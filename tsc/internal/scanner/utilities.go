@@ -30,7 +30,7 @@ func isJSDocTypeExpressionOrChild(node *ast.Node) bool {
 	if node.Flags&(ast.NodeFlagsJSDoc|ast.NodeFlagsReparsed) == 0 {
 		return false
 	}
-	for current := node; current != nil; current = current.Parent {
+	for current := node; current != nil; current = current.Parent() {
 		if ast.IsTypeNode(current) {
 			return true
 		}

@@ -275,7 +275,7 @@ func getUmdSymbol(token *ast.Node, ch *checker.Checker) *ast.Symbol {
 	}
 
 	// The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
-	parent := token.Parent
+	parent := token.Parent()
 	if (ast.IsJsxOpeningLikeElement(parent) && parent.TagName() == token) ||
 		ast.IsJsxOpeningFragment(parent) {
 		var location *ast.Node
@@ -377,7 +377,7 @@ type symbolNameInfo struct {
 }
 
 func getSymbolNamesToImport(sourceFile *ast.SourceFile, ch *checker.Checker, symbolToken *ast.Node, compilerOptions *core.CompilerOptions) []symbolNameInfo {
-	parent := symbolToken.Parent
+	parent := symbolToken.Parent()
 	if (ast.IsJsxOpeningLikeElement(parent) || ast.IsJsxClosingElement(parent)) &&
 		parent.TagName() == symbolToken &&
 		jsxModeNeedsExplicitImport(compilerOptions.Jsx) {

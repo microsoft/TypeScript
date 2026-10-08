@@ -123,7 +123,7 @@ func parseOwnConfigOfJsonSourceFile(
 		// Ensure value is verified except for extends which is handled in its own way for error reporting
 		var propertySetErrors []*ast.Diagnostic
 		if option != nil && option != extendsOptionDeclaration {
-			value, propertySetErrors = convertJsonOption(option, value, basePath, propertyAssignment, propertyAssignment.Initializer, sourceFile)
+			value, propertySetErrors = convertJsonOption(option, value, basePath, propertyAssignment, propertyAssignment.Initializer(), sourceFile)
 		}
 		if parentOption != nil && parentOption.Name != "undefined" && value != nil {
 			if option != nil && option.Name != "" {
@@ -166,7 +166,7 @@ func parseOwnConfigOfJsonSourceFile(
 			}
 		} else if parentOption == tsconfigRootOptionsMap {
 			if option == extendsOptionDeclaration {
-				configPath, err := getExtendsConfigPathOrArray(value, fs, basePath, configFileName, propertyAssignment, propertyAssignment.Initializer, sourceFile)
+				configPath, err := getExtendsConfigPathOrArray(value, fs, basePath, configFileName, propertyAssignment, propertyAssignment.Initializer(), sourceFile)
 				extendedConfigPaths = configPath
 				propertySetErrors = append(propertySetErrors, err...)
 			} else if option == nil {
@@ -649,7 +649,7 @@ func convertObjectLiteralExpressionToJson(
 		result = &collections.OrderedMap[string, any]{}
 	}
 	var errors []*ast.Diagnostic
-	for _, element := range node.Properties.Nodes {
+	for _, element := range node.Properties().Nodes {
 		if element.Kind != ast.KindPropertyAssignment {
 			errors = append(errors, ast.NewDiagnostic(sourceFile, element.Loc, diagnostics.Property_assignment_expected))
 			continue
@@ -670,7 +670,7 @@ func convertObjectLiteralExpressionToJson(
 				option = nil
 			}
 		}
-		value, err := convertPropertyValueToJson(sourceFile, element.AsPropertyAssignment().Initializer, option, returnValue, jsonConversionNotifier)
+		value, err := convertPropertyValueToJson(sourceFile, element.AsPropertyAssignment().Initializer(), option, returnValue, jsonConversionNotifier)
 		errors = append(errors, err...)
 		if keyText != "" {
 			if returnValue {
@@ -731,10 +731,10 @@ func convertPropertyValueToJson(sourceFile *ast.SourceFile, valueExpression *ast
 	case ast.KindNumericLiteral:
 		return float64(jsnum.FromString(valueExpression.Text())), nil
 	case ast.KindPrefixUnaryExpression:
-		if valueExpression.AsPrefixUnaryExpression().Operator != ast.KindMinusToken || valueExpression.AsPrefixUnaryExpression().Operand.Kind != ast.KindNumericLiteral {
+		if valueExpression.AsPrefixUnaryExpression().Operator != ast.KindMinusToken || valueExpression.AsPrefixUnaryExpression().Operand().Kind != ast.KindNumericLiteral {
 			break // not valid JSON syntax
 		}
-		return float64(-jsnum.FromString(valueExpression.AsPrefixUnaryExpression().Operand.Text())), nil
+		return float64(-jsnum.FromString(valueExpression.AsPrefixUnaryExpression().Operand().Text())), nil
 	case ast.KindObjectLiteralExpression:
 		objectLiteralExpression := valueExpression.AsObjectLiteralExpression()
 		// Currently having element option declaration in the tsconfig with type "object"
@@ -1179,7 +1179,7 @@ func parseJsonConfigFileContentWorker(
 					fileName = "tsconfig.json"
 				}
 				diagnosticMessage := diagnostics.The_files_list_in_config_file_0_is_empty
-				nodeValue := ForEachTsConfigPropArray(sourceFile.SourceFile, "files", func(property *ast.PropertyAssignment) *ast.Node { return property.Initializer })
+				nodeValue := ForEachTsConfigPropArray(sourceFile.SourceFile, "files", func(property *ast.PropertyAssignment) *ast.Node { return property.Initializer() })
 				errors = append(errors, CreateDiagnosticForNodeInSourceFile(sourceFile.SourceFile, nodeValue, diagnosticMessage, fileName))
 			} else {
 				errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.The_files_list_in_config_file_0_is_empty, configFileName))
@@ -1531,8 +1531,8 @@ func CreateDiagnosticAtReferenceSyntax(config *ParsedCommandLine, index int, mes
 		return nil
 	}
 	return ForEachTsConfigPropArray(config.ConfigFile.SourceFile, "references", func(property *ast.PropertyAssignment) *ast.Diagnostic {
-		if ast.IsArrayLiteralExpression(property.Initializer) {
-			value := property.Initializer.Elements()
+		if ast.IsArrayLiteralExpression(property.Initializer()) {
+			value := property.Initializer().Elements()
 			if len(value) > index {
 				return CreateDiagnosticForNodeInSourceFile(config.ConfigFile.SourceFile, value[index], message, args...)
 			}
@@ -1545,11 +1545,11 @@ func createDiagnosticAtProjectReferenceProperty(sourceFile *TsConfigSourceFile, 
 	var node *ast.Node
 	if sourceFile != nil {
 		node = ForEachTsConfigPropArray(sourceFile.SourceFile, "references", func(property *ast.PropertyAssignment) *ast.Node {
-			if ast.IsArrayLiteralExpression(property.Initializer) {
-				elements := property.Initializer.Elements()
+			if ast.IsArrayLiteralExpression(property.Initializer()) {
+				elements := property.Initializer().Elements()
 				if len(elements) > index && ast.IsObjectLiteralExpression(elements[index]) {
 					if propertyNode := ForEachPropertyAssignment(elements[index].AsObjectLiteralExpression(), propertyName, func(property *ast.PropertyAssignment) *ast.Node {
-						return property.Initializer
+						return property.Initializer()
 					}); propertyNode != nil {
 						return propertyNode
 					}
@@ -1564,8 +1564,8 @@ func createDiagnosticAtProjectReferenceProperty(sourceFile *TsConfigSourceFile, 
 
 func GetCallbackForFindingPropertyAssignmentByValue(value string) func(property *ast.PropertyAssignment) *ast.Node {
 	return func(property *ast.PropertyAssignment) *ast.Node {
-		if ast.IsArrayLiteralExpression(property.Initializer) {
-			return core.Find(property.Initializer.Elements(), func(element *ast.Node) bool {
+		if ast.IsArrayLiteralExpression(property.Initializer()) {
+			return core.Find(property.Initializer().Elements(), func(element *ast.Node) bool {
 				return ast.IsStringLiteral(element) && element.Text() == value
 			})
 		}
@@ -1586,17 +1586,17 @@ func getContentMapperSyntax(sourceFile *ast.SourceFile, index int, subKey string
 		return nil
 	}
 	return ForEachTsConfigPropArray(sourceFile, "contentMappers", func(property *ast.PropertyAssignment) *ast.Node {
-		if !ast.IsArrayLiteralExpression(property.Initializer) {
-			return property.Initializer
+		if !ast.IsArrayLiteralExpression(property.Initializer()) {
+			return property.Initializer()
 		}
-		elements := property.Initializer.Elements()
+		elements := property.Initializer().Elements()
 		if index < 0 || index >= len(elements) {
-			return property.Initializer
+			return property.Initializer()
 		}
 		element := elements[index]
 		if subKey != "" && ast.IsObjectLiteralExpression(element) {
 			if node := ForEachPropertyAssignment(element.AsObjectLiteralExpression(), subKey, func(property *ast.PropertyAssignment) *ast.Node {
-				return property.Initializer
+				return property.Initializer()
 			}); node != nil {
 				return node
 			}
@@ -1625,7 +1625,7 @@ func GetContentMapperOptionDiagnosticLocation(config *ParsedCommandLine, mapper 
 			}
 		case !segment.IsIndex && ast.IsObjectLiteralExpression(node):
 			next = ForEachPropertyAssignment(node.AsObjectLiteralExpression(), segment.Property, func(property *ast.PropertyAssignment) *ast.Node {
-				return property.Initializer
+				return property.Initializer()
 			})
 		}
 		if next == nil {
@@ -1678,7 +1678,7 @@ func setContentMapperDiagnosticLocation(diagnostic *ast.Diagnostic, sourceFile *
 
 func ForEachPropertyAssignment[T any](objectLiteral *ast.ObjectLiteralExpression, key string, callback func(property *ast.PropertyAssignment) *T, key2 ...string) *T {
 	if objectLiteral != nil {
-		for _, property := range objectLiteral.Properties.Nodes {
+		for _, property := range objectLiteral.Properties().Nodes {
 			if !ast.IsPropertyAssignment(property) {
 				continue
 			}

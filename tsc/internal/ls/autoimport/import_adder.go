@@ -429,10 +429,10 @@ func TryGetAutoImportableReferenceFromTypeNode(importTypeNode *ast.TypeNode, idT
 	var visitor *ast.NodeVisitor
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 	visit := func(node *ast.Node) *ast.Node {
-		if ast.IsLiteralImportTypeNode(node) && node.AsImportTypeNode().Qualifier != nil {
+		if ast.IsLiteralImportTypeNode(node) && node.AsImportTypeNode().Qualifier() != nil {
 			importTypeNode := node.AsImportTypeNode()
 			// Symbol for the left-most thing after the dot
-			firstIdentifier := ast.GetFirstIdentifier(importTypeNode.Qualifier)
+			firstIdentifier := ast.GetFirstIdentifier(importTypeNode.Qualifier())
 			symbol := idToSymbol[firstIdentifier]
 			if symbol == nil {
 				// if symbol is missing then this doesn't come from a synthesized import type node
@@ -443,12 +443,12 @@ func TryGetAutoImportableReferenceFromTypeNode(importTypeNode *ast.TypeNode, idT
 			name := getNameForExportedSymbol(symbol, false /*preferCapitalized*/)
 			var qualifier *ast.EntityName
 			if name != firstIdentifier.Text() {
-				qualifier = replaceFirstIdentifierOfEntityName(factory, importTypeNode.Qualifier, factory.NewIdentifier(name))
+				qualifier = replaceFirstIdentifierOfEntityName(factory, importTypeNode.Qualifier(), factory.NewIdentifier(name))
 			} else {
-				qualifier = importTypeNode.Qualifier
+				qualifier = importTypeNode.Qualifier()
 			}
 			symbols = append(symbols, symbol)
-			typeArguments := visitor.VisitNodes(importTypeNode.TypeArguments)
+			typeArguments := visitor.VisitNodes(importTypeNode.TypeArguments())
 			return factory.NewTypeReferenceNode(qualifier, typeArguments)
 		}
 		return visitor.VisitEachChild(node)
@@ -483,8 +483,8 @@ func replaceFirstIdentifierOfEntityName(factory *ast.NodeFactory, name *ast.Enti
 		return newIdentifier
 	}
 	return factory.NewQualifiedName(
-		replaceFirstIdentifierOfEntityName(factory, name.AsQualifiedName().Left, newIdentifier),
-		name.AsQualifiedName().Right,
+		replaceFirstIdentifierOfEntityName(factory, name.AsQualifiedName().Left(), newIdentifier),
+		name.AsQualifiedName().Right(),
 	)
 }
 

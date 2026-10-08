@@ -117,10 +117,10 @@ func (tx *RuntimeSyntaxTransformer) visit(node *ast.Node) *ast.Node {
 			node = tx.Visitor().VisitEachChild(node)
 		}
 	case ast.KindImportEqualsDeclaration:
-		if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind != ast.KindBlock && node.AsImportEqualsDeclaration().ModuleReference.Kind == ast.KindExternalModuleReference {
+		if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind != ast.KindBlock && node.AsImportEqualsDeclaration().ModuleReference().Kind == ast.KindExternalModuleReference {
 			// do not emit ES6 imports and exports since they are illegal inside a namespace
 			node = nil
-		} else if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind == ast.KindBlock && node.AsImportEqualsDeclaration().ModuleReference.Kind != ast.KindExternalModuleReference {
+		} else if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind == ast.KindBlock && node.AsImportEqualsDeclaration().ModuleReference().Kind != ast.KindExternalModuleReference {
 			// inside a block within a namespace, elide internal import aliases
 			node = nil
 		} else {
@@ -140,10 +140,10 @@ func (tx *RuntimeSyntaxTransformer) visit(node *ast.Node) *ast.Node {
 func (tx *RuntimeSyntaxTransformer) recordDeclarationInScope(node *ast.Node) {
 	switch node.Kind {
 	case ast.KindVariableStatement:
-		tx.recordDeclarationInScope(node.AsVariableStatement().DeclarationList)
+		tx.recordDeclarationInScope(node.AsVariableStatement().DeclarationList())
 		return
 	case ast.KindVariableDeclarationList:
-		for _, decl := range node.AsVariableDeclarationList().Declarations.Nodes {
+		for _, decl := range node.AsVariableDeclarationList().Declarations().Nodes {
 			tx.recordDeclarationInScope(decl)
 		}
 		return
@@ -194,7 +194,7 @@ func (tx *RuntimeSyntaxTransformer) getExpressionForPropertyName(member *ast.Enu
 	case ast.KindComputedPropertyName:
 		n := name.AsComputedPropertyName()
 		// enums don't support computed properties so we always generate the 'expression' part of the name as-is.
-		return tx.Visitor().VisitNode(n.Expression)
+		return tx.Visitor().VisitNode(n.Expression())
 	case ast.KindIdentifier:
 		return tx.Factory().NewStringLiteral(name.Text(), ast.TokenFlagsNone)
 	case ast.KindStringLiteral: // !!! propagate token flags (will produce new diffs)
@@ -351,7 +351,7 @@ func (tx *RuntimeSyntaxTransformer) transformEnumBody(node *ast.EnumDeclaration)
 	node = tx.Visitor().VisitEachChild(node.AsNode()).AsEnumDeclaration()
 
 	statements := []*ast.Statement{}
-	for i := range len(node.Members.Nodes) {
+	for i := range len(node.Members().Nodes) {
 		//  E[E["A"] = 0] = "A";
 		statements = tx.transformEnumMember(
 			statements,
@@ -361,7 +361,7 @@ func (tx *RuntimeSyntaxTransformer) transformEnumBody(node *ast.EnumDeclaration)
 	}
 
 	statementList := tx.Factory().NewNodeList(statements)
-	statementList.Loc = node.Members.Loc
+	statementList.Loc = node.Members().Loc
 
 	tx.currentEnum = savedCurrentEnum
 	return tx.Factory().NewBlock(statementList, true /*multiline*/)
@@ -373,7 +373,7 @@ func (tx *RuntimeSyntaxTransformer) transformEnumMember(
 	enum *ast.EnumDeclaration,
 	index int,
 ) []*ast.Statement {
-	memberNode := enum.Members.Nodes[index]
+	memberNode := enum.Members().Nodes[index]
 	member := memberNode.AsEnumMember()
 
 	savedParent := tx.parentNode
@@ -382,7 +382,7 @@ func (tx *RuntimeSyntaxTransformer) transformEnumMember(
 
 	//  E[E["A"] = x] = "A";
 	//             ^
-	expression := member.Initializer // NOTE: already visited
+	expression := member.Initializer() // NOTE: already visited
 
 	var useExplicitReverseMapping bool
 
@@ -497,20 +497,20 @@ func (tx *RuntimeSyntaxTransformer) transformModuleBody(node *ast.ModuleDeclarat
 
 	var statementsLocation core.TextRange
 	var blockLocation core.TextRange
-	if node.Body != nil {
-		if node.Body.Kind == ast.KindModuleBlock {
+	if node.Body() != nil {
+		if node.Body().Kind == ast.KindModuleBlock {
 			// visit the children of `node` in advance to capture any references to namespace members
 			node = tx.Visitor().VisitEachChild(node.AsNode()).AsModuleDeclaration()
-			body := node.Body.AsModuleBlock()
-			statements = body.Statements.Nodes
-			statementsLocation = body.Statements.Loc
+			body := node.Body().AsModuleBlock()
+			statements = body.Statements().Nodes
+			statementsLocation = body.Statements().Loc
 			blockLocation = body.Loc
 		} else { // node.Body.Kind == ast.KindModuleDeclaration
 			// !!! Strada didn't do this; why?
 			// tx.currentScope = node.AsNode()
-			statements, _ = tx.Visitor().VisitSlice([]*ast.Node{node.Body})
-			moduleBlock := getInnermostModuleDeclarationFromDottedModule(node).Body.AsModuleBlock()
-			statementsLocation = moduleBlock.Statements.Loc.WithPos(-1)
+			statements, _ = tx.Visitor().VisitSlice([]*ast.Node{node.Body()})
+			moduleBlock := getInnermostModuleDeclarationFromDottedModule(node).Body().AsModuleBlock()
+			statementsLocation = moduleBlock.Statements().Loc.WithPos(-1)
 		}
 	}
 
@@ -545,18 +545,18 @@ func (tx *RuntimeSyntaxTransformer) transformModuleBody(node *ast.ModuleDeclarat
 	//  })(hello || (hello = {}));
 	//
 	// We only want to emit comment on the namespace which contains block body itself, not the containing namespaces.
-	if node.Body == nil || node.Body.Kind != ast.KindModuleBlock {
+	if node.Body() == nil || node.Body().Kind != ast.KindModuleBlock {
 		tx.EmitContext().AddEmitFlags(block, printer.EFNoComments)
 	}
 	return block
 }
 
 func (tx *RuntimeSyntaxTransformer) visitImportEqualsDeclaration(node *ast.ImportEqualsDeclaration) *ast.Node {
-	if node.ModuleReference.Kind == ast.KindExternalModuleReference {
+	if node.ModuleReference().Kind == ast.KindExternalModuleReference {
 		return tx.Visitor().VisitEachChild(node.AsNode())
 	}
 
-	moduleReference := tx.Factory().CreateExpressionFromEntityName(node.ModuleReference)
+	moduleReference := tx.Factory().CreateExpressionFromEntityName(node.ModuleReference())
 	tx.EmitContext().SetEmitFlags(moduleReference, printer.EFNoComments|printer.EFNoNestedComments)
 	if !tx.isExportOfNamespace(node.AsNode()) {
 		//  export var ${name} = ${moduleReference};
@@ -580,9 +580,9 @@ func (tx *RuntimeSyntaxTransformer) visitImportEqualsDeclaration(node *ast.Impor
 func (tx *RuntimeSyntaxTransformer) visitVariableStatement(node *ast.VariableStatement) *ast.Node {
 	if tx.isExportOfNamespace(node.AsNode()) {
 		expressions := []*ast.Expression{}
-		for _, declaration := range node.DeclarationList.AsVariableDeclarationList().Declarations.Nodes {
+		for _, declaration := range node.DeclarationList().AsVariableDeclarationList().Declarations().Nodes {
 			v := declaration.AsVariableDeclaration()
-			if v.Initializer == nil {
+			if v.Initializer() == nil {
 				continue
 			}
 			if ast.IsBindingPattern(v.Name()) {
@@ -637,13 +637,13 @@ func (tx *RuntimeSyntaxTransformer) visitFunctionDeclaration(node *ast.FunctionD
 		updated := tx.Factory().UpdateFunctionDeclaration(
 			node,
 			tx.Visitor().VisitModifiers(transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), ^ast.ModifierFlagsExport)),
-			node.AsteriskToken,
+			node.AsteriskToken(),
 			tx.Visitor().VisitNode(node.Name()),
 			nil, /*typeParameters*/
-			tx.Visitor().VisitNodes(node.Parameters),
+			tx.Visitor().VisitNodes(node.Parameters()),
 			nil, /*returnType*/
 			nil, /*fullSignature*/
-			tx.Visitor().VisitNode(node.Body),
+			tx.Visitor().VisitNode(node.Body()),
 		)
 		export := tx.createExportStatementForDeclaration(node.AsNode())
 		if export != nil {
@@ -679,9 +679,9 @@ func (tx *RuntimeSyntaxTransformer) visitClassDeclaration(node *ast.ClassDeclara
 	if name == nil && (exported || ast.ChildIsDecorated(tx.compilerOptions.ExperimentalDecorators.IsTrue(), node.AsNode(), nil)) {
 		name = tx.Factory().NewGeneratedNameForNode(node.AsNode())
 	}
-	heritageClauses := tx.Visitor().VisitNodes(node.HeritageClauses)
-	members := tx.Visitor().VisitNodes(node.Members)
-	parameterProperties := tx.getParameterProperties(core.Find(node.Members.Nodes, ast.IsConstructorDeclaration))
+	heritageClauses := tx.Visitor().VisitNodes(node.HeritageClauses())
+	members := tx.Visitor().VisitNodes(node.Members())
+	parameterProperties := tx.getParameterProperties(core.Find(node.Members().Nodes, ast.IsConstructorDeclaration))
 
 	if len(parameterProperties) > 0 {
 		var newMembers []*ast.ClassElement
@@ -701,7 +701,7 @@ func (tx *RuntimeSyntaxTransformer) visitClassDeclaration(node *ast.ClassDeclara
 		if len(newMembers) > 0 {
 			newMembers = append(newMembers, members.Nodes...)
 			members = tx.Factory().NewNodeList(newMembers)
-			members.Loc = node.Members.Loc
+			members.Loc = node.Members().Loc
 		}
 	}
 
@@ -718,9 +718,9 @@ func (tx *RuntimeSyntaxTransformer) visitClassDeclaration(node *ast.ClassDeclara
 func (tx *RuntimeSyntaxTransformer) visitClassExpression(node *ast.ClassExpression) *ast.Node {
 	modifiers := tx.Visitor().VisitModifiers(transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), ^ast.ModifierFlagsExportDefault))
 	name := tx.Visitor().VisitNode(node.Name())
-	heritageClauses := tx.Visitor().VisitNodes(node.HeritageClauses)
-	members := tx.Visitor().VisitNodes(node.Members)
-	parameterProperties := tx.getParameterProperties(core.Find(node.Members.Nodes, ast.IsConstructorDeclaration))
+	heritageClauses := tx.Visitor().VisitNodes(node.HeritageClauses())
+	members := tx.Visitor().VisitNodes(node.Members())
+	parameterProperties := tx.getParameterProperties(core.Find(node.Members().Nodes, ast.IsConstructorDeclaration))
 
 	if len(parameterProperties) > 0 {
 		var newMembers []*ast.ClassElement
@@ -740,7 +740,7 @@ func (tx *RuntimeSyntaxTransformer) visitClassExpression(node *ast.ClassExpressi
 		if len(newMembers) > 0 {
 			newMembers = append(newMembers, members.Nodes...)
 			members = tx.Factory().NewNodeList(newMembers)
-			members.Loc = node.Members.Loc
+			members.Loc = node.Members().Loc
 		}
 	}
 
@@ -750,7 +750,7 @@ func (tx *RuntimeSyntaxTransformer) visitClassExpression(node *ast.ClassExpressi
 func (tx *RuntimeSyntaxTransformer) visitConstructorDeclaration(node *ast.ConstructorDeclaration) *ast.Node {
 	modifiers := tx.Visitor().VisitModifiers(node.Modifiers())
 	parameters := tx.EmitContext().VisitParameters(node.ParameterList(), tx.Visitor())
-	body := tx.visitConstructorBody(node.Body.AsBlock(), node.AsNode())
+	body := tx.visitConstructorBody(node.Body().AsBlock(), node.AsNode())
 	return tx.Factory().UpdateConstructorDeclaration(node, modifiers, nil /*typeParameters*/, parameters, nil /*returnType*/, nil /*fullSignature*/, body)
 }
 
@@ -764,7 +764,7 @@ func (tx *RuntimeSyntaxTransformer) visitConstructorBody(body *ast.Block, constr
 	savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName := tx.pushScope(body.AsNode())
 
 	tx.EmitContext().StartVariableEnvironment()
-	prologue, rest := tx.Factory().SplitStandardPrologue(body.Statements.Nodes)
+	prologue, rest := tx.Factory().SplitStandardPrologue(body.Statements().Nodes)
 	statements := slices.Clone(prologue)
 
 	// Transform parameters into property assignments. Transforms this:
@@ -784,11 +784,11 @@ func (tx *RuntimeSyntaxTransformer) visitConstructorBody(body *ast.Block, constr
 	for _, parameter := range parameterProperties {
 		if ast.IsIdentifier(parameter.Name()) {
 			propertyName := parameter.Name().Clone(tx.Factory())
-			propertyName.Parent = parameter.Name().Parent //nolint:customlint // .Parent set to get node to printback using text from original file instead of processed text; TODO: this should be achievable via EmitFlags instead
+			propertyName.SetParent(parameter.Name().Parent()) //nolint:customlint // .Parent set to get node to printback using text from original file instead of processed text; TODO: this should be achievable via EmitFlags instead
 			tx.EmitContext().AddEmitFlags(propertyName, printer.EFNoComments|printer.EFNoSourceMap)
 
 			localName := parameter.Name().Clone(tx.Factory())
-			localName.Parent = parameter.Name().Parent //nolint:customlint // .Parent set to get node to printback using text from original file instead of processed text; TODO: this should be achievable via EmitFlags instead
+			localName.SetParent(parameter.Name().Parent()) //nolint:customlint // .Parent set to get node to printback using text from original file instead of processed text; TODO: this should be achievable via EmitFlags instead
 			tx.EmitContext().AddEmitFlags(localName, printer.EFNoComments)
 
 			parameterProperty := tx.Factory().NewExpressionStatement(
@@ -819,7 +819,7 @@ func (tx *RuntimeSyntaxTransformer) visitConstructorBody(body *ast.Block, constr
 
 	statements = tx.EmitContext().EndAndMergeVariableEnvironment(statements)
 	statementList := tx.Factory().NewNodeList(statements)
-	statementList.Loc = body.Statements.Loc
+	statementList.Loc = body.Statements().Loc
 
 	tx.popScope(savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName)
 	tx.popNode(grandparentOfBody)
@@ -840,7 +840,7 @@ func (tx *RuntimeSyntaxTransformer) transformConstructorBodyWorker(statementsIn 
 	// if the statement containing `super` is a `try` statement, transform the body of the `try` block
 	if ast.IsTryStatement(superStatement) {
 		tryStatement := superStatement.AsTryStatement()
-		tryBlock := tryStatement.TryBlock.AsBlock()
+		tryBlock := tryStatement.TryBlock().AsBlock()
 
 		// keep track of hierarchy as we descend
 		grandparentOfTryStatement := tx.pushNode(tryStatement.AsNode())
@@ -849,7 +849,7 @@ func (tx *RuntimeSyntaxTransformer) transformConstructorBodyWorker(statementsIn 
 
 		// visit the `try` block
 		tryBlockStatements := tx.transformConstructorBodyWorker(
-			tryBlock.Statements.Nodes,
+			tryBlock.Statements().Nodes,
 			superPath[1:],
 			initializerStatements,
 		)
@@ -859,12 +859,12 @@ func (tx *RuntimeSyntaxTransformer) transformConstructorBodyWorker(statementsIn 
 		tx.popNode(grandparentOfTryBlock)
 
 		tryBlockStatementList := tx.Factory().NewNodeList(tryBlockStatements)
-		tryBlockStatementList.Loc = tryBlock.Statements.Loc
+		tryBlockStatementList.Loc = tryBlock.Statements().Loc
 		statementsOut = append(statementsOut, tx.Factory().UpdateTryStatement(
 			tryStatement,
 			tx.Factory().UpdateBlock(tryBlock, tryBlockStatementList, tryBlock.MultiLine),
-			tx.Visitor().VisitNode(tryStatement.CatchClause),
-			tx.Visitor().VisitNode(tryStatement.FinallyBlock),
+			tx.Visitor().VisitNode(tryStatement.CatchClause()),
+			tx.Visitor().VisitNode(tryStatement.FinallyBlock()),
 		))
 
 		// restore hierarchy as we ascend to the parent of the `try` statement
@@ -887,8 +887,8 @@ func (tx *RuntimeSyntaxTransformer) visitShorthandPropertyAssignment(node *ast.S
 	exportedOrImportedName := tx.visitExpressionIdentifier(name)
 	if exportedOrImportedName != name {
 		expression := exportedOrImportedName
-		if node.ObjectAssignmentInitializer != nil {
-			equalsToken := node.EqualsToken
+		if node.ObjectAssignmentInitializer() != nil {
+			equalsToken := node.EqualsToken()
 			if equalsToken == nil {
 				equalsToken = tx.Factory().NewToken(ast.KindEqualsToken)
 			}
@@ -897,7 +897,7 @@ func (tx *RuntimeSyntaxTransformer) visitShorthandPropertyAssignment(node *ast.S
 				expression,
 				nil, /*typeNode*/
 				equalsToken,
-				tx.Visitor().VisitNode(node.ObjectAssignmentInitializer),
+				tx.Visitor().VisitNode(node.ObjectAssignmentInitializer()),
 			)
 		}
 
@@ -913,8 +913,8 @@ func (tx *RuntimeSyntaxTransformer) visitShorthandPropertyAssignment(node *ast.S
 		exportedOrImportedName,
 		nil, /*postfixToken*/
 		nil, /*typeNode*/
-		node.EqualsToken,
-		tx.Visitor().VisitNode(node.ObjectAssignmentInitializer),
+		node.EqualsToken(),
+		tx.Visitor().VisitNode(node.ObjectAssignmentInitializer()),
 	)
 }
 
@@ -988,8 +988,8 @@ func (tx *RuntimeSyntaxTransformer) shouldEmitModuleDeclaration(node *ast.Module
 }
 
 func getInnermostModuleDeclarationFromDottedModule(moduleDeclaration *ast.ModuleDeclaration) *ast.ModuleDeclaration {
-	for moduleDeclaration.Body != nil && moduleDeclaration.Body.Kind == ast.KindModuleDeclaration {
-		moduleDeclaration = moduleDeclaration.Body.AsModuleDeclaration()
+	for moduleDeclaration.Body() != nil && moduleDeclaration.Body().Kind == ast.KindModuleDeclaration {
+		moduleDeclaration = moduleDeclaration.Body().AsModuleDeclaration()
 	}
 	return moduleDeclaration
 }

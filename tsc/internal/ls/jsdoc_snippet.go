@@ -206,7 +206,7 @@ func skipWhitespace(text string, position int) int {
 }
 
 func getCommentOwnerInfo(tokenAtPos *ast.Node, generateReturnInDocTemplate bool) *commentOwnerInfo {
-	for node := tokenAtPos; node != nil; node = node.Parent {
+	for node := tokenAtPos; node != nil; node = node.Parent() {
 		info, quit := getCommentOwnerInfoWorker(node, generateReturnInDocTemplate)
 		if info != nil || quit {
 			return info
@@ -223,18 +223,18 @@ func getCommentOwnerInfoWorker(commentOwner *ast.Node, generateReturnInDocTempla
 	case ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindMethodDeclaration, ast.KindConstructor, ast.KindMethodSignature, ast.KindArrowFunction:
 		return &commentOwnerInfo{commentOwner: commentOwner, parameters: commentOwner.Parameters(), hasReturn: hasReturn(commentOwner, generateReturnInDocTemplate)}, false
 	case ast.KindPropertyAssignment:
-		return getCommentOwnerInfoWorker(commentOwner.AsPropertyAssignment().Initializer, generateReturnInDocTemplate)
+		return getCommentOwnerInfoWorker(commentOwner.AsPropertyAssignment().Initializer(), generateReturnInDocTemplate)
 	case ast.KindClassDeclaration, ast.KindInterfaceDeclaration, ast.KindEnumDeclaration, ast.KindEnumMember, ast.KindTypeAliasDeclaration:
 		return &commentOwnerInfo{commentOwner: commentOwner}, false
 	case ast.KindPropertySignature:
-		if typeNode := commentOwner.AsPropertySignatureDeclaration().Type; typeNode != nil && ast.IsFunctionTypeNode(typeNode) {
+		if typeNode := commentOwner.AsPropertySignatureDeclaration().Type(); typeNode != nil && ast.IsFunctionTypeNode(typeNode) {
 			return &commentOwnerInfo{commentOwner: commentOwner, parameters: typeNode.Parameters(), hasReturn: hasReturn(typeNode, generateReturnInDocTemplate)}, false
 		}
 		return &commentOwnerInfo{commentOwner: commentOwner}, false
 	case ast.KindVariableStatement:
-		declarations := commentOwner.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes
+		declarations := commentOwner.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes
 		if len(declarations) == 1 {
-			if initializer := declarations[0].AsVariableDeclaration().Initializer; initializer != nil {
+			if initializer := declarations[0].AsVariableDeclaration().Initializer(); initializer != nil {
 				if host := getRightHandSideOfAssignment(initializer); host != nil {
 					return &commentOwnerInfo{commentOwner: commentOwner, parameters: host.Parameters(), hasReturn: hasReturn(host, generateReturnInDocTemplate)}, false
 				}
@@ -244,23 +244,23 @@ func getCommentOwnerInfoWorker(commentOwner *ast.Node, generateReturnInDocTempla
 	case ast.KindSourceFile:
 		return nil, true
 	case ast.KindModuleDeclaration:
-		if commentOwner.Parent.Kind == ast.KindModuleDeclaration {
+		if commentOwner.Parent().Kind == ast.KindModuleDeclaration {
 			return nil, false
 		}
 		return &commentOwnerInfo{commentOwner: commentOwner}, false
 	case ast.KindExpressionStatement:
-		return getCommentOwnerInfoWorker(commentOwner.AsExpressionStatement().Expression, generateReturnInDocTemplate)
+		return getCommentOwnerInfoWorker(commentOwner.AsExpressionStatement().Expression(), generateReturnInDocTemplate)
 	case ast.KindBinaryExpression:
 		binaryExpression := commentOwner.AsBinaryExpression()
 		if ast.GetAssignmentDeclarationKind(commentOwner) == ast.JSDeclarationKindNone {
 			return nil, true
 		}
-		if ast.IsFunctionLike(binaryExpression.Right) {
-			return &commentOwnerInfo{commentOwner: commentOwner, parameters: binaryExpression.Right.Parameters(), hasReturn: hasReturn(binaryExpression.Right, generateReturnInDocTemplate)}, false
+		if ast.IsFunctionLike(binaryExpression.Right()) {
+			return &commentOwnerInfo{commentOwner: commentOwner, parameters: binaryExpression.Right().Parameters(), hasReturn: hasReturn(binaryExpression.Right(), generateReturnInDocTemplate)}, false
 		}
 		return &commentOwnerInfo{commentOwner: commentOwner}, false
 	case ast.KindPropertyDeclaration:
-		if initializer := commentOwner.AsPropertyDeclaration().Initializer; initializer != nil && ast.IsFunctionExpressionOrArrowFunction(initializer) {
+		if initializer := commentOwner.AsPropertyDeclaration().Initializer(); initializer != nil && ast.IsFunctionExpressionOrArrowFunction(initializer) {
 			return &commentOwnerInfo{commentOwner: commentOwner, parameters: initializer.Parameters(), hasReturn: hasReturn(initializer, generateReturnInDocTemplate)}, false
 		}
 	}
@@ -289,7 +289,7 @@ func getRightHandSideOfAssignment(rightHandSide *ast.Node) *ast.Node {
 		return nil
 	}
 	for rightHandSide.Kind == ast.KindParenthesizedExpression {
-		rightHandSide = rightHandSide.AsParenthesizedExpression().Expression
+		rightHandSide = rightHandSide.AsParenthesizedExpression().Expression()
 	}
 	switch rightHandSide.Kind {
 	case ast.KindFunctionExpression, ast.KindArrowFunction:
@@ -310,7 +310,7 @@ func parameterDocComments(parameters []*ast.ParameterDeclarationNode, isJavaScri
 		}
 		paramType := ""
 		if isJavaScriptFile {
-			if parameter.AsParameterDeclaration().DotDotDotToken != nil {
+			if parameter.AsParameterDeclaration().DotDotDotToken() != nil {
 				paramType = "{...any} "
 			} else {
 				paramType = "{any} "
@@ -351,7 +351,7 @@ func isNonEmptyJSDoc(jsdoc *ast.Node) bool {
 		return false
 	}
 	data := jsdoc.AsJSDoc()
-	return data.Comment != nil && len(data.Comment.Nodes) > 0 || data.Tags != nil && len(data.Tags.Nodes) > 0
+	return data.Comment() != nil && len(data.Comment().Nodes) > 0 || data.Tags() != nil && len(data.Tags().Nodes) > 0
 }
 
 func hasJSDocTags(node *ast.Node, file *ast.SourceFile) bool {
@@ -359,7 +359,7 @@ func hasJSDocTags(node *ast.Node, file *ast.SourceFile) bool {
 	if len(jsdocs) == 0 {
 		return false
 	}
-	tags := jsdocs[len(jsdocs)-1].AsJSDoc().Tags
+	tags := jsdocs[len(jsdocs)-1].AsJSDoc().Tags()
 	return tags != nil && len(tags.Nodes) > 0
 }
 

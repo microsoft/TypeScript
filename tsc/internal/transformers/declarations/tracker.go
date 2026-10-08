@@ -58,12 +58,12 @@ func (s *SymbolTrackerImpl) ReportInaccessibleUniqueSymbolError() {
 }
 
 func (s *SymbolTrackerImpl) isBoundExpando(node *ast.Node) bool {
-	if !(ast.IsExpandoPropertyDeclaration(node) && ast.IsPropertyAccessExpression(node.AsBinaryExpression().Left)) {
+	if !(ast.IsExpandoPropertyDeclaration(node) && ast.IsPropertyAccessExpression(node.AsBinaryExpression().Left())) {
 		return false
 	}
 	// Match transformExpandoAssignment: only an assignment rooted at an identifier (`f.x = ...`) can bind an expando
 	// property; `this.x = ...`, `super.x = ...`, `f().x = ...` and the like have no referenced declaration.
-	ns := ast.GetLeftmostAccessExpression(node.AsBinaryExpression().Left)
+	ns := ast.GetLeftmostAccessExpression(node.AsBinaryExpression().Left())
 	if !ast.IsIdentifier(ns) {
 		return false
 	}
@@ -138,7 +138,7 @@ func (s *SymbolTrackerImpl) ReportPrivateInBaseOfClassExpression(propertyName st
 	location := s.errorLocation()
 	if location != nil {
 		diag := createDiagnosticForNode(location, diagnostics.Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected, propertyName)
-		if ast.IsVariableDeclaration(location.Parent) {
+		if ast.IsVariableDeclaration(location.Parent()) {
 			related := createDiagnosticForNode(location, diagnostics.Add_a_type_annotation_to_the_variable_0, s.errorDeclarationNameWithFallback())
 			diag.AddRelatedInfo(related)
 		}

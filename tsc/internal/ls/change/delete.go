@@ -17,9 +17,9 @@ import (
 func deleteDeclaration(t *Tracker, deletedNodesInLists map[*ast.Node]bool, sourceFile *ast.SourceFile, node *ast.Node) {
 	switch node.Kind {
 	case ast.KindParameter:
-		oldFunction := node.Parent
+		oldFunction := node.Parent()
 		if oldFunction.Kind == ast.KindArrowFunction &&
-			len(oldFunction.AsArrowFunction().Parameters.Nodes) == 1 &&
+			len(oldFunction.AsArrowFunction().Parameters().Nodes) == 1 &&
 			astnav.FindChildOfKind(oldFunction, ast.KindOpenParenToken, sourceFile) == nil {
 			// Lambdas with exactly one parameter are special because, after removal, there
 			// must be an empty parameter list (i.e. `()`) and this won't necessarily be the
@@ -31,7 +31,7 @@ func deleteDeclaration(t *Tracker, deletedNodesInLists map[*ast.Node]bool, sourc
 
 	case ast.KindImportDeclaration, ast.KindImportEqualsDeclaration:
 		imports := sourceFile.Imports()
-		isFirstImport := len(imports) > 0 && node == imports[0].Parent ||
+		isFirstImport := len(imports) > 0 && node == imports[0].Parent() ||
 			node == core.Find(sourceFile.Statements.Nodes, func(s *ast.Node) bool { return ast.IsAnyImportSyntax(s) })
 		// For first import, leave header comment in place, otherwise only delete JSDoc comments
 		leadingTrivia := LeadingTriviaOptionStartLine
@@ -43,9 +43,9 @@ func deleteDeclaration(t *Tracker, deletedNodesInLists map[*ast.Node]bool, sourc
 		deleteNode(t, sourceFile, node, leadingTrivia, TrailingTriviaOptionInclude)
 
 	case ast.KindBindingElement:
-		pattern := node.Parent
+		pattern := node.Parent()
 		preserveComma := pattern.Kind == ast.KindArrayBindingPattern &&
-			node != pattern.AsBindingPattern().Elements.Nodes[len(pattern.AsBindingPattern().Elements.Nodes)-1]
+			node != pattern.AsBindingPattern().Elements().Nodes[len(pattern.AsBindingPattern().Elements().Nodes)-1]
 		if preserveComma {
 			deleteNode(t, sourceFile, node, LeadingTriviaOptionIncludeAll, TrailingTriviaOptionExclude)
 		} else {
@@ -59,8 +59,8 @@ func deleteDeclaration(t *Tracker, deletedNodesInLists map[*ast.Node]bool, sourc
 		deleteNodeInList(t, deletedNodesInLists, sourceFile, node)
 
 	case ast.KindImportSpecifier:
-		namedImports := node.Parent
-		if len(namedImports.AsNamedImports().Elements.Nodes) == 1 {
+		namedImports := node.Parent()
+		if len(namedImports.AsNamedImports().Elements().Nodes) == 1 {
 			deleteImportBinding(t, sourceFile, namedImports)
 		} else {
 			deleteNodeInList(t, deletedNodesInLists, sourceFile, node)
@@ -88,12 +88,12 @@ func deleteDeclaration(t *Tracker, deletedNodesInLists map[*ast.Node]bool, sourc
 		deleteNode(t, sourceFile, node, leadingTrivia, TrailingTriviaOptionInclude)
 
 	default:
-		if node.Parent == nil {
+		if node.Parent() == nil {
 			// a misbehaving client can reach here with the SourceFile node
 			deleteNode(t, sourceFile, node, LeadingTriviaOptionIncludeAll, TrailingTriviaOptionInclude)
-		} else if node.Parent.Kind == ast.KindImportClause && node.Parent.AsImportClause().Name() == node {
-			deleteDefaultImport(t, sourceFile, node.Parent)
-		} else if node.Parent.Kind == ast.KindCallExpression && slices.Contains(node.Parent.AsCallExpression().Arguments.Nodes, node) {
+		} else if node.Parent().Kind == ast.KindImportClause && node.Parent().AsImportClause().Name() == node {
+			deleteDefaultImport(t, sourceFile, node.Parent())
+		} else if node.Parent().Kind == ast.KindCallExpression && slices.Contains(node.Parent().AsCallExpression().Arguments().Nodes, node) {
 			deleteNodeInList(t, deletedNodesInLists, sourceFile, node)
 		} else {
 			deleteNode(t, sourceFile, node, LeadingTriviaOptionIncludeAll, TrailingTriviaOptionInclude)
@@ -103,9 +103,9 @@ func deleteDeclaration(t *Tracker, deletedNodesInLists map[*ast.Node]bool, sourc
 
 func deleteDefaultImport(t *Tracker, sourceFile *ast.SourceFile, importClause *ast.Node) {
 	clause := importClause.AsImportClause()
-	if clause.NamedBindings == nil {
+	if clause.NamedBindings() == nil {
 		// Delete the whole import
-		deleteNode(t, sourceFile, importClause.Parent, LeadingTriviaOptionIncludeAll, TrailingTriviaOptionInclude)
+		deleteNode(t, sourceFile, importClause.Parent(), LeadingTriviaOptionIncludeAll, TrailingTriviaOptionInclude)
 	} else {
 		// import |d,| * as ns from './file'
 		name := clause.Name()
@@ -122,7 +122,7 @@ func deleteDefaultImport(t *Tracker, sourceFile *ast.SourceFile, importClause *a
 }
 
 func deleteImportBinding(t *Tracker, sourceFile *ast.SourceFile, node *ast.Node) {
-	importClause := node.Parent.AsImportClause()
+	importClause := node.Parent().AsImportClause()
 	if importClause.Name() != nil {
 		// Delete named imports while preserving the default import
 		// import d|, * as ns| from './file'
@@ -142,7 +142,7 @@ func deleteImportBinding(t *Tracker, sourceFile *ast.SourceFile, node *ast.Node)
 }
 
 func deleteVariableDeclaration(t *Tracker, deletedNodesInLists map[*ast.Node]bool, sourceFile *ast.SourceFile, node *ast.Node) {
-	parent := node.Parent
+	parent := node.Parent()
 
 	if parent.Kind == ast.KindCatchClause {
 		// TODO: There's currently no unused diagnostic for this, could be a suggestion
@@ -153,12 +153,12 @@ func deleteVariableDeclaration(t *Tracker, deletedNodesInLists map[*ast.Node]boo
 		return
 	}
 
-	if len(parent.AsVariableDeclarationList().Declarations.Nodes) != 1 {
+	if len(parent.AsVariableDeclarationList().Declarations().Nodes) != 1 {
 		deleteNodeInList(t, deletedNodesInLists, sourceFile, node)
 		return
 	}
 
-	gp := parent.Parent
+	gp := parent.Parent()
 	switch gp.Kind {
 	case ast.KindForOfStatement, ast.KindForInStatement:
 		t.ReplaceNode(sourceFile, node, t.NodeFactory.NewObjectLiteralExpression(t.NodeFactory.NewNodeList([]*ast.Node{}), false), nil)

@@ -66,8 +66,8 @@ func (b *NodeBuilderImpl) expandEnumDecl(symbol *ast.Symbol) *ast.Node {
 		}
 		memberDecl := core.Find(p.Declarations, ast.IsEnumMember)
 		var initializer *ast.Node
-		if memberDecl != nil && memberDecl.AsEnumMember().Initializer != nil {
-			initializer = b.f.DeepCloneNode(memberDecl.AsEnumMember().Initializer)
+		if memberDecl != nil && memberDecl.AsEnumMember().Initializer() != nil {
+			initializer = b.f.DeepCloneNode(memberDecl.AsEnumMember().Initializer())
 		} else {
 			initializer = b.enumMemberInitializer(p)
 		}
@@ -219,10 +219,10 @@ func typeElementsToClassElements(f *ast.NodeFactory, members []*ast.Node) []*ast
 		switch m.Kind {
 		case ast.KindPropertySignature:
 			ps := m.AsPropertySignatureDeclaration()
-			members[i] = f.NewPropertyDeclaration(m.Modifiers(), ps.Name(), ps.QuestionToken(), ps.Type, nil)
+			members[i] = f.NewPropertyDeclaration(m.Modifiers(), ps.Name(), ps.QuestionToken(), ps.Type(), nil)
 		case ast.KindMethodSignature:
 			ms := m.AsMethodSignatureDeclaration()
-			members[i] = f.NewMethodDeclaration(m.Modifiers(), nil, ms.Name(), ms.QuestionToken(), ms.TypeParameters, ms.Parameters, ms.Type, nil, nil)
+			members[i] = f.NewMethodDeclaration(m.Modifiers(), nil, ms.Name(), ms.QuestionToken(), ms.TypeParameters(), ms.Parameters(), ms.Type(), nil, nil)
 		}
 	}
 	return members
@@ -546,9 +546,9 @@ func (b *NodeBuilderImpl) expandModuleDecl(symbol *ast.Symbol) *ast.Node {
 	}
 	var attributes *ast.TypeLiteralNodeNode
 	if declaration := core.Find(symbol.Declarations, func(declaration *ast.Node) bool {
-		return ast.IsModuleDeclaration(declaration) && declaration.AsModuleDeclaration().Attributes != nil
+		return ast.IsModuleDeclaration(declaration) && declaration.AsModuleDeclaration().Attributes() != nil
 	}); declaration != nil {
-		attributes = b.f.DeepCloneNode(declaration.AsModuleDeclaration().Attributes)
+		attributes = b.f.DeepCloneNode(declaration.AsModuleDeclaration().Attributes())
 		b.e.SetEmitFlags(attributes, printer.EFSingleLine)
 	}
 	return b.f.NewModuleDeclaration(nil, keyword, localName, attributes, b.f.NewModuleBlock(b.f.NewNodeList(bodyStatements)))
@@ -597,7 +597,7 @@ func (b *NodeBuilderImpl) filterInheritedProperties(t *Type, baseTypes []*Type, 
 
 func (b *NodeBuilderImpl) isNamespaceMember(p *ast.Symbol) bool {
 	return p.Flags&(ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias) != 0 ||
-		!(p.Flags&ast.SymbolFlagsPrototype != 0 || p.Name == "prototype" || (p.ValueDeclaration != nil && ast.HasStaticModifier(p.ValueDeclaration) && ast.IsClassLike(p.ValueDeclaration.Parent)))
+		!(p.Flags&ast.SymbolFlagsPrototype != 0 || p.Name == "prototype" || (p.ValueDeclaration != nil && ast.HasStaticModifier(p.ValueDeclaration) && ast.IsClassLike(p.ValueDeclaration.Parent())))
 }
 
 func isHashPrivate(s *ast.Symbol) bool {

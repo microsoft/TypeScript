@@ -243,9 +243,9 @@ func (f *NodeFactory) NewVoidZeroExpression() *ast.Expression {
 }
 
 func flattenCommaElement(node *ast.Expression, expressions []*ast.Expression) []*ast.Expression {
-	if ast.IsBinaryExpression(node) && ast.NodeIsSynthesized(node) && node.AsBinaryExpression().OperatorToken.Kind == ast.KindCommaToken {
-		expressions = flattenCommaElement(node.AsBinaryExpression().Left, expressions)
-		expressions = flattenCommaElement(node.AsBinaryExpression().Right, expressions)
+	if ast.IsBinaryExpression(node) && ast.NodeIsSynthesized(node) && node.AsBinaryExpression().OperatorToken().Kind == ast.KindCommaToken {
+		expressions = flattenCommaElement(node.AsBinaryExpression().Left(), expressions)
+		expressions = flattenCommaElement(node.AsBinaryExpression().Right(), expressions)
 	} else {
 		expressions = append(expressions, node)
 	}
@@ -282,11 +282,11 @@ func (f *NodeFactory) InlineExpressions(expressions []*ast.Expression) *ast.Expr
 
 func (f *NodeFactory) CreateExpressionFromEntityName(node *ast.Node) *ast.Expression {
 	if ast.IsQualifiedName(node) {
-		left := f.CreateExpressionFromEntityName(node.AsQualifiedName().Left)
-		right := node.AsQualifiedName().Right.Clone(f.AsNodeFactory())
-		right.Loc = node.AsQualifiedName().Right.Loc
+		left := f.CreateExpressionFromEntityName(node.AsQualifiedName().Left())
+		right := node.AsQualifiedName().Right().Clone(f.AsNodeFactory())
+		right.Loc = node.AsQualifiedName().Right().Loc
 		// TODO(rbuckton): Does this need to be parented?
-		right.Parent = node.AsQualifiedName().Right.Parent
+		right.SetParent(node.AsQualifiedName().Right().Parent())
 		propAccess := f.NewPropertyAccessExpression(left, nil, right, ast.NodeFlagsNone)
 		propAccess.Loc = node.Loc
 		return propAccess
@@ -294,7 +294,7 @@ func (f *NodeFactory) CreateExpressionFromEntityName(node *ast.Node) *ast.Expres
 	res := node.Clone(f.AsNodeFactory())
 	res.Loc = node.Loc
 	// TODO(rbuckton): Does this need to be parented?
-	res.Parent = node.Parent
+	res.SetParent(node.Parent())
 	return res
 }
 
@@ -303,12 +303,12 @@ func (f *NodeFactory) RestoreEnclosingLabel(node *ast.Node, outermostLabeledStat
 		return node
 	}
 	innerLabel := node
-	if ast.IsLabeledStatement(outermostLabeledStatement.Statement) {
-		innerLabel = f.RestoreEnclosingLabel(node, outermostLabeledStatement.Statement.AsLabeledStatement())
+	if ast.IsLabeledStatement(outermostLabeledStatement.Statement()) {
+		innerLabel = f.RestoreEnclosingLabel(node, outermostLabeledStatement.Statement().AsLabeledStatement())
 	}
 	return f.UpdateLabeledStatement(
 		outermostLabeledStatement,
-		outermostLabeledStatement.Label,
+		outermostLabeledStatement.Label(),
 		innerLabel,
 	)
 }
@@ -316,7 +316,7 @@ func (f *NodeFactory) RestoreEnclosingLabel(node *ast.Node, outermostLabeledStat
 // CreateForOfBindingStatement creates a statement to bind the iteration value.
 func (f *NodeFactory) CreateForOfBindingStatement(node *ast.Node, boundValue *ast.Node) *ast.Node {
 	if ast.IsVariableDeclarationList(node) {
-		firstDeclaration := node.AsVariableDeclarationList().Declarations.Nodes[0]
+		firstDeclaration := node.AsVariableDeclarationList().Declarations().Nodes[0]
 		updatedDeclaration := f.UpdateVariableDeclaration(
 			firstDeclaration.AsVariableDeclaration(),
 			firstDeclaration.Name(),

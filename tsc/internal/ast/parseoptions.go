@@ -94,7 +94,7 @@ func isFileProbablyExternalModule(sourceFile *SourceFile) *Node {
 
 func isAnExternalModuleIndicatorNode(node *Node) bool {
 	return HasSyntacticModifier(node, ModifierFlagsExport) ||
-		IsImportEqualsDeclaration(node) && IsExternalModuleReference(node.AsImportEqualsDeclaration().ModuleReference) ||
+		IsImportEqualsDeclaration(node) && IsExternalModuleReference(node.AsImportEqualsDeclaration().ModuleReference()) ||
 		IsImportDeclaration(node) || IsExportAssignment(node) || IsExportDeclaration(node)
 }
 

@@ -231,6 +231,8 @@ function goParamName(m: MemberInfo): string {
 /** Get the Go accessor for a member on a cast struct (e.g., "n.IsTypeOnly", "n.Name()"). */
 function goFieldAccess(m: MemberInfo): string {
     if (m.private) return `n.${api.capitalize(m.name)}()`;
+    // Links to nodes and node lists are read through accessors.
+    if (m.goLinkTarget()) return `n.${m.name}()`;
     return `n.${m.name}`;
 }
 

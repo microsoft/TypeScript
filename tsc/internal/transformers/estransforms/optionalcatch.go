@@ -22,10 +22,10 @@ func (ch *optionalCatchTransformer) visit(node *ast.Node) *ast.Node {
 }
 
 func (ch *optionalCatchTransformer) visitCatchClause(node *ast.CatchClause) *ast.Node {
-	if node.VariableDeclaration == nil {
+	if node.VariableDeclaration() == nil {
 		return ch.Factory().NewCatchClause(
 			ch.Factory().NewVariableDeclaration(ch.Factory().NewTempVariable(), nil, nil, nil),
-			ch.Visitor().Visit(node.Block),
+			ch.Visitor().Visit(node.Block()),
 		)
 	}
 	return ch.Visitor().VisitEachChild(node.AsNode())

@@ -76,30 +76,30 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 
 		case ast.KindImportEqualsDeclaration:
 			n := node.AsImportEqualsDeclaration()
-			if ast.IsExternalModuleReference(n.ModuleReference) {
+			if ast.IsExternalModuleReference(n.ModuleReference()) {
 				// import x = require("mod")
 				c.addExternalImport(node)
 			}
 
 		case ast.KindExportDeclaration:
 			n := node.AsExportDeclaration()
-			if n.ModuleSpecifier != nil {
+			if n.ModuleSpecifier() != nil {
 				// export * from "mod"
 				// export * as ns from "mod"
 				// export { x, y } from "mod"
 				c.addExternalImport(node)
-				if n.ExportClause == nil {
+				if n.ExportClause() == nil {
 					// export * from "mod"
 					c.output.hasExportStarsToExportValues = true
-				} else if ast.IsNamedExports(n.ExportClause) {
+				} else if ast.IsNamedExports(n.ExportClause()) {
 					// export { x, y } from "mod"
 					c.addExportedNamesForExportDeclaration(n)
 					if !hasImportDefault {
-						hasImportDefault = containsDefaultReference(n.ExportClause)
+						hasImportDefault = containsDefaultReference(n.ExportClause())
 					}
 				} else {
 					// export * as ns from "mod"
-					name := n.ExportClause.AsNamespaceExport().Name()
+					name := n.ExportClause().AsNamespaceExport().Name()
 					nameText := name.Text()
 					if c.addUniqueExport(nameText) {
 						c.addExportedBinding(node, name)
@@ -123,7 +123,7 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 		case ast.KindVariableStatement:
 			n := node.AsVariableStatement()
 			if ast.HasSyntacticModifier(node, ast.ModifierFlagsExport) {
-				for _, decl := range n.DeclarationList.AsVariableDeclarationList().Declarations.Nodes {
+				for _, decl := range n.DeclarationList().AsVariableDeclarationList().Declarations().Nodes {
 					c.collectExportedVariableInfo(decl)
 				}
 			}
@@ -185,12 +185,12 @@ func (c *externalModuleInfoCollector) addExportedName(name *ast.ModuleExportName
 }
 
 func (c *externalModuleInfoCollector) addExportedNamesForExportDeclaration(node *ast.ExportDeclaration) {
-	for _, specifier := range node.ExportClause.Elements() {
+	for _, specifier := range node.ExportClause().Elements() {
 		specifierNameText := specifier.Name().Text()
 		if c.addUniqueExport(specifierNameText) {
 			name := specifier.PropertyNameOrName()
 			if name.Kind != ast.KindStringLiteral {
-				if node.ModuleSpecifier == nil {
+				if node.ModuleSpecifier() == nil {
 					c.output.exportSpecifiers.Add(name.Text(), specifier.AsExportSpecifier())
 				}
 
@@ -361,10 +361,10 @@ func getImportNeedsImportStarHelper(node *ast.ImportDeclaration) bool {
 	if ast.GetNamespaceDeclarationNode(node.AsNode()) != nil {
 		return true
 	}
-	if node.ImportClause == nil {
+	if node.ImportClause() == nil {
 		return false
 	}
-	bindings := node.ImportClause.AsImportClause().NamedBindings
+	bindings := node.ImportClause().AsImportClause().NamedBindings()
 	if bindings == nil {
 		return false
 	}
@@ -373,17 +373,17 @@ func getImportNeedsImportStarHelper(node *ast.ImportDeclaration) bool {
 	}
 	namedImports := bindings.AsNamedImports()
 	defaultRefCount := 0
-	for _, binding := range namedImports.Elements.Nodes {
+	for _, binding := range namedImports.Elements().Nodes {
 		if isNamedDefaultReference(binding) {
 			defaultRefCount++
 		}
 	}
 	// Import star is required if there's default named refs mixed with non-default refs, or if theres non-default refs and it has a default import
-	return (defaultRefCount > 0 && defaultRefCount != len(namedImports.Elements.Nodes)) || ((len(namedImports.Elements.Nodes)-defaultRefCount) != 0 && ast.IsDefaultImport(node.AsNode()))
+	return (defaultRefCount > 0 && defaultRefCount != len(namedImports.Elements().Nodes)) || ((len(namedImports.Elements().Nodes)-defaultRefCount) != 0 && ast.IsDefaultImport(node.AsNode()))
 }
 
 func getImportNeedsImportDefaultHelper(node *ast.ImportDeclaration) bool {
 	// Import default is needed if there's a default import or a default ref and no other refs (meaning an import star helper wasn't requested)
-	return !getImportNeedsImportStarHelper(node) && (ast.IsDefaultImport(node.AsNode()) || (node.ImportClause != nil &&
-		containsDefaultReference(node.ImportClause.AsImportClause().NamedBindings)))
+	return !getImportNeedsImportStarHelper(node) && (ast.IsDefaultImport(node.AsNode()) || (node.ImportClause() != nil &&
+		containsDefaultReference(node.ImportClause().AsImportClause().NamedBindings())))
 }

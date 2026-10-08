@@ -92,7 +92,7 @@ func NodeIsASICandidate(node *ast.Node, file *ast.SourceFile) bool {
 		return true
 	}
 
-	topNode := ast.FindAncestor(node, func(ancestor *ast.Node) bool { return ancestor.Parent == nil })
+	topNode := ast.FindAncestor(node, func(ancestor *ast.Node) bool { return ancestor.Parent() == nil })
 	nextToken := astnav.FindNextToken(node, topNode, file)
 	if nextToken == nil || nextToken.Kind == ast.KindCloseBraceToken {
 		return true

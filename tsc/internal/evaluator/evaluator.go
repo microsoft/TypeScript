@@ -42,7 +42,7 @@ func NewEvaluator(evaluateEntity Evaluator, outerExpressionsToSkip ast.OuterExpr
 		expr = ast.SkipOuterExpressions(expr, outerExpressionsToSkip|ast.OEKParentheses)
 		switch expr.Kind {
 		case ast.KindPrefixUnaryExpression:
-			result := evaluate(expr.AsPrefixUnaryExpression().Operand, location)
+			result := evaluate(expr.AsPrefixUnaryExpression().Operand(), location)
 			resolvedOtherFiles = result.ResolvedOtherFiles
 			hasExternalReferences = result.HasExternalReferences
 			if value, ok := result.Value.(jsnum.Number); ok {
@@ -56,10 +56,10 @@ func NewEvaluator(evaluateEntity Evaluator, outerExpressionsToSkip ast.OuterExpr
 				}
 			}
 		case ast.KindBinaryExpression:
-			left := evaluate(expr.AsBinaryExpression().Left, location)
-			right := evaluate(expr.AsBinaryExpression().Right, location)
-			operator := expr.AsBinaryExpression().OperatorToken.Kind
-			isSyntacticallyString = (left.IsSyntacticallyString || right.IsSyntacticallyString) && expr.AsBinaryExpression().OperatorToken.Kind == ast.KindPlusToken
+			left := evaluate(expr.AsBinaryExpression().Left(), location)
+			right := evaluate(expr.AsBinaryExpression().Right(), location)
+			operator := expr.AsBinaryExpression().OperatorToken().Kind
+			isSyntacticallyString = (left.IsSyntacticallyString || right.IsSyntacticallyString) && expr.AsBinaryExpression().OperatorToken().Kind == ast.KindPlusToken
 			resolvedOtherFiles = left.ResolvedOtherFiles || right.ResolvedOtherFiles
 			hasExternalReferences = left.HasExternalReferences || right.HasExternalReferences
 			leftNum, leftIsNum := left.Value.(jsnum.Number)
@@ -123,16 +123,16 @@ func NewEvaluator(evaluateEntity Evaluator, outerExpressionsToSkip ast.OuterExpr
 
 func evaluateTemplateExpression(expr *ast.Node, location *ast.Node, evaluate Evaluator) Result {
 	var sb strings.Builder
-	sb.WriteString(expr.AsTemplateExpression().Head.Text())
+	sb.WriteString(expr.AsTemplateExpression().Head().Text())
 	resolvedOtherFiles := false
 	hasExternalReferences := false
-	for _, span := range expr.AsTemplateExpression().TemplateSpans.Nodes {
+	for _, span := range expr.AsTemplateExpression().TemplateSpans().Nodes {
 		spanResult := evaluate(span.Expression(), location)
 		if spanResult.Value == nil {
 			return Result{nil, true /*isSyntacticallyString*/, false, false}
 		}
 		sb.WriteString(AnyToString(spanResult.Value))
-		sb.WriteString(span.AsTemplateSpan().Literal.Text())
+		sb.WriteString(span.AsTemplateSpan().Literal().Text())
 		resolvedOtherFiles = resolvedOtherFiles || spanResult.ResolvedOtherFiles
 		hasExternalReferences = hasExternalReferences || spanResult.HasExternalReferences
 	}

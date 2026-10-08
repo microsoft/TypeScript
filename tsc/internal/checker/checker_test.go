@@ -49,7 +49,7 @@ foo.bar;`
 	defer done()
 	file := p.GetSourceFile("/foo.ts")
 	interfaceId := file.Statements.Nodes[0].Name()
-	varId := file.Statements.Nodes[1].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].Name()
+	varId := file.Statements.Nodes[1].AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes[0].Name()
 	propAccess := file.Statements.Nodes[2].Expression()
 	nodes := []*ast.Node{interfaceId, varId, propAccess}
 	for _, node := range nodes {
@@ -97,7 +97,7 @@ export type E = D;`,
 	defer done()
 	file := p.GetSourceFile("/main.ts")
 	importClauseAt := func(index int) *ast.Node {
-		return file.Statements.Nodes[index].AsImportDeclaration().ImportClause
+		return file.Statements.Nodes[index].AsImportDeclaration().ImportClause()
 	}
 	// An import clause without a default binding has no symbol of its own. A type-only one
 	// should get the same type as the equivalent regular import instead of crashing.
@@ -111,7 +111,7 @@ export type E = D;`,
 	}
 
 	defaultClause := c.GetTypeAtLocation(importClauseAt(3))
-	defaultReference := c.GetTypeAtLocation(file.Statements.Nodes[7].AsTypeAliasDeclaration().Type)
+	defaultReference := c.GetTypeAtLocation(file.Statements.Nodes[7].AsTypeAliasDeclaration().Type())
 	assert.Equal(t, defaultClause, defaultReference)
 }
 

@@ -25,14 +25,14 @@ func (l *LanguageService) ProvideLinkedEditingRange(ctx context.Context, params 
 	position := positions[0].Position
 	token := astnav.FindPrecedingToken(sourceFile, int(position))
 
-	if token == nil || token.Parent.Kind == ast.KindSourceFile {
+	if token == nil || token.Parent().Kind == ast.KindSourceFile {
 		return lsproto.LinkedEditingRangeResponse{}, nil
 	}
 
-	if ast.IsJsxFragment(token.Parent.Parent) {
-		fragment := token.Parent.Parent.AsJsxFragment()
-		openFragment := fragment.OpeningFragment
-		closeFragment := fragment.ClosingFragment
+	if ast.IsJsxFragment(token.Parent().Parent()) {
+		fragment := token.Parent().Parent().AsJsxFragment()
+		openFragment := fragment.OpeningFragment()
+		closeFragment := fragment.ClosingFragment()
 		if openFragment.Flags&ast.NodeFlagsThisNodeOrAnySubNodesHasError != 0 || closeFragment.Flags&ast.NodeFlagsThisNodeOrAnySubNodesHasError != 0 {
 			return lsproto.LinkedEditingRangeResponse{}, nil
 		}
@@ -61,7 +61,7 @@ func (l *LanguageService) ProvideLinkedEditingRange(ctx context.Context, params 
 		}, nil
 	} else {
 		// determines if the cursor is in an element tag
-		tag := ast.FindAncestor(token.Parent, func(n *ast.Node) bool {
+		tag := ast.FindAncestor(token.Parent(), func(n *ast.Node) bool {
 			if ast.IsJsxOpeningElement(n) || ast.IsJsxClosingElement(n) {
 				return true
 			}
@@ -72,9 +72,9 @@ func (l *LanguageService) ProvideLinkedEditingRange(ctx context.Context, params 
 		}
 		debug.Assert(ast.IsJsxOpeningElement(tag) || ast.IsJsxClosingElement(tag), "tag should be opening or closing element")
 
-		jsxElement := tag.Parent.AsJsxElement()
-		openTag := jsxElement.OpeningElement
-		closeTag := jsxElement.ClosingElement
+		jsxElement := tag.Parent().AsJsxElement()
+		openTag := jsxElement.OpeningElement()
+		closeTag := jsxElement.ClosingElement()
 
 		openTagNameStart := astnav.GetStartOfNode(openTag.TagName().AsNode(), sourceFile, false)
 		openTagNameEnd := openTag.TagName().End()

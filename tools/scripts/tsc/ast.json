@@ -1191,7 +1191,6 @@
                         "inherited": true
                     }
                 ],
-                "arena": true,
                 "instantiationAliases": {
                     "EndOfFile": "EndOfFile",
                     "DotToken": "DotToken",
@@ -1238,8 +1237,7 @@
                         "name": "Text",
                         "type": "string"
                     }
-                ],
-                "arena": true
+                ]
             },
             "PrivateIdentifier": {
                 "extends": [
@@ -1322,8 +1320,7 @@
                         "optional": true,
                         "visit": "embeddedStatement"
                     }
-                ],
-                "arena": true
+                ]
             },
             "DoStatement": {
                 "generateSubtreeFacts": true,
@@ -1464,8 +1461,7 @@
                         "type": "Expression",
                         "optional": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "WithStatement": {
                 "generateSubtreeFacts": true,
@@ -1634,8 +1630,7 @@
                         "name": "Expression",
                         "type": "Expression"
                     }
-                ],
-                "arena": true
+                ]
             },
             "Block": {
                 "generateSubtreeFacts": true,
@@ -1654,8 +1649,7 @@
                         "name": "MultiLine",
                         "type": "bool"
                     }
-                ],
-                "arena": true
+                ]
             },
             "VariableStatement": {
                 "extends": [
@@ -1672,8 +1666,7 @@
                         "name": "DeclarationList",
                         "type": "VariableDeclarationList"
                     }
-                ],
-                "arena": true
+                ]
             },
             "VariableDeclaration": {
                 "extends": [
@@ -1703,8 +1696,7 @@
                         "type": "Expression",
                         "optional": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "VariableDeclarationList": {
                 "extends": [
@@ -1721,8 +1713,7 @@
                         "name": "Flags",
                         "inherited": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "BindingPattern": {
                 "extends": [
@@ -1783,8 +1774,7 @@
                         "type": "Expression",
                         "optional": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "BindingElement": {
                 "extends": [
@@ -1885,8 +1875,7 @@
                         "type": "*FlowNode",
                         "goOnly": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "ClassDeclaration": {
                 "extends": [
@@ -1964,8 +1953,7 @@
                         "type": "HeritageClauseElement",
                         "list": "NodeList"
                     }
-                ],
-                "arena": true
+                ]
             },
             "InterfaceDeclaration": {
                 "extends": [
@@ -2002,8 +1990,7 @@
                         "type": "TypeElement",
                         "list": "NodeList"
                     }
-                ],
-                "arena": true
+                ]
             },
             "TypeAliasDeclaration": {
                 "kind": [
@@ -2038,8 +2025,7 @@
                         "name": "Type",
                         "type": "TypeNode"
                     }
-                ],
-                "arena": true
+                ]
             },
             "EnumMember": {
                 "extends": [
@@ -2327,8 +2313,7 @@
                         "name": "Type",
                         "inherited": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "ConstructorDeclaration": {
                 "kind": "Constructor",
@@ -2521,8 +2506,7 @@
                         "name": "Type",
                         "inherited": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "MethodDeclaration": {
                 "extends": [
@@ -2609,8 +2593,7 @@
                         "name": "Initializer",
                         "type": "Expression"
                     }
-                ],
-                "arena": true
+                ]
             },
             "PropertyDeclaration": {
                 "extends": [
@@ -2701,7 +2684,6 @@
                         "inherited": true
                     }
                 ],
-                "arena": true,
                 "instantiationAliases": {
                     "NullLiteral": "NullKeyword",
                     "TrueLiteral": "TrueKeyword",
@@ -2725,8 +2707,7 @@
                         "inherited": true,
                         "bitmask": "TokenFlagsStringLiteralFlags"
                     }
-                ],
-                "arena": true
+                ]
             },
             "NumericLiteral": {
                 "extends": [
@@ -2742,8 +2723,7 @@
                         "inherited": true,
                         "bitmask": "TokenFlagsNumericLiteralFlags"
                     }
-                ],
-                "arena": true
+                ]
             },
             "BigIntLiteral": {
                 "extends": [
@@ -2824,8 +2804,7 @@
                         "name": "Right",
                         "type": "Expression"
                     }
-                ],
-                "arena": true
+                ]
             },
             "PrefixUnaryExpression": {
                 "generateSubtreeFacts": true,
@@ -2848,8 +2827,7 @@
                         "name": "Operand",
                         "type": "Expression"
                     }
-                ],
-                "arena": true
+                ]
             },
             "PostfixUnaryExpression": {
                 "generateSubtreeFacts": true,
@@ -3045,8 +3023,7 @@
                         "name": "WhenFalse",
                         "type": "Expression"
                     }
-                ],
-                "arena": true
+                ]
             },
             "PropertyAccessExpression": {
                 "extends": [
@@ -3074,8 +3051,7 @@
                         "inherited": true,
                         "bitmask": "NodeFlagsOptionalChain"
                     }
-                ],
-                "arena": true
+                ]
             },
             "ElementAccessExpression": {
                 "generateSubtreeFacts": true,
@@ -3103,8 +3079,7 @@
                         "inherited": true,
                         "bitmask": "NodeFlagsOptionalChain"
                     }
-                ],
-                "arena": true
+                ]
             },
             "CallExpression": {
                 "extends": [
@@ -3138,8 +3113,7 @@
                         "inherited": true,
                         "bitmask": "NodeFlagsOptionalChain"
                     }
-                ],
-                "arena": true
+                ]
             },
             "NewExpression": {
                 "extends": [
@@ -3288,8 +3262,7 @@
                         "name": "Expression",
                         "type": "Expression"
                     }
-                ],
-                "arena": true
+                ]
             },
             "ArrayLiteralExpression": {
                 "generateSubtreeFacts": true,
@@ -3370,8 +3343,7 @@
                         "name": "Initializer",
                         "type": "Expression"
                     }
-                ],
-                "arena": true
+                ]
             },
             "ShorthandPropertyAssignment": {
                 "extends": [
@@ -3490,8 +3462,7 @@
                         "type": "TKind",
                         "inherited": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "UnionTypeNode": {
                 "kind": "UnionType",
@@ -3503,8 +3474,7 @@
                         "name": "Types",
                         "inherited": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "IntersectionTypeNode": {
                 "kind": "IntersectionType",
@@ -3516,8 +3486,7 @@
                         "name": "Types",
                         "inherited": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "ConditionalTypeNode": {
                 "kind": "ConditionalType",
@@ -3562,8 +3531,7 @@
                         "name": "Type",
                         "type": "TypeNode"
                     }
-                ],
-                "arena": true
+                ]
             },
             "InferTypeNode": {
                 "kind": "InferType",
@@ -3587,8 +3555,7 @@
                         "name": "ElementType",
                         "type": "TypeNode"
                     }
-                ],
-                "arena": true
+                ]
             },
             "IndexedAccessTypeNode": {
                 "kind": "IndexedAccessType",
@@ -3604,8 +3571,7 @@
                         "name": "IndexType",
                         "type": "TypeNode"
                     }
-                ],
-                "arena": true
+                ]
             },
             "TypeReferenceNode": {
                 "kind": "TypeReference",
@@ -3621,8 +3587,7 @@
                         "name": "TypeArguments",
                         "inherited": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "ExpressionWithTypeArguments": {
                 "extends": [
@@ -3640,8 +3605,7 @@
                         "optional": true,
                         "list": "NodeList"
                     }
-                ],
-                "arena": true
+                ]
             },
             "LiteralTypeNode": {
                 "kind": "LiteralType",
@@ -3653,8 +3617,7 @@
                         "name": "Literal",
                         "type": "Node"
                     }
-                ],
-                "arena": true
+                ]
             },
             "ThisTypeNode": {
                 "kind": "ThisType",
@@ -3805,8 +3768,7 @@
                         "type": "TypeElement",
                         "list": "NodeList"
                     }
-                ],
-                "arena": true
+                ]
             },
             "TupleTypeNode": {
                 "kind": "TupleType",
@@ -3882,8 +3844,7 @@
                         "name": "Type",
                         "type": "TypeNode"
                     }
-                ],
-                "arena": true
+                ]
             },
             "FunctionTypeNode": {
                 "kind": "FunctionType",
@@ -3903,8 +3864,7 @@
                         "name": "Type",
                         "inherited": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "ConstructorTypeNode": {
                 "kind": "ConstructorType",
@@ -4287,8 +4247,7 @@
                         "list": "NodeList",
                         "optional": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "JSDocTypeExpression": {
                 "extends": [
@@ -4382,8 +4341,7 @@
                         "name": "Comment",
                         "inherited": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "JSDocTemplateTag": {
                 "extends": [
@@ -4517,8 +4475,7 @@
                         "name": "Comment",
                         "inherited": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "JSDocSeeTag": {
                 "extends": [
@@ -4966,8 +4923,7 @@
                         "type": "Identifier",
                         "private": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "JSDocText": {
                 "extends": [
@@ -4978,8 +4934,7 @@
                         "name": "text",
                         "inherited": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "JSDocLink": {
                 "extends": [
@@ -5065,8 +5020,7 @@
                         "type": "TypeNode",
                         "optional": true
                     }
-                ],
-                "arena": true
+                ]
             },
             "SyntheticReferenceExpression": {
                 "generateSubtreeFacts": true,

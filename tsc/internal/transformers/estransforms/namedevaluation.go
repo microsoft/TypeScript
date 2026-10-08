@@ -14,15 +14,15 @@ import (
  * @internal
  */
 func isClassNamedEvaluationHelperBlock(emitContext *printer.EmitContext, node *ast.Node) bool {
-	if !ast.IsClassStaticBlockDeclaration(node) || len(node.AsClassStaticBlockDeclaration().Body.Statements()) != 1 {
+	if !ast.IsClassStaticBlockDeclaration(node) || len(node.AsClassStaticBlockDeclaration().Body().Statements()) != 1 {
 		return false
 	}
 
-	statement := node.AsClassStaticBlockDeclaration().Body.Statements()[0]
+	statement := node.AsClassStaticBlockDeclaration().Body().Statements()[0]
 	if ast.IsExpressionStatement(statement) {
 		expression := statement.Expression()
 		if emitContext.IsCallToHelper(expression, "__setFunctionName") {
-			arguments := expression.AsCallExpression().Arguments
+			arguments := expression.AsCallExpression().Arguments()
 			return len(arguments.Nodes) >= 2 &&
 				arguments.Nodes[1] == emitContext.AssignedName(node.AsNode())
 		}
@@ -92,11 +92,11 @@ func isNamedEvaluationAnd(emitContext *printer.EmitContext, node *ast.Node, cb f
 	}
 	switch node.Kind {
 	case ast.KindShorthandPropertyAssignment:
-		return isAnonymousFunctionDefinition(emitContext, node.AsShorthandPropertyAssignment().ObjectAssignmentInitializer, cb)
+		return isAnonymousFunctionDefinition(emitContext, node.AsShorthandPropertyAssignment().ObjectAssignmentInitializer(), cb)
 	case ast.KindPropertyAssignment, ast.KindVariableDeclaration, ast.KindParameter, ast.KindBindingElement, ast.KindPropertyDeclaration:
 		return isAnonymousFunctionDefinition(emitContext, node.Initializer(), cb)
 	case ast.KindBinaryExpression:
-		return isAnonymousFunctionDefinition(emitContext, node.AsBinaryExpression().Right, cb)
+		return isAnonymousFunctionDefinition(emitContext, node.AsBinaryExpression().Right(), cb)
 	case ast.KindExportAssignment:
 		return isAnonymousFunctionDefinition(emitContext, node.Expression(), cb)
 	default:
@@ -222,7 +222,7 @@ func injectClassNamedEvaluationHelperBlockIfMissing(
 			node.Modifiers(),
 			node.Name(),
 			node.TypeParameterList(),
-			node.AsClassDeclaration().HeritageClauses,
+			node.AsClassDeclaration().HeritageClauses(),
 			membersList,
 		)
 	} else {
@@ -231,7 +231,7 @@ func injectClassNamedEvaluationHelperBlockIfMissing(
 			node.Modifiers(),
 			node.Name(),
 			node.TypeParameterList(),
-			node.AsClassExpression().HeritageClauses,
+			node.AsClassExpression().HeritageClauses(),
 			membersList,
 		)
 	}
@@ -280,7 +280,7 @@ func transformNamedEvaluationOfPropertyAssignment(context *printer.EmitContext, 
 
 	factory := context.Factory
 	assignedName, name := getAssignedNameOfPropertyName(context, node.Name(), assignedNameText)
-	initializer := finishTransformNamedEvaluation(context, node.Initializer, assignedName, ignoreEmptyStringLiteral)
+	initializer := finishTransformNamedEvaluation(context, node.Initializer(), assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdatePropertyAssignment(node, nil /*modifiers*/, name, nil /*postfixToken*/, nil /*typeNode*/, initializer)
 }
 
@@ -298,16 +298,16 @@ func transformNamedEvaluationOfShorthandAssignmentProperty(emitContext *printer.
 	if len(assignedNameText) > 0 {
 		assignedName = factory.NewStringLiteral(assignedNameText, ast.TokenFlagsNone)
 	} else {
-		assignedName = getAssignedNameOfIdentifier(emitContext, node.Name(), node.ObjectAssignmentInitializer)
+		assignedName = getAssignedNameOfIdentifier(emitContext, node.Name(), node.ObjectAssignmentInitializer())
 	}
-	objectAssignmentInitializer := finishTransformNamedEvaluation(emitContext, node.ObjectAssignmentInitializer, assignedName, ignoreEmptyStringLiteral)
+	objectAssignmentInitializer := finishTransformNamedEvaluation(emitContext, node.ObjectAssignmentInitializer(), assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdateShorthandPropertyAssignment(
 		node,
 		nil, /*modifiers*/
 		node.Name(),
 		nil, /*postfixToken*/
 		nil, /*typeNode*/
-		node.EqualsToken,
+		node.EqualsToken(),
 		objectAssignmentInitializer,
 	)
 }
@@ -332,9 +332,9 @@ func transformNamedEvaluationOfVariableDeclaration(emitContext *printer.EmitCont
 	if len(assignedNameText) > 0 {
 		assignedName = factory.NewStringLiteral(assignedNameText, ast.TokenFlagsNone)
 	} else {
-		assignedName = getAssignedNameOfIdentifier(emitContext, node.Name(), node.Initializer)
+		assignedName = getAssignedNameOfIdentifier(emitContext, node.Name(), node.Initializer())
 	}
-	initializer := finishTransformNamedEvaluation(emitContext, node.Initializer, assignedName, ignoreEmptyStringLiteral)
+	initializer := finishTransformNamedEvaluation(emitContext, node.Initializer(), assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdateVariableDeclaration(
 		node,
 		node.Name(),
@@ -366,13 +366,13 @@ func transformNamedEvaluationOfParameterDeclaration(emitContext *printer.EmitCon
 	if len(assignedNameText) > 0 {
 		assignedName = factory.NewStringLiteral(assignedNameText, ast.TokenFlagsNone)
 	} else {
-		assignedName = getAssignedNameOfIdentifier(emitContext, node.Name(), node.Initializer)
+		assignedName = getAssignedNameOfIdentifier(emitContext, node.Name(), node.Initializer())
 	}
-	initializer := finishTransformNamedEvaluation(emitContext, node.Initializer, assignedName, ignoreEmptyStringLiteral)
+	initializer := finishTransformNamedEvaluation(emitContext, node.Initializer(), assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdateParameterDeclaration(
 		node,
 		nil, /*modifiers*/
-		node.DotDotDotToken,
+		node.DotDotDotToken(),
 		node.Name(),
 		nil, /*questionToken*/
 		nil, /*typeNode*/
@@ -402,13 +402,13 @@ func transformNamedEvaluationOfBindingElement(emitContext *printer.EmitContext, 
 	if len(assignedNameText) > 0 {
 		assignedName = factory.NewStringLiteral(assignedNameText, ast.TokenFlagsNone)
 	} else {
-		assignedName = getAssignedNameOfIdentifier(emitContext, node.Name(), node.Initializer)
+		assignedName = getAssignedNameOfIdentifier(emitContext, node.Name(), node.Initializer())
 	}
-	initializer := finishTransformNamedEvaluation(emitContext, node.Initializer, assignedName, ignoreEmptyStringLiteral)
+	initializer := finishTransformNamedEvaluation(emitContext, node.Initializer(), assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdateBindingElement(
 		node,
-		node.DotDotDotToken,
-		node.PropertyName,
+		node.DotDotDotToken(),
+		node.PropertyName(),
 		node.Name(),
 		initializer,
 	)
@@ -424,7 +424,7 @@ func transformNamedEvaluationOfPropertyDeclaration(emitContext *printer.EmitCont
 
 	factory := emitContext.Factory
 	assignedName, name := getAssignedNameOfPropertyName(emitContext, node.Name(), assignedNameText)
-	initializer := finishTransformNamedEvaluation(emitContext, node.Initializer, assignedName, ignoreEmptyStringLiteral)
+	initializer := finishTransformNamedEvaluation(emitContext, node.Initializer(), assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdatePropertyDeclaration(
 		node,
 		node.Modifiers(),
@@ -467,15 +467,15 @@ func transformNamedEvaluationOfAssignmentExpression(emitContext *printer.EmitCon
 	if len(assignedNameText) > 0 {
 		assignedName = factory.NewStringLiteral(assignedNameText, ast.TokenFlagsNone)
 	} else {
-		assignedName = getAssignedNameOfIdentifier(emitContext, node.Left, node.Right)
+		assignedName = getAssignedNameOfIdentifier(emitContext, node.Left(), node.Right())
 	}
-	right := finishTransformNamedEvaluation(emitContext, node.Right, assignedName, ignoreEmptyStringLiteral)
+	right := finishTransformNamedEvaluation(emitContext, node.Right(), assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdateBinaryExpression(
 		node,
 		nil, /*modifiers*/
-		node.Left,
+		node.Left(),
 		nil, /*typeNode*/
-		node.OperatorToken,
+		node.OperatorToken(),
 		right,
 	)
 }
@@ -499,7 +499,7 @@ func transformNamedEvaluationOfExportAssignment(emitContext *printer.EmitContext
 	} else {
 		assignedName = factory.NewStringLiteral("default", ast.TokenFlagsNone)
 	}
-	expression := finishTransformNamedEvaluation(emitContext, node.Expression, assignedName, ignoreEmptyStringLiteral)
+	expression := finishTransformNamedEvaluation(emitContext, node.Expression(), assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdateExportAssignment(
 		node,
 		nil, /*modifiers*/

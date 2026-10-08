@@ -233,18 +233,18 @@ func (f *missingMemberFixer) createSignatureDeclarationFromSignature(signature *
 			if ast.IsTypeParameterDeclaration(tp) {
 				typeParameter := tp.AsTypeParameterDeclaration()
 
-				constraint := typeParameter.Constraint
+				constraint := typeParameter.Constraint()
 				if constraint != nil {
 					constraint = f.importTypeNode(constraint, idToSymbol)
 				}
 
-				defaultType := typeParameter.DefaultType
+				defaultType := typeParameter.DefaultType()
 				if defaultType != nil {
 					defaultType = f.importTypeNode(defaultType, idToSymbol)
 				}
 
 				nodes = append(nodes,
-					f.changeTracker.NodeFactory.UpdateTypeParameterDeclaration(typeParameter, typeParameter.Modifiers(), typeParameter.Name(), constraint, typeParameter.Expression, defaultType))
+					f.changeTracker.NodeFactory.UpdateTypeParameterDeclaration(typeParameter, typeParameter.Modifiers(), typeParameter.Name(), constraint, typeParameter.Expression(), defaultType))
 			} else {
 				nodes = append(nodes, tp)
 			}
@@ -260,13 +260,13 @@ func (f *missingMemberFixer) createSignatureDeclarationFromSignature(signature *
 			}
 
 			parameter := p.AsParameterDeclaration()
-			parameterTypeNode := parameter.Type
+			parameterTypeNode := parameter.Type()
 			if parameterTypeNode != nil {
 				parameterTypeNode = f.importTypeNode(parameterTypeNode, idToSymbol)
 			}
 
 			nodes = append(nodes,
-				f.changeTracker.NodeFactory.UpdateParameterDeclaration(parameter, parameter.Modifiers(), parameter.DotDotDotToken, parameter.Name(), core.IfElse(isJS, nil, parameter.QuestionToken), parameterTypeNode, parameter.Initializer))
+				f.changeTracker.NodeFactory.UpdateParameterDeclaration(parameter, parameter.Modifiers(), parameter.DotDotDotToken(), parameter.Name(), core.IfElse(isJS, nil, parameter.QuestionToken()), parameterTypeNode, parameter.Initializer()))
 		}
 		parameters = f.changeTracker.NodeFactory.NewNodeList(nodes)
 	}
@@ -283,20 +283,20 @@ func (f *missingMemberFixer) createSignatureDeclarationFromSignature(signature *
 	switch kind {
 	case ast.KindFunctionExpression:
 		fn := signatureDeclaration.AsFunctionExpression()
-		return f.changeTracker.NodeFactory.UpdateFunctionExpression(fn, modifiers, fn.AsteriskToken, core.IfElse(name != nil && ast.IsIdentifier(name), name, nil), typeParameters, parameters, typeNode, fn.FullSignature, core.OrElse(body, fn.Body))
+		return f.changeTracker.NodeFactory.UpdateFunctionExpression(fn, modifiers, fn.AsteriskToken(), core.IfElse(name != nil && ast.IsIdentifier(name), name, nil), typeParameters, parameters, typeNode, fn.FullSignature(), core.OrElse(body, fn.Body()))
 
 	case ast.KindArrowFunction:
 		fn := signatureDeclaration.AsArrowFunction()
-		return f.changeTracker.NodeFactory.UpdateArrowFunction(fn, modifiers, typeParameters, parameters, typeNode, fn.FullSignature, fn.EqualsGreaterThanToken, core.OrElse(body, fn.Body))
+		return f.changeTracker.NodeFactory.UpdateArrowFunction(fn, modifiers, typeParameters, parameters, typeNode, fn.FullSignature(), fn.EqualsGreaterThanToken(), core.OrElse(body, fn.Body()))
 
 	case ast.KindMethodDeclaration:
 		method := signatureDeclaration.AsMethodDeclaration()
 		methodName := core.IfElse(name == nil, f.changeTracker.NodeFactory.NewIdentifier(""), createPropertyName(f.changeTracker.NodeFactory, name, quotePreference))
-		return f.changeTracker.NodeFactory.UpdateMethodDeclaration(method, modifiers, method.AsteriskToken, methodName, questionToken, typeParameters, parameters, typeNode, method.FullSignature, body)
+		return f.changeTracker.NodeFactory.UpdateMethodDeclaration(method, modifiers, method.AsteriskToken(), methodName, questionToken, typeParameters, parameters, typeNode, method.FullSignature(), body)
 
 	case ast.KindFunctionDeclaration:
 		fn := signatureDeclaration.AsFunctionDeclaration()
-		return f.changeTracker.NodeFactory.UpdateFunctionDeclaration(fn, modifiers, fn.AsteriskToken, core.IfElse(name != nil && ast.IsIdentifier(name), name, nil), typeParameters, parameters, typeNode, fn.FullSignature, core.OrElse(body, fn.Body))
+		return f.changeTracker.NodeFactory.UpdateFunctionDeclaration(fn, modifiers, fn.AsteriskToken(), core.IfElse(name != nil && ast.IsIdentifier(name), name, nil), typeParameters, parameters, typeNode, fn.FullSignature(), core.OrElse(body, fn.Body()))
 	}
 
 	return nil
@@ -340,11 +340,11 @@ func (f *missingMemberFixer) createSignatureDeclarationFromSignatures(signatures
 			questionToken = f.changeTracker.NodeFactory.NewToken(ast.KindQuestionToken)
 		}
 
-		parameters.Nodes = append(parameters.Nodes, f.changeTracker.NodeFactory.NewParameterDeclaration(
+		parameters.SetNodes(append(parameters.Nodes, f.changeTracker.NodeFactory.NewParameterDeclaration(
 			nil /*modifiers*/, f.changeTracker.NodeFactory.NewToken(ast.KindDotDotDotToken),
 			f.changeTracker.NodeFactory.NewIdentifier(restParameterName), questionToken,
 			f.changeTracker.NodeFactory.NewArrayTypeNode(f.changeTracker.NodeFactory.NewKeywordTypeNode(ast.KindUnknownKeyword)), nil, /*initializer*/
-		))
+		)))
 	}
 
 	methodName := core.IfElse(name == nil, f.changeTracker.NodeFactory.NewIdentifier(""), createPropertyName(f.changeTracker.NodeFactory, name, quotePreference))

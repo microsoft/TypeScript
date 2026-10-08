@@ -189,7 +189,7 @@ const (
 func getOperator(expression *Expression) Kind {
 	switch expression.Kind {
 	case KindBinaryExpression:
-		return expression.AsBinaryExpression().OperatorToken.Kind
+		return expression.AsBinaryExpression().OperatorToken().Kind
 	case KindPrefixUnaryExpression:
 		return expression.AsPrefixUnaryExpression().Operator
 	case KindPostfixUnaryExpression:
@@ -371,16 +371,16 @@ func GetLeftmostExpression(node *Expression, stopAtCallExpressions bool) *Expres
 	for {
 		switch node.Kind {
 		case KindPostfixUnaryExpression:
-			node = node.AsPostfixUnaryExpression().Operand
+			node = node.AsPostfixUnaryExpression().Operand()
 			continue
 		case KindBinaryExpression:
-			node = node.AsBinaryExpression().Left
+			node = node.AsBinaryExpression().Left()
 			continue
 		case KindConditionalExpression:
-			node = node.AsConditionalExpression().Condition
+			node = node.AsConditionalExpression().Condition()
 			continue
 		case KindTaggedTemplateExpression:
-			node = node.AsTaggedTemplateExpression().Tag
+			node = node.AsTaggedTemplateExpression().Tag()
 			continue
 		case KindCallExpression:
 			if stopAtCallExpressions {
@@ -667,7 +667,7 @@ func GetTypeNodePrecedence(n *TypeNode) TypePrecedence {
 	case KindTypeOperator:
 		return TypePrecedenceTypeOperator
 	case KindInferType:
-		if n.AsInferTypeNode().TypeParameter.AsTypeParameterDeclaration().Constraint != nil {
+		if n.AsInferTypeNode().TypeParameter().AsTypeParameterDeclaration().Constraint() != nil {
 			// `infer T extends U` must be treated as FunctionTypeNode precedence as the `extends` clause eagerly consumes
 			// TypeNode
 			return TypePrecedenceFunction

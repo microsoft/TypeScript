@@ -11,7 +11,7 @@ import (
 
 var forbidParentAccessAnalyzer = &analysis.Analyzer{
 	Name: "forbidparentaccess",
-	Doc:  "forbids .Parent access in internal/transformers except internal/transformers/declarations",
+	Doc:  "forbids .Parent and .SetParent access in internal/transformers except internal/transformers/declarations",
 	Requires: []*analysis.Analyzer{
 		inspect.Analyzer,
 	},
@@ -23,7 +23,7 @@ var forbidParentAccessAnalyzer = &analysis.Analyzer{
 		in := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
 		for c := range in.Root().Preorder((*ast.SelectorExpr)(nil)) {
 			n := c.Node().(*ast.SelectorExpr)
-			if n.Sel.Name != "Parent" {
+			if n.Sel.Name != "Parent" && n.Sel.Name != "SetParent" {
 				continue
 			}
 

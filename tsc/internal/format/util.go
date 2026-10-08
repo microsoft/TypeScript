@@ -107,10 +107,10 @@ func findImmediatelyPrecedingTokenOfKind(end int, expectedTokenKind ast.Kind, so
 func findOutermostNodeWithinListLevel(node *ast.Node) *ast.Node {
 	current := node
 	for current != nil &&
-		current.Parent != nil &&
-		current.Parent.End() == node.End() &&
-		!isListElement(current.Parent, current) {
-		current = current.Parent
+		current.Parent() != nil &&
+		current.Parent().End() == node.End() &&
+		!isListElement(current.Parent(), current) {
+		current = current.Parent()
 	}
 
 	return current
@@ -128,7 +128,7 @@ func isListElement(parent *ast.Node, node *ast.Node) bool {
 	case ast.KindSourceFile, ast.KindBlock, ast.KindModuleBlock:
 		return node.Loc.ContainedBy(parent.StatementList().Loc)
 	case ast.KindCatchClause:
-		return node.Loc.ContainedBy(parent.AsCatchClause().Block.StatementList().Loc)
+		return node.Loc.ContainedBy(parent.AsCatchClause().Block().StatementList().Loc)
 	}
 
 	return false

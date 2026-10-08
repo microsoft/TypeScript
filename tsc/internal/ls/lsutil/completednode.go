@@ -36,7 +36,7 @@ func IsCompletedNode(n *ast.Node, sourceFile *ast.SourceFile) bool {
 		return nodeEndsWith(n, ast.KindCloseBraceToken, sourceFile)
 
 	case ast.KindCatchClause:
-		return IsCompletedNode(n.AsCatchClause().Block, sourceFile)
+		return IsCompletedNode(n.AsCatchClause().Block(), sourceFile)
 
 	case ast.KindNewExpression:
 		if n.ArgumentList() == nil {
@@ -77,10 +77,10 @@ func IsCompletedNode(n *ast.Node, sourceFile *ast.SourceFile) bool {
 		return n.Body() != nil && IsCompletedNode(n.Body(), sourceFile)
 
 	case ast.KindIfStatement:
-		if n.AsIfStatement().ElseStatement != nil {
-			return IsCompletedNode(n.AsIfStatement().ElseStatement, sourceFile)
+		if n.AsIfStatement().ElseStatement() != nil {
+			return IsCompletedNode(n.AsIfStatement().ElseStatement(), sourceFile)
 		}
-		return IsCompletedNode(n.AsIfStatement().ThenStatement, sourceFile)
+		return IsCompletedNode(n.AsIfStatement().ThenStatement(), sourceFile)
 
 	case ast.KindExpressionStatement:
 		return IsCompletedNode(n.Expression(), sourceFile) ||
@@ -94,8 +94,8 @@ func IsCompletedNode(n *ast.Node, sourceFile *ast.SourceFile) bool {
 		return nodeEndsWith(n, ast.KindCloseBracketToken, sourceFile)
 
 	case ast.KindIndexSignature:
-		if n.AsIndexSignatureDeclaration().Type != nil {
-			return IsCompletedNode(n.AsIndexSignatureDeclaration().Type, sourceFile)
+		if n.AsIndexSignatureDeclaration().Type() != nil {
+			return IsCompletedNode(n.AsIndexSignatureDeclaration().Type(), sourceFile)
 		}
 		return hasChildOfKind(n, ast.KindCloseBracketToken, sourceFile)
 
@@ -117,7 +117,7 @@ func IsCompletedNode(n *ast.Node, sourceFile *ast.SourceFile) bool {
 		return IsCompletedNode(n.Statement(), sourceFile)
 
 	case ast.KindTypeQuery:
-		return IsCompletedNode(n.AsTypeQueryNode().ExprName, sourceFile)
+		return IsCompletedNode(n.AsTypeQueryNode().ExprName(), sourceFile)
 
 	case ast.KindTypeOfExpression,
 		ast.KindDeleteExpression,
@@ -127,30 +127,30 @@ func IsCompletedNode(n *ast.Node, sourceFile *ast.SourceFile) bool {
 		return IsCompletedNode(n.Expression(), sourceFile)
 
 	case ast.KindTaggedTemplateExpression:
-		return IsCompletedNode(n.AsTaggedTemplateExpression().Template, sourceFile)
+		return IsCompletedNode(n.AsTaggedTemplateExpression().Template(), sourceFile)
 
 	case ast.KindTemplateExpression:
-		if n.AsTemplateExpression().TemplateSpans == nil {
+		if n.AsTemplateExpression().TemplateSpans() == nil {
 			return false
 		}
-		lastSpan := core.LastOrNil(n.AsTemplateExpression().TemplateSpans.Nodes)
+		lastSpan := core.LastOrNil(n.AsTemplateExpression().TemplateSpans().Nodes)
 		return IsCompletedNode(lastSpan, sourceFile)
 
 	case ast.KindTemplateSpan:
-		return ast.NodeIsPresent(n.AsTemplateSpan().Literal)
+		return ast.NodeIsPresent(n.AsTemplateSpan().Literal())
 
 	case ast.KindExportDeclaration,
 		ast.KindImportDeclaration:
 		return ast.NodeIsPresent(n.ModuleSpecifier())
 
 	case ast.KindPrefixUnaryExpression:
-		return IsCompletedNode(n.AsPrefixUnaryExpression().Operand, sourceFile)
+		return IsCompletedNode(n.AsPrefixUnaryExpression().Operand(), sourceFile)
 
 	case ast.KindBinaryExpression:
-		return IsCompletedNode(n.AsBinaryExpression().Right, sourceFile)
+		return IsCompletedNode(n.AsBinaryExpression().Right(), sourceFile)
 
 	case ast.KindConditionalExpression:
-		return IsCompletedNode(n.AsConditionalExpression().WhenFalse, sourceFile)
+		return IsCompletedNode(n.AsConditionalExpression().WhenFalse(), sourceFile)
 
 	default:
 		return true

@@ -6,6 +6,7 @@ import (
 	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/linkarena"
 )
 
 var (
@@ -18,55 +19,10 @@ var (
 // ──────────────────────────────────────────────────────────────────────
 
 type NodeFactory struct {
-	hooks                              NodeFactoryHooks
-	arrayTypeNodeArena                 core.Arena[ArrayTypeNode]
-	binaryExpressionArena              core.Arena[BinaryExpression]
-	blockArena                         core.Arena[Block]
-	callExpressionArena                core.Arena[CallExpression]
-	conditionalExpressionArena         core.Arena[ConditionalExpression]
-	constructSignatureDeclarationArena core.Arena[ConstructSignatureDeclaration]
-	elementAccessExpressionArena       core.Arena[ElementAccessExpression]
-	expressionStatementArena           core.Arena[ExpressionStatement]
-	expressionWithTypeArgumentsArena   core.Arena[ExpressionWithTypeArguments]
-	functionDeclarationArena           core.Arena[FunctionDeclaration]
-	functionTypeNodeArena              core.Arena[FunctionTypeNode]
-	heritageClauseArena                core.Arena[HeritageClause]
-	identifierArena                    core.Arena[Identifier]
-	ifStatementArena                   core.Arena[IfStatement]
-	importSpecifierArena               core.Arena[ImportSpecifier]
-	indexedAccessTypeNodeArena         core.Arena[IndexedAccessTypeNode]
-	interfaceDeclarationArena          core.Arena[InterfaceDeclaration]
-	intersectionTypeNodeArena          core.Arena[IntersectionTypeNode]
-	jsdocArena                         core.Arena[JSDoc]
-	jsdocDeprecatedTagArena            core.Arena[JSDocDeprecatedTag]
-	jsdocTextArena                     core.Arena[JSDocText]
-	jsdocUnknownTagArena               core.Arena[JSDocUnknownTag]
-	keywordExpressionArena             core.Arena[KeywordExpression]
-	keywordTypeNodeArena               core.Arena[KeywordTypeNode]
-	literalTypeNodeArena               core.Arena[LiteralTypeNode]
-	methodSignatureDeclarationArena    core.Arena[MethodSignatureDeclaration]
-	modifierListArena                  core.Arena[ModifierList]
-	nodeListArena                      core.Arena[NodeList]
-	numericLiteralArena                core.Arena[NumericLiteral]
-	parameterDeclarationArena          core.Arena[ParameterDeclaration]
-	parenthesizedExpressionArena       core.Arena[ParenthesizedExpression]
-	parenthesizedTypeNodeArena         core.Arena[ParenthesizedTypeNode]
-	prefixUnaryExpressionArena         core.Arena[PrefixUnaryExpression]
-	propertyAccessExpressionArena      core.Arena[PropertyAccessExpression]
-	propertyAssignmentArena            core.Arena[PropertyAssignment]
-	propertySignatureDeclarationArena  core.Arena[PropertySignatureDeclaration]
-	returnStatementArena               core.Arena[ReturnStatement]
-	stringLiteralArena                 core.Arena[StringLiteral]
-	tokenArena                         core.Arena[Token]
-	typeAliasDeclarationArena          core.Arena[TypeAliasDeclaration]
-	typeLiteralNodeArena               core.Arena[TypeLiteralNode]
-	typeOperatorNodeArena              core.Arena[TypeOperatorNode]
-	typeParameterDeclarationArena      core.Arena[TypeParameterDeclaration]
-	typeReferenceNodeArena             core.Arena[TypeReferenceNode]
-	unionTypeNodeArena                 core.Arena[UnionTypeNode]
-	variableDeclarationArena           core.Arena[VariableDeclaration]
-	variableDeclarationListArena       core.Arena[VariableDeclarationList]
-	variableStatementArena             core.Arena[VariableStatement]
+	hooks      NodeFactoryHooks
+	arena      *linkarena.Arena // memory of the nodes the factory creates; see arena.go
+	parsing    bool             // every node handed to the factory was created by it
+	sourceText string           // text whose substrings the arena keeps alive as a whole
 
 	nodeCount int
 	textCount int
@@ -83,8 +39,12 @@ type StatementBase struct {
 
 type IterationStatementBase struct {
 	StatementBase
-	Statement *Statement
+	statement link[Node] // *Statement
 }
+
+func (node *IterationStatementBase) Statement() *Statement { return node.statement.get() }
+
+func (node *IterationStatementBase) SetStatement(statement *Statement) { node.statement.set(statement) }
 
 type ExpressionBase struct {
 	NodeBase
@@ -117,7 +77,13 @@ type TypeNodeBase struct {
 
 type NodeWithTypeArgumentsBase struct {
 	TypeNodeBase
-	TypeArguments *TypeList // Optional
+	typeArguments link[NodeList] // *TypeList. Optional
+}
+
+func (node *NodeWithTypeArgumentsBase) TypeArguments() *TypeList { return node.typeArguments.get() }
+
+func (node *NodeWithTypeArgumentsBase) SetTypeArguments(typeArguments *TypeList) {
+	node.typeArguments.set(typeArguments)
 }
 
 type JSDocTypeBase struct {
@@ -133,7 +99,7 @@ type ExportableBase struct {
 }
 
 type ModifiersBase struct {
-	modifiers *ModifierList // Optional
+	modifiers link[ModifierList] // *ModifierList. Optional
 }
 
 type LocalsContainerBase struct {
@@ -153,17 +119,49 @@ type TypeSyntaxBase struct{}
 
 type FunctionLikeBase struct {
 	LocalsContainerBase
-	TypeParameters *TypeParameterList // Optional
-	Parameters     *ParameterList
-	Type           *TypeNode // Optional
-	FullSignature  *TypeNode // Optional
+	typeParameters link[NodeList] // *TypeParameterList. Optional
+	parameters     link[NodeList] // *ParameterList
+	typeNode       link[Node]     // *TypeNode. Optional
+	fullSignature  link[Node]     // *TypeNode. Optional
+}
+
+func (node *FunctionLikeBase) TypeParameters() *TypeParameterList { return node.typeParameters.get() }
+
+func (node *FunctionLikeBase) SetTypeParameters(typeParameters *TypeParameterList) {
+	node.typeParameters.set(typeParameters)
+}
+
+func (node *FunctionLikeBase) Parameters() *ParameterList { return node.parameters.get() }
+
+func (node *FunctionLikeBase) SetParameters(parameters *ParameterList) {
+	node.parameters.set(parameters)
+}
+
+func (node *FunctionLikeBase) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *FunctionLikeBase) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
+func (node *FunctionLikeBase) FullSignature() *TypeNode { return node.fullSignature.get() }
+
+func (node *FunctionLikeBase) SetFullSignature(fullSignature *TypeNode) {
+	node.fullSignature.set(fullSignature)
 }
 
 type BodyBase struct {
-	AsteriskToken *AsteriskToken // Optional
-	Body          *NodeBody      // Optional
+	asteriskToken link[Node] // *AsteriskToken. Optional
+	body          link[Node] // *NodeBody. Optional
 	EndFlowNode   *FlowNode
 }
+
+func (node *BodyBase) AsteriskToken() *AsteriskToken { return node.asteriskToken.get() }
+
+func (node *BodyBase) SetAsteriskToken(asteriskToken *AsteriskToken) {
+	node.asteriskToken.set(asteriskToken)
+}
+
+func (node *BodyBase) Body() *NodeBody { return node.body.get() }
+
+func (node *BodyBase) SetBody(body *NodeBody) { node.body.set(body) }
 
 type FunctionLikeWithBodyBase struct {
 	FunctionLikeBase
@@ -175,11 +173,27 @@ type ClassLikeBase struct {
 	ModifiersBase
 	LocalsContainerBase
 	CompositeBase
-	name            *IdentifierNode     // Optional
-	TypeParameters  *TypeParameterList  // Optional
-	HeritageClauses *HeritageClauseList // Optional
-	Members         *ClassElementList
+	name            link[Node]     // *IdentifierNode. Optional
+	typeParameters  link[NodeList] // *TypeParameterList. Optional
+	heritageClauses link[NodeList] // *HeritageClauseList. Optional
+	members         link[NodeList] // *ClassElementList
 }
+
+func (node *ClassLikeBase) TypeParameters() *TypeParameterList { return node.typeParameters.get() }
+
+func (node *ClassLikeBase) SetTypeParameters(typeParameters *TypeParameterList) {
+	node.typeParameters.set(typeParameters)
+}
+
+func (node *ClassLikeBase) HeritageClauses() *HeritageClauseList { return node.heritageClauses.get() }
+
+func (node *ClassLikeBase) SetHeritageClauses(heritageClauses *HeritageClauseList) {
+	node.heritageClauses.set(heritageClauses)
+}
+
+func (node *ClassLikeBase) Members() *ClassElementList { return node.members.get() }
+
+func (node *ClassLikeBase) SetMembers(members *ClassElementList) { node.members.set(members) }
 
 type LiteralLikeNodeBase struct {
 	Text       string
@@ -203,8 +217,14 @@ type ClassElementBase struct{}
 
 type NamedMemberBase struct {
 	ModifiersBase
-	name         *PropertyName
-	PostfixToken *TokenNode // Optional
+	name         link[Node] // *PropertyName
+	postfixToken link[Node] // *TokenNode. Optional
+}
+
+func (node *NamedMemberBase) PostfixToken() *TokenNode { return node.postfixToken.get() }
+
+func (node *NamedMemberBase) SetPostfixToken(postfixToken *TokenNode) {
+	node.postfixToken.set(postfixToken)
 }
 
 type ObjectLiteralElementBase struct{}
@@ -230,14 +250,26 @@ type FunctionOrConstructorTypeNodeBase struct {
 
 type UnionOrIntersectionTypeNodeBase struct {
 	TypeNodeBase
-	Types *TypeList
+	types link[NodeList] // *TypeList
 }
+
+func (node *UnionOrIntersectionTypeNodeBase) Types() *TypeList { return node.types.get() }
+
+func (node *UnionOrIntersectionTypeNodeBase) SetTypes(types *TypeList) { node.types.set(types) }
 
 type JSDocTagBase struct {
 	NodeBase
-	TagName *IdentifierNode
-	Comment *NodeList // Optional
+	tagName link[Node]     // *IdentifierNode
+	comment link[NodeList] // *NodeList. Optional
 }
+
+func (node *JSDocTagBase) TagName() *IdentifierNode { return node.tagName.get() }
+
+func (node *JSDocTagBase) SetTagName(tagName *IdentifierNode) { node.tagName.set(tagName) }
+
+func (node *JSDocTagBase) Comment() *NodeList { return node.comment.get() }
+
+func (node *JSDocTagBase) SetComment(comment *NodeList) { node.comment.set(comment) }
 
 type JSDocCommentBase struct {
 	NodeBase
@@ -598,7 +630,7 @@ type Token struct {
 }
 
 func (f *NodeFactory) NewToken(kind TokenSyntaxKind) *Node {
-	data := f.tokenArena.New()
+	data := newData[Token](f)
 	return f.newNode(kind, data)
 }
 
@@ -625,8 +657,9 @@ type Identifier struct {
 }
 
 func (f *NodeFactory) NewIdentifier(text string) *Node {
-	data := f.identifierArena.New()
+	data := newData[Identifier](f)
 	data.Text = text
+	f.keepString(text)
 	f.textCount++
 	return f.newNode(KindIdentifier, data)
 }
@@ -649,8 +682,9 @@ type PrivateIdentifier struct {
 }
 
 func (f *NodeFactory) NewPrivateIdentifier(text string) *Node {
-	data := &PrivateIdentifier{}
+	data := newData[PrivateIdentifier](f)
 	data.Text = text
+	f.keepString(text)
 	f.textCount++
 	return f.newNode(KindPrivateIdentifier, data)
 }
@@ -671,39 +705,47 @@ type QualifiedName struct {
 	NodeBase
 	FlowNodeBase
 	CompositeBase
-	Left  *EntityName
-	Right *MemberName
+	left  link[Node] // *EntityName
+	right link[Node] // *MemberName
 }
 
+func (node *QualifiedName) Left() *EntityName { return node.left.get() }
+
+func (node *QualifiedName) SetLeft(left *EntityName) { node.left.set(left) }
+
+func (node *QualifiedName) Right() *MemberName { return node.right.get() }
+
+func (node *QualifiedName) SetRight(right *MemberName) { node.right.set(right) }
+
 func (f *NodeFactory) NewQualifiedName(left *EntityName, right *MemberName) *Node {
-	data := &QualifiedName{}
-	data.Left = left
-	data.Right = right
+	data := newData[QualifiedName](f)
+	data.left.set(left)
+	data.right.set(right)
 	return f.newNode(KindQualifiedName, data)
 }
 
 func (f *NodeFactory) UpdateQualifiedName(node *QualifiedName, left *EntityName, right *MemberName) *Node {
-	if left != node.Left || right != node.Right {
+	if left != node.Left() || right != node.Right() {
 		return updateNode(f.NewQualifiedName(left, right), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *QualifiedName) ForEachChild(v Visitor) bool {
-	return visit(v, node.Left) || visit(v, node.Right)
+	return visit(v, node.Left()) || visit(v, node.Right())
 }
 
 func (node *QualifiedName) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateQualifiedName(node, v.visitNode(node.Left), v.visitNode(node.Right))
+	return v.Factory.UpdateQualifiedName(node, v.visitNode(node.Left()), v.visitNode(node.Right()))
 }
 
 func (node *QualifiedName) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewQualifiedName(node.Left, node.Right), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewQualifiedName(node.Left(), node.Right()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *QualifiedName) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Left) |
-		propagateSubtreeFacts(node.Right)
+	return propagateSubtreeFacts(node.Left()) |
+		propagateSubtreeFacts(node.Right())
 }
 
 func IsQualifiedName(node *Node) bool {
@@ -717,36 +759,42 @@ func IsQualifiedName(node *Node) bool {
 type ComputedPropertyName struct {
 	NodeBase
 	CompositeBase
-	Expression *Expression
+	expression link[Node] // *Expression
+}
+
+func (node *ComputedPropertyName) Expression() *Expression { return node.expression.get() }
+
+func (node *ComputedPropertyName) SetExpression(expression *Expression) {
+	node.expression.set(expression)
 }
 
 func (f *NodeFactory) NewComputedPropertyName(expression *Expression) *Node {
-	data := &ComputedPropertyName{}
-	data.Expression = expression
+	data := newData[ComputedPropertyName](f)
+	data.expression.set(expression)
 	return f.newNode(KindComputedPropertyName, data)
 }
 
 func (f *NodeFactory) UpdateComputedPropertyName(node *ComputedPropertyName, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewComputedPropertyName(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ComputedPropertyName) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *ComputedPropertyName) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateComputedPropertyName(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateComputedPropertyName(node, v.visitNode(node.Expression()))
 }
 
 func (node *ComputedPropertyName) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewComputedPropertyName(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewComputedPropertyName(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ComputedPropertyName) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression)
+	return propagateSubtreeFacts(node.Expression())
 }
 
 func IsComputedPropertyName(node *Node) bool {
@@ -760,32 +808,38 @@ func IsComputedPropertyName(node *Node) bool {
 type Decorator struct {
 	NodeBase
 	CompositeBase
-	Expression *LeftHandSideExpression
+	expression link[Node] // *LeftHandSideExpression
+}
+
+func (node *Decorator) Expression() *LeftHandSideExpression { return node.expression.get() }
+
+func (node *Decorator) SetExpression(expression *LeftHandSideExpression) {
+	node.expression.set(expression)
 }
 
 func (f *NodeFactory) NewDecorator(expression *LeftHandSideExpression) *Node {
-	data := &Decorator{}
-	data.Expression = expression
+	data := newData[Decorator](f)
+	data.expression.set(expression)
 	return f.newNode(KindDecorator, data)
 }
 
 func (f *NodeFactory) UpdateDecorator(node *Decorator, expression *LeftHandSideExpression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewDecorator(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *Decorator) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *Decorator) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateDecorator(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateDecorator(node, v.visitNode(node.Expression()))
 }
 
 func (node *Decorator) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewDecorator(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewDecorator(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsDecorator(node *Node) bool {
@@ -801,7 +855,7 @@ type EmptyStatement struct {
 }
 
 func (f *NodeFactory) NewEmptyStatement() *Node {
-	data := &EmptyStatement{}
+	data := newData[EmptyStatement](f)
 	return f.newNode(KindEmptyStatement, data)
 }
 
@@ -820,42 +874,58 @@ func IsEmptyStatement(node *Node) bool {
 type IfStatement struct {
 	StatementBase
 	CompositeBase
-	Expression    *Expression
-	ThenStatement *Statement
-	ElseStatement *Statement // Optional
+	expression    link[Node] // *Expression
+	thenStatement link[Node] // *Statement
+	elseStatement link[Node] // *Statement. Optional
+}
+
+func (node *IfStatement) Expression() *Expression { return node.expression.get() }
+
+func (node *IfStatement) SetExpression(expression *Expression) { node.expression.set(expression) }
+
+func (node *IfStatement) ThenStatement() *Statement { return node.thenStatement.get() }
+
+func (node *IfStatement) SetThenStatement(thenStatement *Statement) {
+	node.thenStatement.set(thenStatement)
+}
+
+func (node *IfStatement) ElseStatement() *Statement { return node.elseStatement.get() }
+
+func (node *IfStatement) SetElseStatement(elseStatement *Statement) {
+	node.elseStatement.set(elseStatement)
 }
 
 func (f *NodeFactory) NewIfStatement(expression *Expression, thenStatement *Statement, elseStatement *Statement) *Node {
-	data := f.ifStatementArena.New()
-	data.Expression = expression
-	data.ThenStatement = thenStatement
-	data.ElseStatement = elseStatement
+	data := newData[IfStatement](f)
+	data.expression.set(expression)
+	data.thenStatement.set(thenStatement)
+	data.elseStatement.set(elseStatement)
 	return f.newNode(KindIfStatement, data)
 }
 
 func (f *NodeFactory) UpdateIfStatement(node *IfStatement, expression *Expression, thenStatement *Statement, elseStatement *Statement) *Node {
-	if expression != node.Expression || thenStatement != node.ThenStatement || elseStatement != node.ElseStatement {
+	if expression != node.Expression() || thenStatement != node.ThenStatement() || elseStatement != node.ElseStatement() {
 		return updateNode(f.NewIfStatement(expression, thenStatement, elseStatement), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *IfStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visit(v, node.ThenStatement) || visit(v, node.ElseStatement)
+	return visit(v, node.Expression()) || visit(v, node.ThenStatement()) || visit(v, node.ElseStatement())
 }
 
 func (node *IfStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateIfStatement(node, v.visitNode(node.Expression), v.visitEmbeddedStatement(node.ThenStatement), v.visitEmbeddedStatement(node.ElseStatement))
+	return v.Factory.UpdateIfStatement(node, v.visitNode(node.Expression()), v.visitEmbeddedStatement(node.ThenStatement()), v.visitEmbeddedStatement(node.ElseStatement()))
 }
 
 func (node *IfStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewIfStatement(node.Expression, node.ThenStatement, node.ElseStatement), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewIfStatement(node.Expression(), node.ThenStatement(), node.ElseStatement()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *IfStatement) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression) |
-		propagateSubtreeFacts(node.ThenStatement) |
-		propagateSubtreeFacts(node.ElseStatement)
+	return propagateSubtreeFacts(node.Expression()) |
+		propagateSubtreeFacts(node.ThenStatement()) |
+		propagateSubtreeFacts(node.ElseStatement())
 }
 
 func IsIfStatement(node *Node) bool {
@@ -869,38 +939,42 @@ func IsIfStatement(node *Node) bool {
 type DoStatement struct {
 	IterationStatementBase
 	CompositeBase
-	Expression *Expression
+	expression link[Node] // *Expression
 }
 
+func (node *DoStatement) Expression() *Expression { return node.expression.get() }
+
+func (node *DoStatement) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewDoStatement(statement *Statement, expression *Expression) *Node {
-	data := &DoStatement{}
-	data.Statement = statement
-	data.Expression = expression
+	data := newData[DoStatement](f)
+	data.statement.set(statement)
+	data.expression.set(expression)
 	return f.newNode(KindDoStatement, data)
 }
 
 func (f *NodeFactory) UpdateDoStatement(node *DoStatement, statement *Statement, expression *Expression) *Node {
-	if statement != node.Statement || expression != node.Expression {
+	if statement != node.Statement() || expression != node.Expression() {
 		return updateNode(f.NewDoStatement(statement, expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *DoStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Statement) || visit(v, node.Expression)
+	return visit(v, node.Statement()) || visit(v, node.Expression())
 }
 
 func (node *DoStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateDoStatement(node, v.visitIterationBody(node.Statement), v.visitNode(node.Expression))
+	return v.Factory.UpdateDoStatement(node, v.visitIterationBody(node.Statement()), v.visitNode(node.Expression()))
 }
 
 func (node *DoStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewDoStatement(node.Statement, node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewDoStatement(node.Statement(), node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *DoStatement) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Statement) |
-		propagateSubtreeFacts(node.Expression)
+	return propagateSubtreeFacts(node.Statement()) |
+		propagateSubtreeFacts(node.Expression())
 }
 
 func IsDoStatement(node *Node) bool {
@@ -914,38 +988,42 @@ func IsDoStatement(node *Node) bool {
 type WhileStatement struct {
 	IterationStatementBase
 	CompositeBase
-	Expression *Expression
+	expression link[Node] // *Expression
 }
 
+func (node *WhileStatement) Expression() *Expression { return node.expression.get() }
+
+func (node *WhileStatement) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewWhileStatement(expression *Expression, statement *Statement) *Node {
-	data := &WhileStatement{}
-	data.Expression = expression
-	data.Statement = statement
+	data := newData[WhileStatement](f)
+	data.expression.set(expression)
+	data.statement.set(statement)
 	return f.newNode(KindWhileStatement, data)
 }
 
 func (f *NodeFactory) UpdateWhileStatement(node *WhileStatement, expression *Expression, statement *Statement) *Node {
-	if expression != node.Expression || statement != node.Statement {
+	if expression != node.Expression() || statement != node.Statement() {
 		return updateNode(f.NewWhileStatement(expression, statement), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *WhileStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visit(v, node.Statement)
+	return visit(v, node.Expression()) || visit(v, node.Statement())
 }
 
 func (node *WhileStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateWhileStatement(node, v.visitNode(node.Expression), v.visitIterationBody(node.Statement))
+	return v.Factory.UpdateWhileStatement(node, v.visitNode(node.Expression()), v.visitIterationBody(node.Statement()))
 }
 
 func (node *WhileStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewWhileStatement(node.Expression, node.Statement), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewWhileStatement(node.Expression(), node.Statement()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *WhileStatement) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression) |
-		propagateSubtreeFacts(node.Statement)
+	return propagateSubtreeFacts(node.Expression()) |
+		propagateSubtreeFacts(node.Statement())
 }
 
 func IsWhileStatement(node *Node) bool {
@@ -960,47 +1038,61 @@ type ForStatement struct {
 	IterationStatementBase
 	LocalsContainerBase
 	CompositeBase
-	Initializer *ForInitializer // Optional
-	Condition   *Expression     // Optional
-	Incrementor *Expression     // Optional
+	initializer link[Node] // *ForInitializer. Optional
+	condition   link[Node] // *Expression. Optional
+	incrementor link[Node] // *Expression. Optional
 }
 
+func (node *ForStatement) Initializer() *ForInitializer { return node.initializer.get() }
+
+func (node *ForStatement) SetInitializer(initializer *ForInitializer) {
+	node.initializer.set(initializer)
+}
+
+func (node *ForStatement) Condition() *Expression { return node.condition.get() }
+
+func (node *ForStatement) SetCondition(condition *Expression) { node.condition.set(condition) }
+
+func (node *ForStatement) Incrementor() *Expression { return node.incrementor.get() }
+
+func (node *ForStatement) SetIncrementor(incrementor *Expression) { node.incrementor.set(incrementor) }
+
 func (f *NodeFactory) NewForStatement(initializer *ForInitializer, condition *Expression, incrementor *Expression, statement *Statement) *Node {
-	data := &ForStatement{}
-	data.Initializer = initializer
-	data.Condition = condition
-	data.Incrementor = incrementor
-	data.Statement = statement
+	data := newData[ForStatement](f)
+	data.initializer.set(initializer)
+	data.condition.set(condition)
+	data.incrementor.set(incrementor)
+	data.statement.set(statement)
 	return f.newNode(KindForStatement, data)
 }
 
 func (f *NodeFactory) UpdateForStatement(node *ForStatement, initializer *ForInitializer, condition *Expression, incrementor *Expression, statement *Statement) *Node {
-	if initializer != node.Initializer || condition != node.Condition || incrementor != node.Incrementor || statement != node.Statement {
+	if initializer != node.Initializer() || condition != node.Condition() || incrementor != node.Incrementor() || statement != node.Statement() {
 		return updateNode(f.NewForStatement(initializer, condition, incrementor, statement), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ForStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Initializer) ||
-		visit(v, node.Condition) ||
-		visit(v, node.Incrementor) ||
-		visit(v, node.Statement)
+	return visit(v, node.Initializer()) ||
+		visit(v, node.Condition()) ||
+		visit(v, node.Incrementor()) ||
+		visit(v, node.Statement())
 }
 
 func (node *ForStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateForStatement(node, v.visitNode(node.Initializer), v.visitNode(node.Condition), v.visitNode(node.Incrementor), v.visitIterationBody(node.Statement))
+	return v.Factory.UpdateForStatement(node, v.visitNode(node.Initializer()), v.visitNode(node.Condition()), v.visitNode(node.Incrementor()), v.visitIterationBody(node.Statement()))
 }
 
 func (node *ForStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewForStatement(node.Initializer, node.Condition, node.Incrementor, node.Statement), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewForStatement(node.Initializer(), node.Condition(), node.Incrementor(), node.Statement()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ForStatement) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Initializer) |
-		propagateSubtreeFacts(node.Condition) |
-		propagateSubtreeFacts(node.Incrementor) |
-		propagateSubtreeFacts(node.Statement)
+	return propagateSubtreeFacts(node.Initializer()) |
+		propagateSubtreeFacts(node.Condition()) |
+		propagateSubtreeFacts(node.Incrementor()) |
+		propagateSubtreeFacts(node.Statement())
 }
 
 func IsForStatement(node *Node) bool {
@@ -1015,41 +1107,63 @@ type ForInOrOfStatement struct {
 	StatementBase
 	LocalsContainerBase
 	CompositeBase
-	AwaitModifier *AwaitKeyword // Optional
-	Initializer   *ForInitializer
-	Expression    *Expression
-	Statement     *Statement
+	awaitModifier link[Node] // *AwaitKeyword. Optional
+	initializer   link[Node] // *ForInitializer
+	expression    link[Node] // *Expression
+	statement     link[Node] // *Statement
 }
 
+func (node *ForInOrOfStatement) AwaitModifier() *AwaitKeyword { return node.awaitModifier.get() }
+
+func (node *ForInOrOfStatement) SetAwaitModifier(awaitModifier *AwaitKeyword) {
+	node.awaitModifier.set(awaitModifier)
+}
+
+func (node *ForInOrOfStatement) Initializer() *ForInitializer { return node.initializer.get() }
+
+func (node *ForInOrOfStatement) SetInitializer(initializer *ForInitializer) {
+	node.initializer.set(initializer)
+}
+
+func (node *ForInOrOfStatement) Expression() *Expression { return node.expression.get() }
+
+func (node *ForInOrOfStatement) SetExpression(expression *Expression) {
+	node.expression.set(expression)
+}
+
+func (node *ForInOrOfStatement) Statement() *Statement { return node.statement.get() }
+
+func (node *ForInOrOfStatement) SetStatement(statement *Statement) { node.statement.set(statement) }
+
 func (f *NodeFactory) NewForInOrOfStatement(kind Kind, awaitModifier *AwaitKeyword, initializer *ForInitializer, expression *Expression, statement *Statement) *Node {
-	data := &ForInOrOfStatement{}
-	data.AwaitModifier = awaitModifier
-	data.Initializer = initializer
-	data.Expression = expression
-	data.Statement = statement
+	data := newData[ForInOrOfStatement](f)
+	data.awaitModifier.set(awaitModifier)
+	data.initializer.set(initializer)
+	data.expression.set(expression)
+	data.statement.set(statement)
 	return f.newNode(kind, data)
 }
 
 func (f *NodeFactory) UpdateForInOrOfStatement(node *ForInOrOfStatement, awaitModifier *AwaitKeyword, initializer *ForInitializer, expression *Expression, statement *Statement) *Node {
-	if awaitModifier != node.AwaitModifier || initializer != node.Initializer || expression != node.Expression || statement != node.Statement {
+	if awaitModifier != node.AwaitModifier() || initializer != node.Initializer() || expression != node.Expression() || statement != node.Statement() {
 		return updateNode(f.NewForInOrOfStatement(node.Kind, awaitModifier, initializer, expression, statement), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ForInOrOfStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.AwaitModifier) ||
-		visit(v, node.Initializer) ||
-		visit(v, node.Expression) ||
-		visit(v, node.Statement)
+	return visit(v, node.AwaitModifier()) ||
+		visit(v, node.Initializer()) ||
+		visit(v, node.Expression()) ||
+		visit(v, node.Statement())
 }
 
 func (node *ForInOrOfStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateForInOrOfStatement(node, v.visitNode(node.AwaitModifier), v.visitNode(node.Initializer), v.visitNode(node.Expression), v.visitIterationBody(node.Statement))
+	return v.Factory.UpdateForInOrOfStatement(node, v.visitNode(node.AwaitModifier()), v.visitNode(node.Initializer()), v.visitNode(node.Expression()), v.visitIterationBody(node.Statement()))
 }
 
 func (node *ForInOrOfStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewForInOrOfStatement(node.Kind, node.AwaitModifier, node.Initializer, node.Expression, node.Statement), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewForInOrOfStatement(node.Kind, node.AwaitModifier(), node.Initializer(), node.Expression(), node.Statement()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsForInStatement(node *Node) bool {
@@ -1066,32 +1180,36 @@ func IsForOfStatement(node *Node) bool {
 
 type BreakStatement struct {
 	StatementBase
-	Label *IdentifierNode // Optional
+	label link[Node] // *IdentifierNode. Optional
 }
 
+func (node *BreakStatement) Label() *IdentifierNode { return node.label.get() }
+
+func (node *BreakStatement) SetLabel(label *IdentifierNode) { node.label.set(label) }
+
 func (f *NodeFactory) NewBreakStatement(label *IdentifierNode) *Node {
-	data := &BreakStatement{}
-	data.Label = label
+	data := newData[BreakStatement](f)
+	data.label.set(label)
 	return f.newNode(KindBreakStatement, data)
 }
 
 func (f *NodeFactory) UpdateBreakStatement(node *BreakStatement, label *IdentifierNode) *Node {
-	if label != node.Label {
+	if label != node.Label() {
 		return updateNode(f.NewBreakStatement(label), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *BreakStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Label)
+	return visit(v, node.Label())
 }
 
 func (node *BreakStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateBreakStatement(node, v.visitNode(node.Label))
+	return v.Factory.UpdateBreakStatement(node, v.visitNode(node.Label()))
 }
 
 func (node *BreakStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewBreakStatement(node.Label), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewBreakStatement(node.Label()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsBreakStatement(node *Node) bool {
@@ -1104,32 +1222,36 @@ func IsBreakStatement(node *Node) bool {
 
 type ContinueStatement struct {
 	StatementBase
-	Label *IdentifierNode // Optional
+	label link[Node] // *IdentifierNode. Optional
 }
 
+func (node *ContinueStatement) Label() *IdentifierNode { return node.label.get() }
+
+func (node *ContinueStatement) SetLabel(label *IdentifierNode) { node.label.set(label) }
+
 func (f *NodeFactory) NewContinueStatement(label *IdentifierNode) *Node {
-	data := &ContinueStatement{}
-	data.Label = label
+	data := newData[ContinueStatement](f)
+	data.label.set(label)
 	return f.newNode(KindContinueStatement, data)
 }
 
 func (f *NodeFactory) UpdateContinueStatement(node *ContinueStatement, label *IdentifierNode) *Node {
-	if label != node.Label {
+	if label != node.Label() {
 		return updateNode(f.NewContinueStatement(label), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ContinueStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Label)
+	return visit(v, node.Label())
 }
 
 func (node *ContinueStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateContinueStatement(node, v.visitNode(node.Label))
+	return v.Factory.UpdateContinueStatement(node, v.visitNode(node.Label()))
 }
 
 func (node *ContinueStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewContinueStatement(node.Label), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewContinueStatement(node.Label()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsContinueStatement(node *Node) bool {
@@ -1143,32 +1265,36 @@ func IsContinueStatement(node *Node) bool {
 type ReturnStatement struct {
 	StatementBase
 	CompositeBase
-	Expression *Expression // Optional
+	expression link[Node] // *Expression. Optional
 }
 
+func (node *ReturnStatement) Expression() *Expression { return node.expression.get() }
+
+func (node *ReturnStatement) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewReturnStatement(expression *Expression) *Node {
-	data := f.returnStatementArena.New()
-	data.Expression = expression
+	data := newData[ReturnStatement](f)
+	data.expression.set(expression)
 	return f.newNode(KindReturnStatement, data)
 }
 
 func (f *NodeFactory) UpdateReturnStatement(node *ReturnStatement, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewReturnStatement(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ReturnStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *ReturnStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateReturnStatement(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateReturnStatement(node, v.visitNode(node.Expression()))
 }
 
 func (node *ReturnStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewReturnStatement(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewReturnStatement(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsReturnStatement(node *Node) bool {
@@ -1182,39 +1308,47 @@ func IsReturnStatement(node *Node) bool {
 type WithStatement struct {
 	StatementBase
 	CompositeBase
-	Expression *Expression
-	Statement  *Statement
+	expression link[Node] // *Expression
+	statement  link[Node] // *Statement
 }
 
+func (node *WithStatement) Expression() *Expression { return node.expression.get() }
+
+func (node *WithStatement) SetExpression(expression *Expression) { node.expression.set(expression) }
+
+func (node *WithStatement) Statement() *Statement { return node.statement.get() }
+
+func (node *WithStatement) SetStatement(statement *Statement) { node.statement.set(statement) }
+
 func (f *NodeFactory) NewWithStatement(expression *Expression, statement *Statement) *Node {
-	data := &WithStatement{}
-	data.Expression = expression
-	data.Statement = statement
+	data := newData[WithStatement](f)
+	data.expression.set(expression)
+	data.statement.set(statement)
 	return f.newNode(KindWithStatement, data)
 }
 
 func (f *NodeFactory) UpdateWithStatement(node *WithStatement, expression *Expression, statement *Statement) *Node {
-	if expression != node.Expression || statement != node.Statement {
+	if expression != node.Expression() || statement != node.Statement() {
 		return updateNode(f.NewWithStatement(expression, statement), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *WithStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visit(v, node.Statement)
+	return visit(v, node.Expression()) || visit(v, node.Statement())
 }
 
 func (node *WithStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateWithStatement(node, v.visitNode(node.Expression), v.visitEmbeddedStatement(node.Statement))
+	return v.Factory.UpdateWithStatement(node, v.visitNode(node.Expression()), v.visitEmbeddedStatement(node.Statement()))
 }
 
 func (node *WithStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewWithStatement(node.Expression, node.Statement), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewWithStatement(node.Expression(), node.Statement()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *WithStatement) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression) |
-		propagateSubtreeFacts(node.Statement)
+	return propagateSubtreeFacts(node.Expression()) |
+		propagateSubtreeFacts(node.Statement())
 }
 
 func IsWithStatement(node *Node) bool {
@@ -1228,39 +1362,47 @@ func IsWithStatement(node *Node) bool {
 type SwitchStatement struct {
 	StatementBase
 	CompositeBase
-	Expression *Expression
-	CaseBlock  *CaseBlockNode
+	expression link[Node] // *Expression
+	caseBlock  link[Node] // *CaseBlockNode
 }
 
+func (node *SwitchStatement) Expression() *Expression { return node.expression.get() }
+
+func (node *SwitchStatement) SetExpression(expression *Expression) { node.expression.set(expression) }
+
+func (node *SwitchStatement) CaseBlock() *CaseBlockNode { return node.caseBlock.get() }
+
+func (node *SwitchStatement) SetCaseBlock(caseBlock *CaseBlockNode) { node.caseBlock.set(caseBlock) }
+
 func (f *NodeFactory) NewSwitchStatement(expression *Expression, caseBlock *CaseBlockNode) *Node {
-	data := &SwitchStatement{}
-	data.Expression = expression
-	data.CaseBlock = caseBlock
+	data := newData[SwitchStatement](f)
+	data.expression.set(expression)
+	data.caseBlock.set(caseBlock)
 	return f.newNode(KindSwitchStatement, data)
 }
 
 func (f *NodeFactory) UpdateSwitchStatement(node *SwitchStatement, expression *Expression, caseBlock *CaseBlockNode) *Node {
-	if expression != node.Expression || caseBlock != node.CaseBlock {
+	if expression != node.Expression() || caseBlock != node.CaseBlock() {
 		return updateNode(f.NewSwitchStatement(expression, caseBlock), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *SwitchStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visit(v, node.CaseBlock)
+	return visit(v, node.Expression()) || visit(v, node.CaseBlock())
 }
 
 func (node *SwitchStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateSwitchStatement(node, v.visitNode(node.Expression), v.visitNode(node.CaseBlock))
+	return v.Factory.UpdateSwitchStatement(node, v.visitNode(node.Expression()), v.visitNode(node.CaseBlock()))
 }
 
 func (node *SwitchStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewSwitchStatement(node.Expression, node.CaseBlock), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewSwitchStatement(node.Expression(), node.CaseBlock()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *SwitchStatement) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression) |
-		propagateSubtreeFacts(node.CaseBlock)
+	return propagateSubtreeFacts(node.Expression()) |
+		propagateSubtreeFacts(node.CaseBlock())
 }
 
 func IsSwitchStatement(node *Node) bool {
@@ -1275,36 +1417,40 @@ type CaseBlock struct {
 	NodeBase
 	LocalsContainerBase
 	CompositeBase
-	Clauses *CaseClausesList
+	clauses link[NodeList] // *CaseClausesList
 }
 
+func (node *CaseBlock) Clauses() *CaseClausesList { return node.clauses.get() }
+
+func (node *CaseBlock) SetClauses(clauses *CaseClausesList) { node.clauses.set(clauses) }
+
 func (f *NodeFactory) NewCaseBlock(clauses *CaseClausesList) *Node {
-	data := &CaseBlock{}
-	data.Clauses = clauses
+	data := newData[CaseBlock](f)
+	data.clauses.set(clauses)
 	return f.newNode(KindCaseBlock, data)
 }
 
 func (f *NodeFactory) UpdateCaseBlock(node *CaseBlock, clauses *CaseClausesList) *Node {
-	if clauses != node.Clauses {
+	if clauses != node.Clauses() {
 		return updateNode(f.NewCaseBlock(clauses), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *CaseBlock) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Clauses)
+	return visitNodeList(v, node.Clauses())
 }
 
 func (node *CaseBlock) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateCaseBlock(node, v.visitNodes(node.Clauses))
+	return v.Factory.UpdateCaseBlock(node, v.visitNodes(node.Clauses()))
 }
 
 func (node *CaseBlock) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewCaseBlock(node.Clauses), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewCaseBlock(node.Clauses()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *CaseBlock) computeSubtreeFacts() SubtreeFacts {
-	return propagateNodeListSubtreeFacts(node.Clauses, propagateSubtreeFacts)
+	return propagateNodeListSubtreeFacts(node.Clauses(), propagateSubtreeFacts)
 }
 
 func IsCaseBlock(node *Node) bool {
@@ -1318,40 +1464,52 @@ func IsCaseBlock(node *Node) bool {
 type CaseOrDefaultClause struct {
 	NodeBase
 	CompositeBase
-	Expression          *Expression
-	Statements          *StatementList
+	expression          link[Node]     // *Expression
+	statements          link[NodeList] // *StatementList
 	FallthroughFlowNode *FlowNode
 }
 
+func (node *CaseOrDefaultClause) Expression() *Expression { return node.expression.get() }
+
+func (node *CaseOrDefaultClause) SetExpression(expression *Expression) {
+	node.expression.set(expression)
+}
+
+func (node *CaseOrDefaultClause) Statements() *StatementList { return node.statements.get() }
+
+func (node *CaseOrDefaultClause) SetStatements(statements *StatementList) {
+	node.statements.set(statements)
+}
+
 func (f *NodeFactory) NewCaseOrDefaultClause(kind Kind, expression *Expression, statements *StatementList) *Node {
-	data := &CaseOrDefaultClause{}
-	data.Expression = expression
-	data.Statements = statements
+	data := newData[CaseOrDefaultClause](f)
+	data.expression.set(expression)
+	data.statements.set(statements)
 	return f.newNode(kind, data)
 }
 
 func (f *NodeFactory) UpdateCaseOrDefaultClause(node *CaseOrDefaultClause, expression *Expression, statements *StatementList) *Node {
-	if expression != node.Expression || statements != node.Statements {
+	if expression != node.Expression() || statements != node.Statements() {
 		return updateNode(f.NewCaseOrDefaultClause(node.Kind, expression, statements), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *CaseOrDefaultClause) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visitNodeList(v, node.Statements)
+	return visit(v, node.Expression()) || visitNodeList(v, node.Statements())
 }
 
 func (node *CaseOrDefaultClause) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateCaseOrDefaultClause(node, v.visitNode(node.Expression), v.visitNodes(node.Statements))
+	return v.Factory.UpdateCaseOrDefaultClause(node, v.visitNode(node.Expression()), v.visitNodes(node.Statements()))
 }
 
 func (node *CaseOrDefaultClause) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewCaseOrDefaultClause(node.Kind, node.Expression, node.Statements), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewCaseOrDefaultClause(node.Kind, node.Expression(), node.Statements()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *CaseOrDefaultClause) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression) |
-		propagateNodeListSubtreeFacts(node.Statements, propagateSubtreeFacts)
+	return propagateSubtreeFacts(node.Expression()) |
+		propagateNodeListSubtreeFacts(node.Statements(), propagateSubtreeFacts)
 }
 
 func IsCaseClause(node *Node) bool {
@@ -1369,36 +1527,40 @@ func IsDefaultClause(node *Node) bool {
 type ThrowStatement struct {
 	StatementBase
 	CompositeBase
-	Expression *Expression
+	expression link[Node] // *Expression
 }
 
+func (node *ThrowStatement) Expression() *Expression { return node.expression.get() }
+
+func (node *ThrowStatement) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewThrowStatement(expression *Expression) *Node {
-	data := &ThrowStatement{}
-	data.Expression = expression
+	data := newData[ThrowStatement](f)
+	data.expression.set(expression)
 	return f.newNode(KindThrowStatement, data)
 }
 
 func (f *NodeFactory) UpdateThrowStatement(node *ThrowStatement, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewThrowStatement(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ThrowStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *ThrowStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateThrowStatement(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateThrowStatement(node, v.visitNode(node.Expression()))
 }
 
 func (node *ThrowStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewThrowStatement(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewThrowStatement(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ThrowStatement) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression)
+	return propagateSubtreeFacts(node.Expression())
 }
 
 func IsThrowStatement(node *Node) bool {
@@ -1412,42 +1574,58 @@ func IsThrowStatement(node *Node) bool {
 type TryStatement struct {
 	StatementBase
 	CompositeBase
-	TryBlock     *BlockNode
-	CatchClause  *CatchClauseNode // Optional
-	FinallyBlock *BlockNode       // Optional
+	tryBlock     link[Node] // *BlockNode
+	catchClause  link[Node] // *CatchClauseNode. Optional
+	finallyBlock link[Node] // *BlockNode. Optional
+}
+
+func (node *TryStatement) TryBlock() *BlockNode { return node.tryBlock.get() }
+
+func (node *TryStatement) SetTryBlock(tryBlock *BlockNode) { node.tryBlock.set(tryBlock) }
+
+func (node *TryStatement) CatchClause() *CatchClauseNode { return node.catchClause.get() }
+
+func (node *TryStatement) SetCatchClause(catchClause *CatchClauseNode) {
+	node.catchClause.set(catchClause)
+}
+
+func (node *TryStatement) FinallyBlock() *BlockNode { return node.finallyBlock.get() }
+
+func (node *TryStatement) SetFinallyBlock(finallyBlock *BlockNode) {
+	node.finallyBlock.set(finallyBlock)
 }
 
 func (f *NodeFactory) NewTryStatement(tryBlock *BlockNode, catchClause *CatchClauseNode, finallyBlock *BlockNode) *Node {
-	data := &TryStatement{}
-	data.TryBlock = tryBlock
-	data.CatchClause = catchClause
-	data.FinallyBlock = finallyBlock
+	data := newData[TryStatement](f)
+	data.tryBlock.set(tryBlock)
+	data.catchClause.set(catchClause)
+	data.finallyBlock.set(finallyBlock)
 	return f.newNode(KindTryStatement, data)
 }
 
 func (f *NodeFactory) UpdateTryStatement(node *TryStatement, tryBlock *BlockNode, catchClause *CatchClauseNode, finallyBlock *BlockNode) *Node {
-	if tryBlock != node.TryBlock || catchClause != node.CatchClause || finallyBlock != node.FinallyBlock {
+	if tryBlock != node.TryBlock() || catchClause != node.CatchClause() || finallyBlock != node.FinallyBlock() {
 		return updateNode(f.NewTryStatement(tryBlock, catchClause, finallyBlock), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TryStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.TryBlock) || visit(v, node.CatchClause) || visit(v, node.FinallyBlock)
+	return visit(v, node.TryBlock()) || visit(v, node.CatchClause()) || visit(v, node.FinallyBlock())
 }
 
 func (node *TryStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTryStatement(node, v.visitNode(node.TryBlock), v.visitNode(node.CatchClause), v.visitNode(node.FinallyBlock))
+	return v.Factory.UpdateTryStatement(node, v.visitNode(node.TryBlock()), v.visitNode(node.CatchClause()), v.visitNode(node.FinallyBlock()))
 }
 
 func (node *TryStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTryStatement(node.TryBlock, node.CatchClause, node.FinallyBlock), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTryStatement(node.TryBlock(), node.CatchClause(), node.FinallyBlock()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *TryStatement) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.TryBlock) |
-		propagateSubtreeFacts(node.CatchClause) |
-		propagateSubtreeFacts(node.FinallyBlock)
+	return propagateSubtreeFacts(node.TryBlock()) |
+		propagateSubtreeFacts(node.CatchClause()) |
+		propagateSubtreeFacts(node.FinallyBlock())
 }
 
 func IsTryStatement(node *Node) bool {
@@ -1462,34 +1640,46 @@ type CatchClause struct {
 	NodeBase
 	LocalsContainerBase
 	CompositeBase
-	VariableDeclaration *VariableDeclarationNode // Optional
-	Block               *BlockNode
+	variableDeclaration link[Node] // *VariableDeclarationNode. Optional
+	block               link[Node] // *BlockNode
 }
 
+func (node *CatchClause) VariableDeclaration() *VariableDeclarationNode {
+	return node.variableDeclaration.get()
+}
+
+func (node *CatchClause) SetVariableDeclaration(variableDeclaration *VariableDeclarationNode) {
+	node.variableDeclaration.set(variableDeclaration)
+}
+
+func (node *CatchClause) Block() *BlockNode { return node.block.get() }
+
+func (node *CatchClause) SetBlock(block *BlockNode) { node.block.set(block) }
+
 func (f *NodeFactory) NewCatchClause(variableDeclaration *VariableDeclarationNode, block *BlockNode) *Node {
-	data := &CatchClause{}
-	data.VariableDeclaration = variableDeclaration
-	data.Block = block
+	data := newData[CatchClause](f)
+	data.variableDeclaration.set(variableDeclaration)
+	data.block.set(block)
 	return f.newNode(KindCatchClause, data)
 }
 
 func (f *NodeFactory) UpdateCatchClause(node *CatchClause, variableDeclaration *VariableDeclarationNode, block *BlockNode) *Node {
-	if variableDeclaration != node.VariableDeclaration || block != node.Block {
+	if variableDeclaration != node.VariableDeclaration() || block != node.Block() {
 		return updateNode(f.NewCatchClause(variableDeclaration, block), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *CatchClause) ForEachChild(v Visitor) bool {
-	return visit(v, node.VariableDeclaration) || visit(v, node.Block)
+	return visit(v, node.VariableDeclaration()) || visit(v, node.Block())
 }
 
 func (node *CatchClause) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateCatchClause(node, v.visitNode(node.VariableDeclaration), v.visitNode(node.Block))
+	return v.Factory.UpdateCatchClause(node, v.visitNode(node.VariableDeclaration()), v.visitNode(node.Block()))
 }
 
 func (node *CatchClause) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewCatchClause(node.VariableDeclaration, node.Block), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewCatchClause(node.VariableDeclaration(), node.Block()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsCatchClause(node *Node) bool {
@@ -1505,7 +1695,7 @@ type DebuggerStatement struct {
 }
 
 func (f *NodeFactory) NewDebuggerStatement() *Node {
-	data := &DebuggerStatement{}
+	data := newData[DebuggerStatement](f)
 	return f.newNode(KindDebuggerStatement, data)
 }
 
@@ -1523,39 +1713,47 @@ func IsDebuggerStatement(node *Node) bool {
 
 type LabeledStatement struct {
 	StatementBase
-	Label     *IdentifierNode
-	Statement *Statement
+	label     link[Node] // *IdentifierNode
+	statement link[Node] // *Statement
 }
 
+func (node *LabeledStatement) Label() *IdentifierNode { return node.label.get() }
+
+func (node *LabeledStatement) SetLabel(label *IdentifierNode) { node.label.set(label) }
+
+func (node *LabeledStatement) Statement() *Statement { return node.statement.get() }
+
+func (node *LabeledStatement) SetStatement(statement *Statement) { node.statement.set(statement) }
+
 func (f *NodeFactory) NewLabeledStatement(label *IdentifierNode, statement *Statement) *Node {
-	data := &LabeledStatement{}
-	data.Label = label
-	data.Statement = statement
+	data := newData[LabeledStatement](f)
+	data.label.set(label)
+	data.statement.set(statement)
 	return f.newNode(KindLabeledStatement, data)
 }
 
 func (f *NodeFactory) UpdateLabeledStatement(node *LabeledStatement, label *IdentifierNode, statement *Statement) *Node {
-	if label != node.Label || statement != node.Statement {
+	if label != node.Label() || statement != node.Statement() {
 		return updateNode(f.NewLabeledStatement(label, statement), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *LabeledStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Label) || visit(v, node.Statement)
+	return visit(v, node.Label()) || visit(v, node.Statement())
 }
 
 func (node *LabeledStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateLabeledStatement(node, v.visitNode(node.Label), v.visitEmbeddedStatement(node.Statement))
+	return v.Factory.UpdateLabeledStatement(node, v.visitNode(node.Label()), v.visitEmbeddedStatement(node.Statement()))
 }
 
 func (node *LabeledStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewLabeledStatement(node.Label, node.Statement), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewLabeledStatement(node.Label(), node.Statement()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *LabeledStatement) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Label) |
-		propagateSubtreeFacts(node.Statement)
+	return propagateSubtreeFacts(node.Label()) |
+		propagateSubtreeFacts(node.Statement())
 }
 
 func IsLabeledStatement(node *Node) bool {
@@ -1568,36 +1766,42 @@ func IsLabeledStatement(node *Node) bool {
 
 type ExpressionStatement struct {
 	StatementBase
-	Expression *Expression
+	expression link[Node] // *Expression
+}
+
+func (node *ExpressionStatement) Expression() *Expression { return node.expression.get() }
+
+func (node *ExpressionStatement) SetExpression(expression *Expression) {
+	node.expression.set(expression)
 }
 
 func (f *NodeFactory) NewExpressionStatement(expression *Expression) *Node {
-	data := f.expressionStatementArena.New()
-	data.Expression = expression
+	data := newData[ExpressionStatement](f)
+	data.expression.set(expression)
 	return f.newNode(KindExpressionStatement, data)
 }
 
 func (f *NodeFactory) UpdateExpressionStatement(node *ExpressionStatement, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewExpressionStatement(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ExpressionStatement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *ExpressionStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateExpressionStatement(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateExpressionStatement(node, v.visitNode(node.Expression()))
 }
 
 func (node *ExpressionStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewExpressionStatement(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewExpressionStatement(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ExpressionStatement) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression)
+	return propagateSubtreeFacts(node.Expression())
 }
 
 func IsExpressionStatement(node *Node) bool {
@@ -1612,38 +1816,42 @@ type Block struct {
 	StatementBase
 	LocalsContainerBase
 	CompositeBase
-	Statements *StatementList
+	statements link[NodeList] // *StatementList
 	MultiLine  bool
 }
 
+func (node *Block) Statements() *StatementList { return node.statements.get() }
+
+func (node *Block) SetStatements(statements *StatementList) { node.statements.set(statements) }
+
 func (f *NodeFactory) NewBlock(statements *StatementList, multiLine bool) *Node {
-	data := f.blockArena.New()
-	data.Statements = statements
+	data := newData[Block](f)
+	data.statements.set(statements)
 	data.MultiLine = multiLine
 	return f.newNode(KindBlock, data)
 }
 
 func (f *NodeFactory) UpdateBlock(node *Block, statements *StatementList, multiLine bool) *Node {
-	if statements != node.Statements || multiLine != node.MultiLine {
+	if statements != node.Statements() || multiLine != node.MultiLine {
 		return updateNode(f.NewBlock(statements, multiLine), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *Block) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Statements)
+	return visitNodeList(v, node.Statements())
 }
 
 func (node *Block) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateBlock(node, v.visitNodes(node.Statements), node.MultiLine)
+	return v.Factory.UpdateBlock(node, v.visitNodes(node.Statements()), node.MultiLine)
 }
 
 func (node *Block) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewBlock(node.Statements, node.MultiLine), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewBlock(node.Statements(), node.MultiLine), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *Block) computeSubtreeFacts() SubtreeFacts {
-	return propagateNodeListSubtreeFacts(node.Statements, propagateSubtreeFacts)
+	return propagateNodeListSubtreeFacts(node.Statements(), propagateSubtreeFacts)
 }
 
 func IsBlock(node *Node) bool {
@@ -1658,33 +1866,41 @@ type VariableStatement struct {
 	StatementBase
 	ModifiersBase
 	CompositeBase
-	DeclarationList *VariableDeclarationListNode
+	declarationList link[Node] // *VariableDeclarationListNode
+}
+
+func (node *VariableStatement) DeclarationList() *VariableDeclarationListNode {
+	return node.declarationList.get()
+}
+
+func (node *VariableStatement) SetDeclarationList(declarationList *VariableDeclarationListNode) {
+	node.declarationList.set(declarationList)
 }
 
 func (f *NodeFactory) NewVariableStatement(modifiers *ModifierList, declarationList *VariableDeclarationListNode) *Node {
-	data := f.variableStatementArena.New()
-	data.modifiers = modifiers
-	data.DeclarationList = declarationList
+	data := newData[VariableStatement](f)
+	data.modifiers.set(modifiers)
+	data.declarationList.set(declarationList)
 	return f.newNode(KindVariableStatement, data)
 }
 
 func (f *NodeFactory) UpdateVariableStatement(node *VariableStatement, modifiers *ModifierList, declarationList *VariableDeclarationListNode) *Node {
-	if modifiers != node.modifiers || declarationList != node.DeclarationList {
+	if modifiers != node.modifiers.get() || declarationList != node.DeclarationList() {
 		return updateNode(f.NewVariableStatement(modifiers, declarationList), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *VariableStatement) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.DeclarationList)
+	return visitModifiers(v, node.modifiers.get()) || visit(v, node.DeclarationList())
 }
 
 func (node *VariableStatement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateVariableStatement(node, v.visitModifiers(node.modifiers), v.visitNode(node.DeclarationList))
+	return v.Factory.UpdateVariableStatement(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.DeclarationList()))
 }
 
 func (node *VariableStatement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewVariableStatement(node.Modifiers(), node.DeclarationList), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewVariableStatement(node.Modifiers(), node.DeclarationList()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsVariableStatement(node *Node) bool {
@@ -1700,45 +1916,63 @@ type VariableDeclaration struct {
 	DeclarationBase
 	ExportableBase
 	CompositeBase
-	name             *BindingName
-	ExclamationToken *ExclamationToken // Optional
-	Type             *TypeNode         // Optional
-	Initializer      *Expression       // Optional
+	name             link[Node] // *BindingName
+	exclamationToken link[Node] // *ExclamationToken. Optional
+	typeNode         link[Node] // *TypeNode. Optional
+	initializer      link[Node] // *Expression. Optional
+}
+
+func (node *VariableDeclaration) ExclamationToken() *ExclamationToken {
+	return node.exclamationToken.get()
+}
+
+func (node *VariableDeclaration) SetExclamationToken(exclamationToken *ExclamationToken) {
+	node.exclamationToken.set(exclamationToken)
+}
+
+func (node *VariableDeclaration) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *VariableDeclaration) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
+func (node *VariableDeclaration) Initializer() *Expression { return node.initializer.get() }
+
+func (node *VariableDeclaration) SetInitializer(initializer *Expression) {
+	node.initializer.set(initializer)
 }
 
 func (f *NodeFactory) NewVariableDeclaration(name *BindingName, exclamationToken *ExclamationToken, typeNode *TypeNode, initializer *Expression) *Node {
-	data := f.variableDeclarationArena.New()
-	data.name = name
-	data.ExclamationToken = exclamationToken
-	data.Type = typeNode
-	data.Initializer = initializer
+	data := newData[VariableDeclaration](f)
+	data.name.set(name)
+	data.exclamationToken.set(exclamationToken)
+	data.typeNode.set(typeNode)
+	data.initializer.set(initializer)
 	return f.newNode(KindVariableDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateVariableDeclaration(node *VariableDeclaration, name *BindingName, exclamationToken *ExclamationToken, typeNode *TypeNode, initializer *Expression) *Node {
-	if name != node.name || exclamationToken != node.ExclamationToken || typeNode != node.Type || initializer != node.Initializer {
+	if name != node.name.get() || exclamationToken != node.ExclamationToken() || typeNode != node.Type() || initializer != node.Initializer() {
 		return updateNode(f.NewVariableDeclaration(name, exclamationToken, typeNode, initializer), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *VariableDeclaration) ForEachChild(v Visitor) bool {
-	return visit(v, node.name) ||
-		visit(v, node.ExclamationToken) ||
-		visit(v, node.Type) ||
-		visit(v, node.Initializer)
+	return visit(v, node.name.get()) ||
+		visit(v, node.ExclamationToken()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.Initializer())
 }
 
 func (node *VariableDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateVariableDeclaration(node, v.visitNode(node.name), v.visitNode(node.ExclamationToken), v.visitNode(node.Type), v.visitNode(node.Initializer))
+	return v.Factory.UpdateVariableDeclaration(node, v.visitNode(node.name.get()), v.visitNode(node.ExclamationToken()), v.visitNode(node.Type()), v.visitNode(node.Initializer()))
 }
 
 func (node *VariableDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewVariableDeclaration(node.name, node.ExclamationToken, node.Type, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewVariableDeclaration(node.name.get(), node.ExclamationToken(), node.Type(), node.Initializer()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *VariableDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsVariableDeclaration(node *Node) bool {
@@ -1752,34 +1986,42 @@ func IsVariableDeclaration(node *Node) bool {
 type VariableDeclarationList struct {
 	NodeBase
 	CompositeBase
-	Declarations *VariableDeclarationNodeList
+	declarations link[NodeList] // *VariableDeclarationNodeList
+}
+
+func (node *VariableDeclarationList) Declarations() *VariableDeclarationNodeList {
+	return node.declarations.get()
+}
+
+func (node *VariableDeclarationList) SetDeclarations(declarations *VariableDeclarationNodeList) {
+	node.declarations.set(declarations)
 }
 
 func (f *NodeFactory) NewVariableDeclarationList(declarations *VariableDeclarationNodeList, flags NodeFlags) *Node {
-	data := f.variableDeclarationListArena.New()
-	data.Declarations = declarations
+	data := newData[VariableDeclarationList](f)
+	data.declarations.set(declarations)
 	node := f.newNode(KindVariableDeclarationList, data)
 	node.Flags = flags
 	return node
 }
 
 func (f *NodeFactory) UpdateVariableDeclarationList(node *VariableDeclarationList, declarations *VariableDeclarationNodeList, flags NodeFlags) *Node {
-	if declarations != node.Declarations || flags != node.Flags {
+	if declarations != node.Declarations() || flags != node.Flags {
 		return updateNode(f.NewVariableDeclarationList(declarations, flags), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *VariableDeclarationList) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Declarations)
+	return visitNodeList(v, node.Declarations())
 }
 
 func (node *VariableDeclarationList) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateVariableDeclarationList(node, v.visitNodes(node.Declarations), node.Flags)
+	return v.Factory.UpdateVariableDeclarationList(node, v.visitNodes(node.Declarations()), node.Flags)
 }
 
 func (node *VariableDeclarationList) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewVariableDeclarationList(node.Declarations, node.Flags), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewVariableDeclarationList(node.Declarations(), node.Flags), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsVariableDeclarationList(node *Node) bool {
@@ -1793,32 +2035,36 @@ func IsVariableDeclarationList(node *Node) bool {
 type BindingPattern struct {
 	NodeBase
 	CompositeBase
-	Elements *BindingElementList
+	elements link[NodeList] // *BindingElementList
 }
 
+func (node *BindingPattern) Elements() *BindingElementList { return node.elements.get() }
+
+func (node *BindingPattern) SetElements(elements *BindingElementList) { node.elements.set(elements) }
+
 func (f *NodeFactory) NewBindingPattern(kind Kind, elements *BindingElementList) *Node {
-	data := &BindingPattern{}
-	data.Elements = elements
+	data := newData[BindingPattern](f)
+	data.elements.set(elements)
 	return f.newNode(kind, data)
 }
 
 func (f *NodeFactory) UpdateBindingPattern(node *BindingPattern, elements *BindingElementList) *Node {
-	if elements != node.Elements {
+	if elements != node.Elements() {
 		return updateNode(f.NewBindingPattern(node.Kind, elements), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *BindingPattern) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Elements)
+	return visitNodeList(v, node.Elements())
 }
 
 func (node *BindingPattern) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateBindingPattern(node, v.visitNodes(node.Elements))
+	return v.Factory.UpdateBindingPattern(node, v.visitNodes(node.Elements()))
 }
 
 func (node *BindingPattern) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewBindingPattern(node.Kind, node.Elements), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewBindingPattern(node.Kind, node.Elements()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsObjectBindingPattern(node *Node) bool {
@@ -1838,50 +2084,72 @@ type ParameterDeclaration struct {
 	DeclarationBase
 	ModifiersBase
 	CompositeBase
-	DotDotDotToken *DotDotDotToken // Optional
-	name           *BindingName
-	QuestionToken  *QuestionToken // Optional
-	Type           *TypeNode      // Optional
-	Initializer    *Expression    // Optional
+	dotDotDotToken link[Node] // *DotDotDotToken. Optional
+	name           link[Node] // *BindingName
+	questionToken  link[Node] // *QuestionToken. Optional
+	typeNode       link[Node] // *TypeNode. Optional
+	initializer    link[Node] // *Expression. Optional
+}
+
+func (node *ParameterDeclaration) DotDotDotToken() *DotDotDotToken { return node.dotDotDotToken.get() }
+
+func (node *ParameterDeclaration) SetDotDotDotToken(dotDotDotToken *DotDotDotToken) {
+	node.dotDotDotToken.set(dotDotDotToken)
+}
+
+func (node *ParameterDeclaration) QuestionToken() *QuestionToken { return node.questionToken.get() }
+
+func (node *ParameterDeclaration) SetQuestionToken(questionToken *QuestionToken) {
+	node.questionToken.set(questionToken)
+}
+
+func (node *ParameterDeclaration) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *ParameterDeclaration) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
+func (node *ParameterDeclaration) Initializer() *Expression { return node.initializer.get() }
+
+func (node *ParameterDeclaration) SetInitializer(initializer *Expression) {
+	node.initializer.set(initializer)
 }
 
 func (f *NodeFactory) NewParameterDeclaration(modifiers *ModifierList, dotDotDotToken *DotDotDotToken, name *BindingName, questionToken *QuestionToken, typeNode *TypeNode, initializer *Expression) *Node {
-	data := f.parameterDeclarationArena.New()
-	data.modifiers = modifiers
-	data.DotDotDotToken = dotDotDotToken
-	data.name = name
-	data.QuestionToken = questionToken
-	data.Type = typeNode
-	data.Initializer = initializer
+	data := newData[ParameterDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.dotDotDotToken.set(dotDotDotToken)
+	data.name.set(name)
+	data.questionToken.set(questionToken)
+	data.typeNode.set(typeNode)
+	data.initializer.set(initializer)
 	return f.newNode(KindParameter, data)
 }
 
 func (f *NodeFactory) UpdateParameterDeclaration(node *ParameterDeclaration, modifiers *ModifierList, dotDotDotToken *DotDotDotToken, name *BindingName, questionToken *QuestionToken, typeNode *TypeNode, initializer *Expression) *Node {
-	if modifiers != node.modifiers || dotDotDotToken != node.DotDotDotToken || name != node.name || questionToken != node.QuestionToken || typeNode != node.Type || initializer != node.Initializer {
+	if modifiers != node.modifiers.get() || dotDotDotToken != node.DotDotDotToken() || name != node.name.get() || questionToken != node.QuestionToken() || typeNode != node.Type() || initializer != node.Initializer() {
 		return updateNode(f.NewParameterDeclaration(modifiers, dotDotDotToken, name, questionToken, typeNode, initializer), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ParameterDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.DotDotDotToken) ||
-		visit(v, node.name) ||
-		visit(v, node.QuestionToken) ||
-		visit(v, node.Type) ||
-		visit(v, node.Initializer)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.DotDotDotToken()) ||
+		visit(v, node.name.get()) ||
+		visit(v, node.QuestionToken()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.Initializer())
 }
 
 func (node *ParameterDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateParameterDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.DotDotDotToken), v.visitNode(node.name), v.visitNode(node.QuestionToken), v.visitNode(node.Type), v.visitNode(node.Initializer))
+	return v.Factory.UpdateParameterDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.DotDotDotToken()), v.visitNode(node.name.get()), v.visitNode(node.QuestionToken()), v.visitNode(node.Type()), v.visitNode(node.Initializer()))
 }
 
 func (node *ParameterDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewParameterDeclaration(node.Modifiers(), node.DotDotDotToken, node.name, node.QuestionToken, node.Type, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewParameterDeclaration(node.Modifiers(), node.DotDotDotToken(), node.name.get(), node.QuestionToken(), node.Type(), node.Initializer()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ParameterDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsParameterDeclaration(node *Node) bool {
@@ -1898,45 +2166,63 @@ type BindingElement struct {
 	ExportableBase
 	FlowNodeBase
 	CompositeBase
-	DotDotDotToken *DotDotDotToken // Optional
-	PropertyName   *PropertyName   // Optional
-	name           *BindingName    // Optional
-	Initializer    *Expression     // Optional
+	dotDotDotToken link[Node] // *DotDotDotToken. Optional
+	propertyName   link[Node] // *PropertyName. Optional
+	name           link[Node] // *BindingName. Optional
+	initializer    link[Node] // *Expression. Optional
+}
+
+func (node *BindingElement) DotDotDotToken() *DotDotDotToken { return node.dotDotDotToken.get() }
+
+func (node *BindingElement) SetDotDotDotToken(dotDotDotToken *DotDotDotToken) {
+	node.dotDotDotToken.set(dotDotDotToken)
+}
+
+func (node *BindingElement) PropertyName() *PropertyName { return node.propertyName.get() }
+
+func (node *BindingElement) SetPropertyName(propertyName *PropertyName) {
+	node.propertyName.set(propertyName)
+}
+
+func (node *BindingElement) Initializer() *Expression { return node.initializer.get() }
+
+func (node *BindingElement) SetInitializer(initializer *Expression) {
+	node.initializer.set(initializer)
 }
 
 func (f *NodeFactory) NewBindingElement(dotDotDotToken *DotDotDotToken, propertyName *PropertyName, name *BindingName, initializer *Expression) *Node {
-	data := &BindingElement{}
-	data.DotDotDotToken = dotDotDotToken
-	data.PropertyName = propertyName
-	data.name = name
-	data.Initializer = initializer
+	data := newData[BindingElement](f)
+	data.dotDotDotToken.set(dotDotDotToken)
+	data.propertyName.set(propertyName)
+	data.name.set(name)
+	data.initializer.set(initializer)
 	return f.newNode(KindBindingElement, data)
 }
 
 func (f *NodeFactory) UpdateBindingElement(node *BindingElement, dotDotDotToken *DotDotDotToken, propertyName *PropertyName, name *BindingName, initializer *Expression) *Node {
-	if dotDotDotToken != node.DotDotDotToken || propertyName != node.PropertyName || name != node.name || initializer != node.Initializer {
+	if dotDotDotToken != node.DotDotDotToken() || propertyName != node.PropertyName() || name != node.name.get() || initializer != node.Initializer() {
 		return updateNode(f.NewBindingElement(dotDotDotToken, propertyName, name, initializer), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *BindingElement) ForEachChild(v Visitor) bool {
-	return visit(v, node.DotDotDotToken) ||
-		visit(v, node.PropertyName) ||
-		visit(v, node.name) ||
-		visit(v, node.Initializer)
+	return visit(v, node.DotDotDotToken()) ||
+		visit(v, node.PropertyName()) ||
+		visit(v, node.name.get()) ||
+		visit(v, node.Initializer())
 }
 
 func (node *BindingElement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateBindingElement(node, v.visitNode(node.DotDotDotToken), v.visitNode(node.PropertyName), v.visitNode(node.name), v.visitNode(node.Initializer))
+	return v.Factory.UpdateBindingElement(node, v.visitNode(node.DotDotDotToken()), v.visitNode(node.PropertyName()), v.visitNode(node.name.get()), v.visitNode(node.Initializer()))
 }
 
 func (node *BindingElement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewBindingElement(node.DotDotDotToken, node.PropertyName, node.name, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewBindingElement(node.DotDotDotToken(), node.PropertyName(), node.name.get(), node.Initializer()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *BindingElement) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsBindingElement(node *Node) bool {
@@ -1954,24 +2240,24 @@ type MissingDeclaration struct {
 }
 
 func (f *NodeFactory) NewMissingDeclaration(modifiers *ModifierList) *Node {
-	data := &MissingDeclaration{}
-	data.modifiers = modifiers
+	data := newData[MissingDeclaration](f)
+	data.modifiers.set(modifiers)
 	return f.newNode(KindMissingDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateMissingDeclaration(node *MissingDeclaration, modifiers *ModifierList) *Node {
-	if modifiers != node.modifiers {
+	if modifiers != node.modifiers.get() {
 		return updateNode(f.NewMissingDeclaration(modifiers), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *MissingDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers)
+	return visitModifiers(v, node.modifiers.get())
 }
 
 func (node *MissingDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateMissingDeclaration(node, v.visitModifiers(node.modifiers))
+	return v.Factory.UpdateMissingDeclaration(node, v.visitModifiers(node.modifiers.get()))
 }
 
 func (node *MissingDeclaration) Clone(f NodeFactoryCoercible) *Node {
@@ -1993,51 +2279,51 @@ type FunctionDeclaration struct {
 	ModifiersBase
 	FunctionLikeWithBodyBase
 	CompositeBase
-	name           *IdentifierNode // Optional
+	name           link[Node] // *IdentifierNode. Optional
 	ReturnFlowNode *FlowNode
 }
 
 func (f *NodeFactory) NewFunctionDeclaration(modifiers *ModifierList, asteriskToken *AsteriskToken, name *IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	data := f.functionDeclarationArena.New()
-	data.modifiers = modifiers
-	data.AsteriskToken = asteriskToken
-	data.name = name
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
-	data.FullSignature = fullSignature
-	data.Body = body
+	data := newData[FunctionDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.asteriskToken.set(asteriskToken)
+	data.name.set(name)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
+	data.fullSignature.set(fullSignature)
+	data.body.set(body)
 	return f.newNode(KindFunctionDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateFunctionDeclaration(node *FunctionDeclaration, modifiers *ModifierList, asteriskToken *AsteriskToken, name *IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	if modifiers != node.modifiers || asteriskToken != node.AsteriskToken || name != node.name || typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type || fullSignature != node.FullSignature || body != node.Body {
+	if modifiers != node.modifiers.get() || asteriskToken != node.AsteriskToken() || name != node.name.get() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || body != node.Body() {
 		return updateNode(f.NewFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, typeNode, fullSignature, body), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *FunctionDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.AsteriskToken) ||
-		visit(v, node.name) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Parameters) ||
-		visit(v, node.Type) ||
-		visit(v, node.FullSignature) ||
-		visit(v, node.Body)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.AsteriskToken()) ||
+		visit(v, node.name.get()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.Parameters()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.FullSignature()) ||
+		visit(v, node.Body())
 }
 
 func (node *FunctionDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateFunctionDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.AsteriskToken), v.visitNode(node.name), v.visitNodes(node.TypeParameters), v.visitParameters(node.Parameters), v.visitNode(node.Type), v.visitNode(node.FullSignature), v.visitFunctionBody(node.Body))
+	return v.Factory.UpdateFunctionDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.AsteriskToken()), v.visitNode(node.name.get()), v.visitNodes(node.TypeParameters()), v.visitParameters(node.Parameters()), v.visitNode(node.Type()), v.visitNode(node.FullSignature()), v.visitFunctionBody(node.Body()))
 }
 
 func (node *FunctionDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewFunctionDeclaration(node.Modifiers(), node.AsteriskToken, node.name, node.TypeParameters, node.Parameters, node.Type, node.FullSignature, node.Body), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewFunctionDeclaration(node.Modifiers(), node.AsteriskToken(), node.name.get(), node.TypeParameters(), node.Parameters(), node.Type(), node.FullSignature(), node.Body()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *FunctionDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsFunctionDeclaration(node *Node) bool {
@@ -2055,40 +2341,40 @@ type ClassDeclaration struct {
 }
 
 func (f *NodeFactory) NewClassDeclaration(modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) *Node {
-	data := &ClassDeclaration{}
-	data.modifiers = modifiers
-	data.name = name
-	data.TypeParameters = typeParameters
-	data.HeritageClauses = heritageClauses
-	data.Members = members
+	data := newData[ClassDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.typeParameters.set(typeParameters)
+	data.heritageClauses.set(heritageClauses)
+	data.members.set(members)
 	return f.newNode(KindClassDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateClassDeclaration(node *ClassDeclaration, modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) *Node {
-	if modifiers != node.modifiers || name != node.name || typeParameters != node.TypeParameters || heritageClauses != node.HeritageClauses || members != node.Members {
+	if modifiers != node.modifiers.get() || name != node.name.get() || typeParameters != node.TypeParameters() || heritageClauses != node.HeritageClauses() || members != node.Members() {
 		return updateNode(f.NewClassDeclaration(modifiers, name, typeParameters, heritageClauses, members), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ClassDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.HeritageClauses) ||
-		visitNodeList(v, node.Members)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.HeritageClauses()) ||
+		visitNodeList(v, node.Members())
 }
 
 func (node *ClassDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateClassDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNodes(node.TypeParameters), v.visitNodes(node.HeritageClauses), v.visitNodes(node.Members))
+	return v.Factory.UpdateClassDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNodes(node.TypeParameters()), v.visitNodes(node.HeritageClauses()), v.visitNodes(node.Members()))
 }
 
 func (node *ClassDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewClassDeclaration(node.Modifiers(), node.name, node.TypeParameters, node.HeritageClauses, node.Members), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewClassDeclaration(node.Modifiers(), node.name.get(), node.TypeParameters(), node.HeritageClauses(), node.Members()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ClassDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsClassDeclaration(node *Node) bool {
@@ -2106,40 +2392,40 @@ type ClassExpression struct {
 }
 
 func (f *NodeFactory) NewClassExpression(modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) *Node {
-	data := &ClassExpression{}
-	data.modifiers = modifiers
-	data.name = name
-	data.TypeParameters = typeParameters
-	data.HeritageClauses = heritageClauses
-	data.Members = members
+	data := newData[ClassExpression](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.typeParameters.set(typeParameters)
+	data.heritageClauses.set(heritageClauses)
+	data.members.set(members)
 	return f.newNode(KindClassExpression, data)
 }
 
 func (f *NodeFactory) UpdateClassExpression(node *ClassExpression, modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) *Node {
-	if modifiers != node.modifiers || name != node.name || typeParameters != node.TypeParameters || heritageClauses != node.HeritageClauses || members != node.Members {
+	if modifiers != node.modifiers.get() || name != node.name.get() || typeParameters != node.TypeParameters() || heritageClauses != node.HeritageClauses() || members != node.Members() {
 		return updateNode(f.NewClassExpression(modifiers, name, typeParameters, heritageClauses, members), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ClassExpression) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.HeritageClauses) ||
-		visitNodeList(v, node.Members)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.HeritageClauses()) ||
+		visitNodeList(v, node.Members())
 }
 
 func (node *ClassExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateClassExpression(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNodes(node.TypeParameters), v.visitNodes(node.HeritageClauses), v.visitNodes(node.Members))
+	return v.Factory.UpdateClassExpression(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNodes(node.TypeParameters()), v.visitNodes(node.HeritageClauses()), v.visitNodes(node.Members()))
 }
 
 func (node *ClassExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewClassExpression(node.Modifiers(), node.name, node.TypeParameters, node.HeritageClauses, node.Members), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewClassExpression(node.Modifiers(), node.name.get(), node.TypeParameters(), node.HeritageClauses(), node.Members()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ClassExpression) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsClassExpression(node *Node) bool {
@@ -2154,33 +2440,37 @@ type HeritageClause struct {
 	NodeBase
 	CompositeBase
 	Token Kind
-	Types *HeritageClauseElementList
+	types link[NodeList] // *HeritageClauseElementList
 }
 
+func (node *HeritageClause) Types() *HeritageClauseElementList { return node.types.get() }
+
+func (node *HeritageClause) SetTypes(types *HeritageClauseElementList) { node.types.set(types) }
+
 func (f *NodeFactory) NewHeritageClause(token Kind, types *HeritageClauseElementList) *Node {
-	data := f.heritageClauseArena.New()
+	data := newData[HeritageClause](f)
 	data.Token = token
-	data.Types = types
+	data.types.set(types)
 	return f.newNode(KindHeritageClause, data)
 }
 
 func (f *NodeFactory) UpdateHeritageClause(node *HeritageClause, token Kind, types *HeritageClauseElementList) *Node {
-	if token != node.Token || types != node.Types {
+	if token != node.Token || types != node.Types() {
 		return updateNode(f.NewHeritageClause(token, types), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *HeritageClause) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Types)
+	return visitNodeList(v, node.Types())
 }
 
 func (node *HeritageClause) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateHeritageClause(node, node.Token, v.visitNodes(node.Types))
+	return v.Factory.UpdateHeritageClause(node, node.Token, v.visitNodes(node.Types()))
 }
 
 func (node *HeritageClause) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewHeritageClause(node.Token, node.Types), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewHeritageClause(node.Token, node.Types()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsHeritageClause(node *Node) bool {
@@ -2197,47 +2487,67 @@ type InterfaceDeclaration struct {
 	DeclarationBase
 	ExportableBase
 	ModifiersBase
-	name            *IdentifierNode
-	TypeParameters  *TypeParameterList  // Optional
-	HeritageClauses *HeritageClauseList // Optional
-	Members         *TypeElementList
+	name            link[Node]     // *IdentifierNode
+	typeParameters  link[NodeList] // *TypeParameterList. Optional
+	heritageClauses link[NodeList] // *HeritageClauseList. Optional
+	members         link[NodeList] // *TypeElementList
 }
 
+func (node *InterfaceDeclaration) TypeParameters() *TypeParameterList {
+	return node.typeParameters.get()
+}
+
+func (node *InterfaceDeclaration) SetTypeParameters(typeParameters *TypeParameterList) {
+	node.typeParameters.set(typeParameters)
+}
+
+func (node *InterfaceDeclaration) HeritageClauses() *HeritageClauseList {
+	return node.heritageClauses.get()
+}
+
+func (node *InterfaceDeclaration) SetHeritageClauses(heritageClauses *HeritageClauseList) {
+	node.heritageClauses.set(heritageClauses)
+}
+
+func (node *InterfaceDeclaration) Members() *TypeElementList { return node.members.get() }
+
+func (node *InterfaceDeclaration) SetMembers(members *TypeElementList) { node.members.set(members) }
+
 func (f *NodeFactory) NewInterfaceDeclaration(modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *TypeElementList) *Node {
-	data := f.interfaceDeclarationArena.New()
-	data.modifiers = modifiers
-	data.name = name
-	data.TypeParameters = typeParameters
-	data.HeritageClauses = heritageClauses
-	data.Members = members
+	data := newData[InterfaceDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.typeParameters.set(typeParameters)
+	data.heritageClauses.set(heritageClauses)
+	data.members.set(members)
 	return f.newNode(KindInterfaceDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateInterfaceDeclaration(node *InterfaceDeclaration, modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *TypeElementList) *Node {
-	if modifiers != node.modifiers || name != node.name || typeParameters != node.TypeParameters || heritageClauses != node.HeritageClauses || members != node.Members {
+	if modifiers != node.modifiers.get() || name != node.name.get() || typeParameters != node.TypeParameters() || heritageClauses != node.HeritageClauses() || members != node.Members() {
 		return updateNode(f.NewInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *InterfaceDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.HeritageClauses) ||
-		visitNodeList(v, node.Members)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.HeritageClauses()) ||
+		visitNodeList(v, node.Members())
 }
 
 func (node *InterfaceDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateInterfaceDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNodes(node.TypeParameters), v.visitNodes(node.HeritageClauses), v.visitNodes(node.Members))
+	return v.Factory.UpdateInterfaceDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNodes(node.TypeParameters()), v.visitNodes(node.HeritageClauses()), v.visitNodes(node.Members()))
 }
 
 func (node *InterfaceDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewInterfaceDeclaration(node.Modifiers(), node.name, node.TypeParameters, node.HeritageClauses, node.Members), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewInterfaceDeclaration(node.Modifiers(), node.name.get(), node.TypeParameters(), node.HeritageClauses(), node.Members()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *InterfaceDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsInterfaceDeclaration(node *Node) bool {
@@ -2255,31 +2565,43 @@ type TypeAliasDeclaration struct {
 	ExportableBase
 	ModifiersBase
 	LocalsContainerBase
-	name           *IdentifierNode
-	TypeParameters *TypeParameterList // Optional
-	Type           *TypeNode
+	name           link[Node]     // *IdentifierNode
+	typeParameters link[NodeList] // *TypeParameterList. Optional
+	typeNode       link[Node]     // *TypeNode
 }
 
+func (node *TypeAliasDeclaration) TypeParameters() *TypeParameterList {
+	return node.typeParameters.get()
+}
+
+func (node *TypeAliasDeclaration) SetTypeParameters(typeParameters *TypeParameterList) {
+	node.typeParameters.set(typeParameters)
+}
+
+func (node *TypeAliasDeclaration) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *TypeAliasDeclaration) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewTypeAliasDeclaration(modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, typeNode *TypeNode) *Node {
-	data := f.typeAliasDeclarationArena.New()
-	data.modifiers = modifiers
-	data.name = name
-	data.TypeParameters = typeParameters
-	data.Type = typeNode
+	data := newData[TypeAliasDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.typeParameters.set(typeParameters)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindTypeAliasDeclaration, data)
 }
 
 func (f *NodeFactory) NewJSTypeAliasDeclaration(modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, typeNode *TypeNode) *Node {
-	data := f.typeAliasDeclarationArena.New()
-	data.modifiers = modifiers
-	data.name = name
-	data.TypeParameters = typeParameters
-	data.Type = typeNode
+	data := newData[TypeAliasDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.typeParameters.set(typeParameters)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindJSTypeAliasDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateTypeAliasDeclaration(node *TypeAliasDeclaration, modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, typeNode *TypeNode) *Node {
-	if modifiers != node.modifiers || name != node.name || typeParameters != node.TypeParameters || typeNode != node.Type {
+	if modifiers != node.modifiers.get() || name != node.name.get() || typeParameters != node.TypeParameters() || typeNode != node.Type() {
 		switch node.Kind {
 		case KindTypeAliasDeclaration:
 			return updateNode(f.NewTypeAliasDeclaration(modifiers, name, typeParameters, typeNode), node.AsNode(), f.hooks)
@@ -2293,29 +2615,29 @@ func (f *NodeFactory) UpdateTypeAliasDeclaration(node *TypeAliasDeclaration, mod
 }
 
 func (node *TypeAliasDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visit(v, node.Type)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visit(v, node.Type())
 }
 
 func (node *TypeAliasDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTypeAliasDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNodes(node.TypeParameters), v.visitNode(node.Type))
+	return v.Factory.UpdateTypeAliasDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNodes(node.TypeParameters()), v.visitNode(node.Type()))
 }
 
 func (node *TypeAliasDeclaration) Clone(f NodeFactoryCoercible) *Node {
 	switch node.Kind {
 	case KindTypeAliasDeclaration:
-		return cloneNode(f.AsNodeFactory().NewTypeAliasDeclaration(node.Modifiers(), node.name, node.TypeParameters, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+		return cloneNode(f.AsNodeFactory().NewTypeAliasDeclaration(node.Modifiers(), node.name.get(), node.TypeParameters(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 	case KindJSTypeAliasDeclaration:
-		return cloneNode(f.AsNodeFactory().NewJSTypeAliasDeclaration(node.Modifiers(), node.name, node.TypeParameters, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+		return cloneNode(f.AsNodeFactory().NewJSTypeAliasDeclaration(node.Modifiers(), node.name.get(), node.TypeParameters(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 	default:
 		panic("unexpected kind in TypeAliasDeclaration.Clone: " + node.Kind.String())
 	}
 }
 
 func (node *TypeAliasDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsTypeAliasDeclaration(node *Node) bool {
@@ -2335,37 +2657,41 @@ type EnumMember struct {
 	DeclarationBase
 	NamedMemberBase
 	CompositeBase
-	Initializer *Expression // Optional
+	initializer link[Node] // *Expression. Optional
 }
 
+func (node *EnumMember) Initializer() *Expression { return node.initializer.get() }
+
+func (node *EnumMember) SetInitializer(initializer *Expression) { node.initializer.set(initializer) }
+
 func (f *NodeFactory) NewEnumMember(name *PropertyName, initializer *Expression) *Node {
-	data := &EnumMember{}
-	data.name = name
-	data.Initializer = initializer
+	data := newData[EnumMember](f)
+	data.name.set(name)
+	data.initializer.set(initializer)
 	return f.newNode(KindEnumMember, data)
 }
 
 func (f *NodeFactory) UpdateEnumMember(node *EnumMember, name *PropertyName, initializer *Expression) *Node {
-	if name != node.name || initializer != node.Initializer {
+	if name != node.name.get() || initializer != node.Initializer() {
 		return updateNode(f.NewEnumMember(name, initializer), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *EnumMember) ForEachChild(v Visitor) bool {
-	return visit(v, node.name) || visit(v, node.Initializer)
+	return visit(v, node.name.get()) || visit(v, node.Initializer())
 }
 
 func (node *EnumMember) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateEnumMember(node, v.visitNode(node.name), v.visitNode(node.Initializer))
+	return v.Factory.UpdateEnumMember(node, v.visitNode(node.name.get()), v.visitNode(node.Initializer()))
 }
 
 func (node *EnumMember) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewEnumMember(node.name, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewEnumMember(node.name.get(), node.Initializer()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *EnumMember) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsEnumMember(node *Node) bool {
@@ -2382,39 +2708,43 @@ type EnumDeclaration struct {
 	ExportableBase
 	ModifiersBase
 	CompositeBase
-	name    *IdentifierNode
-	Members *EnumMemberList
+	name    link[Node]     // *IdentifierNode
+	members link[NodeList] // *EnumMemberList
 }
 
+func (node *EnumDeclaration) Members() *EnumMemberList { return node.members.get() }
+
+func (node *EnumDeclaration) SetMembers(members *EnumMemberList) { node.members.set(members) }
+
 func (f *NodeFactory) NewEnumDeclaration(modifiers *ModifierList, name *IdentifierNode, members *EnumMemberList) *Node {
-	data := &EnumDeclaration{}
-	data.modifiers = modifiers
-	data.name = name
-	data.Members = members
+	data := newData[EnumDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.members.set(members)
 	return f.newNode(KindEnumDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateEnumDeclaration(node *EnumDeclaration, modifiers *ModifierList, name *IdentifierNode, members *EnumMemberList) *Node {
-	if modifiers != node.modifiers || name != node.name || members != node.Members {
+	if modifiers != node.modifiers.get() || name != node.name.get() || members != node.Members() {
 		return updateNode(f.NewEnumDeclaration(modifiers, name, members), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *EnumDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visitNodeList(v, node.Members)
+	return visitModifiers(v, node.modifiers.get()) || visit(v, node.name.get()) || visitNodeList(v, node.Members())
 }
 
 func (node *EnumDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateEnumDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNodes(node.Members))
+	return v.Factory.UpdateEnumDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNodes(node.Members()))
 }
 
 func (node *EnumDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewEnumDeclaration(node.Modifiers(), node.name, node.Members), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewEnumDeclaration(node.Modifiers(), node.name.get(), node.Members()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *EnumDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsEnumDeclaration(node *Node) bool {
@@ -2428,36 +2758,40 @@ func IsEnumDeclaration(node *Node) bool {
 type ModuleBlock struct {
 	StatementBase
 	CompositeBase
-	Statements *StatementList
+	statements link[NodeList] // *StatementList
 }
 
+func (node *ModuleBlock) Statements() *StatementList { return node.statements.get() }
+
+func (node *ModuleBlock) SetStatements(statements *StatementList) { node.statements.set(statements) }
+
 func (f *NodeFactory) NewModuleBlock(statements *StatementList) *Node {
-	data := &ModuleBlock{}
-	data.Statements = statements
+	data := newData[ModuleBlock](f)
+	data.statements.set(statements)
 	return f.newNode(KindModuleBlock, data)
 }
 
 func (f *NodeFactory) UpdateModuleBlock(node *ModuleBlock, statements *StatementList) *Node {
-	if statements != node.Statements {
+	if statements != node.Statements() {
 		return updateNode(f.NewModuleBlock(statements), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ModuleBlock) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Statements)
+	return visitNodeList(v, node.Statements())
 }
 
 func (node *ModuleBlock) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateModuleBlock(node, v.visitNodes(node.Statements))
+	return v.Factory.UpdateModuleBlock(node, v.visitNodes(node.Statements()))
 }
 
 func (node *ModuleBlock) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewModuleBlock(node.Statements), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewModuleBlock(node.Statements()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ModuleBlock) computeSubtreeFacts() SubtreeFacts {
-	return propagateNodeListSubtreeFacts(node.Statements, propagateSubtreeFacts)
+	return propagateNodeListSubtreeFacts(node.Statements(), propagateSubtreeFacts)
 }
 
 func IsModuleBlock(node *Node) bool {
@@ -2473,7 +2807,7 @@ type NotEmittedStatement struct {
 }
 
 func (f *NodeFactory) NewNotEmittedStatement() *Node {
-	data := &NotEmittedStatement{}
+	data := newData[NotEmittedStatement](f)
 	return f.newNode(KindNotEmittedStatement, data)
 }
 
@@ -2496,7 +2830,7 @@ type NotEmittedTypeElement struct {
 }
 
 func (f *NodeFactory) NewNotEmittedTypeElement() *Node {
-	data := &NotEmittedTypeElement{}
+	data := newData[NotEmittedTypeElement](f)
 	return f.newNode(KindNotEmittedTypeElement, data)
 }
 
@@ -2517,31 +2851,49 @@ type ImportDeclaration struct {
 	ModifiersBase
 	CompositeBase
 	DeclarationBase
-	ImportClause    *ImportClauseNode // Optional
-	ModuleSpecifier *Expression
-	Attributes      *ImportAttributesNode // Optional
+	importClause    link[Node] // *ImportClauseNode. Optional
+	moduleSpecifier link[Node] // *Expression
+	attributes      link[Node] // *ImportAttributesNode. Optional
+}
+
+func (node *ImportDeclaration) ImportClause() *ImportClauseNode { return node.importClause.get() }
+
+func (node *ImportDeclaration) SetImportClause(importClause *ImportClauseNode) {
+	node.importClause.set(importClause)
+}
+
+func (node *ImportDeclaration) ModuleSpecifier() *Expression { return node.moduleSpecifier.get() }
+
+func (node *ImportDeclaration) SetModuleSpecifier(moduleSpecifier *Expression) {
+	node.moduleSpecifier.set(moduleSpecifier)
+}
+
+func (node *ImportDeclaration) Attributes() *ImportAttributesNode { return node.attributes.get() }
+
+func (node *ImportDeclaration) SetAttributes(attributes *ImportAttributesNode) {
+	node.attributes.set(attributes)
 }
 
 func (f *NodeFactory) NewImportDeclaration(modifiers *ModifierList, importClause *ImportClauseNode, moduleSpecifier *Expression, attributes *ImportAttributesNode) *Node {
-	data := &ImportDeclaration{}
-	data.modifiers = modifiers
-	data.ImportClause = importClause
-	data.ModuleSpecifier = moduleSpecifier
-	data.Attributes = attributes
+	data := newData[ImportDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.importClause.set(importClause)
+	data.moduleSpecifier.set(moduleSpecifier)
+	data.attributes.set(attributes)
 	return f.newNode(KindImportDeclaration, data)
 }
 
 func (f *NodeFactory) NewJSImportDeclaration(modifiers *ModifierList, importClause *ImportClauseNode, moduleSpecifier *Expression, attributes *ImportAttributesNode) *Node {
-	data := &ImportDeclaration{}
-	data.modifiers = modifiers
-	data.ImportClause = importClause
-	data.ModuleSpecifier = moduleSpecifier
-	data.Attributes = attributes
+	data := newData[ImportDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.importClause.set(importClause)
+	data.moduleSpecifier.set(moduleSpecifier)
+	data.attributes.set(attributes)
 	return f.newNode(KindJSImportDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateImportDeclaration(node *ImportDeclaration, modifiers *ModifierList, importClause *ImportClauseNode, moduleSpecifier *Expression, attributes *ImportAttributesNode) *Node {
-	if modifiers != node.modifiers || importClause != node.ImportClause || moduleSpecifier != node.ModuleSpecifier || attributes != node.Attributes {
+	if modifiers != node.modifiers.get() || importClause != node.ImportClause() || moduleSpecifier != node.ModuleSpecifier() || attributes != node.Attributes() {
 		switch node.Kind {
 		case KindImportDeclaration:
 			return updateNode(f.NewImportDeclaration(modifiers, importClause, moduleSpecifier, attributes), node.AsNode(), f.hooks)
@@ -2555,32 +2907,32 @@ func (f *NodeFactory) UpdateImportDeclaration(node *ImportDeclaration, modifiers
 }
 
 func (node *ImportDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.ImportClause) ||
-		visit(v, node.ModuleSpecifier) ||
-		visit(v, node.Attributes)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.ImportClause()) ||
+		visit(v, node.ModuleSpecifier()) ||
+		visit(v, node.Attributes())
 }
 
 func (node *ImportDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateImportDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.ImportClause), v.visitNode(node.ModuleSpecifier), v.visitNode(node.Attributes))
+	return v.Factory.UpdateImportDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.ImportClause()), v.visitNode(node.ModuleSpecifier()), v.visitNode(node.Attributes()))
 }
 
 func (node *ImportDeclaration) Clone(f NodeFactoryCoercible) *Node {
 	switch node.Kind {
 	case KindImportDeclaration:
-		return cloneNode(f.AsNodeFactory().NewImportDeclaration(node.Modifiers(), node.ImportClause, node.ModuleSpecifier, node.Attributes), node.AsNode(), f.AsNodeFactory().hooks)
+		return cloneNode(f.AsNodeFactory().NewImportDeclaration(node.Modifiers(), node.ImportClause(), node.ModuleSpecifier(), node.Attributes()), node.AsNode(), f.AsNodeFactory().hooks)
 	case KindJSImportDeclaration:
-		return cloneNode(f.AsNodeFactory().NewJSImportDeclaration(node.Modifiers(), node.ImportClause, node.ModuleSpecifier, node.Attributes), node.AsNode(), f.AsNodeFactory().hooks)
+		return cloneNode(f.AsNodeFactory().NewJSImportDeclaration(node.Modifiers(), node.ImportClause(), node.ModuleSpecifier(), node.Attributes()), node.AsNode(), f.AsNodeFactory().hooks)
 	default:
 		panic("unexpected kind in ImportDeclaration.Clone: " + node.Kind.String())
 	}
 }
 
 func (node *ImportDeclaration) computeSubtreeFacts() SubtreeFacts {
-	return propagateModifierListSubtreeFacts(node.modifiers) |
-		propagateSubtreeFacts(node.ImportClause) |
-		propagateSubtreeFacts(node.ModuleSpecifier) |
-		propagateSubtreeFacts(node.Attributes)
+	return propagateModifierListSubtreeFacts(node.modifiers.get()) |
+		propagateSubtreeFacts(node.ImportClause()) |
+		propagateSubtreeFacts(node.ModuleSpecifier()) |
+		propagateSubtreeFacts(node.Attributes())
 }
 
 func IsImportDeclaration(node *Node) bool {
@@ -2597,36 +2949,42 @@ func IsJSImportDeclaration(node *Node) bool {
 
 type ExternalModuleReference struct {
 	NodeBase
-	Expression *Expression
+	expression link[Node] // *Expression
+}
+
+func (node *ExternalModuleReference) Expression() *Expression { return node.expression.get() }
+
+func (node *ExternalModuleReference) SetExpression(expression *Expression) {
+	node.expression.set(expression)
 }
 
 func (f *NodeFactory) NewExternalModuleReference(expression *Expression) *Node {
-	data := &ExternalModuleReference{}
-	data.Expression = expression
+	data := newData[ExternalModuleReference](f)
+	data.expression.set(expression)
 	return f.newNode(KindExternalModuleReference, data)
 }
 
 func (f *NodeFactory) UpdateExternalModuleReference(node *ExternalModuleReference, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewExternalModuleReference(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ExternalModuleReference) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *ExternalModuleReference) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateExternalModuleReference(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateExternalModuleReference(node, v.visitNode(node.Expression()))
 }
 
 func (node *ExternalModuleReference) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewExternalModuleReference(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewExternalModuleReference(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ExternalModuleReference) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression)
+	return propagateSubtreeFacts(node.Expression())
 }
 
 func IsExternalModuleReference(node *Node) bool {
@@ -2641,40 +2999,40 @@ type NamespaceImport struct {
 	NodeBase
 	DeclarationBase
 	ExportableBase
-	name *IdentifierNode
+	name link[Node] // *IdentifierNode
 }
 
 func (f *NodeFactory) NewNamespaceImport(name *IdentifierNode) *Node {
-	data := &NamespaceImport{}
-	data.name = name
+	data := newData[NamespaceImport](f)
+	data.name.set(name)
 	return f.newNode(KindNamespaceImport, data)
 }
 
 func (f *NodeFactory) UpdateNamespaceImport(node *NamespaceImport, name *IdentifierNode) *Node {
-	if name != node.name {
+	if name != node.name.get() {
 		return updateNode(f.NewNamespaceImport(name), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *NamespaceImport) ForEachChild(v Visitor) bool {
-	return visit(v, node.name)
+	return visit(v, node.name.get())
 }
 
 func (node *NamespaceImport) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateNamespaceImport(node, v.visitNode(node.name))
+	return v.Factory.UpdateNamespaceImport(node, v.visitNode(node.name.get()))
 }
 
 func (node *NamespaceImport) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewNamespaceImport(node.name), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewNamespaceImport(node.name.get()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *NamespaceImport) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.name)
+	return propagateSubtreeFacts(node.name.get())
 }
 
 func (node *NamespaceImport) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsNamespaceImport(node *Node) bool {
@@ -2688,36 +3046,40 @@ func IsNamespaceImport(node *Node) bool {
 type NamedImports struct {
 	NodeBase
 	CompositeBase
-	Elements *ImportSpecifierList
+	elements link[NodeList] // *ImportSpecifierList
 }
 
+func (node *NamedImports) Elements() *ImportSpecifierList { return node.elements.get() }
+
+func (node *NamedImports) SetElements(elements *ImportSpecifierList) { node.elements.set(elements) }
+
 func (f *NodeFactory) NewNamedImports(elements *ImportSpecifierList) *Node {
-	data := &NamedImports{}
-	data.Elements = elements
+	data := newData[NamedImports](f)
+	data.elements.set(elements)
 	return f.newNode(KindNamedImports, data)
 }
 
 func (f *NodeFactory) UpdateNamedImports(node *NamedImports, elements *ImportSpecifierList) *Node {
-	if elements != node.Elements {
+	if elements != node.Elements() {
 		return updateNode(f.NewNamedImports(elements), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *NamedImports) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Elements)
+	return visitNodeList(v, node.Elements())
 }
 
 func (node *NamedImports) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateNamedImports(node, v.visitNodes(node.Elements))
+	return v.Factory.UpdateNamedImports(node, v.visitNodes(node.Elements()))
 }
 
 func (node *NamedImports) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewNamedImports(node.Elements), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewNamedImports(node.Elements()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *NamedImports) computeSubtreeFacts() SubtreeFacts {
-	return propagateNodeListSubtreeFacts(node.Elements, propagateSubtreeFacts)
+	return propagateNodeListSubtreeFacts(node.Elements(), propagateSubtreeFacts)
 }
 
 func IsNamedImports(node *Node) bool {
@@ -2734,36 +3096,44 @@ type ExportAssignment struct {
 	ModifiersBase
 	CompositeBase
 	IsExportEquals bool
-	Type           *TypeNode
-	Expression     *Expression
+	typeNode       link[Node] // *TypeNode
+	expression     link[Node] // *Expression
 }
 
+func (node *ExportAssignment) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *ExportAssignment) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
+func (node *ExportAssignment) Expression() *Expression { return node.expression.get() }
+
+func (node *ExportAssignment) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewExportAssignment(modifiers *ModifierList, isExportEquals bool, typeNode *TypeNode, expression *Expression) *Node {
-	data := &ExportAssignment{}
-	data.modifiers = modifiers
+	data := newData[ExportAssignment](f)
+	data.modifiers.set(modifiers)
 	data.IsExportEquals = isExportEquals
-	data.Type = typeNode
-	data.Expression = expression
+	data.typeNode.set(typeNode)
+	data.expression.set(expression)
 	return f.newNode(KindExportAssignment, data)
 }
 
 func (f *NodeFactory) UpdateExportAssignment(node *ExportAssignment, modifiers *ModifierList, isExportEquals bool, typeNode *TypeNode, expression *Expression) *Node {
-	if modifiers != node.modifiers || isExportEquals != node.IsExportEquals || typeNode != node.Type || expression != node.Expression {
+	if modifiers != node.modifiers.get() || isExportEquals != node.IsExportEquals || typeNode != node.Type() || expression != node.Expression() {
 		return updateNode(f.NewExportAssignment(modifiers, isExportEquals, typeNode, expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ExportAssignment) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.Type) || visit(v, node.Expression)
+	return visitModifiers(v, node.modifiers.get()) || visit(v, node.Type()) || visit(v, node.Expression())
 }
 
 func (node *ExportAssignment) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateExportAssignment(node, v.visitModifiers(node.modifiers), node.IsExportEquals, v.visitNode(node.Type), v.visitNode(node.Expression))
+	return v.Factory.UpdateExportAssignment(node, v.visitModifiers(node.modifiers.get()), node.IsExportEquals, v.visitNode(node.Type()), v.visitNode(node.Expression()))
 }
 
 func (node *ExportAssignment) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewExportAssignment(node.Modifiers(), node.IsExportEquals, node.Type, node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewExportAssignment(node.Modifiers(), node.IsExportEquals, node.Type(), node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsExportAssignment(node *Node) bool {
@@ -2779,37 +3149,37 @@ type NamespaceExportDeclaration struct {
 	StatementBase
 	DeclarationBase
 	ModifiersBase
-	name *IdentifierNode
+	name link[Node] // *IdentifierNode
 }
 
 func (f *NodeFactory) NewNamespaceExportDeclaration(modifiers *ModifierList, name *IdentifierNode) *Node {
-	data := &NamespaceExportDeclaration{}
-	data.modifiers = modifiers
-	data.name = name
+	data := newData[NamespaceExportDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
 	return f.newNode(KindNamespaceExportDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateNamespaceExportDeclaration(node *NamespaceExportDeclaration, modifiers *ModifierList, name *IdentifierNode) *Node {
-	if modifiers != node.modifiers || name != node.name {
+	if modifiers != node.modifiers.get() || name != node.name.get() {
 		return updateNode(f.NewNamespaceExportDeclaration(modifiers, name), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *NamespaceExportDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.name)
+	return visitModifiers(v, node.modifiers.get()) || visit(v, node.name.get())
 }
 
 func (node *NamespaceExportDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateNamespaceExportDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name))
+	return v.Factory.UpdateNamespaceExportDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()))
 }
 
 func (node *NamespaceExportDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewNamespaceExportDeclaration(node.Modifiers(), node.name), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewNamespaceExportDeclaration(node.Modifiers(), node.name.get()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *NamespaceExportDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsNamespaceExportDeclaration(node *Node) bool {
@@ -2823,40 +3193,40 @@ func IsNamespaceExportDeclaration(node *Node) bool {
 type NamespaceExport struct {
 	NodeBase
 	DeclarationBase
-	name *ModuleExportName
+	name link[Node] // *ModuleExportName
 }
 
 func (f *NodeFactory) NewNamespaceExport(name *ModuleExportName) *Node {
-	data := &NamespaceExport{}
-	data.name = name
+	data := newData[NamespaceExport](f)
+	data.name.set(name)
 	return f.newNode(KindNamespaceExport, data)
 }
 
 func (f *NodeFactory) UpdateNamespaceExport(node *NamespaceExport, name *ModuleExportName) *Node {
-	if name != node.name {
+	if name != node.name.get() {
 		return updateNode(f.NewNamespaceExport(name), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *NamespaceExport) ForEachChild(v Visitor) bool {
-	return visit(v, node.name)
+	return visit(v, node.name.get())
 }
 
 func (node *NamespaceExport) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateNamespaceExport(node, v.visitNode(node.name))
+	return v.Factory.UpdateNamespaceExport(node, v.visitNode(node.name.get()))
 }
 
 func (node *NamespaceExport) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewNamespaceExport(node.name), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewNamespaceExport(node.name.get()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *NamespaceExport) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.name)
+	return propagateSubtreeFacts(node.name.get())
 }
 
 func (node *NamespaceExport) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsNamespaceExport(node *Node) bool {
@@ -2870,36 +3240,40 @@ func IsNamespaceExport(node *Node) bool {
 type NamedExports struct {
 	NodeBase
 	CompositeBase
-	Elements *ExportSpecifierList
+	elements link[NodeList] // *ExportSpecifierList
 }
 
+func (node *NamedExports) Elements() *ExportSpecifierList { return node.elements.get() }
+
+func (node *NamedExports) SetElements(elements *ExportSpecifierList) { node.elements.set(elements) }
+
 func (f *NodeFactory) NewNamedExports(elements *ExportSpecifierList) *Node {
-	data := &NamedExports{}
-	data.Elements = elements
+	data := newData[NamedExports](f)
+	data.elements.set(elements)
 	return f.newNode(KindNamedExports, data)
 }
 
 func (f *NodeFactory) UpdateNamedExports(node *NamedExports, elements *ExportSpecifierList) *Node {
-	if elements != node.Elements {
+	if elements != node.Elements() {
 		return updateNode(f.NewNamedExports(elements), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *NamedExports) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Elements)
+	return visitNodeList(v, node.Elements())
 }
 
 func (node *NamedExports) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateNamedExports(node, v.visitNodes(node.Elements))
+	return v.Factory.UpdateNamedExports(node, v.visitNodes(node.Elements()))
 }
 
 func (node *NamedExports) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewNamedExports(node.Elements), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewNamedExports(node.Elements()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *NamedExports) computeSubtreeFacts() SubtreeFacts {
-	return propagateNodeListSubtreeFacts(node.Elements, propagateSubtreeFacts)
+	return propagateNodeListSubtreeFacts(node.Elements(), propagateSubtreeFacts)
 }
 
 func IsNamedExports(node *Node) bool {
@@ -2916,39 +3290,45 @@ type ExportSpecifier struct {
 	ExportableBase
 	CompositeBase
 	IsTypeOnly   bool
-	PropertyName *ModuleExportName // Optional
-	name         *ModuleExportName
+	propertyName link[Node] // *ModuleExportName. Optional
+	name         link[Node] // *ModuleExportName
+}
+
+func (node *ExportSpecifier) PropertyName() *ModuleExportName { return node.propertyName.get() }
+
+func (node *ExportSpecifier) SetPropertyName(propertyName *ModuleExportName) {
+	node.propertyName.set(propertyName)
 }
 
 func (f *NodeFactory) NewExportSpecifier(isTypeOnly bool, propertyName *ModuleExportName, name *ModuleExportName) *Node {
-	data := &ExportSpecifier{}
+	data := newData[ExportSpecifier](f)
 	data.IsTypeOnly = isTypeOnly
-	data.PropertyName = propertyName
-	data.name = name
+	data.propertyName.set(propertyName)
+	data.name.set(name)
 	return f.newNode(KindExportSpecifier, data)
 }
 
 func (f *NodeFactory) UpdateExportSpecifier(node *ExportSpecifier, isTypeOnly bool, propertyName *ModuleExportName, name *ModuleExportName) *Node {
-	if isTypeOnly != node.IsTypeOnly || propertyName != node.PropertyName || name != node.name {
+	if isTypeOnly != node.IsTypeOnly || propertyName != node.PropertyName() || name != node.name.get() {
 		return updateNode(f.NewExportSpecifier(isTypeOnly, propertyName, name), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ExportSpecifier) ForEachChild(v Visitor) bool {
-	return visit(v, node.PropertyName) || visit(v, node.name)
+	return visit(v, node.PropertyName()) || visit(v, node.name.get())
 }
 
 func (node *ExportSpecifier) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateExportSpecifier(node, node.IsTypeOnly, v.visitNode(node.PropertyName), v.visitNode(node.name))
+	return v.Factory.UpdateExportSpecifier(node, node.IsTypeOnly, v.visitNode(node.PropertyName()), v.visitNode(node.name.get()))
 }
 
 func (node *ExportSpecifier) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewExportSpecifier(node.IsTypeOnly, node.PropertyName, node.name), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewExportSpecifier(node.IsTypeOnly, node.PropertyName(), node.name.get()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ExportSpecifier) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsExportSpecifier(node *Node) bool {
@@ -2968,30 +3348,30 @@ type CallSignatureDeclaration struct {
 }
 
 func (f *NodeFactory) NewCallSignatureDeclaration(typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	data := &CallSignatureDeclaration{}
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
+	data := newData[CallSignatureDeclaration](f)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindCallSignature, data)
 }
 
 func (f *NodeFactory) UpdateCallSignatureDeclaration(node *CallSignatureDeclaration, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	if typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type {
+	if typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewCallSignatureDeclaration(typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *CallSignatureDeclaration) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.Type)
+	return visitNodeList(v, node.TypeParameters()) || visitNodeList(v, node.Parameters()) || visit(v, node.Type())
 }
 
 func (node *CallSignatureDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateCallSignatureDeclaration(node, v.visitNodes(node.TypeParameters), v.visitNodes(node.Parameters), v.visitNode(node.Type))
+	return v.Factory.UpdateCallSignatureDeclaration(node, v.visitNodes(node.TypeParameters()), v.visitNodes(node.Parameters()), v.visitNode(node.Type()))
 }
 
 func (node *CallSignatureDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewCallSignatureDeclaration(node.TypeParameters, node.Parameters, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewCallSignatureDeclaration(node.TypeParameters(), node.Parameters(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsCallSignatureDeclaration(node *Node) bool {
@@ -3011,30 +3391,30 @@ type ConstructSignatureDeclaration struct {
 }
 
 func (f *NodeFactory) NewConstructSignatureDeclaration(typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	data := f.constructSignatureDeclarationArena.New()
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
+	data := newData[ConstructSignatureDeclaration](f)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindConstructSignature, data)
 }
 
 func (f *NodeFactory) UpdateConstructSignatureDeclaration(node *ConstructSignatureDeclaration, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	if typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type {
+	if typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewConstructSignatureDeclaration(typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ConstructSignatureDeclaration) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.Type)
+	return visitNodeList(v, node.TypeParameters()) || visitNodeList(v, node.Parameters()) || visit(v, node.Type())
 }
 
 func (node *ConstructSignatureDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateConstructSignatureDeclaration(node, v.visitNodes(node.TypeParameters), v.visitNodes(node.Parameters), v.visitNode(node.Type))
+	return v.Factory.UpdateConstructSignatureDeclaration(node, v.visitNodes(node.TypeParameters()), v.visitNodes(node.Parameters()), v.visitNode(node.Type()))
 }
 
 func (node *ConstructSignatureDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewConstructSignatureDeclaration(node.TypeParameters, node.Parameters, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewConstructSignatureDeclaration(node.TypeParameters(), node.Parameters(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsConstructSignatureDeclaration(node *Node) bool {
@@ -3056,38 +3436,38 @@ type ConstructorDeclaration struct {
 }
 
 func (f *NodeFactory) NewConstructorDeclaration(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	data := &ConstructorDeclaration{}
-	data.modifiers = modifiers
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
-	data.FullSignature = fullSignature
-	data.Body = body
+	data := newData[ConstructorDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
+	data.fullSignature.set(fullSignature)
+	data.body.set(body)
 	return f.newNode(KindConstructor, data)
 }
 
 func (f *NodeFactory) UpdateConstructorDeclaration(node *ConstructorDeclaration, modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	if modifiers != node.modifiers || typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type || fullSignature != node.FullSignature || body != node.Body {
+	if modifiers != node.modifiers.get() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || body != node.Body() {
 		return updateNode(f.NewConstructorDeclaration(modifiers, typeParameters, parameters, typeNode, fullSignature, body), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ConstructorDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Parameters) ||
-		visit(v, node.Type) ||
-		visit(v, node.FullSignature) ||
-		visit(v, node.Body)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.Parameters()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.FullSignature()) ||
+		visit(v, node.Body())
 }
 
 func (node *ConstructorDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateConstructorDeclaration(node, v.visitModifiers(node.modifiers), v.visitNodes(node.TypeParameters), v.visitParameters(node.Parameters), v.visitNode(node.Type), v.visitNode(node.FullSignature), v.visitFunctionBody(node.Body))
+	return v.Factory.UpdateConstructorDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNodes(node.TypeParameters()), v.visitParameters(node.Parameters()), v.visitNode(node.Type()), v.visitNode(node.FullSignature()), v.visitFunctionBody(node.Body()))
 }
 
 func (node *ConstructorDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewConstructorDeclaration(node.Modifiers(), node.TypeParameters, node.Parameters, node.Type, node.FullSignature, node.Body), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewConstructorDeclaration(node.Modifiers(), node.TypeParameters(), node.Parameters(), node.Type(), node.FullSignature(), node.Body()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsConstructorDeclaration(node *Node) bool {
@@ -3103,44 +3483,44 @@ type GetAccessorDeclaration struct {
 }
 
 func (f *NodeFactory) NewGetAccessorDeclaration(modifiers *ModifierList, name *PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	data := &GetAccessorDeclaration{}
-	data.modifiers = modifiers
-	data.name = name
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
-	data.FullSignature = fullSignature
-	data.Body = body
+	data := newData[GetAccessorDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
+	data.fullSignature.set(fullSignature)
+	data.body.set(body)
 	return f.newNode(KindGetAccessor, data)
 }
 
 func (f *NodeFactory) UpdateGetAccessorDeclaration(node *GetAccessorDeclaration, modifiers *ModifierList, name *PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	if modifiers != node.modifiers || name != node.name || typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type || fullSignature != node.FullSignature || body != node.Body {
+	if modifiers != node.modifiers.get() || name != node.name.get() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || body != node.Body() {
 		return updateNode(f.NewGetAccessorDeclaration(modifiers, name, typeParameters, parameters, typeNode, fullSignature, body), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *GetAccessorDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Parameters) ||
-		visit(v, node.Type) ||
-		visit(v, node.FullSignature) ||
-		visit(v, node.Body)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.Parameters()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.FullSignature()) ||
+		visit(v, node.Body())
 }
 
 func (node *GetAccessorDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateGetAccessorDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNodes(node.TypeParameters), v.visitParameters(node.Parameters), v.visitNode(node.Type), v.visitNode(node.FullSignature), v.visitFunctionBody(node.Body))
+	return v.Factory.UpdateGetAccessorDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNodes(node.TypeParameters()), v.visitParameters(node.Parameters()), v.visitNode(node.Type()), v.visitNode(node.FullSignature()), v.visitFunctionBody(node.Body()))
 }
 
 func (node *GetAccessorDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewGetAccessorDeclaration(node.Modifiers(), node.name, node.TypeParameters, node.Parameters, node.Type, node.FullSignature, node.Body), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewGetAccessorDeclaration(node.Modifiers(), node.name.get(), node.TypeParameters(), node.Parameters(), node.Type(), node.FullSignature(), node.Body()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *GetAccessorDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsGetAccessorDeclaration(node *Node) bool {
@@ -3156,44 +3536,44 @@ type SetAccessorDeclaration struct {
 }
 
 func (f *NodeFactory) NewSetAccessorDeclaration(modifiers *ModifierList, name *PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	data := &SetAccessorDeclaration{}
-	data.modifiers = modifiers
-	data.name = name
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
-	data.FullSignature = fullSignature
-	data.Body = body
+	data := newData[SetAccessorDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
+	data.fullSignature.set(fullSignature)
+	data.body.set(body)
 	return f.newNode(KindSetAccessor, data)
 }
 
 func (f *NodeFactory) UpdateSetAccessorDeclaration(node *SetAccessorDeclaration, modifiers *ModifierList, name *PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	if modifiers != node.modifiers || name != node.name || typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type || fullSignature != node.FullSignature || body != node.Body {
+	if modifiers != node.modifiers.get() || name != node.name.get() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || body != node.Body() {
 		return updateNode(f.NewSetAccessorDeclaration(modifiers, name, typeParameters, parameters, typeNode, fullSignature, body), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *SetAccessorDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Parameters) ||
-		visit(v, node.Type) ||
-		visit(v, node.FullSignature) ||
-		visit(v, node.Body)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.Parameters()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.FullSignature()) ||
+		visit(v, node.Body())
 }
 
 func (node *SetAccessorDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateSetAccessorDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNodes(node.TypeParameters), v.visitParameters(node.Parameters), v.visitNode(node.Type), v.visitNode(node.FullSignature), v.visitFunctionBody(node.Body))
+	return v.Factory.UpdateSetAccessorDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNodes(node.TypeParameters()), v.visitParameters(node.Parameters()), v.visitNode(node.Type()), v.visitNode(node.FullSignature()), v.visitFunctionBody(node.Body()))
 }
 
 func (node *SetAccessorDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewSetAccessorDeclaration(node.Modifiers(), node.name, node.TypeParameters, node.Parameters, node.Type, node.FullSignature, node.Body), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewSetAccessorDeclaration(node.Modifiers(), node.name.get(), node.TypeParameters(), node.Parameters(), node.Type(), node.FullSignature(), node.Body()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *SetAccessorDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsSetAccessorDeclaration(node *Node) bool {
@@ -3215,30 +3595,30 @@ type IndexSignatureDeclaration struct {
 }
 
 func (f *NodeFactory) NewIndexSignatureDeclaration(modifiers *ModifierList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	data := &IndexSignatureDeclaration{}
-	data.modifiers = modifiers
-	data.Parameters = parameters
-	data.Type = typeNode
+	data := newData[IndexSignatureDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindIndexSignature, data)
 }
 
 func (f *NodeFactory) UpdateIndexSignatureDeclaration(node *IndexSignatureDeclaration, modifiers *ModifierList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	if modifiers != node.modifiers || parameters != node.Parameters || typeNode != node.Type {
+	if modifiers != node.modifiers.get() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewIndexSignatureDeclaration(modifiers, parameters, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *IndexSignatureDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visitNodeList(v, node.Parameters) || visit(v, node.Type)
+	return visitModifiers(v, node.modifiers.get()) || visitNodeList(v, node.Parameters()) || visit(v, node.Type())
 }
 
 func (node *IndexSignatureDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateIndexSignatureDeclaration(node, v.visitModifiers(node.modifiers), v.visitNodes(node.Parameters), v.visitNode(node.Type))
+	return v.Factory.UpdateIndexSignatureDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNodes(node.Parameters()), v.visitNode(node.Type()))
 }
 
 func (node *IndexSignatureDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewIndexSignatureDeclaration(node.Modifiers(), node.Parameters, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewIndexSignatureDeclaration(node.Modifiers(), node.Parameters(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsIndexSignatureDeclaration(node *Node) bool {
@@ -3259,42 +3639,42 @@ type MethodSignatureDeclaration struct {
 }
 
 func (f *NodeFactory) NewMethodSignatureDeclaration(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	data := f.methodSignatureDeclarationArena.New()
-	data.modifiers = modifiers
-	data.name = name
-	data.PostfixToken = postfixToken
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
+	data := newData[MethodSignatureDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.postfixToken.set(postfixToken)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindMethodSignature, data)
 }
 
 func (f *NodeFactory) UpdateMethodSignatureDeclaration(node *MethodSignatureDeclaration, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	if modifiers != node.modifiers || name != node.name || postfixToken != node.PostfixToken || typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type {
+	if modifiers != node.modifiers.get() || name != node.name.get() || postfixToken != node.PostfixToken() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewMethodSignatureDeclaration(modifiers, name, postfixToken, typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *MethodSignatureDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visit(v, node.PostfixToken) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Parameters) ||
-		visit(v, node.Type)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visit(v, node.PostfixToken()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.Parameters()) ||
+		visit(v, node.Type())
 }
 
 func (node *MethodSignatureDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateMethodSignatureDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.PostfixToken), v.visitNodes(node.TypeParameters), v.visitNodes(node.Parameters), v.visitNode(node.Type))
+	return v.Factory.UpdateMethodSignatureDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNode(node.PostfixToken()), v.visitNodes(node.TypeParameters()), v.visitNodes(node.Parameters()), v.visitNode(node.Type()))
 }
 
 func (node *MethodSignatureDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewMethodSignatureDeclaration(node.Modifiers(), node.name, node.PostfixToken, node.TypeParameters, node.Parameters, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewMethodSignatureDeclaration(node.Modifiers(), node.name.get(), node.PostfixToken(), node.TypeParameters(), node.Parameters(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *MethodSignatureDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsMethodSignatureDeclaration(node *Node) bool {
@@ -3317,48 +3697,48 @@ type MethodDeclaration struct {
 }
 
 func (f *NodeFactory) NewMethodDeclaration(modifiers *ModifierList, asteriskToken *AsteriskToken, name *PropertyName, postfixToken *TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	data := &MethodDeclaration{}
-	data.modifiers = modifiers
-	data.AsteriskToken = asteriskToken
-	data.name = name
-	data.PostfixToken = postfixToken
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
-	data.FullSignature = fullSignature
-	data.Body = body
+	data := newData[MethodDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.asteriskToken.set(asteriskToken)
+	data.name.set(name)
+	data.postfixToken.set(postfixToken)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
+	data.fullSignature.set(fullSignature)
+	data.body.set(body)
 	return f.newNode(KindMethodDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateMethodDeclaration(node *MethodDeclaration, modifiers *ModifierList, asteriskToken *AsteriskToken, name *PropertyName, postfixToken *TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	if modifiers != node.modifiers || asteriskToken != node.AsteriskToken || name != node.name || postfixToken != node.PostfixToken || typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type || fullSignature != node.FullSignature || body != node.Body {
+	if modifiers != node.modifiers.get() || asteriskToken != node.AsteriskToken() || name != node.name.get() || postfixToken != node.PostfixToken() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || body != node.Body() {
 		return updateNode(f.NewMethodDeclaration(modifiers, asteriskToken, name, postfixToken, typeParameters, parameters, typeNode, fullSignature, body), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *MethodDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.AsteriskToken) ||
-		visit(v, node.name) ||
-		visit(v, node.PostfixToken) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Parameters) ||
-		visit(v, node.Type) ||
-		visit(v, node.FullSignature) ||
-		visit(v, node.Body)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.AsteriskToken()) ||
+		visit(v, node.name.get()) ||
+		visit(v, node.PostfixToken()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.Parameters()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.FullSignature()) ||
+		visit(v, node.Body())
 }
 
 func (node *MethodDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateMethodDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.AsteriskToken), v.visitNode(node.name), v.visitNode(node.PostfixToken), v.visitNodes(node.TypeParameters), v.visitParameters(node.Parameters), v.visitNode(node.Type), v.visitNode(node.FullSignature), v.visitFunctionBody(node.Body))
+	return v.Factory.UpdateMethodDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.AsteriskToken()), v.visitNode(node.name.get()), v.visitNode(node.PostfixToken()), v.visitNodes(node.TypeParameters()), v.visitParameters(node.Parameters()), v.visitNode(node.Type()), v.visitNode(node.FullSignature()), v.visitFunctionBody(node.Body()))
 }
 
 func (node *MethodDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewMethodDeclaration(node.Modifiers(), node.AsteriskToken, node.name, node.PostfixToken, node.TypeParameters, node.Parameters, node.Type, node.FullSignature, node.Body), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewMethodDeclaration(node.Modifiers(), node.AsteriskToken(), node.name.get(), node.PostfixToken(), node.TypeParameters(), node.Parameters(), node.Type(), node.FullSignature(), node.Body()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *MethodDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsMethodDeclaration(node *Node) bool {
@@ -3375,45 +3755,55 @@ type PropertySignatureDeclaration struct {
 	NodeBase
 	DeclarationBase
 	NamedMemberBase
-	Type        *TypeNode
-	Initializer *Expression
+	typeNode    link[Node] // *TypeNode
+	initializer link[Node] // *Expression
+}
+
+func (node *PropertySignatureDeclaration) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *PropertySignatureDeclaration) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
+func (node *PropertySignatureDeclaration) Initializer() *Expression { return node.initializer.get() }
+
+func (node *PropertySignatureDeclaration) SetInitializer(initializer *Expression) {
+	node.initializer.set(initializer)
 }
 
 func (f *NodeFactory) NewPropertySignatureDeclaration(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
-	data := f.propertySignatureDeclarationArena.New()
-	data.modifiers = modifiers
-	data.name = name
-	data.PostfixToken = postfixToken
-	data.Type = typeNode
-	data.Initializer = initializer
+	data := newData[PropertySignatureDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.postfixToken.set(postfixToken)
+	data.typeNode.set(typeNode)
+	data.initializer.set(initializer)
 	return f.newNode(KindPropertySignature, data)
 }
 
 func (f *NodeFactory) UpdatePropertySignatureDeclaration(node *PropertySignatureDeclaration, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
-	if modifiers != node.modifiers || name != node.name || postfixToken != node.PostfixToken || typeNode != node.Type || initializer != node.Initializer {
+	if modifiers != node.modifiers.get() || name != node.name.get() || postfixToken != node.PostfixToken() || typeNode != node.Type() || initializer != node.Initializer() {
 		return updateNode(f.NewPropertySignatureDeclaration(modifiers, name, postfixToken, typeNode, initializer), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *PropertySignatureDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visit(v, node.PostfixToken) ||
-		visit(v, node.Type) ||
-		visit(v, node.Initializer)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visit(v, node.PostfixToken()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.Initializer())
 }
 
 func (node *PropertySignatureDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdatePropertySignatureDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.PostfixToken), v.visitNode(node.Type), v.visitNode(node.Initializer))
+	return v.Factory.UpdatePropertySignatureDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNode(node.PostfixToken()), v.visitNode(node.Type()), v.visitNode(node.Initializer()))
 }
 
 func (node *PropertySignatureDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewPropertySignatureDeclaration(node.Modifiers(), node.name, node.PostfixToken, node.Type, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewPropertySignatureDeclaration(node.Modifiers(), node.name.get(), node.PostfixToken(), node.Type(), node.Initializer()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *PropertySignatureDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsPropertySignatureDeclaration(node *Node) bool {
@@ -3430,45 +3820,55 @@ type PropertyDeclaration struct {
 	DeclarationBase
 	NamedMemberBase
 	CompositeBase
-	Type        *TypeNode   // Optional
-	Initializer *Expression // Optional
+	typeNode    link[Node] // *TypeNode. Optional
+	initializer link[Node] // *Expression. Optional
+}
+
+func (node *PropertyDeclaration) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *PropertyDeclaration) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
+func (node *PropertyDeclaration) Initializer() *Expression { return node.initializer.get() }
+
+func (node *PropertyDeclaration) SetInitializer(initializer *Expression) {
+	node.initializer.set(initializer)
 }
 
 func (f *NodeFactory) NewPropertyDeclaration(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
-	data := &PropertyDeclaration{}
-	data.modifiers = modifiers
-	data.name = name
-	data.PostfixToken = postfixToken
-	data.Type = typeNode
-	data.Initializer = initializer
+	data := newData[PropertyDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.postfixToken.set(postfixToken)
+	data.typeNode.set(typeNode)
+	data.initializer.set(initializer)
 	return f.newNode(KindPropertyDeclaration, data)
 }
 
 func (f *NodeFactory) UpdatePropertyDeclaration(node *PropertyDeclaration, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
-	if modifiers != node.modifiers || name != node.name || postfixToken != node.PostfixToken || typeNode != node.Type || initializer != node.Initializer {
+	if modifiers != node.modifiers.get() || name != node.name.get() || postfixToken != node.PostfixToken() || typeNode != node.Type() || initializer != node.Initializer() {
 		return updateNode(f.NewPropertyDeclaration(modifiers, name, postfixToken, typeNode, initializer), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *PropertyDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visit(v, node.PostfixToken) ||
-		visit(v, node.Type) ||
-		visit(v, node.Initializer)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visit(v, node.PostfixToken()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.Initializer())
 }
 
 func (node *PropertyDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdatePropertyDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.PostfixToken), v.visitNode(node.Type), v.visitNode(node.Initializer))
+	return v.Factory.UpdatePropertyDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNode(node.PostfixToken()), v.visitNode(node.Type()), v.visitNode(node.Initializer()))
 }
 
 func (node *PropertyDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewPropertyDeclaration(node.Modifiers(), node.name, node.PostfixToken, node.Type, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewPropertyDeclaration(node.Modifiers(), node.name.get(), node.PostfixToken(), node.Type(), node.Initializer()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *PropertyDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsPropertyDeclaration(node *Node) bool {
@@ -3486,7 +3886,7 @@ type SemicolonClassElement struct {
 }
 
 func (f *NodeFactory) NewSemicolonClassElement() *Node {
-	data := &SemicolonClassElement{}
+	data := newData[SemicolonClassElement](f)
 	return f.newNode(KindSemicolonClassElement, data)
 }
 
@@ -3509,34 +3909,38 @@ type ClassStaticBlockDeclaration struct {
 	ModifiersBase
 	LocalsContainerBase
 	CompositeBase
-	Body           *BlockNode
+	body           link[Node] // *BlockNode
 	ReturnFlowNode *FlowNode
 }
 
+func (node *ClassStaticBlockDeclaration) Body() *BlockNode { return node.body.get() }
+
+func (node *ClassStaticBlockDeclaration) SetBody(body *BlockNode) { node.body.set(body) }
+
 func (f *NodeFactory) NewClassStaticBlockDeclaration(modifiers *ModifierList, body *BlockNode) *Node {
-	data := &ClassStaticBlockDeclaration{}
-	data.modifiers = modifiers
-	data.Body = body
+	data := newData[ClassStaticBlockDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.body.set(body)
 	return f.newNode(KindClassStaticBlockDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateClassStaticBlockDeclaration(node *ClassStaticBlockDeclaration, modifiers *ModifierList, body *BlockNode) *Node {
-	if modifiers != node.modifiers || body != node.Body {
+	if modifiers != node.modifiers.get() || body != node.Body() {
 		return updateNode(f.NewClassStaticBlockDeclaration(modifiers, body), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ClassStaticBlockDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.Body)
+	return visitModifiers(v, node.modifiers.get()) || visit(v, node.Body())
 }
 
 func (node *ClassStaticBlockDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateClassStaticBlockDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.Body))
+	return v.Factory.UpdateClassStaticBlockDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.Body()))
 }
 
 func (node *ClassStaticBlockDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewClassStaticBlockDeclaration(node.Modifiers(), node.Body), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewClassStaticBlockDeclaration(node.Modifiers(), node.Body()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsClassStaticBlockDeclaration(node *Node) bool {
@@ -3552,7 +3956,7 @@ type OmittedExpression struct {
 }
 
 func (f *NodeFactory) NewOmittedExpression() *Node {
-	data := &OmittedExpression{}
+	data := newData[OmittedExpression](f)
 	return f.newNode(KindOmittedExpression, data)
 }
 
@@ -3574,7 +3978,7 @@ type KeywordExpression struct {
 }
 
 func (f *NodeFactory) NewKeywordExpression(kind KeywordExpressionSyntaxKind) *Node {
-	data := f.keywordExpressionArena.New()
+	data := newData[KeywordExpression](f)
 	return f.newNode(kind, data)
 }
 
@@ -3599,8 +4003,9 @@ type StringLiteral struct {
 }
 
 func (f *NodeFactory) NewStringLiteral(text string, tokenFlags TokenFlags) *Node {
-	data := f.stringLiteralArena.New()
+	data := newData[StringLiteral](f)
 	data.Text = text
+	f.keepString(text)
 	data.TokenFlags = tokenFlags & TokenFlagsStringLiteralFlags
 	f.textCount++
 	return f.newNode(KindStringLiteral, data)
@@ -3623,8 +4028,9 @@ type NumericLiteral struct {
 }
 
 func (f *NodeFactory) NewNumericLiteral(text string, tokenFlags TokenFlags) *Node {
-	data := f.numericLiteralArena.New()
+	data := newData[NumericLiteral](f)
 	data.Text = text
+	f.keepString(text)
 	data.TokenFlags = tokenFlags & TokenFlagsNumericLiteralFlags
 	f.textCount++
 	return f.newNode(KindNumericLiteral, data)
@@ -3647,8 +4053,9 @@ type BigIntLiteral struct {
 }
 
 func (f *NodeFactory) NewBigIntLiteral(text string, tokenFlags TokenFlags) *Node {
-	data := &BigIntLiteral{}
+	data := newData[BigIntLiteral](f)
 	data.Text = text
+	f.keepString(text)
 	data.TokenFlags = tokenFlags & TokenFlagsNumericLiteralFlags
 	f.textCount++
 	return f.newNode(KindBigIntLiteral, data)
@@ -3671,8 +4078,9 @@ type RegularExpressionLiteral struct {
 }
 
 func (f *NodeFactory) NewRegularExpressionLiteral(text string, tokenFlags TokenFlags) *Node {
-	data := &RegularExpressionLiteral{}
+	data := newData[RegularExpressionLiteral](f)
 	data.Text = text
+	f.keepString(text)
 	data.TokenFlags = tokenFlags & TokenFlagsRegularExpressionLiteralFlags
 	f.textCount++
 	return f.newNode(KindRegularExpressionLiteral, data)
@@ -3697,8 +4105,9 @@ type NoSubstitutionTemplateLiteral struct {
 }
 
 func (f *NodeFactory) NewNoSubstitutionTemplateLiteral(text string, templateFlags TokenFlags) *Node {
-	data := &NoSubstitutionTemplateLiteral{}
+	data := newData[NoSubstitutionTemplateLiteral](f)
 	data.Text = text
+	f.keepString(text)
 	data.TemplateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
 	return f.newNode(KindNoSubstitutionTemplateLiteral, data)
@@ -3721,43 +4130,61 @@ type BinaryExpression struct {
 	DeclarationBase
 	ModifiersBase
 	CompositeBase
-	Left          *Expression
-	Type          *TypeNode // Optional
-	OperatorToken *BinaryOperatorToken
-	Right         *Expression
+	left          link[Node] // *Expression
+	typeNode      link[Node] // *TypeNode. Optional
+	operatorToken link[Node] // *BinaryOperatorToken
+	right         link[Node] // *Expression
 }
 
+func (node *BinaryExpression) Left() *Expression { return node.left.get() }
+
+func (node *BinaryExpression) SetLeft(left *Expression) { node.left.set(left) }
+
+func (node *BinaryExpression) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *BinaryExpression) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
+func (node *BinaryExpression) OperatorToken() *BinaryOperatorToken { return node.operatorToken.get() }
+
+func (node *BinaryExpression) SetOperatorToken(operatorToken *BinaryOperatorToken) {
+	node.operatorToken.set(operatorToken)
+}
+
+func (node *BinaryExpression) Right() *Expression { return node.right.get() }
+
+func (node *BinaryExpression) SetRight(right *Expression) { node.right.set(right) }
+
 func (f *NodeFactory) NewBinaryExpression(modifiers *ModifierList, left *Expression, typeNode *TypeNode, operatorToken *BinaryOperatorToken, right *Expression) *Node {
-	data := f.binaryExpressionArena.New()
-	data.modifiers = modifiers
-	data.Left = left
-	data.Type = typeNode
-	data.OperatorToken = operatorToken
-	data.Right = right
+	data := newData[BinaryExpression](f)
+	data.modifiers.set(modifiers)
+	data.left.set(left)
+	data.typeNode.set(typeNode)
+	data.operatorToken.set(operatorToken)
+	data.right.set(right)
 	return f.newNode(KindBinaryExpression, data)
 }
 
 func (f *NodeFactory) UpdateBinaryExpression(node *BinaryExpression, modifiers *ModifierList, left *Expression, typeNode *TypeNode, operatorToken *BinaryOperatorToken, right *Expression) *Node {
-	if modifiers != node.modifiers || left != node.Left || typeNode != node.Type || operatorToken != node.OperatorToken || right != node.Right {
+	if modifiers != node.modifiers.get() || left != node.Left() || typeNode != node.Type() || operatorToken != node.OperatorToken() || right != node.Right() {
 		return updateNode(f.NewBinaryExpression(modifiers, left, typeNode, operatorToken, right), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *BinaryExpression) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.Left) ||
-		visit(v, node.Type) ||
-		visit(v, node.OperatorToken) ||
-		visit(v, node.Right)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.Left()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.OperatorToken()) ||
+		visit(v, node.Right())
 }
 
 func (node *BinaryExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateBinaryExpression(node, v.visitModifiers(node.modifiers), v.visitNode(node.Left), v.visitNode(node.Type), v.visitNode(node.OperatorToken), v.visitNode(node.Right))
+	return v.Factory.UpdateBinaryExpression(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.Left()), v.visitNode(node.Type()), v.visitNode(node.OperatorToken()), v.visitNode(node.Right()))
 }
 
 func (node *BinaryExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewBinaryExpression(node.Modifiers(), node.Left, node.Type, node.OperatorToken, node.Right), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewBinaryExpression(node.Modifiers(), node.Left(), node.Type(), node.OperatorToken(), node.Right()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsBinaryExpression(node *Node) bool {
@@ -3771,37 +4198,41 @@ func IsBinaryExpression(node *Node) bool {
 type PrefixUnaryExpression struct {
 	UpdateExpressionBase
 	Operator Kind
-	Operand  *Expression
+	operand  link[Node] // *Expression
 }
 
+func (node *PrefixUnaryExpression) Operand() *Expression { return node.operand.get() }
+
+func (node *PrefixUnaryExpression) SetOperand(operand *Expression) { node.operand.set(operand) }
+
 func (f *NodeFactory) NewPrefixUnaryExpression(operator Kind, operand *Expression) *Node {
-	data := f.prefixUnaryExpressionArena.New()
+	data := newData[PrefixUnaryExpression](f)
 	data.Operator = operator
-	data.Operand = operand
+	data.operand.set(operand)
 	return f.newNode(KindPrefixUnaryExpression, data)
 }
 
 func (f *NodeFactory) UpdatePrefixUnaryExpression(node *PrefixUnaryExpression, operator Kind, operand *Expression) *Node {
-	if operator != node.Operator || operand != node.Operand {
+	if operator != node.Operator || operand != node.Operand() {
 		return updateNode(f.NewPrefixUnaryExpression(operator, operand), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *PrefixUnaryExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Operand)
+	return visit(v, node.Operand())
 }
 
 func (node *PrefixUnaryExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdatePrefixUnaryExpression(node, node.Operator, v.visitNode(node.Operand))
+	return v.Factory.UpdatePrefixUnaryExpression(node, node.Operator, v.visitNode(node.Operand()))
 }
 
 func (node *PrefixUnaryExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewPrefixUnaryExpression(node.Operator, node.Operand), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewPrefixUnaryExpression(node.Operator, node.Operand()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *PrefixUnaryExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Operand)
+	return propagateSubtreeFacts(node.Operand())
 }
 
 func IsPrefixUnaryExpression(node *Node) bool {
@@ -3814,38 +4245,42 @@ func IsPrefixUnaryExpression(node *Node) bool {
 
 type PostfixUnaryExpression struct {
 	UpdateExpressionBase
-	Operand  *Expression
+	operand  link[Node] // *Expression
 	Operator Kind
 }
 
+func (node *PostfixUnaryExpression) Operand() *Expression { return node.operand.get() }
+
+func (node *PostfixUnaryExpression) SetOperand(operand *Expression) { node.operand.set(operand) }
+
 func (f *NodeFactory) NewPostfixUnaryExpression(operand *Expression, operator Kind) *Node {
-	data := &PostfixUnaryExpression{}
-	data.Operand = operand
+	data := newData[PostfixUnaryExpression](f)
+	data.operand.set(operand)
 	data.Operator = operator
 	return f.newNode(KindPostfixUnaryExpression, data)
 }
 
 func (f *NodeFactory) UpdatePostfixUnaryExpression(node *PostfixUnaryExpression, operand *Expression, operator Kind) *Node {
-	if operand != node.Operand || operator != node.Operator {
+	if operand != node.Operand() || operator != node.Operator {
 		return updateNode(f.NewPostfixUnaryExpression(operand, operator), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *PostfixUnaryExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Operand)
+	return visit(v, node.Operand())
 }
 
 func (node *PostfixUnaryExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdatePostfixUnaryExpression(node, v.visitNode(node.Operand), node.Operator)
+	return v.Factory.UpdatePostfixUnaryExpression(node, v.visitNode(node.Operand()), node.Operator)
 }
 
 func (node *PostfixUnaryExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewPostfixUnaryExpression(node.Operand, node.Operator), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewPostfixUnaryExpression(node.Operand(), node.Operator), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *PostfixUnaryExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Operand)
+	return propagateSubtreeFacts(node.Operand())
 }
 
 func IsPostfixUnaryExpression(node *Node) bool {
@@ -3858,34 +4293,44 @@ func IsPostfixUnaryExpression(node *Node) bool {
 
 type YieldExpression struct {
 	ExpressionBase
-	AsteriskToken *AsteriskToken // Optional
-	Expression    *Expression    // Optional
+	asteriskToken link[Node] // *AsteriskToken. Optional
+	expression    link[Node] // *Expression. Optional
 }
 
+func (node *YieldExpression) AsteriskToken() *AsteriskToken { return node.asteriskToken.get() }
+
+func (node *YieldExpression) SetAsteriskToken(asteriskToken *AsteriskToken) {
+	node.asteriskToken.set(asteriskToken)
+}
+
+func (node *YieldExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *YieldExpression) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewYieldExpression(asteriskToken *AsteriskToken, expression *Expression) *Node {
-	data := &YieldExpression{}
-	data.AsteriskToken = asteriskToken
-	data.Expression = expression
+	data := newData[YieldExpression](f)
+	data.asteriskToken.set(asteriskToken)
+	data.expression.set(expression)
 	return f.newNode(KindYieldExpression, data)
 }
 
 func (f *NodeFactory) UpdateYieldExpression(node *YieldExpression, asteriskToken *AsteriskToken, expression *Expression) *Node {
-	if asteriskToken != node.AsteriskToken || expression != node.Expression {
+	if asteriskToken != node.AsteriskToken() || expression != node.Expression() {
 		return updateNode(f.NewYieldExpression(asteriskToken, expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *YieldExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.AsteriskToken) || visit(v, node.Expression)
+	return visit(v, node.AsteriskToken()) || visit(v, node.Expression())
 }
 
 func (node *YieldExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateYieldExpression(node, v.visitNode(node.AsteriskToken), v.visitNode(node.Expression))
+	return v.Factory.UpdateYieldExpression(node, v.visitNode(node.AsteriskToken()), v.visitNode(node.Expression()))
 }
 
 func (node *YieldExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewYieldExpression(node.AsteriskToken, node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewYieldExpression(node.AsteriskToken(), node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsYieldExpression(node *Node) bool {
@@ -3903,44 +4348,52 @@ type ArrowFunction struct {
 	FunctionLikeWithBodyBase
 	FlowNodeBase
 	CompositeBase
-	EqualsGreaterThanToken *EqualsGreaterThanToken
+	equalsGreaterThanToken link[Node] // *EqualsGreaterThanToken
+}
+
+func (node *ArrowFunction) EqualsGreaterThanToken() *EqualsGreaterThanToken {
+	return node.equalsGreaterThanToken.get()
+}
+
+func (node *ArrowFunction) SetEqualsGreaterThanToken(equalsGreaterThanToken *EqualsGreaterThanToken) {
+	node.equalsGreaterThanToken.set(equalsGreaterThanToken)
 }
 
 func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, equalsGreaterThanToken *EqualsGreaterThanToken, body *ConciseBody) *Node {
-	data := &ArrowFunction{}
-	data.modifiers = modifiers
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
-	data.FullSignature = fullSignature
-	data.EqualsGreaterThanToken = equalsGreaterThanToken
-	data.Body = body
+	data := newData[ArrowFunction](f)
+	data.modifiers.set(modifiers)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
+	data.fullSignature.set(fullSignature)
+	data.equalsGreaterThanToken.set(equalsGreaterThanToken)
+	data.body.set(body)
 	return f.newNode(KindArrowFunction, data)
 }
 
 func (f *NodeFactory) UpdateArrowFunction(node *ArrowFunction, modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, equalsGreaterThanToken *EqualsGreaterThanToken, body *ConciseBody) *Node {
-	if modifiers != node.modifiers || typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type || fullSignature != node.FullSignature || equalsGreaterThanToken != node.EqualsGreaterThanToken || body != node.Body {
+	if modifiers != node.modifiers.get() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || equalsGreaterThanToken != node.EqualsGreaterThanToken() || body != node.Body() {
 		return updateNode(f.NewArrowFunction(modifiers, typeParameters, parameters, typeNode, fullSignature, equalsGreaterThanToken, body), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ArrowFunction) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Parameters) ||
-		visit(v, node.Type) ||
-		visit(v, node.FullSignature) ||
-		visit(v, node.EqualsGreaterThanToken) ||
-		visit(v, node.Body)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.Parameters()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.FullSignature()) ||
+		visit(v, node.EqualsGreaterThanToken()) ||
+		visit(v, node.Body())
 }
 
 func (node *ArrowFunction) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateArrowFunction(node, v.visitModifiers(node.modifiers), v.visitNodes(node.TypeParameters), v.visitParameters(node.Parameters), v.visitNode(node.Type), v.visitNode(node.FullSignature), v.visitNode(node.EqualsGreaterThanToken), v.visitFunctionBody(node.Body))
+	return v.Factory.UpdateArrowFunction(node, v.visitModifiers(node.modifiers.get()), v.visitNodes(node.TypeParameters()), v.visitParameters(node.Parameters()), v.visitNode(node.Type()), v.visitNode(node.FullSignature()), v.visitNode(node.EqualsGreaterThanToken()), v.visitFunctionBody(node.Body()))
 }
 
 func (node *ArrowFunction) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewArrowFunction(node.Modifiers(), node.TypeParameters, node.Parameters, node.Type, node.FullSignature, node.EqualsGreaterThanToken, node.Body), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewArrowFunction(node.Modifiers(), node.TypeParameters(), node.Parameters(), node.Type(), node.FullSignature(), node.EqualsGreaterThanToken(), node.Body()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsArrowFunction(node *Node) bool {
@@ -3958,51 +4411,51 @@ type FunctionExpression struct {
 	FunctionLikeWithBodyBase
 	FlowNodeBase
 	CompositeBase
-	name           *IdentifierNode // Optional
+	name           link[Node] // *IdentifierNode. Optional
 	ReturnFlowNode *FlowNode
 }
 
 func (f *NodeFactory) NewFunctionExpression(modifiers *ModifierList, asteriskToken *AsteriskToken, name *IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	data := &FunctionExpression{}
-	data.modifiers = modifiers
-	data.AsteriskToken = asteriskToken
-	data.name = name
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
-	data.FullSignature = fullSignature
-	data.Body = body
+	data := newData[FunctionExpression](f)
+	data.modifiers.set(modifiers)
+	data.asteriskToken.set(asteriskToken)
+	data.name.set(name)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
+	data.fullSignature.set(fullSignature)
+	data.body.set(body)
 	return f.newNode(KindFunctionExpression, data)
 }
 
 func (f *NodeFactory) UpdateFunctionExpression(node *FunctionExpression, modifiers *ModifierList, asteriskToken *AsteriskToken, name *IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	if modifiers != node.modifiers || asteriskToken != node.AsteriskToken || name != node.name || typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type || fullSignature != node.FullSignature || body != node.Body {
+	if modifiers != node.modifiers.get() || asteriskToken != node.AsteriskToken() || name != node.name.get() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || body != node.Body() {
 		return updateNode(f.NewFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, typeNode, fullSignature, body), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *FunctionExpression) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.AsteriskToken) ||
-		visit(v, node.name) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Parameters) ||
-		visit(v, node.Type) ||
-		visit(v, node.FullSignature) ||
-		visit(v, node.Body)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.AsteriskToken()) ||
+		visit(v, node.name.get()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.Parameters()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.FullSignature()) ||
+		visit(v, node.Body())
 }
 
 func (node *FunctionExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateFunctionExpression(node, v.visitModifiers(node.modifiers), v.visitNode(node.AsteriskToken), v.visitNode(node.name), v.visitNodes(node.TypeParameters), v.visitParameters(node.Parameters), v.visitNode(node.Type), v.visitNode(node.FullSignature), v.visitFunctionBody(node.Body))
+	return v.Factory.UpdateFunctionExpression(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.AsteriskToken()), v.visitNode(node.name.get()), v.visitNodes(node.TypeParameters()), v.visitParameters(node.Parameters()), v.visitNode(node.Type()), v.visitNode(node.FullSignature()), v.visitFunctionBody(node.Body()))
 }
 
 func (node *FunctionExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewFunctionExpression(node.Modifiers(), node.AsteriskToken, node.name, node.TypeParameters, node.Parameters, node.Type, node.FullSignature, node.Body), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewFunctionExpression(node.Modifiers(), node.AsteriskToken(), node.name.get(), node.TypeParameters(), node.Parameters(), node.Type(), node.FullSignature(), node.Body()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *FunctionExpression) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsFunctionExpression(node *Node) bool {
@@ -4015,34 +4468,42 @@ func IsFunctionExpression(node *Node) bool {
 
 type AsExpression struct {
 	ExpressionBase
-	Expression *Expression
-	Type       *TypeNode
+	expression link[Node] // *Expression
+	typeNode   link[Node] // *TypeNode
 }
 
+func (node *AsExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *AsExpression) SetExpression(expression *Expression) { node.expression.set(expression) }
+
+func (node *AsExpression) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *AsExpression) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewAsExpression(expression *Expression, typeNode *TypeNode) *Node {
-	data := &AsExpression{}
-	data.Expression = expression
-	data.Type = typeNode
+	data := newData[AsExpression](f)
+	data.expression.set(expression)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindAsExpression, data)
 }
 
 func (f *NodeFactory) UpdateAsExpression(node *AsExpression, expression *Expression, typeNode *TypeNode) *Node {
-	if expression != node.Expression || typeNode != node.Type {
+	if expression != node.Expression() || typeNode != node.Type() {
 		return updateNode(f.NewAsExpression(expression, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *AsExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visit(v, node.Type)
+	return visit(v, node.Expression()) || visit(v, node.Type())
 }
 
 func (node *AsExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateAsExpression(node, v.visitNode(node.Expression), v.visitNode(node.Type))
+	return v.Factory.UpdateAsExpression(node, v.visitNode(node.Expression()), v.visitNode(node.Type()))
 }
 
 func (node *AsExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewAsExpression(node.Expression, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewAsExpression(node.Expression(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsAsExpression(node *Node) bool {
@@ -4055,34 +4516,44 @@ func IsAsExpression(node *Node) bool {
 
 type SatisfiesExpression struct {
 	ExpressionBase
-	Expression *Expression
-	Type       *TypeNode
+	expression link[Node] // *Expression
+	typeNode   link[Node] // *TypeNode
 }
 
+func (node *SatisfiesExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *SatisfiesExpression) SetExpression(expression *Expression) {
+	node.expression.set(expression)
+}
+
+func (node *SatisfiesExpression) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *SatisfiesExpression) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewSatisfiesExpression(expression *Expression, typeNode *TypeNode) *Node {
-	data := &SatisfiesExpression{}
-	data.Expression = expression
-	data.Type = typeNode
+	data := newData[SatisfiesExpression](f)
+	data.expression.set(expression)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindSatisfiesExpression, data)
 }
 
 func (f *NodeFactory) UpdateSatisfiesExpression(node *SatisfiesExpression, expression *Expression, typeNode *TypeNode) *Node {
-	if expression != node.Expression || typeNode != node.Type {
+	if expression != node.Expression() || typeNode != node.Type() {
 		return updateNode(f.NewSatisfiesExpression(expression, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *SatisfiesExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visit(v, node.Type)
+	return visit(v, node.Expression()) || visit(v, node.Type())
 }
 
 func (node *SatisfiesExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateSatisfiesExpression(node, v.visitNode(node.Expression), v.visitNode(node.Type))
+	return v.Factory.UpdateSatisfiesExpression(node, v.visitNode(node.Expression()), v.visitNode(node.Type()))
 }
 
 func (node *SatisfiesExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewSatisfiesExpression(node.Expression, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewSatisfiesExpression(node.Expression(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsSatisfiesExpression(node *Node) bool {
@@ -4096,52 +4567,76 @@ func IsSatisfiesExpression(node *Node) bool {
 type ConditionalExpression struct {
 	ExpressionBase
 	CompositeBase
-	Condition     *Expression
-	QuestionToken *QuestionToken
-	WhenTrue      *Expression
-	ColonToken    *ColonToken
-	WhenFalse     *Expression
+	condition     link[Node] // *Expression
+	questionToken link[Node] // *QuestionToken
+	whenTrue      link[Node] // *Expression
+	colonToken    link[Node] // *ColonToken
+	whenFalse     link[Node] // *Expression
 }
 
+func (node *ConditionalExpression) Condition() *Expression { return node.condition.get() }
+
+func (node *ConditionalExpression) SetCondition(condition *Expression) { node.condition.set(condition) }
+
+func (node *ConditionalExpression) QuestionToken() *QuestionToken { return node.questionToken.get() }
+
+func (node *ConditionalExpression) SetQuestionToken(questionToken *QuestionToken) {
+	node.questionToken.set(questionToken)
+}
+
+func (node *ConditionalExpression) WhenTrue() *Expression { return node.whenTrue.get() }
+
+func (node *ConditionalExpression) SetWhenTrue(whenTrue *Expression) { node.whenTrue.set(whenTrue) }
+
+func (node *ConditionalExpression) ColonToken() *ColonToken { return node.colonToken.get() }
+
+func (node *ConditionalExpression) SetColonToken(colonToken *ColonToken) {
+	node.colonToken.set(colonToken)
+}
+
+func (node *ConditionalExpression) WhenFalse() *Expression { return node.whenFalse.get() }
+
+func (node *ConditionalExpression) SetWhenFalse(whenFalse *Expression) { node.whenFalse.set(whenFalse) }
+
 func (f *NodeFactory) NewConditionalExpression(condition *Expression, questionToken *QuestionToken, whenTrue *Expression, colonToken *ColonToken, whenFalse *Expression) *Node {
-	data := f.conditionalExpressionArena.New()
-	data.Condition = condition
-	data.QuestionToken = questionToken
-	data.WhenTrue = whenTrue
-	data.ColonToken = colonToken
-	data.WhenFalse = whenFalse
+	data := newData[ConditionalExpression](f)
+	data.condition.set(condition)
+	data.questionToken.set(questionToken)
+	data.whenTrue.set(whenTrue)
+	data.colonToken.set(colonToken)
+	data.whenFalse.set(whenFalse)
 	return f.newNode(KindConditionalExpression, data)
 }
 
 func (f *NodeFactory) UpdateConditionalExpression(node *ConditionalExpression, condition *Expression, questionToken *QuestionToken, whenTrue *Expression, colonToken *ColonToken, whenFalse *Expression) *Node {
-	if condition != node.Condition || questionToken != node.QuestionToken || whenTrue != node.WhenTrue || colonToken != node.ColonToken || whenFalse != node.WhenFalse {
+	if condition != node.Condition() || questionToken != node.QuestionToken() || whenTrue != node.WhenTrue() || colonToken != node.ColonToken() || whenFalse != node.WhenFalse() {
 		return updateNode(f.NewConditionalExpression(condition, questionToken, whenTrue, colonToken, whenFalse), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ConditionalExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Condition) ||
-		visit(v, node.QuestionToken) ||
-		visit(v, node.WhenTrue) ||
-		visit(v, node.ColonToken) ||
-		visit(v, node.WhenFalse)
+	return visit(v, node.Condition()) ||
+		visit(v, node.QuestionToken()) ||
+		visit(v, node.WhenTrue()) ||
+		visit(v, node.ColonToken()) ||
+		visit(v, node.WhenFalse())
 }
 
 func (node *ConditionalExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateConditionalExpression(node, v.visitNode(node.Condition), v.visitNode(node.QuestionToken), v.visitNode(node.WhenTrue), v.visitNode(node.ColonToken), v.visitNode(node.WhenFalse))
+	return v.Factory.UpdateConditionalExpression(node, v.visitNode(node.Condition()), v.visitNode(node.QuestionToken()), v.visitNode(node.WhenTrue()), v.visitNode(node.ColonToken()), v.visitNode(node.WhenFalse()))
 }
 
 func (node *ConditionalExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewConditionalExpression(node.Condition, node.QuestionToken, node.WhenTrue, node.ColonToken, node.WhenFalse), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewConditionalExpression(node.Condition(), node.QuestionToken(), node.WhenTrue(), node.ColonToken(), node.WhenFalse()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ConditionalExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Condition) |
-		propagateSubtreeFacts(node.QuestionToken) |
-		propagateSubtreeFacts(node.WhenTrue) |
-		propagateSubtreeFacts(node.ColonToken) |
-		propagateSubtreeFacts(node.WhenFalse)
+	return propagateSubtreeFacts(node.Condition()) |
+		propagateSubtreeFacts(node.QuestionToken()) |
+		propagateSubtreeFacts(node.WhenTrue()) |
+		propagateSubtreeFacts(node.ColonToken()) |
+		propagateSubtreeFacts(node.WhenFalse())
 }
 
 func IsConditionalExpression(node *Node) bool {
@@ -4156,42 +4651,56 @@ type PropertyAccessExpression struct {
 	MemberExpressionBase
 	FlowNodeBase
 	CompositeBase
-	Expression       *Expression
-	QuestionDotToken *QuestionDotToken // Optional
-	name             *MemberName
+	expression       link[Node] // *Expression
+	questionDotToken link[Node] // *QuestionDotToken. Optional
+	name             link[Node] // *MemberName
+}
+
+func (node *PropertyAccessExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *PropertyAccessExpression) SetExpression(expression *Expression) {
+	node.expression.set(expression)
+}
+
+func (node *PropertyAccessExpression) QuestionDotToken() *QuestionDotToken {
+	return node.questionDotToken.get()
+}
+
+func (node *PropertyAccessExpression) SetQuestionDotToken(questionDotToken *QuestionDotToken) {
+	node.questionDotToken.set(questionDotToken)
 }
 
 func (f *NodeFactory) NewPropertyAccessExpression(expression *Expression, questionDotToken *QuestionDotToken, name *MemberName, flags NodeFlags) *Node {
-	data := f.propertyAccessExpressionArena.New()
-	data.Expression = expression
-	data.QuestionDotToken = questionDotToken
-	data.name = name
+	data := newData[PropertyAccessExpression](f)
+	data.expression.set(expression)
+	data.questionDotToken.set(questionDotToken)
+	data.name.set(name)
 	node := f.newNode(KindPropertyAccessExpression, data)
 	node.Flags |= flags & NodeFlagsOptionalChain
 	return node
 }
 
 func (f *NodeFactory) UpdatePropertyAccessExpression(node *PropertyAccessExpression, expression *Expression, questionDotToken *QuestionDotToken, name *MemberName, flags NodeFlags) *Node {
-	if expression != node.Expression || questionDotToken != node.QuestionDotToken || name != node.name || flags != node.Flags {
+	if expression != node.Expression() || questionDotToken != node.QuestionDotToken() || name != node.name.get() || flags != node.Flags {
 		return updateNode(f.NewPropertyAccessExpression(expression, questionDotToken, name, flags), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *PropertyAccessExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visit(v, node.QuestionDotToken) || visit(v, node.name)
+	return visit(v, node.Expression()) || visit(v, node.QuestionDotToken()) || visit(v, node.name.get())
 }
 
 func (node *PropertyAccessExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdatePropertyAccessExpression(node, v.visitNode(node.Expression), v.visitNode(node.QuestionDotToken), v.visitNode(node.name), node.Flags)
+	return v.Factory.UpdatePropertyAccessExpression(node, v.visitNode(node.Expression()), v.visitNode(node.QuestionDotToken()), v.visitNode(node.name.get()), node.Flags)
 }
 
 func (node *PropertyAccessExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewPropertyAccessExpression(node.Expression, node.QuestionDotToken, node.name, node.Flags), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewPropertyAccessExpression(node.Expression(), node.QuestionDotToken(), node.name.get(), node.Flags), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *PropertyAccessExpression) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsPropertyAccessExpression(node *Node) bool {
@@ -4206,44 +4715,66 @@ type ElementAccessExpression struct {
 	MemberExpressionBase
 	FlowNodeBase
 	CompositeBase
-	Expression         *Expression
-	QuestionDotToken   *QuestionDotToken // Optional
-	ArgumentExpression *Expression
+	expression         link[Node] // *Expression
+	questionDotToken   link[Node] // *QuestionDotToken. Optional
+	argumentExpression link[Node] // *Expression
+}
+
+func (node *ElementAccessExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *ElementAccessExpression) SetExpression(expression *Expression) {
+	node.expression.set(expression)
+}
+
+func (node *ElementAccessExpression) QuestionDotToken() *QuestionDotToken {
+	return node.questionDotToken.get()
+}
+
+func (node *ElementAccessExpression) SetQuestionDotToken(questionDotToken *QuestionDotToken) {
+	node.questionDotToken.set(questionDotToken)
+}
+
+func (node *ElementAccessExpression) ArgumentExpression() *Expression {
+	return node.argumentExpression.get()
+}
+
+func (node *ElementAccessExpression) SetArgumentExpression(argumentExpression *Expression) {
+	node.argumentExpression.set(argumentExpression)
 }
 
 func (f *NodeFactory) NewElementAccessExpression(expression *Expression, questionDotToken *QuestionDotToken, argumentExpression *Expression, flags NodeFlags) *Node {
-	data := f.elementAccessExpressionArena.New()
-	data.Expression = expression
-	data.QuestionDotToken = questionDotToken
-	data.ArgumentExpression = argumentExpression
+	data := newData[ElementAccessExpression](f)
+	data.expression.set(expression)
+	data.questionDotToken.set(questionDotToken)
+	data.argumentExpression.set(argumentExpression)
 	node := f.newNode(KindElementAccessExpression, data)
 	node.Flags |= flags & NodeFlagsOptionalChain
 	return node
 }
 
 func (f *NodeFactory) UpdateElementAccessExpression(node *ElementAccessExpression, expression *Expression, questionDotToken *QuestionDotToken, argumentExpression *Expression, flags NodeFlags) *Node {
-	if expression != node.Expression || questionDotToken != node.QuestionDotToken || argumentExpression != node.ArgumentExpression || flags != node.Flags {
+	if expression != node.Expression() || questionDotToken != node.QuestionDotToken() || argumentExpression != node.ArgumentExpression() || flags != node.Flags {
 		return updateNode(f.NewElementAccessExpression(expression, questionDotToken, argumentExpression, flags), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ElementAccessExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visit(v, node.QuestionDotToken) || visit(v, node.ArgumentExpression)
+	return visit(v, node.Expression()) || visit(v, node.QuestionDotToken()) || visit(v, node.ArgumentExpression())
 }
 
 func (node *ElementAccessExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateElementAccessExpression(node, v.visitNode(node.Expression), v.visitNode(node.QuestionDotToken), v.visitNode(node.ArgumentExpression), node.Flags)
+	return v.Factory.UpdateElementAccessExpression(node, v.visitNode(node.Expression()), v.visitNode(node.QuestionDotToken()), v.visitNode(node.ArgumentExpression()), node.Flags)
 }
 
 func (node *ElementAccessExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewElementAccessExpression(node.Expression, node.QuestionDotToken, node.ArgumentExpression, node.Flags), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewElementAccessExpression(node.Expression(), node.QuestionDotToken(), node.ArgumentExpression(), node.Flags), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ElementAccessExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression) |
-		propagateSubtreeFacts(node.QuestionDotToken) |
-		propagateSubtreeFacts(node.ArgumentExpression)
+	return propagateSubtreeFacts(node.Expression()) |
+		propagateSubtreeFacts(node.QuestionDotToken()) |
+		propagateSubtreeFacts(node.ArgumentExpression())
 }
 
 func IsElementAccessExpression(node *Node) bool {
@@ -4258,43 +4789,63 @@ type CallExpression struct {
 	LeftHandSideExpressionBase
 	DeclarationBase
 	CompositeBase
-	Expression       *Expression
-	QuestionDotToken *QuestionDotToken // Optional
-	TypeArguments    *TypeList         // Optional
-	Arguments        *ElementList
+	expression       link[Node]     // *Expression
+	questionDotToken link[Node]     // *QuestionDotToken. Optional
+	typeArguments    link[NodeList] // *TypeList. Optional
+	arguments        link[NodeList] // *ElementList
 }
 
+func (node *CallExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *CallExpression) SetExpression(expression *Expression) { node.expression.set(expression) }
+
+func (node *CallExpression) QuestionDotToken() *QuestionDotToken { return node.questionDotToken.get() }
+
+func (node *CallExpression) SetQuestionDotToken(questionDotToken *QuestionDotToken) {
+	node.questionDotToken.set(questionDotToken)
+}
+
+func (node *CallExpression) TypeArguments() *TypeList { return node.typeArguments.get() }
+
+func (node *CallExpression) SetTypeArguments(typeArguments *TypeList) {
+	node.typeArguments.set(typeArguments)
+}
+
+func (node *CallExpression) Arguments() *ElementList { return node.arguments.get() }
+
+func (node *CallExpression) SetArguments(arguments *ElementList) { node.arguments.set(arguments) }
+
 func (f *NodeFactory) NewCallExpression(expression *Expression, questionDotToken *QuestionDotToken, typeArguments *TypeList, arguments *ElementList, flags NodeFlags) *Node {
-	data := f.callExpressionArena.New()
-	data.Expression = expression
-	data.QuestionDotToken = questionDotToken
-	data.TypeArguments = typeArguments
-	data.Arguments = arguments
+	data := newData[CallExpression](f)
+	data.expression.set(expression)
+	data.questionDotToken.set(questionDotToken)
+	data.typeArguments.set(typeArguments)
+	data.arguments.set(arguments)
 	node := f.newNode(KindCallExpression, data)
 	node.Flags |= flags & NodeFlagsOptionalChain
 	return node
 }
 
 func (f *NodeFactory) UpdateCallExpression(node *CallExpression, expression *Expression, questionDotToken *QuestionDotToken, typeArguments *TypeList, arguments *ElementList, flags NodeFlags) *Node {
-	if expression != node.Expression || questionDotToken != node.QuestionDotToken || typeArguments != node.TypeArguments || arguments != node.Arguments || flags != node.Flags {
+	if expression != node.Expression() || questionDotToken != node.QuestionDotToken() || typeArguments != node.TypeArguments() || arguments != node.Arguments() || flags != node.Flags {
 		return updateNode(f.NewCallExpression(expression, questionDotToken, typeArguments, arguments, flags), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *CallExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) ||
-		visit(v, node.QuestionDotToken) ||
-		visitNodeList(v, node.TypeArguments) ||
-		visitNodeList(v, node.Arguments)
+	return visit(v, node.Expression()) ||
+		visit(v, node.QuestionDotToken()) ||
+		visitNodeList(v, node.TypeArguments()) ||
+		visitNodeList(v, node.Arguments())
 }
 
 func (node *CallExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateCallExpression(node, v.visitNode(node.Expression), v.visitNode(node.QuestionDotToken), v.visitNodes(node.TypeArguments), v.visitNodes(node.Arguments), node.Flags)
+	return v.Factory.UpdateCallExpression(node, v.visitNode(node.Expression()), v.visitNode(node.QuestionDotToken()), v.visitNodes(node.TypeArguments()), v.visitNodes(node.Arguments()), node.Flags)
 }
 
 func (node *CallExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewCallExpression(node.Expression, node.QuestionDotToken, node.TypeArguments, node.Arguments, node.Flags), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewCallExpression(node.Expression(), node.QuestionDotToken(), node.TypeArguments(), node.Arguments(), node.Flags), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsCallExpression(node *Node) bool {
@@ -4308,36 +4859,50 @@ func IsCallExpression(node *Node) bool {
 type NewExpression struct {
 	PrimaryExpressionBase
 	CompositeBase
-	Expression    *Expression
-	TypeArguments *TypeList    // Optional
-	Arguments     *ElementList // Optional
+	expression    link[Node]     // *Expression
+	typeArguments link[NodeList] // *TypeList. Optional
+	arguments     link[NodeList] // *ElementList. Optional
 }
 
+func (node *NewExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *NewExpression) SetExpression(expression *Expression) { node.expression.set(expression) }
+
+func (node *NewExpression) TypeArguments() *TypeList { return node.typeArguments.get() }
+
+func (node *NewExpression) SetTypeArguments(typeArguments *TypeList) {
+	node.typeArguments.set(typeArguments)
+}
+
+func (node *NewExpression) Arguments() *ElementList { return node.arguments.get() }
+
+func (node *NewExpression) SetArguments(arguments *ElementList) { node.arguments.set(arguments) }
+
 func (f *NodeFactory) NewNewExpression(expression *Expression, typeArguments *TypeList, arguments *ElementList) *Node {
-	data := &NewExpression{}
-	data.Expression = expression
-	data.TypeArguments = typeArguments
-	data.Arguments = arguments
+	data := newData[NewExpression](f)
+	data.expression.set(expression)
+	data.typeArguments.set(typeArguments)
+	data.arguments.set(arguments)
 	return f.newNode(KindNewExpression, data)
 }
 
 func (f *NodeFactory) UpdateNewExpression(node *NewExpression, expression *Expression, typeArguments *TypeList, arguments *ElementList) *Node {
-	if expression != node.Expression || typeArguments != node.TypeArguments || arguments != node.Arguments {
+	if expression != node.Expression() || typeArguments != node.TypeArguments() || arguments != node.Arguments() {
 		return updateNode(f.NewNewExpression(expression, typeArguments, arguments), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *NewExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visitNodeList(v, node.TypeArguments) || visitNodeList(v, node.Arguments)
+	return visit(v, node.Expression()) || visitNodeList(v, node.TypeArguments()) || visitNodeList(v, node.Arguments())
 }
 
 func (node *NewExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateNewExpression(node, v.visitNode(node.Expression), v.visitNodes(node.TypeArguments), v.visitNodes(node.Arguments))
+	return v.Factory.UpdateNewExpression(node, v.visitNode(node.Expression()), v.visitNodes(node.TypeArguments()), v.visitNodes(node.Arguments()))
 }
 
 func (node *NewExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewNewExpression(node.Expression, node.TypeArguments, node.Arguments), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewNewExpression(node.Expression(), node.TypeArguments(), node.Arguments()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsNewExpression(node *Node) bool {
@@ -4353,37 +4918,37 @@ type MetaProperty struct {
 	FlowNodeBase
 	CompositeBase
 	KeywordToken Kind
-	name         *IdentifierNode
+	name         link[Node] // *IdentifierNode
 }
 
 func (f *NodeFactory) NewMetaProperty(keywordToken Kind, name *IdentifierNode) *Node {
-	data := &MetaProperty{}
+	data := newData[MetaProperty](f)
 	data.KeywordToken = keywordToken
-	data.name = name
+	data.name.set(name)
 	return f.newNode(KindMetaProperty, data)
 }
 
 func (f *NodeFactory) UpdateMetaProperty(node *MetaProperty, keywordToken Kind, name *IdentifierNode) *Node {
-	if keywordToken != node.KeywordToken || name != node.name {
+	if keywordToken != node.KeywordToken || name != node.name.get() {
 		return updateNode(f.NewMetaProperty(keywordToken, name), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *MetaProperty) ForEachChild(v Visitor) bool {
-	return visit(v, node.name)
+	return visit(v, node.name.get())
 }
 
 func (node *MetaProperty) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateMetaProperty(node, node.KeywordToken, v.visitNode(node.name))
+	return v.Factory.UpdateMetaProperty(node, node.KeywordToken, v.visitNode(node.name.get()))
 }
 
 func (node *MetaProperty) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewMetaProperty(node.KeywordToken, node.name), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewMetaProperty(node.KeywordToken, node.name.get()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *MetaProperty) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsMetaProperty(node *Node) bool {
@@ -4396,34 +4961,38 @@ func IsMetaProperty(node *Node) bool {
 
 type NonNullExpression struct {
 	LeftHandSideExpressionBase
-	Expression *Expression
+	expression link[Node] // *Expression
 }
 
+func (node *NonNullExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *NonNullExpression) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewNonNullExpression(expression *Expression, flags NodeFlags) *Node {
-	data := &NonNullExpression{}
-	data.Expression = expression
+	data := newData[NonNullExpression](f)
+	data.expression.set(expression)
 	node := f.newNode(KindNonNullExpression, data)
 	node.Flags |= flags & NodeFlagsOptionalChain
 	return node
 }
 
 func (f *NodeFactory) UpdateNonNullExpression(node *NonNullExpression, expression *Expression, flags NodeFlags) *Node {
-	if expression != node.Expression || flags != node.Flags {
+	if expression != node.Expression() || flags != node.Flags {
 		return updateNode(f.NewNonNullExpression(expression, flags), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *NonNullExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *NonNullExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateNonNullExpression(node, v.visitNode(node.Expression), node.Flags)
+	return v.Factory.UpdateNonNullExpression(node, v.visitNode(node.Expression()), node.Flags)
 }
 
 func (node *NonNullExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewNonNullExpression(node.Expression, node.Flags), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewNonNullExpression(node.Expression(), node.Flags), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsNonNullExpression(node *Node) bool {
@@ -4436,32 +5005,36 @@ func IsNonNullExpression(node *Node) bool {
 
 type SpreadElement struct {
 	ExpressionBase
-	Expression *Expression
+	expression link[Node] // *Expression
 }
 
+func (node *SpreadElement) Expression() *Expression { return node.expression.get() }
+
+func (node *SpreadElement) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewSpreadElement(expression *Expression) *Node {
-	data := &SpreadElement{}
-	data.Expression = expression
+	data := newData[SpreadElement](f)
+	data.expression.set(expression)
 	return f.newNode(KindSpreadElement, data)
 }
 
 func (f *NodeFactory) UpdateSpreadElement(node *SpreadElement, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewSpreadElement(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *SpreadElement) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *SpreadElement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateSpreadElement(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateSpreadElement(node, v.visitNode(node.Expression()))
 }
 
 func (node *SpreadElement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewSpreadElement(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewSpreadElement(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsSpreadElement(node *Node) bool {
@@ -4475,39 +5048,49 @@ func IsSpreadElement(node *Node) bool {
 type TemplateExpression struct {
 	PrimaryExpressionBase
 	CompositeBase
-	Head          *TemplateHeadNode
-	TemplateSpans *TemplateSpanList
+	head          link[Node]     // *TemplateHeadNode
+	templateSpans link[NodeList] // *TemplateSpanList
+}
+
+func (node *TemplateExpression) Head() *TemplateHeadNode { return node.head.get() }
+
+func (node *TemplateExpression) SetHead(head *TemplateHeadNode) { node.head.set(head) }
+
+func (node *TemplateExpression) TemplateSpans() *TemplateSpanList { return node.templateSpans.get() }
+
+func (node *TemplateExpression) SetTemplateSpans(templateSpans *TemplateSpanList) {
+	node.templateSpans.set(templateSpans)
 }
 
 func (f *NodeFactory) NewTemplateExpression(head *TemplateHeadNode, templateSpans *TemplateSpanList) *Node {
-	data := &TemplateExpression{}
-	data.Head = head
-	data.TemplateSpans = templateSpans
+	data := newData[TemplateExpression](f)
+	data.head.set(head)
+	data.templateSpans.set(templateSpans)
 	return f.newNode(KindTemplateExpression, data)
 }
 
 func (f *NodeFactory) UpdateTemplateExpression(node *TemplateExpression, head *TemplateHeadNode, templateSpans *TemplateSpanList) *Node {
-	if head != node.Head || templateSpans != node.TemplateSpans {
+	if head != node.Head() || templateSpans != node.TemplateSpans() {
 		return updateNode(f.NewTemplateExpression(head, templateSpans), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TemplateExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Head) || visitNodeList(v, node.TemplateSpans)
+	return visit(v, node.Head()) || visitNodeList(v, node.TemplateSpans())
 }
 
 func (node *TemplateExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTemplateExpression(node, v.visitNode(node.Head), v.visitNodes(node.TemplateSpans))
+	return v.Factory.UpdateTemplateExpression(node, v.visitNode(node.Head()), v.visitNodes(node.TemplateSpans()))
 }
 
 func (node *TemplateExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTemplateExpression(node.Head, node.TemplateSpans), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTemplateExpression(node.Head(), node.TemplateSpans()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *TemplateExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Head) |
-		propagateNodeListSubtreeFacts(node.TemplateSpans, propagateSubtreeFacts)
+	return propagateSubtreeFacts(node.Head()) |
+		propagateNodeListSubtreeFacts(node.TemplateSpans(), propagateSubtreeFacts)
 }
 
 func IsTemplateExpression(node *Node) bool {
@@ -4520,39 +5103,47 @@ func IsTemplateExpression(node *Node) bool {
 
 type TemplateSpan struct {
 	NodeBase
-	Expression *Expression
-	Literal    *TemplateMiddleOrTail
+	expression link[Node] // *Expression
+	literal    link[Node] // *TemplateMiddleOrTail
 }
 
+func (node *TemplateSpan) Expression() *Expression { return node.expression.get() }
+
+func (node *TemplateSpan) SetExpression(expression *Expression) { node.expression.set(expression) }
+
+func (node *TemplateSpan) Literal() *TemplateMiddleOrTail { return node.literal.get() }
+
+func (node *TemplateSpan) SetLiteral(literal *TemplateMiddleOrTail) { node.literal.set(literal) }
+
 func (f *NodeFactory) NewTemplateSpan(expression *Expression, literal *TemplateMiddleOrTail) *Node {
-	data := &TemplateSpan{}
-	data.Expression = expression
-	data.Literal = literal
+	data := newData[TemplateSpan](f)
+	data.expression.set(expression)
+	data.literal.set(literal)
 	return f.newNode(KindTemplateSpan, data)
 }
 
 func (f *NodeFactory) UpdateTemplateSpan(node *TemplateSpan, expression *Expression, literal *TemplateMiddleOrTail) *Node {
-	if expression != node.Expression || literal != node.Literal {
+	if expression != node.Expression() || literal != node.Literal() {
 		return updateNode(f.NewTemplateSpan(expression, literal), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TemplateSpan) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visit(v, node.Literal)
+	return visit(v, node.Expression()) || visit(v, node.Literal())
 }
 
 func (node *TemplateSpan) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTemplateSpan(node, v.visitNode(node.Expression), v.visitNode(node.Literal))
+	return v.Factory.UpdateTemplateSpan(node, v.visitNode(node.Expression()), v.visitNode(node.Literal()))
 }
 
 func (node *TemplateSpan) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTemplateSpan(node.Expression, node.Literal), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTemplateSpan(node.Expression(), node.Literal()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *TemplateSpan) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression) |
-		propagateSubtreeFacts(node.Literal)
+	return propagateSubtreeFacts(node.Expression()) |
+		propagateSubtreeFacts(node.Literal())
 }
 
 func IsTemplateSpan(node *Node) bool {
@@ -4566,43 +5157,67 @@ func IsTemplateSpan(node *Node) bool {
 type TaggedTemplateExpression struct {
 	MemberExpressionBase
 	CompositeBase
-	Tag              *Expression
-	QuestionDotToken *QuestionDotToken
-	TypeArguments    *TypeList // Optional
-	Template         *TemplateLiteral
+	tag              link[Node]     // *Expression
+	questionDotToken link[Node]     // *QuestionDotToken
+	typeArguments    link[NodeList] // *TypeList. Optional
+	template         link[Node]     // *TemplateLiteral
+}
+
+func (node *TaggedTemplateExpression) Tag() *Expression { return node.tag.get() }
+
+func (node *TaggedTemplateExpression) SetTag(tag *Expression) { node.tag.set(tag) }
+
+func (node *TaggedTemplateExpression) QuestionDotToken() *QuestionDotToken {
+	return node.questionDotToken.get()
+}
+
+func (node *TaggedTemplateExpression) SetQuestionDotToken(questionDotToken *QuestionDotToken) {
+	node.questionDotToken.set(questionDotToken)
+}
+
+func (node *TaggedTemplateExpression) TypeArguments() *TypeList { return node.typeArguments.get() }
+
+func (node *TaggedTemplateExpression) SetTypeArguments(typeArguments *TypeList) {
+	node.typeArguments.set(typeArguments)
+}
+
+func (node *TaggedTemplateExpression) Template() *TemplateLiteral { return node.template.get() }
+
+func (node *TaggedTemplateExpression) SetTemplate(template *TemplateLiteral) {
+	node.template.set(template)
 }
 
 func (f *NodeFactory) NewTaggedTemplateExpression(tag *Expression, questionDotToken *QuestionDotToken, typeArguments *TypeList, template *TemplateLiteral, flags NodeFlags) *Node {
-	data := &TaggedTemplateExpression{}
-	data.Tag = tag
-	data.QuestionDotToken = questionDotToken
-	data.TypeArguments = typeArguments
-	data.Template = template
+	data := newData[TaggedTemplateExpression](f)
+	data.tag.set(tag)
+	data.questionDotToken.set(questionDotToken)
+	data.typeArguments.set(typeArguments)
+	data.template.set(template)
 	node := f.newNode(KindTaggedTemplateExpression, data)
 	node.Flags |= flags & NodeFlagsOptionalChain
 	return node
 }
 
 func (f *NodeFactory) UpdateTaggedTemplateExpression(node *TaggedTemplateExpression, tag *Expression, questionDotToken *QuestionDotToken, typeArguments *TypeList, template *TemplateLiteral, flags NodeFlags) *Node {
-	if tag != node.Tag || questionDotToken != node.QuestionDotToken || typeArguments != node.TypeArguments || template != node.Template || flags != node.Flags {
+	if tag != node.Tag() || questionDotToken != node.QuestionDotToken() || typeArguments != node.TypeArguments() || template != node.Template() || flags != node.Flags {
 		return updateNode(f.NewTaggedTemplateExpression(tag, questionDotToken, typeArguments, template, flags), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TaggedTemplateExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Tag) ||
-		visit(v, node.QuestionDotToken) ||
-		visitNodeList(v, node.TypeArguments) ||
-		visit(v, node.Template)
+	return visit(v, node.Tag()) ||
+		visit(v, node.QuestionDotToken()) ||
+		visitNodeList(v, node.TypeArguments()) ||
+		visit(v, node.Template())
 }
 
 func (node *TaggedTemplateExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTaggedTemplateExpression(node, v.visitNode(node.Tag), v.visitNode(node.QuestionDotToken), v.visitNodes(node.TypeArguments), v.visitNode(node.Template), node.Flags)
+	return v.Factory.UpdateTaggedTemplateExpression(node, v.visitNode(node.Tag()), v.visitNode(node.QuestionDotToken()), v.visitNodes(node.TypeArguments()), v.visitNode(node.Template()), node.Flags)
 }
 
 func (node *TaggedTemplateExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTaggedTemplateExpression(node.Tag, node.QuestionDotToken, node.TypeArguments, node.Template, node.Flags), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTaggedTemplateExpression(node.Tag(), node.QuestionDotToken(), node.TypeArguments(), node.Template(), node.Flags), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsTaggedTemplateExpression(node *Node) bool {
@@ -4615,36 +5230,42 @@ func IsTaggedTemplateExpression(node *Node) bool {
 
 type ParenthesizedExpression struct {
 	PrimaryExpressionBase
-	Expression *Expression
+	expression link[Node] // *Expression
+}
+
+func (node *ParenthesizedExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *ParenthesizedExpression) SetExpression(expression *Expression) {
+	node.expression.set(expression)
 }
 
 func (f *NodeFactory) NewParenthesizedExpression(expression *Expression) *Node {
-	data := f.parenthesizedExpressionArena.New()
-	data.Expression = expression
+	data := newData[ParenthesizedExpression](f)
+	data.expression.set(expression)
 	return f.newNode(KindParenthesizedExpression, data)
 }
 
 func (f *NodeFactory) UpdateParenthesizedExpression(node *ParenthesizedExpression, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewParenthesizedExpression(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ParenthesizedExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *ParenthesizedExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateParenthesizedExpression(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateParenthesizedExpression(node, v.visitNode(node.Expression()))
 }
 
 func (node *ParenthesizedExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewParenthesizedExpression(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewParenthesizedExpression(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ParenthesizedExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression)
+	return propagateSubtreeFacts(node.Expression())
 }
 
 func IsParenthesizedExpression(node *Node) bool {
@@ -4658,38 +5279,42 @@ func IsParenthesizedExpression(node *Node) bool {
 type ArrayLiteralExpression struct {
 	PrimaryExpressionBase
 	CompositeBase
-	Elements  *ElementList
+	elements  link[NodeList] // *ElementList
 	MultiLine bool
 }
 
+func (node *ArrayLiteralExpression) Elements() *ElementList { return node.elements.get() }
+
+func (node *ArrayLiteralExpression) SetElements(elements *ElementList) { node.elements.set(elements) }
+
 func (f *NodeFactory) NewArrayLiteralExpression(elements *ElementList, multiLine bool) *Node {
-	data := &ArrayLiteralExpression{}
-	data.Elements = elements
+	data := newData[ArrayLiteralExpression](f)
+	data.elements.set(elements)
 	data.MultiLine = multiLine
 	return f.newNode(KindArrayLiteralExpression, data)
 }
 
 func (f *NodeFactory) UpdateArrayLiteralExpression(node *ArrayLiteralExpression, elements *ElementList, multiLine bool) *Node {
-	if elements != node.Elements || multiLine != node.MultiLine {
+	if elements != node.Elements() || multiLine != node.MultiLine {
 		return updateNode(f.NewArrayLiteralExpression(elements, multiLine), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ArrayLiteralExpression) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Elements)
+	return visitNodeList(v, node.Elements())
 }
 
 func (node *ArrayLiteralExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateArrayLiteralExpression(node, v.visitNodes(node.Elements), node.MultiLine)
+	return v.Factory.UpdateArrayLiteralExpression(node, v.visitNodes(node.Elements()), node.MultiLine)
 }
 
 func (node *ArrayLiteralExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewArrayLiteralExpression(node.Elements, node.MultiLine), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewArrayLiteralExpression(node.Elements(), node.MultiLine), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ArrayLiteralExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateNodeListSubtreeFacts(node.Elements, propagateSubtreeFacts)
+	return propagateNodeListSubtreeFacts(node.Elements(), propagateSubtreeFacts)
 }
 
 func IsArrayLiteralExpression(node *Node) bool {
@@ -4704,38 +5329,44 @@ type ObjectLiteralExpression struct {
 	PrimaryExpressionBase
 	DeclarationBase
 	CompositeBase
-	Properties *NodeList
+	properties link[NodeList] // *NodeList
 	MultiLine  bool
 }
 
+func (node *ObjectLiteralExpression) Properties() *NodeList { return node.properties.get() }
+
+func (node *ObjectLiteralExpression) SetProperties(properties *NodeList) {
+	node.properties.set(properties)
+}
+
 func (f *NodeFactory) NewObjectLiteralExpression(properties *NodeList, multiLine bool) *Node {
-	data := &ObjectLiteralExpression{}
-	data.Properties = properties
+	data := newData[ObjectLiteralExpression](f)
+	data.properties.set(properties)
 	data.MultiLine = multiLine
 	return f.newNode(KindObjectLiteralExpression, data)
 }
 
 func (f *NodeFactory) UpdateObjectLiteralExpression(node *ObjectLiteralExpression, properties *NodeList, multiLine bool) *Node {
-	if properties != node.Properties || multiLine != node.MultiLine {
+	if properties != node.Properties() || multiLine != node.MultiLine {
 		return updateNode(f.NewObjectLiteralExpression(properties, multiLine), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ObjectLiteralExpression) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Properties)
+	return visitNodeList(v, node.Properties())
 }
 
 func (node *ObjectLiteralExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateObjectLiteralExpression(node, v.visitNodes(node.Properties), node.MultiLine)
+	return v.Factory.UpdateObjectLiteralExpression(node, v.visitNodes(node.Properties()), node.MultiLine)
 }
 
 func (node *ObjectLiteralExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewObjectLiteralExpression(node.Properties, node.MultiLine), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewObjectLiteralExpression(node.Properties(), node.MultiLine), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ObjectLiteralExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateNodeListSubtreeFacts(node.Properties, propagateSubtreeFacts)
+	return propagateNodeListSubtreeFacts(node.Properties(), propagateSubtreeFacts)
 }
 
 func IsObjectLiteralExpression(node *Node) bool {
@@ -4750,32 +5381,36 @@ type SpreadAssignment struct {
 	ObjectLiteralElementBase
 	NodeBase
 	DeclarationBase
-	Expression *Expression
+	expression link[Node] // *Expression
 }
 
+func (node *SpreadAssignment) Expression() *Expression { return node.expression.get() }
+
+func (node *SpreadAssignment) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewSpreadAssignment(expression *Expression) *Node {
-	data := &SpreadAssignment{}
-	data.Expression = expression
+	data := newData[SpreadAssignment](f)
+	data.expression.set(expression)
 	return f.newNode(KindSpreadAssignment, data)
 }
 
 func (f *NodeFactory) UpdateSpreadAssignment(node *SpreadAssignment, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewSpreadAssignment(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *SpreadAssignment) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *SpreadAssignment) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateSpreadAssignment(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateSpreadAssignment(node, v.visitNode(node.Expression()))
 }
 
 func (node *SpreadAssignment) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewSpreadAssignment(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewSpreadAssignment(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsSpreadAssignment(node *Node) bool {
@@ -4792,45 +5427,55 @@ type PropertyAssignment struct {
 	DeclarationBase
 	NamedMemberBase
 	CompositeBase
-	Type        *TypeNode
-	Initializer *Expression
+	typeNode    link[Node] // *TypeNode
+	initializer link[Node] // *Expression
+}
+
+func (node *PropertyAssignment) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *PropertyAssignment) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
+func (node *PropertyAssignment) Initializer() *Expression { return node.initializer.get() }
+
+func (node *PropertyAssignment) SetInitializer(initializer *Expression) {
+	node.initializer.set(initializer)
 }
 
 func (f *NodeFactory) NewPropertyAssignment(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
-	data := f.propertyAssignmentArena.New()
-	data.modifiers = modifiers
-	data.name = name
-	data.PostfixToken = postfixToken
-	data.Type = typeNode
-	data.Initializer = initializer
+	data := newData[PropertyAssignment](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.postfixToken.set(postfixToken)
+	data.typeNode.set(typeNode)
+	data.initializer.set(initializer)
 	return f.newNode(KindPropertyAssignment, data)
 }
 
 func (f *NodeFactory) UpdatePropertyAssignment(node *PropertyAssignment, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
-	if modifiers != node.modifiers || name != node.name || postfixToken != node.PostfixToken || typeNode != node.Type || initializer != node.Initializer {
+	if modifiers != node.modifiers.get() || name != node.name.get() || postfixToken != node.PostfixToken() || typeNode != node.Type() || initializer != node.Initializer() {
 		return updateNode(f.NewPropertyAssignment(modifiers, name, postfixToken, typeNode, initializer), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *PropertyAssignment) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visit(v, node.PostfixToken) ||
-		visit(v, node.Type) ||
-		visit(v, node.Initializer)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visit(v, node.PostfixToken()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.Initializer())
 }
 
 func (node *PropertyAssignment) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdatePropertyAssignment(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.PostfixToken), v.visitNode(node.Type), v.visitNode(node.Initializer))
+	return v.Factory.UpdatePropertyAssignment(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNode(node.PostfixToken()), v.visitNode(node.Type()), v.visitNode(node.Initializer()))
 }
 
 func (node *PropertyAssignment) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewPropertyAssignment(node.Modifiers(), node.name, node.PostfixToken, node.Type, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewPropertyAssignment(node.Modifiers(), node.name.get(), node.PostfixToken(), node.Type(), node.Initializer()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *PropertyAssignment) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsPropertyAssignment(node *Node) bool {
@@ -4847,48 +5492,66 @@ type ShorthandPropertyAssignment struct {
 	DeclarationBase
 	NamedMemberBase
 	CompositeBase
-	Type                        *TypeNode
-	EqualsToken                 *EqualsToken // Optional
-	ObjectAssignmentInitializer *Expression  // Optional
+	typeNode                    link[Node] // *TypeNode
+	equalsToken                 link[Node] // *EqualsToken. Optional
+	objectAssignmentInitializer link[Node] // *Expression. Optional
+}
+
+func (node *ShorthandPropertyAssignment) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *ShorthandPropertyAssignment) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
+func (node *ShorthandPropertyAssignment) EqualsToken() *EqualsToken { return node.equalsToken.get() }
+
+func (node *ShorthandPropertyAssignment) SetEqualsToken(equalsToken *EqualsToken) {
+	node.equalsToken.set(equalsToken)
+}
+
+func (node *ShorthandPropertyAssignment) ObjectAssignmentInitializer() *Expression {
+	return node.objectAssignmentInitializer.get()
+}
+
+func (node *ShorthandPropertyAssignment) SetObjectAssignmentInitializer(objectAssignmentInitializer *Expression) {
+	node.objectAssignmentInitializer.set(objectAssignmentInitializer)
 }
 
 func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, equalsToken *EqualsToken, objectAssignmentInitializer *Expression) *Node {
-	data := &ShorthandPropertyAssignment{}
-	data.modifiers = modifiers
-	data.name = name
-	data.PostfixToken = postfixToken
-	data.Type = typeNode
-	data.EqualsToken = equalsToken
-	data.ObjectAssignmentInitializer = objectAssignmentInitializer
+	data := newData[ShorthandPropertyAssignment](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.postfixToken.set(postfixToken)
+	data.typeNode.set(typeNode)
+	data.equalsToken.set(equalsToken)
+	data.objectAssignmentInitializer.set(objectAssignmentInitializer)
 	return f.newNode(KindShorthandPropertyAssignment, data)
 }
 
 func (f *NodeFactory) UpdateShorthandPropertyAssignment(node *ShorthandPropertyAssignment, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, equalsToken *EqualsToken, objectAssignmentInitializer *Expression) *Node {
-	if modifiers != node.modifiers || name != node.name || postfixToken != node.PostfixToken || typeNode != node.Type || equalsToken != node.EqualsToken || objectAssignmentInitializer != node.ObjectAssignmentInitializer {
+	if modifiers != node.modifiers.get() || name != node.name.get() || postfixToken != node.PostfixToken() || typeNode != node.Type() || equalsToken != node.EqualsToken() || objectAssignmentInitializer != node.ObjectAssignmentInitializer() {
 		return updateNode(f.NewShorthandPropertyAssignment(modifiers, name, postfixToken, typeNode, equalsToken, objectAssignmentInitializer), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ShorthandPropertyAssignment) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visit(v, node.PostfixToken) ||
-		visit(v, node.Type) ||
-		visit(v, node.EqualsToken) ||
-		visit(v, node.ObjectAssignmentInitializer)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visit(v, node.PostfixToken()) ||
+		visit(v, node.Type()) ||
+		visit(v, node.EqualsToken()) ||
+		visit(v, node.ObjectAssignmentInitializer())
 }
 
 func (node *ShorthandPropertyAssignment) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateShorthandPropertyAssignment(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.PostfixToken), v.visitNode(node.Type), v.visitNode(node.EqualsToken), v.visitNode(node.ObjectAssignmentInitializer))
+	return v.Factory.UpdateShorthandPropertyAssignment(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNode(node.PostfixToken()), v.visitNode(node.Type()), v.visitNode(node.EqualsToken()), v.visitNode(node.ObjectAssignmentInitializer()))
 }
 
 func (node *ShorthandPropertyAssignment) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewShorthandPropertyAssignment(node.Modifiers(), node.name, node.PostfixToken, node.Type, node.EqualsToken, node.ObjectAssignmentInitializer), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewShorthandPropertyAssignment(node.Modifiers(), node.name.get(), node.PostfixToken(), node.Type(), node.EqualsToken(), node.ObjectAssignmentInitializer()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ShorthandPropertyAssignment) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsShorthandPropertyAssignment(node *Node) bool {
@@ -4901,36 +5564,40 @@ func IsShorthandPropertyAssignment(node *Node) bool {
 
 type DeleteExpression struct {
 	UnaryExpressionBase
-	Expression *Expression
+	expression link[Node] // *Expression
 }
 
+func (node *DeleteExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *DeleteExpression) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewDeleteExpression(expression *Expression) *Node {
-	data := &DeleteExpression{}
-	data.Expression = expression
+	data := newData[DeleteExpression](f)
+	data.expression.set(expression)
 	return f.newNode(KindDeleteExpression, data)
 }
 
 func (f *NodeFactory) UpdateDeleteExpression(node *DeleteExpression, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewDeleteExpression(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *DeleteExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *DeleteExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateDeleteExpression(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateDeleteExpression(node, v.visitNode(node.Expression()))
 }
 
 func (node *DeleteExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewDeleteExpression(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewDeleteExpression(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *DeleteExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression)
+	return propagateSubtreeFacts(node.Expression())
 }
 
 func IsDeleteExpression(node *Node) bool {
@@ -4943,36 +5610,40 @@ func IsDeleteExpression(node *Node) bool {
 
 type TypeOfExpression struct {
 	UnaryExpressionBase
-	Expression *Expression
+	expression link[Node] // *Expression
 }
 
+func (node *TypeOfExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *TypeOfExpression) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewTypeOfExpression(expression *Expression) *Node {
-	data := &TypeOfExpression{}
-	data.Expression = expression
+	data := newData[TypeOfExpression](f)
+	data.expression.set(expression)
 	return f.newNode(KindTypeOfExpression, data)
 }
 
 func (f *NodeFactory) UpdateTypeOfExpression(node *TypeOfExpression, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewTypeOfExpression(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TypeOfExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *TypeOfExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTypeOfExpression(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateTypeOfExpression(node, v.visitNode(node.Expression()))
 }
 
 func (node *TypeOfExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTypeOfExpression(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTypeOfExpression(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *TypeOfExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression)
+	return propagateSubtreeFacts(node.Expression())
 }
 
 func IsTypeOfExpression(node *Node) bool {
@@ -4985,36 +5656,40 @@ func IsTypeOfExpression(node *Node) bool {
 
 type VoidExpression struct {
 	UnaryExpressionBase
-	Expression *Expression
+	expression link[Node] // *Expression
 }
 
+func (node *VoidExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *VoidExpression) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewVoidExpression(expression *Expression) *Node {
-	data := &VoidExpression{}
-	data.Expression = expression
+	data := newData[VoidExpression](f)
+	data.expression.set(expression)
 	return f.newNode(KindVoidExpression, data)
 }
 
 func (f *NodeFactory) UpdateVoidExpression(node *VoidExpression, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewVoidExpression(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *VoidExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *VoidExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateVoidExpression(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateVoidExpression(node, v.visitNode(node.Expression()))
 }
 
 func (node *VoidExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewVoidExpression(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewVoidExpression(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *VoidExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression)
+	return propagateSubtreeFacts(node.Expression())
 }
 
 func IsVoidExpression(node *Node) bool {
@@ -5027,32 +5702,36 @@ func IsVoidExpression(node *Node) bool {
 
 type AwaitExpression struct {
 	UnaryExpressionBase
-	Expression *Expression
+	expression link[Node] // *Expression
 }
 
+func (node *AwaitExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *AwaitExpression) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewAwaitExpression(expression *Expression) *Node {
-	data := &AwaitExpression{}
-	data.Expression = expression
+	data := newData[AwaitExpression](f)
+	data.expression.set(expression)
 	return f.newNode(KindAwaitExpression, data)
 }
 
 func (f *NodeFactory) UpdateAwaitExpression(node *AwaitExpression, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewAwaitExpression(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *AwaitExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *AwaitExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateAwaitExpression(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateAwaitExpression(node, v.visitNode(node.Expression()))
 }
 
 func (node *AwaitExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewAwaitExpression(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewAwaitExpression(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsAwaitExpression(node *Node) bool {
@@ -5065,34 +5744,42 @@ func IsAwaitExpression(node *Node) bool {
 
 type TypeAssertion struct {
 	UnaryExpressionBase
-	Type       *TypeNode
-	Expression *Expression
+	typeNode   link[Node] // *TypeNode
+	expression link[Node] // *Expression
 }
 
+func (node *TypeAssertion) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *TypeAssertion) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
+func (node *TypeAssertion) Expression() *Expression { return node.expression.get() }
+
+func (node *TypeAssertion) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewTypeAssertion(typeNode *TypeNode, expression *Expression) *Node {
-	data := &TypeAssertion{}
-	data.Type = typeNode
-	data.Expression = expression
+	data := newData[TypeAssertion](f)
+	data.typeNode.set(typeNode)
+	data.expression.set(expression)
 	return f.newNode(KindTypeAssertionExpression, data)
 }
 
 func (f *NodeFactory) UpdateTypeAssertion(node *TypeAssertion, typeNode *TypeNode, expression *Expression) *Node {
-	if typeNode != node.Type || expression != node.Expression {
+	if typeNode != node.Type() || expression != node.Expression() {
 		return updateNode(f.NewTypeAssertion(typeNode, expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TypeAssertion) ForEachChild(v Visitor) bool {
-	return visit(v, node.Type) || visit(v, node.Expression)
+	return visit(v, node.Type()) || visit(v, node.Expression())
 }
 
 func (node *TypeAssertion) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTypeAssertion(node, v.visitNode(node.Type), v.visitNode(node.Expression))
+	return v.Factory.UpdateTypeAssertion(node, v.visitNode(node.Type()), v.visitNode(node.Expression()))
 }
 
 func (node *TypeAssertion) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTypeAssertion(node.Type, node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTypeAssertion(node.Type(), node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsTypeAssertion(node *Node) bool {
@@ -5108,7 +5795,7 @@ type KeywordTypeNode struct {
 }
 
 func (f *NodeFactory) NewKeywordTypeNode(kind KeywordTypeSyntaxKind) *Node {
-	data := f.keywordTypeNodeArena.New()
+	data := newData[KeywordTypeNode](f)
 	return f.newNode(kind, data)
 }
 
@@ -5133,28 +5820,28 @@ type UnionTypeNode struct {
 }
 
 func (f *NodeFactory) NewUnionTypeNode(types *TypeList) *Node {
-	data := f.unionTypeNodeArena.New()
-	data.Types = types
+	data := newData[UnionTypeNode](f)
+	data.types.set(types)
 	return f.newNode(KindUnionType, data)
 }
 
 func (f *NodeFactory) UpdateUnionTypeNode(node *UnionTypeNode, types *TypeList) *Node {
-	if types != node.Types {
+	if types != node.Types() {
 		return updateNode(f.NewUnionTypeNode(types), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *UnionTypeNode) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Types)
+	return visitNodeList(v, node.Types())
 }
 
 func (node *UnionTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateUnionTypeNode(node, v.visitNodes(node.Types))
+	return v.Factory.UpdateUnionTypeNode(node, v.visitNodes(node.Types()))
 }
 
 func (node *UnionTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewUnionTypeNode(node.Types), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewUnionTypeNode(node.Types()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsUnionTypeNode(node *Node) bool {
@@ -5170,28 +5857,28 @@ type IntersectionTypeNode struct {
 }
 
 func (f *NodeFactory) NewIntersectionTypeNode(types *TypeList) *Node {
-	data := f.intersectionTypeNodeArena.New()
-	data.Types = types
+	data := newData[IntersectionTypeNode](f)
+	data.types.set(types)
 	return f.newNode(KindIntersectionType, data)
 }
 
 func (f *NodeFactory) UpdateIntersectionTypeNode(node *IntersectionTypeNode, types *TypeList) *Node {
-	if types != node.Types {
+	if types != node.Types() {
 		return updateNode(f.NewIntersectionTypeNode(types), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *IntersectionTypeNode) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Types)
+	return visitNodeList(v, node.Types())
 }
 
 func (node *IntersectionTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateIntersectionTypeNode(node, v.visitNodes(node.Types))
+	return v.Factory.UpdateIntersectionTypeNode(node, v.visitNodes(node.Types()))
 }
 
 func (node *IntersectionTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewIntersectionTypeNode(node.Types), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewIntersectionTypeNode(node.Types()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsIntersectionTypeNode(node *Node) bool {
@@ -5205,41 +5892,59 @@ func IsIntersectionTypeNode(node *Node) bool {
 type ConditionalTypeNode struct {
 	TypeNodeBase
 	LocalsContainerBase
-	CheckType   *TypeNode
-	ExtendsType *TypeNode
-	TrueType    *TypeNode
-	FalseType   *TypeNode
+	checkType   link[Node] // *TypeNode
+	extendsType link[Node] // *TypeNode
+	trueType    link[Node] // *TypeNode
+	falseType   link[Node] // *TypeNode
 }
 
+func (node *ConditionalTypeNode) CheckType() *TypeNode { return node.checkType.get() }
+
+func (node *ConditionalTypeNode) SetCheckType(checkType *TypeNode) { node.checkType.set(checkType) }
+
+func (node *ConditionalTypeNode) ExtendsType() *TypeNode { return node.extendsType.get() }
+
+func (node *ConditionalTypeNode) SetExtendsType(extendsType *TypeNode) {
+	node.extendsType.set(extendsType)
+}
+
+func (node *ConditionalTypeNode) TrueType() *TypeNode { return node.trueType.get() }
+
+func (node *ConditionalTypeNode) SetTrueType(trueType *TypeNode) { node.trueType.set(trueType) }
+
+func (node *ConditionalTypeNode) FalseType() *TypeNode { return node.falseType.get() }
+
+func (node *ConditionalTypeNode) SetFalseType(falseType *TypeNode) { node.falseType.set(falseType) }
+
 func (f *NodeFactory) NewConditionalTypeNode(checkType *TypeNode, extendsType *TypeNode, trueType *TypeNode, falseType *TypeNode) *Node {
-	data := &ConditionalTypeNode{}
-	data.CheckType = checkType
-	data.ExtendsType = extendsType
-	data.TrueType = trueType
-	data.FalseType = falseType
+	data := newData[ConditionalTypeNode](f)
+	data.checkType.set(checkType)
+	data.extendsType.set(extendsType)
+	data.trueType.set(trueType)
+	data.falseType.set(falseType)
 	return f.newNode(KindConditionalType, data)
 }
 
 func (f *NodeFactory) UpdateConditionalTypeNode(node *ConditionalTypeNode, checkType *TypeNode, extendsType *TypeNode, trueType *TypeNode, falseType *TypeNode) *Node {
-	if checkType != node.CheckType || extendsType != node.ExtendsType || trueType != node.TrueType || falseType != node.FalseType {
+	if checkType != node.CheckType() || extendsType != node.ExtendsType() || trueType != node.TrueType() || falseType != node.FalseType() {
 		return updateNode(f.NewConditionalTypeNode(checkType, extendsType, trueType, falseType), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ConditionalTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.CheckType) ||
-		visit(v, node.ExtendsType) ||
-		visit(v, node.TrueType) ||
-		visit(v, node.FalseType)
+	return visit(v, node.CheckType()) ||
+		visit(v, node.ExtendsType()) ||
+		visit(v, node.TrueType()) ||
+		visit(v, node.FalseType())
 }
 
 func (node *ConditionalTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateConditionalTypeNode(node, v.visitNode(node.CheckType), v.visitNode(node.ExtendsType), v.visitNode(node.TrueType), v.visitNode(node.FalseType))
+	return v.Factory.UpdateConditionalTypeNode(node, v.visitNode(node.CheckType()), v.visitNode(node.ExtendsType()), v.visitNode(node.TrueType()), v.visitNode(node.FalseType()))
 }
 
 func (node *ConditionalTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewConditionalTypeNode(node.CheckType, node.ExtendsType, node.TrueType, node.FalseType), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewConditionalTypeNode(node.CheckType(), node.ExtendsType(), node.TrueType(), node.FalseType()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsConditionalTypeNode(node *Node) bool {
@@ -5253,33 +5958,37 @@ func IsConditionalTypeNode(node *Node) bool {
 type TypeOperatorNode struct {
 	TypeNodeBase
 	Operator Kind
-	Type     *TypeNode
+	typeNode link[Node] // *TypeNode
 }
 
+func (node *TypeOperatorNode) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *TypeOperatorNode) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewTypeOperatorNode(operator Kind, typeNode *TypeNode) *Node {
-	data := f.typeOperatorNodeArena.New()
+	data := newData[TypeOperatorNode](f)
 	data.Operator = operator
-	data.Type = typeNode
+	data.typeNode.set(typeNode)
 	return f.newNode(KindTypeOperator, data)
 }
 
 func (f *NodeFactory) UpdateTypeOperatorNode(node *TypeOperatorNode, operator Kind, typeNode *TypeNode) *Node {
-	if operator != node.Operator || typeNode != node.Type {
+	if operator != node.Operator || typeNode != node.Type() {
 		return updateNode(f.NewTypeOperatorNode(operator, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TypeOperatorNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.Type)
+	return visit(v, node.Type())
 }
 
 func (node *TypeOperatorNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTypeOperatorNode(node, node.Operator, v.visitNode(node.Type))
+	return v.Factory.UpdateTypeOperatorNode(node, node.Operator, v.visitNode(node.Type()))
 }
 
 func (node *TypeOperatorNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTypeOperatorNode(node.Operator, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTypeOperatorNode(node.Operator, node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsTypeOperatorNode(node *Node) bool {
@@ -5292,32 +6001,40 @@ func IsTypeOperatorNode(node *Node) bool {
 
 type InferTypeNode struct {
 	TypeNodeBase
-	TypeParameter *TypeParameterDeclarationNode
+	typeParameter link[Node] // *TypeParameterDeclarationNode
+}
+
+func (node *InferTypeNode) TypeParameter() *TypeParameterDeclarationNode {
+	return node.typeParameter.get()
+}
+
+func (node *InferTypeNode) SetTypeParameter(typeParameter *TypeParameterDeclarationNode) {
+	node.typeParameter.set(typeParameter)
 }
 
 func (f *NodeFactory) NewInferTypeNode(typeParameter *TypeParameterDeclarationNode) *Node {
-	data := &InferTypeNode{}
-	data.TypeParameter = typeParameter
+	data := newData[InferTypeNode](f)
+	data.typeParameter.set(typeParameter)
 	return f.newNode(KindInferType, data)
 }
 
 func (f *NodeFactory) UpdateInferTypeNode(node *InferTypeNode, typeParameter *TypeParameterDeclarationNode) *Node {
-	if typeParameter != node.TypeParameter {
+	if typeParameter != node.TypeParameter() {
 		return updateNode(f.NewInferTypeNode(typeParameter), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *InferTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeParameter)
+	return visit(v, node.TypeParameter())
 }
 
 func (node *InferTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateInferTypeNode(node, v.visitNode(node.TypeParameter))
+	return v.Factory.UpdateInferTypeNode(node, v.visitNode(node.TypeParameter()))
 }
 
 func (node *InferTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewInferTypeNode(node.TypeParameter), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewInferTypeNode(node.TypeParameter()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsInferTypeNode(node *Node) bool {
@@ -5330,32 +6047,36 @@ func IsInferTypeNode(node *Node) bool {
 
 type ArrayTypeNode struct {
 	TypeNodeBase
-	ElementType *TypeNode
+	elementType link[Node] // *TypeNode
 }
 
+func (node *ArrayTypeNode) ElementType() *TypeNode { return node.elementType.get() }
+
+func (node *ArrayTypeNode) SetElementType(elementType *TypeNode) { node.elementType.set(elementType) }
+
 func (f *NodeFactory) NewArrayTypeNode(elementType *TypeNode) *Node {
-	data := f.arrayTypeNodeArena.New()
-	data.ElementType = elementType
+	data := newData[ArrayTypeNode](f)
+	data.elementType.set(elementType)
 	return f.newNode(KindArrayType, data)
 }
 
 func (f *NodeFactory) UpdateArrayTypeNode(node *ArrayTypeNode, elementType *TypeNode) *Node {
-	if elementType != node.ElementType {
+	if elementType != node.ElementType() {
 		return updateNode(f.NewArrayTypeNode(elementType), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ArrayTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.ElementType)
+	return visit(v, node.ElementType())
 }
 
 func (node *ArrayTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateArrayTypeNode(node, v.visitNode(node.ElementType))
+	return v.Factory.UpdateArrayTypeNode(node, v.visitNode(node.ElementType()))
 }
 
 func (node *ArrayTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewArrayTypeNode(node.ElementType), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewArrayTypeNode(node.ElementType()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsArrayTypeNode(node *Node) bool {
@@ -5368,34 +6089,44 @@ func IsArrayTypeNode(node *Node) bool {
 
 type IndexedAccessTypeNode struct {
 	TypeNodeBase
-	ObjectType *TypeNode
-	IndexType  *TypeNode
+	objectType link[Node] // *TypeNode
+	indexType  link[Node] // *TypeNode
 }
 
+func (node *IndexedAccessTypeNode) ObjectType() *TypeNode { return node.objectType.get() }
+
+func (node *IndexedAccessTypeNode) SetObjectType(objectType *TypeNode) {
+	node.objectType.set(objectType)
+}
+
+func (node *IndexedAccessTypeNode) IndexType() *TypeNode { return node.indexType.get() }
+
+func (node *IndexedAccessTypeNode) SetIndexType(indexType *TypeNode) { node.indexType.set(indexType) }
+
 func (f *NodeFactory) NewIndexedAccessTypeNode(objectType *TypeNode, indexType *TypeNode) *Node {
-	data := f.indexedAccessTypeNodeArena.New()
-	data.ObjectType = objectType
-	data.IndexType = indexType
+	data := newData[IndexedAccessTypeNode](f)
+	data.objectType.set(objectType)
+	data.indexType.set(indexType)
 	return f.newNode(KindIndexedAccessType, data)
 }
 
 func (f *NodeFactory) UpdateIndexedAccessTypeNode(node *IndexedAccessTypeNode, objectType *TypeNode, indexType *TypeNode) *Node {
-	if objectType != node.ObjectType || indexType != node.IndexType {
+	if objectType != node.ObjectType() || indexType != node.IndexType() {
 		return updateNode(f.NewIndexedAccessTypeNode(objectType, indexType), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *IndexedAccessTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.ObjectType) || visit(v, node.IndexType)
+	return visit(v, node.ObjectType()) || visit(v, node.IndexType())
 }
 
 func (node *IndexedAccessTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateIndexedAccessTypeNode(node, v.visitNode(node.ObjectType), v.visitNode(node.IndexType))
+	return v.Factory.UpdateIndexedAccessTypeNode(node, v.visitNode(node.ObjectType()), v.visitNode(node.IndexType()))
 }
 
 func (node *IndexedAccessTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewIndexedAccessTypeNode(node.ObjectType, node.IndexType), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewIndexedAccessTypeNode(node.ObjectType(), node.IndexType()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsIndexedAccessTypeNode(node *Node) bool {
@@ -5408,33 +6139,37 @@ func IsIndexedAccessTypeNode(node *Node) bool {
 
 type TypeReferenceNode struct {
 	NodeWithTypeArgumentsBase
-	TypeName *EntityName
+	typeName link[Node] // *EntityName
 }
 
+func (node *TypeReferenceNode) TypeName() *EntityName { return node.typeName.get() }
+
+func (node *TypeReferenceNode) SetTypeName(typeName *EntityName) { node.typeName.set(typeName) }
+
 func (f *NodeFactory) NewTypeReferenceNode(typeName *EntityName, typeArguments *TypeList) *Node {
-	data := f.typeReferenceNodeArena.New()
-	data.TypeName = typeName
-	data.TypeArguments = typeArguments
+	data := newData[TypeReferenceNode](f)
+	data.typeName.set(typeName)
+	data.typeArguments.set(typeArguments)
 	return f.newNode(KindTypeReference, data)
 }
 
 func (f *NodeFactory) UpdateTypeReferenceNode(node *TypeReferenceNode, typeName *EntityName, typeArguments *TypeList) *Node {
-	if typeName != node.TypeName || typeArguments != node.TypeArguments {
+	if typeName != node.TypeName() || typeArguments != node.TypeArguments() {
 		return updateNode(f.NewTypeReferenceNode(typeName, typeArguments), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TypeReferenceNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeName) || visitNodeList(v, node.TypeArguments)
+	return visit(v, node.TypeName()) || visitNodeList(v, node.TypeArguments())
 }
 
 func (node *TypeReferenceNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTypeReferenceNode(node, v.visitNode(node.TypeName), v.visitNodes(node.TypeArguments))
+	return v.Factory.UpdateTypeReferenceNode(node, v.visitNode(node.TypeName()), v.visitNodes(node.TypeArguments()))
 }
 
 func (node *TypeReferenceNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTypeReferenceNode(node.TypeName, node.TypeArguments), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTypeReferenceNode(node.TypeName(), node.TypeArguments()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsTypeReferenceNode(node *Node) bool {
@@ -5448,34 +6183,46 @@ func IsTypeReferenceNode(node *Node) bool {
 type ExpressionWithTypeArguments struct {
 	MemberExpressionBase
 	CompositeBase
-	Expression    *Expression
-	TypeArguments *TypeList // Optional
+	expression    link[Node]     // *Expression
+	typeArguments link[NodeList] // *TypeList. Optional
+}
+
+func (node *ExpressionWithTypeArguments) Expression() *Expression { return node.expression.get() }
+
+func (node *ExpressionWithTypeArguments) SetExpression(expression *Expression) {
+	node.expression.set(expression)
+}
+
+func (node *ExpressionWithTypeArguments) TypeArguments() *TypeList { return node.typeArguments.get() }
+
+func (node *ExpressionWithTypeArguments) SetTypeArguments(typeArguments *TypeList) {
+	node.typeArguments.set(typeArguments)
 }
 
 func (f *NodeFactory) NewExpressionWithTypeArguments(expression *Expression, typeArguments *TypeList) *Node {
-	data := f.expressionWithTypeArgumentsArena.New()
-	data.Expression = expression
-	data.TypeArguments = typeArguments
+	data := newData[ExpressionWithTypeArguments](f)
+	data.expression.set(expression)
+	data.typeArguments.set(typeArguments)
 	return f.newNode(KindExpressionWithTypeArguments, data)
 }
 
 func (f *NodeFactory) UpdateExpressionWithTypeArguments(node *ExpressionWithTypeArguments, expression *Expression, typeArguments *TypeList) *Node {
-	if expression != node.Expression || typeArguments != node.TypeArguments {
+	if expression != node.Expression() || typeArguments != node.TypeArguments() {
 		return updateNode(f.NewExpressionWithTypeArguments(expression, typeArguments), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ExpressionWithTypeArguments) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visitNodeList(v, node.TypeArguments)
+	return visit(v, node.Expression()) || visitNodeList(v, node.TypeArguments())
 }
 
 func (node *ExpressionWithTypeArguments) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateExpressionWithTypeArguments(node, v.visitNode(node.Expression), v.visitNodes(node.TypeArguments))
+	return v.Factory.UpdateExpressionWithTypeArguments(node, v.visitNode(node.Expression()), v.visitNodes(node.TypeArguments()))
 }
 
 func (node *ExpressionWithTypeArguments) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewExpressionWithTypeArguments(node.Expression, node.TypeArguments), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewExpressionWithTypeArguments(node.Expression(), node.TypeArguments()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsExpressionWithTypeArguments(node *Node) bool {
@@ -5488,32 +6235,36 @@ func IsExpressionWithTypeArguments(node *Node) bool {
 
 type LiteralTypeNode struct {
 	TypeNodeBase
-	Literal *Node
+	literal link[Node] // *Node
 }
 
+func (node *LiteralTypeNode) Literal() *Node { return node.literal.get() }
+
+func (node *LiteralTypeNode) SetLiteral(literal *Node) { node.literal.set(literal) }
+
 func (f *NodeFactory) NewLiteralTypeNode(literal *Node) *Node {
-	data := f.literalTypeNodeArena.New()
-	data.Literal = literal
+	data := newData[LiteralTypeNode](f)
+	data.literal.set(literal)
 	return f.newNode(KindLiteralType, data)
 }
 
 func (f *NodeFactory) UpdateLiteralTypeNode(node *LiteralTypeNode, literal *Node) *Node {
-	if literal != node.Literal {
+	if literal != node.Literal() {
 		return updateNode(f.NewLiteralTypeNode(literal), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *LiteralTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.Literal)
+	return visit(v, node.Literal())
 }
 
 func (node *LiteralTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateLiteralTypeNode(node, v.visitNode(node.Literal))
+	return v.Factory.UpdateLiteralTypeNode(node, v.visitNode(node.Literal()))
 }
 
 func (node *LiteralTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewLiteralTypeNode(node.Literal), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewLiteralTypeNode(node.Literal()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsLiteralTypeNode(node *Node) bool {
@@ -5529,7 +6280,7 @@ type ThisTypeNode struct {
 }
 
 func (f *NodeFactory) NewThisTypeNode() *Node {
-	data := &ThisTypeNode{}
+	data := newData[ThisTypeNode](f)
 	return f.newNode(KindThisType, data)
 }
 
@@ -5547,36 +6298,54 @@ func IsThisTypeNode(node *Node) bool {
 
 type TypePredicateNode struct {
 	TypeNodeBase
-	AssertsModifier *AssertsKeyword // Optional
-	ParameterName   *TypePredicateParameterName
-	Type            *TypeNode // Optional
+	assertsModifier link[Node] // *AssertsKeyword. Optional
+	parameterName   link[Node] // *TypePredicateParameterName
+	typeNode        link[Node] // *TypeNode. Optional
 }
 
+func (node *TypePredicateNode) AssertsModifier() *AssertsKeyword { return node.assertsModifier.get() }
+
+func (node *TypePredicateNode) SetAssertsModifier(assertsModifier *AssertsKeyword) {
+	node.assertsModifier.set(assertsModifier)
+}
+
+func (node *TypePredicateNode) ParameterName() *TypePredicateParameterName {
+	return node.parameterName.get()
+}
+
+func (node *TypePredicateNode) SetParameterName(parameterName *TypePredicateParameterName) {
+	node.parameterName.set(parameterName)
+}
+
+func (node *TypePredicateNode) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *TypePredicateNode) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewTypePredicateNode(assertsModifier *AssertsKeyword, parameterName *TypePredicateParameterName, typeNode *TypeNode) *Node {
-	data := &TypePredicateNode{}
-	data.AssertsModifier = assertsModifier
-	data.ParameterName = parameterName
-	data.Type = typeNode
+	data := newData[TypePredicateNode](f)
+	data.assertsModifier.set(assertsModifier)
+	data.parameterName.set(parameterName)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindTypePredicate, data)
 }
 
 func (f *NodeFactory) UpdateTypePredicateNode(node *TypePredicateNode, assertsModifier *AssertsKeyword, parameterName *TypePredicateParameterName, typeNode *TypeNode) *Node {
-	if assertsModifier != node.AssertsModifier || parameterName != node.ParameterName || typeNode != node.Type {
+	if assertsModifier != node.AssertsModifier() || parameterName != node.ParameterName() || typeNode != node.Type() {
 		return updateNode(f.NewTypePredicateNode(assertsModifier, parameterName, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TypePredicateNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.AssertsModifier) || visit(v, node.ParameterName) || visit(v, node.Type)
+	return visit(v, node.AssertsModifier()) || visit(v, node.ParameterName()) || visit(v, node.Type())
 }
 
 func (node *TypePredicateNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTypePredicateNode(node, v.visitNode(node.AssertsModifier), v.visitNode(node.ParameterName), v.visitNode(node.Type))
+	return v.Factory.UpdateTypePredicateNode(node, v.visitNode(node.AssertsModifier()), v.visitNode(node.ParameterName()), v.visitNode(node.Type()))
 }
 
 func (node *TypePredicateNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTypePredicateNode(node.AssertsModifier, node.ParameterName, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTypePredicateNode(node.AssertsModifier(), node.ParameterName(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsTypePredicateNode(node *Node) bool {
@@ -5590,43 +6359,47 @@ func IsTypePredicateNode(node *Node) bool {
 type ImportAttribute struct {
 	NodeBase
 	CompositeBase
-	name  *ImportAttributeName
-	Value *Expression
+	name  link[Node] // *ImportAttributeName
+	value link[Node] // *Expression
 }
 
+func (node *ImportAttribute) Value() *Expression { return node.value.get() }
+
+func (node *ImportAttribute) SetValue(value *Expression) { node.value.set(value) }
+
 func (f *NodeFactory) NewImportAttribute(name *ImportAttributeName, value *Expression) *Node {
-	data := &ImportAttribute{}
-	data.name = name
-	data.Value = value
+	data := newData[ImportAttribute](f)
+	data.name.set(name)
+	data.value.set(value)
 	return f.newNode(KindImportAttribute, data)
 }
 
 func (f *NodeFactory) UpdateImportAttribute(node *ImportAttribute, name *ImportAttributeName, value *Expression) *Node {
-	if name != node.name || value != node.Value {
+	if name != node.name.get() || value != node.Value() {
 		return updateNode(f.NewImportAttribute(name, value), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ImportAttribute) ForEachChild(v Visitor) bool {
-	return visit(v, node.name) || visit(v, node.Value)
+	return visit(v, node.name.get()) || visit(v, node.Value())
 }
 
 func (node *ImportAttribute) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateImportAttribute(node, v.visitNode(node.name), v.visitNode(node.Value))
+	return v.Factory.UpdateImportAttribute(node, v.visitNode(node.name.get()), v.visitNode(node.Value()))
 }
 
 func (node *ImportAttribute) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewImportAttribute(node.name, node.Value), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewImportAttribute(node.name.get(), node.Value()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ImportAttribute) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.name) |
-		propagateSubtreeFacts(node.Value)
+	return propagateSubtreeFacts(node.name.get()) |
+		propagateSubtreeFacts(node.Value())
 }
 
 func (node *ImportAttribute) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsImportAttribute(node *Node) bool {
@@ -5641,39 +6414,45 @@ type ImportAttributes struct {
 	NodeBase
 	CompositeBase
 	Token      Kind
-	Attributes *ImportAttributeList
+	attributes link[NodeList] // *ImportAttributeList
 	MultiLine  bool
 }
 
+func (node *ImportAttributes) Attributes() *ImportAttributeList { return node.attributes.get() }
+
+func (node *ImportAttributes) SetAttributes(attributes *ImportAttributeList) {
+	node.attributes.set(attributes)
+}
+
 func (f *NodeFactory) NewImportAttributes(token Kind, attributes *ImportAttributeList, multiLine bool) *Node {
-	data := &ImportAttributes{}
+	data := newData[ImportAttributes](f)
 	data.Token = token
-	data.Attributes = attributes
+	data.attributes.set(attributes)
 	data.MultiLine = multiLine
 	return f.newNode(KindImportAttributes, data)
 }
 
 func (f *NodeFactory) UpdateImportAttributes(node *ImportAttributes, token Kind, attributes *ImportAttributeList, multiLine bool) *Node {
-	if token != node.Token || attributes != node.Attributes || multiLine != node.MultiLine {
+	if token != node.Token || attributes != node.Attributes() || multiLine != node.MultiLine {
 		return updateNode(f.NewImportAttributes(token, attributes, multiLine), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ImportAttributes) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Attributes)
+	return visitNodeList(v, node.Attributes())
 }
 
 func (node *ImportAttributes) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateImportAttributes(node, node.Token, v.visitNodes(node.Attributes), node.MultiLine)
+	return v.Factory.UpdateImportAttributes(node, node.Token, v.visitNodes(node.Attributes()), node.MultiLine)
 }
 
 func (node *ImportAttributes) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewImportAttributes(node.Token, node.Attributes, node.MultiLine), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewImportAttributes(node.Token, node.Attributes(), node.MultiLine), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ImportAttributes) computeSubtreeFacts() SubtreeFacts {
-	return propagateNodeListSubtreeFacts(node.Attributes, propagateSubtreeFacts)
+	return propagateNodeListSubtreeFacts(node.Attributes(), propagateSubtreeFacts)
 }
 
 func IsImportAttributes(node *Node) bool {
@@ -5686,33 +6465,37 @@ func IsImportAttributes(node *Node) bool {
 
 type TypeQueryNode struct {
 	NodeWithTypeArgumentsBase
-	ExprName *EntityName
+	exprName link[Node] // *EntityName
 }
 
+func (node *TypeQueryNode) ExprName() *EntityName { return node.exprName.get() }
+
+func (node *TypeQueryNode) SetExprName(exprName *EntityName) { node.exprName.set(exprName) }
+
 func (f *NodeFactory) NewTypeQueryNode(exprName *EntityName, typeArguments *TypeList) *Node {
-	data := &TypeQueryNode{}
-	data.ExprName = exprName
-	data.TypeArguments = typeArguments
+	data := newData[TypeQueryNode](f)
+	data.exprName.set(exprName)
+	data.typeArguments.set(typeArguments)
 	return f.newNode(KindTypeQuery, data)
 }
 
 func (f *NodeFactory) UpdateTypeQueryNode(node *TypeQueryNode, exprName *EntityName, typeArguments *TypeList) *Node {
-	if exprName != node.ExprName || typeArguments != node.TypeArguments {
+	if exprName != node.ExprName() || typeArguments != node.TypeArguments() {
 		return updateNode(f.NewTypeQueryNode(exprName, typeArguments), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TypeQueryNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.ExprName) || visitNodeList(v, node.TypeArguments)
+	return visit(v, node.ExprName()) || visitNodeList(v, node.TypeArguments())
 }
 
 func (node *TypeQueryNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTypeQueryNode(node, v.visitNode(node.ExprName), v.visitNodes(node.TypeArguments))
+	return v.Factory.UpdateTypeQueryNode(node, v.visitNode(node.ExprName()), v.visitNodes(node.TypeArguments()))
 }
 
 func (node *TypeQueryNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTypeQueryNode(node.ExprName, node.TypeArguments), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTypeQueryNode(node.ExprName(), node.TypeArguments()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsTypeQueryNode(node *Node) bool {
@@ -5727,47 +6510,79 @@ type MappedTypeNode struct {
 	TypeNodeBase
 	DeclarationBase
 	LocalsContainerBase
-	ReadonlyToken *TokenNode // Optional
-	TypeParameter *TypeParameterDeclarationNode
-	NameType      *TypeNode        // Optional
-	QuestionToken *TokenNode       // Optional
-	Type          *TypeNode        // Optional
-	Members       *TypeElementList // Optional
+	readonlyToken link[Node]     // *TokenNode. Optional
+	typeParameter link[Node]     // *TypeParameterDeclarationNode
+	nameType      link[Node]     // *TypeNode. Optional
+	questionToken link[Node]     // *TokenNode. Optional
+	typeNode      link[Node]     // *TypeNode. Optional
+	members       link[NodeList] // *TypeElementList. Optional
 }
 
+func (node *MappedTypeNode) ReadonlyToken() *TokenNode { return node.readonlyToken.get() }
+
+func (node *MappedTypeNode) SetReadonlyToken(readonlyToken *TokenNode) {
+	node.readonlyToken.set(readonlyToken)
+}
+
+func (node *MappedTypeNode) TypeParameter() *TypeParameterDeclarationNode {
+	return node.typeParameter.get()
+}
+
+func (node *MappedTypeNode) SetTypeParameter(typeParameter *TypeParameterDeclarationNode) {
+	node.typeParameter.set(typeParameter)
+}
+
+func (node *MappedTypeNode) NameType() *TypeNode { return node.nameType.get() }
+
+func (node *MappedTypeNode) SetNameType(nameType *TypeNode) { node.nameType.set(nameType) }
+
+func (node *MappedTypeNode) QuestionToken() *TokenNode { return node.questionToken.get() }
+
+func (node *MappedTypeNode) SetQuestionToken(questionToken *TokenNode) {
+	node.questionToken.set(questionToken)
+}
+
+func (node *MappedTypeNode) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *MappedTypeNode) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
+func (node *MappedTypeNode) Members() *TypeElementList { return node.members.get() }
+
+func (node *MappedTypeNode) SetMembers(members *TypeElementList) { node.members.set(members) }
+
 func (f *NodeFactory) NewMappedTypeNode(readonlyToken *TokenNode, typeParameter *TypeParameterDeclarationNode, nameType *TypeNode, questionToken *TokenNode, typeNode *TypeNode, members *TypeElementList) *Node {
-	data := &MappedTypeNode{}
-	data.ReadonlyToken = readonlyToken
-	data.TypeParameter = typeParameter
-	data.NameType = nameType
-	data.QuestionToken = questionToken
-	data.Type = typeNode
-	data.Members = members
+	data := newData[MappedTypeNode](f)
+	data.readonlyToken.set(readonlyToken)
+	data.typeParameter.set(typeParameter)
+	data.nameType.set(nameType)
+	data.questionToken.set(questionToken)
+	data.typeNode.set(typeNode)
+	data.members.set(members)
 	return f.newNode(KindMappedType, data)
 }
 
 func (f *NodeFactory) UpdateMappedTypeNode(node *MappedTypeNode, readonlyToken *TokenNode, typeParameter *TypeParameterDeclarationNode, nameType *TypeNode, questionToken *TokenNode, typeNode *TypeNode, members *TypeElementList) *Node {
-	if readonlyToken != node.ReadonlyToken || typeParameter != node.TypeParameter || nameType != node.NameType || questionToken != node.QuestionToken || typeNode != node.Type || members != node.Members {
+	if readonlyToken != node.ReadonlyToken() || typeParameter != node.TypeParameter() || nameType != node.NameType() || questionToken != node.QuestionToken() || typeNode != node.Type() || members != node.Members() {
 		return updateNode(f.NewMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, typeNode, members), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *MappedTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.ReadonlyToken) ||
-		visit(v, node.TypeParameter) ||
-		visit(v, node.NameType) ||
-		visit(v, node.QuestionToken) ||
-		visit(v, node.Type) ||
-		visitNodeList(v, node.Members)
+	return visit(v, node.ReadonlyToken()) ||
+		visit(v, node.TypeParameter()) ||
+		visit(v, node.NameType()) ||
+		visit(v, node.QuestionToken()) ||
+		visit(v, node.Type()) ||
+		visitNodeList(v, node.Members())
 }
 
 func (node *MappedTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateMappedTypeNode(node, v.visitNode(node.ReadonlyToken), v.visitNode(node.TypeParameter), v.visitNode(node.NameType), v.visitNode(node.QuestionToken), v.visitNode(node.Type), v.visitNodes(node.Members))
+	return v.Factory.UpdateMappedTypeNode(node, v.visitNode(node.ReadonlyToken()), v.visitNode(node.TypeParameter()), v.visitNode(node.NameType()), v.visitNode(node.QuestionToken()), v.visitNode(node.Type()), v.visitNodes(node.Members()))
 }
 
 func (node *MappedTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewMappedTypeNode(node.ReadonlyToken, node.TypeParameter, node.NameType, node.QuestionToken, node.Type, node.Members), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewMappedTypeNode(node.ReadonlyToken(), node.TypeParameter(), node.NameType(), node.QuestionToken(), node.Type(), node.Members()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsMappedTypeNode(node *Node) bool {
@@ -5781,32 +6596,36 @@ func IsMappedTypeNode(node *Node) bool {
 type TypeLiteralNode struct {
 	TypeNodeBase
 	DeclarationBase
-	Members *TypeElementList
+	members link[NodeList] // *TypeElementList
 }
 
+func (node *TypeLiteralNode) Members() *TypeElementList { return node.members.get() }
+
+func (node *TypeLiteralNode) SetMembers(members *TypeElementList) { node.members.set(members) }
+
 func (f *NodeFactory) NewTypeLiteralNode(members *TypeElementList) *Node {
-	data := f.typeLiteralNodeArena.New()
-	data.Members = members
+	data := newData[TypeLiteralNode](f)
+	data.members.set(members)
 	return f.newNode(KindTypeLiteral, data)
 }
 
 func (f *NodeFactory) UpdateTypeLiteralNode(node *TypeLiteralNode, members *TypeElementList) *Node {
-	if members != node.Members {
+	if members != node.Members() {
 		return updateNode(f.NewTypeLiteralNode(members), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TypeLiteralNode) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Members)
+	return visitNodeList(v, node.Members())
 }
 
 func (node *TypeLiteralNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTypeLiteralNode(node, v.visitNodes(node.Members))
+	return v.Factory.UpdateTypeLiteralNode(node, v.visitNodes(node.Members()))
 }
 
 func (node *TypeLiteralNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTypeLiteralNode(node.Members), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTypeLiteralNode(node.Members()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsTypeLiteralNode(node *Node) bool {
@@ -5819,32 +6638,36 @@ func IsTypeLiteralNode(node *Node) bool {
 
 type TupleTypeNode struct {
 	TypeNodeBase
-	Elements *TypeList
+	elements link[NodeList] // *TypeList
 }
 
+func (node *TupleTypeNode) Elements() *TypeList { return node.elements.get() }
+
+func (node *TupleTypeNode) SetElements(elements *TypeList) { node.elements.set(elements) }
+
 func (f *NodeFactory) NewTupleTypeNode(elements *TypeList) *Node {
-	data := &TupleTypeNode{}
-	data.Elements = elements
+	data := newData[TupleTypeNode](f)
+	data.elements.set(elements)
 	return f.newNode(KindTupleType, data)
 }
 
 func (f *NodeFactory) UpdateTupleTypeNode(node *TupleTypeNode, elements *TypeList) *Node {
-	if elements != node.Elements {
+	if elements != node.Elements() {
 		return updateNode(f.NewTupleTypeNode(elements), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TupleTypeNode) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Elements)
+	return visitNodeList(v, node.Elements())
 }
 
 func (node *TupleTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTupleTypeNode(node, v.visitNodes(node.Elements))
+	return v.Factory.UpdateTupleTypeNode(node, v.visitNodes(node.Elements()))
 }
 
 func (node *TupleTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTupleTypeNode(node.Elements), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTupleTypeNode(node.Elements()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsTupleTypeNode(node *Node) bool {
@@ -5858,45 +6681,61 @@ func IsTupleTypeNode(node *Node) bool {
 type NamedTupleMember struct {
 	TypeNodeBase
 	DeclarationBase
-	DotDotDotToken *DotDotDotToken // Optional
-	name           *IdentifierNode
-	QuestionToken  *QuestionToken // Optional
-	Type           *TypeNode
+	dotDotDotToken link[Node] // *DotDotDotToken. Optional
+	name           link[Node] // *IdentifierNode
+	questionToken  link[Node] // *QuestionToken. Optional
+	typeNode       link[Node] // *TypeNode
 }
 
+func (node *NamedTupleMember) DotDotDotToken() *DotDotDotToken { return node.dotDotDotToken.get() }
+
+func (node *NamedTupleMember) SetDotDotDotToken(dotDotDotToken *DotDotDotToken) {
+	node.dotDotDotToken.set(dotDotDotToken)
+}
+
+func (node *NamedTupleMember) QuestionToken() *QuestionToken { return node.questionToken.get() }
+
+func (node *NamedTupleMember) SetQuestionToken(questionToken *QuestionToken) {
+	node.questionToken.set(questionToken)
+}
+
+func (node *NamedTupleMember) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *NamedTupleMember) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewNamedTupleMember(dotDotDotToken *DotDotDotToken, name *IdentifierNode, questionToken *QuestionToken, typeNode *TypeNode) *Node {
-	data := &NamedTupleMember{}
-	data.DotDotDotToken = dotDotDotToken
-	data.name = name
-	data.QuestionToken = questionToken
-	data.Type = typeNode
+	data := newData[NamedTupleMember](f)
+	data.dotDotDotToken.set(dotDotDotToken)
+	data.name.set(name)
+	data.questionToken.set(questionToken)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindNamedTupleMember, data)
 }
 
 func (f *NodeFactory) UpdateNamedTupleMember(node *NamedTupleMember, dotDotDotToken *DotDotDotToken, name *IdentifierNode, questionToken *QuestionToken, typeNode *TypeNode) *Node {
-	if dotDotDotToken != node.DotDotDotToken || name != node.name || questionToken != node.QuestionToken || typeNode != node.Type {
+	if dotDotDotToken != node.DotDotDotToken() || name != node.name.get() || questionToken != node.QuestionToken() || typeNode != node.Type() {
 		return updateNode(f.NewNamedTupleMember(dotDotDotToken, name, questionToken, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *NamedTupleMember) ForEachChild(v Visitor) bool {
-	return visit(v, node.DotDotDotToken) ||
-		visit(v, node.name) ||
-		visit(v, node.QuestionToken) ||
-		visit(v, node.Type)
+	return visit(v, node.DotDotDotToken()) ||
+		visit(v, node.name.get()) ||
+		visit(v, node.QuestionToken()) ||
+		visit(v, node.Type())
 }
 
 func (node *NamedTupleMember) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateNamedTupleMember(node, v.visitNode(node.DotDotDotToken), v.visitNode(node.name), v.visitNode(node.QuestionToken), v.visitNode(node.Type))
+	return v.Factory.UpdateNamedTupleMember(node, v.visitNode(node.DotDotDotToken()), v.visitNode(node.name.get()), v.visitNode(node.QuestionToken()), v.visitNode(node.Type()))
 }
 
 func (node *NamedTupleMember) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewNamedTupleMember(node.DotDotDotToken, node.name, node.QuestionToken, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewNamedTupleMember(node.DotDotDotToken(), node.name.get(), node.QuestionToken(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *NamedTupleMember) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsNamedTupleMember(node *Node) bool {
@@ -5909,32 +6748,36 @@ func IsNamedTupleMember(node *Node) bool {
 
 type OptionalTypeNode struct {
 	TypeNodeBase
-	Type *TypeNode
+	typeNode link[Node] // *TypeNode
 }
 
+func (node *OptionalTypeNode) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *OptionalTypeNode) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewOptionalTypeNode(typeNode *TypeNode) *Node {
-	data := &OptionalTypeNode{}
-	data.Type = typeNode
+	data := newData[OptionalTypeNode](f)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindOptionalType, data)
 }
 
 func (f *NodeFactory) UpdateOptionalTypeNode(node *OptionalTypeNode, typeNode *TypeNode) *Node {
-	if typeNode != node.Type {
+	if typeNode != node.Type() {
 		return updateNode(f.NewOptionalTypeNode(typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *OptionalTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.Type)
+	return visit(v, node.Type())
 }
 
 func (node *OptionalTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateOptionalTypeNode(node, v.visitNode(node.Type))
+	return v.Factory.UpdateOptionalTypeNode(node, v.visitNode(node.Type()))
 }
 
 func (node *OptionalTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewOptionalTypeNode(node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewOptionalTypeNode(node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsOptionalTypeNode(node *Node) bool {
@@ -5947,32 +6790,36 @@ func IsOptionalTypeNode(node *Node) bool {
 
 type RestTypeNode struct {
 	TypeNodeBase
-	Type *TypeNode
+	typeNode link[Node] // *TypeNode
 }
 
+func (node *RestTypeNode) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *RestTypeNode) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewRestTypeNode(typeNode *TypeNode) *Node {
-	data := &RestTypeNode{}
-	data.Type = typeNode
+	data := newData[RestTypeNode](f)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindRestType, data)
 }
 
 func (f *NodeFactory) UpdateRestTypeNode(node *RestTypeNode, typeNode *TypeNode) *Node {
-	if typeNode != node.Type {
+	if typeNode != node.Type() {
 		return updateNode(f.NewRestTypeNode(typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *RestTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.Type)
+	return visit(v, node.Type())
 }
 
 func (node *RestTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateRestTypeNode(node, v.visitNode(node.Type))
+	return v.Factory.UpdateRestTypeNode(node, v.visitNode(node.Type()))
 }
 
 func (node *RestTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewRestTypeNode(node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewRestTypeNode(node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsRestTypeNode(node *Node) bool {
@@ -5985,32 +6832,36 @@ func IsRestTypeNode(node *Node) bool {
 
 type ParenthesizedTypeNode struct {
 	TypeNodeBase
-	Type *TypeNode
+	typeNode link[Node] // *TypeNode
 }
 
+func (node *ParenthesizedTypeNode) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *ParenthesizedTypeNode) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewParenthesizedTypeNode(typeNode *TypeNode) *Node {
-	data := f.parenthesizedTypeNodeArena.New()
-	data.Type = typeNode
+	data := newData[ParenthesizedTypeNode](f)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindParenthesizedType, data)
 }
 
 func (f *NodeFactory) UpdateParenthesizedTypeNode(node *ParenthesizedTypeNode, typeNode *TypeNode) *Node {
-	if typeNode != node.Type {
+	if typeNode != node.Type() {
 		return updateNode(f.NewParenthesizedTypeNode(typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ParenthesizedTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.Type)
+	return visit(v, node.Type())
 }
 
 func (node *ParenthesizedTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateParenthesizedTypeNode(node, v.visitNode(node.Type))
+	return v.Factory.UpdateParenthesizedTypeNode(node, v.visitNode(node.Type()))
 }
 
 func (node *ParenthesizedTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewParenthesizedTypeNode(node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewParenthesizedTypeNode(node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsParenthesizedTypeNode(node *Node) bool {
@@ -6026,30 +6877,30 @@ type FunctionTypeNode struct {
 }
 
 func (f *NodeFactory) NewFunctionTypeNode(typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	data := f.functionTypeNodeArena.New()
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
+	data := newData[FunctionTypeNode](f)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindFunctionType, data)
 }
 
 func (f *NodeFactory) UpdateFunctionTypeNode(node *FunctionTypeNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	if typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type {
+	if typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewFunctionTypeNode(typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *FunctionTypeNode) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.Type)
+	return visitNodeList(v, node.TypeParameters()) || visitNodeList(v, node.Parameters()) || visit(v, node.Type())
 }
 
 func (node *FunctionTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateFunctionTypeNode(node, v.visitNodes(node.TypeParameters), v.visitNodes(node.Parameters), v.visitNode(node.Type))
+	return v.Factory.UpdateFunctionTypeNode(node, v.visitNodes(node.TypeParameters()), v.visitNodes(node.Parameters()), v.visitNode(node.Type()))
 }
 
 func (node *FunctionTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewFunctionTypeNode(node.TypeParameters, node.Parameters, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewFunctionTypeNode(node.TypeParameters(), node.Parameters(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsFunctionTypeNode(node *Node) bool {
@@ -6065,34 +6916,34 @@ type ConstructorTypeNode struct {
 }
 
 func (f *NodeFactory) NewConstructorTypeNode(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	data := &ConstructorTypeNode{}
-	data.modifiers = modifiers
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
+	data := newData[ConstructorTypeNode](f)
+	data.modifiers.set(modifiers)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindConstructorType, data)
 }
 
 func (f *NodeFactory) UpdateConstructorTypeNode(node *ConstructorTypeNode, modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	if modifiers != node.modifiers || typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type {
+	if modifiers != node.modifiers.get() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewConstructorTypeNode(modifiers, typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ConstructorTypeNode) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Parameters) ||
-		visit(v, node.Type)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.Parameters()) ||
+		visit(v, node.Type())
 }
 
 func (node *ConstructorTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateConstructorTypeNode(node, v.visitModifiers(node.modifiers), v.visitNodes(node.TypeParameters), v.visitNodes(node.Parameters), v.visitNode(node.Type))
+	return v.Factory.UpdateConstructorTypeNode(node, v.visitModifiers(node.modifiers.get()), v.visitNodes(node.TypeParameters()), v.visitNodes(node.Parameters()), v.visitNode(node.Type()))
 }
 
 func (node *ConstructorTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewConstructorTypeNode(node.Modifiers(), node.TypeParameters, node.Parameters, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewConstructorTypeNode(node.Modifiers(), node.TypeParameters(), node.Parameters(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsConstructorTypeNode(node *Node) bool {
@@ -6109,9 +6960,11 @@ type TemplateHead struct {
 }
 
 func (f *NodeFactory) NewTemplateHead(text string, rawText string, templateFlags TokenFlags) *Node {
-	data := &TemplateHead{}
+	data := newData[TemplateHead](f)
 	data.Text = text
+	f.keepString(text)
 	data.RawText = rawText
+	f.keepString(rawText)
 	data.TemplateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
 	return f.newNode(KindTemplateHead, data)
@@ -6135,9 +6988,11 @@ type TemplateMiddle struct {
 }
 
 func (f *NodeFactory) NewTemplateMiddle(text string, rawText string, templateFlags TokenFlags) *Node {
-	data := &TemplateMiddle{}
+	data := newData[TemplateMiddle](f)
 	data.Text = text
+	f.keepString(text)
 	data.RawText = rawText
+	f.keepString(rawText)
 	data.TemplateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
 	return f.newNode(KindTemplateMiddle, data)
@@ -6161,9 +7016,11 @@ type TemplateTail struct {
 }
 
 func (f *NodeFactory) NewTemplateTail(text string, rawText string, templateFlags TokenFlags) *Node {
-	data := &TemplateTail{}
+	data := newData[TemplateTail](f)
 	data.Text = text
+	f.keepString(text)
 	data.RawText = rawText
+	f.keepString(rawText)
 	data.TemplateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
 	return f.newNode(KindTemplateTail, data)
@@ -6183,34 +7040,46 @@ func IsTemplateTail(node *Node) bool {
 
 type TemplateLiteralTypeNode struct {
 	TypeNodeBase
-	Head          *TemplateHeadNode
-	TemplateSpans *TemplateLiteralTypeSpanList
+	head          link[Node]     // *TemplateHeadNode
+	templateSpans link[NodeList] // *TemplateLiteralTypeSpanList
+}
+
+func (node *TemplateLiteralTypeNode) Head() *TemplateHeadNode { return node.head.get() }
+
+func (node *TemplateLiteralTypeNode) SetHead(head *TemplateHeadNode) { node.head.set(head) }
+
+func (node *TemplateLiteralTypeNode) TemplateSpans() *TemplateLiteralTypeSpanList {
+	return node.templateSpans.get()
+}
+
+func (node *TemplateLiteralTypeNode) SetTemplateSpans(templateSpans *TemplateLiteralTypeSpanList) {
+	node.templateSpans.set(templateSpans)
 }
 
 func (f *NodeFactory) NewTemplateLiteralTypeNode(head *TemplateHeadNode, templateSpans *TemplateLiteralTypeSpanList) *Node {
-	data := &TemplateLiteralTypeNode{}
-	data.Head = head
-	data.TemplateSpans = templateSpans
+	data := newData[TemplateLiteralTypeNode](f)
+	data.head.set(head)
+	data.templateSpans.set(templateSpans)
 	return f.newNode(KindTemplateLiteralType, data)
 }
 
 func (f *NodeFactory) UpdateTemplateLiteralTypeNode(node *TemplateLiteralTypeNode, head *TemplateHeadNode, templateSpans *TemplateLiteralTypeSpanList) *Node {
-	if head != node.Head || templateSpans != node.TemplateSpans {
+	if head != node.Head() || templateSpans != node.TemplateSpans() {
 		return updateNode(f.NewTemplateLiteralTypeNode(head, templateSpans), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TemplateLiteralTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.Head) || visitNodeList(v, node.TemplateSpans)
+	return visit(v, node.Head()) || visitNodeList(v, node.TemplateSpans())
 }
 
 func (node *TemplateLiteralTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTemplateLiteralTypeNode(node, v.visitNode(node.Head), v.visitNodes(node.TemplateSpans))
+	return v.Factory.UpdateTemplateLiteralTypeNode(node, v.visitNode(node.Head()), v.visitNodes(node.TemplateSpans()))
 }
 
 func (node *TemplateLiteralTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTemplateLiteralTypeNode(node.Head, node.TemplateSpans), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTemplateLiteralTypeNode(node.Head(), node.TemplateSpans()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsTemplateLiteralTypeNode(node *Node) bool {
@@ -6223,34 +7092,44 @@ func IsTemplateLiteralTypeNode(node *Node) bool {
 
 type TemplateLiteralTypeSpan struct {
 	TypeNodeBase
-	Type    *TypeNode
-	Literal *TemplateMiddleOrTail
+	typeNode link[Node] // *TypeNode
+	literal  link[Node] // *TemplateMiddleOrTail
+}
+
+func (node *TemplateLiteralTypeSpan) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *TemplateLiteralTypeSpan) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
+func (node *TemplateLiteralTypeSpan) Literal() *TemplateMiddleOrTail { return node.literal.get() }
+
+func (node *TemplateLiteralTypeSpan) SetLiteral(literal *TemplateMiddleOrTail) {
+	node.literal.set(literal)
 }
 
 func (f *NodeFactory) NewTemplateLiteralTypeSpan(typeNode *TypeNode, literal *TemplateMiddleOrTail) *Node {
-	data := &TemplateLiteralTypeSpan{}
-	data.Type = typeNode
-	data.Literal = literal
+	data := newData[TemplateLiteralTypeSpan](f)
+	data.typeNode.set(typeNode)
+	data.literal.set(literal)
 	return f.newNode(KindTemplateLiteralTypeSpan, data)
 }
 
 func (f *NodeFactory) UpdateTemplateLiteralTypeSpan(node *TemplateLiteralTypeSpan, typeNode *TypeNode, literal *TemplateMiddleOrTail) *Node {
-	if typeNode != node.Type || literal != node.Literal {
+	if typeNode != node.Type() || literal != node.Literal() {
 		return updateNode(f.NewTemplateLiteralTypeSpan(typeNode, literal), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TemplateLiteralTypeSpan) ForEachChild(v Visitor) bool {
-	return visit(v, node.Type) || visit(v, node.Literal)
+	return visit(v, node.Type()) || visit(v, node.Literal())
 }
 
 func (node *TemplateLiteralTypeSpan) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTemplateLiteralTypeSpan(node, v.visitNode(node.Type), v.visitNode(node.Literal))
+	return v.Factory.UpdateTemplateLiteralTypeSpan(node, v.visitNode(node.Type()), v.visitNode(node.Literal()))
 }
 
 func (node *TemplateLiteralTypeSpan) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTemplateLiteralTypeSpan(node.Type, node.Literal), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTemplateLiteralTypeSpan(node.Type(), node.Literal()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsTemplateLiteralTypeSpan(node *Node) bool {
@@ -6265,34 +7144,41 @@ type SyntheticExpression struct {
 	ExpressionBase
 	Type            any
 	IsSpread        bool
-	TupleNameSource *Node // Optional
+	tupleNameSource link[Node] // *Node. Optional
+}
+
+func (node *SyntheticExpression) TupleNameSource() *Node { return node.tupleNameSource.get() }
+
+func (node *SyntheticExpression) SetTupleNameSource(tupleNameSource *Node) {
+	node.tupleNameSource.set(tupleNameSource)
 }
 
 func (f *NodeFactory) NewSyntheticExpression(typeNode any, isSpread bool, tupleNameSource *Node) *Node {
-	data := &SyntheticExpression{}
+	data := newData[SyntheticExpression](f)
 	data.Type = typeNode
+	f.keepValue(typeNode)
 	data.IsSpread = isSpread
-	data.TupleNameSource = tupleNameSource
+	data.tupleNameSource.set(tupleNameSource)
 	return f.newNode(KindSyntheticExpression, data)
 }
 
 func (f *NodeFactory) UpdateSyntheticExpression(node *SyntheticExpression, typeNode any, isSpread bool, tupleNameSource *Node) *Node {
-	if typeNode != node.Type || isSpread != node.IsSpread || tupleNameSource != node.TupleNameSource {
+	if typeNode != node.Type || isSpread != node.IsSpread || tupleNameSource != node.TupleNameSource() {
 		return updateNode(f.NewSyntheticExpression(typeNode, isSpread, tupleNameSource), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *SyntheticExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.TupleNameSource)
+	return visit(v, node.TupleNameSource())
 }
 
 func (node *SyntheticExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateSyntheticExpression(node, node.Type, node.IsSpread, v.visitNode(node.TupleNameSource))
+	return v.Factory.UpdateSyntheticExpression(node, node.Type, node.IsSpread, v.visitNode(node.TupleNameSource()))
 }
 
 func (node *SyntheticExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewSyntheticExpression(node.Type, node.IsSpread, node.TupleNameSource), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewSyntheticExpression(node.Type, node.IsSpread, node.TupleNameSource()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsSyntheticExpression(node *Node) bool {
@@ -6305,36 +7191,42 @@ func IsSyntheticExpression(node *Node) bool {
 
 type PartiallyEmittedExpression struct {
 	LeftHandSideExpressionBase
-	Expression *Expression
+	expression link[Node] // *Expression
+}
+
+func (node *PartiallyEmittedExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *PartiallyEmittedExpression) SetExpression(expression *Expression) {
+	node.expression.set(expression)
 }
 
 func (f *NodeFactory) NewPartiallyEmittedExpression(expression *Expression) *Node {
-	data := &PartiallyEmittedExpression{}
-	data.Expression = expression
+	data := newData[PartiallyEmittedExpression](f)
+	data.expression.set(expression)
 	return f.newNode(KindPartiallyEmittedExpression, data)
 }
 
 func (f *NodeFactory) UpdatePartiallyEmittedExpression(node *PartiallyEmittedExpression, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewPartiallyEmittedExpression(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *PartiallyEmittedExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *PartiallyEmittedExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdatePartiallyEmittedExpression(node, v.visitNode(node.Expression))
+	return v.Factory.UpdatePartiallyEmittedExpression(node, v.visitNode(node.Expression()))
 }
 
 func (node *PartiallyEmittedExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewPartiallyEmittedExpression(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewPartiallyEmittedExpression(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *PartiallyEmittedExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression)
+	return propagateSubtreeFacts(node.Expression())
 }
 
 func IsPartiallyEmittedExpression(node *Node) bool {
@@ -6348,36 +7240,52 @@ func IsPartiallyEmittedExpression(node *Node) bool {
 type JsxElement struct {
 	PrimaryExpressionBase
 	CompositeBase
-	OpeningElement *JsxOpeningElementNode
-	Children       *JsxChildList
-	ClosingElement *JsxClosingElementNode
+	openingElement link[Node]     // *JsxOpeningElementNode
+	children       link[NodeList] // *JsxChildList
+	closingElement link[Node]     // *JsxClosingElementNode
+}
+
+func (node *JsxElement) OpeningElement() *JsxOpeningElementNode { return node.openingElement.get() }
+
+func (node *JsxElement) SetOpeningElement(openingElement *JsxOpeningElementNode) {
+	node.openingElement.set(openingElement)
+}
+
+func (node *JsxElement) Children() *JsxChildList { return node.children.get() }
+
+func (node *JsxElement) SetChildren(children *JsxChildList) { node.children.set(children) }
+
+func (node *JsxElement) ClosingElement() *JsxClosingElementNode { return node.closingElement.get() }
+
+func (node *JsxElement) SetClosingElement(closingElement *JsxClosingElementNode) {
+	node.closingElement.set(closingElement)
 }
 
 func (f *NodeFactory) NewJsxElement(openingElement *JsxOpeningElementNode, children *JsxChildList, closingElement *JsxClosingElementNode) *Node {
-	data := &JsxElement{}
-	data.OpeningElement = openingElement
-	data.Children = children
-	data.ClosingElement = closingElement
+	data := newData[JsxElement](f)
+	data.openingElement.set(openingElement)
+	data.children.set(children)
+	data.closingElement.set(closingElement)
 	return f.newNode(KindJsxElement, data)
 }
 
 func (f *NodeFactory) UpdateJsxElement(node *JsxElement, openingElement *JsxOpeningElementNode, children *JsxChildList, closingElement *JsxClosingElementNode) *Node {
-	if openingElement != node.OpeningElement || children != node.Children || closingElement != node.ClosingElement {
+	if openingElement != node.OpeningElement() || children != node.Children() || closingElement != node.ClosingElement() {
 		return updateNode(f.NewJsxElement(openingElement, children, closingElement), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JsxElement) ForEachChild(v Visitor) bool {
-	return visit(v, node.OpeningElement) || visitNodeList(v, node.Children) || visit(v, node.ClosingElement)
+	return visit(v, node.OpeningElement()) || visitNodeList(v, node.Children()) || visit(v, node.ClosingElement())
 }
 
 func (node *JsxElement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJsxElement(node, v.visitNode(node.OpeningElement), v.visitNodes(node.Children), v.visitNode(node.ClosingElement))
+	return v.Factory.UpdateJsxElement(node, v.visitNode(node.OpeningElement()), v.visitNodes(node.Children()), v.visitNode(node.ClosingElement()))
 }
 
 func (node *JsxElement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJsxElement(node.OpeningElement, node.Children, node.ClosingElement), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJsxElement(node.OpeningElement(), node.Children(), node.ClosingElement()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJsxElement(node *Node) bool {
@@ -6392,32 +7300,38 @@ type JsxAttributes struct {
 	PrimaryExpressionBase
 	DeclarationBase
 	CompositeBase
-	Properties *JsxAttributeList
+	properties link[NodeList] // *JsxAttributeList
+}
+
+func (node *JsxAttributes) Properties() *JsxAttributeList { return node.properties.get() }
+
+func (node *JsxAttributes) SetProperties(properties *JsxAttributeList) {
+	node.properties.set(properties)
 }
 
 func (f *NodeFactory) NewJsxAttributes(properties *JsxAttributeList) *Node {
-	data := &JsxAttributes{}
-	data.Properties = properties
+	data := newData[JsxAttributes](f)
+	data.properties.set(properties)
 	return f.newNode(KindJsxAttributes, data)
 }
 
 func (f *NodeFactory) UpdateJsxAttributes(node *JsxAttributes, properties *JsxAttributeList) *Node {
-	if properties != node.Properties {
+	if properties != node.Properties() {
 		return updateNode(f.NewJsxAttributes(properties), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JsxAttributes) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Properties)
+	return visitNodeList(v, node.Properties())
 }
 
 func (node *JsxAttributes) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJsxAttributes(node, v.visitNodes(node.Properties))
+	return v.Factory.UpdateJsxAttributes(node, v.visitNodes(node.Properties()))
 }
 
 func (node *JsxAttributes) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJsxAttributes(node.Properties), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJsxAttributes(node.Properties()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJsxAttributes(node *Node) bool {
@@ -6431,38 +7345,42 @@ func IsJsxAttributes(node *Node) bool {
 type JsxNamespacedName struct {
 	ExpressionBase
 	CompositeBase
-	Namespace *IdentifierNode
-	name      *IdentifierNode
+	namespace link[Node] // *IdentifierNode
+	name      link[Node] // *IdentifierNode
 }
 
+func (node *JsxNamespacedName) Namespace() *IdentifierNode { return node.namespace.get() }
+
+func (node *JsxNamespacedName) SetNamespace(namespace *IdentifierNode) { node.namespace.set(namespace) }
+
 func (f *NodeFactory) NewJsxNamespacedName(namespace *IdentifierNode, name *IdentifierNode) *Node {
-	data := &JsxNamespacedName{}
-	data.Namespace = namespace
-	data.name = name
+	data := newData[JsxNamespacedName](f)
+	data.namespace.set(namespace)
+	data.name.set(name)
 	return f.newNode(KindJsxNamespacedName, data)
 }
 
 func (f *NodeFactory) UpdateJsxNamespacedName(node *JsxNamespacedName, namespace *IdentifierNode, name *IdentifierNode) *Node {
-	if namespace != node.Namespace || name != node.name {
+	if namespace != node.Namespace() || name != node.name.get() {
 		return updateNode(f.NewJsxNamespacedName(namespace, name), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JsxNamespacedName) ForEachChild(v Visitor) bool {
-	return visit(v, node.Namespace) || visit(v, node.name)
+	return visit(v, node.Namespace()) || visit(v, node.name.get())
 }
 
 func (node *JsxNamespacedName) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJsxNamespacedName(node, v.visitNode(node.Namespace), v.visitNode(node.name))
+	return v.Factory.UpdateJsxNamespacedName(node, v.visitNode(node.Namespace()), v.visitNode(node.name.get()))
 }
 
 func (node *JsxNamespacedName) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJsxNamespacedName(node.Namespace, node.name), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJsxNamespacedName(node.Namespace(), node.name.get()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *JsxNamespacedName) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsJsxNamespacedName(node *Node) bool {
@@ -6476,36 +7394,52 @@ func IsJsxNamespacedName(node *Node) bool {
 type JsxOpeningElement struct {
 	ExpressionBase
 	CompositeBase
-	TagName       *JsxTagNameExpression
-	TypeArguments *TypeList // Optional
-	Attributes    *JsxAttributesNode
+	tagName       link[Node]     // *JsxTagNameExpression
+	typeArguments link[NodeList] // *TypeList. Optional
+	attributes    link[Node]     // *JsxAttributesNode
+}
+
+func (node *JsxOpeningElement) TagName() *JsxTagNameExpression { return node.tagName.get() }
+
+func (node *JsxOpeningElement) SetTagName(tagName *JsxTagNameExpression) { node.tagName.set(tagName) }
+
+func (node *JsxOpeningElement) TypeArguments() *TypeList { return node.typeArguments.get() }
+
+func (node *JsxOpeningElement) SetTypeArguments(typeArguments *TypeList) {
+	node.typeArguments.set(typeArguments)
+}
+
+func (node *JsxOpeningElement) Attributes() *JsxAttributesNode { return node.attributes.get() }
+
+func (node *JsxOpeningElement) SetAttributes(attributes *JsxAttributesNode) {
+	node.attributes.set(attributes)
 }
 
 func (f *NodeFactory) NewJsxOpeningElement(tagName *JsxTagNameExpression, typeArguments *TypeList, attributes *JsxAttributesNode) *Node {
-	data := &JsxOpeningElement{}
-	data.TagName = tagName
-	data.TypeArguments = typeArguments
-	data.Attributes = attributes
+	data := newData[JsxOpeningElement](f)
+	data.tagName.set(tagName)
+	data.typeArguments.set(typeArguments)
+	data.attributes.set(attributes)
 	return f.newNode(KindJsxOpeningElement, data)
 }
 
 func (f *NodeFactory) UpdateJsxOpeningElement(node *JsxOpeningElement, tagName *JsxTagNameExpression, typeArguments *TypeList, attributes *JsxAttributesNode) *Node {
-	if tagName != node.TagName || typeArguments != node.TypeArguments || attributes != node.Attributes {
+	if tagName != node.TagName() || typeArguments != node.TypeArguments() || attributes != node.Attributes() {
 		return updateNode(f.NewJsxOpeningElement(tagName, typeArguments, attributes), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JsxOpeningElement) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visitNodeList(v, node.TypeArguments) || visit(v, node.Attributes)
+	return visit(v, node.TagName()) || visitNodeList(v, node.TypeArguments()) || visit(v, node.Attributes())
 }
 
 func (node *JsxOpeningElement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJsxOpeningElement(node, v.visitNode(node.TagName), v.visitNodes(node.TypeArguments), v.visitNode(node.Attributes))
+	return v.Factory.UpdateJsxOpeningElement(node, v.visitNode(node.TagName()), v.visitNodes(node.TypeArguments()), v.visitNode(node.Attributes()))
 }
 
 func (node *JsxOpeningElement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJsxOpeningElement(node.TagName, node.TypeArguments, node.Attributes), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJsxOpeningElement(node.TagName(), node.TypeArguments(), node.Attributes()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJsxOpeningElement(node *Node) bool {
@@ -6519,36 +7453,54 @@ func IsJsxOpeningElement(node *Node) bool {
 type JsxSelfClosingElement struct {
 	PrimaryExpressionBase
 	CompositeBase
-	TagName       *JsxTagNameExpression
-	TypeArguments *TypeList // Optional
-	Attributes    *JsxAttributesNode
+	tagName       link[Node]     // *JsxTagNameExpression
+	typeArguments link[NodeList] // *TypeList. Optional
+	attributes    link[Node]     // *JsxAttributesNode
+}
+
+func (node *JsxSelfClosingElement) TagName() *JsxTagNameExpression { return node.tagName.get() }
+
+func (node *JsxSelfClosingElement) SetTagName(tagName *JsxTagNameExpression) {
+	node.tagName.set(tagName)
+}
+
+func (node *JsxSelfClosingElement) TypeArguments() *TypeList { return node.typeArguments.get() }
+
+func (node *JsxSelfClosingElement) SetTypeArguments(typeArguments *TypeList) {
+	node.typeArguments.set(typeArguments)
+}
+
+func (node *JsxSelfClosingElement) Attributes() *JsxAttributesNode { return node.attributes.get() }
+
+func (node *JsxSelfClosingElement) SetAttributes(attributes *JsxAttributesNode) {
+	node.attributes.set(attributes)
 }
 
 func (f *NodeFactory) NewJsxSelfClosingElement(tagName *JsxTagNameExpression, typeArguments *TypeList, attributes *JsxAttributesNode) *Node {
-	data := &JsxSelfClosingElement{}
-	data.TagName = tagName
-	data.TypeArguments = typeArguments
-	data.Attributes = attributes
+	data := newData[JsxSelfClosingElement](f)
+	data.tagName.set(tagName)
+	data.typeArguments.set(typeArguments)
+	data.attributes.set(attributes)
 	return f.newNode(KindJsxSelfClosingElement, data)
 }
 
 func (f *NodeFactory) UpdateJsxSelfClosingElement(node *JsxSelfClosingElement, tagName *JsxTagNameExpression, typeArguments *TypeList, attributes *JsxAttributesNode) *Node {
-	if tagName != node.TagName || typeArguments != node.TypeArguments || attributes != node.Attributes {
+	if tagName != node.TagName() || typeArguments != node.TypeArguments() || attributes != node.Attributes() {
 		return updateNode(f.NewJsxSelfClosingElement(tagName, typeArguments, attributes), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JsxSelfClosingElement) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visitNodeList(v, node.TypeArguments) || visit(v, node.Attributes)
+	return visit(v, node.TagName()) || visitNodeList(v, node.TypeArguments()) || visit(v, node.Attributes())
 }
 
 func (node *JsxSelfClosingElement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJsxSelfClosingElement(node, v.visitNode(node.TagName), v.visitNodes(node.TypeArguments), v.visitNode(node.Attributes))
+	return v.Factory.UpdateJsxSelfClosingElement(node, v.visitNode(node.TagName()), v.visitNodes(node.TypeArguments()), v.visitNode(node.Attributes()))
 }
 
 func (node *JsxSelfClosingElement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJsxSelfClosingElement(node.TagName, node.TypeArguments, node.Attributes), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJsxSelfClosingElement(node.TagName(), node.TypeArguments(), node.Attributes()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJsxSelfClosingElement(node *Node) bool {
@@ -6562,36 +7514,52 @@ func IsJsxSelfClosingElement(node *Node) bool {
 type JsxFragment struct {
 	PrimaryExpressionBase
 	CompositeBase
-	OpeningFragment *JsxOpeningFragmentNode
-	Children        *JsxChildList
-	ClosingFragment *JsxClosingFragmentNode
+	openingFragment link[Node]     // *JsxOpeningFragmentNode
+	children        link[NodeList] // *JsxChildList
+	closingFragment link[Node]     // *JsxClosingFragmentNode
+}
+
+func (node *JsxFragment) OpeningFragment() *JsxOpeningFragmentNode { return node.openingFragment.get() }
+
+func (node *JsxFragment) SetOpeningFragment(openingFragment *JsxOpeningFragmentNode) {
+	node.openingFragment.set(openingFragment)
+}
+
+func (node *JsxFragment) Children() *JsxChildList { return node.children.get() }
+
+func (node *JsxFragment) SetChildren(children *JsxChildList) { node.children.set(children) }
+
+func (node *JsxFragment) ClosingFragment() *JsxClosingFragmentNode { return node.closingFragment.get() }
+
+func (node *JsxFragment) SetClosingFragment(closingFragment *JsxClosingFragmentNode) {
+	node.closingFragment.set(closingFragment)
 }
 
 func (f *NodeFactory) NewJsxFragment(openingFragment *JsxOpeningFragmentNode, children *JsxChildList, closingFragment *JsxClosingFragmentNode) *Node {
-	data := &JsxFragment{}
-	data.OpeningFragment = openingFragment
-	data.Children = children
-	data.ClosingFragment = closingFragment
+	data := newData[JsxFragment](f)
+	data.openingFragment.set(openingFragment)
+	data.children.set(children)
+	data.closingFragment.set(closingFragment)
 	return f.newNode(KindJsxFragment, data)
 }
 
 func (f *NodeFactory) UpdateJsxFragment(node *JsxFragment, openingFragment *JsxOpeningFragmentNode, children *JsxChildList, closingFragment *JsxClosingFragmentNode) *Node {
-	if openingFragment != node.OpeningFragment || children != node.Children || closingFragment != node.ClosingFragment {
+	if openingFragment != node.OpeningFragment() || children != node.Children() || closingFragment != node.ClosingFragment() {
 		return updateNode(f.NewJsxFragment(openingFragment, children, closingFragment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JsxFragment) ForEachChild(v Visitor) bool {
-	return visit(v, node.OpeningFragment) || visitNodeList(v, node.Children) || visit(v, node.ClosingFragment)
+	return visit(v, node.OpeningFragment()) || visitNodeList(v, node.Children()) || visit(v, node.ClosingFragment())
 }
 
 func (node *JsxFragment) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJsxFragment(node, v.visitNode(node.OpeningFragment), v.visitNodes(node.Children), v.visitNode(node.ClosingFragment))
+	return v.Factory.UpdateJsxFragment(node, v.visitNode(node.OpeningFragment()), v.visitNodes(node.Children()), v.visitNode(node.ClosingFragment()))
 }
 
 func (node *JsxFragment) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJsxFragment(node.OpeningFragment, node.Children, node.ClosingFragment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJsxFragment(node.OpeningFragment(), node.Children(), node.ClosingFragment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJsxFragment(node *Node) bool {
@@ -6607,7 +7575,7 @@ type JsxOpeningFragment struct {
 }
 
 func (f *NodeFactory) NewJsxOpeningFragment() *Node {
-	data := &JsxOpeningFragment{}
+	data := newData[JsxOpeningFragment](f)
 	return f.newNode(KindJsxOpeningFragment, data)
 }
 
@@ -6628,7 +7596,7 @@ type JsxClosingFragment struct {
 }
 
 func (f *NodeFactory) NewJsxClosingFragment() *Node {
-	data := &JsxClosingFragment{}
+	data := newData[JsxClosingFragment](f)
 	return f.newNode(KindJsxClosingFragment, data)
 }
 
@@ -6648,38 +7616,44 @@ type JsxAttribute struct {
 	NodeBase
 	DeclarationBase
 	CompositeBase
-	name        *JsxAttributeName
-	Initializer *JsxAttributeValue // Optional
+	name        link[Node] // *JsxAttributeName
+	initializer link[Node] // *JsxAttributeValue. Optional
+}
+
+func (node *JsxAttribute) Initializer() *JsxAttributeValue { return node.initializer.get() }
+
+func (node *JsxAttribute) SetInitializer(initializer *JsxAttributeValue) {
+	node.initializer.set(initializer)
 }
 
 func (f *NodeFactory) NewJsxAttribute(name *JsxAttributeName, initializer *JsxAttributeValue) *Node {
-	data := &JsxAttribute{}
-	data.name = name
-	data.Initializer = initializer
+	data := newData[JsxAttribute](f)
+	data.name.set(name)
+	data.initializer.set(initializer)
 	return f.newNode(KindJsxAttribute, data)
 }
 
 func (f *NodeFactory) UpdateJsxAttribute(node *JsxAttribute, name *JsxAttributeName, initializer *JsxAttributeValue) *Node {
-	if name != node.name || initializer != node.Initializer {
+	if name != node.name.get() || initializer != node.Initializer() {
 		return updateNode(f.NewJsxAttribute(name, initializer), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JsxAttribute) ForEachChild(v Visitor) bool {
-	return visit(v, node.name) || visit(v, node.Initializer)
+	return visit(v, node.name.get()) || visit(v, node.Initializer())
 }
 
 func (node *JsxAttribute) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJsxAttribute(node, v.visitNode(node.name), v.visitNode(node.Initializer))
+	return v.Factory.UpdateJsxAttribute(node, v.visitNode(node.name.get()), v.visitNode(node.Initializer()))
 }
 
 func (node *JsxAttribute) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJsxAttribute(node.name, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJsxAttribute(node.name.get(), node.Initializer()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *JsxAttribute) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsJsxAttribute(node *Node) bool {
@@ -6694,32 +7668,38 @@ type JsxSpreadAttribute struct {
 	ObjectLiteralElementBase
 	NodeBase
 	DeclarationBase
-	Expression *Expression
+	expression link[Node] // *Expression
+}
+
+func (node *JsxSpreadAttribute) Expression() *Expression { return node.expression.get() }
+
+func (node *JsxSpreadAttribute) SetExpression(expression *Expression) {
+	node.expression.set(expression)
 }
 
 func (f *NodeFactory) NewJsxSpreadAttribute(expression *Expression) *Node {
-	data := &JsxSpreadAttribute{}
-	data.Expression = expression
+	data := newData[JsxSpreadAttribute](f)
+	data.expression.set(expression)
 	return f.newNode(KindJsxSpreadAttribute, data)
 }
 
 func (f *NodeFactory) UpdateJsxSpreadAttribute(node *JsxSpreadAttribute, expression *Expression) *Node {
-	if expression != node.Expression {
+	if expression != node.Expression() {
 		return updateNode(f.NewJsxSpreadAttribute(expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JsxSpreadAttribute) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression)
+	return visit(v, node.Expression())
 }
 
 func (node *JsxSpreadAttribute) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJsxSpreadAttribute(node, v.visitNode(node.Expression))
+	return v.Factory.UpdateJsxSpreadAttribute(node, v.visitNode(node.Expression()))
 }
 
 func (node *JsxSpreadAttribute) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJsxSpreadAttribute(node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJsxSpreadAttribute(node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJsxSpreadAttribute(node *Node) bool {
@@ -6732,32 +7712,36 @@ func IsJsxSpreadAttribute(node *Node) bool {
 
 type JsxClosingElement struct {
 	NodeBase
-	TagName *JsxTagNameExpression
+	tagName link[Node] // *JsxTagNameExpression
 }
 
+func (node *JsxClosingElement) TagName() *JsxTagNameExpression { return node.tagName.get() }
+
+func (node *JsxClosingElement) SetTagName(tagName *JsxTagNameExpression) { node.tagName.set(tagName) }
+
 func (f *NodeFactory) NewJsxClosingElement(tagName *JsxTagNameExpression) *Node {
-	data := &JsxClosingElement{}
-	data.TagName = tagName
+	data := newData[JsxClosingElement](f)
+	data.tagName.set(tagName)
 	return f.newNode(KindJsxClosingElement, data)
 }
 
 func (f *NodeFactory) UpdateJsxClosingElement(node *JsxClosingElement, tagName *JsxTagNameExpression) *Node {
-	if tagName != node.TagName {
+	if tagName != node.TagName() {
 		return updateNode(f.NewJsxClosingElement(tagName), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JsxClosingElement) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName)
+	return visit(v, node.TagName())
 }
 
 func (node *JsxClosingElement) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJsxClosingElement(node, v.visitNode(node.TagName))
+	return v.Factory.UpdateJsxClosingElement(node, v.visitNode(node.TagName()))
 }
 
 func (node *JsxClosingElement) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJsxClosingElement(node.TagName), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJsxClosingElement(node.TagName()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJsxClosingElement(node *Node) bool {
@@ -6770,34 +7754,44 @@ func IsJsxClosingElement(node *Node) bool {
 
 type JsxExpression struct {
 	ExpressionBase
-	DotDotDotToken *DotDotDotToken // Optional
-	Expression     *Expression     // Optional
+	dotDotDotToken link[Node] // *DotDotDotToken. Optional
+	expression     link[Node] // *Expression. Optional
 }
 
+func (node *JsxExpression) DotDotDotToken() *DotDotDotToken { return node.dotDotDotToken.get() }
+
+func (node *JsxExpression) SetDotDotDotToken(dotDotDotToken *DotDotDotToken) {
+	node.dotDotDotToken.set(dotDotDotToken)
+}
+
+func (node *JsxExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *JsxExpression) SetExpression(expression *Expression) { node.expression.set(expression) }
+
 func (f *NodeFactory) NewJsxExpression(dotDotDotToken *DotDotDotToken, expression *Expression) *Node {
-	data := &JsxExpression{}
-	data.DotDotDotToken = dotDotDotToken
-	data.Expression = expression
+	data := newData[JsxExpression](f)
+	data.dotDotDotToken.set(dotDotDotToken)
+	data.expression.set(expression)
 	return f.newNode(KindJsxExpression, data)
 }
 
 func (f *NodeFactory) UpdateJsxExpression(node *JsxExpression, dotDotDotToken *DotDotDotToken, expression *Expression) *Node {
-	if dotDotDotToken != node.DotDotDotToken || expression != node.Expression {
+	if dotDotDotToken != node.DotDotDotToken() || expression != node.Expression() {
 		return updateNode(f.NewJsxExpression(dotDotDotToken, expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JsxExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.DotDotDotToken) || visit(v, node.Expression)
+	return visit(v, node.DotDotDotToken()) || visit(v, node.Expression())
 }
 
 func (node *JsxExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJsxExpression(node, v.visitNode(node.DotDotDotToken), v.visitNode(node.Expression))
+	return v.Factory.UpdateJsxExpression(node, v.visitNode(node.DotDotDotToken()), v.visitNode(node.Expression()))
 }
 
 func (node *JsxExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJsxExpression(node.DotDotDotToken, node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJsxExpression(node.DotDotDotToken(), node.Expression()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJsxExpression(node *Node) bool {
@@ -6815,8 +7809,9 @@ type JsxText struct {
 }
 
 func (f *NodeFactory) NewJsxText(text string, containsOnlyTriviaWhiteSpaces bool) *Node {
-	data := &JsxText{}
+	data := newData[JsxText](f)
 	data.Text = text
+	f.keepString(text)
 	data.ContainsOnlyTriviaWhiteSpaces = containsOnlyTriviaWhiteSpaces
 	f.textCount++
 	return f.newNode(KindJsxText, data)
@@ -6840,8 +7835,9 @@ type SyntaxList struct {
 }
 
 func (f *NodeFactory) NewSyntaxList(children []*Node) *Node {
-	data := &SyntaxList{}
+	data := newData[SyntaxList](f)
 	data.Children = children
+	f.keepNodes(children)
 	return f.newNode(KindSyntaxList, data)
 }
 
@@ -6875,34 +7871,42 @@ func IsSyntaxList(node *Node) bool {
 
 type JSDoc struct {
 	NodeBase
-	Comment *NodeList
-	Tags    *NodeList // Optional
+	comment link[NodeList] // *NodeList
+	tags    link[NodeList] // *NodeList. Optional
 }
 
+func (node *JSDoc) Comment() *NodeList { return node.comment.get() }
+
+func (node *JSDoc) SetComment(comment *NodeList) { node.comment.set(comment) }
+
+func (node *JSDoc) Tags() *NodeList { return node.tags.get() }
+
+func (node *JSDoc) SetTags(tags *NodeList) { node.tags.set(tags) }
+
 func (f *NodeFactory) NewJSDoc(comment *NodeList, tags *NodeList) *Node {
-	data := f.jsdocArena.New()
-	data.Comment = comment
-	data.Tags = tags
+	data := newData[JSDoc](f)
+	data.comment.set(comment)
+	data.tags.set(tags)
 	return f.newNode(KindJSDoc, data)
 }
 
 func (f *NodeFactory) UpdateJSDoc(node *JSDoc, comment *NodeList, tags *NodeList) *Node {
-	if comment != node.Comment || tags != node.Tags {
+	if comment != node.Comment() || tags != node.Tags() {
 		return updateNode(f.NewJSDoc(comment, tags), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDoc) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Comment) || visitNodeList(v, node.Tags)
+	return visitNodeList(v, node.Comment()) || visitNodeList(v, node.Tags())
 }
 
 func (node *JSDoc) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDoc(node, v.visitNodes(node.Comment), v.visitNodes(node.Tags))
+	return v.Factory.UpdateJSDoc(node, v.visitNodes(node.Comment()), v.visitNodes(node.Tags()))
 }
 
 func (node *JSDoc) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDoc(node.Comment, node.Tags), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDoc(node.Comment(), node.Tags()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDoc(node *Node) bool {
@@ -6915,32 +7919,36 @@ func IsJSDoc(node *Node) bool {
 
 type JSDocTypeExpression struct {
 	TypeNodeBase
-	Type *TypeNode
+	typeNode link[Node] // *TypeNode
 }
 
+func (node *JSDocTypeExpression) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *JSDocTypeExpression) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewJSDocTypeExpression(typeNode *TypeNode) *Node {
-	data := &JSDocTypeExpression{}
-	data.Type = typeNode
+	data := newData[JSDocTypeExpression](f)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindJSDocTypeExpression, data)
 }
 
 func (f *NodeFactory) UpdateJSDocTypeExpression(node *JSDocTypeExpression, typeNode *TypeNode) *Node {
-	if typeNode != node.Type {
+	if typeNode != node.Type() {
 		return updateNode(f.NewJSDocTypeExpression(typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocTypeExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Type)
+	return visit(v, node.Type())
 }
 
 func (node *JSDocTypeExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocTypeExpression(node, v.visitNode(node.Type))
+	return v.Factory.UpdateJSDocTypeExpression(node, v.visitNode(node.Type()))
 }
 
 func (node *JSDocTypeExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocTypeExpression(node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocTypeExpression(node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocTypeExpression(node *Node) bool {
@@ -6953,32 +7961,36 @@ func IsJSDocTypeExpression(node *Node) bool {
 
 type JSDocNonNullableType struct {
 	JSDocTypeBase
-	Type *TypeNode
+	typeNode link[Node] // *TypeNode
 }
 
+func (node *JSDocNonNullableType) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *JSDocNonNullableType) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewJSDocNonNullableType(typeNode *TypeNode) *Node {
-	data := &JSDocNonNullableType{}
-	data.Type = typeNode
+	data := newData[JSDocNonNullableType](f)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindJSDocNonNullableType, data)
 }
 
 func (f *NodeFactory) UpdateJSDocNonNullableType(node *JSDocNonNullableType, typeNode *TypeNode) *Node {
-	if typeNode != node.Type {
+	if typeNode != node.Type() {
 		return updateNode(f.NewJSDocNonNullableType(typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocNonNullableType) ForEachChild(v Visitor) bool {
-	return visit(v, node.Type)
+	return visit(v, node.Type())
 }
 
 func (node *JSDocNonNullableType) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocNonNullableType(node, v.visitNode(node.Type))
+	return v.Factory.UpdateJSDocNonNullableType(node, v.visitNode(node.Type()))
 }
 
 func (node *JSDocNonNullableType) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocNonNullableType(node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocNonNullableType(node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocNonNullableType(node *Node) bool {
@@ -6991,32 +8003,36 @@ func IsJSDocNonNullableType(node *Node) bool {
 
 type JSDocNullableType struct {
 	JSDocTypeBase
-	Type *TypeNode
+	typeNode link[Node] // *TypeNode
 }
 
+func (node *JSDocNullableType) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *JSDocNullableType) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewJSDocNullableType(typeNode *TypeNode) *Node {
-	data := &JSDocNullableType{}
-	data.Type = typeNode
+	data := newData[JSDocNullableType](f)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindJSDocNullableType, data)
 }
 
 func (f *NodeFactory) UpdateJSDocNullableType(node *JSDocNullableType, typeNode *TypeNode) *Node {
-	if typeNode != node.Type {
+	if typeNode != node.Type() {
 		return updateNode(f.NewJSDocNullableType(typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocNullableType) ForEachChild(v Visitor) bool {
-	return visit(v, node.Type)
+	return visit(v, node.Type())
 }
 
 func (node *JSDocNullableType) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocNullableType(node, v.visitNode(node.Type))
+	return v.Factory.UpdateJSDocNullableType(node, v.visitNode(node.Type()))
 }
 
 func (node *JSDocNullableType) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocNullableType(node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocNullableType(node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocNullableType(node *Node) bool {
@@ -7032,7 +8048,7 @@ type JSDocAllType struct {
 }
 
 func (f *NodeFactory) NewJSDocAllType() *Node {
-	data := &JSDocAllType{}
+	data := newData[JSDocAllType](f)
 	return f.newNode(KindJSDocAllType, data)
 }
 
@@ -7050,32 +8066,36 @@ func IsJSDocAllType(node *Node) bool {
 
 type JSDocVariadicType struct {
 	JSDocTypeBase
-	Type *TypeNode
+	typeNode link[Node] // *TypeNode
 }
 
+func (node *JSDocVariadicType) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *JSDocVariadicType) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewJSDocVariadicType(typeNode *TypeNode) *Node {
-	data := &JSDocVariadicType{}
-	data.Type = typeNode
+	data := newData[JSDocVariadicType](f)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindJSDocVariadicType, data)
 }
 
 func (f *NodeFactory) UpdateJSDocVariadicType(node *JSDocVariadicType, typeNode *TypeNode) *Node {
-	if typeNode != node.Type {
+	if typeNode != node.Type() {
 		return updateNode(f.NewJSDocVariadicType(typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocVariadicType) ForEachChild(v Visitor) bool {
-	return visit(v, node.Type)
+	return visit(v, node.Type())
 }
 
 func (node *JSDocVariadicType) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocVariadicType(node, v.visitNode(node.Type))
+	return v.Factory.UpdateJSDocVariadicType(node, v.visitNode(node.Type()))
 }
 
 func (node *JSDocVariadicType) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocVariadicType(node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocVariadicType(node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocVariadicType(node *Node) bool {
@@ -7088,32 +8108,36 @@ func IsJSDocVariadicType(node *Node) bool {
 
 type JSDocOptionalType struct {
 	JSDocTypeBase
-	Type *TypeNode
+	typeNode link[Node] // *TypeNode
 }
 
+func (node *JSDocOptionalType) Type() *TypeNode { return node.typeNode.get() }
+
+func (node *JSDocOptionalType) SetType(typeNode *TypeNode) { node.typeNode.set(typeNode) }
+
 func (f *NodeFactory) NewJSDocOptionalType(typeNode *TypeNode) *Node {
-	data := &JSDocOptionalType{}
-	data.Type = typeNode
+	data := newData[JSDocOptionalType](f)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindJSDocOptionalType, data)
 }
 
 func (f *NodeFactory) UpdateJSDocOptionalType(node *JSDocOptionalType, typeNode *TypeNode) *Node {
-	if typeNode != node.Type {
+	if typeNode != node.Type() {
 		return updateNode(f.NewJSDocOptionalType(typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocOptionalType) ForEachChild(v Visitor) bool {
-	return visit(v, node.Type)
+	return visit(v, node.Type())
 }
 
 func (node *JSDocOptionalType) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocOptionalType(node, v.visitNode(node.Type))
+	return v.Factory.UpdateJSDocOptionalType(node, v.visitNode(node.Type()))
 }
 
 func (node *JSDocOptionalType) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocOptionalType(node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocOptionalType(node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocOptionalType(node *Node) bool {
@@ -7126,34 +8150,40 @@ func IsJSDocOptionalType(node *Node) bool {
 
 type JSDocTypeTag struct {
 	JSDocTagBase
-	TypeExpression *Node
+	typeExpression link[Node] // *Node
+}
+
+func (node *JSDocTypeTag) TypeExpression() *Node { return node.typeExpression.get() }
+
+func (node *JSDocTypeTag) SetTypeExpression(typeExpression *Node) {
+	node.typeExpression.set(typeExpression)
 }
 
 func (f *NodeFactory) NewJSDocTypeTag(tagName *IdentifierNode, typeExpression *Node, comment *NodeList) *Node {
-	data := &JSDocTypeTag{}
-	data.TagName = tagName
-	data.TypeExpression = typeExpression
-	data.Comment = comment
+	data := newData[JSDocTypeTag](f)
+	data.tagName.set(tagName)
+	data.typeExpression.set(typeExpression)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocTypeTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocTypeTag(node *JSDocTypeTag, tagName *IdentifierNode, typeExpression *Node, comment *NodeList) *Node {
-	if tagName != node.TagName || typeExpression != node.TypeExpression || comment != node.Comment {
+	if tagName != node.TagName() || typeExpression != node.TypeExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocTypeTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocTypeTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visit(v, node.TypeExpression()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocTypeTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocTypeTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocTypeTag(node, v.visitNode(node.TagName()), v.visitNode(node.TypeExpression()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocTypeTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocTypeTag(node.TagName, node.TypeExpression, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocTypeTag(node.TagName(), node.TypeExpression(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocTypeTag(node *Node) bool {
@@ -7169,29 +8199,29 @@ type JSDocUnknownTag struct {
 }
 
 func (f *NodeFactory) NewJSDocUnknownTag(tagName *IdentifierNode, comment *NodeList) *Node {
-	data := f.jsdocUnknownTagArena.New()
-	data.TagName = tagName
-	data.Comment = comment
+	data := newData[JSDocUnknownTag](f)
+	data.tagName.set(tagName)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocUnknownTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocUnknownTag(node *JSDocUnknownTag, tagName *IdentifierNode, comment *NodeList) *Node {
-	if tagName != node.TagName || comment != node.Comment {
+	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocUnknownTag(tagName, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocUnknownTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocUnknownTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocUnknownTag(node, v.visitNode(node.TagName), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocUnknownTag(node, v.visitNode(node.TagName()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocUnknownTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocUnknownTag(node.TagName, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocUnknownTag(node.TagName(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocUnknownTag(node *Node) bool {
@@ -7204,39 +8234,49 @@ func IsJSDocUnknownTag(node *Node) bool {
 
 type JSDocTemplateTag struct {
 	JSDocTagBase
-	Constraint     *Node
-	TypeParameters *TypeParameterList
+	constraint     link[Node]     // *Node
+	typeParameters link[NodeList] // *TypeParameterList
+}
+
+func (node *JSDocTemplateTag) Constraint() *Node { return node.constraint.get() }
+
+func (node *JSDocTemplateTag) SetConstraint(constraint *Node) { node.constraint.set(constraint) }
+
+func (node *JSDocTemplateTag) TypeParameters() *TypeParameterList { return node.typeParameters.get() }
+
+func (node *JSDocTemplateTag) SetTypeParameters(typeParameters *TypeParameterList) {
+	node.typeParameters.set(typeParameters)
 }
 
 func (f *NodeFactory) NewJSDocTemplateTag(tagName *IdentifierNode, constraint *Node, typeParameters *TypeParameterList, comment *NodeList) *Node {
-	data := &JSDocTemplateTag{}
-	data.TagName = tagName
-	data.Constraint = constraint
-	data.TypeParameters = typeParameters
-	data.Comment = comment
+	data := newData[JSDocTemplateTag](f)
+	data.tagName.set(tagName)
+	data.constraint.set(constraint)
+	data.typeParameters.set(typeParameters)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocTemplateTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocTemplateTag(node *JSDocTemplateTag, tagName *IdentifierNode, constraint *Node, typeParameters *TypeParameterList, comment *NodeList) *Node {
-	if tagName != node.TagName || constraint != node.Constraint || typeParameters != node.TypeParameters || comment != node.Comment {
+	if tagName != node.TagName() || constraint != node.Constraint() || typeParameters != node.TypeParameters() || comment != node.Comment() {
 		return updateNode(f.NewJSDocTemplateTag(tagName, constraint, typeParameters, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocTemplateTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) ||
-		visit(v, node.Constraint) ||
-		visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) ||
+		visit(v, node.Constraint()) ||
+		visitNodeList(v, node.TypeParameters()) ||
+		visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocTemplateTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocTemplateTag(node, v.visitNode(node.TagName), v.visitNode(node.Constraint), v.visitNodes(node.TypeParameters), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocTemplateTag(node, v.visitNode(node.TagName()), v.visitNode(node.Constraint()), v.visitNodes(node.TypeParameters()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocTemplateTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocTemplateTag(node.TagName, node.Constraint, node.TypeParameters, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocTemplateTag(node.TagName(), node.Constraint(), node.TypeParameters(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocTemplateTag(node *Node) bool {
@@ -7249,34 +8289,40 @@ func IsJSDocTemplateTag(node *Node) bool {
 
 type JSDocReturnTag struct {
 	JSDocTagBase
-	TypeExpression *TypeNode // Optional
+	typeExpression link[Node] // *TypeNode. Optional
+}
+
+func (node *JSDocReturnTag) TypeExpression() *TypeNode { return node.typeExpression.get() }
+
+func (node *JSDocReturnTag) SetTypeExpression(typeExpression *TypeNode) {
+	node.typeExpression.set(typeExpression)
 }
 
 func (f *NodeFactory) NewJSDocReturnTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
-	data := &JSDocReturnTag{}
-	data.TagName = tagName
-	data.TypeExpression = typeExpression
-	data.Comment = comment
+	data := newData[JSDocReturnTag](f)
+	data.tagName.set(tagName)
+	data.typeExpression.set(typeExpression)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocReturnTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocReturnTag(node *JSDocReturnTag, tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
-	if tagName != node.TagName || typeExpression != node.TypeExpression || comment != node.Comment {
+	if tagName != node.TagName() || typeExpression != node.TypeExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocReturnTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocReturnTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visit(v, node.TypeExpression()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocReturnTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocReturnTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocReturnTag(node, v.visitNode(node.TagName()), v.visitNode(node.TypeExpression()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocReturnTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocReturnTag(node.TagName, node.TypeExpression, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocReturnTag(node.TagName(), node.TypeExpression(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocReturnTag(node *Node) bool {
@@ -7292,29 +8338,29 @@ type JSDocPublicTag struct {
 }
 
 func (f *NodeFactory) NewJSDocPublicTag(tagName *IdentifierNode, comment *NodeList) *Node {
-	data := &JSDocPublicTag{}
-	data.TagName = tagName
-	data.Comment = comment
+	data := newData[JSDocPublicTag](f)
+	data.tagName.set(tagName)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocPublicTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocPublicTag(node *JSDocPublicTag, tagName *IdentifierNode, comment *NodeList) *Node {
-	if tagName != node.TagName || comment != node.Comment {
+	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocPublicTag(tagName, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocPublicTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocPublicTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocPublicTag(node, v.visitNode(node.TagName), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocPublicTag(node, v.visitNode(node.TagName()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocPublicTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocPublicTag(node.TagName, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocPublicTag(node.TagName(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocPublicTag(node *Node) bool {
@@ -7330,29 +8376,29 @@ type JSDocPrivateTag struct {
 }
 
 func (f *NodeFactory) NewJSDocPrivateTag(tagName *IdentifierNode, comment *NodeList) *Node {
-	data := &JSDocPrivateTag{}
-	data.TagName = tagName
-	data.Comment = comment
+	data := newData[JSDocPrivateTag](f)
+	data.tagName.set(tagName)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocPrivateTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocPrivateTag(node *JSDocPrivateTag, tagName *IdentifierNode, comment *NodeList) *Node {
-	if tagName != node.TagName || comment != node.Comment {
+	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocPrivateTag(tagName, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocPrivateTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocPrivateTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocPrivateTag(node, v.visitNode(node.TagName), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocPrivateTag(node, v.visitNode(node.TagName()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocPrivateTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocPrivateTag(node.TagName, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocPrivateTag(node.TagName(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocPrivateTag(node *Node) bool {
@@ -7368,29 +8414,29 @@ type JSDocProtectedTag struct {
 }
 
 func (f *NodeFactory) NewJSDocProtectedTag(tagName *IdentifierNode, comment *NodeList) *Node {
-	data := &JSDocProtectedTag{}
-	data.TagName = tagName
-	data.Comment = comment
+	data := newData[JSDocProtectedTag](f)
+	data.tagName.set(tagName)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocProtectedTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocProtectedTag(node *JSDocProtectedTag, tagName *IdentifierNode, comment *NodeList) *Node {
-	if tagName != node.TagName || comment != node.Comment {
+	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocProtectedTag(tagName, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocProtectedTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocProtectedTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocProtectedTag(node, v.visitNode(node.TagName), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocProtectedTag(node, v.visitNode(node.TagName()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocProtectedTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocProtectedTag(node.TagName, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocProtectedTag(node.TagName(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocProtectedTag(node *Node) bool {
@@ -7406,29 +8452,29 @@ type JSDocReadonlyTag struct {
 }
 
 func (f *NodeFactory) NewJSDocReadonlyTag(tagName *IdentifierNode, comment *NodeList) *Node {
-	data := &JSDocReadonlyTag{}
-	data.TagName = tagName
-	data.Comment = comment
+	data := newData[JSDocReadonlyTag](f)
+	data.tagName.set(tagName)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocReadonlyTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocReadonlyTag(node *JSDocReadonlyTag, tagName *IdentifierNode, comment *NodeList) *Node {
-	if tagName != node.TagName || comment != node.Comment {
+	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocReadonlyTag(tagName, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocReadonlyTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocReadonlyTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocReadonlyTag(node, v.visitNode(node.TagName), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocReadonlyTag(node, v.visitNode(node.TagName()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocReadonlyTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocReadonlyTag(node.TagName, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocReadonlyTag(node.TagName(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocReadonlyTag(node *Node) bool {
@@ -7444,29 +8490,29 @@ type JSDocOverrideTag struct {
 }
 
 func (f *NodeFactory) NewJSDocOverrideTag(tagName *IdentifierNode, comment *NodeList) *Node {
-	data := &JSDocOverrideTag{}
-	data.TagName = tagName
-	data.Comment = comment
+	data := newData[JSDocOverrideTag](f)
+	data.tagName.set(tagName)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocOverrideTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocOverrideTag(node *JSDocOverrideTag, tagName *IdentifierNode, comment *NodeList) *Node {
-	if tagName != node.TagName || comment != node.Comment {
+	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocOverrideTag(tagName, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocOverrideTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocOverrideTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocOverrideTag(node, v.visitNode(node.TagName), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocOverrideTag(node, v.visitNode(node.TagName()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocOverrideTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocOverrideTag(node.TagName, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocOverrideTag(node.TagName(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocOverrideTag(node *Node) bool {
@@ -7482,29 +8528,29 @@ type JSDocDeprecatedTag struct {
 }
 
 func (f *NodeFactory) NewJSDocDeprecatedTag(tagName *IdentifierNode, comment *NodeList) *Node {
-	data := f.jsdocDeprecatedTagArena.New()
-	data.TagName = tagName
-	data.Comment = comment
+	data := newData[JSDocDeprecatedTag](f)
+	data.tagName.set(tagName)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocDeprecatedTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocDeprecatedTag(node *JSDocDeprecatedTag, tagName *IdentifierNode, comment *NodeList) *Node {
-	if tagName != node.TagName || comment != node.Comment {
+	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocDeprecatedTag(tagName, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocDeprecatedTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocDeprecatedTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocDeprecatedTag(node, v.visitNode(node.TagName), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocDeprecatedTag(node, v.visitNode(node.TagName()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocDeprecatedTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocDeprecatedTag(node.TagName, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocDeprecatedTag(node.TagName(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocDeprecatedTag(node *Node) bool {
@@ -7517,34 +8563,40 @@ func IsJSDocDeprecatedTag(node *Node) bool {
 
 type JSDocSeeTag struct {
 	JSDocTagBase
-	NameExpression *TypeNode
+	nameExpression link[Node] // *TypeNode
+}
+
+func (node *JSDocSeeTag) NameExpression() *TypeNode { return node.nameExpression.get() }
+
+func (node *JSDocSeeTag) SetNameExpression(nameExpression *TypeNode) {
+	node.nameExpression.set(nameExpression)
 }
 
 func (f *NodeFactory) NewJSDocSeeTag(tagName *IdentifierNode, nameExpression *TypeNode, comment *NodeList) *Node {
-	data := &JSDocSeeTag{}
-	data.TagName = tagName
-	data.NameExpression = nameExpression
-	data.Comment = comment
+	data := newData[JSDocSeeTag](f)
+	data.tagName.set(tagName)
+	data.nameExpression.set(nameExpression)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocSeeTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocSeeTag(node *JSDocSeeTag, tagName *IdentifierNode, nameExpression *TypeNode, comment *NodeList) *Node {
-	if tagName != node.TagName || nameExpression != node.NameExpression || comment != node.Comment {
+	if tagName != node.TagName() || nameExpression != node.NameExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocSeeTag(tagName, nameExpression, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocSeeTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visit(v, node.NameExpression) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visit(v, node.NameExpression()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocSeeTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocSeeTag(node, v.visitNode(node.TagName), v.visitNode(node.NameExpression), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocSeeTag(node, v.visitNode(node.TagName()), v.visitNode(node.NameExpression()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocSeeTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocSeeTag(node.TagName, node.NameExpression, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocSeeTag(node.TagName(), node.NameExpression(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocSeeTag(node *Node) bool {
@@ -7557,34 +8609,42 @@ func IsJSDocSeeTag(node *Node) bool {
 
 type JSDocImplementsTag struct {
 	JSDocTagBase
-	ClassName *ExpressionWithTypeArgumentsNode
+	className link[Node] // *ExpressionWithTypeArgumentsNode
+}
+
+func (node *JSDocImplementsTag) ClassName() *ExpressionWithTypeArgumentsNode {
+	return node.className.get()
+}
+
+func (node *JSDocImplementsTag) SetClassName(className *ExpressionWithTypeArgumentsNode) {
+	node.className.set(className)
 }
 
 func (f *NodeFactory) NewJSDocImplementsTag(tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
-	data := &JSDocImplementsTag{}
-	data.TagName = tagName
-	data.ClassName = className
-	data.Comment = comment
+	data := newData[JSDocImplementsTag](f)
+	data.tagName.set(tagName)
+	data.className.set(className)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocImplementsTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocImplementsTag(node *JSDocImplementsTag, tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
-	if tagName != node.TagName || className != node.ClassName || comment != node.Comment {
+	if tagName != node.TagName() || className != node.ClassName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocImplementsTag(tagName, className, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocImplementsTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visit(v, node.ClassName) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visit(v, node.ClassName()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocImplementsTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocImplementsTag(node, v.visitNode(node.TagName), v.visitNode(node.ClassName), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocImplementsTag(node, v.visitNode(node.TagName()), v.visitNode(node.ClassName()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocImplementsTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocImplementsTag(node.TagName, node.ClassName, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocImplementsTag(node.TagName(), node.ClassName(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocImplementsTag(node *Node) bool {
@@ -7597,34 +8657,42 @@ func IsJSDocImplementsTag(node *Node) bool {
 
 type JSDocAugmentsTag struct {
 	JSDocTagBase
-	ClassName *ExpressionWithTypeArgumentsNode
+	className link[Node] // *ExpressionWithTypeArgumentsNode
+}
+
+func (node *JSDocAugmentsTag) ClassName() *ExpressionWithTypeArgumentsNode {
+	return node.className.get()
+}
+
+func (node *JSDocAugmentsTag) SetClassName(className *ExpressionWithTypeArgumentsNode) {
+	node.className.set(className)
 }
 
 func (f *NodeFactory) NewJSDocAugmentsTag(tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
-	data := &JSDocAugmentsTag{}
-	data.TagName = tagName
-	data.ClassName = className
-	data.Comment = comment
+	data := newData[JSDocAugmentsTag](f)
+	data.tagName.set(tagName)
+	data.className.set(className)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocAugmentsTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocAugmentsTag(node *JSDocAugmentsTag, tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
-	if tagName != node.TagName || className != node.ClassName || comment != node.Comment {
+	if tagName != node.TagName() || className != node.ClassName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocAugmentsTag(tagName, className, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocAugmentsTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visit(v, node.ClassName) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visit(v, node.ClassName()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocAugmentsTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocAugmentsTag(node, v.visitNode(node.TagName), v.visitNode(node.ClassName), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocAugmentsTag(node, v.visitNode(node.TagName()), v.visitNode(node.ClassName()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocAugmentsTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocAugmentsTag(node.TagName, node.ClassName, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocAugmentsTag(node.TagName(), node.ClassName(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocAugmentsTag(node *Node) bool {
@@ -7637,34 +8705,40 @@ func IsJSDocAugmentsTag(node *Node) bool {
 
 type JSDocSatisfiesTag struct {
 	JSDocTagBase
-	TypeExpression *TypeNode
+	typeExpression link[Node] // *TypeNode
+}
+
+func (node *JSDocSatisfiesTag) TypeExpression() *TypeNode { return node.typeExpression.get() }
+
+func (node *JSDocSatisfiesTag) SetTypeExpression(typeExpression *TypeNode) {
+	node.typeExpression.set(typeExpression)
 }
 
 func (f *NodeFactory) NewJSDocSatisfiesTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
-	data := &JSDocSatisfiesTag{}
-	data.TagName = tagName
-	data.TypeExpression = typeExpression
-	data.Comment = comment
+	data := newData[JSDocSatisfiesTag](f)
+	data.tagName.set(tagName)
+	data.typeExpression.set(typeExpression)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocSatisfiesTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocSatisfiesTag(node *JSDocSatisfiesTag, tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
-	if tagName != node.TagName || typeExpression != node.TypeExpression || comment != node.Comment {
+	if tagName != node.TagName() || typeExpression != node.TypeExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocSatisfiesTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocSatisfiesTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visit(v, node.TypeExpression()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocSatisfiesTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocSatisfiesTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocSatisfiesTag(node, v.visitNode(node.TagName()), v.visitNode(node.TypeExpression()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocSatisfiesTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocSatisfiesTag(node.TagName, node.TypeExpression, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocSatisfiesTag(node.TagName(), node.TypeExpression(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocSatisfiesTag(node *Node) bool {
@@ -7677,34 +8751,40 @@ func IsJSDocSatisfiesTag(node *Node) bool {
 
 type JSDocThrowsTag struct {
 	JSDocTagBase
-	TypeExpression *TypeNode // Optional
+	typeExpression link[Node] // *TypeNode. Optional
+}
+
+func (node *JSDocThrowsTag) TypeExpression() *TypeNode { return node.typeExpression.get() }
+
+func (node *JSDocThrowsTag) SetTypeExpression(typeExpression *TypeNode) {
+	node.typeExpression.set(typeExpression)
 }
 
 func (f *NodeFactory) NewJSDocThrowsTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
-	data := &JSDocThrowsTag{}
-	data.TagName = tagName
-	data.TypeExpression = typeExpression
-	data.Comment = comment
+	data := newData[JSDocThrowsTag](f)
+	data.tagName.set(tagName)
+	data.typeExpression.set(typeExpression)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocThrowsTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocThrowsTag(node *JSDocThrowsTag, tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
-	if tagName != node.TagName || typeExpression != node.TypeExpression || comment != node.Comment {
+	if tagName != node.TagName() || typeExpression != node.TypeExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocThrowsTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocThrowsTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visit(v, node.TypeExpression()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocThrowsTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocThrowsTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocThrowsTag(node, v.visitNode(node.TagName()), v.visitNode(node.TypeExpression()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocThrowsTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocThrowsTag(node.TagName, node.TypeExpression, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocThrowsTag(node.TagName(), node.TypeExpression(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocThrowsTag(node *Node) bool {
@@ -7717,34 +8797,40 @@ func IsJSDocThrowsTag(node *Node) bool {
 
 type JSDocThisTag struct {
 	JSDocTagBase
-	TypeExpression *TypeNode
+	typeExpression link[Node] // *TypeNode
+}
+
+func (node *JSDocThisTag) TypeExpression() *TypeNode { return node.typeExpression.get() }
+
+func (node *JSDocThisTag) SetTypeExpression(typeExpression *TypeNode) {
+	node.typeExpression.set(typeExpression)
 }
 
 func (f *NodeFactory) NewJSDocThisTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
-	data := &JSDocThisTag{}
-	data.TagName = tagName
-	data.TypeExpression = typeExpression
-	data.Comment = comment
+	data := newData[JSDocThisTag](f)
+	data.tagName.set(tagName)
+	data.typeExpression.set(typeExpression)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocThisTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocThisTag(node *JSDocThisTag, tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
-	if tagName != node.TagName || typeExpression != node.TypeExpression || comment != node.Comment {
+	if tagName != node.TagName() || typeExpression != node.TypeExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocThisTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocThisTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visit(v, node.TypeExpression()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocThisTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocThisTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocThisTag(node, v.visitNode(node.TagName()), v.visitNode(node.TypeExpression()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocThisTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocThisTag(node.TagName, node.TypeExpression, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocThisTag(node.TagName(), node.TypeExpression(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocThisTag(node *Node) bool {
@@ -7757,42 +8843,60 @@ func IsJSDocThisTag(node *Node) bool {
 
 type JSDocImportTag struct {
 	JSDocTagBase
-	ImportClause    *ImportClauseNode // Optional
-	ModuleSpecifier *Expression
-	Attributes      *ImportAttributesNode // Optional
+	importClause    link[Node] // *ImportClauseNode. Optional
+	moduleSpecifier link[Node] // *Expression
+	attributes      link[Node] // *ImportAttributesNode. Optional
+}
+
+func (node *JSDocImportTag) ImportClause() *ImportClauseNode { return node.importClause.get() }
+
+func (node *JSDocImportTag) SetImportClause(importClause *ImportClauseNode) {
+	node.importClause.set(importClause)
+}
+
+func (node *JSDocImportTag) ModuleSpecifier() *Expression { return node.moduleSpecifier.get() }
+
+func (node *JSDocImportTag) SetModuleSpecifier(moduleSpecifier *Expression) {
+	node.moduleSpecifier.set(moduleSpecifier)
+}
+
+func (node *JSDocImportTag) Attributes() *ImportAttributesNode { return node.attributes.get() }
+
+func (node *JSDocImportTag) SetAttributes(attributes *ImportAttributesNode) {
+	node.attributes.set(attributes)
 }
 
 func (f *NodeFactory) NewJSDocImportTag(tagName *IdentifierNode, importClause *ImportClauseNode, moduleSpecifier *Expression, attributes *ImportAttributesNode, comment *NodeList) *Node {
-	data := &JSDocImportTag{}
-	data.TagName = tagName
-	data.ImportClause = importClause
-	data.ModuleSpecifier = moduleSpecifier
-	data.Attributes = attributes
-	data.Comment = comment
+	data := newData[JSDocImportTag](f)
+	data.tagName.set(tagName)
+	data.importClause.set(importClause)
+	data.moduleSpecifier.set(moduleSpecifier)
+	data.attributes.set(attributes)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocImportTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocImportTag(node *JSDocImportTag, tagName *IdentifierNode, importClause *ImportClauseNode, moduleSpecifier *Expression, attributes *ImportAttributesNode, comment *NodeList) *Node {
-	if tagName != node.TagName || importClause != node.ImportClause || moduleSpecifier != node.ModuleSpecifier || attributes != node.Attributes || comment != node.Comment {
+	if tagName != node.TagName() || importClause != node.ImportClause() || moduleSpecifier != node.ModuleSpecifier() || attributes != node.Attributes() || comment != node.Comment() {
 		return updateNode(f.NewJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocImportTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) ||
-		visit(v, node.ImportClause) ||
-		visit(v, node.ModuleSpecifier) ||
-		visit(v, node.Attributes) ||
-		visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) ||
+		visit(v, node.ImportClause()) ||
+		visit(v, node.ModuleSpecifier()) ||
+		visit(v, node.Attributes()) ||
+		visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocImportTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocImportTag(node, v.visitNode(node.TagName), v.visitNode(node.ImportClause), v.visitNode(node.ModuleSpecifier), v.visitNode(node.Attributes), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocImportTag(node, v.visitNode(node.TagName()), v.visitNode(node.ImportClause()), v.visitNode(node.ModuleSpecifier()), v.visitNode(node.Attributes()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocImportTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocImportTag(node.TagName, node.ImportClause, node.ModuleSpecifier, node.Attributes, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocImportTag(node.TagName(), node.ImportClause(), node.ModuleSpecifier(), node.Attributes(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocImportTag(node *Node) bool {
@@ -7805,43 +8909,49 @@ func IsJSDocImportTag(node *Node) bool {
 
 type JSDocCallbackTag struct {
 	JSDocTagBase
-	TypeExpression *TypeNode
-	name           *JSDocFullName // Optional
+	typeExpression link[Node] // *TypeNode
+	name           link[Node] // *JSDocFullName. Optional
+}
+
+func (node *JSDocCallbackTag) TypeExpression() *TypeNode { return node.typeExpression.get() }
+
+func (node *JSDocCallbackTag) SetTypeExpression(typeExpression *TypeNode) {
+	node.typeExpression.set(typeExpression)
 }
 
 func (f *NodeFactory) NewJSDocCallbackTag(tagName *IdentifierNode, typeExpression *TypeNode, name *JSDocFullName, comment *NodeList) *Node {
-	data := &JSDocCallbackTag{}
-	data.TagName = tagName
-	data.TypeExpression = typeExpression
-	data.name = name
-	data.Comment = comment
+	data := newData[JSDocCallbackTag](f)
+	data.tagName.set(tagName)
+	data.typeExpression.set(typeExpression)
+	data.name.set(name)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocCallbackTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocCallbackTag(node *JSDocCallbackTag, tagName *IdentifierNode, typeExpression *TypeNode, name *JSDocFullName, comment *NodeList) *Node {
-	if tagName != node.TagName || typeExpression != node.TypeExpression || name != node.name || comment != node.Comment {
+	if tagName != node.TagName() || typeExpression != node.TypeExpression() || name != node.name.get() || comment != node.Comment() {
 		return updateNode(f.NewJSDocCallbackTag(tagName, typeExpression, name, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocCallbackTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) ||
-		visit(v, node.TypeExpression) ||
-		visit(v, node.name) ||
-		visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) ||
+		visit(v, node.TypeExpression()) ||
+		visit(v, node.name.get()) ||
+		visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocCallbackTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocCallbackTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNode(node.name), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocCallbackTag(node, v.visitNode(node.TagName()), v.visitNode(node.TypeExpression()), v.visitNode(node.name.get()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocCallbackTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocCallbackTag(node.TagName, node.TypeExpression, node.name, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocCallbackTag(node.TagName(), node.TypeExpression(), node.name.get(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *JSDocCallbackTag) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsJSDocCallbackTag(node *Node) bool {
@@ -7854,34 +8964,40 @@ func IsJSDocCallbackTag(node *Node) bool {
 
 type JSDocOverloadTag struct {
 	JSDocTagBase
-	TypeExpression *TypeNode
+	typeExpression link[Node] // *TypeNode
+}
+
+func (node *JSDocOverloadTag) TypeExpression() *TypeNode { return node.typeExpression.get() }
+
+func (node *JSDocOverloadTag) SetTypeExpression(typeExpression *TypeNode) {
+	node.typeExpression.set(typeExpression)
 }
 
 func (f *NodeFactory) NewJSDocOverloadTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
-	data := &JSDocOverloadTag{}
-	data.TagName = tagName
-	data.TypeExpression = typeExpression
-	data.Comment = comment
+	data := newData[JSDocOverloadTag](f)
+	data.tagName.set(tagName)
+	data.typeExpression.set(typeExpression)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocOverloadTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocOverloadTag(node *JSDocOverloadTag, tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
-	if tagName != node.TagName || typeExpression != node.TypeExpression || comment != node.Comment {
+	if tagName != node.TagName() || typeExpression != node.TypeExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocOverloadTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocOverloadTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) || visit(v, node.TypeExpression()) || visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocOverloadTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocOverloadTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocOverloadTag(node, v.visitNode(node.TagName()), v.visitNode(node.TypeExpression()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocOverloadTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocOverloadTag(node.TagName, node.TypeExpression, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocOverloadTag(node.TagName(), node.TypeExpression(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocOverloadTag(node *Node) bool {
@@ -7894,43 +9010,49 @@ func IsJSDocOverloadTag(node *Node) bool {
 
 type JSDocTypedefTag struct {
 	JSDocTagBase
-	TypeExpression *Node          // Optional
-	name           *JSDocFullName // Optional
+	typeExpression link[Node] // *Node. Optional
+	name           link[Node] // *JSDocFullName. Optional
+}
+
+func (node *JSDocTypedefTag) TypeExpression() *Node { return node.typeExpression.get() }
+
+func (node *JSDocTypedefTag) SetTypeExpression(typeExpression *Node) {
+	node.typeExpression.set(typeExpression)
 }
 
 func (f *NodeFactory) NewJSDocTypedefTag(tagName *IdentifierNode, typeExpression *Node, name *JSDocFullName, comment *NodeList) *Node {
-	data := &JSDocTypedefTag{}
-	data.TagName = tagName
-	data.TypeExpression = typeExpression
-	data.name = name
-	data.Comment = comment
+	data := newData[JSDocTypedefTag](f)
+	data.tagName.set(tagName)
+	data.typeExpression.set(typeExpression)
+	data.name.set(name)
+	data.comment.set(comment)
 	return f.newNode(KindJSDocTypedefTag, data)
 }
 
 func (f *NodeFactory) UpdateJSDocTypedefTag(node *JSDocTypedefTag, tagName *IdentifierNode, typeExpression *Node, name *JSDocFullName, comment *NodeList) *Node {
-	if tagName != node.TagName || typeExpression != node.TypeExpression || name != node.name || comment != node.Comment {
+	if tagName != node.TagName() || typeExpression != node.TypeExpression() || name != node.name.get() || comment != node.Comment() {
 		return updateNode(f.NewJSDocTypedefTag(tagName, typeExpression, name, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocTypedefTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) ||
-		visit(v, node.TypeExpression) ||
-		visit(v, node.name) ||
-		visitNodeList(v, node.Comment)
+	return visit(v, node.TagName()) ||
+		visit(v, node.TypeExpression()) ||
+		visit(v, node.name.get()) ||
+		visitNodeList(v, node.Comment())
 }
 
 func (node *JSDocTypedefTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocTypedefTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNode(node.name), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocTypedefTag(node, v.visitNode(node.TagName()), v.visitNode(node.TypeExpression()), v.visitNode(node.name.get()), v.visitNodes(node.Comment()))
 }
 
 func (node *JSDocTypedefTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocTypedefTag(node.TagName, node.TypeExpression, node.name, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocTypedefTag(node.TagName(), node.TypeExpression(), node.name.get(), node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *JSDocTypedefTag) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsJSDocTypedefTag(node *Node) bool {
@@ -7948,30 +9070,30 @@ type JSDocSignature struct {
 }
 
 func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	data := &JSDocSignature{}
-	data.TypeParameters = typeParameters
-	data.Parameters = parameters
-	data.Type = typeNode
+	data := newData[JSDocSignature](f)
+	data.typeParameters.set(typeParameters)
+	data.parameters.set(parameters)
+	data.typeNode.set(typeNode)
 	return f.newNode(KindJSDocSignature, data)
 }
 
 func (f *NodeFactory) UpdateJSDocSignature(node *JSDocSignature, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
-	if typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type {
+	if typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewJSDocSignature(typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocSignature) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.Type)
+	return visitNodeList(v, node.TypeParameters()) || visitNodeList(v, node.Parameters()) || visit(v, node.Type())
 }
 
 func (node *JSDocSignature) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocSignature(node, v.visitNodes(node.TypeParameters), v.visitNodes(node.Parameters), v.visitNode(node.Type))
+	return v.Factory.UpdateJSDocSignature(node, v.visitNodes(node.TypeParameters()), v.visitNodes(node.Parameters()), v.visitNode(node.Type()))
 }
 
 func (node *JSDocSignature) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocSignature(node.TypeParameters, node.Parameters, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocSignature(node.TypeParameters(), node.Parameters(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsJSDocSignature(node *Node) bool {
@@ -7984,36 +9106,36 @@ func IsJSDocSignature(node *Node) bool {
 
 type JSDocNameReference struct {
 	TypeNodeBase
-	name *EntityName
+	name link[Node] // *EntityName
 }
 
 func (f *NodeFactory) NewJSDocNameReference(name *EntityName) *Node {
-	data := &JSDocNameReference{}
-	data.name = name
+	data := newData[JSDocNameReference](f)
+	data.name.set(name)
 	return f.newNode(KindJSDocNameReference, data)
 }
 
 func (f *NodeFactory) UpdateJSDocNameReference(node *JSDocNameReference, name *EntityName) *Node {
-	if name != node.name {
+	if name != node.name.get() {
 		return updateNode(f.NewJSDocNameReference(name), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocNameReference) ForEachChild(v Visitor) bool {
-	return visit(v, node.name)
+	return visit(v, node.name.get())
 }
 
 func (node *JSDocNameReference) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocNameReference(node, v.visitNode(node.name))
+	return v.Factory.UpdateJSDocNameReference(node, v.visitNode(node.name.get()))
 }
 
 func (node *JSDocNameReference) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocNameReference(node.name), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocNameReference(node.name.get()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *JSDocNameReference) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsJSDocNameReference(node *Node) bool {
@@ -8042,44 +9164,50 @@ type ModuleDeclaration struct {
 	BodyBase
 	CompositeBase
 	Keyword    Kind
-	name       *ModuleName
-	Attributes *TypeLiteralNodeNode // Optional
+	name       link[Node] // *ModuleName
+	attributes link[Node] // *TypeLiteralNodeNode. Optional
+}
+
+func (node *ModuleDeclaration) Attributes() *TypeLiteralNodeNode { return node.attributes.get() }
+
+func (node *ModuleDeclaration) SetAttributes(attributes *TypeLiteralNodeNode) {
+	node.attributes.set(attributes)
 }
 
 func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, keyword Kind, name *ModuleName, attributes *TypeLiteralNodeNode, body *ModuleBody) *Node {
-	data := &ModuleDeclaration{}
-	data.modifiers = modifiers
+	data := newData[ModuleDeclaration](f)
+	data.modifiers.set(modifiers)
 	data.Keyword = keyword
-	data.name = name
-	data.Attributes = attributes
-	data.Body = body
+	data.name.set(name)
+	data.attributes.set(attributes)
+	data.body.set(body)
 	return f.newNode(KindModuleDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateModuleDeclaration(node *ModuleDeclaration, modifiers *ModifierList, keyword Kind, name *ModuleName, attributes *TypeLiteralNodeNode, body *ModuleBody) *Node {
-	if modifiers != node.modifiers || keyword != node.Keyword || name != node.name || attributes != node.Attributes || body != node.Body {
+	if modifiers != node.modifiers.get() || keyword != node.Keyword || name != node.name.get() || attributes != node.Attributes() || body != node.Body() {
 		return updateNode(f.NewModuleDeclaration(modifiers, keyword, name, attributes, body), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ModuleDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visit(v, node.Attributes) ||
-		visit(v, node.Body)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visit(v, node.Attributes()) ||
+		visit(v, node.Body())
 }
 
 func (node *ModuleDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateModuleDeclaration(node, v.visitModifiers(node.modifiers), node.Keyword, v.visitNode(node.name), v.visitNode(node.Attributes), v.visitNode(node.Body))
+	return v.Factory.UpdateModuleDeclaration(node, v.visitModifiers(node.modifiers.get()), node.Keyword, v.visitNode(node.name.get()), v.visitNode(node.Attributes()), v.visitNode(node.Body()))
 }
 
 func (node *ModuleDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewModuleDeclaration(node.Modifiers(), node.Keyword, node.name, node.Attributes, node.Body), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewModuleDeclaration(node.Modifiers(), node.Keyword, node.name.get(), node.Attributes(), node.Body()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ModuleDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsModuleDeclaration(node *Node) bool {
@@ -8097,40 +9225,48 @@ type ImportEqualsDeclaration struct {
 	ModifiersBase
 	CompositeBase
 	IsTypeOnly      bool
-	name            *IdentifierNode
-	ModuleReference *ModuleReference
+	name            link[Node] // *IdentifierNode
+	moduleReference link[Node] // *ModuleReference
+}
+
+func (node *ImportEqualsDeclaration) ModuleReference() *ModuleReference {
+	return node.moduleReference.get()
+}
+
+func (node *ImportEqualsDeclaration) SetModuleReference(moduleReference *ModuleReference) {
+	node.moduleReference.set(moduleReference)
 }
 
 func (f *NodeFactory) NewImportEqualsDeclaration(modifiers *ModifierList, isTypeOnly bool, name *IdentifierNode, moduleReference *ModuleReference) *Node {
-	data := &ImportEqualsDeclaration{}
-	data.modifiers = modifiers
+	data := newData[ImportEqualsDeclaration](f)
+	data.modifiers.set(modifiers)
 	data.IsTypeOnly = isTypeOnly
-	data.name = name
-	data.ModuleReference = moduleReference
+	data.name.set(name)
+	data.moduleReference.set(moduleReference)
 	return f.newNode(KindImportEqualsDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateImportEqualsDeclaration(node *ImportEqualsDeclaration, modifiers *ModifierList, isTypeOnly bool, name *IdentifierNode, moduleReference *ModuleReference) *Node {
-	if modifiers != node.modifiers || isTypeOnly != node.IsTypeOnly || name != node.name || moduleReference != node.ModuleReference {
+	if modifiers != node.modifiers.get() || isTypeOnly != node.IsTypeOnly || name != node.name.get() || moduleReference != node.ModuleReference() {
 		return updateNode(f.NewImportEqualsDeclaration(modifiers, isTypeOnly, name, moduleReference), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ImportEqualsDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.ModuleReference)
+	return visitModifiers(v, node.modifiers.get()) || visit(v, node.name.get()) || visit(v, node.ModuleReference())
 }
 
 func (node *ImportEqualsDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateImportEqualsDeclaration(node, v.visitModifiers(node.modifiers), node.IsTypeOnly, v.visitNode(node.name), v.visitNode(node.ModuleReference))
+	return v.Factory.UpdateImportEqualsDeclaration(node, v.visitModifiers(node.modifiers.get()), node.IsTypeOnly, v.visitNode(node.name.get()), v.visitNode(node.ModuleReference()))
 }
 
 func (node *ImportEqualsDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewImportEqualsDeclaration(node.Modifiers(), node.IsTypeOnly, node.name, node.ModuleReference), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewImportEqualsDeclaration(node.Modifiers(), node.IsTypeOnly, node.name.get(), node.ModuleReference()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ImportEqualsDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsImportEqualsDeclaration(node *Node) bool {
@@ -8147,41 +9283,59 @@ type ExportDeclaration struct {
 	ModifiersBase
 	CompositeBase
 	IsTypeOnly      bool
-	ExportClause    *NamedExportBindings  // Optional
-	ModuleSpecifier *Expression           // Optional
-	Attributes      *ImportAttributesNode // Optional
+	exportClause    link[Node] // *NamedExportBindings. Optional
+	moduleSpecifier link[Node] // *Expression. Optional
+	attributes      link[Node] // *ImportAttributesNode. Optional
+}
+
+func (node *ExportDeclaration) ExportClause() *NamedExportBindings { return node.exportClause.get() }
+
+func (node *ExportDeclaration) SetExportClause(exportClause *NamedExportBindings) {
+	node.exportClause.set(exportClause)
+}
+
+func (node *ExportDeclaration) ModuleSpecifier() *Expression { return node.moduleSpecifier.get() }
+
+func (node *ExportDeclaration) SetModuleSpecifier(moduleSpecifier *Expression) {
+	node.moduleSpecifier.set(moduleSpecifier)
+}
+
+func (node *ExportDeclaration) Attributes() *ImportAttributesNode { return node.attributes.get() }
+
+func (node *ExportDeclaration) SetAttributes(attributes *ImportAttributesNode) {
+	node.attributes.set(attributes)
 }
 
 func (f *NodeFactory) NewExportDeclaration(modifiers *ModifierList, isTypeOnly bool, exportClause *NamedExportBindings, moduleSpecifier *Expression, attributes *ImportAttributesNode) *Node {
-	data := &ExportDeclaration{}
-	data.modifiers = modifiers
+	data := newData[ExportDeclaration](f)
+	data.modifiers.set(modifiers)
 	data.IsTypeOnly = isTypeOnly
-	data.ExportClause = exportClause
-	data.ModuleSpecifier = moduleSpecifier
-	data.Attributes = attributes
+	data.exportClause.set(exportClause)
+	data.moduleSpecifier.set(moduleSpecifier)
+	data.attributes.set(attributes)
 	return f.newNode(KindExportDeclaration, data)
 }
 
 func (f *NodeFactory) UpdateExportDeclaration(node *ExportDeclaration, modifiers *ModifierList, isTypeOnly bool, exportClause *NamedExportBindings, moduleSpecifier *Expression, attributes *ImportAttributesNode) *Node {
-	if modifiers != node.modifiers || isTypeOnly != node.IsTypeOnly || exportClause != node.ExportClause || moduleSpecifier != node.ModuleSpecifier || attributes != node.Attributes {
+	if modifiers != node.modifiers.get() || isTypeOnly != node.IsTypeOnly || exportClause != node.ExportClause() || moduleSpecifier != node.ModuleSpecifier() || attributes != node.Attributes() {
 		return updateNode(f.NewExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, attributes), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ExportDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.ExportClause) ||
-		visit(v, node.ModuleSpecifier) ||
-		visit(v, node.Attributes)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.ExportClause()) ||
+		visit(v, node.ModuleSpecifier()) ||
+		visit(v, node.Attributes())
 }
 
 func (node *ExportDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateExportDeclaration(node, v.visitModifiers(node.modifiers), node.IsTypeOnly, v.visitNode(node.ExportClause), v.visitNode(node.ModuleSpecifier), v.visitNode(node.Attributes))
+	return v.Factory.UpdateExportDeclaration(node, v.visitModifiers(node.modifiers.get()), node.IsTypeOnly, v.visitNode(node.ExportClause()), v.visitNode(node.ModuleSpecifier()), v.visitNode(node.Attributes()))
 }
 
 func (node *ExportDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewExportDeclaration(node.Modifiers(), node.IsTypeOnly, node.ExportClause, node.ModuleSpecifier, node.Attributes), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewExportDeclaration(node.Modifiers(), node.IsTypeOnly, node.ExportClause(), node.ModuleSpecifier(), node.Attributes()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsExportDeclaration(node *Node) bool {
@@ -8195,41 +9349,55 @@ func IsExportDeclaration(node *Node) bool {
 type ImportTypeNode struct {
 	NodeWithTypeArgumentsBase
 	IsTypeOf   bool
-	Argument   *TypeNode
-	Attributes *ImportAttributesNode // Optional
-	Qualifier  *EntityName           // Optional
+	argument   link[Node] // *TypeNode
+	attributes link[Node] // *ImportAttributesNode. Optional
+	qualifier  link[Node] // *EntityName. Optional
 }
 
+func (node *ImportTypeNode) Argument() *TypeNode { return node.argument.get() }
+
+func (node *ImportTypeNode) SetArgument(argument *TypeNode) { node.argument.set(argument) }
+
+func (node *ImportTypeNode) Attributes() *ImportAttributesNode { return node.attributes.get() }
+
+func (node *ImportTypeNode) SetAttributes(attributes *ImportAttributesNode) {
+	node.attributes.set(attributes)
+}
+
+func (node *ImportTypeNode) Qualifier() *EntityName { return node.qualifier.get() }
+
+func (node *ImportTypeNode) SetQualifier(qualifier *EntityName) { node.qualifier.set(qualifier) }
+
 func (f *NodeFactory) NewImportTypeNode(isTypeOf bool, argument *TypeNode, attributes *ImportAttributesNode, qualifier *EntityName, typeArguments *TypeList) *Node {
-	data := &ImportTypeNode{}
+	data := newData[ImportTypeNode](f)
 	data.IsTypeOf = isTypeOf
-	data.Argument = argument
-	data.Attributes = attributes
-	data.Qualifier = qualifier
-	data.TypeArguments = typeArguments
+	data.argument.set(argument)
+	data.attributes.set(attributes)
+	data.qualifier.set(qualifier)
+	data.typeArguments.set(typeArguments)
 	return f.newNode(KindImportType, data)
 }
 
 func (f *NodeFactory) UpdateImportTypeNode(node *ImportTypeNode, isTypeOf bool, argument *TypeNode, attributes *ImportAttributesNode, qualifier *EntityName, typeArguments *TypeList) *Node {
-	if isTypeOf != node.IsTypeOf || argument != node.Argument || attributes != node.Attributes || qualifier != node.Qualifier || typeArguments != node.TypeArguments {
+	if isTypeOf != node.IsTypeOf || argument != node.Argument() || attributes != node.Attributes() || qualifier != node.Qualifier() || typeArguments != node.TypeArguments() {
 		return updateNode(f.NewImportTypeNode(isTypeOf, argument, attributes, qualifier, typeArguments), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ImportTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.Argument) ||
-		visit(v, node.Attributes) ||
-		visit(v, node.Qualifier) ||
-		visitNodeList(v, node.TypeArguments)
+	return visit(v, node.Argument()) ||
+		visit(v, node.Attributes()) ||
+		visit(v, node.Qualifier()) ||
+		visitNodeList(v, node.TypeArguments())
 }
 
 func (node *ImportTypeNode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateImportTypeNode(node, node.IsTypeOf, v.visitNode(node.Argument), v.visitNode(node.Attributes), v.visitNode(node.Qualifier), v.visitNodes(node.TypeArguments))
+	return v.Factory.UpdateImportTypeNode(node, node.IsTypeOf, v.visitNode(node.Argument()), v.visitNode(node.Attributes()), v.visitNode(node.Qualifier()), v.visitNodes(node.TypeArguments()))
 }
 
 func (node *ImportTypeNode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewImportTypeNode(node.IsTypeOf, node.Argument, node.Attributes, node.Qualifier, node.TypeArguments), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewImportTypeNode(node.IsTypeOf, node.Argument(), node.Attributes(), node.Qualifier(), node.TypeArguments()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsImportTypeNode(node *Node) bool {
@@ -8246,39 +9414,45 @@ type ImportClause struct {
 	ExportableBase
 	CompositeBase
 	PhaseModifier ImportPhaseModifierSyntaxKind // Optional
-	name          *IdentifierNode               // Optional
-	NamedBindings *NamedImportBindings          // Optional
+	name          link[Node]                    // *IdentifierNode. Optional
+	namedBindings link[Node]                    // *NamedImportBindings. Optional
+}
+
+func (node *ImportClause) NamedBindings() *NamedImportBindings { return node.namedBindings.get() }
+
+func (node *ImportClause) SetNamedBindings(namedBindings *NamedImportBindings) {
+	node.namedBindings.set(namedBindings)
 }
 
 func (f *NodeFactory) NewImportClause(phaseModifier ImportPhaseModifierSyntaxKind, name *IdentifierNode, namedBindings *NamedImportBindings) *Node {
-	data := &ImportClause{}
+	data := newData[ImportClause](f)
 	data.PhaseModifier = phaseModifier
-	data.name = name
-	data.NamedBindings = namedBindings
+	data.name.set(name)
+	data.namedBindings.set(namedBindings)
 	return f.newNode(KindImportClause, data)
 }
 
 func (f *NodeFactory) UpdateImportClause(node *ImportClause, phaseModifier ImportPhaseModifierSyntaxKind, name *IdentifierNode, namedBindings *NamedImportBindings) *Node {
-	if phaseModifier != node.PhaseModifier || name != node.name || namedBindings != node.NamedBindings {
+	if phaseModifier != node.PhaseModifier || name != node.name.get() || namedBindings != node.NamedBindings() {
 		return updateNode(f.NewImportClause(phaseModifier, name, namedBindings), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ImportClause) ForEachChild(v Visitor) bool {
-	return visit(v, node.name) || visit(v, node.NamedBindings)
+	return visit(v, node.name.get()) || visit(v, node.NamedBindings())
 }
 
 func (node *ImportClause) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateImportClause(node, node.PhaseModifier, v.visitNode(node.name), v.visitNode(node.NamedBindings))
+	return v.Factory.UpdateImportClause(node, node.PhaseModifier, v.visitNode(node.name.get()), v.visitNode(node.NamedBindings()))
 }
 
 func (node *ImportClause) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewImportClause(node.PhaseModifier, node.name, node.NamedBindings), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewImportClause(node.PhaseModifier, node.name.get(), node.NamedBindings()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ImportClause) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsImportClause(node *Node) bool {
@@ -8295,39 +9469,45 @@ type ImportSpecifier struct {
 	ExportableBase
 	CompositeBase
 	IsTypeOnly   bool
-	PropertyName *ModuleExportName // Optional
-	name         *IdentifierNode
+	propertyName link[Node] // *ModuleExportName. Optional
+	name         link[Node] // *IdentifierNode
+}
+
+func (node *ImportSpecifier) PropertyName() *ModuleExportName { return node.propertyName.get() }
+
+func (node *ImportSpecifier) SetPropertyName(propertyName *ModuleExportName) {
+	node.propertyName.set(propertyName)
 }
 
 func (f *NodeFactory) NewImportSpecifier(isTypeOnly bool, propertyName *ModuleExportName, name *IdentifierNode) *Node {
-	data := f.importSpecifierArena.New()
+	data := newData[ImportSpecifier](f)
 	data.IsTypeOnly = isTypeOnly
-	data.PropertyName = propertyName
-	data.name = name
+	data.propertyName.set(propertyName)
+	data.name.set(name)
 	return f.newNode(KindImportSpecifier, data)
 }
 
 func (f *NodeFactory) UpdateImportSpecifier(node *ImportSpecifier, isTypeOnly bool, propertyName *ModuleExportName, name *IdentifierNode) *Node {
-	if isTypeOnly != node.IsTypeOnly || propertyName != node.PropertyName || name != node.name {
+	if isTypeOnly != node.IsTypeOnly || propertyName != node.PropertyName() || name != node.name.get() {
 		return updateNode(f.NewImportSpecifier(isTypeOnly, propertyName, name), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ImportSpecifier) ForEachChild(v Visitor) bool {
-	return visit(v, node.PropertyName) || visit(v, node.name)
+	return visit(v, node.PropertyName()) || visit(v, node.name.get())
 }
 
 func (node *ImportSpecifier) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateImportSpecifier(node, node.IsTypeOnly, v.visitNode(node.PropertyName), v.visitNode(node.name))
+	return v.Factory.UpdateImportSpecifier(node, node.IsTypeOnly, v.visitNode(node.PropertyName()), v.visitNode(node.name.get()))
 }
 
 func (node *ImportSpecifier) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewImportSpecifier(node.IsTypeOnly, node.PropertyName, node.name), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewImportSpecifier(node.IsTypeOnly, node.PropertyName(), node.name.get()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ImportSpecifier) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsImportSpecifier(node *Node) bool {
@@ -8343,8 +9523,9 @@ type JSDocText struct {
 }
 
 func (f *NodeFactory) NewJSDocText(text []string) *Node {
-	data := f.jsdocTextArena.New()
+	data := newData[JSDocText](f)
 	data.text = text
+	keepSlice(f, text)
 	f.textCount++
 	return f.newNode(KindJSDocText, data)
 }
@@ -8363,38 +9544,39 @@ func IsJSDocText(node *Node) bool {
 
 type JSDocLink struct {
 	JSDocCommentBase
-	name *EntityName // Optional
+	name link[Node] // *EntityName. Optional
 }
 
 func (f *NodeFactory) NewJSDocLink(name *EntityName, text []string) *Node {
-	data := &JSDocLink{}
-	data.name = name
+	data := newData[JSDocLink](f)
+	data.name.set(name)
 	data.text = text
+	keepSlice(f, text)
 	f.textCount++
 	return f.newNode(KindJSDocLink, data)
 }
 
 func (f *NodeFactory) UpdateJSDocLink(node *JSDocLink, name *EntityName, text []string) *Node {
-	if name != node.name || !core.Same(text, node.text) {
+	if name != node.name.get() || !core.Same(text, node.text) {
 		return updateNode(f.NewJSDocLink(name, text), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocLink) ForEachChild(v Visitor) bool {
-	return visit(v, node.name)
+	return visit(v, node.name.get())
 }
 
 func (node *JSDocLink) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocLink(node, v.visitNode(node.name), node.text)
+	return v.Factory.UpdateJSDocLink(node, v.visitNode(node.name.get()), node.text)
 }
 
 func (node *JSDocLink) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocLink(node.name, node.text), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocLink(node.name.get(), node.text), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *JSDocLink) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsJSDocLink(node *Node) bool {
@@ -8407,38 +9589,39 @@ func IsJSDocLink(node *Node) bool {
 
 type JSDocLinkPlain struct {
 	JSDocCommentBase
-	name *EntityName // Optional
+	name link[Node] // *EntityName. Optional
 }
 
 func (f *NodeFactory) NewJSDocLinkPlain(name *EntityName, text []string) *Node {
-	data := &JSDocLinkPlain{}
-	data.name = name
+	data := newData[JSDocLinkPlain](f)
+	data.name.set(name)
 	data.text = text
+	keepSlice(f, text)
 	f.textCount++
 	return f.newNode(KindJSDocLinkPlain, data)
 }
 
 func (f *NodeFactory) UpdateJSDocLinkPlain(node *JSDocLinkPlain, name *EntityName, text []string) *Node {
-	if name != node.name || !core.Same(text, node.text) {
+	if name != node.name.get() || !core.Same(text, node.text) {
 		return updateNode(f.NewJSDocLinkPlain(name, text), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocLinkPlain) ForEachChild(v Visitor) bool {
-	return visit(v, node.name)
+	return visit(v, node.name.get())
 }
 
 func (node *JSDocLinkPlain) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocLinkPlain(node, v.visitNode(node.name), node.text)
+	return v.Factory.UpdateJSDocLinkPlain(node, v.visitNode(node.name.get()), node.text)
 }
 
 func (node *JSDocLinkPlain) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocLinkPlain(node.name, node.text), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocLinkPlain(node.name.get(), node.text), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *JSDocLinkPlain) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsJSDocLinkPlain(node *Node) bool {
@@ -8451,38 +9634,39 @@ func IsJSDocLinkPlain(node *Node) bool {
 
 type JSDocLinkCode struct {
 	JSDocCommentBase
-	name *EntityName // Optional
+	name link[Node] // *EntityName. Optional
 }
 
 func (f *NodeFactory) NewJSDocLinkCode(name *EntityName, text []string) *Node {
-	data := &JSDocLinkCode{}
-	data.name = name
+	data := newData[JSDocLinkCode](f)
+	data.name.set(name)
 	data.text = text
+	keepSlice(f, text)
 	f.textCount++
 	return f.newNode(KindJSDocLinkCode, data)
 }
 
 func (f *NodeFactory) UpdateJSDocLinkCode(node *JSDocLinkCode, name *EntityName, text []string) *Node {
-	if name != node.name || !core.Same(text, node.text) {
+	if name != node.name.get() || !core.Same(text, node.text) {
 		return updateNode(f.NewJSDocLinkCode(name, text), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocLinkCode) ForEachChild(v Visitor) bool {
-	return visit(v, node.name)
+	return visit(v, node.name.get())
 }
 
 func (node *JSDocLinkCode) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocLinkCode(node, v.visitNode(node.name), node.text)
+	return v.Factory.UpdateJSDocLinkCode(node, v.visitNode(node.name.get()), node.text)
 }
 
 func (node *JSDocLinkCode) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocLinkCode(node.name, node.text), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocLinkCode(node.name.get(), node.text), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *JSDocLinkCode) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsJSDocLinkCode(node *Node) bool {
@@ -8498,47 +9682,65 @@ type TypeParameterDeclaration struct {
 	NodeBase
 	DeclarationBase
 	ModifiersBase
-	name        *IdentifierNode
-	Constraint  *TypeNode   // Optional
-	Expression  *Expression // Optional
-	DefaultType *TypeNode   // Optional
+	name        link[Node] // *IdentifierNode
+	constraint  link[Node] // *TypeNode. Optional
+	expression  link[Node] // *Expression. Optional
+	defaultType link[Node] // *TypeNode. Optional
+}
+
+func (node *TypeParameterDeclaration) Constraint() *TypeNode { return node.constraint.get() }
+
+func (node *TypeParameterDeclaration) SetConstraint(constraint *TypeNode) {
+	node.constraint.set(constraint)
+}
+
+func (node *TypeParameterDeclaration) Expression() *Expression { return node.expression.get() }
+
+func (node *TypeParameterDeclaration) SetExpression(expression *Expression) {
+	node.expression.set(expression)
+}
+
+func (node *TypeParameterDeclaration) DefaultType() *TypeNode { return node.defaultType.get() }
+
+func (node *TypeParameterDeclaration) SetDefaultType(defaultType *TypeNode) {
+	node.defaultType.set(defaultType)
 }
 
 func (f *NodeFactory) NewTypeParameterDeclaration(modifiers *ModifierList, name *IdentifierNode, constraint *TypeNode, expression *Expression, defaultType *TypeNode) *Node {
-	data := f.typeParameterDeclarationArena.New()
-	data.modifiers = modifiers
-	data.name = name
-	data.Constraint = constraint
-	data.Expression = expression
-	data.DefaultType = defaultType
+	data := newData[TypeParameterDeclaration](f)
+	data.modifiers.set(modifiers)
+	data.name.set(name)
+	data.constraint.set(constraint)
+	data.expression.set(expression)
+	data.defaultType.set(defaultType)
 	return f.newNode(KindTypeParameter, data)
 }
 
 func (f *NodeFactory) UpdateTypeParameterDeclaration(node *TypeParameterDeclaration, modifiers *ModifierList, name *IdentifierNode, constraint *TypeNode, expression *Expression, defaultType *TypeNode) *Node {
-	if modifiers != node.modifiers || name != node.name || constraint != node.Constraint || expression != node.Expression || defaultType != node.DefaultType {
+	if modifiers != node.modifiers.get() || name != node.name.get() || constraint != node.Constraint() || expression != node.Expression() || defaultType != node.DefaultType() {
 		return updateNode(f.NewTypeParameterDeclaration(modifiers, name, constraint, expression, defaultType), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *TypeParameterDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visit(v, node.Constraint) ||
-		visit(v, node.Expression) ||
-		visit(v, node.DefaultType)
+	return visitModifiers(v, node.modifiers.get()) ||
+		visit(v, node.name.get()) ||
+		visit(v, node.Constraint()) ||
+		visit(v, node.Expression()) ||
+		visit(v, node.DefaultType())
 }
 
 func (node *TypeParameterDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTypeParameterDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.Constraint), v.visitNode(node.Expression), v.visitNode(node.DefaultType))
+	return v.Factory.UpdateTypeParameterDeclaration(node, v.visitModifiers(node.modifiers.get()), v.visitNode(node.name.get()), v.visitNode(node.Constraint()), v.visitNode(node.Expression()), v.visitNode(node.DefaultType()))
 }
 
 func (node *TypeParameterDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTypeParameterDeclaration(node.Modifiers(), node.name, node.Constraint, node.Expression, node.DefaultType), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewTypeParameterDeclaration(node.Modifiers(), node.name.get(), node.Constraint(), node.Expression(), node.DefaultType()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *TypeParameterDeclaration) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsTypeParameterDeclaration(node *Node) bool {
@@ -8551,39 +9753,49 @@ func IsTypeParameterDeclaration(node *Node) bool {
 
 type SyntheticReferenceExpression struct {
 	ExpressionBase
-	Expression *Expression
-	ThisArg    *Expression
+	expression link[Node] // *Expression
+	thisArg    link[Node] // *Expression
 }
 
+func (node *SyntheticReferenceExpression) Expression() *Expression { return node.expression.get() }
+
+func (node *SyntheticReferenceExpression) SetExpression(expression *Expression) {
+	node.expression.set(expression)
+}
+
+func (node *SyntheticReferenceExpression) ThisArg() *Expression { return node.thisArg.get() }
+
+func (node *SyntheticReferenceExpression) SetThisArg(thisArg *Expression) { node.thisArg.set(thisArg) }
+
 func (f *NodeFactory) NewSyntheticReferenceExpression(expression *Expression, thisArg *Expression) *Node {
-	data := &SyntheticReferenceExpression{}
-	data.Expression = expression
-	data.ThisArg = thisArg
+	data := newData[SyntheticReferenceExpression](f)
+	data.expression.set(expression)
+	data.thisArg.set(thisArg)
 	return f.newNode(KindSyntheticReferenceExpression, data)
 }
 
 func (f *NodeFactory) UpdateSyntheticReferenceExpression(node *SyntheticReferenceExpression, expression *Expression, thisArg *Expression) *Node {
-	if expression != node.Expression || thisArg != node.ThisArg {
+	if expression != node.Expression() || thisArg != node.ThisArg() {
 		return updateNode(f.NewSyntheticReferenceExpression(expression, thisArg), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *SyntheticReferenceExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visit(v, node.ThisArg)
+	return visit(v, node.Expression()) || visit(v, node.ThisArg())
 }
 
 func (node *SyntheticReferenceExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateSyntheticReferenceExpression(node, v.visitNode(node.Expression), v.visitNode(node.ThisArg))
+	return v.Factory.UpdateSyntheticReferenceExpression(node, v.visitNode(node.Expression()), v.visitNode(node.ThisArg()))
 }
 
 func (node *SyntheticReferenceExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewSyntheticReferenceExpression(node.Expression, node.ThisArg), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewSyntheticReferenceExpression(node.Expression(), node.ThisArg()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *SyntheticReferenceExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression) |
-		propagateSubtreeFacts(node.ThisArg)
+	return propagateSubtreeFacts(node.Expression()) |
+		propagateSubtreeFacts(node.ThisArg())
 }
 
 func IsSyntheticReferenceExpression(node *Node) bool {
@@ -8602,8 +9814,9 @@ type JSDocTypeLiteral struct {
 }
 
 func (f *NodeFactory) NewJSDocTypeLiteral(jsdocPropertyTags []*Node, isArrayType bool) *Node {
-	data := &JSDocTypeLiteral{}
+	data := newData[JSDocTypeLiteral](f)
 	data.JSDocPropertyTags = jsdocPropertyTags
+	f.keepNodes(jsdocPropertyTags)
 	data.IsArrayType = isArrayType
 	return f.newNode(KindJSDocTypeLiteral, data)
 }
@@ -8638,25 +9851,31 @@ func IsJSDocTypeLiteral(node *Node) bool {
 
 type JSDocParameterOrPropertyTag struct {
 	JSDocTagBase
-	name           *EntityName
+	name           link[Node] // *EntityName
 	IsBracketed    bool
-	TypeExpression *TypeNode // Optional
+	typeExpression link[Node] // *TypeNode. Optional
 	IsNameFirst    bool
 }
 
+func (node *JSDocParameterOrPropertyTag) TypeExpression() *TypeNode { return node.typeExpression.get() }
+
+func (node *JSDocParameterOrPropertyTag) SetTypeExpression(typeExpression *TypeNode) {
+	node.typeExpression.set(typeExpression)
+}
+
 func (f *NodeFactory) NewJSDocParameterOrPropertyTag(kind Kind, tagName *IdentifierNode, name *EntityName, isBracketed bool, typeExpression *TypeNode, isNameFirst bool, comment *NodeList) *Node {
-	data := &JSDocParameterOrPropertyTag{}
-	data.TagName = tagName
-	data.name = name
+	data := newData[JSDocParameterOrPropertyTag](f)
+	data.tagName.set(tagName)
+	data.name.set(name)
 	data.IsBracketed = isBracketed
-	data.TypeExpression = typeExpression
+	data.typeExpression.set(typeExpression)
 	data.IsNameFirst = isNameFirst
-	data.Comment = comment
+	data.comment.set(comment)
 	return f.newNode(kind, data)
 }
 
 func (f *NodeFactory) UpdateJSDocParameterOrPropertyTag(node *JSDocParameterOrPropertyTag, tagName *IdentifierNode, name *EntityName, isBracketed bool, typeExpression *TypeNode, isNameFirst bool, comment *NodeList) *Node {
-	if tagName != node.TagName || name != node.name || isBracketed != node.IsBracketed || typeExpression != node.TypeExpression || isNameFirst != node.IsNameFirst || comment != node.Comment {
+	if tagName != node.TagName() || name != node.name.get() || isBracketed != node.IsBracketed || typeExpression != node.TypeExpression() || isNameFirst != node.IsNameFirst || comment != node.Comment() {
 		return updateNode(f.NewJSDocParameterOrPropertyTag(node.Kind, tagName, name, isBracketed, typeExpression, isNameFirst, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
@@ -8671,11 +9890,11 @@ func (node *JSDocParameterOrPropertyTag) VisitEachChild(v *NodeVisitor) *Node {
 }
 
 func (node *JSDocParameterOrPropertyTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocParameterOrPropertyTag(node.Kind, node.TagName, node.name, node.IsBracketed, node.TypeExpression, node.IsNameFirst, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocParameterOrPropertyTag(node.Kind, node.TagName(), node.name.get(), node.IsBracketed, node.TypeExpression(), node.IsNameFirst, node.Comment()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *JSDocParameterOrPropertyTag) Name() *DeclarationName {
-	return node.name
+	return node.name.get()
 }
 
 func IsJSDocParameterTag(node *Node) bool {

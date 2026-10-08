@@ -6,6 +6,10 @@ import "slices"
 
 type Arena[T any] struct {
 	data []T
+	// OnGrow, when set, is called with every block of memory the arena allocates. An owner
+	// whose pointers into the arena are invisible to the garbage collector uses it to keep
+	// the blocks alive.
+	OnGrow func(block []T)
 }
 
 // Allocate a single element in the arena and return a pointer to the element. If the arena is at capacity,
@@ -15,6 +19,9 @@ func (a *Arena[T]) New() *T {
 		nextSize := nextArenaSize(len(a.data))
 		// Use the same trick as slices.Concat; Grow rounds up to the next size class.
 		a.data = slices.Grow[[]T](nil, nextSize)
+		if a.OnGrow != nil {
+			a.OnGrow(a.data[:cap(a.data)])
+		}
 	}
 	index := len(a.data)
 	a.data = a.data[:index+1]
@@ -32,10 +39,17 @@ func (a *Arena[T]) NewSlice(size int) []T {
 	if len(a.data)+size > cap(a.data) {
 		nextSize := nextArenaSize(len(a.data))
 		if size > nextSize {
-			return make([]T, size)
+			slice := make([]T, size)
+			if a.OnGrow != nil {
+				a.OnGrow(slice)
+			}
+			return slice
 		}
 		// Use the same trick as slices.Concat; Grow rounds up to the next size class.
 		a.data = slices.Grow[[]T](nil, nextSize)
+		if a.OnGrow != nil {
+			a.OnGrow(a.data[:cap(a.data)])
+		}
 	}
 	newLen := len(a.data) + size
 	slice := a.data[len(a.data):newLen:newLen]

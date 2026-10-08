@@ -45,18 +45,18 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 		n := node.AsImportDeclaration()
 		// Do not elide a side-effect only import declaration.
 		//  import "foo";
-		if n.ImportClause != nil {
-			importClause := tx.Visitor().VisitNode(n.ImportClause)
+		if n.ImportClause() != nil {
+			importClause := tx.Visitor().VisitNode(n.ImportClause())
 			if importClause == nil {
 				return nil
 			}
-			return tx.Factory().UpdateImportDeclaration(n, n.Modifiers(), importClause, n.ModuleSpecifier, tx.Visitor().VisitNode(n.Attributes))
+			return tx.Factory().UpdateImportDeclaration(n, n.Modifiers(), importClause, n.ModuleSpecifier(), tx.Visitor().VisitNode(n.Attributes()))
 		}
 		return tx.Visitor().VisitEachChild(node)
 	case ast.KindImportClause:
 		n := node.AsImportClause()
 		name := core.IfElse(tx.shouldEmitAliasDeclaration(node), n.Name(), nil)
-		namedBindings := tx.Visitor().VisitNode(n.NamedBindings)
+		namedBindings := tx.Visitor().VisitNode(n.NamedBindings())
 		if name == nil && namedBindings == nil {
 			// all import bindings were elided
 			return nil
@@ -70,7 +70,7 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 		return node
 	case ast.KindNamedImports:
 		n := node.AsNamedImports()
-		elements := tx.Visitor().VisitNodes(n.Elements)
+		elements := tx.Visitor().VisitNodes(n.Elements())
 		if len(elements.Nodes) == 0 {
 			// all import specifiers were elided
 			return nil
@@ -91,17 +91,17 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 	case ast.KindExportDeclaration:
 		n := node.AsExportDeclaration()
 		var exportClause *ast.Node
-		if n.ExportClause != nil {
-			exportClause = tx.Visitor().VisitNode(n.ExportClause)
+		if n.ExportClause() != nil {
+			exportClause = tx.Visitor().VisitNode(n.ExportClause())
 			if exportClause == nil {
 				// all export bindings were elided
 				return nil
 			}
 		}
-		return tx.Factory().UpdateExportDeclaration(n, nil /*modifiers*/, false /*isTypeOnly*/, exportClause, tx.Visitor().VisitNode(n.ModuleSpecifier), tx.Visitor().VisitNode(n.Attributes))
+		return tx.Factory().UpdateExportDeclaration(n, nil /*modifiers*/, false /*isTypeOnly*/, exportClause, tx.Visitor().VisitNode(n.ModuleSpecifier()), tx.Visitor().VisitNode(n.Attributes()))
 	case ast.KindNamedExports:
 		n := node.AsNamedExports()
-		elements := tx.Visitor().VisitNodes(n.Elements)
+		elements := tx.Visitor().VisitNodes(n.Elements())
 		if len(elements.Nodes) == 0 {
 			// all export specifiers were elided
 			return nil

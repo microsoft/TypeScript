@@ -85,7 +85,7 @@ type Parser struct {
 
 	identifierCount            int
 	notParenthesizedArrow      collections.Set[int]
-	nodeSliceArena             core.Arena[*ast.Node]
+	nodeSliceArena             nodeSliceArena
 	stringSliceArena           core.Arena[string]
 	jsdocInfos                 []JSDocInfo
 	possibleAwaitSpans         []int
@@ -135,16 +135,54 @@ func ParseSourceFile(opts ast.SourceFileParseOptions, sourceText string, scriptK
 	p := getParser()
 	defer putParser(p)
 	p.initializeState(opts, sourceText, scriptKind)
+	p.factory.StartParse(sourceText, (*parseProgress)(p))
 	p.nextToken()
+	var result *ast.SourceFile
 	if p.scriptKind == core.ScriptKindJSON {
-		return p.parseJSONText()
+		result = p.parseJSONText()
+	} else {
+		result = p.parseSourceFileWorker()
 	}
-	return p.parseSourceFileWorker()
+	p.factory.FinishParse()
+	result.VerifyArena()
+	return result
+}
+
+// parseProgress reports how much of the source text a parser has scanned, which the arena
+// of the file's nodes uses to judge how much more memory the file will need.
+type parseProgress Parser
+
+func (p *parseProgress) Progress() (done int, total int) {
+	return p.scanner.TokenFullStart(), len(p.sourceText)
+}
+
+// nodeSliceArena allocates the element slices of node lists from the parser's node factory.
+type nodeSliceArena struct {
+	factory *ast.NodeFactory
+}
+
+func (a nodeSliceArena) NewSlice(size int) []*ast.Node {
+	return a.factory.NewNodeSlice(size)
+}
+
+func (a nodeSliceArena) NewSlice1(node *ast.Node) []*ast.Node {
+	slice := a.NewSlice(1)
+	slice[0] = node
+	return slice
+}
+
+func (a nodeSliceArena) Clone(nodes []*ast.Node) []*ast.Node {
+	if len(nodes) == 0 {
+		return nil
+	}
+	slice := a.NewSlice(len(nodes))
+	copy(slice, nodes)
+	return slice
 }
 
 func (p *Parser) initializeClosures() {
 	p.setParentFromContext = func(n *ast.Node) bool {
-		n.Parent = p.currentParent
+		n.SetParent(p.currentParent)
 		return false
 	}
 }
@@ -244,7 +282,7 @@ func (p *Parser) validateJsonValue(sourceFile *ast.SourceFile, valueExpression *
 		}
 		return
 	case ast.KindPrefixUnaryExpression:
-		if valueExpression.AsPrefixUnaryExpression().Operator != ast.KindMinusToken || valueExpression.AsPrefixUnaryExpression().Operand.Kind != ast.KindNumericLiteral {
+		if valueExpression.AsPrefixUnaryExpression().Operator != ast.KindMinusToken || valueExpression.AsPrefixUnaryExpression().Operand().Kind != ast.KindNumericLiteral {
 			break // not valid JSON syntax
 		}
 		return
@@ -266,7 +304,7 @@ func isDoubleQuotedString(node *ast.Node) bool {
 
 // validateJsonObjectLiteral validates properties of a JSON object literal.
 func (p *Parser) validateJsonObjectLiteral(sourceFile *ast.SourceFile, node *ast.ObjectLiteralExpression) {
-	for _, element := range node.Properties.Nodes {
+	for _, element := range node.Properties().Nodes {
 		if element.Kind != ast.KindPropertyAssignment {
 			p.diagnostics = append(p.diagnostics, ast.NewDiagnostic(sourceFile, getErrorSpanForNode(p.sourceText, element), diagnostics.Property_assignment_expected))
 			continue
@@ -274,7 +312,7 @@ func (p *Parser) validateJsonObjectLiteral(sourceFile *ast.SourceFile, node *ast
 		if element.Name() != nil && !isDoubleQuotedString(element.Name()) {
 			p.diagnostics = append(p.diagnostics, ast.NewDiagnostic(sourceFile, getErrorSpanForNode(p.sourceText, element.Name()), diagnostics.String_literal_with_double_quotes_expected))
 		}
-		p.validateJsonValue(sourceFile, element.AsPropertyAssignment().Initializer)
+		p.validateJsonValue(sourceFile, element.AsPropertyAssignment().Initializer())
 	}
 }
 
@@ -299,6 +337,7 @@ func (p *Parser) initializeState(opts ast.SourceFileParseOptions, sourceText str
 	}
 	p.opts = opts
 	p.sourceText = sourceText
+	p.nodeSliceArena.factory = &p.factory
 	p.scriptKind = scriptKind
 	p.languageVariant = getLanguageVariant(p.scriptKind)
 	switch p.scriptKind {
@@ -604,7 +643,7 @@ func (p *Parser) reparseTopLevelAwait(sourceFile *ast.SourceFile) *ast.Node {
 
 	result := p.factory.NewSourceFile(sourceFile.ParseOptions(), p.sourceText, p.newNodeList(sourceFile.Statements.Loc, statements), sourceFile.EndOfFileToken)
 	for _, s := range statements {
-		s.Parent = result.AsNode() // force (re)set parent to reparsed source file
+		s.SetParent(result.AsNode()) // force (re)set parent to reparsed source file
 	}
 	return result
 }
@@ -722,7 +761,7 @@ func (p *Parser) parseEmptyNodeList() *ast.NodeList {
 
 func (p *Parser) createMissingList() *ast.NodeList {
 	result := p.parseEmptyNodeList()
-	result.Nodes = missingListNodes
+	result.SetNodes(missingListNodes)
 	return result
 }
 
@@ -1783,7 +1822,7 @@ func (p *Parser) parseClassDeclarationOrExpression(pos int, jsdoc jsdocScannerIn
 		if heritageClauses != nil {
 			for _, clause := range heritageClauses.Nodes {
 				if clause.AsHeritageClause().Token == ast.KindExtendsKeyword {
-					for _, expr := range clause.AsHeritageClause().Types.Nodes {
+					for _, expr := range clause.AsHeritageClause().Types().Nodes {
 						p.checkJSSyntax(expr)
 					}
 				}
@@ -1851,11 +1890,11 @@ func isTypeHeritageClause(isInterface bool, token ast.Kind) bool {
 func (p *Parser) parseTypeHeritageClauseElement() *ast.HeritageClauseElement {
 	pos := p.nodePos()
 	expressionWithTypeArguments := p.parseExpressionWithTypeArguments().AsExpressionWithTypeArguments()
-	if !isValidHeritageTypeReferenceExpression(expressionWithTypeArguments.Expression) {
+	if !isValidHeritageTypeReferenceExpression(expressionWithTypeArguments.Expression()) {
 		return expressionWithTypeArguments.AsNode()
 	}
-	typeName := p.convertEntityNameExpressionToEntityName(expressionWithTypeArguments.Expression)
-	return p.finishNode(p.factory.NewTypeReferenceNode(typeName, expressionWithTypeArguments.TypeArguments), pos)
+	typeName := p.convertEntityNameExpressionToEntityName(expressionWithTypeArguments.Expression())
+	return p.finishNode(p.factory.NewTypeReferenceNode(typeName, expressionWithTypeArguments.TypeArguments()), pos)
 }
 
 func isValidHeritageTypeReferenceExpression(node *ast.Node) bool {
@@ -1874,7 +1913,7 @@ func (p *Parser) convertEntityNameExpressionToEntityName(node *ast.Node) *ast.No
 	}
 	propertyAccess := node.AsPropertyAccessExpression()
 	result := p.factory.NewQualifiedName(
-		p.convertEntityNameExpressionToEntityName(propertyAccess.Expression),
+		p.convertEntityNameExpressionToEntityName(propertyAccess.Expression()),
 		propertyAccess.Name(),
 	)
 	return p.finishNodeWithEnd(result, node.Pos(), node.End())
@@ -2058,7 +2097,7 @@ func (p *Parser) parseErrorForMissingSemicolonAfter(node *ast.Node) {
 	//   module `M1` {
 	//   ^^^^^^^^^^^ This block is parsed as a template literal like module`M1`.
 	if node.Kind == ast.KindTaggedTemplateExpression {
-		p.parseErrorAtRange(p.skipRangeTrivia(node.AsTaggedTemplateExpression().Template.Loc), diagnostics.Module_declaration_names_may_only_use_or_quoted_strings)
+		p.parseErrorAtRange(p.skipRangeTrivia(node.AsTaggedTemplateExpression().Template().Loc), diagnostics.Module_declaration_names_may_only_use_or_quoted_strings)
 		return
 	}
 	// Otherwise, if this isn't a well-known keyword-like identifier, give the generic fallback message.
@@ -3726,7 +3765,7 @@ func (p *Parser) parseTupleElementType() *ast.TypeNode {
 		node := p.factory.NewOptionalTypeNode(typeNode.Type())
 		node.Flags = typeNode.Flags
 		node.Loc = typeNode.Loc
-		typeNode.Type().Parent = node
+		typeNode.Type().SetParent(node)
 		return node
 	}
 	return typeNode
@@ -3785,7 +3824,7 @@ func (p *Parser) parseTemplateTypeSpans() *ast.NodeList {
 	for {
 		span := p.parseTemplateTypeSpan()
 		list = append(list, span)
-		if span.AsTemplateLiteralTypeSpan().Literal.Kind != ast.KindTemplateMiddle {
+		if span.AsTemplateLiteralTypeSpan().Literal().Kind != ast.KindTemplateMiddle {
 			break
 		}
 	}
@@ -4524,9 +4563,9 @@ func (p *Parser) parseModifiersForArrowFunction() *ast.ModifierList {
 func typeHasArrowFunctionBlockingParseError(node *ast.TypeNode) bool {
 	switch node.Kind {
 	case ast.KindTypeReference:
-		return ast.NodeIsMissing(node.AsTypeReferenceNode().TypeName)
+		return ast.NodeIsMissing(node.AsTypeReferenceNode().TypeName())
 	case ast.KindFunctionType, ast.KindConstructorType:
-		return isMissingNodeList(node.FunctionLikeData().Parameters) || typeHasArrowFunctionBlockingParseError(node.Type())
+		return isMissingNodeList(node.FunctionLikeData().Parameters()) || typeHasArrowFunctionBlockingParseError(node.Type())
 	case ast.KindParenthesizedType:
 		return typeHasArrowFunctionBlockingParseError(node.Type())
 	}
@@ -4709,7 +4748,7 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 				// assertion. See https://github.com/microsoft/TypeScript/issues/63527.
 				lastPrecedence := ast.OperatorPrecedenceHighest
 				if ast.IsBinaryExpression(lastOperand) {
-					lastPrecedence = ast.GetBinaryOperatorPrecedence(lastOperand.AsBinaryExpression().OperatorToken.Kind)
+					lastPrecedence = ast.GetBinaryOperatorPrecedence(lastOperand.AsBinaryExpression().OperatorToken().Kind)
 				}
 				if operator == ast.KindSatisfiesKeyword {
 					leftOperand = p.makeSatisfiesExpression(leftOperand, p.parseType())
@@ -4821,8 +4860,8 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 		var closingElement *ast.Node
 		lastChild := core.LastOrNil(children.Nodes)
 		if lastChild != nil && lastChild.Kind == ast.KindJsxElement &&
-			!ast.TagNamesAreEquivalent(lastChild.AsJsxElement().OpeningElement.TagName(), lastChild.AsJsxElement().ClosingElement.TagName()) &&
-			ast.TagNamesAreEquivalent(opening.TagName(), lastChild.AsJsxElement().ClosingElement.TagName()) {
+			!ast.TagNamesAreEquivalent(lastChild.AsJsxElement().OpeningElement().TagName(), lastChild.AsJsxElement().ClosingElement().TagName()) &&
+			ast.TagNamesAreEquivalent(opening.TagName(), lastChild.AsJsxElement().ClosingElement().TagName()) {
 			// when an unclosed JsxOpeningElement incorrectly parses its parent's JsxClosingElement,
 			// restructure (<div>(...<span>...</div>)) --> (<div>(...<span>...</>)</div>)
 			// (no need to error; the parent will error)
@@ -4830,22 +4869,22 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 			missingIdentifier := p.finishNodeWithEnd(p.newIdentifier(""), end, end)
 			newClosingElement := p.finishNodeWithEnd(p.factory.NewJsxClosingElement(missingIdentifier), end, end)
 			newLast := p.finishNodeWithEnd(
-				p.factory.NewJsxElement(lastChild.AsJsxElement().OpeningElement, lastChild.Children(), newClosingElement),
-				lastChild.AsJsxElement().OpeningElement.Pos(),
+				p.factory.NewJsxElement(lastChild.AsJsxElement().OpeningElement(), lastChild.Children(), newClosingElement),
+				lastChild.AsJsxElement().OpeningElement().Pos(),
 				end,
 			)
 			// force reset parent pointers from discarded parse result
-			if lastChild.AsJsxElement().OpeningElement != nil {
-				lastChild.AsJsxElement().OpeningElement.Parent = newLast
+			if lastChild.AsJsxElement().OpeningElement() != nil {
+				lastChild.AsJsxElement().OpeningElement().SetParent(newLast)
 			}
 			if lastChild.Children() != nil {
 				for _, c := range lastChild.Children().Nodes {
-					c.Parent = newLast
+					c.SetParent(newLast)
 				}
 			}
-			newClosingElement.Parent = newLast
+			newClosingElement.SetParent(newLast)
 			children = p.newNodeList(core.NewTextRange(children.Pos(), newLast.End()), append(children.Nodes[0:len(children.Nodes)-1], newLast))
-			closingElement = lastChild.AsJsxElement().ClosingElement
+			closingElement = lastChild.AsJsxElement().ClosingElement()
 		} else {
 			closingElement = p.parseJsxClosingElement(opening, inExpressionContext)
 			if !ast.TagNamesAreEquivalent(opening.TagName(), closingElement.TagName()) {
@@ -4859,7 +4898,7 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 			}
 		}
 		result = p.finishNode(p.factory.NewJsxElement(opening, children, closingElement), pos)
-		closingElement.Parent = result // force reset parent pointers from possibly discarded parse result
+		closingElement.SetParent(result) // force reset parent pointers from possibly discarded parse result
 	case ast.KindJsxOpeningFragment:
 		result = p.finishNode(p.factory.NewJsxFragment(opening, p.parseJsxChildren(opening), p.parseJsxClosingFragment(inExpressionContext)), pos)
 	case ast.KindJsxSelfClosingElement:
@@ -4904,8 +4943,8 @@ func (p *Parser) parseJsxChildren(openingTag *ast.Expression) *ast.NodeList {
 		}
 		list = append(list, child)
 		if ast.IsJsxOpeningElement(openingTag) && child.Kind == ast.KindJsxElement &&
-			!ast.TagNamesAreEquivalent(child.AsJsxElement().OpeningElement.TagName(), child.AsJsxElement().ClosingElement.TagName()) &&
-			ast.TagNamesAreEquivalent(openingTag.TagName(), child.AsJsxElement().ClosingElement.TagName()) {
+			!ast.TagNamesAreEquivalent(child.AsJsxElement().OpeningElement().TagName(), child.AsJsxElement().ClosingElement().TagName()) &&
+			ast.TagNamesAreEquivalent(openingTag.TagName(), child.AsJsxElement().ClosingElement().TagName()) {
 			// stop after parsing a mismatched child like <div>...(<span></div>) in order to reattach the </div> higher
 			break
 		}
@@ -5452,8 +5491,8 @@ func (p *Parser) parseMemberExpressionRest(pos int, expression *ast.Expression, 
 			// Absorb type arguments into TemplateExpression when preceding expression is ExpressionWithTypeArguments
 			if questionDotToken == nil && ast.IsExpressionWithTypeArguments(expression) {
 				original := expression.AsExpressionWithTypeArguments()
-				expression = p.parseTaggedTemplateRest(pos, original.Expression, questionDotToken, original.TypeArguments)
-				p.unparseExpressionWithTypeArguments(original.Expression, original.TypeArguments, expression)
+				expression = p.parseTaggedTemplateRest(pos, original.Expression(), questionDotToken, original.TypeArguments())
+				p.unparseExpressionWithTypeArguments(original.Expression(), original.TypeArguments(), expression)
 			} else {
 				expression = p.parseTaggedTemplateRest(pos, expression, questionDotToken, nil /*typeArguments*/)
 			}
@@ -5551,7 +5590,7 @@ func (p *Parser) parseCallExpressionRest(pos int, expression *ast.Expression) *a
 			// Absorb type arguments into CallExpression when preceding expression is ExpressionWithTypeArguments
 			if questionDotToken == nil && expression.Kind == ast.KindExpressionWithTypeArguments {
 				typeArguments = expression.TypeArgumentList()
-				expression = expression.AsExpressionWithTypeArguments().Expression
+				expression = expression.AsExpressionWithTypeArguments().Expression()
 			}
 			inner := expression
 			argumentList := p.parseArgumentList()
@@ -5622,7 +5661,7 @@ func (p *Parser) parseTemplateSpans(isTaggedTemplate bool) *ast.NodeList {
 	for {
 		span := p.parseTemplateSpan(isTaggedTemplate)
 		list = append(list, span)
-		if span.AsTemplateSpan().Literal.Kind != ast.KindTemplateMiddle {
+		if span.AsTemplateSpan().Literal().Kind != ast.KindTemplateMiddle {
 			break
 		}
 	}
@@ -5824,11 +5863,11 @@ func (p *Parser) parseDecoratedExpression() *ast.Expression {
 func (p *Parser) unparseExpressionWithTypeArguments(expression *ast.Node, typeArguments *ast.NodeList, result *ast.Node) {
 	// force overwrite the `.Parent` of the expression and type arguments to erase the fact that they may have originally been parsed as an ExpressionWithTypeArguments and be parented to such
 	if expression != nil {
-		expression.Parent = result
+		expression.SetParent(result)
 	}
 	if typeArguments != nil {
 		for _, a := range typeArguments.Nodes {
-			a.Parent = result
+			a.SetParent(result)
 		}
 	}
 }
@@ -5846,7 +5885,7 @@ func (p *Parser) parseNewExpressionOrNewDotTarget() *ast.Node {
 	// Absorb type arguments into NewExpression when preceding expression is ExpressionWithTypeArguments
 	if expression.Kind == ast.KindExpressionWithTypeArguments {
 		typeArguments = expression.TypeArgumentList()
-		expression = expression.AsExpressionWithTypeArguments().Expression
+		expression = expression.AsExpressionWithTypeArguments().Expression()
 	}
 	if p.token == ast.KindQuestionDotToken {
 		p.parseErrorAtCurrentToken(diagnostics.Invalid_optional_chain_from_new_expression_Did_you_mean_to_call_0, scanner.GetTextOfNodeFromSourceText(p.sourceText, expression, false /*includeTrivia*/))

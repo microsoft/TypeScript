@@ -220,7 +220,7 @@ func (tx *forawaitTransformer) visitAwaitExpression(node *ast.AwaitExpression) *
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsAsync != 0 && tx.enclosingFunctionFlags&ast.FunctionFlagsGenerator != 0 {
 		result := tx.Factory().NewYieldExpression(
 			nil, /*asteriskToken*/
-			tx.Factory().NewAwaitHelper(tx.Visitor().VisitNode(node.Expression)),
+			tx.Factory().NewAwaitHelper(tx.Visitor().VisitNode(node.Expression())),
 		)
 		result.Loc = node.Loc
 		tx.EmitContext().SetOriginal(result, node.AsNode())
@@ -231,8 +231,8 @@ func (tx *forawaitTransformer) visitAwaitExpression(node *ast.AwaitExpression) *
 
 func (tx *forawaitTransformer) visitYieldExpression(node *ast.YieldExpression) *ast.Node {
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsAsync != 0 && tx.enclosingFunctionFlags&ast.FunctionFlagsGenerator != 0 {
-		if node.AsteriskToken != nil {
-			expression := tx.Visitor().VisitNode(node.Expression)
+		if node.AsteriskToken() != nil {
+			expression := tx.Visitor().VisitNode(node.Expression())
 
 			asyncValuesResult := tx.Factory().NewAsyncValuesHelper(expression)
 			asyncValuesResult.Loc = expression.Loc
@@ -242,7 +242,7 @@ func (tx *forawaitTransformer) visitYieldExpression(node *ast.YieldExpression) *
 
 			innerYield := tx.Factory().UpdateYieldExpression(
 				node,
-				node.AsteriskToken,
+				node.AsteriskToken(),
 				asyncDelegatorResult,
 			)
 
@@ -258,8 +258,8 @@ func (tx *forawaitTransformer) visitYieldExpression(node *ast.YieldExpression) *
 		}
 
 		var innerExpression *ast.Node
-		if node.Expression != nil {
-			innerExpression = tx.Visitor().VisitNode(node.Expression)
+		if node.Expression() != nil {
+			innerExpression = tx.Visitor().VisitNode(node.Expression())
 		} else {
 			innerExpression = tx.Factory().NewVoidZeroExpression()
 		}
@@ -279,8 +279,8 @@ func (tx *forawaitTransformer) visitYieldExpression(node *ast.YieldExpression) *
 func (tx *forawaitTransformer) visitReturnStatement(node *ast.ReturnStatement) *ast.Node {
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsAsync != 0 && tx.enclosingFunctionFlags&ast.FunctionFlagsGenerator != 0 {
 		var expression *ast.Node
-		if node.Expression != nil {
-			expression = tx.Visitor().VisitNode(node.Expression)
+		if node.Expression() != nil {
+			expression = tx.Visitor().VisitNode(node.Expression())
 		} else {
 			expression = tx.Factory().NewVoidZeroExpression()
 		}
@@ -296,7 +296,7 @@ func (tx *forawaitTransformer) visitReturnStatement(node *ast.ReturnStatement) *
 func (tx *forawaitTransformer) visitLabeledStatement(node *ast.LabeledStatement) *ast.Node {
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsAsync != 0 {
 		statement := unwrapInnermostStatementOfLabel(node)
-		if statement.Kind == ast.KindForOfStatement && statement.AsForInOrOfStatement().AwaitModifier != nil {
+		if statement.Kind == ast.KindForOfStatement && statement.AsForInOrOfStatement().AwaitModifier() != nil {
 			return tx.visitForOfStatement(statement.AsForInOrOfStatement(), node)
 		}
 		return tx.Factory().RestoreEnclosingLabel(tx.Visitor().VisitNode(statement), node)
@@ -307,10 +307,10 @@ func (tx *forawaitTransformer) visitLabeledStatement(node *ast.LabeledStatement)
 // unwrapInnermostStatementOfLabel follows LabeledStatement chains to find the innermost statement.
 func unwrapInnermostStatementOfLabel(node *ast.LabeledStatement) *ast.Node {
 	for {
-		if node.Statement.Kind != ast.KindLabeledStatement {
-			return node.Statement
+		if node.Statement().Kind != ast.KindLabeledStatement {
+			return node.Statement()
 		}
-		node = node.Statement.AsLabeledStatement()
+		node = node.Statement().AsLabeledStatement()
 	}
 }
 
@@ -330,7 +330,7 @@ func (tx *forawaitTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 func (tx *forawaitTransformer) visitForOfStatement(node *ast.ForInOrOfStatement, outermostLabeledStatement *ast.LabeledStatement) *ast.Node {
 	ancestorFacts := tx.enterSubtree(forAwaitHierarchyFactsIterationStatementExcludes, forAwaitHierarchyFactsIterationStatementIncludes)
 	var result *ast.Node
-	if node.AwaitModifier != nil {
+	if node.AwaitModifier() != nil {
 		result = tx.transformForAwaitOfStatement(node, outermostLabeledStatement, ancestorFacts)
 	} else {
 		result = tx.Factory().RestoreEnclosingLabel(tx.Visitor().VisitEachChild(node.AsNode()), outermostLabeledStatement)
@@ -345,19 +345,19 @@ func (tx *forawaitTransformer) convertForOfStatementHead(node *ast.ForInOrOfStat
 	tx.EmitContext().AddVariableDeclaration(value)
 	iteratorValueExpression := f.NewAssignmentExpression(value, boundValue)
 	iteratorValueStatement := f.NewExpressionStatement(iteratorValueExpression)
-	tx.EmitContext().SetSourceMapRange(iteratorValueStatement, node.Expression.Loc)
+	tx.EmitContext().SetSourceMapRange(iteratorValueStatement, node.Expression().Loc)
 
 	exitNonUserCodeExpression := f.NewAssignmentExpression(nonUserCode, f.NewKeywordExpression(ast.KindFalseKeyword))
 	exitNonUserCodeStatement := f.NewExpressionStatement(exitNonUserCodeExpression)
-	tx.EmitContext().SetSourceMapRange(exitNonUserCodeStatement, node.Expression.Loc)
+	tx.EmitContext().SetSourceMapRange(exitNonUserCodeStatement, node.Expression().Loc)
 
 	statements := []*ast.Node{iteratorValueStatement, exitNonUserCodeStatement}
-	binding := tx.Factory().CreateForOfBindingStatement(node.Initializer, value)
+	binding := tx.Factory().CreateForOfBindingStatement(node.Initializer(), value)
 	statements = append(statements, tx.Visitor().VisitNode(binding))
 
 	var bodyLocation core.TextRange
 	var statementsLocation core.TextRange
-	statement := tx.Visitor().VisitEmbeddedStatement(node.Statement)
+	statement := tx.Visitor().VisitEmbeddedStatement(node.Statement())
 	if ast.IsBlock(statement) {
 		statements = append(statements, statement.Statements()...)
 		bodyLocation = statement.Loc
@@ -385,7 +385,7 @@ func (tx *forawaitTransformer) createDownlevelAwait(expression *ast.Node) *ast.N
 
 func (tx *forawaitTransformer) transformForAwaitOfStatement(node *ast.ForInOrOfStatement, outermostLabeledStatement *ast.LabeledStatement, ancestorFacts forAwaitHierarchyFacts) *ast.Node {
 	f := tx.Factory()
-	expression := tx.Visitor().VisitNode(node.Expression)
+	expression := tx.Visitor().VisitNode(node.Expression())
 
 	var iterator *ast.Node
 	if ast.IsIdentifier(expression) {
@@ -408,7 +408,7 @@ func (tx *forawaitTransformer) transformForAwaitOfStatement(node *ast.ForInOrOfS
 	catchVariable := f.NewGeneratedNameForNode(errorRecord)
 	returnMethod := f.NewTempVariable()
 	callValues := f.NewAsyncValuesHelper(expression)
-	callValues.Loc = node.Expression.Loc
+	callValues.Loc = node.Expression().Loc
 	callNext := f.NewCallExpression(
 		f.NewPropertyAccessExpression(iterator, nil, f.NewIdentifier("next"), ast.NodeFlagsNone),
 		nil, nil,
@@ -435,13 +435,13 @@ func (tx *forawaitTransformer) transformForAwaitOfStatement(node *ast.ForInOrOfS
 
 	// Build the for statement
 	iteratorDecl := f.NewVariableDeclaration(iterator, nil, nil, initializer)
-	iteratorDecl.Loc = node.Expression.Loc
+	iteratorDecl.Loc = node.Expression().Loc
 	varDeclList := f.NewVariableDeclarationList(f.NewNodeList([]*ast.Node{
 		f.NewVariableDeclaration(nonUserCode, nil, nil, f.NewKeywordExpression(ast.KindTrueKeyword)),
 		iteratorDecl,
 		f.NewVariableDeclaration(result, nil, nil, nil),
 	}), ast.NodeFlagsNone)
-	varDeclList.Loc = node.Expression.Loc
+	varDeclList.Loc = node.Expression().Loc
 
 	condition := f.InlineExpressions([]*ast.Node{
 		f.NewAssignmentExpression(result, tx.createDownlevelAwait(callNext)),
@@ -536,7 +536,7 @@ func (tx *forawaitTransformer) visitConstructorDeclaration(node *ast.Node) *ast.
 		decl,
 		decl.Modifiers(),
 		nil, /*typeParameters*/
-		tx.EmitContext().VisitParameters(decl.Parameters, tx.Visitor()),
+		tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor()),
 		nil, /*returnType*/
 		nil, /*fullSignature*/
 		tx.EmitContext().VisitFunctionBody(node.Body(), tx.Visitor()),
@@ -554,7 +554,7 @@ func (tx *forawaitTransformer) visitGetAccessorDeclaration(node *ast.Node) *ast.
 		decl.Modifiers(),
 		tx.Visitor().VisitNode(decl.Name()),
 		nil, /*typeParameters*/
-		tx.EmitContext().VisitParameters(decl.Parameters, tx.Visitor()),
+		tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor()),
 		nil, /*returnType*/
 		nil, /*fullSignature*/
 		tx.EmitContext().VisitFunctionBody(node.Body(), tx.Visitor()),
@@ -572,7 +572,7 @@ func (tx *forawaitTransformer) visitSetAccessorDeclaration(node *ast.Node) *ast.
 		decl.Modifiers(),
 		tx.Visitor().VisitNode(decl.Name()),
 		nil, /*typeParameters*/
-		tx.EmitContext().VisitParameters(decl.Parameters, tx.Visitor()),
+		tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor()),
 		nil, /*returnType*/
 		nil, /*fullSignature*/
 		tx.EmitContext().VisitFunctionBody(node.Body(), tx.Visitor()),
@@ -597,7 +597,7 @@ func (tx *forawaitTransformer) visitMethodDeclaration(node *ast.Node) *ast.Node 
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsAsync != 0 {
 		asteriskToken = nil
 	} else {
-		asteriskToken = decl.AsteriskToken
+		asteriskToken = decl.AsteriskToken()
 	}
 
 	var parameters *ast.NodeList
@@ -606,7 +606,7 @@ func (tx *forawaitTransformer) visitMethodDeclaration(node *ast.Node) *ast.Node 
 		parameters = tx.transformAsyncGeneratorFunctionParameterList(node)
 		body = tx.transformAsyncGeneratorFunctionBody(node)
 	} else {
-		parameters = tx.EmitContext().VisitParameters(decl.Parameters, tx.Visitor())
+		parameters = tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor())
 		body = tx.EmitContext().VisitFunctionBody(node.Body(), tx.Visitor())
 	}
 
@@ -642,7 +642,7 @@ func (tx *forawaitTransformer) visitFunctionDeclaration(node *ast.Node) *ast.Nod
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsAsync != 0 {
 		asteriskToken = nil
 	} else {
-		asteriskToken = decl.AsteriskToken
+		asteriskToken = decl.AsteriskToken()
 	}
 
 	var parameters *ast.NodeList
@@ -651,7 +651,7 @@ func (tx *forawaitTransformer) visitFunctionDeclaration(node *ast.Node) *ast.Nod
 		parameters = tx.transformAsyncGeneratorFunctionParameterList(node)
 		body = tx.transformAsyncGeneratorFunctionBody(node)
 	} else {
-		parameters = tx.EmitContext().VisitParameters(decl.Parameters, tx.Visitor())
+		parameters = tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor())
 		body = tx.EmitContext().VisitFunctionBody(node.Body(), tx.Visitor())
 	}
 
@@ -678,10 +678,10 @@ func (tx *forawaitTransformer) visitArrowFunction(node *ast.Node) *ast.Node {
 		decl,
 		decl.Modifiers(),
 		nil, /*typeParameters*/
-		tx.EmitContext().VisitParameters(decl.Parameters, tx.Visitor()),
+		tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor()),
 		nil, /*returnType*/
 		nil, /*fullSignature*/
-		decl.EqualsGreaterThanToken,
+		decl.EqualsGreaterThanToken(),
 		tx.EmitContext().VisitFunctionBody(node.Body(), tx.Visitor()),
 	)
 	tx.enclosingFunctionFlags = savedEnclosingFunctionFlags
@@ -704,7 +704,7 @@ func (tx *forawaitTransformer) visitFunctionExpression(node *ast.Node) *ast.Node
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsAsync != 0 {
 		asteriskToken = nil
 	} else {
-		asteriskToken = decl.AsteriskToken
+		asteriskToken = decl.AsteriskToken()
 	}
 
 	var parameters *ast.NodeList
@@ -713,7 +713,7 @@ func (tx *forawaitTransformer) visitFunctionExpression(node *ast.Node) *ast.Node
 		parameters = tx.transformAsyncGeneratorFunctionParameterList(node)
 		body = tx.transformAsyncGeneratorFunctionBody(node)
 	} else {
-		parameters = tx.EmitContext().VisitParameters(decl.Parameters, tx.Visitor())
+		parameters = tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor())
 		body = tx.EmitContext().VisitFunctionBody(node.Body(), tx.Visitor())
 	}
 
@@ -740,7 +740,7 @@ func (tx *forawaitTransformer) transformAsyncGeneratorFunctionParameterList(node
 	var newParameters []*ast.Node
 	for _, parameter := range node.Parameters() {
 		param := parameter.AsParameterDeclaration()
-		if param.Initializer != nil || param.DotDotDotToken != nil {
+		if param.Initializer() != nil || param.DotDotDotToken() != nil {
 			break
 		}
 		newParameter := tx.Factory().NewParameterDeclaration(

@@ -172,20 +172,20 @@ class MissingImplements implements B. {}
 	}, sourceText, core.ScriptKindTS)
 
 	classDecl := file.Statements.Nodes[0].AsClassDeclaration()
-	assert.Equal(t, classDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
-	assert.Equal(t, classDecl.HeritageClauses.Nodes[1].AsHeritageClause().Types.Nodes[0].Kind, ast.KindTypeReference)
+	assert.Equal(t, classDecl.HeritageClauses().Nodes[0].AsHeritageClause().Types().Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+	assert.Equal(t, classDecl.HeritageClauses().Nodes[1].AsHeritageClause().Types().Nodes[0].Kind, ast.KindTypeReference)
 
 	interfaceDecl := file.Statements.Nodes[1].AsInterfaceDeclaration()
-	assert.Equal(t, interfaceDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindTypeReference)
+	assert.Equal(t, interfaceDecl.HeritageClauses().Nodes[0].AsHeritageClause().Types().Nodes[0].Kind, ast.KindTypeReference)
 
 	invalidInterfaceDecl := file.Statements.Nodes[2].AsInterfaceDeclaration()
-	assert.Equal(t, invalidInterfaceDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+	assert.Equal(t, invalidInterfaceDecl.HeritageClauses().Nodes[0].AsHeritageClause().Types().Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
 
 	missingExtendsDecl := file.Statements.Nodes[3].AsInterfaceDeclaration()
-	assert.Equal(t, missingExtendsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+	assert.Equal(t, missingExtendsDecl.HeritageClauses().Nodes[0].AsHeritageClause().Types().Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
 
 	missingImplementsDecl := file.Statements.Nodes[4].AsClassDeclaration()
-	assert.Equal(t, missingImplementsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+	assert.Equal(t, missingImplementsDecl.HeritageClauses().Nodes[0].AsHeritageClause().Types().Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
 }
 
 func TestParseStaticSourcePhaseImport(t *testing.T) {
@@ -253,13 +253,13 @@ func TestParseStaticSourcePhaseImport(t *testing.T) {
 			assert.Assert(t, ast.IsImportDeclaration(statement))
 
 			declaration := statement.AsImportDeclaration()
-			assert.Assert(t, declaration.ImportClause != nil)
+			assert.Assert(t, declaration.ImportClause() != nil)
 
-			clause := declaration.ImportClause.AsImportClause()
+			clause := declaration.ImportClause().AsImportClause()
 			assert.Equal(t, clause.PhaseModifier, test.phaseModifier)
 			assert.Assert(t, clause.Name() != nil)
 			assert.Equal(t, clause.Name().Text(), test.bindingName)
-			assert.Equal(t, declaration.Attributes != nil, test.hasAttributes)
+			assert.Equal(t, declaration.Attributes() != nil, test.hasAttributes)
 		})
 	}
 }
@@ -298,12 +298,12 @@ func TestParseInvalidStaticSourcePhaseImports(t *testing.T) {
 		assert.Assert(t, ast.IsImportDeclaration(statement))
 
 		declaration := statement.AsImportDeclaration()
-		assert.Assert(t, declaration.ImportClause != nil)
+		assert.Assert(t, declaration.ImportClause() != nil)
 
-		clause := declaration.ImportClause.AsImportClause()
+		clause := declaration.ImportClause().AsImportClause()
 		assert.Equal(t, clause.PhaseModifier, ast.KindSourceKeyword)
 		assert.Equal(t, clause.Name() != nil, test.hasName)
-		assert.Equal(t, clause.NamedBindings != nil, test.hasNamedBindings)
+		assert.Equal(t, clause.NamedBindings() != nil, test.hasNamedBindings)
 	}
 }
 
@@ -316,7 +316,7 @@ func TestParseDynamicSourcePhaseImport(t *testing.T) {
 	statement := file.Statements.Nodes[0]
 	assert.Assert(t, ast.IsExpressionStatement(statement))
 
-	call := statement.AsExpressionStatement().Expression
+	call := statement.AsExpressionStatement().Expression()
 	assert.Assert(t, ast.IsCallExpression(call))
 	assert.Assert(t, ast.IsImportCall(call))
 	assert.Assert(t, call.SubtreeFacts()&ast.SubtreeContainsDynamicImport != 0)
@@ -352,7 +352,7 @@ func TestParseEscapedDynamicImportPhase(t *testing.T) {
 			statement := file.Statements.Nodes[0]
 			assert.Assert(t, ast.IsExpressionStatement(statement))
 
-			call := statement.AsExpressionStatement().Expression
+			call := statement.AsExpressionStatement().Expression()
 			assert.Assert(t, ast.IsCallExpression(call))
 			assert.Assert(t, ast.IsImportCall(call))
 
@@ -438,10 +438,10 @@ const value = 0;`
 
 	jsDocs := typeAlias.JSDoc(file)
 	assert.Equal(t, len(jsDocs), 1)
-	assert.Assert(t, jsDocs[0].AsJSDoc().Tags != nil)
-	assert.Equal(t, len(jsDocs[0].AsJSDoc().Tags.Nodes), 1)
+	assert.Assert(t, jsDocs[0].AsJSDoc().Tags() != nil)
+	assert.Equal(t, len(jsDocs[0].AsJSDoc().Tags().Nodes), 1)
 
-	typeExpression := jsDocs[0].AsJSDoc().Tags.Nodes[0].TypeExpression()
+	typeExpression := jsDocs[0].AsJSDoc().Tags().Nodes[0].TypeExpression()
 	assert.Assert(t, typeExpression != nil)
 
 	expected := strings.Join([]string{"(", `"a" |`, `"b"`, ")[]"}, core.NewLineKindLF.GetNewLineCharacter())

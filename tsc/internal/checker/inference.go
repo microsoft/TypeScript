@@ -716,7 +716,7 @@ func (c *Checker) inferFromObjectTypes(n *InferenceState, source *Type, target *
 	if c.isGenericMappedType(source) && c.isGenericMappedType(target) {
 		c.inferFromGenericMappedTypes(n, source, target)
 	}
-	if target.objectFlags&ObjectFlagsMapped != 0 && target.AsMappedType().declaration.NameType == nil {
+	if target.objectFlags&ObjectFlagsMapped != 0 && target.AsMappedType().declaration.NameType() == nil {
 		constraintType := c.getConstraintTypeFromMappedType(target)
 		if c.inferToMappedType(n, source, target, constraintType) {
 			return
@@ -1671,7 +1671,7 @@ func hasInferenceCandidatesOrDefault(info *InferenceInfo) bool {
 func hasTypeParameterDefault(tp *Type) bool {
 	if tp.symbol != nil {
 		for _, d := range tp.symbol.Declarations {
-			if ast.IsTypeParameterDeclaration(d) && d.AsTypeParameterDeclaration().DefaultType != nil {
+			if ast.IsTypeParameterDeclaration(d) && d.AsTypeParameterDeclaration().DefaultType() != nil {
 				return true
 			}
 		}

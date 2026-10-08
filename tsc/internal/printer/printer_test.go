@@ -2577,8 +2577,8 @@ func TestParenthesizeBinaryExpressionMixingNullishCoalescing(t *testing.T) {
 					innerExpr, /*right: (b innerOp c)*/
 				)
 				// adjust identifiers for right side
-				innerExpr.AsBinaryExpression().Left = factory.NewIdentifier("b")
-				innerExpr.AsBinaryExpression().Right = factory.NewIdentifier("c")
+				innerExpr.AsBinaryExpression().SetLeft(factory.NewIdentifier("b"))
+				innerExpr.AsBinaryExpression().SetRight(factory.NewIdentifier("c"))
 			}
 			file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 				[]*ast.Node{

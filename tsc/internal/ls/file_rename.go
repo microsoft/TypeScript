@@ -120,12 +120,12 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 		switch propertyName {
 		case "files", "include", "exclude":
 			foundExactMatch := updatePathsProperty(configFile, configDir, property, changeTracker, oldToNew, l.converters, l.CaseSensitivity())
-			if foundExactMatch || propertyName != "include" || !ast.IsArrayLiteralExpression(property.Initializer) {
+			if foundExactMatch || propertyName != "include" || !ast.IsArrayLiteralExpression(property.Initializer()) {
 				return
 			}
 			if oldSpec, isDefault := commandLine.GetMatchedIncludeSpec(oldPath); oldSpec != "" && !isDefault {
 				if newSpec, _ := commandLine.GetMatchedIncludeSpec(newPath); newSpec == "" {
-					elements := property.Initializer.Elements()
+					elements := property.Initializer().Elements()
 					if len(elements) > 0 {
 						newPathText := newPath.AsString()
 						if relativePath, ok := l.CaseSensitivity().RelativePathFromDirectory(configDir, newPath); ok {
@@ -140,10 +140,10 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 				}
 			}
 		case "compilerOptions":
-			if !ast.IsObjectLiteralExpression(property.Initializer) {
+			if !ast.IsObjectLiteralExpression(property.Initializer()) {
 				return
 			}
-			forEachObjectProperty(property.Initializer.AsObjectLiteralExpression(), func(property *ast.PropertyAssignment, propertyName string) {
+			forEachObjectProperty(property.Initializer().AsObjectLiteralExpression(), func(property *ast.PropertyAssignment, propertyName string) {
 				option := tsoptions.CommandLineCompilerOptionsMap.Get(propertyName)
 				if option != nil {
 					elementOption := option.Elements()
@@ -153,14 +153,14 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 					}
 				}
 
-				if propertyName != "paths" || !ast.IsObjectLiteralExpression(property.Initializer) {
+				if propertyName != "paths" || !ast.IsObjectLiteralExpression(property.Initializer()) {
 					return
 				}
-				forEachObjectProperty(property.Initializer.AsObjectLiteralExpression(), func(pathsProperty *ast.PropertyAssignment, _ string) {
-					if !ast.IsArrayLiteralExpression(pathsProperty.Initializer) {
+				forEachObjectProperty(property.Initializer().AsObjectLiteralExpression(), func(pathsProperty *ast.PropertyAssignment, _ string) {
+					if !ast.IsArrayLiteralExpression(pathsProperty.Initializer()) {
 						return
 					}
-					for _, element := range pathsProperty.Initializer.Elements() {
+					for _, element := range pathsProperty.Initializer().Elements() {
 						tryUpdateConfigString(configFile, configDir, element, changeTracker, oldToNew, l.converters, l.CaseSensitivity())
 					}
 				})
@@ -170,9 +170,9 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 }
 
 func updatePathsProperty(configFile *ast.SourceFile, configDir tspath.RootedDirectoryPath, property *ast.PropertyAssignment, changeTracker *change.Tracker, oldToNew pathUpdater, converters *lsconv.Converters, caseSensitivity tspath.CaseSensitivity) bool {
-	elements := []*ast.Node{property.Initializer}
-	if ast.IsArrayLiteralExpression(property.Initializer) {
-		elements = property.Initializer.Elements()
+	elements := []*ast.Node{property.Initializer()}
+	if ast.IsArrayLiteralExpression(property.Initializer()) {
+		elements = property.Initializer().Elements()
 	}
 
 	foundExactMatch := false
@@ -372,7 +372,7 @@ func forEachObjectProperty(objectLiteral *ast.ObjectLiteralExpression, cb func(p
 	if objectLiteral == nil {
 		return
 	}
-	for _, property := range objectLiteral.Properties.Nodes {
+	for _, property := range objectLiteral.Properties().Nodes {
 		if !ast.IsPropertyAssignment(property) {
 			continue
 		}

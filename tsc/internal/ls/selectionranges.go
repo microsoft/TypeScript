@@ -87,9 +87,9 @@ func getSelectionChildren(factory *ast.NodeFactory, node *ast.Node, sourceFile *
 
 	// Group `-/+readonly` and `-/+?`.
 	groupedWithPlusMinusTokens := groupChildren(factory, children, func(child *ast.Node) bool {
-		return child == mappedType.ReadonlyToken ||
+		return child == mappedType.ReadonlyToken() ||
 			child.Kind == ast.KindReadonlyKeyword ||
-			child == mappedType.QuestionToken ||
+			child == mappedType.QuestionToken() ||
 			child.Kind == ast.KindQuestionToken
 	})
 
@@ -271,7 +271,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 		// Skip lone variable declarations
 		if parent != nil && ast.IsVariableDeclaration(node) && ast.IsVariableDeclarationList(parent) {
 			decl := parent.AsVariableDeclarationList()
-			if decl != nil && len(decl.Declarations.Nodes) == 1 {
+			if decl != nil && len(decl.Declarations().Nodes) == 1 {
 				return true
 			}
 		}
@@ -312,12 +312,12 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 					// Synthesize a stop for '${ ... }' since '${' and '}' actually belong to siblings.
 					if ast.IsTemplateSpan(parent) {
 						templateSpan := parent.AsTemplateSpan()
-						if templateSpan.Literal != nil {
+						if templateSpan.Literal() != nil {
 							// Start from just before the '${' and end after the '}'
 							// The '${' is 2 characters before the expression start
 							spanStart := node.Pos() - 2
 							// The '}' is the first character of the template literal (middle or tail)
-							spanEnd := astnav.GetStartOfNode(templateSpan.Literal, sourceFile, false) + 1
+							spanEnd := astnav.GetStartOfNode(templateSpan.Literal(), sourceFile, false) + 1
 							// Validate the positions are reasonable
 							text := sourceFile.Text()
 							if spanStart >= 0 && spanEnd <= len(text) && spanStart < spanEnd {

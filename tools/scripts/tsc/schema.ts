@@ -29,7 +29,6 @@ export interface NodeDef {
     extends: string[];
     members?: Member[];
     generateSubtreeFacts?: boolean;
-    arena?: boolean;
     handWritten?: boolean;
     handWrittenVisitor?: boolean;
     typeParameters?: { name: string; constraint: string; default?: string; }[];
@@ -234,10 +233,6 @@ export class NodeType extends TypeBase {
             this.fieldsCache = Object.entries(this.entry?.fields || {}).map(([name, field]) => new MemberInfo(this.api, name, field));
         }
         return this.fieldsCache;
-    }
-
-    get arena(): boolean {
-        return this.def?.arena || false;
     }
 
     get handWritten(): boolean {
@@ -714,6 +709,25 @@ export class MemberInfo {
         // Explicit optionality override (e.g. base is required but this member is optional, or vice-versa).
         if (this.member.optional !== undefined && this.optional !== this.inheritedField.optional) return true;
         return false;
+    }
+
+    /**
+     * The Go type this member refers to when its Go field is a 4-byte link rather than a
+     * pointer, which is the case for every pointer to a node or to a node list (see
+     * tsc/internal/ast/arena.go). Such a field is read and written through accessors.
+     */
+    goLinkTarget(): "Node" | "NodeList" | "ModifierList" | undefined {
+        // Go-only fields keep their declared type. One of them, LocalsContainerBase.NextContainer,
+        // points to a node: it stays a pointer because a SourceFile, which has one, is an ordinary
+        // Go object and cannot hold links. It only ever points to a node of the same file.
+        if (this.goOnly) return undefined;
+        const goType = this.type.formatGoReference();
+        if (goType === "*ModifierList") return "ModifierList";
+        if (!goType.startsWith("*")) return undefined;
+        const base = this.type.baseKind();
+        if (base === "node") return "Node";
+        if (base === "list") return "NodeList";
+        return undefined;
     }
 
     /** Go parameter name: uncapitalized, with Go keyword avoidance. */

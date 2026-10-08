@@ -480,7 +480,7 @@ func (p *Program) canReplaceFileInProgram(file1 *ast.SourceFile, file2 *ast.Sour
 		slices.EqualFunc(file1.Imports(), file2.Imports(), func(n1 *ast.Node, n2 *ast.Node) bool {
 			return equalModuleSpecifiers(n1, n2) &&
 				p.GetModeForUsageLocation(file1, n1) == p.GetModeForUsageLocation(file2, n2) &&
-				ast.IsSourcePhaseImport(n1.Parent) == ast.IsSourcePhaseImport(n2.Parent)
+				ast.IsSourcePhaseImport(n1.Parent()) == ast.IsSourcePhaseImport(n2.Parent())
 		}) &&
 		slices.EqualFunc(file1.ModuleAugmentations, file2.ModuleAugmentations, equalModuleAugmentationNames) &&
 		slices.Equal(file1.AmbientModuleNames, file2.AmbientModuleNames) &&
@@ -654,7 +654,7 @@ func (p *Program) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, mod
 	if !ast.IsStringLiteralLike(moduleSpecifier) {
 		panic("moduleSpecifier must be a StringLiteralLike")
 	}
-	if ast.IsSourcePhaseImport(moduleSpecifier.Parent) {
+	if ast.IsSourcePhaseImport(moduleSpecifier.Parent()) {
 		return nil
 	}
 	mode := p.GetModeForUsageLocation(file, moduleSpecifier)
@@ -932,16 +932,16 @@ func (p *Program) verifyCompilerOptions() {
 	getCompilerOptionsObjectLiteralSyntax := core.Memoize(func() *ast.ObjectLiteralExpression {
 		compilerOptionsProperty := getCompilerOptionsPropertySyntax()
 		if compilerOptionsProperty != nil &&
-			compilerOptionsProperty.Initializer != nil &&
-			ast.IsObjectLiteralExpression(compilerOptionsProperty.Initializer) {
-			return compilerOptionsProperty.Initializer.AsObjectLiteralExpression()
+			compilerOptionsProperty.Initializer() != nil &&
+			ast.IsObjectLiteralExpression(compilerOptionsProperty.Initializer()) {
+			return compilerOptionsProperty.Initializer().AsObjectLiteralExpression()
 		}
 		return nil
 	})
 
 	createOptionDiagnosticInObjectLiteralSyntax := func(objectLiteral *ast.ObjectLiteralExpression, onKey bool, key1 string, key2 string, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 		diag := tsoptions.ForEachPropertyAssignment(objectLiteral, key1, func(property *ast.PropertyAssignment) *ast.Diagnostic {
-			return tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile(), core.IfElse(onKey, property.Name(), property.Initializer), message, args...)
+			return tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile(), core.IfElse(onKey, property.Name(), property.Initializer()), message, args...)
 		}, key2)
 		if diag != nil {
 			p.programDiagnostics = append(p.programDiagnostics, diag)
@@ -1125,8 +1125,8 @@ func (p *Program) verifyCompilerOptions() {
 
 	createDiagnosticForOptionPaths := func(onKey bool, key string, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 		diag := forEachOptionPathsSyntax(func(pathProp *ast.PropertyAssignment) *ast.Diagnostic {
-			if ast.IsObjectLiteralExpression(pathProp.Initializer) {
-				return createOptionDiagnosticInObjectLiteralSyntax(pathProp.Initializer.AsObjectLiteralExpression(), onKey, key, "", message, args...)
+			if ast.IsObjectLiteralExpression(pathProp.Initializer()) {
+				return createOptionDiagnosticInObjectLiteralSyntax(pathProp.Initializer().AsObjectLiteralExpression(), onKey, key, "", message, args...)
 			}
 			return nil
 		})
@@ -1138,9 +1138,9 @@ func (p *Program) verifyCompilerOptions() {
 
 	createDiagnosticForOptionPathKeyValue := func(key string, valueIndex int, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 		diag := forEachOptionPathsSyntax(func(pathProp *ast.PropertyAssignment) *ast.Diagnostic {
-			if ast.IsObjectLiteralExpression(pathProp.Initializer) {
-				return tsoptions.ForEachPropertyAssignment(pathProp.Initializer.AsObjectLiteralExpression(), key, func(keyProps *ast.PropertyAssignment) *ast.Diagnostic {
-					initializer := keyProps.Initializer
+			if ast.IsObjectLiteralExpression(pathProp.Initializer()) {
+				return tsoptions.ForEachPropertyAssignment(pathProp.Initializer().AsObjectLiteralExpression(), key, func(keyProps *ast.PropertyAssignment) *ast.Diagnostic {
+					initializer := keyProps.Initializer()
 					if ast.IsArrayLiteralExpression(initializer) {
 						elements := initializer.ElementList()
 						if elements != nil && len(elements.Nodes) > valueIndex {
@@ -2263,7 +2263,7 @@ func (p *Program) collectPackageNames() *packageNamesInfo {
 				continue
 			}
 			for _, imp := range file.Imports() {
-				if ast.IsSourcePhaseImport(imp.Parent) || tspath.IsExternalModuleNameRelative(imp.Text()) {
+				if ast.IsSourcePhaseImport(imp.Parent()) || tspath.IsExternalModuleNameRelative(imp.Text()) {
 					continue
 				}
 				if resolvedModules, ok := p.resolvedModules[file.PathKey()]; ok {

@@ -91,18 +91,6 @@ class CodeWriter {
 }
 
 function generateNodeFactoryStruct(w: CodeWriter) {
-    const arenaFields: { fieldName: string; typeName: string; }[] = [];
-    for (const node of api.nodes()) {
-        if (!node.arena) continue;
-        arenaFields.push({
-            fieldName: `${api.uncapitalize(node.name)}Arena`,
-            typeName: node.name,
-        });
-    }
-    arenaFields.push({ fieldName: "modifierListArena", typeName: "ModifierList" });
-    arenaFields.push({ fieldName: "nodeListArena", typeName: "NodeList" });
-    arenaFields.sort((a, b) => a.fieldName.localeCompare(b.fieldName));
-
     w.write("// ──────────────────────────────────────────────────────────────────────");
     w.write("// NodeFactory");
     w.write("// ──────────────────────────────────────────────────────────────────────");
@@ -110,14 +98,59 @@ function generateNodeFactoryStruct(w: CodeWriter) {
     w.write("type NodeFactory struct {");
     w.push();
     w.write("hooks NodeFactoryHooks");
-    for (const { fieldName, typeName } of arenaFields) {
-        w.write(`${fieldName} core.Arena[${typeName}]`);
-    }
+    w.write("arena *linkarena.Arena // memory of the nodes the factory creates; see arena.go");
+    w.write("parsing bool // every node handed to the factory was created by it");
+    w.write("sourceText string // text whose substrings the arena keeps alive as a whole");
     w.write("");
     w.write("nodeCount int");
     w.write("textCount int");
     w.pop();
     w.write("}");
+    w.write("");
+}
+
+// ── Links ──────────────────────────────────────────────────────────────────
+
+// Nodes live in arena memory and refer to each other through 4-byte links instead of pointers
+// (see arena.go). A member whose Go type is a pointer to a node or to a node list is stored
+// as a link and read and written through accessors.
+
+function goFieldType(m: MemberInfo): string {
+    return m.goOnly ? m.rawType as string : m.type.formatGoReference();
+}
+
+/** The Go type a link member refers to, or undefined when the member is not stored as a link. */
+function linkTarget(m: MemberInfo): "Node" | "NodeList" | "ModifierList" | undefined {
+    return m.goLinkTarget();
+}
+
+/** The name of the Go field that stores a member. Links behind accessors are unexported. */
+function goFieldName(m: MemberInfo): string {
+    return linkTarget(m) && !m.private ? m.goParamName() : m.name;
+}
+
+/** A Go expression that reads a member of `receiver`. */
+function goRead(m: MemberInfo, receiver = "node"): string {
+    if (!linkTarget(m)) return `${receiver}.${m.name}`;
+    return m.private ? `${receiver}.${m.name}.get()` : `${receiver}.${m.name}()`;
+}
+
+function writeFieldDecl(w: CodeWriter, m: MemberInfo) {
+    const target = linkTarget(m);
+    const goType = target ? `link[${target}]` : goFieldType(m);
+    const notes: string[] = [];
+    if (target) notes.push(goFieldType(m));
+    if (m.optional) notes.push("Optional");
+    w.write(`${goFieldName(m)} ${goType}${notes.length > 0 ? ` // ${notes.join(". ")}` : ""}`);
+}
+
+function writeLinkAccessors(w: CodeWriter, structName: string, m: MemberInfo) {
+    if (!linkTarget(m) || m.private) return;
+    const goType = goFieldType(m);
+    const field = goFieldName(m);
+    w.write(`func (node *${structName}) ${m.name}() ${goType} { return node.${field}.get() }`);
+    w.write("");
+    w.write(`func (node *${structName}) Set${m.name}(${field} ${goType}) { node.${field}.set(${field}) }`);
     w.write("");
 }
 
@@ -131,6 +164,7 @@ function generateHeader(w: CodeWriter) {
     w.write('"sync/atomic"');
     w.write("");
     w.write('"github.com/microsoft/TypeScript/tsc/internal/core"');
+    w.write('"github.com/microsoft/TypeScript/tsc/internal/linkarena"');
     w.pop();
     w.write(")");
     w.write("");
@@ -265,32 +299,22 @@ function generateStructDef(w: CodeWriter, node: NodeType) {
     if (node.members.length > 0) {
         for (const m of node.members) {
             if (m.inherited || m.isKindParam() || m.noGo) continue;
-            const fieldName = m.name;
-            const goType = m.goOnly ? m.rawType as string : m.type.formatGoReference();
-            const comment = buildFieldComment(m);
-            if (comment) {
-                w.write(`${fieldName} ${goType} ${comment}`);
-            }
-            else {
-                w.write(`${fieldName} ${goType}`);
-            }
+            writeFieldDecl(w, m);
         }
     }
 
     w.pop();
     w.write("}");
     w.write("");
-}
 
-function buildFieldComment(m: MemberInfo): string {
-    const parts: string[] = [];
-    if (m.optional) parts.push("Optional");
-    if (parts.length > 0) return `// ${parts.join(". ")}`;
-    return "";
+    for (const m of node.members) {
+        if (m.inherited || m.isKindParam() || m.noGo) continue;
+        writeLinkAccessors(w, structName, m);
+    }
 }
 
 function goSubtreeFactsTerm(m: MemberInfo): string {
-    const access = `node.${m.name}`;
+    const access = goRead(m);
     if (m.listKind === "ModifierList") {
         return `propagateModifierListSubtreeFacts(${access})`;
     }
@@ -358,15 +382,18 @@ function generateBaseStructDefs(w: CodeWriter) {
         if (base.fields.length > 0) {
             for (const field of base.fields) {
                 if (field.noGo) continue;
-                const goType = field.goOnly ? field.rawType as string : field.type.formatGoReference();
-                const comment = field.optional ? " // Optional" : "";
-                w.write(`${field.name} ${goType}${comment}`);
+                writeFieldDecl(w, field);
             }
         }
 
         w.pop();
         w.write("}");
         w.write("");
+
+        for (const field of base.fields) {
+            if (field.noGo) continue;
+            writeLinkAccessors(w, structName, field);
+        }
     }
 }
 
@@ -404,18 +431,32 @@ function emitNewFactory(
     w.write(`func (f *NodeFactory) ${funcName}(${params}) *Node {`);
     w.push();
 
-    if (node.arena) {
-        w.write(`data := f.${api.uncapitalize(structName)}Arena.New()`);
-    }
-    else {
-        w.write(`data := &${structName}{}`);
-    }
+    w.write(`data := newData[${structName}](f)`);
 
     for (const m of members) {
         if (m.isKindParam()) continue;
         if (isNodeFlagsMember(m)) continue;
         const value = m.bitmask ? `${m.goParamName()} & ${m.bitmask}` : m.goParamName();
+        if (linkTarget(m)) {
+            w.write(`data.${goFieldName(m)}.set(${value})`);
+            continue;
+        }
         w.write(`data.${m.name} = ${value}`);
+        // The garbage collector does not look inside nodes, so the factory's arena has to keep
+        // the Go objects they refer to alive.
+        const goType = goFieldType(m);
+        if (goType === "string") {
+            w.write(`f.keepString(${m.goParamName()})`);
+        }
+        else if (goType === "[]*Node") {
+            w.write(`f.keepNodes(${m.goParamName()})`);
+        }
+        else if (goType.startsWith("[]")) {
+            w.write(`keepSlice(f, ${m.goParamName()})`);
+        }
+        else if (goType === "any") {
+            w.write(`f.keepValue(${m.goParamName()})`);
+        }
     }
 
     if (hasTextContent(node)) {
@@ -486,7 +527,7 @@ function generateUpdateFactory(w: CodeWriter, node: NodeType) {
         if (type.kind === "list" && type.listKind === "raw") {
             return `!core.Same(${m.goParamName()}, node.${m.name})`;
         }
-        return `${m.goParamName()} != node.${m.name}`;
+        return `${m.goParamName()} != ${goRead(m)}`;
     });
 
     w.write(`if ${comparisons.join(" || ")} {`);
@@ -558,8 +599,7 @@ function generateForEachChild(w: CodeWriter, node: NodeType) {
 
     // Build visit chain: visit(v, node.Field) || visitNodeList(v, node.Field) || ...
     const parts = childMembers.map(m => {
-        const access = `node.${m.name}`;
-        const type = m.type;
+        const access = goRead(m);
         const listKind = m.listKind;
         if (listKind === "raw") {
             return `visitNodes(v, ${access})`;
@@ -673,7 +713,7 @@ function generateVisitEachChild(w: CodeWriter, node: NodeType) {
 
     const args = updateMembers.map(m => {
         if (!m.isChild()) {
-            return `node.${m.name}`;
+            return goRead(m);
         }
 
         // Raw list: use the local variable
@@ -681,7 +721,7 @@ function generateVisitEachChild(w: CodeWriter, node: NodeType) {
             return rawListLocals.get(m.name)!;
         }
 
-        const access = `node.${m.name}`;
+        const access = goRead(m);
         const type = m.type;
         const listKind = m.listKind;
 
@@ -725,8 +765,8 @@ function generateClone(w: CodeWriter, node: NodeType) {
         if (m.inherited && type?.kind === "alias" && type.name === "ModifierLike") {
             return "node.Modifiers()";
         }
-        // Use direct field access (Clone is a struct method, can access private fields)
-        return `node.${m.name}`;
+        // Clone is a struct method, so it can read private fields directly
+        return goRead(m);
     }).join(", ");
 
     if (node.kindAliases.length > 0) {
@@ -870,7 +910,7 @@ function generateNameAccessor(w: CodeWriter, node: NodeType) {
     const structName = node.name;
     w.write(`func (node *${structName}) Name() *DeclarationName {`);
     w.push();
-    w.write("return node.name");
+    w.write(`return ${goRead(nameMember)}`);
     w.pop();
     w.write("}");
     w.write("");

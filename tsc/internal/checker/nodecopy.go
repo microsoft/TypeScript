@@ -234,8 +234,8 @@ func (b *NodeBuilderImpl) tryReuseExistingNodeHelper(existing *ast.TypeNode) *as
 func (b *NodeBuilderImpl) getModuleSpecifierOverride(parent *ast.Node, lit *ast.Node) string {
 	if b.ctx.enclosingFile != ast.GetSourceFileOfNode(lit) {
 		mode := core.ResolutionModeNone
-		if parent.AsImportTypeNode().Attributes != nil {
-			mode, _ = parent.AsImportTypeNode().Attributes.AsImportAttributes().GetResolutionModeOverride(nil)
+		if parent.AsImportTypeNode().Attributes() != nil {
+			mode, _ = parent.AsImportTypeNode().Attributes().AsImportAttributes().GetResolutionModeOverride(nil)
 		}
 		name := lit.Text()
 		originalName := name
@@ -280,7 +280,7 @@ func (b *NodeBuilderImpl) rewriteModuleSpecifier(parent *ast.Node, lit *ast.Node
 func (b *NodeBuilderImpl) getEnclosingDeclarationIgnoringFakeScope() *ast.Node {
 	enc := b.ctx.enclosingDeclaration
 	for enc != nil && b.links.Get(enc).fakeScopeForSignatureDeclaration != nil {
-		enc = enc.Parent
+		enc = enc.Parent()
 	}
 	return enc
 }
@@ -321,7 +321,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		}
 		introducesError := false
 		leftmost := ast.GetFirstIdentifier(node)
-		if ast.IsInJSFile(node) && (ast.IsExportsIdentifier(leftmost) || ast.IsModuleExportsAccessExpression(leftmost.Parent) || (ast.IsQualifiedName(leftmost.Parent) && ast.IsModuleIdentifier(leftmost.Parent.AsQualifiedName().Left) && ast.IsExportsIdentifier(leftmost.Parent.AsQualifiedName().Right))) {
+		if ast.IsInJSFile(node) && (ast.IsExportsIdentifier(leftmost) || ast.IsModuleExportsAccessExpression(leftmost.Parent()) || (ast.IsQualifiedName(leftmost.Parent()) && ast.IsModuleIdentifier(leftmost.Parent().AsQualifiedName().Left()) && ast.IsExportsIdentifier(leftmost.Parent().AsQualifiedName().Right()))) {
 			introducesError = true
 			return introducesError, b.setTextRange(b.f.DeepCloneNode(node), node), nil
 		}
@@ -383,33 +383,33 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 	}
 	var tryVisitSimpleTypeNode func(node *ast.Node) *ast.Node
 	tryVisitIndexedAccess := func(node *ast.Node) *ast.Node {
-		resultObjectType := tryVisitSimpleTypeNode(node.AsIndexedAccessTypeNode().ObjectType)
+		resultObjectType := tryVisitSimpleTypeNode(node.AsIndexedAccessTypeNode().ObjectType())
 		if resultObjectType == nil {
 			return nil
 		}
-		return b.setTextRange(b.f.UpdateIndexedAccessTypeNode(node.AsIndexedAccessTypeNode(), resultObjectType, visitor.VisitNode(node.AsIndexedAccessTypeNode().IndexType)), node)
+		return b.setTextRange(b.f.UpdateIndexedAccessTypeNode(node.AsIndexedAccessTypeNode(), resultObjectType, visitor.VisitNode(node.AsIndexedAccessTypeNode().IndexType())), node)
 	}
 	tryVisitKeyOf := func(node *ast.Node) *ast.Node {
 		to := node.AsTypeOperatorNode()
-		t := tryVisitSimpleTypeNode(to.Type)
+		t := tryVisitSimpleTypeNode(to.Type())
 		if t == nil {
 			return nil
 		}
 		return b.setTextRange(b.f.UpdateTypeOperatorNode(to, to.Operator, t), node)
 	}
 	tryVisitTypeQuery := func(node *ast.Node) *ast.Node {
-		introducesError, exprName, _ := trackExistingEntityName(node.AsTypeQueryNode().ExprName, nil)
+		introducesError, exprName, _ := trackExistingEntityName(node.AsTypeQueryNode().ExprName(), nil)
 		if !introducesError {
 			return b.setTextRange(b.f.UpdateTypeQueryNode(
 				node.AsTypeQueryNode(),
 				exprName,
-				visitor.VisitNodes(node.AsTypeQueryNode().TypeArguments),
+				visitor.VisitNodes(node.AsTypeQueryNode().TypeArguments()),
 			), node)
 		}
 
-		serializedName := b.serializeTypeName(node.AsTypeQueryNode().ExprName, true, visitor.VisitNodes(node.AsTypeQueryNode().TypeArguments))
+		serializedName := b.serializeTypeName(node.AsTypeQueryNode().ExprName(), true, visitor.VisitNodes(node.AsTypeQueryNode().TypeArguments()))
 		if serializedName != nil {
-			return b.setTextRange(serializedName, node.AsTypeQueryNode().ExprName)
+			return b.setTextRange(serializedName, node.AsTypeQueryNode().ExprName())
 		}
 		return nil
 	}
@@ -433,18 +433,18 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			// in JS, should we enable that.
 			return nil
 		}
-		introducesError, newName, _ := trackExistingEntityName(node.AsTypeReferenceNode().TypeName, nil)
+		introducesError, newName, _ := trackExistingEntityName(node.AsTypeReferenceNode().TypeName(), nil)
 		if !introducesError {
-			typeArguments := visitor.VisitNodes(node.AsTypeReferenceNode().TypeArguments)
+			typeArguments := visitor.VisitNodes(node.AsTypeReferenceNode().TypeArguments())
 			return b.setTextRange(b.f.UpdateTypeReferenceNode(
 				node.AsTypeReferenceNode(),
 				newName,
 				typeArguments,
 			), node)
 		} else {
-			serializedName := b.serializeTypeName(node.AsTypeReferenceNode().TypeName, false, visitor.VisitNodes(node.AsTypeReferenceNode().TypeArguments))
+			serializedName := b.serializeTypeName(node.AsTypeReferenceNode().TypeName(), false, visitor.VisitNodes(node.AsTypeReferenceNode().TypeArguments()))
 			if serializedName != nil {
-				return b.setTextRange(serializedName, node.AsTypeReferenceNode().TypeName)
+				return b.setTextRange(serializedName, node.AsTypeReferenceNode().TypeName())
 			}
 			return nil
 		}
@@ -474,7 +474,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		// Begin JSDoc handling
 		if node.Kind == ast.KindJSDocTypeExpression {
 			// Unwrap JSDocTypeExpressions
-			return visitor.VisitNode(node.AsJSDocTypeExpression().Type)
+			return visitor.VisitNode(node.AsJSDocTypeExpression().Type())
 		}
 		// !!! TODO: We don't _actually_ support jsdoc namepath types, emit `any` instead; verify we handle as gracefully as strada
 		if node.Kind == ast.KindJSDocAllType /* || node.Kind == ast.JSDocNamepathType */ {
@@ -486,24 +486,24 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		// }
 		if node.Kind == ast.KindJSDocNullableType {
 			unionMembers := []*ast.Node{
-				visitor.VisitNode(node.AsJSDocNullableType().Type),
+				visitor.VisitNode(node.AsJSDocNullableType().Type()),
 				factory.NewLiteralTypeNode(factory.NewKeywordExpression(ast.KindNullKeyword)),
 			}
 			return factory.NewUnionTypeNode(factory.NewNodeList(unionMembers))
 		}
 		if node.Kind == ast.KindJSDocOptionalType {
 			unionMembers := []*ast.Node{
-				visitor.VisitNode(node.AsJSDocOptionalType().Type),
+				visitor.VisitNode(node.AsJSDocOptionalType().Type()),
 				factory.NewKeywordTypeNode(ast.KindUndefinedKeyword),
 			}
 			return factory.NewUnionTypeNode(factory.NewNodeList(unionMembers))
 		}
 		if node.Kind == ast.KindJSDocNonNullableType {
 			// Unwrap
-			return visitor.VisitNode(node.AsJSDocNonNullableType().Type)
+			return visitor.VisitNode(node.AsJSDocNonNullableType().Type())
 		}
 		if node.Kind == ast.KindJSDocVariadicType { // !!! TODO: verify this matches how jsdoc variadics are actually handled now?
-			return factory.NewArrayTypeNode(visitor.VisitNode(node.AsJSDocVariadicType().Type))
+			return factory.NewArrayTypeNode(visitor.VisitNode(node.AsJSDocVariadicType().Type()))
 		}
 		if node.Kind == ast.KindJSDocTypeLiteral {
 			var members []*ast.Node
@@ -516,7 +516,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				if ast.IsIdentifier(n) {
 					targetName = n
 				} else {
-					targetName = n.AsQualifiedName().Right // !!! TODO: without typesystem backup, doing this cast unguarded seems really suspect, even though it is what strada does
+					targetName = n.AsQualifiedName().Right() // !!! TODO: without typesystem backup, doing this cast unguarded seems really suspect, even though it is what strada does
 				}
 				name := visitor.VisitNode(targetName)
 				shouldBeOptional := t.AsJSDocParameterOrPropertyTag().IsBracketed || (t.TypeExpression() != nil && t.TypeExpression().Kind == ast.KindJSDocOptionalType)
@@ -544,7 +544,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		// if node.Kind == ast.KindJSDocFunctionType {} // !!! no longer exists
 		// End JSDoc handling
 
-		if ast.IsTypeReferenceNode(node) && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName) && node.AsTypeReferenceNode().TypeName.AsIdentifier().Text == "" {
+		if ast.IsTypeReferenceNode(node) && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName()) && node.AsTypeReferenceNode().TypeName().AsIdentifier().Text == "" {
 			replacement := factory.NewKeywordTypeNode(ast.KindAnyKeyword)
 			b.e.SetOriginal(replacement, node)
 			return replacement
@@ -563,9 +563,9 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				node.AsTypeParameterDeclaration(),
 				visitor.VisitModifiers(node.Modifiers()),
 				newName,
-				visitor.VisitNode(node.AsTypeParameterDeclaration().Constraint),
-				visitor.VisitNode(node.AsTypeParameterDeclaration().Expression),
-				visitor.VisitNode(node.AsTypeParameterDeclaration().DefaultType),
+				visitor.VisitNode(node.AsTypeParameterDeclaration().Constraint()),
+				visitor.VisitNode(node.AsTypeParameterDeclaration().Expression()),
+				visitor.VisitNode(node.AsTypeParameterDeclaration().DefaultType()),
 			)
 		}
 		if ast.IsIndexedAccessTypeNode(node) {
@@ -593,7 +593,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			return node
 		}
 		if ast.IsTypeOperatorNode(node) {
-			if node.AsTypeOperatorNode().Operator == ast.KindUniqueKeyword && node.AsTypeOperatorNode().Type.Kind == ast.KindSymbolKeyword {
+			if node.AsTypeOperatorNode().Operator == ast.KindUniqueKeyword && node.AsTypeOperatorNode().Type().Kind == ast.KindSymbolKeyword {
 				nonFakeEnclosing := b.getEnclosingDeclarationIgnoringFakeScope()
 				sameScope := ast.FindAncestor(node, func(a *ast.Node) bool {
 					return a == nonFakeEnclosing
@@ -614,7 +614,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		if ast.IsLiteralImportTypeNode(node) {
 			// assert keyword in imported attributes is deprecated, so we don't reuse types that contain it
 			// Ex: import("pkg", { assert: {} }
-			if node.AsImportTypeNode().Attributes != nil && node.AsImportTypeNode().Attributes.AsImportAttributes().Token == ast.KindAssertKeyword {
+			if node.AsImportTypeNode().Attributes() != nil && node.AsImportTypeNode().Attributes().AsImportAttributes().Token == ast.KindAssertKeyword {
 				bound.markError(nil)
 				return node
 			}
@@ -627,12 +627,12 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				// !!! TODO: invalidate node reuse if js fallback logic used in type param list/typeof lookup (but isn't this logic gone?)
 				// s := b.ch.symbolNodeLinks.Get(node).resolvedSymbol
 			}
-			originalSpec := node.AsImportTypeNode().Argument.AsLiteralTypeNode().Literal
+			originalSpec := node.AsImportTypeNode().Argument().AsLiteralTypeNode().Literal()
 			specifier := b.rewriteModuleSpecifier(node, originalSpec)
 			if originalSpec == specifier {
 				specifier = visitor.VisitNode(specifier) // visit node if not replaced
 			}
-			arg := node.AsImportTypeNode().Argument
+			arg := node.AsImportTypeNode().Argument()
 			if specifier != originalSpec {
 				arg = factory.NewLiteralTypeNode(specifier)
 			}
@@ -640,9 +640,9 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				node.AsImportTypeNode(),
 				node.AsImportTypeNode().IsTypeOf,
 				arg,
-				visitor.VisitNode(node.AsImportTypeNode().Attributes),
-				visitor.VisitNode(node.AsImportTypeNode().Qualifier),
-				visitor.VisitNodes(node.AsImportTypeNode().TypeArguments),
+				visitor.VisitNode(node.AsImportTypeNode().Attributes()),
+				visitor.VisitNode(node.AsImportTypeNode().Qualifier()),
+				visitor.VisitNodes(node.AsImportTypeNode().TypeArguments()),
 			)
 		}
 		if node.Name() != nil && node.Name().Kind == ast.KindComputedPropertyName && !b.ch.hasLateBindableName(node) {
@@ -652,7 +652,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				return visitor.VisitEachChild(node)
 			}
 			// !!! TODO: this condition matches strada, but it just seems wrong? Or at the very least extraordinarily approximate, and doesn't flag a builder error...
-			shouldRemoveDeclaration := !((b.ctx.internalFlags&nodebuilder.InternalFlagsAllowUnresolvedNames != 0) && ast.IsEntityNameExpression(node.Name().AsComputedPropertyName().Expression) && (b.ch.checkComputedPropertyName(node.Name()).flags&TypeFlagsAny != 0))
+			shouldRemoveDeclaration := !((b.ctx.internalFlags&nodebuilder.InternalFlagsAllowUnresolvedNames != 0) && ast.IsEntityNameExpression(node.Name().AsComputedPropertyName().Expression()) && (b.ch.checkComputedPropertyName(node.Name()).flags&TypeFlagsAny != 0))
 			if shouldRemoveDeclaration {
 				return nil
 			}
@@ -687,9 +687,9 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				return factory.UpdateParameterDeclaration(
 					node.AsParameterDeclaration(),
 					nil,
-					node.AsParameterDeclaration().DotDotDotToken,
+					node.AsParameterDeclaration().DotDotDotToken(),
 					node.Name(),
-					node.AsParameterDeclaration().QuestionToken,
+					node.AsParameterDeclaration().QuestionToken(),
 					newType,
 					nil,
 				)
@@ -698,58 +698,58 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 					node.AsMethodSignatureDeclaration(),
 					node.Modifiers(),
 					node.Name(),
-					node.AsMethodSignatureDeclaration().PostfixToken,
-					node.AsMethodSignatureDeclaration().TypeParameters,
-					node.AsMethodSignatureDeclaration().Parameters,
+					node.AsMethodSignatureDeclaration().PostfixToken(),
+					node.AsMethodSignatureDeclaration().TypeParameters(),
+					node.AsMethodSignatureDeclaration().Parameters(),
 					newType,
 				)
 			case ast.KindCallSignature:
 				return factory.UpdateCallSignatureDeclaration(
 					node.AsCallSignatureDeclaration(),
-					node.AsCallSignatureDeclaration().TypeParameters,
-					node.AsCallSignatureDeclaration().Parameters,
+					node.AsCallSignatureDeclaration().TypeParameters(),
+					node.AsCallSignatureDeclaration().Parameters(),
 					newType,
 				)
 			case ast.KindJSDocSignature:
 				return factory.UpdateJSDocSignature(
 					node.AsJSDocSignature(),
-					node.AsJSDocSignature().TypeParameters,
-					node.AsJSDocSignature().Parameters,
+					node.AsJSDocSignature().TypeParameters(),
+					node.AsJSDocSignature().Parameters(),
 					newType,
 				)
 			case ast.KindConstructSignature:
 				return factory.UpdateConstructSignatureDeclaration(
 					node.AsConstructSignatureDeclaration(),
-					node.AsConstructSignatureDeclaration().TypeParameters,
-					node.AsConstructSignatureDeclaration().Parameters,
+					node.AsConstructSignatureDeclaration().TypeParameters(),
+					node.AsConstructSignatureDeclaration().Parameters(),
 					newType,
 				)
 			case ast.KindIndexSignature:
 				return factory.UpdateIndexSignatureDeclaration(
 					node.AsIndexSignatureDeclaration(),
 					node.Modifiers(),
-					node.AsIndexSignatureDeclaration().Parameters,
+					node.AsIndexSignatureDeclaration().Parameters(),
 					newType,
 				)
 			case ast.KindFunctionType:
 				return factory.UpdateFunctionTypeNode(
 					node.AsFunctionTypeNode(),
-					node.AsFunctionTypeNode().TypeParameters,
-					node.AsFunctionTypeNode().Parameters,
+					node.AsFunctionTypeNode().TypeParameters(),
+					node.AsFunctionTypeNode().Parameters(),
 					newType,
 				)
 			case ast.KindConstructorType:
 				return factory.UpdateConstructorTypeNode(
 					node.AsConstructorTypeNode(),
 					node.Modifiers(),
-					node.AsConstructorTypeNode().TypeParameters,
-					node.AsConstructorTypeNode().Parameters,
+					node.AsConstructorTypeNode().TypeParameters(),
+					node.AsConstructorTypeNode().Parameters(),
 					newType,
 				)
 			}
 		}
-		if ast.IsComputedPropertyName(node) && ast.IsEntityNameExpression(node.AsComputedPropertyName().Expression) {
-			introducesError, result, _ := trackExistingEntityName(node.AsComputedPropertyName().Expression, nil)
+		if ast.IsComputedPropertyName(node) && ast.IsEntityNameExpression(node.AsComputedPropertyName().Expression()) {
+			introducesError, result, _ := trackExistingEntityName(node.AsComputedPropertyName().Expression(), nil)
 			if !introducesError {
 				return factory.UpdateComputedPropertyName(node.AsComputedPropertyName(), result)
 			} else {
@@ -761,8 +761,8 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		}
 		if ast.IsTypePredicateNode(node) {
 			var parameterName *ast.Node
-			if ast.IsIdentifier(node.AsTypePredicateNode().ParameterName) {
-				introducesError, result, _ := trackExistingEntityName(node.AsTypePredicateNode().ParameterName, nil)
+			if ast.IsIdentifier(node.AsTypePredicateNode().ParameterName()) {
+				introducesError, result, _ := trackExistingEntityName(node.AsTypePredicateNode().ParameterName(), nil)
 				// Should not usually happen the only case is when a type predicate comes from a JSDoc type annotation with it's own parameter symbol definition.
 				// /** @type {(v: unknown) => v is undefined} */
 				// const isUndef = v => v === undefined;
@@ -771,22 +771,22 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				}
 				parameterName = result
 			} else {
-				parameterName = node.AsTypePredicateNode().ParameterName.Clone(factory)
+				parameterName = node.AsTypePredicateNode().ParameterName().Clone(factory)
 			}
 			return factory.UpdateTypePredicateNode(
 				node.AsTypePredicateNode(),
-				visitor.VisitNode(node.AsTypePredicateNode().AssertsModifier),
+				visitor.VisitNode(node.AsTypePredicateNode().AssertsModifier()),
 				parameterName,
-				visitor.VisitNode(node.AsTypePredicateNode().Type),
+				visitor.VisitNode(node.AsTypePredicateNode().Type()),
 			)
 		}
 		if ast.IsConditionalTypeNode(node) {
-			checkType := visitor.VisitNode(node.AsConditionalTypeNode().CheckType)
+			checkType := visitor.VisitNode(node.AsConditionalTypeNode().CheckType())
 			dispose := b.enterNewScope(node, nil, b.ch.getInferTypeParameters(node), nil, nil)
-			extendsType := visitor.VisitNode(node.AsConditionalTypeNode().ExtendsType)
-			trueType := visitor.VisitNode(node.AsConditionalTypeNode().TrueType)
+			extendsType := visitor.VisitNode(node.AsConditionalTypeNode().ExtendsType())
+			trueType := visitor.VisitNode(node.AsConditionalTypeNode().TrueType())
 			dispose()
-			falseType := visitor.VisitNode(node.AsConditionalTypeNode().FalseType)
+			falseType := visitor.VisitNode(node.AsConditionalTypeNode().FalseType())
 			return factory.UpdateConditionalTypeNode(
 				node.AsConditionalTypeNode(),
 				checkType,
@@ -842,7 +842,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			} else if ast.IsConditionalTypeNode(node) { // !!! TODO: impossible in combination with the scope start check???
 				typeParams = b.ch.getInferTypeParameters(node)
 			} else if ast.IsMappedTypeNode(node) {
-				typeParams = []*Type{b.ch.getDeclaredTypeOfTypeParameter(b.ch.getSymbolOfDeclaration(node.AsMappedTypeNode().TypeParameter))}
+				typeParams = []*Type{b.ch.getDeclaredTypeOfTypeParameter(b.ch.getSymbolOfDeclaration(node.AsMappedTypeNode().TypeParameter()))}
 			}
 			exit = b.enterNewScope(node, params, typeParams, nil, nil)
 		}

@@ -11,9 +11,9 @@ func convertClassDeclarationToClassExpression(emitContext *printer.EmitContext, 
 	updated := emitContext.Factory.NewClassExpression(
 		transformers.ExtractModifiers(emitContext, node.Modifiers(), ^ast.ModifierFlagsExportDefault),
 		node.Name(),
-		node.TypeParameters,
-		node.HeritageClauses,
-		node.Members,
+		node.TypeParameters(),
+		node.HeritageClauses(),
+		node.Members(),
 	)
 	emitContext.SetOriginal(updated, node.AsNode())
 	updated.Loc = node.Loc
@@ -78,7 +78,7 @@ func (s *superAccessState) visitSuperAccessNode(node *ast.Node) *ast.Node {
 	switch node.Kind {
 	case ast.KindCallExpression:
 		call := node.AsCallExpression()
-		if ast.IsSuperProperty(call.Expression) {
+		if ast.IsSuperProperty(call.Expression()) {
 			return s.substituteCallExpressionWithSuperAccess(call, s.superAccessVisitor)
 		}
 		return s.superAccessVisitor.VisitEachChild(node)
@@ -94,7 +94,7 @@ func (s *superAccessState) visitSuperAccessNode(node *ast.Node) *ast.Node {
 		if node.Expression().Kind == ast.KindSuperKeyword {
 			// super[x] → _superIndex(x) or _superIndex(x).value
 			return s.createSuperElementAccessInAsyncMethod(
-				node.AsElementAccessExpression().ArgumentExpression,
+				node.AsElementAccessExpression().ArgumentExpression(),
 			)
 		}
 		return s.superAccessVisitor.VisitEachChild(node)
@@ -114,7 +114,7 @@ func (s *superAccessState) substituteSuperAccessesInBody(body *ast.Node) *ast.No
 
 // substituteCallExpressionWithSuperAccess handles super.x(args) and super[x](args).
 func (s *superAccessState) substituteCallExpressionWithSuperAccess(call *ast.CallExpression, visitor *ast.NodeVisitor) *ast.Node {
-	expression := call.Expression
+	expression := call.Expression()
 	var target *ast.Node
 
 	if ast.IsPropertyAccessExpression(expression) {
@@ -126,7 +126,7 @@ func (s *superAccessState) substituteCallExpressionWithSuperAccess(call *ast.Cal
 	} else if ast.IsElementAccessExpression(expression) {
 		// super[x](args) → _superIndex(x).call(this, args) or _superIndex(x).value.call(this, args)
 		target = s.createSuperElementAccessInAsyncMethod(
-			expression.AsElementAccessExpression().ArgumentExpression,
+			expression.AsElementAccessExpression().ArgumentExpression(),
 		)
 	} else {
 		return visitor.VisitEachChild(call.AsNode())
@@ -139,8 +139,8 @@ func (s *superAccessState) substituteCallExpressionWithSuperAccess(call *ast.Cal
 
 	var allArgs []*ast.Node
 	allArgs = append(allArgs, s.factory.NewThisExpression())
-	if call.Arguments != nil {
-		visitedArgs := visitor.VisitNodes(call.Arguments)
+	if call.Arguments() != nil {
+		visitedArgs := visitor.VisitNodes(call.Arguments())
 		if visitedArgs != nil {
 			allArgs = append(allArgs, visitedArgs.Nodes...)
 		}
@@ -262,15 +262,15 @@ func (s *superAccessState) trackSuperAccess(node *ast.Node) {
 			s.hasSuperElementAccess = true
 		}
 	case ast.KindBinaryExpression:
-		if ast.IsAssignmentOperator(node.AsBinaryExpression().OperatorToken.Kind) && assignmentTargetContainsSuperProperty(node.AsBinaryExpression().Left) {
+		if ast.IsAssignmentOperator(node.AsBinaryExpression().OperatorToken().Kind) && assignmentTargetContainsSuperProperty(node.AsBinaryExpression().Left()) {
 			s.hasSuperPropertyAssignment = true
 		}
 	case ast.KindPrefixUnaryExpression:
-		if isUpdateExpression(node) && assignmentTargetContainsSuperProperty(node.AsPrefixUnaryExpression().Operand) {
+		if isUpdateExpression(node) && assignmentTargetContainsSuperProperty(node.AsPrefixUnaryExpression().Operand()) {
 			s.hasSuperPropertyAssignment = true
 		}
 	case ast.KindPostfixUnaryExpression:
-		if isUpdateExpression(node) && assignmentTargetContainsSuperProperty(node.AsPostfixUnaryExpression().Operand) {
+		if isUpdateExpression(node) && assignmentTargetContainsSuperProperty(node.AsPostfixUnaryExpression().Operand()) {
 			s.hasSuperPropertyAssignment = true
 		}
 	}

@@ -266,7 +266,7 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 					tokenModifier := tokenModifier(0)
 
 					// Check if this is a declaration
-					parent := node.Parent
+					parent := node.Parent()
 					if parent != nil {
 						parentIsDeclaration := ast.IsBindingElement(parent) || tokenFromDeclarationMapping(parent.Kind) == tokenType
 						if parentIsDeclaration && parent.Name() == node {
@@ -466,21 +466,21 @@ func isLocalDeclaration(decl *ast.Node, sourceFile *ast.SourceFile) bool {
 		decl = getDeclarationForBindingElement(decl)
 	}
 	if ast.IsVariableDeclaration(decl) {
-		parent := decl.Parent
+		parent := decl.Parent()
 		// Check if this is a catch clause parameter
 		if parent != nil && ast.IsCatchClause(parent) {
 			return ast.GetSourceFileOfNode(decl) == sourceFile
 		}
 		if parent != nil && ast.IsVariableDeclarationList(parent) {
-			grandparent := parent.Parent
+			grandparent := parent.Parent()
 			if grandparent != nil {
-				greatGrandparent := grandparent.Parent
+				greatGrandparent := grandparent.Parent()
 				return (!ast.IsSourceFile(greatGrandparent) || ast.IsCatchClause(grandparent)) &&
 					ast.GetSourceFileOfNode(decl) == sourceFile
 			}
 		}
 	} else if ast.IsFunctionDeclaration(decl) {
-		parent := decl.Parent
+		parent := decl.Parent()
 		return parent != nil && !ast.IsSourceFile(parent) && ast.GetSourceFileOfNode(decl) == sourceFile
 	}
 	return false
@@ -488,29 +488,29 @@ func isLocalDeclaration(decl *ast.Node, sourceFile *ast.SourceFile) bool {
 
 func getDeclarationForBindingElement(element *ast.Node) *ast.Node {
 	for {
-		parent := element.Parent
+		parent := element.Parent()
 		if parent != nil && ast.IsBindingPattern(parent) {
-			grandparent := parent.Parent
+			grandparent := parent.Parent()
 			if grandparent != nil && ast.IsBindingElement(grandparent) {
 				element = grandparent
 				continue
 			}
-			return parent.Parent
+			return parent.Parent()
 		}
 		return element
 	}
 }
 
 func isInImportClause(node *ast.Node) bool {
-	parent := node.Parent
+	parent := node.Parent()
 	return parent != nil && (ast.IsImportClause(parent) || ast.IsImportSpecifier(parent) || ast.IsNamespaceImport(parent))
 }
 
 func isExpressionInCallExpression(node *ast.Node) bool {
 	for ast.IsRightSideOfQualifiedNameOrPropertyAccess(node) {
-		node = node.Parent
+		node = node.Parent()
 	}
-	parent := node.Parent
+	parent := node.Parent()
 	return parent != nil && ast.IsCallExpression(parent) && parent.Expression() == node
 }
 

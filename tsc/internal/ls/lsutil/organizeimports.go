@@ -272,20 +272,20 @@ func getModuleSpecifierExpression(declaration *ast.Statement) *ast.Expression {
 	switch declaration.Kind {
 	case ast.KindImportEqualsDeclaration:
 		importEquals := declaration.AsImportEqualsDeclaration()
-		if importEquals.ModuleReference.Kind == ast.KindExternalModuleReference {
-			return importEquals.ModuleReference.Expression()
+		if importEquals.ModuleReference().Kind == ast.KindExternalModuleReference {
+			return importEquals.ModuleReference().Expression()
 		}
 		return nil
 	case ast.KindImportDeclaration:
 		return declaration.ModuleSpecifier()
 	case ast.KindVariableStatement:
-		declarations := declaration.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes
+		declarations := declaration.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes
 		if len(declarations) > 0 {
 			initializer := declarations[0].Initializer()
 			if initializer != nil && initializer.Kind == ast.KindCallExpression {
 				callExpr := initializer.AsCallExpression()
-				if len(callExpr.Arguments.Nodes) > 0 {
-					return callExpr.Arguments.Nodes[0]
+				if len(callExpr.Arguments().Nodes) > 0 {
+					return callExpr.Arguments().Nodes[0]
 				}
 			}
 		}
@@ -343,14 +343,14 @@ func getImportKindOrder(s1 *ast.Statement) int {
 	switch s1.Kind {
 	case ast.KindImportDeclaration:
 		importDecl := s1.AsImportDeclaration()
-		if importDecl.ImportClause == nil {
+		if importDecl.ImportClause() == nil {
 			return importKindOrderSideEffect
 		}
-		importClause := importDecl.ImportClause.AsImportClause()
+		importClause := importDecl.ImportClause().AsImportClause()
 		if importClause.IsTypeOnly() {
 			return importKindOrderTypeOnly
 		}
-		if importClause.NamedBindings != nil && importClause.NamedBindings.Kind == ast.KindNamespaceImport {
+		if importClause.NamedBindings() != nil && importClause.NamedBindings().Kind == ast.KindNamespaceImport {
 			return importKindOrderNamespace
 		}
 		if importClause.Name() != nil {
@@ -472,22 +472,22 @@ func detectNamedImportOrganizationBySort(
 	var importDeclsWithNamed []*ast.Statement
 
 	for _, imp := range originalGroups {
-		if imp.AsImportDeclaration().ImportClause == nil {
+		if imp.AsImportDeclaration().ImportClause() == nil {
 			continue
 		}
-		clause := imp.AsImportDeclaration().ImportClause.AsImportClause()
-		if clause.NamedBindings == nil || clause.NamedBindings.Kind != ast.KindNamedImports {
+		clause := imp.AsImportDeclaration().ImportClause().AsImportClause()
+		if clause.NamedBindings() == nil || clause.NamedBindings().Kind != ast.KindNamedImports {
 			continue
 		}
-		namedImports := clause.NamedBindings.AsNamedImports()
-		if len(namedImports.Elements.Nodes) == 0 {
+		namedImports := clause.NamedBindings().AsNamedImports()
+		if len(namedImports.Elements().Nodes) == 0 {
 			continue
 		}
 
 		if !bothNamedImports {
 			hasTypeOnly := false
 			hasRegular := false
-			for _, elem := range namedImports.Elements.Nodes {
+			for _, elem := range namedImports.Elements().Nodes {
 				if elem.IsTypeOnly() {
 					hasTypeOnly = true
 				} else {
@@ -508,9 +508,9 @@ func detectNamedImportOrganizationBySort(
 
 	namedImportsByDecl := make([][]*ast.Statement, 0, len(importDeclsWithNamed))
 	for _, imp := range importDeclsWithNamed {
-		clause := imp.AsImportDeclaration().ImportClause.AsImportClause()
-		namedImports := clause.NamedBindings.AsNamedImports()
-		namedImportsByDecl = append(namedImportsByDecl, namedImports.Elements.Nodes)
+		clause := imp.AsImportDeclaration().ImportClause().AsImportClause()
+		namedImports := clause.NamedBindings().AsNamedImports()
+		namedImportsByDecl = append(namedImportsByDecl, namedImports.Elements().Nodes)
 	}
 
 	if !bothNamedImports || len(typesToTest) == 0 {

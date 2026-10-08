@@ -136,7 +136,7 @@ func isNonPatternAmbientModuleDeclaration(file *ast.SourceFile, decl *ast.Module
 
 func (e *exportExtractor) extractFromModule(file *ast.SourceFile) []*Export {
 	moduleAugmentations := core.MapNonNil(file.ModuleAugmentations, func(name *ast.ModuleName) *ast.ModuleDeclaration {
-		decl := name.Parent
+		decl := name.Parent()
 		if ast.IsGlobalScopeAugmentation(decl) {
 			return nil
 		}
@@ -243,13 +243,13 @@ func (e *symbolExtractor) extractFromSymbol(name string, symbol *ast.Symbol, mod
 			}
 		}
 	} else if syntax == ExportSyntaxCommonJSModuleExports {
-		expression := symbol.Declarations[0].AsBinaryExpression().Right
+		expression := symbol.Declarations[0].AsBinaryExpression().Right()
 		if expression.Kind == ast.KindObjectLiteralExpression {
 			// what is actually desirable here? I think it would be reasonable to only treat these as exports
 			// if *every* property is a shorthand property or identifier: identifier
 			// At least, it would be sketchy if there were any methods, computed properties...
-			*exports = slices.Grow(*exports, len(expression.AsObjectLiteralExpression().Properties.Nodes))
-			for _, prop := range expression.AsObjectLiteralExpression().Properties.Nodes {
+			*exports = slices.Grow(*exports, len(expression.AsObjectLiteralExpression().Properties().Nodes))
+			for _, prop := range expression.AsObjectLiteralExpression().Properties().Nodes {
 				if ast.IsShorthandPropertyAssignment(prop) || ast.IsPropertyAssignment(prop) && prop.AsPropertyAssignment().Name().Kind == ast.KindIdentifier {
 					export, _ := e.createExport(expression.Symbol().Members[prop.Name().Text()], moduleID, moduleFileName, syntax, file, checkerLease)
 					if export != nil {
@@ -378,7 +378,7 @@ func (e *symbolExtractor) tryResolveSymbol(symbol *ast.Symbol, syntax ExportSynt
 	switch syntax {
 	case ExportSyntaxNamed:
 		decl := ast.GetDeclarationOfKind(symbol, ast.KindExportSpecifier)
-		if decl.Parent.Parent.AsExportDeclaration().ModuleSpecifier == nil {
+		if decl.Parent().Parent().AsExportDeclaration().ModuleSpecifier() == nil {
 			if n := core.FirstNonZero(decl.Name(), decl.PropertyName()); n.Kind == ast.KindIdentifier {
 				loc = n
 				name = n.Text()
