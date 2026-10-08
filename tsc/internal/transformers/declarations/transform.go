@@ -2118,9 +2118,13 @@ caseBlock:
 			}
 		}
 
-		var mods *ast.ModifierList
+		modifierFlags := tx.ensureModifierFlags(node)
 		if isStatic {
-			mods = tx.Factory().NewModifierList([]*ast.Node{tx.Factory().NewModifier(ast.KindStaticKeyword)})
+			modifierFlags |= ast.ModifierFlagsStatic
+		}
+		var mods *ast.ModifierList
+		if modifierFlags != ast.ModifierFlagsNone {
+			mods = tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier))
 		}
 		if ast.HasDynamicName(node) {
 			if !transformers.IsSimpleInlineableExpression(name) {
