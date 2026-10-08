@@ -2,7 +2,6 @@ package checker
 
 import (
 	"fmt"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -153,7 +152,7 @@ func (b *NodeBuilderImpl) expandClassDecl(symbol *ast.Symbol) *ast.Node {
 
 	// Static members
 	staticProps := core.Filter(b.ch.getPropertiesOfType(staticType), func(p *ast.Symbol) bool {
-		return p.Flags()&ast.SymbolFlagsPrototype == 0 && p.Name() != unique.Make("prototype") && !b.isNamespaceMember(p)
+		return p.Flags()&ast.SymbolFlagsPrototype == 0 && p.Name() != ast.SymbolNamePrototype && !b.isNamespaceMember(p)
 	})
 	var staticMembers []*ast.Node
 	staticMembers = b.serializePropertiesWithTruncation(staticProps, staticMembers)
@@ -598,7 +597,7 @@ func (b *NodeBuilderImpl) filterInheritedProperties(t *Type, baseTypes []*Type, 
 
 func (b *NodeBuilderImpl) isNamespaceMember(p *ast.Symbol) bool {
 	return p.Flags()&(ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias) != 0 ||
-		!(p.Flags()&ast.SymbolFlagsPrototype != 0 || p.Name() == unique.Make("prototype") || (p.ValueDeclaration() != nil && ast.HasStaticModifier(p.ValueDeclaration()) && ast.IsClassLike(p.ValueDeclaration().Parent)))
+		!(p.Flags()&ast.SymbolFlagsPrototype != 0 || p.Name() == ast.SymbolNamePrototype || (p.ValueDeclaration() != nil && ast.HasStaticModifier(p.ValueDeclaration()) && ast.IsClassLike(p.ValueDeclaration().Parent)))
 }
 
 func isHashPrivate(s *ast.Symbol) bool {

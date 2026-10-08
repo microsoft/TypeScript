@@ -32,7 +32,7 @@ import (
 type newImportBinding struct {
 	kind          lsproto.ImportKind
 	propertyName  string
-	name          string
+	name          ast.SymbolName
 	addAsTypeOnly lsproto.AddAsTypeOnly
 }
 
@@ -84,12 +84,13 @@ func (f *Fix) Edits(
 		return edits, diagnostics.Update_import_from_0.Localize(locale, f.ModuleSpecifier), safe
 	case lsproto.AutoImportFixKindAddNew:
 		var declarations []*ast.Statement
-		defaultImport := core.IfElse(f.ImportKind == lsproto.ImportKindDefault, &newImportBinding{name: f.Name, addAsTypeOnly: f.AddAsTypeOnly}, nil)
-		namedImports := core.IfElse(f.ImportKind == lsproto.ImportKindNamed, []*newImportBinding{{name: f.Name, addAsTypeOnly: f.AddAsTypeOnly}}, nil)
+		name := unique.Make(f.Name)
+		defaultImport := core.IfElse(f.ImportKind == lsproto.ImportKindDefault, &newImportBinding{name: name, addAsTypeOnly: f.AddAsTypeOnly}, nil)
+		namedImports := core.IfElse(f.ImportKind == lsproto.ImportKindNamed, []*newImportBinding{{name: name, addAsTypeOnly: f.AddAsTypeOnly}}, nil)
 		var namespaceLikeImport *newImportBinding
 		// qualification := f.qualification()
 		if f.ImportKind == lsproto.ImportKindNamespace || f.ImportKind == lsproto.ImportKindCommonJS {
-			namespaceLikeImport = &newImportBinding{kind: f.ImportKind, name: f.Name}
+			namespaceLikeImport = &newImportBinding{kind: f.ImportKind, name: name}
 			// if qualification != nil && qualification.namespacePref != "" {
 			// 	namespaceLikeImport.name = qualification.namespacePref
 			// }
@@ -195,8 +196,9 @@ func getAddToExistingImportFix(file *ast.SourceFile, fix *Fix) *addToExistingImp
 		panic("expected import declaration or require call expression")
 	}
 
-	defaultImport := core.IfElse(fix.ImportKind == lsproto.ImportKindDefault, &newImportBinding{kind: lsproto.ImportKindDefault, name: fix.Name, addAsTypeOnly: fix.AddAsTypeOnly}, nil)
-	namedImports := core.IfElse(fix.ImportKind == lsproto.ImportKindNamed, &newImportBinding{kind: lsproto.ImportKindNamed, name: fix.Name, addAsTypeOnly: fix.AddAsTypeOnly}, nil)
+	name := unique.Make(fix.Name)
+	defaultImport := core.IfElse(fix.ImportKind == lsproto.ImportKindDefault, &newImportBinding{kind: lsproto.ImportKindDefault, name: name, addAsTypeOnly: fix.AddAsTypeOnly}, nil)
+	namedImports := core.IfElse(fix.ImportKind == lsproto.ImportKindNamed, &newImportBinding{kind: lsproto.ImportKindNamed, name: name, addAsTypeOnly: fix.AddAsTypeOnly}, nil)
 	return &addToExistingImportFix{
 		importClauseOrBindingPattern: importClauseOrBindingPattern,
 		defaultImport:                defaultImport,
@@ -216,10 +218,10 @@ func addToExistingImport(
 	case ast.KindObjectBindingPattern:
 		bindingPattern := importClauseOrBindingPattern.AsBindingPattern()
 		if defaultImport != nil {
-			addElementToBindingPattern(ct, file, bindingPattern, defaultImport.name, "default")
+			addElementToBindingPattern(ct, file, bindingPattern, defaultImport.name.Value(), "default")
 		}
 		for _, namedImport := range namedImports {
-			addElementToBindingPattern(ct, file, bindingPattern, namedImport.name, "")
+			addElementToBindingPattern(ct, file, bindingPattern, namedImport.name.Value(), "")
 		}
 		return
 	case ast.KindImportClause:
@@ -240,7 +242,7 @@ func addToExistingImport(
 
 		if defaultImport != nil {
 			debug.Assert(importClause.Name() == nil, "Cannot add a default import to an import clause that already has one")
-			ct.InsertNodeAt(file, core.TextPos(astnav.GetStartOfNode(importClause.AsNode(), file, false)), ct.NodeFactory.NewIdentifier(defaultImport.name), change.NodeOptions{Suffix: ", "})
+			ct.InsertNodeAt(file, core.TextPos(astnav.GetStartOfNode(importClause.AsNode(), file, false)), ct.NodeFactory.NewIdentifier(defaultImport.name.Value()), change.NodeOptions{Suffix: ", "})
 		}
 
 		if len(namedImports) > 0 {
@@ -253,7 +255,7 @@ func addToExistingImport(
 				return ct.NodeFactory.NewImportSpecifier(
 					(!importClause.IsTypeOnly() || promoteFromTypeOnly) && shouldUseTypeOnly(namedImport.addAsTypeOnly, preferences),
 					identifier,
-					ct.NodeFactory.NewIdentifier(namedImport.name),
+					ct.NodeFactory.NewIdentifier(namedImport.name.Value()),
 				)
 			})
 			slices.SortFunc(newSpecifiers, specifierComparer)
@@ -376,7 +378,7 @@ func getNewImports(
 
 		var defaultImportNode *ast.Node
 		if defaultImport != nil {
-			defaultImportNode = ct.NodeFactory.NewIdentifier(defaultImport.name)
+			defaultImportNode = ct.NodeFactory.NewIdentifier(defaultImport.name.Value())
 		}
 
 		statements = append(statements, makeImport(ct, defaultImportNode, core.Map(namedImports, func(namedImport *newImportBinding) *ast.Node {
@@ -387,7 +389,7 @@ func getNewImports(
 			return ct.NodeFactory.NewImportSpecifier(
 				!topLevelTypeOnly && shouldUseTypeOnly(namedImport.addAsTypeOnly, preferences),
 				namedImportPropertyName,
-				ct.NodeFactory.NewIdentifier(namedImport.name),
+				ct.NodeFactory.NewIdentifier(namedImport.name.Value()),
 			)
 		}), moduleSpecifierStringLiteral, topLevelTypeOnly))
 	}
@@ -398,7 +400,7 @@ func getNewImports(
 			declaration = ct.NodeFactory.NewImportEqualsDeclaration(
 				/*modifiers*/ nil,
 				shouldUseTypeOnly(namespaceLikeImport.addAsTypeOnly, preferences),
-				ct.NodeFactory.NewIdentifier(namespaceLikeImport.name),
+				ct.NodeFactory.NewIdentifier(namespaceLikeImport.name.Value()),
 				ct.NodeFactory.NewExternalModuleReference(moduleSpecifierStringLiteral),
 			)
 		} else {
@@ -407,7 +409,7 @@ func getNewImports(
 				ct.NodeFactory.NewImportClause(
 					/*phaseModifier*/ core.IfElse(shouldUseTypeOnly(namespaceLikeImport.addAsTypeOnly, preferences), ast.KindTypeKeyword, ast.KindUnknown),
 					/*name*/ nil,
-					ct.NodeFactory.NewNamespaceImport(ct.NodeFactory.NewIdentifier(namespaceLikeImport.name)),
+					ct.NodeFactory.NewNamespaceImport(ct.NodeFactory.NewIdentifier(namespaceLikeImport.name.Value())),
 				),
 				moduleSpecifierStringLiteral,
 				/*attributes*/ nil,
@@ -447,7 +449,7 @@ func getNewRequires(
 			bindingElements = append(bindingElements, changeTracker.NodeFactory.NewBindingElement(
 				/*dotDotDotToken*/ nil,
 				propertyName,
-				changeTracker.NodeFactory.NewIdentifier(namedImport.name),
+				changeTracker.NodeFactory.NewIdentifier(namedImport.name.Value()),
 				/*initializer*/ nil,
 			))
 		}
@@ -456,7 +458,7 @@ func getNewRequires(
 				changeTracker.NodeFactory.NewBindingElement(
 					/*dotDotDotToken*/ nil,
 					changeTracker.NodeFactory.NewIdentifier("default"),
-					changeTracker.NodeFactory.NewIdentifier(defaultImport.name),
+					changeTracker.NodeFactory.NewIdentifier(defaultImport.name.Value()),
 					/*initializer*/ nil,
 				),
 			}, bindingElements...)
@@ -476,7 +478,7 @@ func getNewRequires(
 	if namespaceLikeImport != nil {
 		declaration := createConstEqualsRequireDeclaration(
 			changeTracker,
-			changeTracker.NodeFactory.NewIdentifier(namespaceLikeImport.name),
+			changeTracker.NodeFactory.NewIdentifier(namespaceLikeImport.name.Value()),
 			quotedModuleSpecifier,
 		)
 		statements = append(statements, declaration)

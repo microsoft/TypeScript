@@ -769,7 +769,7 @@ func (c *Checker) narrowTypeByConstructor(t *Type, operator ast.Kind, identifier
 		return t
 	}
 	// Get the prototype property of the type identifier so we can find out its type.
-	prototypeProperty := c.getPropertyOfType(identifierType, unique.Make("prototype"))
+	prototypeProperty := c.getPropertyOfType(identifierType, ast.SymbolNamePrototype)
 	if prototypeProperty == nil {
 		return t
 	}
@@ -965,7 +965,7 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 }
 
 func (c *Checker) getInstanceType(constructorType *Type) *Type {
-	prototypePropertyType := c.getTypeOfPropertyOfType(constructorType, unique.Make("prototype"))
+	prototypePropertyType := c.getTypeOfPropertyOfType(constructorType, ast.SymbolNamePrototype)
 	if prototypePropertyType != nil && !IsTypeAny(prototypePropertyType) {
 		return prototypePropertyType
 	}
@@ -2093,7 +2093,7 @@ func (c *Checker) getEffectsSignature(node *ast.Node) *Signature {
  * Get the type of the `[Symbol.hasInstance]` method of an object type.
  */
 func (c *Checker) getSymbolHasInstanceMethodOfObjectType(t *Type) *Type {
-	hasInstancePropertyName := c.getPropertyNameForKnownSymbolName(unique.Make("hasInstance"))
+	hasInstancePropertyName := c.getPropertyNameForKnownSymbolName(ast.SymbolNameHasInstance)
 	if c.allTypesAssignableToKind(t, TypeFlagsNonPrimitive) {
 		hasInstanceProperty := c.getPropertyOfType(t, hasInstancePropertyName)
 		if hasInstanceProperty != nil {

@@ -216,14 +216,14 @@ func (adder *importAdder) AddImportFix(fix *Fix) {
 			}
 			entry.namedImports[symbolName] = &newImportBinding{
 				kind:          lsproto.ImportKindNamed,
-				name:          symbolName.Value(),
+				name:          symbolName,
 				addAsTypeOnly: reduceAddAsTypeOnlyValues(prevTypeOnly, fix.AddAsTypeOnly),
 				propertyName:  existingFix.namedImport.propertyName,
 			}
 		} else {
 			// Default import
 			debug.Assert(
-				entry.defaultImport == nil || unique.Make(entry.defaultImport.name) == symbolName,
+				entry.defaultImport == nil || entry.defaultImport.name == symbolName,
 				"(Add to Existing) Default import should be missing or match symbolName",
 			)
 			var prevTypeOnly lsproto.AddAsTypeOnly
@@ -232,7 +232,7 @@ func (adder *importAdder) AddImportFix(fix *Fix) {
 			}
 			entry.defaultImport = &newImportBinding{
 				kind:          lsproto.ImportKindDefault,
-				name:          symbolName.Value(),
+				name:          symbolName,
 				addAsTypeOnly: reduceAddAsTypeOnlyValues(prevTypeOnly, fix.AddAsTypeOnly),
 			}
 		}
@@ -247,7 +247,7 @@ func (adder *importAdder) AddImportFix(fix *Fix) {
 		switch fix.ImportKind {
 		case lsproto.ImportKindDefault:
 			debug.Assert(
-				entry.defaultImport == nil || unique.Make(entry.defaultImport.name) == symbolName,
+				entry.defaultImport == nil || entry.defaultImport.name == symbolName,
 				"(Add new) Default import should be missing or match symbolName",
 			)
 			var prevTypeOnly lsproto.AddAsTypeOnly
@@ -256,7 +256,7 @@ func (adder *importAdder) AddImportFix(fix *Fix) {
 			}
 			entry.defaultImport = &newImportBinding{
 				kind:          lsproto.ImportKindDefault,
-				name:          symbolName.Value(),
+				name:          symbolName,
 				addAsTypeOnly: reduceAddAsTypeOnlyValues(prevTypeOnly, fix.AddAsTypeOnly),
 			}
 
@@ -271,7 +271,7 @@ func (adder *importAdder) AddImportFix(fix *Fix) {
 			}
 			entry.namedImports[symbolName] = &newImportBinding{
 				kind:          lsproto.ImportKindNamed,
-				name:          symbolName.Value(),
+				name:          symbolName,
 				addAsTypeOnly: reduceAddAsTypeOnlyValues(prevTypeOnly, fix.AddAsTypeOnly),
 				// !!! propertyName
 			}
@@ -288,30 +288,30 @@ func (adder *importAdder) AddImportFix(fix *Fix) {
 				}
 				entry.namedImports[symbolName] = &newImportBinding{
 					kind:          lsproto.ImportKindCommonJS,
-					name:          symbolName.Value(),
+					name:          symbolName,
 					addAsTypeOnly: reduceAddAsTypeOnlyValues(prevTypeOnly, fix.AddAsTypeOnly),
 					// !!! propertyName
 				}
 			} else {
 				debug.Assert(
-					entry.namespaceLikeImport == nil || unique.Make(entry.namespaceLikeImport.name) == symbolName,
+					entry.namespaceLikeImport == nil || entry.namespaceLikeImport.name == symbolName,
 					"Namespacelike import should be missing or match symbolName",
 				)
 				entry.namespaceLikeImport = &newImportBinding{
 					kind:          lsproto.ImportKindCommonJS,
-					name:          symbolName.Value(),
+					name:          symbolName,
 					addAsTypeOnly: fix.AddAsTypeOnly,
 				}
 			}
 
 		case lsproto.ImportKindNamespace:
 			debug.Assert(
-				entry.namespaceLikeImport == nil || unique.Make(entry.namespaceLikeImport.name) == symbolName,
+				entry.namespaceLikeImport == nil || entry.namespaceLikeImport.name == symbolName,
 				"Namespacelike import should be missing or match symbolName",
 			)
 			entry.namespaceLikeImport = &newImportBinding{
 				kind:          lsproto.ImportKindNamespace,
-				name:          symbolName.Value(),
+				name:          symbolName,
 				addAsTypeOnly: fix.AddAsTypeOnly,
 			}
 		}
