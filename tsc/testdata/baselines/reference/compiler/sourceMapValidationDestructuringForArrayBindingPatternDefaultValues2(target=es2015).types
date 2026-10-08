@@ -526,16 +526,16 @@ for ([numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "trimm
 }
 for (let
     [nameMA = "noName",
->nameMA : string
+>nameMA : string (origin: string | "noName")
 >"noName" : "noName"
 
         [
             primarySkillA = "primary",
->primarySkillA : string
+>primarySkillA : string (origin: string | "primary")
 >"primary" : "primary"
 
             secondarySkillA = "secondary"
->secondarySkillA : string
+>secondarySkillA : string (origin: string | "secondary")
 >"secondary" : "secondary"
 
         ] = ["none", "none"]
@@ -558,7 +558,7 @@ for (let
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameMA : string
+>nameMA : string (origin: string | "noName")
 }
 for ([nameMA = "noName",
 >[nameMA = "noName",    [        primarySkillA = "primary",        secondarySkillA = "secondary"    ] = ["none", "none"]] = getMultiRobot(), i = 0 : 0

@@ -4,7 +4,7 @@
 // Repro from #50683
 
 type Alignment = (string & {}) | "left" | "center" | "right";
->Alignment : Alignment
+>Alignment : string (origin: string | "center" | "left" | "right")
 
 type Alignments = Record<Alignment, string>;
 >Alignments : Alignments
@@ -33,9 +33,9 @@ const a: Alignments = {
 
 a.left.length;
 >a.left.length : number
->a.left : string
+>a.left : string | undefined
 >a : Alignments
->left : string
+>left : string | undefined
 >length : number
 
 a.other.length;  // Error expected here

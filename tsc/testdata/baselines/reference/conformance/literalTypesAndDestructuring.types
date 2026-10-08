@@ -18,7 +18,7 @@ let { a: a2 = 0 } = x;
 
 let { a: a3 = 2 } = x;
 >a : any
->a3 : number
+>a3 : number (origin: number | 0 | 1)
 >2 : 2
 >x : { a: 0 | 1 | undefined; }
 
@@ -44,7 +44,7 @@ let b2 = x.a ?? 0;
 >0 : 0
 
 let b3 = x.a ?? 2;
->b3 : number
+>b3 : number (origin: number | 0 | 1)
 >x.a ?? 2 : 0 | 1 | 2
 >x.a : 0 | 1 | undefined
 >x : { a: 0 | 1 | undefined; }

@@ -13,7 +13,7 @@ class Cls {
 >problem : () => void
 
     this.#privateProp ??= false ? neverThis() : 20;
->this.#privateProp ??= false ? neverThis() : 20 : number
+>this.#privateProp ??= false ? neverThis() : 20 : number (origin: number | 20)
 >this.#privateProp : number | undefined
 >this : this
 >false ? neverThis() : 20 : 20

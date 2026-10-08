@@ -75,7 +75,7 @@ const { x: z1 } = a;
 
 const { x: z2 = 0 } = a;
 >x : any
->z2 : number
+>z2 : number (origin: number | 0)
 >0 : 0
 >a : { x?: number; y?: number; }
 

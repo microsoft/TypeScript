@@ -2,7 +2,7 @@
 
 === initializedDestructuringAssignmentTypes.ts ===
 const [, a = ''] = ''.match('') || [];
->a : string
+>a : string (origin: string | "")
 >'' : ""
 >''.match('') || [] : RegExpMatchArray | []
 >''.match('') : RegExpMatchArray | null
@@ -15,6 +15,6 @@ const [, a = ''] = ''.match('') || [];
 a.toFixed()
 >a.toFixed() : any
 >a.toFixed : any
->a : string
+>a : string (origin: string | "")
 >toFixed : any
 

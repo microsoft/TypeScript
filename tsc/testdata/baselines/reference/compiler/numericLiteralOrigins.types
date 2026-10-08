@@ -1,0 +1,192 @@
+//// [tests/cases/compiler/numericLiteralOrigins.ts] ////
+
+=== numericLiteralOrigins.ts ===
+type Numeric = 1 | 2 | number;
+>Numeric : number (origin: number | 1 | 2)
+
+type Big = 1n | 2n | bigint;
+>Big : bigint (origin: bigint | 1n | 2n)
+
+type Equal<Left, Right> = (<Value>() => Value extends Left ? 1 : 2) extends
+>Equal : Equal<Left, Right>
+
+    (<Value>() => Value extends Right ? 1 : 2) ? true : false;
+>true : true
+>false : false
+
+const numericIdentity: Equal<Numeric, number> = true;
+>numericIdentity : true
+>true : true
+
+const bigintIdentity: Equal<Big, bigint> = true;
+>bigintIdentity : true
+>true : true
+
+const mergedIdentity: Equal<Numeric | number, number> = true;
+>mergedIdentity : true
+>true : true
+
+const mergedBigIdentity: Equal<Big | bigint, bigint> = true;
+>mergedBigIdentity : true
+>true : true
+
+const intersectionIdentity: Equal<Numeric & {}, number> = true;
+>intersectionIdentity : true
+>true : true
+
+const bigIntersectionIdentity: Equal<Big & {}, bigint> = true;
+>bigIntersectionIdentity : true
+>true : true
+
+declare const values: Record<Numeric, number>;
+>values : Record<number, number>
+
+export const known = values[1];
+>known : number | undefined
+>values[1] : number | undefined
+>values : Record<number, number>
+>1 : 1
+
+export const other = values[3];
+>other : number | undefined
+>values[3] : number | undefined
+>values : Record<number, number>
+>3 : 3
+
+const missing: Record<Numeric, number> = {};
+>missing : Record<number, number>
+>{} : {}
+
+const present: Record<Numeric, number> = { 1: 1, 2: 2 };
+>present : Record<number, number>
+>{ 1: 1, 2: 2 } : { 1: number; 2: number; }
+>1 : number
+>1 : 1
+>2 : number
+>2 : 2
+
+const plain: Record<number, number> = {};
+>plain : Record<number, number>
+>{} : {}
+
+declare const keyValues: { [Key in Numeric]: Key };
+>keyValues : { [x: number]: number; }
+
+export const literalValue = keyValues[1];
+>literalValue : number | undefined (origin: number | 1 | 2 | undefined)
+>keyValues[1] : number | undefined (origin: number | 1 | 2 | undefined)
+>keyValues : { [x: number]: number; }
+>1 : 1
+
+export const indexValue = keyValues[3];
+>indexValue : number | undefined (origin: number | 1 | 2 | undefined)
+>keyValues[3] : number | undefined (origin: number | 1 | 2 | undefined)
+>keyValues : { [x: number]: number; }
+>3 : 3
+
+declare const remapped: { [Key in Big as `${Key}`]: Key };
+>remapped : { [x: `${bigint}`]: bigint; }
+
+export const bigKnown = remapped["1"];
+>bigKnown : bigint | undefined (origin: bigint | 1n | 2n | undefined)
+>remapped["1"] : bigint | undefined (origin: bigint | 1n | 2n | undefined)
+>remapped : { [x: `${bigint}`]: bigint; }
+>"1" : "1"
+
+export const bigOther = remapped["3"];
+>bigOther : bigint | undefined (origin: bigint | 1n | 2n | undefined)
+>remapped["3"] : bigint | undefined (origin: bigint | 1n | 2n | undefined)
+>remapped : { [x: `${bigint}`]: bigint; }
+>"3" : "3"
+
+type GenericNumeric<Key extends number> = Record<Key | number, string>;
+>GenericNumeric : GenericNumeric<Key>
+
+declare const generic: GenericNumeric<1 | 2>;
+>generic : GenericNumeric<1 | 2>
+
+export const genericKnown = generic[1];
+>genericKnown : string | undefined
+>generic[1] : string | undefined
+>generic : GenericNumeric<1 | 2>
+>1 : 1
+
+export const genericOther = generic[3];
+>genericOther : string | undefined
+>generic[3] : string | undefined
+>generic : GenericNumeric<1 | 2>
+>3 : 3
+
+interface NumericIndex { [key: Numeric]: string }
+>key : number (origin: number | 1 | 2)
+
+declare const indexed: NumericIndex;
+>indexed : NumericIndex
+
+export const numericAccess = indexed[0];
+>numericAccess : string | undefined
+>indexed[0] : string | undefined
+>indexed : NumericIndex
+>0 : 0
+
+export const numericStringAccess = indexed["0"];
+>numericStringAccess : string | undefined
+>indexed["0"] : string | undefined
+>indexed : NumericIndex
+>"0" : "0"
+
+export const key: keyof NumericIndex = 0;
+>key : number (origin: number | 1 | 2)
+>0 : 0
+
+export const invalidKey: keyof NumericIndex = "invalid";
+>invalidKey : number (origin: number | 1 | 2)
+>"invalid" : "invalid"
+
+declare function inferValue<Value>(value: { [key: number]: Value }): Value;
+>inferValue : <Value>(value: { [key: number]: Value; }) => Value
+>value : { [key: number]: Value; }
+>key : number
+
+export const inferred = inferValue(indexed);
+>inferred : string
+>inferValue(indexed) : string
+>inferValue : <Value>(value: { [key: number]: Value; }) => Value
+>indexed : NumericIndex
+
+declare const intersection: { [key: Numeric]: { first: number } } & { [key: 3 | number]: { second: string } };
+>intersection : { [key: number]: { first: number; }; } & { [key: number]: { second: string; }; }
+>key : number (origin: number | 1 | 2)
+>first : number
+>key : number (origin: number | 3)
+>second : string
+
+export const combined = intersection[0]!;
+>combined : { first: number; } & { second: string; }
+>intersection[0]! : { first: number; } & { second: string; }
+>intersection[0] : ({ first: number; } & { second: string; }) | undefined
+>intersection : { [key: number]: { first: number; }; } & { [key: number]: { second: string; }; }
+>0 : 0
+
+export const first = combined.first;
+>first : number
+>combined.first : number
+>combined : { first: number; } & { second: string; }
+>first : number
+
+export const second = combined.second;
+>second : string
+>combined.second : string
+>combined : { first: number; } & { second: string; }
+>second : string
+
+export function widenNumeric(value: Numeric) { return value; }
+>widenNumeric : (value: Numeric) => number
+>value : number (origin: number | 1 | 2)
+>value : number (origin: number | 1 | 2)
+
+export function widenBigint(value: Big) { return value; }
+>widenBigint : (value: Big) => bigint
+>value : bigint (origin: bigint | 1n | 2n)
+>value : bigint (origin: bigint | 1n | 2n)
+

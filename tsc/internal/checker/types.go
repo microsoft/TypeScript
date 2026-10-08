@@ -704,6 +704,15 @@ func (t *Type) ObjectFlags() ObjectFlags {
 	return t.objectFlags
 }
 
+type ReducedTypeLinks struct {
+	// The reduced type used for checking and ordinary printing, without literal-origin metadata.
+	target *Type
+	// The union before literal reduction, whose members may themselves have literal origins.
+	origin *Type
+	// The flattened, deduplicated origin union for display, or nil until GetLiteralTypeOrigin computes it.
+	literalOrigin *Type
+}
+
 // Casts for concrete struct types
 
 func (t *Type) AsIntrinsicType() *IntrinsicType           { return t.data.(*IntrinsicType) }
@@ -1169,7 +1178,7 @@ type UnionType struct {
 	UnionOrIntersectionType
 	resolvedReducedType *Type
 	regularType         *Type
-	origin              *Type           // Denormalized union, intersection, or index type in which union originates
+	origin              *Type
 	keyPropertyName     string          // Property with unique unit type that exists in every object/intersection in union type
 	constituentMap      map[*Type]*Type // Constituents keyed by unit type discriminants
 }

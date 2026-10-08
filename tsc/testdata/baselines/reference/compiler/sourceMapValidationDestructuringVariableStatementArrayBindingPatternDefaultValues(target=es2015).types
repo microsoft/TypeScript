@@ -26,28 +26,28 @@ var robotB: Robot = [2, "trimmer", "trimming"];
 >"trimming" : "trimming"
 
 let [, nameA = "noName"] = robotA;
->nameA : string
+>nameA : string (origin: string | "noName")
 >"noName" : "noName"
 >robotA : Robot
 
 let [numberB = -1] = robotB;
->numberB : number
+>numberB : number (origin: number | -1)
 >-1 : -1
 >1 : 1
 >robotB : Robot
 
 let [numberA2 = -1, nameA2 = "noName", skillA2 = "noSkill"] = robotA;
->numberA2 : number
+>numberA2 : number (origin: number | -1)
 >-1 : -1
 >1 : 1
->nameA2 : string
+>nameA2 : string (origin: string | "noName")
 >"noName" : "noName"
->skillA2 : string
+>skillA2 : string (origin: string | "noSkill")
 >"noSkill" : "noSkill"
 >robotA : Robot
 
 let [numberC2 = -1] = [3, "edging", "Trimming edges"];
->numberC2 : number
+>numberC2 : number (origin: number | -1)
 >-1 : -1
 >1 : 1
 >[3, "edging", "Trimming edges"] : [number, string, string]
@@ -56,12 +56,12 @@ let [numberC2 = -1] = [3, "edging", "Trimming edges"];
 >"Trimming edges" : "Trimming edges"
 
 let [numberC = -1, nameC = "noName", skillC = "noSkill"] = [3, "edging", "Trimming edges"];
->numberC : number
+>numberC : number (origin: number | -1)
 >-1 : -1
 >1 : 1
->nameC : string
+>nameC : string (origin: string | "noName")
 >"noName" : "noName"
->skillC : string
+>skillC : string (origin: string | "noSkill")
 >"noSkill" : "noSkill"
 >[3, "edging", "Trimming edges"] : [number, string, string]
 >3 : 3
@@ -69,7 +69,7 @@ let [numberC = -1, nameC = "noName", skillC = "noSkill"] = [3, "edging", "Trimmi
 >"Trimming edges" : "Trimming edges"
 
 let [numberA3 = -1, ...robotAInfo] = robotA;
->numberA3 : number
+>numberA3 : number (origin: number | -1)
 >-1 : -1
 >1 : 1
 >robotAInfo : [string, string]
@@ -77,13 +77,13 @@ let [numberA3 = -1, ...robotAInfo] = robotA;
 
 if (nameA == nameA2) {
 >nameA == nameA2 : boolean
->nameA : string
->nameA2 : string
+>nameA : string (origin: string | "noName")
+>nameA2 : string (origin: string | "noName")
 
     console.log(skillA2);
 >console.log(skillA2) : void
 >console.log : (msg: string) => void
 >console : { log(msg: string): void; }
 >log : (msg: string) => void
->skillA2 : string
+>skillA2 : string (origin: string | "noSkill")
 }

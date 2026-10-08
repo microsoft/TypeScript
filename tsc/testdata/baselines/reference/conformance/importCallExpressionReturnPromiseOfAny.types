@@ -60,7 +60,7 @@ const p2 = import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof 
 >p2 : Promise<typeof defaultModule>
 >import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof defaultModule> : Promise<typeof defaultModule>
 >import(whatToLoad ? getSpecifier() : "defaulPath") : Promise<any>
->whatToLoad ? getSpecifier() : "defaulPath" : string
+>whatToLoad ? getSpecifier() : "defaulPath" : string (origin: string | "defaulPath")
 >whatToLoad : boolean
 >getSpecifier() : string
 >getSpecifier : () => string

@@ -115,6 +115,61 @@ export type E = D;`,
 	assert.Equal(t, defaultClause, defaultReference)
 }
 
+func TestGetLiteralTypeOriginCachesFlattenedUnion(t *testing.T) {
+	t.Parallel()
+
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/types.ts": `type Choice = "a" | "b" | string;
+type Optional = Choice | undefined;
+type Merged = Choice | "c" | string;
+type Numeric = 1 | 2 | number;
+type Big = 1n | 2n | bigint;
+type Generic<Value extends string> = "fixed" | string | Value;
+type Instantiated = Generic<"instantiated">;
+type Plain = string;
+type Ordinary = "a" | "b";`,
+		"/tsconfig.json": `{
+			"compilerOptions": { "strict": true, "target": "esnext" },
+			"files": ["types.ts"]
+		}`,
+	}, tspath.CaseInsensitive))
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
+	p := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
+	p.BindSourceFiles()
+	c, done := p.GetTypeChecker(t.Context())
+	defer done()
+	file := p.GetSourceFile("/types.ts")
+	for i, expected := range []string{
+		`string | "a" | "b"`,
+		`string | "a" | "b" | undefined`,
+		`string | "a" | "b" | "c"`,
+		`number | 1 | 2`,
+		`bigint | 1n | 2n`,
+		`string | "fixed" | Value`,
+		`string | "fixed" | "instantiated"`,
+		"",
+		"",
+	} {
+		typ := c.GetTypeAtLocation(file.Statements.Nodes[i].Name())
+		rawOrigin := c.GetTypeOrigin(typ)
+		origin := c.GetLiteralTypeOrigin(typ)
+		if expected == "" {
+			assert.Assert(t, origin == nil)
+		} else {
+			assert.Assert(t, origin != nil)
+			assert.Equal(t, c.TypeToString(origin), expected)
+		}
+		typeCount := c.TypeCount
+		for range 100 {
+			assert.Equal(t, c.GetLiteralTypeOrigin(typ), origin)
+		}
+		assert.Equal(t, c.TypeCount, typeCount, "Repeated origin queries must not create types")
+		assert.Equal(t, c.GetTypeOrigin(typ), rawOrigin)
+	}
+}
+
 func BenchmarkNewChecker(b *testing.B) {
 	fs := bundled.WrapFS(osvfs.FS())
 	rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))

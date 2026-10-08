@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/literalOriginPredicateNarrowing.ts] ////
+
+=== literalOriginPredicateNarrowing.ts ===
+declare function isString(value: unknown): value is string;
+>isString : Symbol(isString, Decl(literalOriginPredicateNarrowing.ts, 0, 0))
+>value : Symbol(value, Decl(literalOriginPredicateNarrowing.ts, 0, 26))
+>value : Symbol(value, Decl(literalOriginPredicateNarrowing.ts, 0, 26))
+
+declare function isStringOrNumber(value: unknown): value is string | number;
+>isStringOrNumber : Symbol(isStringOrNumber, Decl(literalOriginPredicateNarrowing.ts, 0, 59))
+>value : Symbol(value, Decl(literalOriginPredicateNarrowing.ts, 1, 34))
+>value : Symbol(value, Decl(literalOriginPredicateNarrowing.ts, 1, 34))
+
+declare function isNumberOrBigint(value: unknown): value is number | bigint;
+>isNumberOrBigint : Symbol(isNumberOrBigint, Decl(literalOriginPredicateNarrowing.ts, 1, 76))
+>value : Symbol(value, Decl(literalOriginPredicateNarrowing.ts, 2, 34))
+>value : Symbol(value, Decl(literalOriginPredicateNarrowing.ts, 2, 34))
+
+declare let plain: string;
+>plain : Symbol(plain, Decl(literalOriginPredicateNarrowing.ts, 3, 11))
+
+declare let tracked: "a" | string;
+>tracked : Symbol(tracked, Decl(literalOriginPredicateNarrowing.ts, 4, 11))
+
+declare let numeric: 1 | number;
+>numeric : Symbol(numeric, Decl(literalOriginPredicateNarrowing.ts, 5, 11))
+
+declare let big: 1n | bigint;
+>big : Symbol(big, Decl(literalOriginPredicateNarrowing.ts, 6, 11))
+
+declare let mixed: "a" | string | boolean;
+>mixed : Symbol(mixed, Decl(literalOriginPredicateNarrowing.ts, 7, 11))
+
+if (!isString(plain)) {
+>isString : Symbol(isString, Decl(literalOriginPredicateNarrowing.ts, 0, 0))
+>plain : Symbol(plain, Decl(literalOriginPredicateNarrowing.ts, 3, 11))
+
+    const impossible: never = plain;
+>impossible : Symbol(impossible, Decl(literalOriginPredicateNarrowing.ts, 10, 9))
+>plain : Symbol(plain, Decl(literalOriginPredicateNarrowing.ts, 3, 11))
+}
+if (!isString(tracked)) {
+>isString : Symbol(isString, Decl(literalOriginPredicateNarrowing.ts, 0, 0))
+>tracked : Symbol(tracked, Decl(literalOriginPredicateNarrowing.ts, 4, 11))
+
+    const impossible: never = tracked;
+>impossible : Symbol(impossible, Decl(literalOriginPredicateNarrowing.ts, 13, 9))
+>tracked : Symbol(tracked, Decl(literalOriginPredicateNarrowing.ts, 4, 11))
+}
+if (!isStringOrNumber(plain)) {
+>isStringOrNumber : Symbol(isStringOrNumber, Decl(literalOriginPredicateNarrowing.ts, 0, 59))
+>plain : Symbol(plain, Decl(literalOriginPredicateNarrowing.ts, 3, 11))
+
+    const impossible: never = plain;
+>impossible : Symbol(impossible, Decl(literalOriginPredicateNarrowing.ts, 16, 9))
+>plain : Symbol(plain, Decl(literalOriginPredicateNarrowing.ts, 3, 11))
+}
+if (!isStringOrNumber(tracked)) {
+>isStringOrNumber : Symbol(isStringOrNumber, Decl(literalOriginPredicateNarrowing.ts, 0, 59))
+>tracked : Symbol(tracked, Decl(literalOriginPredicateNarrowing.ts, 4, 11))
+
+    const impossible: never = tracked;
+>impossible : Symbol(impossible, Decl(literalOriginPredicateNarrowing.ts, 19, 9))
+>tracked : Symbol(tracked, Decl(literalOriginPredicateNarrowing.ts, 4, 11))
+}
+if (!isNumberOrBigint(numeric)) {
+>isNumberOrBigint : Symbol(isNumberOrBigint, Decl(literalOriginPredicateNarrowing.ts, 1, 76))
+>numeric : Symbol(numeric, Decl(literalOriginPredicateNarrowing.ts, 5, 11))
+
+    const impossible: never = numeric;
+>impossible : Symbol(impossible, Decl(literalOriginPredicateNarrowing.ts, 22, 9))
+>numeric : Symbol(numeric, Decl(literalOriginPredicateNarrowing.ts, 5, 11))
+}
+if (!isNumberOrBigint(big)) {
+>isNumberOrBigint : Symbol(isNumberOrBigint, Decl(literalOriginPredicateNarrowing.ts, 1, 76))
+>big : Symbol(big, Decl(literalOriginPredicateNarrowing.ts, 6, 11))
+
+    const impossible: never = big;
+>impossible : Symbol(impossible, Decl(literalOriginPredicateNarrowing.ts, 25, 9))
+>big : Symbol(big, Decl(literalOriginPredicateNarrowing.ts, 6, 11))
+}
+if (!isStringOrNumber(mixed)) {
+>isStringOrNumber : Symbol(isStringOrNumber, Decl(literalOriginPredicateNarrowing.ts, 0, 59))
+>mixed : Symbol(mixed, Decl(literalOriginPredicateNarrowing.ts, 7, 11))
+
+    const remaining: boolean = mixed;
+>remaining : Symbol(remaining, Decl(literalOriginPredicateNarrowing.ts, 28, 9))
+>mixed : Symbol(mixed, Decl(literalOriginPredicateNarrowing.ts, 7, 11))
+}
+

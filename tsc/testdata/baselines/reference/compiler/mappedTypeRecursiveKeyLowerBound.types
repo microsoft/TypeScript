@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/mappedTypeRecursiveKeyLowerBound.ts] ////
+
+=== mappedTypeRecursiveKeyLowerBound.ts ===
+type Merge<A, B> = Omit<A, keyof B> & B;
+>Merge : Merge<A, B>
+
+type Options<T> = Omit<Merge<{ a: number }, T>, "unused">;
+>Options : Options<T>
+>a : number
+
+type Constrained<T extends Options<T>> = T;
+>Constrained : T
+
+type Resolved<T extends Options<T>> = Constrained<Options<T>>;
+>Resolved : Options<T>
+

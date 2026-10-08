@@ -8,12 +8,12 @@ let d: string | undefined;
 >d : string | undefined
 
 d ?? (d = x ?? "x")
->d ?? (d = x ?? "x") : string
+>d ?? (d = x ?? "x") : string (origin: string | "x")
 >d : string | undefined
->(d = x ?? "x") : string
->d = x ?? "x" : string
+>(d = x ?? "x") : string (origin: string | "x")
+>d = x ?? "x" : string (origin: string | "x")
 >d : string | undefined
->x ?? "x" : string
+>x ?? "x" : string (origin: string | "x")
 >x : string | undefined
 >"x" : "x"
 
@@ -26,9 +26,9 @@ let e: string | undefined;
 >e : string | undefined
 
 e ??= x ?? "x"
->e ??= x ?? "x" : string
+>e ??= x ?? "x" : string (origin: string | "x")
 >e : string | undefined
->x ?? "x" : string
+>x ?? "x" : string (origin: string | "x")
 >x : string | undefined
 >"x" : "x"
 

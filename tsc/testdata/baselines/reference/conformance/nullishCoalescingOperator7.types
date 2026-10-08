@@ -20,24 +20,24 @@ const foo1 = a ? 1 : 2;
 const foo2 = a ?? 'foo' ? 1 : 2;
 >foo2 : 1 | 2
 >a ?? 'foo' ? 1 : 2 : 1 | 2
->a ?? 'foo' : string
+>a ?? 'foo' : string (origin: string | "foo")
 >a : string | undefined
 >'foo' : "foo"
 >1 : 1
 >2 : 2
 
 const foo3 = a ?? 'foo' ? (b ?? 'bar') : (c ?? 'baz');
->foo3 : string
->a ?? 'foo' ? (b ?? 'bar') : (c ?? 'baz') : string
->a ?? 'foo' : string
+>foo3 : string (origin: string | "bar" | "baz")
+>a ?? 'foo' ? (b ?? 'bar') : (c ?? 'baz') : string (origin: string | "bar" | "baz")
+>a ?? 'foo' : string (origin: string | "foo")
 >a : string | undefined
 >'foo' : "foo"
->(b ?? 'bar') : string
->b ?? 'bar' : string
+>(b ?? 'bar') : string (origin: string | "bar")
+>b ?? 'bar' : string (origin: string | "bar")
 >b : string | undefined
 >'bar' : "bar"
->(c ?? 'baz') : string
->c ?? 'baz' : string
+>(c ?? 'baz') : string (origin: string | "baz")
+>c ?? 'baz' : string (origin: string | "baz")
 >c : string | undefined
 >'baz' : "baz"
 
@@ -45,15 +45,15 @@ function f () {
 >f : () => void
 
     const foo4 = a ?? 'foo' ? b ?? 'bar' : c ?? 'baz';
->foo4 : string
->a ?? 'foo' ? b ?? 'bar' : c ?? 'baz' : string
->a ?? 'foo' : string
+>foo4 : string (origin: string | "bar" | "baz")
+>a ?? 'foo' ? b ?? 'bar' : c ?? 'baz' : string (origin: string | "bar" | "baz")
+>a ?? 'foo' : string (origin: string | "foo")
 >a : string | undefined
 >'foo' : "foo"
->b ?? 'bar' : string
+>b ?? 'bar' : string (origin: string | "bar")
 >b : string | undefined
 >'bar' : "bar"
->c ?? 'baz' : string
+>c ?? 'baz' : string (origin: string | "baz")
 >c : string | undefined
 >'baz' : "baz"
 }

@@ -40,7 +40,7 @@ const test: RowRenderer<Entity> = {
 >formatter : (value: Date | null) => string
 >(value) => value ? value.toString() : '-' : (value: Date | null) => string
 >value : Date | null
->value ? value.toString() : '-' : string
+>value ? value.toString() : '-' : string (origin: string | "-")
 >value : Date | null
 >value.toString() : string
 >value.toString : () => string

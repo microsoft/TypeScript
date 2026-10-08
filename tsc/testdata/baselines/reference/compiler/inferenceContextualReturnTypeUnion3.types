@@ -39,7 +39,7 @@ const soonFrozenObjectDeprecation = <T extends object>(
 >name : string
 
     note && `\n${note}`
->note && `\n${note}` : string
+>note && `\n${note}` : string (origin: string | "")
 >note : string
 >`\n${note}` : string
 >note : string

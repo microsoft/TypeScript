@@ -11,7 +11,7 @@ const getName1 = (person?: Person): string => {
 >person : Person | undefined
 
   return typeof person?.name === 'string' ? person?.name : '';
->typeof person?.name === 'string' ? person?.name : '' : string
+>typeof person?.name === 'string' ? person?.name : '' : string (origin: string | "")
 >typeof person?.name === 'string' : boolean
 >typeof person?.name : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >person?.name : string | undefined
@@ -44,7 +44,7 @@ const getName2 = (person?: Person): string => {
 >person : Person | undefined
 
   return isString(person?.name) ? person?.name : '';
->isString(person?.name) ? person?.name : '' : string
+>isString(person?.name) ? person?.name : '' : string (origin: string | "")
 >isString(person?.name) : boolean
 >isString : (value: any) => value is string
 >person?.name : string | undefined

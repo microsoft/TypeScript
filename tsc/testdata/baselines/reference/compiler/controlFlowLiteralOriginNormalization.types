@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/controlFlowLiteralOriginNormalization.ts] ////
+
+=== controlFlowLiteralOriginNormalization.ts ===
+declare const gridMap: { startRow: number; startColumn: number }[][];
+>gridMap : { startRow: number; startColumn: number; }[][]
+>startRow : number
+>startColumn : number
+
+for (let i = 0; i < gridMap.length; i++) {
+>i : number
+>0 : 0
+>i < gridMap.length : boolean
+>i : number
+>gridMap.length : number
+>gridMap : { startRow: number; startColumn: number; }[][]
+>length : number
+>i++ : number
+>i : number
+
+    if (i !== 0) {
+>i !== 0 : boolean
+>i : number
+>0 : 0
+    }
+    for (let j = 0; j < gridMap[0].length; j++) {
+>j : number
+>0 : 0
+>j < gridMap[0].length : boolean
+>j : number
+>gridMap[0].length : number
+>gridMap[0] : { startRow: number; startColumn: number; }[]
+>gridMap : { startRow: number; startColumn: number; }[][]
+>0 : 0
+>length : number
+>j++ : number
+>j : number
+
+        const cellMap = gridMap[i][j];
+>cellMap : { startRow: number; startColumn: number; }
+>gridMap[i][j] : { startRow: number; startColumn: number; }
+>gridMap[i] : { startRow: number; startColumn: number; }[]
+>gridMap : { startRow: number; startColumn: number; }[][]
+>i : number
+>j : number
+
+        if (cellMap.startRow === i && cellMap.startColumn === j) {
+>cellMap.startRow === i && cellMap.startColumn === j : boolean
+>cellMap.startRow === i : boolean
+>cellMap.startRow : number
+>cellMap : { startRow: number; startColumn: number; }
+>startRow : number
+>i : number
+>cellMap.startColumn === j : boolean
+>cellMap.startColumn : number
+>cellMap : { startRow: number; startColumn: number; }
+>startColumn : number
+>j : number
+        }
+    }
+}
+
