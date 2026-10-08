@@ -761,7 +761,8 @@ func tryGetModuleNameAsNodeModule(
 	globalTypingsCacheLocation := host.GetGlobalTypingsCacheLocation()
 	// Check reachability before consulting package.json exports, which can return
 	// a bare specifier directly. An exported path is only usable if the importing
-	// file can reach the package through node_modules.
+	// file can reach the package through node_modules, and packages under the
+	// global typings cache are excluded.
 	if !caseSensitivity.ContainsPath(parts.TopLevelNodeModulesSearchRoot, info.SourceDirectory.AsPath()) ||
 		globalTypingsCacheLocation != "" && caseSensitivity.ContainsPath(parts.TopLevelNodeModulesSearchRoot, globalTypingsCacheLocation.AsPath()) {
 		return ""
