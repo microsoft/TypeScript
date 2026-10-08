@@ -93,7 +93,7 @@ export async function run(command: string, args: readonly string[] = [], options
     }
 }
 
-export function globInputs(patterns: string[], exclude: string[] = []): string[] {
+function globInputs(patterns: string[], exclude: string[] = []): string[] {
     return fs.globSync(patterns, { cwd: repoRoot, exclude }).map(file => path.join(repoRoot, file));
 }
 

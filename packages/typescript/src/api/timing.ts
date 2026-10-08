@@ -14,7 +14,7 @@
  */
 
 /** Number of most-recent requests retained in the ring buffer. */
-export const RECENT_REQUEST_CAPACITY = 5;
+const RECENT_REQUEST_CAPACITY = 5;
 
 /** A single request's measured timing and transfer sample. */
 export interface RequestTiming {
