@@ -17,21 +17,27 @@ func TestRealpathReservedDeviceName(t *testing.T) {
 	extendedDir := `\\?\` + dir
 
 	assert.NilError(t, os.Mkdir(extendedDir, 0o777))
-	t.Cleanup(func() {
-		assert.NilError(t, os.RemoveAll(extendedDir))
-	})
+	t.Cleanup(func() { _ = os.RemoveAll(extendedDir) })
 	assert.NilError(t, os.WriteFile(`\\?\`+file, nil, 0o666))
 
-	for _, path := range []string{dir, file} {
-		got, err := Realpath(path)
+	resolvedTempDir, err := Realpath(tmp)
+	assert.NilError(t, err)
+	resolvedDir := filepath.Join(resolvedTempDir, "con")
+
+	for _, test := range []struct {
+		path string
+		want string
+	}{
+		{path: dir, want: resolvedDir},
+		{path: file, want: filepath.Join(resolvedDir, "foo.d.ts")},
+	} {
+		got, err := Realpath(test.path)
 		assert.NilError(t, err)
-		assert.Equal(t, got, path)
+		assert.Equal(t, got, test.want)
 	}
 }
 
 func TestHasReservedPathComponent(t *testing.T) {
-	t.Parallel()
-
 	tests := []struct {
 		path string
 		want bool
