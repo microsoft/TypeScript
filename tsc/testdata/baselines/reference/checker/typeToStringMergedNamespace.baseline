@@ -1,0 +1,10 @@
+declare function f<T>(value: T): T;
+declare namespace f { const extra: number; }
+type Sample = typeof f;
+
+useTypeOfFunction=false, verbosity=0: typeof f
+useTypeOfFunction=false, verbosity=1: { <T>(value: T): T; readonly extra: number; }
+useTypeOfFunction=false, verbosity=2: { <T>(value: T): T; readonly extra: number; }
+useTypeOfFunction=true, verbosity=0: typeof f
+useTypeOfFunction=true, verbosity=1: { <T>(value: T): T; readonly extra: number; }
+useTypeOfFunction=true, verbosity=2: { <T>(value: T): T; readonly extra: number; }
