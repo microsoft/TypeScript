@@ -121,6 +121,386 @@
 //     right: undefined,
 //     orange: { name: "orange" },
 // }
+// type Wrapped<T> = ({ value: T; next: Wrapped<T> });
+//      ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Wrapped<T> = {
+// |     value: T;
+// |     next: Wrapped<T>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Wrapped<T> = {
+// |     value: T;
+// |     next: Wrapped<T>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Wrapped<T> = {
+// |     value: T;
+// |     next: Wrapped<T>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// declare const wrappedValue: Wrapped<string>;
+//               ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const wrappedValue: {
+// |     value: string;
+// |     next: Wrapped<string>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//               ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const wrappedValue: {
+// |     value: string;
+// |     next: Wrapped<string>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const wrappedValue: Wrapped<string>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// type Callable<T> = { (value: T): Callable<T>; link: Wrapped<T> };
+//      ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Callable<T> = {
+// |     (value: T): Callable<T>;
+// |     link: {
+// |         value: T;
+// |         next: Wrapped<T>;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Callable<T> = {
+// |     (value: T): Callable<T>;
+// |     link: {
+// |         value: T;
+// |         next: Wrapped<T>;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Callable<T> = {
+// |     (value: T): Callable<T>;
+// |     link: Wrapped<T>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// declare const callableValue: Callable<number>;
+//               ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const callableValue: {
+// |     (value: number): Callable<number>;
+// |     link: {
+// |         value: number;
+// |         next: Wrapped<number>;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//               ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const callableValue: {
+// |     (value: number): Callable<number>;
+// |     link: Wrapped<number>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const callableValue: Callable<number>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const recur = () => recur;
+//       ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const recur: () => typeof recur
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const recur: () => typeof recur
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const recur: () => typeof recur
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// type RecursiveArray = RecursiveArray[];
+//      ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type RecursiveArray = RecursiveArray[]
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type RecursiveArray = RecursiveArray[]
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type RecursiveArray = RecursiveArray[]
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// type RecursiveTuple = [RecursiveTuple?];
+//      ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type RecursiveTuple = [(RecursiveTuple | undefined)?]
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type RecursiveTuple = [(RecursiveTuple | undefined)?]
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type RecursiveTuple = [(RecursiveTuple | undefined)?]
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// type RecursiveUnion = { next: RecursiveUnion } | undefined;
+//      ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type RecursiveUnion = {
+// |     next: RecursiveUnion;
+// | } | undefined
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type RecursiveUnion = {
+// |     next: RecursiveUnion;
+// | } | undefined
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type RecursiveUnion = {
+// |     next: RecursiveUnion;
+// | } | undefined
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// declare const aliasOwner: Wrapped<string>;
+//               ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const aliasOwner: {
+// |     value: string;
+// |     next: Wrapped<string>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//               ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const aliasOwner: {
+// |     value: string;
+// |     next: Wrapped<string>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const aliasOwner: Wrapped<string>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const siblingOwners = { first: aliasOwner, second: aliasOwner };
+//       ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const siblingOwners: {
+// |     first: {
+// |         value: string;
+// |         next: Wrapped<string>;
+// |     };
+// |     second: {
+// |         value: string;
+// |         next: Wrapped<string>;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const siblingOwners: {
+// |     first: {
+// |         value: string;
+// |         next: Wrapped<string>;
+// |     };
+// |     second: {
+// |         value: string;
+// |         next: Wrapped<string>;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const siblingOwners: {
+// |     first: Wrapped<string>;
+// |     second: Wrapped<string>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// function local() {
+//     const object = { next: () => object };
+//           ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const object: {
+// |     next: () => ...;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//           ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const object: {
+// |     next: () => ...;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const object: {
+// |     next: () => ...;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     const broad: unknown = function self() { return self; };
+//                                     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function self(): () => ...
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//                                     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function self(): () => ...
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                                     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function self(): () => ...
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
 [
   {
     "marker": {
@@ -360,6 +740,1092 @@
           "end": {
             "line": 19,
             "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 482,
+      "LSPosition": {
+        "line": 25,
+        "character": 12
+      },
+      "Name": "wrapped",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype Wrapped<T> = {\n    value: T;\n    next: Wrapped<T>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 25,
+            "character": 5
+          },
+          "end": {
+            "line": 25,
+            "character": 12
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 482,
+      "LSPosition": {
+        "line": 25,
+        "character": 12
+      },
+      "Name": "wrapped",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype Wrapped<T> = {\n    value: T;\n    next: Wrapped<T>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 25,
+            "character": 5
+          },
+          "end": {
+            "line": 25,
+            "character": 12
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 482,
+      "LSPosition": {
+        "line": 25,
+        "character": 12
+      },
+      "Name": "wrapped",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype Wrapped<T> = {\n    value: T;\n    next: Wrapped<T>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 25,
+            "character": 5
+          },
+          "end": {
+            "line": 25,
+            "character": 12
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 548,
+      "LSPosition": {
+        "line": 26,
+        "character": 26
+      },
+      "Name": "wrappedValue",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst wrappedValue: Wrapped<string>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 26,
+            "character": 14
+          },
+          "end": {
+            "line": 26,
+            "character": 26
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 548,
+      "LSPosition": {
+        "line": 26,
+        "character": 26
+      },
+      "Name": "wrappedValue",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst wrappedValue: {\n    value: string;\n    next: Wrapped<string>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 26,
+            "character": 14
+          },
+          "end": {
+            "line": 26,
+            "character": 26
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 548,
+      "LSPosition": {
+        "line": 26,
+        "character": 26
+      },
+      "Name": "wrappedValue",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst wrappedValue: {\n    value: string;\n    next: Wrapped<string>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 26,
+            "character": 14
+          },
+          "end": {
+            "line": 26,
+            "character": 26
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 580,
+      "LSPosition": {
+        "line": 27,
+        "character": 13
+      },
+      "Name": "callable",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype Callable<T> = {\n    (value: T): Callable<T>;\n    link: Wrapped<T>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 27,
+            "character": 5
+          },
+          "end": {
+            "line": 27,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 580,
+      "LSPosition": {
+        "line": 27,
+        "character": 13
+      },
+      "Name": "callable",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype Callable<T> = {\n    (value: T): Callable<T>;\n    link: {\n        value: T;\n        next: Wrapped<T>;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 27,
+            "character": 5
+          },
+          "end": {
+            "line": 27,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 580,
+      "LSPosition": {
+        "line": 27,
+        "character": 13
+      },
+      "Name": "callable",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype Callable<T> = {\n    (value: T): Callable<T>;\n    link: {\n        value: T;\n        next: Wrapped<T>;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 27,
+            "character": 5
+          },
+          "end": {
+            "line": 27,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 660,
+      "LSPosition": {
+        "line": 28,
+        "character": 27
+      },
+      "Name": "callableValue",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst callableValue: Callable<number>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 28,
+            "character": 14
+          },
+          "end": {
+            "line": 28,
+            "character": 27
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 660,
+      "LSPosition": {
+        "line": 28,
+        "character": 27
+      },
+      "Name": "callableValue",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst callableValue: {\n    (value: number): Callable<number>;\n    link: Wrapped<number>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 28,
+            "character": 14
+          },
+          "end": {
+            "line": 28,
+            "character": 27
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 660,
+      "LSPosition": {
+        "line": 28,
+        "character": 27
+      },
+      "Name": "callableValue",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst callableValue: {\n    (value: number): Callable<number>;\n    link: {\n        value: number;\n        next: Wrapped<number>;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 28,
+            "character": 14
+          },
+          "end": {
+            "line": 28,
+            "character": 27
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 691,
+      "LSPosition": {
+        "line": 29,
+        "character": 11
+      },
+      "Name": "recur",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst recur: () => typeof recur\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 29,
+            "character": 6
+          },
+          "end": {
+            "line": 29,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 691,
+      "LSPosition": {
+        "line": 29,
+        "character": 11
+      },
+      "Name": "recur",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst recur: () => typeof recur\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 29,
+            "character": 6
+          },
+          "end": {
+            "line": 29,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 691,
+      "LSPosition": {
+        "line": 29,
+        "character": 11
+      },
+      "Name": "recur",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst recur: () => typeof recur\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 29,
+            "character": 6
+          },
+          "end": {
+            "line": 29,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 726,
+      "LSPosition": {
+        "line": 30,
+        "character": 19
+      },
+      "Name": "recursiveArray",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype RecursiveArray = RecursiveArray[]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 30,
+            "character": 5
+          },
+          "end": {
+            "line": 30,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 726,
+      "LSPosition": {
+        "line": 30,
+        "character": 19
+      },
+      "Name": "recursiveArray",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype RecursiveArray = RecursiveArray[]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 30,
+            "character": 5
+          },
+          "end": {
+            "line": 30,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 726,
+      "LSPosition": {
+        "line": 30,
+        "character": 19
+      },
+      "Name": "recursiveArray",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype RecursiveArray = RecursiveArray[]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 30,
+            "character": 5
+          },
+          "end": {
+            "line": 30,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 766,
+      "LSPosition": {
+        "line": 31,
+        "character": 19
+      },
+      "Name": "recursiveTuple",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype RecursiveTuple = [(RecursiveTuple | undefined)?]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 31,
+            "character": 5
+          },
+          "end": {
+            "line": 31,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 766,
+      "LSPosition": {
+        "line": 31,
+        "character": 19
+      },
+      "Name": "recursiveTuple",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype RecursiveTuple = [(RecursiveTuple | undefined)?]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 31,
+            "character": 5
+          },
+          "end": {
+            "line": 31,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 766,
+      "LSPosition": {
+        "line": 31,
+        "character": 19
+      },
+      "Name": "recursiveTuple",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype RecursiveTuple = [(RecursiveTuple | undefined)?]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 31,
+            "character": 5
+          },
+          "end": {
+            "line": 31,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 807,
+      "LSPosition": {
+        "line": 32,
+        "character": 19
+      },
+      "Name": "recursiveUnion",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype RecursiveUnion = {\n    next: RecursiveUnion;\n} | undefined\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 32,
+            "character": 5
+          },
+          "end": {
+            "line": 32,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 807,
+      "LSPosition": {
+        "line": 32,
+        "character": 19
+      },
+      "Name": "recursiveUnion",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype RecursiveUnion = {\n    next: RecursiveUnion;\n} | undefined\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 32,
+            "character": 5
+          },
+          "end": {
+            "line": 32,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 807,
+      "LSPosition": {
+        "line": 32,
+        "character": 19
+      },
+      "Name": "recursiveUnion",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype RecursiveUnion = {\n    next: RecursiveUnion;\n} | undefined\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 32,
+            "character": 5
+          },
+          "end": {
+            "line": 32,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 872,
+      "LSPosition": {
+        "line": 33,
+        "character": 24
+      },
+      "Name": "aliasOwner",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst aliasOwner: Wrapped<string>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 33,
+            "character": 14
+          },
+          "end": {
+            "line": 33,
+            "character": 24
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 872,
+      "LSPosition": {
+        "line": 33,
+        "character": 24
+      },
+      "Name": "aliasOwner",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst aliasOwner: {\n    value: string;\n    next: Wrapped<string>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 33,
+            "character": 14
+          },
+          "end": {
+            "line": 33,
+            "character": 24
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 872,
+      "LSPosition": {
+        "line": 33,
+        "character": 24
+      },
+      "Name": "aliasOwner",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst aliasOwner: {\n    value: string;\n    next: Wrapped<string>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 33,
+            "character": 14
+          },
+          "end": {
+            "line": 33,
+            "character": 24
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 910,
+      "LSPosition": {
+        "line": 34,
+        "character": 19
+      },
+      "Name": "siblingOwners",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst siblingOwners: {\n    first: Wrapped<string>;\n    second: Wrapped<string>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 34,
+            "character": 6
+          },
+          "end": {
+            "line": 34,
+            "character": 19
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 910,
+      "LSPosition": {
+        "line": 34,
+        "character": 19
+      },
+      "Name": "siblingOwners",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst siblingOwners: {\n    first: {\n        value: string;\n        next: Wrapped<string>;\n    };\n    second: {\n        value: string;\n        next: Wrapped<string>;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 34,
+            "character": 6
+          },
+          "end": {
+            "line": 34,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 910,
+      "LSPosition": {
+        "line": 34,
+        "character": 19
+      },
+      "Name": "siblingOwners",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst siblingOwners: {\n    first: {\n        value: string;\n        next: Wrapped<string>;\n    };\n    second: {\n        value: string;\n        next: Wrapped<string>;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 34,
+            "character": 6
+          },
+          "end": {
+            "line": 34,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 991,
+      "LSPosition": {
+        "line": 36,
+        "character": 16
+      },
+      "Name": "localObject",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst object: {\n    next: () => ...;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 36,
+            "character": 10
+          },
+          "end": {
+            "line": 36,
+            "character": 16
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 991,
+      "LSPosition": {
+        "line": 36,
+        "character": 16
+      },
+      "Name": "localObject",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst object: {\n    next: () => ...;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 36,
+            "character": 10
+          },
+          "end": {
+            "line": 36,
+            "character": 16
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 991,
+      "LSPosition": {
+        "line": 36,
+        "character": 16
+      },
+      "Name": "localObject",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst object: {\n    next: () => ...;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 36,
+            "character": 10
+          },
+          "end": {
+            "line": 36,
+            "character": 16
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 1058,
+      "LSPosition": {
+        "line": 37,
+        "character": 40
+      },
+      "Name": "localSelf",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction self(): () => ...\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 37,
+            "character": 36
+          },
+          "end": {
+            "line": 37,
+            "character": 40
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1058,
+      "LSPosition": {
+        "line": 37,
+        "character": 40
+      },
+      "Name": "localSelf",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction self(): () => ...\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 37,
+            "character": 36
+          },
+          "end": {
+            "line": 37,
+            "character": 40
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 1058,
+      "LSPosition": {
+        "line": 37,
+        "character": 40
+      },
+      "Name": "localSelf",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction self(): () => ...\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 37,
+            "character": 36
+          },
+          "end": {
+            "line": 37,
+            "character": 40
           }
         }
       },
