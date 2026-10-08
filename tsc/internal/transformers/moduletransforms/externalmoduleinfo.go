@@ -385,6 +385,5 @@ func getImportNeedsImportStarHelper(node *ast.ImportDeclaration) bool {
 func getImportNeedsImportDefaultHelper(node *ast.ImportDeclaration) bool {
 	// Import default is needed if there's a default import or a default ref and no other refs (meaning an import star helper wasn't requested)
 	return !getImportNeedsImportStarHelper(node) && (ast.IsDefaultImport(node.AsNode()) || (node.ImportClause() != nil &&
-		ast.IsNamedImports(node.ImportClause().AsImportClause().NamedBindings()) &&
 		containsDefaultReference(node.ImportClause().AsImportClause().NamedBindings())))
 }
