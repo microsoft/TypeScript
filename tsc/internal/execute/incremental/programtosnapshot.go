@@ -236,8 +236,8 @@ func fileAffectsGlobalScope(file *ast.SourceFile) bool {
 	binder.BindSourceFile(file)
 	// if file contains anything that augments to global scope we need to build them as if
 	// they are global files as well as module
-	if core.Some(file.ModuleAugmentations, func(augmentation *ast.ModuleName) bool {
-		return ast.IsGlobalScopeAugmentation(augmentation.Parent)
+	if core.Some(file.ModuleAugmentations, func(augmentation ast.ModuleName) bool {
+		return ast.IsGlobalScopeAugmentation(augmentation.Parent())
 	}) {
 		return true
 	}
@@ -252,7 +252,7 @@ func fileAffectsGlobalScope(file *ast.SourceFile) bool {
 	// in the file is not ambient external module, we treat it as a regular script file.
 	return file.Statements != nil &&
 		file.Statements.Nodes != nil &&
-		core.Some(file.Statements.Nodes, func(stmt *ast.Node) bool {
+		core.Some(file.Statements.Nodes, func(stmt ast.Node) bool {
 			return !ast.IsModuleWithStringLiteralName(stmt)
 		})
 }
@@ -273,7 +273,7 @@ func addReferencedFilesFromSymbol(file *ast.SourceFile, referencedFiles *collect
 }
 
 // Get the module source file and all augmenting files from the import name node from file
-func addReferencedFilesFromImportLiteral(file *ast.SourceFile, referencedFiles *collections.Set[tspath.PathKey], checker *checker.Checker, importName *ast.LiteralLikeNode) {
+func addReferencedFilesFromImportLiteral(file *ast.SourceFile, referencedFiles *collections.Set[tspath.PathKey], checker *checker.Checker, importName ast.LiteralLikeNode) {
 	symbol := checker.GetSymbolAtLocation(importName)
 	addReferencedFilesFromSymbol(file, referencedFiles, symbol)
 }

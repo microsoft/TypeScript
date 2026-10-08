@@ -18,8 +18,8 @@ type metadataSerializer struct {
 }
 
 type metadataSerializerContext struct {
-	currentLexicalScope              *ast.Node
-	currentNameScope                 *ast.Node
+	currentLexicalScope              ast.Node
+	currentNameScope                 ast.Node
 	serializingConditionalTypeBranch bool
 }
 
@@ -31,35 +31,35 @@ func (s *metadataSerializer) setContext(ctx metadataSerializerContext) {
 	s.c = ctx
 }
 
-func (s *metadataSerializer) SerializeTypeOfNode(ctx metadataSerializerContext, node *ast.Node, container *ast.Node) *ast.Node {
+func (s *metadataSerializer) SerializeTypeOfNode(ctx metadataSerializerContext, node ast.Node, container ast.Node) ast.Node {
 	oldCtx := s.c
 	s.c = ctx
 	defer s.setContext(oldCtx)
 	return s.serializeTypeOfNode(node, container)
 }
 
-func (s *metadataSerializer) SerializeParameterTypesOfNode(ctx metadataSerializerContext, node *ast.Node, container *ast.Node) *ast.Node {
+func (s *metadataSerializer) SerializeParameterTypesOfNode(ctx metadataSerializerContext, node ast.Node, container ast.Node) ast.Node {
 	oldCtx := s.c
 	s.c = ctx
 	defer s.setContext(oldCtx)
 	return s.serializeParameterTypesOfNode(node, container)
 }
 
-func (s *metadataSerializer) SerializeReturnTypeOfNode(ctx metadataSerializerContext, node *ast.Node) *ast.Node {
+func (s *metadataSerializer) SerializeReturnTypeOfNode(ctx metadataSerializerContext, node ast.Node) ast.Node {
 	oldCtx := s.c
 	s.c = ctx
 	defer s.setContext(oldCtx)
 	return s.serializeReturnTypeOfNode(node)
 }
 
-func GetSetAccessorValueParameter(node *ast.SetAccessorDeclaration) *ast.Node {
-	if node != nil && len(node.Parameters.Nodes) > 0 {
-		if len(node.Parameters.Nodes) >= 2 && ast.IsThisParameter(node.Parameters.Nodes[0]) {
-			return node.Parameters.Nodes[1]
+func GetSetAccessorValueParameter(node ast.SetAccessorDeclaration) ast.Node {
+	if !node.IsNil() && len(node.Parameters().Nodes) > 0 {
+		if len(node.Parameters().Nodes) >= 2 && ast.IsThisParameter(node.Parameters().Nodes[0]) {
+			return node.Parameters().Nodes[1]
 		}
-		return node.Parameters.Nodes[0]
+		return node.Parameters().Nodes[0]
 	}
-	return nil
+	return ast.Node{}
 }
 
 /**
@@ -67,31 +67,31 @@ func GetSetAccessorValueParameter(node *ast.SetAccessorDeclaration) *ast.Node {
  *
  * @internal
  */
-func getSetAccessorTypeAnnotationNode(node *ast.SetAccessorDeclaration) *ast.Node {
+func getSetAccessorTypeAnnotationNode(node ast.SetAccessorDeclaration) ast.Node {
 	p := GetSetAccessorValueParameter(node)
-	if p != nil && p.Type() != nil {
+	if !p.IsNil() && !p.Type().IsNil() {
 		return p.Type()
 	}
-	return nil
+	return ast.Node{}
 }
 
-func getAccessorTypeNode(node *ast.Node, container *ast.Node) *ast.Node {
+func getAccessorTypeNode(node ast.Node, container ast.Node) ast.Node {
 	accessors := ast.GetAllAccessorDeclarations(container.Members(), node)
-	if accessors.SetAccessor != nil {
+	if !accessors.SetAccessor.IsNil() {
 		return getSetAccessorTypeAnnotationNode(accessors.SetAccessor)
 	}
-	if accessors.GetAccessor != nil {
-		return accessors.GetAccessor.Type
+	if !accessors.GetAccessor.IsNil() {
+		return accessors.GetAccessor.Type()
 	}
-	return nil
+	return ast.Node{}
 }
 
 /**
 * Serializes the type of a node for use with decorator type metadata.
 * @param node The node that should have its type serialized.
  */
-func (s *metadataSerializer) serializeTypeOfNode(node *ast.Node, container *ast.Node) *ast.Node {
-	switch node.Kind {
+func (s *metadataSerializer) serializeTypeOfNode(node ast.Node, container ast.Node) ast.Node {
+	switch node.Kind() {
 	case ast.KindPropertyDeclaration, ast.KindParameter:
 		return s.serializeTypeNode(node.Type())
 	case ast.KindGetAccessor, ast.KindSetAccessor:
@@ -107,25 +107,25 @@ func (s *metadataSerializer) serializeTypeOfNode(node *ast.Node, container *ast.
 * Serializes the type of a node for use with decorator type metadata.
 * @param node The node that should have its type serialized.
  */
-func (s *metadataSerializer) serializeParameterTypesOfNode(node *ast.Node, container *ast.Node) *ast.Node {
-	var valueDeclaration *ast.Node
+func (s *metadataSerializer) serializeParameterTypesOfNode(node ast.Node, container ast.Node) ast.Node {
+	var valueDeclaration ast.Node
 	if ast.IsClassLike(node) {
 		valueDeclaration = ast.GetFirstConstructorWithBody(node)
 	} else if ast.IsFunctionLike(node) && ast.NodeIsPresent(node.Body()) {
 		valueDeclaration = node
 	}
 
-	if valueDeclaration == nil {
-		return s.f.NewArrayLiteralExpression(s.f.NewNodeList([]*ast.Node{}), false)
+	if valueDeclaration.IsNil() {
+		return s.f.NewArrayLiteralExpression(s.f.NewNodeList([]ast.Node{}), false)
 	}
 
-	var expressions []*ast.Node
+	var expressions []ast.Node
 	parameters := getParametersOfDecoratedDeclaration(valueDeclaration, container)
 	for i, parameter := range parameters.Nodes {
 		if i == 0 && ast.IsIdentifier(parameter.Name()) && parameter.Name().Text() == "this" {
 			continue
 		}
-		if parameter.AsParameterDeclaration().DotDotDotToken != nil {
+		if !parameter.AsParameterDeclaration().DotDotDotToken().IsNil() {
 			expressions = append(expressions, s.serializeTypeNode(ast.GetRestParameterElementType(parameter.Type())))
 		} else {
 			expressions = append(expressions, s.serializeTypeOfNode(parameter, container))
@@ -134,11 +134,11 @@ func (s *metadataSerializer) serializeParameterTypesOfNode(node *ast.Node, conta
 	return s.f.NewArrayLiteralExpression(s.f.NewNodeList(expressions), false)
 }
 
-func getParametersOfDecoratedDeclaration(node *ast.Node, container *ast.Node) *ast.NodeList {
-	if container != nil && node.Kind == ast.KindGetAccessor {
+func getParametersOfDecoratedDeclaration(node ast.Node, container ast.Node) *ast.NodeList {
+	if !container.IsNil() && node.Kind() == ast.KindGetAccessor {
 		acc := ast.GetAllAccessorDeclarations(container.Members(), node)
-		if acc.SetAccessor != nil {
-			return acc.SetAccessor.Parameters
+		if !acc.SetAccessor.IsNil() {
+			return acc.SetAccessor.Parameters()
 		}
 	}
 	return node.ParameterList()
@@ -148,8 +148,8 @@ func getParametersOfDecoratedDeclaration(node *ast.Node, container *ast.Node) *a
 * Serializes the return type of a node for use with decorator type metadata.
 * @param node The node that should have its return type serialized.
  */
-func (s *metadataSerializer) serializeReturnTypeOfNode(node *ast.Node) *ast.Node {
-	if ast.IsFunctionLike(node) && node.Type() != nil {
+func (s *metadataSerializer) serializeReturnTypeOfNode(node ast.Node) ast.Node {
+	if ast.IsFunctionLike(node) && !node.Type().IsNil() {
 		return s.serializeTypeNode(node.Type())
 	} else if ast.IsAsyncFunction(node) {
 		return s.f.NewIdentifier("Promise")
@@ -175,14 +175,14 @@ func (s *metadataSerializer) serializeReturnTypeOfNode(node *ast.Node) *ast.Node
 *
 * @param node The type node to serialize.
  */
-func (s *metadataSerializer) serializeTypeNode(node *ast.Node) *ast.Node {
-	if node == nil {
+func (s *metadataSerializer) serializeTypeNode(node ast.Node) ast.Node {
+	if node.IsNil() {
 		return s.f.NewIdentifier("Object")
 	}
 
 	node = ast.SkipTypeParentheses(node)
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindVoidKeyword, ast.KindUndefinedKeyword, ast.KindNeverKeyword:
 		return s.f.NewVoidZeroExpression()
 	case ast.KindFunctionType, ast.KindConstructorType:
@@ -190,7 +190,7 @@ func (s *metadataSerializer) serializeTypeNode(node *ast.Node) *ast.Node {
 	case ast.KindArrayType, ast.KindTupleType:
 		return s.f.NewIdentifier("Array")
 	case ast.KindTypePredicate:
-		if node.AsTypePredicateNode().AssertsModifier != nil {
+		if !node.AsTypePredicateNode().AssertsModifier().IsNil() {
 			return s.f.NewVoidZeroExpression()
 		}
 		return s.f.NewIdentifier("Boolean")
@@ -201,7 +201,7 @@ func (s *metadataSerializer) serializeTypeNode(node *ast.Node) *ast.Node {
 	case ast.KindObjectKeyword:
 		return s.f.NewIdentifier("Object")
 	case ast.KindLiteralType:
-		return s.serializeLiteralOfLiteralTypeNode(node.AsLiteralTypeNode().Literal)
+		return s.serializeLiteralOfLiteralTypeNode(node.AsLiteralTypeNode().Literal())
 	case ast.KindNumberKeyword:
 		return s.f.NewIdentifier("Number")
 	case ast.KindBigIntKeyword:
@@ -211,16 +211,16 @@ func (s *metadataSerializer) serializeTypeNode(node *ast.Node) *ast.Node {
 	case ast.KindTypeReference:
 		return s.serializeTypeReferenceNode(node.AsTypeReferenceNode())
 	case ast.KindIntersectionType:
-		return s.serializeUnionOrIntersectionConstituents(node.AsIntersectionTypeNode().Types.Nodes, true)
+		return s.serializeUnionOrIntersectionConstituents(node.AsIntersectionTypeNode().Types().Nodes, true)
 	case ast.KindUnionType:
-		return s.serializeUnionOrIntersectionConstituents(node.AsUnionTypeNode().Types.Nodes, false)
+		return s.serializeUnionOrIntersectionConstituents(node.AsUnionTypeNode().Types().Nodes, false)
 	case ast.KindConditionalType:
 		oldState := s.c.serializingConditionalTypeBranch
 		s.c.serializingConditionalTypeBranch = true
 		defer func() { s.c.serializingConditionalTypeBranch = oldState }()
-		return s.serializeUnionOrIntersectionConstituents([]*ast.Node{node.AsConditionalTypeNode().TrueType, node.AsConditionalTypeNode().FalseType}, false)
+		return s.serializeUnionOrIntersectionConstituents([]ast.Node{node.AsConditionalTypeNode().TrueType(), node.AsConditionalTypeNode().FalseType()}, false)
 	case ast.KindTypeOperator:
-		if node.AsTypeOperatorNode().Operator == ast.KindReadonlyKeyword {
+		if node.AsTypeOperatorNode().Operator() == ast.KindReadonlyKeyword {
 			return s.serializeTypeNode(node.Type())
 		}
 		// TODO: why is `unique symbol` not handled as `Symbol`? This falls back to `Object`
@@ -234,47 +234,47 @@ func (s *metadataSerializer) serializeTypeNode(node *ast.Node) *ast.Node {
 		return s.serializeTypeNode(node.Type())
 	default:
 		debug.FailBadSyntaxKind(node)
-		return nil
+		return ast.Node{}
 	}
 	return s.f.NewIdentifier("Object")
 }
 
-func (s *metadataSerializer) serializeUnionOrIntersectionConstituents(types []*ast.Node, isIntersection bool) *ast.Node {
+func (s *metadataSerializer) serializeUnionOrIntersectionConstituents(types []ast.Node, isIntersection bool) ast.Node {
 	// Note when updating logic here also update `getEntityNameForDecoratorMetadata` in checker.ts so that aliases can be marked as referenced
-	var serializedType *ast.Node
+	var serializedType ast.Node
 	for _, typeNode := range types {
 		typeNode = ast.SkipTypeParentheses(typeNode)
-		if typeNode.Kind == ast.KindNeverKeyword {
+		if typeNode.Kind() == ast.KindNeverKeyword {
 			if isIntersection {
 				return s.f.NewVoidZeroExpression() // Reduce to `never` in an intersection
 			}
 			continue // Elide `never` in a union
 		}
 
-		if typeNode.Kind == ast.KindUnknownKeyword {
+		if typeNode.Kind() == ast.KindUnknownKeyword {
 			if !isIntersection {
 				return s.f.NewIdentifier("Object") // Reduce to `unknown` in a union
 			}
 			continue // Elide `unknown` in an intersection
 		}
 
-		if typeNode.Kind == ast.KindAnyKeyword {
+		if typeNode.Kind() == ast.KindAnyKeyword {
 			return s.f.NewIdentifier("Object") // Reduce to `any` in a union or intersection
 		}
 
-		if !s.strictNullChecks && ((ast.IsLiteralTypeNode(typeNode) && typeNode.AsLiteralTypeNode().Literal.Kind == ast.KindNullKeyword) || typeNode.Kind == ast.KindUndefinedKeyword) {
+		if !s.strictNullChecks && ((ast.IsLiteralTypeNode(typeNode) && typeNode.AsLiteralTypeNode().Literal().Kind() == ast.KindNullKeyword) || typeNode.Kind() == ast.KindUndefinedKeyword) {
 			continue // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
 		}
 
 		serializedConstituent := s.serializeTypeNode(typeNode)
-		if ast.IsIdentifier(serializedConstituent) && serializedConstituent.AsIdentifier().Text == "Object" {
+		if ast.IsIdentifier(serializedConstituent) && serializedConstituent.AsIdentifier().Text() == "Object" {
 			// One of the individual is global object, return immediately
 			return serializedConstituent
 		}
 
 		// If there exists union that is not `void 0` expression, check if the the common type is identifier.
 		// anything more complex and we will just default to Object
-		if serializedType != nil {
+		if !serializedType.IsNil() {
 			// Different types
 			if !s.equateSerializedTypeNodes(serializedType, serializedConstituent) {
 				return s.f.NewIdentifier("Object")
@@ -286,19 +286,19 @@ func (s *metadataSerializer) serializeUnionOrIntersectionConstituents(types []*a
 	}
 
 	// If we were able to find common type, use it
-	if serializedType != nil {
+	if !serializedType.IsNil() {
 		return serializedType
 	}
 	return s.f.NewVoidZeroExpression() // Fallback is only hit if all union constituents are null/undefined/never
 }
 
-func (s *metadataSerializer) serializeLiteralOfLiteralTypeNode(node *ast.Node) *ast.Node {
-	switch node.Kind {
+func (s *metadataSerializer) serializeLiteralOfLiteralTypeNode(node ast.Node) ast.Node {
+	switch node.Kind() {
 	case ast.KindStringLiteral, ast.KindNoSubstitutionTemplateLiteral:
 		return s.f.NewIdentifier("String")
 	case ast.KindPrefixUnaryExpression:
-		operand := node.AsPrefixUnaryExpression().Operand
-		switch operand.Kind {
+		operand := node.AsPrefixUnaryExpression().Operand()
+		switch operand.Kind() {
 		case ast.KindNumericLiteral, ast.KindBigIntLiteral:
 			return s.serializeLiteralOfLiteralTypeNode(operand)
 		default:
@@ -314,21 +314,21 @@ func (s *metadataSerializer) serializeLiteralOfLiteralTypeNode(node *ast.Node) *
 		return s.f.NewVoidZeroExpression()
 	default:
 		debug.FailBadSyntaxKind(node)
-		return nil
+		return ast.Node{}
 	}
-	return nil
+	return ast.Node{}
 }
 
 /**
 * Serializes a TypeReferenceNode to an appropriate JS constructor value for use with decorator type metadata.
 * @param node The type reference node.
  */
-func (s *metadataSerializer) serializeTypeReferenceNode(node *ast.TypeReferenceNode) *ast.Node {
+func (s *metadataSerializer) serializeTypeReferenceNode(node ast.TypeReferenceNode) ast.Node {
 	serialScope := s.c.currentNameScope
-	if serialScope == nil {
+	if serialScope.IsNil() {
 		serialScope = s.c.currentLexicalScope
 	}
-	kind := s.resolver.GetTypeReferenceSerializationKind(s.ec.ParseNode(node.TypeName), s.ec.ParseNode(serialScope))
+	kind := s.resolver.GetTypeReferenceSerializationKind(s.ec.ParseNode(node.TypeName()), s.ec.ParseNode(serialScope))
 	switch kind {
 	case printer.TypeReferenceSerializationKindUnknown:
 		// From conditional type type reference that cannot be resolved is Similar to any or unknown
@@ -336,7 +336,7 @@ func (s *metadataSerializer) serializeTypeReferenceNode(node *ast.TypeReferenceN
 			return s.f.NewIdentifier("Object")
 		}
 
-		serialized := s.serializeEntityNameAsExpressionFallback(node.TypeName)
+		serialized := s.serializeEntityNameAsExpressionFallback(node.TypeName())
 		temp := s.f.NewTempVariable()
 		s.ec.AddVariableDeclaration(temp)
 		return s.f.NewConditionalExpression(
@@ -348,7 +348,7 @@ func (s *metadataSerializer) serializeTypeReferenceNode(node *ast.TypeReferenceN
 		)
 
 	case printer.TypeReferenceSerializationKindTypeWithConstructSignatureAndValue:
-		return s.serializeEntityNameAsExpression(node.TypeName)
+		return s.serializeEntityNameAsExpression(node.TypeName())
 
 	case printer.TypeReferenceSerializationKindVoidNullableOrNeverType:
 		return s.f.NewVoidZeroExpression()
@@ -381,11 +381,11 @@ func (s *metadataSerializer) serializeTypeReferenceNode(node *ast.TypeReferenceN
 		return s.f.NewIdentifier("Object")
 	default:
 		debug.AssertNever(kind, "unknown type reference serialization kind")
-		return nil
+		return ast.Node{}
 	}
 }
 
-func (s *metadataSerializer) serializeBigIntConstructor() *ast.Node {
+func (s *metadataSerializer) serializeBigIntConstructor() ast.Node {
 	if s.languageVersion >= core.ScriptTargetES2020 {
 		return s.f.NewIdentifier("BigInt")
 	}
@@ -402,54 +402,54 @@ func (s *metadataSerializer) serializeBigIntConstructor() *ast.Node {
 * Serializes an entity name as an expression for decorator type metadata.
 * @param node The entity name to serialize.
  */
-func (s *metadataSerializer) serializeEntityNameAsExpression(node *ast.EntityName) *ast.Node {
-	switch node.Kind {
+func (s *metadataSerializer) serializeEntityNameAsExpression(node ast.EntityName) ast.Node {
+	switch node.Kind() {
 	case ast.KindIdentifier:
 		// Create a clone of the name with a new parent, and treat it as if it were
 		// a source tree node for the purposes of the checker.
 		name := node.Clone(s.f)
-		name.Loc = node.Loc
-		s.ec.UnsetOriginal(name)                              // make this identifier emulate a parse node, making it behave correctly when inspected by the module transforms
-		name.Parent = s.ec.ParseNode(s.c.currentLexicalScope) //nolint:customlint // ensure the parent is set to a parse tree node.
+		name.SetLoc(node.Loc())
+		s.ec.UnsetOriginal(name)                                // make this identifier emulate a parse node, making it behave correctly when inspected by the module transforms
+		name.SetParent(s.ec.ParseNode(s.c.currentLexicalScope)) //nolint:customlint // ensure the parent is set to a parse tree node.
 		return name
 	case ast.KindQualifiedName:
 		return s.serializeQualifiedNameAsExpression(node.AsQualifiedName())
 	}
-	return nil
+	return ast.Node{}
 }
 
 /**
 * Serializes an qualified name as an expression for decorator type metadata.
 * @param node The qualified name to serialize.
  */
-func (s *metadataSerializer) serializeQualifiedNameAsExpression(node *ast.QualifiedName) *ast.Node {
-	return s.f.NewPropertyAccessExpression(s.serializeEntityNameAsExpression(node.Left), nil, node.Right, ast.NodeFlagsNone)
+func (s *metadataSerializer) serializeQualifiedNameAsExpression(node ast.QualifiedName) ast.Node {
+	return s.f.NewPropertyAccessExpression(s.serializeEntityNameAsExpression(node.Left()), ast.Node{}, node.Right(), ast.NodeFlagsNone)
 }
 
 /**
 * Serializes an entity name which may not exist at runtime, but whose access shouldn't throw
 * @param node The entity name to serialize.
  */
-func (s *metadataSerializer) serializeEntityNameAsExpressionFallback(node *ast.EntityName) *ast.Node {
-	if node.Kind == ast.KindIdentifier {
+func (s *metadataSerializer) serializeEntityNameAsExpressionFallback(node ast.EntityName) ast.Node {
+	if node.Kind() == ast.KindIdentifier {
 		// A -> typeof A !== "undefined" && A
 		copied := s.serializeEntityNameAsExpression(node)
 		return s.createCheckedValue(copied, copied)
 	}
-	if node.AsQualifiedName().Left.Kind == ast.KindIdentifier {
+	if node.AsQualifiedName().Left().Kind() == ast.KindIdentifier {
 		// A.B -> typeof A !== "undefined" && A.B
-		return s.createCheckedValue(s.serializeEntityNameAsExpression(node.AsQualifiedName().Left), s.serializeEntityNameAsExpression(node))
+		return s.createCheckedValue(s.serializeEntityNameAsExpression(node.AsQualifiedName().Left()), s.serializeEntityNameAsExpression(node))
 	}
 	// A.B.C -> typeof A !== "undefined" && (_a = A.B) !== void 0 && _a.C
-	left := s.serializeEntityNameAsExpressionFallback(node.AsQualifiedName().Left)
+	left := s.serializeEntityNameAsExpressionFallback(node.AsQualifiedName().Left())
 	temp := s.f.NewTempVariable()
 	s.ec.AddVariableDeclaration(temp)
 	return s.f.NewLogicalANDExpression(
 		s.f.NewLogicalANDExpression(
-			left.AsBinaryExpression().Left,
-			s.f.NewStrictInequalityExpression(s.f.NewAssignmentExpression(temp, left.AsBinaryExpression().Right), s.f.NewVoidZeroExpression()),
+			left.AsBinaryExpression().Left(),
+			s.f.NewStrictInequalityExpression(s.f.NewAssignmentExpression(temp, left.AsBinaryExpression().Right()), s.f.NewVoidZeroExpression()),
 		),
-		s.f.NewPropertyAccessExpression(temp, nil, node.AsQualifiedName().Right, ast.NodeFlagsNone),
+		s.f.NewPropertyAccessExpression(temp, ast.Node{}, node.AsQualifiedName().Right(), ast.NodeFlagsNone),
 	)
 }
 
@@ -464,14 +464,14 @@ func (s *metadataSerializer) serializeEntityNameAsExpressionFallback(node *ast.E
 * It's acceptable for this expression to result in `false` at runtime, as the result is intended to be
 * further checked by any containing expression.
  */
-func (s *metadataSerializer) createCheckedValue(left *ast.Node, right *ast.Node) *ast.Node {
+func (s *metadataSerializer) createCheckedValue(left ast.Node, right ast.Node) ast.Node {
 	return s.f.NewLogicalANDExpression(
 		s.f.NewStrictInequalityExpression(s.f.NewTypeOfExpression(left), s.f.NewStringLiteral("undefined", ast.TokenFlagsNone)),
 		right,
 	)
 }
 
-func (s *metadataSerializer) equateSerializedTypeNodes(left *ast.Node, right *ast.Node) bool {
+func (s *metadataSerializer) equateSerializedTypeNodes(left ast.Node, right ast.Node) bool {
 	// temp vars used in fallback
 	if transformers.IsGeneratedIdentifier(s.ec, left) {
 		return transformers.IsGeneratedIdentifier(s.ec, right)
@@ -501,11 +501,11 @@ func (s *metadataSerializer) equateSerializedTypeNodes(left *ast.Node, right *as
 	}
 	// conditionals used in fallback
 	if ast.IsConditionalExpression(left) {
-		return ast.IsConditionalExpression(right) && s.equateSerializedTypeNodes(left.AsConditionalExpression().Condition, right.AsConditionalExpression().Condition) && s.equateSerializedTypeNodes(left.AsConditionalExpression().WhenTrue, right.AsConditionalExpression().WhenTrue) && s.equateSerializedTypeNodes(left.AsConditionalExpression().WhenFalse, right.AsConditionalExpression().WhenFalse)
+		return ast.IsConditionalExpression(right) && s.equateSerializedTypeNodes(left.AsConditionalExpression().Condition(), right.AsConditionalExpression().Condition()) && s.equateSerializedTypeNodes(left.AsConditionalExpression().WhenTrue(), right.AsConditionalExpression().WhenTrue()) && s.equateSerializedTypeNodes(left.AsConditionalExpression().WhenFalse(), right.AsConditionalExpression().WhenFalse())
 	}
 	// logical binary and assignments used in fallback
 	if ast.IsBinaryExpression(left) {
-		return ast.IsBinaryExpression(right) && left.AsBinaryExpression().OperatorToken.Kind == right.AsBinaryExpression().OperatorToken.Kind && s.equateSerializedTypeNodes(left.AsBinaryExpression().Left, right.AsBinaryExpression().Left) && s.equateSerializedTypeNodes(left.AsBinaryExpression().Right, right.AsBinaryExpression().Right)
+		return ast.IsBinaryExpression(right) && left.AsBinaryExpression().OperatorToken().Kind() == right.AsBinaryExpression().OperatorToken().Kind() && s.equateSerializedTypeNodes(left.AsBinaryExpression().Left(), right.AsBinaryExpression().Left()) && s.equateSerializedTypeNodes(left.AsBinaryExpression().Right(), right.AsBinaryExpression().Right())
 	}
 	return false
 }

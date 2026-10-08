@@ -25,7 +25,7 @@ func NewSymbolTrackerImpl(context *NodeBuilderContext, tracker nodebuilder.Symbo
 	return &SymbolTrackerImpl{context, tracker, false}
 }
 
-func (this *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags) bool {
+func (this *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclaration ast.Node, meaning ast.SymbolFlags) bool {
 	if !this.DisableTrackSymbol {
 		if this.inner != nil && this.inner.TrackSymbol(symbol, enclosingDeclaration, meaning) {
 			this.onDiagnosticReported()
@@ -107,14 +107,14 @@ func (this *SymbolTrackerImpl) onDiagnosticReported() {
 	this.context.reportedDiagnostic = true
 }
 
-func (this *SymbolTrackerImpl) ReportInferenceFallback(node *ast.Node) {
+func (this *SymbolTrackerImpl) ReportInferenceFallback(node ast.Node) {
 	if this.inner == nil {
 		return
 	}
 	this.inner.ReportInferenceFallback(node)
 }
 
-func (this *SymbolTrackerImpl) PushErrorFallbackNode(node *ast.Node) {
+func (this *SymbolTrackerImpl) PushErrorFallbackNode(node ast.Node) {
 	if this.inner == nil {
 		return
 	}

@@ -2523,26 +2523,26 @@ func GetRangeOfTokenAtPosition(sourceFile *ast.SourceFile, pos int) core.TextRan
 	return core.NewTextRange(s.tokenStart, s.pos)
 }
 
-func GetTokenPosOfNode(node *ast.Node, sourceFile *ast.SourceFile, includeJSDoc bool) int {
+func GetTokenPosOfNode(node ast.Node, sourceFile *ast.SourceFile, includeJSDoc bool) int {
 	// With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
 	// want to skip trivia because this will launch us forward to the next token.
 	if ast.NodeIsMissing(node) {
 		return node.Pos()
 	}
-	if ast.IsJSDocNode(node) || node.Kind == ast.KindJsxText {
+	if ast.IsJSDocNode(node) || node.Kind() == ast.KindJsxText {
 		// JsxText cannot actually contain comments, even though the scanner will think it sees comments
 		return SkipTriviaEx(sourceFile.Text(), node.Pos(), &SkipTriviaOptions{StopAtComments: true})
 	}
 	if includeJSDoc && len(node.JSDoc(sourceFile)) > 0 {
 		return GetTokenPosOfNode(node.JSDoc(sourceFile)[0], sourceFile, false /*includeJSDoc*/)
 	}
-	return SkipTriviaEx(sourceFile.Text(), node.Pos(), &SkipTriviaOptions{InJSDoc: node.Flags&ast.NodeFlagsJSDoc != 0})
+	return SkipTriviaEx(sourceFile.Text(), node.Pos(), &SkipTriviaOptions{InJSDoc: node.Flags()&ast.NodeFlagsJSDoc != 0})
 }
 
-func getErrorRangeForArrowFunction(sourceFile *ast.SourceFile, node *ast.Node) core.TextRange {
+func getErrorRangeForArrowFunction(sourceFile *ast.SourceFile, node ast.Node) core.TextRange {
 	pos := SkipTrivia(sourceFile.Text(), node.Pos())
 	body := node.Body()
-	if body != nil && body.Kind == ast.KindBlock {
+	if !body.IsNil() && body.Kind() == ast.KindBlock {
 		startLine := GetECMALineOfPosition(sourceFile, body.Pos())
 		endLine := GetECMALineOfPosition(sourceFile, body.End())
 		if startLine < endLine {
@@ -2553,27 +2553,27 @@ func getErrorRangeForArrowFunction(sourceFile *ast.SourceFile, node *ast.Node) c
 	return core.NewTextRange(pos, node.End())
 }
 
-func findOriginatingJSDocSatisfiesTag(sourceFile *ast.SourceFile, node *ast.Node) *ast.Node {
-	targetType := node.AsSatisfiesExpression().Type
-	if targetType.Flags&ast.NodeFlagsReparsed == 0 {
-		return nil
+func findOriginatingJSDocSatisfiesTag(sourceFile *ast.SourceFile, node ast.Node) ast.Node {
+	targetType := node.AsSatisfiesExpression().Type()
+	if targetType.Flags()&ast.NodeFlagsReparsed == 0 {
+		return ast.Node{}
 	}
-	for current := node.Parent; current != nil; current = current.Parent {
-		if current.Flags&ast.NodeFlagsHasJSDoc == 0 {
+	for current := node.Parent(); !current.IsNil(); current = current.Parent() {
+		if current.Flags()&ast.NodeFlagsHasJSDoc == 0 {
 			continue
 		}
-		var firstSatisfiesTag *ast.Node
+		var firstSatisfiesTag ast.Node
 		for _, jsDoc := range current.EagerJSDoc(sourceFile) {
-			if tags := jsDoc.AsJSDoc().Tags; tags != nil {
+			if tags := jsDoc.AsJSDoc().Tags(); tags != nil {
 				for _, tag := range tags.Nodes {
 					if !ast.IsJSDocSatisfiesTag(tag) {
 						continue
 					}
-					if firstSatisfiesTag == nil {
+					if firstSatisfiesTag.IsNil() {
 						firstSatisfiesTag = tag
 					}
-					if typeExpr := tag.AsJSDocSatisfiesTag().TypeExpression; typeExpr != nil {
-						if t := typeExpr.Type(); t != nil && t.Loc == targetType.Loc {
+					if typeExpr := tag.AsJSDocSatisfiesTag().TypeExpression(); !typeExpr.IsNil() {
+						if t := typeExpr.Type(); !t.IsNil() && t.Loc() == targetType.Loc() {
 							return tag
 						}
 					}
@@ -2582,12 +2582,12 @@ func findOriginatingJSDocSatisfiesTag(sourceFile *ast.SourceFile, node *ast.Node
 		}
 		return firstSatisfiesTag
 	}
-	return nil
+	return ast.Node{}
 }
 
-func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextRange {
+func GetErrorRangeForNode(sourceFile *ast.SourceFile, node ast.Node) core.TextRange {
 	errorNode := node
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindSourceFile:
 		pos := SkipTrivia(sourceFile.Text(), 0)
 		if pos == len(sourceFile.Text()) {
@@ -2596,7 +2596,7 @@ func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 		return GetRangeOfTokenAtPosition(sourceFile, pos)
 	// This list is a work in progress. Add missing node kinds to improve their error spans
 	case ast.KindFunctionDeclaration, ast.KindMethodDeclaration:
-		if node.Flags&ast.NodeFlagsReparsed != 0 {
+		if node.Flags()&ast.NodeFlagsReparsed != 0 {
 			errorNode = node
 			break
 		}
@@ -2623,14 +2623,14 @@ func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 		pos := SkipTrivia(sourceFile.Text(), node.Pos())
 		return GetRangeOfTokenAtPosition(sourceFile, pos)
 	case ast.KindSatisfiesExpression:
-		if jsDocSatisfiesTag := findOriginatingJSDocSatisfiesTag(sourceFile, node); jsDocSatisfiesTag != nil {
+		if jsDocSatisfiesTag := findOriginatingJSDocSatisfiesTag(sourceFile, node); !jsDocSatisfiesTag.IsNil() {
 			pos := SkipTrivia(sourceFile.Text(), jsDocSatisfiesTag.TagName().Pos())
 			return GetRangeOfTokenAtPosition(sourceFile, pos)
 		}
-		pos := SkipTrivia(sourceFile.Text(), node.AsSatisfiesExpression().Expression.End())
+		pos := SkipTrivia(sourceFile.Text(), node.AsSatisfiesExpression().Expression().End())
 		return GetRangeOfTokenAtPosition(sourceFile, pos)
 	case ast.KindConstructor:
-		if node.Flags&ast.NodeFlagsReparsed != 0 {
+		if node.Flags()&ast.NodeFlagsReparsed != 0 {
 			errorNode = node
 			break
 		}
@@ -2641,7 +2641,7 @@ func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 		}
 		return core.NewTextRange(start, scanner.TokenEnd())
 	}
-	if errorNode == nil {
+	if errorNode.IsNil() {
 		// If we don't have a better node, then just set the error on the first token of
 		// construct.
 		return GetRangeOfTokenAtPosition(sourceFile, node.Pos())

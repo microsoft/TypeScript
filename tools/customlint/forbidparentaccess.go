@@ -11,7 +11,7 @@ import (
 
 var forbidParentAccessAnalyzer = &analysis.Analyzer{
 	Name: "forbidparentaccess",
-	Doc:  "forbids .Parent access in internal/transformers except internal/transformers/declarations",
+	Doc:  "forbids .Parent access and .SetParent calls in internal/transformers except internal/transformers/declarations",
 	Requires: []*analysis.Analyzer{
 		inspect.Analyzer,
 	},
@@ -23,14 +23,14 @@ var forbidParentAccessAnalyzer = &analysis.Analyzer{
 		in := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
 		for c := range in.Root().Preorder((*ast.SelectorExpr)(nil)) {
 			n := c.Node().(*ast.SelectorExpr)
-			if n.Sel.Name != "Parent" {
+			if n.Sel.Name != "Parent" && n.Sel.Name != "SetParent" {
 				continue
 			}
 
 			pass.Report(analysis.Diagnostic{
 				Pos:     n.Sel.Pos(),
 				End:     n.Sel.End(),
-				Message: "Transformers are run on nodes with potentially unset .Parent pointers, do not use them in transformers. Track context in the transform itself, instead.",
+				Message: "Transformers are run on nodes with potentially unset .Parent links, do not use them in transformers. Track context in the transform itself, instead.",
 			})
 		}
 

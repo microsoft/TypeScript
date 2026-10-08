@@ -6,6 +6,12 @@ func (n *Node) Expression() *Node { return nil }
 
 type Type struct{}
 
+type Handle struct{}
+
+func (n Handle) Expression() Handle { return Handle{} }
+
+func (n Handle) IsNil() bool { return false }
+
 type CheckMode int
 
 type Checker struct {
@@ -15,6 +21,8 @@ type Checker struct {
 func (c *Checker) checkExpression(node *Node, checkMode CheckMode) *Type { return nil }
 
 func (c *Checker) checkExpressionCached(node *Node) *Type { return nil }
+
+func (c *Checker) checkExpressionHandle(node Handle) *Type { return nil }
 
 func (c *Checker) checkSourceElement(node *Node) {}
 
@@ -31,7 +39,32 @@ func (c *Checker) checkSourceElementWorker(node *Node) {
 		c.checkConditionalUpfront(node)
 	default:
 		c.checkLeaf(node)
+		c.checkHandleNilGuardedReturn(Handle{})
+		c.checkHandleElseNilGuardedReturn(Handle{})
+		c.checkHandleNonNilReturn(Handle{})
 	}
+}
+
+func (c *Checker) checkHandleNilGuardedReturn(node Handle) *Type {
+	if node.Expression().IsNil() {
+		return c.errorType
+	}
+	return c.checkExpressionHandle(node.Expression())
+}
+
+func (c *Checker) checkHandleElseNilGuardedReturn(node Handle) *Type {
+	if !node.Expression().IsNil() {
+	} else {
+		return c.errorType
+	}
+	return c.checkExpressionHandle(node.Expression())
+}
+
+func (c *Checker) checkHandleNonNilReturn(node Handle) *Type {
+	if !node.Expression().IsNil() {
+		return c.errorType
+	}
+	return c.checkExpressionHandle(node.Expression())
 }
 
 func (c *Checker) checkExpressionWorker(node *Node, checkMode CheckMode) *Type {

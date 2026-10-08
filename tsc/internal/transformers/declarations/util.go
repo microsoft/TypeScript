@@ -6,12 +6,12 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 )
 
-func needsScopeMarker(result *ast.Node) bool {
+func needsScopeMarker(result ast.Node) bool {
 	return !ast.IsAnyImportOrReExport(result) && !ast.IsExportAssignment(result) && !ast.HasSyntacticModifier(result, ast.ModifierFlagsExport) && !ast.IsAmbientModule(result)
 }
 
-func canHaveLiteralInitializer(resolver printer.EmitResolver, node *ast.Node) bool {
-	switch node.Kind {
+func canHaveLiteralInitializer(resolver printer.EmitResolver, node ast.Node) bool {
+	switch node.Kind() {
 	case ast.KindPropertyDeclaration,
 		ast.KindPropertySignature:
 		return resolver.GetEffectiveDeclarationFlags(node, ast.ModifierFlagsPrivate) == 0
@@ -22,7 +22,7 @@ func canHaveLiteralInitializer(resolver printer.EmitResolver, node *ast.Node) bo
 	return false
 }
 
-func canProduceDiagnostics(node *ast.Node) bool {
+func canProduceDiagnostics(node ast.Node) bool {
 	return ast.IsVariableDeclaration(node) ||
 		ast.IsPropertyDeclaration(node) ||
 		ast.IsPropertySignatureDeclaration(node) ||
@@ -49,18 +49,18 @@ func canProduceDiagnostics(node *ast.Node) bool {
 	/* ast.IsJSDocTypeAlias(node); */
 }
 
-func canReuseModifierNodes(nodes []*ast.Node) bool {
+func canReuseModifierNodes(nodes []ast.Node) bool {
 	for _, node := range nodes {
-		if ast.IsModifier(node) && node.Flags&ast.NodeFlagsReparsed != 0 {
+		if ast.IsModifier(node) && node.Flags()&ast.NodeFlagsReparsed != 0 {
 			return false
 		}
 	}
 	return true
 }
 
-func isDeclarationAndNotVisible(emitContext *printer.EmitContext, resolver printer.EmitResolver, node *ast.Node) bool {
+func isDeclarationAndNotVisible(emitContext *printer.EmitContext, resolver printer.EmitResolver, node ast.Node) bool {
 	node = emitContext.ParseNode(node)
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindFunctionDeclaration,
 		ast.KindModuleDeclaration,
 		ast.KindInterfaceDeclaration,
@@ -84,13 +84,13 @@ func isDeclarationAndNotVisible(emitContext *printer.EmitContext, resolver print
 	return false
 }
 
-func getBindingNameVisible(resolver printer.EmitResolver, elem *ast.Node) bool {
+func getBindingNameVisible(resolver printer.EmitResolver, elem ast.Node) bool {
 	if ast.IsOmittedExpression(elem) {
 		return false
 	}
 	// TODO: parseArrayBindingElement _never_ parses out an OmittedExpression anymore, instead producing a nameless binding element
 	// Audit if OmittedExpression should be removed
-	if elem.Name() == nil {
+	if elem.Name().IsNil() {
 		return false
 	}
 	if ast.IsBindingPattern(elem.Name()) {
@@ -106,7 +106,7 @@ func getBindingNameVisible(resolver printer.EmitResolver, elem *ast.Node) bool {
 	}
 }
 
-func isEnclosingDeclaration(node *ast.Node) bool {
+func isEnclosingDeclaration(node ast.Node) bool {
 	return ast.IsSourceFile(node) ||
 		ast.IsTypeAliasDeclaration(node) ||
 		ast.IsJSTypeAliasDeclaration(node) ||
@@ -119,14 +119,14 @@ func isEnclosingDeclaration(node *ast.Node) bool {
 		ast.IsVariableDeclaration(node)
 }
 
-func isAlwaysType(node *ast.Node) bool {
-	if node.Kind == ast.KindInterfaceDeclaration {
+func isAlwaysType(node ast.Node) bool {
+	if node.Kind() == ast.KindInterfaceDeclaration {
 		return true
 	}
 	return false
 }
 
-func maskModifierFlags(node *ast.Node, modifierMask ast.ModifierFlags, modifierAdditions ast.ModifierFlags) ast.ModifierFlags {
+func maskModifierFlags(node ast.Node, modifierMask ast.ModifierFlags, modifierAdditions ast.ModifierFlags) ast.ModifierFlags {
 	flags := (ast.GetCombinedModifierFlags(node) & modifierMask) | modifierAdditions
 	if flags&ast.ModifierFlagsDefault != 0 && (flags&ast.ModifierFlagsExport == 0) {
 		// A non-exported default is a nonsequitor - we usually try to remove all export modifiers
@@ -139,29 +139,29 @@ func maskModifierFlags(node *ast.Node, modifierMask ast.ModifierFlags, modifierA
 	return flags
 }
 
-func unwrapParenthesizedExpression(o *ast.Node) *ast.Node {
-	for o.Kind == ast.KindParenthesizedExpression {
+func unwrapParenthesizedExpression(o ast.Node) ast.Node {
+	for o.Kind() == ast.KindParenthesizedExpression {
 		o = o.Expression()
 	}
 	return o
 }
 
-func isPrivateMethodTypeParameter(resolver printer.EmitResolver, node *ast.TypeParameterDeclaration) bool {
-	return node.AsNode().Parent.Kind == ast.KindMethodDeclaration && resolver.GetEffectiveDeclarationFlags(node.AsNode().Parent, ast.ModifierFlagsPrivate) != 0
+func isPrivateMethodTypeParameter(resolver printer.EmitResolver, node ast.TypeParameterDeclaration) bool {
+	return node.AsNode().Parent().Kind() == ast.KindMethodDeclaration && resolver.GetEffectiveDeclarationFlags(node.AsNode().Parent(), ast.ModifierFlagsPrivate) != 0
 }
 
 // Returns true if expando properties should be emitted for this function.
 // Properties are emitted if any overload in the symbol has a body (implementation).
-func shouldEmitFunctionProperties(input *ast.FunctionDeclaration) bool {
-	if input.Body != nil {
+func shouldEmitFunctionProperties(input ast.FunctionDeclaration) bool {
+	if !input.Body().IsNil() {
 		return true
 	}
-	return !core.Every(input.Symbol.Declarations(), func(decl *ast.Node) bool {
-		return !ast.IsFunctionDeclaration(decl) || decl.AsFunctionDeclaration().Body == nil
+	return !core.Every(input.Symbol().Declarations(), func(decl ast.Node) bool {
+		return !ast.IsFunctionDeclaration(decl) || decl.AsFunctionDeclaration().Body().IsNil()
 	})
 }
 
-func getEffectiveBaseTypeNode(node *ast.Node) *ast.Node {
+func getEffectiveBaseTypeNode(node ast.Node) ast.Node {
 	baseType := ast.GetClassExtendsHeritageElement(node)
 	// !!! TODO: JSDoc support
 	// if (baseType && isInJSFile(node)) {
@@ -174,7 +174,7 @@ func getEffectiveBaseTypeNode(node *ast.Node) *ast.Node {
 	return baseType
 }
 
-func isScopeMarker(node *ast.Node) bool {
+func isScopeMarker(node ast.Node) bool {
 	return ast.IsExportAssignment(node) || ast.IsExportDeclaration(node)
 }
 

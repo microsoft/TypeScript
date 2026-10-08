@@ -96,7 +96,7 @@ func (e *symbolExtractor) getModuleIDForSymbol(symbol *ast.Symbol) (ModuleID, bo
 	// If fileName is set, this is a source file that may need realpath normalization
 	if fileName != "" && e.realpath != nil {
 		decl := ast.GetNonAugmentationDeclaration(symbol)
-		if decl != nil && decl.Kind == ast.KindSourceFile {
+		if !decl.IsNil() && decl.Kind() == ast.KindSourceFile {
 			return e.getModuleID(decl.AsSourceFile()), true
 		}
 	}
@@ -104,14 +104,14 @@ func (e *symbolExtractor) getModuleIDForSymbol(symbol *ast.Symbol) (ModuleID, bo
 }
 
 func (e *exportExtractor) extractFromFile(file *ast.SourceFile) []*Export {
-	if file.Symbol != nil {
+	if file.Symbol() != nil {
 		return e.extractFromModule(file)
 	}
 	if len(file.AmbientModuleNames) > 0 {
 		var exportCount int
 		for _, statement := range file.Statements.Nodes {
 			if ast.IsModuleWithStringLiteralName(statement) && isNonPatternAmbientModuleDeclaration(file, statement.AsModuleDeclaration()) {
-				exportCount += len(statement.AsModuleDeclaration().Symbol.Exports())
+				exportCount += len(statement.AsModuleDeclaration().Symbol().Exports())
 			}
 		}
 		exports := make([]*Export, 0, exportCount)
@@ -125,9 +125,9 @@ func (e *exportExtractor) extractFromFile(file *ast.SourceFile) []*Export {
 	return nil
 }
 
-func isNonPatternAmbientModuleDeclaration(file *ast.SourceFile, decl *ast.ModuleDeclaration) bool {
+func isNonPatternAmbientModuleDeclaration(file *ast.SourceFile, decl ast.ModuleDeclaration) bool {
 	for _, module := range file.PatternAmbientModules {
-		if module.Symbol == decl.Symbol {
+		if module.Symbol == decl.Symbol() {
 			return false
 		}
 	}
@@ -135,24 +135,24 @@ func isNonPatternAmbientModuleDeclaration(file *ast.SourceFile, decl *ast.Module
 }
 
 func (e *exportExtractor) extractFromModule(file *ast.SourceFile) []*Export {
-	moduleAugmentations := core.MapNonNil(file.ModuleAugmentations, func(name *ast.ModuleName) *ast.ModuleDeclaration {
-		decl := name.Parent
+	moduleAugmentations := core.MapNonNil(file.ModuleAugmentations, func(name ast.ModuleName) ast.ModuleDeclaration {
+		decl := name.Parent()
 		if ast.IsGlobalScopeAugmentation(decl) {
-			return nil
+			return ast.ModuleDeclaration{}
 		}
 		return decl.AsModuleDeclaration()
 	})
 	var augmentationExportCount int
 	for _, decl := range moduleAugmentations {
-		augmentationExportCount += len(decl.Symbol.Exports())
+		augmentationExportCount += len(decl.Symbol().Exports())
 	}
 	moduleID := e.getModuleID(file)
-	exports := make([]*Export, 0, len(file.Symbol.Exports())+augmentationExportCount)
-	for name, symbol := range file.Symbol.Exports() {
+	exports := make([]*Export, 0, len(file.Symbol().Exports())+augmentationExportCount)
+	for name, symbol := range file.Symbol().Exports() {
 		e.extractFromSymbol(name, symbol, moduleID, file.FileName(), file, &exports)
 	}
 	for _, decl := range moduleAugmentations {
-		name := decl.Name().AsStringLiteral().Text
+		name := decl.Name().AsStringLiteral().Text()
 		moduleID := ambientModuleID(name)
 		var moduleFileName tspath.RootedFilePath
 		var unresolvedModuleSpecifier tspath.ModuleSpecifier
@@ -175,8 +175,8 @@ func (e *exportExtractor) extractFromModule(file *ast.SourceFile) []*Export {
 	return exports
 }
 
-func (e *exportExtractor) extractFromModuleDeclaration(decl *ast.ModuleDeclaration, file *ast.SourceFile, moduleID ModuleID, moduleFileName tspath.RootedFilePath, exports *[]*Export) {
-	for name, symbol := range decl.Symbol.Exports() {
+func (e *exportExtractor) extractFromModuleDeclaration(decl ast.ModuleDeclaration, file *ast.SourceFile, moduleID ModuleID, moduleFileName tspath.RootedFilePath, exports *[]*Export) {
+	for name, symbol := range decl.Symbol().Exports() {
 		e.extractFromSymbol(name, symbol, moduleID, moduleFileName, file, exports)
 	}
 }
@@ -243,14 +243,14 @@ func (e *symbolExtractor) extractFromSymbol(name string, symbol *ast.Symbol, mod
 			}
 		}
 	} else if syntax == ExportSyntaxCommonJSModuleExports {
-		expression := symbol.Declarations()[0].AsBinaryExpression().Right
-		if expression.Kind == ast.KindObjectLiteralExpression {
+		expression := symbol.Declarations()[0].AsBinaryExpression().Right()
+		if expression.Kind() == ast.KindObjectLiteralExpression {
 			// what is actually desirable here? I think it would be reasonable to only treat these as exports
 			// if *every* property is a shorthand property or identifier: identifier
 			// At least, it would be sketchy if there were any methods, computed properties...
-			*exports = slices.Grow(*exports, len(expression.AsObjectLiteralExpression().Properties.Nodes))
-			for _, prop := range expression.AsObjectLiteralExpression().Properties.Nodes {
-				if ast.IsShorthandPropertyAssignment(prop) || ast.IsPropertyAssignment(prop) && prop.AsPropertyAssignment().Name().Kind == ast.KindIdentifier {
+			*exports = slices.Grow(*exports, len(expression.AsObjectLiteralExpression().Properties().Nodes))
+			for _, prop := range expression.AsObjectLiteralExpression().Properties().Nodes {
+				if ast.IsShorthandPropertyAssignment(prop) || ast.IsPropertyAssignment(prop) && prop.AsPropertyAssignment().Name().Kind() == ast.KindIdentifier {
 					export, _ := e.createExport(expression.Symbol().Members()[prop.Name().Text()], moduleID, moduleFileName, syntax, file, checkerLease)
 					if export != nil {
 						export.through = name
@@ -287,7 +287,7 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 	if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		targetSymbol = e.tryResolveSymbol(symbol, syntax, checkerLease)
 		if targetSymbol != nil {
-			var decl *ast.Node
+			var decl ast.Node
 			if len(targetSymbol.Declarations()) > 0 {
 				decl = targetSymbol.Declarations()[0]
 			} else if targetSymbol.CheckFlags()&ast.CheckFlagsMapped != 0 {
@@ -295,18 +295,18 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 					decl = mappedDecl.Declarations()[0]
 				}
 			}
-			if decl == nil {
+			if decl.IsNil() {
 				// !!! consider GetImmediateAliasedSymbol to go as far as we can
 				decl = symbol.Declarations()[0]
 			}
-			if decl == nil {
+			if decl.IsNil() {
 				panic("no declaration for aliased symbol")
 			}
 
 			parent := targetSymbol.Parent()
 			if checker := checkerLease.TryChecker(); checker != nil {
 				export.Flags = checker.GetSymbolFlags(targetSymbol)
-				export.IsTypeOnly = checker.GetTypeOnlyAliasDeclaration(symbol) != nil
+				export.IsTypeOnly = !checker.GetTypeOnlyAliasDeclaration(symbol).IsNil()
 				parent = checker.GetMergedSymbol(parent)
 			} else {
 				export.Flags = targetSymbol.Flags()
@@ -373,13 +373,13 @@ func (e *symbolExtractor) tryResolveSymbol(symbol *ast.Symbol, syntax ExportSynt
 		return symbol
 	}
 
-	var loc *ast.Node
+	var loc ast.Node
 	var name string
 	switch syntax {
 	case ExportSyntaxNamed:
 		decl := ast.GetDeclarationOfKind(symbol, ast.KindExportSpecifier)
-		if decl.Parent.Parent.AsExportDeclaration().ModuleSpecifier == nil {
-			if n := core.FirstNonZero(decl.Name(), decl.PropertyName()); n.Kind == ast.KindIdentifier {
+		if decl.Parent().Parent().AsExportDeclaration().ModuleSpecifier().IsNil() {
+			if n := core.FirstNonZero(decl.Name(), decl.PropertyName()); n.Kind() == ast.KindIdentifier {
 				loc = n
 				name = n.Text()
 			}
@@ -392,13 +392,13 @@ func (e *symbolExtractor) tryResolveSymbol(symbol *ast.Symbol, syntax ExportSynt
 		fallthrough
 	case ExportSyntaxDefaultDeclaration:
 		decl := ast.GetDeclarationOfKind(symbol, ast.KindExportAssignment)
-		if decl.Expression().Kind == ast.KindIdentifier {
+		if decl.Expression().Kind() == ast.KindIdentifier {
 			loc = decl.Expression()
 			name = loc.Text()
 		}
 	}
 
-	if loc != nil {
+	if !loc.IsNil() {
 		local := e.localNameResolver.Resolve(loc, name, ast.SymbolFlagsAll, nil, false, false)
 		if local != nil && !ast.IsNonLocalAlias(local, ast.SymbolFlagsNone) {
 			return local
@@ -421,12 +421,12 @@ func shouldIgnoreSymbol(symbol *ast.Symbol) bool {
 
 func getSyntax(symbol *ast.Symbol) ExportSyntax {
 	for _, decl := range symbol.Declarations() {
-		switch decl.Kind {
+		switch decl.Kind() {
 		case ast.KindExportSpecifier:
 			return ExportSyntaxNamed
 		case ast.KindExportAssignment:
 			return core.IfElse(
-				decl.AsExportAssignment().IsExportEquals,
+				decl.AsExportAssignment().IsExportEquals(),
 				ExportSyntaxEquals,
 				ExportSyntaxDefaultDeclaration,
 			)

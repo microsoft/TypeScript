@@ -66,7 +66,7 @@ func (l *LanguageService) ProvideSelectionRanges(ctx context.Context, params *ls
 	return lsproto.SelectionRangesOrNull{SelectionRanges: &results}, nil
 }
 
-func getSelectionChildren(factory *ast.NodeFactory, node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
+func getSelectionChildren(factory *ast.NodeFactory, node ast.Node, sourceFile *ast.SourceFile) []ast.Node {
 	if !ast.IsMappedTypeNode(node) {
 		return getChildrenFromNonJSDocNode(node, sourceFile)
 	}
@@ -78,7 +78,7 @@ func getSelectionChildren(factory *ast.NodeFactory, node *ast.Node, sourceFile *
 
 	openBraceToken := children[0]
 	closeBraceToken := children[len(children)-1]
-	if openBraceToken.Kind != ast.KindOpenBraceToken || closeBraceToken.Kind != ast.KindCloseBraceToken {
+	if openBraceToken.Kind() != ast.KindOpenBraceToken || closeBraceToken.Kind() != ast.KindCloseBraceToken {
 		return children
 	}
 
@@ -86,34 +86,34 @@ func getSelectionChildren(factory *ast.NodeFactory, node *ast.Node, sourceFile *
 	children = children[1 : len(children)-1]
 
 	// Group `-/+readonly` and `-/+?`.
-	groupedWithPlusMinusTokens := groupChildren(factory, children, func(child *ast.Node) bool {
-		return child == mappedType.ReadonlyToken ||
-			child.Kind == ast.KindReadonlyKeyword ||
-			child == mappedType.QuestionToken ||
-			child.Kind == ast.KindQuestionToken
+	groupedWithPlusMinusTokens := groupChildren(factory, children, func(child ast.Node) bool {
+		return child == mappedType.ReadonlyToken() ||
+			child.Kind() == ast.KindReadonlyKeyword ||
+			child == mappedType.QuestionToken() ||
+			child.Kind() == ast.KindQuestionToken
 	})
 
 	// Group the type parameter with its surrounding brackets.
-	groupedWithBrackets := groupChildren(factory, groupedWithPlusMinusTokens, func(child *ast.Node) bool {
-		return child.Kind == ast.KindOpenBracketToken ||
-			child.Kind == ast.KindTypeParameter ||
-			child.Kind == ast.KindCloseBracketToken
+	groupedWithBrackets := groupChildren(factory, groupedWithPlusMinusTokens, func(child ast.Node) bool {
+		return child.Kind() == ast.KindOpenBracketToken ||
+			child.Kind() == ast.KindTypeParameter ||
+			child.Kind() == ast.KindCloseBracketToken
 	})
 
 	// Go exposes the trailing semicolon directly, so keep it in the right-hand
 	// group to produce the same effective selection tree as Strada.
-	return []*ast.Node{
+	return []ast.Node{
 		openBraceToken,
-		createSyntaxList(factory, splitChildren(factory, groupedWithBrackets, func(child *ast.Node) bool {
-			return child.Kind == ast.KindColonToken
+		createSyntaxList(factory, splitChildren(factory, groupedWithBrackets, func(child ast.Node) bool {
+			return child.Kind() == ast.KindColonToken
 		}, false)),
 		closeBraceToken,
 	}
 }
 
-func groupChildren(factory *ast.NodeFactory, children []*ast.Node, groupOn func(*ast.Node) bool) []*ast.Node {
-	var result []*ast.Node
-	var group []*ast.Node
+func groupChildren(factory *ast.NodeFactory, children []ast.Node, groupOn func(ast.Node) bool) []ast.Node {
+	var result []ast.Node
+	var group []ast.Node
 	for _, child := range children {
 		if groupOn(child) {
 			group = append(group, child)
@@ -133,10 +133,10 @@ func groupChildren(factory *ast.NodeFactory, children []*ast.Node, groupOn func(
 
 func splitChildren(
 	factory *ast.NodeFactory,
-	children []*ast.Node,
-	pivotOn func(*ast.Node) bool,
+	children []ast.Node,
+	pivotOn func(ast.Node) bool,
 	separateTrailingSemicolon bool,
-) []*ast.Node {
+) []ast.Node {
 	if len(children) < 2 {
 		return children
 	}
@@ -155,14 +155,14 @@ func splitChildren(
 	leftChildren := children[:splitTokenIndex]
 	splitToken := children[splitTokenIndex]
 	lastToken := children[len(children)-1]
-	separateLastToken := separateTrailingSemicolon && lastToken.Kind == ast.KindSemicolonToken
+	separateLastToken := separateTrailingSemicolon && lastToken.Kind() == ast.KindSemicolonToken
 	rightEnd := len(children)
 	if separateLastToken {
 		rightEnd--
 	}
 	rightChildren := children[splitTokenIndex+1 : rightEnd]
 
-	result := make([]*ast.Node, 0, 4)
+	result := make([]ast.Node, 0, 4)
 	if len(leftChildren) > 0 {
 		result = append(result, createSyntaxList(factory, leftChildren))
 	}
@@ -176,9 +176,9 @@ func splitChildren(
 	return result
 }
 
-func createSyntaxList(factory *ast.NodeFactory, children []*ast.Node) *ast.Node {
+func createSyntaxList(factory *ast.NodeFactory, children []ast.Node) ast.Node {
 	list := factory.NewSyntaxList(children)
-	list.Loc = core.NewTextRange(children[0].Pos(), children[len(children)-1].End())
+	list.SetLoc(core.NewTextRange(children[0].Pos(), children[len(children)-1].End()))
 	return list
 }
 
@@ -194,8 +194,8 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 		lastRange = fullRange
 	}
 
-	nodeContainsPosition := func(node *ast.Node) bool {
-		if node == nil {
+	nodeContainsPosition := func(node ast.Node) bool {
+		if node.IsNil() {
 			return false
 		}
 		start := scanner.GetTokenPosOfNode(node, sourceFile, true /*includeJSDoc*/)
@@ -203,13 +203,13 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 		return start <= pos && pos < end
 	}
 
-	positionShouldSnapToNode := func(node *ast.Node) bool {
+	positionShouldSnapToNode := func(node ast.Node) bool {
 		if pos < node.End() {
 			return true
 		}
 		if node.End() == pos {
 			touchingPropertyName := astnav.GetTouchingPropertyName(sourceFile, pos)
-			return touchingPropertyName != nil && touchingPropertyName.Pos() < node.End()
+			return !touchingPropertyName.IsNil() && touchingPropertyName.Pos() < node.End()
 		}
 		return false
 	}
@@ -255,7 +255,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 		return scanner.ComputeLineOfPosition(lineStarts, pos1) == scanner.ComputeLineOfPosition(lineStarts, pos2)
 	}
 
-	shouldSkipNode := func(node *ast.Node, parent *ast.Node) bool {
+	shouldSkipNode := func(node ast.Node, parent ast.Node) bool {
 		if ast.IsBlock(node) {
 			return true
 		}
@@ -264,14 +264,14 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 			return true
 		}
 
-		if parent != nil && ast.IsVariableDeclarationList(node) && ast.IsVariableStatement(parent) {
+		if !parent.IsNil() && ast.IsVariableDeclarationList(node) && ast.IsVariableStatement(parent) {
 			return true
 		}
 
 		// Skip lone variable declarations
-		if parent != nil && ast.IsVariableDeclaration(node) && ast.IsVariableDeclarationList(parent) {
+		if !parent.IsNil() && ast.IsVariableDeclaration(node) && ast.IsVariableDeclarationList(parent) {
 			decl := parent.AsVariableDeclarationList()
-			if decl != nil && len(decl.Declarations.Nodes) == 1 {
+			if !decl.IsNil() && len(decl.Declarations().Nodes) == 1 {
 				return true
 			}
 		}
@@ -283,13 +283,13 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 		return false
 	}
 
-	var current *ast.Node
-	for current = sourceFile.AsNode(); current != nil; {
-		var next *ast.Node
+	var current ast.Node
+	for current = sourceFile.AsNode(); !current.IsNil(); {
+		var next ast.Node
 		parent := current
 
-		visit := func(node *ast.Node) *ast.Node {
-			if node != nil && next == nil {
+		visit := func(node ast.Node) ast.Node {
+			if !node.IsNil() && next.IsNil() {
 				var foundComment *ast.CommentRange
 				for comment := range scanner.GetTrailingCommentRanges(factory, sourceFile.Text(), node.End()) {
 					foundComment = &comment
@@ -312,12 +312,12 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 					// Synthesize a stop for '${ ... }' since '${' and '}' actually belong to siblings.
 					if ast.IsTemplateSpan(parent) {
 						templateSpan := parent.AsTemplateSpan()
-						if templateSpan.Literal != nil {
+						if !templateSpan.Literal().IsNil() {
 							// Start from just before the '${' and end after the '}'
 							// The '${' is 2 characters before the expression start
 							spanStart := node.Pos() - 2
 							// The '}' is the first character of the template literal (middle or tail)
-							spanEnd := astnav.GetStartOfNode(templateSpan.Literal, sourceFile, false) + 1
+							spanEnd := astnav.GetStartOfNode(templateSpan.Literal(), sourceFile, false) + 1
 							// Validate the positions are reasonable
 							text := sourceFile.Text()
 							if spanStart >= 0 && spanEnd <= len(text) && spanStart < spanEnd {
@@ -333,7 +333,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 
 						if ast.IsMappedTypeNode(node) {
 							for selectionParent := node; ; {
-								var selectionChild *ast.Node
+								var selectionChild ast.Node
 								for _, child := range getSelectionChildren(factory, selectionParent, sourceFile) {
 									childStart := scanner.GetTokenPosOfNode(child, sourceFile, true /*includeJSDoc*/)
 									if childStart > pos {
@@ -345,7 +345,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 										break
 									}
 								}
-								if selectionChild == nil || !ast.IsSyntaxList(selectionChild) {
+								if selectionChild.IsNil() || !ast.IsSyntaxList(selectionChild) {
 									break
 								}
 								selectionParent = selectionChild
@@ -353,7 +353,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 						}
 
 						// String literals should have a stop both inside and outside their quotes.
-						if ast.IsStringLiteral(node) || node.Kind == ast.KindTemplateExpression || node.Kind == ast.KindNoSubstitutionTemplateLiteral {
+						if ast.IsStringLiteral(node) || node.Kind() == ast.KindTemplateExpression || node.Kind() == ast.KindNoSubstitutionTemplateLiteral {
 							// Only add inner content range if there's actually content (handles unterminated literals)
 							if start+1 < end-1 {
 								pushSelectionRange(start+1, end-1)
@@ -369,7 +369,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 
 		visitNodes := func(nodes *ast.NodeList, v *ast.NodeVisitor) *ast.NodeList {
 			if nodes != nil && len(nodes.Nodes) > 0 {
-				shouldSkipList := parent != nil && (ast.IsVariableDeclarationList(parent) || ast.IsTemplateExpression(parent))
+				shouldSkipList := !parent.IsNil() && (ast.IsVariableDeclarationList(parent) || ast.IsTemplateExpression(parent))
 
 				if !shouldSkipList {
 					start := astnav.GetStartOfNode(nodes.Nodes[0], sourceFile, false)

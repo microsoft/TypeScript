@@ -240,7 +240,7 @@ func getFixInfos(ch *checker.Checker, fixContext *CodeFixContext, errorCode int3
 	return sortFixInfo(info, fixContext, view), nil
 }
 
-func getFixesInfoForUMDImport(token *ast.Node, view *autoimport.View, ch *checker.Checker) []*fixInfo {
+func getFixesInfoForUMDImport(token ast.Node, view *autoimport.View, ch *checker.Checker) []*fixInfo {
 	umdSymbol := getUmdSymbol(token, ch)
 	if umdSymbol == nil {
 		return nil
@@ -264,7 +264,7 @@ func getFixesInfoForUMDImport(token *ast.Node, view *autoimport.View, ch *checke
 	return result
 }
 
-func getUmdSymbol(token *ast.Node, ch *checker.Checker) *ast.Symbol {
+func getUmdSymbol(token ast.Node, ch *checker.Checker) *ast.Symbol {
 	// try the identifier to see if it is the umd symbol
 	var umdSymbol *ast.Symbol
 	if ast.IsIdentifier(token) {
@@ -275,10 +275,10 @@ func getUmdSymbol(token *ast.Node, ch *checker.Checker) *ast.Symbol {
 	}
 
 	// The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
-	parent := token.Parent
+	parent := token.Parent()
 	if (ast.IsJsxOpeningLikeElement(parent) && parent.TagName() == token) ||
 		ast.IsJsxOpeningFragment(parent) {
-		var location *ast.Node
+		var location ast.Node
 		if ast.IsJsxOpeningLikeElement(parent) {
 			location = token
 		} else {
@@ -295,11 +295,11 @@ func getUmdSymbol(token *ast.Node, ch *checker.Checker) *ast.Symbol {
 
 func isUMDExportSymbol(symbol *ast.Symbol) bool {
 	return symbol != nil && len(symbol.Declarations()) > 0 &&
-		symbol.Declarations()[0] != nil &&
+		!symbol.Declarations()[0].IsNil() &&
 		ast.IsNamespaceExportDeclaration(symbol.Declarations()[0])
 }
 
-func getFixesInfoForNonUMDImport(fixContext *CodeFixContext, symbolToken *ast.Node, view *autoimport.View, ch *checker.Checker) []*fixInfo {
+func getFixesInfoForNonUMDImport(fixContext *CodeFixContext, symbolToken ast.Node, view *autoimport.View, ch *checker.Checker) []*fixInfo {
 	compilerOptions := fixContext.Program.Options()
 
 	isValidTypeOnlyUseSite := ast.IsValidTypeOnlyAliasUseSite(symbolToken)
@@ -350,7 +350,7 @@ func getFixesInfoForNonUMDImport(fixContext *CodeFixContext, symbolToken *ast.No
 	return allInfo
 }
 
-func getTypeOnlyPromotionFix(sourceFile *ast.SourceFile, symbolToken *ast.Node, symbolName string, ch *checker.Checker) *autoimport.Fix {
+func getTypeOnlyPromotionFix(sourceFile *ast.SourceFile, symbolToken ast.Node, symbolName string, ch *checker.Checker) *autoimport.Fix {
 	// Get the symbol at the token location
 	symbol := ch.ResolveName(symbolName, symbolToken, ast.SymbolFlagsValue, true /* excludeGlobals */)
 	if symbol == nil {
@@ -359,7 +359,7 @@ func getTypeOnlyPromotionFix(sourceFile *ast.SourceFile, symbolToken *ast.Node, 
 
 	// Get the type-only alias declaration
 	typeOnlyAliasDeclaration := ch.GetTypeOnlyAliasDeclaration(symbol)
-	if typeOnlyAliasDeclaration == nil || ast.GetSourceFileOfNode(typeOnlyAliasDeclaration) != sourceFile {
+	if typeOnlyAliasDeclaration.IsNil() || ast.GetSourceFileOfNode(typeOnlyAliasDeclaration) != sourceFile {
 		return nil
 	}
 
@@ -376,8 +376,8 @@ type symbolNameInfo struct {
 	isTypeOnly bool // whether the symbol currently resolves to a type-only import
 }
 
-func getSymbolNamesToImport(sourceFile *ast.SourceFile, ch *checker.Checker, symbolToken *ast.Node, compilerOptions *core.CompilerOptions) []symbolNameInfo {
-	parent := symbolToken.Parent
+func getSymbolNamesToImport(sourceFile *ast.SourceFile, ch *checker.Checker, symbolToken ast.Node, compilerOptions *core.CompilerOptions) []symbolNameInfo {
+	parent := symbolToken.Parent()
 	if (ast.IsJsxOpeningLikeElement(parent) || ast.IsJsxClosingElement(parent)) &&
 		parent.TagName() == symbolToken &&
 		jsxModeNeedsExplicitImport(compilerOptions.Jsx) {
@@ -388,13 +388,13 @@ func getSymbolNamesToImport(sourceFile *ast.SourceFile, ch *checker.Checker, sym
 				compSymbol := ch.ResolveName(symbolToken.Text(), symbolToken, ast.SymbolFlagsValue, false /* excludeGlobals */)
 				if compSymbol == nil {
 					result = append(result, symbolNameInfo{name: symbolToken.Text()})
-				} else if ch.GetTypeOnlyAliasDeclaration(compSymbol) != nil {
+				} else if !ch.GetTypeOnlyAliasDeclaration(compSymbol).IsNil() {
 					result = append(result, symbolNameInfo{name: symbolToken.Text(), isTypeOnly: true})
 				}
 			}
 			nsIsTypeOnly := false
 			if nsSymbol := ch.ResolveName(jsxNamespace, symbolToken, ast.SymbolFlagsValue, true /* excludeGlobals */); nsSymbol != nil {
-				nsIsTypeOnly = ch.GetTypeOnlyAliasDeclaration(nsSymbol) != nil
+				nsIsTypeOnly = !ch.GetTypeOnlyAliasDeclaration(nsSymbol).IsNil()
 			}
 			result = append(result, symbolNameInfo{name: jsxNamespace, isTypeOnly: nsIsTypeOnly})
 			return result
@@ -402,12 +402,12 @@ func getSymbolNamesToImport(sourceFile *ast.SourceFile, ch *checker.Checker, sym
 	}
 	tokenIsTypeOnly := false
 	if sym := ch.ResolveName(symbolToken.Text(), symbolToken, ast.SymbolFlagsValue, true /* excludeGlobals */); sym != nil {
-		tokenIsTypeOnly = ch.GetTypeOnlyAliasDeclaration(sym) != nil
+		tokenIsTypeOnly = !ch.GetTypeOnlyAliasDeclaration(sym).IsNil()
 	}
 	return []symbolNameInfo{{name: symbolToken.Text(), isTypeOnly: tokenIsTypeOnly}}
 }
 
-func needsJsxNamespaceFix(jsxNamespace string, symbolToken *ast.Node, ch *checker.Checker) bool {
+func needsJsxNamespaceFix(jsxNamespace string, symbolToken ast.Node, ch *checker.Checker) bool {
 	if scanner.IsIntrinsicJsxName(symbolToken.Text()) {
 		return true
 	}

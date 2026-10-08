@@ -91,7 +91,7 @@ type RecursionId struct {
 }
 
 // This function exists to constrain the types of values that can be used as recursion IDs.
-func asRecursionId[T *ast.Node | *ast.Symbol | *Type](value T) RecursionId {
+func asRecursionId[T ast.Node | *ast.Symbol | *Type](value T) RecursionId {
 	return RecursionId{value: value}
 }
 
@@ -197,7 +197,7 @@ func (c *Checker) isTypeRelatedTo(source *Type, target *Type, relation *Relation
 		}
 	}
 	if source.flags&TypeFlagsStructuredOrInstantiable != 0 || target.flags&TypeFlagsStructuredOrInstantiable != 0 {
-		return c.checkTypeRelatedTo(source, target, relation, nil /*errorNode*/)
+		return c.checkTypeRelatedTo(source, target, relation, ast.Node{} /*errorNode*/)
 	}
 	return false
 }
@@ -297,7 +297,7 @@ func (c *Checker) isEnumTypeRelatedTo(source *ast.Symbol, target *ast.Symbol, er
 			targetProperty := c.getPropertyOfType(targetEnumType, sourceProperty.Name())
 			if targetProperty == nil || targetProperty.Flags()&ast.SymbolFlagsEnumMember == 0 {
 				if errorReporter != nil {
-					errorReporter(diagnostics.Property_0_is_missing_in_type_1, c.symbolToString(sourceProperty), c.TypeToStringEx(c.getDeclaredTypeOfSymbol(targetSymbol), nil /*enclosingDeclaration*/, TypeFormatFlagsUseFullyQualifiedType, nil))
+					errorReporter(diagnostics.Property_0_is_missing_in_type_1, c.symbolToString(sourceProperty), c.TypeToStringEx(c.getDeclaredTypeOfSymbol(targetSymbol), ast.Node{} /*enclosingDeclaration*/, TypeFormatFlagsUseFullyQualifiedType, nil))
 				}
 				c.enumRelation[key] = RelationComparisonResultFailed
 				return false
@@ -336,19 +336,19 @@ func (c *Checker) isEnumTypeRelatedTo(source *ast.Symbol, target *ast.Symbol, er
 	return true
 }
 
-func (c *Checker) checkTypeAssignableTo(source *Type, target *Type, errorNode *ast.Node, headMessage *diagnostics.Message) bool {
+func (c *Checker) checkTypeAssignableTo(source *Type, target *Type, errorNode ast.Node, headMessage *diagnostics.Message) bool {
 	return c.checkTypeRelatedToEx(source, target, c.assignableRelation, errorNode, headMessage, nil)
 }
 
-func (c *Checker) checkTypeAssignableToEx(source *Type, target *Type, errorNode *ast.Node, headMessage *diagnostics.Message, diagnosticOutput *[]*ast.Diagnostic) bool {
+func (c *Checker) checkTypeAssignableToEx(source *Type, target *Type, errorNode ast.Node, headMessage *diagnostics.Message, diagnosticOutput *[]*ast.Diagnostic) bool {
 	return c.checkTypeRelatedToEx(source, target, c.assignableRelation, errorNode, headMessage, diagnosticOutput)
 }
 
-func (c *Checker) checkTypeComparableTo(source *Type, target *Type, errorNode *ast.Node, headMessage *diagnostics.Message) bool {
+func (c *Checker) checkTypeComparableTo(source *Type, target *Type, errorNode ast.Node, headMessage *diagnostics.Message) bool {
 	return c.checkTypeRelatedToEx(source, target, c.comparableRelation, errorNode, headMessage, nil)
 }
 
-func (c *Checker) checkTypeRelatedTo(source *Type, target *Type, relation *Relation, errorNode *ast.Node) bool {
+func (c *Checker) checkTypeRelatedTo(source *Type, target *Type, relation *Relation, errorNode ast.Node) bool {
 	return c.checkTypeRelatedToEx(source, target, relation, errorNode, nil, nil)
 }
 
@@ -359,7 +359,7 @@ func (c *Checker) checkTypeRelatedToEx(
 	source *Type,
 	target *Type,
 	relation *Relation,
-	errorNode *ast.Node,
+	errorNode ast.Node,
 	headMessage *diagnostics.Message,
 	diagnosticOutput *[]*ast.Diagnostic,
 ) bool {
@@ -367,7 +367,7 @@ func (c *Checker) checkTypeRelatedToEx(
 	r.relation = relation
 	r.errorNode = errorNode
 	r.relationCount = (16_000_000 - relation.size()) / 8
-	result := r.isRelatedToEx(source, target, RecursionFlagsBoth, errorNode != nil /*reportErrors*/, headMessage, IntersectionStateNone)
+	result := r.isRelatedToEx(source, target, RecursionFlagsBoth, !errorNode.IsNil() /*reportErrors*/, headMessage, IntersectionStateNone)
 	if r.overflow {
 		// Record this relation as having failed such that we don't attempt the overflowing operation again.
 		id, _ := getRelationKey(source, target, IntersectionStateNone, relation == c.identityRelation, false /*ignoreConstraints*/)
@@ -375,16 +375,16 @@ func (c *Checker) checkTypeRelatedToEx(
 		if tr := c.tracer; tr != nil {
 			tr.Instant(tracing.PhaseCheckTypes, "checkTypeRelatedTo_DepthLimit", map[string]any{"sourceId": source.id, "targetId": target.id, "depth": len(r.sourceStack), "targetDepth": len(r.targetStack)})
 		}
-		if errorNode == nil {
+		if errorNode.IsNil() {
 			errorNode = c.currentNode
 		}
 		c.reportDiagnostic(NewDiagnosticForNode(errorNode, diagnostics.Excessive_complexity_comparing_types_0_and_1, c.TypeToString(source), c.TypeToString(target)), diagnosticOutput)
 	} else if r.errorChain != nil {
 		// Check if we should issue an extra diagnostic to produce a quickfix for a slightly incorrect import statement
-		if headMessage != nil && errorNode != nil && result == TernaryFalse && source.symbol != nil && c.exportTypeLinks.Has(source.symbol) {
+		if headMessage != nil && !errorNode.IsNil() && result == TernaryFalse && source.symbol != nil && c.exportTypeLinks.Has(source.symbol) {
 			links := c.exportTypeLinks.Get(source.symbol)
-			if links.originatingImport != nil && !ast.IsImportCall(links.originatingImport) {
-				helpfulRetry := c.checkTypeRelatedTo(c.getTypeOfSymbol(links.target), target, relation /*errorNode*/, nil)
+			if !links.originatingImport.IsNil() && !ast.IsImportCall(links.originatingImport) {
+				helpfulRetry := c.checkTypeRelatedTo(c.getTypeOfSymbol(links.target), target, relation /*errorNode*/, ast.Node{})
 				if helpfulRetry {
 					// Likely an incorrect import. Issue a helpful diagnostic to produce a quickfix to change the import
 					r.relatedInfo = append(r.relatedInfo, createDiagnosticForNode(links.originatingImport, diagnostics.Type_originates_at_this_import_A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_Consider_using_a_default_import_or_import_require_here_instead))
@@ -397,7 +397,7 @@ func (c *Checker) checkTypeRelatedToEx(
 	return result != TernaryFalse
 }
 
-func createDiagnosticChainFromErrorChain(chain *ErrorChain, errorNode *ast.Node, relatedInfo []*ast.Diagnostic) *ast.Diagnostic {
+func createDiagnosticChainFromErrorChain(chain *ErrorChain, errorNode ast.Node, relatedInfo []*ast.Diagnostic) *ast.Diagnostic {
 	for chain != nil && chain.message.ElidedInCompatibilityPyramid() {
 		chain = chain.next
 	}
@@ -421,22 +421,22 @@ func (c *Checker) reportDiagnostic(diagnostic *ast.Diagnostic, diagnosticOutput 
 	}
 }
 
-func (c *Checker) checkTypeAssignableToAndOptionallyElaborate(source *Type, target *Type, errorNode *ast.Node, expr *ast.Node, headMessage *diagnostics.Message, diagnosticOutput *[]*ast.Diagnostic) bool {
+func (c *Checker) checkTypeAssignableToAndOptionallyElaborate(source *Type, target *Type, errorNode ast.Node, expr ast.Node, headMessage *diagnostics.Message, diagnosticOutput *[]*ast.Diagnostic) bool {
 	return c.checkTypeRelatedToAndOptionallyElaborate(source, target, c.assignableRelation, errorNode, expr, headMessage, diagnosticOutput)
 }
 
-func (c *Checker) checkTypeRelatedToAndOptionallyElaborate(source *Type, target *Type, relation *Relation, errorNode *ast.Node, expr *ast.Node, headMessage *diagnostics.Message, diagnosticOutput *[]*ast.Diagnostic) bool {
+func (c *Checker) checkTypeRelatedToAndOptionallyElaborate(source *Type, target *Type, relation *Relation, errorNode ast.Node, expr ast.Node, headMessage *diagnostics.Message, diagnosticOutput *[]*ast.Diagnostic) bool {
 	if c.isTypeRelatedTo(source, target, relation) {
 		return true
 	}
-	if errorNode != nil && !c.elaborateError(expr, source, target, relation, headMessage, diagnosticOutput) {
+	if !errorNode.IsNil() && !c.elaborateError(expr, source, target, relation, headMessage, diagnosticOutput) {
 		return c.checkTypeRelatedToEx(source, target, relation, errorNode, headMessage, diagnosticOutput)
 	}
 	return false
 }
 
-func (c *Checker) elaborateError(node *ast.Node, source *Type, target *Type, relation *Relation, headMessage *diagnostics.Message, diagnosticOutput *[]*ast.Diagnostic) bool {
-	if node == nil || c.isOrHasGenericConditional(target) {
+func (c *Checker) elaborateError(node ast.Node, source *Type, target *Type, relation *Relation, headMessage *diagnostics.Message, diagnosticOutput *[]*ast.Diagnostic) bool {
+	if node.IsNil() || c.isOrHasGenericConditional(target) {
 		return false
 	}
 	if c.compilerOptions.NoCheck.IsTrue() {
@@ -446,7 +446,7 @@ func (c *Checker) elaborateError(node *ast.Node, source *Type, target *Type, rel
 		c.elaborateDidYouMeanToCallOrConstruct(node, source, target, relation, SignatureKindCall, headMessage, diagnosticOutput) {
 		return true
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindAsExpression:
 		if !ast.IsConstAssertion(node) {
 			break
@@ -455,9 +455,9 @@ func (c *Checker) elaborateError(node *ast.Node, source *Type, target *Type, rel
 	case ast.KindJsxExpression, ast.KindParenthesizedExpression:
 		return c.elaborateError(node.Expression(), source, target, relation, headMessage, diagnosticOutput)
 	case ast.KindBinaryExpression:
-		switch node.AsBinaryExpression().OperatorToken.Kind {
+		switch node.AsBinaryExpression().OperatorToken().Kind() {
 		case ast.KindEqualsToken, ast.KindCommaToken:
-			return c.elaborateError(node.AsBinaryExpression().Right, source, target, relation, headMessage, diagnosticOutput)
+			return c.elaborateError(node.AsBinaryExpression().Right(), source, target, relation, headMessage, diagnosticOutput)
 		}
 	case ast.KindObjectLiteralExpression:
 		return c.elaborateObjectLiteral(node, source, target, relation, diagnosticOutput)
@@ -475,10 +475,10 @@ func (c *Checker) isOrHasGenericConditional(t *Type) bool {
 	return t.flags&TypeFlagsConditional != 0 || (t.flags&TypeFlagsIntersection != 0 && core.Some(t.Types(), c.isOrHasGenericConditional))
 }
 
-func (c *Checker) elaborateDidYouMeanToCallOrConstruct(node *ast.Node, source *Type, target *Type, relation *Relation, kind SignatureKind, headMessage *diagnostics.Message, diagnosticOutput *[]*ast.Diagnostic) bool {
+func (c *Checker) elaborateDidYouMeanToCallOrConstruct(node ast.Node, source *Type, target *Type, relation *Relation, kind SignatureKind, headMessage *diagnostics.Message, diagnosticOutput *[]*ast.Diagnostic) bool {
 	if core.Some(c.getSignaturesOfType(source, kind), func(s *Signature) bool {
 		returnType := c.getReturnTypeOfSignature(s)
-		return returnType.flags&(TypeFlagsAny|TypeFlagsNever) == 0 && c.checkTypeRelatedTo(returnType, target, relation, nil /*errorNode*/)
+		return returnType.flags&(TypeFlagsAny|TypeFlagsNever) == 0 && c.checkTypeRelatedTo(returnType, target, relation, ast.Node{} /*errorNode*/)
 	}) {
 		var diags []*ast.Diagnostic
 		if !c.checkTypeRelatedToEx(source, target, relation, node, headMessage, &diags) {
@@ -493,7 +493,7 @@ func (c *Checker) elaborateDidYouMeanToCallOrConstruct(node *ast.Node, source *T
 	return false
 }
 
-func (c *Checker) elaborateObjectLiteral(node *ast.Node, source *Type, target *Type, relation *Relation, diagnosticOutput *[]*ast.Diagnostic) bool {
+func (c *Checker) elaborateObjectLiteral(node ast.Node, source *Type, target *Type, relation *Relation, diagnosticOutput *[]*ast.Diagnostic) bool {
 	if target.flags&(TypeFlagsPrimitive|TypeFlagsNever) != 0 {
 		return false
 	}
@@ -506,9 +506,9 @@ func (c *Checker) elaborateObjectLiteral(node *ast.Node, source *Type, target *T
 		if nameType == nil || nameType.flags&TypeFlagsNever != 0 {
 			continue
 		}
-		switch prop.Kind {
+		switch prop.Kind() {
 		case ast.KindSetAccessor, ast.KindGetAccessor, ast.KindMethodDeclaration, ast.KindShorthandPropertyAssignment:
-			reportedError = c.elaborateElement(source, target, relation, prop.Name(), nil, nameType, nil, nil, diagnosticOutput) || reportedError
+			reportedError = c.elaborateElement(source, target, relation, prop.Name(), ast.Node{}, nameType, nil, nil, diagnosticOutput) || reportedError
 		case ast.KindPropertyAssignment:
 			message := core.IfElse(ast.IsComputedNonLiteralName(prop.Name()), diagnostics.Type_of_computed_property_s_value_is_0_which_is_not_assignable_to_type_1, nil)
 			reportedError = c.elaborateElement(source, target, relation, prop.Name(), prop.Initializer(), nameType, message, nil, diagnosticOutput) || reportedError
@@ -517,7 +517,7 @@ func (c *Checker) elaborateObjectLiteral(node *ast.Node, source *Type, target *T
 	return reportedError
 }
 
-func (c *Checker) elaborateArrayLiteral(node *ast.Node, source *Type, target *Type, relation *Relation, diagnosticOutput *[]*ast.Diagnostic) bool {
+func (c *Checker) elaborateArrayLiteral(node ast.Node, source *Type, target *Type, relation *Relation, diagnosticOutput *[]*ast.Diagnostic) bool {
 	if target.flags&(TypeFlagsPrimitive|TypeFlagsNever) != 0 {
 		return false
 	}
@@ -541,25 +541,25 @@ func (c *Checker) elaborateArrayLiteral(node *ast.Node, source *Type, target *Ty
 	return reportedError
 }
 
-func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relation, prop *ast.Node, next *ast.Node, nameType *Type, errorMessage *diagnostics.Message, diagnosticFactory func(prop *ast.Node) *ast.Diagnostic, diagnosticOutput *[]*ast.Diagnostic) bool {
+func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relation, prop ast.Node, next ast.Node, nameType *Type, errorMessage *diagnostics.Message, diagnosticFactory func(prop ast.Node) *ast.Diagnostic, diagnosticOutput *[]*ast.Diagnostic) bool {
 	targetPropType := c.getBestMatchIndexedAccessTypeOrUndefined(source, target, nameType)
 	if targetPropType == nil || targetPropType.flags&TypeFlagsIndexedAccess != 0 {
 		// Don't elaborate on indexes on generic variables
 		return false
 	}
-	sourcePropType := c.getIndexedAccessTypeOrUndefined(source, nameType, AccessFlagsNone, nil, nil)
-	if sourcePropType == nil || c.checkTypeRelatedTo(sourcePropType, targetPropType, relation, nil /*errorNode*/) {
+	sourcePropType := c.getIndexedAccessTypeOrUndefined(source, nameType, AccessFlagsNone, ast.Node{}, nil)
+	if sourcePropType == nil || c.checkTypeRelatedTo(sourcePropType, targetPropType, relation, ast.Node{} /*errorNode*/) {
 		// Don't elaborate on indexes on generic variables or when types match
 		return false
 	}
-	if next != nil && c.elaborateError(next, sourcePropType, targetPropType, relation, nil /*headMessage*/, diagnosticOutput) {
+	if !next.IsNil() && c.elaborateError(next, sourcePropType, targetPropType, relation, nil /*headMessage*/, diagnosticOutput) {
 		return true
 	}
 	// Issue error on the prop itself, since the prop couldn't elaborate the error
 	var diags []*ast.Diagnostic
 	// Use the expression type, if available
 	specificSource := sourcePropType
-	if next != nil {
+	if !next.IsNil() {
 		specificSource = c.checkExpressionForMutableLocationWithContextualType(next, sourcePropType)
 	}
 	if diagnosticFactory != nil {
@@ -568,7 +568,7 @@ func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relatio
 	} else if c.exactOptionalPropertyTypes && c.isExactOptionalPropertyMismatch(specificSource, targetPropType) {
 		diags = append(diags, createDiagnosticForNode(prop, diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target, c.TypeToString(specificSource), c.TypeToString(targetPropType)))
 	} else {
-		propName := c.getPropertyNameFromIndex(nameType, nil /*accessNode*/)
+		propName := c.getPropertyNameFromIndex(nameType, ast.Node{} /*accessNode*/)
 		targetIsOptional := core.OrElse(c.getPropertyOfType(target, propName), c.unknownSymbol).Flags()&ast.SymbolFlagsOptional != 0
 		sourceIsOptional := core.OrElse(c.getPropertyOfType(source, propName), c.unknownSymbol).Flags()&ast.SymbolFlagsOptional != 0
 		targetPropType = c.removeMissingType(targetPropType, targetIsOptional)
@@ -592,13 +592,13 @@ func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relatio
 	issuedElaboration := false
 	if targetProp == nil {
 		indexInfo := c.getApplicableIndexInfo(target, nameType)
-		if indexInfo != nil && indexInfo.declaration != nil && !c.program.IsSourceFileDefaultLibrary(ast.GetSourceFileOfNode(indexInfo.declaration).PathKey()) {
+		if indexInfo != nil && !indexInfo.declaration.IsNil() && !c.program.IsSourceFileDefaultLibrary(ast.GetSourceFileOfNode(indexInfo.declaration).PathKey()) {
 			issuedElaboration = true
 			diagnostic.AddRelatedInfo(createDiagnosticForNode(indexInfo.declaration, diagnostics.The_expected_type_comes_from_this_index_signature))
 		}
 	}
 	if !issuedElaboration && (targetProp != nil && len(targetProp.Declarations()) != 0 || target.symbol != nil && len(target.symbol.Declarations()) != 0) {
-		var targetNode *ast.Node
+		var targetNode ast.Node
 		if targetProp != nil && len(targetProp.Declarations()) != 0 {
 			targetNode = targetProp.Declarations()[0]
 		} else {
@@ -616,27 +616,27 @@ func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relatio
 }
 
 func (c *Checker) getBestMatchIndexedAccessTypeOrUndefined(source *Type, target *Type, nameType *Type) *Type {
-	idx := c.getIndexedAccessTypeOrUndefined(target, nameType, AccessFlagsNone, nil, nil)
+	idx := c.getIndexedAccessTypeOrUndefined(target, nameType, AccessFlagsNone, ast.Node{}, nil)
 	if idx != nil {
 		return idx
 	}
 	if target.flags&TypeFlagsUnion != 0 {
 		best := c.getBestMatchingType(source, target, c.compareTypesAssignableSimple)
 		if best != nil {
-			return c.getIndexedAccessTypeOrUndefined(best, nameType, AccessFlagsNone, nil, nil)
+			return c.getIndexedAccessTypeOrUndefined(best, nameType, AccessFlagsNone, ast.Node{}, nil)
 		}
 	}
 	return nil
 }
 
-func (c *Checker) checkExpressionForMutableLocationWithContextualType(next *ast.Node, sourcePropType *Type) *Type {
+func (c *Checker) checkExpressionForMutableLocationWithContextualType(next ast.Node, sourcePropType *Type) *Type {
 	c.pushContextualType(next, sourcePropType, false /*isCache*/)
 	result := c.checkExpressionForMutableLocation(next, CheckModeContextual)
 	c.popContextualType()
 	return result
 }
 
-func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *Type, relation *Relation, diagnosticOutput *[]*ast.Diagnostic) bool {
+func (c *Checker) elaborateArrowFunction(node ast.Node, source *Type, target *Type, relation *Relation, diagnosticOutput *[]*ast.Diagnostic) bool {
 	// Don't elaborate blocks or functions with annotated parameter types
 	if ast.IsBlock(node.Body()) || core.Some(node.Parameters(), hasType) {
 		return false
@@ -652,10 +652,10 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 	returnExpression := node.Body()
 	sourceReturn := c.getReturnTypeOfSignature(sourceSig)
 	targetReturn := c.getUnionType(core.Map(targetSignatures, c.getReturnTypeOfSignature))
-	if c.checkTypeRelatedTo(sourceReturn, targetReturn, relation, nil /*errorNode*/) {
+	if c.checkTypeRelatedTo(sourceReturn, targetReturn, relation, ast.Node{} /*errorNode*/) {
 		return false
 	}
-	if returnExpression != nil && c.elaborateError(returnExpression, sourceReturn, targetReturn, relation, nil /*headMessage*/, diagnosticOutput) {
+	if !returnExpression.IsNil() && c.elaborateError(returnExpression, sourceReturn, targetReturn, relation, nil /*headMessage*/, diagnosticOutput) {
 		return true
 	}
 	var diags []*ast.Diagnostic
@@ -665,7 +665,7 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 		if target.symbol != nil && len(target.symbol.Declarations()) != 0 {
 			diagnostic.AddRelatedInfo(createDiagnosticForNode(target.symbol.Declarations()[0], diagnostics.The_expected_type_comes_from_the_return_type_of_this_signature))
 		}
-		if ast.GetFunctionFlags(node)&ast.FunctionFlagsAsync == 0 && c.getTypeOfPropertyOfType(sourceReturn, "then") == nil && c.checkTypeRelatedTo(c.createPromiseType(sourceReturn), targetReturn, relation, nil /*errorNode*/) {
+		if ast.GetFunctionFlags(node)&ast.FunctionFlagsAsync == 0 && c.getTypeOfPropertyOfType(sourceReturn, "then") == nil && c.checkTypeRelatedTo(c.createPromiseType(sourceReturn), targetReturn, relation, ast.Node{} /*errorNode*/) {
 			diagnostic.AddRelatedInfo(createDiagnosticForNode(node, diagnostics.Did_you_mean_to_mark_this_function_as_async))
 		}
 		c.reportDiagnostic(diagnostic, diagnosticOutput)
@@ -840,7 +840,7 @@ func getRecursionIdentityTarget(t *Type) *Type {
 func getRecursionIdentityFromTarget(t *Type) RecursionId {
 	// Object and array literals are known not to contain recursive references and don't need a recursion identity.
 	if t.flags&TypeFlagsObject != 0 && !isObjectOrArrayLiteralType(t) {
-		if t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node != nil {
+		if t.objectFlags&ObjectFlagsReference != 0 && !t.AsTypeReference().node.IsNil() {
 			// Deferred type references are tracked through their associated AST node. This gives us finer
 			// granularity than using their associated target because each manifest type reference has a
 			// unique AST node.
@@ -1288,11 +1288,11 @@ func (c *Checker) getTypeNamesForErrorDisplay(left *Type, right *Type) (string, 
 }
 
 func (c *Checker) getTypeNameForErrorDisplay(t *Type) string {
-	return c.typeToStringEx(t, nil /*enclosingDeclaration*/, TypeFormatFlagsUseFullyQualifiedType, nil)
+	return c.typeToStringEx(t, ast.Node{} /*enclosingDeclaration*/, TypeFormatFlagsUseFullyQualifiedType, nil)
 }
 
 func (c *Checker) symbolValueDeclarationIsContextSensitive(symbol *ast.Symbol) bool {
-	return symbol != nil && symbol.ValueDeclaration() != nil && ast.IsExpression(symbol.ValueDeclaration()) && !c.isContextSensitive(symbol.ValueDeclaration())
+	return symbol != nil && !symbol.ValueDeclaration().IsNil() && ast.IsExpression(symbol.ValueDeclaration()) && !c.isContextSensitive(symbol.ValueDeclaration())
 }
 
 func (c *Checker) typeCouldHaveTopLevelSingletonTypes(t *Type) bool {
@@ -1526,8 +1526,8 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 		c.instantiateType(core.IfElse(sourceRestType != nil, sourceRestType, targetRestType), reportUnreliableMarkers)
 	}
 	kind := ast.KindUnknown
-	if target.declaration != nil {
-		kind = target.declaration.Kind
+	if !target.declaration.IsNil() {
+		kind = target.declaration.Kind()
 	}
 	strictVariance := checkMode&SignatureCheckModeCallback == 0 && c.strictFunctionTypes && kind != ast.KindMethodDeclaration && kind != ast.KindMethodSignature && kind != ast.KindConstructor
 	result := TernaryTrue
@@ -1857,14 +1857,14 @@ func (c *Checker) getRestTypeAtPosition(source *Signature, pos int, readonly boo
 	return c.createTupleTypeEx(types, infos, readonly)
 }
 
-func (c *Checker) getNameableDeclarationAtPosition(signature *Signature, pos int) *ast.Node {
+func (c *Checker) getNameableDeclarationAtPosition(signature *Signature, pos int) ast.Node {
 	paramCount := len(signature.parameters) - core.IfElse(signatureHasRestParameter(signature), 1, 0)
 	if pos < paramCount {
 		decl := signature.parameters[pos].ValueDeclaration()
-		if decl != nil && c.isValidDeclarationForTupleLabel(decl) {
+		if !decl.IsNil() && c.isValidDeclarationForTupleLabel(decl) {
 			return decl
 		}
-		return nil
+		return ast.Node{}
 	}
 	if signatureHasRestParameter(signature) {
 		restParameter := signature.parameters[paramCount]
@@ -1875,17 +1875,17 @@ func (c *Checker) getNameableDeclarationAtPosition(signature *Signature, pos int
 			if index < len(elementInfos) {
 				return elementInfos[index].labeledDeclaration
 			}
-			return nil
+			return ast.Node{}
 		}
-		if restParameter.ValueDeclaration() != nil && c.isValidDeclarationForTupleLabel(restParameter.ValueDeclaration()) {
+		if !restParameter.ValueDeclaration().IsNil() && c.isValidDeclarationForTupleLabel(restParameter.ValueDeclaration()) {
 			return restParameter.ValueDeclaration()
 		}
 	}
-	return nil
+	return ast.Node{}
 }
 
-func (c *Checker) isValidDeclarationForTupleLabel(d *ast.Node) bool {
-	return ast.IsNamedTupleMember(d) || ast.IsParameterDeclaration(d) && d.Name() != nil && ast.IsIdentifier(d.Name())
+func (c *Checker) isValidDeclarationForTupleLabel(d ast.Node) bool {
+	return ast.IsNamedTupleMember(d) || ast.IsParameterDeclaration(d) && !d.Name().IsNil() && ast.IsIdentifier(d.Name())
 }
 
 func (c *Checker) getNonArrayRestType(signature *Signature) *Type {
@@ -1974,10 +1974,10 @@ func (c *Checker) getParameterNameAtPosition(signature *Signature, pos int) stri
 }
 
 func (c *Checker) getTupleElementLabel(elementInfo TupleElementInfo, restSymbol *ast.Symbol, index int) string {
-	if elementInfo.labeledDeclaration != nil {
+	if !elementInfo.labeledDeclaration.IsNil() {
 		return elementInfo.labeledDeclaration.Name().Text()
 	}
-	if restSymbol != nil && restSymbol.ValueDeclaration() != nil && ast.IsParameterDeclaration(restSymbol.ValueDeclaration()) {
+	if restSymbol != nil && !restSymbol.ValueDeclaration().IsNil() && ast.IsParameterDeclaration(restSymbol.ValueDeclaration()) {
 		return c.getTupleElementLabelFromBindingElement(restSymbol.ValueDeclaration(), index, elementInfo.flags)
 	}
 	var rootName string
@@ -1989,9 +1989,9 @@ func (c *Checker) getTupleElementLabel(elementInfo TupleElementInfo, restSymbol 
 	return rootName + "_" + strconv.Itoa(index)
 }
 
-func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index int, elementFlags ElementFlags) string {
-	if node.Name() != nil {
-		switch node.Name().Kind {
+func (c *Checker) getTupleElementLabelFromBindingElement(node ast.Node, index int, elementFlags ElementFlags) string {
+	if !node.Name().IsNil() {
+		switch node.Name().Kind() {
 		case ast.KindIdentifier:
 			name := node.Name().Text()
 			if hasDotDotDotToken(node) {
@@ -2030,7 +2030,7 @@ func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index i
 			if hasDotDotDotToken(node) {
 				elements := node.Name().Elements()
 				lastElement := core.LastOrNil(elements)
-				lastElementIsBindingElementRest := lastElement != nil && ast.IsBindingElement(lastElement) && hasDotDotDotToken(lastElement)
+				lastElementIsBindingElementRest := !lastElement.IsNil() && ast.IsBindingElement(lastElement) && hasDotDotDotToken(lastElement)
 				elementCount := len(elements) - core.IfElse(lastElementIsBindingElementRest, 1, 0)
 				if index < elementCount {
 					element := elements[index]
@@ -2057,10 +2057,10 @@ func (c *Checker) getTypePredicateOfSignature(sig *Signature) *TypePredicate {
 		case sig.composite != nil:
 			sig.resolvedTypePredicate = c.getUnionOrIntersectionTypePredicate(sig.composite.signatures, sig.composite.isUnion)
 		default:
-			if sig.declaration != nil {
+			if !sig.declaration.IsNil() {
 				typeNode := sig.declaration.Type()
 				switch {
-				case typeNode != nil:
+				case !typeNode.IsNil():
 					if ast.IsTypePredicateNode(typeNode) {
 						sig.resolvedTypePredicate = c.createTypePredicateFromTypePredicateNode(typeNode, sig)
 					}
@@ -2114,18 +2114,18 @@ func (c *Checker) typePredicateKindsMatch(a *TypePredicate, b *TypePredicate) bo
 	return a.kind == b.kind && a.parameterIndex == b.parameterIndex
 }
 
-func (c *Checker) createTypePredicateFromTypePredicateNode(node *ast.Node, signature *Signature) *TypePredicate {
+func (c *Checker) createTypePredicateFromTypePredicateNode(node ast.Node, signature *Signature) *TypePredicate {
 	predicateNode := node.AsTypePredicateNode()
 	var t *Type
-	if predicateNode.Type != nil {
-		t = c.getTypeFromTypeNode(predicateNode.Type)
+	if !predicateNode.Type().IsNil() {
+		t = c.getTypeFromTypeNode(predicateNode.Type())
 	}
-	if ast.IsThisTypeNode(predicateNode.ParameterName) {
-		kind := core.IfElse(predicateNode.AssertsModifier != nil, TypePredicateKindAssertsThis, TypePredicateKindThis)
+	if ast.IsThisTypeNode(predicateNode.ParameterName()) {
+		kind := core.IfElse(!predicateNode.AssertsModifier().IsNil(), TypePredicateKindAssertsThis, TypePredicateKindThis)
 		return c.newTypePredicate(kind, "" /*parameterName*/, 0 /*parameterIndex*/, t)
 	}
-	kind := core.IfElse(predicateNode.AssertsModifier != nil, TypePredicateKindAssertsIdentifier, TypePredicateKindIdentifier)
-	name := predicateNode.ParameterName.Text()
+	kind := core.IfElse(!predicateNode.AssertsModifier().IsNil(), TypePredicateKindAssertsIdentifier, TypePredicateKindIdentifier)
+	name := predicateNode.ParameterName().Text()
 	index := core.FindIndex(signature.parameters, func(p *ast.Symbol) bool { return p.Name() == name })
 	return c.newTypePredicate(kind, name, int32(index), t)
 }
@@ -2580,7 +2580,7 @@ type ErrorChain struct {
 type Relater struct {
 	c              *Checker
 	relation       *Relation
-	errorNode      *ast.Node
+	errorNode      ast.Node
 	errorChain     *ErrorChain
 	relatedInfo    []*ast.Diagnostic
 	maybeKeys      []CacheHashKey
@@ -2772,13 +2772,13 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 					// We know *exactly* where things went wrong when comparing the types.
 					// Use this property as the error node as this will be more helpful in
 					// reasoning about what went wrong.
-					if r.errorNode == nil {
+					if r.errorNode.IsNil() {
 						panic("No errorNode in hasExcessProperties")
 					}
-					if ast.IsJsxAttributes(r.errorNode) || ast.IsJsxOpeningLikeElement(r.errorNode) || ast.IsJsxOpeningLikeElement(r.errorNode.Parent) {
+					if ast.IsJsxAttributes(r.errorNode) || ast.IsJsxOpeningLikeElement(r.errorNode) || ast.IsJsxOpeningLikeElement(r.errorNode.Parent()) {
 						// JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
 						// However, using an object-literal error message will be very confusing to the users so we give different a message.
-						if prop.ValueDeclaration() != nil && ast.IsJsxAttribute(prop.ValueDeclaration()) && ast.GetSourceFileOfNode(r.errorNode) == ast.GetSourceFileOfNode(prop.ValueDeclaration().Name()) {
+						if !prop.ValueDeclaration().IsNil() && ast.IsJsxAttribute(prop.ValueDeclaration()) && ast.GetSourceFileOfNode(r.errorNode) == ast.GetSourceFileOfNode(prop.ValueDeclaration().Name()) {
 							// Note that extraneous children (as in `<NoChild>extra</NoChild>`) don't pass this check,
 							// since `children` is a Kind.PropertySignature instead of a Kind.JsxAttribute.
 							r.errorNode = prop.ValueDeclaration().Name()
@@ -2792,13 +2792,13 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 						}
 					} else {
 						// use the property's value declaration if the property is assigned inside the literal itself
-						var objectLiteralDeclaration *ast.Node
+						var objectLiteralDeclaration ast.Node
 						if source.symbol != nil {
 							objectLiteralDeclaration = core.FirstOrNil(source.symbol.Declarations())
 						}
 						var suggestion string
-						if prop.ValueDeclaration() != nil && ast.IsObjectLiteralElement(prop.ValueDeclaration()) &&
-							ast.FindAncestor(prop.ValueDeclaration(), func(d *ast.Node) bool { return d == objectLiteralDeclaration }) != nil &&
+						if !prop.ValueDeclaration().IsNil() && ast.IsObjectLiteralElement(prop.ValueDeclaration()) &&
+							!ast.FindAncestor(prop.ValueDeclaration(), func(d ast.Node) bool { return d == objectLiteralDeclaration }).IsNil() &&
 							ast.GetSourceFileOfNode(objectLiteralDeclaration) == ast.GetSourceFileOfNode(r.errorNode) {
 							name := prop.ValueDeclaration().Name()
 							r.errorNode = name
@@ -2853,7 +2853,7 @@ func (c *Checker) getTypeOfPropertyInType(t *Type, name string) *Type {
 }
 
 func shouldCheckAsExcessProperty(prop *ast.Symbol, container *ast.Symbol) bool {
-	return prop.ValueDeclaration() != nil && container.ValueDeclaration() != nil && prop.ValueDeclaration().Parent == container.ValueDeclaration()
+	return !prop.ValueDeclaration().IsNil() && !container.ValueDeclaration().IsNil() && prop.ValueDeclaration().Parent() == container.ValueDeclaration()
 }
 
 func isIgnoredJsxProperty(source *Type, sourceProp *ast.Symbol) bool {
@@ -3454,7 +3454,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 	switch {
 	case target.flags&TypeFlagsTypeParameter != 0:
 		// A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
-		if source.objectFlags&ObjectFlagsMapped != 0 && source.AsMappedType().declaration.NameType == nil && r.isRelatedTo(r.c.getIndexType(target), r.c.getConstraintTypeFromMappedType(source), RecursionFlagsBoth, false) != TernaryFalse {
+		if source.objectFlags&ObjectFlagsMapped != 0 && source.AsMappedType().declaration.NameType().IsNil() && r.isRelatedTo(r.c.getIndexType(target), r.c.getConstraintTypeFromMappedType(source), RecursionFlagsBoth, false) != TernaryFalse {
 			if getMappedTypeModifiers(source)&MappedTypeModifiersIncludeOptional == 0 {
 				templateType := r.c.getTemplateTypeFromMappedType(source)
 				indexedAccessType := r.c.getIndexedAccessType(target, r.c.getTypeParameterFromMappedType(source))
@@ -3496,7 +3496,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			baseIndexType := r.c.getBaseConstraintOrType(indexType)
 			if !r.c.isGenericObjectType(baseObjectType) && !r.c.isGenericIndexType(baseIndexType) {
 				accessFlags := AccessFlagsWriting | core.IfElse(baseObjectType != objectType, AccessFlagsNoIndexSignatures, 0)
-				constraint := r.c.getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, accessFlags, nil, nil)
+				constraint := r.c.getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, accessFlags, ast.Node{}, nil)
 				if constraint != nil {
 					if reportErrors && originalErrorChain != nil {
 						// create a new chain for the constraint error
@@ -3624,7 +3624,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		}
 	case r.c.isGenericMappedType(target) && r.relation != r.c.identityRelation:
 		// Check if source type `S` is related to target type `{ [P in Q]: T }` or `{ [P in Q as R]: T}`.
-		keysRemapped := target.AsMappedType().declaration.NameType != nil
+		keysRemapped := !target.AsMappedType().declaration.NameType().IsNil()
 		templateType := r.c.getTemplateTypeFromMappedType(target)
 		modifiers := getMappedTypeModifiers(target)
 		if modifiers&MappedTypeModifiersExcludeOptional == 0 {
@@ -4376,8 +4376,8 @@ func (r *Relater) isPropertySymbolTypeRelated(sourceProp *ast.Symbol, targetProp
 
 func (r *Relater) reportUnmatchedProperty(source *Type, target *Type, unmatchedProperty *ast.Symbol, requireOptionalProperties bool) {
 	// give specific error in case where private names have the same description
-	if unmatchedProperty.ValueDeclaration() != nil &&
-		unmatchedProperty.ValueDeclaration().Name() != nil &&
+	if !unmatchedProperty.ValueDeclaration().IsNil() &&
+		!unmatchedProperty.ValueDeclaration().Name().IsNil() &&
 		ast.IsPrivateIdentifier(unmatchedProperty.ValueDeclaration().Name()) &&
 		source.symbol != nil &&
 		source.symbol.Flags()&ast.SymbolFlagsClass != 0 {
@@ -4548,7 +4548,7 @@ func (r *Relater) signaturesRelatedTo(source *Type, target *Type, kind Signature
 }
 
 func (r *Relater) constructorVisibilitiesAreCompatible(sourceSignature *Signature, targetSignature *Signature, reportErrors bool) bool {
-	if sourceSignature.declaration == nil || targetSignature.declaration == nil {
+	if sourceSignature.declaration.IsNil() || targetSignature.declaration.IsNil() {
 		return true
 	}
 	sourceAccessibility := sourceSignature.declaration.ModifierFlags() & ast.ModifierFlagsNonPublicAccessibilityModifier
@@ -4766,7 +4766,7 @@ func (r *Relater) reportErrorResults(originalSource *Type, originalTarget *Type,
 			prop = core.Find(r.c.getPropertiesOfUnionOrIntersectionType(originalTarget), isConflictingPrivateProperty)
 		}
 		if prop != nil {
-			r.reportError(message, r.c.typeToStringEx(originalTarget, nil /*enclosingDeclaration*/, TypeFormatFlagsNoTypeReduction, nil), r.c.symbolToString(prop))
+			r.reportError(message, r.c.typeToStringEx(originalTarget, ast.Node{} /*enclosingDeclaration*/, TypeFormatFlagsNoTypeReduction, nil), r.c.symbolToString(prop))
 		}
 	}
 	r.reportRelationError(headMessage, source, target)
@@ -5024,7 +5024,7 @@ func (c *Checker) isTypeDerivedFrom(source *Type, target *Type) bool {
 }
 
 func (c *Checker) isDistributionDependent(root *ConditionalRoot) bool {
-	return root.isDistributive && (c.isTypeParameterPossiblyReferenced(root.checkType, root.node.TrueType) || c.isTypeParameterPossiblyReferenced(root.checkType, root.node.FalseType))
+	return root.isDistributive && (c.isTypeParameterPossiblyReferenced(root.checkType, root.node.TrueType()) || c.isTypeParameterPossiblyReferenced(root.checkType, root.node.FalseType()))
 }
 
 func (r *Relater) traceUnionsOrIntersectionsTooLarge(source *Type, target *Type) {

@@ -11,8 +11,8 @@ import (
 type TypeEraserTransformer struct {
 	transformers.Transformer
 	compilerOptions *core.CompilerOptions
-	parentNode      *ast.Node
-	currentNode     *ast.Node
+	parentNode      ast.Node
+	currentNode     ast.Node
 }
 
 func NewTypeEraserTransformer(opt *transformers.TransformOptions) *transformers.Transformer {
@@ -23,7 +23,7 @@ func NewTypeEraserTransformer(opt *transformers.TransformOptions) *transformers.
 }
 
 // Pushes a new child node onto the ancestor tracking stack, returning the grandparent node to be restored later via `popNode`.
-func (tx *TypeEraserTransformer) pushNode(node *ast.Node) (grandparentNode *ast.Node) {
+func (tx *TypeEraserTransformer) pushNode(node ast.Node) (grandparentNode ast.Node) {
 	grandparentNode = tx.parentNode
 	tx.parentNode = tx.currentNode
 	tx.currentNode = node
@@ -31,16 +31,16 @@ func (tx *TypeEraserTransformer) pushNode(node *ast.Node) (grandparentNode *ast.
 }
 
 // Pops the last child node off the ancestor tracking stack, restoring the grandparent node.
-func (tx *TypeEraserTransformer) popNode(grandparentNode *ast.Node) {
+func (tx *TypeEraserTransformer) popNode(grandparentNode ast.Node) {
 	tx.currentNode = tx.parentNode
 	tx.parentNode = grandparentNode
 }
 
-func (tx *TypeEraserTransformer) elide(node *ast.Statement) *ast.Statement {
+func (tx *TypeEraserTransformer) elide(node ast.Statement) ast.Statement {
 	return tx.EmitContext().NewNotEmittedStatement(node.AsNode())
 }
 
-func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
+func (tx *TypeEraserTransformer) visit(node ast.Node) ast.Node {
 	if node.SubtreeFacts()&ast.SubtreeContainsTypeScript == 0 {
 		return node
 	}
@@ -52,7 +52,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 	grandparentNode := tx.pushNode(node)
 	defer tx.popNode(grandparentNode)
 
-	switch node.Kind {
+	switch node.Kind() {
 	case
 		// TypeScript accessibility and readonly modifiers are elided
 		ast.KindPublicKeyword,
@@ -94,21 +94,21 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		ast.KindLiteralType,
 		// TypeScript index signatures are elided.
 		ast.KindIndexSignature:
-		return nil
+		return ast.Node{}
 
 	case ast.KindInKeyword, ast.KindOutKeyword:
 		// TypeScript `in`/`out` variance modifiers are elided. These keywords are only
 		// meaningful as modifiers on type parameters (which are themselves elided), but they may
 		// appear as a grammar error on other declarations and must not leak into the emitted JS.
 		// The `in` binary operator shares this token kind, so only elide when used as a modifier.
-		if tx.parentNode == nil || !ast.IsBinaryExpression(tx.parentNode) {
-			return nil
+		if tx.parentNode.IsNil() || !ast.IsBinaryExpression(tx.parentNode) {
+			return ast.Node{}
 		}
 		return tx.Visitor().VisitEachChild(node)
 
 	case ast.KindJSImportDeclaration:
 		// reparsed commonjs are elided
-		return nil
+		return ast.Node{}
 	case ast.KindTypeAliasDeclaration,
 		ast.KindJSTypeAliasDeclaration,
 		ast.KindInterfaceDeclaration:
@@ -117,12 +117,12 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindNamespaceExportDeclaration:
 		// TypeScript namespace export declarations are elided.
-		return nil
+		return ast.Node{}
 
 	case ast.KindModuleDeclaration:
 		if !ast.IsIdentifier(node.Name()) ||
 			!ast.IsInstantiatedModule(node, tx.compilerOptions.ShouldPreserveConstEnums()) ||
-			getInnermostModuleDeclarationFromDottedModule(node.AsModuleDeclaration()).Body == nil {
+			getInnermostModuleDeclarationFromDottedModule(node.AsModuleDeclaration()).Body().IsNil() {
 			// TypeScript module declarations are elided if they are not instantiated or have no body
 			return tx.elide(node)
 		}
@@ -130,105 +130,105 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindExpressionWithTypeArguments:
 		n := node.AsExpressionWithTypeArguments()
-		return tx.Factory().UpdateExpressionWithTypeArguments(n, tx.Visitor().VisitNode(n.Expression), nil)
+		return tx.Factory().UpdateExpressionWithTypeArguments(n, tx.Visitor().VisitNode(n.Expression()), nil)
 
 	case ast.KindPropertyDeclaration:
 		if tx.compilerOptions.ExperimentalDecorators.IsTrue() && ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient|ast.ModifierFlagsAbstract) && ast.HasDecorators(node) {
 			// declare/abstract props with decorators must be preserved until the decorator transform can process them and remove them
 			n := node.AsPropertyDeclaration()
-			return tx.Factory().UpdatePropertyDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), nil, nil, tx.Visitor().VisitNode(n.Initializer))
+			return tx.Factory().UpdatePropertyDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), ast.Node{}, ast.Node{}, tx.Visitor().VisitNode(n.Initializer()))
 		}
 		if ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient|ast.ModifierFlagsAbstract) {
 			// TypeScript `declare` fields are elided
-			return nil
+			return ast.Node{}
 		}
 		n := node.AsPropertyDeclaration()
-		return tx.Factory().UpdatePropertyDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), nil, nil, tx.Visitor().VisitNode(n.Initializer))
+		return tx.Factory().UpdatePropertyDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), ast.Node{}, ast.Node{}, tx.Visitor().VisitNode(n.Initializer()))
 
 	case ast.KindConstructor:
 		n := node.AsConstructorDeclaration()
-		if ast.NodeIsMissing(n.Body) {
+		if ast.NodeIsMissing(n.Body()) {
 			// TypeScript overloads are elided
-			return nil
+			return ast.Node{}
 		}
-		return tx.Factory().UpdateConstructorDeclaration(n, nil, nil, tx.Visitor().VisitNodes(n.Parameters), nil, nil, tx.Visitor().VisitNode(n.Body))
+		return tx.Factory().UpdateConstructorDeclaration(n, nil, nil, tx.Visitor().VisitNodes(n.Parameters()), ast.Node{}, ast.Node{}, tx.Visitor().VisitNode(n.Body()))
 
 	case ast.KindMethodDeclaration:
 		n := node.AsMethodDeclaration()
-		if ast.NodeIsMissing(n.Body) {
+		if ast.NodeIsMissing(n.Body()) {
 			// TypeScript overloads are elided
-			return nil
+			return ast.Node{}
 		}
-		return tx.Factory().UpdateMethodDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), n.AsteriskToken, tx.Visitor().VisitNode(n.Name()), nil, nil, tx.Visitor().VisitNodes(n.Parameters), nil, nil, tx.Visitor().VisitNode(n.Body))
+		return tx.Factory().UpdateMethodDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), n.AsteriskToken(), tx.Visitor().VisitNode(n.Name()), ast.Node{}, nil, tx.Visitor().VisitNodes(n.Parameters()), ast.Node{}, ast.Node{}, tx.Visitor().VisitNode(n.Body()))
 
 	case ast.KindGetAccessor:
 		n := node.AsGetAccessorDeclaration()
-		if ast.NodeIsMissing(n.Body) && ast.HasSyntacticModifier(node, ast.ModifierFlagsAbstract) {
+		if ast.NodeIsMissing(n.Body()) && ast.HasSyntacticModifier(node, ast.ModifierFlagsAbstract) {
 			// Abstract accessors are elided
-			return nil
+			return ast.Node{}
 		}
-		body := tx.Visitor().VisitNode(n.Body)
-		if body == nil {
+		body := tx.Visitor().VisitNode(n.Body())
+		if body.IsNil() {
 			body = tx.Factory().NewBlock(tx.Factory().NewNodeList(nil), false)
 		}
-		return tx.Factory().UpdateGetAccessorDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), nil, tx.Visitor().VisitNodes(n.Parameters), nil, nil, body)
+		return tx.Factory().UpdateGetAccessorDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), nil, tx.Visitor().VisitNodes(n.Parameters()), ast.Node{}, ast.Node{}, body)
 
 	case ast.KindSetAccessor:
 		n := node.AsSetAccessorDeclaration()
-		if ast.NodeIsMissing(n.Body) && ast.HasSyntacticModifier(node, ast.ModifierFlagsAbstract) {
+		if ast.NodeIsMissing(n.Body()) && ast.HasSyntacticModifier(node, ast.ModifierFlagsAbstract) {
 			// Abstract accessors are elided
-			return nil
+			return ast.Node{}
 		}
-		body := tx.Visitor().VisitNode(n.Body)
-		if body == nil {
+		body := tx.Visitor().VisitNode(n.Body())
+		if body.IsNil() {
 			body = tx.Factory().NewBlock(tx.Factory().NewNodeList(nil), false)
 		}
-		return tx.Factory().UpdateSetAccessorDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), nil, tx.Visitor().VisitNodes(n.Parameters), nil, nil, body)
+		return tx.Factory().UpdateSetAccessorDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), nil, tx.Visitor().VisitNodes(n.Parameters()), ast.Node{}, ast.Node{}, body)
 
 	case ast.KindVariableDeclaration:
 		n := node.AsVariableDeclaration()
-		updated := tx.Factory().UpdateVariableDeclaration(n, tx.Visitor().VisitNode(n.Name()), nil, nil, tx.Visitor().VisitNode(n.Initializer))
-		if n.Type != nil {
-			tx.EmitContext().SetTypeNode(updated.AsVariableDeclaration().Name(), n.Type)
+		updated := tx.Factory().UpdateVariableDeclaration(n, tx.Visitor().VisitNode(n.Name()), ast.Node{}, ast.Node{}, tx.Visitor().VisitNode(n.Initializer()))
+		if !n.Type().IsNil() {
+			tx.EmitContext().SetTypeNode(updated.AsVariableDeclaration().Name(), n.Type())
 		}
 		return updated
 
 	case ast.KindHeritageClause:
 		n := node.AsHeritageClause()
-		if n.Token == ast.KindImplementsKeyword {
+		if n.Token() == ast.KindImplementsKeyword {
 			// TypeScript `implements` clauses are elided
-			return nil
+			return ast.Node{}
 		}
-		return tx.Factory().UpdateHeritageClause(n, n.Token, tx.Visitor().VisitNodes(n.Types))
+		return tx.Factory().UpdateHeritageClause(n, n.Token(), tx.Visitor().VisitNodes(n.Types()))
 
 	case ast.KindClassDeclaration:
 		n := node.AsClassDeclaration()
-		return tx.Factory().UpdateClassDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), nil, tx.Visitor().VisitNodes(n.HeritageClauses), tx.Visitor().VisitNodes(n.Members))
+		return tx.Factory().UpdateClassDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), nil, tx.Visitor().VisitNodes(n.HeritageClauses()), tx.Visitor().VisitNodes(n.Members()))
 
 	case ast.KindClassExpression:
 		n := node.AsClassExpression()
-		return tx.Factory().UpdateClassExpression(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), nil, tx.Visitor().VisitNodes(n.HeritageClauses), tx.Visitor().VisitNodes(n.Members))
+		return tx.Factory().UpdateClassExpression(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), nil, tx.Visitor().VisitNodes(n.HeritageClauses()), tx.Visitor().VisitNodes(n.Members()))
 
 	case ast.KindFunctionDeclaration:
 		n := node.AsFunctionDeclaration()
-		if ast.NodeIsMissing(n.Body) {
+		if ast.NodeIsMissing(n.Body()) {
 			// TypeScript overloads are elided
 			return tx.elide(node)
 		}
-		return tx.Factory().UpdateFunctionDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), n.AsteriskToken, tx.Visitor().VisitNode(n.Name()), nil, tx.Visitor().VisitNodes(n.Parameters), nil, nil, tx.Visitor().VisitNode(n.Body))
+		return tx.Factory().UpdateFunctionDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), n.AsteriskToken(), tx.Visitor().VisitNode(n.Name()), nil, tx.Visitor().VisitNodes(n.Parameters()), ast.Node{}, ast.Node{}, tx.Visitor().VisitNode(n.Body()))
 
 	case ast.KindFunctionExpression:
 		n := node.AsFunctionExpression()
-		return tx.Factory().UpdateFunctionExpression(n, tx.Visitor().VisitModifiers(n.Modifiers()), n.AsteriskToken, tx.Visitor().VisitNode(n.Name()), nil, tx.Visitor().VisitNodes(n.Parameters), nil, nil, tx.Visitor().VisitNode(n.Body))
+		return tx.Factory().UpdateFunctionExpression(n, tx.Visitor().VisitModifiers(n.Modifiers()), n.AsteriskToken(), tx.Visitor().VisitNode(n.Name()), nil, tx.Visitor().VisitNodes(n.Parameters()), ast.Node{}, ast.Node{}, tx.Visitor().VisitNode(n.Body()))
 
 	case ast.KindArrowFunction:
 		n := node.AsArrowFunction()
-		return tx.Factory().UpdateArrowFunction(n, tx.Visitor().VisitModifiers(n.Modifiers()), nil, tx.Visitor().VisitNodes(n.Parameters), nil, nil, n.EqualsGreaterThanToken, tx.Visitor().VisitNode(n.Body))
+		return tx.Factory().UpdateArrowFunction(n, tx.Visitor().VisitModifiers(n.Modifiers()), nil, tx.Visitor().VisitNodes(n.Parameters()), ast.Node{}, ast.Node{}, n.EqualsGreaterThanToken(), tx.Visitor().VisitNode(n.Body()))
 
 	case ast.KindParameter:
 		if ast.IsThisParameter(node) {
 			// TypeScript `this` parameters are elided
-			return nil
+			return ast.Node{}
 		}
 		n := node.AsParameterDeclaration()
 		// preserve parameter property modifiers to be handled by the runtime transformer
@@ -246,34 +246,34 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 				modifiers = tx.Factory().NewModifierList(slices.Concat(modifiers.Nodes, visited))
 			}
 		}
-		return tx.Factory().UpdateParameterDeclaration(n, modifiers, n.DotDotDotToken, tx.Visitor().VisitNode(n.Name()), nil, nil, tx.Visitor().VisitNode(n.Initializer))
+		return tx.Factory().UpdateParameterDeclaration(n, modifiers, n.DotDotDotToken(), tx.Visitor().VisitNode(n.Name()), ast.Node{}, ast.Node{}, tx.Visitor().VisitNode(n.Initializer()))
 
 	case ast.KindCallExpression:
 		n := node.AsCallExpression()
-		return tx.Factory().UpdateCallExpression(n, tx.Visitor().VisitNode(n.Expression), n.QuestionDotToken, nil, tx.Visitor().VisitNodes(n.Arguments), n.Flags)
+		return tx.Factory().UpdateCallExpression(n, tx.Visitor().VisitNode(n.Expression()), n.QuestionDotToken(), nil, tx.Visitor().VisitNodes(n.Arguments()), n.Flags())
 
 	case ast.KindNewExpression:
 		n := node.AsNewExpression()
-		return tx.Factory().UpdateNewExpression(n, tx.Visitor().VisitNode(n.Expression), nil, tx.Visitor().VisitNodes(n.Arguments))
+		return tx.Factory().UpdateNewExpression(n, tx.Visitor().VisitNode(n.Expression()), nil, tx.Visitor().VisitNodes(n.Arguments()))
 
 	case ast.KindTaggedTemplateExpression:
 		n := node.AsTaggedTemplateExpression()
-		return tx.Factory().UpdateTaggedTemplateExpression(n, tx.Visitor().VisitNode(n.Tag), n.QuestionDotToken, nil, tx.Visitor().VisitNode(n.Template), n.Flags)
+		return tx.Factory().UpdateTaggedTemplateExpression(n, tx.Visitor().VisitNode(n.Tag()), n.QuestionDotToken(), nil, tx.Visitor().VisitNode(n.Template()), n.Flags())
 
 	case ast.KindNonNullExpression, ast.KindTypeAssertionExpression, ast.KindAsExpression, ast.KindSatisfiesExpression:
 		partial := tx.Factory().NewPartiallyEmittedExpression(tx.Visitor().VisitNode(node.Expression()))
 		tx.EmitContext().SetOriginal(partial, node)
-		partial.Loc = node.Loc
+		partial.SetLoc(node.Loc())
 		return partial
 
 	case ast.KindParenthesizedExpression:
 		if !ast.IsJSDocTypeAssertion(node) {
 			n := node.AsParenthesizedExpression()
-			expression := ast.SkipOuterExpressions(n.Expression, ast.OEKAllExceptAssertionsOrExpressionsWithTypeArguments)
+			expression := ast.SkipOuterExpressions(n.Expression(), ast.OEKAllExceptAssertionsOrExpressionsWithTypeArguments)
 			if ast.IsAssertionExpression(expression) || ast.IsSatisfiesExpression(expression) {
-				partial := tx.Factory().NewPartiallyEmittedExpression(tx.Visitor().VisitNode(n.Expression))
+				partial := tx.Factory().NewPartiallyEmittedExpression(tx.Visitor().VisitNode(n.Expression()))
 				tx.EmitContext().SetOriginal(partial, node)
-				partial.Loc = node.Loc
+				partial.SetLoc(node.Loc())
 				return partial
 			}
 		}
@@ -281,110 +281,110 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindJsxSelfClosingElement:
 		n := node.AsJsxSelfClosingElement()
-		return tx.Factory().UpdateJsxSelfClosingElement(n, tx.Visitor().VisitNode(n.TagName), nil, tx.Visitor().VisitNode(n.Attributes))
+		return tx.Factory().UpdateJsxSelfClosingElement(n, tx.Visitor().VisitNode(n.TagName()), nil, tx.Visitor().VisitNode(n.Attributes()))
 
 	case ast.KindJsxOpeningElement:
 		n := node.AsJsxOpeningElement()
-		return tx.Factory().UpdateJsxOpeningElement(n, tx.Visitor().VisitNode(n.TagName), nil, tx.Visitor().VisitNode(n.Attributes))
+		return tx.Factory().UpdateJsxOpeningElement(n, tx.Visitor().VisitNode(n.TagName()), nil, tx.Visitor().VisitNode(n.Attributes()))
 
 	case ast.KindImportEqualsDeclaration:
 		n := node.AsImportEqualsDeclaration()
-		if n.IsTypeOnly {
+		if n.IsTypeOnly() {
 			// elide type-only imports
-			return nil
+			return ast.Node{}
 		}
 		return tx.Visitor().VisitEachChild(node)
 
 	case ast.KindImportDeclaration:
 		n := node.AsImportDeclaration()
-		if n.ImportClause == nil {
+		if n.ImportClause().IsNil() {
 			// Do not elide a side-effect only import declaration.
 			//  import "foo";
 			return node
 		}
-		importClause := tx.Visitor().VisitNode(n.ImportClause)
-		if importClause == nil {
-			return nil
+		importClause := tx.Visitor().VisitNode(n.ImportClause())
+		if importClause.IsNil() {
+			return ast.Node{}
 		}
-		return tx.Factory().UpdateImportDeclaration(n, n.Modifiers(), importClause, n.ModuleSpecifier, n.Attributes)
+		return tx.Factory().UpdateImportDeclaration(n, n.Modifiers(), importClause, n.ModuleSpecifier(), n.Attributes())
 
 	case ast.KindImportClause:
 		n := node.AsImportClause()
 		if n.IsTypeOnly() {
 			// Always elide type-only imports
-			return nil
+			return ast.Node{}
 		}
 		name := n.Name()
-		namedBindings := tx.Visitor().VisitNode(n.NamedBindings)
+		namedBindings := tx.Visitor().VisitNode(n.NamedBindings())
 		// Empty {} due to type-only import erasure can be skipped if there is also a default import
-		if name != nil && namedBindings != nil && ast.IsNamedImports(namedBindings) &&
-			len(namedBindings.AsNamedImports().Elements.Nodes) == 0 &&
-			len(n.NamedBindings.AsNamedImports().Elements.Nodes) != 0 {
+		if !name.IsNil() && !namedBindings.IsNil() && ast.IsNamedImports(namedBindings) &&
+			len(namedBindings.AsNamedImports().Elements().Nodes) == 0 &&
+			len(n.NamedBindings().AsNamedImports().Elements().Nodes) != 0 {
 			// the default binding keeps the import; a source-written {} is left as is
-			namedBindings = nil
+			namedBindings = (ast.Node{})
 		}
-		if name == nil && namedBindings == nil {
+		if name.IsNil() && namedBindings.IsNil() {
 			// all import bindings were elided
-			return nil
+			return ast.Node{}
 		}
-		return tx.Factory().UpdateImportClause(n, n.PhaseModifier, name, namedBindings)
+		return tx.Factory().UpdateImportClause(n, n.PhaseModifier(), name, namedBindings)
 
 	case ast.KindNamedImports:
 		n := node.AsNamedImports()
-		if len(n.Elements.Nodes) == 0 {
+		if len(n.Elements().Nodes) == 0 {
 			// Do not elide a side-effect only import declaration.
 			return node
 		}
-		elements := tx.Visitor().VisitNodes(n.Elements)
+		elements := tx.Visitor().VisitNodes(n.Elements())
 		if !tx.compilerOptions.VerbatimModuleSyntax.IsTrue() && len(elements.Nodes) == 0 {
 			// all import specifiers were elided
-			return nil
+			return ast.Node{}
 		}
 		return tx.Factory().UpdateNamedImports(n, elements)
 
 	case ast.KindImportSpecifier:
 		n := node.AsImportSpecifier()
-		if n.IsTypeOnly {
+		if n.IsTypeOnly() {
 			// elide type-only or unused imports
-			return nil
+			return ast.Node{}
 		}
 		return node
 
 	case ast.KindExportDeclaration:
 		n := node.AsExportDeclaration()
-		if n.IsTypeOnly {
+		if n.IsTypeOnly() {
 			// elide type-only exports
-			return nil
+			return ast.Node{}
 		}
-		var exportClause *ast.Node
-		if n.ExportClause != nil {
-			exportClause = tx.Visitor().VisitNode(n.ExportClause)
-			if exportClause == nil {
+		var exportClause ast.Node
+		if !n.ExportClause().IsNil() {
+			exportClause = tx.Visitor().VisitNode(n.ExportClause())
+			if exportClause.IsNil() {
 				// all export bindings were elided
-				return nil
+				return ast.Node{}
 			}
 		}
-		return tx.Factory().UpdateExportDeclaration(n, nil /*modifiers*/, false /*isTypeOnly*/, exportClause, tx.Visitor().VisitNode(n.ModuleSpecifier), tx.Visitor().VisitNode(n.Attributes))
+		return tx.Factory().UpdateExportDeclaration(n, nil /*modifiers*/, false /*isTypeOnly*/, exportClause, tx.Visitor().VisitNode(n.ModuleSpecifier()), tx.Visitor().VisitNode(n.Attributes()))
 
 	case ast.KindNamedExports:
 		n := node.AsNamedExports()
-		if len(n.Elements.Nodes) == 0 {
+		if len(n.Elements().Nodes) == 0 {
 			// Do not elide an empty export declaration.
 			return node
 		}
 
-		elements := tx.Visitor().VisitNodes(n.Elements)
+		elements := tx.Visitor().VisitNodes(n.Elements())
 		if !tx.compilerOptions.VerbatimModuleSyntax.IsTrue() && len(elements.Nodes) == 0 {
 			// all export specifiers were elided
-			return nil
+			return ast.Node{}
 		}
 		return tx.Factory().UpdateNamedExports(n, elements)
 
 	case ast.KindExportSpecifier:
 		n := node.AsExportSpecifier()
-		if n.IsTypeOnly {
+		if n.IsTypeOnly() {
 			// elide unused export
-			return nil
+			return ast.Node{}
 		}
 		return node
 

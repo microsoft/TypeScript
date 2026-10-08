@@ -137,6 +137,27 @@ Run a focused Go test with:
 go -C ./tsc test -run='TestLocal/<test name>' ./internal/testrunner
 ```
 
+## AST storage
+
+`ast.Node` is a comparable value handle containing a source-file owner and a
+32-bit arena offset. Use `node.IsNil()` to test for an absent node. Copies
+preserve identity and share mutations; concrete `As*()` methods return views,
+not copies of the node's payload. Read and update fields through their generated
+getters and setters.
+
+The schema in `tools/scripts/tsc/ast.json` defines the generated record layouts.
+Run `npx hereby generate:ast` after changing the schema or its generators.
+Records contain scalar values and 32-bit references, while typed side tables
+retain strings, lists, symbols, and other Go-managed values. Local node edges
+are offsets; foreign edges retain the original handle in the owner's side table.
+Lists continue to hold node handles.
+
+Arena chunks never move and keep IDs aligned for 64-bit atomics, including on
+32-bit targets. Each record fits entirely within one chunk. Keep those
+invariants when changing storage or unsafe accessors, and run the arena tests
+with both `-race` and `-gcflags=all=-d=checkptr=2`. Factories are not safe for
+concurrent mutation; create independent factories for independently built trees.
+
 ## Before submitting a pull request
 
 Run:

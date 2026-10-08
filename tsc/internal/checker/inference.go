@@ -225,7 +225,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 		}
 	}
 	switch {
-	case source.objectFlags&ObjectFlagsReference != 0 && target.objectFlags&ObjectFlagsReference != 0 && (source.AsTypeReference().target == target.AsTypeReference().target || c.isArrayType(source) && c.isArrayType(target)) && !(source.AsTypeReference().node != nil && target.AsTypeReference().node != nil):
+	case source.objectFlags&ObjectFlagsReference != 0 && target.objectFlags&ObjectFlagsReference != 0 && (source.AsTypeReference().target == target.AsTypeReference().target || c.isArrayType(source) && c.isArrayType(target)) && !(!source.AsTypeReference().node.IsNil() && !target.AsTypeReference().node.IsNil()):
 		// If source and target are references to the same generic type, infer from type arguments
 		c.invokeOnce(n, source, target, (*Checker).inferFromReferenceTypeArguments)
 	case source.flags&TypeFlagsIndex != 0 && target.flags&TypeFlagsIndex != 0:
@@ -716,7 +716,7 @@ func (c *Checker) inferFromObjectTypes(n *InferenceState, source *Type, target *
 	if c.isGenericMappedType(source) && c.isGenericMappedType(target) {
 		c.inferFromGenericMappedTypes(n, source, target)
 	}
-	if target.objectFlags&ObjectFlagsMapped != 0 && target.AsMappedType().declaration.NameType == nil {
+	if target.objectFlags&ObjectFlagsMapped != 0 && target.AsMappedType().declaration.NameType().IsNil() {
 		constraintType := c.getConstraintTypeFromMappedType(target)
 		if c.inferToMappedType(n, source, target, constraintType) {
 			return
@@ -865,8 +865,8 @@ func (c *Checker) inferFromSignature(n *InferenceState, source *Signature, targe
 	if source.flags&SignatureFlagsIsNonInferrable == 0 {
 		saveBivariant := n.bivariant
 		kind := ast.KindUnknown
-		if target.declaration != nil {
-			kind = target.declaration.Kind
+		if !target.declaration.IsNil() {
+			kind = target.declaration.Kind()
 		}
 		// Once we descend into a bivariant signature we remain bivariant for all nested inferences
 		n.bivariant = n.bivariant || kind == ast.KindMethodDeclaration || kind == ast.KindMethodSignature || kind == ast.KindConstructor
@@ -984,7 +984,7 @@ func (c *Checker) inferToMappedType(n *InferenceState, source *Type, target *Typ
 	if constraintType.flags&TypeFlagsTypeParameter != 0 {
 		// We're inferring from some source type S to a mapped type { [P in K]: X }, where K is a type
 		// parameter. First infer from 'keyof S' to K.
-		c.inferWithPriority(n, c.getIndexTypeEx(source, core.IfElse(c.patternForType[source] != nil, IndexFlagsNoIndexSignatures, IndexFlagsNone)), constraintType, InferencePriorityMappedTypeConstraint)
+		c.inferWithPriority(n, c.getIndexTypeEx(source, core.IfElse(!c.patternForType[source].IsNil(), IndexFlagsNoIndexSignatures, IndexFlagsNone)), constraintType, InferencePriorityMappedTypeConstraint)
 		// If K is constrained to a type C, also infer to C. Thus, for a mapped type { [P in K]: X },
 		// where K extends keyof T, we make the same inferences as for a homomorphic mapped type
 		// { [P in keyof T]: X }. This enables us to make meaningful inferences when the target is a
@@ -1115,7 +1115,7 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 	optionalMask := core.IfElse(modifiers&MappedTypeModifiersIncludeOptional != 0, 0, ast.SymbolFlagsOptional)
 	var indexInfos []*IndexInfo
 	if indexInfo != nil {
-		indexInfos = []*IndexInfo{c.newIndexInfo(c.stringType, core.OrElse(c.inferReverseMappedType(indexInfo.valueType, r.mappedType, r.constraintType), c.unknownType), readonlyMask && indexInfo.isReadonly, nil, nil)}
+		indexInfos = []*IndexInfo{c.newIndexInfo(c.stringType, core.OrElse(c.inferReverseMappedType(indexInfo.valueType, r.mappedType, r.constraintType), c.unknownType), readonlyMask && indexInfo.isReadonly, ast.Node{}, nil)}
 	}
 	members := make(ast.SymbolTable)
 	limitedConstraint := c.getLimitedConstraint(t)
@@ -1254,7 +1254,7 @@ func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
 	}
 	var indexInfos []*IndexInfo
 	if t.flags&TypeFlagsString != 0 {
-		indexInfos = []*IndexInfo{c.newIndexInfo(c.stringType, c.emptyObjectType, false /*isReadonly*/, nil, nil)}
+		indexInfos = []*IndexInfo{c.newIndexInfo(c.stringType, c.emptyObjectType, false /*isReadonly*/, ast.Node{}, nil)}
 	}
 	return c.newAnonymousType(nil, members, nil, nil, indexInfos)
 }
@@ -1293,7 +1293,7 @@ func (c *Checker) newInferenceContextWorker(inferences []*InferenceInfo, signatu
 	return n
 }
 
-func (c *Checker) addIntraExpressionInferenceSite(n *InferenceContext, node *ast.Node, t *Type) {
+func (c *Checker) addIntraExpressionInferenceSite(n *InferenceContext, node ast.Node, t *Type) {
 	n.intraExpressionInferenceSites = append(n.intraExpressionInferenceSites, IntraExpressionInferenceSite{node: node, t: t})
 }
 
@@ -1631,7 +1631,7 @@ func (c *Checker) isFromInferenceBlockedSource(t *Type) bool {
 	return t.symbol != nil && core.Some(t.symbol.Declarations(), c.isSkipDirectInferenceNode)
 }
 
-func (c *Checker) isSkipDirectInferenceNode(node *ast.Node) bool {
+func (c *Checker) isSkipDirectInferenceNode(node ast.Node) bool {
 	return c.skipDirectInferenceNodes.Has(node)
 }
 
@@ -1671,7 +1671,7 @@ func hasInferenceCandidatesOrDefault(info *InferenceInfo) bool {
 func hasTypeParameterDefault(tp *Type) bool {
 	if tp.symbol != nil {
 		for _, d := range tp.symbol.Declarations() {
-			if ast.IsTypeParameterDeclaration(d) && d.AsTypeParameterDeclaration().DefaultType != nil {
+			if ast.IsTypeParameterDeclaration(d) && !d.AsTypeParameterDeclaration().DefaultType().IsNil() {
 				return true
 			}
 		}

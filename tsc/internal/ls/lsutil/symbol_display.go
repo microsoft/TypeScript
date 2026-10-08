@@ -159,7 +159,7 @@ var FileExtensionKindModifiers = ScriptElementKindModifierDts |
 	ScriptElementKindModifierCts |
 	ScriptElementKindModifierCjs
 
-func GetSymbolKind(typeChecker *checker.Checker, symbol *ast.Symbol, location *ast.Node) ScriptElementKind {
+func GetSymbolKind(typeChecker *checker.Checker, symbol *ast.Symbol, location ast.Node) ScriptElementKind {
 	result := getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location)
 	if result != ScriptElementKindUnknown {
 		return result
@@ -167,7 +167,7 @@ func GetSymbolKind(typeChecker *checker.Checker, symbol *ast.Symbol, location *a
 	flags := symbol.CombinedLocalAndExportSymbolFlags()
 	if flags&ast.SymbolFlagsClass != 0 {
 		decl := ast.GetDeclarationOfKind(symbol, ast.KindClassExpression)
-		if decl != nil {
+		if !decl.IsNil() {
 			return ScriptElementKindLocalClassElement
 		}
 		return ScriptElementKindClassElement
@@ -197,7 +197,7 @@ func GetSymbolKind(typeChecker *checker.Checker, symbol *ast.Symbol, location *a
 	return ScriptElementKindUnknown
 }
 
-func getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker *checker.Checker, symbol *ast.Symbol, location *ast.Node) ScriptElementKind {
+func getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker *checker.Checker, symbol *ast.Symbol, location ast.Node) ScriptElementKind {
 	var roots []*ast.Symbol
 	if typeChecker != nil {
 		roots = typeChecker.GetRootSymbols(symbol)
@@ -220,7 +220,7 @@ func getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker *
 		if typeChecker.IsArgumentsSymbol(symbol) {
 			return ScriptElementKindLocalVariableElement
 		}
-		if location.Kind == ast.KindThisKeyword && ast.IsExpression(location) ||
+		if location.Kind() == ast.KindThisKeyword && ast.IsExpression(location) ||
 			ast.IsThisInTypeQuery(location) {
 			return ScriptElementKindParameterElement
 		}
@@ -230,11 +230,11 @@ func getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker *
 	if flags&ast.SymbolFlagsVariable != 0 {
 		if isFirstDeclarationOfSymbolParameter(symbol) {
 			return ScriptElementKindParameterElement
-		} else if symbol.ValueDeclaration() != nil && ast.IsVarConst(symbol.ValueDeclaration()) {
+		} else if !symbol.ValueDeclaration().IsNil() && ast.IsVarConst(symbol.ValueDeclaration()) {
 			return ScriptElementKindConstElement
-		} else if symbol.ValueDeclaration() != nil && ast.IsVarUsing(symbol.ValueDeclaration()) {
+		} else if !symbol.ValueDeclaration().IsNil() && ast.IsVarUsing(symbol.ValueDeclaration()) {
 			return ScriptElementKindVariableUsingElement
-		} else if symbol.ValueDeclaration() != nil && ast.IsVarAwaitUsing(symbol.ValueDeclaration()) {
+		} else if !symbol.ValueDeclaration().IsNil() && ast.IsVarAwaitUsing(symbol.ValueDeclaration()) {
 			return ScriptElementKindVariableAwaitUsingElement
 		} else if core.Some(symbol.Declarations(), ast.IsLet) {
 			return ScriptElementKindLetElement
@@ -297,11 +297,11 @@ func getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker *
 }
 
 func isFirstDeclarationOfSymbolParameter(symbol *ast.Symbol) bool {
-	var declaration *ast.Node
+	var declaration ast.Node
 	if len(symbol.Declarations()) > 0 {
 		declaration = symbol.Declarations()[0]
 	}
-	result := ast.FindAncestorOrQuit(declaration, func(n *ast.Node) ast.FindAncestorResult {
+	result := ast.FindAncestorOrQuit(declaration, func(n ast.Node) ast.FindAncestorResult {
 		if ast.IsParameterDeclaration(n) {
 			return ast.FindAncestorTrue
 		}
@@ -311,7 +311,7 @@ func isFirstDeclarationOfSymbolParameter(symbol *ast.Symbol) bool {
 		return ast.FindAncestorQuit
 	})
 
-	return result != nil
+	return !result.IsNil()
 }
 
 func isLocalVariableOrFunction(symbol *ast.Symbol) bool {
@@ -321,19 +321,19 @@ func isLocalVariableOrFunction(symbol *ast.Symbol) bool {
 
 	for _, decl := range symbol.Declarations() {
 		// Function expressions are local
-		if decl.Kind == ast.KindFunctionExpression {
+		if decl.Kind() == ast.KindFunctionExpression {
 			return true
 		}
 
-		if decl.Kind != ast.KindVariableDeclaration && decl.Kind != ast.KindFunctionDeclaration {
+		if decl.Kind() != ast.KindVariableDeclaration && decl.Kind() != ast.KindFunctionDeclaration {
 			continue
 		}
 
 		// If the parent is not source file or module block, it is a local variable.
-		parent := decl.Parent
-		for ; !ast.IsFunctionBlock(parent); parent = parent.Parent {
+		parent := decl.Parent()
+		for ; !ast.IsFunctionBlock(parent); parent = parent.Parent() {
 			// Reached source file or module block
-			if parent.Kind == ast.KindSourceFile || parent.Kind == ast.KindModuleBlock {
+			if parent.Kind() == ast.KindSourceFile || parent.Kind() == ast.KindModuleBlock {
 				break
 			}
 		}
@@ -374,7 +374,7 @@ func getNormalizedSymbolModifiers(typeChecker *checker.Checker, symbol *ast.Symb
 		var excludeFlags ast.ModifierFlags
 		if len(declarations) > 0 &&
 			isDeprecatedDeclaration(typeChecker, declaration) && // !!! include jsdoc node flags
-			core.Some(declarations, func(d *ast.Node) bool { return !isDeprecatedDeclaration(typeChecker, d) }) {
+			core.Some(declarations, func(d ast.Node) bool { return !isDeprecatedDeclaration(typeChecker, d) }) {
 			excludeFlags = ast.ModifierFlagsDeprecated
 		} else {
 			excludeFlags = ast.ModifierFlagsNone
@@ -385,14 +385,14 @@ func getNormalizedSymbolModifiers(typeChecker *checker.Checker, symbol *ast.Symb
 	return modifierSet
 }
 
-func isDeprecatedDeclaration(typeChecker *checker.Checker, declaration *ast.Node) bool {
+func isDeprecatedDeclaration(typeChecker *checker.Checker, declaration ast.Node) bool {
 	if typeChecker != nil {
 		return typeChecker.IsDeprecatedDeclaration(declaration)
 	}
 	return ast.IsDeprecatedDeclaration(declaration)
 }
 
-func getNodeModifiers(typeChecker *checker.Checker, node *ast.Node, excludeFlags ast.ModifierFlags) ScriptElementKindModifier {
+func getNodeModifiers(typeChecker *checker.Checker, node ast.Node, excludeFlags ast.ModifierFlags) ScriptElementKindModifier {
 	var result ScriptElementKindModifier
 	var flags ast.ModifierFlags
 	if ast.IsDeclaration(node) {
@@ -427,10 +427,10 @@ func getNodeModifiers(typeChecker *checker.Checker, node *ast.Node, excludeFlags
 	if flags&ast.ModifierFlagsAmbient != 0 {
 		result |= ScriptElementKindModifierAmbient
 	}
-	if node.Flags&ast.NodeFlagsAmbient != 0 {
+	if node.Flags()&ast.NodeFlagsAmbient != 0 {
 		result |= ScriptElementKindModifierAmbient
 	}
-	if node.Kind == ast.KindExportAssignment {
+	if node.Kind() == ast.KindExportAssignment {
 		result |= ScriptElementKindModifierExported
 	}
 

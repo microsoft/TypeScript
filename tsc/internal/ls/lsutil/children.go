@@ -10,18 +10,18 @@ import (
 )
 
 // Replaces last(node.getChildren(sourceFile))
-func GetLastChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
+func GetLastChild(node ast.Node, sourceFile *ast.SourceFile) ast.Node {
 	lastChildNode := GetLastVisitedChild(node, sourceFile)
-	if ast.IsJSDocSingleCommentNode(node) && lastChildNode == nil {
-		return nil
+	if ast.IsJSDocSingleCommentNode(node) && lastChildNode.IsNil() {
+		return ast.Node{}
 	}
 	var tokenStartPos int
-	if lastChildNode != nil {
+	if !lastChildNode.IsNil() {
 		tokenStartPos = lastChildNode.End()
 	} else {
 		tokenStartPos = node.Pos()
 	}
-	var lastToken *ast.Node
+	var lastToken ast.Node
 	scanner := scanner.GetScannerForSourceFile(sourceFile, tokenStartPos)
 	for startPos := tokenStartPos; startPos < node.End(); {
 		tokenKind := scanner.Token()
@@ -31,26 +31,26 @@ func GetLastChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 		startPos = tokenEnd
 		scanner.Scan()
 	}
-	return core.IfElse(lastToken != nil, lastToken, lastChildNode)
+	return core.IfElse(!lastToken.IsNil(), lastToken, lastChildNode)
 }
 
-func GetLastToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
-	if node == nil {
-		return nil
+func GetLastToken(node ast.Node, sourceFile *ast.SourceFile) ast.Node {
+	if node.IsNil() {
+		return ast.Node{}
 	}
 
-	if ast.IsTokenKind(node.Kind) || ast.IsIdentifier(node) {
-		return nil
+	if ast.IsTokenKind(node.Kind()) || ast.IsIdentifier(node) {
+		return ast.Node{}
 	}
 
 	AssertHasRealPosition(node)
 
 	lastChild := GetLastChild(node, sourceFile)
-	if lastChild == nil {
-		return nil
+	if lastChild.IsNil() {
+		return ast.Node{}
 	}
 
-	if lastChild.Kind < ast.KindFirstNode {
+	if lastChild.Kind() < ast.KindFirstNode {
 		return lastChild
 	} else {
 		return GetLastToken(lastChild, sourceFile)
@@ -59,11 +59,11 @@ func GetLastToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 
 // Gets the last visited child of the given node.
 // NOTE: This doesn't include unvisited tokens; for this, use `getLastChild` or `getLastToken`.
-func GetLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
-	var lastChild *ast.Node
+func GetLastVisitedChild(node ast.Node, sourceFile *ast.SourceFile) ast.Node {
+	var lastChild ast.Node
 
-	visitNode := func(n *ast.Node, _ *ast.NodeVisitor) *ast.Node {
-		if n != nil && n.Flags&ast.NodeFlagsReparsed == 0 {
+	visitNode := func(n ast.Node, _ *ast.NodeVisitor) ast.Node {
+		if !n.IsNil() && n.Flags()&ast.NodeFlagsReparsed == 0 {
 			lastChild = n
 		}
 		return n
@@ -71,7 +71,7 @@ func GetLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 	visitNodeList := func(nodeList *ast.NodeList, _ *ast.NodeVisitor) *ast.NodeList {
 		if nodeList != nil && len(nodeList.Nodes) > 0 {
 			for _, v := range slices.Backward(nodeList.Nodes) {
-				if v.Flags&ast.NodeFlagsReparsed == 0 {
+				if v.Flags()&ast.NodeFlagsReparsed == 0 {
 					lastChild = v
 					break
 				}
@@ -84,14 +84,14 @@ func GetLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 	return lastChild
 }
 
-func GetFirstToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
-	if ast.IsIdentifier(node) || ast.IsTokenKind(node.Kind) {
-		return nil
+func GetFirstToken(node ast.Node, sourceFile *ast.SourceFile) ast.Node {
+	if ast.IsIdentifier(node) || ast.IsTokenKind(node.Kind()) {
+		return ast.Node{}
 	}
 	AssertHasRealPosition(node)
-	var firstChild *ast.Node
-	node.ForEachChild(func(n *ast.Node) bool {
-		if n == nil || node.Flags&ast.NodeFlagsReparsed != 0 {
+	var firstChild ast.Node
+	node.ForEachChild(func(n ast.Node) bool {
+		if n.IsNil() || node.Flags()&ast.NodeFlagsReparsed != 0 {
 			return false
 		}
 		firstChild = n
@@ -99,13 +99,13 @@ func GetFirstToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 	})
 
 	var tokenEndPosition int
-	if firstChild != nil {
+	if !firstChild.IsNil() {
 		tokenEndPosition = firstChild.Pos()
 	} else {
 		tokenEndPosition = node.End()
 	}
 	scanner := scanner.GetScannerForSourceFile(sourceFile, node.Pos())
-	var firstToken *ast.Node
+	var firstToken ast.Node
 	if node.Pos() < tokenEndPosition {
 		tokenKind := scanner.Token()
 		tokenFullStart := scanner.TokenFullStart()
@@ -113,19 +113,19 @@ func GetFirstToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 		firstToken = sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, node, scanner.TokenFlags())
 	}
 
-	if firstToken != nil {
+	if !firstToken.IsNil() {
 		return firstToken
 	}
-	if firstChild == nil {
-		return nil
+	if firstChild.IsNil() {
+		return ast.Node{}
 	}
-	if firstChild.Kind < ast.KindFirstNode {
+	if firstChild.Kind() < ast.KindFirstNode {
 		return firstChild
 	}
 	return GetFirstToken(firstChild, sourceFile)
 }
 
-func AssertHasRealPosition(node *ast.Node) {
+func AssertHasRealPosition(node ast.Node) {
 	if ast.PositionIsSynthesized(node.Pos()) || ast.PositionIsSynthesized(node.End()) {
 		panic("Node must have a real position for this operation.")
 	}

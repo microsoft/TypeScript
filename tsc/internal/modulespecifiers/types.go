@@ -13,12 +13,12 @@ import (
 type SourceFileForSpecifierGeneration interface {
 	PathKey() tspath.PathKey
 	FileName() tspath.RootedFilePath
-	Imports() []*ast.StringLiteralLike
+	Imports() []ast.StringLiteralLike
 	IsJS() bool
 }
 
 type CheckerShape interface {
-	GetSymbolAtLocation(node *ast.Node) *ast.Symbol
+	GetSymbolAtLocation(node ast.Node) *ast.Symbol
 	GetAliasedSymbol(symbol *ast.Symbol) *ast.Symbol
 }
 
@@ -64,8 +64,8 @@ type ModuleSpecifierGenerationHost interface {
 	GetNearestAncestorDirectoryWithPackageJson(dirname tspath.RootedDirectoryPath) tspath.RootedDirectoryPath
 	GetPackageJsonInfo(pkgJsonPath tspath.RootedFilePath) *packagejson.InfoCacheEntry
 	GetDefaultResolutionModeForFile(file ast.HasFileName) core.ResolutionMode
-	GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule
-	GetModeForUsageLocation(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) core.ResolutionMode
+	GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier ast.StringLiteralLike) *module.ResolvedModule
+	GetModeForUsageLocation(file ast.HasFileName, moduleSpecifier ast.StringLiteralLike) core.ResolutionMode
 }
 
 type ImportModuleSpecifierPreference string

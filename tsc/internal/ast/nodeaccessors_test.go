@@ -1,74 +1,188 @@
 package ast_test
 
 import (
+	"runtime"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
+
+func TestNodeAccessorsCastLayout(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	identifier := factory.NewIdentifier("name")
+	testutil.AssertPanics(t, func() { identifier.AsFunctionDeclaration() }, "AST node has incompatible arena layout")
+	testutil.AssertPanics(t, func() { identifier.AsSourceFile() }, "AST node has incompatible arena layout")
+
+	token := factory.NewToken(ast.KindUnknown)
+	assert.Equal(t, token.AsToken().AsNode(), token)
+	testutil.AssertPanics(t, func() { token.AsIdentifier() }, "AST node has incompatible arena layout")
+	identifier.SetKind(ast.KindUnknown)
+	assert.Equal(t, identifier.AsIdentifier().Text(), "name")
+	testutil.AssertPanics(t, func() { identifier.AsToken() }, "AST node has incompatible arena layout")
+}
+
+func TestNodeFactoryCanonicalTokenLayouts(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	identifier := factory.NewToken(ast.KindIdentifier)
+	assert.Equal(t, identifier.AsIdentifier().Text(), "")
+	assert.Equal(t, factory.NewToken(ast.KindNumericLiteral).AsNumericLiteral().Text(), "")
+	assert.Equal(t, factory.NewToken(ast.KindNullKeyword).AsKeywordExpression().Kind(), ast.KindNullKeyword)
+	assert.Equal(t, factory.NewToken(ast.KindNumberKeyword).AsKeywordTypeNode().Kind(), ast.KindNumberKeyword)
+	assert.Equal(t, factory.NewToken(ast.KindPlusToken).AsToken().Kind(), ast.KindPlusToken)
+	testutil.AssertPanics(t, func() { identifier.AsToken() }, "AST node has incompatible arena layout")
+}
+
+func TestNodeFactoryHookOrdering(t *testing.T) {
+	t.Parallel()
+	var seen bool
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{
+		OnCreate: func(node ast.Node) {
+			if node.Kind() == ast.KindVariableDeclarationList {
+				seen = true
+				assert.Equal(t, node.Flags(), ast.NodeFlagsNone)
+				assert.Equal(t, len(node.AsVariableDeclarationList().Declarations().Nodes), 1)
+				node.SetFlags(ast.NodeFlagsSynthesized)
+			}
+		},
+	})
+	declarations := factory.NewNodeList([]ast.Node{factory.NewIdentifier("x")})
+	node := factory.NewVariableDeclarationList(declarations, ast.NodeFlagsConst)
+	assert.Assert(t, seen)
+	assert.Equal(t, node.Flags(), ast.NodeFlagsConst)
+}
+
+func TestNodeFactorySourceFileIdentity(t *testing.T) {
+	t.Parallel()
+	var factory ast.NodeFactory
+	identifier := factory.NewIdentifier("before")
+	options := ast.SourceFileParseOptions{
+		FileName: tspath.RootedFilePathFromNormalized("/first.ts"),
+		PathKey:  tspath.PathKeyFromCanonical("/first.ts"),
+	}
+	first := factory.NewSourceFile(options, "first", nil, ast.Node{})
+	second := factory.NewSourceFile(options, "second", nil, ast.Node{})
+	assert.Assert(t, first != second)
+	assert.Equal(t, first.AsSourceFile().AsNode(), first)
+	assert.Equal(t, second.AsSourceFile().AsNode(), second)
+	assert.Equal(t, first.AsSourceFile().Text(), "first")
+	assert.Equal(t, second.AsSourceFile().Text(), "second")
+	identifier.SetParent(first)
+	factory.ReleaseArenas()
+	next := factory.NewIdentifier("after")
+	assert.Assert(t, next != identifier)
+	runtime.GC()
+	assert.Equal(t, identifier.Parent(), first)
+	assert.Equal(t, identifier.AsIdentifier().Text(), "before")
+	assert.Equal(t, second.AsSourceFile().Text(), "second")
+}
+
+func TestNodeAccessorsArenaGrowthAndForeignEdges(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	foreignFactory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	local := factory.NewIdentifier("local")
+	foreign := foreignFactory.NewIdentifier("foreign")
+	node := factory.NewBinaryExpression(nil, local, ast.Node{}, factory.NewToken(ast.KindPlusToken), foreign)
+	view := node.AsBinaryExpression()
+	id := ast.GetNodeId(node)
+	for range 8192 {
+		factory.NewIdentifier("growth")
+		foreignFactory.NewIdentifier("growth")
+	}
+	runtime.GC()
+	assert.Equal(t, view.Left(), local)
+	assert.Equal(t, view.Right(), foreign)
+	assert.Equal(t, ast.GetNodeId(node), id)
+	view.SetLeft(foreign)
+	view.SetRight(local)
+	node.SetParent(foreign)
+	assert.Equal(t, node.AsBinaryExpression().Left(), foreign)
+	assert.Equal(t, node.AsBinaryExpression().Right(), local)
+	assert.Equal(t, node.Parent(), foreign)
+	view.SetLeft(ast.Node{})
+	node.SetParent(ast.Node{})
+	assert.Assert(t, view.Left().IsNil())
+	assert.Assert(t, node.Parent().IsNil())
+
+	clone := node.Clone(foreignFactory)
+	assert.Assert(t, clone != node)
+	assert.Equal(t, clone.AsBinaryExpression().Right(), local)
+	identifier := local.AsIdentifier()
+	identifier.SetText("updated")
+	assert.Equal(t, local.AsIdentifier().Text(), "updated")
+	local.SetLoc(core.NewTextRange(1, 3))
+	assert.Equal(t, identifier.Pos(), 1)
+	assert.Equal(t, identifier.End(), 3)
+}
 
 func TestNodeAccessors(t *testing.T) {
 	t.Parallel()
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 	name := factory.NewIdentifier("f")
-	modifiers := factory.NewModifierList([]*ast.Node{factory.NewToken(ast.KindExportKeyword)})
-	node := factory.NewFunctionDeclaration(modifiers, nil, name, nil, nil, nil, nil, nil)
+	modifiers := factory.NewModifierList([]ast.Node{factory.NewToken(ast.KindExportKeyword)})
+	node := factory.NewFunctionDeclaration(modifiers, ast.Node{}, name, nil, nil, ast.Node{}, ast.Node{}, ast.Node{})
 	data := node.AsFunctionDeclaration()
 
 	assert.Equal(t, node.Name(), name)
 	assert.Equal(t, node.Modifiers(), modifiers)
-	assert.Equal(t, node.DeclarationData(), &data.DeclarationBase)
-	assert.Equal(t, node.ExportableData(), &data.ExportableBase)
-	assert.Equal(t, node.FlowNodeData(), &data.FlowNodeBase)
-	assert.Equal(t, node.LocalsContainerData(), &data.LocalsContainerBase)
-	assert.Equal(t, node.FunctionLikeData(), &data.FunctionLikeBase)
-	assert.Equal(t, node.BodyData(), &data.BodyBase)
-	assert.Equal(t, node.LiteralLikeData(), (*ast.LiteralLikeNodeBase)(nil))
+	assert.Equal(t, node.DeclarationData(), data.DeclarationBase())
+	assert.Equal(t, node.ExportableData(), data.ExportableBase())
+	assert.Equal(t, node.FlowNodeData(), data.FlowNodeBase())
+	assert.Equal(t, node.LocalsContainerData(), data.LocalsContainerBase())
+	assert.Equal(t, node.FunctionLikeData(), data.FunctionLikeBase())
+	assert.Equal(t, node.BodyData(), data.BodyBase())
+	assert.Equal(t, node.LiteralLikeData(), ast.LiteralLikeNodeBase{})
 
 	literal := factory.NewStringLiteral("text", ast.TokenFlagsNone)
-	assert.Equal(t, literal.LiteralLikeData(), &literal.AsStringLiteral().LiteralLikeNodeBase)
+	assert.Equal(t, literal.LiteralLikeData(), literal.AsStringLiteral().LiteralLikeNodeBase())
 }
 
 func TestNodeAccessorsSharedKinds(t *testing.T) {
 	t.Parallel()
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 	name := factory.NewIdentifier("T")
-	modifiers := factory.NewModifierList([]*ast.Node{factory.NewToken(ast.KindExportKeyword)})
-	node := factory.NewTypeAliasDeclaration(modifiers, name, nil, nil)
+	modifiers := factory.NewModifierList([]ast.Node{factory.NewToken(ast.KindExportKeyword)})
+	node := factory.NewTypeAliasDeclaration(modifiers, name, nil, ast.Node{})
 	data := node.AsTypeAliasDeclaration()
 
 	for _, kind := range []ast.Kind{ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration} {
-		node.Kind = kind
+		node.SetKind(kind)
 		assert.Equal(t, node.Name(), name)
 		assert.Equal(t, node.Modifiers(), modifiers)
-		assert.Equal(t, node.DeclarationData(), &data.DeclarationBase)
-		assert.Equal(t, node.ExportableData(), &data.ExportableBase)
-		assert.Equal(t, node.FlowNodeData(), &data.FlowNodeBase)
+		assert.Equal(t, node.DeclarationData(), data.DeclarationBase())
+		assert.Equal(t, node.ExportableData(), data.ExportableBase())
+		assert.Equal(t, node.FlowNodeData(), data.FlowNodeBase())
 	}
 }
 
 func TestNodeAccessorsMissing(t *testing.T) {
 	t.Parallel()
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
-	nodes := []*ast.Node{
+	nodes := []ast.Node{
 		factory.NewToken(ast.KindUnknown),
 		factory.NewToken(ast.KindEndOfFile),
 		factory.NewToken(ast.KindPlusToken),
-		ast.NewFlowSwitchClauseData(nil, 0, 0),
+		ast.NewFlowSwitchClauseData(ast.Node{}, 0, 0),
 		ast.NewFlowReduceLabelData(nil, nil),
 	}
 	for _, node := range nodes {
-		t.Run(node.Kind.String(), func(t *testing.T) {
+		t.Run(node.Kind().String(), func(t *testing.T) {
 			t.Parallel()
-			assert.Equal(t, node.Name(), (*ast.Node)(nil))
+			assert.Equal(t, node.Name(), ast.Node{})
 			assert.Equal(t, node.Modifiers(), (*ast.ModifierList)(nil))
-			assert.Equal(t, node.DeclarationData(), (*ast.DeclarationBase)(nil))
-			assert.Equal(t, node.ExportableData(), (*ast.ExportableBase)(nil))
-			assert.Equal(t, node.FlowNodeData(), (*ast.FlowNodeBase)(nil))
-			assert.Equal(t, node.LocalsContainerData(), (*ast.LocalsContainerBase)(nil))
-			assert.Equal(t, node.FunctionLikeData(), (*ast.FunctionLikeBase)(nil))
-			assert.Equal(t, node.BodyData(), (*ast.BodyBase)(nil))
-			assert.Equal(t, node.LiteralLikeData(), (*ast.LiteralLikeNodeBase)(nil))
+			assert.Equal(t, node.DeclarationData(), ast.DeclarationBase{})
+			assert.Equal(t, node.ExportableData(), ast.ExportableBase{})
+			assert.Equal(t, node.FlowNodeData(), ast.FlowNodeBase{})
+			assert.Equal(t, node.LocalsContainerData(), ast.LocalsContainerBase{})
+			assert.Equal(t, node.FunctionLikeData(), ast.FunctionLikeBase{})
+			assert.Equal(t, node.BodyData(), ast.BodyBase{})
+			assert.Equal(t, node.LiteralLikeData(), ast.LiteralLikeNodeBase{})
 		})
 	}
 }

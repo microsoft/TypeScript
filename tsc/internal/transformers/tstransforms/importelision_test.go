@@ -41,7 +41,7 @@ func (p *fakeProgram) SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDt
 }
 
 // GetEmitSyntaxForUsageLocation implements checker.Program.
-func (p *fakeProgram) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, usageLocation *ast.StringLiteralLike) core.ResolutionMode {
+func (p *fakeProgram) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, usageLocation ast.StringLiteralLike) core.ResolutionMode {
 	panic("unimplemented")
 }
 
@@ -54,7 +54,7 @@ func (p *fakeProgram) ContentMapperExtensions() []string {
 	return nil
 }
 
-func (p *fakeProgram) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
+func (p *fakeProgram) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier ast.StringLiteralLike) *module.ResolvedModule {
 	panic("unimplemented")
 }
 
@@ -146,7 +146,7 @@ func (p *fakeProgram) GetDefaultResolutionModeForFile(sourceFile ast.HasFileName
 	return p.getEmitModuleFormatOfFile(sourceFile)
 }
 
-func (p *fakeProgram) GetModeForUsageLocation(sourceFile ast.HasFileName, location *ast.Node) core.ResolutionMode {
+func (p *fakeProgram) GetModeForUsageLocation(sourceFile ast.HasFileName, location ast.Node) core.ResolutionMode {
 	return p.getEmitModuleFormatOfFile(sourceFile)
 }
 
@@ -166,12 +166,12 @@ func (p *fakeProgram) GetSourceFileMetaData(path tspath.PathKey) ast.SourceFileM
 	return ast.SourceFileMetaData{}
 }
 
-func (p *fakeProgram) GetImportHelpersImportSpecifier(path tspath.PathKey) *ast.Node {
-	return nil
+func (p *fakeProgram) GetImportHelpersImportSpecifier(path tspath.PathKey) ast.Node {
+	return ast.Node{}
 }
 
-func (p *fakeProgram) GetJSXRuntimeImportSpecifier(path tspath.PathKey) (moduleReference string, specifier *ast.Node) {
-	return "", nil
+func (p *fakeProgram) GetJSXRuntimeImportSpecifier(path tspath.PathKey) (moduleReference string, specifier ast.Node) {
+	return "", ast.Node{}
 }
 
 func (p *fakeProgram) GetResolvedModules() map[tspath.PathKey]module.ModeAwareCache[*module.ResolvedModule] {

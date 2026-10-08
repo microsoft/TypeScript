@@ -112,20 +112,20 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 	}
 	configDir := configFile.FileName().Directory()
 	jsonObjectLiteral := getTsConfigObjectLiteralExpression(configFile)
-	if jsonObjectLiteral == nil {
+	if jsonObjectLiteral.IsNil() {
 		return
 	}
 
-	forEachObjectProperty(jsonObjectLiteral, func(property *ast.PropertyAssignment, propertyName string) {
+	forEachObjectProperty(jsonObjectLiteral, func(property ast.PropertyAssignment, propertyName string) {
 		switch propertyName {
 		case "files", "include", "exclude":
 			foundExactMatch := updatePathsProperty(configFile, configDir, property, changeTracker, oldToNew, l.converters, l.CaseSensitivity())
-			if foundExactMatch || propertyName != "include" || !ast.IsArrayLiteralExpression(property.Initializer) {
+			if foundExactMatch || propertyName != "include" || !ast.IsArrayLiteralExpression(property.Initializer()) {
 				return
 			}
 			if oldSpec, isDefault := commandLine.GetMatchedIncludeSpec(oldPath); oldSpec != "" && !isDefault {
 				if newSpec, _ := commandLine.GetMatchedIncludeSpec(newPath); newSpec == "" {
-					elements := property.Initializer.Elements()
+					elements := property.Initializer().Elements()
 					if len(elements) > 0 {
 						newPathText := newPath.AsString()
 						if relativePath, ok := l.CaseSensitivity().RelativePathFromDirectory(configDir, newPath); ok {
@@ -140,10 +140,10 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 				}
 			}
 		case "compilerOptions":
-			if !ast.IsObjectLiteralExpression(property.Initializer) {
+			if !ast.IsObjectLiteralExpression(property.Initializer()) {
 				return
 			}
-			forEachObjectProperty(property.Initializer.AsObjectLiteralExpression(), func(property *ast.PropertyAssignment, propertyName string) {
+			forEachObjectProperty(property.Initializer().AsObjectLiteralExpression(), func(property ast.PropertyAssignment, propertyName string) {
 				option := tsoptions.CommandLineCompilerOptionsMap.Get(propertyName)
 				if option != nil {
 					elementOption := option.Elements()
@@ -153,14 +153,14 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 					}
 				}
 
-				if propertyName != "paths" || !ast.IsObjectLiteralExpression(property.Initializer) {
+				if propertyName != "paths" || !ast.IsObjectLiteralExpression(property.Initializer()) {
 					return
 				}
-				forEachObjectProperty(property.Initializer.AsObjectLiteralExpression(), func(pathsProperty *ast.PropertyAssignment, _ string) {
-					if !ast.IsArrayLiteralExpression(pathsProperty.Initializer) {
+				forEachObjectProperty(property.Initializer().AsObjectLiteralExpression(), func(pathsProperty ast.PropertyAssignment, _ string) {
+					if !ast.IsArrayLiteralExpression(pathsProperty.Initializer()) {
 						return
 					}
-					for _, element := range pathsProperty.Initializer.Elements() {
+					for _, element := range pathsProperty.Initializer().Elements() {
 						tryUpdateConfigString(configFile, configDir, element, changeTracker, oldToNew, l.converters, l.CaseSensitivity())
 					}
 				})
@@ -169,10 +169,10 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 	})
 }
 
-func updatePathsProperty(configFile *ast.SourceFile, configDir tspath.RootedDirectoryPath, property *ast.PropertyAssignment, changeTracker *change.Tracker, oldToNew pathUpdater, converters *lsconv.Converters, caseSensitivity tspath.CaseSensitivity) bool {
-	elements := []*ast.Node{property.Initializer}
-	if ast.IsArrayLiteralExpression(property.Initializer) {
-		elements = property.Initializer.Elements()
+func updatePathsProperty(configFile *ast.SourceFile, configDir tspath.RootedDirectoryPath, property ast.PropertyAssignment, changeTracker *change.Tracker, oldToNew pathUpdater, converters *lsconv.Converters, caseSensitivity tspath.CaseSensitivity) bool {
+	elements := []ast.Node{property.Initializer()}
+	if ast.IsArrayLiteralExpression(property.Initializer()) {
+		elements = property.Initializer().Elements()
 	}
 
 	foundExactMatch := false
@@ -182,7 +182,7 @@ func updatePathsProperty(configFile *ast.SourceFile, configDir tspath.RootedDire
 	return foundExactMatch
 }
 
-func tryUpdateConfigString(configFile *ast.SourceFile, configDir tspath.RootedDirectoryPath, element *ast.Node, changeTracker *change.Tracker, oldToNew pathUpdater, converters *lsconv.Converters, caseSensitivity tspath.CaseSensitivity) bool {
+func tryUpdateConfigString(configFile *ast.SourceFile, configDir tspath.RootedDirectoryPath, element ast.Node, changeTracker *change.Tracker, oldToNew pathUpdater, converters *lsconv.Converters, caseSensitivity tspath.CaseSensitivity) bool {
 	if !ast.IsStringLiteral(element) {
 		return false
 	}
@@ -254,7 +254,7 @@ func (l *LanguageService) getUpdatedImportSpecifier(
 	program *compiler.Program,
 	checker *checker.Checker,
 	sourceFile *ast.SourceFile, // old importing source file
-	importLiteral *ast.StringLiteralLike,
+	importLiteral ast.StringLiteralLike,
 	oldToNew pathUpdater,
 	movedFiles []movedFile,
 	newImportFromPath tspath.RootedFilePath,
@@ -303,7 +303,7 @@ func (l *LanguageService) getUpdatedImportSpecifier(
 func getSourceFileToImport(
 	program *compiler.Program,
 	sourceFile *ast.SourceFile,
-	importLiteral *ast.StringLiteralLike,
+	importLiteral ast.StringLiteralLike,
 	oldToNew pathUpdater,
 ) *toImport {
 	if resolved := program.GetResolvedModuleFromModuleSpecifier(sourceFile, importLiteral); resolved != nil && resolved.ResolvedFileName != "" {
@@ -319,7 +319,7 @@ func getSourceFileToImport(
 
 // As a fall back for unresolved modules, we'll check every file affected by the rename to see if any of them would match
 // the import specifier, and if so, we'll obtain the updated specifier for that file.
-func getUpdatedImportSpecifierFromMovedSourceFiles(program *compiler.Program, sourceFile *ast.SourceFile, importLiteral *ast.StringLiteralLike, movedFiles []movedFile, importingSourceFileName tspath.RootedFilePath, userPreferences modulespecifiers.UserPreferences) string {
+func getUpdatedImportSpecifierFromMovedSourceFiles(program *compiler.Program, sourceFile *ast.SourceFile, importLiteral ast.StringLiteralLike, movedFiles []movedFile, importingSourceFileName tspath.RootedFilePath, userPreferences modulespecifiers.UserPreferences) string {
 	resolutionMode := program.GetModeForUsageLocation(sourceFile, importLiteral)
 	for _, candidate := range movedFiles {
 		oldSpecifier := modulespecifiers.UpdateModuleSpecifier(
@@ -354,25 +354,25 @@ func getUpdatedImportSpecifierFromMovedSourceFiles(program *compiler.Program, so
 	return ""
 }
 
-func createStringTextRange(sourceFile *ast.SourceFile, node *ast.LiteralLikeNode) core.TextRange {
+func createStringTextRange(sourceFile *ast.SourceFile, node ast.LiteralLikeNode) core.TextRange {
 	return core.NewTextRange(scanner.GetTokenPosOfNode(node, sourceFile, false)+1, node.End()-1)
 }
 
-func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) *ast.ObjectLiteralExpression {
+func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) ast.ObjectLiteralExpression {
 	if tsConfigSourceFile != nil && tsConfigSourceFile.Statements != nil && len(tsConfigSourceFile.Statements.Nodes) > 0 {
 		expression := tsConfigSourceFile.Statements.Nodes[0].Expression()
 		if ast.IsObjectLiteralExpression(expression) {
 			return expression.AsObjectLiteralExpression()
 		}
 	}
-	return nil
+	return ast.ObjectLiteralExpression{}
 }
 
-func forEachObjectProperty(objectLiteral *ast.ObjectLiteralExpression, cb func(property *ast.PropertyAssignment, propertyName string)) {
-	if objectLiteral == nil {
+func forEachObjectProperty(objectLiteral ast.ObjectLiteralExpression, cb func(property ast.PropertyAssignment, propertyName string)) {
+	if objectLiteral.IsNil() {
 		return
 	}
-	for _, property := range objectLiteral.Properties.Nodes {
+	for _, property := range objectLiteral.Properties().Nodes {
 		if !ast.IsPropertyAssignment(property) {
 			continue
 		}

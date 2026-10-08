@@ -398,7 +398,7 @@ func (p *Program) ReuseProgram(
 	}
 	// Cloning does not recompute synthetic helper or JSX-runtime import bookkeeping. Fall back to a full
 	// build whenever either version requires those imports.
-	if p.importHelpersImportSpecifiers[oldFile.PathKey()] != nil || p.needsImportHelpersImportSpecifier(newFile) {
+	if !p.importHelpersImportSpecifiers[oldFile.PathKey()].IsNil() || p.needsImportHelpersImportSpecifier(newFile) {
 		return nil, newFile, false
 	}
 	if p.jsxRuntimeImportSpecifiers[oldFile.PathKey()] != nil || p.jsxRuntimeImportSpecifier(newFile) != "" {
@@ -413,7 +413,7 @@ func (p *Program) ReuseProgram(
 			!p.canReplaceFileInProgram(oldSupplemental, newSupplemental) {
 			return nil, newFile, false
 		}
-		if p.importHelpersImportSpecifiers[oldSupplemental.PathKey()] != nil || p.needsImportHelpersImportSpecifier(newSupplemental) {
+		if !p.importHelpersImportSpecifiers[oldSupplemental.PathKey()].IsNil() || p.needsImportHelpersImportSpecifier(newSupplemental) {
 			return nil, newFile, false
 		}
 		if p.jsxRuntimeImportSpecifiers[oldSupplemental.PathKey()] != nil || p.jsxRuntimeImportSpecifier(newSupplemental) != "" {
@@ -477,10 +477,10 @@ func (p *Program) canReplaceFileInProgram(file1 *ast.SourceFile, file2 *ast.Sour
 		file1.ScriptKind == file2.ScriptKind &&
 		ast.IsExternalOrCommonJSModule(file1) == ast.IsExternalOrCommonJSModule(file2) &&
 		file1.UsesUriStyleNodeCoreModules == file2.UsesUriStyleNodeCoreModules &&
-		slices.EqualFunc(file1.Imports(), file2.Imports(), func(n1 *ast.Node, n2 *ast.Node) bool {
+		slices.EqualFunc(file1.Imports(), file2.Imports(), func(n1 ast.Node, n2 ast.Node) bool {
 			return equalModuleSpecifiers(n1, n2) &&
 				p.GetModeForUsageLocation(file1, n1) == p.GetModeForUsageLocation(file2, n2) &&
-				ast.IsSourcePhaseImport(n1.Parent) == ast.IsSourcePhaseImport(n2.Parent)
+				ast.IsSourcePhaseImport(n1.Parent()) == ast.IsSourcePhaseImport(n2.Parent())
 		}) &&
 		slices.EqualFunc(file1.ModuleAugmentations, file2.ModuleAugmentations, equalModuleAugmentationNames) &&
 		slices.Equal(file1.AmbientModuleNames, file2.AmbientModuleNames) &&
@@ -513,12 +513,12 @@ func (p *Program) jsxRuntimeImportSpecifier(file *ast.SourceFile) string {
 	return ast.GetJSXRuntimeImport(ast.GetJSXImplicitImportBase(optionsForFile, file), optionsForFile)
 }
 
-func equalModuleSpecifiers(n1 *ast.Node, n2 *ast.Node) bool {
-	return n1.Kind == n2.Kind && (!ast.IsStringLiteral(n1) || n1.Text() == n2.Text())
+func equalModuleSpecifiers(n1 ast.Node, n2 ast.Node) bool {
+	return n1.Kind() == n2.Kind() && (!ast.IsStringLiteral(n1) || n1.Text() == n2.Text())
 }
 
-func equalModuleAugmentationNames(n1 *ast.Node, n2 *ast.Node) bool {
-	return n1.Kind == n2.Kind && n1.Text() == n2.Text()
+func equalModuleAugmentationNames(n1 ast.Node, n2 ast.Node) bool {
+	return n1.Kind() == n2.Kind() && n1.Text() == n2.Text()
 }
 
 func equalFileReferences(f1 *ast.FileReference, f2 *ast.FileReference) bool {
@@ -650,11 +650,11 @@ func (p *Program) GetResolvedModule(file ast.HasFileName, moduleReference string
 	return nil
 }
 
-func (p *Program) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
+func (p *Program) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier ast.StringLiteralLike) *module.ResolvedModule {
 	if !ast.IsStringLiteralLike(moduleSpecifier) {
 		panic("moduleSpecifier must be a StringLiteralLike")
 	}
-	if ast.IsSourcePhaseImport(moduleSpecifier.Parent) {
+	if ast.IsSourcePhaseImport(moduleSpecifier.Parent()) {
 		return nil
 	}
 	mode := p.GetModeForUsageLocation(file, moduleSpecifier)
@@ -791,14 +791,14 @@ func getAdditionalJSSyntacticDiagnostics(file *ast.SourceFile, options *core.Com
 	// Parameter decorators are only valid with experimentalDecorators. Without it,
 	// the checker would report this, but the checker doesn't run on unchecked JS files.
 	var walk ast.Visitor
-	walk = func(node *ast.Node) bool {
+	walk = func(node ast.Node) bool {
 		if node.SubtreeFacts()&ast.SubtreeContainsDecorators == 0 {
 			return false
 		}
-		if node.Kind == ast.KindParameter && ast.HasDecorators(node) {
+		if node.Kind() == ast.KindParameter && ast.HasDecorators(node) {
 			decorator := core.Find(node.ModifierNodes(), ast.IsDecorator)
-			if decorator != nil {
-				diags = append(diags, ast.NewDiagnostic(file, decorator.Loc, diagnostics.Decorators_are_not_valid_here))
+			if !decorator.IsNil() {
+				diags = append(diags, ast.NewDiagnostic(file, decorator.Loc(), diagnostics.Decorators_are_not_valid_here))
 			}
 		}
 		node.ForEachChild(walk)
@@ -925,23 +925,23 @@ func (p *Program) verifyCompilerOptions() {
 		return ""
 	})
 
-	getCompilerOptionsPropertySyntax := core.Memoize(func() *ast.PropertyAssignment {
+	getCompilerOptionsPropertySyntax := core.Memoize(func() ast.PropertyAssignment {
 		return tsoptions.ForEachTsConfigPropArray(sourceFile(), "compilerOptions", core.Identity)
 	})
 
-	getCompilerOptionsObjectLiteralSyntax := core.Memoize(func() *ast.ObjectLiteralExpression {
+	getCompilerOptionsObjectLiteralSyntax := core.Memoize(func() ast.ObjectLiteralExpression {
 		compilerOptionsProperty := getCompilerOptionsPropertySyntax()
-		if compilerOptionsProperty != nil &&
-			compilerOptionsProperty.Initializer != nil &&
-			ast.IsObjectLiteralExpression(compilerOptionsProperty.Initializer) {
-			return compilerOptionsProperty.Initializer.AsObjectLiteralExpression()
+		if !compilerOptionsProperty.IsNil() &&
+			!compilerOptionsProperty.Initializer().IsNil() &&
+			ast.IsObjectLiteralExpression(compilerOptionsProperty.Initializer()) {
+			return compilerOptionsProperty.Initializer().AsObjectLiteralExpression()
 		}
-		return nil
+		return ast.ObjectLiteralExpression{}
 	})
 
-	createOptionDiagnosticInObjectLiteralSyntax := func(objectLiteral *ast.ObjectLiteralExpression, onKey bool, key1 string, key2 string, message *diagnostics.Message, args ...any) *ast.Diagnostic {
-		diag := tsoptions.ForEachPropertyAssignment(objectLiteral, key1, func(property *ast.PropertyAssignment) *ast.Diagnostic {
-			return tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile(), core.IfElse(onKey, property.Name(), property.Initializer), message, args...)
+	createOptionDiagnosticInObjectLiteralSyntax := func(objectLiteral ast.ObjectLiteralExpression, onKey bool, key1 string, key2 string, message *diagnostics.Message, args ...any) *ast.Diagnostic {
+		diag := tsoptions.ForEachPropertyAssignment(objectLiteral, key1, func(property ast.PropertyAssignment) *ast.Diagnostic {
+			return tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile(), core.IfElse(onKey, property.Name(), property.Initializer()), message, args...)
 		}, key2)
 		if diag != nil {
 			p.programDiagnostics = append(p.programDiagnostics, diag)
@@ -952,7 +952,7 @@ func (p *Program) verifyCompilerOptions() {
 	createCompilerOptionsDiagnostic := func(message *diagnostics.Message, args ...any) *ast.Diagnostic {
 		compilerOptionsProperty := getCompilerOptionsPropertySyntax()
 		var diag *ast.Diagnostic
-		if compilerOptionsProperty != nil {
+		if !compilerOptionsProperty.IsNil() {
 			diag = tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile(), compilerOptionsProperty.Name(), message, args...)
 		} else {
 			diag = ast.NewCompilerDiagnostic(message, args...)
@@ -1119,14 +1119,14 @@ func (p *Program) verifyCompilerOptions() {
 		}
 	}
 
-	forEachOptionPathsSyntax := func(callback func(*ast.PropertyAssignment) *ast.Diagnostic) *ast.Diagnostic {
+	forEachOptionPathsSyntax := func(callback func(ast.PropertyAssignment) *ast.Diagnostic) *ast.Diagnostic {
 		return tsoptions.ForEachPropertyAssignment(getCompilerOptionsObjectLiteralSyntax(), "paths", callback)
 	}
 
 	createDiagnosticForOptionPaths := func(onKey bool, key string, message *diagnostics.Message, args ...any) *ast.Diagnostic {
-		diag := forEachOptionPathsSyntax(func(pathProp *ast.PropertyAssignment) *ast.Diagnostic {
-			if ast.IsObjectLiteralExpression(pathProp.Initializer) {
-				return createOptionDiagnosticInObjectLiteralSyntax(pathProp.Initializer.AsObjectLiteralExpression(), onKey, key, "", message, args...)
+		diag := forEachOptionPathsSyntax(func(pathProp ast.PropertyAssignment) *ast.Diagnostic {
+			if ast.IsObjectLiteralExpression(pathProp.Initializer()) {
+				return createOptionDiagnosticInObjectLiteralSyntax(pathProp.Initializer().AsObjectLiteralExpression(), onKey, key, "", message, args...)
 			}
 			return nil
 		})
@@ -1137,10 +1137,10 @@ func (p *Program) verifyCompilerOptions() {
 	}
 
 	createDiagnosticForOptionPathKeyValue := func(key string, valueIndex int, message *diagnostics.Message, args ...any) *ast.Diagnostic {
-		diag := forEachOptionPathsSyntax(func(pathProp *ast.PropertyAssignment) *ast.Diagnostic {
-			if ast.IsObjectLiteralExpression(pathProp.Initializer) {
-				return tsoptions.ForEachPropertyAssignment(pathProp.Initializer.AsObjectLiteralExpression(), key, func(keyProps *ast.PropertyAssignment) *ast.Diagnostic {
-					initializer := keyProps.Initializer
+		diag := forEachOptionPathsSyntax(func(pathProp ast.PropertyAssignment) *ast.Diagnostic {
+			if ast.IsObjectLiteralExpression(pathProp.Initializer()) {
+				return tsoptions.ForEachPropertyAssignment(pathProp.Initializer().AsObjectLiteralExpression(), key, func(keyProps ast.PropertyAssignment) *ast.Diagnostic {
+					initializer := keyProps.Initializer()
 					if ast.IsArrayLiteralExpression(initializer) {
 						elements := initializer.ElementList()
 						if elements != nil && len(elements.Nodes) > valueIndex {
@@ -1297,7 +1297,7 @@ func (p *Program) verifyCompilerOptions() {
 		if options.Jsx == core.JsxEmitReactJSX || options.Jsx == core.JsxEmitReactJSXDev {
 			createDiagnosticForOptionName(diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxFactory", options.Jsx.String())
 		}
-		if parser.ParseIsolatedEntityName(options.JsxFactory) == nil {
+		if parser.ParseIsolatedEntityName(options.JsxFactory).IsNil() {
 			createOptionValueDiagnostic("jsxFactory", diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.JsxFactory)
 		}
 	} else if options.ReactNamespace != "" && !scanner.IsIdentifierText(options.ReactNamespace, core.LanguageVariantStandard) {
@@ -1311,7 +1311,7 @@ func (p *Program) verifyCompilerOptions() {
 		if options.Jsx == core.JsxEmitReactJSX || options.Jsx == core.JsxEmitReactJSXDev {
 			createDiagnosticForOptionName(diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxFragmentFactory", options.Jsx.String())
 		}
-		if parser.ParseIsolatedEntityName(options.JsxFragmentFactory) == nil {
+		if parser.ParseIsolatedEntityName(options.JsxFragmentFactory).IsNil() {
 			createOptionValueDiagnostic("jsxFragmentFactory", diagnostics.Invalid_value_for_jsxFragmentFactory_0_is_not_a_valid_identifier_or_qualified_name, options.JsxFragmentFactory)
 		}
 	}
@@ -1768,7 +1768,7 @@ func (p *Program) GetEmitModuleFormatOfFile(sourceFile ast.HasFileName) core.Mod
 	return ast.GetEmitModuleFormatOfFileWorker(sourceFile.FileName(), p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile), p.GetSourceFileMetaData(sourceFile.PathKey()))
 }
 
-func (p *Program) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, location *ast.StringLiteralLike) core.ResolutionMode {
+func (p *Program) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, location ast.StringLiteralLike) core.ResolutionMode {
 	return getEmitSyntaxForUsageLocationWorker(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.PathKey()], location, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
 }
 
@@ -1776,7 +1776,7 @@ func (p *Program) GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.R
 	return ast.GetImpliedNodeFormatForEmitWorker(sourceFile.FileName(), p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile).GetEmitModuleKind(), p.GetSourceFileMetaData(sourceFile.PathKey()))
 }
 
-func (p *Program) GetModeForUsageLocation(sourceFile ast.HasFileName, location *ast.StringLiteralLike) core.ResolutionMode {
+func (p *Program) GetModeForUsageLocation(sourceFile ast.HasFileName, location ast.StringLiteralLike) core.ResolutionMode {
 	return getModeForUsageLocation(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.PathKey()], location, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
 }
 
@@ -1787,7 +1787,7 @@ func (p *Program) GetModeForResolutionAtIndex(sourceFile *ast.SourceFile, index 
 	}
 	index -= len(imports)
 	for _, augmentation := range sourceFile.ModuleAugmentations {
-		if augmentation.Kind == ast.KindStringLiteral {
+		if augmentation.Kind() == ast.KindStringLiteral {
 			if index == 0 {
 				return p.GetModeForUsageLocation(sourceFile, augmentation)
 			}
@@ -2225,14 +2225,14 @@ func (p *Program) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {
 	return p.sourceFilesFoundSearchingNodeModules.Has(file.PathKey())
 }
 
-func (p *Program) GetJSXRuntimeImportSpecifier(path tspath.PathKey) (moduleReference string, specifier *ast.Node) {
+func (p *Program) GetJSXRuntimeImportSpecifier(path tspath.PathKey) (moduleReference string, specifier ast.Node) {
 	if result := p.jsxRuntimeImportSpecifiers[path]; result != nil {
 		return result.moduleReference, result.specifier
 	}
-	return "", nil
+	return "", ast.Node{}
 }
 
-func (p *Program) GetImportHelpersImportSpecifier(path tspath.PathKey) *ast.Node {
+func (p *Program) GetImportHelpersImportSpecifier(path tspath.PathKey) ast.Node {
 	return p.importHelpersImportSpecifiers[path]
 }
 
@@ -2263,7 +2263,7 @@ func (p *Program) collectPackageNames() *packageNamesInfo {
 				continue
 			}
 			for _, imp := range file.Imports() {
-				if ast.IsSourcePhaseImport(imp.Parent) || tspath.IsExternalModuleNameRelative(imp.Text()) {
+				if ast.IsSourcePhaseImport(imp.Parent()) || tspath.IsExternalModuleNameRelative(imp.Text()) {
 					continue
 				}
 				if resolvedModules, ok := p.resolvedModules[file.PathKey()]; ok {

@@ -149,16 +149,16 @@ func SymbolToExport(symbol *ast.Symbol, ch *checker.Checker) *Export {
 	}
 
 	declaration := core.FirstOrNil(symbol.Declarations())
-	if declaration == nil {
+	if declaration.IsNil() {
 		return nil
 	}
 
 	file := ast.GetSourceFileOfNode(declaration)
-	if file.Symbol == nil {
+	if file.Symbol() == nil {
 		return nil
 	}
 
-	moduleSymbol := ch.GetMergedSymbol(file.Symbol)
+	moduleSymbol := ch.GetMergedSymbol(file.Symbol())
 	moduleID := fileModuleID(file.PathKey())
 	moduleFileName := file.FileName()
 	target := ch.GetMergedSymbol(ch.SkipAlias(symbol))

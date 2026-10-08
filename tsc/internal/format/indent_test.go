@@ -24,8 +24,8 @@ func TestGetContainingList_NamedImports(t *testing.T) {
 	}, text, core.ScriptKindTS)
 
 	// Find ImportSpecifier nodes (AAA and BBB)
-	var importSpecifiers []*ast.Node
-	forEachDescendantOfKind(sourceFile.AsNode(), ast.KindImportSpecifier, func(node *ast.Node) {
+	var importSpecifiers []ast.Node
+	forEachDescendantOfKind(sourceFile.AsNode(), ast.KindImportSpecifier, func(node ast.Node) {
 		importSpecifiers = append(importSpecifiers, node)
 	})
 
@@ -39,9 +39,9 @@ func TestGetContainingList_NamedImports(t *testing.T) {
 	}
 }
 
-func forEachDescendantOfKind(node *ast.Node, kind ast.Kind, action func(*ast.Node)) {
-	node.ForEachChild(func(child *ast.Node) bool {
-		if child.Kind == kind {
+func forEachDescendantOfKind(node ast.Node, kind ast.Kind, action func(ast.Node)) {
+	node.ForEachChild(func(child ast.Node) bool {
+		if child.Kind() == kind {
 			action(child)
 		}
 		forEachDescendantOfKind(child, kind, action)

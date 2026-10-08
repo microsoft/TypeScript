@@ -29,17 +29,17 @@ func NewConstEnumInliningTransformer(opt *transformers.TransformOptions) *transf
 	return tx.NewTransformer(tx.visit, emitContext)
 }
 
-func (tx *ConstEnumInliningTransformer) visit(node *ast.Node) *ast.Node {
-	switch node.Kind {
+func (tx *ConstEnumInliningTransformer) visit(node ast.Node) ast.Node {
+	switch node.Kind() {
 	case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression:
 		{
 			parse := tx.EmitContext().ParseNode(node)
-			if parse == nil {
+			if parse.IsNil() {
 				return tx.Visitor().VisitEachChild(node)
 			}
 			value := tx.emitResolver.GetConstantValue(parse)
 			if value != nil {
-				var replacement *ast.Node
+				var replacement ast.Node
 				switch v := value.(type) {
 				case jsnum.Number:
 					if v.IsInf() {
@@ -69,7 +69,7 @@ func (tx *ConstEnumInliningTransformer) visit(node *ast.Node) *ast.Node {
 
 				if tx.compilerOptions.RemoveComments.IsFalseOrUnknown() {
 					original := tx.EmitContext().MostOriginal(node)
-					if original != nil && !ast.NodeIsSynthesized(original) {
+					if !original.IsNil() && !ast.NodeIsSynthesized(original) {
 						originalText := scanner.GetTextOfNode(original)
 						escapedText := safeMultiLineComment(originalText)
 						tx.EmitContext().AddSyntheticTrailingComment(replacement, ast.KindMultiLineCommentTrivia, escapedText, false)

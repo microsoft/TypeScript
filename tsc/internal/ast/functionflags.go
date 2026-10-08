@@ -10,18 +10,18 @@ const (
 	FunctionFlagsAsyncGenerator FunctionFlags = FunctionFlagsAsync | FunctionFlagsGenerator
 )
 
-func GetFunctionFlags(node *Node) FunctionFlags {
-	if node == nil {
+func GetFunctionFlags(node Node) FunctionFlags {
+	if node.IsNil() {
 		return FunctionFlagsInvalid
 	}
 	data := node.BodyData()
-	if data == nil {
+	if data.IsNil() {
 		return FunctionFlagsInvalid
 	}
 	flags := FunctionFlagsNormal
-	switch node.Kind {
+	switch node.Kind() {
 	case KindFunctionDeclaration, KindFunctionExpression, KindMethodDeclaration:
-		if data.AsteriskToken != nil {
+		if !data.AsteriskToken().IsNil() {
 			flags |= FunctionFlagsGenerator
 		}
 		fallthrough
@@ -30,7 +30,7 @@ func GetFunctionFlags(node *Node) FunctionFlags {
 			flags |= FunctionFlagsAsync
 		}
 	}
-	if data.Body == nil {
+	if data.Body().IsNil() {
 		flags |= FunctionFlagsInvalid
 	}
 	return flags

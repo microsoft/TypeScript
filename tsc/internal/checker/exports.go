@@ -104,11 +104,11 @@ func (c *Checker) GetMergedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return c.getMergedSymbol(symbol)
 }
 
-func (c *Checker) GetSymbolOfNode(node *ast.Node) *ast.Symbol {
+func (c *Checker) GetSymbolOfNode(node ast.Node) *ast.Symbol {
 	return c.getSymbolOfNode(node)
 }
 
-func (c *Checker) GetSymbolOfDeclaration(node *ast.Node) *ast.Symbol {
+func (c *Checker) GetSymbolOfDeclaration(node ast.Node) *ast.Symbol {
 	return c.getSymbolOfDeclaration(node)
 }
 
@@ -128,11 +128,11 @@ func (c *Checker) GetTargetSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return c.getTargetSymbol(symbol)
 }
 
-func (c *Checker) GetTypeOnlyAliasDeclaration(symbol *ast.Symbol) *ast.Node {
+func (c *Checker) GetTypeOnlyAliasDeclaration(symbol *ast.Symbol) ast.Node {
 	return c.getTypeOnlyAliasDeclaration(symbol)
 }
 
-func (c *Checker) ResolveExternalModuleName(moduleSpecifier *ast.Node, importAttributesType *Type) *ast.Symbol {
+func (c *Checker) ResolveExternalModuleName(moduleSpecifier ast.Node, importAttributesType *Type) *ast.Symbol {
 	return c.resolveExternalModuleName(moduleSpecifier, moduleSpecifier, true /*ignoreErrors*/, importAttributesType)
 }
 
@@ -140,7 +140,7 @@ func (c *Checker) ResolveExternalModuleSymbol(moduleSymbol *ast.Symbol) *ast.Sym
 	return c.resolveExternalModuleSymbol(moduleSymbol, false /*dontResolveAlias*/)
 }
 
-func (c *Checker) GetTypeFromTypeNode(node *ast.Node) *Type {
+func (c *Checker) GetTypeFromTypeNode(node ast.Node) *Type {
 	return c.getTypeFromTypeNode(node)
 }
 
@@ -168,7 +168,7 @@ func (c *Checker) TypeHasCallOrConstructSignatures(t *Type) bool {
 // @param isWrite whether this is a write access, e.g. `++foo.x`.
 // @param containingType type where the property comes from.
 // @param property property symbol.
-func (c *Checker) IsPropertyAccessible(node *ast.Node, isSuper bool, isWrite bool, containingType *Type, property *ast.Symbol) bool {
+func (c *Checker) IsPropertyAccessible(node ast.Node, isSuper bool, isWrite bool, containingType *Type, property *ast.Symbol) bool {
 	return c.isPropertyAccessible(node, isSuper, isWrite, containingType, property)
 }
 
@@ -216,7 +216,7 @@ func (c *Checker) GetDefaultFromTypeParameter(typeParameter *Type) *Type {
 	return c.getDefaultFromTypeParameter(typeParameter)
 }
 
-func (c *Checker) GetEffectiveDeclarationFlags(n *ast.Node, flagsToCheck ast.ModifierFlags) ast.ModifierFlags {
+func (c *Checker) GetEffectiveDeclarationFlags(n ast.Node, flagsToCheck ast.ModifierFlags) ast.ModifierFlags {
 	return c.getEffectiveDeclarationFlags(n, flagsToCheck)
 }
 
@@ -256,7 +256,7 @@ func (c *Checker) GetLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol *as
 	return c.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol)
 }
 
-func (c *Checker) GetContextualTypeForObjectLiteralElement(element *ast.Node, contextFlags ContextFlags) *Type {
+func (c *Checker) GetContextualTypeForObjectLiteralElement(element ast.Node, contextFlags ContextFlags) *Type {
 	return c.getContextualTypeForObjectLiteralElement(element, contextFlags)
 }
 
@@ -268,7 +268,7 @@ func (c *Checker) GetExpandedParameters(signature *Signature, skipUnionExpanding
 	return c.getExpandedParameters(signature, skipUnionExpanding)
 }
 
-func (c *Checker) GetResolvedSignature(node *ast.Node) *Signature {
+func (c *Checker) GetResolvedSignature(node ast.Node) *Signature {
 	return c.getResolvedSignature(node, nil, CheckModeNormal)
 }
 
@@ -277,7 +277,7 @@ func (c *Checker) GetTypeOfPropertyOfType(t *Type, name string) *Type {
 	return c.getTypeOfPropertyOfType(t, name)
 }
 
-func (c *Checker) GetContextualTypeForArgumentAtIndex(node *ast.Node, argIndex int) *Type {
+func (c *Checker) GetContextualTypeForArgumentAtIndex(node ast.Node, argIndex int) *Type {
 	return c.getContextualTypeForArgumentAtIndex(node, argIndex)
 }
 
@@ -285,27 +285,27 @@ func (c *Checker) GetAwaitedType(t *Type) *Type {
 	return c.getAwaitedType(t)
 }
 
-func (c *Checker) GetIndexSignaturesAtLocation(node *ast.Node) []*ast.Node {
+func (c *Checker) GetIndexSignaturesAtLocation(node ast.Node) []ast.Node {
 	return c.getIndexSignaturesAtLocation(node)
 }
 
-func (c *Checker) GetResolvedSymbol(node *ast.Node) *ast.Symbol {
+func (c *Checker) GetResolvedSymbol(node ast.Node) *ast.Symbol {
 	return c.getResolvedSymbol(node)
 }
 
-func (c *Checker) GetJsxNamespace(location *ast.Node) string {
+func (c *Checker) GetJsxNamespace(location ast.Node) string {
 	return c.getJsxNamespace(location)
 }
 
-func (c *Checker) GetJsxFragmentFactory(location *ast.Node) string {
+func (c *Checker) GetJsxFragmentFactory(location ast.Node) string {
 	entity := c.getJsxFragmentFactoryEntity(location)
-	if entity != nil {
+	if !entity.IsNil() {
 		return ast.GetFirstIdentifier(entity).Text()
 	}
 	return ""
 }
 
-func (c *Checker) ResolveName(name string, location *ast.Node, meaning ast.SymbolFlags, excludeGlobals bool) *ast.Symbol {
+func (c *Checker) ResolveName(name string, location ast.Node, meaning ast.SymbolFlags, excludeGlobals bool) *ast.Symbol {
 	return c.resolveName(location, name, meaning, nil, true, excludeGlobals)
 }
 
@@ -328,14 +328,14 @@ func (c *Checker) GetReducedType(t *Type) *Type {
 // GetFullyQualifiedName returns the fully qualified name of a symbol, walking up
 // its parent chain (e.g. `"/path/to/module".Namespace.Name`).
 func (c *Checker) GetFullyQualifiedName(symbol *ast.Symbol) string {
-	return c.getFullyQualifiedName(symbol, nil /*containingLocation*/)
+	return c.getFullyQualifiedName(symbol, ast.Node{} /*containingLocation*/)
 }
 
 func (c *Checker) GetBaseConstructorTypeOfClass(t *Type) *Type {
 	return c.getBaseConstructorTypeOfClass(t)
 }
 
-func (c *Checker) GetMemberOverrideModifierStatus(node *ast.Node, member *ast.Node, memberSymbol *ast.Symbol) MemberOverrideStatus {
+func (c *Checker) GetMemberOverrideModifierStatus(node ast.Node, member ast.Node, memberSymbol *ast.Symbol) MemberOverrideStatus {
 	return c.getMemberOverrideModifierStatus(node, member, memberSymbol)
 }
 
@@ -359,7 +359,7 @@ func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
 	return c.getIndexInfosOfType(t)
 }
 
-func (c *Checker) IsContextSensitive(node *ast.Node) bool {
+func (c *Checker) IsContextSensitive(node ast.Node) bool {
 	return c.isContextSensitive(node)
 }
 
@@ -383,9 +383,9 @@ func (c *Checker) GetUnionTypeEx(types []*Type, unionReduction UnionReduction) *
 	return c.getUnionTypeEx(types, unionReduction, nil, nil)
 }
 
-func (c *Checker) RequiresAddingImplicitUndefined(node *ast.Node) bool {
+func (c *Checker) RequiresAddingImplicitUndefined(node ast.Node) bool {
 	enclosingDeclaration := ast.FindAncestor(node, ast.IsDeclaration)
-	if enclosingDeclaration == nil {
+	if enclosingDeclaration.IsNil() {
 		enclosingDeclaration = ast.GetSourceFileOfNode(node).AsNode()
 	}
 	symbol := node.Symbol()

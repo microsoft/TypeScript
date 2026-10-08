@@ -262,7 +262,7 @@ func TestGeneratedNameForIdentifier1(t *testing.T) {
 	n := file.Statements.Nodes[0].Name()
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "f_1", text1)
@@ -282,7 +282,7 @@ func TestGeneratedNameForIdentifier2(t *testing.T) {
 		Suffix: "b",
 	})
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "afb", text1)
@@ -303,7 +303,7 @@ func TestGeneratedNameForIdentifier3(t *testing.T) {
 	})
 	name2 := ec.Factory.NewGeneratedNameForNode(name1)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name2)
 
 	assert.Equal(t, "afb_1", text1)
@@ -321,7 +321,7 @@ func TestGeneratedNameForNamespace1(t *testing.T) {
 	ns1 := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(ns1)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "foo", text1)
@@ -339,7 +339,7 @@ func TestGeneratedNameForNamespace2(t *testing.T) {
 	ns1 := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(ns1)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "foo_1", text1)
@@ -359,7 +359,7 @@ func TestGeneratedNameForNamespace3(t *testing.T) {
 	name1 := ec.Factory.NewGeneratedNameForNode(ns1)
 	name2 := ec.Factory.NewGeneratedNameForNode(ns2)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 	text2 := g.GenerateName(name2)
 
@@ -381,7 +381,7 @@ func TestGeneratedNameForNamespace4(t *testing.T) {
 	name1 := ec.Factory.NewGeneratedNameForNode(ns1)
 	name2 := ec.Factory.NewGeneratedNameForNode(ns2)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	g.PushScope(false)
 	text1 := g.GenerateName(name1)
 	g.PopScope(false)
@@ -407,7 +407,7 @@ func TestGeneratedNameForNodeCached(t *testing.T) {
 	name1 := ec.Factory.NewGeneratedNameForNode(ns1)
 	name2 := ec.Factory.NewGeneratedNameForNode(ns1)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 	text2 := g.GenerateName(name2)
 
@@ -426,7 +426,7 @@ func TestGeneratedNameForImport(t *testing.T) {
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "foo_1", text1)
@@ -443,7 +443,7 @@ func TestGeneratedNameForExport(t *testing.T) {
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "foo_1", text1)
@@ -460,7 +460,7 @@ func TestGeneratedNameForFunctionDeclaration1(t *testing.T) {
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "f_1", text1)
@@ -477,7 +477,7 @@ func TestGeneratedNameForFunctionDeclaration2(t *testing.T) {
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "default_1", text1)
@@ -494,7 +494,7 @@ func TestGeneratedNameForClassDeclaration1(t *testing.T) {
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "C_1", text1)
@@ -511,7 +511,7 @@ func TestGeneratedNameForClassDeclaration2(t *testing.T) {
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "default_1", text1)
@@ -528,7 +528,7 @@ func TestGeneratedNameForExportAssignment(t *testing.T) {
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "default_1", text1)
@@ -545,7 +545,7 @@ func TestGeneratedNameForClassExpression(t *testing.T) {
 	n := file.Statements.Nodes[0].Expression().Expression()
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "class_1", text1)
@@ -562,7 +562,7 @@ func TestGeneratedNameForMethod1(t *testing.T) {
 	n := file.Statements.Nodes[0].Members()[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "m_1", text1)
@@ -579,7 +579,7 @@ func TestGeneratedNameForMethod2(t *testing.T) {
 	n := file.Statements.Nodes[0].Members()[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "_a", text1)
@@ -596,7 +596,7 @@ func TestGeneratedPrivateNameForMethod(t *testing.T) {
 	n := file.Statements.Nodes[0].Members()[0]
 	name1 := ec.Factory.NewGeneratedPrivateNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "#m_1", text1)
@@ -613,7 +613,7 @@ func TestGeneratedNameForComputedPropertyName(t *testing.T) {
 	n := file.Statements.Nodes[0].Members()[0].Name()
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "_a", text1)
@@ -628,12 +628,12 @@ func TestGeneratedNameForOther(t *testing.T) {
 	binder.BindSourceFile(file)
 
 	n := ec.Factory.NewObjectLiteralExpression(
-		ec.Factory.NewNodeList([]*ast.Node{}),
+		ec.Factory.NewNodeList([]ast.Node{}),
 		false, /*multiLine*/
 	)
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
 
-	g := &printer.NameGenerator{Context: ec, GetTextOfNode: (*ast.Node).Text}
+	g := &printer.NameGenerator{Context: ec, GetTextOfNode: ast.Node.Text}
 	text1 := g.GenerateName(name1)
 
 	assert.Equal(t, "_a", text1)

@@ -238,9 +238,17 @@ func guardedNil(ret inspector.Cursor, childExpr ast.Expr) bool {
 }
 
 // condImpliesNil reports whether `cond` evaluating to `condIsTrue` implies that
-// `childExpr` is nil, i.e. `childExpr == nil` (when true) or `childExpr != nil`
-// (when false).
+// `childExpr` is absent, using a nil comparison or its IsNil method.
 func condImpliesNil(cond ast.Expr, childExpr ast.Expr, condIsTrue bool) bool {
+	cond = ast.Unparen(cond)
+	if unary, ok := cond.(*ast.UnaryExpr); ok && unary.Op == token.NOT {
+		return condImpliesNil(unary.X, childExpr, !condIsTrue)
+	}
+	if call, ok := cond.(*ast.CallExpr); ok && len(call.Args) == 0 {
+		if sel, ok := call.Fun.(*ast.SelectorExpr); ok && sel.Sel.Name == "IsNil" {
+			return condIsTrue && equalExpr(sel.X, childExpr)
+		}
+	}
 	bin, ok := cond.(*ast.BinaryExpr)
 	if !ok {
 		return false

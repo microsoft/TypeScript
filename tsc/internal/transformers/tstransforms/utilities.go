@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 )
 
-func constantExpression(value any, factory *printer.NodeFactory) *ast.Expression {
+func constantExpression(value any, factory *printer.NodeFactory) ast.Expression {
 	switch value := value.(type) {
 	case string:
 		return factory.NewStringLiteral(value, ast.TokenFlagsNone)
@@ -25,5 +25,5 @@ func constantExpression(value any, factory *printer.NodeFactory) *ast.Expression
 		}
 		return factory.NewNumericLiteral(value.String(), ast.TokenFlagsNone)
 	}
-	return nil
+	return ast.Node{}
 }

@@ -139,7 +139,7 @@ func getAllIsolatedDeclarationsCodeActions(ctx context.Context, fixContext *Code
 		checker:       ch,
 		changeTracker: changeTracker,
 		locale:        locale.FromContext(ctx),
-		fixedNodes:    make(map[*ast.Node]bool),
+		fixedNodes:    make(map[ast.Node]bool),
 		typePrintMode: typePrintModeFull,
 	}
 
@@ -180,7 +180,7 @@ func tryCodeAction(ctx context.Context, fixContext *CodeFixContext, ch *checker.
 		changeTracker: changeTracker,
 		importAdder:   importAdder,
 		locale:        locale.FromContext(ctx),
-		fixedNodes:    make(map[*ast.Node]bool),
+		fixedNodes:    make(map[ast.Node]bool),
 	}
 
 	description := fn(fixer)
@@ -221,7 +221,7 @@ type isolatedDeclarationsFixer struct {
 	changeTracker   *change.Tracker
 	importAdder     autoimport.ImportAdder
 	locale          locale.Locale
-	fixedNodes      map[*ast.Node]bool
+	fixedNodes      map[ast.Node]bool
 	typePrintMode   typePrintMode
 	symbolsToImport []*ast.Symbol
 	mutatedTarget   bool // set by inferType/relativeType when the target was mutated (e.g., spread decomposition)
@@ -231,7 +231,7 @@ func (f *isolatedDeclarationsFixer) addTypeAnnotation(span core.TextRange) strin
 	nodeWithDiag := astnav.GetTokenAtPosition(f.sourceFile, span.Pos())
 
 	expandoFunction := findExpandoFunction(f.checker, nodeWithDiag)
-	if expandoFunction != nil {
+	if !expandoFunction.IsNil() {
 		if ast.IsFunctionDeclaration(expandoFunction) {
 			return f.createNamespaceForExpandoProperties(expandoFunction)
 		}
@@ -239,15 +239,15 @@ func (f *isolatedDeclarationsFixer) addTypeAnnotation(span core.TextRange) strin
 	}
 
 	nodeMissingType := findAncestorWithMissingType(nodeWithDiag)
-	if nodeMissingType != nil {
+	if !nodeMissingType.IsNil() {
 		return f.fixIsolatedDeclarationError(nodeMissingType)
 	}
 	return ""
 }
 
-func (f *isolatedDeclarationsFixer) createNamespaceForExpandoProperties(expandoFunc *ast.Node) string {
+func (f *isolatedDeclarationsFixer) createNamespaceForExpandoProperties(expandoFunc ast.Node) string {
 	funcDecl := expandoFunc.AsFunctionDeclaration()
-	if funcDecl.Name() == nil {
+	if funcDecl.Name().IsNil() {
 		return ""
 	}
 
@@ -259,26 +259,26 @@ func (f *isolatedDeclarationsFixer) createNamespaceForExpandoProperties(expandoF
 
 	factory := f.changeTracker.NodeFactory
 
-	var newProperties []*ast.Node
+	var newProperties []ast.Node
 	for _, symbol := range elements {
 		if !scanner.IsIdentifierText(symbol.Name(), core.LanguageVariantStandard) {
 			continue
 		}
 		// skip symbols that already have a variable declaration
-		if symbol.ValueDeclaration() != nil && ast.IsVariableDeclaration(symbol.ValueDeclaration()) {
+		if !symbol.ValueDeclaration().IsNil() && ast.IsVariableDeclaration(symbol.ValueDeclaration()) {
 			continue
 		}
 
 		symType := f.checker.GetTypeOfSymbol(symbol)
 		typeNode := f.typeToMinimizedReferenceType(symType, expandoFunc, declarationEmitNodeBuilderFlags)
-		if typeNode == nil {
+		if typeNode.IsNil() {
 			continue
 		}
 
-		varDecl := factory.NewVariableDeclaration(factory.NewIdentifier(symbol.Name()), nil, typeNode, nil)
+		varDecl := factory.NewVariableDeclaration(factory.NewIdentifier(symbol.Name()), ast.Node{}, typeNode, ast.Node{})
 		exportToken := factory.NewToken(ast.KindExportKeyword)
-		varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsNone)
-		varStmt := factory.NewVariableStatement(factory.NewModifierList([]*ast.Node{exportToken}), varDeclList)
+		varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]ast.Node{varDecl}), ast.NodeFlagsNone)
+		varStmt := factory.NewVariableStatement(factory.NewModifierList([]ast.Node{exportToken}), varDeclList)
 		newProperties = append(newProperties, varStmt)
 	}
 
@@ -286,7 +286,7 @@ func (f *isolatedDeclarationsFixer) createNamespaceForExpandoProperties(expandoF
 		return ""
 	}
 
-	var modifiers []*ast.Node
+	var modifiers []ast.Node
 	if ast.HasSyntacticModifier(expandoFunc, ast.ModifierFlagsExport) {
 		modifiers = append(modifiers, factory.NewToken(ast.KindExportKeyword))
 	}
@@ -296,23 +296,23 @@ func (f *isolatedDeclarationsFixer) createNamespaceForExpandoProperties(expandoF
 		factory.NewModifierList(modifiers),
 		ast.KindNamespaceKeyword,
 		factory.NewIdentifier(funcDecl.Name().Text()),
-		nil, /*attributes*/
+		ast.Node{}, /*attributes*/
 		factory.NewModuleBlock(factory.NewNodeList(newProperties)),
 	)
 	// Set the flags for namespace
-	namespace.Flags = ast.NodeFlagsAmbient | ast.NodeFlagsExportContext | ast.NodeFlagsContextFlags
+	namespace.SetFlags(ast.NodeFlagsAmbient | ast.NodeFlagsExportContext | ast.NodeFlagsContextFlags)
 
 	f.changeTracker.InsertNodeAfter(f.sourceFile, expandoFunc, namespace)
 	return diagnostics.Annotate_types_of_properties_expando_function_in_a_namespace.Localize(f.locale)
 }
 
 // needsParenthesizedExpressionForAssertion checks if an expression needs parentheses for an assertion.
-func needsParenthesizedExpressionForAssertion(node *ast.Node) bool {
+func needsParenthesizedExpressionForAssertion(node ast.Node) bool {
 	return !ast.IsEntityNameExpression(node) && !ast.IsCallExpression(node) && !ast.IsObjectLiteralExpression(node) && !ast.IsArrayLiteralExpression(node)
 }
 
 // createAsExpression creates an `expr as Type` expression, parenthesizing if needed.
-func createAsExpression(factory *ast.NodeFactory, node *ast.Node, typeNode *ast.Node) *ast.Node {
+func createAsExpression(factory *ast.NodeFactory, node ast.Node, typeNode ast.Node) ast.Node {
 	if needsParenthesizedExpressionForAssertion(node) {
 		node = factory.NewParenthesizedExpression(node)
 	}
@@ -324,12 +324,12 @@ func (f *isolatedDeclarationsFixer) addInlineAssertion(span core.TextRange) stri
 
 	// No inline assertions for expando members
 	expandoFunction := findExpandoFunction(f.checker, nodeWithDiag)
-	if expandoFunction != nil {
+	if !expandoFunction.IsNil() {
 		return ""
 	}
 
 	targetNode := findBestFittingNode(nodeWithDiag, span)
-	if targetNode == nil || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.Parent) {
+	if targetNode.IsNil() || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.Parent()) {
 		return ""
 	}
 
@@ -342,15 +342,15 @@ func (f *isolatedDeclarationsFixer) addInlineAssertion(span core.TextRange) stri
 		return ""
 	}
 	// No inline assertions on binding patterns
-	if ast.FindAncestor(targetNode, ast.IsBindingPattern) != nil {
+	if !ast.FindAncestor(targetNode, ast.IsBindingPattern).IsNil() {
 		return ""
 	}
 	// No inline assertions on enum members
-	if ast.FindAncestor(targetNode, ast.IsEnumMember) != nil {
+	if !ast.FindAncestor(targetNode, ast.IsEnumMember).IsNil() {
 		return ""
 	}
 	// No support for typeof in extends clauses
-	if isExpressionTarget && (ast.FindAncestorKind(targetNode, ast.KindHeritageClause) != nil || ast.FindAncestor(targetNode, ast.IsTypeNode) != nil) {
+	if isExpressionTarget && (!ast.FindAncestorKind(targetNode, ast.KindHeritageClause).IsNil() || !ast.FindAncestor(targetNode, ast.IsTypeNode).IsNil()) {
 		return ""
 	}
 	// Can't inline type spread elements
@@ -360,7 +360,7 @@ func (f *isolatedDeclarationsFixer) addInlineAssertion(span core.TextRange) stri
 
 	variableDeclaration := ast.FindAncestorKind(targetNode, ast.KindVariableDeclaration)
 	var variableType *checker.Type
-	if variableDeclaration != nil {
+	if !variableDeclaration.IsNil() {
 		variableType = f.checker.GetTypeAtLocation(variableDeclaration)
 	}
 	// Can't use typeof on unique symbols
@@ -373,7 +373,7 @@ func (f *isolatedDeclarationsFixer) addInlineAssertion(span core.TextRange) stri
 	}
 
 	typeNode := f.inferType(targetNode, variableType)
-	if typeNode == nil || f.mutatedTarget {
+	if typeNode.IsNil() || f.mutatedTarget {
 		return ""
 	}
 
@@ -406,7 +406,7 @@ func (f *isolatedDeclarationsFixer) addInlineAssertion(span core.TextRange) stri
 func (f *isolatedDeclarationsFixer) extractAsVariable(span core.TextRange) string {
 	nodeWithDiag := astnav.GetTokenAtPosition(f.sourceFile, span.Pos())
 	targetNode := findBestFittingNode(nodeWithDiag, span)
-	if targetNode == nil || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.Parent) {
+	if targetNode.IsNil() || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.Parent()) {
 		return ""
 	}
 
@@ -425,9 +425,9 @@ func (f *isolatedDeclarationsFixer) extractAsVariable(span core.TextRange) strin
 	}
 
 	parentPropertyAssignment := ast.FindAncestorKind(targetNode, ast.KindPropertyAssignment)
-	if parentPropertyAssignment != nil {
+	if !parentPropertyAssignment.IsNil() {
 		// Identifiers or entity names can already be typeof-ed
-		if parentPropertyAssignment == targetNode.Parent && ast.IsEntityNameExpression(targetNode) {
+		if parentPropertyAssignment == targetNode.Parent() && ast.IsEntityNameExpression(targetNode) {
 			return ""
 		}
 
@@ -438,9 +438,9 @@ func (f *isolatedDeclarationsFixer) extractAsVariable(span core.TextRange) strin
 
 		// Handle spread elements: walk up to the spread's parent and handle const assertions
 		if ast.IsSpreadElement(replacementTarget) {
-			replacementTarget = ast.WalkUpParenthesizedExpressions(replacementTarget.Parent)
-			if isConstAssertion(replacementTarget.Parent) {
-				replacementTarget = replacementTarget.Parent
+			replacementTarget = ast.WalkUpParenthesizedExpressions(replacementTarget.Parent())
+			if isConstAssertion(replacementTarget.Parent()) {
+				replacementTarget = replacementTarget.Parent()
 				initializationNode = replacementTarget
 			} else {
 				constRef := factory.NewTypeReferenceNode(factory.NewIdentifier("const"), nil)
@@ -453,12 +453,12 @@ func (f *isolatedDeclarationsFixer) extractAsVariable(span core.TextRange) strin
 		}
 
 		clonedInit := factory.DeepCloneNode(initializationNode)
-		varDecl := factory.NewVariableDeclaration(tempName.AsNode(), nil, nil, clonedInit)
-		varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst)
+		varDecl := factory.NewVariableDeclaration(tempName.AsNode(), ast.Node{}, ast.Node{}, clonedInit)
+		varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]ast.Node{varDecl}), ast.NodeFlagsConst)
 		varStmt := factory.NewVariableStatement(nil, varDeclList)
 
 		statement := ast.FindAncestor(targetNode, ast.IsStatement)
-		if statement == nil {
+		if statement.IsNil() {
 			return ""
 		}
 		f.changeTracker.InsertNodeBefore(f.sourceFile, statement, varStmt, false, change.LeadingTriviaOptionNone)
@@ -478,12 +478,12 @@ func (f *isolatedDeclarationsFixer) extractAsVariable(span core.TextRange) strin
 // isExpandoPropertyDeclarationForFix matches TS's isExpandoPropertyDeclaration which includes
 // PropertyAccessExpression, ElementAccessExpression, and BinaryExpression. The shared
 // ast.IsExpandoPropertyDeclaration was narrowed to BinaryExpression only for checker purposes.
-func isExpandoPropertyDeclarationForFix(node *ast.Node) bool {
-	return node != nil && (ast.IsPropertyAccessExpression(node) || ast.IsElementAccessExpression(node) || ast.IsBinaryExpression(node))
+func isExpandoPropertyDeclarationForFix(node ast.Node) bool {
+	return !node.IsNil() && (ast.IsPropertyAccessExpression(node) || ast.IsElementAccessExpression(node) || ast.IsBinaryExpression(node))
 }
 
-func findExpandoFunction(ch *checker.Checker, node *ast.Node) *ast.Node {
-	expandoDeclaration := ast.FindAncestorOrQuit(node, func(n *ast.Node) ast.FindAncestorResult {
+func findExpandoFunction(ch *checker.Checker, node ast.Node) ast.Node {
+	expandoDeclaration := ast.FindAncestorOrQuit(node, func(n ast.Node) ast.FindAncestorResult {
 		if ast.IsStatement(n) {
 			return ast.FindAncestorQuit
 		}
@@ -493,69 +493,69 @@ func findExpandoFunction(ch *checker.Checker, node *ast.Node) *ast.Node {
 		return ast.FindAncestorFalse
 	})
 
-	if expandoDeclaration == nil || !isExpandoPropertyDeclarationForFix(expandoDeclaration) {
-		return nil
+	if expandoDeclaration.IsNil() || !isExpandoPropertyDeclarationForFix(expandoDeclaration) {
+		return ast.Node{}
 	}
 
 	assignmentTarget := expandoDeclaration
 	// Some late bound expando members use the whole expression as the declaration.
 	if ast.IsBinaryExpression(assignmentTarget) {
-		assignmentTarget = assignmentTarget.AsBinaryExpression().Left
+		assignmentTarget = assignmentTarget.AsBinaryExpression().Left()
 		if !isExpandoPropertyDeclarationForFix(assignmentTarget) {
-			return nil
+			return ast.Node{}
 		}
 	}
 
-	var expression *ast.Node
+	var expression ast.Node
 	if ast.IsPropertyAccessExpression(assignmentTarget) {
-		expression = assignmentTarget.AsPropertyAccessExpression().Expression
+		expression = assignmentTarget.AsPropertyAccessExpression().Expression()
 	} else if ast.IsElementAccessExpression(assignmentTarget) {
-		expression = assignmentTarget.AsElementAccessExpression().Expression
+		expression = assignmentTarget.AsElementAccessExpression().Expression()
 	} else {
-		return nil
+		return ast.Node{}
 	}
 
 	targetType := ch.GetTypeAtLocation(expression)
 	if targetType == nil {
-		return nil
+		return ast.Node{}
 	}
 
 	properties := ch.GetPropertiesOfType(targetType)
 	found := false
 	for _, p := range properties {
-		if p.ValueDeclaration() == expandoDeclaration || p.ValueDeclaration() == expandoDeclaration.Parent {
+		if p.ValueDeclaration() == expandoDeclaration || p.ValueDeclaration() == expandoDeclaration.Parent() {
 			found = true
 			break
 		}
 	}
 	if !found {
-		return nil
+		return ast.Node{}
 	}
 
 	symbol := targetType.Symbol()
-	if symbol == nil || symbol.ValueDeclaration() == nil {
-		return nil
+	if symbol == nil || symbol.ValueDeclaration().IsNil() {
+		return ast.Node{}
 	}
 
 	fn := symbol.ValueDeclaration()
-	if (ast.IsFunctionExpression(fn) || ast.IsArrowFunction(fn)) && ast.IsVariableDeclaration(fn.Parent) {
-		return fn.Parent
+	if (ast.IsFunctionExpression(fn) || ast.IsArrowFunction(fn)) && ast.IsVariableDeclaration(fn.Parent()) {
+		return fn.Parent()
 	}
 	if ast.IsFunctionDeclaration(fn) {
 		return fn
 	}
 
-	return nil
+	return ast.Node{}
 }
 
-func (f *isolatedDeclarationsFixer) fixIsolatedDeclarationError(node *ast.Node) string {
+func (f *isolatedDeclarationsFixer) fixIsolatedDeclarationError(node ast.Node) string {
 	// Avoid creating duplicate fixes for the same node
 	if f.fixedNodes[node] {
 		return ""
 	}
 	f.fixedNodes[node] = true
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindParameter, ast.KindPropertyDeclaration, ast.KindVariableDeclaration:
 		return f.addTypeToVariableLike(node)
 	case ast.KindArrowFunction, ast.KindFunctionExpression, ast.KindFunctionDeclaration,
@@ -572,27 +572,27 @@ func (f *isolatedDeclarationsFixer) fixIsolatedDeclarationError(node *ast.Node) 
 	}
 }
 
-func (f *isolatedDeclarationsFixer) addTypeToSignatureDeclaration(funcNode *ast.Node) string {
-	if funcNode.Type() != nil {
+func (f *isolatedDeclarationsFixer) addTypeToSignatureDeclaration(funcNode ast.Node) string {
+	if !funcNode.Type().IsNil() {
 		return ""
 	}
 	typeNode := f.inferType(funcNode, nil)
-	if typeNode == nil {
+	if typeNode.IsNil() {
 		return ""
 	}
 	f.changeTracker.TryInsertTypeAnnotation(f.sourceFile, funcNode, typeNode)
 	return diagnostics.Add_return_type_0.Localize(f.locale, typeToStringForDiag(typeNode, f.sourceFile, f.changeTracker))
 }
 
-func (f *isolatedDeclarationsFixer) transformExportAssignment(defaultExport *ast.Node) string {
+func (f *isolatedDeclarationsFixer) transformExportAssignment(defaultExport ast.Node) string {
 	exportAssignment := defaultExport.AsExportAssignment()
-	if exportAssignment.IsExportEquals {
+	if exportAssignment.IsExportEquals() {
 		return ""
 	}
 
-	expression := exportAssignment.Expression
+	expression := exportAssignment.Expression()
 	typeNode := f.inferType(expression, nil)
-	if typeNode == nil {
+	if typeNode.IsNil() {
 		return ""
 	}
 
@@ -603,55 +603,55 @@ func (f *isolatedDeclarationsFixer) transformExportAssignment(defaultExport *ast
 	// Deep clone the expression so synthesized nodes don't reference original source positions
 	clonedExpression := factory.DeepCloneNode(expression)
 
-	varDecl := factory.NewVariableDeclaration(defaultIdentifier.AsNode(), nil, typeNode, clonedExpression)
-	varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst)
+	varDecl := factory.NewVariableDeclaration(defaultIdentifier.AsNode(), ast.Node{}, typeNode, clonedExpression)
+	varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]ast.Node{varDecl}), ast.NodeFlagsConst)
 	varStmt := factory.NewVariableStatement(nil, varDeclList)
 
-	newExport := factory.UpdateExportAssignment(defaultExport.AsExportAssignment(), defaultExport.Modifiers(), false, nil, defaultIdentifier.AsNode())
+	newExport := factory.UpdateExportAssignment(defaultExport.AsExportAssignment(), defaultExport.Modifiers(), false, ast.Node{}, defaultIdentifier.AsNode())
 
-	f.changeTracker.ReplaceNodeWithNodes(f.sourceFile, defaultExport, []*ast.Node{varStmt, newExport}, nil)
+	f.changeTracker.ReplaceNodeWithNodes(f.sourceFile, defaultExport, []ast.Node{varStmt, newExport}, nil)
 	return diagnostics.Extract_default_export_to_variable.Localize(f.locale)
 }
 
-func (f *isolatedDeclarationsFixer) transformExtendsClauseWithExpression(classDecl *ast.Node) string {
+func (f *isolatedDeclarationsFixer) transformExtendsClauseWithExpression(classDecl ast.Node) string {
 	cd := classDecl.AsClassDeclaration()
-	var extendsClause *ast.Node
-	if cd.HeritageClauses != nil {
-		for _, clause := range cd.HeritageClauses.Nodes {
-			if clause.AsHeritageClause().Token == ast.KindExtendsKeyword {
+	var extendsClause ast.Node
+	if cd.HeritageClauses() != nil {
+		for _, clause := range cd.HeritageClauses().Nodes {
+			if clause.AsHeritageClause().Token() == ast.KindExtendsKeyword {
 				extendsClause = clause
 				break
 			}
 		}
 	}
-	if extendsClause == nil {
+	if extendsClause.IsNil() {
 		return ""
 	}
 
-	heritageTypes := extendsClause.AsHeritageClause().Types
+	heritageTypes := extendsClause.AsHeritageClause().Types()
 	if heritageTypes == nil || len(heritageTypes.Nodes) == 0 {
 		return ""
 	}
 	heritageExpression := heritageTypes.Nodes[0]
-	expression := heritageExpression.AsExpressionWithTypeArguments().Expression
+	expression := heritageExpression.AsExpressionWithTypeArguments().Expression()
 
 	heritageTypeNode := f.inferType(expression, nil)
-	if heritageTypeNode == nil {
+	if heritageTypeNode.IsNil() {
 		return ""
 	}
 
 	factory := f.changeTracker.NodeFactory
 
 	baseName := "Anonymous"
-	if cd.Name() != nil {
+	if !cd.Name().IsNil() {
 		baseName = cd.Name().Text() + "Base"
 	}
 	baseClassName := f.changeTracker.EmitContext.Factory.NewUniqueNameEx(baseName, printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
 
 	// Create: const <BaseName>: <type> = <expression>;
 	clonedExpression := factory.DeepCloneNode(expression)
-	varDecl := factory.NewVariableDeclaration(baseClassName.AsNode(), nil, heritageTypeNode, clonedExpression)
-	varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst)
+	varDecl := factory.NewVariableDeclaration(baseClassName.AsNode(), ast.Node{}, heritageTypeNode, clonedExpression)
+	varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]ast.Node{varDecl}), ast.NodeFlagsConst)
 	varStmt := factory.NewVariableStatement(nil, varDeclList)
 
 	f.changeTracker.InsertNodeBefore(f.sourceFile, classDecl, varStmt, false, change.LeadingTriviaOptionNone)
@@ -662,31 +662,31 @@ func (f *isolatedDeclarationsFixer) transformExtendsClauseWithExpression(classDe
 	return diagnostics.Extract_base_class_to_variable.Localize(f.locale)
 }
 
-func (f *isolatedDeclarationsFixer) transformDestructuringPatterns(bindingPattern *ast.Node) string {
-	enclosingVariableDeclaration := bindingPattern.Parent
+func (f *isolatedDeclarationsFixer) transformDestructuringPatterns(bindingPattern ast.Node) string {
+	enclosingVariableDeclaration := bindingPattern.Parent()
 	if !ast.IsVariableDeclaration(enclosingVariableDeclaration) {
 		return ""
 	}
-	enclosingVarStmt := enclosingVariableDeclaration.Parent.Parent
+	enclosingVarStmt := enclosingVariableDeclaration.Parent().Parent()
 	if !ast.IsVariableStatement(enclosingVarStmt) {
 		return ""
 	}
 
 	initializer := enclosingVariableDeclaration.Initializer()
-	if initializer == nil {
+	if initializer.IsNil() {
 		return ""
 	}
 
 	factory := f.changeTracker.NodeFactory
-	var newNodes []*ast.Node
+	var newNodes []ast.Node
 
-	var baseExprNode *ast.Node
+	var baseExprNode ast.Node
 	if !ast.IsIdentifier(initializer) {
 		// Create a temporary variable for complex expressions
 		tempName := f.changeTracker.EmitContext.Factory.NewUniqueNameEx("dest", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
 		clonedInitializer := factory.DeepCloneNode(initializer)
-		varDecl := factory.NewVariableDeclaration(tempName.AsNode(), nil, nil, clonedInitializer)
-		varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst)
+		varDecl := factory.NewVariableDeclaration(tempName.AsNode(), ast.Node{}, ast.Node{}, clonedInitializer)
+		varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]ast.Node{varDecl}), ast.NodeFlagsConst)
 		varStmt := factory.NewVariableStatement(nil, varDeclList)
 		newNodes = append(newNodes, varStmt)
 		baseExprNode = tempName.AsNode()
@@ -703,10 +703,10 @@ func (f *isolatedDeclarationsFixer) transformDestructuringPatterns(bindingPatter
 	}
 
 	// If the enclosing variable statement has multiple declarations, preserve the non-destructuring ones
-	declList := enclosingVarStmt.AsVariableStatement().DeclarationList.AsVariableDeclarationList()
-	if len(declList.Declarations.Nodes) > 1 {
-		var remainingDecls []*ast.Node
-		for _, d := range declList.Declarations.Nodes {
+	declList := enclosingVarStmt.AsVariableStatement().DeclarationList().AsVariableDeclarationList()
+	if len(declList.Declarations().Nodes) > 1 {
+		var remainingDecls []ast.Node
+		for _, d := range declList.Declarations().Nodes {
 			if d != enclosingVariableDeclaration {
 				remainingDecls = append(remainingDecls, d)
 			}
@@ -718,7 +718,7 @@ func (f *isolatedDeclarationsFixer) transformDestructuringPatterns(bindingPatter
 				factory.UpdateVariableDeclarationList(
 					declList,
 					factory.NewNodeList(remainingDecls),
-					declList.Flags,
+					declList.Flags(),
 				),
 			))
 		}
@@ -729,41 +729,41 @@ func (f *isolatedDeclarationsFixer) transformDestructuringPatterns(bindingPatter
 }
 
 func (f *isolatedDeclarationsFixer) extractBindingElements(
-	bindingPattern *ast.Node,
-	baseExpr *ast.Node,
-	newNodes *[]*ast.Node,
-	enclosingVarStmt *ast.Node,
+	bindingPattern ast.Node,
+	baseExpr ast.Node,
+	newNodes *[]ast.Node,
+	enclosingVarStmt ast.Node,
 ) {
 	factory := f.changeTracker.NodeFactory
 
 	if ast.IsObjectBindingPattern(bindingPattern) {
-		for _, element := range bindingPattern.AsBindingPattern().Elements.Nodes {
+		for _, element := range bindingPattern.AsBindingPattern().Elements().Nodes {
 			if ast.IsOmittedExpression(element) {
 				continue
 			}
 			be := element.AsBindingElement()
 			name := be.Name()
-			if name == nil {
+			if name.IsNil() {
 				continue
 			}
 
 			// Build property access expression
-			var accessExpr *ast.Node
-			if be.PropertyName != nil && ast.IsComputedPropertyName(be.PropertyName) {
+			var accessExpr ast.Node
+			if !be.PropertyName().IsNil() && ast.IsComputedPropertyName(be.PropertyName()) {
 				// Handle computed property names: create a temp variable for the computed expression
-				computedExpression := be.PropertyName.AsComputedPropertyName().Expression
+				computedExpression := be.PropertyName().AsComputedPropertyName().Expression()
 				identifierForComputedProperty := f.changeTracker.EmitContext.Factory.NewGeneratedNameForNode(computedExpression)
-				compVarDecl := factory.NewVariableDeclaration(identifierForComputedProperty.AsNode(), nil, nil, computedExpression)
-				compVarDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]*ast.Node{compVarDecl}), ast.NodeFlagsConst)
+				compVarDecl := factory.NewVariableDeclaration(identifierForComputedProperty.AsNode(), ast.Node{}, ast.Node{}, computedExpression)
+				compVarDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]ast.Node{compVarDecl}), ast.NodeFlagsConst)
 				compVarStmt := factory.NewVariableStatement(nil, compVarDeclList)
 				*newNodes = append(*newNodes, compVarStmt)
-				accessExpr = factory.NewElementAccessExpression(baseExpr, nil, identifierForComputedProperty.AsNode(), ast.NodeFlagsNone)
-			} else if be.PropertyName != nil {
+				accessExpr = factory.NewElementAccessExpression(baseExpr, ast.Node{}, identifierForComputedProperty.AsNode(), ast.NodeFlagsNone)
+			} else if !be.PropertyName().IsNil() {
 				// Use property name text (handles identifiers, string literals, numeric literals)
-				propText := be.PropertyName.Text()
-				accessExpr = factory.NewPropertyAccessExpression(baseExpr, nil, factory.NewIdentifier(propText), ast.NodeFlagsNone)
+				propText := be.PropertyName().Text()
+				accessExpr = factory.NewPropertyAccessExpression(baseExpr, ast.Node{}, factory.NewIdentifier(propText), ast.NodeFlagsNone)
 			} else if ast.IsIdentifier(name) {
-				accessExpr = factory.NewPropertyAccessExpression(baseExpr, nil, factory.NewIdentifier(name.Text()), ast.NodeFlagsNone)
+				accessExpr = factory.NewPropertyAccessExpression(baseExpr, ast.Node{}, factory.NewIdentifier(name.Text()), ast.NodeFlagsNone)
 			} else {
 				continue
 			}
@@ -775,17 +775,17 @@ func (f *isolatedDeclarationsFixer) extractBindingElements(
 			}
 		}
 	} else if ast.IsArrayBindingPattern(bindingPattern) {
-		for i, element := range bindingPattern.AsBindingPattern().Elements.Nodes {
+		for i, element := range bindingPattern.AsBindingPattern().Elements().Nodes {
 			if ast.IsOmittedExpression(element) {
 				continue
 			}
 			be := element.AsBindingElement()
 			name := be.Name()
-			if name == nil {
+			if name.IsNil() {
 				continue
 			}
 
-			accessExpr := factory.NewElementAccessExpression(baseExpr, nil, factory.NewNumericLiteral(strconv.Itoa(i), ast.TokenFlagsNone), ast.NodeFlagsNone)
+			accessExpr := factory.NewElementAccessExpression(baseExpr, ast.Node{}, factory.NewNumericLiteral(strconv.Itoa(i), ast.TokenFlagsNone), ast.NodeFlagsNone)
 
 			if ast.IsBindingPattern(name) {
 				f.extractBindingElements(name, accessExpr, newNodes, enclosingVarStmt)
@@ -800,26 +800,26 @@ func (f *isolatedDeclarationsFixer) extractBindingElements(
 // handling default initializers by creating a ternary `temp === undefined ? default : temp`.
 func (f *isolatedDeclarationsFixer) emitBindingElementVariable(
 	factory *ast.NodeFactory,
-	name *ast.Node,
-	be *ast.BindingElement,
-	accessExpr *ast.Node,
-	newNodes *[]*ast.Node,
-	enclosingVarStmt *ast.Node,
+	name ast.Node,
+	be ast.BindingElement,
+	accessExpr ast.Node,
+	newNodes *[]ast.Node,
+	enclosingVarStmt ast.Node,
 ) {
 	typeNode := f.inferType(name, nil)
 	variableInitializer := accessExpr
 
-	if be.Initializer != nil {
+	if !be.Initializer().IsNil() {
 		// Create a temp variable to hold the accessed value, then use a conditional expression
 		// to apply the default: temp === undefined ? defaultValue : temp
-		propName := be.PropertyName
+		propName := be.PropertyName()
 		tempBaseName := "temp"
-		if propName != nil && ast.IsIdentifier(propName) {
+		if !propName.IsNil() && ast.IsIdentifier(propName) {
 			tempBaseName = propName.Text()
 		}
 		tempName := f.changeTracker.EmitContext.Factory.NewUniqueNameEx(tempBaseName, printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
-		tempVarDecl := factory.NewVariableDeclaration(tempName.AsNode(), nil, nil, variableInitializer)
-		tempVarDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]*ast.Node{tempVarDecl}), ast.NodeFlagsConst)
+		tempVarDecl := factory.NewVariableDeclaration(tempName.AsNode(), ast.Node{}, ast.Node{}, variableInitializer)
+		tempVarDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]ast.Node{tempVarDecl}), ast.NodeFlagsConst)
 		tempVarStmt := factory.NewVariableStatement(nil, tempVarDeclList)
 		*newNodes = append(*newNodes, tempVarStmt)
 
@@ -827,33 +827,33 @@ func (f *isolatedDeclarationsFixer) emitBindingElementVariable(
 			factory.NewBinaryExpression(
 				nil,
 				tempName.AsNode(),
-				nil,
+				ast.Node{},
 				factory.NewToken(ast.KindEqualsEqualsEqualsToken),
 				factory.NewIdentifier("undefined"),
 			),
 			factory.NewToken(ast.KindQuestionToken),
-			be.Initializer,
+			be.Initializer(),
 			factory.NewToken(ast.KindColonToken),
 			variableInitializer,
 		)
 	}
 
 	exportModifier := f.getExportModifier(enclosingVarStmt)
-	varDecl := factory.NewVariableDeclaration(factory.NewIdentifier(name.Text()), nil, typeNode, variableInitializer)
-	varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst)
+	varDecl := factory.NewVariableDeclaration(factory.NewIdentifier(name.Text()), ast.Node{}, typeNode, variableInitializer)
+	varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]ast.Node{varDecl}), ast.NodeFlagsConst)
 	varStmt := factory.NewVariableStatement(exportModifier, varDeclList)
 	*newNodes = append(*newNodes, varStmt)
 }
 
-func (f *isolatedDeclarationsFixer) getExportModifier(enclosingVarStmt *ast.Node) *ast.ModifierList {
+func (f *isolatedDeclarationsFixer) getExportModifier(enclosingVarStmt ast.Node) *ast.ModifierList {
 	if ast.HasSyntacticModifier(enclosingVarStmt, ast.ModifierFlagsExport) {
 		exportToken := f.changeTracker.NodeFactory.NewToken(ast.KindExportKeyword)
-		return f.changeTracker.NodeFactory.NewModifierList([]*ast.Node{exportToken})
+		return f.changeTracker.NodeFactory.NewModifierList([]ast.Node{exportToken})
 	}
 	return nil
 }
 
-func (f *isolatedDeclarationsFixer) inferType(node *ast.Node, variableType *checker.Type) *ast.TypeNode {
+func (f *isolatedDeclarationsFixer) inferType(node ast.Node, variableType *checker.Type) ast.TypeNode {
 	f.mutatedTarget = false
 
 	// Handle Relative mode first: return typeof X for identifiers
@@ -869,10 +869,10 @@ func (f *isolatedDeclarationsFixer) inferType(node *ast.Node, variableType *chec
 			typePredicate := f.checker.GetTypePredicateOfSignature(signature)
 			if typePredicate != nil {
 				if typePredicate.Type() == nil {
-					return nil
+					return ast.Node{}
 				}
 				enclosingDecl := ast.FindAncestor(node, ast.IsDeclaration)
-				if enclosingDecl == nil {
+				if enclosingDecl.IsNil() {
 					enclosingDecl = f.sourceFile.AsNode()
 				}
 				flags := declarationEmitNodeBuilderFlags
@@ -880,10 +880,10 @@ func (f *isolatedDeclarationsFixer) inferType(node *ast.Node, variableType *chec
 					flags |= nodebuilder.FlagsAllowUniqueESSymbolType
 				}
 				result := f.checker.TypePredicateToTypePredicateNode(typePredicate, enclosingDecl, flags, nil)
-				if result != nil {
+				if !result.IsNil() {
 					return result.AsNode()
 				}
-				return nil
+				return ast.Node{}
 			}
 			t = f.checker.GetReturnTypeOfSignature(signature)
 		}
@@ -892,7 +892,7 @@ func (f *isolatedDeclarationsFixer) inferType(node *ast.Node, variableType *chec
 	}
 
 	if t == nil {
-		return nil
+		return ast.Node{}
 	}
 
 	// Handle Widened mode: return widened literal type if different
@@ -902,13 +902,13 @@ func (f *isolatedDeclarationsFixer) inferType(node *ast.Node, variableType *chec
 		}
 		widenedType := f.checker.GetWidenedLiteralType(t)
 		if f.checker.IsTypeAssignableTo(widenedType, t) {
-			return nil // widened type is same, no fix needed
+			return ast.Node{} // widened type is same, no fix needed
 		}
 		t = widenedType
 	}
 
 	enclosingDecl := ast.FindAncestor(node, ast.IsDeclaration)
-	if enclosingDecl == nil {
+	if enclosingDecl.IsNil() {
 		enclosingDecl = f.sourceFile.AsNode()
 	}
 
@@ -923,7 +923,7 @@ func (f *isolatedDeclarationsFixer) inferType(node *ast.Node, variableType *chec
 	return typeNode
 }
 
-func (f *isolatedDeclarationsFixer) getExtraFlags(node *ast.Node, t *checker.Type) nodebuilder.Flags {
+func (f *isolatedDeclarationsFixer) getExtraFlags(node ast.Node, t *checker.Type) nodebuilder.Flags {
 	if (ast.IsVariableDeclaration(node) ||
 		(ast.IsPropertyDeclaration(node) && ast.HasSyntacticModifier(node, ast.ModifierFlagsStatic|ast.ModifierFlagsReadonly))) &&
 		t.Flags()&checker.TypeFlagsUniqueESSymbol != 0 {
@@ -933,7 +933,7 @@ func (f *isolatedDeclarationsFixer) getExtraFlags(node *ast.Node, t *checker.Typ
 }
 
 // createTypeOfFromEntityNameExpression creates a `typeof X` type query node.
-func (f *isolatedDeclarationsFixer) createTypeOfFromEntityNameExpression(node *ast.Node) *ast.TypeNode {
+func (f *isolatedDeclarationsFixer) createTypeOfFromEntityNameExpression(node ast.Node) ast.TypeNode {
 	return f.changeTracker.NodeFactory.NewTypeQueryNode(
 		f.changeTracker.NodeFactory.DeepCloneNode(node), nil,
 	)
@@ -941,10 +941,10 @@ func (f *isolatedDeclarationsFixer) createTypeOfFromEntityNameExpression(node *a
 
 // typeFromArraySpreadElements decomposes an array literal with spread elements into
 // separate variables, returning a tuple type of typeof references.
-func (f *isolatedDeclarationsFixer) typeFromArraySpreadElements(node *ast.ArrayLiteralExpression, name string) *ast.TypeNode {
-	isInConstContext := ast.FindAncestor(node.AsNode(), isConstAssertion) != nil
+func (f *isolatedDeclarationsFixer) typeFromArraySpreadElements(node ast.ArrayLiteralExpression, name string) ast.TypeNode {
+	isInConstContext := !ast.FindAncestor(node.AsNode(), isConstAssertion).IsNil()
 	if !isInConstContext {
-		return nil
+		return ast.Node{}
 	}
 	if name == "" {
 		name = "temp"
@@ -954,18 +954,18 @@ func (f *isolatedDeclarationsFixer) typeFromArraySpreadElements(node *ast.ArrayL
 		node.AsNode(),
 		name,
 		isInConstContext,
-		func(n *ast.Node) []*ast.Node {
-			return n.AsArrayLiteralExpression().Elements.Nodes
+		func(n ast.Node) []ast.Node {
+			return n.AsArrayLiteralExpression().Elements().Nodes
 		},
 		ast.IsSpreadElement,
-		func(expr *ast.Node) *ast.Node {
+		func(expr ast.Node) ast.Node {
 			return factory.NewSpreadElement(expr)
 		},
-		func(elements []*ast.Node) *ast.Node {
+		func(elements []ast.Node) ast.Node {
 			return factory.NewArrayLiteralExpression(factory.NewNodeList(elements), true)
 		},
-		func(types []*ast.TypeNode) *ast.TypeNode {
-			restTypes := make([]*ast.TypeNode, len(types))
+		func(types []ast.TypeNode) ast.TypeNode {
+			restTypes := make([]ast.TypeNode, len(types))
 			for i, t := range types {
 				restTypes[i] = factory.NewRestTypeNode(t)
 			}
@@ -976,8 +976,8 @@ func (f *isolatedDeclarationsFixer) typeFromArraySpreadElements(node *ast.ArrayL
 
 // typeFromObjectSpreadAssignment decomposes an object literal with spread assignments into
 // separate variables, returning an intersection type of typeof references.
-func (f *isolatedDeclarationsFixer) typeFromObjectSpreadAssignment(node *ast.ObjectLiteralExpression, name string) *ast.TypeNode {
-	isInConstContext := ast.FindAncestor(node.AsNode(), isConstAssertion) != nil
+func (f *isolatedDeclarationsFixer) typeFromObjectSpreadAssignment(node ast.ObjectLiteralExpression, name string) ast.TypeNode {
+	isInConstContext := !ast.FindAncestor(node.AsNode(), isConstAssertion).IsNil()
 	if name == "" {
 		name = "temp"
 	}
@@ -986,20 +986,20 @@ func (f *isolatedDeclarationsFixer) typeFromObjectSpreadAssignment(node *ast.Obj
 		node.AsNode(),
 		name,
 		isInConstContext,
-		func(n *ast.Node) []*ast.Node {
-			if n.AsObjectLiteralExpression().Properties != nil {
-				return n.AsObjectLiteralExpression().Properties.Nodes
+		func(n ast.Node) []ast.Node {
+			if n.AsObjectLiteralExpression().Properties() != nil {
+				return n.AsObjectLiteralExpression().Properties().Nodes
 			}
 			return nil
 		},
 		ast.IsSpreadAssignment,
-		func(expr *ast.Node) *ast.Node {
+		func(expr ast.Node) ast.Node {
 			return factory.NewSpreadAssignment(expr)
 		},
-		func(elements []*ast.Node) *ast.Node {
+		func(elements []ast.Node) ast.Node {
 			return factory.NewObjectLiteralExpression(factory.NewNodeList(elements), true)
 		},
-		func(types []*ast.TypeNode) *ast.TypeNode {
+		func(types []ast.TypeNode) ast.TypeNode {
 			return factory.NewIntersectionTypeNode(factory.NewNodeList(types))
 		},
 	)
@@ -1008,19 +1008,19 @@ func (f *isolatedDeclarationsFixer) typeFromObjectSpreadAssignment(node *ast.Obj
 // typeFromSpreads is the generic spread decomposition function, ported from TS's typeFromSpreads.
 // It splits a literal with spread elements into separate const variables and returns a composed type.
 func (f *isolatedDeclarationsFixer) typeFromSpreads(
-	node *ast.Node,
+	node ast.Node,
 	name string,
 	isInConstContext bool,
-	getChildren func(*ast.Node) []*ast.Node,
-	isSpread func(*ast.Node) bool,
-	createSpread func(*ast.Node) *ast.Node,
-	makeNodeOfKind func([]*ast.Node) *ast.Node,
-	finalType func([]*ast.TypeNode) *ast.TypeNode,
-) *ast.TypeNode {
+	getChildren func(ast.Node) []ast.Node,
+	isSpread func(ast.Node) bool,
+	createSpread func(ast.Node) ast.Node,
+	makeNodeOfKind func([]ast.Node) ast.Node,
+	finalType func([]ast.TypeNode) ast.TypeNode,
+) ast.TypeNode {
 	factory := f.changeTracker.NodeFactory
-	var intersectionTypes []*ast.TypeNode
-	var newSpreads []*ast.Node
-	var currentVariableProperties []*ast.Node
+	var intersectionTypes []ast.TypeNode
+	var newSpreads []ast.Node
+	var currentVariableProperties []ast.Node
 
 	statement := ast.FindAncestor(node, ast.IsStatement)
 
@@ -1040,7 +1040,7 @@ func (f *isolatedDeclarationsFixer) typeFromSpreads(
 	}
 
 	if len(newSpreads) == 0 {
-		return nil
+		return ast.Node{}
 	}
 
 	f.finalizesVariablePart(factory, name, isInConstContext, statement, makeNodeOfKind, createSpread, &currentVariableProperties, &intersectionTypes, &newSpreads)
@@ -1056,18 +1056,18 @@ func (f *isolatedDeclarationsFixer) makeSpreadVariable(
 	factory *ast.NodeFactory,
 	name string,
 	isInConstContext bool,
-	statement *ast.Node,
-	createSpread func(*ast.Node) *ast.Node,
-	expression *ast.Node,
-	intersectionTypes *[]*ast.TypeNode,
-	newSpreads *[]*ast.Node,
+	statement ast.Node,
+	createSpread func(ast.Node) ast.Node,
+	expression ast.Node,
+	intersectionTypes *[]ast.TypeNode,
+	newSpreads *[]ast.Node,
 ) {
 	tempName := f.changeTracker.EmitContext.Factory.NewUniqueNameEx(
 		name+"_Part"+strconv.Itoa(len(*newSpreads)+1),
 		printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic},
 	).AsNode()
 
-	var initializer *ast.Node
+	var initializer ast.Node
 	if !isInConstContext {
 		initializer = factory.DeepCloneNode(expression)
 	} else {
@@ -1075,11 +1075,11 @@ func (f *isolatedDeclarationsFixer) makeSpreadVariable(
 		initializer = factory.NewAsExpression(factory.DeepCloneNode(expression), constRef)
 	}
 
-	varDecl := factory.NewVariableDeclaration(tempName, nil, nil, initializer)
-	varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst)
+	varDecl := factory.NewVariableDeclaration(tempName, ast.Node{}, ast.Node{}, initializer)
+	varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]ast.Node{varDecl}), ast.NodeFlagsConst)
 	varStmt := factory.NewVariableStatement(nil, varDeclList)
 
-	if statement != nil {
+	if !statement.IsNil() {
 		f.changeTracker.InsertNodeBefore(f.sourceFile, statement, varStmt, false, change.LeadingTriviaOptionNone)
 	}
 
@@ -1092,12 +1092,12 @@ func (f *isolatedDeclarationsFixer) finalizesVariablePart(
 	factory *ast.NodeFactory,
 	name string,
 	isInConstContext bool,
-	statement *ast.Node,
-	makeNodeOfKind func([]*ast.Node) *ast.Node,
-	createSpread func(*ast.Node) *ast.Node,
-	currentVariableProperties *[]*ast.Node,
-	intersectionTypes *[]*ast.TypeNode,
-	newSpreads *[]*ast.Node,
+	statement ast.Node,
+	makeNodeOfKind func([]ast.Node) ast.Node,
+	createSpread func(ast.Node) ast.Node,
+	currentVariableProperties *[]ast.Node,
+	intersectionTypes *[]ast.TypeNode,
+	newSpreads *[]ast.Node,
 ) {
 	if len(*currentVariableProperties) > 0 {
 		f.makeSpreadVariable(factory, name, isInConstContext, statement, createSpread, makeNodeOfKind(*currentVariableProperties), intersectionTypes, newSpreads)
@@ -1106,7 +1106,7 @@ func (f *isolatedDeclarationsFixer) finalizesVariablePart(
 }
 
 // isConstAssertion checks if a node is an `as const` or `<const>` assertion.
-func isConstAssertion(node *ast.Node) bool {
+func isConstAssertion(node ast.Node) bool {
 	if ast.IsAssertionExpression(node) {
 		typeNode := node.Type()
 		return ast.IsConstTypeReference(typeNode)
@@ -1117,9 +1117,9 @@ func isConstAssertion(node *ast.Node) bool {
 // relativeType creates a typeof expression for a node, used in TypePrintMode.Relative.
 // Instead of spelling out the full type, returns `typeof X` for identifiers.
 // For object/array literals with spreads, decomposes into separate variables.
-func (f *isolatedDeclarationsFixer) relativeType(node *ast.Node) *ast.TypeNode {
+func (f *isolatedDeclarationsFixer) relativeType(node ast.Node) ast.TypeNode {
 	if ast.IsParameterDeclaration(node) {
-		return nil
+		return ast.Node{}
 	}
 	if ast.IsShorthandPropertyAssignment(node) {
 		return f.createTypeOfFromEntityNameExpression(node.AsShorthandPropertyAssignment().Name())
@@ -1133,50 +1133,50 @@ func (f *isolatedDeclarationsFixer) relativeType(node *ast.Node) *ast.TypeNode {
 	if ast.IsArrayLiteralExpression(node) {
 		varDecl := ast.FindAncestorKind(node, ast.KindVariableDeclaration)
 		partName := ""
-		if varDecl != nil && ast.IsIdentifier(varDecl.Name()) {
-			partName = varDecl.Name().AsIdentifier().Text
+		if !varDecl.IsNil() && ast.IsIdentifier(varDecl.Name()) {
+			partName = varDecl.Name().AsIdentifier().Text()
 		}
 		return f.typeFromArraySpreadElements(node.AsArrayLiteralExpression(), partName)
 	}
 	if ast.IsObjectLiteralExpression(node) {
 		varDecl := ast.FindAncestorKind(node, ast.KindVariableDeclaration)
 		partName := ""
-		if varDecl != nil && ast.IsIdentifier(varDecl.Name()) {
-			partName = varDecl.Name().AsIdentifier().Text
+		if !varDecl.IsNil() && ast.IsIdentifier(varDecl.Name()) {
+			partName = varDecl.Name().AsIdentifier().Text()
 		}
 		return f.typeFromObjectSpreadAssignment(node.AsObjectLiteralExpression(), partName)
 	}
-	if ast.IsVariableDeclaration(node) && node.Initializer() != nil {
+	if ast.IsVariableDeclaration(node) && !node.Initializer().IsNil() {
 		return f.relativeType(node.Initializer())
 	}
 	if ast.IsConditionalExpression(node) {
 		cond := node.AsConditionalExpression()
-		trueType := f.relativeType(cond.WhenTrue)
-		if trueType == nil {
-			return nil
+		trueType := f.relativeType(cond.WhenTrue())
+		if trueType.IsNil() {
+			return ast.Node{}
 		}
 		trueMutated := f.mutatedTarget
-		falseType := f.relativeType(cond.WhenFalse)
-		if falseType == nil {
-			return nil
+		falseType := f.relativeType(cond.WhenFalse())
+		if falseType.IsNil() {
+			return ast.Node{}
 		}
 		f.mutatedTarget = trueMutated || f.mutatedTarget
 		factory := f.changeTracker.NodeFactory
-		return factory.NewUnionTypeNode(factory.NewNodeList([]*ast.Node{trueType, falseType}))
+		return factory.NewUnionTypeNode(factory.NewNodeList([]ast.Node{trueType, falseType}))
 	}
-	return nil
+	return ast.Node{}
 }
 
 // typeToMinimizedReferenceType converts a type to a type node, then trims trailing
 // type arguments that match their defaults. Ported from TS's
 // services/codefixes/helpers.ts typeToMinimizedReferenceType.
-func (f *isolatedDeclarationsFixer) typeToMinimizedReferenceType(t *checker.Type, enclosingDecl *ast.Node, flags nodebuilder.Flags) *ast.TypeNode {
-	idToSymbol := make(map[*ast.IdentifierNode]*ast.Symbol)
+func (f *isolatedDeclarationsFixer) typeToMinimizedReferenceType(t *checker.Type, enclosingDecl ast.Node, flags nodebuilder.Flags) ast.TypeNode {
+	idToSymbol := make(map[ast.IdentifierNode]*ast.Symbol)
 	// !!! When truncation tracking is supported, check if the type was truncated
 	// and return factory.NewKeywordTypeNode(ast.KindAnyKeyword) instead of the truncated node.
 	typeNode := f.checker.TypeToTypeNodeEx(t, enclosingDecl, flags, nodebuilder.InternalFlagsWriteComputedProps, idToSymbol)
-	if typeNode == nil {
-		return nil
+	if typeNode.IsNil() {
+		return ast.Node{}
 	}
 	if ast.IsTypeReferenceNode(typeNode) && t.ObjectFlags()&checker.ObjectFlagsReference != 0 {
 		typeArgs := f.checker.GetTypeArguments(t)
@@ -1188,7 +1188,7 @@ func (f *isolatedDeclarationsFixer) typeToMinimizedReferenceType(t *checker.Type
 				trimmedArgs := f.changeTracker.NodeFactory.NewNodeList(nodeTypeArgs[:cutoff])
 				typeNode = f.changeTracker.NodeFactory.UpdateTypeReferenceNode(
 					typeNode.AsTypeReferenceNode(),
-					typeNode.AsTypeReferenceNode().TypeName,
+					typeNode.AsTypeReferenceNode().TypeName(),
 					trimmedArgs,
 				)
 			}
@@ -1197,7 +1197,7 @@ func (f *isolatedDeclarationsFixer) typeToMinimizedReferenceType(t *checker.Type
 	// Convert import type references (e.g. import("./path").Name) to simple type references
 	// and collect symbols that need to be imported
 	referenceTypeNode, importableSymbols := autoimport.TryGetAutoImportableReferenceFromTypeNode(typeNode, idToSymbol)
-	if referenceTypeNode != nil {
+	if !referenceTypeNode.IsNil() {
 		typeNode = referenceTypeNode
 		f.symbolsToImport = append(f.symbolsToImport, importableSymbols...)
 	}
@@ -1250,27 +1250,27 @@ func typeParamHasDefault(tp *checker.Type) bool {
 		return false
 	}
 	for _, decl := range sym.Declarations() {
-		if ast.IsTypeParameterDeclaration(decl) && decl.AsTypeParameterDeclaration().DefaultType != nil {
+		if ast.IsTypeParameterDeclaration(decl) && !decl.AsTypeParameterDeclaration().DefaultType().IsNil() {
 			return true
 		}
 	}
 	return false
 }
 
-func (f *isolatedDeclarationsFixer) addTypeToVariableLike(decl *ast.Node) string {
+func (f *isolatedDeclarationsFixer) addTypeToVariableLike(decl ast.Node) string {
 	typeNode := f.inferType(decl, nil)
-	if typeNode == nil {
+	if typeNode.IsNil() {
 		return ""
 	}
-	if decl.Type() != nil {
+	if !decl.Type().IsNil() {
 		f.changeTracker.ReplaceNode(f.sourceFile, decl.Type(), typeNode, nil)
 	} else {
 		f.changeTracker.TryInsertTypeAnnotation(f.sourceFile, decl, typeNode)
 		// Parenthesize paren-less arrow function parameters (`x => ...`) so the inserted `: T`
 		// produces `(x: T) => ...` instead of the invalid `x: T => ...`. Queued after the type
 		// annotation so that the `)` edit at param.End() sorts after the annotation insertion.
-		if ast.IsParameterDeclaration(decl) && decl.Parent != nil && ast.IsArrowFunction(decl.Parent) {
-			f.changeTracker.ParenthesizeArrowParameters(f.sourceFile, decl.Parent)
+		if ast.IsParameterDeclaration(decl) && !decl.Parent().IsNil() && ast.IsArrowFunction(decl.Parent()) {
+			f.changeTracker.ParenthesizeArrowParameters(f.sourceFile, decl.Parent())
 		}
 	}
 	return diagnostics.Add_annotation_of_type_0.Localize(f.locale, typeToStringForDiag(typeNode, f.sourceFile, f.changeTracker))
@@ -1280,7 +1280,7 @@ func (f *isolatedDeclarationsFixer) addTypeToVariableLike(decl *ast.Node) string
 // It reuses the change tracker's EmitContext so that generated identifier names are resolved
 // consistently with the actual code edits, and passes the source file so that the printer's
 // name generator can check for conflicts with existing file-level identifiers.
-func typeToStringForDiag(typeNode *ast.Node, sourceFile *ast.SourceFile, ct *change.Tracker) string {
+func typeToStringForDiag(typeNode ast.Node, sourceFile *ast.SourceFile, ct *change.Tracker) string {
 	savedFlags := ct.EmitContext.EmitFlags(typeNode)
 	ct.EmitContext.SetEmitFlags(typeNode, savedFlags|printer.EFSingleLine)
 	p := printer.NewPrinter(
@@ -1303,34 +1303,34 @@ func typeToStringForDiag(typeNode *ast.Node, sourceFile *ast.SourceFile, ct *cha
 
 // findAncestorWithMissingType walks up the ancestor chain to find a node that
 // can have a type annotation and is missing one.
-func findAncestorWithMissingType(node *ast.Node) *ast.Node {
-	return ast.FindAncestor(node, func(n *ast.Node) bool {
-		if !canHaveTypeAnnotationKinds[n.Kind] {
+func findAncestorWithMissingType(node ast.Node) ast.Node {
+	return ast.FindAncestor(node, func(n ast.Node) bool {
+		if !canHaveTypeAnnotationKinds[n.Kind()] {
 			return false
 		}
 		if ast.IsObjectBindingPattern(n) || ast.IsArrayBindingPattern(n) {
-			return ast.IsVariableDeclaration(n.Parent)
+			return ast.IsVariableDeclaration(n.Parent())
 		}
 		return true
 	})
 }
 
 // findBestFittingNode walks up from the token to find the node that best fits the diagnostic span.
-func findBestFittingNode(node *ast.Node, span core.TextRange) *ast.Node {
-	if node == nil {
-		return nil
+func findBestFittingNode(node ast.Node, span core.TextRange) ast.Node {
+	if node.IsNil() {
+		return ast.Node{}
 	}
-	for node != nil && node.End() < span.Pos()+span.Len() {
-		node = node.Parent
+	for !node.IsNil() && node.End() < span.Pos()+span.Len() {
+		node = node.Parent()
 	}
-	for node.Parent != nil && node.Parent.Pos() == node.Pos() && node.Parent.End() == node.End() {
-		node = node.Parent
+	for !node.Parent().IsNil() && node.Parent().Pos() == node.Pos() && node.Parent().End() == node.End() {
+		node = node.Parent()
 	}
-	if ast.IsIdentifier(node) && ast.HasInitializer(node.Parent) && node.Parent.Initializer() != nil {
-		return node.Parent.Initializer()
+	if ast.IsIdentifier(node) && ast.HasInitializer(node.Parent()) && !node.Parent().Initializer().IsNil() {
+		return node.Parent().Initializer()
 	}
-	if ast.IsIdentifier(node) && ast.IsShorthandPropertyAssignment(node.Parent) {
-		return node.Parent
+	if ast.IsIdentifier(node) && ast.IsShorthandPropertyAssignment(node.Parent()) {
+		return node.Parent()
 	}
 	return node
 }
@@ -1338,8 +1338,8 @@ func findBestFittingNode(node *ast.Node, span core.TextRange) *ast.Node {
 // isNamedDeclarationKind matches TS's isDeclarationKind, which is narrower than Go's IsDeclaration.
 // Go's IsDeclaration returns true for any node with DeclarationData (including CallExpression),
 // while TS's isDeclaration only returns true for specific named declaration kinds.
-func isNamedDeclarationKind(node *ast.Node) bool {
-	switch node.Kind {
+func isNamedDeclarationKind(node ast.Node) bool {
+	switch node.Kind() {
 	case ast.KindArrowFunction, ast.KindBindingElement, ast.KindClassDeclaration, ast.KindClassExpression,
 		ast.KindClassStaticBlockDeclaration, ast.KindConstructor, ast.KindEnumDeclaration, ast.KindEnumMember,
 		ast.KindExportSpecifier, ast.KindFunctionDeclaration, ast.KindFunctionExpression,
@@ -1358,7 +1358,7 @@ func isNamedDeclarationKind(node *ast.Node) bool {
 }
 
 // isValueSignatureDeclaration checks if a node is a function-like declaration that produces a value.
-func isValueSignatureDeclaration(node *ast.Node) bool {
+func isValueSignatureDeclaration(node ast.Node) bool {
 	return ast.IsFunctionExpression(node) || ast.IsArrowFunction(node) || ast.IsMethodDeclaration(node) ||
 		ast.IsAccessor(node) || ast.IsFunctionDeclaration(node) || ast.IsConstructorDeclaration(node)
 }
@@ -1366,7 +1366,7 @@ func isValueSignatureDeclaration(node *ast.Node) bool {
 // getIdentifierNameForNode derives a meaningful variable name from a node expression.
 // For property access expressions like `obj.foo`, returns "foo". Otherwise returns "newLocal".
 // Ported from TS's getIdentifierForNode in services/refactors/helpers.ts.
-func getIdentifierNameForNode(node *ast.Node) string {
+func getIdentifierNameForNode(node ast.Node) string {
 	if ast.IsPropertyAccessExpression(node) {
 		name := node.AsPropertyAccessExpression().Name()
 		if ast.IsIdentifier(name) && !ast.IsPrivateIdentifier(name) && scanner.IdentifierToKeywordKind(name.AsIdentifier()) == ast.KindUnknown {
@@ -1393,27 +1393,27 @@ func (f *isolatedDeclarationsFixer) addSymbolToExistingImport(sym *ast.Symbol) {
 			continue
 		}
 		importDecl := stmt.AsImportDeclaration()
-		if importDecl.ImportClause == nil {
+		if importDecl.ImportClause().IsNil() {
 			continue
 		}
 
 		// Check if this import is from the same module
-		importModuleSymbol := f.checker.GetSymbolAtLocation(importDecl.ModuleSpecifier)
+		importModuleSymbol := f.checker.GetSymbolAtLocation(importDecl.ModuleSpecifier())
 		if importModuleSymbol == nil || f.checker.GetMergedSymbol(importModuleSymbol) != f.checker.GetMergedSymbol(moduleSymbol) {
 			continue
 		}
 
 		// Found the matching import - add the symbol to named imports
-		importClause := importDecl.ImportClause.AsImportClause()
-		if importClause.NamedBindings != nil && ast.IsNamedImports(importClause.NamedBindings) {
+		importClause := importDecl.ImportClause().AsImportClause()
+		if !importClause.NamedBindings().IsNil() && ast.IsNamedImports(importClause.NamedBindings()) {
 			// Add to existing named imports
-			existingElements := importClause.NamedBindings.AsNamedImports().Elements.Nodes
+			existingElements := importClause.NamedBindings().AsNamedImports().Elements().Nodes
 			factory := f.changeTracker.NodeFactory
-			newSpecifier := factory.NewImportSpecifier(false, nil, factory.NewIdentifier(symbolName))
+			newSpecifier := factory.NewImportSpecifier(false, ast.Node{}, factory.NewIdentifier(symbolName))
 			newElements := append(existingElements, newSpecifier.AsNode())
 			newNamedImports := factory.NewNamedImports(factory.NewNodeList(newElements))
-			newImportClause := factory.UpdateImportClause(importClause, importClause.PhaseModifier, importClause.Name(), newNamedImports)
-			newImportDecl := factory.UpdateImportDeclaration(importDecl, importDecl.Modifiers(), newImportClause, importDecl.ModuleSpecifier, importDecl.Attributes)
+			newImportClause := factory.UpdateImportClause(importClause, importClause.PhaseModifier(), importClause.Name(), newNamedImports)
+			newImportDecl := factory.UpdateImportDeclaration(importDecl, importDecl.Modifiers(), newImportClause, importDecl.ModuleSpecifier(), importDecl.Attributes())
 			f.changeTracker.ReplaceNode(f.sourceFile, stmt, newImportDecl.AsNode(), nil)
 		}
 		return

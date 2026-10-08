@@ -24,7 +24,7 @@ type includeProcessor struct {
 	redirectAndFileFormat      collections.SyncMap[tspath.PathKey, []*ast.Diagnostic]
 	computedDiagnostics        *ast.DiagnosticsCollection
 	computedDiagnosticsOnce    sync.Once
-	compilerOptionsSyntax      *ast.ObjectLiteralExpression
+	compilerOptionsSyntax      ast.ObjectLiteralExpression
 	compilerOptionsSyntaxOnce  sync.Once
 }
 
@@ -97,17 +97,17 @@ func (i *includeProcessor) getReferenceLocation(r *FileIncludeReason, program *P
 	return loc
 }
 
-func (i *includeProcessor) getCompilerOptionsObjectLiteralSyntax(program *Program) *ast.ObjectLiteralExpression {
+func (i *includeProcessor) getCompilerOptionsObjectLiteralSyntax(program *Program) ast.ObjectLiteralExpression {
 	i.compilerOptionsSyntaxOnce.Do(func() {
 		configFile := program.opts.Config.ConfigFile
 		if configFile != nil {
-			if compilerOptionsProperty := tsoptions.ForEachTsConfigPropArray(configFile.SourceFile, "compilerOptions", core.Identity); compilerOptionsProperty != nil &&
-				compilerOptionsProperty.Initializer != nil &&
-				ast.IsObjectLiteralExpression(compilerOptionsProperty.Initializer) {
-				i.compilerOptionsSyntax = compilerOptionsProperty.Initializer.AsObjectLiteralExpression()
+			if compilerOptionsProperty := tsoptions.ForEachTsConfigPropArray(configFile.SourceFile, "compilerOptions", core.Identity); !compilerOptionsProperty.IsNil() &&
+				!compilerOptionsProperty.Initializer().IsNil() &&
+				ast.IsObjectLiteralExpression(compilerOptionsProperty.Initializer()) {
+				i.compilerOptionsSyntax = compilerOptionsProperty.Initializer().AsObjectLiteralExpression()
 			}
 		} else {
-			i.compilerOptionsSyntax = nil
+			i.compilerOptionsSyntax = (ast.ObjectLiteralExpression{})
 		}
 	})
 	return i.compilerOptionsSyntax

@@ -7,20 +7,20 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/transformers"
 )
 
-func convertClassDeclarationToClassExpression(emitContext *printer.EmitContext, node *ast.ClassDeclaration) *ast.Expression {
+func convertClassDeclarationToClassExpression(emitContext *printer.EmitContext, node ast.ClassDeclaration) ast.Expression {
 	updated := emitContext.Factory.NewClassExpression(
 		transformers.ExtractModifiers(emitContext, node.Modifiers(), ^ast.ModifierFlagsExportDefault),
 		node.Name(),
-		node.TypeParameters,
-		node.HeritageClauses,
-		node.Members,
+		node.TypeParameters(),
+		node.HeritageClauses(),
+		node.Members(),
 	)
 	emitContext.SetOriginal(updated, node.AsNode())
-	updated.Loc = node.Loc
+	updated.SetLoc(node.Loc())
 	return updated
 }
 
-func createNotNullCondition(emitContext *printer.EmitContext, left *ast.Node, right *ast.Node, invert bool) *ast.Node {
+func createNotNullCondition(emitContext *printer.EmitContext, left ast.Node, right ast.Node, invert bool) ast.Node {
 	token := ast.KindExclamationEqualsEqualsToken
 	op := ast.KindAmpersandAmpersandToken
 	if invert {
@@ -33,16 +33,16 @@ func createNotNullCondition(emitContext *printer.EmitContext, left *ast.Node, ri
 		emitContext.Factory.NewBinaryExpression(
 			nil,
 			left,
-			nil,
+			ast.Node{},
 			emitContext.Factory.NewToken(token),
 			emitContext.Factory.NewKeywordExpression(ast.KindNullKeyword),
 		),
-		nil,
+		ast.Node{},
 		emitContext.Factory.NewToken(op),
 		emitContext.Factory.NewBinaryExpression(
 			nil,
 			right,
-			nil,
+			ast.Node{},
 			emitContext.Factory.NewToken(token),
 			emitContext.Factory.NewVoidZeroExpression(),
 		),
@@ -61,8 +61,8 @@ type superAccessState struct {
 	hasSuperElementAccess      bool
 	hasSuperPropertyAssignment bool
 
-	superBinding       *ast.IdentifierNode
-	superIndexBinding  *ast.IdentifierNode
+	superBinding       ast.IdentifierNode
+	superIndexBinding  ast.IdentifierNode
 	superAccessVisitor *ast.NodeVisitor
 }
 
@@ -74,27 +74,27 @@ func (s *superAccessState) initSuperAccessVisitor(emitContext *printer.EmitConte
 // visitSuperAccessNode walks the async/generator body and replaces super property/element
 // accesses with _super/_superIndex references. This is necessary because the async body
 // ends up inside a generator function where `super` is not valid.
-func (s *superAccessState) visitSuperAccessNode(node *ast.Node) *ast.Node {
-	switch node.Kind {
+func (s *superAccessState) visitSuperAccessNode(node ast.Node) ast.Node {
+	switch node.Kind() {
 	case ast.KindCallExpression:
 		call := node.AsCallExpression()
-		if ast.IsSuperProperty(call.Expression) {
+		if ast.IsSuperProperty(call.Expression()) {
 			return s.substituteCallExpressionWithSuperAccess(call, s.superAccessVisitor)
 		}
 		return s.superAccessVisitor.VisitEachChild(node)
 	case ast.KindPropertyAccessExpression:
-		if node.Expression().Kind == ast.KindSuperKeyword {
+		if node.Expression().Kind() == ast.KindSuperKeyword {
 			// super.x → _super.x
 			return s.factory.NewPropertyAccessExpression(
-				s.superBinding, nil, node.Name(), ast.NodeFlagsNone,
+				s.superBinding, ast.Node{}, node.Name(), ast.NodeFlagsNone,
 			)
 		}
 		return s.superAccessVisitor.VisitEachChild(node)
 	case ast.KindElementAccessExpression:
-		if node.Expression().Kind == ast.KindSuperKeyword {
+		if node.Expression().Kind() == ast.KindSuperKeyword {
 			// super[x] → _superIndex(x) or _superIndex(x).value
 			return s.createSuperElementAccessInAsyncMethod(
-				node.AsElementAccessExpression().ArgumentExpression,
+				node.AsElementAccessExpression().ArgumentExpression(),
 			)
 		}
 		return s.superAccessVisitor.VisitEachChild(node)
@@ -108,62 +108,62 @@ func (s *superAccessState) visitSuperAccessNode(node *ast.Node) *ast.Node {
 	}
 }
 
-func (s *superAccessState) substituteSuperAccessesInBody(body *ast.Node) *ast.Node {
+func (s *superAccessState) substituteSuperAccessesInBody(body ast.Node) ast.Node {
 	return s.superAccessVisitor.VisitNode(body)
 }
 
 // substituteCallExpressionWithSuperAccess handles super.x(args) and super[x](args).
-func (s *superAccessState) substituteCallExpressionWithSuperAccess(call *ast.CallExpression, visitor *ast.NodeVisitor) *ast.Node {
-	expression := call.Expression
-	var target *ast.Node
+func (s *superAccessState) substituteCallExpressionWithSuperAccess(call ast.CallExpression, visitor *ast.NodeVisitor) ast.Node {
+	expression := call.Expression()
+	var target ast.Node
 
 	if ast.IsPropertyAccessExpression(expression) {
 		// super.x(args) → _super.x.call(this, args)
 		target = s.factory.NewPropertyAccessExpression(
-			s.superBinding, nil,
+			s.superBinding, ast.Node{},
 			expression.AsPropertyAccessExpression().Name(), ast.NodeFlagsNone,
 		)
 	} else if ast.IsElementAccessExpression(expression) {
 		// super[x](args) → _superIndex(x).call(this, args) or _superIndex(x).value.call(this, args)
 		target = s.createSuperElementAccessInAsyncMethod(
-			expression.AsElementAccessExpression().ArgumentExpression,
+			expression.AsElementAccessExpression().ArgumentExpression(),
 		)
 	} else {
 		return visitor.VisitEachChild(call.AsNode())
 	}
 
 	callTarget := s.factory.NewPropertyAccessExpression(
-		target, nil,
+		target, ast.Node{},
 		s.factory.NewIdentifier("call"), ast.NodeFlagsNone,
 	)
 
-	var allArgs []*ast.Node
+	var allArgs []ast.Node
 	allArgs = append(allArgs, s.factory.NewThisExpression())
-	if call.Arguments != nil {
-		visitedArgs := visitor.VisitNodes(call.Arguments)
+	if call.Arguments() != nil {
+		visitedArgs := visitor.VisitNodes(call.Arguments())
 		if visitedArgs != nil {
 			allArgs = append(allArgs, visitedArgs.Nodes...)
 		}
 	}
 
 	result := s.factory.NewCallExpression(
-		callTarget, nil, nil,
+		callTarget, ast.Node{}, nil,
 		s.factory.NewNodeList(allArgs), ast.NodeFlagsNone,
 	)
-	result.Loc = call.Loc
+	result.SetLoc(call.Loc())
 	return result
 }
 
 // createSuperElementAccessInAsyncMethod creates _superIndex(x) or _superIndex(x).value.
-func (s *superAccessState) createSuperElementAccessInAsyncMethod(argumentExpression *ast.Node) *ast.Node {
+func (s *superAccessState) createSuperElementAccessInAsyncMethod(argumentExpression ast.Node) ast.Node {
 	superIndexCall := s.factory.NewCallExpression(
-		s.superIndexBinding, nil, nil,
-		s.factory.NewNodeList([]*ast.Node{argumentExpression}),
+		s.superIndexBinding, ast.Node{}, nil,
+		s.factory.NewNodeList([]ast.Node{argumentExpression}),
 		ast.NodeFlagsNone,
 	)
 	if s.hasSuperPropertyAssignment {
 		return s.factory.NewPropertyAccessExpression(
-			superIndexCall, nil,
+			superIndexCall, ast.Node{},
 			s.factory.NewIdentifier("value"), ast.NodeFlagsNone,
 		)
 	}
@@ -179,49 +179,49 @@ func (s *superAccessState) createSuperElementAccessInAsyncMethod(argumentExpress
 //	    x: { get: () => super.x },                           // read-only
 //	    x: { get: () => super.x, set: (v) => super.x = v }, // read-write
 //	});
-func (s *superAccessState) createSuperAccessVariableStatement() *ast.Node {
+func (s *superAccessState) createSuperAccessVariableStatement() ast.Node {
 	f := s.factory
-	var accessors []*ast.Node
+	var accessors []ast.Node
 
 	for name := range s.capturedSuperProperties.Values() {
-		var descriptorProperties []*ast.Node
+		var descriptorProperties []ast.Node
 
 		// getter: get: () => super.name
 		getterBody := f.NewPropertyAccessExpression(
-			f.NewKeywordExpression(ast.KindSuperKeyword), nil,
+			f.NewKeywordExpression(ast.KindSuperKeyword), ast.Node{},
 			f.NewIdentifier(name), ast.NodeFlagsNone,
 		)
 		getterArrow := f.NewArrowFunction(
 			nil, nil,
-			f.NewNodeList([]*ast.Node{}),
-			nil, nil,
+			f.NewNodeList([]ast.Node{}),
+			ast.Node{}, ast.Node{},
 			f.NewToken(ast.KindEqualsGreaterThanToken),
 			getterBody,
 		)
-		getter := f.NewPropertyAssignment(nil, f.NewIdentifier("get"), nil, nil, getterArrow)
+		getter := f.NewPropertyAssignment(nil, f.NewIdentifier("get"), ast.Node{}, ast.Node{}, getterArrow)
 		descriptorProperties = append(descriptorProperties, getter)
 
 		if s.hasSuperPropertyAssignment {
 			// setter: set: v => super.name = v
-			vParam := f.NewParameterDeclaration(nil, nil, f.NewIdentifier("v"), nil, nil, nil)
+			vParam := f.NewParameterDeclaration(nil, ast.Node{}, f.NewIdentifier("v"), ast.Node{}, ast.Node{}, ast.Node{})
 			superProp := f.NewPropertyAccessExpression(
-				f.NewKeywordExpression(ast.KindSuperKeyword), nil,
+				f.NewKeywordExpression(ast.KindSuperKeyword), ast.Node{},
 				f.NewIdentifier(name), ast.NodeFlagsNone,
 			)
 			assignExpr := f.NewAssignmentExpression(superProp, f.NewIdentifier("v"))
 			setterArrow := f.NewArrowFunction(
 				nil, nil,
-				f.NewNodeList([]*ast.Node{vParam}),
-				nil, nil,
+				f.NewNodeList([]ast.Node{vParam}),
+				ast.Node{}, ast.Node{},
 				f.NewToken(ast.KindEqualsGreaterThanToken),
 				assignExpr,
 			)
-			setter := f.NewPropertyAssignment(nil, f.NewIdentifier("set"), nil, nil, setterArrow)
+			setter := f.NewPropertyAssignment(nil, f.NewIdentifier("set"), ast.Node{}, ast.Node{}, setterArrow)
 			descriptorProperties = append(descriptorProperties, setter)
 		}
 
 		descriptor := f.NewObjectLiteralExpression(f.NewNodeList(descriptorProperties), false)
-		accessor := f.NewPropertyAssignment(nil, f.NewIdentifier(name), nil, nil, descriptor)
+		accessor := f.NewPropertyAssignment(nil, f.NewIdentifier(name), ast.Node{}, ast.Node{}, descriptor)
 		accessors = append(accessors, accessor)
 	}
 
@@ -229,18 +229,18 @@ func (s *superAccessState) createSuperAccessVariableStatement() *ast.Node {
 
 	objectCreateCall := f.NewCallExpression(
 		f.NewPropertyAccessExpression(
-			f.NewIdentifier("Object"), nil,
+			f.NewIdentifier("Object"), ast.Node{},
 			f.NewIdentifier("create"), ast.NodeFlagsNone,
-		), nil, nil,
-		f.NewNodeList([]*ast.Node{
+		), ast.Node{}, nil,
+		f.NewNodeList([]ast.Node{
 			f.NewKeywordExpression(ast.KindNullKeyword),
 			descriptorsObject,
 		}),
 		ast.NodeFlagsNone,
 	)
 
-	decl := f.NewVariableDeclaration(s.superBinding, nil, nil, objectCreateCall)
-	declList := f.NewVariableDeclarationList(f.NewNodeList([]*ast.Node{decl}), ast.NodeFlagsConst)
+	decl := f.NewVariableDeclaration(s.superBinding, ast.Node{}, ast.Node{}, objectCreateCall)
+	declList := f.NewVariableDeclarationList(f.NewNodeList([]ast.Node{decl}), ast.NodeFlagsConst)
 	return f.NewVariableStatement(nil, declList)
 }
 
@@ -248,42 +248,42 @@ func (s *superAccessState) createSuperAccessVariableStatement() *ast.Node {
 // for the enclosing async method body. Called from both the main visitor and auxiliary
 // visitors to ensure super accesses are tracked regardless of whether the node has
 // transform flags.
-func (s *superAccessState) trackSuperAccess(node *ast.Node) {
+func (s *superAccessState) trackSuperAccess(node ast.Node) {
 	if s.capturedSuperProperties == nil {
 		return
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindPropertyAccessExpression:
-		if node.Expression().Kind == ast.KindSuperKeyword {
+		if node.Expression().Kind() == ast.KindSuperKeyword {
 			s.capturedSuperProperties.Add(node.Name().Text())
 		}
 	case ast.KindElementAccessExpression:
-		if node.Expression().Kind == ast.KindSuperKeyword {
+		if node.Expression().Kind() == ast.KindSuperKeyword {
 			s.hasSuperElementAccess = true
 		}
 	case ast.KindBinaryExpression:
-		if ast.IsAssignmentOperator(node.AsBinaryExpression().OperatorToken.Kind) && assignmentTargetContainsSuperProperty(node.AsBinaryExpression().Left) {
+		if ast.IsAssignmentOperator(node.AsBinaryExpression().OperatorToken().Kind()) && assignmentTargetContainsSuperProperty(node.AsBinaryExpression().Left()) {
 			s.hasSuperPropertyAssignment = true
 		}
 	case ast.KindPrefixUnaryExpression:
-		if isUpdateExpression(node) && assignmentTargetContainsSuperProperty(node.AsPrefixUnaryExpression().Operand) {
+		if isUpdateExpression(node) && assignmentTargetContainsSuperProperty(node.AsPrefixUnaryExpression().Operand()) {
 			s.hasSuperPropertyAssignment = true
 		}
 	case ast.KindPostfixUnaryExpression:
-		if isUpdateExpression(node) && assignmentTargetContainsSuperProperty(node.AsPostfixUnaryExpression().Operand) {
+		if isUpdateExpression(node) && assignmentTargetContainsSuperProperty(node.AsPostfixUnaryExpression().Operand()) {
 			s.hasSuperPropertyAssignment = true
 		}
 	}
 }
 
 // createAccessorPropertyBackingField creates a private backing field for an `accessor` PropertyDeclaration.
-func createAccessorPropertyBackingField(f *printer.NodeFactory, node *ast.PropertyDeclaration, modifiers *ast.ModifierList, initializer *ast.Expression) *ast.Node {
+func createAccessorPropertyBackingField(f *printer.NodeFactory, node ast.PropertyDeclaration, modifiers *ast.ModifierList, initializer ast.Expression) ast.Node {
 	return f.UpdatePropertyDeclaration(
 		node,
 		modifiers,
 		f.NewGeneratedPrivateNameForNodeEx(node.Name(), printer.AutoGenerateOptions{Suffix: "_accessor_storage"}),
-		nil, /*postfixToken*/
-		nil, /*typeNode*/
+		ast.Node{}, /*postfixToken*/
+		ast.Node{}, /*typeNode*/
 		initializer,
 	)
 }

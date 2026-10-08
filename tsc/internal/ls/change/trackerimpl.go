@@ -134,7 +134,7 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 		}
 		projection := mapped.Script
 		pos := int(mapped.Position)
-		formatNode := func(n *ast.Node) string {
+		formatNode := func(n ast.Node) string {
 			return t.getFormattedTextOfNode(n, targetSourceFile, projection, pos, change.options)
 		}
 
@@ -145,7 +145,7 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 			if joiner == "" {
 				joiner = t.newLine
 			}
-			text = strings.Join(core.Map(change.nodes, func(n *ast.Node) string { return strings.TrimSuffix(formatNode(n), t.newLine) }), joiner)
+			text = strings.Join(core.Map(change.nodes, func(n ast.Node) string { return strings.TrimSuffix(formatNode(n), t.newLine) }), joiner)
 		case trackerEditKindReplaceWithSingleNode:
 			text = formatNode(change.Node)
 		default:
@@ -228,7 +228,7 @@ func leadingIndentation(text string) string {
 	return text[:end]
 }
 
-func (t *Tracker) getFormattedTextOfNode(nodeIn *ast.Node, targetSourceFile *ast.SourceFile, sourceFile *ast.SourceFile, pos int, options NodeOptions) string {
+func (t *Tracker) getFormattedTextOfNode(nodeIn ast.Node, targetSourceFile *ast.SourceFile, sourceFile *ast.SourceFile, pos int, options NodeOptions) string {
 	text, sourceFileLike := t.getNonformattedText(nodeIn, targetSourceFile)
 	// !!! if (validate) validate(node, text);
 	formatOptions := GetFormatCodeSettingsForWriting(t.formatSettings, targetSourceFile)
@@ -242,7 +242,7 @@ func (t *Tracker) getFormattedTextOfNode(nodeIn *ast.Node, targetSourceFile *ast
 
 	if options.delta != nil {
 		delta = *options.delta
-	} else if formatOptions.IndentSize != 0 && format.ShouldIndentChildNode(formatOptions, nodeIn, nil, nil) {
+	} else if formatOptions.IndentSize != 0 && format.ShouldIndentChildNode(formatOptions, nodeIn, ast.Node{}, nil) {
 		delta = formatOptions.IndentSize
 	}
 
@@ -260,7 +260,7 @@ func GetFormatCodeSettingsForWriting(options lsutil.FormatCodeSettings, sourceFi
 	return options
 }
 
-func (t *Tracker) getNonformattedText(node *ast.Node, sourceFile *ast.SourceFile) (string, *ast.Node) {
+func (t *Tracker) getNonformattedText(node ast.Node, sourceFile *ast.SourceFile) (string, ast.Node) {
 	text, nodeOut := printer.PrintAndPositionNode(t.NodeFactory, node, sourceFile, t.newLine, t.formatSettings.IndentSize, t.EmitContext)
 	sourceFileLike := printer.CreateSyntheticSourceFile(
 		t.NodeFactory,
@@ -273,7 +273,7 @@ func (t *Tracker) getNonformattedText(node *ast.Node, sourceFile *ast.SourceFile
 
 // method on the changeTracker because use of converters
 // GetAdjustedRange computes the adjusted range for a node in a source file, accounting for trivia.
-func (t *Tracker) GetAdjustedRange(sourceFile *ast.SourceFile, startNode *ast.Node, endNode *ast.Node, leadingOption LeadingTriviaOption, trailingOption TrailingTriviaOption) core.TextRange {
+func (t *Tracker) GetAdjustedRange(sourceFile *ast.SourceFile, startNode ast.Node, endNode ast.Node, leadingOption LeadingTriviaOption, trailingOption TrailingTriviaOption) core.TextRange {
 	return core.NewTextRange(
 		t.getAdjustedStartPosition(sourceFile, startNode, leadingOption, false),
 		t.getAdjustedEndPosition(sourceFile, endNode, trailingOption),
@@ -281,7 +281,7 @@ func (t *Tracker) GetAdjustedRange(sourceFile *ast.SourceFile, startNode *ast.No
 }
 
 // method on the changeTracker because use of converters
-func (t *Tracker) getAdjustedStartPosition(sourceFile *ast.SourceFile, node *ast.Node, leadingOption LeadingTriviaOption, hasTrailingComment bool) int {
+func (t *Tracker) getAdjustedStartPosition(sourceFile *ast.SourceFile, node ast.Node, leadingOption LeadingTriviaOption, hasTrailingComment bool) int {
 	if leadingOption == LeadingTriviaOptionJSDoc {
 		if JSDocComments := parser.GetJSDocCommentRanges(t.NodeFactory, nil, node, sourceFile.Text()); len(JSDocComments) > 0 {
 			return format.GetLineStartPositionForPosition(JSDocComments[0].Pos(), sourceFile)
@@ -295,7 +295,7 @@ func (t *Tracker) getAdjustedStartPosition(sourceFile *ast.SourceFile, node *ast
 	case LeadingTriviaOptionExclude:
 		return start
 	case LeadingTriviaOptionStartLine:
-		if node.Loc.ContainsInclusive(startOfLinePos) {
+		if node.Loc().ContainsInclusive(startOfLinePos) {
 			return startOfLinePos
 		}
 		return start
@@ -346,7 +346,7 @@ func (t *Tracker) getAdjustedStartPosition(sourceFile *ast.SourceFile, node *ast
 
 // method on the changeTracker because of converters
 // Return the end position of a multiline comment of it is on another line; otherwise returns `undefined`;
-func (t *Tracker) getEndPositionOfMultilineTrailingComment(sourceFile *ast.SourceFile, node *ast.Node, trailingOpt TrailingTriviaOption) int {
+func (t *Tracker) getEndPositionOfMultilineTrailingComment(sourceFile *ast.SourceFile, node ast.Node, trailingOpt TrailingTriviaOption) int {
 	if trailingOpt == TrailingTriviaOptionInclude {
 		// If the trailing comment is a multiline comment that extends to the next lines,
 		// return the end of the comment and track it for the next nodes to adjust.
@@ -372,7 +372,7 @@ func (t *Tracker) getEndPositionOfMultilineTrailingComment(sourceFile *ast.Sourc
 }
 
 // method on the changeTracker because of converters
-func (t *Tracker) getAdjustedEndPosition(sourceFile *ast.SourceFile, node *ast.Node, TrailingTriviaOption TrailingTriviaOption) int {
+func (t *Tracker) getAdjustedEndPosition(sourceFile *ast.SourceFile, node ast.Node, TrailingTriviaOption TrailingTriviaOption) int {
 	if TrailingTriviaOption == TrailingTriviaOptionExclude {
 		return node.End()
 	}
@@ -411,16 +411,16 @@ func hasCommentsBeforeLineBreak(text string, start int) bool {
 	return false
 }
 
-func needSemicolonBetween(a, b *ast.Node) bool {
+func needSemicolonBetween(a, b ast.Node) bool {
 	return (ast.IsPropertySignatureDeclaration(a) || ast.IsPropertyDeclaration(a)) &&
 		ast.IsClassOrTypeElement(b) &&
-		b.Name().Kind == ast.KindComputedPropertyName ||
+		b.Name().Kind() == ast.KindComputedPropertyName ||
 		ast.IsStatementButNotDeclaration(a) &&
 			ast.IsStatementButNotDeclaration(b) // TODO: only if b would start with a `(` or `[`
 }
 
 func (t *Tracker) getInsertionPositionAtSourceFileTop(sourceFile *ast.SourceFile) int {
-	var lastPrologue *ast.Node
+	var lastPrologue ast.Node
 	for _, node := range sourceFile.Statements.Nodes {
 		if ast.IsPrologueDirective(node) {
 			lastPrologue = node
@@ -442,7 +442,7 @@ func (t *Tracker) getInsertionPositionAtSourceFileTop(sourceFile *ast.SourceFile
 			}
 		}
 	}
-	if lastPrologue != nil {
+	if !lastPrologue.IsNil() {
 		position = lastPrologue.End()
 		advancePastLineBreak()
 		return position
