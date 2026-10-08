@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/circularBaseTypeArgumentsReadDeclaredMembers2.ts] ////
+
+=== circularBaseTypeArgumentsReadDeclaredMembers2.ts ===
+// https://github.com/microsoft/TypeScript/issues/64605
+// The shape of Zod's z.json() types: RecordInternals declares optin, and its base type arguments read it.
+
+interface Internals<O = unknown, I = unknown> { output: O; input: I; optin?: "optional" | undefined }
+>output : O
+>input : I
+>optin : "optional" | undefined
+
+interface Schema<Z extends Internals = Internals> { _zod: Z }
+>_zod : Z
+
+type OptionalIn = { _zod: { optin: "optional" } };
+>OptionalIn : OptionalIn
+>_zod : { optin: "optional"; }
+>optin : "optional"
+
+type RecordInput<V extends Schema> = [V] extends [OptionalIn] ? Partial<Record<string, V["_zod"]["input"]>> : Record<string, V["_zod"]["input"]>;
+>RecordInput : RecordInput<V>
+
+interface RecordInternals<V extends Schema> extends Internals<unknown, RecordInput<V>> { optin?: "optional" | undefined }
+>optin : "optional" | undefined
+
+interface RecordSchema<V extends Schema> extends Schema<RecordInternals<V>> { _zod: RecordInternals<V> }
+>_zod : RecordInternals<V>
+
+type IsOptionalIn<T extends Schema> = T extends OptionalIn ? true : false;
+>IsOptionalIn : IsOptionalIn<T>
+>true : true
+>false : false
+
+interface UnionInternals<T extends readonly Schema[]> extends Internals {
+    optin: IsOptionalIn<T[number]> extends false ? "optional" | undefined : "optional";
+>optin : IsOptionalIn<T[number]> extends false ? "optional" | undefined : "optional"
+>false : false
+}
+interface UnionSchema<T extends readonly Schema[]> extends Schema<UnionInternals<T>> { _zod: UnionInternals<T> }
+>_zod : UnionInternals<T>
+
+type _Json = UnionSchema<[RecordSchema<Json>]>;
+>_Json : _Json
+
+interface JsonInternals extends UnionInternals<[RecordSchema<Json>]> { input: unknown }
+>input : unknown
+
+interface Json extends _Json { _zod: JsonInternals }
+>_zod : JsonInternals
+
+export const r: RecordInput<Json> = { a: 1 };
+>r : Record<string, unknown>
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+export const o: Json["_zod"]["optin"] = undefined;
+>o : "optional" | undefined
+>undefined : undefined
+
+export const bad: Json["_zod"]["optin"] = "required"; // error
+>bad : "optional" | undefined
+>"required" : "required"
+
