@@ -183,7 +183,7 @@ func TestTypeToStringRecursivePrototype(t *testing.T) {
 			display := c.TypeToStringEx(typ, node.Parent, checker.TypeFormatFlagsNoTruncation|checker.TypeFormatFlagsGenerateNamesForShadowedTypeParams, nil)
 			t.Logf("methods=%d, bytes=%d, first method occurrences=%d", count, len(display), strings.Count(display, "m000:"))
 			for i := range count {
-				assert.Equal(t, strings.Count(display, fmt.Sprintf("m%03d:", i)), 2)
+				assert.Equal(t, strings.Count(display, fmt.Sprintf("m%03d:", i)), 1)
 			}
 		})
 	}

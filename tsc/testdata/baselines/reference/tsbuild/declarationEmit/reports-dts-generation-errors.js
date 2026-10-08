@@ -53,11 +53,6 @@ Output::
     [7m2[0m export const api = ky.extend({});
     [7m [0m [96m             ~~~[0m
 
-[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS5088: [0mThe inferred type of 'api' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-
-[7m2[0m export const api = ky.extend({});
-[7m [0m [91m             ~~~[0m
-
 TSFILE: /home/src/workspaces/project/index.js
 TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.es2026.full.d.ts
@@ -71,7 +66,7 @@ index.ts
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
 
 
-Found 2 errors in the same file, starting at: index.ts[90m:2[0m
+Found 1 error in index.ts[90m:2[0m
 
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
@@ -153,11 +148,6 @@ Output::
     [7m2[0m export const api = ky.extend({});
     [7m [0m [96m             ~~~[0m
 
-[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS5088: [0mThe inferred type of 'api' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-
-[7m2[0m export const api = ky.extend({});
-[7m [0m [91m             ~~~[0m
-
 TSFILE: /home/src/workspaces/project/index.js
 TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.es2026.full.d.ts
@@ -171,7 +161,7 @@ index.ts
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
 
 
-Found 2 errors in the same file, starting at: index.ts[90m:2[0m
+Found 1 error in index.ts[90m:2[0m
 
 //// [/home/src/workspaces/project/index.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *rewrite with same content*
