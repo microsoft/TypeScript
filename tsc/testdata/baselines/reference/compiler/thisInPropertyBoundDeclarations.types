@@ -80,13 +80,13 @@ class A {
     };
 
     prop4 = {
->prop4 : { a: () => any; }
->{        a: function() { return this; },    } : { a: () => { a: () => any; }; }
+>prop4 : { a: () => A["prop4"]; }
+>{        a: function() { return this; },    } : { a: () => A["prop4"]; }
 
         a: function() { return this; },
->a : () => { a: () => any; }
->function() { return this; } : () => { a: () => any; }
->this : { a: () => any; }
+>a : () => { a: A["prop4"]["a"]; }
+>function() { return this; } : () => { a: A["prop4"]["a"]; }
+>this : { a: () => A["prop4"]; }
 
     };
 
@@ -95,7 +95,7 @@ class A {
 >() => {        return {            a: function() { return this; },        };    } : () => { a: () => { a: () => any; }; }
 
         return {
->{            a: function() { return this; },        } : { a: () => { a: () => any; }; }
+>{            a: function() { return this; },        } : { a: () => any; }
 
             a: function() { return this; },
 >a : () => { a: () => any; }

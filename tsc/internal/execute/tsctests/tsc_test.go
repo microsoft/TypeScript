@@ -610,7 +610,8 @@ func TestTscDeclarationEmit(t *testing.T) {
 					"type": "module"
 				}`),
 			"/home/src/workspaces/project/node_modules/ky/distribution/index.d.ts": stringtestutil.Dedent(`
-				type KyInstance = {
+				declare class KyInstance {
+					private brand;
 					extend(options: Record<string,unknown>): KyInstance;
 				}
 				declare const ky: KyInstance;
@@ -2476,6 +2477,185 @@ func TestTscIncremental(t *testing.T) {
 					caption: "delete build info and check the edited source afresh",
 					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/workspaces/project/tsconfig.tsbuildinfo")
+					},
+				},
+				noChange,
+			},
+		},
+		{
+			subScenario: "recursive function declaration consumption",
+			files: FileMap{
+				"/home/src/workspaces/project/producer/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "composite": true, "outDir": "dist" }
+				}`,
+				"/home/src/workspaces/project/producer/index.ts": stringtestutil.Dedent(`
+					export const arrow = () => arrow;
+					export const expression = function self() { return self; };
+					export const first = () => second;
+					export const second = () => first;
+					export const generic = <T>(value: T) => generic;
+					export const objectReturn = () => ({ call: objectReturn });
+					export const tupleReturn = () => [tupleReturn] as const;
+					export const shadowed = function self(shadowed: number) { return self; };
+					export const object = { value: 1, next: () => object };
+					export const method = { value: 1, next() { return method; } };
+					export const accessor = { value: 1, get next() { return accessor; } };
+					export const tuple = [() => tuple] as const;
+					export const array = [() => array];
+					export const nested = { inner: { next() { return nested.inner; } } };
+					export const memberTuple = [function self() { return self; }] as const;
+					export const memberArray = [function self() { return self; }];
+					export const quoted = { "a-b": function self() { return self; } };
+					export const numeric = { 0: function self() { return self; } };
+					export const key = Symbol();
+					export const computed = { [key]: function self() { return self; } };
+					export const union = true as boolean ? { next: () => union } : undefined;
+					function create<T>(value: T) {
+						const result = { value, next: () => result };
+						return result;
+					}
+					export const specialized = create("text");
+					function createIndexed() {
+						const value: { [key: string]: typeof value } = {};
+						return value;
+					}
+					export const indexed = createIndexed();
+					function createMapped<T>() {
+						const value: { [K in keyof T]: typeof value } = null!;
+						return value;
+					}
+					export const mapped = createMapped<{ next: unknown }>();
+					function createAnnotated<T>(value: T) {
+						const node: { value: T; next: () => typeof node } = { value, next: () => node };
+						return node;
+					}
+					export const viaAnnotation = createAnnotated("text");
+					export type Link<T> = { value: T; next: Link<T> };
+					export type Callable<T> = { (value: T): Callable<T>; link: Link<T> };
+					export declare const link: Link<string>;
+					export declare const callable: Callable<number>;
+					export const nextLink = link.next;
+					export const nextCallable = callable(1);
+					function createHidden<T>(value: T) {
+						type Hidden = { value: T; next: Hidden };
+						return null! as Hidden;
+					}
+					export const hiddenAlias = createHidden("text");
+					export const siblingHiddenAliases = { first: hiddenAlias, second: hiddenAlias };
+					export const parenthesized = (function self() { return self; });
+					export const asserted = (function self() { return self; }) satisfies () => unknown;
+					export class Methods {
+						static recur() { return Methods.recur; }
+						static "a-b"() { return Methods["a-b"]; }
+						static [key]() { return Methods[key]; }
+						recur() { return this.recur; }
+					}
+					export function overloaded(value: string): typeof overloaded;
+					export function overloaded(value: number): typeof overloaded;
+					export function overloaded(value: string | number) { return overloaded; }
+					export const nestedOwner = {
+						make<T>(outer: T) {
+							return {
+								nested<U>(inner: U) { return { outer, inner, owner: nestedOwner }; },
+								constrained<U extends T = T>(inner: U) { return { outer, inner, owner: nestedOwner }; },
+								copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner } {
+									return { outer, inner, owner: nestedOwner };
+								},
+								rest<U>(...values: [U]) { return { outer, inner: values[0], owner: nestedOwner }; },
+							};
+						},
+					};
+					export const nestedNumber = nestedOwner.make(1);
+				`),
+				"/home/src/workspaces/project/consumer/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "noEmit": true },
+					"references": [{ "path": "../producer" }]
+				}`,
+				"/home/src/workspaces/project/consumer/index.ts": stringtestutil.Dedent(`
+					import { arrow, expression, first, generic, objectReturn, tupleReturn, shadowed } from "../producer/dist/index.js";
+					import { object, method, accessor, tuple, array, nested } from "../producer/dist/index.js";
+					import { memberTuple, memberArray, quoted, numeric, key, computed, union, specialized } from "../producer/dist/index.js";
+					import { indexed, mapped, viaAnnotation } from "../producer/dist/index.js";
+					import { nextLink, nextCallable, parenthesized, asserted, Methods, overloaded } from "../producer/dist/index.js";
+					import { hiddenAlias, siblingHiddenAliases } from "../producer/dist/index.js";
+					import { nestedNumber } from "../producer/dist/index.js";
+					const a: typeof arrow = arrow()()();
+					const b: typeof expression = expression()()();
+					const c: typeof first = first()()();
+					const d: typeof generic = generic(1)("text")(true);
+					const objectCall: typeof objectReturn = objectReturn().call().call;
+					const tupleCall: typeof tupleReturn = tupleReturn()[0]()[0];
+					const shadowedCall: typeof shadowed = shadowed(1)(2);
+					const objectValue: number = object.next().next().value;
+					const methodValue: number = method.next().next().value;
+					const accessorValue: number = accessor.next.next.value;
+					const tupleValue: typeof tuple = tuple[0]()[0]();
+					const arrayValue: typeof array = array[0]()[0]();
+					const nestedValue: typeof nested.inner = nested.inner.next().next();
+					const memberTupleValue: typeof memberTuple[0] = memberTuple[0]()();
+					const memberArrayValue: typeof memberArray[0] = memberArray[0]()();
+					const quotedValue: typeof quoted["a-b"] = quoted["a-b"]()();
+					const numericValue: typeof numeric[0] = numeric[0]()();
+					const computedValue: typeof computed[typeof key] = computed[key]()();
+					const unionValue: typeof union = union?.next()?.next();
+					const specializedValue: string = specialized.next().next().value;
+					const indexedValue: typeof indexed = indexed["next"]["next"];
+					const mappedValue: typeof mapped = mapped.next.next;
+					const annotationValue: string = viaAnnotation.next().next().value;
+					const linkValue: string = nextLink.next.next.value;
+					const callableValue: number = nextCallable(1)(2).link.next.value;
+					const parenthesizedValue: typeof parenthesized = parenthesized()()();
+					const assertedValue: typeof asserted = asserted()()();
+					const methodReference: typeof Methods.recur = Methods.recur()()();
+					const quotedMethodReference: typeof Methods["a-b"] = Methods["a-b"]()()();
+					const computedMethodReference: typeof Methods[typeof key] = Methods[key]()()();
+					const instance = new Methods();
+					const instanceMethodReference: typeof instance.recur = instance.recur()()();
+					const overloadReference: typeof overloaded = overloaded(1)("text")(2);
+					const hiddenValue: string = hiddenAlias.next.next.value;
+					const siblingHiddenValue: string = siblingHiddenAliases.second.next.next.value;
+					const nestedString = nestedNumber.nested(true).owner.make("text").nested(2);
+					const nestedBoolean = nestedString.owner.make(true).nested("inner");
+					const nestedStringOuter: string = nestedString.outer;
+					const nestedStringInner: number = nestedString.inner;
+					const nestedBooleanOuter: boolean = nestedBoolean.outer;
+					const nestedBooleanInner: string = nestedBoolean.inner;
+					const constrainedOuter: number = nestedNumber.constrained(2).outer;
+					const constrainedInner: number = nestedNumber.constrained(2).inner;
+					const copiedOuter: number = nestedNumber.copied("inner").outer;
+					const copiedInner: string = nestedNumber.copied("inner").inner;
+					const restOuter: number = nestedNumber.rest(true).outer;
+					const restInner: boolean = nestedNumber.rest(true).inner;
+					type IsAny<T> = 0 extends (1 & T) ? true : false;
+					const result = arrow()()();
+					const notAny: false = null as unknown as IsAny<typeof result>;
+					const invalid: number = arrow()()();
+					const invalidExpression: number = expression()()();
+					const invalidObject: number = objectReturn().call;
+					const invalidTuple: number = tupleReturn()[0];
+					const invalidShadowed: number = shadowed(1);
+					const invalidObjectValue: string = object.next().value;
+					const invalidTupleValue: number = tuple[0]();
+					const invalidSpecialized: number = specialized.next().value;
+					const invalidMapped: number = mapped.next;
+					const invalidAnnotation: number = viaAnnotation.next().value;
+					const invalidLink: number = nextLink.next.value;
+					const invalidCallable: string = nextCallable(1).link.value;
+					const invalidHiddenValue: number = hiddenAlias.next.next.value;
+					const invalidMethod: number = Methods.recur()();
+					const invalidComputedMethod: number = Methods[key]()();
+					const invalidNestedOuter: boolean = nestedString.outer;
+					const invalidNestedInner: string = nestedString.inner;
+					nestedNumber.constrained("wrong");
+				`),
+			},
+			commandLineArgs: []string{"--build", "consumer"},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment to the producer",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/producer/index.ts", "\n// comment-only edit\n")
 					},
 				},
 				noChange,

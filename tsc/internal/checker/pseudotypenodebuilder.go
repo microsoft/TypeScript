@@ -40,6 +40,10 @@ func (b *NodeBuilderImpl) pseudoTypeToNodeWithCheckerFallback(t *pseudochecker.P
 			b.ctx.suppressReportInferenceFallback = oldSuppress
 			return result
 		}
+	} else if (t.Kind == pseudochecker.PseudoTypeKindSingleCallSignature || t.Kind == pseudochecker.PseudoTypeKindObjectLiteral) &&
+		b.getTypeDefinitionReference(checkerType).symbol != nil {
+		// Reusing structural syntax must not unfold an already available back-reference.
+		return b.typeToTypeNode(checkerType)
 	}
 	return b.pseudoTypeToNode(t)
 }
@@ -47,6 +51,10 @@ func (b *NodeBuilderImpl) pseudoTypeToNodeWithCheckerFallback(t *pseudochecker.P
 // Maps a pseudochecker's pseudotypes into ast nodes and reports any inference fallback errors the pseudotype structure implies
 func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Node {
 	debug.Assert(t != nil, "Attempted to serialize nil pseudotype")
+	if t.Kind == pseudochecker.PseudoTypeKindObjectLiteral {
+		restoreDeferredTypeScope := b.enterDeferredTypeScope()
+		defer restoreDeferredTypeScope()
+	}
 	switch t.Kind {
 	case pseudochecker.PseudoTypeKindDirect:
 		return b.reuseTypeNode(t.AsPseudoTypeDirect().TypeNode)
@@ -177,8 +185,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 	case pseudochecker.PseudoTypeKindSingleCallSignature:
 		d := t.AsPseudoTypeSingleCallSignature()
 		signature := b.ch.getSignatureFromDeclaration(d.Signature)
-		expandedParams := b.ch.getExpandedParameters(signature, true /*skipUnionExpanding*/)[0]
-		cleanup := b.enterNewScope(d.Signature, expandedParams, signature.typeParameters, signature.parameters, signature.mapper)
+		_, cleanup := b.enterSignatureScope(signature)
 		defer cleanup()
 		var typeParams *ast.NodeList
 		if len(d.TypeParameters) > 0 {
@@ -232,8 +239,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 			var cleanup func()
 			if e.Kind != pseudochecker.PseudoObjectElementKindPropertyAssignment {
 				signature := b.ch.getSignatureFromDeclaration(e.Signature())
-				expandedParams := b.ch.getExpandedParameters(signature, true /*skipUnionExpanding*/)[0]
-				cleanup = b.enterNewScope(e.Signature(), expandedParams, signature.typeParameters, signature.parameters, signature.mapper)
+				_, cleanup = b.enterSignatureScope(signature)
 			}
 			var newProp *ast.Node
 			switch e.Kind {

@@ -1,13 +1,17 @@
 package checker
 
 import (
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
+	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
+	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
-func cloneNodeBuilderContext(context *NodeBuilderContext) func() {
+func enterTypeParameterNameScope(context *NodeBuilderContext) func() {
 	// Make type parameters created within this context not consume the name outside this context
 	// The symbol serializer ends up creating many sibling scopes that all need "separate" contexts when
 	// it comes to naming things - within a normal `typeToTypeNode` call, the node builder only ever descends
@@ -50,14 +54,256 @@ func (b *NodeBuilderImpl) addSymbolTypeToContext(symbol *ast.Symbol, t *Type) fu
 	}
 }
 
+func (b *NodeBuilderImpl) serializationTypeId(t *Type) TypeId {
+	if b.ch.isArrayOrTupleType(t) {
+		// Deferred and regular references share a serialization identity.
+		return b.ch.createTypeReference(t.Target(), b.ch.getTypeArguments(t)).id
+	}
+	return t.id
+}
+
+func (b *NodeBuilderImpl) enterTypeDefinition(t *Type, symbol *ast.Symbol, expanding bool) func() {
+	return b.enterDefinition(serializationDefinition{t: t, typeId: b.serializationTypeId(t), symbol: symbol, expanding: expanding})
+}
+
+func (b *NodeBuilderImpl) enterDefinition(definition serializationDefinition) func() {
+	definitions := b.ctx.definitions
+	definition.depth = b.ctx.deferredTypeDepth
+	b.ctx.definitions = append(definitions, definition)
+	return func() { b.ctx.definitions = definitions }
+}
+
+// Lexical scopes alone do not guard back-references; only lazy member boundaries do.
+func (b *NodeBuilderImpl) enterDeferredTypeScope() func() {
+	depth := b.ctx.deferredTypeDepth
+	b.ctx.deferredTypeDepth++
+	return func() { b.ctx.deferredTypeDepth = depth }
+}
+
+func (b *NodeBuilderImpl) enterInferTypeParameterScope(typeParameters []*Type) func() {
+	inferTypeParameters := b.ctx.inferTypeParameters
+	b.ctx.inferTypeParameters = typeParameters
+	return func() { b.ctx.inferTypeParameters = inferTypeParameters }
+}
+
+func (b *NodeBuilderImpl) isSameSerializationType(t *Type, typeId TypeId, definition serializationDefinition) bool {
+	if typeId == definition.typeId {
+		return true
+	}
+	other := definition.t
+	// Regular and widened objects may have different IDs without changing shape.
+	// Do not collapse distinct generic instantiations.
+	return t.objectFlags&(ObjectFlagsAnonymous|ObjectFlagsInstantiated) == ObjectFlagsAnonymous &&
+		other.objectFlags&(ObjectFlagsAnonymous|ObjectFlagsInstantiated) == ObjectFlagsAnonymous &&
+		t.symbol != nil && t.symbol == other.symbol && b.ch.isTypeIdenticalTo(t, other)
+}
+
+func (b *NodeBuilderImpl) getTypeDefinitionReference(t *Type) serializationTypeName {
+	var typeId TypeId
+	for _, definition := range b.ctx.definitions {
+		if b.ctx.deferredTypeDepth <= definition.depth {
+			continue
+		}
+		if signature := definition.signature; signature != nil {
+			if t.objectFlags&ObjectFlagsAnonymous == 0 {
+				continue
+			}
+			kind := core.IfElse(signature.flags&SignatureFlagsConstruct != 0, SignatureKindConstruct, SignatureKindCall)
+			if !slices.Contains(b.ch.getSignaturesOfType(t, kind), signature) {
+				continue
+			}
+		} else {
+			if typeId == 0 {
+				typeId = b.serializationTypeId(t)
+			}
+			if !b.isSameSerializationType(t, typeId, definition) {
+				continue
+			}
+		}
+		var name serializationTypeName
+		if symbol := definition.symbol; symbol != nil {
+			if symbol.Flags&(ast.SymbolFlagsProperty|ast.SymbolFlagsMethod|ast.SymbolFlagsAccessor) != 0 {
+				name = b.getSerializationTypeNameFromDeclaration(t, symbol.ValueDeclaration)
+			} else {
+				name = b.getValueTypeName(t, symbol, nil)
+			}
+		} else {
+			name = b.getSerializationValueName(t)
+		}
+		if name.symbol != nil && b.isSerializationTypeNameAccessible(name) {
+			return name
+		}
+	}
+	return serializationTypeName{}
+}
+
+func (b *NodeBuilderImpl) getValueTypeName(t *Type, symbol *ast.Symbol, path []*Type) serializationTypeName {
+	if symbol == nil || symbol.Flags&ast.SymbolFlagsValue == 0 || t.flags&TypeFlagsStructuredOrInstantiable == 0 ||
+		IsPrivateIdentifierSymbol(symbol) || b.ctx.flags&nodebuilder.FlagsUseStructuralFallback != 0 && getDeclarationModifierFlagsFromSymbol(symbol)&(ast.ModifierFlagsPrivate|ast.ModifierFlagsProtected) != 0 ||
+		!scanner.IsIdentifierText(symbol.Name, core.LanguageVariantStandard) {
+		return serializationTypeName{}
+	}
+	// Formatting a diagnostic must not restart inference for a declaration
+	// whose type is still being resolved.
+	namedType := b.ch.valueSymbolLinks.Get(symbol).resolvedType
+	if namedType == nil {
+		return serializationTypeName{}
+	}
+	for _, index := range path {
+		property := b.ch.getPropertyOfType(namedType, getPropertyNameFromType(index))
+		if property != nil {
+			if IsPrivateIdentifierSymbol(property) || b.ctx.flags&nodebuilder.FlagsUseStructuralFallback != 0 && getDeclarationModifierFlagsFromSymbol(property)&(ast.ModifierFlagsPrivate|ast.ModifierFlagsProtected) != 0 ||
+				b.ch.findResolutionCycleStartIndex(property, TypeSystemPropertyNameType) >= 0 {
+				return serializationTypeName{}
+			}
+		}
+		namedType = b.ch.getIndexedAccessType(namedType, index)
+	}
+	if b.serializationTypeId(namedType) != b.serializationTypeId(t) {
+		return serializationTypeName{}
+	}
+	return serializationTypeName{symbol: symbol, meaning: ast.SymbolFlagsValue, path: path}
+}
+
+func (b *NodeBuilderImpl) getSerializationValueName(t *Type) serializationTypeName {
+	if t.objectFlags&ObjectFlagsAnonymous == 0 || t.symbol == nil {
+		return serializationTypeName{}
+	}
+	node := t.symbol.ValueDeclaration
+	if node != nil && (ast.IsExpression(node) || ast.IsClassElement(node) || ast.IsPropertyAssignment(node)) {
+		if name := b.getSerializationTypeNameFromDeclaration(t, node); name.symbol != nil {
+			return name
+		}
+	}
+	return b.getValueTypeName(t, t.symbol, nil)
+}
+
+func (b *NodeBuilderImpl) isSerializationTypeNameAccessible(name serializationTypeName) bool {
+	if b.ctx.flags&nodebuilder.FlagsForbidIndexedAccessSymbolReferences != 0 &&
+		(len(name.path) != 0 || name.symbol.Flags&(ast.SymbolFlagsProperty|ast.SymbolFlagsMethod|ast.SymbolFlagsAccessor) != 0) {
+		return false
+	}
+	// Displays may use lexical names whose declarations cannot be exposed in a .d.ts.
+	if b.ctx.flags&nodebuilder.FlagsUseStructuralFallback == 0 && b.ctx.enclosingDeclaration != nil &&
+		b.ch.resolveName(b.ctx.enclosingDeclaration, name.symbol.Name, name.meaning, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/) == name.symbol {
+		return true
+	}
+	return b.ch.IsValueSymbolAccessible(name.symbol, b.ctx.enclosingDeclaration)
+}
+
+func (b *NodeBuilderImpl) serializationTypeNameToNode(name serializationTypeName) *ast.TypeNode {
+	typeArguments := b.mapToTypeNodes(name.typeArguments, false /*isBareList*/)
+	if name.meaning == ast.SymbolFlagsType {
+		if isReservedMemberName(name.symbol.Name) && name.symbol.Flags&ast.SymbolFlagsClass == 0 {
+			return b.f.NewTypeReferenceNode(b.f.NewIdentifier(""), typeArguments)
+		}
+		if typeArguments != nil && len(typeArguments.Nodes) == 1 && name.symbol == b.ch.globalArrayType.symbol {
+			return b.f.NewArrayTypeNode(typeArguments.Nodes[0])
+		}
+	}
+	node := b.symbolToTypeNode(name.symbol, name.meaning, typeArguments)
+	restoreFlags := b.saveRestoreFlags()
+	b.ctx.flags &^= nodebuilder.FlagsAllowUniqueESSymbolType
+	for _, index := range name.path {
+		b.ctx.approximateLength += 2
+		node = b.f.NewIndexedAccessTypeNode(node, b.typeToTypeNode(index))
+	}
+	restoreFlags()
+	return node
+}
+
+func (b *NodeBuilderImpl) prefersTypeOfFunction(t *Type, name serializationTypeName) bool {
+	if name.symbol == nil || name.meaning != ast.SymbolFlagsValue || t.symbol == nil {
+		return false
+	}
+	symbol := t.symbol
+	if symbol.Flags&ast.SymbolFlagsMethod != 0 {
+		return core.Some(symbol.Declarations, ast.IsStatic)
+	}
+	if symbol.Flags&ast.SymbolFlagsFunction == 0 || len(name.path) != 0 {
+		return false
+	}
+	declaration := name.symbol.ValueDeclaration
+	if declaration == nil || ast.IsVariableDeclaration(declaration) && declaration == b.ctx.enclosingDeclaration {
+		return false
+	}
+	if ast.IsVariableDeclaration(declaration) {
+		if declaration.Parent == nil || !ast.IsVariableDeclarationList(declaration.Parent) || declaration.Parent.Parent == nil {
+			return false
+		}
+		declaration = declaration.Parent.Parent
+	}
+	return symbol.Parent != nil || declaration.Parent != nil &&
+		(declaration.Parent.Kind == ast.KindSourceFile || declaration.Parent.Kind == ast.KindModuleBlock)
+}
+
+func (b *NodeBuilderImpl) getSerializationTypeNameFromDeclaration(t *Type, node *ast.Node) serializationTypeName {
+	var path []*Type
+	for node != nil {
+		if declaration := getAssignedValueDeclaration(node); declaration != nil && !ast.IsStatic(declaration) {
+			slices.Reverse(path)
+			return b.getValueTypeName(t, b.ch.getSymbolOfDeclaration(declaration), path)
+		}
+		parent := walkUpOuterExpressions(node)
+		if parent == nil {
+			return serializationTypeName{}
+		}
+		switch {
+		case ast.IsPropertyDeclaration(parent):
+			node = parent
+		case ast.IsPropertyAssignment(parent):
+			index := b.ch.getLiteralTypeFromPropertyName(parent.Name())
+			if !isTypeUsableAsPropertyName(index) {
+				return serializationTypeName{}
+			}
+			path = append(path, index)
+			node = parent.Parent
+		case ast.IsObjectLiteralExpression(parent), ast.IsClassLike(parent):
+			if node.Name() == nil {
+				return serializationTypeName{}
+			}
+			index := b.ch.getLiteralTypeFromPropertyName(node.Name())
+			if !isTypeUsableAsPropertyName(index) {
+				return serializationTypeName{}
+			}
+			path = append(path, index)
+			if ast.IsClassDeclaration(parent) {
+				slices.Reverse(path)
+				return b.getValueTypeName(t, b.ch.getSymbolOfDeclaration(parent), path)
+			}
+			node = parent
+		case ast.IsArrayLiteralExpression(parent):
+			elements := parent.AsArrayLiteralExpression().Elements.Nodes
+			index := slices.IndexFunc(elements, func(element *ast.Node) bool {
+				return ast.SkipOuterExpressions(element, ast.OEKAll) == node
+			})
+			if index < 0 || core.Some(elements[:index], ast.IsSpreadElement) {
+				return serializationTypeName{}
+			}
+			path = append(path, b.ch.getNumberLiteralType(jsnum.Number(index)))
+			node = parent
+		default:
+			return serializationTypeName{}
+		}
+	}
+	return serializationTypeName{}
+}
+
 func (b *NodeBuilderImpl) enterSignatureScope(signature *Signature) (expandedParams []*ast.Symbol, cleanup func()) {
+	restoreDefinition := b.enterDefinition(serializationDefinition{signature: signature})
+	restoreDeferredTypeScope := b.enterDeferredTypeScope()
 	expandedParams = b.ch.getExpandedParameters(signature, true /*skipUnionExpanding*/)[0]
-	cleanup = b.enterNewScope(signature.declaration, expandedParams, signature.typeParameters, signature.parameters, signature.mapper)
+	restoreScope := b.enterNewScope(signature.declaration, expandedParams, signature.typeParameters, signature.parameters, signature.mapper)
+	cleanup = func() {
+		restoreScope()
+		restoreDeferredTypeScope()
+		restoreDefinition()
+	}
 	return expandedParams, cleanup
 }
 
 func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []*ast.Symbol, typeParameters []*Type, originalParameters []*ast.Symbol, mapper *TypeMapper) func() {
-	cleanupContext := cloneNodeBuilderContext(b.ctx)
+	cleanupNames := enterTypeParameterNameScope(b.ctx)
 	// For regular function/method declarations, the enclosing declaration will already be signature.declaration,
 	// so this is a no-op, but for arrow functions and function expressions, the enclosing declaration will be
 	// the declaration that the arrow function / function expression is assigned to.
@@ -76,6 +322,15 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 	oldMapper := b.ctx.mapper
 	if mapper != nil {
 		b.ctx.mapper = mapper
+	}
+	if mapper := b.ctx.mapper; mapper != nil && len(typeParameters) != 0 {
+		// Bound type parameters shadow inherited substitutions; captured parameters do not.
+		b.ctx.mapper = newFunctionTypeMapper(func(t *Type) *Type {
+			if slices.Contains(typeParameters, t) {
+				return t
+			}
+			return mapper.Map(t)
+		})
 	}
 	if b.ctx.enclosingDeclaration != nil && declaration != nil {
 		// As a performance optimization, reuse the same fake scope within this chain.
@@ -244,7 +499,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 		if cleanupTypeParams != nil {
 			cleanupTypeParams()
 		}
-		cleanupContext()
+		cleanupNames()
 		b.ctx.enclosingDeclaration = oldEnclosingDecl
 		b.ctx.mapper = oldMapper
 	}

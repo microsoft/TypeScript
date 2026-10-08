@@ -1,0 +1,120 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityInstantiationTruncation40.ts ===
+// declare function f<T>(value: T): T;
+// type Sample = (aVeryLongParameterNameThatExceedsTheBudget: string) => typeof f<number>;
+//      ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Sample = (aVeryLongParameterNameThatExceedsTheBudget: string) => typeof f<number>
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//      ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Sample = (aVeryLongParameterNameThatExceedsTheBudget: string) => typeof f<number>
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Sample = (aVeryLongParameterNameThatExceedsTheBudget: string) => typeof f<number>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 47,
+      "LSPosition": {
+        "line": 1,
+        "character": 11
+      },
+      "Name": "sample",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype Sample = (aVeryLongParameterNameThatExceedsTheBudget: string) => typeof f<number>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 5
+          },
+          "end": {
+            "line": 1,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 47,
+      "LSPosition": {
+        "line": 1,
+        "character": 11
+      },
+      "Name": "sample",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype Sample = (aVeryLongParameterNameThatExceedsTheBudget: string) => typeof f<number>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 5
+          },
+          "end": {
+            "line": 1,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 47,
+      "LSPosition": {
+        "line": 1,
+        "character": 11
+      },
+      "Name": "sample",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype Sample = (aVeryLongParameterNameThatExceedsTheBudget: string) => typeof f<number>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 5
+          },
+          "end": {
+            "line": 1,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  }
+]
