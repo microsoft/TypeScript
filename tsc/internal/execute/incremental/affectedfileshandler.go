@@ -116,8 +116,8 @@ func (h *affectedFilesHandler) collectFilesAffectedBy(path tspath.PathKey, wg co
 		return
 	}
 
-	result.Add(file)
 	if !h.updateShapeSignature(file, false) {
+		result.Add(file)
 		return
 	}
 
@@ -129,6 +129,7 @@ func (h *affectedFilesHandler) collectFilesAffectedBy(path tspath.PathKey, wg co
 		return
 	}
 
+	result.Add(file)
 	if h.program.snapshot.options.IsolatedModules.IsTrue() {
 		return
 	}
