@@ -2,7 +2,6 @@ package ls
 
 import (
 	"strconv"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -112,7 +111,7 @@ func (f *missingMemberFixer) createMemberFromSymbol(symbol *ast.Symbol, enclosin
 
 				nodes = append(nodes, f.changeTracker.NodeFactory.NewSetAccessorDeclaration(
 					modifiers, createPropertyName(f.changeTracker.NodeFactory, declarationName, quotePreference),
-					nil /*typeParameters*/, createDummyParameters(f.changeTracker.NodeFactory, 1, []ast.SymbolName{unique.Make(parameter.Name().Text())}, []*ast.TypeNode{f.createTypeNode(t, enclosingDeclaration, flags, nodeBuilder, idToSymbol)}, 1, ast.IsInJSFile(enclosingDeclaration)),
+					nil /*typeParameters*/, createDummyParameters(f.changeTracker.NodeFactory, 1, []ast.SymbolName{ast.MakeSymbolName(parameter.Name().Text())}, []*ast.TypeNode{f.createTypeNode(t, enclosingDeclaration, flags, nodeBuilder, idToSymbol)}, 1, ast.IsInJSFile(enclosingDeclaration)),
 					nil /*type*/, nil /*fullSignature*/, f.createBody(body, quotePreference, signatureOnly),
 				),
 				)
@@ -458,14 +457,14 @@ func createDummyParameters(factory *ast.NodeFactory, argCount int, names []ast.S
 		if i < len(names) && names[i] != ast.EmptySymbolName {
 			parameterName = names[i]
 		} else {
-			parameterName = unique.Make("arg" + strconv.Itoa(i))
+			parameterName = ast.MakeSymbolName("arg" + strconv.Itoa(i))
 		}
 
 		count := parameterNameCounts[parameterName]
 		parameterNameCounts[parameterName] = count + 1
 
 		if count > 0 {
-			parameterName = unique.Make(parameterName.Value() + strconv.Itoa(count))
+			parameterName = ast.MakeSymbolName(parameterName.Value() + strconv.Itoa(count))
 		}
 
 		var questionToken *ast.QuestionToken

@@ -2,7 +2,6 @@ package checker
 
 import (
 	"slices"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -1245,13 +1244,13 @@ func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
 			continue
 		}
 		name := getStringLiteralValue(t)
-		literalProp := c.newSymbol(ast.SymbolFlagsProperty, unique.Make(name))
+		literalProp := c.newSymbol(ast.SymbolFlagsProperty, ast.MakeSymbolName(name))
 		c.valueSymbolLinks.Get(literalProp).resolvedType = c.anyType
 		if t.symbol != nil {
 			literalProp.SetDeclarations(t.symbol.Declarations())
 			literalProp.SetValueDeclaration(t.symbol.ValueDeclaration())
 		}
-		members[unique.Make(name)] = literalProp
+		members[ast.MakeSymbolName(name)] = literalProp
 	}
 	var indexInfos []*IndexInfo
 	if t.flags&TypeFlagsString != 0 {

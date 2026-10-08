@@ -3,7 +3,6 @@ package lsutil
 import (
 	"strings"
 	"unicode"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -116,7 +115,7 @@ func GetQuotePreference(sourceFile *ast.SourceFile, preferences UserPreferences)
 func ModuleSymbolToValidIdentifier(moduleSymbol *ast.Symbol, forceCapitalize bool) string {
 	moduleName := moduleSymbol.Name()
 	if ambientModuleName, ok := ast.TryGetAmbientModuleNameFromSymbolName(moduleName); ok {
-		moduleName = unique.Make(ambientModuleName)
+		moduleName = ast.MakeSymbolName(ambientModuleName)
 	}
 	return ModuleSpecifierToValidIdentifier(moduleName.Value(), forceCapitalize)
 }

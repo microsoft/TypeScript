@@ -9,7 +9,6 @@ import (
 	"sync"
 	"unicode"
 	"unicode/utf8"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -1332,7 +1331,7 @@ func (l *LanguageService) getCompletionData(
 			if isCurrentlyEditingNode(element, file, position) {
 				continue
 			}
-			existing.Add(unique.Make(element.PropertyNameOrName().Text()))
+			existing.Add(ast.MakeSymbolName(element.PropertyNameOrName().Text()))
 		}
 		uniques := core.Filter(exports, func(symbol *ast.Symbol) bool {
 			return symbol.Name() != ast.InternalSymbolNameDefault && !existing.Has(symbol.Name())
@@ -1368,7 +1367,7 @@ func (l *LanguageService) getCompletionData(
 			elements = importAttributes.AsImportAttributes().Attributes.Nodes
 		}
 		attributeNames := core.Map(elements, func(el *ast.Node) ast.SymbolName {
-			return unique.Make(el.AsImportAttribute().Name().Text())
+			return ast.MakeSymbolName(el.AsImportAttribute().Name().Text())
 		})
 		existing := collections.NewSetFromItems(attributeNames...)
 		uniques := core.Filter(
@@ -1550,7 +1549,7 @@ func (l *LanguageService) getCompletionData(
 		// Set sort texts.
 		for _, symbol := range filteredSymbols {
 			symbolId := ast.GetSymbolId(symbol)
-			if spreadMemberNames.Has(unique.Make(ast.SymbolNameText(symbol))) {
+			if spreadMemberNames.Has(ast.MakeSymbolName(ast.SymbolNameText(symbol))) {
 				symbolToSortTextMap[symbolId] = SortTextMemberDeclaredBySpreadAssignment
 			}
 			if symbol.Flags()&ast.SymbolFlagsOptional != 0 {
@@ -4317,7 +4316,7 @@ func getConstraintOfTypeArgumentProperty(node *ast.Node, typeChecker *checker.Ch
 		// (e.g. JSDoc types that never get re-attached) so we'll use
 		// the name as declared by the property as a best-effort.
 		if name, ok := ast.TryGetTextOfPropertyName(reparsed.Name()); ok {
-			return typeChecker.GetTypeOfPropertyOfContextualType(t, unique.Make(name))
+			return typeChecker.GetTypeOfPropertyOfContextualType(t, ast.MakeSymbolName(name))
 		}
 
 		return nil
@@ -4532,7 +4531,7 @@ func filterObjectMembersList(
 		}
 
 		if existingName != "" {
-			existingMemberNames.Add(unique.Make(existingName))
+			existingMemberNames.Add(ast.MakeSymbolName(existingName))
 		}
 	}
 
@@ -4734,7 +4733,7 @@ func filterClassMembersList(
 	}
 
 	return core.Filter(baseSymbols, func(propertySymbol *ast.Symbol) bool {
-		return !existingMemberNames.Has(unique.Make(ast.SymbolNameText(propertySymbol))) &&
+		return !existingMemberNames.Has(ast.MakeSymbolName(ast.SymbolNameText(propertySymbol))) &&
 			len(propertySymbol.Declarations()) > 0 &&
 			checker.GetDeclarationModifierFlagsFromSymbol(propertySymbol)&ast.ModifierFlagsPrivate == 0 &&
 			!(propertySymbol.ValueDeclaration() != nil && ast.IsPrivateIdentifierClassElementDeclaration(propertySymbol.ValueDeclaration()))
@@ -4821,7 +4820,7 @@ func filterJsxAttributes(
 		}
 
 		if attr.Kind == ast.KindJsxAttribute {
-			existingNames.Add(unique.Make(attr.Name().Text()))
+			existingNames.Add(ast.MakeSymbolName(attr.Name().Text()))
 		} else if ast.IsJsxSpreadAttribute(attr) {
 			setMemberDeclaredBySpreadAssignment(attr, &membersDeclaredBySpreadAssignment, typeChecker)
 		}
