@@ -359,7 +359,7 @@ func (p *fileLoader) addProjectReferenceTasks(singleThreaded bool) {
 }
 
 func (p *fileLoader) sortLibs(libFiles []*ast.SourceFile) {
-	slices.SortFunc(libFiles, func(f1 *ast.SourceFile, f2 *ast.SourceFile) int {
+	slices.SortStableFunc(libFiles, func(f1 *ast.SourceFile, f2 *ast.SourceFile) int {
 		return cmp.Compare(p.getDefaultLibFilePriority(f1), p.getDefaultLibFilePriority(f2))
 	})
 }
