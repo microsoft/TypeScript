@@ -946,7 +946,9 @@ func (b *Binder) setCommonJSModuleIndicator(node *ast.Node) bool {
 
 func (b *Binder) bindClassLikeDeclaration(node *ast.Node) {
 	name := node.Name()
-	b.checkStrictModeEvalOrArguments(node, name)
+	if node.Flags&ast.NodeFlagsAmbient == 0 {
+		b.checkStrictModeEvalOrArguments(node, name)
+	}
 	switch node.Kind {
 	case ast.KindClassDeclaration:
 		b.bindBlockScopedDeclaration(node, ast.SymbolFlagsClass, ast.SymbolFlagsClassExcludes)
