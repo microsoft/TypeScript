@@ -107,10 +107,14 @@ metadata operations even when the requested arena field was stable.
 The race was reported by the parallel race-enabled smoke job for
 [microsoft/TypeScript#64698](https://github.com/microsoft/TypeScript/pull/64698),
 [run 37849859691](https://github.com/microsoft/TypeScript/actions/runs/37849859691/job/113559811242).
-The required correction is pointer receivers for source-file field accessors,
-base conversions, and subtree-fact forwarding. Other concrete/base views should
-remain values. Record the implementation and regression evidence here with the
-fix.
+The fix generates pointer receivers for source-file field accessors, base
+conversions, and subtree-fact forwarding. Other concrete/base views remain
+values.
+
+Regression coverage checks the public generated method sets and concurrently
+reads source-file accessors while its metadata mutex is used. The regression
+reproduced the race before the fix. Both exact CI smoke commands pass with a
+race-enabled compiler after the fix.
 
 ## Performance observations
 
@@ -165,8 +169,10 @@ therefore also a generator input. Forced regeneration must be deterministic.
 
 The initial migration passed full validation with unchanged compiler baselines,
 focused race/checkptr tests, 32-bit tests, and a WASI AST test compilation.
-The CI receiver race needs its own regression and race-enabled smoke validation;
-the initial focused arena tests did not exercise concurrent metadata copies.
+The source-file receiver fix passes its focused race regression, both
+race-enabled smoke commands, and `npx hereby validate --all`, with unchanged
+compiler baselines. The initial focused arena tests did not exercise concurrent
+metadata copies.
 
 Relevant commands:
 

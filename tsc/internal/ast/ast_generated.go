@@ -22935,11 +22935,11 @@ func IsJSDocNameReference(node Node) bool {
 // SourceFile
 // ──────────────────────────────────────────────────────────────────────
 
-func (node SourceFile) Symbol() *Symbol {
+func (node *SourceFile) Symbol() *Symbol {
 	return node.Node.poolSymbol(node.Node.uintField(8))
 }
 
-func (node SourceFile) SetSymbol(value *Symbol) {
+func (node *SourceFile) SetSymbol(value *Symbol) {
 	index := node.Node.uintField(8)
 	if index != 0 {
 		node.Node.file.arena.poolSymbol[index-1] = value
@@ -22952,11 +22952,11 @@ func (node SourceFile) SetSymbol(value *Symbol) {
 	node.Node.setUintField(8, arenaPoolIndex(len(node.Node.file.arena.poolSymbol)))
 }
 
-func (node SourceFile) Locals() SymbolTable {
+func (node *SourceFile) Locals() SymbolTable {
 	return node.Node.poolSymbolTable(node.Node.uintField(9))
 }
 
-func (node SourceFile) SetLocals(value SymbolTable) {
+func (node *SourceFile) SetLocals(value SymbolTable) {
 	index := node.Node.uintField(9)
 	if index != 0 {
 		node.Node.file.arena.poolSymbolTable[index-1] = value
@@ -22969,29 +22969,29 @@ func (node SourceFile) SetLocals(value SymbolTable) {
 	node.Node.setUintField(9, arenaPoolIndex(len(node.Node.file.arena.poolSymbolTable)))
 }
 
-func (node SourceFile) NextContainer() Node {
+func (node *SourceFile) NextContainer() Node {
 	return node.Node.nodeField(10)
 }
 
-func (node SourceFile) SetNextContainer(value Node) {
+func (node *SourceFile) SetNextContainer(value Node) {
 	node.Node.setNodeField(10, value)
 }
 
-func (node SourceFile) facts() *atomic.Uint32 {
+func (node *SourceFile) facts() *atomic.Uint32 {
 	return node.Node.atomicField(11)
 }
 
-func (node SourceFile) DeclarationBase() DeclarationBase {
+func (node *SourceFile) DeclarationBase() DeclarationBase {
 	return DeclarationBase{NodeDefault{node.Node}}
 }
 
-func (node SourceFile) LocalsContainerBase() LocalsContainerBase {
+func (node *SourceFile) LocalsContainerBase() LocalsContainerBase {
 	return LocalsContainerBase{NodeDefault{node.Node}}
 }
 
-func (node SourceFile) CompositeBase() CompositeBase { return CompositeBase{NodeDefault{node.Node}} }
+func (node *SourceFile) CompositeBase() CompositeBase { return CompositeBase{NodeDefault{node.Node}} }
 
-func (node SourceFile) subtreeFactsWorker(self Node) SubtreeFacts {
+func (node *SourceFile) subtreeFactsWorker(self Node) SubtreeFacts {
 	return (CompositeBase{NodeDefault{node.Node}}).subtreeFactsWorker(self)
 }
 

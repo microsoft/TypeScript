@@ -165,13 +165,14 @@ function baseFieldOffset(w: Writer, base: NodeType, field: MemberInfo): string {
 }
 
 export function generateArenaView(w: Writer, node: NodeType): void {
+    const receiver = node.name === "SourceFile" ? "*SourceFile" : node.name;
     if (!node.handWritten && node.name !== "NodeBase") {
         w.write(`type ${node.name} struct { NodeDefault }`);
     }
     const fields = arenaFields(node);
     for (const [i, field] of fields.entries()) {
         const offset = node.isBase ? baseFieldOffset(w, node, field) : String(arenaHeaderWords + i);
-        emitField(w, node.name, { name: field.name, type: arenaFieldType(field), storage: storageType(field) }, offset);
+        emitField(w, receiver, { name: field.name, type: arenaFieldType(field), storage: storageType(field) }, offset);
     }
     const bases = new Set<string>();
     const visit = (type: NodeType) => {
@@ -183,14 +184,14 @@ export function generateArenaView(w: Writer, node: NodeType): void {
     visit(node);
     for (const base of bases) {
         if (base === "NodeBase") continue;
-        w.write(`func (node ${node.name}) ${base}() ${base} { return ${base}{NodeDefault{node.Node}} }`);
+        w.write(`func (node ${receiver}) ${base}() ${base} { return ${base}{NodeDefault{node.Node}} }`);
     }
     for (const method of ["computeSubtreeFacts", "propagateSubtreeFacts", "subtreeFactsWorker"]) {
         const owner = methodOwner(node, method);
         if (owner === node.name || owner === "NodeDefault" || (method === "subtreeFactsWorker" && owner !== "CompositeBase")) continue;
         const params = method === "subtreeFactsWorker" ? "self Node" : "";
         const args = method === "subtreeFactsWorker" ? "self" : "";
-        w.write(`func (node ${node.name}) ${method}(${params}) SubtreeFacts { return (${owner}{NodeDefault{node.Node}}).${method}(${args}) }`);
+        w.write(`func (node ${receiver}) ${method}(${params}) SubtreeFacts { return (${owner}{NodeDefault{node.Node}}).${method}(${args}) }`);
     }
     w.write("");
 }

@@ -1,7 +1,9 @@
 package ast_test
 
 import (
+	"reflect"
 	"runtime"
+	"sync"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -10,6 +12,53 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
+
+func TestSourceFileAccessorsUsePointerReceivers(t *testing.T) {
+	t.Parallel()
+	value := reflect.TypeFor[ast.SourceFile]()
+	pointer := reflect.TypeFor[*ast.SourceFile]()
+	for _, name := range []string{
+		"Symbol", "SetSymbol", "Locals", "SetLocals", "NextContainer", "SetNextContainer",
+		"DeclarationBase", "LocalsContainerBase", "CompositeBase",
+	} {
+		if _, ok := value.MethodByName(name); ok {
+			t.Errorf("%s must not copy SourceFile metadata through a value receiver", name)
+		}
+		if _, ok := pointer.MethodByName(name); !ok {
+			t.Errorf("*SourceFile is missing %s", name)
+		}
+	}
+}
+
+func TestSourceFileAccessorsConcurrentMetadata(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	file := factory.NewSourceFile(ast.SourceFileParseOptions{}, "", nil, ast.Node{}).AsSourceFile()
+	key := ast.NewSourceFileDataKey[int]()
+	compute := func(*ast.SourceFile) int { return 1 }
+	file.GetOrComputeData(key, compute)
+	start := make(chan struct{})
+	var wait sync.WaitGroup
+	wait.Go(func() {
+		<-start
+		for range 1024 {
+			assert.Equal(t, file.GetOrComputeData(key, compute), 1)
+		}
+	})
+	wait.Go(func() {
+		<-start
+		for range 1024 {
+			assert.Equal(t, file.Symbol(), (*ast.Symbol)(nil))
+			assert.Assert(t, file.Locals() == nil)
+			assert.Assert(t, file.NextContainer().IsNil())
+			assert.Equal(t, file.DeclarationBase().AsNode(), file.AsNode())
+			assert.Equal(t, file.LocalsContainerBase().AsNode(), file.AsNode())
+			assert.Equal(t, file.CompositeBase().AsNode(), file.AsNode())
+		}
+	})
+	close(start)
+	wait.Wait()
+}
 
 func TestNodeAccessorsCastLayout(t *testing.T) {
 	t.Parallel()
