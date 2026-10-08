@@ -354,6 +354,7 @@ func (c *Checker) GetIndexInfosOfIndexSymbol(symbol *ast.Symbol) []*IndexInfo {
 	var siblingSymbols []*ast.Symbol
 	if symbol.Parent != nil {
 		siblingSymbols = slices.Collect(maps.Values(c.getMembersOfSymbol(symbol.Parent)))
+		c.sortSymbols(siblingSymbols)
 	}
 	return c.getIndexInfosOfIndexSymbol(symbol, siblingSymbols)
 }
