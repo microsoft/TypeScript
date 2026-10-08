@@ -4,7 +4,6 @@ import (
 	"slices"
 	"strconv"
 	"strings"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -532,7 +531,7 @@ func (c *Checker) elaborateArrayLiteral(node *ast.Node, source *Type, target *Ty
 	}
 	reportedError := false
 	for i, element := range node.Elements() {
-		if ast.IsOmittedExpression(element) || c.isTupleLikeType(target) && c.getPropertyOfType(target, unique.Make(jsnum.Number(i).String())) == nil {
+		if ast.IsOmittedExpression(element) || c.isTupleLikeType(target) && c.getPropertyOfType(target, ast.MakeSymbolName(jsnum.Number(i).String())) == nil {
 			continue
 		}
 		nameType := c.getNumberLiteralType(jsnum.Number(i))
@@ -1112,7 +1111,7 @@ func (c *Checker) getMatchingUnionConstituentForType(unionType *Type, t *Type) *
 // an empty name if no such discriminant property exists.
 func (c *Checker) getKeyPropertyName(t *Type) ast.SymbolName {
 	u := t.AsUnionType()
-	if u.keyPropertyName == (ast.SymbolName{}) {
+	if u.keyPropertyName.IsZero() {
 		u.keyPropertyName, u.constituentMap = c.computeKeyPropertyNameAndMap(t)
 	}
 	if u.keyPropertyName == ast.InternalSymbolNameMissing {
@@ -1977,7 +1976,7 @@ func (c *Checker) getParameterNameAtPosition(signature *Signature, pos int) ast.
 
 func (c *Checker) getTupleElementLabel(elementInfo TupleElementInfo, restSymbol *ast.Symbol, index int) ast.SymbolName {
 	if elementInfo.labeledDeclaration != nil {
-		return unique.Make(elementInfo.labeledDeclaration.Name().Text())
+		return ast.MakeSymbolName(elementInfo.labeledDeclaration.Name().Text())
 	}
 	if restSymbol != nil && restSymbol.ValueDeclaration() != nil && ast.IsParameterDeclaration(restSymbol.ValueDeclaration()) {
 		return c.getTupleElementLabelFromBindingElement(restSymbol.ValueDeclaration(), index, elementInfo.flags)
@@ -1986,7 +1985,7 @@ func (c *Checker) getTupleElementLabel(elementInfo TupleElementInfo, restSymbol 
 	if restSymbol != nil {
 		rootName = restSymbol.Name()
 	}
-	return unique.Make(rootName.Value() + "_" + strconv.Itoa(index))
+	return ast.MakeSymbolName(rootName.Value() + "_" + strconv.Itoa(index))
 }
 
 func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index int, elementFlags ElementFlags) ast.SymbolName {
@@ -2007,9 +2006,9 @@ func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index i
 				//   (x: number, y: number, ...z: number[], z_1: number) => ...
 				// which preserves rest elements of z but gives distinct numbers to fixed elements of 'z'
 				if elementFlags&ElementFlagsVariable != 0 {
-					return unique.Make(name)
+					return ast.MakeSymbolName(name)
 				}
-				return unique.Make(name + "_" + strconv.Itoa(index))
+				return ast.MakeSymbolName(name + "_" + strconv.Itoa(index))
 			}
 			// given
 			//   (...[x]: [number]) => ...
@@ -2023,9 +2022,9 @@ func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index i
 			//   (x_0: number) => ...
 			// which which numbers fixed elements of 'x' whose tuple element type is variable
 			if elementFlags&ElementFlagsFixed != 0 {
-				return unique.Make(name)
+				return ast.MakeSymbolName(name)
 			}
-			return unique.Make(name + "_n")
+			return ast.MakeSymbolName(name + "_n")
 		case ast.KindArrayBindingPattern:
 			if hasDotDotDotToken(node) {
 				elements := node.Name().Elements()
@@ -2043,7 +2042,7 @@ func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index i
 			}
 		}
 	}
-	return unique.Make("arg_" + strconv.Itoa(index))
+	return ast.MakeSymbolName("arg_" + strconv.Itoa(index))
 }
 
 func (c *Checker) getTypePredicateOfSignature(sig *Signature) *TypePredicate {
@@ -2126,8 +2125,8 @@ func (c *Checker) createTypePredicateFromTypePredicateNode(node *ast.Node, signa
 	}
 	kind := core.IfElse(predicateNode.AssertsModifier != nil, TypePredicateKindAssertsIdentifier, TypePredicateKindIdentifier)
 	name := predicateNode.ParameterName.Text()
-	index := core.FindIndex(signature.parameters, func(p *ast.Symbol) bool { return p.Name() == unique.Make(name) })
-	return c.newTypePredicate(kind, unique.Make(name), int32(index), t)
+	index := core.FindIndex(signature.parameters, func(p *ast.Symbol) bool { return p.Name() == ast.MakeSymbolName(name) })
+	return c.newTypePredicate(kind, ast.MakeSymbolName(name), int32(index), t)
 }
 
 func (c *Checker) instantiateTypePredicate(predicate *TypePredicate, mapper *TypeMapper) *TypePredicate {
@@ -2784,7 +2783,7 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 							r.errorNode = prop.ValueDeclaration().Name()
 						}
 						propName := r.c.symbolToString(prop)
-						suggestionSymbol := r.c.getSuggestedSymbolForNonexistentJSXAttribute(unique.Make(propName), errorTarget)
+						suggestionSymbol := r.c.getSuggestedSymbolForNonexistentJSXAttribute(ast.MakeSymbolName(propName), errorTarget)
 						if suggestionSymbol != nil {
 							r.reportError(diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, r.c.TypeToString(errorTarget), r.c.symbolToString(suggestionSymbol))
 						} else {
@@ -2803,7 +2802,7 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 							name := prop.ValueDeclaration().Name()
 							r.errorNode = name
 							if ast.IsIdentifier(name) {
-								suggestion = r.c.getSuggestionForNonexistentProperty(unique.Make(name.Text()), errorTarget)
+								suggestion = r.c.getSuggestionForNonexistentProperty(ast.MakeSymbolName(name.Text()), errorTarget)
 							}
 						}
 						if suggestion != "" {
@@ -4230,7 +4229,7 @@ func (r *Relater) propertiesRelatedTo(source *Type, target *Type, reportErrors b
 					if sourceFlags&ElementFlagsVariable != 0 || targetFlags&ElementFlagsVariable != 0 {
 						canExcludeDiscriminants = false
 					}
-					if canExcludeDiscriminants && excludedProperties.Has(unique.Make(strconv.Itoa(sourcePosition))) {
+					if canExcludeDiscriminants && excludedProperties.Has(ast.MakeSymbolName(strconv.Itoa(sourcePosition))) {
 						continue
 					}
 				}

@@ -278,12 +278,12 @@ function translateGoNumericExpression(expression: string, prefix: string): strin
 }
 
 /**
- * Resolve a Go string expression, optionally interned with `unique.Make`,
+ * Resolve a Go string expression, optionally interned with `MakeSymbolName`,
  * into a quoted, JS-escaped TypeScript string literal. `replacements` maps bare
  * Go identifiers (such as a sentinel-prefix constant) to their literal value.
  */
 function parseGoStringValue(goValue: string, replacements: Record<string, string>): string {
-    goValue = goValue.replace(/^unique\.Make\((.*)\)$/, "$1");
+    goValue = goValue.replace(/^(?:unique\.Make|MakeSymbolName)\((.*)\)$/, "$1");
     let result = "";
     for (const part of goValue.split("+").map(p => p.trim())) {
         if (Object.prototype.hasOwnProperty.call(replacements, part)) {

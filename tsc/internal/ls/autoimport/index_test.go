@@ -4,7 +4,6 @@ import (
 	"slices"
 	"strings"
 	"testing"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 
@@ -16,7 +15,7 @@ type testEntry struct {
 	package_ string
 }
 
-func (e *testEntry) Name() ast.SymbolName { return unique.Make(e.name) }
+func (e *testEntry) Name() ast.SymbolName { return ast.MakeSymbolName(e.name) }
 
 func TestIndexFind(t *testing.T) {
 	t.Parallel()
@@ -26,9 +25,9 @@ func TestIndexFind(t *testing.T) {
 	idx.insertAsWords(lower)
 	idx.insertAsWords(upper)
 
-	assert.Assert(t, slices.Equal(idx.Find(unique.Make(strings.Clone("fooBar")), true), []*testEntry{lower}))
+	assert.Assert(t, slices.Equal(idx.Find(ast.MakeSymbolName(strings.Clone("fooBar")), true), []*testEntry{lower}))
 	assert.Assert(t, slices.Equal(idx.Find(upper.Name(), true), []*testEntry{upper}))
-	query := unique.Make(strings.ToUpper(lower.name))
+	query := ast.MakeSymbolName(strings.ToUpper(lower.name))
 	assert.Assert(t, slices.Equal(idx.Find(query, false), []*testEntry{lower, upper}))
 	assert.Equal(t, len(idx.Find(query, true)), 0)
 	assert.Equal(t, len(idx.Find(ast.EmptySymbolName, true)), 0)

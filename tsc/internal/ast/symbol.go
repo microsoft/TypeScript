@@ -1,11 +1,15 @@
 package ast
 
 import (
+	"bytes"
+	"errors"
 	"strings"
 	"sync/atomic"
+	"unicode/utf8"
 	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 )
 
 // Symbol stores flags, checkFlags, and id uniquely for every symbol instance, but may share
@@ -116,218 +120,284 @@ func (s *Symbol) CombinedLocalAndExportSymbolFlags() SymbolFlags {
 
 // SymbolName is an interned name used for symbol identity and lookup.
 // Its zero value denotes an unset name and must not be passed to Value.
-type SymbolName = unique.Handle[string]
+type SymbolName unique.Handle[string]
+
+func MakeSymbolName(text string) SymbolName {
+	return SymbolName(unique.Make(text))
+}
+
+func (name SymbolName) Value() string {
+	return unique.Handle[string](name).Value()
+}
+
+func (name SymbolName) IsZero() bool {
+	return name == SymbolName{}
+}
+
+func (name SymbolName) String() string {
+	if name.IsZero() {
+		return "<unset>"
+	}
+	return name.Value()
+}
+
+// MarshalText uses the escaped spelling so internal names remain valid UTF-8.
+func (name SymbolName) MarshalText() ([]byte, error) {
+	if name.IsZero() {
+		return nil, errors.New("cannot marshal an unset symbol name as text")
+	}
+	text := EscapeSymbolName(name)
+	if !utf8.ValidString(text) {
+		return nil, errors.New("symbol name contains invalid UTF-8")
+	}
+	return []byte(text), nil
+}
+
+func (name *SymbolName) UnmarshalText(text []byte) error {
+	if !utf8.Valid(text) {
+		return errors.New("symbol name contains invalid UTF-8")
+	}
+	*name = UnescapeSymbolName(string(text))
+	return nil
+}
+
+// MarshalJSON preserves the distinction between unset and empty names.
+func (name SymbolName) MarshalJSON() ([]byte, error) {
+	if name.IsZero() {
+		return []byte("null"), nil
+	}
+	text, err := name.MarshalText()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(string(text))
+}
+
+func (name *SymbolName) UnmarshalJSON(data []byte) error {
+	if bytes.Equal(bytes.TrimSpace(data), []byte("null")) {
+		*name = SymbolName{}
+		return nil
+	}
+	if !utf8.Valid(data) {
+		return errors.New("symbol name contains invalid UTF-8")
+	}
+	var text string
+	if err := json.Unmarshal(data, &text); err != nil {
+		return err
+	}
+	return name.UnmarshalText([]byte(text))
+}
 
 // EmptySymbolName is a valid empty name, distinct from an unset zero handle.
-var EmptySymbolName = unique.Make("")
+var EmptySymbolName = MakeSymbolName("")
 
 type SymbolTable map[SymbolName]*Symbol
 
 // Fixed symbol names are interned once and shared by compiler consumers.
 var (
-	SymbolNameZero                          = unique.Make("0")
-	SymbolNameUnresolved                    = unique.Make("<<unresolved>>")
-	SymbolNameAbstractModuleSource          = unique.Make("AbstractModuleSource")
-	SymbolNameArray                         = unique.Make("Array")
-	SymbolNameArrayBuffer                   = unique.Make("ArrayBuffer")
-	SymbolNameArrayConstructor              = unique.Make("ArrayConstructor")
-	SymbolNameArrayLike                     = unique.Make("ArrayLike")
-	SymbolNameAsyncDisposable               = unique.Make("AsyncDisposable")
-	SymbolNameAsyncDisposableStack          = unique.Make("AsyncDisposableStack")
-	SymbolNameAsyncGenerator                = unique.Make("AsyncGenerator")
-	SymbolNameAsyncGeneratorFunction        = unique.Make("AsyncGeneratorFunction")
-	SymbolNameAsyncIterable                 = unique.Make("AsyncIterable")
-	SymbolNameAsyncIterableIterator         = unique.Make("AsyncIterableIterator")
-	SymbolNameAsyncIterator                 = unique.Make("AsyncIterator")
-	SymbolNameAsyncIteratorObject           = unique.Make("AsyncIteratorObject")
-	SymbolNameAtomics                       = unique.Make("Atomics")
-	SymbolNameAwaited                       = unique.Make("Awaited")
-	SymbolNameBigInt                        = unique.Make("BigInt")
-	SymbolNameBigInt64Array                 = unique.Make("BigInt64Array")
-	SymbolNameBigUint64Array                = unique.Make("BigUint64Array")
-	SymbolNameBoolean                       = unique.Make("Boolean")
-	SymbolNameBuiltinIteratorReturn         = unique.Make("BuiltinIteratorReturn")
-	SymbolNameCallableFunction              = unique.Make("CallableFunction")
-	SymbolNameCapitalize                    = unique.Make("Capitalize")
-	SymbolNameClassAccessorDecoratorContext = unique.Make("ClassAccessorDecoratorContext")
-	SymbolNameClassAccessorDecoratorResult  = unique.Make("ClassAccessorDecoratorResult")
-	SymbolNameClassAccessorDecoratorTarget  = unique.Make("ClassAccessorDecoratorTarget")
-	SymbolNameClassDecoratorContext         = unique.Make("ClassDecoratorContext")
-	SymbolNameClassFieldDecoratorContext    = unique.Make("ClassFieldDecoratorContext")
-	SymbolNameClassGetterDecoratorContext   = unique.Make("ClassGetterDecoratorContext")
-	SymbolNameClassMethodDecoratorContext   = unique.Make("ClassMethodDecoratorContext")
-	SymbolNameClassSetterDecoratorContext   = unique.Make("ClassSetterDecoratorContext")
-	SymbolNameDataView                      = unique.Make("DataView")
-	SymbolNameDate                          = unique.Make("Date")
-	SymbolNameDateTimeFormat                = unique.Make("DateTimeFormat")
-	SymbolNameDisposable                    = unique.Make("Disposable")
-	SymbolNameDisposableStack               = unique.Make("DisposableStack")
-	SymbolNameElement                       = unique.Make("Element")
-	SymbolNameElementAttributesProperty     = unique.Make("ElementAttributesProperty")
-	SymbolNameElementChildrenAttribute      = unique.Make("ElementChildrenAttribute")
-	SymbolNameElementClass                  = unique.Make("ElementClass")
-	SymbolNameElementType                   = unique.Make("ElementType")
-	SymbolNameError                         = unique.Make("Error")
-	SymbolNameErrorConstructor              = unique.Make("ErrorConstructor")
-	SymbolNameEventTarget                   = unique.Make("EventTarget")
-	SymbolNameExtract                       = unique.Make("Extract")
-	SymbolNameFloat16Array                  = unique.Make("Float16Array")
-	SymbolNameFloat32Array                  = unique.Make("Float32Array")
-	SymbolNameFloat64Array                  = unique.Make("Float64Array")
-	SymbolNameFunction                      = unique.Make("Function")
-	SymbolNameGenerator                     = unique.Make("Generator")
-	SymbolNameIArguments                    = unique.Make("IArguments")
-	SymbolNameImportAttributes              = unique.Make("ImportAttributes")
-	SymbolNameImportCallOptions             = unique.Make("ImportCallOptions")
-	SymbolNameImportMeta                    = unique.Make("ImportMeta")
-	SymbolNameImportMetaExpression          = unique.Make("ImportMetaExpression")
-	SymbolNameInt16Array                    = unique.Make("Int16Array")
-	SymbolNameInt32Array                    = unique.Make("Int32Array")
-	SymbolNameInt8Array                     = unique.Make("Int8Array")
-	SymbolNameIntl                          = unique.Make("Intl")
-	SymbolNameIntrinsicAttributes           = unique.Make("IntrinsicAttributes")
-	SymbolNameIntrinsicClassAttributes      = unique.Make("IntrinsicClassAttributes")
-	SymbolNameIntrinsicElements             = unique.Make("IntrinsicElements")
-	SymbolNameIterable                      = unique.Make("Iterable")
-	SymbolNameIterableIterator              = unique.Make("IterableIterator")
-	SymbolNameIterator                      = unique.Make("Iterator")
-	SymbolNameIteratorConstructor           = unique.Make("IteratorConstructor")
-	SymbolNameIteratorObject                = unique.Make("IteratorObject")
-	SymbolNameIteratorReturnResult          = unique.Make("IteratorReturnResult")
-	SymbolNameIteratorYieldResult           = unique.Make("IteratorYieldResult")
-	SymbolNameJSON                          = unique.Make("JSON")
-	SymbolNameJSX                           = unique.Make("JSX")
-	SymbolNameK                             = unique.Make("K")
-	SymbolNameLibraryManagedAttributes      = unique.Make("LibraryManagedAttributes")
-	SymbolNameLowercase                     = unique.Make("Lowercase")
-	SymbolNameMap                           = unique.Make("Map")
-	SymbolNameMapConstructor                = unique.Make("MapConstructor")
-	SymbolNameMath                          = unique.Make("Math")
-	SymbolNameNaN                           = unique.Make("NaN")
-	SymbolNameNewableFunction               = unique.Make("NewableFunction")
-	SymbolNameNoInfer                       = unique.Make("NoInfer")
-	SymbolNameNode                          = unique.Make("Node")
-	SymbolNameNodeList                      = unique.Make("NodeList")
-	SymbolNameNonNullable                   = unique.Make("NonNullable")
-	SymbolNameNumber                        = unique.Make("Number")
-	SymbolNameNumberConstructor             = unique.Make("NumberConstructor")
-	SymbolNameNumberFormat                  = unique.Make("NumberFormat")
-	SymbolNameObject                        = unique.Make("Object")
-	SymbolNameObjectConstructor             = unique.Make("ObjectConstructor")
-	SymbolNameOmit                          = unique.Make("Omit")
-	SymbolNamePartial                       = unique.Make("Partial")
-	SymbolNamePick                          = unique.Make("Pick")
-	SymbolNamePromise                       = unique.Make("Promise")
-	SymbolNamePromiseConstructor            = unique.Make("PromiseConstructor")
-	SymbolNamePromiseLike                   = unique.Make("PromiseLike")
-	SymbolNameRawJSON                       = unique.Make("RawJSON")
-	SymbolNameReadonly                      = unique.Make("Readonly")
-	SymbolNameReadonlyArray                 = unique.Make("ReadonlyArray")
-	SymbolNameReadonlyMap                   = unique.Make("ReadonlyMap")
-	SymbolNameReadonlySet                   = unique.Make("ReadonlySet")
-	SymbolNameRecord                        = unique.Make("Record")
-	SymbolNameReflect                       = unique.Make("Reflect")
-	SymbolNameRegExp                        = unique.Make("RegExp")
-	SymbolNameRegExpConstructor             = unique.Make("RegExpConstructor")
-	SymbolNameRegExpExecArray               = unique.Make("RegExpExecArray")
-	SymbolNameRegExpMatchArray              = unique.Make("RegExpMatchArray")
-	SymbolNameRelativeTimeFormat            = unique.Make("RelativeTimeFormat")
-	SymbolNameRequired                      = unique.Make("Required")
-	SymbolNameSet                           = unique.Make("Set")
-	SymbolNameSharedArrayBuffer             = unique.Make("SharedArrayBuffer")
-	SymbolNameString                        = unique.Make("String")
-	SymbolNameStringConstructor             = unique.Make("StringConstructor")
-	SymbolNameSymbol                        = unique.Make("Symbol")
-	SymbolNameSymbolConstructor             = unique.Make("SymbolConstructor")
-	SymbolNameT                             = unique.Make("T")
-	SymbolNameTemplateStringsArray          = unique.Make("TemplateStringsArray")
-	SymbolNameThisType                      = unique.Make("ThisType")
-	SymbolNameTypedPropertyDescriptor       = unique.Make("TypedPropertyDescriptor")
-	SymbolNameUint16Array                   = unique.Make("Uint16Array")
-	SymbolNameUint32Array                   = unique.Make("Uint32Array")
-	SymbolNameUint8Array                    = unique.Make("Uint8Array")
-	SymbolNameUint8ArrayConstructor         = unique.Make("Uint8ArrayConstructor")
-	SymbolNameUint8ClampedArray             = unique.Make("Uint8ClampedArray")
-	SymbolNameUncapitalize                  = unique.Make("Uncapitalize")
-	SymbolNameUppercase                     = unique.Make("Uppercase")
-	SymbolNameWeakMap                       = unique.Make("WeakMap")
-	SymbolNameWeakSet                       = unique.Make("WeakSet")
-	SymbolNameESModule                      = unique.Make("__esModule")
-	SymbolNameUnderscoreDefault             = unique.Make("_default")
-	SymbolNameAny                           = unique.Make("any")
-	SymbolNameArg                           = unique.Make("arg")
-	SymbolNameArgs                          = unique.Make("args")
-	SymbolNameArguments                     = unique.Make("arguments")
-	SymbolNameAsyncIteratorProperty         = unique.Make("asyncIterator")
-	SymbolNameBind                          = unique.Make("bind")
-	SymbolNameBooleanKeyword                = unique.Make("boolean")
-	SymbolNameCaller                        = unique.Make("caller")
-	SymbolNameChildren                      = unique.Make("children")
-	SymbolNameClass                         = unique.Make("class")
-	SymbolNameClassName                     = unique.Make("className")
-	SymbolNameConst                         = unique.Make("const")
-	SymbolNameContext                       = unique.Make("context")
-	SymbolNameDescriptor                    = unique.Make("descriptor")
-	SymbolNameDone                          = unique.Make("done")
-	SymbolNameExports                       = unique.Make("exports")
-	SymbolNameFor                           = unique.Make("for")
-	SymbolNameGetProperty                   = unique.Make("get")
-	SymbolNameGlobal                        = unique.Make("global")
-	SymbolNameGlobalThis                    = unique.Make("globalThis")
-	SymbolNameHasInstance                   = unique.Make("hasInstance")
-	SymbolNameHtmlFor                       = unique.Make("htmlFor")
-	SymbolNameIteratorProperty              = unique.Make("iterator")
-	SymbolNameLength                        = unique.Make("length")
-	SymbolNameMeta                          = unique.Make("meta")
-	SymbolNameModule                        = unique.Make("module")
-	SymbolNameName                          = unique.Make("name")
-	SymbolNameNever                         = unique.Make("never")
-	SymbolNameNext                          = unique.Make("next")
-	SymbolNameNumberKeyword                 = unique.Make("number")
-	SymbolNameParameterIndex                = unique.Make("parameterIndex")
-	SymbolNamePrivate                       = unique.Make("private")
-	SymbolNamePropertyKey                   = unique.Make("propertyKey")
-	SymbolNameProps                         = unique.Make("props")
-	SymbolNamePrototype                     = unique.Make("prototype")
-	SymbolNameRequire                       = unique.Make("require")
-	SymbolNameReturn                        = unique.Make("return")
-	SymbolNameSelf                          = unique.Make("self")
-	SymbolNameSetProperty                   = unique.Make("set")
-	SymbolNameStatic                        = unique.Make("static")
-	SymbolNameStringKeyword                 = unique.Make("string")
-	SymbolNameTarget                        = unique.Make("target")
-	SymbolNameThen                          = unique.Make("then")
-	SymbolNameThrow                         = unique.Make("throw")
-	SymbolNameUndefined                     = unique.Make("undefined")
-	SymbolNameUnknown                       = unique.Make("unknown")
-	SymbolNameValue                         = unique.Make("value")
-	SymbolNameWith                          = unique.Make("with")
-	SymbolNameWritable                      = unique.Make("writable")
+	SymbolNameZero                          = MakeSymbolName("0")
+	SymbolNameUnresolved                    = MakeSymbolName("<<unresolved>>")
+	SymbolNameAbstractModuleSource          = MakeSymbolName("AbstractModuleSource")
+	SymbolNameArray                         = MakeSymbolName("Array")
+	SymbolNameArrayBuffer                   = MakeSymbolName("ArrayBuffer")
+	SymbolNameArrayConstructor              = MakeSymbolName("ArrayConstructor")
+	SymbolNameArrayLike                     = MakeSymbolName("ArrayLike")
+	SymbolNameAsyncDisposable               = MakeSymbolName("AsyncDisposable")
+	SymbolNameAsyncDisposableStack          = MakeSymbolName("AsyncDisposableStack")
+	SymbolNameAsyncGenerator                = MakeSymbolName("AsyncGenerator")
+	SymbolNameAsyncGeneratorFunction        = MakeSymbolName("AsyncGeneratorFunction")
+	SymbolNameAsyncIterable                 = MakeSymbolName("AsyncIterable")
+	SymbolNameAsyncIterableIterator         = MakeSymbolName("AsyncIterableIterator")
+	SymbolNameAsyncIterator                 = MakeSymbolName("AsyncIterator")
+	SymbolNameAsyncIteratorObject           = MakeSymbolName("AsyncIteratorObject")
+	SymbolNameAtomics                       = MakeSymbolName("Atomics")
+	SymbolNameAwaited                       = MakeSymbolName("Awaited")
+	SymbolNameBigInt                        = MakeSymbolName("BigInt")
+	SymbolNameBigInt64Array                 = MakeSymbolName("BigInt64Array")
+	SymbolNameBigUint64Array                = MakeSymbolName("BigUint64Array")
+	SymbolNameBoolean                       = MakeSymbolName("Boolean")
+	SymbolNameBuiltinIteratorReturn         = MakeSymbolName("BuiltinIteratorReturn")
+	SymbolNameCallableFunction              = MakeSymbolName("CallableFunction")
+	SymbolNameCapitalize                    = MakeSymbolName("Capitalize")
+	SymbolNameClassAccessorDecoratorContext = MakeSymbolName("ClassAccessorDecoratorContext")
+	SymbolNameClassAccessorDecoratorResult  = MakeSymbolName("ClassAccessorDecoratorResult")
+	SymbolNameClassAccessorDecoratorTarget  = MakeSymbolName("ClassAccessorDecoratorTarget")
+	SymbolNameClassDecoratorContext         = MakeSymbolName("ClassDecoratorContext")
+	SymbolNameClassFieldDecoratorContext    = MakeSymbolName("ClassFieldDecoratorContext")
+	SymbolNameClassGetterDecoratorContext   = MakeSymbolName("ClassGetterDecoratorContext")
+	SymbolNameClassMethodDecoratorContext   = MakeSymbolName("ClassMethodDecoratorContext")
+	SymbolNameClassSetterDecoratorContext   = MakeSymbolName("ClassSetterDecoratorContext")
+	SymbolNameDataView                      = MakeSymbolName("DataView")
+	SymbolNameDate                          = MakeSymbolName("Date")
+	SymbolNameDateTimeFormat                = MakeSymbolName("DateTimeFormat")
+	SymbolNameDisposable                    = MakeSymbolName("Disposable")
+	SymbolNameDisposableStack               = MakeSymbolName("DisposableStack")
+	SymbolNameElement                       = MakeSymbolName("Element")
+	SymbolNameElementAttributesProperty     = MakeSymbolName("ElementAttributesProperty")
+	SymbolNameElementChildrenAttribute      = MakeSymbolName("ElementChildrenAttribute")
+	SymbolNameElementClass                  = MakeSymbolName("ElementClass")
+	SymbolNameElementType                   = MakeSymbolName("ElementType")
+	SymbolNameError                         = MakeSymbolName("Error")
+	SymbolNameErrorConstructor              = MakeSymbolName("ErrorConstructor")
+	SymbolNameEventTarget                   = MakeSymbolName("EventTarget")
+	SymbolNameExtract                       = MakeSymbolName("Extract")
+	SymbolNameFloat16Array                  = MakeSymbolName("Float16Array")
+	SymbolNameFloat32Array                  = MakeSymbolName("Float32Array")
+	SymbolNameFloat64Array                  = MakeSymbolName("Float64Array")
+	SymbolNameFunction                      = MakeSymbolName("Function")
+	SymbolNameGenerator                     = MakeSymbolName("Generator")
+	SymbolNameIArguments                    = MakeSymbolName("IArguments")
+	SymbolNameImportAttributes              = MakeSymbolName("ImportAttributes")
+	SymbolNameImportCallOptions             = MakeSymbolName("ImportCallOptions")
+	SymbolNameImportMeta                    = MakeSymbolName("ImportMeta")
+	SymbolNameImportMetaExpression          = MakeSymbolName("ImportMetaExpression")
+	SymbolNameInt16Array                    = MakeSymbolName("Int16Array")
+	SymbolNameInt32Array                    = MakeSymbolName("Int32Array")
+	SymbolNameInt8Array                     = MakeSymbolName("Int8Array")
+	SymbolNameIntl                          = MakeSymbolName("Intl")
+	SymbolNameIntrinsicAttributes           = MakeSymbolName("IntrinsicAttributes")
+	SymbolNameIntrinsicClassAttributes      = MakeSymbolName("IntrinsicClassAttributes")
+	SymbolNameIntrinsicElements             = MakeSymbolName("IntrinsicElements")
+	SymbolNameIterable                      = MakeSymbolName("Iterable")
+	SymbolNameIterableIterator              = MakeSymbolName("IterableIterator")
+	SymbolNameIterator                      = MakeSymbolName("Iterator")
+	SymbolNameIteratorConstructor           = MakeSymbolName("IteratorConstructor")
+	SymbolNameIteratorObject                = MakeSymbolName("IteratorObject")
+	SymbolNameIteratorReturnResult          = MakeSymbolName("IteratorReturnResult")
+	SymbolNameIteratorYieldResult           = MakeSymbolName("IteratorYieldResult")
+	SymbolNameJSON                          = MakeSymbolName("JSON")
+	SymbolNameJSX                           = MakeSymbolName("JSX")
+	SymbolNameK                             = MakeSymbolName("K")
+	SymbolNameLibraryManagedAttributes      = MakeSymbolName("LibraryManagedAttributes")
+	SymbolNameLowercase                     = MakeSymbolName("Lowercase")
+	SymbolNameMap                           = MakeSymbolName("Map")
+	SymbolNameMapConstructor                = MakeSymbolName("MapConstructor")
+	SymbolNameMath                          = MakeSymbolName("Math")
+	SymbolNameNaN                           = MakeSymbolName("NaN")
+	SymbolNameNewableFunction               = MakeSymbolName("NewableFunction")
+	SymbolNameNoInfer                       = MakeSymbolName("NoInfer")
+	SymbolNameNode                          = MakeSymbolName("Node")
+	SymbolNameNodeList                      = MakeSymbolName("NodeList")
+	SymbolNameNonNullable                   = MakeSymbolName("NonNullable")
+	SymbolNameNumber                        = MakeSymbolName("Number")
+	SymbolNameNumberConstructor             = MakeSymbolName("NumberConstructor")
+	SymbolNameNumberFormat                  = MakeSymbolName("NumberFormat")
+	SymbolNameObject                        = MakeSymbolName("Object")
+	SymbolNameObjectConstructor             = MakeSymbolName("ObjectConstructor")
+	SymbolNameOmit                          = MakeSymbolName("Omit")
+	SymbolNamePartial                       = MakeSymbolName("Partial")
+	SymbolNamePick                          = MakeSymbolName("Pick")
+	SymbolNamePromise                       = MakeSymbolName("Promise")
+	SymbolNamePromiseConstructor            = MakeSymbolName("PromiseConstructor")
+	SymbolNamePromiseLike                   = MakeSymbolName("PromiseLike")
+	SymbolNameRawJSON                       = MakeSymbolName("RawJSON")
+	SymbolNameReadonly                      = MakeSymbolName("Readonly")
+	SymbolNameReadonlyArray                 = MakeSymbolName("ReadonlyArray")
+	SymbolNameReadonlyMap                   = MakeSymbolName("ReadonlyMap")
+	SymbolNameReadonlySet                   = MakeSymbolName("ReadonlySet")
+	SymbolNameRecord                        = MakeSymbolName("Record")
+	SymbolNameReflect                       = MakeSymbolName("Reflect")
+	SymbolNameRegExp                        = MakeSymbolName("RegExp")
+	SymbolNameRegExpConstructor             = MakeSymbolName("RegExpConstructor")
+	SymbolNameRegExpExecArray               = MakeSymbolName("RegExpExecArray")
+	SymbolNameRegExpMatchArray              = MakeSymbolName("RegExpMatchArray")
+	SymbolNameRelativeTimeFormat            = MakeSymbolName("RelativeTimeFormat")
+	SymbolNameRequired                      = MakeSymbolName("Required")
+	SymbolNameSet                           = MakeSymbolName("Set")
+	SymbolNameSharedArrayBuffer             = MakeSymbolName("SharedArrayBuffer")
+	SymbolNameString                        = MakeSymbolName("String")
+	SymbolNameStringConstructor             = MakeSymbolName("StringConstructor")
+	SymbolNameSymbol                        = MakeSymbolName("Symbol")
+	SymbolNameSymbolConstructor             = MakeSymbolName("SymbolConstructor")
+	SymbolNameT                             = MakeSymbolName("T")
+	SymbolNameTemplateStringsArray          = MakeSymbolName("TemplateStringsArray")
+	SymbolNameThisType                      = MakeSymbolName("ThisType")
+	SymbolNameTypedPropertyDescriptor       = MakeSymbolName("TypedPropertyDescriptor")
+	SymbolNameUint16Array                   = MakeSymbolName("Uint16Array")
+	SymbolNameUint32Array                   = MakeSymbolName("Uint32Array")
+	SymbolNameUint8Array                    = MakeSymbolName("Uint8Array")
+	SymbolNameUint8ArrayConstructor         = MakeSymbolName("Uint8ArrayConstructor")
+	SymbolNameUint8ClampedArray             = MakeSymbolName("Uint8ClampedArray")
+	SymbolNameUncapitalize                  = MakeSymbolName("Uncapitalize")
+	SymbolNameUppercase                     = MakeSymbolName("Uppercase")
+	SymbolNameWeakMap                       = MakeSymbolName("WeakMap")
+	SymbolNameWeakSet                       = MakeSymbolName("WeakSet")
+	SymbolNameESModule                      = MakeSymbolName("__esModule")
+	SymbolNameUnderscoreDefault             = MakeSymbolName("_default")
+	SymbolNameAny                           = MakeSymbolName("any")
+	SymbolNameArg                           = MakeSymbolName("arg")
+	SymbolNameArgs                          = MakeSymbolName("args")
+	SymbolNameArguments                     = MakeSymbolName("arguments")
+	SymbolNameAsyncIteratorProperty         = MakeSymbolName("asyncIterator")
+	SymbolNameBind                          = MakeSymbolName("bind")
+	SymbolNameBooleanKeyword                = MakeSymbolName("boolean")
+	SymbolNameCaller                        = MakeSymbolName("caller")
+	SymbolNameChildren                      = MakeSymbolName("children")
+	SymbolNameClass                         = MakeSymbolName("class")
+	SymbolNameClassName                     = MakeSymbolName("className")
+	SymbolNameConst                         = MakeSymbolName("const")
+	SymbolNameContext                       = MakeSymbolName("context")
+	SymbolNameDescriptor                    = MakeSymbolName("descriptor")
+	SymbolNameDone                          = MakeSymbolName("done")
+	SymbolNameExports                       = MakeSymbolName("exports")
+	SymbolNameFor                           = MakeSymbolName("for")
+	SymbolNameGetProperty                   = MakeSymbolName("get")
+	SymbolNameGlobal                        = MakeSymbolName("global")
+	SymbolNameGlobalThis                    = MakeSymbolName("globalThis")
+	SymbolNameHasInstance                   = MakeSymbolName("hasInstance")
+	SymbolNameHtmlFor                       = MakeSymbolName("htmlFor")
+	SymbolNameIteratorProperty              = MakeSymbolName("iterator")
+	SymbolNameLength                        = MakeSymbolName("length")
+	SymbolNameMeta                          = MakeSymbolName("meta")
+	SymbolNameModule                        = MakeSymbolName("module")
+	SymbolNameName                          = MakeSymbolName("name")
+	SymbolNameNever                         = MakeSymbolName("never")
+	SymbolNameNext                          = MakeSymbolName("next")
+	SymbolNameNumberKeyword                 = MakeSymbolName("number")
+	SymbolNameParameterIndex                = MakeSymbolName("parameterIndex")
+	SymbolNamePrivate                       = MakeSymbolName("private")
+	SymbolNamePropertyKey                   = MakeSymbolName("propertyKey")
+	SymbolNameProps                         = MakeSymbolName("props")
+	SymbolNamePrototype                     = MakeSymbolName("prototype")
+	SymbolNameRequire                       = MakeSymbolName("require")
+	SymbolNameReturn                        = MakeSymbolName("return")
+	SymbolNameSelf                          = MakeSymbolName("self")
+	SymbolNameSetProperty                   = MakeSymbolName("set")
+	SymbolNameStatic                        = MakeSymbolName("static")
+	SymbolNameStringKeyword                 = MakeSymbolName("string")
+	SymbolNameTarget                        = MakeSymbolName("target")
+	SymbolNameThen                          = MakeSymbolName("then")
+	SymbolNameThrow                         = MakeSymbolName("throw")
+	SymbolNameUndefined                     = MakeSymbolName("undefined")
+	SymbolNameUnknown                       = MakeSymbolName("unknown")
+	SymbolNameValue                         = MakeSymbolName("value")
+	SymbolNameWith                          = MakeSymbolName("with")
+	SymbolNameWritable                      = MakeSymbolName("writable")
 )
 
 const InternalSymbolNamePrefix = "\xFE" // Invalid UTF8 sequence, will never occur as IdentifierName
 
 var (
-	InternalSymbolNameCall                    = unique.Make(InternalSymbolNamePrefix + "call")                    // Call signatures
-	InternalSymbolNameConstructor             = unique.Make(InternalSymbolNamePrefix + "constructor")             // Constructor implementations
-	InternalSymbolNameNew                     = unique.Make(InternalSymbolNamePrefix + "new")                     // Constructor signatures
-	InternalSymbolNameIndex                   = unique.Make(InternalSymbolNamePrefix + "index")                   // Index signatures
-	InternalSymbolNameExportStar              = unique.Make(InternalSymbolNamePrefix + "export")                  // Module export * declarations
-	InternalSymbolNameGlobal                  = unique.Make(InternalSymbolNamePrefix + "global")                  // Global self-reference
-	InternalSymbolNameMissing                 = unique.Make(InternalSymbolNamePrefix + "missing")                 // Indicates missing symbol
-	InternalSymbolNameType                    = unique.Make(InternalSymbolNamePrefix + "type")                    // Anonymous type literal symbol
-	InternalSymbolNameObject                  = unique.Make(InternalSymbolNamePrefix + "object")                  // Anonymous object literal declaration
-	InternalSymbolNameJSXAttributes           = unique.Make(InternalSymbolNamePrefix + "jsxAttributes")           // Anonymous JSX attributes object literal declaration
-	InternalSymbolNameClass                   = unique.Make(InternalSymbolNamePrefix + "class")                   // Unnamed class expression
-	InternalSymbolNameFunction                = unique.Make(InternalSymbolNamePrefix + "function")                // Unnamed function expression
-	InternalSymbolNameComputed                = unique.Make(InternalSymbolNamePrefix + "computed")                // Computed property name declaration with dynamic name
-	InternalSymbolNameAssignmentDeclaration   = unique.Make(InternalSymbolNamePrefix + "assignment")              // Assignment declarations
-	InternalSymbolNameInstantiationExpression = unique.Make(InternalSymbolNamePrefix + "instantiationExpression") // Instantiation expressions
-	InternalSymbolNameImportAttributes        = unique.Make(InternalSymbolNamePrefix + "importAttributes")
-	InternalSymbolNameExportEquals            = unique.Make("export=") // Export assignment symbol
-	InternalSymbolNameDefault                 = unique.Make("default") // Default export symbol (technically not wholly internal, but included here for usability)
-	InternalSymbolNameThis                    = unique.Make("this")
-	InternalSymbolNameModuleExports           = unique.Make("module.exports")
+	InternalSymbolNameCall                    = MakeSymbolName(InternalSymbolNamePrefix + "call")                    // Call signatures
+	InternalSymbolNameConstructor             = MakeSymbolName(InternalSymbolNamePrefix + "constructor")             // Constructor implementations
+	InternalSymbolNameNew                     = MakeSymbolName(InternalSymbolNamePrefix + "new")                     // Constructor signatures
+	InternalSymbolNameIndex                   = MakeSymbolName(InternalSymbolNamePrefix + "index")                   // Index signatures
+	InternalSymbolNameExportStar              = MakeSymbolName(InternalSymbolNamePrefix + "export")                  // Module export * declarations
+	InternalSymbolNameGlobal                  = MakeSymbolName(InternalSymbolNamePrefix + "global")                  // Global self-reference
+	InternalSymbolNameMissing                 = MakeSymbolName(InternalSymbolNamePrefix + "missing")                 // Indicates missing symbol
+	InternalSymbolNameType                    = MakeSymbolName(InternalSymbolNamePrefix + "type")                    // Anonymous type literal symbol
+	InternalSymbolNameObject                  = MakeSymbolName(InternalSymbolNamePrefix + "object")                  // Anonymous object literal declaration
+	InternalSymbolNameJSXAttributes           = MakeSymbolName(InternalSymbolNamePrefix + "jsxAttributes")           // Anonymous JSX attributes object literal declaration
+	InternalSymbolNameClass                   = MakeSymbolName(InternalSymbolNamePrefix + "class")                   // Unnamed class expression
+	InternalSymbolNameFunction                = MakeSymbolName(InternalSymbolNamePrefix + "function")                // Unnamed function expression
+	InternalSymbolNameComputed                = MakeSymbolName(InternalSymbolNamePrefix + "computed")                // Computed property name declaration with dynamic name
+	InternalSymbolNameAssignmentDeclaration   = MakeSymbolName(InternalSymbolNamePrefix + "assignment")              // Assignment declarations
+	InternalSymbolNameInstantiationExpression = MakeSymbolName(InternalSymbolNamePrefix + "instantiationExpression") // Instantiation expressions
+	InternalSymbolNameImportAttributes        = MakeSymbolName(InternalSymbolNamePrefix + "importAttributes")
+	InternalSymbolNameExportEquals            = MakeSymbolName("export=") // Export assignment symbol
+	InternalSymbolNameDefault                 = MakeSymbolName("default") // Default export symbol (technically not wholly internal, but included here for usability)
+	InternalSymbolNameThis                    = MakeSymbolName("this")
+	InternalSymbolNameModuleExports           = MakeSymbolName("module.exports")
 )
 
 // SymbolNameText returns a display name, preserving private identifier spelling.
@@ -364,4 +434,14 @@ func EscapeSymbolName(symbolName SymbolName) string {
 		return "_" + name
 	}
 	return name
+}
+
+// UnescapeSymbolName reverses EscapeSymbolName and interns the decoded name.
+func UnescapeSymbolName(name string) SymbolName {
+	if strings.HasPrefix(name, "___") {
+		name = name[1:]
+	} else if rest, ok := strings.CutPrefix(name, "__"); ok {
+		name = InternalSymbolNamePrefix + rest
+	}
+	return MakeSymbolName(name)
 }

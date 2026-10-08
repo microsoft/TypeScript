@@ -4,7 +4,6 @@ import (
 	"slices"
 	"strconv"
 	"sync"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -311,10 +310,10 @@ func (b *Binder) getDeclarationName(node *ast.Node) ast.SymbolName {
 			}
 			if pattern := core.TryParsePattern(moduleName); pattern.IsValid() && pattern.StarIndex >= 0 {
 				if attributes := node.AsModuleDeclaration().Attributes; attributes != nil {
-					return unique.Make(ast.InternalSymbolNamePrefix + "\"" + moduleName + "\"pattern@" + strconv.FormatUint(uint64(ast.GetNodeId(attributes)), 10))
+					return ast.MakeSymbolName(ast.InternalSymbolNamePrefix + "\"" + moduleName + "\"pattern@" + strconv.FormatUint(uint64(ast.GetNodeId(attributes)), 10))
 				}
 			}
-			return unique.Make("\"" + moduleName + "\"")
+			return ast.MakeSymbolName("\"" + moduleName + "\"")
 		}
 		if ast.IsPrivateIdentifier(name) {
 			// containingClass exists because private names only allowed inside classes
@@ -326,17 +325,17 @@ func (b *Binder) getDeclarationName(node *ast.Node) ast.SymbolName {
 			return GetSymbolNameForPrivateIdentifier(containingClass.Symbol(), name.Text())
 		}
 		if ast.IsPropertyNameLiteral(name) || ast.IsJsxNamespacedName(name) {
-			return unique.Make(name.Text())
+			return ast.MakeSymbolName(name.Text())
 		}
 		if ast.IsComputedPropertyName(name) {
 			nameExpression := name.Expression()
 			// treat computed property names where expression is string/numeric literal as just string/numeric literal
 			if ast.IsStringOrNumericLiteralLike(nameExpression) {
-				return unique.Make(nameExpression.Text())
+				return ast.MakeSymbolName(nameExpression.Text())
 			}
 			if ast.IsSignedNumericLiteral(nameExpression) {
 				unaryExpression := nameExpression.AsPrefixUnaryExpression()
-				return unique.Make(scanner.TokenToString(unaryExpression.Operator) + unaryExpression.Operand.Text())
+				return ast.MakeSymbolName(scanner.TokenToString(unaryExpression.Operator) + unaryExpression.Operand.Text())
 			}
 			panic("Only computed properties with literal names have declaration names")
 		}
@@ -372,7 +371,7 @@ func (b *Binder) getDisplayName(node *ast.Node) string {
 }
 
 func GetSymbolNameForPrivateIdentifier(containingClassSymbol *ast.Symbol, description string) ast.SymbolName {
-	return unique.Make(ast.InternalSymbolNamePrefix + "#" + strconv.Itoa(int(ast.GetSymbolId(containingClassSymbol))) + "@" + description)
+	return ast.MakeSymbolName(ast.InternalSymbolNamePrefix + "#" + strconv.Itoa(int(ast.GetSymbolId(containingClassSymbol))) + "@" + description)
 }
 
 func (b *Binder) declareModuleMember(node *ast.Node, symbolFlags ast.SymbolFlags, symbolExcludes ast.SymbolFlags) *ast.Symbol {
@@ -770,7 +769,7 @@ func (b *Binder) bindSourceFileIfExternalModule() {
 }
 
 func (b *Binder) bindSourceFileAsExternalModule() {
-	b.bindAnonymousDeclaration(b.file.AsNode(), ast.SymbolFlagsValueModule, unique.Make("\""+b.file.FileName().RemoveFileExtension().AsString()+"\""))
+	b.bindAnonymousDeclaration(b.file.AsNode(), ast.SymbolFlagsValueModule, ast.MakeSymbolName("\""+b.file.FileName().RemoveFileExtension().AsString()+"\""))
 }
 
 func (b *Binder) bindModuleDeclaration(node *ast.Node) {
@@ -919,7 +918,7 @@ func (b *Binder) bindFunctionExpression(node *ast.Node) {
 	bindingName := ast.InternalSymbolNameFunction
 	if ast.IsFunctionExpression(node) && node.AsFunctionExpression().Name() != nil {
 		b.checkStrictModeFunctionName(node)
-		bindingName = unique.Make(node.AsFunctionExpression().Name().Text())
+		bindingName = ast.MakeSymbolName(node.AsFunctionExpression().Name().Text())
 	}
 	b.bindAnonymousDeclaration(node, ast.SymbolFlagsFunction, bindingName)
 }
@@ -953,7 +952,7 @@ func (b *Binder) bindClassLikeDeclaration(node *ast.Node) {
 	case ast.KindClassExpression:
 		nameText := ast.InternalSymbolNameClass
 		if name != nil {
-			nameText = unique.Make(name.Text())
+			nameText = ast.MakeSymbolName(name.Text())
 		}
 		b.bindAnonymousDeclaration(node, ast.SymbolFlagsClass, nameText)
 	}
@@ -1203,7 +1202,7 @@ func (b *Binder) bindParameter(node *ast.Node) {
 	}
 	if ast.IsBindingPattern(decl.Name()) {
 		index := slices.Index(node.Parent.Parameters(), node)
-		b.bindAnonymousDeclaration(node, ast.SymbolFlagsFunctionScopedVariable, unique.Make("__"+strconv.Itoa(index)))
+		b.bindAnonymousDeclaration(node, ast.SymbolFlagsFunctionScopedVariable, ast.MakeSymbolName("__"+strconv.Itoa(index)))
 	} else {
 		b.declareSymbolAndAddToSymbolTable(node, ast.SymbolFlagsFunctionScopedVariable, ast.SymbolFlagsParameterExcludes)
 	}
@@ -1273,19 +1272,19 @@ func (b *Binder) bindTypeParameter(node *ast.Node) {
 
 func (b *Binder) lookupEntity(node *ast.Node, container *ast.Node) *ast.Symbol {
 	if ast.IsIdentifier(node) {
-		return b.lookupName(unique.Make(node.Text()), container)
+		return b.lookupName(ast.MakeSymbolName(node.Text()), container)
 	}
 	if node.Expression().Kind == ast.KindThisKeyword {
 		if _, symbolTable := b.getThisClassAndSymbolTable(); symbolTable != nil {
 			if name := ast.GetElementOrPropertyAccessName(node); name != nil {
-				return symbolTable[unique.Make(name.Text())]
+				return symbolTable[ast.MakeSymbolName(name.Text())]
 			}
 		}
 		return nil
 	}
 	if symbol := getInitializerSymbol(b.lookupEntity(node.Expression(), container)); symbol != nil && symbol.Exports() != nil {
 		if name := ast.GetElementOrPropertyAccessName(node); name != nil {
-			return symbol.Exports()[unique.Make(name.Text())]
+			return symbol.Exports()[ast.MakeSymbolName(name.Text())]
 		}
 	}
 	return nil

@@ -3,7 +3,6 @@ package binder
 import (
 	"runtime"
 	"testing"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -35,7 +34,7 @@ export class Second { #value = 2; }
 	}, text, core.ScriptKindTS)
 	BindSourceFile(file)
 
-	name := unique.Make("named")
+	name := ast.MakeSymbolName("named")
 	local := file.Locals[name]
 	exported := file.Symbol.Exports()[name]
 	assert.Assert(t, local != nil && exported != nil)
@@ -44,16 +43,16 @@ export class Second { #value = 2; }
 	assert.Equal(t, len(exported.Declarations()), 2)
 	assert.Equal(t, local.ExportSymbol(), exported)
 
-	members := file.Symbol.Exports()[unique.Make("Shape")].Members()
-	for _, name := range []ast.SymbolName{ast.InternalSymbolNameCall, unique.Make("__call"), unique.Make("literal"), unique.Make("0")} {
+	members := file.Symbol.Exports()[ast.MakeSymbolName("Shape")].Members()
+	for _, name := range []ast.SymbolName{ast.InternalSymbolNameCall, ast.MakeSymbolName("__call"), ast.MakeSymbolName("literal"), ast.MakeSymbolName("0")} {
 		assert.Assert(t, members[name] != nil)
 		assert.Assert(t, members[name].Name() == name)
 	}
-	assert.Assert(t, members[ast.InternalSymbolNameCall] != members[unique.Make("__call")])
-	assert.Assert(t, file.Symbol.Exports()[unique.Make("renamed")].Name() == unique.Make("renamed"))
+	assert.Assert(t, members[ast.InternalSymbolNameCall] != members[ast.MakeSymbolName("__call")])
+	assert.Assert(t, file.Symbol.Exports()[ast.MakeSymbolName("renamed")].Name() == ast.MakeSymbolName("renamed"))
 
 	first := file.Symbol.Exports()[ast.InternalSymbolNameDefault]
-	second := file.Symbol.Exports()[unique.Make("Second")]
+	second := file.Symbol.Exports()[ast.MakeSymbolName("Second")]
 	firstPrivate := GetSymbolNameForPrivateIdentifier(first, "#value")
 	secondPrivate := GetSymbolNameForPrivateIdentifier(second, "#value")
 	assert.Assert(t, firstPrivate != secondPrivate)

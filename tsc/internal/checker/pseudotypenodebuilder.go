@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"unique"
-
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
@@ -667,7 +665,7 @@ func (b *NodeBuilderImpl) pseudoReturnTypeMatchesPredicate(rt *pseudochecker.Pse
 	}
 	// For identifier predicates, check parameter name matches
 	if !isThis {
-		if unique.Make(tp.ParameterName.Text()) != predicate.parameterName {
+		if ast.MakeSymbolName(tp.ParameterName.Text()) != predicate.parameterName {
 			return false
 		}
 	}

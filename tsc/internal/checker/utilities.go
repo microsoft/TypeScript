@@ -5,7 +5,6 @@ import (
 	"slices"
 	"strings"
 	"sync"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -930,9 +929,9 @@ func isTypeUsableAsPropertyName(t *Type) bool {
 func getPropertyNameFromType(t *Type) ast.SymbolName {
 	switch {
 	case t.flags&TypeFlagsStringLiteral != 0:
-		return unique.Make(t.AsLiteralType().value.(string))
+		return ast.MakeSymbolName(t.AsLiteralType().value.(string))
 	case t.flags&TypeFlagsNumberLiteral != 0:
-		return unique.Make(t.AsLiteralType().value.(jsnum.Number).String())
+		return ast.MakeSymbolName(t.AsLiteralType().value.(jsnum.Number).String())
 	case t.flags&TypeFlagsUniqueESSymbol != 0:
 		return t.AsUniqueESSymbolType().name
 	}

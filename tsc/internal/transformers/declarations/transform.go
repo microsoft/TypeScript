@@ -5,7 +5,6 @@ import (
 	"iter"
 	"slices"
 	"strings"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -1193,7 +1192,7 @@ func (tx *DeclarationTransformer) tryGetNameOfAssignedExpression(unwrapped *ast.
 		nameText = unwrapped.Text()
 	}
 	if nameText != "" && nameText != "default" {
-		if tx.resolver.IsNameResolvable(tx.enclosingDeclaration, unique.Make(nameText)) {
+		if tx.resolver.IsNameResolvable(tx.enclosingDeclaration, ast.MakeSymbolName(nameText)) {
 			// create a unique name that shares the same text as its' base
 			nameNode = tx.Factory().NewUniqueNameEx(nameText, printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
 		} else {
@@ -2788,7 +2787,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 
 	exportName := tx.Factory().NewIdentifier(property)
 	localName := tx.tryGetNameOfAssignedExpression(node.AsNode())
-	if localName == nil && !tx.resolver.IsNameResolvable(tx.enclosingDeclaration, unique.Make(property)) && !ast.IsNonContextualKeyword(scanner.StringToToken(exportName.Text())) {
+	if localName == nil && !tx.resolver.IsNameResolvable(tx.enclosingDeclaration, ast.MakeSymbolName(property)) && !ast.IsNonContextualKeyword(scanner.StringToToken(exportName.Text())) {
 		// use exportName as localName if there won't be any conflicts or keyword issues
 		localName = exportName
 	}
@@ -2824,7 +2823,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 	declarationData.Symbol = host
 	containerData := synthesizedNamespace.LocalsContainerData()
 	containerData.Locals = make(ast.SymbolTable, 0)
-	containerData.Locals[unique.Make(localName.Text())] = symbol
+	containerData.Locals[ast.MakeSymbolName(localName.Text())] = symbol
 
 	oldEnclosing := tx.enclosingDeclaration
 	tx.enclosingDeclaration = synthesizedNamespace

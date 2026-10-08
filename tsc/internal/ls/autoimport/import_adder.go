@@ -6,7 +6,6 @@ import (
 	"maps"
 	"slices"
 	"strings"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -189,7 +188,7 @@ func sortedNamedImports(m map[ast.SymbolName]*newImportBinding) []*newImportBind
 // AddImportFix adds a fix to the import adder, accumulating it with other fixes
 // so that multiple imports from the same module are coalesced into a single import statement.
 func (adder *importAdder) AddImportFix(fix *Fix) {
-	symbolName := unique.Make(fix.Name)
+	symbolName := ast.MakeSymbolName(fix.Name)
 	compilerOptions := adder.view.program.Options()
 
 	switch fix.Kind {

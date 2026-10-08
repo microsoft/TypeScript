@@ -1,8 +1,6 @@
 package binder
 
 import (
-	"unique"
-
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -198,7 +196,7 @@ loop:
 			}
 			if ast.IsClassExpression(location) && meaning&ast.SymbolFlagsClass != 0 {
 				className := location.Name()
-				if className != nil && name == unique.Make(className.Text()) {
+				if className != nil && name == ast.MakeSymbolName(className.Text()) {
 					result = location.Symbol()
 					break loop
 				}
@@ -247,7 +245,7 @@ loop:
 			}
 			if meaning&ast.SymbolFlagsFunction != 0 {
 				functionName := location.AsFunctionExpression().Name()
-				if functionName != nil && name == unique.Make(functionName.Text()) {
+				if functionName != nil && name == ast.MakeSymbolName(functionName.Text()) {
 					result = location.Symbol()
 					break loop
 				}
@@ -297,7 +295,7 @@ loop:
 		case ast.KindInferType:
 			if meaning&ast.SymbolFlagsTypeParameter != 0 {
 				parameterName := location.AsInferTypeNode().TypeParameter.AsTypeParameterDeclaration().Name()
-				if parameterName != nil && name == unique.Make(parameterName.Text()) {
+				if parameterName != nil && name == ast.MakeSymbolName(parameterName.Text()) {
 					result = location.AsInferTypeNode().TypeParameter.Symbol()
 					break loop
 				}

@@ -4,7 +4,6 @@ import (
 	"strconv"
 	"strings"
 	"testing"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -62,7 +61,7 @@ func TestTransientSymbolWithFileDeclarationIsSnapshotOwned(t *testing.T) {
 	class := sourceFile.Statements.Nodes[0]
 	symbol := ast.NewSymbol()
 	symbol.SetFlags(ast.SymbolFlagsClass | ast.SymbolFlagsTransient)
-	symbol.SetName(unique.Make("C"))
+	symbol.SetName(ast.MakeSymbolName("C"))
 	symbol.SetDeclarations([]*ast.Node{class})
 	sd := newTestSnapshotData()
 
@@ -86,7 +85,7 @@ func TestSymbolReferencesIdentifyOwnerWithoutDescriptor(t *testing.T) {
 	assert.Assert(t, !strings.Contains(string(encoded), "contentHash"))
 
 	// A file-owned symbol's relationships are references into the same file.
-	member := class.Members()[unique.Make("property")]
+	member := class.Members()[ast.MakeSymbolName("property")]
 	response := newFileSymbolResponse(member)
 	assert.DeepEqual(t, response.Parent, reference)
 }
@@ -110,6 +109,6 @@ func TestContentMappedSymbolsAreSnapshotOwned(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, resolved, class)
 
-	reference := newSymbolReference(class.Members()[unique.Make("property")])
+	reference := newSymbolReference(class.Members()[ast.MakeSymbolName("property")])
 	assert.Equal(t, reference.File, "")
 }

@@ -5,7 +5,6 @@ import (
 	"iter"
 	"slices"
 	"strings"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -996,7 +995,7 @@ func getPropertySymbolsFromBaseTypes(symbol *ast.Symbol, propertyName ast.Symbol
 
 func getPropertySymbolFromBindingElement(checker *checker.Checker, bindingElement *ast.Node) *ast.Symbol {
 	if typeOfPattern := checker.GetTypeAtLocation(bindingElement.Parent); typeOfPattern != nil {
-		return checker.GetPropertyOfType(typeOfPattern, unique.Make(bindingElement.Name().Text()))
+		return checker.GetPropertyOfType(typeOfPattern, ast.MakeSymbolName(bindingElement.Name().Text()))
 	}
 	return nil
 }

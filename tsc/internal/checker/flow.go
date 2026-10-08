@@ -5,7 +5,6 @@ import (
 	"slices"
 	"strconv"
 	"strings"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -459,7 +458,7 @@ func (c *Checker) narrowTypeByCallExpression(f *FlowState, t *Type, callExpressi
 		callAccess := callExpression.Expression()
 		if c.isMatchingReference(f.reference.Expression(), c.getReferenceCandidate(callAccess.Expression())) && ast.IsIdentifier(callAccess.Name()) && callAccess.Name().Text() == "hasOwnProperty" && len(callExpression.Arguments()) == 1 {
 			argument := callExpression.Arguments()[0]
-			if accessedName, ok := c.getAccessedPropertyName(f.reference); ok && ast.IsStringLiteralLike(argument) && accessedName == unique.Make(argument.Text()) {
+			if accessedName, ok := c.getAccessedPropertyName(f.reference); ok && ast.IsStringLiteralLike(argument) && accessedName == ast.MakeSymbolName(argument.Text()) {
 				return c.getTypeWithFacts(t, core.IfElse(assumeTrue, TypeFactsNEUndefined, TypeFactsEQUndefined))
 			}
 		}
@@ -1640,7 +1639,7 @@ func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 	case ast.KindQualifiedName:
 		if ast.IsAccessExpression(target) {
 			if targetPropertyName, ok := c.getAccessedPropertyName(target); ok {
-				return unique.Make(source.AsQualifiedName().Right.Text()) == targetPropertyName && c.isMatchingReference(source.AsQualifiedName().Left, target.Expression())
+				return ast.MakeSymbolName(source.AsQualifiedName().Right.Text()) == targetPropertyName && c.isMatchingReference(source.AsQualifiedName().Left, target.Expression())
 			}
 		}
 	case ast.KindBinaryExpression:
@@ -1727,7 +1726,7 @@ func (c *Checker) writeFlowCacheKey(b *keyBuilder, node *ast.Node, declaredType 
 
 func (c *Checker) getAccessedPropertyName(access *ast.Node) (ast.SymbolName, bool) {
 	if ast.IsPropertyAccessExpression(access) {
-		return unique.Make(access.Name().Text()), true
+		return ast.MakeSymbolName(access.Name().Text()), true
 	}
 	if ast.IsElementAccessExpression(access) {
 		return c.tryGetElementAccessExpressionName(access.AsElementAccessExpression())
@@ -1736,7 +1735,7 @@ func (c *Checker) getAccessedPropertyName(access *ast.Node) (ast.SymbolName, boo
 		return c.getDestructuringPropertyName(access)
 	}
 	if ast.IsParameterDeclaration(access) {
-		return unique.Make(strconv.Itoa(slices.Index(access.Parent.Parameters(), access))), true
+		return ast.MakeSymbolName(strconv.Itoa(slices.Index(access.Parent.Parameters(), access))), true
 	}
 	return ast.EmptySymbolName, false
 }
@@ -1744,7 +1743,7 @@ func (c *Checker) getAccessedPropertyName(access *ast.Node) (ast.SymbolName, boo
 func (c *Checker) tryGetElementAccessExpressionName(node *ast.ElementAccessExpression) (ast.SymbolName, bool) {
 	switch {
 	case ast.IsStringOrNumericLiteralLike(node.ArgumentExpression):
-		return unique.Make(node.ArgumentExpression.Text()), true
+		return ast.MakeSymbolName(node.ArgumentExpression.Text()), true
 	case ast.IsEntityNameExpression(node.ArgumentExpression):
 		return c.tryGetNameFromEntityNameExpression(node.ArgumentExpression)
 	}
@@ -1775,7 +1774,7 @@ func (c *Checker) tryGetNameFromEntityNameExpression(node *ast.Node) (ast.Symbol
 			}
 		} else if ast.IsEnumMember(declaration) {
 			name, ok := ast.TryGetTextOfPropertyName(declaration.Name())
-			return unique.Make(name), ok
+			return ast.MakeSymbolName(name), ok
 		}
 	}
 	return ast.EmptySymbolName, false
@@ -1786,7 +1785,7 @@ func tryGetNameFromType(t *Type) (ast.SymbolName, bool) {
 	case t.flags&TypeFlagsUniqueESSymbol != 0:
 		return t.AsUniqueESSymbolType().name, true
 	case t.flags&TypeFlagsStringOrNumberLiteral != 0:
-		return unique.Make(evaluator.AnyToString(t.AsLiteralType().value)), true
+		return ast.MakeSymbolName(evaluator.AnyToString(t.AsLiteralType().value)), true
 	}
 	return ast.EmptySymbolName, false
 }
@@ -1800,7 +1799,7 @@ func (c *Checker) getDestructuringPropertyName(node *ast.Node) (ast.SymbolName, 
 		return c.getLiteralPropertyNameText(node.Name())
 	}
 	if ast.IsArrayLiteralExpression(parent) || ast.IsArrayBindingPattern(parent) {
-		return unique.Make(strconv.Itoa(slices.Index(parent.Elements(), node))), true
+		return ast.MakeSymbolName(strconv.Itoa(slices.Index(parent.Elements(), node))), true
 	}
 	return ast.EmptySymbolName, false
 }
@@ -1808,7 +1807,7 @@ func (c *Checker) getDestructuringPropertyName(node *ast.Node) (ast.SymbolName, 
 func (c *Checker) getLiteralPropertyNameText(name *ast.Node) (ast.SymbolName, bool) {
 	t := c.getLiteralTypeFromPropertyName(name)
 	if t.flags&(TypeFlagsStringLiteral|TypeFlagsNumberLiteral) != 0 {
-		return unique.Make(evaluator.AnyToString(t.AsLiteralType().value)), true
+		return ast.MakeSymbolName(evaluator.AnyToString(t.AsLiteralType().value)), true
 	}
 	return ast.EmptySymbolName, false
 }
@@ -2114,7 +2113,7 @@ func (c *Checker) getPropertyNameForKnownSymbolName(symbolName ast.SymbolName) a
 			return getPropertyNameFromType(uniqueType)
 		}
 	}
-	return unique.Make(ast.InternalSymbolNamePrefix + "@" + symbolName.Value())
+	return ast.MakeSymbolName(ast.InternalSymbolNamePrefix + "@" + symbolName.Value())
 }
 
 // We require the dotted function name in an assertion expression to be comprised of identifiers
@@ -2141,7 +2140,7 @@ func (c *Checker) getTypeOfDottedName(node *ast.Node, diagnostic *ast.Diagnostic
 						prop = c.getPropertyOfType(t, binder.GetSymbolNameForPrivateIdentifier(t.symbol, name.Text()))
 					}
 				} else {
-					prop = c.getPropertyOfType(t, unique.Make(name.Text()))
+					prop = c.getPropertyOfType(t, ast.MakeSymbolName(name.Text()))
 				}
 				if prop != nil {
 					return c.getExplicitTypeOfSymbol(prop, diagnostic)

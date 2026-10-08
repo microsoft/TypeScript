@@ -6,7 +6,6 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
@@ -2619,7 +2618,7 @@ func GetNamespaceDeclarationNode(node *Node) *Node {
 }
 
 func ModuleExportNameIsDefault(node *Node) bool {
-	return unique.Make(node.Text()) == InternalSymbolNameDefault
+	return MakeSymbolName(node.Text()) == InternalSymbolNameDefault
 }
 
 func IsDefaultImport(node *Node /*ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration*/) bool {
@@ -3239,18 +3238,18 @@ func GetPropertyNameForPropertyNameNode(name *Node) SymbolName {
 	switch name.Kind {
 	case KindIdentifier, KindPrivateIdentifier, KindStringLiteral, KindNoSubstitutionTemplateLiteral,
 		KindNumericLiteral, KindBigIntLiteral, KindJsxNamespacedName:
-		return unique.Make(name.Text())
+		return MakeSymbolName(name.Text())
 	case KindComputedPropertyName:
 		nameExpression := name.Expression()
 		if IsStringOrNumericLiteralLike(nameExpression) {
-			return unique.Make(nameExpression.Text())
+			return MakeSymbolName(nameExpression.Text())
 		}
 		if IsSignedNumericLiteral(nameExpression) {
 			text := nameExpression.AsPrefixUnaryExpression().Operand.Text()
 			if nameExpression.AsPrefixUnaryExpression().Operator == KindMinusToken {
 				text = "-" + text
 			}
-			return unique.Make(text)
+			return MakeSymbolName(text)
 		}
 		return InternalSymbolNameMissing
 	}

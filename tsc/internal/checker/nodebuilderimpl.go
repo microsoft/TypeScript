@@ -5,7 +5,6 @@ import (
 	"maps"
 	"slices"
 	"strings"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -411,7 +410,7 @@ func (b *NodeBuilderImpl) mapToTypeNodes(list []*Type, isBareList bool) *ast.Nod
 		if typeNode != nil {
 			result = append(result, typeNode)
 			if seenNames != nil && isIdentifierTypeReference(typeNode) {
-				seenNames.Add(unique.Make(typeNode.AsTypeReferenceNode().TypeName.Text()), seenName{t, len(result) - 1})
+				seenNames.Add(ast.MakeSymbolName(typeNode.AsTypeReferenceNode().TypeName.Text()), seenName{t, len(result) - 1})
 			}
 		}
 	}
@@ -1492,7 +1491,7 @@ func (b *NodeBuilderImpl) typeParameterToName(typeParameter *Type) *ast.Identifi
 		}
 	}
 	if b.ctx.flags&nodebuilder.FlagsGenerateNamesForShadowedTypeParams != 0 {
-		rawName := unique.Make(result.Text())
+		rawName := ast.MakeSymbolName(result.Text())
 		i, _ := b.ctx.typeParameterNamesByTextNextNameCount.Get(rawName)
 		name := rawName
 
@@ -1501,7 +1500,7 @@ func (b *NodeBuilderImpl) typeParameterToName(typeParameter *Type) *ast.Identifi
 				break
 			}
 			i++
-			name = unique.Make(fmt.Sprintf("%s_%d", rawName.Value(), i))
+			name = ast.MakeSymbolName(fmt.Sprintf("%s_%d", rawName.Value(), i))
 		}
 
 		if name != rawName {
@@ -2011,7 +2010,7 @@ func (c *Checker) getExpandedParameters(sig *Signature, skipUnionExpanding bool)
 					}
 					var name ast.SymbolName
 					for true {
-						name = unique.Make(fmt.Sprintf("%s_%d", names[i].Value(), counter))
+						name = ast.MakeSymbolName(fmt.Sprintf("%s_%d", names[i].Value(), counter))
 						_, ok := uniqueNames[name]
 						if ok {
 							counter++
@@ -2437,12 +2436,12 @@ func (b *NodeBuilderImpl) shouldUsePlaceholderForProperty(propertySymbol *ast.Sy
 func (b *NodeBuilderImpl) trackComputedName(accessExpression *ast.Node, enclosingDeclaration *ast.Node) {
 	// get symbol of the first identifier of the entityName
 	firstIdentifier := ast.GetFirstIdentifier(accessExpression)
-	name := b.ch.resolveName(enclosingDeclaration, unique.Make(firstIdentifier.Text()), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false)
+	name := b.ch.resolveName(enclosingDeclaration, ast.MakeSymbolName(firstIdentifier.Text()), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false)
 	if name != nil {
 		b.ctx.tracker.TrackSymbol(name, enclosingDeclaration, ast.SymbolFlagsValue)
 	} else {
 		// Name does not resolve at target location, track symbol at dest location (should be inaccessible)
-		fallback := b.ch.resolveName(firstIdentifier, unique.Make(firstIdentifier.Text()), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false)
+		fallback := b.ch.resolveName(firstIdentifier, ast.MakeSymbolName(firstIdentifier.Text()), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false)
 		if fallback != nil {
 			b.ctx.tracker.TrackSymbol(fallback, enclosingDeclaration, ast.SymbolFlagsValue)
 		}

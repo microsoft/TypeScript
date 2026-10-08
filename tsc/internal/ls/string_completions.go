@@ -8,7 +8,6 @@ import (
 	"maps"
 	"slices"
 	"strings"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -398,7 +397,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		}
 		exports := typeChecker.GetExportsAndPropertiesOfModule(moduleSpecifierSymbol)
 		existing := collections.NewSetFromItems(core.Map(namedImportsOrExports.Elements(), func(n *ast.Node) ast.SymbolName {
-			return unique.Make(n.PropertyNameOrName().Text())
+			return ast.MakeSymbolName(n.PropertyNameOrName().Text())
 		})...)
 		uniques := core.Filter(exports, func(e *ast.Symbol) bool {
 			return e.Name() != ast.InternalSymbolNameDefault && !existing.Has(e.Name())
@@ -519,7 +518,7 @@ func fromUnionableLiteralType(
 		switch {
 		case result.fromProperties != nil:
 			result := result.fromProperties
-			alreadyUsedNames := collections.NewSetFromItems(core.Map(alreadyUsedTypes, unique.Make[string])...)
+			alreadyUsedNames := collections.NewSetFromItems(core.Map(alreadyUsedTypes, ast.MakeSymbolName)...)
 			return &stringLiteralCompletions{
 				fromProperties: &completionsFromProperties{
 					symbols: core.Filter(
@@ -2030,7 +2029,7 @@ func getStringLiteralCompletionsFromSignature(
 		}
 		t := typeChecker.GetTypeParameterAtPosition(candidate, argumentInfo.argumentIndex)
 		if ast.IsJsxOpeningLikeElement(call) {
-			propType := typeChecker.GetTypeOfPropertyOfType(t, unique.Make(editingArgument.AsJsxAttribute().Name().Text()))
+			propType := typeChecker.GetTypeOfPropertyOfType(t, ast.MakeSymbolName(editingArgument.AsJsxAttribute().Name().Text()))
 			if propType != nil {
 				t = propType
 			}
@@ -2091,7 +2090,7 @@ func (l *LanguageService) stringLiteralCompletionDetails(
 	case completion.fromProperties != nil:
 		properties := completion.fromProperties
 		for _, symbol := range properties.symbols {
-			if symbol.Name() == unique.Make(name) {
+			if symbol.Name() == ast.MakeSymbolName(name) {
 				return l.createCompletionDetailsForSymbol(item, symbol, checker, location, position, docFormat)
 			}
 		}

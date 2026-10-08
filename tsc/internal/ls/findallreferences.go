@@ -7,7 +7,6 @@ import (
 	"slices"
 	"strings"
 	"sync"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -1394,7 +1393,7 @@ func (l *LanguageService) getReferencesForStringLiteral(
 
 func isStringLiteralPropertyReference(node *ast.StringLiteralLike, checker *checker.Checker) bool {
 	if ast.IsPropertySignatureDeclaration(node.Parent) {
-		return checker.GetPropertyOfType(checker.GetTypeAtLocation(node.Parent.Parent), unique.Make(node.Text())) != nil
+		return checker.GetPropertyOfType(checker.GetTypeAtLocation(node.Parent.Parent), ast.MakeSymbolName(node.Text())) != nil
 	}
 	return false
 }
@@ -1966,7 +1965,7 @@ func (state *refState) createSearch(location *ast.Node, symbol *ast.Symbol, comi
 			}
 		}
 		symbolName := ast.SymbolNameText(s)
-		if moduleName, ok := ast.TryGetAmbientModuleNameFromSymbolName(unique.Make(symbolName)); ok {
+		if moduleName, ok := ast.TryGetAmbientModuleNameFromSymbolName(ast.MakeSymbolName(symbolName)); ok {
 			text = moduleName
 		} else {
 			text = symbolName

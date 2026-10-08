@@ -3,7 +3,6 @@ package autoimport
 import (
 	"slices"
 	"sync/atomic"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -252,7 +251,7 @@ func (e *symbolExtractor) extractFromSymbol(name ast.SymbolName, symbol *ast.Sym
 			*exports = slices.Grow(*exports, len(expression.AsObjectLiteralExpression().Properties.Nodes))
 			for _, prop := range expression.AsObjectLiteralExpression().Properties.Nodes {
 				if ast.IsShorthandPropertyAssignment(prop) || ast.IsPropertyAssignment(prop) && prop.AsPropertyAssignment().Name().Kind == ast.KindIdentifier {
-					export, _ := e.createExport(expression.Symbol().Members()[unique.Make(prop.Name().Text())], moduleID, moduleFileName, syntax, file, checkerLease)
+					export, _ := e.createExport(expression.Symbol().Members()[ast.MakeSymbolName(prop.Name().Text())], moduleID, moduleFileName, syntax, file, checkerLease)
 					if export != nil {
 						export.through = name
 						*exports = append(*exports, export)
@@ -353,7 +352,7 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 			// Last resort: derive identifier from the file name. Use FileName() (original
 			// casing) rather than ModuleID/Path() which is lowercased on case-insensitive
 			// file systems, losing PascalCase.
-			export.localName = unique.Make(lsutil.ModuleSpecifierToValidIdentifier(fileNameForDefaultExportName(targetSymbol, moduleFileName, moduleID), false))
+			export.localName = ast.MakeSymbolName(lsutil.ModuleSpecifierToValidIdentifier(fileNameForDefaultExportName(targetSymbol, moduleFileName, moduleID), false))
 		}
 	}
 
@@ -400,7 +399,7 @@ func (e *symbolExtractor) tryResolveSymbol(symbol *ast.Symbol, syntax ExportSynt
 	}
 
 	if loc != nil {
-		local := e.localNameResolver.Resolve(loc, unique.Make(name), ast.SymbolFlagsAll, nil, false, false)
+		local := e.localNameResolver.Resolve(loc, ast.MakeSymbolName(name), ast.SymbolFlagsAll, nil, false, false)
 		if local != nil && !ast.IsNonLocalAlias(local, ast.SymbolFlagsNone) {
 			return local
 		}
@@ -452,7 +451,7 @@ func getSyntax(symbol *ast.Symbol) ExportSyntax {
 }
 
 func isUnusableName(name ast.SymbolName) bool {
-	return name == (ast.SymbolName{}) || name == ast.EmptySymbolName ||
+	return name.IsZero() || name == ast.EmptySymbolName ||
 		name == ast.SymbolNameUnderscoreDefault ||
 		name == ast.InternalSymbolNameExportStar ||
 		name == ast.InternalSymbolNameDefault ||

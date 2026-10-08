@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"unique"
-
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
@@ -232,7 +230,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 						continue
 					}
 					typeParamName := b.typeParameterToName(typeParam).Text
-					add(unique.Make(typeParamName), typeParam.symbol)
+					add(ast.MakeSymbolName(typeParamName), typeParam.symbol)
 				}
 			})
 		}

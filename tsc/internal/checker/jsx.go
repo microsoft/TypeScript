@@ -4,7 +4,6 @@ import (
 	"iter"
 	"math"
 	"slices"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -222,7 +221,7 @@ func (c *Checker) getContextualTypeForJsxAttribute(attribute *ast.Node, contextF
 		if attributesType == nil || IsTypeAny(attributesType) {
 			return nil
 		}
-		return c.getTypeOfPropertyOfContextualType(attributesType, unique.Make(attribute.Name().Text()))
+		return c.getTypeOfPropertyOfContextualType(attributesType, ast.MakeSymbolName(attribute.Name().Text()))
 	}
 	return c.getContextualType(attribute.Parent, contextFlags)
 }
@@ -518,13 +517,13 @@ func (c *Checker) getJSXFragmentType(node *ast.Node) *Type {
 		if !shouldModuleRefErr {
 			flags &^= ast.SymbolFlagsEnum
 		}
-		jsxFactorySymbol = c.resolveName(node, unique.Make(jsxFragmentFactoryName), flags, diagnostics.Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found, true /*isUse*/, false /*excludeGlobals*/)
+		jsxFactorySymbol = c.resolveName(node, ast.MakeSymbolName(jsxFragmentFactoryName), flags, diagnostics.Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found, true /*isUse*/, false /*excludeGlobals*/)
 	}
 	if jsxFactorySymbol == nil {
 		links.jsxFragmentType = c.errorType
 		return links.jsxFragmentType
 	}
-	if jsxFactorySymbol.Name() == unique.Make(ReactNames.Fragment) {
+	if jsxFactorySymbol.Name() == ast.MakeSymbolName(ReactNames.Fragment) {
 		links.jsxFragmentType = c.getTypeOfSymbol(jsxFactorySymbol)
 		return links.jsxFragmentType
 	}
@@ -534,7 +533,7 @@ func (c *Checker) getJSXFragmentType(node *ast.Node) *Type {
 	}
 
 	reactExports := c.getExportsOfSymbol(resolvedAlias)
-	typeSymbol := c.getSymbol(reactExports, unique.Make(ReactNames.Fragment), ast.SymbolFlagsBlockScopedVariable)
+	typeSymbol := c.getSymbol(reactExports, ast.MakeSymbolName(ReactNames.Fragment), ast.SymbolFlagsBlockScopedVariable)
 	if typeSymbol != nil {
 		links.jsxFragmentType = c.getTypeOfSymbol(typeSymbol)
 	} else {
@@ -755,7 +754,7 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 				if allAttributesTable != nil {
 					allAttributesTable[attributeSymbol.Name()] = attributeSymbol
 				}
-				if unique.Make(attributeDecl.Name().Text()) == jsxChildrenPropertyName {
+				if ast.MakeSymbolName(attributeDecl.Name().Text()) == jsxChildrenPropertyName {
 					explicitlySpecifyChildrenAttribute = true
 				}
 				if contextualType != nil && checkMode&CheckModeInferential != 0 && checkMode&CheckModeSkipContextSensitive == 0 && c.isContextSensitive(attributeDecl) {
@@ -1141,7 +1140,7 @@ func (c *Checker) getIntrinsicAttributesTypeFromStringLiteralType(t *Type, locat
 	intrinsicElementsType := c.getJsxType(JsxNames.IntrinsicElements, location)
 	if !c.isErrorType(intrinsicElementsType) {
 		stringLiteralTypeName := getStringLiteralValue(t)
-		intrinsicProp := c.getPropertyOfType(intrinsicElementsType, unique.Make(stringLiteralTypeName))
+		intrinsicProp := c.getPropertyOfType(intrinsicElementsType, ast.MakeSymbolName(stringLiteralTypeName))
 		if intrinsicProp != nil {
 			return c.getTypeOfSymbol(intrinsicProp)
 		}
@@ -1198,7 +1197,7 @@ func (c *Checker) getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node *ast.
 		return links.resolvedJsxElementAttributesType
 	}
 	if links.jsxFlags&JsxFlagsIntrinsicIndexedElement != 0 {
-		indexInfo := c.getApplicableIndexInfoForName(c.getJsxType(JsxNames.IntrinsicElements, node), unique.Make(node.TagName().Text()))
+		indexInfo := c.getApplicableIndexInfoForName(c.getJsxType(JsxNames.IntrinsicElements, node), ast.MakeSymbolName(node.TagName().Text()))
 		if indexInfo != nil {
 			links.resolvedJsxElementAttributesType = indexInfo.valueType
 			return links.resolvedJsxElementAttributesType
@@ -1225,7 +1224,7 @@ func (c *Checker) getIntrinsicTagSymbol(node *ast.Node) *ast.Symbol {
 			panic("Invalid tag name")
 		}
 		propName := tagName.Text()
-		intrinsicProp := c.getPropertyOfType(intrinsicElementsType, unique.Make(propName))
+		intrinsicProp := c.getPropertyOfType(intrinsicElementsType, ast.MakeSymbolName(propName))
 		if intrinsicProp != nil {
 			c.jsxElementLinks.Get(node).jsxFlags |= JsxFlagsIntrinsicNamedElement
 			links.resolvedSymbol = intrinsicProp
@@ -1238,7 +1237,7 @@ func (c *Checker) getIntrinsicTagSymbol(node *ast.Node) *ast.Symbol {
 			links.resolvedSymbol = indexSymbol
 			return links.resolvedSymbol
 		}
-		if c.getTypeOfPropertyOrIndexSignatureOfType(intrinsicElementsType, unique.Make(propName)) != nil {
+		if c.getTypeOfPropertyOrIndexSignatureOfType(intrinsicElementsType, ast.MakeSymbolName(propName)) != nil {
 			c.jsxElementLinks.Get(node).jsxFlags |= JsxFlagsIntrinsicIndexedElement
 			links.resolvedSymbol = intrinsicElementsType.symbol
 			return links.resolvedSymbol
@@ -1314,7 +1313,7 @@ func (c *Checker) getJsxNamespaceAt(location *ast.Node) *ast.Symbol {
 		resolvedNamespace := c.getJsxNamespaceContainerForImplicitImport(location)
 		if resolvedNamespace == nil || resolvedNamespace == c.unknownSymbol {
 			namespaceName := c.getJsxNamespace(location)
-			resolvedNamespace = c.resolveName(location, unique.Make(namespaceName), ast.SymbolFlagsNamespace, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
+			resolvedNamespace = c.resolveName(location, ast.MakeSymbolName(namespaceName), ast.SymbolFlagsNamespace, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
 		}
 		if resolvedNamespace != nil {
 			candidate := c.resolveSymbol(c.getSymbol(c.getExportsOfSymbol(c.resolveSymbol(resolvedNamespace)), JsxNames.JSX, ast.SymbolFlagsNamespace))

@@ -7,7 +7,6 @@ import (
 	"slices"
 	"strings"
 	"unicode"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -79,7 +78,7 @@ func (f *Fix) Edits(
 		return edits, diagnostics.Update_import_from_0.Localize(locale, f.ModuleSpecifier), safe
 	case lsproto.AutoImportFixKindAddNew:
 		var declarations []*ast.Statement
-		name := unique.Make(f.Name)
+		name := ast.MakeSymbolName(f.Name)
 		defaultImport := core.IfElse(f.ImportKind == lsproto.ImportKindDefault, &newImportBinding{name: name, addAsTypeOnly: f.AddAsTypeOnly}, nil)
 		namedImports := core.IfElse(f.ImportKind == lsproto.ImportKindNamed, []*newImportBinding{{name: name, addAsTypeOnly: f.AddAsTypeOnly}}, nil)
 		var namespaceLikeImport *newImportBinding
@@ -188,7 +187,7 @@ func getAddToExistingImportFix(file *ast.SourceFile, fix *Fix) *addToExistingImp
 		panic("expected import declaration or require call expression")
 	}
 
-	name := unique.Make(fix.Name)
+	name := ast.MakeSymbolName(fix.Name)
 	defaultImport := core.IfElse(fix.ImportKind == lsproto.ImportKindDefault, &newImportBinding{kind: lsproto.ImportKindDefault, name: name, addAsTypeOnly: fix.AddAsTypeOnly}, nil)
 	namedImports := core.IfElse(fix.ImportKind == lsproto.ImportKindNamed, &newImportBinding{kind: lsproto.ImportKindNamed, name: name, addAsTypeOnly: fix.AddAsTypeOnly}, nil)
 	return &addToExistingImportFix{
@@ -602,7 +601,7 @@ func (v *View) GetFixes(export *Export, forJSX bool, isValidTypeOnlyUseSite bool
 	startsWithUpper := unicode.IsUpper(rune(nameText[0]))
 	if forJSX && !startsWithUpper {
 		if export.IsRenameable() {
-			name = unique.Make(fmt.Sprintf("%c%s", unicode.ToUpper(rune(nameText[0])), nameText[1:]))
+			name = ast.MakeSymbolName(fmt.Sprintf("%c%s", unicode.ToUpper(rune(nameText[0])), nameText[1:]))
 		} else {
 			return nil
 		}
