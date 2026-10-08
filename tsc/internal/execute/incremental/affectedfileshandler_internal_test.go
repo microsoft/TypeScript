@@ -56,7 +56,7 @@ func TestUpdateShapeSignatureCachedResult(t *testing.T) {
 	assert.Assert(t, !h.updateShapeSignature(d, false))
 	assert.Assert(t, !h.updateShapeSignature(d, false))
 
-	wg := core.NewWorkGroup(true)
+	wg := core.NewWorkGroup(1)
 	var result collections.SyncSet[*ast.SourceFile]
 	wg.Queue(func() { h.collectFilesAffectedBy(b.PathKey(), wg, &result) })
 	wg.RunAndWait()
