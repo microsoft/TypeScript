@@ -5,23 +5,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/transformers"
 )
 
-type logicalAssignmentTransformer struct {
-	transformers.Transformer
-}
-
-func (ch *logicalAssignmentTransformer) visit(node *ast.Node) *ast.Node {
-	if node.SubtreeFacts()&ast.SubtreeContainsLogicalAssignments == 0 {
-		return node
-	}
-	switch node.Kind {
-	case ast.KindBinaryExpression:
-		return ch.visitBinaryExpression(node.AsBinaryExpression())
-	default:
-		return ch.Visitor().VisitEachChild(node)
-	}
-}
-
-func (ch *logicalAssignmentTransformer) visitBinaryExpression(node *ast.BinaryExpression) *ast.Node {
+func (ch *syntaxTransformer) visitLogicalAssignment(node *ast.BinaryExpression) *ast.Node {
 	var nonAssignmentOperator ast.Kind
 	switch node.OperatorToken.Kind {
 	case ast.KindBarBarEqualsToken:
@@ -31,7 +15,7 @@ func (ch *logicalAssignmentTransformer) visitBinaryExpression(node *ast.BinaryEx
 	case ast.KindQuestionQuestionEqualsToken:
 		nonAssignmentOperator = ast.KindQuestionQuestionToken
 	default:
-		return ch.Visitor().VisitEachChild(node.AsNode())
+		panic("Expected a logical assignment")
 	}
 
 	left := ast.SkipParentheses(ch.Visitor().VisitNode(node.Left))
@@ -105,9 +89,4 @@ func (ch *logicalAssignmentTransformer) visitBinaryExpression(node *ast.BinaryEx
 			),
 		),
 	)
-}
-
-func newLogicalAssignmentTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
-	tx := &logicalAssignmentTransformer{}
-	return tx.NewTransformer(tx.visit, opts.Context)
 }
