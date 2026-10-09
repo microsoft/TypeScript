@@ -6,6 +6,9 @@ func (n *Node) Parent() *Node {
 	return nil
 }
 
+func (n *Node) SetParent(parent *Node) {}
+
 func allowed(n *Node) {
 	_ = n.Parent()
+	n.SetParent(nil)
 }

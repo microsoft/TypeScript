@@ -13,13 +13,13 @@ import (
 )
 
 type externalModuleInfo struct {
-	externalImports              []*ast.Declaration                                            // ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration. imports and reexports of other external modules
-	exportSpecifiers             collections.MultiMap[string, *ast.ExportSpecifier]            // Maps local names to their associated export specifiers (excludes reexports)
-	exportedBindings             collections.MultiMap[*ast.Declaration, *ast.ModuleExportName] // Maps local declarations to their associated export aliases
-	exportedNames                []*ast.ModuleExportName                                       // all exported names in the module, both local and re-exported, excluding the names of locally exported function declarations
-	exportedFunctions            collections.OrderedSet[*ast.FunctionDeclarationNode]          // all of the top-level exported function declarations
-	exportEquals                 *ast.ExportAssignment                                         // an export=/module.exports= declaration if one was present
-	hasExportStarsToExportValues bool                                                          // whether this module contains export*
+	externalImports              []ast.Declaration                                           // ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration. imports and reexports of other external modules
+	exportSpecifiers             collections.MultiMap[string, ast.ExportSpecifier]           // Maps local names to their associated export specifiers (excludes reexports)
+	exportedBindings             collections.MultiMap[ast.Declaration, ast.ModuleExportName] // Maps local declarations to their associated export aliases
+	exportedNames                []ast.ModuleExportName                                      // all exported names in the module, both local and re-exported, excluding the names of locally exported function declarations
+	exportedFunctions            collections.OrderedSet[ast.FunctionDeclarationNode]         // all of the top-level exported function declarations
+	exportEquals                 ast.ExportAssignment                                        // an export=/module.exports= declaration if one was present
+	hasExportStarsToExportValues bool                                                        // whether this module contains export*
 }
 
 type externalModuleInfoCollector struct {
@@ -51,15 +51,15 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 		// (e.g., `declare export = x` is elided by the type eraser but must still be collected)
 		if ast.IsNotEmittedStatement(node) {
 			original := c.emitContext.MostOriginal(node)
-			if original != nil && ast.IsExportAssignment(original) {
+			if !original.IsNil() && ast.IsExportAssignment(original) {
 				n := original.AsExportAssignment()
-				if n.IsExportEquals && c.output.exportEquals == nil {
+				if n.IsExportEquals() && c.output.exportEquals.IsNil() {
 					c.output.exportEquals = n
 				}
 			}
 			continue
 		}
-		switch node.Kind {
+		switch node.Kind() {
 		case ast.KindImportDeclaration:
 			// import "mod"
 			// import x from "mod"
@@ -76,30 +76,30 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 
 		case ast.KindImportEqualsDeclaration:
 			n := node.AsImportEqualsDeclaration()
-			if ast.IsExternalModuleReference(n.ModuleReference) {
+			if ast.IsExternalModuleReference(n.ModuleReference()) {
 				// import x = require("mod")
 				c.addExternalImport(node)
 			}
 
 		case ast.KindExportDeclaration:
 			n := node.AsExportDeclaration()
-			if n.ModuleSpecifier != nil {
+			if !n.ModuleSpecifier().IsNil() {
 				// export * from "mod"
 				// export * as ns from "mod"
 				// export { x, y } from "mod"
 				c.addExternalImport(node)
-				if n.ExportClause == nil {
+				if n.ExportClause().IsNil() {
 					// export * from "mod"
 					c.output.hasExportStarsToExportValues = true
-				} else if ast.IsNamedExports(n.ExportClause) {
+				} else if ast.IsNamedExports(n.ExportClause()) {
 					// export { x, y } from "mod"
 					c.addExportedNamesForExportDeclaration(n)
 					if !hasImportDefault {
-						hasImportDefault = containsDefaultReference(n.ExportClause)
+						hasImportDefault = containsDefaultReference(n.ExportClause())
 					}
 				} else {
 					// export * as ns from "mod"
-					name := n.ExportClause.AsNamespaceExport().Name()
+					name := n.ExportClause().AsNamespaceExport().Name()
 					nameText := name.Text()
 					if c.addUniqueExport(nameText) {
 						c.addExportedBinding(node, name)
@@ -115,7 +115,7 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 
 		case ast.KindExportAssignment:
 			n := node.AsExportAssignment()
-			if n.IsExportEquals && c.output.exportEquals == nil {
+			if n.IsExportEquals() && c.output.exportEquals.IsNil() {
 				// export = x
 				c.output.exportEquals = n
 			}
@@ -123,7 +123,7 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 		case ast.KindVariableStatement:
 			n := node.AsVariableStatement()
 			if ast.HasSyntacticModifier(node, ast.ModifierFlagsExport) {
-				for _, decl := range n.DeclarationList.AsVariableDeclarationList().Declarations.Nodes {
+				for _, decl := range n.DeclarationList().AsVariableDeclarationList().Declarations().Nodes {
 					c.collectExportedVariableInfo(decl)
 				}
 			}
@@ -131,7 +131,7 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 		case ast.KindFunctionDeclaration:
 			n := node.AsFunctionDeclaration()
 			if ast.HasSyntacticModifier(node, ast.ModifierFlagsExport) {
-				c.addExportedFunctionDeclaration(n, nil /*name*/, ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault))
+				c.addExportedFunctionDeclaration(n, ast.Node{} /*name*/, ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault))
 			}
 
 		case ast.KindClassDeclaration:
@@ -141,7 +141,7 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 					// export default class { }
 					if !c.hasExportDefault {
 						name := n.Name()
-						if name == nil {
+						if name.IsNil() {
 							name = c.emitContext.Factory.NewGeneratedNameForNode(node)
 						}
 						c.addExportedBinding(node, name)
@@ -150,7 +150,7 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 				} else {
 					// export class x { }
 					name := n.Name()
-					if name != nil {
+					if !name.IsNil() {
 						if c.addUniqueExport(name.Text()) {
 							c.addExportedBinding(node, name)
 							c.addExportedName(name)
@@ -172,34 +172,34 @@ func (c *externalModuleInfoCollector) addUniqueExport(name string) bool {
 	return false
 }
 
-func (c *externalModuleInfoCollector) addExportedBinding(decl *ast.Declaration, name *ast.ModuleExportName) {
+func (c *externalModuleInfoCollector) addExportedBinding(decl ast.Declaration, name ast.ModuleExportName) {
 	c.output.exportedBindings.Add(c.emitContext.MostOriginal(decl), name)
 }
 
-func (c *externalModuleInfoCollector) addExternalImport(node *ast.Node /*ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration*/) {
+func (c *externalModuleInfoCollector) addExternalImport(node ast.Node /*ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration*/) {
 	c.output.externalImports = append(c.output.externalImports, node)
 }
 
-func (c *externalModuleInfoCollector) addExportedName(name *ast.ModuleExportName) {
+func (c *externalModuleInfoCollector) addExportedName(name ast.ModuleExportName) {
 	c.output.exportedNames = append(c.output.exportedNames, name)
 }
 
-func (c *externalModuleInfoCollector) addExportedNamesForExportDeclaration(node *ast.ExportDeclaration) {
-	for _, specifier := range node.ExportClause.Elements() {
+func (c *externalModuleInfoCollector) addExportedNamesForExportDeclaration(node ast.ExportDeclaration) {
+	for _, specifier := range node.ExportClause().Elements() {
 		specifierNameText := specifier.Name().Text()
 		if c.addUniqueExport(specifierNameText) {
 			name := specifier.PropertyNameOrName()
-			if name.Kind != ast.KindStringLiteral {
-				if node.ModuleSpecifier == nil {
+			if name.Kind() != ast.KindStringLiteral {
+				if node.ModuleSpecifier().IsNil() {
 					c.output.exportSpecifiers.Add(name.Text(), specifier.AsExportSpecifier())
 				}
 
 				decl := c.resolver.GetReferencedImportDeclaration(c.emitContext.MostOriginal(name))
-				if decl == nil {
+				if decl.IsNil() {
 					decl = c.resolver.GetReferencedValueDeclaration(c.emitContext.MostOriginal(name))
 				}
-				if decl != nil {
-					if decl.Kind == ast.KindFunctionDeclaration {
+				if !decl.IsNil() {
+					if decl.Kind() == ast.KindFunctionDeclaration {
 						c.uniqueExports.Delete(specifierNameText)
 						c.addExportedFunctionDeclaration(decl.AsFunctionDeclaration(), specifier.Name(), ast.ModuleExportNameIsDefault(specifier.Name()))
 						continue
@@ -213,13 +213,13 @@ func (c *externalModuleInfoCollector) addExportedNamesForExportDeclaration(node 
 	}
 }
 
-func (c *externalModuleInfoCollector) addExportedFunctionDeclaration(node *ast.FunctionDeclaration, name *ast.ModuleExportName, isDefault bool) {
+func (c *externalModuleInfoCollector) addExportedFunctionDeclaration(node ast.FunctionDeclaration, name ast.ModuleExportName, isDefault bool) {
 	c.output.exportedFunctions.Add(c.emitContext.MostOriginal(node.AsNode()))
 	if isDefault {
 		// export default function() { }
 		// function x() { } + export { x as default };
 		if !c.hasExportDefault {
-			if name == nil {
+			if name.IsNil() {
 				name = c.emitContext.Factory.NewGeneratedNameForNode(node.AsNode())
 			}
 			c.addExportedBinding(node.AsNode(), name)
@@ -228,7 +228,7 @@ func (c *externalModuleInfoCollector) addExportedFunctionDeclaration(node *ast.F
 	} else {
 		// export function x() { }
 		// function x() { } + export { x }
-		if name == nil {
+		if name.IsNil() {
 			name = node.Name()
 		}
 		nameText := name.Text()
@@ -238,11 +238,11 @@ func (c *externalModuleInfoCollector) addExportedFunctionDeclaration(node *ast.F
 	}
 }
 
-func (c *externalModuleInfoCollector) collectExportedVariableInfo(decl *ast.Node /*VariableDeclaration | BindingElement*/) {
+func (c *externalModuleInfoCollector) collectExportedVariableInfo(decl ast.Node /*VariableDeclaration | BindingElement*/) {
 	if ast.IsBindingPattern(decl.Name()) {
 		for _, element := range decl.Name().Elements() {
 			e := element.AsBindingElement()
-			if e.Name() != nil {
+			if !e.Name().IsNil() {
 				c.collectExportedVariableInfo(element)
 			}
 		}
@@ -259,14 +259,14 @@ func (c *externalModuleInfoCollector) collectExportedVariableInfo(decl *ast.Node
 
 const externalHelpersModuleNameText = "tslib"
 
-func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitContext, sourceFile *ast.SourceFile, compilerOptions *core.CompilerOptions, fileModuleKind core.ModuleKind, hasExportStarsToExportValues bool, hasImportStar bool, hasImportDefault bool) *ast.Node /*ImportDeclaration | ImportEqualsDeclaration*/ {
+func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitContext, sourceFile *ast.SourceFile, compilerOptions *core.CompilerOptions, fileModuleKind core.ModuleKind, hasExportStarsToExportValues bool, hasImportStar bool, hasImportDefault bool) ast.Node /*ImportDeclaration | ImportEqualsDeclaration*/ {
 	if compilerOptions.ImportHelpers.IsTrue() && ast.IsEffectiveExternalModule(sourceFile, compilerOptions) {
 		moduleKind := compilerOptions.GetEmitModuleKind()
 		helpers := getImportedHelpers(emitContext, sourceFile)
 		if fileModuleKind == core.ModuleKindCommonJS || fileModuleKind == core.ModuleKindNone && moduleKind == core.ModuleKindCommonJS {
 			// When we emit to a non-ES module, generate a synthetic `import tslib = require("tslib")` to be further transformed.
 			externalHelpersModuleName := getOrCreateExternalHelpersModuleNameIfNeeded(emitContext, sourceFile, compilerOptions, helpers, hasExportStarsToExportValues, hasImportStar || hasImportDefault, fileModuleKind)
-			if externalHelpersModuleName != nil {
+			if !externalHelpersModuleName.IsNil() {
 				externalHelpersImportDeclaration := emitContext.Factory.NewImportEqualsDeclaration(
 					nil,   /*modifiers*/
 					false, /*isTypeOnly*/
@@ -291,9 +291,9 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 				// Alias the imports if the names are used somewhere in the file.
 				// NOTE: We don't need to care about global import collisions as this is a module.
 
-				importSpecifiers := core.Map(helperNames, func(name string) *ast.ImportSpecifierNode {
+				importSpecifiers := core.Map(helperNames, func(name string) ast.ImportSpecifierNode {
 					if emitContext.IsFileLevelUniqueName(sourceFile, name, nil /*hasGlobalName*/) {
-						return emitContext.Factory.NewImportSpecifier(false /*isTypeOnly*/, nil /*propertyName*/, emitContext.Factory.NewIdentifier(name))
+						return emitContext.Factory.NewImportSpecifier(false /*isTypeOnly*/, ast.Node{} /*propertyName*/, emitContext.Factory.NewIdentifier(name))
 					} else {
 						return emitContext.Factory.NewImportSpecifier(false /*isTypeOnly*/, emitContext.Factory.NewIdentifier(name), emitContext.Factory.NewUnscopedHelperName(name))
 					}
@@ -304,9 +304,9 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 
 				externalHelpersImportDeclaration := emitContext.Factory.NewImportDeclaration(
 					nil, /*modifiers*/
-					emitContext.Factory.NewImportClause(ast.KindUnknown /*phaseModifier*/, nil /*name*/, namedBindings),
+					emitContext.Factory.NewImportClause(ast.KindUnknown /*phaseModifier*/, ast.Node{} /*name*/, namedBindings),
 					emitContext.Factory.NewStringLiteral(externalHelpersModuleNameText, ast.TokenFlagsNone),
-					nil, /*attributes*/
+					ast.Node{}, /*attributes*/
 				)
 
 				emitContext.AddEmitFlags(externalHelpersImportDeclaration, printer.EFCustomPrologue)
@@ -314,7 +314,7 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 			}
 		}
 	}
-	return nil
+	return ast.Node{}
 }
 
 func getImportedHelpers(emitContext *printer.EmitContext, sourceFile *ast.SourceFile) []*printer.EmitHelper {
@@ -327,9 +327,9 @@ func getImportedHelpers(emitContext *printer.EmitContext, sourceFile *ast.Source
 	return helpers
 }
 
-func getOrCreateExternalHelpersModuleNameIfNeeded(emitContext *printer.EmitContext, node *ast.SourceFile, compilerOptions *core.CompilerOptions, helpers []*printer.EmitHelper, hasExportStarsToExportValues bool, hasImportStarOrImportDefault bool, fileModuleKind core.ModuleKind) *ast.IdentifierNode {
+func getOrCreateExternalHelpersModuleNameIfNeeded(emitContext *printer.EmitContext, node *ast.SourceFile, compilerOptions *core.CompilerOptions, helpers []*printer.EmitHelper, hasExportStarsToExportValues bool, hasImportStarOrImportDefault bool, fileModuleKind core.ModuleKind) ast.IdentifierNode {
 	externalHelpersModuleName := emitContext.GetExternalHelpersModuleName(node)
-	if externalHelpersModuleName != nil {
+	if !externalHelpersModuleName.IsNil() {
 		return externalHelpersModuleName
 	}
 
@@ -345,27 +345,27 @@ func getOrCreateExternalHelpersModuleNameIfNeeded(emitContext *printer.EmitConte
 	return externalHelpersModuleName
 }
 
-func isNamedDefaultReference(e *ast.Node /*ImportSpecifier | ExportSpecifier*/) bool {
+func isNamedDefaultReference(e ast.Node /*ImportSpecifier | ExportSpecifier*/) bool {
 	return ast.ModuleExportNameIsDefault(e.PropertyNameOrName())
 }
 
-func containsDefaultReference(node *ast.Node /*NamedImportBindings | NamedExportBindings*/) bool {
-	return node != nil && (ast.IsNamedImports(node) || ast.IsNamedExports(node)) && core.Some(node.Elements(), isNamedDefaultReference)
+func containsDefaultReference(node ast.Node /*NamedImportBindings | NamedExportBindings*/) bool {
+	return !node.IsNil() && (ast.IsNamedImports(node) || ast.IsNamedExports(node)) && core.Some(node.Elements(), isNamedDefaultReference)
 }
 
-func getExportNeedsImportStarHelper(node *ast.ExportDeclaration) bool {
-	return ast.GetNamespaceDeclarationNode(node.AsNode()) != nil
+func getExportNeedsImportStarHelper(node ast.ExportDeclaration) bool {
+	return !ast.GetNamespaceDeclarationNode(node.AsNode()).IsNil()
 }
 
-func getImportNeedsImportStarHelper(node *ast.ImportDeclaration) bool {
-	if ast.GetNamespaceDeclarationNode(node.AsNode()) != nil {
+func getImportNeedsImportStarHelper(node ast.ImportDeclaration) bool {
+	if !ast.GetNamespaceDeclarationNode(node.AsNode()).IsNil() {
 		return true
 	}
-	if node.ImportClause == nil {
+	if node.ImportClause().IsNil() {
 		return false
 	}
-	bindings := node.ImportClause.AsImportClause().NamedBindings
-	if bindings == nil {
+	bindings := node.ImportClause().AsImportClause().NamedBindings()
+	if bindings.IsNil() {
 		return false
 	}
 	if !ast.IsNamedImports(bindings) {
@@ -373,17 +373,17 @@ func getImportNeedsImportStarHelper(node *ast.ImportDeclaration) bool {
 	}
 	namedImports := bindings.AsNamedImports()
 	defaultRefCount := 0
-	for _, binding := range namedImports.Elements.Nodes {
+	for _, binding := range namedImports.Elements().Nodes {
 		if isNamedDefaultReference(binding) {
 			defaultRefCount++
 		}
 	}
 	// Import star is required if there's default named refs mixed with non-default refs, or if theres non-default refs and it has a default import
-	return (defaultRefCount > 0 && defaultRefCount != len(namedImports.Elements.Nodes)) || ((len(namedImports.Elements.Nodes)-defaultRefCount) != 0 && ast.IsDefaultImport(node.AsNode()))
+	return (defaultRefCount > 0 && defaultRefCount != len(namedImports.Elements().Nodes)) || ((len(namedImports.Elements().Nodes)-defaultRefCount) != 0 && ast.IsDefaultImport(node.AsNode()))
 }
 
-func getImportNeedsImportDefaultHelper(node *ast.ImportDeclaration) bool {
+func getImportNeedsImportDefaultHelper(node ast.ImportDeclaration) bool {
 	// Import default is needed if there's a default import or a default ref and no other refs (meaning an import star helper wasn't requested)
-	return !getImportNeedsImportStarHelper(node) && (ast.IsDefaultImport(node.AsNode()) || (node.ImportClause != nil &&
-		containsDefaultReference(node.ImportClause.AsImportClause().NamedBindings)))
+	return !getImportNeedsImportStarHelper(node) && (ast.IsDefaultImport(node.AsNode()) || (!node.ImportClause().IsNil() &&
+		containsDefaultReference(node.ImportClause().AsImportClause().NamedBindings())))
 }

@@ -30,7 +30,7 @@ type ImportAdder interface {
 
 // addToExistingState tracks modifications to an existing import clause or binding pattern
 type addToExistingState struct {
-	importClauseOrBindingPattern *ast.ImportClauseOrBindingPattern
+	importClauseOrBindingPattern ast.ImportClauseOrBindingPattern
 	defaultImport                *newImportBinding
 	namedImports                 map[string]*newImportBinding
 }
@@ -60,10 +60,10 @@ type importAdder struct {
 	preferences   lsutil.UserPreferences
 
 	// State
-	addToNamespace []*Fix                                                    // Namespace fixes don't conflict, so just build a list
-	importType     []*Fix                                                    // JSDoc type import fixes
-	addToExisting  map[*ast.ImportClauseOrBindingPattern]*addToExistingState // importClauseOrBindingPattern -> default or named bindings
-	newImports     map[string]*importsCollection                             // module specifier + type only -> imports
+	addToNamespace []*Fix                                                   // Namespace fixes don't conflict, so just build a list
+	importType     []*Fix                                                   // JSDoc type import fixes
+	addToExisting  map[ast.ImportClauseOrBindingPattern]*addToExistingState // importClauseOrBindingPattern -> default or named bindings
+	newImports     map[string]*importsCollection                            // module specifier + type only -> imports
 	// !!! removeExisting, verbatimImports?
 }
 
@@ -86,7 +86,7 @@ func NewImportAdder(
 		preferences:    preferences,
 		addToNamespace: nil,
 		importType:     nil,
-		addToExisting:  make(map[*ast.Node]*addToExistingState),
+		addToExisting:  make(map[ast.Node]*addToExistingState),
 		newImports:     make(map[string]*importsCollection),
 	}
 }
@@ -136,10 +136,10 @@ func (adder *importAdder) Edits() []*lsproto.TextEdit {
 		)
 	}
 
-	var newDeclarations []*ast.AnyImportOrRequireStatement
+	var newDeclarations []ast.AnyImportOrRequireStatement
 	for key, newImport := range adder.newImports {
 		moduleSpecifier := key[2:] // From `${0 | 1}|${moduleSpecifier}` format
-		var declarations []*ast.AnyImportOrRequireStatement
+		var declarations []ast.AnyImportOrRequireStatement
 		if newImport.useRequire {
 			declarations = getNewRequires(
 				tracker,
@@ -383,12 +383,12 @@ func TypeToAutoImportableTypeNode(
 	c *checker.Checker,
 	importAdder ImportAdder,
 	t *checker.Type,
-	contextNode *ast.Node, // !!! flags
-) *ast.TypeNode {
-	idToSymbol := make(map[*ast.IdentifierNode]*ast.Symbol)
+	contextNode ast.Node, // !!! flags
+) ast.TypeNode {
+	idToSymbol := make(map[ast.IdentifierNode]*ast.Symbol)
 	typeNode := c.TypeToTypeNode(t, contextNode, nodebuilder.FlagsNone, idToSymbol)
-	if typeNode == nil {
-		return nil
+	if typeNode.IsNil() {
+		return ast.Node{}
 	}
 	return TypeNodeToAutoImportableTypeNode(typeNode, importAdder, idToSymbol)
 }
@@ -396,12 +396,12 @@ func TypeToAutoImportableTypeNode(
 // TypeNodeToAutoImportableTypeNode converts import type references in a type node to
 // simple type references and registers needed imports with the import adder.
 func TypeNodeToAutoImportableTypeNode(
-	typeNode *ast.TypeNode,
+	typeNode ast.TypeNode,
 	importAdder ImportAdder,
-	idToSymbol map[*ast.IdentifierNode]*ast.Symbol,
-) *ast.TypeNode {
+	idToSymbol map[ast.IdentifierNode]*ast.Symbol,
+) ast.TypeNode {
 	referenceTypeNode, importableSymbols := TryGetAutoImportableReferenceFromTypeNode(typeNode, idToSymbol)
-	if referenceTypeNode != nil {
+	if !referenceTypeNode.IsNil() {
 		if importAdder != nil {
 			importSymbols(importAdder, importableSymbols)
 		}
@@ -424,15 +424,15 @@ func importSymbols(importAdder ImportAdder, symbols []*ast.Symbol) {
 // TryGetAutoImportableReferenceFromTypeNode converts import type references in a type node
 // to simple type references and returns the transformed type node and the symbols that need
 // to be imported.
-func TryGetAutoImportableReferenceFromTypeNode(importTypeNode *ast.TypeNode, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) (*ast.TypeNode, []*ast.Symbol) {
+func TryGetAutoImportableReferenceFromTypeNode(importTypeNode ast.TypeNode, idToSymbol map[ast.IdentifierNode]*ast.Symbol) (ast.TypeNode, []*ast.Symbol) {
 	var symbols []*ast.Symbol
 	var visitor *ast.NodeVisitor
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
-	visit := func(node *ast.Node) *ast.Node {
-		if ast.IsLiteralImportTypeNode(node) && node.AsImportTypeNode().Qualifier != nil {
+	visit := func(node ast.Node) ast.Node {
+		if ast.IsLiteralImportTypeNode(node) && !node.AsImportTypeNode().Qualifier().IsNil() {
 			importTypeNode := node.AsImportTypeNode()
 			// Symbol for the left-most thing after the dot
-			firstIdentifier := ast.GetFirstIdentifier(importTypeNode.Qualifier)
+			firstIdentifier := ast.GetFirstIdentifier(importTypeNode.Qualifier())
 			symbol := idToSymbol[firstIdentifier]
 			if symbol == nil {
 				// if symbol is missing then this doesn't come from a synthesized import type node
@@ -441,14 +441,14 @@ func TryGetAutoImportableReferenceFromTypeNode(importTypeNode *ast.TypeNode, idT
 				return node.VisitEachChild(visitor)
 			}
 			name := getNameForExportedSymbol(symbol, false /*preferCapitalized*/)
-			var qualifier *ast.EntityName
+			var qualifier ast.EntityName
 			if name != firstIdentifier.Text() {
-				qualifier = replaceFirstIdentifierOfEntityName(factory, importTypeNode.Qualifier, factory.NewIdentifier(name))
+				qualifier = replaceFirstIdentifierOfEntityName(factory, importTypeNode.Qualifier(), factory.NewIdentifier(name))
 			} else {
-				qualifier = importTypeNode.Qualifier
+				qualifier = importTypeNode.Qualifier()
 			}
 			symbols = append(symbols, symbol)
-			typeArguments := visitor.VisitNodes(importTypeNode.TypeArguments)
+			typeArguments := visitor.VisitNodes(importTypeNode.TypeArguments())
 			return factory.NewTypeReferenceNode(qualifier, typeArguments)
 		}
 		return visitor.VisitEachChild(node)
@@ -456,7 +456,7 @@ func TryGetAutoImportableReferenceFromTypeNode(importTypeNode *ast.TypeNode, idT
 	visitor = ast.NewNodeVisitor(visit, factory, ast.NodeVisitorHooks{})
 
 	typeNode := visitor.VisitNode(importTypeNode)
-	debug.Assert(typeNode == nil || ast.IsTypeNode(typeNode), "expected a type node")
+	debug.Assert(typeNode.IsNil() || ast.IsTypeNode(typeNode), "expected a type node")
 	return typeNode, symbols
 }
 
@@ -478,13 +478,13 @@ func getNameForExportedSymbol(symbol *ast.Symbol, preferCapitalized bool) string
 	return symbol.Name()
 }
 
-func replaceFirstIdentifierOfEntityName(factory *ast.NodeFactory, name *ast.EntityName, newIdentifier *ast.IdentifierNode) *ast.EntityName {
-	if name.Kind == ast.KindIdentifier {
+func replaceFirstIdentifierOfEntityName(factory *ast.NodeFactory, name ast.EntityName, newIdentifier ast.IdentifierNode) ast.EntityName {
+	if name.Kind() == ast.KindIdentifier {
 		return newIdentifier
 	}
 	return factory.NewQualifiedName(
-		replaceFirstIdentifierOfEntityName(factory, name.AsQualifiedName().Left, newIdentifier),
-		name.AsQualifiedName().Right,
+		replaceFirstIdentifierOfEntityName(factory, name.AsQualifiedName().Left(), newIdentifier),
+		name.AsQualifiedName().Right(),
 	)
 }
 

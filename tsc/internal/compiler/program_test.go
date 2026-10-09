@@ -515,7 +515,7 @@ func TestImportSourceProgram(t *testing.T) {
 			assert.Assert(t, program.GetSourceFile("/src/a.ts") != nil)
 			for _, specifier := range file.Imports() {
 				resolved := program.GetResolvedModuleFromModuleSpecifier(file, specifier)
-				assert.Equal(t, resolved.IsResolved(), !ast.IsSourcePhaseImport(specifier.Parent))
+				assert.Equal(t, resolved.IsResolved(), !ast.IsSourcePhaseImport(specifier.Parent()))
 			}
 
 			files["/src/index.ts"] = content
@@ -530,7 +530,7 @@ func TestImportSourceProgram(t *testing.T) {
 			file = program.GetSourceFile("/src/index.ts")
 			for _, specifier := range file.Imports() {
 				resolved := program.GetResolvedModuleFromModuleSpecifier(file, specifier)
-				assert.Equal(t, resolved.IsResolved(), !ast.IsSourcePhaseImport(specifier.Parent))
+				assert.Equal(t, resolved.IsResolved(), !ast.IsSourcePhaseImport(specifier.Parent()))
 			}
 		})
 	}

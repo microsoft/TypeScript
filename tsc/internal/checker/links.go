@@ -11,15 +11,15 @@ type nodeLinkStore[V any] struct {
 	store core.PagedLinkStore[V]
 }
 
-func (s *nodeLinkStore[V]) Get(node *ast.Node) *V {
+func (s *nodeLinkStore[V]) Get(node ast.Node) *V {
 	return s.store.Get(uint64(ast.GetNodeId(node)))
 }
 
-func (s *nodeLinkStore[V]) Has(node *ast.Node) bool {
+func (s *nodeLinkStore[V]) Has(node ast.Node) bool {
 	return s.store.Has(uint64(ast.GetNodeId(node)))
 }
 
-func (s *nodeLinkStore[V]) TryGet(node *ast.Node) *V {
+func (s *nodeLinkStore[V]) TryGet(node ast.Node) *V {
 	return s.store.TryGet(uint64(ast.GetNodeId(node)))
 }
 

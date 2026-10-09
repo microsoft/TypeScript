@@ -56,7 +56,7 @@ func (b *NodeBuilderImpl) enterSignatureScope(signature *Signature) (expandedPar
 	return expandedParams, cleanup
 }
 
-func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []*ast.Symbol, typeParameters []*Type, originalParameters []*ast.Symbol, mapper *TypeMapper) func() {
+func (b *NodeBuilderImpl) enterNewScope(declaration ast.Node, expandedParams []*ast.Symbol, typeParameters []*Type, originalParameters []*ast.Symbol, mapper *TypeMapper) func() {
 	cleanupContext := cloneNodeBuilderContext(b.ctx)
 	// For regular function/method declarations, the enclosing declaration will already be signature.declaration,
 	// so this is a no-op, but for arrow functions and function expressions, the enclosing declaration will be
@@ -77,7 +77,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 	if mapper != nil {
 		b.ctx.mapper = mapper
 	}
-	if b.ctx.enclosingDeclaration != nil && declaration != nil {
+	if !b.ctx.enclosingDeclaration.IsNil() && !declaration.IsNil() {
 		// As a performance optimization, reuse the same fake scope within this chain.
 		// This is especially needed when we are working on an excessively deep type;
 		// if we don't do this, then we spend all of our time adding more and more
@@ -96,26 +96,26 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 		// traverse all ancestors.
 		pushFakeScope := func(kind string, addAll func(addSymbol func(name string, symbol *ast.Symbol))) func() {
 			// We only ever need to look two declarations upward.
-			debug.Assert(b.ctx.enclosingDeclaration != nil)
-			var existingFakeScope *ast.Node
+			debug.Assert(!b.ctx.enclosingDeclaration.IsNil())
+			var existingFakeScope ast.Node
 			if b.links.Has(b.ctx.enclosingDeclaration) {
 				links := b.links.Get(b.ctx.enclosingDeclaration)
 				if links.fakeScopeForSignatureDeclaration != nil && *links.fakeScopeForSignatureDeclaration == kind {
 					existingFakeScope = b.ctx.enclosingDeclaration
 				}
 			}
-			if existingFakeScope == nil && b.ctx.enclosingDeclaration.Parent != nil {
-				if b.links.Has(b.ctx.enclosingDeclaration.Parent) {
-					links := b.links.Get(b.ctx.enclosingDeclaration.Parent)
+			if existingFakeScope.IsNil() && !b.ctx.enclosingDeclaration.Parent().IsNil() {
+				if b.links.Has(b.ctx.enclosingDeclaration.Parent()) {
+					links := b.links.Get(b.ctx.enclosingDeclaration.Parent())
 					if links.fakeScopeForSignatureDeclaration != nil && *links.fakeScopeForSignatureDeclaration == kind {
-						existingFakeScope = b.ctx.enclosingDeclaration.Parent
+						existingFakeScope = b.ctx.enclosingDeclaration.Parent()
 					}
 				}
 			}
-			debug.Assert(existingFakeScope == nil || ast.IsBlock(existingFakeScope))
+			debug.Assert(existingFakeScope.IsNil() || ast.IsBlock(existingFakeScope))
 
 			var locals ast.SymbolTable
-			if existingFakeScope != nil {
+			if !existingFakeScope.IsNil() {
 				locals = existingFakeScope.Locals()
 			}
 			if locals == nil {
@@ -125,7 +125,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 			oldLocals := []localsRecord{}
 			addAll(func(name string, symbol *ast.Symbol) {
 				// Add cleanup information only if we don't own the fake scope
-				if existingFakeScope != nil {
+				if !existingFakeScope.IsNil() {
 					oldSymbol, ok := locals[name]
 					if !ok || oldSymbol == nil {
 						newLocals = append(newLocals, name)
@@ -136,14 +136,14 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 				locals[name] = symbol
 			})
 
-			if existingFakeScope == nil {
+			if existingFakeScope.IsNil() {
 				// Use a Block for this; the type of the node doesn't matter so long as it
 				// has locals, and this is cheaper/easier than using a function-ish Node.
-				fakeScope := b.f.NewBlock(b.f.NewNodeList([]*ast.Node{}), false)
+				fakeScope := b.f.NewBlock(b.f.NewNodeList([]ast.Node{}), false)
 				b.links.Get(fakeScope).fakeScopeForSignatureDeclaration = &kind
 				data := fakeScope.LocalsContainerData()
-				data.Locals = locals
-				fakeScope.Parent = b.ctx.enclosingDeclaration
+				data.SetLocals(locals)
+				fakeScope.SetParent(b.ctx.enclosingDeclaration)
 				b.ctx.enclosingDeclaration = fakeScope
 				return nil
 			} else {
@@ -177,13 +177,13 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 						if originalParam != nil {
 							add(originalParam.Name(), originalParam)
 						}
-					} else if !core.Some(param.Declarations(), func(d *ast.Node) bool {
-						var bindElement func(e *ast.BindingElement)
-						var bindPattern func(e *ast.BindingPattern)
+					} else if !core.Some(param.Declarations(), func(d ast.Node) bool {
+						var bindElement func(e ast.BindingElement)
+						var bindPattern func(e ast.BindingPattern)
 
-						bindPatternWorker := func(p *ast.BindingPattern) {
-							for _, e := range p.Elements.Nodes {
-								switch e.Kind {
+						bindPatternWorker := func(p ast.BindingPattern) {
+							for _, e := range p.Elements().Nodes {
+								switch e.Kind() {
 								case ast.KindOmittedExpression:
 									return
 								case ast.KindBindingElement:
@@ -195,8 +195,8 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 							}
 						}
 
-						bindElementWorker := func(e *ast.BindingElement) {
-							if e.Name() != nil && ast.IsBindingPattern(e.Name()) {
+						bindElementWorker := func(e ast.BindingElement) {
+							if !e.Name().IsNil() && ast.IsBindingPattern(e.Name()) {
 								bindPattern(e.Name().AsBindingPattern())
 								return
 							}
@@ -208,7 +208,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 						bindElement = bindElementWorker
 						bindPattern = bindPatternWorker
 
-						if ast.IsParameterDeclaration(d) && d.Name() != nil && ast.IsBindingPattern(d.Name()) {
+						if ast.IsParameterDeclaration(d) && !d.Name().IsNil() && ast.IsBindingPattern(d.Name()) {
 							bindPattern(d.Name().AsBindingPattern())
 							return true
 						}
@@ -229,7 +229,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 					if typeParam == nil {
 						continue
 					}
-					typeParamName := b.typeParameterToName(typeParam).Text
+					typeParamName := b.typeParameterToName(typeParam).Text()
 					add(typeParamName, typeParam.symbol)
 				}
 			})

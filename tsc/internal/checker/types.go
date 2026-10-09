@@ -210,14 +210,14 @@ type AliasSymbolLinks struct {
 	immediateTarget     *ast.Symbol // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
 	aliasTarget         *ast.Symbol // Resolved (non-alias) target of an alias
 	referenced          bool        // True if alias symbol has been referenced as a value that can be emitted
-	typeOnlyDeclaration *ast.Node   // First resolved alias declaration that makes the symbol only usable in type constructs
+	typeOnlyDeclaration ast.Node    // First resolved alias declaration that makes the symbol only usable in type constructs
 }
 
 // Links for module symbols
 
 type ModuleSymbolLinks struct {
-	resolvedExports       ast.SymbolTable      // Resolved exports of module or combined early- and late-bound static members of a class.
-	typeOnlyExportStarMap map[string]*ast.Node // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
+	resolvedExports       ast.SymbolTable     // Resolved exports of module or combined early- and late-bound static members of a class.
+	typeOnlyExportStarMap map[string]ast.Node // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
 	exportsChecked        bool
 }
 
@@ -237,7 +237,7 @@ type LateBoundLinks struct {
 
 type ExportTypeLinks struct {
 	target            *ast.Symbol // Target symbol
-	originatingImport *ast.Node   // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
+	originatingImport ast.Node    // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
 }
 
 // Links for type aliases
@@ -329,7 +329,7 @@ type MarkedAssignmentSymbolLinks struct {
 
 type accessibleChainCacheKey struct {
 	useOnlyExternalAliasing bool
-	location                *ast.Node
+	location                ast.Node
 	meaning                 ast.SymbolFlags
 }
 
@@ -411,12 +411,12 @@ type SourceFileLinks struct {
 	unusedChecked                bool
 	externalHelpersModule        *ast.Symbol
 	requestedExternalEmitHelpers ExternalEmitHelpers
-	deferredNodes                collections.OrderedSet[*ast.Node]
-	identifierCheckNodes         []*ast.Node
+	deferredNodes                collections.OrderedSet[ast.Node]
+	identifierCheckNodes         []ast.Node
 	localJsxNamespace            string
 	localJsxFragmentNamespace    string
-	localJsxFactory              *ast.EntityName
-	localJsxFragmentFactory      *ast.EntityName
+	localJsxFactory              ast.EntityName
+	localJsxFragmentFactory      ast.EntityName
 	jsxFragmentType              *Type
 }
 
@@ -1004,7 +1004,7 @@ func (t *ObjectType) AsObjectType() *ObjectType { return t }
 
 type TypeReference struct {
 	ObjectType
-	node                  *ast.Node // TypeReferenceNode | ArrayTypeNode | TupleTypeNode when deferred, else nil
+	node                  ast.Node // TypeReferenceNode | ArrayTypeNode | TupleTypeNode when deferred, else nil
 	resolvedTypeArguments []*Type
 }
 
@@ -1072,11 +1072,11 @@ const (
 
 type TupleElementInfo struct {
 	flags              ElementFlags
-	labeledDeclaration *ast.Node // NamedTupleMember | ParameterDeclaration | nil
+	labeledDeclaration ast.Node // NamedTupleMember | ParameterDeclaration | nil
 }
 
 func (t *TupleElementInfo) TupleElementFlags() ElementFlags { return t.flags }
-func (t *TupleElementInfo) LabeledDeclaration() *ast.Node   { return t.labeledDeclaration }
+func (t *TupleElementInfo) LabeledDeclaration() ast.Node    { return t.labeledDeclaration }
 
 type TupleType struct {
 	InterfaceType
@@ -1102,14 +1102,14 @@ func (t *TupleType) ElementInfos() []TupleElementInfo { return t.elementInfos }
 
 type InstantiationExpressionType struct {
 	ObjectType
-	node *ast.Node
+	node ast.Node
 }
 
 // MappedType
 
 type MappedType struct {
 	ObjectType
-	declaration          *ast.MappedTypeNode
+	declaration          ast.MappedTypeNode
 	typeParameter        *Type
 	constraintType       *Type
 	nameType             *Type
@@ -1256,7 +1256,7 @@ func (t *SubstitutionType) BaseType() *Type        { return t.baseType }
 func (t *SubstitutionType) SubstConstraint() *Type { return t.constraint }
 
 type ConditionalRoot struct {
-	node                *ast.ConditionalTypeNode
+	node                ast.ConditionalTypeNode
 	checkType           *Type
 	extendsType         *Type
 	isDistributive      bool
@@ -1314,7 +1314,7 @@ type Signature struct {
 	flags                    SignatureFlags
 	minArgumentCount         int32
 	resolvedMinArgumentCount int32
-	declaration              *ast.Node
+	declaration              ast.Node
 	typeParameters           []*Type
 	parameters               []*ast.Symbol
 	thisParameter            *ast.Symbol
@@ -1338,7 +1338,7 @@ func (s *Signature) TypeParameters() []*Type {
 	return s.typeParameters
 }
 
-func (s *Signature) Declaration() *ast.Node {
+func (s *Signature) Declaration() ast.Node {
 	return s.declaration
 }
 
@@ -1405,9 +1405,9 @@ type IndexInfo struct {
 	keyType     *Type
 	valueType   *Type
 	isReadonly  bool
-	declaration *ast.Node   // IndexSignatureDeclaration
+	declaration ast.Node    // IndexSignatureDeclaration
 	indexSymbol *ast.Symbol // Synthetic property symbol for this index signature
-	components  []*ast.Node // ElementWithComputedPropertyName
+	components  []ast.Node  // ElementWithComputedPropertyName
 }
 
 func (info *IndexInfo) KeyType() *Type {
@@ -1422,7 +1422,7 @@ func (info *IndexInfo) IsReadonly() bool {
 	return info.isReadonly
 }
 
-func (info *IndexInfo) Declaration() *ast.Node {
+func (info *IndexInfo) Declaration() ast.Node {
 	return info.declaration
 }
 

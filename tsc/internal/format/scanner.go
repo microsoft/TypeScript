@@ -96,8 +96,8 @@ func (s *formattingScanner) advance() {
 	s.savedPos = s.s.TokenFullStart()
 }
 
-func shouldRescanGreaterThanToken(node *ast.Node) bool {
-	switch node.Kind {
+func shouldRescanGreaterThanToken(node ast.Node) bool {
+	switch node.Kind() {
 	case ast.KindGreaterThanEqualsToken,
 		ast.KindGreaterThanGreaterThanEqualsToken,
 		ast.KindGreaterThanGreaterThanGreaterThanEqualsToken,
@@ -108,40 +108,40 @@ func shouldRescanGreaterThanToken(node *ast.Node) bool {
 	return false
 }
 
-func shouldRescanJsxIdentifier(node *ast.Node) bool {
-	if node.Parent != nil {
-		switch node.Parent.Kind {
+func shouldRescanJsxIdentifier(node ast.Node) bool {
+	if !node.Parent().IsNil() {
+		switch node.Parent().Kind() {
 		case ast.KindJsxAttribute,
 			ast.KindJsxOpeningElement,
 			ast.KindJsxClosingElement,
 			ast.KindJsxSelfClosingElement,
 			ast.KindJsxNamespacedName:
 			// May parse an identifier like `module-layout`; that will be scanned as a keyword at first, but we should parse the whole thing to get an identifier.
-			return ast.IsKeywordKind(node.Kind) || node.Kind == ast.KindIdentifier
+			return ast.IsKeywordKind(node.Kind()) || node.Kind() == ast.KindIdentifier
 		case ast.KindPropertyAccessExpression:
 			// The leftmost name of a dotted JSX tag name (e.g. `a-b` in `<a-b.c>`) may contain hyphens, so rescan it as a JSX identifier.
-			return (ast.IsKeywordKind(node.Kind) || node.Kind == ast.KindIdentifier) && isLeftmostJsxTagName(node)
+			return (ast.IsKeywordKind(node.Kind()) || node.Kind() == ast.KindIdentifier) && isLeftmostJsxTagName(node)
 		}
 	}
 	return false
 }
 
-func isLeftmostJsxTagName(node *ast.Node) bool {
-	return ast.FindAncestorOrQuit(node, func(n *ast.Node) ast.FindAncestorResult {
+func isLeftmostJsxTagName(node ast.Node) bool {
+	return !ast.FindAncestorOrQuit(node, func(n ast.Node) ast.FindAncestorResult {
 		switch {
-		case n.Parent == nil:
+		case n.Parent().IsNil():
 			return ast.FindAncestorQuit
 		case ast.IsJsxTagName(n):
 			return ast.FindAncestorTrue
-		case ast.IsPropertyAccessExpression(n.Parent) && n.Parent.Expression() == n:
+		case ast.IsPropertyAccessExpression(n.Parent()) && n.Parent().Expression() == n:
 			return ast.FindAncestorFalse
 		default:
 			return ast.FindAncestorQuit
 		}
-	}) != nil
+	}).IsNil()
 }
 
-func (s *formattingScanner) shouldRescanJsxText(node *ast.Node) bool {
+func (s *formattingScanner) shouldRescanJsxText(node ast.Node) bool {
 	if ast.IsJsxText(node) {
 		return true
 	}
@@ -152,17 +152,17 @@ func (s *formattingScanner) shouldRescanJsxText(node *ast.Node) bool {
 	return s.lastTokenInfo.token.Kind == ast.KindJsxText
 }
 
-func shouldRescanSlashToken(container *ast.Node) bool {
-	return container.Kind == ast.KindRegularExpressionLiteral
+func shouldRescanSlashToken(container ast.Node) bool {
+	return container.Kind() == ast.KindRegularExpressionLiteral
 }
 
-func shouldRescanTemplateToken(container *ast.Node) bool {
-	return container.Kind == ast.KindTemplateMiddle ||
-		container.Kind == ast.KindTemplateTail
+func shouldRescanTemplateToken(container ast.Node) bool {
+	return container.Kind() == ast.KindTemplateMiddle ||
+		container.Kind() == ast.KindTemplateTail
 }
 
-func shouldRescanJsxAttributeValue(node *ast.Node) bool {
-	return node.Parent != nil && ast.IsJsxAttribute(node.Parent) && node.Parent.Initializer() == node
+func shouldRescanJsxAttributeValue(node ast.Node) bool {
+	return !node.Parent().IsNil() && ast.IsJsxAttribute(node.Parent()) && node.Parent().Initializer() == node
 }
 
 func startsWithSlashToken(t ast.Kind) bool {
@@ -181,14 +181,14 @@ const (
 	actionRescanJsxAttributeValue
 )
 
-func fixTokenKind(tokenInfo tokenInfo, container *ast.Node) tokenInfo {
-	if ast.IsTokenKind(container.Kind) && tokenInfo.token.Kind != container.Kind {
-		tokenInfo.token.Kind = container.Kind
+func fixTokenKind(tokenInfo tokenInfo, container ast.Node) tokenInfo {
+	if ast.IsTokenKind(container.Kind()) && tokenInfo.token.Kind != container.Kind() {
+		tokenInfo.token.Kind = container.Kind()
 	}
 	return tokenInfo
 }
 
-func (s *formattingScanner) readTokenInfo(n *ast.Node) tokenInfo {
+func (s *formattingScanner) readTokenInfo(n ast.Node) tokenInfo {
 	debug.Assert(s.isOnToken())
 
 	// normally scanner returns the smallest available token
@@ -269,7 +269,7 @@ func (s *formattingScanner) readTokenInfo(n *ast.Node) tokenInfo {
 	return s.lastTokenInfo
 }
 
-func (s *formattingScanner) getNextToken(n *ast.Node, expectedScanAction scanAction) ast.Kind {
+func (s *formattingScanner) getNextToken(n ast.Node, expectedScanAction scanAction) ast.Kind {
 	token := s.s.Token()
 	s.lastScanAction = actionScan
 	switch expectedScanAction {
@@ -277,14 +277,14 @@ func (s *formattingScanner) getNextToken(n *ast.Node, expectedScanAction scanAct
 		if token == ast.KindGreaterThanToken {
 			s.lastScanAction = actionRescanGreaterThanToken
 			newToken := s.s.ReScanGreaterThanToken()
-			debug.Assert(n.Kind == newToken)
+			debug.Assert(n.Kind() == newToken)
 			return newToken
 		}
 	case actionRescanSlashToken:
 		if startsWithSlashToken(token) {
 			s.lastScanAction = actionRescanSlashToken
 			newToken := s.s.ReScanSlashToken()
-			debug.Assert(n.Kind == newToken)
+			debug.Assert(n.Kind() == newToken)
 			return newToken
 		}
 	case actionRescanTemplateToken:

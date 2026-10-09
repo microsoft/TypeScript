@@ -250,9 +250,9 @@ func (a *tracedTypeAdapter) ReferenceTypeArguments() []tracing.TracedType {
 	return wrapTypes(a.t.AsTypeReference().resolvedTypeArguments)
 }
 
-func (a *tracedTypeAdapter) ReferenceNode() *ast.Node {
+func (a *tracedTypeAdapter) ReferenceNode() ast.Node {
 	if a.t.flags&TypeFlagsObject == 0 || a.t.objectFlags&ObjectFlagsReference == 0 {
-		return nil
+		return ast.Node{}
 	}
 	return a.t.AsTypeReference().node
 }
@@ -316,9 +316,9 @@ func (a *tracedTypeAdapter) IsTuple() bool {
 	return a.t.objectFlags&ObjectFlagsTuple != 0
 }
 
-func (a *tracedTypeAdapter) Pattern() *ast.Node {
+func (a *tracedTypeAdapter) Pattern() ast.Node {
 	if a.checker == nil {
-		return nil
+		return ast.Node{}
 	}
 	return a.checker.patternForType[a.t]
 }

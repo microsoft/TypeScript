@@ -11,9 +11,9 @@ import (
 type FormattingContext struct {
 	currentTokenSpan   TextRangeWithKind
 	nextTokenSpan      TextRangeWithKind
-	contextNode        *ast.Node
-	currentTokenParent *ast.Node
-	nextTokenParent    *ast.Node
+	contextNode        ast.Node
+	currentTokenParent ast.Node
+	nextTokenParent    ast.Node
 
 	contextNodeAllOnSameLine    core.Tristate
 	nextNodeAllOnSameLine       core.Tristate
@@ -35,14 +35,14 @@ func NewFormattingContext(file *ast.SourceFile, kind FormatRequestKind, options 
 	return res
 }
 
-func (this *FormattingContext) UpdateContext(cur TextRangeWithKind, curParent *ast.Node, next TextRangeWithKind, nextParent *ast.Node, commonParent *ast.Node) {
-	if curParent == nil {
+func (this *FormattingContext) UpdateContext(cur TextRangeWithKind, curParent ast.Node, next TextRangeWithKind, nextParent ast.Node, commonParent ast.Node) {
+	if curParent.IsNil() {
 		panic("nil current range node parent in update context")
 	}
-	if nextParent == nil {
+	if nextParent.IsNil() {
 		panic("nil next range node parent in update context")
 	}
-	if commonParent == nil {
+	if commonParent.IsNil() {
 		panic("nil common parent node in update context")
 	}
 	this.currentTokenSpan = cur
@@ -66,19 +66,19 @@ func (this *FormattingContext) rangeIsOnOneLine(node core.TextRange) core.Trista
 	return core.TSFalse
 }
 
-func (this *FormattingContext) nodeIsOnOneLine(node *ast.Node) core.Tristate {
+func (this *FormattingContext) nodeIsOnOneLine(node ast.Node) core.Tristate {
 	return this.rangeIsOnOneLine(withTokenStart(node, this.SourceFile))
 }
 
-func withTokenStart(loc *ast.Node, file *ast.SourceFile) core.TextRange {
+func withTokenStart(loc ast.Node, file *ast.SourceFile) core.TextRange {
 	startPos := scanner.GetTokenPosOfNode(loc, file, false)
 	return core.NewTextRange(startPos, loc.End())
 }
 
-func (this *FormattingContext) blockIsOnOneLine(node *ast.Node) core.Tristate {
+func (this *FormattingContext) blockIsOnOneLine(node ast.Node) core.Tristate {
 	openBrace := astnav.FindChildOfKind(node, ast.KindOpenBraceToken, this.SourceFile)
 	closeBrace := astnav.FindChildOfKind(node, ast.KindCloseBraceToken, this.SourceFile)
-	if openBrace != nil && closeBrace != nil {
+	if !openBrace.IsNil() && !closeBrace.IsNil() {
 		closeBraceStart := scanner.GetTokenPosOfNode(closeBrace, this.SourceFile, false)
 		return this.rangeIsOnOneLine(core.NewTextRange(openBrace.End(), closeBraceStart))
 	}

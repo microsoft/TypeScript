@@ -13,21 +13,21 @@ func collectExternalModuleReferences(file *ast.SourceFile) {
 		collectModuleReferences(file, node, false /*inAmbientModule*/)
 	}
 
-	if file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0 || ast.IsInJSFile(file.AsNode()) {
-		ast.ForEachDynamicImportOrRequireCall(file /*includeTypeSpaceImports*/, true /*requireStringLiteralLikeArgument*/, true, func(node *ast.Node, moduleSpecifier *ast.Expression) bool {
+	if file.Flags()&ast.NodeFlagsPossiblyContainsDynamicImport != 0 || ast.IsInJSFile(file.AsNode()) {
+		ast.ForEachDynamicImportOrRequireCall(file /*includeTypeSpaceImports*/, true /*requireStringLiteralLikeArgument*/, true, func(node ast.Node, moduleSpecifier ast.Expression) bool {
 			ast.SetImportsOfSourceFile(file, append(file.Imports(), moduleSpecifier))
 			return false
 		})
 	}
 }
 
-func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbientModule bool) {
+func collectModuleReferences(file *ast.SourceFile, node ast.Statement, inAmbientModule bool) {
 	if ast.IsAnyImportOrReExport(node) {
 		moduleNameExpr := ast.GetExternalModuleName(node)
 		// TypeScript 1.0 spec (April 2014): 12.1.6
 		// An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules
 		// only through top - level external module names. Relative external module names are not permitted.
-		if moduleNameExpr != nil && ast.IsStringLiteral(moduleNameExpr) {
+		if !moduleNameExpr.IsNil() && ast.IsStringLiteral(moduleNameExpr) {
 			moduleName := moduleNameExpr.Text()
 			if moduleName != "" && (!inAmbientModule || !tspath.IsExternalModuleNameRelative(moduleName)) {
 				ast.SetImportsOfSourceFile(file, append(file.Imports(), moduleNameExpr))
@@ -61,7 +61,7 @@ func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbien
 			// The StringLiteral must specify a top - level external module name.
 			// Relative external module names are not permitted
 			// NOTE: body of ambient module is always a module block, if it exists
-			if node.Body() != nil {
+			if !node.Body().IsNil() {
 				for _, statement := range node.Body().Statements() {
 					collectModuleReferences(file, statement, true /*inAmbientModule*/)
 				}

@@ -415,8 +415,8 @@ func OrElse[T comparable](value T, defaultValue T) T {
 
 // Returns `a` if `a` is not `nil`; Otherwise, returns `b`. Coalesce is roughly analogous to `??` in JS, except that it
 // non-shortcutting, so it is advised to only use a constant or precomputed value for `b`
-func Coalesce[T *U, U any](a T, b T) T {
-	if a == nil {
+func Coalesce[T comparable](a T, b T) T {
+	if a == *new(T) {
 		return b
 	} else {
 		return a
@@ -702,9 +702,9 @@ func Identity[T any](t T) T {
 	return t
 }
 
-func CheckEachDefined[S any](s []*S, msg string) []*S {
+func CheckEachDefined[S comparable](s []S, msg string) []S {
 	for _, value := range s {
-		if value == nil {
+		if value == *new(S) {
 			panic(msg)
 		}
 	}
@@ -724,11 +724,11 @@ func ShouldRewriteModuleSpecifier(specifier string, compilerOptions *CompilerOpt
 	return compilerOptions.RewriteRelativeImportExtensions.IsTrue() && tspath.PathIsRelative(specifier) && !tspath.IsDeclarationFileName(specifier) && tspath.HasTSFileExtension(specifier)
 }
 
-func SingleElementSlice[T any](element *T) []*T {
-	if element == nil {
+func SingleElementSlice[T comparable](element T) []T {
+	if element == *new(T) {
 		return nil
 	}
-	return []*T{element}
+	return []T{element}
 }
 
 func ConcatenateSeq[T any](seqs ...iter.Seq[T]) iter.Seq[T] {

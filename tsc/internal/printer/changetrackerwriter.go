@@ -38,13 +38,13 @@ func NewChangeTrackerWriter(newline string, indentSize int) *ChangeTrackerWriter
 
 func (ct *ChangeTrackerWriter) GetPrintHandlers() PrintHandlers {
 	return PrintHandlers{
-		OnBeforeEmitNode: func(nodeOpt *ast.Node) {
-			if nodeOpt != nil {
+		OnBeforeEmitNode: func(nodeOpt ast.Node) {
+			if !nodeOpt.IsNil() {
 				ct.setPos(nodeOpt)
 			}
 		},
-		OnAfterEmitNode: func(nodeOpt *ast.Node) {
-			if nodeOpt != nil {
+		OnAfterEmitNode: func(nodeOpt ast.Node) {
+			if !nodeOpt.IsNil() {
 				ct.setEnd(nodeOpt)
 			}
 		},
@@ -58,13 +58,13 @@ func (ct *ChangeTrackerWriter) GetPrintHandlers() PrintHandlers {
 				ct.setEnd(nodesOpt)
 			}
 		},
-		OnBeforeEmitToken: func(nodeOpt *ast.TokenNode) {
-			if nodeOpt != nil {
+		OnBeforeEmitToken: func(nodeOpt ast.TokenNode) {
+			if !nodeOpt.IsNil() {
 				ct.setPos(nodeOpt)
 			}
 		},
-		OnAfterEmitToken: func(nodeOpt *ast.TokenNode) {
-			if nodeOpt != nil {
+		OnAfterEmitToken: func(nodeOpt ast.TokenNode) {
+			if !nodeOpt.IsNil() {
 				ct.setEnd(nodeOpt)
 			}
 		},
@@ -104,10 +104,10 @@ func (ct *ChangeTrackerWriter) setLastNonTriviaPosition(s string, force bool) {
 	}
 }
 
-func (ct *ChangeTrackerWriter) AssignPositionsToNode(node *ast.Node, factory *ast.NodeFactory) *ast.Node {
+func (ct *ChangeTrackerWriter) AssignPositionsToNode(node ast.Node, factory *ast.NodeFactory) ast.Node {
 	var visitor *ast.NodeVisitor
 	visitor = &ast.NodeVisitor{
-		Visit:   func(n *ast.Node) *ast.Node { return ct.assignPositionsToNodeWorker(n, visitor) },
+		Visit:   func(n ast.Node) ast.Node { return ct.assignPositionsToNodeWorker(n, visitor) },
 		Factory: factory,
 		Hooks: ast.NodeVisitorHooks{
 			VisitNode:  ct.assignPositionsToNodeWorker,
@@ -128,10 +128,10 @@ func (ct *ChangeTrackerWriter) AssignPositionsToNode(node *ast.Node, factory *as
 }
 
 func (ct *ChangeTrackerWriter) assignPositionsToNodeWorker(
-	node *ast.Node,
+	node ast.Node,
 	v *ast.NodeVisitor,
-) *ast.Node {
-	if node == nil {
+) ast.Node {
+	if node.IsNil() {
 		return node
 	}
 	visited := node.VisitEachChild(v)
@@ -143,11 +143,11 @@ func (ct *ChangeTrackerWriter) assignPositionsToNodeWorker(
 	if visited == node {
 		newNode = visited.Clone(v.Factory)
 	}
-	newNode.ForEachChild(func(child *ast.Node) bool {
-		child.Parent = newNode
+	newNode.ForEachChild(func(child ast.Node) bool {
+		child.SetParent(newNode)
 		return true
 	})
-	newNode.Loc = core.NewTextRange(ct.getPos(node), ct.getEnd(node))
+	newNode.SetLoc(core.NewTextRange(ct.getPos(node), ct.getEnd(node)))
 	return newNode
 }
 

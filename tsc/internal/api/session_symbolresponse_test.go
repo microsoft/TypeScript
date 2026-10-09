@@ -62,7 +62,7 @@ func TestTransientSymbolWithFileDeclarationIsSnapshotOwned(t *testing.T) {
 	symbol := ast.NewSymbol()
 	symbol.SetFlags(ast.SymbolFlagsClass | ast.SymbolFlagsTransient)
 	symbol.SetName("C")
-	symbol.SetDeclarations([]*ast.Node{class})
+	symbol.SetDeclarations([]ast.Node{class})
 	sd := newTestSnapshotData()
 
 	response := sd.newSymbolResponse(symbol, "/tsconfig.json")

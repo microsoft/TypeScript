@@ -11,7 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
-func createDiagnosticForInvalidEnumType(opt *CommandLineOption, sourceFile *ast.SourceFile, node *ast.Node) *ast.Diagnostic {
+func createDiagnosticForInvalidEnumType(opt *CommandLineOption, sourceFile *ast.SourceFile, node ast.Node) *ast.Diagnostic {
 	namesOfType := slices.Collect(opt.EnumMap().Keys())
 	stringNames := formatEnumTypeKeys(opt, namesOfType)
 	optName := "--" + opt.Name
@@ -39,7 +39,7 @@ func getCompilerOptionValueTypeString(option *CommandLineOption) string {
 func (parser *commandLineParser) createUnknownOptionError(
 	unknownOption string,
 	unknownOptionErrorText string,
-	node *ast.Node,
+	node ast.Node,
 	sourceFile *ast.SourceFile,
 ) *ast.Diagnostic {
 	return createUnknownOptionError(
@@ -61,7 +61,7 @@ func createUnknownOptionError(
 	unknownOption string,
 	unknownOptionDiagnostic *diagnostics.Message,
 	unknownOptionErrorText string, // optional
-	node *ast.Node, // optional
+	node ast.Node, // optional
 	sourceFile *ast.SourceFile, // optional
 	alternateMode *AlternateModeDiagnostics, // optional
 	unknownDidYouMeanDiagnostic *diagnostics.Message, // optional; nil skips suggestion
@@ -89,12 +89,12 @@ func createUnknownOptionError(
 	return CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, unknownOptionDiagnostic, unknownOptionErrorText)
 }
 
-func CreateDiagnosticForNodeInSourceFile(sourceFile *ast.SourceFile, node *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
-	return ast.NewDiagnostic(sourceFile, core.NewTextRange(scanner.SkipTrivia(sourceFile.Text(), node.Loc.Pos()), node.End()), message, args...)
+func CreateDiagnosticForNodeInSourceFile(sourceFile *ast.SourceFile, node ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
+	return ast.NewDiagnostic(sourceFile, core.NewTextRange(scanner.SkipTrivia(sourceFile.Text(), node.Loc().Pos()), node.End()), message, args...)
 }
 
-func CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile *ast.SourceFile, node *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
-	if sourceFile != nil && node != nil {
+func CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile *ast.SourceFile, node ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
+	if sourceFile != nil && !node.IsNil() {
 		return CreateDiagnosticForNodeInSourceFile(sourceFile, node, message, args...)
 	}
 	return ast.NewCompilerDiagnostic(message, args...)

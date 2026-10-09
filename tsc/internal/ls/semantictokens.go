@@ -213,7 +213,7 @@ func semanticTokenLSPRange(token semanticToken, converters *lsconv.Converters) (
 }
 
 type semanticToken struct {
-	node          *ast.Node
+	node          ast.Node
 	file          *ast.SourceFile
 	tokenType     tokenType
 	tokenModifier tokenModifier
@@ -228,17 +228,17 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 
 	inJSXElement := false
 
-	var visit func(*ast.Node) bool
-	visit = func(node *ast.Node) bool {
+	var visit func(ast.Node) bool
+	visit = func(node ast.Node) bool {
 		// Check for cancellation
 		if ctx.Err() != nil {
 			return false
 		}
 
-		if node == nil {
+		if node.IsNil() {
 			return false
 		}
-		if node.Flags&ast.NodeFlagsReparsed != 0 {
+		if node.Flags()&ast.NodeFlagsReparsed != 0 {
 			return false
 		}
 		nodeEnd := node.End()
@@ -266,9 +266,9 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 					tokenModifier := tokenModifier(0)
 
 					// Check if this is a declaration
-					parent := node.Parent
-					if parent != nil {
-						parentIsDeclaration := ast.IsBindingElement(parent) || tokenFromDeclarationMapping(parent.Kind) == tokenType
+					parent := node.Parent()
+					if !parent.IsNil() {
+						parentIsDeclaration := ast.IsBindingElement(parent) || tokenFromDeclarationMapping(parent.Kind()) == tokenType
 						if parentIsDeclaration && parent.Name() == node {
 							tokenModifier |= tokenModifierDeclaration
 						}
@@ -283,7 +283,7 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 					tokenType = reclassifyByType(c, node, tokenType)
 
 					// Get the value declaration to check modifiers
-					if decl := symbol.ValueDeclaration(); decl != nil {
+					if decl := symbol.ValueDeclaration(); !decl.IsNil() {
 						modifiers := ast.GetCombinedModifierFlags(decl)
 						nodeFlags := ast.GetCombinedNodeFlags(decl)
 
@@ -361,14 +361,14 @@ func classifySymbol(symbol *ast.Symbol, meaning ast.SemanticMeaning) (tokenType,
 
 	// Check the value declaration
 	decl := symbol.ValueDeclaration()
-	if decl == nil && len(symbol.Declarations()) > 0 {
+	if decl.IsNil() && len(symbol.Declarations()) > 0 {
 		decl = symbol.Declarations()[0]
 	}
-	if decl != nil {
+	if !decl.IsNil() {
 		if ast.IsBindingElement(decl) {
 			decl = getDeclarationForBindingElement(decl)
 		}
-		if tokenType := tokenFromDeclarationMapping(decl.Kind); tokenType >= 0 {
+		if tokenType := tokenFromDeclarationMapping(decl.Kind()); tokenType >= 0 {
 			return tokenType, true
 		}
 	}
@@ -415,7 +415,7 @@ func tokenFromDeclarationMapping(kind ast.Kind) tokenType {
 	}
 }
 
-func reclassifyByType(c *checker.Checker, node *ast.Node, tt tokenType) tokenType {
+func reclassifyByType(c *checker.Checker, node ast.Node, tt tokenType) tokenType {
 	// Type-based reclassification for variables, properties, and parameters
 	if tt == tokenTypeVariable || tt == tokenTypeProperty || tt == tokenTypeParameter {
 		typ := c.GetTypeAtLocation(node)
@@ -461,57 +461,57 @@ func reclassifyByType(c *checker.Checker, node *ast.Node, tt tokenType) tokenTyp
 	return tt
 }
 
-func isLocalDeclaration(decl *ast.Node, sourceFile *ast.SourceFile) bool {
+func isLocalDeclaration(decl ast.Node, sourceFile *ast.SourceFile) bool {
 	if ast.IsBindingElement(decl) {
 		decl = getDeclarationForBindingElement(decl)
 	}
 	if ast.IsVariableDeclaration(decl) {
-		parent := decl.Parent
+		parent := decl.Parent()
 		// Check if this is a catch clause parameter
-		if parent != nil && ast.IsCatchClause(parent) {
+		if !parent.IsNil() && ast.IsCatchClause(parent) {
 			return ast.GetSourceFileOfNode(decl) == sourceFile
 		}
-		if parent != nil && ast.IsVariableDeclarationList(parent) {
-			grandparent := parent.Parent
-			if grandparent != nil {
-				greatGrandparent := grandparent.Parent
+		if !parent.IsNil() && ast.IsVariableDeclarationList(parent) {
+			grandparent := parent.Parent()
+			if !grandparent.IsNil() {
+				greatGrandparent := grandparent.Parent()
 				return (!ast.IsSourceFile(greatGrandparent) || ast.IsCatchClause(grandparent)) &&
 					ast.GetSourceFileOfNode(decl) == sourceFile
 			}
 		}
 	} else if ast.IsFunctionDeclaration(decl) {
-		parent := decl.Parent
-		return parent != nil && !ast.IsSourceFile(parent) && ast.GetSourceFileOfNode(decl) == sourceFile
+		parent := decl.Parent()
+		return !parent.IsNil() && !ast.IsSourceFile(parent) && ast.GetSourceFileOfNode(decl) == sourceFile
 	}
 	return false
 }
 
-func getDeclarationForBindingElement(element *ast.Node) *ast.Node {
+func getDeclarationForBindingElement(element ast.Node) ast.Node {
 	for {
-		parent := element.Parent
-		if parent != nil && ast.IsBindingPattern(parent) {
-			grandparent := parent.Parent
-			if grandparent != nil && ast.IsBindingElement(grandparent) {
+		parent := element.Parent()
+		if !parent.IsNil() && ast.IsBindingPattern(parent) {
+			grandparent := parent.Parent()
+			if !grandparent.IsNil() && ast.IsBindingElement(grandparent) {
 				element = grandparent
 				continue
 			}
-			return parent.Parent
+			return parent.Parent()
 		}
 		return element
 	}
 }
 
-func isInImportClause(node *ast.Node) bool {
-	parent := node.Parent
-	return parent != nil && (ast.IsImportClause(parent) || ast.IsImportSpecifier(parent) || ast.IsNamespaceImport(parent))
+func isInImportClause(node ast.Node) bool {
+	parent := node.Parent()
+	return !parent.IsNil() && (ast.IsImportClause(parent) || ast.IsImportSpecifier(parent) || ast.IsNamespaceImport(parent))
 }
 
-func isExpressionInCallExpression(node *ast.Node) bool {
+func isExpressionInCallExpression(node ast.Node) bool {
 	for ast.IsRightSideOfQualifiedNameOrPropertyAccess(node) {
-		node = node.Parent
+		node = node.Parent()
 	}
-	parent := node.Parent
-	return parent != nil && ast.IsCallExpression(parent) && parent.Expression() == node
+	parent := node.Parent()
+	return !parent.IsNil() && ast.IsCallExpression(parent) && parent.Expression() == node
 }
 
 func isInfinityOrNaNString(text string) bool {

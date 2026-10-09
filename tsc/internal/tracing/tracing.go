@@ -54,14 +54,14 @@ type TracedType interface {
 	SubstitutionConstraintType() TracedType
 	ReferenceTarget() TracedType
 	ReferenceTypeArguments() []TracedType
-	ReferenceNode() *ast.Node
+	ReferenceNode() ast.Node
 	ReverseMappedSourceType() TracedType
 	ReverseMappedMappedType() TracedType
 	ReverseMappedConstraintType() TracedType
 	EvolvingArrayElementType() TracedType
 	EvolvingArrayFinalType() TracedType
 	IsTuple() bool
-	Pattern() *ast.Node
+	Pattern() ast.Node
 	RecursionIdentity() any
 
 	// Display is an optional string representation of the type
@@ -678,7 +678,7 @@ func (t *typeTracer) buildTypeDescriptor(typ TracedType, recursionIdentityMap ma
 	if args := typ.ReferenceTypeArguments(); len(args) > 0 {
 		desc.TypeArguments = mapTypeIds(args)
 	}
-	if node := typ.ReferenceNode(); node != nil {
+	if node := typ.ReferenceNode(); !node.IsNil() {
 		desc.ReferenceLocation = getLocation(node)
 	}
 
@@ -702,7 +702,7 @@ func (t *typeTracer) buildTypeDescriptor(typ TracedType, recursionIdentityMap ma
 	}
 
 	// Pattern (destructuring)
-	if pattern := typ.Pattern(); pattern != nil {
+	if pattern := typ.Pattern(); !pattern.IsNil() {
 		desc.DestructuringPattern = getLocation(pattern)
 	}
 
@@ -736,8 +736,8 @@ func mapTypeIds(types []TracedType) []uint32 {
 	return ids
 }
 
-func getLocation(node *ast.Node) *Location {
-	if node == nil {
+func getLocation(node ast.Node) *Location {
+	if node.IsNil() {
 		return nil
 	}
 	file := ast.GetSourceFileOfNode(node)

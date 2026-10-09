@@ -15,9 +15,9 @@ import (
 )
 
 // FilterImportDeclarations filters out non-import declarations from a list of statements.
-func FilterImportDeclarations(statements []*ast.Statement) []*ast.Statement {
-	return core.Filter(statements, func(stmt *ast.Statement) bool {
-		return stmt.Kind == ast.KindImportDeclaration
+func FilterImportDeclarations(statements []ast.Statement) []ast.Statement {
+	return core.Filter(statements, func(stmt ast.Statement) bool {
+		return stmt.Kind() == ast.KindImportDeclaration
 	})
 }
 
@@ -268,43 +268,43 @@ func getOrganizeImportsStringComparer(preferences UserPreferences, ignoreCase bo
 	return getOrganizeImportsOrdinalStringComparer(ignoreCase)
 }
 
-func getModuleSpecifierExpression(declaration *ast.Statement) *ast.Expression {
-	switch declaration.Kind {
+func getModuleSpecifierExpression(declaration ast.Statement) ast.Expression {
+	switch declaration.Kind() {
 	case ast.KindImportEqualsDeclaration:
 		importEquals := declaration.AsImportEqualsDeclaration()
-		if importEquals.ModuleReference.Kind == ast.KindExternalModuleReference {
-			return importEquals.ModuleReference.Expression()
+		if importEquals.ModuleReference().Kind() == ast.KindExternalModuleReference {
+			return importEquals.ModuleReference().Expression()
 		}
-		return nil
+		return ast.Node{}
 	case ast.KindImportDeclaration:
 		return declaration.ModuleSpecifier()
 	case ast.KindVariableStatement:
-		declarations := declaration.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes
+		declarations := declaration.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes
 		if len(declarations) > 0 {
 			initializer := declarations[0].Initializer()
-			if initializer != nil && initializer.Kind == ast.KindCallExpression {
+			if !initializer.IsNil() && initializer.Kind() == ast.KindCallExpression {
 				callExpr := initializer.AsCallExpression()
-				if len(callExpr.Arguments.Nodes) > 0 {
-					return callExpr.Arguments.Nodes[0]
+				if len(callExpr.Arguments().Nodes) > 0 {
+					return callExpr.Arguments().Nodes[0]
 				}
 			}
 		}
-		return nil
+		return ast.Node{}
 	default:
-		return nil
+		return ast.Node{}
 	}
 }
 
 // GetExternalModuleName returns the module name from a module specifier expression.
-func GetExternalModuleName(specifier *ast.Expression) string {
-	if specifier != nil && ast.IsStringLiteralLike(specifier.AsNode()) {
+func GetExternalModuleName(specifier ast.Expression) string {
+	if !specifier.IsNil() && ast.IsStringLiteralLike(specifier.AsNode()) {
 		return specifier.Text()
 	}
 	return ""
 }
 
 // CompareModuleSpecifiers compares two module specifiers using the given comparer.
-func CompareModuleSpecifiers(m1 *ast.Expression, m2 *ast.Expression, comparer func(a, b string) int) int {
+func CompareModuleSpecifiers(m1 ast.Expression, m2 ast.Expression, comparer func(a, b string) int) int {
 	name1 := GetExternalModuleName(m1)
 	name2 := GetExternalModuleName(m2)
 	if cmp := core.CompareBooleans(name1 == "", name2 == ""); cmp != 0 {
@@ -316,7 +316,7 @@ func CompareModuleSpecifiers(m1 *ast.Expression, m2 *ast.Expression, comparer fu
 	return comparer(name1, name2)
 }
 
-func compareImportKind(s1 *ast.Statement, s2 *ast.Statement) int {
+func compareImportKind(s1 ast.Statement, s2 ast.Statement) int {
 	return cmp.Compare(getImportKindOrder(s1), getImportKindOrder(s2))
 }
 
@@ -339,21 +339,21 @@ const (
 	importKindOrderUnknown      = 7
 )
 
-func getImportKindOrder(s1 *ast.Statement) int {
-	switch s1.Kind {
+func getImportKindOrder(s1 ast.Statement) int {
+	switch s1.Kind() {
 	case ast.KindImportDeclaration:
 		importDecl := s1.AsImportDeclaration()
-		if importDecl.ImportClause == nil {
+		if importDecl.ImportClause().IsNil() {
 			return importKindOrderSideEffect
 		}
-		importClause := importDecl.ImportClause.AsImportClause()
+		importClause := importDecl.ImportClause().AsImportClause()
 		if importClause.IsTypeOnly() {
 			return importKindOrderTypeOnly
 		}
-		if importClause.NamedBindings != nil && importClause.NamedBindings.Kind == ast.KindNamespaceImport {
+		if !importClause.NamedBindings().IsNil() && importClause.NamedBindings().Kind() == ast.KindNamespaceImport {
 			return importKindOrderNamespace
 		}
-		if importClause.Name() != nil {
+		if !importClause.Name().IsNil() {
 			return importKindOrderDefault
 		}
 		return importKindOrderNamed
@@ -367,14 +367,14 @@ func getImportKindOrder(s1 *ast.Statement) int {
 }
 
 // CompareImportsOrRequireStatements compares two import or require statements.
-func CompareImportsOrRequireStatements(s1 *ast.Statement, s2 *ast.Statement, comparer func(a, b string) int) int {
+func CompareImportsOrRequireStatements(s1 ast.Statement, s2 ast.Statement, comparer func(a, b string) int) int {
 	if cmp := CompareModuleSpecifiers(getModuleSpecifierExpression(s1), getModuleSpecifierExpression(s2), comparer); cmp != 0 {
 		return cmp
 	}
 	return compareImportKind(s1, s2)
 }
 
-func compareImportOrExportSpecifiers(s1 *ast.Node, s2 *ast.Node, comparer func(a, b string) int, preferences UserPreferences) int {
+func compareImportOrExportSpecifiers(s1 ast.Node, s2 ast.Node, comparer func(a, b string) int, preferences UserPreferences) int {
 	typeOrder := preferences.OrganizeImportsTypeOrder
 
 	s1Name := s1.Name().Text()
@@ -397,7 +397,7 @@ func compareImportOrExportSpecifiers(s1 *ast.Node, s2 *ast.Node, comparer func(a
 }
 
 // GetNamedImportSpecifierComparer returns a comparer function for sorting import specifiers.
-func GetNamedImportSpecifierComparer(preferences UserPreferences, comparer func(a, b string) int) func(s1, s2 *ast.Node) int {
+func GetNamedImportSpecifierComparer(preferences UserPreferences, comparer func(a, b string) int) func(s1, s2 ast.Node) int {
 	if comparer == nil {
 		ignoreCase := false
 		if !preferences.OrganizeImportsIgnoreCase.IsUnknown() {
@@ -405,28 +405,28 @@ func GetNamedImportSpecifierComparer(preferences UserPreferences, comparer func(
 		}
 		comparer = getOrganizeImportsStringComparer(preferences, ignoreCase)
 	}
-	return func(s1, s2 *ast.Node) int {
+	return func(s1, s2 ast.Node) int {
 		return compareImportOrExportSpecifiers(s1, s2, comparer, preferences)
 	}
 }
 
 // GetImportSpecifierInsertionIndex returns the index at which to insert a new import specifier.
-func GetImportSpecifierInsertionIndex(sortedImports []*ast.Node, newImport *ast.Node, comparer func(s1, s2 *ast.Node) int) int {
-	return core.FirstResult(core.BinarySearchUniqueFunc(sortedImports, func(mid int, value *ast.Node) int {
+func GetImportSpecifierInsertionIndex(sortedImports []ast.Node, newImport ast.Node, comparer func(s1, s2 ast.Node) int) int {
+	return core.FirstResult(core.BinarySearchUniqueFunc(sortedImports, func(mid int, value ast.Node) int {
 		return comparer(value, newImport)
 	}))
 }
 
 // GetImportDeclarationInsertIndex returns the index at which to insert a new import declaration.
-func GetImportDeclarationInsertIndex(sortedImports []*ast.Statement, newImport *ast.Statement, comparer func(a, b *ast.Statement) int) int {
-	return core.FirstResult(core.BinarySearchUniqueFunc(sortedImports, func(mid int, value *ast.Statement) int {
+func GetImportDeclarationInsertIndex(sortedImports []ast.Statement, newImport ast.Statement, comparer func(a, b ast.Statement) int) int {
+	return core.FirstResult(core.BinarySearchUniqueFunc(sortedImports, func(mid int, value ast.Statement) int {
 		return comparer(value, newImport)
 	}))
 }
 
 // GetOrganizeImportsStringComparerWithDetection returns a string comparer based on detecting the order of import statements by the module specifier
-func GetOrganizeImportsStringComparerWithDetection(originalImportDecls []*ast.Statement, preferences UserPreferences) (comparer func(a, b string) int, isSorted bool) {
-	result, sorted := DetectModuleSpecifierCaseBySort([][]*ast.Statement{originalImportDecls}, getComparers(preferences))
+func GetOrganizeImportsStringComparerWithDetection(originalImportDecls []ast.Statement, preferences UserPreferences) (comparer func(a, b string) int, isSorted bool) {
+	result, sorted := DetectModuleSpecifierCaseBySort([][]ast.Statement{originalImportDecls}, getComparers(preferences))
 	return result, sorted
 }
 
@@ -452,7 +452,7 @@ type namedImportSortResult struct {
 
 // DetectNamedImportOrganizationBySort detects the order of named imports throughout the file by considering the named imports in each statement as a group
 func DetectNamedImportOrganizationBySort(
-	originalGroups []*ast.Statement,
+	originalGroups []ast.Statement,
 	comparersToTest []func(a, b string) int,
 	typesToTest []OrganizeImportsTypeOrder,
 ) (comparer func(a, b string) int, typeOrder OrganizeImportsTypeOrder, found bool) {
@@ -464,30 +464,30 @@ func DetectNamedImportOrganizationBySort(
 }
 
 func detectNamedImportOrganizationBySort(
-	originalGroups []*ast.Statement,
+	originalGroups []ast.Statement,
 	comparersToTest []func(a, b string) int,
 	typesToTest []OrganizeImportsTypeOrder,
 ) *namedImportSortResult {
 	var bothNamedImports bool
-	var importDeclsWithNamed []*ast.Statement
+	var importDeclsWithNamed []ast.Statement
 
 	for _, imp := range originalGroups {
-		if imp.AsImportDeclaration().ImportClause == nil {
+		if imp.AsImportDeclaration().ImportClause().IsNil() {
 			continue
 		}
-		clause := imp.AsImportDeclaration().ImportClause.AsImportClause()
-		if clause.NamedBindings == nil || clause.NamedBindings.Kind != ast.KindNamedImports {
+		clause := imp.AsImportDeclaration().ImportClause().AsImportClause()
+		if clause.NamedBindings().IsNil() || clause.NamedBindings().Kind() != ast.KindNamedImports {
 			continue
 		}
-		namedImports := clause.NamedBindings.AsNamedImports()
-		if len(namedImports.Elements.Nodes) == 0 {
+		namedImports := clause.NamedBindings().AsNamedImports()
+		if len(namedImports.Elements().Nodes) == 0 {
 			continue
 		}
 
 		if !bothNamedImports {
 			hasTypeOnly := false
 			hasRegular := false
-			for _, elem := range namedImports.Elements.Nodes {
+			for _, elem := range namedImports.Elements().Nodes {
 				if elem.IsTypeOnly() {
 					hasTypeOnly = true
 				} else {
@@ -506,11 +506,11 @@ func detectNamedImportOrganizationBySort(
 		return nil
 	}
 
-	namedImportsByDecl := make([][]*ast.Statement, 0, len(importDeclsWithNamed))
+	namedImportsByDecl := make([][]ast.Statement, 0, len(importDeclsWithNamed))
 	for _, imp := range importDeclsWithNamed {
-		clause := imp.AsImportDeclaration().ImportClause.AsImportClause()
-		namedImports := clause.NamedBindings.AsNamedImports()
-		namedImportsByDecl = append(namedImportsByDecl, namedImports.Elements.Nodes)
+		clause := imp.AsImportDeclaration().ImportClause().AsImportClause()
+		namedImports := clause.NamedBindings().AsNamedImports()
+		namedImportsByDecl = append(namedImportsByDecl, namedImports.Elements().Nodes)
 	}
 
 	if !bothNamedImports || len(typesToTest) == 0 {
@@ -555,7 +555,7 @@ func detectNamedImportOrganizationBySort(
 		for _, importDecl := range namedImportsByDecl {
 			for _, typeOrder := range typesToTest {
 				prefs := UserPreferences{OrganizeImportsTypeOrder: typeOrder}
-				diff := measureSortedness(importDecl, func(n1, n2 *ast.Node) int {
+				diff := measureSortedness(importDecl, func(n1, n2 ast.Node) int {
 					return compareImportOrExportSpecifiers(n1, n2, curComparer, prefs)
 				})
 				currDiff[typeOrder] = currDiff[typeOrder] + diff
@@ -600,12 +600,12 @@ type caseSensitivityDetectionResult struct {
 }
 
 // DetectModuleSpecifierCaseBySort detects the order of module specifiers based on import statements throughout the module/file
-func DetectModuleSpecifierCaseBySort(importDeclsByGroup [][]*ast.Statement, comparersToTest []func(a, b string) int) (comparer func(a, b string) int, isSorted bool) {
+func DetectModuleSpecifierCaseBySort(importDeclsByGroup [][]ast.Statement, comparersToTest []func(a, b string) int) (comparer func(a, b string) int, isSorted bool) {
 	moduleSpecifiersByGroup := make([][]string, 0, len(importDeclsByGroup))
 	for _, importGroup := range importDeclsByGroup {
 		moduleNames := make([]string, 0, len(importGroup))
 		for _, decl := range importGroup {
-			if expr := getModuleSpecifierExpression(decl); expr != nil {
+			if expr := getModuleSpecifierExpression(decl); !expr.IsNil() {
 				moduleNames = append(moduleNames, GetExternalModuleName(expr))
 			} else {
 				moduleNames = append(moduleNames, "")
@@ -659,19 +659,19 @@ func measureSortedness[T any](arr []T, comparer func(a, b T) int) int {
 }
 
 // GetNamedImportSpecifierComparerWithDetection returns a specifier comparer based on detecting the existing sort order within a single import statement
-func GetNamedImportSpecifierComparerWithDetection(importDecl *ast.Node, sourceFile *ast.SourceFile, preferences UserPreferences) (specifierComparer func(s1, s2 *ast.Node) int, isSorted core.Tristate) {
+func GetNamedImportSpecifierComparerWithDetection(importDecl ast.Node, sourceFile *ast.SourceFile, preferences UserPreferences) (specifierComparer func(s1, s2 ast.Node) int, isSorted core.Tristate) {
 	comparersToTest, typeOrdersToTest := GetDetectionLists(preferences)
 
-	var importStmt *ast.Statement
-	if importDecl.Kind == ast.KindImportDeclaration {
+	var importStmt ast.Statement
+	if importDecl.Kind() == ast.KindImportDeclaration {
 		importStmt = importDecl
 	}
 
 	specifierComparer = GetNamedImportSpecifierComparer(preferences, comparersToTest[0])
 	isSorted = core.TSUnknown
 
-	if (ResolveOrganizeImportsSort(preferences) == OrganizeImportsSortAuto || preferences.OrganizeImportsTypeOrder == OrganizeImportsTypeOrderAuto) && importStmt != nil {
-		detectFromDecl := detectNamedImportOrganizationBySort([]*ast.Statement{importStmt}, comparersToTest, typeOrdersToTest)
+	if (ResolveOrganizeImportsSort(preferences) == OrganizeImportsSortAuto || preferences.OrganizeImportsTypeOrder == OrganizeImportsTypeOrderAuto) && !importStmt.IsNil() {
+		detectFromDecl := detectNamedImportOrganizationBySort([]ast.Statement{importStmt}, comparersToTest, typeOrdersToTest)
 		if detectFromDecl != nil {
 			isSorted = core.BoolToTristate(detectFromDecl.isSorted)
 			specifierComparer = GetNamedImportSpecifierComparer(

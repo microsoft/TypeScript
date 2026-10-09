@@ -128,7 +128,7 @@ type processedFiles struct {
 	typeResolutionsInFile         map[tspath.PathKey]module.ModeAwareCache[*module.ResolvedTypeReferenceDirective]
 	sourceFileMetaDatas           map[tspath.PathKey]ast.SourceFileMetaData
 	jsxRuntimeImportSpecifiers    map[tspath.PathKey]*jsxRuntimeImportSpecifier
-	importHelpersImportSpecifiers map[tspath.PathKey]*ast.StringLiteralNode
+	importHelpersImportSpecifiers map[tspath.PathKey]ast.StringLiteralNode
 	libFiles                      map[tspath.PathKey]*LibFile
 	// List of present unsupported extensions
 	sourceFilesFoundSearchingNodeModules collections.Set[tspath.PathKey]
@@ -160,7 +160,7 @@ func (h *compilerResolutionHost) GetCurrentDirectory() tspath.RootedDirectoryPat
 
 type jsxRuntimeImportSpecifier struct {
 	moduleReference string
-	specifier       *ast.StringLiteralNode
+	specifier       ast.StringLiteralNode
 }
 
 func processAllProgramFiles(
@@ -825,7 +825,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 	file := t.file
 	meta := t.metadata
 
-	moduleNames := make([]*ast.Node, 0, len(file.Imports())+len(file.ModuleAugmentations)+2)
+	moduleNames := make([]ast.Node, 0, len(file.Imports())+len(file.ModuleAugmentations)+2)
 
 	isJavaScriptFile := ast.IsSourceFileJS(file)
 	isExternalModuleFile := ast.IsExternalModule(file)
@@ -856,7 +856,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 
 	moduleNames = append(moduleNames, file.Imports()...)
 	for _, imp := range file.ModuleAugmentations {
-		if imp.Kind == ast.KindStringLiteral {
+		if imp.Kind() == ast.KindStringLiteral {
 			moduleNames = append(moduleNames, imp)
 		}
 		// Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
@@ -872,7 +872,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 
 		for index, entry := range moduleNames {
 			moduleName := entry.Text()
-			if moduleName == "" || ast.IsSourcePhaseImport(entry.Parent) {
+			if moduleName == "" || ast.IsSourcePhaseImport(entry.Parent()) {
 				continue
 			}
 
@@ -914,7 +914,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 				module.GetResolutionDiagnostic(optionsForFile, resolvedModule, file) == nil &&
 				!optionsForFile.NoResolve.IsTrue() &&
 				!(isJsFile && !optionsForFile.GetAllowJS()) &&
-				(importIndex < 0 || (importIndex < len(file.Imports()) && (ast.IsInJSFile(file.Imports()[importIndex]) || file.Imports()[importIndex].Flags&ast.NodeFlagsJSDoc == 0)))
+				(importIndex < 0 || (importIndex < len(file.Imports()) && (ast.IsInJSFile(file.Imports()[importIndex]) || file.Imports()[importIndex].Flags()&ast.NodeFlagsJSDoc == 0)))
 
 			if shouldAddFile {
 				t.addSubTask(resolvedRef{
@@ -927,7 +927,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 						referencedFile: &referencedFileData{
 							file:      t.path,
 							index:     importIndex,
-							synthetic: core.IfElse(importIndex < 0, entry, nil),
+							synthetic: core.IfElse(importIndex < 0, entry, ast.Node{}),
 						},
 					},
 					packageId: resolvedModule.PackageId,
@@ -940,13 +940,13 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 	}
 }
 
-func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) *ast.StringLiteralNode {
+func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) ast.StringLiteralNode {
 	p.factoryMu.Lock()
 	defer p.factoryMu.Unlock()
 	externalHelpersModuleReference := p.factory.NewStringLiteral(text, ast.TokenFlagsNone)
-	importDecl := p.factory.NewImportDeclaration(nil, nil, externalHelpersModuleReference, nil)
-	externalHelpersModuleReference.Parent = importDecl
-	importDecl.Parent = file.AsNode()
+	importDecl := p.factory.NewImportDeclaration(nil, ast.Node{}, externalHelpersModuleReference, ast.Node{})
+	externalHelpersModuleReference.SetParent(importDecl)
+	importDecl.SetParent(file.AsNode())
 	return externalHelpersModuleReference
 }
 
@@ -1034,27 +1034,27 @@ func getDefaultResolutionModeForFile(fileName tspath.RootedFilePath, meta ast.So
 	}
 }
 
-func getModeForUsageLocation(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, usage *ast.StringLiteralLike, options *core.CompilerOptions) core.ResolutionMode {
-	if ast.IsImportDeclaration(usage.Parent) || usage.Parent.Kind == ast.KindJSImportDeclaration || ast.IsExportDeclaration(usage.Parent) || ast.IsJSDocImportTag(usage.Parent) {
-		isTypeOnly := ast.IsExclusivelyTypeOnlyImportOrExport(usage.Parent)
+func getModeForUsageLocation(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, usage ast.StringLiteralLike, options *core.CompilerOptions) core.ResolutionMode {
+	if ast.IsImportDeclaration(usage.Parent()) || usage.Parent().Kind() == ast.KindJSImportDeclaration || ast.IsExportDeclaration(usage.Parent()) || ast.IsJSDocImportTag(usage.Parent()) {
+		isTypeOnly := ast.IsExclusivelyTypeOnlyImportOrExport(usage.Parent())
 		if isTypeOnly {
 			var override core.ResolutionMode
 			var ok bool
-			switch usage.Parent.Kind {
+			switch usage.Parent().Kind() {
 			case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
-				override, ok = usage.Parent.AsImportDeclaration().Attributes.GetResolutionModeOverride(nil)
+				override, ok = usage.Parent().AsImportDeclaration().Attributes().GetResolutionModeOverride(nil)
 			case ast.KindExportDeclaration:
-				override, ok = usage.Parent.AsExportDeclaration().Attributes.GetResolutionModeOverride(nil)
+				override, ok = usage.Parent().AsExportDeclaration().Attributes().GetResolutionModeOverride(nil)
 			case ast.KindJSDocImportTag:
-				override, ok = usage.Parent.AsJSDocImportTag().Attributes.GetResolutionModeOverride(nil)
+				override, ok = usage.Parent().AsJSDocImportTag().Attributes().GetResolutionModeOverride(nil)
 			}
 			if ok {
 				return override
 			}
 		}
 	}
-	if ast.IsLiteralTypeNode(usage.Parent) && ast.IsImportTypeNode(usage.Parent.Parent) {
-		if override, ok := usage.Parent.Parent.AsImportTypeNode().Attributes.GetResolutionModeOverride(nil); ok {
+	if ast.IsLiteralTypeNode(usage.Parent()) && ast.IsImportTypeNode(usage.Parent().Parent()) {
+		if override, ok := usage.Parent().Parent().AsImportTypeNode().Attributes().GetResolutionModeOverride(nil); ok {
 			return override
 		}
 	}
@@ -1072,12 +1072,12 @@ func importSyntaxAffectsModuleResolution(options *core.CompilerOptions) bool {
 		options.GetResolvePackageJsonExports() || options.GetResolvePackageJsonImports()
 }
 
-func getEmitSyntaxForUsageLocationWorker(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, usage *ast.Node, options *core.CompilerOptions) core.ResolutionMode {
-	if ast.IsRequireCall(usage.Parent, false /*requireStringLiteralLikeArgument*/) || ast.IsExternalModuleReference(usage.Parent) && ast.IsImportEqualsDeclaration(usage.Parent.Parent) {
+func getEmitSyntaxForUsageLocationWorker(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, usage ast.Node, options *core.CompilerOptions) core.ResolutionMode {
+	if ast.IsRequireCall(usage.Parent(), false /*requireStringLiteralLikeArgument*/) || ast.IsExternalModuleReference(usage.Parent()) && ast.IsImportEqualsDeclaration(usage.Parent().Parent()) {
 		return core.ModuleKindCommonJS
 	}
 	fileEmitMode := ast.GetEmitModuleFormatOfFileWorker(fileName, options, meta)
-	if call := ast.WalkUpParenthesizedExpressions(usage.Parent); ast.IsImportCall(call) {
+	if call := ast.WalkUpParenthesizedExpressions(usage.Parent()); ast.IsImportCall(call) {
 		if ast.IsSourcePhaseImportCall(call) {
 			return core.ModuleKindESNext
 		}

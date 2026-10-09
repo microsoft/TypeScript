@@ -44,11 +44,11 @@ func newEmitHost(ctx context.Context, program *Program, file *ast.SourceFile) (*
 	}, done
 }
 
-func (host *emitHost) GetModeForUsageLocation(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) core.ResolutionMode {
+func (host *emitHost) GetModeForUsageLocation(file ast.HasFileName, moduleSpecifier ast.StringLiteralLike) core.ResolutionMode {
 	return host.program.GetModeForUsageLocation(file, moduleSpecifier)
 }
 
-func (host *emitHost) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
+func (host *emitHost) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier ast.StringLiteralLike) *module.ResolvedModule {
 	return host.program.GetResolvedModuleFromModuleSpecifier(file, moduleSpecifier)
 }
 

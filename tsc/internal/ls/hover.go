@@ -70,7 +70,7 @@ func (l *LanguageService) ProvideHover(ctx context.Context, params *lsproto.Hove
 			continue
 		}
 		rangeFile := ast.GetSourceFileOfNode(rangeNode)
-		textRange := getRangeOfNode(rangeNode, rangeFile, nil /*endNode*/)
+		textRange := getRangeOfNode(rangeNode, rangeFile, ast.Node{} /*endNode*/)
 		hoverRange, hoverFidelity := l.converters.ToLSPRangeForFeature(rangeFile, textRange, spanmap.FeatureHover)
 
 		var content string
@@ -171,7 +171,7 @@ func (l *LanguageService) ProvideHover(ctx context.Context, params *lsproto.Hove
 	return lsproto.HoverOrNull{Hover: combined}, nil
 }
 
-func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, vc *checker.VerbosityContext, vsCapability bool) (string, string, string, []*lsproto.VSClassifiedTextRun) {
+func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbol, node ast.Node, contentFormat lsproto.MarkupKind, vc *checker.VerbosityContext, vsCapability bool) (string, string, string, []*lsproto.VSClassifiedTextRun) {
 	info := getQuickInfoAndDeclarationAtLocation(c, symbol, node, vc, vsCapability, getMeaningFromLocation(node))
 	quickInfo := info.displayParts.String()
 	if quickInfo == "" {
@@ -209,7 +209,7 @@ func (l *LanguageService) documentationLocationMapper(feature spanmap.Feature) d
 // declaration JSDoc, root-symbol JSDoc, alias target JSDoc) and returns the first non-empty result,
 // formatted for contentFormat. commentOnly restricts the result to the JSDoc summary, excluding the
 // @tag section.
-func getDocumentationForSymbol(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, declaration *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+func getDocumentationForSymbol(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node ast.Node, declaration ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
 	documentation := documentationFromSignature(getMappedLocation, c, symbol, getCallOrNewExpression(node), node, contentFormat, commentOnly)
 	if documentation != "" {
 		return documentation
@@ -228,8 +228,8 @@ func getDocumentationForSymbol(getMappedLocation documentationLocationMapper, c 
 	return documentationFromAlias(getMappedLocation, c, symbol, node, contentFormat, commentOnly)
 }
 
-func documentationFromSignature(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
-	if node == nil {
+func documentationFromSignature(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node ast.Node, location ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+	if node.IsNil() {
 		return ""
 	}
 	signature := c.GetResolvedSignature(node)
@@ -237,7 +237,7 @@ func documentationFromSignature(getMappedLocation documentationLocationMapper, c
 		return ""
 	}
 	declaration := signature.Declaration()
-	if declaration == nil {
+	if declaration.IsNil() {
 		return ""
 	}
 	if ast.IsCallSignatureDeclaration(declaration) || ast.IsConstructSignatureDeclaration(declaration) {
@@ -246,7 +246,7 @@ func documentationFromSignature(getMappedLocation documentationLocationMapper, c
 	return ""
 }
 
-func documentationFromAlias(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+func documentationFromAlias(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
 	if symbol == nil || symbol.Flags()&ast.SymbolFlagsAlias == 0 {
 		return ""
 	}
@@ -263,7 +263,7 @@ func documentationFromAlias(getMappedLocation documentationLocationMapper, c *ch
 
 	for _, candidate := range candidates {
 		aliasedDeclaration := core.OrElse(candidate.ValueDeclaration(), core.FirstOrNil(candidate.Declarations()))
-		if aliasedDeclaration == nil {
+		if aliasedDeclaration.IsNil() {
 			continue
 		}
 
@@ -275,7 +275,7 @@ func documentationFromAlias(getMappedLocation documentationLocationMapper, c *ch
 	return ""
 }
 
-func documentationFromRootSymbols(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+func documentationFromRootSymbols(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
 	if symbol == nil {
 		return ""
 	}
@@ -291,8 +291,8 @@ func documentationFromRootSymbols(getMappedLocation documentationLocationMapper,
 			continue
 		}
 		declarations := rootSymbol.Declarations()
-		if len(declarations) == 0 && rootSymbol.ValueDeclaration() != nil {
-			declarations = []*ast.Node{rootSymbol.ValueDeclaration()}
+		if len(declarations) == 0 && !rootSymbol.ValueDeclaration().IsNil() {
+			declarations = []ast.Node{rootSymbol.ValueDeclaration()}
 		}
 		for _, declaration := range declarations {
 			if documentation := getDocumentationFromDeclaration(getMappedLocation, c, rootSymbol, declaration, node, contentFormat, commentOnly); documentation != "" {
@@ -303,18 +303,18 @@ func documentationFromRootSymbols(getMappedLocation documentationLocationMapper,
 	return strings.Join(docs, "\n")
 }
 
-func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, declaration *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
-	if declaration == nil {
+func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, declaration ast.Node, location ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+	if declaration.IsNil() {
 		return ""
 	}
 	isMarkdown := contentFormat == lsproto.MarkupKindMarkdown
 	var b strings.Builder
-	if jsdoc := getJSDocOrTag(c, declaration, &collections.Set[*ast.Symbol]{}); jsdoc != nil && !(declaration.Flags&ast.NodeFlagsReparsed == 0 && containsTypedefTag(jsdoc)) {
+	if jsdoc := getJSDocOrTag(c, declaration, &collections.Set[*ast.Symbol]{}); !jsdoc.IsNil() && !(declaration.Flags()&ast.NodeFlagsReparsed == 0 && containsTypedefTag(jsdoc)) {
 		writeComments(getMappedLocation, &b, c, jsdoc.Comments(), isMarkdown)
-		if jsdoc.Kind == ast.KindJSDoc && !commentOnly {
-			if tags := jsdoc.AsJSDoc().Tags; tags != nil {
+		if jsdoc.Kind() == ast.KindJSDoc && !commentOnly {
+			if tags := jsdoc.AsJSDoc().Tags(); tags != nil {
 				for _, tag := range tags.Nodes {
-					if tag.Kind == ast.KindJSDocTypeTag || tag.Kind == ast.KindJSDocTypedefTag || tag.Kind == ast.KindJSDocCallbackTag {
+					if tag.Kind() == ast.KindJSDocTypeTag || tag.Kind() == ast.KindJSDocTypedefTag || tag.Kind() == ast.KindJSDocCallbackTag {
 						continue
 					}
 					b.WriteString("\n\n")
@@ -326,7 +326,7 @@ func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapp
 						b.WriteString("@")
 						b.WriteString(tag.TagName().Text())
 					}
-					switch tag.Kind {
+					switch tag.Kind() {
 					case ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag:
 						writeOptionalEntityName(&b, tag.Name())
 					case ast.KindJSDocAugmentsTag:
@@ -340,7 +340,7 @@ func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapp
 						}
 					}
 					comments := tag.Comments()
-					if tag.Kind == ast.KindJSDocUnknownTag && tag.TagName().Text() == "example" {
+					if tag.Kind() == ast.KindJSDocUnknownTag && tag.TagName().Text() == "example" {
 						commentText := scanner.GetTextOfJSDocComment(tag.CommentList())
 						if strings.HasPrefix(commentText, "<caption>") {
 							if captionEnd := strings.Index(commentText, "</caption>"); captionEnd > 0 {
@@ -365,23 +365,23 @@ func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapp
 						} else {
 							writeCode(&b, "tsx", commentText)
 						}
-					} else if tag.Kind == ast.KindJSDocSeeTag && tag.AsJSDocSeeTag().NameExpression != nil {
+					} else if tag.Kind() == ast.KindJSDocSeeTag && !tag.AsJSDocSeeTag().NameExpression().IsNil() {
 						b.WriteString(" — ")
-						writeNameLink(getMappedLocation, &b, c, tag.AsJSDocSeeTag().NameExpression.Name(), "", false /*quote*/, isMarkdown)
+						writeNameLink(getMappedLocation, &b, c, tag.AsJSDocSeeTag().NameExpression().Name(), "", false /*quote*/, isMarkdown)
 						if len(comments) != 0 {
 							b.WriteString(" ")
 							writeComments(getMappedLocation, &b, c, comments, isMarkdown)
 						}
-					} else if tag.Kind == ast.KindJSDocThrowsTag && tag.AsJSDocThrowsTag().TypeExpression != nil {
+					} else if tag.Kind() == ast.KindJSDocThrowsTag && !tag.AsJSDocThrowsTag().TypeExpression().IsNil() {
 						b.WriteString(" — ")
-						b.WriteString(scanner.GetTextOfNode(tag.AsJSDocThrowsTag().TypeExpression))
+						b.WriteString(scanner.GetTextOfNode(tag.AsJSDocThrowsTag().TypeExpression()))
 						if len(comments) != 0 {
 							b.WriteString(" ")
 							writeComments(getMappedLocation, &b, c, comments, isMarkdown)
 						}
 					} else if len(comments) != 0 {
 						b.WriteString(" ")
-						if comments[0].Kind != ast.KindJSDocText || !strings.HasPrefix(comments[0].Text(), "-") {
+						if comments[0].Kind() != ast.KindJSDocText || !strings.HasPrefix(comments[0].Text(), "-") {
 							b.WriteString("— ")
 						}
 						writeComments(getMappedLocation, &b, c, comments, isMarkdown)
@@ -400,12 +400,12 @@ func formatQuickInfo(quickInfo string) string {
 	return b.String()
 }
 
-func shouldGetType(node *ast.Node) bool {
-	switch node.Kind {
+func shouldGetType(node ast.Node) bool {
+	switch node.Kind() {
 	case ast.KindIdentifier:
 		// If we're in a JSDoc node with no associated symbol, no binding has taken place for the node and
 		// we can't answer questions about types of declaration nodes (such as property declarations).
-		return !(node.Flags&ast.NodeFlagsJSDoc != 0 && ast.IsDeclarationName(node)) && !ast.IsLabelName(node) && !ast.IsTagName(node) && !ast.IsConstTypeReference(node.Parent)
+		return !(node.Flags()&ast.NodeFlagsJSDoc != 0 && ast.IsDeclarationName(node)) && !ast.IsLabelName(node) && !ast.IsTagName(node) && !ast.IsConstTypeReference(node.Parent())
 	case ast.KindThisKeyword, ast.KindThisType, ast.KindSuperKeyword, ast.KindNamedTupleMember:
 		return true
 	case ast.KindMetaProperty:
@@ -418,12 +418,12 @@ func shouldGetType(node *ast.Node) bool {
 // symbolDisplayInfo holds the result of getSymbolDisplayPartsDocumentationAndSymbolKind.
 type symbolDisplayInfo struct {
 	displayParts *displayPartsWriter
-	declaration  *ast.Node
+	declaration  ast.Node
 }
 
 // getQuickInfoAndDeclarationAtLocation builds classified display parts using displayPartsWriter when vsCapability is true.
 // When vsCapability is false, it still builds the plain text string but skips classification runs.
-func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, vc *checker.VerbosityContext, vsCapability bool, meaning ast.SemanticMeaning) symbolDisplayInfo {
+func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol, node ast.Node, vc *checker.VerbosityContext, vsCapability bool, meaning ast.SemanticMeaning) symbolDisplayInfo {
 	container := getContainerNode(node)
 	if vc == nil {
 		vc = &checker.VerbosityContext{}
@@ -432,7 +432,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 
 	// Source file for printer context
 	var sourceFile *ast.SourceFile
-	if node != nil {
+	if !node.IsNil() {
 		sourceFile = ast.GetSourceFileOfNode(node)
 	}
 
@@ -448,7 +448,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 
 	// writeTypeClassified writes a type to dpw with proper classification (punctuation, symbols, keywords).
 	// Falls back to flat text when vsCapability is false or when TypeToTypeNode fails.
-	writeTypeClassified := func(t *checker.Type, enclosing *ast.Node, flags checker.TypeFormatFlags) {
+	writeTypeClassified := func(t *checker.Type, enclosing ast.Node, flags checker.TypeFormatFlags) {
 		flags |= checker.TypeFormatFlagsMultilineObjectLiterals
 		if !vsCapability {
 			dpw.Write(c.TypeToStringEx(t, enclosing, flags, vc))
@@ -456,11 +456,11 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		}
 		emitContext := getEmitContext()
 		defer emitContext.Factory.ReleaseArenas()
-		idToSymbol := make(map[*ast.IdentifierNode]*ast.Symbol)
+		idToSymbol := make(map[ast.IdentifierNode]*ast.Symbol)
 		nb := checker.NewNodeBuilderEx(c, emitContext, idToSymbol)
 		combinedFlags := nodebuilder.Flags(flags&checker.TypeFormatFlagsNodeBuilderFlagsMask) | classifiedNodeBuilderFlags
 		typeNode := nb.TypeToTypeNode(t, enclosing, combinedFlags, nodebuilder.InternalFlagsNone, nil)
-		if typeNode == nil {
+		if typeNode.IsNil() {
 			dpw.Write(c.TypeToStringEx(t, enclosing, flags, vc))
 			return
 		}
@@ -472,7 +472,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 	}
 
 	// writeSignatureClassified writes a signature to dpw with proper classification.
-	writeSignatureClassified := func(sig *checker.Signature, enclosing *ast.Node, flags checker.TypeFormatFlags) {
+	writeSignatureClassified := func(sig *checker.Signature, enclosing ast.Node, flags checker.TypeFormatFlags) {
 		flags |= checker.TypeFormatFlagsMultilineObjectLiterals
 		if !vsCapability {
 			dpw.Write(c.SignatureToStringEx(sig, enclosing, flags, vc))
@@ -495,11 +495,11 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		}
 		emitContext := getEmitContext()
 		defer emitContext.Factory.ReleaseArenas()
-		idToSymbol := make(map[*ast.IdentifierNode]*ast.Symbol)
+		idToSymbol := make(map[ast.IdentifierNode]*ast.Symbol)
 		nb := checker.NewNodeBuilderEx(c, emitContext, idToSymbol)
 		combinedFlags := nodebuilder.Flags(flags&checker.TypeFormatFlagsNodeBuilderFlagsMask) | classifiedNodeBuilderFlags
 		sigNode := nb.SignatureToSignatureDeclaration(sig, sigOutput, enclosing, combinedFlags, nodebuilder.InternalFlagsNone, nil)
-		if sigNode == nil {
+		if sigNode.IsNil() {
 			dpw.Write(c.SignatureToStringEx(sig, enclosing, flags, vc))
 			return
 		}
@@ -511,7 +511,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 	}
 
 	// writeSymbolClassified writes a symbol name to dpw with proper classification based on symbol flags.
-	writeSymbolClassified := func(symbol *ast.Symbol, enclosing *ast.Node, meaning ast.SymbolFlags, flags checker.SymbolFormatFlags) {
+	writeSymbolClassified := func(symbol *ast.Symbol, enclosing ast.Node, meaning ast.SymbolFlags, flags checker.SymbolFormatFlags) {
 		if !vsCapability {
 			dpw.Write(c.SymbolToStringEx(symbol, enclosing, meaning, flags))
 			return
@@ -521,13 +521,13 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		dpw.WriteSymbol(text, symbol)
 	}
 	writeModuleImportAttributes := func(symbol *ast.Symbol) {
-		declaration := core.Find(symbol.Declarations(), func(declaration *ast.Node) bool {
-			return ast.IsModuleDeclaration(declaration) && declaration.AsModuleDeclaration().Attributes != nil
+		declaration := core.Find(symbol.Declarations(), func(declaration ast.Node) bool {
+			return ast.IsModuleDeclaration(declaration) && !declaration.AsModuleDeclaration().Attributes().IsNil()
 		})
-		if declaration == nil {
+		if declaration.IsNil() {
 			return
 		}
-		attributes := declaration.AsModuleDeclaration().Attributes
+		attributes := declaration.AsModuleDeclaration().Attributes()
 		emitContext := getEmitContext()
 		emitContext.SetEmitFlags(attributes, printer.EFSingleLine)
 		p := printer.NewPrinter(printer.PrinterOptions{NewLine: core.NewLineKindLF}, printer.PrintHandlers{}, emitContext)
@@ -536,7 +536,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		dpw.WriteKeyword(" with ")
 		dpw.WriteFrom(tempDpw)
 	}
-	if node.Kind == ast.KindThisKeyword && ast.IsInExpressionContext(node) || ast.IsThisInTypeQuery(node) {
+	if node.Kind() == ast.KindThisKeyword && ast.IsInExpressionContext(node) || ast.IsThisInTypeQuery(node) {
 		dpw.WriteKeyword("this")
 		dpw.WritePunctuation(": ")
 		writeTypeClassified(c.GetTypeAtLocation(node), container, typeFormatFlags)
@@ -550,9 +550,9 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 	}
 	var visitedAliases collections.Set[*ast.Symbol]
 	var aliasLevel int
-	var firstDeclaration *ast.Node
-	setDeclaration := func(declaration *ast.Node) {
-		if firstDeclaration == nil {
+	var firstDeclaration ast.Node
+	setDeclaration := func(declaration ast.Node) {
+		if firstDeclaration.IsNil() {
 			firstDeclaration = declaration
 		}
 	}
@@ -594,16 +594,16 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 				if i != 0 {
 					dpw.WritePunctuation(", ")
 				}
-				writeSymbolClassified(tp.Symbol(), nil, ast.SymbolFlagsNone, symbolFormatFlags)
+				writeSymbolClassified(tp.Symbol(), ast.Node{}, ast.SymbolFlagsNone, symbolFormatFlags)
 				cons := c.GetConstraintOfTypeParameter(tp)
 				if cons != nil {
 					dpw.WriteKeyword(" extends ")
-					writeTypeClassified(cons, nil, typeFormatFlags)
+					writeTypeClassified(cons, ast.Node{}, typeFormatFlags)
 				}
 				def := c.GetDefaultFromTypeParameter(tp)
 				if def != nil {
 					dpw.WriteOperator(" = ")
-					writeTypeClassified(def, nil, typeFormatFlags)
+					writeTypeClassified(def, ast.Node{}, typeFormatFlags)
 				}
 			}
 			dpw.WritePunctuation(">")
@@ -687,7 +687,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 				return
 			}
 		}
-		if flags&ast.SymbolFlagsProperty != 0 && symbol.ValueDeclaration() != nil && ast.IsMethodDeclaration(symbol.ValueDeclaration()) {
+		if flags&ast.SymbolFlagsProperty != 0 && !symbol.ValueDeclaration().IsNil() && ast.IsMethodDeclaration(symbol.ValueDeclaration()) {
 			flags = ast.SymbolFlagsMethod
 		}
 		if flags&(ast.SymbolFlagsVariable|ast.SymbolFlagsProperty|ast.SymbolFlagsAccessor) != 0 {
@@ -704,7 +704,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 					dpw.WritePunctuation(") ")
 				default:
 					decl := symbol.ValueDeclaration()
-					if decl != nil {
+					if !decl.IsNil() {
 						decl = ast.GetRootDeclaration(decl)
 						switch {
 						case ast.IsParameterDeclaration(decl):
@@ -735,7 +735,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 				}
 				dpw.WritePunctuation(": ")
 			}
-			if callNode := getCallOrNewExpression(node); callNode != nil {
+			if callNode := getCallOrNewExpression(node); !callNode.IsNil() {
 				flags := typeFormatFlags | checker.TypeFormatFlagsWriteTypeArgumentsOfSignature | checker.TypeFormatFlagsWriteArrowStyleSignature
 				if ast.IsCallExpression(callNode) {
 					flags |= checker.TypeFormatFlagsWriteCallStyleSignature
@@ -781,14 +781,14 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		if flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0 {
 			isMethod := flags&ast.SymbolFlagsMethod != 0
 			prefix := core.IfElse(isMethod, "method", "function ")
-			if ast.IsIdentifier(node) && (ast.IsFunctionLikeDeclaration(node.Parent) || ast.IsMethodSignatureDeclaration(node.Parent)) && node.Parent.Name() == node && slices.Contains(symbol.Declarations(), node.Parent) {
-				setDeclaration(node.Parent)
-				signatures := []*checker.Signature{c.GetSignatureFromDeclaration(node.Parent)}
+			if ast.IsIdentifier(node) && (ast.IsFunctionLikeDeclaration(node.Parent()) || ast.IsMethodSignatureDeclaration(node.Parent())) && node.Parent().Name() == node && slices.Contains(symbol.Declarations(), node.Parent()) {
+				setDeclaration(node.Parent())
+				signatures := []*checker.Signature{c.GetSignatureFromDeclaration(node.Parent())}
 				writeSignatures(signatures, prefix, isMethod, symbol)
 			} else {
 				signatures := getSignaturesAtLocation(c, symbol, checker.SignatureKindCall, node)
 				if len(signatures) == 1 {
-					if d := signatures[0].Declaration(); d != nil && d.Flags&ast.NodeFlagsJSDoc == 0 {
+					if d := signatures[0].Declaration(); !d.IsNil() && d.Flags()&ast.NodeFlagsJSDoc == 0 {
 						setDeclaration(d)
 					}
 				}
@@ -797,20 +797,20 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 			setDeclaration(symbol.ValueDeclaration())
 		}
 		if flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0 {
-			if node.Kind == ast.KindThisKeyword || ast.IsThisInTypeQuery(node) {
+			if node.Kind() == ast.KindThisKeyword || ast.IsThisInTypeQuery(node) {
 				writeNewLine()
 				dpw.WriteKeyword("this")
-			} else if node.Kind == ast.KindConstructorKeyword && (ast.IsConstructorDeclaration(node.Parent) || ast.IsConstructSignatureDeclaration(node.Parent)) {
-				setDeclaration(node.Parent)
-				signatures := []*checker.Signature{c.GetSignatureFromDeclaration(node.Parent)}
+			} else if node.Kind() == ast.KindConstructorKeyword && (ast.IsConstructorDeclaration(node.Parent()) || ast.IsConstructSignatureDeclaration(node.Parent())) {
+				setDeclaration(node.Parent())
+				signatures := []*checker.Signature{c.GetSignatureFromDeclaration(node.Parent())}
 				writeSignatures(signatures, "constructor ", false, symbol)
 			} else {
 				var signatures []*checker.Signature
-				if flags&ast.SymbolFlagsClass != 0 && getCallOrNewExpression(node) != nil {
+				if flags&ast.SymbolFlagsClass != 0 && !getCallOrNewExpression(node).IsNil() {
 					signatures = getSignaturesAtLocation(c, symbol, checker.SignatureKindConstruct, node)
 				}
 				if len(signatures) == 1 {
-					if d := signatures[0].Declaration(); d != nil && d.Flags&ast.NodeFlagsJSDoc == 0 {
+					if d := signatures[0].Declaration(); !d.IsNil() && d.Flags()&ast.NodeFlagsJSDoc == 0 {
 						setDeclaration(d)
 					}
 					writeSignatures(signatures, "constructor ", false, symbol)
@@ -818,15 +818,15 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 					writeNewLine()
 					if flags&ast.SymbolFlagsClass != 0 {
 						classExpression := ast.GetDeclarationOfKind(symbol, ast.KindClassExpression)
-						if classExpression != nil {
+						if !classExpression.IsNil() {
 							// Local class expression: show "(local class)" prefix
 							dpw.WritePunctuation("(")
 							dpw.Write("local class")
 							dpw.WritePunctuation(") ")
 						}
 						if !tryExpandSymbol(symbol, flags) {
-							if classExpression == nil {
-								if core.Some(symbol.Declarations(), func(d *ast.Node) bool {
+							if classExpression.IsNil() {
+								if core.Some(symbol.Declarations(), func(d ast.Node) bool {
 									return ast.IsClassDeclaration(d) && ast.HasAbstractModifier(d)
 								}) {
 									dpw.WriteKeyword("abstract ")
@@ -856,7 +856,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		if flags&ast.SymbolFlagsEnum != 0 {
 			writeNewLine()
 			if !tryExpandSymbol(symbol, flags) {
-				if core.Some(symbol.Declarations(), func(d *ast.Node) bool {
+				if core.Some(symbol.Declarations(), func(d ast.Node) bool {
 					return ast.IsEnumDeclaration(d) && ast.IsEnumConst(d)
 				}) {
 					dpw.WriteKeyword("const ")
@@ -869,7 +869,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		if flags&ast.SymbolFlagsModule != 0 {
 			writeNewLine()
 			if !tryExpandSymbol(symbol, flags) {
-				isModule := symbol.ValueDeclaration() != nil && (ast.IsSourceFile(symbol.ValueDeclaration()) || ast.IsAmbientModule(symbol.ValueDeclaration()))
+				isModule := !symbol.ValueDeclaration().IsNil() && (ast.IsSourceFile(symbol.ValueDeclaration()) || ast.IsAmbientModule(symbol.ValueDeclaration()))
 				dpw.WriteKeyword(core.IfElse(isModule, "module ", "namespace "))
 				writeSymbolClassified(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags)
 				writeModuleImportAttributes(symbol)
@@ -881,7 +881,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 			dpw.WritePunctuation("(")
 			dpw.Write("type parameter")
 			dpw.WritePunctuation(") ")
-			if ast.IsIdentifier(node) && ast.IsTypeReferenceNode(node.Parent) && checker.IsDistributedTypeParameter(c.GetTypeAtLocation(node.Parent)) {
+			if ast.IsIdentifier(node) && ast.IsTypeReferenceNode(node.Parent()) && checker.IsDistributedTypeParameter(c.GetTypeAtLocation(node.Parent())) {
 				dpw.WritePunctuation("(")
 				dpw.Write("distributed")
 				dpw.WritePunctuation(") ")
@@ -905,13 +905,13 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 			} else {
 				// Method/function type parameter
 				decl := ast.GetDeclarationOfKind(symbol, ast.KindTypeParameter)
-				if decl != nil && decl.Parent != nil {
-					declaration := decl.Parent
+				if !decl.IsNil() && !decl.Parent().IsNil() {
+					declaration := decl.Parent()
 					if ast.IsFunctionLike(declaration) {
 						dpw.WriteKeyword(" in ")
-						if declaration.Kind == ast.KindConstructSignature {
+						if declaration.Kind() == ast.KindConstructSignature {
 							dpw.WriteKeyword("new ")
-						} else if declaration.Kind != ast.KindCallSignature && declaration.Name() != nil {
+						} else if declaration.Kind() != ast.KindCallSignature && !declaration.Name().IsNil() {
 							writeSymbolClassified(declaration.Symbol(), container, ast.SymbolFlagsNone, symbolFormatFlags)
 						}
 						sig := c.GetSignatureFromDeclaration(declaration)
@@ -938,8 +938,8 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 			writeTypeParams(c.GetTypeAliasTypeParameters(symbol))
 			dpw.WriteOperator(" = ")
 			var typeAliasType *checker.Type
-			if node.Parent != nil && ast.IsConstTypeReference(node.Parent) {
-				typeAliasType = c.GetTypeAtLocation(node.Parent)
+			if !node.Parent().IsNil() && ast.IsConstTypeReference(node.Parent()) {
+				typeAliasType = c.GetTypeAtLocation(node.Parent())
 			} else {
 				typeAliasType = c.GetDeclaredTypeOfSymbol(symbol)
 			}
@@ -957,32 +957,32 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 }
 
 // typeParameterToString renders a type parameter declaration (e.g., "T extends FooType").
-func typeParameterToString(c *checker.Checker, t *checker.Type, enclosingDeclaration *ast.Node, vc *checker.VerbosityContext) string {
+func typeParameterToString(c *checker.Checker, t *checker.Type, enclosingDeclaration ast.Node, vc *checker.VerbosityContext) string {
 	return c.TypeParameterToStringEx(t, enclosingDeclaration, vc)
 }
 
-func getNodeForQuickInfo(node *ast.Node) *ast.Node {
-	if node.Parent == nil {
+func getNodeForQuickInfo(node ast.Node) ast.Node {
+	if node.Parent().IsNil() {
 		return node
 	}
-	if ast.IsNewExpression(node.Parent) && node.Pos() == node.Parent.Pos() {
-		return node.Parent.Expression()
+	if ast.IsNewExpression(node.Parent()) && node.Pos() == node.Parent().Pos() {
+		return node.Parent().Expression()
 	}
-	if ast.IsNamedTupleMember(node.Parent) && node.Pos() == node.Parent.Pos() {
-		return node.Parent
+	if ast.IsNamedTupleMember(node.Parent()) && node.Pos() == node.Parent().Pos() {
+		return node.Parent()
 	}
-	if ast.IsImportMeta(node.Parent) && node.Parent.Name() == node {
-		return node.Parent
+	if ast.IsImportMeta(node.Parent()) && node.Parent().Name() == node {
+		return node.Parent()
 	}
-	if ast.IsJsxNamespacedName(node.Parent) {
-		return node.Parent
+	if ast.IsJsxNamespacedName(node.Parent()) {
+		return node.Parent()
 	}
 	return node
 }
 
-func getSymbolAtLocationForQuickInfo(c *checker.Checker, node *ast.Node) *ast.Symbol {
-	if objectElement := getContainingObjectLiteralElement(node); objectElement != nil {
-		if contextualType := c.GetContextualType(objectElement.Parent, checker.ContextFlagsNone); contextualType != nil {
+func getSymbolAtLocationForQuickInfo(c *checker.Checker, node ast.Node) *ast.Symbol {
+	if objectElement := getContainingObjectLiteralElement(node); !objectElement.IsNil() {
+		if contextualType := c.GetContextualType(objectElement.Parent(), checker.ContextFlagsNone); contextualType != nil {
 			if properties := c.GetPropertySymbolsFromContextualType(objectElement, contextualType, false /*unionSymbolOk*/); len(properties) == 1 {
 				return properties[0]
 			}
@@ -991,10 +991,10 @@ func getSymbolAtLocationForQuickInfo(c *checker.Checker, node *ast.Node) *ast.Sy
 	return c.GetSymbolAtLocation(node)
 }
 
-func getSignaturesAtLocation(c *checker.Checker, symbol *ast.Symbol, kind checker.SignatureKind, node *ast.Node) []*checker.Signature {
+func getSignaturesAtLocation(c *checker.Checker, symbol *ast.Symbol, kind checker.SignatureKind, node ast.Node) []*checker.Signature {
 	signatures := c.GetSignaturesOfType(c.RemoveMissingOrUndefinedType(c.GetTypeOfSymbol(symbol)), kind)
 	if len(signatures) > 1 || len(signatures) == 1 && len(signatures[0].TypeParameters()) != 0 {
-		if callNode := getCallOrNewExpression(node); callNode != nil {
+		if callNode := getCallOrNewExpression(node); !callNode.IsNil() {
 			// We have a call or new expression, return the resolved signature
 			return []*checker.Signature{c.GetResolvedSignature(callNode)}
 		}
@@ -1002,24 +1002,24 @@ func getSignaturesAtLocation(c *checker.Checker, symbol *ast.Symbol, kind checke
 	return signatures
 }
 
-func getCallOrNewExpression(node *ast.Node) *ast.Node {
+func getCallOrNewExpression(node ast.Node) ast.Node {
 	if ast.IsSourceFile(node) {
-		return nil
+		return ast.Node{}
 	}
-	if ast.IsPropertyAccessExpression(node.Parent) && node.Parent.Name() == node {
-		node = node.Parent
+	if ast.IsPropertyAccessExpression(node.Parent()) && node.Parent().Name() == node {
+		node = node.Parent()
 	}
-	if (ast.IsCallExpression(node.Parent) || ast.IsNewExpression(node.Parent)) && node.Parent.Expression() == node {
-		return node.Parent
+	if (ast.IsCallExpression(node.Parent()) || ast.IsNewExpression(node.Parent())) && node.Parent().Expression() == node {
+		return node.Parent()
 	}
-	return nil
+	return ast.Node{}
 }
 
-func containsTypedefTag(jsdoc *ast.Node) bool {
-	if jsdoc.Kind == ast.KindJSDoc {
-		if tags := jsdoc.AsJSDoc().Tags; tags != nil {
+func containsTypedefTag(jsdoc ast.Node) bool {
+	if jsdoc.Kind() == ast.KindJSDoc {
+		if tags := jsdoc.AsJSDoc().Tags(); tags != nil {
 			for _, tag := range tags.Nodes {
-				if tag.Kind == ast.KindJSDocTypedefTag || tag.Kind == ast.KindJSDocCallbackTag {
+				if tag.Kind() == ast.KindJSDocTypedefTag || tag.Kind() == ast.KindJSDocCallbackTag {
 					return true
 				}
 			}
@@ -1049,9 +1049,9 @@ func writeCode(b *strings.Builder, lang string, code string) {
 	b.WriteByte('\n')
 }
 
-func writeComments(getMappedLocation documentationLocationMapper, b *strings.Builder, c *checker.Checker, comments []*ast.Node, isMarkdown bool) {
+func writeComments(getMappedLocation documentationLocationMapper, b *strings.Builder, c *checker.Checker, comments []ast.Node, isMarkdown bool) {
 	for _, comment := range comments {
-		switch comment.Kind {
+		switch comment.Kind() {
 		case ast.KindJSDocText:
 			b.WriteString(comment.Text())
 		case ast.KindJSDocLink, ast.KindJSDocLinkPlain:
@@ -1062,10 +1062,10 @@ func writeComments(getMappedLocation documentationLocationMapper, b *strings.Bui
 	}
 }
 
-func writeJSDocLink(getMappedLocation documentationLocationMapper, b *strings.Builder, c *checker.Checker, link *ast.Node, quote bool, isMarkdown bool) {
+func writeJSDocLink(getMappedLocation documentationLocationMapper, b *strings.Builder, c *checker.Checker, link ast.Node, quote bool, isMarkdown bool) {
 	name := link.Name()
 	text := strings.Trim(link.Text(), " ")
-	if name == nil {
+	if name.IsNil() {
 		writeQuotedString(b, text, quote && isMarkdown)
 		return
 	}
@@ -1094,7 +1094,7 @@ func writeJSDocLink(getMappedLocation documentationLocationMapper, b *strings.Bu
 	writeNameLink(getMappedLocation, b, c, name, text, quote, isMarkdown)
 }
 
-func writeNameLink(getMappedLocation documentationLocationMapper, b *strings.Builder, c *checker.Checker, name *ast.Node, text string, quote bool, isMarkdown bool) {
+func writeNameLink(getMappedLocation documentationLocationMapper, b *strings.Builder, c *checker.Checker, name ast.Node, text string, quote bool, isMarkdown bool) {
 	declarations := getDeclarationsFromLocation(c, name)
 	if len(declarations) != 0 {
 		declaration := declarations[0]
@@ -1129,8 +1129,8 @@ func writeMarkdownLink(b *strings.Builder, text string, uri string, quote bool) 
 	b.WriteString(")")
 }
 
-func writeOptionalEntityName(b *strings.Builder, name *ast.Node) {
-	if name != nil {
+func writeOptionalEntityName(b *strings.Builder, name ast.Node) {
+	if !name.IsNil() {
 		b.WriteString(" ")
 		writeQuotedString(b, getEntityNameString(name), true /*quote*/)
 	}
@@ -1146,20 +1146,20 @@ func writeQuotedString(b *strings.Builder, str string, quote bool) {
 	}
 }
 
-func getEntityNameString(name *ast.Node) string {
+func getEntityNameString(name ast.Node) string {
 	var b strings.Builder
 	writeEntityNameParts(&b, name)
 	return b.String()
 }
 
-func writeEntityNameParts(b *strings.Builder, node *ast.Node) {
-	switch node.Kind {
+func writeEntityNameParts(b *strings.Builder, node ast.Node) {
+	switch node.Kind() {
 	case ast.KindIdentifier:
 		b.WriteString(node.Text())
 	case ast.KindQualifiedName:
-		writeEntityNameParts(b, node.AsQualifiedName().Left)
+		writeEntityNameParts(b, node.AsQualifiedName().Left())
 		b.WriteByte('.')
-		writeEntityNameParts(b, node.AsQualifiedName().Right)
+		writeEntityNameParts(b, node.AsQualifiedName().Right())
 	case ast.KindPropertyAccessExpression:
 		writeEntityNameParts(b, node.Expression())
 		b.WriteByte('.')

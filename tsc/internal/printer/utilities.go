@@ -196,16 +196,16 @@ func escapeJsxAttributeString(s string, quoteChar QuoteChar) string {
 	return b.String()
 }
 
-func canUseOriginalText(node *ast.LiteralLikeNode, flags getLiteralTextFlags) bool {
+func canUseOriginalText(node ast.LiteralLikeNode, flags getLiteralTextFlags) bool {
 	// A synthetic node has no original text, nor does a node without a parent as we would be unable to find the
 	// containing SourceFile. We also cannot use the original text if the literal was unterminated and the caller has
 	// requested proper termination of unterminated literals
-	if ast.NodeIsSynthesized(node) || node.Parent == nil || flags&getLiteralTextFlagsTerminateUnterminatedLiterals != 0 && ast.IsUnterminatedLiteral(node) {
+	if ast.NodeIsSynthesized(node) || node.Parent().IsNil() || flags&getLiteralTextFlagsTerminateUnterminatedLiterals != 0 && ast.IsUnterminatedLiteral(node) {
 		return false
 	}
 
-	if node.Kind == ast.KindNumericLiteral {
-		tokenFlags := node.AsNumericLiteral().TokenFlags
+	if node.Kind() == ast.KindNumericLiteral {
+		tokenFlags := node.AsNumericLiteral().TokenFlags()
 		// For a numeric literal, we cannot use the original text if the original text was an invalid literal
 		if tokenFlags&ast.TokenFlagsIsInvalid != 0 {
 			return false
@@ -221,10 +221,10 @@ func canUseOriginalText(node *ast.LiteralLikeNode, flags getLiteralTextFlags) bo
 	// TODO(rbuckton): The reason as to why we do not use the original text for bigints is not mentioned in the
 	// original compiler source. It could be that this is no longer necessary, in which case bigint literals should
 	// use the same code path as numeric literals, above
-	return node.Kind != ast.KindBigIntLiteral
+	return node.Kind() != ast.KindBigIntLiteral
 }
 
-func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags getLiteralTextFlags) string {
+func getLiteralText(node ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags getLiteralTextFlags) string {
 	// If we don't need to downlevel and we can reach the original source text using
 	// the node's parent reference, then simply get the text as it was originally written.
 	if sourceFile != nil && canUseOriginalText(node, flags) {
@@ -233,11 +233,11 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 
 	// If we can't reach the original source text, use the canonical form if it's a number,
 	// or a (possibly escaped) quoted form of the original text if it's string-like.
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindStringLiteral:
 		var b strings.Builder
 		var quoteChar QuoteChar
-		if node.AsStringLiteral().TokenFlags&ast.TokenFlagsSingleQuote != 0 {
+		if node.AsStringLiteral().TokenFlags()&ast.TokenFlagsSingleQuote != 0 {
 			quoteChar = QuoteCharSingleQuote
 		} else {
 			quoteChar = QuoteCharDoubleQuote
@@ -265,7 +265,7 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 		// had to include a backslash: `not \${a} substitution`.
 		var b strings.Builder
 		text := node.Text()
-		rawText := node.TemplateLiteralLikeData().RawText
+		rawText := node.TemplateLiteralLikeData().RawText()
 		raw := len(rawText) > 0 || len(text) == 0
 
 		var textLen int
@@ -276,7 +276,7 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 		}
 
 		// Write leading quote character
-		switch node.Kind {
+		switch node.Kind() {
 		case ast.KindNoSubstitutionTemplateLiteral:
 			b.Grow(2 + textLen)
 			b.WriteRune('`')
@@ -301,7 +301,7 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 		}
 
 		// Write trailing quote character
-		switch node.Kind {
+		switch node.Kind() {
 		case ast.KindNoSubstitutionTemplateLiteral:
 			b.WriteRune('`')
 		case ast.KindTemplateHead:
@@ -338,7 +338,7 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 	}
 }
 
-func isNotPrologueDirective(node *ast.Node) bool {
+func isNotPrologueDirective(node ast.Node) bool {
 	return !ast.IsPrologueDirective(node)
 }
 
@@ -419,15 +419,15 @@ func getPreviousNonWhitespacePosition(pos int, stopPos int, sourceFile *ast.Sour
 	return -1
 }
 
-func siblingNodePositionsAreComparable(emitContext *EmitContext, previousNode *ast.Node, nextNode *ast.Node) bool {
+func siblingNodePositionsAreComparable(emitContext *EmitContext, previousNode ast.Node, nextNode ast.Node) bool {
 	if nextNode.Pos() < previousNode.End() {
 		return false
 	}
 
 	previousNode = emitContext.MostOriginal(previousNode)
 	nextNode = emitContext.MostOriginal(nextNode)
-	parent := previousNode.Parent
-	if parent == nil || parent != nextNode.Parent {
+	parent := previousNode.Parent()
+	if parent.IsNil() || parent != nextNode.Parent() {
 		return false
 	}
 
@@ -440,13 +440,13 @@ func siblingNodePositionsAreComparable(emitContext *EmitContext, previousNode *a
 	return false
 }
 
-func getContainingNodeArray(node *ast.Node) *ast.NodeList {
-	parent := node.Parent
-	if parent == nil {
+func getContainingNodeArray(node ast.Node) *ast.NodeList {
+	parent := node.Parent()
+	if parent.IsNil() {
 		return nil
 	}
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindTypeParameter:
 		switch {
 		case ast.IsFunctionLike(parent) || ast.IsClassLike(parent) || ast.IsInterfaceDeclaration(parent) || ast.IsTypeOrJSTypeAliasDeclaration(parent):
@@ -454,27 +454,27 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 		case ast.IsInferTypeNode(parent):
 			// infer type nodes have no associated type parameter list
 		default:
-			panic(fmt.Sprintf("Unexpected TypeParameter parent: %#v", parent.Kind))
+			panic(fmt.Sprintf("Unexpected TypeParameter parent: %#v", parent.Kind()))
 		}
 
 	case ast.KindParameter:
-		return node.Parent.FunctionLikeData().Parameters
+		return node.Parent().FunctionLikeData().Parameters()
 	case ast.KindTemplateLiteralTypeSpan:
-		return node.Parent.AsTemplateLiteralTypeNode().TemplateSpans
+		return node.Parent().AsTemplateLiteralTypeNode().TemplateSpans()
 	case ast.KindTemplateSpan:
-		return node.Parent.AsTemplateExpression().TemplateSpans
+		return node.Parent().AsTemplateExpression().TemplateSpans()
 	case ast.KindDecorator:
-		if canHaveDecorators(node.Parent) {
-			if modifiers := node.Parent.Modifiers(); modifiers != nil {
+		if canHaveDecorators(node.Parent()) {
+			if modifiers := node.Parent().Modifiers(); modifiers != nil {
 				return &modifiers.NodeList
 			}
 		}
 		return nil
 	case ast.KindHeritageClause:
-		if ast.IsClassLike(node.Parent) {
-			return node.Parent.ClassLikeData().HeritageClauses
+		if ast.IsClassLike(node.Parent()) {
+			return node.Parent().ClassLikeData().HeritageClauses()
 		} else {
-			return node.Parent.AsInterfaceDeclaration().HeritageClauses
+			return node.Parent().AsInterfaceDeclaration().HeritageClauses()
 		}
 	}
 
@@ -486,15 +486,15 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 	// 	 return node.parent.tags
 	// }
 
-	switch parent.Kind {
+	switch parent.Kind() {
 	case ast.KindTypeLiteral, ast.KindInterfaceDeclaration:
 		if ast.IsTypeElement(node) {
 			return parent.MemberList()
 		}
 	case ast.KindUnionType:
-		return parent.AsUnionTypeNode().Types
+		return parent.AsUnionTypeNode().Types()
 	case ast.KindIntersectionType:
-		return parent.AsIntersectionTypeNode().Types
+		return parent.AsIntersectionTypeNode().Types()
 	case ast.KindArrayLiteralExpression, ast.KindTupleType, ast.KindNamedImports, ast.KindNamedExports:
 		return parent.ElementList()
 	case ast.KindObjectLiteralExpression, ast.KindJsxAttributes:
@@ -503,17 +503,17 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 		p := parent.AsCallExpression()
 		switch {
 		case ast.IsTypeNode(node):
-			return p.TypeArguments
-		case node != p.Expression:
-			return p.Arguments
+			return p.TypeArguments()
+		case node != p.Expression():
+			return p.Arguments()
 		}
 	case ast.KindNewExpression:
 		p := parent.AsNewExpression()
 		switch {
 		case ast.IsTypeNode(node):
-			return p.TypeArguments
-		case node != p.Expression:
-			return p.Arguments
+			return p.TypeArguments()
+		case node != p.Expression():
+			return p.Arguments()
 		}
 	case ast.KindJsxElement, ast.KindJsxFragment:
 		if ast.IsJsxChild(node) {
@@ -526,7 +526,7 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 	case ast.KindBlock, ast.KindModuleBlock, ast.KindCaseClause, ast.KindDefaultClause:
 		return parent.StatementList()
 	case ast.KindCaseBlock:
-		return parent.AsCaseBlock().Clauses
+		return parent.AsCaseBlock().Clauses()
 	case ast.KindClassDeclaration, ast.KindClassExpression:
 		if ast.IsClassElement(node) {
 			return parent.MemberList()
@@ -550,8 +550,8 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 	return nil
 }
 
-func canHaveDecorators(node *ast.Node) bool {
-	switch node.Kind {
+func canHaveDecorators(node ast.Node) bool {
+	switch node.Kind() {
 	case ast.KindParameter,
 		ast.KindPropertyDeclaration,
 		ast.KindMethodDeclaration,
@@ -564,13 +564,13 @@ func canHaveDecorators(node *ast.Node) bool {
 	return false
 }
 
-func originalNodesHaveSameParent(emitContext *EmitContext, nodeA *ast.Node, nodeB *ast.Node) bool {
+func originalNodesHaveSameParent(emitContext *EmitContext, nodeA ast.Node, nodeB ast.Node) bool {
 	nodeA = emitContext.MostOriginal(nodeA)
-	if nodeA.Parent != nil {
+	if !nodeA.Parent().IsNil() {
 		// For performance, do not call `MostOriginal` for `nodeB` if `nodeA` doesn't even
 		// have a parent node.
 		nodeB = emitContext.MostOriginal(nodeB)
-		return nodeA.Parent == nodeB.Parent
+		return nodeA.Parent() == nodeB.Parent()
 	}
 	return false
 }
@@ -578,8 +578,8 @@ func originalNodesHaveSameParent(emitContext *EmitContext, nodeA *ast.Node, node
 func tryGetEnd(node interface{ End() int }) (int, bool) {
 	// avoid using reflect (via core.IsNil) for common cases
 	switch v := node.(type) {
-	case (*ast.Node):
-		if v != nil {
+	case ast.Node:
+		if !v.IsNil() {
 			return v.End(), true
 		}
 	case (*ast.NodeList):
@@ -611,21 +611,21 @@ func greatestEnd(end int, nodes ...interface{ End() int }) int {
 	return end
 }
 
-func skipSynthesizedParentheses(node *ast.Node) *ast.Node {
-	for node.Kind == ast.KindParenthesizedExpression && ast.NodeIsSynthesized(node) {
+func skipSynthesizedParentheses(node ast.Node) ast.Node {
+	for node.Kind() == ast.KindParenthesizedExpression && ast.NodeIsSynthesized(node) {
 		node = node.Expression()
 	}
 	return node
 }
 
-func isNewExpressionWithoutArguments(node *ast.Node) bool {
-	return node.Kind == ast.KindNewExpression && node.ArgumentList() == nil
+func isNewExpressionWithoutArguments(node ast.Node) bool {
+	return node.Kind() == ast.KindNewExpression && node.ArgumentList() == nil
 }
 
-func isBinaryOperation(node *ast.Node, token ast.Kind) bool {
+func isBinaryOperation(node ast.Node, token ast.Kind) bool {
 	node = ast.SkipPartiallyEmittedExpressions(node)
-	return node.Kind == ast.KindBinaryExpression &&
-		node.AsBinaryExpression().OperatorToken.Kind == token
+	return node.Kind() == ast.KindBinaryExpression &&
+		node.AsBinaryExpression().OperatorToken().Kind() == token
 }
 
 func mixingBinaryOperatorsRequiresParentheses(a ast.Kind, b ast.Kind) bool {
@@ -638,7 +638,7 @@ func mixingBinaryOperatorsRequiresParentheses(a ast.Kind, b ast.Kind) bool {
 	return false
 }
 
-func isImmediatelyInvokedFunctionExpressionOrArrowFunction(node *ast.Expression) bool {
+func isImmediatelyInvokedFunctionExpressionOrArrowFunction(node ast.Expression) bool {
 	node = ast.SkipPartiallyEmittedExpressions(node)
 	if !ast.IsCallExpression(node) {
 		return false

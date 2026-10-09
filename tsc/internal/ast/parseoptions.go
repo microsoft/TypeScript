@@ -57,21 +57,21 @@ func SetExternalModuleIndicator(file *SourceFile, opts ExternalModuleIndicatorOp
 	file.ExternalModuleIndicator = getExternalModuleIndicator(file, opts)
 }
 
-func getExternalModuleIndicator(file *SourceFile, opts ExternalModuleIndicatorOptions) *Node {
+func getExternalModuleIndicator(file *SourceFile, opts ExternalModuleIndicatorOptions) Node {
 	if file.ScriptKind == core.ScriptKindJSON {
-		return nil
+		return Node{}
 	}
 
-	if node := isFileProbablyExternalModule(file); node != nil {
+	if node := isFileProbablyExternalModule(file); !node.IsNil() {
 		return node
 	}
 
 	if file.IsDeclarationFile {
-		return nil
+		return Node{}
 	}
 
 	if opts.JSX {
-		if node := isFileModuleFromUsingJSXTag(file); node != nil {
+		if node := isFileModuleFromUsingJSXTag(file); !node.IsNil() {
 			return node
 		}
 	}
@@ -80,10 +80,10 @@ func getExternalModuleIndicator(file *SourceFile, opts ExternalModuleIndicatorOp
 		return file.AsNode()
 	}
 
-	return nil
+	return Node{}
 }
 
-func isFileProbablyExternalModule(sourceFile *SourceFile) *Node {
+func isFileProbablyExternalModule(sourceFile *SourceFile) Node {
 	for _, statement := range sourceFile.Statements.Nodes {
 		if isAnExternalModuleIndicatorNode(statement) {
 			return statement
@@ -92,23 +92,23 @@ func isFileProbablyExternalModule(sourceFile *SourceFile) *Node {
 	return getImportMetaIfNecessary(sourceFile)
 }
 
-func isAnExternalModuleIndicatorNode(node *Node) bool {
+func isAnExternalModuleIndicatorNode(node Node) bool {
 	return HasSyntacticModifier(node, ModifierFlagsExport) ||
-		IsImportEqualsDeclaration(node) && IsExternalModuleReference(node.AsImportEqualsDeclaration().ModuleReference) ||
+		IsImportEqualsDeclaration(node) && IsExternalModuleReference(node.AsImportEqualsDeclaration().ModuleReference()) ||
 		IsImportDeclaration(node) || IsExportAssignment(node) || IsExportDeclaration(node)
 }
 
-func getImportMetaIfNecessary(sourceFile *SourceFile) *Node {
-	if sourceFile.AsNode().Flags&NodeFlagsPossiblyContainsImportMeta != 0 {
+func getImportMetaIfNecessary(sourceFile *SourceFile) Node {
+	if sourceFile.AsNode().Flags()&NodeFlagsPossiblyContainsImportMeta != 0 {
 		return findChildNode(sourceFile.AsNode(), IsImportMeta)
 	}
-	return nil
+	return Node{}
 }
 
-func findChildNode(root *Node, check func(*Node) bool) *Node {
-	var result *Node
-	var visit func(*Node) bool
-	visit = func(node *Node) bool {
+func findChildNode(root Node, check func(Node) bool) Node {
+	var result Node
+	var visit func(Node) bool
+	visit = func(node Node) bool {
 		if check(node) {
 			result = node
 			return true
@@ -119,19 +119,19 @@ func findChildNode(root *Node, check func(*Node) bool) *Node {
 	return result
 }
 
-func isFileModuleFromUsingJSXTag(file *SourceFile) *Node {
+func isFileModuleFromUsingJSXTag(file *SourceFile) Node {
 	return walkTreeForJSXTags(file.AsNode())
 }
 
 // This is a somewhat unavoidable full tree walk to locate a JSX tag - `import.meta` requires the same,
 // but we avoid that walk (or parts of it) if at all possible using the `PossiblyContainsImportMeta` node flag.
 // Unfortunately, there's no `NodeFlag` space to do the same for JSX.
-func walkTreeForJSXTags(node *Node) *Node {
-	var found *Node
+func walkTreeForJSXTags(node Node) Node {
+	var found Node
 
-	var visitor func(node *Node) bool
-	visitor = func(node *Node) bool {
-		if found != nil {
+	var visitor func(node Node) bool
+	visitor = func(node Node) bool {
+		if !found.IsNil() {
 			return true
 		}
 		if node.SubtreeFacts()&SubtreeContainsJsx == 0 {

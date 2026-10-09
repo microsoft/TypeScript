@@ -17,23 +17,23 @@ func ProbablyUsesSemicolons(file *ast.SourceFile) bool {
 	withoutSemicolon := 0
 	nStatementsToObserve := 5
 
-	var visit func(node *ast.Node) bool
-	visit = func(node *ast.Node) bool {
-		if node.Flags&ast.NodeFlagsReparsed != 0 {
+	var visit func(node ast.Node) bool
+	visit = func(node ast.Node) bool {
+		if node.Flags()&ast.NodeFlagsReparsed != 0 {
 			return false
 		}
-		if SyntaxRequiresTrailingSemicolonOrASI(node.Kind) {
+		if SyntaxRequiresTrailingSemicolonOrASI(node.Kind()) {
 			lastToken := GetLastToken(node, file)
-			if lastToken != nil && lastToken.Kind == ast.KindSemicolonToken {
+			if !lastToken.IsNil() && lastToken.Kind() == ast.KindSemicolonToken {
 				withSemicolon++
 			} else {
 				withoutSemicolon++
 			}
-		} else if SyntaxRequiresTrailingCommaOrSemicolonOrASI(node.Kind) {
+		} else if SyntaxRequiresTrailingCommaOrSemicolonOrASI(node.Kind()) {
 			lastToken := GetLastToken(node, file)
-			if lastToken != nil && lastToken.Kind == ast.KindSemicolonToken {
+			if !lastToken.IsNil() && lastToken.Kind() == ast.KindSemicolonToken {
 				withSemicolon++
-			} else if lastToken != nil && lastToken.Kind != ast.KindCommaToken {
+			} else if !lastToken.IsNil() && lastToken.Kind() != ast.KindCommaToken {
 				lastTokenLine := scanner.GetECMALineOfPosition(
 					file,
 					astnav.GetStartOfNode(lastToken, file, false /*includeJSDoc*/),
@@ -88,8 +88,8 @@ func ShouldUseUriStyleNodeCoreModules(file *ast.SourceFile, program *compiler.Pr
 	return program.UsesUriStyleNodeCoreModules()
 }
 
-func QuotePreferenceFromString(str *ast.StringLiteral) QuotePreference {
-	if str.TokenFlags&ast.TokenFlagsSingleQuote != 0 {
+func QuotePreferenceFromString(str ast.StringLiteral) QuotePreference {
+	if str.TokenFlags()&ast.TokenFlagsSingleQuote != 0 {
 		return QuotePreferenceSingle
 	}
 	return QuotePreferenceDouble
@@ -103,10 +103,10 @@ func GetQuotePreference(sourceFile *ast.SourceFile, preferences UserPreferences)
 		return QuotePreferenceDouble
 	}
 	// ignore synthetic import added when importHelpers: true
-	firstModuleSpecifier := core.Find(sourceFile.Imports(), func(n *ast.Node) bool {
-		return ast.IsStringLiteral(n) && !ast.NodeIsSynthesized(n.Parent)
+	firstModuleSpecifier := core.Find(sourceFile.Imports(), func(n ast.Node) bool {
+		return ast.IsStringLiteral(n) && !ast.NodeIsSynthesized(n.Parent())
 	})
-	if firstModuleSpecifier != nil {
+	if !firstModuleSpecifier.IsNil() {
 		return QuotePreferenceFromString(firstModuleSpecifier.AsStringLiteral())
 	}
 	return QuotePreferenceDouble

@@ -105,7 +105,7 @@ func (r *aliasResolver) GetEmitModuleFormatOfFile(sourceFile ast.HasFileName) co
 }
 
 // GetEmitSyntaxForUsageLocation implements checker.Program.
-func (r *aliasResolver) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, usageLocation *ast.StringLiteralLike) core.ResolutionMode {
+func (r *aliasResolver) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, usageLocation ast.StringLiteralLike) core.ResolutionMode {
 	return core.ModuleKindESNext
 }
 
@@ -115,7 +115,7 @@ func (r *aliasResolver) GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) 
 }
 
 // GetModeForUsageLocation implements checker.Program.
-func (r *aliasResolver) GetModeForUsageLocation(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) core.ResolutionMode {
+func (r *aliasResolver) GetModeForUsageLocation(file ast.HasFileName, moduleSpecifier ast.StringLiteralLike) core.ResolutionMode {
 	return core.ModuleKindESNext
 }
 
@@ -177,13 +177,13 @@ func (r *aliasResolver) GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPa
 }
 
 // GetImportHelpersImportSpecifier implements checker.Program.
-func (r *aliasResolver) GetImportHelpersImportSpecifier(path tspath.PathKey) *ast.Node {
+func (r *aliasResolver) GetImportHelpersImportSpecifier(path tspath.PathKey) ast.Node {
 	panic("unimplemented")
 }
 
 // GetJSXRuntimeImportSpecifier implements checker.Program.
-func (r *aliasResolver) GetJSXRuntimeImportSpecifier(path tspath.PathKey) (moduleReference string, specifier *ast.Node) {
-	return "", nil
+func (r *aliasResolver) GetJSXRuntimeImportSpecifier(path tspath.PathKey) (moduleReference string, specifier ast.Node) {
+	return "", ast.Node{}
 }
 
 // GetNearestAncestorDirectoryWithPackageJson implements checker.Program.
@@ -217,7 +217,7 @@ func (r *aliasResolver) GetRedirectTargets(path tspath.PathKey) []tspath.RootedF
 }
 
 // GetResolvedModuleFromModuleSpecifier implements checker.Program.
-func (r *aliasResolver) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
+func (r *aliasResolver) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier ast.StringLiteralLike) *module.ResolvedModule {
 	panic("unimplemented")
 }
 
