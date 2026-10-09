@@ -88,7 +88,7 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 		t.snapshot.options.SkipDefaultLibCheck.IsTrue() == t.oldProgram.snapshot.options.SkipDefaultLibCheck.IsTrue()
 
 	files := t.program.GetSourceFiles()
-	wg := core.NewWorkGroup(t.program.SingleThreaded())
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(t.program.SingleThreaded()))
 	for _, file := range files {
 		wg.Queue(func() {
 			versionText := file.Text()
