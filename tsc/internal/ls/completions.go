@@ -2662,9 +2662,16 @@ func (l *LanguageService) getEntryForMemberCompletion(ctx context.Context, typeC
 	}
 
 	nodes := fixer.createMemberFromSymbol(symbol, classLikeDeclaration, file, body, preserveOptionalFlagsProperty, abstract)
+	fixer.addImports()
 	var additionalTextEdits []*lsproto.TextEdit
 	if importAdder != nil && importAdder.HasFixes() {
-		additionalTextEdits = importAdder.Edits()
+		importTracker := change.NewTracker(ctx, l.GetProgram().Options(), l.FormatOptions(), l.converters)
+		importAdder.WriteFixes(importTracker)
+		changes, unmappable := importTracker.GetChanges()
+		if len(unmappable) != 0 {
+			return nil, nil
+		}
+		additionalTextEdits = changes[file.OriginalFileName()]
 	}
 	if presentModifiers.eraseRange != nil {
 		additionalTextEdits = append(additionalTextEdits, &lsproto.TextEdit{
@@ -6697,7 +6704,14 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 
 		var additionalTextEdits *[]*lsproto.TextEdit
 		if importAdder != nil {
-			if edits := importAdder.Edits(); len(edits) != 0 {
+			importTracker := change.NewTracker(ctx, options, l.FormatOptions(), l.converters)
+			importAdder.WriteFixes(importTracker)
+			changes, unmappable := importTracker.GetChanges()
+			if len(unmappable) != 0 {
+				return nil, nil
+			}
+			edits := changes[file.OriginalFileName()]
+			if len(edits) != 0 {
 				additionalTextEdits = &edits
 			}
 		}

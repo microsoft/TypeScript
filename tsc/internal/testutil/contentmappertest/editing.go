@@ -23,7 +23,10 @@ func (prefixedSupplementalHandler) HandleRequest(ctx context.Context, method str
 		if err := json.Unmarshal(params, &p); err != nil {
 			return nil, err
 		}
-		const prefix = "/* generated */\n"
+		prefix := "/* generated */\n"
+		if strings.Contains(p.FileName, "codefix-unmapped-import") {
+			prefix = "import type { C } from \"./a\";\n"
+		}
 		features := spanmap.FeatureAll
 		if strings.Contains(p.FileName, "folding-disabled") || strings.Contains(p.FileName, "codelens-disabled") || strings.Contains(p.FileName, "formatting-disabled") {
 			features = spanmap.FeatureNone

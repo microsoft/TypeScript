@@ -9,26 +9,35 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
-func TestCodeFixAddMissingAttributes6(t *testing.T) {
+const addMissingAttributesJsxDeclarations = `
+declare namespace JSX {
+    interface Element {}
+    interface IntrinsicElements {
+        div: {};
+    }
+}`
+
+func TestCodeFixAddMissingAttributes1(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @jsx: preserve
-// @filename: foo.tsx
+// @Filename: a.tsx
 interface P {
     a: number;
     b: string;
-    c: number[];
-    d: any;
 }
 
-const A = ({ a, b, c, d }: P) =>
-    <div>{a}{b}{c}{d}</div>;
+const A = ({ a, b }: P) =>
+    <div>{a}{b}</div>;
 
-const props = { a: 1, b: "", c: [], d: undefined };
-const Bar = () =>
-    <A {...props}></A>`
+const B = () =>
+    <A[||]></A>`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content+addMissingAttributesJsxDeclarations)
 	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description:     diagnostics.Add_missing_attributes.Localize(locale.Default),
+		NewRangeContent: ` a={0} b={""}`,
+		ApplyChanges:    true,
+	})
 	f.VerifyNoErrors(t)
-	f.VerifyCodeFixNotAvailable(t, diagnostics.Add_missing_attributes.Localize(locale.Default))
 }
