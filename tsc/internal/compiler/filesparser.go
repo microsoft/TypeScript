@@ -1,6 +1,7 @@
 package compiler
 
 import (
+	"context"
 	"math"
 	"slices"
 	"strings"
@@ -56,10 +57,10 @@ func (t *parseTask) PathKey() tspath.PathKey {
 	return t.path
 }
 
-func (t *parseTask) load(loader *fileLoader) {
+func (t *parseTask) load(ctx context.Context, loader *fileLoader) {
 	t.loaded = true
 	if t.isForAutomaticTypeDirective {
-		t.loadAutomaticTypeDirectives(loader)
+		t.loadAutomaticTypeDirectives(ctx, loader)
 		return
 	}
 	if t.failedLookup {
@@ -118,13 +119,16 @@ func (t *parseTask) load(loader *fileLoader) {
 
 	file := t.file
 	if file == nil {
-		file = loader.parseSourceFile(t)
+		file = loader.parseSourceFile(ctx, t)
 	}
 	if file == nil {
 		return
 	}
 
 	t.file = file
+	if ctx.Err() != nil {
+		return
+	}
 	if virtualFileName := file.VirtualFileName(); virtualFileName != "" {
 		t.metadata.ImpliedNodeFormat = ast.GetImpliedNodeFormatForFile(virtualFileName, t.metadata.PackageJsonType)
 	}
@@ -133,6 +137,9 @@ func (t *parseTask) load(loader *fileLoader) {
 	compilerOptions := loader.opts.Config.CompilerOptions()
 	if !compilerOptions.NoResolve.IsTrue() && !loader.opts.SkipModuleResolution {
 		for index, ref := range file.ReferencedFiles {
+			if ctx.Err() != nil {
+				return
+			}
 			resolvedRef, processingDiagnostic := loader.resolveTripleslashPathReference(ref.FileName, file.FileName(), index)
 			if processingDiagnostic != nil {
 				t.processingDiagnostics = append(t.processingDiagnostics, processingDiagnostic)
@@ -141,11 +148,14 @@ func (t *parseTask) load(loader *fileLoader) {
 			t.addSubTask(*resolvedRef, nil)
 		}
 
-		loader.resolveTypeReferenceDirectives(t)
+		loader.resolveTypeReferenceDirectives(ctx, t)
 	}
 
 	if compilerOptions.NoLib != core.TSTrue && !loader.opts.SkipModuleResolution {
 		for index, lib := range file.LibReferenceDirectives {
+			if ctx.Err() != nil {
+				return
+			}
 			includeReason := &FileIncludeReason{
 				kind: fileIncludeKindLibReferenceDirective,
 				referencedFile: &referencedFileData{
@@ -169,7 +179,7 @@ func (t *parseTask) load(loader *fileLoader) {
 		}
 	}
 
-	loader.resolveImportsAndModuleAugmentations(t)
+	loader.resolveImportsAndModuleAugmentations(ctx, t)
 	for _, supplemental := range file.SupplementalSourceFiles() {
 		t.subTasks = append(t.subTasks, &parseTask{
 			normalizedFilePath:          supplemental.FileName(),
@@ -195,11 +205,11 @@ func (t *parseTask) redirect(loader *fileLoader, fileName tspath.RootedFilePath,
 	t.subTasks = []*parseTask{t.redirectedParseTask}
 }
 
-func (t *parseTask) loadAutomaticTypeDirectives(loader *fileLoader) {
+func (t *parseTask) loadAutomaticTypeDirectives(ctx context.Context, loader *fileLoader) {
 	if loader.tracing != nil {
 		defer loader.tracing.Push(tracing.PhaseProgram, "processTypeReferences", nil, false)()
 	}
-	toParseTypeRefs, typeResolutionsInFile, typeResolutionsTrace, pDiagnostics := loader.resolveAutomaticTypeDirectives(t.normalizedFilePath)
+	toParseTypeRefs, typeResolutionsInFile, typeResolutionsTrace, pDiagnostics := loader.resolveAutomaticTypeDirectives(ctx, t.normalizedFilePath)
 	t.typeResolutionsInFile = typeResolutionsInFile
 	t.typeResolutionsTrace = typeResolutionsTrace
 	t.processingDiagnostics = append(t.processingDiagnostics, pDiagnostics...)
@@ -265,13 +275,16 @@ type parseTaskData struct {
 	packageId       module.PackageId
 }
 
-func (w *filesParser) parse(loader *fileLoader, tasks []*parseTask) {
-	w.start(loader, tasks, 0)
+func (w *filesParser) parse(ctx context.Context, loader *fileLoader, tasks []*parseTask) {
+	w.start(ctx, loader, tasks, 0)
 	w.wg.RunAndWait()
 }
 
-func (w *filesParser) start(loader *fileLoader, tasks []*parseTask, depth int) {
+func (w *filesParser) start(ctx context.Context, loader *fileLoader, tasks []*parseTask, depth int) {
 	for i, task := range tasks {
+		if ctx.Err() != nil {
+			return
+		}
 		if task.path == "" {
 			panic("parse task must have a path key: " + task.normalizedFilePath.AsString())
 		}
@@ -284,6 +297,9 @@ func (w *filesParser) start(loader *fileLoader, tasks []*parseTask, depth int) {
 		w.wg.Queue(func() {
 			data.mu.Lock()
 			defer data.mu.Unlock()
+			if ctx.Err() != nil {
+				return
+			}
 
 			startSubtasks := false
 			if loaded {
@@ -316,9 +332,12 @@ func (w *filesParser) start(loader *fileLoader, tasks []*parseTask, depth int) {
 			}
 
 			for _, taskByFileName := range data.tasks {
+				if ctx.Err() != nil {
+					return
+				}
 				loadSubTasks := startSubtasks
 				if !taskByFileName.loaded {
-					taskByFileName.load(loader)
+					taskByFileName.load(ctx, loader)
 					if taskByFileName.redirectedParseTask != nil {
 						// Always load redirected task
 						loadSubTasks = true
@@ -327,14 +346,14 @@ func (w *filesParser) start(loader *fileLoader, tasks []*parseTask, depth int) {
 				}
 				if loadSubTasks && (lowered || !taskByFileName.startedSubTasks) {
 					taskByFileName.startedSubTasks = true
-					w.start(loader, taskByFileName.subTasks, data.lowestDepth)
+					w.start(ctx, loader, taskByFileName.subTasks, data.lowestDepth)
 				}
 			}
 		})
 	}
 }
 
-func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
+func (w *filesParser) getProcessedFiles(ctx context.Context, loader *fileLoader) processedFiles {
 	totalFileCount := int(loader.totalFileCount.Load())
 	libFileCount := int(loader.libFileCount.Load())
 
@@ -385,6 +404,9 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 	var recordedDuplicates map[*parseTaskData]*collections.Set[tspath.RootedFilePath]
 	collectFiles = func(tasks []*parseTask, seen map[*parseTaskData]tspath.RootedFilePath) {
 		for _, task := range tasks {
+			if ctx.Err() != nil {
+				return
+			}
 			includeReason := task.includeReason
 			// Exclude automatic type directive tasks from include reason processing,
 			// as these are internal implementation details and should not contribute
@@ -550,6 +572,9 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 	}
 
 	collectFiles(loader.rootTasks, make(map[*parseTaskData]tspath.RootedFilePath, totalFileCount))
+	if ctx.Err() != nil {
+		return processedFiles{}
+	}
 	loader.sortLibs(libFiles)
 
 	allFiles := append(libFiles, files...)

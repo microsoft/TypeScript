@@ -58,12 +58,14 @@ func newContentMapperProgramWithOptions(t *testing.T, contentMapperProject conte
 
 	config := tsoptions.NewParsedCommandLine(options, testFileNames(rootFiles...), nil, "/", fs.CaseSensitivity())
 	config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{Package: "vue", Extensions: []string{".vue"}, Name: "vue-mapper", Version: "1.0.0"}}
-	return compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 		Config: config,
 		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, contentMapperProject),
 		// Load files on the calling goroutine for deterministic diagnostics ordering.
 		SingleThreaded: core.TSTrue,
 	})
+	assert.NilError(t, err)
+	return program
 }
 
 func TestContentMapperVirtualExtensionSetsImpliedNodeFormat(t *testing.T) {

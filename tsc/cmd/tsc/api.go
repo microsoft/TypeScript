@@ -5,9 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"os/signal"
 	"strings"
-	"syscall"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
@@ -42,7 +40,7 @@ func parseAPIFlags(args []string) (apiFlags, error) {
 	return result, nil
 }
 
-func runAPI(args []string) int {
+func runAPI(ctx context.Context, args []string) int {
 	flags, err := parseAPIFlags(args)
 	if err != nil {
 		return 2
@@ -76,9 +74,6 @@ func runAPI(args []string) int {
 	}
 
 	s := api.NewStdioServer(options)
-
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
 
 	if err := s.Run(ctx); err != nil {
 		fmt.Fprintln(os.Stderr, err)

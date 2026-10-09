@@ -1,6 +1,7 @@
 package compiler
 
 import (
+	"context"
 	"fmt"
 	"maps"
 	"path/filepath"
@@ -25,6 +26,47 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+type cancellingCompilerHost struct {
+	CompilerHost
+	cancel context.CancelFunc
+	reads  int
+}
+
+func (h *cancellingCompilerHost) GetSourceFile(options ast.SourceFileParseOptions) *ast.SourceFile {
+	h.reads++
+	file := h.CompilerHost.GetSourceFile(options)
+	h.cancel()
+	return file
+}
+
+func TestProgramLoadingStopsOnCancellation(t *testing.T) {
+	t.Parallel()
+	fs := vfstest.FromMap(map[string]any{
+		"/src/a.ts": "export const a = 1;",
+		"/src/b.ts": "export const b = 2;",
+	}, tspath.CaseSensitive)
+	config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{NoLib: core.TSTrue}, []tspath.RootedFilePath{"/src/a.ts", "/src/b.ts"}, nil, "/src", tspath.CaseSensitive)
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+	host := &cancellingCompilerHost{CompilerHost: NewCompilerHost(fs, "/", nil, nil, nil), cancel: cancel}
+	program, err := NewProgram(ctx, ProgramOptions{
+		Config:         config,
+		SingleThreaded: core.TSTrue,
+		Host:           host,
+	})
+	assert.ErrorIs(t, err, context.Canceled)
+	assert.Assert(t, program == nil)
+	assert.Equal(t, host.reads, 1)
+
+	program, err = NewProgram(ctx, ProgramOptions{
+		Config: config,
+		Host:   host,
+	})
+	assert.ErrorIs(t, err, context.Canceled)
+	assert.Assert(t, program == nil)
+	assert.Equal(t, host.reads, 1)
+}
 
 func TestProgramSharedData(t *testing.T) {
 	t.Parallel()
@@ -107,7 +149,7 @@ import { value } from "./dep.js"; export const result = value;`,
 	assert.Equal(t, len(diagnostics), 0)
 	var pools, resolvers int
 	tr := new(tracing.Tracing)
-	p := NewProgram(ProgramOptions{
+	p, err := NewProgram(t.Context(), ProgramOptions{
 		Config:  config,
 		Host:    host,
 		Tracing: tr,
@@ -127,8 +169,16 @@ import { value } from "./dep.js"; export const result = value;`,
 			return module.NewResolver(options)
 		},
 	})
+	assert.NilError(t, err)
 	assert.Equal(t, pools, 1)
 	assert.Equal(t, resolvers, 1)
+	cancelledCtx, cancel := context.WithCancel(t.Context())
+	cancel()
+	cancelled, acquired, reused, err := p.UpdateProgram(cancelledCtx, "/src/index.ts", host, nil, nil)
+	assert.ErrorIs(t, err, context.Canceled)
+	assert.Assert(t, cancelled == nil)
+	assert.Assert(t, acquired == nil)
+	assert.Assert(t, !reused)
 	assert.Equal(t, p.Tracing(), tr)
 	assert.Assert(t, p.GetPackageJsonInfo("/factory-only/package.json") == nil, "lazy lookups must not retain the factory's host")
 	oldFile := p.GetSourceFile("/src/index.ts")
@@ -174,14 +224,16 @@ import { value } from "./dep.js"; export const result = value;`,
 	assert.Assert(t, defaults.compilerCheckerPool.tracing == nil)
 	assert.Equal(t, pools, 2)
 
-	traced := NewProgram(ProgramOptions{Config: config, Host: newHost, Tracing: tr})
+	traced, err := NewProgram(t.Context(), ProgramOptions{Config: config, Host: newHost, Tracing: tr})
+	assert.NilError(t, err)
 	assert.Equal(t, traced.Tracing(), tr)
 	assert.Equal(t, traced.compilerCheckerPool.tracing, tr)
 
 	newFiles["/src/index.ts"] = `import "./other.js";`
 	newFiles["/src/other.ts"] = "export {};"
 	rebuildHost := NewCompilerHost(vfstest.FromMap(newFiles, tspath.CaseSensitive), "/", nil, nil, nil)
-	rebuilt, _, reused := p.UpdateProgram("/src/index.ts", rebuildHost, nil, nil)
+	rebuilt, _, reused, err := p.UpdateProgram(t.Context(), "/src/index.ts", rebuildHost, nil, nil)
+	assert.NilError(t, err)
 	assert.Assert(t, !reused)
 	assert.Assert(t, rebuilt.compilerCheckerPool != nil)
 	assert.Equal(t, rebuilt.Host(), rebuildHost)
@@ -211,7 +263,8 @@ func TestClonedProgramProjectReferenceResolution(t *testing.T) {
 				PreserveSymlinks: core.BoolToTristate(preserveSymlinks),
 			}, nil, fs, nil)
 			assert.Equal(t, len(diagnostics), 0)
-			p := NewProgram(ProgramOptions{Config: config, Host: host, UseSourceOfProjectReference: true})
+			p, err := NewProgram(t.Context(), ProgramOptions{Config: config, Host: host, UseSourceOfProjectReference: true})
+			assert.NilError(t, err)
 			assert.Assert(t, p.GetSourceFile("/reference/index.ts") != nil)
 			assert.Assert(t, !host.FS().FileExists("/reference/dist/index.d.ts"))
 			newFiles := maps.Clone(files)
@@ -464,11 +517,12 @@ func TestProgram(t *testing.T) {
 
 			opts := core.CompilerOptions{Target: testCase.target}
 
-			program := NewProgram(ProgramOptions{
+			program, err := NewProgram(t.Context(), ProgramOptions{
 				Config: tsoptions.NewParsedCommandLine(&opts, []tspath.RootedFilePath{"c:/dev/src/index.ts"}, nil, "c:/dev/src", fs.CaseSensitivity()),
 				Host:   NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 			})
 
+			assert.NilError(t, err)
 			actualFiles := []string{}
 			for _, file := range program.GetSourceFiles() {
 				actualFiles = append(actualFiles, strings.TrimPrefix(file.FileName().AsString(), libPrefix))
@@ -501,7 +555,8 @@ func TestImportSourceProgram(t *testing.T) {
 			host := NewCompilerHost(fs, "/", nil, nil, nil)
 			config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, fs, nil)
 			assert.Equal(t, len(diagnostics), 0)
-			program := NewProgram(ProgramOptions{Config: config, Host: host})
+			program, err := NewProgram(t.Context(), ProgramOptions{Config: config, Host: host})
+			assert.NilError(t, err)
 			file := program.GetSourceFile("/src/index.ts")
 			assert.Assert(t, program.GetSourceFile("/src/a.ts") == nil)
 			assert.Equal(t, len(program.GetResolvedModules()[fs.CaseSensitivity().PathKey(file.FileName().AsPath())]), 0)
@@ -510,7 +565,8 @@ func TestImportSourceProgram(t *testing.T) {
 
 			files["/src/index.ts"] = test.evaluation + strings.TrimPrefix(content, test.source)
 			host = NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/", nil, nil, nil)
-			program, file, reused := program.UpdateProgram("/src/index.ts", host, nil, nil)
+			program, file, reused, err := program.UpdateProgram(t.Context(), "/src/index.ts", host, nil, nil)
+			assert.NilError(t, err)
 			assert.Assert(t, !reused)
 			assert.Assert(t, program.GetSourceFile("/src/a.ts") != nil)
 			for _, specifier := range file.Imports() {
@@ -520,13 +576,15 @@ func TestImportSourceProgram(t *testing.T) {
 
 			files["/src/index.ts"] = content
 			host = NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/", nil, nil, nil)
-			program, _, reused = program.UpdateProgram("/src/index.ts", host, nil, nil)
+			program, _, reused, err = program.UpdateProgram(t.Context(), "/src/index.ts", host, nil, nil)
+			assert.NilError(t, err)
 			assert.Assert(t, !reused)
 			assert.Assert(t, program.GetSourceFile("/src/a.ts") == nil)
 
 			files["/src/index.ts"] = test.evaluation + content
 			host = NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/", nil, nil, nil)
-			program = NewProgram(ProgramOptions{Config: config, Host: host})
+			program, err = NewProgram(t.Context(), ProgramOptions{Config: config, Host: host})
+			assert.NilError(t, err)
 			file = program.GetSourceFile("/src/index.ts")
 			for _, specifier := range file.Imports() {
 				resolved := program.GetResolvedModuleFromModuleSpecifier(file, specifier)
@@ -556,10 +614,12 @@ func TestIncludeProcessorDiagnosticsWithMissingFileCasing(t *testing.T) {
 
 	// List both casings as root files. The first one (/src/MyFile.ts) will fail
 	// to load because it does not exist on the case-sensitive filesystem.
-	program := NewProgram(ProgramOptions{
+	program, err := NewProgram(t.Context(), ProgramOptions{
 		Config: tsoptions.NewParsedCommandLine(&opts, []tspath.RootedFilePath{"/src/MyFile.ts", "/src/myFile.ts"}, nil, "/", fs.CaseSensitivity()),
 		Host:   NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 	})
+
+	assert.NilError(t, err)
 
 	// GetProgramDiagnostics triggers getDiagnostics which processes all
 	// include processor diagnostics including the casing diagnostic whose
@@ -599,7 +659,9 @@ func BenchmarkNewProgram(b *testing.B) {
 			}
 
 			for b.Loop() {
-				NewProgram(programOpts)
+				if _, err := NewProgram(b.Context(), programOpts); err != nil {
+					b.Fatal(err)
+				}
 			}
 		})
 	}
@@ -616,7 +678,9 @@ func BenchmarkNewProgram(b *testing.B) {
 		}
 
 		for b.Loop() {
-			NewProgram(opts)
+			if _, err := NewProgram(b.Context(), opts); err != nil {
+				b.Fatal(err)
+			}
 		}
 	})
 }
