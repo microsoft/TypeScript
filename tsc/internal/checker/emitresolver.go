@@ -705,9 +705,12 @@ func (r *EmitResolver) CreateLiteralConstValue(node *ast.Node, tracker nodebuild
 	case jsnum.Number:
 		if value.IsInf() {
 			if value > 0 {
-				return r.emitContext.Factory.NewIdentifier("Infinity")
+				return r.emitContext.Factory.NewNumericLiteral(jsnum.InfinityLiteralText, ast.TokenFlagsNone)
 			}
-			return r.emitContext.Factory.NewPrefixUnaryExpression(ast.KindMinusToken, r.emitContext.Factory.NewIdentifier("Infinity"))
+			return r.emitContext.Factory.NewPrefixUnaryExpression(
+				ast.KindMinusToken,
+				r.emitContext.Factory.NewNumericLiteral(jsnum.InfinityLiteralText, ast.TokenFlagsNone),
+			)
 		}
 		if value.IsNaN() {
 			return r.emitContext.Factory.NewIdentifier("NaN")
