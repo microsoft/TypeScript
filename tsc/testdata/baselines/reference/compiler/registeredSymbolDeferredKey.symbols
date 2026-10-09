@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/registeredSymbolDeferredKey.ts] ////
+
+=== registeredSymbolDeferredKey.ts ===
+export function make<K extends string>(key: K) {
+>make : Symbol(make, Decl(registeredSymbolDeferredKey.ts, 0, 0))
+>K : Symbol(K, Decl(registeredSymbolDeferredKey.ts, 0, 21))
+>key : Symbol(key, Decl(registeredSymbolDeferredKey.ts, 0, 39))
+>K : Symbol(K, Decl(registeredSymbolDeferredKey.ts, 0, 21))
+
+    const registered = Symbol.for(key);
+>registered : Symbol(registered, Decl(registeredSymbolDeferredKey.ts, 1, 9))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>key : Symbol(key, Decl(registeredSymbolDeferredKey.ts, 0, 39))
+
+    const widened: symbol = registered;
+>widened : Symbol(widened, Decl(registeredSymbolDeferredKey.ts, 2, 9))
+>registered : Symbol(registered, Decl(registeredSymbolDeferredKey.ts, 1, 9))
+
+    return registered;
+>registered : Symbol(registered, Decl(registeredSymbolDeferredKey.ts, 1, 9))
+}
+
+export function unreachable(key: never): never {
+>unreachable : Symbol(unreachable, Decl(registeredSymbolDeferredKey.ts, 4, 1))
+>key : Symbol(key, Decl(registeredSymbolDeferredKey.ts, 6, 28))
+
+    return Symbol.for(key);
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>key : Symbol(key, Decl(registeredSymbolDeferredKey.ts, 6, 28))
+}
+
+export function read<K extends string>(first: K, second: K) {
+>read : Symbol(read, Decl(registeredSymbolDeferredKey.ts, 8, 1))
+>K : Symbol(K, Decl(registeredSymbolDeferredKey.ts, 10, 21))
+>first : Symbol(first, Decl(registeredSymbolDeferredKey.ts, 10, 39))
+>K : Symbol(K, Decl(registeredSymbolDeferredKey.ts, 10, 21))
+>second : Symbol(second, Decl(registeredSymbolDeferredKey.ts, 10, 48))
+>K : Symbol(K, Decl(registeredSymbolDeferredKey.ts, 10, 21))
+
+    const firstKey = Symbol.for(first);
+>firstKey : Symbol(firstKey, Decl(registeredSymbolDeferredKey.ts, 11, 9))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>first : Symbol(first, Decl(registeredSymbolDeferredKey.ts, 10, 39))
+
+    const record = { [firstKey]: "first" } as const;
+>record : Symbol(record, Decl(registeredSymbolDeferredKey.ts, 12, 9))
+>[firstKey] : Symbol([firstKey], Decl(registeredSymbolDeferredKey.ts, 12, 20))
+>firstKey : Symbol(firstKey, Decl(registeredSymbolDeferredKey.ts, 11, 9))
+>const : Symbol(const)
+
+    const secondKey = Symbol.for(second);
+>secondKey : Symbol(secondKey, Decl(registeredSymbolDeferredKey.ts, 13, 9))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>second : Symbol(second, Decl(registeredSymbolDeferredKey.ts, 10, 48))
+
+    const value: "first" = record[secondKey];
+>value : Symbol(value, Decl(registeredSymbolDeferredKey.ts, 14, 9))
+>record : Symbol(record, Decl(registeredSymbolDeferredKey.ts, 12, 9))
+>secondKey : Symbol(secondKey, Decl(registeredSymbolDeferredKey.ts, 13, 9))
+
+    return value;
+>value : Symbol(value, Decl(registeredSymbolDeferredKey.ts, 14, 9))
+}
+
+read<"a" | "b">("a", "b");
+>read : Symbol(read, Decl(registeredSymbolDeferredKey.ts, 8, 1))
+

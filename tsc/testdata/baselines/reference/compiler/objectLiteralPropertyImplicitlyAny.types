@@ -2,17 +2,17 @@
 
 === objectLiteralPropertyImplicitlyAny.ts ===
 const foo = Symbol.for("foo");
->foo : unique symbol
->Symbol.for("foo") : unique symbol
->Symbol.for : (key: string) => symbol
+>foo : RegisteredSymbol<"foo">
+>Symbol.for("foo") : RegisteredSymbol<"foo">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : (key: string) => symbol
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >"foo" : "foo"
 
 const o = { [foo]: undefined };
 >o : { [foo]: undefined; }
 >{ [foo]: undefined } : { [foo]: undefined; }
 >[foo] : undefined
->foo : unique symbol
+>foo : RegisteredSymbol<"foo">
 >undefined : undefined
 

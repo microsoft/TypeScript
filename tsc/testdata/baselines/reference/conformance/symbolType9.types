@@ -3,10 +3,10 @@
 === symbolType9.ts ===
 var s = Symbol.for("equal");
 >s : symbol
->Symbol.for("equal") : symbol
->Symbol.for : (key: string) => symbol
+>Symbol.for("equal") : RegisteredSymbol<"equal">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : (key: string) => symbol
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >"equal" : "equal"
 
 s == s;

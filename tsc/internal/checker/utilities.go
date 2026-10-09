@@ -616,6 +616,10 @@ func CompareTypes(t1, t2 *Type) int {
 		if c := CompareTypes(t1.AsStringMappingType().target, t2.AsStringMappingType().target); c != 0 {
 			return c
 		}
+	case t1.flags&TypeFlagsRegisteredESSymbol != 0:
+		if c := CompareTypes(t1.AsRegisteredESSymbolType().target, t2.AsRegisteredESSymbolType().target); c != 0 {
+			return c
+		}
 	}
 	// Fall back to type IDs. This results in type creation order for built-in types.
 	return int(t1.id) - int(t2.id)

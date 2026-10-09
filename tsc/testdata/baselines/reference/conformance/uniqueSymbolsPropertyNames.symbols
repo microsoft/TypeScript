@@ -131,19 +131,19 @@ class Cls1 {
 >Cls1 : Symbol(Cls1, Decl(uniqueSymbolsPropertyNames.ts, 45, 2))
 
   [uniqueSymbol0] = "first";
->[uniqueSymbol0] : Symbol(Cls1[uniqueSymbol0], Decl(uniqueSymbolsPropertyNames.ts, 47, 12), Decl(uniqueSymbolsPropertyNames.ts, 48, 28))
+>[uniqueSymbol0] : Symbol(Cls1[uniqueSymbol0], Decl(uniqueSymbolsPropertyNames.ts, 47, 12), Decl(uniqueSymbolsPropertyNames.ts, 48, 28), Decl(uniqueSymbolsPropertyNames.ts, 49, 27), Decl(uniqueSymbolsPropertyNames.ts, 50, 28))
 >uniqueSymbol0 : Symbol(uniqueSymbol0, Decl(uniqueSymbolsPropertyNames.ts, 8, 5))
 
   [uniqueSymbol0] = "last";
->[uniqueSymbol0] : Symbol(Cls1[uniqueSymbol0], Decl(uniqueSymbolsPropertyNames.ts, 47, 12), Decl(uniqueSymbolsPropertyNames.ts, 48, 28))
+>[uniqueSymbol0] : Symbol(Cls1[uniqueSymbol0], Decl(uniqueSymbolsPropertyNames.ts, 47, 12), Decl(uniqueSymbolsPropertyNames.ts, 48, 28), Decl(uniqueSymbolsPropertyNames.ts, 49, 27), Decl(uniqueSymbolsPropertyNames.ts, 50, 28))
 >uniqueSymbol0 : Symbol(uniqueSymbol0, Decl(uniqueSymbolsPropertyNames.ts, 8, 5))
 
   [uniqueSymbol1] = "first";
->[uniqueSymbol1] : Symbol(Cls1[uniqueSymbol1], Decl(uniqueSymbolsPropertyNames.ts, 49, 27), Decl(uniqueSymbolsPropertyNames.ts, 50, 28))
+>[uniqueSymbol1] : Symbol(Cls1[uniqueSymbol0], Decl(uniqueSymbolsPropertyNames.ts, 47, 12), Decl(uniqueSymbolsPropertyNames.ts, 48, 28), Decl(uniqueSymbolsPropertyNames.ts, 49, 27), Decl(uniqueSymbolsPropertyNames.ts, 50, 28))
 >uniqueSymbol1 : Symbol(uniqueSymbol1, Decl(uniqueSymbolsPropertyNames.ts, 9, 5))
 
   [uniqueSymbol1] = "last";
->[uniqueSymbol1] : Symbol(Cls1[uniqueSymbol1], Decl(uniqueSymbolsPropertyNames.ts, 49, 27), Decl(uniqueSymbolsPropertyNames.ts, 50, 28))
+>[uniqueSymbol1] : Symbol(Cls1[uniqueSymbol0], Decl(uniqueSymbolsPropertyNames.ts, 47, 12), Decl(uniqueSymbolsPropertyNames.ts, 48, 28), Decl(uniqueSymbolsPropertyNames.ts, 49, 27), Decl(uniqueSymbolsPropertyNames.ts, 50, 28))
 >uniqueSymbol1 : Symbol(uniqueSymbol1, Decl(uniqueSymbolsPropertyNames.ts, 9, 5))
 }
 

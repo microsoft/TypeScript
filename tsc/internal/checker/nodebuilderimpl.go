@@ -2352,6 +2352,14 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 		}
 	}
 	if result == nil {
+		if declaration != nil && ast.IsVariableDeclaration(declaration) && t.flags&TypeFlagsUniqueESSymbol != 0 && !b.ch.IsValueSymbolAccessible(t.symbol, b.ctx.enclosingDeclaration) {
+			initializer := declaration.Initializer()
+			if initializer != nil && ast.IsEntityNameExpression(initializer) {
+				result = b.f.NewTypeQueryNode(b.f.DeepCloneNode(initializer), nil)
+			}
+		}
+	}
+	if result == nil {
 		if reportedInferenceFallback {
 			oldSuppress := b.ctx.suppressReportInferenceFallback
 			b.ctx.suppressReportInferenceFallback = true
@@ -2571,6 +2579,11 @@ func (b *NodeBuilderImpl) getPropertyNameNodeForSymbolFromNameType(symbol *ast.S
 		return b.createPropertyNameNodeForIdentifierOrLiteral(name, singleQuote, stringNamed, isMethod, symbol)
 	}
 	if nameType.flags&TypeFlagsUniqueESSymbol != 0 {
+		if isRegisteredSymbolAlias(nameType.alias) && symbol.ValueDeclaration != nil {
+			if declName := symbol.ValueDeclaration.Name(); declName != nil && ast.IsComputedPropertyName(declName) {
+				return b.f.DeepCloneNode(declName)
+			}
+		}
 		// The reference was tracked in the destination scope by trackComputedName.
 		// Reconstructing its spelling in the source scope must not paint that scope's declarations visible.
 		return b.f.NewComputedPropertyName(b.symbolToExpressionWorker(nameType.AsUniqueESSymbolType().symbol, ast.SymbolFlagsValue))
@@ -2838,12 +2851,52 @@ func (b *NodeBuilderImpl) createTypeNodeFromObjectType(t *Type) *ast.TypeNode {
 
 	restoreFlags := b.saveRestoreFlags()
 	b.ctx.flags |= nodebuilder.FlagsInObjectTypeLiteral
+	var mappedProperties []*ast.Symbol
+	var ordinaryProperties []*ast.Symbol
+	for _, property := range resolved.properties {
+		var nameType *Type
+		if b.ch.valueSymbolLinks.Has(property) {
+			nameType = b.ch.valueSymbolLinks.TryGet(property).nameType
+		}
+		name := ast.GetNameOfDeclaration(property.ValueDeclaration)
+		if nameType != nil && nameType.flags&TypeFlagsUniqueESSymbol != 0 && isRegisteredSymbolAlias(nameType.alias) &&
+			name != nil && ast.IsComputedPropertyName(name) && !ast.IsEntityNameExpression(name.Expression()) {
+			mappedProperties = append(mappedProperties, property)
+		} else {
+			ordinaryProperties = append(ordinaryProperties, property)
+		}
+	}
+	if len(mappedProperties) != 0 {
+		copy := *resolved
+		copy.properties = ordinaryProperties
+		resolved = &copy
+	}
 	members := b.createTypeNodesFromResolvedType(resolved)
+	var typeNodes []*ast.TypeNode
+	if members != nil && len(members.Nodes) != 0 || len(mappedProperties) == 0 {
+		typeLiteralNode := b.f.NewTypeLiteralNode(members)
+		b.ctx.approximateLength += 2
+		b.e.SetEmitFlags(typeLiteralNode, core.IfElse((b.ctx.flags&nodebuilder.FlagsMultilineObjectLiterals != 0), 0, printer.EFSingleLine))
+		typeNodes = append(typeNodes, typeLiteralNode)
+	}
+	for _, property := range mappedProperties {
+		nameType := b.ch.valueSymbolLinks.Get(property).nameType
+		key := b.f.NewTypeParameterDeclaration(nil, b.f.NewIdentifier("K"), b.typeToTypeNode(nameType), nil, nil)
+		var readonlyToken *ast.Node
+		if b.ch.isReadonlySymbol(property) {
+			readonlyToken = b.f.NewToken(ast.KindReadonlyKeyword)
+		}
+		var questionToken *ast.Node
+		if property.Flags&ast.SymbolFlagsOptional != 0 {
+			questionToken = b.f.NewToken(ast.KindQuestionToken)
+		}
+		typeNodes = append(typeNodes, b.f.NewMappedTypeNode(readonlyToken, key, nil, questionToken, b.typeToTypeNode(b.ch.getNonMissingTypeOfSymbol(property)), nil))
+	}
 	restoreFlags()
-	typeLiteralNode := b.f.NewTypeLiteralNode(members)
-	b.ctx.approximateLength += 2
-	b.e.SetEmitFlags(typeLiteralNode, core.IfElse((b.ctx.flags&nodebuilder.FlagsMultilineObjectLiterals != 0), 0, printer.EFSingleLine))
-	return typeLiteralNode
+	if len(typeNodes) == 1 {
+		return typeNodes[0]
+	}
+	return b.f.NewIntersectionTypeNode(b.f.NewNodeList(typeNodes))
 }
 
 func getTypeAliasForTypeLiteral(c *Checker, t *Type) *ast.Symbol {
@@ -3468,6 +3521,9 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		}
 	}
 	if t.flags&TypeFlagsUniqueESSymbol != 0 {
+		if isRegisteredSymbolAlias(t.alias) {
+			return t.alias.ToTypeReferenceNode(b)
+		}
 		if b.ctx.flags&nodebuilder.FlagsAllowUniqueESSymbolType == 0 {
 			if b.ch.IsValueSymbolAccessible(t.symbol, b.ctx.enclosingDeclaration) {
 				b.ctx.approximateLength += 6
