@@ -1414,6 +1414,60 @@ func TestBuildResolutionOptionChanges(t *testing.T) {
 	testCompilerOptionChanges(t, tests)
 }
 
+func TestBuildInheritedPathsBasePath(t *testing.T) {
+	t.Parallel()
+	const project = "/home/src/workspaces/project"
+	for _, build := range []bool{false, true} {
+		for _, initialBase := range []string{"first", "second"} {
+			nextBase := core.IfElse(initialBase == "first", "second", "first")
+			config := func(base string) string {
+				return fmt.Sprintf(`{
+					"extends": "../configs/%s/base.json",
+					"compilerOptions": {
+						"strict": true, "module": "esnext", "moduleResolution": "bundler",
+						"composite": true, "declaration": true, "emitDeclarationOnly": true,
+						"rootDir": "..", "outDir": "dist"
+					},
+					"files": ["index.ts"]
+				}`, base)
+			}
+			args := []string{"--project", "producer", "--listEmittedFiles"}
+			if build {
+				args = []string{"--build", "producer", "--verbose"}
+			}
+			const expectedDiff = "Changing the base of inherited paths leaves stale declaration module specifiers."
+			test := &tscInput{
+				subScenario: "inherited paths base " + initialBase + " to " + nextBase + " " + core.IfElse(build, "build", "incremental"),
+				cwd:         project,
+				files: FileMap{
+					project + "/producer/tsconfig.json":   config(initialBase),
+					project + "/configs/first/base.json":  `{"compilerOptions":{"paths":{"short":["./thing.ts"]}}}`,
+					project + "/configs/second/base.json": `{"compilerOptions":{"paths":{"short":["./thing.ts"]}}}`,
+					project + "/configs/first/thing.ts":   "export class Thing { private field = 1; }\n",
+					project + "/configs/second/thing.ts":  "export class Thing { private field = 2; }\n",
+					project + "/producer/factory.ts":      "import { Thing } from '../configs/first/thing';\nexport function make() { return new Thing(); }\n",
+					project + "/producer/index.ts":        "import { make } from './factory';\nexport const result = make();\n",
+				},
+				commandLineArgs: args,
+				edits: []*tscEdit{
+					noChange,
+					{
+						caption: "change extends without changing paths or source files",
+						edit: func(sys *TestSys) {
+							sys.writeFileNoError(project+"/producer/tsconfig.json", config(nextBase))
+						},
+						expectedDiff: expectedDiff,
+					},
+					{caption: "no change", expectedDiff: expectedDiff},
+					{caption: "force rebuild", commandLineArgs: []string{"--build", "producer", "--verbose", "--force"}},
+					noChange,
+				},
+			}
+			test.run(t, "compilerOptionChanges")
+		}
+	}
+}
+
 func TestBuildFileDelete(t *testing.T) {
 	t.Parallel()
 	testCases := []*tscInput{
