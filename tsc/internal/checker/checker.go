@@ -140,6 +140,8 @@ const (
 	CachedTypeKindDecoratorContextStatic
 	CachedTypeKindDecoratorContextPrivate
 	CachedTypeKindDecoratorContextPrivateStatic
+	CachedTypeKindSimplifiedConditionalTypeForReading
+	CachedTypeKindSimplifiedConditionalTypeForWriting
 )
 
 // CachedTypeKey
@@ -28543,6 +28545,16 @@ func (c *Checker) distributeIndexOverObjectType(objectType *Type, indexType *Typ
 }
 
 func (c *Checker) getSimplifiedConditionalType(t *Type, writing bool) *Type {
+	key := CachedTypeKey{kind: core.IfElse(writing, CachedTypeKindSimplifiedConditionalTypeForWriting, CachedTypeKindSimplifiedConditionalTypeForReading), typeId: t.id}
+	if cached, ok := c.cachedTypes[key]; ok {
+		return cached
+	}
+	result := c.getSimplifiedConditionalTypeWorker(t, writing)
+	c.cachedTypes[key] = result
+	return result
+}
+
+func (c *Checker) getSimplifiedConditionalTypeWorker(t *Type, writing bool) *Type {
 	checkType := t.AsConditionalType().checkType
 	extendsType := t.AsConditionalType().extendsType
 	trueType := c.getTrueTypeFromConditionalType(t)
