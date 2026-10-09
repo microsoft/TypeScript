@@ -23,6 +23,14 @@ type SymbolTrackerImpl struct {
 	getIsolatedDeclarationError func(node *ast.Node) *ast.Diagnostic
 }
 
+func (s *SymbolTrackerImpl) TypeAliasScope() *ast.Node {
+	return s.state.typeAliasScope
+}
+
+func (s *SymbolTrackerImpl) AddTypeAliasDeclaration(declaration *ast.Node) {
+	s.state.typeAliases = append(s.state.typeAliases, declaration)
+}
+
 // PopErrorFallbackNode implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) PopErrorFallbackNode() {
 	s.fallbackStack = s.fallbackStack[:len(s.fallbackStack)-1]
@@ -237,6 +245,8 @@ func createDiagnosticForNode(node *ast.Node, message *diagnostics.Message, args 
 }
 
 type SymbolTrackerSharedState struct {
+	typeAliasScope                   *ast.Node
+	typeAliases                      []*ast.Node
 	lateMarkedStatements             []*ast.Node
 	diagnostics                      []*ast.Diagnostic
 	getSymbolAccessibilityDiagnostic GetSymbolAccessibilityDiagnostic

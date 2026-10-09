@@ -54,8 +54,17 @@ func (b *NodeBuilder) enterContext(enclosingDeclaration *ast.Node, flags nodebui
 		enclosingSymbolTypes:     make(map[ast.SymbolId]*Type),
 		remappedSymbolReferences: make(map[ast.SymbolId]*ast.Symbol),
 	}
-	tracker = NewSymbolTrackerImpl(b.impl.ctx, tracker)
-	b.impl.ctx.tracker = tracker
+	for node := enclosingDeclaration; node != nil; node = node.Parent {
+		if ast.IsClassLike(node) || ast.IsInterfaceDeclaration(node) {
+			if symbol := b.impl.ch.getSymbolOfDeclaration(node); symbol != nil {
+				parameters := b.impl.ch.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol)
+				b.impl.ctx.typeParameters = append(parameters, b.impl.ctx.typeParameters...)
+			}
+		}
+	}
+	wrappedTracker := NewSymbolTrackerImpl(b.impl.ctx, tracker)
+	b.impl.ctx.tracker = wrappedTracker
+	b.impl.ctx.typeAliasTracker, _ = wrappedTracker.inner.(nodebuilder.TypeAliasTracker)
 }
 
 // propagateVerbosityOut copies expansion signals from the context to the VerbosityContext output.
@@ -102,6 +111,9 @@ func (b *NodeBuilder) exitContextSlice(result []*ast.Node) []*ast.Node {
 }
 
 func (b *NodeBuilder) exitContextCheck() {
+	if !b.impl.ctx.encounteredError {
+		b.impl.emitSerializationTypeAliases()
+	}
 	if b.impl.ctx.truncating && b.impl.ctx.flags&nodebuilder.FlagsNoTruncation != 0 {
 		b.impl.ctx.tracker.ReportTruncationError()
 	}

@@ -26,6 +26,7 @@ func NewSymbolTrackerImpl(context *NodeBuilderContext, tracker nodebuilder.Symbo
 }
 
 func (this *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags) bool {
+	this.context.recordTypeAliasParameter(symbol)
 	if !this.DisableTrackSymbol {
 		if this.inner != nil && this.inner.TrackSymbol(symbol, enclosingDeclaration, meaning) {
 			this.onDiagnosticReported()

@@ -22,6 +22,13 @@ type SymbolTracker interface {
 	PopErrorFallbackNode()
 }
 
+// Declaration emit can supply bindings that cannot be expressed by a type node alone.
+type TypeAliasTracker interface {
+	// The destination lexical scope for helper declarations.
+	TypeAliasScope() *ast.Node
+	AddTypeAliasDeclaration(declaration *ast.Node)
+}
+
 // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
 type Flags uint32
 

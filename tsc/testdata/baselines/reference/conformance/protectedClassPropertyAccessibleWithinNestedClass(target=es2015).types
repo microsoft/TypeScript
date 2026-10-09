@@ -78,10 +78,10 @@ class C {
 >x : C
 
                 var x1 = x.foo;
->x1 : () => any
->x.foo : () => any
+>x1 : () => C["foo"]
+>x.foo : () => C["foo"]
 >x : C
->foo : () => any
+>foo : () => C["foo"]
 
                 var x2 = x.bar;
 >x2 : () => void
@@ -131,10 +131,10 @@ class C {
 >C : typeof C
 
                 var y1 = y.foo;
->y1 : () => any
->y.foo : () => any
+>y1 : () => C["foo"]
+>y.foo : () => C["foo"]
 >y : C
->foo : () => any
+>foo : () => C["foo"]
 
                 var y2 = y.bar;
 >y2 : () => void

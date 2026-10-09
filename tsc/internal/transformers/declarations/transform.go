@@ -298,6 +298,8 @@ func (tx *DeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 	tx.rawLibReferenceDirectives = make([]*ast.FileReference, 0)
 	tx.witnessedCjsExports.Clear()
 	tx.state.currentSourceFile = node
+	tx.state.typeAliasScope = node.AsNode()
+	tx.state.typeAliases = nil
 	tx.collectFileReferences(node)
 	tx.resolver.PrecalculateDeclarationEmitVisibility(tx.EmitContext().MostOriginal(node.AsNode()).AsSourceFile())
 	updated := tx.transformSourceFile(node)
@@ -351,6 +353,14 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast
 	statements := tx.Visitor().VisitNodes(node.Statements)
 	combinedStatements = tx.transformAndReplaceLatePaintedStatements(statements)
 	combinedStatements = tx.appendCjsExports(combinedStatements)
+	if len(tx.state.typeAliases) != 0 {
+		combinedStatements = tx.Factory().NewNodeList(append(tx.state.typeAliases, combinedStatements.Nodes...))
+		tx.needsScopeFixMarker = true
+		if ast.IsExternalOrCommonJSModule(node) && !hasScopeMarker(combinedStatements) {
+			combinedStatements = tx.Factory().NewNodeList(append(combinedStatements.Nodes, createEmptyExports(tx.Factory().AsNodeFactory())))
+			tx.resultHasScopeMarker = true
+		}
+	}
 	combinedStatements.Loc = statements.Loc // setTextRange
 	if ast.IsExternalOrCommonJSModule(node) {
 		if ast.IsInJSFile(node.AsNode()) {
@@ -1843,6 +1853,8 @@ func (tx *DeclarationTransformer) transformModuleDeclaration(input *ast.ModuleDe
 	attributes := tx.Visitor().Visit(input.Attributes)
 
 	if inner != nil && inner.Kind == ast.KindModuleBlock {
+		oldTypeAliasScope, oldTypeAliases := tx.state.typeAliasScope, tx.state.typeAliases
+		tx.state.typeAliasScope, tx.state.typeAliases = input.AsNode(), nil
 		oldNeedsScopeFix := tx.needsScopeFixMarker
 		oldHasScopeFix := tx.resultHasScopeMarker
 		tx.resultHasScopeMarker = false
@@ -1852,6 +1864,11 @@ func (tx *DeclarationTransformer) transformModuleDeclaration(input *ast.ModuleDe
 		if input.Flags&ast.NodeFlagsAmbient != 0 {
 			tx.needsScopeFixMarker = false // If it was `declare`'d everything is implicitly exported already, ignore late printed "privates"
 		}
+		if len(tx.state.typeAliases) != 0 {
+			lateStatements = tx.Factory().NewNodeList(append(tx.state.typeAliases, lateStatements.Nodes...))
+			tx.needsScopeFixMarker = true
+		}
+		tx.state.typeAliasScope, tx.state.typeAliases = oldTypeAliasScope, oldTypeAliases
 		// With the final list of statements, there are 3 possibilities:
 		// 1. There's an export assignment or export declaration in the namespace - do nothing
 		// 2. Everything is exported and there are no export assignments or export declarations - strip all export modifiers

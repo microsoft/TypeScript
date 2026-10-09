@@ -1,50 +1,11 @@
-anonymousBindings.ts(2,14): error TS5088: The inferred type of 'factory' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(3,17): error TS5088: The inferred type of 'captured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(7,17): error TS5088: The inferred type of 'nestedCaptured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(18,17): error TS5088: The inferred type of 'constrained' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(22,17): error TS5088: The inferred type of 'optionalCaptured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(26,17): error TS5088: The inferred type of 'annotatedCaptured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(30,17): error TS5088: The inferred type of 'recursiveTuple' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(34,17): error TS5088: The inferred type of 'inferredCaptured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(38,17): error TS5088: The inferred type of 'mappedCaptured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(42,17): error TS5088: The inferred type of 'freshGeneric' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(46,17): error TS5088: The inferred type of 'mutualCaptured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(53,5): error TS5088: The inferred type of 'make' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(58,17): error TS5088: The inferred type of 'covariantClass' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(64,17): error TS5088: The inferred type of 'contravariantClass' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-anonymousBindings.ts(71,21): error TS5088: The inferred type of 'captured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 anonymousBindings.ts(93,26): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 anonymousBindings.ts(94,7): error TS2322: Type 'string' is not assignable to type 'number'.
 consumer.ts(11,7): error TS2322: Type '() => typeof arrow' is not assignable to type 'number'.
 consumer.ts(13,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-hiddenReferences.ts(3,12): error TS5088: The inferred type of 'expose' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-hiddenReferences.ts(4,15): error TS5088: The inferred type of 'next' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-hiddenReferences.ts(5,5): error TS5088: The inferred type of 'expose' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-mappedCycles.ts(6,14): error TS5088: The inferred type of 'mappedCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-mappedCycles.ts(7,14): error TS5088: The inferred type of 'mappedCycleCopy' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-mappedCycles.ts(8,14): error TS5088: The inferred type of 'nestedCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-mappedCycles.ts(10,14): error TS5088: The inferred type of 'keyedCycles' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-mappedCycles.ts(15,14): error TS5088: The inferred type of 'sharedCycles' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-mappedCycles.ts(25,14): error TS5088: The inferred type of 'mutualCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 mappedCycles.ts(38,7): error TS2322: Type 'number' is not assignable to type 'string'.
 mappedCycles.ts(39,7): error TS2322: Type 'string' is not assignable to type 'number'.
-mixedMappedCycle.ts(6,14): error TS5088: The inferred type of 'mixedCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 namedReferences.ts(28,7): error TS2322: Type 'string' is not assignable to type 'number'.
 namedReferences.ts(29,14): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-nestedNamedFunctions.ts(5,14): error TS5088: The inferred type of 'factory' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-nestedNamedFunctions.ts(8,17): error TS5088: The inferred type of 'local' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-optionalMappedCycle.ts(6,14): error TS5088: The inferred type of 'optionalCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-optionalMappedCycle.ts(8,14): error TS5088: The inferred type of 'optionalCopy' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-optionalMappedCycle.ts(10,14): error TS5088: The inferred type of 'nullableCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-optionalMappedCycle.ts(12,14): error TS5088: The inferred type of 'mixedCycles' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-optionalMappedCycle.ts(13,14): error TS5088: The inferred type of 'sharedOptionalCycles' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-optionalMappedCycle.ts(15,14): error TS5088: The inferred type of 'nullableKeys' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-optionalMappedCycle.ts(21,14): error TS5088: The inferred type of 'nullableRoot' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-optionalMappedCycle.ts(23,14): error TS5088: The inferred type of 'optionalRoot' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-optionalMappedCycle.ts(28,14): error TS5088: The inferred type of 'nullableLinks' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-optionalMappedCycle.ts(30,14): error TS5088: The inferred type of 'optionalNullableLinks' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-optionalMappedCycle.ts(35,14): error TS5088: The inferred type of 'nullableOptionalLinks' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-optionalMappedCycle.ts(40,14): error TS5088: The inferred type of 'nullishLinks' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 optionalMappedCycle.ts(73,7): error TS2322: Type 'null' is not assignable to type '{ value: number; next: any; }'.
 optionalMappedCycle.ts(74,7): error TS2322: Type 'undefined' is not assignable to type '{ value: number; next: any; }'.
 optionalMappedCycle.ts(75,42): error TS2531: Object is possibly 'null'.
@@ -53,11 +14,9 @@ recursiveAnnotations.ts(2,15): error TS2502: 'tuple' is referenced directly or i
 recursiveAnnotations.ts(3,15): error TS2502: 'array' is referenced directly or indirectly in its own type annotation.
 recursiveAnnotations.ts(8,15): error TS2502: 'union' is referenced directly or indirectly in its own type annotation.
 recursiveAnnotations.ts(9,15): error TS2502: 'conditional' is referenced directly or indirectly in its own type annotation.
-recursiveObject.ts(1,17): error TS5088: The inferred type of 'recursiveObject' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 recursiveObject.ts(12,7): error TS2322: Type '<U>(arg: U) => { call: any; consume: (arg: number) => any; }' is not assignable to type 'number'.
 recursiveObject.ts(13,16): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 recursiveStructures.ts(47,7): error TS2322: Type 'string' is not assignable to type 'number'.
-shadowedMappedCycle.ts(6,14): error TS5088: The inferred type of 'shadowedCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 
 
 ==== script.ts (0 errors) ====
@@ -117,10 +76,8 @@ shadowedMappedCycle.ts(6,14): error TS5088: The inferred type of 'shadowedCycle'
     const tupleCall: typeof tupleReturn = tupleReturn()[0]()[0];
     const shadowedCall: typeof shadowed = shadowed(1)(2);
     
-==== recursiveObject.ts (3 errors) ====
+==== recursiveObject.ts (2 errors) ====
     export function recursiveObject<T>() {
-                    ~~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'recursiveObject' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         const value = {
             call: <U>(arg: U) => value,
             consume: (arg: T) => value,
@@ -138,19 +95,15 @@ shadowedMappedCycle.ts(6,14): error TS5088: The inferred type of 'shadowedCycle'
                    ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
-==== nestedNamedFunctions.ts (2 errors) ====
+==== nestedNamedFunctions.ts (0 errors) ====
     export const nestedObject = { recur: () => nestedObject.recur };
     export const nestedTuple = [() => nestedTuple[0]] as const;
     export const object = { recur: function self() { return self; } };
     export const tuple = [function self() { return self; }] as const;
     export const factory = () => function self() { return self; };
-                 ~~~~~~~
-!!! error TS5088: The inferred type of 'factory' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     export const method = { recur() { return method; } };
     export const accessor = { get recur() { return accessor; } };
     export function local() {
-                    ~~~~~
-!!! error TS5088: The inferred type of 'local' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         function recur() { return recur; }
         return recur;
     }
@@ -260,18 +213,12 @@ shadowedMappedCycle.ts(6,14): error TS5088: The inferred type of 'shadowedCycle'
                  ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
-==== hiddenReferences.ts (3 errors) ====
+==== hiddenReferences.ts (0 errors) ====
     export class Hidden {
         private static recur() { return Hidden.recur; }
         static expose() { return Hidden.recur; }
-               ~~~~~~
-!!! error TS5088: The inferred type of 'expose' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         protected next() { return this.next; }
-                  ~~~~
-!!! error TS5088: The inferred type of 'next' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         expose() { return this.next; }
-        ~~~~~~
-!!! error TS5088: The inferred type of 'expose' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     }
     
 ==== signatureScopes.ts (0 errors) ====
@@ -337,32 +284,22 @@ shadowedMappedCycle.ts(6,14): error TS5088: The inferred type of 'shadowedCycle'
     export const inferredCopy = inferred;
     const inferredValue: string = inferredCopy.next(1).second("text").value;
     
-==== mappedCycles.ts (8 errors) ====
+==== mappedCycles.ts (2 errors) ====
     type Show<T> = { [K in keyof T]: T[K] } & unknown;
     type Resolve<M, K extends keyof M> = Show<{
         [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
     }>;
     declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
     export const mappedCycle = build<{ Node: { value: number; next: "ref" } }>();
-                 ~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'mappedCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     export const mappedCycleCopy = mappedCycle;
-                 ~~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'mappedCycleCopy' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     export const nestedCycle = { wrapped: build<{ Node: { value: string; next: "ref" } }>() };
-                 ~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'nestedCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     export const cycleKey = Symbol();
     export const keyedCycles = build<{
-                 ~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'keyedCycles' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         "a-b": { value: string; next: "ref" };
         0: { value: boolean; next: "ref" };
         [cycleKey]: { value: number; next: "ref" };
     }>();
     export const sharedCycles = {
-                 ~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'sharedCycles' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         first: mappedCycle,
         second: mappedCycle,
     };
@@ -373,8 +310,6 @@ shadowedMappedCycle.ts(6,14): error TS5088: The inferred type of 'shadowedCycle'
     }>;
     declare const buildMutual: <M>() => { [K in keyof M]: ResolveMutual<M, K> };
     export const mutualCycle = buildMutual<{
-                 ~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'mutualCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         First: { value: number; next: { ref: "Second" } };
         Second: { value: string; next: { ref: "First" } };
     }>();
@@ -394,71 +329,47 @@ shadowedMappedCycle.ts(6,14): error TS5088: The inferred type of 'shadowedCycle'
           ~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     
-==== optionalMappedCycle.ts (16 errors) ====
+==== optionalMappedCycle.ts (4 errors) ====
     type Show<T> = { [K in keyof T]: T[K] } & unknown;
     type Resolve<M, K extends keyof M> = Show<{
         [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
     }>;
     declare const build: <M>() => { [K in keyof M]?: Resolve<M, K> };
     export const optionalCycle = build<{ Node: { value: number; next: "ref" } }>();
-                 ~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'optionalCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     const optionalValue: number | undefined = optionalCycle.Node?.next.next.value;
     export const optionalCopy = optionalCycle;
-                 ~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'optionalCopy' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     declare const buildNullable: <M>() => { [K in keyof M]: Resolve<M, K> | null };
     export const nullableCycle = buildNullable<{ Node: { value: string; next: "ref" } }>();
-                 ~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'nullableCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     declare const wrap: <T>(value: T) => { required: T; optional?: T | null };
     export const mixedCycles = wrap(optionalCycle);
-                 ~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'mixedCycles' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     export const sharedOptionalCycles = { first: optionalCycle, second: optionalCycle };
-                 ~~~~~~~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'sharedOptionalCycles' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     export const nullableKey = Symbol();
     export const nullableKeys = buildNullable<{
-                 ~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'nullableKeys' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         "a-b": { value: string; next: "ref" };
         0: { value: boolean; next: "ref" };
         [nullableKey]: { value: number; next: "ref" };
     }>();
     declare const buildNullableRoot: <M>() => Resolve<M, keyof M> | null;
     export const nullableRoot = buildNullableRoot<{ Node: { value: number; next: "ref" } }>();
-                 ~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'nullableRoot' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     declare const buildOptionalRoot: <M>() => Resolve<M, keyof M> | undefined;
     export const optionalRoot = buildOptionalRoot<{ Node: { value: string; next: "ref" } }>();
-                 ~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'optionalRoot' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     type ResolveNullable<M, K extends keyof M> = Show<{
         [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullable<M, K> | null : M[K][P];
     }>;
     declare const buildNullableLinks: <M>() => { [K in keyof M]: ResolveNullable<M, K> | null };
     export const nullableLinks = buildNullableLinks<{ Node: { value: number; next: "ref" } }>();
-                 ~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'nullableLinks' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     declare const buildOptionalNullableLinks: <M>() => { [K in keyof M]?: ResolveNullable<M, K> | null };
     export const optionalNullableLinks = buildOptionalNullableLinks<{ Node: { value: number; next: "ref" } }>();
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'optionalNullableLinks' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     type ResolveOptional<M, K extends keyof M> = Show<{
         [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveOptional<M, K> | undefined : M[K][P];
     }>;
     declare const buildNullableOptionalLinks: <M>() => { [K in keyof M]: ResolveOptional<M, K> | null };
     export const nullableOptionalLinks = buildNullableOptionalLinks<{ Node: { value: number; next: "ref" } }>();
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'nullableOptionalLinks' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     type ResolveNullish<M, K extends keyof M> = Show<{
         [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullish<M, K> | null | undefined : M[K][P];
     }>;
     declare const buildNullishLinks: <M>() => { [K in keyof M]?: ResolveNullish<M, K> | null };
     export const nullishLinks = buildNullishLinks<{ Node: { value: number; next: "ref" } }>();
-                 ~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'nullishLinks' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     type NonNullable<T> = "shadowed";
     type OptionalNode = (typeof optionalCycle)["Node"] & {};
     type NullableNode = (typeof nullableCycle)["Node"] & {};
@@ -504,33 +415,25 @@ shadowedMappedCycle.ts(6,14): error TS5088: The inferred type of 'shadowedCycle'
                                             ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2533: Object is possibly 'null' or 'undefined'.
     
-==== mixedMappedCycle.ts (1 errors) ====
+==== mixedMappedCycle.ts (0 errors) ====
     type Show<T> = { [K in keyof T]: T[K] } & unknown;
     type Resolve<M, K extends keyof M> = Show<{
         [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
     }>;
     declare const build: <M>() => { [K in keyof M]: Resolve<M, K> | false | null };
     export const mixedCycle = build<{ Node: { value: number; next: "ref" } }>();
-                 ~~~~~~~~~~
-!!! error TS5088: The inferred type of 'mixedCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     if (mixedCycle.Node) {
         const value: number = mixedCycle.Node.next.next.value;
     }
     
-==== anonymousBindings.ts (17 errors) ====
+==== anonymousBindings.ts (2 errors) ====
     export const _recursive = 1;
     export const factory = () => function self() { return self; };
-                 ~~~~~~~
-!!! error TS5088: The inferred type of 'factory' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     export function captured<T>(value: T) {
-                    ~~~~~~~~
-!!! error TS5088: The inferred type of 'captured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         const node = { value, next: () => node, consume: (other: T) => node };
         return node;
     }
     export function nestedCaptured<T>(outer: T) {
-                    ~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'nestedCaptured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         return <U>(inner: U) => {
             const node = {
                 outer,
@@ -542,50 +445,34 @@ shadowedMappedCycle.ts(6,14): error TS5088: The inferred type of 'shadowedCycle'
         };
     }
     export function constrained<T extends { value: number }, K extends keyof T>(key: K) {
-                    ~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'constrained' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         const node = { value: null! as T[K], next: () => node };
         return node;
     }
     export function optionalCaptured<T>(value: T) {
-                    ~~~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'optionalCaptured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         type Node = { value: T; next: Node };
         return null! as { node?: Node | false | null };
     }
     export function annotatedCaptured<T>(value: T) {
-                    ~~~~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'annotatedCaptured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         const node: { value: typeof value; next: typeof node } = { value, next: null! };
         return node;
     }
     export function recursiveTuple<T>(value: T) {
-                    ~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'recursiveTuple' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         type Tuple = readonly [T, Tuple];
         return null! as Tuple;
     }
     export function inferredCaptured<T>() {
-                    ~~~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'inferredCaptured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         type Node<V> = { value: V; next: Node<V> };
         return null! as (T extends () => infer U ? Node<U> : never);
     }
     export function mappedCaptured<T>() {
-                    ~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'mappedCaptured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         type Node = { [K in keyof T]: { value: T[K]; next: Node } };
         return null! as Node;
     }
     export function freshGeneric<T>(unused: T) {
-                    ~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'freshGeneric' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         const recur = <U>(value: U) => recur;
         return recur;
     }
     export function mutualCaptured<T, U>(left: T, right: U) {
-                    ~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'mutualCaptured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         type Left = { left: T; next: Right };
         type Right = { right: U; self: Right; next: Left };
         return { left: null! as Left, right: null! as Right };
@@ -593,23 +480,17 @@ shadowedMappedCycle.ts(6,14): error TS5088: The inferred type of 'shadowedCycle'
     export class CapturedClass<T> {
         constructor(public value: T) {}
         make<U extends T>(inner: U) {
-        ~~~~
-!!! error TS5088: The inferred type of 'make' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
             const node = { outer: this.value, inner, next: () => node };
             return node;
         }
     }
     export function covariantClass() {
-                    ~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'covariantClass' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         return class Node<out T> {
             value!: T;
             next(): Node<T> { return this; }
         };
     }
     export function contravariantClass() {
-                    ~~~~~~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'contravariantClass' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         return class Node<in T> {
             consume!: (value: T) => void;
             next(): Node<T> { return this; }
@@ -617,8 +498,6 @@ shadowedMappedCycle.ts(6,14): error TS5088: The inferred type of 'shadowedCycle'
     }
     export namespace Nested {
         export function captured<T>(value: T) {
-                        ~~~~~~~~
-!!! error TS5088: The inferred type of 'captured' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
             const node = { value, next: () => node };
             return node;
         }
@@ -647,14 +526,12 @@ shadowedMappedCycle.ts(6,14): error TS5088: The inferred type of 'shadowedCycle'
           ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     
-==== shadowedMappedCycle.ts (1 errors) ====
+==== shadowedMappedCycle.ts (0 errors) ====
     type Show<T> = { [K in keyof T]: T[K] } & unknown;
     type Resolve<M, K extends keyof M> = Show<{
         [P in keyof M[K]]: M[K][P] extends "ref" ? <T>(shadowedCycle: T) => Resolve<M, K> : M[K][P];
     }>;
     declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
     export const shadowedCycle = build<{ Node: { value: number; next: "ref" } }>();
-                 ~~~~~~~~~~~~~
-!!! error TS5088: The inferred type of 'shadowedCycle' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     const shadowedValue: number = shadowedCycle.Node.next(1).next("text").value;
     

@@ -45,7 +45,9 @@ type CompositeTypeCacheIdentity struct {
 	flags               nodebuilder.Flags
 	internalFlags       nodebuilder.InternalFlags
 	inferTypeParameters CacheHashKey
-	definitions         CacheHashKey
+	bindings            CacheHashKey
+	expansions          CacheHashKey
+	typeAliasSupport    bool
 }
 
 // A reference's spelling is independent of the definition currently being emitted.
@@ -56,14 +58,22 @@ type serializationTypeName struct {
 	path          []*Type
 }
 
-// Definitions include standalone signatures and types emitted syntactically or structurally.
-type serializationDefinition struct {
-	t         *Type
-	typeId    TypeId
-	signature *Signature
-	symbol    *ast.Symbol
-	depth     int
-	expanding bool
+// A value binding denotes its complete annotation, not an arbitrary constituent.
+type serializationTypeBinding struct {
+	t      *Type
+	typeId TypeId
+	symbol *ast.Symbol
+	path   []*Type
+	depth  int
+}
+
+// Structural graph traversal is independent of the bindings chosen for its cycles.
+type serializationExpansion struct {
+	t              *Type
+	typeId         TypeId
+	typeParameters []*Type
+	mapper         *TypeMapper
+	alias          *serializationTypeAlias
 }
 
 type NodeBuilderLinks struct {
@@ -105,8 +115,17 @@ type NodeBuilderContext struct {
 	enclosingSymbolTypes            map[ast.SymbolId]*Type
 	suppressReportInferenceFallback bool
 	remappedSymbolReferences        map[ast.SymbolId]*ast.Symbol
-	definitions                     []serializationDefinition
+	bindings                        []serializationTypeBinding
+	expansions                      []*serializationExpansion
 	deferredTypeDepth               int // Lazy member boundaries, excluding eager type arguments and container elements.
+	typeParameters                  []*Type
+	typeAliasTracker                nodebuilder.TypeAliasTracker
+	typeAliases                     []*serializationTypeAlias
+	typeAliasReferences             []serializationTypeAliasReference
+	currentTypeAlias                *serializationTypeAlias
+	typeAliasParameterDepth         int
+	writingTypeAliasArguments       bool
+	skipTypeAliasReference          bool
 
 	// per signature scope state
 	typeParameterNames                    collections.CopyOnWriteMap[TypeId, *ast.Identifier]
@@ -1898,7 +1917,17 @@ func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 		}
 	} else {
 		for _, parameter := range signature.typeParameters {
-			typeParameters = append(typeParameters, b.typeParameterToDeclaration(parameter))
+			declaration := b.typeParameterToDeclaration(parameter)
+			flags := b.ch.getTypeParameterModifiers(parameter)
+			if (kind == ast.KindConstructorType || kind == ast.KindConstructSignature) && flags&(ast.ModifierFlagsIn|ast.ModifierFlagsOut) != 0 {
+				// Class variance does not apply to constructor signatures.
+				var modifiers *ast.ModifierList
+				if flags := flags &^ (ast.ModifierFlagsIn | ast.ModifierFlagsOut); flags != ast.ModifierFlagsNone {
+					modifiers = b.f.NewModifierList(ast.CreateModifiersFromModifierFlags(flags, b.f.NewModifier))
+				}
+				declaration = ast.ReplaceModifiers(b.f, declaration, modifiers)
+			}
+			typeParameters = append(typeParameters, declaration)
 		}
 	}
 
@@ -2312,8 +2341,8 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 		t = b.ch.getOptionalType(t, false)
 	}
 
-	restoreDefinition := b.enterTypeDefinition(t, symbol, false /*expanding*/)
-	defer restoreDefinition()
+	restoreBinding := b.enterTypeBinding(t, symbol)
+	defer restoreBinding()
 
 	restoreFlags := b.saveRestoreFlags()
 	if t.flags&TypeFlagsUniqueESSymbol != 0 && t.symbol == symbol && (b.ctx.enclosingDeclaration == nil || core.Some(symbol.Declarations, func(d *ast.Declaration) bool {
@@ -2998,10 +3027,12 @@ func (b *NodeBuilderImpl) conditionalTypeToTypeNode(_t *Type) *ast.TypeNode {
 		b.ctx.approximateLength += 37
 		// 15 each for two added conditionals, 7 for an added infer type
 		newMapper := prependTypeMapping(t.root.checkType, newParam, t.mapper)
+		restoreScope := b.enterNewScope(t.root.node.AsNode(), nil, append([]*Type{newParam}, t.root.inferTypeParameters...), nil, nil)
 		restoreInferTypeParameters := b.enterInferTypeParameterScope(t.root.inferTypeParameters)
 		extendsTypeNode := b.typeToTypeNode(b.ch.instantiateType(t.root.extendsType, newMapper))
 		restoreInferTypeParameters()
 		trueTypeNode := b.typeToTypeNodeOrCircularityElision(b.ch.instantiateType(b.getTypeFromTypeNode(t.root.node.TrueType, false), newMapper))
+		restoreScope()
 		falseTypeNode := b.typeToTypeNodeOrCircularityElision(b.ch.instantiateType(b.getTypeFromTypeNode(t.root.node.FalseType, false), newMapper))
 
 		// outermost conditional makes `T` a type parameter, allowing the inner conditionals to be distributive
@@ -3020,10 +3051,12 @@ func (b *NodeBuilderImpl) conditionalTypeToTypeNode(_t *Type) *ast.TypeNode {
 		syntheticTrueNode := b.f.NewConditionalTypeNode(b.f.NewTypeReferenceNode(name.Clone(b.f), nil), b.f.DeepCloneNode(checkTypeNode), innerCheckConditionalNode, b.f.NewKeywordTypeNode(ast.KindNeverKeyword))
 		return b.f.NewConditionalTypeNode(checkTypeNode, syntheticExtendsNode, syntheticTrueNode, b.f.NewKeywordTypeNode(ast.KindNeverKeyword))
 	}
+	restoreScope := b.enterNewScope(t.root.node.AsNode(), nil, t.root.inferTypeParameters, nil, nil)
 	restoreInferTypeParameters := b.enterInferTypeParameterScope(t.root.inferTypeParameters)
 	extendsTypeNode := b.typeToTypeNode(t.extendsType)
 	restoreInferTypeParameters()
 	trueTypeNode := b.typeToTypeNodeOrCircularityElision(b.ch.getTrueTypeFromConditionalType(_t))
+	restoreScope()
 	falseTypeNode := b.typeToTypeNodeOrCircularityElision(b.ch.getFalseTypeFromConditionalType(_t))
 	return b.f.NewConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode)
 }
@@ -3193,14 +3226,31 @@ func (b *NodeBuilderImpl) typeReferenceToTypeNode(t *Type) *ast.TypeNode {
 
 func (b *NodeBuilderImpl) visitType(t *Type, transform func(b *NodeBuilderImpl, t *Type) *ast.TypeNode) *ast.TypeNode {
 	typeId := b.serializationTypeId(t)
-	for _, definition := range b.ctx.definitions {
-		if definition.expanding && b.isSameSerializationType(t, typeId, definition) {
+	for _, expansion := range b.ctx.expansions {
+		if b.isSameSerializationType(t, typeId, expansion.t, expansion.typeId) {
+			if b.ctx.typeAliasTracker != nil {
+				if expansion.alias == nil {
+					expansion.alias = b.createSerializationTypeAlias(expansion)
+				}
+				return b.serializationTypeAliasToNode(expansion.alias)
+			}
 			return b.createCyclicStructurePlaceholder()
 		}
 	}
-	restoreDefinition := b.enterTypeDefinition(t, nil, true /*expanding*/)
-	defer restoreDefinition()
-	return transform(b, t)
+	expansion := &serializationExpansion{t: t, typeId: typeId, typeParameters: slices.Clone(b.ctx.typeParameters), mapper: b.ctx.mapper}
+	expansions := b.ctx.expansions
+	bindings := b.ctx.bindings
+	if name := b.getSerializationValueName(t); name.symbol != nil && b.isSerializationTypeNameAccessible(name) {
+		b.ctx.bindings = append(bindings, serializationTypeBinding{t: t, typeId: typeId, symbol: name.symbol, path: name.path, depth: b.ctx.deferredTypeDepth})
+	}
+	b.ctx.expansions = append(expansions, expansion)
+	result := transform(b, t)
+	b.ctx.expansions = expansions
+	b.ctx.bindings = bindings
+	if expansion.alias != nil {
+		return b.serializationTypeAliasToNode(expansion.alias)
+	}
+	return result
 }
 
 func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeBuilderImpl, t *Type) *ast.TypeNode) *ast.TypeNode {
@@ -3235,34 +3285,35 @@ func (b *NodeBuilderImpl) transformType(t *Type, transform func(b *NodeBuilderIm
 	// of types allows us to catch circular references to instantiations of the same anonymous type
 
 	key := CompositeTypeCacheIdentity{
-		typeId:        typeId,
-		flags:         b.ctx.flags,
-		internalFlags: b.ctx.internalFlags,
+		typeId:           typeId,
+		flags:            b.ctx.flags,
+		internalFlags:    b.ctx.internalFlags,
+		typeAliasSupport: b.ctx.typeAliasTracker != nil,
 	}
 	// Expansion must recompute canIncreaseExpansionDepth instead of reusing cached output.
-	canUseCache := b.ctx.maxExpansionDepth < 0
+	canUseCache := b.ctx.maxExpansionDepth < 0 && b.ctx.currentTypeAlias == nil && len(b.ctx.typeAliases) == 0
 	if canUseCache && len(b.ctx.inferTypeParameters) != 0 {
 		key.inferTypeParameters = getTypeListKey(b.ctx.inferTypeParameters)
 	}
-	if canUseCache && len(b.ctx.definitions) != 0 {
-		// Unnamed definitions matter too: they determine where cyclic output is elided.
-		var definitions keyBuilder
-		for _, definition := range b.ctx.definitions {
-			definitions.writeUint32(uint32(definition.typeId))
-			if definition.signature != nil {
-				definitions.writeUint32(uint32(definition.signature.id))
-			} else {
-				definitions.writeUint32(0)
+	if canUseCache && len(b.ctx.bindings) != 0 {
+		var bindings keyBuilder
+		for _, binding := range b.ctx.bindings {
+			bindings.writeUint32(uint32(binding.typeId))
+			bindings.writeSymbol(binding.symbol)
+			bindings.writeInt(len(binding.path))
+			for _, index := range binding.path {
+				bindings.writeType(index)
 			}
-			if definition.symbol != nil {
-				definitions.writeSymbol(definition.symbol)
-			} else {
-				definitions.writeUint64(0)
-			}
-			definitions.writeByte(core.IfElse(definition.expanding, byte(1), byte(0)))
-			definitions.writeByte(core.IfElse(b.ctx.deferredTypeDepth > definition.depth, byte(1), byte(0)))
+			bindings.writeByte(core.IfElse(b.ctx.deferredTypeDepth > binding.depth, byte(1), byte(0)))
 		}
-		key.definitions = definitions.hash()
+		key.bindings = bindings.hash()
+	}
+	if canUseCache && len(b.ctx.expansions) != 0 {
+		var expansions keyBuilder
+		for _, expansion := range b.ctx.expansions {
+			expansions.writeUint32(uint32(expansion.typeId))
+		}
+		key.expansions = expansions.hash()
 	}
 	if canUseCache && b.ctx.enclosingDeclaration != nil && b.links.Has(b.ctx.enclosingDeclaration) {
 		links := b.links.Get(b.ctx.enclosingDeclaration)
@@ -3307,7 +3358,7 @@ func (b *NodeBuilderImpl) transformType(t *Type, transform func(b *NodeBuilderIm
 	startLength := b.ctx.approximateLength
 	result := transform(b, t)
 	addedLength := b.ctx.approximateLength - startLength
-	if canUseCache && !b.ctx.reportedDiagnostic && !b.ctx.encounteredError {
+	if canUseCache && len(b.ctx.typeAliases) == 0 && !b.ctx.reportedDiagnostic && !b.ctx.encounteredError {
 		links := b.links.Get(b.ctx.enclosingDeclaration)
 		if links.serializedTypes == nil {
 			links.serializedTypes = make(map[CompositeTypeCacheIdentity]*SerializedTypeEntry)
@@ -3344,6 +3395,8 @@ func (b *NodeBuilderImpl) transformType(t *Type, transform func(b *NodeBuilderIm
 }
 
 func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
+	skipTypeAliasReference := b.ctx.skipTypeAliasReference
+	b.ctx.skipTypeAliasReference = false
 	inTypeAlias := b.ctx.flags & nodebuilder.FlagsInTypeAlias
 	b.ctx.flags &^= nodebuilder.FlagsInTypeAlias
 
@@ -3513,7 +3566,12 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		defer func() { b.ctx.depth-- }()
 	}
 
-	if name := b.getTypeDefinitionReference(t); name.symbol != nil {
+	if !skipTypeAliasReference {
+		if alias := b.getSerializationTypeAlias(t); alias != nil {
+			return b.serializationTypeAliasToNode(alias)
+		}
+	}
+	if name := b.getTypeBindingReference(t); name.symbol != nil {
 		return b.serializationTypeNameToNode(name)
 	}
 
@@ -3537,6 +3595,9 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		}
 	}
 	if t.flags&TypeFlagsTypeParameter != 0 || objectFlags&ObjectFlagsClassOrInterface != 0 {
+		if t.flags&TypeFlagsTypeParameter != 0 {
+			b.ctx.recordTypeAliasParameter(t.symbol)
+		}
 		// When expanding class or interface types, show their structural form
 		if objectFlags&ObjectFlagsClassOrInterface != 0 && b.shouldExpandType(t, false /*isAlias*/) {
 			b.ctx.depth++
