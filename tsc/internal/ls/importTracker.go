@@ -357,7 +357,7 @@ func getSearchesFromDirectImports(
 
 	isNameMatch := func(name string) bool {
 		// Use name of "default" even in `export =` case because we may have allowSyntheticDefaultImports
-		return name == exportSymbol.Name() || exportKind != ExportKindNamed && name == ast.InternalSymbolNameDefault
+		return ast.MakeSymbolName(name) == exportSymbol.Name() || exportKind != ExportKindNamed && ast.MakeSymbolName(name) == ast.InternalSymbolNameDefault
 	}
 
 	// `import x = require("./x")` or `import * as x from "./x"`.
@@ -385,7 +385,7 @@ func getSearchesFromDirectImports(
 				singleReferences = append(singleReferences, propertyName)
 				// If renaming `{ foo as bar }`, don't touch `bar`, just `foo`.
 				// But do rename `foo` in ` { default as foo }` if that's the original export name.
-				if !isForRename || name.Text() == exportSymbol.Name() {
+				if !isForRename || ast.MakeSymbolName(name.Text()) == exportSymbol.Name() {
 					// Search locally for `bar`.
 					addSearch(name, checker.GetSymbolAtLocation(name))
 				}
@@ -415,7 +415,7 @@ func getSearchesFromDirectImports(
 		if ast.IsImportTypeNode(decl) {
 			if qualifier := decl.AsImportTypeNode().Qualifier; qualifier != nil {
 				firstIdentifier := ast.GetFirstIdentifier(qualifier)
-				if firstIdentifier.Text() == ast.SymbolName(exportSymbol) {
+				if ast.MakeSymbolName(firstIdentifier.Text()) == exportSymbol.Name() {
 					singleReferences = append(singleReferences, firstIdentifier)
 				}
 			} else if exportKind == ExportKindExportEquals {
@@ -448,7 +448,7 @@ func getSearchesFromDirectImports(
 			// `export =` might be imported by a default import if `--allowSyntheticDefaultImports` is on, so this handles both ExportKind.Default and ExportKind.ExportEquals.
 			// If a default import has the same name as the default export, allow to rename it.
 			// Given `import f` and `export default function f`, we will rename both, but for `import g` we will rename just that.
-			if name := importClause.Name(); name != nil && (exportKind == ExportKindDefault || exportKind == ExportKindExportEquals) && (!isForRename || name.Text() == symbolNameNoDefault(exportSymbol)) {
+			if name := importClause.Name(); name != nil && (exportKind == ExportKindDefault || exportKind == ExportKindExportEquals) && (!isForRename || ast.MakeSymbolName(name.Text()) == symbolNameNoDefault(exportSymbol)) {
 				defaultImportAlias := checker.GetSymbolAtLocation(name)
 				addSearch(name, defaultImportAlias)
 			}
@@ -583,7 +583,7 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 			return nil
 		}
 		// Similarly, skip past the symbol for 'export ='
-		if importedSymbol.Name() == "export=" {
+		if importedSymbol.Name() == ast.InternalSymbolNameExportEquals {
 			importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker)
 			if importedSymbol == nil {
 				return nil
@@ -593,7 +593,7 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 		// If `importedName` is undefined, do continue searching as the export is anonymous.
 		// (All imports returned from this function will be ignored anyway if we are in rename and this is a not a named export.)
 		importedName := symbolNameNoDefault(importedSymbol)
-		if importedName == "" || importedName == ast.InternalSymbolNameDefault || importedName == symbol.Name() {
+		if importedName == ast.EmptySymbolName || importedName == ast.InternalSymbolNameDefault || importedName == symbol.Name() {
 			return &ImportExportSymbol{
 				kind:   ImpExpKindImport,
 				symbol: importedSymbol,
@@ -699,17 +699,17 @@ func getExportEqualsLocalSymbol(importedSymbol *ast.Symbol, checker *checker.Che
 	return nil
 }
 
-func symbolNameNoDefault(symbol *ast.Symbol) string {
+func symbolNameNoDefault(symbol *ast.Symbol) ast.SymbolName {
 	if symbol.Name() != ast.InternalSymbolNameDefault {
 		return symbol.Name()
 	}
 	for _, decl := range symbol.Declarations() {
 		name := ast.GetNameOfDeclaration(decl)
 		if name != nil && ast.IsIdentifier(name) {
-			return name.Text()
+			return ast.MakeSymbolName(name.Text())
 		}
 	}
-	return ""
+	return ast.EmptySymbolName
 }
 
 // findModuleReferences finds all references to a module symbol across the given source files.

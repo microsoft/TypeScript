@@ -665,7 +665,7 @@ func (b *NodeBuilderImpl) pseudoReturnTypeMatchesPredicate(rt *pseudochecker.Pse
 	}
 	// For identifier predicates, check parameter name matches
 	if !isThis {
-		if tp.ParameterName.Text() != predicate.parameterName {
+		if ast.MakeSymbolName(tp.ParameterName.Text()) != predicate.parameterName {
 			return false
 		}
 	}

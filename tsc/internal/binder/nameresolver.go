@@ -13,16 +13,16 @@ type NameResolver struct {
 	Globals                          ast.SymbolTable
 	ArgumentsSymbol                  *ast.Symbol
 	RequireSymbol                    *ast.Symbol
-	Lookup                           func(symbols ast.SymbolTable, name string, meaning ast.SymbolFlags) *ast.Symbol
+	Lookup                           func(symbols ast.SymbolTable, name ast.SymbolName, meaning ast.SymbolFlags) *ast.Symbol
 	SymbolReferenced                 func(symbol *ast.Symbol, meaning ast.SymbolFlags)
 	SetRequiresScopeChangeCache      func(node *ast.Node, value core.Tristate)
 	GetRequiresScopeChangeCache      func(node *ast.Node) core.Tristate
-	OnPropertyWithInvalidInitializer func(location *ast.Node, name string, declaration *ast.Node, result *ast.Symbol) bool
-	OnFailedToResolveSymbol          func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message)
+	OnPropertyWithInvalidInitializer func(location *ast.Node, name ast.SymbolName, declaration *ast.Node, result *ast.Symbol) bool
+	OnFailedToResolveSymbol          func(location *ast.Node, name ast.SymbolName, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message)
 	OnSuccessfullyResolvedSymbol     func(location *ast.Node, result *ast.Symbol, meaning ast.SymbolFlags, lastLocation *ast.Node, associatedDeclarationForContainingInitializerOrBindingName *ast.Node, withinDeferredContext bool)
 }
 
-func (r *NameResolver) Resolve(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol {
+func (r *NameResolver) Resolve(location *ast.Node, name ast.SymbolName, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol {
 	var result *ast.Symbol
 	var lastLocation *ast.Node
 	var lastSelfReferenceLocation *ast.Node
@@ -31,7 +31,7 @@ func (r *NameResolver) Resolve(location *ast.Node, name string, meaning ast.Symb
 	var withinDeferredContext bool
 	var grandparent *ast.Node
 	originalLocation := location // needed for did-you-mean error reporting, which gathers candidates starting from the original location
-	nameIsConst := name == "const"
+	nameIsConst := name == ast.SymbolNameConst
 loop:
 	for location != nil {
 		if nameIsConst && ast.IsConstAssertion(location) {
@@ -161,7 +161,7 @@ loop:
 				if nameNotFoundMessage != nil && r.CompilerOptions.GetIsolatedModules() && location.Flags&ast.NodeFlagsAmbient == 0 && ast.GetSourceFileOfNode(location) != ast.GetSourceFileOfNode(result.ValueDeclaration()) {
 					isolatedModulesLikeFlagName := core.IfElse(r.CompilerOptions.VerbatimModuleSyntax == core.TSTrue, "verbatimModuleSyntax", "isolatedModules")
 					r.error(originalLocation, diagnostics.Cannot_access_0_from_another_file_without_qualification_when_1_is_enabled_Use_2_instead,
-						name, isolatedModulesLikeFlagName, enumSymbol.Name()+"."+name)
+						name.Value(), isolatedModulesLikeFlagName, enumSymbol.Name().Value()+"."+name.Value())
 				}
 				break loop
 			}
@@ -196,7 +196,7 @@ loop:
 			}
 			if ast.IsClassExpression(location) && meaning&ast.SymbolFlagsClass != 0 {
 				className := location.Name()
-				if className != nil && name == className.Text() {
+				if className != nil && name == ast.MakeSymbolName(className.Text()) {
 					result = location.Symbol()
 					break loop
 				}
@@ -234,18 +234,18 @@ loop:
 				}
 			}
 		case ast.KindMethodDeclaration, ast.KindConstructor, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindFunctionDeclaration:
-			if meaning&ast.SymbolFlagsVariable != 0 && name == "arguments" {
+			if meaning&ast.SymbolFlagsVariable != 0 && name == ast.SymbolNameArguments {
 				result = r.argumentsSymbol()
 				break loop
 			}
 		case ast.KindFunctionExpression:
-			if meaning&ast.SymbolFlagsVariable != 0 && name == "arguments" {
+			if meaning&ast.SymbolFlagsVariable != 0 && name == ast.SymbolNameArguments {
 				result = r.argumentsSymbol()
 				break loop
 			}
 			if meaning&ast.SymbolFlagsFunction != 0 {
 				functionName := location.AsFunctionExpression().Name()
-				if functionName != nil && name == functionName.Text() {
+				if functionName != nil && name == ast.MakeSymbolName(functionName.Text()) {
 					result = location.Symbol()
 					break loop
 				}
@@ -295,7 +295,7 @@ loop:
 		case ast.KindInferType:
 			if meaning&ast.SymbolFlagsTypeParameter != 0 {
 				parameterName := location.AsInferTypeNode().TypeParameter.AsTypeParameterDeclaration().Name()
-				if parameterName != nil && name == parameterName.Text() {
+				if parameterName != nil && name == ast.MakeSymbolName(parameterName.Text()) {
 					result = location.AsInferTypeNode().TypeParameter.Symbol()
 					break loop
 				}
@@ -423,7 +423,7 @@ func (r *NameResolver) getSymbolOfDeclaration(node *ast.Node) *ast.Symbol {
 	return node.Symbol()
 }
 
-func (r *NameResolver) lookup(symbols ast.SymbolTable, name string, meaning ast.SymbolFlags) *ast.Symbol {
+func (r *NameResolver) lookup(symbols ast.SymbolTable, name ast.SymbolName, meaning ast.SymbolFlags) *ast.Symbol {
 	if r.Lookup != nil {
 		return r.Lookup(symbols, name, meaning)
 	}
@@ -443,7 +443,7 @@ func (r *NameResolver) argumentsSymbol() *ast.Symbol {
 	if r.ArgumentsSymbol == nil {
 		// Default implementation synthesizes a transient symbol for `arguments`
 		r.ArgumentsSymbol = ast.NewSymbol()
-		r.ArgumentsSymbol.SetName("arguments")
+		r.ArgumentsSymbol.SetName(ast.SymbolNameArguments)
 		r.ArgumentsSymbol.SetFlags(ast.SymbolFlagsProperty | ast.SymbolFlagsTransient)
 	}
 	return r.ArgumentsSymbol

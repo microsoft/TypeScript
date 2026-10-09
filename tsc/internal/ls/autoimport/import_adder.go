@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"maps"
 	"slices"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -32,13 +33,13 @@ type ImportAdder interface {
 type addToExistingState struct {
 	importClauseOrBindingPattern *ast.ImportClauseOrBindingPattern
 	defaultImport                *newImportBinding
-	namedImports                 map[string]*newImportBinding
+	namedImports                 map[ast.SymbolName]*newImportBinding
 }
 
 // importsCollection tracks new imports to be created for a given module specifier
 type importsCollection struct {
 	defaultImport       *newImportBinding
-	namedImports        map[string]*newImportBinding
+	namedImports        map[ast.SymbolName]*newImportBinding
 	namespaceLikeImport *newImportBinding
 	useRequire          bool
 }
@@ -175,8 +176,8 @@ func (adder *importAdder) Edits() []*lsproto.TextEdit {
 	return changes[adder.view.importingFile.OriginalFileName()]
 }
 
-func sortedNamedImports(m map[string]*newImportBinding) []*newImportBinding {
-	keys := slices.Sorted(maps.Keys(m))
+func sortedNamedImports(m map[ast.SymbolName]*newImportBinding) []*newImportBinding {
+	keys := slices.SortedFunc(maps.Keys(m), func(a, b ast.SymbolName) int { return strings.Compare(a.Value(), b.Value()) })
 	result := make([]*newImportBinding, 0, len(keys))
 	for _, k := range keys {
 		result = append(result, m[k])
@@ -187,7 +188,7 @@ func sortedNamedImports(m map[string]*newImportBinding) []*newImportBinding {
 // AddImportFix adds a fix to the import adder, accumulating it with other fixes
 // so that multiple imports from the same module are coalesced into a single import statement.
 func (adder *importAdder) AddImportFix(fix *Fix) {
-	symbolName := fix.Name
+	symbolName := ast.MakeSymbolName(fix.Name)
 	compilerOptions := adder.view.program.Options()
 
 	switch fix.Kind {
@@ -201,7 +202,7 @@ func (adder *importAdder) AddImportFix(fix *Fix) {
 		if entry == nil {
 			entry = &addToExistingState{
 				importClauseOrBindingPattern: existingFix.importClauseOrBindingPattern,
-				namedImports:                 make(map[string]*newImportBinding),
+				namedImports:                 make(map[ast.SymbolName]*newImportBinding),
 			}
 			adder.addToExisting[existingFix.importClauseOrBindingPattern] = entry
 		}
@@ -260,7 +261,7 @@ func (adder *importAdder) AddImportFix(fix *Fix) {
 
 		case lsproto.ImportKindNamed:
 			if entry.namedImports == nil {
-				entry.namedImports = make(map[string]*newImportBinding)
+				entry.namedImports = make(map[ast.SymbolName]*newImportBinding)
 			}
 			prevImport := entry.namedImports[symbolName]
 			var prevTypeOnly lsproto.AddAsTypeOnly
@@ -277,7 +278,7 @@ func (adder *importAdder) AddImportFix(fix *Fix) {
 		case lsproto.ImportKindCommonJS:
 			if compilerOptions.VerbatimModuleSyntax == core.TSTrue {
 				if entry.namedImports == nil {
-					entry.namedImports = make(map[string]*newImportBinding)
+					entry.namedImports = make(map[ast.SymbolName]*newImportBinding)
 				}
 				prevImport := entry.namedImports[symbolName]
 				var prevTypeOnly lsproto.AddAsTypeOnly
@@ -469,13 +470,13 @@ func getNameForExportedSymbol(symbol *ast.Symbol, preferCapitalized bool) string
 		// - export { foo as default } => foo
 		// - export default 0 => filename converted to camelCase
 		name := getDefaultLikeExportNameFromDeclaration(symbol)
-		if name != "" {
-			return name
+		if name != ast.EmptySymbolName {
+			return name.Value()
 		}
 		debug.Assert(symbol.Parent() != nil, "Expected exported symbol to have module symbol as parent")
 		return lsutil.ModuleSymbolToValidIdentifier(symbol.Parent(), preferCapitalized)
 	}
-	return symbol.Name()
+	return symbol.Name().Value()
 }
 
 func replaceFirstIdentifierOfEntityName(factory *ast.NodeFactory, name *ast.EntityName, newIdentifier *ast.IdentifierNode) *ast.EntityName {

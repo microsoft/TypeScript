@@ -366,7 +366,7 @@ func isUniqueLocalName(name string, container *ast.Node) bool {
 		locals := node.Locals()
 		if locals != nil {
 			// We conservatively include alias symbols to cover cases where they're emitted as locals
-			if local, ok := locals[name]; ok && local.Flags()&(ast.SymbolFlagsValue|ast.SymbolFlagsExportValue|ast.SymbolFlagsAlias) != 0 {
+			if local, ok := locals[ast.MakeSymbolName(name)]; ok && local.Flags()&(ast.SymbolFlagsValue|ast.SymbolFlagsExportValue|ast.SymbolFlagsAlias) != 0 {
 				return false
 			}
 		}

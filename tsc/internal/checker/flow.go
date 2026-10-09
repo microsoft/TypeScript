@@ -458,7 +458,7 @@ func (c *Checker) narrowTypeByCallExpression(f *FlowState, t *Type, callExpressi
 		callAccess := callExpression.Expression()
 		if c.isMatchingReference(f.reference.Expression(), c.getReferenceCandidate(callAccess.Expression())) && ast.IsIdentifier(callAccess.Name()) && callAccess.Name().Text() == "hasOwnProperty" && len(callExpression.Arguments()) == 1 {
 			argument := callExpression.Arguments()[0]
-			if accessedName, ok := c.getAccessedPropertyName(f.reference); ok && ast.IsStringLiteralLike(argument) && accessedName == argument.Text() {
+			if accessedName, ok := c.getAccessedPropertyName(f.reference); ok && ast.IsStringLiteralLike(argument) && accessedName == ast.MakeSymbolName(argument.Text()) {
 				return c.getTypeWithFacts(t, core.IfElse(assumeTrue, TypeFactsNEUndefined, TypeFactsEQUndefined))
 			}
 		}
@@ -702,7 +702,7 @@ func (c *Checker) narrowTypeByTypeFacts(t *Type, impliedType *Type, facts TypeFa
 func (c *Checker) narrowTypeByDiscriminantProperty(t *Type, access *ast.Node, operator ast.Kind, value *ast.Node, assumeTrue bool) *Type {
 	if (operator == ast.KindEqualsEqualsEqualsToken || operator == ast.KindExclamationEqualsEqualsToken) && t.flags&TypeFlagsUnion != 0 {
 		keyPropertyName := c.getKeyPropertyName(t)
-		if keyPropertyName != "" {
+		if keyPropertyName != ast.EmptySymbolName {
 			if accessedName, ok := c.getAccessedPropertyName(access); ok && keyPropertyName == accessedName {
 				candidate := c.getConstituentTypeForKeyType(t, c.getTypeOfExpression(value))
 				if candidate != nil {
@@ -768,7 +768,7 @@ func (c *Checker) narrowTypeByConstructor(t *Type, operator ast.Kind, identifier
 		return t
 	}
 	// Get the prototype property of the type identifier so we can find out its type.
-	prototypeProperty := c.getPropertyOfType(identifierType, "prototype")
+	prototypeProperty := c.getPropertyOfType(identifierType, ast.SymbolNamePrototype)
 	if prototypeProperty == nil {
 		return t
 	}
@@ -882,14 +882,14 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 	}
 	// We first attempt to filter the current type, narrowing constituents as appropriate and removing
 	// constituents that are unrelated to the candidate.
-	var keyPropertyName string
+	keyPropertyName := ast.EmptySymbolName
 	if t.flags&TypeFlagsUnion != 0 {
 		keyPropertyName = c.getKeyPropertyName(t)
 	}
 	narrowedType := c.mapType(candidate, func(n *Type) *Type {
 		// If a discriminant property is available, use that to reduce the type.
 		matching := t
-		if keyPropertyName != "" {
+		if keyPropertyName != ast.EmptySymbolName {
 			if discriminant := c.getTypeOfPropertyOfType(n, keyPropertyName); discriminant != nil {
 				if constituent := c.getConstituentTypeForKeyType(t, discriminant); constituent != nil {
 					matching = constituent
@@ -964,7 +964,7 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 }
 
 func (c *Checker) getInstanceType(constructorType *Type) *Type {
-	prototypePropertyType := c.getTypeOfPropertyOfType(constructorType, "prototype")
+	prototypePropertyType := c.getTypeOfPropertyOfType(constructorType, ast.SymbolNamePrototype)
 	if prototypePropertyType != nil && !IsTypeAny(prototypePropertyType) {
 		return prototypePropertyType
 	}
@@ -1021,7 +1021,7 @@ func (c *Checker) narrowTypeByInKeyword(f *FlowState, t *Type, nameType *Type, a
 	return t
 }
 
-func (c *Checker) isTypePresencePossible(t *Type, propName string, assumeTrue bool) bool {
+func (c *Checker) isTypePresencePossible(t *Type, propName ast.SymbolName, assumeTrue bool) bool {
 	prop := c.getPropertyOfType(t, propName)
 	if prop != nil {
 		return prop.Flags()&ast.SymbolFlagsOptional != 0 || prop.CheckFlags()&ast.CheckFlagsPartial != 0 || assumeTrue
@@ -1231,7 +1231,7 @@ func (c *Checker) narrowTypeBySwitchOptionalChainContainment(t *Type, data *ast.
 func (c *Checker) narrowTypeBySwitchOnDiscriminantProperty(t *Type, access *ast.Node, data *ast.FlowSwitchClauseData) *Type {
 	if data.ClauseStart < data.ClauseEnd && t.flags&TypeFlagsUnion != 0 {
 		accessedName, _ := c.getAccessedPropertyName(access)
-		if accessedName != "" && c.getKeyPropertyName(t) == accessedName {
+		if accessedName != ast.EmptySymbolName && c.getKeyPropertyName(t) == accessedName {
 			clauseTypes := c.getSwitchClauseTypes(data.SwitchStatement)[data.ClauseStart:data.ClauseEnd]
 			candidate := c.getUnionType(core.Map(clauseTypes, func(s *Type) *Type {
 				result := c.getConstituentTypeForKeyType(t, s)
@@ -1639,7 +1639,7 @@ func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 	case ast.KindQualifiedName:
 		if ast.IsAccessExpression(target) {
 			if targetPropertyName, ok := c.getAccessedPropertyName(target); ok {
-				return source.AsQualifiedName().Right.Text() == targetPropertyName && c.isMatchingReference(source.AsQualifiedName().Left, target.Expression())
+				return ast.MakeSymbolName(source.AsQualifiedName().Right.Text()) == targetPropertyName && c.isMatchingReference(source.AsQualifiedName().Left, target.Expression())
 			}
 		}
 	case ast.KindBinaryExpression:
@@ -1700,7 +1700,7 @@ func (c *Checker) writeFlowCacheKey(b *keyBuilder, node *ast.Node, declaredType 
 				return false
 			}
 			b.writeByte('.')
-			b.writeString(propName)
+			b.writeString(propName.Value())
 			return true
 		}
 		if ast.IsElementAccessExpression(node) && ast.IsIdentifier(node.AsElementAccessExpression().ArgumentExpression) {
@@ -1724,9 +1724,9 @@ func (c *Checker) writeFlowCacheKey(b *keyBuilder, node *ast.Node, declaredType 
 	return false
 }
 
-func (c *Checker) getAccessedPropertyName(access *ast.Node) (string, bool) {
+func (c *Checker) getAccessedPropertyName(access *ast.Node) (ast.SymbolName, bool) {
 	if ast.IsPropertyAccessExpression(access) {
-		return access.Name().Text(), true
+		return ast.MakeSymbolName(access.Name().Text()), true
 	}
 	if ast.IsElementAccessExpression(access) {
 		return c.tryGetElementAccessExpressionName(access.AsElementAccessExpression())
@@ -1735,29 +1735,29 @@ func (c *Checker) getAccessedPropertyName(access *ast.Node) (string, bool) {
 		return c.getDestructuringPropertyName(access)
 	}
 	if ast.IsParameterDeclaration(access) {
-		return strconv.Itoa(slices.Index(access.Parent.Parameters(), access)), true
+		return ast.MakeSymbolName(strconv.Itoa(slices.Index(access.Parent.Parameters(), access))), true
 	}
-	return "", false
+	return ast.EmptySymbolName, false
 }
 
-func (c *Checker) tryGetElementAccessExpressionName(node *ast.ElementAccessExpression) (string, bool) {
+func (c *Checker) tryGetElementAccessExpressionName(node *ast.ElementAccessExpression) (ast.SymbolName, bool) {
 	switch {
 	case ast.IsStringOrNumericLiteralLike(node.ArgumentExpression):
-		return node.ArgumentExpression.Text(), true
+		return ast.MakeSymbolName(node.ArgumentExpression.Text()), true
 	case ast.IsEntityNameExpression(node.ArgumentExpression):
 		return c.tryGetNameFromEntityNameExpression(node.ArgumentExpression)
 	}
-	return "", false
+	return ast.EmptySymbolName, false
 }
 
-func (c *Checker) tryGetNameFromEntityNameExpression(node *ast.Node) (string, bool) {
+func (c *Checker) tryGetNameFromEntityNameExpression(node *ast.Node) (ast.SymbolName, bool) {
 	symbol := c.resolveEntityName(node, ast.SymbolFlagsValue, true /*ignoreErrors*/, false, nil)
 	if symbol == nil || !(c.isConstantVariable(symbol) || (symbol.Flags()&ast.SymbolFlagsEnumMember != 0)) {
-		return "", false
+		return ast.EmptySymbolName, false
 	}
 	declaration := symbol.ValueDeclaration()
 	if declaration == nil {
-		return "", false
+		return ast.EmptySymbolName, false
 	}
 	t := c.tryGetTypeFromTypeNode(declaration)
 	if t != nil {
@@ -1773,23 +1773,24 @@ func (c *Checker) tryGetNameFromEntityNameExpression(node *ast.Node) (string, bo
 				return tryGetNameFromType(initializerType)
 			}
 		} else if ast.IsEnumMember(declaration) {
-			return ast.TryGetTextOfPropertyName(declaration.Name())
+			name, ok := ast.TryGetTextOfPropertyName(declaration.Name())
+			return ast.MakeSymbolName(name), ok
 		}
 	}
-	return "", false
+	return ast.EmptySymbolName, false
 }
 
-func tryGetNameFromType(t *Type) (string, bool) {
+func tryGetNameFromType(t *Type) (ast.SymbolName, bool) {
 	switch {
 	case t.flags&TypeFlagsUniqueESSymbol != 0:
 		return t.AsUniqueESSymbolType().name, true
 	case t.flags&TypeFlagsStringOrNumberLiteral != 0:
-		return evaluator.AnyToString(t.AsLiteralType().value), true
+		return ast.MakeSymbolName(evaluator.AnyToString(t.AsLiteralType().value)), true
 	}
-	return "", false
+	return ast.EmptySymbolName, false
 }
 
-func (c *Checker) getDestructuringPropertyName(node *ast.Node) (string, bool) {
+func (c *Checker) getDestructuringPropertyName(node *ast.Node) (ast.SymbolName, bool) {
 	parent := node.Parent
 	if ast.IsBindingElement(node) && ast.IsObjectBindingPattern(parent) {
 		return c.getLiteralPropertyNameText(getBindingElementPropertyName(node))
@@ -1798,17 +1799,17 @@ func (c *Checker) getDestructuringPropertyName(node *ast.Node) (string, bool) {
 		return c.getLiteralPropertyNameText(node.Name())
 	}
 	if ast.IsArrayLiteralExpression(parent) || ast.IsArrayBindingPattern(parent) {
-		return strconv.Itoa(slices.Index(parent.Elements(), node)), true
+		return ast.MakeSymbolName(strconv.Itoa(slices.Index(parent.Elements(), node))), true
 	}
-	return "", false
+	return ast.EmptySymbolName, false
 }
 
-func (c *Checker) getLiteralPropertyNameText(name *ast.Node) (string, bool) {
+func (c *Checker) getLiteralPropertyNameText(name *ast.Node) (ast.SymbolName, bool) {
 	t := c.getLiteralTypeFromPropertyName(name)
 	if t.flags&(TypeFlagsStringLiteral|TypeFlagsNumberLiteral) != 0 {
-		return evaluator.AnyToString(t.AsLiteralType().value), true
+		return ast.MakeSymbolName(evaluator.AnyToString(t.AsLiteralType().value)), true
 	}
-	return "", false
+	return ast.EmptySymbolName, false
 }
 
 func (c *Checker) isConstantReference(node *ast.Node) bool {
@@ -2091,7 +2092,7 @@ func (c *Checker) getEffectsSignature(node *ast.Node) *Signature {
  * Get the type of the `[Symbol.hasInstance]` method of an object type.
  */
 func (c *Checker) getSymbolHasInstanceMethodOfObjectType(t *Type) *Type {
-	hasInstancePropertyName := c.getPropertyNameForKnownSymbolName("hasInstance")
+	hasInstancePropertyName := c.getPropertyNameForKnownSymbolName(ast.SymbolNameHasInstance)
 	if c.allTypesAssignableToKind(t, TypeFlagsNonPrimitive) {
 		hasInstanceProperty := c.getPropertyOfType(t, hasInstancePropertyName)
 		if hasInstanceProperty != nil {
@@ -2104,7 +2105,7 @@ func (c *Checker) getSymbolHasInstanceMethodOfObjectType(t *Type) *Type {
 	return nil
 }
 
-func (c *Checker) getPropertyNameForKnownSymbolName(symbolName string) string {
+func (c *Checker) getPropertyNameForKnownSymbolName(symbolName ast.SymbolName) ast.SymbolName {
 	ctorType := c.getGlobalESSymbolConstructorSymbolOrNil()
 	if ctorType != nil {
 		uniqueType := c.getTypeOfPropertyOfType(c.getTypeOfSymbol(ctorType), symbolName)
@@ -2112,7 +2113,7 @@ func (c *Checker) getPropertyNameForKnownSymbolName(symbolName string) string {
 			return getPropertyNameFromType(uniqueType)
 		}
 	}
-	return ast.InternalSymbolNamePrefix + "@" + symbolName
+	return ast.MakeSymbolName(ast.InternalSymbolNamePrefix + "@" + symbolName.Value())
 }
 
 // We require the dotted function name in an assertion expression to be comprised of identifiers
@@ -2139,7 +2140,7 @@ func (c *Checker) getTypeOfDottedName(node *ast.Node, diagnostic *ast.Diagnostic
 						prop = c.getPropertyOfType(t, binder.GetSymbolNameForPrivateIdentifier(t.symbol, name.Text()))
 					}
 				} else {
-					prop = c.getPropertyOfType(t, name.Text())
+					prop = c.getPropertyOfType(t, ast.MakeSymbolName(name.Text()))
 				}
 				if prop != nil {
 					return c.getExplicitTypeOfSymbol(prop, diagnostic)
@@ -2465,10 +2466,11 @@ func (c *Checker) getTypePredicateArgument(predicate *TypePredicate, callExpress
 
 func (c *Checker) getFlowTypeInConstructor(symbol *ast.Symbol, constructor *ast.Node) *Type {
 	var accessName *ast.Node
-	if strings.HasPrefix(symbol.Name(), ast.InternalSymbolNamePrefix+"#") {
-		accessName = c.factory.NewPrivateIdentifier(symbol.Name()[strings.Index(symbol.Name(), "@")+1:])
+	if strings.HasPrefix(symbol.Name().Value(), ast.InternalSymbolNamePrefix+"#") {
+		name := symbol.Name().Value()
+		accessName = c.factory.NewPrivateIdentifier(name[strings.Index(name, "@")+1:])
 	} else {
-		accessName = c.factory.NewIdentifier(symbol.Name())
+		accessName = c.factory.NewIdentifier(symbol.Name().Value())
 	}
 	reference := c.factory.NewPropertyAccessExpression(c.factory.NewKeywordExpression(ast.KindThisKeyword), nil, accessName, ast.NodeFlagsNone)
 	reference.Expression().Parent = reference
@@ -2487,10 +2489,11 @@ func (c *Checker) getFlowTypeInConstructor(symbol *ast.Symbol, constructor *ast.
 
 func (c *Checker) getFlowTypeInStaticBlocks(symbol *ast.Symbol, staticBlocks []*ast.Node) *Type {
 	var accessName *ast.Node
-	if strings.HasPrefix(symbol.Name(), ast.InternalSymbolNamePrefix+"#") {
-		accessName = c.factory.NewPrivateIdentifier(symbol.Name()[strings.Index(symbol.Name(), "@")+1:])
+	if strings.HasPrefix(symbol.Name().Value(), ast.InternalSymbolNamePrefix+"#") {
+		name := symbol.Name().Value()
+		accessName = c.factory.NewPrivateIdentifier(name[strings.Index(name, "@")+1:])
 	} else {
-		accessName = c.factory.NewIdentifier(symbol.Name())
+		accessName = c.factory.NewIdentifier(symbol.Name().Value())
 	}
 	for _, staticBlock := range staticBlocks {
 		reference := c.factory.NewPropertyAccessExpression(c.factory.NewKeywordExpression(ast.KindThisKeyword), nil, accessName, ast.NodeFlagsNone)

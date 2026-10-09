@@ -111,7 +111,7 @@ func (f *missingMemberFixer) createMemberFromSymbol(symbol *ast.Symbol, enclosin
 
 				nodes = append(nodes, f.changeTracker.NodeFactory.NewSetAccessorDeclaration(
 					modifiers, createPropertyName(f.changeTracker.NodeFactory, declarationName, quotePreference),
-					nil /*typeParameters*/, createDummyParameters(f.changeTracker.NodeFactory, 1, []string{parameter.Name().Text()}, []*ast.TypeNode{f.createTypeNode(t, enclosingDeclaration, flags, nodeBuilder, idToSymbol)}, 1, ast.IsInJSFile(enclosingDeclaration)),
+					nil /*typeParameters*/, createDummyParameters(f.changeTracker.NodeFactory, 1, []ast.SymbolName{ast.MakeSymbolName(parameter.Name().Text())}, []*ast.TypeNode{f.createTypeNode(t, enclosingDeclaration, flags, nodeBuilder, idToSymbol)}, 1, ast.IsInJSFile(enclosingDeclaration)),
 					nil /*type*/, nil /*fullSignature*/, f.createBody(body, quotePreference, signatureOnly),
 				),
 				)
@@ -323,7 +323,7 @@ func (f *missingMemberFixer) createSignatureDeclarationFromSignatures(signatures
 	}
 
 	maxNonRestArgs := len(maxArgsSignature.Parameters()) - core.IfElse(maxArgsSignature.HasRestParameter(), 1, 0)
-	parameterNames := make([]string, 0, len(maxArgsSignature.Parameters()))
+	parameterNames := make([]ast.SymbolName, 0, len(maxArgsSignature.Parameters()))
 	for _, symbol := range maxArgsSignature.Parameters() {
 		parameterNames = append(parameterNames, symbol.Name())
 	}
@@ -331,8 +331,8 @@ func (f *missingMemberFixer) createSignatureDeclarationFromSignatures(signatures
 
 	if hasRestParameter {
 		restParameterName := "rest"
-		if maxNonRestArgs < len(parameterNames) && parameterNames[maxNonRestArgs] != "" {
-			restParameterName = parameterNames[maxNonRestArgs]
+		if maxNonRestArgs < len(parameterNames) && parameterNames[maxNonRestArgs] != ast.EmptySymbolName {
+			restParameterName = parameterNames[maxNonRestArgs].Value()
 		}
 
 		var questionToken *ast.QuestionToken
@@ -448,23 +448,23 @@ func (f *missingMemberFixer) createStubbedMethodBody(quotePreference lsutil.Quot
 	}), true /*multiLine*/)
 }
 
-func createDummyParameters(factory *ast.NodeFactory, argCount int, names []string, types []*ast.TypeNode, minArgumentCount int, inJS bool) *ast.ParameterList {
+func createDummyParameters(factory *ast.NodeFactory, argCount int, names []ast.SymbolName, types []*ast.TypeNode, minArgumentCount int, inJS bool) *ast.ParameterList {
 	parameters := make([]*ast.Node, 0, argCount)
-	parameterNameCounts := make(map[string]int)
+	parameterNameCounts := make(map[ast.SymbolName]int)
 
 	for i := range argCount {
-		parameterName := ""
-		if i < len(names) && names[i] != "" {
+		parameterName := ast.EmptySymbolName
+		if i < len(names) && names[i] != ast.EmptySymbolName {
 			parameterName = names[i]
 		} else {
-			parameterName = "arg" + strconv.Itoa(i)
+			parameterName = ast.MakeSymbolName("arg" + strconv.Itoa(i))
 		}
 
 		count := parameterNameCounts[parameterName]
 		parameterNameCounts[parameterName] = count + 1
 
 		if count > 0 {
-			parameterName += strconv.Itoa(count)
+			parameterName = ast.MakeSymbolName(parameterName.Value() + strconv.Itoa(count))
 		}
 
 		var questionToken *ast.QuestionToken
@@ -481,7 +481,7 @@ func createDummyParameters(factory *ast.NodeFactory, argCount int, names []strin
 			typeNode = factory.NewKeywordTypeNode(ast.KindUnknownKeyword)
 		}
 		parameters = append(parameters,
-			factory.NewParameterDeclaration(nil /*modifiers*/, nil /*dotDotDotToken*/, factory.NewIdentifier(parameterName), questionToken, typeNode, nil /*initializer*/))
+			factory.NewParameterDeclaration(nil /*modifiers*/, nil /*dotDotDotToken*/, factory.NewIdentifier(parameterName.Value()), questionToken, typeNode, nil /*initializer*/))
 	}
 	return factory.NewNodeList(parameters)
 }
@@ -490,14 +490,14 @@ func createDeclarationName(factory *ast.NodeFactory, typeChecker *checker.Checke
 	if symbol != nil && symbol.CheckFlags()&ast.CheckFlagsMapped != 0 {
 		nameType := typeChecker.GetNameTypeOfSymbol(symbol)
 		if nameType != nil && checker.IsTypeUsableAsPropertyName(nameType) {
-			return factory.NewIdentifier(checker.GetPropertyNameFromType(nameType))
+			return factory.NewIdentifier(checker.GetPropertyNameFromType(nameType).Value())
 		}
 	}
 	if declaration != nil && declaration.Name() != nil {
 		return declaration.Name().Clone(factory)
 	}
 	if symbol != nil {
-		return factory.NewIdentifier(symbol.Name())
+		return factory.NewIdentifier(symbol.Name().Value())
 	}
 	return nil
 }

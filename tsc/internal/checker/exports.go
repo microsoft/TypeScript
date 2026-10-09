@@ -92,11 +92,11 @@ func IsTypeUsableAsPropertyName(t *Type) bool {
 	return isTypeUsableAsPropertyName(t)
 }
 
-func GetPropertyNameFromType(t *Type) string {
+func GetPropertyNameFromType(t *Type) ast.SymbolName {
 	return getPropertyNameFromType(t)
 }
 
-func (c *Checker) GetGlobalSymbol(name string, meaning ast.SymbolFlags, diagnostic *diagnostics.Message) *ast.Symbol {
+func (c *Checker) GetGlobalSymbol(name ast.SymbolName, meaning ast.SymbolFlags, diagnostic *diagnostics.Message) *ast.Symbol {
 	return c.getGlobalSymbol(name, meaning, diagnostic)
 }
 
@@ -152,7 +152,7 @@ func (c *Checker) GetPropertiesOfType(t *Type) []*ast.Symbol {
 	return c.getPropertiesOfType(t)
 }
 
-func (c *Checker) GetPropertyOfType(t *Type, name string) *ast.Symbol {
+func (c *Checker) GetPropertyOfType(t *Type, name ast.SymbolName) *ast.Symbol {
 	return c.getPropertyOfType(t, name)
 }
 
@@ -172,7 +172,7 @@ func (c *Checker) IsPropertyAccessible(node *ast.Node, isSuper bool, isWrite boo
 	return c.isPropertyAccessible(node, isSuper, isWrite, containingType, property)
 }
 
-func (c *Checker) GetTypeOfPropertyOfContextualType(t *Type, name string) *Type {
+func (c *Checker) GetTypeOfPropertyOfContextualType(t *Type, name ast.SymbolName) *Type {
 	return c.getTypeOfPropertyOfContextualType(t, name)
 }
 
@@ -273,7 +273,7 @@ func (c *Checker) GetResolvedSignature(node *ast.Node) *Signature {
 }
 
 // Return the type of the given property in the given type, or nil if no such property exists
-func (c *Checker) GetTypeOfPropertyOfType(t *Type, name string) *Type {
+func (c *Checker) GetTypeOfPropertyOfType(t *Type, name ast.SymbolName) *Type {
 	return c.getTypeOfPropertyOfType(t, name)
 }
 
@@ -305,7 +305,7 @@ func (c *Checker) GetJsxFragmentFactory(location *ast.Node) string {
 	return ""
 }
 
-func (c *Checker) ResolveName(name string, location *ast.Node, meaning ast.SymbolFlags, excludeGlobals bool) *ast.Symbol {
+func (c *Checker) ResolveName(name ast.SymbolName, location *ast.Node, meaning ast.SymbolFlags, excludeGlobals bool) *ast.Symbol {
 	return c.resolveName(location, name, meaning, nil, true, excludeGlobals)
 }
 

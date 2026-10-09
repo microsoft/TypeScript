@@ -33,7 +33,7 @@ func cloneNodeBuilderContext(context *NodeBuilderContext) func() {
 }
 
 type localsRecord struct {
-	name      string
+	name      ast.SymbolName
 	oldSymbol *ast.Symbol
 }
 
@@ -94,7 +94,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 		// Note that we only check the most immediate enclosingDeclaration; the only place we
 		// could potentially add another fake scope into the chain is right here, so we don't
 		// traverse all ancestors.
-		pushFakeScope := func(kind string, addAll func(addSymbol func(name string, symbol *ast.Symbol))) func() {
+		pushFakeScope := func(kind string, addAll func(addSymbol func(name ast.SymbolName, symbol *ast.Symbol))) func() {
 			// We only ever need to look two declarations upward.
 			debug.Assert(b.ctx.enclosingDeclaration != nil)
 			var existingFakeScope *ast.Node
@@ -121,9 +121,9 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 			if locals == nil {
 				locals = make(ast.SymbolTable)
 			}
-			newLocals := []string{}
+			newLocals := []ast.SymbolName{}
 			oldLocals := []localsRecord{}
-			addAll(func(name string, symbol *ast.Symbol) {
+			addAll(func(name ast.SymbolName, symbol *ast.Symbol) {
 				// Add cleanup information only if we don't own the fake scope
 				if existingFakeScope != nil {
 					oldSymbol, ok := locals[name]
@@ -163,7 +163,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 		if expandedParams == nil || !core.Some(expandedParams, func(p *ast.Symbol) bool { return p != nil }) {
 			cleanupParams = nil
 		} else {
-			cleanupParams = pushFakeScope("params", func(add func(name string, symbol *ast.Symbol)) {
+			cleanupParams = pushFakeScope("params", func(add func(name ast.SymbolName, symbol *ast.Symbol)) {
 				if expandedParams == nil {
 					return
 				}
@@ -221,7 +221,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 		}
 
 		if b.ctx.flags&nodebuilder.FlagsGenerateNamesForShadowedTypeParams != 0 && typeParameters != nil && core.Some(typeParameters, func(p *Type) bool { return p != nil }) {
-			cleanupTypeParams = pushFakeScope("typeParams", func(add func(name string, symbol *ast.Symbol)) {
+			cleanupTypeParams = pushFakeScope("typeParams", func(add func(name ast.SymbolName, symbol *ast.Symbol)) {
 				if typeParameters == nil {
 					return
 				}
@@ -230,7 +230,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 						continue
 					}
 					typeParamName := b.typeParameterToName(typeParam).Text
-					add(typeParamName, typeParam.symbol)
+					add(ast.MakeSymbolName(typeParamName), typeParam.symbol)
 				}
 			})
 		}

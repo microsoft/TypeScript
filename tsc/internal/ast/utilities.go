@@ -1659,14 +1659,15 @@ func IsAmbientModule(node *Node) bool {
 	return IsModuleDeclaration(node) && (node.AsModuleDeclaration().Name().Kind == KindStringLiteral || IsGlobalScopeAugmentation(node))
 }
 
-func IsAmbientModuleSymbolName(s string) bool {
+func IsAmbientModuleSymbolName(s SymbolName) bool {
 	_, ok := TryGetAmbientModuleNameFromSymbolName(s)
 	return ok
 }
 
 // Ambient module symbols are either of the form `"modulename"` or `InternalSymbolNamePrefix + "\"modulename\"pattern@nodeId"`;
 // see `getDeclarationName`.
-func TryGetAmbientModuleNameFromSymbolName(s string) (string, bool) {
+func TryGetAmbientModuleNameFromSymbolName(name SymbolName) (string, bool) {
+	s := name.Value()
 	if strings.HasPrefix(s, "\"") && strings.HasSuffix(s, "\"") {
 		return s[1 : len(s)-1], true
 	}
@@ -2617,7 +2618,7 @@ func GetNamespaceDeclarationNode(node *Node) *Node {
 }
 
 func ModuleExportNameIsDefault(node *Node) bool {
-	return node.Text() == InternalSymbolNameDefault
+	return MakeSymbolName(node.Text()) == InternalSymbolNameDefault
 }
 
 func IsDefaultImport(node *Node /*ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration*/) bool {
@@ -3233,22 +3234,22 @@ func isShorthandPropertyNameUseSite(useSite *Node) bool {
 	return IsIdentifier(useSite) && IsShorthandPropertyAssignment(useSite.Parent) && useSite.Parent.AsShorthandPropertyAssignment().Name() == useSite
 }
 
-func GetPropertyNameForPropertyNameNode(name *Node) string {
+func GetPropertyNameForPropertyNameNode(name *Node) SymbolName {
 	switch name.Kind {
 	case KindIdentifier, KindPrivateIdentifier, KindStringLiteral, KindNoSubstitutionTemplateLiteral,
 		KindNumericLiteral, KindBigIntLiteral, KindJsxNamespacedName:
-		return name.Text()
+		return MakeSymbolName(name.Text())
 	case KindComputedPropertyName:
 		nameExpression := name.Expression()
 		if IsStringOrNumericLiteralLike(nameExpression) {
-			return nameExpression.Text()
+			return MakeSymbolName(nameExpression.Text())
 		}
 		if IsSignedNumericLiteral(nameExpression) {
 			text := nameExpression.AsPrefixUnaryExpression().Operand.Text()
 			if nameExpression.AsPrefixUnaryExpression().Operator == KindMinusToken {
 				text = "-" + text
 			}
-			return text
+			return MakeSymbolName(text)
 		}
 		return InternalSymbolNameMissing
 	}

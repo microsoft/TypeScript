@@ -1049,7 +1049,7 @@ func (l *LanguageService) getCompletionData(
 		members := getPropertiesForCompletion(containerExpectedType, typeChecker)
 		existingMembers := getPropertiesForCompletion(containerActualType, typeChecker)
 
-		existingMemberNames := collections.Set[string]{}
+		existingMemberNames := collections.Set[ast.SymbolName]{}
 		for _, member := range existingMembers {
 			existingMemberNames.Add(member.Name())
 		}
@@ -1325,15 +1325,15 @@ func (l *LanguageService) getCompletionData(
 		isNewIdentifierLocation = false
 		exports := typeChecker.GetExportsAndPropertiesOfModule(moduleSpecifierSymbol)
 
-		existing := collections.Set[string]{}
+		existing := collections.Set[ast.SymbolName]{}
 		for _, element := range namedImportsOrExports.Elements() {
 			if isCurrentlyEditingNode(element, file, position) {
 				continue
 			}
-			existing.Add(element.PropertyNameOrName().Text())
+			existing.Add(ast.MakeSymbolName(element.PropertyNameOrName().Text()))
 		}
 		uniques := core.Filter(exports, func(symbol *ast.Symbol) bool {
-			return ast.SymbolName(symbol) != ast.InternalSymbolNameDefault && !existing.Has(ast.SymbolName(symbol))
+			return symbol.Name() != ast.InternalSymbolNameDefault && !existing.Has(symbol.Name())
 		})
 
 		symbols = append(symbols, uniques...)
@@ -1365,14 +1365,14 @@ func (l *LanguageService) getCompletionData(
 		if importAttributes.AsImportAttributes().Attributes != nil {
 			elements = importAttributes.AsImportAttributes().Attributes.Nodes
 		}
-		attributeNames := core.Map(elements, func(el *ast.Node) string {
-			return el.AsImportAttribute().Name().Text()
+		attributeNames := core.Map(elements, func(el *ast.Node) ast.SymbolName {
+			return ast.MakeSymbolName(el.AsImportAttribute().Name().Text())
 		})
 		existing := collections.NewSetFromItems(attributeNames...)
 		uniques := core.Filter(
 			typeChecker.GetApparentProperties(typeChecker.GetTypeAtLocation(importAttributes)),
 			func(symbol *ast.Symbol) bool {
-				return !existing.Has(ast.SymbolName(symbol))
+				return !existing.Has(symbol.Name())
 			},
 		)
 		symbols = append(symbols, uniques...)
@@ -1548,7 +1548,7 @@ func (l *LanguageService) getCompletionData(
 		// Set sort texts.
 		for _, symbol := range filteredSymbols {
 			symbolId := ast.GetSymbolId(symbol)
-			if spreadMemberNames.Has(ast.SymbolName(symbol)) {
+			if spreadMemberNames.Has(ast.MakeSymbolName(ast.SymbolNameText(symbol))) {
 				symbolToSortTextMap[symbolId] = SortTextMemberDeclaredBySpreadAssignment
 			}
 			if symbol.Flags()&ast.SymbolFlagsOptional != 0 {
@@ -3170,7 +3170,7 @@ func getCompletionEntryDisplayNameForSymbol(
 	if originIncludesSymbolName(origin) {
 		name = origin.symbolName()
 	} else {
-		name = ast.SymbolName(symbol)
+		name = ast.SymbolNameText(symbol)
 	}
 	if name == "" ||
 		// If the symbol is external module, don't show it in the completion list
@@ -4251,15 +4251,15 @@ func isSnippetScope(scopeNode *ast.Node) bool {
 func isProbablyGlobalType(t *checker.Type, file *ast.SourceFile, typeChecker *checker.Checker) bool {
 	// The type of `self` and `window` is the same in lib.dom.d.ts, but `window` does not exist in
 	// lib.webworker.d.ts, so checking against `self` is also a check against `window` when it exists.
-	selfSymbol := typeChecker.GetGlobalSymbol("self", ast.SymbolFlagsValue, nil /*diagnostic*/)
+	selfSymbol := typeChecker.GetGlobalSymbol(ast.SymbolNameSelf, ast.SymbolFlagsValue, nil /*diagnostic*/)
 	if selfSymbol != nil && typeChecker.GetTypeOfSymbolAtLocation(selfSymbol, file.AsNode()) == t {
 		return true
 	}
-	globalSymbol := typeChecker.GetGlobalSymbol("global", ast.SymbolFlagsValue, nil /*diagnostic*/)
+	globalSymbol := typeChecker.GetGlobalSymbol(ast.SymbolNameGlobal, ast.SymbolFlagsValue, nil /*diagnostic*/)
 	if globalSymbol != nil && typeChecker.GetTypeOfSymbolAtLocation(globalSymbol, file.AsNode()) == t {
 		return true
 	}
-	globalThisSymbol := typeChecker.GetGlobalSymbol("globalThis", ast.SymbolFlagsValue, nil /*diagnostic*/)
+	globalThisSymbol := typeChecker.GetGlobalSymbol(ast.SymbolNameGlobalThis, ast.SymbolFlagsValue, nil /*diagnostic*/)
 	if globalThisSymbol != nil && typeChecker.GetTypeOfSymbolAtLocation(globalThisSymbol, file.AsNode()) == t {
 		return true
 	}
@@ -4315,7 +4315,7 @@ func getConstraintOfTypeArgumentProperty(node *ast.Node, typeChecker *checker.Ch
 		// (e.g. JSDoc types that never get re-attached) so we'll use
 		// the name as declared by the property as a best-effort.
 		if name, ok := ast.TryGetTextOfPropertyName(reparsed.Name()); ok {
-			return typeChecker.GetTypeOfPropertyOfContextualType(t, name)
+			return typeChecker.GetTypeOfPropertyOfContextualType(t, ast.MakeSymbolName(name))
 		}
 
 		return nil
@@ -4486,13 +4486,13 @@ func filterObjectMembersList(
 	file *ast.SourceFile,
 	position int,
 	typeChecker *checker.Checker,
-) (filteredMembers []*ast.Symbol, spreadMemberNames collections.Set[string]) {
+) (filteredMembers []*ast.Symbol, spreadMemberNames collections.Set[ast.SymbolName]) {
 	if len(existingMembers) == 0 {
-		return contextualMemberSymbols, collections.Set[string]{}
+		return contextualMemberSymbols, collections.Set[ast.SymbolName]{}
 	}
 
-	membersDeclaredBySpreadAssignment := collections.Set[string]{}
-	existingMemberNames := collections.Set[string]{}
+	membersDeclaredBySpreadAssignment := collections.Set[ast.SymbolName]{}
+	existingMemberNames := collections.Set[ast.SymbolName]{}
 	for _, member := range existingMembers {
 		// Ignore omitted expressions for missing members.
 		if member.Kind != ast.KindPropertyAssignment &&
@@ -4530,7 +4530,7 @@ func filterObjectMembersList(
 		}
 
 		if existingName != "" {
-			existingMemberNames.Add(existingName)
+			existingMemberNames.Add(ast.MakeSymbolName(existingName))
 		}
 	}
 
@@ -4546,7 +4546,7 @@ func isCurrentlyEditingNode(node *ast.Node, file *ast.SourceFile, position int) 
 	return start <= position && position <= node.End()
 }
 
-func setMemberDeclaredBySpreadAssignment(declaration *ast.Node, members *collections.Set[string], typeChecker *checker.Checker) {
+func setMemberDeclaredBySpreadAssignment(declaration *ast.Node, members *collections.Set[ast.SymbolName], typeChecker *checker.Checker) {
 	expression := declaration.Expression()
 	symbol := typeChecker.GetSymbolAtLocation(expression)
 	var t *checker.Type
@@ -4700,7 +4700,7 @@ func filterClassMembersList(
 	file *ast.SourceFile,
 	position int,
 ) []*ast.Symbol {
-	existingMemberNames := collections.Set[string]{}
+	existingMemberNames := collections.Set[ast.SymbolName]{}
 	for _, member := range existingMembers {
 		// Ignore omitted expressions for missing members.
 		if member.Kind != ast.KindPropertyDeclaration &&
@@ -4726,13 +4726,13 @@ func filterClassMembersList(
 		}
 
 		existingName := ast.GetPropertyNameForPropertyNameNode(member.Name())
-		if existingName != "" {
+		if existingName != ast.EmptySymbolName {
 			existingMemberNames.Add(existingName)
 		}
 	}
 
 	return core.Filter(baseSymbols, func(propertySymbol *ast.Symbol) bool {
-		return !existingMemberNames.Has(ast.SymbolName(propertySymbol)) &&
+		return !existingMemberNames.Has(ast.MakeSymbolName(ast.SymbolNameText(propertySymbol))) &&
 			len(propertySymbol.Declarations()) > 0 &&
 			checker.GetDeclarationModifierFlagsFromSymbol(propertySymbol)&ast.ModifierFlagsPrivate == 0 &&
 			!(propertySymbol.ValueDeclaration() != nil && ast.IsPrivateIdentifierClassElementDeclaration(propertySymbol.ValueDeclaration()))
@@ -4809,9 +4809,9 @@ func filterJsxAttributes(
 	file *ast.SourceFile,
 	position int,
 	typeChecker *checker.Checker,
-) (filteredMembers []*ast.Symbol, spreadMemberNames *collections.Set[string]) {
-	existingNames := collections.Set[string]{}
-	membersDeclaredBySpreadAssignment := collections.Set[string]{}
+) (filteredMembers []*ast.Symbol, spreadMemberNames *collections.Set[ast.SymbolName]) {
+	existingNames := collections.Set[ast.SymbolName]{}
+	membersDeclaredBySpreadAssignment := collections.Set[ast.SymbolName]{}
 	for _, attr := range attributes {
 		// If this is the item we are editing right now, do not filter it out.
 		if isCurrentlyEditingNode(attr, file, position) {
@@ -4819,7 +4819,7 @@ func filterJsxAttributes(
 		}
 
 		if attr.Kind == ast.KindJsxAttribute {
-			existingNames.Add(attr.Name().Text())
+			existingNames.Add(ast.MakeSymbolName(attr.Name().Text()))
 		} else if ast.IsJsxSpreadAttribute(attr) {
 			setMemberDeclaredBySpreadAssignment(attr, &membersDeclaredBySpreadAssignment, typeChecker)
 		}

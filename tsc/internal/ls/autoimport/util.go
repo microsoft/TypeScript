@@ -114,31 +114,31 @@ func getPackageNamesInNodeModules(nodeModulesDir tspath.RootedDirectoryPath, fs 
 	return packageNames
 }
 
-func getDefaultLikeExportNameFromDeclaration(symbol *ast.Symbol) string {
+func getDefaultLikeExportNameFromDeclaration(symbol *ast.Symbol) ast.SymbolName {
 	for _, d := range symbol.Declarations() {
 		// "export default" in this case. See `ExportAssignment`for more details.
 		if ast.IsExportAssignment(d) {
 			if innerExpression := ast.SkipOuterExpressions(d.Expression(), ast.OEKAll); ast.IsIdentifier(innerExpression) {
-				return innerExpression.Text()
+				return ast.MakeSymbolName(innerExpression.Text())
 			}
 			continue
 		}
 		// "export { ~ as default }"
 		if ast.IsExportSpecifier(d) && d.Symbol().Flags() == ast.SymbolFlagsAlias && d.PropertyName() != nil {
 			if d.PropertyName().Kind == ast.KindIdentifier {
-				return d.PropertyName().Text()
+				return ast.MakeSymbolName(d.PropertyName().Text())
 			}
 			continue
 		}
 		// GH#52694
 		if name := ast.GetNameOfDeclaration(d); name != nil && name.Kind == ast.KindIdentifier {
-			return name.Text()
+			return ast.MakeSymbolName(name.Text())
 		}
 		if symbol.Parent() != nil && !checker.IsExternalModuleSymbol(symbol.Parent()) {
 			return symbol.Parent().Name()
 		}
 	}
-	return ""
+	return ast.EmptySymbolName
 }
 
 func getResolvedPackageNames(ctx context.Context, program *compiler.Program) *collections.Set[string] {
