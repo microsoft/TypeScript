@@ -74,7 +74,9 @@ func (s *PagedLinkStore[V]) Has(key uint64) bool {
 func (s *PagedLinkStore[V]) TryGet(key uint64) *V {
 	pageIndex := key >> LinkPageShift
 	if int(pageIndex) < len(s.pages) {
-		return s.pages[pageIndex][key&LinkPageMask]
+		if page := s.pages[pageIndex]; page != nil {
+			return page[key&LinkPageMask]
+		}
 	}
 	return nil
 }
