@@ -1,0 +1,64 @@
+// === Inlay Hints ===
+f(...xs, "middle", "end");
+  ^
+{
+  "position": {
+    "line": 2,
+    "character": 2
+  },
+  "label": [
+    {
+      "value": "...head",
+      "location": {
+        "uri": "file:///inlayHintsSingleRestWithSpreadAndSuffix.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 32
+          },
+          "end": {
+            "line": 0,
+            "character": 36
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+f(...xs, "middle", "end");
+                   ^
+{
+  "position": {
+    "line": 2,
+    "character": 19
+  },
+  "label": [
+    {
+      "value": "tail",
+      "location": {
+        "uri": "file:///inlayHintsSingleRestWithSpreadAndSuffix.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 48
+          },
+          "end": {
+            "line": 0,
+            "character": 52
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}

@@ -1,0 +1,512 @@
+// === Inlay Hints ===
+fn(true, 1, "a", "b", "end");
+   ^
+{
+  "position": {
+    "line": 1,
+    "character": 3
+  },
+  "label": [
+    {
+      "value": "prefix",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 20
+          },
+          "end": {
+            "line": 0,
+            "character": 26
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+fn(true, 1, "a", "b", "end");
+         ^
+{
+  "position": {
+    "line": 1,
+    "character": 9
+  },
+  "label": [
+    {
+      "value": "first",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 47
+          },
+          "end": {
+            "line": 0,
+            "character": 52
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+fn(true, 1, "a", "b", "end");
+            ^
+{
+  "position": {
+    "line": 1,
+    "character": 12
+  },
+  "label": [
+    {
+      "value": "...middle",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 65
+          },
+          "end": {
+            "line": 0,
+            "character": 71
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+fn(true, 1, "a", "b", "end");
+                      ^
+{
+  "position": {
+    "line": 1,
+    "character": 22
+  },
+  "label": [
+    {
+      "value": "last",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 83
+          },
+          "end": {
+            "line": 0,
+            "character": 87
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+fn(true, 1, "end");
+   ^
+{
+  "position": {
+    "line": 2,
+    "character": 3
+  },
+  "label": [
+    {
+      "value": "prefix",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 20
+          },
+          "end": {
+            "line": 0,
+            "character": 26
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+fn(true, 1, "end");
+         ^
+{
+  "position": {
+    "line": 2,
+    "character": 9
+  },
+  "label": [
+    {
+      "value": "first",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 47
+          },
+          "end": {
+            "line": 0,
+            "character": 52
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+fn(true, 1, "end");
+            ^
+{
+  "position": {
+    "line": 2,
+    "character": 12
+  },
+  "label": [
+    {
+      "value": "last",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 83
+          },
+          "end": {
+            "line": 0,
+            "character": 87
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+onlyTrailing(1, 2, "end");
+             ^
+{
+  "position": {
+    "line": 4,
+    "character": 13
+  },
+  "label": [
+    {
+      "value": "...head",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 43
+          },
+          "end": {
+            "line": 3,
+            "character": 47
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+onlyTrailing(1, 2, "end");
+                   ^
+{
+  "position": {
+    "line": 4,
+    "character": 19
+  },
+  "label": [
+    {
+      "value": "tail",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 59
+          },
+          "end": {
+            "line": 3,
+            "character": 63
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+onlyTrailing("end");
+             ^
+{
+  "position": {
+    "line": 5,
+    "character": 13
+  },
+  "label": [
+    {
+      "value": "tail",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 59
+          },
+          "end": {
+            "line": 3,
+            "character": 63
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+noTrailing(1, "a", "b");
+           ^
+{
+  "position": {
+    "line": 7,
+    "character": 11
+  },
+  "label": [
+    {
+      "value": "first",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 6,
+            "character": 38
+          },
+          "end": {
+            "line": 6,
+            "character": 43
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+noTrailing(1, "a", "b");
+              ^
+{
+  "position": {
+    "line": 7,
+    "character": 14
+  },
+  "label": [
+    {
+      "value": "...rest",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 6,
+            "character": 56
+          },
+          "end": {
+            "line": 6,
+            "character": 60
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    multi<T, U>(1, ...middle, "end", true);
+                ^
+{
+  "position": {
+    "line": 10,
+    "character": 16
+  },
+  "label": [
+    {
+      "value": "first",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 73
+          },
+          "end": {
+            "line": 8,
+            "character": 78
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    multi<T, U>(1, ...middle, "end", true);
+                              ^
+{
+  "position": {
+    "line": 10,
+    "character": 30
+  },
+  "label": [
+    {
+      "value": "penultimate",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 113
+          },
+          "end": {
+            "line": 8,
+            "character": 124
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    multi<T, U>(1, ...middle, "end", true);
+                                     ^
+{
+  "position": {
+    "line": 10,
+    "character": 37
+  },
+  "label": [
+    {
+      "value": "last",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 134
+          },
+          "end": {
+            "line": 8,
+            "character": 138
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+skip({ x: 1 }, 2);
+               ^
+{
+  "position": {
+    "line": 13,
+    "character": 15
+  },
+  "label": [
+    {
+      "value": "next",
+      "location": {
+        "uri": "file:///inlayHintsTupleRestTrailing.ts",
+        "range": {
+          "start": {
+            "line": 12,
+            "character": 44
+          },
+          "end": {
+            "line": 12,
+            "character": 48
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
