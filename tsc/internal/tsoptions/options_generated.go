@@ -408,6 +408,7 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 		!oldOptions.Paths.EqualFunc(newOptions.Paths, func(a, b []string) bool {
 			return (a == nil) == (b == nil) && slices.Equal(a, b)
 		}) ||
+		oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("") ||
 		oldOptions.ResolvePackageJsonExports != newOptions.ResolvePackageJsonExports ||
 		oldOptions.ResolvePackageJsonImports != newOptions.ResolvePackageJsonImports ||
 		oldOptions.RewriteRelativeImportExtensions != newOptions.RewriteRelativeImportExtensions ||
@@ -478,6 +479,7 @@ func CompilerOptionsAffectEmit(oldOptions *core.CompilerOptions, newOptions *cor
 		!oldOptions.Paths.EqualFunc(newOptions.Paths, func(a, b []string) bool {
 			return (a == nil) == (b == nil) && slices.Equal(a, b)
 		}) ||
+		oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("") ||
 		oldOptions.PreserveConstEnums != newOptions.PreserveConstEnums ||
 		oldOptions.ResolvePackageJsonExports != newOptions.ResolvePackageJsonExports ||
 		oldOptions.ResolvePackageJsonImports != newOptions.ResolvePackageJsonImports ||

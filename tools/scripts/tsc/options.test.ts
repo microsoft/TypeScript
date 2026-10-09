@@ -209,6 +209,7 @@ test("option comparisons use value equality for every stored option type", () =>
         assert(source.includes(`(oldOptions.${name} == nil) != (newOptions.${name} == nil) || !slices.Equal(oldOptions.${name}, newOptions.${name})`));
     }
     assert.match(source, /!oldOptions.Paths.EqualFunc\(newOptions.Paths, func\(a, b \[\]string\) bool/);
+    assert.equal(source.split('oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("")').length - 1, 2);
     assert.match(source, /return \(a == nil\) == \(b == nil\) && slices.Equal\(a, b\)/);
     assert.match(source, /oldOptions.GetStrictOptionValue\(oldOptions.StrictNullChecks\) != newOptions.GetStrictOptionValue\(newOptions.StrictNullChecks\)/);
 });

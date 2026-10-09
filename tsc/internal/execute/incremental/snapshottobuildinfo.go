@@ -331,6 +331,10 @@ func (t *toBuildInfo) setCompilerOptions() {
 			t.buildInfo.Options.Set(option.Name, t.toRelativeToBuildInfoCompilerOptionValue(option, value))
 		},
 	)
+	// The inherited paths base is derived, not a declared compiler option.
+	if pathsBasePath := t.snapshot.options.GetPathsBasePath(""); pathsBasePath != "" {
+		t.buildInfo.Options.Set("pathsBasePath", t.relativeToBuildInfo(tspath.RootedPath(pathsBasePath)))
+	}
 }
 
 func (t *toBuildInfo) setReferencedMap() {

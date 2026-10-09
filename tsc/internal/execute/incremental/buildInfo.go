@@ -561,6 +561,12 @@ func (b *BuildInfo) GetCompilerOptions(buildInfoDirectory tspath.RootedDirectory
 		return options
 	}
 	for option, value := range b.Options.Entries() {
+		if option == "pathsBasePath" {
+			if path := tsoptions.ParseString(value); path != "" && buildInfoDirectory != "" {
+				options.PathsBasePath = buildInfoDirectory.ResolveDirectory(path)
+			}
+			continue
+		}
 		optionDeclaration := tsoptions.CommandLineCompilerOptionsMap.Get(option)
 		if buildInfoDirectory == "" && optionDeclaration != nil {
 			pathKind := optionDeclaration.PathKind

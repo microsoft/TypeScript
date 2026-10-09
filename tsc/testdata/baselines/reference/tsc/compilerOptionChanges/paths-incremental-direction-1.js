@@ -98,7 +98,7 @@ export declare class Thing {
 export declare const result: import("renamed").Thing;
 
 //// [/home/src/workspaces/project/producer/dist/producer/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":[4],"fileNames":["lib.es2020.d.ts","../../../external/thing.ts","../../../external/factory.ts","../../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1e13636538b7ccc39e192111e556e4fd-export class Thing { private field = 1; }\n","signature":"fd3b9b2da1026c3ff32025ff8ed07329-export declare class Thing {\n    private field;\n}\n","impliedNodeFormat":1},{"version":"ca900e2385cd189084934dd47c6733af-import { Thing } from './thing';\nexport function make() { return new Thing(); }\n","signature":"8541230877a83bcc0999fabcf92106a2-import { Thing } from './thing';\nexport declare function make(): Thing;\n","impliedNodeFormat":1},{"version":"c380ebe92cb8d9563d50748aaca5c414-import { make } from '../external/factory';\nexport const result = make();\n","signature":"dc47be6432a95c739ebc4a61d1942dd9-export declare const result: import(\"renamed\").Thing;\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"..","paths":{"renamed":["../external/thing.ts"]},"rootDir":"../../..","strict":true,"target":7},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[4],"fileNames":["lib.es2020.d.ts","../../../external/thing.ts","../../../external/factory.ts","../../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1e13636538b7ccc39e192111e556e4fd-export class Thing { private field = 1; }\n","signature":"fd3b9b2da1026c3ff32025ff8ed07329-export declare class Thing {\n    private field;\n}\n","impliedNodeFormat":1},{"version":"ca900e2385cd189084934dd47c6733af-import { Thing } from './thing';\nexport function make() { return new Thing(); }\n","signature":"8541230877a83bcc0999fabcf92106a2-import { Thing } from './thing';\nexport declare function make(): Thing;\n","impliedNodeFormat":1},{"version":"c380ebe92cb8d9563d50748aaca5c414-import { make } from '../external/factory';\nexport const result = make();\n","signature":"dc47be6432a95c739ebc4a61d1942dd9-export declare const result: import(\"renamed\").Thing;\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"..","paths":{"renamed":["../external/thing.ts"]},"rootDir":"../../..","strict":true,"target":7,"pathsBasePath":"../.."},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/producer/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -186,7 +186,8 @@ export declare const result: import("renamed").Thing;
     },
     "rootDir": "../../..",
     "strict": true,
-    "target": 7
+    "target": 7,
+    "pathsBasePath": "../.."
   },
   "referencedMap": {
     "../../../external/factory.ts": [
@@ -197,7 +198,7 @@ export declare const result: import("renamed").Thing;
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1991
+  "size": 2015
 }
 
 producer/tsconfig.json::
@@ -293,7 +294,7 @@ Errors  Files
 export declare const result: import("short").Thing;
 
 //// [/home/src/workspaces/project/producer/dist/producer/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","errors":true,"root":[4],"fileNames":["lib.es2020.d.ts","../../../external/thing.ts","../../../external/factory.ts","../../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1e13636538b7ccc39e192111e556e4fd-export class Thing { private field = 1; }\n","signature":"fd3b9b2da1026c3ff32025ff8ed07329-export declare class Thing {\n    private field;\n}\n","impliedNodeFormat":1},{"version":"ca900e2385cd189084934dd47c6733af-import { Thing } from './thing';\nexport function make() { return new Thing(); }\n","signature":"8541230877a83bcc0999fabcf92106a2-import { Thing } from './thing';\nexport declare function make(): Thing;\n","impliedNodeFormat":1},{"version":"c380ebe92cb8d9563d50748aaca5c414-import { make } from '../external/factory';\nexport const result = make();\n","signature":"0e35362bb91c0babf0255c92a3f9a217-export declare const result: import(\"short\").Thing;\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"..","paths":{"short":["../external/thing.ts"]},"rootDir":"../../..","strict":true,"target":7},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[4],"fileNames":["lib.es2020.d.ts","../../../external/thing.ts","../../../external/factory.ts","../../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1e13636538b7ccc39e192111e556e4fd-export class Thing { private field = 1; }\n","signature":"fd3b9b2da1026c3ff32025ff8ed07329-export declare class Thing {\n    private field;\n}\n","impliedNodeFormat":1},{"version":"ca900e2385cd189084934dd47c6733af-import { Thing } from './thing';\nexport function make() { return new Thing(); }\n","signature":"8541230877a83bcc0999fabcf92106a2-import { Thing } from './thing';\nexport declare function make(): Thing;\n","impliedNodeFormat":1},{"version":"c380ebe92cb8d9563d50748aaca5c414-import { make } from '../external/factory';\nexport const result = make();\n","signature":"0e35362bb91c0babf0255c92a3f9a217-export declare const result: import(\"short\").Thing;\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"..","paths":{"short":["../external/thing.ts"]},"rootDir":"../../..","strict":true,"target":7,"pathsBasePath":"../.."},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/producer/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -381,7 +382,8 @@ export declare const result: import("short").Thing;
     },
     "rootDir": "../../..",
     "strict": true,
-    "target": 7
+    "target": 7,
+    "pathsBasePath": "../.."
   },
   "referencedMap": {
     "../../../external/factory.ts": [
@@ -392,7 +394,7 @@ export declare const result: import("short").Thing;
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1987
+  "size": 2011
 }
 
 producer/tsconfig.json::
