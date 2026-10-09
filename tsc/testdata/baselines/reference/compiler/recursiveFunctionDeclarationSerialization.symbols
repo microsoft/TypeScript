@@ -2064,6 +2064,61 @@ if (mixedCycle.Node) {
 >value : Symbol(value, Decl(mixedMappedCycle.ts, 5, 41))
 }
 
+=== anonymousThisReturn.ts ===
+export function test() {
+>test : Symbol(test, Decl(anonymousThisReturn.ts, 0, 0))
+
+    return {
+        relyingOnThis() {
+>relyingOnThis : Symbol(relyingOnThis, Decl(anonymousThisReturn.ts, 1, 12))
+
+            return this;
+>this : Symbol(__object, Decl(anonymousThisReturn.ts, 1, 10))
+
+        },
+    };
+}
+test().relyingOnThis();
+>test().relyingOnThis : Symbol(relyingOnThis, Decl(anonymousThisReturn.ts, 1, 12))
+>test : Symbol(test, Decl(anonymousThisReturn.ts, 0, 0))
+>relyingOnThis : Symbol(relyingOnThis, Decl(anonymousThisReturn.ts, 1, 12))
+
+=== recursiveConditionalAliasUtils.ts ===
+type Recursive<T> = T extends Array<infer V> ? Recursive<V> : T;
+>Recursive : Symbol(Recursive, Decl(recursiveConditionalAliasUtils.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveConditionalAliasUtils.ts, 0, 15))
+>T : Symbol(T, Decl(recursiveConditionalAliasUtils.ts, 0, 15))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>V : Symbol(V, Decl(recursiveConditionalAliasUtils.ts, 0, 41))
+>Recursive : Symbol(Recursive, Decl(recursiveConditionalAliasUtils.ts, 0, 0))
+>V : Symbol(V, Decl(recursiveConditionalAliasUtils.ts, 0, 41))
+>T : Symbol(T, Decl(recursiveConditionalAliasUtils.ts, 0, 15))
+
+export const f = <T>(): Recursive<T> => {
+>f : Symbol(f, Decl(recursiveConditionalAliasUtils.ts, 1, 12))
+>T : Symbol(T, Decl(recursiveConditionalAliasUtils.ts, 1, 18))
+>Recursive : Symbol(Recursive, Decl(recursiveConditionalAliasUtils.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveConditionalAliasUtils.ts, 1, 18))
+
+    return null!;
+};
+
+=== recursiveConditionalAliasCopy.ts ===
+import { f } from "./recursiveConditionalAliasUtils";
+>f : Symbol(f, Decl(recursiveConditionalAliasCopy.ts, 0, 8))
+
+export const a = f;
+>a : Symbol(a, Decl(recursiveConditionalAliasCopy.ts, 1, 12))
+>f : Symbol(f, Decl(recursiveConditionalAliasCopy.ts, 0, 8))
+
+const numberValue: number = a<number[][][][][][][][][][][][][][][][]>();
+>numberValue : Symbol(numberValue, Decl(recursiveConditionalAliasCopy.ts, 2, 5))
+>a : Symbol(a, Decl(recursiveConditionalAliasCopy.ts, 1, 12))
+
+const stringValue: string = a<string[][]>();
+>stringValue : Symbol(stringValue, Decl(recursiveConditionalAliasCopy.ts, 3, 5))
+>a : Symbol(a, Decl(recursiveConditionalAliasCopy.ts, 1, 12))
+
 === anonymousBindings.ts ===
 export const _recursive = 1;
 >_recursive : Symbol(_recursive, Decl(anonymousBindings.ts, 0, 12))

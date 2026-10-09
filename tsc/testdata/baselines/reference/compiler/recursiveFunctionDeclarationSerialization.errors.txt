@@ -426,6 +426,28 @@ recursiveStructures.ts(47,7): error TS2322: Type 'string' is not assignable to t
         const value: number = mixedCycle.Node.next.next.value;
     }
     
+==== anonymousThisReturn.ts (0 errors) ====
+    export function test() {
+        return {
+            relyingOnThis() {
+                return this;
+            },
+        };
+    }
+    test().relyingOnThis();
+    
+==== recursiveConditionalAliasUtils.ts (0 errors) ====
+    type Recursive<T> = T extends Array<infer V> ? Recursive<V> : T;
+    export const f = <T>(): Recursive<T> => {
+        return null!;
+    };
+    
+==== recursiveConditionalAliasCopy.ts (0 errors) ====
+    import { f } from "./recursiveConditionalAliasUtils";
+    export const a = f;
+    const numberValue: number = a<number[][][][][][][][][][][][][][][][]>();
+    const stringValue: string = a<string[][]>();
+    
 ==== anonymousBindings.ts (2 errors) ====
     export const _recursive = 1;
     export const factory = () => function self() { return self; };

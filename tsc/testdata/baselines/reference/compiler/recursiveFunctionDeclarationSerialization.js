@@ -373,6 +373,28 @@ if (mixedCycle.Node) {
     const value: number = mixedCycle.Node.next.next.value;
 }
 
+//// [anonymousThisReturn.ts]
+export function test() {
+    return {
+        relyingOnThis() {
+            return this;
+        },
+    };
+}
+test().relyingOnThis();
+
+//// [recursiveConditionalAliasUtils.ts]
+type Recursive<T> = T extends Array<infer V> ? Recursive<V> : T;
+export const f = <T>(): Recursive<T> => {
+    return null!;
+};
+
+//// [recursiveConditionalAliasCopy.ts]
+import { f } from "./recursiveConditionalAliasUtils";
+export const a = f;
+const numberValue: number = a<number[][][][][][][][][][][][][][][][]>();
+const stringValue: string = a<string[][]>();
+
 //// [anonymousBindings.ts]
 export const _recursive = 1;
 export const factory = () => function self() { return self; };
@@ -752,6 +774,24 @@ export const mixedCycle = build();
 if (mixedCycle.Node) {
     const value = mixedCycle.Node.next.next.value;
 }
+//// [anonymousThisReturn.js]
+export function test() {
+    return {
+        relyingOnThis() {
+            return this;
+        },
+    };
+}
+test().relyingOnThis();
+//// [recursiveConditionalAliasUtils.js]
+export const f = () => {
+    return null;
+};
+//// [recursiveConditionalAliasCopy.js]
+import { f } from "./recursiveConditionalAliasUtils";
+export const a = f;
+const numberValue = a();
+const stringValue = a();
 //// [anonymousBindings.js]
 export const _recursive = 1;
 export const factory = () => function self() { return self; };
@@ -1573,6 +1613,21 @@ export declare const mixedCycle: {
     Node: false | _recursive | null;
 };
 export {};
+//// [anonymousThisReturn.d.ts]
+type _recursive = {
+    relyingOnThis(): _recursive;
+};
+export declare function test(): {
+    relyingOnThis(): _recursive;
+};
+export {};
+//// [recursiveConditionalAliasUtils.d.ts]
+type Recursive<T> = T extends Array<infer V> ? Recursive<V> : T;
+export declare const f: <T>() => Recursive<T>;
+export {};
+//// [recursiveConditionalAliasCopy.d.ts]
+import { f } from "./recursiveConditionalAliasUtils";
+export declare const a: typeof f;
 //// [anonymousBindings.d.ts]
 type _recursive_1 = () => _recursive_1;
 type _recursive_2<T> = {

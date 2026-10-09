@@ -2489,6 +2489,15 @@ func TestTscIncremental(t *testing.T) {
 					"compilerOptions": { "strict": true, "exactOptionalPropertyTypes": true, "composite": true, "outDir": "dist" }
 				}`,
 				"/home/src/workspaces/project/producer/index.ts": stringtestutil.Dedent(`
+					import { f } from "./recursive-conditional-utils";
+					export const conditionalAliasCopy = f;
+					export function anonymousThisReturn() {
+						return {
+							relyingOnThis() {
+								return this;
+							},
+						};
+					}
 					export const arrow = () => arrow;
 					export const expression = function self() { return self; };
 					export const first = () => second;
@@ -2704,11 +2713,18 @@ func TestTscIncremental(t *testing.T) {
 					}
 					type NonNullable<T> = "shadowed";
 				`),
+				"/home/src/workspaces/project/producer/recursive-conditional-utils.ts": stringtestutil.Dedent(`
+					type Recursive<T> = T extends Array<infer V> ? Recursive<V> : T;
+					export const f = <T>(): Recursive<T> => {
+						return null!;
+					};
+				`),
 				"/home/src/workspaces/project/consumer/tsconfig.json": `{
 					"compilerOptions": { "strict": true, "exactOptionalPropertyTypes": true, "noEmit": true },
 					"references": [{ "path": "../producer" }]
 				}`,
 				"/home/src/workspaces/project/consumer/index.ts": stringtestutil.Dedent(`
+					import { conditionalAliasCopy, anonymousThisReturn } from "../producer/dist/index.js";
 					import { arrow, expression, first, generic, objectReturn, tupleReturn, shadowed } from "../producer/dist/index.js";
 					import { object, method, accessor, tuple, array, nested } from "../producer/dist/index.js";
 					import { memberTuple, memberArray, quoted, numeric, key, computed, union, specialized } from "../producer/dist/index.js";
@@ -2813,6 +2829,13 @@ func TestTscIncremental(t *testing.T) {
 					const nullableOptionalLinkHasNull: null extends NullableOptionalLinkNode["next"] ? true : false = false;
 					const nullableOptionalLinkHasUndefined: undefined extends NullableOptionalLinkNode["next"] ? true : false = true;
 					type IsAny<T> = 0 extends (1 & T) ? true : false;
+					const anonymousThisResult = anonymousThisReturn().relyingOnThis().relyingOnThis();
+					const anonymousThisNotAny: IsAny<typeof anonymousThisResult> = false;
+					const anonymousThisMethodNotAny: IsAny<typeof anonymousThisResult.relyingOnThis> = false;
+					const conditionalAliasResult = conditionalAliasCopy<number[][][][][][][][][][][][][][][][]>();
+					const conditionalNumber: number = conditionalAliasResult;
+					const conditionalString: string = conditionalAliasCopy<string[][]>();
+					const conditionalNotAny: IsAny<typeof conditionalAliasResult> = false;
 					const result = arrow()()();
 					const notAny: false = null as unknown as IsAny<typeof result>;
 					const mappedNotAny: false = null as unknown as IsAny<typeof mappedCycle.Node.next>;
@@ -2903,6 +2926,10 @@ func TestTscIncremental(t *testing.T) {
 					const invalidCapturedClassValue: number = capturedClassResult.outer;
 					const invalidCovariance: typeof covariantString = covariantUnknown.next();
 					const invalidContravariance: typeof contravariantUnknown = contravariantString.next();
+					const invalidAnonymousThis: number = anonymousThisResult;
+					const invalidAnonymousThisMethod: number = anonymousThisResult.relyingOnThis;
+					const invalidConditionalAlias: string = conditionalAliasResult;
+					const invalidConditionalAliasArray: number[] = conditionalAliasResult;
 				`),
 			},
 			commandLineArgs: []string{"--build", "consumer"},

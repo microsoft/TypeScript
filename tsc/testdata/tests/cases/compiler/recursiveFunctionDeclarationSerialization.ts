@@ -374,6 +374,28 @@ if (mixedCycle.Node) {
     const value: number = mixedCycle.Node.next.next.value;
 }
 
+// @filename: anonymousThisReturn.ts
+export function test() {
+    return {
+        relyingOnThis() {
+            return this;
+        },
+    };
+}
+test().relyingOnThis();
+
+// @filename: recursiveConditionalAliasUtils.ts
+type Recursive<T> = T extends Array<infer V> ? Recursive<V> : T;
+export const f = <T>(): Recursive<T> => {
+    return null!;
+};
+
+// @filename: recursiveConditionalAliasCopy.ts
+import { f } from "./recursiveConditionalAliasUtils";
+export const a = f;
+const numberValue: number = a<number[][][][][][][][][][][][][][][][]>();
+const stringValue: string = a<string[][]>();
+
 // @filename: anonymousBindings.ts
 export const _recursive = 1;
 export const factory = () => function self() { return self; };

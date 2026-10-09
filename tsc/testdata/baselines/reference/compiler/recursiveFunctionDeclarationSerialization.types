@@ -2096,6 +2096,60 @@ if (mixedCycle.Node) {
 >value : number
 }
 
+=== anonymousThisReturn.ts ===
+export function test() {
+>test : () => { relyingOnThis(): { relyingOnThis(): any; }; }
+
+    return {
+>{        relyingOnThis() {            return this;        },    } : { relyingOnThis(): any; }
+
+        relyingOnThis() {
+>relyingOnThis : () => { relyingOnThis(): any; }
+
+            return this;
+>this : { relyingOnThis(): any; }
+
+        },
+    };
+}
+test().relyingOnThis();
+>test().relyingOnThis() : { relyingOnThis(): any; }
+>test().relyingOnThis : () => { relyingOnThis(): any; }
+>test() : { relyingOnThis(): any; }
+>test : () => { relyingOnThis(): { relyingOnThis(): any; }; }
+>relyingOnThis : () => { relyingOnThis(): any; }
+
+=== recursiveConditionalAliasUtils.ts ===
+type Recursive<T> = T extends Array<infer V> ? Recursive<V> : T;
+>Recursive : Recursive<T>
+
+export const f = <T>(): Recursive<T> => {
+>f : <T>() => Recursive<T>
+><T>(): Recursive<T> => {    return null!;} : <T>() => Recursive<T>
+
+    return null!;
+>null! : never
+
+};
+
+=== recursiveConditionalAliasCopy.ts ===
+import { f } from "./recursiveConditionalAliasUtils";
+>f : <T>() => T extends (infer V)[] ? V extends (infer V)[] ? any : V : T
+
+export const a = f;
+>a : <T>() => T extends (infer V)[] ? V extends (infer V)[] ? any : V : T
+>f : <T>() => T extends (infer V)[] ? V extends (infer V)[] ? any : V : T
+
+const numberValue: number = a<number[][][][][][][][][][][][][][][][]>();
+>numberValue : number
+>a<number[][][][][][][][][][][][][][][][]>() : number
+>a : <T>() => T extends (infer V)[] ? V extends (infer V)[] ? any : V : T
+
+const stringValue: string = a<string[][]>();
+>stringValue : string
+>a<string[][]>() : string
+>a : <T>() => T extends (infer V)[] ? V extends (infer V)[] ? any : V : T
+
 === anonymousBindings.ts ===
 export const _recursive = 1;
 >_recursive : 1
