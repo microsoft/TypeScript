@@ -399,6 +399,10 @@ func (c *Checker) SkipAlias(symbol *ast.Symbol) *ast.Symbol {
 	return symbol
 }
 
+func (c *Checker) GetDeclarationOfAliasSymbol(symbol *ast.Symbol) *ast.Node {
+	return c.getDeclarationOfAliasSymbol(symbol)
+}
+
 func (c *Checker) GetRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 	roots := c.getImmediateRootSymbols(symbol)
 	if len(roots) == 0 {
