@@ -9085,7 +9085,12 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 		return c.unknownSignature
 	}
 
-	s.args = c.getEffectiveCallArguments(node)
+	s.isSingleNonGenericCandidate = len(s.candidates) == 1 && len(s.candidates[0].typeParameters) == 0
+	var contextualSignature *Signature
+	if s.isSingleNonGenericCandidate {
+		contextualSignature = s.candidates[0]
+	}
+	s.args = c.getEffectiveCallArguments(node, contextualSignature)
 	// The excludeArgument array contains true for each context sensitive argument (an argument
 	// is context sensitive it is susceptible to a one-time permanent contextual typing).
 	//
@@ -9098,7 +9103,6 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	//
 	// For a decorator, no arguments are susceptible to contextual typing due to the fact
 	// decorators are applied to a declaration by the emitter, and not to an expression.
-	s.isSingleNonGenericCandidate = len(s.candidates) == 1 && len(s.candidates[0].typeParameters) == 0
 	if !isDecorator && !s.isSingleNonGenericCandidate && core.Some(s.args, c.isContextSensitive) {
 		s.argCheckMode = CheckModeSkipContextSensitive
 	} else {
@@ -9513,6 +9517,16 @@ func (c *Checker) isSignatureApplicable(node *ast.Node, args []*ast.Node, signat
 	for i := range argCount {
 		arg := args[i]
 		if !ast.IsOmittedExpression(arg) {
+			if ast.IsSpreadElement(arg) && i == len(args)-1 && isContextuallyTypableSpreadExpression(arg.Expression()) {
+				paramType := c.getRestTypeAtPosition(signature, i, false /*readonly*/)
+				argType := c.checkExpressionWithContextualType(arg.Expression(), paramType, nil /*inferenceContext*/, checkMode)
+				effectiveCheckArgumentNode := c.getEffectiveCheckNode(arg)
+				if !c.checkTypeRelatedToAndOptionallyElaborate(argType, paramType, relation, core.IfElse(reportErrors, effectiveCheckArgumentNode, nil), effectiveCheckArgumentNode, headMessage, diagnosticOutput) {
+					c.maybeAddMissingAwaitInfo(arg.Expression(), argType, paramType, relation, reportErrors, diagnosticOutput)
+					return false
+				}
+				continue
+			}
 			paramType := c.getTypeAtPosition(signature, i)
 			argType := c.checkExpressionWithContextualType(arg, paramType, nil /*inferenceContext*/, checkMode)
 			// If one or more arguments are still excluded (as indicated by CheckMode.SkipContextSensitive),
@@ -29930,6 +29944,8 @@ func (c *Checker) getContextualType(node *ast.Node, contextFlags ContextFlags) *
 		return c.getContextualTypeForObjectLiteralElement(parent, contextFlags)
 	case ast.KindSpreadAssignment:
 		return c.getContextualType(parent.Parent, contextFlags)
+	case ast.KindSpreadElement:
+		return c.getContextualTypeForSpreadElement(parent, contextFlags)
 	case ast.KindArrayLiteralExpression:
 		t := c.getApparentTypeOfContextualType(parent, contextFlags)
 		elementIndex := ast.IndexOfNode(parent.Elements(), node)
@@ -30015,7 +30031,7 @@ func (c *Checker) getContextuallyTypedParameterType(parameter *ast.Node) *Type {
 	}
 	iife := ast.GetImmediatelyInvokedFunctionExpression(fn)
 	if iife != nil {
-		args := c.getEffectiveCallArguments(iife)
+		args := c.getEffectiveCallArguments(iife, nil /*contextualSignature*/)
 		indexOfParameter := slices.Index(fn.Parameters(), parameter)
 		if hasDotDotDotToken(parameter) {
 			return c.getSpreadArgumentType(args, indexOfParameter, len(args), c.anyType, nil /*context*/, CheckModeNormal)
@@ -30314,7 +30330,7 @@ func (c *Checker) getContextualTypeForAwaitOperand(node *ast.Node, contextFlags 
 
 // In a typed function call, an argument or substitution expression is contextually typed by the type of the corresponding parameter.
 func (c *Checker) getContextualTypeForArgument(callTarget *ast.Node, arg *ast.Node) *Type {
-	args := c.getEffectiveCallArguments(callTarget)
+	args := c.getEffectiveCallArguments(callTarget, nil /*contextualSignature*/)
 	argIndex := slices.Index(args, arg)
 	// -1 for e.g. the expression of a CallExpression, or the tag of a TaggedTemplateExpression
 	if argIndex == -1 {
@@ -30523,6 +30539,34 @@ func (c *Checker) getContextualTypeForObjectLiteralMethod(node *ast.Node, contex
 	return c.getContextualTypeForObjectLiteralElement(node, contextFlags)
 }
 
+// In a contextually typed array literal, a spread expression is contextually typed by the portion
+// of the contextual array or tuple that the spread occupies.
+func (c *Checker) getContextualTypeForSpreadElement(spread *ast.Node, contextFlags ContextFlags) *Type {
+	parent := spread.Parent
+	if ast.IsArrayLiteralExpression(parent) {
+		contextualType := c.getApparentTypeOfContextualType(parent, contextFlags)
+		if contextualType == nil {
+			return nil
+		}
+		index := ast.IndexOfNode(parent.Elements(), spread)
+		if index < 0 {
+			return nil
+		}
+		firstSpreadIndex, lastSpreadIndex := c.getSpreadIndices(parent)
+		return c.mapTypeEx(contextualType, func(t *Type) *Type {
+			if isTupleType(t) && firstSpreadIndex == lastSpreadIndex {
+				return c.sliceTupleType(t, index, len(parent.Elements())-index-1)
+			}
+			elementType := c.getContextualTypeForElementExpression(t, index, len(parent.Elements()), firstSpreadIndex, lastSpreadIndex)
+			if elementType == nil {
+				return nil
+			}
+			return c.createArrayType(elementType)
+		}, true /*noReductions*/)
+	}
+	return nil
+}
+
 func (c *Checker) getContextualTypeForElementExpression(t *Type, index int, length int, firstSpreadIndex int, lastSpreadIndex int) *Type {
 	if t == nil {
 		return nil
@@ -30593,7 +30637,7 @@ func (c *Checker) getContextualImportAttributeType(node *ast.Node) *Type {
 }
 
 // Returns the effective arguments for an expression that works like a function invocation.
-func (c *Checker) getEffectiveCallArguments(node *ast.Node) []*ast.Node {
+func (c *Checker) getEffectiveCallArguments(node *ast.Node, contextualSignature *Signature) []*ast.Node {
 	switch {
 	case ast.IsJsxOpeningFragment(node):
 		// This attributes Type does not include a children property yet, the same way a fragment created with <React.Fragment> does not at this stage
@@ -30630,9 +30674,12 @@ func (c *Checker) getEffectiveCallArguments(node *ast.Node) []*ast.Node {
 			for i := spreadIndex; i < len(args); i++ {
 				arg := args[i]
 				var spreadType *Type
-				// We can call checkExpressionCached because spread expressions never have a contextual type.
 				if ast.IsSpreadElement(arg) {
-					if len(c.flowLoopStack) != 0 {
+					if contextualSignature != nil && isContextuallyTypableSpreadExpression(arg.Expression()) {
+						argumentPosition := len(effectiveArgs)
+						contextualType := c.getRestTypeAtPosition(contextualSignature, argumentPosition, false /*readonly*/)
+						spreadType = c.checkExpressionWithContextualType(arg.Expression(), contextualType, nil /*inferenceContext*/, CheckModeNormal)
+					} else if len(c.flowLoopStack) != 0 {
 						spreadType = c.checkExpression(arg.Expression())
 					} else {
 						spreadType = c.checkExpressionCached(arg.Expression())
@@ -30657,6 +30704,30 @@ func (c *Checker) getEffectiveCallArguments(node *ast.Node) []*ast.Node {
 		}
 		return args
 	}
+}
+
+// Returns true for expression trees that contain array literals whose element types can be
+// improved by a contextual type. Other spread operands retain their existing context-free check.
+func isContextuallyTypableSpreadExpression(node *ast.Node) bool {
+	switch node.Kind {
+	case ast.KindArrayLiteralExpression:
+		for _, element := range node.Elements() {
+			if ast.IsSpreadElement(element) && !isContextuallyTypableSpreadExpression(element.Expression()) {
+				return false
+			}
+		}
+		return true
+	case ast.KindParenthesizedExpression:
+		return isContextuallyTypableSpreadExpression(node.Expression())
+	case ast.KindConditionalExpression:
+		conditional := node.AsConditionalExpression()
+		return isContextuallyTypableSpreadExpression(conditional.WhenTrue) && isContextuallyTypableSpreadExpression(conditional.WhenFalse)
+	case ast.KindBinaryExpression:
+		binary := node.AsBinaryExpression()
+		return ast.NodeKindIs(binary.OperatorToken, ast.KindBarBarToken, ast.KindQuestionQuestionToken) &&
+			(isContextuallyTypableSpreadExpression(binary.Left) || isContextuallyTypableSpreadExpression(binary.Right))
+	}
+	return false
 }
 
 func (c *Checker) getSpreadArgumentIndex(args []*ast.Node) int {

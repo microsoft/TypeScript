@@ -1,8 +1,7 @@
 literalFreshnessPropagationOnNarrowing.ts(37,5): error TS2322: Type '"y"' is not assignable to type '"x"'.
-literalFreshnessPropagationOnNarrowing.ts(60,12): error TS2322: Type 'string' is not assignable to type 'XY'.
 
 
-==== literalFreshnessPropagationOnNarrowing.ts (2 errors) ====
+==== literalFreshnessPropagationOnNarrowing.ts (1 errors) ====
     function f1() {
         let b = true;
         let obj = { b };
@@ -65,6 +64,4 @@ literalFreshnessPropagationOnNarrowing.ts(60,12): error TS2322: Type 'string' is
         // Desired: OK
         // Error in all extant branches
         arr = [...['y']];
-               ~~~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'XY'.
     }
