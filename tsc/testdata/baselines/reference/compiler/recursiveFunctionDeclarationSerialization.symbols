@@ -1187,3 +1187,1405 @@ const inferredValue: string = inferredCopy.next(1).second("text").value;
 >second : Symbol(second, Decl(signatureScopes.ts, 47, 64))
 >value : Symbol(value, Decl(signatureScopes.ts, 48, 26))
 
+=== mappedCycles.ts ===
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+>Show : Symbol(Show, Decl(mappedCycles.ts, 0, 0))
+>T : Symbol(T, Decl(mappedCycles.ts, 0, 10))
+>K : Symbol(K, Decl(mappedCycles.ts, 0, 18))
+>T : Symbol(T, Decl(mappedCycles.ts, 0, 10))
+>T : Symbol(T, Decl(mappedCycles.ts, 0, 10))
+>K : Symbol(K, Decl(mappedCycles.ts, 0, 18))
+
+type Resolve<M, K extends keyof M> = Show<{
+>Resolve : Symbol(Resolve, Decl(mappedCycles.ts, 0, 50))
+>M : Symbol(M, Decl(mappedCycles.ts, 1, 13))
+>K : Symbol(K, Decl(mappedCycles.ts, 1, 15))
+>M : Symbol(M, Decl(mappedCycles.ts, 1, 13))
+>Show : Symbol(Show, Decl(mappedCycles.ts, 0, 0))
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+>P : Symbol(P, Decl(mappedCycles.ts, 2, 5))
+>M : Symbol(M, Decl(mappedCycles.ts, 1, 13))
+>K : Symbol(K, Decl(mappedCycles.ts, 1, 15))
+>M : Symbol(M, Decl(mappedCycles.ts, 1, 13))
+>K : Symbol(K, Decl(mappedCycles.ts, 1, 15))
+>P : Symbol(P, Decl(mappedCycles.ts, 2, 5))
+>Resolve : Symbol(Resolve, Decl(mappedCycles.ts, 0, 50))
+>M : Symbol(M, Decl(mappedCycles.ts, 1, 13))
+>K : Symbol(K, Decl(mappedCycles.ts, 1, 15))
+>M : Symbol(M, Decl(mappedCycles.ts, 1, 13))
+>K : Symbol(K, Decl(mappedCycles.ts, 1, 15))
+>P : Symbol(P, Decl(mappedCycles.ts, 2, 5))
+
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
+>build : Symbol(build, Decl(mappedCycles.ts, 4, 13))
+>M : Symbol(M, Decl(mappedCycles.ts, 4, 22))
+>K : Symbol(K, Decl(mappedCycles.ts, 4, 33))
+>M : Symbol(M, Decl(mappedCycles.ts, 4, 22))
+>Resolve : Symbol(Resolve, Decl(mappedCycles.ts, 0, 50))
+>M : Symbol(M, Decl(mappedCycles.ts, 4, 22))
+>K : Symbol(K, Decl(mappedCycles.ts, 4, 33))
+
+export const mappedCycle = build<{ Node: { value: number; next: "ref" } }>();
+>mappedCycle : Symbol(mappedCycle, Decl(mappedCycles.ts, 5, 12))
+>build : Symbol(build, Decl(mappedCycles.ts, 4, 13))
+>Node : Symbol(Node, Decl(mappedCycles.ts, 5, 34))
+>value : Symbol(value, Decl(mappedCycles.ts, 5, 42))
+>next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+
+export const mappedCycleCopy = mappedCycle;
+>mappedCycleCopy : Symbol(mappedCycleCopy, Decl(mappedCycles.ts, 6, 12))
+>mappedCycle : Symbol(mappedCycle, Decl(mappedCycles.ts, 5, 12))
+
+export const nestedCycle = { wrapped: build<{ Node: { value: string; next: "ref" } }>() };
+>nestedCycle : Symbol(nestedCycle, Decl(mappedCycles.ts, 7, 12))
+>wrapped : Symbol(wrapped, Decl(mappedCycles.ts, 7, 28))
+>build : Symbol(build, Decl(mappedCycles.ts, 4, 13))
+>Node : Symbol(Node, Decl(mappedCycles.ts, 7, 45))
+>value : Symbol(value, Decl(mappedCycles.ts, 7, 53))
+>next : Symbol(next, Decl(mappedCycles.ts, 7, 68))
+
+export const cycleKey = Symbol();
+>cycleKey : Symbol(cycleKey, Decl(mappedCycles.ts, 8, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export const keyedCycles = build<{
+>keyedCycles : Symbol(keyedCycles, Decl(mappedCycles.ts, 9, 12))
+>build : Symbol(build, Decl(mappedCycles.ts, 4, 13))
+
+    "a-b": { value: string; next: "ref" };
+>"a-b" : Symbol("a-b", Decl(mappedCycles.ts, 9, 34))
+>value : Symbol(value, Decl(mappedCycles.ts, 10, 12))
+>next : Symbol(next, Decl(mappedCycles.ts, 10, 27))
+
+    0: { value: boolean; next: "ref" };
+>0 : Symbol(0, Decl(mappedCycles.ts, 10, 42))
+>value : Symbol(value, Decl(mappedCycles.ts, 11, 8))
+>next : Symbol(next, Decl(mappedCycles.ts, 11, 24))
+
+    [cycleKey]: { value: number; next: "ref" };
+>[cycleKey] : Symbol([cycleKey], Decl(mappedCycles.ts, 11, 39))
+>cycleKey : Symbol(cycleKey, Decl(mappedCycles.ts, 8, 12))
+>value : Symbol(value, Decl(mappedCycles.ts, 12, 17))
+>next : Symbol(next, Decl(mappedCycles.ts, 12, 32))
+
+}>();
+export const sharedCycles = {
+>sharedCycles : Symbol(sharedCycles, Decl(mappedCycles.ts, 14, 12))
+
+    first: mappedCycle,
+>first : Symbol(first, Decl(mappedCycles.ts, 14, 29))
+>mappedCycle : Symbol(mappedCycle, Decl(mappedCycles.ts, 5, 12))
+
+    second: mappedCycle,
+>second : Symbol(second, Decl(mappedCycles.ts, 15, 23))
+>mappedCycle : Symbol(mappedCycle, Decl(mappedCycles.ts, 5, 12))
+
+};
+export const broadCycle: { Node: unknown } = mappedCycle;
+>broadCycle : Symbol(broadCycle, Decl(mappedCycles.ts, 18, 12))
+>Node : Symbol(Node, Decl(mappedCycles.ts, 18, 26))
+>mappedCycle : Symbol(mappedCycle, Decl(mappedCycles.ts, 5, 12))
+
+type ResolveMutual<M, K extends keyof M> = Show<{
+>ResolveMutual : Symbol(ResolveMutual, Decl(mappedCycles.ts, 18, 57))
+>M : Symbol(M, Decl(mappedCycles.ts, 20, 19))
+>K : Symbol(K, Decl(mappedCycles.ts, 20, 21))
+>M : Symbol(M, Decl(mappedCycles.ts, 20, 19))
+>Show : Symbol(Show, Decl(mappedCycles.ts, 0, 0))
+
+    [P in keyof M[K]]: M[K][P] extends { ref: infer R extends keyof M } ? ResolveMutual<M, R> : M[K][P];
+>P : Symbol(P, Decl(mappedCycles.ts, 21, 5))
+>M : Symbol(M, Decl(mappedCycles.ts, 20, 19))
+>K : Symbol(K, Decl(mappedCycles.ts, 20, 21))
+>M : Symbol(M, Decl(mappedCycles.ts, 20, 19))
+>K : Symbol(K, Decl(mappedCycles.ts, 20, 21))
+>P : Symbol(P, Decl(mappedCycles.ts, 21, 5))
+>ref : Symbol(ref, Decl(mappedCycles.ts, 21, 40))
+>R : Symbol(R, Decl(mappedCycles.ts, 21, 51))
+>M : Symbol(M, Decl(mappedCycles.ts, 20, 19))
+>ResolveMutual : Symbol(ResolveMutual, Decl(mappedCycles.ts, 18, 57))
+>M : Symbol(M, Decl(mappedCycles.ts, 20, 19))
+>R : Symbol(R, Decl(mappedCycles.ts, 21, 51))
+>M : Symbol(M, Decl(mappedCycles.ts, 20, 19))
+>K : Symbol(K, Decl(mappedCycles.ts, 20, 21))
+>P : Symbol(P, Decl(mappedCycles.ts, 21, 5))
+
+}>;
+declare const buildMutual: <M>() => { [K in keyof M]: ResolveMutual<M, K> };
+>buildMutual : Symbol(buildMutual, Decl(mappedCycles.ts, 23, 13))
+>M : Symbol(M, Decl(mappedCycles.ts, 23, 28))
+>K : Symbol(K, Decl(mappedCycles.ts, 23, 39))
+>M : Symbol(M, Decl(mappedCycles.ts, 23, 28))
+>ResolveMutual : Symbol(ResolveMutual, Decl(mappedCycles.ts, 18, 57))
+>M : Symbol(M, Decl(mappedCycles.ts, 23, 28))
+>K : Symbol(K, Decl(mappedCycles.ts, 23, 39))
+
+export const mutualCycle = buildMutual<{
+>mutualCycle : Symbol(mutualCycle, Decl(mappedCycles.ts, 24, 12))
+>buildMutual : Symbol(buildMutual, Decl(mappedCycles.ts, 23, 13))
+
+    First: { value: number; next: { ref: "Second" } };
+>First : Symbol(First, Decl(mappedCycles.ts, 24, 40))
+>value : Symbol(value, Decl(mappedCycles.ts, 25, 12))
+>next : Symbol(next, Decl(mappedCycles.ts, 25, 27))
+>ref : Symbol(ref, Decl(mappedCycles.ts, 25, 35))
+
+    Second: { value: string; next: { ref: "First" } };
+>Second : Symbol(Second, Decl(mappedCycles.ts, 25, 54))
+>value : Symbol(value, Decl(mappedCycles.ts, 26, 13))
+>next : Symbol(next, Decl(mappedCycles.ts, 26, 28))
+>ref : Symbol(ref, Decl(mappedCycles.ts, 26, 36))
+
+}>();
+
+const mappedValue: number = mappedCycle.Node.next.next.value;
+>mappedValue : Symbol(mappedValue, Decl(mappedCycles.ts, 29, 5))
+>mappedCycle.Node.next.next.value : Symbol(value, Decl(mappedCycles.ts, 5, 42))
+>mappedCycle.Node.next.next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+>mappedCycle.Node.next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+>mappedCycle.Node : Symbol(Node, Decl(mappedCycles.ts, 5, 34))
+>mappedCycle : Symbol(mappedCycle, Decl(mappedCycles.ts, 5, 12))
+>Node : Symbol(Node, Decl(mappedCycles.ts, 5, 34))
+>next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+>next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+>value : Symbol(value, Decl(mappedCycles.ts, 5, 42))
+
+const nestedMappedValue: string = nestedCycle.wrapped.Node.next.next.value;
+>nestedMappedValue : Symbol(nestedMappedValue, Decl(mappedCycles.ts, 30, 5))
+>nestedCycle.wrapped.Node.next.next.value : Symbol(value, Decl(mappedCycles.ts, 7, 53))
+>nestedCycle.wrapped.Node.next.next : Symbol(next, Decl(mappedCycles.ts, 7, 68))
+>nestedCycle.wrapped.Node.next : Symbol(next, Decl(mappedCycles.ts, 7, 68))
+>nestedCycle.wrapped.Node : Symbol(Node, Decl(mappedCycles.ts, 7, 45))
+>nestedCycle.wrapped : Symbol(wrapped, Decl(mappedCycles.ts, 7, 28))
+>nestedCycle : Symbol(nestedCycle, Decl(mappedCycles.ts, 7, 12))
+>wrapped : Symbol(wrapped, Decl(mappedCycles.ts, 7, 28))
+>Node : Symbol(Node, Decl(mappedCycles.ts, 7, 45))
+>next : Symbol(next, Decl(mappedCycles.ts, 7, 68))
+>next : Symbol(next, Decl(mappedCycles.ts, 7, 68))
+>value : Symbol(value, Decl(mappedCycles.ts, 7, 53))
+
+const quotedMappedValue: string = keyedCycles["a-b"].next.next.value;
+>quotedMappedValue : Symbol(quotedMappedValue, Decl(mappedCycles.ts, 31, 5))
+>keyedCycles["a-b"].next.next.value : Symbol(value, Decl(mappedCycles.ts, 10, 12))
+>keyedCycles["a-b"].next.next : Symbol(next, Decl(mappedCycles.ts, 10, 27))
+>keyedCycles["a-b"].next : Symbol(next, Decl(mappedCycles.ts, 10, 27))
+>keyedCycles : Symbol(keyedCycles, Decl(mappedCycles.ts, 9, 12))
+>"a-b" : Symbol("a-b", Decl(mappedCycles.ts, 9, 34))
+>next : Symbol(next, Decl(mappedCycles.ts, 10, 27))
+>next : Symbol(next, Decl(mappedCycles.ts, 10, 27))
+>value : Symbol(value, Decl(mappedCycles.ts, 10, 12))
+
+const numericMappedValue: boolean = keyedCycles[0].next.next.value;
+>numericMappedValue : Symbol(numericMappedValue, Decl(mappedCycles.ts, 32, 5))
+>keyedCycles[0].next.next.value : Symbol(value, Decl(mappedCycles.ts, 11, 8))
+>keyedCycles[0].next.next : Symbol(next, Decl(mappedCycles.ts, 11, 24))
+>keyedCycles[0].next : Symbol(next, Decl(mappedCycles.ts, 11, 24))
+>keyedCycles : Symbol(keyedCycles, Decl(mappedCycles.ts, 9, 12))
+>0 : Symbol(0, Decl(mappedCycles.ts, 10, 42))
+>next : Symbol(next, Decl(mappedCycles.ts, 11, 24))
+>next : Symbol(next, Decl(mappedCycles.ts, 11, 24))
+>value : Symbol(value, Decl(mappedCycles.ts, 11, 8))
+
+const symbolMappedValue: number = keyedCycles[cycleKey].next.next.value;
+>symbolMappedValue : Symbol(symbolMappedValue, Decl(mappedCycles.ts, 33, 5))
+>keyedCycles[cycleKey].next.next.value : Symbol(value, Decl(mappedCycles.ts, 12, 17))
+>keyedCycles[cycleKey].next.next : Symbol(next, Decl(mappedCycles.ts, 12, 32))
+>keyedCycles[cycleKey].next : Symbol(next, Decl(mappedCycles.ts, 12, 32))
+>keyedCycles : Symbol(keyedCycles, Decl(mappedCycles.ts, 9, 12))
+>cycleKey : Symbol(cycleKey, Decl(mappedCycles.ts, 8, 12))
+>next : Symbol(next, Decl(mappedCycles.ts, 12, 32))
+>next : Symbol(next, Decl(mappedCycles.ts, 12, 32))
+>value : Symbol(value, Decl(mappedCycles.ts, 12, 17))
+
+const sharedMappedValue: number = sharedCycles.second.Node.next.next.value;
+>sharedMappedValue : Symbol(sharedMappedValue, Decl(mappedCycles.ts, 34, 5))
+>sharedCycles.second.Node.next.next.value : Symbol(value, Decl(mappedCycles.ts, 5, 42))
+>sharedCycles.second.Node.next.next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+>sharedCycles.second.Node.next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+>sharedCycles.second.Node : Symbol(Node, Decl(mappedCycles.ts, 5, 34))
+>sharedCycles.second : Symbol(second, Decl(mappedCycles.ts, 15, 23))
+>sharedCycles : Symbol(sharedCycles, Decl(mappedCycles.ts, 14, 12))
+>second : Symbol(second, Decl(mappedCycles.ts, 15, 23))
+>Node : Symbol(Node, Decl(mappedCycles.ts, 5, 34))
+>next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+>next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+>value : Symbol(value, Decl(mappedCycles.ts, 5, 42))
+
+const mutualFirstValue: number = mutualCycle.First.next.next.value;
+>mutualFirstValue : Symbol(mutualFirstValue, Decl(mappedCycles.ts, 35, 5))
+>mutualCycle.First.next.next.value : Symbol(value, Decl(mappedCycles.ts, 25, 12))
+>mutualCycle.First.next.next : Symbol(next, Decl(mappedCycles.ts, 26, 28))
+>mutualCycle.First.next : Symbol(next, Decl(mappedCycles.ts, 25, 27))
+>mutualCycle.First : Symbol(First, Decl(mappedCycles.ts, 24, 40))
+>mutualCycle : Symbol(mutualCycle, Decl(mappedCycles.ts, 24, 12))
+>First : Symbol(First, Decl(mappedCycles.ts, 24, 40))
+>next : Symbol(next, Decl(mappedCycles.ts, 25, 27))
+>next : Symbol(next, Decl(mappedCycles.ts, 26, 28))
+>value : Symbol(value, Decl(mappedCycles.ts, 25, 12))
+
+const mutualSecondValue: string = mutualCycle.First.next.value;
+>mutualSecondValue : Symbol(mutualSecondValue, Decl(mappedCycles.ts, 36, 5))
+>mutualCycle.First.next.value : Symbol(value, Decl(mappedCycles.ts, 26, 13))
+>mutualCycle.First.next : Symbol(next, Decl(mappedCycles.ts, 25, 27))
+>mutualCycle.First : Symbol(First, Decl(mappedCycles.ts, 24, 40))
+>mutualCycle : Symbol(mutualCycle, Decl(mappedCycles.ts, 24, 12))
+>First : Symbol(First, Decl(mappedCycles.ts, 24, 40))
+>next : Symbol(next, Decl(mappedCycles.ts, 25, 27))
+>value : Symbol(value, Decl(mappedCycles.ts, 26, 13))
+
+const invalidMappedValue: string = mappedCycle.Node.next.next.value;
+>invalidMappedValue : Symbol(invalidMappedValue, Decl(mappedCycles.ts, 37, 5))
+>mappedCycle.Node.next.next.value : Symbol(value, Decl(mappedCycles.ts, 5, 42))
+>mappedCycle.Node.next.next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+>mappedCycle.Node.next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+>mappedCycle.Node : Symbol(Node, Decl(mappedCycles.ts, 5, 34))
+>mappedCycle : Symbol(mappedCycle, Decl(mappedCycles.ts, 5, 12))
+>Node : Symbol(Node, Decl(mappedCycles.ts, 5, 34))
+>next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+>next : Symbol(next, Decl(mappedCycles.ts, 5, 57))
+>value : Symbol(value, Decl(mappedCycles.ts, 5, 42))
+
+const invalidMutualValue: number = mutualCycle.First.next.value;
+>invalidMutualValue : Symbol(invalidMutualValue, Decl(mappedCycles.ts, 38, 5))
+>mutualCycle.First.next.value : Symbol(value, Decl(mappedCycles.ts, 26, 13))
+>mutualCycle.First.next : Symbol(next, Decl(mappedCycles.ts, 25, 27))
+>mutualCycle.First : Symbol(First, Decl(mappedCycles.ts, 24, 40))
+>mutualCycle : Symbol(mutualCycle, Decl(mappedCycles.ts, 24, 12))
+>First : Symbol(First, Decl(mappedCycles.ts, 24, 40))
+>next : Symbol(next, Decl(mappedCycles.ts, 25, 27))
+>value : Symbol(value, Decl(mappedCycles.ts, 26, 13))
+
+=== optionalMappedCycle.ts ===
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+>Show : Symbol(Show, Decl(optionalMappedCycle.ts, 0, 0))
+>T : Symbol(T, Decl(optionalMappedCycle.ts, 0, 10))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 0, 18))
+>T : Symbol(T, Decl(optionalMappedCycle.ts, 0, 10))
+>T : Symbol(T, Decl(optionalMappedCycle.ts, 0, 10))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 0, 18))
+
+type Resolve<M, K extends keyof M> = Show<{
+>Resolve : Symbol(Resolve, Decl(optionalMappedCycle.ts, 0, 50))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 1, 15))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 1, 13))
+>Show : Symbol(Show, Decl(optionalMappedCycle.ts, 0, 0))
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+>P : Symbol(P, Decl(optionalMappedCycle.ts, 2, 5))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 1, 15))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 1, 15))
+>P : Symbol(P, Decl(optionalMappedCycle.ts, 2, 5))
+>Resolve : Symbol(Resolve, Decl(optionalMappedCycle.ts, 0, 50))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 1, 15))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 1, 15))
+>P : Symbol(P, Decl(optionalMappedCycle.ts, 2, 5))
+
+}>;
+declare const build: <M>() => { [K in keyof M]?: Resolve<M, K> };
+>build : Symbol(build, Decl(optionalMappedCycle.ts, 4, 13))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 4, 22))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 4, 33))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 4, 22))
+>Resolve : Symbol(Resolve, Decl(optionalMappedCycle.ts, 0, 50))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 4, 22))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 4, 33))
+
+export const optionalCycle = build<{ Node: { value: number; next: "ref" } }>();
+>optionalCycle : Symbol(optionalCycle, Decl(optionalMappedCycle.ts, 5, 12))
+>build : Symbol(build, Decl(optionalMappedCycle.ts, 4, 13))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 5, 36))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 5, 44))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+
+const optionalValue: number | undefined = optionalCycle.Node?.next.next.value;
+>optionalValue : Symbol(optionalValue, Decl(optionalMappedCycle.ts, 6, 5))
+>optionalCycle.Node?.next.next.value : Symbol(value, Decl(optionalMappedCycle.ts, 5, 44))
+>optionalCycle.Node?.next.next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>optionalCycle.Node?.next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>optionalCycle.Node : Symbol(Node, Decl(optionalMappedCycle.ts, 5, 36))
+>optionalCycle : Symbol(optionalCycle, Decl(optionalMappedCycle.ts, 5, 12))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 5, 36))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 5, 44))
+
+export const optionalCopy = optionalCycle;
+>optionalCopy : Symbol(optionalCopy, Decl(optionalMappedCycle.ts, 7, 12))
+>optionalCycle : Symbol(optionalCycle, Decl(optionalMappedCycle.ts, 5, 12))
+
+declare const buildNullable: <M>() => { [K in keyof M]: Resolve<M, K> | null };
+>buildNullable : Symbol(buildNullable, Decl(optionalMappedCycle.ts, 8, 13))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 8, 30))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 8, 41))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 8, 30))
+>Resolve : Symbol(Resolve, Decl(optionalMappedCycle.ts, 0, 50))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 8, 30))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 8, 41))
+
+export const nullableCycle = buildNullable<{ Node: { value: string; next: "ref" } }>();
+>nullableCycle : Symbol(nullableCycle, Decl(optionalMappedCycle.ts, 9, 12))
+>buildNullable : Symbol(buildNullable, Decl(optionalMappedCycle.ts, 8, 13))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 9, 44))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 9, 52))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 9, 67))
+
+declare const wrap: <T>(value: T) => { required: T; optional?: T | null };
+>wrap : Symbol(wrap, Decl(optionalMappedCycle.ts, 10, 13))
+>T : Symbol(T, Decl(optionalMappedCycle.ts, 10, 21))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 10, 24))
+>T : Symbol(T, Decl(optionalMappedCycle.ts, 10, 21))
+>required : Symbol(required, Decl(optionalMappedCycle.ts, 10, 38))
+>T : Symbol(T, Decl(optionalMappedCycle.ts, 10, 21))
+>optional : Symbol(optional, Decl(optionalMappedCycle.ts, 10, 51))
+>T : Symbol(T, Decl(optionalMappedCycle.ts, 10, 21))
+
+export const mixedCycles = wrap(optionalCycle);
+>mixedCycles : Symbol(mixedCycles, Decl(optionalMappedCycle.ts, 11, 12))
+>wrap : Symbol(wrap, Decl(optionalMappedCycle.ts, 10, 13))
+>optionalCycle : Symbol(optionalCycle, Decl(optionalMappedCycle.ts, 5, 12))
+
+export const sharedOptionalCycles = { first: optionalCycle, second: optionalCycle };
+>sharedOptionalCycles : Symbol(sharedOptionalCycles, Decl(optionalMappedCycle.ts, 12, 12))
+>first : Symbol(first, Decl(optionalMappedCycle.ts, 12, 37))
+>optionalCycle : Symbol(optionalCycle, Decl(optionalMappedCycle.ts, 5, 12))
+>second : Symbol(second, Decl(optionalMappedCycle.ts, 12, 59))
+>optionalCycle : Symbol(optionalCycle, Decl(optionalMappedCycle.ts, 5, 12))
+
+export const nullableKey = Symbol();
+>nullableKey : Symbol(nullableKey, Decl(optionalMappedCycle.ts, 13, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export const nullableKeys = buildNullable<{
+>nullableKeys : Symbol(nullableKeys, Decl(optionalMappedCycle.ts, 14, 12))
+>buildNullable : Symbol(buildNullable, Decl(optionalMappedCycle.ts, 8, 13))
+
+    "a-b": { value: string; next: "ref" };
+>"a-b" : Symbol("a-b", Decl(optionalMappedCycle.ts, 14, 43))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 15, 12))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 15, 27))
+
+    0: { value: boolean; next: "ref" };
+>0 : Symbol(0, Decl(optionalMappedCycle.ts, 15, 42))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 16, 8))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 16, 24))
+
+    [nullableKey]: { value: number; next: "ref" };
+>[nullableKey] : Symbol([nullableKey], Decl(optionalMappedCycle.ts, 16, 39))
+>nullableKey : Symbol(nullableKey, Decl(optionalMappedCycle.ts, 13, 12))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 17, 20))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 17, 35))
+
+}>();
+declare const buildNullableRoot: <M>() => Resolve<M, keyof M> | null;
+>buildNullableRoot : Symbol(buildNullableRoot, Decl(optionalMappedCycle.ts, 19, 13))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 19, 34))
+>Resolve : Symbol(Resolve, Decl(optionalMappedCycle.ts, 0, 50))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 19, 34))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 19, 34))
+
+export const nullableRoot = buildNullableRoot<{ Node: { value: number; next: "ref" } }>();
+>nullableRoot : Symbol(nullableRoot, Decl(optionalMappedCycle.ts, 20, 12))
+>buildNullableRoot : Symbol(buildNullableRoot, Decl(optionalMappedCycle.ts, 19, 13))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 20, 47))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 20, 55))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 20, 70))
+
+declare const buildOptionalRoot: <M>() => Resolve<M, keyof M> | undefined;
+>buildOptionalRoot : Symbol(buildOptionalRoot, Decl(optionalMappedCycle.ts, 21, 13))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 21, 34))
+>Resolve : Symbol(Resolve, Decl(optionalMappedCycle.ts, 0, 50))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 21, 34))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 21, 34))
+
+export const optionalRoot = buildOptionalRoot<{ Node: { value: string; next: "ref" } }>();
+>optionalRoot : Symbol(optionalRoot, Decl(optionalMappedCycle.ts, 22, 12))
+>buildOptionalRoot : Symbol(buildOptionalRoot, Decl(optionalMappedCycle.ts, 21, 13))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 22, 47))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 22, 55))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 22, 70))
+
+type ResolveNullable<M, K extends keyof M> = Show<{
+>ResolveNullable : Symbol(ResolveNullable, Decl(optionalMappedCycle.ts, 22, 90))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 23, 21))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 23, 23))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 23, 21))
+>Show : Symbol(Show, Decl(optionalMappedCycle.ts, 0, 0))
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullable<M, K> | null : M[K][P];
+>P : Symbol(P, Decl(optionalMappedCycle.ts, 24, 5))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 23, 21))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 23, 23))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 23, 21))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 23, 23))
+>P : Symbol(P, Decl(optionalMappedCycle.ts, 24, 5))
+>ResolveNullable : Symbol(ResolveNullable, Decl(optionalMappedCycle.ts, 22, 90))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 23, 21))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 23, 23))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 23, 21))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 23, 23))
+>P : Symbol(P, Decl(optionalMappedCycle.ts, 24, 5))
+
+}>;
+declare const buildNullableLinks: <M>() => { [K in keyof M]: ResolveNullable<M, K> | null };
+>buildNullableLinks : Symbol(buildNullableLinks, Decl(optionalMappedCycle.ts, 26, 13))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 26, 35))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 26, 46))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 26, 35))
+>ResolveNullable : Symbol(ResolveNullable, Decl(optionalMappedCycle.ts, 22, 90))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 26, 35))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 26, 46))
+
+export const nullableLinks = buildNullableLinks<{ Node: { value: number; next: "ref" } }>();
+>nullableLinks : Symbol(nullableLinks, Decl(optionalMappedCycle.ts, 27, 12))
+>buildNullableLinks : Symbol(buildNullableLinks, Decl(optionalMappedCycle.ts, 26, 13))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 27, 49))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 27, 57))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 27, 72))
+
+declare const buildOptionalNullableLinks: <M>() => { [K in keyof M]?: ResolveNullable<M, K> | null };
+>buildOptionalNullableLinks : Symbol(buildOptionalNullableLinks, Decl(optionalMappedCycle.ts, 28, 13))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 28, 43))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 28, 54))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 28, 43))
+>ResolveNullable : Symbol(ResolveNullable, Decl(optionalMappedCycle.ts, 22, 90))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 28, 43))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 28, 54))
+
+export const optionalNullableLinks = buildOptionalNullableLinks<{ Node: { value: number; next: "ref" } }>();
+>optionalNullableLinks : Symbol(optionalNullableLinks, Decl(optionalMappedCycle.ts, 29, 12))
+>buildOptionalNullableLinks : Symbol(buildOptionalNullableLinks, Decl(optionalMappedCycle.ts, 28, 13))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 29, 65))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 29, 73))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 29, 88))
+
+type ResolveOptional<M, K extends keyof M> = Show<{
+>ResolveOptional : Symbol(ResolveOptional, Decl(optionalMappedCycle.ts, 29, 108))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 30, 21))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 30, 23))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 30, 21))
+>Show : Symbol(Show, Decl(optionalMappedCycle.ts, 0, 0))
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveOptional<M, K> | undefined : M[K][P];
+>P : Symbol(P, Decl(optionalMappedCycle.ts, 31, 5))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 30, 21))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 30, 23))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 30, 21))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 30, 23))
+>P : Symbol(P, Decl(optionalMappedCycle.ts, 31, 5))
+>ResolveOptional : Symbol(ResolveOptional, Decl(optionalMappedCycle.ts, 29, 108))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 30, 21))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 30, 23))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 30, 21))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 30, 23))
+>P : Symbol(P, Decl(optionalMappedCycle.ts, 31, 5))
+
+}>;
+declare const buildNullableOptionalLinks: <M>() => { [K in keyof M]: ResolveOptional<M, K> | null };
+>buildNullableOptionalLinks : Symbol(buildNullableOptionalLinks, Decl(optionalMappedCycle.ts, 33, 13))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 33, 43))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 33, 54))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 33, 43))
+>ResolveOptional : Symbol(ResolveOptional, Decl(optionalMappedCycle.ts, 29, 108))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 33, 43))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 33, 54))
+
+export const nullableOptionalLinks = buildNullableOptionalLinks<{ Node: { value: number; next: "ref" } }>();
+>nullableOptionalLinks : Symbol(nullableOptionalLinks, Decl(optionalMappedCycle.ts, 34, 12))
+>buildNullableOptionalLinks : Symbol(buildNullableOptionalLinks, Decl(optionalMappedCycle.ts, 33, 13))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 34, 65))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 34, 73))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 34, 88))
+
+type ResolveNullish<M, K extends keyof M> = Show<{
+>ResolveNullish : Symbol(ResolveNullish, Decl(optionalMappedCycle.ts, 34, 108))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 35, 20))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 35, 22))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 35, 20))
+>Show : Symbol(Show, Decl(optionalMappedCycle.ts, 0, 0))
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullish<M, K> | null | undefined : M[K][P];
+>P : Symbol(P, Decl(optionalMappedCycle.ts, 36, 5))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 35, 20))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 35, 22))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 35, 20))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 35, 22))
+>P : Symbol(P, Decl(optionalMappedCycle.ts, 36, 5))
+>ResolveNullish : Symbol(ResolveNullish, Decl(optionalMappedCycle.ts, 34, 108))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 35, 20))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 35, 22))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 35, 20))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 35, 22))
+>P : Symbol(P, Decl(optionalMappedCycle.ts, 36, 5))
+
+}>;
+declare const buildNullishLinks: <M>() => { [K in keyof M]?: ResolveNullish<M, K> | null };
+>buildNullishLinks : Symbol(buildNullishLinks, Decl(optionalMappedCycle.ts, 38, 13))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 38, 34))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 38, 45))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 38, 34))
+>ResolveNullish : Symbol(ResolveNullish, Decl(optionalMappedCycle.ts, 34, 108))
+>M : Symbol(M, Decl(optionalMappedCycle.ts, 38, 34))
+>K : Symbol(K, Decl(optionalMappedCycle.ts, 38, 45))
+
+export const nullishLinks = buildNullishLinks<{ Node: { value: number; next: "ref" } }>();
+>nullishLinks : Symbol(nullishLinks, Decl(optionalMappedCycle.ts, 39, 12))
+>buildNullishLinks : Symbol(buildNullishLinks, Decl(optionalMappedCycle.ts, 38, 13))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 39, 47))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 39, 55))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 39, 70))
+
+type NonNullable<T> = "shadowed";
+>NonNullable : Symbol(NonNullable, Decl(optionalMappedCycle.ts, 39, 90))
+>T : Symbol(T, Decl(optionalMappedCycle.ts, 40, 17))
+
+type OptionalNode = (typeof optionalCycle)["Node"] & {};
+>OptionalNode : Symbol(OptionalNode, Decl(optionalMappedCycle.ts, 40, 33))
+>optionalCycle : Symbol(optionalCycle, Decl(optionalMappedCycle.ts, 5, 12))
+
+type NullableNode = (typeof nullableCycle)["Node"] & {};
+>NullableNode : Symbol(NullableNode, Decl(optionalMappedCycle.ts, 41, 56))
+>nullableCycle : Symbol(nullableCycle, Decl(optionalMappedCycle.ts, 9, 12))
+
+type NullableLinkNode = (typeof nullableLinks)["Node"] & {};
+>NullableLinkNode : Symbol(NullableLinkNode, Decl(optionalMappedCycle.ts, 42, 56))
+>nullableLinks : Symbol(nullableLinks, Decl(optionalMappedCycle.ts, 27, 12))
+
+type NullishLinkNode = (typeof nullishLinks)["Node"] & {};
+>NullishLinkNode : Symbol(NullishLinkNode, Decl(optionalMappedCycle.ts, 43, 60))
+>nullishLinks : Symbol(nullishLinks, Decl(optionalMappedCycle.ts, 39, 12))
+
+type OptionalNullableLinkNode = (typeof optionalNullableLinks)["Node"] & {};
+>OptionalNullableLinkNode : Symbol(OptionalNullableLinkNode, Decl(optionalMappedCycle.ts, 44, 58))
+>optionalNullableLinks : Symbol(optionalNullableLinks, Decl(optionalMappedCycle.ts, 29, 12))
+
+type NullableOptionalLinkNode = (typeof nullableOptionalLinks)["Node"] & {};
+>NullableOptionalLinkNode : Symbol(NullableOptionalLinkNode, Decl(optionalMappedCycle.ts, 45, 76))
+>nullableOptionalLinks : Symbol(nullableOptionalLinks, Decl(optionalMappedCycle.ts, 34, 12))
+
+const copiedValue: number | undefined = optionalCopy.Node?.next.next.value;
+>copiedValue : Symbol(copiedValue, Decl(optionalMappedCycle.ts, 47, 5))
+>optionalCopy.Node?.next.next.value : Symbol(value, Decl(optionalMappedCycle.ts, 5, 44))
+>optionalCopy.Node?.next.next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>optionalCopy.Node?.next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>optionalCopy.Node : Symbol(Node, Decl(optionalMappedCycle.ts, 5, 36))
+>optionalCopy : Symbol(optionalCopy, Decl(optionalMappedCycle.ts, 7, 12))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 5, 36))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 5, 44))
+
+const nullableValue: string | undefined = nullableCycle.Node?.next.next.value;
+>nullableValue : Symbol(nullableValue, Decl(optionalMappedCycle.ts, 48, 5))
+>nullableCycle.Node?.next.next.value : Symbol(value, Decl(optionalMappedCycle.ts, 9, 52))
+>nullableCycle.Node?.next.next : Symbol(next, Decl(optionalMappedCycle.ts, 9, 67))
+>nullableCycle.Node?.next : Symbol(next, Decl(optionalMappedCycle.ts, 9, 67))
+>nullableCycle.Node : Symbol(Node, Decl(optionalMappedCycle.ts, 9, 44))
+>nullableCycle : Symbol(nullableCycle, Decl(optionalMappedCycle.ts, 9, 12))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 9, 44))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 9, 67))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 9, 67))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 9, 52))
+
+const mixedValue: number | undefined = mixedCycles.optional?.Node?.next.next.value;
+>mixedValue : Symbol(mixedValue, Decl(optionalMappedCycle.ts, 49, 5))
+>mixedCycles.optional?.Node?.next.next.value : Symbol(value, Decl(optionalMappedCycle.ts, 5, 44))
+>mixedCycles.optional?.Node?.next.next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>mixedCycles.optional?.Node?.next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>mixedCycles.optional?.Node : Symbol(Node, Decl(optionalMappedCycle.ts, 5, 36))
+>mixedCycles.optional : Symbol(optional, Decl(optionalMappedCycle.ts, 10, 51))
+>mixedCycles : Symbol(mixedCycles, Decl(optionalMappedCycle.ts, 11, 12))
+>optional : Symbol(optional, Decl(optionalMappedCycle.ts, 10, 51))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 5, 36))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 5, 44))
+
+const sharedValue: number | undefined = sharedOptionalCycles.second.Node?.next.next.value;
+>sharedValue : Symbol(sharedValue, Decl(optionalMappedCycle.ts, 50, 5))
+>sharedOptionalCycles.second.Node?.next.next.value : Symbol(value, Decl(optionalMappedCycle.ts, 5, 44))
+>sharedOptionalCycles.second.Node?.next.next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>sharedOptionalCycles.second.Node?.next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>sharedOptionalCycles.second.Node : Symbol(Node, Decl(optionalMappedCycle.ts, 5, 36))
+>sharedOptionalCycles.second : Symbol(second, Decl(optionalMappedCycle.ts, 12, 59))
+>sharedOptionalCycles : Symbol(sharedOptionalCycles, Decl(optionalMappedCycle.ts, 12, 12))
+>second : Symbol(second, Decl(optionalMappedCycle.ts, 12, 59))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 5, 36))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 5, 59))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 5, 44))
+
+const quotedValue: string | undefined = nullableKeys["a-b"]?.next.next.value;
+>quotedValue : Symbol(quotedValue, Decl(optionalMappedCycle.ts, 51, 5))
+>nullableKeys["a-b"]?.next.next.value : Symbol(value, Decl(optionalMappedCycle.ts, 15, 12))
+>nullableKeys["a-b"]?.next.next : Symbol(next, Decl(optionalMappedCycle.ts, 15, 27))
+>nullableKeys["a-b"]?.next : Symbol(next, Decl(optionalMappedCycle.ts, 15, 27))
+>nullableKeys : Symbol(nullableKeys, Decl(optionalMappedCycle.ts, 14, 12))
+>"a-b" : Symbol("a-b", Decl(optionalMappedCycle.ts, 14, 43))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 15, 27))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 15, 27))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 15, 12))
+
+const numericValue: boolean | undefined = nullableKeys[0]?.next.next.value;
+>numericValue : Symbol(numericValue, Decl(optionalMappedCycle.ts, 52, 5))
+>nullableKeys[0]?.next.next.value : Symbol(value, Decl(optionalMappedCycle.ts, 16, 8))
+>nullableKeys[0]?.next.next : Symbol(next, Decl(optionalMappedCycle.ts, 16, 24))
+>nullableKeys[0]?.next : Symbol(next, Decl(optionalMappedCycle.ts, 16, 24))
+>nullableKeys : Symbol(nullableKeys, Decl(optionalMappedCycle.ts, 14, 12))
+>0 : Symbol(0, Decl(optionalMappedCycle.ts, 15, 42))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 16, 24))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 16, 24))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 16, 8))
+
+const symbolValue: number | undefined = nullableKeys[nullableKey]?.next.next.value;
+>symbolValue : Symbol(symbolValue, Decl(optionalMappedCycle.ts, 53, 5))
+>nullableKeys[nullableKey]?.next.next.value : Symbol(value, Decl(optionalMappedCycle.ts, 17, 20))
+>nullableKeys[nullableKey]?.next.next : Symbol(next, Decl(optionalMappedCycle.ts, 17, 35))
+>nullableKeys[nullableKey]?.next : Symbol(next, Decl(optionalMappedCycle.ts, 17, 35))
+>nullableKeys : Symbol(nullableKeys, Decl(optionalMappedCycle.ts, 14, 12))
+>nullableKey : Symbol(nullableKey, Decl(optionalMappedCycle.ts, 13, 12))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 17, 35))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 17, 35))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 17, 20))
+
+const nullableRootValue: number | undefined = nullableRoot?.next.next.value;
+>nullableRootValue : Symbol(nullableRootValue, Decl(optionalMappedCycle.ts, 54, 5))
+>nullableRoot?.next.next.value : Symbol(value, Decl(optionalMappedCycle.ts, 20, 55))
+>nullableRoot?.next.next : Symbol(next, Decl(optionalMappedCycle.ts, 20, 70))
+>nullableRoot?.next : Symbol(next, Decl(optionalMappedCycle.ts, 20, 70))
+>nullableRoot : Symbol(nullableRoot, Decl(optionalMappedCycle.ts, 20, 12))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 20, 70))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 20, 70))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 20, 55))
+
+const optionalRootValue: string | undefined = optionalRoot?.next.next.value;
+>optionalRootValue : Symbol(optionalRootValue, Decl(optionalMappedCycle.ts, 55, 5))
+>optionalRoot?.next.next.value : Symbol(value, Decl(optionalMappedCycle.ts, 22, 55))
+>optionalRoot?.next.next : Symbol(next, Decl(optionalMappedCycle.ts, 22, 70))
+>optionalRoot?.next : Symbol(next, Decl(optionalMappedCycle.ts, 22, 70))
+>optionalRoot : Symbol(optionalRoot, Decl(optionalMappedCycle.ts, 22, 12))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 22, 70))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 22, 70))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 22, 55))
+
+const nullableLinkValue: number | undefined = nullableLinks.Node?.next?.next?.value;
+>nullableLinkValue : Symbol(nullableLinkValue, Decl(optionalMappedCycle.ts, 56, 5))
+>nullableLinks.Node?.next?.next?.value : Symbol(value, Decl(optionalMappedCycle.ts, 27, 57))
+>nullableLinks.Node?.next?.next : Symbol(next, Decl(optionalMappedCycle.ts, 27, 72))
+>nullableLinks.Node?.next : Symbol(next, Decl(optionalMappedCycle.ts, 27, 72))
+>nullableLinks.Node : Symbol(Node, Decl(optionalMappedCycle.ts, 27, 49))
+>nullableLinks : Symbol(nullableLinks, Decl(optionalMappedCycle.ts, 27, 12))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 27, 49))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 27, 72))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 27, 72))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 27, 57))
+
+const nullishLinkValue: number | undefined = nullishLinks.Node?.next?.next?.value;
+>nullishLinkValue : Symbol(nullishLinkValue, Decl(optionalMappedCycle.ts, 57, 5))
+>nullishLinks.Node?.next?.next?.value : Symbol(value, Decl(optionalMappedCycle.ts, 39, 55))
+>nullishLinks.Node?.next?.next : Symbol(next, Decl(optionalMappedCycle.ts, 39, 70))
+>nullishLinks.Node?.next : Symbol(next, Decl(optionalMappedCycle.ts, 39, 70))
+>nullishLinks.Node : Symbol(Node, Decl(optionalMappedCycle.ts, 39, 47))
+>nullishLinks : Symbol(nullishLinks, Decl(optionalMappedCycle.ts, 39, 12))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 39, 47))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 39, 70))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 39, 70))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 39, 55))
+
+const optionalNullableLinkValue: number | undefined = optionalNullableLinks.Node?.next?.next?.value;
+>optionalNullableLinkValue : Symbol(optionalNullableLinkValue, Decl(optionalMappedCycle.ts, 58, 5))
+>optionalNullableLinks.Node?.next?.next?.value : Symbol(value, Decl(optionalMappedCycle.ts, 29, 73))
+>optionalNullableLinks.Node?.next?.next : Symbol(next, Decl(optionalMappedCycle.ts, 29, 88))
+>optionalNullableLinks.Node?.next : Symbol(next, Decl(optionalMappedCycle.ts, 29, 88))
+>optionalNullableLinks.Node : Symbol(Node, Decl(optionalMappedCycle.ts, 29, 65))
+>optionalNullableLinks : Symbol(optionalNullableLinks, Decl(optionalMappedCycle.ts, 29, 12))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 29, 65))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 29, 88))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 29, 88))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 29, 73))
+
+const nullableOptionalLinkValue: number | undefined = nullableOptionalLinks.Node?.next?.next?.value;
+>nullableOptionalLinkValue : Symbol(nullableOptionalLinkValue, Decl(optionalMappedCycle.ts, 59, 5))
+>nullableOptionalLinks.Node?.next?.next?.value : Symbol(value, Decl(optionalMappedCycle.ts, 34, 73))
+>nullableOptionalLinks.Node?.next?.next : Symbol(next, Decl(optionalMappedCycle.ts, 34, 88))
+>nullableOptionalLinks.Node?.next : Symbol(next, Decl(optionalMappedCycle.ts, 34, 88))
+>nullableOptionalLinks.Node : Symbol(Node, Decl(optionalMappedCycle.ts, 34, 65))
+>nullableOptionalLinks : Symbol(nullableOptionalLinks, Decl(optionalMappedCycle.ts, 34, 12))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 34, 65))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 34, 88))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 34, 88))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 34, 73))
+
+const optionalNextHasNull: null extends OptionalNode["next"] ? true : false = false;
+>optionalNextHasNull : Symbol(optionalNextHasNull, Decl(optionalMappedCycle.ts, 60, 5))
+>OptionalNode : Symbol(OptionalNode, Decl(optionalMappedCycle.ts, 40, 33))
+
+const optionalNextHasUndefined: undefined extends OptionalNode["next"] ? true : false = false;
+>optionalNextHasUndefined : Symbol(optionalNextHasUndefined, Decl(optionalMappedCycle.ts, 61, 5))
+>OptionalNode : Symbol(OptionalNode, Decl(optionalMappedCycle.ts, 40, 33))
+
+const nullableNextHasNull: null extends NullableNode["next"] ? true : false = false;
+>nullableNextHasNull : Symbol(nullableNextHasNull, Decl(optionalMappedCycle.ts, 62, 5))
+>NullableNode : Symbol(NullableNode, Decl(optionalMappedCycle.ts, 41, 56))
+
+const nullableNextHasUndefined: undefined extends NullableNode["next"] ? true : false = false;
+>nullableNextHasUndefined : Symbol(nullableNextHasUndefined, Decl(optionalMappedCycle.ts, 63, 5))
+>NullableNode : Symbol(NullableNode, Decl(optionalMappedCycle.ts, 41, 56))
+
+const nullableLinkHasNull: null extends NullableLinkNode["next"] ? true : false = true;
+>nullableLinkHasNull : Symbol(nullableLinkHasNull, Decl(optionalMappedCycle.ts, 64, 5))
+>NullableLinkNode : Symbol(NullableLinkNode, Decl(optionalMappedCycle.ts, 42, 56))
+
+const nullableLinkHasUndefined: undefined extends NullableLinkNode["next"] ? true : false = false;
+>nullableLinkHasUndefined : Symbol(nullableLinkHasUndefined, Decl(optionalMappedCycle.ts, 65, 5))
+>NullableLinkNode : Symbol(NullableLinkNode, Decl(optionalMappedCycle.ts, 42, 56))
+
+const nullishLinkHasNull: null extends NullishLinkNode["next"] ? true : false = true;
+>nullishLinkHasNull : Symbol(nullishLinkHasNull, Decl(optionalMappedCycle.ts, 66, 5))
+>NullishLinkNode : Symbol(NullishLinkNode, Decl(optionalMappedCycle.ts, 43, 60))
+
+const nullishLinkHasUndefined: undefined extends NullishLinkNode["next"] ? true : false = true;
+>nullishLinkHasUndefined : Symbol(nullishLinkHasUndefined, Decl(optionalMappedCycle.ts, 67, 5))
+>NullishLinkNode : Symbol(NullishLinkNode, Decl(optionalMappedCycle.ts, 43, 60))
+
+const optionalNullableLinkHasNull: null extends OptionalNullableLinkNode["next"] ? true : false = true;
+>optionalNullableLinkHasNull : Symbol(optionalNullableLinkHasNull, Decl(optionalMappedCycle.ts, 68, 5))
+>OptionalNullableLinkNode : Symbol(OptionalNullableLinkNode, Decl(optionalMappedCycle.ts, 44, 58))
+
+const optionalNullableLinkHasUndefined: undefined extends OptionalNullableLinkNode["next"] ? true : false = false;
+>optionalNullableLinkHasUndefined : Symbol(optionalNullableLinkHasUndefined, Decl(optionalMappedCycle.ts, 69, 5))
+>OptionalNullableLinkNode : Symbol(OptionalNullableLinkNode, Decl(optionalMappedCycle.ts, 44, 58))
+
+const nullableOptionalLinkHasNull: null extends NullableOptionalLinkNode["next"] ? true : false = false;
+>nullableOptionalLinkHasNull : Symbol(nullableOptionalLinkHasNull, Decl(optionalMappedCycle.ts, 70, 5))
+>NullableOptionalLinkNode : Symbol(NullableOptionalLinkNode, Decl(optionalMappedCycle.ts, 45, 76))
+
+const nullableOptionalLinkHasUndefined: undefined extends NullableOptionalLinkNode["next"] ? true : false = true;
+>nullableOptionalLinkHasUndefined : Symbol(nullableOptionalLinkHasUndefined, Decl(optionalMappedCycle.ts, 71, 5))
+>NullableOptionalLinkNode : Symbol(NullableOptionalLinkNode, Decl(optionalMappedCycle.ts, 45, 76))
+
+const invalidNullNext: OptionalNode["next"] = null;
+>invalidNullNext : Symbol(invalidNullNext, Decl(optionalMappedCycle.ts, 72, 5))
+>OptionalNode : Symbol(OptionalNode, Decl(optionalMappedCycle.ts, 40, 33))
+
+const invalidUndefinedNext: OptionalNode["next"] = undefined;
+>invalidUndefinedNext : Symbol(invalidUndefinedNext, Decl(optionalMappedCycle.ts, 73, 5))
+>OptionalNode : Symbol(OptionalNode, Decl(optionalMappedCycle.ts, 40, 33))
+>undefined : Symbol(undefined)
+
+const invalidNullableLinkValue: number = nullableLinks.Node!.next.value;
+>invalidNullableLinkValue : Symbol(invalidNullableLinkValue, Decl(optionalMappedCycle.ts, 74, 5))
+>nullableLinks.Node!.next.value : Symbol(value, Decl(optionalMappedCycle.ts, 27, 57))
+>nullableLinks.Node!.next : Symbol(next, Decl(optionalMappedCycle.ts, 27, 72))
+>nullableLinks.Node : Symbol(Node, Decl(optionalMappedCycle.ts, 27, 49))
+>nullableLinks : Symbol(nullableLinks, Decl(optionalMappedCycle.ts, 27, 12))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 27, 49))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 27, 72))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 27, 57))
+
+const invalidNullishLinkValue: number = nullishLinks.Node!.next.value;
+>invalidNullishLinkValue : Symbol(invalidNullishLinkValue, Decl(optionalMappedCycle.ts, 75, 5))
+>nullishLinks.Node!.next.value : Symbol(value, Decl(optionalMappedCycle.ts, 39, 55))
+>nullishLinks.Node!.next : Symbol(next, Decl(optionalMappedCycle.ts, 39, 70))
+>nullishLinks.Node : Symbol(Node, Decl(optionalMappedCycle.ts, 39, 47))
+>nullishLinks : Symbol(nullishLinks, Decl(optionalMappedCycle.ts, 39, 12))
+>Node : Symbol(Node, Decl(optionalMappedCycle.ts, 39, 47))
+>next : Symbol(next, Decl(optionalMappedCycle.ts, 39, 70))
+>value : Symbol(value, Decl(optionalMappedCycle.ts, 39, 55))
+
+=== mixedMappedCycle.ts ===
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+>Show : Symbol(Show, Decl(mixedMappedCycle.ts, 0, 0))
+>T : Symbol(T, Decl(mixedMappedCycle.ts, 0, 10))
+>K : Symbol(K, Decl(mixedMappedCycle.ts, 0, 18))
+>T : Symbol(T, Decl(mixedMappedCycle.ts, 0, 10))
+>T : Symbol(T, Decl(mixedMappedCycle.ts, 0, 10))
+>K : Symbol(K, Decl(mixedMappedCycle.ts, 0, 18))
+
+type Resolve<M, K extends keyof M> = Show<{
+>Resolve : Symbol(Resolve, Decl(mixedMappedCycle.ts, 0, 50))
+>M : Symbol(M, Decl(mixedMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(mixedMappedCycle.ts, 1, 15))
+>M : Symbol(M, Decl(mixedMappedCycle.ts, 1, 13))
+>Show : Symbol(Show, Decl(mixedMappedCycle.ts, 0, 0))
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+>P : Symbol(P, Decl(mixedMappedCycle.ts, 2, 5))
+>M : Symbol(M, Decl(mixedMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(mixedMappedCycle.ts, 1, 15))
+>M : Symbol(M, Decl(mixedMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(mixedMappedCycle.ts, 1, 15))
+>P : Symbol(P, Decl(mixedMappedCycle.ts, 2, 5))
+>Resolve : Symbol(Resolve, Decl(mixedMappedCycle.ts, 0, 50))
+>M : Symbol(M, Decl(mixedMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(mixedMappedCycle.ts, 1, 15))
+>M : Symbol(M, Decl(mixedMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(mixedMappedCycle.ts, 1, 15))
+>P : Symbol(P, Decl(mixedMappedCycle.ts, 2, 5))
+
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> | false | null };
+>build : Symbol(build, Decl(mixedMappedCycle.ts, 4, 13))
+>M : Symbol(M, Decl(mixedMappedCycle.ts, 4, 22))
+>K : Symbol(K, Decl(mixedMappedCycle.ts, 4, 33))
+>M : Symbol(M, Decl(mixedMappedCycle.ts, 4, 22))
+>Resolve : Symbol(Resolve, Decl(mixedMappedCycle.ts, 0, 50))
+>M : Symbol(M, Decl(mixedMappedCycle.ts, 4, 22))
+>K : Symbol(K, Decl(mixedMappedCycle.ts, 4, 33))
+
+export const mixedCycle = build<{ Node: { value: number; next: "ref" } }>();
+>mixedCycle : Symbol(mixedCycle, Decl(mixedMappedCycle.ts, 5, 12))
+>build : Symbol(build, Decl(mixedMappedCycle.ts, 4, 13))
+>Node : Symbol(Node, Decl(mixedMappedCycle.ts, 5, 33))
+>value : Symbol(value, Decl(mixedMappedCycle.ts, 5, 41))
+>next : Symbol(next, Decl(mixedMappedCycle.ts, 5, 56))
+
+if (mixedCycle.Node) {
+>mixedCycle.Node : Symbol(Node, Decl(mixedMappedCycle.ts, 5, 33))
+>mixedCycle : Symbol(mixedCycle, Decl(mixedMappedCycle.ts, 5, 12))
+>Node : Symbol(Node, Decl(mixedMappedCycle.ts, 5, 33))
+
+    const value: number = mixedCycle.Node.next.next.value;
+>value : Symbol(value, Decl(mixedMappedCycle.ts, 7, 9))
+>mixedCycle.Node.next.next.value : Symbol(value, Decl(mixedMappedCycle.ts, 5, 41))
+>mixedCycle.Node.next.next : Symbol(next, Decl(mixedMappedCycle.ts, 5, 56))
+>mixedCycle.Node.next : Symbol(next, Decl(mixedMappedCycle.ts, 5, 56))
+>mixedCycle.Node : Symbol(Node, Decl(mixedMappedCycle.ts, 5, 33))
+>mixedCycle : Symbol(mixedCycle, Decl(mixedMappedCycle.ts, 5, 12))
+>Node : Symbol(Node, Decl(mixedMappedCycle.ts, 5, 33))
+>next : Symbol(next, Decl(mixedMappedCycle.ts, 5, 56))
+>next : Symbol(next, Decl(mixedMappedCycle.ts, 5, 56))
+>value : Symbol(value, Decl(mixedMappedCycle.ts, 5, 41))
+}
+
+=== anonymousBindings.ts ===
+export const _recursive = 1;
+>_recursive : Symbol(_recursive, Decl(anonymousBindings.ts, 0, 12))
+
+export const factory = () => function self() { return self; };
+>factory : Symbol(factory, Decl(anonymousBindings.ts, 1, 12))
+>self : Symbol(self, Decl(anonymousBindings.ts, 1, 28))
+>self : Symbol(self, Decl(anonymousBindings.ts, 1, 28))
+
+export function captured<T>(value: T) {
+>captured : Symbol(captured, Decl(anonymousBindings.ts, 1, 62))
+>T : Symbol(T, Decl(anonymousBindings.ts, 2, 25))
+>value : Symbol(value, Decl(anonymousBindings.ts, 2, 28))
+>T : Symbol(T, Decl(anonymousBindings.ts, 2, 25))
+
+    const node = { value, next: () => node, consume: (other: T) => node };
+>node : Symbol(node, Decl(anonymousBindings.ts, 3, 9))
+>value : Symbol(value, Decl(anonymousBindings.ts, 3, 18))
+>next : Symbol(next, Decl(anonymousBindings.ts, 3, 25))
+>node : Symbol(node, Decl(anonymousBindings.ts, 3, 9))
+>consume : Symbol(consume, Decl(anonymousBindings.ts, 3, 43))
+>other : Symbol(other, Decl(anonymousBindings.ts, 3, 54))
+>T : Symbol(T, Decl(anonymousBindings.ts, 2, 25))
+>node : Symbol(node, Decl(anonymousBindings.ts, 3, 9))
+
+    return node;
+>node : Symbol(node, Decl(anonymousBindings.ts, 3, 9))
+}
+export function nestedCaptured<T>(outer: T) {
+>nestedCaptured : Symbol(nestedCaptured, Decl(anonymousBindings.ts, 5, 1))
+>T : Symbol(T, Decl(anonymousBindings.ts, 6, 31))
+>outer : Symbol(outer, Decl(anonymousBindings.ts, 6, 34))
+>T : Symbol(T, Decl(anonymousBindings.ts, 6, 31))
+
+    return <U>(inner: U) => {
+>U : Symbol(U, Decl(anonymousBindings.ts, 7, 12))
+>inner : Symbol(inner, Decl(anonymousBindings.ts, 7, 15))
+>U : Symbol(U, Decl(anonymousBindings.ts, 7, 12))
+
+        const node = {
+>node : Symbol(node, Decl(anonymousBindings.ts, 8, 13))
+
+            outer,
+>outer : Symbol(outer, Decl(anonymousBindings.ts, 8, 22))
+
+            inner,
+>inner : Symbol(inner, Decl(anonymousBindings.ts, 9, 18))
+
+            next: () => node,
+>next : Symbol(next, Decl(anonymousBindings.ts, 10, 18))
+>node : Symbol(node, Decl(anonymousBindings.ts, 8, 13))
+
+            shadow: <T>(value: T) => ({ outer, inner, value, next: node }),
+>shadow : Symbol(shadow, Decl(anonymousBindings.ts, 11, 29))
+>T : Symbol(T, Decl(anonymousBindings.ts, 12, 21))
+>value : Symbol(value, Decl(anonymousBindings.ts, 12, 24))
+>T : Symbol(T, Decl(anonymousBindings.ts, 12, 21))
+>outer : Symbol(outer, Decl(anonymousBindings.ts, 12, 39))
+>inner : Symbol(inner, Decl(anonymousBindings.ts, 12, 46))
+>value : Symbol(value, Decl(anonymousBindings.ts, 12, 53))
+>next : Symbol(next, Decl(anonymousBindings.ts, 12, 60))
+>node : Symbol(node, Decl(anonymousBindings.ts, 8, 13))
+
+        };
+        return node;
+>node : Symbol(node, Decl(anonymousBindings.ts, 8, 13))
+
+    };
+}
+export function constrained<T extends { value: number }, K extends keyof T>(key: K) {
+>constrained : Symbol(constrained, Decl(anonymousBindings.ts, 16, 1))
+>T : Symbol(T, Decl(anonymousBindings.ts, 17, 28))
+>value : Symbol(value, Decl(anonymousBindings.ts, 17, 39))
+>K : Symbol(K, Decl(anonymousBindings.ts, 17, 56))
+>T : Symbol(T, Decl(anonymousBindings.ts, 17, 28))
+>key : Symbol(key, Decl(anonymousBindings.ts, 17, 76))
+>K : Symbol(K, Decl(anonymousBindings.ts, 17, 56))
+
+    const node = { value: null! as T[K], next: () => node };
+>node : Symbol(node, Decl(anonymousBindings.ts, 18, 9))
+>value : Symbol(value, Decl(anonymousBindings.ts, 18, 18))
+>T : Symbol(T, Decl(anonymousBindings.ts, 17, 28))
+>K : Symbol(K, Decl(anonymousBindings.ts, 17, 56))
+>next : Symbol(next, Decl(anonymousBindings.ts, 18, 40))
+>node : Symbol(node, Decl(anonymousBindings.ts, 18, 9))
+
+    return node;
+>node : Symbol(node, Decl(anonymousBindings.ts, 18, 9))
+}
+export function optionalCaptured<T>(value: T) {
+>optionalCaptured : Symbol(optionalCaptured, Decl(anonymousBindings.ts, 20, 1))
+>T : Symbol(T, Decl(anonymousBindings.ts, 21, 33))
+>value : Symbol(value, Decl(anonymousBindings.ts, 21, 36))
+>T : Symbol(T, Decl(anonymousBindings.ts, 21, 33))
+
+    type Node = { value: T; next: Node };
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 21, 47))
+>value : Symbol(value, Decl(anonymousBindings.ts, 22, 17))
+>T : Symbol(T, Decl(anonymousBindings.ts, 21, 33))
+>next : Symbol(next, Decl(anonymousBindings.ts, 22, 27))
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 21, 47))
+
+    return null! as { node?: Node | false | null };
+>node : Symbol(node, Decl(anonymousBindings.ts, 23, 21))
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 21, 47))
+}
+export function annotatedCaptured<T>(value: T) {
+>annotatedCaptured : Symbol(annotatedCaptured, Decl(anonymousBindings.ts, 24, 1))
+>T : Symbol(T, Decl(anonymousBindings.ts, 25, 34))
+>value : Symbol(value, Decl(anonymousBindings.ts, 25, 37))
+>T : Symbol(T, Decl(anonymousBindings.ts, 25, 34))
+
+    const node: { value: typeof value; next: typeof node } = { value, next: null! };
+>node : Symbol(node, Decl(anonymousBindings.ts, 26, 9))
+>value : Symbol(value, Decl(anonymousBindings.ts, 26, 17))
+>value : Symbol(value, Decl(anonymousBindings.ts, 25, 37))
+>next : Symbol(next, Decl(anonymousBindings.ts, 26, 38))
+>node : Symbol(node, Decl(anonymousBindings.ts, 26, 9))
+>value : Symbol(value, Decl(anonymousBindings.ts, 26, 62))
+>next : Symbol(next, Decl(anonymousBindings.ts, 26, 69))
+
+    return node;
+>node : Symbol(node, Decl(anonymousBindings.ts, 26, 9))
+}
+export function recursiveTuple<T>(value: T) {
+>recursiveTuple : Symbol(recursiveTuple, Decl(anonymousBindings.ts, 28, 1))
+>T : Symbol(T, Decl(anonymousBindings.ts, 29, 31))
+>value : Symbol(value, Decl(anonymousBindings.ts, 29, 34))
+>T : Symbol(T, Decl(anonymousBindings.ts, 29, 31))
+
+    type Tuple = readonly [T, Tuple];
+>Tuple : Symbol(Tuple, Decl(anonymousBindings.ts, 29, 45))
+>T : Symbol(T, Decl(anonymousBindings.ts, 29, 31))
+>Tuple : Symbol(Tuple, Decl(anonymousBindings.ts, 29, 45))
+
+    return null! as Tuple;
+>Tuple : Symbol(Tuple, Decl(anonymousBindings.ts, 29, 45))
+}
+export function inferredCaptured<T>() {
+>inferredCaptured : Symbol(inferredCaptured, Decl(anonymousBindings.ts, 32, 1))
+>T : Symbol(T, Decl(anonymousBindings.ts, 33, 33))
+
+    type Node<V> = { value: V; next: Node<V> };
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 33, 39))
+>V : Symbol(V, Decl(anonymousBindings.ts, 34, 14))
+>value : Symbol(value, Decl(anonymousBindings.ts, 34, 20))
+>V : Symbol(V, Decl(anonymousBindings.ts, 34, 14))
+>next : Symbol(next, Decl(anonymousBindings.ts, 34, 30))
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 33, 39))
+>V : Symbol(V, Decl(anonymousBindings.ts, 34, 14))
+
+    return null! as (T extends () => infer U ? Node<U> : never);
+>T : Symbol(T, Decl(anonymousBindings.ts, 33, 33))
+>U : Symbol(U, Decl(anonymousBindings.ts, 35, 42))
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 33, 39))
+>U : Symbol(U, Decl(anonymousBindings.ts, 35, 42))
+}
+export function mappedCaptured<T>() {
+>mappedCaptured : Symbol(mappedCaptured, Decl(anonymousBindings.ts, 36, 1))
+>T : Symbol(T, Decl(anonymousBindings.ts, 37, 31))
+
+    type Node = { [K in keyof T]: { value: T[K]; next: Node } };
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 37, 37))
+>K : Symbol(K, Decl(anonymousBindings.ts, 38, 19))
+>T : Symbol(T, Decl(anonymousBindings.ts, 37, 31))
+>value : Symbol(value, Decl(anonymousBindings.ts, 38, 35))
+>T : Symbol(T, Decl(anonymousBindings.ts, 37, 31))
+>K : Symbol(K, Decl(anonymousBindings.ts, 38, 19))
+>next : Symbol(next, Decl(anonymousBindings.ts, 38, 48))
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 37, 37))
+
+    return null! as Node;
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 37, 37))
+}
+export function freshGeneric<T>(unused: T) {
+>freshGeneric : Symbol(freshGeneric, Decl(anonymousBindings.ts, 40, 1))
+>T : Symbol(T, Decl(anonymousBindings.ts, 41, 29))
+>unused : Symbol(unused, Decl(anonymousBindings.ts, 41, 32))
+>T : Symbol(T, Decl(anonymousBindings.ts, 41, 29))
+
+    const recur = <U>(value: U) => recur;
+>recur : Symbol(recur, Decl(anonymousBindings.ts, 42, 9))
+>U : Symbol(U, Decl(anonymousBindings.ts, 42, 19))
+>value : Symbol(value, Decl(anonymousBindings.ts, 42, 22))
+>U : Symbol(U, Decl(anonymousBindings.ts, 42, 19))
+>recur : Symbol(recur, Decl(anonymousBindings.ts, 42, 9))
+
+    return recur;
+>recur : Symbol(recur, Decl(anonymousBindings.ts, 42, 9))
+}
+export function mutualCaptured<T, U>(left: T, right: U) {
+>mutualCaptured : Symbol(mutualCaptured, Decl(anonymousBindings.ts, 44, 1))
+>T : Symbol(T, Decl(anonymousBindings.ts, 45, 31))
+>U : Symbol(U, Decl(anonymousBindings.ts, 45, 33))
+>left : Symbol(left, Decl(anonymousBindings.ts, 45, 37))
+>T : Symbol(T, Decl(anonymousBindings.ts, 45, 31))
+>right : Symbol(right, Decl(anonymousBindings.ts, 45, 45))
+>U : Symbol(U, Decl(anonymousBindings.ts, 45, 33))
+
+    type Left = { left: T; next: Right };
+>Left : Symbol(Left, Decl(anonymousBindings.ts, 45, 57))
+>left : Symbol(left, Decl(anonymousBindings.ts, 46, 17))
+>T : Symbol(T, Decl(anonymousBindings.ts, 45, 31))
+>next : Symbol(next, Decl(anonymousBindings.ts, 46, 26))
+>Right : Symbol(Right, Decl(anonymousBindings.ts, 46, 41))
+
+    type Right = { right: U; self: Right; next: Left };
+>Right : Symbol(Right, Decl(anonymousBindings.ts, 46, 41))
+>right : Symbol(right, Decl(anonymousBindings.ts, 47, 18))
+>U : Symbol(U, Decl(anonymousBindings.ts, 45, 33))
+>self : Symbol(self, Decl(anonymousBindings.ts, 47, 28))
+>Right : Symbol(Right, Decl(anonymousBindings.ts, 46, 41))
+>next : Symbol(next, Decl(anonymousBindings.ts, 47, 41))
+>Left : Symbol(Left, Decl(anonymousBindings.ts, 45, 57))
+
+    return { left: null! as Left, right: null! as Right };
+>left : Symbol(left, Decl(anonymousBindings.ts, 48, 12))
+>Left : Symbol(Left, Decl(anonymousBindings.ts, 45, 57))
+>right : Symbol(right, Decl(anonymousBindings.ts, 48, 33))
+>Right : Symbol(Right, Decl(anonymousBindings.ts, 46, 41))
+}
+export class CapturedClass<T> {
+>CapturedClass : Symbol(CapturedClass, Decl(anonymousBindings.ts, 49, 1))
+>T : Symbol(T, Decl(anonymousBindings.ts, 50, 27))
+
+    constructor(public value: T) {}
+>value : Symbol(CapturedClass.value, Decl(anonymousBindings.ts, 51, 16))
+>T : Symbol(T, Decl(anonymousBindings.ts, 50, 27))
+
+    make<U extends T>(inner: U) {
+>make : Symbol(CapturedClass.make, Decl(anonymousBindings.ts, 51, 35))
+>U : Symbol(U, Decl(anonymousBindings.ts, 52, 9))
+>T : Symbol(T, Decl(anonymousBindings.ts, 50, 27))
+>inner : Symbol(inner, Decl(anonymousBindings.ts, 52, 22))
+>U : Symbol(U, Decl(anonymousBindings.ts, 52, 9))
+
+        const node = { outer: this.value, inner, next: () => node };
+>node : Symbol(node, Decl(anonymousBindings.ts, 53, 13))
+>outer : Symbol(outer, Decl(anonymousBindings.ts, 53, 22))
+>this.value : Symbol(CapturedClass.value, Decl(anonymousBindings.ts, 51, 16))
+>this : Symbol(CapturedClass, Decl(anonymousBindings.ts, 49, 1))
+>value : Symbol(CapturedClass.value, Decl(anonymousBindings.ts, 51, 16))
+>inner : Symbol(inner, Decl(anonymousBindings.ts, 53, 41))
+>next : Symbol(next, Decl(anonymousBindings.ts, 53, 48))
+>node : Symbol(node, Decl(anonymousBindings.ts, 53, 13))
+
+        return node;
+>node : Symbol(node, Decl(anonymousBindings.ts, 53, 13))
+    }
+}
+export function covariantClass() {
+>covariantClass : Symbol(covariantClass, Decl(anonymousBindings.ts, 56, 1))
+
+    return class Node<out T> {
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 58, 10))
+>T : Symbol(T, Decl(anonymousBindings.ts, 58, 22))
+
+        value!: T;
+>value : Symbol(Node.value, Decl(anonymousBindings.ts, 58, 30))
+>T : Symbol(T, Decl(anonymousBindings.ts, 58, 22))
+
+        next(): Node<T> { return this; }
+>next : Symbol(Node.next, Decl(anonymousBindings.ts, 59, 18))
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 58, 10))
+>T : Symbol(T, Decl(anonymousBindings.ts, 58, 22))
+>this : Symbol(Node, Decl(anonymousBindings.ts, 58, 10))
+
+    };
+}
+export function contravariantClass() {
+>contravariantClass : Symbol(contravariantClass, Decl(anonymousBindings.ts, 62, 1))
+
+    return class Node<in T> {
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 64, 10))
+>T : Symbol(T, Decl(anonymousBindings.ts, 64, 22))
+
+        consume!: (value: T) => void;
+>consume : Symbol(Node.consume, Decl(anonymousBindings.ts, 64, 29))
+>value : Symbol(value, Decl(anonymousBindings.ts, 65, 19))
+>T : Symbol(T, Decl(anonymousBindings.ts, 64, 22))
+
+        next(): Node<T> { return this; }
+>next : Symbol(Node.next, Decl(anonymousBindings.ts, 65, 37))
+>Node : Symbol(Node, Decl(anonymousBindings.ts, 64, 10))
+>T : Symbol(T, Decl(anonymousBindings.ts, 64, 22))
+>this : Symbol(Node, Decl(anonymousBindings.ts, 64, 10))
+
+    };
+}
+export namespace Nested {
+>Nested : Symbol(Nested, Decl(anonymousBindings.ts, 68, 1))
+
+    export function captured<T>(value: T) {
+>captured : Symbol(captured, Decl(anonymousBindings.ts, 69, 25))
+>T : Symbol(T, Decl(anonymousBindings.ts, 70, 29))
+>value : Symbol(value, Decl(anonymousBindings.ts, 70, 32))
+>T : Symbol(T, Decl(anonymousBindings.ts, 70, 29))
+
+        const node = { value, next: () => node };
+>node : Symbol(node, Decl(anonymousBindings.ts, 71, 13))
+>value : Symbol(value, Decl(anonymousBindings.ts, 71, 22))
+>next : Symbol(next, Decl(anonymousBindings.ts, 71, 29))
+>node : Symbol(node, Decl(anonymousBindings.ts, 71, 13))
+
+        return node;
+>node : Symbol(node, Decl(anonymousBindings.ts, 71, 13))
+    }
+}
+const capturedValue: string = captured("text").next().consume("other").value;
+>capturedValue : Symbol(capturedValue, Decl(anonymousBindings.ts, 75, 5))
+>captured("text").next().consume("other").value : Symbol(value, Decl(anonymousBindings.ts, 3, 18))
+>captured("text").next().consume : Symbol(consume, Decl(anonymousBindings.ts, 3, 43))
+>captured("text").next : Symbol(next, Decl(anonymousBindings.ts, 3, 25))
+>captured : Symbol(captured, Decl(anonymousBindings.ts, 1, 62))
+>next : Symbol(next, Decl(anonymousBindings.ts, 3, 25))
+>consume : Symbol(consume, Decl(anonymousBindings.ts, 3, 43))
+>value : Symbol(value, Decl(anonymousBindings.ts, 3, 18))
+
+const nestedValue = nestedCaptured(1)("text").shadow(true).next.next();
+>nestedValue : Symbol(nestedValue, Decl(anonymousBindings.ts, 76, 5))
+>nestedCaptured(1)("text").shadow(true).next.next : Symbol(next, Decl(anonymousBindings.ts, 10, 18))
+>nestedCaptured(1)("text").shadow(true).next : Symbol(next, Decl(anonymousBindings.ts, 12, 60))
+>nestedCaptured(1)("text").shadow : Symbol(shadow, Decl(anonymousBindings.ts, 11, 29))
+>nestedCaptured : Symbol(nestedCaptured, Decl(anonymousBindings.ts, 5, 1))
+>shadow : Symbol(shadow, Decl(anonymousBindings.ts, 11, 29))
+>next : Symbol(next, Decl(anonymousBindings.ts, 12, 60))
+>next : Symbol(next, Decl(anonymousBindings.ts, 10, 18))
+
+const nestedOuter: number = nestedValue.outer;
+>nestedOuter : Symbol(nestedOuter, Decl(anonymousBindings.ts, 77, 5))
+>nestedValue.outer : Symbol(outer, Decl(anonymousBindings.ts, 8, 22))
+>nestedValue : Symbol(nestedValue, Decl(anonymousBindings.ts, 76, 5))
+>outer : Symbol(outer, Decl(anonymousBindings.ts, 8, 22))
+
+const nestedInner: string = nestedValue.inner;
+>nestedInner : Symbol(nestedInner, Decl(anonymousBindings.ts, 78, 5))
+>nestedValue.inner : Symbol(inner, Decl(anonymousBindings.ts, 9, 18))
+>nestedValue : Symbol(nestedValue, Decl(anonymousBindings.ts, 76, 5))
+>inner : Symbol(inner, Decl(anonymousBindings.ts, 9, 18))
+
+const constrainedValue: number = constrained<{ value: number }, "value">("value").next().value;
+>constrainedValue : Symbol(constrainedValue, Decl(anonymousBindings.ts, 79, 5))
+>constrained<{ value: number }, "value">("value").next().value : Symbol(value, Decl(anonymousBindings.ts, 18, 18))
+>constrained<{ value: number }, "value">("value").next : Symbol(next, Decl(anonymousBindings.ts, 18, 40))
+>constrained : Symbol(constrained, Decl(anonymousBindings.ts, 16, 1))
+>value : Symbol(value, Decl(anonymousBindings.ts, 79, 46))
+>next : Symbol(next, Decl(anonymousBindings.ts, 18, 40))
+>value : Symbol(value, Decl(anonymousBindings.ts, 18, 18))
+
+const annotatedValue: string = annotatedCaptured("text").next.next.value;
+>annotatedValue : Symbol(annotatedValue, Decl(anonymousBindings.ts, 80, 5))
+>annotatedCaptured("text").next.next.value : Symbol(value, Decl(anonymousBindings.ts, 26, 17))
+>annotatedCaptured("text").next.next : Symbol(next, Decl(anonymousBindings.ts, 26, 38))
+>annotatedCaptured("text").next : Symbol(next, Decl(anonymousBindings.ts, 26, 38))
+>annotatedCaptured : Symbol(annotatedCaptured, Decl(anonymousBindings.ts, 24, 1))
+>next : Symbol(next, Decl(anonymousBindings.ts, 26, 38))
+>next : Symbol(next, Decl(anonymousBindings.ts, 26, 38))
+>value : Symbol(value, Decl(anonymousBindings.ts, 26, 17))
+
+const tupleValue: string = recursiveTuple("text")[1][1][0];
+>tupleValue : Symbol(tupleValue, Decl(anonymousBindings.ts, 81, 5))
+>recursiveTuple : Symbol(recursiveTuple, Decl(anonymousBindings.ts, 28, 1))
+>1 : Symbol(1)
+>1 : Symbol(1)
+>0 : Symbol(0)
+
+const namespaceValue: number = Nested.captured(1).next().next().value;
+>namespaceValue : Symbol(namespaceValue, Decl(anonymousBindings.ts, 82, 5))
+>Nested.captured(1).next().next().value : Symbol(value, Decl(anonymousBindings.ts, 71, 22))
+>Nested.captured(1).next().next : Symbol(next, Decl(anonymousBindings.ts, 71, 29))
+>Nested.captured(1).next : Symbol(next, Decl(anonymousBindings.ts, 71, 29))
+>Nested.captured : Symbol(Nested.captured, Decl(anonymousBindings.ts, 69, 25))
+>Nested : Symbol(Nested, Decl(anonymousBindings.ts, 68, 1))
+>captured : Symbol(Nested.captured, Decl(anonymousBindings.ts, 69, 25))
+>next : Symbol(next, Decl(anonymousBindings.ts, 71, 29))
+>next : Symbol(next, Decl(anonymousBindings.ts, 71, 29))
+>value : Symbol(value, Decl(anonymousBindings.ts, 71, 22))
+
+const inferredValue: string = inferredCaptured<() => string>().next.next.value;
+>inferredValue : Symbol(inferredValue, Decl(anonymousBindings.ts, 83, 5))
+>inferredCaptured<() => string>().next.next.value : Symbol(value, Decl(anonymousBindings.ts, 34, 20))
+>inferredCaptured<() => string>().next.next : Symbol(next, Decl(anonymousBindings.ts, 34, 30))
+>inferredCaptured<() => string>().next : Symbol(next, Decl(anonymousBindings.ts, 34, 30))
+>inferredCaptured : Symbol(inferredCaptured, Decl(anonymousBindings.ts, 32, 1))
+>next : Symbol(next, Decl(anonymousBindings.ts, 34, 30))
+>next : Symbol(next, Decl(anonymousBindings.ts, 34, 30))
+>value : Symbol(value, Decl(anonymousBindings.ts, 34, 20))
+
+const mappedValue: number = mappedCaptured<{ value: number }>().value.next.value.value;
+>mappedValue : Symbol(mappedValue, Decl(anonymousBindings.ts, 84, 5))
+>mappedCaptured<{ value: number }>().value.next.value.value : Symbol(value, Decl(anonymousBindings.ts, 38, 35))
+>mappedCaptured<{ value: number }>().value.next.value : Symbol(value, Decl(anonymousBindings.ts, 84, 44))
+>mappedCaptured<{ value: number }>().value.next : Symbol(next, Decl(anonymousBindings.ts, 38, 48))
+>mappedCaptured<{ value: number }>().value : Symbol(value, Decl(anonymousBindings.ts, 84, 44))
+>mappedCaptured : Symbol(mappedCaptured, Decl(anonymousBindings.ts, 36, 1))
+>value : Symbol(value, Decl(anonymousBindings.ts, 84, 44))
+>value : Symbol(value, Decl(anonymousBindings.ts, 84, 44))
+>next : Symbol(next, Decl(anonymousBindings.ts, 38, 48))
+>value : Symbol(value, Decl(anonymousBindings.ts, 84, 44))
+>value : Symbol(value, Decl(anonymousBindings.ts, 38, 35))
+
+const freshValue = freshGeneric(1)("text")(true)(2);
+>freshValue : Symbol(freshValue, Decl(anonymousBindings.ts, 85, 5))
+>freshGeneric : Symbol(freshGeneric, Decl(anonymousBindings.ts, 40, 1))
+
+const mutualValue: string = mutualCaptured(1, "text").left.next.self.next.next.right;
+>mutualValue : Symbol(mutualValue, Decl(anonymousBindings.ts, 86, 5))
+>mutualCaptured(1, "text").left.next.self.next.next.right : Symbol(right, Decl(anonymousBindings.ts, 47, 18))
+>mutualCaptured(1, "text").left.next.self.next.next : Symbol(next, Decl(anonymousBindings.ts, 46, 26))
+>mutualCaptured(1, "text").left.next.self.next : Symbol(next, Decl(anonymousBindings.ts, 47, 41))
+>mutualCaptured(1, "text").left.next.self : Symbol(self, Decl(anonymousBindings.ts, 47, 28))
+>mutualCaptured(1, "text").left.next : Symbol(next, Decl(anonymousBindings.ts, 46, 26))
+>mutualCaptured(1, "text").left : Symbol(left, Decl(anonymousBindings.ts, 48, 12))
+>mutualCaptured : Symbol(mutualCaptured, Decl(anonymousBindings.ts, 44, 1))
+>left : Symbol(left, Decl(anonymousBindings.ts, 48, 12))
+>next : Symbol(next, Decl(anonymousBindings.ts, 46, 26))
+>self : Symbol(self, Decl(anonymousBindings.ts, 47, 28))
+>next : Symbol(next, Decl(anonymousBindings.ts, 47, 41))
+>next : Symbol(next, Decl(anonymousBindings.ts, 46, 26))
+>right : Symbol(right, Decl(anonymousBindings.ts, 47, 18))
+
+const classValue: string = new CapturedClass("text").make("other").next().outer;
+>classValue : Symbol(classValue, Decl(anonymousBindings.ts, 87, 5))
+>new CapturedClass("text").make("other").next().outer : Symbol(outer, Decl(anonymousBindings.ts, 53, 22))
+>new CapturedClass("text").make("other").next : Symbol(next, Decl(anonymousBindings.ts, 53, 48))
+>new CapturedClass("text").make : Symbol(CapturedClass.make, Decl(anonymousBindings.ts, 51, 35))
+>CapturedClass : Symbol(CapturedClass, Decl(anonymousBindings.ts, 49, 1))
+>make : Symbol(CapturedClass.make, Decl(anonymousBindings.ts, 51, 35))
+>next : Symbol(next, Decl(anonymousBindings.ts, 53, 48))
+>outer : Symbol(outer, Decl(anonymousBindings.ts, 53, 22))
+
+const optional = optionalCaptured("text");
+>optional : Symbol(optional, Decl(anonymousBindings.ts, 88, 5))
+>optionalCaptured : Symbol(optionalCaptured, Decl(anonymousBindings.ts, 20, 1))
+
+if (optional.node) {
+>optional.node : Symbol(node, Decl(anonymousBindings.ts, 23, 21))
+>optional : Symbol(optional, Decl(anonymousBindings.ts, 88, 5))
+>node : Symbol(node, Decl(anonymousBindings.ts, 23, 21))
+
+    const value: string = optional.node.next.next.value;
+>value : Symbol(value, Decl(anonymousBindings.ts, 90, 9))
+>optional.node.next.next.value : Symbol(value, Decl(anonymousBindings.ts, 22, 17))
+>optional.node.next.next : Symbol(next, Decl(anonymousBindings.ts, 22, 27))
+>optional.node.next : Symbol(next, Decl(anonymousBindings.ts, 22, 27))
+>optional.node : Symbol(node, Decl(anonymousBindings.ts, 23, 21))
+>optional : Symbol(optional, Decl(anonymousBindings.ts, 88, 5))
+>node : Symbol(node, Decl(anonymousBindings.ts, 23, 21))
+>next : Symbol(next, Decl(anonymousBindings.ts, 22, 27))
+>next : Symbol(next, Decl(anonymousBindings.ts, 22, 27))
+>value : Symbol(value, Decl(anonymousBindings.ts, 22, 17))
+}
+captured("text").consume(1);
+>captured("text").consume : Symbol(consume, Decl(anonymousBindings.ts, 3, 43))
+>captured : Symbol(captured, Decl(anonymousBindings.ts, 1, 62))
+>consume : Symbol(consume, Decl(anonymousBindings.ts, 3, 43))
+
+const invalidTupleValue: number = recursiveTuple("text")[1][0];
+>invalidTupleValue : Symbol(invalidTupleValue, Decl(anonymousBindings.ts, 93, 5))
+>recursiveTuple : Symbol(recursiveTuple, Decl(anonymousBindings.ts, 28, 1))
+>1 : Symbol(1)
+>0 : Symbol(0)
+
+=== shadowedMappedCycle.ts ===
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+>Show : Symbol(Show, Decl(shadowedMappedCycle.ts, 0, 0))
+>T : Symbol(T, Decl(shadowedMappedCycle.ts, 0, 10))
+>K : Symbol(K, Decl(shadowedMappedCycle.ts, 0, 18))
+>T : Symbol(T, Decl(shadowedMappedCycle.ts, 0, 10))
+>T : Symbol(T, Decl(shadowedMappedCycle.ts, 0, 10))
+>K : Symbol(K, Decl(shadowedMappedCycle.ts, 0, 18))
+
+type Resolve<M, K extends keyof M> = Show<{
+>Resolve : Symbol(Resolve, Decl(shadowedMappedCycle.ts, 0, 50))
+>M : Symbol(M, Decl(shadowedMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(shadowedMappedCycle.ts, 1, 15))
+>M : Symbol(M, Decl(shadowedMappedCycle.ts, 1, 13))
+>Show : Symbol(Show, Decl(shadowedMappedCycle.ts, 0, 0))
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? <T>(shadowedCycle: T) => Resolve<M, K> : M[K][P];
+>P : Symbol(P, Decl(shadowedMappedCycle.ts, 2, 5))
+>M : Symbol(M, Decl(shadowedMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(shadowedMappedCycle.ts, 1, 15))
+>M : Symbol(M, Decl(shadowedMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(shadowedMappedCycle.ts, 1, 15))
+>P : Symbol(P, Decl(shadowedMappedCycle.ts, 2, 5))
+>T : Symbol(T, Decl(shadowedMappedCycle.ts, 2, 48))
+>shadowedCycle : Symbol(shadowedCycle, Decl(shadowedMappedCycle.ts, 2, 51))
+>T : Symbol(T, Decl(shadowedMappedCycle.ts, 2, 48))
+>Resolve : Symbol(Resolve, Decl(shadowedMappedCycle.ts, 0, 50))
+>M : Symbol(M, Decl(shadowedMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(shadowedMappedCycle.ts, 1, 15))
+>M : Symbol(M, Decl(shadowedMappedCycle.ts, 1, 13))
+>K : Symbol(K, Decl(shadowedMappedCycle.ts, 1, 15))
+>P : Symbol(P, Decl(shadowedMappedCycle.ts, 2, 5))
+
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
+>build : Symbol(build, Decl(shadowedMappedCycle.ts, 4, 13))
+>M : Symbol(M, Decl(shadowedMappedCycle.ts, 4, 22))
+>K : Symbol(K, Decl(shadowedMappedCycle.ts, 4, 33))
+>M : Symbol(M, Decl(shadowedMappedCycle.ts, 4, 22))
+>Resolve : Symbol(Resolve, Decl(shadowedMappedCycle.ts, 0, 50))
+>M : Symbol(M, Decl(shadowedMappedCycle.ts, 4, 22))
+>K : Symbol(K, Decl(shadowedMappedCycle.ts, 4, 33))
+
+export const shadowedCycle = build<{ Node: { value: number; next: "ref" } }>();
+>shadowedCycle : Symbol(shadowedCycle, Decl(shadowedMappedCycle.ts, 5, 12))
+>build : Symbol(build, Decl(shadowedMappedCycle.ts, 4, 13))
+>Node : Symbol(Node, Decl(shadowedMappedCycle.ts, 5, 36))
+>value : Symbol(value, Decl(shadowedMappedCycle.ts, 5, 44))
+>next : Symbol(next, Decl(shadowedMappedCycle.ts, 5, 59))
+
+const shadowedValue: number = shadowedCycle.Node.next(1).next("text").value;
+>shadowedValue : Symbol(shadowedValue, Decl(shadowedMappedCycle.ts, 6, 5))
+>shadowedCycle.Node.next(1).next("text").value : Symbol(value, Decl(shadowedMappedCycle.ts, 5, 44))
+>shadowedCycle.Node.next(1).next : Symbol(next, Decl(shadowedMappedCycle.ts, 5, 59))
+>shadowedCycle.Node.next : Symbol(next, Decl(shadowedMappedCycle.ts, 5, 59))
+>shadowedCycle.Node : Symbol(Node, Decl(shadowedMappedCycle.ts, 5, 36))
+>shadowedCycle : Symbol(shadowedCycle, Decl(shadowedMappedCycle.ts, 5, 12))
+>Node : Symbol(Node, Decl(shadowedMappedCycle.ts, 5, 36))
+>next : Symbol(next, Decl(shadowedMappedCycle.ts, 5, 59))
+>next : Symbol(next, Decl(shadowedMappedCycle.ts, 5, 59))
+>value : Symbol(value, Decl(shadowedMappedCycle.ts, 5, 44))
+

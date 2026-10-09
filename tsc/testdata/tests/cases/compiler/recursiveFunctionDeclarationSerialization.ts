@@ -243,3 +243,238 @@ export type Inferred<T> = T extends (value: infer U) => infer R
 export declare const inferred: Inferred<(value: number) => { next: typeof reused }>;
 export const inferredCopy = inferred;
 const inferredValue: string = inferredCopy.next(1).second("text").value;
+
+// @filename: mappedCycles.ts
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+type Resolve<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
+export const mappedCycle = build<{ Node: { value: number; next: "ref" } }>();
+export const mappedCycleCopy = mappedCycle;
+export const nestedCycle = { wrapped: build<{ Node: { value: string; next: "ref" } }>() };
+export const cycleKey = Symbol();
+export const keyedCycles = build<{
+    "a-b": { value: string; next: "ref" };
+    0: { value: boolean; next: "ref" };
+    [cycleKey]: { value: number; next: "ref" };
+}>();
+export const sharedCycles = {
+    first: mappedCycle,
+    second: mappedCycle,
+};
+export const broadCycle: { Node: unknown } = mappedCycle;
+
+type ResolveMutual<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends { ref: infer R extends keyof M } ? ResolveMutual<M, R> : M[K][P];
+}>;
+declare const buildMutual: <M>() => { [K in keyof M]: ResolveMutual<M, K> };
+export const mutualCycle = buildMutual<{
+    First: { value: number; next: { ref: "Second" } };
+    Second: { value: string; next: { ref: "First" } };
+}>();
+
+const mappedValue: number = mappedCycle.Node.next.next.value;
+const nestedMappedValue: string = nestedCycle.wrapped.Node.next.next.value;
+const quotedMappedValue: string = keyedCycles["a-b"].next.next.value;
+const numericMappedValue: boolean = keyedCycles[0].next.next.value;
+const symbolMappedValue: number = keyedCycles[cycleKey].next.next.value;
+const sharedMappedValue: number = sharedCycles.second.Node.next.next.value;
+const mutualFirstValue: number = mutualCycle.First.next.next.value;
+const mutualSecondValue: string = mutualCycle.First.next.value;
+const invalidMappedValue: string = mappedCycle.Node.next.next.value;
+const invalidMutualValue: number = mutualCycle.First.next.value;
+
+// @filename: optionalMappedCycle.ts
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+type Resolve<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+}>;
+declare const build: <M>() => { [K in keyof M]?: Resolve<M, K> };
+export const optionalCycle = build<{ Node: { value: number; next: "ref" } }>();
+const optionalValue: number | undefined = optionalCycle.Node?.next.next.value;
+export const optionalCopy = optionalCycle;
+declare const buildNullable: <M>() => { [K in keyof M]: Resolve<M, K> | null };
+export const nullableCycle = buildNullable<{ Node: { value: string; next: "ref" } }>();
+declare const wrap: <T>(value: T) => { required: T; optional?: T | null };
+export const mixedCycles = wrap(optionalCycle);
+export const sharedOptionalCycles = { first: optionalCycle, second: optionalCycle };
+export const nullableKey = Symbol();
+export const nullableKeys = buildNullable<{
+    "a-b": { value: string; next: "ref" };
+    0: { value: boolean; next: "ref" };
+    [nullableKey]: { value: number; next: "ref" };
+}>();
+declare const buildNullableRoot: <M>() => Resolve<M, keyof M> | null;
+export const nullableRoot = buildNullableRoot<{ Node: { value: number; next: "ref" } }>();
+declare const buildOptionalRoot: <M>() => Resolve<M, keyof M> | undefined;
+export const optionalRoot = buildOptionalRoot<{ Node: { value: string; next: "ref" } }>();
+type ResolveNullable<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullable<M, K> | null : M[K][P];
+}>;
+declare const buildNullableLinks: <M>() => { [K in keyof M]: ResolveNullable<M, K> | null };
+export const nullableLinks = buildNullableLinks<{ Node: { value: number; next: "ref" } }>();
+declare const buildOptionalNullableLinks: <M>() => { [K in keyof M]?: ResolveNullable<M, K> | null };
+export const optionalNullableLinks = buildOptionalNullableLinks<{ Node: { value: number; next: "ref" } }>();
+type ResolveOptional<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveOptional<M, K> | undefined : M[K][P];
+}>;
+declare const buildNullableOptionalLinks: <M>() => { [K in keyof M]: ResolveOptional<M, K> | null };
+export const nullableOptionalLinks = buildNullableOptionalLinks<{ Node: { value: number; next: "ref" } }>();
+type ResolveNullish<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullish<M, K> | null | undefined : M[K][P];
+}>;
+declare const buildNullishLinks: <M>() => { [K in keyof M]?: ResolveNullish<M, K> | null };
+export const nullishLinks = buildNullishLinks<{ Node: { value: number; next: "ref" } }>();
+type NonNullable<T> = "shadowed";
+type OptionalNode = (typeof optionalCycle)["Node"] & {};
+type NullableNode = (typeof nullableCycle)["Node"] & {};
+type NullableLinkNode = (typeof nullableLinks)["Node"] & {};
+type NullishLinkNode = (typeof nullishLinks)["Node"] & {};
+type OptionalNullableLinkNode = (typeof optionalNullableLinks)["Node"] & {};
+type NullableOptionalLinkNode = (typeof nullableOptionalLinks)["Node"] & {};
+const copiedValue: number | undefined = optionalCopy.Node?.next.next.value;
+const nullableValue: string | undefined = nullableCycle.Node?.next.next.value;
+const mixedValue: number | undefined = mixedCycles.optional?.Node?.next.next.value;
+const sharedValue: number | undefined = sharedOptionalCycles.second.Node?.next.next.value;
+const quotedValue: string | undefined = nullableKeys["a-b"]?.next.next.value;
+const numericValue: boolean | undefined = nullableKeys[0]?.next.next.value;
+const symbolValue: number | undefined = nullableKeys[nullableKey]?.next.next.value;
+const nullableRootValue: number | undefined = nullableRoot?.next.next.value;
+const optionalRootValue: string | undefined = optionalRoot?.next.next.value;
+const nullableLinkValue: number | undefined = nullableLinks.Node?.next?.next?.value;
+const nullishLinkValue: number | undefined = nullishLinks.Node?.next?.next?.value;
+const optionalNullableLinkValue: number | undefined = optionalNullableLinks.Node?.next?.next?.value;
+const nullableOptionalLinkValue: number | undefined = nullableOptionalLinks.Node?.next?.next?.value;
+const optionalNextHasNull: null extends OptionalNode["next"] ? true : false = false;
+const optionalNextHasUndefined: undefined extends OptionalNode["next"] ? true : false = false;
+const nullableNextHasNull: null extends NullableNode["next"] ? true : false = false;
+const nullableNextHasUndefined: undefined extends NullableNode["next"] ? true : false = false;
+const nullableLinkHasNull: null extends NullableLinkNode["next"] ? true : false = true;
+const nullableLinkHasUndefined: undefined extends NullableLinkNode["next"] ? true : false = false;
+const nullishLinkHasNull: null extends NullishLinkNode["next"] ? true : false = true;
+const nullishLinkHasUndefined: undefined extends NullishLinkNode["next"] ? true : false = true;
+const optionalNullableLinkHasNull: null extends OptionalNullableLinkNode["next"] ? true : false = true;
+const optionalNullableLinkHasUndefined: undefined extends OptionalNullableLinkNode["next"] ? true : false = false;
+const nullableOptionalLinkHasNull: null extends NullableOptionalLinkNode["next"] ? true : false = false;
+const nullableOptionalLinkHasUndefined: undefined extends NullableOptionalLinkNode["next"] ? true : false = true;
+const invalidNullNext: OptionalNode["next"] = null;
+const invalidUndefinedNext: OptionalNode["next"] = undefined;
+const invalidNullableLinkValue: number = nullableLinks.Node!.next.value;
+const invalidNullishLinkValue: number = nullishLinks.Node!.next.value;
+
+// @filename: mixedMappedCycle.ts
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+type Resolve<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> | false | null };
+export const mixedCycle = build<{ Node: { value: number; next: "ref" } }>();
+if (mixedCycle.Node) {
+    const value: number = mixedCycle.Node.next.next.value;
+}
+
+// @filename: anonymousBindings.ts
+export const _recursive = 1;
+export const factory = () => function self() { return self; };
+export function captured<T>(value: T) {
+    const node = { value, next: () => node, consume: (other: T) => node };
+    return node;
+}
+export function nestedCaptured<T>(outer: T) {
+    return <U>(inner: U) => {
+        const node = {
+            outer,
+            inner,
+            next: () => node,
+            shadow: <T>(value: T) => ({ outer, inner, value, next: node }),
+        };
+        return node;
+    };
+}
+export function constrained<T extends { value: number }, K extends keyof T>(key: K) {
+    const node = { value: null! as T[K], next: () => node };
+    return node;
+}
+export function optionalCaptured<T>(value: T) {
+    type Node = { value: T; next: Node };
+    return null! as { node?: Node | false | null };
+}
+export function annotatedCaptured<T>(value: T) {
+    const node: { value: typeof value; next: typeof node } = { value, next: null! };
+    return node;
+}
+export function recursiveTuple<T>(value: T) {
+    type Tuple = readonly [T, Tuple];
+    return null! as Tuple;
+}
+export function inferredCaptured<T>() {
+    type Node<V> = { value: V; next: Node<V> };
+    return null! as (T extends () => infer U ? Node<U> : never);
+}
+export function mappedCaptured<T>() {
+    type Node = { [K in keyof T]: { value: T[K]; next: Node } };
+    return null! as Node;
+}
+export function freshGeneric<T>(unused: T) {
+    const recur = <U>(value: U) => recur;
+    return recur;
+}
+export function mutualCaptured<T, U>(left: T, right: U) {
+    type Left = { left: T; next: Right };
+    type Right = { right: U; self: Right; next: Left };
+    return { left: null! as Left, right: null! as Right };
+}
+export class CapturedClass<T> {
+    constructor(public value: T) {}
+    make<U extends T>(inner: U) {
+        const node = { outer: this.value, inner, next: () => node };
+        return node;
+    }
+}
+export function covariantClass() {
+    return class Node<out T> {
+        value!: T;
+        next(): Node<T> { return this; }
+    };
+}
+export function contravariantClass() {
+    return class Node<in T> {
+        consume!: (value: T) => void;
+        next(): Node<T> { return this; }
+    };
+}
+export namespace Nested {
+    export function captured<T>(value: T) {
+        const node = { value, next: () => node };
+        return node;
+    }
+}
+const capturedValue: string = captured("text").next().consume("other").value;
+const nestedValue = nestedCaptured(1)("text").shadow(true).next.next();
+const nestedOuter: number = nestedValue.outer;
+const nestedInner: string = nestedValue.inner;
+const constrainedValue: number = constrained<{ value: number }, "value">("value").next().value;
+const annotatedValue: string = annotatedCaptured("text").next.next.value;
+const tupleValue: string = recursiveTuple("text")[1][1][0];
+const namespaceValue: number = Nested.captured(1).next().next().value;
+const inferredValue: string = inferredCaptured<() => string>().next.next.value;
+const mappedValue: number = mappedCaptured<{ value: number }>().value.next.value.value;
+const freshValue = freshGeneric(1)("text")(true)(2);
+const mutualValue: string = mutualCaptured(1, "text").left.next.self.next.next.right;
+const classValue: string = new CapturedClass("text").make("other").next().outer;
+const optional = optionalCaptured("text");
+if (optional.node) {
+    const value: string = optional.node.next.next.value;
+}
+captured("text").consume(1);
+const invalidTupleValue: number = recursiveTuple("text")[1][0];
+
+// @filename: shadowedMappedCycle.ts
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+type Resolve<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? <T>(shadowedCycle: T) => Resolve<M, K> : M[K][P];
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
+export const shadowedCycle = build<{ Node: { value: number; next: "ref" } }>();
+const shadowedValue: number = shadowedCycle.Node.next(1).next("text").value;

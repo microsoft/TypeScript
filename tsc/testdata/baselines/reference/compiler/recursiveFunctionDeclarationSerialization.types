@@ -1370,3 +1370,1250 @@ const inferredValue: string = inferredCopy.next(1).second("text").value;
 >"text" : "text"
 >value : string
 
+=== mappedCycles.ts ===
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+>Show : { [K in keyof T]: T[K]; }
+
+type Resolve<M, K extends keyof M> = Show<{
+>Resolve : { [P in keyof M[K]]: M[K][P] extends "ref" ? any extends infer T_1 ? { [K_1 in keyof T_1]: T_1[K_1]; } : never : M[K][P]; } extends infer T ? { [K_1 in keyof T]: T[K_1]; } : never
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
+>build : <M>() => { [K in keyof M]: Resolve<M, K>; }
+
+export const mappedCycle = build<{ Node: { value: number; next: "ref" } }>();
+>mappedCycle : { Node: { value: number; next: any; }; }
+>build<{ Node: { value: number; next: "ref" } }>() : { Node: { value: number; next: any; }; }
+>build : <M>() => { [K in keyof M]: Resolve<M, K>; }
+>Node : { value: number; next: "ref"; }
+>value : number
+>next : "ref"
+
+export const mappedCycleCopy = mappedCycle;
+>mappedCycleCopy : { Node: { value: number; next: any; }; }
+>mappedCycle : { Node: { value: number; next: any; }; }
+
+export const nestedCycle = { wrapped: build<{ Node: { value: string; next: "ref" } }>() };
+>nestedCycle : { wrapped: { Node: { value: string; next: any; }; }; }
+>{ wrapped: build<{ Node: { value: string; next: "ref" } }>() } : { wrapped: { Node: { value: string; next: any; }; }; }
+>wrapped : { Node: { value: string; next: any; }; }
+>build<{ Node: { value: string; next: "ref" } }>() : { Node: { value: string; next: any; }; }
+>build : <M>() => { [K in keyof M]: Resolve<M, K>; }
+>Node : { value: string; next: "ref"; }
+>value : string
+>next : "ref"
+
+export const cycleKey = Symbol();
+>cycleKey : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export const keyedCycles = build<{
+>keyedCycles : { "a-b": { value: string; next: any; }; 0: { value: boolean; next: any; }; [cycleKey]: { value: number; next: any; }; }
+>build<{    "a-b": { value: string; next: "ref" };    0: { value: boolean; next: "ref" };    [cycleKey]: { value: number; next: "ref" };}>() : { "a-b": { value: string; next: any; }; 0: { value: boolean; next: any; }; [cycleKey]: { value: number; next: any; }; }
+>build : <M>() => { [K in keyof M]: Resolve<M, K>; }
+
+    "a-b": { value: string; next: "ref" };
+>"a-b" : { value: string; next: "ref"; }
+>value : string
+>next : "ref"
+
+    0: { value: boolean; next: "ref" };
+>0 : { value: boolean; next: "ref"; }
+>value : boolean
+>next : "ref"
+
+    [cycleKey]: { value: number; next: "ref" };
+>[cycleKey] : { value: number; next: "ref"; }
+>cycleKey : unique symbol
+>value : number
+>next : "ref"
+
+}>();
+export const sharedCycles = {
+>sharedCycles : { first: { Node: { value: number; next: any; }; }; second: { Node: { value: number; next: any; }; }; }
+>{    first: mappedCycle,    second: mappedCycle,} : { first: { Node: { value: number; next: any; }; }; second: { Node: { value: number; next: any; }; }; }
+
+    first: mappedCycle,
+>first : { Node: { value: number; next: any; }; }
+>mappedCycle : { Node: { value: number; next: any; }; }
+
+    second: mappedCycle,
+>second : { Node: { value: number; next: any; }; }
+>mappedCycle : { Node: { value: number; next: any; }; }
+
+};
+export const broadCycle: { Node: unknown } = mappedCycle;
+>broadCycle : { Node: unknown; }
+>Node : unknown
+>mappedCycle : { Node: { value: number; next: any; }; }
+
+type ResolveMutual<M, K extends keyof M> = Show<{
+>ResolveMutual : { [P in keyof M[K]]: M[K][P] extends { ref: infer R extends keyof M; } ? { [P_1 in keyof M[R]]: M[R][P_1] extends { ref: infer R extends keyof M; } ? any : M[R][P_1]; } extends infer T_1 ? { [K_1 in keyof T_1]: T_1[K_1]; } : never : M[K][P]; } extends infer T ? { [K_1 in keyof T]: T[K_1]; } : never
+
+    [P in keyof M[K]]: M[K][P] extends { ref: infer R extends keyof M } ? ResolveMutual<M, R> : M[K][P];
+>ref : R
+
+}>;
+declare const buildMutual: <M>() => { [K in keyof M]: ResolveMutual<M, K> };
+>buildMutual : <M>() => { [K in keyof M]: ResolveMutual<M, K>; }
+
+export const mutualCycle = buildMutual<{
+>mutualCycle : { First: { value: number; next: { value: string; next: any; }; }; Second: { value: string; next: { value: number; next: any; }; }; }
+>buildMutual<{    First: { value: number; next: { ref: "Second" } };    Second: { value: string; next: { ref: "First" } };}>() : { First: { value: number; next: { value: string; next: any; }; }; Second: { value: string; next: { value: number; next: any; }; }; }
+>buildMutual : <M>() => { [K in keyof M]: ResolveMutual<M, K>; }
+
+    First: { value: number; next: { ref: "Second" } };
+>First : { value: number; next: { ref: "Second"; }; }
+>value : number
+>next : { ref: "Second"; }
+>ref : "Second"
+
+    Second: { value: string; next: { ref: "First" } };
+>Second : { value: string; next: { ref: "First"; }; }
+>value : string
+>next : { ref: "First"; }
+>ref : "First"
+
+}>();
+
+const mappedValue: number = mappedCycle.Node.next.next.value;
+>mappedValue : number
+>mappedCycle.Node.next.next.value : number
+>mappedCycle.Node.next.next : { value: number; next: any; }
+>mappedCycle.Node.next : { value: number; next: any; }
+>mappedCycle.Node : { value: number; next: any; }
+>mappedCycle : { Node: { value: number; next: any; }; }
+>Node : { value: number; next: any; }
+>next : { value: number; next: any; }
+>next : { value: number; next: any; }
+>value : number
+
+const nestedMappedValue: string = nestedCycle.wrapped.Node.next.next.value;
+>nestedMappedValue : string
+>nestedCycle.wrapped.Node.next.next.value : string
+>nestedCycle.wrapped.Node.next.next : { value: string; next: any; }
+>nestedCycle.wrapped.Node.next : { value: string; next: any; }
+>nestedCycle.wrapped.Node : { value: string; next: any; }
+>nestedCycle.wrapped : { Node: { value: string; next: any; }; }
+>nestedCycle : { wrapped: { Node: { value: string; next: any; }; }; }
+>wrapped : { Node: { value: string; next: any; }; }
+>Node : { value: string; next: any; }
+>next : { value: string; next: any; }
+>next : { value: string; next: any; }
+>value : string
+
+const quotedMappedValue: string = keyedCycles["a-b"].next.next.value;
+>quotedMappedValue : string
+>keyedCycles["a-b"].next.next.value : string
+>keyedCycles["a-b"].next.next : { value: string; next: any; }
+>keyedCycles["a-b"].next : { value: string; next: any; }
+>keyedCycles["a-b"] : { value: string; next: any; }
+>keyedCycles : { "a-b": { value: string; next: any; }; 0: { value: boolean; next: any; }; [cycleKey]: { value: number; next: any; }; }
+>"a-b" : "a-b"
+>next : { value: string; next: any; }
+>next : { value: string; next: any; }
+>value : string
+
+const numericMappedValue: boolean = keyedCycles[0].next.next.value;
+>numericMappedValue : boolean
+>keyedCycles[0].next.next.value : boolean
+>keyedCycles[0].next.next : { value: boolean; next: any; }
+>keyedCycles[0].next : { value: boolean; next: any; }
+>keyedCycles[0] : { value: boolean; next: any; }
+>keyedCycles : { "a-b": { value: string; next: any; }; 0: { value: boolean; next: any; }; [cycleKey]: { value: number; next: any; }; }
+>0 : 0
+>next : { value: boolean; next: any; }
+>next : { value: boolean; next: any; }
+>value : boolean
+
+const symbolMappedValue: number = keyedCycles[cycleKey].next.next.value;
+>symbolMappedValue : number
+>keyedCycles[cycleKey].next.next.value : number
+>keyedCycles[cycleKey].next.next : { value: number; next: any; }
+>keyedCycles[cycleKey].next : { value: number; next: any; }
+>keyedCycles[cycleKey] : { value: number; next: any; }
+>keyedCycles : { "a-b": { value: string; next: any; }; 0: { value: boolean; next: any; }; [cycleKey]: { value: number; next: any; }; }
+>cycleKey : unique symbol
+>next : { value: number; next: any; }
+>next : { value: number; next: any; }
+>value : number
+
+const sharedMappedValue: number = sharedCycles.second.Node.next.next.value;
+>sharedMappedValue : number
+>sharedCycles.second.Node.next.next.value : number
+>sharedCycles.second.Node.next.next : { value: number; next: any; }
+>sharedCycles.second.Node.next : { value: number; next: any; }
+>sharedCycles.second.Node : { value: number; next: any; }
+>sharedCycles.second : { Node: { value: number; next: any; }; }
+>sharedCycles : { first: { Node: { value: number; next: any; }; }; second: { Node: { value: number; next: any; }; }; }
+>second : { Node: { value: number; next: any; }; }
+>Node : { value: number; next: any; }
+>next : { value: number; next: any; }
+>next : { value: number; next: any; }
+>value : number
+
+const mutualFirstValue: number = mutualCycle.First.next.next.value;
+>mutualFirstValue : number
+>mutualCycle.First.next.next.value : number
+>mutualCycle.First.next.next : { value: number; next: { value: string; next: any; }; }
+>mutualCycle.First.next : { value: string; next: { value: number; next: any; }; }
+>mutualCycle.First : { value: number; next: { value: string; next: any; }; }
+>mutualCycle : { First: { value: number; next: { value: string; next: any; }; }; Second: { value: string; next: { value: number; next: any; }; }; }
+>First : { value: number; next: { value: string; next: any; }; }
+>next : { value: string; next: { value: number; next: any; }; }
+>next : { value: number; next: { value: string; next: any; }; }
+>value : number
+
+const mutualSecondValue: string = mutualCycle.First.next.value;
+>mutualSecondValue : string
+>mutualCycle.First.next.value : string
+>mutualCycle.First.next : { value: string; next: { value: number; next: any; }; }
+>mutualCycle.First : { value: number; next: { value: string; next: any; }; }
+>mutualCycle : { First: { value: number; next: { value: string; next: any; }; }; Second: { value: string; next: { value: number; next: any; }; }; }
+>First : { value: number; next: { value: string; next: any; }; }
+>next : { value: string; next: { value: number; next: any; }; }
+>value : string
+
+const invalidMappedValue: string = mappedCycle.Node.next.next.value;
+>invalidMappedValue : string
+>mappedCycle.Node.next.next.value : number
+>mappedCycle.Node.next.next : { value: number; next: any; }
+>mappedCycle.Node.next : { value: number; next: any; }
+>mappedCycle.Node : { value: number; next: any; }
+>mappedCycle : { Node: { value: number; next: any; }; }
+>Node : { value: number; next: any; }
+>next : { value: number; next: any; }
+>next : { value: number; next: any; }
+>value : number
+
+const invalidMutualValue: number = mutualCycle.First.next.value;
+>invalidMutualValue : number
+>mutualCycle.First.next.value : string
+>mutualCycle.First.next : { value: string; next: { value: number; next: any; }; }
+>mutualCycle.First : { value: number; next: { value: string; next: any; }; }
+>mutualCycle : { First: { value: number; next: { value: string; next: any; }; }; Second: { value: string; next: { value: number; next: any; }; }; }
+>First : { value: number; next: { value: string; next: any; }; }
+>next : { value: string; next: { value: number; next: any; }; }
+>value : string
+
+=== optionalMappedCycle.ts ===
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+>Show : { [K in keyof T]: T[K]; }
+
+type Resolve<M, K extends keyof M> = Show<{
+>Resolve : { [P in keyof M[K]]: M[K][P] extends "ref" ? any extends infer T_1 ? { [K_1 in keyof T_1]: T_1[K_1]; } : never : M[K][P]; } extends infer T ? { [K_1 in keyof T]: T[K_1]; } : never
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+}>;
+declare const build: <M>() => { [K in keyof M]?: Resolve<M, K> };
+>build : <M>() => { [K in keyof M]?: Resolve<M, K>; }
+
+export const optionalCycle = build<{ Node: { value: number; next: "ref" } }>();
+>optionalCycle : { Node?: { value: number; next: any; } | undefined; }
+>build<{ Node: { value: number; next: "ref" } }>() : { Node?: { value: number; next: any; } | undefined; }
+>build : <M>() => { [K in keyof M]?: Resolve<M, K>; }
+>Node : { value: number; next: "ref"; }
+>value : number
+>next : "ref"
+
+const optionalValue: number | undefined = optionalCycle.Node?.next.next.value;
+>optionalValue : number | undefined
+>optionalCycle.Node?.next.next.value : number | undefined
+>optionalCycle.Node?.next.next : { value: number; next: any; } | undefined
+>optionalCycle.Node?.next : { value: number; next: any; } | undefined
+>optionalCycle.Node : { value: number; next: any; } | undefined
+>optionalCycle : { Node?: { value: number; next: any; } | undefined; }
+>Node : { value: number; next: any; } | undefined
+>next : { value: number; next: any; } | undefined
+>next : { value: number; next: any; } | undefined
+>value : number | undefined
+
+export const optionalCopy = optionalCycle;
+>optionalCopy : { Node?: { value: number; next: any; } | undefined; }
+>optionalCycle : { Node?: { value: number; next: any; } | undefined; }
+
+declare const buildNullable: <M>() => { [K in keyof M]: Resolve<M, K> | null };
+>buildNullable : <M>() => { [K in keyof M]: Resolve<M, K> | null; }
+
+export const nullableCycle = buildNullable<{ Node: { value: string; next: "ref" } }>();
+>nullableCycle : { Node: { value: string; next: any; } | null; }
+>buildNullable<{ Node: { value: string; next: "ref" } }>() : { Node: { value: string; next: any; } | null; }
+>buildNullable : <M>() => { [K in keyof M]: Resolve<M, K> | null; }
+>Node : { value: string; next: "ref"; }
+>value : string
+>next : "ref"
+
+declare const wrap: <T>(value: T) => { required: T; optional?: T | null };
+>wrap : <T>(value: T) => { required: T; optional?: T | null; }
+>value : T
+>required : T
+>optional : T | null | undefined
+
+export const mixedCycles = wrap(optionalCycle);
+>mixedCycles : { required: { Node?: { value: number; next: any; } | undefined; }; optional?: { Node?: { value: number; next: any; } | undefined; } | null | undefined; }
+>wrap(optionalCycle) : { required: { Node?: { value: number; next: any; } | undefined; }; optional?: { Node?: { value: number; next: any; } | undefined; } | null | undefined; }
+>wrap : <T>(value: T) => { required: T; optional?: T | null; }
+>optionalCycle : { Node?: { value: number; next: any; } | undefined; }
+
+export const sharedOptionalCycles = { first: optionalCycle, second: optionalCycle };
+>sharedOptionalCycles : { first: { Node?: { value: number; next: any; } | undefined; }; second: { Node?: { value: number; next: any; } | undefined; }; }
+>{ first: optionalCycle, second: optionalCycle } : { first: { Node?: { value: number; next: any; } | undefined; }; second: { Node?: { value: number; next: any; } | undefined; }; }
+>first : { Node?: { value: number; next: any; } | undefined; }
+>optionalCycle : { Node?: { value: number; next: any; } | undefined; }
+>second : { Node?: { value: number; next: any; } | undefined; }
+>optionalCycle : { Node?: { value: number; next: any; } | undefined; }
+
+export const nullableKey = Symbol();
+>nullableKey : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export const nullableKeys = buildNullable<{
+>nullableKeys : { "a-b": { value: string; next: any; } | null; 0: { value: boolean; next: any; } | null; [nullableKey]: { value: number; next: any; } | null; }
+>buildNullable<{    "a-b": { value: string; next: "ref" };    0: { value: boolean; next: "ref" };    [nullableKey]: { value: number; next: "ref" };}>() : { "a-b": { value: string; next: any; } | null; 0: { value: boolean; next: any; } | null; [nullableKey]: { value: number; next: any; } | null; }
+>buildNullable : <M>() => { [K in keyof M]: Resolve<M, K> | null; }
+
+    "a-b": { value: string; next: "ref" };
+>"a-b" : { value: string; next: "ref"; }
+>value : string
+>next : "ref"
+
+    0: { value: boolean; next: "ref" };
+>0 : { value: boolean; next: "ref"; }
+>value : boolean
+>next : "ref"
+
+    [nullableKey]: { value: number; next: "ref" };
+>[nullableKey] : { value: number; next: "ref"; }
+>nullableKey : unique symbol
+>value : number
+>next : "ref"
+
+}>();
+declare const buildNullableRoot: <M>() => Resolve<M, keyof M> | null;
+>buildNullableRoot : <M>() => Resolve<M, keyof M> | null
+
+export const nullableRoot = buildNullableRoot<{ Node: { value: number; next: "ref" } }>();
+>nullableRoot : { value: number; next: any; } | null
+>buildNullableRoot<{ Node: { value: number; next: "ref" } }>() : { value: number; next: any; } | null
+>buildNullableRoot : <M>() => Resolve<M, keyof M> | null
+>Node : { value: number; next: "ref"; }
+>value : number
+>next : "ref"
+
+declare const buildOptionalRoot: <M>() => Resolve<M, keyof M> | undefined;
+>buildOptionalRoot : <M>() => Resolve<M, keyof M> | undefined
+
+export const optionalRoot = buildOptionalRoot<{ Node: { value: string; next: "ref" } }>();
+>optionalRoot : { value: string; next: any; } | undefined
+>buildOptionalRoot<{ Node: { value: string; next: "ref" } }>() : { value: string; next: any; } | undefined
+>buildOptionalRoot : <M>() => Resolve<M, keyof M> | undefined
+>Node : { value: string; next: "ref"; }
+>value : string
+>next : "ref"
+
+type ResolveNullable<M, K extends keyof M> = Show<{
+>ResolveNullable : { [P in keyof M[K]]: M[K][P] extends "ref" ? (any extends infer T_1 ? { [K_1 in keyof T_1]: T_1[K_1]; } : never) | null : M[K][P]; } extends infer T ? { [K_1 in keyof T]: T[K_1]; } : never
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullable<M, K> | null : M[K][P];
+}>;
+declare const buildNullableLinks: <M>() => { [K in keyof M]: ResolveNullable<M, K> | null };
+>buildNullableLinks : <M>() => { [K in keyof M]: ResolveNullable<M, K> | null; }
+
+export const nullableLinks = buildNullableLinks<{ Node: { value: number; next: "ref" } }>();
+>nullableLinks : { Node: { value: number; next: any | null; } | null; }
+>buildNullableLinks<{ Node: { value: number; next: "ref" } }>() : { Node: { value: number; next: any | null; } | null; }
+>buildNullableLinks : <M>() => { [K in keyof M]: ResolveNullable<M, K> | null; }
+>Node : { value: number; next: "ref"; }
+>value : number
+>next : "ref"
+
+declare const buildOptionalNullableLinks: <M>() => { [K in keyof M]?: ResolveNullable<M, K> | null };
+>buildOptionalNullableLinks : <M>() => { [K in keyof M]?: ResolveNullable<M, K> | null; }
+
+export const optionalNullableLinks = buildOptionalNullableLinks<{ Node: { value: number; next: "ref" } }>();
+>optionalNullableLinks : { Node?: { value: number; next: any | null; } | null | undefined; }
+>buildOptionalNullableLinks<{ Node: { value: number; next: "ref" } }>() : { Node?: { value: number; next: any | null; } | null | undefined; }
+>buildOptionalNullableLinks : <M>() => { [K in keyof M]?: ResolveNullable<M, K> | null; }
+>Node : { value: number; next: "ref"; }
+>value : number
+>next : "ref"
+
+type ResolveOptional<M, K extends keyof M> = Show<{
+>ResolveOptional : { [P in keyof M[K]]: M[K][P] extends "ref" ? (any extends infer T_1 ? { [K_1 in keyof T_1]: T_1[K_1]; } : never) | undefined : M[K][P]; } extends infer T ? { [K_1 in keyof T]: T[K_1]; } : never
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveOptional<M, K> | undefined : M[K][P];
+}>;
+declare const buildNullableOptionalLinks: <M>() => { [K in keyof M]: ResolveOptional<M, K> | null };
+>buildNullableOptionalLinks : <M>() => { [K in keyof M]: ResolveOptional<M, K> | null; }
+
+export const nullableOptionalLinks = buildNullableOptionalLinks<{ Node: { value: number; next: "ref" } }>();
+>nullableOptionalLinks : { Node: { value: number; next: any | undefined; } | null; }
+>buildNullableOptionalLinks<{ Node: { value: number; next: "ref" } }>() : { Node: { value: number; next: any | undefined; } | null; }
+>buildNullableOptionalLinks : <M>() => { [K in keyof M]: ResolveOptional<M, K> | null; }
+>Node : { value: number; next: "ref"; }
+>value : number
+>next : "ref"
+
+type ResolveNullish<M, K extends keyof M> = Show<{
+>ResolveNullish : { [P in keyof M[K]]: M[K][P] extends "ref" ? (any extends infer T_1 ? { [K_1 in keyof T_1]: T_1[K_1]; } : never) | null | undefined : M[K][P]; } extends infer T ? { [K_1 in keyof T]: T[K_1]; } : never
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullish<M, K> | null | undefined : M[K][P];
+}>;
+declare const buildNullishLinks: <M>() => { [K in keyof M]?: ResolveNullish<M, K> | null };
+>buildNullishLinks : <M>() => { [K in keyof M]?: ResolveNullish<M, K> | null; }
+
+export const nullishLinks = buildNullishLinks<{ Node: { value: number; next: "ref" } }>();
+>nullishLinks : { Node?: { value: number; next: any | null | undefined; } | null | undefined; }
+>buildNullishLinks<{ Node: { value: number; next: "ref" } }>() : { Node?: { value: number; next: any | null | undefined; } | null | undefined; }
+>buildNullishLinks : <M>() => { [K in keyof M]?: ResolveNullish<M, K> | null; }
+>Node : { value: number; next: "ref"; }
+>value : number
+>next : "ref"
+
+type NonNullable<T> = "shadowed";
+>NonNullable : "shadowed"
+
+type OptionalNode = (typeof optionalCycle)["Node"] & {};
+>OptionalNode : { value: number; next: any; }
+>optionalCycle : { Node?: { value: number; next: any; } | undefined; }
+
+type NullableNode = (typeof nullableCycle)["Node"] & {};
+>NullableNode : { value: string; next: any; }
+>nullableCycle : { Node: { value: string; next: any; } | null; }
+
+type NullableLinkNode = (typeof nullableLinks)["Node"] & {};
+>NullableLinkNode : { value: number; next: any | null; }
+>nullableLinks : { Node: { value: number; next: any | null; } | null; }
+
+type NullishLinkNode = (typeof nullishLinks)["Node"] & {};
+>NullishLinkNode : { value: number; next: any | null | undefined; }
+>nullishLinks : { Node?: { value: number; next: any | null | undefined; } | null | undefined; }
+
+type OptionalNullableLinkNode = (typeof optionalNullableLinks)["Node"] & {};
+>OptionalNullableLinkNode : { value: number; next: any | null; }
+>optionalNullableLinks : { Node?: { value: number; next: any | null; } | null | undefined; }
+
+type NullableOptionalLinkNode = (typeof nullableOptionalLinks)["Node"] & {};
+>NullableOptionalLinkNode : { value: number; next: any | undefined; }
+>nullableOptionalLinks : { Node: { value: number; next: any | undefined; } | null; }
+
+const copiedValue: number | undefined = optionalCopy.Node?.next.next.value;
+>copiedValue : number | undefined
+>optionalCopy.Node?.next.next.value : number | undefined
+>optionalCopy.Node?.next.next : { value: number; next: any; } | undefined
+>optionalCopy.Node?.next : { value: number; next: any; } | undefined
+>optionalCopy.Node : { value: number; next: any; } | undefined
+>optionalCopy : { Node?: { value: number; next: any; } | undefined; }
+>Node : { value: number; next: any; } | undefined
+>next : { value: number; next: any; } | undefined
+>next : { value: number; next: any; } | undefined
+>value : number | undefined
+
+const nullableValue: string | undefined = nullableCycle.Node?.next.next.value;
+>nullableValue : string | undefined
+>nullableCycle.Node?.next.next.value : string | undefined
+>nullableCycle.Node?.next.next : { value: string; next: any; } | undefined
+>nullableCycle.Node?.next : { value: string; next: any; } | undefined
+>nullableCycle.Node : { value: string; next: any; } | null
+>nullableCycle : { Node: { value: string; next: any; } | null; }
+>Node : { value: string; next: any; } | null
+>next : { value: string; next: any; } | undefined
+>next : { value: string; next: any; } | undefined
+>value : string | undefined
+
+const mixedValue: number | undefined = mixedCycles.optional?.Node?.next.next.value;
+>mixedValue : number | undefined
+>mixedCycles.optional?.Node?.next.next.value : number | undefined
+>mixedCycles.optional?.Node?.next.next : { value: number; next: any; } | undefined
+>mixedCycles.optional?.Node?.next : { value: number; next: any; } | undefined
+>mixedCycles.optional?.Node : { value: number; next: any; } | undefined
+>mixedCycles.optional : { Node?: { value: number; next: any; } | undefined; } | null | undefined
+>mixedCycles : { required: { Node?: { value: number; next: any; } | undefined; }; optional?: { Node?: { value: number; next: any; } | undefined; } | null | undefined; }
+>optional : { Node?: { value: number; next: any; } | undefined; } | null | undefined
+>Node : { value: number; next: any; } | undefined
+>next : { value: number; next: any; } | undefined
+>next : { value: number; next: any; } | undefined
+>value : number | undefined
+
+const sharedValue: number | undefined = sharedOptionalCycles.second.Node?.next.next.value;
+>sharedValue : number | undefined
+>sharedOptionalCycles.second.Node?.next.next.value : number | undefined
+>sharedOptionalCycles.second.Node?.next.next : { value: number; next: any; } | undefined
+>sharedOptionalCycles.second.Node?.next : { value: number; next: any; } | undefined
+>sharedOptionalCycles.second.Node : { value: number; next: any; } | undefined
+>sharedOptionalCycles.second : { Node?: { value: number; next: any; } | undefined; }
+>sharedOptionalCycles : { first: { Node?: { value: number; next: any; } | undefined; }; second: { Node?: { value: number; next: any; } | undefined; }; }
+>second : { Node?: { value: number; next: any; } | undefined; }
+>Node : { value: number; next: any; } | undefined
+>next : { value: number; next: any; } | undefined
+>next : { value: number; next: any; } | undefined
+>value : number | undefined
+
+const quotedValue: string | undefined = nullableKeys["a-b"]?.next.next.value;
+>quotedValue : string | undefined
+>nullableKeys["a-b"]?.next.next.value : string | undefined
+>nullableKeys["a-b"]?.next.next : { value: string; next: any; } | undefined
+>nullableKeys["a-b"]?.next : { value: string; next: any; } | undefined
+>nullableKeys["a-b"] : { value: string; next: any; } | null
+>nullableKeys : { "a-b": { value: string; next: any; } | null; 0: { value: boolean; next: any; } | null; [nullableKey]: { value: number; next: any; } | null; }
+>"a-b" : "a-b"
+>next : { value: string; next: any; } | undefined
+>next : { value: string; next: any; } | undefined
+>value : string | undefined
+
+const numericValue: boolean | undefined = nullableKeys[0]?.next.next.value;
+>numericValue : boolean | undefined
+>nullableKeys[0]?.next.next.value : boolean | undefined
+>nullableKeys[0]?.next.next : { value: boolean; next: any; } | undefined
+>nullableKeys[0]?.next : { value: boolean; next: any; } | undefined
+>nullableKeys[0] : { value: boolean; next: any; } | null
+>nullableKeys : { "a-b": { value: string; next: any; } | null; 0: { value: boolean; next: any; } | null; [nullableKey]: { value: number; next: any; } | null; }
+>0 : 0
+>next : { value: boolean; next: any; } | undefined
+>next : { value: boolean; next: any; } | undefined
+>value : boolean | undefined
+
+const symbolValue: number | undefined = nullableKeys[nullableKey]?.next.next.value;
+>symbolValue : number | undefined
+>nullableKeys[nullableKey]?.next.next.value : number | undefined
+>nullableKeys[nullableKey]?.next.next : { value: number; next: any; } | undefined
+>nullableKeys[nullableKey]?.next : { value: number; next: any; } | undefined
+>nullableKeys[nullableKey] : { value: number; next: any; } | null
+>nullableKeys : { "a-b": { value: string; next: any; } | null; 0: { value: boolean; next: any; } | null; [nullableKey]: { value: number; next: any; } | null; }
+>nullableKey : unique symbol
+>next : { value: number; next: any; } | undefined
+>next : { value: number; next: any; } | undefined
+>value : number | undefined
+
+const nullableRootValue: number | undefined = nullableRoot?.next.next.value;
+>nullableRootValue : number | undefined
+>nullableRoot?.next.next.value : number | undefined
+>nullableRoot?.next.next : { value: number; next: any; } | undefined
+>nullableRoot?.next : { value: number; next: any; } | undefined
+>nullableRoot : { value: number; next: any; } | null
+>next : { value: number; next: any; } | undefined
+>next : { value: number; next: any; } | undefined
+>value : number | undefined
+
+const optionalRootValue: string | undefined = optionalRoot?.next.next.value;
+>optionalRootValue : string | undefined
+>optionalRoot?.next.next.value : string | undefined
+>optionalRoot?.next.next : { value: string; next: any; } | undefined
+>optionalRoot?.next : { value: string; next: any; } | undefined
+>optionalRoot : { value: string; next: any; } | undefined
+>next : { value: string; next: any; } | undefined
+>next : { value: string; next: any; } | undefined
+>value : string | undefined
+
+const nullableLinkValue: number | undefined = nullableLinks.Node?.next?.next?.value;
+>nullableLinkValue : number | undefined
+>nullableLinks.Node?.next?.next?.value : number | undefined
+>nullableLinks.Node?.next?.next : { value: number; next: any | null; } | null | undefined
+>nullableLinks.Node?.next : { value: number; next: any | null; } | null | undefined
+>nullableLinks.Node : { value: number; next: any | null; } | null
+>nullableLinks : { Node: { value: number; next: any | null; } | null; }
+>Node : { value: number; next: any | null; } | null
+>next : { value: number; next: any | null; } | null | undefined
+>next : { value: number; next: any | null; } | null | undefined
+>value : number | undefined
+
+const nullishLinkValue: number | undefined = nullishLinks.Node?.next?.next?.value;
+>nullishLinkValue : number | undefined
+>nullishLinks.Node?.next?.next?.value : number | undefined
+>nullishLinks.Node?.next?.next : { value: number; next: any | null | undefined; } | null | undefined
+>nullishLinks.Node?.next : { value: number; next: any | null | undefined; } | null | undefined
+>nullishLinks.Node : { value: number; next: any | null | undefined; } | null | undefined
+>nullishLinks : { Node?: { value: number; next: any | null | undefined; } | null | undefined; }
+>Node : { value: number; next: any | null | undefined; } | null | undefined
+>next : { value: number; next: any | null | undefined; } | null | undefined
+>next : { value: number; next: any | null | undefined; } | null | undefined
+>value : number | undefined
+
+const optionalNullableLinkValue: number | undefined = optionalNullableLinks.Node?.next?.next?.value;
+>optionalNullableLinkValue : number | undefined
+>optionalNullableLinks.Node?.next?.next?.value : number | undefined
+>optionalNullableLinks.Node?.next?.next : { value: number; next: any | null; } | null | undefined
+>optionalNullableLinks.Node?.next : { value: number; next: any | null; } | null | undefined
+>optionalNullableLinks.Node : { value: number; next: any | null; } | null | undefined
+>optionalNullableLinks : { Node?: { value: number; next: any | null; } | null | undefined; }
+>Node : { value: number; next: any | null; } | null | undefined
+>next : { value: number; next: any | null; } | null | undefined
+>next : { value: number; next: any | null; } | null | undefined
+>value : number | undefined
+
+const nullableOptionalLinkValue: number | undefined = nullableOptionalLinks.Node?.next?.next?.value;
+>nullableOptionalLinkValue : number | undefined
+>nullableOptionalLinks.Node?.next?.next?.value : number | undefined
+>nullableOptionalLinks.Node?.next?.next : { value: number; next: any | undefined; } | undefined
+>nullableOptionalLinks.Node?.next : { value: number; next: any | undefined; } | undefined
+>nullableOptionalLinks.Node : { value: number; next: any | undefined; } | null
+>nullableOptionalLinks : { Node: { value: number; next: any | undefined; } | null; }
+>Node : { value: number; next: any | undefined; } | null
+>next : { value: number; next: any | undefined; } | undefined
+>next : { value: number; next: any | undefined; } | undefined
+>value : number | undefined
+
+const optionalNextHasNull: null extends OptionalNode["next"] ? true : false = false;
+>optionalNextHasNull : false
+>true : true
+>false : false
+>false : false
+
+const optionalNextHasUndefined: undefined extends OptionalNode["next"] ? true : false = false;
+>optionalNextHasUndefined : false
+>true : true
+>false : false
+>false : false
+
+const nullableNextHasNull: null extends NullableNode["next"] ? true : false = false;
+>nullableNextHasNull : false
+>true : true
+>false : false
+>false : false
+
+const nullableNextHasUndefined: undefined extends NullableNode["next"] ? true : false = false;
+>nullableNextHasUndefined : false
+>true : true
+>false : false
+>false : false
+
+const nullableLinkHasNull: null extends NullableLinkNode["next"] ? true : false = true;
+>nullableLinkHasNull : true
+>true : true
+>false : false
+>true : true
+
+const nullableLinkHasUndefined: undefined extends NullableLinkNode["next"] ? true : false = false;
+>nullableLinkHasUndefined : false
+>true : true
+>false : false
+>false : false
+
+const nullishLinkHasNull: null extends NullishLinkNode["next"] ? true : false = true;
+>nullishLinkHasNull : true
+>true : true
+>false : false
+>true : true
+
+const nullishLinkHasUndefined: undefined extends NullishLinkNode["next"] ? true : false = true;
+>nullishLinkHasUndefined : true
+>true : true
+>false : false
+>true : true
+
+const optionalNullableLinkHasNull: null extends OptionalNullableLinkNode["next"] ? true : false = true;
+>optionalNullableLinkHasNull : true
+>true : true
+>false : false
+>true : true
+
+const optionalNullableLinkHasUndefined: undefined extends OptionalNullableLinkNode["next"] ? true : false = false;
+>optionalNullableLinkHasUndefined : false
+>true : true
+>false : false
+>false : false
+
+const nullableOptionalLinkHasNull: null extends NullableOptionalLinkNode["next"] ? true : false = false;
+>nullableOptionalLinkHasNull : false
+>true : true
+>false : false
+>false : false
+
+const nullableOptionalLinkHasUndefined: undefined extends NullableOptionalLinkNode["next"] ? true : false = true;
+>nullableOptionalLinkHasUndefined : true
+>true : true
+>false : false
+>true : true
+
+const invalidNullNext: OptionalNode["next"] = null;
+>invalidNullNext : { value: number; next: any; }
+
+const invalidUndefinedNext: OptionalNode["next"] = undefined;
+>invalidUndefinedNext : { value: number; next: any; }
+>undefined : undefined
+
+const invalidNullableLinkValue: number = nullableLinks.Node!.next.value;
+>invalidNullableLinkValue : number
+>nullableLinks.Node!.next.value : number
+>nullableLinks.Node!.next : { value: number; next: any | null; } | null
+>nullableLinks.Node! : { value: number; next: any | null; }
+>nullableLinks.Node : { value: number; next: any | null; } | null
+>nullableLinks : { Node: { value: number; next: any | null; } | null; }
+>Node : { value: number; next: any | null; } | null
+>next : { value: number; next: any | null; } | null
+>value : number
+
+const invalidNullishLinkValue: number = nullishLinks.Node!.next.value;
+>invalidNullishLinkValue : number
+>nullishLinks.Node!.next.value : number
+>nullishLinks.Node!.next : { value: number; next: any | null | undefined; } | null | undefined
+>nullishLinks.Node! : { value: number; next: any | null | undefined; }
+>nullishLinks.Node : { value: number; next: any | null | undefined; } | null | undefined
+>nullishLinks : { Node?: { value: number; next: any | null | undefined; } | null | undefined; }
+>Node : { value: number; next: any | null | undefined; } | null | undefined
+>next : { value: number; next: any | null | undefined; } | null | undefined
+>value : number
+
+=== mixedMappedCycle.ts ===
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+>Show : { [K in keyof T]: T[K]; }
+
+type Resolve<M, K extends keyof M> = Show<{
+>Resolve : { [P in keyof M[K]]: M[K][P] extends "ref" ? any extends infer T_1 ? { [K_1 in keyof T_1]: T_1[K_1]; } : never : M[K][P]; } extends infer T ? { [K_1 in keyof T]: T[K_1]; } : never
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> | false | null };
+>build : <M>() => { [K in keyof M]: Resolve<M, K> | false | null; }
+>false : false
+
+export const mixedCycle = build<{ Node: { value: number; next: "ref" } }>();
+>mixedCycle : { Node: false | { value: number; next: any; } | null; }
+>build<{ Node: { value: number; next: "ref" } }>() : { Node: false | { value: number; next: any; } | null; }
+>build : <M>() => { [K in keyof M]: Resolve<M, K> | false | null; }
+>Node : { value: number; next: "ref"; }
+>value : number
+>next : "ref"
+
+if (mixedCycle.Node) {
+>mixedCycle.Node : false | { value: number; next: any; } | null
+>mixedCycle : { Node: false | { value: number; next: any; } | null; }
+>Node : false | { value: number; next: any; } | null
+
+    const value: number = mixedCycle.Node.next.next.value;
+>value : number
+>mixedCycle.Node.next.next.value : number
+>mixedCycle.Node.next.next : { value: number; next: any; }
+>mixedCycle.Node.next : { value: number; next: any; }
+>mixedCycle.Node : { value: number; next: any; }
+>mixedCycle : { Node: false | { value: number; next: any; } | null; }
+>Node : { value: number; next: any; }
+>next : { value: number; next: any; }
+>next : { value: number; next: any; }
+>value : number
+}
+
+=== anonymousBindings.ts ===
+export const _recursive = 1;
+>_recursive : 1
+>1 : 1
+
+export const factory = () => function self() { return self; };
+>factory : () => () => () => any
+>() => function self() { return self; } : () => () => () => any
+>function self() { return self; } : () => any
+>self : () => typeof self
+>self : () => typeof self
+
+export function captured<T>(value: T) {
+>captured : <T>(value: T) => { value: T; next: () => typeof node; consume: (other: T) => typeof node; }
+>value : T
+
+    const node = { value, next: () => node, consume: (other: T) => node };
+>node : { value: T; next: () => typeof node; consume: (other: T) => typeof node; }
+>{ value, next: () => node, consume: (other: T) => node } : { value: T; next: () => typeof node; consume: (other: T) => typeof node; }
+>value : T
+>next : () => { value: T; next: (typeof node)["next"]; consume: (other: T) => typeof node; }
+>() => node : () => { value: T; next: (typeof node)["next"]; consume: (other: T) => typeof node; }
+>node : { value: T; next: () => typeof node; consume: (other: T) => typeof node; }
+>consume : (other: T) => { value: T; next: () => typeof node; consume: (typeof node)["consume"]; }
+>(other: T) => node : (other: T) => { value: T; next: () => typeof node; consume: (typeof node)["consume"]; }
+>other : T
+>node : { value: T; next: () => typeof node; consume: (other: T) => typeof node; }
+
+    return node;
+>node : { value: T; next: () => typeof node; consume: (other: T) => typeof node; }
+}
+export function nestedCaptured<T>(outer: T) {
+>nestedCaptured : <T>(outer: T) => <U>(inner: U) => { outer: T; inner: U; next: () => any; shadow: <T_1>(value: T_1) => { outer: T; inner: U; value: T_1; next: any; }; }
+>outer : T
+
+    return <U>(inner: U) => {
+><U>(inner: U) => {        const node = {            outer,            inner,            next: () => node,            shadow: <T>(value: T) => ({ outer, inner, value, next: node }),        };        return node;    } : <U>(inner: U) => { outer: T; inner: U; next: () => any; shadow: <T_1>(value: T_1) => { outer: T; inner: U; value: T_1; next: any; }; }
+>inner : U
+
+        const node = {
+>node : { outer: T; inner: U; next: () => typeof node; shadow: <T_1>(value: T_1) => { outer: T; inner: U; value: T_1; next: typeof node; }; }
+>{            outer,            inner,            next: () => node,            shadow: <T>(value: T) => ({ outer, inner, value, next: node }),        } : { outer: T; inner: U; next: () => typeof node; shadow: <T_1>(value: T_1) => { outer: T; inner: U; value: T_1; next: typeof node; }; }
+
+            outer,
+>outer : T
+
+            inner,
+>inner : U
+
+            next: () => node,
+>next : () => { outer: T; inner: U; next: (typeof node)["next"]; shadow: <T_1>(value: T_1) => { outer: T; inner: U; value: T_1; next: typeof node; }; }
+>() => node : () => { outer: T; inner: U; next: (typeof node)["next"]; shadow: <T_1>(value: T_1) => { outer: T; inner: U; value: T_1; next: typeof node; }; }
+>node : { outer: T; inner: U; next: () => typeof node; shadow: <T_1>(value: T_1) => { outer: T; inner: U; value: T_1; next: typeof node; }; }
+
+            shadow: <T>(value: T) => ({ outer, inner, value, next: node }),
+>shadow : <T_1>(value: T_1) => { outer: T; inner: U; value: T_1; next: { outer: T; inner: U; next: () => typeof node; shadow: (typeof node)["shadow"]; }; }
+><T>(value: T) => ({ outer, inner, value, next: node }) : <T_1>(value: T_1) => { outer: T; inner: U; value: T_1; next: { outer: T; inner: U; next: () => typeof node; shadow: (typeof node)["shadow"]; }; }
+>value : T
+>({ outer, inner, value, next: node }) : { outer: T_1; inner: U; value: T; next: { outer: T_1; inner: U; next: () => typeof node; shadow: <T>(value: T) => any; }; }
+>{ outer, inner, value, next: node } : { outer: T_1; inner: U; value: T; next: { outer: T_1; inner: U; next: () => typeof node; shadow: <T>(value: T) => any; }; }
+>outer : T_1
+>inner : U
+>value : T
+>next : { outer: T_1; inner: U; next: () => typeof node; shadow: <T>(value: T) => { outer: T_1; inner: U; value: T; next: typeof node; }; }
+>node : { outer: T_1; inner: U; next: () => typeof node; shadow: <T>(value: T) => { outer: T_1; inner: U; value: T; next: typeof node; }; }
+
+        };
+        return node;
+>node : { outer: T; inner: U; next: () => typeof node; shadow: <T_1>(value: T_1) => { outer: T; inner: U; value: T_1; next: typeof node; }; }
+
+    };
+}
+export function constrained<T extends { value: number }, K extends keyof T>(key: K) {
+>constrained : <T extends { value: number; }, K extends keyof T>(key: K) => { value: T[K]; next: () => typeof node; }
+>value : number
+>key : K
+
+    const node = { value: null! as T[K], next: () => node };
+>node : { value: T[K]; next: () => typeof node; }
+>{ value: null! as T[K], next: () => node } : { value: T[K]; next: () => typeof node; }
+>value : T[K]
+>null! as T[K] : T[K]
+>null! : never
+>next : () => { value: T[K]; next: (typeof node)["next"]; }
+>() => node : () => { value: T[K]; next: (typeof node)["next"]; }
+>node : { value: T[K]; next: () => typeof node; }
+
+    return node;
+>node : { value: T[K]; next: () => typeof node; }
+}
+export function optionalCaptured<T>(value: T) {
+>optionalCaptured : <T>(value: T) => { node?: { value: T; next: any; } | false | null; }
+>value : T
+
+    type Node = { value: T; next: Node };
+>Node : { value: T; next: any; }
+>value : T
+>next : { value: T; next: any; }
+
+    return null! as { node?: Node | false | null };
+>null! as { node?: Node | false | null } : { node?: { value: T; next: any; } | false | null; }
+>null! : never
+>node : false | { value: T; next: any; } | null | undefined
+>false : false
+}
+export function annotatedCaptured<T>(value: T) {
+>annotatedCaptured : <T>(value: T) => { value: typeof value; next: any; }
+>value : T
+
+    const node: { value: typeof value; next: typeof node } = { value, next: null! };
+>node : { value: typeof value; next: any; }
+>value : T
+>value : T
+>next : { value: typeof value; next: any; }
+>node : { value: typeof value; next: any; }
+>{ value, next: null! } : { value: T; next: never; }
+>value : T
+>next : never
+>null! : never
+
+    return node;
+>node : { value: typeof value; next: any; }
+}
+export function recursiveTuple<T>(value: T) {
+>recursiveTuple : <T>(value: T) => readonly [T, any]
+>value : T
+
+    type Tuple = readonly [T, Tuple];
+>Tuple : readonly [T, any]
+
+    return null! as Tuple;
+>null! as Tuple : readonly [T, any]
+>null! : never
+}
+export function inferredCaptured<T>() {
+>inferredCaptured : <T>() => (T extends () => infer U ? { value: U; next: any; } : never)
+
+    type Node<V> = { value: V; next: Node<V> };
+>Node : { value: V; next: any; }
+>value : V
+>next : { value: V; next: any; }
+
+    return null! as (T extends () => infer U ? Node<U> : never);
+>null! as (T extends () => infer U ? Node<U> : never) : T extends () => infer U ? { value: U; next: any; } : never
+>null! : never
+}
+export function mappedCaptured<T>() {
+>mappedCaptured : <T>() => { [K in keyof T]: { value: T[K]; next: any; }; }
+
+    type Node = { [K in keyof T]: { value: T[K]; next: Node } };
+>Node : { [K in keyof T]: { value: T[K]; next: any; }; }
+>value : T[K]
+>next : { [K in keyof T]: { value: T[K]; next: any; }; }
+
+    return null! as Node;
+>null! as Node : { [K in keyof T]: { value: T[K]; next: any; }; }
+>null! : never
+}
+export function freshGeneric<T>(unused: T) {
+>freshGeneric : <T>(unused: T) => <U>(value: U) => typeof recur
+>unused : T
+
+    const recur = <U>(value: U) => recur;
+>recur : <U>(value: U) => typeof recur
+><U>(value: U) => recur : <U>(value: U) => typeof recur
+>value : U
+>recur : <U>(value: U) => typeof recur
+
+    return recur;
+>recur : <U>(value: U) => typeof recur
+}
+export function mutualCaptured<T, U>(left: T, right: U) {
+>mutualCaptured : <T, U>(left: T, right: U) => { left: { left: T; next: { right: U; self: any; next: any; }; }; right: { right: U; self: any; next: { left: T; next: any; }; }; }
+>left : T
+>right : U
+
+    type Left = { left: T; next: Right };
+>Left : { left: T; next: { right: U; self: any; next: any; }; }
+>left : T
+>next : { right: U; self: any; next: { left: T; next: any; }; }
+
+    type Right = { right: U; self: Right; next: Left };
+>Right : { right: U; self: any; next: { left: T; next: any; }; }
+>right : U
+>self : { right: U; self: any; next: { left: T; next: any; }; }
+>next : { left: T; next: { right: U; self: any; next: any; }; }
+
+    return { left: null! as Left, right: null! as Right };
+>{ left: null! as Left, right: null! as Right } : { left: { left: T; next: { right: U; self: any; next: any; }; }; right: { right: U; self: any; next: { left: T; next: any; }; }; }
+>left : { left: T; next: { right: U; self: any; next: any; }; }
+>null! as Left : { left: T; next: { right: U; self: any; next: any; }; }
+>null! : never
+>right : { right: U; self: any; next: { left: T; next: any; }; }
+>null! as Right : { right: U; self: any; next: { left: T; next: any; }; }
+>null! : never
+}
+export class CapturedClass<T> {
+>CapturedClass : CapturedClass<T>
+
+    constructor(public value: T) {}
+>value : T
+
+    make<U extends T>(inner: U) {
+>make : <U extends T>(inner: U) => { outer: T; inner: U; next: () => typeof node; }
+>inner : U
+
+        const node = { outer: this.value, inner, next: () => node };
+>node : { outer: T; inner: U; next: () => typeof node; }
+>{ outer: this.value, inner, next: () => node } : { outer: T; inner: U; next: () => typeof node; }
+>outer : T
+>this.value : T
+>this : this
+>value : T
+>inner : U
+>next : () => { outer: T; inner: U; next: (typeof node)["next"]; }
+>() => node : () => { outer: T; inner: U; next: (typeof node)["next"]; }
+>node : { outer: T; inner: U; next: () => typeof node; }
+
+        return node;
+>node : { outer: T; inner: U; next: () => typeof node; }
+    }
+}
+export function covariantClass() {
+>covariantClass : () => typeof Node
+
+    return class Node<out T> {
+>class Node<out T> {        value!: T;        next(): Node<T> { return this; }    } : typeof Node
+>Node : typeof Node
+
+        value!: T;
+>value : T
+
+        next(): Node<T> { return this; }
+>next : () => Node<T>
+>this : this
+
+    };
+}
+export function contravariantClass() {
+>contravariantClass : () => typeof Node
+
+    return class Node<in T> {
+>class Node<in T> {        consume!: (value: T) => void;        next(): Node<T> { return this; }    } : typeof Node
+>Node : typeof Node
+
+        consume!: (value: T) => void;
+>consume : (value: T) => void
+>value : T
+
+        next(): Node<T> { return this; }
+>next : () => Node<T>
+>this : this
+
+    };
+}
+export namespace Nested {
+>Nested : typeof Nested
+
+    export function captured<T>(value: T) {
+>captured : <T>(value: T) => { value: T; next: () => typeof node; }
+>value : T
+
+        const node = { value, next: () => node };
+>node : { value: T; next: () => typeof node; }
+>{ value, next: () => node } : { value: T; next: () => typeof node; }
+>value : T
+>next : () => { value: T; next: (typeof node)["next"]; }
+>() => node : () => { value: T; next: (typeof node)["next"]; }
+>node : { value: T; next: () => typeof node; }
+
+        return node;
+>node : { value: T; next: () => typeof node; }
+    }
+}
+const capturedValue: string = captured("text").next().consume("other").value;
+>capturedValue : string
+>captured("text").next().consume("other").value : string
+>captured("text").next().consume("other") : { value: string; next: () => any; consume: (other: string) => any; }
+>captured("text").next().consume : (other: string) => { value: string; next: () => any; consume: any; }
+>captured("text").next() : { value: string; next: () => any; consume: (other: string) => any; }
+>captured("text").next : () => { value: string; next: any; consume: (other: string) => any; }
+>captured("text") : { value: string; next: () => any; consume: (other: string) => any; }
+>captured : <T>(value: T) => { value: T; next: () => any; consume: (other: T) => any; }
+>"text" : "text"
+>next : () => { value: string; next: any; consume: (other: string) => any; }
+>consume : (other: string) => { value: string; next: () => any; consume: any; }
+>"other" : "other"
+>value : string
+
+const nestedValue = nestedCaptured(1)("text").shadow(true).next.next();
+>nestedValue : { outer: number; inner: string; next: () => any; shadow: <T>(value: T) => { outer: number; inner: string; value: T; next: any; }; }
+>nestedCaptured(1)("text").shadow(true).next.next() : { outer: number; inner: string; next: () => any; shadow: <T>(value: T) => { outer: number; inner: string; value: T; next: any; }; }
+>nestedCaptured(1)("text").shadow(true).next.next : () => { outer: number; inner: string; next: any; shadow: <T>(value: T) => { outer: number; inner: string; value: T; next: any; }; }
+>nestedCaptured(1)("text").shadow(true).next : { outer: number; inner: string; next: () => any; shadow: <T>(value: T) => { outer: number; inner: string; value: T; next: any; }; }
+>nestedCaptured(1)("text").shadow(true) : { outer: number; inner: string; value: boolean; next: { outer: number; inner: string; next: () => any; shadow: <T>(value: T) => { outer: number; inner: string; value: T; next: any; }; }; }
+>nestedCaptured(1)("text").shadow : <T>(value: T) => { outer: number; inner: string; value: T; next: { outer: number; inner: string; next: () => any; shadow: any; }; }
+>nestedCaptured(1)("text") : { outer: number; inner: string; next: () => any; shadow: <T>(value: T) => { outer: number; inner: string; value: T; next: any; }; }
+>nestedCaptured(1) : <U>(inner: U) => { outer: number; inner: U; next: () => any; shadow: <T>(value: T) => { outer: number; inner: U; value: T; next: any; }; }
+>nestedCaptured : <T>(outer: T) => <U>(inner: U) => { outer: T; inner: U; next: () => any; shadow: <T_1>(value: T_1) => { outer: T; inner: U; value: T_1; next: any; }; }
+>1 : 1
+>"text" : "text"
+>shadow : <T>(value: T) => { outer: number; inner: string; value: T; next: { outer: number; inner: string; next: () => any; shadow: any; }; }
+>true : true
+>next : { outer: number; inner: string; next: () => any; shadow: <T>(value: T) => { outer: number; inner: string; value: T; next: any; }; }
+>next : () => { outer: number; inner: string; next: any; shadow: <T>(value: T) => { outer: number; inner: string; value: T; next: any; }; }
+
+const nestedOuter: number = nestedValue.outer;
+>nestedOuter : number
+>nestedValue.outer : number
+>nestedValue : { outer: number; inner: string; next: () => any; shadow: <T>(value: T) => { outer: number; inner: string; value: T; next: any; }; }
+>outer : number
+
+const nestedInner: string = nestedValue.inner;
+>nestedInner : string
+>nestedValue.inner : string
+>nestedValue : { outer: number; inner: string; next: () => any; shadow: <T>(value: T) => { outer: number; inner: string; value: T; next: any; }; }
+>inner : string
+
+const constrainedValue: number = constrained<{ value: number }, "value">("value").next().value;
+>constrainedValue : number
+>constrained<{ value: number }, "value">("value").next().value : number
+>constrained<{ value: number }, "value">("value").next() : { value: number; next: () => any; }
+>constrained<{ value: number }, "value">("value").next : () => { value: number; next: any; }
+>constrained<{ value: number }, "value">("value") : { value: number; next: () => any; }
+>constrained : <T extends { value: number; }, K extends keyof T>(key: K) => { value: T[K]; next: () => any; }
+>value : number
+>"value" : "value"
+>next : () => { value: number; next: any; }
+>value : number
+
+const annotatedValue: string = annotatedCaptured("text").next.next.value;
+>annotatedValue : string
+>annotatedCaptured("text").next.next.value : string
+>annotatedCaptured("text").next.next : { value: string; next: any; }
+>annotatedCaptured("text").next : { value: string; next: any; }
+>annotatedCaptured("text") : { value: string; next: any; }
+>annotatedCaptured : <T>(value: T) => { value: typeof value; next: any; }
+>"text" : "text"
+>next : { value: string; next: any; }
+>next : { value: string; next: any; }
+>value : string
+
+const tupleValue: string = recursiveTuple("text")[1][1][0];
+>tupleValue : string
+>recursiveTuple("text")[1][1][0] : string
+>recursiveTuple("text")[1][1] : readonly [string, any]
+>recursiveTuple("text")[1] : readonly [string, any]
+>recursiveTuple("text") : readonly [string, any]
+>recursiveTuple : <T>(value: T) => readonly [T, any]
+>"text" : "text"
+>1 : 1
+>1 : 1
+>0 : 0
+
+const namespaceValue: number = Nested.captured(1).next().next().value;
+>namespaceValue : number
+>Nested.captured(1).next().next().value : number
+>Nested.captured(1).next().next() : { value: number; next: () => any; }
+>Nested.captured(1).next().next : () => { value: number; next: any; }
+>Nested.captured(1).next() : { value: number; next: () => any; }
+>Nested.captured(1).next : () => { value: number; next: any; }
+>Nested.captured(1) : { value: number; next: () => any; }
+>Nested.captured : <T>(value: T) => { value: T; next: () => any; }
+>Nested : typeof Nested
+>captured : <T>(value: T) => { value: T; next: () => any; }
+>1 : 1
+>next : () => { value: number; next: any; }
+>next : () => { value: number; next: any; }
+>value : number
+
+const inferredValue: string = inferredCaptured<() => string>().next.next.value;
+>inferredValue : string
+>inferredCaptured<() => string>().next.next.value : string
+>inferredCaptured<() => string>().next.next : { value: string; next: any; }
+>inferredCaptured<() => string>().next : { value: string; next: any; }
+>inferredCaptured<() => string>() : { value: string; next: any; }
+>inferredCaptured : <T>() => (T extends () => infer U ? { value: U; next: any; } : never)
+>next : { value: string; next: any; }
+>next : { value: string; next: any; }
+>value : string
+
+const mappedValue: number = mappedCaptured<{ value: number }>().value.next.value.value;
+>mappedValue : number
+>mappedCaptured<{ value: number }>().value.next.value.value : number
+>mappedCaptured<{ value: number }>().value.next.value : { value: number; next: { value: any; }; }
+>mappedCaptured<{ value: number }>().value.next : { value: { value: number; next: any; }; }
+>mappedCaptured<{ value: number }>().value : { value: number; next: { value: any; }; }
+>mappedCaptured<{ value: number }>() : { value: { value: number; next: any; }; }
+>mappedCaptured : <T>() => { [K in keyof T]: { value: T[K]; next: any; }; }
+>value : number
+>value : { value: number; next: { value: any; }; }
+>next : { value: { value: number; next: any; }; }
+>value : { value: number; next: { value: any; }; }
+>value : number
+
+const freshValue = freshGeneric(1)("text")(true)(2);
+>freshValue : <U>(value: U) => any
+>freshGeneric(1)("text")(true)(2) : <U>(value: U) => any
+>freshGeneric(1)("text")(true) : <U>(value: U) => any
+>freshGeneric(1)("text") : <U>(value: U) => any
+>freshGeneric(1) : <U>(value: U) => any
+>freshGeneric : <T>(unused: T) => <U>(value: U) => any
+>1 : 1
+>"text" : "text"
+>true : true
+>2 : 2
+
+const mutualValue: string = mutualCaptured(1, "text").left.next.self.next.next.right;
+>mutualValue : string
+>mutualCaptured(1, "text").left.next.self.next.next.right : string
+>mutualCaptured(1, "text").left.next.self.next.next : { right: string; self: any; next: { left: number; next: any; }; }
+>mutualCaptured(1, "text").left.next.self.next : { left: number; next: { right: string; self: any; next: any; }; }
+>mutualCaptured(1, "text").left.next.self : { right: string; self: any; next: { left: number; next: any; }; }
+>mutualCaptured(1, "text").left.next : { right: string; self: any; next: { left: number; next: any; }; }
+>mutualCaptured(1, "text").left : { left: number; next: { right: string; self: any; next: any; }; }
+>mutualCaptured(1, "text") : { left: { left: number; next: { right: string; self: any; next: any; }; }; right: { right: string; self: any; next: { left: number; next: any; }; }; }
+>mutualCaptured : <T, U>(left: T, right: U) => { left: { left: T; next: { right: U; self: any; next: any; }; }; right: { right: U; self: any; next: { left: T; next: any; }; }; }
+>1 : 1
+>"text" : "text"
+>left : { left: number; next: { right: string; self: any; next: any; }; }
+>next : { right: string; self: any; next: { left: number; next: any; }; }
+>self : { right: string; self: any; next: { left: number; next: any; }; }
+>next : { left: number; next: { right: string; self: any; next: any; }; }
+>next : { right: string; self: any; next: { left: number; next: any; }; }
+>right : string
+
+const classValue: string = new CapturedClass("text").make("other").next().outer;
+>classValue : string
+>new CapturedClass("text").make("other").next().outer : string
+>new CapturedClass("text").make("other").next() : { outer: string; inner: "other"; next: () => any; }
+>new CapturedClass("text").make("other").next : () => { outer: string; inner: "other"; next: any; }
+>new CapturedClass("text").make("other") : { outer: string; inner: "other"; next: () => any; }
+>new CapturedClass("text").make : <U extends string>(inner: U) => { outer: string; inner: U; next: () => any; }
+>new CapturedClass("text") : CapturedClass<string>
+>CapturedClass : typeof CapturedClass
+>"text" : "text"
+>make : <U extends string>(inner: U) => { outer: string; inner: U; next: () => any; }
+>"other" : "other"
+>next : () => { outer: string; inner: "other"; next: any; }
+>outer : string
+
+const optional = optionalCaptured("text");
+>optional : { node?: false | { value: string; next: any; } | null | undefined; }
+>optionalCaptured("text") : { node?: false | { value: string; next: any; } | null | undefined; }
+>optionalCaptured : <T>(value: T) => { node?: { value: T; next: any; } | false | null; }
+>"text" : "text"
+
+if (optional.node) {
+>optional.node : false | { value: string; next: any; } | null | undefined
+>optional : { node?: false | { value: string; next: any; } | null | undefined; }
+>node : false | { value: string; next: any; } | null | undefined
+
+    const value: string = optional.node.next.next.value;
+>value : string
+>optional.node.next.next.value : string
+>optional.node.next.next : { value: string; next: any; }
+>optional.node.next : { value: string; next: any; }
+>optional.node : { value: string; next: any; }
+>optional : { node?: false | { value: string; next: any; } | null | undefined; }
+>node : { value: string; next: any; }
+>next : { value: string; next: any; }
+>next : { value: string; next: any; }
+>value : string
+}
+captured("text").consume(1);
+>captured("text").consume(1) : { value: string; next: () => any; consume: (other: string) => any; }
+>captured("text").consume : (other: string) => { value: string; next: () => any; consume: any; }
+>captured("text") : { value: string; next: () => any; consume: (other: string) => any; }
+>captured : <T>(value: T) => { value: T; next: () => any; consume: (other: T) => any; }
+>"text" : "text"
+>consume : (other: string) => { value: string; next: () => any; consume: any; }
+>1 : 1
+
+const invalidTupleValue: number = recursiveTuple("text")[1][0];
+>invalidTupleValue : number
+>recursiveTuple("text")[1][0] : string
+>recursiveTuple("text")[1] : readonly [string, any]
+>recursiveTuple("text") : readonly [string, any]
+>recursiveTuple : <T>(value: T) => readonly [T, any]
+>"text" : "text"
+>1 : 1
+>0 : 0
+
+=== shadowedMappedCycle.ts ===
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+>Show : { [K in keyof T]: T[K]; }
+
+type Resolve<M, K extends keyof M> = Show<{
+>Resolve : { [P in keyof M[K]]: M[K][P] extends "ref" ? <T_1>(shadowedCycle: T_1) => Resolve<M, K> : M[K][P]; } extends infer T ? { [K_1 in keyof T]: T[K_1]; } : never
+
+    [P in keyof M[K]]: M[K][P] extends "ref" ? <T>(shadowedCycle: T) => Resolve<M, K> : M[K][P];
+>shadowedCycle : T
+
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
+>build : <M>() => { [K in keyof M]: Resolve<M, K>; }
+
+export const shadowedCycle = build<{ Node: { value: number; next: "ref" } }>();
+>shadowedCycle : { Node: { value: number; next: <T>(shadowedCycle: T) => any; }; }
+>build<{ Node: { value: number; next: "ref" } }>() : { Node: { value: number; next: <T>(shadowedCycle: T) => any; }; }
+>build : <M>() => { [K in keyof M]: Resolve<M, K>; }
+>Node : { value: number; next: "ref"; }
+>value : number
+>next : "ref"
+
+const shadowedValue: number = shadowedCycle.Node.next(1).next("text").value;
+>shadowedValue : number
+>shadowedCycle.Node.next(1).next("text").value : number
+>shadowedCycle.Node.next(1).next("text") : { value: number; next: <T>(shadowedCycle: T) => any; }
+>shadowedCycle.Node.next(1).next : <T>(shadowedCycle: T) => { value: number; next: any; }
+>shadowedCycle.Node.next(1) : { value: number; next: <T>(shadowedCycle: T) => any; }
+>shadowedCycle.Node.next : <T>(shadowedCycle: T) => { value: number; next: any; }
+>shadowedCycle.Node : { value: number; next: <T>(shadowedCycle: T) => any; }
+>shadowedCycle : { Node: { value: number; next: <T>(shadowedCycle: T) => any; }; }
+>Node : { value: number; next: <T>(shadowedCycle: T) => any; }
+>next : <T>(shadowedCycle: T) => { value: number; next: any; }
+>1 : 1
+>next : <T>(shadowedCycle: T) => { value: number; next: any; }
+>"text" : "text"
+>value : number
+

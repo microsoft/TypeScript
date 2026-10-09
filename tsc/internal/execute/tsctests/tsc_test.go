@@ -2486,7 +2486,7 @@ func TestTscIncremental(t *testing.T) {
 			subScenario: "recursive function declaration consumption",
 			files: FileMap{
 				"/home/src/workspaces/project/producer/tsconfig.json": `{
-					"compilerOptions": { "strict": true, "composite": true, "outDir": "dist" }
+					"compilerOptions": { "strict": true, "exactOptionalPropertyTypes": true, "composite": true, "outDir": "dist" }
 				}`,
 				"/home/src/workspaces/project/producer/index.ts": stringtestutil.Dedent(`
 					export const arrow = () => arrow;
@@ -2566,9 +2566,146 @@ func TestTscIncremental(t *testing.T) {
 						},
 					};
 					export const nestedNumber = nestedOwner.make(1);
+					type Show<T> = { [K in keyof T]: T[K] } & unknown;
+					type Resolve<M, K extends keyof M> = Show<{
+						[P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+					}>;
+					declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
+					export const mappedCycle = build<{ Node: { value: number; next: "ref" } }>();
+					export const mappedCycleCopy = mappedCycle;
+					export const nestedCycle = { wrapped: build<{ Node: { value: string; next: "ref" } }>() };
+					export const cycleKey = Symbol();
+					export const keyedCycles = build<{
+						"a-b": { value: string; next: "ref" };
+						0: { value: boolean; next: "ref" };
+						[cycleKey]: { value: number; next: "ref" };
+					}>();
+					export const sharedCycles = { first: mappedCycle, second: mappedCycle };
+					type ResolveMutual<M, K extends keyof M> = Show<{
+						[P in keyof M[K]]: M[K][P] extends { ref: infer R extends keyof M } ? ResolveMutual<M, R> : M[K][P];
+					}>;
+					declare const buildMutual: <M>() => { [K in keyof M]: ResolveMutual<M, K> };
+					export const mutualCycle = buildMutual<{
+						First: { value: number; next: { ref: "Second" } };
+						Second: { value: string; next: { ref: "First" } };
+					}>();
+					type ResolveShadowed<M, K extends keyof M> = Show<{
+						[P in keyof M[K]]: M[K][P] extends "ref" ? <T>(shadowedCycle: T) => ResolveShadowed<M, K> : M[K][P];
+					}>;
+					declare const buildShadowed: <M>() => { [K in keyof M]: ResolveShadowed<M, K> };
+					export const shadowedCycle = buildShadowed<{ Node: { value: number; next: "ref" } }>();
+					declare const buildOptional: <M>() => { [K in keyof M]?: Resolve<M, K> };
+					export const optionalCycle = buildOptional<{ Node: { value: number; next: "ref" } }>();
+					declare const buildNullable: <M>() => { [K in keyof M]: Resolve<M, K> | null };
+					export const nullableCycle = buildNullable<{ Node: { value: string; next: "ref" } }>();
+					declare const wrap: <T>(value: T) => { required: T; optional?: T | null };
+					export const mixedCycles = wrap(optionalCycle);
+					export const sharedOptionalCycles = { first: optionalCycle, second: optionalCycle };
+					export const nullableKeys = buildNullable<{
+						"a-b": { value: string; next: "ref" };
+						0: { value: boolean; next: "ref" };
+						[cycleKey]: { value: number; next: "ref" };
+					}>();
+					declare const buildNullableRoot: <M>() => Resolve<M, keyof M> | null;
+					export const nullableRoot = buildNullableRoot<{ Node: { value: number; next: "ref" } }>();
+					declare const buildOptionalRoot: <M>() => Resolve<M, keyof M> | undefined;
+					export const optionalRoot = buildOptionalRoot<{ Node: { value: string; next: "ref" } }>();
+					type ResolveNullable<M, K extends keyof M> = Show<{
+						[P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullable<M, K> | null : M[K][P];
+					}>;
+					declare const buildNullableLinks: <M>() => { [K in keyof M]: ResolveNullable<M, K> | null };
+					export const nullableLinks = buildNullableLinks<{ Node: { value: number; next: "ref" } }>();
+					declare const buildOptionalNullableLinks: <M>() => { [K in keyof M]?: ResolveNullable<M, K> | null };
+					export const optionalNullableLinks = buildOptionalNullableLinks<{ Node: { value: number; next: "ref" } }>();
+					type ResolveOptional<M, K extends keyof M> = Show<{
+						[P in keyof M[K]]: M[K][P] extends "ref" ? ResolveOptional<M, K> | undefined : M[K][P];
+					}>;
+					declare const buildNullableOptionalLinks: <M>() => { [K in keyof M]: ResolveOptional<M, K> | null };
+					export const nullableOptionalLinks = buildNullableOptionalLinks<{ Node: { value: number; next: "ref" } }>();
+					type ResolveNullish<M, K extends keyof M> = Show<{
+						[P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullish<M, K> | null | undefined : M[K][P];
+					}>;
+					declare const buildNullishLinks: <M>() => { [K in keyof M]?: ResolveNullish<M, K> | null };
+					export const nullishLinks = buildNullishLinks<{ Node: { value: number; next: "ref" } }>();
+					declare const buildMixed: <M>() => { [K in keyof M]?: Resolve<M, K> | false | null };
+					export const mixedUnionCycle = buildMixed<{ Node: { value: number; next: "ref" } }>();
+					export const _recursive = 1;
+					export const factory = () => function self() { return self; };
+					export function captured<T>(value: T) {
+						const node = { value, next: () => node, consume: (other: T) => node };
+						return node;
+					}
+					export function nestedCaptured<T>(outer: T) {
+						return <U>(inner: U) => {
+							const node = {
+								outer, inner, next: () => node,
+								shadow: <T>(value: T) => ({ outer, inner, value, next: node }),
+							};
+							return node;
+						};
+					}
+					export function constrained<T extends { value: number }, K extends keyof T>(key: K) {
+						const node = { value: null! as T[K], next: () => node };
+						return node;
+					}
+					export function optionalCaptured<T>(value: T) {
+						type Node = { value: T; next: Node };
+						return null! as { node?: Node | false | null };
+					}
+					export function annotatedCaptured<T>(value: T) {
+						const node: { value: typeof value; next: typeof node } = { value, next: null! };
+						return node;
+					}
+					export function recursiveTuple<T>(value: T) {
+						type Tuple = readonly [T, Tuple];
+						return null! as Tuple;
+					}
+					export function inferredCaptured<T>() {
+						type Node<V> = { value: V; next: Node<V> };
+						return null! as (T extends () => infer U ? Node<U> : never);
+					}
+					export function mappedCaptured<T>() {
+						type Node = { [K in keyof T]: { value: T[K]; next: Node } };
+						return null! as Node;
+					}
+					export function freshGeneric<T>(unused: T) {
+						const recur = <U>(value: U) => recur;
+						return recur;
+					}
+					export function mutualCaptured<T, U>(left: T, right: U) {
+						type Left = { left: T; next: Right };
+						type Right = { right: U; self: Right; next: Left };
+						return { left: null! as Left, right: null! as Right };
+					}
+					export class CapturedClass<T> {
+						constructor(public value: T) {}
+						make<U extends T>(inner: U) {
+							const node = { outer: this.value, inner, next: () => node };
+							return node;
+						}
+					}
+					export function covariantClass() {
+						return class Node<out T> {
+							value!: T;
+							next(): Node<T> { return this; }
+						};
+					}
+					export function contravariantClass() {
+						return class Node<in T> {
+							consume!: (value: T) => void;
+							next(): Node<T> { return this; }
+						};
+					}
+					export namespace Nested {
+						export function captured<T>(value: T) {
+							const node = { value, next: () => node };
+							return node;
+						}
+					}
+					type NonNullable<T> = "shadowed";
 				`),
 				"/home/src/workspaces/project/consumer/tsconfig.json": `{
-					"compilerOptions": { "strict": true, "noEmit": true },
+					"compilerOptions": { "strict": true, "exactOptionalPropertyTypes": true, "noEmit": true },
 					"references": [{ "path": "../producer" }]
 				}`,
 				"/home/src/workspaces/project/consumer/index.ts": stringtestutil.Dedent(`
@@ -2579,6 +2716,13 @@ func TestTscIncremental(t *testing.T) {
 					import { nextLink, nextCallable, parenthesized, asserted, Methods, overloaded } from "../producer/dist/index.js";
 					import { hiddenAlias, siblingHiddenAliases } from "../producer/dist/index.js";
 					import { nestedNumber } from "../producer/dist/index.js";
+					import { mappedCycle, mappedCycleCopy, nestedCycle, cycleKey, keyedCycles, sharedCycles, mutualCycle, shadowedCycle } from "../producer/dist/index.js";
+					import { optionalCycle, nullableCycle, mixedCycles, sharedOptionalCycles, nullableKeys, nullableRoot, optionalRoot, nullableLinks, nullishLinks } from "../producer/dist/index.js";
+					import { optionalNullableLinks, nullableOptionalLinks } from "../producer/dist/index.js";
+					import { mixedUnionCycle, factory, captured, nestedCaptured, constrained, optionalCaptured, annotatedCaptured, recursiveTuple, Nested } from "../producer/dist/index.js";
+					import { inferredCaptured, mappedCaptured, freshGeneric, mutualCaptured } from "../producer/dist/index.js";
+					import { CapturedClass } from "../producer/dist/index.js";
+					import { covariantClass, contravariantClass } from "../producer/dist/index.js";
 					const a: typeof arrow = arrow()()();
 					const b: typeof expression = expression()()();
 					const c: typeof first = first()()();
@@ -2626,9 +2770,102 @@ func TestTscIncremental(t *testing.T) {
 					const copiedInner: string = nestedNumber.copied("inner").inner;
 					const restOuter: number = nestedNumber.rest(true).outer;
 					const restInner: boolean = nestedNumber.rest(true).inner;
+					const mappedCycleValue: number = mappedCycle.Node.next.next.value;
+					const copiedMappedValue: number = mappedCycleCopy.Node.next.next.value;
+					const nestedMappedValue: string = nestedCycle.wrapped.Node.next.next.value;
+					const quotedMappedValue: string = keyedCycles["a-b"].next.next.value;
+					const numericMappedValue: boolean = keyedCycles[0].next.next.value;
+					const symbolMappedValue: number = keyedCycles[cycleKey].next.next.value;
+					const sharedMappedValue: number = sharedCycles.second.Node.next.next.value;
+					const mutualFirstValue: number = mutualCycle.First.next.next.value;
+					const mutualSecondValue: string = mutualCycle.First.next.value;
+					const shadowedMappedValue: number = shadowedCycle.Node.next(1).next("text").value;
+					const optionalCycleValue: number | undefined = optionalCycle.Node?.next.next.value;
+					const nullableCycleValue: string | undefined = nullableCycle.Node?.next.next.value;
+					const mixedCycleValue: number | undefined = mixedCycles.optional?.Node?.next.next.value;
+					const mixedRequiredValue: number | undefined = mixedCycles.required.Node?.next.next.value;
+					const sharedOptionalValue: number | undefined = sharedOptionalCycles.second.Node?.next.next.value;
+					const quotedNullableValue: string | undefined = nullableKeys["a-b"]?.next.next.value;
+					const numericNullableValue: boolean | undefined = nullableKeys[0]?.next.next.value;
+					const symbolNullableValue: number | undefined = nullableKeys[cycleKey]?.next.next.value;
+					const nullableRootValue: number | undefined = nullableRoot?.next.next.value;
+					const optionalRootValue: string | undefined = optionalRoot?.next.next.value;
+					const nullableLinkValue: number | undefined = nullableLinks.Node?.next?.next?.value;
+					const nullishLinkValue: number | undefined = nullishLinks.Node?.next?.next?.value;
+					const optionalNullableLinkValue: number | undefined = optionalNullableLinks.Node?.next?.next?.value;
+					const nullableOptionalLinkValue: number | undefined = nullableOptionalLinks.Node?.next?.next?.value;
+					type OptionalNode = (typeof optionalCycle)["Node"] & {};
+					type NullableNode = (typeof nullableCycle)["Node"] & {};
+					type NullableLinkNode = (typeof nullableLinks)["Node"] & {};
+					type NullishLinkNode = (typeof nullishLinks)["Node"] & {};
+					type OptionalNullableLinkNode = (typeof optionalNullableLinks)["Node"] & {};
+					type NullableOptionalLinkNode = (typeof nullableOptionalLinks)["Node"] & {};
+					const optionalNextHasNull: null extends OptionalNode["next"] ? true : false = false;
+					const optionalNextHasUndefined: undefined extends OptionalNode["next"] ? true : false = false;
+					const nullableNextHasNull: null extends NullableNode["next"] ? true : false = false;
+					const nullableNextHasUndefined: undefined extends NullableNode["next"] ? true : false = false;
+					const nullableLinkHasNull: null extends NullableLinkNode["next"] ? true : false = true;
+					const nullableLinkHasUndefined: undefined extends NullableLinkNode["next"] ? true : false = false;
+					const nullishLinkHasNull: null extends NullishLinkNode["next"] ? true : false = true;
+					const nullishLinkHasUndefined: undefined extends NullishLinkNode["next"] ? true : false = true;
+					const optionalNullableLinkHasNull: null extends OptionalNullableLinkNode["next"] ? true : false = true;
+					const optionalNullableLinkHasUndefined: undefined extends OptionalNullableLinkNode["next"] ? true : false = false;
+					const nullableOptionalLinkHasNull: null extends NullableOptionalLinkNode["next"] ? true : false = false;
+					const nullableOptionalLinkHasUndefined: undefined extends NullableOptionalLinkNode["next"] ? true : false = true;
 					type IsAny<T> = 0 extends (1 & T) ? true : false;
 					const result = arrow()()();
 					const notAny: false = null as unknown as IsAny<typeof result>;
+					const mappedNotAny: false = null as unknown as IsAny<typeof mappedCycle.Node.next>;
+					const mutualNotAny: false = null as unknown as IsAny<typeof mutualCycle.First.next>;
+					const shadowedMappedNotAny: false = null as unknown as IsAny<typeof shadowedCycle.Node.next>;
+					const optionalNotAny: IsAny<OptionalNode["next"]> = false;
+					const nullableNotAny: IsAny<NullableNode["next"]> = false;
+					const nullableLinkNotAny: IsAny<NullableLinkNode["next"]> = false;
+					const nullishLinkNotAny: IsAny<NullishLinkNode["next"]> = false;
+					const optionalNullableLinkNotAny: IsAny<OptionalNullableLinkNode["next"]> = false;
+					const nullableOptionalLinkNotAny: IsAny<NullableOptionalLinkNode["next"]> = false;
+					const factoryResult = factory()()()();
+					const factoryNotAny: IsAny<typeof factoryResult> = false;
+					const capturedValue: string = captured("text").next().consume("other").value;
+					const capturedResult = captured("text").next();
+					const capturedNotAny: IsAny<typeof capturedResult> = false;
+					const nestedCapturedValue = nestedCaptured(1)("text").shadow(true).next.next();
+					const capturedOuter: number = nestedCapturedValue.outer;
+					const capturedInner: string = nestedCapturedValue.inner;
+					const constrainedValue: number = constrained<{ value: number }, "value">("value").next().value;
+					const annotatedCapturedValue: string = annotatedCaptured("text").next.next.value;
+					const recursiveTupleValue: string = recursiveTuple("text")[1][1][0];
+					const namespaceValue: number = Nested.captured(1).next().next().value;
+					const inferredCapturedValue: string = inferredCaptured<() => string>().next.next.value;
+					const mappedCapturedValue: number = mappedCaptured<{ value: number }>().value.next.value.value;
+					const freshGenericValue = freshGeneric(1)("text")(true)(2);
+					const freshGenericNotAny: IsAny<typeof freshGenericValue> = false;
+					const mutualCapturedValue: string = mutualCaptured(1, "text").left.next.self.next.next.right;
+					const mutualCapturedResult = mutualCaptured(1, "text").right.self.next.left;
+					const mutualCapturedNotAny: IsAny<typeof mutualCapturedResult> = false;
+					const capturedClassResult = new CapturedClass("text").make("other").next();
+					const capturedClassOuter: string = capturedClassResult.outer;
+					const capturedClassInner: string = capturedClassResult.inner;
+					const capturedClassNotAny: IsAny<typeof capturedClassResult> = false;
+					const Covariant = covariantClass();
+					const covariantString = new Covariant<string>();
+					const covariantUnknown = new Covariant<unknown>();
+					const covariantWide: typeof covariantUnknown = covariantString.next();
+					const covariantNotAny: IsAny<typeof covariantString> = false;
+					const Contravariant = contravariantClass();
+					const contravariantString = new Contravariant<string>();
+					const contravariantUnknown = new Contravariant<unknown>();
+					const contravariantNarrow: typeof contravariantString = contravariantUnknown.next();
+					const contravariantNotAny: IsAny<typeof contravariantString> = false;
+					const optionalCapturedValue = optionalCaptured("text");
+					if (optionalCapturedValue.node) {
+						const value: string = optionalCapturedValue.node.next.next.value;
+						const notAny: IsAny<typeof optionalCapturedValue.node.next> = false;
+					}
+					if (mixedUnionCycle.Node) {
+						const value: number = mixedUnionCycle.Node.next.next.value;
+						const notAny: IsAny<typeof mixedUnionCycle.Node.next> = false;
+					}
 					const invalid: number = arrow()()();
 					const invalidExpression: number = expression()()();
 					const invalidObject: number = objectReturn().call;
@@ -2647,6 +2884,25 @@ func TestTscIncremental(t *testing.T) {
 					const invalidNestedOuter: boolean = nestedString.outer;
 					const invalidNestedInner: string = nestedString.inner;
 					nestedNumber.constrained("wrong");
+					const invalidMappedCycleValue: string = mappedCycle.Node.next.next.value;
+					const invalidMutualCycleValue: number = mutualCycle.First.next.value;
+					const invalidShadowedMappedValue: string = shadowedCycle.Node.next(1).next("text").value;
+					const invalidNullNext: OptionalNode["next"] = null;
+					const invalidUndefinedNext: OptionalNode["next"] = undefined;
+					const invalidNullableLinkValue: number = nullableLinks.Node!.next.value;
+					const invalidNullishLinkValue: number = nullishLinks.Node!.next.value;
+					captured("text").consume(1);
+					const invalidRecursiveTupleValue: number = recursiveTuple("text")[1][0];
+					const invalidCapturedOuter: string = nestedCapturedValue.outer;
+					const invalidCapturedInner: number = nestedCapturedValue.inner;
+					type WithoutFalseOrNullish<T> = T extends false | null | undefined ? never : T;
+					const invalidMixedNext: WithoutFalseOrNullish<typeof mixedUnionCycle.Node>["next"] = false;
+					const invalidInferredCapturedValue: number = inferredCaptured<() => string>().next.value;
+					const invalidMappedCapturedValue: string = mappedCaptured<{ value: number }>().value.next.value.value;
+					const invalidMutualCapturedValue: boolean = mutualCaptured(1, "text").right.self.next.left;
+					const invalidCapturedClassValue: number = capturedClassResult.outer;
+					const invalidCovariance: typeof covariantString = covariantUnknown.next();
+					const invalidContravariance: typeof contravariantUnknown = contravariantString.next();
 				`),
 			},
 			commandLineArgs: []string{"--build", "consumer"},
