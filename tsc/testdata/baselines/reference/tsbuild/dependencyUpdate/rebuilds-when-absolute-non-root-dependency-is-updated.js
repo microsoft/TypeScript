@@ -60,7 +60,7 @@ import { myValue } from "abs-dep";
 export const value = myValue;
 
 //// [C:/work/project/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2026.full.d.ts","d:/work/deps/dep.d.ts","../src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"4384f7716e1c7cc875e39624007cccc9-export declare const myValue: string;",{"version":"6c77917c7b17b3698cb1dbdb7227fbff-import { myValue } from \"abs-dep\";\nexport const value: string = myValue;","signature":"d704bb9feb766d5360f4081857e4c09e-export declare const value: string;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"./","strict":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/index.d.ts"}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2026.full.d.ts","d:/work/deps/dep.d.ts","../src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"4384f7716e1c7cc875e39624007cccc9-export declare const myValue: string;",{"version":"6c77917c7b17b3698cb1dbdb7227fbff-import { myValue } from \"abs-dep\";\nexport const value: string = myValue;","signature":"d704bb9feb766d5360f4081857e4c09e-export declare const value: string;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"./","paths":{"abs-dep":["D:/work/deps/dep.d.ts"]},"strict":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/index.d.ts"}
 //// [C:/work/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -116,6 +116,11 @@ export const value = myValue;
   "options": {
     "composite": true,
     "outDir": "./",
+    "paths": {
+      "abs-dep": [
+        "D:/work/deps/dep.d.ts"
+      ]
+    },
     "strict": true
   },
   "referencedMap": {
@@ -124,7 +129,7 @@ export const value = myValue;
     ]
   },
   "latestChangedDtsFile": "./src/index.d.ts",
-  "size": 1347
+  "size": 1393
 }
 
 tsconfig.json::
@@ -160,7 +165,7 @@ Found 1 error in src/index.ts[90m:2[0m
 
 //// [C:/work/project/dist/src/index.js] *rewrite with same content*
 //// [C:/work/project/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2026.full.d.ts","d:/work/deps/dep.d.ts","../src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"936f1acf4d15f440cdb2eb27f80fb9c9-export declare const myValue: number;",{"version":"6c77917c7b17b3698cb1dbdb7227fbff-import { myValue } from \"abs-dep\";\nexport const value: string = myValue;","signature":"d704bb9feb766d5360f4081857e4c09e-export declare const value: string;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"./","strict":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":48,"end":53,"code":2322,"category":1,"messageKey":"Type_0_is_not_assignable_to_type_1_2322","messageArgs":["number","string"]}]]],"latestChangedDtsFile":"./src/index.d.ts"}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2026.full.d.ts","d:/work/deps/dep.d.ts","../src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"936f1acf4d15f440cdb2eb27f80fb9c9-export declare const myValue: number;",{"version":"6c77917c7b17b3698cb1dbdb7227fbff-import { myValue } from \"abs-dep\";\nexport const value: string = myValue;","signature":"d704bb9feb766d5360f4081857e4c09e-export declare const value: string;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"./","paths":{"abs-dep":["D:/work/deps/dep.d.ts"]},"strict":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":48,"end":53,"code":2322,"category":1,"messageKey":"Type_0_is_not_assignable_to_type_1_2322","messageArgs":["number","string"]}]]],"latestChangedDtsFile":"./src/index.d.ts"}
 //// [C:/work/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -216,6 +221,11 @@ Found 1 error in src/index.ts[90m:2[0m
   "options": {
     "composite": true,
     "outDir": "./",
+    "paths": {
+      "abs-dep": [
+        "D:/work/deps/dep.d.ts"
+      ]
+    },
     "strict": true
   },
   "referencedMap": {
@@ -242,7 +252,7 @@ Found 1 error in src/index.ts[90m:2[0m
     ]
   ],
   "latestChangedDtsFile": "./src/index.d.ts",
-  "size": 1518
+  "size": 1564
 }
 
 tsconfig.json::

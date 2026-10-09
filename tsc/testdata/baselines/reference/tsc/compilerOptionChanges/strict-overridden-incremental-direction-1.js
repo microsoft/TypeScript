@@ -59,7 +59,7 @@ declare const console: { log(msg: any): void; };
 export declare const result: string | undefined;
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"ff3cebb5439d132016ddfefe7bb8208f-declare const input: string | undefined;\nexport const result = input;\n","signature":"233fb08c56c1b5c6a94a087c9b369d38-export declare const result: string | undefined;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"strictNullChecks":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"ff3cebb5439d132016ddfefe7bb8208f-declare const input: string | undefined;\nexport const result = input;\n","signature":"233fb08c56c1b5c6a94a087c9b369d38-export declare const result: string | undefined;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"strictNullChecks":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -105,6 +105,7 @@ export declare const result: string | undefined;
     "emitDeclarationOnly": true,
     "declaration": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
@@ -112,7 +113,7 @@ export declare const result: string | undefined;
     "target": 7
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1311
+  "size": 1334
 }
 
 producer/tsconfig.json::
@@ -162,7 +163,7 @@ ExitStatus:: Success
 Output::
 TSFILE: /home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"ff3cebb5439d132016ddfefe7bb8208f-declare const input: string | undefined;\nexport const result = input;\n","signature":"233fb08c56c1b5c6a94a087c9b369d38-export declare const result: string | undefined;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"outDir":"./","rootDir":"..","strict":false,"strictNullChecks":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"ff3cebb5439d132016ddfefe7bb8208f-declare const input: string | undefined;\nexport const result = input;\n","signature":"233fb08c56c1b5c6a94a087c9b369d38-export declare const result: string | undefined;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":false,"strictNullChecks":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -208,6 +209,7 @@ TSFILE: /home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo
     "emitDeclarationOnly": true,
     "declaration": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": false,
@@ -215,7 +217,7 @@ TSFILE: /home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo
     "target": 7
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1312
+  "size": 1335
 }
 
 producer/tsconfig.json::

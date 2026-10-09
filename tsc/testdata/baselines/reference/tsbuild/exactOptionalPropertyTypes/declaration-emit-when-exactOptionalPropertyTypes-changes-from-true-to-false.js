@@ -292,7 +292,7 @@ Edit [0]:: toggle exactOptionalPropertyTypes without changing source files
 }
 
 tsgo --build consumer --verbose
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * producer/tsconfig.json
@@ -306,175 +306,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'consumer/tsconfig.json'...
 
-[96mconsumer/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2375: [0mType '{ value: undefined; }' is not assignable to type '{ value?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-  Types of property 'value' are incompatible.
-    Type 'undefined' is not assignable to type 'string'.
-
-[7m2[0m export const value: typeof result = { value: undefined };
-[7m [0m [91m             ~~~~~[0m
-
-
-Found 1 error in consumer/index.ts[90m:2[0m
-
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es5.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"ce71d49ec9c731eb30d4d2ca52fd9246-declare function make<T>(): { value?: T };\nexport const result = make<string>();","signature":"466ccd98668ec437fb7b9f660a2f9240-export declare const result: {\n    value?: string;\n};\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"exactOptionalPropertyTypes":false,"module":99,"outDir":"./","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
-{
-  "version": "FakeTSVersion",
-  "root": [
-    {
-      "files": [
-        "../index.ts"
-      ],
-      "original": 2
-    }
-  ],
-  "fileNames": [
-    "lib.es5.d.ts",
-    "../index.ts"
-  ],
-  "fileInfos": [
-    {
-      "fileName": "lib.es5.d.ts",
-      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedNodeFormat": 1
-      }
-    },
-    {
-      "fileName": "../index.ts",
-      "version": "ce71d49ec9c731eb30d4d2ca52fd9246-declare function make<T>(): { value?: T };\nexport const result = make<string>();",
-      "signature": "466ccd98668ec437fb7b9f660a2f9240-export declare const result: {\n    value?: string;\n};\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "ce71d49ec9c731eb30d4d2ca52fd9246-declare function make<T>(): { value?: T };\nexport const result = make<string>();",
-        "signature": "466ccd98668ec437fb7b9f660a2f9240-export declare const result: {\n    value?: string;\n};\n",
-        "impliedNodeFormat": 1
-      }
-    }
-  ],
-  "options": {
-    "composite": true,
-    "emitDeclarationOnly": true,
-    "exactOptionalPropertyTypes": false,
-    "module": 99,
-    "outDir": "./",
-    "strict": true,
-    "target": 7
-  },
-  "latestChangedDtsFile": "./index.d.ts",
-  "size": 1301
-}
-
-producer/tsconfig.json::
-SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es5.d.ts
-*refresh*    /home/src/workspaces/project/producer/index.ts
-Signatures::
-
-consumer/tsconfig.json::
-SemanticDiagnostics::
-Signatures::
-
-
-Diff:: Changing exactOptionalPropertyTypes without editing source files leaves stale declarations and downstream diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/index.d.ts
-@@ -1,3 +1,3 @@
- export declare const result: {
--    value?: string | undefined;
-+    value?: string;
- };
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -0,0 +1,10 @@
-+[96mconsumer/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2375: [0mType '{ value: undefined; }' is not assignable to type '{ value?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-+  Types of property 'value' are incompatible.
-+    Type 'undefined' is not assignable to type 'string'.
-+
-+[7m2[0m export const value: typeof result = { value: undefined };
-+[7m [0m [91m             ~~~~~[0m
-+
-+
-+Found 1 error in consumer/index.ts[90m:2[0m
-+
-
-Edit [1]:: no change
-
-tsgo --build consumer --verbose
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-    * consumer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is up to date because newest input 'producer/index.ts' is older than output 'producer/dist/tsconfig.tsbuildinfo'
-
-[[90mHH:MM:SS AM[0m] Project 'consumer/tsconfig.json' is out of date because buildinfo file 'consumer/dist/tsconfig.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project 'consumer/tsconfig.json'...
-
-[96mconsumer/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2375: [0mType '{ value: undefined; }' is not assignable to type '{ value?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-  Types of property 'value' are incompatible.
-    Type 'undefined' is not assignable to type 'string'.
-
-[7m2[0m export const value: typeof result = { value: undefined };
-[7m [0m [91m             ~~~~~[0m
-
-
-Found 1 error in consumer/index.ts[90m:2[0m
-
-
-consumer/tsconfig.json::
-SemanticDiagnostics::
-Signatures::
-
-
-Diff:: Changing exactOptionalPropertyTypes without editing source files leaves stale declarations and downstream diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/index.d.ts
-@@ -1,3 +1,3 @@
- export declare const result: {
--    value?: string | undefined;
-+    value?: string;
- };
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -0,0 +1,10 @@
-+[96mconsumer/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2375: [0mType '{ value: undefined; }' is not assignable to type '{ value?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-+  Types of property 'value' are incompatible.
-+    Type 'undefined' is not assignable to type 'string'.
-+
-+[7m2[0m export const value: typeof result = { value: undefined };
-+[7m [0m [91m             ~~~~~[0m
-+
-+
-+Found 1 error in consumer/index.ts[90m:2[0m
-+
-
-Edit [2]:: force rebuild with the same compiler options
-
-tsgo --build consumer --verbose --force
-ExitStatus:: Success
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-    * consumer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
-
-[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
-
-[[90mHH:MM:SS AM[0m] Project 'consumer/tsconfig.json' is being forcibly rebuilt
-
-[[90mHH:MM:SS AM[0m] Building project 'consumer/tsconfig.json'...
-
-//// [/home/src/workspaces/project/consumer/dist/index.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/consumer/dist/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":[3],"fileNames":["lib.es5.d.ts","../../producer/dist/index.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"501ff75cdc5d82b297716d1b95ac0851-export declare const result: {\n    value?: string | undefined;\n};\n",{"version":"fabbe8df4bcbb914d7641c48938c0461-import { result } from \"../producer\";\nexport const value: typeof result = { value: undefined };","signature":"f23c37bb4bdf4d159c0bfe56864fad40-import { result } from \"../producer\";\nexport declare const value: typeof result;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"emitDeclarationOnly":true,"exactOptionalPropertyTypes":true,"outDir":"./","strict":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/consumer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
@@ -603,6 +434,62 @@ export declare const result: {
   "latestChangedDtsFile": "./index.d.ts",
   "size": 1313
 }
+
+producer/tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es5.d.ts
+*refresh*    /home/src/workspaces/project/producer/index.ts
+Signatures::
+(stored at emit) /home/src/workspaces/project/producer/index.ts
+
+consumer/tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/workspaces/project/producer/dist/index.d.ts
+*refresh*    /home/src/workspaces/project/consumer/index.ts
+Signatures::
+(used version)   /home/src/workspaces/project/producer/dist/index.d.ts
+(computed .d.ts) /home/src/workspaces/project/consumer/index.ts
+
+
+Edit [1]:: no change
+
+tsgo --build consumer --verbose
+ExitStatus:: Success
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+    * consumer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is up to date because newest input 'producer/index.ts' is older than output 'producer/dist/tsconfig.tsbuildinfo'
+
+[[90mHH:MM:SS AM[0m] Project 'consumer/tsconfig.json' is up to date because newest input 'consumer/index.ts' is older than output 'consumer/dist/tsconfig.tsbuildinfo'
+
+
+
+
+Edit [2]:: force rebuild with the same compiler options
+
+tsgo --build consumer --verbose --force
+ExitStatus:: Success
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+    * consumer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
+
+[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
+
+[[90mHH:MM:SS AM[0m] Project 'consumer/tsconfig.json' is being forcibly rebuilt
+
+[[90mHH:MM:SS AM[0m] Building project 'consumer/tsconfig.json'...
+
+//// [/home/src/workspaces/project/consumer/dist/index.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/consumer/dist/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/home/src/workspaces/project/consumer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/index.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 producer/tsconfig.json::
 SemanticDiagnostics::

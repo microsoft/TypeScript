@@ -76,6 +76,9 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Enable importing files with any extension, provided a declaration file is present."),
                 defaultValueDescription: false,
@@ -88,6 +91,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 affectsSemanticDiagnostics: true,
+                affectsEmit: true,
                 affectsBuildInfo: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Allow imports to include TypeScript file extensions. Requires '--moduleResolution bundler' and either '--noEmit' or '--emitDeclarationOnly' to be set."),
@@ -166,6 +170,9 @@ export const options: OptionsModel = {
             type: "[]string",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Conditions to set in addition to the resolver-specific defaults when resolving imports."),
             },
@@ -271,6 +278,9 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "commonOptionsWithBuild",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 category: diagnostic("Type Checking"),
                 description: diagnostic("Deduplicate packages with the same name and version."),
                 documentationAnchor: false,
@@ -338,6 +348,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 affectsSemanticDiagnostics: true,
+                affectsEmit: true,
                 affectsBuildInfo: true,
                 category: diagnostic("Type Checking"),
                 description: diagnostic("Interpret optional property types as written, rather than adding 'undefined'."),
@@ -373,6 +384,9 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 category: diagnostic("Interop Constraints"),
                 description: diagnostic("Ensure that each file can be safely transpiled without relying on other imports."),
                 defaultValueDescription: false,
@@ -389,6 +403,7 @@ export const options: OptionsModel = {
                 defaultValueDescription: false,
                 affectsBuildInfo: true,
                 affectsSemanticDiagnostics: true,
+                affectsEmit: true,
             },
         },
         {
@@ -490,6 +505,9 @@ export const options: OptionsModel = {
             type: "string",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 category: diagnostic("Language and Environment"),
                 description: diagnostic("Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'."),
                 defaultValueDescription: "`React.createElement`",
@@ -500,6 +518,9 @@ export const options: OptionsModel = {
             type: "string",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 category: diagnostic("Language and Environment"),
                 description: diagnostic("Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. 'React.Fragment' or 'Fragment'."),
                 defaultValueDescription: "React.Fragment",
@@ -582,6 +603,9 @@ export const options: OptionsModel = {
             type: "ModuleResolutionKind",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Specify how TypeScript looks up a file from a given module specifier."),
                 defaultValueDescription: diagnostic("`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."),
@@ -678,6 +702,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 affectsSemanticDiagnostics: true,
+                affectsEmit: true,
                 affectsBuildInfo: true,
                 strictFlag: true,
                 category: diagnostic("Type Checking"),
@@ -691,6 +716,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 affectsSemanticDiagnostics: true,
+                affectsEmit: true,
                 affectsBuildInfo: true,
                 strictFlag: true,
                 category: diagnostic("Type Checking"),
@@ -753,6 +779,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 affectsSemanticDiagnostics: true,
+                affectsEmit: true,
                 affectsBuildInfo: true,
                 category: diagnostic("Type Checking"),
                 description: diagnostic("Add 'undefined' to a type when accessed using an index."),
@@ -853,6 +880,9 @@ export const options: OptionsModel = {
             type: "*collections.OrderedMap[string, []string]",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 allowConfigDirTemplateSubstitution: true,
                 isTSConfigOnly: true,
                 category: diagnostic("Modules"),
@@ -921,6 +951,9 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Use the package.json 'exports' field when resolving package imports."),
                 defaultValueDescription: diagnostic("`true` when 'moduleResolution' is 'node16', 'nodenext', or 'bundler'; otherwise `false`."),
@@ -931,6 +964,9 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Use the package.json 'imports' field when resolving imports."),
                 defaultValueDescription: diagnostic("`true` when 'moduleResolution' is 'node16', 'nodenext', or 'bundler'; otherwise `false`."),
@@ -955,6 +991,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 affectsSemanticDiagnostics: true,
+                affectsEmit: true,
                 affectsBuildInfo: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files."),
@@ -995,6 +1032,9 @@ export const options: OptionsModel = {
             pathKind: "directory",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 isTSConfigOnly: true,
                 allowConfigDirTemplateSubstitution: true,
                 category: diagnostic("Modules"),
@@ -1047,6 +1087,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 affectsSemanticDiagnostics: true,
+                affectsEmit: true,
                 affectsBuildInfo: true,
                 strictFlag: true,
                 category: diagnostic("Type Checking"),
@@ -1060,6 +1101,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 affectsSemanticDiagnostics: true,
+                affectsEmit: true,
                 affectsBuildInfo: true,
                 strictFlag: true,
                 category: diagnostic("Type Checking"),
@@ -1073,6 +1115,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 affectsSemanticDiagnostics: true,
+                affectsEmit: true,
                 affectsBuildInfo: true,
                 strictFlag: true,
                 category: diagnostic("Type Checking"),
@@ -1086,6 +1129,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 affectsSemanticDiagnostics: true,
+                affectsEmit: true,
                 affectsBuildInfo: true,
                 strictFlag: true,
                 category: diagnostic("Type Checking"),
@@ -1205,6 +1249,9 @@ export const options: OptionsModel = {
             pathKind: "directory",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 allowConfigDirTemplateSubstitution: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Specify multiple folders that act like './node_modules/@types'."),
@@ -1216,6 +1263,9 @@ export const options: OptionsModel = {
             type: "[]string",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 showInSimplifiedHelpView: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("Specify type package names to be included without being referenced in a source file."),
@@ -1240,6 +1290,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 affectsSemanticDiagnostics: true,
+                affectsEmit: true,
                 affectsBuildInfo: true,
                 strictFlag: true,
                 category: diagnostic("Type Checking"),

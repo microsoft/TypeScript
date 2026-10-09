@@ -82,7 +82,7 @@ export const result = A.create(B.Fragment, null,
     A.create("div", null));
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.tsx"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"889be8e0051bcc533143d52d6f067b9c-declare namespace A { function create(...args: any[]): any; const Fragment: any; namespace JSX { interface Element {} interface IntrinsicElements { div: {}; } } }\ndeclare namespace B { const Fragment: any; }\nexport const result = <><div /></>;","signature":"e7c244a7e3db537b93f3d558f130dc47-declare namespace A {\n    function create(...args: any[]): any;\n    const Fragment: any;\n    namespace JSX {\n        interface Element {\n        }\n        interface IntrinsicElements {\n            div: {};\n        }\n    }\n}\nexport declare const result: A.JSX.Element;\nexport {};\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":false,"declaration":true,"jsx":2,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.tsx"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"889be8e0051bcc533143d52d6f067b9c-declare namespace A { function create(...args: any[]): any; const Fragment: any; namespace JSX { interface Element {} interface IntrinsicElements { div: {}; } } }\ndeclare namespace B { const Fragment: any; }\nexport const result = <><div /></>;","signature":"e7c244a7e3db537b93f3d558f130dc47-declare namespace A {\n    function create(...args: any[]): any;\n    const Fragment: any;\n    namespace JSX {\n        interface Element {\n        }\n        interface IntrinsicElements {\n            div: {};\n        }\n    }\n}\nexport declare const result: A.JSX.Element;\nexport {};\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":false,"declaration":true,"jsx":2,"jsxFactory":"A.create","jsxFragmentFactory":"B.Fragment","module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -128,14 +128,17 @@ export const result = A.create(B.Fragment, null,
     "emitDeclarationOnly": false,
     "declaration": true,
     "jsx": 2,
+    "jsxFactory": "A.create",
+    "jsxFragmentFactory": "B.Fragment",
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
     "target": 7
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1712
+  "size": 1793
 }
 
 producer/tsconfig.json::
@@ -194,22 +197,75 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'producer/tsconfig.json'...
+//// [/home/src/workspaces/project/producer/dist/index.js] *modified* 
+export const result = A.create(A.Fragment, null,
+    A.create("div", null));
 
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *mTime changed*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.tsx"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"889be8e0051bcc533143d52d6f067b9c-declare namespace A { function create(...args: any[]): any; const Fragment: any; namespace JSX { interface Element {} interface IntrinsicElements { div: {}; } } }\ndeclare namespace B { const Fragment: any; }\nexport const result = <><div /></>;","signature":"e7c244a7e3db537b93f3d558f130dc47-declare namespace A {\n    function create(...args: any[]): any;\n    const Fragment: any;\n    namespace JSX {\n        interface Element {\n        }\n        interface IntrinsicElements {\n            div: {};\n        }\n    }\n}\nexport declare const result: A.JSX.Element;\nexport {};\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":false,"declaration":true,"jsx":2,"jsxFactory":"A.create","jsxFragmentFactory":"A.Fragment","module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
+{
+  "version": "FakeTSVersion",
+  "root": [
+    {
+      "files": [
+        "../index.tsx"
+      ],
+      "original": 2
+    }
+  ],
+  "fileNames": [
+    "lib.es2020.d.ts",
+    "../index.tsx"
+  ],
+  "fileInfos": [
+    {
+      "fileName": "lib.es2020.d.ts",
+      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "../index.tsx",
+      "version": "889be8e0051bcc533143d52d6f067b9c-declare namespace A { function create(...args: any[]): any; const Fragment: any; namespace JSX { interface Element {} interface IntrinsicElements { div: {}; } } }\ndeclare namespace B { const Fragment: any; }\nexport const result = <><div /></>;",
+      "signature": "e7c244a7e3db537b93f3d558f130dc47-declare namespace A {\n    function create(...args: any[]): any;\n    const Fragment: any;\n    namespace JSX {\n        interface Element {\n        }\n        interface IntrinsicElements {\n            div: {};\n        }\n    }\n}\nexport declare const result: A.JSX.Element;\nexport {};\n",
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "889be8e0051bcc533143d52d6f067b9c-declare namespace A { function create(...args: any[]): any; const Fragment: any; namespace JSX { interface Element {} interface IntrinsicElements { div: {}; } } }\ndeclare namespace B { const Fragment: any; }\nexport const result = <><div /></>;",
+        "signature": "e7c244a7e3db537b93f3d558f130dc47-declare namespace A {\n    function create(...args: any[]): any;\n    const Fragment: any;\n    namespace JSX {\n        interface Element {\n        }\n        interface IntrinsicElements {\n            div: {};\n        }\n    }\n}\nexport declare const result: A.JSX.Element;\nexport {};\n",
+        "impliedNodeFormat": 1
+      }
+    }
+  ],
+  "options": {
+    "composite": true,
+    "emitDeclarationOnly": false,
+    "declaration": true,
+    "jsx": 2,
+    "jsxFactory": "A.create",
+    "jsxFragmentFactory": "A.Fragment",
+    "module": 99,
+    "moduleResolution": 100,
+    "outDir": "./",
+    "rootDir": "..",
+    "strict": true,
+    "target": 7
+  },
+  "latestChangedDtsFile": "./index.d.ts",
+  "size": 1793
+}
 
 producer/tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+*refresh*    /home/src/workspaces/project/producer/index.tsx
 Signatures::
-
-
-Diff:: Changing jsxFragmentFactory without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.js
-+++ incremental /home/src/workspaces/project/producer/dist/index.js
-@@ -1,2 +1,2 @@
--export const result = A.create(A.Fragment, null,
-+export const result = A.create(B.Fragment, null,
-     A.create("div", null));
 
 
 Edit [2]:: no change
@@ -225,15 +281,6 @@ Output::
 
 
 
-Diff:: Changing jsxFragmentFactory without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.js
-+++ incremental /home/src/workspaces/project/producer/dist/index.js
-@@ -1,2 +1,2 @@
--export const result = A.create(A.Fragment, null,
-+export const result = A.create(B.Fragment, null,
-     A.create("div", null));
-
-
 Edit [3]:: force rebuild with the same compiler options
 
 tsgo --build producer --verbose --force
@@ -247,10 +294,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
 
 //// [/home/src/workspaces/project/producer/dist/index.d.ts] *rewrite with same content*
-//// [/home/src/workspaces/project/producer/dist/index.js] *modified* 
-export const result = A.create(A.Fragment, null,
-    A.create("div", null));
-
+//// [/home/src/workspaces/project/producer/dist/index.js] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 

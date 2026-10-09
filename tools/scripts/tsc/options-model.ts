@@ -51,7 +51,9 @@ export interface DeclarationMetadata {
     allowConfigDirTemplateSubstitution?: boolean;
     affectsDeclarationPath?: boolean;
     affectsSemanticDiagnostics?: boolean;
+    /** Required for every option participating in incremental invalidation. */
     affectsBuildInfo?: boolean;
+    /** Changes can alter JavaScript, declarations, or declaration diagnostics. */
     affectsEmit?: boolean;
     strictFlag?: boolean;
     listPreserveFalsyValues?: boolean;

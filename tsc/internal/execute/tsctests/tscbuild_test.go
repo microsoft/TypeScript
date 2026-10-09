@@ -1049,12 +1049,8 @@ func TestBuildExactOptionalPropertyTypes(t *testing.T) {
 							fmt.Sprintf(`"exactOptionalPropertyTypes": %t`, !exactOptionalPropertyTypes),
 						)
 					},
-					expectedDiff: "Changing exactOptionalPropertyTypes without editing source files leaves stale declarations and downstream diagnostics.",
 				},
-				{
-					caption:      "no change",
-					expectedDiff: "Changing exactOptionalPropertyTypes without editing source files leaves stale declarations and downstream diagnostics.",
-				},
+				noChange,
 				{
 					caption:         "force rebuild with the same compiler options",
 					commandLineArgs: []string{"--build", "consumer", "--verbose", "--force"},
@@ -1073,7 +1069,6 @@ type compilerOptionChangeTest struct {
 	options map[string]any
 	files   FileMap
 	roots   []string
-	matches [2]bool
 }
 
 func TestBuildOptionChangeShapeSignature(t *testing.T) {
@@ -1112,12 +1107,8 @@ func TestBuildOptionChangeShapeSignature(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/a.ts", "    /** @internal */\n    value = \"\";\n", "")
 					},
-					expectedDiff: "Option-only declaration emit leaves stale shape signatures, so a source edit does not invalidate dependent output and diagnostics.",
 				},
-				{
-					caption:      "no change",
-					expectedDiff: "Option-only declaration emit leaves stale shape signatures, so a source edit does not invalidate dependent output and diagnostics.",
-				},
+				noChange,
 				{caption: "force rebuild", commandLineArgs: []string{"--build", "--verbose", "--force"}},
 				noChange,
 			},
@@ -1174,10 +1165,6 @@ func testCompilerOptionChanges(t *testing.T, tests []compilerOptionChangeTest) {
 				if build {
 					args = []string{"--build", "producer", "--verbose"}
 				}
-				expectedDiff := ""
-				if !test.matches[direction] {
-					expectedDiff = "Changing " + test.option + " without editing source files leaves stale output or diagnostics."
-				}
 				input := &tscInput{
 					subScenario:     fmt.Sprintf("%s %s direction %d", name, mode, direction),
 					cwd:             project,
@@ -1190,9 +1177,8 @@ func testCompilerOptionChanges(t *testing.T, tests []compilerOptionChangeTest) {
 							edit: func(sys *TestSys) {
 								sys.writeFileNoError(configPath, config(test.values[1-direction]))
 							},
-							expectedDiff: expectedDiff,
 						},
-						{caption: "no change", expectedDiff: expectedDiff},
+						noChange,
 						{
 							caption:         "force rebuild with the same compiler options",
 							commandLineArgs: []string{"--build", "producer", "--verbose", "--force"},
@@ -1213,7 +1199,7 @@ func TestBuildTypeCheckingOptionChanges(t *testing.T) {
 		{option: "strictNullChecks", values: [2]any{false, true}, files: nullable, options: map[string]any{"strictPropertyInitialization": false}},
 		{option: "strict", values: [2]any{false, true}, files: nullable},
 		{option: "strict", name: "strict default", values: [2]any{nil, false}, files: nullable},
-		{option: "strict", name: "strict overridden", values: [2]any{false, true}, files: nullable, options: map[string]any{"strictNullChecks": true}, matches: [2]bool{true, true}},
+		{option: "strict", name: "strict overridden", values: [2]any{false, true}, files: nullable, options: map[string]any{"strictNullChecks": true}},
 		{option: "noUncheckedIndexedAccess", values: [2]any{false, true}, files: FileMap{"index.ts": "declare const input: { [key: string]: number };\nexport const result = input.value;\n"}},
 		{
 			option: "strictBindCallApply", values: [2]any{false, true},
@@ -1399,7 +1385,7 @@ func TestBuildResolutionOptionChanges(t *testing.T) {
 			},
 		},
 		{
-			option: "deduplicatePackages", values: [2]any{false, true}, matches: [2]bool{false, true}, roots: []string{"index.ts"},
+			option: "deduplicatePackages", values: [2]any{false, true}, roots: []string{"index.ts"},
 			files: FileMap{
 				"index.ts":                        "import { input as a } from 'first';\nimport { input as b } from 'second';\nexport const result = [a, b];\n",
 				"node_modules/first/package.json": `{"name":"first","version":"1.0.0","types":"index.d.ts"}`,

@@ -3,6 +3,8 @@
 package tsoptions
 
 import (
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -372,19 +374,26 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 	if oldOptions == nil || newOptions == nil {
 		return true
 	}
-	return oldOptions.AllowImportingTsExtensions != newOptions.AllowImportingTsExtensions ||
+	return oldOptions.AllowArbitraryExtensions != newOptions.AllowArbitraryExtensions ||
+		oldOptions.AllowImportingTsExtensions != newOptions.AllowImportingTsExtensions ||
 		oldOptions.AllowUmdGlobalAccess != newOptions.AllowUmdGlobalAccess ||
 		oldOptions.AllowUnreachableCode != newOptions.AllowUnreachableCode ||
 		oldOptions.AllowUnusedLabels != newOptions.AllowUnusedLabels ||
 		oldOptions.AssumeChangesOnlyAffectDirectDependencies != newOptions.AssumeChangesOnlyAffectDirectDependencies ||
 		oldOptions.CheckJs != newOptions.CheckJs ||
+		(oldOptions.CustomConditions == nil) != (newOptions.CustomConditions == nil) || !slices.Equal(oldOptions.CustomConditions, newOptions.CustomConditions) ||
 		oldOptions.EmitDecoratorMetadata != newOptions.EmitDecoratorMetadata ||
+		oldOptions.DeduplicatePackages != newOptions.DeduplicatePackages ||
 		oldOptions.ErasableSyntaxOnly != newOptions.ErasableSyntaxOnly ||
 		oldOptions.ExactOptionalPropertyTypes != newOptions.ExactOptionalPropertyTypes ||
 		oldOptions.ExperimentalDecorators != newOptions.ExperimentalDecorators ||
+		oldOptions.IsolatedModules != newOptions.IsolatedModules ||
 		oldOptions.IsolatedDeclarations != newOptions.IsolatedDeclarations ||
 		oldOptions.Jsx != newOptions.Jsx ||
+		oldOptions.JsxFactory != newOptions.JsxFactory ||
+		oldOptions.JsxFragmentFactory != newOptions.JsxFragmentFactory ||
 		oldOptions.JsxImportSource != newOptions.JsxImportSource ||
+		oldOptions.ModuleResolution != newOptions.ModuleResolution ||
 		oldOptions.NoErrorTruncation != newOptions.NoErrorTruncation ||
 		oldOptions.NoFallthroughCasesInSwitch != newOptions.NoFallthroughCasesInSwitch ||
 		oldOptions.GetStrictOptionValue(oldOptions.NoImplicitAny) != newOptions.GetStrictOptionValue(newOptions.NoImplicitAny) ||
@@ -396,13 +405,21 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 		oldOptions.NoUnusedParameters != newOptions.NoUnusedParameters ||
 		oldOptions.NoImplicitOverride != newOptions.NoImplicitOverride ||
 		oldOptions.NoUncheckedSideEffectImports != newOptions.NoUncheckedSideEffectImports ||
+		!oldOptions.Paths.EqualFunc(newOptions.Paths, func(a, b []string) bool {
+			return (a == nil) == (b == nil) && slices.Equal(a, b)
+		}) ||
+		oldOptions.ResolvePackageJsonExports != newOptions.ResolvePackageJsonExports ||
+		oldOptions.ResolvePackageJsonImports != newOptions.ResolvePackageJsonImports ||
 		oldOptions.RewriteRelativeImportExtensions != newOptions.RewriteRelativeImportExtensions ||
+		(oldOptions.RootDirs == nil) != (newOptions.RootDirs == nil) || !slices.Equal(oldOptions.RootDirs, newOptions.RootDirs) ||
 		oldOptions.StableTypeOrdering != newOptions.StableTypeOrdering ||
 		oldOptions.GetStrictOptionValue(oldOptions.StrictBindCallApply) != newOptions.GetStrictOptionValue(newOptions.StrictBindCallApply) ||
 		oldOptions.GetStrictOptionValue(oldOptions.StrictBuiltinIteratorReturn) != newOptions.GetStrictOptionValue(newOptions.StrictBuiltinIteratorReturn) ||
 		oldOptions.GetStrictOptionValue(oldOptions.StrictFunctionTypes) != newOptions.GetStrictOptionValue(newOptions.StrictFunctionTypes) ||
 		oldOptions.GetStrictOptionValue(oldOptions.StrictNullChecks) != newOptions.GetStrictOptionValue(newOptions.StrictNullChecks) ||
 		oldOptions.GetStrictOptionValue(oldOptions.StrictPropertyInitialization) != newOptions.GetStrictOptionValue(newOptions.StrictPropertyInitialization) ||
+		(oldOptions.TypeRoots == nil) != (newOptions.TypeRoots == nil) || !slices.Equal(oldOptions.TypeRoots, newOptions.TypeRoots) ||
+		(oldOptions.Types == nil) != (newOptions.Types == nil) || !slices.Equal(oldOptions.Types, newOptions.Types) ||
 		oldOptions.UseDefineForClassFields != newOptions.UseDefineForClassFields ||
 		oldOptions.GetStrictOptionValue(oldOptions.UseUnknownInCatchVariables) != newOptions.GetStrictOptionValue(newOptions.UseUnknownInCatchVariables) ||
 		oldOptions.VerbatimModuleSyntax != newOptions.VerbatimModuleSyntax ||
@@ -430,30 +447,57 @@ func CompilerOptionsAffectEmit(oldOptions *core.CompilerOptions, newOptions *cor
 	if oldOptions == nil || newOptions == nil {
 		return true
 	}
-	return oldOptions.AssumeChangesOnlyAffectDirectDependencies != newOptions.AssumeChangesOnlyAffectDirectDependencies ||
+	return oldOptions.AllowArbitraryExtensions != newOptions.AllowArbitraryExtensions ||
+		oldOptions.AllowImportingTsExtensions != newOptions.AllowImportingTsExtensions ||
+		oldOptions.AssumeChangesOnlyAffectDirectDependencies != newOptions.AssumeChangesOnlyAffectDirectDependencies ||
+		(oldOptions.CustomConditions == nil) != (newOptions.CustomConditions == nil) || !slices.Equal(oldOptions.CustomConditions, newOptions.CustomConditions) ||
 		oldOptions.EmitBOM != newOptions.EmitBOM ||
 		oldOptions.EmitDecoratorMetadata != newOptions.EmitDecoratorMetadata ||
 		oldOptions.DeclarationDir != newOptions.DeclarationDir ||
+		oldOptions.DeduplicatePackages != newOptions.DeduplicatePackages ||
+		oldOptions.ExactOptionalPropertyTypes != newOptions.ExactOptionalPropertyTypes ||
 		oldOptions.ExperimentalDecorators != newOptions.ExperimentalDecorators ||
+		oldOptions.IsolatedModules != newOptions.IsolatedModules ||
+		oldOptions.IsolatedDeclarations != newOptions.IsolatedDeclarations ||
 		oldOptions.ImportHelpers != newOptions.ImportHelpers ||
 		oldOptions.InlineSources != newOptions.InlineSources ||
 		oldOptions.Jsx != newOptions.Jsx ||
+		oldOptions.JsxFactory != newOptions.JsxFactory ||
+		oldOptions.JsxFragmentFactory != newOptions.JsxFragmentFactory ||
 		oldOptions.JsxImportSource != newOptions.JsxImportSource ||
 		oldOptions.MapRoot != newOptions.MapRoot ||
 		oldOptions.Module != newOptions.Module ||
+		oldOptions.ModuleResolution != newOptions.ModuleResolution ||
 		oldOptions.NewLine != newOptions.NewLine ||
+		oldOptions.GetStrictOptionValue(oldOptions.NoImplicitAny) != newOptions.GetStrictOptionValue(newOptions.NoImplicitAny) ||
+		oldOptions.GetStrictOptionValue(oldOptions.NoImplicitThis) != newOptions.GetStrictOptionValue(newOptions.NoImplicitThis) ||
 		oldOptions.NoEmitHelpers != newOptions.NoEmitHelpers ||
+		oldOptions.NoUncheckedIndexedAccess != newOptions.NoUncheckedIndexedAccess ||
 		oldOptions.NoEmitOnError != newOptions.NoEmitOnError ||
 		oldOptions.OutDir != newOptions.OutDir ||
+		!oldOptions.Paths.EqualFunc(newOptions.Paths, func(a, b []string) bool {
+			return (a == nil) == (b == nil) && slices.Equal(a, b)
+		}) ||
 		oldOptions.PreserveConstEnums != newOptions.PreserveConstEnums ||
+		oldOptions.ResolvePackageJsonExports != newOptions.ResolvePackageJsonExports ||
+		oldOptions.ResolvePackageJsonImports != newOptions.ResolvePackageJsonImports ||
 		oldOptions.RemoveComments != newOptions.RemoveComments ||
+		oldOptions.RewriteRelativeImportExtensions != newOptions.RewriteRelativeImportExtensions ||
 		oldOptions.ReactNamespace != newOptions.ReactNamespace ||
 		oldOptions.RootDir != newOptions.RootDir ||
+		(oldOptions.RootDirs == nil) != (newOptions.RootDirs == nil) || !slices.Equal(oldOptions.RootDirs, newOptions.RootDirs) ||
+		oldOptions.GetStrictOptionValue(oldOptions.StrictBindCallApply) != newOptions.GetStrictOptionValue(newOptions.StrictBindCallApply) ||
+		oldOptions.GetStrictOptionValue(oldOptions.StrictBuiltinIteratorReturn) != newOptions.GetStrictOptionValue(newOptions.StrictBuiltinIteratorReturn) ||
+		oldOptions.GetStrictOptionValue(oldOptions.StrictFunctionTypes) != newOptions.GetStrictOptionValue(newOptions.StrictFunctionTypes) ||
+		oldOptions.GetStrictOptionValue(oldOptions.StrictNullChecks) != newOptions.GetStrictOptionValue(newOptions.StrictNullChecks) ||
 		oldOptions.StripInternal != newOptions.StripInternal ||
 		oldOptions.SourceRoot != newOptions.SourceRoot ||
 		oldOptions.Target != newOptions.Target ||
 		oldOptions.TsBuildInfoFile != newOptions.TsBuildInfoFile ||
+		(oldOptions.TypeRoots == nil) != (newOptions.TypeRoots == nil) || !slices.Equal(oldOptions.TypeRoots, newOptions.TypeRoots) ||
+		(oldOptions.Types == nil) != (newOptions.Types == nil) || !slices.Equal(oldOptions.Types, newOptions.Types) ||
 		oldOptions.UseDefineForClassFields != newOptions.UseDefineForClassFields ||
+		oldOptions.GetStrictOptionValue(oldOptions.UseUnknownInCatchVariables) != newOptions.GetStrictOptionValue(newOptions.UseUnknownInCatchVariables) ||
 		oldOptions.VerbatimModuleSyntax != newOptions.VerbatimModuleSyntax ||
 		oldOptions.AlwaysStrict != newOptions.AlwaysStrict ||
 		oldOptions.DownlevelIteration != newOptions.DownlevelIteration ||
@@ -465,6 +509,9 @@ func CompilerOptionsAffectEmit(oldOptions *core.CompilerOptions, newOptions *cor
 func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn func(option *CommandLineOption, value any)) {
 	if options.AllowJs != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("allowJs"), options.AllowJs)
+	}
+	if options.AllowArbitraryExtensions != core.TSUnknown {
+		fn(CommandLineCompilerOptionsMap.Get("allowArbitraryExtensions"), options.AllowArbitraryExtensions)
 	}
 	if options.AllowImportingTsExtensions != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("allowImportingTsExtensions"), options.AllowImportingTsExtensions)
@@ -483,6 +530,9 @@ func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn f
 	}
 	if options.CheckJs != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("checkJs"), options.CheckJs)
+	}
+	if options.CustomConditions != nil {
+		fn(CommandLineCompilerOptionsMap.Get("customConditions"), options.CustomConditions)
 	}
 	if options.Composite != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("composite"), options.Composite)
@@ -505,6 +555,9 @@ func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn f
 	if options.DeclarationMap != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("declarationMap"), options.DeclarationMap)
 	}
+	if options.DeduplicatePackages != core.TSUnknown {
+		fn(CommandLineCompilerOptionsMap.Get("deduplicatePackages"), options.DeduplicatePackages)
+	}
 	if options.ErasableSyntaxOnly != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("erasableSyntaxOnly"), options.ErasableSyntaxOnly)
 	}
@@ -513,6 +566,9 @@ func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn f
 	}
 	if options.ExperimentalDecorators != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("experimentalDecorators"), options.ExperimentalDecorators)
+	}
+	if options.IsolatedModules != core.TSUnknown {
+		fn(CommandLineCompilerOptionsMap.Get("isolatedModules"), options.IsolatedModules)
 	}
 	if options.IsolatedDeclarations != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("isolatedDeclarations"), options.IsolatedDeclarations)
@@ -529,6 +585,12 @@ func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn f
 	if options.Jsx != 0 {
 		fn(CommandLineCompilerOptionsMap.Get("jsx"), options.Jsx)
 	}
+	if options.JsxFactory != "" {
+		fn(CommandLineCompilerOptionsMap.Get("jsxFactory"), options.JsxFactory)
+	}
+	if options.JsxFragmentFactory != "" {
+		fn(CommandLineCompilerOptionsMap.Get("jsxFragmentFactory"), options.JsxFragmentFactory)
+	}
 	if options.JsxImportSource != "" {
 		fn(CommandLineCompilerOptionsMap.Get("jsxImportSource"), options.JsxImportSource)
 	}
@@ -537,6 +599,9 @@ func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn f
 	}
 	if options.Module != 0 {
 		fn(CommandLineCompilerOptionsMap.Get("module"), options.Module)
+	}
+	if options.ModuleResolution != 0 {
+		fn(CommandLineCompilerOptionsMap.Get("moduleResolution"), options.ModuleResolution)
 	}
 	if options.NewLine != 0 {
 		fn(CommandLineCompilerOptionsMap.Get("newLine"), options.NewLine)
@@ -583,8 +648,17 @@ func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn f
 	if options.OutDir != "" {
 		fn(CommandLineCompilerOptionsMap.Get("outDir"), options.OutDir)
 	}
+	if options.Paths != nil {
+		fn(CommandLineCompilerOptionsMap.Get("paths"), options.Paths)
+	}
 	if options.PreserveConstEnums != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("preserveConstEnums"), options.PreserveConstEnums)
+	}
+	if options.ResolvePackageJsonExports != core.TSUnknown {
+		fn(CommandLineCompilerOptionsMap.Get("resolvePackageJsonExports"), options.ResolvePackageJsonExports)
+	}
+	if options.ResolvePackageJsonImports != core.TSUnknown {
+		fn(CommandLineCompilerOptionsMap.Get("resolvePackageJsonImports"), options.ResolvePackageJsonImports)
 	}
 	if options.RemoveComments != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("removeComments"), options.RemoveComments)
@@ -597,6 +671,9 @@ func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn f
 	}
 	if options.RootDir != "" {
 		fn(CommandLineCompilerOptionsMap.Get("rootDir"), options.RootDir)
+	}
+	if options.RootDirs != nil {
+		fn(CommandLineCompilerOptionsMap.Get("rootDirs"), options.RootDirs)
 	}
 	if options.SkipLibCheck != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("skipLibCheck"), options.SkipLibCheck)
@@ -639,6 +716,12 @@ func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn f
 	}
 	if options.TsBuildInfoFile != "" {
 		fn(CommandLineCompilerOptionsMap.Get("tsBuildInfoFile"), options.TsBuildInfoFile)
+	}
+	if options.TypeRoots != nil {
+		fn(CommandLineCompilerOptionsMap.Get("typeRoots"), options.TypeRoots)
+	}
+	if options.Types != nil {
+		fn(CommandLineCompilerOptionsMap.Get("types"), options.Types)
 	}
 	if options.UseDefineForClassFields != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("useDefineForClassFields"), options.UseDefineForClassFields)

@@ -71,7 +71,7 @@ export {};
 export const result = 1 /* Value.Result */;
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e395acaa99867f5ee43dd1f51beb1f60-const enum Value { Result = 1 }\nexport const result = Value.Result;\n","signature":"41c236b74c1b8b388644ea9278676760-declare const enum Value {\n    Result = 1\n}\nexport declare const result = Value.Result;\nexport {};\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":false,"declaration":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e395acaa99867f5ee43dd1f51beb1f60-const enum Value { Result = 1 }\nexport const result = Value.Result;\n","signature":"41c236b74c1b8b388644ea9278676760-declare const enum Value {\n    Result = 1\n}\nexport declare const result = Value.Result;\nexport {};\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":false,"declaration":true,"isolatedModules":false,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -116,14 +116,16 @@ export const result = 1 /* Value.Result */;
     "composite": true,
     "emitDeclarationOnly": false,
     "declaration": true,
+    "isolatedModules": false,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
     "target": 7
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1340
+  "size": 1387
 }
 
 producer/tsconfig.json::
@@ -180,25 +182,76 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'producer/tsconfig.json'...
+//// [/home/src/workspaces/project/producer/dist/index.js] *modified* 
+var Value;
+(function (Value) {
+    Value[Value["Result"] = 1] = "Result";
+})(Value || (Value = {}));
+export const result = Value.Result;
 
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *mTime changed*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e395acaa99867f5ee43dd1f51beb1f60-const enum Value { Result = 1 }\nexport const result = Value.Result;\n","signature":"41c236b74c1b8b388644ea9278676760-declare const enum Value {\n    Result = 1\n}\nexport declare const result = Value.Result;\nexport {};\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":false,"declaration":true,"isolatedModules":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
+{
+  "version": "FakeTSVersion",
+  "root": [
+    {
+      "files": [
+        "../index.ts"
+      ],
+      "original": 2
+    }
+  ],
+  "fileNames": [
+    "lib.es2020.d.ts",
+    "../index.ts"
+  ],
+  "fileInfos": [
+    {
+      "fileName": "lib.es2020.d.ts",
+      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "../index.ts",
+      "version": "e395acaa99867f5ee43dd1f51beb1f60-const enum Value { Result = 1 }\nexport const result = Value.Result;\n",
+      "signature": "41c236b74c1b8b388644ea9278676760-declare const enum Value {\n    Result = 1\n}\nexport declare const result = Value.Result;\nexport {};\n",
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "e395acaa99867f5ee43dd1f51beb1f60-const enum Value { Result = 1 }\nexport const result = Value.Result;\n",
+        "signature": "41c236b74c1b8b388644ea9278676760-declare const enum Value {\n    Result = 1\n}\nexport declare const result = Value.Result;\nexport {};\n",
+        "impliedNodeFormat": 1
+      }
+    }
+  ],
+  "options": {
+    "composite": true,
+    "emitDeclarationOnly": false,
+    "declaration": true,
+    "isolatedModules": true,
+    "module": 99,
+    "moduleResolution": 100,
+    "outDir": "./",
+    "rootDir": "..",
+    "strict": true,
+    "target": 7
+  },
+  "latestChangedDtsFile": "./index.d.ts",
+  "size": 1386
+}
 
 producer/tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+*refresh*    /home/src/workspaces/project/producer/index.ts
 Signatures::
-
-
-Diff:: Changing isolatedModules without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.js
-+++ incremental /home/src/workspaces/project/producer/dist/index.js
-@@ -1,5 +1,1 @@
--var Value;
--(function (Value) {
--    Value[Value["Result"] = 1] = "Result";
--})(Value || (Value = {}));
--export const result = Value.Result;
-+export const result = 1 /* Value.Result */;
 
 
 Edit [2]:: no change
@@ -214,18 +267,6 @@ Output::
 
 
 
-Diff:: Changing isolatedModules without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.js
-+++ incremental /home/src/workspaces/project/producer/dist/index.js
-@@ -1,5 +1,1 @@
--var Value;
--(function (Value) {
--    Value[Value["Result"] = 1] = "Result";
--})(Value || (Value = {}));
--export const result = Value.Result;
-+export const result = 1 /* Value.Result */;
-
-
 Edit [3]:: force rebuild with the same compiler options
 
 tsgo --build producer --verbose --force
@@ -239,13 +280,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
 
 //// [/home/src/workspaces/project/producer/dist/index.d.ts] *rewrite with same content*
-//// [/home/src/workspaces/project/producer/dist/index.js] *modified* 
-var Value;
-(function (Value) {
-    Value[Value["Result"] = 1] = "Result";
-})(Value || (Value = {}));
-export const result = Value.Result;
-
+//// [/home/src/workspaces/project/producer/dist/index.js] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
