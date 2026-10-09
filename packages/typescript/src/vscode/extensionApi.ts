@@ -83,8 +83,9 @@ export interface TypeScriptSDK extends TypeScriptModuleLoader {
      * Opens an API pipe, waiting for scheduled server restarts to complete.
      * Handles remain usable after restarts of the same installation. If a different
      * installation is selected, use the SDK from the latest initialization event.
+     * Set synchronous to connect using the synchronous API's transport.
      */
-    initializeAPIConnection(pipe?: string): Promise<string>;
+    initializeAPIConnection(pipe?: string, synchronous?: boolean): Promise<string>;
 }
 
 export interface ExtensionAPI {
