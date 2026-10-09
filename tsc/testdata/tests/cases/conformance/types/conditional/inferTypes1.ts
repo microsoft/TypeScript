@@ -188,3 +188,20 @@ function invoker <K extends string | number | symbol, A extends any[]> (key: K, 
 const result = invoker('test', true)({ test: (a: boolean) => 123 })
 
 type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
+
+// Inference between distributive conditional types should infer the original
+// type parameter, not its distributed representation.
+declare function inferFromConditional<T>(value: T extends unknown ? T : never): T;
+
+function f100<U>(value: U extends unknown ? U : never, ordinary: U) {
+    const inferred = inferFromConditional(value);
+    const accept: typeof inferred = ordinary;
+}
+
+type Boxed<T> = { value: T };
+declare function inferFromNestedConditional<X, T>(value: X extends unknown ? Boxed<T> : never): T;
+
+function f101<U>(value: U extends unknown ? Boxed<U> : never, ordinary: U) {
+    const inferred = inferFromNestedConditional(value);
+    const accept: typeof inferred = ordinary;
+}
