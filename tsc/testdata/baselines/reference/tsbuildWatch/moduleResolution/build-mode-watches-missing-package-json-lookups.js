@@ -103,6 +103,7 @@ export const theNum = 42;
 
 Watch Registrations::
 Directory watches::
+  /home/src/tslibs/TS/Lib
   /user/username/projects/myproject
   /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
@@ -183,6 +184,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/ind
 
 Watch Registrations::
 Directory watches::
+  /home/src/tslibs/TS/Lib
   /user/username/projects/myproject
   /user/username/projects/myproject/node_modules
   /user/username/projects/myproject/node_modules/pkg2
@@ -280,6 +282,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 Watch Registrations::
 Directory watches::
+  /home/src/tslibs/TS/Lib
   /user/username/projects/myproject
   /user/username/projects/myproject/node_modules
   /user/username/projects/myproject/node_modules/pkg2
