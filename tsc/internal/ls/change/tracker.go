@@ -27,7 +27,7 @@ type NodeOptions struct {
 	Suffix string
 
 	// Text of inserted node will be formatted with this indentation, otherwise indentation will be inferred from the old node
-	indentation *int
+	Indentation *int
 
 	// Text of inserted node will be formatted with this delta, otherwise delta will be inferred from the new node kind
 	delta *int
@@ -419,6 +419,13 @@ func (t *Tracker) endPosForInsertNodeAfter(sourceFile *ast.SourceFile, after *as
 * Note that separators are part of the node in statements and class elements.
  */
 func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.Node, newNode *ast.Node, containingList *ast.NodeList) {
+	t.InsertNodesInListAfter(sourceFile, after, []*ast.Node{newNode}, containingList)
+}
+
+func (t *Tracker) InsertNodesInListAfter(sourceFile *ast.SourceFile, after *ast.Node, newNodes []*ast.Node, containingList *ast.NodeList) {
+	if len(newNodes) == 0 {
+		return
+	}
 	if containingList == nil {
 		containingList = format.GetContainingList(after, sourceFile)
 	}
@@ -456,7 +463,7 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 
 			// write separator and leading trivia of the next element as suffix
 			suffix := scanner.TokenToString(nextToken.Kind) + sourceFile.Text()[nextToken.End():startPos]
-			t.InsertNodesAt(sourceFile, core.TextPos(startPos), []*ast.Node{newNode}, NodeOptions{Suffix: suffix})
+			t.InsertNodesAt(sourceFile, core.TextPos(startPos), newNodes, NodeOptions{Suffix: suffix, joiner: scanner.TokenToString(nextToken.Kind) + t.newLine})
 		}
 		return
 	}
@@ -486,14 +493,14 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 		// in this case we'll always treat containing list as multiline
 		multilineList = true
 	}
+	separatorString := scanner.TokenToString(separator)
+	suffix := ""
+	nextToken := astnav.GetTokenAtPosition(sourceFile, end)
+	if isSeparator(after, nextToken) {
+		end = nextToken.End()
+		suffix = separatorString
+	}
 	if multilineList {
-		// insert separator immediately following the 'after' node to preserve comments in trailing trivia
-		separatorToken := t.NewToken(separator)
-		separatorString := scanner.TokenToString(separator)
-		separatorToken.Loc = core.NewTextRange(end, end+len(separatorString))
-		separatorToken.Parent = after.Parent
-		endPos := core.TextPos(end)
-		t.ReplaceRange(sourceFile, core.NewTextRange(int(endPos), int(endPos)), separatorToken, NodeOptions{})
 		// use the same indentation as 'after' item
 		indentation := format.FindFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, t.formatSettings)
 		// insert element before the line break on the line that contains 'after' element
@@ -502,20 +509,32 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 		for insertPos != end && stringutil.IsLineBreak(rune(sourceFile.Text()[insertPos-1])) {
 			insertPos--
 		}
+		prefix := t.newLine
+		if suffix == "" {
+			if insertPos == end {
+				prefix = separatorString + prefix
+			} else {
+				t.insertTextAt(sourceFile, core.TextPos(end), separatorString)
+			}
+		}
 		insertLSPos := core.TextPos(insertPos)
-		t.ReplaceRange(
+		t.ReplaceRangeWithNodes(
 			sourceFile,
 			core.NewTextRange(int(insertLSPos), int(insertLSPos)),
-			newNode,
+			newNodes,
 			NodeOptions{
-				indentation: &indentation,
-				Prefix:      t.newLine,
+				Indentation: &indentation,
+				Prefix:      prefix,
+				Suffix:      suffix,
+				joiner:      separatorString + t.newLine,
 			},
 		)
 	} else {
-		separatorString := scanner.TokenToString(separator)
-		endPos := core.TextPos(end)
-		t.ReplaceRange(sourceFile, core.NewTextRange(int(endPos), int(endPos)), newNode, NodeOptions{Prefix: separatorString + " "})
+		prefix := separatorString + " "
+		if suffix != "" {
+			prefix = " "
+		}
+		t.InsertNodesAt(sourceFile, core.TextPos(end), newNodes, NodeOptions{Prefix: prefix, Suffix: suffix, joiner: separatorString + " "})
 	}
 }
 
@@ -753,7 +772,7 @@ func (t *Tracker) getInsertNodeAtStartInsertOptions(sourceFile *ast.SourceFile, 
 		prefix = "," + prefix
 	}
 
-	return NodeOptions{indentation: &indentation, Prefix: prefix, Suffix: suffix}
+	return NodeOptions{Indentation: &indentation, Prefix: prefix, Suffix: suffix}
 }
 
 func (t *Tracker) finishNodesWithInsertionsAtStart() {

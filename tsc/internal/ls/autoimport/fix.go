@@ -73,7 +73,7 @@ func (f *Fix) Edits(
 			panic("import index out of range")
 		}
 		existingFix := getAddToExistingImportFix(file, f)
-		addToExistingImport(tracker, file, existingFix.importClauseOrBindingPattern, existingFix.defaultImport, core.SingleElementSlice(existingFix.namedImport), preferences)
+		addToExistingImport(tracker, file, existingFix.importClauseOrBindingPattern, existingFix.defaultImport, core.SingleElementSlice(existingFix.namedImport), collections.Set[*ast.Node]{}, compilerOptions, preferences)
 		edits, safe := fileEdits(tracker, file)
 		return edits, diagnostics.Update_import_from_0.Localize(locale, f.ModuleSpecifier), safe
 	case lsproto.AutoImportFixKindAddNew:
@@ -201,6 +201,8 @@ func addToExistingImport(
 	importClauseOrBindingPattern *ast.Node,
 	defaultImport *newImportBinding,
 	namedImports []*newImportBinding,
+	importsToPromote collections.Set[*ast.Node],
+	compilerOptions *core.CompilerOptions,
 	preferences lsutil.UserPreferences,
 ) {
 	switch importClauseOrBindingPattern.Kind {
@@ -217,12 +219,13 @@ func addToExistingImport(
 		importClause := importClauseOrBindingPattern.AsImportClause()
 
 		// promoteFromTypeOnly = true if we need to promote the entire original clause from type only
-		promoteFromTypeOnly := importClause.IsTypeOnly() && core.Some(append(namedImports, defaultImport), func(i *newImportBinding) bool {
+		promoteFromTypeOnly := importClause.IsTypeOnly() && (importsToPromote.Len() > 0 || core.Some(append(namedImports, defaultImport), func(i *newImportBinding) bool {
 			if i == nil {
 				return false
 			}
 			return i.addAsTypeOnly == lsproto.AddAsTypeOnlyNotAllowed
-		})
+		}))
+		preserveExistingTypeOnly := promoteFromTypeOnly && (importsToPromote.Len() == 0 || len(namedImports) > 0 || compilerOptions.VerbatimModuleSyntax.IsTrue())
 
 		var existingSpecifiers []*ast.Node
 		if importClause.NamedBindings != nil && importClause.NamedBindings.Kind == ast.KindNamedImports {
@@ -241,14 +244,10 @@ func addToExistingImport(
 				if namedImport.propertyName != "" {
 					identifier = ct.NodeFactory.NewIdentifier(namedImport.propertyName).AsIdentifier().AsNode()
 				}
-				return ct.NodeFactory.NewImportSpecifier(
-					(!importClause.IsTypeOnly() || promoteFromTypeOnly) && shouldUseTypeOnly(namedImport.addAsTypeOnly, preferences),
-					identifier,
-					ct.NodeFactory.NewIdentifier(namedImport.name),
-				)
+				return ct.NodeFactory.NewImportSpecifier((!importClause.IsTypeOnly() || promoteFromTypeOnly) && shouldUseTypeOnly(namedImport.addAsTypeOnly, preferences), identifier, ct.NodeFactory.NewIdentifier(namedImport.name))
 			})
 			slices.SortFunc(newSpecifiers, specifierComparer)
-			if len(existingSpecifiers) > 0 && isSorted != core.TSFalse {
+			if len(existingSpecifiers) > 0 {
 				// The sorting preference computed earlier may or may not have validated that these particular
 				// import specifiers are sorted. If they aren't, `getImportSpecifierInsertionIndex` will return
 				// nonsense. So if there are existing specifiers, even if we know the sorting preference, we
@@ -258,35 +257,27 @@ func addToExistingImport(
 				// If we're promoting the clause from type-only, we need to transform the existing imports
 				// before attempting to insert the new named imports (for comparison purposes only)
 				specsToCompareAgainst := existingSpecifiers
-				if promoteFromTypeOnly && len(existingSpecifiers) > 0 {
+				if promoteFromTypeOnly || importsToPromote.Len() > 0 {
 					specsToCompareAgainst = core.Map(existingSpecifiers, func(e *ast.Node) *ast.Node {
 						spec := e.AsImportSpecifier()
-						var propertyName *ast.Node
-						if spec.PropertyName != nil {
-							propertyName = spec.PropertyName
-						}
-						syntheticSpec := ct.NodeFactory.NewImportSpecifier(
-							true, // isTypeOnly
-							propertyName,
-							spec.Name(),
-						)
-						return syntheticSpec
+						return ct.NodeFactory.NewImportSpecifier(!importsToPromote.Has(e) && (spec.IsTypeOnly || preserveExistingTypeOnly), spec.PropertyName, spec.Name())
 					})
 				}
 
+				canInsertSorted := isSorted != core.TSFalse && slices.IsSortedFunc(specsToCompareAgainst, specifierComparer)
 				for _, spec := range newSpecifiers {
-					insertionIndex := lsutil.GetImportSpecifierInsertionIndex(specsToCompareAgainst, spec, specifierComparer)
-					ct.InsertImportSpecifierAtIndex(file, spec, importClause.NamedBindings, insertionIndex)
-				}
-			} else if len(existingSpecifiers) > 0 {
-				for _, spec := range newSpecifiers {
-					ct.InsertNodeInListAfter(file, existingSpecifiers[len(existingSpecifiers)-1], spec.AsNode(), nil)
+					if canInsertSorted {
+						insertionIndex := lsutil.GetImportSpecifierInsertionIndex(specsToCompareAgainst, spec, specifierComparer)
+						ct.InsertImportSpecifierAtIndex(file, spec, importClause.NamedBindings, insertionIndex)
+					} else {
+						ct.InsertNodeInListAfter(file, existingSpecifiers[len(existingSpecifiers)-1], spec.AsNode(), nil /*containingList*/)
+					}
 				}
 			} else {
 				if len(newSpecifiers) > 0 {
 					namedImports := ct.NodeFactory.NewNamedImports(ct.NodeFactory.NewNodeList(newSpecifiers))
 					if importClause.NamedBindings != nil {
-						ct.ReplaceNode(file, importClause.NamedBindings, namedImports, nil)
+						ct.ReplaceNode(file, importClause.NamedBindings, namedImports, nil /*options*/)
 					} else {
 						if importClause.Name() == nil {
 							panic("Import clause must have either named imports or a default import")
@@ -301,18 +292,18 @@ func addToExistingImport(
 			// Delete the 'type' keyword from the import clause
 			typeKeyword := getTypeKeywordOfTypeOnlyImport(importClause, file)
 			ct.Delete(file, typeKeyword)
-
-			// Add 'type' modifier to existing specifiers (not newly added ones)
-			// We preserve the type-onlyness of existing specifiers regardless of whether
-			// it would make a difference in emit (user preference).
-			if len(existingSpecifiers) > 0 {
-				for _, specifier := range existingSpecifiers {
-					if !specifier.AsImportSpecifier().IsTypeOnly {
-						ct.InsertModifierBefore(file, ast.KindTypeKeyword, specifier)
-					}
+		}
+		for _, specifier := range existingSpecifiers {
+			if importsToPromote.Has(specifier) {
+				if specifier.AsImportSpecifier().IsTypeOnly {
+					deleteTypeKeyword(ct, file, specifier.Pos())
 				}
+			} else if preserveExistingTypeOnly && !specifier.AsImportSpecifier().IsTypeOnly {
+				ct.InsertModifierBefore(file, ast.KindTypeKeyword, specifier)
 			}
 		}
+	case ast.KindImportEqualsDeclaration:
+		promoteFromTypeOnly(ct, importClauseOrBindingPattern, compilerOptions, file, preferences)
 	default:
 		panic("Unsupported clause kind: " + importClauseOrBindingPattern.KindString() + " for addToExistingImport")
 	}

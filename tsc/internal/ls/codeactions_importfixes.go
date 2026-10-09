@@ -94,16 +94,14 @@ func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]*C
 	return actions, nil
 }
 
-func getAllImportCodeActions(ctx context.Context, fixContext *CodeFixContext) (*CombinedCodeActions, error) {
+func getAllImportCodeActions(ctx context.Context, fixContext *CodeFixContext, fixAll *CodeFixAll) (*CombinedCodeActions, error) {
 	if fixContext.SourceFile.FileName().IsDynamic() {
 		return nil, nil
 	}
 
-	allDiagnostics := fixContext.Program.GetSemanticDiagnostics(ctx, fixContext.SourceFile)
-
 	var importDiags []*ast.Diagnostic
-	for _, diag := range allDiagnostics {
-		if isFixableDiagnostic(diag, importFixErrorCodes) {
+	for _, diag := range fixAll.diagnostics {
+		if diag.File() == fixContext.SourceFile && isFixableDiagnostic(diag, importFixErrorCodes) {
 			importDiags = append(importDiags, diag)
 		}
 	}
@@ -112,41 +110,20 @@ func getAllImportCodeActions(ctx context.Context, fixContext *CodeFixContext) (*
 		return nil, nil
 	}
 
-	ch, done := fixContext.Program.GetTypeChecker(ctx)
-	defer done()
-
-	view, err := fixContext.LS.getPreparedAutoImportView(fixContext.SourceFile, ch)
+	importAdder, err := fixAll.getImportAdder(ctx, fixContext)
 	if err != nil {
 		return nil, err
 	}
-	if view == nil {
-		view = fixContext.LS.getCurrentAutoImportView(fixContext.SourceFile, ch)
-	}
-
-	importAdder := autoimport.NewImportAdder(
-		ctx,
-		fixContext.Program,
-		ch,
-		fixContext.SourceFile,
-		view,
-		fixContext.LS.FormatOptions(),
-		fixContext.LS.converters,
-		fixContext.LS.UserPreferences(),
-	)
 
 	for _, diag := range importDiags {
-		if err := addImportFromDiagnostic(ch, importAdder, diag, fixContext); err != nil {
+		err := addImportFromDiagnostic(fixAll.typeChecker, importAdder, diag, fixContext)
+		if err != nil {
 			return nil, err
 		}
 	}
 
-	if !importAdder.HasFixes() {
-		return nil, nil
-	}
-
 	return &CombinedCodeActions{
 		Description: diagnostics.Add_all_missing_imports.Localize(locale.FromContext(ctx)),
-		Changes:     importAdder.Edits(),
 	}, nil
 }
 
