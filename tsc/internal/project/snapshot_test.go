@@ -14,6 +14,73 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func TestTypingsWatchWithoutDiscoveryDirectories(t *testing.T) {
+	t.Parallel()
+
+	const file = "/workspace/typings/jquery.d.ts"
+	for _, changeType := range []lsproto.FileChangeType{
+		lsproto.FileChangeTypeCreated, lsproto.FileChangeTypeChanged, lsproto.FileChangeTypeDeleted,
+	} {
+		summary := FileChangeSummary{}
+		uri := lsproto.DocumentUri("file://" + file)
+		switch changeType {
+		case lsproto.FileChangeTypeCreated:
+			summary.Created.Add(uri)
+		case lsproto.FileChangeTypeChanged:
+			summary.Changed.Add(uri)
+		case lsproto.FileChangeTypeDeleted:
+			summary.Deleted.Add(uri)
+		}
+		assert.Assert(t, fileChangeSummaryAffectsTypingsWatch(summary, nil, []tspath.RootedFilePath{file}, tspath.CaseInsensitive))
+		assert.Assert(t, !fileChangeSummaryAffectsTypingsWatch(summary, nil, nil, tspath.CaseInsensitive))
+	}
+}
+
+func TestTypingsWatchAncestorDeletion(t *testing.T) {
+	t.Parallel()
+	for _, path := range []tspath.RootedPath{"/workspace/project/bower.json", "/workspace/project/node_modules"} {
+		for _, deleted := range []string{"/workspace", "/workspace/project", "/workspace/project-other", "/workspace/other"} {
+			summary := FileChangeSummary{}
+			summary.Deleted.Add(lsproto.DocumentUri("file://" + deleted))
+			assert.Equal(t, fileChangeSummaryAffectsTypingsWatch(summary, []tspath.RootedPath{path}, nil, tspath.CaseInsensitive),
+				deleted == "/workspace" || deleted == "/workspace/project")
+		}
+	}
+}
+
+func TestTypingsWatchBatchAllocations(t *testing.T) { //nolint:paralleltest // allocation counting requires sequential execution
+	var events collections.Set[lsproto.DocumentUri]
+	for i := range 500 {
+		events.Add(lsproto.DocumentUri(fmt.Sprintf("file:///unrelated/file%d.js", i)))
+	}
+	var filesToWatch []tspath.RootedPath
+	var typingsFiles []tspath.RootedFilePath
+	for i := range 16 {
+		filesToWatch = append(filesToWatch, tspath.RootedFilePathFromNormalized(fmt.Sprintf("/workspace/package%d/package.json", i)).AsPath())
+		typingsFiles = append(typingsFiles, tspath.RootedFilePathFromNormalized(fmt.Sprintf("/workspace/package%d/index.d.ts", i)))
+	}
+	for _, kind := range []string{"changed", "created", "deleted"} { //nolint:paralleltest // allocation counting requires sequential execution
+		t.Run(kind, func(t *testing.T) {
+			summary := FileChangeSummary{}
+			switch kind {
+			case "changed":
+				summary.Changed = events
+			case "created":
+				summary.Created = events
+			case "deleted":
+				summary.Deleted = events
+			}
+			allocations := testing.AllocsPerRun(10, func() {
+				if fileChangeSummaryAffectsTypingsWatch(summary, filesToWatch, typingsFiles, tspath.CaseSensitive) {
+					t.Fatal("unrelated events must not affect the typings watch")
+				}
+			})
+			// URI decoding allocates once per event; building the watch list should not.
+			assert.Assert(t, allocations <= float64(events.Len()+4), "watch-list allocations must not scale with the event count: %v", allocations)
+		})
+	}
+}
+
 func TestSnapshot(t *testing.T) {
 	t.Parallel()
 	if !bundled.Embedded {
@@ -36,6 +103,47 @@ func TestSnapshot(t *testing.T) {
 		})
 		return session
 	}
+
+	t.Run("discarding provisional discovery coverage invalidates older requests", func(t *testing.T) {
+		t.Parallel()
+		session := setup(map[string]any{
+			"/x/app.js":         "",
+			"/x/package.json":   `{"dependencies":{"foo":"1.0.0"}}`,
+			"/y/app.js":         "",
+			"/typings/foo.d.ts": "declare const foo: number;",
+		})
+		defer session.Close()
+		session.hasTypingsInstaller = true
+		ctx := context.Background()
+		session.DidOpenFile(ctx, "file:///x/app.js", 1, "", lsproto.LanguageKindJavaScript)
+		firstSnapshotID := session.Snapshot().ID()
+		firstProject := session.Snapshot().ProjectCollection.InferredProject()
+		firstInfo := firstProject.ComputeTypingsInfo()
+		firstFiles := firstProject.ComputeTypingsFileNames()
+		session.DidCloseFile(ctx, "file:///x/app.js")
+		session.DidOpenFile(ctx, "file:///y/app.js", 1, "", lsproto.LanguageKindJavaScript)
+		assert.Assert(t, session.Snapshot().ProjectCollection.inferredProjectATAInvalidationSnapshotID > firstSnapshotID,
+			"discarding the x discovery watches must invalidate requests dispatched under them")
+		assert.NilError(t, session.fs.WriteFile("/x/package.json", `{}`))
+		snapshot, err := session.APIUpdate(ctx, FileChangeSummary{
+			Changed: *collections.NewSetFromItems(lsproto.DocumentUri("file:///x/package.json")),
+		}, nil)
+		assert.NilError(t, err)
+		snapshot.Deref()
+		session.DidCloseFile(ctx, "file:///y/app.js")
+		session.DidOpenFile(ctx, "file:///x/app.js", 1, "", lsproto.LanguageKindJavaScript)
+		session.pendingATAChanges[firstProject.ID()] = &ATAStateChange{
+			SnapshotID:   firstSnapshotID,
+			TypingsInfo:  &firstInfo,
+			FileNames:    firstFiles,
+			TypingsFiles: []tspath.RootedFilePath{"/typings/foo.d.ts"},
+		}
+		snapshot, err = session.APIUpdate(ctx, FileChangeSummary{}, nil)
+		assert.NilError(t, err)
+		defer snapshot.Deref()
+		assert.Assert(t, snapshot.ProjectCollection.InferredProject().installedTypingsInfo == nil,
+			"returning to x must not make its obsolete result valid again")
+	})
 
 	t.Run("creates and removes synthetic programs", func(t *testing.T) {
 		t.Parallel()
