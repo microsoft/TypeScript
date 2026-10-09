@@ -596,6 +596,7 @@ type Checker struct {
 	TotalInstantiationCount                     uint32
 	instantiationCount                          uint32
 	instantiationStack                          []*Type
+	resolvingMembersStack                       []resolvingMembers
 	conditionalConstraintDepth                  uint32
 	inlineLevel                                 int
 	serializationLevel                          int
@@ -19316,6 +19317,11 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 	t = c.getReducedApparentType(t)
 	switch {
 	case t.flags&TypeFlagsObject != 0:
+		if t.objectFlags&ObjectFlagsMembersResolved == 0 {
+			if symbol := c.getDeclaredPropertyOfResolvingType(t, name); symbol != nil {
+				return symbol
+			}
+		}
 		resolved := c.resolveStructuredTypeMembers(t)
 		symbol := resolved.members[name]
 		if symbol != nil {
@@ -19546,6 +19552,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 			members = maps.Clone(members)
 		}
 		thisArgument := core.LastOrNil(typeArguments)
+		c.resolvingMembersStack = append(c.resolvingMembersStack, resolvingMembers{t: t, declaredMembers: resolved.declaredMembers, members: members})
 		for _, baseType := range baseTypes {
 			instantiatedBaseType := baseType
 			if thisArgument != nil {
@@ -19564,8 +19571,49 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 				return findIndexInfo(indexInfos, info.keyType) == nil
 			}))
 		}
+		c.resolvingMembersStack = c.resolvingMembersStack[:len(c.resolvingMembersStack)-1]
 	}
 	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
+}
+
+// Base type arguments may refer back to a type whose members are being resolved. Inherited members never
+// replace a declared value member, so such a reference can read the declared properties without resolving
+// the members again, which would repeat the same instantiations until the depth limit.
+type resolvingMembers struct {
+	t               *Type
+	declaredMembers ast.SymbolTable
+	members         ast.SymbolTable
+}
+
+func (c *Checker) getResolvingMembers(t *Type) *resolvingMembers {
+	for i := len(c.resolvingMembersStack) - 1; i >= 0; i-- {
+		if c.resolvingMembersStack[i].t == t {
+			return &c.resolvingMembersStack[i]
+		}
+	}
+	return nil
+}
+
+// Return the property with the given name that t declares itself, if t is a type whose members are being resolved.
+func (c *Checker) getDeclaredPropertyOfResolvingType(t *Type, name string) *ast.Symbol {
+	if r := c.getResolvingMembers(t); r != nil {
+		if symbol := r.declaredMembers[name]; symbol != nil && symbol.Flags&ast.SymbolFlagsValue != 0 {
+			return r.members[name]
+		}
+	}
+	return nil
+}
+
+// Return true if t is a type whose members are being resolved and t declares a property itself.
+func (c *Checker) resolvingTypeDeclaresProperties(t *Type) bool {
+	if r := c.getResolvingMembers(t); r != nil {
+		for name, symbol := range r.declaredMembers {
+			if symbol.Flags&ast.SymbolFlagsValue != 0 && !isReservedMemberName(name) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func findIndexInfo(indexInfos []*IndexInfo, keyType *Type) *IndexInfo {
@@ -27902,6 +27950,9 @@ func (c *Checker) getPropertyNameFromIndex(indexType *Type, accessNode *ast.Node
 }
 
 func (c *Checker) isStringIndexSignatureOnlyTypeWorker(t *Type) bool {
+	if t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsMembersResolved == 0 && c.resolvingTypeDeclaresProperties(t) {
+		return false
+	}
 	return t.flags&TypeFlagsObject != 0 && !c.isGenericMappedType(t) && len(c.getPropertiesOfType(t)) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
 		t.flags&TypeFlagsUnionOrIntersection != 0 && core.Every(t.Types(), c.isStringIndexSignatureOnlyType)
 }
