@@ -574,13 +574,12 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 		}
 		if ast.HasDynamicName(input) {
 			if tx.state.isolatedDeclarations {
-				// Classes and object literals usually elide properties with computed names that are not of a literal type
-				// In isolated declarations TSC needs to error on these as we don't know the type in a DTE.
-				if !tx.resolver.IsDefinitelyReferenceToGlobalSymbolObject(input.Name().Expression()) {
+				// Entity name expressions can be preserved without knowing the type of the computed name.
+				if !ast.IsEntityNameExpression(input.Name().Expression()) && !tx.resolver.IsDefinitelyReferenceToGlobalSymbolObject(input.Name().Expression()) {
 					if ast.IsClassDeclaration(input.Parent) || ast.IsObjectLiteralExpression(input.Parent) {
 						tx.state.addDiagnostic(createDiagnosticForNode(input, diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations))
 						return nil
-					} else if (ast.IsInterfaceDeclaration(input.Parent) || ast.IsTypeLiteralNode(input.Parent)) && !ast.IsEntityNameExpression(input.Name().Expression()) {
+					} else if ast.IsInterfaceDeclaration(input.Parent) || ast.IsTypeLiteralNode(input.Parent) {
 						// Type declarations just need to double-check that the input computed name is an entity name expression
 						tx.state.addDiagnostic(createDiagnosticForNode(input, diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations))
 						return nil
@@ -1965,13 +1964,18 @@ func (tx *DeclarationTransformer) buildClassMembers(classNode *ast.Node, extraMe
 		privateIdentifier = tx.Factory().NewPropertyDeclaration(nil, tx.Factory().NewPrivateIdentifier("#private"), nil, nil, nil)
 	}
 
-	lateIndexes := tx.resolver.CreateLateBoundIndexSignatures(
-		classNode,
-		tx.enclosingDeclaration,
-		declarationEmitNodeBuilderFlags,
-		declarationEmitInternalNodeBuilderFlags,
-		tx.tracker,
-	)
+	var lateIndexes []*ast.Node
+	if !tx.state.isolatedDeclarations {
+		// Isolated declaration emit preserves the computed members themselves, so their
+		// inferred index signatures must not add another copy of those members.
+		lateIndexes = tx.resolver.CreateLateBoundIndexSignatures(
+			classNode,
+			tx.enclosingDeclaration,
+			declarationEmitNodeBuilderFlags,
+			declarationEmitInternalNodeBuilderFlags,
+			tx.tracker,
+		)
+	}
 
 	memberNodes := make([]*ast.Node, 0, len(classNode.ClassLikeData().Members.Nodes))
 	if privateIdentifier != nil {

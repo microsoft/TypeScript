@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
@@ -419,6 +420,13 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 		pt := t.AsPseudoTypeObjectLiteral()
 		if type_ == nil {
 			return false
+		}
+		if b.ch.compilerOptions.IsolatedDeclarations.IsTrue() && core.Some(pt.Elements, func(e *pseudochecker.PseudoObjectElement) bool {
+			return ast.IsComputedPropertyName(e.Name) && ast.IsEntityNameExpression(e.Name.Expression())
+		}) {
+			// Computed names can resolve to overlapping properties or index signatures. Preserve the
+			// syntactic members rather than comparing them with the checker's merged object shape.
+			return true
 		}
 		targetProps := b.ch.getPropertiesOfType(undefinedStripped)
 		// Count total declarations across all target prop symbols to handle getter/setter pairs,

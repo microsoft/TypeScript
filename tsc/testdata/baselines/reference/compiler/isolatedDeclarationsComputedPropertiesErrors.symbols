@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/isolatedDeclarationsComputedPropertiesErrors.ts] ////
+
+=== isolatedDeclarationsComputedPropertiesErrors.ts ===
+export const prop: unique symbol = Symbol();
+>prop : Symbol(prop, Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 0, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export class MyClass {
+>MyClass : Symbol(MyClass, Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 0, 44))
+
+    [prop] = () => Math.random();
+>[prop] : Symbol(MyClass[prop], Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 2, 22))
+>prop : Symbol(prop, Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 0, 12))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    ["a" + "b"]: number = 1;
+>["a" + "b"] : Symbol(MyClass["a\" + \"b"], Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 3, 33))
+}
+
+export const object = {
+>object : Symbol(object, Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 7, 12))
+
+    [prop]: Math.random(),
+>[prop] : Symbol([prop], Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 7, 23))
+>prop : Symbol(prop, Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 0, 12))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+};
+
+export const invalidName = {
+>invalidName : Symbol(invalidName, Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 11, 12))
+
+    [Math.random()]: 1,
+>[Math.random()] : Symbol([Math.random()], Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 11, 28))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+};
+
