@@ -38,8 +38,8 @@ func TestGlobalFileDeletionAfterNonGlobalFile(t *testing.T) {
 					break
 				}
 			}
-			assert.Equal(t, to.globalFileRemoved, globalFirst)
-			assert.Equal(t, current.changedFilesSet.Has(file.PathKey()), globalFirst)
+			assert.Assert(t, to.globalFileRemoved)
+			assert.Assert(t, current.changedFilesSet.Has(file.PathKey()))
 			assert.Assert(t, current.buildInfoEmitPending.Load())
 		})
 	}
