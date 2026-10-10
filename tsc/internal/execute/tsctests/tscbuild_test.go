@@ -1335,6 +1335,26 @@ func TestBuildReactNamespaceOptionDiagnostics(t *testing.T) {
 	})
 }
 
+func TestBuildPreserveConstEnumsOptionDiagnostics(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "preserveConstEnums", name: "preserveConstEnums namespace order", values: [2]any{false, true},
+			files:        FileMap{"index.ts": "export namespace Value { export const enum Field { One } }\nexport class Value {}\n"},
+			expectedDiff: "Changing preserveConstEnums retains the previous namespace/class declaration-order diagnostics.",
+		},
+		{
+			option: "preserveConstEnums", name: "preserveConstEnums namespace merge", values: [2]any{false, true},
+			options: map[string]any{"moduleDetection": "legacy"},
+			files: FileMap{
+				"index.ts": "namespace Value { export const enum Field { One } }\n",
+				"other.ts": "class Value {}\n",
+			},
+			expectedDiff: "Changing preserveConstEnums retains the previous cross-file namespace/class merge diagnostics.",
+		},
+	})
+}
+
 func TestBuildEmitOptionChanges(t *testing.T) {
 	t.Parallel()
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
