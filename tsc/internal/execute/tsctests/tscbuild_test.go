@@ -1305,6 +1305,21 @@ func TestBuildModuleOptionDiagnostics(t *testing.T) {
 	})
 }
 
+func TestBuildImportHelpersOptionDiagnostics(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "importHelpers", values: [2]any{false, true},
+			options: map[string]any{"target": "es2015", "emitDeclarationOnly": false},
+			files: FileMap{
+				"index.ts":                  "export async function result() { return 1; }\n",
+				getTestLibPathFor("es2020"): tscDefaultLibContent + "\ninterface Promise<T> { then<U>(callback: (value: T) => U): Promise<U>; }\n",
+			},
+			expectedDiff: "Changing importHelpers retains the previous missing-tslib diagnostics.",
+		},
+	})
+}
+
 func TestBuildEmitOptionChanges(t *testing.T) {
 	t.Parallel()
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
