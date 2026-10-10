@@ -46,21 +46,10 @@ const j4 = <div x={n<<n} />;
 "use strict";
 class C1 {
 }
- << T > (x);
-T;
-T > {};
 class C2 extends B {
 }
- << T > (x);
-T;
-T > {};
 const C3 = class extends g() {
-} << T > (x), T;
-T > {};
- << T > (x);
-T;
-T > {};
-;
+};
 const e1 = f;
 const e2 = f(f);
 const s1 = n << 2;
@@ -70,18 +59,7 @@ const s4 = a << 1;
 const s5 = a << 1;
 //// [jsx.jsx]
 "use strict";
-const j1 = <Comp /> << T > (x), T;
-T > value;
-{
-    f;
-}
-/>;
-const j2 = <Comp /> << T > (x), T;
-T > value;
-{
-    f;
-}
- > ;
-Comp > ;
+const j1 = <Comp value={f}/>;
+const j2 = <Comp value={f}></Comp>;
 const j3 = <div x={n << 1}/>;
 const j4 = <div x={n << n}/>;

@@ -3086,7 +3086,7 @@ func (p *Parser) parseTypeArgumentsOfTypeReference() *ast.NodeList {
 }
 
 func (p *Parser) parseTypeArguments() *ast.NodeList {
-	if p.token == ast.KindLessThanToken {
+	if p.reScanLessThanToken() == ast.KindLessThanToken {
 		return p.parseBracketedList(PCTypeArguments, (*Parser).parseType, ast.KindLessThanToken, ast.KindGreaterThanToken)
 	}
 	return nil
@@ -3189,7 +3189,19 @@ func (p *Parser) parseTypeQuery() *ast.Node {
 	// Make sure we perform ASI to prevent parsing the next line's type arguments as part of an instantiation expression
 	var typeArguments *ast.NodeList
 	if !p.hasPrecedingLineBreak() {
-		typeArguments = p.parseTypeArguments()
+		if p.token == ast.KindLessThanLessThanToken {
+			// `<<` may start type arguments whose first type is generic (`typeof f<<T>(x: T) => T>`), but it
+			// may also be a left shift following a type in an expression (`x as typeof y << 1`). Only treat it
+			// as type arguments if they parse without errors.
+			state := p.mark()
+			typeArguments = p.parseTypeArguments()
+			if len(p.diagnostics) != state.diagnosticsLen {
+				p.rewind(state)
+				typeArguments = nil
+			}
+		} else {
+			typeArguments = p.parseTypeArguments()
+		}
 	}
 	return p.finishNode(p.factory.NewTypeQueryNode(entityName, typeArguments), pos)
 }

@@ -27,30 +27,34 @@ interface J<F> {}
 class C1 implements I<<T>(x: T) => T> {}
 >C1 : Symbol(C1, Decl(heritage.ts, 4, 17))
 >I : Symbol(I, Decl(heritage.ts, 2, 21))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
+>T : Symbol(T, Decl(heritage.ts, 6, 23))
+>x : Symbol(x, Decl(heritage.ts, 6, 26))
+>T : Symbol(T, Decl(heritage.ts, 6, 23))
+>T : Symbol(T, Decl(heritage.ts, 6, 23))
 
 class C2 extends B<<T>(x: T) => T> {}
 >C2 : Symbol(C2, Decl(heritage.ts, 6, 40))
 >B : Symbol(B, Decl(heritage.ts, 1, 31))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
+>T : Symbol(T, Decl(heritage.ts, 7, 20))
+>x : Symbol(x, Decl(heritage.ts, 7, 23))
+>T : Symbol(T, Decl(heritage.ts, 7, 20))
+>T : Symbol(T, Decl(heritage.ts, 7, 20))
 
 const C3 = class extends g()<<T>(x: T) => T> {};
 >C3 : Symbol(C3, Decl(heritage.ts, 8, 5))
 >g : Symbol(g, Decl(heritage.ts, 0, 32))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
+>T : Symbol(T, Decl(heritage.ts, 8, 30))
+>x : Symbol(x, Decl(heritage.ts, 8, 33))
+>T : Symbol(T, Decl(heritage.ts, 8, 30))
+>T : Symbol(T, Decl(heritage.ts, 8, 30))
 
 interface I2 extends J<<T>(x: T) => T> {}
 >I2 : Symbol(I2, Decl(heritage.ts, 8, 48))
 >J : Symbol(J, Decl(heritage.ts, 3, 17))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
+>T : Symbol(T, Decl(heritage.ts, 9, 24))
+>x : Symbol(x, Decl(heritage.ts, 9, 27))
+>T : Symbol(T, Decl(heritage.ts, 9, 24))
+>T : Symbol(T, Decl(heritage.ts, 9, 24))
 
 type A1 = typeof f<<T>(x: T) => T>;
 >A1 : Symbol(A1, Decl(heritage.ts, 9, 41))
@@ -137,17 +141,21 @@ declare function Comp<P>(props: { value: P }): JSX.Element;
 const j1 = <Comp<<T>(x: T) => T> value={f} />;
 >j1 : Symbol(j1, Decl(jsx.tsx, 8, 5))
 >Comp : Symbol(Comp, Decl(jsx.tsx, 5, 1))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
->T : Symbol(T, Decl(jsx.tsx, 8, 23))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
+>T : Symbol(T, Decl(jsx.tsx, 8, 18))
+>x : Symbol(x, Decl(jsx.tsx, 8, 21))
+>T : Symbol(T, Decl(jsx.tsx, 8, 18))
+>T : Symbol(T, Decl(jsx.tsx, 8, 18))
+>value : Symbol(value, Decl(jsx.tsx, 8, 32))
 >f : Symbol(f, Decl(heritage.ts, 0, 13))
 
 const j2 = <Comp<<T>(x: T) => T> value={f}></Comp>;
 >j2 : Symbol(j2, Decl(jsx.tsx, 9, 5))
 >Comp : Symbol(Comp, Decl(jsx.tsx, 5, 1))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
->T : Symbol(T, Decl(jsx.tsx, 9, 23))
->T : Symbol(T, Decl(heritage.ts, 8, 35))
+>T : Symbol(T, Decl(jsx.tsx, 9, 18))
+>x : Symbol(x, Decl(jsx.tsx, 9, 21))
+>T : Symbol(T, Decl(jsx.tsx, 9, 18))
+>T : Symbol(T, Decl(jsx.tsx, 9, 18))
+>value : Symbol(value, Decl(jsx.tsx, 9, 32))
 >f : Symbol(f, Decl(heritage.ts, 0, 13))
 >Comp : Symbol(Comp, Decl(jsx.tsx, 5, 1))
 

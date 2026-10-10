@@ -17,63 +17,26 @@ interface J<F> {}
 
 class C1 implements I<<T>(x: T) => T> {}
 >C1 : C1
-><<T>(x : boolean
-><<T : number
-> : any
->T : any
->(x : any
->x : any
->T : any
->T> {} : boolean
->T : any
->{} : {}
+>x : T
 
 class C2 extends B<<T>(x: T) => T> {}
 >C2 : C2
->B : typeof B
-><<T>(x : boolean
-><<T : number
-> : any
->T : any
->(x : any
->x : any
->T : any
->T> {} : boolean
->T : any
->{} : {}
+>B : B<<T>(x: T) => T>
+>x : T
 
 const C3 = class extends g()<<T>(x: T) => T> {};
->C3 : boolean
->class extends g()<<T>(x : boolean
->class extends g()<<T : number
->class extends g() : typeof (Anonymous class)
->g() : typeof B
+>C3 : typeof C3
+>class extends g()<<T>(x: T) => T> {} : typeof C3
+>g() : B<<T>(x: T) => T>
 >g : () => typeof B
->T : any
->(x : any
->x : any
->T : any
->T> {} : boolean
->T : any
->{} : {}
+>x : T
 
 interface I2 extends J<<T>(x: T) => T> {}
-><<T>(x : boolean
-><<T : number
-> : any
->T : any
->(x : any
->x : any
->T : any
->T> {} : boolean
->T : any
->{} : {}
+>x : T
 
 type A1 = typeof f<<T>(x: T) => T>;
->A1 : <T>(x: T) => T
+>A1 : typeof f<<T>(x: T) => T>
 >f : <T>(x: T) => T
-><<T>(x: T) => T> : any
-> : any
 >x : T
 
 const e1 = f<<T>(x: T) => T>;
@@ -150,41 +113,21 @@ declare function Comp<P>(props: { value: P }): JSX.Element;
 >JSX : any
 
 const j1 = <Comp<<T>(x: T) => T> value={f} />;
->j1 : boolean
-><Comp<<T>(x : boolean
-><Comp<<T : number
-><Comp : JSX.Element
+>j1 : JSX.Element
+><Comp<<T>(x: T) => T> value={f} /> : JSX.Element
 >Comp : <P>(props: { value: P; }) => JSX.Element
->T : any
->(x : any
->x : any
->T : any
->T> value : boolean
->T : any
->value : any
+>x : T
+>value : <T>(x: T) => T
 >f : <T>(x: T) => T
->/> : RegExp
 
 const j2 = <Comp<<T>(x: T) => T> value={f}></Comp>;
->j2 : boolean
-><Comp<<T>(x : boolean
-><Comp<<T : number
-><Comp : JSX.Element
+>j2 : JSX.Element
+><Comp<<T>(x: T) => T> value={f}></Comp> : JSX.Element
 >Comp : <P>(props: { value: P; }) => JSX.Element
->T : any
->(x : any
->x : any
->T : any
->T> value : boolean
->T : any
->value : any
+>x : T
+>value : <T>(x: T) => T
 >f : <T>(x: T) => T
->> : boolean
-> : any
-> : any
->Comp> : boolean
 >Comp : <P>(props: { value: P; }) => JSX.Element
-> : any
 
 const j3 = <div x={n << 1} />;
 >j3 : JSX.Element
