@@ -1353,6 +1353,33 @@ func TestBuildPreserveConstEnumsOptionDiagnostics(t *testing.T) {
 	})
 }
 
+func TestBuildLibOrderOptionChanges(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "lib", values: [2]any{[]string{"es5", "es2015.symbol"}, []string{"es2015.symbol", "es5"}},
+			options: map[string]any{"libReplacement": true},
+			roots:   []string{"index.ts"},
+			files: FileMap{
+				"index.ts": "export const result = input();\n",
+				"node_modules/@typescript/lib-es5/package.json":    `{"name":"@typescript/lib-es5","types":"index.d.ts"}`,
+				"node_modules/@typescript/lib-es5/index.d.ts":      tscDefaultLibContent + "\ndeclare function input(): 'first';\n",
+				"node_modules/@typescript/lib-es2015/package.json": `{"name":"@typescript/lib-es2015"}`,
+				"node_modules/@typescript/lib-es2015/symbol.d.ts":  "/// <reference no-default-lib=\"true\" />\ndeclare function input(): 'second';\n",
+			},
+			expectedDiff: "Reordering lib changes overload selection without changing the file set, leaving the inferred declaration stale.",
+		},
+		{
+			option: "lib", name: "bundled lib order", values: [2]any{[]string{"es5", "es2015.symbol"}, []string{"es2015.symbol", "es5"}},
+			files: FileMap{
+				"index.ts":                         "export const result = input();\n",
+				getTestLibPathFor("es5"):           tscDefaultLibContent + "\ndeclare function input(): 'first';\n",
+				getTestLibPathFor("es2015.symbol"): "/// <reference no-default-lib=\"true\" />\ndeclare function input(): 'second';\n",
+			},
+		},
+	})
+}
+
 func TestBuildEmitOptionChanges(t *testing.T) {
 	t.Parallel()
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
