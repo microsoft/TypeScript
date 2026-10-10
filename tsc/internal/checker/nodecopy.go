@@ -290,7 +290,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 	// instead of re-closing-over all of these each time we need a visitor. In theory the compiler could handle this, but in practice closure inlining hasn't been reliable
 	var visitor *ast.NodeVisitor
 	// note: also handles renaming type parameters renamed within the current context
-	attachSymbolToLeftmostIdentifier := func(leftmost *ast.Node, node *ast.Node, sym *ast.Symbol) *ast.Node {
+	attachSymbolToLeftmostIdentifier := func(leftmost *ast.Node, node *ast.Node, sym *ast.Symbol, meaning ast.SymbolFlags) *ast.Node {
 		var vis *ast.NodeVisitor
 		visitorFunc := func(node *ast.Node) *ast.Node {
 			if node == leftmost {
@@ -298,7 +298,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				var name *ast.Node
 				if sym != nil {
 					type_ = b.ch.getDeclaredTypeOfSymbol(sym)
-					if sym.Flags()&ast.SymbolFlagsTypeParameter != 0 {
+					if sym.Flags()&meaning&ast.SymbolFlagsTypeParameter != 0 {
 						name = b.typeParameterToName(type_).AsNode()
 					}
 				}
@@ -334,7 +334,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				introducesError = true
 				b.ctx.tracker.ReportInaccessibleThisError()
 			}
-			return introducesError, attachSymbolToLeftmostIdentifier(leftmost, node, sym), nil
+			return introducesError, attachSymbolToLeftmostIdentifier(leftmost, node, sym, meaning), nil
 		}
 		sym = b.ch.resolveEntityName(leftmost, meaning, true, true, nil)
 		if b.ctx.enclosingDeclaration != nil && !(sym != nil && sym.Flags()&ast.SymbolFlagsTypeParameter != 0) {
@@ -367,17 +367,17 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			// If a parameter is resolvable in the current context it is also visible, so no need to go to symbol accesibility
 			if sym.Flags()&ast.SymbolFlagsFunctionScopedVariable != 0 && sym.ValueDeclaration() != nil {
 				if ast.IsPartOfParameterDeclaration(sym.ValueDeclaration()) || ast.IsJSDocParameterTag(sym.ValueDeclaration()) {
-					return introducesError, attachSymbolToLeftmostIdentifier(leftmost, node, sym), nil
+					return introducesError, attachSymbolToLeftmostIdentifier(leftmost, node, sym, meaning), nil
 				}
 			}
-			if sym.Flags()&ast.SymbolFlagsTypeParameter == 0 /* Type parameters are visible in the current context if they are are resolvable */ && !ast.IsDeclarationName(node) &&
+			if sym.Flags()&meaning&ast.SymbolFlagsTypeParameter == 0 /* Type parameters are visible in the current context if they are are resolvable */ && !ast.IsDeclarationName(node) &&
 				b.ch.IsSymbolAccessible(sym, enclosingDeclaration, meaning, false).Accessibility != printer.SymbolAccessibilityAccessible {
 				b.ctx.tracker.ReportInferenceFallback(node)
 				introducesError = true
 			} else {
 				b.ctx.tracker.TrackSymbol(sym, enclosingDeclaration, meaning)
 			}
-			return introducesError, attachSymbolToLeftmostIdentifier(leftmost, node, sym), nil
+			return introducesError, attachSymbolToLeftmostIdentifier(leftmost, node, sym, meaning), nil
 		}
 		return introducesError, b.setTextRange(b.f.DeepCloneNode(node), node), nil
 	}

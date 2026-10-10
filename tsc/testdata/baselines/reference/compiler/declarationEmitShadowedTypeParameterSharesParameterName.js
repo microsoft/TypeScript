@@ -122,73 +122,20 @@ export function local(value) {
 
 
 //// [declarationEmitShadowedTypeParameterSharesParameterName.d.ts]
-export declare function predicate<value>(value: value): <value_1>(value: value_1) => value_1 is value_1 & string;
-export declare function assertion<value>(value: value): <value_1>(value: value_1) => asserts value_1 is value_1 & string;
-export declare function query<value>(value: value): <value_1>(value: value_1, other: typeof value_1) => typeof value_1;
+export declare function predicate<value>(value: value): <value_1>(value: value_1) => value is value_1 & string;
+export declare function assertion<value>(value: value): <value_1>(value: value_1) => asserts value is value_1 & string;
+export declare function query<value>(value: value): <value_1>(value: value_1, other: typeof value) => typeof value;
 export declare function qualifiedQuery<value>(value: value): <value_1 extends {
     a: number;
-}>(value: value_1) => typeof value_1.a;
-export declare function capturedPredicate<value>(value: value): <value_1>(value: value_1, value_1: unknown) => value_1 is value_1 & string;
-export declare function capturedQuery<value>(value: value): <value_1>(value: value_1, value_1: number) => typeof value_1;
-export declare function nested<value>(value: value): <value_1>(value: value_1) => <value_2>(value: value_2) => typeof value_2;
-export declare const arrow: <value>(value: value) => <value_1>(value: value_1) => value_1 is value_1 & string;
+}>(value: value_1) => typeof value.a;
+export declare function capturedPredicate<value>(value: value): <value_1>(value: value_1, value_1: unknown) => value is value_1 & string;
+export declare function capturedQuery<value>(value: value): <value_1>(value: value_1, value_1: number) => typeof value;
+export declare function nested<value>(value: value): <value_1>(value: value_1) => <value_2>(value: value_2) => typeof value;
+export declare const arrow: <value>(value: value) => <value_1>(value: value_1) => value is value_1 & string;
 export declare function method<value>(value: value): {
-    m<value_1>(value: value_1): asserts value_1;
+    m<value_1>(value: value_1): asserts value;
 };
 export declare function local<value>(value: value): <value_1>(x: value_1) => {
-    a: typeof value_1;
+    a: 1;
     b: value_1;
 };
-
-
-//// [DtsFileErrors]
-
-
-declarationEmitShadowedTypeParameterSharesParameterName.d.ts(1,86): error TS1225: Cannot find parameter 'value_1'.
-declarationEmitShadowedTypeParameterSharesParameterName.d.ts(2,94): error TS1225: Cannot find parameter 'value_1'.
-declarationEmitShadowedTypeParameterSharesParameterName.d.ts(3,93): error TS2693: 'value_1' only refers to a type, but is being used as a value here.
-declarationEmitShadowedTypeParameterSharesParameterName.d.ts(3,112): error TS2693: 'value_1' only refers to a type, but is being used as a value here.
-declarationEmitShadowedTypeParameterSharesParameterName.d.ts(6,30): error TS2693: 'value_1' only refers to a type, but is being used as a value here.
-declarationEmitShadowedTypeParameterSharesParameterName.d.ts(9,119): error TS2693: 'value_2' only refers to a type, but is being used as a value here.
-declarationEmitShadowedTypeParameterSharesParameterName.d.ts(10,83): error TS1225: Cannot find parameter 'value_1'.
-declarationEmitShadowedTypeParameterSharesParameterName.d.ts(12,41): error TS1225: Cannot find parameter 'value_1'.
-declarationEmitShadowedTypeParameterSharesParameterName.d.ts(15,15): error TS2693: 'value_1' only refers to a type, but is being used as a value here.
-
-
-==== declarationEmitShadowedTypeParameterSharesParameterName.d.ts (9 errors) ====
-    export declare function predicate<value>(value: value): <value_1>(value: value_1) => value_1 is value_1 & string;
-                                                                                         ~~~~~~~
-!!! error TS1225: Cannot find parameter 'value_1'.
-    export declare function assertion<value>(value: value): <value_1>(value: value_1) => asserts value_1 is value_1 & string;
-                                                                                                 ~~~~~~~
-!!! error TS1225: Cannot find parameter 'value_1'.
-    export declare function query<value>(value: value): <value_1>(value: value_1, other: typeof value_1) => typeof value_1;
-                                                                                                ~~~~~~~
-!!! error TS2693: 'value_1' only refers to a type, but is being used as a value here.
-                                                                                                                   ~~~~~~~
-!!! error TS2693: 'value_1' only refers to a type, but is being used as a value here.
-    export declare function qualifiedQuery<value>(value: value): <value_1 extends {
-        a: number;
-    }>(value: value_1) => typeof value_1.a;
-                                 ~~~~~~~
-!!! error TS2693: 'value_1' only refers to a type, but is being used as a value here.
-    export declare function capturedPredicate<value>(value: value): <value_1>(value: value_1, value_1: unknown) => value_1 is value_1 & string;
-    export declare function capturedQuery<value>(value: value): <value_1>(value: value_1, value_1: number) => typeof value_1;
-    export declare function nested<value>(value: value): <value_1>(value: value_1) => <value_2>(value: value_2) => typeof value_2;
-                                                                                                                          ~~~~~~~
-!!! error TS2693: 'value_2' only refers to a type, but is being used as a value here.
-    export declare const arrow: <value>(value: value) => <value_1>(value: value_1) => value_1 is value_1 & string;
-                                                                                      ~~~~~~~
-!!! error TS1225: Cannot find parameter 'value_1'.
-    export declare function method<value>(value: value): {
-        m<value_1>(value: value_1): asserts value_1;
-                                            ~~~~~~~
-!!! error TS1225: Cannot find parameter 'value_1'.
-    };
-    export declare function local<value>(value: value): <value_1>(x: value_1) => {
-        a: typeof value_1;
-                  ~~~~~~~
-!!! error TS2693: 'value_1' only refers to a type, but is being used as a value here.
-        b: value_1;
-    };
-    

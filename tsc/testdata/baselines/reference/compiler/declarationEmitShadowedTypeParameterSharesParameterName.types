@@ -2,7 +2,7 @@
 
 === declarationEmitShadowedTypeParameterSharesParameterName.ts ===
 export function predicate<value>(value: value) {
->predicate : <value>(value: value) => <value_1>(value: value_1) => value_1 is value_1 & string
+>predicate : <value>(value: value) => <value_1>(value: value_1) => value is value_1 & string
 >value : value
 
     return function <value>(value: value): value is value & string {
@@ -19,7 +19,7 @@ export function predicate<value>(value: value) {
 }
 
 export function assertion<value>(value: value) {
->assertion : <value>(value: value) => <value_1>(value: value_1) => asserts value_1 is value_1 & string
+>assertion : <value>(value: value) => <value_1>(value: value_1) => asserts value is value_1 & string
 >value : value
 
     return function <value>(value: value): asserts value is value & string {
@@ -37,7 +37,7 @@ export function assertion<value>(value: value) {
 }
 
 export function query<value>(value: value) {
->query : <value>(value: value) => <value_1>(value: value_1, other: typeof value_1) => typeof value_1
+>query : <value>(value: value) => <value_1>(value: value_1, other: typeof value) => typeof value
 >value : value
 
     return function <value>(value: value, other: typeof value): typeof value {
@@ -54,7 +54,7 @@ export function query<value>(value: value) {
 }
 
 export function qualifiedQuery<value>(value: value) {
->qualifiedQuery : <value>(value: value) => <value_1 extends { a: number; }>(value: value_1) => typeof value_1.a
+>qualifiedQuery : <value>(value: value) => <value_1 extends { a: number; }>(value: value_1) => typeof value.a
 >value : value
 
     return function <value extends { a: number }>(value: value): typeof value.a {
@@ -74,7 +74,7 @@ export function qualifiedQuery<value>(value: value) {
 }
 
 export function capturedPredicate<value>(value: value) {
->capturedPredicate : <value>(value: value) => <value_1>(value: value_1, value_1: unknown) => value_1 is value_1 & string
+>capturedPredicate : <value>(value: value) => <value_1>(value: value_1, value_1: unknown) => value is value_1 & string
 >value : value
 
     return function <value>(value: value, value_1: unknown): value is value & string {
@@ -92,7 +92,7 @@ export function capturedPredicate<value>(value: value) {
 }
 
 export function capturedQuery<value>(value: value) {
->capturedQuery : <value>(value: value) => <value_1>(value: value_1, value_1: number) => typeof value_1
+>capturedQuery : <value>(value: value) => <value_1>(value: value_1, value_1: number) => typeof value
 >value : value
 
     return function <value>(value: value, value_1: number): typeof value {
@@ -108,11 +108,11 @@ export function capturedQuery<value>(value: value) {
 }
 
 export function nested<value>(value: value) {
->nested : <value>(value: value) => <value_1>(value: value_1) => <value_2>(value: value_2) => typeof value_2
+>nested : <value>(value: value) => <value_1>(value: value_1) => <value_2>(value: value_2) => typeof value
 >value : value
 
     return function <value>(value: value) {
->function <value>(value: value) {        return function <value>(value: value): typeof value {            return value;        };    } : <value>(value: value) => <value_1>(value: value_1) => typeof value_1
+>function <value>(value: value) {        return function <value>(value: value): typeof value {            return value;        };    } : <value>(value: value) => <value_1>(value: value_1) => typeof value
 >value : value
 
         return function <value>(value: value): typeof value {
@@ -128,8 +128,8 @@ export function nested<value>(value: value) {
 }
 
 export const arrow = <value>(value: value) => <value>(value: value): value is value & string => typeof value === "string";
->arrow : <value>(value: value) => <value_1>(value: value_1) => value_1 is value_1 & string
-><value>(value: value) => <value>(value: value): value is value & string => typeof value === "string" : <value>(value: value) => <value_1>(value: value_1) => value_1 is value_1 & string
+>arrow : <value>(value: value) => <value_1>(value: value_1) => value is value_1 & string
+><value>(value: value) => <value>(value: value): value is value & string => typeof value === "string" : <value>(value: value) => <value_1>(value: value_1) => value is value_1 & string
 >value : value
 ><value>(value: value): value is value & string => typeof value === "string" : <value>(value: value) => value is value & string
 >value : value
@@ -139,7 +139,7 @@ export const arrow = <value>(value: value) => <value>(value: value): value is va
 >"string" : "string"
 
 export function method<value>(value: value) {
->method : <value>(value: value) => { m<value_1>(value: value_1): asserts value_1; }
+>method : <value>(value: value) => { m<value_1>(value: value_1): asserts value; }
 >value : value
 
     return {
@@ -159,11 +159,11 @@ export function method<value>(value: value) {
 }
 
 export function local<value>(value: value) {
->local : <value>(value: value) => <value_1>(x: value_1) => { a: typeof value_1; b: value_1; }
+>local : <value>(value: value) => <value_1>(x: value_1) => { a: 1; b: value_1; }
 >value : value
 
     return function <value>(x: value) {
->function <value>(x: value) {        const value = 1;        const result: { a: typeof value; b: value } = { a: value, b: x };        return result;    } : <value_1>(x: value_1) => { a: typeof value_1; b: value_1; }
+>function <value>(x: value) {        const value = 1;        const result: { a: typeof value; b: value } = { a: value, b: x };        return result;    } : <value_1>(x: value_1) => { a: 1; b: value_1; }
 >x : value
 
         const value = 1;
@@ -171,7 +171,7 @@ export function local<value>(value: value) {
 >1 : 1
 
         const result: { a: typeof value; b: value } = { a: value, b: x };
->result : { a: typeof value; b: value; }
+>result : { a: 1; b: value; }
 >a : 1
 >value : 1
 >b : value
@@ -182,7 +182,7 @@ export function local<value>(value: value) {
 >x : value
 
         return result;
->result : { a: typeof value; b: value; }
+>result : { a: 1; b: value; }
 
     };
 }
