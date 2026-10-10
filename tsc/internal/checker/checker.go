@@ -16533,53 +16533,36 @@ func (c *Checker) getExportsOfModule(moduleSymbol *ast.Symbol) ast.SymbolTable {
 	return links.resolvedExports
 }
 
-type ExportCollision struct {
-	specifierText        string
-	exportsWithDuplicate []*ast.Node
-}
-
-type ExportCollisionTable = map[string]*ExportCollision
-
 func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports ast.SymbolTable, typeOnlyExportStarMap map[string]*ast.Node) {
 	var visitedSymbols []*ast.Symbol
-	nonTypeOnlyNames := collections.NewSetWithSizeHint[string](len(moduleSymbol.Exports()))
+	// Modules reached through a non-type-only path. Their export names are removed from
+	// typeOnlyExportStarMap once the traversal is complete, since visiting a module via
+	// 'export *' overrides the type-onlyness its exports acquired through an 'export type *'.
+	var nonTypeOnlyModules []*ast.Symbol
 	// The ES6 spec permits export * declarations in a module to circularly reference the module itself. For example,
 	// module 'a' can 'export * from "b"' and 'b' can 'export * from "a"' without error.
 	var visit func(*ast.Symbol, *ast.Node, bool) ast.SymbolTable
 	visit = func(symbol *ast.Symbol, exportStar *ast.Node, isTypeOnly bool) ast.SymbolTable {
 		if !isTypeOnly && symbol != nil {
-			// Add non-type-only names before checking if we've visited this module,
-			// because we might have visited it via an 'export type *', and visiting
-			// again with 'export *' will override the type-onlyness of its exports.
-			for name := range symbol.Exports() {
-				nonTypeOnlyNames.Add(name)
-			}
+			nonTypeOnlyModules = append(nonTypeOnlyModules, symbol)
 		}
 		if symbol == nil || symbol.Exports() == nil || slices.Contains(visitedSymbols, symbol) {
 			return nil
 		}
 		visitedSymbols = append(visitedSymbols, symbol)
-		symbols := maps.Clone(symbol.Exports())
 		// All export * declarations are collected in an __export symbol by the binder
 		exportStars := symbol.Exports()[ast.InternalSymbolNameExportStar]
-		if exportStars != nil {
-			nestedSymbols := make(ast.SymbolTable)
-			lookupTable := make(ExportCollisionTable)
-			for _, node := range exportStars.Declarations() {
-				resolvedModule := c.resolveExternalModuleName(node, node.ModuleSpecifier(), false /*ignoreErrors*/, c.getTypeFromImportAttributes(ast.GetImportAttributes(node)))
-				exportedSymbols := visit(resolvedModule, node, isTypeOnly || node.IsTypeOnly())
-				c.extendExportSymbols(nestedSymbols, exportedSymbols, lookupTable, node)
+		var symbols ast.SymbolTable
+		if exportStars == nil {
+			if exportStar == nil {
+				// The table of the module being resolved is cached and may be extended below.
+				symbols = maps.Clone(symbol.Exports())
+			} else {
+				// Nested tables are only read while being merged into their importer's table.
+				symbols = symbol.Exports()
 			}
-			for id, s := range lookupTable {
-				// It's not an error if the file with multiple `export *`s with duplicate names exports a member with that name itself
-				if id == ast.InternalSymbolNameExportEquals || len(s.exportsWithDuplicate) == 0 || symbols[id] != nil {
-					continue
-				}
-				for _, node := range s.exportsWithDuplicate {
-					c.addDiagnostic(createDiagnosticForNode(node, diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity, s.specifierText, id))
-				}
-			}
-			c.extendExportSymbols(symbols, nestedSymbols, nil, nil)
+		} else {
+			symbols = c.getExportsWithExportStars(symbol, exportStars.Declarations(), isTypeOnly, visit)
 		}
 		if exportStar != nil && exportStar.IsTypeOnly() {
 			if typeOnlyExportStarMap == nil {
@@ -16617,34 +16600,65 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 			}
 		}
 	}
-	for name := range nonTypeOnlyNames.Keys() {
-		delete(typeOnlyExportStarMap, name)
+	if typeOnlyExportStarMap != nil {
+		for _, symbol := range nonTypeOnlyModules {
+			for name := range symbol.Exports() {
+				delete(typeOnlyExportStarMap, name)
+			}
+		}
 	}
 	return exports, typeOnlyExportStarMap
 }
 
-/**
- * Extends one symbol table with another while collecting information on name collisions for error message generation into the `lookupTable` argument
- * Not passing `lookupTable` and `exportNode` disables this collection, and just extends the tables
- */
-func (c *Checker) extendExportSymbols(target ast.SymbolTable, source ast.SymbolTable, lookupTable ExportCollisionTable, exportNode *ast.Node) {
-	for id, sourceSymbol := range source {
-		if id == ast.InternalSymbolNameDefault {
-			continue
-		}
-		targetSymbol := target[id]
-		if targetSymbol == nil {
-			target[id] = sourceSymbol
-			if lookupTable != nil && exportNode != nil {
-				lookupTable[id] = &ExportCollision{
-					specifierText: scanner.GetTextOfNode(exportNode.ModuleSpecifier()),
+// getExportsWithExportStars returns the exports of a module that contains export * declarations:
+// its own exports, extended with the exports of each re-exported module. Names that more than one
+// export * declaration contributes with different meanings are reported, unless the module itself
+// declares the name.
+func (c *Checker) getExportsWithExportStars(symbol *ast.Symbol, declarations []*ast.Node, isTypeOnly bool, visit func(*ast.Symbol, *ast.Node, bool) ast.SymbolTable) ast.SymbolTable {
+	exportedSymbols := make([]ast.SymbolTable, len(declarations))
+	// Re-exported tables often overlap, so size for the largest one and let the map grow past that.
+	largest := 0
+	for i, node := range declarations {
+		resolvedModule := c.resolveExternalModuleName(node, node.ModuleSpecifier(), false /*ignoreErrors*/, c.getTypeFromImportAttributes(ast.GetImportAttributes(node)))
+		exportedSymbols[i] = visit(resolvedModule, node, isTypeOnly || node.IsTypeOnly())
+		largest = max(largest, len(exportedSymbols[i]))
+	}
+	symbols := make(ast.SymbolTable, len(symbol.Exports())+largest)
+	maps.Copy(symbols, symbol.Exports())
+	// With a single export * declaration there is nothing to collide with, so the bookkeeping is skipped entirely.
+	var firstExportStar map[string]*ast.Node // name -> export * declaration that first contributed it
+	var duplicates map[string][]*ast.Node    // name -> later export * declarations contributing a different symbol
+	if len(declarations) > 1 {
+		firstExportStar = make(map[string]*ast.Node, largest)
+	}
+	for i, node := range declarations {
+		for id, sourceSymbol := range exportedSymbols[i] {
+			if id == ast.InternalSymbolNameDefault {
+				continue
+			}
+			targetSymbol := symbols[id]
+			if targetSymbol == nil {
+				symbols[id] = sourceSymbol
+				if firstExportStar != nil {
+					firstExportStar[id] = node
+				}
+			} else if firstExportStar != nil && id != ast.InternalSymbolNameExportEquals {
+				if _, fromExportStar := firstExportStar[id]; fromExportStar && c.resolveSymbol(targetSymbol) != c.resolveSymbol(sourceSymbol) {
+					if duplicates == nil {
+						duplicates = make(map[string][]*ast.Node)
+					}
+					duplicates[id] = append(duplicates[id], node)
 				}
 			}
-		} else if lookupTable != nil && exportNode != nil && c.resolveSymbol(targetSymbol) != c.resolveSymbol(sourceSymbol) {
-			s := lookupTable[id]
-			s.exportsWithDuplicate = append(s.exportsWithDuplicate, exportNode)
 		}
 	}
+	for id, nodes := range duplicates {
+		specifierText := scanner.GetTextOfNode(firstExportStar[id].ModuleSpecifier())
+		for _, node := range nodes {
+			c.addDiagnostic(createDiagnosticForNode(node, diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity, specifierText, id))
+		}
+	}
+	return symbols
 }
 
 func (c *Checker) ResolveAlias(symbol *ast.Symbol) (*ast.Symbol, bool) {
