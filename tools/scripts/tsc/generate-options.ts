@@ -555,7 +555,8 @@ export function generateOptionComparisons(model = options): string {
             return `func CompilerOptionsAffect${name}(oldOptions *core.CompilerOptions, newOptions *core.CompilerOptions) bool {
     if oldOptions == newOptions { return false }
     if oldOptions == nil || newOptions == nil { return true }
-    return ${expressions.join(" ||\n") || "false"}
+    ${expressions.map(expression => `if ${expression} { return true }`).join("\n")}
+    return false
 }
 `;
         }).join("\n")

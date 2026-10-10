@@ -1273,7 +1273,6 @@ func TestBuildModuleSuffixesOptionChanges(t *testing.T) {
 				"input.ts":        "export class Value { private field = 1; }\n",
 				"input.native.ts": "export class Value { private field = 2; }\n",
 			},
-			expectedDiff: "Changing moduleSuffixes leaves inferred declaration module specifiers stale when both alternative files are already included.",
 		},
 	})
 }

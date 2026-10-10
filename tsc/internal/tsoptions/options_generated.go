@@ -374,59 +374,165 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 	if oldOptions == nil || newOptions == nil {
 		return true
 	}
-	return oldOptions.AllowArbitraryExtensions != newOptions.AllowArbitraryExtensions ||
-		oldOptions.AllowImportingTsExtensions != newOptions.AllowImportingTsExtensions ||
-		oldOptions.AllowUmdGlobalAccess != newOptions.AllowUmdGlobalAccess ||
-		oldOptions.AllowUnreachableCode != newOptions.AllowUnreachableCode ||
-		oldOptions.AllowUnusedLabels != newOptions.AllowUnusedLabels ||
-		oldOptions.AssumeChangesOnlyAffectDirectDependencies != newOptions.AssumeChangesOnlyAffectDirectDependencies ||
-		oldOptions.CheckJs != newOptions.CheckJs ||
-		(oldOptions.CustomConditions == nil) != (newOptions.CustomConditions == nil) || !slices.Equal(oldOptions.CustomConditions, newOptions.CustomConditions) ||
-		oldOptions.EmitDecoratorMetadata != newOptions.EmitDecoratorMetadata ||
-		oldOptions.DeduplicatePackages != newOptions.DeduplicatePackages ||
-		oldOptions.ErasableSyntaxOnly != newOptions.ErasableSyntaxOnly ||
-		oldOptions.ExactOptionalPropertyTypes != newOptions.ExactOptionalPropertyTypes ||
-		oldOptions.ExperimentalDecorators != newOptions.ExperimentalDecorators ||
-		oldOptions.IsolatedModules != newOptions.IsolatedModules ||
-		oldOptions.IsolatedDeclarations != newOptions.IsolatedDeclarations ||
-		oldOptions.Jsx != newOptions.Jsx ||
-		oldOptions.JsxFactory != newOptions.JsxFactory ||
-		oldOptions.JsxFragmentFactory != newOptions.JsxFragmentFactory ||
-		oldOptions.JsxImportSource != newOptions.JsxImportSource ||
-		oldOptions.ModuleResolution != newOptions.ModuleResolution ||
-		oldOptions.ModuleDetection != newOptions.ModuleDetection ||
-		oldOptions.NoErrorTruncation != newOptions.NoErrorTruncation ||
-		oldOptions.NoFallthroughCasesInSwitch != newOptions.NoFallthroughCasesInSwitch ||
-		oldOptions.GetStrictOptionValue(oldOptions.NoImplicitAny) != newOptions.GetStrictOptionValue(newOptions.NoImplicitAny) ||
-		oldOptions.GetStrictOptionValue(oldOptions.NoImplicitThis) != newOptions.GetStrictOptionValue(newOptions.NoImplicitThis) ||
-		oldOptions.NoImplicitReturns != newOptions.NoImplicitReturns ||
-		oldOptions.NoPropertyAccessFromIndexSignature != newOptions.NoPropertyAccessFromIndexSignature ||
-		oldOptions.NoUncheckedIndexedAccess != newOptions.NoUncheckedIndexedAccess ||
-		oldOptions.NoUnusedLocals != newOptions.NoUnusedLocals ||
-		oldOptions.NoUnusedParameters != newOptions.NoUnusedParameters ||
-		oldOptions.NoImplicitOverride != newOptions.NoImplicitOverride ||
-		oldOptions.NoUncheckedSideEffectImports != newOptions.NoUncheckedSideEffectImports ||
-		!oldOptions.Paths.EqualFunc(newOptions.Paths, func(a, b []string) bool {
-			return (a == nil) == (b == nil) && slices.Equal(a, b)
-		}) ||
-		oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("") ||
-		oldOptions.ResolvePackageJsonExports != newOptions.ResolvePackageJsonExports ||
-		oldOptions.ResolvePackageJsonImports != newOptions.ResolvePackageJsonImports ||
-		oldOptions.RewriteRelativeImportExtensions != newOptions.RewriteRelativeImportExtensions ||
-		(oldOptions.RootDirs == nil) != (newOptions.RootDirs == nil) || !slices.Equal(oldOptions.RootDirs, newOptions.RootDirs) ||
-		oldOptions.StableTypeOrdering != newOptions.StableTypeOrdering ||
-		oldOptions.GetStrictOptionValue(oldOptions.StrictBindCallApply) != newOptions.GetStrictOptionValue(newOptions.StrictBindCallApply) ||
-		oldOptions.GetStrictOptionValue(oldOptions.StrictBuiltinIteratorReturn) != newOptions.GetStrictOptionValue(newOptions.StrictBuiltinIteratorReturn) ||
-		oldOptions.GetStrictOptionValue(oldOptions.StrictFunctionTypes) != newOptions.GetStrictOptionValue(newOptions.StrictFunctionTypes) ||
-		oldOptions.GetStrictOptionValue(oldOptions.StrictNullChecks) != newOptions.GetStrictOptionValue(newOptions.StrictNullChecks) ||
-		oldOptions.GetStrictOptionValue(oldOptions.StrictPropertyInitialization) != newOptions.GetStrictOptionValue(newOptions.StrictPropertyInitialization) ||
-		(oldOptions.TypeRoots == nil) != (newOptions.TypeRoots == nil) || !slices.Equal(oldOptions.TypeRoots, newOptions.TypeRoots) ||
-		(oldOptions.Types == nil) != (newOptions.Types == nil) || !slices.Equal(oldOptions.Types, newOptions.Types) ||
-		oldOptions.UseDefineForClassFields != newOptions.UseDefineForClassFields ||
-		oldOptions.GetStrictOptionValue(oldOptions.UseUnknownInCatchVariables) != newOptions.GetStrictOptionValue(newOptions.UseUnknownInCatchVariables) ||
-		oldOptions.VerbatimModuleSyntax != newOptions.VerbatimModuleSyntax ||
-		oldOptions.AllowSyntheticDefaultImports != newOptions.AllowSyntheticDefaultImports ||
-		oldOptions.ESModuleInterop != newOptions.ESModuleInterop
+	if oldOptions.AllowArbitraryExtensions != newOptions.AllowArbitraryExtensions {
+		return true
+	}
+	if oldOptions.AllowImportingTsExtensions != newOptions.AllowImportingTsExtensions {
+		return true
+	}
+	if oldOptions.AllowUmdGlobalAccess != newOptions.AllowUmdGlobalAccess {
+		return true
+	}
+	if oldOptions.AllowUnreachableCode != newOptions.AllowUnreachableCode {
+		return true
+	}
+	if oldOptions.AllowUnusedLabels != newOptions.AllowUnusedLabels {
+		return true
+	}
+	if oldOptions.AssumeChangesOnlyAffectDirectDependencies != newOptions.AssumeChangesOnlyAffectDirectDependencies {
+		return true
+	}
+	if oldOptions.CheckJs != newOptions.CheckJs {
+		return true
+	}
+	if (oldOptions.CustomConditions == nil) != (newOptions.CustomConditions == nil) || !slices.Equal(oldOptions.CustomConditions, newOptions.CustomConditions) {
+		return true
+	}
+	if oldOptions.EmitDecoratorMetadata != newOptions.EmitDecoratorMetadata {
+		return true
+	}
+	if oldOptions.DeduplicatePackages != newOptions.DeduplicatePackages {
+		return true
+	}
+	if oldOptions.ErasableSyntaxOnly != newOptions.ErasableSyntaxOnly {
+		return true
+	}
+	if oldOptions.ExactOptionalPropertyTypes != newOptions.ExactOptionalPropertyTypes {
+		return true
+	}
+	if oldOptions.ExperimentalDecorators != newOptions.ExperimentalDecorators {
+		return true
+	}
+	if oldOptions.IsolatedModules != newOptions.IsolatedModules {
+		return true
+	}
+	if oldOptions.IsolatedDeclarations != newOptions.IsolatedDeclarations {
+		return true
+	}
+	if oldOptions.Jsx != newOptions.Jsx {
+		return true
+	}
+	if oldOptions.JsxFactory != newOptions.JsxFactory {
+		return true
+	}
+	if oldOptions.JsxFragmentFactory != newOptions.JsxFragmentFactory {
+		return true
+	}
+	if oldOptions.JsxImportSource != newOptions.JsxImportSource {
+		return true
+	}
+	if oldOptions.ModuleResolution != newOptions.ModuleResolution {
+		return true
+	}
+	if (oldOptions.ModuleSuffixes == nil) != (newOptions.ModuleSuffixes == nil) || !slices.Equal(oldOptions.ModuleSuffixes, newOptions.ModuleSuffixes) {
+		return true
+	}
+	if oldOptions.ModuleDetection != newOptions.ModuleDetection {
+		return true
+	}
+	if oldOptions.NoErrorTruncation != newOptions.NoErrorTruncation {
+		return true
+	}
+	if oldOptions.NoFallthroughCasesInSwitch != newOptions.NoFallthroughCasesInSwitch {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.NoImplicitAny) != newOptions.GetStrictOptionValue(newOptions.NoImplicitAny) {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.NoImplicitThis) != newOptions.GetStrictOptionValue(newOptions.NoImplicitThis) {
+		return true
+	}
+	if oldOptions.NoImplicitReturns != newOptions.NoImplicitReturns {
+		return true
+	}
+	if oldOptions.NoPropertyAccessFromIndexSignature != newOptions.NoPropertyAccessFromIndexSignature {
+		return true
+	}
+	if oldOptions.NoUncheckedIndexedAccess != newOptions.NoUncheckedIndexedAccess {
+		return true
+	}
+	if oldOptions.NoUnusedLocals != newOptions.NoUnusedLocals {
+		return true
+	}
+	if oldOptions.NoUnusedParameters != newOptions.NoUnusedParameters {
+		return true
+	}
+	if oldOptions.NoImplicitOverride != newOptions.NoImplicitOverride {
+		return true
+	}
+	if oldOptions.NoUncheckedSideEffectImports != newOptions.NoUncheckedSideEffectImports {
+		return true
+	}
+	if !oldOptions.Paths.EqualFunc(newOptions.Paths, func(a, b []string) bool {
+		return (a == nil) == (b == nil) && slices.Equal(a, b)
+	}) {
+		return true
+	}
+	if oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("") {
+		return true
+	}
+	if oldOptions.ResolvePackageJsonExports != newOptions.ResolvePackageJsonExports {
+		return true
+	}
+	if oldOptions.ResolvePackageJsonImports != newOptions.ResolvePackageJsonImports {
+		return true
+	}
+	if oldOptions.RewriteRelativeImportExtensions != newOptions.RewriteRelativeImportExtensions {
+		return true
+	}
+	if (oldOptions.RootDirs == nil) != (newOptions.RootDirs == nil) || !slices.Equal(oldOptions.RootDirs, newOptions.RootDirs) {
+		return true
+	}
+	if oldOptions.StableTypeOrdering != newOptions.StableTypeOrdering {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.StrictBindCallApply) != newOptions.GetStrictOptionValue(newOptions.StrictBindCallApply) {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.StrictBuiltinIteratorReturn) != newOptions.GetStrictOptionValue(newOptions.StrictBuiltinIteratorReturn) {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.StrictFunctionTypes) != newOptions.GetStrictOptionValue(newOptions.StrictFunctionTypes) {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.StrictNullChecks) != newOptions.GetStrictOptionValue(newOptions.StrictNullChecks) {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.StrictPropertyInitialization) != newOptions.GetStrictOptionValue(newOptions.StrictPropertyInitialization) {
+		return true
+	}
+	if (oldOptions.TypeRoots == nil) != (newOptions.TypeRoots == nil) || !slices.Equal(oldOptions.TypeRoots, newOptions.TypeRoots) {
+		return true
+	}
+	if (oldOptions.Types == nil) != (newOptions.Types == nil) || !slices.Equal(oldOptions.Types, newOptions.Types) {
+		return true
+	}
+	if oldOptions.UseDefineForClassFields != newOptions.UseDefineForClassFields {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.UseUnknownInCatchVariables) != newOptions.GetStrictOptionValue(newOptions.UseUnknownInCatchVariables) {
+		return true
+	}
+	if oldOptions.VerbatimModuleSyntax != newOptions.VerbatimModuleSyntax {
+		return true
+	}
+	if oldOptions.AllowSyntheticDefaultImports != newOptions.AllowSyntheticDefaultImports {
+		return true
+	}
+	if oldOptions.ESModuleInterop != newOptions.ESModuleInterop {
+		return true
+	}
+	return false
 }
 
 func CompilerOptionsAffectDeclarationPath(oldOptions *core.CompilerOptions, newOptions *core.CompilerOptions) bool {
@@ -436,10 +542,19 @@ func CompilerOptionsAffectDeclarationPath(oldOptions *core.CompilerOptions, newO
 	if oldOptions == nil || newOptions == nil {
 		return true
 	}
-	return oldOptions.DeclarationDir != newOptions.DeclarationDir ||
-		oldOptions.OutDir != newOptions.OutDir ||
-		oldOptions.RootDir != newOptions.RootDir ||
-		oldOptions.OutFile != newOptions.OutFile
+	if oldOptions.DeclarationDir != newOptions.DeclarationDir {
+		return true
+	}
+	if oldOptions.OutDir != newOptions.OutDir {
+		return true
+	}
+	if oldOptions.RootDir != newOptions.RootDir {
+		return true
+	}
+	if oldOptions.OutFile != newOptions.OutFile {
+		return true
+	}
+	return false
 }
 
 func CompilerOptionsAffectEmit(oldOptions *core.CompilerOptions, newOptions *core.CompilerOptions) bool {
@@ -449,64 +564,180 @@ func CompilerOptionsAffectEmit(oldOptions *core.CompilerOptions, newOptions *cor
 	if oldOptions == nil || newOptions == nil {
 		return true
 	}
-	return oldOptions.AllowArbitraryExtensions != newOptions.AllowArbitraryExtensions ||
-		oldOptions.AllowImportingTsExtensions != newOptions.AllowImportingTsExtensions ||
-		oldOptions.AssumeChangesOnlyAffectDirectDependencies != newOptions.AssumeChangesOnlyAffectDirectDependencies ||
-		(oldOptions.CustomConditions == nil) != (newOptions.CustomConditions == nil) || !slices.Equal(oldOptions.CustomConditions, newOptions.CustomConditions) ||
-		oldOptions.EmitBOM != newOptions.EmitBOM ||
-		oldOptions.EmitDecoratorMetadata != newOptions.EmitDecoratorMetadata ||
-		oldOptions.DeclarationDir != newOptions.DeclarationDir ||
-		oldOptions.DeduplicatePackages != newOptions.DeduplicatePackages ||
-		oldOptions.ExactOptionalPropertyTypes != newOptions.ExactOptionalPropertyTypes ||
-		oldOptions.ExperimentalDecorators != newOptions.ExperimentalDecorators ||
-		oldOptions.IsolatedModules != newOptions.IsolatedModules ||
-		oldOptions.IsolatedDeclarations != newOptions.IsolatedDeclarations ||
-		oldOptions.ImportHelpers != newOptions.ImportHelpers ||
-		oldOptions.InlineSources != newOptions.InlineSources ||
-		oldOptions.Jsx != newOptions.Jsx ||
-		oldOptions.JsxFactory != newOptions.JsxFactory ||
-		oldOptions.JsxFragmentFactory != newOptions.JsxFragmentFactory ||
-		oldOptions.JsxImportSource != newOptions.JsxImportSource ||
-		oldOptions.MapRoot != newOptions.MapRoot ||
-		oldOptions.Module != newOptions.Module ||
-		oldOptions.ModuleResolution != newOptions.ModuleResolution ||
-		oldOptions.ModuleDetection != newOptions.ModuleDetection ||
-		oldOptions.NewLine != newOptions.NewLine ||
-		oldOptions.GetStrictOptionValue(oldOptions.NoImplicitAny) != newOptions.GetStrictOptionValue(newOptions.NoImplicitAny) ||
-		oldOptions.GetStrictOptionValue(oldOptions.NoImplicitThis) != newOptions.GetStrictOptionValue(newOptions.NoImplicitThis) ||
-		oldOptions.NoEmitHelpers != newOptions.NoEmitHelpers ||
-		oldOptions.NoUncheckedIndexedAccess != newOptions.NoUncheckedIndexedAccess ||
-		oldOptions.NoEmitOnError != newOptions.NoEmitOnError ||
-		oldOptions.OutDir != newOptions.OutDir ||
-		!oldOptions.Paths.EqualFunc(newOptions.Paths, func(a, b []string) bool {
-			return (a == nil) == (b == nil) && slices.Equal(a, b)
-		}) ||
-		oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("") ||
-		oldOptions.PreserveConstEnums != newOptions.PreserveConstEnums ||
-		oldOptions.ResolvePackageJsonExports != newOptions.ResolvePackageJsonExports ||
-		oldOptions.ResolvePackageJsonImports != newOptions.ResolvePackageJsonImports ||
-		oldOptions.RemoveComments != newOptions.RemoveComments ||
-		oldOptions.RewriteRelativeImportExtensions != newOptions.RewriteRelativeImportExtensions ||
-		oldOptions.ReactNamespace != newOptions.ReactNamespace ||
-		oldOptions.RootDir != newOptions.RootDir ||
-		(oldOptions.RootDirs == nil) != (newOptions.RootDirs == nil) || !slices.Equal(oldOptions.RootDirs, newOptions.RootDirs) ||
-		oldOptions.GetStrictOptionValue(oldOptions.StrictBindCallApply) != newOptions.GetStrictOptionValue(newOptions.StrictBindCallApply) ||
-		oldOptions.GetStrictOptionValue(oldOptions.StrictBuiltinIteratorReturn) != newOptions.GetStrictOptionValue(newOptions.StrictBuiltinIteratorReturn) ||
-		oldOptions.GetStrictOptionValue(oldOptions.StrictFunctionTypes) != newOptions.GetStrictOptionValue(newOptions.StrictFunctionTypes) ||
-		oldOptions.GetStrictOptionValue(oldOptions.StrictNullChecks) != newOptions.GetStrictOptionValue(newOptions.StrictNullChecks) ||
-		oldOptions.StripInternal != newOptions.StripInternal ||
-		oldOptions.SourceRoot != newOptions.SourceRoot ||
-		oldOptions.Target != newOptions.Target ||
-		oldOptions.TsBuildInfoFile != newOptions.TsBuildInfoFile ||
-		(oldOptions.TypeRoots == nil) != (newOptions.TypeRoots == nil) || !slices.Equal(oldOptions.TypeRoots, newOptions.TypeRoots) ||
-		(oldOptions.Types == nil) != (newOptions.Types == nil) || !slices.Equal(oldOptions.Types, newOptions.Types) ||
-		oldOptions.UseDefineForClassFields != newOptions.UseDefineForClassFields ||
-		oldOptions.GetStrictOptionValue(oldOptions.UseUnknownInCatchVariables) != newOptions.GetStrictOptionValue(newOptions.UseUnknownInCatchVariables) ||
-		oldOptions.VerbatimModuleSyntax != newOptions.VerbatimModuleSyntax ||
-		oldOptions.AlwaysStrict != newOptions.AlwaysStrict ||
-		oldOptions.DownlevelIteration != newOptions.DownlevelIteration ||
-		oldOptions.ESModuleInterop != newOptions.ESModuleInterop ||
-		oldOptions.OutFile != newOptions.OutFile
+	if oldOptions.AllowArbitraryExtensions != newOptions.AllowArbitraryExtensions {
+		return true
+	}
+	if oldOptions.AllowImportingTsExtensions != newOptions.AllowImportingTsExtensions {
+		return true
+	}
+	if oldOptions.AssumeChangesOnlyAffectDirectDependencies != newOptions.AssumeChangesOnlyAffectDirectDependencies {
+		return true
+	}
+	if (oldOptions.CustomConditions == nil) != (newOptions.CustomConditions == nil) || !slices.Equal(oldOptions.CustomConditions, newOptions.CustomConditions) {
+		return true
+	}
+	if oldOptions.EmitBOM != newOptions.EmitBOM {
+		return true
+	}
+	if oldOptions.EmitDecoratorMetadata != newOptions.EmitDecoratorMetadata {
+		return true
+	}
+	if oldOptions.DeclarationDir != newOptions.DeclarationDir {
+		return true
+	}
+	if oldOptions.DeduplicatePackages != newOptions.DeduplicatePackages {
+		return true
+	}
+	if oldOptions.ExactOptionalPropertyTypes != newOptions.ExactOptionalPropertyTypes {
+		return true
+	}
+	if oldOptions.ExperimentalDecorators != newOptions.ExperimentalDecorators {
+		return true
+	}
+	if oldOptions.IsolatedModules != newOptions.IsolatedModules {
+		return true
+	}
+	if oldOptions.IsolatedDeclarations != newOptions.IsolatedDeclarations {
+		return true
+	}
+	if oldOptions.ImportHelpers != newOptions.ImportHelpers {
+		return true
+	}
+	if oldOptions.InlineSources != newOptions.InlineSources {
+		return true
+	}
+	if oldOptions.Jsx != newOptions.Jsx {
+		return true
+	}
+	if oldOptions.JsxFactory != newOptions.JsxFactory {
+		return true
+	}
+	if oldOptions.JsxFragmentFactory != newOptions.JsxFragmentFactory {
+		return true
+	}
+	if oldOptions.JsxImportSource != newOptions.JsxImportSource {
+		return true
+	}
+	if oldOptions.MapRoot != newOptions.MapRoot {
+		return true
+	}
+	if oldOptions.Module != newOptions.Module {
+		return true
+	}
+	if oldOptions.ModuleResolution != newOptions.ModuleResolution {
+		return true
+	}
+	if (oldOptions.ModuleSuffixes == nil) != (newOptions.ModuleSuffixes == nil) || !slices.Equal(oldOptions.ModuleSuffixes, newOptions.ModuleSuffixes) {
+		return true
+	}
+	if oldOptions.ModuleDetection != newOptions.ModuleDetection {
+		return true
+	}
+	if oldOptions.NewLine != newOptions.NewLine {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.NoImplicitAny) != newOptions.GetStrictOptionValue(newOptions.NoImplicitAny) {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.NoImplicitThis) != newOptions.GetStrictOptionValue(newOptions.NoImplicitThis) {
+		return true
+	}
+	if oldOptions.NoEmitHelpers != newOptions.NoEmitHelpers {
+		return true
+	}
+	if oldOptions.NoUncheckedIndexedAccess != newOptions.NoUncheckedIndexedAccess {
+		return true
+	}
+	if oldOptions.NoEmitOnError != newOptions.NoEmitOnError {
+		return true
+	}
+	if oldOptions.OutDir != newOptions.OutDir {
+		return true
+	}
+	if !oldOptions.Paths.EqualFunc(newOptions.Paths, func(a, b []string) bool {
+		return (a == nil) == (b == nil) && slices.Equal(a, b)
+	}) {
+		return true
+	}
+	if oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("") {
+		return true
+	}
+	if oldOptions.PreserveConstEnums != newOptions.PreserveConstEnums {
+		return true
+	}
+	if oldOptions.ResolvePackageJsonExports != newOptions.ResolvePackageJsonExports {
+		return true
+	}
+	if oldOptions.ResolvePackageJsonImports != newOptions.ResolvePackageJsonImports {
+		return true
+	}
+	if oldOptions.RemoveComments != newOptions.RemoveComments {
+		return true
+	}
+	if oldOptions.RewriteRelativeImportExtensions != newOptions.RewriteRelativeImportExtensions {
+		return true
+	}
+	if oldOptions.ReactNamespace != newOptions.ReactNamespace {
+		return true
+	}
+	if oldOptions.RootDir != newOptions.RootDir {
+		return true
+	}
+	if (oldOptions.RootDirs == nil) != (newOptions.RootDirs == nil) || !slices.Equal(oldOptions.RootDirs, newOptions.RootDirs) {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.StrictBindCallApply) != newOptions.GetStrictOptionValue(newOptions.StrictBindCallApply) {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.StrictBuiltinIteratorReturn) != newOptions.GetStrictOptionValue(newOptions.StrictBuiltinIteratorReturn) {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.StrictFunctionTypes) != newOptions.GetStrictOptionValue(newOptions.StrictFunctionTypes) {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.StrictNullChecks) != newOptions.GetStrictOptionValue(newOptions.StrictNullChecks) {
+		return true
+	}
+	if oldOptions.StripInternal != newOptions.StripInternal {
+		return true
+	}
+	if oldOptions.SourceRoot != newOptions.SourceRoot {
+		return true
+	}
+	if oldOptions.Target != newOptions.Target {
+		return true
+	}
+	if oldOptions.TsBuildInfoFile != newOptions.TsBuildInfoFile {
+		return true
+	}
+	if (oldOptions.TypeRoots == nil) != (newOptions.TypeRoots == nil) || !slices.Equal(oldOptions.TypeRoots, newOptions.TypeRoots) {
+		return true
+	}
+	if (oldOptions.Types == nil) != (newOptions.Types == nil) || !slices.Equal(oldOptions.Types, newOptions.Types) {
+		return true
+	}
+	if oldOptions.UseDefineForClassFields != newOptions.UseDefineForClassFields {
+		return true
+	}
+	if oldOptions.GetStrictOptionValue(oldOptions.UseUnknownInCatchVariables) != newOptions.GetStrictOptionValue(newOptions.UseUnknownInCatchVariables) {
+		return true
+	}
+	if oldOptions.VerbatimModuleSyntax != newOptions.VerbatimModuleSyntax {
+		return true
+	}
+	if oldOptions.AlwaysStrict != newOptions.AlwaysStrict {
+		return true
+	}
+	if oldOptions.DownlevelIteration != newOptions.DownlevelIteration {
+		return true
+	}
+	if oldOptions.ESModuleInterop != newOptions.ESModuleInterop {
+		return true
+	}
+	if oldOptions.OutFile != newOptions.OutFile {
+		return true
+	}
+	return false
 }
 
 // ForEachCompilerOptionAffectingBuildInfo visits nonzero options in CompilerOptions field order.
@@ -606,6 +837,9 @@ func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn f
 	}
 	if options.ModuleResolution != 0 {
 		fn(CommandLineCompilerOptionsMap.Get("moduleResolution"), options.ModuleResolution)
+	}
+	if options.ModuleSuffixes != nil {
+		fn(CommandLineCompilerOptionsMap.Get("moduleSuffixes"), options.ModuleSuffixes)
 	}
 	if options.ModuleDetection != 0 {
 		fn(CommandLineCompilerOptionsMap.Get("moduleDetection"), options.ModuleDetection)

@@ -212,6 +212,8 @@ test("option comparisons use value equality for every stored option type", () =>
     assert.equal(source.split('oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("")').length - 1, 2);
     assert.match(source, /return \(a == nil\) == \(b == nil\) && slices.Equal\(a, b\)/);
     assert.match(source, /oldOptions.GetStrictOptionValue\(oldOptions.StrictNullChecks\) != newOptions.GetStrictOptionValue\(newOptions.StrictNullChecks\)/);
+    assert.match(source, /if \(oldOptions.ModuleSuffixes/);
+    assert.doesNotMatch(source, / \|\|\noldOptions/);
 });
 
 test("option section headings are detached line comments", () => {

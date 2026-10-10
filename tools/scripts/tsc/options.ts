@@ -616,6 +616,9 @@ export const options: OptionsModel = {
             type: "[]string",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 listPreserveFalsyValues: true,
                 category: diagnostic("Modules"),
                 description: diagnostic("List of file name suffixes to search when resolving a module."),
