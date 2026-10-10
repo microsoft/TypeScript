@@ -2713,7 +2713,7 @@ func (b *NodeBuilderImpl) addPropertyToElementList(propertySymbol *ast.Symbol, t
 	}
 	propertySignature := b.f.NewPropertySignatureDeclaration(modifiers, propertyName, optionalToken, propertyTypeNode, nil)
 
-	b.setCommentRange(propertySignature, propertySymbol.ValueDeclaration())
+	b.setCommentRange(propertySignature, core.Coalesce(propertySymbol.ValueDeclaration(), core.FirstOrNil(propertySymbol.Declarations())))
 	typeElements = append(typeElements, propertySignature)
 
 	return typeElements
