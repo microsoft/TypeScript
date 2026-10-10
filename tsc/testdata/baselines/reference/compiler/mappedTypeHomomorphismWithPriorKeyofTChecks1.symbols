@@ -1,0 +1,158 @@
+//// [tests/cases/compiler/mappedTypeHomomorphismWithPriorKeyofTChecks1.ts] ////
+
+=== mappedTypeHomomorphismWithPriorKeyofTChecks1.ts ===
+type SharedUnionFieldsDeep1<T> = [T] extends [unknown[]]
+>SharedUnionFieldsDeep1 : Symbol(SharedUnionFieldsDeep1, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 0, 28))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 0, 28))
+
+  ? // Keep only tuple positions guaranteed across the union.
+    1 extends T["length"]
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 0, 28))
+
+    ? [T[0]]
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 0, 28))
+
+    : T
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 0, 28))
+
+  : keyof T extends infer CommonKeys
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 0, 28))
+>CommonKeys : Symbol(CommonKeys, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 5, 25))
+
+  ? ([CommonKeys] extends [never] ? true : false) extends false
+>CommonKeys : Symbol(CommonKeys, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 5, 25))
+
+    ? {
+        [Key in keyof T]: SharedUnionFieldsDeep1<T[Key]>;
+>Key : Symbol(Key, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 8, 9))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 0, 28))
+>SharedUnionFieldsDeep1 : Symbol(SharedUnionFieldsDeep1, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 0, 28))
+>Key : Symbol(Key, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 8, 9))
+      }
+    : {}
+  : T;
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 0, 28))
+
+// distributes
+declare const actual1: SharedUnionFieldsDeep1<
+>actual1 : Symbol(actual1, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 14, 13))
+>SharedUnionFieldsDeep1 : Symbol(SharedUnionFieldsDeep1, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 0, 0))
+
+  { tuple: [number] } | { tuple: [number, string] }
+>tuple : Symbol(tuple, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 15, 3))
+>tuple : Symbol(tuple, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 15, 25))
+
+>;
+
+type SharedUnionFieldsDeep2<T> = [T] extends [unknown[]]
+>SharedUnionFieldsDeep2 : Symbol(SharedUnionFieldsDeep2, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 16, 2))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 18, 28))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 18, 28))
+
+  ? // Keep only tuple positions guaranteed across the union.
+    1 extends T["length"]
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 18, 28))
+
+    ? [T[0]]
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 18, 28))
+
+    : T
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 18, 28))
+
+  : keyof T extends infer CommonKeys
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 18, 28))
+>CommonKeys : Symbol(CommonKeys, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 23, 25))
+
+  ? ([CommonKeys] extends [never] ? true : false) extends false
+>CommonKeys : Symbol(CommonKeys, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 23, 25))
+
+    ? keyof T extends infer Keys extends PropertyKey
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 18, 28))
+>Keys : Symbol(Keys, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 25, 27))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+
+      ? {
+          [Key in Keys]: SharedUnionFieldsDeep2<T[Key & keyof T]>;
+>Key : Symbol(Key, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 27, 11))
+>Keys : Symbol(Keys, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 25, 27))
+>SharedUnionFieldsDeep2 : Symbol(SharedUnionFieldsDeep2, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 16, 2))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 18, 28))
+>Key : Symbol(Key, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 27, 11))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 18, 28))
+        }
+      : never
+    : {}
+  : T;
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 18, 28))
+
+// doesn't distribute
+declare const actual2: SharedUnionFieldsDeep2<
+>actual2 : Symbol(actual2, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 34, 13))
+>SharedUnionFieldsDeep2 : Symbol(SharedUnionFieldsDeep2, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 16, 2))
+
+  { tuple: [number] } | { tuple: [number, string] }
+>tuple : Symbol(tuple, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 35, 3))
+>tuple : Symbol(tuple, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 35, 25))
+
+>;
+
+// `& unknown` used here just to avoid printing type alias at actual3
+type SharedUnionFieldsDeepMappedType3<T, K extends keyof T = keyof T> = {
+>SharedUnionFieldsDeepMappedType3 : Symbol(SharedUnionFieldsDeepMappedType3, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 36, 2))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 39, 38))
+>K : Symbol(K, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 39, 40))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 39, 38))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 39, 38))
+
+  [Key in K]: SharedUnionFieldsDeep3<T[Key]>;
+>Key : Symbol(Key, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 40, 3))
+>K : Symbol(K, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 39, 40))
+>SharedUnionFieldsDeep3 : Symbol(SharedUnionFieldsDeep3, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 41, 12))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 39, 38))
+>Key : Symbol(Key, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 40, 3))
+
+} & unknown;
+
+type SharedUnionFieldsDeep3<T> = [T] extends [unknown[]]
+>SharedUnionFieldsDeep3 : Symbol(SharedUnionFieldsDeep3, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 41, 12))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 43, 28))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 43, 28))
+
+  ? // Keep only tuple positions guaranteed across the union.
+    1 extends T["length"]
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 43, 28))
+
+    ? [T[0]]
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 43, 28))
+
+    : T
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 43, 28))
+
+  : keyof T extends infer CommonKeys
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 43, 28))
+>CommonKeys : Symbol(CommonKeys, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 48, 25))
+
+  ? ([CommonKeys] extends [never] ? true : false) extends false
+>CommonKeys : Symbol(CommonKeys, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 48, 25))
+
+    ? SharedUnionFieldsDeepMappedType3<T>
+>SharedUnionFieldsDeepMappedType3 : Symbol(SharedUnionFieldsDeepMappedType3, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 36, 2))
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 43, 28))
+
+    : {}
+  : T;
+>T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 43, 28))
+
+// doesn't distribute either
+declare const actual3: SharedUnionFieldsDeep3<
+>actual3 : Symbol(actual3, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 55, 13))
+>SharedUnionFieldsDeep3 : Symbol(SharedUnionFieldsDeep3, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 41, 12))
+
+  { tuple: [number] } | { tuple: [number, string] }
+>tuple : Symbol(tuple, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 56, 3))
+>tuple : Symbol(tuple, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 56, 25))
+
+>;
+
