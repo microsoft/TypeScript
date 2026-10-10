@@ -386,7 +386,7 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	}
 	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
 	// no declaration and duplicate names.
-	return int(ast.GetSymbolId(s1)) - int(ast.GetSymbolId(s2))
+	return cmp.Compare(ast.GetSymbolId(s1), ast.GetSymbolId(s2))
 }
 
 func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
@@ -398,6 +398,9 @@ func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
 	}
 	if n2 == nil {
 		return -1
+	}
+	if n1.Parent != nil && n1.Parent == n2.Parent {
+		return n1.Pos() - n2.Pos()
 	}
 	s1 := ast.GetSourceFileOfNode(n1)
 	s2 := ast.GetSourceFileOfNode(n2)
