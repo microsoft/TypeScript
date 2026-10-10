@@ -1,0 +1,46 @@
+//// [tests/cases/conformance/jsdoc/extendsTag10.ts] ////
+
+=== a.js ===
+/** @template T */
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+    /** @returns {T} */
+    get value() {
+>value : Symbol(A.value, Decl(a.js, 1, 9))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+/** @param {any} Base */
+function mixin(Base) {
+>mixin : Symbol(mixin, Decl(a.js, 6, 1))
+>Base : Symbol(Base, Decl(a.js, 9, 15))
+
+    return class extends Base {
+>Base : Symbol(Base, Decl(a.js, 9, 15))
+
+        extra = 1;
+>extra : Symbol((Anonymous class).extra, Decl(a.js, 10, 31))
+
+    };
+}
+
+/** @extends {A<string>} */
+class B extends mixin(A) {}
+>B : Symbol(B, Decl(a.js, 13, 1))
+>mixin : Symbol(mixin, Decl(a.js, 6, 1))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+const value = new B().value;
+>value : Symbol(value, Decl(a.js, 18, 5))
+>B : Symbol(B, Decl(a.js, 13, 1))
+
+const extra = new B().extra;
+>extra : Symbol(extra, Decl(a.js, 19, 5))
+>new B().extra : Symbol((Anonymous class).extra, Decl(a.js, 10, 31))
+>B : Symbol(B, Decl(a.js, 13, 1))
+>extra : Symbol((Anonymous class).extra, Decl(a.js, 10, 31))
+
