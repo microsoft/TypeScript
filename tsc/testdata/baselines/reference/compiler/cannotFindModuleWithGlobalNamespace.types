@@ -1,16 +1,24 @@
 //// [tests/cases/compiler/cannotFindModuleWithGlobalNamespace.ts] ////
 
+=== main.ts ===
+/// <reference path="globals.d.ts" />
+import MessageFormat from "messageformat";
+>MessageFormat : any
+
+import Other from "otherlib";
+>Other : any
+
+import { something } from "not-declared-globally";
+>something : any
+
 === globals.d.ts ===
 declare module messageformat {
     export type Msg = (params: {}) => string;
 >Msg : Msg
 >params : {}
 }
-
-=== main.ts ===
-import MessageFormat from "messageformat";
->MessageFormat : any
-
-import { something } from "not-declared-globally";
->something : any
+declare module otherlib {
+    export type Other = string;
+>Other : string
+}
 

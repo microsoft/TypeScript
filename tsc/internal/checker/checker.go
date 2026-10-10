@@ -15435,7 +15435,7 @@ func (c *Checker) getCannotResolveModuleNameErrorForGlobalNamespace(moduleRefere
 	}
 	for _, declaration := range symbol.Declarations() {
 		if ast.IsModuleDeclaration(declaration) && !ast.IsStringLiteral(declaration.Name()) {
-			return diagnostics.Cannot_find_module_0_Did_you_mean_to_use_the_global_namespace_0_If_you_meant_to_declare_an_ambient_module_the_name_must_be_quoted_Colon_declare_module_0
+			return diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations_Did_you_mean_to_use_the_global_namespace_0_If_you_meant_to_declare_an_ambient_module_the_name_must_be_quoted_Colon_declare_module_0
 		}
 	}
 	return nil
@@ -15895,6 +15895,13 @@ func (c *Checker) getSuggestedImportExtension(extensionlessImportPath tspath.Roo
 func (c *Checker) errorOnImplicitAnyModule(isError bool, errorNode *ast.Node, mode core.ResolutionMode, resolvedModule *module.ResolvedModule, moduleReference string) {
 	if isSideEffectImport(errorNode) {
 		return
+	}
+
+	if isError {
+		if globalNamespaceError := c.getCannotResolveModuleNameErrorForGlobalNamespace(moduleReference); globalNamespaceError != nil {
+			c.error(errorNode, globalNamespaceError, moduleReference)
+			return
+		}
 	}
 
 	var errorInfo *ast.Diagnostic
