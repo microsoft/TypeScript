@@ -160,6 +160,10 @@ func (h *mockModuleSpecifierGenerationHost) GetPackageJsonInfo(pkgJsonPath tspat
 	return nil
 }
 
+func (h *mockModuleSpecifierGenerationHost) ModuleSpecifierGenerationCache() *GenerationCache {
+	return nil
+}
+
 func (h *mockModuleSpecifierGenerationHost) GetDefaultResolutionModeForFile(file ast.HasFileName) core.ResolutionMode {
 	return core.ResolutionModeNone
 }
@@ -458,31 +462,31 @@ func TestTryGetModuleNameFromExportsOrImports(t *testing.T) {
 			Value: "./dist/internal/",
 		}
 		host := &mockModuleSpecifierGenerationHost{caseSensitivity: tspath.CaseSensitive}
+		options := &core.CompilerOptions{}
+		target := newExportsOrImportsTarget("/pkg/dist/internal/file.ts", options, host, true /*isImports*/, false /*preferTsExtension*/)
 		if result := tryGetModuleNameFromExportsOrImports(
-			&core.CompilerOptions{},
+			options,
 			host,
-			"/pkg/dist/internal/file.ts",
+			&target,
 			"/pkg",
 			"#internal/",
+			"", /*subpath*/
 			exports,
 			nil,
 			MatchingModeDirectory,
-			true,
-			false,
 		); result == "" {
 			t.Fatal("directory target with a trailing separator should match")
 		}
 		if result := tryGetModuleNameFromExportsOrImports(
-			&core.CompilerOptions{},
+			options,
 			host,
-			"/pkg/dist/internal/file.ts",
+			&target,
 			"/pkg",
 			"#internal",
+			"", /*subpath*/
 			exports,
 			nil,
 			MatchingModeExact,
-			true,
-			false,
 		); result != "" {
 			t.Fatalf("exact target with a trailing separator matched as %q", result)
 		}
@@ -511,20 +515,22 @@ func TestTryGetModuleNameFromExportsOrImports(t *testing.T) {
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
 				t.Parallel()
+				options := &core.CompilerOptions{}
+				host := &mockModuleSpecifierGenerationHost{}
+				target := newExportsOrImportsTarget(tspath.RootedFilePathFromNormalized(tt.targetFilePath), options, host, false /*isImports*/, false /*preferTsExtension*/)
 				result := tryGetModuleNameFromExportsOrImports(
-					&core.CompilerOptions{},
-					&mockModuleSpecifierGenerationHost{},
-					tspath.RootedFilePathFromNormalized(tt.targetFilePath),
+					options,
+					host,
+					&target,
 					"/pkg",
 					"./src/things/*",
+					"", /*subpath*/
 					packagejson.ExportsOrImports{
 						Type:  packagejson.JSONValueTypeString,
 						Value: "./src/things/*/index.js",
 					},
 					[]string{},
 					MatchingModePattern,
-					false,
-					false,
 				)
 				if result != tt.expected {
 					t.Errorf("tryGetModuleNameFromExportsOrImports(targetFilePath = %q) = %v, expected %v", tt.targetFilePath, result, tt.expected)

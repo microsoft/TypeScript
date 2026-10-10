@@ -63,6 +63,9 @@ type ModuleSpecifierGenerationHost interface {
 
 	GetNearestAncestorDirectoryWithPackageJson(dirname tspath.RootedDirectoryPath) tspath.RootedDirectoryPath
 	GetPackageJsonInfo(pkgJsonPath tspath.RootedFilePath) *packagejson.InfoCacheEntry
+	// ModuleSpecifierGenerationCache returns the cache the host keeps across module specifier
+	// generation, or nil when it does not keep one.
+	ModuleSpecifierGenerationCache() *GenerationCache
 	GetDefaultResolutionModeForFile(file ast.HasFileName) core.ResolutionMode
 	GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule
 	GetModeForUsageLocation(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) core.ResolutionMode
