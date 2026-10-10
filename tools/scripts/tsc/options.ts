@@ -913,6 +913,7 @@ export const options: OptionsModel = {
             type: "Tristate",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
                 affectsEmit: true,
                 affectsBuildInfo: true,
                 category: diagnostic("Emit"),

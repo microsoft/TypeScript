@@ -1340,8 +1340,7 @@ func TestBuildPreserveConstEnumsOptionDiagnostics(t *testing.T) {
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
 		{
 			option: "preserveConstEnums", name: "preserveConstEnums namespace order", values: [2]any{false, true},
-			files:        FileMap{"index.ts": "export namespace Value { export const enum Field { One } }\nexport class Value {}\n"},
-			expectedDiff: "Changing preserveConstEnums retains the previous namespace/class declaration-order diagnostics.",
+			files: FileMap{"index.ts": "export namespace Value { export const enum Field { One } }\nexport class Value {}\n"},
 		},
 		{
 			option: "preserveConstEnums", name: "preserveConstEnums namespace merge", values: [2]any{false, true},
@@ -1350,7 +1349,6 @@ func TestBuildPreserveConstEnumsOptionDiagnostics(t *testing.T) {
 				"index.ts": "namespace Value { export const enum Field { One } }\n",
 				"other.ts": "class Value {}\n",
 			},
-			expectedDiff: "Changing preserveConstEnums retains the previous cross-file namespace/class merge diagnostics.",
 		},
 	})
 }

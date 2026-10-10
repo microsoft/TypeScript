@@ -487,6 +487,9 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 	if oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("") {
 		return true
 	}
+	if oldOptions.PreserveConstEnums != newOptions.PreserveConstEnums {
+		return true
+	}
 	if oldOptions.ResolvePackageJsonExports != newOptions.ResolvePackageJsonExports {
 		return true
 	}
