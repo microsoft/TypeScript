@@ -207,6 +207,29 @@ func TestCustomConditionsNullOverride(t *testing.T) {
 	assert.Assert(t, customConditions == nil, "customConditions should be nil after override, got: %v", customConditions)
 }
 
+func TestParseCommandLineStringListTrimsWhitespace(t *testing.T) {
+	t.Parallel()
+
+	fs := tsoptionstest.NewVFS(map[string]string{
+		"/home/project/index.ts": `export {};`,
+	}, tspath.CaseSensitive)
+
+	cmdLine := tsoptions.ParseCommandLine([]string{
+		"--customConditions", " webpack , browser,\tnode ",
+		"--types", "node, jest",
+		"--typeRoots", "a, b",
+		"--moduleSuffixes", ".ios, .native,",
+		"index.ts",
+	}, fs, "/home/project")
+
+	assert.Equal(t, len(cmdLine.Errors), 0)
+	options := cmdLine.CompilerOptions()
+	assert.DeepEqual(t, options.CustomConditions, []string{"webpack", "browser", "node"})
+	assert.DeepEqual(t, options.Types, []string{"node", "jest"})
+	assert.DeepEqual(t, options.TypeRoots, []tspath.RootedDirectoryPath{"/home/project/a", "/home/project/b"})
+	assert.DeepEqual(t, options.ModuleSuffixes, []string{".ios", ".native"})
+}
+
 func TestParseCommandLineVerifyNull(t *testing.T) {
 	t.Parallel()
 
