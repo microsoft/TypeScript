@@ -1315,7 +1315,6 @@ func TestBuildImportHelpersOptionDiagnostics(t *testing.T) {
 				"index.ts":                  "export async function result() { return 1; }\n",
 				getTestLibPathFor("es2020"): tscDefaultLibContent + "\ninterface Promise<T> { then<U>(callback: (value: T) => U): Promise<U>; }\n",
 			},
-			expectedDiff: "Changing importHelpers retains the previous missing-tslib diagnostics.",
 		},
 	})
 }

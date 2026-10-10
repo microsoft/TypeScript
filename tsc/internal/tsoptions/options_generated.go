@@ -419,6 +419,9 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 	if oldOptions.IsolatedDeclarations != newOptions.IsolatedDeclarations {
 		return true
 	}
+	if oldOptions.ImportHelpers != newOptions.ImportHelpers {
+		return true
+	}
 	if oldOptions.Jsx != newOptions.Jsx {
 		return true
 	}
