@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/importSource/importSource19.ts] ////
+
+=== globals.d.ts ===
+declare module "*.wasm" {
+>"*.wasm" : Symbol("*.wasm", Decl(globals.d.ts, 0, 0))
+
+    const value: string;
+>value : Symbol(value, Decl(globals.d.ts, 1, 9))
+
+    export default value;
+>value : Symbol(value, Decl(globals.d.ts, 1, 9))
+}
+declare namespace WebAssembly {
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --), Decl(globals.d.ts, 3, 1))
+
+    interface Module { value: number; }
+>Module : Symbol(Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(globals.d.ts, 4, 31))
+>value : Symbol(Module.value, Decl(globals.d.ts, 5, 22))
+}
+
+=== index.ts ===
+import a from "./a.wasm";
+>a : Symbol(a, Decl(index.ts, 0, 6))
+
+import source b from "./a.wasm";
+>b : Symbol(b, Decl(index.ts, 1, 6))
+
+const c: string = a;
+>c : Symbol(c, Decl(index.ts, 2, 5))
+>a : Symbol(a, Decl(index.ts, 0, 6))
+
+const d: AbstractModuleSource = b;
+>d : Symbol(d, Decl(index.ts, 3, 5))
+>AbstractModuleSource : Symbol(AbstractModuleSource, Decl(lib.esnext.modulesource.d.ts, --, --))
+>b : Symbol(b, Decl(index.ts, 1, 6))
+
+export { b };
+>b : Symbol(b, Decl(index.ts, 4, 8))
+
+export const e = import.source("./a.wasm");
+>e : Symbol(e, Decl(index.ts, 5, 12))
+

@@ -21,6 +21,7 @@ import (
 	lsproto "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	nodebuilder "github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	spanmap "github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	tspath "github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func main() {
@@ -497,6 +498,7 @@ func main() {
 			"OverrideKeyword":                              toInt32(ast.KindOverrideKeyword),
 			"OfKeyword":                                    toInt32(ast.KindOfKeyword),
 			"DeferKeyword":                                 toInt32(ast.KindDeferKeyword),
+			"SourceKeyword":                                toInt32(ast.KindSourceKeyword),
 			"QualifiedName":                                toInt32(ast.KindQualifiedName),
 			"ComputedPropertyName":                         toInt32(ast.KindComputedPropertyName),
 			"TypeParameter":                                toInt32(ast.KindTypeParameter),
@@ -892,6 +894,10 @@ func main() {
 			"TS":      toInt32(core.ScriptKindTS),
 			"TSX":     toInt32(core.ScriptKindTSX),
 			"JSON":    toInt32(core.ScriptKindJSON),
+		},
+		"CaseSensitivity": {
+			"Insensitive": toInt32(tspath.CaseInsensitive),
+			"Sensitive":   toInt32(tspath.CaseSensitive),
 		},
 		"TokenFlags": {
 			"None":                           toInt32(ast.TokenFlagsNone),

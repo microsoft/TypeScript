@@ -57,6 +57,7 @@ test("validate generates before building and selects the generation scope", asyn
             },
             runTests: action("test:tsc"),
             runTestExtension: action("test:extension"),
+            runCheckAPIDeclarations: action("check:api-declarations"),
             runTestAPI: action("test:api"),
             runTestBenchmarks: action("test:benchmarks"),
             runTestTools: action("test:tools"),
@@ -74,6 +75,7 @@ test("validate generates before building and selects the generation scope", asyn
         assert.equal(calls[0], "all" in options ? "generate" : "generate:go");
         assert.ok(calls.indexOf("build") > 0);
         assert.ok(calls.indexOf("build") < calls.indexOf("test:tsc"));
+        assert.ok(calls.indexOf("check:api-declarations") > calls.indexOf("test:extension"));
         assert.equal(calls.includes("test:api"), "api" in options || "all" in options);
         assert.equal(calls.includes("test:tools"), "all" in options);
         assert.equal(calls.includes("test:options"), "all" in options);
@@ -436,12 +438,12 @@ test("generate includes standalone generators without Go traversal", async () =>
         fs.readFileSync(path.join(root, "packages/typescript/vendor/vscode-jsonrpc/package.json")),
         fs.readFileSync(path.join(root, "node_modules/vscode-jsonrpc/package.json")),
     );
-    const lspOutput = path.join(root, "tsc/internal/lsp/lsproto/lsp_generated.go");
-    const timestamp = fs.statSync(lspOutput).mtimeMs;
+    const lspOutputs = ["tsc/internal/lsp/lsproto/lsp_generated.go", "packages/typescript/src/vscode/protocol.generated.ts"].map(file => path.join(root, file));
+    const timestamps = lspOutputs.map(file => fs.statSync(file).mtimeMs);
     const current = await x("npx", ["hereby", "generate:lsp"], { throwOnError: true, nodeOptions: { cwd: root } });
     assert.match(current.stdout, /LSP bindings are up to date/);
     assert.doesNotMatch(current.stdout, /Using vscode-languageclient/);
-    assert.equal(fs.statSync(lspOutput).mtimeMs, timestamp);
+    assert.deepEqual(lspOutputs.map(file => fs.statSync(file).mtimeMs), timestamps);
 });
 
 test("localization and vendoring preserve current outputs", async context => {

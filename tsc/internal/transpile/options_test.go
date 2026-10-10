@@ -6,6 +6,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func TestTranspileConditionalOptions(t *testing.T) {
@@ -65,7 +66,7 @@ func TestTranspileClearsInapplicableOptions(t *testing.T) {
 				Composite:                  core.TSTrue,
 				TsBuildInfoFile:            "/other/buildinfo",
 				Paths:                      collections.NewOrderedMapFromList([]collections.MapEntry[string, []string]{{Key: "*", Value: []string{"/missing/*"}}}),
-				RootDirs:                   []string{"/missing"},
+				RootDirs:                   []tspath.RootedDirectoryPath{"/missing"},
 				Types:                      []string{"missing"},
 				AllowImportingTsExtensions: core.TSTrue,
 				NoEmitOnError:              core.TSTrue,

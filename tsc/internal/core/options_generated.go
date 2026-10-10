@@ -6,6 +6,7 @@ import (
 	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 //go:generate npx hereby generate:compileroptions
@@ -32,7 +33,7 @@ type CompilerOptions struct {
 	EmitBOM                                   Tristate                                  `json:"emitBOM,omitzero"`
 	EmitDecoratorMetadata                     Tristate                                  `json:"emitDecoratorMetadata,omitzero"`
 	Declaration                               Tristate                                  `json:"declaration,omitzero"`
-	DeclarationDir                            string                                    `json:"declarationDir,omitzero"`
+	DeclarationDir                            tspath.RootedDirectoryPath                `json:"declarationDir,omitzero"`
 	DeclarationMap                            Tristate                                  `json:"declarationMap,omitzero"`
 	DeduplicatePackages                       Tristate                                  `json:"deduplicatePackages,omitzero"`
 	DisableSizeLimit                          Tristate                                  `json:"disableSizeLimit,omitzero"`
@@ -59,7 +60,7 @@ type CompilerOptions struct {
 	Lib                                       []string                                  `json:"lib,omitzero"`
 	LibReplacement                            Tristate                                  `json:"libReplacement,omitzero"`
 	Locale                                    string                                    `json:"locale,omitzero"`
-	MapRoot                                   string                                    `json:"mapRoot,omitzero"`
+	MapRoot                                   tspath.SourceMapLocation                  `json:"mapRoot,omitzero"`
 	Module                                    ModuleKind                                `json:"module,omitzero"`
 	ModuleResolution                          ModuleResolutionKind                      `json:"moduleResolution,omitzero"`
 	ModuleSuffixes                            []string                                  `json:"moduleSuffixes,omitzero"`
@@ -82,83 +83,83 @@ type CompilerOptions struct {
 	NoResolve                                 Tristate                                  `json:"noResolve,omitzero"`
 	NoImplicitOverride                        Tristate                                  `json:"noImplicitOverride,omitzero"`
 	NoUncheckedSideEffectImports              Tristate                                  `json:"noUncheckedSideEffectImports,omitzero"`
-	OutDir                                    string                                    `json:"outDir,omitzero"`
+	OutDir                                    tspath.RootedDirectoryPath                `json:"outDir,omitzero"`
 	Paths                                     *collections.OrderedMap[string, []string] `json:"paths,omitzero"`
 	// Plugins are parsed only so tools can report that native TypeScript does not support them.
-	Plugins                         []PluginImport `json:"plugins,omitzero"`
-	PreserveConstEnums              Tristate       `json:"preserveConstEnums,omitzero"`
-	PreserveSymlinks                Tristate       `json:"preserveSymlinks,omitzero"`
-	Project                         string         `json:"project,omitzero"`
-	ResolveJsonModule               Tristate       `json:"resolveJsonModule,omitzero"`
-	ResolvePackageJsonExports       Tristate       `json:"resolvePackageJsonExports,omitzero"`
-	ResolvePackageJsonImports       Tristate       `json:"resolvePackageJsonImports,omitzero"`
-	RemoveComments                  Tristate       `json:"removeComments,omitzero"`
-	RewriteRelativeImportExtensions Tristate       `json:"rewriteRelativeImportExtensions,omitzero"`
-	ReactNamespace                  string         `json:"reactNamespace,omitzero"`
-	RootDir                         string         `json:"rootDir,omitzero"`
-	RootDirs                        []string       `json:"rootDirs,omitzero"`
-	SkipLibCheck                    Tristate       `json:"skipLibCheck,omitzero"`
-	StableTypeOrdering              Tristate       `json:"stableTypeOrdering,omitzero"`
-	Strict                          Tristate       `json:"strict,omitzero"`
-	StrictBindCallApply             Tristate       `json:"strictBindCallApply,omitzero"`
-	StrictBuiltinIteratorReturn     Tristate       `json:"strictBuiltinIteratorReturn,omitzero"`
-	StrictFunctionTypes             Tristate       `json:"strictFunctionTypes,omitzero"`
-	StrictNullChecks                Tristate       `json:"strictNullChecks,omitzero"`
-	StrictPropertyInitialization    Tristate       `json:"strictPropertyInitialization,omitzero"`
-	StripInternal                   Tristate       `json:"stripInternal,omitzero"`
-	SkipDefaultLibCheck             Tristate       `json:"skipDefaultLibCheck,omitzero"`
-	SourceMap                       Tristate       `json:"sourceMap,omitzero"`
-	SourceRoot                      string         `json:"sourceRoot,omitzero"`
-	SuppressOutputPathCheck         Tristate       `json:"suppressOutputPathCheck,omitzero"`
-	Target                          ScriptTarget   `json:"target,omitzero"`
-	TraceResolution                 Tristate       `json:"traceResolution,omitzero"`
-	TsBuildInfoFile                 string         `json:"tsBuildInfoFile,omitzero"`
-	TypeRoots                       []string       `json:"typeRoots,omitzero"`
-	Types                           []string       `json:"types,omitzero"`
-	UseDefineForClassFields         Tristate       `json:"useDefineForClassFields,omitzero"`
-	UseUnknownInCatchVariables      Tristate       `json:"useUnknownInCatchVariables,omitzero"`
-	VerbatimModuleSyntax            Tristate       `json:"verbatimModuleSyntax,omitzero"`
-	MaxNodeModuleJsDepth            *int           `json:"maxNodeModuleJsDepth,omitzero"`
+	Plugins                         []PluginImport               `json:"plugins,omitzero"`
+	PreserveConstEnums              Tristate                     `json:"preserveConstEnums,omitzero"`
+	PreserveSymlinks                Tristate                     `json:"preserveSymlinks,omitzero"`
+	Project                         tspath.RootedPath            `json:"project,omitzero"`
+	ResolveJsonModule               Tristate                     `json:"resolveJsonModule,omitzero"`
+	ResolvePackageJsonExports       Tristate                     `json:"resolvePackageJsonExports,omitzero"`
+	ResolvePackageJsonImports       Tristate                     `json:"resolvePackageJsonImports,omitzero"`
+	RemoveComments                  Tristate                     `json:"removeComments,omitzero"`
+	RewriteRelativeImportExtensions Tristate                     `json:"rewriteRelativeImportExtensions,omitzero"`
+	ReactNamespace                  string                       `json:"reactNamespace,omitzero"`
+	RootDir                         tspath.RootedDirectoryPath   `json:"rootDir,omitzero"`
+	RootDirs                        []tspath.RootedDirectoryPath `json:"rootDirs,omitzero"`
+	SkipLibCheck                    Tristate                     `json:"skipLibCheck,omitzero"`
+	StableTypeOrdering              Tristate                     `json:"stableTypeOrdering,omitzero"`
+	Strict                          Tristate                     `json:"strict,omitzero"`
+	StrictBindCallApply             Tristate                     `json:"strictBindCallApply,omitzero"`
+	StrictBuiltinIteratorReturn     Tristate                     `json:"strictBuiltinIteratorReturn,omitzero"`
+	StrictFunctionTypes             Tristate                     `json:"strictFunctionTypes,omitzero"`
+	StrictNullChecks                Tristate                     `json:"strictNullChecks,omitzero"`
+	StrictPropertyInitialization    Tristate                     `json:"strictPropertyInitialization,omitzero"`
+	StripInternal                   Tristate                     `json:"stripInternal,omitzero"`
+	SkipDefaultLibCheck             Tristate                     `json:"skipDefaultLibCheck,omitzero"`
+	SourceMap                       Tristate                     `json:"sourceMap,omitzero"`
+	SourceRoot                      tspath.SourceMapLocation     `json:"sourceRoot,omitzero"`
+	SuppressOutputPathCheck         Tristate                     `json:"suppressOutputPathCheck,omitzero"`
+	Target                          ScriptTarget                 `json:"target,omitzero"`
+	TraceResolution                 Tristate                     `json:"traceResolution,omitzero"`
+	TsBuildInfoFile                 tspath.RootedFilePath        `json:"tsBuildInfoFile,omitzero"`
+	TypeRoots                       []tspath.RootedDirectoryPath `json:"typeRoots,omitzero"`
+	Types                           []string                     `json:"types,omitzero"`
+	UseDefineForClassFields         Tristate                     `json:"useDefineForClassFields,omitzero"`
+	UseUnknownInCatchVariables      Tristate                     `json:"useUnknownInCatchVariables,omitzero"`
+	VerbatimModuleSyntax            Tristate                     `json:"verbatimModuleSyntax,omitzero"`
+	MaxNodeModuleJsDepth            *int                         `json:"maxNodeModuleJsDepth,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
 	AllowSyntheticDefaultImports Tristate `json:"allowSyntheticDefaultImports,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
 	AlwaysStrict Tristate `json:"alwaysStrict,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
-	BaseUrl string `json:"baseUrl,omitzero"`
+	BaseUrl tspath.RootedDirectoryPath `json:"baseUrl,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
 	DownlevelIteration Tristate `json:"downlevelIteration,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
 	ESModuleInterop Tristate `json:"esModuleInterop,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
-	OutFile string `json:"outFile,omitzero"`
+	OutFile tspath.RootedFilePath `json:"outFile,omitzero"`
 
 	// Internal fields
 
-	ConfigFilePath      string   `json:"configFilePath,omitzero"`
-	NoDtsResolution     Tristate `json:"noDtsResolution,omitzero"`
-	PathsBasePath       string   `json:"pathsBasePath,omitzero"`
-	Diagnostics         Tristate `json:"diagnostics,omitzero"`
-	ExtendedDiagnostics Tristate `json:"extendedDiagnostics,omitzero"`
-	GenerateCpuProfile  string   `json:"generateCpuProfile,omitzero"`
-	GenerateTrace       string   `json:"generateTrace,omitzero"`
-	ListEmittedFiles    Tristate `json:"listEmittedFiles,omitzero"`
-	ListFiles           Tristate `json:"listFiles,omitzero"`
-	ExplainFiles        Tristate `json:"explainFiles,omitzero"`
-	ListFilesOnly       Tristate `json:"listFilesOnly,omitzero"`
-	NoEmitForJsFiles    Tristate `json:"noEmitForJsFiles,omitzero"`
-	PreserveWatchOutput Tristate `json:"preserveWatchOutput,omitzero"`
-	Pretty              Tristate `json:"pretty,omitzero"`
-	Version             Tristate `json:"version,omitzero"`
-	Watch               Tristate `json:"watch,omitzero"`
-	ShowConfig          Tristate `json:"showConfig,omitzero"`
-	Build               Tristate `json:"build,omitzero"`
-	Help                Tristate `json:"help,omitzero"`
-	All                 Tristate `json:"all,omitzero"`
-	RunExternalCode     Tristate `json:"runExternalCode,omitzero"`
-	PprofDir            string   `json:"pprofDir,omitzero"`
-	SingleThreaded      Tristate `json:"singleThreaded,omitzero"`
-	Quiet               Tristate `json:"quiet,omitzero"`
-	Checkers            *int     `json:"checkers,omitzero"`
+	ConfigFilePath      tspath.RootedFilePath      `json:"configFilePath,omitzero"`
+	NoDtsResolution     Tristate                   `json:"noDtsResolution,omitzero"`
+	PathsBasePath       tspath.RootedDirectoryPath `json:"pathsBasePath,omitzero"`
+	Diagnostics         Tristate                   `json:"diagnostics,omitzero"`
+	ExtendedDiagnostics Tristate                   `json:"extendedDiagnostics,omitzero"`
+	GenerateCpuProfile  tspath.RootedFilePath      `json:"generateCpuProfile,omitzero"`
+	GenerateTrace       tspath.RootedDirectoryPath `json:"generateTrace,omitzero"`
+	ListEmittedFiles    Tristate                   `json:"listEmittedFiles,omitzero"`
+	ListFiles           Tristate                   `json:"listFiles,omitzero"`
+	ExplainFiles        Tristate                   `json:"explainFiles,omitzero"`
+	ListFilesOnly       Tristate                   `json:"listFilesOnly,omitzero"`
+	NoEmitForJsFiles    Tristate                   `json:"noEmitForJsFiles,omitzero"`
+	PreserveWatchOutput Tristate                   `json:"preserveWatchOutput,omitzero"`
+	Pretty              Tristate                   `json:"pretty,omitzero"`
+	Version             Tristate                   `json:"version,omitzero"`
+	Watch               Tristate                   `json:"watch,omitzero"`
+	ShowConfig          Tristate                   `json:"showConfig,omitzero"`
+	Build               Tristate                   `json:"build,omitzero"`
+	Help                Tristate                   `json:"help,omitzero"`
+	All                 Tristate                   `json:"all,omitzero"`
+	RunExternalCode     Tristate                   `json:"runExternalCode,omitzero"`
+	PprofDir            tspath.RootedDirectoryPath `json:"pprofDir,omitzero"`
+	SingleThreaded      Tristate                   `json:"singleThreaded,omitzero"`
+	Quiet               Tristate                   `json:"quiet,omitzero"`
+	Checkers            *int                       `json:"checkers,omitzero"`
 }
 
 // Clone creates a shallow copy of the CompilerOptions.

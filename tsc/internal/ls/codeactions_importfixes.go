@@ -14,7 +14,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 var importFixErrorCodes = []int32{
@@ -96,7 +95,7 @@ func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]*C
 }
 
 func getAllImportCodeActions(ctx context.Context, fixContext *CodeFixContext) (*CombinedCodeActions, error) {
-	if tspath.IsDynamicFileName(fixContext.SourceFile.FileName()) {
+	if fixContext.SourceFile.FileName().IsDynamic() {
 		return nil, nil
 	}
 
@@ -173,7 +172,7 @@ func addImportFromDiagnostic(ch *checker.Checker, importAdder autoimport.ImportA
 
 func getFixInfos(ch *checker.Checker, fixContext *CodeFixContext, errorCode int32, pos int) ([]*fixInfo, error) {
 	// Can't compute import fixes for dynamic/untitled files since they don't have real file paths
-	if tspath.IsDynamicFileName(fixContext.SourceFile.FileName()) {
+	if fixContext.SourceFile.FileName().IsDynamic() {
 		return nil, nil
 	}
 
@@ -258,7 +257,7 @@ func getFixesInfoForUMDImport(token *ast.Node, view *autoimport.View, ch *checke
 		}
 		result = append(result, &fixInfo{
 			fix:                 fix,
-			symbolName:          umdSymbol.Name,
+			symbolName:          umdSymbol.Name(),
 			errorIdentifierText: errorIdentifierText,
 		})
 	}
@@ -295,9 +294,9 @@ func getUmdSymbol(token *ast.Node, ch *checker.Checker) *ast.Symbol {
 }
 
 func isUMDExportSymbol(symbol *ast.Symbol) bool {
-	return symbol != nil && len(symbol.Declarations) > 0 &&
-		symbol.Declarations[0] != nil &&
-		ast.IsNamespaceExportDeclaration(symbol.Declarations[0])
+	return symbol != nil && len(symbol.Declarations()) > 0 &&
+		symbol.Declarations()[0] != nil &&
+		ast.IsNamespaceExportDeclaration(symbol.Declarations()[0])
 }
 
 func getFixesInfoForNonUMDImport(fixContext *CodeFixContext, symbolToken *ast.Node, view *autoimport.View, ch *checker.Checker) []*fixInfo {
@@ -416,8 +415,8 @@ func needsJsxNamespaceFix(jsxNamespace string, symbolToken *ast.Node, ch *checke
 	if namespaceSymbol == nil {
 		return true
 	}
-	if slices.ContainsFunc(namespaceSymbol.Declarations, ast.IsTypeOnlyImportOrExportDeclaration) {
-		return (namespaceSymbol.Flags & ast.SymbolFlagsValue) == 0
+	if slices.ContainsFunc(namespaceSymbol.Declarations(), ast.IsTypeOnlyImportOrExportDeclaration) {
+		return (namespaceSymbol.Flags() & ast.SymbolFlagsValue) == 0
 	}
 	return false
 }

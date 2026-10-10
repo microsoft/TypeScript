@@ -282,7 +282,7 @@ func (c *Checker) inferFromAliasTypeArguments(n *InferenceState, source *Type, t
 	// Simply infer from source type arguments to target type arguments, with defaults applied.
 	params := c.typeAliasLinks.Get(source.alias.symbol).typeParameters
 	minParams := c.getMinTypeArgumentCount(params)
-	nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration)
+	nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration())
 	sourceTypes := c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
 	targetTypes := c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
 	c.inferFromTypeArguments(n, sourceTypes, targetTypes, c.getAliasVariances(source.alias.symbol))
@@ -839,9 +839,9 @@ func (c *Checker) inferFromObjectTypes(n *InferenceState, source *Type, target *
 func (c *Checker) inferFromProperties(n *InferenceState, source *Type, target *Type) {
 	properties := c.getPropertiesOfObjectType(target)
 	for _, targetProp := range properties {
-		sourceProp := c.getPropertyOfType(source, targetProp.Name)
-		if sourceProp != nil && !core.Some(sourceProp.Declarations, c.isSkipDirectInferenceNode) {
-			c.inferFromTypes(n, c.removeMissingType(c.getTypeOfSymbol(sourceProp), sourceProp.Flags&ast.SymbolFlagsOptional != 0), c.removeMissingType(c.getTypeOfSymbol(targetProp), targetProp.Flags&ast.SymbolFlagsOptional != 0))
+		sourceProp := c.getPropertyOfType(source, targetProp.Name())
+		if sourceProp != nil && !core.Some(sourceProp.Declarations(), c.isSkipDirectInferenceNode) {
+			c.inferFromTypes(n, c.removeMissingType(c.getTypeOfSymbol(sourceProp), sourceProp.Flags()&ast.SymbolFlagsOptional != 0), c.removeMissingType(c.getTypeOfSymbol(targetProp), targetProp.Flags()&ast.SymbolFlagsOptional != 0))
 		}
 	}
 }
@@ -932,7 +932,7 @@ func (c *Checker) inferFromIndexTypes(n *InferenceState, source *Type, target *T
 			for _, prop := range c.getPropertiesOfType(source) {
 				if c.isApplicableIndexType(c.getLiteralTypeFromProperty(prop, TypeFlagsStringOrNumberLiteralOrUnique, false), targetInfo.keyType) {
 					propType := c.getTypeOfSymbol(prop)
-					if prop.Flags&ast.SymbolFlagsOptional != 0 {
+					if prop.Flags()&ast.SymbolFlagsOptional != 0 {
 						propType = c.removeMissingOrUndefinedType(propType)
 					}
 					propTypes = append(propTypes, propType)
@@ -1130,8 +1130,8 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 			}
 		}
 		checkFlags := ast.CheckFlagsReverseMapped | core.IfElse(readonlyMask && c.isReadonlySymbol(prop), ast.CheckFlagsReadonly, 0)
-		inferredProp := c.newSymbolEx(ast.SymbolFlagsProperty|prop.Flags&optionalMask, prop.Name, checkFlags)
-		inferredProp.Declarations = prop.Declarations
+		inferredProp := c.newSymbolEx(ast.SymbolFlagsProperty|prop.Flags()&optionalMask, prop.Name(), checkFlags)
+		inferredProp.SetDeclarations(prop.Declarations())
 		c.valueSymbolLinks.Get(inferredProp).nameType = c.valueSymbolLinks.Get(prop).nameType
 		links := c.ReverseMappedSymbolLinks.Get(inferredProp)
 		links.propertyType = c.getTypeOfSymbol(prop)
@@ -1148,7 +1148,7 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 			links.mappedType = r.mappedType
 			links.constraintType = r.constraintType
 		}
-		members[prop.Name] = inferredProp
+		members[prop.Name()] = inferredProp
 	}
 	c.setStructuredTypeMembers(t, members, nil, nil, indexInfos)
 }
@@ -1247,8 +1247,8 @@ func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
 		literalProp := c.newSymbol(ast.SymbolFlagsProperty, name)
 		c.valueSymbolLinks.Get(literalProp).resolvedType = c.anyType
 		if t.symbol != nil {
-			literalProp.Declarations = t.symbol.Declarations
-			literalProp.ValueDeclaration = t.symbol.ValueDeclaration
+			literalProp.SetDeclarations(t.symbol.Declarations())
+			literalProp.SetValueDeclaration(t.symbol.ValueDeclaration())
 		}
 		members[name] = literalProp
 	}
@@ -1628,7 +1628,7 @@ func (c *Checker) literalTypesWithSameBaseType(types []*Type) bool {
 }
 
 func (c *Checker) isFromInferenceBlockedSource(t *Type) bool {
-	return t.symbol != nil && core.Some(t.symbol.Declarations, c.isSkipDirectInferenceNode)
+	return t.symbol != nil && core.Some(t.symbol.Declarations(), c.isSkipDirectInferenceNode)
 }
 
 func (c *Checker) isSkipDirectInferenceNode(node *ast.Node) bool {
@@ -1670,7 +1670,7 @@ func hasInferenceCandidatesOrDefault(info *InferenceInfo) bool {
 
 func hasTypeParameterDefault(tp *Type) bool {
 	if tp.symbol != nil {
-		for _, d := range tp.symbol.Declarations {
+		for _, d := range tp.symbol.Declarations() {
 			if ast.IsTypeParameterDeclaration(d) && d.AsTypeParameterDeclaration().DefaultType != nil {
 				return true
 			}

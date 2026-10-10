@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/importSource/importSource13.ts] ////
+
+=== b.mts ===
+import source a from "./a.wasm";
+>a : Symbol(a, Decl(b.mts, 0, 6))
+
+const b: AbstractModuleSource = a;
+>b : Symbol(b, Decl(b.mts, 1, 5))
+>AbstractModuleSource : Symbol(AbstractModuleSource, Decl(lib.esnext.modulesource.d.ts, --, --))
+>a : Symbol(a, Decl(b.mts, 0, 6))
+
+const c: Promise<AbstractModuleSource> = import.source("./a.wasm");
+>c : Symbol(c, Decl(b.mts, 2, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>AbstractModuleSource : Symbol(AbstractModuleSource, Decl(lib.esnext.modulesource.d.ts, --, --))
+
+=== c.cts ===
+import source a from "./a.wasm";
+>a : Symbol(a, Decl(c.cts, 0, 6))
+
+const b: AbstractModuleSource = a;
+>b : Symbol(b, Decl(c.cts, 1, 5))
+>AbstractModuleSource : Symbol(AbstractModuleSource, Decl(lib.esnext.modulesource.d.ts, --, --))
+>a : Symbol(a, Decl(c.cts, 0, 6))
+
+const c: Promise<AbstractModuleSource> = import.source("./a.wasm");
+>c : Symbol(c, Decl(c.cts, 2, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>AbstractModuleSource : Symbol(AbstractModuleSource, Decl(lib.esnext.modulesource.d.ts, --, --))
+
