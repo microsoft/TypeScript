@@ -431,6 +431,9 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 	if oldOptions.JsxImportSource != newOptions.JsxImportSource {
 		return true
 	}
+	if oldOptions.Module != newOptions.Module {
+		return true
+	}
 	if oldOptions.ModuleResolution != newOptions.ModuleResolution {
 		return true
 	}

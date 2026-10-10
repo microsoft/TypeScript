@@ -590,6 +590,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 shortName: "m",
+                affectsSemanticDiagnostics: true,
                 affectsEmit: true,
                 affectsBuildInfo: true,
                 showInSimplifiedHelpView: true,
