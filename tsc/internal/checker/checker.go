@@ -26479,6 +26479,9 @@ func (c *Checker) removeSubtypes(types []*Type, hasObjectTypes bool) []*Type {
 	if cached := c.subtypeReductionCache[key]; cached != nil {
 		return cached
 	}
+	if hasObjectTypes {
+		types = c.removeIdenticalObjectLiteralTypes(types)
+	}
 	// We assume that redundant primitive types have already been removed from the types array and that there
 	// are no any and unknown types in the array. Thus, the only possible supertypes for primitive types are empty
 	// object types, and if none of those are present we can exclude primitive types from the subtype check.
@@ -26558,6 +26561,65 @@ func (c *Checker) removeSubtypes(types []*Type, hasObjectTypes bool) []*Type {
 	}
 	c.subtypeReductionCache[key] = types
 	return types
+}
+
+// removeIdenticalObjectLiteralTypes removes object literal types with the same shape as an earlier type in the list.
+// The pairwise loop in removeSubtypes would keep only the first of them anyway, but at a quadratic cost for large
+// arrays of records such as imported JSON files.
+func (c *Checker) removeIdenticalObjectLiteralTypes(types []*Type) []*Type {
+	var seen map[CacheHashKey]struct{}
+	return core.Filter(types, func(t *Type) bool {
+		key, ok := c.getObjectLiteralShapeKey(t)
+		if !ok {
+			return true
+		}
+		if _, ok := seen[key]; ok {
+			return false
+		}
+		if seen == nil {
+			seen = make(map[CacheHashKey]struct{})
+		}
+		seen[key] = struct{}{}
+		return true
+	})
+}
+
+func (c *Checker) getObjectLiteralShapeKey(t *Type) (CacheHashKey, bool) {
+	if t.flags&TypeFlagsObject == 0 || !isObjectLiteralType(t) {
+		return CacheHashKey{}, false
+	}
+	resolved := c.resolveStructuredTypeMembers(t)
+	if len(resolved.signatures) != 0 || len(resolved.indexInfos) != 0 {
+		return CacheHashKey{}, false
+	}
+	var b keyBuilder
+	b.writeUint32(uint32(t.objectFlags & (ObjectFlagsFreshLiteral | ObjectFlagsJSLiteral | ObjectFlagsContainsSpread | ObjectFlagsObjectLiteralPatternWithComputedProperties)))
+	b.writeInt(len(resolved.properties))
+	for _, p := range resolved.properties {
+		propType := c.getResolvedTypeOfObjectLiteralProperty(p)
+		if propType == nil {
+			return CacheHashKey{}, false
+		}
+		b.writeInt(len(p.Name()))
+		b.writeString(p.Name())
+		b.writeUint32(uint32(p.Flags()))
+		b.writeUint32(uint32(p.CheckFlags()))
+		b.writeType(propType)
+	}
+	return b.hash(), true
+}
+
+// getResolvedTypeOfObjectLiteralProperty returns the type of a plain object literal property only if it is already
+// resolved, so that computing a shape key never triggers type resolution (see #46981).
+func (c *Checker) getResolvedTypeOfObjectLiteralProperty(p *ast.Symbol) *Type {
+	if p.Flags()&(ast.SymbolFlagsAccessor|ast.SymbolFlagsMethod) != 0 ||
+		p.CheckFlags()&(ast.CheckFlagsDeferredType|ast.CheckFlagsInstantiated|ast.CheckFlagsMapped|ast.CheckFlagsReverseMapped) != 0 {
+		return nil
+	}
+	if links := c.valueSymbolLinks.TryGet(p); links != nil {
+		return links.resolvedType
+	}
+	return nil
 }
 
 func (c *Checker) intersectTypes(type1 *Type, type2 *Type) *Type {
