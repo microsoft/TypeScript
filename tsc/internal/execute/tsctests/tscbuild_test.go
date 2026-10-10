@@ -1277,6 +1277,17 @@ func TestBuildModuleSuffixesOptionChanges(t *testing.T) {
 	})
 }
 
+func TestBuildTargetOptionDiagnostics(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "target", values: [2]any{"es2015", "es2020"},
+			files:        FileMap{"index.ts": "export const result = 1n;\n"},
+			expectedDiff: "Changing target with explicit unchanged libraries retains the previous BigInt syntax diagnostics.",
+		},
+	})
+}
+
 func TestBuildEmitOptionChanges(t *testing.T) {
 	t.Parallel()
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
