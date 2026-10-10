@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/weakTypeWithTypeParameterBase.ts] ////
+
+=== weakTypeWithTypeParameterBase.ts ===
+declare function base<T>(): new () => T;
+>base : Symbol(base, Decl(weakTypeWithTypeParameterBase.ts, 0, 0))
+>T : Symbol(T, Decl(weakTypeWithTypeParameterBase.ts, 0, 22))
+>T : Symbol(T, Decl(weakTypeWithTypeParameterBase.ts, 0, 22))
+
+function make<T extends object>() {
+>make : Symbol(make, Decl(weakTypeWithTypeParameterBase.ts, 0, 40))
+>T : Symbol(T, Decl(weakTypeWithTypeParameterBase.ts, 2, 14))
+
+    class Weak extends base<T>() {
+>Weak : Symbol(Weak, Decl(weakTypeWithTypeParameterBase.ts, 2, 35))
+>base : Symbol(base, Decl(weakTypeWithTypeParameterBase.ts, 0, 0))
+>T : Symbol(T, Decl(weakTypeWithTypeParameterBase.ts, 2, 14))
+
+        optional?: string;
+>optional : Symbol(Weak.optional, Decl(weakTypeWithTypeParameterBase.ts, 3, 34))
+    }
+    return Weak;
+>Weak : Symbol(Weak, Decl(weakTypeWithTypeParameterBase.ts, 2, 35))
+}
+
+const C = make<() => void>();
+>C : Symbol(C, Decl(weakTypeWithTypeParameterBase.ts, 9, 5))
+>make : Symbol(make, Decl(weakTypeWithTypeParameterBase.ts, 0, 40))
+
+const c: InstanceType<typeof C> = () => {};
+>c : Symbol(c, Decl(weakTypeWithTypeParameterBase.ts, 10, 5))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(weakTypeWithTypeParameterBase.ts, 9, 5))
+
+function makeGeneric<T extends object>() {
+>makeGeneric : Symbol(makeGeneric, Decl(weakTypeWithTypeParameterBase.ts, 10, 43))
+>T : Symbol(T, Decl(weakTypeWithTypeParameterBase.ts, 12, 21))
+
+    class Inner<U> extends base<T>() {
+>Inner : Symbol(Inner, Decl(weakTypeWithTypeParameterBase.ts, 12, 42))
+>U : Symbol(U, Decl(weakTypeWithTypeParameterBase.ts, 13, 16))
+>base : Symbol(base, Decl(weakTypeWithTypeParameterBase.ts, 0, 0))
+>T : Symbol(T, Decl(weakTypeWithTypeParameterBase.ts, 12, 21))
+
+        u?: U;
+>u : Symbol(Inner.u, Decl(weakTypeWithTypeParameterBase.ts, 13, 38))
+>U : Symbol(U, Decl(weakTypeWithTypeParameterBase.ts, 13, 16))
+    }
+    return Inner;
+>Inner : Symbol(Inner, Decl(weakTypeWithTypeParameterBase.ts, 12, 42))
+}
+
+const I = makeGeneric<{ req: string }>();
+>I : Symbol(I, Decl(weakTypeWithTypeParameterBase.ts, 19, 5))
+>makeGeneric : Symbol(makeGeneric, Decl(weakTypeWithTypeParameterBase.ts, 10, 43))
+>req : Symbol(req, Decl(weakTypeWithTypeParameterBase.ts, 19, 23))
+
+const i: InstanceType<typeof I> = { other: 1 } as { other: number };
+>i : Symbol(i, Decl(weakTypeWithTypeParameterBase.ts, 20, 5))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>I : Symbol(I, Decl(weakTypeWithTypeParameterBase.ts, 19, 5))
+>other : Symbol(other, Decl(weakTypeWithTypeParameterBase.ts, 20, 35))
+>other : Symbol(other, Decl(weakTypeWithTypeParameterBase.ts, 20, 51))
+
