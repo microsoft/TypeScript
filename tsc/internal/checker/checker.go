@@ -15422,6 +15422,25 @@ func (c *Checker) getCannotResolveModuleNameErrorForSpecificModule(moduleName *a
 	return nil
 }
 
+// Returns a more specific error when a failed non-relative module import matches a global
+// namespace declaration, e.g. `declare module foo { }`, which declares a namespace rather
+// than an ambient module. See https://github.com/microsoft/TypeScript/issues/23185.
+func (c *Checker) getCannotResolveModuleNameErrorForGlobalNamespace(moduleReference string) *diagnostics.Message {
+	if tspath.IsExternalModuleNameRelative(moduleReference) {
+		return nil
+	}
+	symbol := c.getGlobalSymbol(moduleReference, ast.SymbolFlagsModule, nil /*diagnostic*/)
+	if symbol == nil {
+		return nil
+	}
+	for _, declaration := range symbol.Declarations() {
+		if ast.IsModuleDeclaration(declaration) && !ast.IsStringLiteral(declaration.Name()) {
+			return diagnostics.Cannot_find_module_0_Did_you_mean_to_use_the_global_namespace_0_If_you_meant_to_declare_an_ambient_module_the_name_must_be_quoted_Colon_declare_module_0
+		}
+	}
+	return nil
+}
+
 func (c *Checker) resolveExternalModuleNameWorker(location *ast.Node, moduleReferenceExpression *ast.Node, moduleNotFoundError *diagnostics.Message, ignoreErrors bool, isForAugmentation bool, importAttributesType *Type) *ast.Symbol {
 	if ast.IsStringLiteralLike(moduleReferenceExpression) {
 		if ast.IsSourcePhaseImport(moduleReferenceExpression.Parent) {
@@ -15716,6 +15735,11 @@ func (c *Checker) resolveExternalModule(
 	}
 
 	if moduleNotFoundError != nil {
+		if moduleNotFoundError == diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations {
+			if betterError := c.getCannotResolveModuleNameErrorForGlobalNamespace(moduleReference); betterError != nil {
+				moduleNotFoundError = betterError
+			}
+		}
 		// See if this was possibly a projectReference redirect
 		if resolvedModule.IsResolved() {
 			redirect := c.program.GetProjectReferenceFromSource(

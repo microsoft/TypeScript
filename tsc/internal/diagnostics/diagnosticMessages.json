@@ -8923,5 +8923,9 @@
     "A deferred import must specify a namespace binding.": {
         "category": "Error",
         "code": 18117
+    },
+    "Cannot find module '{0}'. Did you mean to use the global namespace '{0}'? If you meant to declare an ambient module, the name must be quoted: `declare module '{0}';`.": {
+        "category": "Error",
+        "code": 95210
     }
 }

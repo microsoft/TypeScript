@@ -2220,5 +2220,6 @@
     "Organize_Imports_95206": "Organize Imports",
     "Remove_Unused_Imports_95207": "Remove Unused Imports",
     "Sort_Imports_95208": "Sort Imports",
-    "JSDoc_comment_95209": "JSDoc comment"
+    "JSDoc_comment_95209": "JSDoc comment",
+    "Cannot_find_module_0_Did_you_mean_to_use_the_global_namespace_0_If_you_meant_to_declare_an_ambient_m_95210": "Cannot find module '{0}'. Did you mean to use the global namespace '{0}'? If you meant to declare an ambient module, the name must be quoted: `declare module '{0}';`."
 }

@@ -4446,6 +4446,8 @@ var Sort_Imports = &Message{code: 95208, category: CategoryMessage, key: "Sort_I
 
 var JSDoc_comment = &Message{code: 95209, category: CategoryMessage, key: "JSDoc_comment_95209", text: "JSDoc comment"}
 
+var Cannot_find_module_0_Did_you_mean_to_use_the_global_namespace_0_If_you_meant_to_declare_an_ambient_module_the_name_must_be_quoted_Colon_declare_module_0 = &Message{code: 95210, category: CategoryError, key: "Cannot_find_module_0_Did_you_mean_to_use_the_global_namespace_0_If_you_meant_to_declare_an_ambient_m_95210", text: "Cannot find module '{0}'. Did you mean to use the global namespace '{0}'? If you meant to declare an ambient module, the name must be quoted: `declare module '{0}';`."}
+
 var allMessages = [...]**Message{
 	&Unterminated_string_literal,
 	&Identifier_expected,
@@ -6669,4 +6671,5 @@ var allMessages = [...]**Message{
 	&Remove_Unused_Imports,
 	&Sort_Imports,
 	&JSDoc_comment,
+	&Cannot_find_module_0_Did_you_mean_to_use_the_global_namespace_0_If_you_meant_to_declare_an_ambient_module_the_name_must_be_quoted_Colon_declare_module_0,
 }

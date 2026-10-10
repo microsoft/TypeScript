@@ -1,0 +1,20 @@
+globals.d.ts(1,16): error TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
+main.ts(1,27): error TS95210: Cannot find module 'messageformat'. Did you mean to use the global namespace 'messageformat'? If you meant to declare an ambient module, the name must be quoted: `declare module 'messageformat';`.
+main.ts(2,27): error TS2307: Cannot find module 'not-declared-globally' or its corresponding type declarations.
+
+
+==== globals.d.ts (1 errors) ====
+    declare module messageformat {
+                   ~~~~~~~~~~~~~
+!!! error TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
+        export type Msg = (params: {}) => string;
+    }
+    
+==== main.ts (2 errors) ====
+    import MessageFormat from "messageformat";
+                              ~~~~~~~~~~~~~~~
+!!! error TS95210: Cannot find module 'messageformat'. Did you mean to use the global namespace 'messageformat'? If you meant to declare an ambient module, the name must be quoted: `declare module 'messageformat';`.
+    import { something } from "not-declared-globally";
+                              ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'not-declared-globally' or its corresponding type declarations.
+    
