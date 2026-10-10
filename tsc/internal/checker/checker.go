@@ -17216,6 +17216,9 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 }
 
 func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
+	// An element that the parameter's annotation or contextual type already types is not padded:
+	// padding would replace that type with the element's own (implicitly any) type.
+	declaredType := c.getDeclaredTypeOfParameterBindingPattern(pattern)
 	var missingElements []*ast.Node
 	for _, e := range pattern.Elements() {
 		if hasDotDotDotToken(e) {
@@ -17223,6 +17226,9 @@ func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 		}
 		name := c.getPropertyNameFromBindingElement(e)
 		if name != ast.InternalSymbolNameMissing && c.getPropertyOfType(t, name) == nil {
+			if declaredType != nil && c.getTypeOfPropertyOfType(declaredType, name) != nil {
+				continue
+			}
 			missingElements = append(missingElements, e)
 		}
 	}
@@ -17241,6 +17247,36 @@ func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 	result := c.newAnonymousType(t.symbol, members, nil, nil, c.getIndexInfosOfType(t))
 	result.objectFlags = t.objectFlags
 	return result
+}
+
+// getDeclaredTypeOfParameterBindingPattern returns the type that an object binding pattern of a
+// parameter destructures when the parameter's type annotation or its contextual signature supplies
+// one. It never consults an initializer, so it is safe to call while checking one.
+func (c *Checker) getDeclaredTypeOfParameterBindingPattern(pattern *ast.Node) *Type {
+	parent := pattern.Parent
+	var t *Type
+	switch {
+	case ast.IsBindingElement(parent):
+		if !ast.IsObjectBindingPattern(parent.Parent) {
+			return nil
+		}
+		outer := c.getDeclaredTypeOfParameterBindingPattern(parent.Parent)
+		name := c.getPropertyNameFromBindingElement(parent)
+		if outer == nil || name == ast.InternalSymbolNameMissing {
+			return nil
+		}
+		t = c.getTypeOfPropertyOfType(outer, name)
+	case ast.IsParameterDeclaration(parent):
+		if parent.Type() != nil {
+			t = c.getTypeFromTypeNode(parent.Type())
+		} else {
+			t = c.getContextuallyTypedParameterType(parent)
+		}
+	}
+	if t == nil {
+		return nil
+	}
+	return c.GetNonNullableType(t)
 }
 
 func (c *Checker) getPropertyNameFromBindingElement(e *ast.Node) string {
