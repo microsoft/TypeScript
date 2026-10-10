@@ -1319,6 +1319,23 @@ func TestBuildImportHelpersOptionDiagnostics(t *testing.T) {
 	})
 }
 
+func TestBuildReactNamespaceOptionDiagnostics(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "reactNamespace", values: [2]any{"React", "Other"},
+			options: map[string]any{"jsx": "react"},
+			files: FileMap{"index.tsx": stringtestutil.Dedent(`
+				declare namespace React {
+					function createElement(...args: any[]): any;
+					namespace JSX { interface Element {} interface IntrinsicElements { div: {} } }
+				}
+				export const result = <div />;`)},
+			expectedDiff: "Changing reactNamespace retains the previous JSX namespace diagnostics.",
+		},
+	})
+}
+
 func TestBuildEmitOptionChanges(t *testing.T) {
 	t.Parallel()
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
