@@ -896,18 +896,16 @@ func tryDirectoryWithPackageJson(
 			importMode = core.ResolutionModeESM
 		}
 
-		conditions := module.GetConditions(options, importMode)
-
 		var fromExports tspath.ModuleSpecifier
 		if packageJsonContent != nil && packageJsonContent.Fields.Exports.Type != packagejson.JSONValueTypeNotPresent {
-			fromExports = tryGetModuleNameFromExports(
+			fromExports = getModuleNameFromExports(
 				options,
 				host,
 				pathObj.FileName,
 				packageRootDirectory,
 				packageName,
-				packageJsonContent.Fields.Exports,
-				conditions,
+				packageJsonContent,
+				importMode,
 			)
 		}
 		if len(fromExports) > 0 {
@@ -1009,6 +1007,7 @@ func tryGetModuleNameFromExports(
 	exports packagejson.ExportsOrImports,
 	conditions []string,
 ) tspath.ModuleSpecifier {
+	target := newExportsOrImportsTarget(targetFileName, options, host, false /*isImports*/, false /*preferTsExtension*/)
 	if exports.IsSubpaths() {
 		// sub-mappings
 		// 3 cases:
@@ -1016,14 +1015,13 @@ func tryGetModuleNameFromExports(
 		// * pattern mappings (contains a *)
 		// * exact mappings (no *, does not end with /)
 		for k, subk := range exports.AsObject().Entries() {
-			subPackageName := tspath.ResolvePathWithoutTrailingDirectorySeparator(packageName, k)
 			mode := MatchingModeExact
 			if strings.HasSuffix(k, "/") {
 				mode = MatchingModeDirectory
 			} else if strings.Contains(k, "*") {
 				mode = MatchingModePattern
 			}
-			result := tryGetModuleNameFromExportsOrImports(options, host, targetFileName, packageDirectory, subPackageName, subk, conditions, mode /*isImports*/, false /*preferTsExtension*/, false)
+			result := tryGetModuleNameFromExportsOrImports(options, host, &target, packageDirectory, packageName, k, subk, conditions, mode)
 			if len(result) > 0 {
 				return tspath.ToModuleSpecifier(result)
 			}
@@ -1032,14 +1030,13 @@ func tryGetModuleNameFromExports(
 	return tspath.ToModuleSpecifier(tryGetModuleNameFromExportsOrImports(
 		options,
 		host,
-		targetFileName,
+		&target,
 		packageDirectory,
 		packageName,
+		"", /*subpath*/
 		exports,
 		conditions,
 		MatchingModeExact,
-		/*isImports*/ false,
-		/*preferTsExtension*/ false,
 	))
 }
 
@@ -1072,6 +1069,7 @@ func tryGetModuleNameFromPackageJsonImports(
 		return "" // not present or invalid for imports
 	case packagejson.JSONValueTypeObject:
 		conditions := module.GetConditions(options, importMode)
+		target := newExportsOrImportsTarget(moduleFileName, options, host, true /*isImports*/, preferTsExtension)
 		top := imports.AsObject()
 		entries := top.Entries()
 		for k, value := range entries {
@@ -1090,14 +1088,13 @@ func tryGetModuleNameFromPackageJsonImports(
 			result := tryGetModuleNameFromExportsOrImports(
 				options,
 				host,
-				moduleFileName,
+				&target,
 				ancestorDirectoryWithPackageJson,
 				k,
+				"", /*subpath*/
 				value,
 				conditions,
 				mode,
-				true,
-				preferTsExtension,
 			)
 			if len(result) > 0 {
 				return tspath.ToModuleSpecifier(result)
@@ -1123,94 +1120,89 @@ func tryGetModuleNameFromPaths(
 	compilerOptions *core.CompilerOptions,
 ) string {
 	caseSensitivity := host.CaseSensitivity()
-	for key, values := range paths.Entries() {
-		for _, patternText := range values {
-			normalized := tspath.NormalizePath(patternText)
-			pattern := resolvePathPatternIfInSameVolume(normalized, baseDirectory, caseSensitivity)
-			if len(pattern) == 0 {
-				pattern = normalized
-			}
-			prefix, suffix, ok := strings.Cut(pattern, "*")
+	// The specifiers relativeToBaseUrl can be written as, in order of preference. They don't depend on the
+	// pattern, so they are computed once; the last entry, the file name as written, is only considered by
+	// patterns that have an extension themselves (see below).
+	candidates := make([]specPair, 0, len(allowedEndings)+1)
+	for _, ending := range allowedEndings {
+		candidates = append(candidates, specPair{
+			ending: ending,
+			value: processEnding(
+				tspath.ToModuleSpecifier(relativeToBaseUrl),
+				fileName,
+				[]ModuleSpecifierEnding{ending},
+				compilerOptions,
+				host,
+			),
+		})
+	}
+	candidates = append(candidates, specPair{
+		ending: ModuleSpecifierEndingJsExtension,
+		value:  tspath.ToModuleSpecifier(relativeToBaseUrl),
+	})
+	for _, p := range getPathPatterns(host, paths, baseDirectory) {
+		// In module resolution, if `pattern` itself has an extension, a file with that extension is looked up directly,
+		// meaning a '.ts' or '.d.ts' extension is allowed to resolve. This is distinct from the case where a '*' substitution
+		// causes a module specifier to have an extension, i.e. the extension comes from the module specifier in a JS/TS file
+		// and matches the '*'. For example:
+		//
+		// Module Specifier      | Path Mapping (key: [pattern]) | Interpolation       | Resolution Action
+		// ---------------------->------------------------------->--------------------->---------------------------------------------------------------
+		// import "@app/foo"    -> "@app/*": ["./src/app/*.ts"] -> "./src/app/foo.ts" -> tryFile("./src/app/foo.ts") || [continue resolution algorithm]
+		// import "@app/foo.ts" -> "@app/*": ["./src/app/*"]    -> "./src/app/foo.ts" -> [continue resolution algorithm]
+		//
+		// (https://github.com/microsoft/TypeScript/blob/ad4ded80e1d58f0bf36ac16bea71bc10d9f09895/src/compiler/moduleNameResolver.ts#L2509-L2516)
+		//
+		// The interpolation produced by both scenarios is identical, but only in the former, where the extension is encoded in
+		// the path mapping rather than in the module specifier, will we prioritize a file lookup on the interpolation result.
+		// (In fact, currently, the latter scenario will necessarily fail since no resolution mode recognizes '.ts' as a valid
+		// extension for a module specifier.)
+		//
+		// Here, this means we need to be careful about whether we generate a match from the target filename (typically with a
+		// .ts extension) or the possible relative module specifiers representing that file:
+		//
+		// Filename            | Relative Module Specifier Candidates         | Path Mapping                 | Filename Result    | Module Specifier Results
+		// --------------------<----------------------------------------------<------------------------------<-------------------||----------------------------
+		// dist/haha.d.ts      <- dist/haha, dist/haha.js                     <- "@app/*": ["./dist/*.d.ts"] <- @app/haha        || (none)
+		// dist/haha.d.ts      <- dist/haha, dist/haha.js                     <- "@app/*": ["./dist/*"]      <- (none)           || @app/haha, @app/haha.js
+		// dist/foo/index.d.ts <- dist/foo, dist/foo/index, dist/foo/index.js <- "@app/*": ["./dist/*.d.ts"] <- @app/foo/index   || (none)
+		// dist/foo/index.d.ts <- dist/foo, dist/foo/index, dist/foo/index.js <- "@app/*": ["./dist/*"]      <- (none)           || @app/foo, @app/foo/index, @app/foo/index.js
+		// dist/wow.js.js      <- dist/wow.js, dist/wow.js.js                 <- "@app/*": ["./dist/*.js"]   <- @app/wow.js      || @app/wow, @app/wow.js
+		//
+		// The "Filename Result" can be generated only if `pattern` has an extension. Care must be taken that the list of
+		// relative module specifiers to run the interpolation (a) is actually valid for the module resolution mode, (b) takes
+		// into account the existence of other files (e.g. 'dist/wow.js' cannot refer to 'dist/wow.js.js' if 'dist/wow.js'
+		// exists) and (c) that they are ordered by preference. The last row shows that the filename result and module
+		// specifier results are not mutually exclusive. Note that the filename result is a higher priority in module
+		// resolution, but as long criteria (b) above is met, I don't think its result needs to be the highest priority result
+		// in module specifier generation. I have included it last, as it's difficult to tell exactly where it should be
+		// sorted among the others for a particular value of `importModuleSpecifierEnding`.
 
-			// In module resolution, if `pattern` itself has an extension, a file with that extension is looked up directly,
-			// meaning a '.ts' or '.d.ts' extension is allowed to resolve. This is distinct from the case where a '*' substitution
-			// causes a module specifier to have an extension, i.e. the extension comes from the module specifier in a JS/TS file
-			// and matches the '*'. For example:
-			//
-			// Module Specifier      | Path Mapping (key: [pattern]) | Interpolation       | Resolution Action
-			// ---------------------->------------------------------->--------------------->---------------------------------------------------------------
-			// import "@app/foo"    -> "@app/*": ["./src/app/*.ts"] -> "./src/app/foo.ts" -> tryFile("./src/app/foo.ts") || [continue resolution algorithm]
-			// import "@app/foo.ts" -> "@app/*": ["./src/app/*"]    -> "./src/app/foo.ts" -> [continue resolution algorithm]
-			//
-			// (https://github.com/microsoft/TypeScript/blob/ad4ded80e1d58f0bf36ac16bea71bc10d9f09895/src/compiler/moduleNameResolver.ts#L2509-L2516)
-			//
-			// The interpolation produced by both scenarios is identical, but only in the former, where the extension is encoded in
-			// the path mapping rather than in the module specifier, will we prioritize a file lookup on the interpolation result.
-			// (In fact, currently, the latter scenario will necessarily fail since no resolution mode recognizes '.ts' as a valid
-			// extension for a module specifier.)
-			//
-			// Here, this means we need to be careful about whether we generate a match from the target filename (typically with a
-			// .ts extension) or the possible relative module specifiers representing that file:
-			//
-			// Filename            | Relative Module Specifier Candidates         | Path Mapping                 | Filename Result    | Module Specifier Results
-			// --------------------<----------------------------------------------<------------------------------<-------------------||----------------------------
-			// dist/haha.d.ts      <- dist/haha, dist/haha.js                     <- "@app/*": ["./dist/*.d.ts"] <- @app/haha        || (none)
-			// dist/haha.d.ts      <- dist/haha, dist/haha.js                     <- "@app/*": ["./dist/*"]      <- (none)           || @app/haha, @app/haha.js
-			// dist/foo/index.d.ts <- dist/foo, dist/foo/index, dist/foo/index.js <- "@app/*": ["./dist/*.d.ts"] <- @app/foo/index   || (none)
-			// dist/foo/index.d.ts <- dist/foo, dist/foo/index, dist/foo/index.js <- "@app/*": ["./dist/*"]      <- (none)           || @app/foo, @app/foo/index, @app/foo/index.js
-			// dist/wow.js.js      <- dist/wow.js, dist/wow.js.js                 <- "@app/*": ["./dist/*.js"]   <- @app/wow.js      || @app/wow, @app/wow.js
-			//
-			// The "Filename Result" can be generated only if `pattern` has an extension. Care must be taken that the list of
-			// relative module specifiers to run the interpolation (a) is actually valid for the module resolution mode, (b) takes
-			// into account the existence of other files (e.g. 'dist/wow.js' cannot refer to 'dist/wow.js.js' if 'dist/wow.js'
-			// exists) and (c) that they are ordered by preference. The last row shows that the filename result and module
-			// specifier results are not mutually exclusive. Note that the filename result is a higher priority in module
-			// resolution, but as long criteria (b) above is met, I don't think its result needs to be the highest priority result
-			// in module specifier generation. I have included it last, as it's difficult to tell exactly where it should be
-			// sorted among the others for a particular value of `importModuleSpecifierEnding`.
+		patternCandidates := candidates[:len(allowedEndings)]
+		if p.hasExtension {
+			patternCandidates = candidates
+		}
 
-			var candidates []specPair
-			for _, ending := range allowedEndings {
-				result := processEnding(
-					tspath.ToModuleSpecifier(relativeToBaseUrl),
-					fileName,
-					[]ModuleSpecifierEnding{ending},
-					compilerOptions,
-					host,
-				)
-				candidates = append(candidates, specPair{
-					ending: ending,
-					value:  result,
-				})
-			}
-			if len(tspath.TryGetExtensionFromPath(pattern)) > 0 {
-				candidates = append(candidates, specPair{
-					ending: ModuleSpecifierEndingJsExtension,
-					value:  tspath.ToModuleSpecifier(relativeToBaseUrl),
-				})
-			}
-
-			if ok {
-				for _, c := range candidates {
-					value := c.value.AsString()
-					if len(value) >= len(prefix)+len(suffix) &&
-						stringutil.HasPrefix(value, prefix, caseSensitivity.IsCaseSensitive()) && // TODO: possible strada bug: these are not case-switched in strada
-						stringutil.HasSuffix(value, suffix, caseSensitivity.IsCaseSensitive()) &&
-						validateEnding(c, relativeToBaseUrl, fileName, compilerOptions, host) {
-						matchedStar := value[len(prefix) : len(value)-len(suffix)]
-						if !tspath.PathIsRelative(matchedStar) {
-							return replaceFirstStar(key, matchedStar)
-						}
+		if p.hasWildcard {
+			for _, c := range patternCandidates {
+				value := c.value.AsString()
+				if len(value) >= len(p.prefix)+len(p.suffix) &&
+					stringutil.HasPrefix(value, p.prefix, caseSensitivity.IsCaseSensitive()) && // TODO: possible strada bug: these are not case-switched in strada
+					stringutil.HasSuffix(value, p.suffix, caseSensitivity.IsCaseSensitive()) &&
+					validateEnding(c, relativeToBaseUrl, fileName, compilerOptions, host) {
+					matchedStar := value[len(p.prefix) : len(value)-len(p.suffix)]
+					if !tspath.PathIsRelative(matchedStar) {
+						return replaceFirstStar(p.key, matchedStar)
 					}
 				}
-			} else if core.Some(candidates, func(c specPair) bool {
-				return c.ending != ModuleSpecifierEndingMinimal && pattern == c.value.AsString()
-			}) ||
-				core.Some(candidates, func(c specPair) bool {
-					return c.ending == ModuleSpecifierEndingMinimal && pattern == c.value.AsString() && validateEnding(c, relativeToBaseUrl, fileName, compilerOptions, host)
-				}) {
-				return key
 			}
+		} else if core.Some(patternCandidates, func(c specPair) bool {
+			return c.ending != ModuleSpecifierEndingMinimal && p.pattern == c.value.AsString()
+		}) ||
+			core.Some(patternCandidates, func(c specPair) bool {
+				return c.ending == ModuleSpecifierEndingMinimal && p.pattern == c.value.AsString() && validateEnding(c, relativeToBaseUrl, fileName, compilerOptions, host)
+			}) {
+			return p.key
 		}
 	}
 	return ""
@@ -1227,39 +1219,69 @@ func validateEnding(c specPair, relativeToBaseUrl string, fileName tspath.Rooted
 	return c.ending != ModuleSpecifierEndingMinimal || c.value == processEnding(tspath.ToModuleSpecifier(relativeToBaseUrl), fileName, []ModuleSpecifierEnding{c.ending}, compilerOptions, host)
 }
 
+// exportsOrImportsTarget is the file that a package.json "exports" or "imports" lookup searches for,
+// in each form an entry may name it. The forms depend only on the target, so a lookup computes them
+// once instead of once per entry.
+type exportsOrImportsTarget struct {
+	fileName               tspath.RootedFilePath
+	extensionSwappedTarget tspath.RootedFilePath // the JS file a TS target is emitted as
+	outputFile             tspath.RootedFilePath // "imports" only: the target's JS output
+	declarationFile        tspath.RootedFilePath // "imports" only: the target's declaration output
+	canTryTsExtension      bool
+}
+
+func newExportsOrImportsTarget(
+	targetFileName tspath.RootedFilePath,
+	options *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	isImports bool,
+	preferTsExtension bool,
+) exportsOrImportsTarget {
+	target := exportsOrImportsTarget{
+		fileName:          targetFileName,
+		canTryTsExtension: preferTsExtension && targetFileName.HasImplementationTSFileExtension(),
+	}
+	// possible strada bug? Always uses compilerOptions of the host project, not those applicable to the targeted package.json!
+	if isImports {
+		target.outputFile = outputpaths.GetOutputJSFileNameWorker(targetFileName, options, host)
+		target.declarationFile = outputpaths.GetOutputDeclarationFileNameWorker(targetFileName, options, host)
+	}
+	if targetFileName.HasTSFileExtension() {
+		target.extensionSwappedTarget = targetFileName.RemoveFileExtension().AppendSuffix(module.TryGetJSExtensionForFileName(targetFileName, options))
+	}
+	return target
+}
+
+// exportsEntryName returns the specifier published by the "exports" entry under subpath, or by the
+// package itself when subpath is empty. Lookups build it only for the entry that matches.
+func exportsEntryName(packageName string, subpath string) string {
+	if subpath == "" {
+		return packageName
+	}
+	return tspath.ResolvePathWithoutTrailingDirectorySeparator(packageName, subpath)
+}
+
 func tryGetModuleNameFromExportsOrImports(
 	options *core.CompilerOptions,
 	host ModuleSpecifierGenerationHost,
-	targetFileName tspath.RootedFilePath,
+	target *exportsOrImportsTarget,
 	packageDirectory tspath.RootedDirectoryPath,
 	packageName string,
+	subpath string,
 	exports packagejson.ExportsOrImports,
 	conditions []string,
 	mode MatchingMode,
-	isImports bool,
-	preferTsExtension bool,
 ) string {
-	packageSpecifier := tspath.ToModuleSpecifier(packageName)
 	switch exports.Type {
 	case packagejson.JSONValueTypeNotPresent:
 		return ""
 	case packagejson.JSONValueTypeString:
 		strValue := exports.Value.(string)
-
-		// possible strada bug? Always uses compilerOptions of the host project, not those applicable to the targeted package.json!
-		var outputFile tspath.RootedFilePath
-		var declarationFile tspath.RootedFilePath
-		if isImports {
-			outputFile = outputpaths.GetOutputJSFileNameWorker(targetFileName, options, host)
-			declarationFile = outputpaths.GetOutputDeclarationFileNameWorker(targetFileName, options, host)
-		}
-
-		var extensionSwappedTarget tspath.RootedFilePath
-		if targetFileName.HasTSFileExtension() {
-			extensionSwappedTarget = targetFileName.RemoveFileExtension().AppendSuffix(module.TryGetJSExtensionForFileName(targetFileName, options))
-		}
-		canTryTsExtension := preferTsExtension && targetFileName.HasImplementationTSFileExtension()
-
+		targetFileName := target.fileName
+		extensionSwappedTarget := target.extensionSwappedTarget
+		outputFile := target.outputFile
+		declarationFile := target.declarationFile
+		canTryTsExtension := target.canTryTsExtension
 		caseSensitivity := host.CaseSensitivity()
 
 		switch mode {
@@ -1272,7 +1294,7 @@ func tryGetModuleNameFromExportsOrImports(
 				caseSensitivity.CompareFilePaths(targetFileName, resolvedTarget) == 0 ||
 				len(outputFile) > 0 && caseSensitivity.CompareFilePaths(outputFile, resolvedTarget) == 0 ||
 				len(declarationFile) > 0 && caseSensitivity.CompareFilePaths(declarationFile, resolvedTarget) == 0 {
-				return packageName
+				return exportsEntryName(packageName, subpath)
 			}
 		case MatchingModeDirectory:
 			resolvedTarget := packageDirectory.ResolveDirectory(tspath.RemoveTrailingDirectorySeparator(strValue))
@@ -1282,50 +1304,49 @@ func tryGetModuleNameFromExportsOrImports(
 
 				tspath.RootedPath(resolvedTarget)) {
 				fragment, _ := caseSensitivity.RelativePathFromDirectory(resolvedTarget, targetFileName)
-				return packageSpecifier.Resolve(strValue, fragment.AsString()).AsString()
+				return tspath.ToModuleSpecifier(exportsEntryName(packageName, subpath)).Resolve(strValue, fragment.AsString()).AsString()
 			}
 			if len(extensionSwappedTarget) > 0 && caseSensitivity.ContainsFilePath(resolvedTarget, extensionSwappedTarget) {
 				fragment, _ := caseSensitivity.RelativePathFromDirectory(resolvedTarget, extensionSwappedTarget)
-				return packageSpecifier.Resolve(strValue, fragment.AsString()).AsString()
+				return tspath.ToModuleSpecifier(exportsEntryName(packageName, subpath)).Resolve(strValue, fragment.AsString()).AsString()
 			}
 			if !canTryTsExtension && caseSensitivity.ContainsFilePath(resolvedTarget, targetFileName) {
 				fragment, _ := caseSensitivity.RelativePathFromDirectory(resolvedTarget, targetFileName)
-				return packageSpecifier.Resolve(strValue, fragment.AsString()).AsString()
+				return tspath.ToModuleSpecifier(exportsEntryName(packageName, subpath)).Resolve(strValue, fragment.AsString()).AsString()
 			}
 			if len(outputFile) > 0 && caseSensitivity.ContainsFilePath(resolvedTarget, outputFile) {
 				fragment, _ := caseSensitivity.RelativePathFromDirectory(resolvedTarget, outputFile)
-				return packageSpecifier.CombineRelative(fragment).AsString()
+				return tspath.ToModuleSpecifier(exportsEntryName(packageName, subpath)).CombineRelative(fragment).AsString()
 			}
 			if len(declarationFile) > 0 && caseSensitivity.ContainsFilePath(resolvedTarget, declarationFile) {
 				fragment, _ := caseSensitivity.RelativePathFromDirectory(resolvedTarget, declarationFile)
 				jsExtension := getJSExtensionForFileName(declarationFile, options)
 				fragmentWithJsExtension := fragment.ChangeExtension(jsExtension)
-				return packageSpecifier.CombineRelative(fragmentWithJsExtension).AsString()
+				return tspath.ToModuleSpecifier(exportsEntryName(packageName, subpath)).CombineRelative(fragmentWithJsExtension).AsString()
 			}
 		case MatchingModePattern:
 			pathOrPattern := tspath.ResolvePath(packageDirectory.AsString(), strValue)
 			leadingSlice, trailingSlice, _ := strings.Cut(pathOrPattern, "*")
-			caseSensitivity := host.CaseSensitivity()
 			targetFilePath := targetFileName.AsString()
 			if canTryTsExtension && stringutil.HasPrefixAndSuffixWithoutOverlap(targetFilePath, leadingSlice, trailingSlice, caseSensitivity.IsCaseSensitive()) {
 				starReplacement := targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]
-				return replaceFirstStar(packageName, starReplacement)
+				return replaceFirstStar(exportsEntryName(packageName, subpath), starReplacement)
 			}
 			if extensionSwappedTargetString := extensionSwappedTarget.AsString(); len(extensionSwappedTargetString) > 0 && stringutil.HasPrefixAndSuffixWithoutOverlap(extensionSwappedTargetString, leadingSlice, trailingSlice, caseSensitivity.IsCaseSensitive()) {
 				starReplacement := extensionSwappedTargetString[len(leadingSlice) : len(extensionSwappedTargetString)-len(trailingSlice)]
-				return replaceFirstStar(packageName, starReplacement)
+				return replaceFirstStar(exportsEntryName(packageName, subpath), starReplacement)
 			}
 			if !canTryTsExtension && stringutil.HasPrefixAndSuffixWithoutOverlap(targetFilePath, leadingSlice, trailingSlice, caseSensitivity.IsCaseSensitive()) {
 				starReplacement := targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]
-				return replaceFirstStar(packageName, starReplacement)
+				return replaceFirstStar(exportsEntryName(packageName, subpath), starReplacement)
 			}
 			if outputFileString := outputFile.AsString(); len(outputFileString) > 0 && stringutil.HasPrefixAndSuffixWithoutOverlap(outputFileString, leadingSlice, trailingSlice, caseSensitivity.IsCaseSensitive()) {
 				starReplacement := outputFileString[len(leadingSlice) : len(outputFileString)-len(trailingSlice)]
-				return replaceFirstStar(packageName, starReplacement)
+				return replaceFirstStar(exportsEntryName(packageName, subpath), starReplacement)
 			}
 			if declarationFileString := declarationFile.AsString(); len(declarationFileString) > 0 && stringutil.HasPrefixAndSuffixWithoutOverlap(declarationFileString, leadingSlice, trailingSlice, caseSensitivity.IsCaseSensitive()) {
 				starReplacement := declarationFileString[len(leadingSlice) : len(declarationFileString)-len(trailingSlice)]
-				substituted := replaceFirstStar(packageName, starReplacement)
+				substituted := replaceFirstStar(exportsEntryName(packageName, subpath), starReplacement)
 				jsExtension := module.TryGetJSExtensionForFileName(declarationFile, options)
 				if len(jsExtension) > 0 {
 					return tspath.ChangeFullExtension(substituted, jsExtension)
@@ -1336,7 +1357,7 @@ func tryGetModuleNameFromExportsOrImports(
 	case packagejson.JSONValueTypeArray:
 		arr := exports.AsArray()
 		for _, e := range arr {
-			result := tryGetModuleNameFromExportsOrImports(options, host, targetFileName, packageDirectory, packageName, e, conditions, mode, isImports, preferTsExtension)
+			result := tryGetModuleNameFromExportsOrImports(options, host, target, packageDirectory, packageName, subpath, e, conditions, mode)
 			if len(result) > 0 {
 				return result
 			}
@@ -1346,7 +1367,7 @@ func tryGetModuleNameFromExportsOrImports(
 		obj := exports.AsObject()
 		for key, value := range obj.Entries() {
 			if key == "default" || slices.Contains(conditions, key) || slices.Contains(conditions, "types") && module.IsApplicableVersionedTypesKey(key) {
-				result := tryGetModuleNameFromExportsOrImports(options, host, targetFileName, packageDirectory, packageName, value, conditions, mode, isImports, preferTsExtension)
+				result := tryGetModuleNameFromExportsOrImports(options, host, target, packageDirectory, packageName, subpath, value, conditions, mode)
 				if len(result) > 0 {
 					return result
 				}

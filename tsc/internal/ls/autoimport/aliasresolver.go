@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
@@ -184,6 +185,12 @@ func (r *aliasResolver) GetImportHelpersImportSpecifier(path tspath.PathKey) *as
 // GetJSXRuntimeImportSpecifier implements checker.Program.
 func (r *aliasResolver) GetJSXRuntimeImportSpecifier(path tspath.PathKey) (moduleReference string, specifier *ast.Node) {
 	return "", nil
+}
+
+// ModuleSpecifierGenerationCache implements checker.Program. Module specifier generation needs host
+// methods the alias resolver does not implement, so it keeps no cache.
+func (r *aliasResolver) ModuleSpecifierGenerationCache() *modulespecifiers.GenerationCache {
+	return nil
 }
 
 // GetNearestAncestorDirectoryWithPackageJson implements checker.Program.

@@ -181,3 +181,25 @@ func TestParse(t *testing.T) {
 		})
 	}
 }
+
+func TestGetVersionPathsSharesTable(t *testing.T) {
+	t.Parallel()
+	fields, err := packagejson.Parse([]byte(`{ "name": "pkg", "typesVersions": { "*": { "*": ["./types/*"] } } }`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	p := &packagejson.PackageJson{Fields: fields, Parseable: true}
+	first := p.GetVersionPaths(nil)
+	second := p.GetVersionPaths(nil)
+	firstPaths, secondPaths := first.GetPaths(), second.GetPaths()
+	if firstPaths == nil {
+		t.Fatal("expected typesVersions paths")
+	}
+	// Module specifier generation caches resolved patterns by table identity.
+	if firstPaths != secondPaths {
+		t.Error("each GetVersionPaths result built its own paths table")
+	}
+	if values, ok := firstPaths.Get("*"); !ok || len(values) != 1 || values[0] != "./types/*" {
+		t.Errorf("paths table = %v", firstPaths)
+	}
+}

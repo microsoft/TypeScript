@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
@@ -83,6 +84,10 @@ func (p *fakeProgram) ResolveModuleName(moduleName string, containingFile tspath
 }
 
 func (p *fakeProgram) GetPackageJsonInfo(pkgJsonPath tspath.RootedFilePath) *packagejson.InfoCacheEntry {
+	return nil
+}
+
+func (p *fakeProgram) ModuleSpecifierGenerationCache() *modulespecifiers.GenerationCache {
 	return nil
 }
 

@@ -118,6 +118,8 @@ type Program struct {
 
 	declarationDiagnosticCache collections.SyncMap[*ast.SourceFile, []*ast.Diagnostic]
 
+	moduleSpecifierGenerationCache modulespecifiers.GenerationCache
+
 	programDiagnostics             []*ast.Diagnostic
 	hasEmitBlockingDiagnostics     collections.Set[tspath.PathKey]
 	contentMapperOptionDiagnostics []*ast.Diagnostic
@@ -171,6 +173,11 @@ func (p *Program) GetNearestAncestorDirectoryWithPackageJson(dirname tspath.Root
 		return scoped.PackageDirectory.AsDirectoryPath()
 	}
 	return ""
+}
+
+// ModuleSpecifierGenerationCache implements modulespecifiers.ModuleSpecifierGenerationHost.
+func (p *Program) ModuleSpecifierGenerationCache() *modulespecifiers.GenerationCache {
+	return &p.moduleSpecifierGenerationCache
 }
 
 // GetPackageJsonInfo implements checker.Program.
