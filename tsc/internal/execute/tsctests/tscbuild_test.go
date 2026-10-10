@@ -1287,6 +1287,26 @@ func TestBuildTargetOptionDiagnostics(t *testing.T) {
 	})
 }
 
+func TestBuildModuleOptionDiagnostics(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "module", name: "module top-level await", values: [2]any{"esnext", "commonjs"},
+			files:        FileMap{"index.ts": "export const result = await 1;\n"},
+			expectedDiff: "Changing module retains the previous top-level-await diagnostics.",
+		},
+		{
+			option: "module", name: "module import attributes", values: [2]any{"esnext", "commonjs"},
+			roots: []string{"index.ts", "data.json"},
+			files: FileMap{
+				"index.ts":  "import value from './data.json' with { type: 'json' };\nexport { value };\n",
+				"data.json": `{"value":1}`,
+			},
+			expectedDiff: "Changing module retains the previous import-attribute diagnostics.",
+		},
+	})
+}
+
 func TestBuildEmitOptionChanges(t *testing.T) {
 	t.Parallel()
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
