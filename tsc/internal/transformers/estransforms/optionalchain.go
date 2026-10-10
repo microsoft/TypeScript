@@ -140,6 +140,10 @@ func flattenChain(chain *ast.Node) flattenResult {
 		debug.Assert(!isNonNullChain(chain))
 		links = append([]*ast.Node{chain}, links...)
 	}
+	if ast.IsTaggedTemplateExpression(chain) {
+		// A tagged template has no expression; its tag is the base of the chain.
+		return flattenResult{chain.AsTaggedTemplateExpression().Tag, links}
+	}
 	return flattenResult{chain.Expression(), links}
 }
 
@@ -204,6 +208,17 @@ func (ch *optionalChainTransformer) visitOptionalExpression(node *ast.Node, capt
 					ast.NodeFlagsNone,
 				)
 			}
+		case ast.KindTaggedTemplateExpression:
+			// A tagged template can only be the head of the chain (flattenChain
+			// stops walking at it); re-tag its template onto the checked base.
+			t := segment.AsTaggedTemplateExpression()
+			rightExpression = ch.Factory().NewTaggedTemplateExpression(
+				rightExpression,
+				nil, /*questionDotToken*/
+				t.TypeArguments,
+				ch.Visitor().VisitNode(t.Template),
+				ast.NodeFlagsNone,
+			)
 		}
 		ch.EmitContext().SetOriginal(rightExpression, segment)
 	}
