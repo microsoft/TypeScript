@@ -267,8 +267,7 @@ func TestWatch(t *testing.T) {
 			commandLineArgs: []string{"--watch"},
 			edits: []*tscEdit{
 				{
-					caption:      "remove nested dir",
-					expectedDiff: "incremental has prior state and does not report no-inputs error",
+					caption: "remove nested dir",
 					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/workspaces/project/src/lib/helper.ts")
 					},
@@ -598,6 +597,41 @@ func TestWatch(t *testing.T) {
 				}),
 			},
 		},
+	}
+
+	for _, build := range []bool{false, true} {
+		for _, initiallyEmpty := range []bool{false, true} {
+			args := []string{"--watch"}
+			if build {
+				args = []string{"--build", "--watch", "--force"}
+			}
+			files := FileMap{
+				"/home/src/workspaces/project/tsconfig.json": fmt.Sprintf(`{
+	"compilerOptions": { "composite": %t, "outDir": "out" },
+	"include": ["src/**/*.ts"]
+}`, build),
+			}
+			const sourcePath = "/home/src/workspaces/project/src/helper.ts"
+			if !initiallyEmpty {
+				files[sourcePath] = `export const helper = 1;`
+			}
+			addFile := newTscEdit("add first source file", func(sys *TestSys) {
+				sys.writeFileNoError(sourcePath, `export const helper = 2;`)
+			})
+			removeFile := newTscEdit("remove last source file", func(sys *TestSys) {
+				sys.removeNoError(sourcePath)
+			})
+			edits := []*tscEdit{removeFile, addFile}
+			if initiallyEmpty {
+				edits = []*tscEdit{addFile, removeFile}
+			}
+			testCases = append(testCases, &tscInput{
+				subScenario:     fmt.Sprintf("watch updates no-inputs diagnostics build %t initiallyEmpty %t", build, initiallyEmpty),
+				files:           files,
+				commandLineArgs: args,
+				edits:           edits,
+			})
+		}
 	}
 
 	for _, test := range testCases {
