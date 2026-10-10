@@ -152,6 +152,10 @@ func (s *formattingScanner) shouldRescanJsxText(node *ast.Node) bool {
 	return s.lastTokenInfo.token.Kind == ast.KindJsxText
 }
 
+func shouldRescanLessThanSlashToken(container *ast.Node) bool {
+	return container.Kind == ast.KindJsxClosingElement || container.Kind == ast.KindJsxClosingFragment
+}
+
 func shouldRescanSlashToken(container *ast.Node) bool {
 	return container.Kind == ast.KindRegularExpressionLiteral
 }
@@ -179,6 +183,7 @@ const (
 	actionRescanJsxIdentifier
 	actionRescanJsxText
 	actionRescanJsxAttributeValue
+	actionRescanLessThanSlashToken
 )
 
 func fixTokenKind(tokenInfo tokenInfo, container *ast.Node) tokenInfo {
@@ -207,6 +212,8 @@ func (s *formattingScanner) readTokenInfo(n *ast.Node) tokenInfo {
 		expectedScanAction = actionRescanJsxText
 	} else if shouldRescanJsxAttributeValue(n) {
 		expectedScanAction = actionRescanJsxAttributeValue
+	} else if shouldRescanLessThanSlashToken(n) {
+		expectedScanAction = actionRescanLessThanSlashToken
 	} else {
 		expectedScanAction = actionScan
 	}
@@ -301,6 +308,12 @@ func (s *formattingScanner) getNextToken(n *ast.Node, expectedScanAction scanAct
 	case actionRescanJsxAttributeValue:
 		s.lastScanAction = actionRescanJsxAttributeValue
 		return s.s.ReScanJsxAttributeValue()
+	case actionRescanLessThanSlashToken:
+		if token == ast.KindLessThanToken {
+			// The parser scans `</` of a closing tag as one token, so a `/*` right after `<` isn't a comment
+			s.lastScanAction = actionRescanLessThanSlashToken
+			return s.s.ReScanJsxToken( /*allowMultilineJsxText*/ false)
+		}
 	case actionScan:
 		// no rescan needed; the token was already produced by the normal scan
 	default:
