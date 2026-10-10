@@ -2178,11 +2178,11 @@ namespace TypeScript {
 
                 context.modDeclChain.pop();
 >context.modDeclChain.pop() : any
->context.modDeclChain.pop : () => ModuleDeclaration | undefined
+>context.modDeclChain.pop : () => any
 >context.modDeclChain : ModuleDeclaration[]
 >context : AssignScopeContext
 >modDeclChain : ModuleDeclaration[]
->pop : () => ModuleDeclaration | undefined
+>pop : () => any
 
                 if (context.modDeclChain.length >= 1) {
 >context.modDeclChain.length >= 1 : boolean

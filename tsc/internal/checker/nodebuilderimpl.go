@@ -2300,6 +2300,11 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 	var reportedInferenceFallback bool
 	// !!! expandable hover support
 	if !b.isActivelyExpanding() && tryReuse && b.ctx.enclosingDeclaration != nil && declaration != nil && (ast.IsAccessor(declaration) || (ast.HasInferredType(declaration) && !ast.NodeIsSynthesized(declaration) && (t.ObjectFlags()&ObjectFlagsRequiresWidening) == 0)) {
+		oldMapper := b.ctx.mapper
+		// The annotation belongs to the original declaration, not the instantiated symbol.
+		if symbol != nil && symbol.CheckFlags&ast.CheckFlagsInstantiated != 0 {
+			b.ctx.mapper = b.ch.combineTypeMappers(b.ch.valueSymbolLinks.Get(symbol).mapper, oldMapper)
+		}
 		var remove func()
 		if symbol != nil {
 			remove = b.addSymbolTypeToContext(symbol, t)
@@ -2350,6 +2355,7 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 		if remove != nil {
 			remove()
 		}
+		b.ctx.mapper = oldMapper
 	}
 	if result == nil {
 		if reportedInferenceFallback {
