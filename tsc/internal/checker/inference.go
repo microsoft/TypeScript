@@ -247,11 +247,11 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	case target.flags&TypeFlagsConditional != 0:
 		c.invokeOnce(n, source, target, (*Checker).inferToConditionalType)
 	case target.flags&TypeFlagsUnionOrIntersection != 0:
-		c.inferToMultipleTypes(n, source, target.Types(), target.flags)
+		c.inferToUnionOrIntersectionType(n, source, target)
 	case source.flags&TypeFlagsUnion != 0:
 		// Infer from each source union constituent, excluding incompatible fixed discriminants.
 		discriminants := c.getInferenceDiscriminants(source, target)
-	inferConstituents:
+	inferSources:
 		for _, sourceType := range source.Types() {
 			if len(discriminants) != 0 && sourceType.flags&(TypeFlagsObject|TypeFlagsIntersection) != 0 {
 				for _, targetProp := range discriminants {
@@ -265,7 +265,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 					}
 					propType := c.getNonMissingTypeOfSymbol(sourceProp)
 					if isLiteralType(propType) && !c.areTypesComparable(propType, c.getNonMissingTypeOfSymbol(targetProp)) {
-						continue inferConstituents
+						continue inferSources
 					}
 				}
 			}
@@ -474,7 +474,19 @@ func getTypeListDepth(types []*Type, maxDepth int) int {
 	return depth
 }
 
-func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets []*Type, targetFlags TypeFlags) {
+func (c *Checker) inferToUnionOrIntersectionType(n *InferenceState, source *Type, target *Type) {
+	var discriminants [][]*ast.Symbol
+	if target.flags&TypeFlagsUnion != 0 {
+		sources := source.Distributed()
+		discriminants = make([][]*ast.Symbol, len(sources))
+		for i, s := range sources {
+			discriminants[i] = c.getInferenceDiscriminants(target, s)
+		}
+	}
+	c.inferToMultipleTypes(n, source, target.Types(), target.flags, discriminants)
+}
+
+func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets []*Type, targetFlags TypeFlags, discriminants [][]*ast.Symbol) {
 	typeVariableCount := 0
 	if targetFlags&TypeFlagsUnion != 0 {
 		var nakedTypeVariable *Type
@@ -495,7 +507,20 @@ func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets 
 				nakedTypeVariable = t
 				typeVariableCount++
 			} else {
+			inferSources:
 				for i := range sources {
+					if len(discriminants) != 0 && len(discriminants[i]) != 0 && t.flags&(TypeFlagsObject|TypeFlagsIntersection) != 0 {
+						for _, sourceProp := range discriminants[i] {
+							targetProp := c.getPropertyOfType(t, sourceProp.Name)
+							if targetProp == nil || sourceProp.Flags&ast.SymbolFlagsOptional != 0 && targetProp.Flags&ast.SymbolFlagsOptional != 0 {
+								continue
+							}
+							propType := c.getNonMissingTypeOfSymbol(targetProp)
+							if isLiteralType(propType) && !c.areTypesComparable(c.getNonMissingTypeOfSymbol(sourceProp), propType) {
+								continue inferSources
+							}
+						}
+					}
 					saveInferencePriority := n.inferencePriority
 					n.inferencePriority = InferencePriorityMaxValue
 					c.inferFromTypes(n, sources[i], t)
@@ -576,7 +601,7 @@ func getSingleTypeVariableFromIntersectionTypes(n *InferenceState, types []*Type
 func (c *Checker) inferToMultipleTypesWithPriority(n *InferenceState, source *Type, targets []*Type, targetFlags TypeFlags, newPriority InferencePriority) {
 	savePriority := n.priority
 	n.priority |= newPriority
-	c.inferToMultipleTypes(n, source, targets, targetFlags)
+	c.inferToMultipleTypes(n, source, targets, targetFlags, nil)
 	n.priority = savePriority
 }
 
