@@ -71,6 +71,7 @@ type CombinedCodeActions struct {
 var codeFixProviders = []*CodeFixProvider{
 	ImportFixProvider,
 	IsolatedDeclarationsFixProvider,
+	ConvertComputedEnumMemberNameProvider,
 	FixClassIncorrectlyImplementsInterfaceProvider,
 	// Add more code fix providers here as they are implemented
 }
