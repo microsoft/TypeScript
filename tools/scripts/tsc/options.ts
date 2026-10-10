@@ -1216,6 +1216,7 @@ export const options: OptionsModel = {
             declaration: {
                 group: "optionsForCompiler",
                 shortName: "t",
+                affectsSemanticDiagnostics: true,
                 affectsEmit: true,
                 affectsBuildInfo: true,
                 showInSimplifiedHelpView: true,

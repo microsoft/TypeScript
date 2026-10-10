@@ -162,125 +162,12 @@ Edit [1]:: change target without changing source files
 }
 
 tsgo --build producer --verbose
-ExitStatus:: Success
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is out of date because output 'producer/dist/tsconfig.tsbuildinfo' is older than input 'producer/tsconfig.json'
-
-[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
-
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d9dbd437f2c323ecf251d980f1dfa5ee-export const result = 1n;\n","signature":"608bc115064824bf56c869258b8c619d-export declare const result = 1n;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":2},"latestChangedDtsFile":"./index.d.ts"}
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
-{
-  "version": "FakeTSVersion",
-  "root": [
-    {
-      "files": [
-        "../index.ts"
-      ],
-      "original": 2
-    }
-  ],
-  "fileNames": [
-    "lib.es2020.d.ts",
-    "../index.ts"
-  ],
-  "fileInfos": [
-    {
-      "fileName": "lib.es2020.d.ts",
-      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedNodeFormat": 1
-      }
-    },
-    {
-      "fileName": "../index.ts",
-      "version": "d9dbd437f2c323ecf251d980f1dfa5ee-export const result = 1n;\n",
-      "signature": "608bc115064824bf56c869258b8c619d-export declare const result = 1n;\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "d9dbd437f2c323ecf251d980f1dfa5ee-export const result = 1n;\n",
-        "signature": "608bc115064824bf56c869258b8c619d-export declare const result = 1n;\n",
-        "impliedNodeFormat": 1
-      }
-    }
-  ],
-  "options": {
-    "composite": true,
-    "emitDeclarationOnly": true,
-    "declaration": true,
-    "module": 99,
-    "moduleResolution": 100,
-    "outDir": "./",
-    "rootDir": "..",
-    "strict": true,
-    "target": 2
-  },
-  "latestChangedDtsFile": "./index.d.ts",
-  "size": 1250
-}
-
-producer/tsconfig.json::
-SemanticDiagnostics::
-Signatures::
-
-
-Diff:: Changing target with explicit unchanged libraries retains the previous BigInt syntax diagnostics.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -1,8 +0,0 @@
--[96mproducer/index.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2737: [0mBigInt literals are not available when targeting lower than ES2020.
--
--[7m1[0m export const result = 1n;
--[7m [0m [91m                      ~~[0m
--
--
--Found 1 error in producer/index.ts[90m:1[0m
--
-
-Edit [2]:: no change
-
-tsgo --build producer --verbose
-ExitStatus:: Success
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is up to date because newest input 'producer/index.ts' is older than output 'producer/dist/tsconfig.tsbuildinfo'
-
-
-
-
-Diff:: Changing target with explicit unchanged libraries retains the previous BigInt syntax diagnostics.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -1,8 +0,0 @@
--[96mproducer/index.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2737: [0mBigInt literals are not available when targeting lower than ES2020.
--
--[7m1[0m export const result = 1n;
--[7m [0m [91m                      ~~[0m
--
--
--Found 1 error in producer/index.ts[90m:1[0m
--
-
-Edit [3]:: force rebuild with the same compiler options
-
-tsgo --build producer --verbose --force
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * producer/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is out of date because output 'producer/dist/tsconfig.tsbuildinfo' is older than input 'producer/tsconfig.json'
 
 [[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
 
@@ -292,7 +179,6 @@ Output::
 
 Found 1 error in producer/index.ts[90m:1[0m
 
-//// [/home/src/workspaces/project/producer/dist/index.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d9dbd437f2c323ecf251d980f1dfa5ee-export const result = 1n;\n","signature":"608bc115064824bf56c869258b8c619d-export declare const result = 1n;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":2},"semanticDiagnosticsPerFile":[[2,[{"pos":22,"end":24,"code":2737,"category":1,"messageKey":"BigInt_literals_are_not_available_when_targeting_lower_than_ES2020_2737"}]]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
@@ -363,6 +249,63 @@ Found 1 error in producer/index.ts[90m:1[0m
   "latestChangedDtsFile": "./index.d.ts",
   "size": 1419
 }
+
+producer/tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+*refresh*    /home/src/workspaces/project/producer/index.ts
+Signatures::
+
+
+Edit [2]:: no change
+
+tsgo --build producer --verbose
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is out of date because buildinfo file 'producer/dist/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
+
+[96mproducer/index.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2737: [0mBigInt literals are not available when targeting lower than ES2020.
+
+[7m1[0m export const result = 1n;
+[7m [0m [91m                      ~~[0m
+
+
+Found 1 error in producer/index.ts[90m:1[0m
+
+
+producer/tsconfig.json::
+SemanticDiagnostics::
+Signatures::
+
+
+Edit [3]:: force rebuild with the same compiler options
+
+tsgo --build producer --verbose --force
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
+
+[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
+
+[96mproducer/index.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2737: [0mBigInt literals are not available when targeting lower than ES2020.
+
+[7m1[0m export const result = 1n;
+[7m [0m [91m                      ~~[0m
+
+
+Found 1 error in producer/index.ts[90m:1[0m
+
+//// [/home/src/workspaces/project/producer/dist/index.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 producer/tsconfig.json::
 SemanticDiagnostics::

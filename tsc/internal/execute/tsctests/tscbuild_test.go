@@ -1282,8 +1282,7 @@ func TestBuildTargetOptionDiagnostics(t *testing.T) {
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
 		{
 			option: "target", values: [2]any{"es2015", "es2020"},
-			files:        FileMap{"index.ts": "export const result = 1n;\n"},
-			expectedDiff: "Changing target with explicit unchanged libraries retains the previous BigInt syntax diagnostics.",
+			files: FileMap{"index.ts": "export const result = 1n;\n"},
 		},
 	})
 }

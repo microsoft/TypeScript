@@ -511,6 +511,9 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 	if oldOptions.GetStrictOptionValue(oldOptions.StrictPropertyInitialization) != newOptions.GetStrictOptionValue(newOptions.StrictPropertyInitialization) {
 		return true
 	}
+	if oldOptions.Target != newOptions.Target {
+		return true
+	}
 	if (oldOptions.TypeRoots == nil) != (newOptions.TypeRoots == nil) || !slices.Equal(oldOptions.TypeRoots, newOptions.TypeRoots) {
 		return true
 	}
