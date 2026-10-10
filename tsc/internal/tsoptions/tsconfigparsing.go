@@ -1361,15 +1361,7 @@ func parseJsonConfigFileContentWorker(
 		parsedConfigOptions := parsedConfig.options
 		fileNames, literalFileNamesLen := getFileNamesFromConfigSpecs(configFileSpecs, basePath, parsedConfigOptions.CompilerOptions, fs, contentMapperExtensions)
 		if shouldReportNoInputFiles(fileNames, canJsonReportNoInputFiles(rawConfig), resolutionStack) {
-			includeSpecs := configFileSpecs.includeSpecs
-			excludeSpecs := configFileSpecs.excludeSpecs
-			if includeSpecs == nil {
-				includeSpecs = []string{}
-			}
-			if excludeSpecs == nil {
-				excludeSpecs = []string{}
-			}
-			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, configFileName, core.Must(core.StringifyJson(includeSpecs, "", "")), core.Must(core.StringifyJson(excludeSpecs, "", ""))))
+			errors = append(errors, getErrorForNoInputFiles(&configFileSpecs, configFileName))
 		}
 		return fileNames, literalFileNamesLen
 	}
@@ -1440,6 +1432,18 @@ func canJsonReportNoInputFiles(rawConfig *collections.OrderedMap[string, any]) b
 
 func shouldReportNoInputFiles(fileNames []tspath.RootedFilePath, canJsonReportNoInputFiles bool, resolutionStack []tspath.PathKey) bool {
 	return len(fileNames) == 0 && canJsonReportNoInputFiles && len(resolutionStack) == 0
+}
+
+func getErrorForNoInputFiles(specs *configFileSpecs, configFileName tspath.RootedFilePath) *ast.Diagnostic {
+	includeSpecs := specs.includeSpecs
+	excludeSpecs := specs.excludeSpecs
+	if includeSpecs == nil {
+		includeSpecs = []string{}
+	}
+	if excludeSpecs == nil {
+		excludeSpecs = []string{}
+	}
+	return ast.NewCompilerDiagnostic(diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, configFileName, core.Must(core.StringifyJson(includeSpecs, "", "")), core.Must(core.StringifyJson(excludeSpecs, "", "")))
 }
 
 func validateSpecs(specs any, disallowTrailingRecursion bool, jsonSourceFile *ast.SourceFile, specKey string) ([]tspath.PathPattern, []*ast.Diagnostic) {

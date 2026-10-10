@@ -35,7 +35,6 @@ export const helper = 2;
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[91merror[0m[90m TS18003: [0mNo inputs were found in config file '/home/src/workspaces/project/tsconfig.json'. Specified 'include' paths were '["src/**/*.ts"]' and 'exclude' paths were '["/home/src/workspaces/project/out"]'.
 [96mtsconfig.json[0m:[93m2[0m:[93m43[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
   Visit https://aka.ms/ts6 for migration information.
 
@@ -43,9 +42,9 @@ Output::
 [7m [0m [91m                                          ~~~~~~~~[0m
 
 
-Found 2 errors in the same file, starting at: tsconfig.json[90m:2[0m
+Found 1 error in tsconfig.json[90m:2[0m
 
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
@@ -86,22 +85,6 @@ SemanticDiagnostics::
 Signatures::
 (used version)   /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 (computed .d.ts) /home/src/workspaces/project/src/helper.ts
-
-
-Diff:: Filename reload retains the initial no-inputs diagnostic after a source file is added.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -1,3 +1,4 @@
-+[91merror[0m[90m TS18003: [0mNo inputs were found in config file '/home/src/workspaces/project/tsconfig.json'. Specified 'include' paths were '["src/**/*.ts"]' and 'exclude' paths were '["/home/src/workspaces/project/out"]'.
- [96mtsconfig.json[0m:[93m2[0m:[93m43[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
-   Visit https://aka.ms/ts6 for migration information.
-
-@@ -5,5 +6,5 @@
- [7m [0m [91m                                          ~~~~~~~~[0m
-
-
--Found 1 error in tsconfig.json[90m:2[0m
-+Found 2 errors in the same file, starting at: tsconfig.json[90m:2[0m
 
 
 Edit [1]:: remove last source file

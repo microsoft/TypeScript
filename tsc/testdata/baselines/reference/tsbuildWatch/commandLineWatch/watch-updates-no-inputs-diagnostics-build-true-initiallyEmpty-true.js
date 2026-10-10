@@ -45,8 +45,7 @@ export const helper = 2;
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[91merror[0m[90m TS18003: [0mNo inputs were found in config file '/home/src/workspaces/project/tsconfig.json'. Specified 'include' paths were '["src/**/*.ts"]' and 'exclude' paths were '["/home/src/workspaces/project/out"]'.
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
@@ -78,11 +77,10 @@ export declare const helper = 2;
 export const helper = 2;
 
 //// [/home/src/workspaces/project/out/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.es2026.full.d.ts","../src/helper.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"4cfe3c7aa736450b8afd77a4f21c00c8-export const helper = 2;","signature":"4442875ee69a1b282969dfdd30e3eac0-export declare const helper = 2;\n","impliedNodeFormat":1}],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./src/helper.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2026.full.d.ts","../src/helper.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"4cfe3c7aa736450b8afd77a4f21c00c8-export const helper = 2;","signature":"4442875ee69a1b282969dfdd30e3eac0-export declare const helper = 2;\n","impliedNodeFormat":1}],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./src/helper.d.ts"}
 //// [/home/src/workspaces/project/out/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
-  "errors": true,
   "root": [
     {
       "files": [
@@ -125,7 +123,7 @@ export const helper = 2;
     "outDir": "./"
   },
   "latestChangedDtsFile": "./src/helper.d.ts",
-  "size": 1154
+  "size": 1140
 }
 
 Watch Registrations::
@@ -140,12 +138,6 @@ SemanticDiagnostics::
 Signatures::
 (stored at emit) /home/src/workspaces/project/src/helper.ts
 
-
-Diff:: Filename reload retains the initial no-inputs diagnostic after a source file is added.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -0,0 +1,1 @@
-+[91merror[0m[90m TS18003: [0mNo inputs were found in config file '/home/src/workspaces/project/tsconfig.json'. Specified 'include' paths were '["src/**/*.ts"]' and 'exclude' paths were '["/home/src/workspaces/project/out"]'.
 
 Edit [1]:: remove last source file
 //// [/home/src/workspaces/project/src/helper.ts] *deleted*

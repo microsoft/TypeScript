@@ -71,7 +71,11 @@ Edit [0]:: remove last source file
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS18003: [0mNo inputs were found in config file '/home/src/workspaces/project/tsconfig.json'. Specified 'include' paths were '["src/**/*.ts"]' and 'exclude' paths were '["/home/src/workspaces/project/out"]'.
+
+Found 1 error.
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 Watch Registrations::
@@ -82,15 +86,6 @@ tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
-
-Diff:: Filename reload does not add the no-inputs diagnostic after the last source file is removed.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -1,4 +0,0 @@
--[91merror[0m[90m TS18003: [0mNo inputs were found in config file '/home/src/workspaces/project/tsconfig.json'. Specified 'include' paths were '["src/**/*.ts"]' and 'exclude' paths were '["/home/src/workspaces/project/out"]'.
--
--Found 1 error.
--
 
 Edit [1]:: add first source file
 //// [/home/src/workspaces/project/src/helper.ts] *new* 

@@ -510,10 +510,16 @@ func (p *ParsedCommandLine) ReloadFileNamesOfParsedCommandLine(fs vfs.FS) *Parse
 		p.ContentMapperExtensions(),
 	)
 	parsedConfig.FileNames = fileNames
+	errors := slices.DeleteFunc(slices.Clone(p.Errors), func(diagnostic *ast.Diagnostic) bool {
+		return diagnostic.Code() == diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.Code()
+	})
+	if raw, ok := p.Raw.(*collections.OrderedMap[string, any]); ok && shouldReportNoInputFiles(fileNames, canJsonReportNoInputFiles(raw), nil) {
+		errors = append(errors, getErrorForNoInputFiles(p.getConfigFileSpecs(), p.ConfigFileName()))
+	}
 	parsedCommandLine := ParsedCommandLine{
 		ParsedConfig:                &parsedConfig,
 		ConfigFile:                  p.ConfigFile,
-		Errors:                      p.Errors,
+		Errors:                      errors,
 		Raw:                         p.Raw,
 		CompileOnSave:               p.CompileOnSave,
 		configFileSpecs:             p.configFileSpecs,

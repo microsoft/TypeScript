@@ -267,8 +267,7 @@ func TestWatch(t *testing.T) {
 			commandLineArgs: []string{"--watch"},
 			edits: []*tscEdit{
 				{
-					caption:      "remove nested dir",
-					expectedDiff: "incremental has prior state and does not report no-inputs error",
+					caption: "remove nested dir",
 					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/workspaces/project/src/lib/helper.ts")
 					},
@@ -624,10 +623,7 @@ func TestWatch(t *testing.T) {
 			})
 			edits := []*tscEdit{removeFile, addFile}
 			if initiallyEmpty {
-				addFile.expectedDiff = "Filename reload retains the initial no-inputs diagnostic after a source file is added."
 				edits = []*tscEdit{addFile, removeFile}
-			} else {
-				removeFile.expectedDiff = "Filename reload does not add the no-inputs diagnostic after the last source file is removed."
 			}
 			testCases = append(testCases, &tscInput{
 				subScenario:     fmt.Sprintf("watch updates no-inputs diagnostics build %t initiallyEmpty %t", build, initiallyEmpty),
