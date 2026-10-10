@@ -1,0 +1,43 @@
+//// [tests/cases/conformance/jsdoc/jsdocAugments_genericFunctionTypeArgument.ts] ////
+
+=== /a.d.ts ===
+declare class A<T> { x: T }
+>A : A<T>
+>x : T
+
+interface I<T> { y: T }
+>y : T
+
+=== /b.js ===
+/** @augments A<<T>(x: T) => T> */
+class B extends A {
+>B : B
+>A : A<<T>(x: T) => T>
+
+    m() {
+>m : () => <T>(x: T) => T
+
+        return this.x;
+>this.x : <T>(x: T) => T
+>this : this
+>x : <T>(x: T) => T
+    }
+}
+
+/** @implements {I<<T>(x: T) => T>} */
+class C {
+>C : C
+
+    constructor() {
+        /** @type {<T>(x: T) => T} */
+        this.y = x => x;
+>this.y = x => x : <T>(x: T) => T
+>this.y : <T>(x: T) => T
+>this : this
+>y : <T>(x: T) => T
+>x => x : <T>(x: T) => T
+>x : T
+>x : T
+    }
+}
+
