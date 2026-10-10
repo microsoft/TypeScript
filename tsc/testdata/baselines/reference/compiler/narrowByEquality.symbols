@@ -139,4 +139,18 @@ if (xUnknown != null) {
 >xUnknown : Symbol(xUnknown, Decl(narrowByEquality.ts, 4, 11))
 }
 
+declare let option: { type: string } | undefined;
+>option : Symbol(option, Decl(narrowByEquality.ts, 72, 11))
+>type : Symbol(type, Decl(narrowByEquality.ts, 72, 21))
+
+if ((option satisfies { type: string } | undefined) !== undefined) {
+>option : Symbol(option, Decl(narrowByEquality.ts, 72, 11))
+>type : Symbol(type, Decl(narrowByEquality.ts, 74, 23))
+>undefined : Symbol(undefined)
+
+    option.type;
+>option.type : Symbol(type, Decl(narrowByEquality.ts, 72, 21))
+>option : Symbol(option, Decl(narrowByEquality.ts, 72, 11))
+>type : Symbol(type, Decl(narrowByEquality.ts, 72, 21))
+}
 
