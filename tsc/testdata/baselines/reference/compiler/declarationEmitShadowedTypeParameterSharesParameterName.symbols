@@ -1,0 +1,213 @@
+//// [tests/cases/compiler/declarationEmitShadowedTypeParameterSharesParameterName.ts] ////
+
+=== declarationEmitShadowedTypeParameterSharesParameterName.ts ===
+export function predicate<value>(value: value) {
+>predicate : Symbol(predicate, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 0, 0))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 0, 26), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 0, 33))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 0, 26), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 0, 33))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 0, 26), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 0, 33))
+
+    return function <value>(value: value): value is value & string {
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 1, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 1, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 1, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 1, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 1, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 1, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 1, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 1, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 1, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 1, 28))
+
+        return typeof value === "string";
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 1, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 1, 28))
+
+    };
+}
+
+export function assertion<value>(value: value) {
+>assertion : Symbol(assertion, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 4, 1))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 6, 26), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 6, 33))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 6, 26), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 6, 33))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 6, 26), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 6, 33))
+
+    return function <value>(value: value): asserts value is value & string {
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 28))
+
+        if (typeof value !== "string") throw value;
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 7, 28))
+
+    };
+}
+
+export function query<value>(value: value) {
+>query : Symbol(query, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 10, 1))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 12, 22), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 12, 29))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 12, 22), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 12, 29))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 12, 22), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 12, 29))
+
+    return function <value>(value: value, other: typeof value): typeof value {
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 28))
+>other : Symbol(other, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 41))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 28))
+
+        return value;
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 13, 28))
+
+    };
+}
+
+export function qualifiedQuery<value>(value: value) {
+>qualifiedQuery : Symbol(qualifiedQuery, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 16, 1))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 18, 31), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 18, 38))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 18, 31), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 18, 38))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 18, 31), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 18, 38))
+
+    return function <value extends { a: number }>(value: value): typeof value.a {
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 50))
+>a : Symbol(a, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 36))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 50))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 50))
+>value.a : Symbol(a, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 36))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 50))
+>a : Symbol(a, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 36))
+
+        return value.a;
+>value.a : Symbol(a, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 36))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 50))
+>a : Symbol(a, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 19, 36))
+
+    };
+}
+
+export function capturedPredicate<value>(value: value) {
+>capturedPredicate : Symbol(capturedPredicate, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 22, 1))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 24, 34), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 24, 41))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 24, 34), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 24, 41))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 24, 34), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 24, 41))
+
+    return function <value>(value: value, value_1: unknown): value is value & string {
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 28))
+>value_1 : Symbol(value_1, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 41))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 28))
+
+        return typeof value === "string";
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 25, 28))
+
+    };
+}
+
+export function capturedQuery<value>(value: value) {
+>capturedQuery : Symbol(capturedQuery, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 28, 1))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 30, 30), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 30, 37))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 30, 30), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 30, 37))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 30, 30), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 30, 37))
+
+    return function <value>(value: value, value_1: number): typeof value {
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 31, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 31, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 31, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 31, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 31, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 31, 28))
+>value_1 : Symbol(value_1, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 31, 41))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 31, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 31, 28))
+
+        return value;
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 31, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 31, 28))
+
+    };
+}
+
+export function nested<value>(value: value) {
+>nested : Symbol(nested, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 34, 1))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 36, 23), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 36, 30))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 36, 23), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 36, 30))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 36, 23), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 36, 30))
+
+    return function <value>(value: value) {
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 37, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 37, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 37, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 37, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 37, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 37, 28))
+
+        return function <value>(value: value): typeof value {
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 38, 25), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 38, 32))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 38, 25), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 38, 32))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 38, 25), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 38, 32))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 38, 25), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 38, 32))
+
+            return value;
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 38, 25), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 38, 32))
+
+        };
+    };
+}
+
+export const arrow = <value>(value: value) => <value>(value: value): value is value & string => typeof value === "string";
+>arrow : Symbol(arrow, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 12))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 22), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 29))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 22), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 29))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 22), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 29))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 47), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 54))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 47), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 54))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 47), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 54))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 47), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 54))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 47), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 54))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 47), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 54))
+
+export function method<value>(value: value) {
+>method : Symbol(method, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 44, 122))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 46, 23), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 46, 30))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 46, 23), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 46, 30))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 46, 23), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 46, 30))
+
+    return {
+        m<value>(value: value): asserts value {
+>m : Symbol(m, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 47, 12))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 48, 10), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 48, 17))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 48, 10), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 48, 17))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 48, 10), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 48, 17))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 48, 10), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 48, 17))
+
+            if (!value) throw value;
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 48, 10), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 48, 17))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 48, 10), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 48, 17))
+
+        },
+    };
+}
+
+export function local<value>(value: value) {
+>local : Symbol(local, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 52, 1))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 54, 22), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 54, 29))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 54, 22), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 54, 29))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 54, 22), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 54, 29))
+
+    return function <value>(x: value) {
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 55, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 56, 13))
+>x : Symbol(x, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 55, 28))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 55, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 56, 13))
+
+        const value = 1;
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 55, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 56, 13))
+
+        const result: { a: typeof value; b: value } = { a: value, b: x };
+>result : Symbol(result, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 57, 13))
+>a : Symbol(a, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 57, 23))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 55, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 56, 13))
+>b : Symbol(b, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 57, 40))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 55, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 56, 13))
+>a : Symbol(a, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 57, 55))
+>value : Symbol(value, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 55, 21), Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 56, 13))
+>b : Symbol(b, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 57, 65))
+>x : Symbol(x, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 55, 28))
+
+        return result;
+>result : Symbol(result, Decl(declarationEmitShadowedTypeParameterSharesParameterName.ts, 57, 13))
+
+    };
+}
+
