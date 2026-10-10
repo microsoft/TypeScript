@@ -15,6 +15,7 @@ func TestGlobalFileDeletionAfterNonGlobalFile(t *testing.T) {
 	file := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/index.ts", PathKey: "/index.ts"}, "export {};", core.ScriptKindTS)
 	for _, globalFirst := range []bool{false, true} {
 		t.Run(core.IfElse(globalFirst, "global first", "non-global first"), func(t *testing.T) {
+			t.Parallel()
 			current := &snapshot{
 				allFilesExcludingDefaultLibraryFile: []*ast.SourceFile{file},
 			}
