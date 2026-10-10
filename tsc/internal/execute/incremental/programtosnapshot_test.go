@@ -3,9 +3,47 @@ package incremental
 import (
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
+
+func TestGlobalFileDeletionAfterNonGlobalFile(t *testing.T) {
+	t.Parallel()
+	file := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/index.ts", PathKey: "/index.ts"}, "export {};", core.ScriptKindTS)
+	for _, globalFirst := range []bool{false, true} {
+		t.Run(core.IfElse(globalFirst, "global first", "non-global first"), func(t *testing.T) {
+			current := &snapshot{
+				allFilesExcludingDefaultLibraryFile: []*ast.SourceFile{file},
+			}
+
+			current.allFilesExcludingDefaultLibraryFileOnce.Do(func() {})
+			current.fileInfos.Store(file.PathKey(), &FileInfo{})
+			to := &toProgramSnapshot{snapshot: current}
+			deletions := []struct {
+				path tspath.PathKey
+				info *FileInfo
+			}{
+				{"/empty.d.ts", &FileInfo{}},
+				{"/globals.d.ts", &FileInfo{affectsGlobalScope: true}},
+			}
+			if globalFirst {
+				deletions[0], deletions[1] = deletions[1], deletions[0]
+			}
+			// Enumerate both possible orders without relying on SyncMap iteration order.
+			for _, deletion := range deletions {
+				if !to.handleDeletedFile(deletion.path, deletion.info) {
+					break
+				}
+			}
+			assert.Equal(t, to.globalFileRemoved, globalFirst)
+			assert.Equal(t, current.changedFilesSet.Has(file.PathKey()), globalFirst)
+			assert.Assert(t, current.buildInfoEmitPending.Load())
+		})
+	}
+}
 
 func TestGlobalFileOrderChanged(t *testing.T) {
 	t.Parallel()

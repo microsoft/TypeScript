@@ -1379,6 +1379,21 @@ func TestBuildLibOrderOptionChanges(t *testing.T) {
 	})
 }
 
+func TestBuildNoLibOptionChanges(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "noLib", values: [2]any{false, true},
+			options: map[string]any{"lib": nil},
+			files: FileMap{
+				"index.ts":                       "export const result = input();\n",
+				"globals.d.ts":                   "interface Boolean {} interface Function {} interface CallableFunction {} interface NewableFunction {} interface IArguments {} interface Number {} interface Object {} interface RegExp {} interface String {} interface Array<T> {} interface ReadonlyArray<T> {}\n",
+				getTestLibPathFor("es2020.full"): tscDefaultLibContent + "\ndeclare function input(): 'library';\n",
+			},
+		},
+	})
+}
+
 func TestBuildEmitOptionChanges(t *testing.T) {
 	t.Parallel()
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
