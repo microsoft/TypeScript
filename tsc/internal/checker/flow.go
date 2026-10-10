@@ -707,7 +707,8 @@ func (c *Checker) narrowTypeByDiscriminantProperty(t *Type, access *ast.Node, op
 				candidate := c.getConstituentTypeForKeyType(t, c.getTypeOfExpression(value))
 				if candidate != nil {
 					if assumeTrue && operator == ast.KindEqualsEqualsEqualsToken || !assumeTrue && operator == ast.KindExclamationEqualsEqualsToken {
-						return candidate
+						// Nullable constituents have no key property; preserve them as the general path does.
+						return c.getUnionType([]*Type{candidate, c.filterType(t, func(t *Type) bool { return t.flags&TypeFlagsNullable != 0 })})
 					}
 					if propType := c.getTypeOfPropertyOfType(candidate, keyPropertyName); propType != nil && isUnitType(propType) {
 						return c.removeType(t, candidate)
