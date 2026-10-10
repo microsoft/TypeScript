@@ -1,0 +1,194 @@
+//// [tests/cases/compiler/declarationEmitInaccessibleNameContexts.ts] ////
+
+=== hidden.ts ===
+export function make() {
+>make : () => Hidden
+
+    interface Hidden { x: number }
+>x : number
+
+    return { x: 1 } as Hidden;
+>{ x: 1 } as Hidden : Hidden
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+}
+export function makeClass() {
+>makeClass : () => typeof HiddenBase
+
+    interface HiddenProp { x: number }
+>x : number
+
+    class HiddenBase { y = { x: 1 } as HiddenProp }
+>HiddenBase : HiddenBase
+>y : HiddenProp
+>{ x: 1 } as HiddenProp : HiddenProp
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+
+    return HiddenBase;
+>HiddenBase : typeof HiddenBase
+}
+
+=== index.ts ===
+import { make, makeClass } from "./hidden";
+>make : () => Hidden
+>makeClass : () => typeof HiddenBase
+
+export const variable = make();
+>variable : Hidden
+>make() : Hidden
+>make : () => Hidden
+
+export let [destructured] = [make()];
+>destructured : Hidden
+>[make()] : [Hidden]
+>make() : Hidden
+>make : () => Hidden
+
+export function returnType() { return make(); }
+>returnType : () => Hidden
+>make() : Hidden
+>make : () => Hidden
+
+export function parameterWithInitializer(p = make()) { return 0; }
+>parameterWithInitializer : (p?: Hidden) => number
+>p : Hidden
+>make() : Hidden
+>make : () => Hidden
+>0 : 0
+
+export const arrow = (p = make()) => p;
+>arrow : (p?: Hidden) => Hidden
+>(p = make()) => p : (p?: Hidden) => Hidden
+>p : Hidden
+>make() : Hidden
+>make : () => Hidden
+>p : Hidden
+
+export class C {
+>C : C
+
+    property = make();
+>property : Hidden
+>make() : Hidden
+>make : () => Hidden
+
+    static staticProperty = make();
+>staticProperty : Hidden
+>make() : Hidden
+>make : () => Hidden
+
+    #privateField = make();
+>#privateField : Hidden
+>make() : Hidden
+>make : () => Hidden
+
+    constructor(public parameterProperty = make()) {}
+>parameterProperty : Hidden
+>make() : Hidden
+>make : () => Hidden
+
+    method() { return make(); }
+>method : () => Hidden
+>make() : Hidden
+>make : () => Hidden
+
+    static staticMethod() { return make(); }
+>staticMethod : () => Hidden
+>make() : Hidden
+>make : () => Hidden
+
+    methodWithParameter(p = make()) { return 0; }
+>methodWithParameter : (p?: Hidden) => number
+>p : Hidden
+>make() : Hidden
+>make : () => Hidden
+>0 : 0
+
+    get getter() { return make(); }
+>getter : Hidden
+>make() : Hidden
+>make : () => Hidden
+
+    get accessor() { return make(); }
+>accessor : Hidden
+>make() : Hidden
+>make : () => Hidden
+
+    set accessor(v) { v; }
+>accessor : Hidden
+>v : Hidden
+>v : Hidden
+}
+
+export class Derived extends makeClass() {}
+>Derived : Derived
+>makeClass() : HiddenBase
+>makeClass : () => typeof HiddenBase
+
+export function host() {}
+>host : { (): void; prop: Hidden; }
+
+host.prop = make();
+>host.prop = make() : Hidden
+>host.prop : Hidden
+>host : { (): void; prop: Hidden; }
+>prop : Hidden
+>make() : Hidden
+>make : () => Hidden
+
+export const arrowHost = () => 0;
+>arrowHost : { (): number; prop: Hidden; }
+>() => 0 : { (): number; prop: Hidden; }
+>0 : 0
+
+arrowHost.prop = make();
+>arrowHost.prop = make() : Hidden
+>arrowHost.prop : Hidden
+>arrowHost : { (): number; prop: Hidden; }
+>prop : Hidden
+>make() : Hidden
+>make : () => Hidden
+
+export namespace N {
+>N : typeof N
+
+    export const inNamespace = make();
+>inNamespace : Hidden
+>make() : Hidden
+>make : () => Hidden
+
+    export function returnInNamespace() { return make(); }
+>returnInNamespace : () => Hidden
+>make() : Hidden
+>make : () => Hidden
+}
+
+export const objectLiteral = {
+>objectLiteral : { nested: Hidden; method(): Hidden; }
+>{    nested: make(),    method() { return make(); },} : { nested: Hidden; method(): Hidden; }
+
+    nested: make(),
+>nested : Hidden
+>make() : Hidden
+>make : () => Hidden
+
+    method() { return make(); },
+>method : () => Hidden
+>make() : Hidden
+>make : () => Hidden
+
+};
+
+export function generic<T = ReturnType<typeof make>>(t?: T) { return t; }
+>generic : <T = Hidden>(t?: T) => T | undefined
+>make : () => Hidden
+>t : T | undefined
+>t : T | undefined
+
+export default make();
+>make() : Hidden
+>make : () => Hidden
+

@@ -1,0 +1,125 @@
+hidden.ts(1,17): error TS4060: Return type of exported function has or is using private name 'Hidden'.
+hidden.ts(5,17): error TS4060: Return type of exported function has or is using private name 'HiddenProp'.
+index.ts(3,14): error TS4023: Exported variable 'variable' has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(4,12): error TS4023: Exported variable '[destructured]' has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(5,17): error TS4058: Return type of exported function has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(6,42): error TS4076: Parameter 'p' of exported function has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(7,14): error TS4023: Exported variable 'arrow' has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(10,5): error TS4029: Public property 'property' of exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(11,12): error TS4026: Public static property 'staticProperty' of exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(13,17): error TS4061: Parameter 'parameterProperty' of constructor from exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(14,5): error TS4053: Return type of public method from exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(15,12): error TS4050: Return type of public static method from exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(16,25): error TS4071: Parameter 'p' of public method from exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(17,9): error TS4041: Return type of public getter 'getter' from exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(18,9): error TS4041: Return type of public getter 'accessor' from exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(19,18): error TS4108: Parameter 'v' of accessor has or is using name 'Hidden' from external module '"hidden"' but cannot be named.
+index.ts(22,30): error TS4020: 'extends' clause of exported class 'Derived' has or is using private name 'HiddenProp'.
+index.ts(25,1): error TS4032: Property 'prop' of exported interface has or is using name 'Hidden' from private module '"hidden"'.
+index.ts(27,1): error TS4032: Property 'prop' of exported interface has or is using name 'Hidden' from private module '"hidden"'.
+index.ts(30,18): error TS4023: Exported variable 'inNamespace' has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(31,21): error TS4058: Return type of exported function has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(34,14): error TS4023: Exported variable 'objectLiteral' has or is using name 'Hidden' from external module "hidden" but cannot be named.
+index.ts(41,1): error TS4082: Default export of the module has or is using private name 'Hidden'.
+
+
+==== hidden.ts (2 errors) ====
+    export function make() {
+                    ~~~~
+!!! error TS4060: Return type of exported function has or is using private name 'Hidden'.
+        interface Hidden { x: number }
+        return { x: 1 } as Hidden;
+    }
+    export function makeClass() {
+                    ~~~~~~~~~
+!!! error TS4060: Return type of exported function has or is using private name 'HiddenProp'.
+        interface HiddenProp { x: number }
+        class HiddenBase { y = { x: 1 } as HiddenProp }
+        return HiddenBase;
+    }
+    
+==== index.ts (21 errors) ====
+    import { make, makeClass } from "./hidden";
+    
+    export const variable = make();
+                 ~~~~~~~~
+!!! error TS4023: Exported variable 'variable' has or is using name 'Hidden' from external module "hidden" but cannot be named.
+    export let [destructured] = [make()];
+               ~~~~~~~~~~~~~~
+!!! error TS4023: Exported variable '[destructured]' has or is using name 'Hidden' from external module "hidden" but cannot be named.
+    export function returnType() { return make(); }
+                    ~~~~~~~~~~
+!!! error TS4058: Return type of exported function has or is using name 'Hidden' from external module "hidden" but cannot be named.
+    export function parameterWithInitializer(p = make()) { return 0; }
+                                             ~~~~~~~~~~
+!!! error TS4076: Parameter 'p' of exported function has or is using name 'Hidden' from external module "hidden" but cannot be named.
+    export const arrow = (p = make()) => p;
+                 ~~~~~
+!!! error TS4023: Exported variable 'arrow' has or is using name 'Hidden' from external module "hidden" but cannot be named.
+    
+    export class C {
+        property = make();
+        ~~~~~~~~
+!!! error TS4029: Public property 'property' of exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+        static staticProperty = make();
+               ~~~~~~~~~~~~~~
+!!! error TS4026: Public static property 'staticProperty' of exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+        #privateField = make();
+        constructor(public parameterProperty = make()) {}
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4061: Parameter 'parameterProperty' of constructor from exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+        method() { return make(); }
+        ~~~~~~
+!!! error TS4053: Return type of public method from exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+        static staticMethod() { return make(); }
+               ~~~~~~~~~~~~
+!!! error TS4050: Return type of public static method from exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+        methodWithParameter(p = make()) { return 0; }
+                            ~~~~~~~~~~
+!!! error TS4071: Parameter 'p' of public method from exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+        get getter() { return make(); }
+            ~~~~~~
+!!! error TS4041: Return type of public getter 'getter' from exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+        get accessor() { return make(); }
+            ~~~~~~~~
+!!! error TS4041: Return type of public getter 'accessor' from exported class has or is using name 'Hidden' from external module "hidden" but cannot be named.
+        set accessor(v) { v; }
+                     ~
+!!! error TS4108: Parameter 'v' of accessor has or is using name 'Hidden' from external module '"hidden"' but cannot be named.
+    }
+    
+    export class Derived extends makeClass() {}
+                                 ~~~~~~~~~~~
+!!! error TS4020: 'extends' clause of exported class 'Derived' has or is using private name 'HiddenProp'.
+    
+    export function host() {}
+    host.prop = make();
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS4032: Property 'prop' of exported interface has or is using name 'Hidden' from private module '"hidden"'.
+    export const arrowHost = () => 0;
+    arrowHost.prop = make();
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4032: Property 'prop' of exported interface has or is using name 'Hidden' from private module '"hidden"'.
+    
+    export namespace N {
+        export const inNamespace = make();
+                     ~~~~~~~~~~~
+!!! error TS4023: Exported variable 'inNamespace' has or is using name 'Hidden' from external module "hidden" but cannot be named.
+        export function returnInNamespace() { return make(); }
+                        ~~~~~~~~~~~~~~~~~
+!!! error TS4058: Return type of exported function has or is using name 'Hidden' from external module "hidden" but cannot be named.
+    }
+    
+    export const objectLiteral = {
+                 ~~~~~~~~~~~~~
+!!! error TS4023: Exported variable 'objectLiteral' has or is using name 'Hidden' from external module "hidden" but cannot be named.
+        nested: make(),
+        method() { return make(); },
+    };
+    
+    export function generic<T = ReturnType<typeof make>>(t?: T) { return t; }
+    
+    export default make();
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4082: Default export of the module has or is using private name 'Hidden'.
+    
