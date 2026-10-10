@@ -190,12 +190,31 @@ func (tx *DeclarationTransformer) isInternalDeclaration(node *ast.Node, sourceFi
 		return false
 	}
 
-	for commentRange := range tx.getLeadingCommentRangesOfNode(parseTreeNode, sourceFile) {
-		if hasInternalAnnotation(commentRange, sourceFile) {
-			return true
+	for _, jsdoc := range parseTreeNode.JSDoc(sourceFile) {
+		if tags := jsdoc.AsJSDoc().Tags; tags != nil {
+			for _, tag := range tags.Nodes {
+				if tag.TagName().Text() == "internal" {
+					return true
+				}
+			}
 		}
 	}
-	return false
+
+	// Preserve explicit non-JSDoc annotations on the nearest leading comment.
+	var lastComment ast.CommentRange
+	for commentRange := range tx.getLeadingCommentRangesOfNode(parseTreeNode, sourceFile) {
+		lastComment = commentRange
+	}
+	if lastComment.End() == 0 {
+		return false
+	}
+	comment := sourceFile.Text()[lastComment.Pos():lastComment.End()]
+	if strings.HasPrefix(comment, "/**") {
+		return false
+	}
+	comment = strings.TrimLeft(strings.TrimSuffix(comment[2:], "*/"), "* \t\r\n")
+	words := strings.Fields(comment)
+	return len(words) > 0 && words[0] == "@internal"
 }
 
 func (tx *DeclarationTransformer) getLeadingCommentRangesOfNode(node *ast.Node, sourceFile *ast.SourceFile) iter.Seq[ast.CommentRange] {
