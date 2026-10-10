@@ -335,6 +335,9 @@ type snapshot struct {
 
 	// Additional fields that are not serialized but needed to track state
 
+	// Reconstructed from build-info fileNames when loading incremental state.
+	fileOrder []tspath.PathKey
+
 	// true if build info emit is pending
 	buildInfoEmitPending                    atomic.Bool
 	hasErrorsFromOldState                   core.Tristate

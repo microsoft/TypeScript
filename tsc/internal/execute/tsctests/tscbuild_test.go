@@ -2,6 +2,8 @@ package tsctests
 
 import (
 	"fmt"
+	"maps"
+	"path"
 	"slices"
 	"strconv"
 	"strings"
@@ -9,6 +11,7 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/stringtestutil"
@@ -992,6 +995,621 @@ func TestBuildEmitDeclarationOnly(t *testing.T) {
 
 	for _, test := range testCases {
 		test.run(t, "emitDeclarationOnly")
+	}
+}
+
+func TestBuildExactOptionalPropertyTypes(t *testing.T) {
+	t.Parallel()
+	for _, exactOptionalPropertyTypes := range []bool{false, true} {
+		test := &tscInput{
+			subScenario: fmt.Sprintf("declaration emit when exactOptionalPropertyTypes changes from %t to %t", exactOptionalPropertyTypes, !exactOptionalPropertyTypes),
+			files: FileMap{
+				"/home/src/workspaces/project/producer/tsconfig.json": stringtestutil.Dedent(fmt.Sprintf(`
+					{
+						"compilerOptions": {
+							"strict": true,
+							"exactOptionalPropertyTypes": %t,
+							"composite": true,
+							"emitDeclarationOnly": true,
+							"target": "es2020",
+							"module": "esnext",
+							"lib": ["es5"],
+							"outDir": "dist"
+						},
+						"files": ["index.ts"]
+					}`, exactOptionalPropertyTypes)),
+				"/home/src/workspaces/project/producer/index.ts": stringtestutil.Dedent(`
+					declare function make<T>(): { value?: T };
+					export const result = make<string>();`),
+				"/home/src/workspaces/project/consumer/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"strict": true,
+							"exactOptionalPropertyTypes": true,
+							"composite": true,
+							"emitDeclarationOnly": true,
+							"lib": ["es5"],
+							"outDir": "dist"
+						},
+						"references": [{ "path": "../producer" }],
+						"files": ["index.ts"]
+					}`),
+				"/home/src/workspaces/project/consumer/index.ts": stringtestutil.Dedent(`
+					import { result } from "../producer";
+					export const value: typeof result = { value: undefined };`),
+			},
+			commandLineArgs: []string{"--build", "consumer", "--verbose"},
+			edits: []*tscEdit{
+				{
+					caption: "toggle exactOptionalPropertyTypes without changing source files",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText(
+							"/home/src/workspaces/project/producer/tsconfig.json",
+							fmt.Sprintf(`"exactOptionalPropertyTypes": %t`, exactOptionalPropertyTypes),
+							fmt.Sprintf(`"exactOptionalPropertyTypes": %t`, !exactOptionalPropertyTypes),
+						)
+					},
+				},
+				noChange,
+				{
+					caption:         "force rebuild with the same compiler options",
+					commandLineArgs: []string{"--build", "consumer", "--verbose", "--force"},
+				},
+				noChange,
+			},
+		}
+		test.run(t, "exactOptionalPropertyTypes")
+	}
+}
+
+type compilerOptionChangeTest struct {
+	option  string
+	name    string
+	values  [2]any
+	options map[string]any
+	files   FileMap
+	roots   []string
+}
+
+func TestBuildOptionChangeShapeSignature(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		args := []string{"--project", ".", "--listEmittedFiles"}
+		if build {
+			args = []string{"--build", "--verbose"}
+		}
+		test := &tscInput{
+			subScenario: "source edit after changing stripInternal " + core.IfElse(build, "build", "incremental"),
+			cwd:         "/home/src/workspaces/project",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{
+					"compilerOptions": {
+						"composite": true, "declaration": true, "emitDeclarationOnly": true,
+						"strict": true, "stripInternal": true,
+						"outDir": "dist"
+					},
+					"files": ["a.ts", "b.ts"]
+				}`,
+				"/home/src/workspaces/project/a.ts": "export class Result {\n    /** @internal */\n    value = \"\";\n}\n",
+				"/home/src/workspaces/project/b.ts": "import { Result } from './a';\nexport const forwarded = new Result().value;\n",
+			},
+			commandLineArgs: args,
+			edits: []*tscEdit{
+				{
+					caption: "disable stripInternal without changing source files",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", `"stripInternal": true`, `"stripInternal": false`)
+					},
+				},
+				noChange,
+				{
+					caption: "restore the original declaration shape with a source edit",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText("/home/src/workspaces/project/a.ts", "    /** @internal */\n    value = \"\";\n", "")
+					},
+				},
+				noChange,
+				{caption: "force rebuild", commandLineArgs: []string{"--build", "--verbose", "--force"}},
+				noChange,
+			},
+		}
+		test.run(t, "compilerOptionChanges")
+	}
+}
+
+func testCompilerOptionChanges(t *testing.T, tests []compilerOptionChangeTest) {
+	t.Helper()
+	const project = "/home/src/workspaces/project"
+	for _, test := range tests {
+		for direction := range 2 {
+			for _, build := range []bool{false, true} {
+				name := core.IfElse(test.name != "", test.name, test.option)
+				mode := core.IfElse(build, "build", "incremental")
+				files := FileMap{}
+				for file, content := range test.files {
+					if strings.HasPrefix(file, "/") {
+						files[file] = content
+					} else {
+						files[path.Join(project, "producer", file)] = content
+					}
+				}
+				roots := test.roots
+				if roots == nil {
+					for file := range test.files {
+						if !strings.HasPrefix(file, "/") && !strings.HasPrefix(file, "../") && !strings.Contains(file, "node_modules/") &&
+							(strings.HasSuffix(file, ".ts") || strings.HasSuffix(file, ".tsx") || strings.HasSuffix(file, ".js")) {
+							roots = append(roots, file)
+						}
+					}
+					slices.Sort(roots)
+				}
+				config := func(value any) string {
+					options := map[string]any{
+						"strict": true, "target": "es2020", "module": "esnext", "moduleResolution": "bundler",
+						"composite": true, "declaration": true, "emitDeclarationOnly": true,
+						"lib": []string{"es2020"}, "rootDir": ".", "outDir": "dist",
+					}
+					maps.Copy(options, test.options)
+					if value == nil {
+						delete(options, test.option)
+					} else {
+						options[test.option] = value
+					}
+					text, err := json.Marshal(map[string]any{"compilerOptions": options, "files": roots}, json.Deterministic(true), json.WithIndent("    "))
+					assert.NilError(t, err)
+					return string(text)
+				}
+				configPath := project + "/producer/tsconfig.json"
+				files[configPath] = config(test.values[direction])
+				args := []string{"--project", "producer", "--listEmittedFiles"}
+				if build {
+					args = []string{"--build", "producer", "--verbose"}
+				}
+				input := &tscInput{
+					subScenario:     fmt.Sprintf("%s %s direction %d", name, mode, direction),
+					cwd:             project,
+					files:           files,
+					commandLineArgs: args,
+					edits: []*tscEdit{
+						noChange,
+						{
+							caption: "change " + test.option + " without changing source files",
+							edit: func(sys *TestSys) {
+								sys.writeFileNoError(configPath, config(test.values[1-direction]))
+							},
+						},
+						noChange,
+						{
+							caption:         "force rebuild with the same compiler options",
+							commandLineArgs: []string{"--build", "producer", "--verbose", "--force"},
+						},
+						noChange,
+					},
+				}
+				input.run(t, "compilerOptionChanges")
+			}
+		}
+	}
+}
+
+func TestBuildModuleDetectionOptionChanges(t *testing.T) {
+	t.Parallel()
+	tests := []compilerOptionChangeTest{
+		{option: "moduleDetection", name: "moduleDetection empty", values: [2]any{"legacy", "force"}, files: FileMap{"index.ts": ""}},
+		{option: "moduleDetection", name: "moduleDetection comment", values: [2]any{"legacy", "force"}, files: FileMap{"index.ts": "// A file with no statements.\n"}},
+		{option: "moduleDetection", name: "moduleDetection ambient module", values: [2]any{"legacy", "force"}, files: FileMap{"index.ts": "declare module 'input' { export const value: number; }\n"}},
+		{
+			option: "moduleDetection", name: "moduleDetection CommonJS", values: [2]any{"legacy", "force"},
+			options: map[string]any{"allowJs": true, "emitDeclarationOnly": false},
+			files:   FileMap{"index.js": "exports.value = 1;\n"},
+		},
+	}
+	testCompilerOptionChanges(t, tests)
+}
+
+func TestBuildTypeCheckingOptionChanges(t *testing.T) {
+	t.Parallel()
+	nullable := FileMap{"index.ts": "declare const input: string | undefined;\nexport const result = input;\n"}
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{option: "strictNullChecks", values: [2]any{false, true}, files: nullable, options: map[string]any{"strictPropertyInitialization": false}},
+		{option: "strict", values: [2]any{false, true}, files: nullable},
+		{option: "strict", name: "strict default", values: [2]any{nil, false}, files: nullable},
+		{option: "strict", name: "strict overridden", values: [2]any{false, true}, files: nullable, options: map[string]any{"strictNullChecks": true}},
+		{option: "noUncheckedIndexedAccess", values: [2]any{false, true}, files: FileMap{"index.ts": "declare const input: { [key: string]: number };\nexport const result = input.value;\n"}},
+		{
+			option: "strictBindCallApply", values: [2]any{false, true},
+			files: FileMap{
+				"index.ts": "declare function input(value: string): number;\nexport const result = input.bind(null, 'hello');\n",
+				getTestLibPathFor("es2020"): tscDefaultLibContent + stringtestutil.Dedent(`
+					interface Function { bind(thisArg: any, ...args: any[]): any; }
+					interface CallableFunction {
+						bind<T, A0, A extends any[], R>(this: (this: T, arg: A0, ...args: A) => R, thisArg: T, arg: A0): (...args: A) => R;
+					}`),
+			},
+		},
+		{
+			option: "strictBuiltinIteratorReturn", values: [2]any{false, true},
+			files: FileMap{
+				"index.ts": "export const result = new Set<string>().values().next().value;\n",
+				getTestLibPathFor("es2020"): tscDefaultLibContent + stringtestutil.Dedent(`
+					type BuiltinIteratorReturn = intrinsic;
+					interface Set<T> {
+						values(): { next(): { value: T; done?: false } | { value: BuiltinIteratorReturn; done: true } };
+					}
+					declare const Set: { new<T>(): Set<T> };`),
+			},
+		},
+		{option: "useUnknownInCatchVariables", values: [2]any{false, true}, files: FileMap{"index.ts": "export function result() { try { throw 1; } catch (error) { return error; } }\n"}},
+		{option: "noImplicitAny", values: [2]any{false, true}, files: FileMap{"index.ts": "export function result() { let value; value = 1; return value; }\n"}},
+		{option: "noImplicitThis", values: [2]any{false, true}, files: FileMap{"index.ts": "export const result = { value: 1, get() { return this.value; } };\n"}},
+		{
+			option: "strictFunctionTypes", values: [2]any{false, true},
+			files: FileMap{"index.ts": stringtestutil.Dedent(`
+				interface Animal { name: string; }
+				interface Dog extends Animal { bark(): void; }
+				declare function infer<T>(a: (value: T) => void, b: (value: T) => void): T;
+				declare const animal: (value: Animal) => void;
+				declare const dog: (value: Dog) => void;
+				export const result = infer(animal, dog);`)},
+		},
+		{
+			option: "strictNullChecks", name: "decorator nullability", values: [2]any{false, true},
+			options: map[string]any{"strictPropertyInitialization": false, "emitDeclarationOnly": false, "experimentalDecorators": true, "emitDecoratorMetadata": true},
+			files:   FileMap{"index.ts": "declare function decorate(value: any): any;\n@decorate\nexport class Result { constructor(value: string | null) {} }\n"},
+		},
+	})
+}
+
+func TestBuildModuleSuffixesOptionChanges(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "moduleSuffixes", values: [2]any{[]string{"", ".native"}, []string{".native", ""}},
+			files: FileMap{
+				"index.ts":        "import { make } from './factory';\nexport const result = make();\n",
+				"factory.ts":      "import { Value } from './input';\nexport function make() { return new Value(); }\n",
+				"input.ts":        "export class Value { private field = 1; }\n",
+				"input.native.ts": "export class Value { private field = 2; }\n",
+			},
+		},
+	})
+}
+
+func TestBuildTargetOptionDiagnostics(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "target", values: [2]any{"es2015", "es2020"},
+			files: FileMap{"index.ts": "export const result = 1n;\n"},
+		},
+	})
+}
+
+func TestBuildModuleOptionDiagnostics(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "module", name: "module top-level await", values: [2]any{"esnext", "commonjs"},
+			files: FileMap{"index.ts": "export const result = await 1;\n"},
+		},
+		{
+			option: "module", name: "module import attributes", values: [2]any{"esnext", "commonjs"},
+			roots: []string{"index.ts", "data.json"},
+			files: FileMap{
+				"index.ts":  "import value from './data.json' with { type: 'json' };\nexport { value };\n",
+				"data.json": `{"value":1}`,
+			},
+		},
+	})
+}
+
+func TestBuildImportHelpersOptionDiagnostics(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "importHelpers", values: [2]any{false, true},
+			options: map[string]any{"target": "es2015", "emitDeclarationOnly": false},
+			files: FileMap{
+				"index.ts":                  "export async function result() { return 1; }\n",
+				getTestLibPathFor("es2020"): tscDefaultLibContent + "\ninterface Promise<T> { then<U>(callback: (value: T) => U): Promise<U>; }\n",
+			},
+		},
+	})
+}
+
+func TestBuildReactNamespaceOptionDiagnostics(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "reactNamespace", values: [2]any{"React", "Other"},
+			options: map[string]any{"jsx": "react"},
+			files: FileMap{"index.tsx": stringtestutil.Dedent(`
+				declare namespace React {
+					function createElement(...args: any[]): any;
+					namespace JSX { interface Element {} interface IntrinsicElements { div: {} } }
+				}
+				export const result = <div />;`)},
+		},
+	})
+}
+
+func TestBuildPreserveConstEnumsOptionDiagnostics(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "preserveConstEnums", name: "preserveConstEnums namespace order", values: [2]any{false, true},
+			files: FileMap{"index.ts": "export namespace Value { export const enum Field { One } }\nexport class Value {}\n"},
+		},
+		{
+			option: "preserveConstEnums", name: "preserveConstEnums namespace merge", values: [2]any{false, true},
+			options: map[string]any{"moduleDetection": "legacy"},
+			files: FileMap{
+				"index.ts": "namespace Value { export const enum Field { One } }\n",
+				"other.ts": "class Value {}\n",
+			},
+		},
+	})
+}
+
+func TestBuildLibOrderOptionChanges(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "lib", values: [2]any{[]string{"es5", "es2015.symbol"}, []string{"es2015.symbol", "es5"}},
+			options: map[string]any{"libReplacement": true},
+			roots:   []string{"index.ts"},
+			files: FileMap{
+				"index.ts": "export const result = input();\n",
+				"node_modules/@typescript/lib-es5/package.json":    `{"name":"@typescript/lib-es5","types":"index.d.ts"}`,
+				"node_modules/@typescript/lib-es5/index.d.ts":      tscDefaultLibContent + "\ndeclare function input(): 'first';\n",
+				"node_modules/@typescript/lib-es2015/package.json": `{"name":"@typescript/lib-es2015"}`,
+				"node_modules/@typescript/lib-es2015/symbol.d.ts":  "/// <reference no-default-lib=\"true\" />\ndeclare function input(): 'second';\n",
+			},
+		},
+		{
+			option: "lib", name: "bundled lib order", values: [2]any{[]string{"es5", "es2015.symbol"}, []string{"es2015.symbol", "es5"}},
+			files: FileMap{
+				"index.ts":                         "export const result = input();\n",
+				getTestLibPathFor("es5"):           tscDefaultLibContent + "\ndeclare function input(): 'first';\n",
+				getTestLibPathFor("es2015.symbol"): "/// <reference no-default-lib=\"true\" />\ndeclare function input(): 'second';\n",
+			},
+		},
+	})
+}
+
+func TestBuildNoLibOptionChanges(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "noLib", values: [2]any{false, true},
+			options: map[string]any{"lib": nil},
+			files: FileMap{
+				"index.ts":                       "export const result = input();\n",
+				"globals.d.ts":                   "interface Boolean {} interface Function {} interface CallableFunction {} interface NewableFunction {} interface IArguments {} interface Number {} interface Object {} interface RegExp {} interface String {} interface Array<T> {} interface ReadonlyArray<T> {}\n",
+				getTestLibPathFor("es2020.full"): tscDefaultLibContent + "\ndeclare function input(): 'library';\n",
+			},
+		},
+	})
+}
+
+func TestBuildEmitOptionChanges(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{option: "isolatedDeclarations", values: [2]any{false, true}, files: FileMap{"index.ts": "export const result = 1 + 2;\n"}},
+		{
+			option: "jsxFactory", values: [2]any{"A.create", "B.create"}, options: map[string]any{"jsx": "react"},
+			files: FileMap{"index.tsx": stringtestutil.Dedent(`
+				declare namespace A { function create(...args: any[]): any; namespace JSX { interface Element { a: string; } interface IntrinsicElements { div: {}; } } }
+				declare namespace B { function create(...args: any[]): any; namespace JSX { interface Element { b: number; } interface IntrinsicElements { div: {}; } } }
+				export const result = <div />;`)},
+		},
+		{
+			option: "jsxFragmentFactory", values: [2]any{"A.Fragment", "B.Fragment"},
+			options: map[string]any{"jsx": "react", "jsxFactory": "A.create", "emitDeclarationOnly": false},
+			files: FileMap{"index.tsx": stringtestutil.Dedent(`
+				declare namespace A { function create(...args: any[]): any; const Fragment: any; namespace JSX { interface Element {} interface IntrinsicElements { div: {}; } } }
+				declare namespace B { const Fragment: any; }
+				export const result = <><div /></>;`)},
+		},
+		{
+			option: "isolatedModules", values: [2]any{false, true}, options: map[string]any{"emitDeclarationOnly": false},
+			files: FileMap{"index.ts": "const enum Value { Result = 1 }\nexport const result = Value.Result;\n"},
+		},
+		{
+			option: "isolatedModules", name: "isolatedModules preserveConstEnums", values: [2]any{false, true},
+			options: map[string]any{"emitDeclarationOnly": false, "preserveConstEnums": true},
+			files:   FileMap{"index.ts": "const enum Value { Result = 1 }\nexport const result = Value.Result;\n"},
+		},
+		{
+			option: "rewriteRelativeImportExtensions", values: [2]any{false, true},
+			options: map[string]any{"emitDeclarationOnly": false, "allowImportingTsExtensions": true},
+			files:   FileMap{"index.ts": "export { result } from './other.ts';\n", "other.ts": "export const result = 1;\n"},
+		},
+		{
+			option: "rewriteRelativeImportExtensions", name: "rewriteRelativeImportExtensions inferred imports", values: [2]any{false, true},
+			files: FileMap{
+				"package.json": `{"type":"module"}`,
+				"index.ts":     "import { make } from './factory.js';\nexport const result = make();\n",
+				"factory.ts":   "import { Thing } from './thing.js';\nexport function make() { return new Thing(); }\n",
+				"thing.ts":     "export class Thing { private field = 1; }\n",
+			},
+			options: map[string]any{"module": "nodenext", "moduleResolution": "nodenext"},
+		},
+		{
+			option: "allowImportingTsExtensions", values: [2]any{false, true},
+			options: map[string]any{"module": "nodenext", "moduleResolution": "nodenext"},
+			files: FileMap{
+				"package.json": `{"type":"module"}`,
+				"index.ts":     "import { make } from './factory.js';\nexport const result = make();\n",
+				"factory.ts":   "import { Thing } from './thing.js';\nexport function make() { return new Thing(); }\n",
+				"thing.ts":     "export class Thing { private field = 1; }\n",
+			},
+		},
+	})
+}
+
+func TestBuildResolutionOptionChanges(t *testing.T) {
+	t.Parallel()
+	tests := []compilerOptionChangeTest{
+		{
+			option: "paths", values: [2]any{map[string][]string{"short": {"../external/thing.ts"}}, map[string][]string{"renamed": {"../external/thing.ts"}}},
+			options: map[string]any{"rootDir": ".."}, roots: []string{"index.ts"},
+			files: FileMap{
+				"index.ts":               "import { make } from '../external/factory';\nexport const result = make();\n",
+				"../external/factory.ts": "import { Thing } from './thing';\nexport function make() { return new Thing(); }\n",
+				"../external/thing.ts":   "export class Thing { private field = 1; }\n",
+			},
+		},
+		{
+			option: "resolvePackageJsonImports", values: [2]any{false, true},
+			options: map[string]any{"rootDir": ".."}, roots: []string{"index.ts"},
+			files: FileMap{
+				"../package.json":        `{"imports":{"#thing":"./external/thing.ts"}}`,
+				"index.ts":               "import { make } from '../external/factory';\nexport const result = make();\n",
+				"../external/factory.ts": "import { Thing } from './thing';\nexport function make() { return new Thing(); }\n",
+				"../external/thing.ts":   "export class Thing { private field = 1; }\n",
+			},
+		},
+		{
+			option: "customConditions", values: [2]any{[]string{}, []string{"custom"}}, roots: []string{"index.ts", "factory.ts"},
+			files: FileMap{
+				"index.ts":   "import { make } from './factory';\nexport const result = make();\n",
+				"factory.ts": "import { Thing } from './node_modules/fixture/deep/nested/thing';\nexport function make() { return new Thing(); }\n",
+				"node_modules/fixture/deep/nested/thing.d.ts": "export class Thing { private field; }\n",
+				"node_modules/fixture/unused.d.ts":            "export {};\n",
+				"node_modules/fixture/package.json":           `{"name":"fixture","version":"1.0.0","exports":{"./special":{"custom":"./deep/nested/thing.d.ts","default":"./unused.d.ts"},"./fallback":"./deep/nested/thing.d.ts"}}`,
+			},
+		},
+		{
+			option: "resolvePackageJsonExports", values: [2]any{false, true}, roots: []string{"index.ts", "factory.ts"},
+			files: FileMap{
+				"index.ts":   "import { make } from './factory';\nexport const result = make();\n",
+				"factory.ts": "import { Thing } from './node_modules/fixture/deep/nested/thing';\nexport function make() { return new Thing(); }\n",
+				"node_modules/fixture/deep/nested/thing.d.ts": "export class Thing { private field; }\n",
+				"node_modules/fixture/package.json":           `{"name":"fixture","version":"1.0.0","exports":{"./short":"./deep/nested/thing.d.ts"}}`,
+			},
+		},
+		{
+			option: "rootDirs", values: [2]any{[]string{}, []string{"./src", "./generated"}},
+			files: FileMap{
+				"src/index.ts":         "import { make } from '../generated/factory';\nexport const result = make();\n",
+				"generated/factory.ts": "import { Thing } from './thing';\nexport function make() { return new Thing(); }\n",
+				"generated/thing.ts":   "export class Thing { private field = 1; }\n",
+			},
+		},
+		{
+			option: "moduleResolution", values: [2]any{"node16", "nodenext"},
+			options: map[string]any{"module": "nodenext", "rootDir": ".."}, roots: []string{"index.ts"},
+			files: FileMap{
+				"../package.json":        `{"imports":{"#/thing":"./external/thing.ts"}}`,
+				"index.ts":               "import { make } from '../external/factory';\nexport const result = make();\n",
+				"../external/factory.ts": "import { Thing } from './thing';\nexport function make() { return new Thing(); }\n",
+				"../external/thing.ts":   "export class Thing { private field = 1; }\n",
+			},
+		},
+		{
+			option: "types", values: [2]any{[]string{"first", "second"}, []string{"second", "first"}}, roots: []string{"index.ts"},
+			files: FileMap{
+				"index.ts":                              "export const result = input();\n",
+				"node_modules/@types/first/index.d.ts":  "declare function input(): 'first';\n",
+				"node_modules/@types/second/index.d.ts": "declare function input(): 'second';\n",
+			},
+		},
+		{
+			option: "typeRoots", values: [2]any{[]string{"./types-a", "./types-b"}, []string{"./types-b", "./types-a"}},
+			options: map[string]any{"types": []string{"*"}}, roots: []string{"index.ts"},
+			files: FileMap{
+				"index.ts":                  "export const result = input();\n",
+				"types-a/first/index.d.ts":  "declare function input(): 'first';\n",
+				"types-b/second/index.d.ts": "declare function input(): 'second';\n",
+			},
+		},
+		{
+			option: "allowArbitraryExtensions", values: [2]any{false, true},
+			files: FileMap{
+				"index.ts":        "import { input } from './styles.css';\nexport const result = input;\n",
+				"styles.d.css.ts": "export declare const input: { value: string };\n",
+			},
+		},
+		{
+			option: "deduplicatePackages", values: [2]any{false, true}, roots: []string{"index.ts"},
+			files: FileMap{
+				"index.ts":                        "import { input as a } from 'first';\nimport { input as b } from 'second';\nexport const result = [a, b];\n",
+				"node_modules/first/package.json": `{"name":"first","version":"1.0.0","types":"index.d.ts"}`,
+				"node_modules/first/index.d.ts":   "export { input } from 'dependency';\n",
+				"node_modules/first/node_modules/dependency/package.json":  `{"name":"dependency","version":"1.0.0","types":"index.d.ts"}`,
+				"node_modules/first/node_modules/dependency/index.d.ts":    "export const input: 'first';\n",
+				"node_modules/second/package.json":                         `{"name":"second","version":"1.0.0","types":"index.d.ts"}`,
+				"node_modules/second/index.d.ts":                           "export { input } from 'dependency';\n",
+				"node_modules/second/node_modules/dependency/package.json": `{"name":"dependency","version":"1.0.0","types":"index.d.ts"}`,
+				"node_modules/second/node_modules/dependency/index.d.ts":   "export const input: 'second';\n",
+			},
+		},
+	}
+	for _, test := range slices.Clone(tests) {
+		switch test.option {
+		case "paths", "rootDirs", "customConditions":
+			test.values[0] = nil
+		case "moduleResolution", "resolvePackageJsonExports", "resolvePackageJsonImports":
+			test.values = [2]any{nil, test.values[0]}
+		default:
+			continue
+		}
+		test.name = test.option + " unset"
+		tests = append(tests, test)
+	}
+	testCompilerOptionChanges(t, tests)
+}
+
+func TestBuildInheritedPathsBasePath(t *testing.T) {
+	t.Parallel()
+	const project = "/home/src/workspaces/project"
+	for _, build := range []bool{false, true} {
+		for _, initialBase := range []string{"first", "second"} {
+			nextBase := core.IfElse(initialBase == "first", "second", "first")
+			config := func(base string) string {
+				return fmt.Sprintf(`{
+					"extends": "../configs/%s/base.json",
+					"compilerOptions": {
+						"strict": true, "module": "esnext", "moduleResolution": "bundler",
+						"composite": true, "declaration": true, "emitDeclarationOnly": true,
+						"rootDir": "..", "outDir": "dist"
+					},
+					"files": ["index.ts"]
+				}`, base)
+			}
+			args := []string{"--project", "producer", "--listEmittedFiles"}
+			if build {
+				args = []string{"--build", "producer", "--verbose"}
+			}
+			test := &tscInput{
+				subScenario: "inherited paths base " + initialBase + " to " + nextBase + " " + core.IfElse(build, "build", "incremental"),
+				cwd:         project,
+				files: FileMap{
+					project + "/producer/tsconfig.json":   config(initialBase),
+					project + "/configs/first/base.json":  `{"compilerOptions":{"paths":{"short":["./thing.ts"]}}}`,
+					project + "/configs/second/base.json": `{"compilerOptions":{"paths":{"short":["./thing.ts"]}}}`,
+					project + "/configs/first/thing.ts":   "export class Thing { private field = 1; }\n",
+					project + "/configs/second/thing.ts":  "export class Thing { private field = 2; }\n",
+					project + "/producer/factory.ts":      "import { Thing } from '../configs/first/thing';\nexport function make() { return new Thing(); }\n",
+					project + "/producer/index.ts":        "import { make } from './factory';\nexport const result = make();\n",
+				},
+				commandLineArgs: args,
+				edits: []*tscEdit{
+					noChange,
+					{
+						caption: "change extends without changing paths or source files",
+						edit: func(sys *TestSys) {
+							sys.writeFileNoError(project+"/producer/tsconfig.json", config(nextBase))
+						},
+					},
+					noChange,
+					{caption: "force rebuild", commandLineArgs: []string{"--build", "producer", "--verbose", "--force"}},
+					noChange,
+				},
+			}
+			test.run(t, "compilerOptionChanges")
+		}
 	}
 }
 

@@ -222,12 +222,14 @@ func toReadableBuildInfo(buildInfo *incremental.BuildInfo, buildInfoText string)
 		Errors:               buildInfo.Errors,
 		CheckPending:         buildInfo.CheckPending,
 		FileNames:            buildInfoPathsAsStrings(buildInfo.FileNames),
-		Options:              buildInfo.Options,
 		LatestChangedDtsFile: buildInfo.LatestChangedDtsFile.AsString(),
 		SemanticErrors:       buildInfo.SemanticErrors,
 		PackageJsons:         buildInfoPathsAsStrings(buildInfo.PackageJsons),
 		MissingPackageJsons:  buildInfoPathsAsStrings(buildInfo.MissingPackageJsons),
 		Size:                 len(buildInfoText),
+	}
+	if buildInfo.Options != nil {
+		readable.Options = &buildInfo.Options.OrderedMap
 	}
 	readable.setFileInfos()
 	readable.setRoot()

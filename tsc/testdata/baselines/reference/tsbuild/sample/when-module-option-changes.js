@@ -275,4 +275,8 @@ Output::
 
 core/tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
+*refresh*    /user/username/projects/sample1/core/anotherModule.ts
+*refresh*    /user/username/projects/sample1/core/index.ts
+*refresh*    /user/username/projects/sample1/core/some_decl.d.ts
 Signatures::

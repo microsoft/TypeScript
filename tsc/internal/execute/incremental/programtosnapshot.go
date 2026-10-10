@@ -21,6 +21,9 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 		options:      program.Options(),
 		hashWithText: hashWithText,
 		checkPending: program.Options().NoCheck.IsTrue(),
+		fileOrder: core.Map(program.GetSourceFiles(), func(file *ast.SourceFile) tspath.PathKey {
+			return file.PathKey()
+		}),
 	}
 	to := &toProgramSnapshot{
 		program:    program,
@@ -31,6 +34,7 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 	if to.snapshot.canUseIncrementalState() {
 		to.reuseFromOldProgram()
 		to.computeProgramFileChanges()
+		to.handleGlobalFileOrderChange()
 		to.handleFileDelete()
 		to.handleGlobalScopeChange()
 		to.handlePendingEmit()
@@ -162,21 +166,56 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 func (t *toProgramSnapshot) handleFileDelete() {
 	if t.oldProgram != nil {
 		// If the global file is removed, add all files as changed
-		t.oldProgram.snapshot.fileInfos.Range(func(filePath tspath.PathKey, oldInfo *FileInfo) bool {
-			if _, ok := t.snapshot.fileInfos.Load(filePath); !ok {
-				if oldInfo.affectsGlobalScope {
-					for _, file := range t.snapshot.getAllFilesExcludingDefaultLibraryFile(t.program, nil) {
-						t.snapshot.addFileToChangeSet(file.PathKey())
-					}
-					t.globalFileRemoved = true
-				} else {
-					t.snapshot.buildInfoEmitPending.Store(true)
-				}
-				return false
-			}
-			return true
-		})
+		t.oldProgram.snapshot.fileInfos.Range(t.handleDeletedFile)
 	}
+}
+
+func (t *toProgramSnapshot) handleGlobalFileOrderChange() {
+	if t.oldProgram == nil || !globalFileOrderChanged(t.oldProgram.snapshot, t.snapshot) {
+		return
+	}
+	for _, file := range t.program.GetSourceFiles() {
+		t.snapshot.addFileToChangeSet(file.PathKey())
+		t.snapshot.semanticDiagnosticsPerFile.Delete(file.PathKey())
+		t.snapshot.emitDiagnosticsPerFile.Delete(file.PathKey())
+	}
+}
+
+func globalFileOrderChanged(oldSnapshot *snapshot, newSnapshot *snapshot) bool {
+	isSharedGlobal := func(path tspath.PathKey) bool {
+		oldInfo, oldOK := oldSnapshot.fileInfos.Load(path)
+		newInfo, newOK := newSnapshot.fileInfos.Load(path)
+		return oldOK && newOK && oldInfo.affectsGlobalScope && newInfo.affectsGlobalScope
+	}
+	oldIndex := 0
+	for _, path := range newSnapshot.fileOrder {
+		if !isSharedGlobal(path) {
+			continue
+		}
+		for oldIndex < len(oldSnapshot.fileOrder) && !isSharedGlobal(oldSnapshot.fileOrder[oldIndex]) {
+			oldIndex++
+		}
+		if oldIndex == len(oldSnapshot.fileOrder) || oldSnapshot.fileOrder[oldIndex] != path {
+			return true
+		}
+		oldIndex++
+	}
+	return false
+}
+
+func (t *toProgramSnapshot) handleDeletedFile(filePath tspath.PathKey, oldInfo *FileInfo) bool {
+	if _, ok := t.snapshot.fileInfos.Load(filePath); !ok {
+		if oldInfo.affectsGlobalScope {
+			for _, file := range t.snapshot.getAllFilesExcludingDefaultLibraryFile(t.program, nil) {
+				t.snapshot.addFileToChangeSet(file.PathKey())
+			}
+			t.globalFileRemoved = true
+			return false
+		} else {
+			t.snapshot.buildInfoEmitPending.Store(true)
+		}
+	}
+	return true
 }
 
 func (t *toProgramSnapshot) handleGlobalScopeChange() {
