@@ -72,6 +72,7 @@ func (defaultLs *LanguageService) handleCrossProject[Req lsproto.HasTextDocument
 	allProjects := orchestrator.GetAllProjectsForInitialRequest()
 	var results collections.SyncMap[string, *response[Resp]]
 	var defaultDefinition *nonLocalDefinition
+	defaultDefinitionProjectLoaded := false
 	canSearchProject := func(project Project) bool {
 		_, searched := results.Load(project.Id())
 		return !searched
@@ -241,6 +242,15 @@ func (defaultLs *LanguageService) handleCrossProject[Req lsproto.HasTextDocument
 				}
 				return true
 			})
+
+			// An inferred project may reference files whose configured project was
+			// unloaded when an unrelated file was opened. Load it once before expanding the search.
+			if !defaultDefinitionProjectLoaded && defaultLs.GetProgram().Options().ConfigFilePath == "" && !tspath.IsDeclarationFileName(defaultDefinition.TextDocumentURI().FileName()) {
+				if _, errProjects := orchestrator.GetProjectsForFile(ctx, defaultDefinition.TextDocumentURI()); errProjects != nil {
+					return resp, errProjects
+				}
+				defaultDefinitionProjectLoaded = true
+			}
 
 			// Load more projects based on default definition found
 			for loadedProject := range orchestrator.GetProjectsLoadingProjectTree(ctx, &requestedProjectTrees) {
