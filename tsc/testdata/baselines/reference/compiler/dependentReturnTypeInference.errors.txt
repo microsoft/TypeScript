@@ -1,0 +1,746 @@
+dependentReturnType1.ts(29,10): error TS7023: 'capitalize' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+dependentReturnType1.ts(33,22): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+
+
+==== dependentReturnType1.ts (2 errors) ====
+    export {};
+    
+    class Unnamed {
+        root!: { name: string };
+    
+        // Original return type: T extends string ? this : T extends undefined ? string : never
+        name2<T extends string | undefined>(name?: T) {
+            if (typeof name === "undefined") {
+                return this.root.name;
+            }
+            this.root.name = name;
+            return this;
+        }
+    }
+    
+    // Original return type: T extends true ? 1 : T extends false ? 2 : never
+    function conditional<T extends boolean>(x: T) {
+        return x ? 1 : 2;
+    }
+    
+    // Original return type: T extends "a" ? "a" : T extends "b" ? number : never
+    function contextualConditional<T extends "a" | "b">(x: T) {
+        return x === "a" ? x : parseInt(x);
+    }
+    
+    declare function isString(s: unknown): s is string;
+    
+    // Original return type: T extends string[] ? string[] : T extends string ? string : never
+    function capitalize<T extends string | string[]>(input: T) {
+             ~~~~~~~~~~
+!!! error TS7023: 'capitalize' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+        if (isString(input)) {
+            return input[0].toUpperCase() + input.slice(1);
+        }
+        return input.map(element => capitalize(element));
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    }
+    
+    // Original return type: T extends {} ? void : T extends undefined ? number : never
+    function voidRet<T extends { a: string } | undefined>(x: T) {
+        if (x) {
+            return;
+        }
+        return 1;
+    }
+    
+    // Original return type:
+    // T extends string
+    //     ? U extends string ? 1 : U extends number ? 2 : never
+    //     : T extends number ? U extends number ? 3 : U extends string ? 4 : never
+    //     : never
+    function ttt<T extends string | number, U extends string | number>(x: T, y: U) {
+        if (typeof x === "number" && typeof y === "string") {
+            return 4;
+        }
+        return undefined as any;
+    }
+    
+    // Original return type: T extends 1 ? number : T extends 2 ? string : never
+    function noShadowing<T extends 1 | 2>(x: T) {
+        if (true) {
+            if (x === 1) {
+                return 1;
+            }
+            return "";
+        }
+    }
+    
+    // Original return type: Promise<T extends true ? 1 : T extends false ? 2 : never>
+    async function abool<T extends true | false>(x: T) {
+        if (x) {
+            return 1;
+        }
+        return 2;
+    }
+    
+    // Original return type: Generator<number, T extends true ? 1 : T extends false ? 2 : never, unknown>
+    function* bbool<T extends true | false>(x: T) {
+        yield 3;
+        if (x) {
+            return 1;
+        }
+        return 2;
+    }
+    
+    // Original return type: T extends true ? 1 : T extends false ? 2 : never
+    function returnStuff1<T extends boolean>(x: T) {
+        return (x ? (1) : 2);
+    }
+    
+    // Original return type: T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never
+    function returnStuff2<T extends 1 | 2 | "a">(x: T) {
+        return (typeof x === "string" ? 0 : (x === 1 ? ("one") : "two"));
+    }
+    
+==== dependentReturnType2.js (0 errors) ====
+    export {};
+    
+    /**
+     * @template T
+     * @template A
+     * @template R1
+     * @template B
+     * @template R2
+     * @typedef {T extends A ? R1 : T extends B ? R2 : never} HelperCond
+     */
+    
+    /**
+     * @typedef IMessage
+     * @property {string} [html]
+     * @property {Object[]} [tokens]
+     */
+    
+    class NewKatex {
+        /**
+         * @param {string} s
+         * @returns {string}
+         */
+        render(s) {
+            return "";
+        }
+    
+        /**
+         * @template {string | IMessage} T
+         * @param {T} message
+         * Original return type: `T extends string ? string : T extends IMessage ? IMessage : never`
+         */
+        renderMessage(message) {
+            if (typeof message === "string") {
+                return this.render(message);
+            }
+            if (!message.html?.trim()) {
+                return message;
+            }
+            if (!message.tokens) {
+                message.tokens = [];
+            }
+            message.html = this.render(message.html);
+            return message;
+        }
+    }
+    
+    /**
+     * @template {true | false} T
+     * @param {{ dollarSyntax: boolean; parenthesisSyntax: boolean; }} options
+     * @param {T} isMessage
+     * Original return type:
+     * `T extends true ? (message: IMessage) => IMessage : T extends false ? (message: string) => string : never`
+     */
+    function createKatexMessageRendering(options, isMessage) {
+        const instance = new NewKatex();
+        if (isMessage) {
+            return (/** @type {IMessage} */ message) => instance.renderMessage(message);
+        }
+        return (/** @type {string} */ message) => instance.renderMessage(message);
+    }
+    
+    /** @typedef {Record<any, any>} MyObj */
+    /** @typedef {MyObj} MessageBoxAction */
+    
+    /**
+     * @template {string | undefined} T
+     * @param {T} group
+     * Original return type: `HelperCond<T, string, MessageBoxAction[], undefined, Record<string, MessageBoxAction[]>>`
+     */
+    function getWithoutBug(group) {
+        if (group === undefined) {
+            return /** @type {Record<string, MessageBoxAction[]>} */ ({});
+        }
+        return /** @type {MessageBoxAction[]} */ ([]);
+    }
+    
+    /**
+     * @param {string} x
+     * @returns {Date}
+     */
+    function mapDateForAPI(x) {
+        return /** @type {any} */ (undefined);
+    }
+    
+    /**
+     * @template {string | undefined} T
+     * @param {string} start
+     * @param {T} [end]
+     * Original return type: `HelperCond<T, string, { start: Date, end: Date }, undefined, { start: Date, end: undefined }>`
+     */
+    function transformDatesForAPI(start, end) {
+        return end !== undefined
+            ? { start: mapDateForAPI(start), end: mapDateForAPI(end) }
+            : { start: mapDateForAPI(start), end: undefined };
+    }
+    
+    /** @typedef {MyObj} RepeatOptions */
+    /** @typedef {MyObj} Job */
+    /**
+     * @typedef {Object} IJob
+     * @property {MyObj} data
+     */
+    class NewAgenda {
+        /**
+         * @param {string | number} interval
+         * @param {string} name
+         * @param {IJob["data"]} data
+         * @param {RepeatOptions} options
+         * @returns {Promise<Job>}
+         */
+        async _createIntervalJob(interval, name, data, options) {
+            return /** @type {any} */ (undefined);
+        }
+    
+        /**
+         * @param {string | number} interval
+         * @param {string[]} names
+         * @param {IJob["data"]} data
+         * @param {RepeatOptions} options
+         * @returns {Promise<Job[]> | undefined}
+         */
+        _createIntervalJobs(interval, names, data, options) {
+            return undefined;
+        }
+    
+        /**
+         * @template {string | string[]} T
+         * @param {string | number} interval
+         * @param {T} name
+         * @param {IJob["data"]} data
+         * @param {RepeatOptions} options
+         * Original return type: `Promise<HelperCond<T, string, Job, string[], Job[] | undefined>>`
+         */
+        async newEvery(interval, name, data, options) {
+            if (typeof name === "string") {
+                return this._createIntervalJob(interval, name, data, options);
+            }
+            if (Array.isArray(name)) {
+                return this._createIntervalJobs(interval, name, data, options);
+            }
+            throw new Error("Unexpected error: Invalid job name(s)");
+        }
+    }
+    
+    /**
+     * @template {string | null | undefined} T
+     * @param {T} value
+     * Original return type: `HelperCond<T, string, string, null | undefined, null>`
+     */
+    function transform1(value) {
+        if (value == null) return null;
+        if (typeof value !== "string") {
+            throw new Error();
+        }
+        return value.toLowerCase();
+    }
+    
+==== dependentReturnType3.ts (0 errors) ====
+    export {};
+    
+    type HelperCond<T, A, R1, B, R2> =
+        T extends A ? R1 : T extends B ? R2 : never;
+    
+    interface IMessage {
+        html?: string;
+        tokens?: {}[];
+    }
+    
+    class NewKatex {
+        render(s: string): string {
+            return "";
+        }
+    
+        // Original return type: T extends string ? string : T extends IMessage ? IMessage : never
+        renderMessage<T extends string | IMessage>(message: T) {
+            if (typeof message === "string") {
+                return this.render(message);
+            }
+            if (!message.html?.trim()) {
+                return message;
+            }
+            if (!message.tokens) {
+                message.tokens = [];
+            }
+            message.html = this.render(message.html);
+            return message;
+        }
+    }
+    
+    // Original return type:
+    // T extends true ? (message: IMessage) => IMessage : T extends false ? (message: string) => string : never
+    function createKatexMessageRendering<T extends true | false>(
+        options: { dollarSyntax: boolean; parenthesisSyntax: boolean },
+        isMessage: T,
+    ) {
+        const instance = new NewKatex();
+        if (isMessage) {
+            return (message: IMessage): IMessage => instance.renderMessage(message);
+        }
+        return (message: string): string => instance.renderMessage(message);
+    }
+    
+    type MessageBoxAction = object;
+    
+    // Original return type: HelperCond<T, string, MessageBoxAction[], undefined, Record<string, MessageBoxAction[]>>
+    function getWithoutBug<T extends string | undefined>(group: T) {
+        if (group === undefined) {
+            return {} as Record<string, MessageBoxAction[]>;
+        }
+        return [] as MessageBoxAction[];
+    }
+    
+    declare function mapDateForAPI(x: string): Date;
+    
+    // Original return type:
+    // HelperCond<T, string, { start: Date; end: Date }, undefined, { start: Date; end: undefined }>
+    function transformDatesForAPI<T extends string | undefined>(start: string, end?: T) {
+        return end !== undefined
+            ? { start: mapDateForAPI(start), end: mapDateForAPI(end) }
+            : { start: mapDateForAPI(start), end: undefined };
+    }
+    
+    type RepeatOptions = object;
+    type Job = object;
+    type IJob = { data: object };
+    
+    class NewAgenda {
+        async _createIntervalJob(interval: string | number, name: string, data: IJob["data"], options: RepeatOptions): Promise<Job> {
+            return undefined as any;
+        }
+    
+        private _createIntervalJobs(
+            interval: string | number,
+            names: string[],
+            data: IJob["data"],
+            options: RepeatOptions,
+        ): Promise<Job[]> | undefined {
+            return undefined as any;
+        }
+    
+        // Original return type: Promise<HelperCond<T, string, Job, string[], Job[] | undefined>>
+        async newEvery<T extends string | string[]>(
+            interval: string | number,
+            name: T,
+            data: IJob["data"],
+            options: RepeatOptions,
+        ) {
+            if (typeof name === "string") {
+                return this._createIntervalJob(interval, name, data, options);
+            }
+            if (Array.isArray(name)) {
+                return this._createIntervalJobs(interval, name, data, options);
+            }
+            throw new Error("Unexpected error: Invalid job name(s)");
+        }
+    }
+    
+    // Original return type: HelperCond<T, string, string, null | undefined, null>
+    function transform1<T extends string | null | undefined>(value: T) {
+        if (value == null) return null;
+        if (typeof value !== "string") {
+            throw new Error();
+        }
+        return value.toLowerCase();
+    }
+    
+==== dependentReturnType4.ts (0 errors) ====
+    export {};
+    
+    declare const rand: { a?: never };
+    type Missing = typeof rand.a;
+    
+    // Original return type: T extends Missing ? 0 : T extends string ? 1 : never
+    function bar1<T extends string | Missing>(x?: T) {
+        if (x === undefined) {
+            return 0;
+        }
+        return 1;
+    }
+    
+    // Original return type: T extends undefined ? 0 : T extends string ? 1 : never
+    function bar2<T extends string | undefined>(x?: T) {
+        if (x === undefined) {
+            return 0;
+        }
+        return 1;
+    }
+    
+==== dependentReturnType6.ts (0 errors) ====
+    export {};
+    
+    function outer<T extends boolean>(x: T): number {
+        return inner();
+    
+        // Original return type: T extends true ? 1 : T extends false ? 2 : never
+        function inner() {
+            return x ? 1 : 2;
+        }
+    }
+    
+    // Original overloads:
+    // function fun6<T extends boolean>(x: T, y: string): T extends true ? string : T extends false ? 2 : never;
+    // function fun6<T extends boolean>(x: T, y: undefined): T extends true ? 1 : T extends false ? 2 : never;
+    // function fun6(x: boolean): 1 | 2 | string;
+    // Original return type: T extends true ? 1 | string : T extends false ? 2 : never
+    function fun6<T extends boolean>(x: T, y?: string) {
+        return x ? y !== undefined ? y : 1 : 2;
+    }
+    
+    interface SomeInterfaceGood<T> {
+        prop1: T extends true ? 2 : T extends false ? 1 : never;
+        prop2: T extends true ? 1 : T extends false ? 2 : never;
+    }
+    
+    // Original return type: SomeInterfaceGood<T>[U]
+    function fun4good<T extends boolean, U extends keyof SomeInterfaceGood<unknown>>(x: T, y: U) {
+        if (y === "prop1") {
+            return x ? 2 : 1;
+        }
+        return x ? 1 : 2;
+    }
+    
+    interface BB {
+        a: number;
+        b: string;
+    }
+    
+    // Original return type: T extends 1 ? BB[U] : T extends 2 ? boolean : never
+    function fun5<T extends 1 | 2, U extends keyof BB>(x: T, y: U) {
+        if (x === 1) {
+            if (y === "a") {
+                return 0;
+            }
+            return "";
+        }
+        return true;
+    }
+    
+==== dependentReturnType8.ts (0 errors) ====
+    export {};
+    
+    declare const record: Record<string, string[]>;
+    declare const array: string[];
+    
+    // Original return type: T extends string ? string[] : T extends undefined ? Record<string, string[]> : never
+    const getObject = <T extends string | undefined>(group: T) =>
+        group === undefined ? record : array;
+    
+==== dependentReturnType10.ts (0 errors) ====
+    export {};
+    
+    interface Animal {
+        name: string;
+        species: string;
+    }
+    
+    interface Dog extends Animal {
+        breed: string;
+    }
+    
+    type GreetRet<T> =
+        T extends string ? string :
+        T extends { name: string } ? { greeting: string; breed: string } :
+        never;
+    
+    // Original return type: GreetRet<T>
+    function greet<T extends string | Dog>(animal: T) {
+        if (typeof animal === "string") {
+            return `hello, ${animal}`;
+        }
+        return { greeting: `woof, ${animal.name}`, breed: animal.breed };
+    }
+    
+==== dependentReturnType11.ts (0 errors) ====
+    export {};
+    
+    type Ret<T extends boolean> =
+        T extends true ? 1 :
+        T extends false ? 2 :
+        never;
+    
+    // Original return type: Ret<T>
+    function f1<T extends boolean>(param: T) {
+        return param ? 1 : 2;
+    }
+    
+    // Original return type: Ret<T>
+    function f2<T extends boolean>(param: { prop: T }) {
+        return param.prop ? 1 : 2;
+    }
+    
+    // Original return type: Ret<T>
+    function f3<T extends boolean>({ prop }: { prop: T }) {
+        return prop ? 1 : 2;
+    }
+    
+    // Original return type: Ret<T>
+    function f4<T extends boolean>({ prop1 }: { prop1: { prop2: T } }) {
+        return prop1.prop2 ? 1 : 2;
+    }
+    
+    // Original return type: Ret<T>
+    function f5<T extends boolean>(param: { prop1: { prop2: T } }) {
+        return param.prop1.prop2 ? 1 : 2;
+    }
+    
+    // Original return type: Ret<T>
+    function f6<T extends boolean>({ prop1: { prop2: a } }: { prop1: { prop2: T } }) {
+        return a ? 1 : 2;
+    }
+    
+    // Original return type: Ret<T>
+    function f7<T extends boolean>({ prop1: { prop2 } }: { prop1: { prop2: T } }) {
+        return prop2 ? 1 : 2;
+    }
+    
+    // Original return type: Ret<T>
+    function f9<T extends boolean>(param: { "some prop": T }) {
+        return param["some prop"] ? 1 : 2;
+    }
+    
+    class Dog {
+        bark(): void {}
+    }
+    
+    class Cat {
+        meow(): void {}
+    }
+    
+    type Type1<T> = { prop: T; prop2: Cat | Dog };
+    
+    // Original return type: Ret<T>
+    function g1<T extends boolean>(param: T) {
+        return param ? 1 : 2;
+    }
+    
+    // Original return type: Ret<T>
+    function g2<T extends boolean>(param: { prop: T }) {
+        return param.prop ? 1 : 2;
+    }
+    
+    // Original return type: Ret<T>
+    function g3<T extends boolean>(param: Type1<T>) {
+        return param.prop ? 1 : 2;
+    }
+    
+    interface Type2<T extends boolean> {
+        prop: T;
+        [key: string]: boolean | undefined;
+    }
+    
+    // Original return type: Ret<T>
+    function g5<T extends boolean>(param: Type2<T>) {
+        return param.prop ? 1 : 2;
+    }
+    
+    type Type4<T, S> = {
+        prop: T;
+        prop2: S[];
+    };
+    
+    // Original return type: Ret<T>
+    function g7<T extends boolean, S>(param: Type4<T, S>) {
+        return param.prop ? 1 : 2;
+    }
+    
+    // Original return type: Ret<T>
+    function g8<T extends boolean>(param: Type1<T> & { prop2: Cat | Dog }) {
+        return param.prop ? 1 : 2;
+    }
+    
+    type Type5<S> = {
+        prop: S;
+        prop2: string[];
+    };
+    
+    // Original return type: Ret<T>
+    function g12<T extends boolean>(param: Type5<T>) {
+        return param.prop ? 1 : 2;
+    }
+    
+    class Class1<T> {
+        prop!: T;
+    }
+    
+    // Original return type: Ret<T>
+    function g15<T extends boolean>(param: Class1<T>) {
+        return param.prop ? 1 : 2;
+    }
+    
+    // Original return type: Ret<T>
+    function h1<T extends boolean>(param: T) {
+        if (param) {
+            const param = false;
+            return 1;
+        }
+        return 2;
+    }
+    
+    // Original return type: Ret<T>
+    function h2<T extends boolean>({ prop }: { prop: T }) {
+        if (prop) {
+            const prop = false;
+            return 1;
+        }
+        return 2;
+    }
+    
+    // Original return type: Ret<T>
+    function h3<T extends boolean>(param: { prop: T }) {
+        if (param.prop) {
+            const param = { prop: false };
+            return 1;
+        }
+        return 2;
+    }
+    
+    // Original return type: Ret<T>
+    function h4<T extends boolean>(param: { "some prop": T }) {
+        if (param["some prop"]) {
+            const param = { "some prop": false };
+            return 1;
+        }
+        return 2;
+    }
+    
+    type RetU<T> =
+        T extends true ? 1 :
+        T extends false ? 2 :
+        T extends undefined ? 3 :
+        never;
+    
+    // Original return type: RetU<T>
+    function fn2<T extends boolean | undefined>(param?: T) {
+        if (param == undefined) {
+            return 3;
+        }
+        if (param) {
+            return 1;
+        }
+        return 2;
+    }
+    
+    // Original return type: RetU<T>
+    function fn3<T extends boolean | undefined>(param: { prop?: T }) {
+        if (param.prop == undefined) {
+            return 3;
+        }
+        if (param.prop) {
+            return 1;
+        }
+        return 2;
+    }
+    
+    // Original return type: RetU<T>
+    function fn4<T extends boolean | undefined>({ prop }: { prop?: T }) {
+        if (prop == undefined) {
+            return 3;
+        }
+        if (prop) {
+            return 1;
+        }
+        return 2;
+    }
+    
+==== dependentReturnType12.ts (0 errors) ====
+    export {};
+    
+    type RetU<T> =
+        T extends string ? 2 :
+        T extends number ? 1 :
+        never;
+    
+    // Original return type: RetU<T>
+    function fn1<T extends string | number>(param?: T) {
+        if (typeof param === "number") {
+            return 1;
+        }
+        return 2;
+    }
+    
+    // Original return type: RetU<T>
+    function fn3<T extends string | number>(param: { prop?: T }) {
+        if (typeof param.prop === "number") {
+            return 1;
+        }
+        return 2;
+    }
+    
+    // Original return type: RetU<T>
+    function fn4<T extends string | number>({ prop }: { prop?: T }) {
+        if (typeof prop === "number") {
+            return 1;
+        }
+        return 2;
+    }
+    
+==== dependentReturnType13.ts (0 errors) ====
+    export {};
+    
+    // Original return type: T extends string ? 1 : T extends string[] ? 2 : never
+    function f1<T extends string | string[]>(param: T) {
+        if (Array.isArray(param)) {
+            return 2;
+        }
+        return 1;
+    }
+    
+    // Original return type: T extends string ? 1 : T extends string[] | number[] ? 2 : never
+    function f2<T extends string | string[] | number[]>(param: T) {
+        if (Array.isArray(param)) {
+            return 2;
+        }
+        return 1;
+    }
+    
+    // Original return type: T extends string ? 1 : T extends number | string[] ? 2 : never
+    function f5<T extends string | number | string[]>(param: T) {
+        if (Array.isArray(param) || typeof param === "number") {
+            const narrowed: string[] | number = param;
+            return 2;
+        }
+        const narrowed: string = param;
+        return 1;
+    }
+    
+    // Original return type:
+    // U extends number
+    //     ? T extends string[] ? 2 : T extends string ? 1 : never
+    //     : U extends number[]
+    //     ? T extends string[] ? 4 : T extends string ? 3 : never
+    //     : never
+    function f7<T extends string | string[], U extends number | number[]>(param: T, other: U) {
+        if (Array.isArray(other)) {
+            if (Array.isArray(param)) {
+                return 4;
+            }
+            return 3;
+        }
+        if (Array.isArray(param)) {
+            return 2;
+        }
+        return 1;
+    }

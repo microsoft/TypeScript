@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/dependentReturnType4.ts] ////
+
+=== dependentReturnType4.ts ===
+declare const rand: { a?: never };
+>rand : Symbol(rand, Decl(dependentReturnType4.ts, 0, 13))
+>a : Symbol(a, Decl(dependentReturnType4.ts, 0, 21))
+
+type Missing = typeof rand.a;
+>Missing : Symbol(Missing, Decl(dependentReturnType4.ts, 0, 34))
+>rand.a : Symbol(a, Decl(dependentReturnType4.ts, 0, 21))
+>rand : Symbol(rand, Decl(dependentReturnType4.ts, 0, 13))
+>a : Symbol(a, Decl(dependentReturnType4.ts, 0, 21))
+
+// Detection of valid optional parameter references
+
+// Ok, will narrow return type
+function bar1<T extends string | Missing>(x?: T):
+>bar1 : Symbol(bar1, Decl(dependentReturnType4.ts, 1, 29))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 6, 14))
+>Missing : Symbol(Missing, Decl(dependentReturnType4.ts, 0, 34))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 6, 42))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 6, 14))
+
+    T extends Missing ? 0 : T extends string ? 1 : never {
+>T : Symbol(T, Decl(dependentReturnType4.ts, 6, 14))
+>Missing : Symbol(Missing, Decl(dependentReturnType4.ts, 0, 34))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 6, 14))
+
+    if (x === undefined) {
+>x : Symbol(x, Decl(dependentReturnType4.ts, 6, 42))
+>undefined : Symbol(undefined)
+
+        return 0;
+    }
+    return 1;
+}
+
+// Ok, will narrow return type
+function bar2<T extends string | undefined>(x?: T):
+>bar2 : Symbol(bar2, Decl(dependentReturnType4.ts, 12, 1))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 15, 14))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 15, 44))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 15, 14))
+
+    T extends undefined ? 0 : T extends string ? 1 : never {
+>T : Symbol(T, Decl(dependentReturnType4.ts, 15, 14))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 15, 14))
+
+    if (x === undefined) {
+>x : Symbol(x, Decl(dependentReturnType4.ts, 15, 44))
+>undefined : Symbol(undefined)
+
+        return 0;
+    }
+    return 1;
+}
+
+// Not ok, will not narrow return type
+function bar3<T extends string>(x?: T):
+>bar3 : Symbol(bar3, Decl(dependentReturnType4.ts, 21, 1))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 24, 14))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 24, 32))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 24, 14))
+
+    T extends undefined ? 0 : T extends string ? 1 : never {
+>T : Symbol(T, Decl(dependentReturnType4.ts, 24, 14))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 24, 14))
+
+    if (x === undefined) {
+>x : Symbol(x, Decl(dependentReturnType4.ts, 24, 32))
+>undefined : Symbol(undefined)
+
+        return 0;
+    }
+    return 1;
+}
