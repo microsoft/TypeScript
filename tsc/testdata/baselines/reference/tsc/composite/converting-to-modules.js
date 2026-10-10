@@ -179,4 +179,6 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
+*refresh*    /home/src/workspaces/project/src/main.ts
 Signatures::

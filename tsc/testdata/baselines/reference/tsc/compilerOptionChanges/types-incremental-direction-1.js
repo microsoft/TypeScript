@@ -314,7 +314,10 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/producer/node_modules/@types/first/index.d.ts
 *refresh*    /home/src/workspaces/project/producer/node_modules/@types/second/index.d.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/producer/index.ts
+(used version)   /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+(computed .d.ts) /home/src/workspaces/project/producer/index.ts
+(used version)   /home/src/workspaces/project/producer/node_modules/@types/first/index.d.ts
+(used version)   /home/src/workspaces/project/producer/node_modules/@types/second/index.d.ts
 
 
 Edit [2]:: no change

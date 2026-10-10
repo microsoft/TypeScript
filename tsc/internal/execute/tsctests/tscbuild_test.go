@@ -1063,13 +1063,12 @@ func TestBuildExactOptionalPropertyTypes(t *testing.T) {
 }
 
 type compilerOptionChangeTest struct {
-	option       string
-	name         string
-	values       [2]any
-	options      map[string]any
-	files        FileMap
-	roots        []string
-	expectedDiff string
+	option  string
+	name    string
+	values  [2]any
+	options map[string]any
+	files   FileMap
+	roots   []string
 }
 
 func TestBuildOptionChangeShapeSignature(t *testing.T) {
@@ -1174,13 +1173,12 @@ func testCompilerOptionChanges(t *testing.T, tests []compilerOptionChangeTest) {
 					edits: []*tscEdit{
 						noChange,
 						{
-							caption:      "change " + test.option + " without changing source files",
-							expectedDiff: test.expectedDiff,
+							caption: "change " + test.option + " without changing source files",
 							edit: func(sys *TestSys) {
 								sys.writeFileNoError(configPath, config(test.values[1-direction]))
 							},
 						},
-						{caption: noChange.caption, expectedDiff: test.expectedDiff},
+						noChange,
 						{
 							caption:         "force rebuild with the same compiler options",
 							commandLineArgs: []string{"--build", "producer", "--verbose", "--force"},
