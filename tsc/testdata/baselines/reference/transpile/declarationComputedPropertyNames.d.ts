@@ -86,6 +86,7 @@ export interface B {
     ["2"]: number;
 }
 export declare class C {
+    [x: number]: number;
     [missing]: number;
     [ns.missing]: number;
     [presentNs.a]: number;

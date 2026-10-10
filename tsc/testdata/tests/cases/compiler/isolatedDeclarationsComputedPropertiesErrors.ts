@@ -17,3 +17,8 @@ export const object = {
 export const invalidName = {
     [Math.random()]: 1,
 };
+
+export const stringKey: string = "key";
+export const indexedObject = {
+    [stringKey]: Math.random(),
+};

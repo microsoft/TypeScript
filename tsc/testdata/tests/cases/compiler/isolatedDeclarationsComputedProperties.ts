@@ -1,5 +1,5 @@
 // @declaration: true
-// @isolatedDeclarations: true
+// @isolatedDeclarations: false, true
 // @strict: true
 // @target: esnext
 

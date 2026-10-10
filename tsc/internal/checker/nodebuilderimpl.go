@@ -127,7 +127,7 @@ func newNodeBuilderImpl(ch *Checker, e *printer.EmitContext, idToSymbol map[*ast
 	if idToSymbol == nil {
 		idToSymbol = make(map[*ast.IdentifierNode]*ast.Symbol)
 	}
-	b := &NodeBuilderImpl{f: e.Factory.AsNodeFactory(), ch: ch, e: e, idToSymbol: idToSymbol, pc: pseudochecker.NewPseudoChecker(ch.strictNullChecks, ch.exactOptionalPropertyTypes, ch.compilerOptions.IsolatedDeclarations.IsTrue())}
+	b := &NodeBuilderImpl{f: e.Factory.AsNodeFactory(), ch: ch, e: e, idToSymbol: idToSymbol, pc: pseudochecker.NewPseudoChecker(ch.strictNullChecks, ch.exactOptionalPropertyTypes)}
 	b.cloneBindingNameVisitor = ast.NewNodeVisitor(b.cloneBindingName, b.f, ast.NodeVisitorHooks{})
 	return b
 }

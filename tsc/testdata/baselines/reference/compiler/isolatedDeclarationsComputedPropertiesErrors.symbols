@@ -42,3 +42,18 @@ export const invalidName = {
 
 };
 
+export const stringKey: string = "key";
+>stringKey : Symbol(stringKey, Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 15, 12))
+
+export const indexedObject = {
+>indexedObject : Symbol(indexedObject, Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 16, 12))
+
+    [stringKey]: Math.random(),
+>[stringKey] : Symbol([stringKey], Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 16, 30))
+>stringKey : Symbol(stringKey, Decl(isolatedDeclarationsComputedPropertiesErrors.ts, 15, 12))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+};
+

@@ -585,7 +585,8 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 						return nil
 					}
 				}
-			} else if !tx.resolver.IsLateBound(tx.EmitContext().ParseNode(input)) || !ast.IsEntityNameExpression(input.Name().Expression()) {
+			}
+			if !ast.IsEntityNameExpression(input.Name().Expression()) {
 				return nil
 			}
 		}
@@ -1964,24 +1965,25 @@ func (tx *DeclarationTransformer) buildClassMembers(classNode *ast.Node, extraMe
 		privateIdentifier = tx.Factory().NewPropertyDeclaration(nil, tx.Factory().NewPrivateIdentifier("#private"), nil, nil, nil)
 	}
 
-	var lateIndexes []*ast.Node
-	if !tx.state.isolatedDeclarations {
-		// Isolated declaration emit preserves the computed members themselves, so their
-		// inferred index signatures must not add another copy of those members.
-		lateIndexes = tx.resolver.CreateLateBoundIndexSignatures(
-			classNode,
-			tx.enclosingDeclaration,
-			declarationEmitNodeBuilderFlags,
-			declarationEmitInternalNodeBuilderFlags,
-			tx.tracker,
-		)
-	}
+	lateIndexes := tx.resolver.CreateLateBoundIndexSignatures(
+		classNode,
+		tx.enclosingDeclaration,
+		declarationEmitNodeBuilderFlags,
+		declarationEmitInternalNodeBuilderFlags,
+		tx.tracker,
+	)
 
 	memberNodes := make([]*ast.Node, 0, len(classNode.ClassLikeData().Members.Nodes))
 	if privateIdentifier != nil {
 		memberNodes = append(memberNodes, privateIdentifier)
 	}
-	memberNodes = append(memberNodes, lateIndexes...)
+	// Entity computed names are emitted from the original class members below.
+	// Keep synthesized indexes only when they do not duplicate those members.
+	for _, index := range lateIndexes {
+		if index.Name() == nil || !ast.IsComputedPropertyName(index.Name()) || !ast.IsEntityNameExpression(index.Name().Expression()) {
+			memberNodes = append(memberNodes, index)
+		}
+	}
 	memberNodes = append(memberNodes, parameterProperties...)
 	memberNodes = append(memberNodes, extraMembers...)
 	visitResult := tx.Visitor().VisitNodes(classNode.ClassLikeData().Members)

@@ -14,9 +14,8 @@ package pseudochecker
 type PseudoChecker struct {
 	strictNullChecks           bool
 	exactOptionalPropertyTypes bool
-	preserveComputedNames      bool
 }
 
-func NewPseudoChecker(strictNullChecks bool, exactOptionalPropertyTypes bool, preserveComputedNames bool) *PseudoChecker {
-	return &PseudoChecker{strictNullChecks: strictNullChecks, exactOptionalPropertyTypes: exactOptionalPropertyTypes, preserveComputedNames: preserveComputedNames}
+func NewPseudoChecker(strictNullChecks bool, exactOptionalPropertyTypes bool) *PseudoChecker {
+	return &PseudoChecker{strictNullChecks: strictNullChecks, exactOptionalPropertyTypes: exactOptionalPropertyTypes}
 }

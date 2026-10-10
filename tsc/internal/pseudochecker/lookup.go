@@ -361,7 +361,7 @@ func (ch *PseudoChecker) typeFromObjectLiteral(node *ast.ObjectLiteralExpression
 
 // roughly analogous to typeFromObjectLiteralAccessor in strada
 func (ch *PseudoChecker) getAccessorMember(accessor *ast.Node, name *ast.Node) *PseudoObjectElement {
-	if ch.preserveComputedNames && ast.IsComputedPropertyName(name) && ast.IsEntityNameExpression(name.Expression()) {
+	if ast.IsComputedPropertyName(name) && ast.IsEntityNameExpression(name.Expression()) {
 		// Computed accessors cannot be paired using their bound symbols alone. Preserve each
 		// accessor so the declaration checker can resolve the computed names and pair them.
 		if ast.IsGetAccessorDeclaration(accessor) {
@@ -435,7 +435,7 @@ func (ch *PseudoChecker) canGetTypeFromObjectLiteral(node *ast.ObjectLiteralExpr
 		}
 		if e.Name().Kind == ast.KindComputedPropertyName {
 			expression := e.Name().Expression()
-			if !ast.IsPrimitiveLiteralValue(expression, false) && !(ch.preserveComputedNames && ast.IsEntityNameExpression(expression)) {
+			if !ast.IsPrimitiveLiteralValue(expression, false) && !ast.IsEntityNameExpression(expression) {
 				errorNodes = append(errorNodes, e.Name())
 			}
 		}

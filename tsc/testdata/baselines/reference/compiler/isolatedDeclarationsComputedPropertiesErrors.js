@@ -16,6 +16,11 @@ export const invalidName = {
     [Math.random()]: 1,
 };
 
+export const stringKey: string = "key";
+export const indexedObject = {
+    [stringKey]: Math.random(),
+};
+
 
 //// [isolatedDeclarationsComputedPropertiesErrors.js]
 export const prop = Symbol();
@@ -28,4 +33,8 @@ export const object = {
 };
 export const invalidName = {
     [Math.random()]: 1,
+};
+export const stringKey = "key";
+export const indexedObject = {
+    [stringKey]: Math.random(),
 };

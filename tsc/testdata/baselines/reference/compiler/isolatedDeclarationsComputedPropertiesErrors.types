@@ -54,3 +54,21 @@ export const invalidName = {
 
 };
 
+export const stringKey: string = "key";
+>stringKey : string
+>"key" : "key"
+
+export const indexedObject = {
+>indexedObject : { [stringKey]: number; }
+>{    [stringKey]: Math.random(),} : { [stringKey]: number; }
+
+    [stringKey]: Math.random(),
+>[stringKey] : number
+>stringKey : string
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+};
+
