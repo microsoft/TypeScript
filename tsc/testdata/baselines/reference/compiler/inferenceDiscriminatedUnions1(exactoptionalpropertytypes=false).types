@@ -455,7 +455,7 @@ export function undefinedTarget(): UndefinedOk<string[]> | MaybeErr<string> {
 >undefinedTarget : () => UndefinedOk<string[]> | MaybeErr<string>
 
     return undefinedOk([]);
->undefinedOk([]) : UndefinedOk<readonly []>
+>undefinedOk([]) : UndefinedOk<[]>
 >undefinedOk : <const T>(value: T) => UndefinedOk<T>
 >[] : []
 }

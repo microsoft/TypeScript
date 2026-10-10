@@ -264,7 +264,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 						continue
 					}
 					propType := c.getNonMissingTypeOfSymbol(sourceProp)
-					if isLiteralType(propType) && !c.areTypesComparable(propType, c.getNonMissingTypeOfSymbol(targetProp)) {
+					if isLiteralType(propType) && !c.isTypeAssignableTo(propType, c.getNonMissingTypeOfSymbol(targetProp)) {
 						continue inferSources
 					}
 				}
@@ -516,7 +516,7 @@ func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets 
 								continue
 							}
 							propType := c.getNonMissingTypeOfSymbol(targetProp)
-							if isLiteralType(propType) && !c.areTypesComparable(c.getNonMissingTypeOfSymbol(sourceProp), propType) {
+							if isLiteralType(propType) && !c.isTypeAssignableTo(c.getNonMissingTypeOfSymbol(sourceProp), propType) {
 								continue inferSources
 							}
 						}
