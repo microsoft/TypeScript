@@ -214,7 +214,7 @@ func (s *SymbolTrackerImpl) handleSymbolAccessibilityError(symbolAccessibilityRe
 		// The checker should issue errors on unresolvable names, skip the declaration emit error for using a private/unreachable name for those
 	} else if symbolAccessibilityResult.Accessibility != printer.SymbolAccessibilityNotResolved {
 		// Report error
-		errorInfo := s.state.getSymbolAccessibilityDiagnostic(symbolAccessibilityResult)
+		errorInfo := s.state.diagnosticContext.get(symbolAccessibilityResult)
 		if errorInfo != nil {
 			info := *errorInfo
 			diagNode := symbolAccessibilityResult.ErrorNode
@@ -237,15 +237,15 @@ func createDiagnosticForNode(node *ast.Node, message *diagnostics.Message, args 
 }
 
 type SymbolTrackerSharedState struct {
-	lateMarkedStatements             []*ast.Node
-	diagnostics                      []*ast.Diagnostic
-	getSymbolAccessibilityDiagnostic GetSymbolAccessibilityDiagnostic
-	errorNameNode                    *ast.Node
-	isolatedDeclarations             bool
-	stripInternal                    bool
-	currentSourceFile                *ast.SourceFile
-	resolver                         printer.EmitResolver
-	reportExpandoFunctionErrors      func(node *ast.Node)
+	lateMarkedStatements        []*ast.Node
+	diagnostics                 []*ast.Diagnostic
+	diagnosticContext           symbolAccessibilityDiagnosticContext
+	errorNameNode               *ast.Node
+	isolatedDeclarations        bool
+	stripInternal               bool
+	currentSourceFile           *ast.SourceFile
+	resolver                    printer.EmitResolver
+	reportExpandoFunctionErrors func(node *ast.Node)
 }
 
 func (s *SymbolTrackerSharedState) addDiagnostic(diag *ast.Diagnostic) {

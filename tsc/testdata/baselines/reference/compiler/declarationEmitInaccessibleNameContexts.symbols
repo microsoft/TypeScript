@@ -1,0 +1,164 @@
+//// [tests/cases/compiler/declarationEmitInaccessibleNameContexts.ts] ////
+
+=== hidden.ts ===
+export function make() {
+>make : Symbol(make, Decl(hidden.ts, 0, 0))
+
+    interface Hidden { x: number }
+>Hidden : Symbol(Hidden, Decl(hidden.ts, 0, 24))
+>x : Symbol(Hidden.x, Decl(hidden.ts, 1, 22))
+
+    return { x: 1 } as Hidden;
+>x : Symbol(x, Decl(hidden.ts, 2, 12))
+>Hidden : Symbol(Hidden, Decl(hidden.ts, 0, 24))
+}
+export function makeClass() {
+>makeClass : Symbol(makeClass, Decl(hidden.ts, 3, 1))
+
+    interface HiddenProp { x: number }
+>HiddenProp : Symbol(HiddenProp, Decl(hidden.ts, 4, 29))
+>x : Symbol(HiddenProp.x, Decl(hidden.ts, 5, 26))
+
+    class HiddenBase { y = { x: 1 } as HiddenProp }
+>HiddenBase : Symbol(HiddenBase, Decl(hidden.ts, 5, 38))
+>y : Symbol(HiddenBase.y, Decl(hidden.ts, 6, 22))
+>x : Symbol(x, Decl(hidden.ts, 6, 28))
+>HiddenProp : Symbol(HiddenProp, Decl(hidden.ts, 4, 29))
+
+    return HiddenBase;
+>HiddenBase : Symbol(HiddenBase, Decl(hidden.ts, 5, 38))
+}
+
+=== index.ts ===
+import { make, makeClass } from "./hidden";
+>make : Symbol(make, Decl(index.ts, 0, 8))
+>makeClass : Symbol(makeClass, Decl(index.ts, 0, 14))
+
+export const variable = make();
+>variable : Symbol(variable, Decl(index.ts, 2, 12))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+export let [destructured] = [make()];
+>destructured : Symbol(destructured, Decl(index.ts, 3, 12))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+export function returnType() { return make(); }
+>returnType : Symbol(returnType, Decl(index.ts, 3, 37))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+export function parameterWithInitializer(p = make()) { return 0; }
+>parameterWithInitializer : Symbol(parameterWithInitializer, Decl(index.ts, 4, 47))
+>p : Symbol(p, Decl(index.ts, 5, 41))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+export const arrow = (p = make()) => p;
+>arrow : Symbol(arrow, Decl(index.ts, 6, 12))
+>p : Symbol(p, Decl(index.ts, 6, 22))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+>p : Symbol(p, Decl(index.ts, 6, 22))
+
+export class C {
+>C : Symbol(C, Decl(index.ts, 6, 39))
+
+    property = make();
+>property : Symbol(C.property, Decl(index.ts, 8, 16))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+    static staticProperty = make();
+>staticProperty : Symbol(C.staticProperty, Decl(index.ts, 9, 22))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+    #privateField = make();
+>#privateField : Symbol(C.#privateField, Decl(index.ts, 10, 35))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+    constructor(public parameterProperty = make()) {}
+>parameterProperty : Symbol(C.parameterProperty, Decl(index.ts, 12, 16))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+    method() { return make(); }
+>method : Symbol(C.method, Decl(index.ts, 12, 53))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+    static staticMethod() { return make(); }
+>staticMethod : Symbol(C.staticMethod, Decl(index.ts, 13, 31))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+    methodWithParameter(p = make()) { return 0; }
+>methodWithParameter : Symbol(C.methodWithParameter, Decl(index.ts, 14, 44))
+>p : Symbol(p, Decl(index.ts, 15, 24))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+    get getter() { return make(); }
+>getter : Symbol(C.getter, Decl(index.ts, 15, 49))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+    get accessor() { return make(); }
+>accessor : Symbol(C.accessor, Decl(index.ts, 16, 35), Decl(index.ts, 17, 37))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+    set accessor(v) { v; }
+>accessor : Symbol(C.accessor, Decl(index.ts, 16, 35), Decl(index.ts, 17, 37))
+>v : Symbol(v, Decl(index.ts, 18, 17))
+>v : Symbol(v, Decl(index.ts, 18, 17))
+}
+
+export class Derived extends makeClass() {}
+>Derived : Symbol(Derived, Decl(index.ts, 19, 1))
+>makeClass : Symbol(makeClass, Decl(index.ts, 0, 14))
+
+export function host() {}
+>host : Symbol(host, Decl(index.ts, 21, 43))
+
+host.prop = make();
+>host.prop : Symbol(host.prop, Decl(index.ts, 23, 25))
+>host : Symbol(host, Decl(index.ts, 21, 43))
+>prop : Symbol(host.prop, Decl(index.ts, 23, 25))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+export const arrowHost = () => 0;
+>arrowHost : Symbol(arrowHost, Decl(index.ts, 25, 12))
+
+arrowHost.prop = make();
+>arrowHost.prop : Symbol(arrowHost.prop, Decl(index.ts, 25, 33))
+>arrowHost : Symbol(arrowHost, Decl(index.ts, 25, 12))
+>prop : Symbol(arrowHost.prop, Decl(index.ts, 25, 33))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+export namespace N {
+>N : Symbol(N, Decl(index.ts, 26, 24))
+
+    export const inNamespace = make();
+>inNamespace : Symbol(inNamespace, Decl(index.ts, 29, 16))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+    export function returnInNamespace() { return make(); }
+>returnInNamespace : Symbol(returnInNamespace, Decl(index.ts, 29, 38))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+}
+
+export const objectLiteral = {
+>objectLiteral : Symbol(objectLiteral, Decl(index.ts, 33, 12))
+
+    nested: make(),
+>nested : Symbol(nested, Decl(index.ts, 33, 30))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+    method() { return make(); },
+>method : Symbol(method, Decl(index.ts, 34, 19))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
+};
+
+export function generic<T = ReturnType<typeof make>>(t?: T) { return t; }
+>generic : Symbol(generic, Decl(index.ts, 36, 2))
+>T : Symbol(T, Decl(index.ts, 38, 24))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>make : Symbol(make, Decl(index.ts, 0, 8))
+>t : Symbol(t, Decl(index.ts, 38, 53))
+>T : Symbol(T, Decl(index.ts, 38, 24))
+>t : Symbol(t, Decl(index.ts, 38, 53))
+
+export default make();
+>make : Symbol(make, Decl(index.ts, 0, 8))
+
