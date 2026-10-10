@@ -316,5 +316,4 @@ interface DateConstructor {
 }
 
 interface Date {
-    getVarDate: () => VarDate;
 }

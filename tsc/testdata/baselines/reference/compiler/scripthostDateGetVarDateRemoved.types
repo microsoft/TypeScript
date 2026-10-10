@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/scripthostDateGetVarDateRemoved.ts] ////
+
+=== scripthostDateGetVarDateRemoved.ts ===
+/// <reference lib="scripthost" />
+
+new Date().getVarDate();
+>new Date().getVarDate() : any
+>new Date().getVarDate : any
+>new Date() : Date
+>Date : DateConstructor
+>getVarDate : any
+
