@@ -1262,6 +1262,22 @@ func TestBuildTypeCheckingOptionChanges(t *testing.T) {
 	})
 }
 
+func TestBuildModuleSuffixesOptionChanges(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "moduleSuffixes", values: [2]any{[]string{"", ".native"}, []string{".native", ""}},
+			files: FileMap{
+				"index.ts":        "import { make } from './factory';\nexport const result = make();\n",
+				"factory.ts":      "import { Value } from './input';\nexport function make() { return new Value(); }\n",
+				"input.ts":        "export class Value { private field = 1; }\n",
+				"input.native.ts": "export class Value { private field = 2; }\n",
+			},
+			expectedDiff: "Changing moduleSuffixes leaves inferred declaration module specifiers stale when both alternative files are already included.",
+		},
+	})
+}
+
 func TestBuildEmitOptionChanges(t *testing.T) {
 	t.Parallel()
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
