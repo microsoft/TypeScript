@@ -9,6 +9,24 @@ import (
 
 type GetSymbolAccessibilityDiagnostic = func(symbolAccessibilityResult printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic
 
+// symbolAccessibilityDiagnosticContext selects the diagnostic reported when a declaration uses a
+// symbol that cannot be named. Nearly every visited declaration establishes a context and almost
+// none of them report an error, so the selector for a declaration node is created only on demand.
+type symbolAccessibilityDiagnosticContext struct {
+	node *ast.Node                        // declaration whose selector is created when needed
+	fn   GetSymbolAccessibilityDiagnostic // explicit selector, used instead of node when set
+}
+
+func (ctx symbolAccessibilityDiagnosticContext) get(symbolAccessibilityResult printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+	if ctx.fn != nil {
+		return ctx.fn(symbolAccessibilityResult)
+	}
+	if ctx.node != nil {
+		return createGetSymbolAccessibilityDiagnosticForNode(ctx.node)(symbolAccessibilityResult)
+	}
+	return nil
+}
+
 type SymbolAccessibilityDiagnostic struct {
 	errorNode         *ast.Node
 	diagnosticMessage *diagnostics.Message

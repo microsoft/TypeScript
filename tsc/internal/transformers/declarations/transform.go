@@ -285,7 +285,7 @@ func (tx *DeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 	tx.needsScopeFixMarker = false
 	tx.resultHasScopeMarker = false
 	tx.enclosingDeclaration = node.AsNode()
-	tx.state.getSymbolAccessibilityDiagnostic = throwDiagnostic
+	tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{fn: throwDiagnostic}
 	tx.resultHasExternalModuleIndicator = false
 	tx.suppressNewDiagnosticContexts = false
 	tx.state.lateMarkedStatements = make([]*ast.Node, 0)
@@ -542,26 +542,37 @@ func (tx *DeclarationTransformer) getTypeReferences() (result []*ast.FileReferen
 	return result
 }
 
-func (tx *DeclarationTransformer) setupDiagnosticContext(input *ast.Node) (bool, func()) {
+// savedDiagnosticContext is the state that restoreDiagnosticContext reinstates once a declaration has been visited.
+type savedDiagnosticContext struct {
+	diagnosticContext             symbolAccessibilityDiagnosticContext
+	errorNameNode                 *ast.Node
+	suppressNewDiagnosticContexts bool
+}
+
+func (tx *DeclarationTransformer) setupDiagnosticContext(input *ast.Node) (bool, savedDiagnosticContext) {
 	canProduceDiagnostic := canProduceDiagnostics(input)
-	oldWithinObjectLiteralType := tx.suppressNewDiagnosticContexts
+	saved := savedDiagnosticContext{
+		diagnosticContext:             tx.state.diagnosticContext,
+		errorNameNode:                 tx.state.errorNameNode,
+		suppressNewDiagnosticContexts: tx.suppressNewDiagnosticContexts,
+	}
 	shouldEnterSuppressNewDiagnosticsContextContext := (input.Kind == ast.KindTypeLiteral || input.Kind == ast.KindMappedType) && !(input.Parent.Kind == ast.KindTypeAliasDeclaration || input.Parent.Kind == ast.KindJSTypeAliasDeclaration)
 
-	oldDiag := tx.state.getSymbolAccessibilityDiagnostic
 	if canProduceDiagnostic && !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input)
+		tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{node: input}
 	}
-	oldName := tx.state.errorNameNode
 
 	if shouldEnterSuppressNewDiagnosticsContextContext {
 		tx.suppressNewDiagnosticContexts = true
 	}
 
-	return canProduceDiagnostic, func() {
-		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
-		tx.state.errorNameNode = oldName
-		tx.suppressNewDiagnosticContexts = oldWithinObjectLiteralType
-	}
+	return canProduceDiagnostic, saved
+}
+
+func (tx *DeclarationTransformer) restoreDiagnosticContext(saved savedDiagnosticContext) {
+	tx.state.diagnosticContext = saved.diagnosticContext
+	tx.state.errorNameNode = saved.errorNameNode
+	tx.suppressNewDiagnosticContexts = saved.suppressNewDiagnosticContexts
 }
 
 func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.Node {
@@ -610,8 +621,8 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 		tx.enclosingDeclaration = input
 	}
 
-	canProduceDiagnostic, cleanupDiagnosticContext := tx.setupDiagnosticContext(input)
-	defer cleanupDiagnosticContext()
+	canProduceDiagnostic, savedDiagnosticContext := tx.setupDiagnosticContext(input)
+	defer tx.restoreDiagnosticContext(savedDiagnosticContext)
 
 	var result *ast.Node
 
@@ -700,16 +711,16 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 }
 
 func (tx *DeclarationTransformer) checkName(node *ast.Node) {
-	oldDiag := tx.state.getSymbolAccessibilityDiagnostic
+	oldDiag := tx.state.diagnosticContext
 	if !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNodeName(node)
+		tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{fn: createGetSymbolAccessibilityDiagnosticForNodeName(node)}
 	}
 	tx.state.errorNameNode = node.Name()
 	debug.Assert(ast.HasDynamicName(node)) // Should only be called with dynamic names
 	entityName := node.Name().Expression()
 	tx.checkEntityNameVisibility(entityName, tx.enclosingDeclaration)
 	if !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+		tx.state.diagnosticContext = oldDiag
 	}
 	tx.state.errorNameNode = nil
 }
@@ -1230,12 +1241,12 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		return exportAssignment
 	}
 
-	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+	tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{fn: func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 		return &SymbolAccessibilityDiagnostic{
 			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
 			errorNode:         input,
 		}
-	}
+	}}
 	tx.tracker.PushErrorFallbackNode(assignment)
 
 	// Check if the expression is a class expression - emit as a class declaration + export assignment
@@ -1468,12 +1479,12 @@ func (tx *DeclarationTransformer) transformCommonJSExportWorker(input *ast.Node,
 		if name.Text() == "default" {
 			// const _default: Type; export default _default;
 			newId := tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
-			tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+			tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{fn: func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 				return &SymbolAccessibilityDiagnostic{
 					diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
 					errorNode:         input,
 				}
-			}
+			}}
 			tx.tracker.PushErrorFallbackNode(input)
 			type_ := tx.ensureType(input, false)
 			varDecl := tx.Factory().NewVariableDeclaration(newId, nil, type_, nil)
@@ -1509,12 +1520,12 @@ func (tx *DeclarationTransformer) transformCommonJSExportWorker(input *ast.Node,
 	}
 	// const _exported: Type; export {_exported as "name"};
 	newId := tx.Factory().NewUniqueNameEx("_exported", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
-	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+	tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{fn: func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 		return &SymbolAccessibilityDiagnostic{
 			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
 			errorNode:         input,
 		}
-	}
+	}}
 	tx.tracker.PushErrorFallbackNode(input)
 	type_ := tx.ensureType(input, false)
 	varDecl := tx.Factory().NewVariableDeclaration(newId, nil, type_, nil)
@@ -1668,11 +1679,11 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 
 	oldErrorNameNode := tx.state.errorNameNode
 	tx.state.errorNameNode = node.Name()
-	var oldDiag GetSymbolAccessibilityDiagnostic
+	var oldDiag symbolAccessibilityDiagnosticContext
 	if !tx.suppressNewDiagnosticContexts {
-		oldDiag = tx.state.getSymbolAccessibilityDiagnostic
+		oldDiag = tx.state.diagnosticContext
 		if canProduceDiagnostics(node) {
-			tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(node)
+			tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{node: node}
 		}
 	}
 	var typeNode *ast.Node
@@ -1691,7 +1702,7 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 
 	tx.state.errorNameNode = oldErrorNameNode
 	if !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+		tx.state.diagnosticContext = oldDiag
 	}
 	if typeNode == nil {
 		return tx.Factory().NewKeywordTypeNode(ast.KindAnyKeyword)
@@ -1754,10 +1765,10 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 	}
 
 	canProduceDiagnostic := canProduceDiagnostics(input)
-	oldDiag := tx.state.getSymbolAccessibilityDiagnostic
+	oldDiag := tx.state.diagnosticContext
 	oldName := tx.state.errorNameNode
 	if canProduceDiagnostic {
-		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input)
+		tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{node: input}
 	}
 	saveNeedsDeclare := tx.needsDeclare
 
@@ -1783,7 +1794,7 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 	}
 
 	tx.enclosingDeclaration = previousEnclosingDeclaration
-	tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+	tx.state.diagnosticContext = oldDiag
 	tx.needsDeclare = saveNeedsDeclare
 	tx.state.errorNameNode = oldName
 	return result
@@ -1932,12 +1943,12 @@ func (tx *DeclarationTransformer) buildClassMembers(classNode *ast.Node, extraMe
 	ctor := ast.GetFirstConstructorWithBody(classNode)
 	var parameterProperties []*ast.Node
 	if ctor != nil {
-		oldDiag := tx.state.getSymbolAccessibilityDiagnostic
+		oldDiag := tx.state.diagnosticContext
 		for _, param := range ctor.AsConstructorDeclaration().Parameters.Nodes {
 			if !ast.HasSyntacticModifier(param, ast.ModifierFlagsParameterPropertyModifier) || tx.shouldStripInternal(param) {
 				continue
 			}
-			tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param)
+			tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{node: param}
 			if param.Name().Kind == ast.KindIdentifier {
 				updated := tx.Factory().NewPropertyDeclaration(
 					tx.ensureModifiers(param),
@@ -1953,7 +1964,7 @@ func (tx *DeclarationTransformer) buildClassMembers(classNode *ast.Node, extraMe
 				parameterProperties = append(parameterProperties, tx.walkBindingPattern(param.Name().AsBindingPattern(), param)...)
 			}
 		}
-		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+		tx.state.diagnosticContext = oldDiag
 	}
 
 	// When the class has at least one private identifier, create a unique constant identifier to retain the nominal typing behavior
@@ -2016,13 +2027,13 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 			oldId = input.Name().Text()
 		}
 		newId := tx.Factory().NewUniqueNameEx(oldId+"_base", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
-		tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+		tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{fn: func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 			return &SymbolAccessibilityDiagnostic{
 				diagnosticMessage: diagnostics.X_extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
 				errorNode:         extendsClause,
 				typeName:          input.Name(),
 			}
-		}
+		}}
 
 		varDecl := tx.Factory().NewVariableDeclaration(
 			newId,
@@ -2365,11 +2376,11 @@ func (tx *DeclarationTransformer) ensureTypeParams(node *ast.Node, params *ast.T
 	}
 	oldErrorNameNode := tx.state.errorNameNode
 	tx.state.errorNameNode = node.Name()
-	var oldDiag GetSymbolAccessibilityDiagnostic
+	var oldDiag symbolAccessibilityDiagnosticContext
 	if !tx.suppressNewDiagnosticContexts {
-		oldDiag = tx.state.getSymbolAccessibilityDiagnostic
+		oldDiag = tx.state.diagnosticContext
 		if canProduceDiagnostics(node) {
-			tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(node)
+			tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{node: node}
 		}
 	}
 
@@ -2384,7 +2395,7 @@ func (tx *DeclarationTransformer) ensureTypeParams(node *ast.Node, params *ast.T
 
 	tx.state.errorNameNode = oldErrorNameNode
 	if !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+		tx.state.diagnosticContext = oldDiag
 	}
 	return typeParameters
 }
@@ -2401,9 +2412,9 @@ func (tx *DeclarationTransformer) updateParamList(node *ast.Node, params *ast.Pa
 }
 
 func (tx *DeclarationTransformer) ensureParameter(p *ast.ParameterDeclaration) *ast.Node {
-	oldDiag := tx.state.getSymbolAccessibilityDiagnostic
+	oldDiag := tx.state.diagnosticContext
 	if !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.AsNode())
+		tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{node: p.AsNode()}
 	}
 	var questionToken *ast.TokenNode
 	if tx.resolver.IsOptionalParameter(p.AsNode()) {
@@ -2422,7 +2433,7 @@ func (tx *DeclarationTransformer) ensureParameter(p *ast.ParameterDeclaration) *
 		tx.ensureType(p.AsNode(), true),
 		tx.ensureNoInitializer(p.AsNode()),
 	)
-	tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+	tx.state.diagnosticContext = oldDiag
 	return result
 }
 
@@ -2468,10 +2479,10 @@ func (tx *DeclarationTransformer) transformImportEqualsDeclaration(decl *ast.Imp
 			tx.Factory().UpdateExternalModuleReference(decl.ModuleReference.AsExternalModuleReference(), tx.rewriteModuleSpecifier(decl.AsNode(), specifier)),
 		)
 	} else {
-		oldDiag := tx.state.getSymbolAccessibilityDiagnostic
-		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(decl.AsNode())
+		oldDiag := tx.state.diagnosticContext
+		tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{node: decl.AsNode()}
 		tx.checkEntityNameVisibility(decl.ModuleReference, tx.enclosingDeclaration)
-		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+		tx.state.diagnosticContext = oldDiag
 		return decl.AsNode()
 	}
 }
@@ -2679,8 +2690,8 @@ func (tx *DeclarationTransformer) stripDeclareModifiers(node *ast.Node) *ast.Nod
 
 func (tx *DeclarationTransformer) visitCJSExportAssignments(expression *ast.Node) *ast.Node {
 	if expression != nil {
-		_, cleanupDiagnosticContext := tx.setupDiagnosticContext(expression)
-		defer cleanupDiagnosticContext()
+		_, savedDiagnosticContext := tx.setupDiagnosticContext(expression)
+		defer tx.restoreDiagnosticContext(savedDiagnosticContext)
 		switch ast.GetAssignmentDeclarationKind(expression) {
 		case ast.JSDeclarationKindModuleExports:
 			if tx.state.currentSourceFile.CommonJSModuleIndicator != nil {
@@ -2699,8 +2710,8 @@ func (tx *DeclarationTransformer) visitCJSExportAssignments(expression *ast.Node
 
 func (tx *DeclarationTransformer) visitNestedExpression(expression *ast.Node) *ast.Node {
 	if expression != nil {
-		_, cleanupDiagnosticContext := tx.setupDiagnosticContext(expression)
-		defer cleanupDiagnosticContext()
+		_, savedDiagnosticContext := tx.setupDiagnosticContext(expression)
+		defer tx.restoreDiagnosticContext(savedDiagnosticContext)
 		switch ast.GetAssignmentDeclarationKind(expression) {
 		case ast.JSDeclarationKindProperty:
 			tx.transformExpandoAssignment(expression.AsBinaryExpression())
@@ -2796,8 +2807,8 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		localName = tx.Factory().NewGeneratedNameForNode(node.AsNode())
 	}
 
-	_, cleanupDiagnosticContext := tx.setupDiagnosticContext(node.AsNode())
-	defer cleanupDiagnosticContext()
+	_, savedDiagnosticContext := tx.setupDiagnosticContext(node.AsNode())
+	defer tx.restoreDiagnosticContext(savedDiagnosticContext)
 
 	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
 
@@ -2896,8 +2907,8 @@ func (tx *DeclarationTransformer) transformExpandoHost(name *ast.Node, declarati
 		modifierFlags ^= ast.ModifierFlagsExport
 	}
 
-	_, cleanupDiagnosticContext := tx.setupDiagnosticContext(declaration)
-	defer cleanupDiagnosticContext()
+	_, savedDiagnosticContext := tx.setupDiagnosticContext(declaration)
+	defer tx.restoreDiagnosticContext(savedDiagnosticContext)
 
 	modifiers := tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier))
 	replacement := make([]*ast.Node, 0)
