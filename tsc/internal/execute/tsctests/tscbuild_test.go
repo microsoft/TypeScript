@@ -1063,12 +1063,13 @@ func TestBuildExactOptionalPropertyTypes(t *testing.T) {
 }
 
 type compilerOptionChangeTest struct {
-	option  string
-	name    string
-	values  [2]any
-	options map[string]any
-	files   FileMap
-	roots   []string
+	option       string
+	name         string
+	values       [2]any
+	options      map[string]any
+	files        FileMap
+	roots        []string
+	expectedDiff string
 }
 
 func TestBuildOptionChangeShapeSignature(t *testing.T) {
@@ -1173,12 +1174,13 @@ func testCompilerOptionChanges(t *testing.T, tests []compilerOptionChangeTest) {
 					edits: []*tscEdit{
 						noChange,
 						{
-							caption: "change " + test.option + " without changing source files",
+							caption:      "change " + test.option + " without changing source files",
+							expectedDiff: test.expectedDiff,
 							edit: func(sys *TestSys) {
 								sys.writeFileNoError(configPath, config(test.values[1-direction]))
 							},
 						},
-						noChange,
+						{caption: noChange.caption, expectedDiff: test.expectedDiff},
 						{
 							caption:         "force rebuild with the same compiler options",
 							commandLineArgs: []string{"--build", "producer", "--verbose", "--force"},
@@ -1190,6 +1192,24 @@ func testCompilerOptionChanges(t *testing.T, tests []compilerOptionChangeTest) {
 			}
 		}
 	}
+}
+
+func TestBuildModuleDetectionOptionChanges(t *testing.T) {
+	t.Parallel()
+	tests := []compilerOptionChangeTest{
+		{option: "moduleDetection", name: "moduleDetection empty", values: [2]any{"legacy", "force"}, files: FileMap{"index.ts": ""}},
+		{option: "moduleDetection", name: "moduleDetection comment", values: [2]any{"legacy", "force"}, files: FileMap{"index.ts": "// A file with no statements.\n"}},
+		{option: "moduleDetection", name: "moduleDetection ambient module", values: [2]any{"legacy", "force"}, files: FileMap{"index.ts": "declare module 'input' { export const value: number; }\n"}},
+		{
+			option: "moduleDetection", name: "moduleDetection CommonJS", values: [2]any{"legacy", "force"},
+			options: map[string]any{"allowJs": true, "emitDeclarationOnly": false},
+			files:   FileMap{"index.js": "exports.value = 1;\n"},
+		},
+	}
+	for i := range tests {
+		tests[i].expectedDiff = "Changing moduleDetection does not invalidate module markers or semantic diagnostics when global-scope classification is unchanged."
+	}
+	testCompilerOptionChanges(t, tests)
 }
 
 func TestBuildTypeCheckingOptionChanges(t *testing.T) {
