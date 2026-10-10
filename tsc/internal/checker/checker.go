@@ -26585,10 +26585,11 @@ func (c *Checker) removeIdenticalObjectLiteralTypes(types []*Type) []*Type {
 }
 
 func (c *Checker) getObjectLiteralShapeKey(t *Type) (CacheHashKey, bool) {
-	if t.flags&TypeFlagsObject == 0 || !isObjectLiteralType(t) {
+	// Only use members that are already resolved, so that computing the key never triggers resolution.
+	if t.flags&TypeFlagsObject == 0 || !isObjectLiteralType(t) || t.objectFlags&ObjectFlagsMembersResolved == 0 {
 		return CacheHashKey{}, false
 	}
-	resolved := c.resolveStructuredTypeMembers(t)
+	resolved := t.AsStructuredType()
 	if len(resolved.signatures) != 0 || len(resolved.indexInfos) != 0 {
 		return CacheHashKey{}, false
 	}
@@ -26610,7 +26611,7 @@ func (c *Checker) getObjectLiteralShapeKey(t *Type) (CacheHashKey, bool) {
 }
 
 // getResolvedTypeOfObjectLiteralProperty returns the type of a plain object literal property only if it is already
-// resolved, so that computing a shape key never triggers type resolution (see #46981).
+// resolved (see #46981).
 func (c *Checker) getResolvedTypeOfObjectLiteralProperty(p *ast.Symbol) *Type {
 	if p.Flags()&(ast.SymbolFlagsAccessor|ast.SymbolFlagsMethod) != 0 ||
 		p.CheckFlags()&(ast.CheckFlagsDeferredType|ast.CheckFlagsInstantiated|ast.CheckFlagsMapped|ast.CheckFlagsReverseMapped) != 0 {
