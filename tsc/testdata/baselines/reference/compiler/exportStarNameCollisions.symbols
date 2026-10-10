@@ -1,0 +1,146 @@
+//// [tests/cases/compiler/exportStarNameCollisions.ts] ////
+
+=== a.ts ===
+export const onlyA = 1;
+>onlyA : Symbol(onlyA, Decl(a.ts, 0, 12))
+
+export const shared = "a";
+>shared : Symbol(shared, Decl(a.ts, 1, 12))
+
+export interface SharedType { fromA: true }
+>SharedType : Symbol(SharedType, Decl(a.ts, 1, 26))
+>fromA : Symbol(SharedType.fromA, Decl(a.ts, 2, 29))
+
+export default "a";
+
+=== b.ts ===
+export const onlyB = 2;
+>onlyB : Symbol(onlyB, Decl(b.ts, 0, 12))
+
+export const shared = "b";
+>shared : Symbol(shared, Decl(b.ts, 1, 12))
+
+export interface SharedType { fromB: true }
+>SharedType : Symbol(SharedType, Decl(b.ts, 1, 26))
+>fromB : Symbol(SharedType.fromB, Decl(b.ts, 2, 29))
+
+export default "b";
+
+=== b2.ts ===
+export const shared = "b2";
+>shared : Symbol(shared, Decl(b2.ts, 0, 12))
+
+=== sameSymbol.ts ===
+export { shared } from "./a";
+>shared : Symbol(shared, Decl(sameSymbol.ts, 0, 8))
+
+=== twoStarsCollide.ts ===
+
+// 'shared' and 'SharedType' come from both modules with different meanings.
+export * from "./a";
+export * from "./b";
+
+=== threeStarsCollide.ts ===
+
+// Both later declarations are reported against the first one.
+export * from "./a";
+export * from "./b";
+export * from "./b2";
+
+=== sameSymbolTwice.ts ===
+
+// Reaching the same symbol through two declarations is not a collision.
+export * from "./a";
+export * from "./sameSymbol";
+
+=== localShadows.ts ===
+// A module's own export takes precedence and silences the collision for shared, but not for SharedType.
+export * from "./a";
+export * from "./b";
+export const shared = "local";
+>shared : Symbol(shared, Decl(localShadows.ts, 3, 12))
+
+=== singleStar.ts ===
+
+export * from "./a";
+
+=== typeOnlyThenValue.ts ===
+
+export type * from "./a";
+export * from "./b";
+
+=== valueThenTypeOnly.ts ===
+
+export * from "./a";
+export type * from "./b";
+
+=== chained.ts ===
+
+export * from "./twoStarsCollide";
+export * from "./singleStar";
+
+=== consumer.ts ===
+import { onlyA, onlyB, shared as s1 } from "./twoStarsCollide";
+>onlyA : Symbol(onlyA, Decl(consumer.ts, 0, 8))
+>onlyB : Symbol(onlyB, Decl(consumer.ts, 0, 15))
+>shared : Symbol(s1, Decl(a.ts, 1, 12))
+>s1 : Symbol(s1, Decl(consumer.ts, 0, 22))
+
+import { shared as s2 } from "./sameSymbolTwice";
+>shared : Symbol(s1, Decl(a.ts, 1, 12))
+>s2 : Symbol(s2, Decl(consumer.ts, 1, 8))
+
+import { shared as s3 } from "./localShadows";
+>shared : Symbol(s3, Decl(localShadows.ts, 3, 12))
+>s3 : Symbol(s3, Decl(consumer.ts, 2, 8))
+
+import { shared as s4, onlyA as a4 } from "./singleStar";
+>shared : Symbol(s1, Decl(a.ts, 1, 12))
+>s4 : Symbol(s4, Decl(consumer.ts, 3, 8))
+>onlyA : Symbol(onlyA, Decl(a.ts, 0, 12))
+>a4 : Symbol(a4, Decl(consumer.ts, 3, 22))
+
+import { onlyA as a5, onlyB as b5 } from "./typeOnlyThenValue";
+>onlyA : Symbol(onlyA, Decl(a.ts, 0, 12))
+>a5 : Symbol(a5, Decl(consumer.ts, 4, 8))
+>onlyB : Symbol(onlyB, Decl(b.ts, 0, 12))
+>b5 : Symbol(b5, Decl(consumer.ts, 4, 21))
+
+import { onlyA as a6, onlyB as b6 } from "./valueThenTypeOnly";
+>onlyA : Symbol(onlyA, Decl(a.ts, 0, 12))
+>a6 : Symbol(a6, Decl(consumer.ts, 5, 8))
+>onlyB : Symbol(onlyB, Decl(b.ts, 0, 12))
+>b6 : Symbol(b6, Decl(consumer.ts, 5, 21))
+
+import { onlyA as a7, onlyB as b7, shared as s7 } from "./chained";
+>onlyA : Symbol(onlyA, Decl(a.ts, 0, 12))
+>a7 : Symbol(a7, Decl(consumer.ts, 6, 8))
+>onlyB : Symbol(onlyB, Decl(b.ts, 0, 12))
+>b7 : Symbol(b7, Decl(consumer.ts, 6, 21))
+>shared : Symbol(s1, Decl(a.ts, 1, 12))
+>s7 : Symbol(s7, Decl(consumer.ts, 6, 34))
+
+import type { SharedType } from "./twoStarsCollide";
+>SharedType : Symbol(SharedType, Decl(consumer.ts, 7, 13))
+
+export const values = [onlyA, onlyB, s1, s2, s3, s4, a4, a5, b5, a6, b6, a7, b7, s7];
+>values : Symbol(values, Decl(consumer.ts, 8, 12))
+>onlyA : Symbol(onlyA, Decl(consumer.ts, 0, 8))
+>onlyB : Symbol(onlyB, Decl(consumer.ts, 0, 15))
+>s1 : Symbol(s1, Decl(consumer.ts, 0, 22))
+>s2 : Symbol(s2, Decl(consumer.ts, 1, 8))
+>s3 : Symbol(s3, Decl(consumer.ts, 2, 8))
+>s4 : Symbol(s4, Decl(consumer.ts, 3, 8))
+>a4 : Symbol(a4, Decl(consumer.ts, 3, 22))
+>a5 : Symbol(a5, Decl(consumer.ts, 4, 8))
+>b5 : Symbol(b5, Decl(consumer.ts, 4, 21))
+>a6 : Symbol(a6, Decl(consumer.ts, 5, 8))
+>b6 : Symbol(b6, Decl(consumer.ts, 5, 21))
+>a7 : Symbol(a7, Decl(consumer.ts, 6, 8))
+>b7 : Symbol(b7, Decl(consumer.ts, 6, 21))
+>s7 : Symbol(s7, Decl(consumer.ts, 6, 34))
+
+export let t: SharedType | undefined;
+>t : Symbol(t, Decl(consumer.ts, 9, 10))
+>SharedType : Symbol(SharedType, Decl(consumer.ts, 7, 13))
+
