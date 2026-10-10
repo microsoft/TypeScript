@@ -1206,9 +1206,6 @@ func TestBuildModuleDetectionOptionChanges(t *testing.T) {
 			files:   FileMap{"index.js": "exports.value = 1;\n"},
 		},
 	}
-	for i := range tests {
-		tests[i].expectedDiff = "Changing moduleDetection does not invalidate module markers or semantic diagnostics when global-scope classification is unchanged."
-	}
 	testCompilerOptionChanges(t, tests)
 }
 

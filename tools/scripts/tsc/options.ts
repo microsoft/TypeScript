@@ -629,6 +629,9 @@ export const options: OptionsModel = {
             ],
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
+                affectsEmit: true,
+                affectsBuildInfo: true,
                 description: diagnostic("Control what method is used to detect module-format JS files."),
                 category: diagnostic("Language and Environment"),
                 defaultValueDescription: diagnostic('"auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node16+) as modules.'),

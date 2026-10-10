@@ -68,7 +68,7 @@ export declare var value: 1;
 exports.value = 1;
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"20a3857f22d98156672630c4be07f6b8-exports.value = 1;\n","signature":"7ec131aff5fd730d6d542e77cde11d4c-export declare var value: 1;\n","impliedNodeFormat":1}],"options":{"allowJs":true,"composite":true,"emitDeclarationOnly":false,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"20a3857f22d98156672630c4be07f6b8-exports.value = 1;\n","signature":"7ec131aff5fd730d6d542e77cde11d4c-export declare var value: 1;\n","impliedNodeFormat":1}],"options":{"allowJs":true,"composite":true,"emitDeclarationOnly":false,"declaration":true,"module":99,"moduleResolution":100,"moduleDetection":2,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -116,13 +116,14 @@ exports.value = 1;
     "declaration": true,
     "module": 99,
     "moduleResolution": 100,
+    "moduleDetection": 2,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
     "target": 7
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1254
+  "size": 1274
 }
 
 producer/tsconfig.json::
@@ -180,22 +181,74 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'producer/tsconfig.json'...
+//// [/home/src/workspaces/project/producer/dist/index.js] *modified* 
+exports.value = 1;
+export {};
 
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *mTime changed*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"20a3857f22d98156672630c4be07f6b8-exports.value = 1;\n","signature":"7ec131aff5fd730d6d542e77cde11d4c-export declare var value: 1;\n","impliedNodeFormat":1}],"options":{"allowJs":true,"composite":true,"emitDeclarationOnly":false,"declaration":true,"module":99,"moduleResolution":100,"moduleDetection":3,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
+{
+  "version": "FakeTSVersion",
+  "root": [
+    {
+      "files": [
+        "../index.js"
+      ],
+      "original": 2
+    }
+  ],
+  "fileNames": [
+    "lib.es2020.d.ts",
+    "../index.js"
+  ],
+  "fileInfos": [
+    {
+      "fileName": "lib.es2020.d.ts",
+      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "../index.js",
+      "version": "20a3857f22d98156672630c4be07f6b8-exports.value = 1;\n",
+      "signature": "7ec131aff5fd730d6d542e77cde11d4c-export declare var value: 1;\n",
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "20a3857f22d98156672630c4be07f6b8-exports.value = 1;\n",
+        "signature": "7ec131aff5fd730d6d542e77cde11d4c-export declare var value: 1;\n",
+        "impliedNodeFormat": 1
+      }
+    }
+  ],
+  "options": {
+    "allowJs": true,
+    "composite": true,
+    "emitDeclarationOnly": false,
+    "declaration": true,
+    "module": 99,
+    "moduleResolution": 100,
+    "moduleDetection": 3,
+    "outDir": "./",
+    "rootDir": "..",
+    "strict": true,
+    "target": 7
+  },
+  "latestChangedDtsFile": "./index.d.ts",
+  "size": 1274
+}
 
 producer/tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+*refresh*    /home/src/workspaces/project/producer/index.js
 Signatures::
-
-
-Diff:: Changing moduleDetection does not invalidate module markers or semantic diagnostics when global-scope classification is unchanged.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.js
-+++ incremental /home/src/workspaces/project/producer/dist/index.js
-@@ -1,2 +1,2 @@
-+"use strict";
- exports.value = 1;
--export {};
 
 
 Edit [2]:: no change
@@ -211,15 +264,6 @@ Output::
 
 
 
-Diff:: Changing moduleDetection does not invalidate module markers or semantic diagnostics when global-scope classification is unchanged.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.js
-+++ incremental /home/src/workspaces/project/producer/dist/index.js
-@@ -1,2 +1,2 @@
-+"use strict";
- exports.value = 1;
--export {};
-
-
 Edit [3]:: force rebuild with the same compiler options
 
 tsgo --build producer --verbose --force
@@ -233,10 +277,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
 
 //// [/home/src/workspaces/project/producer/dist/index.d.ts] *rewrite with same content*
-//// [/home/src/workspaces/project/producer/dist/index.js] *modified* 
-exports.value = 1;
-export {};
-
+//// [/home/src/workspaces/project/producer/dist/index.js] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 

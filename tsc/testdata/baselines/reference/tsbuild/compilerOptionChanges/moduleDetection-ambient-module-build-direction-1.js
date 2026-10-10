@@ -74,7 +74,7 @@ declare module 'input' {
 export {};
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5db005431628d0037c2fc136bf7654c7-declare module 'input' { export const value: number; }\n","signature":"a6c9c8115f87b440d148380a0edeb889-declare module 'input' {\n    const value: number;\n}\nexport {};\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"semanticDiagnosticsPerFile":[[2,[{"pos":15,"end":22,"code":2664,"category":1,"messageKey":"Invalid_module_name_in_augmentation_module_0_cannot_be_found_2664","messageArgs":["input"]}]]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5db005431628d0037c2fc136bf7654c7-declare module 'input' { export const value: number; }\n","signature":"a6c9c8115f87b440d148380a0edeb889-declare module 'input' {\n    const value: number;\n}\nexport {};\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"moduleDetection":3,"outDir":"./","rootDir":"..","strict":true,"target":7},"semanticDiagnosticsPerFile":[[2,[{"pos":15,"end":22,"code":2664,"category":1,"messageKey":"Invalid_module_name_in_augmentation_module_0_cannot_be_found_2664","messageArgs":["input"]}]]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -121,6 +121,7 @@ export {};
     "declaration": true,
     "module": 99,
     "moduleResolution": 100,
+    "moduleDetection": 3,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
@@ -144,7 +145,7 @@ export {};
     ]
   ],
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1498
+  "size": 1518
 }
 
 producer/tsconfig.json::
@@ -205,189 +206,12 @@ Edit [1]:: change moduleDetection without changing source files
 }
 
 tsgo --build producer --verbose
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is out of date because buildinfo file 'producer/dist/tsconfig.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
-
-[96mproducer/index.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2664: [0mInvalid module name in augmentation, module 'input' cannot be found.
-
-[7m1[0m declare module 'input' { export const value: number; }
-[7m [0m [91m               ~~~~~~~[0m
-
-
-Found 1 error in producer/index.ts[90m:1[0m
-
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5db005431628d0037c2fc136bf7654c7-declare module 'input' { export const value: number; }\n","signature":"a6c9c8115f87b440d148380a0edeb889-declare module 'input' {\n    const value: number;\n}\nexport {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"referencedMap":[[1,1]],"semanticDiagnosticsPerFile":[[2,[{"pos":15,"end":22,"code":2664,"category":1,"messageKey":"Invalid_module_name_in_augmentation_module_0_cannot_be_found_2664","messageArgs":["input"]}]]],"latestChangedDtsFile":"./index.d.ts"}
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
-{
-  "version": "FakeTSVersion",
-  "root": [
-    {
-      "files": [
-        "../index.ts"
-      ],
-      "original": 2
-    }
-  ],
-  "fileNames": [
-    "lib.es2020.d.ts",
-    "../index.ts"
-  ],
-  "fileInfos": [
-    {
-      "fileName": "lib.es2020.d.ts",
-      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedNodeFormat": 1
-      }
-    },
-    {
-      "fileName": "../index.ts",
-      "version": "5db005431628d0037c2fc136bf7654c7-declare module 'input' { export const value: number; }\n",
-      "signature": "a6c9c8115f87b440d148380a0edeb889-declare module 'input' {\n    const value: number;\n}\nexport {};\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "5db005431628d0037c2fc136bf7654c7-declare module 'input' { export const value: number; }\n",
-        "signature": "a6c9c8115f87b440d148380a0edeb889-declare module 'input' {\n    const value: number;\n}\nexport {};\n",
-        "impliedNodeFormat": 1
-      }
-    }
-  ],
-  "fileIdsList": [
-    [
-      "../index.ts"
-    ]
-  ],
-  "options": {
-    "composite": true,
-    "emitDeclarationOnly": true,
-    "declaration": true,
-    "module": 99,
-    "moduleResolution": 100,
-    "outDir": "./",
-    "rootDir": "..",
-    "strict": true,
-    "target": 7
-  },
-  "referencedMap": {
-    "lib.es2020.d.ts": [
-      "../index.ts"
-    ]
-  },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../index.ts",
-      [
-        {
-          "pos": 15,
-          "end": 22,
-          "code": 2664,
-          "category": 1,
-          "messageKey": "Invalid_module_name_in_augmentation_module_0_cannot_be_found_2664",
-          "messageArgs": [
-            "input"
-          ]
-        }
-      ]
-    ]
-  ],
-  "latestChangedDtsFile": "./index.d.ts",
-  "size": 1542
-}
-
-producer/tsconfig.json::
-SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
-Signatures::
-(used version)   /home/src/tslibs/TS/Lib/lib.es2020.d.ts
-
-
-Diff:: Changing moduleDetection does not invalidate module markers or semantic diagnostics when global-scope classification is unchanged.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/index.d.ts
-@@ -1,3 +1,4 @@
- declare module 'input' {
-     const value: number;
- }
-+export {};
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -0,0 +1,8 @@
-+[96mproducer/index.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2664: [0mInvalid module name in augmentation, module 'input' cannot be found.
-+
-+[7m1[0m declare module 'input' { export const value: number; }
-+[7m [0m [91m               ~~~~~~~[0m
-+
-+
-+Found 1 error in producer/index.ts[90m:1[0m
-+
-
-Edit [2]:: no change
-
-tsgo --build producer --verbose
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is out of date because buildinfo file 'producer/dist/tsconfig.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
-
-[96mproducer/index.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2664: [0mInvalid module name in augmentation, module 'input' cannot be found.
-
-[7m1[0m declare module 'input' { export const value: number; }
-[7m [0m [91m               ~~~~~~~[0m
-
-
-Found 1 error in producer/index.ts[90m:1[0m
-
-
-producer/tsconfig.json::
-SemanticDiagnostics::
-Signatures::
-
-
-Diff:: Changing moduleDetection does not invalidate module markers or semantic diagnostics when global-scope classification is unchanged.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/index.d.ts
-@@ -1,3 +1,4 @@
- declare module 'input' {
-     const value: number;
- }
-+export {};
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -0,0 +1,8 @@
-+[96mproducer/index.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2664: [0mInvalid module name in augmentation, module 'input' cannot be found.
-+
-+[7m1[0m declare module 'input' { export const value: number; }
-+[7m [0m [91m               ~~~~~~~[0m
-+
-+
-+Found 1 error in producer/index.ts[90m:1[0m
-+
-
-Edit [3]:: force rebuild with the same compiler options
-
-tsgo --build producer --verbose --force
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * producer/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is out of date because buildinfo file 'producer/dist/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
 
@@ -397,7 +221,7 @@ declare module 'input' {
 }
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5db005431628d0037c2fc136bf7654c7-declare module 'input' { export const value: number; }\n","signature":"b39b85e7a6424b9042daed7bafcf3d0d-declare module 'input' {\n    const value: number;\n}\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"referencedMap":[[1,1]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5db005431628d0037c2fc136bf7654c7-declare module 'input' { export const value: number; }\n","signature":"b39b85e7a6424b9042daed7bafcf3d0d-declare module 'input' {\n    const value: number;\n}\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"moduleDetection":2,"outDir":"./","rootDir":"..","strict":true,"target":7},"referencedMap":[[1,1]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -449,6 +273,7 @@ declare module 'input' {
     "declaration": true,
     "module": 99,
     "moduleResolution": 100,
+    "moduleDetection": 2,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
@@ -460,8 +285,46 @@ declare module 'input' {
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1343
+  "size": 1363
 }
+
+producer/tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+*refresh*    /home/src/workspaces/project/producer/index.ts
+Signatures::
+(used version)   /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+(stored at emit) /home/src/workspaces/project/producer/index.ts
+
+
+Edit [2]:: no change
+
+tsgo --build producer --verbose
+ExitStatus:: Success
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is up to date because newest input 'producer/index.ts' is older than output 'producer/dist/tsconfig.tsbuildinfo'
+
+
+
+
+Edit [3]:: force rebuild with the same compiler options
+
+tsgo --build producer --verbose --force
+ExitStatus:: Success
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
+
+[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
+
+//// [/home/src/workspaces/project/producer/dist/index.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 producer/tsconfig.json::
 SemanticDiagnostics::

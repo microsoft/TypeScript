@@ -394,6 +394,7 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 		oldOptions.JsxFragmentFactory != newOptions.JsxFragmentFactory ||
 		oldOptions.JsxImportSource != newOptions.JsxImportSource ||
 		oldOptions.ModuleResolution != newOptions.ModuleResolution ||
+		oldOptions.ModuleDetection != newOptions.ModuleDetection ||
 		oldOptions.NoErrorTruncation != newOptions.NoErrorTruncation ||
 		oldOptions.NoFallthroughCasesInSwitch != newOptions.NoFallthroughCasesInSwitch ||
 		oldOptions.GetStrictOptionValue(oldOptions.NoImplicitAny) != newOptions.GetStrictOptionValue(newOptions.NoImplicitAny) ||
@@ -469,6 +470,7 @@ func CompilerOptionsAffectEmit(oldOptions *core.CompilerOptions, newOptions *cor
 		oldOptions.MapRoot != newOptions.MapRoot ||
 		oldOptions.Module != newOptions.Module ||
 		oldOptions.ModuleResolution != newOptions.ModuleResolution ||
+		oldOptions.ModuleDetection != newOptions.ModuleDetection ||
 		oldOptions.NewLine != newOptions.NewLine ||
 		oldOptions.GetStrictOptionValue(oldOptions.NoImplicitAny) != newOptions.GetStrictOptionValue(newOptions.NoImplicitAny) ||
 		oldOptions.GetStrictOptionValue(oldOptions.NoImplicitThis) != newOptions.GetStrictOptionValue(newOptions.NoImplicitThis) ||
@@ -604,6 +606,9 @@ func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn f
 	}
 	if options.ModuleResolution != 0 {
 		fn(CommandLineCompilerOptionsMap.Get("moduleResolution"), options.ModuleResolution)
+	}
+	if options.ModuleDetection != 0 {
+		fn(CommandLineCompilerOptionsMap.Get("moduleDetection"), options.ModuleDetection)
 	}
 	if options.NewLine != 0 {
 		fn(CommandLineCompilerOptionsMap.Get("newLine"), options.NewLine)
