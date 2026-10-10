@@ -652,6 +652,7 @@ type Checker struct {
 	requireSymbol                               *ast.Symbol
 	unknownSymbol                               *ast.Symbol
 	unresolvedSymbols                           map[string]*ast.Symbol
+	enclosingLabelCache                         map[*ast.Node]map[string]struct{}
 	errorTypes                                  map[CacheHashKey]*Type
 	moduleSymbols                               map[*ast.Node]*ast.Symbol
 	globalThisSymbol                            *ast.Symbol
