@@ -676,7 +676,10 @@ func (tx *RuntimeSyntaxTransformer) visitClassDeclaration(node *ast.ClassDeclara
 	}
 
 	name := tx.Visitor().VisitNode(node.Name())
-	if name == nil && (exported || ast.ChildIsDecorated(tx.compilerOptions.ExperimentalDecorators.IsTrue(), node.AsNode(), nil)) {
+	if name == nil && (exported ||
+		ast.ChildIsDecorated(tx.compilerOptions.ExperimentalDecorators.IsTrue(), node.AsNode(), nil) ||
+		node.ModifierFlags()&ast.ModifierFlagsExportDefault != ast.ModifierFlagsExportDefault &&
+			ast.NodeIsDecorated(tx.compilerOptions.ExperimentalDecorators.IsTrue(), node.AsNode(), nil, nil)) {
 		name = tx.Factory().NewGeneratedNameForNode(node.AsNode())
 	}
 	heritageClauses := tx.Visitor().VisitNodes(node.HeritageClauses)

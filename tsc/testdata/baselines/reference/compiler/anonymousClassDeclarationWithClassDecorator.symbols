@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/anonymousClassDeclarationWithClassDecorator.ts] ////
+
+=== anonymousClassDeclarationWithClassDecorator.ts ===
+declare var dec: any;
+>dec : Symbol(dec, Decl(anonymousClassDeclarationWithClassDecorator.ts, 0, 11))
+
+@dec
+>dec : Symbol(dec, Decl(anonymousClassDeclarationWithClassDecorator.ts, 0, 11))
+
+class {
+}
+
+@dec
+>dec : Symbol(dec, Decl(anonymousClassDeclarationWithClassDecorator.ts, 0, 11))
+
+default class {
+}
+
