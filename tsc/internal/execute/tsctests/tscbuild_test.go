@@ -1331,7 +1331,6 @@ func TestBuildReactNamespaceOptionDiagnostics(t *testing.T) {
 					namespace JSX { interface Element {} interface IntrinsicElements { div: {} } }
 				}
 				export const result = <div />;`)},
-			expectedDiff: "Changing reactNamespace retains the previous JSX namespace diagnostics.",
 		},
 	})
 }

@@ -1011,6 +1011,7 @@ export const options: OptionsModel = {
             type: "string",
             declaration: {
                 group: "optionsForCompiler",
+                affectsSemanticDiagnostics: true,
                 affectsEmit: true,
                 affectsBuildInfo: true,
                 category: diagnostic("Language and Environment"),

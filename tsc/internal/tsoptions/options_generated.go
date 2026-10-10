@@ -496,6 +496,9 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 	if oldOptions.RewriteRelativeImportExtensions != newOptions.RewriteRelativeImportExtensions {
 		return true
 	}
+	if oldOptions.ReactNamespace != newOptions.ReactNamespace {
+		return true
+	}
 	if (oldOptions.RootDirs == nil) != (newOptions.RootDirs == nil) || !slices.Equal(oldOptions.RootDirs, newOptions.RootDirs) {
 		return true
 	}
