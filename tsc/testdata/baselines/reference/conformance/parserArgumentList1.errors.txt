@@ -1,11 +1,23 @@
 parserArgumentList1.ts(2,42): error TS2304: Cannot find name '_classNameRegexp'.
+parserArgumentList1.ts(2,81): error TS7006: Parameter 'everything' implicitly has an 'any' type.
+parserArgumentList1.ts(2,93): error TS7006: Parameter 'leftDelimiter' implicitly has an 'any' type.
+parserArgumentList1.ts(2,108): error TS7006: Parameter 'name' implicitly has an 'any' type.
+parserArgumentList1.ts(2,114): error TS7006: Parameter 'rightDelimiter' implicitly has an 'any' type.
 
 
-==== parserArgumentList1.ts (1 errors) ====
+==== parserArgumentList1.ts (5 errors) ====
     export function removeClass (node:HTMLElement, className:string) {
     	node.className = node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {
     	                                        ~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name '_classNameRegexp'.
+    	                                                                               ~~~~~~~~~~
+!!! error TS7006: Parameter 'everything' implicitly has an 'any' type.
+    	                                                                                           ~~~~~~~~~~~~~
+!!! error TS7006: Parameter 'leftDelimiter' implicitly has an 'any' type.
+    	                                                                                                          ~~~~
+!!! error TS7006: Parameter 'name' implicitly has an 'any' type.
+    	                                                                                                                ~~~~~~~~~~~~~~
+!!! error TS7006: Parameter 'rightDelimiter' implicitly has an 'any' type.
     		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';
     	});
     }
