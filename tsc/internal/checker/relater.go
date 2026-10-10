@@ -3238,7 +3238,15 @@ func (r *Relater) structuredTypeRelatedTo(source *Type, target *Type, reportErro
 		// needs to have its constraint hoisted into an intersection with said type parameter, this way
 		// the type param can be compared with itself in the target (with the influence of its constraint to match other parts)
 		// For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
-		if result == TernaryFalse && (source.flags&TypeFlagsIntersection != 0 || source.flags&TypeFlagsTypeParameter != 0 && target.flags&TypeFlagsUnion != 0) {
+		// We skip the combined-constraint check while measuring variances. Variance
+		// measurement compares marker instantiations, and there the hoisted constraint may
+		// itself be an intersection with instantiable constituents (e.g. deferred conditional
+		// types, as produced by heavily overloaded generic builder types), so a failed
+		// comparison re-enters this logic with a structurally new and ever larger source
+		// that the relation cache and the deeply-nested-type guards never recognize as
+		// recursive, and the chase grows without bound (see microsoft/TypeScript#64423).
+		// The check never contributes to the measured relation between the marker types.
+		if result == TernaryFalse && len(r.c.varianceStack) == 0 && (source.flags&TypeFlagsIntersection != 0 || source.flags&TypeFlagsTypeParameter != 0 && target.flags&TypeFlagsUnion != 0) {
 			var sourceTypes []*Type
 			if source.flags&TypeFlagsIntersection != 0 {
 				sourceTypes = source.Types()
