@@ -21,6 +21,9 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 		options:      program.Options(),
 		hashWithText: hashWithText,
 		checkPending: program.Options().NoCheck.IsTrue(),
+		fileOrder: core.Map(program.GetSourceFiles(), func(file *ast.SourceFile) tspath.PathKey {
+			return file.PathKey()
+		}),
 	}
 	to := &toProgramSnapshot{
 		program:    program,
@@ -31,6 +34,7 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 	if to.snapshot.canUseIncrementalState() {
 		to.reuseFromOldProgram()
 		to.computeProgramFileChanges()
+		to.handleGlobalFileOrderChange()
 		to.handleFileDelete()
 		to.handleGlobalScopeChange()
 		to.handlePendingEmit()
@@ -177,6 +181,39 @@ func (t *toProgramSnapshot) handleFileDelete() {
 			return true
 		})
 	}
+}
+
+func (t *toProgramSnapshot) handleGlobalFileOrderChange() {
+	if t.oldProgram == nil || !globalFileOrderChanged(t.oldProgram.snapshot, t.snapshot) {
+		return
+	}
+	for _, file := range t.program.GetSourceFiles() {
+		t.snapshot.addFileToChangeSet(file.PathKey())
+		t.snapshot.semanticDiagnosticsPerFile.Delete(file.PathKey())
+		t.snapshot.emitDiagnosticsPerFile.Delete(file.PathKey())
+	}
+}
+
+func globalFileOrderChanged(oldSnapshot *snapshot, newSnapshot *snapshot) bool {
+	isSharedGlobal := func(path tspath.PathKey) bool {
+		oldInfo, oldOK := oldSnapshot.fileInfos.Load(path)
+		newInfo, newOK := newSnapshot.fileInfos.Load(path)
+		return oldOK && newOK && oldInfo.affectsGlobalScope && newInfo.affectsGlobalScope
+	}
+	oldIndex := 0
+	for _, path := range newSnapshot.fileOrder {
+		if !isSharedGlobal(path) {
+			continue
+		}
+		for oldIndex < len(oldSnapshot.fileOrder) && !isSharedGlobal(oldSnapshot.fileOrder[oldIndex]) {
+			oldIndex++
+		}
+		if oldIndex == len(oldSnapshot.fileOrder) || oldSnapshot.fileOrder[oldIndex] != path {
+			return true
+		}
+		oldIndex++
+	}
+	return false
 }
 
 func (t *toProgramSnapshot) handleGlobalScopeChange() {

@@ -1367,7 +1367,6 @@ func TestBuildLibOrderOptionChanges(t *testing.T) {
 				"node_modules/@typescript/lib-es2015/package.json": `{"name":"@typescript/lib-es2015"}`,
 				"node_modules/@typescript/lib-es2015/symbol.d.ts":  "/// <reference no-default-lib=\"true\" />\ndeclare function input(): 'second';\n",
 			},
-			expectedDiff: "Reordering lib changes overload selection without changing the file set, leaving the inferred declaration stale.",
 		},
 		{
 			option: "lib", name: "bundled lib order", values: [2]any{[]string{"es5", "es2015.symbol"}, []string{"es2015.symbol", "es5"}},
