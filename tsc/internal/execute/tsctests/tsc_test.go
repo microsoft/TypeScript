@@ -2326,12 +2326,10 @@ func TestTscIncremental(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
 					},
-					expectedDiff: "Like Strada, signature generation produces the missing-global diagnostic before semantic checking, so it is excluded from the file's semantic diagnostics.",
 				},
 				{
-					caption:      "no change",
-					edit:         noChange.edit,
-					expectedDiff: "Like Strada, the cached semantic diagnostics do not include the missing-global diagnostic produced during signature generation.",
+					caption: "no change",
+					edit:    noChange.edit,
 				},
 				{
 					caption: "delete build info to restore the semantic diagnostic",
@@ -2377,6 +2375,31 @@ func TestTscIncremental(t *testing.T) {
 						sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", `"allowJs": true`, `"allowJs": true, "checkJs": true`)
 					},
 				},
+				noChange,
+			},
+		},
+		{
+			subScenario: "global diagnostics survive build signature generation",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"noEmit": true, "incremental": true}}`,
+				"/home/src/workspaces/project/repro.ts":      `export function* values() { yield 1; }`,
+			},
+			commandLineArgs: []string{"--build"},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
+					},
+				},
+				{
+					caption: "no change",
+					edit:    noChange.edit,
+				},
+				newTscEdit("remove the generator", func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/repro.ts", `export const value = 1;`)
+				}),
 				noChange,
 			},
 		},
@@ -2519,6 +2542,44 @@ func TestTscIncremental(t *testing.T) {
 				},
 			},
 		},
+	}
+
+	for _, checkers := range []int{1, 2} {
+		for _, build := range []bool{false, true} {
+			args := []string{}
+			if build {
+				args = []string{"--build"}
+			}
+			test := &tscInput{
+				subScenario: fmt.Sprintf("global diagnostics with declaration emit checkers %d build %t", checkers, build),
+				files: FileMap{
+					"/home/src/workspaces/project/tsconfig.json": fmt.Sprintf(`{"compilerOptions": {"declaration": true, "incremental": true, "checkers": %d}}`, checkers),
+					"/home/src/workspaces/project/generator.ts":  `export function* values() { yield 1; }`,
+					"/home/src/workspaces/project/index.ts":      `import { values } from "./generator"; export const get = values;`,
+				},
+				commandLineArgs: args,
+				edits: []*tscEdit{
+					newTscEdit("edit both modules without changing their types", func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/generator.ts", "\n// generator comment\n")
+						sys.appendFile("/home/src/workspaces/project/index.ts", "\n// consumer comment\n")
+					}),
+					noChange,
+					newTscEdit("remove the generator", func(sys *TestSys) {
+						sys.writeFileNoError("/home/src/workspaces/project/generator.ts", `export function values() { return 1; }`)
+					}),
+					noChange,
+					newTscEdit("restore the generator", func(sys *TestSys) {
+						sys.writeFileNoError("/home/src/workspaces/project/generator.ts", `export function* values() { yield 2; }`)
+					}),
+					noChange,
+				},
+			}
+			watchTest := *test
+			watchTest.subScenario += " watch"
+			watchTest.commandLineArgs = append(args, "--watch")
+			watchTest.edits = core.Filter(test.edits, func(edit *tscEdit) bool { return edit != noChange })
+			testCases = append(testCases, test, &watchTest)
+		}
 	}
 
 	for _, test := range testCases {

@@ -6,7 +6,7 @@ export function* values() { yield 1; }
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions": {"noEmit": true, "incremental": true}}
 
-tsgo 
+tsgo --build
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
@@ -109,7 +109,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo 
+tsgo --build
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
@@ -190,7 +190,7 @@ export function* values() { yield 1; }
 // comment-only edit
 
 
-tsgo 
+tsgo --build
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
@@ -275,7 +275,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo 
+tsgo --build
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
@@ -355,22 +355,18 @@ SemanticDiagnostics::
 Signatures::
 
 
-Edit [3]:: delete build info to restore the semantic diagnostic
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *deleted*
+Edit [3]:: remove the generator
+//// [/home/src/workspaces/project/repro.ts] *modified* 
+export const value = 1;
 
-tsgo 
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+tsgo --build
+ExitStatus:: Success
 Output::
-[91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
-
-Found 1 error.
-
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.es2026.full.d.ts","./repro.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"303d5119b8941b887ef975780b83caec-export function* values() { yield 1; }\n// comment-only edit\n"],"semanticDiagnosticsPerFile":[[2,[{"noFile":true,"code":2318,"category":1,"messageKey":"Cannot_find_global_type_0_2318","messageArgs":["IterableIterator"]}]]],"affectedFilesPendingEmit":[2]}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2026.full.d.ts","./repro.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"9ae38e3a9bd5acd9f384aed0787571ff-export const value = 1;","signature":"ba5c8ef2b0978fc944b312728d63c3f1-export declare const value = 1;\n","impliedNodeFormat":1}],"affectedFilesPendingEmit":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
-  "errors": true,
   "root": [
     {
       "files": [
@@ -398,26 +394,15 @@ Found 1 error.
     },
     {
       "fileName": "./repro.ts",
-      "version": "303d5119b8941b887ef975780b83caec-export function* values() { yield 1; }\n// comment-only edit\n",
-      "signature": "303d5119b8941b887ef975780b83caec-export function* values() { yield 1; }\n// comment-only edit\n",
-      "impliedNodeFormat": "CommonJS"
+      "version": "9ae38e3a9bd5acd9f384aed0787571ff-export const value = 1;",
+      "signature": "ba5c8ef2b0978fc944b312728d63c3f1-export declare const value = 1;\n",
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "9ae38e3a9bd5acd9f384aed0787571ff-export const value = 1;",
+        "signature": "ba5c8ef2b0978fc944b312728d63c3f1-export declare const value = 1;\n",
+        "impliedNodeFormat": 1
+      }
     }
-  ],
-  "semanticDiagnosticsPerFile": [
-    [
-      "./repro.ts",
-      [
-        {
-          "noFile": true,
-          "code": 2318,
-          "category": 1,
-          "messageKey": "Cannot_find_global_type_0_2318",
-          "messageArgs": [
-            "IterableIterator"
-          ]
-        }
-      ]
-    ]
   ],
   "affectedFilesPendingEmit": [
     [
@@ -426,11 +411,19 @@ Found 1 error.
       2
     ]
   ],
-  "size": 1174
+  "size": 1077
 }
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/repro.ts
 Signatures::
+(computed .d.ts) /home/src/workspaces/project/repro.ts
+
+
+Edit [4]:: no change
+
+tsgo --build
+ExitStatus:: Success
+Output::
+

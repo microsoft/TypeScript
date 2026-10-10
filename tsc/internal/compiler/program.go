@@ -826,10 +826,16 @@ func (p *Program) GetSemanticDiagnostics(ctx context.Context, sourceFile *ast.So
 // GetSemanticDiagnosticsForIncremental includes newly discovered globals in each
 // file's cached diagnostics and leaves noEmit filtering to the builder.
 func (p *Program) GetSemanticDiagnosticsForIncremental(ctx context.Context, sourceFiles []*ast.SourceFile) map[*ast.SourceFile][]*ast.Diagnostic {
-	allDiags := p.collectCheckerDiagnosticsFromFiles(ctx, sourceFiles, func(ctx context.Context, c *checker.Checker, file *ast.SourceFile) []*ast.Diagnostic {
+	collect := func(ctx context.Context, c *checker.Checker, file *ast.SourceFile) []*ast.Diagnostic {
 		return p.getBindAndCheckDiagnosticsWithChecker(ctx, c, file, true /*includeDeferredGlobals*/)
-	})
+	}
 	result := make(map[*ast.SourceFile][]*ast.Diagnostic, len(sourceFiles))
+	if len(sourceFiles) == 1 {
+		file := sourceFiles[0]
+		result[file] = p.collectCheckerDiagnostics(ctx, file, collect)
+		return result
+	}
+	allDiags := p.collectCheckerDiagnosticsFromFiles(ctx, sourceFiles, collect)
 	for i, diags := range allDiags {
 		result[sourceFiles[i]] = filterAndSortDiagnostics(diags)
 	}
