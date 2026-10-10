@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/undefinedPropertyDeclarationOrder.ts] ////
+
+=== undefinedPropertyDeclarationOrder.ts ===
+export const a = Math.random() > 0.5 ? { user: 1 } : { status: "a" };
+>a : { user: number; status?: undefined; } | { user?: undefined; status: string; }
+>Math.random() > 0.5 ? { user: 1 } : { status: "a" } : { user: number; } | { status: string; }
+>Math.random() > 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>{ user: 1 } : { user: number; }
+>user : number
+>1 : 1
+>{ status: "a" } : { status: string; }
+>status : string
+>"a" : "a"
+
+export const b = Math.random() > 0.5 ? { status: "no" } : { status: "ok", user: 2 };
+>b : { status: string; user?: undefined; } | { status: string; user: number; }
+>Math.random() > 0.5 ? { status: "no" } : { status: "ok", user: 2 } : { status: string; } | { status: string; user: number; }
+>Math.random() > 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>{ status: "no" } : { status: string; }
+>status : string
+>"no" : "no"
+>{ status: "ok", user: 2 } : { status: string; user: number; }
+>status : string
+>"ok" : "ok"
+>user : number
+>2 : 2
+
