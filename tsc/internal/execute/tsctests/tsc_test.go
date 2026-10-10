@@ -2381,6 +2381,33 @@ func TestTscIncremental(t *testing.T) {
 			},
 		},
 		{
+			subScenario: "global diagnostics survive build signature generation",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"noEmit": true, "incremental": true}}`,
+				"/home/src/workspaces/project/repro.ts":      `export function* values() { yield 1; }`,
+			},
+			commandLineArgs: []string{"--build"},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
+					},
+					expectedDiff: "Signature generation produces the missing-global diagnostic before semantic checking, so the build loses it.",
+				},
+				{
+					caption:      "no change",
+					edit:         noChange.edit,
+					expectedDiff: "The cached semantic diagnostics do not include the missing-global diagnostic produced during signature generation.",
+				},
+				newTscEdit("remove the generator", func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/repro.ts", `export const value = 1;`)
+				}),
+				noChange,
+			},
+		},
+		{
 			subScenario: "reverse mapped declaration consumption",
 			files: FileMap{
 				"/home/src/workspaces/project/producer/tsconfig.json": `{
