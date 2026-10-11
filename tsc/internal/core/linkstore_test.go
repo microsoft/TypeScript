@@ -113,17 +113,17 @@ func TestIndexedArenaReachability(t *testing.T) {
 	var arena core.IndexedArena[*string]
 	for i := range 4096 {
 		_, value := arena.New()
-		*value = new(fmt.Sprint(i))
+		*value = new(strconv.Itoa(i))
 	}
 	runtime.GC()
 	for i := range 4096 {
-		assert.Equal(t, **arena.Get(uint32(i + 1)), fmt.Sprint(i))
+		assert.Equal(t, **arena.Get(uint32(i + 1)), strconv.Itoa(i))
 	}
 }
 
 func BenchmarkPagedLinkStore(b *testing.B) {
 	for _, stride := range []uint64{1, 16, 256} {
-		b.Run(fmt.Sprint(stride), func(b *testing.B) {
+		b.Run(strconv.FormatUint(stride, 10), func(b *testing.B) {
 			type value struct {
 				typ   *int
 				flags uint32
