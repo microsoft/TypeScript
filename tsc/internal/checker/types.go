@@ -1510,6 +1510,7 @@ const (
 	SignatureFlagsIsUntypedSignatureInJSFile             SignatureFlags = 1 << 6 // Indicates signature is from a js file and has no types
 	SignatureFlagsIsNonInferrable                        SignatureFlags = 1 << 7 // Indicates signature comes from a non-inferrable type
 	SignatureFlagsIsSignatureCandidateForOverloadFailure SignatureFlags = 1 << 8
+	signatureFlagsNoTypePredicate                        SignatureFlags = 1 << 9
 	// We do not propagate `IsInnerCallChain` or `IsOuterCallChain` to instantiated signatures, as that would result in us
 	// attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
 	// instantiating the return type.
@@ -1525,15 +1526,79 @@ type Signature struct {
 	minArgumentCount         int32
 	resolvedMinArgumentCount int32
 	declaration              *ast.Node
-	typeParameters           []*Type
 	parameters               []*ast.Symbol
-	thisParameter            *ast.Symbol
 	resolvedReturnType       *Type
-	resolvedTypePredicate    *TypePredicate
 	target                   *Signature
 	mapper                   *TypeMapper
-	isolatedSignatureType    *Type
-	composite                *CompositeSignature
+	extra                    *signatureExtra
+}
+
+type signatureExtra struct {
+	typeParameters        []*Type
+	thisParameter         *ast.Symbol
+	resolvedTypePredicate *TypePredicate
+	isolatedSignatureType *Type
+	composite             *CompositeSignature
+}
+
+func (s *Signature) ensureExtra(c *Checker) *signatureExtra {
+	if s.extra == nil {
+		s.extra = c.signatureExtraArena.New()
+	}
+	return s.extra
+}
+
+func (s *Signature) setTypeParameters(c *Checker, types []*Type) {
+	if types != nil || s.extra != nil {
+		s.ensureExtra(c).typeParameters = types
+	}
+}
+
+func (s *Signature) setThisParameter(c *Checker, parameter *ast.Symbol) {
+	if parameter != nil || s.extra != nil {
+		s.ensureExtra(c).thisParameter = parameter
+	}
+}
+
+func (s *Signature) getResolvedTypePredicate(c *Checker) *TypePredicate {
+	if s.flags&signatureFlagsNoTypePredicate != 0 {
+		return c.noTypePredicate
+	}
+	if s.extra == nil {
+		return nil
+	}
+	return s.extra.resolvedTypePredicate
+}
+
+func (s *Signature) setResolvedTypePredicate(c *Checker, predicate *TypePredicate) {
+	s.flags &^= signatureFlagsNoTypePredicate
+	if predicate != nil && predicate == c.noTypePredicate {
+		s.flags |= signatureFlagsNoTypePredicate
+		predicate = nil
+	}
+	if predicate != nil || s.extra != nil {
+		s.ensureExtra(c).resolvedTypePredicate = predicate
+	}
+}
+
+func (s *Signature) getComposite() *CompositeSignature {
+	if s.extra == nil {
+		return nil
+	}
+	return s.extra.composite
+}
+
+func (s *Signature) setComposite(c *Checker, composite *CompositeSignature) {
+	if composite != nil || s.extra != nil {
+		s.ensureExtra(c).composite = composite
+	}
+}
+
+func (s *Signature) getIsolatedSignatureType() *Type {
+	if s.extra == nil {
+		return nil
+	}
+	return s.extra.isolatedSignatureType
 }
 
 func (s *Signature) Id() SignatureId {
@@ -1541,11 +1606,14 @@ func (s *Signature) Id() SignatureId {
 }
 
 func (s *Signature) Flags() SignatureFlags {
-	return s.flags
+	return s.flags &^ signatureFlagsNoTypePredicate
 }
 
 func (s *Signature) TypeParameters() []*Type {
-	return s.typeParameters
+	if s.extra == nil {
+		return nil
+	}
+	return s.extra.typeParameters
 }
 
 func (s *Signature) Declaration() *ast.Node {
@@ -1557,7 +1625,10 @@ func (s *Signature) Target() *Signature {
 }
 
 func (s *Signature) ThisParameter() *ast.Symbol {
-	return s.thisParameter
+	if s.extra == nil {
+		return nil
+	}
+	return s.extra.thisParameter
 }
 
 func (s *Signature) Parameters() []*ast.Symbol {

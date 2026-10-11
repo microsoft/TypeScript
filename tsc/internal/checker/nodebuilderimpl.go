@@ -1869,12 +1869,12 @@ func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 	b.ctx.approximateLength += 3
 	// Usually a signature contributes a few more characters than this, but 3 is the minimum
 
-	if b.ctx.flags&nodebuilder.FlagsWriteTypeArgumentsOfSignature != 0 && signature.target != nil && signature.mapper != nil && len(signature.target.typeParameters) != 0 {
-		for _, parameter := range signature.target.typeParameters {
+	if b.ctx.flags&nodebuilder.FlagsWriteTypeArgumentsOfSignature != 0 && signature.target != nil && signature.mapper != nil && len(signature.target.TypeParameters()) != 0 {
+		for _, parameter := range signature.target.TypeParameters() {
 			typeParameters = append(typeParameters, b.typeToTypeNode(b.ch.instantiateType(parameter, signature.mapper)))
 		}
 	} else {
-		for _, parameter := range signature.typeParameters {
+		for _, parameter := range signature.TypeParameters() {
 			typeParameters = append(typeParameters, b.typeParameterToDeclaration(parameter))
 		}
 	}
@@ -2071,8 +2071,8 @@ func (c *Checker) getExpandedParameters(sig *Signature, skipUnionExpanding bool)
 }
 
 func (b *NodeBuilderImpl) tryGetThisParameterDeclaration(signature *Signature) *ast.Node {
-	if signature.thisParameter != nil {
-		return b.symbolToParameterDeclaration(signature.thisParameter, false)
+	if signature.ThisParameter() != nil {
+		return b.symbolToParameterDeclaration(signature.ThisParameter(), false)
 	}
 	if signature.declaration != nil && ast.IsInJSFile(signature.declaration) {
 		// !!! JSDoc Support

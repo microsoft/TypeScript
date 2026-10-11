@@ -9,6 +9,7 @@ import (
 	"testing"
 	"unsafe"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/race"
 	"github.com/zeebo/xxh3"
 	"gotest.tools/v3/assert"
@@ -471,5 +472,83 @@ func TestCompactTypeNodeLinksLayout(t *testing.T) {
 	links.setOuterTypeParameters(c, nil)
 	assert.Assert(t, links.getOuterTypeParameters() == nil)
 	assert.Equal(t, links.resolvedType, types[0])
+	runtime.KeepAlive(c)
+}
+
+func TestCompactSignatureLayout(t *testing.T) {
+	t.Parallel()
+	assert.Equal(t, unsafe.Sizeof(Signature{}), 16+8*unsafe.Sizeof(uintptr(0)))
+	assert.Equal(t, unsafe.Sizeof(signatureExtra{}), 7*unsafe.Sizeof(uintptr(0)))
+}
+
+func TestSignatureExtra(t *testing.T) {
+	t.Parallel()
+	c, types := newCompositeTestChecker()
+	c.noTypePredicate = &TypePredicate{}
+	sig := c.newSignature(SignatureFlagsHasRestParameter, nil, nil, nil, nil, types[0], nil, 1)
+	assert.Assert(t, sig.extra == nil)
+	assert.Assert(t, sig.TypeParameters() == nil)
+	assert.Assert(t, sig.ThisParameter() == nil)
+	assert.Assert(t, sig.getComposite() == nil)
+	assert.Assert(t, sig.getIsolatedSignatureType() == nil)
+	assert.Assert(t, sig.getResolvedTypePredicate(c) == nil)
+	assert.Equal(t, sig.resolvedMinArgumentCount, int32(-1))
+	sig.setTypeParameters(c, nil)
+	sig.setThisParameter(c, nil)
+	sig.setComposite(c, nil)
+	sig.setResolvedTypePredicate(c, nil)
+	assert.Assert(t, sig.extra == nil)
+	assert.Assert(t, c.getTypePredicateOfSignature(sig) == nil)
+	assert.Equal(t, sig.getResolvedTypePredicate(c), c.noTypePredicate)
+	assert.Assert(t, sig.extra == nil)
+	assert.Assert(t, sig.flags&SignatureFlagsHasRestParameter != 0)
+	assert.Equal(t, sig.Flags(), SignatureFlagsHasRestParameter)
+	sig.setResolvedTypePredicate(c, nil)
+	assert.Assert(t, sig.getResolvedTypePredicate(c) == nil)
+	sig.setTypeParameters(c, []*Type{})
+	assert.Assert(t, sig.TypeParameters() != nil)
+	entry := sig.extra
+	list := slices.Clone(types)
+	sig.setTypeParameters(c, list)
+	list[0] = types[1]
+	assert.Equal(t, sig.TypeParameters()[0], types[1])
+	parameter := &ast.Symbol{}
+	sig.setThisParameter(c, parameter)
+	predicate := c.newTypePredicate(TypePredicateKindIdentifier, "p", 0, types[0])
+	sig.setResolvedTypePredicate(c, predicate)
+	assert.Equal(t, c.getTypePredicateOfSignature(sig), predicate)
+	composite := &CompositeSignature{isUnion: true, signatures: []*Signature{sig}}
+	sig.setComposite(c, composite)
+	sig.ensureExtra(c).isolatedSignatureType = types[2]
+	clone := c.cloneSignature(sig)
+	assert.Assert(t, clone.extra != entry)
+	assert.Equal(t, clone.getComposite(), composite)
+	assert.Equal(t, clone.ThisParameter(), parameter)
+	assert.Equal(t, clone.TypeParameters()[0], types[1])
+	assert.Assert(t, clone.getResolvedTypePredicate(c) == nil)
+	assert.Assert(t, clone.getIsolatedSignatureType() == nil)
+	clone.setThisParameter(c, nil)
+	assert.Equal(t, sig.ThisParameter(), parameter)
+	sig.setResolvedTypePredicate(c, c.noTypePredicate)
+	assert.Assert(t, c.getTypePredicateOfSignature(sig) == nil)
+	assert.Assert(t, entry.resolvedTypePredicate == nil)
+	sig.setResolvedTypePredicate(c, predicate)
+	for range 1024 {
+		other := c.newSignature(SignatureFlagsNone, nil, types, parameter, nil, nil, predicate, 0)
+		other.setComposite(c, composite)
+	}
+	runtime.GC()
+	assert.Equal(t, sig.extra, entry)
+	assert.Equal(t, sig.getResolvedTypePredicate(c), predicate)
+	assert.Equal(t, sig.Flags(), SignatureFlagsHasRestParameter)
+	assert.Equal(t, sig.getIsolatedSignatureType(), types[2])
+	sig.setTypeParameters(c, nil)
+	sig.setThisParameter(c, nil)
+	sig.setComposite(c, nil)
+	assert.Equal(t, sig.extra, entry)
+	assert.Assert(t, sig.TypeParameters() == nil)
+	assert.Equal(t, sig.resolvedReturnType, types[0])
+	assert.Equal(t, sig.minArgumentCount, int32(1))
+	assert.Equal(t, sig.getResolvedTypePredicate(c), predicate)
 	runtime.KeepAlive(c)
 }
