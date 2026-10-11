@@ -538,6 +538,45 @@ func TestCompactValueSymbolLinksLayout(t *testing.T) {
 	assert.Equal(t, links.getContainingType(), types[2])
 }
 
+func TestStructuredMembersLookup(t *testing.T) {
+	t.Parallel()
+	c, _ := newCompositeTestChecker()
+	for _, count := range []int{0, 1, 8, 20, 300} {
+		members := make(ast.SymbolTable, count)
+		for i := range count {
+			name := strconv.Itoa(i)
+			members[name] = c.newSymbol(ast.SymbolFlagsProperty, name)
+		}
+		typ := c.newAnonymousType(nil, members, nil, nil, nil)
+		resolved := typ.AsStructuredType()
+		assert.Equal(t, len(resolved.properties), count)
+		for name, symbol := range members {
+			assert.Equal(t, resolved.getMember(name), symbol)
+		}
+		assert.Assert(t, resolved.getMember("missing") == nil)
+		other := c.newAnonymousType(nil, resolved.getMembers(), nil, nil, nil)
+		for name, symbol := range members {
+			assert.Equal(t, other.AsStructuredType().getMember(name), symbol)
+		}
+		members["new"] = c.newSymbol(ast.SymbolFlagsProperty, "new")
+		assert.Assert(t, resolved.getMember("new") == nil)
+		members[ast.InternalSymbolNameCall] = c.newSymbol(ast.SymbolFlagsSignature, ast.InternalSymbolNameCall)
+		withReserved := c.newAnonymousType(nil, members, nil, nil, nil).AsStructuredType()
+		assert.Equal(t, withReserved.getMember(ast.InternalSymbolNameCall), members[ast.InternalSymbolNameCall])
+		for range 300 {
+			c.newMemberIndex(members, withReserved.properties, nil)
+		}
+		runtime.GC()
+		for name, symbol := range members {
+			assert.Equal(t, withReserved.getMember(name), symbol)
+		}
+	}
+	renamed := c.newSymbol(ast.SymbolFlagsProperty, "original")
+	member := c.newAnonymousType(nil, ast.SymbolTable{"different": renamed}, nil, nil, nil).AsStructuredType()
+	assert.Equal(t, member.getMember("different"), renamed)
+	assert.Assert(t, member.getMember("original") == nil)
+}
+
 func TestCompactStructuredTypeLayout(t *testing.T) {
 	t.Parallel()
 	assert.Equal(t, unsafe.Sizeof(StructuredType{}), unsafe.Sizeof(ConstrainedType{})+5*unsafe.Sizeof(uintptr(0)))
