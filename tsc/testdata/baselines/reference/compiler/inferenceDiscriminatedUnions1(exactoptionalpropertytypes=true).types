@@ -1,0 +1,669 @@
+//// [tests/cases/compiler/inferenceDiscriminatedUnions1.ts] ////
+
+=== inferenceDiscriminatedUnions1.ts ===
+type Ok<T> = { ok: true; value: T };
+>Ok : Ok<T>
+>ok : true
+>true : true
+>value : T
+
+type Err<E> = { ok: false; value: E };
+>Err : Err<E>
+>ok : false
+>false : false
+>value : E
+
+type ErrShape = { ok: false; value: string };
+>ErrShape : ErrShape
+>ok : false
+>false : false
+>value : string
+
+type OkShape = { ok: true; value: string[] };
+>OkShape : OkShape
+>ok : true
+>true : true
+>value : string[]
+
+enum K { A, B }
+>K : K
+>A : K.A
+>B : K.B
+
+type Success<T> = { kind: "success"; value: T };
+>Success : Success<T>
+>kind : "success"
+>value : T
+
+type Failure<E> = { kind: "failure"; value: E };
+>Failure : Failure<E>
+>kind : "failure"
+>value : E
+
+type Accepted<T> = { kind: 1; value: T };
+>Accepted : Accepted<T>
+>kind : 1
+>value : T
+
+type Rejected<E> = { kind: 0; value: E };
+>Rejected : Rejected<E>
+>kind : 0
+>value : E
+
+type OptionalOk<T> = { ok?: true; value: T };
+>OptionalOk : OptionalOk<T>
+>ok : true | undefined
+>true : true
+>value : T
+
+type MaybeErr<E> = { ok?: false; value: E };
+>MaybeErr : MaybeErr<E>
+>ok : false | undefined
+>false : false
+>value : E
+
+type ExplicitOptionalOk<T> = { ok?: true | undefined; value: T };
+>ExplicitOptionalOk : ExplicitOptionalOk<T>
+>ok : true | undefined
+>true : true
+>value : T
+
+type UnionOk<T> = { ok: true | undefined; value: T };
+>UnionOk : UnionOk<T>
+>ok : true | undefined
+>true : true
+>value : T
+
+type AlwaysUndefinedErr<E> = { ok: undefined; value: E };
+>AlwaysUndefinedErr : AlwaysUndefinedErr<E>
+>ok : undefined
+>value : E
+
+type UndefinedOk<T> = { ok: undefined; value: T };
+>UndefinedOk : UndefinedOk<T>
+>ok : undefined
+>value : T
+
+type Tagged<A, B> = { type: "a"; value: A } | { type: "b"; value: B };
+>Tagged : Tagged<A, B>
+>type : "a"
+>value : A
+>type : "b"
+>value : B
+
+declare const u1: { kind: "b"; value: number } | { kind: "a"; value: string };
+>u1 : { kind: "b"; value: number; } | { kind: "a"; value: string; }
+>kind : "b"
+>value : number
+>kind : "a"
+>value : string
+
+declare const u2: { kind: string; value: number } | { kind: "a"; value: string };
+>u2 : { kind: string; value: number; } | { kind: "a"; value: string; }
+>kind : string
+>value : number
+>kind : "a"
+>value : string
+
+declare const broadTag: { kind: number; value: number } | { kind: "a"; value: string };
+>broadTag : { kind: number; value: number; } | { kind: "a"; value: string; }
+>kind : number
+>value : number
+>kind : "a"
+>value : string
+
+declare const u3: { value: number } | { kind: "a"; value: string };
+>u3 : { value: number; } | { kind: "a"; value: string; }
+>value : number
+>kind : "a"
+>value : string
+
+declare const u4: { kind: "a"; sub: 2; value: string } | { kind: "b"; sub: 1; value: number };
+>u4 : { kind: "a"; sub: 2; value: string; } | { kind: "b"; sub: 1; value: number; }
+>kind : "a"
+>sub : 2
+>value : string
+>kind : "b"
+>sub : 1
+>value : number
+
+declare const u5: { kind: K.B; value: number } | { kind: K.A; value: string };
+>u5 : { kind: K.B; value: number; } | { kind: K.A; value: string; }
+>kind : K.B
+>K : any
+>value : number
+>kind : K.A
+>K : any
+>value : string
+
+declare const u6: Err<number> | Ok<string>;
+>u6 : Err<number> | Ok<string>
+
+declare const taggedSource: Tagged<string, number>;
+>taggedSource : Tagged<string, number>
+
+declare const reversedTaggedSource: { type: "b"; value: number } | { type: "a"; value: string };
+>reversedTaggedSource : { type: "b"; value: number; } | { type: "a"; value: string; }
+>type : "b"
+>value : number
+>type : "a"
+>value : string
+
+declare const broadSourceTag: { type: string; value: number };
+>broadSourceTag : { type: string; value: number; }
+>type : string
+>value : number
+
+declare const missingTag: { value: number };
+>missingTag : { value: number; }
+>value : number
+
+declare const optionalTag: { type?: "a"; value: string };
+>optionalTag : { type?: "a"; value: string; }
+>type : "a" | undefined
+>value : string
+
+declare function ok<const T>(value: T): Ok<T>;
+>ok : <const T>(value: T) => Ok<T>
+>value : T
+
+export function aliasTarget(): ErrShape | OkShape { return ok([]); }
+>aliasTarget : () => ErrShape | OkShape
+>ok([]) : Ok<[]>
+>ok : <const T>(value: T) => Ok<T>
+>[] : []
+
+export function f(): Ok<string[]> | Err<string> {
+>f : () => Ok<string[]> | Err<string>
+
+    return ok([]);
+>ok([]) : Ok<[]>
+>ok : <const T>(value: T) => Ok<T>
+>[] : []
+}
+
+export function optionalSource(): Ok<string[]> | MaybeErr<string> {
+>optionalSource : () => Ok<string[]> | MaybeErr<string>
+
+    return ok([]);
+>ok([]) : Ok<[]>
+>ok : <const T>(value: T) => Ok<T>
+>[] : []
+}
+
+declare function okInline<const T>(value: T): { ok: true; value: T };
+>okInline : <const T>(value: T) => { ok: true; value: T; }
+>value : T
+>ok : true
+>true : true
+>value : T
+
+export function inlineTarget(): ErrShape | OkShape { return okInline([]); }
+>inlineTarget : () => ErrShape | OkShape
+>okInline([]) : { ok: true; value: []; }
+>okInline : <const T>(value: T) => { ok: true; value: T; }
+>[] : []
+
+export function inlineTargetReversed(): OkShape | ErrShape { return okInline([]); }
+>inlineTargetReversed : () => OkShape | ErrShape
+>okInline([]) : { ok: true; value: []; }
+>okInline : <const T>(value: T) => { ok: true; value: T; }
+>[] : []
+
+declare function on<T>(handler: (e: { kind: "a"; value: T }) => void): T;
+>on : <T>(handler: (e: { kind: "a"; value: T; }) => void) => T
+>handler : (e: { kind: "a"; value: T; }) => void
+>e : { kind: "a"; value: T; }
+>kind : "a"
+>value : T
+
+const r1 = on((e: { kind: "a"; value: string } | { kind: "b"; value: number }) => {});
+>r1 : string
+>on((e: { kind: "a"; value: string } | { kind: "b"; value: number }) => {}) : string
+>on : <T>(handler: (e: { kind: "a"; value: T; }) => void) => T
+>(e: { kind: "a"; value: string } | { kind: "b"; value: number }) => {} : (e: { kind: "a"; value: string; } | { kind: "b"; value: number; }) => void
+>e : { kind: "a"; value: string; } | { kind: "b"; value: number; }
+>kind : "a"
+>value : string
+>kind : "b"
+>value : number
+
+const r2 = on((e: { kind: "b"; value: number } | { kind: "a"; value: string }) => {});
+>r2 : string
+>on((e: { kind: "b"; value: number } | { kind: "a"; value: string }) => {}) : string
+>on : <T>(handler: (e: { kind: "a"; value: T; }) => void) => T
+>(e: { kind: "b"; value: number } | { kind: "a"; value: string }) => {} : (e: { kind: "b"; value: number; } | { kind: "a"; value: string; }) => void
+>e : { kind: "b"; value: number; } | { kind: "a"; value: string; }
+>kind : "b"
+>value : number
+>kind : "a"
+>value : string
+
+declare function pick<T>(x: { kind: "a"; value: T }): T;
+>pick : <T>(x: { kind: "a"; value: T; }) => T
+>x : { kind: "a"; value: T; }
+>kind : "a"
+>value : T
+
+const r3 = pick(u1);
+>r3 : string
+>pick(u1) : string
+>pick : <T>(x: { kind: "a"; value: T; }) => T
+>u1 : { kind: "b"; value: number; } | { kind: "a"; value: string; }
+
+const r4 = pick(u2);
+>r4 : string
+>pick(u2) : string
+>pick : <T>(x: { kind: "a"; value: T; }) => T
+>u2 : { kind: string; value: number; } | { kind: "a"; value: string; }
+
+const broadResult = pick(broadTag);
+>broadResult : string
+>pick(broadTag) : string
+>pick : <T>(x: { kind: "a"; value: T; }) => T
+>broadTag : { kind: number; value: number; } | { kind: "a"; value: string; }
+
+const r5 = pick(u3);
+>r5 : number
+>pick(u3) : number
+>pick : <T>(x: { kind: "a"; value: T; }) => T
+>u3 : { value: number; } | { kind: "a"; value: string; }
+
+declare function two<T>(x: { kind: "a"; sub: 1; value: T }): T;
+>two : <T>(x: { kind: "a"; sub: 1; value: T; }) => T
+>x : { kind: "a"; sub: 1; value: T; }
+>kind : "a"
+>sub : 1
+>value : T
+
+const r6 = two(u4);
+>r6 : string
+>two(u4) : string
+>two : <T>(x: { kind: "a"; sub: 1; value: T; }) => T
+>u4 : { kind: "a"; sub: 2; value: string; } | { kind: "b"; sub: 1; value: number; }
+
+declare function twoReversed<T>(x: { sub: 1; kind: "a"; value: T }): T;
+>twoReversed : <T>(x: { sub: 1; kind: "a"; value: T; }) => T
+>x : { sub: 1; kind: "a"; value: T; }
+>sub : 1
+>kind : "a"
+>value : T
+
+const r6Reversed = twoReversed(u4);
+>r6Reversed : number
+>twoReversed(u4) : number
+>twoReversed : <T>(x: { sub: 1; kind: "a"; value: T; }) => T
+>u4 : { kind: "a"; sub: 2; value: string; } | { kind: "b"; sub: 1; value: number; }
+
+declare function enumTag<T>(x: { kind: K.A; value: T }): T;
+>enumTag : <T>(x: { kind: K.A; value: T; }) => T
+>x : { kind: K.A; value: T; }
+>kind : K.A
+>K : any
+>value : T
+
+const r7 = enumTag(u5);
+>r7 : string
+>enumTag(u5) : string
+>enumTag : <T>(x: { kind: K.A; value: T; }) => T
+>u5 : { kind: K.B; value: number; } | { kind: K.A; value: string; }
+
+declare function boolTag<T>(x: { ok: boolean; value: T }): T;
+>boolTag : <T>(x: { ok: boolean; value: T; }) => T
+>x : { ok: boolean; value: T; }
+>ok : boolean
+>value : T
+
+const r8 = boolTag(u6);
+>r8 : number
+>boolTag(u6) : number
+>boolTag : <T>(x: { ok: boolean; value: T; }) => T
+>u6 : Err<number> | Ok<string>
+
+declare function wrap<const T>(value: T): { result: Ok<T> };
+>wrap : <const T>(value: T) => { result: Ok<T>; }
+>value : T
+>result : Ok<T>
+
+export function nested(): { result: ErrShape | OkShape } { return wrap([]); }
+>nested : () => { result: ErrShape | OkShape; }
+>result : ErrShape | OkShape
+>wrap([]) : { result: Ok<[]>; }
+>wrap : <const T>(value: T) => { result: Ok<T>; }
+>[] : []
+
+declare function success<const T>(value: T): Success<T>;
+>success : <const T>(value: T) => Success<T>
+>value : T
+
+export function withStringTag(): Success<string[]> | Failure<string> {
+>withStringTag : () => Success<string[]> | Failure<string>
+
+    return success([]);
+>success([]) : Success<[]>
+>success : <const T>(value: T) => Success<T>
+>[] : []
+}
+
+declare function accepted<const T>(value: T): Accepted<T>;
+>accepted : <const T>(value: T) => Accepted<T>
+>value : T
+
+export function withNumberTag(): Accepted<string[]> | Rejected<string> {
+>withNumberTag : () => Accepted<string[]> | Rejected<string>
+
+    return accepted([]);
+>accepted([]) : Accepted<[]>
+>accepted : <const T>(value: T) => Accepted<T>
+>[] : []
+}
+
+declare function unmatched<T>(): { kind: "other"; value: T };
+>unmatched : <T>() => { kind: "other"; value: T; }
+>kind : "other"
+>value : T
+
+export function withUnmatchedTag(): Success<string[]> | Failure<number[]> {
+>withUnmatchedTag : () => Success<string[]> | Failure<number[]>
+
+    return unmatched();
+>unmatched() : { kind: "other"; value: string[] | number[]; }
+>unmatched : <T>() => { kind: "other"; value: T; }
+}
+
+declare function optionalOk<const T>(value: T): OptionalOk<T>;
+>optionalOk : <const T>(value: T) => OptionalOk<T>
+>value : T
+
+export function optionalTarget(): OptionalOk<string[]> | Err<string> {
+>optionalTarget : () => OptionalOk<string[]> | Err<string>
+
+    return optionalOk([]);
+>optionalOk([]) : OptionalOk<readonly []>
+>optionalOk : <const T>(value: T) => OptionalOk<T>
+>[] : []
+}
+
+export function bothOptional(): OptionalOk<string[]> | MaybeErr<string> {
+>bothOptional : () => OptionalOk<string[]> | MaybeErr<string>
+
+    return optionalOk([]);
+>optionalOk([]) : OptionalOk<readonly []>
+>optionalOk : <const T>(value: T) => OptionalOk<T>
+>[] : []
+}
+
+export function missingSourceTag(): OptionalOk<string[]> | { value: string } {
+>missingSourceTag : () => OptionalOk<string[]> | { value: string; }
+>value : string
+
+    return optionalOk([]);
+>optionalOk([]) : OptionalOk<[]>
+>optionalOk : <const T>(value: T) => OptionalOk<T>
+>[] : []
+}
+
+export function undefinedSource(): OptionalOk<string[]> | AlwaysUndefinedErr<string> {
+>undefinedSource : () => OptionalOk<string[]> | AlwaysUndefinedErr<string>
+
+    return optionalOk([]);
+>optionalOk([]) : OptionalOk<readonly []>
+>optionalOk : <const T>(value: T) => OptionalOk<T>
+>[] : []
+}
+
+declare function explicitOptionalOk<const T>(value: T): ExplicitOptionalOk<T>;
+>explicitOptionalOk : <const T>(value: T) => ExplicitOptionalOk<T>
+>value : T
+
+export function explicitUndefined(): ExplicitOptionalOk<string[]> | Err<string> {
+>explicitUndefined : () => ExplicitOptionalOk<string[]> | Err<string>
+
+    return explicitOptionalOk([]);
+>explicitOptionalOk([]) : ExplicitOptionalOk<readonly []>
+>explicitOptionalOk : <const T>(value: T) => ExplicitOptionalOk<T>
+>[] : []
+}
+
+export function explicitUndefinedOverlap(): ExplicitOptionalOk<string[]> | AlwaysUndefinedErr<string> {
+>explicitUndefinedOverlap : () => ExplicitOptionalOk<string[]> | AlwaysUndefinedErr<string>
+
+    return explicitOptionalOk([]);
+>explicitOptionalOk([]) : ExplicitOptionalOk<readonly []>
+>explicitOptionalOk : <const T>(value: T) => ExplicitOptionalOk<T>
+>[] : []
+}
+
+declare function unionOk<const T>(value: T): UnionOk<T>;
+>unionOk : <const T>(value: T) => UnionOk<T>
+>value : T
+
+export function requiredUnionTag(): UnionOk<string[]> | Err<string> {
+>requiredUnionTag : () => UnionOk<string[]> | Err<string>
+
+    return unionOk([]);
+>unionOk([]) : UnionOk<readonly []>
+>unionOk : <const T>(value: T) => UnionOk<T>
+>[] : []
+}
+
+declare function undefinedOk<const T>(value: T): UndefinedOk<T>;
+>undefinedOk : <const T>(value: T) => UndefinedOk<T>
+>value : T
+
+export function undefinedTarget(): UndefinedOk<string[]> | MaybeErr<string> {
+>undefinedTarget : () => UndefinedOk<string[]> | MaybeErr<string>
+
+    return undefinedOk([]);
+>undefinedOk([]) : UndefinedOk<[]>
+>undefinedOk : <const T>(value: T) => UndefinedOk<T>
+>[] : []
+}
+
+declare function inferTwoArguments<A, B>(first: Tagged<A, B>, second: Tagged<A, B>): [A, B];
+>inferTwoArguments : <A, B>(first: Tagged<A, B>, second: Tagged<A, B>) => [A, B]
+>first : Tagged<A, B>
+>second : Tagged<A, B>
+
+const twoArguments = inferTwoArguments({ type: "a", value: 42 }, { type: "b", value: true });
+>twoArguments : [number, boolean]
+>inferTwoArguments({ type: "a", value: 42 }, { type: "b", value: true }) : [number, boolean]
+>inferTwoArguments : <A, B>(first: Tagged<A, B>, second: Tagged<A, B>) => [A, B]
+>{ type: "a", value: 42 } : { type: "a"; value: number; }
+>type : "a"
+>"a" : "a"
+>value : number
+>42 : 42
+>{ type: "b", value: true } : { type: "b"; value: true; }
+>type : "b"
+>"b" : "b"
+>value : true
+>true : true
+
+declare function inferInlineUnion<A, B>(value: { type: "a"; value: A } | { type: "b"; value: B }): [A, B];
+>inferInlineUnion : <A, B>(value: { type: "a"; value: A; } | { type: "b"; value: B; }) => [A, B]
+>value : { type: "a"; value: A; } | { type: "b"; value: B; }
+>type : "a"
+>value : A
+>type : "b"
+>value : B
+
+const oneArgument = inferInlineUnion({ type: "a", value: 42 });
+>oneArgument : [number, unknown]
+>inferInlineUnion({ type: "a", value: 42 }) : [number, unknown]
+>inferInlineUnion : <A, B>(value: { type: "a"; value: A; } | { type: "b"; value: B; }) => [A, B]
+>{ type: "a", value: 42 } : { type: "a"; value: number; }
+>type : "a"
+>"a" : "a"
+>value : number
+>42 : 42
+
+const unionArgument = inferInlineUnion(taggedSource);
+>unionArgument : [string, number]
+>inferInlineUnion(taggedSource) : [string, number]
+>inferInlineUnion : <A, B>(value: { type: "a"; value: A; } | { type: "b"; value: B; }) => [A, B]
+>taggedSource : Tagged<string, number>
+
+const explicitUnionArgument = inferInlineUnion<string, number>(taggedSource);
+>explicitUnionArgument : [string, number]
+>inferInlineUnion<string, number>(taggedSource) : [string, number]
+>inferInlineUnion : <A, B>(value: { type: "a"; value: A; } | { type: "b"; value: B; }) => [A, B]
+>taggedSource : Tagged<string, number>
+
+const reversedSourceUnion = inferInlineUnion(reversedTaggedSource);
+>reversedSourceUnion : [string, number]
+>inferInlineUnion(reversedTaggedSource) : [string, number]
+>inferInlineUnion : <A, B>(value: { type: "a"; value: A; } | { type: "b"; value: B; }) => [A, B]
+>reversedTaggedSource : { type: "b"; value: number; } | { type: "a"; value: string; }
+
+const broadTargetUnion = inferInlineUnion(broadSourceTag);
+>broadTargetUnion : [number, number]
+>inferInlineUnion(broadSourceTag) : [number, number]
+>inferInlineUnion : <A, B>(value: { type: "a"; value: A; } | { type: "b"; value: B; }) => [A, B]
+>broadSourceTag : { type: string; value: number; }
+
+const missingTargetUnion = inferInlineUnion(missingTag);
+>missingTargetUnion : [number, number]
+>inferInlineUnion(missingTag) : [number, number]
+>inferInlineUnion : <A, B>(value: { type: "a"; value: A; } | { type: "b"; value: B; }) => [A, B]
+>missingTag : { value: number; }
+
+declare function inferUnionWithFallback<T extends { type: "a" | "b" }, A, B>(value: T | Tagged<A, B>): [T, A, B];
+>inferUnionWithFallback : <T extends { type: "a" | "b"; }, A, B>(value: T | Tagged<A, B>) => [T, A, B]
+>type : "a" | "b"
+>value : T | Tagged<A, B>
+
+const nakedTypeParameter = inferUnionWithFallback({ type: "a", value: 42 });
+>nakedTypeParameter : [{ type: "a"; value: number; }, number, unknown]
+>inferUnionWithFallback({ type: "a", value: 42 }) : [{ type: "a"; value: number; }, number, unknown]
+>inferUnionWithFallback : <T extends { type: "a" | "b"; }, A, B>(value: T | Tagged<A, B>) => [T, A, B]
+>{ type: "a", value: 42 } : { type: "a"; value: number; }
+>type : "a"
+>"a" : "a"
+>value : number
+>42 : 42
+
+declare function inferNoInferOverloads<A, B>(first: Tagged<A, NoInfer<B>>, second: Tagged<A, B>): [A, B];
+>inferNoInferOverloads : { <A, B>(first: Tagged<A, NoInfer<B>>, second: Tagged<A, B>): [A, B]; <A_1, B_1>(first: Tagged<NoInfer<A_1>, B_1>, second: Tagged<A_1, B_1>): [A_1, B_1]; }
+>first : Tagged<A, NoInfer<B>>
+>second : Tagged<A, B>
+
+declare function inferNoInferOverloads<A, B>(first: Tagged<NoInfer<A>, B>, second: Tagged<A, B>): [A, B];
+>inferNoInferOverloads : { <A_1, B_1>(first: Tagged<A_1, NoInfer<B_1>>, second: Tagged<A_1, B_1>): [A_1, B_1]; <A, B>(first: Tagged<NoInfer<A>, B>, second: Tagged<A, B>): [A, B]; }
+>first : Tagged<NoInfer<A>, B>
+>second : Tagged<A, B>
+
+const noInferArguments = inferNoInferOverloads({ type: "a", value: 42 }, { type: "b", value: true });
+>noInferArguments : [number, boolean]
+>inferNoInferOverloads({ type: "a", value: 42 }, { type: "b", value: true }) : [number, boolean]
+>inferNoInferOverloads : { <A, B>(first: Tagged<A, NoInfer<B>>, second: Tagged<A, B>): [A, B]; <A, B>(first: Tagged<NoInfer<A>, B>, second: Tagged<A, B>): [A, B]; }
+>{ type: "a", value: 42 } : { type: "a"; value: number; }
+>type : "a"
+>"a" : "a"
+>value : number
+>42 : 42
+>{ type: "b", value: true } : { type: "b"; value: true; }
+>type : "b"
+>"b" : "b"
+>value : true
+>true : true
+
+const noInferReversedArguments = inferNoInferOverloads({ type: "b", value: true }, { type: "a", value: 42 });
+>noInferReversedArguments : [number, unknown]
+>inferNoInferOverloads({ type: "b", value: true }, { type: "a", value: 42 }) : [number, unknown]
+>inferNoInferOverloads : { <A, B>(first: Tagged<A, NoInfer<B>>, second: Tagged<A, B>): [A, B]; <A, B>(first: Tagged<NoInfer<A>, B>, second: Tagged<A, B>): [A, B]; }
+>{ type: "b", value: true } : { type: "b"; value: boolean; }
+>type : "b"
+>"b" : "b"
+>value : boolean
+>true : true
+>{ type: "a", value: 42 } : { type: "a"; value: number; }
+>type : "a"
+>"a" : "a"
+>value : number
+>42 : 42
+
+declare function inferReversedUnion<A, B>(value: { type: "b"; value: B } | { type: "a"; value: A }): [A, B];
+>inferReversedUnion : <A, B>(value: { type: "b"; value: B; } | { type: "a"; value: A; }) => [A, B]
+>value : { type: "b"; value: B; } | { type: "a"; value: A; }
+>type : "b"
+>value : B
+>type : "a"
+>value : A
+
+const reversedTargetUnion = inferReversedUnion(taggedSource);
+>reversedTargetUnion : [string, number]
+>inferReversedUnion(taggedSource) : [string, number]
+>inferReversedUnion : <A, B>(value: { type: "b"; value: B; } | { type: "a"; value: A; }) => [A, B]
+>taggedSource : Tagged<string, number>
+
+declare function inferTwoDiscriminants<A, B>(value: { type: "a"; sub: 1; value: A } | { type: "b"; sub: 2; value: B }): [A, B];
+>inferTwoDiscriminants : <A, B>(value: { type: "a"; sub: 1; value: A; } | { type: "b"; sub: 2; value: B; }) => [A, B]
+>value : { type: "a"; sub: 1; value: A; } | { type: "b"; sub: 2; value: B; }
+>type : "a"
+>sub : 1
+>value : A
+>type : "b"
+>sub : 2
+>value : B
+
+const unmatchedTargetUnion = inferTwoDiscriminants({ type: "a", sub: 2, value: 42 });
+>unmatchedTargetUnion : [number, unknown]
+>inferTwoDiscriminants({ type: "a", sub: 2, value: 42 }) : [number, unknown]
+>inferTwoDiscriminants : <A, B>(value: { type: "a"; sub: 1; value: A; } | { type: "b"; sub: 2; value: B; }) => [A, B]
+>{ type: "a", sub: 2, value: 42 } : { type: "a"; sub: 2; value: number; }
+>type : "a"
+>"a" : "a"
+>sub : 2
+>2 : 2
+>value : number
+>42 : 42
+
+const unmatchedTargetUnionReversedSource = inferTwoDiscriminants({ sub: 2, type: "a", value: 42 });
+>unmatchedTargetUnionReversedSource : [unknown, number]
+>inferTwoDiscriminants({ sub: 2, type: "a", value: 42 }) : [unknown, number]
+>inferTwoDiscriminants : <A, B>(value: { type: "a"; sub: 1; value: A; } | { type: "b"; sub: 2; value: B; }) => [A, B]
+>{ sub: 2, type: "a", value: 42 } : { sub: 2; type: "a"; value: number; }
+>sub : 2
+>2 : 2
+>type : "a"
+>"a" : "a"
+>value : number
+>42 : 42
+
+declare function inferTwoDiscriminantsReversed<A, B>(value: { sub: 1; type: "a"; value: A } | { sub: 2; type: "b"; value: B }): [A, B];
+>inferTwoDiscriminantsReversed : <A, B>(value: { sub: 1; type: "a"; value: A; } | { sub: 2; type: "b"; value: B; }) => [A, B]
+>value : { sub: 1; type: "a"; value: A; } | { sub: 2; type: "b"; value: B; }
+>sub : 1
+>type : "a"
+>value : A
+>sub : 2
+>type : "b"
+>value : B
+
+const unmatchedTargetUnionReversed = inferTwoDiscriminantsReversed({ type: "a", sub: 2, value: 42 });
+>unmatchedTargetUnionReversed : [number, unknown]
+>inferTwoDiscriminantsReversed({ type: "a", sub: 2, value: 42 }) : [number, unknown]
+>inferTwoDiscriminantsReversed : <A, B>(value: { sub: 1; type: "a"; value: A; } | { sub: 2; type: "b"; value: B; }) => [A, B]
+>{ type: "a", sub: 2, value: 42 } : { type: "a"; sub: 2; value: number; }
+>type : "a"
+>"a" : "a"
+>sub : 2
+>2 : 2
+>value : number
+>42 : 42
+
+declare function inferOptionalUnion<A, B>(value: { type?: "a"; value: A } | { type?: "b"; value: B }): [A, B];
+>inferOptionalUnion : <A, B>(value: { type?: "a"; value: A; } | { type?: "b"; value: B; }) => [A, B]
+>value : { type?: "a"; value: A; } | { type?: "b"; value: B; }
+>type : "a" | undefined
+>value : A
+>type : "b" | undefined
+>value : B
+
+const optionalTargetUnion = inferOptionalUnion(optionalTag);
+>optionalTargetUnion : [string, string]
+>inferOptionalUnion(optionalTag) : [string, string]
+>inferOptionalUnion : <A, B>(value: { type?: "a"; value: A; } | { type?: "b"; value: B; }) => [A, B]
+>optionalTag : { type?: "a"; value: string; }
+

@@ -1,0 +1,313 @@
+inferenceDiscriminatedUnions1.ts(52,17): error TS2345: Argument of type '{ kind: "b"; value: number; } | { kind: "a"; value: string; }' is not assignable to parameter of type '{ kind: "a"; value: string; }'.
+  Type '{ kind: "b"; value: number; }' is not assignable to type '{ kind: "a"; value: string; }'.
+    Types of property 'kind' are incompatible.
+      Type '"b"' is not assignable to type '"a"'.
+inferenceDiscriminatedUnions1.ts(53,17): error TS2345: Argument of type '{ kind: string; value: number; } | { kind: "a"; value: string; }' is not assignable to parameter of type '{ kind: "a"; value: string; }'.
+  Type '{ kind: string; value: number; }' is not assignable to type '{ kind: "a"; value: string; }'.
+    Types of property 'kind' are incompatible.
+      Type 'string' is not assignable to type '"a"'.
+inferenceDiscriminatedUnions1.ts(54,26): error TS2345: Argument of type '{ kind: number; value: number; } | { kind: "a"; value: string; }' is not assignable to parameter of type '{ kind: "a"; value: string; }'.
+  Type '{ kind: number; value: number; }' is not assignable to type '{ kind: "a"; value: string; }'.
+    Types of property 'kind' are incompatible.
+      Type 'number' is not assignable to type '"a"'.
+inferenceDiscriminatedUnions1.ts(55,17): error TS2345: Argument of type '{ value: number; } | { kind: "a"; value: string; }' is not assignable to parameter of type '{ kind: "a"; value: number; }'.
+  Property 'kind' is missing in type '{ value: number; }' but required in type '{ kind: "a"; value: number; }'.
+inferenceDiscriminatedUnions1.ts(58,16): error TS2345: Argument of type '{ kind: "a"; sub: 2; value: string; } | { kind: "b"; sub: 1; value: number; }' is not assignable to parameter of type '{ kind: "a"; sub: 1; value: string; }'.
+  Type '{ kind: "a"; sub: 2; value: string; }' is not assignable to type '{ kind: "a"; sub: 1; value: string; }'.
+    Types of property 'sub' are incompatible.
+      Type '2' is not assignable to type '1'.
+inferenceDiscriminatedUnions1.ts(61,32): error TS2345: Argument of type '{ kind: "a"; sub: 2; value: string; } | { kind: "b"; sub: 1; value: number; }' is not assignable to parameter of type '{ sub: 1; kind: "a"; value: number; }'.
+  Type '{ kind: "a"; sub: 2; value: string; }' is not assignable to type '{ sub: 1; kind: "a"; value: number; }'.
+    Types of property 'sub' are incompatible.
+      Type '2' is not assignable to type '1'.
+inferenceDiscriminatedUnions1.ts(64,20): error TS2345: Argument of type '{ kind: K.B; value: number; } | { kind: K.A; value: string; }' is not assignable to parameter of type '{ kind: K.A; value: string; }'.
+  Type '{ kind: K.B; value: number; }' is not assignable to type '{ kind: K.A; value: string; }'.
+    Types of property 'kind' are incompatible.
+      Type 'K.B' is not assignable to type 'K.A'.
+inferenceDiscriminatedUnions1.ts(67,20): error TS2345: Argument of type 'Err<number> | Ok<string>' is not assignable to parameter of type '{ ok: boolean; value: number; }'.
+  Type 'Ok<string>' is not assignable to type '{ ok: boolean; value: number; }'.
+    Types of property 'value' are incompatible.
+      Type 'string' is not assignable to type 'number'.
+inferenceDiscriminatedUnions1.ts(84,5): error TS2322: Type '{ kind: "other"; value: string[] | number[]; }' is not assignable to type 'Failure<number[]> | Success<string[]>'.
+  Type '{ kind: "other"; value: string[] | number[]; }' is not assignable to type 'Success<string[]>'.
+    Types of property 'kind' are incompatible.
+      Type '"other"' is not assignable to type '"success"'.
+inferenceDiscriminatedUnions1.ts(89,5): error TS2375: Type 'OptionalOk<readonly []>' is not assignable to type 'Err<string> | OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Type 'OptionalOk<readonly []>' is not assignable to type 'OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+    The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+inferenceDiscriminatedUnions1.ts(93,5): error TS2375: Type 'OptionalOk<readonly []>' is not assignable to type 'MaybeErr<string> | OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Type 'OptionalOk<readonly []>' is not assignable to type 'OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+    The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+inferenceDiscriminatedUnions1.ts(101,5): error TS2322: Type 'OptionalOk<readonly []>' is not assignable to type 'AlwaysUndefinedErr<string> | OptionalOk<string[]>'.
+  Type 'OptionalOk<readonly []>' is not assignable to type 'OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+    The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+inferenceDiscriminatedUnions1.ts(106,5): error TS2322: Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'Err<string> | ExplicitOptionalOk<string[]>'.
+  Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'ExplicitOptionalOk<string[]>'.
+    The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+inferenceDiscriminatedUnions1.ts(110,5): error TS2322: Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'AlwaysUndefinedErr<string> | ExplicitOptionalOk<string[]>'.
+  Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'ExplicitOptionalOk<string[]>'.
+    The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+inferenceDiscriminatedUnions1.ts(115,5): error TS2322: Type 'UnionOk<readonly []>' is not assignable to type 'Err<string> | UnionOk<string[]>'.
+  Type 'UnionOk<readonly []>' is not assignable to type 'UnionOk<string[]>'.
+    The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+inferenceDiscriminatedUnions1.ts(131,43): error TS2345: Argument of type '{ type: string; value: number; }' is not assignable to parameter of type '{ type: "a"; value: number; } | { type: "b"; value: number; }'.
+  Type '{ type: string; value: number; }' is not assignable to type '{ type: "b"; value: number; }'.
+    Types of property 'type' are incompatible.
+      Type 'string' is not assignable to type '"b"'.
+inferenceDiscriminatedUnions1.ts(132,45): error TS2345: Argument of type '{ value: number; }' is not assignable to parameter of type '{ type: "a"; value: number; } | { type: "b"; value: number; }'.
+  Property 'type' is missing in type '{ value: number; }' but required in type '{ type: "b"; value: number; }'.
+inferenceDiscriminatedUnions1.ts(146,52): error TS2345: Argument of type '{ type: "a"; sub: 2; value: number; }' is not assignable to parameter of type '{ type: "a"; sub: 1; value: number; } | { type: "b"; sub: 2; value: unknown; }'.
+  Types of property 'sub' are incompatible.
+    Type '2' is not assignable to type '1'.
+inferenceDiscriminatedUnions1.ts(147,66): error TS2345: Argument of type '{ sub: 2; type: "a"; value: number; }' is not assignable to parameter of type '{ type: "a"; sub: 1; value: unknown; } | { type: "b"; sub: 2; value: number; }'.
+  Types of property 'type' are incompatible.
+    Type '"a"' is not assignable to type '"b"'.
+inferenceDiscriminatedUnions1.ts(150,68): error TS2345: Argument of type '{ type: "a"; sub: 2; value: number; }' is not assignable to parameter of type '{ sub: 1; type: "a"; value: number; } | { sub: 2; type: "b"; value: unknown; }'.
+  Types of property 'sub' are incompatible.
+    Type '2' is not assignable to type '1'.
+
+
+==== inferenceDiscriminatedUnions1.ts (20 errors) ====
+    type Ok<T> = { ok: true; value: T };
+    type Err<E> = { ok: false; value: E };
+    type ErrShape = { ok: false; value: string };
+    type OkShape = { ok: true; value: string[] };
+    enum K { A, B }
+    type Success<T> = { kind: "success"; value: T };
+    type Failure<E> = { kind: "failure"; value: E };
+    type Accepted<T> = { kind: 1; value: T };
+    type Rejected<E> = { kind: 0; value: E };
+    type OptionalOk<T> = { ok?: true; value: T };
+    type MaybeErr<E> = { ok?: false; value: E };
+    type ExplicitOptionalOk<T> = { ok?: true | undefined; value: T };
+    type UnionOk<T> = { ok: true | undefined; value: T };
+    type AlwaysUndefinedErr<E> = { ok: undefined; value: E };
+    type UndefinedOk<T> = { ok: undefined; value: T };
+    type Tagged<A, B> = { type: "a"; value: A } | { type: "b"; value: B };
+    
+    declare const u1: { kind: "b"; value: number } | { kind: "a"; value: string };
+    declare const u2: { kind: string; value: number } | { kind: "a"; value: string };
+    declare const broadTag: { kind: number; value: number } | { kind: "a"; value: string };
+    declare const u3: { value: number } | { kind: "a"; value: string };
+    declare const u4: { kind: "a"; sub: 2; value: string } | { kind: "b"; sub: 1; value: number };
+    declare const u5: { kind: K.B; value: number } | { kind: K.A; value: string };
+    declare const u6: Err<number> | Ok<string>;
+    declare const taggedSource: Tagged<string, number>;
+    declare const reversedTaggedSource: { type: "b"; value: number } | { type: "a"; value: string };
+    declare const broadSourceTag: { type: string; value: number };
+    declare const missingTag: { value: number };
+    declare const optionalTag: { type?: "a"; value: string };
+    
+    declare function ok<const T>(value: T): Ok<T>;
+    export function aliasTarget(): ErrShape | OkShape { return ok([]); }
+    
+    export function f(): Ok<string[]> | Err<string> {
+        return ok([]);
+    }
+    
+    export function optionalSource(): Ok<string[]> | MaybeErr<string> {
+        return ok([]);
+    }
+    
+    declare function okInline<const T>(value: T): { ok: true; value: T };
+    export function inlineTarget(): ErrShape | OkShape { return okInline([]); }
+    
+    export function inlineTargetReversed(): OkShape | ErrShape { return okInline([]); }
+    
+    declare function on<T>(handler: (e: { kind: "a"; value: T }) => void): T;
+    const r1 = on((e: { kind: "a"; value: string } | { kind: "b"; value: number }) => {});
+    const r2 = on((e: { kind: "b"; value: number } | { kind: "a"; value: string }) => {});
+    
+    declare function pick<T>(x: { kind: "a"; value: T }): T;
+    const r3 = pick(u1);
+                    ~~
+!!! error TS2345: Argument of type '{ kind: "b"; value: number; } | { kind: "a"; value: string; }' is not assignable to parameter of type '{ kind: "a"; value: string; }'.
+!!! error TS2345:   Type '{ kind: "b"; value: number; }' is not assignable to type '{ kind: "a"; value: string; }'.
+!!! error TS2345:     Types of property 'kind' are incompatible.
+!!! error TS2345:       Type '"b"' is not assignable to type '"a"'.
+    const r4 = pick(u2);
+                    ~~
+!!! error TS2345: Argument of type '{ kind: string; value: number; } | { kind: "a"; value: string; }' is not assignable to parameter of type '{ kind: "a"; value: string; }'.
+!!! error TS2345:   Type '{ kind: string; value: number; }' is not assignable to type '{ kind: "a"; value: string; }'.
+!!! error TS2345:     Types of property 'kind' are incompatible.
+!!! error TS2345:       Type 'string' is not assignable to type '"a"'.
+    const broadResult = pick(broadTag);
+                             ~~~~~~~~
+!!! error TS2345: Argument of type '{ kind: number; value: number; } | { kind: "a"; value: string; }' is not assignable to parameter of type '{ kind: "a"; value: string; }'.
+!!! error TS2345:   Type '{ kind: number; value: number; }' is not assignable to type '{ kind: "a"; value: string; }'.
+!!! error TS2345:     Types of property 'kind' are incompatible.
+!!! error TS2345:       Type 'number' is not assignable to type '"a"'.
+    const r5 = pick(u3);
+                    ~~
+!!! error TS2345: Argument of type '{ value: number; } | { kind: "a"; value: string; }' is not assignable to parameter of type '{ kind: "a"; value: number; }'.
+!!! error TS2345:   Property 'kind' is missing in type '{ value: number; }' but required in type '{ kind: "a"; value: number; }'.
+!!! related TS2728 inferenceDiscriminatedUnions1.ts:51:31: 'kind' is declared here.
+    
+    declare function two<T>(x: { kind: "a"; sub: 1; value: T }): T;
+    const r6 = two(u4);
+                   ~~
+!!! error TS2345: Argument of type '{ kind: "a"; sub: 2; value: string; } | { kind: "b"; sub: 1; value: number; }' is not assignable to parameter of type '{ kind: "a"; sub: 1; value: string; }'.
+!!! error TS2345:   Type '{ kind: "a"; sub: 2; value: string; }' is not assignable to type '{ kind: "a"; sub: 1; value: string; }'.
+!!! error TS2345:     Types of property 'sub' are incompatible.
+!!! error TS2345:       Type '2' is not assignable to type '1'.
+    
+    declare function twoReversed<T>(x: { sub: 1; kind: "a"; value: T }): T;
+    const r6Reversed = twoReversed(u4);
+                                   ~~
+!!! error TS2345: Argument of type '{ kind: "a"; sub: 2; value: string; } | { kind: "b"; sub: 1; value: number; }' is not assignable to parameter of type '{ sub: 1; kind: "a"; value: number; }'.
+!!! error TS2345:   Type '{ kind: "a"; sub: 2; value: string; }' is not assignable to type '{ sub: 1; kind: "a"; value: number; }'.
+!!! error TS2345:     Types of property 'sub' are incompatible.
+!!! error TS2345:       Type '2' is not assignable to type '1'.
+    
+    declare function enumTag<T>(x: { kind: K.A; value: T }): T;
+    const r7 = enumTag(u5);
+                       ~~
+!!! error TS2345: Argument of type '{ kind: K.B; value: number; } | { kind: K.A; value: string; }' is not assignable to parameter of type '{ kind: K.A; value: string; }'.
+!!! error TS2345:   Type '{ kind: K.B; value: number; }' is not assignable to type '{ kind: K.A; value: string; }'.
+!!! error TS2345:     Types of property 'kind' are incompatible.
+!!! error TS2345:       Type 'K.B' is not assignable to type 'K.A'.
+    
+    declare function boolTag<T>(x: { ok: boolean; value: T }): T;
+    const r8 = boolTag(u6);
+                       ~~
+!!! error TS2345: Argument of type 'Err<number> | Ok<string>' is not assignable to parameter of type '{ ok: boolean; value: number; }'.
+!!! error TS2345:   Type 'Ok<string>' is not assignable to type '{ ok: boolean; value: number; }'.
+!!! error TS2345:     Types of property 'value' are incompatible.
+!!! error TS2345:       Type 'string' is not assignable to type 'number'.
+    
+    declare function wrap<const T>(value: T): { result: Ok<T> };
+    export function nested(): { result: ErrShape | OkShape } { return wrap([]); }
+    
+    declare function success<const T>(value: T): Success<T>;
+    export function withStringTag(): Success<string[]> | Failure<string> {
+        return success([]);
+    }
+    
+    declare function accepted<const T>(value: T): Accepted<T>;
+    export function withNumberTag(): Accepted<string[]> | Rejected<string> {
+        return accepted([]);
+    }
+    
+    declare function unmatched<T>(): { kind: "other"; value: T };
+    export function withUnmatchedTag(): Success<string[]> | Failure<number[]> {
+        return unmatched();
+        ~~~~~~
+!!! error TS2322: Type '{ kind: "other"; value: string[] | number[]; }' is not assignable to type 'Failure<number[]> | Success<string[]>'.
+!!! error TS2322:   Type '{ kind: "other"; value: string[] | number[]; }' is not assignable to type 'Success<string[]>'.
+!!! error TS2322:     Types of property 'kind' are incompatible.
+!!! error TS2322:       Type '"other"' is not assignable to type '"success"'.
+    }
+    
+    declare function optionalOk<const T>(value: T): OptionalOk<T>;
+    export function optionalTarget(): OptionalOk<string[]> | Err<string> {
+        return optionalOk([]);
+        ~~~~~~
+!!! error TS2375: Type 'OptionalOk<readonly []>' is not assignable to type 'Err<string> | OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Type 'OptionalOk<readonly []>' is not assignable to type 'OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+    }
+    
+    export function bothOptional(): OptionalOk<string[]> | MaybeErr<string> {
+        return optionalOk([]);
+        ~~~~~~
+!!! error TS2375: Type 'OptionalOk<readonly []>' is not assignable to type 'MaybeErr<string> | OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Type 'OptionalOk<readonly []>' is not assignable to type 'OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+    }
+    
+    export function missingSourceTag(): OptionalOk<string[]> | { value: string } {
+        return optionalOk([]);
+    }
+    
+    export function undefinedSource(): OptionalOk<string[]> | AlwaysUndefinedErr<string> {
+        return optionalOk([]);
+        ~~~~~~
+!!! error TS2322: Type 'OptionalOk<readonly []>' is not assignable to type 'AlwaysUndefinedErr<string> | OptionalOk<string[]>'.
+!!! error TS2322:   Type 'OptionalOk<readonly []>' is not assignable to type 'OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2322:     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+    }
+    
+    declare function explicitOptionalOk<const T>(value: T): ExplicitOptionalOk<T>;
+    export function explicitUndefined(): ExplicitOptionalOk<string[]> | Err<string> {
+        return explicitOptionalOk([]);
+        ~~~~~~
+!!! error TS2322: Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'Err<string> | ExplicitOptionalOk<string[]>'.
+!!! error TS2322:   Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'ExplicitOptionalOk<string[]>'.
+!!! error TS2322:     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+    }
+    
+    export function explicitUndefinedOverlap(): ExplicitOptionalOk<string[]> | AlwaysUndefinedErr<string> {
+        return explicitOptionalOk([]);
+        ~~~~~~
+!!! error TS2322: Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'AlwaysUndefinedErr<string> | ExplicitOptionalOk<string[]>'.
+!!! error TS2322:   Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'ExplicitOptionalOk<string[]>'.
+!!! error TS2322:     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+    }
+    
+    declare function unionOk<const T>(value: T): UnionOk<T>;
+    export function requiredUnionTag(): UnionOk<string[]> | Err<string> {
+        return unionOk([]);
+        ~~~~~~
+!!! error TS2322: Type 'UnionOk<readonly []>' is not assignable to type 'Err<string> | UnionOk<string[]>'.
+!!! error TS2322:   Type 'UnionOk<readonly []>' is not assignable to type 'UnionOk<string[]>'.
+!!! error TS2322:     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+    }
+    
+    declare function undefinedOk<const T>(value: T): UndefinedOk<T>;
+    export function undefinedTarget(): UndefinedOk<string[]> | MaybeErr<string> {
+        return undefinedOk([]);
+    }
+    
+    declare function inferTwoArguments<A, B>(first: Tagged<A, B>, second: Tagged<A, B>): [A, B];
+    const twoArguments = inferTwoArguments({ type: "a", value: 42 }, { type: "b", value: true });
+    
+    declare function inferInlineUnion<A, B>(value: { type: "a"; value: A } | { type: "b"; value: B }): [A, B];
+    const oneArgument = inferInlineUnion({ type: "a", value: 42 });
+    const unionArgument = inferInlineUnion(taggedSource);
+    const explicitUnionArgument = inferInlineUnion<string, number>(taggedSource);
+    const reversedSourceUnion = inferInlineUnion(reversedTaggedSource);
+    const broadTargetUnion = inferInlineUnion(broadSourceTag);
+                                              ~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ type: string; value: number; }' is not assignable to parameter of type '{ type: "a"; value: number; } | { type: "b"; value: number; }'.
+!!! error TS2345:   Type '{ type: string; value: number; }' is not assignable to type '{ type: "b"; value: number; }'.
+!!! error TS2345:     Types of property 'type' are incompatible.
+!!! error TS2345:       Type 'string' is not assignable to type '"b"'.
+    const missingTargetUnion = inferInlineUnion(missingTag);
+                                                ~~~~~~~~~~
+!!! error TS2345: Argument of type '{ value: number; }' is not assignable to parameter of type '{ type: "a"; value: number; } | { type: "b"; value: number; }'.
+!!! error TS2345:   Property 'type' is missing in type '{ value: number; }' but required in type '{ type: "b"; value: number; }'.
+!!! related TS2728 inferenceDiscriminatedUnions1.ts:126:76: 'type' is declared here.
+    
+    declare function inferUnionWithFallback<T extends { type: "a" | "b" }, A, B>(value: T | Tagged<A, B>): [T, A, B];
+    const nakedTypeParameter = inferUnionWithFallback({ type: "a", value: 42 });
+    
+    declare function inferNoInferOverloads<A, B>(first: Tagged<A, NoInfer<B>>, second: Tagged<A, B>): [A, B];
+    declare function inferNoInferOverloads<A, B>(first: Tagged<NoInfer<A>, B>, second: Tagged<A, B>): [A, B];
+    const noInferArguments = inferNoInferOverloads({ type: "a", value: 42 }, { type: "b", value: true });
+    const noInferReversedArguments = inferNoInferOverloads({ type: "b", value: true }, { type: "a", value: 42 });
+    
+    declare function inferReversedUnion<A, B>(value: { type: "b"; value: B } | { type: "a"; value: A }): [A, B];
+    const reversedTargetUnion = inferReversedUnion(taggedSource);
+    
+    declare function inferTwoDiscriminants<A, B>(value: { type: "a"; sub: 1; value: A } | { type: "b"; sub: 2; value: B }): [A, B];
+    const unmatchedTargetUnion = inferTwoDiscriminants({ type: "a", sub: 2, value: 42 });
+                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ type: "a"; sub: 2; value: number; }' is not assignable to parameter of type '{ type: "a"; sub: 1; value: number; } | { type: "b"; sub: 2; value: unknown; }'.
+!!! error TS2345:   Types of property 'sub' are incompatible.
+!!! error TS2345:     Type '2' is not assignable to type '1'.
+    const unmatchedTargetUnionReversedSource = inferTwoDiscriminants({ sub: 2, type: "a", value: 42 });
+                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ sub: 2; type: "a"; value: number; }' is not assignable to parameter of type '{ type: "a"; sub: 1; value: unknown; } | { type: "b"; sub: 2; value: number; }'.
+!!! error TS2345:   Types of property 'type' are incompatible.
+!!! error TS2345:     Type '"a"' is not assignable to type '"b"'.
+    
+    declare function inferTwoDiscriminantsReversed<A, B>(value: { sub: 1; type: "a"; value: A } | { sub: 2; type: "b"; value: B }): [A, B];
+    const unmatchedTargetUnionReversed = inferTwoDiscriminantsReversed({ type: "a", sub: 2, value: 42 });
+                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ type: "a"; sub: 2; value: number; }' is not assignable to parameter of type '{ sub: 1; type: "a"; value: number; } | { sub: 2; type: "b"; value: unknown; }'.
+!!! error TS2345:   Types of property 'sub' are incompatible.
+!!! error TS2345:     Type '2' is not assignable to type '1'.
+    
+    declare function inferOptionalUnion<A, B>(value: { type?: "a"; value: A } | { type?: "b"; value: B }): [A, B];
+    const optionalTargetUnion = inferOptionalUnion(optionalTag);
+    
