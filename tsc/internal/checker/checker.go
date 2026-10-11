@@ -14691,10 +14691,14 @@ func (c *Checker) getLateBoundSymbol(symbol *ast.Symbol) *ast.Symbol {
 	if links.lateSymbol == nil && core.Some(symbol.Declarations(), c.hasLateBindableName) {
 		// force late binding of members/exports. This will set the late-bound symbol
 		parent := c.getMergedSymbol(symbol.Parent())
-		if core.Some(symbol.Declarations(), ast.HasStaticModifier) {
-			c.getExportsOfSymbol(parent)
-		} else {
-			c.getMembersOfSymbol(parent)
+		// Parent can be nil for top-level script expandos (SourceFile has no symbol) when
+		// checking was skipped (--noCheck) and late binding has not run yet.
+		if parent != nil {
+			if core.Some(symbol.Declarations(), ast.HasStaticModifier) {
+				c.getExportsOfSymbol(parent)
+			} else {
+				c.getMembersOfSymbol(parent)
+			}
 		}
 	}
 	if links.lateSymbol == nil {
