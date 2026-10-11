@@ -1,0 +1,92 @@
+// === goToDefinition ===
+// === /jsdocInlineLinksInTypePosition.ts ===
+// <|class [|C|] {}|>
+// /**
+//  * @throws {@link /*GOTO DEF*/C}
+//  * @returns {@linkcode C}
+//  * @param value {@linkplain C}
+//  */
+// --- (line: 7) skipped ---
+
+
+
+// === goToDefinition ===
+// === /jsdocInlineLinksInTypePosition.ts ===
+// <|class [|C|] {}|>
+// /**
+//  * @throws {@link C}
+//  * @returns {@linkcode /*GOTO DEF*/C}
+//  * @param value {@linkplain C}
+//  */
+// function f(value: C) {}
+// --- (line: 8) skipped ---
+
+
+
+// === goToDefinition ===
+// === /jsdocInlineLinksInTypePosition.ts ===
+// <|class [|C|] {}|>
+// /**
+//  * @throws {@link C}
+//  * @returns {@linkcode C}
+//  * @param value {@linkplain /*GOTO DEF*/C}
+//  */
+// function f(value: C) {}
+// 
+// --- (line: 9) skipped ---
+
+
+
+// === goToDefinition ===
+// === /jsdocInlineLinksInTypePosition.ts ===
+// <|class [|C|] {}|>
+// /**
+//  * @throws {@link C}
+//  * @returns {@linkcode C}
+//  * @param value {@linkplain C}
+//  */
+// function f(value: C) {}
+// 
+// /**
+//  * @throws {/*GOTO DEF*/C} description
+//  * @returns {C} description
+//  * @param {C} value description
+//  */
+// function g(value: C) { return value; }
+
+
+
+// === goToDefinition ===
+// === /jsdocInlineLinksInTypePosition.ts ===
+// <|class [|C|] {}|>
+// /**
+//  * @throws {@link C}
+//  * @returns {@linkcode C}
+//  * @param value {@linkplain C}
+//  */
+// function f(value: C) {}
+// 
+// /**
+//  * @throws {C} description
+//  * @returns {/*GOTO DEF*/C} description
+//  * @param {C} value description
+//  */
+// function g(value: C) { return value; }
+
+
+
+// === goToDefinition ===
+// === /jsdocInlineLinksInTypePosition.ts ===
+// <|class [|C|] {}|>
+// /**
+//  * @throws {@link C}
+//  * @returns {@linkcode C}
+// --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
+// /**
+//  * @throws {C} description
+//  * @returns {C} description
+//  * @param {/*GOTO DEF*/C} value description
+//  */
+// function g(value: C) { return value; }
