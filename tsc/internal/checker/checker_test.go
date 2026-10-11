@@ -1,7 +1,9 @@
 package checker_test
 
 import (
+	"fmt"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -130,4 +132,59 @@ func BenchmarkNewChecker(b *testing.B) {
 	for b.Loop() {
 		checker.NewChecker(program, nil)
 	}
+}
+
+func BenchmarkCheck(b *testing.B) {
+	fs := bundled.WrapFS(osvfs.FS())
+	rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, fs, nil)
+	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
+	program := compiler.NewProgram(compiler.ProgramOptions{
+		Config: parsed,
+		Host:   host,
+	})
+	program.BindSourceFiles()
+	ctx := b.Context()
+
+	b.ReportAllocs()
+	for b.Loop() {
+		c, _ := checker.NewChecker(program, nil)
+		for _, file := range program.GetSourceFiles() {
+			c.GetDiagnostics(ctx, file)
+		}
+		c.GetGlobalDiagnostics()
+	}
+}
+
+func TestTypeAllocationAcrossCheckerGrowth(t *testing.T) {
+	t.Parallel()
+	var content strings.Builder
+	content.WriteString(`interface Box<T> { value: T }
+export type Initial = Box<"first">;
+`)
+	for i := range 1024 {
+		fmt.Fprintf(&content, "export type T%d = Box<\"value%d\">;\n", i, i)
+	}
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/foo.ts": content.String(),
+	}, tspath.CaseSensitive))
+	opts := &core.CompilerOptions{NoLib: core.TSTrue}
+	program := compiler.NewProgram(compiler.ProgramOptions{
+		Config: tsoptions.NewParsedCommandLine(opts, []tspath.RootedFilePath{"/foo.ts"}, nil, "/", fs.CaseSensitivity()),
+		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+	})
+	program.BindSourceFiles()
+	c, done := program.GetTypeChecker(t.Context())
+	defer done()
+	file := program.GetSourceFile("/foo.ts")
+	initial := c.GetTypeAtLocation(file.Statements.Nodes[1].AsTypeAliasDeclaration().Type)
+	for i := range 1024 {
+		node := file.Statements.Nodes[i+2].AsTypeAliasDeclaration().Type
+		typ := c.GetTypeAtLocation(node)
+		assert.Equal(t, c.TypeToString(typ), fmt.Sprintf("T%d", i))
+	}
+	assert.Equal(t, c.GetTypeAtLocation(file.Statements.Nodes[1].AsTypeAliasDeclaration().Type), initial)
+	assert.Equal(t, c.TypeToString(initial), "Initial")
+	assert.Equal(t, len(c.GetDiagnostics(t.Context(), file)), 0)
 }
