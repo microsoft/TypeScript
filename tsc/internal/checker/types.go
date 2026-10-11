@@ -438,8 +438,26 @@ type SymbolNodeLinks struct {
 }
 
 type TypeNodeLinks struct {
-	resolvedType        *Type   // Resolved type associated with node
-	outerTypeParameters []*Type // Outer type parameters of anonymous object type
+	resolvedType        *Type    // Resolved type associated with node
+	outerTypeParameters *[]*Type // Outer type parameters of anonymous object type
+}
+
+func (links *TypeNodeLinks) getOuterTypeParameters() []*Type {
+	if links.outerTypeParameters == nil {
+		return nil
+	}
+	return *links.outerTypeParameters
+}
+
+func (links *TypeNodeLinks) setOuterTypeParameters(c *Checker, types []*Type) {
+	if types == nil {
+		links.outerTypeParameters = nil
+		return
+	}
+	if links.outerTypeParameters == nil {
+		links.outerTypeParameters = c.outerTypeParameterListArena.New()
+	}
+	*links.outerTypeParameters = types
 }
 
 type ComputedNameNodeLinks struct {
