@@ -1096,8 +1096,12 @@ func (t *ConstrainedType) AsConstrainedType() *ConstrainedType { return t }
 
 type StructuredType struct {
 	ConstrainedType
-	members            ast.SymbolTable
-	properties         []*ast.Symbol
+	members    ast.SymbolTable
+	properties []*ast.Symbol
+	extra      *structuredTypeExtra
+}
+
+type structuredTypeExtra struct {
 	signatures         []*Signature // Signatures (call + construct)
 	callSignatureCount int          // Count of call signatures
 	indexInfos         []*IndexInfo
@@ -1108,11 +1112,38 @@ type StructuredType struct {
 func (t *StructuredType) AsStructuredType() *StructuredType { return t }
 
 func (t *StructuredType) CallSignatures() []*Signature {
-	return slices.Clip(t.signatures[:t.callSignatureCount])
+	if t.extra == nil {
+		return nil
+	}
+	return slices.Clip(t.extra.signatures[:t.extra.callSignatureCount])
 }
 
 func (t *StructuredType) ConstructSignatures() []*Signature {
-	return slices.Clip(t.signatures[t.callSignatureCount:])
+	if t.extra == nil {
+		return nil
+	}
+	return slices.Clip(t.extra.signatures[t.extra.callSignatureCount:])
+}
+
+func (t *StructuredType) getSignatures() []*Signature {
+	if t.extra == nil {
+		return nil
+	}
+	return t.extra.signatures
+}
+
+func (t *StructuredType) getIndexInfos() []*IndexInfo {
+	if t.extra == nil {
+		return nil
+	}
+	return t.extra.indexInfos
+}
+
+func (t *StructuredType) ensureExtra(c *Checker) *structuredTypeExtra {
+	if t.extra == nil {
+		t.extra = c.structuredTypeExtraArena.New()
+	}
+	return t.extra
 }
 
 func (t *StructuredType) Properties() []*ast.Symbol {
