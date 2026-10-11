@@ -576,7 +576,7 @@ func (b *NodeBuilderImpl) getResolvedTypeWithoutAbstractConstructSignatures(t *S
 		t.extra.objectTypeWithoutAbstractConstructSignatures = t.AsType()
 		return t.AsType()
 	}
-	typeCopy := b.ch.newAnonymousType(t.symbol, t.members, t.CallSignatures(), core.IfElse(len(constructSignatures) > 0, constructSignatures, []*Signature{}), t.getIndexInfos())
+	typeCopy := b.ch.newAnonymousType(t.symbol, t.getMembers(), t.CallSignatures(), core.IfElse(len(constructSignatures) > 0, constructSignatures, []*Signature{}), t.getIndexInfos())
 	t.extra.objectTypeWithoutAbstractConstructSignatures = typeCopy
 	typeCopy.AsStructuredType().ensureExtra().objectTypeWithoutAbstractConstructSignatures = typeCopy
 	return typeCopy
