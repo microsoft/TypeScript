@@ -4,6 +4,7 @@ package ast
 
 import (
 	"sync/atomic"
+	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
@@ -598,49 +599,52 @@ type Token struct {
 }
 
 func (f *NodeFactory) NewToken(kind TokenSyntaxKind) *Node {
+	if !IsTokenKind(kind) {
+		panic("Invalid token kind")
+	}
 	switch kind {
 	case KindNumericLiteral:
 		data := f.numericLiteralArena.New()
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	case KindBigIntLiteral:
 		data := &BigIntLiteral{}
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	case KindStringLiteral:
 		data := f.stringLiteralArena.New()
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	case KindJsxText:
 		data := &JsxText{}
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	case KindRegularExpressionLiteral:
 		data := &RegularExpressionLiteral{}
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	case KindNoSubstitutionTemplateLiteral:
 		data := &NoSubstitutionTemplateLiteral{}
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	case KindTemplateHead:
 		data := &TemplateHead{}
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	case KindTemplateMiddle:
 		data := &TemplateMiddle{}
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	case KindTemplateTail:
 		data := &TemplateTail{}
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	case KindIdentifier:
 		data := f.identifierArena.New()
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	case KindPrivateIdentifier:
 		data := &PrivateIdentifier{}
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	case KindFalseKeyword, KindImportKeyword, KindNullKeyword, KindSuperKeyword, KindThisKeyword, KindTrueKeyword:
 		data := f.keywordExpressionArena.New()
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
 		data := f.keywordTypeNodeArena.New()
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	default:
 		data := f.tokenArena.New()
-		return f.newNode(kind, data.AsNode(), data)
+		return f.newNode(kind, data.AsNode())
 	}
 }
 
@@ -670,7 +674,7 @@ func (f *NodeFactory) NewIdentifier(text string) *Node {
 	data := f.identifierArena.New()
 	data.Text = text
 	f.textCount++
-	return f.newNode(KindIdentifier, data.AsNode(), data)
+	return f.newNode(KindIdentifier, data.AsNode())
 }
 
 func (node *Identifier) Clone(f NodeFactoryCoercible) *Node {
@@ -694,7 +698,7 @@ func (f *NodeFactory) NewPrivateIdentifier(text string) *Node {
 	data := &PrivateIdentifier{}
 	data.Text = text
 	f.textCount++
-	return f.newNode(KindPrivateIdentifier, data.AsNode(), data)
+	return f.newNode(KindPrivateIdentifier, data.AsNode())
 }
 
 func (node *PrivateIdentifier) Clone(f NodeFactoryCoercible) *Node {
@@ -721,7 +725,7 @@ func (f *NodeFactory) NewQualifiedName(left *EntityName, right *MemberName) *Nod
 	data := &QualifiedName{}
 	data.Left = left
 	data.Right = right
-	return f.newNode(KindQualifiedName, data.AsNode(), data)
+	return f.newNode(KindQualifiedName, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateQualifiedName(node *QualifiedName, left *EntityName, right *MemberName) *Node {
@@ -765,7 +769,7 @@ type ComputedPropertyName struct {
 func (f *NodeFactory) NewComputedPropertyName(expression *Expression) *Node {
 	data := &ComputedPropertyName{}
 	data.Expression = expression
-	return f.newNode(KindComputedPropertyName, data.AsNode(), data)
+	return f.newNode(KindComputedPropertyName, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateComputedPropertyName(node *ComputedPropertyName, expression *Expression) *Node {
@@ -808,7 +812,7 @@ type Decorator struct {
 func (f *NodeFactory) NewDecorator(expression *LeftHandSideExpression) *Node {
 	data := &Decorator{}
 	data.Expression = expression
-	return f.newNode(KindDecorator, data.AsNode(), data)
+	return f.newNode(KindDecorator, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateDecorator(node *Decorator, expression *LeftHandSideExpression) *Node {
@@ -844,7 +848,7 @@ type EmptyStatement struct {
 
 func (f *NodeFactory) NewEmptyStatement() *Node {
 	data := &EmptyStatement{}
-	return f.newNode(KindEmptyStatement, data.AsNode(), data)
+	return f.newNode(KindEmptyStatement, data.AsNode())
 }
 
 func (node *EmptyStatement) Clone(f NodeFactoryCoercible) *Node {
@@ -872,7 +876,7 @@ func (f *NodeFactory) NewIfStatement(expression *Expression, thenStatement *Stat
 	data.Expression = expression
 	data.ThenStatement = thenStatement
 	data.ElseStatement = elseStatement
-	return f.newNode(KindIfStatement, data.AsNode(), data)
+	return f.newNode(KindIfStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateIfStatement(node *IfStatement, expression *Expression, thenStatement *Statement, elseStatement *Statement) *Node {
@@ -918,7 +922,7 @@ func (f *NodeFactory) NewDoStatement(statement *Statement, expression *Expressio
 	data := &DoStatement{}
 	data.Statement = statement
 	data.Expression = expression
-	return f.newNode(KindDoStatement, data.AsNode(), data)
+	return f.newNode(KindDoStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateDoStatement(node *DoStatement, statement *Statement, expression *Expression) *Node {
@@ -963,7 +967,7 @@ func (f *NodeFactory) NewWhileStatement(expression *Expression, statement *State
 	data := &WhileStatement{}
 	data.Expression = expression
 	data.Statement = statement
-	return f.newNode(KindWhileStatement, data.AsNode(), data)
+	return f.newNode(KindWhileStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateWhileStatement(node *WhileStatement, expression *Expression, statement *Statement) *Node {
@@ -1013,7 +1017,7 @@ func (f *NodeFactory) NewForStatement(initializer *ForInitializer, condition *Ex
 	data.Condition = condition
 	data.Incrementor = incrementor
 	data.Statement = statement
-	return f.newNode(KindForStatement, data.AsNode(), data)
+	return f.newNode(KindForStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateForStatement(node *ForStatement, initializer *ForInitializer, condition *Expression, incrementor *Expression, statement *Statement) *Node {
@@ -1069,7 +1073,7 @@ func (f *NodeFactory) NewForInOrOfStatement(kind Kind, awaitModifier *AwaitKeywo
 	data.Initializer = initializer
 	data.Expression = expression
 	data.Statement = statement
-	return f.newNode(kind, data.AsNode(), data)
+	return f.newNode(kind, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateForInOrOfStatement(node *ForInOrOfStatement, awaitModifier *AwaitKeyword, initializer *ForInitializer, expression *Expression, statement *Statement) *Node {
@@ -1114,7 +1118,7 @@ type BreakStatement struct {
 func (f *NodeFactory) NewBreakStatement(label *IdentifierNode) *Node {
 	data := &BreakStatement{}
 	data.Label = label
-	return f.newNode(KindBreakStatement, data.AsNode(), data)
+	return f.newNode(KindBreakStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateBreakStatement(node *BreakStatement, label *IdentifierNode) *Node {
@@ -1152,7 +1156,7 @@ type ContinueStatement struct {
 func (f *NodeFactory) NewContinueStatement(label *IdentifierNode) *Node {
 	data := &ContinueStatement{}
 	data.Label = label
-	return f.newNode(KindContinueStatement, data.AsNode(), data)
+	return f.newNode(KindContinueStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateContinueStatement(node *ContinueStatement, label *IdentifierNode) *Node {
@@ -1191,7 +1195,7 @@ type ReturnStatement struct {
 func (f *NodeFactory) NewReturnStatement(expression *Expression) *Node {
 	data := f.returnStatementArena.New()
 	data.Expression = expression
-	return f.newNode(KindReturnStatement, data.AsNode(), data)
+	return f.newNode(KindReturnStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateReturnStatement(node *ReturnStatement, expression *Expression) *Node {
@@ -1232,7 +1236,7 @@ func (f *NodeFactory) NewWithStatement(expression *Expression, statement *Statem
 	data := &WithStatement{}
 	data.Expression = expression
 	data.Statement = statement
-	return f.newNode(KindWithStatement, data.AsNode(), data)
+	return f.newNode(KindWithStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateWithStatement(node *WithStatement, expression *Expression, statement *Statement) *Node {
@@ -1278,7 +1282,7 @@ func (f *NodeFactory) NewSwitchStatement(expression *Expression, caseBlock *Case
 	data := &SwitchStatement{}
 	data.Expression = expression
 	data.CaseBlock = caseBlock
-	return f.newNode(KindSwitchStatement, data.AsNode(), data)
+	return f.newNode(KindSwitchStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateSwitchStatement(node *SwitchStatement, expression *Expression, caseBlock *CaseBlockNode) *Node {
@@ -1323,7 +1327,7 @@ type CaseBlock struct {
 func (f *NodeFactory) NewCaseBlock(clauses *CaseClausesList) *Node {
 	data := &CaseBlock{}
 	data.Clauses = clauses
-	return f.newNode(KindCaseBlock, data.AsNode(), data)
+	return f.newNode(KindCaseBlock, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateCaseBlock(node *CaseBlock, clauses *CaseClausesList) *Node {
@@ -1369,7 +1373,7 @@ func (f *NodeFactory) NewCaseOrDefaultClause(kind Kind, expression *Expression, 
 	data := &CaseOrDefaultClause{}
 	data.Expression = expression
 	data.Statements = statements
-	return f.newNode(kind, data.AsNode(), data)
+	return f.newNode(kind, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateCaseOrDefaultClause(node *CaseOrDefaultClause, expression *Expression, statements *StatementList) *Node {
@@ -1417,7 +1421,7 @@ type ThrowStatement struct {
 func (f *NodeFactory) NewThrowStatement(expression *Expression) *Node {
 	data := &ThrowStatement{}
 	data.Expression = expression
-	return f.newNode(KindThrowStatement, data.AsNode(), data)
+	return f.newNode(KindThrowStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateThrowStatement(node *ThrowStatement, expression *Expression) *Node {
@@ -1464,7 +1468,7 @@ func (f *NodeFactory) NewTryStatement(tryBlock *BlockNode, catchClause *CatchCla
 	data.TryBlock = tryBlock
 	data.CatchClause = catchClause
 	data.FinallyBlock = finallyBlock
-	return f.newNode(KindTryStatement, data.AsNode(), data)
+	return f.newNode(KindTryStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTryStatement(node *TryStatement, tryBlock *BlockNode, catchClause *CatchClauseNode, finallyBlock *BlockNode) *Node {
@@ -1512,7 +1516,7 @@ func (f *NodeFactory) NewCatchClause(variableDeclaration *VariableDeclarationNod
 	data := &CatchClause{}
 	data.VariableDeclaration = variableDeclaration
 	data.Block = block
-	return f.newNode(KindCatchClause, data.AsNode(), data)
+	return f.newNode(KindCatchClause, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateCatchClause(node *CatchClause, variableDeclaration *VariableDeclarationNode, block *BlockNode) *Node {
@@ -1548,7 +1552,7 @@ type DebuggerStatement struct {
 
 func (f *NodeFactory) NewDebuggerStatement() *Node {
 	data := &DebuggerStatement{}
-	return f.newNode(KindDebuggerStatement, data.AsNode(), data)
+	return f.newNode(KindDebuggerStatement, data.AsNode())
 }
 
 func (node *DebuggerStatement) Clone(f NodeFactoryCoercible) *Node {
@@ -1573,7 +1577,7 @@ func (f *NodeFactory) NewLabeledStatement(label *IdentifierNode, statement *Stat
 	data := &LabeledStatement{}
 	data.Label = label
 	data.Statement = statement
-	return f.newNode(KindLabeledStatement, data.AsNode(), data)
+	return f.newNode(KindLabeledStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateLabeledStatement(node *LabeledStatement, label *IdentifierNode, statement *Statement) *Node {
@@ -1616,7 +1620,7 @@ type ExpressionStatement struct {
 func (f *NodeFactory) NewExpressionStatement(expression *Expression) *Node {
 	data := f.expressionStatementArena.New()
 	data.Expression = expression
-	return f.newNode(KindExpressionStatement, data.AsNode(), data)
+	return f.newNode(KindExpressionStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateExpressionStatement(node *ExpressionStatement, expression *Expression) *Node {
@@ -1662,7 +1666,7 @@ func (f *NodeFactory) NewBlock(statements *StatementList, multiLine bool) *Node 
 	data := f.blockArena.New()
 	data.Statements = statements
 	data.MultiLine = multiLine
-	return f.newNode(KindBlock, data.AsNode(), data)
+	return f.newNode(KindBlock, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateBlock(node *Block, statements *StatementList, multiLine bool) *Node {
@@ -1707,7 +1711,7 @@ func (f *NodeFactory) NewVariableStatement(modifiers *ModifierList, declarationL
 	data := f.variableStatementArena.New()
 	data.modifiers = modifiers
 	data.DeclarationList = declarationList
-	return f.newNode(KindVariableStatement, data.AsNode(), data)
+	return f.newNode(KindVariableStatement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateVariableStatement(node *VariableStatement, modifiers *ModifierList, declarationList *VariableDeclarationListNode) *Node {
@@ -1754,7 +1758,7 @@ func (f *NodeFactory) NewVariableDeclaration(name *BindingName, exclamationToken
 	data.ExclamationToken = exclamationToken
 	data.Type = typeNode
 	data.Initializer = initializer
-	return f.newNode(KindVariableDeclaration, data.AsNode(), data)
+	return f.newNode(KindVariableDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateVariableDeclaration(node *VariableDeclaration, name *BindingName, exclamationToken *ExclamationToken, typeNode *TypeNode, initializer *Expression) *Node {
@@ -1800,7 +1804,7 @@ type VariableDeclarationList struct {
 func (f *NodeFactory) NewVariableDeclarationList(declarations *VariableDeclarationNodeList, flags NodeFlags) *Node {
 	data := f.variableDeclarationListArena.New()
 	data.Declarations = declarations
-	node := f.newNode(KindVariableDeclarationList, data.AsNode(), data)
+	node := f.newNode(KindVariableDeclarationList, data.AsNode())
 	node.Flags = flags
 	return node
 }
@@ -1841,7 +1845,7 @@ type BindingPattern struct {
 func (f *NodeFactory) NewBindingPattern(kind Kind, elements *BindingElementList) *Node {
 	data := &BindingPattern{}
 	data.Elements = elements
-	return f.newNode(kind, data.AsNode(), data)
+	return f.newNode(kind, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateBindingPattern(node *BindingPattern, elements *BindingElementList) *Node {
@@ -1895,7 +1899,7 @@ func (f *NodeFactory) NewParameterDeclaration(modifiers *ModifierList, dotDotDot
 	data.QuestionToken = questionToken
 	data.Type = typeNode
 	data.Initializer = initializer
-	return f.newNode(KindParameter, data.AsNode(), data)
+	return f.newNode(KindParameter, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateParameterDeclaration(node *ParameterDeclaration, modifiers *ModifierList, dotDotDotToken *DotDotDotToken, name *BindingName, questionToken *QuestionToken, typeNode *TypeNode, initializer *Expression) *Node {
@@ -1952,7 +1956,7 @@ func (f *NodeFactory) NewBindingElement(dotDotDotToken *DotDotDotToken, property
 	data.PropertyName = propertyName
 	data.name = name
 	data.Initializer = initializer
-	return f.newNode(KindBindingElement, data.AsNode(), data)
+	return f.newNode(KindBindingElement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateBindingElement(node *BindingElement, dotDotDotToken *DotDotDotToken, propertyName *PropertyName, name *BindingName, initializer *Expression) *Node {
@@ -1998,7 +2002,7 @@ type MissingDeclaration struct {
 func (f *NodeFactory) NewMissingDeclaration(modifiers *ModifierList) *Node {
 	data := &MissingDeclaration{}
 	data.modifiers = modifiers
-	return f.newNode(KindMissingDeclaration, data.AsNode(), data)
+	return f.newNode(KindMissingDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateMissingDeclaration(node *MissingDeclaration, modifiers *ModifierList) *Node {
@@ -2049,7 +2053,7 @@ func (f *NodeFactory) NewFunctionDeclaration(modifiers *ModifierList, asteriskTo
 	data.Type = typeNode
 	data.FullSignature = fullSignature
 	data.Body = body
-	return f.newNode(KindFunctionDeclaration, data.AsNode(), data)
+	return f.newNode(KindFunctionDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateFunctionDeclaration(node *FunctionDeclaration, modifiers *ModifierList, asteriskToken *AsteriskToken, name *IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
@@ -2103,7 +2107,7 @@ func (f *NodeFactory) NewClassDeclaration(modifiers *ModifierList, name *Identif
 	data.TypeParameters = typeParameters
 	data.HeritageClauses = heritageClauses
 	data.Members = members
-	return f.newNode(KindClassDeclaration, data.AsNode(), data)
+	return f.newNode(KindClassDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateClassDeclaration(node *ClassDeclaration, modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) *Node {
@@ -2154,7 +2158,7 @@ func (f *NodeFactory) NewClassExpression(modifiers *ModifierList, name *Identifi
 	data.TypeParameters = typeParameters
 	data.HeritageClauses = heritageClauses
 	data.Members = members
-	return f.newNode(KindClassExpression, data.AsNode(), data)
+	return f.newNode(KindClassExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateClassExpression(node *ClassExpression, modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) *Node {
@@ -2203,7 +2207,7 @@ func (f *NodeFactory) NewHeritageClause(token Kind, types *HeritageClauseElement
 	data := f.heritageClauseArena.New()
 	data.Token = token
 	data.Types = types
-	return f.newNode(KindHeritageClause, data.AsNode(), data)
+	return f.newNode(KindHeritageClause, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateHeritageClause(node *HeritageClause, token Kind, types *HeritageClauseElementList) *Node {
@@ -2252,7 +2256,7 @@ func (f *NodeFactory) NewInterfaceDeclaration(modifiers *ModifierList, name *Ide
 	data.TypeParameters = typeParameters
 	data.HeritageClauses = heritageClauses
 	data.Members = members
-	return f.newNode(KindInterfaceDeclaration, data.AsNode(), data)
+	return f.newNode(KindInterfaceDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateInterfaceDeclaration(node *InterfaceDeclaration, modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *TypeElementList) *Node {
@@ -2308,7 +2312,7 @@ func (f *NodeFactory) NewTypeAliasDeclaration(modifiers *ModifierList, name *Ide
 	data.name = name
 	data.TypeParameters = typeParameters
 	data.Type = typeNode
-	return f.newNode(KindTypeAliasDeclaration, data.AsNode(), data)
+	return f.newNode(KindTypeAliasDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) NewJSTypeAliasDeclaration(modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, typeNode *TypeNode) *Node {
@@ -2317,7 +2321,7 @@ func (f *NodeFactory) NewJSTypeAliasDeclaration(modifiers *ModifierList, name *I
 	data.name = name
 	data.TypeParameters = typeParameters
 	data.Type = typeNode
-	return f.newNode(KindJSTypeAliasDeclaration, data.AsNode(), data)
+	return f.newNode(KindJSTypeAliasDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTypeAliasDeclaration(node *TypeAliasDeclaration, modifiers *ModifierList, name *IdentifierNode, typeParameters *TypeParameterList, typeNode *TypeNode) *Node {
@@ -2384,7 +2388,7 @@ func (f *NodeFactory) NewEnumMember(name *PropertyName, initializer *Expression)
 	data := &EnumMember{}
 	data.name = name
 	data.Initializer = initializer
-	return f.newNode(KindEnumMember, data.AsNode(), data)
+	return f.newNode(KindEnumMember, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateEnumMember(node *EnumMember, name *PropertyName, initializer *Expression) *Node {
@@ -2433,7 +2437,7 @@ func (f *NodeFactory) NewEnumDeclaration(modifiers *ModifierList, name *Identifi
 	data.modifiers = modifiers
 	data.name = name
 	data.Members = members
-	return f.newNode(KindEnumDeclaration, data.AsNode(), data)
+	return f.newNode(KindEnumDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateEnumDeclaration(node *EnumDeclaration, modifiers *ModifierList, name *IdentifierNode, members *EnumMemberList) *Node {
@@ -2476,7 +2480,7 @@ type ModuleBlock struct {
 func (f *NodeFactory) NewModuleBlock(statements *StatementList) *Node {
 	data := &ModuleBlock{}
 	data.Statements = statements
-	return f.newNode(KindModuleBlock, data.AsNode(), data)
+	return f.newNode(KindModuleBlock, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateModuleBlock(node *ModuleBlock, statements *StatementList) *Node {
@@ -2516,7 +2520,7 @@ type NotEmittedStatement struct {
 
 func (f *NodeFactory) NewNotEmittedStatement() *Node {
 	data := &NotEmittedStatement{}
-	return f.newNode(KindNotEmittedStatement, data.AsNode(), data)
+	return f.newNode(KindNotEmittedStatement, data.AsNode())
 }
 
 func (node *NotEmittedStatement) Clone(f NodeFactoryCoercible) *Node {
@@ -2539,7 +2543,7 @@ type NotEmittedTypeElement struct {
 
 func (f *NodeFactory) NewNotEmittedTypeElement() *Node {
 	data := &NotEmittedTypeElement{}
-	return f.newNode(KindNotEmittedTypeElement, data.AsNode(), data)
+	return f.newNode(KindNotEmittedTypeElement, data.AsNode())
 }
 
 func (node *NotEmittedTypeElement) Clone(f NodeFactoryCoercible) *Node {
@@ -2570,7 +2574,7 @@ func (f *NodeFactory) NewImportDeclaration(modifiers *ModifierList, importClause
 	data.ImportClause = importClause
 	data.ModuleSpecifier = moduleSpecifier
 	data.Attributes = attributes
-	return f.newNode(KindImportDeclaration, data.AsNode(), data)
+	return f.newNode(KindImportDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) NewJSImportDeclaration(modifiers *ModifierList, importClause *ImportClauseNode, moduleSpecifier *Expression, attributes *ImportAttributesNode) *Node {
@@ -2579,7 +2583,7 @@ func (f *NodeFactory) NewJSImportDeclaration(modifiers *ModifierList, importClau
 	data.ImportClause = importClause
 	data.ModuleSpecifier = moduleSpecifier
 	data.Attributes = attributes
-	return f.newNode(KindJSImportDeclaration, data.AsNode(), data)
+	return f.newNode(KindJSImportDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateImportDeclaration(node *ImportDeclaration, modifiers *ModifierList, importClause *ImportClauseNode, moduleSpecifier *Expression, attributes *ImportAttributesNode) *Node {
@@ -2645,7 +2649,7 @@ type ExternalModuleReference struct {
 func (f *NodeFactory) NewExternalModuleReference(expression *Expression) *Node {
 	data := &ExternalModuleReference{}
 	data.Expression = expression
-	return f.newNode(KindExternalModuleReference, data.AsNode(), data)
+	return f.newNode(KindExternalModuleReference, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateExternalModuleReference(node *ExternalModuleReference, expression *Expression) *Node {
@@ -2689,7 +2693,7 @@ type NamespaceImport struct {
 func (f *NodeFactory) NewNamespaceImport(name *IdentifierNode) *Node {
 	data := &NamespaceImport{}
 	data.name = name
-	return f.newNode(KindNamespaceImport, data.AsNode(), data)
+	return f.newNode(KindNamespaceImport, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateNamespaceImport(node *NamespaceImport, name *IdentifierNode) *Node {
@@ -2736,7 +2740,7 @@ type NamedImports struct {
 func (f *NodeFactory) NewNamedImports(elements *ImportSpecifierList) *Node {
 	data := &NamedImports{}
 	data.Elements = elements
-	return f.newNode(KindNamedImports, data.AsNode(), data)
+	return f.newNode(KindNamedImports, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateNamedImports(node *NamedImports, elements *ImportSpecifierList) *Node {
@@ -2786,7 +2790,7 @@ func (f *NodeFactory) NewExportAssignment(modifiers *ModifierList, isExportEqual
 	data.IsExportEquals = isExportEquals
 	data.Type = typeNode
 	data.Expression = expression
-	return f.newNode(KindExportAssignment, data.AsNode(), data)
+	return f.newNode(KindExportAssignment, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateExportAssignment(node *ExportAssignment, modifiers *ModifierList, isExportEquals bool, typeNode *TypeNode, expression *Expression) *Node {
@@ -2828,7 +2832,7 @@ func (f *NodeFactory) NewNamespaceExportDeclaration(modifiers *ModifierList, nam
 	data := &NamespaceExportDeclaration{}
 	data.modifiers = modifiers
 	data.name = name
-	return f.newNode(KindNamespaceExportDeclaration, data.AsNode(), data)
+	return f.newNode(KindNamespaceExportDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateNamespaceExportDeclaration(node *NamespaceExportDeclaration, modifiers *ModifierList, name *IdentifierNode) *Node {
@@ -2871,7 +2875,7 @@ type NamespaceExport struct {
 func (f *NodeFactory) NewNamespaceExport(name *ModuleExportName) *Node {
 	data := &NamespaceExport{}
 	data.name = name
-	return f.newNode(KindNamespaceExport, data.AsNode(), data)
+	return f.newNode(KindNamespaceExport, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateNamespaceExport(node *NamespaceExport, name *ModuleExportName) *Node {
@@ -2918,7 +2922,7 @@ type NamedExports struct {
 func (f *NodeFactory) NewNamedExports(elements *ExportSpecifierList) *Node {
 	data := &NamedExports{}
 	data.Elements = elements
-	return f.newNode(KindNamedExports, data.AsNode(), data)
+	return f.newNode(KindNamedExports, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateNamedExports(node *NamedExports, elements *ExportSpecifierList) *Node {
@@ -2967,7 +2971,7 @@ func (f *NodeFactory) NewExportSpecifier(isTypeOnly bool, propertyName *ModuleEx
 	data.IsTypeOnly = isTypeOnly
 	data.PropertyName = propertyName
 	data.name = name
-	return f.newNode(KindExportSpecifier, data.AsNode(), data)
+	return f.newNode(KindExportSpecifier, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateExportSpecifier(node *ExportSpecifier, isTypeOnly bool, propertyName *ModuleExportName, name *ModuleExportName) *Node {
@@ -3014,7 +3018,7 @@ func (f *NodeFactory) NewCallSignatureDeclaration(typeParameters *TypeParameterL
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
 	data.Type = typeNode
-	return f.newNode(KindCallSignature, data.AsNode(), data)
+	return f.newNode(KindCallSignature, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateCallSignatureDeclaration(node *CallSignatureDeclaration, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
@@ -3057,7 +3061,7 @@ func (f *NodeFactory) NewConstructSignatureDeclaration(typeParameters *TypeParam
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
 	data.Type = typeNode
-	return f.newNode(KindConstructSignature, data.AsNode(), data)
+	return f.newNode(KindConstructSignature, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateConstructSignatureDeclaration(node *ConstructSignatureDeclaration, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
@@ -3105,7 +3109,7 @@ func (f *NodeFactory) NewConstructorDeclaration(modifiers *ModifierList, typePar
 	data.Type = typeNode
 	data.FullSignature = fullSignature
 	data.Body = body
-	return f.newNode(KindConstructor, data.AsNode(), data)
+	return f.newNode(KindConstructor, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateConstructorDeclaration(node *ConstructorDeclaration, modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
@@ -3153,7 +3157,7 @@ func (f *NodeFactory) NewGetAccessorDeclaration(modifiers *ModifierList, name *P
 	data.Type = typeNode
 	data.FullSignature = fullSignature
 	data.Body = body
-	return f.newNode(KindGetAccessor, data.AsNode(), data)
+	return f.newNode(KindGetAccessor, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateGetAccessorDeclaration(node *GetAccessorDeclaration, modifiers *ModifierList, name *PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
@@ -3206,7 +3210,7 @@ func (f *NodeFactory) NewSetAccessorDeclaration(modifiers *ModifierList, name *P
 	data.Type = typeNode
 	data.FullSignature = fullSignature
 	data.Body = body
-	return f.newNode(KindSetAccessor, data.AsNode(), data)
+	return f.newNode(KindSetAccessor, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateSetAccessorDeclaration(node *SetAccessorDeclaration, modifiers *ModifierList, name *PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
@@ -3261,7 +3265,7 @@ func (f *NodeFactory) NewIndexSignatureDeclaration(modifiers *ModifierList, para
 	data.modifiers = modifiers
 	data.Parameters = parameters
 	data.Type = typeNode
-	return f.newNode(KindIndexSignature, data.AsNode(), data)
+	return f.newNode(KindIndexSignature, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateIndexSignatureDeclaration(node *IndexSignatureDeclaration, modifiers *ModifierList, parameters *ParameterList, typeNode *TypeNode) *Node {
@@ -3308,7 +3312,7 @@ func (f *NodeFactory) NewMethodSignatureDeclaration(modifiers *ModifierList, nam
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
 	data.Type = typeNode
-	return f.newNode(KindMethodSignature, data.AsNode(), data)
+	return f.newNode(KindMethodSignature, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateMethodSignatureDeclaration(node *MethodSignatureDeclaration, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
@@ -3369,7 +3373,7 @@ func (f *NodeFactory) NewMethodDeclaration(modifiers *ModifierList, asteriskToke
 	data.Type = typeNode
 	data.FullSignature = fullSignature
 	data.Body = body
-	return f.newNode(KindMethodDeclaration, data.AsNode(), data)
+	return f.newNode(KindMethodDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateMethodDeclaration(node *MethodDeclaration, modifiers *ModifierList, asteriskToken *AsteriskToken, name *PropertyName, postfixToken *TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
@@ -3428,7 +3432,7 @@ func (f *NodeFactory) NewPropertySignatureDeclaration(modifiers *ModifierList, n
 	data.PostfixToken = postfixToken
 	data.Type = typeNode
 	data.Initializer = initializer
-	return f.newNode(KindPropertySignature, data.AsNode(), data)
+	return f.newNode(KindPropertySignature, data.AsNode())
 }
 
 func (f *NodeFactory) UpdatePropertySignatureDeclaration(node *PropertySignatureDeclaration, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
@@ -3483,7 +3487,7 @@ func (f *NodeFactory) NewPropertyDeclaration(modifiers *ModifierList, name *Prop
 	data.PostfixToken = postfixToken
 	data.Type = typeNode
 	data.Initializer = initializer
-	return f.newNode(KindPropertyDeclaration, data.AsNode(), data)
+	return f.newNode(KindPropertyDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdatePropertyDeclaration(node *PropertyDeclaration, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
@@ -3529,7 +3533,7 @@ type SemicolonClassElement struct {
 
 func (f *NodeFactory) NewSemicolonClassElement() *Node {
 	data := &SemicolonClassElement{}
-	return f.newNode(KindSemicolonClassElement, data.AsNode(), data)
+	return f.newNode(KindSemicolonClassElement, data.AsNode())
 }
 
 func (node *SemicolonClassElement) Clone(f NodeFactoryCoercible) *Node {
@@ -3559,7 +3563,7 @@ func (f *NodeFactory) NewClassStaticBlockDeclaration(modifiers *ModifierList, bo
 	data := &ClassStaticBlockDeclaration{}
 	data.modifiers = modifiers
 	data.Body = body
-	return f.newNode(KindClassStaticBlockDeclaration, data.AsNode(), data)
+	return f.newNode(KindClassStaticBlockDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateClassStaticBlockDeclaration(node *ClassStaticBlockDeclaration, modifiers *ModifierList, body *BlockNode) *Node {
@@ -3595,7 +3599,7 @@ type OmittedExpression struct {
 
 func (f *NodeFactory) NewOmittedExpression() *Node {
 	data := &OmittedExpression{}
-	return f.newNode(KindOmittedExpression, data.AsNode(), data)
+	return f.newNode(KindOmittedExpression, data.AsNode())
 }
 
 func (node *OmittedExpression) Clone(f NodeFactoryCoercible) *Node {
@@ -3617,7 +3621,7 @@ type KeywordExpression struct {
 
 func (f *NodeFactory) NewKeywordExpression(kind KeywordExpressionSyntaxKind) *Node {
 	data := f.keywordExpressionArena.New()
-	return f.newNode(kind, data.AsNode(), data)
+	return f.newNode(kind, data.AsNode())
 }
 
 func (node *KeywordExpression) Clone(f NodeFactoryCoercible) *Node {
@@ -3645,7 +3649,7 @@ func (f *NodeFactory) NewStringLiteral(text string, tokenFlags TokenFlags) *Node
 	data.Text = text
 	data.TokenFlags = tokenFlags & TokenFlagsStringLiteralFlags
 	f.textCount++
-	return f.newNode(KindStringLiteral, data.AsNode(), data)
+	return f.newNode(KindStringLiteral, data.AsNode())
 }
 
 func (node *StringLiteral) Clone(f NodeFactoryCoercible) *Node {
@@ -3669,7 +3673,7 @@ func (f *NodeFactory) NewNumericLiteral(text string, tokenFlags TokenFlags) *Nod
 	data.Text = text
 	data.TokenFlags = tokenFlags & TokenFlagsNumericLiteralFlags
 	f.textCount++
-	return f.newNode(KindNumericLiteral, data.AsNode(), data)
+	return f.newNode(KindNumericLiteral, data.AsNode())
 }
 
 func (node *NumericLiteral) Clone(f NodeFactoryCoercible) *Node {
@@ -3693,7 +3697,7 @@ func (f *NodeFactory) NewBigIntLiteral(text string, tokenFlags TokenFlags) *Node
 	data.Text = text
 	data.TokenFlags = tokenFlags & TokenFlagsNumericLiteralFlags
 	f.textCount++
-	return f.newNode(KindBigIntLiteral, data.AsNode(), data)
+	return f.newNode(KindBigIntLiteral, data.AsNode())
 }
 
 func (node *BigIntLiteral) Clone(f NodeFactoryCoercible) *Node {
@@ -3717,7 +3721,7 @@ func (f *NodeFactory) NewRegularExpressionLiteral(text string, tokenFlags TokenF
 	data.Text = text
 	data.TokenFlags = tokenFlags & TokenFlagsRegularExpressionLiteralFlags
 	f.textCount++
-	return f.newNode(KindRegularExpressionLiteral, data.AsNode(), data)
+	return f.newNode(KindRegularExpressionLiteral, data.AsNode())
 }
 
 func (node *RegularExpressionLiteral) Clone(f NodeFactoryCoercible) *Node {
@@ -3743,7 +3747,7 @@ func (f *NodeFactory) NewNoSubstitutionTemplateLiteral(text string, templateFlag
 	data.Text = text
 	data.TemplateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
-	return f.newNode(KindNoSubstitutionTemplateLiteral, data.AsNode(), data)
+	return f.newNode(KindNoSubstitutionTemplateLiteral, data.AsNode())
 }
 
 func (node *NoSubstitutionTemplateLiteral) Clone(f NodeFactoryCoercible) *Node {
@@ -3776,7 +3780,7 @@ func (f *NodeFactory) NewBinaryExpression(modifiers *ModifierList, left *Express
 	data.Type = typeNode
 	data.OperatorToken = operatorToken
 	data.Right = right
-	return f.newNode(KindBinaryExpression, data.AsNode(), data)
+	return f.newNode(KindBinaryExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateBinaryExpression(node *BinaryExpression, modifiers *ModifierList, left *Expression, typeNode *TypeNode, operatorToken *BinaryOperatorToken, right *Expression) *Node {
@@ -3820,7 +3824,7 @@ func (f *NodeFactory) NewPrefixUnaryExpression(operator Kind, operand *Expressio
 	data := f.prefixUnaryExpressionArena.New()
 	data.Operator = operator
 	data.Operand = operand
-	return f.newNode(KindPrefixUnaryExpression, data.AsNode(), data)
+	return f.newNode(KindPrefixUnaryExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdatePrefixUnaryExpression(node *PrefixUnaryExpression, operator Kind, operand *Expression) *Node {
@@ -3864,7 +3868,7 @@ func (f *NodeFactory) NewPostfixUnaryExpression(operand *Expression, operator Ki
 	data := &PostfixUnaryExpression{}
 	data.Operand = operand
 	data.Operator = operator
-	return f.newNode(KindPostfixUnaryExpression, data.AsNode(), data)
+	return f.newNode(KindPostfixUnaryExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdatePostfixUnaryExpression(node *PostfixUnaryExpression, operand *Expression, operator Kind) *Node {
@@ -3908,7 +3912,7 @@ func (f *NodeFactory) NewYieldExpression(asteriskToken *AsteriskToken, expressio
 	data := &YieldExpression{}
 	data.AsteriskToken = asteriskToken
 	data.Expression = expression
-	return f.newNode(KindYieldExpression, data.AsNode(), data)
+	return f.newNode(KindYieldExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateYieldExpression(node *YieldExpression, asteriskToken *AsteriskToken, expression *Expression) *Node {
@@ -3957,7 +3961,7 @@ func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *
 	data.FullSignature = fullSignature
 	data.EqualsGreaterThanToken = equalsGreaterThanToken
 	data.Body = body
-	return f.newNode(KindArrowFunction, data.AsNode(), data)
+	return f.newNode(KindArrowFunction, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateArrowFunction(node *ArrowFunction, modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, equalsGreaterThanToken *EqualsGreaterThanToken, body *ConciseBody) *Node {
@@ -4014,7 +4018,7 @@ func (f *NodeFactory) NewFunctionExpression(modifiers *ModifierList, asteriskTok
 	data.Type = typeNode
 	data.FullSignature = fullSignature
 	data.Body = body
-	return f.newNode(KindFunctionExpression, data.AsNode(), data)
+	return f.newNode(KindFunctionExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateFunctionExpression(node *FunctionExpression, modifiers *ModifierList, asteriskToken *AsteriskToken, name *IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
@@ -4065,7 +4069,7 @@ func (f *NodeFactory) NewAsExpression(expression *Expression, typeNode *TypeNode
 	data := &AsExpression{}
 	data.Expression = expression
 	data.Type = typeNode
-	return f.newNode(KindAsExpression, data.AsNode(), data)
+	return f.newNode(KindAsExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateAsExpression(node *AsExpression, expression *Expression, typeNode *TypeNode) *Node {
@@ -4105,7 +4109,7 @@ func (f *NodeFactory) NewSatisfiesExpression(expression *Expression, typeNode *T
 	data := &SatisfiesExpression{}
 	data.Expression = expression
 	data.Type = typeNode
-	return f.newNode(KindSatisfiesExpression, data.AsNode(), data)
+	return f.newNode(KindSatisfiesExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateSatisfiesExpression(node *SatisfiesExpression, expression *Expression, typeNode *TypeNode) *Node {
@@ -4152,7 +4156,7 @@ func (f *NodeFactory) NewConditionalExpression(condition *Expression, questionTo
 	data.WhenTrue = whenTrue
 	data.ColonToken = colonToken
 	data.WhenFalse = whenFalse
-	return f.newNode(KindConditionalExpression, data.AsNode(), data)
+	return f.newNode(KindConditionalExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateConditionalExpression(node *ConditionalExpression, condition *Expression, questionToken *QuestionToken, whenTrue *Expression, colonToken *ColonToken, whenFalse *Expression) *Node {
@@ -4208,7 +4212,7 @@ func (f *NodeFactory) NewPropertyAccessExpression(expression *Expression, questi
 	data.Expression = expression
 	data.QuestionDotToken = questionDotToken
 	data.name = name
-	node := f.newNode(KindPropertyAccessExpression, data.AsNode(), data)
+	node := f.newNode(KindPropertyAccessExpression, data.AsNode())
 	node.Flags |= flags & NodeFlagsOptionalChain
 	return node
 }
@@ -4258,7 +4262,7 @@ func (f *NodeFactory) NewElementAccessExpression(expression *Expression, questio
 	data.Expression = expression
 	data.QuestionDotToken = questionDotToken
 	data.ArgumentExpression = argumentExpression
-	node := f.newNode(KindElementAccessExpression, data.AsNode(), data)
+	node := f.newNode(KindElementAccessExpression, data.AsNode())
 	node.Flags |= flags & NodeFlagsOptionalChain
 	return node
 }
@@ -4312,7 +4316,7 @@ func (f *NodeFactory) NewCallExpression(expression *Expression, questionDotToken
 	data.QuestionDotToken = questionDotToken
 	data.TypeArguments = typeArguments
 	data.Arguments = arguments
-	node := f.newNode(KindCallExpression, data.AsNode(), data)
+	node := f.newNode(KindCallExpression, data.AsNode())
 	node.Flags |= flags & NodeFlagsOptionalChain
 	return node
 }
@@ -4360,7 +4364,7 @@ func (f *NodeFactory) NewNewExpression(expression *Expression, typeArguments *Ty
 	data.Expression = expression
 	data.TypeArguments = typeArguments
 	data.Arguments = arguments
-	return f.newNode(KindNewExpression, data.AsNode(), data)
+	return f.newNode(KindNewExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateNewExpression(node *NewExpression, expression *Expression, typeArguments *TypeList, arguments *ElementList) *Node {
@@ -4402,7 +4406,7 @@ func (f *NodeFactory) NewMetaProperty(keywordToken Kind, name *IdentifierNode) *
 	data := &MetaProperty{}
 	data.KeywordToken = keywordToken
 	data.name = name
-	return f.newNode(KindMetaProperty, data.AsNode(), data)
+	return f.newNode(KindMetaProperty, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateMetaProperty(node *MetaProperty, keywordToken Kind, name *IdentifierNode) *Node {
@@ -4444,7 +4448,7 @@ type NonNullExpression struct {
 func (f *NodeFactory) NewNonNullExpression(expression *Expression, flags NodeFlags) *Node {
 	data := &NonNullExpression{}
 	data.Expression = expression
-	node := f.newNode(KindNonNullExpression, data.AsNode(), data)
+	node := f.newNode(KindNonNullExpression, data.AsNode())
 	node.Flags |= flags & NodeFlagsOptionalChain
 	return node
 }
@@ -4484,7 +4488,7 @@ type SpreadElement struct {
 func (f *NodeFactory) NewSpreadElement(expression *Expression) *Node {
 	data := &SpreadElement{}
 	data.Expression = expression
-	return f.newNode(KindSpreadElement, data.AsNode(), data)
+	return f.newNode(KindSpreadElement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateSpreadElement(node *SpreadElement, expression *Expression) *Node {
@@ -4525,7 +4529,7 @@ func (f *NodeFactory) NewTemplateExpression(head *TemplateHeadNode, templateSpan
 	data := &TemplateExpression{}
 	data.Head = head
 	data.TemplateSpans = templateSpans
-	return f.newNode(KindTemplateExpression, data.AsNode(), data)
+	return f.newNode(KindTemplateExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTemplateExpression(node *TemplateExpression, head *TemplateHeadNode, templateSpans *TemplateSpanList) *Node {
@@ -4570,7 +4574,7 @@ func (f *NodeFactory) NewTemplateSpan(expression *Expression, literal *TemplateM
 	data := &TemplateSpan{}
 	data.Expression = expression
 	data.Literal = literal
-	return f.newNode(KindTemplateSpan, data.AsNode(), data)
+	return f.newNode(KindTemplateSpan, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTemplateSpan(node *TemplateSpan, expression *Expression, literal *TemplateMiddleOrTail) *Node {
@@ -4620,7 +4624,7 @@ func (f *NodeFactory) NewTaggedTemplateExpression(tag *Expression, questionDotTo
 	data.QuestionDotToken = questionDotToken
 	data.TypeArguments = typeArguments
 	data.Template = template
-	node := f.newNode(KindTaggedTemplateExpression, data.AsNode(), data)
+	node := f.newNode(KindTaggedTemplateExpression, data.AsNode())
 	node.Flags |= flags & NodeFlagsOptionalChain
 	return node
 }
@@ -4663,7 +4667,7 @@ type ParenthesizedExpression struct {
 func (f *NodeFactory) NewParenthesizedExpression(expression *Expression) *Node {
 	data := f.parenthesizedExpressionArena.New()
 	data.Expression = expression
-	return f.newNode(KindParenthesizedExpression, data.AsNode(), data)
+	return f.newNode(KindParenthesizedExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateParenthesizedExpression(node *ParenthesizedExpression, expression *Expression) *Node {
@@ -4708,7 +4712,7 @@ func (f *NodeFactory) NewArrayLiteralExpression(elements *ElementList, multiLine
 	data := &ArrayLiteralExpression{}
 	data.Elements = elements
 	data.MultiLine = multiLine
-	return f.newNode(KindArrayLiteralExpression, data.AsNode(), data)
+	return f.newNode(KindArrayLiteralExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateArrayLiteralExpression(node *ArrayLiteralExpression, elements *ElementList, multiLine bool) *Node {
@@ -4754,7 +4758,7 @@ func (f *NodeFactory) NewObjectLiteralExpression(properties *NodeList, multiLine
 	data := &ObjectLiteralExpression{}
 	data.Properties = properties
 	data.MultiLine = multiLine
-	return f.newNode(KindObjectLiteralExpression, data.AsNode(), data)
+	return f.newNode(KindObjectLiteralExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateObjectLiteralExpression(node *ObjectLiteralExpression, properties *NodeList, multiLine bool) *Node {
@@ -4798,7 +4802,7 @@ type SpreadAssignment struct {
 func (f *NodeFactory) NewSpreadAssignment(expression *Expression) *Node {
 	data := &SpreadAssignment{}
 	data.Expression = expression
-	return f.newNode(KindSpreadAssignment, data.AsNode(), data)
+	return f.newNode(KindSpreadAssignment, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateSpreadAssignment(node *SpreadAssignment, expression *Expression) *Node {
@@ -4845,7 +4849,7 @@ func (f *NodeFactory) NewPropertyAssignment(modifiers *ModifierList, name *Prope
 	data.PostfixToken = postfixToken
 	data.Type = typeNode
 	data.Initializer = initializer
-	return f.newNode(KindPropertyAssignment, data.AsNode(), data)
+	return f.newNode(KindPropertyAssignment, data.AsNode())
 }
 
 func (f *NodeFactory) UpdatePropertyAssignment(node *PropertyAssignment, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
@@ -4902,7 +4906,7 @@ func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers *ModifierList, na
 	data.Type = typeNode
 	data.EqualsToken = equalsToken
 	data.ObjectAssignmentInitializer = objectAssignmentInitializer
-	return f.newNode(KindShorthandPropertyAssignment, data.AsNode(), data)
+	return f.newNode(KindShorthandPropertyAssignment, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateShorthandPropertyAssignment(node *ShorthandPropertyAssignment, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, equalsToken *EqualsToken, objectAssignmentInitializer *Expression) *Node {
@@ -4949,7 +4953,7 @@ type DeleteExpression struct {
 func (f *NodeFactory) NewDeleteExpression(expression *Expression) *Node {
 	data := &DeleteExpression{}
 	data.Expression = expression
-	return f.newNode(KindDeleteExpression, data.AsNode(), data)
+	return f.newNode(KindDeleteExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateDeleteExpression(node *DeleteExpression, expression *Expression) *Node {
@@ -4991,7 +4995,7 @@ type TypeOfExpression struct {
 func (f *NodeFactory) NewTypeOfExpression(expression *Expression) *Node {
 	data := &TypeOfExpression{}
 	data.Expression = expression
-	return f.newNode(KindTypeOfExpression, data.AsNode(), data)
+	return f.newNode(KindTypeOfExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTypeOfExpression(node *TypeOfExpression, expression *Expression) *Node {
@@ -5033,7 +5037,7 @@ type VoidExpression struct {
 func (f *NodeFactory) NewVoidExpression(expression *Expression) *Node {
 	data := &VoidExpression{}
 	data.Expression = expression
-	return f.newNode(KindVoidExpression, data.AsNode(), data)
+	return f.newNode(KindVoidExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateVoidExpression(node *VoidExpression, expression *Expression) *Node {
@@ -5075,7 +5079,7 @@ type AwaitExpression struct {
 func (f *NodeFactory) NewAwaitExpression(expression *Expression) *Node {
 	data := &AwaitExpression{}
 	data.Expression = expression
-	return f.newNode(KindAwaitExpression, data.AsNode(), data)
+	return f.newNode(KindAwaitExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateAwaitExpression(node *AwaitExpression, expression *Expression) *Node {
@@ -5115,7 +5119,7 @@ func (f *NodeFactory) NewTypeAssertion(typeNode *TypeNode, expression *Expressio
 	data := &TypeAssertion{}
 	data.Type = typeNode
 	data.Expression = expression
-	return f.newNode(KindTypeAssertionExpression, data.AsNode(), data)
+	return f.newNode(KindTypeAssertionExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTypeAssertion(node *TypeAssertion, typeNode *TypeNode, expression *Expression) *Node {
@@ -5151,7 +5155,7 @@ type KeywordTypeNode struct {
 
 func (f *NodeFactory) NewKeywordTypeNode(kind KeywordTypeSyntaxKind) *Node {
 	data := f.keywordTypeNodeArena.New()
-	return f.newNode(kind, data.AsNode(), data)
+	return f.newNode(kind, data.AsNode())
 }
 
 func (node *KeywordTypeNode) Clone(f NodeFactoryCoercible) *Node {
@@ -5177,7 +5181,7 @@ type UnionTypeNode struct {
 func (f *NodeFactory) NewUnionTypeNode(types *TypeList) *Node {
 	data := f.unionTypeNodeArena.New()
 	data.Types = types
-	return f.newNode(KindUnionType, data.AsNode(), data)
+	return f.newNode(KindUnionType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateUnionTypeNode(node *UnionTypeNode, types *TypeList) *Node {
@@ -5214,7 +5218,7 @@ type IntersectionTypeNode struct {
 func (f *NodeFactory) NewIntersectionTypeNode(types *TypeList) *Node {
 	data := f.intersectionTypeNodeArena.New()
 	data.Types = types
-	return f.newNode(KindIntersectionType, data.AsNode(), data)
+	return f.newNode(KindIntersectionType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateIntersectionTypeNode(node *IntersectionTypeNode, types *TypeList) *Node {
@@ -5259,7 +5263,7 @@ func (f *NodeFactory) NewConditionalTypeNode(checkType *TypeNode, extendsType *T
 	data.ExtendsType = extendsType
 	data.TrueType = trueType
 	data.FalseType = falseType
-	return f.newNode(KindConditionalType, data.AsNode(), data)
+	return f.newNode(KindConditionalType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateConditionalTypeNode(node *ConditionalTypeNode, checkType *TypeNode, extendsType *TypeNode, trueType *TypeNode, falseType *TypeNode) *Node {
@@ -5302,7 +5306,7 @@ func (f *NodeFactory) NewTypeOperatorNode(operator Kind, typeNode *TypeNode) *No
 	data := f.typeOperatorNodeArena.New()
 	data.Operator = operator
 	data.Type = typeNode
-	return f.newNode(KindTypeOperator, data.AsNode(), data)
+	return f.newNode(KindTypeOperator, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTypeOperatorNode(node *TypeOperatorNode, operator Kind, typeNode *TypeNode) *Node {
@@ -5340,7 +5344,7 @@ type InferTypeNode struct {
 func (f *NodeFactory) NewInferTypeNode(typeParameter *TypeParameterDeclarationNode) *Node {
 	data := &InferTypeNode{}
 	data.TypeParameter = typeParameter
-	return f.newNode(KindInferType, data.AsNode(), data)
+	return f.newNode(KindInferType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateInferTypeNode(node *InferTypeNode, typeParameter *TypeParameterDeclarationNode) *Node {
@@ -5378,7 +5382,7 @@ type ArrayTypeNode struct {
 func (f *NodeFactory) NewArrayTypeNode(elementType *TypeNode) *Node {
 	data := f.arrayTypeNodeArena.New()
 	data.ElementType = elementType
-	return f.newNode(KindArrayType, data.AsNode(), data)
+	return f.newNode(KindArrayType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateArrayTypeNode(node *ArrayTypeNode, elementType *TypeNode) *Node {
@@ -5418,7 +5422,7 @@ func (f *NodeFactory) NewIndexedAccessTypeNode(objectType *TypeNode, indexType *
 	data := f.indexedAccessTypeNodeArena.New()
 	data.ObjectType = objectType
 	data.IndexType = indexType
-	return f.newNode(KindIndexedAccessType, data.AsNode(), data)
+	return f.newNode(KindIndexedAccessType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateIndexedAccessTypeNode(node *IndexedAccessTypeNode, objectType *TypeNode, indexType *TypeNode) *Node {
@@ -5457,7 +5461,7 @@ func (f *NodeFactory) NewTypeReferenceNode(typeName *EntityName, typeArguments *
 	data := f.typeReferenceNodeArena.New()
 	data.TypeName = typeName
 	data.TypeArguments = typeArguments
-	return f.newNode(KindTypeReference, data.AsNode(), data)
+	return f.newNode(KindTypeReference, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTypeReferenceNode(node *TypeReferenceNode, typeName *EntityName, typeArguments *TypeList) *Node {
@@ -5498,7 +5502,7 @@ func (f *NodeFactory) NewExpressionWithTypeArguments(expression *Expression, typ
 	data := f.expressionWithTypeArgumentsArena.New()
 	data.Expression = expression
 	data.TypeArguments = typeArguments
-	return f.newNode(KindExpressionWithTypeArguments, data.AsNode(), data)
+	return f.newNode(KindExpressionWithTypeArguments, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateExpressionWithTypeArguments(node *ExpressionWithTypeArguments, expression *Expression, typeArguments *TypeList) *Node {
@@ -5536,7 +5540,7 @@ type LiteralTypeNode struct {
 func (f *NodeFactory) NewLiteralTypeNode(literal *Node) *Node {
 	data := f.literalTypeNodeArena.New()
 	data.Literal = literal
-	return f.newNode(KindLiteralType, data.AsNode(), data)
+	return f.newNode(KindLiteralType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateLiteralTypeNode(node *LiteralTypeNode, literal *Node) *Node {
@@ -5572,7 +5576,7 @@ type ThisTypeNode struct {
 
 func (f *NodeFactory) NewThisTypeNode() *Node {
 	data := &ThisTypeNode{}
-	return f.newNode(KindThisType, data.AsNode(), data)
+	return f.newNode(KindThisType, data.AsNode())
 }
 
 func (node *ThisTypeNode) Clone(f NodeFactoryCoercible) *Node {
@@ -5599,7 +5603,7 @@ func (f *NodeFactory) NewTypePredicateNode(assertsModifier *AssertsKeyword, para
 	data.AssertsModifier = assertsModifier
 	data.ParameterName = parameterName
 	data.Type = typeNode
-	return f.newNode(KindTypePredicate, data.AsNode(), data)
+	return f.newNode(KindTypePredicate, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTypePredicateNode(node *TypePredicateNode, assertsModifier *AssertsKeyword, parameterName *TypePredicateParameterName, typeNode *TypeNode) *Node {
@@ -5640,7 +5644,7 @@ func (f *NodeFactory) NewImportAttribute(name *ImportAttributeName, value *Expre
 	data := &ImportAttribute{}
 	data.name = name
 	data.Value = value
-	return f.newNode(KindImportAttribute, data.AsNode(), data)
+	return f.newNode(KindImportAttribute, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateImportAttribute(node *ImportAttribute, name *ImportAttributeName, value *Expression) *Node {
@@ -5692,7 +5696,7 @@ func (f *NodeFactory) NewImportAttributes(token Kind, attributes *ImportAttribut
 	data.Token = token
 	data.Attributes = attributes
 	data.MultiLine = multiLine
-	return f.newNode(KindImportAttributes, data.AsNode(), data)
+	return f.newNode(KindImportAttributes, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateImportAttributes(node *ImportAttributes, token Kind, attributes *ImportAttributeList, multiLine bool) *Node {
@@ -5735,7 +5739,7 @@ func (f *NodeFactory) NewTypeQueryNode(exprName *EntityName, typeArguments *Type
 	data := &TypeQueryNode{}
 	data.ExprName = exprName
 	data.TypeArguments = typeArguments
-	return f.newNode(KindTypeQuery, data.AsNode(), data)
+	return f.newNode(KindTypeQuery, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTypeQueryNode(node *TypeQueryNode, exprName *EntityName, typeArguments *TypeList) *Node {
@@ -5785,7 +5789,7 @@ func (f *NodeFactory) NewMappedTypeNode(readonlyToken *TokenNode, typeParameter 
 	data.QuestionToken = questionToken
 	data.Type = typeNode
 	data.Members = members
-	return f.newNode(KindMappedType, data.AsNode(), data)
+	return f.newNode(KindMappedType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateMappedTypeNode(node *MappedTypeNode, readonlyToken *TokenNode, typeParameter *TypeParameterDeclarationNode, nameType *TypeNode, questionToken *TokenNode, typeNode *TypeNode, members *TypeElementList) *Node {
@@ -5829,7 +5833,7 @@ type TypeLiteralNode struct {
 func (f *NodeFactory) NewTypeLiteralNode(members *TypeElementList) *Node {
 	data := f.typeLiteralNodeArena.New()
 	data.Members = members
-	return f.newNode(KindTypeLiteral, data.AsNode(), data)
+	return f.newNode(KindTypeLiteral, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTypeLiteralNode(node *TypeLiteralNode, members *TypeElementList) *Node {
@@ -5867,7 +5871,7 @@ type TupleTypeNode struct {
 func (f *NodeFactory) NewTupleTypeNode(elements *TypeList) *Node {
 	data := &TupleTypeNode{}
 	data.Elements = elements
-	return f.newNode(KindTupleType, data.AsNode(), data)
+	return f.newNode(KindTupleType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTupleTypeNode(node *TupleTypeNode, elements *TypeList) *Node {
@@ -5912,7 +5916,7 @@ func (f *NodeFactory) NewNamedTupleMember(dotDotDotToken *DotDotDotToken, name *
 	data.name = name
 	data.QuestionToken = questionToken
 	data.Type = typeNode
-	return f.newNode(KindNamedTupleMember, data.AsNode(), data)
+	return f.newNode(KindNamedTupleMember, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateNamedTupleMember(node *NamedTupleMember, dotDotDotToken *DotDotDotToken, name *IdentifierNode, questionToken *QuestionToken, typeNode *TypeNode) *Node {
@@ -5957,7 +5961,7 @@ type OptionalTypeNode struct {
 func (f *NodeFactory) NewOptionalTypeNode(typeNode *TypeNode) *Node {
 	data := &OptionalTypeNode{}
 	data.Type = typeNode
-	return f.newNode(KindOptionalType, data.AsNode(), data)
+	return f.newNode(KindOptionalType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateOptionalTypeNode(node *OptionalTypeNode, typeNode *TypeNode) *Node {
@@ -5995,7 +5999,7 @@ type RestTypeNode struct {
 func (f *NodeFactory) NewRestTypeNode(typeNode *TypeNode) *Node {
 	data := &RestTypeNode{}
 	data.Type = typeNode
-	return f.newNode(KindRestType, data.AsNode(), data)
+	return f.newNode(KindRestType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateRestTypeNode(node *RestTypeNode, typeNode *TypeNode) *Node {
@@ -6033,7 +6037,7 @@ type ParenthesizedTypeNode struct {
 func (f *NodeFactory) NewParenthesizedTypeNode(typeNode *TypeNode) *Node {
 	data := f.parenthesizedTypeNodeArena.New()
 	data.Type = typeNode
-	return f.newNode(KindParenthesizedType, data.AsNode(), data)
+	return f.newNode(KindParenthesizedType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateParenthesizedTypeNode(node *ParenthesizedTypeNode, typeNode *TypeNode) *Node {
@@ -6072,7 +6076,7 @@ func (f *NodeFactory) NewFunctionTypeNode(typeParameters *TypeParameterList, par
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
 	data.Type = typeNode
-	return f.newNode(KindFunctionType, data.AsNode(), data)
+	return f.newNode(KindFunctionType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateFunctionTypeNode(node *FunctionTypeNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
@@ -6112,7 +6116,7 @@ func (f *NodeFactory) NewConstructorTypeNode(modifiers *ModifierList, typeParame
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
 	data.Type = typeNode
-	return f.newNode(KindConstructorType, data.AsNode(), data)
+	return f.newNode(KindConstructorType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateConstructorTypeNode(node *ConstructorTypeNode, modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
@@ -6156,7 +6160,7 @@ func (f *NodeFactory) NewTemplateHead(text string, rawText string, templateFlags
 	data.RawText = rawText
 	data.TemplateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
-	return f.newNode(KindTemplateHead, data.AsNode(), data)
+	return f.newNode(KindTemplateHead, data.AsNode())
 }
 
 func (node *TemplateHead) Clone(f NodeFactoryCoercible) *Node {
@@ -6182,7 +6186,7 @@ func (f *NodeFactory) NewTemplateMiddle(text string, rawText string, templateFla
 	data.RawText = rawText
 	data.TemplateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
-	return f.newNode(KindTemplateMiddle, data.AsNode(), data)
+	return f.newNode(KindTemplateMiddle, data.AsNode())
 }
 
 func (node *TemplateMiddle) Clone(f NodeFactoryCoercible) *Node {
@@ -6208,7 +6212,7 @@ func (f *NodeFactory) NewTemplateTail(text string, rawText string, templateFlags
 	data.RawText = rawText
 	data.TemplateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
-	return f.newNode(KindTemplateTail, data.AsNode(), data)
+	return f.newNode(KindTemplateTail, data.AsNode())
 }
 
 func (node *TemplateTail) Clone(f NodeFactoryCoercible) *Node {
@@ -6233,7 +6237,7 @@ func (f *NodeFactory) NewTemplateLiteralTypeNode(head *TemplateHeadNode, templat
 	data := &TemplateLiteralTypeNode{}
 	data.Head = head
 	data.TemplateSpans = templateSpans
-	return f.newNode(KindTemplateLiteralType, data.AsNode(), data)
+	return f.newNode(KindTemplateLiteralType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTemplateLiteralTypeNode(node *TemplateLiteralTypeNode, head *TemplateHeadNode, templateSpans *TemplateLiteralTypeSpanList) *Node {
@@ -6273,7 +6277,7 @@ func (f *NodeFactory) NewTemplateLiteralTypeSpan(typeNode *TypeNode, literal *Te
 	data := &TemplateLiteralTypeSpan{}
 	data.Type = typeNode
 	data.Literal = literal
-	return f.newNode(KindTemplateLiteralTypeSpan, data.AsNode(), data)
+	return f.newNode(KindTemplateLiteralTypeSpan, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTemplateLiteralTypeSpan(node *TemplateLiteralTypeSpan, typeNode *TypeNode, literal *TemplateMiddleOrTail) *Node {
@@ -6315,7 +6319,7 @@ func (f *NodeFactory) NewSyntheticExpression(typeNode any, isSpread bool, tupleN
 	data.Type = typeNode
 	data.IsSpread = isSpread
 	data.TupleNameSource = tupleNameSource
-	return f.newNode(KindSyntheticExpression, data.AsNode(), data)
+	return f.newNode(KindSyntheticExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateSyntheticExpression(node *SyntheticExpression, typeNode any, isSpread bool, tupleNameSource *Node) *Node {
@@ -6353,7 +6357,7 @@ type PartiallyEmittedExpression struct {
 func (f *NodeFactory) NewPartiallyEmittedExpression(expression *Expression) *Node {
 	data := &PartiallyEmittedExpression{}
 	data.Expression = expression
-	return f.newNode(KindPartiallyEmittedExpression, data.AsNode(), data)
+	return f.newNode(KindPartiallyEmittedExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdatePartiallyEmittedExpression(node *PartiallyEmittedExpression, expression *Expression) *Node {
@@ -6400,7 +6404,7 @@ func (f *NodeFactory) NewJsxElement(openingElement *JsxOpeningElementNode, child
 	data.OpeningElement = openingElement
 	data.Children = children
 	data.ClosingElement = closingElement
-	return f.newNode(KindJsxElement, data.AsNode(), data)
+	return f.newNode(KindJsxElement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJsxElement(node *JsxElement, openingElement *JsxOpeningElementNode, children *JsxChildList, closingElement *JsxClosingElementNode) *Node {
@@ -6440,7 +6444,7 @@ type JsxAttributes struct {
 func (f *NodeFactory) NewJsxAttributes(properties *JsxAttributeList) *Node {
 	data := &JsxAttributes{}
 	data.Properties = properties
-	return f.newNode(KindJsxAttributes, data.AsNode(), data)
+	return f.newNode(KindJsxAttributes, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJsxAttributes(node *JsxAttributes, properties *JsxAttributeList) *Node {
@@ -6481,7 +6485,7 @@ func (f *NodeFactory) NewJsxNamespacedName(namespace *IdentifierNode, name *Iden
 	data := &JsxNamespacedName{}
 	data.Namespace = namespace
 	data.name = name
-	return f.newNode(KindJsxNamespacedName, data.AsNode(), data)
+	return f.newNode(KindJsxNamespacedName, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJsxNamespacedName(node *JsxNamespacedName, namespace *IdentifierNode, name *IdentifierNode) *Node {
@@ -6528,7 +6532,7 @@ func (f *NodeFactory) NewJsxOpeningElement(tagName *JsxTagNameExpression, typeAr
 	data.TagName = tagName
 	data.TypeArguments = typeArguments
 	data.Attributes = attributes
-	return f.newNode(KindJsxOpeningElement, data.AsNode(), data)
+	return f.newNode(KindJsxOpeningElement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJsxOpeningElement(node *JsxOpeningElement, tagName *JsxTagNameExpression, typeArguments *TypeList, attributes *JsxAttributesNode) *Node {
@@ -6571,7 +6575,7 @@ func (f *NodeFactory) NewJsxSelfClosingElement(tagName *JsxTagNameExpression, ty
 	data.TagName = tagName
 	data.TypeArguments = typeArguments
 	data.Attributes = attributes
-	return f.newNode(KindJsxSelfClosingElement, data.AsNode(), data)
+	return f.newNode(KindJsxSelfClosingElement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJsxSelfClosingElement(node *JsxSelfClosingElement, tagName *JsxTagNameExpression, typeArguments *TypeList, attributes *JsxAttributesNode) *Node {
@@ -6614,7 +6618,7 @@ func (f *NodeFactory) NewJsxFragment(openingFragment *JsxOpeningFragmentNode, ch
 	data.OpeningFragment = openingFragment
 	data.Children = children
 	data.ClosingFragment = closingFragment
-	return f.newNode(KindJsxFragment, data.AsNode(), data)
+	return f.newNode(KindJsxFragment, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJsxFragment(node *JsxFragment, openingFragment *JsxOpeningFragmentNode, children *JsxChildList, closingFragment *JsxClosingFragmentNode) *Node {
@@ -6650,7 +6654,7 @@ type JsxOpeningFragment struct {
 
 func (f *NodeFactory) NewJsxOpeningFragment() *Node {
 	data := &JsxOpeningFragment{}
-	return f.newNode(KindJsxOpeningFragment, data.AsNode(), data)
+	return f.newNode(KindJsxOpeningFragment, data.AsNode())
 }
 
 func (node *JsxOpeningFragment) Clone(f NodeFactoryCoercible) *Node {
@@ -6671,7 +6675,7 @@ type JsxClosingFragment struct {
 
 func (f *NodeFactory) NewJsxClosingFragment() *Node {
 	data := &JsxClosingFragment{}
-	return f.newNode(KindJsxClosingFragment, data.AsNode(), data)
+	return f.newNode(KindJsxClosingFragment, data.AsNode())
 }
 
 func (node *JsxClosingFragment) Clone(f NodeFactoryCoercible) *Node {
@@ -6698,7 +6702,7 @@ func (f *NodeFactory) NewJsxAttribute(name *JsxAttributeName, initializer *JsxAt
 	data := &JsxAttribute{}
 	data.name = name
 	data.Initializer = initializer
-	return f.newNode(KindJsxAttribute, data.AsNode(), data)
+	return f.newNode(KindJsxAttribute, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJsxAttribute(node *JsxAttribute, name *JsxAttributeName, initializer *JsxAttributeValue) *Node {
@@ -6742,7 +6746,7 @@ type JsxSpreadAttribute struct {
 func (f *NodeFactory) NewJsxSpreadAttribute(expression *Expression) *Node {
 	data := &JsxSpreadAttribute{}
 	data.Expression = expression
-	return f.newNode(KindJsxSpreadAttribute, data.AsNode(), data)
+	return f.newNode(KindJsxSpreadAttribute, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJsxSpreadAttribute(node *JsxSpreadAttribute, expression *Expression) *Node {
@@ -6780,7 +6784,7 @@ type JsxClosingElement struct {
 func (f *NodeFactory) NewJsxClosingElement(tagName *JsxTagNameExpression) *Node {
 	data := &JsxClosingElement{}
 	data.TagName = tagName
-	return f.newNode(KindJsxClosingElement, data.AsNode(), data)
+	return f.newNode(KindJsxClosingElement, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJsxClosingElement(node *JsxClosingElement, tagName *JsxTagNameExpression) *Node {
@@ -6820,7 +6824,7 @@ func (f *NodeFactory) NewJsxExpression(dotDotDotToken *DotDotDotToken, expressio
 	data := &JsxExpression{}
 	data.DotDotDotToken = dotDotDotToken
 	data.Expression = expression
-	return f.newNode(KindJsxExpression, data.AsNode(), data)
+	return f.newNode(KindJsxExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJsxExpression(node *JsxExpression, dotDotDotToken *DotDotDotToken, expression *Expression) *Node {
@@ -6861,7 +6865,7 @@ func (f *NodeFactory) NewJsxText(text string, containsOnlyTriviaWhiteSpaces bool
 	data.Text = text
 	data.ContainsOnlyTriviaWhiteSpaces = containsOnlyTriviaWhiteSpaces
 	f.textCount++
-	return f.newNode(KindJsxText, data.AsNode(), data)
+	return f.newNode(KindJsxText, data.AsNode())
 }
 
 func (node *JsxText) Clone(f NodeFactoryCoercible) *Node {
@@ -6884,7 +6888,7 @@ type SyntaxList struct {
 func (f *NodeFactory) NewSyntaxList(children []*Node) *Node {
 	data := &SyntaxList{}
 	data.Children = children
-	return f.newNode(KindSyntaxList, data.AsNode(), data)
+	return f.newNode(KindSyntaxList, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateSyntaxList(node *SyntaxList, children []*Node) *Node {
@@ -6925,7 +6929,7 @@ func (f *NodeFactory) NewJSDoc(comment *NodeList, tags *NodeList) *Node {
 	data := f.jsdocArena.New()
 	data.Comment = comment
 	data.Tags = tags
-	return f.newNode(KindJSDoc, data.AsNode(), data)
+	return f.newNode(KindJSDoc, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDoc(node *JSDoc, comment *NodeList, tags *NodeList) *Node {
@@ -6963,7 +6967,7 @@ type JSDocTypeExpression struct {
 func (f *NodeFactory) NewJSDocTypeExpression(typeNode *TypeNode) *Node {
 	data := &JSDocTypeExpression{}
 	data.Type = typeNode
-	return f.newNode(KindJSDocTypeExpression, data.AsNode(), data)
+	return f.newNode(KindJSDocTypeExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocTypeExpression(node *JSDocTypeExpression, typeNode *TypeNode) *Node {
@@ -7001,7 +7005,7 @@ type JSDocNonNullableType struct {
 func (f *NodeFactory) NewJSDocNonNullableType(typeNode *TypeNode) *Node {
 	data := &JSDocNonNullableType{}
 	data.Type = typeNode
-	return f.newNode(KindJSDocNonNullableType, data.AsNode(), data)
+	return f.newNode(KindJSDocNonNullableType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocNonNullableType(node *JSDocNonNullableType, typeNode *TypeNode) *Node {
@@ -7039,7 +7043,7 @@ type JSDocNullableType struct {
 func (f *NodeFactory) NewJSDocNullableType(typeNode *TypeNode) *Node {
 	data := &JSDocNullableType{}
 	data.Type = typeNode
-	return f.newNode(KindJSDocNullableType, data.AsNode(), data)
+	return f.newNode(KindJSDocNullableType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocNullableType(node *JSDocNullableType, typeNode *TypeNode) *Node {
@@ -7075,7 +7079,7 @@ type JSDocAllType struct {
 
 func (f *NodeFactory) NewJSDocAllType() *Node {
 	data := &JSDocAllType{}
-	return f.newNode(KindJSDocAllType, data.AsNode(), data)
+	return f.newNode(KindJSDocAllType, data.AsNode())
 }
 
 func (node *JSDocAllType) Clone(f NodeFactoryCoercible) *Node {
@@ -7098,7 +7102,7 @@ type JSDocVariadicType struct {
 func (f *NodeFactory) NewJSDocVariadicType(typeNode *TypeNode) *Node {
 	data := &JSDocVariadicType{}
 	data.Type = typeNode
-	return f.newNode(KindJSDocVariadicType, data.AsNode(), data)
+	return f.newNode(KindJSDocVariadicType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocVariadicType(node *JSDocVariadicType, typeNode *TypeNode) *Node {
@@ -7136,7 +7140,7 @@ type JSDocOptionalType struct {
 func (f *NodeFactory) NewJSDocOptionalType(typeNode *TypeNode) *Node {
 	data := &JSDocOptionalType{}
 	data.Type = typeNode
-	return f.newNode(KindJSDocOptionalType, data.AsNode(), data)
+	return f.newNode(KindJSDocOptionalType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocOptionalType(node *JSDocOptionalType, typeNode *TypeNode) *Node {
@@ -7176,7 +7180,7 @@ func (f *NodeFactory) NewJSDocTypeTag(tagName *IdentifierNode, typeExpression *N
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
 	data.Comment = comment
-	return f.newNode(KindJSDocTypeTag, data.AsNode(), data)
+	return f.newNode(KindJSDocTypeTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocTypeTag(node *JSDocTypeTag, tagName *IdentifierNode, typeExpression *Node, comment *NodeList) *Node {
@@ -7214,7 +7218,7 @@ func (f *NodeFactory) NewJSDocUnknownTag(tagName *IdentifierNode, comment *NodeL
 	data := f.jsdocUnknownTagArena.New()
 	data.TagName = tagName
 	data.Comment = comment
-	return f.newNode(KindJSDocUnknownTag, data.AsNode(), data)
+	return f.newNode(KindJSDocUnknownTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocUnknownTag(node *JSDocUnknownTag, tagName *IdentifierNode, comment *NodeList) *Node {
@@ -7256,7 +7260,7 @@ func (f *NodeFactory) NewJSDocTemplateTag(tagName *IdentifierNode, constraint *N
 	data.Constraint = constraint
 	data.TypeParameters = typeParameters
 	data.Comment = comment
-	return f.newNode(KindJSDocTemplateTag, data.AsNode(), data)
+	return f.newNode(KindJSDocTemplateTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocTemplateTag(node *JSDocTemplateTag, tagName *IdentifierNode, constraint *Node, typeParameters *TypeParameterList, comment *NodeList) *Node {
@@ -7299,7 +7303,7 @@ func (f *NodeFactory) NewJSDocReturnTag(tagName *IdentifierNode, typeExpression 
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
 	data.Comment = comment
-	return f.newNode(KindJSDocReturnTag, data.AsNode(), data)
+	return f.newNode(KindJSDocReturnTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocReturnTag(node *JSDocReturnTag, tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
@@ -7337,7 +7341,7 @@ func (f *NodeFactory) NewJSDocPublicTag(tagName *IdentifierNode, comment *NodeLi
 	data := &JSDocPublicTag{}
 	data.TagName = tagName
 	data.Comment = comment
-	return f.newNode(KindJSDocPublicTag, data.AsNode(), data)
+	return f.newNode(KindJSDocPublicTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocPublicTag(node *JSDocPublicTag, tagName *IdentifierNode, comment *NodeList) *Node {
@@ -7375,7 +7379,7 @@ func (f *NodeFactory) NewJSDocPrivateTag(tagName *IdentifierNode, comment *NodeL
 	data := &JSDocPrivateTag{}
 	data.TagName = tagName
 	data.Comment = comment
-	return f.newNode(KindJSDocPrivateTag, data.AsNode(), data)
+	return f.newNode(KindJSDocPrivateTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocPrivateTag(node *JSDocPrivateTag, tagName *IdentifierNode, comment *NodeList) *Node {
@@ -7413,7 +7417,7 @@ func (f *NodeFactory) NewJSDocProtectedTag(tagName *IdentifierNode, comment *Nod
 	data := &JSDocProtectedTag{}
 	data.TagName = tagName
 	data.Comment = comment
-	return f.newNode(KindJSDocProtectedTag, data.AsNode(), data)
+	return f.newNode(KindJSDocProtectedTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocProtectedTag(node *JSDocProtectedTag, tagName *IdentifierNode, comment *NodeList) *Node {
@@ -7451,7 +7455,7 @@ func (f *NodeFactory) NewJSDocReadonlyTag(tagName *IdentifierNode, comment *Node
 	data := &JSDocReadonlyTag{}
 	data.TagName = tagName
 	data.Comment = comment
-	return f.newNode(KindJSDocReadonlyTag, data.AsNode(), data)
+	return f.newNode(KindJSDocReadonlyTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocReadonlyTag(node *JSDocReadonlyTag, tagName *IdentifierNode, comment *NodeList) *Node {
@@ -7489,7 +7493,7 @@ func (f *NodeFactory) NewJSDocOverrideTag(tagName *IdentifierNode, comment *Node
 	data := &JSDocOverrideTag{}
 	data.TagName = tagName
 	data.Comment = comment
-	return f.newNode(KindJSDocOverrideTag, data.AsNode(), data)
+	return f.newNode(KindJSDocOverrideTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocOverrideTag(node *JSDocOverrideTag, tagName *IdentifierNode, comment *NodeList) *Node {
@@ -7527,7 +7531,7 @@ func (f *NodeFactory) NewJSDocDeprecatedTag(tagName *IdentifierNode, comment *No
 	data := f.jsdocDeprecatedTagArena.New()
 	data.TagName = tagName
 	data.Comment = comment
-	return f.newNode(KindJSDocDeprecatedTag, data.AsNode(), data)
+	return f.newNode(KindJSDocDeprecatedTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocDeprecatedTag(node *JSDocDeprecatedTag, tagName *IdentifierNode, comment *NodeList) *Node {
@@ -7567,7 +7571,7 @@ func (f *NodeFactory) NewJSDocSeeTag(tagName *IdentifierNode, nameExpression *Ty
 	data.TagName = tagName
 	data.NameExpression = nameExpression
 	data.Comment = comment
-	return f.newNode(KindJSDocSeeTag, data.AsNode(), data)
+	return f.newNode(KindJSDocSeeTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocSeeTag(node *JSDocSeeTag, tagName *IdentifierNode, nameExpression *TypeNode, comment *NodeList) *Node {
@@ -7607,7 +7611,7 @@ func (f *NodeFactory) NewJSDocImplementsTag(tagName *IdentifierNode, className *
 	data.TagName = tagName
 	data.ClassName = className
 	data.Comment = comment
-	return f.newNode(KindJSDocImplementsTag, data.AsNode(), data)
+	return f.newNode(KindJSDocImplementsTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocImplementsTag(node *JSDocImplementsTag, tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
@@ -7647,7 +7651,7 @@ func (f *NodeFactory) NewJSDocAugmentsTag(tagName *IdentifierNode, className *Ex
 	data.TagName = tagName
 	data.ClassName = className
 	data.Comment = comment
-	return f.newNode(KindJSDocAugmentsTag, data.AsNode(), data)
+	return f.newNode(KindJSDocAugmentsTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocAugmentsTag(node *JSDocAugmentsTag, tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
@@ -7687,7 +7691,7 @@ func (f *NodeFactory) NewJSDocSatisfiesTag(tagName *IdentifierNode, typeExpressi
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
 	data.Comment = comment
-	return f.newNode(KindJSDocSatisfiesTag, data.AsNode(), data)
+	return f.newNode(KindJSDocSatisfiesTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocSatisfiesTag(node *JSDocSatisfiesTag, tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
@@ -7727,7 +7731,7 @@ func (f *NodeFactory) NewJSDocThrowsTag(tagName *IdentifierNode, typeExpression 
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
 	data.Comment = comment
-	return f.newNode(KindJSDocThrowsTag, data.AsNode(), data)
+	return f.newNode(KindJSDocThrowsTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocThrowsTag(node *JSDocThrowsTag, tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
@@ -7767,7 +7771,7 @@ func (f *NodeFactory) NewJSDocThisTag(tagName *IdentifierNode, typeExpression *T
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
 	data.Comment = comment
-	return f.newNode(KindJSDocThisTag, data.AsNode(), data)
+	return f.newNode(KindJSDocThisTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocThisTag(node *JSDocThisTag, tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
@@ -7811,7 +7815,7 @@ func (f *NodeFactory) NewJSDocImportTag(tagName *IdentifierNode, importClause *I
 	data.ModuleSpecifier = moduleSpecifier
 	data.Attributes = attributes
 	data.Comment = comment
-	return f.newNode(KindJSDocImportTag, data.AsNode(), data)
+	return f.newNode(KindJSDocImportTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocImportTag(node *JSDocImportTag, tagName *IdentifierNode, importClause *ImportClauseNode, moduleSpecifier *Expression, attributes *ImportAttributesNode, comment *NodeList) *Node {
@@ -7857,7 +7861,7 @@ func (f *NodeFactory) NewJSDocCallbackTag(tagName *IdentifierNode, typeExpressio
 	data.TypeExpression = typeExpression
 	data.name = name
 	data.Comment = comment
-	return f.newNode(KindJSDocCallbackTag, data.AsNode(), data)
+	return f.newNode(KindJSDocCallbackTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocCallbackTag(node *JSDocCallbackTag, tagName *IdentifierNode, typeExpression *TypeNode, name *JSDocFullName, comment *NodeList) *Node {
@@ -7904,7 +7908,7 @@ func (f *NodeFactory) NewJSDocOverloadTag(tagName *IdentifierNode, typeExpressio
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
 	data.Comment = comment
-	return f.newNode(KindJSDocOverloadTag, data.AsNode(), data)
+	return f.newNode(KindJSDocOverloadTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocOverloadTag(node *JSDocOverloadTag, tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
@@ -7946,7 +7950,7 @@ func (f *NodeFactory) NewJSDocTypedefTag(tagName *IdentifierNode, typeExpression
 	data.TypeExpression = typeExpression
 	data.name = name
 	data.Comment = comment
-	return f.newNode(KindJSDocTypedefTag, data.AsNode(), data)
+	return f.newNode(KindJSDocTypedefTag, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocTypedefTag(node *JSDocTypedefTag, tagName *IdentifierNode, typeExpression *Node, name *JSDocFullName, comment *NodeList) *Node {
@@ -7994,7 +7998,7 @@ func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, param
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
 	data.Type = typeNode
-	return f.newNode(KindJSDocSignature, data.AsNode(), data)
+	return f.newNode(KindJSDocSignature, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocSignature(node *JSDocSignature, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
@@ -8032,7 +8036,7 @@ type JSDocNameReference struct {
 func (f *NodeFactory) NewJSDocNameReference(name *EntityName) *Node {
 	data := &JSDocNameReference{}
 	data.name = name
-	return f.newNode(KindJSDocNameReference, data.AsNode(), data)
+	return f.newNode(KindJSDocNameReference, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocNameReference(node *JSDocNameReference, name *EntityName) *Node {
@@ -8095,7 +8099,7 @@ func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, keyword Kind
 	data.name = name
 	data.Attributes = attributes
 	data.Body = body
-	return f.newNode(KindModuleDeclaration, data.AsNode(), data)
+	return f.newNode(KindModuleDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateModuleDeclaration(node *ModuleDeclaration, modifiers *ModifierList, keyword Kind, name *ModuleName, attributes *TypeLiteralNodeNode, body *ModuleBody) *Node {
@@ -8149,7 +8153,7 @@ func (f *NodeFactory) NewImportEqualsDeclaration(modifiers *ModifierList, isType
 	data.IsTypeOnly = isTypeOnly
 	data.name = name
 	data.ModuleReference = moduleReference
-	return f.newNode(KindImportEqualsDeclaration, data.AsNode(), data)
+	return f.newNode(KindImportEqualsDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateImportEqualsDeclaration(node *ImportEqualsDeclaration, modifiers *ModifierList, isTypeOnly bool, name *IdentifierNode, moduleReference *ModuleReference) *Node {
@@ -8201,7 +8205,7 @@ func (f *NodeFactory) NewExportDeclaration(modifiers *ModifierList, isTypeOnly b
 	data.ExportClause = exportClause
 	data.ModuleSpecifier = moduleSpecifier
 	data.Attributes = attributes
-	return f.newNode(KindExportDeclaration, data.AsNode(), data)
+	return f.newNode(KindExportDeclaration, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateExportDeclaration(node *ExportDeclaration, modifiers *ModifierList, isTypeOnly bool, exportClause *NamedExportBindings, moduleSpecifier *Expression, attributes *ImportAttributesNode) *Node {
@@ -8249,7 +8253,7 @@ func (f *NodeFactory) NewImportTypeNode(isTypeOf bool, argument *TypeNode, attri
 	data.Attributes = attributes
 	data.Qualifier = qualifier
 	data.TypeArguments = typeArguments
-	return f.newNode(KindImportType, data.AsNode(), data)
+	return f.newNode(KindImportType, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateImportTypeNode(node *ImportTypeNode, isTypeOf bool, argument *TypeNode, attributes *ImportAttributesNode, qualifier *EntityName, typeArguments *TypeList) *Node {
@@ -8297,7 +8301,7 @@ func (f *NodeFactory) NewImportClause(phaseModifier ImportPhaseModifierSyntaxKin
 	data.PhaseModifier = phaseModifier
 	data.name = name
 	data.NamedBindings = namedBindings
-	return f.newNode(KindImportClause, data.AsNode(), data)
+	return f.newNode(KindImportClause, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateImportClause(node *ImportClause, phaseModifier ImportPhaseModifierSyntaxKind, name *IdentifierNode, namedBindings *NamedImportBindings) *Node {
@@ -8346,7 +8350,7 @@ func (f *NodeFactory) NewImportSpecifier(isTypeOnly bool, propertyName *ModuleEx
 	data.IsTypeOnly = isTypeOnly
 	data.PropertyName = propertyName
 	data.name = name
-	return f.newNode(KindImportSpecifier, data.AsNode(), data)
+	return f.newNode(KindImportSpecifier, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateImportSpecifier(node *ImportSpecifier, isTypeOnly bool, propertyName *ModuleExportName, name *IdentifierNode) *Node {
@@ -8388,7 +8392,7 @@ func (f *NodeFactory) NewJSDocText(text []string) *Node {
 	data := f.jsdocTextArena.New()
 	data.text = text
 	f.textCount++
-	return f.newNode(KindJSDocText, data.AsNode(), data)
+	return f.newNode(KindJSDocText, data.AsNode())
 }
 
 func (node *JSDocText) Clone(f NodeFactoryCoercible) *Node {
@@ -8413,7 +8417,7 @@ func (f *NodeFactory) NewJSDocLink(name *EntityName, text []string) *Node {
 	data.name = name
 	data.text = text
 	f.textCount++
-	return f.newNode(KindJSDocLink, data.AsNode(), data)
+	return f.newNode(KindJSDocLink, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocLink(node *JSDocLink, name *EntityName, text []string) *Node {
@@ -8457,7 +8461,7 @@ func (f *NodeFactory) NewJSDocLinkPlain(name *EntityName, text []string) *Node {
 	data.name = name
 	data.text = text
 	f.textCount++
-	return f.newNode(KindJSDocLinkPlain, data.AsNode(), data)
+	return f.newNode(KindJSDocLinkPlain, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocLinkPlain(node *JSDocLinkPlain, name *EntityName, text []string) *Node {
@@ -8501,7 +8505,7 @@ func (f *NodeFactory) NewJSDocLinkCode(name *EntityName, text []string) *Node {
 	data.name = name
 	data.text = text
 	f.textCount++
-	return f.newNode(KindJSDocLinkCode, data.AsNode(), data)
+	return f.newNode(KindJSDocLinkCode, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocLinkCode(node *JSDocLinkCode, name *EntityName, text []string) *Node {
@@ -8553,7 +8557,7 @@ func (f *NodeFactory) NewTypeParameterDeclaration(modifiers *ModifierList, name 
 	data.Constraint = constraint
 	data.Expression = expression
 	data.DefaultType = defaultType
-	return f.newNode(KindTypeParameter, data.AsNode(), data)
+	return f.newNode(KindTypeParameter, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateTypeParameterDeclaration(node *TypeParameterDeclaration, modifiers *ModifierList, name *IdentifierNode, constraint *TypeNode, expression *Expression, defaultType *TypeNode) *Node {
@@ -8601,7 +8605,7 @@ func (f *NodeFactory) NewSyntheticReferenceExpression(expression *Expression, th
 	data := &SyntheticReferenceExpression{}
 	data.Expression = expression
 	data.ThisArg = thisArg
-	return f.newNode(KindSyntheticReferenceExpression, data.AsNode(), data)
+	return f.newNode(KindSyntheticReferenceExpression, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateSyntheticReferenceExpression(node *SyntheticReferenceExpression, expression *Expression, thisArg *Expression) *Node {
@@ -8647,7 +8651,7 @@ func (f *NodeFactory) NewJSDocTypeLiteral(jsdocPropertyTags []*Node, isArrayType
 	data := &JSDocTypeLiteral{}
 	data.JSDocPropertyTags = jsdocPropertyTags
 	data.IsArrayType = isArrayType
-	return f.newNode(KindJSDocTypeLiteral, data.AsNode(), data)
+	return f.newNode(KindJSDocTypeLiteral, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocTypeLiteral(node *JSDocTypeLiteral, jsdocPropertyTags []*Node, isArrayType bool) *Node {
@@ -8694,7 +8698,7 @@ func (f *NodeFactory) NewJSDocParameterOrPropertyTag(kind Kind, tagName *Identif
 	data.TypeExpression = typeExpression
 	data.IsNameFirst = isNameFirst
 	data.Comment = comment
-	return f.newNode(kind, data.AsNode(), data)
+	return f.newNode(kind, data.AsNode())
 }
 
 func (f *NodeFactory) UpdateJSDocParameterOrPropertyTag(node *JSDocParameterOrPropertyTag, tagName *IdentifierNode, name *EntityName, isBracketed bool, typeExpression *TypeNode, isNameFirst bool, comment *NodeList) *Node {
@@ -8735,339 +8739,339 @@ func IsJSDocPropertyTag(node *Node) bool {
 func (n *Node) ForEachChild(v Visitor) bool {
 	switch n.Kind {
 	case KindQualifiedName:
-		return n.data.(*QualifiedName).ForEachChild(v)
+		return (*QualifiedName)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindComputedPropertyName:
-		return n.data.(*ComputedPropertyName).ForEachChild(v)
+		return (*ComputedPropertyName)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindDecorator:
-		return n.data.(*Decorator).ForEachChild(v)
+		return (*Decorator)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindIfStatement:
-		return n.data.(*IfStatement).ForEachChild(v)
+		return (*IfStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindDoStatement:
-		return n.data.(*DoStatement).ForEachChild(v)
+		return (*DoStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindWhileStatement:
-		return n.data.(*WhileStatement).ForEachChild(v)
+		return (*WhileStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindForStatement:
-		return n.data.(*ForStatement).ForEachChild(v)
+		return (*ForStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindForInStatement, KindForOfStatement:
-		return n.data.(*ForInOrOfStatement).ForEachChild(v)
+		return (*ForInOrOfStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindBreakStatement:
-		return n.data.(*BreakStatement).ForEachChild(v)
+		return (*BreakStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindContinueStatement:
-		return n.data.(*ContinueStatement).ForEachChild(v)
+		return (*ContinueStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindReturnStatement:
-		return n.data.(*ReturnStatement).ForEachChild(v)
+		return (*ReturnStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindWithStatement:
-		return n.data.(*WithStatement).ForEachChild(v)
+		return (*WithStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSwitchStatement:
-		return n.data.(*SwitchStatement).ForEachChild(v)
+		return (*SwitchStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindCaseBlock:
-		return n.data.(*CaseBlock).ForEachChild(v)
+		return (*CaseBlock)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindCaseClause, KindDefaultClause:
-		return n.data.(*CaseOrDefaultClause).ForEachChild(v)
+		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindThrowStatement:
-		return n.data.(*ThrowStatement).ForEachChild(v)
+		return (*ThrowStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTryStatement:
-		return n.data.(*TryStatement).ForEachChild(v)
+		return (*TryStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindCatchClause:
-		return n.data.(*CatchClause).ForEachChild(v)
+		return (*CatchClause)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindLabeledStatement:
-		return n.data.(*LabeledStatement).ForEachChild(v)
+		return (*LabeledStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindExpressionStatement:
-		return n.data.(*ExpressionStatement).ForEachChild(v)
+		return (*ExpressionStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindBlock:
-		return n.data.(*Block).ForEachChild(v)
+		return (*Block)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindVariableStatement:
-		return n.data.(*VariableStatement).ForEachChild(v)
+		return (*VariableStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindVariableDeclaration:
-		return n.data.(*VariableDeclaration).ForEachChild(v)
+		return (*VariableDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindVariableDeclarationList:
-		return n.data.(*VariableDeclarationList).ForEachChild(v)
+		return (*VariableDeclarationList)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
-		return n.data.(*BindingPattern).ForEachChild(v)
+		return (*BindingPattern)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindParameter:
-		return n.data.(*ParameterDeclaration).ForEachChild(v)
+		return (*ParameterDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindBindingElement:
-		return n.data.(*BindingElement).ForEachChild(v)
+		return (*BindingElement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindMissingDeclaration:
-		return n.data.(*MissingDeclaration).ForEachChild(v)
+		return (*MissingDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindFunctionDeclaration:
-		return n.data.(*FunctionDeclaration).ForEachChild(v)
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindClassDeclaration:
-		return n.data.(*ClassDeclaration).ForEachChild(v)
+		return (*ClassDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindClassExpression:
-		return n.data.(*ClassExpression).ForEachChild(v)
+		return (*ClassExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindHeritageClause:
-		return n.data.(*HeritageClause).ForEachChild(v)
+		return (*HeritageClause)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindInterfaceDeclaration:
-		return n.data.(*InterfaceDeclaration).ForEachChild(v)
+		return (*InterfaceDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
-		return n.data.(*TypeAliasDeclaration).ForEachChild(v)
+		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindEnumMember:
-		return n.data.(*EnumMember).ForEachChild(v)
+		return (*EnumMember)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindEnumDeclaration:
-		return n.data.(*EnumDeclaration).ForEachChild(v)
+		return (*EnumDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindModuleBlock:
-		return n.data.(*ModuleBlock).ForEachChild(v)
+		return (*ModuleBlock)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportDeclaration, KindJSImportDeclaration:
-		return n.data.(*ImportDeclaration).ForEachChild(v)
+		return (*ImportDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindExternalModuleReference:
-		return n.data.(*ExternalModuleReference).ForEachChild(v)
+		return (*ExternalModuleReference)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNamespaceImport:
-		return n.data.(*NamespaceImport).ForEachChild(v)
+		return (*NamespaceImport)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNamedImports:
-		return n.data.(*NamedImports).ForEachChild(v)
+		return (*NamedImports)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindExportAssignment:
-		return n.data.(*ExportAssignment).ForEachChild(v)
+		return (*ExportAssignment)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNamespaceExportDeclaration:
-		return n.data.(*NamespaceExportDeclaration).ForEachChild(v)
+		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNamespaceExport:
-		return n.data.(*NamespaceExport).ForEachChild(v)
+		return (*NamespaceExport)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNamedExports:
-		return n.data.(*NamedExports).ForEachChild(v)
+		return (*NamedExports)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindExportSpecifier:
-		return n.data.(*ExportSpecifier).ForEachChild(v)
+		return (*ExportSpecifier)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindCallSignature:
-		return n.data.(*CallSignatureDeclaration).ForEachChild(v)
+		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindConstructSignature:
-		return n.data.(*ConstructSignatureDeclaration).ForEachChild(v)
+		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindConstructor:
-		return n.data.(*ConstructorDeclaration).ForEachChild(v)
+		return (*ConstructorDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindGetAccessor:
-		return n.data.(*GetAccessorDeclaration).ForEachChild(v)
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSetAccessor:
-		return n.data.(*SetAccessorDeclaration).ForEachChild(v)
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindIndexSignature:
-		return n.data.(*IndexSignatureDeclaration).ForEachChild(v)
+		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindMethodSignature:
-		return n.data.(*MethodSignatureDeclaration).ForEachChild(v)
+		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindMethodDeclaration:
-		return n.data.(*MethodDeclaration).ForEachChild(v)
+		return (*MethodDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPropertySignature:
-		return n.data.(*PropertySignatureDeclaration).ForEachChild(v)
+		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPropertyDeclaration:
-		return n.data.(*PropertyDeclaration).ForEachChild(v)
+		return (*PropertyDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindClassStaticBlockDeclaration:
-		return n.data.(*ClassStaticBlockDeclaration).ForEachChild(v)
+		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindBinaryExpression:
-		return n.data.(*BinaryExpression).ForEachChild(v)
+		return (*BinaryExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPrefixUnaryExpression:
-		return n.data.(*PrefixUnaryExpression).ForEachChild(v)
+		return (*PrefixUnaryExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPostfixUnaryExpression:
-		return n.data.(*PostfixUnaryExpression).ForEachChild(v)
+		return (*PostfixUnaryExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindYieldExpression:
-		return n.data.(*YieldExpression).ForEachChild(v)
+		return (*YieldExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindArrowFunction:
-		return n.data.(*ArrowFunction).ForEachChild(v)
+		return (*ArrowFunction)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindFunctionExpression:
-		return n.data.(*FunctionExpression).ForEachChild(v)
+		return (*FunctionExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindAsExpression:
-		return n.data.(*AsExpression).ForEachChild(v)
+		return (*AsExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSatisfiesExpression:
-		return n.data.(*SatisfiesExpression).ForEachChild(v)
+		return (*SatisfiesExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindConditionalExpression:
-		return n.data.(*ConditionalExpression).ForEachChild(v)
+		return (*ConditionalExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPropertyAccessExpression:
-		return n.data.(*PropertyAccessExpression).ForEachChild(v)
+		return (*PropertyAccessExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindElementAccessExpression:
-		return n.data.(*ElementAccessExpression).ForEachChild(v)
+		return (*ElementAccessExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindCallExpression:
-		return n.data.(*CallExpression).ForEachChild(v)
+		return (*CallExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNewExpression:
-		return n.data.(*NewExpression).ForEachChild(v)
+		return (*NewExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindMetaProperty:
-		return n.data.(*MetaProperty).ForEachChild(v)
+		return (*MetaProperty)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNonNullExpression:
-		return n.data.(*NonNullExpression).ForEachChild(v)
+		return (*NonNullExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSpreadElement:
-		return n.data.(*SpreadElement).ForEachChild(v)
+		return (*SpreadElement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTemplateExpression:
-		return n.data.(*TemplateExpression).ForEachChild(v)
+		return (*TemplateExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTemplateSpan:
-		return n.data.(*TemplateSpan).ForEachChild(v)
+		return (*TemplateSpan)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTaggedTemplateExpression:
-		return n.data.(*TaggedTemplateExpression).ForEachChild(v)
+		return (*TaggedTemplateExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindParenthesizedExpression:
-		return n.data.(*ParenthesizedExpression).ForEachChild(v)
+		return (*ParenthesizedExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindArrayLiteralExpression:
-		return n.data.(*ArrayLiteralExpression).ForEachChild(v)
+		return (*ArrayLiteralExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindObjectLiteralExpression:
-		return n.data.(*ObjectLiteralExpression).ForEachChild(v)
+		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSpreadAssignment:
-		return n.data.(*SpreadAssignment).ForEachChild(v)
+		return (*SpreadAssignment)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPropertyAssignment:
-		return n.data.(*PropertyAssignment).ForEachChild(v)
+		return (*PropertyAssignment)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindShorthandPropertyAssignment:
-		return n.data.(*ShorthandPropertyAssignment).ForEachChild(v)
+		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindDeleteExpression:
-		return n.data.(*DeleteExpression).ForEachChild(v)
+		return (*DeleteExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeOfExpression:
-		return n.data.(*TypeOfExpression).ForEachChild(v)
+		return (*TypeOfExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindVoidExpression:
-		return n.data.(*VoidExpression).ForEachChild(v)
+		return (*VoidExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindAwaitExpression:
-		return n.data.(*AwaitExpression).ForEachChild(v)
+		return (*AwaitExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeAssertionExpression:
-		return n.data.(*TypeAssertion).ForEachChild(v)
+		return (*TypeAssertion)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindUnionType:
-		return n.data.(*UnionTypeNode).ForEachChild(v)
+		return (*UnionTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindIntersectionType:
-		return n.data.(*IntersectionTypeNode).ForEachChild(v)
+		return (*IntersectionTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindConditionalType:
-		return n.data.(*ConditionalTypeNode).ForEachChild(v)
+		return (*ConditionalTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeOperator:
-		return n.data.(*TypeOperatorNode).ForEachChild(v)
+		return (*TypeOperatorNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindInferType:
-		return n.data.(*InferTypeNode).ForEachChild(v)
+		return (*InferTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindArrayType:
-		return n.data.(*ArrayTypeNode).ForEachChild(v)
+		return (*ArrayTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindIndexedAccessType:
-		return n.data.(*IndexedAccessTypeNode).ForEachChild(v)
+		return (*IndexedAccessTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeReference:
-		return n.data.(*TypeReferenceNode).ForEachChild(v)
+		return (*TypeReferenceNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindExpressionWithTypeArguments:
-		return n.data.(*ExpressionWithTypeArguments).ForEachChild(v)
+		return (*ExpressionWithTypeArguments)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindLiteralType:
-		return n.data.(*LiteralTypeNode).ForEachChild(v)
+		return (*LiteralTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypePredicate:
-		return n.data.(*TypePredicateNode).ForEachChild(v)
+		return (*TypePredicateNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportAttribute:
-		return n.data.(*ImportAttribute).ForEachChild(v)
+		return (*ImportAttribute)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportAttributes:
-		return n.data.(*ImportAttributes).ForEachChild(v)
+		return (*ImportAttributes)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeQuery:
-		return n.data.(*TypeQueryNode).ForEachChild(v)
+		return (*TypeQueryNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindMappedType:
-		return n.data.(*MappedTypeNode).ForEachChild(v)
+		return (*MappedTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeLiteral:
-		return n.data.(*TypeLiteralNode).ForEachChild(v)
+		return (*TypeLiteralNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTupleType:
-		return n.data.(*TupleTypeNode).ForEachChild(v)
+		return (*TupleTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNamedTupleMember:
-		return n.data.(*NamedTupleMember).ForEachChild(v)
+		return (*NamedTupleMember)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindOptionalType:
-		return n.data.(*OptionalTypeNode).ForEachChild(v)
+		return (*OptionalTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindRestType:
-		return n.data.(*RestTypeNode).ForEachChild(v)
+		return (*RestTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindParenthesizedType:
-		return n.data.(*ParenthesizedTypeNode).ForEachChild(v)
+		return (*ParenthesizedTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindFunctionType:
-		return n.data.(*FunctionTypeNode).ForEachChild(v)
+		return (*FunctionTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindConstructorType:
-		return n.data.(*ConstructorTypeNode).ForEachChild(v)
+		return (*ConstructorTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTemplateLiteralType:
-		return n.data.(*TemplateLiteralTypeNode).ForEachChild(v)
+		return (*TemplateLiteralTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTemplateLiteralTypeSpan:
-		return n.data.(*TemplateLiteralTypeSpan).ForEachChild(v)
+		return (*TemplateLiteralTypeSpan)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSyntheticExpression:
-		return n.data.(*SyntheticExpression).ForEachChild(v)
+		return (*SyntheticExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPartiallyEmittedExpression:
-		return n.data.(*PartiallyEmittedExpression).ForEachChild(v)
+		return (*PartiallyEmittedExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxElement:
-		return n.data.(*JsxElement).ForEachChild(v)
+		return (*JsxElement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxAttributes:
-		return n.data.(*JsxAttributes).ForEachChild(v)
+		return (*JsxAttributes)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxNamespacedName:
-		return n.data.(*JsxNamespacedName).ForEachChild(v)
+		return (*JsxNamespacedName)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxOpeningElement:
-		return n.data.(*JsxOpeningElement).ForEachChild(v)
+		return (*JsxOpeningElement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxSelfClosingElement:
-		return n.data.(*JsxSelfClosingElement).ForEachChild(v)
+		return (*JsxSelfClosingElement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxFragment:
-		return n.data.(*JsxFragment).ForEachChild(v)
+		return (*JsxFragment)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxAttribute:
-		return n.data.(*JsxAttribute).ForEachChild(v)
+		return (*JsxAttribute)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxSpreadAttribute:
-		return n.data.(*JsxSpreadAttribute).ForEachChild(v)
+		return (*JsxSpreadAttribute)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxClosingElement:
-		return n.data.(*JsxClosingElement).ForEachChild(v)
+		return (*JsxClosingElement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxExpression:
-		return n.data.(*JsxExpression).ForEachChild(v)
+		return (*JsxExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSyntaxList:
-		return n.data.(*SyntaxList).ForEachChild(v)
+		return (*SyntaxList)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDoc:
-		return n.data.(*JSDoc).ForEachChild(v)
+		return (*JSDoc)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocTypeExpression:
-		return n.data.(*JSDocTypeExpression).ForEachChild(v)
+		return (*JSDocTypeExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocNonNullableType:
-		return n.data.(*JSDocNonNullableType).ForEachChild(v)
+		return (*JSDocNonNullableType)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocNullableType:
-		return n.data.(*JSDocNullableType).ForEachChild(v)
+		return (*JSDocNullableType)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocVariadicType:
-		return n.data.(*JSDocVariadicType).ForEachChild(v)
+		return (*JSDocVariadicType)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocOptionalType:
-		return n.data.(*JSDocOptionalType).ForEachChild(v)
+		return (*JSDocOptionalType)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocTypeTag:
-		return n.data.(*JSDocTypeTag).ForEachChild(v)
+		return (*JSDocTypeTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocUnknownTag:
-		return n.data.(*JSDocUnknownTag).ForEachChild(v)
+		return (*JSDocUnknownTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocTemplateTag:
-		return n.data.(*JSDocTemplateTag).ForEachChild(v)
+		return (*JSDocTemplateTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocReturnTag:
-		return n.data.(*JSDocReturnTag).ForEachChild(v)
+		return (*JSDocReturnTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocPublicTag:
-		return n.data.(*JSDocPublicTag).ForEachChild(v)
+		return (*JSDocPublicTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocPrivateTag:
-		return n.data.(*JSDocPrivateTag).ForEachChild(v)
+		return (*JSDocPrivateTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocProtectedTag:
-		return n.data.(*JSDocProtectedTag).ForEachChild(v)
+		return (*JSDocProtectedTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocReadonlyTag:
-		return n.data.(*JSDocReadonlyTag).ForEachChild(v)
+		return (*JSDocReadonlyTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocOverrideTag:
-		return n.data.(*JSDocOverrideTag).ForEachChild(v)
+		return (*JSDocOverrideTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocDeprecatedTag:
-		return n.data.(*JSDocDeprecatedTag).ForEachChild(v)
+		return (*JSDocDeprecatedTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocSeeTag:
-		return n.data.(*JSDocSeeTag).ForEachChild(v)
+		return (*JSDocSeeTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocImplementsTag:
-		return n.data.(*JSDocImplementsTag).ForEachChild(v)
+		return (*JSDocImplementsTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocAugmentsTag:
-		return n.data.(*JSDocAugmentsTag).ForEachChild(v)
+		return (*JSDocAugmentsTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocSatisfiesTag:
-		return n.data.(*JSDocSatisfiesTag).ForEachChild(v)
+		return (*JSDocSatisfiesTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocThrowsTag:
-		return n.data.(*JSDocThrowsTag).ForEachChild(v)
+		return (*JSDocThrowsTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocThisTag:
-		return n.data.(*JSDocThisTag).ForEachChild(v)
+		return (*JSDocThisTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocImportTag:
-		return n.data.(*JSDocImportTag).ForEachChild(v)
+		return (*JSDocImportTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocCallbackTag:
-		return n.data.(*JSDocCallbackTag).ForEachChild(v)
+		return (*JSDocCallbackTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocOverloadTag:
-		return n.data.(*JSDocOverloadTag).ForEachChild(v)
+		return (*JSDocOverloadTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocTypedefTag:
-		return n.data.(*JSDocTypedefTag).ForEachChild(v)
+		return (*JSDocTypedefTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocSignature:
-		return n.data.(*JSDocSignature).ForEachChild(v)
+		return (*JSDocSignature)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocNameReference:
-		return n.data.(*JSDocNameReference).ForEachChild(v)
+		return (*JSDocNameReference)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSourceFile:
-		return n.data.(*SourceFile).ForEachChild(v)
+		return (*SourceFile)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindModuleDeclaration:
-		return n.data.(*ModuleDeclaration).ForEachChild(v)
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportEqualsDeclaration:
-		return n.data.(*ImportEqualsDeclaration).ForEachChild(v)
+		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindExportDeclaration:
-		return n.data.(*ExportDeclaration).ForEachChild(v)
+		return (*ExportDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportType:
-		return n.data.(*ImportTypeNode).ForEachChild(v)
+		return (*ImportTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportClause:
-		return n.data.(*ImportClause).ForEachChild(v)
+		return (*ImportClause)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportSpecifier:
-		return n.data.(*ImportSpecifier).ForEachChild(v)
+		return (*ImportSpecifier)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocLink:
-		return n.data.(*JSDocLink).ForEachChild(v)
+		return (*JSDocLink)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocLinkPlain:
-		return n.data.(*JSDocLinkPlain).ForEachChild(v)
+		return (*JSDocLinkPlain)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocLinkCode:
-		return n.data.(*JSDocLinkCode).ForEachChild(v)
+		return (*JSDocLinkCode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeParameter:
-		return n.data.(*TypeParameterDeclaration).ForEachChild(v)
+		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSyntheticReferenceExpression:
-		return n.data.(*SyntheticReferenceExpression).ForEachChild(v)
+		return (*SyntheticReferenceExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocTypeLiteral:
-		return n.data.(*JSDocTypeLiteral).ForEachChild(v)
+		return (*JSDocTypeLiteral)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
-		return n.data.(*JSDocParameterOrPropertyTag).ForEachChild(v)
+		return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n)).ForEachChild(v)
 	default:
 		return false
 	}
@@ -9080,339 +9084,339 @@ func (n *Node) ForEachChild(v Visitor) bool {
 func (n *Node) VisitEachChild(v *NodeVisitor) *Node {
 	switch n.Kind {
 	case KindQualifiedName:
-		return n.data.(*QualifiedName).VisitEachChild(v)
+		return (*QualifiedName)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindComputedPropertyName:
-		return n.data.(*ComputedPropertyName).VisitEachChild(v)
+		return (*ComputedPropertyName)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindDecorator:
-		return n.data.(*Decorator).VisitEachChild(v)
+		return (*Decorator)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindIfStatement:
-		return n.data.(*IfStatement).VisitEachChild(v)
+		return (*IfStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindDoStatement:
-		return n.data.(*DoStatement).VisitEachChild(v)
+		return (*DoStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindWhileStatement:
-		return n.data.(*WhileStatement).VisitEachChild(v)
+		return (*WhileStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindForStatement:
-		return n.data.(*ForStatement).VisitEachChild(v)
+		return (*ForStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindForInStatement, KindForOfStatement:
-		return n.data.(*ForInOrOfStatement).VisitEachChild(v)
+		return (*ForInOrOfStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindBreakStatement:
-		return n.data.(*BreakStatement).VisitEachChild(v)
+		return (*BreakStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindContinueStatement:
-		return n.data.(*ContinueStatement).VisitEachChild(v)
+		return (*ContinueStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindReturnStatement:
-		return n.data.(*ReturnStatement).VisitEachChild(v)
+		return (*ReturnStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindWithStatement:
-		return n.data.(*WithStatement).VisitEachChild(v)
+		return (*WithStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSwitchStatement:
-		return n.data.(*SwitchStatement).VisitEachChild(v)
+		return (*SwitchStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindCaseBlock:
-		return n.data.(*CaseBlock).VisitEachChild(v)
+		return (*CaseBlock)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindCaseClause, KindDefaultClause:
-		return n.data.(*CaseOrDefaultClause).VisitEachChild(v)
+		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindThrowStatement:
-		return n.data.(*ThrowStatement).VisitEachChild(v)
+		return (*ThrowStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTryStatement:
-		return n.data.(*TryStatement).VisitEachChild(v)
+		return (*TryStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindCatchClause:
-		return n.data.(*CatchClause).VisitEachChild(v)
+		return (*CatchClause)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindLabeledStatement:
-		return n.data.(*LabeledStatement).VisitEachChild(v)
+		return (*LabeledStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindExpressionStatement:
-		return n.data.(*ExpressionStatement).VisitEachChild(v)
+		return (*ExpressionStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindBlock:
-		return n.data.(*Block).VisitEachChild(v)
+		return (*Block)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindVariableStatement:
-		return n.data.(*VariableStatement).VisitEachChild(v)
+		return (*VariableStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindVariableDeclaration:
-		return n.data.(*VariableDeclaration).VisitEachChild(v)
+		return (*VariableDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindVariableDeclarationList:
-		return n.data.(*VariableDeclarationList).VisitEachChild(v)
+		return (*VariableDeclarationList)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
-		return n.data.(*BindingPattern).VisitEachChild(v)
+		return (*BindingPattern)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindParameter:
-		return n.data.(*ParameterDeclaration).VisitEachChild(v)
+		return (*ParameterDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindBindingElement:
-		return n.data.(*BindingElement).VisitEachChild(v)
+		return (*BindingElement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindMissingDeclaration:
-		return n.data.(*MissingDeclaration).VisitEachChild(v)
+		return (*MissingDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindFunctionDeclaration:
-		return n.data.(*FunctionDeclaration).VisitEachChild(v)
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindClassDeclaration:
-		return n.data.(*ClassDeclaration).VisitEachChild(v)
+		return (*ClassDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindClassExpression:
-		return n.data.(*ClassExpression).VisitEachChild(v)
+		return (*ClassExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindHeritageClause:
-		return n.data.(*HeritageClause).VisitEachChild(v)
+		return (*HeritageClause)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindInterfaceDeclaration:
-		return n.data.(*InterfaceDeclaration).VisitEachChild(v)
+		return (*InterfaceDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
-		return n.data.(*TypeAliasDeclaration).VisitEachChild(v)
+		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindEnumMember:
-		return n.data.(*EnumMember).VisitEachChild(v)
+		return (*EnumMember)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindEnumDeclaration:
-		return n.data.(*EnumDeclaration).VisitEachChild(v)
+		return (*EnumDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindModuleBlock:
-		return n.data.(*ModuleBlock).VisitEachChild(v)
+		return (*ModuleBlock)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportDeclaration, KindJSImportDeclaration:
-		return n.data.(*ImportDeclaration).VisitEachChild(v)
+		return (*ImportDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindExternalModuleReference:
-		return n.data.(*ExternalModuleReference).VisitEachChild(v)
+		return (*ExternalModuleReference)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNamespaceImport:
-		return n.data.(*NamespaceImport).VisitEachChild(v)
+		return (*NamespaceImport)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNamedImports:
-		return n.data.(*NamedImports).VisitEachChild(v)
+		return (*NamedImports)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindExportAssignment:
-		return n.data.(*ExportAssignment).VisitEachChild(v)
+		return (*ExportAssignment)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNamespaceExportDeclaration:
-		return n.data.(*NamespaceExportDeclaration).VisitEachChild(v)
+		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNamespaceExport:
-		return n.data.(*NamespaceExport).VisitEachChild(v)
+		return (*NamespaceExport)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNamedExports:
-		return n.data.(*NamedExports).VisitEachChild(v)
+		return (*NamedExports)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindExportSpecifier:
-		return n.data.(*ExportSpecifier).VisitEachChild(v)
+		return (*ExportSpecifier)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindCallSignature:
-		return n.data.(*CallSignatureDeclaration).VisitEachChild(v)
+		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindConstructSignature:
-		return n.data.(*ConstructSignatureDeclaration).VisitEachChild(v)
+		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindConstructor:
-		return n.data.(*ConstructorDeclaration).VisitEachChild(v)
+		return (*ConstructorDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindGetAccessor:
-		return n.data.(*GetAccessorDeclaration).VisitEachChild(v)
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSetAccessor:
-		return n.data.(*SetAccessorDeclaration).VisitEachChild(v)
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindIndexSignature:
-		return n.data.(*IndexSignatureDeclaration).VisitEachChild(v)
+		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindMethodSignature:
-		return n.data.(*MethodSignatureDeclaration).VisitEachChild(v)
+		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindMethodDeclaration:
-		return n.data.(*MethodDeclaration).VisitEachChild(v)
+		return (*MethodDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPropertySignature:
-		return n.data.(*PropertySignatureDeclaration).VisitEachChild(v)
+		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPropertyDeclaration:
-		return n.data.(*PropertyDeclaration).VisitEachChild(v)
+		return (*PropertyDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindClassStaticBlockDeclaration:
-		return n.data.(*ClassStaticBlockDeclaration).VisitEachChild(v)
+		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindBinaryExpression:
-		return n.data.(*BinaryExpression).VisitEachChild(v)
+		return (*BinaryExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPrefixUnaryExpression:
-		return n.data.(*PrefixUnaryExpression).VisitEachChild(v)
+		return (*PrefixUnaryExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPostfixUnaryExpression:
-		return n.data.(*PostfixUnaryExpression).VisitEachChild(v)
+		return (*PostfixUnaryExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindYieldExpression:
-		return n.data.(*YieldExpression).VisitEachChild(v)
+		return (*YieldExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindArrowFunction:
-		return n.data.(*ArrowFunction).VisitEachChild(v)
+		return (*ArrowFunction)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindFunctionExpression:
-		return n.data.(*FunctionExpression).VisitEachChild(v)
+		return (*FunctionExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindAsExpression:
-		return n.data.(*AsExpression).VisitEachChild(v)
+		return (*AsExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSatisfiesExpression:
-		return n.data.(*SatisfiesExpression).VisitEachChild(v)
+		return (*SatisfiesExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindConditionalExpression:
-		return n.data.(*ConditionalExpression).VisitEachChild(v)
+		return (*ConditionalExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPropertyAccessExpression:
-		return n.data.(*PropertyAccessExpression).VisitEachChild(v)
+		return (*PropertyAccessExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindElementAccessExpression:
-		return n.data.(*ElementAccessExpression).VisitEachChild(v)
+		return (*ElementAccessExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindCallExpression:
-		return n.data.(*CallExpression).VisitEachChild(v)
+		return (*CallExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNewExpression:
-		return n.data.(*NewExpression).VisitEachChild(v)
+		return (*NewExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindMetaProperty:
-		return n.data.(*MetaProperty).VisitEachChild(v)
+		return (*MetaProperty)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNonNullExpression:
-		return n.data.(*NonNullExpression).VisitEachChild(v)
+		return (*NonNullExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSpreadElement:
-		return n.data.(*SpreadElement).VisitEachChild(v)
+		return (*SpreadElement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTemplateExpression:
-		return n.data.(*TemplateExpression).VisitEachChild(v)
+		return (*TemplateExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTemplateSpan:
-		return n.data.(*TemplateSpan).VisitEachChild(v)
+		return (*TemplateSpan)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTaggedTemplateExpression:
-		return n.data.(*TaggedTemplateExpression).VisitEachChild(v)
+		return (*TaggedTemplateExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindParenthesizedExpression:
-		return n.data.(*ParenthesizedExpression).VisitEachChild(v)
+		return (*ParenthesizedExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindArrayLiteralExpression:
-		return n.data.(*ArrayLiteralExpression).VisitEachChild(v)
+		return (*ArrayLiteralExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindObjectLiteralExpression:
-		return n.data.(*ObjectLiteralExpression).VisitEachChild(v)
+		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSpreadAssignment:
-		return n.data.(*SpreadAssignment).VisitEachChild(v)
+		return (*SpreadAssignment)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPropertyAssignment:
-		return n.data.(*PropertyAssignment).VisitEachChild(v)
+		return (*PropertyAssignment)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindShorthandPropertyAssignment:
-		return n.data.(*ShorthandPropertyAssignment).VisitEachChild(v)
+		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindDeleteExpression:
-		return n.data.(*DeleteExpression).VisitEachChild(v)
+		return (*DeleteExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeOfExpression:
-		return n.data.(*TypeOfExpression).VisitEachChild(v)
+		return (*TypeOfExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindVoidExpression:
-		return n.data.(*VoidExpression).VisitEachChild(v)
+		return (*VoidExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindAwaitExpression:
-		return n.data.(*AwaitExpression).VisitEachChild(v)
+		return (*AwaitExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeAssertionExpression:
-		return n.data.(*TypeAssertion).VisitEachChild(v)
+		return (*TypeAssertion)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindUnionType:
-		return n.data.(*UnionTypeNode).VisitEachChild(v)
+		return (*UnionTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindIntersectionType:
-		return n.data.(*IntersectionTypeNode).VisitEachChild(v)
+		return (*IntersectionTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindConditionalType:
-		return n.data.(*ConditionalTypeNode).VisitEachChild(v)
+		return (*ConditionalTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeOperator:
-		return n.data.(*TypeOperatorNode).VisitEachChild(v)
+		return (*TypeOperatorNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindInferType:
-		return n.data.(*InferTypeNode).VisitEachChild(v)
+		return (*InferTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindArrayType:
-		return n.data.(*ArrayTypeNode).VisitEachChild(v)
+		return (*ArrayTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindIndexedAccessType:
-		return n.data.(*IndexedAccessTypeNode).VisitEachChild(v)
+		return (*IndexedAccessTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeReference:
-		return n.data.(*TypeReferenceNode).VisitEachChild(v)
+		return (*TypeReferenceNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindExpressionWithTypeArguments:
-		return n.data.(*ExpressionWithTypeArguments).VisitEachChild(v)
+		return (*ExpressionWithTypeArguments)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindLiteralType:
-		return n.data.(*LiteralTypeNode).VisitEachChild(v)
+		return (*LiteralTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypePredicate:
-		return n.data.(*TypePredicateNode).VisitEachChild(v)
+		return (*TypePredicateNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportAttribute:
-		return n.data.(*ImportAttribute).VisitEachChild(v)
+		return (*ImportAttribute)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportAttributes:
-		return n.data.(*ImportAttributes).VisitEachChild(v)
+		return (*ImportAttributes)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeQuery:
-		return n.data.(*TypeQueryNode).VisitEachChild(v)
+		return (*TypeQueryNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindMappedType:
-		return n.data.(*MappedTypeNode).VisitEachChild(v)
+		return (*MappedTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeLiteral:
-		return n.data.(*TypeLiteralNode).VisitEachChild(v)
+		return (*TypeLiteralNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTupleType:
-		return n.data.(*TupleTypeNode).VisitEachChild(v)
+		return (*TupleTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNamedTupleMember:
-		return n.data.(*NamedTupleMember).VisitEachChild(v)
+		return (*NamedTupleMember)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindOptionalType:
-		return n.data.(*OptionalTypeNode).VisitEachChild(v)
+		return (*OptionalTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindRestType:
-		return n.data.(*RestTypeNode).VisitEachChild(v)
+		return (*RestTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindParenthesizedType:
-		return n.data.(*ParenthesizedTypeNode).VisitEachChild(v)
+		return (*ParenthesizedTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindFunctionType:
-		return n.data.(*FunctionTypeNode).VisitEachChild(v)
+		return (*FunctionTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindConstructorType:
-		return n.data.(*ConstructorTypeNode).VisitEachChild(v)
+		return (*ConstructorTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTemplateLiteralType:
-		return n.data.(*TemplateLiteralTypeNode).VisitEachChild(v)
+		return (*TemplateLiteralTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTemplateLiteralTypeSpan:
-		return n.data.(*TemplateLiteralTypeSpan).VisitEachChild(v)
+		return (*TemplateLiteralTypeSpan)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSyntheticExpression:
-		return n.data.(*SyntheticExpression).VisitEachChild(v)
+		return (*SyntheticExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPartiallyEmittedExpression:
-		return n.data.(*PartiallyEmittedExpression).VisitEachChild(v)
+		return (*PartiallyEmittedExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxElement:
-		return n.data.(*JsxElement).VisitEachChild(v)
+		return (*JsxElement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxAttributes:
-		return n.data.(*JsxAttributes).VisitEachChild(v)
+		return (*JsxAttributes)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxNamespacedName:
-		return n.data.(*JsxNamespacedName).VisitEachChild(v)
+		return (*JsxNamespacedName)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxOpeningElement:
-		return n.data.(*JsxOpeningElement).VisitEachChild(v)
+		return (*JsxOpeningElement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxSelfClosingElement:
-		return n.data.(*JsxSelfClosingElement).VisitEachChild(v)
+		return (*JsxSelfClosingElement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxFragment:
-		return n.data.(*JsxFragment).VisitEachChild(v)
+		return (*JsxFragment)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxAttribute:
-		return n.data.(*JsxAttribute).VisitEachChild(v)
+		return (*JsxAttribute)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxSpreadAttribute:
-		return n.data.(*JsxSpreadAttribute).VisitEachChild(v)
+		return (*JsxSpreadAttribute)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxClosingElement:
-		return n.data.(*JsxClosingElement).VisitEachChild(v)
+		return (*JsxClosingElement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxExpression:
-		return n.data.(*JsxExpression).VisitEachChild(v)
+		return (*JsxExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSyntaxList:
-		return n.data.(*SyntaxList).VisitEachChild(v)
+		return (*SyntaxList)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDoc:
-		return n.data.(*JSDoc).VisitEachChild(v)
+		return (*JSDoc)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocTypeExpression:
-		return n.data.(*JSDocTypeExpression).VisitEachChild(v)
+		return (*JSDocTypeExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocNonNullableType:
-		return n.data.(*JSDocNonNullableType).VisitEachChild(v)
+		return (*JSDocNonNullableType)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocNullableType:
-		return n.data.(*JSDocNullableType).VisitEachChild(v)
+		return (*JSDocNullableType)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocVariadicType:
-		return n.data.(*JSDocVariadicType).VisitEachChild(v)
+		return (*JSDocVariadicType)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocOptionalType:
-		return n.data.(*JSDocOptionalType).VisitEachChild(v)
+		return (*JSDocOptionalType)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocTypeTag:
-		return n.data.(*JSDocTypeTag).VisitEachChild(v)
+		return (*JSDocTypeTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocUnknownTag:
-		return n.data.(*JSDocUnknownTag).VisitEachChild(v)
+		return (*JSDocUnknownTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocTemplateTag:
-		return n.data.(*JSDocTemplateTag).VisitEachChild(v)
+		return (*JSDocTemplateTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocReturnTag:
-		return n.data.(*JSDocReturnTag).VisitEachChild(v)
+		return (*JSDocReturnTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocPublicTag:
-		return n.data.(*JSDocPublicTag).VisitEachChild(v)
+		return (*JSDocPublicTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocPrivateTag:
-		return n.data.(*JSDocPrivateTag).VisitEachChild(v)
+		return (*JSDocPrivateTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocProtectedTag:
-		return n.data.(*JSDocProtectedTag).VisitEachChild(v)
+		return (*JSDocProtectedTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocReadonlyTag:
-		return n.data.(*JSDocReadonlyTag).VisitEachChild(v)
+		return (*JSDocReadonlyTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocOverrideTag:
-		return n.data.(*JSDocOverrideTag).VisitEachChild(v)
+		return (*JSDocOverrideTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocDeprecatedTag:
-		return n.data.(*JSDocDeprecatedTag).VisitEachChild(v)
+		return (*JSDocDeprecatedTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocSeeTag:
-		return n.data.(*JSDocSeeTag).VisitEachChild(v)
+		return (*JSDocSeeTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocImplementsTag:
-		return n.data.(*JSDocImplementsTag).VisitEachChild(v)
+		return (*JSDocImplementsTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocAugmentsTag:
-		return n.data.(*JSDocAugmentsTag).VisitEachChild(v)
+		return (*JSDocAugmentsTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocSatisfiesTag:
-		return n.data.(*JSDocSatisfiesTag).VisitEachChild(v)
+		return (*JSDocSatisfiesTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocThrowsTag:
-		return n.data.(*JSDocThrowsTag).VisitEachChild(v)
+		return (*JSDocThrowsTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocThisTag:
-		return n.data.(*JSDocThisTag).VisitEachChild(v)
+		return (*JSDocThisTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocImportTag:
-		return n.data.(*JSDocImportTag).VisitEachChild(v)
+		return (*JSDocImportTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocCallbackTag:
-		return n.data.(*JSDocCallbackTag).VisitEachChild(v)
+		return (*JSDocCallbackTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocOverloadTag:
-		return n.data.(*JSDocOverloadTag).VisitEachChild(v)
+		return (*JSDocOverloadTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocTypedefTag:
-		return n.data.(*JSDocTypedefTag).VisitEachChild(v)
+		return (*JSDocTypedefTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocSignature:
-		return n.data.(*JSDocSignature).VisitEachChild(v)
+		return (*JSDocSignature)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocNameReference:
-		return n.data.(*JSDocNameReference).VisitEachChild(v)
+		return (*JSDocNameReference)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSourceFile:
-		return n.data.(*SourceFile).VisitEachChild(v)
+		return (*SourceFile)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindModuleDeclaration:
-		return n.data.(*ModuleDeclaration).VisitEachChild(v)
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportEqualsDeclaration:
-		return n.data.(*ImportEqualsDeclaration).VisitEachChild(v)
+		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindExportDeclaration:
-		return n.data.(*ExportDeclaration).VisitEachChild(v)
+		return (*ExportDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportType:
-		return n.data.(*ImportTypeNode).VisitEachChild(v)
+		return (*ImportTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportClause:
-		return n.data.(*ImportClause).VisitEachChild(v)
+		return (*ImportClause)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportSpecifier:
-		return n.data.(*ImportSpecifier).VisitEachChild(v)
+		return (*ImportSpecifier)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocLink:
-		return n.data.(*JSDocLink).VisitEachChild(v)
+		return (*JSDocLink)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocLinkPlain:
-		return n.data.(*JSDocLinkPlain).VisitEachChild(v)
+		return (*JSDocLinkPlain)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocLinkCode:
-		return n.data.(*JSDocLinkCode).VisitEachChild(v)
+		return (*JSDocLinkCode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeParameter:
-		return n.data.(*TypeParameterDeclaration).VisitEachChild(v)
+		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSyntheticReferenceExpression:
-		return n.data.(*SyntheticReferenceExpression).VisitEachChild(v)
+		return (*SyntheticReferenceExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocTypeLiteral:
-		return n.data.(*JSDocTypeLiteral).VisitEachChild(v)
+		return (*JSDocTypeLiteral)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
-		return n.data.(*JSDocParameterOrPropertyTag).VisitEachChild(v)
+		return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	default:
 		return n
 	}
@@ -9427,389 +9431,389 @@ func (n *Node) Clone(f NodeFactoryCoercible) *Node {
 	case kindFlowSwitchClauseData, kindFlowReduceLabelData:
 		return nil
 	case KindUnknown, KindEndOfFile, KindSingleLineCommentTrivia, KindMultiLineCommentTrivia, KindNewLineTrivia, KindWhitespaceTrivia, KindConflictMarkerTrivia, KindNonTextFileMarkerTrivia, KindJsxTextAllWhiteSpaces, KindOpenBraceToken, KindCloseBraceToken, KindOpenParenToken, KindCloseParenToken, KindOpenBracketToken, KindCloseBracketToken, KindDotToken, KindDotDotDotToken, KindSemicolonToken, KindCommaToken, KindQuestionDotToken, KindLessThanToken, KindLessThanSlashToken, KindGreaterThanToken, KindLessThanEqualsToken, KindGreaterThanEqualsToken, KindEqualsEqualsToken, KindExclamationEqualsToken, KindEqualsEqualsEqualsToken, KindExclamationEqualsEqualsToken, KindEqualsGreaterThanToken, KindPlusToken, KindMinusToken, KindAsteriskToken, KindAsteriskAsteriskToken, KindSlashToken, KindPercentToken, KindPlusPlusToken, KindMinusMinusToken, KindLessThanLessThanToken, KindGreaterThanGreaterThanToken, KindGreaterThanGreaterThanGreaterThanToken, KindAmpersandToken, KindBarToken, KindCaretToken, KindExclamationToken, KindTildeToken, KindAmpersandAmpersandToken, KindBarBarToken, KindQuestionToken, KindColonToken, KindAtToken, KindQuestionQuestionToken, KindBacktickToken, KindHashToken, KindEqualsToken, KindPlusEqualsToken, KindMinusEqualsToken, KindAsteriskEqualsToken, KindAsteriskAsteriskEqualsToken, KindSlashEqualsToken, KindPercentEqualsToken, KindLessThanLessThanEqualsToken, KindGreaterThanGreaterThanEqualsToken, KindGreaterThanGreaterThanGreaterThanEqualsToken, KindAmpersandEqualsToken, KindBarEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken, KindQuestionQuestionEqualsToken, KindCaretEqualsToken, KindJSDocCommentTextToken, KindBreakKeyword, KindCaseKeyword, KindCatchKeyword, KindClassKeyword, KindConstKeyword, KindContinueKeyword, KindDebuggerKeyword, KindDefaultKeyword, KindDeleteKeyword, KindDoKeyword, KindElseKeyword, KindEnumKeyword, KindExportKeyword, KindExtendsKeyword, KindFinallyKeyword, KindForKeyword, KindFunctionKeyword, KindIfKeyword, KindInKeyword, KindInstanceOfKeyword, KindNewKeyword, KindReturnKeyword, KindSwitchKeyword, KindThrowKeyword, KindTryKeyword, KindTypeOfKeyword, KindVarKeyword, KindWhileKeyword, KindWithKeyword, KindImplementsKeyword, KindInterfaceKeyword, KindLetKeyword, KindPackageKeyword, KindPrivateKeyword, KindProtectedKeyword, KindPublicKeyword, KindStaticKeyword, KindYieldKeyword, KindAbstractKeyword, KindAccessorKeyword, KindAsKeyword, KindAssertsKeyword, KindAssertKeyword, KindAsyncKeyword, KindAwaitKeyword, KindConstructorKeyword, KindDeclareKeyword, KindGetKeyword, KindImmediateKeyword, KindInferKeyword, KindIsKeyword, KindKeyOfKeyword, KindModuleKeyword, KindNamespaceKeyword, KindOutKeyword, KindReadonlyKeyword, KindRequireKeyword, KindSatisfiesKeyword, KindSetKeyword, KindTypeKeyword, KindUniqueKeyword, KindUsingKeyword, KindFromKeyword, KindGlobalKeyword, KindOverrideKeyword, KindOfKeyword, KindDeferKeyword, KindSourceKeyword:
-		return n.data.(*Token).Clone(f)
+		return (*Token)(unsafe.Pointer(n)).Clone(f)
 	case KindNumericLiteral:
-		return n.data.(*NumericLiteral).Clone(f)
+		return (*NumericLiteral)(unsafe.Pointer(n)).Clone(f)
 	case KindBigIntLiteral:
-		return n.data.(*BigIntLiteral).Clone(f)
+		return (*BigIntLiteral)(unsafe.Pointer(n)).Clone(f)
 	case KindStringLiteral:
-		return n.data.(*StringLiteral).Clone(f)
+		return (*StringLiteral)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxText:
-		return n.data.(*JsxText).Clone(f)
+		return (*JsxText)(unsafe.Pointer(n)).Clone(f)
 	case KindRegularExpressionLiteral:
-		return n.data.(*RegularExpressionLiteral).Clone(f)
+		return (*RegularExpressionLiteral)(unsafe.Pointer(n)).Clone(f)
 	case KindNoSubstitutionTemplateLiteral:
-		return n.data.(*NoSubstitutionTemplateLiteral).Clone(f)
+		return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateHead:
-		return n.data.(*TemplateHead).Clone(f)
+		return (*TemplateHead)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateMiddle:
-		return n.data.(*TemplateMiddle).Clone(f)
+		return (*TemplateMiddle)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateTail:
-		return n.data.(*TemplateTail).Clone(f)
+		return (*TemplateTail)(unsafe.Pointer(n)).Clone(f)
 	case KindIdentifier:
-		return n.data.(*Identifier).Clone(f)
+		return (*Identifier)(unsafe.Pointer(n)).Clone(f)
 	case KindPrivateIdentifier:
-		return n.data.(*PrivateIdentifier).Clone(f)
+		return (*PrivateIdentifier)(unsafe.Pointer(n)).Clone(f)
 	case KindFalseKeyword, KindImportKeyword, KindNullKeyword, KindSuperKeyword, KindThisKeyword, KindTrueKeyword:
-		return n.data.(*KeywordExpression).Clone(f)
+		return (*KeywordExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
-		return n.data.(*KeywordTypeNode).Clone(f)
+		return (*KeywordTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindQualifiedName:
-		return n.data.(*QualifiedName).Clone(f)
+		return (*QualifiedName)(unsafe.Pointer(n)).Clone(f)
 	case KindComputedPropertyName:
-		return n.data.(*ComputedPropertyName).Clone(f)
+		return (*ComputedPropertyName)(unsafe.Pointer(n)).Clone(f)
 	case KindDecorator:
-		return n.data.(*Decorator).Clone(f)
+		return (*Decorator)(unsafe.Pointer(n)).Clone(f)
 	case KindEmptyStatement:
-		return n.data.(*EmptyStatement).Clone(f)
+		return (*EmptyStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindIfStatement:
-		return n.data.(*IfStatement).Clone(f)
+		return (*IfStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindDoStatement:
-		return n.data.(*DoStatement).Clone(f)
+		return (*DoStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindWhileStatement:
-		return n.data.(*WhileStatement).Clone(f)
+		return (*WhileStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindForStatement:
-		return n.data.(*ForStatement).Clone(f)
+		return (*ForStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindForInStatement, KindForOfStatement:
-		return n.data.(*ForInOrOfStatement).Clone(f)
+		return (*ForInOrOfStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindBreakStatement:
-		return n.data.(*BreakStatement).Clone(f)
+		return (*BreakStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindContinueStatement:
-		return n.data.(*ContinueStatement).Clone(f)
+		return (*ContinueStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindReturnStatement:
-		return n.data.(*ReturnStatement).Clone(f)
+		return (*ReturnStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindWithStatement:
-		return n.data.(*WithStatement).Clone(f)
+		return (*WithStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindSwitchStatement:
-		return n.data.(*SwitchStatement).Clone(f)
+		return (*SwitchStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindCaseBlock:
-		return n.data.(*CaseBlock).Clone(f)
+		return (*CaseBlock)(unsafe.Pointer(n)).Clone(f)
 	case KindCaseClause, KindDefaultClause:
-		return n.data.(*CaseOrDefaultClause).Clone(f)
+		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).Clone(f)
 	case KindThrowStatement:
-		return n.data.(*ThrowStatement).Clone(f)
+		return (*ThrowStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindTryStatement:
-		return n.data.(*TryStatement).Clone(f)
+		return (*TryStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindCatchClause:
-		return n.data.(*CatchClause).Clone(f)
+		return (*CatchClause)(unsafe.Pointer(n)).Clone(f)
 	case KindDebuggerStatement:
-		return n.data.(*DebuggerStatement).Clone(f)
+		return (*DebuggerStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindLabeledStatement:
-		return n.data.(*LabeledStatement).Clone(f)
+		return (*LabeledStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindExpressionStatement:
-		return n.data.(*ExpressionStatement).Clone(f)
+		return (*ExpressionStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindBlock:
-		return n.data.(*Block).Clone(f)
+		return (*Block)(unsafe.Pointer(n)).Clone(f)
 	case KindVariableStatement:
-		return n.data.(*VariableStatement).Clone(f)
+		return (*VariableStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindVariableDeclaration:
-		return n.data.(*VariableDeclaration).Clone(f)
+		return (*VariableDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindVariableDeclarationList:
-		return n.data.(*VariableDeclarationList).Clone(f)
+		return (*VariableDeclarationList)(unsafe.Pointer(n)).Clone(f)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
-		return n.data.(*BindingPattern).Clone(f)
+		return (*BindingPattern)(unsafe.Pointer(n)).Clone(f)
 	case KindParameter:
-		return n.data.(*ParameterDeclaration).Clone(f)
+		return (*ParameterDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindBindingElement:
-		return n.data.(*BindingElement).Clone(f)
+		return (*BindingElement)(unsafe.Pointer(n)).Clone(f)
 	case KindMissingDeclaration:
-		return n.data.(*MissingDeclaration).Clone(f)
+		return (*MissingDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindFunctionDeclaration:
-		return n.data.(*FunctionDeclaration).Clone(f)
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindClassDeclaration:
-		return n.data.(*ClassDeclaration).Clone(f)
+		return (*ClassDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindClassExpression:
-		return n.data.(*ClassExpression).Clone(f)
+		return (*ClassExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindHeritageClause:
-		return n.data.(*HeritageClause).Clone(f)
+		return (*HeritageClause)(unsafe.Pointer(n)).Clone(f)
 	case KindInterfaceDeclaration:
-		return n.data.(*InterfaceDeclaration).Clone(f)
+		return (*InterfaceDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
-		return n.data.(*TypeAliasDeclaration).Clone(f)
+		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindEnumMember:
-		return n.data.(*EnumMember).Clone(f)
+		return (*EnumMember)(unsafe.Pointer(n)).Clone(f)
 	case KindEnumDeclaration:
-		return n.data.(*EnumDeclaration).Clone(f)
+		return (*EnumDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindModuleBlock:
-		return n.data.(*ModuleBlock).Clone(f)
+		return (*ModuleBlock)(unsafe.Pointer(n)).Clone(f)
 	case KindNotEmittedStatement:
-		return n.data.(*NotEmittedStatement).Clone(f)
+		return (*NotEmittedStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindNotEmittedTypeElement:
-		return n.data.(*NotEmittedTypeElement).Clone(f)
+		return (*NotEmittedTypeElement)(unsafe.Pointer(n)).Clone(f)
 	case KindImportDeclaration, KindJSImportDeclaration:
-		return n.data.(*ImportDeclaration).Clone(f)
+		return (*ImportDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindExternalModuleReference:
-		return n.data.(*ExternalModuleReference).Clone(f)
+		return (*ExternalModuleReference)(unsafe.Pointer(n)).Clone(f)
 	case KindNamespaceImport:
-		return n.data.(*NamespaceImport).Clone(f)
+		return (*NamespaceImport)(unsafe.Pointer(n)).Clone(f)
 	case KindNamedImports:
-		return n.data.(*NamedImports).Clone(f)
+		return (*NamedImports)(unsafe.Pointer(n)).Clone(f)
 	case KindExportAssignment:
-		return n.data.(*ExportAssignment).Clone(f)
+		return (*ExportAssignment)(unsafe.Pointer(n)).Clone(f)
 	case KindNamespaceExportDeclaration:
-		return n.data.(*NamespaceExportDeclaration).Clone(f)
+		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindNamespaceExport:
-		return n.data.(*NamespaceExport).Clone(f)
+		return (*NamespaceExport)(unsafe.Pointer(n)).Clone(f)
 	case KindNamedExports:
-		return n.data.(*NamedExports).Clone(f)
+		return (*NamedExports)(unsafe.Pointer(n)).Clone(f)
 	case KindExportSpecifier:
-		return n.data.(*ExportSpecifier).Clone(f)
+		return (*ExportSpecifier)(unsafe.Pointer(n)).Clone(f)
 	case KindCallSignature:
-		return n.data.(*CallSignatureDeclaration).Clone(f)
+		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindConstructSignature:
-		return n.data.(*ConstructSignatureDeclaration).Clone(f)
+		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindConstructor:
-		return n.data.(*ConstructorDeclaration).Clone(f)
+		return (*ConstructorDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindGetAccessor:
-		return n.data.(*GetAccessorDeclaration).Clone(f)
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindSetAccessor:
-		return n.data.(*SetAccessorDeclaration).Clone(f)
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindIndexSignature:
-		return n.data.(*IndexSignatureDeclaration).Clone(f)
+		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindMethodSignature:
-		return n.data.(*MethodSignatureDeclaration).Clone(f)
+		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindMethodDeclaration:
-		return n.data.(*MethodDeclaration).Clone(f)
+		return (*MethodDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindPropertySignature:
-		return n.data.(*PropertySignatureDeclaration).Clone(f)
+		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindPropertyDeclaration:
-		return n.data.(*PropertyDeclaration).Clone(f)
+		return (*PropertyDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindSemicolonClassElement:
-		return n.data.(*SemicolonClassElement).Clone(f)
+		return (*SemicolonClassElement)(unsafe.Pointer(n)).Clone(f)
 	case KindClassStaticBlockDeclaration:
-		return n.data.(*ClassStaticBlockDeclaration).Clone(f)
+		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindOmittedExpression:
-		return n.data.(*OmittedExpression).Clone(f)
+		return (*OmittedExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindBinaryExpression:
-		return n.data.(*BinaryExpression).Clone(f)
+		return (*BinaryExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindPrefixUnaryExpression:
-		return n.data.(*PrefixUnaryExpression).Clone(f)
+		return (*PrefixUnaryExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindPostfixUnaryExpression:
-		return n.data.(*PostfixUnaryExpression).Clone(f)
+		return (*PostfixUnaryExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindYieldExpression:
-		return n.data.(*YieldExpression).Clone(f)
+		return (*YieldExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindArrowFunction:
-		return n.data.(*ArrowFunction).Clone(f)
+		return (*ArrowFunction)(unsafe.Pointer(n)).Clone(f)
 	case KindFunctionExpression:
-		return n.data.(*FunctionExpression).Clone(f)
+		return (*FunctionExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindAsExpression:
-		return n.data.(*AsExpression).Clone(f)
+		return (*AsExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindSatisfiesExpression:
-		return n.data.(*SatisfiesExpression).Clone(f)
+		return (*SatisfiesExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindConditionalExpression:
-		return n.data.(*ConditionalExpression).Clone(f)
+		return (*ConditionalExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindPropertyAccessExpression:
-		return n.data.(*PropertyAccessExpression).Clone(f)
+		return (*PropertyAccessExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindElementAccessExpression:
-		return n.data.(*ElementAccessExpression).Clone(f)
+		return (*ElementAccessExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindCallExpression:
-		return n.data.(*CallExpression).Clone(f)
+		return (*CallExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindNewExpression:
-		return n.data.(*NewExpression).Clone(f)
+		return (*NewExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindMetaProperty:
-		return n.data.(*MetaProperty).Clone(f)
+		return (*MetaProperty)(unsafe.Pointer(n)).Clone(f)
 	case KindNonNullExpression:
-		return n.data.(*NonNullExpression).Clone(f)
+		return (*NonNullExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindSpreadElement:
-		return n.data.(*SpreadElement).Clone(f)
+		return (*SpreadElement)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateExpression:
-		return n.data.(*TemplateExpression).Clone(f)
+		return (*TemplateExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateSpan:
-		return n.data.(*TemplateSpan).Clone(f)
+		return (*TemplateSpan)(unsafe.Pointer(n)).Clone(f)
 	case KindTaggedTemplateExpression:
-		return n.data.(*TaggedTemplateExpression).Clone(f)
+		return (*TaggedTemplateExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindParenthesizedExpression:
-		return n.data.(*ParenthesizedExpression).Clone(f)
+		return (*ParenthesizedExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindArrayLiteralExpression:
-		return n.data.(*ArrayLiteralExpression).Clone(f)
+		return (*ArrayLiteralExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindObjectLiteralExpression:
-		return n.data.(*ObjectLiteralExpression).Clone(f)
+		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindSpreadAssignment:
-		return n.data.(*SpreadAssignment).Clone(f)
+		return (*SpreadAssignment)(unsafe.Pointer(n)).Clone(f)
 	case KindPropertyAssignment:
-		return n.data.(*PropertyAssignment).Clone(f)
+		return (*PropertyAssignment)(unsafe.Pointer(n)).Clone(f)
 	case KindShorthandPropertyAssignment:
-		return n.data.(*ShorthandPropertyAssignment).Clone(f)
+		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).Clone(f)
 	case KindDeleteExpression:
-		return n.data.(*DeleteExpression).Clone(f)
+		return (*DeleteExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeOfExpression:
-		return n.data.(*TypeOfExpression).Clone(f)
+		return (*TypeOfExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindVoidExpression:
-		return n.data.(*VoidExpression).Clone(f)
+		return (*VoidExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindAwaitExpression:
-		return n.data.(*AwaitExpression).Clone(f)
+		return (*AwaitExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeAssertionExpression:
-		return n.data.(*TypeAssertion).Clone(f)
+		return (*TypeAssertion)(unsafe.Pointer(n)).Clone(f)
 	case KindUnionType:
-		return n.data.(*UnionTypeNode).Clone(f)
+		return (*UnionTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindIntersectionType:
-		return n.data.(*IntersectionTypeNode).Clone(f)
+		return (*IntersectionTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindConditionalType:
-		return n.data.(*ConditionalTypeNode).Clone(f)
+		return (*ConditionalTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeOperator:
-		return n.data.(*TypeOperatorNode).Clone(f)
+		return (*TypeOperatorNode)(unsafe.Pointer(n)).Clone(f)
 	case KindInferType:
-		return n.data.(*InferTypeNode).Clone(f)
+		return (*InferTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindArrayType:
-		return n.data.(*ArrayTypeNode).Clone(f)
+		return (*ArrayTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindIndexedAccessType:
-		return n.data.(*IndexedAccessTypeNode).Clone(f)
+		return (*IndexedAccessTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeReference:
-		return n.data.(*TypeReferenceNode).Clone(f)
+		return (*TypeReferenceNode)(unsafe.Pointer(n)).Clone(f)
 	case KindExpressionWithTypeArguments:
-		return n.data.(*ExpressionWithTypeArguments).Clone(f)
+		return (*ExpressionWithTypeArguments)(unsafe.Pointer(n)).Clone(f)
 	case KindLiteralType:
-		return n.data.(*LiteralTypeNode).Clone(f)
+		return (*LiteralTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindThisType:
-		return n.data.(*ThisTypeNode).Clone(f)
+		return (*ThisTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTypePredicate:
-		return n.data.(*TypePredicateNode).Clone(f)
+		return (*TypePredicateNode)(unsafe.Pointer(n)).Clone(f)
 	case KindImportAttribute:
-		return n.data.(*ImportAttribute).Clone(f)
+		return (*ImportAttribute)(unsafe.Pointer(n)).Clone(f)
 	case KindImportAttributes:
-		return n.data.(*ImportAttributes).Clone(f)
+		return (*ImportAttributes)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeQuery:
-		return n.data.(*TypeQueryNode).Clone(f)
+		return (*TypeQueryNode)(unsafe.Pointer(n)).Clone(f)
 	case KindMappedType:
-		return n.data.(*MappedTypeNode).Clone(f)
+		return (*MappedTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeLiteral:
-		return n.data.(*TypeLiteralNode).Clone(f)
+		return (*TypeLiteralNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTupleType:
-		return n.data.(*TupleTypeNode).Clone(f)
+		return (*TupleTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindNamedTupleMember:
-		return n.data.(*NamedTupleMember).Clone(f)
+		return (*NamedTupleMember)(unsafe.Pointer(n)).Clone(f)
 	case KindOptionalType:
-		return n.data.(*OptionalTypeNode).Clone(f)
+		return (*OptionalTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindRestType:
-		return n.data.(*RestTypeNode).Clone(f)
+		return (*RestTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindParenthesizedType:
-		return n.data.(*ParenthesizedTypeNode).Clone(f)
+		return (*ParenthesizedTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindFunctionType:
-		return n.data.(*FunctionTypeNode).Clone(f)
+		return (*FunctionTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindConstructorType:
-		return n.data.(*ConstructorTypeNode).Clone(f)
+		return (*ConstructorTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateLiteralType:
-		return n.data.(*TemplateLiteralTypeNode).Clone(f)
+		return (*TemplateLiteralTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateLiteralTypeSpan:
-		return n.data.(*TemplateLiteralTypeSpan).Clone(f)
+		return (*TemplateLiteralTypeSpan)(unsafe.Pointer(n)).Clone(f)
 	case KindSyntheticExpression:
-		return n.data.(*SyntheticExpression).Clone(f)
+		return (*SyntheticExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindPartiallyEmittedExpression:
-		return n.data.(*PartiallyEmittedExpression).Clone(f)
+		return (*PartiallyEmittedExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxElement:
-		return n.data.(*JsxElement).Clone(f)
+		return (*JsxElement)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxAttributes:
-		return n.data.(*JsxAttributes).Clone(f)
+		return (*JsxAttributes)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxNamespacedName:
-		return n.data.(*JsxNamespacedName).Clone(f)
+		return (*JsxNamespacedName)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxOpeningElement:
-		return n.data.(*JsxOpeningElement).Clone(f)
+		return (*JsxOpeningElement)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxSelfClosingElement:
-		return n.data.(*JsxSelfClosingElement).Clone(f)
+		return (*JsxSelfClosingElement)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxFragment:
-		return n.data.(*JsxFragment).Clone(f)
+		return (*JsxFragment)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxOpeningFragment:
-		return n.data.(*JsxOpeningFragment).Clone(f)
+		return (*JsxOpeningFragment)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxClosingFragment:
-		return n.data.(*JsxClosingFragment).Clone(f)
+		return (*JsxClosingFragment)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxAttribute:
-		return n.data.(*JsxAttribute).Clone(f)
+		return (*JsxAttribute)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxSpreadAttribute:
-		return n.data.(*JsxSpreadAttribute).Clone(f)
+		return (*JsxSpreadAttribute)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxClosingElement:
-		return n.data.(*JsxClosingElement).Clone(f)
+		return (*JsxClosingElement)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxExpression:
-		return n.data.(*JsxExpression).Clone(f)
+		return (*JsxExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindSyntaxList:
-		return n.data.(*SyntaxList).Clone(f)
+		return (*SyntaxList)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDoc:
-		return n.data.(*JSDoc).Clone(f)
+		return (*JSDoc)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocTypeExpression:
-		return n.data.(*JSDocTypeExpression).Clone(f)
+		return (*JSDocTypeExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocNonNullableType:
-		return n.data.(*JSDocNonNullableType).Clone(f)
+		return (*JSDocNonNullableType)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocNullableType:
-		return n.data.(*JSDocNullableType).Clone(f)
+		return (*JSDocNullableType)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocAllType:
-		return n.data.(*JSDocAllType).Clone(f)
+		return (*JSDocAllType)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocVariadicType:
-		return n.data.(*JSDocVariadicType).Clone(f)
+		return (*JSDocVariadicType)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocOptionalType:
-		return n.data.(*JSDocOptionalType).Clone(f)
+		return (*JSDocOptionalType)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocTypeTag:
-		return n.data.(*JSDocTypeTag).Clone(f)
+		return (*JSDocTypeTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocUnknownTag:
-		return n.data.(*JSDocUnknownTag).Clone(f)
+		return (*JSDocUnknownTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocTemplateTag:
-		return n.data.(*JSDocTemplateTag).Clone(f)
+		return (*JSDocTemplateTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocReturnTag:
-		return n.data.(*JSDocReturnTag).Clone(f)
+		return (*JSDocReturnTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocPublicTag:
-		return n.data.(*JSDocPublicTag).Clone(f)
+		return (*JSDocPublicTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocPrivateTag:
-		return n.data.(*JSDocPrivateTag).Clone(f)
+		return (*JSDocPrivateTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocProtectedTag:
-		return n.data.(*JSDocProtectedTag).Clone(f)
+		return (*JSDocProtectedTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocReadonlyTag:
-		return n.data.(*JSDocReadonlyTag).Clone(f)
+		return (*JSDocReadonlyTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocOverrideTag:
-		return n.data.(*JSDocOverrideTag).Clone(f)
+		return (*JSDocOverrideTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocDeprecatedTag:
-		return n.data.(*JSDocDeprecatedTag).Clone(f)
+		return (*JSDocDeprecatedTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocSeeTag:
-		return n.data.(*JSDocSeeTag).Clone(f)
+		return (*JSDocSeeTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocImplementsTag:
-		return n.data.(*JSDocImplementsTag).Clone(f)
+		return (*JSDocImplementsTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocAugmentsTag:
-		return n.data.(*JSDocAugmentsTag).Clone(f)
+		return (*JSDocAugmentsTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocSatisfiesTag:
-		return n.data.(*JSDocSatisfiesTag).Clone(f)
+		return (*JSDocSatisfiesTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocThrowsTag:
-		return n.data.(*JSDocThrowsTag).Clone(f)
+		return (*JSDocThrowsTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocThisTag:
-		return n.data.(*JSDocThisTag).Clone(f)
+		return (*JSDocThisTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocImportTag:
-		return n.data.(*JSDocImportTag).Clone(f)
+		return (*JSDocImportTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocCallbackTag:
-		return n.data.(*JSDocCallbackTag).Clone(f)
+		return (*JSDocCallbackTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocOverloadTag:
-		return n.data.(*JSDocOverloadTag).Clone(f)
+		return (*JSDocOverloadTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocTypedefTag:
-		return n.data.(*JSDocTypedefTag).Clone(f)
+		return (*JSDocTypedefTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocSignature:
-		return n.data.(*JSDocSignature).Clone(f)
+		return (*JSDocSignature)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocNameReference:
-		return n.data.(*JSDocNameReference).Clone(f)
+		return (*JSDocNameReference)(unsafe.Pointer(n)).Clone(f)
 	case KindSourceFile:
-		return n.data.(*SourceFile).Clone(f)
+		return (*SourceFile)(unsafe.Pointer(n)).Clone(f)
 	case KindModuleDeclaration:
-		return n.data.(*ModuleDeclaration).Clone(f)
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindImportEqualsDeclaration:
-		return n.data.(*ImportEqualsDeclaration).Clone(f)
+		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindExportDeclaration:
-		return n.data.(*ExportDeclaration).Clone(f)
+		return (*ExportDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindImportType:
-		return n.data.(*ImportTypeNode).Clone(f)
+		return (*ImportTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindImportClause:
-		return n.data.(*ImportClause).Clone(f)
+		return (*ImportClause)(unsafe.Pointer(n)).Clone(f)
 	case KindImportSpecifier:
-		return n.data.(*ImportSpecifier).Clone(f)
+		return (*ImportSpecifier)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocText:
-		return n.data.(*JSDocText).Clone(f)
+		return (*JSDocText)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocLink:
-		return n.data.(*JSDocLink).Clone(f)
+		return (*JSDocLink)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocLinkPlain:
-		return n.data.(*JSDocLinkPlain).Clone(f)
+		return (*JSDocLinkPlain)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocLinkCode:
-		return n.data.(*JSDocLinkCode).Clone(f)
+		return (*JSDocLinkCode)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeParameter:
-		return n.data.(*TypeParameterDeclaration).Clone(f)
+		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindSyntheticReferenceExpression:
-		return n.data.(*SyntheticReferenceExpression).Clone(f)
+		return (*SyntheticReferenceExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocTypeLiteral:
-		return n.data.(*JSDocTypeLiteral).Clone(f)
+		return (*JSDocTypeLiteral)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
-		return n.data.(*JSDocParameterOrPropertyTag).Clone(f)
+		return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n)).Clone(f)
 	default:
 		return nil
 	}
@@ -9852,43 +9856,43 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
 		return n.computeSubtreeFacts()
 	case KindQualifiedName:
-		return n.data.(*QualifiedName).subtreeFactsWorker(n)
+		return (*QualifiedName)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindComputedPropertyName:
-		return n.data.(*ComputedPropertyName).subtreeFactsWorker(n)
+		return (*ComputedPropertyName)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindDecorator:
-		return n.data.(*Decorator).subtreeFactsWorker(n)
+		return (*Decorator)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindEmptyStatement:
 		return n.computeSubtreeFacts()
 	case KindIfStatement:
-		return n.data.(*IfStatement).subtreeFactsWorker(n)
+		return (*IfStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindDoStatement:
-		return n.data.(*DoStatement).subtreeFactsWorker(n)
+		return (*DoStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindWhileStatement:
-		return n.data.(*WhileStatement).subtreeFactsWorker(n)
+		return (*WhileStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindForStatement:
-		return n.data.(*ForStatement).subtreeFactsWorker(n)
+		return (*ForStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindForInStatement, KindForOfStatement:
-		return n.data.(*ForInOrOfStatement).subtreeFactsWorker(n)
+		return (*ForInOrOfStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindBreakStatement:
 		return n.computeSubtreeFacts()
 	case KindContinueStatement:
 		return n.computeSubtreeFacts()
 	case KindReturnStatement:
-		return n.data.(*ReturnStatement).subtreeFactsWorker(n)
+		return (*ReturnStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindWithStatement:
-		return n.data.(*WithStatement).subtreeFactsWorker(n)
+		return (*WithStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindSwitchStatement:
-		return n.data.(*SwitchStatement).subtreeFactsWorker(n)
+		return (*SwitchStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindCaseBlock:
-		return n.data.(*CaseBlock).subtreeFactsWorker(n)
+		return (*CaseBlock)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindCaseClause, KindDefaultClause:
-		return n.data.(*CaseOrDefaultClause).subtreeFactsWorker(n)
+		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindThrowStatement:
-		return n.data.(*ThrowStatement).subtreeFactsWorker(n)
+		return (*ThrowStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindTryStatement:
-		return n.data.(*TryStatement).subtreeFactsWorker(n)
+		return (*TryStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindCatchClause:
-		return n.data.(*CatchClause).subtreeFactsWorker(n)
+		return (*CatchClause)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindDebuggerStatement:
 		return n.computeSubtreeFacts()
 	case KindLabeledStatement:
@@ -9896,89 +9900,89 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindExpressionStatement:
 		return n.computeSubtreeFacts()
 	case KindBlock:
-		return n.data.(*Block).subtreeFactsWorker(n)
+		return (*Block)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindVariableStatement:
-		return n.data.(*VariableStatement).subtreeFactsWorker(n)
+		return (*VariableStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindVariableDeclaration:
-		return n.data.(*VariableDeclaration).subtreeFactsWorker(n)
+		return (*VariableDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindVariableDeclarationList:
-		return n.data.(*VariableDeclarationList).subtreeFactsWorker(n)
+		return (*VariableDeclarationList)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
-		return n.data.(*BindingPattern).subtreeFactsWorker(n)
+		return (*BindingPattern)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindParameter:
-		return n.data.(*ParameterDeclaration).subtreeFactsWorker(n)
+		return (*ParameterDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindBindingElement:
-		return n.data.(*BindingElement).subtreeFactsWorker(n)
+		return (*BindingElement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindMissingDeclaration:
 		return n.computeSubtreeFacts()
 	case KindFunctionDeclaration:
-		return n.data.(*FunctionDeclaration).subtreeFactsWorker(n)
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindClassDeclaration:
-		return n.data.(*ClassDeclaration).subtreeFactsWorker(n)
+		return (*ClassDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindClassExpression:
-		return n.data.(*ClassExpression).subtreeFactsWorker(n)
+		return (*ClassExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindHeritageClause:
-		return n.data.(*HeritageClause).subtreeFactsWorker(n)
+		return (*HeritageClause)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindInterfaceDeclaration:
 		return n.computeSubtreeFacts()
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
 		return n.computeSubtreeFacts()
 	case KindEnumMember:
-		return n.data.(*EnumMember).subtreeFactsWorker(n)
+		return (*EnumMember)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindEnumDeclaration:
-		return n.data.(*EnumDeclaration).subtreeFactsWorker(n)
+		return (*EnumDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindModuleBlock:
-		return n.data.(*ModuleBlock).subtreeFactsWorker(n)
+		return (*ModuleBlock)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindNotEmittedStatement:
 		return n.computeSubtreeFacts()
 	case KindNotEmittedTypeElement:
 		return n.computeSubtreeFacts()
 	case KindImportDeclaration, KindJSImportDeclaration:
-		return n.data.(*ImportDeclaration).subtreeFactsWorker(n)
+		return (*ImportDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindExternalModuleReference:
 		return n.computeSubtreeFacts()
 	case KindNamespaceImport:
 		return n.computeSubtreeFacts()
 	case KindNamedImports:
-		return n.data.(*NamedImports).subtreeFactsWorker(n)
+		return (*NamedImports)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindExportAssignment:
-		return n.data.(*ExportAssignment).subtreeFactsWorker(n)
+		return (*ExportAssignment)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindNamespaceExportDeclaration:
 		return n.computeSubtreeFacts()
 	case KindNamespaceExport:
 		return n.computeSubtreeFacts()
 	case KindNamedExports:
-		return n.data.(*NamedExports).subtreeFactsWorker(n)
+		return (*NamedExports)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindExportSpecifier:
-		return n.data.(*ExportSpecifier).subtreeFactsWorker(n)
+		return (*ExportSpecifier)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindCallSignature:
 		return n.computeSubtreeFacts()
 	case KindConstructSignature:
 		return n.computeSubtreeFacts()
 	case KindConstructor:
-		return n.data.(*ConstructorDeclaration).subtreeFactsWorker(n)
+		return (*ConstructorDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindGetAccessor:
-		return n.data.(*GetAccessorDeclaration).subtreeFactsWorker(n)
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindSetAccessor:
-		return n.data.(*SetAccessorDeclaration).subtreeFactsWorker(n)
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindIndexSignature:
 		return n.computeSubtreeFacts()
 	case KindMethodSignature:
 		return n.computeSubtreeFacts()
 	case KindMethodDeclaration:
-		return n.data.(*MethodDeclaration).subtreeFactsWorker(n)
+		return (*MethodDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindPropertySignature:
 		return n.computeSubtreeFacts()
 	case KindPropertyDeclaration:
-		return n.data.(*PropertyDeclaration).subtreeFactsWorker(n)
+		return (*PropertyDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindSemicolonClassElement:
 		return n.computeSubtreeFacts()
 	case KindClassStaticBlockDeclaration:
-		return n.data.(*ClassStaticBlockDeclaration).subtreeFactsWorker(n)
+		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindOmittedExpression:
 		return n.computeSubtreeFacts()
 	case KindBinaryExpression:
-		return n.data.(*BinaryExpression).subtreeFactsWorker(n)
+		return (*BinaryExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindPrefixUnaryExpression:
 		return n.computeSubtreeFacts()
 	case KindPostfixUnaryExpression:
@@ -9986,47 +9990,47 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindYieldExpression:
 		return n.computeSubtreeFacts()
 	case KindArrowFunction:
-		return n.data.(*ArrowFunction).subtreeFactsWorker(n)
+		return (*ArrowFunction)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindFunctionExpression:
-		return n.data.(*FunctionExpression).subtreeFactsWorker(n)
+		return (*FunctionExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindAsExpression:
 		return n.computeSubtreeFacts()
 	case KindSatisfiesExpression:
 		return n.computeSubtreeFacts()
 	case KindConditionalExpression:
-		return n.data.(*ConditionalExpression).subtreeFactsWorker(n)
+		return (*ConditionalExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindPropertyAccessExpression:
-		return n.data.(*PropertyAccessExpression).subtreeFactsWorker(n)
+		return (*PropertyAccessExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindElementAccessExpression:
-		return n.data.(*ElementAccessExpression).subtreeFactsWorker(n)
+		return (*ElementAccessExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindCallExpression:
-		return n.data.(*CallExpression).subtreeFactsWorker(n)
+		return (*CallExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindNewExpression:
-		return n.data.(*NewExpression).subtreeFactsWorker(n)
+		return (*NewExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindMetaProperty:
-		return n.data.(*MetaProperty).subtreeFactsWorker(n)
+		return (*MetaProperty)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindNonNullExpression:
 		return n.computeSubtreeFacts()
 	case KindSpreadElement:
 		return n.computeSubtreeFacts()
 	case KindTemplateExpression:
-		return n.data.(*TemplateExpression).subtreeFactsWorker(n)
+		return (*TemplateExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindTemplateSpan:
 		return n.computeSubtreeFacts()
 	case KindTaggedTemplateExpression:
-		return n.data.(*TaggedTemplateExpression).subtreeFactsWorker(n)
+		return (*TaggedTemplateExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindParenthesizedExpression:
 		return n.computeSubtreeFacts()
 	case KindArrayLiteralExpression:
-		return n.data.(*ArrayLiteralExpression).subtreeFactsWorker(n)
+		return (*ArrayLiteralExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindObjectLiteralExpression:
-		return n.data.(*ObjectLiteralExpression).subtreeFactsWorker(n)
+		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindSpreadAssignment:
 		return n.computeSubtreeFacts()
 	case KindPropertyAssignment:
-		return n.data.(*PropertyAssignment).subtreeFactsWorker(n)
+		return (*PropertyAssignment)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindShorthandPropertyAssignment:
-		return n.data.(*ShorthandPropertyAssignment).subtreeFactsWorker(n)
+		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindDeleteExpression:
 		return n.computeSubtreeFacts()
 	case KindTypeOfExpression:
@@ -10054,7 +10058,7 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindTypeReference:
 		return n.computeSubtreeFacts()
 	case KindExpressionWithTypeArguments:
-		return n.data.(*ExpressionWithTypeArguments).subtreeFactsWorker(n)
+		return (*ExpressionWithTypeArguments)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindLiteralType:
 		return n.computeSubtreeFacts()
 	case KindThisType:
@@ -10062,9 +10066,9 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindTypePredicate:
 		return n.computeSubtreeFacts()
 	case KindImportAttribute:
-		return n.data.(*ImportAttribute).subtreeFactsWorker(n)
+		return (*ImportAttribute)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindImportAttributes:
-		return n.data.(*ImportAttributes).subtreeFactsWorker(n)
+		return (*ImportAttributes)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindTypeQuery:
 		return n.computeSubtreeFacts()
 	case KindMappedType:
@@ -10094,23 +10098,23 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindPartiallyEmittedExpression:
 		return n.computeSubtreeFacts()
 	case KindJsxElement:
-		return n.data.(*JsxElement).subtreeFactsWorker(n)
+		return (*JsxElement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxAttributes:
-		return n.data.(*JsxAttributes).subtreeFactsWorker(n)
+		return (*JsxAttributes)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxNamespacedName:
-		return n.data.(*JsxNamespacedName).subtreeFactsWorker(n)
+		return (*JsxNamespacedName)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxOpeningElement:
-		return n.data.(*JsxOpeningElement).subtreeFactsWorker(n)
+		return (*JsxOpeningElement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxSelfClosingElement:
-		return n.data.(*JsxSelfClosingElement).subtreeFactsWorker(n)
+		return (*JsxSelfClosingElement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxFragment:
-		return n.data.(*JsxFragment).subtreeFactsWorker(n)
+		return (*JsxFragment)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxOpeningFragment:
 		return n.computeSubtreeFacts()
 	case KindJsxClosingFragment:
 		return n.computeSubtreeFacts()
 	case KindJsxAttribute:
-		return n.data.(*JsxAttribute).subtreeFactsWorker(n)
+		return (*JsxAttribute)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxSpreadAttribute:
 		return n.computeSubtreeFacts()
 	case KindJsxClosingElement:
@@ -10178,19 +10182,19 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindJSDocNameReference:
 		return n.computeSubtreeFacts()
 	case KindSourceFile:
-		return n.data.(*SourceFile).subtreeFactsWorker(n)
+		return (*SourceFile)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindModuleDeclaration:
-		return n.data.(*ModuleDeclaration).subtreeFactsWorker(n)
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindImportEqualsDeclaration:
-		return n.data.(*ImportEqualsDeclaration).subtreeFactsWorker(n)
+		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindExportDeclaration:
-		return n.data.(*ExportDeclaration).subtreeFactsWorker(n)
+		return (*ExportDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindImportType:
 		return n.computeSubtreeFacts()
 	case KindImportClause:
-		return n.data.(*ImportClause).subtreeFactsWorker(n)
+		return (*ImportClause)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindImportSpecifier:
-		return n.data.(*ImportSpecifier).subtreeFactsWorker(n)
+		return (*ImportSpecifier)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJSDocText:
 		return n.computeSubtreeFacts()
 	case KindJSDocLink:
@@ -10215,389 +10219,389 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 func (n *Node) computeSubtreeFacts() SubtreeFacts {
 	switch n.Kind {
 	case KindUnknown, KindEndOfFile, KindSingleLineCommentTrivia, KindMultiLineCommentTrivia, KindNewLineTrivia, KindWhitespaceTrivia, KindConflictMarkerTrivia, KindNonTextFileMarkerTrivia, KindJsxTextAllWhiteSpaces, KindOpenBraceToken, KindCloseBraceToken, KindOpenParenToken, KindCloseParenToken, KindOpenBracketToken, KindCloseBracketToken, KindDotToken, KindDotDotDotToken, KindSemicolonToken, KindCommaToken, KindQuestionDotToken, KindLessThanToken, KindLessThanSlashToken, KindGreaterThanToken, KindLessThanEqualsToken, KindGreaterThanEqualsToken, KindEqualsEqualsToken, KindExclamationEqualsToken, KindEqualsEqualsEqualsToken, KindExclamationEqualsEqualsToken, KindEqualsGreaterThanToken, KindPlusToken, KindMinusToken, KindAsteriskToken, KindAsteriskAsteriskToken, KindSlashToken, KindPercentToken, KindPlusPlusToken, KindMinusMinusToken, KindLessThanLessThanToken, KindGreaterThanGreaterThanToken, KindGreaterThanGreaterThanGreaterThanToken, KindAmpersandToken, KindBarToken, KindCaretToken, KindExclamationToken, KindTildeToken, KindAmpersandAmpersandToken, KindBarBarToken, KindQuestionToken, KindColonToken, KindAtToken, KindQuestionQuestionToken, KindBacktickToken, KindHashToken, KindEqualsToken, KindPlusEqualsToken, KindMinusEqualsToken, KindAsteriskEqualsToken, KindAsteriskAsteriskEqualsToken, KindSlashEqualsToken, KindPercentEqualsToken, KindLessThanLessThanEqualsToken, KindGreaterThanGreaterThanEqualsToken, KindGreaterThanGreaterThanGreaterThanEqualsToken, KindAmpersandEqualsToken, KindBarEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken, KindQuestionQuestionEqualsToken, KindCaretEqualsToken, KindJSDocCommentTextToken, KindBreakKeyword, KindCaseKeyword, KindCatchKeyword, KindClassKeyword, KindConstKeyword, KindContinueKeyword, KindDebuggerKeyword, KindDefaultKeyword, KindDeleteKeyword, KindDoKeyword, KindElseKeyword, KindEnumKeyword, KindExportKeyword, KindExtendsKeyword, KindFinallyKeyword, KindForKeyword, KindFunctionKeyword, KindIfKeyword, KindInKeyword, KindInstanceOfKeyword, KindNewKeyword, KindReturnKeyword, KindSwitchKeyword, KindThrowKeyword, KindTryKeyword, KindTypeOfKeyword, KindVarKeyword, KindWhileKeyword, KindWithKeyword, KindImplementsKeyword, KindInterfaceKeyword, KindLetKeyword, KindPackageKeyword, KindPrivateKeyword, KindProtectedKeyword, KindPublicKeyword, KindStaticKeyword, KindYieldKeyword, KindAbstractKeyword, KindAccessorKeyword, KindAsKeyword, KindAssertsKeyword, KindAssertKeyword, KindAsyncKeyword, KindAwaitKeyword, KindConstructorKeyword, KindDeclareKeyword, KindGetKeyword, KindImmediateKeyword, KindInferKeyword, KindIsKeyword, KindKeyOfKeyword, KindModuleKeyword, KindNamespaceKeyword, KindOutKeyword, KindReadonlyKeyword, KindRequireKeyword, KindSatisfiesKeyword, KindSetKeyword, KindTypeKeyword, KindUniqueKeyword, KindUsingKeyword, KindFromKeyword, KindGlobalKeyword, KindOverrideKeyword, KindOfKeyword, KindDeferKeyword, KindSourceKeyword:
-		return n.data.(*Token).computeSubtreeFacts()
+		return (*Token)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNumericLiteral:
-		return n.data.(*NumericLiteral).computeSubtreeFacts()
+		return (*NumericLiteral)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindBigIntLiteral:
-		return n.data.(*BigIntLiteral).computeSubtreeFacts()
+		return (*BigIntLiteral)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindStringLiteral:
-		return n.data.(*StringLiteral).computeSubtreeFacts()
+		return (*StringLiteral)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxText:
-		return n.data.(*JsxText).computeSubtreeFacts()
+		return (*JsxText)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindRegularExpressionLiteral:
-		return n.data.(*RegularExpressionLiteral).computeSubtreeFacts()
+		return (*RegularExpressionLiteral)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNoSubstitutionTemplateLiteral:
-		return n.data.(*NoSubstitutionTemplateLiteral).computeSubtreeFacts()
+		return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateHead:
-		return n.data.(*TemplateHead).computeSubtreeFacts()
+		return (*TemplateHead)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateMiddle:
-		return n.data.(*TemplateMiddle).computeSubtreeFacts()
+		return (*TemplateMiddle)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateTail:
-		return n.data.(*TemplateTail).computeSubtreeFacts()
+		return (*TemplateTail)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindIdentifier:
-		return n.data.(*Identifier).computeSubtreeFacts()
+		return (*Identifier)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPrivateIdentifier:
-		return n.data.(*PrivateIdentifier).computeSubtreeFacts()
+		return (*PrivateIdentifier)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindFalseKeyword, KindImportKeyword, KindNullKeyword, KindSuperKeyword, KindThisKeyword, KindTrueKeyword:
-		return n.data.(*KeywordExpression).computeSubtreeFacts()
+		return (*KeywordExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
-		return n.data.(*KeywordTypeNode).computeSubtreeFacts()
+		return (*KeywordTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindQualifiedName:
-		return n.data.(*QualifiedName).computeSubtreeFacts()
+		return (*QualifiedName)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindComputedPropertyName:
-		return n.data.(*ComputedPropertyName).computeSubtreeFacts()
+		return (*ComputedPropertyName)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindDecorator:
-		return n.data.(*Decorator).computeSubtreeFacts()
+		return (*Decorator)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindEmptyStatement:
-		return n.data.(*EmptyStatement).computeSubtreeFacts()
+		return (*EmptyStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindIfStatement:
-		return n.data.(*IfStatement).computeSubtreeFacts()
+		return (*IfStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindDoStatement:
-		return n.data.(*DoStatement).computeSubtreeFacts()
+		return (*DoStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindWhileStatement:
-		return n.data.(*WhileStatement).computeSubtreeFacts()
+		return (*WhileStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindForStatement:
-		return n.data.(*ForStatement).computeSubtreeFacts()
+		return (*ForStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindForInStatement, KindForOfStatement:
-		return n.data.(*ForInOrOfStatement).computeSubtreeFacts()
+		return (*ForInOrOfStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindBreakStatement:
-		return n.data.(*BreakStatement).computeSubtreeFacts()
+		return (*BreakStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindContinueStatement:
-		return n.data.(*ContinueStatement).computeSubtreeFacts()
+		return (*ContinueStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindReturnStatement:
-		return n.data.(*ReturnStatement).computeSubtreeFacts()
+		return (*ReturnStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindWithStatement:
-		return n.data.(*WithStatement).computeSubtreeFacts()
+		return (*WithStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSwitchStatement:
-		return n.data.(*SwitchStatement).computeSubtreeFacts()
+		return (*SwitchStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindCaseBlock:
-		return n.data.(*CaseBlock).computeSubtreeFacts()
+		return (*CaseBlock)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindCaseClause, KindDefaultClause:
-		return n.data.(*CaseOrDefaultClause).computeSubtreeFacts()
+		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindThrowStatement:
-		return n.data.(*ThrowStatement).computeSubtreeFacts()
+		return (*ThrowStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTryStatement:
-		return n.data.(*TryStatement).computeSubtreeFacts()
+		return (*TryStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindCatchClause:
-		return n.data.(*CatchClause).computeSubtreeFacts()
+		return (*CatchClause)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindDebuggerStatement:
-		return n.data.(*DebuggerStatement).computeSubtreeFacts()
+		return (*DebuggerStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindLabeledStatement:
-		return n.data.(*LabeledStatement).computeSubtreeFacts()
+		return (*LabeledStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindExpressionStatement:
-		return n.data.(*ExpressionStatement).computeSubtreeFacts()
+		return (*ExpressionStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindBlock:
-		return n.data.(*Block).computeSubtreeFacts()
+		return (*Block)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindVariableStatement:
-		return n.data.(*VariableStatement).computeSubtreeFacts()
+		return (*VariableStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindVariableDeclaration:
-		return n.data.(*VariableDeclaration).computeSubtreeFacts()
+		return (*VariableDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindVariableDeclarationList:
-		return n.data.(*VariableDeclarationList).computeSubtreeFacts()
+		return (*VariableDeclarationList)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindObjectBindingPattern, KindArrayBindingPattern:
-		return n.data.(*BindingPattern).computeSubtreeFacts()
+		return (*BindingPattern)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindParameter:
-		return n.data.(*ParameterDeclaration).computeSubtreeFacts()
+		return (*ParameterDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindBindingElement:
-		return n.data.(*BindingElement).computeSubtreeFacts()
+		return (*BindingElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindMissingDeclaration:
-		return n.data.(*MissingDeclaration).computeSubtreeFacts()
+		return (*MissingDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindFunctionDeclaration:
-		return n.data.(*FunctionDeclaration).computeSubtreeFacts()
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindClassDeclaration:
-		return n.data.(*ClassDeclaration).computeSubtreeFacts()
+		return (*ClassDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindClassExpression:
-		return n.data.(*ClassExpression).computeSubtreeFacts()
+		return (*ClassExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindHeritageClause:
-		return n.data.(*HeritageClause).computeSubtreeFacts()
+		return (*HeritageClause)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindInterfaceDeclaration:
-		return n.data.(*InterfaceDeclaration).computeSubtreeFacts()
+		return (*InterfaceDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
-		return n.data.(*TypeAliasDeclaration).computeSubtreeFacts()
+		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindEnumMember:
-		return n.data.(*EnumMember).computeSubtreeFacts()
+		return (*EnumMember)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindEnumDeclaration:
-		return n.data.(*EnumDeclaration).computeSubtreeFacts()
+		return (*EnumDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindModuleBlock:
-		return n.data.(*ModuleBlock).computeSubtreeFacts()
+		return (*ModuleBlock)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNotEmittedStatement:
-		return n.data.(*NotEmittedStatement).computeSubtreeFacts()
+		return (*NotEmittedStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNotEmittedTypeElement:
-		return n.data.(*NotEmittedTypeElement).computeSubtreeFacts()
+		return (*NotEmittedTypeElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportDeclaration, KindJSImportDeclaration:
-		return n.data.(*ImportDeclaration).computeSubtreeFacts()
+		return (*ImportDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindExternalModuleReference:
-		return n.data.(*ExternalModuleReference).computeSubtreeFacts()
+		return (*ExternalModuleReference)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNamespaceImport:
-		return n.data.(*NamespaceImport).computeSubtreeFacts()
+		return (*NamespaceImport)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNamedImports:
-		return n.data.(*NamedImports).computeSubtreeFacts()
+		return (*NamedImports)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindExportAssignment:
-		return n.data.(*ExportAssignment).computeSubtreeFacts()
+		return (*ExportAssignment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNamespaceExportDeclaration:
-		return n.data.(*NamespaceExportDeclaration).computeSubtreeFacts()
+		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNamespaceExport:
-		return n.data.(*NamespaceExport).computeSubtreeFacts()
+		return (*NamespaceExport)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNamedExports:
-		return n.data.(*NamedExports).computeSubtreeFacts()
+		return (*NamedExports)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindExportSpecifier:
-		return n.data.(*ExportSpecifier).computeSubtreeFacts()
+		return (*ExportSpecifier)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindCallSignature:
-		return n.data.(*CallSignatureDeclaration).computeSubtreeFacts()
+		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindConstructSignature:
-		return n.data.(*ConstructSignatureDeclaration).computeSubtreeFacts()
+		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindConstructor:
-		return n.data.(*ConstructorDeclaration).computeSubtreeFacts()
+		return (*ConstructorDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindGetAccessor:
-		return n.data.(*GetAccessorDeclaration).computeSubtreeFacts()
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSetAccessor:
-		return n.data.(*SetAccessorDeclaration).computeSubtreeFacts()
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindIndexSignature:
-		return n.data.(*IndexSignatureDeclaration).computeSubtreeFacts()
+		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindMethodSignature:
-		return n.data.(*MethodSignatureDeclaration).computeSubtreeFacts()
+		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindMethodDeclaration:
-		return n.data.(*MethodDeclaration).computeSubtreeFacts()
+		return (*MethodDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPropertySignature:
-		return n.data.(*PropertySignatureDeclaration).computeSubtreeFacts()
+		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPropertyDeclaration:
-		return n.data.(*PropertyDeclaration).computeSubtreeFacts()
+		return (*PropertyDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSemicolonClassElement:
-		return n.data.(*SemicolonClassElement).computeSubtreeFacts()
+		return (*SemicolonClassElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindClassStaticBlockDeclaration:
-		return n.data.(*ClassStaticBlockDeclaration).computeSubtreeFacts()
+		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindOmittedExpression:
-		return n.data.(*OmittedExpression).computeSubtreeFacts()
+		return (*OmittedExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindBinaryExpression:
-		return n.data.(*BinaryExpression).computeSubtreeFacts()
+		return (*BinaryExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPrefixUnaryExpression:
-		return n.data.(*PrefixUnaryExpression).computeSubtreeFacts()
+		return (*PrefixUnaryExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPostfixUnaryExpression:
-		return n.data.(*PostfixUnaryExpression).computeSubtreeFacts()
+		return (*PostfixUnaryExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindYieldExpression:
-		return n.data.(*YieldExpression).computeSubtreeFacts()
+		return (*YieldExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindArrowFunction:
-		return n.data.(*ArrowFunction).computeSubtreeFacts()
+		return (*ArrowFunction)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindFunctionExpression:
-		return n.data.(*FunctionExpression).computeSubtreeFacts()
+		return (*FunctionExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindAsExpression:
-		return n.data.(*AsExpression).computeSubtreeFacts()
+		return (*AsExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSatisfiesExpression:
-		return n.data.(*SatisfiesExpression).computeSubtreeFacts()
+		return (*SatisfiesExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindConditionalExpression:
-		return n.data.(*ConditionalExpression).computeSubtreeFacts()
+		return (*ConditionalExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPropertyAccessExpression:
-		return n.data.(*PropertyAccessExpression).computeSubtreeFacts()
+		return (*PropertyAccessExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindElementAccessExpression:
-		return n.data.(*ElementAccessExpression).computeSubtreeFacts()
+		return (*ElementAccessExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindCallExpression:
-		return n.data.(*CallExpression).computeSubtreeFacts()
+		return (*CallExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNewExpression:
-		return n.data.(*NewExpression).computeSubtreeFacts()
+		return (*NewExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindMetaProperty:
-		return n.data.(*MetaProperty).computeSubtreeFacts()
+		return (*MetaProperty)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNonNullExpression:
-		return n.data.(*NonNullExpression).computeSubtreeFacts()
+		return (*NonNullExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSpreadElement:
-		return n.data.(*SpreadElement).computeSubtreeFacts()
+		return (*SpreadElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateExpression:
-		return n.data.(*TemplateExpression).computeSubtreeFacts()
+		return (*TemplateExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateSpan:
-		return n.data.(*TemplateSpan).computeSubtreeFacts()
+		return (*TemplateSpan)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTaggedTemplateExpression:
-		return n.data.(*TaggedTemplateExpression).computeSubtreeFacts()
+		return (*TaggedTemplateExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindParenthesizedExpression:
-		return n.data.(*ParenthesizedExpression).computeSubtreeFacts()
+		return (*ParenthesizedExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindArrayLiteralExpression:
-		return n.data.(*ArrayLiteralExpression).computeSubtreeFacts()
+		return (*ArrayLiteralExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindObjectLiteralExpression:
-		return n.data.(*ObjectLiteralExpression).computeSubtreeFacts()
+		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSpreadAssignment:
-		return n.data.(*SpreadAssignment).computeSubtreeFacts()
+		return (*SpreadAssignment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPropertyAssignment:
-		return n.data.(*PropertyAssignment).computeSubtreeFacts()
+		return (*PropertyAssignment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindShorthandPropertyAssignment:
-		return n.data.(*ShorthandPropertyAssignment).computeSubtreeFacts()
+		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindDeleteExpression:
-		return n.data.(*DeleteExpression).computeSubtreeFacts()
+		return (*DeleteExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeOfExpression:
-		return n.data.(*TypeOfExpression).computeSubtreeFacts()
+		return (*TypeOfExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindVoidExpression:
-		return n.data.(*VoidExpression).computeSubtreeFacts()
+		return (*VoidExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindAwaitExpression:
-		return n.data.(*AwaitExpression).computeSubtreeFacts()
+		return (*AwaitExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeAssertionExpression:
-		return n.data.(*TypeAssertion).computeSubtreeFacts()
+		return (*TypeAssertion)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindUnionType:
-		return n.data.(*UnionTypeNode).computeSubtreeFacts()
+		return (*UnionTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindIntersectionType:
-		return n.data.(*IntersectionTypeNode).computeSubtreeFacts()
+		return (*IntersectionTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindConditionalType:
-		return n.data.(*ConditionalTypeNode).computeSubtreeFacts()
+		return (*ConditionalTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeOperator:
-		return n.data.(*TypeOperatorNode).computeSubtreeFacts()
+		return (*TypeOperatorNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindInferType:
-		return n.data.(*InferTypeNode).computeSubtreeFacts()
+		return (*InferTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindArrayType:
-		return n.data.(*ArrayTypeNode).computeSubtreeFacts()
+		return (*ArrayTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindIndexedAccessType:
-		return n.data.(*IndexedAccessTypeNode).computeSubtreeFacts()
+		return (*IndexedAccessTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeReference:
-		return n.data.(*TypeReferenceNode).computeSubtreeFacts()
+		return (*TypeReferenceNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindExpressionWithTypeArguments:
-		return n.data.(*ExpressionWithTypeArguments).computeSubtreeFacts()
+		return (*ExpressionWithTypeArguments)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindLiteralType:
-		return n.data.(*LiteralTypeNode).computeSubtreeFacts()
+		return (*LiteralTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindThisType:
-		return n.data.(*ThisTypeNode).computeSubtreeFacts()
+		return (*ThisTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypePredicate:
-		return n.data.(*TypePredicateNode).computeSubtreeFacts()
+		return (*TypePredicateNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportAttribute:
-		return n.data.(*ImportAttribute).computeSubtreeFacts()
+		return (*ImportAttribute)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportAttributes:
-		return n.data.(*ImportAttributes).computeSubtreeFacts()
+		return (*ImportAttributes)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeQuery:
-		return n.data.(*TypeQueryNode).computeSubtreeFacts()
+		return (*TypeQueryNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindMappedType:
-		return n.data.(*MappedTypeNode).computeSubtreeFacts()
+		return (*MappedTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeLiteral:
-		return n.data.(*TypeLiteralNode).computeSubtreeFacts()
+		return (*TypeLiteralNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTupleType:
-		return n.data.(*TupleTypeNode).computeSubtreeFacts()
+		return (*TupleTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNamedTupleMember:
-		return n.data.(*NamedTupleMember).computeSubtreeFacts()
+		return (*NamedTupleMember)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindOptionalType:
-		return n.data.(*OptionalTypeNode).computeSubtreeFacts()
+		return (*OptionalTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindRestType:
-		return n.data.(*RestTypeNode).computeSubtreeFacts()
+		return (*RestTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindParenthesizedType:
-		return n.data.(*ParenthesizedTypeNode).computeSubtreeFacts()
+		return (*ParenthesizedTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindFunctionType:
-		return n.data.(*FunctionTypeNode).computeSubtreeFacts()
+		return (*FunctionTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindConstructorType:
-		return n.data.(*ConstructorTypeNode).computeSubtreeFacts()
+		return (*ConstructorTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateLiteralType:
-		return n.data.(*TemplateLiteralTypeNode).computeSubtreeFacts()
+		return (*TemplateLiteralTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateLiteralTypeSpan:
-		return n.data.(*TemplateLiteralTypeSpan).computeSubtreeFacts()
+		return (*TemplateLiteralTypeSpan)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSyntheticExpression:
-		return n.data.(*SyntheticExpression).computeSubtreeFacts()
+		return (*SyntheticExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPartiallyEmittedExpression:
-		return n.data.(*PartiallyEmittedExpression).computeSubtreeFacts()
+		return (*PartiallyEmittedExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxElement:
-		return n.data.(*JsxElement).computeSubtreeFacts()
+		return (*JsxElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxAttributes:
-		return n.data.(*JsxAttributes).computeSubtreeFacts()
+		return (*JsxAttributes)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxNamespacedName:
-		return n.data.(*JsxNamespacedName).computeSubtreeFacts()
+		return (*JsxNamespacedName)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxOpeningElement:
-		return n.data.(*JsxOpeningElement).computeSubtreeFacts()
+		return (*JsxOpeningElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxSelfClosingElement:
-		return n.data.(*JsxSelfClosingElement).computeSubtreeFacts()
+		return (*JsxSelfClosingElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxFragment:
-		return n.data.(*JsxFragment).computeSubtreeFacts()
+		return (*JsxFragment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxOpeningFragment:
-		return n.data.(*JsxOpeningFragment).computeSubtreeFacts()
+		return (*JsxOpeningFragment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxClosingFragment:
-		return n.data.(*JsxClosingFragment).computeSubtreeFacts()
+		return (*JsxClosingFragment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxAttribute:
-		return n.data.(*JsxAttribute).computeSubtreeFacts()
+		return (*JsxAttribute)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxSpreadAttribute:
-		return n.data.(*JsxSpreadAttribute).computeSubtreeFacts()
+		return (*JsxSpreadAttribute)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxClosingElement:
-		return n.data.(*JsxClosingElement).computeSubtreeFacts()
+		return (*JsxClosingElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxExpression:
-		return n.data.(*JsxExpression).computeSubtreeFacts()
+		return (*JsxExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSyntaxList:
-		return n.data.(*SyntaxList).computeSubtreeFacts()
+		return (*SyntaxList)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDoc:
-		return n.data.(*JSDoc).computeSubtreeFacts()
+		return (*JSDoc)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocTypeExpression:
-		return n.data.(*JSDocTypeExpression).computeSubtreeFacts()
+		return (*JSDocTypeExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocNonNullableType:
-		return n.data.(*JSDocNonNullableType).computeSubtreeFacts()
+		return (*JSDocNonNullableType)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocNullableType:
-		return n.data.(*JSDocNullableType).computeSubtreeFacts()
+		return (*JSDocNullableType)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocAllType:
-		return n.data.(*JSDocAllType).computeSubtreeFacts()
+		return (*JSDocAllType)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocVariadicType:
-		return n.data.(*JSDocVariadicType).computeSubtreeFacts()
+		return (*JSDocVariadicType)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocOptionalType:
-		return n.data.(*JSDocOptionalType).computeSubtreeFacts()
+		return (*JSDocOptionalType)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocTypeTag:
-		return n.data.(*JSDocTypeTag).computeSubtreeFacts()
+		return (*JSDocTypeTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocUnknownTag:
-		return n.data.(*JSDocUnknownTag).computeSubtreeFacts()
+		return (*JSDocUnknownTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocTemplateTag:
-		return n.data.(*JSDocTemplateTag).computeSubtreeFacts()
+		return (*JSDocTemplateTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocReturnTag:
-		return n.data.(*JSDocReturnTag).computeSubtreeFacts()
+		return (*JSDocReturnTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocPublicTag:
-		return n.data.(*JSDocPublicTag).computeSubtreeFacts()
+		return (*JSDocPublicTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocPrivateTag:
-		return n.data.(*JSDocPrivateTag).computeSubtreeFacts()
+		return (*JSDocPrivateTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocProtectedTag:
-		return n.data.(*JSDocProtectedTag).computeSubtreeFacts()
+		return (*JSDocProtectedTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocReadonlyTag:
-		return n.data.(*JSDocReadonlyTag).computeSubtreeFacts()
+		return (*JSDocReadonlyTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocOverrideTag:
-		return n.data.(*JSDocOverrideTag).computeSubtreeFacts()
+		return (*JSDocOverrideTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocDeprecatedTag:
-		return n.data.(*JSDocDeprecatedTag).computeSubtreeFacts()
+		return (*JSDocDeprecatedTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocSeeTag:
-		return n.data.(*JSDocSeeTag).computeSubtreeFacts()
+		return (*JSDocSeeTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocImplementsTag:
-		return n.data.(*JSDocImplementsTag).computeSubtreeFacts()
+		return (*JSDocImplementsTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocAugmentsTag:
-		return n.data.(*JSDocAugmentsTag).computeSubtreeFacts()
+		return (*JSDocAugmentsTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocSatisfiesTag:
-		return n.data.(*JSDocSatisfiesTag).computeSubtreeFacts()
+		return (*JSDocSatisfiesTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocThrowsTag:
-		return n.data.(*JSDocThrowsTag).computeSubtreeFacts()
+		return (*JSDocThrowsTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocThisTag:
-		return n.data.(*JSDocThisTag).computeSubtreeFacts()
+		return (*JSDocThisTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocImportTag:
-		return n.data.(*JSDocImportTag).computeSubtreeFacts()
+		return (*JSDocImportTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocCallbackTag:
-		return n.data.(*JSDocCallbackTag).computeSubtreeFacts()
+		return (*JSDocCallbackTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocOverloadTag:
-		return n.data.(*JSDocOverloadTag).computeSubtreeFacts()
+		return (*JSDocOverloadTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocTypedefTag:
-		return n.data.(*JSDocTypedefTag).computeSubtreeFacts()
+		return (*JSDocTypedefTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocSignature:
-		return n.data.(*JSDocSignature).computeSubtreeFacts()
+		return (*JSDocSignature)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocNameReference:
-		return n.data.(*JSDocNameReference).computeSubtreeFacts()
+		return (*JSDocNameReference)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSourceFile:
-		return n.data.(*SourceFile).computeSubtreeFacts()
+		return (*SourceFile)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindModuleDeclaration:
-		return n.data.(*ModuleDeclaration).computeSubtreeFacts()
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportEqualsDeclaration:
-		return n.data.(*ImportEqualsDeclaration).computeSubtreeFacts()
+		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindExportDeclaration:
-		return n.data.(*ExportDeclaration).computeSubtreeFacts()
+		return (*ExportDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportType:
-		return n.data.(*ImportTypeNode).computeSubtreeFacts()
+		return (*ImportTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportClause:
-		return n.data.(*ImportClause).computeSubtreeFacts()
+		return (*ImportClause)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportSpecifier:
-		return n.data.(*ImportSpecifier).computeSubtreeFacts()
+		return (*ImportSpecifier)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocText:
-		return n.data.(*JSDocText).computeSubtreeFacts()
+		return (*JSDocText)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocLink:
-		return n.data.(*JSDocLink).computeSubtreeFacts()
+		return (*JSDocLink)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocLinkPlain:
-		return n.data.(*JSDocLinkPlain).computeSubtreeFacts()
+		return (*JSDocLinkPlain)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocLinkCode:
-		return n.data.(*JSDocLinkCode).computeSubtreeFacts()
+		return (*JSDocLinkCode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeParameter:
-		return n.data.(*TypeParameterDeclaration).computeSubtreeFacts()
+		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSyntheticReferenceExpression:
-		return n.data.(*SyntheticReferenceExpression).computeSubtreeFacts()
+		return (*SyntheticReferenceExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocTypeLiteral:
-		return n.data.(*JSDocTypeLiteral).computeSubtreeFacts()
+		return (*JSDocTypeLiteral)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
-		return n.data.(*JSDocParameterOrPropertyTag).computeSubtreeFacts()
+		return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	default:
 		return SubtreeFactsNone
 	}
@@ -10606,389 +10610,389 @@ func (n *Node) computeSubtreeFacts() SubtreeFacts {
 func (n *Node) propagateSubtreeFacts() SubtreeFacts {
 	switch n.Kind {
 	case KindUnknown, KindEndOfFile, KindSingleLineCommentTrivia, KindMultiLineCommentTrivia, KindNewLineTrivia, KindWhitespaceTrivia, KindConflictMarkerTrivia, KindNonTextFileMarkerTrivia, KindJsxTextAllWhiteSpaces, KindOpenBraceToken, KindCloseBraceToken, KindOpenParenToken, KindCloseParenToken, KindOpenBracketToken, KindCloseBracketToken, KindDotToken, KindDotDotDotToken, KindSemicolonToken, KindCommaToken, KindQuestionDotToken, KindLessThanToken, KindLessThanSlashToken, KindGreaterThanToken, KindLessThanEqualsToken, KindGreaterThanEqualsToken, KindEqualsEqualsToken, KindExclamationEqualsToken, KindEqualsEqualsEqualsToken, KindExclamationEqualsEqualsToken, KindEqualsGreaterThanToken, KindPlusToken, KindMinusToken, KindAsteriskToken, KindAsteriskAsteriskToken, KindSlashToken, KindPercentToken, KindPlusPlusToken, KindMinusMinusToken, KindLessThanLessThanToken, KindGreaterThanGreaterThanToken, KindGreaterThanGreaterThanGreaterThanToken, KindAmpersandToken, KindBarToken, KindCaretToken, KindExclamationToken, KindTildeToken, KindAmpersandAmpersandToken, KindBarBarToken, KindQuestionToken, KindColonToken, KindAtToken, KindQuestionQuestionToken, KindBacktickToken, KindHashToken, KindEqualsToken, KindPlusEqualsToken, KindMinusEqualsToken, KindAsteriskEqualsToken, KindAsteriskAsteriskEqualsToken, KindSlashEqualsToken, KindPercentEqualsToken, KindLessThanLessThanEqualsToken, KindGreaterThanGreaterThanEqualsToken, KindGreaterThanGreaterThanGreaterThanEqualsToken, KindAmpersandEqualsToken, KindBarEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken, KindQuestionQuestionEqualsToken, KindCaretEqualsToken, KindJSDocCommentTextToken, KindBreakKeyword, KindCaseKeyword, KindCatchKeyword, KindClassKeyword, KindConstKeyword, KindContinueKeyword, KindDebuggerKeyword, KindDefaultKeyword, KindDeleteKeyword, KindDoKeyword, KindElseKeyword, KindEnumKeyword, KindExportKeyword, KindExtendsKeyword, KindFinallyKeyword, KindForKeyword, KindFunctionKeyword, KindIfKeyword, KindInKeyword, KindInstanceOfKeyword, KindNewKeyword, KindReturnKeyword, KindSwitchKeyword, KindThrowKeyword, KindTryKeyword, KindTypeOfKeyword, KindVarKeyword, KindWhileKeyword, KindWithKeyword, KindImplementsKeyword, KindInterfaceKeyword, KindLetKeyword, KindPackageKeyword, KindPrivateKeyword, KindProtectedKeyword, KindPublicKeyword, KindStaticKeyword, KindYieldKeyword, KindAbstractKeyword, KindAccessorKeyword, KindAsKeyword, KindAssertsKeyword, KindAssertKeyword, KindAsyncKeyword, KindAwaitKeyword, KindConstructorKeyword, KindDeclareKeyword, KindGetKeyword, KindImmediateKeyword, KindInferKeyword, KindIsKeyword, KindKeyOfKeyword, KindModuleKeyword, KindNamespaceKeyword, KindOutKeyword, KindReadonlyKeyword, KindRequireKeyword, KindSatisfiesKeyword, KindSetKeyword, KindTypeKeyword, KindUniqueKeyword, KindUsingKeyword, KindFromKeyword, KindGlobalKeyword, KindOverrideKeyword, KindOfKeyword, KindDeferKeyword, KindSourceKeyword:
-		return n.data.(*Token).propagateSubtreeFacts()
+		return (*Token)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNumericLiteral:
-		return n.data.(*NumericLiteral).propagateSubtreeFacts()
+		return (*NumericLiteral)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindBigIntLiteral:
-		return n.data.(*BigIntLiteral).propagateSubtreeFacts()
+		return (*BigIntLiteral)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindStringLiteral:
-		return n.data.(*StringLiteral).propagateSubtreeFacts()
+		return (*StringLiteral)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxText:
-		return n.data.(*JsxText).propagateSubtreeFacts()
+		return (*JsxText)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindRegularExpressionLiteral:
-		return n.data.(*RegularExpressionLiteral).propagateSubtreeFacts()
+		return (*RegularExpressionLiteral)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNoSubstitutionTemplateLiteral:
-		return n.data.(*NoSubstitutionTemplateLiteral).propagateSubtreeFacts()
+		return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateHead:
-		return n.data.(*TemplateHead).propagateSubtreeFacts()
+		return (*TemplateHead)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateMiddle:
-		return n.data.(*TemplateMiddle).propagateSubtreeFacts()
+		return (*TemplateMiddle)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateTail:
-		return n.data.(*TemplateTail).propagateSubtreeFacts()
+		return (*TemplateTail)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindIdentifier:
-		return n.data.(*Identifier).propagateSubtreeFacts()
+		return (*Identifier)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPrivateIdentifier:
-		return n.data.(*PrivateIdentifier).propagateSubtreeFacts()
+		return (*PrivateIdentifier)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindFalseKeyword, KindImportKeyword, KindNullKeyword, KindSuperKeyword, KindThisKeyword, KindTrueKeyword:
-		return n.data.(*KeywordExpression).propagateSubtreeFacts()
+		return (*KeywordExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
-		return n.data.(*KeywordTypeNode).propagateSubtreeFacts()
+		return (*KeywordTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindQualifiedName:
-		return n.data.(*QualifiedName).propagateSubtreeFacts()
+		return (*QualifiedName)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindComputedPropertyName:
-		return n.data.(*ComputedPropertyName).propagateSubtreeFacts()
+		return (*ComputedPropertyName)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindDecorator:
-		return n.data.(*Decorator).propagateSubtreeFacts()
+		return (*Decorator)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindEmptyStatement:
-		return n.data.(*EmptyStatement).propagateSubtreeFacts()
+		return (*EmptyStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindIfStatement:
-		return n.data.(*IfStatement).propagateSubtreeFacts()
+		return (*IfStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindDoStatement:
-		return n.data.(*DoStatement).propagateSubtreeFacts()
+		return (*DoStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindWhileStatement:
-		return n.data.(*WhileStatement).propagateSubtreeFacts()
+		return (*WhileStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindForStatement:
-		return n.data.(*ForStatement).propagateSubtreeFacts()
+		return (*ForStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindForInStatement, KindForOfStatement:
-		return n.data.(*ForInOrOfStatement).propagateSubtreeFacts()
+		return (*ForInOrOfStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindBreakStatement:
-		return n.data.(*BreakStatement).propagateSubtreeFacts()
+		return (*BreakStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindContinueStatement:
-		return n.data.(*ContinueStatement).propagateSubtreeFacts()
+		return (*ContinueStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindReturnStatement:
-		return n.data.(*ReturnStatement).propagateSubtreeFacts()
+		return (*ReturnStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindWithStatement:
-		return n.data.(*WithStatement).propagateSubtreeFacts()
+		return (*WithStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSwitchStatement:
-		return n.data.(*SwitchStatement).propagateSubtreeFacts()
+		return (*SwitchStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindCaseBlock:
-		return n.data.(*CaseBlock).propagateSubtreeFacts()
+		return (*CaseBlock)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindCaseClause, KindDefaultClause:
-		return n.data.(*CaseOrDefaultClause).propagateSubtreeFacts()
+		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindThrowStatement:
-		return n.data.(*ThrowStatement).propagateSubtreeFacts()
+		return (*ThrowStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTryStatement:
-		return n.data.(*TryStatement).propagateSubtreeFacts()
+		return (*TryStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindCatchClause:
-		return n.data.(*CatchClause).propagateSubtreeFacts()
+		return (*CatchClause)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindDebuggerStatement:
-		return n.data.(*DebuggerStatement).propagateSubtreeFacts()
+		return (*DebuggerStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindLabeledStatement:
-		return n.data.(*LabeledStatement).propagateSubtreeFacts()
+		return (*LabeledStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindExpressionStatement:
-		return n.data.(*ExpressionStatement).propagateSubtreeFacts()
+		return (*ExpressionStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindBlock:
-		return n.data.(*Block).propagateSubtreeFacts()
+		return (*Block)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindVariableStatement:
-		return n.data.(*VariableStatement).propagateSubtreeFacts()
+		return (*VariableStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindVariableDeclaration:
-		return n.data.(*VariableDeclaration).propagateSubtreeFacts()
+		return (*VariableDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindVariableDeclarationList:
-		return n.data.(*VariableDeclarationList).propagateSubtreeFacts()
+		return (*VariableDeclarationList)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindObjectBindingPattern, KindArrayBindingPattern:
-		return n.data.(*BindingPattern).propagateSubtreeFacts()
+		return (*BindingPattern)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindParameter:
-		return n.data.(*ParameterDeclaration).propagateSubtreeFacts()
+		return (*ParameterDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindBindingElement:
-		return n.data.(*BindingElement).propagateSubtreeFacts()
+		return (*BindingElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindMissingDeclaration:
-		return n.data.(*MissingDeclaration).propagateSubtreeFacts()
+		return (*MissingDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindFunctionDeclaration:
-		return n.data.(*FunctionDeclaration).propagateSubtreeFacts()
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindClassDeclaration:
-		return n.data.(*ClassDeclaration).propagateSubtreeFacts()
+		return (*ClassDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindClassExpression:
-		return n.data.(*ClassExpression).propagateSubtreeFacts()
+		return (*ClassExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindHeritageClause:
-		return n.data.(*HeritageClause).propagateSubtreeFacts()
+		return (*HeritageClause)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindInterfaceDeclaration:
-		return n.data.(*InterfaceDeclaration).propagateSubtreeFacts()
+		return (*InterfaceDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
-		return n.data.(*TypeAliasDeclaration).propagateSubtreeFacts()
+		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindEnumMember:
-		return n.data.(*EnumMember).propagateSubtreeFacts()
+		return (*EnumMember)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindEnumDeclaration:
-		return n.data.(*EnumDeclaration).propagateSubtreeFacts()
+		return (*EnumDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindModuleBlock:
-		return n.data.(*ModuleBlock).propagateSubtreeFacts()
+		return (*ModuleBlock)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNotEmittedStatement:
-		return n.data.(*NotEmittedStatement).propagateSubtreeFacts()
+		return (*NotEmittedStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNotEmittedTypeElement:
-		return n.data.(*NotEmittedTypeElement).propagateSubtreeFacts()
+		return (*NotEmittedTypeElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportDeclaration, KindJSImportDeclaration:
-		return n.data.(*ImportDeclaration).propagateSubtreeFacts()
+		return (*ImportDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindExternalModuleReference:
-		return n.data.(*ExternalModuleReference).propagateSubtreeFacts()
+		return (*ExternalModuleReference)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNamespaceImport:
-		return n.data.(*NamespaceImport).propagateSubtreeFacts()
+		return (*NamespaceImport)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNamedImports:
-		return n.data.(*NamedImports).propagateSubtreeFacts()
+		return (*NamedImports)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindExportAssignment:
-		return n.data.(*ExportAssignment).propagateSubtreeFacts()
+		return (*ExportAssignment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNamespaceExportDeclaration:
-		return n.data.(*NamespaceExportDeclaration).propagateSubtreeFacts()
+		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNamespaceExport:
-		return n.data.(*NamespaceExport).propagateSubtreeFacts()
+		return (*NamespaceExport)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNamedExports:
-		return n.data.(*NamedExports).propagateSubtreeFacts()
+		return (*NamedExports)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindExportSpecifier:
-		return n.data.(*ExportSpecifier).propagateSubtreeFacts()
+		return (*ExportSpecifier)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindCallSignature:
-		return n.data.(*CallSignatureDeclaration).propagateSubtreeFacts()
+		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindConstructSignature:
-		return n.data.(*ConstructSignatureDeclaration).propagateSubtreeFacts()
+		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindConstructor:
-		return n.data.(*ConstructorDeclaration).propagateSubtreeFacts()
+		return (*ConstructorDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindGetAccessor:
-		return n.data.(*GetAccessorDeclaration).propagateSubtreeFacts()
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSetAccessor:
-		return n.data.(*SetAccessorDeclaration).propagateSubtreeFacts()
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindIndexSignature:
-		return n.data.(*IndexSignatureDeclaration).propagateSubtreeFacts()
+		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindMethodSignature:
-		return n.data.(*MethodSignatureDeclaration).propagateSubtreeFacts()
+		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindMethodDeclaration:
-		return n.data.(*MethodDeclaration).propagateSubtreeFacts()
+		return (*MethodDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPropertySignature:
-		return n.data.(*PropertySignatureDeclaration).propagateSubtreeFacts()
+		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPropertyDeclaration:
-		return n.data.(*PropertyDeclaration).propagateSubtreeFacts()
+		return (*PropertyDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSemicolonClassElement:
-		return n.data.(*SemicolonClassElement).propagateSubtreeFacts()
+		return (*SemicolonClassElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindClassStaticBlockDeclaration:
-		return n.data.(*ClassStaticBlockDeclaration).propagateSubtreeFacts()
+		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindOmittedExpression:
-		return n.data.(*OmittedExpression).propagateSubtreeFacts()
+		return (*OmittedExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindBinaryExpression:
-		return n.data.(*BinaryExpression).propagateSubtreeFacts()
+		return (*BinaryExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPrefixUnaryExpression:
-		return n.data.(*PrefixUnaryExpression).propagateSubtreeFacts()
+		return (*PrefixUnaryExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPostfixUnaryExpression:
-		return n.data.(*PostfixUnaryExpression).propagateSubtreeFacts()
+		return (*PostfixUnaryExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindYieldExpression:
-		return n.data.(*YieldExpression).propagateSubtreeFacts()
+		return (*YieldExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindArrowFunction:
-		return n.data.(*ArrowFunction).propagateSubtreeFacts()
+		return (*ArrowFunction)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindFunctionExpression:
-		return n.data.(*FunctionExpression).propagateSubtreeFacts()
+		return (*FunctionExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindAsExpression:
-		return n.data.(*AsExpression).propagateSubtreeFacts()
+		return (*AsExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSatisfiesExpression:
-		return n.data.(*SatisfiesExpression).propagateSubtreeFacts()
+		return (*SatisfiesExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindConditionalExpression:
-		return n.data.(*ConditionalExpression).propagateSubtreeFacts()
+		return (*ConditionalExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPropertyAccessExpression:
-		return n.data.(*PropertyAccessExpression).propagateSubtreeFacts()
+		return (*PropertyAccessExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindElementAccessExpression:
-		return n.data.(*ElementAccessExpression).propagateSubtreeFacts()
+		return (*ElementAccessExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindCallExpression:
-		return n.data.(*CallExpression).propagateSubtreeFacts()
+		return (*CallExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNewExpression:
-		return n.data.(*NewExpression).propagateSubtreeFacts()
+		return (*NewExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindMetaProperty:
-		return n.data.(*MetaProperty).propagateSubtreeFacts()
+		return (*MetaProperty)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNonNullExpression:
-		return n.data.(*NonNullExpression).propagateSubtreeFacts()
+		return (*NonNullExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSpreadElement:
-		return n.data.(*SpreadElement).propagateSubtreeFacts()
+		return (*SpreadElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateExpression:
-		return n.data.(*TemplateExpression).propagateSubtreeFacts()
+		return (*TemplateExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateSpan:
-		return n.data.(*TemplateSpan).propagateSubtreeFacts()
+		return (*TemplateSpan)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTaggedTemplateExpression:
-		return n.data.(*TaggedTemplateExpression).propagateSubtreeFacts()
+		return (*TaggedTemplateExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindParenthesizedExpression:
-		return n.data.(*ParenthesizedExpression).propagateSubtreeFacts()
+		return (*ParenthesizedExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindArrayLiteralExpression:
-		return n.data.(*ArrayLiteralExpression).propagateSubtreeFacts()
+		return (*ArrayLiteralExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindObjectLiteralExpression:
-		return n.data.(*ObjectLiteralExpression).propagateSubtreeFacts()
+		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSpreadAssignment:
-		return n.data.(*SpreadAssignment).propagateSubtreeFacts()
+		return (*SpreadAssignment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPropertyAssignment:
-		return n.data.(*PropertyAssignment).propagateSubtreeFacts()
+		return (*PropertyAssignment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindShorthandPropertyAssignment:
-		return n.data.(*ShorthandPropertyAssignment).propagateSubtreeFacts()
+		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindDeleteExpression:
-		return n.data.(*DeleteExpression).propagateSubtreeFacts()
+		return (*DeleteExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeOfExpression:
-		return n.data.(*TypeOfExpression).propagateSubtreeFacts()
+		return (*TypeOfExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindVoidExpression:
-		return n.data.(*VoidExpression).propagateSubtreeFacts()
+		return (*VoidExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindAwaitExpression:
-		return n.data.(*AwaitExpression).propagateSubtreeFacts()
+		return (*AwaitExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeAssertionExpression:
-		return n.data.(*TypeAssertion).propagateSubtreeFacts()
+		return (*TypeAssertion)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindUnionType:
-		return n.data.(*UnionTypeNode).propagateSubtreeFacts()
+		return (*UnionTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindIntersectionType:
-		return n.data.(*IntersectionTypeNode).propagateSubtreeFacts()
+		return (*IntersectionTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindConditionalType:
-		return n.data.(*ConditionalTypeNode).propagateSubtreeFacts()
+		return (*ConditionalTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeOperator:
-		return n.data.(*TypeOperatorNode).propagateSubtreeFacts()
+		return (*TypeOperatorNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindInferType:
-		return n.data.(*InferTypeNode).propagateSubtreeFacts()
+		return (*InferTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindArrayType:
-		return n.data.(*ArrayTypeNode).propagateSubtreeFacts()
+		return (*ArrayTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindIndexedAccessType:
-		return n.data.(*IndexedAccessTypeNode).propagateSubtreeFacts()
+		return (*IndexedAccessTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeReference:
-		return n.data.(*TypeReferenceNode).propagateSubtreeFacts()
+		return (*TypeReferenceNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindExpressionWithTypeArguments:
-		return n.data.(*ExpressionWithTypeArguments).propagateSubtreeFacts()
+		return (*ExpressionWithTypeArguments)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindLiteralType:
-		return n.data.(*LiteralTypeNode).propagateSubtreeFacts()
+		return (*LiteralTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindThisType:
-		return n.data.(*ThisTypeNode).propagateSubtreeFacts()
+		return (*ThisTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypePredicate:
-		return n.data.(*TypePredicateNode).propagateSubtreeFacts()
+		return (*TypePredicateNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportAttribute:
-		return n.data.(*ImportAttribute).propagateSubtreeFacts()
+		return (*ImportAttribute)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportAttributes:
-		return n.data.(*ImportAttributes).propagateSubtreeFacts()
+		return (*ImportAttributes)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeQuery:
-		return n.data.(*TypeQueryNode).propagateSubtreeFacts()
+		return (*TypeQueryNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindMappedType:
-		return n.data.(*MappedTypeNode).propagateSubtreeFacts()
+		return (*MappedTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeLiteral:
-		return n.data.(*TypeLiteralNode).propagateSubtreeFacts()
+		return (*TypeLiteralNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTupleType:
-		return n.data.(*TupleTypeNode).propagateSubtreeFacts()
+		return (*TupleTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNamedTupleMember:
-		return n.data.(*NamedTupleMember).propagateSubtreeFacts()
+		return (*NamedTupleMember)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindOptionalType:
-		return n.data.(*OptionalTypeNode).propagateSubtreeFacts()
+		return (*OptionalTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindRestType:
-		return n.data.(*RestTypeNode).propagateSubtreeFacts()
+		return (*RestTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindParenthesizedType:
-		return n.data.(*ParenthesizedTypeNode).propagateSubtreeFacts()
+		return (*ParenthesizedTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindFunctionType:
-		return n.data.(*FunctionTypeNode).propagateSubtreeFacts()
+		return (*FunctionTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindConstructorType:
-		return n.data.(*ConstructorTypeNode).propagateSubtreeFacts()
+		return (*ConstructorTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateLiteralType:
-		return n.data.(*TemplateLiteralTypeNode).propagateSubtreeFacts()
+		return (*TemplateLiteralTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateLiteralTypeSpan:
-		return n.data.(*TemplateLiteralTypeSpan).propagateSubtreeFacts()
+		return (*TemplateLiteralTypeSpan)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSyntheticExpression:
-		return n.data.(*SyntheticExpression).propagateSubtreeFacts()
+		return (*SyntheticExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPartiallyEmittedExpression:
-		return n.data.(*PartiallyEmittedExpression).propagateSubtreeFacts()
+		return (*PartiallyEmittedExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxElement:
-		return n.data.(*JsxElement).propagateSubtreeFacts()
+		return (*JsxElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxAttributes:
-		return n.data.(*JsxAttributes).propagateSubtreeFacts()
+		return (*JsxAttributes)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxNamespacedName:
-		return n.data.(*JsxNamespacedName).propagateSubtreeFacts()
+		return (*JsxNamespacedName)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxOpeningElement:
-		return n.data.(*JsxOpeningElement).propagateSubtreeFacts()
+		return (*JsxOpeningElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxSelfClosingElement:
-		return n.data.(*JsxSelfClosingElement).propagateSubtreeFacts()
+		return (*JsxSelfClosingElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxFragment:
-		return n.data.(*JsxFragment).propagateSubtreeFacts()
+		return (*JsxFragment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxOpeningFragment:
-		return n.data.(*JsxOpeningFragment).propagateSubtreeFacts()
+		return (*JsxOpeningFragment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxClosingFragment:
-		return n.data.(*JsxClosingFragment).propagateSubtreeFacts()
+		return (*JsxClosingFragment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxAttribute:
-		return n.data.(*JsxAttribute).propagateSubtreeFacts()
+		return (*JsxAttribute)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxSpreadAttribute:
-		return n.data.(*JsxSpreadAttribute).propagateSubtreeFacts()
+		return (*JsxSpreadAttribute)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxClosingElement:
-		return n.data.(*JsxClosingElement).propagateSubtreeFacts()
+		return (*JsxClosingElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxExpression:
-		return n.data.(*JsxExpression).propagateSubtreeFacts()
+		return (*JsxExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSyntaxList:
-		return n.data.(*SyntaxList).propagateSubtreeFacts()
+		return (*SyntaxList)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDoc:
-		return n.data.(*JSDoc).propagateSubtreeFacts()
+		return (*JSDoc)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocTypeExpression:
-		return n.data.(*JSDocTypeExpression).propagateSubtreeFacts()
+		return (*JSDocTypeExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocNonNullableType:
-		return n.data.(*JSDocNonNullableType).propagateSubtreeFacts()
+		return (*JSDocNonNullableType)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocNullableType:
-		return n.data.(*JSDocNullableType).propagateSubtreeFacts()
+		return (*JSDocNullableType)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocAllType:
-		return n.data.(*JSDocAllType).propagateSubtreeFacts()
+		return (*JSDocAllType)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocVariadicType:
-		return n.data.(*JSDocVariadicType).propagateSubtreeFacts()
+		return (*JSDocVariadicType)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocOptionalType:
-		return n.data.(*JSDocOptionalType).propagateSubtreeFacts()
+		return (*JSDocOptionalType)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocTypeTag:
-		return n.data.(*JSDocTypeTag).propagateSubtreeFacts()
+		return (*JSDocTypeTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocUnknownTag:
-		return n.data.(*JSDocUnknownTag).propagateSubtreeFacts()
+		return (*JSDocUnknownTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocTemplateTag:
-		return n.data.(*JSDocTemplateTag).propagateSubtreeFacts()
+		return (*JSDocTemplateTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocReturnTag:
-		return n.data.(*JSDocReturnTag).propagateSubtreeFacts()
+		return (*JSDocReturnTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocPublicTag:
-		return n.data.(*JSDocPublicTag).propagateSubtreeFacts()
+		return (*JSDocPublicTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocPrivateTag:
-		return n.data.(*JSDocPrivateTag).propagateSubtreeFacts()
+		return (*JSDocPrivateTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocProtectedTag:
-		return n.data.(*JSDocProtectedTag).propagateSubtreeFacts()
+		return (*JSDocProtectedTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocReadonlyTag:
-		return n.data.(*JSDocReadonlyTag).propagateSubtreeFacts()
+		return (*JSDocReadonlyTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocOverrideTag:
-		return n.data.(*JSDocOverrideTag).propagateSubtreeFacts()
+		return (*JSDocOverrideTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocDeprecatedTag:
-		return n.data.(*JSDocDeprecatedTag).propagateSubtreeFacts()
+		return (*JSDocDeprecatedTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocSeeTag:
-		return n.data.(*JSDocSeeTag).propagateSubtreeFacts()
+		return (*JSDocSeeTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocImplementsTag:
-		return n.data.(*JSDocImplementsTag).propagateSubtreeFacts()
+		return (*JSDocImplementsTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocAugmentsTag:
-		return n.data.(*JSDocAugmentsTag).propagateSubtreeFacts()
+		return (*JSDocAugmentsTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocSatisfiesTag:
-		return n.data.(*JSDocSatisfiesTag).propagateSubtreeFacts()
+		return (*JSDocSatisfiesTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocThrowsTag:
-		return n.data.(*JSDocThrowsTag).propagateSubtreeFacts()
+		return (*JSDocThrowsTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocThisTag:
-		return n.data.(*JSDocThisTag).propagateSubtreeFacts()
+		return (*JSDocThisTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocImportTag:
-		return n.data.(*JSDocImportTag).propagateSubtreeFacts()
+		return (*JSDocImportTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocCallbackTag:
-		return n.data.(*JSDocCallbackTag).propagateSubtreeFacts()
+		return (*JSDocCallbackTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocOverloadTag:
-		return n.data.(*JSDocOverloadTag).propagateSubtreeFacts()
+		return (*JSDocOverloadTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocTypedefTag:
-		return n.data.(*JSDocTypedefTag).propagateSubtreeFacts()
+		return (*JSDocTypedefTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocSignature:
-		return n.data.(*JSDocSignature).propagateSubtreeFacts()
+		return (*JSDocSignature)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocNameReference:
-		return n.data.(*JSDocNameReference).propagateSubtreeFacts()
+		return (*JSDocNameReference)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSourceFile:
-		return n.data.(*SourceFile).propagateSubtreeFacts()
+		return (*SourceFile)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindModuleDeclaration:
-		return n.data.(*ModuleDeclaration).propagateSubtreeFacts()
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportEqualsDeclaration:
-		return n.data.(*ImportEqualsDeclaration).propagateSubtreeFacts()
+		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindExportDeclaration:
-		return n.data.(*ExportDeclaration).propagateSubtreeFacts()
+		return (*ExportDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportType:
-		return n.data.(*ImportTypeNode).propagateSubtreeFacts()
+		return (*ImportTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportClause:
-		return n.data.(*ImportClause).propagateSubtreeFacts()
+		return (*ImportClause)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportSpecifier:
-		return n.data.(*ImportSpecifier).propagateSubtreeFacts()
+		return (*ImportSpecifier)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocText:
-		return n.data.(*JSDocText).propagateSubtreeFacts()
+		return (*JSDocText)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocLink:
-		return n.data.(*JSDocLink).propagateSubtreeFacts()
+		return (*JSDocLink)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocLinkPlain:
-		return n.data.(*JSDocLinkPlain).propagateSubtreeFacts()
+		return (*JSDocLinkPlain)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocLinkCode:
-		return n.data.(*JSDocLinkCode).propagateSubtreeFacts()
+		return (*JSDocLinkCode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeParameter:
-		return n.data.(*TypeParameterDeclaration).propagateSubtreeFacts()
+		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSyntheticReferenceExpression:
-		return n.data.(*SyntheticReferenceExpression).propagateSubtreeFacts()
+		return (*SyntheticReferenceExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocTypeLiteral:
-		return n.data.(*JSDocTypeLiteral).propagateSubtreeFacts()
+		return (*JSDocTypeLiteral)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
-		return n.data.(*JSDocParameterOrPropertyTag).propagateSubtreeFacts()
+		return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	default:
 		return SubtreeFactsNone
 	}
@@ -11056,93 +11060,93 @@ var nodeFlowNodeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) FlowNodeData() *FlowNodeBase {
 	switch nodeFlowNodeDataDispatch[n.Kind] {
 	case 1:
-		return n.data.(*Identifier).FlowNodeData()
+		return (*Identifier)(unsafe.Pointer(n)).FlowNodeData()
 	case 2:
-		return n.data.(*QualifiedName).FlowNodeData()
+		return (*QualifiedName)(unsafe.Pointer(n)).FlowNodeData()
 	case 3:
-		return n.data.(*EmptyStatement).FlowNodeData()
+		return (*EmptyStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 4:
-		return n.data.(*IfStatement).FlowNodeData()
+		return (*IfStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 5:
-		return n.data.(*DoStatement).FlowNodeData()
+		return (*DoStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 6:
-		return n.data.(*WhileStatement).FlowNodeData()
+		return (*WhileStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 7:
-		return n.data.(*ForStatement).FlowNodeData()
+		return (*ForStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 8:
-		return n.data.(*ForInOrOfStatement).FlowNodeData()
+		return (*ForInOrOfStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 9:
-		return n.data.(*BreakStatement).FlowNodeData()
+		return (*BreakStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 10:
-		return n.data.(*ContinueStatement).FlowNodeData()
+		return (*ContinueStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 11:
-		return n.data.(*ReturnStatement).FlowNodeData()
+		return (*ReturnStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 12:
-		return n.data.(*WithStatement).FlowNodeData()
+		return (*WithStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 13:
-		return n.data.(*SwitchStatement).FlowNodeData()
+		return (*SwitchStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 14:
-		return n.data.(*ThrowStatement).FlowNodeData()
+		return (*ThrowStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 15:
-		return n.data.(*TryStatement).FlowNodeData()
+		return (*TryStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 16:
-		return n.data.(*DebuggerStatement).FlowNodeData()
+		return (*DebuggerStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 17:
-		return n.data.(*LabeledStatement).FlowNodeData()
+		return (*LabeledStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 18:
-		return n.data.(*ExpressionStatement).FlowNodeData()
+		return (*ExpressionStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 19:
-		return n.data.(*Block).FlowNodeData()
+		return (*Block)(unsafe.Pointer(n)).FlowNodeData()
 	case 20:
-		return n.data.(*VariableStatement).FlowNodeData()
+		return (*VariableStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 21:
-		return n.data.(*BindingElement).FlowNodeData()
+		return (*BindingElement)(unsafe.Pointer(n)).FlowNodeData()
 	case 22:
-		return n.data.(*MissingDeclaration).FlowNodeData()
+		return (*MissingDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 23:
-		return n.data.(*FunctionDeclaration).FlowNodeData()
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 24:
-		return n.data.(*ClassDeclaration).FlowNodeData()
+		return (*ClassDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 25:
-		return n.data.(*InterfaceDeclaration).FlowNodeData()
+		return (*InterfaceDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 26:
-		return n.data.(*TypeAliasDeclaration).FlowNodeData()
+		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 27:
-		return n.data.(*EnumDeclaration).FlowNodeData()
+		return (*EnumDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 28:
-		return n.data.(*ModuleBlock).FlowNodeData()
+		return (*ModuleBlock)(unsafe.Pointer(n)).FlowNodeData()
 	case 29:
-		return n.data.(*NotEmittedStatement).FlowNodeData()
+		return (*NotEmittedStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 30:
-		return n.data.(*ImportDeclaration).FlowNodeData()
+		return (*ImportDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 31:
-		return n.data.(*ExportAssignment).FlowNodeData()
+		return (*ExportAssignment)(unsafe.Pointer(n)).FlowNodeData()
 	case 32:
-		return n.data.(*NamespaceExportDeclaration).FlowNodeData()
+		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 33:
-		return n.data.(*GetAccessorDeclaration).FlowNodeData()
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 34:
-		return n.data.(*SetAccessorDeclaration).FlowNodeData()
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 35:
-		return n.data.(*MethodDeclaration).FlowNodeData()
+		return (*MethodDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 36:
-		return n.data.(*KeywordExpression).FlowNodeData()
+		return (*KeywordExpression)(unsafe.Pointer(n)).FlowNodeData()
 	case 37:
-		return n.data.(*ArrowFunction).FlowNodeData()
+		return (*ArrowFunction)(unsafe.Pointer(n)).FlowNodeData()
 	case 38:
-		return n.data.(*FunctionExpression).FlowNodeData()
+		return (*FunctionExpression)(unsafe.Pointer(n)).FlowNodeData()
 	case 39:
-		return n.data.(*PropertyAccessExpression).FlowNodeData()
+		return (*PropertyAccessExpression)(unsafe.Pointer(n)).FlowNodeData()
 	case 40:
-		return n.data.(*ElementAccessExpression).FlowNodeData()
+		return (*ElementAccessExpression)(unsafe.Pointer(n)).FlowNodeData()
 	case 41:
-		return n.data.(*MetaProperty).FlowNodeData()
+		return (*MetaProperty)(unsafe.Pointer(n)).FlowNodeData()
 	case 42:
-		return n.data.(*ModuleDeclaration).FlowNodeData()
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 43:
-		return n.data.(*ImportEqualsDeclaration).FlowNodeData()
+		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 44:
-		return n.data.(*ExportDeclaration).FlowNodeData()
+		return (*ExportDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	default:
 		return nil
 	}
@@ -11212,117 +11216,117 @@ var nodeDeclarationDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) DeclarationData() *DeclarationBase {
 	switch nodeDeclarationDataDispatch[n.Kind] {
 	case 1:
-		return n.data.(*VariableDeclaration).DeclarationData()
+		return (*VariableDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 2:
-		return n.data.(*ParameterDeclaration).DeclarationData()
+		return (*ParameterDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 3:
-		return n.data.(*BindingElement).DeclarationData()
+		return (*BindingElement)(unsafe.Pointer(n)).DeclarationData()
 	case 4:
-		return n.data.(*MissingDeclaration).DeclarationData()
+		return (*MissingDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 5:
-		return n.data.(*FunctionDeclaration).DeclarationData()
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 6:
-		return n.data.(*ClassDeclaration).DeclarationData()
+		return (*ClassDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 7:
-		return n.data.(*ClassExpression).DeclarationData()
+		return (*ClassExpression)(unsafe.Pointer(n)).DeclarationData()
 	case 8:
-		return n.data.(*InterfaceDeclaration).DeclarationData()
+		return (*InterfaceDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 9:
-		return n.data.(*TypeAliasDeclaration).DeclarationData()
+		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 10:
-		return n.data.(*EnumMember).DeclarationData()
+		return (*EnumMember)(unsafe.Pointer(n)).DeclarationData()
 	case 11:
-		return n.data.(*EnumDeclaration).DeclarationData()
+		return (*EnumDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 12:
-		return n.data.(*NotEmittedTypeElement).DeclarationData()
+		return (*NotEmittedTypeElement)(unsafe.Pointer(n)).DeclarationData()
 	case 13:
-		return n.data.(*ImportDeclaration).DeclarationData()
+		return (*ImportDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 14:
-		return n.data.(*NamespaceImport).DeclarationData()
+		return (*NamespaceImport)(unsafe.Pointer(n)).DeclarationData()
 	case 15:
-		return n.data.(*ExportAssignment).DeclarationData()
+		return (*ExportAssignment)(unsafe.Pointer(n)).DeclarationData()
 	case 16:
-		return n.data.(*NamespaceExportDeclaration).DeclarationData()
+		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 17:
-		return n.data.(*NamespaceExport).DeclarationData()
+		return (*NamespaceExport)(unsafe.Pointer(n)).DeclarationData()
 	case 18:
-		return n.data.(*ExportSpecifier).DeclarationData()
+		return (*ExportSpecifier)(unsafe.Pointer(n)).DeclarationData()
 	case 19:
-		return n.data.(*CallSignatureDeclaration).DeclarationData()
+		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 20:
-		return n.data.(*ConstructSignatureDeclaration).DeclarationData()
+		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 21:
-		return n.data.(*ConstructorDeclaration).DeclarationData()
+		return (*ConstructorDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 22:
-		return n.data.(*GetAccessorDeclaration).DeclarationData()
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 23:
-		return n.data.(*SetAccessorDeclaration).DeclarationData()
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 24:
-		return n.data.(*IndexSignatureDeclaration).DeclarationData()
+		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 25:
-		return n.data.(*MethodSignatureDeclaration).DeclarationData()
+		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 26:
-		return n.data.(*MethodDeclaration).DeclarationData()
+		return (*MethodDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 27:
-		return n.data.(*PropertySignatureDeclaration).DeclarationData()
+		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 28:
-		return n.data.(*PropertyDeclaration).DeclarationData()
+		return (*PropertyDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 29:
-		return n.data.(*SemicolonClassElement).DeclarationData()
+		return (*SemicolonClassElement)(unsafe.Pointer(n)).DeclarationData()
 	case 30:
-		return n.data.(*ClassStaticBlockDeclaration).DeclarationData()
+		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 31:
-		return n.data.(*NoSubstitutionTemplateLiteral).DeclarationData()
+		return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n)).DeclarationData()
 	case 32:
-		return n.data.(*BinaryExpression).DeclarationData()
+		return (*BinaryExpression)(unsafe.Pointer(n)).DeclarationData()
 	case 33:
-		return n.data.(*ArrowFunction).DeclarationData()
+		return (*ArrowFunction)(unsafe.Pointer(n)).DeclarationData()
 	case 34:
-		return n.data.(*FunctionExpression).DeclarationData()
+		return (*FunctionExpression)(unsafe.Pointer(n)).DeclarationData()
 	case 35:
-		return n.data.(*CallExpression).DeclarationData()
+		return (*CallExpression)(unsafe.Pointer(n)).DeclarationData()
 	case 36:
-		return n.data.(*ObjectLiteralExpression).DeclarationData()
+		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).DeclarationData()
 	case 37:
-		return n.data.(*SpreadAssignment).DeclarationData()
+		return (*SpreadAssignment)(unsafe.Pointer(n)).DeclarationData()
 	case 38:
-		return n.data.(*PropertyAssignment).DeclarationData()
+		return (*PropertyAssignment)(unsafe.Pointer(n)).DeclarationData()
 	case 39:
-		return n.data.(*ShorthandPropertyAssignment).DeclarationData()
+		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).DeclarationData()
 	case 40:
-		return n.data.(*MappedTypeNode).DeclarationData()
+		return (*MappedTypeNode)(unsafe.Pointer(n)).DeclarationData()
 	case 41:
-		return n.data.(*TypeLiteralNode).DeclarationData()
+		return (*TypeLiteralNode)(unsafe.Pointer(n)).DeclarationData()
 	case 42:
-		return n.data.(*NamedTupleMember).DeclarationData()
+		return (*NamedTupleMember)(unsafe.Pointer(n)).DeclarationData()
 	case 43:
-		return n.data.(*FunctionTypeNode).DeclarationData()
+		return (*FunctionTypeNode)(unsafe.Pointer(n)).DeclarationData()
 	case 44:
-		return n.data.(*ConstructorTypeNode).DeclarationData()
+		return (*ConstructorTypeNode)(unsafe.Pointer(n)).DeclarationData()
 	case 45:
-		return n.data.(*JsxAttributes).DeclarationData()
+		return (*JsxAttributes)(unsafe.Pointer(n)).DeclarationData()
 	case 46:
-		return n.data.(*JsxAttribute).DeclarationData()
+		return (*JsxAttribute)(unsafe.Pointer(n)).DeclarationData()
 	case 47:
-		return n.data.(*JsxSpreadAttribute).DeclarationData()
+		return (*JsxSpreadAttribute)(unsafe.Pointer(n)).DeclarationData()
 	case 48:
-		return n.data.(*JSDocSignature).DeclarationData()
+		return (*JSDocSignature)(unsafe.Pointer(n)).DeclarationData()
 	case 49:
-		return n.data.(*SourceFile).DeclarationData()
+		return (*SourceFile)(unsafe.Pointer(n)).DeclarationData()
 	case 50:
-		return n.data.(*ModuleDeclaration).DeclarationData()
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 51:
-		return n.data.(*ImportEqualsDeclaration).DeclarationData()
+		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 52:
-		return n.data.(*ExportDeclaration).DeclarationData()
+		return (*ExportDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 53:
-		return n.data.(*ImportClause).DeclarationData()
+		return (*ImportClause)(unsafe.Pointer(n)).DeclarationData()
 	case 54:
-		return n.data.(*ImportSpecifier).DeclarationData()
+		return (*ImportSpecifier)(unsafe.Pointer(n)).DeclarationData()
 	case 55:
-		return n.data.(*TypeParameterDeclaration).DeclarationData()
+		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 56:
-		return n.data.(*JSDocTypeLiteral).DeclarationData()
+		return (*JSDocTypeLiteral)(unsafe.Pointer(n)).DeclarationData()
 	default:
 		return nil
 	}
@@ -11349,33 +11353,33 @@ var nodeExportableDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) ExportableData() *ExportableBase {
 	switch nodeExportableDataDispatch[n.Kind] {
 	case 1:
-		return n.data.(*VariableDeclaration).ExportableData()
+		return (*VariableDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 2:
-		return n.data.(*BindingElement).ExportableData()
+		return (*BindingElement)(unsafe.Pointer(n)).ExportableData()
 	case 3:
-		return n.data.(*FunctionDeclaration).ExportableData()
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 4:
-		return n.data.(*ClassDeclaration).ExportableData()
+		return (*ClassDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 5:
-		return n.data.(*ClassExpression).ExportableData()
+		return (*ClassExpression)(unsafe.Pointer(n)).ExportableData()
 	case 6:
-		return n.data.(*InterfaceDeclaration).ExportableData()
+		return (*InterfaceDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 7:
-		return n.data.(*TypeAliasDeclaration).ExportableData()
+		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 8:
-		return n.data.(*EnumDeclaration).ExportableData()
+		return (*EnumDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 9:
-		return n.data.(*NamespaceImport).ExportableData()
+		return (*NamespaceImport)(unsafe.Pointer(n)).ExportableData()
 	case 10:
-		return n.data.(*ExportSpecifier).ExportableData()
+		return (*ExportSpecifier)(unsafe.Pointer(n)).ExportableData()
 	case 11:
-		return n.data.(*ModuleDeclaration).ExportableData()
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 12:
-		return n.data.(*ImportEqualsDeclaration).ExportableData()
+		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 13:
-		return n.data.(*ImportClause).ExportableData()
+		return (*ImportClause)(unsafe.Pointer(n)).ExportableData()
 	case 14:
-		return n.data.(*ImportSpecifier).ExportableData()
+		return (*ImportSpecifier)(unsafe.Pointer(n)).ExportableData()
 	default:
 		return nil
 	}
@@ -11416,59 +11420,59 @@ var nodeLocalsContainerDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) LocalsContainerData() *LocalsContainerBase {
 	switch nodeLocalsContainerDataDispatch[n.Kind] {
 	case 1:
-		return n.data.(*ForStatement).LocalsContainerData()
+		return (*ForStatement)(unsafe.Pointer(n)).LocalsContainerData()
 	case 2:
-		return n.data.(*ForInOrOfStatement).LocalsContainerData()
+		return (*ForInOrOfStatement)(unsafe.Pointer(n)).LocalsContainerData()
 	case 3:
-		return n.data.(*CaseBlock).LocalsContainerData()
+		return (*CaseBlock)(unsafe.Pointer(n)).LocalsContainerData()
 	case 4:
-		return n.data.(*CatchClause).LocalsContainerData()
+		return (*CatchClause)(unsafe.Pointer(n)).LocalsContainerData()
 	case 5:
-		return n.data.(*Block).LocalsContainerData()
+		return (*Block)(unsafe.Pointer(n)).LocalsContainerData()
 	case 6:
-		return n.data.(*FunctionDeclaration).LocalsContainerData()
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 7:
-		return n.data.(*ClassDeclaration).LocalsContainerData()
+		return (*ClassDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 8:
-		return n.data.(*ClassExpression).LocalsContainerData()
+		return (*ClassExpression)(unsafe.Pointer(n)).LocalsContainerData()
 	case 9:
-		return n.data.(*TypeAliasDeclaration).LocalsContainerData()
+		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 10:
-		return n.data.(*CallSignatureDeclaration).LocalsContainerData()
+		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 11:
-		return n.data.(*ConstructSignatureDeclaration).LocalsContainerData()
+		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 12:
-		return n.data.(*ConstructorDeclaration).LocalsContainerData()
+		return (*ConstructorDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 13:
-		return n.data.(*GetAccessorDeclaration).LocalsContainerData()
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 14:
-		return n.data.(*SetAccessorDeclaration).LocalsContainerData()
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 15:
-		return n.data.(*IndexSignatureDeclaration).LocalsContainerData()
+		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 16:
-		return n.data.(*MethodSignatureDeclaration).LocalsContainerData()
+		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 17:
-		return n.data.(*MethodDeclaration).LocalsContainerData()
+		return (*MethodDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 18:
-		return n.data.(*ClassStaticBlockDeclaration).LocalsContainerData()
+		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 19:
-		return n.data.(*ArrowFunction).LocalsContainerData()
+		return (*ArrowFunction)(unsafe.Pointer(n)).LocalsContainerData()
 	case 20:
-		return n.data.(*FunctionExpression).LocalsContainerData()
+		return (*FunctionExpression)(unsafe.Pointer(n)).LocalsContainerData()
 	case 21:
-		return n.data.(*ConditionalTypeNode).LocalsContainerData()
+		return (*ConditionalTypeNode)(unsafe.Pointer(n)).LocalsContainerData()
 	case 22:
-		return n.data.(*MappedTypeNode).LocalsContainerData()
+		return (*MappedTypeNode)(unsafe.Pointer(n)).LocalsContainerData()
 	case 23:
-		return n.data.(*FunctionTypeNode).LocalsContainerData()
+		return (*FunctionTypeNode)(unsafe.Pointer(n)).LocalsContainerData()
 	case 24:
-		return n.data.(*ConstructorTypeNode).LocalsContainerData()
+		return (*ConstructorTypeNode)(unsafe.Pointer(n)).LocalsContainerData()
 	case 25:
-		return n.data.(*JSDocSignature).LocalsContainerData()
+		return (*JSDocSignature)(unsafe.Pointer(n)).LocalsContainerData()
 	case 26:
-		return n.data.(*SourceFile).LocalsContainerData()
+		return (*SourceFile)(unsafe.Pointer(n)).LocalsContainerData()
 	case 27:
-		return n.data.(*ModuleDeclaration).LocalsContainerData()
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	default:
 		return nil
 	}
@@ -11494,33 +11498,33 @@ var nodeFunctionLikeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) FunctionLikeData() *FunctionLikeBase {
 	switch nodeFunctionLikeDataDispatch[n.Kind] {
 	case 1:
-		return n.data.(*FunctionDeclaration).FunctionLikeData()
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 2:
-		return n.data.(*CallSignatureDeclaration).FunctionLikeData()
+		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 3:
-		return n.data.(*ConstructSignatureDeclaration).FunctionLikeData()
+		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 4:
-		return n.data.(*ConstructorDeclaration).FunctionLikeData()
+		return (*ConstructorDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 5:
-		return n.data.(*GetAccessorDeclaration).FunctionLikeData()
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 6:
-		return n.data.(*SetAccessorDeclaration).FunctionLikeData()
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 7:
-		return n.data.(*IndexSignatureDeclaration).FunctionLikeData()
+		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 8:
-		return n.data.(*MethodSignatureDeclaration).FunctionLikeData()
+		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 9:
-		return n.data.(*MethodDeclaration).FunctionLikeData()
+		return (*MethodDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 10:
-		return n.data.(*ArrowFunction).FunctionLikeData()
+		return (*ArrowFunction)(unsafe.Pointer(n)).FunctionLikeData()
 	case 11:
-		return n.data.(*FunctionExpression).FunctionLikeData()
+		return (*FunctionExpression)(unsafe.Pointer(n)).FunctionLikeData()
 	case 12:
-		return n.data.(*FunctionTypeNode).FunctionLikeData()
+		return (*FunctionTypeNode)(unsafe.Pointer(n)).FunctionLikeData()
 	case 13:
-		return n.data.(*ConstructorTypeNode).FunctionLikeData()
+		return (*ConstructorTypeNode)(unsafe.Pointer(n)).FunctionLikeData()
 	case 14:
-		return n.data.(*JSDocSignature).FunctionLikeData()
+		return (*JSDocSignature)(unsafe.Pointer(n)).FunctionLikeData()
 	default:
 		return nil
 	}
@@ -11529,9 +11533,9 @@ func (n *Node) FunctionLikeData() *FunctionLikeBase {
 func (n *Node) ClassLikeData() *ClassLikeBase {
 	switch n.Kind {
 	case KindClassDeclaration:
-		return n.data.(*ClassDeclaration).ClassLikeData()
+		return (*ClassDeclaration)(unsafe.Pointer(n)).ClassLikeData()
 	case KindClassExpression:
-		return n.data.(*ClassExpression).ClassLikeData()
+		return (*ClassExpression)(unsafe.Pointer(n)).ClassLikeData()
 	default:
 		return nil
 	}
@@ -11551,21 +11555,21 @@ var nodeBodyDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) BodyData() *BodyBase {
 	switch nodeBodyDataDispatch[n.Kind] {
 	case 1:
-		return n.data.(*FunctionDeclaration).BodyData()
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).BodyData()
 	case 2:
-		return n.data.(*ConstructorDeclaration).BodyData()
+		return (*ConstructorDeclaration)(unsafe.Pointer(n)).BodyData()
 	case 3:
-		return n.data.(*GetAccessorDeclaration).BodyData()
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).BodyData()
 	case 4:
-		return n.data.(*SetAccessorDeclaration).BodyData()
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).BodyData()
 	case 5:
-		return n.data.(*MethodDeclaration).BodyData()
+		return (*MethodDeclaration)(unsafe.Pointer(n)).BodyData()
 	case 6:
-		return n.data.(*ArrowFunction).BodyData()
+		return (*ArrowFunction)(unsafe.Pointer(n)).BodyData()
 	case 7:
-		return n.data.(*FunctionExpression).BodyData()
+		return (*FunctionExpression)(unsafe.Pointer(n)).BodyData()
 	case 8:
-		return n.data.(*ModuleDeclaration).BodyData()
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).BodyData()
 	default:
 		return nil
 	}
@@ -11586,23 +11590,23 @@ var nodeLiteralLikeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) LiteralLikeData() *LiteralLikeNodeBase {
 	switch nodeLiteralLikeDataDispatch[n.Kind] {
 	case 1:
-		return n.data.(*StringLiteral).LiteralLikeData()
+		return (*StringLiteral)(unsafe.Pointer(n)).LiteralLikeData()
 	case 2:
-		return n.data.(*NumericLiteral).LiteralLikeData()
+		return (*NumericLiteral)(unsafe.Pointer(n)).LiteralLikeData()
 	case 3:
-		return n.data.(*BigIntLiteral).LiteralLikeData()
+		return (*BigIntLiteral)(unsafe.Pointer(n)).LiteralLikeData()
 	case 4:
-		return n.data.(*RegularExpressionLiteral).LiteralLikeData()
+		return (*RegularExpressionLiteral)(unsafe.Pointer(n)).LiteralLikeData()
 	case 5:
-		return n.data.(*NoSubstitutionTemplateLiteral).LiteralLikeData()
+		return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n)).LiteralLikeData()
 	case 6:
-		return n.data.(*TemplateHead).LiteralLikeData()
+		return (*TemplateHead)(unsafe.Pointer(n)).LiteralLikeData()
 	case 7:
-		return n.data.(*TemplateMiddle).LiteralLikeData()
+		return (*TemplateMiddle)(unsafe.Pointer(n)).LiteralLikeData()
 	case 8:
-		return n.data.(*TemplateTail).LiteralLikeData()
+		return (*TemplateTail)(unsafe.Pointer(n)).LiteralLikeData()
 	case 9:
-		return n.data.(*JsxText).LiteralLikeData()
+		return (*JsxText)(unsafe.Pointer(n)).LiteralLikeData()
 	default:
 		return nil
 	}
@@ -11611,13 +11615,13 @@ func (n *Node) LiteralLikeData() *LiteralLikeNodeBase {
 func (n *Node) TemplateLiteralLikeData() *TemplateLiteralLikeNodeBase {
 	switch n.Kind {
 	case KindNoSubstitutionTemplateLiteral:
-		return n.data.(*NoSubstitutionTemplateLiteral).TemplateLiteralLikeData()
+		return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n)).TemplateLiteralLikeData()
 	case KindTemplateHead:
-		return n.data.(*TemplateHead).TemplateLiteralLikeData()
+		return (*TemplateHead)(unsafe.Pointer(n)).TemplateLiteralLikeData()
 	case KindTemplateMiddle:
-		return n.data.(*TemplateMiddle).TemplateLiteralLikeData()
+		return (*TemplateMiddle)(unsafe.Pointer(n)).TemplateLiteralLikeData()
 	case KindTemplateTail:
-		return n.data.(*TemplateTail).TemplateLiteralLikeData()
+		return (*TemplateTail)(unsafe.Pointer(n)).TemplateLiteralLikeData()
 	default:
 		return nil
 	}
@@ -11676,87 +11680,87 @@ var nodeNameDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) Name() *DeclarationName {
 	switch nodeNameDispatch[n.Kind] {
 	case 1:
-		return n.data.(*VariableDeclaration).Name()
+		return (*VariableDeclaration)(unsafe.Pointer(n)).Name()
 	case 2:
-		return n.data.(*ParameterDeclaration).Name()
+		return (*ParameterDeclaration)(unsafe.Pointer(n)).Name()
 	case 3:
-		return n.data.(*BindingElement).Name()
+		return (*BindingElement)(unsafe.Pointer(n)).Name()
 	case 4:
-		return n.data.(*FunctionDeclaration).Name()
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).Name()
 	case 5:
-		return n.data.(*ClassDeclaration).Name()
+		return (*ClassDeclaration)(unsafe.Pointer(n)).Name()
 	case 6:
-		return n.data.(*ClassExpression).Name()
+		return (*ClassExpression)(unsafe.Pointer(n)).Name()
 	case 7:
-		return n.data.(*InterfaceDeclaration).Name()
+		return (*InterfaceDeclaration)(unsafe.Pointer(n)).Name()
 	case 8:
-		return n.data.(*TypeAliasDeclaration).Name()
+		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).Name()
 	case 9:
-		return n.data.(*EnumMember).Name()
+		return (*EnumMember)(unsafe.Pointer(n)).Name()
 	case 10:
-		return n.data.(*EnumDeclaration).Name()
+		return (*EnumDeclaration)(unsafe.Pointer(n)).Name()
 	case 11:
-		return n.data.(*NamespaceImport).Name()
+		return (*NamespaceImport)(unsafe.Pointer(n)).Name()
 	case 12:
-		return n.data.(*NamespaceExportDeclaration).Name()
+		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).Name()
 	case 13:
-		return n.data.(*NamespaceExport).Name()
+		return (*NamespaceExport)(unsafe.Pointer(n)).Name()
 	case 14:
-		return n.data.(*ExportSpecifier).Name()
+		return (*ExportSpecifier)(unsafe.Pointer(n)).Name()
 	case 15:
-		return n.data.(*GetAccessorDeclaration).Name()
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).Name()
 	case 16:
-		return n.data.(*SetAccessorDeclaration).Name()
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).Name()
 	case 17:
-		return n.data.(*MethodSignatureDeclaration).Name()
+		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).Name()
 	case 18:
-		return n.data.(*MethodDeclaration).Name()
+		return (*MethodDeclaration)(unsafe.Pointer(n)).Name()
 	case 19:
-		return n.data.(*PropertySignatureDeclaration).Name()
+		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).Name()
 	case 20:
-		return n.data.(*PropertyDeclaration).Name()
+		return (*PropertyDeclaration)(unsafe.Pointer(n)).Name()
 	case 21:
-		return n.data.(*FunctionExpression).Name()
+		return (*FunctionExpression)(unsafe.Pointer(n)).Name()
 	case 22:
-		return n.data.(*PropertyAccessExpression).Name()
+		return (*PropertyAccessExpression)(unsafe.Pointer(n)).Name()
 	case 23:
-		return n.data.(*MetaProperty).Name()
+		return (*MetaProperty)(unsafe.Pointer(n)).Name()
 	case 24:
-		return n.data.(*PropertyAssignment).Name()
+		return (*PropertyAssignment)(unsafe.Pointer(n)).Name()
 	case 25:
-		return n.data.(*ShorthandPropertyAssignment).Name()
+		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).Name()
 	case 26:
-		return n.data.(*ImportAttribute).Name()
+		return (*ImportAttribute)(unsafe.Pointer(n)).Name()
 	case 27:
-		return n.data.(*NamedTupleMember).Name()
+		return (*NamedTupleMember)(unsafe.Pointer(n)).Name()
 	case 28:
-		return n.data.(*JsxNamespacedName).Name()
+		return (*JsxNamespacedName)(unsafe.Pointer(n)).Name()
 	case 29:
-		return n.data.(*JsxAttribute).Name()
+		return (*JsxAttribute)(unsafe.Pointer(n)).Name()
 	case 30:
-		return n.data.(*JSDocCallbackTag).Name()
+		return (*JSDocCallbackTag)(unsafe.Pointer(n)).Name()
 	case 31:
-		return n.data.(*JSDocTypedefTag).Name()
+		return (*JSDocTypedefTag)(unsafe.Pointer(n)).Name()
 	case 32:
-		return n.data.(*JSDocNameReference).Name()
+		return (*JSDocNameReference)(unsafe.Pointer(n)).Name()
 	case 33:
-		return n.data.(*ModuleDeclaration).Name()
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).Name()
 	case 34:
-		return n.data.(*ImportEqualsDeclaration).Name()
+		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).Name()
 	case 35:
-		return n.data.(*ImportClause).Name()
+		return (*ImportClause)(unsafe.Pointer(n)).Name()
 	case 36:
-		return n.data.(*ImportSpecifier).Name()
+		return (*ImportSpecifier)(unsafe.Pointer(n)).Name()
 	case 37:
-		return n.data.(*JSDocLink).Name()
+		return (*JSDocLink)(unsafe.Pointer(n)).Name()
 	case 38:
-		return n.data.(*JSDocLinkPlain).Name()
+		return (*JSDocLinkPlain)(unsafe.Pointer(n)).Name()
 	case 39:
-		return n.data.(*JSDocLinkCode).Name()
+		return (*JSDocLinkCode)(unsafe.Pointer(n)).Name()
 	case 40:
-		return n.data.(*TypeParameterDeclaration).Name()
+		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).Name()
 	case 41:
-		return n.data.(*JSDocParameterOrPropertyTag).Name()
+		return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n)).Name()
 	default:
 		return nil
 	}
@@ -11801,67 +11805,67 @@ var nodeModifiersDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) Modifiers() *ModifierList {
 	switch nodeModifiersDispatch[n.Kind] {
 	case 1:
-		return n.data.(*VariableStatement).Modifiers()
+		return (*VariableStatement)(unsafe.Pointer(n)).Modifiers()
 	case 2:
-		return n.data.(*ParameterDeclaration).Modifiers()
+		return (*ParameterDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 3:
-		return n.data.(*MissingDeclaration).Modifiers()
+		return (*MissingDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 4:
-		return n.data.(*FunctionDeclaration).Modifiers()
+		return (*FunctionDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 5:
-		return n.data.(*ClassDeclaration).Modifiers()
+		return (*ClassDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 6:
-		return n.data.(*ClassExpression).Modifiers()
+		return (*ClassExpression)(unsafe.Pointer(n)).Modifiers()
 	case 7:
-		return n.data.(*InterfaceDeclaration).Modifiers()
+		return (*InterfaceDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 8:
-		return n.data.(*TypeAliasDeclaration).Modifiers()
+		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 9:
-		return n.data.(*EnumDeclaration).Modifiers()
+		return (*EnumDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 10:
-		return n.data.(*ImportDeclaration).Modifiers()
+		return (*ImportDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 11:
-		return n.data.(*ExportAssignment).Modifiers()
+		return (*ExportAssignment)(unsafe.Pointer(n)).Modifiers()
 	case 12:
-		return n.data.(*NamespaceExportDeclaration).Modifiers()
+		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 13:
-		return n.data.(*ConstructorDeclaration).Modifiers()
+		return (*ConstructorDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 14:
-		return n.data.(*GetAccessorDeclaration).Modifiers()
+		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 15:
-		return n.data.(*SetAccessorDeclaration).Modifiers()
+		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 16:
-		return n.data.(*IndexSignatureDeclaration).Modifiers()
+		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 17:
-		return n.data.(*MethodSignatureDeclaration).Modifiers()
+		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 18:
-		return n.data.(*MethodDeclaration).Modifiers()
+		return (*MethodDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 19:
-		return n.data.(*PropertySignatureDeclaration).Modifiers()
+		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 20:
-		return n.data.(*PropertyDeclaration).Modifiers()
+		return (*PropertyDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 21:
-		return n.data.(*ClassStaticBlockDeclaration).Modifiers()
+		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 22:
-		return n.data.(*BinaryExpression).Modifiers()
+		return (*BinaryExpression)(unsafe.Pointer(n)).Modifiers()
 	case 23:
-		return n.data.(*ArrowFunction).Modifiers()
+		return (*ArrowFunction)(unsafe.Pointer(n)).Modifiers()
 	case 24:
-		return n.data.(*FunctionExpression).Modifiers()
+		return (*FunctionExpression)(unsafe.Pointer(n)).Modifiers()
 	case 25:
-		return n.data.(*PropertyAssignment).Modifiers()
+		return (*PropertyAssignment)(unsafe.Pointer(n)).Modifiers()
 	case 26:
-		return n.data.(*ShorthandPropertyAssignment).Modifiers()
+		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).Modifiers()
 	case 27:
-		return n.data.(*ConstructorTypeNode).Modifiers()
+		return (*ConstructorTypeNode)(unsafe.Pointer(n)).Modifiers()
 	case 28:
-		return n.data.(*ModuleDeclaration).Modifiers()
+		return (*ModuleDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 29:
-		return n.data.(*ImportEqualsDeclaration).Modifiers()
+		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 30:
-		return n.data.(*ExportDeclaration).Modifiers()
+		return (*ExportDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 31:
-		return n.data.(*TypeParameterDeclaration).Modifiers()
+		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).Modifiers()
 	default:
 		return nil
 	}
@@ -11870,67 +11874,67 @@ func (n *Node) Modifiers() *ModifierList {
 func (n *MutableNode) SetModifiers(modifiers *ModifierList) {
 	switch n.Kind {
 	case KindVariableStatement:
-		n.data.(*VariableStatement).setModifiers(modifiers)
+		(*VariableStatement)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindParameter:
-		n.data.(*ParameterDeclaration).setModifiers(modifiers)
+		(*ParameterDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindMissingDeclaration:
-		n.data.(*MissingDeclaration).setModifiers(modifiers)
+		(*MissingDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindFunctionDeclaration:
-		n.data.(*FunctionDeclaration).setModifiers(modifiers)
+		(*FunctionDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindClassDeclaration:
-		n.data.(*ClassDeclaration).setModifiers(modifiers)
+		(*ClassDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindClassExpression:
-		n.data.(*ClassExpression).setModifiers(modifiers)
+		(*ClassExpression)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindInterfaceDeclaration:
-		n.data.(*InterfaceDeclaration).setModifiers(modifiers)
+		(*InterfaceDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
-		n.data.(*TypeAliasDeclaration).setModifiers(modifiers)
+		(*TypeAliasDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindEnumDeclaration:
-		n.data.(*EnumDeclaration).setModifiers(modifiers)
+		(*EnumDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindImportDeclaration, KindJSImportDeclaration:
-		n.data.(*ImportDeclaration).setModifiers(modifiers)
+		(*ImportDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindExportAssignment:
-		n.data.(*ExportAssignment).setModifiers(modifiers)
+		(*ExportAssignment)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindNamespaceExportDeclaration:
-		n.data.(*NamespaceExportDeclaration).setModifiers(modifiers)
+		(*NamespaceExportDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindConstructor:
-		n.data.(*ConstructorDeclaration).setModifiers(modifiers)
+		(*ConstructorDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindGetAccessor:
-		n.data.(*GetAccessorDeclaration).setModifiers(modifiers)
+		(*GetAccessorDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindSetAccessor:
-		n.data.(*SetAccessorDeclaration).setModifiers(modifiers)
+		(*SetAccessorDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindIndexSignature:
-		n.data.(*IndexSignatureDeclaration).setModifiers(modifiers)
+		(*IndexSignatureDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindMethodSignature:
-		n.data.(*MethodSignatureDeclaration).setModifiers(modifiers)
+		(*MethodSignatureDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindMethodDeclaration:
-		n.data.(*MethodDeclaration).setModifiers(modifiers)
+		(*MethodDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindPropertySignature:
-		n.data.(*PropertySignatureDeclaration).setModifiers(modifiers)
+		(*PropertySignatureDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindPropertyDeclaration:
-		n.data.(*PropertyDeclaration).setModifiers(modifiers)
+		(*PropertyDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindClassStaticBlockDeclaration:
-		n.data.(*ClassStaticBlockDeclaration).setModifiers(modifiers)
+		(*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindBinaryExpression:
-		n.data.(*BinaryExpression).setModifiers(modifiers)
+		(*BinaryExpression)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindArrowFunction:
-		n.data.(*ArrowFunction).setModifiers(modifiers)
+		(*ArrowFunction)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindFunctionExpression:
-		n.data.(*FunctionExpression).setModifiers(modifiers)
+		(*FunctionExpression)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindPropertyAssignment:
-		n.data.(*PropertyAssignment).setModifiers(modifiers)
+		(*PropertyAssignment)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindShorthandPropertyAssignment:
-		n.data.(*ShorthandPropertyAssignment).setModifiers(modifiers)
+		(*ShorthandPropertyAssignment)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindConstructorType:
-		n.data.(*ConstructorTypeNode).setModifiers(modifiers)
+		(*ConstructorTypeNode)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindModuleDeclaration:
-		n.data.(*ModuleDeclaration).setModifiers(modifiers)
+		(*ModuleDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindImportEqualsDeclaration:
-		n.data.(*ImportEqualsDeclaration).setModifiers(modifiers)
+		(*ImportEqualsDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindExportDeclaration:
-		n.data.(*ExportDeclaration).setModifiers(modifiers)
+		(*ExportDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindTypeParameter:
-		n.data.(*TypeParameterDeclaration).setModifiers(modifiers)
+		(*TypeParameterDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	}
 }
 
@@ -11938,772 +11942,1562 @@ func (n *MutableNode) SetModifiers(modifiers *ModifierList) {
 // As*() cast methods
 // ──────────────────────────────────────────────────────────────────────
 
+// Every concrete node embeds its header at offset zero.
+var (
+	_ [0 - unsafe.Offsetof(Token{}.Node)]byte
+	_ [0 - unsafe.Offsetof(Identifier{}.Node)]byte
+	_ [0 - unsafe.Offsetof(PrivateIdentifier{}.Node)]byte
+	_ [0 - unsafe.Offsetof(QualifiedName{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ComputedPropertyName{}.Node)]byte
+	_ [0 - unsafe.Offsetof(Decorator{}.Node)]byte
+	_ [0 - unsafe.Offsetof(EmptyStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(IfStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(DoStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(WhileStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ForStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ForInOrOfStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(BreakStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ContinueStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ReturnStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(WithStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(SwitchStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(CaseBlock{}.Node)]byte
+	_ [0 - unsafe.Offsetof(CaseOrDefaultClause{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ThrowStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TryStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(CatchClause{}.Node)]byte
+	_ [0 - unsafe.Offsetof(DebuggerStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(LabeledStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ExpressionStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(Block{}.Node)]byte
+	_ [0 - unsafe.Offsetof(VariableStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(VariableDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(VariableDeclarationList{}.Node)]byte
+	_ [0 - unsafe.Offsetof(BindingPattern{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ParameterDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(BindingElement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(MissingDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(FunctionDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ClassDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ClassExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(HeritageClause{}.Node)]byte
+	_ [0 - unsafe.Offsetof(InterfaceDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TypeAliasDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(EnumMember{}.Node)]byte
+	_ [0 - unsafe.Offsetof(EnumDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ModuleBlock{}.Node)]byte
+	_ [0 - unsafe.Offsetof(NotEmittedStatement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(NotEmittedTypeElement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ImportDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ExternalModuleReference{}.Node)]byte
+	_ [0 - unsafe.Offsetof(NamespaceImport{}.Node)]byte
+	_ [0 - unsafe.Offsetof(NamedImports{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ExportAssignment{}.Node)]byte
+	_ [0 - unsafe.Offsetof(NamespaceExportDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(NamespaceExport{}.Node)]byte
+	_ [0 - unsafe.Offsetof(NamedExports{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ExportSpecifier{}.Node)]byte
+	_ [0 - unsafe.Offsetof(CallSignatureDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ConstructSignatureDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ConstructorDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(GetAccessorDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(SetAccessorDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(IndexSignatureDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(MethodSignatureDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(MethodDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(PropertySignatureDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(PropertyDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(SemicolonClassElement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ClassStaticBlockDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(OmittedExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(KeywordExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(StringLiteral{}.Node)]byte
+	_ [0 - unsafe.Offsetof(NumericLiteral{}.Node)]byte
+	_ [0 - unsafe.Offsetof(BigIntLiteral{}.Node)]byte
+	_ [0 - unsafe.Offsetof(RegularExpressionLiteral{}.Node)]byte
+	_ [0 - unsafe.Offsetof(NoSubstitutionTemplateLiteral{}.Node)]byte
+	_ [0 - unsafe.Offsetof(BinaryExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(PrefixUnaryExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(PostfixUnaryExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(YieldExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ArrowFunction{}.Node)]byte
+	_ [0 - unsafe.Offsetof(FunctionExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(AsExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(SatisfiesExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ConditionalExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(PropertyAccessExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ElementAccessExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(CallExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(NewExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(MetaProperty{}.Node)]byte
+	_ [0 - unsafe.Offsetof(NonNullExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(SpreadElement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TemplateExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TemplateSpan{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TaggedTemplateExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ParenthesizedExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ArrayLiteralExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ObjectLiteralExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(SpreadAssignment{}.Node)]byte
+	_ [0 - unsafe.Offsetof(PropertyAssignment{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ShorthandPropertyAssignment{}.Node)]byte
+	_ [0 - unsafe.Offsetof(DeleteExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TypeOfExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(VoidExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(AwaitExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TypeAssertion{}.Node)]byte
+	_ [0 - unsafe.Offsetof(KeywordTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(UnionTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(IntersectionTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ConditionalTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TypeOperatorNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(InferTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ArrayTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(IndexedAccessTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TypeReferenceNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ExpressionWithTypeArguments{}.Node)]byte
+	_ [0 - unsafe.Offsetof(LiteralTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ThisTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TypePredicateNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ImportAttribute{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ImportAttributes{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TypeQueryNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(MappedTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TypeLiteralNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TupleTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(NamedTupleMember{}.Node)]byte
+	_ [0 - unsafe.Offsetof(OptionalTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(RestTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ParenthesizedTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(FunctionTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ConstructorTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TemplateHead{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TemplateMiddle{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TemplateTail{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TemplateLiteralTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TemplateLiteralTypeSpan{}.Node)]byte
+	_ [0 - unsafe.Offsetof(SyntheticExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(PartiallyEmittedExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxElement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxAttributes{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxNamespacedName{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxOpeningElement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxSelfClosingElement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxFragment{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxOpeningFragment{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxClosingFragment{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxAttribute{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxSpreadAttribute{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxClosingElement{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JsxText{}.Node)]byte
+	_ [0 - unsafe.Offsetof(SyntaxList{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDoc{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocTypeExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocNonNullableType{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocNullableType{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocAllType{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocVariadicType{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocOptionalType{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocTypeTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocUnknownTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocTemplateTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocReturnTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocPublicTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocPrivateTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocProtectedTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocReadonlyTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocOverrideTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocDeprecatedTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocSeeTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocImplementsTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocAugmentsTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocSatisfiesTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocThrowsTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocThisTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocImportTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocCallbackTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocOverloadTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocTypedefTag{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocSignature{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocNameReference{}.Node)]byte
+	_ [0 - unsafe.Offsetof(SourceFile{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ModuleDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ImportEqualsDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ExportDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ImportTypeNode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ImportClause{}.Node)]byte
+	_ [0 - unsafe.Offsetof(ImportSpecifier{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocText{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocLink{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocLinkPlain{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocLinkCode{}.Node)]byte
+	_ [0 - unsafe.Offsetof(TypeParameterDeclaration{}.Node)]byte
+	_ [0 - unsafe.Offsetof(SyntheticReferenceExpression{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocTypeLiteral{}.Node)]byte
+	_ [0 - unsafe.Offsetof(JSDocParameterOrPropertyTag{}.Node)]byte
+)
+
 func (n *Node) AsToken() *Token {
-	return n.data.(*Token)
+	switch n.Kind {
+	case KindUnknown, KindEndOfFile, KindSingleLineCommentTrivia, KindMultiLineCommentTrivia, KindNewLineTrivia, KindWhitespaceTrivia, KindConflictMarkerTrivia, KindNonTextFileMarkerTrivia, KindJsxTextAllWhiteSpaces, KindOpenBraceToken, KindCloseBraceToken, KindOpenParenToken, KindCloseParenToken, KindOpenBracketToken, KindCloseBracketToken, KindDotToken, KindDotDotDotToken, KindSemicolonToken, KindCommaToken, KindQuestionDotToken, KindLessThanToken, KindLessThanSlashToken, KindGreaterThanToken, KindLessThanEqualsToken, KindGreaterThanEqualsToken, KindEqualsEqualsToken, KindExclamationEqualsToken, KindEqualsEqualsEqualsToken, KindExclamationEqualsEqualsToken, KindEqualsGreaterThanToken, KindPlusToken, KindMinusToken, KindAsteriskToken, KindAsteriskAsteriskToken, KindSlashToken, KindPercentToken, KindPlusPlusToken, KindMinusMinusToken, KindLessThanLessThanToken, KindGreaterThanGreaterThanToken, KindGreaterThanGreaterThanGreaterThanToken, KindAmpersandToken, KindBarToken, KindCaretToken, KindExclamationToken, KindTildeToken, KindAmpersandAmpersandToken, KindBarBarToken, KindQuestionToken, KindColonToken, KindAtToken, KindQuestionQuestionToken, KindBacktickToken, KindHashToken, KindEqualsToken, KindPlusEqualsToken, KindMinusEqualsToken, KindAsteriskEqualsToken, KindAsteriskAsteriskEqualsToken, KindSlashEqualsToken, KindPercentEqualsToken, KindLessThanLessThanEqualsToken, KindGreaterThanGreaterThanEqualsToken, KindGreaterThanGreaterThanGreaterThanEqualsToken, KindAmpersandEqualsToken, KindBarEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken, KindQuestionQuestionEqualsToken, KindCaretEqualsToken, KindJSDocCommentTextToken, KindBreakKeyword, KindCaseKeyword, KindCatchKeyword, KindClassKeyword, KindConstKeyword, KindContinueKeyword, KindDebuggerKeyword, KindDefaultKeyword, KindDeleteKeyword, KindDoKeyword, KindElseKeyword, KindEnumKeyword, KindExportKeyword, KindExtendsKeyword, KindFinallyKeyword, KindForKeyword, KindFunctionKeyword, KindIfKeyword, KindInKeyword, KindInstanceOfKeyword, KindNewKeyword, KindReturnKeyword, KindSwitchKeyword, KindThrowKeyword, KindTryKeyword, KindTypeOfKeyword, KindVarKeyword, KindWhileKeyword, KindWithKeyword, KindImplementsKeyword, KindInterfaceKeyword, KindLetKeyword, KindPackageKeyword, KindPrivateKeyword, KindProtectedKeyword, KindPublicKeyword, KindStaticKeyword, KindYieldKeyword, KindAbstractKeyword, KindAccessorKeyword, KindAsKeyword, KindAssertsKeyword, KindAssertKeyword, KindAsyncKeyword, KindAwaitKeyword, KindConstructorKeyword, KindDeclareKeyword, KindGetKeyword, KindImmediateKeyword, KindInferKeyword, KindIsKeyword, KindKeyOfKeyword, KindModuleKeyword, KindNamespaceKeyword, KindOutKeyword, KindReadonlyKeyword, KindRequireKeyword, KindSatisfiesKeyword, KindSetKeyword, KindTypeKeyword, KindUniqueKeyword, KindUsingKeyword, KindFromKeyword, KindGlobalKeyword, KindOverrideKeyword, KindOfKeyword, KindDeferKeyword, KindSourceKeyword:
+	default:
+		panic("Invalid node cast to Token")
+	}
+	return (*Token)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsIdentifier() *Identifier {
-	return n.data.(*Identifier)
+	if n.Kind != KindIdentifier {
+		panic("Invalid node cast to Identifier")
+	}
+	return (*Identifier)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsPrivateIdentifier() *PrivateIdentifier {
-	return n.data.(*PrivateIdentifier)
+	if n.Kind != KindPrivateIdentifier {
+		panic("Invalid node cast to PrivateIdentifier")
+	}
+	return (*PrivateIdentifier)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsQualifiedName() *QualifiedName {
-	return n.data.(*QualifiedName)
+	if n.Kind != KindQualifiedName {
+		panic("Invalid node cast to QualifiedName")
+	}
+	return (*QualifiedName)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsComputedPropertyName() *ComputedPropertyName {
-	return n.data.(*ComputedPropertyName)
+	if n.Kind != KindComputedPropertyName {
+		panic("Invalid node cast to ComputedPropertyName")
+	}
+	return (*ComputedPropertyName)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsDecorator() *Decorator {
-	return n.data.(*Decorator)
+	if n.Kind != KindDecorator {
+		panic("Invalid node cast to Decorator")
+	}
+	return (*Decorator)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsEmptyStatement() *EmptyStatement {
-	return n.data.(*EmptyStatement)
+	if n.Kind != KindEmptyStatement {
+		panic("Invalid node cast to EmptyStatement")
+	}
+	return (*EmptyStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsIfStatement() *IfStatement {
-	return n.data.(*IfStatement)
+	if n.Kind != KindIfStatement {
+		panic("Invalid node cast to IfStatement")
+	}
+	return (*IfStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsDoStatement() *DoStatement {
-	return n.data.(*DoStatement)
+	if n.Kind != KindDoStatement {
+		panic("Invalid node cast to DoStatement")
+	}
+	return (*DoStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsWhileStatement() *WhileStatement {
-	return n.data.(*WhileStatement)
+	if n.Kind != KindWhileStatement {
+		panic("Invalid node cast to WhileStatement")
+	}
+	return (*WhileStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsForStatement() *ForStatement {
-	return n.data.(*ForStatement)
+	if n.Kind != KindForStatement {
+		panic("Invalid node cast to ForStatement")
+	}
+	return (*ForStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsForInOrOfStatement() *ForInOrOfStatement {
-	return n.data.(*ForInOrOfStatement)
+	switch n.Kind {
+	case KindForInStatement, KindForOfStatement:
+	default:
+		panic("Invalid node cast to ForInOrOfStatement")
+	}
+	return (*ForInOrOfStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsBreakStatement() *BreakStatement {
-	return n.data.(*BreakStatement)
+	if n.Kind != KindBreakStatement {
+		panic("Invalid node cast to BreakStatement")
+	}
+	return (*BreakStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsContinueStatement() *ContinueStatement {
-	return n.data.(*ContinueStatement)
+	if n.Kind != KindContinueStatement {
+		panic("Invalid node cast to ContinueStatement")
+	}
+	return (*ContinueStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsReturnStatement() *ReturnStatement {
-	return n.data.(*ReturnStatement)
+	if n.Kind != KindReturnStatement {
+		panic("Invalid node cast to ReturnStatement")
+	}
+	return (*ReturnStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsWithStatement() *WithStatement {
-	return n.data.(*WithStatement)
+	if n.Kind != KindWithStatement {
+		panic("Invalid node cast to WithStatement")
+	}
+	return (*WithStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsSwitchStatement() *SwitchStatement {
-	return n.data.(*SwitchStatement)
+	if n.Kind != KindSwitchStatement {
+		panic("Invalid node cast to SwitchStatement")
+	}
+	return (*SwitchStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsCaseBlock() *CaseBlock {
-	return n.data.(*CaseBlock)
+	if n.Kind != KindCaseBlock {
+		panic("Invalid node cast to CaseBlock")
+	}
+	return (*CaseBlock)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsCaseOrDefaultClause() *CaseOrDefaultClause {
-	return n.data.(*CaseOrDefaultClause)
+	switch n.Kind {
+	case KindCaseClause, KindDefaultClause:
+	default:
+		panic("Invalid node cast to CaseOrDefaultClause")
+	}
+	return (*CaseOrDefaultClause)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsThrowStatement() *ThrowStatement {
-	return n.data.(*ThrowStatement)
+	if n.Kind != KindThrowStatement {
+		panic("Invalid node cast to ThrowStatement")
+	}
+	return (*ThrowStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTryStatement() *TryStatement {
-	return n.data.(*TryStatement)
+	if n.Kind != KindTryStatement {
+		panic("Invalid node cast to TryStatement")
+	}
+	return (*TryStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsCatchClause() *CatchClause {
-	return n.data.(*CatchClause)
+	if n.Kind != KindCatchClause {
+		panic("Invalid node cast to CatchClause")
+	}
+	return (*CatchClause)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsDebuggerStatement() *DebuggerStatement {
-	return n.data.(*DebuggerStatement)
+	if n.Kind != KindDebuggerStatement {
+		panic("Invalid node cast to DebuggerStatement")
+	}
+	return (*DebuggerStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsLabeledStatement() *LabeledStatement {
-	return n.data.(*LabeledStatement)
+	if n.Kind != KindLabeledStatement {
+		panic("Invalid node cast to LabeledStatement")
+	}
+	return (*LabeledStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsExpressionStatement() *ExpressionStatement {
-	return n.data.(*ExpressionStatement)
+	if n.Kind != KindExpressionStatement {
+		panic("Invalid node cast to ExpressionStatement")
+	}
+	return (*ExpressionStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsBlock() *Block {
-	return n.data.(*Block)
+	if n.Kind != KindBlock {
+		panic("Invalid node cast to Block")
+	}
+	return (*Block)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsVariableStatement() *VariableStatement {
-	return n.data.(*VariableStatement)
+	if n.Kind != KindVariableStatement {
+		panic("Invalid node cast to VariableStatement")
+	}
+	return (*VariableStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsVariableDeclaration() *VariableDeclaration {
-	return n.data.(*VariableDeclaration)
+	if n.Kind != KindVariableDeclaration {
+		panic("Invalid node cast to VariableDeclaration")
+	}
+	return (*VariableDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsVariableDeclarationList() *VariableDeclarationList {
-	return n.data.(*VariableDeclarationList)
+	if n.Kind != KindVariableDeclarationList {
+		panic("Invalid node cast to VariableDeclarationList")
+	}
+	return (*VariableDeclarationList)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsBindingPattern() *BindingPattern {
-	return n.data.(*BindingPattern)
+	switch n.Kind {
+	case KindObjectBindingPattern, KindArrayBindingPattern:
+	default:
+		panic("Invalid node cast to BindingPattern")
+	}
+	return (*BindingPattern)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsParameterDeclaration() *ParameterDeclaration {
-	return n.data.(*ParameterDeclaration)
+	if n.Kind != KindParameter {
+		panic("Invalid node cast to ParameterDeclaration")
+	}
+	return (*ParameterDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsBindingElement() *BindingElement {
-	return n.data.(*BindingElement)
+	if n.Kind != KindBindingElement {
+		panic("Invalid node cast to BindingElement")
+	}
+	return (*BindingElement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsMissingDeclaration() *MissingDeclaration {
-	return n.data.(*MissingDeclaration)
+	if n.Kind != KindMissingDeclaration {
+		panic("Invalid node cast to MissingDeclaration")
+	}
+	return (*MissingDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsFunctionDeclaration() *FunctionDeclaration {
-	return n.data.(*FunctionDeclaration)
+	if n.Kind != KindFunctionDeclaration {
+		panic("Invalid node cast to FunctionDeclaration")
+	}
+	return (*FunctionDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsClassDeclaration() *ClassDeclaration {
-	return n.data.(*ClassDeclaration)
+	if n.Kind != KindClassDeclaration {
+		panic("Invalid node cast to ClassDeclaration")
+	}
+	return (*ClassDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsClassExpression() *ClassExpression {
-	return n.data.(*ClassExpression)
+	if n.Kind != KindClassExpression {
+		panic("Invalid node cast to ClassExpression")
+	}
+	return (*ClassExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsHeritageClause() *HeritageClause {
-	return n.data.(*HeritageClause)
+	if n.Kind != KindHeritageClause {
+		panic("Invalid node cast to HeritageClause")
+	}
+	return (*HeritageClause)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsInterfaceDeclaration() *InterfaceDeclaration {
-	return n.data.(*InterfaceDeclaration)
+	if n.Kind != KindInterfaceDeclaration {
+		panic("Invalid node cast to InterfaceDeclaration")
+	}
+	return (*InterfaceDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTypeAliasDeclaration() *TypeAliasDeclaration {
-	return n.data.(*TypeAliasDeclaration)
+	switch n.Kind {
+	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+	default:
+		panic("Invalid node cast to TypeAliasDeclaration")
+	}
+	return (*TypeAliasDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsEnumMember() *EnumMember {
-	return n.data.(*EnumMember)
+	if n.Kind != KindEnumMember {
+		panic("Invalid node cast to EnumMember")
+	}
+	return (*EnumMember)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsEnumDeclaration() *EnumDeclaration {
-	return n.data.(*EnumDeclaration)
+	if n.Kind != KindEnumDeclaration {
+		panic("Invalid node cast to EnumDeclaration")
+	}
+	return (*EnumDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsModuleBlock() *ModuleBlock {
-	return n.data.(*ModuleBlock)
+	if n.Kind != KindModuleBlock {
+		panic("Invalid node cast to ModuleBlock")
+	}
+	return (*ModuleBlock)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsNotEmittedStatement() *NotEmittedStatement {
-	return n.data.(*NotEmittedStatement)
+	if n.Kind != KindNotEmittedStatement {
+		panic("Invalid node cast to NotEmittedStatement")
+	}
+	return (*NotEmittedStatement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsNotEmittedTypeElement() *NotEmittedTypeElement {
-	return n.data.(*NotEmittedTypeElement)
+	if n.Kind != KindNotEmittedTypeElement {
+		panic("Invalid node cast to NotEmittedTypeElement")
+	}
+	return (*NotEmittedTypeElement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsImportDeclaration() *ImportDeclaration {
-	return n.data.(*ImportDeclaration)
+	switch n.Kind {
+	case KindImportDeclaration, KindJSImportDeclaration:
+	default:
+		panic("Invalid node cast to ImportDeclaration")
+	}
+	return (*ImportDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsExternalModuleReference() *ExternalModuleReference {
-	return n.data.(*ExternalModuleReference)
+	if n.Kind != KindExternalModuleReference {
+		panic("Invalid node cast to ExternalModuleReference")
+	}
+	return (*ExternalModuleReference)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsNamespaceImport() *NamespaceImport {
-	return n.data.(*NamespaceImport)
+	if n.Kind != KindNamespaceImport {
+		panic("Invalid node cast to NamespaceImport")
+	}
+	return (*NamespaceImport)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsNamedImports() *NamedImports {
-	return n.data.(*NamedImports)
+	if n.Kind != KindNamedImports {
+		panic("Invalid node cast to NamedImports")
+	}
+	return (*NamedImports)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsExportAssignment() *ExportAssignment {
-	return n.data.(*ExportAssignment)
+	if n.Kind != KindExportAssignment {
+		panic("Invalid node cast to ExportAssignment")
+	}
+	return (*ExportAssignment)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsNamespaceExportDeclaration() *NamespaceExportDeclaration {
-	return n.data.(*NamespaceExportDeclaration)
+	if n.Kind != KindNamespaceExportDeclaration {
+		panic("Invalid node cast to NamespaceExportDeclaration")
+	}
+	return (*NamespaceExportDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsNamespaceExport() *NamespaceExport {
-	return n.data.(*NamespaceExport)
+	if n.Kind != KindNamespaceExport {
+		panic("Invalid node cast to NamespaceExport")
+	}
+	return (*NamespaceExport)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsNamedExports() *NamedExports {
-	return n.data.(*NamedExports)
+	if n.Kind != KindNamedExports {
+		panic("Invalid node cast to NamedExports")
+	}
+	return (*NamedExports)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsExportSpecifier() *ExportSpecifier {
-	return n.data.(*ExportSpecifier)
+	if n.Kind != KindExportSpecifier {
+		panic("Invalid node cast to ExportSpecifier")
+	}
+	return (*ExportSpecifier)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsCallSignatureDeclaration() *CallSignatureDeclaration {
-	return n.data.(*CallSignatureDeclaration)
+	if n.Kind != KindCallSignature {
+		panic("Invalid node cast to CallSignatureDeclaration")
+	}
+	return (*CallSignatureDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsConstructSignatureDeclaration() *ConstructSignatureDeclaration {
-	return n.data.(*ConstructSignatureDeclaration)
+	if n.Kind != KindConstructSignature {
+		panic("Invalid node cast to ConstructSignatureDeclaration")
+	}
+	return (*ConstructSignatureDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsConstructorDeclaration() *ConstructorDeclaration {
-	return n.data.(*ConstructorDeclaration)
+	if n.Kind != KindConstructor {
+		panic("Invalid node cast to ConstructorDeclaration")
+	}
+	return (*ConstructorDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsGetAccessorDeclaration() *GetAccessorDeclaration {
-	return n.data.(*GetAccessorDeclaration)
+	if n.Kind != KindGetAccessor {
+		panic("Invalid node cast to GetAccessorDeclaration")
+	}
+	return (*GetAccessorDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsSetAccessorDeclaration() *SetAccessorDeclaration {
-	return n.data.(*SetAccessorDeclaration)
+	if n.Kind != KindSetAccessor {
+		panic("Invalid node cast to SetAccessorDeclaration")
+	}
+	return (*SetAccessorDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsIndexSignatureDeclaration() *IndexSignatureDeclaration {
-	return n.data.(*IndexSignatureDeclaration)
+	if n.Kind != KindIndexSignature {
+		panic("Invalid node cast to IndexSignatureDeclaration")
+	}
+	return (*IndexSignatureDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsMethodSignatureDeclaration() *MethodSignatureDeclaration {
-	return n.data.(*MethodSignatureDeclaration)
+	if n.Kind != KindMethodSignature {
+		panic("Invalid node cast to MethodSignatureDeclaration")
+	}
+	return (*MethodSignatureDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsMethodDeclaration() *MethodDeclaration {
-	return n.data.(*MethodDeclaration)
+	if n.Kind != KindMethodDeclaration {
+		panic("Invalid node cast to MethodDeclaration")
+	}
+	return (*MethodDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsPropertySignatureDeclaration() *PropertySignatureDeclaration {
-	return n.data.(*PropertySignatureDeclaration)
+	if n.Kind != KindPropertySignature {
+		panic("Invalid node cast to PropertySignatureDeclaration")
+	}
+	return (*PropertySignatureDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsPropertyDeclaration() *PropertyDeclaration {
-	return n.data.(*PropertyDeclaration)
+	if n.Kind != KindPropertyDeclaration {
+		panic("Invalid node cast to PropertyDeclaration")
+	}
+	return (*PropertyDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsSemicolonClassElement() *SemicolonClassElement {
-	return n.data.(*SemicolonClassElement)
+	if n.Kind != KindSemicolonClassElement {
+		panic("Invalid node cast to SemicolonClassElement")
+	}
+	return (*SemicolonClassElement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsClassStaticBlockDeclaration() *ClassStaticBlockDeclaration {
-	return n.data.(*ClassStaticBlockDeclaration)
+	if n.Kind != KindClassStaticBlockDeclaration {
+		panic("Invalid node cast to ClassStaticBlockDeclaration")
+	}
+	return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsOmittedExpression() *OmittedExpression {
-	return n.data.(*OmittedExpression)
+	if n.Kind != KindOmittedExpression {
+		panic("Invalid node cast to OmittedExpression")
+	}
+	return (*OmittedExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsKeywordExpression() *KeywordExpression {
-	return n.data.(*KeywordExpression)
+	switch n.Kind {
+	case KindFalseKeyword, KindImportKeyword, KindNullKeyword, KindSuperKeyword, KindThisKeyword, KindTrueKeyword:
+	default:
+		panic("Invalid node cast to KeywordExpression")
+	}
+	return (*KeywordExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsStringLiteral() *StringLiteral {
-	return n.data.(*StringLiteral)
+	if n.Kind != KindStringLiteral {
+		panic("Invalid node cast to StringLiteral")
+	}
+	return (*StringLiteral)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsNumericLiteral() *NumericLiteral {
-	return n.data.(*NumericLiteral)
+	if n.Kind != KindNumericLiteral {
+		panic("Invalid node cast to NumericLiteral")
+	}
+	return (*NumericLiteral)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsBigIntLiteral() *BigIntLiteral {
-	return n.data.(*BigIntLiteral)
+	if n.Kind != KindBigIntLiteral {
+		panic("Invalid node cast to BigIntLiteral")
+	}
+	return (*BigIntLiteral)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsRegularExpressionLiteral() *RegularExpressionLiteral {
-	return n.data.(*RegularExpressionLiteral)
+	if n.Kind != KindRegularExpressionLiteral {
+		panic("Invalid node cast to RegularExpressionLiteral")
+	}
+	return (*RegularExpressionLiteral)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsNoSubstitutionTemplateLiteral() *NoSubstitutionTemplateLiteral {
-	return n.data.(*NoSubstitutionTemplateLiteral)
+	if n.Kind != KindNoSubstitutionTemplateLiteral {
+		panic("Invalid node cast to NoSubstitutionTemplateLiteral")
+	}
+	return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsBinaryExpression() *BinaryExpression {
-	return n.data.(*BinaryExpression)
+	if n.Kind != KindBinaryExpression {
+		panic("Invalid node cast to BinaryExpression")
+	}
+	return (*BinaryExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsPrefixUnaryExpression() *PrefixUnaryExpression {
-	return n.data.(*PrefixUnaryExpression)
+	if n.Kind != KindPrefixUnaryExpression {
+		panic("Invalid node cast to PrefixUnaryExpression")
+	}
+	return (*PrefixUnaryExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsPostfixUnaryExpression() *PostfixUnaryExpression {
-	return n.data.(*PostfixUnaryExpression)
+	if n.Kind != KindPostfixUnaryExpression {
+		panic("Invalid node cast to PostfixUnaryExpression")
+	}
+	return (*PostfixUnaryExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsYieldExpression() *YieldExpression {
-	return n.data.(*YieldExpression)
+	if n.Kind != KindYieldExpression {
+		panic("Invalid node cast to YieldExpression")
+	}
+	return (*YieldExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsArrowFunction() *ArrowFunction {
-	return n.data.(*ArrowFunction)
+	if n.Kind != KindArrowFunction {
+		panic("Invalid node cast to ArrowFunction")
+	}
+	return (*ArrowFunction)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsFunctionExpression() *FunctionExpression {
-	return n.data.(*FunctionExpression)
+	if n.Kind != KindFunctionExpression {
+		panic("Invalid node cast to FunctionExpression")
+	}
+	return (*FunctionExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsAsExpression() *AsExpression {
-	return n.data.(*AsExpression)
+	if n.Kind != KindAsExpression {
+		panic("Invalid node cast to AsExpression")
+	}
+	return (*AsExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsSatisfiesExpression() *SatisfiesExpression {
-	return n.data.(*SatisfiesExpression)
+	if n.Kind != KindSatisfiesExpression {
+		panic("Invalid node cast to SatisfiesExpression")
+	}
+	return (*SatisfiesExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsConditionalExpression() *ConditionalExpression {
-	return n.data.(*ConditionalExpression)
+	if n.Kind != KindConditionalExpression {
+		panic("Invalid node cast to ConditionalExpression")
+	}
+	return (*ConditionalExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsPropertyAccessExpression() *PropertyAccessExpression {
-	return n.data.(*PropertyAccessExpression)
+	if n.Kind != KindPropertyAccessExpression {
+		panic("Invalid node cast to PropertyAccessExpression")
+	}
+	return (*PropertyAccessExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsElementAccessExpression() *ElementAccessExpression {
-	return n.data.(*ElementAccessExpression)
+	if n.Kind != KindElementAccessExpression {
+		panic("Invalid node cast to ElementAccessExpression")
+	}
+	return (*ElementAccessExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsCallExpression() *CallExpression {
-	return n.data.(*CallExpression)
+	if n.Kind != KindCallExpression {
+		panic("Invalid node cast to CallExpression")
+	}
+	return (*CallExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsNewExpression() *NewExpression {
-	return n.data.(*NewExpression)
+	if n.Kind != KindNewExpression {
+		panic("Invalid node cast to NewExpression")
+	}
+	return (*NewExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsMetaProperty() *MetaProperty {
-	return n.data.(*MetaProperty)
+	if n.Kind != KindMetaProperty {
+		panic("Invalid node cast to MetaProperty")
+	}
+	return (*MetaProperty)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsNonNullExpression() *NonNullExpression {
-	return n.data.(*NonNullExpression)
+	if n.Kind != KindNonNullExpression {
+		panic("Invalid node cast to NonNullExpression")
+	}
+	return (*NonNullExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsSpreadElement() *SpreadElement {
-	return n.data.(*SpreadElement)
+	if n.Kind != KindSpreadElement {
+		panic("Invalid node cast to SpreadElement")
+	}
+	return (*SpreadElement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTemplateExpression() *TemplateExpression {
-	return n.data.(*TemplateExpression)
+	if n.Kind != KindTemplateExpression {
+		panic("Invalid node cast to TemplateExpression")
+	}
+	return (*TemplateExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTemplateSpan() *TemplateSpan {
-	return n.data.(*TemplateSpan)
+	if n.Kind != KindTemplateSpan {
+		panic("Invalid node cast to TemplateSpan")
+	}
+	return (*TemplateSpan)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTaggedTemplateExpression() *TaggedTemplateExpression {
-	return n.data.(*TaggedTemplateExpression)
+	if n.Kind != KindTaggedTemplateExpression {
+		panic("Invalid node cast to TaggedTemplateExpression")
+	}
+	return (*TaggedTemplateExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsParenthesizedExpression() *ParenthesizedExpression {
-	return n.data.(*ParenthesizedExpression)
+	if n.Kind != KindParenthesizedExpression {
+		panic("Invalid node cast to ParenthesizedExpression")
+	}
+	return (*ParenthesizedExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsArrayLiteralExpression() *ArrayLiteralExpression {
-	return n.data.(*ArrayLiteralExpression)
+	if n.Kind != KindArrayLiteralExpression {
+		panic("Invalid node cast to ArrayLiteralExpression")
+	}
+	return (*ArrayLiteralExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsObjectLiteralExpression() *ObjectLiteralExpression {
-	return n.data.(*ObjectLiteralExpression)
+	if n.Kind != KindObjectLiteralExpression {
+		panic("Invalid node cast to ObjectLiteralExpression")
+	}
+	return (*ObjectLiteralExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsSpreadAssignment() *SpreadAssignment {
-	return n.data.(*SpreadAssignment)
+	if n.Kind != KindSpreadAssignment {
+		panic("Invalid node cast to SpreadAssignment")
+	}
+	return (*SpreadAssignment)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsPropertyAssignment() *PropertyAssignment {
-	return n.data.(*PropertyAssignment)
+	if n.Kind != KindPropertyAssignment {
+		panic("Invalid node cast to PropertyAssignment")
+	}
+	return (*PropertyAssignment)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsShorthandPropertyAssignment() *ShorthandPropertyAssignment {
-	return n.data.(*ShorthandPropertyAssignment)
+	if n.Kind != KindShorthandPropertyAssignment {
+		panic("Invalid node cast to ShorthandPropertyAssignment")
+	}
+	return (*ShorthandPropertyAssignment)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsDeleteExpression() *DeleteExpression {
-	return n.data.(*DeleteExpression)
+	if n.Kind != KindDeleteExpression {
+		panic("Invalid node cast to DeleteExpression")
+	}
+	return (*DeleteExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTypeOfExpression() *TypeOfExpression {
-	return n.data.(*TypeOfExpression)
+	if n.Kind != KindTypeOfExpression {
+		panic("Invalid node cast to TypeOfExpression")
+	}
+	return (*TypeOfExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsVoidExpression() *VoidExpression {
-	return n.data.(*VoidExpression)
+	if n.Kind != KindVoidExpression {
+		panic("Invalid node cast to VoidExpression")
+	}
+	return (*VoidExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsAwaitExpression() *AwaitExpression {
-	return n.data.(*AwaitExpression)
+	if n.Kind != KindAwaitExpression {
+		panic("Invalid node cast to AwaitExpression")
+	}
+	return (*AwaitExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTypeAssertion() *TypeAssertion {
-	return n.data.(*TypeAssertion)
+	if n.Kind != KindTypeAssertionExpression {
+		panic("Invalid node cast to TypeAssertion")
+	}
+	return (*TypeAssertion)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsKeywordTypeNode() *KeywordTypeNode {
-	return n.data.(*KeywordTypeNode)
+	switch n.Kind {
+	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
+	default:
+		panic("Invalid node cast to KeywordTypeNode")
+	}
+	return (*KeywordTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsUnionTypeNode() *UnionTypeNode {
-	return n.data.(*UnionTypeNode)
+	if n.Kind != KindUnionType {
+		panic("Invalid node cast to UnionTypeNode")
+	}
+	return (*UnionTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsIntersectionTypeNode() *IntersectionTypeNode {
-	return n.data.(*IntersectionTypeNode)
+	if n.Kind != KindIntersectionType {
+		panic("Invalid node cast to IntersectionTypeNode")
+	}
+	return (*IntersectionTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsConditionalTypeNode() *ConditionalTypeNode {
-	return n.data.(*ConditionalTypeNode)
+	if n.Kind != KindConditionalType {
+		panic("Invalid node cast to ConditionalTypeNode")
+	}
+	return (*ConditionalTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTypeOperatorNode() *TypeOperatorNode {
-	return n.data.(*TypeOperatorNode)
+	if n.Kind != KindTypeOperator {
+		panic("Invalid node cast to TypeOperatorNode")
+	}
+	return (*TypeOperatorNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsInferTypeNode() *InferTypeNode {
-	return n.data.(*InferTypeNode)
+	if n.Kind != KindInferType {
+		panic("Invalid node cast to InferTypeNode")
+	}
+	return (*InferTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsArrayTypeNode() *ArrayTypeNode {
-	return n.data.(*ArrayTypeNode)
+	if n.Kind != KindArrayType {
+		panic("Invalid node cast to ArrayTypeNode")
+	}
+	return (*ArrayTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsIndexedAccessTypeNode() *IndexedAccessTypeNode {
-	return n.data.(*IndexedAccessTypeNode)
+	if n.Kind != KindIndexedAccessType {
+		panic("Invalid node cast to IndexedAccessTypeNode")
+	}
+	return (*IndexedAccessTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTypeReferenceNode() *TypeReferenceNode {
-	return n.data.(*TypeReferenceNode)
+	if n.Kind != KindTypeReference {
+		panic("Invalid node cast to TypeReferenceNode")
+	}
+	return (*TypeReferenceNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsExpressionWithTypeArguments() *ExpressionWithTypeArguments {
-	return n.data.(*ExpressionWithTypeArguments)
+	if n.Kind != KindExpressionWithTypeArguments {
+		panic("Invalid node cast to ExpressionWithTypeArguments")
+	}
+	return (*ExpressionWithTypeArguments)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsLiteralTypeNode() *LiteralTypeNode {
-	return n.data.(*LiteralTypeNode)
+	if n.Kind != KindLiteralType {
+		panic("Invalid node cast to LiteralTypeNode")
+	}
+	return (*LiteralTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsThisTypeNode() *ThisTypeNode {
-	return n.data.(*ThisTypeNode)
+	if n.Kind != KindThisType {
+		panic("Invalid node cast to ThisTypeNode")
+	}
+	return (*ThisTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTypePredicateNode() *TypePredicateNode {
-	return n.data.(*TypePredicateNode)
+	if n.Kind != KindTypePredicate {
+		panic("Invalid node cast to TypePredicateNode")
+	}
+	return (*TypePredicateNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsImportAttribute() *ImportAttribute {
-	return n.data.(*ImportAttribute)
+	if n.Kind != KindImportAttribute {
+		panic("Invalid node cast to ImportAttribute")
+	}
+	return (*ImportAttribute)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsImportAttributes() *ImportAttributes {
-	return n.data.(*ImportAttributes)
+	if n.Kind != KindImportAttributes {
+		panic("Invalid node cast to ImportAttributes")
+	}
+	return (*ImportAttributes)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTypeQueryNode() *TypeQueryNode {
-	return n.data.(*TypeQueryNode)
+	if n.Kind != KindTypeQuery {
+		panic("Invalid node cast to TypeQueryNode")
+	}
+	return (*TypeQueryNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsMappedTypeNode() *MappedTypeNode {
-	return n.data.(*MappedTypeNode)
+	if n.Kind != KindMappedType {
+		panic("Invalid node cast to MappedTypeNode")
+	}
+	return (*MappedTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTypeLiteralNode() *TypeLiteralNode {
-	return n.data.(*TypeLiteralNode)
+	if n.Kind != KindTypeLiteral {
+		panic("Invalid node cast to TypeLiteralNode")
+	}
+	return (*TypeLiteralNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTupleTypeNode() *TupleTypeNode {
-	return n.data.(*TupleTypeNode)
+	if n.Kind != KindTupleType {
+		panic("Invalid node cast to TupleTypeNode")
+	}
+	return (*TupleTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsNamedTupleMember() *NamedTupleMember {
-	return n.data.(*NamedTupleMember)
+	if n.Kind != KindNamedTupleMember {
+		panic("Invalid node cast to NamedTupleMember")
+	}
+	return (*NamedTupleMember)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsOptionalTypeNode() *OptionalTypeNode {
-	return n.data.(*OptionalTypeNode)
+	if n.Kind != KindOptionalType {
+		panic("Invalid node cast to OptionalTypeNode")
+	}
+	return (*OptionalTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsRestTypeNode() *RestTypeNode {
-	return n.data.(*RestTypeNode)
+	if n.Kind != KindRestType {
+		panic("Invalid node cast to RestTypeNode")
+	}
+	return (*RestTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsParenthesizedTypeNode() *ParenthesizedTypeNode {
-	return n.data.(*ParenthesizedTypeNode)
+	if n.Kind != KindParenthesizedType {
+		panic("Invalid node cast to ParenthesizedTypeNode")
+	}
+	return (*ParenthesizedTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsFunctionTypeNode() *FunctionTypeNode {
-	return n.data.(*FunctionTypeNode)
+	if n.Kind != KindFunctionType {
+		panic("Invalid node cast to FunctionTypeNode")
+	}
+	return (*FunctionTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsConstructorTypeNode() *ConstructorTypeNode {
-	return n.data.(*ConstructorTypeNode)
+	if n.Kind != KindConstructorType {
+		panic("Invalid node cast to ConstructorTypeNode")
+	}
+	return (*ConstructorTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTemplateHead() *TemplateHead {
-	return n.data.(*TemplateHead)
+	if n.Kind != KindTemplateHead {
+		panic("Invalid node cast to TemplateHead")
+	}
+	return (*TemplateHead)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTemplateMiddle() *TemplateMiddle {
-	return n.data.(*TemplateMiddle)
+	if n.Kind != KindTemplateMiddle {
+		panic("Invalid node cast to TemplateMiddle")
+	}
+	return (*TemplateMiddle)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTemplateTail() *TemplateTail {
-	return n.data.(*TemplateTail)
+	if n.Kind != KindTemplateTail {
+		panic("Invalid node cast to TemplateTail")
+	}
+	return (*TemplateTail)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTemplateLiteralTypeNode() *TemplateLiteralTypeNode {
-	return n.data.(*TemplateLiteralTypeNode)
+	if n.Kind != KindTemplateLiteralType {
+		panic("Invalid node cast to TemplateLiteralTypeNode")
+	}
+	return (*TemplateLiteralTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTemplateLiteralTypeSpan() *TemplateLiteralTypeSpan {
-	return n.data.(*TemplateLiteralTypeSpan)
+	if n.Kind != KindTemplateLiteralTypeSpan {
+		panic("Invalid node cast to TemplateLiteralTypeSpan")
+	}
+	return (*TemplateLiteralTypeSpan)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsSyntheticExpression() *SyntheticExpression {
-	return n.data.(*SyntheticExpression)
+	if n.Kind != KindSyntheticExpression {
+		panic("Invalid node cast to SyntheticExpression")
+	}
+	return (*SyntheticExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsPartiallyEmittedExpression() *PartiallyEmittedExpression {
-	return n.data.(*PartiallyEmittedExpression)
+	if n.Kind != KindPartiallyEmittedExpression {
+		panic("Invalid node cast to PartiallyEmittedExpression")
+	}
+	return (*PartiallyEmittedExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxElement() *JsxElement {
-	return n.data.(*JsxElement)
+	if n.Kind != KindJsxElement {
+		panic("Invalid node cast to JsxElement")
+	}
+	return (*JsxElement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxAttributes() *JsxAttributes {
-	return n.data.(*JsxAttributes)
+	if n.Kind != KindJsxAttributes {
+		panic("Invalid node cast to JsxAttributes")
+	}
+	return (*JsxAttributes)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxNamespacedName() *JsxNamespacedName {
-	return n.data.(*JsxNamespacedName)
+	if n.Kind != KindJsxNamespacedName {
+		panic("Invalid node cast to JsxNamespacedName")
+	}
+	return (*JsxNamespacedName)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxOpeningElement() *JsxOpeningElement {
-	return n.data.(*JsxOpeningElement)
+	if n.Kind != KindJsxOpeningElement {
+		panic("Invalid node cast to JsxOpeningElement")
+	}
+	return (*JsxOpeningElement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxSelfClosingElement() *JsxSelfClosingElement {
-	return n.data.(*JsxSelfClosingElement)
+	if n.Kind != KindJsxSelfClosingElement {
+		panic("Invalid node cast to JsxSelfClosingElement")
+	}
+	return (*JsxSelfClosingElement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxFragment() *JsxFragment {
-	return n.data.(*JsxFragment)
+	if n.Kind != KindJsxFragment {
+		panic("Invalid node cast to JsxFragment")
+	}
+	return (*JsxFragment)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxOpeningFragment() *JsxOpeningFragment {
-	return n.data.(*JsxOpeningFragment)
+	if n.Kind != KindJsxOpeningFragment {
+		panic("Invalid node cast to JsxOpeningFragment")
+	}
+	return (*JsxOpeningFragment)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxClosingFragment() *JsxClosingFragment {
-	return n.data.(*JsxClosingFragment)
+	if n.Kind != KindJsxClosingFragment {
+		panic("Invalid node cast to JsxClosingFragment")
+	}
+	return (*JsxClosingFragment)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxAttribute() *JsxAttribute {
-	return n.data.(*JsxAttribute)
+	if n.Kind != KindJsxAttribute {
+		panic("Invalid node cast to JsxAttribute")
+	}
+	return (*JsxAttribute)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxSpreadAttribute() *JsxSpreadAttribute {
-	return n.data.(*JsxSpreadAttribute)
+	if n.Kind != KindJsxSpreadAttribute {
+		panic("Invalid node cast to JsxSpreadAttribute")
+	}
+	return (*JsxSpreadAttribute)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxClosingElement() *JsxClosingElement {
-	return n.data.(*JsxClosingElement)
+	if n.Kind != KindJsxClosingElement {
+		panic("Invalid node cast to JsxClosingElement")
+	}
+	return (*JsxClosingElement)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxExpression() *JsxExpression {
-	return n.data.(*JsxExpression)
+	if n.Kind != KindJsxExpression {
+		panic("Invalid node cast to JsxExpression")
+	}
+	return (*JsxExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJsxText() *JsxText {
-	return n.data.(*JsxText)
+	if n.Kind != KindJsxText {
+		panic("Invalid node cast to JsxText")
+	}
+	return (*JsxText)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsSyntaxList() *SyntaxList {
-	return n.data.(*SyntaxList)
+	if n.Kind != KindSyntaxList {
+		panic("Invalid node cast to SyntaxList")
+	}
+	return (*SyntaxList)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDoc() *JSDoc {
-	return n.data.(*JSDoc)
+	if n.Kind != KindJSDoc {
+		panic("Invalid node cast to JSDoc")
+	}
+	return (*JSDoc)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocTypeExpression() *JSDocTypeExpression {
-	return n.data.(*JSDocTypeExpression)
+	if n.Kind != KindJSDocTypeExpression {
+		panic("Invalid node cast to JSDocTypeExpression")
+	}
+	return (*JSDocTypeExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocNonNullableType() *JSDocNonNullableType {
-	return n.data.(*JSDocNonNullableType)
+	if n.Kind != KindJSDocNonNullableType {
+		panic("Invalid node cast to JSDocNonNullableType")
+	}
+	return (*JSDocNonNullableType)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocNullableType() *JSDocNullableType {
-	return n.data.(*JSDocNullableType)
+	if n.Kind != KindJSDocNullableType {
+		panic("Invalid node cast to JSDocNullableType")
+	}
+	return (*JSDocNullableType)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocAllType() *JSDocAllType {
-	return n.data.(*JSDocAllType)
+	if n.Kind != KindJSDocAllType {
+		panic("Invalid node cast to JSDocAllType")
+	}
+	return (*JSDocAllType)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocVariadicType() *JSDocVariadicType {
-	return n.data.(*JSDocVariadicType)
+	if n.Kind != KindJSDocVariadicType {
+		panic("Invalid node cast to JSDocVariadicType")
+	}
+	return (*JSDocVariadicType)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocOptionalType() *JSDocOptionalType {
-	return n.data.(*JSDocOptionalType)
+	if n.Kind != KindJSDocOptionalType {
+		panic("Invalid node cast to JSDocOptionalType")
+	}
+	return (*JSDocOptionalType)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocTypeTag() *JSDocTypeTag {
-	return n.data.(*JSDocTypeTag)
+	if n.Kind != KindJSDocTypeTag {
+		panic("Invalid node cast to JSDocTypeTag")
+	}
+	return (*JSDocTypeTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocUnknownTag() *JSDocUnknownTag {
-	return n.data.(*JSDocUnknownTag)
+	if n.Kind != KindJSDocUnknownTag {
+		panic("Invalid node cast to JSDocUnknownTag")
+	}
+	return (*JSDocUnknownTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocTemplateTag() *JSDocTemplateTag {
-	return n.data.(*JSDocTemplateTag)
+	if n.Kind != KindJSDocTemplateTag {
+		panic("Invalid node cast to JSDocTemplateTag")
+	}
+	return (*JSDocTemplateTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocReturnTag() *JSDocReturnTag {
-	return n.data.(*JSDocReturnTag)
+	if n.Kind != KindJSDocReturnTag {
+		panic("Invalid node cast to JSDocReturnTag")
+	}
+	return (*JSDocReturnTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocPublicTag() *JSDocPublicTag {
-	return n.data.(*JSDocPublicTag)
+	if n.Kind != KindJSDocPublicTag {
+		panic("Invalid node cast to JSDocPublicTag")
+	}
+	return (*JSDocPublicTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocPrivateTag() *JSDocPrivateTag {
-	return n.data.(*JSDocPrivateTag)
+	if n.Kind != KindJSDocPrivateTag {
+		panic("Invalid node cast to JSDocPrivateTag")
+	}
+	return (*JSDocPrivateTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocProtectedTag() *JSDocProtectedTag {
-	return n.data.(*JSDocProtectedTag)
+	if n.Kind != KindJSDocProtectedTag {
+		panic("Invalid node cast to JSDocProtectedTag")
+	}
+	return (*JSDocProtectedTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocReadonlyTag() *JSDocReadonlyTag {
-	return n.data.(*JSDocReadonlyTag)
+	if n.Kind != KindJSDocReadonlyTag {
+		panic("Invalid node cast to JSDocReadonlyTag")
+	}
+	return (*JSDocReadonlyTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocOverrideTag() *JSDocOverrideTag {
-	return n.data.(*JSDocOverrideTag)
+	if n.Kind != KindJSDocOverrideTag {
+		panic("Invalid node cast to JSDocOverrideTag")
+	}
+	return (*JSDocOverrideTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocDeprecatedTag() *JSDocDeprecatedTag {
-	return n.data.(*JSDocDeprecatedTag)
+	if n.Kind != KindJSDocDeprecatedTag {
+		panic("Invalid node cast to JSDocDeprecatedTag")
+	}
+	return (*JSDocDeprecatedTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocSeeTag() *JSDocSeeTag {
-	return n.data.(*JSDocSeeTag)
+	if n.Kind != KindJSDocSeeTag {
+		panic("Invalid node cast to JSDocSeeTag")
+	}
+	return (*JSDocSeeTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocImplementsTag() *JSDocImplementsTag {
-	return n.data.(*JSDocImplementsTag)
+	if n.Kind != KindJSDocImplementsTag {
+		panic("Invalid node cast to JSDocImplementsTag")
+	}
+	return (*JSDocImplementsTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocAugmentsTag() *JSDocAugmentsTag {
-	return n.data.(*JSDocAugmentsTag)
+	if n.Kind != KindJSDocAugmentsTag {
+		panic("Invalid node cast to JSDocAugmentsTag")
+	}
+	return (*JSDocAugmentsTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocSatisfiesTag() *JSDocSatisfiesTag {
-	return n.data.(*JSDocSatisfiesTag)
+	if n.Kind != KindJSDocSatisfiesTag {
+		panic("Invalid node cast to JSDocSatisfiesTag")
+	}
+	return (*JSDocSatisfiesTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocThrowsTag() *JSDocThrowsTag {
-	return n.data.(*JSDocThrowsTag)
+	if n.Kind != KindJSDocThrowsTag {
+		panic("Invalid node cast to JSDocThrowsTag")
+	}
+	return (*JSDocThrowsTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocThisTag() *JSDocThisTag {
-	return n.data.(*JSDocThisTag)
+	if n.Kind != KindJSDocThisTag {
+		panic("Invalid node cast to JSDocThisTag")
+	}
+	return (*JSDocThisTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocImportTag() *JSDocImportTag {
-	return n.data.(*JSDocImportTag)
+	if n.Kind != KindJSDocImportTag {
+		panic("Invalid node cast to JSDocImportTag")
+	}
+	return (*JSDocImportTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocCallbackTag() *JSDocCallbackTag {
-	return n.data.(*JSDocCallbackTag)
+	if n.Kind != KindJSDocCallbackTag {
+		panic("Invalid node cast to JSDocCallbackTag")
+	}
+	return (*JSDocCallbackTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocOverloadTag() *JSDocOverloadTag {
-	return n.data.(*JSDocOverloadTag)
+	if n.Kind != KindJSDocOverloadTag {
+		panic("Invalid node cast to JSDocOverloadTag")
+	}
+	return (*JSDocOverloadTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocTypedefTag() *JSDocTypedefTag {
-	return n.data.(*JSDocTypedefTag)
+	if n.Kind != KindJSDocTypedefTag {
+		panic("Invalid node cast to JSDocTypedefTag")
+	}
+	return (*JSDocTypedefTag)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocSignature() *JSDocSignature {
-	return n.data.(*JSDocSignature)
+	if n.Kind != KindJSDocSignature {
+		panic("Invalid node cast to JSDocSignature")
+	}
+	return (*JSDocSignature)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocNameReference() *JSDocNameReference {
-	return n.data.(*JSDocNameReference)
+	if n.Kind != KindJSDocNameReference {
+		panic("Invalid node cast to JSDocNameReference")
+	}
+	return (*JSDocNameReference)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsSourceFile() *SourceFile {
-	return n.data.(*SourceFile)
+	if n.Kind != KindSourceFile {
+		panic("Invalid node cast to SourceFile")
+	}
+	return (*SourceFile)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsModuleDeclaration() *ModuleDeclaration {
-	return n.data.(*ModuleDeclaration)
+	if n.Kind != KindModuleDeclaration {
+		panic("Invalid node cast to ModuleDeclaration")
+	}
+	return (*ModuleDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsImportEqualsDeclaration() *ImportEqualsDeclaration {
-	return n.data.(*ImportEqualsDeclaration)
+	if n.Kind != KindImportEqualsDeclaration {
+		panic("Invalid node cast to ImportEqualsDeclaration")
+	}
+	return (*ImportEqualsDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsExportDeclaration() *ExportDeclaration {
-	return n.data.(*ExportDeclaration)
+	if n.Kind != KindExportDeclaration {
+		panic("Invalid node cast to ExportDeclaration")
+	}
+	return (*ExportDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsImportTypeNode() *ImportTypeNode {
-	return n.data.(*ImportTypeNode)
+	if n.Kind != KindImportType {
+		panic("Invalid node cast to ImportTypeNode")
+	}
+	return (*ImportTypeNode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsImportClause() *ImportClause {
-	return n.data.(*ImportClause)
+	if n.Kind != KindImportClause {
+		panic("Invalid node cast to ImportClause")
+	}
+	return (*ImportClause)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsImportSpecifier() *ImportSpecifier {
-	return n.data.(*ImportSpecifier)
+	if n.Kind != KindImportSpecifier {
+		panic("Invalid node cast to ImportSpecifier")
+	}
+	return (*ImportSpecifier)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocText() *JSDocText {
-	return n.data.(*JSDocText)
+	if n.Kind != KindJSDocText {
+		panic("Invalid node cast to JSDocText")
+	}
+	return (*JSDocText)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocLink() *JSDocLink {
-	return n.data.(*JSDocLink)
+	if n.Kind != KindJSDocLink {
+		panic("Invalid node cast to JSDocLink")
+	}
+	return (*JSDocLink)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocLinkPlain() *JSDocLinkPlain {
-	return n.data.(*JSDocLinkPlain)
+	if n.Kind != KindJSDocLinkPlain {
+		panic("Invalid node cast to JSDocLinkPlain")
+	}
+	return (*JSDocLinkPlain)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocLinkCode() *JSDocLinkCode {
-	return n.data.(*JSDocLinkCode)
+	if n.Kind != KindJSDocLinkCode {
+		panic("Invalid node cast to JSDocLinkCode")
+	}
+	return (*JSDocLinkCode)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsTypeParameterDeclaration() *TypeParameterDeclaration {
-	return n.data.(*TypeParameterDeclaration)
+	if n.Kind != KindTypeParameter {
+		panic("Invalid node cast to TypeParameterDeclaration")
+	}
+	return (*TypeParameterDeclaration)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsSyntheticReferenceExpression() *SyntheticReferenceExpression {
-	return n.data.(*SyntheticReferenceExpression)
+	if n.Kind != KindSyntheticReferenceExpression {
+		panic("Invalid node cast to SyntheticReferenceExpression")
+	}
+	return (*SyntheticReferenceExpression)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocTypeLiteral() *JSDocTypeLiteral {
-	return n.data.(*JSDocTypeLiteral)
+	if n.Kind != KindJSDocTypeLiteral {
+		panic("Invalid node cast to JSDocTypeLiteral")
+	}
+	return (*JSDocTypeLiteral)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsJSDocParameterOrPropertyTag() *JSDocParameterOrPropertyTag {
-	return n.data.(*JSDocParameterOrPropertyTag)
+	switch n.Kind {
+	case KindJSDocParameterTag, KindJSDocPropertyTag:
+	default:
+		panic("Invalid node cast to JSDocParameterOrPropertyTag")
+	}
+	return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n))
 }
 
 // ──────────────────────────────────────────────────────────────────────
