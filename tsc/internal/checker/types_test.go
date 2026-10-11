@@ -1,10 +1,15 @@
 package checker
 
 import (
+	"encoding/binary"
+	"fmt"
 	"runtime"
+	"strings"
 	"testing"
 	"unsafe"
 
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/race"
+	"github.com/zeebo/xxh3"
 	"gotest.tools/v3/assert"
 )
 
@@ -72,4 +77,66 @@ func didPanic(f func()) (panicked bool) {
 func TestTypeHeaderSize(t *testing.T) {
 	t.Parallel()
 	assert.Equal(t, unsafe.Sizeof(Type{}), 16+3*unsafe.Sizeof((*Checker)(nil)))
+}
+
+func TestKeyBuilder(t *testing.T) {
+	t.Parallel()
+	for _, count := range []int{0, 1, 46, 47, 256, 4096} {
+		t.Run(strconv.Itoa(count), func(t *testing.T) {
+			t.Parallel()
+			types := make([]*Type, count)
+			var expected []byte
+			prefix := strings.Repeat("x", count)
+			expected = append(expected, prefix...)
+			expected = append(expected, 17)
+			expected = binary.LittleEndian.AppendUint32(expected, 123)
+			expected = binary.LittleEndian.AppendUint64(expected, uint64(count))
+			for i := range types {
+				types[i] = &Type{id: TypeId(i + 1)}
+				expected = binary.LittleEndian.AppendUint32(expected, uint32(i+1))
+			}
+			expected = append(expected, "suffix"...)
+			var builder keyBuilder
+			builder.writeString(prefix)
+			builder.writeByte(17)
+			builder.writeUint32(123)
+			builder.writeTypes(types)
+			builder.writeString("suffix")
+			assert.Equal(t, builder.hash(), CacheHashKey(xxh3.Hash128(expected)))
+			assert.Equal(t, builder.hash(), CacheHashKey(xxh3.Hash128(expected)))
+		})
+	}
+}
+
+func TestTypeListKeyAllocations(t *testing.T) { //nolint:paralleltest
+	if race.Enabled {
+		t.Skip("race instrumentation changes hashing allocations")
+	}
+	for _, count := range []int{8, 46, 47, 256, 4096} {
+		types := make([]*Type, count)
+		for i := range types {
+			types[i] = &Type{id: TypeId(i + 1)}
+		}
+		allocations := testing.AllocsPerRun(10, func() { getTypeListKey(types) })
+		expected := float64(0)
+		if count > 46 {
+			expected = 1
+		}
+		assert.Equal(t, allocations, expected, "type list length %d", count)
+	}
+}
+
+func BenchmarkTypeListKey(b *testing.B) {
+	for _, count := range []int{8, 46, 47, 256, 4096} {
+		b.Run(strconv.Itoa(count), func(b *testing.B) {
+			types := make([]*Type, count)
+			for i := range types {
+				types[i] = &Type{id: TypeId(i + 1)}
+			}
+			b.ReportAllocs()
+			for b.Loop() {
+				getTypeListKey(types)
+			}
+		})
+	}
 }
