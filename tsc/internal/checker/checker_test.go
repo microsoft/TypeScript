@@ -117,6 +117,171 @@ export type E = D;`,
 	assert.Equal(t, defaultClause, defaultReference)
 }
 
+func TestInstantiatedMemberLookupIdentity(t *testing.T) {
+	t.Parallel()
+	for _, reverse := range []bool{false, true} {
+		t.Run(core.IfElse(reverse, "reverse", "forward"), func(t *testing.T) {
+			t.Parallel()
+			fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+				"/main.ts": `interface Base<T> { inherited: T; shared: string }
+interface Derived<T> extends Base<T[]> {
+    own: T; shared: "derived"; unused: string;
+    p0: T; p1: T; p2: T; p3: T; p4: T; p5: T;
+}
+declare const instance: Derived<number>;
+instance.inherited;
+instance.own;
+instance.shared;`,
+				"/tsconfig.json": `{"compilerOptions":{"strict":true},"files":["main.ts"]}`,
+			}, tspath.CaseInsensitive))
+			host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+			parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+			assert.Equal(t, len(errors), 0)
+			program := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
+			program.BindSourceFiles()
+			c, done := program.GetTypeChecker(t.Context())
+			defer done()
+			file := program.GetSourceFile("/main.ts")
+			expressions := []*ast.Node{
+				file.Statements.Nodes[3].Expression(),
+				file.Statements.Nodes[4].Expression(),
+				file.Statements.Nodes[5].Expression(),
+			}
+			symbols := make([]*ast.Symbol, len(expressions))
+			typ := c.GetTypeAtLocation(expressions[0].Expression())
+			for index := range expressions {
+				i := index
+				if reverse {
+					i = len(expressions) - index - 1
+				}
+				symbols[i] = c.GetPropertyOfType(typ, expressions[i].Name().Text())
+				assert.Assert(t, symbols[i] != nil)
+			}
+			before := c.SymbolCount
+			for _, expression := range expressions {
+				c.GetPropertyOfType(typ, expression.Name().Text())
+			}
+			assert.Equal(t, c.SymbolCount, before)
+			unused := file.Statements.Nodes[1].Symbol().Members()["unused"]
+			c.GetTypeOfSymbol(unused)
+			properties := c.GetPropertiesOfType(typ)
+			assert.Equal(t, len(properties), 10)
+			assert.Equal(t, properties[0].Name(), "own")
+			assert.Equal(t, properties[1].Name(), "shared")
+			assert.Equal(t, properties[2].Name(), "unused")
+			assert.Assert(t, properties[2] != unused)
+			assert.Equal(t, properties[len(properties)-1].Name(), "inherited")
+			for i, expression := range expressions {
+				assert.Equal(t, c.GetPropertyOfType(typ, expression.Name().Text()), symbols[i])
+				assert.Equal(t, c.GetSymbolAtLocation(expression), symbols[i])
+				found := false
+				for _, property := range properties {
+					if property == symbols[i] {
+						found = true
+					}
+				}
+				assert.Assert(t, found)
+			}
+			assert.Equal(t, len(c.GetDiagnostics(t.Context(), file)), 0)
+		})
+	}
+}
+
+func TestInstantiatedMemberShapeQueries(t *testing.T) {
+	t.Parallel()
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/main.ts": `interface Container<T> {
+    (): T;
+    [key: string]: T;
+    value: T;
+    unused: T;
+    another: T;
+}
+declare const container: Container<string>;
+container.value;`,
+		"/tsconfig.json": `{"compilerOptions":{"strict":true},"files":["main.ts"]}`,
+	}, tspath.CaseInsensitive))
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+	assert.Equal(t, len(errors), 0)
+	program := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
+	program.BindSourceFiles()
+	c, done := program.GetTypeChecker(t.Context())
+	defer done()
+	file := program.GetSourceFile("/main.ts")
+	typ := c.GetTypeAtLocation(file.Statements.Nodes[2].Expression().Expression())
+	before := c.SymbolCount
+	value := c.GetPropertyOfType(typ, "value")
+	assert.Assert(t, value != nil)
+	assert.Equal(t, c.SymbolCount, before+1)
+	before = c.SymbolCount
+	assert.Equal(t, len(c.GetSignaturesOfType(typ, checker.SignatureKindCall)), 1)
+	assert.Equal(t, len(c.GetIndexInfosOfType(typ)), 1)
+	assert.Equal(t, c.SymbolCount, before)
+	properties := c.GetPropertiesOfType(typ)
+	assert.Equal(t, len(properties), 3)
+	assert.Equal(t, c.SymbolCount, before+2)
+	assert.Equal(t, c.GetPropertyOfType(typ, "value"), value)
+}
+
+func TestInstantiatedMemberTableKeys(t *testing.T) {
+	t.Parallel()
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/main.ts": `interface Base<T> { value: T }
+interface Derived<T> extends Base<T> {}
+declare const instance: Derived<string>;
+instance;`,
+		"/tsconfig.json": `{"files":["main.ts"]}`,
+	}, tspath.CaseInsensitive))
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+	assert.Equal(t, len(errors), 0)
+	program := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
+	program.BindSourceFiles()
+	file := program.GetSourceFile("/main.ts")
+	members := file.Statements.Nodes[0].Symbol().Members()
+	members["different"] = members["value"]
+	delete(members, "value")
+	c, done := program.GetTypeChecker(t.Context())
+	defer done()
+	typ := c.GetTypeAtLocation(file.Statements.Nodes[3].Expression())
+	value := c.GetPropertyOfType(typ, "value")
+	assert.Assert(t, value != nil)
+	properties := c.GetPropertiesOfType(typ)
+	assert.Equal(t, len(properties), 1)
+	assert.Equal(t, properties[0], value)
+	assert.Assert(t, c.GetPropertyOfType(typ, "different") == nil)
+}
+
+func TestInstantiatedDiamondMissingMember(t *testing.T) {
+	t.Parallel()
+	var source strings.Builder
+	source.WriteString("interface L0<T> { value?: T }\ninterface R0<T> { value?: T }\n")
+	for i := 1; i <= 24; i++ {
+		fmt.Fprintf(&source, "interface L%d<T> extends L%d<T>, R%d<T> {}\ninterface R%d<T> extends L%d<T>, R%d<T> {}\n", i, i-1, i-1, i, i-1, i-1)
+	}
+	source.WriteString("declare const instance: L24<string>;\ninstance;")
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/main.ts":       source.String(),
+		"/tsconfig.json": `{"files":["main.ts"]}`,
+	}, tspath.CaseInsensitive))
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+	assert.Equal(t, len(errors), 0)
+	program := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
+	program.BindSourceFiles()
+	c, done := program.GetTypeChecker(t.Context())
+	defer done()
+	file := program.GetSourceFile("/main.ts")
+	typ := c.GetTypeAtLocation(file.Statements.Nodes[len(file.Statements.Nodes)-1].Expression())
+	assert.Assert(t, c.GetPropertyOfType(typ, "missing") == nil)
+	value := c.GetPropertyOfType(typ, "value")
+	assert.Assert(t, value != nil)
+	properties := c.GetPropertiesOfType(typ)
+	assert.Equal(t, len(properties), 1)
+	assert.Equal(t, properties[0], value)
+}
+
 func BenchmarkNewChecker(b *testing.B) {
 	fs := bundled.WrapFS(osvfs.FS())
 	rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
