@@ -683,6 +683,8 @@ type Checker struct {
 	conditionalTypeArena                        core.Arena[ConditionalType]
 	typeListArena                               core.Arena[*Type]
 	valueSymbolExtraArena                       core.Arena[valueSymbolExtra]
+	memberIndexArena                            core.Arena[memberIndex]
+	memberIndexSlotsArena                       core.Arena[uint32]
 	freeTypeSets                                *temporaryTypeSet
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
@@ -10943,7 +10945,7 @@ func (c *Checker) getInstantiationExpressionType(exprType *Type, node *ast.Node)
 					debug.Assert(t.symbol != nil, "Instantiation expression source type must have a symbol")
 					symbol.SetDeclarations(t.symbol.Declarations())
 					result := c.newObjectType(ObjectFlagsAnonymous|ObjectFlagsInstantiationExpressionType, symbol)
-					c.setStructuredTypeMembers(result, resolved.members, callSignatures, constructSignatures, resolved.indexInfos)
+					c.setStructuredTypeMembers(result, resolved.getMembers(), callSignatures, constructSignatures, resolved.indexInfos)
 					result.AsInstantiationExpressionType().node = node
 					return result
 				}
@@ -16138,7 +16140,7 @@ func (c *Checker) cloneTypeAsModuleType(symbol *ast.Symbol, moduleType *Type, re
 	links.target = symbol
 	links.originatingImport = referenceParent
 	resolvedModuleType := c.resolveStructuredTypeMembers(moduleType)
-	c.valueSymbolLinks.Get(result).resolvedType = c.newAnonymousType(result, resolvedModuleType.members, nil, nil, resolvedModuleType.indexInfos)
+	c.valueSymbolLinks.Get(result).resolvedType = c.newAnonymousType(result, resolvedModuleType.getMembers(), nil, nil, resolvedModuleType.indexInfos)
 	return result
 }
 
@@ -19338,7 +19340,7 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 	switch {
 	case t.flags&TypeFlagsObject != 0:
 		resolved := c.resolveStructuredTypeMembers(t)
-		symbol := resolved.members[name]
+		symbol := resolved.getMember(name)
 		if symbol != nil {
 			if !includeTypeOnlyMembers && t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsValueModule != 0 && c.moduleSymbolLinks.Get(t.symbol).typeOnlyExportStarMap[name] != nil {
 				// If this is the type of a module, `resolved.members.get(name)` might have effectively skipped over
@@ -19543,6 +19545,7 @@ func (c *Checker) resolveTypeReferenceMembers(t *Type) {
 func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters []*Type, typeArguments []*Type) {
 	var mapper *TypeMapper
 	var members ast.SymbolTable
+	var properties []*ast.Symbol
 	var callSignatures []*Signature
 	var constructSignatures []*Signature
 	var indexInfos []*IndexInfo
@@ -19556,7 +19559,19 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 	} else {
 		instantiated = true
 		mapper = newTypeMapper(typeParameters, typeArguments)
-		members = c.instantiateSymbolTable(resolved.declaredMembers, mapper)
+		properties = c.getNamedMembers(resolved.declaredMembers, t.symbol)
+		for _, symbol := range properties {
+			if resolved.declaredMembers[symbol.Name()] != symbol {
+				members = c.instantiateSymbolTable(resolved.declaredMembers, mapper)
+				properties = nil
+				break
+			}
+		}
+		if members == nil {
+			for i, symbol := range properties {
+				properties[i] = c.instantiateSymbol(symbol, mapper)
+			}
+		}
 		callSignatures = c.instantiateSignatures(resolved.declaredCallSignatures, mapper)
 		constructSignatures = c.instantiateSignatures(resolved.declaredConstructSignatures, mapper)
 		indexInfos = c.instantiateIndexInfos(resolved.declaredIndexInfos, mapper)
@@ -19565,6 +19580,11 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 	if len(baseTypes) != 0 {
 		if !instantiated {
 			members = maps.Clone(members)
+		} else if members == nil {
+			members = make(ast.SymbolTable, len(properties))
+			for _, symbol := range properties {
+				members[symbol.Name()] = symbol
+			}
 		}
 		thisArgument := core.LastOrNil(typeArguments)
 		for _, baseType := range baseTypes {
@@ -19587,6 +19607,11 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 		}
 	}
 	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
+	if instantiated && len(baseTypes) == 0 && members == nil {
+		data := t.AsStructuredType()
+		data.properties = properties
+		data.members = c.newPropertyIndex(properties, nil)
+	}
 }
 
 func findIndexInfo(indexInfos []*IndexInfo, keyType *Type) *IndexInfo {
@@ -21833,7 +21858,7 @@ func (c *Checker) includeMixinType(t *Type, types []*Type, mixinFlags []bool, in
 func (c *Checker) getPropertyOfObjectType(t *Type, name string) *ast.Symbol {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
-		symbol := resolved.members[name]
+		symbol := resolved.getMember(name)
 		if symbol != nil && c.symbolIsValue(symbol) {
 			return symbol
 		}
@@ -25713,8 +25738,18 @@ func (c *Checker) cloneTypeReference(source *Type) *Type {
 func (c *Checker) setStructuredTypeMembers(t *Type, members ast.SymbolTable, callSignatures []*Signature, constructSignatures []*Signature, indexInfos []*IndexInfo) {
 	t.objectFlags |= ObjectFlagsMembersResolved
 	data := t.AsStructuredType()
-	data.members = members
+	// Named-member filtering may recursively query this type before it finishes.
+	data.members = nil
+	if members != nil {
+		data.members = c.memberIndexArena.New()
+		data.members.fallback = members
+	}
 	data.properties = c.getNamedMembers(members, t.symbol)
+	if data.members != nil && t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsValueModule != 0 {
+		data.members.fallback = members
+	} else {
+		data.members = c.newMemberIndex(members, data.properties, data.members)
+	}
 	if len(callSignatures) != 0 {
 		if len(constructSignatures) != 0 {
 			data.signatures = core.Concatenate(callSignatures, constructSignatures)
@@ -31744,7 +31779,7 @@ func (c *Checker) isFunctionObjectType(t *Type) bool {
 	// We do a quick check for a "bind" property before performing the more expensive subtype
 	// check. This gives us a quicker out in the common case where an object type is not a function.
 	resolved := c.resolveStructuredTypeMembers(t)
-	return len(resolved.signatures) != 0 || resolved.members["bind"] != nil && c.isTypeSubtypeOf(t, c.globalFunctionType)
+	return len(resolved.signatures) != 0 || resolved.getMember("bind") != nil && c.isTypeSubtypeOf(t, c.globalFunctionType)
 }
 
 func (c *Checker) getTypeWithFacts(t *Type, include TypeFacts) *Type {
@@ -32240,7 +32275,7 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 			// member should more exactly be the kind of (declarationless) symbol we want.
 			// (See #44364 and #45031 for relevant implementation PRs)
 			if metaProp.KeywordToken == ast.KindImportKeyword && node.Text() == "meta" {
-				return c.getGlobalImportMetaExpressionType().AsObjectType().members["meta"]
+				return c.getGlobalImportMetaExpressionType().AsObjectType().getMember("meta")
 			}
 			// no other meta properties are valid syntax, thus no others should have symbols
 			return nil

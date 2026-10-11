@@ -154,10 +154,17 @@ func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb 
 	if reducedType.flags&TypeFlagsStructuredType == 0 {
 		return
 	}
-	for name, symbol := range c.resolveStructuredTypeMembers(reducedType).members {
-		if c.isNamedMember(symbol, name) {
-			cb(symbol, name)
+	resolved := c.resolveStructuredTypeMembers(reducedType)
+	if resolved.members != nil && resolved.members.fallback != nil {
+		for name, symbol := range resolved.members.fallback {
+			if c.isNamedMember(symbol, name) {
+				cb(symbol, name)
+			}
 		}
+		return
+	}
+	for _, symbol := range resolved.properties {
+		cb(symbol, symbol.Name())
 	}
 }
 

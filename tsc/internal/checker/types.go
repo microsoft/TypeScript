@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/evaluator"
+	"github.com/zeebo/xxh3"
 )
 
 //go:generate npx hereby generate:checker
@@ -1097,7 +1098,7 @@ func (t *ConstrainedType) AsConstrainedType() *ConstrainedType { return t }
 
 type StructuredType struct {
 	ConstrainedType
-	members            ast.SymbolTable
+	members            *memberIndex
 	properties         []*ast.Symbol
 	signatures         []*Signature // Signatures (call + construct)
 	callSignatureCount int          // Count of call signatures
@@ -1118,6 +1119,102 @@ func (t *StructuredType) ConstructSignatures() []*Signature {
 
 func (t *StructuredType) Properties() []*ast.Symbol {
 	return t.properties
+}
+
+type memberIndex struct {
+	slots    []uint32
+	fallback ast.SymbolTable
+}
+
+// Property order is semantic. Keep it unchanged and index it with pointer-free
+// slots instead of retaining a second map of names and symbol pointers.
+func (c *Checker) newMemberIndex(members ast.SymbolTable, properties []*ast.Symbol, index *memberIndex) *memberIndex {
+	needsFallback := len(members) != len(properties)
+	for _, symbol := range properties {
+		if members[symbol.Name()] != symbol {
+			needsFallback = true
+			break
+		}
+	}
+	if needsFallback {
+		if index == nil {
+			index = c.memberIndexArena.New()
+		}
+		index.fallback = members
+		return index
+	}
+	if index != nil {
+		index.fallback = nil
+	}
+	return c.newPropertyIndex(properties, index)
+}
+
+func (c *Checker) newPropertyIndex(properties []*ast.Symbol, index *memberIndex) *memberIndex {
+	if len(properties) <= 8 {
+		return nil
+	}
+	if uint64(len(properties)) > uint64(^uint32(0)) {
+		panic("Member index exhausted")
+	}
+	if index == nil {
+		index = c.memberIndexArena.New()
+	}
+	size := 1 << bits.Len(uint(len(properties))*2-1)
+	index.slots = c.memberIndexSlotsArena.NewSlice(size)
+	mask := uint64(size - 1)
+	for i, symbol := range properties {
+		slot := xxh3.HashString(symbol.Name()) & mask
+		for index.slots[slot] != 0 {
+			slot = (slot + 1) & mask
+		}
+		index.slots[slot] = uint32(i + 1)
+	}
+	return index
+}
+
+func (t *StructuredType) getMember(name string) *ast.Symbol {
+	if t.members == nil {
+		for _, symbol := range t.properties {
+			if symbol.Name() == name {
+				return symbol
+			}
+		}
+		return nil
+	}
+	if t.members.fallback != nil {
+		return t.members.fallback[name]
+	}
+	slots := t.members.slots
+	if len(slots) == 0 {
+		return nil
+	}
+	mask := uint64(len(slots) - 1)
+	slot := xxh3.HashString(name) & mask
+	for {
+		index := slots[slot]
+		if index == 0 {
+			return nil
+		}
+		symbol := t.properties[index-1]
+		if symbol.Name() == name {
+			return symbol
+		}
+		slot = (slot + 1) & mask
+	}
+}
+
+func (t *StructuredType) getMembers() ast.SymbolTable {
+	if t.members != nil && t.members.fallback != nil {
+		return t.members.fallback
+	}
+	if len(t.properties) == 0 {
+		return nil
+	}
+	members := make(ast.SymbolTable, len(t.properties))
+	for _, symbol := range t.properties {
+		members[symbol.Name()] = symbol
+	}
+	return members
 }
 
 // Except for tuple type references and reverse mapped types, all object types have an associated symbol.
