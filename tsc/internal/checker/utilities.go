@@ -881,6 +881,44 @@ type orderedSet[T comparable] struct {
 	values      []T
 }
 
+// Composite type construction often finds an existing interned type. Borrow
+// workspace for normalization, and copy constituents only when publishing a
+// new type. Each recursive construction borrows a separate set.
+type temporaryTypeSet struct {
+	orderedSet[*Type]
+	inline [16]*Type
+	next   *temporaryTypeSet
+}
+
+func (c *Checker) getTemporaryTypeSet() *temporaryTypeSet {
+	set := c.freeTypeSets
+	if set == nil {
+		set = &temporaryTypeSet{}
+		set.values = set.inline[:0]
+	} else {
+		c.freeTypeSets = set.next
+		set.next = nil
+	}
+	return set
+}
+
+func (c *Checker) releaseTemporaryTypeSet(set *temporaryTypeSet) {
+	clear(set.values)
+	if cap(set.values) > len(set.inline) {
+		clear(set.inline[:])
+	}
+	clear(set.valuesByKey)
+	// Do not retain arbitrarily large temporary unions and their dedup maps.
+	if cap(set.values) > 4096 {
+		set.values = set.inline[:0]
+		set.valuesByKey = nil
+	} else {
+		set.values = set.values[:0]
+	}
+	set.next = c.freeTypeSets
+	c.freeTypeSets = set
+}
+
 func (s *orderedSet[T]) contains(value T) bool {
 	if s.valuesByKey == nil {
 		return slices.Contains(s.values, value)
