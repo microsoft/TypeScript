@@ -566,19 +566,19 @@ func (b *NodeBuilderImpl) getResolvedTypeWithoutAbstractConstructSignatures(t *S
 	if len(t.ConstructSignatures()) == 0 {
 		return t.AsType()
 	}
-	if t.objectTypeWithoutAbstractConstructSignatures != nil {
-		return t.objectTypeWithoutAbstractConstructSignatures
+	if t.extra.objectTypeWithoutAbstractConstructSignatures != nil {
+		return t.extra.objectTypeWithoutAbstractConstructSignatures
 	}
 	constructSignatures := core.Filter(t.ConstructSignatures(), func(signature *Signature) bool {
 		return signature.flags&SignatureFlagsAbstract == 0
 	})
 	if len(constructSignatures) == len(t.ConstructSignatures()) {
-		t.objectTypeWithoutAbstractConstructSignatures = t.AsType()
+		t.extra.objectTypeWithoutAbstractConstructSignatures = t.AsType()
 		return t.AsType()
 	}
-	typeCopy := b.ch.newAnonymousType(t.symbol, t.members, t.CallSignatures(), core.IfElse(len(constructSignatures) > 0, constructSignatures, []*Signature{}), t.indexInfos)
-	t.objectTypeWithoutAbstractConstructSignatures = typeCopy
-	typeCopy.AsStructuredType().objectTypeWithoutAbstractConstructSignatures = typeCopy
+	typeCopy := b.ch.newAnonymousType(t.symbol, t.members, t.CallSignatures(), core.IfElse(len(constructSignatures) > 0, constructSignatures, []*Signature{}), t.getIndexInfos())
+	t.extra.objectTypeWithoutAbstractConstructSignatures = typeCopy
+	typeCopy.AsStructuredType().ensureExtra(b.ch).objectTypeWithoutAbstractConstructSignatures = typeCopy
 	return typeCopy
 }
 
@@ -2737,7 +2737,7 @@ func (b *NodeBuilderImpl) createTypeNodesFromResolvedType(resolvedType *Structur
 		}
 		typeElements = append(typeElements, b.signatureToSignatureDeclarationHelper(signature, ast.KindConstructSignature, nil))
 	}
-	for _, info := range resolvedType.indexInfos {
+	for _, info := range resolvedType.getIndexInfos() {
 		var typeNode *ast.TypeNode
 		if resolvedType.objectFlags&ObjectFlagsReverseMapped != 0 && b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier != 0 {
 			typeNode = b.createElidedInformationPlaceholder()
@@ -2794,7 +2794,7 @@ func (b *NodeBuilderImpl) createTypeNodeFromObjectType(t *Type) *ast.TypeNode {
 	resolved := b.ch.resolveStructuredTypeMembers(t)
 	callSigs := resolved.CallSignatures()
 	ctorSigs := resolved.ConstructSignatures()
-	if len(resolved.properties) == 0 && len(resolved.indexInfos) == 0 {
+	if len(resolved.properties) == 0 && len(resolved.getIndexInfos()) == 0 {
 		if len(callSigs) == 0 && len(ctorSigs) == 0 {
 			b.ctx.approximateLength += 2
 			result := b.f.NewTypeLiteralNode(b.f.NewNodeList([]*ast.Node{}))
@@ -2823,7 +2823,7 @@ func (b *NodeBuilderImpl) createTypeNodeFromObjectType(t *Type) *ast.TypeNode {
 			return b.ch.getOrCreateTypeFromSignature(s)
 		})
 		// count the number of type elements excluding abstract constructors
-		typeElementCount := len(callSigs) + (len(ctorSigs) - len(abstractSignatures)) + len(resolved.indexInfos) + core.IfElse(b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0, core.CountWhere(resolved.properties, func(p *ast.Symbol) bool {
+		typeElementCount := len(callSigs) + (len(ctorSigs) - len(abstractSignatures)) + len(resolved.getIndexInfos()) + core.IfElse(b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0, core.CountWhere(resolved.properties, func(p *ast.Symbol) bool {
 			return p.Flags()&ast.SymbolFlagsPrototype == 0
 		}), len(resolved.properties))
 		// don't include an empty object literal if there were no other static-side

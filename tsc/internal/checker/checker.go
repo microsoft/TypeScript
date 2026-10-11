@@ -685,6 +685,7 @@ type Checker struct {
 	conditionalTypeArena                        core.Arena[ConditionalType]
 	typeListArena                               core.Arena[*Type]
 	valueSymbolExtraArena                       core.Arena[valueSymbolExtra]
+	structuredTypeExtraArena                    core.Arena[structuredTypeExtra]
 	freeTypeSets                                *temporaryTypeSet
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
@@ -4604,7 +4605,7 @@ func (c *Checker) getTypeWithoutSignatures(t *Type) *Type {
 	switch {
 	case t.flags&TypeFlagsObject != 0:
 		resolved := c.resolveStructuredTypeMembers(t)
-		if len(resolved.signatures) != 0 {
+		if len(resolved.getSignatures()) != 0 {
 			result := c.newObjectType(ObjectFlagsAnonymous, t.symbol)
 			result.objectFlags |= ObjectFlagsMembersResolved
 			result.AsObjectType().members = resolved.members
@@ -10944,7 +10945,7 @@ func (c *Checker) getInstantiationExpressionType(exprType *Type, node *ast.Node)
 					debug.Assert(t.symbol != nil, "Instantiation expression source type must have a symbol")
 					symbol.SetDeclarations(t.symbol.Declarations())
 					result := c.newObjectType(ObjectFlagsAnonymous|ObjectFlagsInstantiationExpressionType, symbol)
-					c.setStructuredTypeMembers(result, resolved.members, callSignatures, constructSignatures, resolved.indexInfos)
+					c.setStructuredTypeMembers(result, resolved.members, callSignatures, constructSignatures, resolved.getIndexInfos())
 					result.AsInstantiationExpressionType().node = node
 					return result
 				}
@@ -16139,7 +16140,7 @@ func (c *Checker) cloneTypeAsModuleType(symbol *ast.Symbol, moduleType *Type, re
 	links.target = symbol
 	links.originatingImport = referenceParent
 	resolvedModuleType := c.resolveStructuredTypeMembers(moduleType)
-	c.valueSymbolLinks.Get(result).resolvedType = c.newAnonymousType(result, resolvedModuleType.members, nil, nil, resolvedModuleType.indexInfos)
+	c.valueSymbolLinks.Get(result).resolvedType = c.newAnonymousType(result, resolvedModuleType.members, nil, nil, resolvedModuleType.getIndexInfos())
 	return result
 }
 
@@ -19403,10 +19404,13 @@ func (c *Checker) getSignaturesOfStructuredType(t *Type, kind SignatureKind) []*
 		return nil
 	}
 	resolved := c.resolveStructuredTypeMembers(t)
-	if kind == SignatureKindCall {
-		return resolved.signatures[:resolved.callSignatureCount]
+	if resolved.extra == nil {
+		return nil
 	}
-	return resolved.signatures[resolved.callSignatureCount:]
+	if kind == SignatureKindCall {
+		return resolved.extra.signatures[:resolved.extra.callSignatureCount]
+	}
+	return resolved.extra.signatures[resolved.extra.callSignatureCount:]
 }
 
 func (c *Checker) getIndexInfosOfType(t *Type) []*IndexInfo {
@@ -19415,7 +19419,7 @@ func (c *Checker) getIndexInfosOfType(t *Type) []*IndexInfo {
 
 func (c *Checker) getIndexInfosOfStructuredType(t *Type) []*IndexInfo {
 	if t.flags&TypeFlagsStructuredType != 0 {
-		return c.resolveStructuredTypeMembers(t).indexInfos
+		return c.resolveStructuredTypeMembers(t).getIndexInfos()
 	}
 	return nil
 }
@@ -19788,7 +19792,7 @@ func (c *Checker) getSingleCallOrConstructSignature(t *Type) *Signature {
 func (c *Checker) getSingleSignature(t *Type, kind SignatureKind, allowMembers bool) *Signature {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
-		if allowMembers || len(resolved.properties) == 0 && len(resolved.indexInfos) == 0 {
+		if allowMembers || len(resolved.properties) == 0 && len(resolved.getIndexInfos()) == 0 {
 			if kind == SignatureKindCall && len(resolved.CallSignatures()) == 1 && len(resolved.ConstructSignatures()) == 0 {
 				return resolved.CallSignatures()[0]
 			}
@@ -21141,14 +21145,20 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 			indexInfos = append(indexInfos, c.enumNumberIndexInfo)
 		}
 	}
-	d.indexInfos = indexInfos
+	if indexInfos != nil || d.extra != nil {
+		d.ensureExtra(c).indexInfos = indexInfos
+	}
 	// We resolve the members before computing the signatures because a signature may use
 	// typeof with a qualified name expression that circularly references the type we are
 	// in the process of resolving (see issue #6072). The temporarily empty signature list
 	// will never be observed because a qualified name can't reference signatures.
 	if symbol.Flags()&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0 {
-		d.signatures = c.getSignaturesOfSymbol(symbol)
-		d.callSignatureCount = len(d.signatures)
+		signatures := c.getSignaturesOfSymbol(symbol)
+		if signatures != nil || d.extra != nil {
+			extra := d.ensureExtra(c)
+			extra.signatures = signatures
+			extra.callSignatureCount = len(signatures)
+		}
 	}
 	// And likewise for construct signatures for classes
 	if symbol.Flags()&ast.SymbolFlagsClass != 0 {
@@ -21157,7 +21167,10 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 		if len(constructSignatures) == 0 {
 			constructSignatures = c.getDefaultConstructSignatures(classType)
 		}
-		d.signatures = append(d.signatures, constructSignatures...)
+		if len(constructSignatures) != 0 {
+			extra := d.ensureExtra(c)
+			extra.signatures = append(extra.signatures, constructSignatures...)
+		}
 	}
 }
 
@@ -25716,22 +25729,30 @@ func (c *Checker) setStructuredTypeMembers(t *Type, members ast.SymbolTable, cal
 	data := t.AsStructuredType()
 	data.members = members
 	data.properties = c.getNamedMembers(members, t.symbol)
+	c.setStructuredTypeSignatures(data, callSignatures, constructSignatures, indexInfos)
+}
+
+func (c *Checker) setStructuredTypeSignatures(data *StructuredType, callSignatures []*Signature, constructSignatures []*Signature, indexInfos []*IndexInfo) {
+	if data.extra == nil && callSignatures == nil && constructSignatures == nil && indexInfos == nil {
+		return
+	}
+	extra := data.ensureExtra(c)
 	if len(callSignatures) != 0 {
 		if len(constructSignatures) != 0 {
-			data.signatures = core.Concatenate(callSignatures, constructSignatures)
+			extra.signatures = core.Concatenate(callSignatures, constructSignatures)
 		} else {
-			data.signatures = slices.Clip(callSignatures)
+			extra.signatures = slices.Clip(callSignatures)
 		}
-		data.callSignatureCount = len(callSignatures)
+		extra.callSignatureCount = len(callSignatures)
 	} else {
 		if len(constructSignatures) != 0 {
-			data.signatures = slices.Clip(constructSignatures)
+			extra.signatures = slices.Clip(constructSignatures)
 		} else {
-			data.signatures = nil
+			extra.signatures = nil
 		}
-		data.callSignatureCount = 0
+		extra.callSignatureCount = 0
 	}
-	data.indexInfos = slices.Clip(indexInfos)
+	extra.indexInfos = slices.Clip(indexInfos)
 }
 
 func (c *Checker) newTypeParameter(symbol *ast.Symbol) *Type {
@@ -27061,7 +27082,7 @@ func (c *Checker) IsEmptyAnonymousObjectType(t *Type) bool {
 }
 
 func (c *Checker) isEmptyResolvedType(t *StructuredType) bool {
-	return t.AsType() != c.anyFunctionType && len(t.properties) == 0 && len(t.signatures) == 0 && len(t.indexInfos) == 0
+	return t.AsType() != c.anyFunctionType && len(t.properties) == 0 && len(t.getSignatures()) == 0 && len(t.getIndexInfos()) == 0
 }
 
 func (c *Checker) isEmptyObjectType(t *Type) bool {
@@ -28445,7 +28466,7 @@ func (c *Checker) containsUndefinedType(t *Type) bool {
 }
 
 func (c *Checker) typeHasCallOrConstructSignatures(t *Type) bool {
-	return t.flags&TypeFlagsStructuredType != 0 && len(c.resolveStructuredTypeMembers(t).signatures) != 0
+	return t.flags&TypeFlagsStructuredType != 0 && len(c.resolveStructuredTypeMembers(t).getSignatures()) != 0
 }
 
 func (c *Checker) getNormalizedType(t *Type, writing bool) *Type {
@@ -28752,7 +28773,7 @@ func (c *Checker) getRegularTypeOfObjectLiteral(t *Type) *Type {
 	}
 	resolved := c.resolveStructuredTypeMembers(t)
 	members := c.transformTypeOfMembers(t, c.getRegularTypeOfObjectLiteral)
-	regular := c.newAnonymousType(t.symbol, members, resolved.CallSignatures(), resolved.ConstructSignatures(), resolved.indexInfos)
+	regular := c.newAnonymousType(t.symbol, members, resolved.CallSignatures(), resolved.ConstructSignatures(), resolved.getIndexInfos())
 	regular.flags = resolved.flags
 	regular.objectFlags |= resolved.objectFlags & ^ObjectFlagsFreshLiteral
 	c.cachedTypes[key] = regular
@@ -31745,7 +31766,7 @@ func (c *Checker) isFunctionObjectType(t *Type) bool {
 	// We do a quick check for a "bind" property before performing the more expensive subtype
 	// check. This gives us a quicker out in the common case where an object type is not a function.
 	resolved := c.resolveStructuredTypeMembers(t)
-	return len(resolved.signatures) != 0 || resolved.members["bind"] != nil && c.isTypeSubtypeOf(t, c.globalFunctionType)
+	return len(resolved.getSignatures()) != 0 || resolved.members["bind"] != nil && c.isTypeSubtypeOf(t, c.globalFunctionType)
 }
 
 func (c *Checker) getTypeWithFacts(t *Type, include TypeFacts) *Type {

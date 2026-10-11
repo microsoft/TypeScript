@@ -391,3 +391,53 @@ func TestCompactValueSymbolLinksLayout(t *testing.T) {
 	assert.Equal(t, links.getWriteType(), types[0])
 	assert.Equal(t, links.getContainingType(), types[2])
 }
+
+func TestCompactStructuredTypeLayout(t *testing.T) {
+	t.Parallel()
+	assert.Equal(t, unsafe.Sizeof(StructuredType{}), unsafe.Sizeof(ConstrainedType{})+5*unsafe.Sizeof(uintptr(0)))
+}
+
+func TestStructuredTypeExtra(t *testing.T) {
+	t.Parallel()
+	c, types := newCompositeTestChecker()
+	data := c.newAnonymousType(nil, nil, nil, nil, nil).AsStructuredType()
+	assert.Assert(t, data.extra == nil)
+	assert.Assert(t, data.CallSignatures() == nil)
+	assert.Assert(t, data.ConstructSignatures() == nil)
+	assert.Assert(t, data.getIndexInfos() == nil)
+	c.setStructuredTypeSignatures(data, nil, nil, nil)
+	assert.Assert(t, data.extra == nil)
+
+	call := &Signature{}
+	construct := &Signature{}
+	info := &IndexInfo{keyType: types[0]}
+	c.setStructuredTypeSignatures(data, []*Signature{call}, []*Signature{construct}, []*IndexInfo{info})
+	assert.Equal(t, data.CallSignatures()[0], call)
+	assert.Equal(t, data.ConstructSignatures()[0], construct)
+	assert.Equal(t, cap(data.CallSignatures()), 1)
+	assert.Equal(t, cap(data.ConstructSignatures()), 1)
+	assert.Equal(t, data.getIndexInfos()[0], info)
+	extra := data.extra
+	extra.objectTypeWithoutAbstractConstructSignatures = types[2]
+	for range 1024 {
+		other := c.newAnonymousType(nil, nil, []*Signature{call}, nil, nil)
+		assert.Assert(t, other.AsStructuredType().extra != extra)
+	}
+	runtime.GC()
+	assert.Equal(t, data.CallSignatures()[0], call)
+	assert.Equal(t, data.ConstructSignatures()[0], construct)
+	assert.Equal(t, data.getIndexInfos()[0], info)
+	assert.Equal(t, data.extra.objectTypeWithoutAbstractConstructSignatures, types[2])
+	c.setStructuredTypeSignatures(data, nil, []*Signature{construct}, nil)
+	assert.Equal(t, len(data.CallSignatures()), 0)
+	assert.Equal(t, data.ConstructSignatures()[0], construct)
+	assert.Assert(t, data.getIndexInfos() == nil)
+	c.setStructuredTypeSignatures(data, nil, nil, nil)
+	assert.Assert(t, data.CallSignatures() == nil)
+	assert.Assert(t, data.ConstructSignatures() == nil)
+	assert.Equal(t, data.extra, extra)
+	assert.Equal(t, extra.objectTypeWithoutAbstractConstructSignatures, types[2])
+	c.setStructuredTypeSignatures(data, nil, nil, []*IndexInfo{})
+	assert.Assert(t, data.getIndexInfos() != nil)
+	runtime.KeepAlive(c)
+}
