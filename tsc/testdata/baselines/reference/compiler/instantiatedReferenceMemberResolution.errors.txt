@@ -1,0 +1,136 @@
+instantiatedReferenceMemberResolution.ts(14,9): error TS2339: Property 'missing' does not exist on type 'Derived<number>'.
+instantiatedReferenceMemberResolution.ts(28,5): error TS2341: Property 'secret' is private and only accessible within class 'Box<T>'.
+instantiatedReferenceMemberResolution.ts(34,7): error TS2559: Type '{ other: number; }' has no properties in common with type 'Weak<string>'.
+instantiatedReferenceMemberResolution.ts(37,7): error TS2559: Type '{ other: number; }' has no properties in common with type 'ConditionalBase<"b">'.
+instantiatedReferenceMemberResolution.ts(38,7): error TS2741: Property 'kind' is missing in type '{ other: number; }' but required in type 'ConditionalBase<"a">'.
+instantiatedReferenceMemberResolution.ts(43,9): error TS2339: Property 'bind' does not exist on type 'Fn<"b">'.
+instantiatedReferenceMemberResolution.ts(50,11): error TS2430: Interface 'Wrap<T>' incorrectly extends interface 'T'.
+  'Wrap<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ a?: string | undefined; }'.
+instantiatedReferenceMemberResolution.ts(51,7): error TS2741: Property 'b' is missing in type '{ other: number; }' but required in type 'Wrap<{ a?: string | undefined; b: number; }>'.
+instantiatedReferenceMemberResolution.ts(59,24): error TS2716: Type parameter 'T' has a circular default.
+instantiatedReferenceMemberResolution.ts(74,7): error TS2322: Type 'ReducedDict<"b">' is not assignable to type '{ [key: string]: number; }'.
+  'string' index signatures are incompatible.
+    Type 'unknown' is not assignable to type 'number'.
+instantiatedReferenceMemberResolution.ts(80,7): error TS2322: Type '<U>(x: U, y: string) => U' is not assignable to type 'number'.
+instantiatedReferenceMemberResolution.ts(82,7): error TS2322: Type '(x: unknown, y: string) => unknown' is not assignable to type 'number'.
+
+
+==== instantiatedReferenceMemberResolution.ts (12 errors) ====
+    interface Base<T> {
+        value: T;
+        shared: string;
+    }
+    interface Derived<T> extends Base<T[]> {
+        shared: "derived";
+        own: T;
+    }
+    declare const derived: Derived<number>;
+    export const value = derived.value;
+    export const shared = derived.shared;
+    export const properties = { ...derived };
+    export const again = derived.value;
+    derived.missing;
+            ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type 'Derived<number>'.
+    
+    class Box<T> {
+        private secret!: T;
+        protected hidden!: T;
+        contents!: T;
+        get readonlyContents(): T { return this.contents; }
+        set writeonlyContents(value: T) {}
+        method<U>(value: U): [T, U] { return [this.contents, value]; }
+    }
+    declare const box: Box<string>;
+    export const contents = box.contents;
+    export const method = box.method(1);
+    export const boxProperties = { ...box };
+    box.secret;
+        ~~~~~~
+!!! error TS2341: Property 'secret' is private and only accessible within class 'Box<T>'.
+    
+    interface Weak<T> {
+        value?: T;
+    }
+    declare const unrelated: { other: number };
+    const weak: Weak<string> = unrelated;
+          ~~~~
+!!! error TS2559: Type '{ other: number; }' has no properties in common with type 'Weak<string>'.
+    type Tagged<T> = { kind: T } & { kind: "a" };
+    interface ConditionalBase<T extends string> extends Tagged<T> { optional?: T }
+    const reduced: ConditionalBase<"b"> = unrelated;
+          ~~~~~~~
+!!! error TS2559: Type '{ other: number; }' has no properties in common with type 'ConditionalBase<"b">'.
+    const unreduced: ConditionalBase<"a"> = unrelated;
+          ~~~~~~~~~
+!!! error TS2741: Property 'kind' is missing in type '{ other: number; }' but required in type 'ConditionalBase<"a">'.
+!!! related TS2728 instantiatedReferenceMemberResolution.ts:35:20: 'kind' is declared here.
+    
+    type Callable<T> = { (): T; kind: T } & { kind: "a" };
+    interface Fn<T extends string> extends Callable<T> {}
+    declare const neverFn: Fn<"b">;
+    neverFn.bind;
+            ~~~~
+!!! error TS2339: Property 'bind' does not exist on type 'Fn<"b">'.
+    declare const fn: Fn<"a">;
+    export const bound = fn.bind;
+    interface Dict<T> { [key: string]: T }
+    declare const dict: Dict<string>;
+    export const indexed = dict["property"];
+    
+    interface Wrap<T extends { a?: string }> extends T {}
+              ~~~~
+!!! error TS2430: Interface 'Wrap<T>' incorrectly extends interface 'T'.
+!!! error TS2430:   'Wrap<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ a?: string | undefined; }'.
+    const wrapped: Wrap<{ a?: string; b: number }> = unrelated;
+          ~~~~~~~
+!!! error TS2741: Property 'b' is missing in type '{ other: number; }' but required in type 'Wrap<{ a?: string | undefined; b: number; }>'.
+!!! related TS2728 instantiatedReferenceMemberResolution.ts:51:35: 'b' is declared here.
+    
+    interface Tree<T> extends Array<Tree<T>> { value: T }
+    declare const tree: Tree<string>;
+    export const children = tree.map(child => child.value);
+    interface Self<T> { next: this; value: T }
+    declare const self: Self<number>;
+    export const next = self.next.next.value;
+    interface Defaults<T = Defaults> { value: T }
+                           ~~~~~~~~
+!!! error TS2716: Type parameter 'T' has a circular default.
+    declare const defaults: Defaults;
+    export const defaultValue = defaults.value;
+    
+    interface First<T> { shared: T }
+    interface Second<T> { shared: T; second: T }
+    interface Multiple<T> extends First<T>, Second<T> { own: T }
+    declare const multiple: Multiple<number>;
+    export const multipleValue = multiple.shared;
+    export const multipleProperties = { ...multiple };
+    
+    interface ReducedDict<T extends string> extends Tagged<T> {
+        [key: string]: unknown;
+    }
+    declare const reducedDict: ReducedDict<"b">;
+    const numberDict: { [key: string]: number } = reducedDict;
+          ~~~~~~~~~~
+!!! error TS2322: Type 'ReducedDict<"b">' is not assignable to type '{ [key: string]: number; }'.
+!!! error TS2322:   'string' index signatures are incompatible.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'number'.
+    
+    type Two<T> = { <U>(x: U, y: T): U } & { <U>(x: U, y: string): U };
+    interface Overloads<T> extends Two<T> {}
+    declare function pipe<A extends any[], B>(f: (...args: A) => B): (...args: A) => B;
+    declare const merged: Overloads<string>;
+    const piped1: number = pipe(merged);
+          ~~~~~~
+!!! error TS2322: Type '<U>(x: U, y: string) => U' is not assignable to type 'number'.
+    declare const distinct: Overloads<number>;
+    const piped2: number = pipe(distinct);
+          ~~~~~~
+!!! error TS2322: Type '(x: unknown, y: string) => unknown' is not assignable to type 'number'.
+    
+    interface CallableBox<T> { (): T }
+    declare const boxOrCallable: CallableBox<string> | Box<string>;
+    if (typeof boxOrCallable === "function") {
+        boxOrCallable;
+    }
+    

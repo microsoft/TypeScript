@@ -36,3 +36,32 @@ i/**/`
 		},
 	})
 }
+
+func TestGenericMemberLookupBeforeAndAfterCompletion(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `
+interface Base<T> { inherited: T; shared: string }
+interface Derived<T> extends Base<T[]> { own: T; shared: "derived" }
+declare const instance: Derived<number>;
+instance./*inherited*/inherited;
+instance./*shared*/shared;
+instance./*completion*/
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyQuickInfoAt(t, "inherited", "(property) Base<number[]>.inherited: number[]", "")
+	f.VerifyQuickInfoAt(t, "shared", `(property) Derived<number>.shared: "derived"`, "")
+	f.VerifyCompletions(t, "completion", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{"inherited", "own", "shared"},
+		},
+	})
+	f.VerifyQuickInfoAt(t, "inherited", "(property) Base<number[]>.inherited: number[]", "")
+	f.VerifyQuickInfoAt(t, "shared", `(property) Derived<number>.shared: "derived"`, "")
+}

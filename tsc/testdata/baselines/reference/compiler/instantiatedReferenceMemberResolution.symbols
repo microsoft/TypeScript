@@ -1,0 +1,406 @@
+//// [tests/cases/compiler/instantiatedReferenceMemberResolution.ts] ////
+
+=== instantiatedReferenceMemberResolution.ts ===
+interface Base<T> {
+>Base : Symbol(Base, Decl(instantiatedReferenceMemberResolution.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 0, 15))
+
+    value: T;
+>value : Symbol(Base.value, Decl(instantiatedReferenceMemberResolution.ts, 0, 19))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 0, 15))
+
+    shared: string;
+>shared : Symbol(Base.shared, Decl(instantiatedReferenceMemberResolution.ts, 1, 13))
+}
+interface Derived<T> extends Base<T[]> {
+>Derived : Symbol(Derived, Decl(instantiatedReferenceMemberResolution.ts, 3, 1))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 4, 18))
+>Base : Symbol(Base, Decl(instantiatedReferenceMemberResolution.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 4, 18))
+
+    shared: "derived";
+>shared : Symbol(Derived.shared, Decl(instantiatedReferenceMemberResolution.ts, 4, 40))
+
+    own: T;
+>own : Symbol(Derived.own, Decl(instantiatedReferenceMemberResolution.ts, 5, 22))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 4, 18))
+}
+declare const derived: Derived<number>;
+>derived : Symbol(derived, Decl(instantiatedReferenceMemberResolution.ts, 8, 13))
+>Derived : Symbol(Derived, Decl(instantiatedReferenceMemberResolution.ts, 3, 1))
+
+export const value = derived.value;
+>value : Symbol(value, Decl(instantiatedReferenceMemberResolution.ts, 9, 12))
+>derived.value : Symbol(Base.value, Decl(instantiatedReferenceMemberResolution.ts, 0, 19))
+>derived : Symbol(derived, Decl(instantiatedReferenceMemberResolution.ts, 8, 13))
+>value : Symbol(Base.value, Decl(instantiatedReferenceMemberResolution.ts, 0, 19))
+
+export const shared = derived.shared;
+>shared : Symbol(shared, Decl(instantiatedReferenceMemberResolution.ts, 10, 12))
+>derived.shared : Symbol(Derived.shared, Decl(instantiatedReferenceMemberResolution.ts, 4, 40))
+>derived : Symbol(derived, Decl(instantiatedReferenceMemberResolution.ts, 8, 13))
+>shared : Symbol(Derived.shared, Decl(instantiatedReferenceMemberResolution.ts, 4, 40))
+
+export const properties = { ...derived };
+>properties : Symbol(properties, Decl(instantiatedReferenceMemberResolution.ts, 11, 12))
+>derived : Symbol(derived, Decl(instantiatedReferenceMemberResolution.ts, 8, 13))
+
+export const again = derived.value;
+>again : Symbol(again, Decl(instantiatedReferenceMemberResolution.ts, 12, 12))
+>derived.value : Symbol(Base.value, Decl(instantiatedReferenceMemberResolution.ts, 0, 19))
+>derived : Symbol(derived, Decl(instantiatedReferenceMemberResolution.ts, 8, 13))
+>value : Symbol(Base.value, Decl(instantiatedReferenceMemberResolution.ts, 0, 19))
+
+derived.missing;
+>derived : Symbol(derived, Decl(instantiatedReferenceMemberResolution.ts, 8, 13))
+
+class Box<T> {
+>Box : Symbol(Box, Decl(instantiatedReferenceMemberResolution.ts, 13, 16))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 15, 10))
+
+    private secret!: T;
+>secret : Symbol(Box.secret, Decl(instantiatedReferenceMemberResolution.ts, 15, 14))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 15, 10))
+
+    protected hidden!: T;
+>hidden : Symbol(Box.hidden, Decl(instantiatedReferenceMemberResolution.ts, 16, 23))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 15, 10))
+
+    contents!: T;
+>contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberResolution.ts, 17, 25))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 15, 10))
+
+    get readonlyContents(): T { return this.contents; }
+>readonlyContents : Symbol(Box.readonlyContents, Decl(instantiatedReferenceMemberResolution.ts, 18, 17))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 15, 10))
+>this.contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberResolution.ts, 17, 25))
+>this : Symbol(Box, Decl(instantiatedReferenceMemberResolution.ts, 13, 16))
+>contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberResolution.ts, 17, 25))
+
+    set writeonlyContents(value: T) {}
+>writeonlyContents : Symbol(Box.writeonlyContents, Decl(instantiatedReferenceMemberResolution.ts, 19, 55))
+>value : Symbol(value, Decl(instantiatedReferenceMemberResolution.ts, 20, 26))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 15, 10))
+
+    method<U>(value: U): [T, U] { return [this.contents, value]; }
+>method : Symbol(Box.method, Decl(instantiatedReferenceMemberResolution.ts, 20, 38))
+>U : Symbol(U, Decl(instantiatedReferenceMemberResolution.ts, 21, 11))
+>value : Symbol(value, Decl(instantiatedReferenceMemberResolution.ts, 21, 14))
+>U : Symbol(U, Decl(instantiatedReferenceMemberResolution.ts, 21, 11))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 15, 10))
+>U : Symbol(U, Decl(instantiatedReferenceMemberResolution.ts, 21, 11))
+>this.contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberResolution.ts, 17, 25))
+>this : Symbol(Box, Decl(instantiatedReferenceMemberResolution.ts, 13, 16))
+>contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberResolution.ts, 17, 25))
+>value : Symbol(value, Decl(instantiatedReferenceMemberResolution.ts, 21, 14))
+}
+declare const box: Box<string>;
+>box : Symbol(box, Decl(instantiatedReferenceMemberResolution.ts, 23, 13))
+>Box : Symbol(Box, Decl(instantiatedReferenceMemberResolution.ts, 13, 16))
+
+export const contents = box.contents;
+>contents : Symbol(contents, Decl(instantiatedReferenceMemberResolution.ts, 24, 12))
+>box.contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberResolution.ts, 17, 25))
+>box : Symbol(box, Decl(instantiatedReferenceMemberResolution.ts, 23, 13))
+>contents : Symbol(Box.contents, Decl(instantiatedReferenceMemberResolution.ts, 17, 25))
+
+export const method = box.method(1);
+>method : Symbol(method, Decl(instantiatedReferenceMemberResolution.ts, 25, 12))
+>box.method : Symbol(Box.method, Decl(instantiatedReferenceMemberResolution.ts, 20, 38))
+>box : Symbol(box, Decl(instantiatedReferenceMemberResolution.ts, 23, 13))
+>method : Symbol(Box.method, Decl(instantiatedReferenceMemberResolution.ts, 20, 38))
+
+export const boxProperties = { ...box };
+>boxProperties : Symbol(boxProperties, Decl(instantiatedReferenceMemberResolution.ts, 26, 12))
+>box : Symbol(box, Decl(instantiatedReferenceMemberResolution.ts, 23, 13))
+
+box.secret;
+>box.secret : Symbol(Box.secret, Decl(instantiatedReferenceMemberResolution.ts, 15, 14))
+>box : Symbol(box, Decl(instantiatedReferenceMemberResolution.ts, 23, 13))
+>secret : Symbol(Box.secret, Decl(instantiatedReferenceMemberResolution.ts, 15, 14))
+
+interface Weak<T> {
+>Weak : Symbol(Weak, Decl(instantiatedReferenceMemberResolution.ts, 27, 11))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 29, 15))
+
+    value?: T;
+>value : Symbol(Weak.value, Decl(instantiatedReferenceMemberResolution.ts, 29, 19))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 29, 15))
+}
+declare const unrelated: { other: number };
+>unrelated : Symbol(unrelated, Decl(instantiatedReferenceMemberResolution.ts, 32, 13))
+>other : Symbol(other, Decl(instantiatedReferenceMemberResolution.ts, 32, 26))
+
+const weak: Weak<string> = unrelated;
+>weak : Symbol(weak, Decl(instantiatedReferenceMemberResolution.ts, 33, 5))
+>Weak : Symbol(Weak, Decl(instantiatedReferenceMemberResolution.ts, 27, 11))
+>unrelated : Symbol(unrelated, Decl(instantiatedReferenceMemberResolution.ts, 32, 13))
+
+type Tagged<T> = { kind: T } & { kind: "a" };
+>Tagged : Symbol(Tagged, Decl(instantiatedReferenceMemberResolution.ts, 33, 37))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 34, 12))
+>kind : Symbol(kind, Decl(instantiatedReferenceMemberResolution.ts, 34, 18))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 34, 12))
+>kind : Symbol(kind, Decl(instantiatedReferenceMemberResolution.ts, 34, 32))
+
+interface ConditionalBase<T extends string> extends Tagged<T> { optional?: T }
+>ConditionalBase : Symbol(ConditionalBase, Decl(instantiatedReferenceMemberResolution.ts, 34, 45))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 35, 26))
+>Tagged : Symbol(Tagged, Decl(instantiatedReferenceMemberResolution.ts, 33, 37))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 35, 26))
+>optional : Symbol(ConditionalBase.optional, Decl(instantiatedReferenceMemberResolution.ts, 35, 63))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 35, 26))
+
+const reduced: ConditionalBase<"b"> = unrelated;
+>reduced : Symbol(reduced, Decl(instantiatedReferenceMemberResolution.ts, 36, 5))
+>ConditionalBase : Symbol(ConditionalBase, Decl(instantiatedReferenceMemberResolution.ts, 34, 45))
+>unrelated : Symbol(unrelated, Decl(instantiatedReferenceMemberResolution.ts, 32, 13))
+
+const unreduced: ConditionalBase<"a"> = unrelated;
+>unreduced : Symbol(unreduced, Decl(instantiatedReferenceMemberResolution.ts, 37, 5))
+>ConditionalBase : Symbol(ConditionalBase, Decl(instantiatedReferenceMemberResolution.ts, 34, 45))
+>unrelated : Symbol(unrelated, Decl(instantiatedReferenceMemberResolution.ts, 32, 13))
+
+type Callable<T> = { (): T; kind: T } & { kind: "a" };
+>Callable : Symbol(Callable, Decl(instantiatedReferenceMemberResolution.ts, 37, 50))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 39, 14))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 39, 14))
+>kind : Symbol(kind, Decl(instantiatedReferenceMemberResolution.ts, 39, 27))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 39, 14))
+>kind : Symbol(kind, Decl(instantiatedReferenceMemberResolution.ts, 39, 41))
+
+interface Fn<T extends string> extends Callable<T> {}
+>Fn : Symbol(Fn, Decl(instantiatedReferenceMemberResolution.ts, 39, 54))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 40, 13))
+>Callable : Symbol(Callable, Decl(instantiatedReferenceMemberResolution.ts, 37, 50))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 40, 13))
+
+declare const neverFn: Fn<"b">;
+>neverFn : Symbol(neverFn, Decl(instantiatedReferenceMemberResolution.ts, 41, 13))
+>Fn : Symbol(Fn, Decl(instantiatedReferenceMemberResolution.ts, 39, 54))
+
+neverFn.bind;
+>neverFn : Symbol(neverFn, Decl(instantiatedReferenceMemberResolution.ts, 41, 13))
+
+declare const fn: Fn<"a">;
+>fn : Symbol(fn, Decl(instantiatedReferenceMemberResolution.ts, 43, 13))
+>Fn : Symbol(Fn, Decl(instantiatedReferenceMemberResolution.ts, 39, 54))
+
+export const bound = fn.bind;
+>bound : Symbol(bound, Decl(instantiatedReferenceMemberResolution.ts, 44, 12))
+>fn.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(instantiatedReferenceMemberResolution.ts, 43, 13))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+interface Dict<T> { [key: string]: T }
+>Dict : Symbol(Dict, Decl(instantiatedReferenceMemberResolution.ts, 44, 29))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 45, 15))
+>key : Symbol(key, Decl(instantiatedReferenceMemberResolution.ts, 45, 21))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 45, 15))
+
+declare const dict: Dict<string>;
+>dict : Symbol(dict, Decl(instantiatedReferenceMemberResolution.ts, 46, 13))
+>Dict : Symbol(Dict, Decl(instantiatedReferenceMemberResolution.ts, 44, 29))
+
+export const indexed = dict["property"];
+>indexed : Symbol(indexed, Decl(instantiatedReferenceMemberResolution.ts, 47, 12))
+>dict : Symbol(dict, Decl(instantiatedReferenceMemberResolution.ts, 46, 13))
+
+interface Wrap<T extends { a?: string }> extends T {}
+>Wrap : Symbol(Wrap, Decl(instantiatedReferenceMemberResolution.ts, 47, 40))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 49, 15))
+>a : Symbol(a, Decl(instantiatedReferenceMemberResolution.ts, 49, 26))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 49, 15))
+
+const wrapped: Wrap<{ a?: string; b: number }> = unrelated;
+>wrapped : Symbol(wrapped, Decl(instantiatedReferenceMemberResolution.ts, 50, 5))
+>Wrap : Symbol(Wrap, Decl(instantiatedReferenceMemberResolution.ts, 47, 40))
+>a : Symbol(a, Decl(instantiatedReferenceMemberResolution.ts, 50, 21))
+>b : Symbol(b, Decl(instantiatedReferenceMemberResolution.ts, 50, 33))
+>unrelated : Symbol(unrelated, Decl(instantiatedReferenceMemberResolution.ts, 32, 13))
+
+interface Tree<T> extends Array<Tree<T>> { value: T }
+>Tree : Symbol(Tree, Decl(instantiatedReferenceMemberResolution.ts, 50, 59))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 52, 15))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Tree : Symbol(Tree, Decl(instantiatedReferenceMemberResolution.ts, 50, 59))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 52, 15))
+>value : Symbol(Tree.value, Decl(instantiatedReferenceMemberResolution.ts, 52, 42))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 52, 15))
+
+declare const tree: Tree<string>;
+>tree : Symbol(tree, Decl(instantiatedReferenceMemberResolution.ts, 53, 13))
+>Tree : Symbol(Tree, Decl(instantiatedReferenceMemberResolution.ts, 50, 59))
+
+export const children = tree.map(child => child.value);
+>children : Symbol(children, Decl(instantiatedReferenceMemberResolution.ts, 54, 12))
+>tree.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>tree : Symbol(tree, Decl(instantiatedReferenceMemberResolution.ts, 53, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>child : Symbol(child, Decl(instantiatedReferenceMemberResolution.ts, 54, 33))
+>child.value : Symbol(Tree.value, Decl(instantiatedReferenceMemberResolution.ts, 52, 42))
+>child : Symbol(child, Decl(instantiatedReferenceMemberResolution.ts, 54, 33))
+>value : Symbol(Tree.value, Decl(instantiatedReferenceMemberResolution.ts, 52, 42))
+
+interface Self<T> { next: this; value: T }
+>Self : Symbol(Self, Decl(instantiatedReferenceMemberResolution.ts, 54, 55))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 55, 15))
+>next : Symbol(Self.next, Decl(instantiatedReferenceMemberResolution.ts, 55, 19))
+>value : Symbol(Self.value, Decl(instantiatedReferenceMemberResolution.ts, 55, 31))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 55, 15))
+
+declare const self: Self<number>;
+>self : Symbol(self, Decl(instantiatedReferenceMemberResolution.ts, 56, 13))
+>Self : Symbol(Self, Decl(instantiatedReferenceMemberResolution.ts, 54, 55))
+
+export const next = self.next.next.value;
+>next : Symbol(next, Decl(instantiatedReferenceMemberResolution.ts, 57, 12))
+>self.next.next.value : Symbol(Self.value, Decl(instantiatedReferenceMemberResolution.ts, 55, 31))
+>self.next.next : Symbol(Self.next, Decl(instantiatedReferenceMemberResolution.ts, 55, 19))
+>self.next : Symbol(Self.next, Decl(instantiatedReferenceMemberResolution.ts, 55, 19))
+>self : Symbol(self, Decl(instantiatedReferenceMemberResolution.ts, 56, 13))
+>next : Symbol(Self.next, Decl(instantiatedReferenceMemberResolution.ts, 55, 19))
+>next : Symbol(Self.next, Decl(instantiatedReferenceMemberResolution.ts, 55, 19))
+>value : Symbol(Self.value, Decl(instantiatedReferenceMemberResolution.ts, 55, 31))
+
+interface Defaults<T = Defaults> { value: T }
+>Defaults : Symbol(Defaults, Decl(instantiatedReferenceMemberResolution.ts, 57, 41))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 58, 19))
+>Defaults : Symbol(Defaults, Decl(instantiatedReferenceMemberResolution.ts, 57, 41))
+>value : Symbol(Defaults.value, Decl(instantiatedReferenceMemberResolution.ts, 58, 34))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 58, 19))
+
+declare const defaults: Defaults;
+>defaults : Symbol(defaults, Decl(instantiatedReferenceMemberResolution.ts, 59, 13))
+>Defaults : Symbol(Defaults, Decl(instantiatedReferenceMemberResolution.ts, 57, 41))
+
+export const defaultValue = defaults.value;
+>defaultValue : Symbol(defaultValue, Decl(instantiatedReferenceMemberResolution.ts, 60, 12))
+>defaults.value : Symbol(Defaults.value, Decl(instantiatedReferenceMemberResolution.ts, 58, 34))
+>defaults : Symbol(defaults, Decl(instantiatedReferenceMemberResolution.ts, 59, 13))
+>value : Symbol(Defaults.value, Decl(instantiatedReferenceMemberResolution.ts, 58, 34))
+
+interface First<T> { shared: T }
+>First : Symbol(First, Decl(instantiatedReferenceMemberResolution.ts, 60, 43))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 62, 16))
+>shared : Symbol(First.shared, Decl(instantiatedReferenceMemberResolution.ts, 62, 20))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 62, 16))
+
+interface Second<T> { shared: T; second: T }
+>Second : Symbol(Second, Decl(instantiatedReferenceMemberResolution.ts, 62, 32))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 63, 17))
+>shared : Symbol(Second.shared, Decl(instantiatedReferenceMemberResolution.ts, 63, 21))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 63, 17))
+>second : Symbol(Second.second, Decl(instantiatedReferenceMemberResolution.ts, 63, 32))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 63, 17))
+
+interface Multiple<T> extends First<T>, Second<T> { own: T }
+>Multiple : Symbol(Multiple, Decl(instantiatedReferenceMemberResolution.ts, 63, 44))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 64, 19))
+>First : Symbol(First, Decl(instantiatedReferenceMemberResolution.ts, 60, 43))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 64, 19))
+>Second : Symbol(Second, Decl(instantiatedReferenceMemberResolution.ts, 62, 32))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 64, 19))
+>own : Symbol(Multiple.own, Decl(instantiatedReferenceMemberResolution.ts, 64, 51))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 64, 19))
+
+declare const multiple: Multiple<number>;
+>multiple : Symbol(multiple, Decl(instantiatedReferenceMemberResolution.ts, 65, 13))
+>Multiple : Symbol(Multiple, Decl(instantiatedReferenceMemberResolution.ts, 63, 44))
+
+export const multipleValue = multiple.shared;
+>multipleValue : Symbol(multipleValue, Decl(instantiatedReferenceMemberResolution.ts, 66, 12))
+>multiple.shared : Symbol(First.shared, Decl(instantiatedReferenceMemberResolution.ts, 62, 20))
+>multiple : Symbol(multiple, Decl(instantiatedReferenceMemberResolution.ts, 65, 13))
+>shared : Symbol(First.shared, Decl(instantiatedReferenceMemberResolution.ts, 62, 20))
+
+export const multipleProperties = { ...multiple };
+>multipleProperties : Symbol(multipleProperties, Decl(instantiatedReferenceMemberResolution.ts, 67, 12))
+>multiple : Symbol(multiple, Decl(instantiatedReferenceMemberResolution.ts, 65, 13))
+
+interface ReducedDict<T extends string> extends Tagged<T> {
+>ReducedDict : Symbol(ReducedDict, Decl(instantiatedReferenceMemberResolution.ts, 67, 50))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 69, 22))
+>Tagged : Symbol(Tagged, Decl(instantiatedReferenceMemberResolution.ts, 33, 37))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 69, 22))
+
+    [key: string]: unknown;
+>key : Symbol(key, Decl(instantiatedReferenceMemberResolution.ts, 70, 5))
+}
+declare const reducedDict: ReducedDict<"b">;
+>reducedDict : Symbol(reducedDict, Decl(instantiatedReferenceMemberResolution.ts, 72, 13))
+>ReducedDict : Symbol(ReducedDict, Decl(instantiatedReferenceMemberResolution.ts, 67, 50))
+
+const numberDict: { [key: string]: number } = reducedDict;
+>numberDict : Symbol(numberDict, Decl(instantiatedReferenceMemberResolution.ts, 73, 5))
+>key : Symbol(key, Decl(instantiatedReferenceMemberResolution.ts, 73, 21))
+>reducedDict : Symbol(reducedDict, Decl(instantiatedReferenceMemberResolution.ts, 72, 13))
+
+type Two<T> = { <U>(x: U, y: T): U } & { <U>(x: U, y: string): U };
+>Two : Symbol(Two, Decl(instantiatedReferenceMemberResolution.ts, 73, 58))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 75, 9))
+>U : Symbol(U, Decl(instantiatedReferenceMemberResolution.ts, 75, 17))
+>x : Symbol(x, Decl(instantiatedReferenceMemberResolution.ts, 75, 20))
+>U : Symbol(U, Decl(instantiatedReferenceMemberResolution.ts, 75, 17))
+>y : Symbol(y, Decl(instantiatedReferenceMemberResolution.ts, 75, 25))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 75, 9))
+>U : Symbol(U, Decl(instantiatedReferenceMemberResolution.ts, 75, 17))
+>U : Symbol(U, Decl(instantiatedReferenceMemberResolution.ts, 75, 42))
+>x : Symbol(x, Decl(instantiatedReferenceMemberResolution.ts, 75, 45))
+>U : Symbol(U, Decl(instantiatedReferenceMemberResolution.ts, 75, 42))
+>y : Symbol(y, Decl(instantiatedReferenceMemberResolution.ts, 75, 50))
+>U : Symbol(U, Decl(instantiatedReferenceMemberResolution.ts, 75, 42))
+
+interface Overloads<T> extends Two<T> {}
+>Overloads : Symbol(Overloads, Decl(instantiatedReferenceMemberResolution.ts, 75, 67))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 76, 20))
+>Two : Symbol(Two, Decl(instantiatedReferenceMemberResolution.ts, 73, 58))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 76, 20))
+
+declare function pipe<A extends any[], B>(f: (...args: A) => B): (...args: A) => B;
+>pipe : Symbol(pipe, Decl(instantiatedReferenceMemberResolution.ts, 76, 40))
+>A : Symbol(A, Decl(instantiatedReferenceMemberResolution.ts, 77, 22))
+>B : Symbol(B, Decl(instantiatedReferenceMemberResolution.ts, 77, 38))
+>f : Symbol(f, Decl(instantiatedReferenceMemberResolution.ts, 77, 42))
+>args : Symbol(args, Decl(instantiatedReferenceMemberResolution.ts, 77, 46))
+>A : Symbol(A, Decl(instantiatedReferenceMemberResolution.ts, 77, 22))
+>B : Symbol(B, Decl(instantiatedReferenceMemberResolution.ts, 77, 38))
+>args : Symbol(args, Decl(instantiatedReferenceMemberResolution.ts, 77, 66))
+>A : Symbol(A, Decl(instantiatedReferenceMemberResolution.ts, 77, 22))
+>B : Symbol(B, Decl(instantiatedReferenceMemberResolution.ts, 77, 38))
+
+declare const merged: Overloads<string>;
+>merged : Symbol(merged, Decl(instantiatedReferenceMemberResolution.ts, 78, 13))
+>Overloads : Symbol(Overloads, Decl(instantiatedReferenceMemberResolution.ts, 75, 67))
+
+const piped1: number = pipe(merged);
+>piped1 : Symbol(piped1, Decl(instantiatedReferenceMemberResolution.ts, 79, 5))
+>pipe : Symbol(pipe, Decl(instantiatedReferenceMemberResolution.ts, 76, 40))
+>merged : Symbol(merged, Decl(instantiatedReferenceMemberResolution.ts, 78, 13))
+
+declare const distinct: Overloads<number>;
+>distinct : Symbol(distinct, Decl(instantiatedReferenceMemberResolution.ts, 80, 13))
+>Overloads : Symbol(Overloads, Decl(instantiatedReferenceMemberResolution.ts, 75, 67))
+
+const piped2: number = pipe(distinct);
+>piped2 : Symbol(piped2, Decl(instantiatedReferenceMemberResolution.ts, 81, 5))
+>pipe : Symbol(pipe, Decl(instantiatedReferenceMemberResolution.ts, 76, 40))
+>distinct : Symbol(distinct, Decl(instantiatedReferenceMemberResolution.ts, 80, 13))
+
+interface CallableBox<T> { (): T }
+>CallableBox : Symbol(CallableBox, Decl(instantiatedReferenceMemberResolution.ts, 81, 38))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 83, 22))
+>T : Symbol(T, Decl(instantiatedReferenceMemberResolution.ts, 83, 22))
+
+declare const boxOrCallable: CallableBox<string> | Box<string>;
+>boxOrCallable : Symbol(boxOrCallable, Decl(instantiatedReferenceMemberResolution.ts, 84, 13))
+>CallableBox : Symbol(CallableBox, Decl(instantiatedReferenceMemberResolution.ts, 81, 38))
+>Box : Symbol(Box, Decl(instantiatedReferenceMemberResolution.ts, 13, 16))
+
+if (typeof boxOrCallable === "function") {
+>boxOrCallable : Symbol(boxOrCallable, Decl(instantiatedReferenceMemberResolution.ts, 84, 13))
+
+    boxOrCallable;
+>boxOrCallable : Symbol(boxOrCallable, Decl(instantiatedReferenceMemberResolution.ts, 84, 13))
+}
+
