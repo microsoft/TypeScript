@@ -25539,14 +25539,13 @@ func isUnaryTupleTypeNode(node *ast.Node) bool {
 	return ast.IsTupleTypeNode(node) && len(node.Elements()) == 1
 }
 
-func (c *Checker) newType(flags TypeFlags, objectFlags ObjectFlags, data TypeData) *Type {
+func (c *Checker) newType(flags TypeFlags, objectFlags ObjectFlags, t *Type, kind typeKind) *Type {
 	c.TypeCount++
-	t := data.AsType()
 	t.flags = flags
 	t.objectFlags = objectFlags &^ (ObjectFlagsCouldContainTypeVariablesComputed | ObjectFlagsCouldContainTypeVariables | ObjectFlagsMembersResolved)
 	t.id = TypeId(c.TypeCount)
+	t.kind = kind
 	t.checker = c
-	t.data = data
 	if c.tracer != nil {
 		c.tracer.RecordType(t)
 	}
@@ -25560,7 +25559,7 @@ func (c *Checker) newIntrinsicType(flags TypeFlags, intrinsicName string) *Type 
 func (c *Checker) newIntrinsicTypeEx(flags TypeFlags, intrinsicName string, objectFlags ObjectFlags) *Type {
 	data := &IntrinsicType{}
 	data.intrinsicName = intrinsicName
-	return c.newType(flags, objectFlags, data)
+	return c.newType(flags, objectFlags, data.AsType(), typeKindIntrinsic)
 }
 
 func (c *Checker) createWideningType(nonWideningType *Type) *Type {
@@ -25582,7 +25581,7 @@ func (c *Checker) createUnknownUnionType() *Type {
 func (c *Checker) newLiteralType(flags TypeFlags, value any, regularType *Type) *Type {
 	data := &LiteralType{}
 	data.value = value
-	t := c.newType(flags, ObjectFlagsNone, data)
+	t := c.newType(flags, ObjectFlagsNone, data.AsType(), typeKindLiteral)
 	if regularType != nil {
 		data.regularType = regularType
 	} else {
@@ -25594,34 +25593,43 @@ func (c *Checker) newLiteralType(flags TypeFlags, value any, regularType *Type) 
 func (c *Checker) newUniqueESSymbolType(symbol *ast.Symbol, name string) *Type {
 	data := &UniqueESSymbolType{}
 	data.name = name
-	t := c.newType(TypeFlagsUniqueESSymbol, ObjectFlagsNone, data)
+	t := c.newType(TypeFlagsUniqueESSymbol, ObjectFlagsNone, data.AsType(), typeKindUniqueESSymbol)
 	t.symbol = symbol
 	return t
 }
 
 func (c *Checker) newObjectType(objectFlags ObjectFlags, symbol *ast.Symbol) *Type {
-	var data TypeData
+	var t *Type
+	var kind typeKind
 	switch {
 	case objectFlags&ObjectFlagsClassOrInterface != 0:
-		data = &InterfaceType{}
+		t = (&InterfaceType{}).AsType()
+		kind = typeKindInterface
 	case objectFlags&ObjectFlagsTuple != 0:
-		data = &TupleType{}
+		t = (&TupleType{}).AsType()
+		kind = typeKindTuple
 	case objectFlags&ObjectFlagsReference != 0:
-		data = &TypeReference{}
+		t = (&TypeReference{}).AsType()
+		kind = typeKindTypeReference
 	case objectFlags&ObjectFlagsMapped != 0:
-		data = &MappedType{}
+		t = (&MappedType{}).AsType()
+		kind = typeKindMapped
 	case objectFlags&ObjectFlagsReverseMapped != 0:
-		data = &ReverseMappedType{}
+		t = (&ReverseMappedType{}).AsType()
+		kind = typeKindReverseMapped
 	case objectFlags&ObjectFlagsEvolvingArray != 0:
-		data = &EvolvingArrayType{}
+		t = (&EvolvingArrayType{}).AsType()
+		kind = typeKindEvolvingArray
 	case objectFlags&ObjectFlagsInstantiationExpressionType != 0:
-		data = &InstantiationExpressionType{}
+		t = (&InstantiationExpressionType{}).AsType()
+		kind = typeKindInstantiationExpression
 	case objectFlags&ObjectFlagsAnonymous != 0:
-		data = &ObjectType{}
+		t = (&ObjectType{}).AsType()
+		kind = typeKindObject
 	default:
 		panic("Unhandled case in newObjectType")
 	}
-	t := c.newType(TypeFlagsObject, objectFlags, data)
+	c.newType(TypeFlagsObject, objectFlags, t, kind)
 	t.symbol = symbol
 	return t
 }
@@ -25705,7 +25713,7 @@ func (c *Checker) setStructuredTypeMembers(t *Type, members ast.SymbolTable, cal
 }
 
 func (c *Checker) newTypeParameter(symbol *ast.Symbol) *Type {
-	t := c.newType(TypeFlagsTypeParameter, ObjectFlagsNone, &TypeParameter{})
+	t := c.newType(TypeFlagsTypeParameter, ObjectFlagsNone, (&TypeParameter{}).AsType(), typeKindTypeParameter)
 	t.symbol = symbol
 	return t
 }
@@ -25727,13 +25735,13 @@ func (c *Checker) getPropagatingFlagsOfTypes(types []*Type, excludeKinds TypeFla
 func (c *Checker) newUnionType(objectFlags ObjectFlags, types []*Type) *Type {
 	data := &UnionType{}
 	data.types = types
-	return c.newType(TypeFlagsUnion, objectFlags, data)
+	return c.newType(TypeFlagsUnion, objectFlags, data.AsType(), typeKindUnion)
 }
 
 func (c *Checker) newIntersectionType(objectFlags ObjectFlags, types []*Type) *Type {
 	data := &IntersectionType{}
 	data.types = types
-	return c.newType(TypeFlagsIntersection, objectFlags, data)
+	return c.newType(TypeFlagsIntersection, objectFlags, data.AsType(), typeKindIntersection)
 }
 
 func (c *Checker) newIndexedAccessType(objectType *Type, indexType *Type, accessFlags AccessFlags) *Type {
@@ -25741,27 +25749,27 @@ func (c *Checker) newIndexedAccessType(objectType *Type, indexType *Type, access
 	data.objectType = objectType
 	data.indexType = indexType
 	data.accessFlags = accessFlags
-	return c.newType(TypeFlagsIndexedAccess, ObjectFlagsNone, data)
+	return c.newType(TypeFlagsIndexedAccess, ObjectFlagsNone, data.AsType(), typeKindIndexedAccess)
 }
 
 func (c *Checker) newIndexType(target *Type, indexFlags IndexFlags) *Type {
 	data := &IndexType{}
 	data.target = target
 	data.indexFlags = indexFlags
-	return c.newType(TypeFlagsIndex, ObjectFlagsNone, data)
+	return c.newType(TypeFlagsIndex, ObjectFlagsNone, data.AsType(), typeKindIndex)
 }
 
 func (c *Checker) newTemplateLiteralType(texts []string, types []*Type) *Type {
 	data := &TemplateLiteralType{}
 	data.texts = texts
 	data.types = types
-	return c.newType(TypeFlagsTemplateLiteral, ObjectFlagsNone, data)
+	return c.newType(TypeFlagsTemplateLiteral, ObjectFlagsNone, data.AsType(), typeKindTemplateLiteral)
 }
 
 func (c *Checker) newStringMappingType(symbol *ast.Symbol, target *Type) *Type {
 	data := &StringMappingType{}
 	data.target = target
-	t := c.newType(TypeFlagsStringMapping, ObjectFlagsNone, data)
+	t := c.newType(TypeFlagsStringMapping, ObjectFlagsNone, data.AsType(), typeKindStringMapping)
 	t.symbol = symbol
 	return t
 }
@@ -25773,14 +25781,14 @@ func (c *Checker) newConditionalType(root *ConditionalRoot, mapper *TypeMapper, 
 	data.extendsType = c.instantiateType(root.extendsType, mapper)
 	data.mapper = mapper
 	data.combinedMapper = combinedMapper
-	return c.newType(TypeFlagsConditional, ObjectFlagsNone, data)
+	return c.newType(TypeFlagsConditional, ObjectFlagsNone, data.AsType(), typeKindConditional)
 }
 
 func (c *Checker) newSubstitutionType(baseType *Type, constraint *Type) *Type {
 	data := &SubstitutionType{}
 	data.baseType = baseType
 	data.constraint = constraint
-	return c.newType(TypeFlagsSubstitution, ObjectFlagsNone, data)
+	return c.newType(TypeFlagsSubstitution, ObjectFlagsNone, data.AsType(), typeKindSubstitution)
 }
 
 func (c *Checker) newSignature(flags SignatureFlags, declaration *ast.Node, typeParameters []*Type, thisParameter *ast.Symbol, parameters []*ast.Symbol, resolvedReturnType *Type, resolvedTypePredicate *TypePredicate, minArgumentCount int) *Signature {
