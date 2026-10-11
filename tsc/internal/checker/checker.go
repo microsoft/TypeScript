@@ -686,6 +686,7 @@ type Checker struct {
 	indexedAccessTypeArena                      core.Arena[IndexedAccessType]
 	conditionalTypeArena                        core.Arena[ConditionalType]
 	typeListArena                               core.Arena[*Type]
+	outerTypeParameterListArena                 core.Arena[[]*Type]
 	valueSymbolExtraArena                       core.Arena[valueSymbolExtra]
 	structuredTypeExtraArena                    core.Arena[structuredTypeExtra]
 	freeTypeSets                                *temporaryTypeSet
@@ -22870,7 +22871,7 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	default:
 		target = t
 	}
-	typeParameters = links.outerTypeParameters
+	typeParameters = links.getOuterTypeParameters()
 	if typeParameters == nil {
 		// The first time an anonymous type is instantiated we compute and store a list of the type
 		// parameters that are in scope (and therefore potentially referenced). For type literals that
@@ -22893,7 +22894,7 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 		if typeParameters == nil {
 			typeParameters = []*Type{}
 		}
-		links.outerTypeParameters = typeParameters
+		links.setOuterTypeParameters(c, typeParameters)
 	}
 	if len(typeParameters) == 0 {
 		return t

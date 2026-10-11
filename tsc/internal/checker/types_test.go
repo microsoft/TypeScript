@@ -441,3 +441,35 @@ func TestStructuredTypeExtra(t *testing.T) {
 	assert.Assert(t, data.getIndexInfos() != nil)
 	runtime.KeepAlive(c)
 }
+
+func TestCompactTypeNodeLinksLayout(t *testing.T) {
+	t.Parallel()
+	assert.Equal(t, unsafe.Sizeof(TypeNodeLinks{}), 2*unsafe.Sizeof(uintptr(0)))
+	c, types := newCompositeTestChecker()
+	var links TypeNodeLinks
+	links.resolvedType = types[0]
+	assert.Assert(t, links.getOuterTypeParameters() == nil)
+	links.setOuterTypeParameters(c, nil)
+	assert.Assert(t, links.outerTypeParameters == nil)
+	links.setOuterTypeParameters(c, []*Type{})
+	assert.Assert(t, links.getOuterTypeParameters() != nil)
+	assert.Equal(t, len(links.getOuterTypeParameters()), 0)
+	entry := links.outerTypeParameters
+	list := slices.Clone(types)
+	links.setOuterTypeParameters(c, list)
+	assert.Equal(t, links.outerTypeParameters, entry)
+	assert.Equal(t, links.getOuterTypeParameters()[0], types[0])
+	list[0] = types[1]
+	assert.Equal(t, links.getOuterTypeParameters()[0], types[1])
+	for range 1024 {
+		var other TypeNodeLinks
+		other.setOuterTypeParameters(c, types)
+	}
+	runtime.GC()
+	assert.Equal(t, links.getOuterTypeParameters()[0], types[1])
+	assert.Equal(t, links.resolvedType, types[0])
+	links.setOuterTypeParameters(c, nil)
+	assert.Assert(t, links.getOuterTypeParameters() == nil)
+	assert.Equal(t, links.resolvedType, types[0])
+	runtime.KeepAlive(c)
+}
