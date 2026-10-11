@@ -21,6 +21,7 @@ import type {
     NamedTupleMember,
     ParameterDeclaration,
 } from "../../ast/ast.ts";
+import type { RootedFilePath } from "../../ast/index.ts";
 import type {
     Diagnostic,
     RequestFileSystem,
@@ -190,6 +191,8 @@ export interface Type {
     isStringMappingType(): this is StringMappingType;
     /** Whether this type is a type parameter */
     isTypeParameter(): this is TypeParameter;
+    /** Whether this is a mapped type */
+    isMappedType(): this is MappedType;
 }
 
 /**
@@ -242,6 +245,30 @@ export interface BooleanLiteralType extends LiteralType {
 export interface ObjectType extends Type {
     /** Object flags — use to determine the specific kind of object type. */
     readonly objectFlags: ObjectFlags;
+}
+
+/** Mapped types (ObjectFlags.Mapped) */
+export interface MappedType extends ObjectType {
+    /** Get the type parameter iterated by the mapped type */
+    getTypeParameter: {
+        (): TypeParameter;
+        gen(): Generator<ProtocolRequest, TypeParameter, ProtocolResponse["result"]>;
+    };
+    /** Get the constraint over which the mapped type iterates */
+    getConstraintType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
+    /** Get the remapped property name type, if present */
+    getNameType: {
+        (): Type | undefined;
+        gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    };
+    /** Get the property value template type */
+    getTemplateType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
 }
 
 /** Type references (ObjectFlags.Reference) — e.g. Array<string>, Map<K, V> */
@@ -530,13 +557,13 @@ export interface FormatDiagnosticsHost {
 
 export interface EmitOutputFile {
     readonly text: string;
-    readonly sourceFileName?: string | undefined;
+    readonly sourceFileName?: RootedFilePath | undefined;
 }
 
 export interface EmitResult {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
-    readonly emittedFiles: readonly string[];
+    readonly emittedFiles: readonly RootedFilePath[];
     /** Emitted files captured as a filesystem layer suitable for {@link Snapshot.update}. */
     readonly fileSystem?: RequestFileSystem | undefined;
 }
@@ -544,7 +571,7 @@ export interface EmitResult {
 export interface EmitOutput {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
-    readonly outputFiles: ReadonlyMap<string, EmitOutputFile>;
+    readonly outputFiles: ReadonlyMap<RootedFilePath, EmitOutputFile>;
 }
 
 export interface ImportSymbolAction {

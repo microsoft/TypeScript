@@ -66,7 +66,7 @@ func TestContainsIgnoredPath(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			result := ContainsIgnoredPath(tt.path)
+			result := containsIgnoredPath(tt.path)
 			if result != tt.expected {
 				t.Errorf("ContainsIgnoredPath(%q) = %v, expected %v", tt.path, result, tt.expected)
 			}
@@ -81,7 +81,7 @@ func TestIgnoredPathsPatterns(t *testing.T) {
 
 	for _, pattern := range expectedPatterns {
 		testPath := "/test" + pattern + "/file.ts"
-		if !ContainsIgnoredPath(testPath) {
+		if !containsIgnoredPath(testPath) {
 			t.Errorf("Expected pattern '%s' to be detected in path '%s'", pattern, testPath)
 		}
 	}
@@ -124,7 +124,7 @@ func TestIgnoredPathsEdgeCases(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			result := ContainsIgnoredPath(tt.path)
+			result := containsIgnoredPath(tt.path)
 			if result != tt.expected {
 				t.Errorf("ContainsIgnoredPath(%q) = %v, expected %v", tt.path, result, tt.expected)
 			}

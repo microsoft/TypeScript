@@ -1200,12 +1200,10 @@ func (i *dynamicIndenter) shouldAddDelta(line int, kind ast.Kind, container *ast
 		case ast.KindJsxOpeningElement, ast.KindJsxClosingElement, ast.KindJsxSelfClosingElement:
 			return false
 		}
-		break
 	case ast.KindOpenBracketToken, ast.KindCloseBracketToken:
 		if container.Kind != ast.KindMappedType {
 			return false
 		}
-		break
 	}
 	// if token line equals to the line of containing node (this is a first token in the node) - use node indentation
 	return i.nodeStartLine != line &&

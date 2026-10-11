@@ -9,8 +9,11 @@ import (
 )
 
 type InferenceKey struct {
-	s TypeId
-	t TypeId
+	source        TypeId
+	target        TypeId
+	priority      InferencePriority
+	contravariant bool
+	bivariant     bool
 }
 
 type InferenceState struct {
@@ -78,14 +81,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	}
 	if source.alias != nil && target.alias != nil && source.alias.symbol == target.alias.symbol {
 		if len(source.alias.typeArguments) != 0 || len(target.alias.typeArguments) != 0 {
-			// Source and target are types originating in the same generic type alias declaration.
-			// Simply infer from source type arguments to target type arguments, with defaults applied.
-			params := c.typeAliasLinks.Get(source.alias.symbol).typeParameters
-			minParams := c.getMinTypeArgumentCount(params)
-			nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration)
-			sourceTypes := c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
-			targetTypes := c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
-			c.inferFromTypeArguments(n, sourceTypes, targetTypes, c.getAliasVariances(source.alias.symbol))
+			c.invokeOnce(n, source, target, (*Checker).inferFromAliasTypeArguments)
 		}
 		// And if there weren't any type arguments, there's no reason to run inference as the types must be the same.
 		return
@@ -231,7 +227,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	switch {
 	case source.objectFlags&ObjectFlagsReference != 0 && target.objectFlags&ObjectFlagsReference != 0 && (source.AsTypeReference().target == target.AsTypeReference().target || c.isArrayType(source) && c.isArrayType(target)) && !(source.AsTypeReference().node != nil && target.AsTypeReference().node != nil):
 		// If source and target are references to the same generic type, infer from type arguments
-		c.inferFromTypeArguments(n, c.getTypeArguments(source), c.getTypeArguments(target), c.getVariances(source.AsTypeReference().target))
+		c.invokeOnce(n, source, target, (*Checker).inferFromReferenceTypeArguments)
 	case source.flags&TypeFlagsIndex != 0 && target.flags&TypeFlagsIndex != 0:
 		c.inferFromContravariantTypes(n, source.AsIndexType().target, target.AsIndexType().target)
 	case (isLiteralType(source) || source.flags&TypeFlagsString != 0) && target.flags&TypeFlagsIndex != 0:
@@ -279,6 +275,21 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 			c.invokeOnce(n, source, target, (*Checker).inferFromObjectTypes)
 		}
 	}
+}
+
+func (c *Checker) inferFromAliasTypeArguments(n *InferenceState, source *Type, target *Type) {
+	// Source and target are types originating in the same generic type alias declaration.
+	// Simply infer from source type arguments to target type arguments, with defaults applied.
+	params := c.typeAliasLinks.Get(source.alias.symbol).typeParameters
+	minParams := c.getMinTypeArgumentCount(params)
+	nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration())
+	sourceTypes := c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
+	targetTypes := c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
+	c.inferFromTypeArguments(n, sourceTypes, targetTypes, c.getAliasVariances(source.alias.symbol))
+}
+
+func (c *Checker) inferFromReferenceTypeArguments(n *InferenceState, source *Type, target *Type) {
+	c.inferFromTypeArguments(n, c.getTypeArguments(source), c.getTypeArguments(target), c.getVariances(source.AsTypeReference().target))
 }
 
 func (c *Checker) inferFromTypeArguments(n *InferenceState, sourceTypes []*Type, targetTypes []*Type, variances []VarianceFlags) {
@@ -333,7 +344,7 @@ func (c *Checker) inferFromContravariantTypesIfStrictFunctionTypes(n *InferenceS
 // such that we would go on inferring forever, even though we would never infer
 // between the same pair of types.
 func (c *Checker) invokeOnce(n *InferenceState, source *Type, target *Type, action func(c *Checker, n *InferenceState, source *Type, target *Type)) {
-	key := InferenceKey{s: source.id, t: target.id}
+	key := InferenceKey{source: source.id, target: target.id, priority: n.priority, contravariant: n.contravariant, bivariant: n.bivariant}
 	if status, ok := n.visited[key]; ok {
 		n.inferencePriority = min(n.inferencePriority, status)
 		return
@@ -699,7 +710,7 @@ func (c *Checker) inferFromGenericMappedTypes(n *InferenceState, source *Type, t
 func (c *Checker) inferFromObjectTypes(n *InferenceState, source *Type, target *Type) {
 	if source.objectFlags&ObjectFlagsReference != 0 && target.objectFlags&ObjectFlagsReference != 0 && (source.Target() == target.Target() || c.isArrayType(source) && c.isArrayType(target)) {
 		// If source and target are references to the same generic type, infer from type arguments
-		c.inferFromTypeArguments(n, c.getTypeArguments(source), c.getTypeArguments(target), c.getVariances(source.Target()))
+		c.inferFromReferenceTypeArguments(n, source, target)
 		return
 	}
 	if c.isGenericMappedType(source) && c.isGenericMappedType(target) {
@@ -828,9 +839,9 @@ func (c *Checker) inferFromObjectTypes(n *InferenceState, source *Type, target *
 func (c *Checker) inferFromProperties(n *InferenceState, source *Type, target *Type) {
 	properties := c.getPropertiesOfObjectType(target)
 	for _, targetProp := range properties {
-		sourceProp := c.getPropertyOfType(source, targetProp.Name)
-		if sourceProp != nil && !core.Some(sourceProp.Declarations, c.isSkipDirectInferenceNode) {
-			c.inferFromTypes(n, c.removeMissingType(c.getTypeOfSymbol(sourceProp), sourceProp.Flags&ast.SymbolFlagsOptional != 0), c.removeMissingType(c.getTypeOfSymbol(targetProp), targetProp.Flags&ast.SymbolFlagsOptional != 0))
+		sourceProp := c.getPropertyOfType(source, targetProp.Name())
+		if sourceProp != nil && !core.Some(sourceProp.Declarations(), c.isSkipDirectInferenceNode) {
+			c.inferFromTypes(n, c.removeMissingType(c.getTypeOfSymbol(sourceProp), sourceProp.Flags()&ast.SymbolFlagsOptional != 0), c.removeMissingType(c.getTypeOfSymbol(targetProp), targetProp.Flags()&ast.SymbolFlagsOptional != 0))
 		}
 	}
 }
@@ -921,7 +932,7 @@ func (c *Checker) inferFromIndexTypes(n *InferenceState, source *Type, target *T
 			for _, prop := range c.getPropertiesOfType(source) {
 				if c.isApplicableIndexType(c.getLiteralTypeFromProperty(prop, TypeFlagsStringOrNumberLiteralOrUnique, false), targetInfo.keyType) {
 					propType := c.getTypeOfSymbol(prop)
-					if prop.Flags&ast.SymbolFlagsOptional != 0 {
+					if prop.Flags()&ast.SymbolFlagsOptional != 0 {
 						propType = c.removeMissingOrUndefinedType(propType)
 					}
 					propTypes = append(propTypes, propType)
@@ -1119,8 +1130,8 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 			}
 		}
 		checkFlags := ast.CheckFlagsReverseMapped | core.IfElse(readonlyMask && c.isReadonlySymbol(prop), ast.CheckFlagsReadonly, 0)
-		inferredProp := c.newSymbolEx(ast.SymbolFlagsProperty|prop.Flags&optionalMask, prop.Name, checkFlags)
-		inferredProp.Declarations = prop.Declarations
+		inferredProp := c.newSymbolEx(ast.SymbolFlagsProperty|prop.Flags()&optionalMask, prop.Name(), checkFlags)
+		inferredProp.SetDeclarations(prop.Declarations())
 		c.valueSymbolLinks.Get(inferredProp).nameType = c.valueSymbolLinks.Get(prop).nameType
 		links := c.ReverseMappedSymbolLinks.Get(inferredProp)
 		links.propertyType = c.getTypeOfSymbol(prop)
@@ -1137,7 +1148,7 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 			links.mappedType = r.mappedType
 			links.constraintType = r.constraintType
 		}
-		members[prop.Name] = inferredProp
+		members[prop.Name()] = inferredProp
 	}
 	c.setStructuredTypeMembers(t, members, nil, nil, indexInfos)
 }
@@ -1236,8 +1247,8 @@ func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
 		literalProp := c.newSymbol(ast.SymbolFlagsProperty, name)
 		c.valueSymbolLinks.Get(literalProp).resolvedType = c.anyType
 		if t.symbol != nil {
-			literalProp.Declarations = t.symbol.Declarations
-			literalProp.ValueDeclaration = t.symbol.ValueDeclaration
+			literalProp.SetDeclarations(t.symbol.Declarations())
+			literalProp.SetValueDeclaration(t.symbol.ValueDeclaration())
 		}
 		members[name] = literalProp
 	}
@@ -1378,7 +1389,8 @@ func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
 		constraint := c.getConstraintOfTypeParameter(inference.typeParameter)
 		if constraint != nil {
 			instantiatedConstraint := c.instantiateType(constraint, n.nonFixingMapper)
-			if inferredType != nil && n.flags&InferenceFlagsNoConstraintChecks == 0 {
+			// A pure return type inference is still filtered in a recursive call resolution, whose result can become the type of the enclosing declaration.
+			if inferredType != nil && (n.flags&InferenceFlagsNoConstraintChecks == 0 || inference.priority == InferencePriorityReturnType) {
 				constraintWithThis := c.getTypeWithThisArgument(instantiatedConstraint, inferredType, false)
 				if n.compareTypes(inferredType, constraintWithThis, false) == TernaryFalse {
 					var filteredByConstraint *Type
@@ -1616,7 +1628,7 @@ func (c *Checker) literalTypesWithSameBaseType(types []*Type) bool {
 }
 
 func (c *Checker) isFromInferenceBlockedSource(t *Type) bool {
-	return t.symbol != nil && core.Some(t.symbol.Declarations, c.isSkipDirectInferenceNode)
+	return t.symbol != nil && core.Some(t.symbol.Declarations(), c.isSkipDirectInferenceNode)
 }
 
 func (c *Checker) isSkipDirectInferenceNode(node *ast.Node) bool {
@@ -1658,7 +1670,7 @@ func hasInferenceCandidatesOrDefault(info *InferenceInfo) bool {
 
 func hasTypeParameterDefault(tp *Type) bool {
 	if tp.symbol != nil {
-		for _, d := range tp.symbol.Declarations {
+		for _, d := range tp.symbol.Declarations() {
 			if ast.IsTypeParameterDeclaration(d) && d.AsTypeParameterDeclaration().DefaultType != nil {
 				return true
 			}

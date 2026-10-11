@@ -241,7 +241,7 @@ func (tx *CommonJSModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.
 }
 
 func (tx *CommonJSModuleTransformer) shouldEmitUnderscoreUnderscoreESModule() bool {
-	if tspath.FileExtensionIsOneOf(tx.currentSourceFile.FileName(), tspath.SupportedJSExtensionsFlat) &&
+	if tx.currentSourceFile.FileName().ExtensionIsOneOf(tspath.SupportedJSExtensionsFlat) &&
 		tx.currentSourceFile.CommonJSModuleIndicator != nil &&
 		(tx.currentSourceFile.ExternalModuleIndicator == nil || tx.currentSourceFile.ExternalModuleIndicator.Kind == ast.KindSourceFile) {
 		return false
@@ -1260,10 +1260,14 @@ func (tx *CommonJSModuleTransformer) visitTopLevelNestedLabeledStatement(node *a
 // Visits a top-level nested `with` statement as it may contain `var` declarations that are hoisted and may still be
 // exported with `export {}`.
 func (tx *CommonJSModuleTransformer) visitTopLevelNestedWithStatement(node *ast.WithStatement) *ast.Node {
+	statement := tx.topLevelNestedVisitor.VisitEmbeddedStatement(node.Statement)
+	if statement == nil {
+		statement = tx.Factory().NewEmptyStatement()
+	}
 	return tx.Factory().UpdateWithStatement(
 		node,
 		tx.Visitor().VisitNode(node.Expression),
-		tx.topLevelNestedVisitor.VisitEmbeddedStatement(node.Statement),
+		statement,
 	)
 }
 
@@ -1333,7 +1337,7 @@ func (tx *CommonJSModuleTransformer) visitForStatement(node *ast.ForStatement) *
 		tx.discardedValueVisitor.VisitNode(node.Initializer),
 		tx.Visitor().VisitNode(node.Condition),
 		tx.discardedValueVisitor.VisitNode(node.Incrementor),
-		tx.EmitContext().VisitIterationBody(node.Statement, tx.topLevelNestedVisitor),
+		tx.EmitContext().VisitIterationBody(node.Statement, tx.Visitor()),
 	)
 }
 
@@ -1343,7 +1347,7 @@ func (tx *CommonJSModuleTransformer) visitForInOrOfStatement(node *ast.ForInOrOf
 		node.AwaitModifier,
 		tx.discardedValueVisitor.VisitNode(node.Initializer),
 		tx.Visitor().VisitNode(node.Expression),
-		tx.EmitContext().VisitIterationBody(node.Statement, tx.topLevelNestedVisitor),
+		tx.EmitContext().VisitIterationBody(node.Statement, tx.Visitor()),
 	)
 }
 
@@ -1807,7 +1811,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 			needsRewrite = true
 		}
 	}
-	if ast.IsImportCall(node.AsNode()) && tx.shouldTransformImportCall() {
+	if node.Expression.Kind == ast.KindImportKeyword && tx.shouldTransformImportCall() {
 		return tx.visitImportCallExpression(node, needsRewrite)
 	}
 	if needsRewrite {

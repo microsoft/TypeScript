@@ -2,12 +2,12 @@ import {
     type Node,
     type SourceFile,
     SyntaxKind,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     API,
     type Project,
     type Snapshot,
-} from "@typescript/typescript/unstable/async"; // @sync: } from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/async"; // @sync: } from "@typescript/typescript/sync";
 import { writeFileSync } from "node:fs";
 import inspector from "node:inspector";
 import path from "node:path";
@@ -206,7 +206,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     }
 
     async function loadSnapshot() {
-        snapshot = await api.createSnapshot({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" }); // @generators: [snapshot] = api.batch(api.createSnapshot.gen({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" }));
+        snapshot = await api.createSnapshot({ openProjects: ["tsc/testdata/fixtures/compiler/tsconfig.json"] }); // @generators: [snapshot] = api.batch(api.createSnapshot.gen({ openProjects: ["tsc/testdata/fixtures/compiler/tsconfig.json" ]}));
         project = snapshot.getProjects()[0];
     }
 

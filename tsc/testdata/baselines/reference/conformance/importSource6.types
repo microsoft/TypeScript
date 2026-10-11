@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/importSource/importSource6.ts] ////
+
+=== a.ts ===
+
+export default 1;
+
+=== b.ts ===
+import source a from "./a.js";
+>a : AbstractModuleSource
+
+const b = import.source("./a.js");
+>b : Promise<AbstractModuleSource>
+>import.source("./a.js") : Promise<AbstractModuleSource>
+>source : any
+>"./a.js" : "./a.js"
+

@@ -17,6 +17,8 @@ import (
 // request-scoped lifetime and reclamation. It returns a checker and a release
 // function that must be called when the caller is done with the checker.
 // The returned checker must not be accessed concurrently; each acquisition is exclusive.
+// Acquisitions are not reentrant, even when they share a request ID. Callers must
+// pass an already acquired checker to nested operations instead of acquiring again.
 // If file is non-nil, the pool may use it as an affinity hint to return the same
 // checker for the same file across calls.
 type CheckerPool interface {
@@ -207,7 +209,9 @@ func getCheckerAssociationsInOrder(fileWeights []int, adjacentFiles [][]int, fil
 			}
 			oldWeight := float64(checkerWeight)
 			newWeight := float64(checkerWeight + fileWeights[fileIndex])
-			penalty := alpha * (newWeight*math.Sqrt(newWeight) - oldWeight*math.Sqrt(oldWeight))
+			newPenalty := float64(newWeight * math.Sqrt(newWeight))
+			oldPenalty := float64(oldWeight * math.Sqrt(oldWeight))
+			penalty := float64(alpha * (newPenalty - oldPenalty))
 			score := float64(neighborCounts[checkerIndex]) - penalty
 			if score > bestScore || score == bestScore && (bestChecker < 0 || checkerWeight < checkerWeights[bestChecker]) {
 				bestChecker = checkerIndex
@@ -425,12 +429,12 @@ func (p *checkerPool) getImportAdjacency() [][]int {
 	}
 	adjacentFiles := make([][]int, len(p.program.files))
 	for fileIndex, file := range p.program.files {
-		resolvedModules := p.program.resolvedModules[file.Path()]
+		resolvedModules := p.program.resolvedModules[file.PathKey()]
 		for _, resolved := range resolvedModules {
 			if resolved == nil || !resolved.IsResolved() {
 				continue
 			}
-			importedFile := p.program.GetSourceFileForResolvedModule(resolved.ResolvedFileName)
+			importedFile := p.program.GetSourceFileForResolvedModule(resolved)
 			importedIndex, ok := fileIndices[importedFile]
 			if !ok || importedIndex == fileIndex {
 				continue

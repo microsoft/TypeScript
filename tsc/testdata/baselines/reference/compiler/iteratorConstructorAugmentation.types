@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/iteratorConstructorAugmentation.ts] ////
+
+=== iteratorConstructorAugmentation.ts ===
+interface IteratorConstructor {
+    f(): void;
+>f : () => void
+}
+
+declare const a: Iterator<number>;
+>a : Iterator<number, any, any>
+
+declare const b: Iterable<string>;
+>b : Iterable<string>
+
+const c: IteratorObject<number, undefined, unknown> = Iterator.from(a);
+>c : IteratorObject<number, undefined, unknown>
+>Iterator.from(a) : IteratorObject<number, undefined, unknown>
+>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>a : Iterator<number, any, any>
+
+const d: IteratorObject<string, undefined, unknown> = Iterator.from(b);
+>d : IteratorObject<string, undefined, unknown>
+>Iterator.from(b) : IteratorObject<string, undefined, unknown>
+>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>b : Iterable<string>
+
+const e = Iterator.from;
+>e : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+
+const f = Iterator.from<number>;
+>f : (value: Iterable<number, unknown, undefined> | Iterator<number, unknown, undefined>) => IteratorObject<number, undefined, unknown>
+>Iterator.from<number> : (value: Iterable<number, unknown, undefined> | Iterator<number, unknown, undefined>) => IteratorObject<number, undefined, unknown>
+>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+
+Iterator.f();
+>Iterator.f() : void
+>Iterator.f : () => void
+>Iterator : IteratorConstructor
+>f : () => void
+
+const g: IteratorObject<string, undefined, unknown> = Iterator.from(a);
+>g : IteratorObject<string, undefined, unknown>
+>Iterator.from(a) : IteratorObject<number, undefined, unknown>
+>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>a : Iterator<number, any, any>
+
+Iterator.from(1);
+>Iterator.from(1) : IteratorObject<unknown, undefined, unknown>
+>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>1 : 1
+

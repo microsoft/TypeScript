@@ -1,16 +1,20 @@
 import {
     API,
     formatDiagnostics,
+    type FormatDiagnosticsHost,
     formatDiagnosticsWithColorAndContext,
-} from "@typescript/typescript/unstable/async";
-import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
+} from "@typescript/typescript/async";
 import assert from "node:assert";
 import {
     describe,
     test,
 } from "node:test";
+import {
+    areTestsFiltered,
+    createVirtualFileSystem,
+} from "./testUtils.ts";
 
-describe("diagnosticFormatter", () => {
+describe("diagnosticFormatter", { concurrency: areTestsFiltered() }, () => {
     test("formats diagnostics with a configured program host", async () => {
         const source = `const x: number = "oops";\n`;
         const api = spawnAPI({
@@ -18,7 +22,7 @@ describe("diagnosticFormatter", () => {
             "/project/index.ts": source,
         });
         try {
-            const snapshot = await api.createSnapshot({ openProject: "/project/tsconfig.json" });
+            const snapshot = await api.createSnapshot({ openProjects: ["/project/tsconfig.json"] });
             const program = snapshot.getConfiguredProject("/project/tsconfig.json")!.program;
             const diagnostics = await program.getSemanticDiagnostics("/project/index.ts");
             assert.equal(diagnostics.length, 1);
@@ -39,6 +43,15 @@ describe("diagnosticFormatter", () => {
             assert.ok(color.includes("~"), color);
             assert.ok(color.includes("\x1b["), color);
             assert.ok(color.endsWith("\r\n"), color);
+            for (const directory of ["/project", "/project/src/..", "\\project\\src\\.."]) {
+                const stringHost: FormatDiagnosticsHost = {
+                    getCurrentDirectory: () => directory,
+                    getCanonicalFileName: fileName => fileName,
+                    getNewLine: () => "\r\n",
+                };
+                assert.equal(formatDiagnostics(diagnostics, stringHost), plain);
+                assert.equal(formatDiagnosticsWithColorAndContext(diagnostics, stringHost), color);
+            }
             const doubled = formatDiagnosticsWithColorAndContext([diagnostics[0], diagnostics[0]], program);
             assert.equal(doubled, color + "\r\n" + color);
 
@@ -87,7 +100,7 @@ describe("diagnosticFormatter", () => {
             "/workspace/index.ts": `const x: number = "oops";`,
         });
         try {
-            const snapshot = await api.createSnapshot({ openProject: "/workspace/tsconfig.json" });
+            const snapshot = await api.createSnapshot({ openProjects: ["/workspace/tsconfig.json"] });
             const program = snapshot.getConfiguredProject("/workspace/tsconfig.json")!.program;
             const diagnostics = await program.getSemanticDiagnostics("/workspace/index.ts");
             const configDiagnostics = (await api.parseConfigFile("/workspace/tsconfig.json")).errors;

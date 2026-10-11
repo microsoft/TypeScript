@@ -29,6 +29,7 @@
     "files": [
         "bin",
         "lib",
+        "schemas",
         "dist",
         "vendor"
     ],
@@ -37,48 +38,58 @@
     },
     "exports": {
         "./package.json": "./package.json",
+        "./schemas/tsconfig.schema.json": "./schemas/tsconfig.schema.json",
+        "./schemas/jsconfig.schema.json": "./schemas/jsconfig.schema.json",
         ".": "./lib/version.cjs",
-        "./unstable/sync": {
+        "./vscode": {
+            "@typescript/source": "./src/vscode/extensionApi.ts",
+            "default": "./dist/vscode/extensionApi.js"
+        },
+        "./sync": {
             "@typescript/source": "./src/api/sync/api.ts",
             "default": "./dist/api/sync/api.js"
         },
-        "./unstable/async": {
+        "./async": {
             "@typescript/source": "./src/api/async/api.ts",
             "default": "./dist/api/async/api.js"
         },
-        "./unstable/fs": {
+        "./fs": {
             "@typescript/source": "./src/api/fs.ts",
             "default": "./dist/api/fs.js"
         },
-        "./unstable/proto": {
+        "./path": {
+            "@typescript/source": "./src/api/typedPaths.ts",
+            "default": "./dist/api/typedPaths.js"
+        },
+        "./proto": {
             "@typescript/source": "./src/api/proto.ts",
             "default": "./dist/api/proto.js"
         },
-        "./unstable/ast": {
+        "./ast": {
             "@typescript/source": "./src/ast/index.ts",
             "default": "./dist/ast/index.js"
         },
-        "./unstable/ast/is": {
+        "./ast/is": {
             "@typescript/source": "./src/ast/is.ts",
             "default": "./dist/ast/is.js"
         },
-        "./unstable/ast/factory": {
+        "./ast/factory": {
             "@typescript/source": "./src/ast/factory.generated.ts",
             "default": "./dist/ast/factory.generated.js"
         },
-        "./unstable/ast/utils": {
+        "./ast/utils": {
             "@typescript/source": "./src/ast/utils.ts",
             "default": "./dist/ast/utils.js"
         },
-        "./unstable/ast/scanner": {
+        "./ast/scanner": {
             "@typescript/source": "./src/ast/scanner.ts",
             "default": "./dist/ast/scanner.js"
         },
-        "./unstable/ast/visitor": {
+        "./ast/visitor": {
             "@typescript/source": "./src/ast/visitor.ts",
             "default": "./dist/ast/visitor.js"
         },
-        "./unstable/ast/clone": {
+        "./ast/clone": {
             "@typescript/source": "./src/ast/clone.ts",
             "default": "./dist/ast/clone.js"
         }
@@ -97,7 +108,7 @@
     },
     "scripts": {
         "node": "node --conditions @typescript/source",
-        "generate": "npm run generate:ast && npm run generate:encoder && npm run generate:sync",
+        "generate": "npm run node -- scripts/generate.ts",
         "generate:ast": "node ../../tools/scripts/tsc/generate-ts-ast.ts",
         "generate:encoder": "npm run node -- ../../tools/scripts/tsc/generate-encoder.ts",
         "generate:sync": "npm run node -- scripts/generateSync.ts",

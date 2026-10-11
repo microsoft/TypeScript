@@ -27,7 +27,7 @@ func (l *LanguageService) ProvideInlayHint(
 	params *lsproto.InlayHintParams,
 ) (lsproto.InlayHintResponse, error) {
 	userPreferences := l.UserPreferences()
-	inlayHintPreferences := userPreferences.InlayHints
+	inlayHintPreferences := userPreferences.InlayHintsPreferences
 	if !isAnyInlayHintEnabled(inlayHintPreferences) {
 		return lsproto.InlayHintsOrNull{InlayHints: nil}, nil
 	}
@@ -38,20 +38,22 @@ func (l *LanguageService) ProvideInlayHint(
 	mappedRanges := l.converters.FromLSPRangeIntersectingForSourceFile(file, params.Range, spanmap.FeatureInlayHints)
 	result := make([]*lsproto.InlayHint, 0, len(mappedRanges))
 	for _, mapped := range mappedRanges {
-		projection := mapped.Script
-		checker, done := program.GetTypeCheckerForFile(ctx, projection)
-		defer done()
-		inlayHintState := &inlayHintState{
-			ctx:             ctx,
-			span:            mapped.Span,
-			preferences:     inlayHintPreferences,
-			quotePreference: quotePreference,
-			file:            projection,
-			checker:         checker,
-			converters:      l.converters,
-		}
-		inlayHintState.visit(projection.AsNode())
-		result = append(result, inlayHintState.result...)
+		func() {
+			projection := mapped.Script
+			checker, done := program.GetTypeCheckerForFile(ctx, projection)
+			defer done()
+			inlayHintState := &inlayHintState{
+				ctx:             ctx,
+				span:            mapped.Span,
+				preferences:     inlayHintPreferences,
+				quotePreference: quotePreference,
+				file:            projection,
+				checker:         checker,
+				converters:      l.converters,
+			}
+			inlayHintState.visit(projection.AsNode())
+			result = append(result, inlayHintState.result...)
+		}()
 	}
 	return lsproto.InlayHintsOrNull{InlayHints: &result}, nil
 }
@@ -302,7 +304,7 @@ func (s *inlayHintState) addParameterTypeHint(node *ast.ParameterDeclarationNode
 }
 
 func (s *inlayHintState) getParameterDeclarationTypeHints(symbol *ast.Symbol) *lsproto.StringOrInlayHintLabelParts {
-	valueDeclaration := symbol.ValueDeclaration
+	valueDeclaration := symbol.ValueDeclaration()
 	if valueDeclaration == nil || !ast.IsParameterDeclaration(valueDeclaration) {
 		return nil
 	}
@@ -435,7 +437,7 @@ func isHintableLiteral(node *ast.Node) bool {
 
 func isModuleReferenceType(t *checker.Type) bool {
 	symbol := t.Symbol()
-	return symbol != nil && symbol.Flags&ast.SymbolFlagsModule != 0
+	return symbol != nil && symbol.Flags()&ast.SymbolFlagsModule != 0
 }
 
 func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) []*lsproto.InlayHintLabelPart {
@@ -465,8 +467,8 @@ func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node, idToSymbol map[*
 		case ast.KindIdentifier:
 			identifierText := node.Text()
 			var name *ast.Node
-			if symbol := idToSymbol[node]; symbol != nil && len(symbol.Declarations) != 0 {
-				name = ast.GetNameOfDeclaration(symbol.Declarations[0])
+			if symbol := idToSymbol[node]; symbol != nil && len(symbol.Declarations()) != 0 {
+				name = ast.GetNameOfDeclaration(symbol.Declarations()[0])
 			}
 			if name != nil {
 				parts = append(parts, s.getNodeDisplayPart(identifierText, name))
@@ -889,7 +891,7 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 	if pos == paramCount {
 		return &parameterInfo{
 			parameter:       restId,
-			name:            restParameter.Name,
+			name:            restParameter.Name(),
 			isRestParameter: true,
 		}
 	}
@@ -897,8 +899,8 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 }
 
 func getParameterDeclarationIdentifier(symbol *ast.Symbol) *ast.IdentifierNode {
-	if symbol.ValueDeclaration != nil && ast.IsParameterDeclaration(symbol.ValueDeclaration) && ast.IsIdentifier(symbol.ValueDeclaration.Name()) {
-		return symbol.ValueDeclaration.Name()
+	if symbol.ValueDeclaration() != nil && ast.IsParameterDeclaration(symbol.ValueDeclaration()) && ast.IsIdentifier(symbol.ValueDeclaration().Name()) {
+		return symbol.ValueDeclaration().Name()
 	}
 	return nil
 }

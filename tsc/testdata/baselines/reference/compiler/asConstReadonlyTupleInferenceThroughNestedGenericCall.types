@@ -1,0 +1,140 @@
+//// [tests/cases/compiler/asConstReadonlyTupleInferenceThroughNestedGenericCall.ts] ////
+
+=== asConstReadonlyTupleInferenceThroughNestedGenericCall.ts ===
+// regression test for https://github.com/microsoft/TypeScript/issues/63666
+
+interface Box<T> {
+    readonly value: T;
+>value : T
+}
+type Content<R> = R extends Box<infer U> ? U : never;
+>Content : Content<R>
+
+type BoxLike<R> = Box<Content<R>>;
+>BoxLike : BoxLike<R>
+
+declare function box<T>(value: T): Box<T>;
+>box : <T>(value: T) => Box<T>
+>value : T
+
+declare function f<R extends BoxLike<R>>(v: R): R;
+>f : <R extends BoxLike<R>>(v: R) => R
+>v : R
+
+declare function f2<R extends BoxLike<R>>(body: () => R): R;
+>f2 : <R extends BoxLike<R>>(body: () => R) => R
+>body : () => R
+
+declare function id<T>(x: T): T;
+>id : <T>(x: T) => T
+>x : T
+
+declare const a: { a: number };
+>a : { a: number; }
+>a : number
+
+declare const b: { b: number };
+>b : { b: number; }
+>b : number
+
+declare const neverValue: never;
+>neverValue : never
+
+// nested generic call under a conditional-type-based F-bounded constraint
+const r1 = f(box([a, b] as const));
+>r1 : Box<readonly [{ a: number; }, { b: number; }]>
+>f(box([a, b] as const)) : Box<readonly [{ a: number; }, { b: number; }]>
+>f : <R extends BoxLike<R>>(v: R) => R
+>box([a, b] as const) : Box<readonly [{ a: number; }, { b: number; }]>
+>box : <T>(value: T) => Box<T>
+>[a, b] as const : readonly [{ a: number; }, { b: number; }]
+>[a, b] : readonly [{ a: number; }, { b: number; }]
+>a : { a: number; }
+>b : { b: number; }
+
+// @ts-expect-error
+const check1: Box<[{ a: number }, { b: number }]> = r1;
+>check1 : Box<[{ a: number; }, { b: number; }]>
+>a : number
+>b : number
+>r1 : Box<readonly [{ a: number; }, { b: number; }]>
+
+const ok1: Box<readonly [{ a: number }, { b: number }]> = r1;
+>ok1 : Box<readonly [{ a: number; }, { b: number; }]>
+>a : number
+>b : number
+>r1 : Box<readonly [{ a: number; }, { b: number; }]>
+
+// context-sensitive callback
+const r2 = f2(() => box([a, b] as const));
+>r2 : Box<readonly [{ a: number; }, { b: number; }]>
+>f2(() => box([a, b] as const)) : Box<readonly [{ a: number; }, { b: number; }]>
+>f2 : <R extends BoxLike<R>>(body: () => R) => R
+>() => box([a, b] as const) : () => Box<readonly [{ a: number; }, { b: number; }]>
+>box([a, b] as const) : Box<readonly [{ a: number; }, { b: number; }]>
+>box : <T>(value: T) => Box<T>
+>[a, b] as const : readonly [{ a: number; }, { b: number; }]
+>[a, b] : readonly [{ a: number; }, { b: number; }]
+>a : { a: number; }
+>b : { b: number; }
+
+const ok2: Box<readonly [{ a: number }, { b: number }]> = r2;
+>ok2 : Box<readonly [{ a: number; }, { b: number; }]>
+>a : number
+>b : number
+>r2 : Box<readonly [{ a: number; }, { b: number; }]>
+
+// direct literal and non-circular constraints keep readonly
+const r3 = f({ value: [a, b] as const });
+>r3 : { value: readonly [{ a: number; }, { b: number; }]; }
+>f({ value: [a, b] as const }) : { value: readonly [{ a: number; }, { b: number; }]; }
+>f : <R extends BoxLike<R>>(v: R) => R
+>{ value: [a, b] as const } : { value: readonly [{ a: number; }, { b: number; }]; }
+>value : readonly [{ a: number; }, { b: number; }]
+>[a, b] as const : readonly [{ a: number; }, { b: number; }]
+>[a, b] : readonly [{ a: number; }, { b: number; }]
+>a : { a: number; }
+>b : { b: number; }
+
+declare function g<R extends Box<unknown>>(v: R): R;
+>g : <R extends Box<unknown>>(v: R) => R
+>v : R
+
+const r4 = g(box([a, b] as const));
+>r4 : Box<readonly [{ a: number; }, { b: number; }]>
+>g(box([a, b] as const)) : Box<readonly [{ a: number; }, { b: number; }]>
+>g : <R extends Box<unknown>>(v: R) => R
+>box([a, b] as const) : Box<readonly [{ a: number; }, { b: number; }]>
+>box : <T>(value: T) => Box<T>
+>[a, b] as const : readonly [{ a: number; }, { b: number; }]
+>[a, b] : readonly [{ a: number; }, { b: number; }]
+>a : { a: number; }
+>b : { b: number; }
+
+declare function h<R extends Box<R["value"]>>(v: R): R;
+>h : <R extends Box<R["value"]>>(v: R) => R
+>v : R
+
+const r5 = h(box([a, b] as const));
+>r5 : Box<readonly [{ a: number; }, { b: number; }]>
+>h(box([a, b] as const)) : Box<readonly [{ a: number; }, { b: number; }]>
+>h : <R extends Box<R["value"]>>(v: R) => R
+>box([a, b] as const) : Box<readonly [{ a: number; }, { b: number; }]>
+>box : <T>(value: T) => Box<T>
+>[a, b] as const : readonly [{ a: number; }, { b: number; }]
+>[a, b] : readonly [{ a: number; }, { b: number; }]
+>a : { a: number; }
+>b : { b: number; }
+
+// a contextual type of never must not make the const tuple mutable
+// @ts-expect-error
+const z = id<typeof neverValue>([a, b] as const);
+>z : never
+>id<typeof neverValue>([a, b] as const) : never
+>id : <T>(x: T) => T
+>neverValue : never
+>[a, b] as const : readonly [{ a: number; }, { b: number; }]
+>[a, b] : readonly [{ a: number; }, { b: number; }]
+>a : { a: number; }
+>b : { b: number; }
+

@@ -1,0 +1,134 @@
+//// [tests/cases/compiler/declarationEmitAlternativeContainingModules.ts] ////
+
+=== internal/deep/model.ts ===
+export interface Named { value: string; }
+>Named : Symbol(Named, Decl(model.ts, 0, 0))
+>value : Symbol(Named.value, Decl(model.ts, 0, 24))
+
+export interface Aliased { value: string; }
+>Aliased : Symbol(Aliased, Decl(model.ts, 0, 41))
+>value : Symbol(Aliased.value, Decl(model.ts, 1, 26))
+
+export interface Assigned { value: string; }
+>Assigned : Symbol(Assigned, Decl(model.ts, 1, 43))
+>value : Symbol(Assigned.value, Decl(model.ts, 2, 27))
+
+export interface Ordered { value: string; }
+>Ordered : Symbol(Ordered, Decl(model.ts, 2, 44))
+>value : Symbol(Ordered.value, Decl(model.ts, 3, 26))
+
+export interface Unlisted { value: string; }
+>Unlisted : Symbol(Unlisted, Decl(model.ts, 3, 43))
+>value : Symbol(Unlisted.value, Decl(model.ts, 4, 27))
+
+export function makeNamed(): Named { return { value: "" }; }
+>makeNamed : Symbol(makeNamed, Decl(model.ts, 4, 44))
+>Named : Symbol(Named, Decl(model.ts, 0, 0))
+>value : Symbol(value, Decl(model.ts, 5, 45))
+
+export function makeAliased(): Aliased { return { value: "" }; }
+>makeAliased : Symbol(makeAliased, Decl(model.ts, 5, 60))
+>Aliased : Symbol(Aliased, Decl(model.ts, 0, 41))
+>value : Symbol(value, Decl(model.ts, 6, 49))
+
+export function makeAssigned(): Assigned { return { value: "" }; }
+>makeAssigned : Symbol(makeAssigned, Decl(model.ts, 6, 64))
+>Assigned : Symbol(Assigned, Decl(model.ts, 1, 43))
+>value : Symbol(value, Decl(model.ts, 7, 51))
+
+export function makeOrdered(): Ordered { return { value: "" }; }
+>makeOrdered : Symbol(makeOrdered, Decl(model.ts, 7, 66))
+>Ordered : Symbol(Ordered, Decl(model.ts, 2, 44))
+>value : Symbol(value, Decl(model.ts, 8, 49))
+
+export function makeUnlisted(): Unlisted { return { value: "" }; }
+>makeUnlisted : Symbol(makeUnlisted, Decl(model.ts, 8, 64))
+>Unlisted : Symbol(Unlisted, Decl(model.ts, 3, 43))
+>value : Symbol(value, Decl(model.ts, 9, 51))
+
+=== internal/deep/starred.ts ===
+export interface Starred { value: string; }
+>Starred : Symbol(Starred, Decl(starred.ts, 0, 0))
+>value : Symbol(Starred.value, Decl(starred.ts, 0, 26))
+
+export function makeStarred(): Starred { return { value: "" }; }
+>makeStarred : Symbol(makeStarred, Decl(starred.ts, 0, 43))
+>Starred : Symbol(Starred, Decl(starred.ts, 0, 0))
+>value : Symbol(value, Decl(starred.ts, 1, 49))
+
+=== factory.ts ===
+export { makeNamed, makeAliased, makeAssigned, makeOrdered, makeUnlisted } from "./internal/deep/model";
+>makeNamed : Symbol(makeNamed, Decl(factory.ts, 0, 8))
+>makeAliased : Symbol(makeAliased, Decl(factory.ts, 0, 19))
+>makeAssigned : Symbol(makeAssigned, Decl(factory.ts, 0, 32))
+>makeOrdered : Symbol(makeOrdered, Decl(factory.ts, 0, 46))
+>makeUnlisted : Symbol(makeUnlisted, Decl(factory.ts, 0, 59))
+
+export { makeStarred } from "./internal/deep/starred";
+>makeStarred : Symbol(makeStarred, Decl(factory.ts, 1, 8))
+
+=== named.ts ===
+export { Named } from "./internal/deep/model";
+>Named : Symbol(Named, Decl(named.ts, 0, 8))
+
+=== aliased.ts ===
+export { Aliased as Alias } from "./internal/deep/model";
+>Aliased : Symbol(Aliased, Decl(model.ts, 0, 41))
+>Alias : Symbol(Alias, Decl(aliased.ts, 0, 8))
+
+=== star.ts ===
+
+export * from "./internal/deep/starred";
+
+=== assigned.ts ===
+import { Assigned } from "./internal/deep/model";
+>Assigned : Symbol(Assigned, Decl(assigned.ts, 0, 8))
+
+export = Assigned;
+>Assigned : Symbol(Assigned, Decl(assigned.ts, 0, 8))
+
+=== orderedFirst.ts ===
+export { Ordered } from "./internal/deep/model";
+>Ordered : Symbol(Ordered, Decl(orderedFirst.ts, 0, 8))
+
+=== orderedSecond.ts ===
+export { Ordered } from "./internal/deep/model";
+>Ordered : Symbol(Ordered, Decl(orderedSecond.ts, 0, 8))
+
+=== index.ts ===
+import { makeNamed, makeAliased, makeStarred, makeAssigned, makeOrdered, makeUnlisted } from "./factory";
+>makeNamed : Symbol(makeNamed, Decl(index.ts, 0, 8))
+>makeAliased : Symbol(makeAliased, Decl(index.ts, 0, 19))
+>makeStarred : Symbol(makeStarred, Decl(index.ts, 0, 32))
+>makeAssigned : Symbol(makeAssigned, Decl(index.ts, 0, 45))
+>makeOrdered : Symbol(makeOrdered, Decl(index.ts, 0, 59))
+>makeUnlisted : Symbol(makeUnlisted, Decl(index.ts, 0, 72))
+
+export const named = makeNamed();
+>named : Symbol(named, Decl(index.ts, 1, 12))
+>makeNamed : Symbol(makeNamed, Decl(index.ts, 0, 8))
+
+export const repeated = makeNamed();
+>repeated : Symbol(repeated, Decl(index.ts, 2, 12))
+>makeNamed : Symbol(makeNamed, Decl(index.ts, 0, 8))
+
+export const aliased = makeAliased();
+>aliased : Symbol(aliased, Decl(index.ts, 3, 12))
+>makeAliased : Symbol(makeAliased, Decl(index.ts, 0, 19))
+
+export const starred = makeStarred();
+>starred : Symbol(starred, Decl(index.ts, 4, 12))
+>makeStarred : Symbol(makeStarred, Decl(index.ts, 0, 32))
+
+export const assigned = makeAssigned();
+>assigned : Symbol(assigned, Decl(index.ts, 5, 12))
+>makeAssigned : Symbol(makeAssigned, Decl(index.ts, 0, 45))
+
+export const ordered = makeOrdered();
+>ordered : Symbol(ordered, Decl(index.ts, 6, 12))
+>makeOrdered : Symbol(makeOrdered, Decl(index.ts, 0, 59))
+
+export const unlisted = makeUnlisted();
+>unlisted : Symbol(unlisted, Decl(index.ts, 7, 12))
+>makeUnlisted : Symbol(makeUnlisted, Decl(index.ts, 0, 72))
+

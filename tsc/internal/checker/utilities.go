@@ -69,7 +69,7 @@ func hasReadonlyModifier(node *ast.Node) bool {
 }
 
 func isStaticPrivateIdentifierProperty(s *ast.Symbol) bool {
-	return s.ValueDeclaration != nil && ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration) && ast.IsStatic(s.ValueDeclaration)
+	return s.ValueDeclaration() != nil && ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration()) && ast.IsStatic(s.ValueDeclaration())
 }
 
 func isEmptyObjectLiteral(expression *ast.Node) bool {
@@ -195,7 +195,7 @@ func canHaveLocals(node *ast.Node) bool {
 }
 
 func isShorthandAmbientModuleSymbol(moduleSymbol *ast.Symbol) bool {
-	return isShorthandAmbientModule(moduleSymbol.ValueDeclaration)
+	return isShorthandAmbientModule(moduleSymbol.ValueDeclaration())
 }
 
 func isShorthandAmbientModule(node *ast.Node) bool {
@@ -254,7 +254,7 @@ func isSyntacticDefault(node *ast.Node) bool {
 }
 
 func hasExportAssignmentSymbol(moduleSymbol *ast.Symbol) bool {
-	return moduleSymbol.Exports[ast.InternalSymbolNameExportEquals] != nil
+	return moduleSymbol.Exports()[ast.InternalSymbolNameExportEquals] != nil
 }
 
 func isTypeAlias(node *ast.Node) bool {
@@ -353,7 +353,7 @@ func createSymbolTable(symbols []*ast.Symbol) ast.SymbolTable {
 	}
 	result := make(ast.SymbolTable)
 	for _, symbol := range symbols {
-		result[symbol.Name] = symbol
+		result[symbol.Name()] = symbol
 	}
 	return result
 }
@@ -372,16 +372,16 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	if s2 == nil {
 		return -1
 	}
-	if len(s1.Declarations) != 0 && len(s2.Declarations) != 0 {
-		if r := c.compareNodes(s1.Declarations[0], s2.Declarations[0]); r != 0 {
+	if len(s1.Declarations()) != 0 && len(s2.Declarations()) != 0 {
+		if r := c.compareNodes(s1.Declarations()[0], s2.Declarations()[0]); r != 0 {
 			return r
 		}
-	} else if len(s1.Declarations) != 0 {
+	} else if len(s1.Declarations()) != 0 {
 		return -1
-	} else if len(s2.Declarations) != 0 {
+	} else if len(s2.Declarations()) != 0 {
 		return 1
 	}
-	if r := strings.Compare(s1.Name, s2.Name); r != 0 {
+	if r := strings.Compare(s1.Name(), s2.Name()); r != 0 {
 		return r
 	}
 	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
@@ -441,11 +441,11 @@ func CompareTypes(t1, t2 *Type) int {
 		// Order other unnamed or identically named object types by symbol.
 		if t1.objectFlags&ObjectFlagsInstantiationExpressionType != 0 && t2.objectFlags&ObjectFlagsInstantiationExpressionType != 0 {
 			var declaration1, declaration2 *ast.Node
-			if t1.symbol != nil && len(t1.symbol.Declarations) != 0 {
-				declaration1 = t1.symbol.Declarations[0]
+			if t1.symbol != nil && len(t1.symbol.Declarations()) != 0 {
+				declaration1 = t1.symbol.Declarations()[0]
 			}
-			if t2.symbol != nil && len(t2.symbol.Declarations) != 0 {
-				declaration2 = t2.symbol.Declarations[0]
+			if t2.symbol != nil && len(t2.symbol.Declarations()) != 0 {
+				declaration2 = t2.symbol.Declarations()[0]
 			}
 			// A single instantiation expression can produce multiple types for union constituents,
 			// so compare their source declarations before comparing the shared expression node.
@@ -641,7 +641,7 @@ func compareTypeNames(t1, t2 *Type) int {
 	if s2 == nil {
 		return -1
 	}
-	if c := strings.Compare(s1.Name, s2.Name); c != 0 {
+	if c := strings.Compare(s1.Name(), s2.Name()); c != 0 {
 		return c
 	}
 	// Keep distinct same-named declarations together before comparing alias arguments or structure.
@@ -759,39 +759,39 @@ func getDeclarationModifierFlagsFromSymbol(s *ast.Symbol) ast.ModifierFlags {
 }
 
 func getDeclarationModifierFlagsFromSymbolEx(s *ast.Symbol, isWrite bool) ast.ModifierFlags {
-	if s.CheckFlags&ast.CheckFlagsSynthetic != 0 {
+	if s.CheckFlags()&ast.CheckFlagsSynthetic != 0 {
 		var accessModifier ast.ModifierFlags
 		switch {
-		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsPublic != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWritePublic != 0:
+		case !isWrite && s.CheckFlags()&ast.CheckFlagsContainsPublic != 0 || isWrite && s.CheckFlags()&ast.CheckFlagsContainsWritePublic != 0:
 			accessModifier = ast.ModifierFlagsPublic
-		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsProtected != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWriteProtected != 0:
+		case !isWrite && s.CheckFlags()&ast.CheckFlagsContainsProtected != 0 || isWrite && s.CheckFlags()&ast.CheckFlagsContainsWriteProtected != 0:
 			accessModifier = ast.ModifierFlagsProtected
-		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsPrivate != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWritePrivate != 0:
+		case !isWrite && s.CheckFlags()&ast.CheckFlagsContainsPrivate != 0 || isWrite && s.CheckFlags()&ast.CheckFlagsContainsWritePrivate != 0:
 			accessModifier = ast.ModifierFlagsPrivate
 		}
-		if s.CheckFlags&ast.CheckFlagsContainsStatic != 0 {
+		if s.CheckFlags()&ast.CheckFlagsContainsStatic != 0 {
 			return accessModifier | ast.ModifierFlagsStatic
 		}
 		return accessModifier
 	}
-	if s.ValueDeclaration != nil {
+	if s.ValueDeclaration() != nil {
 		var declaration *ast.Node
 		if isWrite {
-			declaration = core.Find(s.Declarations, ast.IsSetAccessorDeclaration)
+			declaration = core.Find(s.Declarations(), ast.IsSetAccessorDeclaration)
 		}
-		if declaration == nil && s.Flags&ast.SymbolFlagsGetAccessor != 0 {
-			declaration = core.Find(s.Declarations, ast.IsGetAccessorDeclaration)
+		if declaration == nil && s.Flags()&ast.SymbolFlagsGetAccessor != 0 {
+			declaration = core.Find(s.Declarations(), ast.IsGetAccessorDeclaration)
 		}
 		if declaration == nil {
-			declaration = s.ValueDeclaration
+			declaration = s.ValueDeclaration()
 		}
 		flags := ast.GetCombinedModifierFlags(declaration)
-		if s.Parent != nil && s.Parent.Flags&ast.SymbolFlagsClass != 0 {
+		if s.Parent() != nil && s.Parent().Flags()&ast.SymbolFlagsClass != 0 {
 			return flags
 		}
 		return flags & ^ast.ModifierFlagsAccessibilityModifier
 	}
-	if s.Flags&ast.SymbolFlagsPrototype != 0 {
+	if s.Flags()&ast.SymbolFlagsPrototype != 0 {
 		return ast.ModifierFlagsPublic | ast.ModifierFlagsStatic
 	}
 	return ast.ModifierFlagsNone
@@ -1016,14 +1016,14 @@ func isVariableDeclarationInVariableStatement(node *ast.Node) bool {
 }
 
 func IsKnownSymbol(symbol *ast.Symbol) bool {
-	return isLateBoundName(symbol.Name)
+	return isLateBoundName(symbol.Name())
 }
 
 func IsPrivateIdentifierSymbol(symbol *ast.Symbol) bool {
 	if symbol == nil {
 		return false
 	}
-	return strings.HasPrefix(symbol.Name, ast.InternalSymbolNamePrefix+"#")
+	return strings.HasPrefix(symbol.Name(), ast.InternalSymbolNamePrefix+"#")
 }
 
 func isLateBoundName(name string) bool {
@@ -1081,13 +1081,13 @@ func isInfinityOrNaNString(name string) bool {
 }
 
 func (c *Checker) isConstantVariable(symbol *ast.Symbol) bool {
-	return symbol.Flags&ast.SymbolFlagsVariable != 0 && (c.getDeclarationNodeFlagsFromSymbol(symbol)&ast.NodeFlagsConstant) != 0
+	return symbol.Flags()&ast.SymbolFlagsVariable != 0 && (c.getDeclarationNodeFlagsFromSymbol(symbol)&ast.NodeFlagsConstant) != 0
 }
 
 func (c *Checker) isParameterOrMutableLocalVariable(symbol *ast.Symbol) bool {
 	// Return true if symbol is a parameter, a catch clause variable, or a mutable local variable
-	if symbol.ValueDeclaration != nil {
-		declaration := ast.GetRootDeclaration(symbol.ValueDeclaration)
+	if symbol.ValueDeclaration() != nil {
+		declaration := ast.GetRootDeclaration(symbol.ValueDeclaration())
 		return declaration != nil && (ast.IsParameterDeclaration(declaration) || ast.IsVariableDeclaration(declaration) && (ast.IsCatchClause(declaration.Parent) || c.isMutableLocalVariableDeclaration(declaration)))
 	}
 	return false
@@ -1302,7 +1302,7 @@ func getEnclosingContainer(node *ast.Node) *ast.Node {
 }
 
 func getDeclarationsOfKind(symbol *ast.Symbol, kind ast.Kind) []*ast.Node {
-	return core.Filter(symbol.Declarations, func(d *ast.Node) bool { return d.Kind == kind })
+	return core.Filter(symbol.Declarations(), func(d *ast.Node) bool { return d.Kind == kind })
 }
 
 func hasType(node *ast.Node) bool {
@@ -1344,6 +1344,15 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"Iterator": {
 			{lib: "es2015", props: []string{}},
+		},
+		"IteratorConstructor": {
+			{lib: "es2026", props: []string{"concat"}},
+		},
+		"RawJSON": {
+			{lib: "es2026", props: []string{}},
+		},
+		"JSON": {
+			{lib: "es2026", props: []string{"isRawJSON", "rawJSON"}},
 		},
 		"AsyncIterator": {
 			{lib: "es2015", props: []string{}},
@@ -1413,7 +1422,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"ArrayConstructor": {
 			{lib: "es2015", props: []string{"from", "of"}},
-			{lib: "esnext", props: []string{"fromAsync"}},
+			{lib: "es2026", props: []string{"fromAsync"}},
 		},
 		"ObjectConstructor": {
 			{lib: "es2015", props: []string{"assign", "getOwnPropertySymbols", "keys", "is", "setPrototypeOf"}},
@@ -1428,10 +1437,11 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		"Math": {
 			{lib: "es2015", props: []string{"clz32", "imul", "sign", "log10", "log2", "log1p", "expm1", "cosh", "sinh", "tanh", "acosh", "asinh", "atanh", "hypot", "trunc", "fround", "cbrt"}},
 			{lib: "es2025", props: []string{"f16round"}},
+			{lib: "es2026", props: []string{"sumPrecise"}},
 		},
 		"Map": {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
-			{lib: "esnext", props: []string{
+			{lib: "es2026", props: []string{
 				"getOrInsert",
 				"getOrInsertComputed",
 			}},
@@ -1464,7 +1474,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"WeakMap": {
 			{lib: "es2015", props: []string{}},
-			{lib: "esnext", props: []string{
+			{lib: "es2026", props: []string{
 				"getOrInsert",
 				"getOrInsertComputed",
 			}},
@@ -1532,6 +1542,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		"Uint8Array": {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
+			{lib: "es2026", props: []string{"toBase64", "setFromBase64", "toHex", "setFromHex"}},
 		},
 		"Uint8ClampedArray": {
 			{lib: "es2022", props: []string{"at"}},
@@ -1578,10 +1589,10 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 			{lib: "es2022", props: []string{"cause"}},
 		},
 		"ErrorConstructor": {
-			{lib: "esnext", props: []string{"isError"}},
+			{lib: "es2026", props: []string{"isError"}},
 		},
 		"Uint8ArrayConstructor": {
-			{lib: "esnext", props: []string{"fromBase64", "fromHex"}},
+			{lib: "es2026", props: []string{"fromBase64", "fromHex"}},
 		},
 		"DisposableStack": {
 			{lib: "esnext", props: []string{}},
@@ -1620,9 +1631,9 @@ func tryGetPropertyAccessOrIdentifierToString(expr *ast.Node) string {
 }
 
 func allDeclarationsInSameSourceFile(symbol *ast.Symbol) bool {
-	if len(symbol.Declarations) > 1 {
+	if len(symbol.Declarations()) > 1 {
 		var sourceFile *ast.SourceFile
-		for i, d := range symbol.Declarations {
+		for i, d := range symbol.Declarations() {
 			if i == 0 {
 				sourceFile = ast.GetSourceFileOfNode(d)
 			} else if ast.GetSourceFileOfNode(d) != sourceFile {
@@ -1687,7 +1698,7 @@ func symbolsToArray(symbols ast.SymbolTable) []*ast.Symbol {
 }
 
 func SkipAlias(symbol *ast.Symbol, checker *Checker) *ast.Symbol {
-	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+	if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		return checker.GetAliasedSymbol(symbol)
 	}
 	return symbol
@@ -1769,17 +1780,17 @@ func (c *Checker) isUncheckedJSSuggestion(node *ast.Node, suggestion *ast.Symbol
 		if c.compilerOptions.CheckJs.IsUnknown() && file.CheckJsDirective == nil && (file.ScriptKind == core.ScriptKindJS || file.ScriptKind == core.ScriptKindJSX) {
 			var declarationFile *ast.SourceFile
 			if suggestion != nil {
-				if firstDeclaration := core.FirstOrNil(suggestion.Declarations); firstDeclaration != nil {
+				if firstDeclaration := core.FirstOrNil(suggestion.Declarations()); firstDeclaration != nil {
 					declarationFile = ast.GetSourceFileOfNode(firstDeclaration)
 				}
 			}
 			suggestionHasNoExtendsOrDecorators := suggestion == nil ||
-				suggestion.ValueDeclaration == nil ||
-				!ast.IsClassLike(suggestion.ValueDeclaration) ||
-				len(ast.GetExtendsHeritageClauseElements(suggestion.ValueDeclaration)) != 0 ||
-				ast.ClassOrConstructorParameterIsDecorated(false, suggestion.ValueDeclaration)
+				suggestion.ValueDeclaration() == nil ||
+				!ast.IsClassLike(suggestion.ValueDeclaration()) ||
+				len(ast.GetExtendsHeritageClauseElements(suggestion.ValueDeclaration())) != 0 ||
+				ast.ClassOrConstructorParameterIsDecorated(false, suggestion.ValueDeclaration())
 			return !(file != declarationFile && declarationFile != nil && ast.IsGlobalSourceFile(declarationFile.AsNode())) &&
-				!(excludeClasses && suggestion != nil && suggestion.Flags&ast.SymbolFlagsClass != 0 && suggestionHasNoExtendsOrDecorators) &&
+				!(excludeClasses && suggestion != nil && suggestion.Flags()&ast.SymbolFlagsClass != 0 && suggestionHasNoExtendsOrDecorators) &&
 				!(node != nil && excludeClasses && ast.IsPropertyAccessExpression(node) && node.Expression().Kind == ast.KindThisKeyword && suggestionHasNoExtendsOrDecorators)
 		}
 	}
@@ -1829,7 +1840,7 @@ func CreateModuleNotFoundChain(program Program, file *ast.SourceFile, moduleRefe
 	resolvedModule := program.GetResolvedModule(file, moduleReference, mode)
 
 	if resolvedModule != nil && resolvedModule.AlternateResult != "" {
-		if strings.Contains(resolvedModule.AlternateResult, "/node_modules/@types/") {
+		if resolvedModule.AlternateResult.ContainsLowercaseDirectorySequence("/node_modules/@types/") {
 			packageName = "@types/" + module.MangleScopedPackageName(packageName)
 		}
 		return DiagnosticDetails{
@@ -1862,9 +1873,9 @@ func CreateModuleNotFoundChain(program Program, file *ast.SourceFile, moduleRefe
 // incremental builder (repopulation of cached diagnostics).
 // Mirrors createModeMismatchDetails in the TypeScript compiler's utilities.ts.
 func CreateModeMismatchDetails(program Program, file *ast.SourceFile) DiagnosticDetails {
-	ext := tspath.TryGetExtensionFromPath(file.FileName())
+	ext := file.FileName().Extension()
 	targetExt := core.IfElse(ext == tspath.ExtensionTs, tspath.ExtensionMts, core.IfElse(ext == tspath.ExtensionJs, tspath.ExtensionMjs, ""))
-	meta := program.GetSourceFileMetaData(file.Path())
+	meta := program.GetSourceFileMetaData(file.PathKey())
 	packageJsonType := meta.PackageJsonType
 	packageJsonDirectory := meta.PackageJsonDirectory
 
@@ -1872,12 +1883,12 @@ func CreateModeMismatchDetails(program Program, file *ast.SourceFile) Diagnostic
 		if targetExt != "" {
 			return DiagnosticDetails{
 				Message: diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Colon_module_to_1,
-				Args:    []any{targetExt, tspath.CombinePaths(packageJsonDirectory, "package.json")},
+				Args:    []any{targetExt, packageJsonDirectory.ResolveFile("package.json").AsString()},
 			}
 		}
 		return DiagnosticDetails{
 			Message: diagnostics.To_convert_this_file_to_an_ECMAScript_module_add_the_field_type_Colon_module_to_0,
-			Args:    []any{tspath.CombinePaths(packageJsonDirectory, "package.json")},
+			Args:    []any{packageJsonDirectory.ResolveFile("package.json").AsString()},
 		}
 	}
 	if targetExt != "" {
@@ -1907,4 +1918,8 @@ func GetSetAccessorValueParameter(accessor *ast.Node) *ast.Node {
 		return parameters[core.IfElse(hasThis, 1, 0)]
 	}
 	return nil
+}
+
+func quotedAndCommaSeparated(items []string) string {
+	return strings.Join(core.Map(items, func(item string) string { return "'" + item + "'" }), ", ")
 }

@@ -12,13 +12,12 @@ import {
     formatSyntaxKind,
     getTokenAtPosition,
     getTouchingPropertyName,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import type {
     Node,
     SourceFile,
-} from "@typescript/typescript/unstable/ast";
-import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
-import { API } from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/ast";
+import { API } from "@typescript/typescript/sync";
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -29,6 +28,10 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
+import {
+    areTestsFiltered,
+    createVirtualFileSystem,
+} from "../testUtils.ts";
 
 // ---------------------------------------------------------------------------
 // Go JSON baseline format
@@ -81,7 +84,7 @@ const baselineDir = resolve(repoRoot, "tsc/testdata/baselines/reference/astnav")
 // Tests
 // ---------------------------------------------------------------------------
 
-describe("astnav", () => {
+describe("astnav", { concurrency: areTestsFiltered() }, () => {
     let fileText: string;
 
     try {
@@ -108,7 +111,7 @@ describe("astnav", () => {
             }),
         });
 
-        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sf = project.program.getSourceFile("/src/testFile.ts");
         assert.ok(sf, "Failed to get source file from API");

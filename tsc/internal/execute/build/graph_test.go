@@ -10,21 +10,22 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsctests"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
 func TestBuildOrderGenerator(t *testing.T) {
 	t.Parallel()
 	testCases := []*buildOrderTestCase{
-		{"specify two roots", []string{"A", "G"}, []string{"D", "E", "C", "B", "A", "G"}, false},
-		{"multiple parts of the same graph in various orders", []string{"A"}, []string{"D", "E", "C", "B", "A"}, false},
-		{"multiple parts of the same graph in various orders", []string{"A", "C", "D"}, []string{"D", "E", "C", "B", "A"}, false},
-		{"multiple parts of the same graph in various orders", []string{"D", "C", "A"}, []string{"D", "E", "C", "B", "A"}, false},
-		{"other orderings", []string{"F"}, []string{"E", "F"}, false},
-		{"other orderings", []string{"E"}, []string{"E"}, false},
-		{"other orderings", []string{"F", "C", "A"}, []string{"E", "F", "D", "C", "B", "A"}, false},
-		{"returns circular order", []string{"H"}, []string{"E", "J", "I", "H"}, true},
-		{"returns circular order", []string{"A", "H"}, []string{"D", "E", "C", "B", "A", "J", "I", "H"}, true},
+		{"specify two roots", []string{"A", "G"}, []string{"D", "E", "C", "B", "A", "G"}, []string{"D", "E", "G", "C", "B", "A"}, false},
+		{"multiple parts of the same graph in various orders", []string{"A"}, []string{"D", "E", "C", "B", "A"}, []string{"D", "E", "C", "B", "A"}, false},
+		{"multiple parts of the same graph in various orders", []string{"A", "C", "D"}, []string{"D", "E", "C", "B", "A"}, []string{"D", "E", "C", "B", "A"}, false},
+		{"multiple parts of the same graph in various orders", []string{"D", "C", "A"}, []string{"D", "E", "C", "B", "A"}, []string{"D", "E", "C", "B", "A"}, false},
+		{"other orderings", []string{"F"}, []string{"E", "F"}, []string{"E", "F"}, false},
+		{"other orderings", []string{"E"}, []string{"E"}, []string{"E"}, false},
+		{"other orderings", []string{"F", "C", "A"}, []string{"E", "F", "D", "C", "B", "A"}, []string{"E", "D", "F", "C", "B", "A"}, false},
+		{"returns circular order", []string{"H"}, []string{"E", "J", "I", "H"}, []string{"E", "J", "I", "H"}, true},
+		{"returns circular order", []string{"A", "H"}, []string{"D", "E", "C", "B", "A", "J", "I", "H"}, []string{"D", "E", "C", "J", "B", "I", "A", "H"}, true},
 	}
 	for _, testcase := range testCases {
 		testcase.run(t)
@@ -32,10 +33,11 @@ func TestBuildOrderGenerator(t *testing.T) {
 }
 
 type buildOrderTestCase struct {
-	name     string
-	projects []string
-	expected []string
-	circular bool
+	name             string
+	projects         []string
+	expected         []string
+	expectedSchedule []string
+	circular         bool
 }
 
 func (b *buildOrderTestCase) configName(project string) string {
@@ -108,17 +110,20 @@ func (b *buildOrderTestCase) run(t *testing.T) {
             }`, project, referencesStr)
 		}
 
-		sys := tsctests.NewTscSystem(files, true, "/home/src/workspaces/project")
+		sys := tsctests.NewTscSystem(files, tspath.CaseSensitive, "/home/src/workspaces/project")
 		args := append([]string{"--build", "--dry"}, b.projects...)
-		buildCommand := tsoptions.ParseBuildCommandLine(args, sys)
+		buildCommand := tsoptions.ParseBuildCommandLine(args, sys.FS(), sys.GetCurrentDirectory())
 		orchestrator := build.NewOrchestrator(build.Options{
 			Sys:     sys,
 			Command: buildCommand,
 		})
 		orchestrator.GenerateGraph(nil)
-		buildOrder := core.Map(orchestrator.Order(), b.projectName)
+		buildOrder := core.Map(orchestrator.Order(), func(config tspath.RootedFilePath) string { return b.projectName(config.AsString()) })
 		assert.DeepEqual(t, buildOrder, b.expected)
 		verifyDeps(orchestrator, buildOrder, false)
+		scheduleOrder := core.Map(orchestrator.ScheduleOrder(), b.projectName)
+		assert.DeepEqual(t, scheduleOrder, b.expectedSchedule)
+		verifyDeps(orchestrator, scheduleOrder, false)
 
 		if !b.circular {
 			for project, projectDeps := range deps {
@@ -137,17 +142,17 @@ func (b *buildOrderTestCase) run(t *testing.T) {
 		}
 
 		orchestrator.GenerateGraphReusingOldTasks()
-		buildOrder2 := core.Map(orchestrator.Order(), b.projectName)
+		buildOrder2 := core.Map(orchestrator.Order(), func(config tspath.RootedFilePath) string { return b.projectName(config.AsString()) })
 		assert.DeepEqual(t, buildOrder2, b.expected)
 
 		argsWatch := append([]string{"--build", "--watch"}, b.projects...)
-		buildCommandWatch := tsoptions.ParseBuildCommandLine(argsWatch, sys)
+		buildCommandWatch := tsoptions.ParseBuildCommandLine(argsWatch, sys.FS(), sys.GetCurrentDirectory())
 		orchestrator = build.NewOrchestrator(build.Options{
 			Sys:     sys,
 			Command: buildCommandWatch,
 		})
 		orchestrator.GenerateGraph(nil)
-		buildOrder3 := core.Map(orchestrator.Order(), b.projectName)
+		buildOrder3 := core.Map(orchestrator.Order(), func(config tspath.RootedFilePath) string { return b.projectName(config.AsString()) })
 		verifyDeps(orchestrator, buildOrder3, true)
 	})
 }

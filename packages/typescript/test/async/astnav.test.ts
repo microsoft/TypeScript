@@ -1,6 +1,6 @@
-import { API } from "@typescript/typescript/unstable/async"; // @sync-skip
+import { API } from "@typescript/typescript/async"; // @sync-skip
 // @sync-only-start
-// import { API } from "@typescript/typescript/unstable/sync";
+// import { API } from "@typescript/typescript/sync";
 // @sync-only-end
 import {
     findNextToken,
@@ -8,12 +8,11 @@ import {
     formatSyntaxKind,
     getTokenAtPosition,
     getTouchingPropertyName,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import type {
     Node,
     SourceFile,
-} from "@typescript/typescript/unstable/ast";
-import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
+} from "@typescript/typescript/ast";
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -24,6 +23,10 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
+import {
+    areTestsFiltered,
+    createVirtualFileSystem,
+} from "../testUtils.ts";
 
 // ---------------------------------------------------------------------------
 // Go JSON baseline format
@@ -76,7 +79,7 @@ const baselineDir = resolve(repoRoot, "tsc/testdata/baselines/reference/astnav")
 // Tests
 // ---------------------------------------------------------------------------
 
-describe("astnav", () => {
+describe("astnav", { concurrency: areTestsFiltered() }, () => {
     let fileText: string;
 
     try {
@@ -103,7 +106,7 @@ describe("astnav", () => {
             }),
         });
 
-        const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sf = await project.program.getSourceFile("/src/testFile.ts");
         assert.ok(sf, "Failed to get source file from API");

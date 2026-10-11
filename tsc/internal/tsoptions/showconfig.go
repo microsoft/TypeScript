@@ -1,18 +1,14 @@
 package tsoptions
 
 import (
-	"reflect"
-
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/debug"
-	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 // computeFn wraps a typed getter method so it can be stored in an impliedOption's
 // compute field (which has type func(*core.CompilerOptions) any).
-func computeFn[T any](fn func(*core.CompilerOptions) T) func(*core.CompilerOptions) any {
+func computeFn[T comparable](fn func(*core.CompilerOptions) T) func(*core.CompilerOptions) any {
 	return func(opts *core.CompilerOptions) any {
 		return fn(opts)
 	}
@@ -61,28 +57,25 @@ type TSConfig struct {
 
 // ConvertToTSConfig generates a complete tsconfig representation for --showConfig output,
 // matching the behavior of TypeScript's convertToTSConfig function.
-func ConvertToTSConfig(configParseResult *ParsedCommandLine, configFileName string) *TSConfig {
+func ConvertToTSConfig(configParseResult *ParsedCommandLine, configFileName tspath.RootedFilePath) *TSConfig {
 	if configFileName == "" {
-		configFileName = "tsconfig.json"
+		configFileName = configParseResult.BaseDirectory().ResolveFile("tsconfig.json")
 	}
-	normalizedConfigPath := tspath.GetNormalizedAbsolutePath(configFileName, configParseResult.GetCurrentDirectory())
-	comparePathsOptions := tspath.ComparePathsOptions{
-		CurrentDirectory:          configParseResult.GetCurrentDirectory(),
-		UseCaseSensitiveFileNames: configParseResult.UseCaseSensitiveFileNames(),
-	}
+	caseSensitivity := configParseResult.CaseSensitivity()
 
 	// Build the list of all resolved files as relative paths from the config file.
 	var files []string
 	for _, f := range configParseResult.FileNames() {
-		normalizedFilePath := tspath.GetNormalizedAbsolutePath(f, configParseResult.GetCurrentDirectory())
-		relativePath := tspath.GetRelativePathFromFile(normalizedConfigPath, normalizedFilePath, comparePathsOptions)
-		files = append(files, relativePath)
+		if relativePath, ok := caseSensitivity.RelativePathFromFile(configFileName, f); ok {
+			files = append(files, relativePath.AsModuleSpecifier().AsString())
+		} else {
+			files = append(files, f.AsString())
+		}
 	}
 
 	// Serialize compiler options
-	optionMap := serializeCompilerOptions(configParseResult.CompilerOptions(), normalizedConfigPath, comparePathsOptions)
+	optionMap := serializeCompilerOptions(configParseResult.CompilerOptions(), configFileName, caseSensitivity)
 
-	// Remove command-line-only options from the output
 	for _, name := range []string{
 		"showConfig", "configFile", "configFilePath", "help", "init",
 		"listFilesOnly", "listEmittedFiles", "project", "build", "version",
@@ -93,7 +86,7 @@ func ConvertToTSConfig(configParseResult *ParsedCommandLine, configFileName stri
 	// Add implied compiler options (options that are derived from explicitly set options,
 	// such as moduleResolution implied by module, or useDefineForClassFields implied by target).
 	// This mirrors TypeScript's convertToTSConfig computedOptions logic.
-	addImpliedOptions(optionMap, configParseResult.CompilerOptions(), normalizedConfigPath, comparePathsOptions)
+	addImpliedOptions(optionMap, configParseResult.CompilerOptions())
 
 	config := &TSConfig{
 		CompilerOptions: optionMap,
@@ -119,13 +112,12 @@ func ConvertToTSConfig(configParseResult *ParsedCommandLine, configFileName stri
 	}
 
 	// Add include/exclude from configFileSpecs
-	if configParseResult.ConfigFile != nil && configParseResult.ConfigFile.configFileSpecs != nil {
-		specs := configParseResult.ConfigFile.configFileSpecs
-		include := filterSameAsDefaultInclude(specs.validatedIncludeSpecs)
+	if specs := configParseResult.getConfigFileSpecs(); specs != nil {
+		include := filterSameAsDefaultInclude(core.Map(specs.validatedIncludeSpecs, tspath.PathPattern.AsString))
 		if len(include) > 0 {
 			config.Include = include
 		}
-		config.Exclude = specs.validatedExcludeSpecs
+		config.Exclude = core.Map(specs.validatedExcludeSpecs, tspath.PathPattern.AsString)
 	}
 
 	// Add compileOnSave
@@ -159,139 +151,23 @@ func getNameOfCompilerOptionValue(value any, enumMap *collections.OrderedMap[str
 	return ""
 }
 
-// serializeCompilerOptions converts CompilerOptions to an ordered map with
-// string names as keys and serialized values (enums as strings, paths as
-// relative paths, etc.) matching the output of tsc --showConfig.
-func serializeCompilerOptions(options *core.CompilerOptions, configFilePath string, comparePathsOptions tspath.ComparePathsOptions) *collections.OrderedMap[string, any] {
-	result := collections.NewOrderedMapWithSizeHint[string, any](32)
-	configDir := tspath.GetDirectoryPath(configFilePath)
-
-	optionsValue := reflect.ValueOf(options).Elem()
-	optionsTypeInfo := reflect.TypeFor[core.CompilerOptions]()
-
-	for i := range optionsValue.NumField() {
-		field := optionsTypeInfo.Field(i)
-		if !field.IsExported() {
-			continue
-		}
-
-		optionDecl := CommandLineCompilerOptionsMap.Get(field.Name)
-		if optionDecl == nil {
-			continue
-		}
-
-		// Skip command-line-only and output formatting options
-		if optionDecl.Category == diagnostics.Command_line_Options || optionDecl.Category == diagnostics.Output_Formatting {
-			continue
-		}
-
-		fieldValue := optionsValue.Field(i)
-
-		// Skip zero values (unset options)
-		if fieldValue.IsZero() {
-			continue
-		}
-
-		name := optionDecl.Name
-		value := fieldValue.Interface()
-
-		enumMap := optionDecl.EnumMap()
-		if enumMap != nil {
-			// Enum option - convert numeric value to string name
-			serialized := serializeEnumValue(value, enumMap)
-			if serialized != "" {
-				result.Set(name, serialized)
-			}
-			continue
-		}
-
-		switch optionDecl.Kind {
-		case CommandLineOptionTypeListOrElement:
-			debug.Assert(false, "listOrElement option should not reach serialization")
-		case CommandLineOptionTypeList:
-			elem := optionDecl.Elements()
-			if elem != nil && elem.IsFilePath {
-				// List of file paths - make relative
-				if strs, ok := value.([]string); ok {
-					relPaths := make([]string, len(strs))
-					for j, s := range strs {
-						absPath := tspath.GetNormalizedAbsolutePath(s, configDir)
-						relPaths[j] = tspath.GetRelativePathFromFile(configFilePath, absPath, comparePathsOptions)
-					}
-					result.Set(name, relPaths)
-					continue
-				}
-			}
-			if elem != nil && elem.EnumMap() != nil {
-				// List of enum values (e.g., lib)
-				elemMap := elem.EnumMap()
-				if strs, ok := value.([]string); ok {
-					serialized := make([]string, 0, len(strs))
-					for _, s := range strs {
-						// lib values are already stored as the d.ts filename, need to find original key
-						found := getNameOfCompilerOptionValue(s, elemMap)
-						if found != "" {
-							serialized = append(serialized, found)
-						} else {
-							serialized = append(serialized, s)
-						}
-					}
-					result.Set(name, serialized)
-					continue
-				}
-			}
-			result.Set(name, value)
-
-		case CommandLineOptionTypeString:
-			if optionDecl.IsFilePath {
-				// File path option - make relative to config
-				if s, ok := value.(string); ok && s != "" {
-					absPath := tspath.GetNormalizedAbsolutePath(s, configDir)
-					result.Set(name, tspath.GetRelativePathFromFile(configFilePath, absPath, comparePathsOptions))
-					continue
-				}
-			}
-			result.Set(name, value)
-
-		case CommandLineOptionTypeBoolean:
-			if t, ok := value.(core.Tristate); ok {
-				if t.IsTrue() {
-					result.Set(name, true)
-				} else if t.IsFalse() {
-					result.Set(name, false)
-				}
-			} else {
-				result.Set(name, value)
-			}
-
-		case CommandLineOptionTypeNumber:
-			result.Set(name, value)
-
-		default:
-			result.Set(name, value)
-		}
+func serializeCompilerOptionPath(value tspath.RootedPath, configFilePath tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) string {
+	if relativePath, ok := caseSensitivity.RelativePathFromFileToPath(configFilePath, value); ok {
+		return relativePath.AsModuleSpecifier().AsString()
 	}
-
-	return result
+	return value.AsString()
 }
 
-// serializeEnumValue converts an enum field value to its corresponding string key
-// using the option's enum map. It handles int32-based enum types.
-func serializeEnumValue(value any, enumMap *collections.OrderedMap[string, any]) string {
-	// The enum maps store values as core.ModuleKind, core.ScriptTarget, etc.
-	// But those are all int32 underneath. We need to compare by the underlying int32 value.
-	rv := reflect.ValueOf(value)
-	if rv.CanInt() {
-		intVal := rv.Int()
-		for k, v := range enumMap.Entries() {
-			ev := reflect.ValueOf(v)
-			if ev.CanInt() && ev.Int() == intVal {
-				return k
-			}
+func serializeCompilerOptionEnumList(values []string, enumMap *collections.OrderedMap[string, any]) []string {
+	result := make([]string, len(values))
+	for i, value := range values {
+		if name := getNameOfCompilerOptionValue(value, enumMap); name != "" {
+			result[i] = name
+		} else {
+			result[i] = value
 		}
 	}
-	// Fallback: direct comparison
-	return getNameOfCompilerOptionValue(value, enumMap)
+	return result
 }
 
 // addImpliedOptions adds compiler options that are implied by other explicitly-set options,
@@ -300,8 +176,6 @@ func serializeEnumValue(value any, enumMap *collections.OrderedMap[string, any])
 func addImpliedOptions(
 	optionMap *collections.OrderedMap[string, any],
 	options *core.CompilerOptions,
-	_ string,
-	_ tspath.ComparePathsOptions,
 ) {
 	// Build the set of explicitly provided option JSON names (e.g., "module", "target").
 	provided := make(map[string]bool, optionMap.Size())
@@ -334,7 +208,7 @@ func addImpliedOptions(
 		defaultVal := entry.compute(defaultOpts)
 
 		// If the implied value equals the default, this option doesn't add useful information.
-		if reflect.DeepEqual(implied, defaultVal) {
+		if implied == defaultVal {
 			continue
 		}
 
@@ -368,7 +242,7 @@ func serializeImpliedOptionValue(optionDecl *CommandLineOption, value any) any {
 	}
 	enumMap := optionDecl.EnumMap()
 	if enumMap != nil {
-		s := serializeEnumValue(value, enumMap)
+		s := serializeCompilerOptionEnum(value)
 		if s != "" {
 			return s
 		}

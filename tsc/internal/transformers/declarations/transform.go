@@ -26,21 +26,18 @@ type ReferencedFilePair struct {
 }
 
 type OutputPaths interface {
-	DeclarationFilePath() string
-	JsFilePath() string
+	DeclarationFilePath() tspath.RootedFilePath
+	JsFilePath() tspath.RootedFilePath
 }
 
 // Used to be passed in the TransformationContext, which is now just an EmitContext
 type DeclarationEmitHost interface {
 	modulespecifiers.ModuleSpecifierGenerationHost
-	GetCurrentDirectory() string
-	UseCaseSensitiveFileNames() bool
+	CaseSensitivity() tspath.CaseSensitivity
 	GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.FileReference) *ast.SourceFile
 
 	GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) OutputPaths
 	SourceFileMayBeEmitted(file *ast.SourceFile, forceDtsEmit bool) bool
-	GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags
-	GetEmitResolver() printer.EmitResolver
 }
 
 type thisPropertyAssignmentKey struct {
@@ -67,8 +64,7 @@ type DeclarationTransformer struct {
 	tracker             *SymbolTrackerImpl
 	state               *SymbolTrackerSharedState
 	resolver            printer.EmitResolver
-	declarationFilePath string
-	declarationMapPath  string
+	declarationFilePath tspath.RootedFilePath
 
 	needsDeclare                     bool
 	needsScopeFixMarker              bool
@@ -100,8 +96,11 @@ type DeclarationTransformer struct {
 }
 
 // TODO: Convert to transformers.TransformerFactory signature to allow more automatic composition with other transforms
-func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitContext, compilerOptions *core.CompilerOptions, declarationFilePath string, declarationMapPath string) *DeclarationTransformer {
-	resolver := host.GetEmitResolver()
+func NewDeclarationTransformer(host DeclarationEmitHost, resolver printer.EmitResolver, compilerOptions *core.CompilerOptions, declarationFilePath tspath.RootedFilePath) *DeclarationTransformer {
+	if resolver == nil || resolver.EmitContext() == nil {
+		panic("DeclarationTransformer requires an EmitResolver with an EmitContext")
+	}
+	context := resolver.EmitContext()
 	state := &SymbolTrackerSharedState{isolatedDeclarations: compilerOptions.IsolatedDeclarations.IsTrue(), stripInternal: compilerOptions.StripInternal.IsTrue(), resolver: resolver}
 	tracker := NewSymbolTracker(host, resolver, state)
 	// TODO: Use new host GetOutputPathsFor method instead of passing in entrypoint paths (which will also better support bundled emit)
@@ -112,7 +111,6 @@ func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitCo
 		state:               state,
 		resolver:            resolver,
 		declarationFilePath: declarationFilePath,
-		declarationMapPath:  declarationMapPath,
 	}
 	tx.state.reportExpandoFunctionErrors = func(node *ast.Node) {
 		if !tx.state.isolatedDeclarations {
@@ -120,8 +118,8 @@ func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitCo
 		}
 		props := resolver.GetPropertiesOfContainerFunction(node)
 		for _, p := range props {
-			if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration) {
-				errorTarget := p.ValueDeclaration
+			if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration()) {
+				errorTarget := p.ValueDeclaration()
 				if ast.IsBinaryExpression(errorTarget) {
 					errorTarget = errorTarget.AsBinaryExpression().Left
 				}
@@ -356,8 +354,8 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast
 	combinedStatements.Loc = statements.Loc // setTextRange
 	if ast.IsExternalOrCommonJSModule(node) {
 		if ast.IsInJSFile(node.AsNode()) {
-			if exportEquals := node.Symbol.Exports[ast.InternalSymbolNameExportEquals]; exportEquals != nil && len(exportEquals.Declarations) > 1 {
-				for _, node := range exportEquals.Declarations {
+			if exportEquals := node.Symbol.Exports()[ast.InternalSymbolNameExportEquals]; exportEquals != nil && len(exportEquals.Declarations()) > 1 {
+				for _, node := range exportEquals.Declarations() {
 					tx.state.addDiagnostic(createDiagnosticForNode(node, diagnostics.Multiple_module_exports_assignments_cannot_be_serialized_for_declaration_emit))
 				}
 			}
@@ -370,12 +368,11 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast
 			combinedStatements = withMarker
 		}
 	}
-	outputFilePath := tspath.GetDirectoryPath(tspath.NormalizeSlashes(tx.declarationFilePath))
 	result := tx.Factory().UpdateSourceFile(node, combinedStatements, node.EndOfFileToken)
 	result.AsSourceFile().LibReferenceDirectives = tx.getLibReferences()
 	result.AsSourceFile().TypeReferenceDirectives = tx.getTypeReferences()
 	result.AsSourceFile().IsDeclarationFile = true
-	result.AsSourceFile().ReferencedFiles = tx.getReferencedFiles(outputFilePath)
+	result.AsSourceFile().ReferencedFiles = tx.getReferencedFiles(tx.declarationFilePath.Directory())
 	return result.AsNode()
 }
 
@@ -461,7 +458,7 @@ func (tx *DeclarationTransformer) transformAndReplaceLatePaintedStatements(state
 	return tx.Factory().NewNodeList(results)
 }
 
-func (tx *DeclarationTransformer) getReferencedFiles(outputFilePath string) (results []*ast.FileReference) {
+func (tx *DeclarationTransformer) getReferencedFiles(outputFilePath tspath.RootedDirectoryPath) (results []*ast.FileReference) {
 	// Handle path rewrites for triple slash ref comments
 	for _, pair := range tx.rawReferencedFiles {
 		sourceFile := pair.file
@@ -476,34 +473,31 @@ func (tx *DeclarationTransformer) getReferencedFiles(outputFilePath string) (res
 			continue
 		}
 
-		var declFileName string
+		var declFileName tspath.RootedFilePath
 		if file.IsDeclarationFile {
 			declFileName = file.FileName()
 		} else {
 			paths := tx.host.GetOutputPathsFor(file, true)
 			// Try to use output path for referenced file, or output js path if that doesn't exist, or the input path if all else fails
 			declFileName = paths.DeclarationFilePath()
-			if len(declFileName) == 0 {
+			if declFileName == "" {
 				declFileName = paths.JsFilePath()
 			}
-			if len(declFileName) == 0 {
+			if declFileName == "" {
 				declFileName = file.FileName()
 			}
 		}
 		// Should only be missing if the source file is missing a fileName (at which point we can't name a reference to it anyway)
 		// TODO: Shouldn't this be a crash or assert instead of a silent continue?
-		if len(declFileName) == 0 {
+		if declFileName == "" {
 			continue
 		}
 
 		fileName := tspath.GetRelativePathToDirectoryOrUrl(
-			outputFilePath,
-			declFileName,
-			false, // TODO: Probably unsafe to assume this isn't a URL, but that's what strada does
-			tspath.ComparePathsOptions{
-				CurrentDirectory:          tx.host.GetCurrentDirectory(),
-				UseCaseSensitiveFileNames: tx.host.UseCaseSensitiveFileNames(),
-			},
+			outputFilePath.AsString(),
+			declFileName.AsString(),
+			false,
+			tx.host.CaseSensitivity(),
 		)
 
 		results = append(results, &ast.FileReference{
@@ -825,7 +819,7 @@ func (tx *DeclarationTransformer) transformExpressionWithTypeArguments(input *as
 }
 
 func (tx *DeclarationTransformer) transformTypeParameterDeclaration(input *ast.TypeParameterDeclaration) *ast.Node {
-	if isPrivateMethodTypeParameter(tx.host, input) && (input.DefaultType != nil || input.Constraint != nil) {
+	if isPrivateMethodTypeParameter(tx.resolver, input) && (input.DefaultType != nil || input.Constraint != nil) {
 		return tx.Factory().UpdateTypeParameterDeclaration(
 			input,
 			input.Modifiers(),
@@ -1011,7 +1005,7 @@ func (tx *DeclarationTransformer) transformSetAccessorDeclaration(input *ast.Set
 		tx.ensureModifiers(input.AsNode()),
 		input.Name(),
 		nil, // accessors shouldn't have type params
-		tx.updateAccessorParamList(input.AsNode(), tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0),
+		tx.updateAccessorParamList(input.AsNode(), tx.resolver.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0),
 		nil,
 		nil,
 		nil,
@@ -1027,7 +1021,7 @@ func (tx *DeclarationTransformer) transformGetAccesorDeclaration(input *ast.GetA
 		tx.ensureModifiers(input.AsNode()),
 		input.Name(),
 		nil, // accessors shouldn't have type params
-		tx.updateAccessorParamList(input.AsNode(), tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0),
+		tx.updateAccessorParamList(input.AsNode(), tx.resolver.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0),
 		tx.ensureType(input.AsNode(), false),
 		nil,
 		nil,
@@ -1094,7 +1088,7 @@ func (tx *DeclarationTransformer) transformConstructSignatureDeclaration(input *
 }
 
 func (tx *DeclarationTransformer) omitPrivateMethodType(input *ast.Node) *ast.Node {
-	if input.Symbol() != nil && len(input.Symbol().Declarations) > 0 && input.Symbol().Declarations[0] != input {
+	if input.Symbol() != nil && len(input.Symbol().Declarations()) > 0 && input.Symbol().Declarations()[0] != input {
 		return nil
 	}
 	var result *ast.Node
@@ -1120,7 +1114,7 @@ func (tx *DeclarationTransformer) omitPrivateMethodType(input *ast.Node) *ast.No
 }
 
 func (tx *DeclarationTransformer) transformMethodSignatureDeclaration(input *ast.MethodSignatureDeclaration) *ast.Node {
-	if tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0 {
+	if tx.resolver.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0 {
 		return tx.omitPrivateMethodType(input.AsNode())
 	} else if ast.IsPrivateIdentifier(input.Name()) {
 		return nil
@@ -1138,7 +1132,7 @@ func (tx *DeclarationTransformer) transformMethodSignatureDeclaration(input *ast
 }
 
 func (tx *DeclarationTransformer) transformMethodDeclaration(input *ast.MethodDeclaration) *ast.Node {
-	if tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0 {
+	if tx.resolver.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0 {
 		return tx.omitPrivateMethodType(input.AsNode())
 	} else if ast.IsPrivateIdentifier(input.Name()) {
 		return nil
@@ -1231,9 +1225,18 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 	tx.resultHasScopeMarker = true
 	if ast.IsIdentifier(expression) && (ast.IsSourceFile(input.Parent) || ast.IsModuleBlock(input.Parent)) {
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, expression)
+		tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 		tx.preserveJsDoc(exportAssignment, input)
 		return exportAssignment
 	}
+
+	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+		return &SymbolAccessibilityDiagnostic{
+			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
+			errorNode:         input,
+		}
+	}
+	tx.tracker.PushErrorFallbackNode(assignment)
 
 	// Check if the expression is a class expression - emit as a class declaration + export assignment
 	unwrapped := ast.SkipOuterExpressions(expression, ast.OEKExpressionTypePassthrough)
@@ -1244,9 +1247,11 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 			mods = append(mods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
 		}
 		classDecl := tx.transformClassExpressionToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods))
+		tx.tracker.PopErrorFallbackNode()
 		tx.preserveJsDoc(classDecl, input)
 		// Reuse the same name node for the export so unique names resolve consistently
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+		tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 		tx.removeAllComments(exportAssignment)
 		return tx.Factory().NewSyntaxList([]*ast.Node{exportAssignment, classDecl})
 	} else if ast.IsFunctionLike(unwrapped) {
@@ -1257,25 +1262,20 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		}
 		fullSignatureType := assignment.Type()
 		funcDecl := tx.transformFunctionLikeToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods), fullSignatureType)
+		tx.tracker.PopErrorFallbackNode()
 		tx.preserveJsDoc(funcDecl, input)
 		// Reuse the same name node for the export so unique names resolve consistently
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+		tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 		tx.removeAllComments(exportAssignment)
 		return tx.Factory().NewSyntaxList([]*ast.Node{exportAssignment, funcDecl})
 	}
 
 	// expression is non-identifier, create _default typed variable to reference
-	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
-		return &SymbolAccessibilityDiagnostic{
-			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
-			errorNode:         input,
-		}
-	}
 	tx.cjsExportAssignmentName = newId
-	tx.tracker.PushErrorFallbackNode(assignment)
 	var type_, initializer *ast.Node
 	if ast.IsPrimitiveLiteralValue(unwrapParenthesizedExpression(expression), true) {
-		initializer = tx.resolver.CreateLiteralConstValue(tx.EmitContext(), tx.EmitContext().ParseNode(assignment), tx.tracker)
+		initializer = tx.resolver.CreateLiteralConstValue(tx.EmitContext().ParseNode(assignment), tx.tracker)
 	}
 	if initializer == nil {
 		type_ = tx.ensureType(assignment, false)
@@ -1290,6 +1290,7 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 	}
 	statement := tx.Factory().NewVariableStatement(modList, tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst))
 	exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+	tx.EmitContext().AssignSourceMapRange(exportAssignment, input)
 	// Remove comments from the export declaration and copy them onto the synthetic _default declaration
 	tx.preserveJsDoc(statement, input)
 	return tx.Factory().NewSyntaxList([]*ast.Node{statement, exportAssignment})
@@ -1490,7 +1491,7 @@ func (tx *DeclarationTransformer) transformCommonJSExportWorker(input *ast.Node,
 			tx.preserveJsDoc(statement, input)
 			tx.removeAllComments(assignment)
 			return tx.Factory().NewSyntaxList([]*ast.Node{statement, assignment})
-		} else if tx.host.GetEmitResolver().GetReferencedValueDeclaration(name) == input || tx.host.GetEmitResolver().GetReferencedValueDeclaration(name) == nil {
+		} else if tx.resolver.GetReferencedValueDeclaration(name) == input || tx.resolver.GetReferencedValueDeclaration(name) == nil {
 			// only inline to a export var if the `name` lookup points at this assignment or nothing - if it points at something else, we must use a temp name
 			// export var name: Type
 			tx.tracker.PushErrorFallbackNode(input)
@@ -1561,7 +1562,7 @@ func (tx *DeclarationTransformer) wrapInCJSExportNamespace(content *ast.Node) *a
 
 func isCommonJSAliasExport(node *ast.Node) bool {
 	if ast.IsBinaryExpression(node) && ast.IsIdentifier(node.AsBinaryExpression().Right) {
-		if symbol := node.Symbol(); symbol != nil && len(symbol.Declarations) == 1 {
+		if symbol := node.Symbol(); symbol != nil && len(symbol.Declarations()) == 1 {
 			return true
 		}
 	}
@@ -1635,7 +1636,7 @@ func (tx *DeclarationTransformer) removeAllComments(node *ast.Node) {
 }
 
 func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool) *ast.Node {
-	if !ignorePrivate && tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(node), ast.ModifierFlagsPrivate) != 0 {
+	if !ignorePrivate && tx.resolver.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(node), ast.ModifierFlagsPrivate) != 0 {
 		// Private nodes emit no types (except private parameter properties, whose parameter types are actually visible)
 		return nil
 	}
@@ -1655,7 +1656,7 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 			if tx.inClassExpressionDeclaration {
 				jsFlags &^= nodebuilder.FlagsWriteClassExpressionAsTypeLiteral
 			}
-			res := tx.resolver.TryJSTypeNodeToTypeNode(tx.EmitContext(), node.Type(), tx.enclosingDeclaration, jsFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
+			res := tx.resolver.TryJSTypeNodeToTypeNode(node.Type(), tx.enclosingDeclaration, jsFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
 			if res != nil {
 				return res
 			}
@@ -1681,9 +1682,9 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 		flags &^= nodebuilder.FlagsWriteClassExpressionAsTypeLiteral
 	}
 	if ast.HasInferredType(node) {
-		typeNode = tx.resolver.CreateTypeOfDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, flags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
+		typeNode = tx.resolver.CreateTypeOfDeclaration(node, tx.enclosingDeclaration, flags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
 	} else if ast.IsFunctionLike(node) {
-		typeNode = tx.resolver.CreateReturnTypeOfSignatureDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, flags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
+		typeNode = tx.resolver.CreateReturnTypeOfSignatureDeclaration(node, tx.enclosingDeclaration, flags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
 	} else {
 		debug.AssertNever(node)
 	}
@@ -1699,7 +1700,7 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 }
 
 func (tx *DeclarationTransformer) shouldPrintWithInitializer(node *ast.Node) bool {
-	return canHaveLiteralInitializer(tx.host, node) && node.Initializer() != nil && tx.resolver.IsLiteralConstDeclaration(tx.EmitContext().MostOriginal(node))
+	return canHaveLiteralInitializer(tx.resolver, node) && node.Initializer() != nil && tx.resolver.IsLiteralConstDeclaration(tx.EmitContext().MostOriginal(node))
 }
 
 func (tx *DeclarationTransformer) checkEntityNameVisibility(entityName *ast.Node, enclosingDeclaration *ast.Node) {
@@ -1909,7 +1910,7 @@ func (tx *DeclarationTransformer) stripExportModifiers(statement *ast.Node) *ast
 		return nil
 	}
 	parseNode := tx.EmitContext().ParseNode(statement)
-	if ast.IsImportEqualsDeclaration(statement) || (parseNode != nil && tx.host.GetEffectiveDeclarationFlags(parseNode, ast.ModifierFlagsDefault) != 0) || !ast.CanHaveModifiers(statement) {
+	if ast.IsImportEqualsDeclaration(statement) || (parseNode != nil && tx.resolver.GetEffectiveDeclarationFlags(parseNode, ast.ModifierFlagsDefault) != 0) || !ast.CanHaveModifiers(statement) {
 		// `export import` statements should remain as-is, as imports are _not_ implicitly exported in an ambient namespace
 		// Likewise, `export default` classes and the like and just be `default`, so we preserve their `export` modifiers, too
 		return statement
@@ -1965,7 +1966,6 @@ func (tx *DeclarationTransformer) buildClassMembers(classNode *ast.Node, extraMe
 	}
 
 	lateIndexes := tx.resolver.CreateLateBoundIndexSignatures(
-		tx.EmitContext(),
 		classNode,
 		tx.enclosingDeclaration,
 		declarationEmitNodeBuilderFlags,
@@ -2027,7 +2027,7 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 		varDecl := tx.Factory().NewVariableDeclaration(
 			newId,
 			nil,
-			tx.resolver.CreateTypeOfExpression(tx.EmitContext(), extendsClause.Expression(), input.AsNode(), declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker),
+			tx.resolver.CreateTypeOfExpression(extendsClause.Expression(), input.AsNode(), declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker),
 			nil,
 		)
 		var mods *ast.ModifierList
@@ -2356,7 +2356,7 @@ func (tx *DeclarationTransformer) ensureModifierFlags(node *ast.Node) ast.Modifi
 }
 
 func (tx *DeclarationTransformer) ensureTypeParams(node *ast.Node, params *ast.TypeParameterList) *ast.TypeParameterList {
-	if tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(node), ast.ModifierFlagsPrivate) != 0 {
+	if tx.resolver.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(node), ast.ModifierFlagsPrivate) != 0 {
 		return nil
 	}
 	var typeParameters *ast.TypeParameterList
@@ -2374,7 +2374,7 @@ func (tx *DeclarationTransformer) ensureTypeParams(node *ast.Node, params *ast.T
 	}
 
 	if data := node.FunctionLikeData(); data != nil && data.FullSignature != nil {
-		if nodes := tx.resolver.CreateTypeParametersOfSignatureDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker); nodes != nil {
+		if nodes := tx.resolver.CreateTypeParametersOfSignatureDeclaration(node, tx.enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker); nodes != nil {
 			typeParameters = &ast.TypeParameterList{
 				Loc:   node.Loc,
 				Nodes: nodes,
@@ -2390,7 +2390,7 @@ func (tx *DeclarationTransformer) ensureTypeParams(node *ast.Node, params *ast.T
 }
 
 func (tx *DeclarationTransformer) updateParamList(node *ast.Node, params *ast.ParameterList) *ast.ParameterList {
-	if tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(node), ast.ModifierFlagsPrivate) != 0 || len(params.Nodes) == 0 {
+	if tx.resolver.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(node), ast.ModifierFlagsPrivate) != 0 || len(params.Nodes) == 0 {
 		return tx.Factory().NewNodeList([]*ast.Node{})
 	}
 	results := make([]*ast.Node, len(params.Nodes))
@@ -2432,7 +2432,7 @@ func (tx *DeclarationTransformer) ensureNoInitializer(node *ast.Node) *ast.Node 
 		if !ast.IsPrimitiveLiteralValue(unwrappedInitializer, true) {
 			tx.tracker.ReportInferenceFallback(node)
 		}
-		return tx.resolver.CreateLiteralConstValue(tx.EmitContext(), tx.EmitContext().ParseNode(node), tx.tracker)
+		return tx.resolver.CreateLiteralConstValue(tx.EmitContext().ParseNode(node), tx.tracker)
 	}
 	return nil
 }
@@ -2728,7 +2728,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 	left := node.Left
 
 	symbol := node.Symbol
-	if symbol == nil || symbol.Flags&ast.SymbolFlagsAssignment == 0 {
+	if symbol == nil || symbol.Flags()&ast.SymbolFlagsAssignment == 0 {
 		return
 	}
 
@@ -2799,14 +2799,18 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 	_, cleanupDiagnosticContext := tx.setupDiagnosticContext(node.AsNode())
 	defer cleanupDiagnosticContext()
 
+	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
+
 	if ast.IsIdentifier(node.Right) {
+		if !preexistingExpandoHasExport {
+			tx.addExportModifierToExpandoMembers(hostId)
+		}
 		// alias-like, emit an `export {name}` or `export {name as alias}`
 		result := tx.transformBinaryExpressionToExportDeclaration(node.AsNode(), exportName)
 		tx.expandoMembers[hostId] = append(tx.expandoMembers[hostId], result)
 		return
 	}
 
-	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
 	var varModifiers *ast.ModifierList
 
 	if preexistingExpandoHasExport {
@@ -2846,16 +2850,22 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 			},
 		))
 		statements = append(statements, tx.Factory().NewExportDeclaration(nil /*modifiers*/, false /*isTypeOnly*/, namedExports, nil /*moduleSpecifier*/, nil /*attributes*/))
-	}
-
-	if len(statements) > 1 && !preexistingExpandoHasExport {
-		// Add an `export` modifier to all existing expando members so they remain exported after the `export {}` is added
-		for _, decl := range tx.expandoMembers[hostId] {
-			modifierFlags := ast.ModifierFlagsExport | ast.GetCombinedModifierFlags(decl)
-			decl.AsMutable().SetModifiers(tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier)))
+		if !preexistingExpandoHasExport {
+			// Done before adding statements to expando members to keep the initial variable statement, before we rename anything, private
+			tx.addExportModifierToExpandoMembers(hostId)
 		}
 	}
+
 	tx.expandoMembers[hostId] = append(tx.expandoMembers[hostId], statements...)
+}
+
+func (tx *DeclarationTransformer) addExportModifierToExpandoMembers(hostId ast.NodeId) {
+	// Add an `export` modifier to all existing expando members so they remain exported after the `export {}` is added
+	for _, decl := range tx.expandoMembers[hostId] {
+		// only invoked when `tx.expandoMembers` does not *yet* contain an `export` declaration, so no need to skip one here to prevent `export export {}`
+		modifierFlags := ast.ModifierFlagsExport | ast.GetCombinedModifierFlags(decl)
+		decl.AsMutable().SetModifiers(tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier)))
+	}
 }
 
 func (tx *DeclarationTransformer) getExpandoHostId(declaration *ast.Declaration) ast.NodeId {

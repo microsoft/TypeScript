@@ -142,29 +142,29 @@ func (p *checkerPool) GetChecker(ctx context.Context, file *ast.SourceFile) (*ch
 	}
 }
 
-// tryReacquireForRequest checks whether the given request already has an
-// associated checker. If so, it either returns the checker directly (still held)
-// or reacquires it by claiming a semaphore slot. The caller must provide the
+// tryReacquireForRequest claims a semaphore slot, then checks whether the given
+// request has an idle associated checker. The caller must provide the
 // appropriate semaphore channel and indicate whether this is a diagnostics
 // request (isDiag). If the associated checker is in the wrong category
 // (e.g. a diagnostics index for a query request), the association is deleted
 // and normal acquisition proceeds.
 //
-// Returns (checker, release, true) if the request was served (either still held
-// or reclaimed). Returns (nil, nil, false) if the caller must proceed with
+// Request affinity is only a preference for an idle checker, not permission to
+// reuse a held checker: concurrent acquisitions can share the same request ID.
+// Returns (checker, release, true) if the checker was reclaimed.
+// Returns (nil, nil, false) if the caller must proceed with
 // normal acquisition — in this case, a semaphore slot has already been claimed.
 // Must NOT be called with p.mu held.
 func (p *checkerPool) tryReacquireForRequest(requestID string, sem chan<- struct{}, isDiag bool) (*checker.Checker, func(), bool) {
+	sem <- struct{}{}
 	if requestID == "" {
-		sem <- struct{}{}
 		return nil, nil, false
 	}
 
 	p.mu.Lock()
+	defer p.mu.Unlock()
 	index, ok := p.requestAssociations[requestID]
 	if !ok {
-		p.mu.Unlock()
-		sem <- struct{}{}
 		return nil, nil, false
 	}
 
@@ -172,46 +172,20 @@ func (p *checkerPool) tryReacquireForRequest(requestID string, sem chan<- struct
 	// Index 0 is for diagnostics; indices 1+ are for queries.
 	if (isDiag && index != 0) || (!isDiag && index == 0) {
 		delete(p.requestAssociations, requestID)
-		p.mu.Unlock()
-		sem <- struct{}{}
 		return nil, nil, false
 	}
 
 	c := p.checkers[index]
 	if c == nil {
 		delete(p.requestAssociations, requestID)
-		p.mu.Unlock()
-		sem <- struct{}{}
 		return nil, nil, false
 	}
 
-	held := p.heldBy[index]
-	if held == requestID {
-		// Same request, checker still held — return without claiming a slot.
-		p.mu.Unlock()
-		return c, noop, true
+	if p.heldBy[index] == "" {
+		p.heldBy[index] = requestID
+		return c, p.createRelease(requestID, index, c), true
 	}
 
-	if held == "" {
-		// Same request reacquiring after release — need a semaphore slot.
-		p.mu.Unlock()
-		sem <- struct{}{}
-		p.mu.Lock()
-		// Re-check: checker may have been disposed while waiting for the slot.
-		if cc := p.checkers[index]; cc == c && p.heldBy[index] == "" {
-			p.heldBy[index] = requestID
-			p.mu.Unlock()
-			return c, p.createRelease(requestID, index, c), true
-		}
-		p.mu.Unlock()
-		// Checker was replaced/disposed while waiting for the slot.
-		// The slot is still claimed; the caller will use it for normal acquisition.
-		return nil, nil, false
-	}
-
-	// Checker held by another request — claim a slot normally.
-	p.mu.Unlock()
-	sem <- struct{}{}
 	return nil, nil, false
 }
 
@@ -351,7 +325,10 @@ func (p *checkerPool) createRelease(requestID string, index int, c *checker.Chec
 			p.log(fmt.Sprintf("checkerpool: Checker %d for request %s was canceled, disposing", index, holdTag(requestID)))
 			p.disposeCheckerLocked(index, c)
 		} else {
-			p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
+			// Query checkers can produce incidental errors while serializing types.
+			if index == 0 {
+				p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
+			}
 			p.heldBy[index] = ""
 			p.lastReleased[index] = time.Now()
 			if !p.discarded {
@@ -491,8 +468,8 @@ func (p *checkerPool) mergeGlobalDiagnosticsFromCheckerLocked(index int, c *chec
 	}
 }
 
-// GetGlobalDiagnostics returns the accumulated global diagnostics collected from
-// all checkers that have been used so far in this pool's lifetime.
+// GetGlobalDiagnostics returns the global diagnostics accumulated from the dedicated
+// diagnostics checker across its instances during this pool's lifetime.
 func (p *checkerPool) GetGlobalDiagnostics() []*ast.Diagnostic {
 	p.mu.Lock()
 	defer p.mu.Unlock()
@@ -526,5 +503,3 @@ func (p *checkerPool) Discard() {
 		p.cleanupTimer = nil
 	}
 }
-
-func noop() {}

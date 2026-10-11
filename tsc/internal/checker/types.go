@@ -11,8 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/evaluator"
 )
 
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=SignatureKind -output=stringer_generated.go
-//go:generate npx dprint fmt stringer_generated.go
+//go:generate npx hereby generate:checker
 
 // ParseFlags
 
@@ -642,8 +641,7 @@ const (
 	// Flags that require TypeFlags.Object and ObjectFlags.Reference
 	ObjectFlagsIdenticalBaseTypeCalculated = 1 << 27 // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
 	ObjectFlagsIdenticalBaseTypeExists     = 1 << 28 // has a defined cachedEquivalentBaseType member
-	ObjectFlagsUnresolvedMembers           = 1 << 29 // Member resolution in process
-	ObjectFlagsFromTypeNode                = 1 << 30 // Originates in resolution of AST type node
+	ObjectFlagsFromTypeNode                = 1 << 29 // Originates in resolution of AST type node
 	// Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
 	ObjectFlagsIsGenericTypeComputed = 1 << 22 // IsGenericObjectType flag has been computed
 	ObjectFlagsIsGenericObjectType   = 1 << 23 // Union or intersection contains generic object type
@@ -1119,6 +1117,17 @@ type MappedType struct {
 	modifiersType        *Type
 	resolvedApparentType *Type
 	containsError        bool
+}
+
+func (t *MappedType) TypeParameter() *Type  { return t.typeParameter }
+func (t *MappedType) ConstraintType() *Type { return t.constraintType }
+func (t *MappedType) NameType() *Type       { return t.nameType }
+func (t *MappedType) TemplateType() *Type   { return t.templateType }
+func (t *MappedType) ResolveComponents(c *Checker, typ *Type) {
+	c.getTypeParameterFromMappedType(typ)
+	c.getConstraintTypeFromMappedType(typ)
+	c.getNameTypeFromMappedType(typ)
+	c.getTemplateTypeFromMappedType(typ)
 }
 
 // ReverseMappedType
