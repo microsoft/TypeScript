@@ -285,6 +285,7 @@ type InferenceContext struct {
 	outerReturnMapper             *TypeMapper      // Type mapper for inferences from return types of outer function (if any)
 	inferredTypeParameters        []*Type          // Inferred type parameters for function result
 	intraExpressionInferenceSites []IntraExpressionInferenceSite
+	mapperStorage                 [2]InferenceTypeMapper
 }
 
 type InferenceInfo struct {
