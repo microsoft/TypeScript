@@ -670,6 +670,16 @@ type Checker struct {
 	symbolWithDataArena                         core.Arena[ast.SymbolWithData]
 	signatureArena                              core.Arena[Signature]
 	indexInfoArena                              core.Arena[IndexInfo]
+	literalTypeArena                            core.Arena[LiteralType]
+	objectTypeArena                             core.Arena[ObjectType]
+	typeReferenceArena                          core.Arena[TypeReference]
+	interfaceTypeArena                          core.Arena[InterfaceType]
+	mappedTypeArena                             core.Arena[MappedType]
+	unionTypeArena                              core.Arena[UnionType]
+	intersectionTypeArena                       core.Arena[IntersectionType]
+	typeParameterArena                          core.Arena[TypeParameter]
+	indexedAccessTypeArena                      core.Arena[IndexedAccessType]
+	conditionalTypeArena                        core.Arena[ConditionalType]
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
 	factory                                     ast.NodeFactory
@@ -25579,7 +25589,7 @@ func (c *Checker) createUnknownUnionType() *Type {
 }
 
 func (c *Checker) newLiteralType(flags TypeFlags, value any, regularType *Type) *Type {
-	data := &LiteralType{}
+	data := c.literalTypeArena.New()
 	data.value = value
 	t := c.newType(flags, ObjectFlagsNone, data.AsType(), typeKindLiteral)
 	if regularType != nil {
@@ -25603,16 +25613,16 @@ func (c *Checker) newObjectType(objectFlags ObjectFlags, symbol *ast.Symbol) *Ty
 	var kind typeKind
 	switch {
 	case objectFlags&ObjectFlagsClassOrInterface != 0:
-		t = (&InterfaceType{}).AsType()
+		t = c.interfaceTypeArena.New().AsType()
 		kind = typeKindInterface
 	case objectFlags&ObjectFlagsTuple != 0:
 		t = (&TupleType{}).AsType()
 		kind = typeKindTuple
 	case objectFlags&ObjectFlagsReference != 0:
-		t = (&TypeReference{}).AsType()
+		t = c.typeReferenceArena.New().AsType()
 		kind = typeKindTypeReference
 	case objectFlags&ObjectFlagsMapped != 0:
-		t = (&MappedType{}).AsType()
+		t = c.mappedTypeArena.New().AsType()
 		kind = typeKindMapped
 	case objectFlags&ObjectFlagsReverseMapped != 0:
 		t = (&ReverseMappedType{}).AsType()
@@ -25624,7 +25634,7 @@ func (c *Checker) newObjectType(objectFlags ObjectFlags, symbol *ast.Symbol) *Ty
 		t = (&InstantiationExpressionType{}).AsType()
 		kind = typeKindInstantiationExpression
 	case objectFlags&ObjectFlagsAnonymous != 0:
-		t = (&ObjectType{}).AsType()
+		t = c.objectTypeArena.New().AsType()
 		kind = typeKindObject
 	default:
 		panic("Unhandled case in newObjectType")
@@ -25713,7 +25723,7 @@ func (c *Checker) setStructuredTypeMembers(t *Type, members ast.SymbolTable, cal
 }
 
 func (c *Checker) newTypeParameter(symbol *ast.Symbol) *Type {
-	t := c.newType(TypeFlagsTypeParameter, ObjectFlagsNone, (&TypeParameter{}).AsType(), typeKindTypeParameter)
+	t := c.newType(TypeFlagsTypeParameter, ObjectFlagsNone, c.typeParameterArena.New().AsType(), typeKindTypeParameter)
 	t.symbol = symbol
 	return t
 }
@@ -25733,19 +25743,19 @@ func (c *Checker) getPropagatingFlagsOfTypes(types []*Type, excludeKinds TypeFla
 }
 
 func (c *Checker) newUnionType(objectFlags ObjectFlags, types []*Type) *Type {
-	data := &UnionType{}
+	data := c.unionTypeArena.New()
 	data.types = types
 	return c.newType(TypeFlagsUnion, objectFlags, data.AsType(), typeKindUnion)
 }
 
 func (c *Checker) newIntersectionType(objectFlags ObjectFlags, types []*Type) *Type {
-	data := &IntersectionType{}
+	data := c.intersectionTypeArena.New()
 	data.types = types
 	return c.newType(TypeFlagsIntersection, objectFlags, data.AsType(), typeKindIntersection)
 }
 
 func (c *Checker) newIndexedAccessType(objectType *Type, indexType *Type, accessFlags AccessFlags) *Type {
-	data := &IndexedAccessType{}
+	data := c.indexedAccessTypeArena.New()
 	data.objectType = objectType
 	data.indexType = indexType
 	data.accessFlags = accessFlags
@@ -25775,7 +25785,7 @@ func (c *Checker) newStringMappingType(symbol *ast.Symbol, target *Type) *Type {
 }
 
 func (c *Checker) newConditionalType(root *ConditionalRoot, mapper *TypeMapper, combinedMapper *TypeMapper) *Type {
-	data := &ConditionalType{}
+	data := c.conditionalTypeArena.New()
 	data.root = root
 	data.checkType = c.instantiateType(root.checkType, mapper)
 	data.extendsType = c.instantiateType(root.extendsType, mapper)
