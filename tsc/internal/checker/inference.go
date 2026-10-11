@@ -1132,7 +1132,7 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 		checkFlags := ast.CheckFlagsReverseMapped | core.IfElse(readonlyMask && c.isReadonlySymbol(prop), ast.CheckFlagsReadonly, 0)
 		inferredProp := c.newSymbolEx(ast.SymbolFlagsProperty|prop.Flags()&optionalMask, prop.Name(), checkFlags)
 		inferredProp.SetDeclarations(prop.Declarations())
-		c.valueSymbolLinks.Get(inferredProp).nameType = c.valueSymbolLinks.Get(prop).nameType
+		c.valueSymbolLinks.Get(inferredProp).setNameType(c, c.valueSymbolLinks.Get(prop).getNameType())
 		links := c.ReverseMappedSymbolLinks.Get(inferredProp)
 		links.propertyType = c.getTypeOfSymbol(prop)
 		constraintTarget := r.constraintType.AsIndexType().target

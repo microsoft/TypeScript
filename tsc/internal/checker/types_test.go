@@ -359,3 +359,32 @@ func TestInferenceContextMappers(t *testing.T) { //nolint:paralleltest
 		}), float64(2))
 	}
 }
+
+func TestCompactValueSymbolLinksLayout(t *testing.T) {
+	t.Parallel()
+	assert.Assert(t, unsafe.Sizeof(ValueSymbolLinks{}) <= 5*unsafe.Sizeof(uintptr(0)))
+	c, types := newCompositeTestChecker()
+	var links ValueSymbolLinks
+	assert.Assert(t, links.getWriteType() == nil)
+	assert.Assert(t, links.getNameType() == nil)
+	assert.Assert(t, links.getContainingType() == nil)
+	links.setWriteType(c, nil)
+	links.setNameType(c, nil)
+	links.setContainingType(c, nil)
+	assert.Assert(t, links.extra == nil)
+	links.setWriteType(c, types[0])
+	links.setNameType(c, types[1])
+	links.setContainingType(c, types[2])
+	for range 1024 {
+		var other ValueSymbolLinks
+		other.setNameType(c, types[2])
+	}
+	runtime.GC()
+	assert.Equal(t, links.getWriteType(), types[0])
+	assert.Equal(t, links.getNameType(), types[1])
+	assert.Equal(t, links.getContainingType(), types[2])
+	links.setNameType(c, nil)
+	assert.Assert(t, links.getNameType() == nil)
+	assert.Equal(t, links.getWriteType(), types[0])
+	assert.Equal(t, links.getContainingType(), types[2])
+}

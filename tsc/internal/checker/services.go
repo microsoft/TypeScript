@@ -413,7 +413,7 @@ func (c *Checker) GetRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 
 func (c *Checker) GetMappedTypeSymbolOfProperty(symbol *ast.Symbol) *ast.Symbol {
 	if valueLinks := c.valueSymbolLinks.TryGet(symbol); valueLinks != nil {
-		return valueLinks.containingType.symbol
+		return valueLinks.getContainingType().symbol
 	}
 	return nil
 }
@@ -421,7 +421,7 @@ func (c *Checker) GetMappedTypeSymbolOfProperty(symbol *ast.Symbol) *ast.Symbol 
 func (c *Checker) getImmediateRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 	if symbol.CheckFlags()&ast.CheckFlagsSynthetic != 0 {
 		return core.MapNonNil(
-			c.valueSymbolLinks.Get(symbol).containingType.Types(),
+			c.valueSymbolLinks.Get(symbol).getContainingType().Types(),
 			func(t *Type) *ast.Symbol {
 				return c.getPropertyOfType(t, symbol.Name())
 			},

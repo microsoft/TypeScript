@@ -182,12 +182,67 @@ type SymbolReferenceLinks struct {
 
 type ValueSymbolLinks struct {
 	resolvedType                 *Type // Type of value symbol
-	writeType                    *Type
 	target                       *ast.Symbol
 	mapper                       *TypeMapper
-	nameType                     *Type
-	containingType               *Type // Mapped type for mapped type property, containing union or intersection type for synthetic property
+	extra                        *valueSymbolExtra
 	functionOrConstructorChecked bool
+}
+
+type valueSymbolExtra struct {
+	writeType      *Type
+	nameType       *Type
+	containingType *Type // Mapped type for mapped type property, containing union or intersection type for synthetic property
+}
+
+func (links *ValueSymbolLinks) getWriteType() *Type {
+	if links.extra == nil {
+		return nil
+	}
+	return links.extra.writeType
+}
+
+func (links *ValueSymbolLinks) getNameType() *Type {
+	if links.extra == nil {
+		return nil
+	}
+	return links.extra.nameType
+}
+
+func (links *ValueSymbolLinks) getContainingType() *Type {
+	if links.extra == nil {
+		return nil
+	}
+	return links.extra.containingType
+}
+
+func (links *ValueSymbolLinks) setWriteType(c *Checker, typ *Type) {
+	if links.extra == nil {
+		if typ == nil {
+			return
+		}
+		links.extra = c.valueSymbolExtraArena.New()
+	}
+	links.extra.writeType = typ
+}
+
+func (links *ValueSymbolLinks) setNameType(c *Checker, typ *Type) {
+	if links.extra == nil {
+		if typ == nil {
+			return
+		}
+		links.extra = c.valueSymbolExtraArena.New()
+	}
+	links.extra.nameType = typ
+}
+
+func (links *ValueSymbolLinks) setContainingType(c *Checker, typ *Type) {
+	if links.extra == nil {
+		if typ == nil {
+			return
+		}
+		links.extra = c.valueSymbolExtraArena.New()
+	}
+	links.extra.containingType = typ
 }
 
 // Additional links for mapped symbols
