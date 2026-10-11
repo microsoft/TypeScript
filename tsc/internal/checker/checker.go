@@ -17806,6 +17806,12 @@ func (b *keyBuilder) spill() {
 	b.inlineLength = 0
 }
 
+func (b *keyBuilder) reserve(size int) {
+	if b.overflowBuffer != nil || b.inlineLength+size > len(b.inlineBuffer) {
+		b.overflowBuffer = slices.Grow(b.overflowBuffer, b.inlineLength+size)
+	}
+}
+
 func (b *keyBuilder) writeByte(c byte) {
 	if b.inlineLength == len(b.inlineBuffer) {
 		b.spill()
@@ -17854,6 +17860,7 @@ func (b *keyBuilder) writeType(t *Type) {
 }
 
 func (b *keyBuilder) writeTypes(types []*Type) {
+	b.reserve(8 + 4*len(types))
 	b.writeInt(len(types))
 	for _, t := range types {
 		b.writeType(t)
