@@ -513,10 +513,10 @@ func CompareTypes(t1, t2 *Type) int {
 				// instantiateAnonymousType prepends a fresh type parameter mapping.
 				// Compare the effective instantiation, not the identity of that fresh parameter.
 				if m1 != nil {
-					m1 = m1.data.(*CompositeTypeMapper).m2
+					m1 = castTypeMapper[CompositeTypeMapper](m1, typeMapperComposite).m2
 				}
 				if m2 != nil {
-					m2 = m2.data.(*CompositeTypeMapper).m2
+					m2 = castTypeMapper[CompositeTypeMapper](m2, typeMapperComposite).m2
 				}
 			}
 			if c := compareTypeMappers(m1, m2); c != 0 {
@@ -730,22 +730,22 @@ func compareTypeMappers(m1, m2 *TypeMapper) int {
 	}
 	switch kind1 {
 	case TypeMapperKindSimple:
-		m1 := m1.data.(*SimpleTypeMapper)
-		m2 := m2.data.(*SimpleTypeMapper)
+		m1 := castTypeMapper[SimpleTypeMapper](m1, typeMapperSimple)
+		m2 := castTypeMapper[SimpleTypeMapper](m2, typeMapperSimple)
 		if c := CompareTypes(m1.source, m2.source); c != 0 {
 			return c
 		}
 		return CompareTypes(m1.target, m2.target)
 	case TypeMapperKindArray:
-		m1 := m1.data.(*ArrayTypeMapper)
-		m2 := m2.data.(*ArrayTypeMapper)
+		m1 := castTypeMapper[ArrayTypeMapper](m1, typeMapperArray)
+		m2 := castTypeMapper[ArrayTypeMapper](m2, typeMapperArray)
 		if c := compareTypeLists(m1.sources, m2.sources); c != 0 {
 			return c
 		}
 		return compareTypeLists(m1.targets, m2.targets)
 	case TypeMapperKindMerged:
-		m1 := m1.data.(*MergedTypeMapper)
-		m2 := m2.data.(*MergedTypeMapper)
+		m1 := castTypeMapper[MergedTypeMapper](m1, typeMapperMerged)
+		m2 := castTypeMapper[MergedTypeMapper](m2, typeMapperMerged)
 		if c := compareTypeMappers(m1.m1, m2.m1); c != 0 {
 			return c
 		}

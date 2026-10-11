@@ -1288,8 +1288,8 @@ func (c *Checker) newInferenceContextWorker(inferences []*InferenceInfo, signatu
 		flags:        flags,
 		compareTypes: compareTypes,
 	}
-	n.mapper = c.newInferenceTypeMapper(n, true /*fixing*/)
-	n.nonFixingMapper = c.newInferenceTypeMapper(n, false /*fixing*/)
+	n.mapper = c.initInferenceTypeMapper(&n.mapperStorage[0], n, true /*fixing*/)
+	n.nonFixingMapper = c.initInferenceTypeMapper(&n.mapperStorage[1], n, false /*fixing*/)
 	return n
 }
 

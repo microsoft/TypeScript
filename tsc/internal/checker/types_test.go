@@ -261,6 +261,7 @@ func BenchmarkCompositeTypeCacheHit(b *testing.B) {
 		c.newObjectType(ObjectFlagsInterface, nil),
 		c.newObjectType(ObjectFlagsInterface, nil),
 	}
+
 	c.getIntersectionType(objects)
 	c.removeType(union, types[1])
 	b.ReportAllocs()
@@ -269,5 +270,92 @@ func BenchmarkCompositeTypeCacheHit(b *testing.B) {
 		c.getIntersectionType(objects)
 		c.mapType(union, func(t *Type) *Type { return t })
 		c.removeType(union, types[1])
+	}
+}
+
+func TestTypeMapperDispatch(t *testing.T) {
+	t.Parallel()
+	c, types := newCompositeTestChecker()
+	source, target, other := types[0], types[1], types[2]
+	simple := newSimpleTypeMapper(source, target)
+	array := newArrayTypeMapper([]*Type{source, other}, []*Type{target, source})
+	merged := newMergedTypeMapper(simple, array)
+	for _, test := range []struct {
+		mapper *TypeMapper
+		kind   TypeMapperKind
+		result *Type
+	}{
+		{simple, TypeMapperKindSimple, target},
+		{array, TypeMapperKindArray, target},
+		{merged, TypeMapperKindMerged, target},
+		{newArrayToSingleTypeMapper([]*Type{source}, target), TypeMapperKindUnknown, target},
+		{newDeferredTypeMapper([]*Type{source}, []func() *Type{func() *Type { return target }}), TypeMapperKindUnknown, target},
+		{newFunctionTypeMapper(func(typ *Type) *Type {
+			if typ == source {
+				return target
+			}
+			return typ
+		}), TypeMapperKindUnknown, target},
+		{newCompositeTypeMapper(c, newSimpleTypeMapper(other, target), simple), TypeMapperKindUnknown, target},
+	} {
+		assert.Equal(t, test.mapper.Kind(), test.kind)
+		assert.Equal(t, test.mapper.Map(source), test.result)
+		assert.Assert(t, !test.mapper.MapsThisOnly())
+	}
+	assert.Equal(t, compareTypeMappers(simple, newSimpleTypeMapper(source, target)), 0)
+	assert.Equal(t, compareTypeMappers(array, newArrayTypeMapper([]*Type{source, other}, []*Type{target, source})), 0)
+	assert.Equal(t, compareTypeMappers(merged, newMergedTypeMapper(simple, array)), 0)
+	this := c.newTypeParameter(nil)
+	this.AsTypeParameter().isThisType = true
+	for _, mapper := range []*TypeMapper{
+		newSimpleTypeMapper(this, target),
+		newArrayTypeMapper([]*Type{this}, []*Type{target}),
+		newArrayToSingleTypeMapper([]*Type{this}, target),
+		newDeferredTypeMapper([]*Type{this}, []func() *Type{func() *Type { return target }}),
+	} {
+		assert.Assert(t, mapper.MapsThisOnly())
+		assert.Equal(t, mapper.Map(this), target)
+		assert.Equal(t, mapper.Map(other), other)
+	}
+}
+
+func TestCompactTypeMapperLayout(t *testing.T) {
+	t.Parallel()
+	assert.Assert(t, unsafe.Sizeof(SimpleTypeMapper{}) <= 3*unsafe.Sizeof(uintptr(0)))
+	assert.Assert(t, unsafe.Sizeof(MergedTypeMapper{}) <= 3*unsafe.Sizeof(uintptr(0)))
+	c, types := newCompositeTestChecker()
+	mapper := newSimpleTypeMapper(types[0], types[1])
+	assert.Assert(t, castTypeMapper[SimpleTypeMapper](mapper, typeMapperSimple).source == types[0])
+	func() {
+		defer func() { assert.Assert(t, recover() != nil) }()
+		castTypeMapper[ArrayTypeMapper](mapper, typeMapperArray)
+	}()
+	runtime.GC()
+	assert.Equal(t, mapper.Map(types[0]), types[1])
+	runtime.KeepAlive(c)
+}
+
+func TestInferenceContextMappers(t *testing.T) { //nolint:paralleltest
+	c, types := newCompositeTestChecker()
+	c.errorType = types[0]
+	info := newInferenceInfo(types[0])
+	info.inferredType = types[1]
+	info.candidates = []*Type{types[1]}
+	context := c.newInferenceContextWorker([]*InferenceInfo{info}, nil, InferenceFlagsNone, nil)
+	assert.Equal(t, context.nonFixingMapper.Map(types[0]), types[1])
+	assert.Assert(t, !info.isFixed)
+	clone := c.cloneInferenceContext(context, InferenceFlagsNone)
+	clone.inferences[0].candidates[0] = types[2]
+	assert.Equal(t, info.candidates[0], types[1])
+	assert.Equal(t, context.mapper.Map(types[0]), types[0])
+	assert.Assert(t, info.isFixed)
+	assert.Assert(t, !clone.inferences[0].isFixed)
+	assert.Equal(t, context.mapper.Map(types[2]), types[2])
+	runtime.GC()
+	assert.Equal(t, context.nonFixingMapper.Map(types[0]), types[0])
+	if !race.Enabled {
+		assert.Equal(t, testing.AllocsPerRun(10, func() {
+			c.newInferenceContextWorker([]*InferenceInfo{info}, nil, InferenceFlagsNone, nil)
+		}), float64(2))
 	}
 }
