@@ -779,9 +779,11 @@ func (t *Type) AsMappedType() *MappedType { return castType[MappedType](t, typeK
 func (t *Type) AsReverseMappedType() *ReverseMappedType {
 	return castType[ReverseMappedType](t, typeKindReverseMapped)
 }
+
 func (t *Type) AsEvolvingArrayType() *EvolvingArrayType {
 	return castType[EvolvingArrayType](t, typeKindEvolvingArray)
 }
+
 func (t *Type) AsTypeParameter() *TypeParameter {
 	return castType[TypeParameter](t, typeKindTypeParameter)
 }
@@ -793,15 +795,19 @@ func (t *Type) AsIndexType() *IndexType { return castType[IndexType](t, typeKind
 func (t *Type) AsIndexedAccessType() *IndexedAccessType {
 	return castType[IndexedAccessType](t, typeKindIndexedAccess)
 }
+
 func (t *Type) AsTemplateLiteralType() *TemplateLiteralType {
 	return castType[TemplateLiteralType](t, typeKindTemplateLiteral)
 }
+
 func (t *Type) AsStringMappingType() *StringMappingType {
 	return castType[StringMappingType](t, typeKindStringMapping)
 }
+
 func (t *Type) AsSubstitutionType() *SubstitutionType {
 	return castType[SubstitutionType](t, typeKindSubstitution)
 }
+
 func (t *Type) AsConditionalType() *ConditionalType {
 	return castType[ConditionalType](t, typeKindConditional)
 }
