@@ -468,6 +468,9 @@ func (tx *LegacyDecoratorsTransformer) transformClassDeclarationWithClassDecorat
 
 	tx.EmitContext().SetOriginal(classExpression, node.AsNode())
 	classExpression.Loc = location
+	// The class's synthetic comments are emitted once, on the variable statement.
+	tx.EmitContext().SetSyntheticLeadingComments(classExpression, nil)
+	tx.EmitContext().SetSyntheticTrailingComments(classExpression, nil)
 
 	//  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
 	//                                         or decoratedClassAlias if the class contain self-reference.
@@ -482,6 +485,8 @@ func (tx *LegacyDecoratorsTransformer) transformClassDeclarationWithClassDecorat
 		varInitializer,
 	)
 	tx.EmitContext().SetOriginal(varDecl, node.AsNode())
+	tx.EmitContext().SetSyntheticLeadingComments(varDecl, nil)
+	tx.EmitContext().SetSyntheticTrailingComments(varDecl, nil)
 
 	varDeclList := tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsLet)
 	varStatement := tx.Factory().NewVariableStatement(nil, varDeclList)
@@ -562,6 +567,8 @@ func (tx *LegacyDecoratorsTransformer) getConstructorDecorationStatement(node *a
 	if expression != nil {
 		result := tx.Factory().NewExpressionStatement(expression)
 		tx.EmitContext().SetOriginal(result, node.AsNode())
+		tx.EmitContext().SetSyntheticLeadingComments(result, nil)
+		tx.EmitContext().SetSyntheticTrailingComments(result, nil)
 		return result
 	}
 	return nil

@@ -1,0 +1,79 @@
+package tstransforms_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/checker"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/emittestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/parsetestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/transformers"
+	"github.com/microsoft/TypeScript/tsc/internal/transformers/tstransforms"
+)
+
+const decorateHelper = `var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+`
+
+// Synthetic comments attached to a declaration are copied by SetOriginal to every node created from
+// it, so each transform must keep them on exactly one of the emitted nodes.
+func TestSyntheticCommentsAreEmittedOnce(t *testing.T) {
+	t.Parallel()
+	data := []struct {
+		title  string
+		input  string
+		output string
+		newTx  func(opts *transformers.TransformOptions) *transformers.Transformer
+	}{
+		{
+			title:  "EnumDeclaration",
+			input:  "enum E { A }",
+			output: "/*leading*/ var E;\n(function (E) {\n    E[E[\"A\"] = 0] = \"A\";\n})(E || (E = {})); /*trailing*/",
+			newTx:  tstransforms.NewRuntimeSyntaxTransformer,
+		},
+		{
+			title:  "DecoratedClass",
+			input:  "declare function dec(c: any): any;\n@dec class C {}",
+			output: decorateHelper + "/*leading*/ let C = class C {\n}; /*trailing*/\nC = __decorate([\n    dec\n], C);",
+			newTx:  tstransforms.NewLegacyDecoratorsTransformer,
+		},
+		{
+			title:  "ModuleDeclaration",
+			input:  "namespace N { export const x = 1; }",
+			output: "/*leading*/ var N;\n(function (N) {\n    N.x = 1;\n})(N || (N = {})); /*trailing*/",
+			newTx:  tstransforms.NewRuntimeSyntaxTransformer,
+		},
+	}
+
+	for _, rec := range data {
+		t.Run(rec.title, func(t *testing.T) {
+			t.Parallel()
+			file := parsetestutil.ParseTypeScript(rec.input, false /*jsx*/)
+			parsetestutil.CheckDiagnostics(t, file)
+			compilerOptions := &core.CompilerOptions{ExperimentalDecorators: core.TSTrue}
+			esnext := func(ast.HasFileName) core.ModuleKind { return core.ModuleKindESNext }
+			c, _ := checker.NewChecker(&fakeProgram{
+				singleThreaded:              true,
+				compilerOptions:             compilerOptions,
+				files:                       []*ast.SourceFile{file},
+				getEmitModuleFormatOfFile:   esnext,
+				getImpliedNodeFormatForEmit: esnext,
+			}, nil)
+			emitContext := printer.NewEmitContext()
+			emitResolver := c.NewEmitResolver(emitContext)
+			declaration := file.Statements.Nodes[len(file.Statements.Nodes)-1]
+			emitContext.AddSyntheticLeadingComment(declaration, ast.KindMultiLineCommentTrivia, "leading", false /*hasTrailingNewLine*/)
+			emitContext.AddSyntheticTrailingComment(declaration, ast.KindMultiLineCommentTrivia, "trailing", false /*hasTrailingNewLine*/)
+			opts := &transformers.TransformOptions{CompilerOptions: compilerOptions, Context: emitContext, EmitResolver: emitResolver, Resolver: emitResolver}
+			file = tstransforms.NewTypeEraserTransformer(opts).TransformSourceFile(file)
+			file = rec.newTx(opts).TransformSourceFile(file)
+			emittestutil.CheckEmit(t, emitContext, file, rec.output)
+		})
+	}
+}

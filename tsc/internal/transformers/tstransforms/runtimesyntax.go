@@ -258,7 +258,8 @@ func (tx *RuntimeSyntaxTransformer) addVarForDeclaration(statements []*ast.State
 	varStatement := tx.Factory().NewVariableStatement(modifiers, varDecls)
 
 	tx.EmitContext().SetOriginal(varDecl, node)
-	// !!! synthetic comments
+	tx.EmitContext().SetSyntheticLeadingComments(varDecl, nil)
+	tx.EmitContext().SetSyntheticTrailingComments(varDecl, nil)
 	tx.EmitContext().SetOriginal(varStatement, node)
 
 	// Adjust the source map emit to match the old emitter.
