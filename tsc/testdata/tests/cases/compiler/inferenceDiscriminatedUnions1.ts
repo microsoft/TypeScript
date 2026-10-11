@@ -135,6 +135,9 @@ const reversedSourceUnion = inferInlineUnion(reversedTaggedSource);
 const broadTargetUnion = inferInlineUnion(broadSourceTag);
 const missingTargetUnion = inferInlineUnion(missingTag);
 
+declare function inferUnionWithFallback<T extends { type: "a" | "b" }, A, B>(value: T | Tagged<A, B>): [T, A, B];
+const nakedTypeParameter = inferUnionWithFallback({ type: "a", value: 42 });
+
 declare function inferNoInferOverloads<A, B>(first: Tagged<A, NoInfer<B>>, second: Tagged<A, B>): [A, B];
 declare function inferNoInferOverloads<A, B>(first: Tagged<NoInfer<A>, B>, second: Tagged<A, B>): [A, B];
 const noInferArguments = inferNoInferOverloads({ type: "a", value: 42 }, { type: "b", value: true });
@@ -145,6 +148,7 @@ const reversedTargetUnion = inferReversedUnion(taggedSource);
 
 declare function inferTwoDiscriminants<A, B>(value: { type: "a"; sub: 1; value: A } | { type: "b"; sub: 2; value: B }): [A, B];
 const unmatchedTargetUnion = inferTwoDiscriminants({ type: "a", sub: 2, value: 42 });
+const unmatchedTargetUnionReversedSource = inferTwoDiscriminants({ sub: 2, type: "a", value: 42 });
 
 declare function inferTwoDiscriminantsReversed<A, B>(value: { sub: 1; type: "a"; value: A } | { sub: 2; type: "b"; value: B }): [A, B];
 const unmatchedTargetUnionReversed = inferTwoDiscriminantsReversed({ type: "a", sub: 2, value: 42 });

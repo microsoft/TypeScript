@@ -243,13 +243,13 @@ const iterable = {
 };
 
 const doubles = mapAsyncIterable(iterable, (x) => x + x);
->doubles : AsyncGenerator<unknown, undefined, void>
->mapAsyncIterable(iterable, (x) => x + x) : AsyncGenerator<unknown, undefined, void>
+>doubles : AsyncGenerator<number, number, void>
+>mapAsyncIterable(iterable, (x) => x + x) : AsyncGenerator<number, number, void>
 >mapAsyncIterable : <T, U, R = undefined>(iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
 >iterable : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
->(x) => x + x : (x: unknown) => any
->x : unknown
->x + x : any
->x : unknown
->x : unknown
+>(x) => x + x : (x: number) => number
+>x : number
+>x + x : number
+>x : number
+>x : number
 

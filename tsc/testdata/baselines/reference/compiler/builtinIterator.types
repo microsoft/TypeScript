@@ -50,8 +50,8 @@ const zero = iterator.filter(isZero);
 >isZero : (x: number) => x is 0
 
 const iteratorFromBare = Iterator.from({
->iteratorFromBare : IteratorObject<unknown, undefined, unknown>
->Iterator.from({  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },}) : IteratorObject<unknown, undefined, unknown>
+>iteratorFromBare : IteratorObject<string, undefined, unknown>
+>Iterator.from({  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },}) : IteratorObject<string, undefined, unknown>
 >Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
 >Iterator : IteratorConstructor
 >from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>

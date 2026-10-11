@@ -249,26 +249,13 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	case target.flags&TypeFlagsUnionOrIntersection != 0:
 		c.inferToUnionOrIntersectionType(n, source, target)
 	case source.flags&TypeFlagsUnion != 0:
-		// Infer from each source union constituent, excluding incompatible fixed discriminants.
-		discriminants := c.getInferenceDiscriminants(source, target)
-	inferSources:
-		for _, sourceType := range source.Types() {
-			if len(discriminants) != 0 && sourceType.flags&(TypeFlagsObject|TypeFlagsIntersection) != 0 {
-				for _, targetProp := range discriminants {
-					sourceProp := c.getPropertyOfType(sourceType, targetProp.Name)
-					if sourceProp == nil {
-						continue
-					}
-					// Two optional tags always overlap through absence.
-					if sourceProp.Flags&ast.SymbolFlagsOptional != 0 && targetProp.Flags&ast.SymbolFlagsOptional != 0 {
-						continue
-					}
-					propType := c.getNonMissingTypeOfSymbol(sourceProp)
-					if isLiteralType(propType) && !c.isTypeAssignableTo(propType, c.getNonMissingTypeOfSymbol(targetProp)) {
-						continue inferSources
-					}
-				}
-			}
+		if discriminants := c.getInferenceDiscriminants(source, target); len(discriminants) != 0 {
+			discriminator := &TypeDiscriminator{c: c, props: discriminants, isRelatedTo: func(targetType *Type, sourceType *Type) Ternary {
+				return c.compareTypesAssignableSimple(sourceType, targetType)
+			}}
+			source = c.discriminateTypeByDiscriminableItems(source, discriminator)
+		}
+		for _, sourceType := range source.Distributed() {
 			c.inferFromTypes(n, sourceType, target)
 		}
 	case target.flags&TypeFlagsTemplateLiteral != 0:
@@ -475,18 +462,25 @@ func getTypeListDepth(types []*Type, maxDepth int) int {
 }
 
 func (c *Checker) inferToUnionOrIntersectionType(n *InferenceState, source *Type, target *Type) {
-	var discriminants [][]*ast.Symbol
+	// Each entry contains the remaining allowed targets for the corresponding source constituent.
+	// A nil entry means unrestricted.
+	var filteredTargetsBySource [][]*Type
 	if target.flags&TypeFlagsUnion != 0 {
 		sources := source.Distributed()
-		discriminants = make([][]*ast.Symbol, len(sources))
+		filteredTargetsBySource = make([][]*Type, len(sources))
 		for i, s := range sources {
-			discriminants[i] = c.getInferenceDiscriminants(target, s)
+			if discriminants := c.getInferenceDiscriminants(target, s); len(discriminants) != 0 {
+				discriminator := &TypeDiscriminator{c: c, props: discriminants, isRelatedTo: c.compareTypesAssignableSimple}
+				if filtered := c.discriminateTypeByDiscriminableItems(target, discriminator); filtered != target {
+					filteredTargetsBySource[i] = filtered.Distributed()
+				}
+			}
 		}
 	}
-	c.inferToMultipleTypes(n, source, target.Types(), target.flags, discriminants)
+	c.inferToMultipleTypes(n, source, target.Types(), target.flags, filteredTargetsBySource)
 }
 
-func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets []*Type, targetFlags TypeFlags, discriminants [][]*ast.Symbol) {
+func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets []*Type, targetFlags TypeFlags, filteredTargetsBySource [][]*Type) {
 	typeVariableCount := 0
 	if targetFlags&TypeFlagsUnion != 0 {
 		var nakedTypeVariable *Type
@@ -506,20 +500,21 @@ func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets 
 			if getInferenceInfoForType(n, t) != nil {
 				nakedTypeVariable = t
 				typeVariableCount++
+				// Naked type parameters still consume their entries in the filtered target lists.
+				for i, remaining := range filteredTargetsBySource {
+					if len(remaining) != 0 && remaining[0] == t {
+						filteredTargetsBySource[i] = remaining[1:]
+					}
+				}
 			} else {
-			inferSources:
 				for i := range sources {
-					if len(discriminants) != 0 && len(discriminants[i]) != 0 && t.flags&(TypeFlagsObject|TypeFlagsIntersection) != 0 {
-						for _, sourceProp := range discriminants[i] {
-							targetProp := c.getPropertyOfType(t, sourceProp.Name)
-							if targetProp == nil || sourceProp.Flags&ast.SymbolFlagsOptional != 0 && targetProp.Flags&ast.SymbolFlagsOptional != 0 {
-								continue
-							}
-							propType := c.getNonMissingTypeOfSymbol(targetProp)
-							if isLiteralType(propType) && !c.isTypeAssignableTo(c.getNonMissingTypeOfSymbol(sourceProp), propType) {
-								continue inferSources
-							}
+					if len(filteredTargetsBySource) != 0 && filteredTargetsBySource[i] != nil {
+						// Filtering preserves union order, so the next allowed target must be first.
+						remaining := filteredTargetsBySource[i]
+						if len(remaining) == 0 || remaining[0] != t {
+							continue
 						}
+						filteredTargetsBySource[i] = remaining[1:]
 					}
 					saveInferencePriority := n.inferencePriority
 					n.inferencePriority = InferencePriorityMaxValue

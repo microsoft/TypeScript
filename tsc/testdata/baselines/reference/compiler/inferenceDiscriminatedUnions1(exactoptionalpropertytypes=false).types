@@ -252,14 +252,14 @@ const r3 = pick(u1);
 >u1 : { kind: "b"; value: number; } | { kind: "a"; value: string; }
 
 const r4 = pick(u2);
->r4 : number
->pick(u2) : number
+>r4 : string
+>pick(u2) : string
 >pick : <T>(x: { kind: "a"; value: T; }) => T
 >u2 : { kind: string; value: number; } | { kind: "a"; value: string; }
 
 const broadResult = pick(broadTag);
->broadResult : number
->pick(broadTag) : number
+>broadResult : string
+>pick(broadTag) : string
 >pick : <T>(x: { kind: "a"; value: T; }) => T
 >broadTag : { kind: number; value: number; } | { kind: "a"; value: string; }
 
@@ -277,8 +277,8 @@ declare function two<T>(x: { kind: "a"; sub: 1; value: T }): T;
 >value : T
 
 const r6 = two(u4);
->r6 : unknown
->two(u4) : unknown
+>r6 : string
+>two(u4) : string
 >two : <T>(x: { kind: "a"; sub: 1; value: T; }) => T
 >u4 : { kind: "a"; sub: 2; value: string; } | { kind: "b"; sub: 1; value: number; }
 
@@ -290,8 +290,8 @@ declare function twoReversed<T>(x: { sub: 1; kind: "a"; value: T }): T;
 >value : T
 
 const r6Reversed = twoReversed(u4);
->r6Reversed : unknown
->twoReversed(u4) : unknown
+>r6Reversed : number
+>twoReversed(u4) : number
 >twoReversed : <T>(x: { sub: 1; kind: "a"; value: T; }) => T
 >u4 : { kind: "a"; sub: 2; value: string; } | { kind: "b"; sub: 1; value: number; }
 
@@ -367,7 +367,7 @@ export function withUnmatchedTag(): Success<string[]> | Failure<number[]> {
 >withUnmatchedTag : () => Success<string[]> | Failure<number[]>
 
     return unmatched();
->unmatched() : { kind: "other"; value: unknown; }
+>unmatched() : { kind: "other"; value: string[] | number[]; }
 >unmatched : <T>() => { kind: "other"; value: T; }
 }
 
@@ -379,7 +379,7 @@ export function optionalTarget(): OptionalOk<string[]> | Err<string> {
 >optionalTarget : () => OptionalOk<string[]> | Err<string>
 
     return optionalOk([]);
->optionalOk([]) : OptionalOk<[]>
+>optionalOk([]) : OptionalOk<readonly []>
 >optionalOk : <const T>(value: T) => OptionalOk<T>
 >[] : []
 }
@@ -420,7 +420,7 @@ export function explicitUndefined(): ExplicitOptionalOk<string[]> | Err<string> 
 >explicitUndefined : () => ExplicitOptionalOk<string[]> | Err<string>
 
     return explicitOptionalOk([]);
->explicitOptionalOk([]) : ExplicitOptionalOk<[]>
+>explicitOptionalOk([]) : ExplicitOptionalOk<readonly []>
 >explicitOptionalOk : <const T>(value: T) => ExplicitOptionalOk<T>
 >[] : []
 }
@@ -442,7 +442,7 @@ export function requiredUnionTag(): UnionOk<string[]> | Err<string> {
 >requiredUnionTag : () => UnionOk<string[]> | Err<string>
 
     return unionOk([]);
->unionOk([]) : UnionOk<[]>
+>unionOk([]) : UnionOk<readonly []>
 >unionOk : <const T>(value: T) => UnionOk<T>
 >[] : []
 }
@@ -528,6 +528,21 @@ const missingTargetUnion = inferInlineUnion(missingTag);
 >inferInlineUnion : <A, B>(value: { type: "a"; value: A; } | { type: "b"; value: B; }) => [A, B]
 >missingTag : { value: number; }
 
+declare function inferUnionWithFallback<T extends { type: "a" | "b" }, A, B>(value: T | Tagged<A, B>): [T, A, B];
+>inferUnionWithFallback : <T extends { type: "a" | "b"; }, A, B>(value: T | Tagged<A, B>) => [T, A, B]
+>type : "a" | "b"
+>value : T | Tagged<A, B>
+
+const nakedTypeParameter = inferUnionWithFallback({ type: "a", value: 42 });
+>nakedTypeParameter : [{ type: "a"; value: number; }, number, unknown]
+>inferUnionWithFallback({ type: "a", value: 42 }) : [{ type: "a"; value: number; }, number, unknown]
+>inferUnionWithFallback : <T extends { type: "a" | "b"; }, A, B>(value: T | Tagged<A, B>) => [T, A, B]
+>{ type: "a", value: 42 } : { type: "a"; value: number; }
+>type : "a"
+>"a" : "a"
+>value : number
+>42 : 42
+
 declare function inferNoInferOverloads<A, B>(first: Tagged<A, NoInfer<B>>, second: Tagged<A, B>): [A, B];
 >inferNoInferOverloads : { <A, B>(first: Tagged<A, NoInfer<B>>, second: Tagged<A, B>): [A, B]; <A_1, B_1>(first: Tagged<NoInfer<A_1>, B_1>, second: Tagged<A_1, B_1>): [A_1, B_1]; }
 >first : Tagged<A, NoInfer<B>>
@@ -593,14 +608,26 @@ declare function inferTwoDiscriminants<A, B>(value: { type: "a"; sub: 1; value: 
 >value : B
 
 const unmatchedTargetUnion = inferTwoDiscriminants({ type: "a", sub: 2, value: 42 });
->unmatchedTargetUnion : [unknown, unknown]
->inferTwoDiscriminants({ type: "a", sub: 2, value: 42 }) : [unknown, unknown]
+>unmatchedTargetUnion : [number, unknown]
+>inferTwoDiscriminants({ type: "a", sub: 2, value: 42 }) : [number, unknown]
 >inferTwoDiscriminants : <A, B>(value: { type: "a"; sub: 1; value: A; } | { type: "b"; sub: 2; value: B; }) => [A, B]
 >{ type: "a", sub: 2, value: 42 } : { type: "a"; sub: 2; value: number; }
 >type : "a"
 >"a" : "a"
 >sub : 2
 >2 : 2
+>value : number
+>42 : 42
+
+const unmatchedTargetUnionReversedSource = inferTwoDiscriminants({ sub: 2, type: "a", value: 42 });
+>unmatchedTargetUnionReversedSource : [unknown, number]
+>inferTwoDiscriminants({ sub: 2, type: "a", value: 42 }) : [unknown, number]
+>inferTwoDiscriminants : <A, B>(value: { type: "a"; sub: 1; value: A; } | { type: "b"; sub: 2; value: B; }) => [A, B]
+>{ sub: 2, type: "a", value: 42 } : { sub: 2; type: "a"; value: number; }
+>sub : 2
+>2 : 2
+>type : "a"
+>"a" : "a"
 >value : number
 >42 : 42
 
@@ -615,8 +642,8 @@ declare function inferTwoDiscriminantsReversed<A, B>(value: { sub: 1; type: "a";
 >value : B
 
 const unmatchedTargetUnionReversed = inferTwoDiscriminantsReversed({ type: "a", sub: 2, value: 42 });
->unmatchedTargetUnionReversed : [unknown, unknown]
->inferTwoDiscriminantsReversed({ type: "a", sub: 2, value: 42 }) : [unknown, unknown]
+>unmatchedTargetUnionReversed : [number, unknown]
+>inferTwoDiscriminantsReversed({ type: "a", sub: 2, value: 42 }) : [number, unknown]
 >inferTwoDiscriminantsReversed : <A, B>(value: { sub: 1; type: "a"; value: A; } | { sub: 2; type: "b"; value: B; }) => [A, B]
 >{ type: "a", sub: 2, value: 42 } : { type: "a"; sub: 2; value: number; }
 >type : "a"
