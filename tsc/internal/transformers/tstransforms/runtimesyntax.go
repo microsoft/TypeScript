@@ -338,6 +338,11 @@ func (tx *RuntimeSyntaxTransformer) visitEnumDeclaration(node *ast.EnumDeclarati
 	enumCall := tx.Factory().NewCallExpression(tx.Factory().NewParenthesizedExpression(enumFunc), nil, nil, tx.Factory().NewNodeList([]*ast.Node{enumArg}), ast.NodeFlagsNone)
 	enumStatement := tx.Factory().NewExpressionStatement(enumCall)
 	tx.EmitContext().SetOriginal(enumStatement, node.AsNode())
+	if varAdded {
+		// If a variable was added, synthetic comments are emitted on it, not on the enumStatement.
+		tx.EmitContext().SetSyntheticLeadingComments(enumStatement, nil)
+		tx.EmitContext().SetSyntheticTrailingComments(enumStatement, nil)
+	}
 	tx.EmitContext().AssignCommentAndSourceMapRanges(enumStatement, node.AsNode())
 	tx.EmitContext().AddEmitFlags(enumStatement, emitFlags)
 	return tx.Factory().NewSyntaxList(append(statements, enumStatement))
@@ -480,6 +485,11 @@ func (tx *RuntimeSyntaxTransformer) visitModuleDeclaration(node *ast.ModuleDecla
 	moduleCall := tx.Factory().NewCallExpression(tx.Factory().NewParenthesizedExpression(moduleFunc), nil, nil, tx.Factory().NewNodeList([]*ast.Node{moduleArg}), ast.NodeFlagsNone)
 	moduleStatement := tx.Factory().NewExpressionStatement(moduleCall)
 	tx.EmitContext().SetOriginal(moduleStatement, node.AsNode())
+	if varAdded {
+		// If a variable was added, synthetic comments are emitted on it, not on the moduleStatement.
+		tx.EmitContext().SetSyntheticLeadingComments(moduleStatement, nil)
+		tx.EmitContext().SetSyntheticTrailingComments(moduleStatement, nil)
+	}
 	tx.EmitContext().AssignCommentAndSourceMapRanges(moduleStatement, node.AsNode())
 	tx.EmitContext().AddEmitFlags(moduleStatement, emitFlags)
 	return tx.Factory().NewSyntaxList(append(statements, moduleStatement))
