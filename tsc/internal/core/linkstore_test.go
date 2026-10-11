@@ -1,8 +1,8 @@
 package core_test
 
 import (
-	"fmt"
 	"runtime"
+	"strconv"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"

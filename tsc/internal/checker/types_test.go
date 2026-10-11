@@ -2,8 +2,8 @@ package checker
 
 import (
 	"encoding/binary"
-	"fmt"
 	"runtime"
+	"strconv"
 	"strings"
 	"testing"
 	"unsafe"
