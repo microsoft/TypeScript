@@ -4,6 +4,7 @@ import (
 	"strings"
 	"sync/atomic"
 
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 )
 
@@ -23,10 +24,20 @@ type symbolData struct {
 	name             string
 	declarations     []*Node
 	valueDeclaration *Node
-	members          SymbolTable
-	exports          SymbolTable
 	parent           *Symbol
-	exportSymbol     *Symbol
+	extra            *symbolExtra
+}
+
+type symbolExtra struct {
+	members      SymbolTable
+	exports      SymbolTable
+	exportSymbol *Symbol
+}
+
+// SymbolExtraArena batches optional symbol metadata without adding an allocator
+// pointer to every symbol. References from symbolData keep its blocks alive.
+type SymbolExtraArena struct {
+	arena core.Arena[symbolExtra]
 }
 
 func (s *Symbol) Flags() SymbolFlags      { return s.flags }
@@ -34,20 +45,60 @@ func (s *Symbol) CheckFlags() CheckFlags  { return s.checkFlags }
 func (s *Symbol) Name() string            { return s.data.name }
 func (s *Symbol) Declarations() []*Node   { return s.data.declarations }
 func (s *Symbol) ValueDeclaration() *Node { return s.data.valueDeclaration }
-func (s *Symbol) Members() SymbolTable    { return s.data.members }
-func (s *Symbol) Exports() SymbolTable    { return s.data.exports }
 func (s *Symbol) Parent() *Symbol         { return s.data.parent }
-func (s *Symbol) ExportSymbol() *Symbol   { return s.data.exportSymbol }
+
+func (s *Symbol) Members() SymbolTable {
+	if s.data.extra == nil {
+		return nil
+	}
+	return s.data.extra.members
+}
+
+func (s *Symbol) Exports() SymbolTable {
+	if s.data.extra == nil {
+		return nil
+	}
+	return s.data.extra.exports
+}
+
+func (s *Symbol) ExportSymbol() *Symbol {
+	if s.data.extra == nil {
+		return nil
+	}
+	return s.data.extra.exportSymbol
+}
 
 func (s *Symbol) SetFlags(value SymbolFlags)      { s.flags = value }
 func (s *Symbol) SetCheckFlags(value CheckFlags)  { s.checkFlags = value }
 func (s *Symbol) SetName(value string)            { s.data.name = value }
 func (s *Symbol) SetDeclarations(value []*Node)   { s.data.declarations = value }
 func (s *Symbol) SetValueDeclaration(value *Node) { s.data.valueDeclaration = value }
-func (s *Symbol) SetMembers(value SymbolTable)    { s.data.members = value }
-func (s *Symbol) SetExports(value SymbolTable)    { s.data.exports = value }
 func (s *Symbol) SetParent(value *Symbol)         { s.data.parent = value }
-func (s *Symbol) SetExportSymbol(value *Symbol)   { s.data.exportSymbol = value }
+
+func (s *Symbol) ensureExtra(arena *SymbolExtraArena) *symbolExtra {
+	if s.data.extra == nil {
+		s.data.extra = arena.arena.New()
+	}
+	return s.data.extra
+}
+
+func (s *Symbol) SetMembers(value SymbolTable, arena *SymbolExtraArena) {
+	if value != nil || s.data.extra != nil {
+		s.ensureExtra(arena).members = value
+	}
+}
+
+func (s *Symbol) SetExports(value SymbolTable, arena *SymbolExtraArena) {
+	if value != nil || s.data.extra != nil {
+		s.ensureExtra(arena).exports = value
+	}
+}
+
+func (s *Symbol) SetExportSymbol(value *Symbol, arena *SymbolExtraArena) {
+	if value != nil || s.data.extra != nil {
+		s.ensureExtra(arena).exportSymbol = value
+	}
+}
 
 // SymbolWithData is a helper structure that contains both a Symbol and its associated symbolData.
 type SymbolWithData struct {

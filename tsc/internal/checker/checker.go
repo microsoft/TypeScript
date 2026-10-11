@@ -669,6 +669,7 @@ type Checker struct {
 	suggestionDiagnostics                       ast.DiagnosticsCollection
 	symbolArena                                 core.Arena[ast.Symbol]
 	symbolWithDataArena                         core.Arena[ast.SymbolWithData]
+	symbolExtraArena                            ast.SymbolExtraArena
 	signatureArena                              core.Arena[Signature]
 	indexInfoArena                              core.Arena[IndexInfo]
 	literalTypeArena                            core.Arena[LiteralType]
@@ -988,7 +989,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.errorTypes = make(map[CacheHashKey]*Type)
 	c.moduleSymbols = make(map[*ast.Node]*ast.Symbol)
 	c.globalThisSymbol = c.newSymbolEx(ast.SymbolFlagsModule, "globalThis", ast.CheckFlagsReadonly)
-	c.globalThisSymbol.SetExports(c.globals)
+	c.globalThisSymbol.SetExports(c.globals, &c.symbolExtraArena)
 	c.globals[c.globalThisSymbol.Name()] = c.globalThisSymbol
 	c.resolveName = c.createNameResolver().Resolve
 	c.resolveNameForSymbolSuggestion = c.createNameResolverForSuggestion().Resolve
@@ -14473,10 +14474,10 @@ func (c *Checker) mergeSymbol(target *ast.Symbol, source *ast.Symbol, unidirecti
 		}
 		target.SetDeclarations(append(target.Declarations(), source.Declarations()...))
 		if source.Members() != nil {
-			c.mergeSymbolTable(ast.GetMembers(target), source.Members(), unidirectional, nil)
+			c.mergeSymbolTable(ast.GetMembers(target, &c.symbolExtraArena), source.Members(), unidirectional, nil)
 		}
 		if source.Exports() != nil {
-			c.mergeSymbolTable(ast.GetExports(target), source.Exports(), unidirectional, target)
+			c.mergeSymbolTable(ast.GetExports(target, &c.symbolExtraArena), source.Exports(), unidirectional, target)
 		}
 		if !unidirectional {
 			c.recordMergedSymbol(target, source)
@@ -14636,8 +14637,8 @@ func (c *Checker) cloneSymbol(symbol *ast.Symbol) *ast.Symbol {
 	result.SetDeclarations(symbol.Declarations()[0:len(symbol.Declarations()):len(symbol.Declarations())])
 	result.SetParent(symbol.Parent())
 	result.SetValueDeclaration(symbol.ValueDeclaration())
-	result.SetMembers(maps.Clone(symbol.Members()))
-	result.SetExports(maps.Clone(symbol.Exports()))
+	result.SetMembers(maps.Clone(symbol.Members()), &c.symbolExtraArena)
+	result.SetExports(maps.Clone(symbol.Exports()), &c.symbolExtraArena)
 	c.recordMergedSymbol(result, symbol)
 	return result
 }
@@ -15100,8 +15101,8 @@ func (c *Checker) combineValueAndTypeSymbols(valueSymbol *ast.Symbol, typeSymbol
 		result.SetParent(typeSymbol.Parent())
 	}
 	result.SetValueDeclaration(valueSymbol.ValueDeclaration())
-	result.SetMembers(maps.Clone(typeSymbol.Members()))
-	result.SetExports(maps.Clone(valueSymbol.Exports()))
+	result.SetMembers(maps.Clone(typeSymbol.Members()), &c.symbolExtraArena)
+	result.SetExports(maps.Clone(valueSymbol.Exports()), &c.symbolExtraArena)
 	return result
 }
 
@@ -16133,8 +16134,8 @@ func (c *Checker) cloneTypeAsModuleType(symbol *ast.Symbol, moduleType *Type, re
 	result := c.newSymbol(symbol.Flags(), symbol.Name())
 	result.SetDeclarations(slices.Clone(symbol.Declarations()))
 	result.SetValueDeclaration(symbol.ValueDeclaration())
-	result.SetMembers(maps.Clone(symbol.Members()))
-	result.SetExports(maps.Clone(symbol.Exports()))
+	result.SetMembers(maps.Clone(symbol.Members()), &c.symbolExtraArena)
+	result.SetExports(maps.Clone(symbol.Exports()), &c.symbolExtraArena)
 	result.SetParent(symbol.Parent())
 	links := c.exportTypeLinks.Get(result)
 	links.target = symbol
@@ -25273,7 +25274,7 @@ func (c *Checker) getGlobalImportMetaExpressionType() *Type {
 		metaPropertySymbol.SetParent(symbol)
 		c.valueSymbolLinks.Get(metaPropertySymbol).resolvedType = importMetaType
 		members := createSymbolTable([]*ast.Symbol{metaPropertySymbol})
-		symbol.SetMembers(members)
+		symbol.SetMembers(members, &c.symbolExtraArena)
 		c.deferredGlobalImportMetaExpressionType = c.newAnonymousType(symbol, members, nil, nil, nil)
 	}
 	return c.deferredGlobalImportMetaExpressionType
