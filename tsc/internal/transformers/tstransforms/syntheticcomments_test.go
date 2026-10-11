@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/emittestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/parsetestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/transformers"
+	"github.com/microsoft/TypeScript/tsc/internal/transformers/estransforms"
 	"github.com/microsoft/TypeScript/tsc/internal/transformers/tstransforms"
 )
 
@@ -34,6 +35,10 @@ func TestSyntheticCommentsAreEmittedOnce(t *testing.T) {
 		input  string
 		output string
 		newTx  func(opts *transformers.TransformOptions) *transformers.Transformer
+		// The node to attach the comments to; defaults to the last statement.
+		declaration func(file *ast.SourceFile) *ast.Node
+		// Defaults to ESNext.
+		target core.ScriptTarget
 	}{
 		{
 			title:  "EnumDeclaration",
@@ -48,6 +53,14 @@ func TestSyntheticCommentsAreEmittedOnce(t *testing.T) {
 			newTx:  tstransforms.NewLegacyDecoratorsTransformer,
 		},
 		{
+			title:       "StaticPropertyDeclaration",
+			input:       "class C { static x = 1; }",
+			output:      "class C {\n    /*leading*/ static { this.x = 1; } /*trailing*/\n}",
+			newTx:       estransforms.GetESTransformer,
+			declaration: func(file *ast.SourceFile) *ast.Node { return file.Statements.Nodes[0].Members()[0] },
+			target:      core.ScriptTargetES2022,
+		},
+		{
 			title:  "ModuleDeclaration",
 			input:  "namespace N { export const x = 1; }",
 			output: "/*leading*/ var N;\n(function (N) {\n    N.x = 1;\n})(N || (N = {}));",
@@ -60,7 +73,11 @@ func TestSyntheticCommentsAreEmittedOnce(t *testing.T) {
 			t.Parallel()
 			file := parsetestutil.ParseTypeScript(rec.input, false /*jsx*/)
 			parsetestutil.CheckDiagnostics(t, file)
-			compilerOptions := &core.CompilerOptions{ExperimentalDecorators: core.TSTrue}
+			target := rec.target
+			if target == core.ScriptTargetNone {
+				target = core.ScriptTargetESNext
+			}
+			compilerOptions := &core.CompilerOptions{ExperimentalDecorators: core.TSTrue, Target: target, UseDefineForClassFields: core.TSFalse}
 			esnext := func(ast.HasFileName) core.ModuleKind { return core.ModuleKindESNext }
 			c, _ := checker.NewChecker(&fakeProgram{
 				singleThreaded:              true,
@@ -72,6 +89,9 @@ func TestSyntheticCommentsAreEmittedOnce(t *testing.T) {
 			emitContext := printer.NewEmitContext()
 			emitResolver := c.NewEmitResolver(emitContext)
 			declaration := file.Statements.Nodes[len(file.Statements.Nodes)-1]
+			if rec.declaration != nil {
+				declaration = rec.declaration(file)
+			}
 			emitContext.AddSyntheticLeadingComment(declaration, ast.KindMultiLineCommentTrivia, "leading", false /*hasTrailingNewLine*/)
 			emitContext.AddSyntheticTrailingComment(declaration, ast.KindMultiLineCommentTrivia, "trailing", false /*hasTrailingNewLine*/)
 			opts := &transformers.TransformOptions{CompilerOptions: compilerOptions, Context: emitContext, EmitResolver: emitResolver, Resolver: emitResolver}
