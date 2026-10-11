@@ -1,0 +1,310 @@
+// === QuickInfo ===
+=== /jsdocInlineLinksInTypePosition.ts ===
+// class C {}
+// /**
+//  * @throws {@link C}
+//                   ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class C
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//  * @returns {@linkcode C}
+//                        ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class C
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//  * @param value {@linkplain C}
+//                             ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class C
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//  */
+// function f(value: C) {}
+//          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function f(value: C): void
+// | ```
+// | 
+// | 
+// | *@throws* — [C](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)
+// | 
+// | *@returns* — [`C`](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)
+// | 
+// | *@param* `value` — [C](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * @throws {C} description
+//             ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class C
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//  * @returns {C} description
+//              ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class C
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//  * @param {C} value description
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class C
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//  */
+// function g(value: C) { return value; }
+//          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function g(value: C): C
+// | ```
+// | 
+// | 
+// | *@throws* — {C} description
+// | 
+// | *@returns* — description
+// | 
+// | *@param* `value` — description
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 33,
+      "LSPosition": {
+        "line": 2,
+        "character": 18
+      },
+      "Name": "throwsLink",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 18
+        },
+        "end": {
+          "line": 2,
+          "character": 19
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 59,
+      "LSPosition": {
+        "line": 3,
+        "character": 23
+      },
+      "Name": "returnsLink",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 23
+        },
+        "end": {
+          "line": 3,
+          "character": 24
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 90,
+      "LSPosition": {
+        "line": 4,
+        "character": 28
+      },
+      "Name": "paramLink",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 28
+        },
+        "end": {
+          "line": 4,
+          "character": 29
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 106,
+      "LSPosition": {
+        "line": 6,
+        "character": 9
+      },
+      "Name": "inlineLinks",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction f(value: C): void\n```\n\n\n*@throws* — [C](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)\n\n*@returns* — [`C`](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)\n\n*@param* `value` — [C](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 9
+        },
+        "end": {
+          "line": 6,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 138,
+      "LSPosition": {
+        "line": 9,
+        "character": 12
+      },
+      "Name": "throwsType",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 12
+        },
+        "end": {
+          "line": 9,
+          "character": 13
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 166,
+      "LSPosition": {
+        "line": 10,
+        "character": 13
+      },
+      "Name": "returnsType",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 13
+        },
+        "end": {
+          "line": 10,
+          "character": 14
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 192,
+      "LSPosition": {
+        "line": 11,
+        "character": 11
+      },
+      "Name": "paramType",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 11
+        },
+        "end": {
+          "line": 11,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 226,
+      "LSPosition": {
+        "line": 13,
+        "character": 9
+      },
+      "Name": "types",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction g(value: C): C\n```\n\n\n*@throws* — {C} description\n\n*@returns* — description\n\n*@param* `value` — description"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 9
+        },
+        "end": {
+          "line": 13,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]
