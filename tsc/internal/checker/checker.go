@@ -683,6 +683,8 @@ type Checker struct {
 	typeParameterArena                          core.Arena[TypeParameter]
 	indexedAccessTypeArena                      core.Arena[IndexedAccessType]
 	conditionalTypeArena                        core.Arena[ConditionalType]
+	typeListArena                               core.Arena[*Type]
+	freeTypeSets                                *temporaryTypeSet
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
 	factory                                     ast.NodeFactory
@@ -25771,13 +25773,13 @@ func (c *Checker) getPropagatingFlagsOfTypes(types []*Type, excludeKinds TypeFla
 
 func (c *Checker) newUnionType(objectFlags ObjectFlags, types []*Type) *Type {
 	data := c.unionTypeArena.New()
-	data.types = types
+	data.types = c.typeListArena.Clone(types)
 	return c.newType(TypeFlagsUnion, objectFlags, data.AsType(), typeKindUnion)
 }
 
 func (c *Checker) newIntersectionType(objectFlags ObjectFlags, types []*Type) *Type {
 	data := c.intersectionTypeArena.New()
-	data.types = types
+	data.types = c.typeListArena.Clone(types)
 	return c.newType(TypeFlagsIntersection, objectFlags, data.AsType(), typeKindIntersection)
 }
 
@@ -26158,27 +26160,37 @@ func (c *Checker) mapTypeEx(t *Type, f func(*Type) *Type, noReductions bool) *Ty
 	if u.origin != nil && u.origin.flags&TypeFlagsUnion != 0 {
 		types = u.origin.Types()
 	}
-	mappedTypes := make([]*Type, 0, 16)
+	var set *temporaryTypeSet
+	defer func() {
+		if set != nil {
+			c.releaseTemporaryTypeSet(set)
+		}
+	}()
+	var mappedTypes []*Type
 	var changed bool
-	for _, s := range types {
+	for i, s := range types {
 		var mapped *Type
 		if s.flags&TypeFlagsUnion != 0 {
 			mapped = c.mapTypeEx(s, f, noReductions)
 		} else {
 			mapped = f(s)
 		}
-		if mapped != s {
+		if mapped != s && !changed {
 			changed = true
+			set = c.getTemporaryTypeSet()
+			mappedTypes = set.values[:0]
+			mappedTypes = append(mappedTypes, types[:i]...)
 		}
-		if mapped != nil {
+		if changed && mapped != nil {
 			mappedTypes = append(mappedTypes, mapped)
 		}
 	}
 	if changed {
+		set.values = mappedTypes
 		if len(mappedTypes) == 0 {
 			return nil
 		}
-		return c.getUnionTypeEx(slices.Clone(mappedTypes), core.IfElse(noReductions, UnionReductionNone, UnionReductionLiteral), nil /*alias*/, nil /*origin*/)
+		return c.getUnionTypeEx(mappedTypes, core.IfElse(noReductions, UnionReductionNone, UnionReductionLiteral), nil /*alias*/, nil /*origin*/)
 	}
 	return t
 }
@@ -26235,7 +26247,10 @@ func (c *Checker) getUnionTypeEx(types []*Type, unionReduction UnionReduction, a
 }
 
 func (c *Checker) getUnionTypeWorker(types []*Type, unionReduction UnionReduction, alias *TypeAlias, origin *Type) *Type {
-	typeSet, includes := c.addTypesToUnion(types)
+	set := c.getTemporaryTypeSet()
+	defer c.releaseTemporaryTypeSet(set)
+	typeSet, includes := c.addTypesToUnion(types, set.values[:0])
+	set.values = typeSet
 	if unionReduction != UnionReductionNone {
 		if includes&TypeFlagsAnyOrUnknown != 0 {
 			if includes&TypeFlagsAny != 0 {
@@ -26342,8 +26357,7 @@ func (c *Checker) UnionTypes() iter.Seq[*Type] {
 	return maps.Values(c.unionTypes)
 }
 
-func (c *Checker) addTypesToUnion(sourceTypes []*Type) ([]*Type, TypeFlags) {
-	types := make([]*Type, 0, len(sourceTypes))
+func (c *Checker) addTypesToUnion(sourceTypes []*Type, types []*Type) ([]*Type, TypeFlags) {
 	var includes TypeFlags
 	addType := func(t *Type) {
 		flags := t.flags
@@ -26601,8 +26615,9 @@ func (c *Checker) removeSubtypes(types []*Type, hasObjectTypes bool) []*Type {
 			}
 		}
 	}
-	c.subtypeReductionCache[key] = types
-	return types
+	reduced := c.typeListArena.Clone(types)
+	c.subtypeReductionCache[key] = reduced
+	return reduced
 }
 
 func (c *Checker) intersectTypes(type1 *Type, type2 *Type) *Type {
@@ -26638,10 +26653,10 @@ func (c *Checker) getIntersectionType(types []*Type) *Type {
 }
 
 func (c *Checker) getIntersectionTypeEx(types []*Type, flags IntersectionFlags, alias *TypeAlias) *Type {
-	var orderedTypes orderedSet[*Type]
-	orderedTypes.values = make([]*Type, 0, len(types))
-	includes := c.addTypesToIntersection(&orderedTypes, 0, types)
-	typeSet := orderedTypes.values
+	set := c.getTemporaryTypeSet()
+	defer c.releaseTemporaryTypeSet(set)
+	includes := c.addTypesToIntersection(&set.orderedSet, 0, types)
+	typeSet := set.values
 	objectFlags := ObjectFlagsNone
 	// An intersection type is considered empty if it contains
 	// the type never, or
@@ -27191,7 +27206,11 @@ func (c *Checker) removeType(t *Type, targetType *Type) *Type {
 			return types[1-i]
 		}
 		// Remove the target type from the slice.
-		filtered := append(types[:i:i], types[i+1:]...)
+		set := c.getTemporaryTypeSet()
+		defer c.releaseTemporaryTypeSet(set)
+		set.values = append(set.values[:0], types[:i]...)
+		set.values = append(set.values, types[i+1:]...)
+		filtered := set.values
 		return c.getUnionTypeFromSortedList(filtered, t.AsUnionType().objectFlags&(ObjectFlagsPrimitiveUnion|ObjectFlagsContainsIntersections), nil /*alias*/, nil /*origin*/)
 	}
 	return t

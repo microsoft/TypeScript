@@ -3,6 +3,7 @@ package checker
 import (
 	"encoding/binary"
 	"runtime"
+	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -138,5 +139,135 @@ func BenchmarkTypeListKey(b *testing.B) {
 				getTypeListKey(types)
 			}
 		})
+	}
+}
+
+func newCompositeTestChecker() (*Checker, []*Type) {
+	c := &Checker{
+		strictNullChecks:      true,
+		unionTypes:            make(map[CacheHashKey]*Type),
+		unionOfUnionTypes:     make(map[UnionOfUnionKey]*Type),
+		intersectionTypes:     make(map[CacheHashKey]*Type),
+		subtypeReductionCache: make(map[CacheHashKey][]*Type),
+	}
+	c.compareSymbols = c.compareSymbolsWorker
+	c.neverType = c.newIntrinsicType(TypeFlagsNever, "never")
+	c.unknownType = c.newIntrinsicType(TypeFlagsUnknown, "unknown")
+	types := []*Type{
+		c.newIntrinsicType(TypeFlagsString, "string"),
+		c.newIntrinsicType(TypeFlagsNumber, "number"),
+		c.newIntrinsicType(TypeFlagsESSymbol, "symbol"),
+	}
+	return c, types
+}
+
+func TestCompositeTypeOwnsConstituents(t *testing.T) {
+	t.Parallel()
+	c, types := newCompositeTestChecker()
+	borrowed := slices.Clone(types)
+	union := c.getUnionTypeFromSortedList(borrowed, ObjectFlagsNone, nil, nil)
+	borrowed[0] = c.neverType
+	assert.Assert(t, slices.Equal(union.Types(), types))
+	objects := []*Type{
+		c.newObjectType(ObjectFlagsInterface, nil),
+		c.newObjectType(ObjectFlagsInterface, nil),
+		c.newObjectType(ObjectFlagsInterface, nil),
+	}
+	intersection := c.getIntersectionType(objects)
+	objects[0] = c.neverType
+	assert.Assert(t, intersection.Types()[0] != c.neverType)
+	reduced := c.removeSubtypes(borrowed, false)
+	expected := slices.Clone(reduced)
+	borrowed[0] = types[0]
+	assert.Assert(t, slices.Equal(reduced, expected))
+}
+
+func TestCompositeTypeCacheHitAllocations(t *testing.T) { //nolint:paralleltest
+	if race.Enabled {
+		t.Skip("race instrumentation changes hashing allocations")
+	}
+	c, types := newCompositeTestChecker()
+	union := c.getUnionType(types)
+	filtered := c.removeType(union, types[1])
+	objects := []*Type{
+		c.newObjectType(ObjectFlagsInterface, nil),
+		c.newObjectType(ObjectFlagsInterface, nil),
+		c.newObjectType(ObjectFlagsInterface, nil),
+	}
+	intersection := c.getIntersectionType(objects)
+	assert.Equal(t, testing.AllocsPerRun(10, func() { c.getUnionType(types) }), float64(0))
+	assert.Equal(t, testing.AllocsPerRun(10, func() { c.getIntersectionType(objects) }), float64(0))
+	assert.Equal(t, testing.AllocsPerRun(10, func() { c.mapType(union, func(t *Type) *Type { return t }) }), float64(0))
+	assert.Equal(t, testing.AllocsPerRun(10, func() {
+		c.mapType(union, func(t *Type) *Type {
+			if t == types[1] {
+				return nil
+			}
+			return t
+		})
+	}), float64(0))
+	assert.Equal(t, testing.AllocsPerRun(10, func() { c.removeType(union, types[1]) }), float64(0))
+	assert.Equal(t, c.removeType(union, types[1]), filtered)
+	assert.Equal(t, c.getIntersectionType(objects), intersection)
+}
+
+func TestTemporaryTypeSetReuse(t *testing.T) {
+	t.Parallel()
+	c, primitives := newCompositeTestChecker()
+	for _, count := range []int{3, 17, 80, 300, 5000, 3} {
+		objects := make([]*Type, count)
+		for i := range objects {
+			objects[i] = c.newObjectType(ObjectFlagsInterface, nil)
+		}
+		intersection := c.getIntersectionType(objects)
+		assert.Assert(t, slices.Equal(intersection.Types(), objects))
+		union := c.getUnionType(objects)
+		assert.Assert(t, slices.Equal(union.Types(), objects))
+		mapped := c.mapType(union, func(typ *Type) *Type {
+			c.getIntersectionType(objects[:2])
+			if typ == objects[1] {
+				return nil
+			}
+			return typ
+		})
+		expected := slices.Clone(objects)
+		expected = slices.Delete(expected, 1, 2)
+		assert.Assert(t, slices.Equal(mapped.Types(), expected))
+		assert.Equal(t, c.removeType(union, objects[1]), mapped)
+		assert.Assert(t, c.mapType(union, func(*Type) *Type { return nil }) == nil)
+		assert.Equal(t, c.getIntersectionType(objects), intersection)
+		for set := c.freeTypeSets; set != nil; set = set.next {
+			assert.Equal(t, len(set.values), 0)
+			assert.Equal(t, len(set.valuesByKey), 0)
+			assert.Assert(t, cap(set.values) <= 4096)
+			for _, typ := range set.values[:cap(set.values)] {
+				assert.Assert(t, typ == nil)
+			}
+			for _, typ := range set.inline {
+				assert.Assert(t, typ == nil)
+			}
+		}
+	}
+	left := c.getUnionType(primitives[:2])
+	right := c.getUnionType(primitives[1:])
+	assert.Equal(t, c.getIntersectionType([]*Type{left, right}), primitives[1])
+}
+
+func BenchmarkCompositeTypeCacheHit(b *testing.B) {
+	c, types := newCompositeTestChecker()
+	union := c.getUnionType(types)
+	objects := []*Type{
+		c.newObjectType(ObjectFlagsInterface, nil),
+		c.newObjectType(ObjectFlagsInterface, nil),
+		c.newObjectType(ObjectFlagsInterface, nil),
+	}
+	c.getIntersectionType(objects)
+	c.removeType(union, types[1])
+	b.ReportAllocs()
+	for b.Loop() {
+		c.getUnionType(types)
+		c.getIntersectionType(objects)
+		c.mapType(union, func(t *Type) *Type { return t })
+		c.removeType(union, types[1])
 	}
 }
