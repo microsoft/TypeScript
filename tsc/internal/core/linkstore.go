@@ -40,12 +40,12 @@ const (
 )
 
 // PagedLinkStore implements a sparse-array-like structure for storing elements keyed by dense uint64 keys.
-// Elements are allocated in an area, element references are stored in fixed-size pages of 256 entries, and
-// an index of pages is maintained in a growable list.
+// Elements are allocated in an arena, and compressed indexes are stored in fixed-size pages of 256 entries.
+// The pages contain no Go pointers, halving their size on 64-bit hosts and avoiding GC scans of each entry.
 
 type PagedLinkStore[V any] struct {
-	pages []*[LinkPageSize]*V
-	arena Arena[V]
+	pages []*[LinkPageSize]uint32
+	arena IndexedArena[V]
 }
 
 func (s *PagedLinkStore[V]) Get(key uint64) *V {
@@ -56,15 +56,16 @@ func (s *PagedLinkStore[V]) Get(key uint64) *V {
 	}
 	page := s.pages[pageIndex]
 	if page == nil {
-		page = new([LinkPageSize]*V)
+		page = new([LinkPageSize]uint32)
 		s.pages[pageIndex] = page
 	}
-	link := page[key&LinkPageMask]
-	if link == nil {
-		link = s.arena.New()
-		page[key&LinkPageMask] = link
+	index := page[key&LinkPageMask]
+	if index == 0 {
+		id, value := s.arena.New()
+		page[key&LinkPageMask] = id
+		return value
 	}
-	return link
+	return s.arena.Get(index)
 }
 
 func (s *PagedLinkStore[V]) Has(key uint64) bool {
@@ -75,7 +76,7 @@ func (s *PagedLinkStore[V]) TryGet(key uint64) *V {
 	pageIndex := key >> LinkPageShift
 	if int(pageIndex) < len(s.pages) {
 		if page := s.pages[pageIndex]; page != nil {
-			return page[key&LinkPageMask]
+			return s.arena.Get(page[key&LinkPageMask])
 		}
 	}
 	return nil
