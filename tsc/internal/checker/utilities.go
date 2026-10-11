@@ -513,10 +513,10 @@ func CompareTypes(t1, t2 *Type) int {
 				// instantiateAnonymousType prepends a fresh type parameter mapping.
 				// Compare the effective instantiation, not the identity of that fresh parameter.
 				if m1 != nil {
-					m1 = m1.data.(*CompositeTypeMapper).m2
+					m1 = castTypeMapper[CompositeTypeMapper](m1, typeMapperComposite).m2
 				}
 				if m2 != nil {
-					m2 = m2.data.(*CompositeTypeMapper).m2
+					m2 = castTypeMapper[CompositeTypeMapper](m2, typeMapperComposite).m2
 				}
 			}
 			if c := compareTypeMappers(m1, m2); c != 0 {
@@ -730,22 +730,22 @@ func compareTypeMappers(m1, m2 *TypeMapper) int {
 	}
 	switch kind1 {
 	case TypeMapperKindSimple:
-		m1 := m1.data.(*SimpleTypeMapper)
-		m2 := m2.data.(*SimpleTypeMapper)
+		m1 := castTypeMapper[SimpleTypeMapper](m1, typeMapperSimple)
+		m2 := castTypeMapper[SimpleTypeMapper](m2, typeMapperSimple)
 		if c := CompareTypes(m1.source, m2.source); c != 0 {
 			return c
 		}
 		return CompareTypes(m1.target, m2.target)
 	case TypeMapperKindArray:
-		m1 := m1.data.(*ArrayTypeMapper)
-		m2 := m2.data.(*ArrayTypeMapper)
+		m1 := castTypeMapper[ArrayTypeMapper](m1, typeMapperArray)
+		m2 := castTypeMapper[ArrayTypeMapper](m2, typeMapperArray)
 		if c := compareTypeLists(m1.sources, m2.sources); c != 0 {
 			return c
 		}
 		return compareTypeLists(m1.targets, m2.targets)
 	case TypeMapperKindMerged:
-		m1 := m1.data.(*MergedTypeMapper)
-		m2 := m2.data.(*MergedTypeMapper)
+		m1 := castTypeMapper[MergedTypeMapper](m1, typeMapperMerged)
+		m2 := castTypeMapper[MergedTypeMapper](m2, typeMapperMerged)
 		if c := compareTypeMappers(m1.m1, m2.m1); c != 0 {
 			return c
 		}
@@ -879,6 +879,44 @@ const orderedSetMapThreshold = 16
 type orderedSet[T comparable] struct {
 	valuesByKey map[T]struct{}
 	values      []T
+}
+
+// Composite type construction often finds an existing interned type. Borrow
+// workspace for normalization, and copy constituents only when publishing a
+// new type. Each recursive construction borrows a separate set.
+type temporaryTypeSet struct {
+	orderedSet[*Type]
+	inline [16]*Type
+	next   *temporaryTypeSet
+}
+
+func (c *Checker) getTemporaryTypeSet() *temporaryTypeSet {
+	set := c.freeTypeSets
+	if set == nil {
+		set = &temporaryTypeSet{}
+		set.values = set.inline[:0]
+	} else {
+		c.freeTypeSets = set.next
+		set.next = nil
+	}
+	return set
+}
+
+func (c *Checker) releaseTemporaryTypeSet(set *temporaryTypeSet) {
+	clear(set.values)
+	if cap(set.values) > len(set.inline) {
+		clear(set.inline[:])
+	}
+	clear(set.valuesByKey)
+	// Do not retain arbitrarily large temporary unions and their dedup maps.
+	if cap(set.values) > 4096 {
+		set.values = set.inline[:0]
+		set.valuesByKey = nil
+	} else {
+		set.values = set.values[:0]
+	}
+	set.next = c.freeTypeSets
+	c.freeTypeSets = set
 }
 
 func (s *orderedSet[T]) contains(value T) bool {

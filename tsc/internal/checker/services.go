@@ -154,10 +154,17 @@ func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb 
 	if reducedType.flags&TypeFlagsStructuredType == 0 {
 		return
 	}
-	for name, symbol := range c.resolveStructuredTypeMembers(reducedType).members {
-		if c.isNamedMember(symbol, name) {
-			cb(symbol, name)
+	resolved := c.resolveStructuredTypeMembers(reducedType)
+	if resolved.members != nil && resolved.members.fallback != nil {
+		for name, symbol := range resolved.members.fallback {
+			if c.isNamedMember(symbol, name) {
+				cb(symbol, name)
+			}
 		}
+		return
+	}
+	for _, symbol := range resolved.properties {
+		cb(symbol, symbol.Name())
 	}
 }
 
@@ -413,7 +420,7 @@ func (c *Checker) GetRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 
 func (c *Checker) GetMappedTypeSymbolOfProperty(symbol *ast.Symbol) *ast.Symbol {
 	if valueLinks := c.valueSymbolLinks.TryGet(symbol); valueLinks != nil {
-		return valueLinks.containingType.symbol
+		return valueLinks.getContainingType().symbol
 	}
 	return nil
 }
@@ -421,7 +428,7 @@ func (c *Checker) GetMappedTypeSymbolOfProperty(symbol *ast.Symbol) *ast.Symbol 
 func (c *Checker) getImmediateRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 	if symbol.CheckFlags()&ast.CheckFlagsSynthetic != 0 {
 		return core.MapNonNil(
-			c.valueSymbolLinks.Get(symbol).containingType.Types(),
+			c.valueSymbolLinks.Get(symbol).getContainingType().Types(),
 			func(t *Type) *ast.Symbol {
 				return c.getPropertyOfType(t, symbol.Name())
 			},

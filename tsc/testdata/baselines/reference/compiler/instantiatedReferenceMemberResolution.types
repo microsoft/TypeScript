@@ -1,0 +1,307 @@
+//// [tests/cases/compiler/instantiatedReferenceMemberResolution.ts] ////
+
+=== instantiatedReferenceMemberResolution.ts ===
+interface Base<T> {
+    value: T;
+>value : T
+
+    shared: string;
+>shared : string
+}
+interface Derived<T> extends Base<T[]> {
+    shared: "derived";
+>shared : "derived"
+
+    own: T;
+>own : T
+}
+declare const derived: Derived<number>;
+>derived : Derived<number>
+
+export const value = derived.value;
+>value : number[]
+>derived.value : number[]
+>derived : Derived<number>
+>value : number[]
+
+export const shared = derived.shared;
+>shared : "derived"
+>derived.shared : "derived"
+>derived : Derived<number>
+>shared : "derived"
+
+export const properties = { ...derived };
+>properties : { value: number[]; shared: "derived"; own: number; }
+>{ ...derived } : { value: number[]; shared: "derived"; own: number; }
+>derived : Derived<number>
+
+export const again = derived.value;
+>again : number[]
+>derived.value : number[]
+>derived : Derived<number>
+>value : number[]
+
+derived.missing;
+>derived.missing : any
+>derived : Derived<number>
+>missing : any
+
+class Box<T> {
+>Box : Box<T>
+
+    private secret!: T;
+>secret : T
+
+    protected hidden!: T;
+>hidden : T
+
+    contents!: T;
+>contents : T
+
+    get readonlyContents(): T { return this.contents; }
+>readonlyContents : T
+>this.contents : T
+>this : this
+>contents : T
+
+    set writeonlyContents(value: T) {}
+>writeonlyContents : T
+>value : T
+
+    method<U>(value: U): [T, U] { return [this.contents, value]; }
+>method : <U>(value: U) => [T, U]
+>value : U
+>[this.contents, value] : [T, U]
+>this.contents : T
+>this : this
+>contents : T
+>value : U
+}
+declare const box: Box<string>;
+>box : Box<string>
+
+export const contents = box.contents;
+>contents : string
+>box.contents : string
+>box : Box<string>
+>contents : string
+
+export const method = box.method(1);
+>method : [string, number]
+>box.method(1) : [string, number]
+>box.method : <U>(value: U) => [string, U]
+>box : Box<string>
+>method : <U>(value: U) => [string, U]
+>1 : 1
+
+export const boxProperties = { ...box };
+>boxProperties : { contents: string; }
+>{ ...box } : { contents: string; }
+>box : Box<string>
+
+box.secret;
+>box.secret : string
+>box : Box<string>
+>secret : string
+
+interface Weak<T> {
+    value?: T;
+>value : T | undefined
+}
+declare const unrelated: { other: number };
+>unrelated : { other: number; }
+>other : number
+
+const weak: Weak<string> = unrelated;
+>weak : Weak<string>
+>unrelated : { other: number; }
+
+type Tagged<T> = { kind: T } & { kind: "a" };
+>Tagged : Tagged<T>
+>kind : T
+>kind : "a"
+
+interface ConditionalBase<T extends string> extends Tagged<T> { optional?: T }
+>optional : T | undefined
+
+const reduced: ConditionalBase<"b"> = unrelated;
+>reduced : ConditionalBase<"b">
+>unrelated : { other: number; }
+
+const unreduced: ConditionalBase<"a"> = unrelated;
+>unreduced : ConditionalBase<"a">
+>unrelated : { other: number; }
+
+type Callable<T> = { (): T; kind: T } & { kind: "a" };
+>Callable : Callable<T>
+>kind : T
+>kind : "a"
+
+interface Fn<T extends string> extends Callable<T> {}
+declare const neverFn: Fn<"b">;
+>neverFn : Fn<"b">
+
+neverFn.bind;
+>neverFn.bind : any
+>neverFn : Fn<"b">
+>bind : any
+
+declare const fn: Fn<"a">;
+>fn : Fn<"a">
+
+export const bound = fn.bind;
+>bound : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>fn.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>fn : Fn<"a">
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+
+interface Dict<T> { [key: string]: T }
+>key : string
+
+declare const dict: Dict<string>;
+>dict : Dict<string>
+
+export const indexed = dict["property"];
+>indexed : string
+>dict["property"] : string
+>dict : Dict<string>
+>"property" : "property"
+
+interface Wrap<T extends { a?: string }> extends T {}
+>a : string | undefined
+
+const wrapped: Wrap<{ a?: string; b: number }> = unrelated;
+>wrapped : Wrap<{ a?: string; b: number; }>
+>a : string | undefined
+>b : number
+>unrelated : { other: number; }
+
+interface Tree<T> extends Array<Tree<T>> { value: T }
+>value : T
+
+declare const tree: Tree<string>;
+>tree : Tree<string>
+
+export const children = tree.map(child => child.value);
+>children : string[]
+>tree.map(child => child.value) : string[]
+>tree.map : <U>(callbackfn: (value: Tree<string>, index: number, array: Tree<string>[]) => U, thisArg?: any) => U[]
+>tree : Tree<string>
+>map : <U>(callbackfn: (value: Tree<string>, index: number, array: Tree<string>[]) => U, thisArg?: any) => U[]
+>child => child.value : (child: Tree<string>) => string
+>child : Tree<string>
+>child.value : string
+>child : Tree<string>
+>value : string
+
+interface Self<T> { next: this; value: T }
+>next : this
+>value : T
+
+declare const self: Self<number>;
+>self : Self<number>
+
+export const next = self.next.next.value;
+>next : number
+>self.next.next.value : number
+>self.next.next : Self<number>
+>self.next : Self<number>
+>self : Self<number>
+>next : Self<number>
+>next : Self<number>
+>value : number
+
+interface Defaults<T = Defaults> { value: T }
+>value : T
+
+declare const defaults: Defaults;
+>defaults : Defaults<unknown>
+
+export const defaultValue = defaults.value;
+>defaultValue : unknown
+>defaults.value : unknown
+>defaults : Defaults<unknown>
+>value : unknown
+
+interface First<T> { shared: T }
+>shared : T
+
+interface Second<T> { shared: T; second: T }
+>shared : T
+>second : T
+
+interface Multiple<T> extends First<T>, Second<T> { own: T }
+>own : T
+
+declare const multiple: Multiple<number>;
+>multiple : Multiple<number>
+
+export const multipleValue = multiple.shared;
+>multipleValue : number
+>multiple.shared : number
+>multiple : Multiple<number>
+>shared : number
+
+export const multipleProperties = { ...multiple };
+>multipleProperties : { shared: number; second: number; own: number; }
+>{ ...multiple } : { shared: number; second: number; own: number; }
+>multiple : Multiple<number>
+
+interface ReducedDict<T extends string> extends Tagged<T> {
+    [key: string]: unknown;
+>key : string
+}
+declare const reducedDict: ReducedDict<"b">;
+>reducedDict : ReducedDict<"b">
+
+const numberDict: { [key: string]: number } = reducedDict;
+>numberDict : { [key: string]: number; }
+>key : string
+>reducedDict : ReducedDict<"b">
+
+type Two<T> = { <U>(x: U, y: T): U } & { <U>(x: U, y: string): U };
+>Two : Two<T>
+>x : U
+>y : T
+>x : U
+>y : string
+
+interface Overloads<T> extends Two<T> {}
+declare function pipe<A extends any[], B>(f: (...args: A) => B): (...args: A) => B;
+>pipe : <A extends any[], B>(f: (...args: A) => B) => (...args: A) => B
+>f : (...args: A) => B
+>args : A
+>args : A
+
+declare const merged: Overloads<string>;
+>merged : Overloads<string>
+
+const piped1: number = pipe(merged);
+>piped1 : number
+>pipe(merged) : <U>(x: U, y: string) => U
+>pipe : <A extends any[], B>(f: (...args: A) => B) => (...args: A) => B
+>merged : Overloads<string>
+
+declare const distinct: Overloads<number>;
+>distinct : Overloads<number>
+
+const piped2: number = pipe(distinct);
+>piped2 : number
+>pipe(distinct) : (x: unknown, y: string) => unknown
+>pipe : <A extends any[], B>(f: (...args: A) => B) => (...args: A) => B
+>distinct : Overloads<number>
+
+interface CallableBox<T> { (): T }
+declare const boxOrCallable: CallableBox<string> | Box<string>;
+>boxOrCallable : Box<string> | CallableBox<string>
+
+if (typeof boxOrCallable === "function") {
+>typeof boxOrCallable === "function" : boolean
+>typeof boxOrCallable : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>boxOrCallable : Box<string> | CallableBox<string>
+>"function" : "function"
+
+    boxOrCallable;
+>boxOrCallable : CallableBox<string>
+}
+

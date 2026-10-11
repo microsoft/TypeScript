@@ -4,11 +4,13 @@ import (
 	"math/bits"
 	"slices"
 	"strings"
+	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/evaluator"
+	"github.com/zeebo/xxh3"
 )
 
 //go:generate npx hereby generate:checker
@@ -181,12 +183,67 @@ type SymbolReferenceLinks struct {
 
 type ValueSymbolLinks struct {
 	resolvedType                 *Type // Type of value symbol
-	writeType                    *Type
 	target                       *ast.Symbol
 	mapper                       *TypeMapper
-	nameType                     *Type
-	containingType               *Type // Mapped type for mapped type property, containing union or intersection type for synthetic property
+	extra                        *valueSymbolExtra
 	functionOrConstructorChecked bool
+}
+
+type valueSymbolExtra struct {
+	writeType      *Type
+	nameType       *Type
+	containingType *Type // Mapped type for mapped type property, containing union or intersection type for synthetic property
+}
+
+func (links *ValueSymbolLinks) getWriteType() *Type {
+	if links.extra == nil {
+		return nil
+	}
+	return links.extra.writeType
+}
+
+func (links *ValueSymbolLinks) getNameType() *Type {
+	if links.extra == nil {
+		return nil
+	}
+	return links.extra.nameType
+}
+
+func (links *ValueSymbolLinks) getContainingType() *Type {
+	if links.extra == nil {
+		return nil
+	}
+	return links.extra.containingType
+}
+
+func (links *ValueSymbolLinks) setWriteType(c *Checker, typ *Type) {
+	if links.extra == nil {
+		if typ == nil {
+			return
+		}
+		links.extra = c.valueSymbolExtraArena.New()
+	}
+	links.extra.writeType = typ
+}
+
+func (links *ValueSymbolLinks) setNameType(c *Checker, typ *Type) {
+	if links.extra == nil {
+		if typ == nil {
+			return
+		}
+		links.extra = c.valueSymbolExtraArena.New()
+	}
+	links.extra.nameType = typ
+}
+
+func (links *ValueSymbolLinks) setContainingType(c *Checker, typ *Type) {
+	if links.extra == nil {
+		if typ == nil {
+			return
+		}
+		links.extra = c.valueSymbolExtraArena.New()
+	}
+	links.extra.containingType = typ
 }
 
 // Additional links for mapped symbols
@@ -682,14 +739,73 @@ func (a *TypeAlias) TypeArguments() []*Type {
 
 // Type
 
+// The concrete kind is separate from mutable semantic flags. All concrete types
+// embed Type at offset zero, so a tag replaces the self-referential interface.
+// The ordering groups types by their embedded bases for the base casts below.
+type typeKind uint8
+
+const (
+	typeKindIntrinsic typeKind = iota + 1
+	typeKindLiteral
+	typeKindUniqueESSymbol
+	typeKindTypeParameter
+	typeKindIndex
+	typeKindIndexedAccess
+	typeKindTemplateLiteral
+	typeKindStringMapping
+	typeKindSubstitution
+	typeKindConditional
+	typeKindObject
+	typeKindTypeReference
+	typeKindInterface
+	typeKindTuple
+	typeKindInstantiationExpression
+	typeKindMapped
+	typeKindReverseMapped
+	typeKindEvolvingArray
+	typeKindUnion
+	typeKindIntersection
+)
+
 type Type struct {
 	flags       TypeFlags
 	objectFlags ObjectFlags
 	id          TypeId
+	kind        typeKind
 	symbol      *ast.Symbol
 	alias       *TypeAlias
 	checker     *Checker
-	data        TypeData // Type specific data
+}
+
+// Enforce the layout required by the pointer conversions, on every architecture.
+var (
+	_ [0 - unsafe.Offsetof(IntrinsicType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(LiteralType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(UniqueESSymbolType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(TypeParameter{}.Type)]byte
+	_ [0 - unsafe.Offsetof(IndexType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(IndexedAccessType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(TemplateLiteralType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(StringMappingType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(SubstitutionType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(ConditionalType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(ObjectType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(TypeReference{}.Type)]byte
+	_ [0 - unsafe.Offsetof(InterfaceType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(TupleType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(InstantiationExpressionType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(MappedType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(ReverseMappedType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(EvolvingArrayType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(UnionType{}.Type)]byte
+	_ [0 - unsafe.Offsetof(IntersectionType{}.Type)]byte
+)
+
+func castType[T any](t *Type, kind typeKind) *T {
+	if t.kind != kind {
+		panic("Invalid type cast")
+	}
+	return (*T)(unsafe.Pointer(t))
 }
 
 func (t *Type) Id() TypeId {
@@ -706,35 +822,94 @@ func (t *Type) ObjectFlags() ObjectFlags {
 
 // Casts for concrete struct types
 
-func (t *Type) AsIntrinsicType() *IntrinsicType           { return t.data.(*IntrinsicType) }
-func (t *Type) AsLiteralType() *LiteralType               { return t.data.(*LiteralType) }
-func (t *Type) AsUniqueESSymbolType() *UniqueESSymbolType { return t.data.(*UniqueESSymbolType) }
-func (t *Type) AsTupleType() *TupleType                   { return t.data.(*TupleType) }
-func (t *Type) AsInstantiationExpressionType() *InstantiationExpressionType {
-	return t.data.(*InstantiationExpressionType)
+func (t *Type) AsIntrinsicType() *IntrinsicType { return castType[IntrinsicType](t, typeKindIntrinsic) }
+func (t *Type) AsLiteralType() *LiteralType     { return castType[LiteralType](t, typeKindLiteral) }
+func (t *Type) AsUniqueESSymbolType() *UniqueESSymbolType {
+	return castType[UniqueESSymbolType](t, typeKindUniqueESSymbol)
 }
-func (t *Type) AsMappedType() *MappedType                   { return t.data.(*MappedType) }
-func (t *Type) AsReverseMappedType() *ReverseMappedType     { return t.data.(*ReverseMappedType) }
-func (t *Type) AsEvolvingArrayType() *EvolvingArrayType     { return t.data.(*EvolvingArrayType) }
-func (t *Type) AsTypeParameter() *TypeParameter             { return t.data.(*TypeParameter) }
-func (t *Type) AsUnionType() *UnionType                     { return t.data.(*UnionType) }
-func (t *Type) AsIntersectionType() *IntersectionType       { return t.data.(*IntersectionType) }
-func (t *Type) AsIndexType() *IndexType                     { return t.data.(*IndexType) }
-func (t *Type) AsIndexedAccessType() *IndexedAccessType     { return t.data.(*IndexedAccessType) }
-func (t *Type) AsTemplateLiteralType() *TemplateLiteralType { return t.data.(*TemplateLiteralType) }
-func (t *Type) AsStringMappingType() *StringMappingType     { return t.data.(*StringMappingType) }
-func (t *Type) AsSubstitutionType() *SubstitutionType       { return t.data.(*SubstitutionType) }
-func (t *Type) AsConditionalType() *ConditionalType         { return t.data.(*ConditionalType) }
+func (t *Type) AsTupleType() *TupleType { return castType[TupleType](t, typeKindTuple) }
+func (t *Type) AsInstantiationExpressionType() *InstantiationExpressionType {
+	return castType[InstantiationExpressionType](t, typeKindInstantiationExpression)
+}
+func (t *Type) AsMappedType() *MappedType { return castType[MappedType](t, typeKindMapped) }
+func (t *Type) AsReverseMappedType() *ReverseMappedType {
+	return castType[ReverseMappedType](t, typeKindReverseMapped)
+}
+
+func (t *Type) AsEvolvingArrayType() *EvolvingArrayType {
+	return castType[EvolvingArrayType](t, typeKindEvolvingArray)
+}
+
+func (t *Type) AsTypeParameter() *TypeParameter {
+	return castType[TypeParameter](t, typeKindTypeParameter)
+}
+func (t *Type) AsUnionType() *UnionType { return castType[UnionType](t, typeKindUnion) }
+func (t *Type) AsIntersectionType() *IntersectionType {
+	return castType[IntersectionType](t, typeKindIntersection)
+}
+func (t *Type) AsIndexType() *IndexType { return castType[IndexType](t, typeKindIndex) }
+func (t *Type) AsIndexedAccessType() *IndexedAccessType {
+	return castType[IndexedAccessType](t, typeKindIndexedAccess)
+}
+
+func (t *Type) AsTemplateLiteralType() *TemplateLiteralType {
+	return castType[TemplateLiteralType](t, typeKindTemplateLiteral)
+}
+
+func (t *Type) AsStringMappingType() *StringMappingType {
+	return castType[StringMappingType](t, typeKindStringMapping)
+}
+
+func (t *Type) AsSubstitutionType() *SubstitutionType {
+	return castType[SubstitutionType](t, typeKindSubstitution)
+}
+
+func (t *Type) AsConditionalType() *ConditionalType {
+	return castType[ConditionalType](t, typeKindConditional)
+}
 
 // Casts for embedded struct types
 
-func (t *Type) AsConstrainedType() *ConstrainedType { return t.data.AsConstrainedType() }
-func (t *Type) AsStructuredType() *StructuredType   { return t.data.AsStructuredType() }
-func (t *Type) AsObjectType() *ObjectType           { return t.data.AsObjectType() }
-func (t *Type) AsTypeReference() *TypeReference     { return t.data.AsTypeReference() }
-func (t *Type) AsInterfaceType() *InterfaceType     { return t.data.AsInterfaceType() }
+func (t *Type) AsConstrainedType() *ConstrainedType {
+	if t.kind >= typeKindTypeParameter && t.kind <= typeKindIntersection {
+		return (*ConstrainedType)(unsafe.Pointer(t))
+	}
+	return nil
+}
+
+func (t *Type) AsStructuredType() *StructuredType {
+	if t.kind >= typeKindObject && t.kind <= typeKindIntersection {
+		return (*StructuredType)(unsafe.Pointer(t))
+	}
+	return nil
+}
+
+func (t *Type) AsObjectType() *ObjectType {
+	if t.kind >= typeKindObject && t.kind <= typeKindEvolvingArray {
+		return (*ObjectType)(unsafe.Pointer(t))
+	}
+	return nil
+}
+
+func (t *Type) AsTypeReference() *TypeReference {
+	if t.kind >= typeKindTypeReference && t.kind <= typeKindTuple {
+		return (*TypeReference)(unsafe.Pointer(t))
+	}
+	return nil
+}
+
+func (t *Type) AsInterfaceType() *InterfaceType {
+	if t.kind >= typeKindInterface && t.kind <= typeKindTuple {
+		return (*InterfaceType)(unsafe.Pointer(t))
+	}
+	return nil
+}
+
 func (t *Type) AsUnionOrIntersectionType() *UnionOrIntersectionType {
-	return t.data.AsUnionOrIntersectionType()
+	if t.kind >= typeKindUnion && t.kind <= typeKindIntersection {
+		return (*UnionOrIntersectionType)(unsafe.Pointer(t))
+	}
+	return nil
 }
 
 func (t *Type) Distributed() []*Type {
@@ -855,18 +1030,6 @@ func (t *Type) IsTupleType() bool {
 	return isTupleType(t)
 }
 
-// TypeData
-
-type TypeData interface {
-	AsType() *Type
-	AsConstrainedType() *ConstrainedType
-	AsStructuredType() *StructuredType
-	AsObjectType() *ObjectType
-	AsTypeReference() *TypeReference
-	AsInterfaceType() *InterfaceType
-	AsUnionOrIntersectionType() *UnionOrIntersectionType
-}
-
 // TypeBase
 
 type TypeBase struct {
@@ -935,7 +1098,7 @@ func (t *ConstrainedType) AsConstrainedType() *ConstrainedType { return t }
 
 type StructuredType struct {
 	ConstrainedType
-	members            ast.SymbolTable
+	members            *memberIndex
 	properties         []*ast.Symbol
 	signatures         []*Signature // Signatures (call + construct)
 	callSignatureCount int          // Count of call signatures
@@ -956,6 +1119,102 @@ func (t *StructuredType) ConstructSignatures() []*Signature {
 
 func (t *StructuredType) Properties() []*ast.Symbol {
 	return t.properties
+}
+
+type memberIndex struct {
+	slots    []uint32
+	fallback ast.SymbolTable
+}
+
+// Property order is semantic. Keep it unchanged and index it with pointer-free
+// slots instead of retaining a second map of names and symbol pointers.
+func (c *Checker) newMemberIndex(members ast.SymbolTable, properties []*ast.Symbol, index *memberIndex) *memberIndex {
+	needsFallback := len(members) != len(properties)
+	for _, symbol := range properties {
+		if members[symbol.Name()] != symbol {
+			needsFallback = true
+			break
+		}
+	}
+	if needsFallback {
+		if index == nil {
+			index = c.memberIndexArena.New()
+		}
+		index.fallback = members
+		return index
+	}
+	if index != nil {
+		index.fallback = nil
+	}
+	return c.newPropertyIndex(properties, index)
+}
+
+func (c *Checker) newPropertyIndex(properties []*ast.Symbol, index *memberIndex) *memberIndex {
+	if len(properties) <= 8 {
+		return nil
+	}
+	if uint64(len(properties)) > uint64(^uint32(0)) {
+		panic("Member index exhausted")
+	}
+	if index == nil {
+		index = c.memberIndexArena.New()
+	}
+	size := 1 << bits.Len(uint(len(properties))*2-1)
+	index.slots = c.memberIndexSlotsArena.NewSlice(size)
+	mask := uint64(size - 1)
+	for i, symbol := range properties {
+		slot := xxh3.HashString(symbol.Name()) & mask
+		for index.slots[slot] != 0 {
+			slot = (slot + 1) & mask
+		}
+		index.slots[slot] = uint32(i + 1)
+	}
+	return index
+}
+
+func (t *StructuredType) getMember(name string) *ast.Symbol {
+	if t.members == nil {
+		for _, symbol := range t.properties {
+			if symbol.Name() == name {
+				return symbol
+			}
+		}
+		return nil
+	}
+	if t.members.fallback != nil {
+		return t.members.fallback[name]
+	}
+	slots := t.members.slots
+	if len(slots) == 0 {
+		return nil
+	}
+	mask := uint64(len(slots) - 1)
+	slot := xxh3.HashString(name) & mask
+	for {
+		index := slots[slot]
+		if index == 0 {
+			return nil
+		}
+		symbol := t.properties[index-1]
+		if symbol.Name() == name {
+			return symbol
+		}
+		slot = (slot + 1) & mask
+	}
+}
+
+func (t *StructuredType) getMembers() ast.SymbolTable {
+	if t.members != nil && t.members.fallback != nil {
+		return t.members.fallback
+	}
+	if len(t.properties) == 0 {
+		return nil
+	}
+	members := make(ast.SymbolTable, len(t.properties))
+	for _, symbol := range t.properties {
+		members[symbol.Name()] = symbol
+	}
+	return members
 }
 
 // Except for tuple type references and reverse mapped types, all object types have an associated symbol.
