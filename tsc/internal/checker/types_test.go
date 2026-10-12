@@ -98,7 +98,18 @@ func TestTypeCasts(t *testing.T) {
 		typ.flags = TypeFlagsNever
 		typ.objectFlags = ObjectFlagsReference
 		assert.Equal(t, test.cast(typ), any(test.data))
-		assert.Assert(t, didPanic(func() { typ.AsLiteralType() }) == (test.kind != typeKindLiteral))
+		for _, target := range tests {
+			switch target.kind {
+			case typeKindObject:
+				assert.Equal(t, target.cast(typ), any(test.data.AsObjectType()))
+			case typeKindTypeReference:
+				assert.Equal(t, target.cast(typ), any(test.data.AsTypeReference()))
+			case typeKindInterface:
+				assert.Equal(t, target.cast(typ), any(test.data.AsInterfaceType()))
+			default:
+				assert.Assert(t, didPanic(func() { target.cast(typ) }) == (test.kind != target.kind))
+			}
+		}
 	}
 }
 
@@ -403,15 +414,15 @@ func TestTypeMapperDispatch(t *testing.T) {
 		{simple, TypeMapperKindSimple, target},
 		{array, TypeMapperKindArray, target},
 		{merged, TypeMapperKindMerged, target},
-		{newArrayToSingleTypeMapper([]*Type{source}, target), TypeMapperKindArrayToSingle, target},
-		{newDeferredTypeMapper([]*Type{source}, []func() *Type{func() *Type { return target }}), TypeMapperKindDeferred, target},
+		{newArrayToSingleTypeMapper([]*Type{source}, target), TypeMapperKindUnknown, target},
+		{newDeferredTypeMapper([]*Type{source}, []func() *Type{func() *Type { return target }}), TypeMapperKindUnknown, target},
 		{newFunctionTypeMapper(func(typ *Type) *Type {
 			if typ == source {
 				return target
 			}
 			return typ
-		}), TypeMapperKindFunction, target},
-		{newCompositeTypeMapper(c, newSimpleTypeMapper(other, target), simple), TypeMapperKindComposite, target},
+		}), TypeMapperKindUnknown, target},
+		{newCompositeTypeMapper(c, newSimpleTypeMapper(other, target), simple), TypeMapperKindUnknown, target},
 	} {
 		assert.Equal(t, test.mapper.Kind(), test.kind)
 		assert.Equal(t, test.mapper.Map(source), test.result)
@@ -441,10 +452,28 @@ func TestCompactTypeMapperLayout(t *testing.T) {
 	c, types := newCompositeTestChecker()
 	mapper := newSimpleTypeMapper(types[0], types[1])
 	assert.Assert(t, castTypeMapper[SimpleTypeMapper](mapper, TypeMapperKindSimple).source == types[0])
-	func() {
-		defer func() { assert.Assert(t, recover() != nil) }()
-		castTypeMapper[ArrayTypeMapper](mapper, TypeMapperKindArray)
-	}()
+	context := c.newInferenceContextWorker(nil, nil, InferenceFlagsNone, nil)
+	tests := []struct {
+		kind   TypeMapperKind
+		mapper *TypeMapper
+		cast   func(*TypeMapper) any
+	}{
+		{TypeMapperKindSimple, mapper, func(m *TypeMapper) any { return castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple) }},
+		{TypeMapperKindArray, newArrayTypeMapper(nil, nil), func(m *TypeMapper) any { return castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray) }},
+		{TypeMapperKindArrayToSingle, newArrayToSingleTypeMapper(nil, nil), func(m *TypeMapper) any { return castTypeMapper[ArrayToSingleTypeMapper](m, TypeMapperKindArrayToSingle) }},
+		{TypeMapperKindDeferred, newDeferredTypeMapper(nil, nil), func(m *TypeMapper) any { return castTypeMapper[DeferredTypeMapper](m, TypeMapperKindDeferred) }},
+		{TypeMapperKindFunction, newFunctionTypeMapper(func(t *Type) *Type { return t }), func(m *TypeMapper) any { return castTypeMapper[FunctionTypeMapper](m, TypeMapperKindFunction) }},
+		{TypeMapperKindMerged, newMergedTypeMapper(mapper, mapper), func(m *TypeMapper) any { return castTypeMapper[MergedTypeMapper](m, TypeMapperKindMerged) }},
+		{TypeMapperKindComposite, newCompositeTypeMapper(c, mapper, mapper), func(m *TypeMapper) any { return castTypeMapper[CompositeTypeMapper](m, TypeMapperKindComposite) }},
+		{TypeMapperKindInference, context.mapper, func(m *TypeMapper) any { return castTypeMapper[InferenceTypeMapper](m, TypeMapperKindInference) }},
+	}
+	runtime.GC()
+	for _, test := range tests {
+		assert.Equal(t, test.mapper.kind, test.kind)
+		for _, target := range tests {
+			assert.Assert(t, didPanic(func() { target.cast(test.mapper) }) == (test.kind != target.kind))
+		}
+	}
 	runtime.GC()
 	assert.Equal(t, mapper.Map(types[0]), types[1])
 	runtime.KeepAlive(c)
