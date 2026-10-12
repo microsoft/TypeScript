@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 )
 
@@ -25,7 +26,20 @@ func NewSymbolTrackerImpl(context *NodeBuilderContext, tracker nodebuilder.Symbo
 	return &SymbolTrackerImpl{context, tracker, false}
 }
 
+func (this *SymbolTrackerImpl) TypeAliasScope() *ast.Node {
+	if this.inner == nil {
+		return nil
+	}
+	return this.inner.TypeAliasScope()
+}
+
+func (this *SymbolTrackerImpl) AddTypeAliasDeclaration(declaration *ast.Node) {
+	debug.Assert(this.inner != nil, "Type alias synthesis requires a symbol tracker")
+	this.inner.AddTypeAliasDeclaration(declaration)
+}
+
 func (this *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags) bool {
+	this.context.recordTypeAliasParameter(symbol)
 	if !this.DisableTrackSymbol {
 		if this.inner != nil && this.inner.TrackSymbol(symbol, enclosingDeclaration, meaning) {
 			this.onDiagnosticReported()
