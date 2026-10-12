@@ -21,10 +21,27 @@ export * from "./default";
 export * from "./other";
 export { default } from "./default";
 
+// @filename: /localDefault.ts
+export * from "./default";
+export * from "./other";
+export default class Local {}
+
+// @filename: /defaultType.ts
+export default interface DefaultType {
+    value: string;
+}
+
+// @filename: /reexportType.ts
+export type * from "./defaultType";
+
 // @filename: /main.ts
 import Default, { named } from "./reexport";
 import Resolved from "./resolved";
+import Local from "./localDefault";
+import type DefaultType from "./reexportType";
 
 new Default();
 new Resolved();
+new Local();
+const value: DefaultType = { value: "" };
 named;

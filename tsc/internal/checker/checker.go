@@ -14890,36 +14890,22 @@ func (c *Checker) reportNonDefaultExport(moduleSymbol *ast.Symbol, node *ast.Nod
 	if moduleSymbol.Exports() != nil && moduleSymbol.Exports()[node.Symbol().Name()] != nil {
 		c.error(node, diagnostics.Module_0_has_no_default_export_Did_you_mean_to_use_import_1_from_0_instead, c.symbolToString(moduleSymbol), c.symbolToString(node.Symbol()))
 	} else {
-		diagnostic := c.error(node.Name(), diagnostics.Module_0_has_no_default_export, c.symbolToString(moduleSymbol))
-		var exportStar *ast.Symbol
-		if moduleSymbol.Exports() != nil {
-			exportStar = moduleSymbol.Exports()[ast.InternalSymbolNameExportStar]
-		}
-		if exportStar != nil {
-			defaultExport := core.Find(exportStar.Declarations(), func(decl *ast.Declaration) bool {
-				if !(ast.IsExportDeclaration(decl) && decl.ModuleSpecifier() != nil) {
-					return false
-				}
-				resolvedExternalModuleName := c.resolveExternalModuleName(decl, decl.ModuleSpecifier(), false /*ignoreErrors*/, c.getTypeFromImportAttributes(ast.GetImportAttributes(decl)))
-				return resolvedExternalModuleName != nil && resolvedExternalModuleName.Exports()[ast.InternalSymbolNameDefault] != nil
-			})
-			if defaultExport != nil {
-				diagnostic.AddRelatedInfo(createDiagnosticForNode(defaultExport, diagnostics.X_export_Asterisk_does_not_re_export_a_default))
-			}
-		}
+		c.error(node.Name(), diagnostics.Module_0_has_no_default_export, c.symbolToString(moduleSymbol))
 	}
 }
 
 func (c *Checker) resolveExportByName(moduleSymbol *ast.Symbol, name string, sourceNode *ast.Node, dontResolveAlias bool) *ast.Symbol {
 	exportValue := moduleSymbol.Exports()[ast.InternalSymbolNameExportEquals]
 	var exportSymbol *ast.Symbol
+	var exportStarDeclaration *ast.Node
 	if exportValue != nil {
 		exportSymbol = c.getPropertyOfTypeEx(c.getTypeOfSymbol(exportValue), name, true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/)
 	} else {
-		exportSymbol = moduleSymbol.Exports()[name]
+		exportSymbol = c.getExportsOfSymbol(moduleSymbol)[name]
+		exportStarDeclaration = c.moduleSymbolLinks.Get(moduleSymbol).typeOnlyExportStarMap[name]
 	}
 	resolved := c.resolveSymbolEx(exportSymbol, dontResolveAlias)
-	c.markSymbolOfAliasDeclarationIfTypeOnly(sourceNode, nil)
+	c.markSymbolOfAliasDeclarationIfTypeOnly(sourceNode, exportStarDeclaration)
 	return resolved
 }
 
@@ -16629,9 +16615,6 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
  */
 func (c *Checker) extendExportSymbols(target ast.SymbolTable, source ast.SymbolTable, lookupTable ExportCollisionTable, exportNode *ast.Node) {
 	for id, sourceSymbol := range source {
-		if id == ast.InternalSymbolNameDefault {
-			continue
-		}
 		targetSymbol := target[id]
 		if targetSymbol == nil {
 			target[id] = sourceSymbol
