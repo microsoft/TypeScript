@@ -261,7 +261,7 @@ func addReferencedFilesFromSymbol(file *ast.SourceFile, referencedFiles *collect
 	if symbol == nil {
 		return
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range symbol.Declarations() {
 		fileOfDecl := ast.GetSourceFileOfNode(declaration)
 		if fileOfDecl == nil {
 			continue

@@ -188,7 +188,7 @@ func (l *LanguageService) getRenameInfoForNode(ctx context.Context, newName stri
 	}
 
 	// Only allow a symbol to be renamed if it actually has at least one declaration.
-	if len(symbol.Declarations) == 0 {
+	if len(symbol.Declarations()) == 0 {
 		return RenameInfo{}, false
 	}
 
@@ -227,14 +227,14 @@ func nodeIsEligibleForRename(node *ast.Node) bool {
 // renameBlockedReason returns a non-nil diagnostic message if the rename should be blocked
 // because the symbol is a library definition, a default keyword, or would cross node_modules boundaries.
 func (l *LanguageService) renameBlockedReason(sourceFile *ast.SourceFile, node *ast.Node, symbol *ast.Symbol, ch *checker.Checker, program *compiler.Program) *diagnostics.Message {
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range symbol.Declarations() {
 		if isDefinedInLibraryFile(program, declaration) {
 			return diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library
 		}
 	}
 
 	// Cannot rename `default` as in `import { default as foo } from "./someModule"`
-	if ast.IsIdentifier(node) && node.Text() == "default" && symbol.Parent != nil && symbol.Parent.Flags&ast.SymbolFlagsModule != 0 {
+	if ast.IsIdentifier(node) && node.Text() == "default" && symbol.Parent() != nil && symbol.Parent().Flags()&ast.SymbolFlagsModule != 0 {
 		return diagnostics.You_cannot_rename_this_element
 	}
 
@@ -254,14 +254,14 @@ func isDefinedInLibraryFile(program *compiler.Program, declaration *ast.Node) bo
 // wouldRenameInOtherNodeModules checks if renaming the symbol would affect node_modules.
 func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Symbol, ch *checker.Checker, preferences lsutil.UserPreferences) *diagnostics.Message {
 	sym := symbol
-	if !preferences.ProvidePrefixAndSuffixTextForRename.IsTrueOrUnknown() && sym.Flags&ast.SymbolFlagsAlias != 0 {
-		importSpecifier := core.Find(sym.Declarations, ast.IsImportSpecifier)
+	if !preferences.ProvidePrefixAndSuffixTextForRename.IsTrueOrUnknown() && sym.Flags()&ast.SymbolFlagsAlias != 0 {
+		importSpecifier := core.Find(sym.Declarations(), ast.IsImportSpecifier)
 		if importSpecifier != nil && importSpecifier.AsImportSpecifier().PropertyName == nil {
 			sym = ch.GetAliasedSymbol(sym)
 		}
 	}
 
-	declarations := sym.Declarations
+	declarations := sym.Declarations()
 	if len(declarations) == 0 {
 		return nil
 	}
@@ -308,7 +308,7 @@ func (l *LanguageService) getRenameInfoForModule(ctx context.Context, newName st
 		return getRenameInfoError(ctx, diagnostics.File_rename_is_not_supported_by_the_editor), true
 	}
 
-	moduleSourceFile := core.Find(moduleSymbol.Declarations, ast.IsSourceFile)
+	moduleSourceFile := core.Find(moduleSymbol.Declarations(), ast.IsSourceFile)
 	if moduleSourceFile == nil {
 		return RenameInfo{}, false
 	}
@@ -407,7 +407,7 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 			} else {
 				originalSymbol = ch.GetSymbolAtLocation(originalNode)
 			}
-			if originalSymbol != nil && slices.Contains(originalSymbol.Declarations, parent) {
+			if originalSymbol != nil && slices.Contains(originalSymbol.Declarations(), parent) {
 				return name + " as " + newText
 			}
 			return newText

@@ -124,7 +124,6 @@ import type {
 } from "../proto.ts";
 import {
     resolveFileName,
-    toCreateSnapshotRequest,
     validateSymbolResponse,
 } from "../proto.ts";
 import {
@@ -361,13 +360,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private activeBuildOrchestrators: Set<BuildOrchestrator> = new Set();
     private activeSourceFileLeases: Map<number, RetainedSourceFile> = new Map();
     readonly printer: Printer;
-    readonly internal: InternalAPI;
+    readonly debug: DebugHandlers;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
         this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache<Symbol>();
         this.printer = new Printer(this.client);
-        this.internal = new InternalAPI(this.client, () => this.ensureInitialized()); // @sync: this.internal = new InternalAPI(this.client, this.ensureInitialized);
+        this.debug = new DebugHandlers(this.client, () => this.ensureInitialized()); // @sync: this.debug = new DebugHandlers(this.client, this.ensureInitialized);
     }
 
     /**
@@ -482,6 +481,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return "\n";
     }
 
+    /** @internal */
     async createBuildOrchestrator(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Promise<BuildOrchestrator> {
         await this.ensureInitialized();
         const orchestratorResponse = await this.client.apiRequest("createBuildOrchestrator", {
@@ -626,7 +626,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     async createSnapshot(params?: CreateSnapshotParams): Promise<Snapshot> {
         await this.ensureInitialized();
 
-        const requestParams = toCreateSnapshotRequest(this.prepareCreateSnapshotParams(params));
+        const requestParams = this.prepareCreateSnapshotParams(params);
         const data = await this.client.apiRequest("createSnapshot", requestParams);
 
         const snapshot = new Snapshot(
@@ -653,7 +653,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
         const data = await this.client.apiRequest("updateSnapshot", {
             snapshot: baseSnapshot.id,
-            changes: toCreateSnapshotRequest(this.prepareCreateSnapshotParams(params)),
+            changes: this.prepareCreateSnapshotParams(params),
         });
         if (data.snapshot === baseSnapshot.id) {
             await this.client.apiRequest("release", { snapshot: data.snapshot });
@@ -675,8 +675,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return snapshot;
     }
 
-    private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams | undefined {
-        if (!params) return undefined;
+    private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams {
+        params ??= {};
         const prepareOptions = (options: CreateProgramOptions | undefined): ProtocolCreateProgramOptions | undefined => {
             if (!options) return undefined;
             const { moduleResolver, projectReferences, ...rest } = options;
@@ -884,8 +884,13 @@ function sourceFileDescriptor(sourceFile: RemoteSourceFile): SourceFileDescripto
     };
 }
 
+/** Returns whether a node is backed by a remote compiler response. */
+export function isRemoteNode(node: Node): boolean {
+    return node instanceof RemoteNode;
+}
+
 function getRemoteSourceFile(node: Node): RemoteSourceFile | undefined {
-    if (!(node instanceof RemoteNode)) return undefined;
+    if (!isRemoteNode(node)) return undefined;
     const file = node.getSourceFile();
     return file instanceof RemoteSourceFile && file.api ? file : undefined;
 }
@@ -951,11 +956,10 @@ export class RetainedSourceFile {
     }
 }
 
-export class InternalAPI {
+export class DebugHandlers {
     private client: Client;
     private ensureInitialized: EnsureInitialized;
 
-    /** @internal */
     constructor(client: Client, ensureInitialized: EnsureInitialized) {
         this.client = client;
         this.ensureInitialized = ensureInitialized;
@@ -1051,7 +1055,6 @@ export class Snapshot {
     private snapshotRegistry: SnapshotObjectRegistry;
     private projectDataMap: Map<ProjectId, ProjectResponse>;
     private updateSnapshot: SnapshotUpdater;
-    readonly internal: SnapshotInternalAPI;
 
     private get client(): Client {
         return this.api.client;
@@ -1083,8 +1086,6 @@ export class Snapshot {
             createdPrograms: data.operation.createdPrograms?.map(projectId => this.requireProject(projectId).program),
             openedFiles: data.operation.openedFiles?.map(result => ({ project: this.requireProject(result.project) })),
         };
-
-        this.internal = new SnapshotInternalAPI(this.id, api.client);
     }
 
     getProjects(): readonly Project[] {
@@ -1538,15 +1539,10 @@ export class Project<Id extends ProjectId = ProjectId> {
     readonly currentDirectory: RootedDirectoryPath;
     readonly dirty: boolean;
     readonly parsedCommandLine: ParsedCommandLine;
-    /** @deprecated Use `parsedCommandLine.options`. */
-    readonly compilerOptions: CompilerOptions;
-    /** @deprecated Use `parsedCommandLine.fileNames`. */
-    readonly rootFiles: readonly RootedFilePath[];
 
     readonly program: Program<Id>;
     readonly checker: Checker;
     readonly languageService: LanguageService;
-    private snapshotId: number;
 
     constructor(data: ProjectResponse, snapshotId: number, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, snapshotRegistry: SnapshotObjectRegistry) {
         this.id = data.id as Id;
@@ -1558,23 +1554,10 @@ export class Project<Id extends ProjectId = ProjectId> {
             throw new Error(`Project '${data.configFileName}' has no parsed command line`);
         }
         this.parsedCommandLine = data.parsedCommandLine;
-        this.compilerOptions = this.parsedCommandLine.options;
-        this.rootFiles = this.parsedCommandLine.fileNames;
-        this.snapshotId = snapshotId;
         this.program = new Program(snapshotId, this, toPath);
         const objectRegistry = new ProjectObjectRegistry(snapshotId, this, snapshotRegistry);
         this.checker = new Checker(snapshotId, this, objectRegistry);
         this.languageService = new LanguageService(snapshotId, this, objectRegistry);
-    }
-
-    /** @deprecated Use `languageService.getImportAdderEdits`. */
-    getImportAdderEdits(file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): Promise<readonly TextEdit[]> {
-        return this.languageService.getImportAdderEdits(file, actions);
-    }
-
-    /** @deprecated Use `languageService.getImportEditsForSymbols`. */
-    getImportEditsForSymbols(file: DocumentIdentifier, symbols: readonly Symbol[], options: GetImportEditsForSymbolsOptions = {}): Promise<readonly TextEdit[]> {
-        return this.languageService.getImportEditsForSymbols(file, symbols, options);
     }
 
     dispose(): void {
@@ -1686,6 +1669,27 @@ export class LanguageService {
             })),
         };
     }
+
+    /**
+     * Format a synthesized node with the correct indentation for insertion at a
+     * specific position in an existing source file.
+     *
+     * @param node The synthesized AST node to format.
+     * @param file The target file where the node will be inserted.
+     * @param position The UTF-16 code-unit offset in the target file for insertion.
+     * @returns The formatted text of the node, indented for the insertion position.
+     */
+    async formatNodeForInsertion(node: Node, file: DocumentIdentifier, position: number): Promise<string> {
+        const encoded = encodeNode(node);
+        const base64 = uint8ArrayToBase64(encoded);
+        return this.client.apiRequest("formatNodeForInsertion", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+            position,
+            data: base64,
+        });
+    }
 }
 
 export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnosticsHost {
@@ -1723,7 +1727,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 
     getNewLine(): string {
-        return this.project.compilerOptions.newLine === NewLineKind.CRLF ? "\r\n" : "\n";
+        return this.project.parsedCommandLine.options.newLine === NewLineKind.CRLF ? "\r\n" : "\n";
     }
 
     /** @internal */
@@ -1746,7 +1750,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 
     getCompilerOptions(): CompilerOptions {
-        return this.project.compilerOptions;
+        return this.project.parsedCommandLine.options;
     }
 
     async getSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {
@@ -1757,8 +1761,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     /**
      * Returns the source file for an already-canonical path.
-     *
-     * @internal
      */
     getSourceFileByPath(path: PathKey): Promise<SourceFile | undefined> {
         // The wire format is a string, but the cache key remains the supplied
@@ -2436,21 +2438,6 @@ export class Checker {
             symbol: symbol.reference,
         });
         return (data ?? []).map(h => new NodeHandle(h, this.project));
-    }
-
-    /** @deprecated Use `project.languageService.getReferencedSymbolsForNode`. */
-    getReferencedSymbolsForNode(node: Node, position: number): Promise<ReferencedSymbolEntry[]> {
-        return this.project.languageService.getReferencedSymbolsForNode(node, position);
-    }
-
-    /** @deprecated Use `project.languageService.getSignatureUsage`. */
-    getSignatureUsage(signatureDecl: Node): Promise<SignatureUsage[]> {
-        return this.project.languageService.getSignatureUsage(signatureDecl);
-    }
-
-    /** @deprecated Use `project.languageService.getCompletionsAtPosition`. */
-    getCompletionsAtPosition(document: string, position: number, options?: CompletionOptions): Promise<CompletionInfo | undefined> {
-        return this.project.languageService.getCompletionsAtPosition(document, position, options);
     }
 
     /**
@@ -3160,45 +3147,6 @@ export class Printer {
             preserveSourceNewlines: options.preserveSourceNewlines,
             neverAsciiEscape: options.neverAsciiEscape,
             terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
-        });
-    }
-}
-
-export class SnapshotInternalAPI {
-    private snapshotId: number;
-    private client: Client;
-
-    constructor(snapshotId: number, client: Client) {
-        this.snapshotId = snapshotId;
-        this.client = client;
-    }
-
-    /**
-     * Format a synthesized node with the correct indentation for insertion at a
-     * specific position in an existing source file.
-     *
-     * @param node The synthesized AST node to format.
-     * @param file The target file where the node will be inserted.
-     * @param position The UTF-16 code-unit offset in the target file for insertion.
-     * @returns The formatted text of the node, indented for the insertion position.
-     */
-    async formatNodeForInsertion(node: Node, file: DocumentIdentifier, position: number): Promise<string> {
-        const data = await this.client.apiRequest("getDefaultProjectForFile", {
-            snapshot: this.snapshotId,
-            file,
-        });
-        if (!data) {
-            throw new Error(`No project found for file: ${typeof file === "string" ? file : file.uri}`);
-        }
-
-        const encoded = encodeNode(node);
-        const base64 = uint8ArrayToBase64(encoded);
-        return this.client.apiRequest("formatNodeForInsertion", {
-            snapshot: this.snapshotId,
-            project: data.id,
-            file,
-            position,
-            data: base64,
         });
     }
 }

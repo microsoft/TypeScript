@@ -178,7 +178,7 @@ func getImportersForExport(
 	var indirectUserDeclarations []*ast.Node
 	markSeenDirectImport := nodeSeenTracker()
 	markSeenIndirectUser := nodeSeenTracker()
-	isAvailableThroughGlobal := isSourceFileWithGlobalExports(exportInfo.exportingModuleSymbol.ValueDeclaration)
+	isAvailableThroughGlobal := isSourceFileWithGlobalExports(exportInfo.exportingModuleSymbol.ValueDeclaration())
 
 	getDirectImports := func(moduleSymbol *ast.Symbol) []*ast.Node {
 		return allDirectImports[moduleSymbol]
@@ -203,7 +203,7 @@ func getImportersForExport(
 		if moduleSymbol == nil {
 			return
 		}
-		debug.Assert(moduleSymbol.Flags&ast.SymbolFlagsModule != 0)
+		debug.Assert(moduleSymbol.Flags()&ast.SymbolFlagsModule != 0)
 		for _, directImport := range getDirectImports(moduleSymbol) {
 			if !ast.IsImportTypeNode(directImport) {
 				addIndirectUser(getSourceFileLikeForImportDeclaration(directImport), true /*addTransitiveDependencies*/)
@@ -309,7 +309,7 @@ func getImportersForExport(
 			return sourceFiles
 		}
 		// Module augmentations may use this module's exports without importing it.
-		for _, decl := range exportInfo.exportingModuleSymbol.Declarations {
+		for _, decl := range exportInfo.exportingModuleSymbol.Declarations() {
 			if ast.IsExternalModuleAugmentation(decl) && sourceFilesSet.Has(ast.GetSourceFileOfNode(decl).FileName()) {
 				addIndirectUser(decl, false)
 			}
@@ -357,7 +357,7 @@ func getSearchesFromDirectImports(
 
 	isNameMatch := func(name string) bool {
 		// Use name of "default" even in `export =` case because we may have allowSyntheticDefaultImports
-		return name == exportSymbol.Name || exportKind != ExportKindNamed && name == ast.InternalSymbolNameDefault
+		return name == exportSymbol.Name() || exportKind != ExportKindNamed && name == ast.InternalSymbolNameDefault
 	}
 
 	// `import x = require("./x")` or `import * as x from "./x"`.
@@ -385,7 +385,7 @@ func getSearchesFromDirectImports(
 				singleReferences = append(singleReferences, propertyName)
 				// If renaming `{ foo as bar }`, don't touch `bar`, just `foo`.
 				// But do rename `foo` in ` { default as foo }` if that's the original export name.
-				if !isForRename || name.Text() == exportSymbol.Name {
+				if !isForRename || name.Text() == exportSymbol.Name() {
 					// Search locally for `bar`.
 					addSearch(name, checker.GetSymbolAtLocation(name))
 				}
@@ -475,7 +475,7 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 	getExport := func() *ImportExportSymbol {
 		getExportAssignmentExport := func(ex *ast.Node) *ImportExportSymbol {
 			// Get the symbol for the `export =` node; its parent is the module it's the export of.
-			if ex.Symbol().Parent == nil {
+			if ex.Symbol().Parent() == nil {
 				return nil
 			}
 			exportKind := core.IfElse(ex.AsExportAssignment().IsExportEquals, ExportKindExportEquals, ExportKindDefault)
@@ -483,7 +483,7 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 				kind:   ImpExpKindExport,
 				symbol: symbol,
 				exportInfo: &ExportInfo{
-					exportingModuleSymbol: ex.Symbol().Parent,
+					exportingModuleSymbol: ex.Symbol().Parent(),
 					exportKind:            exportKind,
 				},
 			}
@@ -519,16 +519,16 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 
 		parent := node.Parent
 		grandparent := parent.Parent
-		if symbol.ExportSymbol != nil {
+		if symbol.ExportSymbol() != nil {
 			if ast.IsPropertyAccessExpression(parent) {
 				// When accessing an export of a JS module, there's no alias. The symbol will still be flagged as an export even though we're at the use.
 				// So check that we are at the declaration.
-				if ast.IsBinaryExpression(grandparent) && slices.Contains(symbol.Declarations, parent) {
+				if ast.IsBinaryExpression(grandparent) && slices.Contains(symbol.Declarations(), parent) {
 					return getSpecialPropertyExport(grandparent, false /*useLhsSymbol*/)
 				}
 				return nil
 			}
-			return exportInfo(symbol.ExportSymbol, getExportKindForDeclaration(parent))
+			return exportInfo(symbol.ExportSymbol(), getExportKindForDeclaration(parent))
 		} else {
 			exportNode := getExportNode(parent, node)
 			switch {
@@ -569,7 +569,7 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 		// JS destructuring from `require(...)` is import-like for references, but the binding element
 		// itself is still a local variable symbol rather than an alias.
 		var importedSymbol *ast.Symbol
-		if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+		if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
 			importedSymbol = checker.GetImmediateAliasedSymbol(symbol)
 		} else {
 			importedSymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol, checker)
@@ -583,7 +583,7 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 			return nil
 		}
 		// Similarly, skip past the symbol for 'export ='
-		if importedSymbol.Name == "export=" {
+		if importedSymbol.Name() == "export=" {
 			importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker)
 			if importedSymbol == nil {
 				return nil
@@ -593,7 +593,7 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 		// If `importedName` is undefined, do continue searching as the export is anonymous.
 		// (All imports returned from this function will be ignored anyway if we are in rename and this is a not a named export.)
 		importedName := symbolNameNoDefault(importedSymbol)
-		if importedName == "" || importedName == ast.InternalSymbolNameDefault || importedName == symbol.Name {
+		if importedName == "" || importedName == ast.InternalSymbolNameDefault || importedName == symbol.Name() {
 			return &ImportExportSymbol{
 				kind:   ImpExpKindImport,
 				symbol: importedSymbol,
@@ -611,8 +611,8 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 
 func getExportInfo(exportSymbol *ast.Symbol, exportKind ExportKind, c *checker.Checker) *ExportInfo {
 	// Parent can be nil if an `export` is not at the top-level (which is a compile error).
-	if exportSymbol.Parent != nil {
-		exportingModuleSymbol := c.GetMergedSymbol(exportSymbol.Parent)
+	if exportSymbol.Parent() != nil {
+		exportingModuleSymbol := c.GetMergedSymbol(exportSymbol.Parent())
 		// `export` may appear in a namespace. In that case, just rely on global search.
 		if checker.IsExternalModuleSymbol(exportingModuleSymbol) {
 			return &ExportInfo{
@@ -668,7 +668,7 @@ func isExternalModuleImportEquals(node *ast.Node) bool {
 // If at an export specifier, go to the symbol it refers to. */
 func skipExportSpecifierSymbol(symbol *ast.Symbol, checker *checker.Checker) *ast.Symbol {
 	// For `export { foo } from './bar", there's nothing to skip, because it does not create a new alias. But `export { foo } does.
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range symbol.Declarations() {
 		switch {
 		case ast.IsExportSpecifier(declaration) && declaration.PropertyName() == nil && declaration.Parent.Parent.ModuleSpecifier() == nil:
 			return core.OrElse(checker.GetExportSpecifierLocalTargetSymbol(declaration), symbol)
@@ -683,10 +683,10 @@ func skipExportSpecifierSymbol(symbol *ast.Symbol, checker *checker.Checker) *as
 }
 
 func getExportEqualsLocalSymbol(importedSymbol *ast.Symbol, checker *checker.Checker) *ast.Symbol {
-	if importedSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+	if importedSymbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		return checker.GetImmediateAliasedSymbol(importedSymbol)
 	}
-	decl := importedSymbol.ValueDeclaration
+	decl := importedSymbol.ValueDeclaration()
 	debug.Assert(decl != nil)
 	switch {
 	case ast.IsExportAssignment(decl):
@@ -700,10 +700,10 @@ func getExportEqualsLocalSymbol(importedSymbol *ast.Symbol, checker *checker.Che
 }
 
 func symbolNameNoDefault(symbol *ast.Symbol) string {
-	if symbol.Name != ast.InternalSymbolNameDefault {
-		return symbol.Name
+	if symbol.Name() != ast.InternalSymbolNameDefault {
+		return symbol.Name()
 	}
-	for _, decl := range symbol.Declarations {
+	for _, decl := range symbol.Declarations() {
 		name := ast.GetNameOfDeclaration(decl)
 		if name != nil && ast.IsIdentifier(name) {
 			return name.Text()
@@ -718,7 +718,7 @@ func findModuleReferences(program *compiler.Program, sourceFiles []*ast.SourceFi
 	refs := []ModuleReference{}
 
 	for _, referencingFile := range sourceFiles {
-		searchSourceFile := searchModuleSymbol.ValueDeclaration
+		searchSourceFile := searchModuleSymbol.ValueDeclaration()
 		if searchSourceFile != nil && searchSourceFile.Kind == ast.KindSourceFile {
 			// Check <reference path> directives
 			for _, ref := range referencingFile.ReferencedFiles {

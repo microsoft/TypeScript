@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
@@ -31,15 +32,15 @@ var _ EmitHost = (*emitHost)(nil)
 
 // NOTE: emitHost operations must be thread-safe
 type emitHost struct {
-	program      *Program
-	emitResolver printer.EmitResolver
+	program         *Program
+	newEmitResolver func(*printer.EmitContext) *checker.EmitResolver
 }
 
 func newEmitHost(ctx context.Context, program *Program, file *ast.SourceFile) (*emitHost, func()) {
 	checker, done := program.GetTypeCheckerForFile(ctx, file)
 	return &emitHost{
-		program:      program,
-		emitResolver: checker.GetEmitResolver(),
+		program:         program,
+		newEmitResolver: checker.NewEmitResolver,
 	}, done
 }
 
@@ -87,10 +88,6 @@ func (host *emitHost) GetRedirectTargets(path tspath.PathKey) []tspath.RootedFil
 	return host.program.GetRedirectTargets(path)
 }
 
-func (host *emitHost) GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags {
-	return host.GetEmitResolver().GetEffectiveDeclarationFlags(node, flags)
-}
-
 func (host *emitHost) GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) declarations.OutputPaths {
 	// TODO: cache
 	return outputpaths.GetOutputPathsFor(file, host.Options(), host, outputpaths.ForceEmitPaths{Dts: forceDtsPaths})
@@ -130,8 +127,8 @@ func (host *emitHost) WriteFile(fileName tspath.RootedFilePath, text string) err
 	return host.program.Host().FS().WriteFile(fileName, text)
 }
 
-func (host *emitHost) GetEmitResolver() printer.EmitResolver {
-	return host.emitResolver
+func (host *emitHost) NewEmitResolver(emitContext *printer.EmitContext) printer.EmitResolver {
+	return host.newEmitResolver(emitContext)
 }
 
 func (host *emitHost) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {

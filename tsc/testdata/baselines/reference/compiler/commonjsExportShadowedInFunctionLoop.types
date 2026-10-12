@@ -1,0 +1,104 @@
+//// [tests/cases/compiler/commonjsExportShadowedInFunctionLoop.ts] ////
+
+=== commonjsExportShadowedInFunctionLoop.ts ===
+export function f(xs: number[]) {
+>f : (xs: number[]) => void
+>xs : number[]
+
+    for (const x of xs) {
+>x : number
+>xs : number[]
+
+        const mount = x;
+>mount : number
+>x : number
+
+        console.log(mount);
+>console.log(mount) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>mount : number
+    }
+    for (const x in xs) {
+>x : string
+>xs : number[]
+
+        const mount = x;
+>mount : string
+>x : string
+
+        console.log(mount);
+>console.log(mount) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>mount : string
+    }
+    for (let x = 0; x < xs.length; x++) {
+>x : number
+>0 : 0
+>x < xs.length : boolean
+>x : number
+>xs.length : number
+>xs : number[]
+>length : number
+>x++ : number
+>x : number
+
+        const mount = xs[x];
+>mount : number
+>xs[x] : number
+>xs : number[]
+>x : number
+
+        console.log(mount);
+>console.log(mount) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>mount : number
+    }
+}
+function mount() {}
+>mount : () => void
+
+export { mount };
+>mount : () => void
+
+for (const x of [1]) {
+>x : number
+>[1] : number[]
+>1 : 1
+
+    var fromForOf = x;
+>fromForOf : number
+>x : number
+}
+for (const x in [1]) {
+>x : string
+>[1] : number[]
+>1 : 1
+
+    var fromForIn = x;
+>fromForIn : string
+>x : string
+}
+for (let x = 0; x < 1; x++) {
+>x : number
+>0 : 0
+>x < 1 : boolean
+>x : number
+>1 : 1
+>x++ : number
+>x : number
+
+    var fromFor = x;
+>fromFor : number
+>x : number
+}
+export { fromForOf, fromForIn, fromFor };
+>fromForOf : number
+>fromForIn : string
+>fromFor : number
+

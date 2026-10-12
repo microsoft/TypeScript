@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/importedValueInEnumComputedNameNoFlake.ts] ////
+
+=== key.ts ===
+export const key = "member";
+>key : "member"
+>"member" : "member"
+
+=== main.ts ===
+import { key } from "./key";
+>key : "member"
+
+export enum Example {
+>Example : Example
+
+    [key] = 0,
+>[key] : Example
+>key : "member"
+>0 : 0
+}
