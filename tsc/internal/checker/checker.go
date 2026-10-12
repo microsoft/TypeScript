@@ -689,6 +689,7 @@ type Checker struct {
 	valueSymbolExtraArena                       core.Arena[valueSymbolExtra]
 	structuredTypeExtraArena                    core.Arena[structuredTypeExtra]
 	freeTypeSets                                *temporaryTypeSet
+	freePropertyCounts                          *temporaryPropertyCounts
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
 	factory                                     ast.NodeFactory
@@ -22324,7 +22325,8 @@ func (c *Checker) isMappingOfSameObjectType(types []*Type) bool {
 
 func (c *Checker) somePropertyReducesToNever(t *Type) bool {
 	// Collect declaration counts for each property across all constituent types of the intersection.
-	var counts collections.OrderedMap[string, int]
+	counts := c.getTemporaryPropertyCounts()
+	defer c.releaseTemporaryPropertyCounts(counts)
 	for _, t := range t.Types() {
 		for _, prop := range c.getPropertiesOfType(t) {
 			counts.Set(prop.Name(), counts.GetOrZero(prop.Name())+1)
