@@ -636,6 +636,7 @@ type Checker struct {
 	subtypeReductionCache                       map[CacheHashKey][]*Type
 	cachedTypes                                 map[CachedTypeKey]*Type
 	cachedSignatures                            map[CachedSignatureKey]*Signature
+	writeTypes                                  map[*ast.Symbol]*Type
 	undefinedProperties                         map[string]*ast.Symbol
 	narrowedTypes                               map[NarrowedTypeKey]*Type
 	assignmentReducedTypes                      map[AssignmentReducedKey]*Type
@@ -955,6 +956,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.subtypeReductionCache = make(map[CacheHashKey][]*Type)
 	c.cachedTypes = make(map[CachedTypeKey]*Type)
 	c.cachedSignatures = make(map[CachedSignatureKey]*Signature)
+	c.writeTypes = make(map[*ast.Symbol]*Type)
 	c.undefinedProperties = make(map[string]*ast.Symbol)
 	c.narrowedTypes = make(map[NarrowedTypeKey]*Type)
 	c.assignmentReducedTypes = make(map[AssignmentReducedKey]*Type)
@@ -16807,20 +16809,19 @@ func (c *Checker) getTypeOfSymbolWithDeferredType(symbol *ast.Symbol) *Type {
 }
 
 func (c *Checker) getWriteTypeOfSymbolWithDeferredType(symbol *ast.Symbol) *Type {
-	links := c.valueSymbolLinks.Get(symbol)
-	if links.writeType == nil {
+	if c.writeTypes[symbol] == nil {
 		deferred := c.deferredSymbolLinks.Get(symbol)
 		if len(deferred.writeConstituents) != 0 {
 			if deferred.parent.flags&TypeFlagsUnion != 0 {
-				links.writeType = c.getUnionType(deferred.writeConstituents)
+				c.writeTypes[symbol] = c.getUnionType(deferred.writeConstituents)
 			} else {
-				links.writeType = c.getIntersectionType(deferred.writeConstituents)
+				c.writeTypes[symbol] = c.getIntersectionType(deferred.writeConstituents)
 			}
 		} else {
-			links.writeType = c.getTypeOfSymbolWithDeferredType(symbol)
+			c.writeTypes[symbol] = c.getTypeOfSymbolWithDeferredType(symbol)
 		}
 	}
-	return links.writeType
+	return c.writeTypes[symbol]
 }
 
 // Distinct write types come only from set accessors, but synthetic union and intersection
@@ -16832,7 +16833,7 @@ func (c *Checker) getWriteTypeOfSymbol(symbol *ast.Symbol) *Type {
 			return c.getWriteTypeOfSymbolWithDeferredType(symbol)
 		}
 		links := c.valueSymbolLinks.Get(symbol)
-		return core.OrElse(links.writeType, links.resolvedType)
+		return core.OrElse(c.writeTypes[symbol], links.resolvedType)
 	}
 	if symbol.Flags()&ast.SymbolFlagsProperty != 0 {
 		return c.removeMissingType(c.getTypeOfSymbol(symbol), symbol.Flags()&ast.SymbolFlagsOptional != 0)
@@ -16930,10 +16931,10 @@ func (c *Checker) getTypeOfInstantiatedSymbol(symbol *ast.Symbol) *Type {
 
 func (c *Checker) getWriteTypeOfInstantiatedSymbol(symbol *ast.Symbol) *Type {
 	links := c.valueSymbolLinks.Get(symbol)
-	if links.writeType == nil {
-		links.writeType = c.instantiateType(c.getWriteTypeOfSymbol(links.target), links.mapper)
+	if c.writeTypes[symbol] == nil {
+		c.writeTypes[symbol] = c.instantiateType(c.getWriteTypeOfSymbol(links.target), links.mapper)
 	}
-	return links.writeType
+	return c.writeTypes[symbol]
 }
 
 func (c *Checker) getTypeOfVariableOrParameterOrProperty(symbol *ast.Symbol) *Type {
@@ -18980,8 +18981,7 @@ func (c *Checker) getTypeOfAccessors(symbol *ast.Symbol) *Type {
 }
 
 func (c *Checker) getWriteTypeOfAccessors(symbol *ast.Symbol) *Type {
-	links := c.valueSymbolLinks.Get(symbol)
-	if links.writeType == nil {
+	if c.writeTypes[symbol] == nil {
 		if !c.pushTypeResolution(symbol, TypeSystemPropertyNameWriteType) {
 			return c.errorType
 		}
@@ -19000,15 +19000,15 @@ func (c *Checker) getWriteTypeOfAccessors(symbol *ast.Symbol) *Type {
 			writeType = c.anyType
 		}
 		// Absent an explicit setter type annotation we use the read type of the accessor.
-		if links.writeType == nil {
+		if c.writeTypes[symbol] == nil {
 			if writeType != nil {
-				links.writeType = writeType
+				c.writeTypes[symbol] = writeType
 			} else {
-				links.writeType = c.getTypeOfAccessors(symbol)
+				c.writeTypes[symbol] = c.getTypeOfAccessors(symbol)
 			}
 		}
 	}
-	return links.writeType
+	return c.writeTypes[symbol]
 }
 
 func (c *Checker) getTypeOfAlias(symbol *ast.Symbol) *Type {
@@ -19228,7 +19228,7 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 	case TypeSystemPropertyNameInitializerIsUndefined:
 		return c.nodeLinks.Get(r.target.(*ast.Node)).flags&NodeCheckFlagsInitializerIsUndefinedComputed != 0
 	case TypeSystemPropertyNameWriteType:
-		return c.valueSymbolLinks.Get(r.target.(*ast.Symbol)).writeType != nil
+		return c.writeTypes[r.target.(*ast.Symbol)] != nil
 	case TypeSystemPropertyNameAliasTarget:
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget != nil
 	}
@@ -21178,7 +21178,7 @@ func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symb
 			return symbol
 		}
 		// If we're a setter, check writeType.
-		if links.writeType != nil && !c.couldContainTypeVariables(links.writeType) {
+		if writeType := c.writeTypes[symbol]; writeType != nil && !c.couldContainTypeVariables(writeType) {
 			return symbol
 		}
 	}
@@ -22009,7 +22009,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 		links := c.valueSymbolLinks.Get(clone)
 		links.containingType = containingType
 		links.mapper = singlePropMapper
-		links.writeType = c.getWriteTypeOfSymbol(singleProp)
+		c.writeTypes[clone] = c.getWriteTypeOfSymbol(singleProp)
 		return clone
 	}
 	if propSet.Size() == 0 {
@@ -22074,18 +22074,27 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 		deferred.writeConstituents = writeTypes
 		return result
 	}
+
+	var resolvedType *Type
 	if isUnion {
-		links.resolvedType = c.getUnionType(propTypes)
+		resolvedType = c.getUnionType(propTypes)
 	} else {
-		links.resolvedType = c.getIntersectionType(propTypes)
+		resolvedType = c.getIntersectionType(propTypes)
 	}
+	links.resolvedType = resolvedType
+
 	if writeTypes != nil {
+		var writeType *Type
 		if isUnion {
-			links.writeType = c.getUnionType(writeTypes)
+			writeType = c.getUnionType(writeTypes)
 		} else {
-			links.writeType = c.getIntersectionType(writeTypes)
+			writeType = c.getIntersectionType(writeTypes)
+		}
+		if writeType != resolvedType {
+			c.writeTypes[result] = writeType
 		}
 	}
+
 	return result
 }
 
