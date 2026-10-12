@@ -757,11 +757,21 @@ func tryGetModuleNameAsNodeModule(
 		return ""
 	}
 
+	caseSensitivity := host.CaseSensitivity()
+	globalTypingsCacheLocation := host.GetGlobalTypingsCacheLocation()
+	// Check reachability before consulting package.json exports, which can return
+	// a bare specifier directly. An exported path is only usable if the importing
+	// file can reach the package through node_modules, and packages under the
+	// global typings cache are excluded.
+	if !caseSensitivity.ContainsPath(parts.TopLevelNodeModulesSearchRoot, info.SourceDirectory.AsPath()) ||
+		globalTypingsCacheLocation != "" && caseSensitivity.ContainsPath(parts.TopLevelNodeModulesSearchRoot, globalTypingsCacheLocation.AsPath()) {
+		return ""
+	}
+
 	// Simplify the full file path to something that can be resolved by Node.
 	preferences := getModuleSpecifierPreferences(userPreferences, host, options, importingSourceFile, "")
 	allowedEndings := preferences.getAllowedEndingsInPreferredOrder(core.ResolutionModeNone)
 
-	caseSensitivity := host.CaseSensitivity()
 	moduleSpecifier := pathObj.FileName.AsString()
 	isPackageRootPath := false
 	if !packageNameOnly {
@@ -816,14 +826,6 @@ func tryGetModuleNameAsNodeModule(
 	}
 
 	if pathObj.IsRedirect && !isPackageRootPath {
-		return ""
-	}
-
-	globalTypingsCacheLocation := host.GetGlobalTypingsCacheLocation()
-	// Get a path that's relative to node_modules or the importing file's path
-	// if node_modules folder is in this folder or any of its parent folders, no need to keep it.
-	if !caseSensitivity.ContainsPath(parts.TopLevelNodeModulesSearchRoot, info.SourceDirectory.AsPath()) ||
-		globalTypingsCacheLocation != "" && caseSensitivity.ContainsPath(parts.TopLevelNodeModulesSearchRoot, globalTypingsCacheLocation.AsPath()) {
 		return ""
 	}
 
