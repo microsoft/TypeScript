@@ -23401,14 +23401,16 @@ func (c *Checker) getDistributedTypeFromTypeParameter(t *Type) *Type {
 	return tp.distributedType
 }
 
-// Returns an identity mapper for the non-distributed form of the given type if it is a distributed type
-// parameter. Instantiating with this mapper maps all occurrences of the distributed type parameter back
-// to the non-distributed form.
-func getNonDistributingMapper(t *Type) *TypeMapper {
-	if typeParameter := getNonDistributedTypeParameter(t); typeParameter != t {
-		return newSimpleTypeMapper(typeParameter, typeParameter)
+// Returns the given conditional type with references to the distributed form of its check type parameter
+// mapped back to the non-distributed form. This is the identity instantiation of the conditional type,
+// which is cached in the instantiation map of the conditional type's root.
+func (c *Checker) getNonDistributedConditionalType(t *Type) *Type {
+	if typeParameter := getNonDistributedTypeParameter(t.AsConditionalType().checkType); typeParameter != t.AsConditionalType().checkType {
+		instantiated := c.instantiateType(t, newSimpleTypeMapper(typeParameter, typeParameter))
+		debug.Assert(instantiated.flags&TypeFlagsConditional != 0, "Identity instantiation of a conditional type should remain deferred")
+		return instantiated
 	}
-	return nil
+	return t
 }
 
 func getNonDistributedTypeParameter(t *Type) *Type {

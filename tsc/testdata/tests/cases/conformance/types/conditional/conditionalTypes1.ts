@@ -410,3 +410,67 @@ function conditionalRelations6<T>(x: T extends { self: T } ? { t: T } : never) {
     const make = <V>(v: V): T extends { self: T } ? { t: T, v: V } : never => null!;
     x = make(1);
 }
+
+function conditionalRelations7<T>(
+    x: T extends object ? { inner: [T] extends [string] ? { t: T } : never } : never,
+    y: [T] extends [string] ? { t: T } : never,
+) {
+    x.inner = y;
+    y = x.inner;
+}
+
+declare function pickT<V>(v: { t: V }): V;
+function conditionalRelations8<T>(x: T extends object ? { t: T } : never, t: T) {
+    let r = pickT(x);
+    r = t;
+}
+
+interface Box<X> { value: X }
+function conditionalRelations9<T>(
+    x: Box<T extends { value: infer U } ? { t: T, u: U } : never>,
+    y: Box<T extends { value: infer U } ? { t: T, u: U } : never>,
+) {
+    x = y;
+    y = x;
+}
+
+type Cond<T> = T extends { value: infer U } ? { t: T, u: U } : never;
+type Rec<T> = T extends object ? { next: Rec<T>, t: T } : never;
+function conditionalRelations10<T>(x: Cond<T>, y: T extends { value: infer U } ? { t: T, u: U } : never) {
+    x = y;
+    y = x;
+    const make = <V>(v: V): Cond<T> => null!;
+    x = make(1);
+}
+function conditionalRelations11<T>(x: Rec<T>, y: T extends object ? { next: Rec<T>, t: T } : never) {
+    x = y;
+    y = x;
+}
+
+function conditionalRelations12<T, U>(x: T extends string ? T : never, y: T, z: T extends string ? U : never) {
+    x = y;  // Error
+    x = z;  // Error
+    z = x;  // Error
+}
+
+type ElementType =
+    | { type: "text"; text: string }
+    | { type: "image"; src: string };
+interface Page {
+    addElement<T extends ElementType["type"] | (string & {})>(
+        attrs: { type: T } & (T extends ElementType["type"]
+            ? Partial<Omit<Extract<ElementType, { type: T }>, "type">>
+            : Record<string, any>),
+    ): void;
+}
+declare const returned: {
+    addElement<T extends ElementType["type"] | (string & {})>(
+        attrs: { type: T } & (T extends ElementType["type"]
+            ? Partial<Omit<Extract<ElementType, { type: T }>, "type">>
+            : Record<string, any>),
+    ): void;
+};
+const page: Page = returned;
+
+declare let f: <A>(m: A, r: (a: A extends string ? A : 0) => void) => void;
+let g: <A>(m: A, r: (a: A extends string ? A : 0) => void) => void = f;

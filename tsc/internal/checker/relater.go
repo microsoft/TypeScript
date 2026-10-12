@@ -3757,33 +3757,28 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			return TernaryMaybe
 		}
 		if target.flags&TypeFlagsConditional != 0 {
+			// The constituent types of an uninstantiated distributive conditional type reference the distributed
+			// form of the check type parameter. Normalize both sides to their non-distributed form such that the
+			// comparison doesn't depend on whether either side has been instantiated.
+			s := r.c.getNonDistributedConditionalType(source)
+			t := r.c.getNonDistributedConditionalType(target)
 			// Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
 			// one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
 			// and Y1 is related to Y2.
-			sourceParams := source.AsConditionalType().root.inferTypeParameters
-			// The constituent types of a distributive conditional type reference the distributed form of the
-			// check type parameter. Map those references back to the non-distributed form on both sides so
-			// that the comparison doesn't depend on whether either side has been instantiated.
-			sourceMapper := getNonDistributingMapper(source.AsConditionalType().checkType)
-			targetMapper := getNonDistributingMapper(target.AsConditionalType().checkType)
-			// The infer type parameters of the source are in scope in its extends type and true type only
-			sourceTrueMapper := sourceMapper
+			sourceParams := s.AsConditionalType().root.inferTypeParameters
+			sourceExtends := s.AsConditionalType().extendsType
+			var mapper *TypeMapper
 			if len(sourceParams) != 0 {
 				// If the source has infer type parameters, we instantiate them in the context of the target
 				ctx := r.c.newInferenceContext(sourceParams, nil /*signature*/, InferenceFlagsNone, r.isRelatedToWorker)
-				r.c.inferTypes(ctx.inferences, target.AsConditionalType().extendsType, source.AsConditionalType().extendsType, InferencePriorityNoConstraints|InferencePriorityAlwaysStrict, false)
-				sourceTrueMapper = r.c.combineTypeMappers(sourceMapper, ctx.mapper)
+				r.c.inferTypes(ctx.inferences, t.AsConditionalType().extendsType, sourceExtends, InferencePriorityNoConstraints|InferencePriorityAlwaysStrict, false)
+				sourceExtends = r.c.instantiateType(sourceExtends, ctx.mapper)
+				mapper = ctx.mapper
 			}
-			sourceExtends := r.c.instantiateType(source.AsConditionalType().extendsType, sourceTrueMapper)
-			targetExtends := r.c.instantiateType(target.AsConditionalType().extendsType, targetMapper)
-			if r.c.isTypeIdenticalTo(sourceExtends, targetExtends) && (r.isRelatedTo(source.AsConditionalType().checkType, target.AsConditionalType().checkType, RecursionFlagsBoth, false) != 0 || r.isRelatedTo(target.AsConditionalType().checkType, source.AsConditionalType().checkType, RecursionFlagsBoth, false) != 0) {
-				sourceTrueType := r.c.instantiateType(r.c.getTrueTypeFromConditionalType(source), sourceTrueMapper)
-				targetTrueType := r.c.instantiateType(r.c.getTrueTypeFromConditionalType(target), targetMapper)
-				result = r.isRelatedTo(sourceTrueType, targetTrueType, RecursionFlagsBoth, reportErrors)
+			if r.c.isTypeIdenticalTo(sourceExtends, t.AsConditionalType().extendsType) && (r.isRelatedTo(s.AsConditionalType().checkType, t.AsConditionalType().checkType, RecursionFlagsBoth, false) != 0 || r.isRelatedTo(t.AsConditionalType().checkType, s.AsConditionalType().checkType, RecursionFlagsBoth, false) != 0) {
+				result = r.isRelatedTo(r.c.instantiateType(r.c.getTrueTypeFromConditionalType(s), mapper), r.c.getTrueTypeFromConditionalType(t), RecursionFlagsBoth, reportErrors)
 				if result != TernaryFalse {
-					sourceFalseType := r.c.instantiateType(r.c.getFalseTypeFromConditionalType(source), sourceMapper)
-					targetFalseType := r.c.instantiateType(r.c.getFalseTypeFromConditionalType(target), targetMapper)
-					result &= r.isRelatedTo(sourceFalseType, targetFalseType, RecursionFlagsBoth, reportErrors)
+					result &= r.isRelatedTo(r.c.getFalseTypeFromConditionalType(s), r.c.getFalseTypeFromConditionalType(t), RecursionFlagsBoth, reportErrors)
 				}
 				if result != TernaryFalse {
 					return result
