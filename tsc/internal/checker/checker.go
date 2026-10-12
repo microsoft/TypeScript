@@ -21916,24 +21916,35 @@ func (c *Checker) getPropertyOfUnionOrIntersectionType(t *Type, name string, ski
 // these partial properties when identifying discriminant properties, but otherwise they are filtered out
 // and do not appear to be present in the union type.
 func (c *Checker) getUnionOrIntersectionProperty(t *Type, name string, skipObjectFunctionPropertyAugment bool) *ast.Symbol {
-	var cache ast.SymbolTable
+	data := t.AsUnionOrIntersectionType()
 	if skipObjectFunctionPropertyAugment {
-		cache = ast.GetSymbolTable(&t.AsUnionOrIntersectionType().propertyCacheWithoutFunctionPropertyAugment)
+		if prop := data.propertyCacheWithoutFunctionPropertyAugment[name]; prop != nil {
+			return prop
+		}
 	} else {
-		cache = ast.GetSymbolTable(&t.AsUnionOrIntersectionType().propertyCache)
-	}
-	if prop := cache[name]; prop != nil {
-		return prop
+		if data.propertyCache != nil {
+			if prop := data.propertyCache[name]; prop != nil {
+				return prop
+			}
+		}
+		// Complete non-augmented properties are also valid for augmented
+		// lookup. Share the entry instead of retaining it in both tables.
+		if prop := data.propertyCacheWithoutFunctionPropertyAugment[name]; prop != nil && prop.CheckFlags()&ast.CheckFlagsPartial == 0 {
+			return prop
+		}
 	}
 	prop := c.createUnionOrIntersectionProperty(t, name, skipObjectFunctionPropertyAugment)
 	if prop != nil {
-		cache[name] = prop
-		// Propagate an entry from the non-augmented cache to the augmented cache unless the property is partial.
-		if skipObjectFunctionPropertyAugment && prop.CheckFlags()&ast.CheckFlagsPartial == 0 {
-			augmentedCache := ast.GetSymbolTable(&t.AsUnionOrIntersectionType().propertyCache)
-			if augmentedCache[name] == nil {
-				augmentedCache[name] = prop
+		if skipObjectFunctionPropertyAugment {
+			ast.GetSymbolTable(&data.propertyCacheWithoutFunctionPropertyAugment)[name] = prop
+			if prop.CheckFlags()&ast.CheckFlagsPartial == 0 && data.propertyCache[name] == prop {
+				delete(data.propertyCache, name)
+				if len(data.propertyCache) == 0 {
+					data.propertyCache = nil
+				}
 			}
+		} else {
+			ast.GetSymbolTable(&data.propertyCache)[name] = prop
 		}
 	}
 	return prop
