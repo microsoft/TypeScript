@@ -213,30 +213,34 @@ func TestLocaleFilesIgnoreStaleDiagnostics(t *testing.T) {
 	validateLocaleFile(t, []byte("{\r\n  \"Removed_diagnostic_99999\": \"Stale translation.\"\r\n}"), nil)
 }
 
-func TestGenerateLocalizationSource(t *testing.T) {
-	t.Parallel()
-
-	source := filepath.Join(t.TempDir(), "source.json")
-	command := exec.Command("go", "run", "generate.go", "-locsource", source)
-	output, err := command.CombinedOutput()
-	assert.NilError(t, err, "%s", output)
-
-	data, err := os.ReadFile(source)
-	assert.NilError(t, err)
-	var messages map[Key]string
-	assert.NilError(t, json.Unmarshal(data, &messages))
-	expected := make(map[Key]string, len(allMessages))
-	for _, p := range allMessages {
-		message := *p
-		expected[message.key] = message.text
-	}
-	assert.DeepEqual(t, messages, expected)
-}
-
 func TestGenerateLocalizations(t *testing.T) {
 	t.Parallel()
 
 	dir := t.TempDir()
+	generator := filepath.Join(dir, "generate.exe")
+	build := exec.Command("go", "build", "-o", generator, "generate.go")
+	buildOutput, err := build.CombinedOutput()
+	assert.NilError(t, err, "%s", buildOutput)
+	data, err := os.ReadFile("diagnosticMessages.json")
+	assert.NilError(t, err)
+	assert.NilError(t, os.WriteFile(filepath.Join(dir, "diagnosticMessages.json"), data, 0o644))
+
+	source := filepath.Join(dir, "diagnosticMessages.generated.json")
+	sourceCommand := exec.Command(generator, "-locsource", source)
+	sourceCommand.Dir = dir
+	sourceOutput, err := sourceCommand.CombinedOutput()
+	assert.NilError(t, err, "%s", sourceOutput)
+	data, err = os.ReadFile(source)
+	assert.NilError(t, err)
+	var sourceMessages map[Key]string
+	assert.NilError(t, json.Unmarshal(data, &sourceMessages))
+	assert.Equal(t, sourceMessages[Identifier_expected.key], Identifier_expected.text)
+	for _, name := range []string{"diagnostics_generated.go", "loc_generated.go", "loc"} {
+		_, err = os.Stat(filepath.Join(dir, name))
+		assert.Assert(t, os.IsNotExist(err))
+	}
+	assert.NilError(t, os.Remove(source))
+
 	locDir := filepath.Join(dir, "loc")
 	projectDir := filepath.Join(dir, "tools")
 	assert.NilError(t, os.MkdirAll(locDir, 0o755))
@@ -244,7 +248,7 @@ func TestGenerateLocalizations(t *testing.T) {
 	project := filepath.Join(projectDir, "LocProject.json")
 	assert.NilError(t, os.WriteFile(project, []byte(`{
 		"Projects": [{"LocItems": [{
-			"SourceFile": "source.json",
+			"SourceFile": "diagnosticMessages.generated.json",
 			"Languages": "de-DE;cs-CZ;fr-FR"
 		}]}]
 	}`), 0o644))
@@ -263,18 +267,20 @@ func TestGenerateLocalizations(t *testing.T) {
 
 	generate := func() {
 		t.Helper()
-		command := exec.Command("go", "run", "generate.go",
+		command := exec.Command(generator,
 			"-diagnostics", filepath.Join(dir, "diagnostics_generated.go"),
 			"-loc", filepath.Join(dir, "loc_generated.go"),
 			"-locdir", locDir,
-			"-locproject", project,
-			"-locsource", filepath.Join(dir, "source.json"))
-		output, err := command.CombinedOutput()
-		assert.NilError(t, err, "%s", output)
+			"-locproject", project)
+		command.Dir = dir
+		output, runErr := command.CombinedOutput()
+		assert.NilError(t, runErr, "%s", output)
+		_, sourceErr := os.Stat(source)
+		assert.Assert(t, os.IsNotExist(sourceErr))
 	}
 	generate()
 
-	data, err := os.ReadFile(filepath.Join(locDir, "de-DE.generated.json"))
+	data, err = os.ReadFile(filepath.Join(locDir, "de-DE.generated.json"))
 	assert.NilError(t, err)
 	assert.DeepEqual(t, data, germanHandback)
 
