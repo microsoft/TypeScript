@@ -16832,8 +16832,11 @@ func (c *Checker) getWriteTypeOfSymbol(symbol *ast.Symbol) *Type {
 		if symbol.CheckFlags()&ast.CheckFlagsDeferredType != 0 {
 			return c.getWriteTypeOfSymbolWithDeferredType(symbol)
 		}
+		if writeType := c.writeTypes[symbol]; writeType != nil {
+			return writeType
+		}
 		links := c.valueSymbolLinks.Get(symbol)
-		return core.OrElse(c.writeTypes[symbol], links.resolvedType)
+		return links.resolvedType
 	}
 	if symbol.Flags()&ast.SymbolFlagsProperty != 0 {
 		return c.removeMissingType(c.getTypeOfSymbol(symbol), symbol.Flags()&ast.SymbolFlagsOptional != 0)
