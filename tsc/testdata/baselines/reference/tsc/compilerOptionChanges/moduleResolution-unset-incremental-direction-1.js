@@ -97,7 +97,7 @@ export declare class Thing {
 export declare const result: import("../external/thing").Thing;
 
 //// [/home/src/workspaces/project/producer/dist/producer/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":[4],"packageJsons":["../../../package.json"],"fileNames":["lib.es2020.d.ts","../../../external/thing.ts","../../../external/factory.ts","../../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1e13636538b7ccc39e192111e556e4fd-export class Thing { private field = 1; }\n","signature":"fd3b9b2da1026c3ff32025ff8ed07329-export declare class Thing {\n    private field;\n}\n","impliedNodeFormat":1},{"version":"ca900e2385cd189084934dd47c6733af-import { Thing } from './thing';\nexport function make() { return new Thing(); }\n","signature":"8541230877a83bcc0999fabcf92106a2-import { Thing } from './thing';\nexport declare function make(): Thing;\n","impliedNodeFormat":1},{"version":"c380ebe92cb8d9563d50748aaca5c414-import { make } from '../external/factory';\nexport const result = make();\n","signature":"2f2ebb2b7d07a5a45f54b657eb07ecd7-export declare const result: import(\"../external/thing\").Thing;\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":199,"outDir":"..","rootDir":"../../..","strict":true,"target":7},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[4],"packageJsons":["../../../package.json"],"fileNames":["lib.es2020.d.ts","../../../external/thing.ts","../../../external/factory.ts","../../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1e13636538b7ccc39e192111e556e4fd-export class Thing { private field = 1; }\n","signature":"fd3b9b2da1026c3ff32025ff8ed07329-export declare class Thing {\n    private field;\n}\n","impliedNodeFormat":1},{"version":"ca900e2385cd189084934dd47c6733af-import { Thing } from './thing';\nexport function make() { return new Thing(); }\n","signature":"8541230877a83bcc0999fabcf92106a2-import { Thing } from './thing';\nexport declare function make(): Thing;\n","impliedNodeFormat":1},{"version":"c380ebe92cb8d9563d50748aaca5c414-import { make } from '../external/factory';\nexport const result = make();\n","signature":"2f2ebb2b7d07a5a45f54b657eb07ecd7-export declare const result: import(\"../external/thing\").Thing;\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":199,"moduleResolution":3,"outDir":"..","rootDir":"../../..","strict":true,"target":7},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/producer/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -179,6 +179,7 @@ export declare const result: import("../external/thing").Thing;
     "emitDeclarationOnly": true,
     "declaration": true,
     "module": 199,
+    "moduleResolution": 3,
     "outDir": "..",
     "rootDir": "../../..",
     "strict": true,
@@ -193,7 +194,7 @@ export declare const result: import("../external/thing").Thing;
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1975
+  "size": 1996
 }
 
 producer/tsconfig.json::
@@ -274,6 +275,8 @@ Output::
 [7m1[0m import { make } from '../external/factory';
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~~~~~[0m
 
+TSFILE: /home/src/workspaces/project/producer/dist/producer/index.d.ts
+TSFILE: /home/src/workspaces/project/producer/dist/producer/tsconfig.tsbuildinfo
 
 Found 2 errors in 2 files.
 
@@ -281,91 +284,6 @@ Errors  Files
      1  external/factory.ts[90m:1[0m
      1  producer/index.ts[90m:1[0m
 
-
-producer/tsconfig.json::
-SemanticDiagnostics::
-Signatures::
-
-
-Diff:: Changing moduleResolution without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/producer/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/producer/index.d.ts
-@@ -1,1 +1,1 @@
--export declare const result: import("#/thing").Thing;
-+export declare const result: import("../external/thing").Thing;
-
-
-Edit [2]:: no change
-
-tsgo --project producer --listEmittedFiles
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
-Output::
-[96mexternal/factory.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/external/thing.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.
-  File is CommonJS module because '/home/src/workspaces/project/package.json' does not have field "type"
-
-[7m1[0m import { Thing } from './thing';
-[7m [0m [91m                      ~~~~~~~~~[0m
-
-[96mproducer/index.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/external/factory.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.
-  File is CommonJS module because '/home/src/workspaces/project/package.json' does not have field "type"
-
-[7m1[0m import { make } from '../external/factory';
-[7m [0m [91m                     ~~~~~~~~~~~~~~~~~~~~~[0m
-
-
-Found 2 errors in 2 files.
-
-Errors  Files
-     1  external/factory.ts[90m:1[0m
-     1  producer/index.ts[90m:1[0m
-
-
-producer/tsconfig.json::
-SemanticDiagnostics::
-Signatures::
-
-
-Diff:: Changing moduleResolution without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/producer/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/producer/index.d.ts
-@@ -1,1 +1,1 @@
--export declare const result: import("#/thing").Thing;
-+export declare const result: import("../external/thing").Thing;
-
-
-Edit [3]:: force rebuild with the same compiler options
-
-tsgo --build producer --verbose --force
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
-
-[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
-
-[96mexternal/factory.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/external/thing.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.
-  File is CommonJS module because '/home/src/workspaces/project/package.json' does not have field "type"
-
-[7m1[0m import { Thing } from './thing';
-[7m [0m [91m                      ~~~~~~~~~[0m
-
-[96mproducer/index.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/external/factory.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.
-  File is CommonJS module because '/home/src/workspaces/project/package.json' does not have field "type"
-
-[7m1[0m import { make } from '../external/factory';
-[7m [0m [91m                     ~~~~~~~~~~~~~~~~~~~~~[0m
-
-
-Found 2 errors in 2 files.
-
-Errors  Files
-     1  external/factory.ts[90m:1[0m
-     1  producer/index.ts[90m:1[0m
-
-//// [/home/src/workspaces/project/producer/dist/external/factory.d.ts] *rewrite with same content*
-//// [/home/src/workspaces/project/producer/dist/external/thing.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/producer/index.d.ts] *modified* 
 export declare const result: import("#/thing").Thing;
 
@@ -468,6 +386,83 @@ export declare const result: import("#/thing").Thing;
   "latestChangedDtsFile": "./index.d.ts",
   "size": 1965
 }
+
+producer/tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+*refresh*    /home/src/workspaces/project/external/thing.ts
+*refresh*    /home/src/workspaces/project/external/factory.ts
+*refresh*    /home/src/workspaces/project/producer/index.ts
+Signatures::
+(stored at emit) /home/src/workspaces/project/producer/index.ts
+
+
+Edit [2]:: no change
+
+tsgo --project producer --listEmittedFiles
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
+Output::
+[96mexternal/factory.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/external/thing.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+  File is CommonJS module because '/home/src/workspaces/project/package.json' does not have field "type"
+
+[7m1[0m import { Thing } from './thing';
+[7m [0m [91m                      ~~~~~~~~~[0m
+
+[96mproducer/index.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/external/factory.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+  File is CommonJS module because '/home/src/workspaces/project/package.json' does not have field "type"
+
+[7m1[0m import { make } from '../external/factory';
+[7m [0m [91m                     ~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  external/factory.ts[90m:1[0m
+     1  producer/index.ts[90m:1[0m
+
+
+producer/tsconfig.json::
+SemanticDiagnostics::
+Signatures::
+
+
+Edit [3]:: force rebuild with the same compiler options
+
+tsgo --build producer --verbose --force
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
+
+[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
+
+[96mexternal/factory.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/external/thing.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+  File is CommonJS module because '/home/src/workspaces/project/package.json' does not have field "type"
+
+[7m1[0m import { Thing } from './thing';
+[7m [0m [91m                      ~~~~~~~~~[0m
+
+[96mproducer/index.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/external/factory.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+  File is CommonJS module because '/home/src/workspaces/project/package.json' does not have field "type"
+
+[7m1[0m import { make } from '../external/factory';
+[7m [0m [91m                     ~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  external/factory.ts[90m:1[0m
+     1  producer/index.ts[90m:1[0m
+
+//// [/home/src/workspaces/project/producer/dist/external/factory.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/external/thing.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/producer/index.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/producer/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/producer/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 producer/tsconfig.json::
 SemanticDiagnostics::

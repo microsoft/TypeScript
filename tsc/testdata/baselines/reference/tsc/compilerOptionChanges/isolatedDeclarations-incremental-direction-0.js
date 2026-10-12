@@ -58,7 +58,7 @@ declare const console: { log(msg: any): void; };
 export declare const result: number;
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"22ca88e642a81a7a9c2fbfee1956ef64-export const result = 1 + 2;\n","signature":"a94472928cda3235e9d3fc6bdd8b2536-export declare const result: number;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"isolatedDeclarations":false,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"22ca88e642a81a7a9c2fbfee1956ef64-export const result = 1 + 2;\n","signature":"a94472928cda3235e9d3fc6bdd8b2536-export declare const result: number;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"isolatedDeclarations":false,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -105,13 +105,14 @@ export declare const result: number;
     "declaration": true,
     "isolatedDeclarations": false,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
     "target": 7
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1262
+  "size": 1285
 }
 
 producer/tsconfig.json::
@@ -157,11 +158,23 @@ Edit [1]:: change isolatedDeclarations without changing source files
 }
 
 tsgo --project producer --listEmittedFiles
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
+[96mproducer/index.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS9010: [0mVariable must have an explicit type annotation with --isolatedDeclarations.
+
+[7m1[0m export const result = 1 + 2;
+[7m [0m [91m             ~~~~~~[0m
+
+  [96mproducer/index.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable result.
+    [7m1[0m export const result = 1 + 2;
+    [7m [0m [96m             ~~~~~~[0m
+
 TSFILE: /home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo
+
+Found 1 error in producer/index.ts[90m:1[0m
+
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"22ca88e642a81a7a9c2fbfee1956ef64-export const result = 1 + 2;\n","signature":"a94472928cda3235e9d3fc6bdd8b2536-export declare const result: number;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"isolatedDeclarations":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"22ca88e642a81a7a9c2fbfee1956ef64-export const result = 1 + 2;\n","signature":"a94472928cda3235e9d3fc6bdd8b2536-export declare const result: number;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"isolatedDeclarations":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":19,"code":9010,"category":1,"messageKey":"Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations_9010","relatedInformation":[{"pos":13,"end":19,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["result"]}]}]]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -208,13 +221,40 @@ TSFILE: /home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo
     "declaration": true,
     "isolatedDeclarations": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
     "target": 7
   },
+  "emitDiagnosticsPerFile": [
+    [
+      "../index.ts",
+      [
+        {
+          "pos": 13,
+          "end": 19,
+          "code": 9010,
+          "category": 1,
+          "messageKey": "Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations_9010",
+          "relatedInformation": [
+            {
+              "pos": 13,
+              "end": 19,
+              "code": 9027,
+              "category": 1,
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "result"
+              ]
+            }
+          ]
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1261
+  "size": 1608
 }
 
 producer/tsconfig.json::
@@ -224,50 +264,28 @@ SemanticDiagnostics::
 Signatures::
 
 
-Diff:: Changing isolatedDeclarations without editing source files leaves stale output or diagnostics.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -1,12 +0,0 @@
--[96mproducer/index.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS9010: [0mVariable must have an explicit type annotation with --isolatedDeclarations.
--
--[7m1[0m export const result = 1 + 2;
--[7m [0m [91m             ~~~~~~[0m
--
--  [96mproducer/index.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable result.
--    [7m1[0m export const result = 1 + 2;
--    [7m [0m [96m             ~~~~~~[0m
--
--
--Found 1 error in producer/index.ts[90m:1[0m
--
-
 Edit [2]:: no change
 
 tsgo --project producer --listEmittedFiles
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
+[96mproducer/index.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS9010: [0mVariable must have an explicit type annotation with --isolatedDeclarations.
+
+[7m1[0m export const result = 1 + 2;
+[7m [0m [91m             ~~~~~~[0m
+
+  [96mproducer/index.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable result.
+    [7m1[0m export const result = 1 + 2;
+    [7m [0m [96m             ~~~~~~[0m
+
+
+Found 1 error in producer/index.ts[90m:1[0m
+
 
 producer/tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
-
-Diff:: Changing isolatedDeclarations without editing source files leaves stale output or diagnostics.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -1,12 +0,0 @@
--[96mproducer/index.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS9010: [0mVariable must have an explicit type annotation with --isolatedDeclarations.
--
--[7m1[0m export const result = 1 + 2;
--[7m [0m [91m             ~~~~~~[0m
--
--  [96mproducer/index.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable result.
--    [7m1[0m export const result = 1 + 2;
--    [7m [0m [96m             ~~~~~~[0m
--
--
--Found 1 error in producer/index.ts[90m:1[0m
--
 
 Edit [3]:: force rebuild with the same compiler options
 
@@ -294,7 +312,7 @@ Output::
 Found 1 error in producer/index.ts[90m:1[0m
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"22ca88e642a81a7a9c2fbfee1956ef64-export const result = 1 + 2;\n"],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"isolatedDeclarations":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":19,"code":9010,"category":1,"messageKey":"Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations_9010","relatedInformation":[{"pos":13,"end":19,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["result"]}]}]]],"emitSignatures":[2]}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"22ca88e642a81a7a9c2fbfee1956ef64-export const result = 1 + 2;\n"],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"isolatedDeclarations":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":19,"code":9010,"category":1,"messageKey":"Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations_9010","relatedInformation":[{"pos":13,"end":19,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["result"]}]}]]],"emitSignatures":[2]}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -336,6 +354,7 @@ Found 1 error in producer/index.ts[90m:1[0m
     "declaration": true,
     "isolatedDeclarations": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
@@ -373,7 +392,7 @@ Found 1 error in producer/index.ts[90m:1[0m
       "original": 2
     }
   ],
-  "size": 1448
+  "size": 1471
 }
 
 producer/tsconfig.json::

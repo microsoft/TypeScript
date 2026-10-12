@@ -75,7 +75,7 @@ declare const console: { log(msg: any): void; };
 export declare const result: "first";
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts","../types-b/second/index.d.ts","../types-a/first/index.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"26b427adfeca24f5b62a735e11365618-export const result = input();\n","signature":"5a64247cbccb0d8fcd870d0ee9b7c167-export declare const result: \"first\";\n","impliedNodeFormat":1},{"version":"7310e40b4471d53101cf3f1181033c10-declare function input(): 'second';\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"de71218713951cfb72b34e51c1c9c2bd-declare function input(): 'first';\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts","../types-b/second/index.d.ts","../types-a/first/index.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"26b427adfeca24f5b62a735e11365618-export const result = input();\n","signature":"5a64247cbccb0d8fcd870d0ee9b7c167-export declare const result: \"first\";\n","impliedNodeFormat":1},{"version":"7310e40b4471d53101cf3f1181033c10-declare function input(): 'second';\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"de71218713951cfb72b34e51c1c9c2bd-declare function input(): 'first';\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7,"typeRoots":["../types-b","../types-a"],"types":["*"]},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -147,13 +147,21 @@ export declare const result: "first";
     "emitDeclarationOnly": true,
     "declaration": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
-    "target": 7
+    "target": 7,
+    "typeRoots": [
+      "../types-b",
+      "../types-a"
+    ],
+    "types": [
+      "*"
+    ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1564
+  "size": 1641
 }
 
 producer/tsconfig.json::
@@ -218,61 +226,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'producer/tsconfig.json'...
-
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *mTime changed*
-
-producer/tsconfig.json::
-SemanticDiagnostics::
-Signatures::
-
-
-Diff:: Changing typeRoots without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/index.d.ts
-@@ -1,1 +1,1 @@
--export declare const result: "second";
-+export declare const result: "first";
-
-
-Edit [2]:: no change
-
-tsgo --build producer --verbose
-ExitStatus:: Success
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is up to date because newest input 'producer/index.ts' is older than output 'producer/dist/tsconfig.tsbuildinfo'
-
-
-
-
-Diff:: Changing typeRoots without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/index.d.ts
-@@ -1,1 +1,1 @@
--export declare const result: "second";
-+export declare const result: "first";
-
-
-Edit [3]:: force rebuild with the same compiler options
-
-tsgo --build producer --verbose --force
-ExitStatus:: Success
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
-
-[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
-
 //// [/home/src/workspaces/project/producer/dist/index.d.ts] *modified* 
 export declare const result: "second";
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts","../types-a/first/index.d.ts","../types-b/second/index.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"26b427adfeca24f5b62a735e11365618-export const result = input();\n","signature":"d8331a24b0c5de40a3ff21c9ad3ee6ed-export declare const result: \"second\";\n","impliedNodeFormat":1},{"version":"de71218713951cfb72b34e51c1c9c2bd-declare function input(): 'first';\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"7310e40b4471d53101cf3f1181033c10-declare function input(): 'second';\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts","../types-a/first/index.d.ts","../types-b/second/index.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"26b427adfeca24f5b62a735e11365618-export const result = input();\n","signature":"d8331a24b0c5de40a3ff21c9ad3ee6ed-export declare const result: \"second\";\n","impliedNodeFormat":1},{"version":"de71218713951cfb72b34e51c1c9c2bd-declare function input(): 'first';\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"7310e40b4471d53101cf3f1181033c10-declare function input(): 'second';\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7,"typeRoots":["../types-a","../types-b"],"types":["*"]},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -344,14 +302,61 @@ export declare const result: "second";
     "emitDeclarationOnly": true,
     "declaration": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
-    "target": 7
+    "target": 7,
+    "typeRoots": [
+      "../types-a",
+      "../types-b"
+    ],
+    "types": [
+      "*"
+    ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1565
+  "size": 1642
 }
+
+producer/tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+*refresh*    /home/src/workspaces/project/producer/index.ts
+*refresh*    /home/src/workspaces/project/producer/types-a/first/index.d.ts
+*refresh*    /home/src/workspaces/project/producer/types-b/second/index.d.ts
+Signatures::
+(stored at emit) /home/src/workspaces/project/producer/index.ts
+
+
+Edit [2]:: no change
+
+tsgo --build producer --verbose
+ExitStatus:: Success
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is up to date because newest input 'producer/index.ts' is older than output 'producer/dist/tsconfig.tsbuildinfo'
+
+
+
+
+Edit [3]:: force rebuild with the same compiler options
+
+tsgo --build producer --verbose --force
+ExitStatus:: Success
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
+
+[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
+
+//// [/home/src/workspaces/project/producer/dist/index.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 producer/tsconfig.json::
 SemanticDiagnostics::

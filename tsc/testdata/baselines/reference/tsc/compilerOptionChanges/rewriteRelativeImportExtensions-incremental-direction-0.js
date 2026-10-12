@@ -83,7 +83,7 @@ export declare const result = 1;
 export const result = 1;
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":[[2,3]],"fileNames":["lib.es2020.d.ts","../other.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b33cb3c0fc12538ee0608497e30c503f-export const result = 1;\n","signature":"993e425aeb82a5fb982b8b91a1f7366e-export declare const result = 1;\n","impliedNodeFormat":1},"1df26769cf0ee6ac1620f40ac896ea8a-export { result } from './other.ts';\n"],"fileIdsList":[[2]],"options":{"allowImportingTsExtensions":true,"composite":true,"emitDeclarationOnly":false,"declaration":true,"module":99,"outDir":"./","rewriteRelativeImportExtensions":false,"rootDir":"..","strict":true,"target":7},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[[2,3]],"fileNames":["lib.es2020.d.ts","../other.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b33cb3c0fc12538ee0608497e30c503f-export const result = 1;\n","signature":"993e425aeb82a5fb982b8b91a1f7366e-export declare const result = 1;\n","impliedNodeFormat":1},"1df26769cf0ee6ac1620f40ac896ea8a-export { result } from './other.ts';\n"],"fileIdsList":[[2]],"options":{"allowImportingTsExtensions":true,"composite":true,"emitDeclarationOnly":false,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rewriteRelativeImportExtensions":false,"rootDir":"..","strict":true,"target":7},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -147,6 +147,7 @@ export const result = 1;
     "emitDeclarationOnly": false,
     "declaration": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rewriteRelativeImportExtensions": false,
     "rootDir": "..",
@@ -164,7 +165,7 @@ export const result = 1;
     "../index.ts"
   ],
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1487
+  "size": 1510
 }
 
 producer/tsconfig.json::
@@ -226,9 +227,15 @@ Edit [1]:: change rewriteRelativeImportExtensions without changing source files
 tsgo --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
+TSFILE: /home/src/workspaces/project/producer/dist/other.js
+TSFILE: /home/src/workspaces/project/producer/dist/index.js
 TSFILE: /home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo
+//// [/home/src/workspaces/project/producer/dist/index.js] *modified* 
+export { result } from './other.js';
+
+//// [/home/src/workspaces/project/producer/dist/other.js] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2020.d.ts","../other.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b33cb3c0fc12538ee0608497e30c503f-export const result = 1;\n","signature":"993e425aeb82a5fb982b8b91a1f7366e-export declare const result = 1;\n","impliedNodeFormat":1},"1df26769cf0ee6ac1620f40ac896ea8a-export { result } from './other.ts';\n"],"fileIdsList":[[2]],"options":{"allowImportingTsExtensions":true,"composite":true,"emitDeclarationOnly":false,"declaration":true,"module":99,"outDir":"./","rewriteRelativeImportExtensions":true,"rootDir":"..","strict":true,"target":7},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2020.d.ts","../other.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b33cb3c0fc12538ee0608497e30c503f-export const result = 1;\n","signature":"993e425aeb82a5fb982b8b91a1f7366e-export declare const result = 1;\n","impliedNodeFormat":1},"1df26769cf0ee6ac1620f40ac896ea8a-export { result } from './other.ts';\n"],"fileIdsList":[[2]],"options":{"allowImportingTsExtensions":true,"composite":true,"emitDeclarationOnly":false,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rewriteRelativeImportExtensions":true,"rootDir":"..","strict":true,"target":7},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -291,6 +298,7 @@ TSFILE: /home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo
     "emitDeclarationOnly": false,
     "declaration": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rewriteRelativeImportExtensions": true,
     "rootDir": "..",
@@ -303,7 +311,7 @@ TSFILE: /home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1435
+  "size": 1458
 }
 
 producer/tsconfig.json::
@@ -312,14 +320,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/producer/other.ts
 *refresh*    /home/src/workspaces/project/producer/index.ts
 Signatures::
-
-
-Diff:: Changing rewriteRelativeImportExtensions without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.js
-+++ incremental /home/src/workspaces/project/producer/dist/index.js
-@@ -1,1 +1,1 @@
--export { result } from './other.js';
-+export { result } from './other.ts';
 
 
 Edit [2]:: no change
@@ -331,14 +331,6 @@ Output::
 producer/tsconfig.json::
 SemanticDiagnostics::
 Signatures::
-
-
-Diff:: Changing rewriteRelativeImportExtensions without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.js
-+++ incremental /home/src/workspaces/project/producer/dist/index.js
-@@ -1,1 +1,1 @@
--export { result } from './other.js';
-+export { result } from './other.ts';
 
 
 Edit [3]:: force rebuild with the same compiler options
@@ -354,9 +346,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
 
 //// [/home/src/workspaces/project/producer/dist/index.d.ts] *rewrite with same content*
-//// [/home/src/workspaces/project/producer/dist/index.js] *modified* 
-export { result } from './other.js';
-
+//// [/home/src/workspaces/project/producer/dist/index.js] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/other.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/other.js] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *rewrite with same content*

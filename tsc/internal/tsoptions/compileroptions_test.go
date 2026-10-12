@@ -261,6 +261,78 @@ func compilerOptionTestValues(t *testing.T, field reflect.StructField) []reflect
 	return values
 }
 
+func TestCompilerOptionInvalidationComparisons(t *testing.T) {
+	t.Parallel()
+	for _, name := range []string{"CustomConditions", "Paths", "RootDirs", "TypeRoots", "Types"} {
+		field, ok := reflect.TypeFor[core.CompilerOptions]().FieldByName(name)
+		if !ok {
+			t.Fatal("Missing compiler option", name)
+		}
+		values := compilerOptionTestValues(t, field)
+		if field.Type.Kind() == reflect.Slice {
+			for _, entries := range [][]string{{"/first", "/second"}, {"/first", "/second"}, {"/second", "/first"}} {
+				value := reflect.MakeSlice(field.Type, len(entries), len(entries))
+				for i, entry := range entries {
+					value.Index(i).Set(reflect.ValueOf(entry).Convert(field.Type.Elem()))
+				}
+				values = append(values, value)
+			}
+		} else {
+			for _, entries := range [][]string{nil, {}, {"first", "second"}, {"second", "first"}} {
+				for _, keys := range [][]string{{"a", "b"}, {"b", "a"}} {
+					paths := &collections.OrderedMap[string, []string]{}
+					for _, key := range keys {
+						paths.Set(key, entries)
+					}
+					values = append(values, reflect.ValueOf(paths), reflect.ValueOf(paths.Clone()))
+				}
+			}
+			values = append(values, reflect.ValueOf(collections.NewOrderedMapWithSizeHint[string, []string](0)))
+		}
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			for _, aValue := range values {
+				for _, bValue := range values {
+					a, b := &core.CompilerOptions{}, &core.CompilerOptions{}
+					reflect.ValueOf(a).Elem().FieldByIndex(field.Index).Set(aValue)
+					reflect.ValueOf(b).Elem().FieldByIndex(field.Index).Set(bValue)
+					want := !a.Equals(b)
+					if got := CompilerOptionsAffectEmit(a, b); got != want {
+						t.Fatalf("Emit comparison got %v, want %v for %v and %v", got, want, aValue, bValue)
+					}
+					if got := CompilerOptionsAffectSemanticDiagnostics(a, b); got != want {
+						t.Fatalf("Diagnostics comparison got %v, want %v for %v and %v", got, want, aValue, bValue)
+					}
+				}
+			}
+		})
+	}
+}
+
+func TestCompilerOptionInvalidationStrictDefaults(t *testing.T) {
+	t.Parallel()
+	a := &core.CompilerOptions{}
+	b := &core.CompilerOptions{Strict: core.TSTrue}
+	if CompilerOptionsAffectEmit(a, b) || CompilerOptionsAffectSemanticDiagnostics(a, b) {
+		t.Fatal("Explicitly enabling the default strict mode must not invalidate cached results")
+	}
+	b.Strict = core.TSFalse
+	if !CompilerOptionsAffectEmit(a, b) || !CompilerOptionsAffectSemanticDiagnostics(a, b) {
+		t.Fatal("Disabling implied strict options must invalidate cached results")
+	}
+	a = &core.CompilerOptions{
+		Strict: core.TSFalse, NoImplicitAny: core.TSFalse, NoImplicitThis: core.TSFalse,
+		StrictBindCallApply: core.TSFalse, StrictBuiltinIteratorReturn: core.TSFalse,
+		StrictFunctionTypes: core.TSFalse, StrictNullChecks: core.TSTrue,
+		StrictPropertyInitialization: core.TSFalse, UseUnknownInCatchVariables: core.TSFalse,
+	}
+	b = a.Clone()
+	b.Strict = core.TSTrue
+	if CompilerOptionsAffectEmit(a, b) || CompilerOptionsAffectSemanticDiagnostics(a, b) {
+		t.Fatal("Changing strict must respect explicit overrides of its suboptions")
+	}
+}
+
 func TestCompilerOptionConfigDirSubstitution(t *testing.T) {
 	t.Parallel()
 

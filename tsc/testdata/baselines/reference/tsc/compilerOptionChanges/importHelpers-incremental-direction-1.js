@@ -75,7 +75,7 @@ export function result() {
 }
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"0576b6d9f0951f6e78d059343c639289-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Promise<T> { then<U>(callback: (value: T) => U): Promise<U>; }\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a883828f47f18aa40b82337ef5cfdea1-export async function result() { return 1; }\n","signature":"134f4b886194b9d95f4b0c0a13bb06e6-export declare function result(): Promise<number>;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":false,"declaration":true,"importHelpers":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":2},"semanticDiagnosticsPerFile":[[2,[{"pos":22,"end":28,"code":2354,"category":1,"messageKey":"This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found_2354","messageArgs":["tslib"]}]]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"0576b6d9f0951f6e78d059343c639289-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Promise<T> { then<U>(callback: (value: T) => U): Promise<U>; }\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a883828f47f18aa40b82337ef5cfdea1-export async function result() { return 1; }\n","signature":"134f4b886194b9d95f4b0c0a13bb06e6-export declare function result(): Promise<number>;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":false,"declaration":true,"importHelpers":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":2},"semanticDiagnosticsPerFile":[[2,[{"pos":22,"end":28,"code":2354,"category":1,"messageKey":"This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found_2354","messageArgs":["tslib"]}]]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -122,6 +122,7 @@ export function result() {
     "declaration": true,
     "importHelpers": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
@@ -145,7 +146,7 @@ export function result() {
     ]
   ],
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1556
+  "size": 1579
 }
 
 producer/tsconfig.json::
@@ -199,18 +200,10 @@ Edit [1]:: change importHelpers without changing source files
 }
 
 tsgo --project producer --listEmittedFiles
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: Success
 Output::
-[96mproducer/index.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2354: [0mThis syntax requires an imported helper but module 'tslib' cannot be found.
-
-[7m1[0m export async function result() { return 1; }
-[7m [0m [91m                      ~~~~~~[0m
-
 TSFILE: /home/src/workspaces/project/producer/dist/index.js
 TSFILE: /home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo
-
-Found 1 error in producer/index.ts[90m:1[0m
-
 //// [/home/src/workspaces/project/producer/dist/index.js] *modified* 
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -226,7 +219,7 @@ export function result() {
 }
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"0576b6d9f0951f6e78d059343c639289-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Promise<T> { then<U>(callback: (value: T) => U): Promise<U>; }\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a883828f47f18aa40b82337ef5cfdea1-export async function result() { return 1; }\n","signature":"134f4b886194b9d95f4b0c0a13bb06e6-export declare function result(): Promise<number>;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":false,"declaration":true,"importHelpers":false,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":2},"semanticDiagnosticsPerFile":[[2,[{"pos":22,"end":28,"code":2354,"category":1,"messageKey":"This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found_2354","messageArgs":["tslib"]}]]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"0576b6d9f0951f6e78d059343c639289-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Promise<T> { then<U>(callback: (value: T) => U): Promise<U>; }\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a883828f47f18aa40b82337ef5cfdea1-export async function result() { return 1; }\n","signature":"134f4b886194b9d95f4b0c0a13bb06e6-export declare function result(): Promise<number>;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":false,"declaration":true,"importHelpers":false,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":2},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -273,81 +266,33 @@ export function result() {
     "declaration": true,
     "importHelpers": false,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
     "target": 2
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../index.ts",
-      [
-        {
-          "pos": 22,
-          "end": 28,
-          "code": 2354,
-          "category": 1,
-          "messageKey": "This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found_2354",
-          "messageArgs": [
-            "tslib"
-          ]
-        }
-      ]
-    ]
-  ],
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1557
+  "size": 1385
 }
 
 producer/tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+*refresh*    /home/src/workspaces/project/producer/index.ts
 Signatures::
 
-
-Diff:: Changing importHelpers retains the previous missing-tslib diagnostics.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -0,0 +1,8 @@
-+[96mproducer/index.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2354: [0mThis syntax requires an imported helper but module 'tslib' cannot be found.
-+
-+[7m1[0m export async function result() { return 1; }
-+[7m [0m [91m                      ~~~~~~[0m
-+
-+
-+Found 1 error in producer/index.ts[90m:1[0m
-+
 
 Edit [2]:: no change
 
 tsgo --project producer --listEmittedFiles
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: Success
 Output::
-[96mproducer/index.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2354: [0mThis syntax requires an imported helper but module 'tslib' cannot be found.
-
-[7m1[0m export async function result() { return 1; }
-[7m [0m [91m                      ~~~~~~[0m
-
-
-Found 1 error in producer/index.ts[90m:1[0m
-
 
 producer/tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
-
-Diff:: Changing importHelpers retains the previous missing-tslib diagnostics.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -0,0 +1,8 @@
-+[96mproducer/index.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2354: [0mThis syntax requires an imported helper but module 'tslib' cannot be found.
-+
-+[7m1[0m export async function result() { return 1; }
-+[7m [0m [91m                      ~~~~~~[0m
-+
-+
-+Found 1 error in producer/index.ts[90m:1[0m
-+
 
 Edit [3]:: force rebuild with the same compiler options
 
@@ -363,62 +308,8 @@ Output::
 
 //// [/home/src/workspaces/project/producer/dist/index.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/index.js] *rewrite with same content*
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"0576b6d9f0951f6e78d059343c639289-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Promise<T> { then<U>(callback: (value: T) => U): Promise<U>; }\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a883828f47f18aa40b82337ef5cfdea1-export async function result() { return 1; }\n","signature":"134f4b886194b9d95f4b0c0a13bb06e6-export declare function result(): Promise<number>;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":false,"declaration":true,"importHelpers":false,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":2},"latestChangedDtsFile":"./index.d.ts"}
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
-{
-  "version": "FakeTSVersion",
-  "root": [
-    {
-      "files": [
-        "../index.ts"
-      ],
-      "original": 2
-    }
-  ],
-  "fileNames": [
-    "lib.es2020.d.ts",
-    "../index.ts"
-  ],
-  "fileInfos": [
-    {
-      "fileName": "lib.es2020.d.ts",
-      "version": "0576b6d9f0951f6e78d059343c639289-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Promise<T> { then<U>(callback: (value: T) => U): Promise<U>; }\n",
-      "signature": "0576b6d9f0951f6e78d059343c639289-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Promise<T> { then<U>(callback: (value: T) => U): Promise<U>; }\n",
-      "affectsGlobalScope": true,
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "0576b6d9f0951f6e78d059343c639289-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Promise<T> { then<U>(callback: (value: T) => U): Promise<U>; }\n",
-        "affectsGlobalScope": true,
-        "impliedNodeFormat": 1
-      }
-    },
-    {
-      "fileName": "../index.ts",
-      "version": "a883828f47f18aa40b82337ef5cfdea1-export async function result() { return 1; }\n",
-      "signature": "134f4b886194b9d95f4b0c0a13bb06e6-export declare function result(): Promise<number>;\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "a883828f47f18aa40b82337ef5cfdea1-export async function result() { return 1; }\n",
-        "signature": "134f4b886194b9d95f4b0c0a13bb06e6-export declare function result(): Promise<number>;\n",
-        "impliedNodeFormat": 1
-      }
-    }
-  ],
-  "options": {
-    "composite": true,
-    "emitDeclarationOnly": false,
-    "declaration": true,
-    "importHelpers": false,
-    "module": 99,
-    "outDir": "./",
-    "rootDir": "..",
-    "strict": true,
-    "target": 2
-  },
-  "latestChangedDtsFile": "./index.d.ts",
-  "size": 1362
-}
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 producer/tsconfig.json::
 SemanticDiagnostics::

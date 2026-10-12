@@ -470,6 +470,14 @@ func (b *BuildInfoResolvedRoot) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+type BuildInfoCompilerOptions struct {
+	collections.OrderedMap[string, any]
+}
+
+func (options *BuildInfoCompilerOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return tsoptions.UnmarshalRawCompilerOptions(dec, &options.OrderedMap)
+}
+
 type BuildInfo struct {
 	Version string `json:"version,omitzero"`
 
@@ -482,18 +490,18 @@ type BuildInfo struct {
 	ContentMapperIdentities []string         `json:"contentMapperIdentities,omitzero"`
 
 	// IncrementalProgram info
-	FileNames                  []BuildInfoPath                      `json:"fileNames,omitzero"`
-	FileInfos                  []*BuildInfoFileInfo                 `json:"fileInfos,omitzero"`
-	FileIdsList                [][]BuildInfoFileId                  `json:"fileIdsList,omitzero"`
-	Options                    *collections.OrderedMap[string, any] `json:"options,omitzero"`
-	ReferencedMap              []*BuildInfoReferenceMapEntry        `json:"referencedMap,omitzero"`
-	SemanticDiagnosticsPerFile []*BuildInfoSemanticDiagnostic       `json:"semanticDiagnosticsPerFile,omitzero"`
-	EmitDiagnosticsPerFile     []*BuildInfoDiagnosticsOfFile        `json:"emitDiagnosticsPerFile,omitzero"`
-	ChangeFileSet              []BuildInfoFileId                    `json:"changeFileSet,omitzero"`
-	AffectedFilesPendingEmit   []*BuildInfoFilePendingEmit          `json:"affectedFilesPendingEmit,omitzero"`
-	LatestChangedDtsFile       BuildInfoPath                        `json:"latestChangedDtsFile,omitzero"` // Because this is only output file in the program, we dont need fileId to deduplicate name
-	EmitSignatures             []*BuildInfoEmitSignature            `json:"emitSignatures,omitzero"`
-	ResolvedRoot               []*BuildInfoResolvedRoot             `json:"resolvedRoot,omitzero"`
+	FileNames                  []BuildInfoPath                `json:"fileNames,omitzero"`
+	FileInfos                  []*BuildInfoFileInfo           `json:"fileInfos,omitzero"`
+	FileIdsList                [][]BuildInfoFileId            `json:"fileIdsList,omitzero"`
+	Options                    *BuildInfoCompilerOptions      `json:"options,omitzero"`
+	ReferencedMap              []*BuildInfoReferenceMapEntry  `json:"referencedMap,omitzero"`
+	SemanticDiagnosticsPerFile []*BuildInfoSemanticDiagnostic `json:"semanticDiagnosticsPerFile,omitzero"`
+	EmitDiagnosticsPerFile     []*BuildInfoDiagnosticsOfFile  `json:"emitDiagnosticsPerFile,omitzero"`
+	ChangeFileSet              []BuildInfoFileId              `json:"changeFileSet,omitzero"`
+	AffectedFilesPendingEmit   []*BuildInfoFilePendingEmit    `json:"affectedFilesPendingEmit,omitzero"`
+	LatestChangedDtsFile       BuildInfoPath                  `json:"latestChangedDtsFile,omitzero"` // Because this is only output file in the program, we dont need fileId to deduplicate name
+	EmitSignatures             []*BuildInfoEmitSignature      `json:"emitSignatures,omitzero"`
+	ResolvedRoot               []*BuildInfoResolvedRoot       `json:"resolvedRoot,omitzero"`
 
 	// NonIncrementalProgram info
 	SemanticErrors bool `json:"semanticErrors,omitzero"`
@@ -549,6 +557,9 @@ func (b *BuildInfo) fileInfo(fileId BuildInfoFileId) *BuildInfoFileInfo {
 
 func (b *BuildInfo) GetCompilerOptions(buildInfoDirectory tspath.RootedDirectoryPath) *core.CompilerOptions {
 	options := &core.CompilerOptions{}
+	if b.Options == nil {
+		return options
+	}
 	for option, value := range b.Options.Entries() {
 		optionDeclaration := tsoptions.CommandLineCompilerOptionsMap.Get(option)
 		if buildInfoDirectory == "" && optionDeclaration != nil {

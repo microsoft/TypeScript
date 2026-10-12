@@ -58,7 +58,7 @@ declare const console: { log(msg: any): void; };
 export declare function result(): any;
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5906842426280b1436801b4605bdacdc-export function result() { try { throw 1; } catch (error) { return error; } }\n","signature":"86c77d7e37fa31e2429019792182f793-export declare function result(): any;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7,"useUnknownInCatchVariables":false},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5906842426280b1436801b4605bdacdc-export function result() { try { throw 1; } catch (error) { return error; } }\n","signature":"86c77d7e37fa31e2429019792182f793-export declare function result(): any;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7,"useUnknownInCatchVariables":false},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -104,6 +104,7 @@ export declare function result(): any;
     "emitDeclarationOnly": true,
     "declaration": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
@@ -111,7 +112,7 @@ export declare function result(): any;
     "useUnknownInCatchVariables": false
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1319
+  "size": 1342
 }
 
 producer/tsconfig.json::
@@ -159,115 +160,13 @@ Edit [1]:: change useUnknownInCatchVariables without changing source files
 tsgo --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
+TSFILE: /home/src/workspaces/project/producer/dist/index.d.ts
 TSFILE: /home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5906842426280b1436801b4605bdacdc-export function result() { try { throw 1; } catch (error) { return error; } }\n","signature":"86c77d7e37fa31e2429019792182f793-export declare function result(): any;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7,"useUnknownInCatchVariables":true},"latestChangedDtsFile":"./index.d.ts"}
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
-{
-  "version": "FakeTSVersion",
-  "root": [
-    {
-      "files": [
-        "../index.ts"
-      ],
-      "original": 2
-    }
-  ],
-  "fileNames": [
-    "lib.es2020.d.ts",
-    "../index.ts"
-  ],
-  "fileInfos": [
-    {
-      "fileName": "lib.es2020.d.ts",
-      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedNodeFormat": 1
-      }
-    },
-    {
-      "fileName": "../index.ts",
-      "version": "5906842426280b1436801b4605bdacdc-export function result() { try { throw 1; } catch (error) { return error; } }\n",
-      "signature": "86c77d7e37fa31e2429019792182f793-export declare function result(): any;\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "5906842426280b1436801b4605bdacdc-export function result() { try { throw 1; } catch (error) { return error; } }\n",
-        "signature": "86c77d7e37fa31e2429019792182f793-export declare function result(): any;\n",
-        "impliedNodeFormat": 1
-      }
-    }
-  ],
-  "options": {
-    "composite": true,
-    "emitDeclarationOnly": true,
-    "declaration": true,
-    "module": 99,
-    "outDir": "./",
-    "rootDir": "..",
-    "strict": true,
-    "target": 7,
-    "useUnknownInCatchVariables": true
-  },
-  "latestChangedDtsFile": "./index.d.ts",
-  "size": 1318
-}
-
-producer/tsconfig.json::
-SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
-*refresh*    /home/src/workspaces/project/producer/index.ts
-Signatures::
-
-
-Diff:: Changing useUnknownInCatchVariables without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/index.d.ts
-@@ -1,1 +1,1 @@
--export declare function result(): unknown;
-+export declare function result(): any;
-
-
-Edit [2]:: no change
-
-tsgo --project producer --listEmittedFiles
-ExitStatus:: Success
-Output::
-
-producer/tsconfig.json::
-SemanticDiagnostics::
-Signatures::
-
-
-Diff:: Changing useUnknownInCatchVariables without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/index.d.ts
-@@ -1,1 +1,1 @@
--export declare function result(): unknown;
-+export declare function result(): any;
-
-
-Edit [3]:: force rebuild with the same compiler options
-
-tsgo --build producer --verbose --force
-ExitStatus:: Success
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
-
-[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
-
 //// [/home/src/workspaces/project/producer/dist/index.d.ts] *modified* 
 export declare function result(): unknown;
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5906842426280b1436801b4605bdacdc-export function result() { try { throw 1; } catch (error) { return error; } }\n","signature":"635c23f8927b342f5cb9d08a33d41270-export declare function result(): unknown;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7,"useUnknownInCatchVariables":true},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2020.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5906842426280b1436801b4605bdacdc-export function result() { try { throw 1; } catch (error) { return error; } }\n","signature":"635c23f8927b342f5cb9d08a33d41270-export declare function result(): unknown;\n","impliedNodeFormat":1}],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7,"useUnknownInCatchVariables":true},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -313,6 +212,7 @@ export declare function result(): unknown;
     "emitDeclarationOnly": true,
     "declaration": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
@@ -320,8 +220,43 @@ export declare function result(): unknown;
     "useUnknownInCatchVariables": true
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1322
+  "size": 1345
 }
+
+producer/tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+*refresh*    /home/src/workspaces/project/producer/index.ts
+Signatures::
+(stored at emit) /home/src/workspaces/project/producer/index.ts
+
+
+Edit [2]:: no change
+
+tsgo --project producer --listEmittedFiles
+ExitStatus:: Success
+Output::
+
+producer/tsconfig.json::
+SemanticDiagnostics::
+Signatures::
+
+
+Edit [3]:: force rebuild with the same compiler options
+
+tsgo --build producer --verbose --force
+ExitStatus:: Success
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
+
+[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
+
+//// [/home/src/workspaces/project/producer/dist/index.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 producer/tsconfig.json::
 SemanticDiagnostics::

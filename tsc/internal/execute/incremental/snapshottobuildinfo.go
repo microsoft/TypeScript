@@ -326,7 +326,7 @@ func (t *toBuildInfo) setCompilerOptions() {
 		func(option *tsoptions.CommandLineOption, value any) {
 			// Make it relative to buildInfo directory if file path
 			if t.buildInfo.Options == nil {
-				t.buildInfo.Options = &collections.OrderedMap[string, any]{}
+				t.buildInfo.Options = &BuildInfoCompilerOptions{}
 			}
 			t.buildInfo.Options.Set(option.Name, t.toRelativeToBuildInfoCompilerOptionValue(option, value))
 		},

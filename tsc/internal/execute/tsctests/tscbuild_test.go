@@ -1049,12 +1049,8 @@ func TestBuildExactOptionalPropertyTypes(t *testing.T) {
 							fmt.Sprintf(`"exactOptionalPropertyTypes": %t`, !exactOptionalPropertyTypes),
 						)
 					},
-					expectedDiff: "Changing exactOptionalPropertyTypes without editing source files leaves stale declarations and downstream diagnostics.",
 				},
-				{
-					caption:      "no change",
-					expectedDiff: "Changing exactOptionalPropertyTypes without editing source files leaves stale declarations and downstream diagnostics.",
-				},
+				noChange,
 				{
 					caption:         "force rebuild with the same compiler options",
 					commandLineArgs: []string{"--build", "consumer", "--verbose", "--force"},
@@ -1067,14 +1063,12 @@ func TestBuildExactOptionalPropertyTypes(t *testing.T) {
 }
 
 type compilerOptionChangeTest struct {
-	option       string
-	name         string
-	values       [2]any
-	options      map[string]any
-	files        FileMap
-	roots        []string
-	matches      [2]bool
-	expectedDiff string
+	option  string
+	name    string
+	values  [2]any
+	options map[string]any
+	files   FileMap
+	roots   []string
 }
 
 func TestBuildOptionChangeShapeSignature(t *testing.T) {
@@ -1113,12 +1107,8 @@ func TestBuildOptionChangeShapeSignature(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.replaceFileText("/home/src/workspaces/project/a.ts", "    /** @internal */\n    value = \"\";\n", "")
 					},
-					expectedDiff: "Option-only declaration emit leaves stale shape signatures, so a source edit does not invalidate dependent output and diagnostics.",
 				},
-				{
-					caption:      "no change",
-					expectedDiff: "Option-only declaration emit leaves stale shape signatures, so a source edit does not invalidate dependent output and diagnostics.",
-				},
+				noChange,
 				{caption: "force rebuild", commandLineArgs: []string{"--build", "--verbose", "--force"}},
 				noChange,
 			},
@@ -1175,10 +1165,6 @@ func testCompilerOptionChanges(t *testing.T, tests []compilerOptionChangeTest) {
 				if build {
 					args = []string{"--build", "producer", "--verbose"}
 				}
-				expectedDiff := test.expectedDiff
-				if expectedDiff == "" && !test.matches[direction] {
-					expectedDiff = "Changing " + test.option + " without editing source files leaves stale output or diagnostics."
-				}
 				input := &tscInput{
 					subScenario:     fmt.Sprintf("%s %s direction %d", name, mode, direction),
 					cwd:             project,
@@ -1191,9 +1177,8 @@ func testCompilerOptionChanges(t *testing.T, tests []compilerOptionChangeTest) {
 							edit: func(sys *TestSys) {
 								sys.writeFileNoError(configPath, config(test.values[1-direction]))
 							},
-							expectedDiff: expectedDiff,
 						},
-						{caption: "no change", expectedDiff: expectedDiff},
+						noChange,
 						{
 							caption:         "force rebuild with the same compiler options",
 							commandLineArgs: []string{"--build", "producer", "--verbose", "--force"},
@@ -1207,6 +1192,21 @@ func testCompilerOptionChanges(t *testing.T, tests []compilerOptionChangeTest) {
 	}
 }
 
+func TestBuildModuleDetectionOptionChanges(t *testing.T) {
+	t.Parallel()
+	tests := []compilerOptionChangeTest{
+		{option: "moduleDetection", name: "moduleDetection empty", values: [2]any{"legacy", "force"}, files: FileMap{"index.ts": ""}},
+		{option: "moduleDetection", name: "moduleDetection comment", values: [2]any{"legacy", "force"}, files: FileMap{"index.ts": "// A file with no statements.\n"}},
+		{option: "moduleDetection", name: "moduleDetection ambient module", values: [2]any{"legacy", "force"}, files: FileMap{"index.ts": "declare module 'input' { export const value: number; }\n"}},
+		{
+			option: "moduleDetection", name: "moduleDetection CommonJS", values: [2]any{"legacy", "force"},
+			options: map[string]any{"allowJs": true, "emitDeclarationOnly": false},
+			files:   FileMap{"index.js": "exports.value = 1;\n"},
+		},
+	}
+	testCompilerOptionChanges(t, tests)
+}
+
 func TestBuildTypeCheckingOptionChanges(t *testing.T) {
 	t.Parallel()
 	nullable := FileMap{"index.ts": "declare const input: string | undefined;\nexport const result = input;\n"}
@@ -1214,7 +1214,7 @@ func TestBuildTypeCheckingOptionChanges(t *testing.T) {
 		{option: "strictNullChecks", values: [2]any{false, true}, files: nullable, options: map[string]any{"strictPropertyInitialization": false}},
 		{option: "strict", values: [2]any{false, true}, files: nullable},
 		{option: "strict", name: "strict default", values: [2]any{nil, false}, files: nullable},
-		{option: "strict", name: "strict overridden", values: [2]any{false, true}, files: nullable, options: map[string]any{"strictNullChecks": true}, matches: [2]bool{true, true}},
+		{option: "strict", name: "strict overridden", values: [2]any{false, true}, files: nullable, options: map[string]any{"strictNullChecks": true}},
 		{option: "noUncheckedIndexedAccess", values: [2]any{false, true}, files: FileMap{"index.ts": "declare const input: { [key: string]: number };\nexport const result = input.value;\n"}},
 		{
 			option: "strictBindCallApply", values: [2]any{false, true},
@@ -1260,24 +1260,6 @@ func TestBuildTypeCheckingOptionChanges(t *testing.T) {
 	})
 }
 
-func TestBuildModuleDetectionOptionChanges(t *testing.T) {
-	t.Parallel()
-	tests := []compilerOptionChangeTest{
-		{option: "moduleDetection", name: "moduleDetection empty", values: [2]any{"legacy", "force"}, files: FileMap{"index.ts": ""}},
-		{option: "moduleDetection", name: "moduleDetection comment", values: [2]any{"legacy", "force"}, files: FileMap{"index.ts": "// A file with no statements.\n"}},
-		{option: "moduleDetection", name: "moduleDetection ambient module", values: [2]any{"legacy", "force"}, files: FileMap{"index.ts": "declare module 'input' { export const value: number; }\n"}},
-		{
-			option: "moduleDetection", name: "moduleDetection CommonJS", values: [2]any{"legacy", "force"},
-			options: map[string]any{"allowJs": true, "emitDeclarationOnly": false},
-			files:   FileMap{"index.js": "exports.value = 1;\n"},
-		},
-	}
-	for i := range tests {
-		tests[i].expectedDiff = "Changing moduleDetection does not invalidate module markers or semantic diagnostics when global-scope classification is unchanged."
-	}
-	testCompilerOptionChanges(t, tests)
-}
-
 func TestBuildModuleSuffixesOptionChanges(t *testing.T) {
 	t.Parallel()
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
@@ -1289,7 +1271,6 @@ func TestBuildModuleSuffixesOptionChanges(t *testing.T) {
 				"input.ts":        "export class Value { private field = 1; }\n",
 				"input.native.ts": "export class Value { private field = 2; }\n",
 			},
-			expectedDiff: "Changing moduleSuffixes leaves inferred declaration module specifiers stale when both alternative files are already included.",
 		},
 	})
 }
@@ -1299,8 +1280,7 @@ func TestBuildTargetOptionDiagnostics(t *testing.T) {
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
 		{
 			option: "target", values: [2]any{"es2015", "es2020"},
-			files:        FileMap{"index.ts": "export const result = 1n;\n"},
-			expectedDiff: "Changing target with explicit unchanged libraries retains the previous BigInt syntax diagnostics.",
+			files: FileMap{"index.ts": "export const result = 1n;\n"},
 		},
 	})
 }
@@ -1310,8 +1290,7 @@ func TestBuildModuleOptionDiagnostics(t *testing.T) {
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
 		{
 			option: "module", name: "module top-level await", values: [2]any{"esnext", "commonjs"},
-			files:        FileMap{"index.ts": "export const result = await 1;\n"},
-			expectedDiff: "Changing module retains the previous top-level-await diagnostics.",
+			files: FileMap{"index.ts": "export const result = await 1;\n"},
 		},
 		{
 			option: "module", name: "module import attributes", values: [2]any{"esnext", "commonjs"},
@@ -1320,7 +1299,6 @@ func TestBuildModuleOptionDiagnostics(t *testing.T) {
 				"index.ts":  "import value from './data.json' with { type: 'json' };\nexport { value };\n",
 				"data.json": `{"value":1}`,
 			},
-			expectedDiff: "Changing module retains the previous import-attribute diagnostics.",
 		},
 	})
 }
@@ -1335,7 +1313,6 @@ func TestBuildImportHelpersOptionDiagnostics(t *testing.T) {
 				"index.ts":                  "export async function result() { return 1; }\n",
 				getTestLibPathFor("es2020"): tscDefaultLibContent + "\ninterface Promise<T> { then<U>(callback: (value: T) => U): Promise<U>; }\n",
 			},
-			expectedDiff: "Changing importHelpers retains the previous missing-tslib diagnostics.",
 		},
 	})
 }
@@ -1352,7 +1329,6 @@ func TestBuildReactNamespaceOptionDiagnostics(t *testing.T) {
 					namespace JSX { interface Element {} interface IntrinsicElements { div: {} } }
 				}
 				export const result = <div />;`)},
-			expectedDiff: "Changing reactNamespace retains the previous JSX namespace diagnostics.",
 		},
 	})
 }
@@ -1362,8 +1338,7 @@ func TestBuildPreserveConstEnumsOptionDiagnostics(t *testing.T) {
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
 		{
 			option: "preserveConstEnums", name: "preserveConstEnums namespace order", values: [2]any{false, true},
-			files:        FileMap{"index.ts": "export namespace Value { export const enum Field { One } }\nexport class Value {}\n"},
-			expectedDiff: "Changing preserveConstEnums retains the previous namespace/class declaration-order diagnostics.",
+			files: FileMap{"index.ts": "export namespace Value { export const enum Field { One } }\nexport class Value {}\n"},
 		},
 		{
 			option: "preserveConstEnums", name: "preserveConstEnums namespace merge", values: [2]any{false, true},
@@ -1372,7 +1347,21 @@ func TestBuildPreserveConstEnumsOptionDiagnostics(t *testing.T) {
 				"index.ts": "namespace Value { export const enum Field { One } }\n",
 				"other.ts": "class Value {}\n",
 			},
-			expectedDiff: "Changing preserveConstEnums retains the previous cross-file namespace/class merge diagnostics.",
+		},
+	})
+}
+
+func TestBuildNoLibOptionChanges(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "noLib", values: [2]any{false, true},
+			options: map[string]any{"lib": nil},
+			files: FileMap{
+				"index.ts":                       "export const result = input();\n",
+				"globals.d.ts":                   "interface Boolean {} interface Function {} interface CallableFunction {} interface NewableFunction {} interface IArguments {} interface Number {} interface Object {} interface RegExp {} interface String {} interface Array<T> {} interface ReadonlyArray<T> {}\n",
+				getTestLibPathFor("es2020.full"): tscDefaultLibContent + "\ndeclare function input(): 'library';\n",
+			},
 		},
 	})
 }
@@ -1517,7 +1506,7 @@ func TestBuildResolutionOptionChanges(t *testing.T) {
 			},
 		},
 		{
-			option: "deduplicatePackages", values: [2]any{false, true}, matches: [2]bool{false, true}, roots: []string{"index.ts"},
+			option: "deduplicatePackages", values: [2]any{false, true}, roots: []string{"index.ts"},
 			files: FileMap{
 				"index.ts":                        "import { input as a } from 'first';\nimport { input as b } from 'second';\nexport const result = [a, b];\n",
 				"node_modules/first/package.json": `{"name":"first","version":"1.0.0","types":"index.d.ts"}`,

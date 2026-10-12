@@ -82,7 +82,7 @@ export declare class Thing {
 export declare const result: import("../generated/thing").Thing;
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2020.d.ts","../generated/thing.ts","../generated/factory.ts","../src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1e13636538b7ccc39e192111e556e4fd-export class Thing { private field = 1; }\n","signature":"fd3b9b2da1026c3ff32025ff8ed07329-export declare class Thing {\n    private field;\n}\n","impliedNodeFormat":1},{"version":"ca900e2385cd189084934dd47c6733af-import { Thing } from './thing';\nexport function make() { return new Thing(); }\n","signature":"8541230877a83bcc0999fabcf92106a2-import { Thing } from './thing';\nexport declare function make(): Thing;\n","impliedNodeFormat":1},{"version":"2e3d71cdddb13c604565f74d13e4d8aa-import { make } from '../generated/factory';\nexport const result = make();\n","signature":"f6655abf00ee64b0f2ddd0df13f3dab8-export declare const result: import(\"../generated/thing\").Thing;\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./src/index.d.ts"}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2020.d.ts","../generated/thing.ts","../generated/factory.ts","../src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1e13636538b7ccc39e192111e556e4fd-export class Thing { private field = 1; }\n","signature":"fd3b9b2da1026c3ff32025ff8ed07329-export declare class Thing {\n    private field;\n}\n","impliedNodeFormat":1},{"version":"ca900e2385cd189084934dd47c6733af-import { Thing } from './thing';\nexport function make() { return new Thing(); }\n","signature":"8541230877a83bcc0999fabcf92106a2-import { Thing } from './thing';\nexport declare function make(): Thing;\n","impliedNodeFormat":1},{"version":"2e3d71cdddb13c604565f74d13e4d8aa-import { make } from '../generated/factory';\nexport const result = make();\n","signature":"f6655abf00ee64b0f2ddd0df13f3dab8-export declare const result: import(\"../generated/thing\").Thing;\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","rootDirs":[],"strict":true,"target":7},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./src/index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -165,8 +165,10 @@ export declare const result: import("../generated/thing").Thing;
     "emitDeclarationOnly": true,
     "declaration": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
+    "rootDirs": [],
     "strict": true,
     "target": 7
   },
@@ -179,7 +181,7 @@ export declare const result: import("../generated/thing").Thing;
     ]
   },
   "latestChangedDtsFile": "./src/index.d.ts",
-  "size": 1914
+  "size": 1951
 }
 
 producer/tsconfig.json::
@@ -245,63 +247,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'producer/tsconfig.json'...
-
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *mTime changed*
-
-producer/tsconfig.json::
-SemanticDiagnostics::
-Signatures::
-
-
-Diff:: Changing rootDirs without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/src/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/src/index.d.ts
-@@ -1,1 +1,1 @@
--export declare const result: import("./thing").Thing;
-+export declare const result: import("../generated/thing").Thing;
-
-
-Edit [2]:: no change
-
-tsgo --build producer --verbose
-ExitStatus:: Success
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is up to date because newest input 'producer/src/index.ts' is older than output 'producer/dist/tsconfig.tsbuildinfo'
-
-
-
-
-Diff:: Changing rootDirs without editing source files leaves stale output or diagnostics.
---- nonIncremental /home/src/workspaces/project/producer/dist/src/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/src/index.d.ts
-@@ -1,1 +1,1 @@
--export declare const result: import("./thing").Thing;
-+export declare const result: import("../generated/thing").Thing;
-
-
-Edit [3]:: force rebuild with the same compiler options
-
-tsgo --build producer --verbose --force
-ExitStatus:: Success
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
-
-[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
-
-//// [/home/src/workspaces/project/producer/dist/generated/factory.d.ts] *rewrite with same content*
-//// [/home/src/workspaces/project/producer/dist/generated/thing.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/producer/dist/src/index.d.ts] *modified* 
 export declare const result: import("./thing").Thing;
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2020.d.ts","../generated/thing.ts","../generated/factory.ts","../src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1e13636538b7ccc39e192111e556e4fd-export class Thing { private field = 1; }\n","signature":"fd3b9b2da1026c3ff32025ff8ed07329-export declare class Thing {\n    private field;\n}\n","impliedNodeFormat":1},{"version":"ca900e2385cd189084934dd47c6733af-import { Thing } from './thing';\nexport function make() { return new Thing(); }\n","signature":"8541230877a83bcc0999fabcf92106a2-import { Thing } from './thing';\nexport declare function make(): Thing;\n","impliedNodeFormat":1},{"version":"2e3d71cdddb13c604565f74d13e4d8aa-import { make } from '../generated/factory';\nexport const result = make();\n","signature":"b9864d32407f7f094d6860218dc805f5-export declare const result: import(\"./thing\").Thing;\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./src/index.d.ts"}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2020.d.ts","../generated/thing.ts","../generated/factory.ts","../src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1e13636538b7ccc39e192111e556e4fd-export class Thing { private field = 1; }\n","signature":"fd3b9b2da1026c3ff32025ff8ed07329-export declare class Thing {\n    private field;\n}\n","impliedNodeFormat":1},{"version":"ca900e2385cd189084934dd47c6733af-import { Thing } from './thing';\nexport function make() { return new Thing(); }\n","signature":"8541230877a83bcc0999fabcf92106a2-import { Thing } from './thing';\nexport declare function make(): Thing;\n","impliedNodeFormat":1},{"version":"2e3d71cdddb13c604565f74d13e4d8aa-import { make } from '../generated/factory';\nexport const result = make();\n","signature":"b9864d32407f7f094d6860218dc805f5-export declare const result: import(\"./thing\").Thing;\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","rootDirs":["../src","../generated"],"strict":true,"target":7},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./src/index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -384,8 +334,13 @@ export declare const result: import("./thing").Thing;
     "emitDeclarationOnly": true,
     "declaration": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
+    "rootDirs": [
+      "../src",
+      "../generated"
+    ],
     "strict": true,
     "target": 7
   },
@@ -398,8 +353,49 @@ export declare const result: import("./thing").Thing;
     ]
   },
   "latestChangedDtsFile": "./src/index.d.ts",
-  "size": 1903
+  "size": 1963
 }
+
+producer/tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+*refresh*    /home/src/workspaces/project/producer/generated/thing.ts
+*refresh*    /home/src/workspaces/project/producer/generated/factory.ts
+*refresh*    /home/src/workspaces/project/producer/src/index.ts
+Signatures::
+(stored at emit) /home/src/workspaces/project/producer/src/index.ts
+
+
+Edit [2]:: no change
+
+tsgo --build producer --verbose
+ExitStatus:: Success
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is up to date because newest input 'producer/src/index.ts' is older than output 'producer/dist/tsconfig.tsbuildinfo'
+
+
+
+
+Edit [3]:: force rebuild with the same compiler options
+
+tsgo --build producer --verbose --force
+ExitStatus:: Success
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
+
+[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
+
+//// [/home/src/workspaces/project/producer/dist/generated/factory.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/generated/thing.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/src/index.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 producer/tsconfig.json::
 SemanticDiagnostics::

@@ -85,7 +85,7 @@ declare const console: { log(msg: any): void; };
 export declare const result: "first"[];
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[5],"packageJsons":["../node_modules/first/node_modules/dependency/package.json","../node_modules/first/package.json","../node_modules/second/node_modules/dependency/package.json","../node_modules/second/package.json"],"fileNames":["lib.es2020.d.ts","../node_modules/first/node_modules/dependency/index.d.ts","../node_modules/first/index.d.ts","../node_modules/second/index.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"8314dc361a146d40f123a1696028ad63-export const input: 'first';\n","7f7c915aaec78d3b8809e464f7ce1464-export { input } from 'dependency';\n","7f7c915aaec78d3b8809e464f7ce1464-export { input } from 'dependency';\n",{"version":"c48cd4fc72f2e3723fd9cb54f2cbab0c-import { input as a } from 'first';\nimport { input as b } from 'second';\nexport const result = [a, b];\n","signature":"4fa89edf3c871627b0eabe835299a013-export declare const result: \"first\"[];\n","impliedNodeFormat":1}],"fileIdsList":[[3,4],[2]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7},"referencedMap":[[5,1],[3,2],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[5],"packageJsons":["../node_modules/first/node_modules/dependency/package.json","../node_modules/first/package.json","../node_modules/second/node_modules/dependency/package.json","../node_modules/second/package.json"],"fileNames":["lib.es2020.d.ts","../node_modules/first/node_modules/dependency/index.d.ts","../node_modules/first/index.d.ts","../node_modules/second/index.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"8314dc361a146d40f123a1696028ad63-export const input: 'first';\n","7f7c915aaec78d3b8809e464f7ce1464-export { input } from 'dependency';\n","7f7c915aaec78d3b8809e464f7ce1464-export { input } from 'dependency';\n",{"version":"c48cd4fc72f2e3723fd9cb54f2cbab0c-import { input as a } from 'first';\nimport { input as b } from 'second';\nexport const result = [a, b];\n","signature":"4fa89edf3c871627b0eabe835299a013-export declare const result: \"first\"[];\n","impliedNodeFormat":1}],"fileIdsList":[[3,4],[2]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"deduplicatePackages":true,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"referencedMap":[[5,1],[3,2],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -166,7 +166,9 @@ export declare const result: "first"[];
     "composite": true,
     "emitDeclarationOnly": true,
     "declaration": true,
+    "deduplicatePackages": true,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
@@ -185,7 +187,7 @@ export declare const result: "first"[];
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1933
+  "size": 1983
 }
 
 producer/tsconfig.json::
@@ -249,7 +251,7 @@ Output::
 export declare const result: ("first" | "second")[];
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[6],"packageJsons":["../node_modules/first/node_modules/dependency/package.json","../node_modules/first/package.json","../node_modules/second/node_modules/dependency/package.json","../node_modules/second/package.json"],"fileNames":["lib.es2020.d.ts","../node_modules/first/node_modules/dependency/index.d.ts","../node_modules/first/index.d.ts","../node_modules/second/node_modules/dependency/index.d.ts","../node_modules/second/index.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"8314dc361a146d40f123a1696028ad63-export const input: 'first';\n","7f7c915aaec78d3b8809e464f7ce1464-export { input } from 'dependency';\n","2be5566647752018a2f34c167fe6f053-export const input: 'second';\n","7f7c915aaec78d3b8809e464f7ce1464-export { input } from 'dependency';\n",{"version":"c48cd4fc72f2e3723fd9cb54f2cbab0c-import { input as a } from 'first';\nimport { input as b } from 'second';\nexport const result = [a, b];\n","signature":"e96591b5ed8dde6e90e57827d7658d94-export declare const result: (\"first\" | \"second\")[];\n","impliedNodeFormat":1}],"fileIdsList":[[3,5],[2],[4]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":99,"outDir":"./","rootDir":"..","strict":true,"target":7},"referencedMap":[[6,1],[3,2],[5,3]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[6],"packageJsons":["../node_modules/first/node_modules/dependency/package.json","../node_modules/first/package.json","../node_modules/second/node_modules/dependency/package.json","../node_modules/second/package.json"],"fileNames":["lib.es2020.d.ts","../node_modules/first/node_modules/dependency/index.d.ts","../node_modules/first/index.d.ts","../node_modules/second/node_modules/dependency/index.d.ts","../node_modules/second/index.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"8314dc361a146d40f123a1696028ad63-export const input: 'first';\n","7f7c915aaec78d3b8809e464f7ce1464-export { input } from 'dependency';\n","2be5566647752018a2f34c167fe6f053-export const input: 'second';\n","7f7c915aaec78d3b8809e464f7ce1464-export { input } from 'dependency';\n",{"version":"c48cd4fc72f2e3723fd9cb54f2cbab0c-import { input as a } from 'first';\nimport { input as b } from 'second';\nexport const result = [a, b];\n","signature":"e96591b5ed8dde6e90e57827d7658d94-export declare const result: (\"first\" | \"second\")[];\n","impliedNodeFormat":1}],"fileIdsList":[[3,5],[2],[4]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"deduplicatePackages":false,"module":99,"moduleResolution":100,"outDir":"./","rootDir":"..","strict":true,"target":7},"referencedMap":[[6,1],[3,2],[5,3]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -340,7 +342,9 @@ export declare const result: ("first" | "second")[];
     "composite": true,
     "emitDeclarationOnly": true,
     "declaration": true,
+    "deduplicatePackages": false,
     "module": 99,
+    "moduleResolution": 100,
     "outDir": "./",
     "rootDir": "..",
     "strict": true,
@@ -359,11 +363,14 @@ export declare const result: ("first" | "second")[];
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 2079
+  "size": 2130
 }
 
 producer/tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2020.d.ts
+*refresh*    /home/src/workspaces/project/producer/node_modules/first/node_modules/dependency/index.d.ts
+*refresh*    /home/src/workspaces/project/producer/node_modules/first/index.d.ts
 *refresh*    /home/src/workspaces/project/producer/node_modules/second/node_modules/dependency/index.d.ts
 *refresh*    /home/src/workspaces/project/producer/node_modules/second/index.d.ts
 *refresh*    /home/src/workspaces/project/producer/index.ts
