@@ -20,3 +20,32 @@ enum E {
 >"C" : "C"
 }
 
+// Alias exports that resolve to enum members must still constant-evaluate (like E.C).
+enum F {
+>F : F
+
+    A = 1,
+>A : F.A
+>1 : 1
+}
+namespace E2 {
+>E2 : typeof E2
+
+    export import C = F.A;
+>C : F.A
+>F : F
+>A : F.A
+}
+enum E2 {
+>E2 : E2
+
+    D = E2["C"],
+>D : E2.D
+>E2["C"] : F
+>E2 : typeof E2
+>"C" : "C"
+
+    Next,
+>Next : E2.Next
+}
+

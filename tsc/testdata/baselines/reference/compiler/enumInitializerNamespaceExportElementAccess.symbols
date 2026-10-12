@@ -19,3 +19,30 @@ enum E {
 >"C" : Symbol(E.C, Decl(enumInitializerNamespaceExportElementAccess.ts, 3, 13))
 }
 
+// Alias exports that resolve to enum members must still constant-evaluate (like E.C).
+enum F {
+>F : Symbol(F, Decl(enumInitializerNamespaceExportElementAccess.ts, 8, 1))
+
+    A = 1,
+>A : Symbol(F.A, Decl(enumInitializerNamespaceExportElementAccess.ts, 11, 8))
+}
+namespace E2 {
+>E2 : Symbol(E2, Decl(enumInitializerNamespaceExportElementAccess.ts, 13, 1), Decl(enumInitializerNamespaceExportElementAccess.ts, 16, 1))
+
+    export import C = F.A;
+>C : Symbol(C, Decl(enumInitializerNamespaceExportElementAccess.ts, 14, 14))
+>F : Symbol(F, Decl(enumInitializerNamespaceExportElementAccess.ts, 8, 1))
+>A : Symbol(C, Decl(enumInitializerNamespaceExportElementAccess.ts, 11, 8))
+}
+enum E2 {
+>E2 : Symbol(E2, Decl(enumInitializerNamespaceExportElementAccess.ts, 13, 1), Decl(enumInitializerNamespaceExportElementAccess.ts, 16, 1))
+
+    D = E2["C"],
+>D : Symbol(E2.D, Decl(enumInitializerNamespaceExportElementAccess.ts, 17, 9))
+>E2 : Symbol(E2, Decl(enumInitializerNamespaceExportElementAccess.ts, 13, 1), Decl(enumInitializerNamespaceExportElementAccess.ts, 16, 1))
+>"C" : Symbol(E2.C, Decl(enumInitializerNamespaceExportElementAccess.ts, 14, 14))
+
+    Next,
+>Next : Symbol(E2.Next, Decl(enumInitializerNamespaceExportElementAccess.ts, 18, 16))
+}
+

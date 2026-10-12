@@ -14,3 +14,15 @@ enumInitializerNamespaceExportElementAccess.ts(8,9): error TS18033: Type 'typeof
 !!! error TS18033: Type 'typeof C' is not assignable to type 'number' as required for computed enum member values.
     }
     
+    // Alias exports that resolve to enum members must still constant-evaluate (like E.C).
+    enum F {
+        A = 1,
+    }
+    namespace E2 {
+        export import C = F.A;
+    }
+    enum E2 {
+        D = E2["C"],
+        Next,
+    }
+    

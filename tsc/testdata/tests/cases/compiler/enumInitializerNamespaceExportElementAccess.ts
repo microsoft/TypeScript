@@ -7,3 +7,15 @@ namespace E {
 enum E {
     D = E["C"],
 }
+
+// Alias exports that resolve to enum members must still constant-evaluate (like E.C).
+enum F {
+    A = 1,
+}
+namespace E2 {
+    export import C = F.A;
+}
+enum E2 {
+    D = E2["C"],
+    Next,
+}
