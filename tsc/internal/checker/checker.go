@@ -15165,7 +15165,7 @@ func (c *Checker) canHaveSyntheticDefault(file *ast.Node, moduleSymbol *ast.Symb
 	if file == nil || file.AsSourceFile().IsDeclarationFile {
 		// Definitely cannot have a synthetic default if they have a syntactic default member specified
 		defaultExportSymbol := c.resolveExportByName(moduleSymbol, ast.InternalSymbolNameDefault /*sourceNode*/, nil /*dontResolveAlias*/, true) // Dont resolve alias because we want the immediately exported symbol's declaration
-		if defaultExportSymbol != nil && core.Some(defaultExportSymbol.Declarations(), isSyntacticDefault) {
+		if defaultExportSymbol != nil && (c.resolveSymbol(defaultExportSymbol).CheckFlags()&ast.CheckFlagsExportConflict != 0 || core.Some(defaultExportSymbol.Declarations(), isSyntacticDefault)) {
 			return false
 		}
 		// It _might_ still be incorrect to assume there is no __esModule marker on the import at runtime, even if there is no `default` member

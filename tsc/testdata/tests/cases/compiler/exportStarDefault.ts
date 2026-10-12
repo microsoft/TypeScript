@@ -54,6 +54,16 @@ export * from "./first";
 // @filename: namedConflict.ts
 export { shared } from "./ambiguous";
 
+// @filename: firstDeclaration.d.ts
+export default class FirstDeclaration { first: number; }
+
+// @filename: secondDeclaration.d.ts
+export default class SecondDeclaration { second: number; }
+
+// @filename: ambiguousDeclaration.d.ts
+export * from "./firstDeclaration";
+export * from "./secondDeclaration";
+
 // @filename: consumer.ts
 import First from "./single";
 import { default as Diamond, shared as diamondShared } from "./diamond";
@@ -67,6 +77,7 @@ import * as ambiguous from "./ambiguous";
 import * as forwarded from "./forwarded";
 import * as namedConflict from "./namedConflict";
 import Conflict, { default as NamedConflict, shared, unique } from "./ambiguous";
+import DeclarationConflict from "./ambiguousDeclaration";
 export { default, shared as conflict } from "./forwarded";
 
 new First().first;
@@ -96,3 +107,4 @@ ambiguous["shared"].nonexistent();
 Conflict.nonexistent();
 NamedConflict.nonexistent();
 shared.nonexistent();
+DeclarationConflict.nonexistent();
