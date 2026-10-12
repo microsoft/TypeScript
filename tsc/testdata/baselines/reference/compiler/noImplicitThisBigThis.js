@@ -97,3 +97,38 @@ function createObjNoCrash() {
         }
     };
 }
+
+
+//// [noImplicitThisBigThis.d.ts]
+type _recursive = {
+    func1(): _recursive;
+    func2(): _recursive;
+    func3(): _recursive;
+};
+type _recursive_1 = {
+    func1(): _recursive_1;
+    func2(): _recursive_1;
+    func3(): _recursive_1;
+    func4(): _recursive_1;
+    func5(): _recursive_1;
+    func6(): _recursive_1;
+    func7(): _recursive_1;
+    func8(): _recursive_1;
+    func9(): _recursive_1;
+};
+declare function createObj(): {
+    func1(): _recursive;
+    func2(): _recursive;
+    func3(): _recursive;
+};
+declare function createObjNoCrash(): {
+    func1(): _recursive_1;
+    func2(): _recursive_1;
+    func3(): _recursive_1;
+    func4(): _recursive_1;
+    func5(): _recursive_1;
+    func6(): _recursive_1;
+    func7(): _recursive_1;
+    func8(): _recursive_1;
+    func9(): _recursive_1;
+};

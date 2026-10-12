@@ -107,7 +107,7 @@
 // ^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const generic: <number>(value: number) => <T>(value: T) => typeof generic
+// | const generic: <number>(value: number) => typeof generic
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -117,7 +117,7 @@
 // ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | const specialized: <string>(value: string) => <T>(value: T) => typeof generic
+// | const specialized: <string>(value: string) => typeof generic
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -311,7 +311,7 @@
 // ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | function genericFunction<number>(value: number): <T>(value: T) => typeof genericFunction
+// | function genericFunction<number>(value: number): typeof genericFunction
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -955,7 +955,7 @@
 // |     wrapped: {
 // |         Node: {
 // |             value: number;
-// |             next: ...;
+// |             next: (typeof nestedCycle)["wrapped"]["Node"];
 // |         };
 // |     };
 // | }
@@ -971,13 +971,13 @@
 // |     first: {
 // |         Node: {
 // |             value: number;
-// |             next: ...;
+// |             next: (typeof sharedCycles)["first"]["Node"];
 // |         };
 // |     };
 // |     second: {
 // |         Node: {
 // |             value: number;
-// |             next: ...;
+// |             next: (typeof sharedCycles)["second"]["Node"];
 // |         };
 // |     };
 // | }
@@ -1046,7 +1046,7 @@
 // |     cycle: {
 // |         Node: {
 // |             value: number;
-// |             next: ... | null;
+// |             next: (typeof nullableLinkBox)["cycle"]["Node"];
 // |         } | null;
 // |     };
 // | }
@@ -1498,7 +1498,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst generic: <number>(value: number) => <T>(value: T) => typeof generic\n```\n"
+          "value": "```typescript\nconst generic: <number>(value: number) => typeof generic\n```\n"
         },
         "range": {
           "start": {
@@ -1528,7 +1528,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst specialized: <string>(value: string) => <T>(value: T) => typeof generic\n```\n"
+          "value": "```typescript\nconst specialized: <string>(value: string) => typeof generic\n```\n"
         },
         "range": {
           "start": {
@@ -2188,7 +2188,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nfunction genericFunction<number>(value: number): <T>(value: T) => typeof genericFunction\n```\n"
+          "value": "```typescript\nfunction genericFunction<number>(value: number): typeof genericFunction\n```\n"
         },
         "range": {
           "start": {
@@ -3058,7 +3058,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst nestedCycle: {\n    wrapped: {\n        Node: {\n            value: number;\n            next: ...;\n        };\n    };\n}\n```\n"
+          "value": "```typescript\nconst nestedCycle: {\n    wrapped: {\n        Node: {\n            value: number;\n            next: (typeof nestedCycle)[\"wrapped\"][\"Node\"];\n        };\n    };\n}\n```\n"
         },
         "range": {
           "start": {
@@ -3088,7 +3088,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst sharedCycles: {\n    first: {\n        Node: {\n            value: number;\n            next: ...;\n        };\n    };\n    second: {\n        Node: {\n            value: number;\n            next: ...;\n        };\n    };\n}\n```\n"
+          "value": "```typescript\nconst sharedCycles: {\n    first: {\n        Node: {\n            value: number;\n            next: (typeof sharedCycles)[\"first\"][\"Node\"];\n        };\n    };\n    second: {\n        Node: {\n            value: number;\n            next: (typeof sharedCycles)[\"second\"][\"Node\"];\n        };\n    };\n}\n```\n"
         },
         "range": {
           "start": {
@@ -3208,7 +3208,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nconst nullableLinkBox: {\n    cycle: {\n        Node: {\n            value: number;\n            next: ... | null;\n        } | null;\n    };\n}\n```\n"
+          "value": "```typescript\nconst nullableLinkBox: {\n    cycle: {\n        Node: {\n            value: number;\n            next: (typeof nullableLinkBox)[\"cycle\"][\"Node\"];\n        } | null;\n    };\n}\n```\n"
         },
         "range": {
           "start": {

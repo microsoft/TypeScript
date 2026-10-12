@@ -34,7 +34,7 @@ export const recursiveNamed = function self() { return self; };
 export const annotatedRecursiveArrow: () => typeof annotatedRecursiveArrow = () => annotatedRecursiveArrow;
 >annotatedRecursiveArrow : () => typeof annotatedRecursiveArrow
 >annotatedRecursiveArrow : () => typeof annotatedRecursiveArrow
->() => annotatedRecursiveArrow : () => () => typeof annotatedRecursiveArrow
+>() => annotatedRecursiveArrow : () => typeof annotatedRecursiveArrow
 >annotatedRecursiveArrow : () => typeof annotatedRecursiveArrow
 
 export const annotatedRecursiveObject: { next: () => typeof annotatedRecursiveObject } = {
