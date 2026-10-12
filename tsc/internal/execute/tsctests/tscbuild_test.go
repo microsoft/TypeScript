@@ -1063,13 +1063,12 @@ func TestBuildExactOptionalPropertyTypes(t *testing.T) {
 }
 
 type compilerOptionChangeTest struct {
-	option       string
-	name         string
-	values       [2]any
-	options      map[string]any
-	files        FileMap
-	roots        []string
-	expectedDiff string
+	option  string
+	name    string
+	values  [2]any
+	options map[string]any
+	files   FileMap
+	roots   []string
 }
 
 func TestBuildOptionChangeShapeSignature(t *testing.T) {
@@ -1174,13 +1173,12 @@ func testCompilerOptionChanges(t *testing.T, tests []compilerOptionChangeTest) {
 					edits: []*tscEdit{
 						noChange,
 						{
-							caption:      "change " + test.option + " without changing source files",
-							expectedDiff: test.expectedDiff,
+							caption: "change " + test.option + " without changing source files",
 							edit: func(sys *TestSys) {
 								sys.writeFileNoError(configPath, config(test.values[1-direction]))
 							},
 						},
-						{caption: noChange.caption, expectedDiff: test.expectedDiff},
+						noChange,
 						{
 							caption:         "force rebuild with the same compiler options",
 							commandLineArgs: []string{"--build", "producer", "--verbose", "--force"},
@@ -1353,21 +1351,6 @@ func TestBuildPreserveConstEnumsOptionDiagnostics(t *testing.T) {
 	})
 }
 
-func TestBuildNoLibOptionChanges(t *testing.T) {
-	t.Parallel()
-	testCompilerOptionChanges(t, []compilerOptionChangeTest{
-		{
-			option: "noLib", values: [2]any{false, true},
-			options: map[string]any{"lib": nil},
-			files: FileMap{
-				"index.ts":                       "export const result = input();\n",
-				"globals.d.ts":                   "interface Boolean {} interface Function {} interface CallableFunction {} interface NewableFunction {} interface IArguments {} interface Number {} interface Object {} interface RegExp {} interface String {} interface Array<T> {} interface ReadonlyArray<T> {}\n",
-				getTestLibPathFor("es2020.full"): tscDefaultLibContent + "\ndeclare function input(): 'library';\n",
-			},
-		},
-	})
-}
-
 func TestBuildLibOrderOptionChanges(t *testing.T) {
 	t.Parallel()
 	testCompilerOptionChanges(t, []compilerOptionChangeTest{
@@ -1382,7 +1365,6 @@ func TestBuildLibOrderOptionChanges(t *testing.T) {
 				"node_modules/@typescript/lib-es2015/package.json": `{"name":"@typescript/lib-es2015"}`,
 				"node_modules/@typescript/lib-es2015/symbol.d.ts":  "/// <reference no-default-lib=\"true\" />\ndeclare function input(): 'second';\n",
 			},
-			expectedDiff: "Reordering lib changes overload selection without changing the file set, leaving the inferred declaration stale.",
 		},
 		{
 			option: "lib", name: "bundled lib order", values: [2]any{[]string{"es5", "es2015.symbol"}, []string{"es2015.symbol", "es5"}},
@@ -1390,6 +1372,21 @@ func TestBuildLibOrderOptionChanges(t *testing.T) {
 				"index.ts":                         "export const result = input();\n",
 				getTestLibPathFor("es5"):           tscDefaultLibContent + "\ndeclare function input(): 'first';\n",
 				getTestLibPathFor("es2015.symbol"): "/// <reference no-default-lib=\"true\" />\ndeclare function input(): 'second';\n",
+			},
+		},
+	})
+}
+
+func TestBuildNoLibOptionChanges(t *testing.T) {
+	t.Parallel()
+	testCompilerOptionChanges(t, []compilerOptionChangeTest{
+		{
+			option: "noLib", values: [2]any{false, true},
+			options: map[string]any{"lib": nil},
+			files: FileMap{
+				"index.ts":                       "export const result = input();\n",
+				"globals.d.ts":                   "interface Boolean {} interface Function {} interface CallableFunction {} interface NewableFunction {} interface IArguments {} interface Number {} interface Object {} interface RegExp {} interface String {} interface Array<T> {} interface ReadonlyArray<T> {}\n",
+				getTestLibPathFor("es2020.full"): tscDefaultLibContent + "\ndeclare function input(): 'library';\n",
 			},
 		},
 	})

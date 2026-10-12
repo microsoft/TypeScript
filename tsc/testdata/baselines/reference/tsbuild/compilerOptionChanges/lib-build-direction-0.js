@@ -206,56 +206,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'producer/tsconfig.json'...
-
-//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *mTime changed*
-
-producer/tsconfig.json::
-SemanticDiagnostics::
-Signatures::
-
-
-Diff:: Reordering lib changes overload selection without changing the file set, leaving the inferred declaration stale.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/index.d.ts
-@@ -1,1 +1,1 @@
--export declare const result: "first";
-+export declare const result: "second";
-
-
-Edit [2]:: no change
-
-tsgo --build producer --verbose
-ExitStatus:: Success
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is up to date because newest input 'producer/index.ts' is older than output 'producer/dist/tsconfig.tsbuildinfo'
-
-
-
-
-Diff:: Reordering lib changes overload selection without changing the file set, leaving the inferred declaration stale.
---- nonIncremental /home/src/workspaces/project/producer/dist/index.d.ts
-+++ incremental /home/src/workspaces/project/producer/dist/index.d.ts
-@@ -1,1 +1,1 @@
--export declare const result: "first";
-+export declare const result: "second";
-
-
-Edit [3]:: force rebuild with the same compiler options
-
-tsgo --build producer --verbose --force
-ExitStatus:: Success
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * producer/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
-
-[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
-
 //// [/home/src/workspaces/project/producer/dist/index.d.ts] *modified* 
 export declare const result: "first";
 
@@ -335,6 +285,46 @@ export declare const result: "first";
   "latestChangedDtsFile": "./index.d.ts",
   "size": 1766
 }
+
+producer/tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/workspaces/project/producer/node_modules/@typescript/lib-es2015/symbol.d.ts
+*refresh*    /home/src/workspaces/project/producer/node_modules/@typescript/lib-es5/index.d.ts
+*refresh*    /home/src/workspaces/project/producer/index.ts
+Signatures::
+(used version)   /home/src/workspaces/project/producer/node_modules/@typescript/lib-es2015/symbol.d.ts
+(used version)   /home/src/workspaces/project/producer/node_modules/@typescript/lib-es5/index.d.ts
+(computed .d.ts) /home/src/workspaces/project/producer/index.ts
+
+
+Edit [2]:: no change
+
+tsgo --build producer --verbose
+ExitStatus:: Success
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is up to date because newest input 'producer/index.ts' is older than output 'producer/dist/tsconfig.tsbuildinfo'
+
+
+
+
+Edit [3]:: force rebuild with the same compiler options
+
+tsgo --build producer --verbose --force
+ExitStatus:: Success
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * producer/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'producer/tsconfig.json' is being forcibly rebuilt
+
+[[90mHH:MM:SS AM[0m] Building project 'producer/tsconfig.json'...
+
+//// [/home/src/workspaces/project/producer/dist/index.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 producer/tsconfig.json::
 SemanticDiagnostics::
