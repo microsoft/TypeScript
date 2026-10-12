@@ -3,6 +3,7 @@ package checker_test
 import (
 	"fmt"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -115,6 +116,51 @@ export type E = D;`,
 	defaultClause := c.GetTypeAtLocation(importClauseAt(3))
 	defaultReference := c.GetTypeAtLocation(file.Statements.Nodes[7].AsTypeAliasDeclaration().Type)
 	assert.Equal(t, defaultClause, defaultReference)
+}
+
+func TestUnionPropertyFunctionAugmentation(t *testing.T) {
+	t.Parallel()
+	for _, lookupFirst := range []bool{false, true} {
+		t.Run(strconv.FormatBool(lookupFirst), func(t *testing.T) {
+			t.Parallel()
+			fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+				"/main.ts": `type Callable = { (): string; shared: string };
+type Other = { call: number; shared: number };
+declare const instance: Callable | Other;
+instance;`,
+				"/function.d.ts": `interface Function {
+    call(thisArg: any, ...args: any[]): any;
+}
+interface CallableFunction extends Function {}`,
+				"/tsconfig.json": `{"compilerOptions":{"strict":true,"noLib":true},"files":["main.ts","function.d.ts"]}`,
+			}, tspath.CaseInsensitive))
+			host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+			parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+			assert.Equal(t, len(errors), 0)
+			program := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
+			program.BindSourceFiles()
+			c, done := program.GetTypeChecker(t.Context())
+			defer done()
+			file := program.GetSourceFile("/main.ts")
+			typ := c.GetTypeAtLocation(file.Statements.Nodes[3].Expression())
+			var call *ast.Symbol
+			if lookupFirst {
+				call = c.GetPropertyOfType(typ, "call")
+				assert.Assert(t, call != nil)
+			}
+			properties := c.GetPropertiesOfType(typ)
+			assert.Equal(t, len(properties), 1)
+			assert.Equal(t, properties[0].Name(), "shared")
+			if call == nil {
+				call = c.GetPropertyOfType(typ, "call")
+				assert.Assert(t, call != nil)
+			}
+			assert.Equal(t, c.GetPropertyOfType(typ, "call"), call)
+			assert.Equal(t, c.GetPropertyOfType(typ, "shared"), properties[0])
+			assert.Equal(t, len(c.GetPropertiesOfType(typ)), 1)
+			assert.Equal(t, len(c.GetDiagnostics(t.Context(), file)), 0)
+		})
+	}
 }
 
 func BenchmarkNewChecker(b *testing.B) {
