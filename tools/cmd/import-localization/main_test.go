@@ -22,6 +22,7 @@ func TestImportLocalization(t *testing.T) {
 		"StaleEnglish": "Changed English.",
 		"Translated": "Source [text].",
 		"SameAsEnglish": "English.",
+		"ExistingEnglish": "Existing English.",
 		"ExistingOnly": "Existing source."
 	}`), 0o644))
 	assert.NilError(t, os.WriteFile(handback, []byte(`{
@@ -47,6 +48,8 @@ func TestImportLocalization(t *testing.T) {
 		"Updated": "이전 번역",
 		"StaleEnglish": "기존 번역",
 		"Translated": "Previous translation.",
+		"SameAsEnglish": "Previous translation.",
+		"ExistingEnglish": "Existing English.",
 		"ExistingOnly": "Keep this translation.",
 		"Removed": "Remove this translation."
 	}`), 0o644))
@@ -56,7 +59,6 @@ func TestImportLocalization(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, string(data), "{\r\n"+
 		"  \"ExistingOnly\": \"Keep this translation.\",\r\n"+
-		"  \"SameAsEnglish\": \"English.\",\r\n"+
 		"  \"StaleEnglish\": \"기존 번역\",\r\n"+
 		"  \"Translated\": \"새 번역]\",\r\n"+
 		"  \"Updated\": \"이전 번역\"\r\n"+
@@ -70,7 +72,7 @@ func TestImportLocalization(t *testing.T) {
 	assert.NilError(t, importLocalization(source, handback, newOutput))
 	messages, err := readMessages(newOutput)
 	assert.NilError(t, err)
-	assert.DeepEqual(t, messages, map[string]string{"SameAsEnglish": "English.", "Translated": "새 번역]"})
+	assert.DeepEqual(t, messages, map[string]string{"Translated": "새 번역]"})
 }
 
 func TestImportLocalizationRejectsInvalidMetadata(t *testing.T) {
