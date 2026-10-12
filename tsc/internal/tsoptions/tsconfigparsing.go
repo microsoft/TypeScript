@@ -1089,7 +1089,9 @@ func parseConfig(
 		}
 		if sourceFile != nil {
 			for extendedSourceFile := range result.extendedSourceFiles.Keys() {
-				sourceFile.ExtendedSourceFiles = core.InsertSorted(sourceFile.ExtendedSourceFiles, extendedSourceFile, cmp.Compare)
+				if caseSensitivity.PathKey(extendedSourceFile.AsPath()) != resolvedPath {
+					sourceFile.ExtendedSourceFiles = core.InsertSorted(sourceFile.ExtendedSourceFiles, extendedSourceFile, cmp.Compare)
+				}
 			}
 		}
 		ownConfig.options = mergeParsedCompilerOptions(result.options, ownConfig.options, ownConfig.raw)

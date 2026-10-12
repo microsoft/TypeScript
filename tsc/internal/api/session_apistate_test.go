@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -495,4 +496,59 @@ func TestGetCurrentLanguageServerSnapshotOpeningLSPFileEnsuresConfiguredProgram(
 	assert.NilError(t, err)
 	assert.Equal(t, ensured.Projects[0].Dirty, false)
 	assert.Equal(t, (*ensured.Operation.OpenedFiles)[0].Project, projectID)
+}
+
+func TestOpenProjectsWithCircularExtendsReportCircularity(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const first = "/home/projects/p1/tsconfig.json"
+	const second = "/home/projects/p2/tsconfig.json"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		first:                             `{ "extends": "../shared/base.json" }`,
+		second:                            `{ "extends": "../shared/base.json" }`,
+		"/home/projects/shared/base.json": `{ "extends": "../p2/tsconfig.json" }`,
+		"/home/projects/p1/a.ts":          `export const a = 1;`,
+		"/home/projects/p2/b.ts":          `export const b = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	type snapshotResult struct {
+		response *CreateSnapshotResponse
+		err      error
+	}
+	result := make(chan snapshotResult, 1)
+	go func() {
+		if _, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+			OpenProjects: []DocumentIdentifier{{FileName: first}},
+		}); err != nil {
+			result <- snapshotResult{err: err}
+			return
+		}
+		response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+			OpenProjects: []DocumentIdentifier{{FileName: second}},
+		})
+		result <- snapshotResult{response: response, err: err}
+	}()
+
+	select {
+	case snapshot := <-result:
+		assert.NilError(t, snapshot.err)
+		diagnostics, err := session.handleGetConfigFileParsingDiagnostics(context.Background(), &GetProjectDiagnosticsParams{
+			Snapshot: snapshot.response.Snapshot,
+			Project:  configuredProjectID(second),
+		})
+		assert.NilError(t, err)
+		codes := make([]int32, 0, len(diagnostics))
+		for _, diagnostic := range diagnostics {
+			codes = append(codes, diagnostic.Code)
+		}
+		assert.DeepEqual(t, codes, []int32{18000})
+	case <-time.After(10 * time.Second):
+		t.Fatal("opening a project with a circular extends chain deadlocked")
+	}
 }
