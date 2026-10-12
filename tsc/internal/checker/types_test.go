@@ -15,6 +15,38 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func TestCheckerNodeLinkStores(t *testing.T) {
+	t.Parallel()
+	f := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	first := &Checker{}
+	second := &Checker{}
+	nodes := make([]*ast.Node, 4096)
+	for i := range nodes {
+		node := f.NewIdentifier(strconv.Itoa(i))
+		if i%2 == 0 {
+			ast.GetNodeId(node)
+		}
+		nodes[i] = node
+		assert.Assert(t, !first.typeNodeLinks.Has(node))
+		assert.Assert(t, !first.signatureLinks.Has(node))
+		first.typeNodeLinks.Get(node).resolvedType = &Type{id: TypeId(i + 1)}
+		first.signatureLinks.Get(node).resolvedSignature = &Signature{id: SignatureId(i + 1)}
+		second.typeNodeLinks.Get(node).resolvedType = &Type{id: TypeId(i + 2)}
+		second.signatureLinks.Get(node).resolvedSignature = &Signature{id: SignatureId(i + 2)}
+	}
+	f.ReleaseArenas()
+	runtime.GC()
+	for i, node := range nodes {
+		assert.Equal(t, first.typeNodeLinks.Get(node).resolvedType.id, TypeId(i+1))
+		assert.Equal(t, first.signatureLinks.Get(node).resolvedSignature.id, SignatureId(i+1))
+		assert.Equal(t, second.typeNodeLinks.Get(node).resolvedType.id, TypeId(i+2))
+		assert.Equal(t, second.signatureLinks.Get(node).resolvedSignature.id, SignatureId(i+2))
+	}
+	clone := nodes[0].Clone(f)
+	assert.Assert(t, !first.typeNodeLinks.Has(clone))
+	assert.Assert(t, !first.signatureLinks.Has(clone))
+}
+
 func TestTypeCasts(t *testing.T) {
 	t.Parallel()
 	type bases interface {
