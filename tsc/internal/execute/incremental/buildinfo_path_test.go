@@ -39,7 +39,7 @@ func TestBuildInfoPathJSONRoundTrip(t *testing.T) {
 
 func TestBuildInfoCompilerOptionsJSONRoundTrip(t *testing.T) {
 	t.Parallel()
-	const input = `{"options":{"paths":{"second":["b","a"],"first":[]},"rootDirs":["./src","../generated"],"typeRoots":["./types"],"types":[],"customConditions":["custom"]}}`
+	const input = `{"options":{"paths":{"second":["b","a"],"first":[]},"rootDirs":["./src","../generated"],"typeRoots":["./types"],"types":[],"customConditions":["custom"],"pathsBasePath":"../configs/first"}}`
 	var info BuildInfo
 	assert.NilError(t, json.Unmarshal([]byte(input), &info))
 	options := info.GetCompilerOptions("/project/dist")
@@ -50,6 +50,8 @@ func TestBuildInfoCompilerOptionsJSONRoundTrip(t *testing.T) {
 	assert.Equal(t, options.RootDirs[0].AsString(), "/project/dist/src")
 	assert.Equal(t, options.RootDirs[1].AsString(), "/project/generated")
 	assert.Equal(t, options.TypeRoots[0].AsString(), "/project/dist/types")
+	assert.Equal(t, options.PathsBasePath.AsString(), "/project/configs/first")
+	assert.Equal(t, info.GetCompilerOptions("").PathsBasePath.AsString(), "")
 	data, err := json.Marshal(&info)
 	assert.NilError(t, err)
 	assert.Equal(t, string(data), input)

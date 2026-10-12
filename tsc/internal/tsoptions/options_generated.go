@@ -484,6 +484,9 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 	}) {
 		return true
 	}
+	if oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("") {
+		return true
+	}
 	if oldOptions.PreserveConstEnums != newOptions.PreserveConstEnums {
 		return true
 	}
@@ -669,6 +672,9 @@ func CompilerOptionsAffectEmit(oldOptions *core.CompilerOptions, newOptions *cor
 	if !oldOptions.Paths.EqualFunc(newOptions.Paths, func(a, b []string) bool {
 		return (a == nil) == (b == nil) && slices.Equal(a, b)
 	}) {
+		return true
+	}
+	if oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("") {
 		return true
 	}
 	if oldOptions.PreserveConstEnums != newOptions.PreserveConstEnums {

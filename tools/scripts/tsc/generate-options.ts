@@ -546,7 +546,11 @@ export function generateOptionComparisons(model = options): string {
                     if (declaration.strictFlag) return `${receiver}.GetStrictOptionValue(${field})`;
                     return field;
                 };
-                return [optionValuesDiffer(goType(option), value("oldOptions"), value("newOptions"))];
+                const expressions = [optionValuesDiffer(goType(option), value("oldOptions"), value("newOptions"))];
+                if (option.name === "paths") {
+                    expressions.push('oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("")');
+                }
+                return expressions;
             });
             return `func CompilerOptionsAffect${name}(oldOptions *core.CompilerOptions, newOptions *core.CompilerOptions) bool {
     if oldOptions == newOptions { return false }

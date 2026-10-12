@@ -309,6 +309,27 @@ func TestCompilerOptionInvalidationComparisons(t *testing.T) {
 	}
 }
 
+func TestCompilerOptionInvalidationPathsBasePath(t *testing.T) {
+	t.Parallel()
+	emptyPaths := &collections.OrderedMap[string, []string]{}
+	paths := &collections.OrderedMap[string, []string]{}
+	paths.Set("short", []string{"./thing.ts"})
+	for _, paths := range []*collections.OrderedMap[string, []string]{nil, emptyPaths, paths} {
+		a := &core.CompilerOptions{Paths: paths, PathsBasePath: "/first"}
+		b := &core.CompilerOptions{Paths: paths, PathsBasePath: "/second"}
+		want := paths.Size() != 0
+		if got := CompilerOptionsAffectEmit(a, b); got != want {
+			t.Fatalf("Emit comparison got %v, want %v for paths %v", got, want, paths)
+		}
+		if got := CompilerOptionsAffectSemanticDiagnostics(a, b); got != want {
+			t.Fatalf("Diagnostics comparison got %v, want %v for paths %v", got, want, paths)
+		}
+		if CompilerOptionsAffectEmit(a, a.Clone()) || CompilerOptionsAffectSemanticDiagnostics(a, a.Clone()) {
+			t.Fatal("Equal paths and base directories must not invalidate cached results")
+		}
+	}
+}
+
 func TestCompilerOptionInvalidationStrictDefaults(t *testing.T) {
 	t.Parallel()
 	a := &core.CompilerOptions{}

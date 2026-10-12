@@ -1556,7 +1556,6 @@ func TestBuildInheritedPathsBasePath(t *testing.T) {
 			if build {
 				args = []string{"--build", "producer", "--verbose"}
 			}
-			const expectedDiff = "Changing the base of inherited paths leaves stale declaration module specifiers."
 			test := &tscInput{
 				subScenario: "inherited paths base " + initialBase + " to " + nextBase + " " + core.IfElse(build, "build", "incremental"),
 				cwd:         project,
@@ -1577,9 +1576,8 @@ func TestBuildInheritedPathsBasePath(t *testing.T) {
 						edit: func(sys *TestSys) {
 							sys.writeFileNoError(project+"/producer/tsconfig.json", config(nextBase))
 						},
-						expectedDiff: expectedDiff,
 					},
-					{caption: "no change", expectedDiff: expectedDiff},
+					noChange,
 					{caption: "force rebuild", commandLineArgs: []string{"--build", "producer", "--verbose", "--force"}},
 					noChange,
 				},
