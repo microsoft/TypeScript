@@ -1,0 +1,9 @@
+originalType.MethodName|newType.MethodName|reason (will be discarded in parsing)
+If the original 
+
+TypeChecker.tryGetMemberInModuleExports|Checker.getMemberInModuleExports|rename
+ts.parseCommandLine|API.parseCommandLine|
+ts.parseJsonConfigFileContent|API.parseJsonConfigFileContent|
+ts.parseConfigFileTextToJson|API.readConfigFile|the same minus error handling
+ts.readConfigFile|API.readConfigFile|
+ts.parseJsonSourceFileConfigFileContent|API.parseConfigFile|
