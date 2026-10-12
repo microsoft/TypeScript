@@ -215,8 +215,8 @@ let OuterC = class C {
 
 
 //// [varianceAnnotations.d.ts]
-type _recursive<out T> = {
-    foo(): _recursive<T>;
+type OuterC_recursive<out T> = {
+    foo(): OuterC_recursive<T>;
 };
 type Covariant<out T> = {
     x: T;
@@ -328,5 +328,5 @@ declare let Anon: {
     };
 };
 declare let OuterC: {
-    new <T>(): _recursive<T>;
+    new <T>(): OuterC_recursive<T>;
 };

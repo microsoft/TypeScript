@@ -100,35 +100,35 @@ function createObjNoCrash() {
 
 
 //// [noImplicitThisBigThis.d.ts]
-type _recursive = {
-    func1(): _recursive;
-    func2(): _recursive;
-    func3(): _recursive;
+type createObj_recursive = {
+    func1(): createObj_recursive;
+    func2(): createObj_recursive;
+    func3(): createObj_recursive;
 };
-type _recursive_1 = {
-    func1(): _recursive_1;
-    func2(): _recursive_1;
-    func3(): _recursive_1;
-    func4(): _recursive_1;
-    func5(): _recursive_1;
-    func6(): _recursive_1;
-    func7(): _recursive_1;
-    func8(): _recursive_1;
-    func9(): _recursive_1;
+type createObjNoCrash_recursive = {
+    func1(): createObjNoCrash_recursive;
+    func2(): createObjNoCrash_recursive;
+    func3(): createObjNoCrash_recursive;
+    func4(): createObjNoCrash_recursive;
+    func5(): createObjNoCrash_recursive;
+    func6(): createObjNoCrash_recursive;
+    func7(): createObjNoCrash_recursive;
+    func8(): createObjNoCrash_recursive;
+    func9(): createObjNoCrash_recursive;
 };
 declare function createObj(): {
-    func1(): _recursive;
-    func2(): _recursive;
-    func3(): _recursive;
+    func1(): createObj_recursive;
+    func2(): createObj_recursive;
+    func3(): createObj_recursive;
 };
 declare function createObjNoCrash(): {
-    func1(): _recursive_1;
-    func2(): _recursive_1;
-    func3(): _recursive_1;
-    func4(): _recursive_1;
-    func5(): _recursive_1;
-    func6(): _recursive_1;
-    func7(): _recursive_1;
-    func8(): _recursive_1;
-    func9(): _recursive_1;
+    func1(): createObjNoCrash_recursive;
+    func2(): createObjNoCrash_recursive;
+    func3(): createObjNoCrash_recursive;
+    func4(): createObjNoCrash_recursive;
+    func5(): createObjNoCrash_recursive;
+    func6(): createObjNoCrash_recursive;
+    func7(): createObjNoCrash_recursive;
+    func8(): createObjNoCrash_recursive;
+    func9(): createObjNoCrash_recursive;
 };
