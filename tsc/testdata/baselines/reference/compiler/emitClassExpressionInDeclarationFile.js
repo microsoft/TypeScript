@@ -67,8 +67,8 @@ test.tags();
 
 
 //// [emitClassExpressionInDeclarationFile.d.ts]
-type _recursive = {
-    tags(c: _recursive): _recursive;
+type circularReference_recursive = {
+    tags(c: circularReference_recursive): circularReference_recursive;
 };
 export declare var simpleExample: {
     new (): {
@@ -77,8 +77,8 @@ export declare var simpleExample: {
     getTags(): void;
 };
 export declare var circularReference: {
-    new (): _recursive;
-    getTags(c: _recursive): _recursive;
+    new (): circularReference_recursive;
+    getTags(c: circularReference_recursive): circularReference_recursive;
 };
 export declare class FooItem {
     foo(): void;

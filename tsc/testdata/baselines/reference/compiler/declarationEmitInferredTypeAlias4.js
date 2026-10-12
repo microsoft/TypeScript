@@ -16,7 +16,7 @@ function f() {
 
 
 //// [declarationEmitInferredTypeAlias4.d.ts]
-type _recursive<A> = {
-    x: A[] | _recursive<A>;
+type f_recursive<A> = {
+    x: A[] | f_recursive<A>;
 };
-declare function f<A>(): A[] | _recursive<A>;
+declare function f<A>(): A[] | f_recursive<A>;
