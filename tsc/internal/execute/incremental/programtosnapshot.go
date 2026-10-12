@@ -210,10 +210,10 @@ func (t *toProgramSnapshot) handleDeletedFile(filePath tspath.PathKey, oldInfo *
 				t.snapshot.addFileToChangeSet(file.PathKey())
 			}
 			t.globalFileRemoved = true
+			return false
 		} else {
 			t.snapshot.buildInfoEmitPending.Store(true)
 		}
-		return false
 	}
 	return true
 }
