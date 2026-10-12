@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/enumInitializerNamespaceExportElementAccess.ts] ////
+
+=== enumInitializerNamespaceExportElementAccess.ts ===
+// Namespace export merged with enum must not be treated as an enum member via E["C"].
+// Previously panicked: Unhandled case in Node.MemberList: KindModuleBlock
+
+namespace E {
+>E : Symbol(E, Decl(enumInitializerNamespaceExportElementAccess.ts, 0, 0), Decl(enumInitializerNamespaceExportElementAccess.ts, 5, 1))
+
+    export class C {}
+>C : Symbol(C, Decl(enumInitializerNamespaceExportElementAccess.ts, 3, 13))
+}
+enum E {
+>E : Symbol(E, Decl(enumInitializerNamespaceExportElementAccess.ts, 0, 0), Decl(enumInitializerNamespaceExportElementAccess.ts, 5, 1))
+
+    D = E["C"],
+>D : Symbol(E.D, Decl(enumInitializerNamespaceExportElementAccess.ts, 6, 8))
+>E : Symbol(E, Decl(enumInitializerNamespaceExportElementAccess.ts, 0, 0), Decl(enumInitializerNamespaceExportElementAccess.ts, 5, 1))
+>"C" : Symbol(E.C, Decl(enumInitializerNamespaceExportElementAccess.ts, 3, 13))
+}
+

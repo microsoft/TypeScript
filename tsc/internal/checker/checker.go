@@ -24600,7 +24600,9 @@ func (c *Checker) evaluateEntity(expr *ast.Node, location *ast.Node) evaluator.R
 			if rootSymbol != nil && rootSymbol.Flags()&ast.SymbolFlagsEnum != 0 {
 				name := expr.AsElementAccessExpression().ArgumentExpression.Text()
 				member := rootSymbol.Exports()[name]
-				if member != nil {
+				// Merged namespace+enum symbols can export non-enum members (e.g. a class).
+				// Only treat EnumMember exports as constant enum values — mirror the identifier path.
+				if member != nil && member.Flags()&ast.SymbolFlagsEnumMember != 0 {
 					if location != nil {
 						return c.evaluateEnumMember(expr, member, location)
 					}

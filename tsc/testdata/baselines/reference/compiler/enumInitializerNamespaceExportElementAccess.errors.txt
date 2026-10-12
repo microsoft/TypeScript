@@ -1,0 +1,16 @@
+enumInitializerNamespaceExportElementAccess.ts(8,9): error TS18033: Type 'typeof C' is not assignable to type 'number' as required for computed enum member values.
+
+
+==== enumInitializerNamespaceExportElementAccess.ts (1 errors) ====
+    // Namespace export merged with enum must not be treated as an enum member via E["C"].
+    // Previously panicked: Unhandled case in Node.MemberList: KindModuleBlock
+    
+    namespace E {
+        export class C {}
+    }
+    enum E {
+        D = E["C"],
+            ~~~~~~
+!!! error TS18033: Type 'typeof C' is not assignable to type 'number' as required for computed enum member values.
+    }
+    
