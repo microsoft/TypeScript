@@ -230,9 +230,9 @@ function f105<U extends object>(value: U extends unknown ? { [K in keyof U]: U[K
     const accept: typeof inferred = ordinary;
 }
 
-declare function inferFromNestedConditional<X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T } : never) : never): T;
+declare function inferFromNestedNonDistributiveConditional<X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T } : never) : never): T;
 function f106<U>(value: U extends unknown ? ([U] extends [string] ? { value: U } : never) : never, ordinary: U) {
-    const inferred = inferFromNestedConditional(value);
+    const inferred = inferFromNestedNonDistributiveConditional(value);
     const accept: typeof inferred = ordinary;
 }
 

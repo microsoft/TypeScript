@@ -814,7 +814,7 @@ type Boxed<T> = { value: T };
 >T : Symbol(T, Decl(inferTypes1.ts, 196, 11))
 
 declare function inferFromNestedConditional<X, T>(value: X extends unknown ? Boxed<T> : never): T;
->inferFromNestedConditional : Symbol(inferFromNestedConditional, Decl(inferTypes1.ts, 196, 29), Decl(inferTypes1.ts, 226, 1))
+>inferFromNestedConditional : Symbol(inferFromNestedConditional, Decl(inferTypes1.ts, 196, 29))
 >X : Symbol(X, Decl(inferTypes1.ts, 197, 44))
 >T : Symbol(T, Decl(inferTypes1.ts, 197, 46))
 >value : Symbol(value, Decl(inferTypes1.ts, 197, 50))
@@ -835,7 +835,7 @@ function f101<U>(value: U extends unknown ? Boxed<U> : never, ordinary: U) {
 
     const inferred = inferFromNestedConditional(value);
 >inferred : Symbol(inferred, Decl(inferTypes1.ts, 200, 9))
->inferFromNestedConditional : Symbol(inferFromNestedConditional, Decl(inferTypes1.ts, 196, 29), Decl(inferTypes1.ts, 226, 1))
+>inferFromNestedConditional : Symbol(inferFromNestedConditional, Decl(inferTypes1.ts, 196, 29))
 >value : Symbol(value, Decl(inferTypes1.ts, 199, 17))
 
     const accept: typeof inferred = ordinary;
@@ -978,19 +978,19 @@ function f105<U extends object>(value: U extends unknown ? { [K in keyof U]: U[K
 >ordinary : Symbol(ordinary, Decl(inferTypes1.ts, 223, 92))
 }
 
-declare function inferFromNestedConditional<X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T } : never) : never): T;
->inferFromNestedConditional : Symbol(inferFromNestedConditional, Decl(inferTypes1.ts, 196, 29), Decl(inferTypes1.ts, 226, 1))
->X : Symbol(X, Decl(inferTypes1.ts, 228, 44))
->T : Symbol(T, Decl(inferTypes1.ts, 228, 46))
->value : Symbol(value, Decl(inferTypes1.ts, 228, 50))
->X : Symbol(X, Decl(inferTypes1.ts, 228, 44))
->X : Symbol(X, Decl(inferTypes1.ts, 228, 44))
->value : Symbol(value, Decl(inferTypes1.ts, 228, 102))
->T : Symbol(T, Decl(inferTypes1.ts, 228, 46))
->T : Symbol(T, Decl(inferTypes1.ts, 228, 46))
+declare function inferFromNestedNonDistributiveConditional<X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T } : never) : never): T;
+>inferFromNestedNonDistributiveConditional : Symbol(inferFromNestedNonDistributiveConditional, Decl(inferTypes1.ts, 226, 1))
+>X : Symbol(X, Decl(inferTypes1.ts, 228, 59))
+>T : Symbol(T, Decl(inferTypes1.ts, 228, 61))
+>value : Symbol(value, Decl(inferTypes1.ts, 228, 65))
+>X : Symbol(X, Decl(inferTypes1.ts, 228, 59))
+>X : Symbol(X, Decl(inferTypes1.ts, 228, 59))
+>value : Symbol(value, Decl(inferTypes1.ts, 228, 117))
+>T : Symbol(T, Decl(inferTypes1.ts, 228, 61))
+>T : Symbol(T, Decl(inferTypes1.ts, 228, 61))
 
 function f106<U>(value: U extends unknown ? ([U] extends [string] ? { value: U } : never) : never, ordinary: U) {
->f106 : Symbol(f106, Decl(inferTypes1.ts, 228, 135))
+>f106 : Symbol(f106, Decl(inferTypes1.ts, 228, 150))
 >U : Symbol(U, Decl(inferTypes1.ts, 229, 14))
 >value : Symbol(value, Decl(inferTypes1.ts, 229, 17))
 >U : Symbol(U, Decl(inferTypes1.ts, 229, 14))
@@ -1000,9 +1000,9 @@ function f106<U>(value: U extends unknown ? ([U] extends [string] ? { value: U }
 >ordinary : Symbol(ordinary, Decl(inferTypes1.ts, 229, 98))
 >U : Symbol(U, Decl(inferTypes1.ts, 229, 14))
 
-    const inferred = inferFromNestedConditional(value);
+    const inferred = inferFromNestedNonDistributiveConditional(value);
 >inferred : Symbol(inferred, Decl(inferTypes1.ts, 230, 9))
->inferFromNestedConditional : Symbol(inferFromNestedConditional, Decl(inferTypes1.ts, 196, 29), Decl(inferTypes1.ts, 226, 1))
+>inferFromNestedNonDistributiveConditional : Symbol(inferFromNestedNonDistributiveConditional, Decl(inferTypes1.ts, 226, 1))
 >value : Symbol(value, Decl(inferTypes1.ts, 229, 17))
 
     const accept: typeof inferred = ordinary;

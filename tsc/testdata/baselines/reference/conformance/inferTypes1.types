@@ -521,7 +521,7 @@ type Boxed<T> = { value: T };
 >value : T
 
 declare function inferFromNestedConditional<X, T>(value: X extends unknown ? Boxed<T> : never): T;
->inferFromNestedConditional : { <X, T>(value: X extends unknown ? Boxed<T> : never): T; <X_1, T_1>(value: X_1 extends unknown ? ([X_1] extends [string] ? { value: T_1; } : never) : never): T_1; }
+>inferFromNestedConditional : <X, T>(value: X extends unknown ? Boxed<T> : never) => T
 >value : X extends unknown ? Boxed<T> : never
 
 function f101<U>(value: U extends unknown ? Boxed<U> : never, ordinary: U) {
@@ -532,7 +532,7 @@ function f101<U>(value: U extends unknown ? Boxed<U> : never, ordinary: U) {
     const inferred = inferFromNestedConditional(value);
 >inferred : U
 >inferFromNestedConditional(value) : U
->inferFromNestedConditional : { <X, T>(value: X extends unknown ? Boxed<T> : never): T; <X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T; } : never) : never): T; }
+>inferFromNestedConditional : <X, T>(value: X extends unknown ? Boxed<T> : never) => T
 >value : U extends unknown ? Boxed<U> : never
 
     const accept: typeof inferred = ordinary;
@@ -633,8 +633,8 @@ function f105<U extends object>(value: U extends unknown ? { [K in keyof U]: U[K
 >ordinary : U
 }
 
-declare function inferFromNestedConditional<X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T } : never) : never): T;
->inferFromNestedConditional : { <X_1, T_1>(value: X_1 extends unknown ? Boxed<T_1> : never): T_1; <X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T; } : never) : never): T; }
+declare function inferFromNestedNonDistributiveConditional<X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T } : never) : never): T;
+>inferFromNestedNonDistributiveConditional : <X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T; } : never) : never) => T
 >value : X extends unknown ? [X] extends [string] ? { value: T; } : never : never
 >value : T
 
@@ -644,10 +644,10 @@ function f106<U>(value: U extends unknown ? ([U] extends [string] ? { value: U }
 >value : U
 >ordinary : U
 
-    const inferred = inferFromNestedConditional(value);
+    const inferred = inferFromNestedNonDistributiveConditional(value);
 >inferred : U
->inferFromNestedConditional(value) : U
->inferFromNestedConditional : { <X, T>(value: X extends unknown ? Boxed<T> : never): T; <X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T; } : never) : never): T; }
+>inferFromNestedNonDistributiveConditional(value) : U
+>inferFromNestedNonDistributiveConditional : <X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T; } : never) : never) => T
 >value : U extends unknown ? [U] extends [string] ? { value: U; } : never : never
 
     const accept: typeof inferred = ordinary;
