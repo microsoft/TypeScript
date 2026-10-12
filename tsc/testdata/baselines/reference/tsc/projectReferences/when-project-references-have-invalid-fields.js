@@ -64,7 +64,7 @@ Output::
 
 Found 4 errors in the same file, starting at: project/tsconfig.json[90m:7[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

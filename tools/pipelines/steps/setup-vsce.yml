@@ -4,10 +4,10 @@ parameters:
     default: succeeded()
 
 steps:
-  - task: NodeTool@0
+  - task: UseNode@1
     condition: ${{ parameters.condition }}
     inputs:
-      versionSpec: 24.x
+      version: 24.x
     displayName: 'Install Node'
 
   - bash: |

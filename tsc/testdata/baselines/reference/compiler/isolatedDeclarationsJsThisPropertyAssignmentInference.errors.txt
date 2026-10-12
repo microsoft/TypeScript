@@ -1,0 +1,15 @@
+error TS5053: Option 'allowJs' cannot be specified with option 'isolatedDeclarations'.
+a.js(4,9): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+
+
+!!! error TS5053: Option 'allowJs' cannot be specified with option 'isolatedDeclarations'.
+==== a.js (1 errors) ====
+    function foo() { return 1; }
+    export class C {
+        constructor() {
+            this.x = foo();
+            ~~~~~~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+        }
+    }
+    

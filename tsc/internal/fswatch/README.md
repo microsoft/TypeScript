@@ -90,9 +90,20 @@ if errors.Is(err, fswatch.ErrWatchTerminated) {
 - Event order within a batch is **not guaranteed**.
 - The callback runs on a library goroutine, not the caller's. Each watch's
   callback is serialized (never concurrent with itself).
-- Paths in events are absolute. **Resolve symlinks before subscribing**;
-  backends report canonical paths:
+- Paths in events are absolute. Subscribing through a directory symlink follows
+  its target while preserving the caller-visible root in delivered paths.
 
-  ```go
-  realDir, err := filepath.EvalSymlinks(dir)
-  ```
+On macOS, watch roots and subscribed filenames are normalized to NFC. On volumes
+reporting case-insensitive lookup, FSEvents and kqueue match paths using
+CoreFoundation's case-insensitive fold, including expansions such as sharp s /
+`SS` and ligatures / letter sequences. This is not width- or
+diacritic-insensitive comparison. Folded forms are only comparison keys:
+directory events retain the caller's root casing, with an NFC suffix for
+FSEvents and the on-disk child spelling for kqueue; file events use the
+subscribed NFC filename. Symlink-root subscriptions likewise retain the
+caller-visible root.
+
+The fold has been compared with actual aliases and distinct names on
+case-insensitive APFS. It is not a guarantee of identical Unicode lookup
+tables on every filesystem or macOS version. Case-sensitive volumes and
+watcher backends on other platforms retain exact comparison.

@@ -9,10 +9,17 @@ import {
 } from "#vscode-jsonrpc/node";
 import type { ChildProcess } from "node:child_process";
 import type { Socket } from "node:net";
+import type {
+    RootedDirectoryPath,
+    RootedFilePath,
+    RootedPath,
+} from "../../ast/index.ts";
+import type { FileSystemCallbacks } from "../fs.ts";
 import {
-    type FileSystem,
-    fsCallbackNames,
-} from "../fs.ts";
+    configureFileSystemCallbacks,
+    encodeFileSystemCallbackResult,
+    type FileSystemCallbackConfiguration,
+} from "../fsCallbacks.ts";
 import {
     type ClientOptions,
     type ClientSocketOptions,
@@ -57,8 +64,11 @@ export class Client {
 
     constructor(options: ClientOptions) {
         this.options = options;
-        if (isSpawnOptions(options) && options.collectTiming) {
-            this.timing = new TimingCollector();
+        if (isSpawnOptions(options)) {
+            configureFileSystemCallbacks(options.fs);
+            if (options.collectTiming) {
+                this.timing = new TimingCollector();
+            }
         }
     }
 
@@ -84,18 +94,10 @@ export class Client {
 
         return new Promise((resolve, reject) => {
             const args = getAPIProcessArgs(options, true);
+            const fsConfiguration = configureFileSystemCallbacks(options.fs);
 
-            // Enable virtual FS callbacks for each provided FS function
-            const enabledCallbacks: string[] = [];
-            if (options.fs) {
-                for (const name of fsCallbackNames) {
-                    if (options.fs[name]) {
-                        enabledCallbacks.push(name);
-                    }
-                }
-            }
-            if (enabledCallbacks.length > 0) {
-                args.push(`--callbacks=${enabledCallbacks.join(",")}`);
+            if (fsConfiguration.arguments.length > 0) {
+                args.push(`--callbacks=${fsConfiguration.arguments.join(",")}`);
             }
 
             this.process = spawn(resolveExePath(options), args, {
@@ -114,7 +116,7 @@ export class Client {
             const reader = new StreamMessageReader(this.process.stdout!);
             const writer = new StreamMessageWriter(this.process.stdin!);
             this.connection = createMessageConnection(reader, writer);
-            this.registerFSCallbacks(this.connection, options.fs);
+            this.registerFSCallbacks(this.connection, options.fs, fsConfiguration);
             this.connection.listen();
         });
     }
@@ -138,35 +140,78 @@ export class Client {
         });
     }
 
-    private registerFSCallbacks(connection: MessageConnection, fs: FileSystem | undefined): void {
+    private registerFSCallbacks(
+        connection: MessageConnection,
+        fs: FileSystemCallbacks | undefined,
+        configuration: FileSystemCallbackConfiguration,
+    ): void {
         if (!fs) return;
-        for (const name of fsCallbackNames) {
-            if (name === "writeFile") {
-                if (!fs.writeFile) continue;
-                const callback = fs.writeFile;
-
-                const requestType = new RequestType<{ path: string; data: string; }, unknown, void>(name);
-                connection.onRequest(requestType, (arg: { path: string; data: string; }) => {
-                    callback(arg.path, arg.data);
-                    return null;
-                });
-
-                continue;
-            }
-
-            const callback = fs[name];
-            if (callback) {
-                const requestType = new RequestType<unknown, unknown, void>(name);
-                connection.onRequest(requestType, (arg: unknown) => {
-                    const result = callback(arg as any);
-                    if (name === "readFile") {
-                        // readFile has 3 returns: string (content), null (not found), undefined (fall back).
-                        // JSON-RPC can't distinguish null from undefined, so wrap in object.
-                        if (result === undefined) return null;
-                        return { content: result };
-                    }
-                    return result ?? null;
-                });
+        for (const name of configuration.callbackNames) {
+            switch (name) {
+                case "readFile": {
+                    const callback = fs.readFile;
+                    if (typeof callback !== "function") throw new Error("Invalid readFile callback configuration");
+                    connection.onRequest(new RequestType<RootedFilePath, unknown, void>(name), fileName => {
+                        return encodeFileSystemCallbackResult(name, callback(fileName));
+                    });
+                    break;
+                }
+                case "fileExists": {
+                    const callback = fs.fileExists;
+                    if (typeof callback !== "function") throw new Error("Invalid fileExists callback configuration");
+                    connection.onRequest(new RequestType<RootedFilePath, unknown, void>(name), fileName => {
+                        return encodeFileSystemCallbackResult(name, callback(fileName));
+                    });
+                    break;
+                }
+                case "directoryExists": {
+                    const callback = fs.directoryExists;
+                    if (typeof callback !== "function") throw new Error("Invalid directoryExists callback configuration");
+                    connection.onRequest(new RequestType<RootedDirectoryPath, unknown, void>(name), directoryName => {
+                        return encodeFileSystemCallbackResult(name, callback(directoryName));
+                    });
+                    break;
+                }
+                case "getAccessibleEntries": {
+                    const callback = fs.getAccessibleEntries;
+                    if (typeof callback !== "function") throw new Error("Invalid getAccessibleEntries callback configuration");
+                    connection.onRequest(new RequestType<RootedDirectoryPath, unknown, void>(name), directoryName => {
+                        return encodeFileSystemCallbackResult(name, callback(directoryName));
+                    });
+                    break;
+                }
+                case "realpath": {
+                    const callback = fs.realpath;
+                    if (typeof callback !== "function") throw new Error("Invalid realpath callback configuration");
+                    connection.onRequest(new RequestType<RootedPath, unknown, void>(name), path => {
+                        return encodeFileSystemCallbackResult(name, callback(path));
+                    });
+                    break;
+                }
+                case "stat": {
+                    const callback = fs.stat;
+                    if (typeof callback !== "function") throw new Error("Invalid stat callback configuration");
+                    connection.onRequest(new RequestType<RootedPath, unknown, void>(name), path => {
+                        return encodeFileSystemCallbackResult(name, callback(path));
+                    });
+                    break;
+                }
+                case "writeFile": {
+                    const callback = fs.writeFile;
+                    if (typeof callback !== "function") throw new Error("Invalid writeFile callback configuration");
+                    connection.onRequest(new RequestType<{ path: RootedFilePath; data: string; }, unknown, void>(name), arg => {
+                        return encodeFileSystemCallbackResult(name, callback(arg.path, arg.data));
+                    });
+                    break;
+                }
+                case "removeFile": {
+                    const callback = fs.removeFile;
+                    if (typeof callback !== "function") throw new Error("Invalid removeFile callback configuration");
+                    connection.onRequest(new RequestType<RootedPath, unknown, void>(name), path => {
+                        return encodeFileSystemCallbackResult(name, callback(path));
+                    });
+                    break;
+                }
             }
         }
     }
@@ -197,6 +242,14 @@ export class Client {
                 : Buffer.byteLength(JSON.stringify(result), "utf-8"),
         });
         return result;
+    }
+
+    registerCallback(name: string, callback: (params: unknown) => unknown | Promise<unknown>): () => void {
+        if (!this.connection) {
+            throw new Error("Connection not established");
+        }
+        const disposable = this.connection.onRequest(new RequestType<unknown, unknown, void>(name), callback);
+        return () => disposable.dispose();
     }
 
     private async doBatch(): Promise<void> {

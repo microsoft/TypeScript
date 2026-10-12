@@ -1,0 +1,85 @@
+// === goToSourceDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// /*GOTO SOURCE DEF*/b;
+// export { b };
+// 
+
+
+
+// === goToSourceDefinition ===
+// === /c.ts ===
+// <|import source [|c|] from "./a.wasm";|>
+// /*GOTO SOURCE DEF*/c;
+// 
+
+
+
+// === goToSourceDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// b;
+// <|export { [|b|] };|>
+// 
+
+// === /d.ts ===
+// import { /*GOTO SOURCE DEF*/b as d } from "./b";
+// d;
+// 
+
+
+
+// === goToSourceDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// b;
+// export { b };
+// 
+
+// === /d.ts ===
+// import { b as d } from "./b";
+// /*GOTO SOURCE DEF*/d;
+// 
+
+
+
+// === goToSourceDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// b;
+// <|export { [|b|] };|>
+// 
+
+// === /e.ts ===
+// export { b as /*GOTO SOURCE DEF*/e } from "./b";
+// 
+
+
+
+// === goToSourceDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// b;
+// export { b };
+// 
+
+// === /f.ts ===
+// import { e as f } from "./e";
+// /*GOTO SOURCE DEF*/f;
+// import * as ns from "./e";
+// ns.e;
+
+
+
+// === goToSourceDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// b;
+// export { b };
+// 
+
+// === /f.ts ===
+// import { e as f } from "./e";
+// f;
+// import * as ns from "./e";
+// ns./*GOTO SOURCE DEF*/e;

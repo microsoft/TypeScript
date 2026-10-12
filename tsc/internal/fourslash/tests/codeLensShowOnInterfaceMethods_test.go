@@ -46,10 +46,8 @@ class AbstractC implements J {
 			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 			defer done()
 			f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
-				CodeLens: lsutil.CodeLensUserPreferences{
-					ImplementationsCodeLensEnabled:                core.TSTrue,
-					ImplementationsCodeLensShowOnInterfaceMethods: value,
-				},
+				ImplementationsCodeLensEnabled:                core.TSTrue,
+				ImplementationsCodeLensShowOnInterfaceMethods: value,
 			})
 		})
 	}

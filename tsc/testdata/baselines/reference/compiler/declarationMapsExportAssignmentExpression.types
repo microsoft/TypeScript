@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/declarationMapsExportAssignmentExpression.ts] ////
+
+=== exportDefault.ts ===
+const b = 1;
+>b : 1
+>1 : 1
+
+const d = 2;
+>d : 2
+>2 : 2
+
+export default { b, d };
+>{ b, d } : { b: number; d: number; }
+>b : number
+>d : number
+
+=== exportEquals.ts ===
+const a = 1;
+>a : 1
+>1 : 1
+
+export = { a };
+>{ a } : { a: number; }
+>a : number
+
+=== exportEqualsClass.ts ===
+export = class {
+>class {    x = 1;} : typeof (Anonymous class)
+
+    x = 1;
+>x : number
+>1 : 1
+
+};
+
+=== exportDefaultArrow.ts ===
+export default (x: number) => x;
+>(x: number) => x : (x: number) => number
+>x : number
+>x : number
+

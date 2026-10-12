@@ -6,4 +6,5 @@
 
 //// [jsxAttributeValueBinaryExpression.jsx]
 "use strict";
-<X a=<b />, <c />/>;
+(<X a=<b />/>, <c />) /  >
+;

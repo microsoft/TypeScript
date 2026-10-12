@@ -29,7 +29,7 @@ Output::
 
 Found 1 error in tsconfig.json[90m:3[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -74,7 +74,7 @@ export const x = 10;
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/project/src/index.ts
 Signatures::
 
@@ -106,7 +106,7 @@ Found 1 error in tsconfig.json[90m:3[0m
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/project/src/index.ts
 Signatures::
 

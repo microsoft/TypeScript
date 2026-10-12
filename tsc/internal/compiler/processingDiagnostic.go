@@ -20,23 +20,24 @@ const (
 )
 
 type processingDiagnostic struct {
-	kind processingDiagnosticKind
-	data any
+	kind        processingDiagnosticKind
+	reason      *FileIncludeReason
+	explanation *includeExplainingDiagnostic
 }
 
 func (d *processingDiagnostic) asFileIncludeReason() *FileIncludeReason {
-	return d.data.(*FileIncludeReason)
+	return d.reason
 }
 
 type includeExplainingDiagnostic struct {
-	file             tspath.Path
+	file             tspath.PathKey
 	diagnosticReason *FileIncludeReason
 	message          *diagnostics.Message
-	args             []any
+	args             []string
 }
 
 func (d *processingDiagnostic) asIncludeExplainingDiagnostic() *includeExplainingDiagnostic {
-	return d.data.(*includeExplainingDiagnostic)
+	return d.explanation
 }
 
 func (d *processingDiagnostic) toDiagnostic(program *Program) *ast.Diagnostic {
@@ -91,19 +92,19 @@ func (d *processingDiagnostic) createDiagnosticExplainingFile(program *Program) 
 		if !seenReasons.AddIfAbsent(includeReason) {
 			return
 		}
-		includeDetails = append(includeDetails, includeReason.toDiagnostic(program, false))
+		includeDetails = append(includeDetails, includeReason.toDiagnostic(program, false, ""))
 		processRelatedInfo(includeReason)
 	}
 
 	// !!! todo sheetal caching
 
 	if diag.file != "" {
-		reasons := program.includeProcessor.fileIncludeReasons[diag.file]
+		reasons := program.fileIncludeReasons[diag.file]
 		includeDetails = make([]*ast.Diagnostic, 0, len(reasons))
 		for _, reason := range reasons {
 			processInclude(reason)
 		}
-		redirectInfo = program.includeProcessor.explainRedirectAndImpliedFormat(program, diag.file, func(fileName string) string { return fileName })
+		redirectInfo = program.includeProcessor.explainRedirectAndImpliedFormat(program, diag.file, func(fileName tspath.RootedFilePath) string { return fileName.AsString() })
 	}
 	if diag.diagnosticReason != nil {
 		processInclude(diag.diagnosticReason)
@@ -119,11 +120,12 @@ func (d *processingDiagnostic) createDiagnosticExplainingFile(program *Program) 
 	}
 
 	var result *ast.Diagnostic
+	args := core.Map(diag.args, func(arg string) any { return arg })
 	if preferredLocation != nil {
-		result = program.includeProcessor.getReferenceLocation(preferredLocation, program).diagnosticAt(diag.message, diag.args...)
+		result = program.includeProcessor.getReferenceLocation(preferredLocation, program).diagnosticAt(diag.message, args...)
 	}
 	if result == nil {
-		result = ast.NewCompilerDiagnostic(diag.message, diag.args...)
+		result = ast.NewCompilerDiagnostic(diag.message, args...)
 	}
 	if chain != nil {
 		result.SetMessageChain(chain)

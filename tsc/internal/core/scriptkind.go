@@ -1,7 +1,6 @@
 package core
 
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=ScriptKind -output=scriptkind_stringer_generated.go
-//go:generate npx dprint fmt scriptkind_stringer_generated.go
+//go:generate npx hereby generate:scriptkind
 
 type ScriptKind int32
 

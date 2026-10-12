@@ -133,12 +133,22 @@ namespace N {
 >x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 79, 7))
 }
 
+// in a class static block
+class C1 {
+>C1 : Symbol(C1, Decl(unusedLocalsAndParameters.ts, 80, 1))
+
+    static {
+        let foo = 1;
+>foo : Symbol(foo, Decl(unusedLocalsAndParameters.ts, 85, 11))
+    }
+}
+
 for (let x: y) {
->x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 82, 8))
+>x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 89, 8))
 >y : Symbol(y)
 
     z(x);
->z : Symbol(z, Decl(unusedLocalsAndParameters.ts, 82, 16))
->x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 82, 8))
+>z : Symbol(z, Decl(unusedLocalsAndParameters.ts, 89, 16))
+>x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 89, 8))
 }
 

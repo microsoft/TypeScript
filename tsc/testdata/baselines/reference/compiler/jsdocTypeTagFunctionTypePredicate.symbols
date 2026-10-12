@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/jsdocTypeTagFunctionTypePredicate.ts] ////
+
+=== types.d.mts ===
+export type Foo = Error & { code: "X" };
+>Foo : Symbol(Foo, Decl(types.d.mts, 0, 0))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>code : Symbol(code, Decl(types.d.mts, 0, 27))
+
+export type Bar = Error & { code: "Y" };
+>Bar : Symbol(Bar, Decl(types.d.mts, 0, 40))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>code : Symbol(code, Decl(types.d.mts, 1, 27))
+
+=== isFoo.mjs ===
+/** @import { Foo, Bar } from "./types.d.mts" */
+
+/** @type {(e: unknown) => e is Foo} */
+export function isFoo(e) {
+>isFoo : Symbol(isFoo, Decl(isFoo.mjs, 0, 0))
+>e : Symbol(e, Decl(isFoo.mjs, 3, 22))
+
+    return e instanceof Error && "code" in e && e.code === "X";
+>e : Symbol(e, Decl(isFoo.mjs, 3, 22))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>e : Symbol(e, Decl(isFoo.mjs, 3, 22))
+>e.code : Symbol(code)
+>e : Symbol(e, Decl(isFoo.mjs, 3, 22))
+>code : Symbol(code)
+}
+
+export default /** @type {(e: unknown) => e is Bar} */ (e) => {
+>e : Symbol(e, Decl(isFoo.mjs, 7, 56))
+
+    return e instanceof Error && "code" in e && e.code === "Y";
+>e : Symbol(e, Decl(isFoo.mjs, 7, 56))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>e : Symbol(e, Decl(isFoo.mjs, 7, 56))
+>e.code : Symbol(code)
+>e : Symbol(e, Decl(isFoo.mjs, 7, 56))
+>code : Symbol(code)
+
+};
+
+/** @type {(e: unknown) => e is Missing} */
+export function isMissing(e) {
+>isMissing : Symbol(isMissing, Decl(isFoo.mjs, 9, 2))
+>e : Symbol(e, Decl(isFoo.mjs, 12, 26))
+
+    return !!e;
+>e : Symbol(e, Decl(isFoo.mjs, 12, 26))
+}
+
+/** @type {(e: unknown) => asserts e is MissingAsserted} */
+export function assertMissing(e) {
+>assertMissing : Symbol(assertMissing, Decl(isFoo.mjs, 14, 1))
+>e : Symbol(e, Decl(isFoo.mjs, 17, 30))
+
+    if (!e) {
+>e : Symbol(e, Decl(isFoo.mjs, 17, 30))
+
+        throw new TypeError();
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+=== missingExpression.mjs ===
+export default /** @type {(e: unknown) => e is MissingExpression} */ (e) => !!e;
+>e : Symbol(e, Decl(missingExpression.mjs, 0, 70))
+>e : Symbol(e, Decl(missingExpression.mjs, 0, 70))
+
+=== inferredArrow.mjs ===
+/** @import { Foo } from "./types.d.mts" */
+
+const arr = /** @type {unknown[]} */ ([]);
+>arr : Symbol(arr, Decl(inferredArrow.mjs, 2, 5))
+
+// Passed as an argument to a generic, overloaded function, so this arrow is
+// checked once with CheckModeSkipContextSensitive during overload resolution.
+export const foos = arr.filter(/** @type {(e: unknown) => e is Foo} */ (e) => e instanceof Error);
+>foos : Symbol(foos, Decl(inferredArrow.mjs, 6, 12))
+>arr.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(inferredArrow.mjs, 2, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(inferredArrow.mjs, 6, 72))
+>e : Symbol(e, Decl(inferredArrow.mjs, 6, 72))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+export const missings = arr.filter(/** @type {(e: unknown) => e is InferredMissing} */ (e) => !!e);
+>missings : Symbol(missings, Decl(inferredArrow.mjs, 7, 12))
+>arr.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(inferredArrow.mjs, 2, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(inferredArrow.mjs, 7, 88))
+>e : Symbol(e, Decl(inferredArrow.mjs, 7, 88))
+

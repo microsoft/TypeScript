@@ -1,0 +1,62 @@
+global.ts(2,11): error TS2430: Interface 'GlobalInterface' incorrectly extends interface 'GlobalBase'.
+  Types of property 'value' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+global.ts(6,22): error TS2430: Interface 'AmbientInterface' incorrectly extends interface 'Base'.
+  Types of property 'value' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+original.ts(2,18): error TS2430: Interface 'AugmentedInterface' incorrectly extends interface 'Base'.
+  Types of property 'value' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+original.ts(4,11): error TS2395: Individual declarations in merged declaration 'Visibility' must be all exported or all local.
+original.ts(5,18): error TS2395: Individual declarations in merged declaration 'Visibility' must be all exported or all local.
+
+
+==== global.ts (2 errors) ====
+    interface GlobalBase { value: number }
+    interface GlobalInterface extends GlobalBase {}
+              ~~~~~~~~~~~~~~~
+!!! error TS2430: Interface 'GlobalInterface' incorrectly extends interface 'GlobalBase'.
+!!! error TS2430:   Types of property 'value' are incompatible.
+!!! error TS2430:     Type 'string' is not assignable to type 'number'.
+    
+    declare module "ambient" {
+        interface Base { value: number }
+        export interface AmbientInterface extends Base {}
+                         ~~~~~~~~~~~~~~~~
+!!! error TS2430: Interface 'AmbientInterface' incorrectly extends interface 'Base'.
+!!! error TS2430:   Types of property 'value' are incompatible.
+!!! error TS2430:     Type 'string' is not assignable to type 'number'.
+    }
+    
+==== ambient.d.ts (0 errors) ====
+    declare module "ambient" {
+        export interface AmbientInterface { value: string }
+    }
+    
+==== original.ts (3 errors) ====
+    export interface Base { value: number }
+    export interface AugmentedInterface extends Base {}
+                     ~~~~~~~~~~~~~~~~~~
+!!! error TS2430: Interface 'AugmentedInterface' incorrectly extends interface 'Base'.
+!!! error TS2430:   Types of property 'value' are incompatible.
+!!! error TS2430:     Type 'string' is not assignable to type 'number'.
+    
+    interface Visibility {}
+              ~~~~~~~~~~
+!!! error TS2395: Individual declarations in merged declaration 'Visibility' must be all exported or all local.
+    export interface Visibility {}
+                     ~~~~~~~~~~
+!!! error TS2395: Individual declarations in merged declaration 'Visibility' must be all exported or all local.
+    namespace Visibility { export const other = 1; }
+    
+==== augmentation.ts (0 errors) ====
+    import "./original";
+    
+    declare module "./original" {
+        interface AugmentedInterface { value: string }
+    }
+    
+    declare global {
+        interface GlobalInterface { value: string }
+    }
+    

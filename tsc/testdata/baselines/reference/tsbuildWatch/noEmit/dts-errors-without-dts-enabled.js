@@ -40,7 +40,7 @@ Output::
   ],
   "size": 45
 }
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -69,7 +69,7 @@ Directory watches::
   /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
@@ -99,7 +99,7 @@ Directory watches::
   /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
@@ -138,7 +138,7 @@ Directory watches::
   /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
@@ -173,7 +173,7 @@ Directory watches::
   /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
@@ -203,7 +203,7 @@ Directory watches::
   /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
@@ -244,7 +244,7 @@ Directory watches::
   /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
@@ -279,6 +279,6 @@ Directory watches::
   /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::

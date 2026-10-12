@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/declarationMapsRenameWithProjectReferencesEdit.ts] *new* 
 
 

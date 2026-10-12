@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/declarationEmitDefaultImportPrivateClass.ts] ////
+
+=== route.d.ts ===
+export type Schema = unknown;
+>Schema : unknown
+
+declare class Route {
+>Route : Route
+
+    private parts;
+>parts : any
+}
+export = Route;
+>Route : Route
+
+=== index.ts ===
+import Route from "./route";
+>Route : typeof Route
+
+export const route = new Route();
+>route : Route
+>new Route() : Route
+>Route : typeof Route
+

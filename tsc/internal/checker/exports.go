@@ -82,10 +82,10 @@ func (c *Checker) GetUnionType(types []*Type) *Type {
 }
 
 func (c *Checker) GetNameTypeOfSymbol(symbol *ast.Symbol) *Type {
-	if !c.valueSymbolLinks.Has(symbol) {
-		return nil
+	if links := c.valueSymbolLinks.TryGet(symbol); links != nil {
+		return links.nameType
 	}
-	return c.valueSymbolLinks.TryGet(symbol).nameType
+	return nil
 }
 
 func IsTypeUsableAsPropertyName(t *Type) bool {
@@ -102,6 +102,18 @@ func (c *Checker) GetGlobalSymbol(name string, meaning ast.SymbolFlags, diagnost
 
 func (c *Checker) GetMergedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return c.getMergedSymbol(symbol)
+}
+
+func (c *Checker) GetSymbolOfNode(node *ast.Node) *ast.Symbol {
+	return c.getSymbolOfNode(node)
+}
+
+func (c *Checker) GetSymbolOfDeclaration(node *ast.Node) *ast.Symbol {
+	return c.getSymbolOfDeclaration(node)
+}
+
+func (c *Checker) GetParentOfSymbol(symbol *ast.Symbol) *ast.Symbol {
+	return c.getParentOfSymbol(symbol)
 }
 
 func (c *Checker) TryFindAmbientModule(moduleName string) *ast.Symbol {
@@ -380,7 +392,7 @@ func (c *Checker) RequiresAddingImplicitUndefined(node *ast.Node) bool {
 	if symbol == nil {
 		return false
 	}
-	return c.GetEmitResolver().RequiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
+	return c.requiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
 }
 
 func (c *Checker) RemoveMissingOrUndefinedType(t *Type) *Type {

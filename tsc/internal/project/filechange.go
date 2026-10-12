@@ -55,6 +55,14 @@ type FileChangeSummary struct {
 	InvalidateAll bool
 }
 
+func (f FileChangeSummary) Clone() FileChangeSummary {
+	f.Closed = *f.Closed.Clone()
+	f.Changed = *f.Changed.Clone()
+	f.Created = *f.Created.Clone()
+	f.Deleted = *f.Deleted.Clone()
+	return f
+}
+
 func (f FileChangeSummary) IsEmpty() bool {
 	return !f.InvalidateAll && f.Opened == "" && f.Reopened == "" && f.Closed.Len() == 0 && f.Changed.Len() == 0 && f.Created.Len() == 0 && f.Deleted.Len() == 0
 }

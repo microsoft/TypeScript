@@ -10,19 +10,23 @@
 
 import {
     type Expression,
-    type Path,
     type SourceFile,
     type Statement,
     SyntaxKind,
     TokenFlags,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     createArrayLiteralExpression,
     createExpressionStatement,
     createNumericLiteral,
     createSourceFile,
     createToken,
-} from "@typescript/typescript/unstable/ast/factory";
+} from "@typescript/typescript/ast/factory";
+import {
+    CaseSensitivity,
+    pathKey,
+    toRootedFilePath,
+} from "@typescript/typescript/path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { Bench } from "tinybench";
@@ -52,7 +56,14 @@ function makeSourceFileWithLargeList(elementCount: number): Uint8Array {
     const array = createArrayLiteralExpression(elements);
     const stmt: Statement = createExpressionStatement(array);
     const eof = createToken(SyntaxKind.EndOfFile);
-    const sf: SourceFile = createSourceFile([stmt], eof, text, "/bench.ts", "/bench.ts" as Path);
+    const fileName = toRootedFilePath("/bench.ts", undefined);
+    const sf: SourceFile = createSourceFile(
+        [stmt],
+        eof,
+        text,
+        fileName,
+        pathKey(fileName, CaseSensitivity.Sensitive),
+    );
     return encodeSourceFile(sf);
 }
 

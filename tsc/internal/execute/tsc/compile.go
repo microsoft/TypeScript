@@ -23,8 +23,8 @@ type System interface {
 	Writer() io.Writer
 	ErrorWriter() io.Writer
 	FS() vfs.FS
-	DefaultLibraryPath() string
-	GetCurrentDirectory() string
+	DefaultLibraryPath() tspath.RootedDirectoryPath
+	GetCurrentDirectory() tspath.RootedDirectoryPath
 	WriteOutputIsTTY() bool
 	GetWidthOfTerminal() int
 	GetEnvironmentVariable(name string) (string, bool)
@@ -69,7 +69,7 @@ type CommandLineResult struct {
 
 type CommandLineTesting interface {
 	// Ensure that all emitted files are timestamped in order to ensure they are deterministic for test baseline
-	OnEmittedFiles(result *compiler.EmitResult, mTimesCache *collections.SyncMap[tspath.Path, time.Time])
+	OnEmittedFiles(result *compiler.EmitResult, mTimesCache *collections.SyncMap[tspath.PathKey, time.Time])
 	OnListFilesStart(w io.Writer)
 	OnListFilesEnd(w io.Writer)
 	OnStatisticsStart(w io.Writer)

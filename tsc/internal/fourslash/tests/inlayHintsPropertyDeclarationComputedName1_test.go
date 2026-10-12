@@ -22,8 +22,6 @@ func TestInlayHintsPropertyDeclarationComputedName1(t *testing.T) {
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{
-		InlayHints: lsutil.InlayHintsPreferences{
-			IncludeInlayPropertyDeclarationTypeHints: core.TSTrue,
-		},
+		IncludeInlayPropertyDeclarationTypeHints: core.TSTrue,
 	})
 }

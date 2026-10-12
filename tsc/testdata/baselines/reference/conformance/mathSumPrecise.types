@@ -1,0 +1,56 @@
+//// [tests/cases/conformance/es2026/mathSumPrecise.ts] ////
+
+=== mathSumPrecise.ts ===
+const arraySum: number = Math.sumPrecise([1, 2, 3]);
+>arraySum : number
+>Math.sumPrecise([1, 2, 3]) : number
+>Math.sumPrecise : (items: Iterable<number>) => number
+>Math : Math
+>sumPrecise : (items: Iterable<number>) => number
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+const setSum: number = Math.sumPrecise(new Set([0.1, 0.2]));
+>setSum : number
+>Math.sumPrecise(new Set([0.1, 0.2])) : number
+>Math.sumPrecise : (items: Iterable<number>) => number
+>Math : Math
+>sumPrecise : (items: Iterable<number>) => number
+>new Set([0.1, 0.2]) : Set<number>
+>Set : SetConstructor
+>[0.1, 0.2] : number[]
+>0.1 : 0.1
+>0.2 : 0.2
+
+function* numbers(): Generator<number, void, unknown> {
+>numbers : () => Generator<number, void, unknown>
+
+    yield 1;
+>yield 1 : unknown
+>1 : 1
+
+    yield 2;
+>yield 2 : unknown
+>2 : 2
+}
+
+const generatorSum: number = Math.sumPrecise(numbers());
+>generatorSum : number
+>Math.sumPrecise(numbers()) : number
+>Math.sumPrecise : (items: Iterable<number>) => number
+>Math : Math
+>sumPrecise : (items: Iterable<number>) => number
+>numbers() : Generator<number, void, unknown>
+>numbers : () => Generator<number, void, unknown>
+
+Math.sumPrecise([1n, 2n]);
+>Math.sumPrecise([1n, 2n]) : number
+>Math.sumPrecise : (items: Iterable<number>) => number
+>Math : Math
+>sumPrecise : (items: Iterable<number>) => number
+>[1n, 2n] : bigint[]
+>1n : 1n
+>2n : 2n
+

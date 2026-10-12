@@ -83,6 +83,13 @@ namespace N {
     var x;
 }
 
+// in a class static block
+class C1 {
+    static {
+        let foo = 1;
+    }
+}
+
 for (let x: y) {
     z(x);
 }
@@ -154,6 +161,12 @@ var N;
 (function (N) {
     var x;
 })(N || (N = {}));
+// in a class static block
+class C1 {
+}
+(() => {
+    let foo = 1;
+})();
 for (let x, { z }; (x); )
     ;
 export {};

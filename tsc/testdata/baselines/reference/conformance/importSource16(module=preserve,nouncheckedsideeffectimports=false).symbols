@@ -1,0 +1,58 @@
+//// [tests/cases/conformance/importSource/importSource16.ts] ////
+
+=== index.mts ===
+import source a from "./missing.wasm";
+>a : Symbol(a, Decl(index.mts, 0, 6))
+
+import source b from "missing";
+>b : Symbol(b, Decl(index.mts, 1, 6))
+
+import source c from "./a.txt";
+>c : Symbol(c, Decl(index.mts, 2, 6))
+
+import source d from "./a.js";
+>d : Symbol(d, Decl(index.mts, 3, 6))
+
+import source e from "./a.d.ts";
+>e : Symbol(e, Decl(index.mts, 4, 6))
+
+import source f from "./a.ts";
+>f : Symbol(f, Decl(index.mts, 5, 6))
+
+export { a, b, c, d, e, f };
+>a : Symbol(a, Decl(index.mts, 6, 8))
+>b : Symbol(b, Decl(index.mts, 6, 11))
+>c : Symbol(c, Decl(index.mts, 6, 14))
+>d : Symbol(d, Decl(index.mts, 6, 17))
+>e : Symbol(e, Decl(index.mts, 6, 20))
+>f : Symbol(f, Decl(index.mts, 6, 23))
+
+const sources: AbstractModuleSource[] = [a, b, c, d, e, f];
+>sources : Symbol(sources, Decl(index.mts, 7, 5))
+>AbstractModuleSource : Symbol(AbstractModuleSource, Decl(lib.esnext.modulesource.d.ts, --, --))
+>a : Symbol(a, Decl(index.mts, 0, 6))
+>b : Symbol(b, Decl(index.mts, 1, 6))
+>c : Symbol(c, Decl(index.mts, 2, 6))
+>d : Symbol(d, Decl(index.mts, 3, 6))
+>e : Symbol(e, Decl(index.mts, 4, 6))
+>f : Symbol(f, Decl(index.mts, 5, 6))
+
+export const g = import.source("./missing.wasm");
+>g : Symbol(g, Decl(index.mts, 8, 12))
+
+export const h = import.source("missing");
+>h : Symbol(h, Decl(index.mts, 9, 12))
+
+export const i = import.source("./a.txt");
+>i : Symbol(i, Decl(index.mts, 10, 12))
+
+export function load(path: string): Promise<AbstractModuleSource> {
+>load : Symbol(load, Decl(index.mts, 10, 42))
+>path : Symbol(path, Decl(index.mts, 11, 21))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>AbstractModuleSource : Symbol(AbstractModuleSource, Decl(lib.esnext.modulesource.d.ts, --, --))
+
+    return import.source(path);
+>path : Symbol(path, Decl(index.mts, 11, 21))
+}
+

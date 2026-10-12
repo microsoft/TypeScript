@@ -56,7 +56,16 @@ jobs:
           filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
           fetch-depth: 0 # Default is 1; need to set to 0 to get the benefits of blob:none.
           persist-credentials: false
-      - uses: azure/login@7ddb5af1ef8758cf1353cf3b42f940aee27ba21c # v3.0.2
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - uses: ./.github/actions/setup-go
+      - name: Check out target branch
+        env:
+          TARGET_BRANCH: ${{ inputs.target_branch }}
+        run: git switch --detach "origin/$TARGET_BRANCH"
+      - run: npm ci
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
@@ -110,7 +119,9 @@ jobs:
               pull_number: +PR,
             });
 
-            if (!pr.data.merge_commit_sha) throw new Error("No merge commit sha found");
+            if (!pr.data.merged || !pr.data.merge_commit_sha) {
+              throw new Error(`PR #${PR} has not been merged`);
+            }
 
             const pickBranch = `cherry-pick/${PR}/${TARGET_BRANCH}`;
 
@@ -118,7 +129,6 @@ jobs:
 
             await exec.exec("git", ["config", "user.email", "290192711+typescript-automation[bot]@users.noreply.github.com"]);
             await exec.exec("git", ["config", "user.name", "typescript-automation[bot]"]);
-            await exec.exec("git", ["switch", "--detach", `origin/${TARGET_BRANCH}`]);
             await exec.exec("git", ["switch", "-c", pickBranch]);
 
             let updatedBaselinesMessage = "";
@@ -127,29 +137,38 @@ jobs:
             } catch (e) {
               console.log(e);
 
-              // The cherry-pick failed. If all of the conflicts are in tsc/testdata/baselines,
+              // The cherry-pick failed. If all conflicts are compiler baselines,
               // try to run the tests and accept the new baselines.
 
-              await exec.exec("git", ["add", "tsc/testdata/baselines"]);
-              // This will fail if any other files were modified.
+              const conflictsOutput = await exec.getExecOutput("git", ["diff", "--name-only", "--diff-filter=U"]);
+              const conflictedFiles = conflictsOutput.stdout.trim().split("\n").filter(Boolean);
+              const baselineDirs = ["tsc/testdata/baselines", "tests/baselines"];
+              if (!conflictedFiles.length || conflictedFiles.some(file => !baselineDirs.some(dir => file.startsWith(`${dir}/`)))) {
+                throw new Error(`Cherry-pick has non-baseline conflicts:\n${conflictedFiles.join("\n")}`);
+              }
+
+              await exec.exec("git", ["add", "--all", "--", ...conflictedFiles]);
               await exec.exec("git", ["-c", "core.editor=true", "cherry-pick", "--continue"]);
 
-              await exec.exec("npm", ["ci"]);
-
               try {
-                await exec.exec("npm", ["test", "--", "--no-lint"]);
+                await exec.exec("npx", ["hereby", "test"]);
               } catch {
                 // Expected to fail.
               }
 
               await exec.exec("npx", ["hereby", "baseline-accept"]);
-              await exec.exec("git", ["add", "tsc/testdata/baselines"]);
-              await exec.exec("git", ["commit", "-m", "Update baselines"]);
+              await exec.exec("npx", ["hereby", "test"]);
+              const existingBaselineDirs = baselineDirs.filter(dir => conflictedFiles.some(file => file.startsWith(`${dir}/`)));
+              await exec.exec("git", ["add", "--all", "--", ...existingBaselineDirs]);
+              const staged = await exec.getExecOutput("git", ["diff", "--cached", "--quiet"], { ignoreReturnCode: true });
+              if (staged.exitCode !== 0) {
+                await exec.exec("git", ["commit", "-m", "Update baselines"]);
+              }
 
               updatedBaselinesMessage = " This involved updating baselines; please check the diff.";
             }
 
-            await exec.exec("git", ["push", "--force", "--set-upstream", "origin", pickBranch]);
+            await exec.exec("git", ["push", "--force-with-lease", "--set-upstream", "origin", pickBranch]);
 
             const existingPulls = await github.rest.pulls.list({
               owner: context.repo.owner,
@@ -180,11 +199,12 @@ jobs:
                 assignees: ["DanielRosenwasser"],
               });
 
+              const reviewers = ["DanielRosenwasser", REQUESTING_USER].filter(Boolean);
               await github.rest.pulls.requestReviewers({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 pull_number: newPr.data.number,
-                reviewers: ["DanielRosenwasser", REQUESTING_USER],
+                reviewers,
               });
 
               commentBody = `I've created #${newPr.data.number} for you.${updatedBaselinesMessage}`;

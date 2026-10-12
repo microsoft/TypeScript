@@ -4,14 +4,19 @@
  *   - packages/typescript/src/ast/ast.generated.ts
  *   - packages/typescript/src/ast/factory.generated.ts
  *   - packages/typescript/src/ast/is.generated.ts
+ *   - packages/typescript/src/ast/visitor.generated.ts
  *
  * Usage: node tools/scripts/tsc/generate-ts-ast.ts
  */
 
-import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { xSync } from "tinyexec";
+import { GeneratedFile } from "../gen/generatedFile.mts";
+import {
+    formatFilesSync,
+    parseGeneratorArgs,
+    repoRoot as ROOT,
+} from "../gen/utils.mts";
 import type {
     MemberInfo,
     NodeType,
@@ -25,8 +30,6 @@ import {
 // ────────────────────────────────────────────────────────────────────────────
 // Load schema
 // ────────────────────────────────────────────────────────────────────────────
-
-const ROOT = path.resolve(import.meta.dirname!, "../../..");
 
 // TS members only (filter noTS/inherited issues)
 function tsMembers(node: NodeType): MemberInfo[] {
@@ -638,7 +641,7 @@ function generateFactory(): string {
         }
     }
     // Always needed
-    for (const t of ["Node", "NodeArray", "KeywordTypeSyntaxKind", "Token", "SourceFile", "KeywordTypeNode", "EndOfFile", "ImportPhaseModifierSyntaxKind", "Path", "Statement"]) {
+    for (const t of ["Node", "NodeArray", "KeywordTypeSyntaxKind", "Token", "SourceFile", "KeywordTypeNode", "EndOfFile", "RootedFilePath", "ImportPhaseModifierSyntaxKind", "PathKey", "Statement"]) {
         importTypes.add(t);
     }
     const handWrittenCloneHelpers = api.nodes()
@@ -679,6 +682,7 @@ function generateFactory(): string {
             if (members.filter(m => m.isChild()).length > 0) {
                 for (const kind of node.kindTypes()) {
                     handWrittenForEachChildImports.push(`forEachChildOf${kind.name}`);
+                    handWrittenForEachChildImports.push(`yieldEachChildOf${kind.name}`);
                 }
             }
         }
@@ -695,6 +699,7 @@ function generateFactory(): string {
 
     // ── NodeObject class ──
     const sortedGetters = [...getterNames].sort();
+    out.push(`/** @internal */`);
     out.push(`export class NodeObject {`);
     out.push(`    readonly kind: SyntaxKind;`);
     out.push(`    flags: NodeFlags = 0 as NodeFlags;`);
@@ -719,6 +724,11 @@ function generateFactory(): string {
     out.push(`    forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined {`);
     out.push(`        const fn = forEachChildTable[this.kind];`);
     out.push(`        return fn ? fn(this._data, visitor, visitArray) : undefined;`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext> {`);
+    out.push(`        const fn = yieldEachChildTable[this.kind];`);
+    out.push(`        return fn ? fn(this._data) : emptyChildrenIter();`);
     out.push(`    }`);
     out.push(``);
     out.push(`    getSourceFile(): SourceFile {`);
@@ -898,6 +908,75 @@ function generateFactory(): string {
     out.push(`    [SyntaxKind.SourceFile]: (data, cbNode, cbNodes) =>`);
     out.push(`        visitNodes(cbNode, cbNodes, data.statements) ||`);
     out.push(`        visitNode(cbNode, data.endOfFileToken),`);
+    out.push(`};`);
+    out.push(``);
+
+    // ── yieldEachChildTable ──
+    out.push(`type YieldEachChildFunction = <T>(data: any) => Generator<Node, T | undefined, T>;`);
+    out.push(``);
+    out.push(`function* emptyChildrenIter<T>(): Generator<Node, T | undefined, T> {`);
+    out.push(`    return undefined;`);
+    out.push(`}`);
+    out.push(``);
+    out.push(`const yieldEachChildTable: Record<number, YieldEachChildFunction> = {`);
+    // Schema nodes
+    for (const node of api.nodes()) {
+        if (node.handWritten) continue;
+        if (isVariantNode(node)) continue;
+        const members = tsMembers(node);
+        const childMembers = members.filter(m => m.isChild());
+        if (childMembers.length === 0) continue;
+        const syntaxKinds = node.allKinds();
+        if (node.handWrittenVisitor) {
+            for (const sk of syntaxKinds) {
+                out.push(`    [${sk.formatTypeScript()}]: yieldEachChildOf${node.name},`);
+            }
+            continue;
+        }
+        const visits = childMembers.map(m => {
+            const propName = api.uncapitalize(m.name);
+            const listKind = m.listKind;
+            if (listKind) {
+                const visit = `for (const n of data.${propName}) { const res = yield n; if (res) return res; }`;
+                return m.optional ? `if (data.${propName}) { ${visit} }` : visit;
+            }
+            return `if (data.${propName}) { const res = yield data.${propName}; if (res) return res; }`;
+        });
+        const body = visits.join("\n        ");
+        for (const sk of syntaxKinds) {
+            out.push(`    [${sk.formatTypeScript()}]: function* (data) {`);
+            out.push(`        ${body}`);
+            out.push(`    },`);
+        }
+    }
+    // Variant nodes
+    for (const v of tsVariants) {
+        if (!v.members) continue;
+        const childMembers = v.members.filter(m => m.type.baseKind() === "node" || m.type.baseKind() === "list");
+        if (childMembers.length === 0) continue;
+        if (v.handWrittenVisitor) {
+            out.push(`    [SyntaxKind.${v.syntaxKind}]: yieldEachChildOf${v.tsName},`);
+            continue;
+        }
+        const visits = childMembers.map(m => {
+            const propName = api.uncapitalize(m.name);
+            const listKind = m.listKind;
+            if (listKind) {
+                const visit = `for (const n of data.${propName}) { const res = yield n; if (res) return res; }`;
+                return m.optional ? `if (data.${propName}) { ${visit} }` : visit;
+            }
+            return `if (data.${propName}) { const res = yield data.${propName}; if (res) return res; }`;
+        });
+        const body = visits.join("\n        ");
+        out.push(`    [SyntaxKind.${v.syntaxKind}]: function* (data) {`);
+        out.push(`        ${body}`);
+        out.push(`    },`);
+    }
+    // SourceFile is handWritten so we add its yieldEachChild entry manually
+    out.push(`    [SyntaxKind.SourceFile]: function* (data) {`);
+    out.push(`        for (const n of data.statements) { const res = yield n; if (res) return res; }`);
+    out.push(`        const res = yield data.endOfFileToken; if (res) return res;`);
+    out.push(`    },`);
     out.push(`};`);
     out.push(``);
 
@@ -1192,8 +1271,8 @@ function generateFactory(): string {
         out.push(``);
     }
 
-    // ── createSourceFile (hand-written — SourceFile is handWritten in schema) ──
-    out.push(`export function createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFile, text: string, fileName: string, path: Path): SourceFile {`);
+    // ── createSourceFile (custom generated implementation — SourceFile is handWritten in schema) ──
+    out.push(`export function createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFile, text: string, fileName: RootedFilePath, path: PathKey): SourceFile {`);
     out.push(`    return new NodeObject(SyntaxKind.SourceFile, {`);
     out.push(`        statements: createNodeArray(statements),`);
     out.push(`        endOfFileToken,`);
@@ -1735,16 +1814,16 @@ function generateVisitor(): string {
 // Main
 // ────────────────────────────────────────────────────────────────────────────
 
-function writeAndFormat(filePath: string, content: string) {
-    fs.writeFileSync(filePath, content);
-    xSync("dprint", ["fmt", filePath], {
-        throwOnError: true,
-        nodeOptions: { stdio: "inherit", cwd: ROOT },
-    });
+function writeAndFormat(filePath: string, generate: () => string, force: boolean) {
+    const generated = new GeneratedFile(filePath, [import.meta.filename, path.join(ROOT, "tools/scripts/tsc/schema.ts"), path.join(ROOT, "tools/scripts/tsc/ast.json")]);
+    if (generated.isCurrent(force)) return;
+    generated.write(generate());
+    formatFilesSync([filePath]);
+    generated.markCurrent();
     console.log(`Generated ${filePath}`);
 }
 
-export default function main() {
+export default function main(force = false) {
     console.log("Generating TS AST code...");
 
     const factoryPath = path.join(ROOT, "packages/typescript/src/ast/factory.generated.ts");
@@ -1752,12 +1831,12 @@ export default function main() {
     const astGenPath = path.join(ROOT, "packages/typescript/src/ast/ast.generated.ts");
     const visitorPath = path.join(ROOT, "packages/typescript/src/ast/visitor.generated.ts");
 
-    writeAndFormat(astGenPath, generateAstGenerated());
-    writeAndFormat(factoryPath, generateFactory());
-    writeAndFormat(isGenPath, generateIsGenerated());
-    writeAndFormat(visitorPath, generateVisitor());
+    writeAndFormat(astGenPath, generateAstGenerated, force);
+    writeAndFormat(factoryPath, generateFactory, force);
+    writeAndFormat(isGenPath, generateIsGenerated, force);
+    writeAndFormat(visitorPath, generateVisitor, force);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-    main();
+    main(parseGeneratorArgs({}).force);
 }

@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/thisPropertyAssignmentUsedBeforeAssignedJs1.ts] ////
+
+=== index.js ===
+export class BaseProduct {
+>BaseProduct : BaseProduct
+
+  Price = 0;
+>Price : number
+>0 : 0
+}
+
+export class Product extends BaseProduct {
+>Product : Product
+>BaseProduct : BaseProduct
+
+  Compute() {
+>Compute : () => void
+
+    this.Price = Number(this.Price);
+>this.Price = Number(this.Price) : number
+>this.Price : number
+>this : this
+>Price : number
+>Number(this.Price) : number
+>Number : NumberConstructor
+>this.Price : number
+>this : this
+>Price : number
+  }
+}
+
+export class Annotated {
+>Annotated : Annotated
+
+  Compute() {
+>Compute : () => void
+
+    /** @type {number} */
+    this.Price = this.Price + 1;
+>this.Price = this.Price + 1 : number
+>this.Price : number
+>this : this
+>Price : number
+>this.Price + 1 : number
+>this.Price : number
+>this : this
+>Price : number
+>1 : 1
+  }
+}
+

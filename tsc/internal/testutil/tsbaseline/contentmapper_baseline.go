@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 var ansiEscape = regexp.MustCompile("\x1b\\[[0-9;]*m")
@@ -39,7 +40,7 @@ func DoContentMapperBaseline(
 
 func getContentMapperBaseline(program compiler.ProgramLike, diagnostics []*ast.Diagnostic) string {
 	prog := program.Program()
-	mapped := make(map[string]*contentmapper.Mapper)
+	mapped := make(map[tspath.RootedFilePath]*contentmapper.Mapper)
 	var files []*ast.SourceFile
 	for _, file := range program.GetSourceFiles() {
 		if mapper := prog.GetContentMapper(file); mapper != nil {
@@ -54,7 +55,7 @@ func getContentMapperBaseline(program compiler.ProgramLike, diagnostics []*ast.D
 	var b strings.Builder
 	for _, file := range files {
 		mapper := mapped[file.FileName()]
-		fmt.Fprintf(&b, "//// [%s] (ScriptKind: %s, ContentMapper: %v)\n", removeTestPathPrefixes(file.FileName(), false), file.ScriptKind, mapper.Definition.Extensions)
+		fmt.Fprintf(&b, "//// [%s] (ScriptKind: %s, ContentMapper: %v)\n", removeTestPathPrefixes(file.FileName().AsString(), false), file.ScriptKind, mapper.Definition.Extensions)
 		b.WriteString("--- Original ---\n")
 		b.WriteString(ensureTrailingNewline(file.OriginalText()))
 		b.WriteString("--- Transformed ---\n")

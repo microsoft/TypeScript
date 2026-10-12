@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/es2026/arrayFromAsyncES2026.ts] ////
+
+=== arrayFromAsyncES2026.ts ===
+const resolvedValues: Promise<number[]> = Array.fromAsync([
+>resolvedValues : Symbol(resolvedValues, Decl(arrayFromAsyncES2026.ts, 0, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --))
+
+    Promise.resolve(1),
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    Promise.resolve(2),
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+]);
+
+const mapped: Promise<string[]> = Array.fromAsync([1, 2], async value => value.toString());
+>mapped : Symbol(mapped, Decl(arrayFromAsyncES2026.ts, 5, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --))
+>value : Symbol(value, Decl(arrayFromAsyncES2026.ts, 5, 63))
+>value.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(arrayFromAsyncES2026.ts, 5, 63))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+

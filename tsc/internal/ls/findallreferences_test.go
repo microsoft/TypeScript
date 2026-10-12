@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -47,18 +48,18 @@ func TestImplementationsWorklistDoesNotBlowUp(t *testing.T) {
 		fs := vfstest.FromMap(map[string]string{
 			"/repro.ts":      content,
 			"/tsconfig.json": `{ "compilerOptions": {}, "files": ["repro.ts"] }`,
-		}, false /*useCaseSensitiveFileNames*/)
+		}, tspath.CaseInsensitive /*caseSensitivity*/)
 		fs = bundled.WrapFS(fs)
 
-		host := compiler.NewCompilerHost("/", fs, bundled.LibPath(), nil, nil, nil)
-		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, host, nil)
+		host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
 		assert.Equal(t, len(errors), 0)
 		program := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
 		program.BindSourceFiles()
 		program.GetSemanticDiagnostics(context.Background(), program.GetSourceFile("/repro.ts"))
 
 		sourceFile := program.GetSourceFile("/repro.ts")
-		converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *lsconv.LSPLineMap {
+		converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ tspath.RootedFilePath) *lsconv.LSPLineMap {
 			return lsconv.ComputeLSPLineStarts(content)
 		})
 		l := &LanguageService{program: program, converters: converters}

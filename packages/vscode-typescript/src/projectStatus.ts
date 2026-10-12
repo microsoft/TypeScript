@@ -43,22 +43,19 @@ export class ProjectStatus implements vscode.Disposable {
     private statusItem?: vscode.LanguageStatusItem;
     private state: ProjectInfoState.State = ProjectInfoState.None;
     private disposables: vscode.Disposable[] = [];
-    private ready = false;
 
     constructor(
         private readonly client: Client,
         private readonly activeEditorTracker: ActiveJsTsEditorTracker,
-        onReady: vscode.Event<void>,
     ) {
         this.disposables.push(
             activeEditorTracker.onDidChangeActiveJsTsEditor(() => this.updateStatus()),
         );
-        this.disposables.push(
-            onReady(() => {
-                this.ready = true;
-                this.updateStatus();
-            }),
-        );
+        this.updateStatus();
+    }
+
+    onLanguageServerInitialized(): void {
+        this.updateStatus();
     }
 
     private async updateStatus(): Promise<void> {
@@ -73,7 +70,7 @@ export class ProjectStatus implements vscode.Disposable {
             return;
         }
 
-        if (!this.ready) {
+        if (!this.client.isInitialized) {
             return;
         }
 

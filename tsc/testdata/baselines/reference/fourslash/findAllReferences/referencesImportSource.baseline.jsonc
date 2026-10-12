@@ -1,0 +1,75 @@
+// === findAllReferences ===
+// === /a.d.ts ===
+// declare module "m" {
+//     export default function /*FIND ALL REFS*/[|f|](): void;
+// }
+// 
+
+// === /b.ts ===
+// import [|f|] from "m";
+// [|f|]();
+// 
+
+
+
+// === findAllReferences ===
+// === /a.d.ts ===
+// declare module "m" {
+//     export default function [|f|](): void;
+// }
+// 
+
+// === /b.ts ===
+// import /*FIND ALL REFS*/[|f|] from "m";
+// [|f|]();
+// 
+
+
+
+// === findAllReferences ===
+// === /c.ts ===
+// import source /*FIND ALL REFS*/[|f|] from "m";
+// [|f|];
+// export { [|f|] };
+// 
+
+// === /d.ts ===
+// import { [|f|] } from "./c";
+// [|f|];
+// 
+
+
+
+// === findAllReferences ===
+// === /c.ts ===
+// import source [|f|] from "m";
+// /*FIND ALL REFS*/[|f|];
+// export { [|f|] };
+// 
+
+// === /d.ts ===
+// import { [|f|] } from "./c";
+// [|f|];
+// 
+
+
+
+// === findAllReferences ===
+// === /c.ts ===
+// import source [|f|] from "m";
+// [|f|];
+// export { [|f|] };
+// 
+
+// === /d.ts ===
+// import { /*FIND ALL REFS*/[|f|] } from "./c";
+// [|f|];
+// 
+
+
+
+// === findAllReferences ===
+// === /e.ts ===
+// import source /*FIND ALL REFS*/[|g|] from "m";
+// [|g|];
+// import.source("m");

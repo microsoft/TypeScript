@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/isolatedDeclarationsJsThisPropertyAssignmentInference.ts] ////
+
+=== a.js ===
+function foo() { return 1; }
+>foo : () => number
+>1 : 1
+
+export class C {
+>C : C
+
+    constructor() {
+        this.x = foo();
+>this.x = foo() : number
+>this.x : any
+>this : this
+>x : any
+>foo() : number
+>foo : () => number
+    }
+}
+

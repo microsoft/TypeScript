@@ -16,6 +16,10 @@ variables:
   # For MicroBuild telemetry
   - name: TeamName
     value: TypeScript
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
+    value: Iv23li4GolzJSEp1mzHI
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID
+    value: https://jststeam-passwords.vault.azure.net/keys/typescript-automation
 
 resources:
   repositories:
@@ -79,6 +83,17 @@ extends:
 
               - bash: |
                   set -euo pipefail
+                  if [ -z "$RELEASE_BUILD_RUN_NAME" ]; then
+                    echo "Unable to read the source build run name." >&2
+                    exit 1
+                  fi
+                  echo "##vso[build.updatebuildnumber]$RELEASE_BUILD_RUN_NAME-publish"
+                displayName: 'Set publisher run name'
+                env:
+                  RELEASE_BUILD_RUN_NAME: $(resources.pipeline.TypeScript_Release_Build.runName)
+
+              - bash: |
+                  set -euo pipefail
 
                   src="$(Pipeline.Workspace)/npm"
                   platformDst="$(Build.ArtifactStagingDirectory)/npm-platform"
@@ -91,6 +106,66 @@ extends:
                     echo "Expected exactly 2 npm publish stages, found $stageCount." >&2
                     exit 1
                   fi
+
+                  mainPackage="$(jq -r 'if .stages[1] | length == 1 then .stages[1][0].filename else empty end' "$manifest")"
+                  if [ -z "$mainPackage" ]; then
+                    echo "Expected exactly one main npm package." >&2
+                    exit 1
+                  fi
+                  mainPackageJson="$(tar -xOf "$src/$mainPackage" package/package.json)"
+                  version="$(jq -r '.version' <<< "$mainPackageJson")"
+                  npmTag="$(jq -r '.publishConfig.tag' <<< "$mainPackageJson")"
+                  if [ -z "$version" ] || [ "$version" = "null" ]; then
+                    echo "Unable to read the TypeScript package version." >&2
+                    exit 1
+                  fi
+                  versionComponent='(0|[1-9][0-9]*)'
+                  case "$npmTag" in
+                    next) ;;
+                    latest)
+                      if ! [[ "$version" =~ ^$versionComponent\.$versionComponent\.(2|[3-9]|[1-9][0-9]+)$ ]]; then
+                        echo "Stable package version must have patch version 2 or greater: $version" >&2
+                        exit 1
+                      fi
+                      ;;
+                    beta)
+                      if ! [[ "$version" =~ ^$versionComponent\.$versionComponent\.0-beta$ ]]; then
+                        echo "Beta package version must have the form major.minor.0-beta: $version" >&2
+                        exit 1
+                      fi
+                      ;;
+                    rc)
+                      if ! [[ "$version" =~ ^$versionComponent\.$versionComponent\.1-rc$ ]]; then
+                        echo "RC package version must have the form major.minor.1-rc: $version" >&2
+                        exit 1
+                      fi
+                      ;;
+                    *)
+                      echo "Unexpected npm publish tag: $npmTag" >&2
+                      exit 1
+                      ;;
+                  esac
+                  if [ "$npmTag" = "next" ]; then
+                    if [ "$RELEASE_SOURCE_BRANCH" != "refs/heads/main" ]; then
+                      echo "Refusing to publish npm tag $npmTag from $RELEASE_SOURCE_BRANCH." >&2
+                      exit 1
+                    fi
+                  elif ! [[ "$RELEASE_SOURCE_BRANCH" =~ ^refs/heads/(release-.+|ts[0-9]+-release)$ ]]; then
+                    echo "Refusing to publish npm tag $npmTag from $RELEASE_SOURCE_BRANCH." >&2
+                    exit 1
+                  fi
+
+                  while IFS= read -r filename; do
+                    packageVersion="$(tar -xOf "$src/$filename" package/package.json | jq -r '.version')"
+                    if [ "$packageVersion" != "$version" ]; then
+                      echo "Package $filename has version $packageVersion, expected $version." >&2
+                      exit 1
+                    fi
+                  done < <(jq -r '.stages[][] | .filename' "$manifest")
+
+                  echo "##vso[task.setvariable variable=packageVersion;isOutput=true]$version"
+                  echo "##vso[task.setvariable variable=npmTag;isOutput=true]$npmTag"
+
                   jq -r '.stages[0][].filename' "$manifest" | xargs -I {} cp -v "$src/{}" "$platformDst/"
                   jq -r '.stages[1][].filename' "$manifest" | xargs -I {} cp -v "$src/{}" "$mainDst/"
 
@@ -101,7 +176,10 @@ extends:
                     echo "Expected 1 main package, found $mainCount." >&2
                     exit 1
                   fi
+                name: releaseMetadata
                 displayName: 'Stage npm artifacts'
+                env:
+                  RELEASE_SOURCE_BRANCH: $(resources.pipeline.TypeScript_Release_Build.sourceBranch)
 
       - stage: Publish_npm
         displayName: Publish npm packages
@@ -220,3 +298,180 @@ extends:
                           echo "Publishing $vsixFilePath with $manifestFilePath and $signatureFilePath"
                           npx vsce publish --packagePath "$vsixFilePath" --manifestPath "$manifestFilePath" --signaturePath "$signatureFilePath" --azure-credential --skip-duplicate --allow-all-proposed-apis
                         done
+
+      - stage: Finalize_release
+        displayName: Create TypeScript GitHub Release
+        dependsOn:
+          - Prepare
+          - Publish_npm
+        condition: and(succeeded(), eq(${{ parameters.dryRun }}, False), ne(dependencies.Prepare.outputs['Stage_npm.releaseMetadata.npmTag'], 'next'))
+        variables:
+          packageVersion: $[stageDependencies.Prepare.Stage_npm.outputs['releaseMetadata.packageVersion']]
+          npmTag: $[stageDependencies.Prepare.Stage_npm.outputs['releaseMetadata.npmTag']]
+
+        jobs:
+          - job: Finalize_release
+            displayName: Create TypeScript tag and GitHub Release
+
+            templateContext:
+              type: releaseJob
+              isProduction: true
+              inputs:
+                - input: pipelineArtifact
+                  pipeline: 'TypeScript_Release_Build'
+                  artifactName: 'npm'
+                  targetPath: '$(Pipeline.Workspace)/npm'
+
+            steps:
+              - checkout: none
+
+              - template: /tools/pipelines/steps/create-github-app-token.yml@self
+                parameters:
+                  azureSubscription: TypeScript-DevDiv-KeyVault
+                  repositories: TypeScript
+                  permissions: contents:write
+                  insertSteps:
+                    - bash: |
+                        set -euo pipefail
+                        artifactDirectory="$(Pipeline.Workspace)/npm"
+                        manifest="$artifactDirectory/publish-manifest.json"
+
+                        case "$NPM_TAG" in
+                          latest)
+                            if ! [[ "$PACKAGE_VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(2|[3-9]|[1-9][0-9]+)$ ]]; then
+                              echo "Stable package version must have patch version 2 or greater: $PACKAGE_VERSION" >&2
+                              exit 1
+                            fi
+                            tag="v$PACKAGE_VERSION"
+                            title="TypeScript $PACKAGE_VERSION"
+                            prerelease=false
+                            ;;
+                          beta)
+                            if ! [[ "$PACKAGE_VERSION" =~ ^((0|[1-9][0-9]*)\.(0|[1-9][0-9]*))\.0-beta$ ]]; then
+                              echo "Beta package version must have the form major.minor.0-beta: $PACKAGE_VERSION" >&2
+                              exit 1
+                            fi
+                            tag="v${BASH_REMATCH[1]}-$NPM_TAG"
+                            title="TypeScript ${BASH_REMATCH[1]} Beta"
+                            prerelease=true
+                            ;;
+                          rc)
+                            if ! [[ "$PACKAGE_VERSION" =~ ^((0|[1-9][0-9]*)\.(0|[1-9][0-9]*))\.1-rc$ ]]; then
+                              echo "RC package version must have the form major.minor.1-rc: $PACKAGE_VERSION" >&2
+                              exit 1
+                            fi
+                            tag="v${BASH_REMATCH[1]}-$NPM_TAG"
+                            title="TypeScript ${BASH_REMATCH[1]}.1 RC"
+                            prerelease=true
+                            ;;
+                          *)
+                            echo "Refusing to create a GitHub Release for npm tag $NPM_TAG." >&2
+                            exit 1
+                            ;;
+                        esac
+
+                        existingTagCommit="$(gh api "repos/microsoft/TypeScript/git/ref/tags/$tag" --jq '.object.sha' 2>/dev/null || true)"
+                        if [ -n "$existingTagCommit" ]; then
+                          if [ "$existingTagCommit" != "$RELEASE_SOURCE_COMMIT" ]; then
+                            echo "Tag $tag points to $existingTagCommit, expected $RELEASE_SOURCE_COMMIT." >&2
+                            exit 1
+                          fi
+                        else
+                          if ! gh api repos/microsoft/TypeScript/git/refs \
+                            --method POST \
+                            --field ref="refs/tags/$tag" \
+                            --field sha="$RELEASE_SOURCE_COMMIT"; then
+                            echo "Creation of $tag failed; checking whether another run created it."
+                            existingTagCommit="$(gh api "repos/microsoft/TypeScript/git/ref/tags/$tag" --jq '.object.sha')"
+                            if [ "$existingTagCommit" != "$RELEASE_SOURCE_COMMIT" ]; then
+                              echo "Tag $tag points to $existingTagCommit, expected $RELEASE_SOURCE_COMMIT." >&2
+                              exit 1
+                            fi
+                          fi
+                        fi
+
+                        notes="Downloads are available on [npm](https://www.npmjs.com/package/typescript/v/$PACKAGE_VERSION)."
+                        if ! gh release view "$tag" --repo microsoft/TypeScript >/dev/null 2>&1; then
+                          releaseArgs=(
+                            "$tag"
+                            --repo microsoft/TypeScript
+                            --title "$title"
+                            --notes "$notes"
+                            --target "$RELEASE_SOURCE_COMMIT"
+                          )
+                          if [ "$prerelease" = "true" ]; then
+                            releaseArgs+=(--prerelease --latest=false)
+                          else
+                            releaseArgs+=(--latest)
+                          fi
+                          if ! gh release create "${releaseArgs[@]}"; then
+                            echo "Creation of GitHub Release $tag failed; checking whether another run created it."
+                            gh release view "$tag" --repo microsoft/TypeScript >/dev/null
+                          fi
+                        fi
+
+                        existingAssetsDirectory="$(mktemp -d)"
+                        trap 'rm -rf "$existingAssetsDirectory"' EXIT
+
+                        refreshExistingAssetNames() {
+                          local output
+                          output="$(
+                            gh release view "$tag" \
+                              --repo microsoft/TypeScript \
+                              --json assets \
+                              --jq '.assets[].name'
+                          )"
+                          mapfile -t existingAssetNames <<< "$output"
+                        }
+
+                        assetExists() {
+                          local filename="$1"
+                          local existingAssetName
+                          for existingAssetName in "${existingAssetNames[@]}"; do
+                            if [ "$existingAssetName" = "$filename" ]; then
+                              return 0
+                            fi
+                          done
+                          return 1
+                        }
+
+                        verifyExistingAsset() {
+                          local packagePath="$1"
+                          local filename
+                          local expectedHash
+                          local existingHash
+                          filename="$(basename "$packagePath")"
+                          expectedHash="$(sha256sum "$packagePath" | cut -d' ' -f1)"
+                          gh release download "$tag" \
+                            --repo microsoft/TypeScript \
+                            --pattern "$filename" \
+                            --dir "$existingAssetsDirectory" \
+                            --clobber
+                          existingHash="$(sha256sum "$existingAssetsDirectory/$filename" | cut -d' ' -f1)"
+                          if [ "$existingHash" != "$expectedHash" ]; then
+                            echo "Existing GitHub Release asset $filename does not match the published package." >&2
+                            exit 1
+                          fi
+                        }
+
+                        refreshExistingAssetNames
+                        while IFS= read -r filename; do
+                          packagePath="$artifactDirectory/$filename"
+                          test -f "$packagePath"
+                          if assetExists "$filename"; then
+                            verifyExistingAsset "$packagePath"
+                          elif ! gh release upload "$tag" "$packagePath" --repo microsoft/TypeScript; then
+                            echo "Upload of $filename failed; checking whether another run uploaded it."
+                            refreshExistingAssetNames
+                            if ! assetExists "$filename"; then
+                              exit 1
+                            fi
+                            verifyExistingAsset "$packagePath"
+                          fi
+                        done < <(jq -r '.stages[][] | .filename' "$manifest")
+                      displayName: Create TypeScript GitHub Release
+                      env:
+                        GH_TOKEN: $(GH_TOKEN)
+                        PACKAGE_VERSION: $(packageVersion)
+                        NPM_TAG: $(npmTag)
+                        RELEASE_SOURCE_COMMIT: $(resources.pipeline.TypeScript_Release_Build.sourceCommit)

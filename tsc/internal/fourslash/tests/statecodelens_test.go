@@ -119,14 +119,12 @@ class Point2 implements Pointable {
 
 	// Ref projects are loaded after as part of this command
 	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
-		CodeLens: lsutil.CodeLensUserPreferences{
-			ReferencesCodeLensEnabled:            core.TSTrue,
-			ReferencesCodeLensShowOnAllFunctions: core.TSTrue,
+		ReferencesCodeLensEnabled:            core.TSTrue,
+		ReferencesCodeLensShowOnAllFunctions: core.TSTrue,
 
-			ImplementationsCodeLensEnabled:                core.TSTrue,
-			ImplementationsCodeLensShowOnInterfaceMethods: core.TSTrue,
-			ImplementationsCodeLensShowOnAllClassMethods:  core.TSTrue,
-		},
+		ImplementationsCodeLensEnabled:                core.TSTrue,
+		ImplementationsCodeLensShowOnInterfaceMethods: core.TSTrue,
+		ImplementationsCodeLensShowOnAllClassMethods:  core.TSTrue,
 	})
 
 	// Open temp file and verify all projects alive
@@ -180,8 +178,6 @@ foo.aaa();
 	defer done()
 
 	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
-		CodeLens: lsutil.CodeLensUserPreferences{
-			ReferencesCodeLensEnabled: core.TSTrue,
-		},
+		ReferencesCodeLensEnabled: core.TSTrue,
 	})
 }

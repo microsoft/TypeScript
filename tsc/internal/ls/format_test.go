@@ -62,7 +62,7 @@ func TestGetFormattingEditsAfterKeystroke_EmptyFile(t *testing.T) {
 	text := ""
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/index.ts",
-		Path:     "/index.ts",
+		PathKey:  "/index.ts",
 	}, text, core.ScriptKindTS)
 
 	// Create language service with nil program (we're only testing the formatting function)
@@ -92,7 +92,7 @@ func TestGetFormattingEditsAfterKeystroke_SimpleStatement(t *testing.T) {
 	text := "const x = 1"
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/index.ts",
-		Path:     "/index.ts",
+		PathKey:  "/index.ts",
 	}, text, core.ScriptKindTS)
 
 	// Create language service with nil program
@@ -157,7 +157,7 @@ func TestGetFormattingEditsForRange_FunctionBody(t *testing.T) {
 			t.Parallel()
 			sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 				FileName: "/test.ts",
-				Path:     "/test.ts",
+				PathKey:  "/test.ts",
 			}, tc.text, core.ScriptKindTS)
 
 			langService := &LanguageService{}

@@ -1,0 +1,145 @@
+name: New release branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        description: Release branch name to create
+        required: true
+        type: string
+      package_version:
+        description: Release package version
+        required: true
+        type: string
+      core_major_minor:
+        description: Release core major.minor version
+        required: true
+        type: string
+
+      # Inputs provided by the bot
+      distinct_id:
+        description: '(bot) A distinct ID'
+        required: false
+        default: ''
+      source_issue:
+        description: '(bot) The issue that triggered this workflow'
+        required: false
+        default: ''
+      requesting_user:
+        description: '(bot) The user who requested this workflow'
+        required: false
+        default: ''
+      status_comment:
+        description: '(bot) The comment to update with the status of this workflow'
+        required: false
+        default: ''
+
+run-name: ${{ github.workflow }}${{ inputs.distinct_id && format(' (bot run {0})', inputs.distinct_id) || '' }}
+
+permissions:
+  contents: read
+  id-token: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  create:
+    if: github.repository == 'microsoft/TypeScript'
+    runs-on: ubuntu-latest
+    environment:
+      name: azure
+      deployment: false
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          filter: blob:none
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - uses: ./.github/actions/setup-go
+      - name: Configure release branch
+        env:
+          BRANCH_NAME: ${{ inputs.branch_name }}
+          PACKAGE_VERSION: ${{ inputs.package_version }}
+          CORE_MAJOR_MINOR: ${{ inputs.core_major_minor }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$BRANCH_NAME" =~ ^(release-.+|ts[0-9]+-release)$ ]]; then
+            echo "Release branch name must start with 'release-' or match 'ts<number>-release'." >&2
+            exit 1
+          fi
+          if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH_NAME"; then
+            echo "Branch $BRANCH_NAME already exists." >&2
+            exit 1
+          fi
+
+          git switch -c "$BRANCH_NAME"
+          node tools/scripts/configure-release.mjs "$PACKAGE_VERSION" "$CORE_MAJOR_MINOR"
+
+          mapfile -t changedFiles < <(git diff --name-only)
+          expectedFiles=("Herebyfile.mjs" "tsc/internal/core/version.go")
+          if [ "${changedFiles[*]}" != "${expectedFiles[*]}" ]; then
+            echo "Unexpected files in release configuration: ${changedFiles[*]}" >&2
+            exit 1
+          fi
+      - run: npm ci
+      - run: npx hereby validate --all
+      - name: Commit release configuration
+        env:
+          PACKAGE_VERSION: ${{ inputs.package_version }}
+        run: |
+          set -euo pipefail
+          git diff --check
+          mapfile -t changedFiles < <(git diff --name-only)
+          expectedFiles=("Herebyfile.mjs" "tsc/internal/core/version.go")
+          if [ "${changedFiles[*]}" != "${expectedFiles[*]}" ]; then
+            echo "Validation produced unexpected changes: ${changedFiles[*]}" >&2
+            exit 1
+          fi
+          git add Herebyfile.mjs tsc/internal/core/version.go
+          git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
+          git config user.name "typescript-automation[bot]"
+          git config core.hooksPath /dev/null
+          git commit -m "Bump version to $PACKAGE_VERSION"
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Create GitHub App token
+        id: app-token
+        uses: microsoft/create-github-app-token-via-key-vault@5ba0d436e9c3cac52feff4d1f2f66f9698ce4a2d # v1
+        with:
+          client-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID }}
+          key-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID }}
+          owner: microsoft
+          repositories: TypeScript
+          permission-contents: write
+      - name: Configure git for GitHub App token
+        env:
+          GITHUB_APP_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          basic_auth="$(node -e 'process.stdout.write(Buffer.from("x-access-token:" + process.env.GITHUB_APP_TOKEN).toString("base64"))')"
+          echo "::add-mask::$basic_auth"
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${basic_auth}"
+      - env:
+          BRANCH_NAME: ${{ inputs.branch_name }}
+        run: git push --set-upstream origin "$BRANCH_NAME"
+
+      - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@08bcbbf253fd6bc533dd8b9ab47a58582be57fbe # master
+        if: ${{ !cancelled() && inputs.distinct_id }}
+        with:
+          success_comment: "I've created ${{ inputs.branch_name }} with version ${{ inputs.package_version }} for you."
+          failure_comment: 'I was unable to create the new release branch.'
+          github_token: ${{ steps.app-token.outputs.token }}
+          distinct_id: ${{ inputs.distinct_id }}
+          source_issue: ${{ inputs.source_issue }}
+          requesting_user: ${{ inputs.requesting_user }}
+          status_comment: ${{ inputs.status_comment }}

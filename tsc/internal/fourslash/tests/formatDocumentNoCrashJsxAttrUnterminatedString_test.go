@@ -16,5 +16,5 @@ const x = <HangupButton customClass = 'ha
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.FormatDocument(t, "")
-	f.VerifyCurrentFileContent(t, "const x = <HangupButton customClass= 'ha\n")
+	f.VerifyCurrentFileContent(t, "const x = <HangupButton customClass='ha\n")
 }

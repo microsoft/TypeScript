@@ -33,17 +33,29 @@ func TestPlugin(t *testing.T) {
 	var plugin plugin
 
 	config := &packages.Config{
-		Mode: packages.LoadAllSyntax,
-		Dir:  testdataDir,
-		Env:  append(os.Environ(), "GO111MODULE=on", "GOPROXY=off", "GOWORK=off"),
+		Mode:  packages.LoadAllSyntax,
+		Dir:   testdataDir,
+		Env:   append(os.Environ(), "GO111MODULE=on", "GOPROXY=off", "GOWORK=off"),
+		Tests: true,
 	}
 
 	pkgs, err := packages.Load(config, "./...")
 	assert.NilError(t, err)
 
 	var allFiles []string
+	seenFiles := make(map[string]struct{})
 	for _, pkg := range pkgs {
-		allFiles = append(allFiles, pkg.GoFiles...)
+		for _, file := range pkg.GoFiles {
+			rel, relErr := filepath.Rel(testdataDir, file)
+			if relErr != nil || rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
+				continue
+			}
+			if _, seen := seenFiles[file]; seen {
+				continue
+			}
+			seenFiles[file] = struct{}{}
+			allFiles = append(allFiles, file)
+		}
 	}
 
 	for _, pkg := range pkgs {
@@ -91,6 +103,9 @@ func TestPlugin(t *testing.T) {
 				diagsByPath[path] = m
 			}
 
+			if _, exists := m[d]; exists {
+				continue
+			}
 			m[d] = struct{}{}
 
 			f := act.Package.Fset.File(diag.Pos)

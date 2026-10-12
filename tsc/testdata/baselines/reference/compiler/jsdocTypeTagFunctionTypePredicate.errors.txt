@@ -1,0 +1,55 @@
+inferredArrow.mjs(8,68): error TS2304: Cannot find name 'InferredMissing'.
+isFoo.mjs(12,33): error TS2304: Cannot find name 'Missing'.
+isFoo.mjs(17,41): error TS2304: Cannot find name 'MissingAsserted'.
+missingExpression.mjs(1,48): error TS2304: Cannot find name 'MissingExpression'.
+
+
+==== types.d.mts (0 errors) ====
+    export type Foo = Error & { code: "X" };
+    export type Bar = Error & { code: "Y" };
+    
+==== isFoo.mjs (2 errors) ====
+    /** @import { Foo, Bar } from "./types.d.mts" */
+    
+    /** @type {(e: unknown) => e is Foo} */
+    export function isFoo(e) {
+        return e instanceof Error && "code" in e && e.code === "X";
+    }
+    
+    export default /** @type {(e: unknown) => e is Bar} */ (e) => {
+        return e instanceof Error && "code" in e && e.code === "Y";
+    };
+    
+    /** @type {(e: unknown) => e is Missing} */
+                                    ~~~~~~~
+!!! error TS2304: Cannot find name 'Missing'.
+    export function isMissing(e) {
+        return !!e;
+    }
+    
+    /** @type {(e: unknown) => asserts e is MissingAsserted} */
+                                            ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'MissingAsserted'.
+    export function assertMissing(e) {
+        if (!e) {
+            throw new TypeError();
+        }
+    }
+    
+==== missingExpression.mjs (1 errors) ====
+    export default /** @type {(e: unknown) => e is MissingExpression} */ (e) => !!e;
+                                                   ~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'MissingExpression'.
+    
+==== inferredArrow.mjs (1 errors) ====
+    /** @import { Foo } from "./types.d.mts" */
+    
+    const arr = /** @type {unknown[]} */ ([]);
+    
+    // Passed as an argument to a generic, overloaded function, so this arrow is
+    // checked once with CheckModeSkipContextSensitive during overload resolution.
+    export const foos = arr.filter(/** @type {(e: unknown) => e is Foo} */ (e) => e instanceof Error);
+    export const missings = arr.filter(/** @type {(e: unknown) => e is InferredMissing} */ (e) => !!e);
+                                                                       ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'InferredMissing'.
+    

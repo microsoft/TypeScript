@@ -42,3 +42,17 @@ export const { m: [n, o], p: { q } } = foo();
 >q : Symbol(q, Decl(exportDestructuringIterator.ts, 7, 30))
 >foo : Symbol(foo, Decl(exportDestructuringIterator.ts, 0, 0))
 
+export const [...[r, s]] = foo();
+>r : Symbol(r, Decl(exportDestructuringIterator.ts, 8, 18))
+>s : Symbol(s, Decl(exportDestructuringIterator.ts, 8, 20))
+>foo : Symbol(foo, Decl(exportDestructuringIterator.ts, 0, 0))
+
+export const [...{ length: t }] = foo();
+>t : Symbol(t, Decl(exportDestructuringIterator.ts, 9, 18))
+>foo : Symbol(foo, Decl(exportDestructuringIterator.ts, 0, 0))
+
+export const [...[u = 1, , ...[v]]] = foo();
+>u : Symbol(u, Decl(exportDestructuringIterator.ts, 10, 18))
+>v : Symbol(v, Decl(exportDestructuringIterator.ts, 10, 31))
+>foo : Symbol(foo, Decl(exportDestructuringIterator.ts, 0, 0))
+

@@ -29,5 +29,5 @@ someExportedVariable;
 	f.MarkTestAsStradaServer()
 	f.GoToFile(t, "/home/src/workspaces/project/lib/index.ts")
 	f.GoToFile(t, "/home/src/workspaces/project/src/index.ts")
-	f.VerifyBaselineRename(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSTrue}, "i")
+	f.VerifyBaselineRename(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue}, "i")
 }

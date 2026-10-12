@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsUntypedModule3.ts] ////
+
+=== /index.mts ===
+// @ts-expect-error
+import { x } from "./untyped.mjs";
+>x : any
+
+x;
+>x : error
+

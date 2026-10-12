@@ -17,13 +17,15 @@ import (
 
 // FileHandle represents a file created for an autoimport lifecycle test.
 type FileHandle struct {
-	fileName string
+	fileName tspath.RootedFilePath
 	content  string
 }
 
-func (f FileHandle) FileName() string         { return f.fileName }
-func (f FileHandle) Content() string          { return f.content }
-func (f FileHandle) URI() lsproto.DocumentUri { return lsconv.FileNameToDocumentURI(f.fileName) }
+func (f FileHandle) FileName() tspath.RootedFilePath { return f.fileName }
+func (f FileHandle) Content() string                 { return f.content }
+func (f FileHandle) URI() lsproto.DocumentUri {
+	return lsconv.FileNameToDocumentURI(f.fileName)
+}
 
 // ProjectFileHandle adds export metadata for TypeScript source files.
 type ProjectFileHandle struct {
@@ -34,7 +36,7 @@ type ProjectFileHandle struct {
 // NodeModulesPackageHandle describes a generated package under node_modules.
 type NodeModulesPackageHandle struct {
 	Name        string
-	Directory   string
+	Directory   tspath.RootedDirectoryPath
 	packageJSON FileHandle
 	declaration FileHandle
 }
@@ -44,7 +46,7 @@ func (p NodeModulesPackageHandle) DeclarationFile() FileHandle { return p.declar
 
 // MonorepoHandle exposes the generated monorepo layout including root and packages.
 type MonorepoHandle struct {
-	root             string
+	root             tspath.RootedDirectoryPath
 	rootNodeModules  []NodeModulesPackageHandle
 	rootDependencies []string
 	packages         []ProjectHandle
@@ -52,7 +54,7 @@ type MonorepoHandle struct {
 	rootPackageJSON  FileHandle
 }
 
-func (m MonorepoHandle) Root() string { return m.root }
+func (m MonorepoHandle) Root() tspath.RootedDirectoryPath { return m.root }
 func (m MonorepoHandle) RootNodeModules() []NodeModulesPackageHandle {
 	return slices.Clone(m.rootNodeModules)
 }
@@ -69,7 +71,7 @@ func (m MonorepoHandle) RootPackageJSONFile() FileHandle { return m.rootPackageJ
 
 // ProjectHandle exposes the generated project layout for a fixture project root.
 type ProjectHandle struct {
-	root         string
+	root         tspath.RootedDirectoryPath
 	files        []ProjectFileHandle
 	tsconfig     FileHandle
 	packageJSON  FileHandle
@@ -77,8 +79,8 @@ type ProjectHandle struct {
 	dependencies []string
 }
 
-func (p ProjectHandle) Root() string               { return p.root }
-func (p ProjectHandle) Files() []ProjectFileHandle { return slices.Clone(p.files) }
+func (p ProjectHandle) Root() tspath.RootedDirectoryPath { return p.root }
+func (p ProjectHandle) Files() []ProjectFileHandle       { return slices.Clone(p.files) }
 func (p ProjectHandle) File(index int) ProjectFileHandle {
 	if index < 0 || index >= len(p.files) {
 		panic(fmt.Sprintf("file index %d out of range", index))
@@ -132,7 +134,7 @@ func (f *MonorepoFixture) Utils() *projecttestutil.SessionUtils { return f.utils
 func (f *MonorepoFixture) Monorepo() MonorepoHandle             { return f.monorepo }
 func (f *MonorepoFixture) ExtraFiles() []FileHandle             { return slices.Clone(f.extra) }
 func (f *MonorepoFixture) ExtraFile(path string) FileHandle {
-	normalized := normalizeAbsolutePath(path)
+	normalized := tspath.RootedFilePathFromAbsolute(path)
 	for _, handle := range f.extra {
 		if handle.fileName == normalized {
 			return handle
@@ -203,44 +205,44 @@ func SetupMonorepoLifecycleSession(t *testing.T, config MonorepoSetupConfig) *Mo
 	t.Helper()
 	builder := newFileMapBuilder(nil)
 
-	monorepoRoot := normalizeAbsolutePath(config.Root)
+	monorepoRoot := tspath.RootedDirectoryPathFromAbsolute(config.Root)
 	monorepoName := config.MonorepoPackageTemplate.Name
 	if monorepoName == "" {
 		monorepoName = "monorepo"
 	}
 
 	// Add root tsconfig.json
-	rootTSConfigPath := tspath.CombinePaths(monorepoRoot, "tsconfig.json")
+	rootTSConfigPath := monorepoRoot.ResolveFile("tsconfig.json")
 	rootTSConfigContent := "{\n  \"compilerOptions\": {\n    \"module\": \"esnext\",\n    \"target\": \"esnext\",\n    \"strict\": true,\n    \"baseUrl\": \".\",\n    \"allowJs\": true,\n    \"checkJs\": true\n  }\n}\n"
-	builder.AddTextFile(rootTSConfigPath, rootTSConfigContent)
+	builder.AddTextFile(rootTSConfigPath.AsString(), rootTSConfigContent)
 	rootTSConfig := FileHandle{fileName: rootTSConfigPath, content: rootTSConfigContent}
 
 	// Add root node_modules
-	rootNodeModulesDir := tspath.CombinePaths(monorepoRoot, "node_modules")
-	rootNodeModules := builder.AddNodeModulesPackagesWithNames(rootNodeModulesDir, config.NodeModuleNames)
+	rootNodeModulesDir := monorepoRoot.ResolveDirectory("node_modules")
+	rootNodeModules := builder.AddNodeModulesPackagesWithNames(rootNodeModulesDir.AsString(), config.NodeModuleNames)
 
 	// Add root package.json with dependencies (default to all root node_modules if unspecified)
 	rootDependencies := selectPackagesByName(rootNodeModules, config.DependencyNames)
-	rootPackageJSON := builder.addRootPackageJSON(monorepoRoot, monorepoName, rootDependencies)
+	rootPackageJSON := builder.addRootPackageJSON(monorepoRoot.AsString(), monorepoName, rootDependencies)
 	rootDependencyNames := packageNames(rootDependencies)
 
 	// Build each package in packages/
-	packagesDir := tspath.CombinePaths(monorepoRoot, "packages")
+	packagesDir := monorepoRoot.ResolveDirectory("packages")
 	packageHandles := make([]ProjectHandle, 0, len(config.Packages))
 	for _, pkg := range config.Packages {
-		pkgDir := tspath.CombinePaths(packagesDir, pkg.Name)
-		builder.AddLocalProject(pkgDir, pkg.FileCount)
+		pkgDir := packagesDir.ResolveDirectory(pkg.Name)
+		builder.AddLocalProject(pkgDir.AsString(), pkg.FileCount)
 
 		var pkgNodeModules []NodeModulesPackageHandle
 		if len(pkg.NodeModuleNames) > 0 {
-			pkgNodeModulesDir := tspath.CombinePaths(pkgDir, "node_modules")
-			pkgNodeModules = builder.AddNodeModulesPackagesWithNames(pkgNodeModulesDir, pkg.NodeModuleNames)
+			pkgNodeModulesDir := pkgDir.ResolveDirectory("node_modules")
+			pkgNodeModules = builder.AddNodeModulesPackagesWithNames(pkgNodeModulesDir.AsString(), pkg.NodeModuleNames)
 		}
 
 		availableDeps := append(slices.Clone(rootNodeModules), pkgNodeModules...)
 		selectedDeps := selectPackagesByName(availableDeps, pkg.DependencyNames)
 		if len(selectedDeps) > 0 {
-			builder.AddPackageJSONWithDependenciesNamed(pkgDir, pkg.Name, selectedDeps)
+			builder.AddPackageJSONWithDependenciesNamed(pkgDir.AsString(), pkg.Name, selectedDeps)
 		}
 	}
 
@@ -248,7 +250,7 @@ func SetupMonorepoLifecycleSession(t *testing.T, config MonorepoSetupConfig) *Mo
 	extraHandles := make([]FileHandle, 0, len(config.ExtraFiles))
 	for _, extra := range config.ExtraFiles {
 		builder.AddTextFile(extra.Path, extra.Content)
-		extraHandles = append(extraHandles, FileHandle{fileName: normalizeAbsolutePath(extra.Path), content: extra.Content})
+		extraHandles = append(extraHandles, FileHandle{fileName: tspath.RootedFilePathFromAbsolute(extra.Path), content: extra.Content})
 	}
 
 	// Add symlinks
@@ -258,7 +260,7 @@ func SetupMonorepoLifecycleSession(t *testing.T, config MonorepoSetupConfig) *Mo
 
 	// Build project handles after all packages are created
 	for _, pkg := range config.Packages {
-		pkgDir := tspath.CombinePaths(packagesDir, pkg.Name)
+		pkgDir := packagesDir.ResolveDirectory(pkg.Name)
 		if record, ok := builder.projects[pkgDir]; ok {
 			packageHandles = append(packageHandles, record.toHandles())
 		}
@@ -311,11 +313,11 @@ type fileMapBuilder struct {
 	files         map[string]any
 	nextPackageID int
 	nextProjectID int
-	projects      map[string]*projectRecord
+	projects      map[tspath.RootedDirectoryPath]*projectRecord
 }
 
 type projectRecord struct {
-	root         string
+	root         tspath.RootedDirectoryPath
 	sourceFiles  []projectFile
 	tsconfig     FileHandle
 	packageJSON  *FileHandle
@@ -324,7 +326,7 @@ type projectRecord struct {
 }
 
 type projectFile struct {
-	FileName         string
+	FileName         tspath.RootedFilePath
 	ExportIdentifier string
 	Content          string
 }
@@ -332,7 +334,7 @@ type projectFile struct {
 func newFileMapBuilder(initial map[string]any) *fileMapBuilder {
 	b := &fileMapBuilder{
 		files:    make(map[string]any),
-		projects: make(map[string]*projectRecord),
+		projects: make(map[tspath.RootedDirectoryPath]*projectRecord),
 	}
 	if len(initial) == 0 {
 		return b
@@ -343,7 +345,7 @@ func newFileMapBuilder(initial map[string]any) *fileMapBuilder {
 	return b
 }
 
-func (b *fileMapBuilder) ensureProjectRecord(root string) *projectRecord {
+func (b *fileMapBuilder) ensureProjectRecord(root tspath.RootedDirectoryPath) *projectRecord {
 	if record, ok := b.projects[root]; ok {
 		return record
 	}
@@ -354,7 +356,9 @@ func (b *fileMapBuilder) ensureProjectRecord(root string) *projectRecord {
 
 func (b *fileMapBuilder) projectHandles() []ProjectHandle {
 	keys := slices.Collect(maps.Keys(b.projects))
-	slices.Sort(keys)
+	slices.SortFunc(keys, func(a, b tspath.RootedDirectoryPath) int {
+		return a.Compare(b)
+	})
 	result := make([]ProjectHandle, 0, len(keys))
 	for _, key := range keys {
 		result = append(result, b.projects[key].toHandles())
@@ -425,8 +429,8 @@ func (b *fileMapBuilder) AddNodeModulesPackage(nodeModulesDir string) NodeModule
 
 func (b *fileMapBuilder) AddNamedNodeModulesPackage(nodeModulesDir string, name string) NodeModulesPackageHandle {
 	b.ensureFiles()
-	normalizedDir := normalizeAbsolutePath(nodeModulesDir)
-	if tspath.GetBaseFileName(normalizedDir) != "node_modules" {
+	normalizedDir := tspath.RootedDirectoryPathFromAbsolute(nodeModulesDir)
+	if normalizedDir.BaseName() != "node_modules" {
 		panic("nodeModulesDir must point to a node_modules directory: " + nodeModulesDir)
 	}
 	b.nextPackageID++
@@ -435,20 +439,20 @@ func (b *fileMapBuilder) AddNamedNodeModulesPackage(nodeModulesDir string, name 
 		resolvedName = fmt.Sprintf("pkg%d", b.nextPackageID)
 	}
 	exportName := sanitizeIdentifier(resolvedName) + "_value"
-	pkgDir := tspath.CombinePaths(normalizedDir, resolvedName)
-	packageJSONPath := tspath.CombinePaths(pkgDir, "package.json")
+	pkgDir := normalizedDir.ResolveDirectory(resolvedName)
+	packageJSONPath := pkgDir.ResolveFile("package.json")
 	packageJSONContent := fmt.Sprintf(`{"name":"%s","types":"index.d.ts"}`, resolvedName)
-	b.files[packageJSONPath] = packageJSONContent
-	declarationPath := tspath.CombinePaths(pkgDir, "index.d.ts")
+	b.files[packageJSONPath.AsString()] = packageJSONContent
+	declarationPath := pkgDir.ResolveFile("index.d.ts")
 	declarationContent := fmt.Sprintf("export declare const %s: number;\n", exportName)
-	b.files[declarationPath] = declarationContent
+	b.files[declarationPath.AsString()] = declarationContent
 	packageHandle := NodeModulesPackageHandle{
 		Name:        resolvedName,
 		Directory:   pkgDir,
 		packageJSON: FileHandle{fileName: packageJSONPath, content: packageJSONContent},
 		declaration: FileHandle{fileName: declarationPath, content: declarationContent},
 	}
-	projectRoot := tspath.GetDirectoryPath(normalizedDir)
+	projectRoot := normalizedDir.AsPath().Directory()
 	record := b.ensureProjectRecord(projectRoot)
 	record.nodeModules = append(record.nodeModules, packageHandle)
 	return packageHandle
@@ -459,18 +463,18 @@ func (b *fileMapBuilder) AddLocalProject(projectDir string, fileCount int) {
 	if fileCount < 0 {
 		panic("fileCount must be non-negative")
 	}
-	dir := normalizeAbsolutePath(projectDir)
+	dir := tspath.RootedDirectoryPathFromAbsolute(projectDir)
 	record := b.ensureProjectRecord(dir)
 	b.nextProjectID++
-	tsConfigPath := tspath.CombinePaths(dir, "tsconfig.json")
+	tsConfigPath := dir.ResolveFile("tsconfig.json")
 	tsConfigContent := "{\n  \"compilerOptions\": {\n    \"module\": \"esnext\",\n    \"target\": \"esnext\",\n    \"strict\": true,\n    \"allowJs\": true,\n    \"checkJs\": true\n  }\n}\n"
-	b.files[tsConfigPath] = tsConfigContent
+	b.files[tsConfigPath.AsString()] = tsConfigContent
 	record.tsconfig = FileHandle{fileName: tsConfigPath, content: tsConfigContent}
 	for i := 1; i <= fileCount; i++ {
-		path := tspath.CombinePaths(dir, fmt.Sprintf("file%d.ts", i))
+		path := dir.ResolveFile(fmt.Sprintf("file%d.ts", i))
 		exportName := fmt.Sprintf("localExport%d_%d", b.nextProjectID, i)
 		content := fmt.Sprintf("export const %s = %d;\n", exportName, i)
-		b.files[path] = content
+		b.files[path.AsString()] = content
 		record.sourceFiles = append(record.sourceFiles, projectFile{FileName: path, ExportIdentifier: exportName, Content: content})
 	}
 }
@@ -482,8 +486,8 @@ func (b *fileMapBuilder) AddPackageJSONWithDependencies(projectDir string, deps 
 
 func (b *fileMapBuilder) AddPackageJSONWithDependenciesNamed(projectDir string, packageName string, deps []NodeModulesPackageHandle) FileHandle {
 	b.ensureFiles()
-	dir := normalizeAbsolutePath(projectDir)
-	packageJSONPath := tspath.CombinePaths(dir, "package.json")
+	dir := tspath.RootedDirectoryPathFromAbsolute(projectDir)
+	packageJSONPath := dir.ResolveFile("package.json")
 	dependencyLines := make([]string, 0, len(deps))
 	for _, dep := range deps {
 		dependencyLines = append(dependencyLines, fmt.Sprintf("\"%s\": \"*\"", dep.Name))
@@ -504,7 +508,7 @@ func (b *fileMapBuilder) AddPackageJSONWithDependenciesNamed(projectDir string, 
 	}
 	builder.WriteString("}\n")
 	content := builder.String()
-	b.files[packageJSONPath] = content
+	b.files[packageJSONPath.AsString()] = content
 	record := b.ensureProjectRecord(dir)
 	packageHandle := FileHandle{fileName: packageJSONPath, content: content}
 	record.packageJSON = &packageHandle
@@ -516,8 +520,8 @@ func (b *fileMapBuilder) AddPackageJSONWithDependenciesNamed(projectDir string, 
 // This is used to set up the root workspace config without treating it as a project.
 func (b *fileMapBuilder) addRootPackageJSON(rootDir string, packageName string, deps []NodeModulesPackageHandle) FileHandle {
 	b.ensureFiles()
-	dir := normalizeAbsolutePath(rootDir)
-	packageJSONPath := tspath.CombinePaths(dir, "package.json")
+	dir := tspath.RootedDirectoryPathFromAbsolute(rootDir)
+	packageJSONPath := dir.ResolveFile("package.json")
 	dependencyLines := make([]string, 0, len(deps))
 	for _, dep := range deps {
 		dependencyLines = append(dependencyLines, fmt.Sprintf("\"%s\": \"*\"", dep.Name))
@@ -537,7 +541,7 @@ func (b *fileMapBuilder) addRootPackageJSON(rootDir string, packageName string, 
 	}
 	builder.WriteString("}\n")
 	content := builder.String()
-	b.files[packageJSONPath] = content
+	b.files[packageJSONPath.AsString()] = content
 	return FileHandle{fileName: packageJSONPath, content: content}
 }
 

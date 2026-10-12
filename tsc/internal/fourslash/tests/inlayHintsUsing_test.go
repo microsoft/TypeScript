@@ -19,7 +19,7 @@ using _defer = {
 };`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{
+	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{
 		IncludeInlayVariableTypeHints: core.TSTrue,
-	}})
+	})
 }

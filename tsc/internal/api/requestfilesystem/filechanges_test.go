@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -20,7 +21,7 @@ func TestFileChangesIncludeDirectoryTombstones(t *testing.T) {
 		Symlinks: map[string]RequestSymlink{
 			"/alias": {Target: "/removed"},
 		},
-	}, vfstest.FromMap(map[string]string{}, true), "/")
+	}, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
 	assert.NilError(t, err)
 
 	var summary project.FileChangeSummary
@@ -45,7 +46,8 @@ func TestFileChangesIncludeListingsAndSymlinks(t *testing.T) {
 	base := vfstest.FromMap(map[string]string{
 		"/dir/old.ts":  "old listing",
 		"/link/old.ts": "old target",
-	}, true)
+	}, tspath.CaseSensitive)
+
 	var summary project.FileChangeSummary
 	_, err := NewForUpdate(&RequestFileSystem{
 		Kind: KindLayer,
@@ -77,7 +79,7 @@ func TestFileChangesIncludeRecursiveSymlinkAliases(t *testing.T) {
 		Symlinks: map[string]RequestSymlink{
 			"/dir/link": {Target: "/dir"},
 		},
-	}, vfstest.FromMap(map[string]string{}, true), "/")
+	}, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
 	assert.NilError(t, err)
 
 	var summary project.FileChangeSummary
@@ -101,7 +103,7 @@ func TestFileChangesIncludeRootSymlinkAliases(t *testing.T) {
 		Symlinks: map[string]RequestSymlink{
 			"/link": {Target: "/"},
 		},
-	}, vfstest.FromMap(map[string]string{}, true), "/")
+	}, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
 	assert.NilError(t, err)
 	content, ok := base.ReadFile("/link/file.ts")
 	assert.Assert(t, ok)

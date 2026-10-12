@@ -1,0 +1,17 @@
+jsonRawJSON1.ts(5,3): error TS2540: Cannot assign to 'rawJSON' because it is a read-only property.
+
+
+==== jsonRawJSON1.ts (1 errors) ====
+    const a = JSON.rawJSON("12345678901234567890");
+    const b: string = a.rawJSON;
+    const c: string = JSON.stringify({ value: a });
+    
+    a.rawJSON = "0";
+      ~~~~~~~
+!!! error TS2540: Cannot assign to 'rawJSON' because it is a read-only property.
+    
+    declare const d: unknown;
+    if (JSON.isRawJSON(d)) {
+        const e: string = d.rawJSON;
+    }
+    

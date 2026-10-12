@@ -1,0 +1,28 @@
+mathSumPrecise.ts(11,17): error TS2345: Argument of type 'bigint[]' is not assignable to parameter of type 'Iterable<number>'.
+  The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+    Type 'IteratorResult<bigint, undefined>' is not assignable to type 'IteratorResult<number, any>'.
+      Type 'IteratorYieldResult<bigint>' is not assignable to type 'IteratorResult<number, any>'.
+        Type 'IteratorYieldResult<bigint>' is not assignable to type 'IteratorYieldResult<number>'.
+          Type 'bigint' is not assignable to type 'number'.
+
+
+==== mathSumPrecise.ts (1 errors) ====
+    const arraySum: number = Math.sumPrecise([1, 2, 3]);
+    const setSum: number = Math.sumPrecise(new Set([0.1, 0.2]));
+    
+    function* numbers(): Generator<number, void, unknown> {
+        yield 1;
+        yield 2;
+    }
+    
+    const generatorSum: number = Math.sumPrecise(numbers());
+    
+    Math.sumPrecise([1n, 2n]);
+                    ~~~~~~~~
+!!! error TS2345: Argument of type 'bigint[]' is not assignable to parameter of type 'Iterable<number>'.
+!!! error TS2345:   The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+!!! error TS2345:     Type 'IteratorResult<bigint, undefined>' is not assignable to type 'IteratorResult<number, any>'.
+!!! error TS2345:       Type 'IteratorYieldResult<bigint>' is not assignable to type 'IteratorResult<number, any>'.
+!!! error TS2345:         Type 'IteratorYieldResult<bigint>' is not assignable to type 'IteratorYieldResult<number>'.
+!!! error TS2345:           Type 'bigint' is not assignable to type 'number'.
+    

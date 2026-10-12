@@ -1,0 +1,152 @@
+//// [tests/cases/compiler/recursiveTypeInference2.ts] ////
+
+=== recursiveTypeInference2.ts ===
+// https://github.com/microsoft/TypeScript/issues/64415
+
+type output<T> = T extends { _zod: { output: any } } ? T["_zod"]["output"] : unknown;
+>output : output<T>
+>_zod : { output: any; }
+>output : any
+
+type input<T> = T extends { _zod: { input: any } } ? T["_zod"]["input"] : unknown;
+>input : input<T>
+>_zod : { input: any; }
+>input : any
+
+type NoUndefined<T> = T extends undefined ? never : T;
+>NoUndefined : NoUndefined<T>
+
+type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+>Writeable : Writeable<T>
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : { [K in keyof T]: T[K]; }
+
+interface $ZodTypeInternals<out O = unknown, out I = unknown> { def: unknown; output: O; input: I; optin?: "optional" | undefined; optout?: "optional" | undefined }
+>def : unknown
+>output : O
+>input : I
+>optin : "optional" | undefined
+>optout : "optional" | undefined
+
+interface StandardProps<I, O> { readonly types?: { readonly input: I; readonly output: O } | undefined }
+>types : { readonly input: I; readonly output: O; } | undefined
+>input : I
+>output : O
+
+interface $ZodType<O = unknown, I = unknown, Internals extends $ZodTypeInternals<O, I> = $ZodTypeInternals<O, I>> {
+  _zod: Internals;
+>_zod : Internals
+
+  "~standard": StandardProps<input<this>, output<this>>;
+>"~standard" : StandardProps<input<this>, output<this>>
+}
+interface ZodType<out Internals extends $ZodTypeInternals = $ZodTypeInternals> extends $ZodType<any, any, Internals> {
+  default(def: NoUndefined<output<this>>): ZodDefault<this>;
+>default : { (def: NoUndefined<output<this>>): ZodDefault<this>; (def: () => NoUndefined<output<this>>): ZodDefault<this>; }
+>def : NoUndefined<output<this>>
+
+  default(def: () => NoUndefined<output<this>>): ZodDefault<this>;
+>default : { (def: NoUndefined<output<this>>): ZodDefault<this>; (def: () => NoUndefined<output<this>>): ZodDefault<this>; }
+>def : () => NoUndefined<output<this>>
+}
+type Shape = Readonly<{ [k: string]: $ZodType }>;
+>Shape : Readonly<{ [k: string]: $ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>; }>
+>k : string
+
+type OptionalOut = { _zod: { optout: "optional" } };
+>OptionalOut : OptionalOut
+>_zod : { optout: "optional"; }
+>optout : "optional"
+
+type OptionalIn = { _zod: { optin: "optional" } };
+>OptionalIn : OptionalIn
+>_zod : { optin: "optional"; }
+>optin : "optional"
+
+type $InferObjectOutput<T extends Shape> = Prettify<
+>$InferObjectOutput : { -readonly [k in keyof T as T[k] extends OptionalOut ? never : k]: T[k]["_zod"]["output"]; } & { -readonly [k in keyof T as T[k] extends OptionalOut ? k : never]?: T[k]["_zod"]["output"] | undefined; } extends infer T_1 ? { [K in keyof T_1]: T_1[K]; } : never
+
+  { -readonly [k in keyof T as T[k] extends OptionalOut ? never : k]: T[k]["_zod"]["output"] } &
+  { -readonly [k in keyof T as T[k] extends OptionalOut ? k : never]?: T[k]["_zod"]["output"] }
+>;
+type $InferObjectInput<T extends Shape> = Prettify<
+>$InferObjectInput : { -readonly [k in keyof T as T[k] extends OptionalIn ? never : k]: T[k]["_zod"]["input"]; } & { -readonly [k in keyof T as T[k] extends OptionalIn ? k : never]?: T[k]["_zod"]["input"] | undefined; } extends infer T_1 ? { [K in keyof T_1]: T_1[K]; } : never
+
+  { -readonly [k in keyof T as T[k] extends OptionalIn ? never : k]: T[k]["_zod"]["input"] } &
+  { -readonly [k in keyof T as T[k] extends OptionalIn ? k : never]?: T[k]["_zod"]["input"] }
+>;
+interface $ZodStringInternals extends $ZodTypeInternals { def: { type: "string" }; output: string; input: string }
+>def : { type: "string"; }
+>type : "string"
+>output : string
+>input : string
+
+interface ZodString extends ZodType<$ZodStringInternals> {}
+declare function string(): ZodString;
+>string : () => ZodString
+
+interface $ZodObjectInternals<S extends Shape> extends $ZodTypeInternals { def: { type: "object"; shape: S }; output: $InferObjectOutput<S>; input: $InferObjectInput<S> }
+>def : { type: "object"; shape: S; }
+>type : "object"
+>shape : S
+>output : { -readonly [k in keyof S as S[k] extends OptionalOut ? never : k]: S[k]["_zod"]["output"]; } & { -readonly [k in keyof S as S[k] extends OptionalOut ? k : never]?: S[k]["_zod"]["output"] | undefined; } extends infer T ? { [K in keyof T]: T[K]; } : never
+>input : { -readonly [k in keyof S as S[k] extends OptionalIn ? never : k]: S[k]["_zod"]["input"]; } & { -readonly [k in keyof S as S[k] extends OptionalIn ? k : never]?: S[k]["_zod"]["input"] | undefined; } extends infer T ? { [K in keyof T]: T[K]; } : never
+
+interface ZodObject<S extends Shape> extends ZodType<$ZodObjectInternals<S>> { shape: S }
+>shape : S
+
+declare function object<T extends Shape>(shape: T): ZodObject<Writeable<T>>;
+>object : <T extends Shape>(shape: T) => ZodObject<Writeable<T>>
+>shape : T
+
+interface $ZodArrayInternals<T extends $ZodType> extends $ZodTypeInternals { def: { type: "array"; element: T }; output: output<T>[]; input: input<T>[] }
+>def : { type: "array"; element: T; }
+>type : "array"
+>element : T
+>output : output<T>[]
+>input : input<T>[]
+
+interface ZodArray<T extends $ZodType> extends ZodType<$ZodArrayInternals<T>> { element: T }
+>element : T
+
+declare function array<T extends $ZodType>(element: T): ZodArray<T>;
+>array : <T extends $ZodType>(element: T) => ZodArray<T>
+>element : T
+
+interface $ZodDefaultInternals<T extends $ZodType> extends $ZodTypeInternals { def: { type: "default"; inner: T }; output: NoUndefined<output<T>>; input: input<T> | undefined; optin: "optional" }
+>def : { type: "default"; inner: T; }
+>type : "default"
+>inner : T
+>output : NoUndefined<output<T>>
+>input : input<T> | undefined
+>optin : "optional"
+
+interface ZodDefault<T extends $ZodType> extends ZodType<$ZodDefaultInternals<T>> {}
+
+const Tree = object({
+>Tree : ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>
+>object({  name: string(),  get children() {    return array(Tree).default([])  },}) : ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>
+>object : <T extends Shape>(shape: T) => ZodObject<Writeable<T>>
+>{  name: string(),  get children() {    return array(Tree).default([])  },} : { name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; }
+
+  name: string(),
+>name : ZodString
+>string() : ZodString
+>string : () => ZodString
+
+  get children() {
+>children : ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>
+
+    return array(Tree).default([])
+>array(Tree).default([]) : ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>
+>array(Tree).default : { (def: { name: string; children: any; }[]): ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; (def: () => { name: string; children: any; }[]): ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; }
+>array(Tree) : ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>
+>array : <T extends $ZodType>(element: T) => ZodArray<T>
+>Tree : ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>
+>default : { (def: { name: string; children: any; }[]): ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; (def: () => { name: string; children: any; }[]): ZodDefault<ZodArray<ZodObject<Writeable<{ name: ZodString; readonly children: ZodDefault<ZodArray<ZodObject<Writeable<any>>>>; }>>>>; }
+>[] : never[]
+
+  },
+});
+

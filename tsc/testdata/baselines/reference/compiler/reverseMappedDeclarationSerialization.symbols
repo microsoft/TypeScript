@@ -1,0 +1,223 @@
+//// [tests/cases/compiler/reverseMappedDeclarationSerialization.ts] ////
+
+=== finite.ts ===
+declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;
+>unwrap : Symbol(unwrap, Decl(finite.ts, 0, 0))
+>T : Symbol(T, Decl(finite.ts, 0, 24))
+>input : Symbol(input, Decl(finite.ts, 0, 27))
+>K : Symbol(K, Decl(finite.ts, 0, 37))
+>T : Symbol(T, Decl(finite.ts, 0, 24))
+>value : Symbol(value, Decl(finite.ts, 0, 53))
+>T : Symbol(T, Decl(finite.ts, 0, 24))
+>K : Symbol(K, Decl(finite.ts, 0, 37))
+>T : Symbol(T, Decl(finite.ts, 0, 24))
+
+declare const indexedInput: Record<string, { value: string }>;
+>indexedInput : Symbol(indexedInput, Decl(finite.ts, 1, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(finite.ts, 1, 44))
+
+export const indexed = unwrap(indexedInput);
+>indexed : Symbol(indexed, Decl(finite.ts, 2, 12))
+>unwrap : Symbol(unwrap, Decl(finite.ts, 0, 0))
+>indexedInput : Symbol(indexedInput, Decl(finite.ts, 1, 13))
+
+export const explicit: Record<string, string> = unwrap(indexedInput);
+>explicit : Symbol(explicit, Decl(finite.ts, 3, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>unwrap : Symbol(unwrap, Decl(finite.ts, 0, 0))
+>indexedInput : Symbol(indexedInput, Decl(finite.ts, 1, 13))
+
+export const shallow = unwrap({ name: { value: "text" } });
+>shallow : Symbol(shallow, Decl(finite.ts, 4, 12))
+>unwrap : Symbol(unwrap, Decl(finite.ts, 0, 0))
+>name : Symbol(name, Decl(finite.ts, 4, 31))
+>value : Symbol(value, Decl(finite.ts, 4, 39))
+
+declare const readonlyInput: {
+>readonlyInput : Symbol(readonlyInput, Decl(finite.ts, 6, 13))
+
+    readonly [key: string]: { value: string | number };
+>key : Symbol(key, Decl(finite.ts, 7, 14))
+>value : Symbol(value, Decl(finite.ts, 7, 29))
+
+};
+export const readonlyIndexed = unwrap(readonlyInput);
+>readonlyIndexed : Symbol(readonlyIndexed, Decl(finite.ts, 9, 12))
+>unwrap : Symbol(unwrap, Decl(finite.ts, 0, 0))
+>readonlyInput : Symbol(readonlyInput, Decl(finite.ts, 6, 13))
+
+type Validator<T> = ((input: unknown) => T | undefined) | {
+>Validator : Symbol(Validator, Decl(finite.ts, 9, 53))
+>T : Symbol(T, Decl(finite.ts, 11, 15))
+>input : Symbol(input, Decl(finite.ts, 11, 22))
+>T : Symbol(T, Decl(finite.ts, 11, 15))
+
+    [K in keyof T]: Validator<T[K]>;
+>K : Symbol(K, Decl(finite.ts, 12, 5))
+>T : Symbol(T, Decl(finite.ts, 11, 15))
+>Validator : Symbol(Validator, Decl(finite.ts, 9, 53))
+>T : Symbol(T, Decl(finite.ts, 11, 15))
+>K : Symbol(K, Decl(finite.ts, 12, 5))
+
+};
+declare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;
+>decode : Symbol(decode, Decl(finite.ts, 13, 2))
+>T : Symbol(T, Decl(finite.ts, 14, 24))
+>input : Symbol(input, Decl(finite.ts, 14, 27))
+>K : Symbol(K, Decl(finite.ts, 14, 37))
+>T : Symbol(T, Decl(finite.ts, 14, 24))
+>Validator : Symbol(Validator, Decl(finite.ts, 9, 53))
+>T : Symbol(T, Decl(finite.ts, 14, 24))
+>K : Symbol(K, Decl(finite.ts, 14, 37))
+>T : Symbol(T, Decl(finite.ts, 14, 24))
+
+declare const stringValidator: (input: unknown) => string | undefined;
+>stringValidator : Symbol(stringValidator, Decl(finite.ts, 15, 13))
+>input : Symbol(input, Decl(finite.ts, 15, 32))
+
+export const deep = decode({ a: { b: { c: { d: stringValidator } } } });
+>deep : Symbol(deep, Decl(finite.ts, 17, 12))
+>decode : Symbol(decode, Decl(finite.ts, 13, 2))
+>a : Symbol(a, Decl(finite.ts, 17, 28))
+>b : Symbol(b, Decl(finite.ts, 17, 33))
+>c : Symbol(c, Decl(finite.ts, 17, 38))
+>d : Symbol(d, Decl(finite.ts, 17, 43))
+>stringValidator : Symbol(stringValidator, Decl(finite.ts, 15, 13))
+
+interface NamedInput {
+>NamedInput : Symbol(NamedInput, Decl(finite.ts, 17, 72))
+
+    leaf: typeof stringValidator;
+>leaf : Symbol(NamedInput.leaf, Decl(finite.ts, 18, 22))
+>stringValidator : Symbol(stringValidator, Decl(finite.ts, 15, 13))
+}
+declare const namedInput: { node: NamedInput };
+>namedInput : Symbol(namedInput, Decl(finite.ts, 21, 13))
+>node : Symbol(node, Decl(finite.ts, 21, 27))
+>NamedInput : Symbol(NamedInput, Decl(finite.ts, 17, 72))
+
+export const named = decode(namedInput);
+>named : Symbol(named, Decl(finite.ts, 22, 12))
+>decode : Symbol(decode, Decl(finite.ts, 13, 2))
+>namedInput : Symbol(namedInput, Decl(finite.ts, 21, 13))
+
+declare const nestedIndexInput: { node: Record<string, typeof stringValidator> };
+>nestedIndexInput : Symbol(nestedIndexInput, Decl(finite.ts, 24, 13))
+>node : Symbol(node, Decl(finite.ts, 24, 33))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>stringValidator : Symbol(stringValidator, Decl(finite.ts, 15, 13))
+
+export const nestedIndexed = decode(nestedIndexInput);
+>nestedIndexed : Symbol(nestedIndexed, Decl(finite.ts, 25, 12))
+>decode : Symbol(decode, Decl(finite.ts, 13, 2))
+>nestedIndexInput : Symbol(nestedIndexInput, Decl(finite.ts, 24, 13))
+
+export const namedExplicit: { node: { leaf: string } } = decode(namedInput);
+>namedExplicit : Symbol(namedExplicit, Decl(finite.ts, 27, 12))
+>node : Symbol(node, Decl(finite.ts, 27, 29))
+>leaf : Symbol(leaf, Decl(finite.ts, 27, 37))
+>decode : Symbol(decode, Decl(finite.ts, 13, 2))
+>namedInput : Symbol(namedInput, Decl(finite.ts, 21, 13))
+
+export const deepExplicit: { a: { b: { c: { d: string } } } } =
+>deepExplicit : Symbol(deepExplicit, Decl(finite.ts, 28, 12))
+>a : Symbol(a, Decl(finite.ts, 28, 28))
+>b : Symbol(b, Decl(finite.ts, 28, 33))
+>c : Symbol(c, Decl(finite.ts, 28, 38))
+>d : Symbol(d, Decl(finite.ts, 28, 43))
+
+    decode({ a: { b: { c: { d: stringValidator } } } });
+>decode : Symbol(decode, Decl(finite.ts, 13, 2))
+>a : Symbol(a, Decl(finite.ts, 29, 12))
+>b : Symbol(b, Decl(finite.ts, 29, 17))
+>c : Symbol(c, Decl(finite.ts, 29, 22))
+>d : Symbol(d, Decl(finite.ts, 29, 27))
+>stringValidator : Symbol(stringValidator, Decl(finite.ts, 15, 13))
+
+=== recursive.ts ===
+type Validator<T> = ((input: unknown) => T | undefined) | {
+>Validator : Symbol(Validator, Decl(recursive.ts, 0, 0))
+>T : Symbol(T, Decl(recursive.ts, 0, 15))
+>input : Symbol(input, Decl(recursive.ts, 0, 22))
+>T : Symbol(T, Decl(recursive.ts, 0, 15))
+
+    [K in keyof T]: Validator<T[K]>;
+>K : Symbol(K, Decl(recursive.ts, 1, 5))
+>T : Symbol(T, Decl(recursive.ts, 0, 15))
+>Validator : Symbol(Validator, Decl(recursive.ts, 0, 0))
+>T : Symbol(T, Decl(recursive.ts, 0, 15))
+>K : Symbol(K, Decl(recursive.ts, 1, 5))
+
+};
+declare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;
+>decode : Symbol(decode, Decl(recursive.ts, 2, 2))
+>T : Symbol(T, Decl(recursive.ts, 3, 24))
+>input : Symbol(input, Decl(recursive.ts, 3, 27))
+>K : Symbol(K, Decl(recursive.ts, 3, 37))
+>T : Symbol(T, Decl(recursive.ts, 3, 24))
+>Validator : Symbol(Validator, Decl(recursive.ts, 0, 0))
+>T : Symbol(T, Decl(recursive.ts, 3, 24))
+>K : Symbol(K, Decl(recursive.ts, 3, 37))
+>T : Symbol(T, Decl(recursive.ts, 3, 24))
+
+type RecursiveInput = {
+>RecursiveInput : Symbol(RecursiveInput, Decl(recursive.ts, 3, 74))
+
+    value: (input: unknown) => string;
+>value : Symbol(value, Decl(recursive.ts, 4, 23))
+>input : Symbol(input, Decl(recursive.ts, 5, 12))
+
+    next: RecursiveInput;
+>next : Symbol(next, Decl(recursive.ts, 5, 38))
+>RecursiveInput : Symbol(RecursiveInput, Decl(recursive.ts, 3, 74))
+
+};
+declare const recursiveInput: RecursiveInput;
+>recursiveInput : Symbol(recursiveInput, Decl(recursive.ts, 8, 13))
+>RecursiveInput : Symbol(RecursiveInput, Decl(recursive.ts, 3, 74))
+
+export const recursive = decode(recursiveInput);
+>recursive : Symbol(recursive, Decl(recursive.ts, 9, 12))
+>decode : Symbol(decode, Decl(recursive.ts, 2, 2))
+>recursiveInput : Symbol(recursiveInput, Decl(recursive.ts, 8, 13))
+
+interface GrowingInput<T> {
+>GrowingInput : Symbol(GrowingInput, Decl(recursive.ts, 9, 48))
+>T : Symbol(T, Decl(recursive.ts, 11, 23))
+
+    value: (input: unknown) => T;
+>value : Symbol(GrowingInput.value, Decl(recursive.ts, 11, 27))
+>input : Symbol(input, Decl(recursive.ts, 12, 12))
+>T : Symbol(T, Decl(recursive.ts, 11, 23))
+
+    next: GrowingInput<T[]>;
+>next : Symbol(GrowingInput.next, Decl(recursive.ts, 12, 33))
+>GrowingInput : Symbol(GrowingInput, Decl(recursive.ts, 9, 48))
+>T : Symbol(T, Decl(recursive.ts, 11, 23))
+}
+declare const growingInput: GrowingInput<string>;
+>growingInput : Symbol(growingInput, Decl(recursive.ts, 15, 13))
+>GrowingInput : Symbol(GrowingInput, Decl(recursive.ts, 9, 48))
+
+export const growing = decode(growingInput);
+>growing : Symbol(growing, Decl(recursive.ts, 16, 12))
+>decode : Symbol(decode, Decl(recursive.ts, 2, 2))
+>growingInput : Symbol(growingInput, Decl(recursive.ts, 15, 13))
+
+interface RecursiveIndexInput {
+>RecursiveIndexInput : Symbol(RecursiveIndexInput, Decl(recursive.ts, 16, 44))
+
+    [key: string]: RecursiveIndexInput;
+>key : Symbol(key, Decl(recursive.ts, 19, 5))
+>RecursiveIndexInput : Symbol(RecursiveIndexInput, Decl(recursive.ts, 16, 44))
+}
+declare const recursiveIndexInput: RecursiveIndexInput;
+>recursiveIndexInput : Symbol(recursiveIndexInput, Decl(recursive.ts, 21, 13))
+>RecursiveIndexInput : Symbol(RecursiveIndexInput, Decl(recursive.ts, 16, 44))
+
+export const recursiveIndexed = decode(recursiveIndexInput);
+>recursiveIndexed : Symbol(recursiveIndexed, Decl(recursive.ts, 22, 12))
+>decode : Symbol(decode, Decl(recursive.ts, 2, 2))
+>recursiveIndexInput : Symbol(recursiveIndexInput, Decl(recursive.ts, 21, 13))
+

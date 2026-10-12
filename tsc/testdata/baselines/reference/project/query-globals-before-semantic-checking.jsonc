@@ -1,0 +1,48 @@
+// Hover on value
+{
+  "contents": {
+    "kind": "plaintext",
+    "value": "const value: {\n    items: Json[];\n}"
+  },
+  "range": {
+    "start": {
+      "line": 3,
+      "character": 13
+    },
+    "end": {
+      "line": 3,
+      "character": 18
+    }
+  }
+}
+
+// Published after hover
+[]
+
+// Hover on value
+{
+  "contents": {
+    "kind": "plaintext",
+    "value": "const value: {\n    items: Json[];\n}"
+  },
+  "range": {
+    "start": {
+      "line": 3,
+      "character": 13
+    },
+    "end": {
+      "line": 3,
+      "character": 18
+    }
+  }
+}
+
+// Published after hover
+[]
+
+// Document diagnostics
+{
+  "kind": "full",
+  "items": []
+}
+

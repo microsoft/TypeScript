@@ -452,7 +452,7 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 		case ast.IsFunctionLike(parent) || ast.IsClassLike(parent) || ast.IsInterfaceDeclaration(parent) || ast.IsTypeOrJSTypeAliasDeclaration(parent):
 			return parent.TypeParameterList()
 		case ast.IsInferTypeNode(parent):
-			break
+			// infer type nodes have no associated type parameter list
 		default:
 			panic(fmt.Sprintf("Unexpected TypeParameter parent: %#v", parent.Kind))
 		}

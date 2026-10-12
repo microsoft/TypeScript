@@ -9,6 +9,9 @@ export interface OtherIndexProps {}
 === r/node_modules/foo/other.d.ts ===
 
 export interface OtherProps {}
+=== r/node_modules/foo/subpkg/main.d.ts ===
+
+export interface SubpkgProps {}
 === r/node_modules/foo/index.d.ts ===
 import { OtherProps } from "./other";
 >OtherProps : any
@@ -16,13 +19,16 @@ import { OtherProps } from "./other";
 import { OtherIndexProps } from "./other/index";
 >OtherIndexProps : any
 
+import { SubpkgProps } from "./subpkg/main";
+>SubpkgProps : any
+
 import { NestedProps } from "nested";
 >NestedProps : any
 
 export interface SomeProps {}
 
-export function foo(): [SomeProps, OtherProps, OtherIndexProps, NestedProps];
->foo : () => [SomeProps, OtherProps, OtherIndexProps, NestedProps]
+export function foo(): [SomeProps, OtherProps, OtherIndexProps, SubpkgProps, NestedProps];
+>foo : () => [SomeProps, OtherProps, OtherIndexProps, SubpkgProps, NestedProps]
 
 === node_modules/root/index.d.ts ===
 export interface RootProps {}
@@ -32,15 +38,15 @@ export function bar(): RootProps;
 
 === r/entry.ts ===
 import { foo } from "foo";
->foo : () => [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/node_modules/nested").NestedProps]
+>foo : () => [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/subpkg").SubpkgProps, import("foo/node_modules/nested").NestedProps]
 
 import { bar } from "root";
 >bar : () => import("root").RootProps
 
 export const x = foo();
->x : [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/node_modules/nested").NestedProps]
->foo() : [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/node_modules/nested").NestedProps]
->foo : () => [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/node_modules/nested").NestedProps]
+>x : [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/subpkg").SubpkgProps, import("foo/node_modules/nested").NestedProps]
+>foo() : [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/subpkg").SubpkgProps, import("foo/node_modules/nested").NestedProps]
+>foo : () => [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/subpkg").SubpkgProps, import("foo/node_modules/nested").NestedProps]
 
 export const y = bar();
 >y : import("root").RootProps

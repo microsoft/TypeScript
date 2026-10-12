@@ -19,13 +19,15 @@ unusedLocalsAndParameters.ts(71,11): error TS6133: 'c' is declared but its value
 unusedLocalsAndParameters.ts(74,11): error TS6133: 'c' is declared but its value is never read.
 unusedLocalsAndParameters.ts(79,11): error TS6133: 'N' is declared but its value is never read.
 unusedLocalsAndParameters.ts(80,9): error TS6133: 'x' is declared but its value is never read.
-unusedLocalsAndParameters.ts(83,13): error TS2304: Cannot find name 'y'.
-unusedLocalsAndParameters.ts(83,14): error TS1005: ',' expected.
-unusedLocalsAndParameters.ts(84,6): error TS1005: ',' expected.
-unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
+unusedLocalsAndParameters.ts(84,7): error TS6196: 'C1' is declared but never used.
+unusedLocalsAndParameters.ts(86,13): error TS6133: 'foo' is declared but its value is never read.
+unusedLocalsAndParameters.ts(90,13): error TS2304: Cannot find name 'y'.
+unusedLocalsAndParameters.ts(90,14): error TS1005: ',' expected.
+unusedLocalsAndParameters.ts(91,6): error TS1005: ',' expected.
+unusedLocalsAndParameters.ts(92,1): error TS1109: Expression expected.
 
 
-==== unusedLocalsAndParameters.ts (25 errors) ====
+==== unusedLocalsAndParameters.ts (27 errors) ====
     export { };
     
     // function declaration paramter
@@ -148,6 +150,17 @@ unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
         var x;
             ~
 !!! error TS6133: 'x' is declared but its value is never read.
+    }
+    
+    // in a class static block
+    class C1 {
+          ~~
+!!! error TS6196: 'C1' is declared but never used.
+        static {
+            let foo = 1;
+                ~~~
+!!! error TS6133: 'foo' is declared but its value is never read.
+        }
     }
     
     for (let x: y) {

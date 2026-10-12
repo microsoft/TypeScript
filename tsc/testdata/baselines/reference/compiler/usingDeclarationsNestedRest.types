@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/usingDeclarationsNestedRest.ts] ////
+
+=== usingDeclarationsNestedRest.ts ===
+using z = { [Symbol.dispose]() {} };
+>z : { [Symbol.dispose](): void; }
+>{ [Symbol.dispose]() {} } : { [Symbol.dispose](): void; }
+>[Symbol.dispose] : () => void
+>Symbol.dispose : unique symbol
+>Symbol : SymbolConstructor
+>dispose : unique symbol
+
+var [...[a, b]] = [0, 1];
+>a : number
+>b : number
+>[0, 1] : number[]
+>0 : 0
+>1 : 1
+
+var [...{ length: c }] = [0, 1];
+>length : any
+>c : number
+>[0, 1] : number[]
+>0 : 0
+>1 : 1
+
+var [...[d = 2, , ...[e]]] = [undefined, 1, 3];
+>d : number
+>2 : 2
+>e : number | undefined
+>[undefined, 1, 3] : (number | undefined)[]
+>undefined : undefined
+>1 : 1
+>3 : 3
+

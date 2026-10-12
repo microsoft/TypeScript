@@ -67,6 +67,8 @@ func getCodeActionsToFixClassIncorrectlyImplementsInterface(context context.Cont
 }
 
 func getAllCodeActionsToFixClassIncorrectlyImplementsInterface(context context.Context, fixContext *CodeFixContext) (*CombinedCodeActions, error) {
+	allDiags := getAllDiagnostics(context, fixContext.Program, fixContext.SourceFile)
+
 	typeChecker, done := fixContext.Program.GetTypeCheckerForFile(context, fixContext.SourceFile)
 	defer done()
 
@@ -78,7 +80,7 @@ func getAllCodeActionsToFixClassIncorrectlyImplementsInterface(context context.C
 
 	seenClassDeclarations := collections.Set[*ast.Node]{}
 
-	for _, diag := range getAllDiagnostics(context, fixContext.Program, fixContext.SourceFile) {
+	for _, diag := range allDiags {
 		if isFixableDiagnostic(diag, fixClassIncorrectlyImplementsInterfaceErrorCodes) {
 			classDeclaration := getClass(fixContext.SourceFile, core.NewTextRange(diag.Pos(), diag.End()))
 			if classDeclaration == nil {
@@ -179,7 +181,7 @@ func getMissingMembers(typeChecker *checker.Checker, classDeclaration *ast.Node,
 
 	var classMembers ast.SymbolTable
 	if classDeclaration.Symbol() != nil {
-		classMembers = classDeclaration.Symbol().Members
+		classMembers = classDeclaration.Symbol().Members()
 	}
 
 	var missingMembers []*ast.Symbol
@@ -188,15 +190,15 @@ func getMissingMembers(typeChecker *checker.Checker, classDeclaration *ast.Node,
 			if symbol == nil {
 				continue
 			}
-			if classMembers != nil && classMembers[symbol.Name] != nil {
+			if classMembers != nil && classMembers[symbol.Name()] != nil {
 				continue
 			}
-			if inheritedMembers[symbol.Name] != nil || seenMembers[symbol.Name] != nil {
+			if inheritedMembers[symbol.Name()] != nil || seenMembers[symbol.Name()] != nil {
 				continue
 			}
 			flags := checker.GetDeclarationModifierFlagsFromSymbol(symbol)
 			if flags&ast.ModifierFlagsPrivate == 0 {
-				seenMembers[symbol.Name] = symbol
+				seenMembers[symbol.Name()] = symbol
 				missingMembers = append(missingMembers, symbol)
 			}
 		}
@@ -222,7 +224,7 @@ func getInheritedMembers(typeChecker *checker.Checker, classDeclaration *ast.Nod
 		}
 		flags := checker.GetDeclarationModifierFlagsFromSymbol(symbol)
 		if flags&ast.ModifierFlagsPrivate == 0 {
-			inheritedMembers[symbol.Name] = symbol
+			inheritedMembers[symbol.Name()] = symbol
 		}
 	}
 	return inheritedMembers

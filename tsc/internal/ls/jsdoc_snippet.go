@@ -27,7 +27,7 @@ type commentOwnerInfo struct {
 }
 
 func (l *LanguageService) getJSDocSnippetCompletion(ctx context.Context, file *ast.SourceFile, position int) *CompletionList {
-	if l.UserPreferences().EnableJSDocCompletions.IsFalse() {
+	if l.UserPreferences().CompleteJSDocs.IsFalse() {
 		return nil
 	}
 	if !isPotentiallyValidJSDocSnippetCompletionPosition(file, position) {
