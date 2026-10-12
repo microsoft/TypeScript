@@ -35,5 +35,13 @@ function f(k) {
 }
 
 
+//// [mod1.d.ts]
+type _recursive = {
+    values(): _recursive;
+};
+export declare var K: {
+    new (): _recursive;
+};
+export {};
 //// [main.d.ts]
 export {};

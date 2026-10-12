@@ -126,3 +126,40 @@ export class Instance {
         return this.#priv;
     }
 }
+
+
+//// [declarationEmitStaticMethodNonIdentifierNames.d.ts]
+type _recursive = () => _recursive;
+declare const uniqueSym: unique symbol;
+export declare class Foo {
+    #private;
+    static getPriv(): () => void;
+    static "quoted-name"(): void;
+    static getQuoted(): (typeof Foo)["quoted-name"];
+    static ["computed-name"](): void;
+    static getComputed(): (typeof Foo)["computed-name"];
+    static 1(): void;
+    static getNumeric(): (typeof Foo)[1];
+    static [uniqueSym](): void;
+    static getUnique(): (typeof Foo)[typeof uniqueSym];
+    static privRef: () => void;
+}
+export declare class Writable {
+    static normalName(): void;
+    static getNormal(): (typeof Writable)["normalName"];
+    static $dollar(): void;
+    static getDollar(): (typeof Writable)["$dollar"];
+}
+export declare class Generic {
+    #private;
+    static getPriv(): <T>(x: T) => T;
+}
+export declare class Recursive {
+    #private;
+    static getRec(): _recursive;
+}
+export declare class Instance {
+    #private;
+    getPriv(): () => void;
+}
+export {};

@@ -20,6 +20,10 @@ type SymbolTracker interface {
 	ReportInferenceFallback(node *ast.Node)
 	PushErrorFallbackNode(node *ast.Node)
 	PopErrorFallbackNode()
+
+	// Used when InternalFlagsSynthesizeTypeAliases is enabled.
+	TypeAliasScope() *ast.Node
+	AddTypeAliasDeclaration(declaration *ast.Node)
 }
 
 // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
@@ -75,4 +79,5 @@ const (
 	InternalFlagsNoSyntacticPrinter      InternalFlags = 1 << 1
 	InternalFlagsDoNotIncludeSymbolChain InternalFlags = 1 << 2
 	InternalFlagsAllowUnresolvedNames    InternalFlags = 1 << 3
+	InternalFlagsSynthesizeTypeAliases   InternalFlags = 1 << 4
 )

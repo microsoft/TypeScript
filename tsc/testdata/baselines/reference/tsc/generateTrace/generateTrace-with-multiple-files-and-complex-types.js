@@ -225,10 +225,12 @@ declare const console: { log(msg: any): void; };
 {"id":115,"symbolName":"__type","recursionId":85,"firstDeclaration":{"path":"/home/src/workspaces/project/types.ts","start":{"line":3,"character":16},"end":{"line":3,"character":27}},"flags":["Object"],"display":"(x: U) => U"},
 {"id":116,"recursionId":97,"flags":["StringLiteral"],"display":"\"value\""},
 {"id":117,"recursionId":98,"flags":["StringLiteral"],"display":"\"map\""},
-{"id":118,"symbolName":"Container","recursionId":83,"instantiatedType":91,"typeArguments":[112],"firstDeclaration":{"path":"/home/src/workspaces/project/types.ts","start":{"line":1,"character":1},"end":{"line":4,"character":2}},"flags":["Object"]},
-{"id":119,"symbolName":"Nullable","recursionId":99,"unionTypes":[10,13,14],"aliasTypeArguments":[14],"firstDeclaration":{"path":"/home/src/workspaces/project/types.ts","start":{"line":5,"character":1},"end":{"line":5,"character":48}},"flags":["Union"],"display":"Nullable<string>"},
-{"id":120,"recursionId":100,"flags":["StringLiteral"],"display":"\"hello\""},
-{"id":121,"recursionId":101,"flags":["StringLiteral"],"display":"\"hello\""},
-{"id":122,"symbolName":"__object","recursionId":102,"firstDeclaration":{"path":"/home/src/workspaces/project/main.ts","start":{"line":2,"character":57},"end":{"line":2,"character":86}},"flags":["Object"],"display":"{ value: U; map: <U>(fn: (x: number) => U) => Container<U>; }"}]
+{"id":118,"symbolName":"__type","recursionId":85,"firstDeclaration":{"path":"/home/src/workspaces/project/types.ts","start":{"line":3,"character":16},"end":{"line":3,"character":27}},"flags":["Object"],"display":"(x: number) => U"},
+{"id":119,"symbolName":"__type","recursionId":85,"firstDeclaration":{"path":"/home/src/workspaces/project/types.ts","start":{"line":3,"character":16},"end":{"line":3,"character":27}},"flags":["Object"],"display":"(x: U) => U"},
+{"id":120,"symbolName":"Container","recursionId":83,"instantiatedType":91,"typeArguments":[112],"firstDeclaration":{"path":"/home/src/workspaces/project/types.ts","start":{"line":1,"character":1},"end":{"line":4,"character":2}},"flags":["Object"]},
+{"id":121,"symbolName":"Nullable","recursionId":99,"unionTypes":[10,13,14],"aliasTypeArguments":[14],"firstDeclaration":{"path":"/home/src/workspaces/project/types.ts","start":{"line":5,"character":1},"end":{"line":5,"character":48}},"flags":["Union"],"display":"Nullable<string>"},
+{"id":122,"recursionId":100,"flags":["StringLiteral"],"display":"\"hello\""},
+{"id":123,"recursionId":101,"flags":["StringLiteral"],"display":"\"hello\""},
+{"id":124,"symbolName":"__object","recursionId":102,"firstDeclaration":{"path":"/home/src/workspaces/project/main.ts","start":{"line":2,"character":57},"end":{"line":2,"character":86}},"flags":["Object"],"display":"{ value: U; map: <U>(fn: (x: number) => U) => Container<U>; }"}]
 
 

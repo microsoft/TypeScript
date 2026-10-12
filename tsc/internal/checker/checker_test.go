@@ -12,6 +12,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
@@ -186,6 +188,96 @@ func TestTypeToStringRecursivePrototype(t *testing.T) {
 				assert.Equal(t, strings.Count(display, fmt.Sprintf("m%03d:", i)), 1)
 			}
 		})
+	}
+}
+
+type typeAliasRecordingTracker struct {
+	*checker.SymbolTrackerImpl
+	scope        *ast.Node
+	declarations []*ast.Node
+	cyclicErrors int
+	scopeQueries int
+}
+
+func (s *typeAliasRecordingTracker) TypeAliasScope() *ast.Node {
+	s.scopeQueries++
+	return s.scope
+}
+
+func (s *typeAliasRecordingTracker) AddTypeAliasDeclaration(declaration *ast.Node) {
+	s.declarations = append(s.declarations, declaration)
+}
+
+func (s *typeAliasRecordingTracker) ReportCyclicStructureError() {
+	s.cyclicErrors++
+}
+
+func TestNodeBuilderTypeAliasSynthesisFlag(t *testing.T) {
+	t.Parallel()
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/foo.ts": `export function make() {
+    return { next() { return this; } };
+}
+make();`,
+		"/tsconfig.json": `{"compilerOptions":{"strict":true},"files":["foo.ts"]}`,
+	}, tspath.CaseInsensitive))
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+	assert.Equal(t, len(errors), 0)
+	p := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
+	p.BindSourceFiles()
+	c, done := p.GetTypeChecker(t.Context())
+	defer done()
+	file := p.GetSourceFile("/foo.ts")
+	typ := c.GetTypeAtLocation(file.Statements.Nodes[1].Expression())
+	builder := checker.NewNodeBuilder(c, printer.NewEmitContext())
+	tracker := &typeAliasRecordingTracker{
+		SymbolTrackerImpl: checker.NewSymbolTrackerImpl(&checker.NodeBuilderContext{}, nil),
+		scope:             file.AsNode(),
+	}
+	node := builder.TypeToTypeNode(typ, file.Statements.Nodes[0], nodebuilder.FlagsNoTruncation, nodebuilder.InternalFlagsNone, tracker)
+	assert.Assert(t, node == nil)
+	assert.Equal(t, tracker.cyclicErrors, 1)
+	assert.Equal(t, len(tracker.declarations), 0)
+	assert.Equal(t, tracker.scopeQueries, 0)
+
+	for _, synthesize := range []bool{false, true, false, true} {
+		tracker.declarations = nil
+		tracker.cyclicErrors, tracker.scopeQueries = 0, 0
+		internalFlags := nodebuilder.InternalFlagsNone
+		if synthesize {
+			internalFlags |= nodebuilder.InternalFlagsSynthesizeTypeAliases
+		}
+		node := builder.TypeToTypeNode(typ, file.Statements.Nodes[0], nodebuilder.FlagsNoTruncation|nodebuilder.FlagsAllowAnonymousIdentifier, internalFlags, tracker)
+		assert.Assert(t, node != nil)
+		assert.Equal(t, tracker.cyclicErrors, 0)
+		if synthesize {
+			assert.Equal(t, len(tracker.declarations), 1)
+			assert.Assert(t, tracker.scopeQueries > 0)
+			assert.Equal(t, node.Kind, ast.KindTypeReference)
+			assert.Equal(t, node.AsTypeReferenceNode().TypeName, tracker.declarations[0].Name())
+		} else {
+			assert.Equal(t, len(tracker.declarations), 0)
+			assert.Equal(t, tracker.scopeQueries, 0)
+			assert.Equal(t, node.Kind, ast.KindTypeLiteral)
+		}
+	}
+
+	for _, missingTracker := range []bool{false, true} {
+		func() {
+			tracker.scope = nil
+			var sink nodebuilder.SymbolTracker = tracker
+			if missingTracker {
+				sink = nil
+			}
+			defer func() {
+				message, ok := recover().(string)
+				assert.Assert(t, ok, "Expected a missing-scope assertion")
+				assert.Assert(t, strings.Contains(message, "Type alias synthesis requires a destination scope"))
+			}()
+			checker.NewNodeBuilder(c, printer.NewEmitContext()).TypeToTypeNode(typ, file.Statements.Nodes[0], nodebuilder.FlagsNoTruncation, nodebuilder.InternalFlagsSynthesizeTypeAliases, sink)
+			t.Fatal("Expected type alias synthesis without a destination scope to panic")
+		}()
 	}
 }
 

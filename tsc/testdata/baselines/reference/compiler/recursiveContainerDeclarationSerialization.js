@@ -59,6 +59,16 @@ export function finiteArray() {
 }
 
 
+//// [local.d.ts]
+type _recursive = _recursive[];
+type _recursive_1 = [_recursive_1];
+type _recursive_2 = readonly [_recursive_2];
+type _recursive_3 = (string | _recursive_3)[];
+export declare function array(): _recursive;
+export declare function tuple(): _recursive_1;
+export declare function readonlyTuple(): _recursive_2;
+export declare function union(): string | _recursive_3;
+export {};
 //// [nameable.d.ts]
 export type RecursiveArray = RecursiveArray[];
 export type RecursiveTuple = readonly [RecursiveTuple];

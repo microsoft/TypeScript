@@ -13,3 +13,10 @@ function f() {
     var x;
     return x;
 }
+
+
+//// [declarationEmitInferredTypeAlias4.d.ts]
+type _recursive<A> = {
+    x: A[] | _recursive<A>;
+};
+declare function f<A>(): A[] | _recursive<A>;
