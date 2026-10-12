@@ -57,7 +57,7 @@ func getSourceFileSymbolIndex(sourceFile *ast.SourceFile) map[SymbolID]*ast.Symb
 		index := make(map[SymbolID]*ast.Symbol, file.SymbolCount)
 		var addSymbol func(*ast.Symbol)
 		addSymbol = func(symbol *ast.Symbol) {
-			if symbol == nil || symbol.Flags&ast.SymbolFlagsTransient != 0 {
+			if symbol == nil || symbol.Flags()&ast.SymbolFlagsTransient != 0 {
 				return
 			}
 			compilerdebug.Assert(ast.GetSourceFileOfSymbol(symbol) == file)
@@ -67,9 +67,9 @@ func getSourceFileSymbolIndex(sourceFile *ast.SourceFile) map[SymbolID]*ast.Symb
 				return
 			}
 			index[id] = symbol
-			addSymbol(symbol.Parent)
-			addSymbol(symbol.ExportSymbol)
-			for _, table := range []ast.SymbolTable{symbol.Members, symbol.Exports} {
+			addSymbol(symbol.Parent())
+			addSymbol(symbol.ExportSymbol())
+			for _, table := range []ast.SymbolTable{symbol.Members(), symbol.Exports()} {
 				for _, child := range table {
 					addSymbol(child)
 				}
@@ -203,7 +203,7 @@ func (sd *snapshotData) getOrCreateProjectRegistry(projectID project.ID) *projec
 // symbol is owned by its snapshot. Content-mapped outputs live in a cache that cannot yet be
 // addressed by file key, so their binder symbols remain snapshot-owned.
 func symbolOwnerFile(symbol *ast.Symbol) *ast.SourceFile {
-	if symbol.Flags&ast.SymbolFlagsTransient != 0 {
+	if symbol.Flags()&ast.SymbolFlagsTransient != 0 {
 		return nil
 	}
 	file := ast.GetSourceFileOfSymbol(symbol)
@@ -248,25 +248,25 @@ func newFileSymbolResponse(symbol *ast.Symbol) *SymbolResponse {
 func buildSymbolResponse(symbol *ast.Symbol, reference SymbolReference, owner *ast.SourceFile) *SymbolResponse {
 	resp := &SymbolResponse{
 		Reference:    reference,
-		Name:         ast.EscapeSymbolName(symbol.Name),
-		Flags:        uint32(symbol.Flags),
-		CheckFlags:   uint32(symbol.CheckFlags),
-		Parent:       newSymbolReference(symbol.Parent),
-		ExportSymbol: newSymbolReference(symbol.ExportSymbol),
+		Name:         ast.EscapeSymbolName(symbol.Name()),
+		Flags:        uint32(symbol.Flags()),
+		CheckFlags:   uint32(symbol.CheckFlags()),
+		Parent:       newSymbolReference(symbol.Parent()),
+		ExportSymbol: newSymbolReference(symbol.ExportSymbol()),
 	}
 	if owner != nil {
 		// A client resolves a file-owned symbol's relationships through its own source file.
-		compilerdebug.Assert(symbol.Parent == nil || symbolOwnerFile(symbol.Parent) == owner, "File-owned symbol parent belongs to another owner")
-		compilerdebug.Assert(symbol.ExportSymbol == nil || symbolOwnerFile(symbol.ExportSymbol) == owner, "File-owned export symbol belongs to another owner")
+		compilerdebug.Assert(symbol.Parent() == nil || symbolOwnerFile(symbol.Parent()) == owner, "File-owned symbol parent belongs to another owner")
+		compilerdebug.Assert(symbol.ExportSymbol() == nil || symbolOwnerFile(symbol.ExportSymbol()) == owner, "File-owned export symbol belongs to another owner")
 	}
-	if len(symbol.Declarations) > 0 {
-		resp.Declarations = make([]NodeHandle, len(symbol.Declarations))
-		for i, decl := range symbol.Declarations {
+	if len(symbol.Declarations()) > 0 {
+		resp.Declarations = make([]NodeHandle, len(symbol.Declarations()))
+		for i, decl := range symbol.Declarations() {
 			resp.Declarations[i] = symbolNodeHandleFrom(decl, owner)
 		}
 	}
-	if symbol.ValueDeclaration != nil {
-		resp.ValueDeclaration = symbolNodeHandleFrom(symbol.ValueDeclaration, owner)
+	if symbol.ValueDeclaration() != nil {
+		resp.ValueDeclaration = symbolNodeHandleFrom(symbol.ValueDeclaration(), owner)
 	}
 	return resp
 }
@@ -1101,8 +1101,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleTypeToString(ctx, parsed.(*TypeToTypeNodeParams))
 	case string(MethodPrintNode):
 		return s.handlePrintNode(ctx, parsed.(*PrintNodeParams))
-	case string(MethodFormatNodeForInsertion):
-		return s.handleFormatNodeForInsertion(ctx, parsed.(*FormatNodeForInsertionParams))
 	case string(MethodEmit):
 		return s.handleEmit(ctx, parsed.(*EmitParams))
 	case string(MethodEmitToString):
@@ -1241,6 +1239,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSignatureUsages(ctx, parsed.(*GetSignatureUsagesParams))
 	case string(MethodGetCompletionsAtPosition):
 		return s.handleGetCompletionsAtPosition(ctx, parsed.(*GetCompletionsAtPositionParams))
+	case string(MethodFormatNodeForInsertion):
+		return s.handleFormatNodeForInsertion(ctx, parsed.(*FormatNodeForInsertionParams))
 	default:
 		return nil, fmt.Errorf("unknown method: %s", method)
 	}
@@ -3071,26 +3071,26 @@ func (s *Session) handleGetTypesAtPositions(ctx context.Context, params *GetType
 
 // @gen-proto-nullable
 func (s *Session) handleGetParentOfSymbol(_ context.Context, params *GetSymbolPropertyParams) (*SymbolResponse, error) {
-	return s.resolveSymbolPropertyOfSymbol(params, func(sym *ast.Symbol) *ast.Symbol { return sym.Parent })
+	return s.resolveSymbolPropertyOfSymbol(params, func(sym *ast.Symbol) *ast.Symbol { return sym.Parent() })
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetMembersOfSymbol(ctx context.Context, params *GetSymbolPropertyParams) ([]*SymbolResponse, error) {
 	return s.resolveSymbolTablePropertyOfSymbol(ctx, params, func(symbol *ast.Symbol) ast.SymbolTable {
-		return symbol.Members
+		return symbol.Members()
 	})
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetExportsOfSymbol(ctx context.Context, params *GetSymbolPropertyParams) ([]*SymbolResponse, error) {
 	return s.resolveSymbolTablePropertyOfSymbol(ctx, params, func(symbol *ast.Symbol) ast.SymbolTable {
-		return symbol.Exports
+		return symbol.Exports()
 	})
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetExportSymbolOfSymbol(_ context.Context, params *GetSymbolPropertyParams) (*SymbolResponse, error) {
-	return s.resolveSymbolPropertyOfSymbol(params, func(sym *ast.Symbol) *ast.Symbol { return sym.ExportSymbol })
+	return s.resolveSymbolPropertyOfSymbol(params, func(sym *ast.Symbol) *ast.Symbol { return sym.ExportSymbol() })
 }
 
 // @gen-proto-nullable
@@ -3469,8 +3469,8 @@ func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params
 		slices.SortFunc(symbols, func(left *ast.Symbol, right *ast.Symbol) int {
 			compilerdebug.Assert(ast.GetSourceFileOfSymbol(left) == file)
 			compilerdebug.Assert(ast.GetSourceFileOfSymbol(right) == file)
-			leftHasDeclaration := len(left.Declarations) != 0
-			rightHasDeclaration := len(right.Declarations) != 0
+			leftHasDeclaration := len(left.Declarations()) != 0
+			rightHasDeclaration := len(right.Declarations()) != 0
 			if leftHasDeclaration != rightHasDeclaration {
 				if leftHasDeclaration {
 					return -1
@@ -3478,11 +3478,11 @@ func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params
 				return 1
 			}
 			if leftHasDeclaration {
-				if order := cmp.Compare(left.Declarations[0].Pos(), right.Declarations[0].Pos()); order != 0 {
+				if order := cmp.Compare(left.Declarations()[0].Pos(), right.Declarations()[0].Pos()); order != 0 {
 					return order
 				}
 			}
-			if order := cmp.Compare(left.Name, right.Name); order != 0 {
+			if order := cmp.Compare(left.Name(), right.Name()); order != 0 {
 				return order
 			}
 			return cmp.Compare(ast.GetSymbolId(left), ast.GetSymbolId(right))
@@ -4214,9 +4214,9 @@ func (s *Session) handleGetWellKnownSymbols(ctx context.Context, params *GetIntr
 	unknownSymbol := setup.checker.GetUnknownSymbol()
 	undefinedSymbol := setup.checker.GetUndefinedSymbol()
 	argumentsSymbol := setup.checker.GetArgumentsSymbol()
-	compilerdebug.Assert(unknownSymbol.Flags&ast.SymbolFlagsTransient != 0)
-	compilerdebug.Assert(undefinedSymbol.Flags&ast.SymbolFlagsTransient != 0)
-	compilerdebug.Assert(argumentsSymbol.Flags&ast.SymbolFlagsTransient != 0)
+	compilerdebug.Assert(unknownSymbol.Flags()&ast.SymbolFlagsTransient != 0)
+	compilerdebug.Assert(undefinedSymbol.Flags()&ast.SymbolFlagsTransient != 0)
+	compilerdebug.Assert(argumentsSymbol.Flags()&ast.SymbolFlagsTransient != 0)
 	unknown, _ := setup.sd.registerSymbol(unknownSymbol, setup.projectID)
 	undefined, _ := setup.sd.registerSymbol(undefinedSymbol, setup.projectID)
 	arguments, _ := setup.sd.registerSymbol(argumentsSymbol, setup.projectID)

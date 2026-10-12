@@ -1,5 +1,5 @@
-import type { ContentMapperContribution } from "@typescript/typescript/unstable/vscode";
-export type { ContentMapperContribution, ContentMapperManifest } from "@typescript/typescript/unstable/vscode";
+import type { ContentMapperContribution } from "@typescript/typescript/vscode";
+export type { ContentMapperContribution, ContentMapperManifest } from "@typescript/typescript/vscode";
 
 export interface SerializedContentMapperContribution {
     readonly contributorId: string;

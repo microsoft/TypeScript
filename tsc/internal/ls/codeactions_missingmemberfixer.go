@@ -50,13 +50,13 @@ func (f *missingMemberFixer) createNodeBuilder() (*checker.NodeBuilder, map[*ast
 }
 
 func (f *missingMemberFixer) createMemberFromSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, sourceFile *ast.SourceFile, body *ast.FunctionBody, preserveOptional preserveOptionalFlags, abstract bool) []*ast.Node {
-	declarations := symbol.Declarations
+	declarations := symbol.Declarations()
 	declaration := core.FirstOrNil(declarations)
 
 	quotePreference := lsutil.GetQuotePreference(sourceFile, f.preferences)
 	ambient := enclosingDeclaration.Flags&ast.NodeFlagsAmbient != 0
 	signatureOnly := ambient || abstract
-	optional := symbol.Flags&ast.SymbolFlagsOptional != 0
+	optional := symbol.Flags()&ast.SymbolFlagsOptional != 0
 	kind := ast.KindPropertySignature
 	if declaration != nil {
 		kind = declaration.Kind
@@ -84,7 +84,7 @@ func (f *missingMemberFixer) createMemberFromSymbol(symbol *ast.Symbol, enclosin
 
 	case ast.KindGetAccessor, ast.KindSetAccessor:
 		nodeBuilder, idToSymbol := f.createNodeBuilder()
-		accessors := ast.GetAllAccessorDeclarations(symbol.Declarations, declaration)
+		accessors := ast.GetAllAccessorDeclarations(symbol.Declarations(), declaration)
 		var orderedAccessors []*ast.Node
 		if accessors.SecondAccessor == nil {
 			orderedAccessors = append(orderedAccessors, accessors.FirstAccessor)
@@ -325,7 +325,7 @@ func (f *missingMemberFixer) createSignatureDeclarationFromSignatures(signatures
 	maxNonRestArgs := len(maxArgsSignature.Parameters()) - core.IfElse(maxArgsSignature.HasRestParameter(), 1, 0)
 	parameterNames := make([]string, 0, len(maxArgsSignature.Parameters()))
 	for _, symbol := range maxArgsSignature.Parameters() {
-		parameterNames = append(parameterNames, symbol.Name)
+		parameterNames = append(parameterNames, symbol.Name())
 	}
 	parameters := createDummyParameters(f.changeTracker.NodeFactory, maxNonRestArgs, parameterNames, nil /*types*/, minArgumentCount, ast.IsInJSFile(enclosingDeclaration))
 
@@ -404,7 +404,7 @@ func (f *missingMemberFixer) importTypeNode(typeNode *ast.TypeNode, idToSymbol m
 
 func (f *missingMemberFixer) getExportedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	symbol = f.typeChecker.GetExportSymbolOfSymbol(symbol)
-	if symbol == nil || symbol.Parent == nil {
+	if symbol == nil || symbol.Parent() == nil {
 		return nil
 	}
 	return symbol
@@ -487,7 +487,7 @@ func createDummyParameters(factory *ast.NodeFactory, argCount int, names []strin
 }
 
 func createDeclarationName(factory *ast.NodeFactory, typeChecker *checker.Checker, symbol *ast.Symbol, declaration *ast.Node) *ast.PropertyName {
-	if symbol != nil && symbol.CheckFlags&ast.CheckFlagsMapped != 0 {
+	if symbol != nil && symbol.CheckFlags()&ast.CheckFlagsMapped != 0 {
 		nameType := typeChecker.GetNameTypeOfSymbol(symbol)
 		if nameType != nil && checker.IsTypeUsableAsPropertyName(nameType) {
 			return factory.NewIdentifier(checker.GetPropertyNameFromType(nameType))
@@ -497,7 +497,7 @@ func createDeclarationName(factory *ast.NodeFactory, typeChecker *checker.Checke
 		return declaration.Name().Clone(factory)
 	}
 	if symbol != nil {
-		return factory.NewIdentifier(symbol.Name)
+		return factory.NewIdentifier(symbol.Name())
 	}
 	return nil
 }

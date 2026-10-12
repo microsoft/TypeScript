@@ -1,0 +1,30 @@
+decoratorMetadataObjectLiteralMethodNoCrash.ts(4,7): error TS1206: Decorators are not valid here.
+decoratorMetadataObjectLiteralMethodNoCrash.ts(13,15): error TS1206: Decorators are not valid here.
+decoratorMetadataObjectLiteralMethodNoCrash.ts(14,19): error TS1206: Decorators are not valid here.
+
+
+==== decoratorMetadataObjectLiteralMethodNoCrash.ts (3 errors) ====
+    declare function dec(...args: any[]): any;
+    
+    const o = {
+        m(@dec x: string) {}
+          ~
+!!! error TS1206: Decorators are not valid here.
+    };
+    
+    class C {
+        @dec
+        prop!: number;
+    
+        method() {
+            return {
+                m(@dec x: string) {},
+                  ~
+!!! error TS1206: Decorators are not valid here.
+                set s(@dec v: number) {}
+                      ~
+!!! error TS1206: Decorators are not valid here.
+            };
+        }
+    }
+    

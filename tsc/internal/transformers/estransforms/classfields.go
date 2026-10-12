@@ -686,9 +686,9 @@ func (tx *classFieldsTransformer) visitMethodOrAccessorDeclaration(node *ast.Nod
 	}
 
 	// leave invalid code untransformed
-	info := tx.accessPrivateIdentifier(node.Name())
+	info, _ := tx.getPrivateIdentifier(tx.getPrivateIdentifierEnvironment(), node.Name())
 	debug.Assert(info != nil, "Undeclared private name for property declaration.")
-	if !info.isValid {
+	if info.kind == printer.PrivateIdentifierKindUntransformed || !info.isValid {
 		return node
 	}
 
@@ -895,11 +895,11 @@ func (tx *classFieldsTransformer) transformAutoAccessor(node *ast.PropertyDeclar
 func (tx *classFieldsTransformer) transformPrivateFieldInitializer(node *ast.PropertyDeclaration) *ast.Node {
 	if tx.shouldTransformClassElementToWeakMap(node.AsNode()) {
 		// If we are transforming private elements into WeakMap/WeakSet, we should elide the node.
-		info := tx.accessPrivateIdentifier(node.Name())
+		info, _ := tx.getPrivateIdentifier(tx.getPrivateIdentifierEnvironment(), node.Name())
 		debug.Assert(info != nil, "Undeclared private name for property declaration.")
 
 		// Leave invalid code untransformed
-		if !info.isValid {
+		if info.kind == printer.PrivateIdentifierKindUntransformed || !info.isValid {
 			return node.AsNode()
 		}
 
@@ -3318,7 +3318,7 @@ func (tx *classFieldsTransformer) visitAssignmentRestProperty(node *ast.Node) *a
 }
 
 func (tx *classFieldsTransformer) visitObjectAssignmentElement(node *ast.Node) *ast.Node {
-	debug.Assert(node != nil && ast.IsObjectBindingOrAssignmentElement(node))
+	debug.Assert(node != nil && ast.IsObjectLiteralElement(node))
 	if ast.IsSpreadAssignment(node) {
 		return tx.visitAssignmentRestProperty(node)
 	}

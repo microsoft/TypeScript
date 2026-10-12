@@ -1,0 +1,60 @@
+malformedDestructuringAssignmentTransformVariants.ts(8,1): error TS18036: Class decorators can't be used with static private identifier. Consider removing the experimental decorator.
+malformedDestructuringAssignmentTransformVariants.ts(14,19): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+malformedDestructuringAssignmentTransformVariants.ts(15,19): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+malformedDestructuringAssignmentTransformVariants.ts(16,19): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+malformedDestructuringAssignmentTransformVariants.ts(17,19): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+malformedDestructuringAssignmentTransformVariants.ts(21,24): error TS1136: Property assignment expected.
+malformedDestructuringAssignmentTransformVariants.ts(22,28): error TS1136: Property assignment expected.
+malformedDestructuringAssignmentTransformVariants.ts(23,28): error TS1136: Property assignment expected.
+malformedDestructuringAssignmentTransformVariants.ts(24,25): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+malformedDestructuringAssignmentTransformVariants.ts(24,38): error TS1136: Property assignment expected.
+
+
+==== malformedDestructuringAssignmentTransformVariants.ts (10 errors) ====
+    declare function dec(...args: any[]): any;
+    declare const value: any;
+    
+    class Base {
+        static x: any;
+    }
+    
+    @dec
+    ~~~~
+!!! error TS18036: Class decorators can't be used with static private identifier. Consider removing the experimental decorator.
+    class C extends Base {
+        static #x: any;
+    
+        static {
+            // Invalid array targets must still visit private and super accesses.
+            [super.x, 0, this.#x] = value;
+                      ~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+            [super.x, 1 + 2, this.#x] = value;
+                      ~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+            [super.x, (() => {}), this.#x] = value;
+                      ~~~~~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+            [super.x, value(), this.#x] = value;
+                      ~~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+            [super.x, , ...this.#x] = value;
+    
+            // Object methods/accessors are not destructuring assignment elements.
+            ({ x: super.x, m() {}, private: this.#x } = value);
+                           ~
+!!! error TS1136: Property assignment expected.
+            ({ x: super.x, get g() { return 1; }, private: this.#x } = value);
+                               ~
+!!! error TS1136: Property assignment expected.
+            ({ x: super.x, set s(v) {}, private: this.#x } = value);
+                               ~
+!!! error TS1136: Property assignment expected.
+            ({ x: [super.x, 0, this.#x], m() {} } = value);
+                            ~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+                                         ~
+!!! error TS1136: Property assignment expected.
+        }
+    }
+    

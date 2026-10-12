@@ -41,6 +41,8 @@ func (tx *MetadataTransformer) visit(node *ast.Node) *ast.Node {
 		return tx.visitClassDeclaration(node.AsClassDeclaration())
 	case ast.KindClassExpression:
 		return tx.visitClassExpression(node.AsClassExpression())
+	case ast.KindObjectLiteralExpression:
+		return tx.visitObjectLiteralExpression(node)
 	case ast.KindPropertyDeclaration:
 		return tx.visitPropertyDeclaration(node.AsPropertyDeclaration())
 	case ast.KindMethodDeclaration:
@@ -74,6 +76,14 @@ func (tx *MetadataTransformer) setParent(node *ast.Node) {
 
 func (tx *MetadataTransformer) setCurrentLexicalScope(node *ast.Node) {
 	tx.currentLexicalScope = node
+}
+
+func (tx *MetadataTransformer) visitObjectLiteralExpression(node *ast.Node) *ast.Node {
+	oldParent := tx.parent
+	tx.parent = node
+	defer tx.setParent(oldParent)
+
+	return tx.Visitor().VisitEachChild(node)
 }
 
 func (tx *MetadataTransformer) visitClassExpression(node *ast.ClassExpression) *ast.Node {

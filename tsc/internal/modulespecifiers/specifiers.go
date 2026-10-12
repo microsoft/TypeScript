@@ -110,7 +110,7 @@ type ambientModuleInfo struct {
 }
 
 func tryGetModuleNameFromAmbientModule(moduleSymbol *ast.Symbol, checker CheckerShape) ambientModuleInfo {
-	for _, decl := range moduleSymbol.Declarations {
+	for _, decl := range moduleSymbol.Declarations() {
 		if ast.IsModuleWithStringLiteralName(decl) && (!ast.IsModuleAugmentationExternal(decl) || !tspath.IsExternalModuleNameRelative(decl.Name().Text())) {
 			return ambientModuleInfo{name: tspath.ToModuleSpecifier(decl.Name().Text()), symbol: moduleSymbol}
 		}
@@ -126,7 +126,7 @@ func tryGetModuleNameFromAmbientModule(moduleSymbol *ast.Symbol, checker Checker
 	 * }
 	 */
 	// `import {c} from "m";` is valid, in which case, `moduleSymbol` is "ns", but the module name should be "m"
-	for _, d := range moduleSymbol.Declarations {
+	for _, d := range moduleSymbol.Declarations() {
 		if !ast.IsModuleDeclaration(d) {
 			continue
 		}
@@ -136,11 +136,11 @@ func tryGetModuleNameFromAmbientModule(moduleSymbol *ast.Symbol, checker Checker
 			continue
 		}
 
-		sym, ok := possibleContainer.Symbol().Exports[ast.InternalSymbolNameExportEquals]
+		sym, ok := possibleContainer.Symbol().Exports()[ast.InternalSymbolNameExportEquals]
 		if !ok || sym == nil {
 			continue
 		}
-		exportAssignmentDecl := sym.ValueDeclaration
+		exportAssignmentDecl := sym.ValueDeclaration()
 		if exportAssignmentDecl == nil || exportAssignmentDecl.Kind != ast.KindExportAssignment {
 			continue
 		}
@@ -148,7 +148,7 @@ func tryGetModuleNameFromAmbientModule(moduleSymbol *ast.Symbol, checker Checker
 		if exportSymbol == nil {
 			continue
 		}
-		if exportSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+		if exportSymbol.Flags()&ast.SymbolFlagsAlias != 0 {
 			exportSymbol = checker.GetAliasedSymbol(exportSymbol)
 		}
 		// TODO: Possible strada bug - isn't this insufficient in the presence of merge symbols?

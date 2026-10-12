@@ -7,7 +7,7 @@ declare const i: Iterator<string, undefined>;
 
 declare const io: IteratorObject<string, undefined, unknown>;
 >io : Symbol(io, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 1, 13))
->IteratorObject : Symbol(IteratorObject, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.disposable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>IteratorObject : Symbol(IteratorObject, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.disposable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 
 declare const g: Generator<string, void>;
 >g : Symbol(g, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 2, 13))

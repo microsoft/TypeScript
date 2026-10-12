@@ -123,6 +123,15 @@ export interface RawCompilerOptions`,
 	if strings.Contains(generated, "projects: readonly ProjectResponse[];") {
 		t.Error("response array fields must remain mutable")
 	}
+	projectResponse := generated[strings.Index(generated, "export interface ProjectResponse"):strings.Index(generated, "export interface GetSymbolAtPositionParams")]
+	for _, deprecated := range []string{
+		"rootFiles:",
+		"compilerOptions:",
+	} {
+		if strings.Contains(projectResponse, deprecated) {
+			t.Errorf("generated ProjectResponse contains deprecated API field %q", deprecated)
+		}
+	}
 	for _, name := range []string{"CompilerOptions", "PluginImport"} {
 		if strings.Contains(generated, "export interface "+name+" {") {
 			t.Errorf("%s must be imported, not regenerated from Go", name)

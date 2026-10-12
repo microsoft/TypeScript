@@ -15,8 +15,10 @@ import (
 // Atomic ids
 
 var (
-	nextNodeId   atomic.Uint64
-	nextSymbolId atomic.Uint64
+	nextNodeId        atomic.Uint64
+	nextSymbolId      atomic.Uint64
+	nextNodeBlockId   atomic.Uint64
+	nextSymbolBlockId atomic.Uint64
 )
 
 func GetNodeId(node *Node) NodeId {
@@ -43,6 +45,53 @@ func GetSymbolId(symbol *Symbol) SymbolId {
 	return SymbolId(id)
 }
 
+const (
+	BlockIdOffset = 0x1_0000_0000_0000
+	BlockIdSize   = core.LinkPageSize
+)
+
+type NodeIdGenerator struct {
+	nextId uint64
+	lastId uint64
+}
+
+func (a *NodeIdGenerator) GetNodeId(node *Node) NodeId {
+	id := node.id.Load()
+	if id == 0 {
+		if a.nextId == a.lastId {
+			a.nextId = nextNodeBlockId.Add(BlockIdSize) - BlockIdSize
+			a.lastId = a.nextId + BlockIdSize
+		}
+		id = a.nextId + BlockIdOffset
+		a.nextId++
+		if !node.id.CompareAndSwap(0, id) {
+			id = node.id.Load()
+		}
+	}
+	return NodeId(id)
+}
+
+type SymbolIdGenerator struct {
+	nextId uint64
+	lastId uint64
+}
+
+func (a *SymbolIdGenerator) GetSymbolId(symbol *Symbol) SymbolId {
+	id := symbol.id.Load()
+	if id == 0 {
+		if a.nextId == a.lastId {
+			a.nextId = nextSymbolBlockId.Add(BlockIdSize) - BlockIdSize
+			a.lastId = a.nextId + BlockIdSize
+		}
+		id = a.nextId + BlockIdOffset
+		a.nextId++
+		if !symbol.id.CompareAndSwap(0, id) {
+			id = symbol.id.Load()
+		}
+	}
+	return SymbolId(id)
+}
+
 func GetSymbolTable(data *SymbolTable) SymbolTable {
 	if *data == nil {
 		*data = make(SymbolTable)
@@ -51,11 +100,11 @@ func GetSymbolTable(data *SymbolTable) SymbolTable {
 }
 
 func GetMembers(symbol *Symbol) SymbolTable {
-	return GetSymbolTable(&symbol.Members)
+	return GetSymbolTable(&symbol.data.members)
 }
 
 func GetExports(symbol *Symbol) SymbolTable {
-	return GetSymbolTable(&symbol.Exports)
+	return GetSymbolTable(&symbol.data.exports)
 }
 
 func GetLocals(container *Node) SymbolTable {
@@ -2567,7 +2616,7 @@ func IsParameterLike(node *Node) bool {
 }
 
 func GetDeclarationOfKind(symbol *Symbol, kind Kind) *Node {
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range symbol.Declarations() {
 		if declaration.Kind == kind {
 			return declaration
 		}
@@ -2689,8 +2738,8 @@ func IsNonLocalAlias(symbol *Symbol, excludes SymbolFlags) bool {
 	if symbol == nil {
 		return false
 	}
-	return symbol.Flags&(SymbolFlagsAlias|excludes) == SymbolFlagsAlias ||
-		symbol.Flags&SymbolFlagsAlias != 0 && symbol.Flags&SymbolFlagsAssignment != 0
+	return symbol.Flags()&(SymbolFlagsAlias|excludes) == SymbolFlagsAlias ||
+		symbol.Flags()&SymbolFlagsAlias != 0 && symbol.Flags()&SymbolFlagsAssignment != 0
 }
 
 // An alias symbol is created by one of the following declarations:
@@ -3023,7 +3072,7 @@ func IsExclusivelyTypeOnlyImportOrExport(node *Node) bool {
 }
 
 func GetClassLikeDeclarationOfSymbol(symbol *Symbol) *Node {
-	return core.Find(symbol.Declarations, IsClassLike)
+	return core.Find(symbol.Declarations(), IsClassLike)
 }
 
 func IsCallLikeExpression(node *Node) bool {
@@ -3140,7 +3189,7 @@ func GetTypeAnnotationNode(node *Node) *TypeNode {
 		KindTypePredicate, KindParenthesizedType, KindTypeOperator, KindMappedType, KindTypeAssertionExpression,
 		KindAsExpression, KindSatisfiesExpression, KindTypeAliasDeclaration, KindJSTypeAliasDeclaration,
 		KindNamedTupleMember, KindOptionalType, KindRestType, KindTemplateLiteralTypeSpan, KindJSDocTypeExpression,
-		KindJSDocPropertyTag, KindJSDocNullableType, KindJSDocNonNullableType, KindJSDocOptionalType:
+		KindJSDocParameterTag, KindJSDocPropertyTag, KindJSDocNullableType, KindJSDocNonNullableType, KindJSDocOptionalType:
 		return node.Type()
 	default:
 		funcLike := node.FunctionLikeData()
@@ -3642,7 +3691,7 @@ func IsExternalModuleAugmentation(node *Node) bool {
 }
 
 func GetSourceFileOfModule(module *Symbol) *SourceFile {
-	declaration := module.ValueDeclaration
+	declaration := module.ValueDeclaration()
 	if declaration == nil {
 		declaration = GetNonAugmentationDeclaration(module)
 	}
@@ -3650,7 +3699,7 @@ func GetSourceFileOfModule(module *Symbol) *SourceFile {
 }
 
 func GetNonAugmentationDeclaration(symbol *Symbol) *Node {
-	return core.Find(symbol.Declarations, func(d *Node) bool {
+	return core.Find(symbol.Declarations(), func(d *Node) bool {
 		return !IsExternalModuleAugmentation(d) && !IsGlobalScopeAugmentation(d)
 	})
 }
