@@ -15,8 +15,10 @@ import (
 // Atomic ids
 
 var (
-	nextNodeId   atomic.Uint64
-	nextSymbolId atomic.Uint64
+	nextNodeId        atomic.Uint64
+	nextSymbolId      atomic.Uint64
+	nextNodeBlockId   atomic.Uint64
+	nextSymbolBlockId atomic.Uint64
 )
 
 func GetNodeId(node *Node) NodeId {
@@ -36,6 +38,53 @@ func GetSymbolId(symbol *Symbol) SymbolId {
 	if id == 0 {
 		// Worst case, we burn a few ids if we have to CAS.
 		id = nextSymbolId.Add(1)
+		if !symbol.id.CompareAndSwap(0, id) {
+			id = symbol.id.Load()
+		}
+	}
+	return SymbolId(id)
+}
+
+const (
+	BlockIdOffset = 0x1_0000_0000_0000
+	BlockIdSize   = core.LinkPageSize
+)
+
+type NodeIdGenerator struct {
+	nextId uint64
+	lastId uint64
+}
+
+func (a *NodeIdGenerator) GetNodeId(node *Node) NodeId {
+	id := node.id.Load()
+	if id == 0 {
+		if a.nextId == a.lastId {
+			a.nextId = nextNodeBlockId.Add(BlockIdSize) - BlockIdSize
+			a.lastId = a.nextId + BlockIdSize
+		}
+		id = a.nextId + BlockIdOffset
+		a.nextId++
+		if !node.id.CompareAndSwap(0, id) {
+			id = node.id.Load()
+		}
+	}
+	return NodeId(id)
+}
+
+type SymbolIdGenerator struct {
+	nextId uint64
+	lastId uint64
+}
+
+func (a *SymbolIdGenerator) GetSymbolId(symbol *Symbol) SymbolId {
+	id := symbol.id.Load()
+	if id == 0 {
+		if a.nextId == a.lastId {
+			a.nextId = nextSymbolBlockId.Add(BlockIdSize) - BlockIdSize
+			a.lastId = a.nextId + BlockIdSize
+		}
+		id = a.nextId + BlockIdOffset
+		a.nextId++
 		if !symbol.id.CompareAndSwap(0, id) {
 			id = symbol.id.Load()
 		}
