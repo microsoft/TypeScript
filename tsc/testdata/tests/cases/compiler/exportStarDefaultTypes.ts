@@ -25,7 +25,8 @@ export type { default, Shared } from "./first";
 // @filename: consumer.ts
 import type First from "./single";
 import type Resolved from "./resolved";
-import type Conflict, { Shared } from "./ambiguous";
+import type Conflict from "./ambiguous";
+import type { Shared } from "./ambiguous";
 import type * as ns from "./ambiguous";
 export type { default, Shared } from "./ambiguous";
 const first: First = { first: 1 };

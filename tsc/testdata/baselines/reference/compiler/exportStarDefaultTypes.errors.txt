@@ -1,0 +1,53 @@
+consumer.ts(3,13): error TS2308: Module "ambiguous" has already exported a member named 'default'. Consider explicitly re-exporting to resolve the ambiguity.
+consumer.ts(4,15): error TS2308: Module "ambiguous" has already exported a member named 'Shared'. Consider explicitly re-exporting to resolve the ambiguity.
+consumer.ts(6,15): error TS2308: Module "ambiguous" has already exported a member named 'default'. Consider explicitly re-exporting to resolve the ambiguity.
+consumer.ts(6,24): error TS2308: Module "ambiguous" has already exported a member named 'Shared'. Consider explicitly re-exporting to resolve the ambiguity.
+consumer.ts(11,21): error TS2308: Module "ambiguous" has already exported a member named 'Shared'. Consider explicitly re-exporting to resolve the ambiguity.
+consumer.ts(12,18): error TS2308: Module "ambiguous" has already exported a member named 'Shared'. Consider explicitly re-exporting to resolve the ambiguity.
+
+
+==== first.ts (0 errors) ====
+    export default interface First { first: number; }
+    export interface Shared { first: number; }
+    
+==== second.ts (0 errors) ====
+    export default interface Second { second: number; }
+    export interface Shared { second: number; }
+    
+==== single.ts (0 errors) ====
+    export type * from "./first";
+    
+==== ambiguous.ts (0 errors) ====
+    export type * from "./first";
+    export type * from "./second";
+    
+==== resolved.ts (0 errors) ====
+    export type * from "./ambiguous";
+    export type { default, Shared } from "./first";
+    
+==== consumer.ts (6 errors) ====
+    import type First from "./single";
+    import type Resolved from "./resolved";
+    import type Conflict from "./ambiguous";
+                ~~~~~~~~
+!!! error TS2308: Module "ambiguous" has already exported a member named 'default'. Consider explicitly re-exporting to resolve the ambiguity.
+    import type { Shared } from "./ambiguous";
+                  ~~~~~~
+!!! error TS2308: Module "ambiguous" has already exported a member named 'Shared'. Consider explicitly re-exporting to resolve the ambiguity.
+    import type * as ns from "./ambiguous";
+    export type { default, Shared } from "./ambiguous";
+                  ~~~~~~~
+!!! error TS2308: Module "ambiguous" has already exported a member named 'default'. Consider explicitly re-exporting to resolve the ambiguity.
+                           ~~~~~~
+!!! error TS2308: Module "ambiguous" has already exported a member named 'Shared'. Consider explicitly re-exporting to resolve the ambiguity.
+    const first: First = { first: 1 };
+    const resolved: Resolved = first;
+    const conflict: Conflict = {};
+    const shared: Shared = {};
+    const qualified: ns.Shared = {};
+                        ~~~~~~
+!!! error TS2308: Module "ambiguous" has already exported a member named 'Shared'. Consider explicitly re-exporting to resolve the ambiguity.
+    const nested: ns.Shared.Nested = {};
+                     ~~~~~~
+!!! error TS2308: Module "ambiguous" has already exported a member named 'Shared'. Consider explicitly re-exporting to resolve the ambiguity.
+    

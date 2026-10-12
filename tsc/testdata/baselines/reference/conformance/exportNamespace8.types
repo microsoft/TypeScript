@@ -22,7 +22,7 @@ export * from "./b"; // Collision error
 === /d.ts ===
 import { A, B, C } from "./c";
 >A : typeof A
->B : typeof B
+>B : any
 >C : typeof C
 
 let _: A = new A();   // Error
@@ -31,9 +31,9 @@ let _: A = new A();   // Error
 >A : typeof A
 
 let __: B = new B();  // Ok
->__ : B
->new B() : B
->B : typeof B
+>__ : any
+>new B() : any
+>B : any
 
 let ___: C = new C(); // Ok
 >___ : C

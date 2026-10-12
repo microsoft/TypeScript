@@ -47,5 +47,5 @@ A;
 
 type _ = A; // Follow-on from collision error
 >_ : Symbol(_, Decl(g.ts, 1, 2))
->A : Symbol(A)
+>A : Symbol(A, Decl(g.ts, 0, 8))
 
