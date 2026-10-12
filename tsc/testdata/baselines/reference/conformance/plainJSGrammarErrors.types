@@ -627,3 +627,76 @@ const spreadDynamicImport = import(...[])
 
 return
 
+// optional property access in assignment positions
+let optObj = { a: 1, s: "x" };
+>optObj : { a: number; s: string; }
+>{ a: 1, s: "x" } : { a: number; s: string; }
+>a : number
+>1 : 1
+>s : string
+>"x" : "x"
+
+optObj?.a = 1;
+>optObj?.a = 1 : 1
+>optObj?.a : number
+>optObj : { a: number; s: string; }
+>a : number
+>1 : 1
+
+optObj.a?.b = 1;
+>optObj.a?.b = 1 : 1
+>optObj.a?.b : any
+>optObj.a : number
+>optObj : { a: number; s: string; }
+>a : number
+>b : any
+>1 : 1
+
+optObj?.a++;
+>optObj?.a++ : number
+>optObj?.a : number
+>optObj : { a: number; s: string; }
+>a : number
+
+({ ...optObj?.a } = {});
+>({ ...optObj?.a } = {}) : {}
+>{ ...optObj?.a } = {} : {}
+>{ ...optObj?.a } : any
+>optObj?.a : number
+>optObj : { a: number; s: string; }
+>a : number
+>{} : {}
+
+for (optObj?.s in {});
+>optObj?.s : string
+>optObj : { a: number; s: string; }
+>s : string
+>{} : {}
+
+for (optObj?.a of []);
+>optObj?.a : number
+>optObj : { a: number; s: string; }
+>a : number
+>[] : never[]
+
+/** @type {any} */ let anyObj;
+>anyObj : any
+
+for (anyObj?.a in {});
+>anyObj?.a : any
+>anyObj : any
+>a : any
+>{} : {}
+
+optObj.a = 2;
+>optObj.a = 2 : 2
+>optObj.a : number
+>optObj : { a: number; s: string; }
+>a : number
+>2 : 2
+
+optObj?.a;
+>optObj?.a : number
+>optObj : { a: number; s: string; }
+>a : number
+

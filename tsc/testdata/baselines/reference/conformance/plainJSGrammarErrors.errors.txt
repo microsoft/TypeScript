@@ -99,9 +99,16 @@ plainJSGrammarErrors.js(202,22): error TS17012: 'targe' is not a valid meta-prop
 plainJSGrammarErrors.js(203,30): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
 plainJSGrammarErrors.js(204,30): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
 plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot be spread element.
+plainJSGrammarErrors.js(211,1): error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+plainJSGrammarErrors.js(212,1): error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+plainJSGrammarErrors.js(213,1): error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+plainJSGrammarErrors.js(214,7): error TS2778: The target of an object rest assignment may not be an optional property access.
+plainJSGrammarErrors.js(215,6): error TS2780: The left-hand side of a 'for...in' statement may not be an optional property access.
+plainJSGrammarErrors.js(216,6): error TS2781: The left-hand side of a 'for...of' statement may not be an optional property access.
+plainJSGrammarErrors.js(218,6): error TS2780: The left-hand side of a 'for...in' statement may not be an optional property access.
 
 
-==== plainJSGrammarErrors.js (101 errors) ====
+==== plainJSGrammarErrors.js (108 errors) ====
     class C {
         // #private mistakes
         q = #unbound
@@ -511,4 +518,31 @@ plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot
 !!! error TS1325: Argument of dynamic import cannot be spread element.
     
     return
+    
+    // optional property access in assignment positions
+    let optObj = { a: 1, s: "x" };
+    optObj?.a = 1;
+    ~~~~~~~~~
+!!! error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+    optObj.a?.b = 1;
+    ~~~~~~~~~~~
+!!! error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+    optObj?.a++;
+    ~~~~~~~~~
+!!! error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+    ({ ...optObj?.a } = {});
+          ~~~~~~~~~
+!!! error TS2778: The target of an object rest assignment may not be an optional property access.
+    for (optObj?.s in {});
+         ~~~~~~~~~
+!!! error TS2780: The left-hand side of a 'for...in' statement may not be an optional property access.
+    for (optObj?.a of []);
+         ~~~~~~~~~
+!!! error TS2781: The left-hand side of a 'for...of' statement may not be an optional property access.
+    /** @type {any} */ let anyObj;
+    for (anyObj?.a in {});
+         ~~~~~~~~~
+!!! error TS2780: The left-hand side of a 'for...in' statement may not be an optional property access.
+    optObj.a = 2;
+    optObj?.a;
     
