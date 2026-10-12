@@ -153,6 +153,79 @@ func TestKeyBuilder(t *testing.T) {
 	}
 }
 
+func TestRelationKeys(t *testing.T) {
+	t.Parallel()
+	source := &Type{id: 1}
+	target := &Type{id: ^TypeId(0)}
+	var relation Relation
+	assert.Equal(t, relation.size(), 0)
+	for state := IntersectionStateNone; state <= IntersectionStateSource|IntersectionStateTarget; state++ {
+		key, constrained := getRelationKey(source, target, state, false, false)
+		assert.Assert(t, !constrained)
+		assert.Equal(t, relation.get(key), RelationComparisonResultNone)
+		relation.set(key, RelationComparisonResultSucceeded)
+		reverse, _ := getRelationKey(target, source, state, false, false)
+		assert.Assert(t, key != reverse)
+		assert.Equal(t, relation.get(reverse), RelationComparisonResultNone)
+		identity, _ := getRelationKey(target, source, state, true, false)
+		assert.Equal(t, key, identity)
+		relation.set(key, RelationComparisonResultFailed|RelationComparisonResultReportsUnreliable)
+		assert.Equal(t, relation.get(key), RelationComparisonResultFailed|RelationComparisonResultReportsUnreliable)
+	}
+	assert.Equal(t, relation.size(), 4)
+	for state := IntersectionStateNone; state <= IntersectionStateSource|IntersectionStateTarget; state++ {
+		key, _ := getRelationKey(source, target, state, false, false)
+		assert.Equal(t, relation.get(key), RelationComparisonResultFailed|RelationComparisonResultReportsUnreliable)
+	}
+}
+
+func TestRelationKeyNamespaces(t *testing.T) {
+	t.Parallel()
+	simple, _ := getRelationKey(&Type{id: 1}, &Type{id: 2}, IntersectionStateNone, false, false)
+	generic := relationKey{value: simple.value, generic: true}
+	var relation Relation
+	relation.set(simple, RelationComparisonResultSucceeded)
+	assert.Equal(t, relation.get(generic), RelationComparisonResultNone)
+	relation.set(generic, RelationComparisonResultFailed)
+	assert.Equal(t, relation.get(simple), RelationComparisonResultSucceeded)
+	assert.Equal(t, relation.get(generic), RelationComparisonResultFailed)
+	assert.Equal(t, relation.size(), 2)
+}
+
+func TestGenericRelationKeys(t *testing.T) {
+	t.Parallel()
+	c, types := newCompositeTestChecker()
+	c.noConstraintType = c.newIntrinsicType(TypeFlagsNever, "no constraint")
+	root := types[0]
+	newParameter := func(constraint *Type) *Type {
+		parameter := &TypeParameter{constraint: constraint}
+		return c.newType(TypeFlagsTypeParameter, ObjectFlagsNone, parameter.AsType(), typeKindTypeParameter)
+	}
+	newReference := func(argument *Type) *Type {
+		reference := &TypeReference{resolvedTypeArguments: []*Type{argument}}
+		reference.target = root
+		return c.newType(TypeFlagsObject, ObjectFlagsReference, reference.AsType(), typeKindTypeReference)
+	}
+	left := newReference(newParameter(c.noConstraintType))
+	right := newReference(newParameter(c.noConstraintType))
+	equivalentLeft := newReference(newParameter(c.noConstraintType))
+	equivalentRight := newReference(newParameter(c.noConstraintType))
+	key, constrained := getRelationKey(left, right, IntersectionStateNone, false, false)
+	assert.Assert(t, !constrained)
+	equivalent, _ := getRelationKey(equivalentLeft, equivalentRight, IntersectionStateNone, false, false)
+	assert.Equal(t, key, equivalent)
+	var relation Relation
+	relation.set(key, RelationComparisonResultSucceeded)
+	assert.Equal(t, relation.get(equivalent), RelationComparisonResultSucceeded)
+	constrainedLeft := newReference(newParameter(types[1]))
+	constrainedKey, constrained := getRelationKey(constrainedLeft, right, IntersectionStateNone, false, false)
+	assert.Assert(t, constrained)
+	assert.Assert(t, constrainedKey != key)
+	broadest, constrained := getRelationKey(constrainedLeft, right, IntersectionStateNone, false, true)
+	assert.Assert(t, !constrained)
+	assert.Equal(t, broadest, key)
+}
+
 func TestTypeListKeyAllocations(t *testing.T) { //nolint:paralleltest
 	if race.Enabled {
 		t.Skip("race instrumentation changes hashing allocations")

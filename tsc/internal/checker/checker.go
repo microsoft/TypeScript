@@ -18070,7 +18070,7 @@ func getConditionalTypeKey(typeArguments []*Type, alias *TypeAlias, forConstrain
 	return b.hash()
 }
 
-func getRelationKey(source *Type, target *Type, intersectionState IntersectionState, isIdentity bool, ignoreConstraints bool) (CacheHashKey, bool) {
+func getRelationKey(source *Type, target *Type, intersectionState IntersectionState, isIdentity bool, ignoreConstraints bool) (relationKey, bool) {
 	if isIdentity && source.id > target.id {
 		source, target = target, source
 	}
@@ -18080,12 +18080,15 @@ func getRelationKey(source *Type, target *Type, intersectionState IntersectionSt
 		b.writeByte('g')
 		constrained = b.writeGenericTypeReferences(source, target, ignoreConstraints)
 	} else {
-		b.writeByte('s')
-		b.writeType(source)
-		b.writeType(target)
+		// Ordinary relationships need only the two exact IDs. Intersection
+		// states select separate maps, leaving generic hashes unmodified.
+		return relationKey{value: CacheHashKey{
+			Lo: uint64(source.id)<<32 | uint64(target.id),
+			Hi: uint64(intersectionState),
+		}}, false
 	}
 	b.writeUint32(uint32(intersectionState))
-	return b.hash(), constrained
+	return relationKey{value: b.hash(), generic: true}, constrained
 }
 
 func getNodeListKey(nodes []*ast.Node) CacheHashKey {

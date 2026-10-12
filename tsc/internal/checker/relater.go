@@ -96,22 +96,43 @@ func asRecursionId[T *ast.Node | *ast.Symbol | *Type](value T) RecursionId {
 }
 
 type Relation struct {
-	results map[CacheHashKey]RelationComparisonResult
+	genericResults map[CacheHashKey]RelationComparisonResult
+	simpleResults  [4]map[uint64]RelationComparisonResult
 }
 
-func (r *Relation) get(key CacheHashKey) RelationComparisonResult {
-	return r.results[key]
+type relationKey struct {
+	value   CacheHashKey
+	generic bool
 }
 
-func (r *Relation) set(key CacheHashKey, result RelationComparisonResult) {
-	if r.results == nil {
-		r.results = make(map[CacheHashKey]RelationComparisonResult)
+func (r *Relation) get(key relationKey) RelationComparisonResult {
+	if key.generic {
+		return r.genericResults[key.value]
 	}
-	r.results[key] = result
+	return r.simpleResults[key.value.Hi][key.value.Lo]
+}
+
+func (r *Relation) set(key relationKey, result RelationComparisonResult) {
+	if key.generic {
+		if r.genericResults == nil {
+			r.genericResults = make(map[CacheHashKey]RelationComparisonResult)
+		}
+		r.genericResults[key.value] = result
+	} else {
+		results := &r.simpleResults[key.value.Hi]
+		if *results == nil {
+			*results = make(map[uint64]RelationComparisonResult)
+		}
+		(*results)[key.value.Lo] = result
+	}
 }
 
 func (r *Relation) size() int {
-	return len(r.results)
+	size := len(r.genericResults)
+	for _, results := range r.simpleResults {
+		size += len(results)
+	}
+	return size
 }
 
 func (c *Checker) isTypeIdenticalTo(source *Type, target *Type) bool {
@@ -2584,8 +2605,8 @@ type Relater struct {
 	errorNode      *ast.Node
 	errorChain     *ErrorChain
 	relatedInfo    []*ast.Diagnostic
-	maybeKeys      []CacheHashKey
-	maybeKeysSet   collections.Set[CacheHashKey]
+	maybeKeys      []relationKey
+	maybeKeysSet   collections.Set[relationKey]
 	sourceStack    []*Type
 	targetStack    []*Type
 	maybeCount     int
