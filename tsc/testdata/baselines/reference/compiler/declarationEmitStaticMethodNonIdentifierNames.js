@@ -129,7 +129,7 @@ export class Instance {
 
 
 //// [declarationEmitStaticMethodNonIdentifierNames.d.ts]
-type _recursive = () => _recursive;
+type Recursive_getRec_recursive = () => Recursive_getRec_recursive;
 declare const uniqueSym: unique symbol;
 export declare class Foo {
     #private;
@@ -156,7 +156,7 @@ export declare class Generic {
 }
 export declare class Recursive {
     #private;
-    static getRec(): _recursive;
+    static getRec(): Recursive_getRec_recursive;
 }
 export declare class Instance {
     #private;

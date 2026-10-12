@@ -1014,15 +1014,15 @@ export declare const shadowed: (shadowed: number) => typeof import("./exported")
 //// [consumer.d.ts]
 export {};
 //// [recursiveObject.d.ts]
-type _recursive<T> = {
-    call: <U>(arg: U) => _recursive<T>;
-    consume: (arg: T) => _recursive<T>;
+type recursiveObject_recursive<T> = {
+    call: <U>(arg: U) => recursiveObject_recursive<T>;
+    consume: (arg: T) => recursiveObject_recursive<T>;
 };
-export declare function recursiveObject<T>(): _recursive<T>;
+export declare function recursiveObject<T>(): recursiveObject_recursive<T>;
 export {};
 //// [nestedNamedFunctions.d.ts]
-type _recursive = () => _recursive;
-type _recursive_1 = () => _recursive_1;
+type factory_recursive = () => factory_recursive;
+type local_recursive = () => local_recursive;
 export declare const nestedObject: {
     recur: () => () => (typeof nestedObject)["recur"];
 };
@@ -1031,14 +1031,14 @@ export declare const object: {
     recur: () => () => (typeof object)["recur"];
 };
 export declare const tuple: readonly [() => () => (typeof tuple)[0]];
-export declare const factory: () => () => _recursive;
+export declare const factory: () => () => factory_recursive;
 export declare const method: {
     recur(): typeof method;
 };
 export declare const accessor: {
     readonly recur: typeof accessor;
 };
-export declare function local(): _recursive_1;
+export declare function local(): local_recursive;
 export {};
 //// [recursiveStructures.d.ts]
 export declare const object: {
@@ -1169,14 +1169,14 @@ export declare class Methods {
 export declare function overloaded(value: string): typeof overloaded;
 export declare function overloaded(value: number): typeof overloaded;
 //// [hiddenReferences.d.ts]
-type _recursive = () => _recursive;
-type _recursive_1 = () => _recursive_1;
-type _recursive_2 = () => _recursive_2;
+type Hidden_expose_recursive = () => Hidden_expose_recursive;
+type Hidden_next_recursive = () => Hidden_next_recursive;
+type Hidden_expose_recursive_1 = () => Hidden_expose_recursive_1;
 export declare class Hidden {
     private static recur;
-    static expose(): _recursive;
-    protected next(): _recursive_1;
-    expose(): _recursive_2;
+    static expose(): Hidden_expose_recursive;
+    protected next(): Hidden_next_recursive;
+    expose(): Hidden_expose_recursive_1;
 }
 export {};
 //// [signatureScopes.d.ts]
@@ -1581,87 +1581,87 @@ export declare const mutualCycle: {
     };
 };
 //// [optionalMappedCycle.d.ts]
-type _recursive = {
+type optionalCycle_recursive = {
     value: number;
-    next: _recursive;
+    next: optionalCycle_recursive;
 };
-type _recursive_1 = {
+type optionalCopy_recursive = {
     value: number;
-    next: _recursive_1;
+    next: optionalCopy_recursive;
 };
-type _recursive_2 = {
+type nullableCycle_recursive = {
     value: string;
-    next: _recursive_2;
+    next: nullableCycle_recursive;
 };
-type _recursive_3 = {
+type mixedCycles_recursive = {
     value: number;
-    next: _recursive_3;
+    next: mixedCycles_recursive;
 };
-type _recursive_4 = {
+type sharedOptionalCycles_recursive = {
     value: number;
-    next: _recursive_4;
+    next: sharedOptionalCycles_recursive;
 };
-type _recursive_5 = {
+type nullableKeys_recursive = {
     value: string;
-    next: _recursive_5;
+    next: nullableKeys_recursive;
 };
-type _recursive_6 = {
+type nullableKeys_recursive_1 = {
     value: boolean;
-    next: _recursive_6;
+    next: nullableKeys_recursive_1;
 };
-type _recursive_7 = {
+type nullableKeys_recursive_2 = {
     value: number;
-    next: _recursive_7;
+    next: nullableKeys_recursive_2;
 };
-type _recursive_8 = {
+type nullableRoot_recursive = {
     value: number;
-    next: _recursive_8;
+    next: nullableRoot_recursive;
 };
-type _recursive_9 = {
+type optionalRoot_recursive = {
     value: string;
-    next: _recursive_9;
+    next: optionalRoot_recursive;
 };
-type _recursive_10 = {
+type optionalNullableLinks_recursive = {
     value: number;
-    next: _recursive_10 | null;
+    next: optionalNullableLinks_recursive | null;
 };
-type _recursive_11 = {
+type nullableOptionalLinks_recursive = {
     value: number;
-    next: _recursive_11 | undefined;
+    next: nullableOptionalLinks_recursive | undefined;
 };
 export declare const optionalCycle: {
-    Node?: _recursive | undefined;
+    Node?: optionalCycle_recursive | undefined;
 };
 export declare const optionalCopy: {
-    Node?: _recursive_1 | undefined;
+    Node?: optionalCopy_recursive | undefined;
 };
 export declare const nullableCycle: {
-    Node: _recursive_2 | null;
+    Node: nullableCycle_recursive | null;
 };
 export declare const mixedCycles: {
     required: {
-        Node?: _recursive_3 | undefined;
+        Node?: mixedCycles_recursive | undefined;
     };
     optional?: {
-        Node?: _recursive_3 | undefined;
+        Node?: mixedCycles_recursive | undefined;
     } | null | undefined;
 };
 export declare const sharedOptionalCycles: {
     first: {
-        Node?: _recursive_4 | undefined;
+        Node?: sharedOptionalCycles_recursive | undefined;
     };
     second: {
-        Node?: _recursive_4 | undefined;
+        Node?: sharedOptionalCycles_recursive | undefined;
     };
 };
 export declare const nullableKey: unique symbol;
 export declare const nullableKeys: {
-    "a-b": _recursive_5 | null;
-    0: _recursive_6 | null;
-    [nullableKey]: _recursive_7 | null;
+    "a-b": nullableKeys_recursive | null;
+    0: nullableKeys_recursive_1 | null;
+    [nullableKey]: nullableKeys_recursive_2 | null;
 };
-export declare const nullableRoot: _recursive_8 | null;
-export declare const optionalRoot: _recursive_9 | undefined;
+export declare const nullableRoot: nullableRoot_recursive | null;
+export declare const optionalRoot: optionalRoot_recursive | undefined;
 export declare const nullableLinks: {
     Node: {
         value: number;
@@ -1669,10 +1669,10 @@ export declare const nullableLinks: {
     } | null;
 };
 export declare const optionalNullableLinks: {
-    Node?: _recursive_10 | null | undefined;
+    Node?: optionalNullableLinks_recursive | null | undefined;
 };
 export declare const nullableOptionalLinks: {
-    Node: _recursive_11 | null;
+    Node: nullableOptionalLinks_recursive | null;
 };
 export declare const nullishLinks: {
     Node?: {
@@ -1682,20 +1682,20 @@ export declare const nullishLinks: {
 };
 export {};
 //// [mixedMappedCycle.d.ts]
-type _recursive = {
+type mixedCycle_recursive = {
     value: number;
-    next: _recursive;
+    next: mixedCycle_recursive;
 };
 export declare const mixedCycle: {
-    Node: false | _recursive | null;
+    Node: false | mixedCycle_recursive | null;
 };
 export {};
 //// [anonymousThisReturn.d.ts]
-type _recursive = {
-    relyingOnThis(): _recursive;
+type test_recursive = {
+    relyingOnThis(): test_recursive;
 };
 export declare function test(): {
-    relyingOnThis(): _recursive;
+    relyingOnThis(): test_recursive;
 };
 export {};
 //// [recursiveConditionalAliasUtils.d.ts]
@@ -1706,105 +1706,105 @@ export {};
 import { f } from "./recursiveConditionalAliasUtils";
 export declare const a: typeof f;
 //// [anonymousBindings.d.ts]
-type _recursive_1 = () => _recursive_1;
-type _recursive_2<T> = {
+type factory_recursive = () => factory_recursive;
+type captured_recursive<T> = {
     value: T;
-    next: () => _recursive_2<T>;
-    consume: (other: T) => _recursive_2<T>;
+    next: () => captured_recursive<T>;
+    consume: (other: T) => captured_recursive<T>;
 };
-type _recursive_3<T, U> = {
+type nestedCaptured_recursive<T, U> = {
     outer: T;
     inner: U;
-    next: () => _recursive_3<T, U>;
+    next: () => nestedCaptured_recursive<T, U>;
     shadow: <T_1>(value: T_1) => {
         outer: T;
         inner: U;
         value: T_1;
-        next: _recursive_3<T, U>;
+        next: nestedCaptured_recursive<T, U>;
     };
 };
-type _recursive_4<T extends {
+type constrained_recursive<T extends {
     value: number;
 }, K extends keyof T> = {
     value: T[K];
-    next: () => _recursive_4<T, K>;
+    next: () => constrained_recursive<T, K>;
 };
-type _recursive_5<T> = {
+type optionalCaptured_recursive<T> = {
     value: T;
-    next: _recursive_5<T>;
+    next: optionalCaptured_recursive<T>;
 };
-type _recursive_6<T> = {
+type annotatedCaptured_recursive<T> = {
     value: T;
-    next: _recursive_6<T>;
+    next: annotatedCaptured_recursive<T>;
 };
-type _recursive_7<T> = readonly [T, _recursive_7<T>];
-type _recursive_8<U> = {
+type recursiveTuple_recursive<T> = readonly [T, recursiveTuple_recursive<T>];
+type inferredCaptured_recursive<U> = {
     value: U;
-    next: _recursive_8<U>;
+    next: inferredCaptured_recursive<U>;
 };
-type _recursive_9<T> = { [K in keyof T]: {
+type mappedCaptured_recursive<T> = { [K in keyof T]: {
     value: T[K];
-    next: _recursive_9<T>;
+    next: mappedCaptured_recursive<T>;
 }; };
-type _recursive_10 = <U>(value: U) => _recursive_10;
-type _recursive_11<T, U> = {
+type freshGeneric_recursive = <U>(value: U) => freshGeneric_recursive;
+type mutualCaptured_recursive<T, U> = {
     right: U;
-    self: _recursive_11<T, U>;
-    next: _recursive_12<T, U>;
+    self: mutualCaptured_recursive<T, U>;
+    next: mutualCaptured_recursive_1<T, U>;
 };
-type _recursive_12<T, U> = {
+type mutualCaptured_recursive_1<T, U> = {
     left: T;
-    next: _recursive_11<T, U>;
+    next: mutualCaptured_recursive<T, U>;
 };
-type _recursive_13<T, U extends T> = {
+type CapturedClass_make_recursive<T, U extends T> = {
     outer: T;
     inner: U;
-    next: () => _recursive_13<T, U>;
+    next: () => CapturedClass_make_recursive<T, U>;
 };
-type _recursive_14<out T> = {
+type covariantClass_recursive<out T> = {
     value: T;
-    next(): _recursive_14<T>;
+    next(): covariantClass_recursive<T>;
 };
-type _recursive_15<in T> = {
+type contravariantClass_recursive<in T> = {
     consume: (value: T) => void;
-    next(): _recursive_15<T>;
+    next(): contravariantClass_recursive<T>;
 };
 export declare const _recursive = 1;
-export declare const factory: () => () => _recursive_1;
-export declare function captured<T>(value: T): _recursive_2<T>;
-export declare function nestedCaptured<T>(outer: T): <U>(inner: U) => _recursive_3<T, U>;
+export declare const factory: () => () => factory_recursive;
+export declare function captured<T>(value: T): captured_recursive<T>;
+export declare function nestedCaptured<T>(outer: T): <U>(inner: U) => nestedCaptured_recursive<T, U>;
 export declare function constrained<T extends {
     value: number;
-}, K extends keyof T>(key: K): _recursive_4<T, K>;
+}, K extends keyof T>(key: K): constrained_recursive<T, K>;
 export declare function optionalCaptured<T>(value: T): {
-    node?: _recursive_5<T> | false | null;
+    node?: optionalCaptured_recursive<T> | false | null;
 };
-export declare function annotatedCaptured<T>(value: T): _recursive_6<T>;
-export declare function recursiveTuple<T>(value: T): _recursive_7<T>;
-export declare function inferredCaptured<T>(): (T extends () => infer U ? _recursive_8<U> : never);
-export declare function mappedCaptured<T>(): _recursive_9<T>;
-export declare function freshGeneric<T>(unused: T): _recursive_10;
+export declare function annotatedCaptured<T>(value: T): annotatedCaptured_recursive<T>;
+export declare function recursiveTuple<T>(value: T): recursiveTuple_recursive<T>;
+export declare function inferredCaptured<T>(): (T extends () => infer U ? inferredCaptured_recursive<U> : never);
+export declare function mappedCaptured<T>(): mappedCaptured_recursive<T>;
+export declare function freshGeneric<T>(unused: T): freshGeneric_recursive;
 export declare function mutualCaptured<T, U>(left: T, right: U): {
-    left: _recursive_12<T, U>;
-    right: _recursive_11<T, U>;
+    left: mutualCaptured_recursive_1<T, U>;
+    right: mutualCaptured_recursive<T, U>;
 };
 export declare class CapturedClass<T> {
     value: T;
     constructor(value: T);
-    make<U extends T>(inner: U): _recursive_13<T, U>;
+    make<U extends T>(inner: U): CapturedClass_make_recursive<T, U>;
 }
 export declare function covariantClass(): {
-    new <T>(): _recursive_14<T>;
+    new <T>(): covariantClass_recursive<T>;
 };
 export declare function contravariantClass(): {
-    new <T>(): _recursive_15<T>;
+    new <T>(): contravariantClass_recursive<T>;
 };
 export declare namespace Nested {
-    type _recursive_16<T> = {
+    type captured_recursive_1<T> = {
         value: T;
-        next: () => _recursive_16<T>;
+        next: () => captured_recursive_1<T>;
     };
-    export function captured<T>(value: T): _recursive_16<T>;
+    export function captured<T>(value: T): captured_recursive_1<T>;
     export {};
 }
 export {};
@@ -1816,48 +1816,48 @@ export declare const shadowedCycle: {
     };
 };
 //// [globalRecursiveA.d.ts]
-type _recursive = {
+type makeA_recursive = {
     value: number;
-    self(): _recursive;
+    self(): makeA_recursive;
 };
-type _recursive_1 = {
+type makeReserved_recursive_1 = {
     value: boolean;
-    self(): _recursive_1;
+    self(): makeReserved_recursive_1;
 };
-type _recursive_2<T> = {
+type GlobalA_create_recursive<T> = {
     value: T;
-    next: () => _recursive_2<T>;
+    next: () => GlobalA_create_recursive<T>;
 };
-type _recursive_3 = {
+type GlobalA_a_b_recursive = {
     value: boolean;
-    next: () => _recursive_3;
+    next: () => GlobalA_a_b_recursive;
 };
 declare function makeA(): {
     value: number;
-    self(): _recursive;
+    self(): makeA_recursive;
 };
 type makeReserved_recursive = "reserved";
 declare function makeReserved(): {
     value: boolean;
-    self(): _recursive_1;
+    self(): makeReserved_recursive_1;
 };
 declare class GlobalA {
-    static create<T>(value: T): _recursive_2<T>;
-    static "a-b"(): _recursive_3;
+    static create<T>(value: T): GlobalA_create_recursive<T>;
+    static "a-b"(): GlobalA_a_b_recursive;
 }
 //// [globalRecursiveB.d.ts]
-type _recursive = {
+type makeB_recursive = {
     value: string;
-    self(): _recursive;
+    self(): makeB_recursive;
 };
-type _recursive_1<T> = {
+type GlobalB_create_recursive<T> = {
     value: T;
-    next: () => _recursive_1<T>;
+    next: () => GlobalB_create_recursive<T>;
 };
 declare function makeB(): {
     value: string;
-    self(): _recursive;
+    self(): makeB_recursive;
 };
 declare class GlobalB {
-    static create<T>(value: T): _recursive_1<T>;
+    static create<T>(value: T): GlobalB_create_recursive<T>;
 }

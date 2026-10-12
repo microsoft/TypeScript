@@ -2,10 +2,13 @@ package checker
 
 import (
 	"slices"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
 type serializationTypeAlias struct {
@@ -45,13 +48,46 @@ func (ctx *NodeBuilderContext) recordTypeAliasParameter(symbol *ast.Symbol) {
 	}
 }
 
+func (b *NodeBuilderImpl) serializationTypeAliasName(scope *ast.Node) string {
+	parts := []string{}
+	// Keep the emitted owner even while bodies are rebuilt in synthetic helper scopes.
+	for node := b.ctx.typeAliasNamingDeclaration; node != nil && node != scope; node = node.Parent {
+		name := ast.GetNameOfDeclaration(node)
+		if name == nil {
+			continue
+		}
+		if ast.IsComputedPropertyName(name) {
+			name = ast.SkipParentheses(name.Expression())
+		}
+		if name == nil || !(ast.IsIdentifier(name) || ast.IsPrivateIdentifier(name) || ast.IsStringOrNumericLiteralLike(name)) || name.Text() == "" {
+			continue
+		}
+		parts = append(parts, strings.Map(func(ch rune) rune {
+			if scanner.IsIdentifierPart(ch) {
+				return ch
+			}
+			return '_'
+		}, name.Text()))
+	}
+	if len(parts) == 0 {
+		return "_recursive"
+	}
+	slices.Reverse(parts)
+	name := strings.Join(parts, "_")
+	if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
+		name = "_" + name
+	}
+	return name + "_recursive"
+}
+
 func (b *NodeBuilderImpl) createSerializationTypeAlias(expansion *serializationExpansion) *serializationTypeAlias {
+	destination := b.ctx.tracker.TypeAliasScope()
 	// Hoisted helpers need unscoped uniqueness even when first referenced inside a class.
-	name := b.e.Factory.NewUniqueNameEx("_recursive", printer.AutoGenerateOptions{
+	name := b.e.Factory.NewUniqueNameEx(b.serializationTypeAliasName(destination), printer.AutoGenerateOptions{
 		Flags: printer.GeneratedIdentifierFlagsOptimistic,
 	})
 	scope := b.f.NewBlock(b.f.NewNodeList(nil), false)
-	scope.Parent = b.ctx.tracker.TypeAliasScope()
+	scope.Parent = destination
 	parameters := []*Type{}
 	for _, parameter := range expansion.typeParameters {
 		if !slices.Contains(parameters, parameter) {

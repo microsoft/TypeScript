@@ -253,6 +253,7 @@ make();`,
 		assert.Equal(t, tracker.cyclicErrors, 0)
 		if synthesize {
 			assert.Equal(t, len(tracker.declarations), 1)
+			assert.Equal(t, tracker.declarations[0].Name().Text(), "make_recursive")
 			assert.Assert(t, tracker.scopeQueries > 0)
 			assert.Equal(t, node.Kind, ast.KindTypeReference)
 			assert.Equal(t, node.AsTypeReferenceNode().TypeName, tracker.declarations[0].Name())

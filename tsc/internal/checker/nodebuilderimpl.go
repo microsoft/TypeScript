@@ -119,6 +119,7 @@ type NodeBuilderContext struct {
 	deferredTypeDepth               int // Lazy member boundaries, excluding eager type arguments and container elements.
 	typeParameters                  []*Type
 	typeAliases                     []*serializationTypeAlias
+	typeAliasNamingDeclaration      *ast.Node
 	typeAliasReferences             []serializationTypeAliasReference
 	currentTypeAlias                *serializationTypeAlias
 	typeAliasParameterDepth         int
