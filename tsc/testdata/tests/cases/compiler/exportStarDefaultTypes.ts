@@ -33,3 +33,4 @@ const resolved: Resolved = first;
 const conflict: Conflict = {};
 const shared: Shared = {};
 const qualified: ns.Shared = {};
+const nested: ns.Shared.Nested = {};

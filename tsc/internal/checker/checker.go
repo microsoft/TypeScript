@@ -14907,9 +14907,12 @@ func (c *Checker) resolveExportByName(moduleSymbol *ast.Symbol, name string, sou
 		exportSymbol = c.getExportsOfModule(moduleSymbol)[name]
 	}
 	resolved := c.resolveSymbolEx(exportSymbol, dontResolveAlias)
-	errorNode := sourceNode.Name()
-	if ast.IsImportOrExportSpecifier(sourceNode) {
-		errorNode = sourceNode.PropertyNameOrName()
+	var errorNode *ast.Node
+	if sourceNode != nil {
+		errorNode = sourceNode.Name()
+		if ast.IsImportOrExportSpecifier(sourceNode) {
+			errorNode = sourceNode.PropertyNameOrName()
+		}
 	}
 	c.checkExportConflict(c.resolveSymbol(exportSymbol), errorNode)
 	c.markSymbolOfAliasDeclarationIfTypeOnly(sourceNode, c.moduleSymbolLinks.Get(moduleSymbol).typeOnlyExportStarMap[name])
@@ -15099,6 +15102,7 @@ func (c *Checker) getExportOfModule(symbol *ast.Symbol, nameText string, specifi
 }
 
 func (c *Checker) checkExportConflict(symbol *ast.Symbol, node *ast.Node) bool {
+	symbol = c.resolveSymbol(symbol)
 	if symbol == nil || symbol.CheckFlags()&ast.CheckFlagsExportConflict == 0 {
 		return false
 	}
@@ -16233,8 +16237,8 @@ func (c *Checker) resolveQualifiedName(name *ast.Node, left *ast.Node, right *as
 	if namespace == nil || ast.NodeIsMissing(right) {
 		return nil
 	}
-	if namespace == c.unknownSymbol {
-		return namespace
+	if namespace == c.unknownSymbol || namespace.CheckFlags()&ast.CheckFlagsExportConflict != 0 {
+		return c.unknownSymbol
 	}
 	if namespace.ValueDeclaration() != nil &&
 		ast.IsInJSFile(namespace.ValueDeclaration()) &&
@@ -27556,6 +27560,9 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 				errorNode = getIndexNodeForAccessExpression(accessNode)
 			}
 			if c.checkExportConflict(prop, errorNode) {
+				if accessExpression != nil && accessFlags&AccessFlagsCacheSymbol != 0 {
+					c.symbolNodeLinks.Get(accessNode).resolvedSymbol = prop
+				}
 				return c.errorType
 			}
 			if accessFlags&AccessFlagsReportDeprecated != 0 && accessNode != nil && len(prop.Declarations()) != 0 && c.isDeprecatedSymbol(prop) && c.isUncalledFunctionReference(accessNode, prop) {
