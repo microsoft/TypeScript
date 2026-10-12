@@ -23533,7 +23533,7 @@ func (c *Checker) isInDistributiveContext(node *ast.Node, symbol *ast.Symbol) bo
 	for n := node; n != nil && !ast.IsStatement(n); n = n.Parent {
 		if ast.IsConditionalTypeNode(n) {
 			if checkTypeNode := n.AsConditionalTypeNode().CheckType; isSimpleIdentifierTypeReference(checkTypeNode) {
-				if s := c.getSymbolFromTypeReference(checkTypeNode); s != nil && s.Flags&ast.SymbolFlagsTypeParameter != 0 && (symbol == nil || s == symbol) {
+				if s := c.getSymbolFromTypeReference(checkTypeNode); s != nil && s.Flags()&ast.SymbolFlagsTypeParameter != 0 && (symbol == nil || s == symbol) {
 					return true
 				}
 			}

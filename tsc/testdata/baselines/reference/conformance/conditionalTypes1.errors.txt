@@ -77,12 +77,12 @@ conditionalTypes1.ts(304,43): error TS2322: Type 'T95<U>' is not assignable to t
   Type 'number | boolean' is not assignable to type 'T94<U>'.
     Type 'number' is not assignable to type 'T94<U>'.
       Type 'boolean' is not assignable to type 'true'.
-conditionalTypes1.ts(447,5): error TS2322: Type 'T' is not assignable to type 'T extends string ? T : never'.
-conditionalTypes1.ts(448,5): error TS2322: Type 'T extends string ? U : never' is not assignable to type 'T extends string ? T : never'.
+conditionalTypes1.ts(463,5): error TS2322: Type 'T' is not assignable to type 'T extends string ? T : never'.
+conditionalTypes1.ts(464,5): error TS2322: Type 'T extends string ? U : never' is not assignable to type 'T extends string ? T : never'.
   Type 'U' is not assignable to type 'T extends string ? T : never'.
     Type 'U' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-conditionalTypes1.ts(449,5): error TS2322: Type 'T extends string ? T : never' is not assignable to type 'T extends string ? U : never'.
+conditionalTypes1.ts(465,5): error TS2322: Type 'T extends string ? T : never' is not assignable to type 'T extends string ? U : never'.
   Type 'string & T' is not assignable to type 'T extends string ? U : never'.
     Type 'string & T' is not assignable to type 'U'.
       'U' could be instantiated with an arbitrary type which could be unrelated to 'string & T'.
@@ -662,8 +662,8 @@ conditionalTypes1.ts(449,5): error TS2322: Type 'T extends string ? T : never' i
 !!! error TS2322:   Type 'U' is not assignable to type 'T extends string ? T : never'.
 !!! error TS2322:     Type 'U' is not assignable to type 'T'.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 conditionalTypes1.ts:446:36: This type parameter might need an `extends T` constraint.
-!!! related TS2208 conditionalTypes1.ts:446:36: This type parameter might need an `extends T extends string ? T : never` constraint.
+!!! related TS2208 conditionalTypes1.ts:462:36: This type parameter might need an `extends T` constraint.
+!!! related TS2208 conditionalTypes1.ts:462:36: This type parameter might need an `extends T extends string ? T : never` constraint.
         z = x;  // Error
         ~
 !!! error TS2322: Type 'T extends string ? T : never' is not assignable to type 'T extends string ? U : never'.
