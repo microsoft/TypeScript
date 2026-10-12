@@ -25,7 +25,7 @@ function foo(arr, depth) {
 
 
 //// [arrayFakeFlatNoCrashInferenceDeclarations.d.ts]
-type _recursive<InnerArr> = InnerArr | (InnerArr extends readonly (infer InnerArr)[] ? _recursive<InnerArr> : InnerArr);
+type foo_recursive<InnerArr> = InnerArr | (InnerArr extends readonly (infer InnerArr)[] ? foo_recursive<InnerArr> : InnerArr);
 type BadFlatArray<Arr, Depth extends number> = {
     obj: {
         "done": Arr;
@@ -33,4 +33,4 @@ type BadFlatArray<Arr, Depth extends number> = {
     }[Depth extends -1 ? "done" : "recur"];
 }["obj"];
 declare function flat<A, D extends number = 1>(arr: A, depth?: D): BadFlatArray<A, D>[];
-declare function foo<T>(arr: T[], depth: number): (T | (T extends readonly (infer InnerArr)[] ? _recursive<InnerArr> : T))[];
+declare function foo<T>(arr: T[], depth: number): (T | (T extends readonly (infer InnerArr)[] ? foo_recursive<InnerArr> : T))[];
