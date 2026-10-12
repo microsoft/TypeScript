@@ -557,3 +557,42 @@ recursiveStructures.ts(47,7): error TS2322: Type 'string' is not assignable to t
     export const shadowedCycle = build<{ Node: { value: number; next: "ref" } }>();
     const shadowedValue: number = shadowedCycle.Node.next(1).next("text").value;
     
+==== globalRecursiveA.ts (0 errors) ====
+    function makeA() {
+        return {
+            value: 1,
+            self() { return this; },
+        };
+    }
+    type makeReserved_recursive = "reserved";
+    function makeReserved() {
+        return {
+            value: true,
+            self() { return this; },
+        };
+    }
+    class GlobalA {
+        static create<T>(value: T) {
+            const node = { value, next: () => node };
+            return node;
+        }
+        static "a-b"() {
+            const node = { value: true, next: () => node };
+            return node;
+        }
+    }
+    
+==== globalRecursiveB.ts (0 errors) ====
+    function makeB() {
+        return {
+            value: "text",
+            self() { return this; },
+        };
+    }
+    class GlobalB {
+        static create<T>(value: T) {
+            const node = { value, next: () => node };
+            return node;
+        }
+    }
+    

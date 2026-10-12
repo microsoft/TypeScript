@@ -500,6 +500,45 @@ declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
 export const shadowedCycle = build<{ Node: { value: number; next: "ref" } }>();
 const shadowedValue: number = shadowedCycle.Node.next(1).next("text").value;
 
+//// [globalRecursiveA.ts]
+function makeA() {
+    return {
+        value: 1,
+        self() { return this; },
+    };
+}
+type makeReserved_recursive = "reserved";
+function makeReserved() {
+    return {
+        value: true,
+        self() { return this; },
+    };
+}
+class GlobalA {
+    static create<T>(value: T) {
+        const node = { value, next: () => node };
+        return node;
+    }
+    static "a-b"() {
+        const node = { value: true, next: () => node };
+        return node;
+    }
+}
+
+//// [globalRecursiveB.ts]
+function makeB() {
+    return {
+        value: "text",
+        self() { return this; },
+    };
+}
+class GlobalB {
+    static create<T>(value: T) {
+        const node = { value, next: () => node };
+        return node;
+    }
+}
+
 
 //// [script.js]
 "use strict";
@@ -889,6 +928,44 @@ const invalidTupleValue = recursiveTuple("text")[1][0];
 //// [shadowedMappedCycle.js]
 export const shadowedCycle = build();
 const shadowedValue = shadowedCycle.Node.next(1).next("text").value;
+//// [globalRecursiveA.js]
+"use strict";
+function makeA() {
+    return {
+        value: 1,
+        self() { return this; },
+    };
+}
+function makeReserved() {
+    return {
+        value: true,
+        self() { return this; },
+    };
+}
+class GlobalA {
+    static create(value) {
+        const node = { value, next: () => node };
+        return node;
+    }
+    static "a-b"() {
+        const node = { value: true, next: () => node };
+        return node;
+    }
+}
+//// [globalRecursiveB.js]
+"use strict";
+function makeB() {
+    return {
+        value: "text",
+        self() { return this; },
+    };
+}
+class GlobalB {
+    static create(value) {
+        const node = { value, next: () => node };
+        return node;
+    }
+}
 
 
 //// [script.d.ts]
@@ -1738,3 +1815,49 @@ export declare const shadowedCycle: {
         next: <T>(shadowedCycle: T) => typeof import("./shadowedMappedCycle").shadowedCycle["Node"];
     };
 };
+//// [globalRecursiveA.d.ts]
+type _recursive = {
+    value: number;
+    self(): _recursive;
+};
+type _recursive_1 = {
+    value: boolean;
+    self(): _recursive_1;
+};
+type _recursive_2<T> = {
+    value: T;
+    next: () => _recursive_2<T>;
+};
+type _recursive_3 = {
+    value: boolean;
+    next: () => _recursive_3;
+};
+declare function makeA(): {
+    value: number;
+    self(): _recursive;
+};
+type makeReserved_recursive = "reserved";
+declare function makeReserved(): {
+    value: boolean;
+    self(): _recursive_1;
+};
+declare class GlobalA {
+    static create<T>(value: T): _recursive_2<T>;
+    static "a-b"(): _recursive_3;
+}
+//// [globalRecursiveB.d.ts]
+type _recursive = {
+    value: string;
+    self(): _recursive;
+};
+type _recursive_1<T> = {
+    value: T;
+    next: () => _recursive_1<T>;
+};
+declare function makeB(): {
+    value: string;
+    self(): _recursive;
+};
+declare class GlobalB {
+    static create<T>(value: T): _recursive_1<T>;
+}
