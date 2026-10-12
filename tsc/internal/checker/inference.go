@@ -699,25 +699,13 @@ func (c *Checker) inferToTemplateLiteralType(n *InferenceState, source *Type, ta
 func (c *Checker) inferFromGenericMappedTypes(n *InferenceState, source *Type, target *Type) {
 	// The source and target types are generic types { [P in S]: X } and { [P in T]: Y }, so we infer
 	// from S to T and from X to Y.
-	sourceConstraint := c.getConstraintTypeFromMappedType(source)
-	var mapper *TypeMapper
-	if sourceConstraint.flags&TypeFlagsIndex != 0 {
-		sourceTypeParameter := sourceConstraint.AsIndexType().target
-		nonDistributedTypeParameter := getNonDistributedTypeParameter(sourceTypeParameter)
-		if nonDistributedTypeParameter != sourceTypeParameter {
-			// getNonDistributedTypeParameter only unwraps a top-level occurrence, but the
-			// distributed parameter can be nested in a source (for example, Box<T>).
-			// An identity mapper makes instantiateType traverse that source so getMappedType can
-			// unwrap each distributed occurrence without otherwise changing the type.
-			mapper = newSimpleTypeMapper(nonDistributedTypeParameter, nonDistributedTypeParameter)
-		}
-	}
-	c.inferFromTypes(n, c.instantiateType(sourceConstraint, mapper), c.getConstraintTypeFromMappedType(target))
-	c.inferFromTypes(n, c.instantiateType(c.getTemplateTypeFromMappedType(source), mapper), c.getTemplateTypeFromMappedType(target))
+	source = c.getNonDistributedMappedType(source)
+	c.inferFromTypes(n, c.getConstraintTypeFromMappedType(source), c.getConstraintTypeFromMappedType(target))
+	c.inferFromTypes(n, c.getTemplateTypeFromMappedType(source), c.getTemplateTypeFromMappedType(target))
 	sourceNameType := c.getNameTypeFromMappedType(source)
 	targetNameType := c.getNameTypeFromMappedType(target)
 	if sourceNameType != nil && targetNameType != nil {
-		c.inferFromTypes(n, c.instantiateType(sourceNameType, mapper), targetNameType)
+		c.inferFromTypes(n, sourceNameType, targetNameType)
 	}
 }
 

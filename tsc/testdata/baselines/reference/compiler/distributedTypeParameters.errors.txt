@@ -25,14 +25,13 @@ distributedTypeParameters.ts(83,46): error TS2536: Type 'keyof T' cannot be used
 distributedTypeParameters.ts(91,36): error TS2344: Type 'U[P]' does not satisfy the constraint 'T[P]'.
   Type 'U' is not assignable to type 'T'.
     'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
-distributedTypeParameters.ts(91,36): error TS2536: Type 'P' cannot be used to index type 'U'.
 distributedTypeParameters.ts(134,35): error TS2344: Type 'I[K]' does not satisfy the constraint 'P[K]'.
   Type 'I' is not assignable to type 'P'.
     'I' is only assignable to the non-distributed 'P', but 'P' has been distributed here.
 distributedTypeParameters.ts(134,35): error TS2536: Type 'K' cannot be used to index type 'I'.
 
 
-==== distributedTypeParameters.ts (16 errors) ====
+==== distributedTypeParameters.ts (15 errors) ====
     // https://github.com/microsoft/TypeScript/issues/63708
     
     type Show<A, B extends A> = [A, B] & {};
@@ -164,8 +163,6 @@ distributedTypeParameters.ts(134,35): error TS2536: Type 'K' cannot be used to i
 !!! error TS2344: Type 'U[P]' does not satisfy the constraint 'T[P]'.
 !!! error TS2344:   Type 'U' is not assignable to type 'T'.
 !!! error TS2344:     'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
-                                       ~~~~
-!!! error TS2536: Type 'P' cannot be used to index type 'U'.
     };
     
     const mappedIndexedAccessResult = mappedIndexedAccess<

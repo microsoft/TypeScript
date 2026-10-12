@@ -141,7 +141,7 @@ const (
 	CachedTypeKindDecoratorContextStatic
 	CachedTypeKindDecoratorContextPrivate
 	CachedTypeKindDecoratorContextPrivateStatic
-	CachedTypeKindNonDistributedConditionalType
+	CachedTypeKindNonDistributedType
 	CachedTypeKindSimplifiedConditionalTypeForReading
 	CachedTypeKindSimplifiedConditionalTypeForWriting
 )
@@ -23905,26 +23905,33 @@ func (c *Checker) getDistributedTypeParameter(node *ast.Node, t *Type) *Type {
 	return t
 }
 
-// Returns true if the node is, or is contained in, a distributive conditional type for the given type
-// parameter symbol, or for any type parameter when symbol is nil. Types declared in such a context may
-// reference distributed type parameters, so their identity instantiation isn't the declared type itself
-// (instantiation maps distributed type parameters back to their non-distributed form).
+// Returns true if the node is, or is contained in, a distributive context for the given type parameter
+// symbol, or for any type parameter when symbol is nil. A distributive context is a distributive conditional
+// type 'T extends U ? X : Y' or the template of a homomorphic mapped type '{ [K in keyof T]: X }', both of
+// which distribute over union types for T. Types declared in such a context may reference distributed type
+// parameters, so their identity instantiation isn't the declared type itself (instantiation maps distributed
+// type parameters back to their non-distributed form).
 func (c *Checker) isInDistributiveContext(node *ast.Node, symbol *ast.Symbol) bool {
-	for n := node; n != nil && !ast.IsStatement(n); n = n.Parent {
-		if ast.IsConditionalTypeNode(n) {
-			if checkTypeNode := n.AsConditionalTypeNode().CheckType; isSimpleIdentifierTypeReference(checkTypeNode) {
-				if s := c.getSymbolFromTypeReference(checkTypeNode); s != nil && s.Flags()&ast.SymbolFlagsTypeParameter != 0 && (symbol == nil || s == symbol) {
-					return true
+	var child *ast.Node
+	for n := node; n != nil && !ast.IsStatement(n); child, n = n, n.Parent {
+		var typeParameterNode *ast.Node
+		switch {
+		case ast.IsConditionalTypeNode(n):
+			typeParameterNode = n.AsConditionalTypeNode().CheckType
+		case ast.IsMappedTypeNode(n):
+			// The template and name type of a homomorphic mapped type are distributive contexts, but its
+			// 'keyof T' constraint is not: the constraint of the mapped type's type parameter is shared by
+			// all instantiations of the mapped type and must stay in terms of the non-distributed form.
+			m := n.AsMappedTypeNode()
+			if child == nil || child == m.Type || child == m.NameType {
+				if constraint := m.TypeParameter.AsTypeParameterDeclaration().Constraint; constraint != nil && ast.IsTypeOperatorNode(constraint) && constraint.AsTypeOperatorNode().Operator == ast.KindKeyOfKeyword {
+					typeParameterNode = constraint.Type()
 				}
-			} else if ast.IsMappedTypeNode(n) {
-				constraint := n.AsMappedTypeNode().TypeParameter.AsTypeParameterDeclaration().Constraint
-				typeNode := constraint.Type()
-				if ast.IsTypeOperatorNode(constraint) && constraint.AsTypeOperatorNode().Operator == ast.KindKeyOfKeyword &&
-					isSimpleIdentifierTypeReference(typeNode) && c.getSymbolFromTypeReference(typeNode) == t.symbol {
-					// If node is contained in a homomorphic mapped type for the given type parameter,
-					// return the distributed form of the type parameter.
-					return c.getDistributedTypeFromTypeParameter(t)
-				}
+			}
+		}
+		if typeParameterNode != nil && isSimpleIdentifierTypeReference(typeParameterNode) {
+			if s := c.getSymbolFromTypeReference(typeParameterNode); s != nil && s.Flags()&ast.SymbolFlagsTypeParameter != 0 && (symbol == nil || s == symbol) {
+				return true
 			}
 		}
 	}
@@ -23942,20 +23949,39 @@ func (c *Checker) getDistributedTypeFromTypeParameter(t *Type) *Type {
 }
 
 // Returns the given conditional type with references to the distributed form of its check type parameter
-// mapped back to the non-distributed form. This is the identity instantiation of the conditional type,
-// which is cached in the instantiation map of the conditional type's root.
+// mapped back to the non-distributed form.
 func (c *Checker) getNonDistributedConditionalType(t *Type) *Type {
-	checkType := t.AsConditionalType().checkType
-	typeParameter := getNonDistributedTypeParameter(checkType)
-	if typeParameter == checkType {
+	result := c.getNonDistributedType(t, t.AsConditionalType().checkType)
+	debug.Assert(result.flags&TypeFlagsConditional != 0, "Identity instantiation of a conditional type should remain deferred")
+	return result
+}
+
+// Returns the given generic mapped type with references to the distributed form of its homomorphic type
+// variable mapped back to the non-distributed form.
+func (c *Checker) getNonDistributedMappedType(t *Type) *Type {
+	typeVariable := c.getHomomorphicTypeVariable(t)
+	if typeVariable == nil || typeVariable.flags&TypeFlagsTypeParameter == 0 || typeVariable.AsTypeParameter().distributedType == nil {
 		return t
 	}
-	key := CachedTypeKey{kind: CachedTypeKindNonDistributedConditionalType, typeId: t.id}
+	result := c.getNonDistributedType(t, typeVariable.AsTypeParameter().distributedType)
+	debug.Assert(result.objectFlags&ObjectFlagsMapped != 0, "Identity instantiation of a generic mapped type should remain a mapped type")
+	return result
+}
+
+// Returns the identity instantiation of the given type for the non-distributed form of the given type
+// variable if it is a distributed type parameter, and otherwise the type itself. Instantiation maps all
+// occurrences of distributed type parameters back to their non-distributed form, so the result is the
+// given type with distributed type parameters replaced by their non-distributed form.
+func (c *Checker) getNonDistributedType(t *Type, typeVariable *Type) *Type {
+	typeParameter := getNonDistributedTypeParameter(typeVariable)
+	if typeParameter == typeVariable {
+		return t
+	}
+	key := CachedTypeKey{kind: CachedTypeKindNonDistributedType, typeId: t.id}
 	if cached := c.cachedTypes[key]; cached != nil {
 		return cached
 	}
 	result := c.instantiateType(t, newSimpleTypeMapper(typeParameter, typeParameter))
-	debug.Assert(result.flags&TypeFlagsConditional != 0, "Identity instantiation of a conditional type should remain deferred")
 	c.cachedTypes[key] = result
 	return result
 }
