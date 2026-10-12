@@ -530,6 +530,15 @@ func (s *Scanner) Scan() ast.Kind {
 		case '`':
 			s.token = s.scanTemplateAndSetTokenValue(false /*shouldEmitInvalidEscapeError*/)
 		case '%':
+			if s.charAt(1) == '%' && isConflictMarkerTrivia(s.text, s.pos) {
+				s.pos = scanConflictMarkerTrivia(s.text, s.pos, s.errorAt)
+				if s.skipTrivia {
+					continue
+				} else {
+					s.token = ast.KindConflictMarkerTrivia
+					return s.token
+				}
+			}
 			if s.charAt(1) == '=' {
 				s.pos += 2
 				s.token = ast.KindPercentEqualsToken
@@ -584,6 +593,15 @@ func (s *Scanner) Scan() ast.Kind {
 				s.token = ast.KindAsteriskToken
 			}
 		case '+':
+			if s.charAt(1) == '+' && isConflictMarkerTrivia(s.text, s.pos) {
+				s.pos = scanConflictMarkerTrivia(s.text, s.pos, s.errorAt)
+				if s.skipTrivia {
+					continue
+				} else {
+					s.token = ast.KindConflictMarkerTrivia
+					return s.token
+				}
+			}
 			next := s.charAt(1)
 			if next == '=' {
 				s.pos += 2
@@ -896,6 +914,15 @@ func (s *Scanner) Scan() ast.Kind {
 			s.pos++
 			s.token = ast.KindAtToken
 		case '\\':
+			if s.charAt(1) == '\\' && isConflictMarkerTrivia(s.text, s.pos) {
+				s.pos = scanConflictMarkerTrivia(s.text, s.pos, s.errorAt)
+				if s.skipTrivia {
+					continue
+				} else {
+					s.token = ast.KindConflictMarkerTrivia
+					return s.token
+				}
+			}
 			if s.scanIdentifier(0, identifierVariantStandard) {
 				s.token = GetIdentifierToken(s.tokenValue)
 			} else {
@@ -2288,7 +2315,7 @@ func couldStartTrivia(text string, pos int) bool {
 	// Characters that could start normal trivia
 	case '\r', '\n', '\t', '\v', '\f', ' ', '/',
 		// Characters that could start conflict marker trivia
-		'<', '|', '=', '>':
+		'<', '|', '=', '%', '\\', '+', '>':
 		return true
 	case '#':
 		// Only if its the beginning can we have #! trivia
@@ -2371,7 +2398,7 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 					continue
 				}
 			}
-		case '<', '|', '=', '>':
+		case '<', '|', '=', '%', '\\', '+', '>':
 			if isConflictMarkerTrivia(text, pos) {
 				pos = scanConflictMarkerTrivia(text, pos, nil)
 				canConsumeStar = false
@@ -2412,8 +2439,8 @@ func isConflictMarkerTrivia(text string, pos int) bool {
 	}
 
 	// Fast reject: a conflict marker is the same byte repeated seven times. If the
-	// second byte differs (the overwhelmingly common case for `<`, `>`, `=`, `|`
-	// tokens), it cannot be a marker, so skip the line-start check entirely.
+	// second byte differs (the overwhelmingly common case), it cannot be a marker,
+	// so skip the line-start check entirely.
 	if pos+1 >= len(text) || text[pos+1] != text[pos] {
 		return false
 	}
@@ -2454,14 +2481,14 @@ func scanConflictMarkerTrivia(text string, pos int, reportError func(diag *diagn
 			ch, size = utf8.DecodeRuneInString(text[pos:])
 		}
 	} else {
-		if ch != '|' && ch != '=' {
-			panic("Assertion failed: ch must be either '|' or '='")
+		if ch != '|' && ch != '=' && ch != '%' && ch != '\\' && ch != '+' {
+			panic("Assertion failed: ch must be '|', '=', '%', '\\', or '+'")
 		}
-		// Consume everything from the start of a ||||||| or ======= marker to the start
-		// of the next ======= or >>>>>>> marker.
+		// Consume everything from the start of an intermediate marker to the
+		// start of the next intermediate marker or the overall >>>>>>> marker.
 		for pos < length {
 			currentChar := text[pos]
-			if (currentChar == '=' || currentChar == '>') && rune(currentChar) != ch && isConflictMarkerTrivia(text, pos) {
+			if (currentChar == '=' || currentChar == '%' || currentChar == '\\' || currentChar == '+' || currentChar == '>') && rune(currentChar) != ch && isConflictMarkerTrivia(text, pos) {
 				break
 			}
 
