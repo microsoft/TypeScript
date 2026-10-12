@@ -19674,6 +19674,9 @@ func (c *Checker) resolveObjectTypeMember(resolution *objectMemberResolution, na
 			}
 		} else {
 			property = c.getPropertyOfTypeEx(baseType, name, true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/)
+			if property != nil && property.Name() != name {
+				property = nil
+			}
 			if property == nil {
 				// Inherited tables use symbol names, which can differ from the base's keys.
 				for _, candidate := range c.getPropertiesOfType(baseType) {
