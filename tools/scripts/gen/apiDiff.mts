@@ -32,6 +32,7 @@ const typeMappings = new Map([
     ["Symbol", "Symbol"],
     ["Type", "Type"],
     ["Node", "Node"],
+    ["NodeFactory", "ts"],
     ["ts", "ts"],
 ]);
 
