@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/conflictMarkerJujutsuTrivia3.ts] ////
+
+=== conflictMarkerJujutsuTrivia3.ts ===
+class C {
+>C : Symbol(C, Decl(conflictMarkerJujutsuTrivia3.ts, 0, 0))
+
+  foo() {
+>foo : Symbol(C.foo, Decl(conflictMarkerJujutsuTrivia3.ts, 0, 9))
+
+<<<<<<<<<<< conflict 1 of 2
+%%%%%%%%%%% diff from: puqzxvrm 9be6077e "call c()"
+\\\\\\\\\\\        to: lnqukurm 84b1da1d "call a()"
+-     c();
++     a();
++++++++++++ uxvuvmmx 71bb7e49 "call b()"
+     b();
+>>>>>>>>>>> conflict 1 of 2 ends
+  }
+
+<<<<<<<<<<< conflict 2 of 2
+%%%%%%%%%%% diff from: puqzxvrm 9be6077e "call c()"
+\\\\\\\\\\\        to: lnqukurm 84b1da1d "call a()"
++/*
++=======
++*/
++
++++++++++++ uxvuvmmx 71bb7e49 "call b()"
+/*
+%%%%%%%
+*/
+
+>>>>>>>>>>> conflict 2 of 2 ends
+  public bar() { }
+>bar : Symbol(C.bar, Decl(conflictMarkerJujutsuTrivia3.ts, 10, 3))
+}
+

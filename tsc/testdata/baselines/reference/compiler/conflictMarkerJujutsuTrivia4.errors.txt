@@ -1,0 +1,32 @@
+conflictMarkerJujutsuTrivia4.ts(7,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia4.ts(8,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia4.ts(10,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia4.ts(11,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia4.ts(14,1): error TS1185: Merge conflict marker encountered.
+
+
+==== conflictMarkerJujutsuTrivia4.ts (5 errors) ====
+    function grapefruit() {
+    }
+    
+    function grape() {
+    }
+    
+    <<<<<<< conflict 1 of 1
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    +++++++ vqysvltp 86ba33d1 "Change call" (no terminating newline)
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    grapefruit()
+    %%%%%%% diff from: zqvxtwpm 339cbb5a "Add file" (no terminating newline)
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    \\\\\\\        to: noqwrurv d60e161f "Add newline"
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+     grape()
+    +
+    >>>>>>> conflict 1 of 1 ends
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
