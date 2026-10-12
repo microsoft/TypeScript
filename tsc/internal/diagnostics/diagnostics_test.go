@@ -213,6 +213,26 @@ func TestLocaleFilesIgnoreStaleDiagnostics(t *testing.T) {
 	validateLocaleFile(t, []byte("{\r\n  \"Removed_diagnostic_99999\": \"Stale translation.\"\r\n}"), nil)
 }
 
+func TestGenerateLocalizationSource(t *testing.T) {
+	t.Parallel()
+
+	source := filepath.Join(t.TempDir(), "source.json")
+	command := exec.Command("go", "run", "generate.go", "-locsource", source)
+	output, err := command.CombinedOutput()
+	assert.NilError(t, err, "%s", output)
+
+	data, err := os.ReadFile(source)
+	assert.NilError(t, err)
+	var messages map[Key]string
+	assert.NilError(t, json.Unmarshal(data, &messages))
+	expected := make(map[Key]string, len(allMessages))
+	for _, p := range allMessages {
+		message := *p
+		expected[message.key] = message.text
+	}
+	assert.DeepEqual(t, messages, expected)
+}
+
 func TestGenerateLocalizations(t *testing.T) {
 	t.Parallel()
 
