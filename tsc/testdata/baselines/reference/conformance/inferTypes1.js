@@ -188,6 +188,23 @@ const result = invoker('test', true)({ test: (a: boolean) => 123 })
 
 type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
 
+// Inference between distributive conditional types should infer the original
+// type parameter, not its distributed representation.
+declare function inferFromConditional<T>(value: T extends unknown ? T : never): T;
+
+function f100<U>(value: U extends unknown ? U : never, ordinary: U) {
+    const inferred = inferFromConditional(value);
+    const accept: typeof inferred = ordinary;
+}
+
+type Boxed<T> = { value: T };
+declare function inferFromNestedConditional<X, T>(value: X extends unknown ? Boxed<T> : never): T;
+
+function f101<U>(value: U extends unknown ? Boxed<U> : never, ordinary: U) {
+    const inferred = inferFromNestedConditional(value);
+    const accept: typeof inferred = ordinary;
+}
+
 
 //// [inferTypes1.js]
 "use strict";
@@ -213,6 +230,14 @@ function invoker(key, ...args) {
     return (obj) => obj[key](...args);
 }
 const result = invoker('test', true)({ test: (a) => 123 });
+function f100(value, ordinary) {
+    const inferred = inferFromConditional(value);
+    const accept = ordinary;
+}
+function f101(value, ordinary) {
+    const inferred = inferFromNestedConditional(value);
+    const accept = ordinary;
+}
 
 
 //// [inferTypes1.d.ts]
@@ -407,3 +432,10 @@ type Test2 = EnsureIsString<42>;
 declare function invoker<K extends string | number | symbol, A extends any[]>(key: K, ...args: A): <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>;
 declare const result: number;
 type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
+declare function inferFromConditional<T>(value: T extends unknown ? T : never): T;
+declare function f100<U>(value: U extends unknown ? U : never, ordinary: U): void;
+type Boxed<T> = {
+    value: T;
+};
+declare function inferFromNestedConditional<X, T>(value: X extends unknown ? Boxed<T> : never): T;
+declare function f101<U>(value: U extends unknown ? Boxed<U> : never, ordinary: U): void;

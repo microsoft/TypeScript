@@ -241,3 +241,20 @@ inferTypes1.ts(153,40): error TS2322: Type 'T' is not assignable to type 'string
     
     type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
     
+    // Inference between distributive conditional types should infer the original
+    // type parameter, not its distributed representation.
+    declare function inferFromConditional<T>(value: T extends unknown ? T : never): T;
+    
+    function f100<U>(value: U extends unknown ? U : never, ordinary: U) {
+        const inferred = inferFromConditional(value);
+        const accept: typeof inferred = ordinary;
+    }
+    
+    type Boxed<T> = { value: T };
+    declare function inferFromNestedConditional<X, T>(value: X extends unknown ? Boxed<T> : never): T;
+    
+    function f101<U>(value: U extends unknown ? Boxed<U> : never, ordinary: U) {
+        const inferred = inferFromNestedConditional(value);
+        const accept: typeof inferred = ordinary;
+    }
+    
