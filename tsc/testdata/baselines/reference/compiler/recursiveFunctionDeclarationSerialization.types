@@ -33,7 +33,7 @@ export function declaration() { return declaration; }
 export const annotated: () => typeof annotated = () => annotated;
 >annotated : () => typeof annotated
 >annotated : () => typeof annotated
->() => annotated : () => () => typeof annotated
+>() => annotated : () => typeof annotated
 >annotated : () => typeof annotated
 
 export const first = () => second;
@@ -88,8 +88,8 @@ export const contextual: () => unknown = function self() { return self; };
 >self : () => typeof self
 
 export const specialized = generic<number>;
->specialized : (value: number) => <T>(value: T) => typeof generic
->generic<number> : (value: number) => <T>(value: T) => typeof generic
+>specialized : (value: number) => typeof generic
+>generic<number> : (value: number) => typeof generic
 >generic : <T>(value: T) => typeof generic
 
 export const annotatedParameter = (value: string | number) => annotatedParameter;
@@ -1395,8 +1395,8 @@ export const mappedCycleCopy = mappedCycle;
 >mappedCycle : { Node: { value: number; next: any; }; }
 
 export const nestedCycle = { wrapped: build<{ Node: { value: string; next: "ref" } }>() };
->nestedCycle : { wrapped: { Node: { value: string; next: any; }; }; }
->{ wrapped: build<{ Node: { value: string; next: "ref" } }>() } : { wrapped: { Node: { value: string; next: any; }; }; }
+>nestedCycle : { wrapped: { Node: { value: string; next: (typeof nestedCycle)["wrapped"]["Node"]; }; }; }
+>{ wrapped: build<{ Node: { value: string; next: "ref" } }>() } : { wrapped: { Node: { value: string; next: (typeof nestedCycle)["wrapped"]["Node"]; }; }; }
 >wrapped : { Node: { value: string; next: any; }; }
 >build<{ Node: { value: string; next: "ref" } }>() : { Node: { value: string; next: any; }; }
 >build : <M>() => { [K in keyof M]: Resolve<M, K>; }
@@ -1432,8 +1432,8 @@ export const keyedCycles = build<{
 
 }>();
 export const sharedCycles = {
->sharedCycles : { first: { Node: { value: number; next: any; }; }; second: { Node: { value: number; next: any; }; }; }
->{    first: mappedCycle,    second: mappedCycle,} : { first: { Node: { value: number; next: any; }; }; second: { Node: { value: number; next: any; }; }; }
+>sharedCycles : { first: { Node: { value: number; next: (typeof sharedCycles)["first"]["Node"]; }; }; second: { Node: { value: number; next: (typeof sharedCycles)["second"]["Node"]; }; }; }
+>{    first: mappedCycle,    second: mappedCycle,} : { first: { Node: { value: number; next: (typeof sharedCycles)["first"]["Node"]; }; }; second: { Node: { value: number; next: (typeof sharedCycles)["second"]["Node"]; }; }; }
 
     first: mappedCycle,
 >first : { Node: { value: number; next: any; }; }
@@ -1497,7 +1497,7 @@ const nestedMappedValue: string = nestedCycle.wrapped.Node.next.next.value;
 >nestedCycle.wrapped.Node.next : { value: string; next: any; }
 >nestedCycle.wrapped.Node : { value: string; next: any; }
 >nestedCycle.wrapped : { Node: { value: string; next: any; }; }
->nestedCycle : { wrapped: { Node: { value: string; next: any; }; }; }
+>nestedCycle : { wrapped: { Node: { value: string; next: (typeof nestedCycle)["wrapped"]["Node"]; }; }; }
 >wrapped : { Node: { value: string; next: any; }; }
 >Node : { value: string; next: any; }
 >next : { value: string; next: any; }
@@ -1547,7 +1547,7 @@ const sharedMappedValue: number = sharedCycles.second.Node.next.next.value;
 >sharedCycles.second.Node.next : { value: number; next: any; }
 >sharedCycles.second.Node : { value: number; next: any; }
 >sharedCycles.second : { Node: { value: number; next: any; }; }
->sharedCycles : { first: { Node: { value: number; next: any; }; }; second: { Node: { value: number; next: any; }; }; }
+>sharedCycles : { first: { Node: { value: number; next: (typeof sharedCycles)["first"]["Node"]; }; }; second: { Node: { value: number; next: (typeof sharedCycles)["second"]["Node"]; }; }; }
 >second : { Node: { value: number; next: any; }; }
 >Node : { value: number; next: any; }
 >next : { value: number; next: any; }

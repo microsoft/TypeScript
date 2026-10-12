@@ -41,7 +41,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNodeWithCheckerFallback(t *pseudochecker.P
 			return result
 		}
 	} else if (t.Kind == pseudochecker.PseudoTypeKindSingleCallSignature || t.Kind == pseudochecker.PseudoTypeKindObjectLiteral) &&
-		b.getTypeDefinitionReference(checkerType).symbol != nil {
+		b.getTypeBindingReference(checkerType).symbol != nil {
 		// Reusing structural syntax must not unfold an already available back-reference.
 		return b.typeToTypeNode(checkerType)
 	}
