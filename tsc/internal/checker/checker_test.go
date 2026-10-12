@@ -250,6 +250,65 @@ instance;`,
 	assert.Assert(t, c.GetPropertyOfType(typ, "different") == nil)
 }
 
+func TestInstantiatedMemberEnumeration(t *testing.T) {
+	t.Parallel()
+	var source strings.Builder
+	source.WriteString("interface Base<T> { shared: T; ")
+	for i := range 64 {
+		fmt.Fprintf(&source, "p%d: T; ", i)
+	}
+	source.WriteString("}\ninterface First<T> extends Base<T> { first: T }\n")
+	source.WriteString("interface Second<T> { shared: T; second: T }\n")
+	source.WriteString("interface Derived<T> extends First<T>, Second<T> { own: T }\n")
+	for _, test := range []struct {
+		name     string
+		typeName string
+		count    int
+		first    string
+		partial  bool
+	}{
+		{name: "declared", typeName: "Base", count: 65, first: "shared"},
+		{name: "declaredCached", typeName: "Base", count: 65, first: "shared", partial: true},
+		{name: "inherited", typeName: "Derived", count: 68, first: "own"},
+		{name: "inheritedCached", typeName: "Derived", count: 68, first: "own", partial: true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+				"/main.ts":       source.String() + fmt.Sprintf("declare const instance: %s<string>;\ninstance;", test.typeName),
+				"/tsconfig.json": `{"compilerOptions":{"strict":true},"files":["main.ts"]}`,
+			}, tspath.CaseInsensitive))
+			host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+			parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+			assert.Equal(t, len(errors), 0)
+			program := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
+			program.BindSourceFiles()
+			c, done := program.GetTypeChecker(t.Context())
+			defer done()
+			file := program.GetSourceFile("/main.ts")
+			typ := c.GetTypeAtLocation(file.Statements.Nodes[5].Expression())
+			cached := make(map[string]*ast.Symbol)
+			if test.partial {
+				for _, name := range []string{"p63", "shared", "second", "missing"} {
+					cached[name] = c.GetPropertyOfType(typ, name)
+				}
+			}
+			properties := c.GetPropertiesOfType(typ)
+			assert.Equal(t, len(properties), test.count)
+			assert.Equal(t, properties[0].Name(), test.first)
+			assert.Equal(t, c.GetPropertyOfType(typ, "shared").ValueDeclaration(), file.Statements.Nodes[0].Symbol().Members()["shared"].ValueDeclaration())
+			for _, property := range properties {
+				assert.Equal(t, c.GetPropertyOfType(typ, property.Name()), property)
+				assert.Equal(t, c.TypeToString(c.GetTypeOfSymbol(property)), "string")
+			}
+			for name, symbol := range cached {
+				assert.Equal(t, c.GetPropertyOfType(typ, name), symbol)
+			}
+			assert.Equal(t, len(c.GetDiagnostics(t.Context(), file)), 0)
+		})
+	}
+}
+
 func TestInstantiatedDiamondMissingMember(t *testing.T) {
 	t.Parallel()
 	var source strings.Builder

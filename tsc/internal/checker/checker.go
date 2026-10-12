@@ -19658,9 +19658,7 @@ func (c *Checker) resolveObjectTypeMember(resolution *objectMemberResolution, na
 		if resolution.mapper == nil || c.isNamedMember(symbol, name) {
 			result = symbol
 			if instantiate && resolution.mapper != nil {
-				if _, unaffected := slices.BinarySearch(resolution.unaffected, name); !unaffected {
-					result = c.newInstantiatedSymbol(symbol, resolution.mapper)
-				}
+				result = c.instantiateObjectTypeMember(resolution, name, symbol)
 			}
 		}
 	}
@@ -19699,6 +19697,15 @@ func (c *Checker) resolveObjectTypeMember(resolution *objectMemberResolution, na
 	return result
 }
 
+func (c *Checker) instantiateObjectTypeMember(resolution *objectMemberResolution, name string, symbol *ast.Symbol) *ast.Symbol {
+	if resolution.mapper != nil {
+		if _, unaffected := slices.BinarySearch(resolution.unaffected, name); !unaffected {
+			return c.newInstantiatedSymbol(symbol, resolution.mapper)
+		}
+	}
+	return symbol
+}
+
 func (c *Checker) everyObjectTypeMemberName(resolution *objectMemberResolution, f func(string) bool) bool {
 	var seen collections.Set[*objectMemberResolution]
 	return c.everyObjectTypeMemberNameWorker(resolution, &seen, f)
@@ -19731,18 +19738,64 @@ func (c *Checker) everyObjectTypeMemberNameWorker(resolution *objectMemberResolu
 }
 
 func (c *Checker) resolveObjectTypeProperties(t *Type, resolution *objectMemberResolution) {
+	if resolution.mapper != nil && len(resolution.baseTypes) == 0 && !resolution.fullOnly {
+		properties := c.getNamedMembers(resolution.source.declaredMembers, t.symbol)
+		members := make(ast.SymbolTable, len(properties))
+		count := 0
+		for _, symbol := range properties {
+			name := symbol.Name()
+			member, cached := resolution.members[name]
+			if !cached {
+				member = c.instantiateObjectTypeMember(resolution, name, symbol)
+			}
+			if member != nil {
+				members[name] = member
+				properties[count] = member
+				count++
+			}
+		}
+		data := t.AsStructuredType()
+		data.members = members
+		data.properties = properties[:count]
+		t.objectFlags |= ObjectFlagsMembersResolved
+		delete(c.objectMemberResolutions, t)
+		return
+	}
 	if resolution.mapper == nil && len(resolution.baseTypes) == 0 {
 		resolution.members = resolution.source.declaredMembers
 	} else {
 		if resolution.members == nil {
 			resolution.members = make(ast.SymbolTable, len(resolution.source.declaredMembers))
 		}
-		for name := range resolution.source.declaredMembers {
-			c.resolveObjectTypeMember(resolution, name, true /*instantiate*/)
+		for name, symbol := range resolution.source.declaredMembers {
+			if _, cached := resolution.members[name]; cached {
+				continue
+			}
+			if symbol.Flags()&ast.SymbolFlagsValue != 0 && (resolution.mapper == nil || !isReservedMemberName(name)) {
+				resolution.members[name] = c.instantiateObjectTypeMember(resolution, name, symbol)
+			} else {
+				c.resolveObjectTypeMember(resolution, name, true /*instantiate*/)
+			}
 		}
 		for _, baseType := range resolution.baseTypes {
-			for _, property := range c.getPropertiesOfType(baseType) {
-				c.resolveObjectTypeMember(resolution, property.Name(), true /*instantiate*/)
+			properties := c.getPropertiesOfType(baseType)
+			base := c.getReducedApparentType(baseType)
+			canonical := base.flags&TypeFlagsObject != 0 && base.objectFlags&ObjectFlagsMembersResolved != 0 &&
+				c.objectMemberResolutions[base] == nil &&
+				(base.symbol == nil || base.symbol.Flags()&ast.SymbolFlagsValueModule == 0)
+			for _, property := range properties {
+				name := property.Name()
+				if _, cached := resolution.members[name]; cached {
+					continue
+				}
+				// Reuse the enumerated value only when lookup through the base's table
+				// has the same identity; unusual keys and aliases use the shared resolver.
+				if canonical && base.AsStructuredType().members[name] == property &&
+					property.Flags()&ast.SymbolFlagsValue != 0 && !isStaticPrivateIdentifierProperty(property) {
+					resolution.members[name] = property
+				} else {
+					c.resolveObjectTypeMember(resolution, name, true /*instantiate*/)
+				}
 			}
 		}
 	}
