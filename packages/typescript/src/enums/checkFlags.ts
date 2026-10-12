@@ -29,6 +29,7 @@ export var CheckFlags: any;
     CheckFlags[CheckFlags["IsDiscriminantComputed"] = 16777216] = "IsDiscriminantComputed";
     CheckFlags[CheckFlags["IsDiscriminant"] = 33554432] = "IsDiscriminant";
     CheckFlags[CheckFlags["IndexSymbol"] = 67108864] = "IndexSymbol";
+    CheckFlags[CheckFlags["ExportConflict"] = 134217728] = "ExportConflict";
     CheckFlags[CheckFlags["Synthetic"] = 6] = "Synthetic";
     CheckFlags[CheckFlags["NonUniformAndLiteral"] = 192] = "NonUniformAndLiteral";
     CheckFlags[CheckFlags["Partial"] = 48] = "Partial";
