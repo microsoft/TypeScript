@@ -2,7 +2,7 @@ import type {
     LspMiddlewareMethod,
     LspMiddlewareTransformer,
     TypeScriptSDK,
-} from "@typescript/typescript/unstable/vscode";
+} from "@typescript/typescript/vscode";
 import * as path from "path";
 import * as vscode from "vscode";
 import { ActiveJsTsEditorTracker } from "./activeJsTsEditorTracker";

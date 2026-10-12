@@ -56,6 +56,7 @@ export { SyntaxKind } from "#enums/syntaxKind";
 export { TokenFlags } from "#enums/tokenFlags";
 
 export * from "./ast.generated.ts";
+export * as factory from "./factory.generated.ts";
 
 // ── Core types ──
 

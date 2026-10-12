@@ -230,7 +230,7 @@ func getSourceDefCheckerInfo(
 	if len(declarations) == 0 && isPropertyName {
 		if left := node.Parent.Expression(); left != nil {
 			if prop := c.GetPropertyOfType(c.GetTypeAtLocation(left), node.Text()); prop != nil {
-				declarations = prop.Declarations
+				declarations = prop.Declarations()
 			}
 		}
 	}
@@ -254,7 +254,7 @@ func getSourceDefCheckerInfo(
 		}
 	}
 	if sym := c.GetSymbolAtLocation(resolveNode); sym != nil {
-		for _, d := range sym.Declarations {
+		for _, d := range sym.Declarations() {
 			if !ast.IsImportSpecifier(d) && !ast.IsImportClause(d) && !ast.IsNamespaceImport(d) && !ast.IsImportEqualsDeclaration(d) {
 				continue
 			}
