@@ -892,6 +892,237 @@
 // | 
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
+// type Show<T> = { [K in keyof T]: T[K] } & unknown;
+// type Resolve<M, K extends keyof M> = Show<{
+//     [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+// }>;
+// declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
+// const mappedCycle = build<{ Node: { value: number; next: "ref" } }>();
+//       ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const mappedCycle: {
+// |     Node: {
+// |         value: number;
+// |         next: ...;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const mappedCycle: {
+// |     Node: {
+// |         value: number;
+// |         next: ...;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// mappedCycle.Node.next.next.value;
+//             ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Node: {
+// |     value: number;
+// |     next: ...;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//                  ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) next: {
+// |     value: number;
+// |     next: ...;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const nestedCycle = { wrapped: mappedCycle };
+//       ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const nestedCycle: {
+// |     wrapped: {
+// |         Node: {
+// |             value: number;
+// |             next: ...;
+// |         };
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const sharedCycles = { first: mappedCycle, second: mappedCycle };
+//       ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const sharedCycles: {
+// |     first: {
+// |         Node: {
+// |             value: number;
+// |             next: ...;
+// |         };
+// |     };
+// |     second: {
+// |         Node: {
+// |             value: number;
+// |             next: ...;
+// |         };
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// declare const buildOptional: <M>() => { [K in keyof M]?: Resolve<M, K> };
+// declare const buildNullable: <M>() => { [K in keyof M]: Resolve<M, K> | null };
+// const optionalBox = { cycle: buildOptional<{ Node: { value: number; next: "ref" } }>() };
+//       ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const optionalBox: {
+// |     cycle: {
+// |         Node?: {
+// |             value: number;
+// |             next: ...;
+// |         } | undefined;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const optionalBox: {
+// |     cycle: {
+// |         Node?: {
+// |             value: number;
+// |             next: ...;
+// |         } | undefined;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const nullableBox = { cycle: buildNullable<{ Node: { value: number; next: "ref" } }>() };
+//       ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const nullableBox: {
+// |     cycle: {
+// |         Node: {
+// |             value: number;
+// |             next: ...;
+// |         } | null;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// type ResolveNullable<M, K extends keyof M> = Show<{
+//     [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullable<M, K> | null : M[K][P];
+// }>;
+// declare const buildNullableLinks: <M>() => { [K in keyof M]: ResolveNullable<M, K> | null };
+// const nullableLinkBox = { cycle: buildNullableLinks<{ Node: { value: number; next: "ref" } }>() };
+//       ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const nullableLinkBox: {
+// |     cycle: {
+// |         Node: {
+// |             value: number;
+// |             next: ... | null;
+// |         } | null;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// function captured<T>(value: T) {
+//     const node = { value, next: () => node };
+//     return node;
+// }
+// const capturedValue = captured(1);
+//       ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const capturedValue: {
+// |     value: number;
+// |     next: () => ...;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const capturedValue: {
+// |     value: number;
+// |     next: () => ...;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// capturedValue.next();
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) next: () => {
+// |     value: number;
+// |     next: () => ...;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// function inferredCaptured<T>() {
+//     type Node<V> = { value: V; next: Node<V> };
+//     return null! as (T extends () => infer U ? Node<U> : never);
+// }
+// const inferredValue = inferredCaptured<() => string>();
+//       ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const inferredValue: Node<string>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// declare const buildMixed: <M>() => { [K in keyof M]?: Resolve<M, K> | false | null };
+// const mixedBox = { cycle: buildMixed<{ Node: { value: number; next: "ref" } }>() };
+//       ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const mixedBox: {
+// |     cycle: {
+// |         Node?: false | {
+// |             value: number;
+// |             next: ...;
+// |         } | null | undefined;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
 [
   {
     "marker": {
@@ -2687,6 +2918,457 @@
           "end": {
             "line": 75,
             "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2725,
+      "LSPosition": {
+        "line": 81,
+        "character": 17
+      },
+      "Name": "mappedCycle",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst mappedCycle: {\n    Node: {\n        value: number;\n        next: ...;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 81,
+            "character": 6
+          },
+          "end": {
+            "line": 81,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2725,
+      "LSPosition": {
+        "line": 81,
+        "character": 17
+      },
+      "Name": "mappedCycle",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst mappedCycle: {\n    Node: {\n        value: number;\n        next: ...;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 81,
+            "character": 6
+          },
+          "end": {
+            "line": 81,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 2795,
+      "LSPosition": {
+        "line": 82,
+        "character": 16
+      },
+      "Name": "mappedNode",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(property) Node: {\n    value: number;\n    next: ...;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 82,
+            "character": 12
+          },
+          "end": {
+            "line": 82,
+            "character": 16
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2800,
+      "LSPosition": {
+        "line": 82,
+        "character": 21
+      },
+      "Name": "mappedNext",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(property) next: {\n    value: number;\n    next: ...;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 82,
+            "character": 17
+          },
+          "end": {
+            "line": 82,
+            "character": 21
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2830,
+      "LSPosition": {
+        "line": 83,
+        "character": 17
+      },
+      "Name": "nestedMappedCycle",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst nestedCycle: {\n    wrapped: {\n        Node: {\n            value: number;\n            next: ...;\n        };\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 83,
+            "character": 6
+          },
+          "end": {
+            "line": 83,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2877,
+      "LSPosition": {
+        "line": 84,
+        "character": 18
+      },
+      "Name": "sharedMappedCycles",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst sharedCycles: {\n    first: {\n        Node: {\n            value: number;\n            next: ...;\n        };\n    };\n    second: {\n        Node: {\n            value: number;\n            next: ...;\n        };\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 84,
+            "character": 6
+          },
+          "end": {
+            "line": 84,
+            "character": 18
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 3096,
+      "LSPosition": {
+        "line": 87,
+        "character": 17
+      },
+      "Name": "optionalMappedCycle",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst optionalBox: {\n    cycle: {\n        Node?: {\n            value: number;\n            next: ...;\n        } | undefined;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 87,
+            "character": 6
+          },
+          "end": {
+            "line": 87,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 3096,
+      "LSPosition": {
+        "line": 87,
+        "character": 17
+      },
+      "Name": "optionalMappedCycle",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst optionalBox: {\n    cycle: {\n        Node?: {\n            value: number;\n            next: ...;\n        } | undefined;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 87,
+            "character": 6
+          },
+          "end": {
+            "line": 87,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 3186,
+      "LSPosition": {
+        "line": 88,
+        "character": 17
+      },
+      "Name": "nullableMappedCycle",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst nullableBox: {\n    cycle: {\n        Node: {\n            value: number;\n            next: ...;\n        } | null;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 88,
+            "character": 6
+          },
+          "end": {
+            "line": 88,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 3516,
+      "LSPosition": {
+        "line": 93,
+        "character": 21
+      },
+      "Name": "nullableMappedLinks",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst nullableLinkBox: {\n    cycle: {\n        Node: {\n            value: number;\n            next: ... | null;\n        } | null;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 93,
+            "character": 6
+          },
+          "end": {
+            "line": 93,
+            "character": 21
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 3711,
+      "LSPosition": {
+        "line": 98,
+        "character": 19
+      },
+      "Name": "capturedValue",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst capturedValue: {\n    value: number;\n    next: () => ...;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 98,
+            "character": 6
+          },
+          "end": {
+            "line": 98,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 3711,
+      "LSPosition": {
+        "line": 98,
+        "character": 19
+      },
+      "Name": "capturedValue",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst capturedValue: {\n    value: number;\n    next: () => ...;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 98,
+            "character": 6
+          },
+          "end": {
+            "line": 98,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 3745,
+      "LSPosition": {
+        "line": 99,
+        "character": 18
+      },
+      "Name": "capturedNext",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(property) next: () => {\n    value: number;\n    next: () => ...;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 99,
+            "character": 14
+          },
+          "end": {
+            "line": 99,
+            "character": 18
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 3916,
+      "LSPosition": {
+        "line": 104,
+        "character": 19
+      },
+      "Name": "inferredCapturedValue",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst inferredValue: Node<string>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 104,
+            "character": 6
+          },
+          "end": {
+            "line": 104,
+            "character": 19
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 4053,
+      "LSPosition": {
+        "line": 106,
+        "character": 14
+      },
+      "Name": "mixedMappedCycle",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst mixedBox: {\n    cycle: {\n        Node?: false | {\n            value: number;\n            next: ...;\n        } | null | undefined;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 106,
+            "character": 6
+          },
+          "end": {
+            "line": 106,
+            "character": 14
           }
         }
       },
