@@ -139,6 +139,7 @@ const (
 	CachedTypeKindDecoratorContextStatic
 	CachedTypeKindDecoratorContextPrivate
 	CachedTypeKindDecoratorContextPrivateStatic
+	CachedTypeKindNonDistributedConditionalType
 )
 
 // CachedTypeKey
@@ -23405,12 +23406,19 @@ func (c *Checker) getDistributedTypeFromTypeParameter(t *Type) *Type {
 // mapped back to the non-distributed form. This is the identity instantiation of the conditional type,
 // which is cached in the instantiation map of the conditional type's root.
 func (c *Checker) getNonDistributedConditionalType(t *Type) *Type {
-	if typeParameter := getNonDistributedTypeParameter(t.AsConditionalType().checkType); typeParameter != t.AsConditionalType().checkType {
-		instantiated := c.instantiateType(t, newSimpleTypeMapper(typeParameter, typeParameter))
-		debug.Assert(instantiated.flags&TypeFlagsConditional != 0, "Identity instantiation of a conditional type should remain deferred")
-		return instantiated
+	checkType := t.AsConditionalType().checkType
+	typeParameter := getNonDistributedTypeParameter(checkType)
+	if typeParameter == checkType {
+		return t
 	}
-	return t
+	key := CachedTypeKey{kind: CachedTypeKindNonDistributedConditionalType, typeId: t.id}
+	if cached := c.cachedTypes[key]; cached != nil {
+		return cached
+	}
+	result := c.instantiateType(t, newSimpleTypeMapper(typeParameter, typeParameter))
+	debug.Assert(result.flags&TypeFlagsConditional != 0, "Identity instantiation of a conditional type should remain deferred")
+	c.cachedTypes[key] = result
+	return result
 }
 
 func getNonDistributedTypeParameter(t *Type) *Type {
