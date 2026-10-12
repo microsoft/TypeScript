@@ -25659,36 +25659,26 @@ func (c *Checker) newUniqueESSymbolType(symbol *ast.Symbol, name string) *Type {
 
 func (c *Checker) newObjectType(objectFlags ObjectFlags, symbol *ast.Symbol) *Type {
 	var t *Type
-	var kind typeKind
 	switch {
 	case objectFlags&ObjectFlagsClassOrInterface != 0:
-		t = c.interfaceTypeArena.New().AsType()
-		kind = typeKindInterface
+		t = c.newType(TypeFlagsObject, objectFlags, c.interfaceTypeArena.New().AsType(), typeKindInterface)
 	case objectFlags&ObjectFlagsTuple != 0:
-		t = (&TupleType{}).AsType()
-		kind = typeKindTuple
+		t = c.newType(TypeFlagsObject, objectFlags, (&TupleType{}).AsType(), typeKindTuple)
 	case objectFlags&ObjectFlagsReference != 0:
-		t = c.typeReferenceArena.New().AsType()
-		kind = typeKindTypeReference
+		t = c.newType(TypeFlagsObject, objectFlags, c.typeReferenceArena.New().AsType(), typeKindTypeReference)
 	case objectFlags&ObjectFlagsMapped != 0:
-		t = c.mappedTypeArena.New().AsType()
-		kind = typeKindMapped
+		t = c.newType(TypeFlagsObject, objectFlags, c.mappedTypeArena.New().AsType(), typeKindMapped)
 	case objectFlags&ObjectFlagsReverseMapped != 0:
-		t = (&ReverseMappedType{}).AsType()
-		kind = typeKindReverseMapped
+		t = c.newType(TypeFlagsObject, objectFlags, (&ReverseMappedType{}).AsType(), typeKindReverseMapped)
 	case objectFlags&ObjectFlagsEvolvingArray != 0:
-		t = (&EvolvingArrayType{}).AsType()
-		kind = typeKindEvolvingArray
+		t = c.newType(TypeFlagsObject, objectFlags, (&EvolvingArrayType{}).AsType(), typeKindEvolvingArray)
 	case objectFlags&ObjectFlagsInstantiationExpressionType != 0:
-		t = (&InstantiationExpressionType{}).AsType()
-		kind = typeKindInstantiationExpression
+		t = c.newType(TypeFlagsObject, objectFlags, (&InstantiationExpressionType{}).AsType(), typeKindInstantiationExpression)
 	case objectFlags&ObjectFlagsAnonymous != 0:
-		t = c.objectTypeArena.New().AsType()
-		kind = typeKindObject
+		t = c.newType(TypeFlagsObject, objectFlags, c.objectTypeArena.New().AsType(), typeKindObject)
 	default:
 		panic("Unhandled case in newObjectType")
 	}
-	c.newType(TypeFlagsObject, objectFlags, t, kind)
 	t.symbol = symbol
 	return t
 }

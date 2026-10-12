@@ -1,0 +1,120 @@
+	package ast
+	
+	type Kind int16
+	
+	const (
+		KindIdentifier Kind = iota
+		KindImportDeclaration
+		KindJSImportDeclaration
+	)
+	
+	type Node struct {
+		Kind Kind
+	}
+	
+	type Identifier struct {
+		Node
+		Text string
+	}
+	
+	type ImportDeclaration struct {
+		Node
+	}
+	
+	func (n *Node) AsNode() *Node { return n }
+	
+	func (n *Node) AsIdentifier() *Identifier {
+		if n.Kind != KindIdentifier {
+			panic("Invalid node cast")
+		}
+		return nil
+	}
+	
+	func (n *Node) AsImportDeclaration() *ImportDeclaration {
+		switch n.Kind {
+		case KindImportDeclaration, KindJSImportDeclaration:
+			return nil
+		default:
+			panic("Invalid node cast")
+		}
+	}
+	
+	func newNode(kind Kind, node *Node) *Node {
+		node.Kind = kind
+		return node
+	}
+	
+	func NewIdentifier(text string) *Node {
+		data := &Identifier{Text: text}
+		return newNode(KindIdentifier, data.AsNode())
+	}
+	
+	func badFactory() *Node {
+		data := &ImportDeclaration{}
+		return newNode(KindIdentifier, data.AsNode())
+		       ~
+!!! unsafelayout: newNode must pair a concrete AsNode() receiver with a compatible kind
+	}
+	
+	func escapes(kind Kind) *Node {
+		data := &Identifier{}
+		_ = newNode
+		    ~
+!!! unsafelayout: checked construction must be called directly so its allocation/tag pairing can be verified
+		return newNode(kind, data.AsNode())
+		       ~
+!!! unsafelayout: newNode must pair a concrete AsNode() receiver with a compatible kind
+	}
+	
+	type PretendIdentifier struct {
+		Identifier
+	}
+	
+	func (n *PretendIdentifier) AsNode() *Node { return &n.Node }
+	
+	func shadowedUpcast() *Node {
+		data := &PretendIdentifier{}
+		return newNode(KindIdentifier, data.AsNode())
+		       ~
+!!! unsafelayout: newNode must pair a concrete AsNode() receiver with a compatible kind
+	}
+	
+	func illegalWrites(node *Node, identifier *Identifier, declaration *ImportDeclaration, kind Kind) {
+		node.Kind = KindIdentifier
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		identifier.Kind = KindIdentifier
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		identifier.Kind = KindImportDeclaration
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		declaration.Kind = KindImportDeclaration
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		declaration.Kind = KindJSImportDeclaration
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		declaration.Kind = kind
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		declaration.Kind += KindImportDeclaration
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		node.Kind++
+		~
+!!! unsafelayout: incrementing a compiler tag bypasses checked tag assignment
+		_ = &node.Kind
+		    ~
+!!! unsafelayout: taking a compiler tag's address bypasses checked tag assignment
+		(node.Kind) = KindIdentifier
+		 ~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		(node.Kind)++
+		~
+!!! unsafelayout: incrementing a compiler tag bypasses checked tag assignment
+		_ = &(node.Kind)
+		    ~
+!!! unsafelayout: taking a compiler tag's address bypasses checked tag assignment
+	}
+	

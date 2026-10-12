@@ -1,0 +1,147 @@
+	package checker
+	
+	import "unsafe"
+	
+	type typeKind uint8
+	
+	const (
+		typeKindLiteral typeKind = iota
+		typeKindObject
+	)
+	
+	type Type struct {
+		kind typeKind
+	}
+	
+	type LiteralType struct {
+		TypeBase
+	}
+	
+	type ObjectType struct {
+		TypeBase
+	}
+	
+	type TypeBase struct {
+		Type
+	}
+	
+	func (t *TypeBase) AsType() *Type { return &t.Type }
+	
+	type Checker struct{}
+	
+	func (c *Checker) newType(flags, objectFlags int, typ *Type, kind typeKind) *Type {
+		typ.kind = kind
+		return typ
+	}
+	
+	func castType[T any](t *Type, kind typeKind) *T {
+		if t.kind != kind {
+			panic("Invalid type cast")
+		}
+		return (*T)(unsafe.Pointer(t))
+	}
+	
+	func calls(c *Checker, literal *LiteralType, typ *Type, kind typeKind) {
+		c.newType(0, 0, literal.AsType(), typeKindLiteral)
+		c.newType(0, 0, literal.AsType(), typeKindObject)
+		~
+!!! unsafelayout: newType must directly pair a concrete AsType() receiver with its matching constant kind
+		c.newType(0, 0, literal.AsType(), kind)
+		~
+!!! unsafelayout: newType must directly pair a concrete AsType() receiver with its matching constant kind
+		c.newType(0, 0, typ, typeKindLiteral)
+		~
+!!! unsafelayout: newType must directly pair a concrete AsType() receiver with its matching constant kind
+		_ = c.newType
+		    ~
+!!! unsafelayout: checked construction must be called directly so its allocation/tag pairing can be verified
+		_ = castType[LiteralType](typ, typeKindLiteral)
+		_ = castType[LiteralType](typ, typeKindObject)
+		    ~
+!!! unsafelayout: checked cast must directly pair its concrete target type with its matching constant kind
+		_ = castType[ObjectType](typ, typeKindLiteral)
+		    ~
+!!! unsafelayout: checked cast must directly pair its concrete target type with its matching constant kind
+		_ = castType[LiteralType](typ, kind)
+		    ~
+!!! unsafelayout: checked cast must directly pair its concrete target type with its matching constant kind
+		_ = castType[*LiteralType](typ, typeKindLiteral)
+		    ~
+!!! unsafelayout: checked cast must directly pair its concrete target type with its matching constant kind
+		_ = castType[LiteralType]
+		    ~
+!!! unsafelayout: checked cast must directly pair its concrete target type with its matching constant kind
+		typ.kind = typeKindLiteral
+		~
+!!! unsafelayout: type kind is immutable outside checked construction
+		typ.kind++
+		~
+!!! unsafelayout: incrementing a compiler tag bypasses checked tag assignment
+		_ = &typ.kind
+		    ~
+!!! unsafelayout: taking a compiler tag's address bypasses checked tag assignment
+		_ = (*LiteralType)(unsafe.Pointer(typ))
+		    ~
+!!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
+		                   ~
+!!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
+	}
+	
+	type PretendLiteralType struct {
+		LiteralType
+	}
+	
+	func (t *PretendLiteralType) AsType() *Type { return &t.Type }
+	
+	func shadowedUpcast(c *Checker) {
+		data := &PretendLiteralType{}
+		c.newType(0, 0, data.AsType(), typeKindLiteral)
+		~
+!!! unsafelayout: newType must directly pair a concrete AsType() receiver with its matching constant kind
+	}
+	
+	type typeMapperKind uint8
+	
+	const (
+		typeMapperSimple typeMapperKind = iota
+		typeMapperArray
+	)
+	
+	type TypeMapper struct {
+		kind typeMapperKind
+	}
+	
+	type SimpleTypeMapper struct {
+		TypeMapper
+	}
+	
+	type ArrayTypeMapper struct {
+		TypeMapper
+	}
+	
+	func castTypeMapper[T any](m *TypeMapper, kind typeMapperKind) *T {
+		if m.kind != kind {
+			panic("Invalid type mapper cast")
+		}
+		return (*T)(unsafe.Pointer(m))
+	}
+	
+	func mapperCalls(simple *SimpleTypeMapper, header *TypeMapper) {
+		simple.kind = typeMapperSimple
+		simple.kind = typeMapperArray
+		~
+!!! unsafelayout: mapper tag must match the concrete mapper allocation
+		header.kind = typeMapperSimple
+		~
+!!! unsafelayout: mapper tag must match the concrete mapper allocation
+		_ = castTypeMapper[SimpleTypeMapper](header, typeMapperSimple)
+		_ = castTypeMapper[SimpleTypeMapper](header, typeMapperArray)
+		    ~
+!!! unsafelayout: checked cast must directly pair its concrete target type with its matching constant kind
+		_ = (*SimpleTypeMapper)(unsafe.Pointer(header))
+		    ~
+!!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
+		                        ~
+!!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
+	}
+	

@@ -22,6 +22,7 @@ func (f *plugin) BuildAnalyzers() ([]*analysis.Analyzer, error) {
 		forbidParentAccessAnalyzer,
 		shadowAnalyzer,
 		typedPathsAnalyzer,
+		unsafeLayoutAnalyzer,
 		unexportedAPIAnalyzer,
 	}, nil
 }

@@ -1,0 +1,102 @@
+	package consumer
+	
+	import (
+		"unsafe"
+	
+		"testdata/unsafelayout/internal/ast"
+		"testdata/unsafelayout/internal/checker"
+	)
+	
+	type BadNode ast.Node
+	     ~
+!!! unsafelayout: defining a new compiler-record type bypasses checked construction; use a type alias
+	
+	type NodeAlias = ast.Node
+	
+	type BorrowedNode struct {
+		*ast.Node
+	}
+	
+	func uses(node *ast.Node, declaration *ast.ImportDeclaration, kind ast.Kind, typ *checker.Type) {
+		node.Kind = ast.KindIdentifier
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		declaration.Kind = ast.KindImportDeclaration
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		declaration.Kind = ast.KindJSImportDeclaration
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		node.AsImportDeclaration().Kind = ast.KindImportDeclaration
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		declaration.Kind = ast.KindIdentifier
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		declaration.Kind = kind
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		declaration.Kind++
+		~
+!!! unsafelayout: incrementing a compiler tag bypasses checked tag assignment
+		_ = &node.Kind
+		    ~
+!!! unsafelayout: taking a compiler tag's address bypasses checked tag assignment
+		_ = &ast.Node{Kind: ast.KindIdentifier}
+		     ~
+!!! unsafelayout: a bare compiler header has no concrete payload; use a concrete factory
+		     ~
+!!! unsafelayout: construct compiler records through their owning factories, not struct literals
+		              ~
+!!! unsafelayout: compiler tags must be assigned by checked construction, not struct literals
+		_ = &ast.Identifier{}
+		     ~
+!!! unsafelayout: construct compiler records through their owning factories, not struct literals
+		_ = new(ast.Node)
+		    ~
+!!! unsafelayout: a bare compiler header has no concrete payload; use a concrete factory
+		    ~
+!!! unsafelayout: allocate compiler records through their owning factories
+		_ = new(ast.Identifier)
+		    ~
+!!! unsafelayout: allocate compiler records through their owning factories
+		_ = new(NodeAlias)
+		    ~
+!!! unsafelayout: a bare compiler header has no concrete payload; use a concrete factory
+		    ~
+!!! unsafelayout: allocate compiler records through their owning factories
+		_ = unsafe.Sizeof(ast.Node{})
+		_ = unsafe.Offsetof(ast.Identifier{}.Node)
+		_ = (*ast.Identifier)(unsafe.Pointer(node))
+		    ~
+!!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
+		                      ~
+!!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
+		_ = *node
+		    ~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
+		_ = *declaration
+		    ~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
+		_ = *typ
+		    ~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
+		copy := *node
+		        ~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
+		_ = copy
+		    ~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
+		pointer := unsafe.Pointer(node)
+		           ~
+!!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
+		_ = pointer
+		borrowed := BorrowedNode{Node: node}
+		borrowed.Kind = ast.KindIdentifier
+		~
+!!! unsafelayout: AST kind is immutable outside checked construction; create a new node
+		_ = &borrowed.Kind
+		    ~
+!!! unsafelayout: taking a compiler tag's address bypasses checked tag assignment
+	}
+	

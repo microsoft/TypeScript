@@ -174,6 +174,8 @@ func (list *ModifierList) Clone(f *NodeFactory) *ModifierList {
 
 // Every concrete AST node embeds Node at offset zero. Kind identifies the
 // enclosing allocation, which generated accessors recover without a data pointer.
+// Initialize Kind only in newNode; transformations must construct a new node
+// rather than retagging one. The unsafelayout linter enforces this boundary.
 
 type Node struct {
 	Kind   Kind
