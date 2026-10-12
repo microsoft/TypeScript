@@ -474,3 +474,14 @@ const page: Page = returned;
 
 declare let f: <A>(m: A, r: (a: A extends string ? A : 0) => void) => void;
 let g: <A>(m: A, r: (a: A extends string ? A : 0) => void) => void = f;
+
+type SigA = { m<T, U extends T extends 0 ? 1 : 2>(u: U): void };
+type SigB = { m<T, U extends T extends 0 ? 1 : 2>(u: U): void };
+declare const sigs: SigA | SigB;
+sigs.m(2);
+
+function conditionalRelations13<T>() {
+    type C<X> = X extends 0 ? 1 : 2;
+    var a: T extends 0 ? 1 : 2;
+    var a: C<T>;
+}

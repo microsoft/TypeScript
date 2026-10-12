@@ -3359,13 +3359,15 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		case source.flags&TypeFlagsConditional != 0:
 			if source.AsConditionalType().root.isDistributive == target.AsConditionalType().root.isDistributive {
-				result = r.isRelatedTo(source.AsConditionalType().checkType, target.AsConditionalType().checkType, RecursionFlagsBoth, false /*reportErrors*/)
+				s := r.c.getNonDistributedConditionalType(source)
+				t := r.c.getNonDistributedConditionalType(target)
+				result = r.isRelatedTo(s.AsConditionalType().checkType, t.AsConditionalType().checkType, RecursionFlagsBoth, false /*reportErrors*/)
 				if result != TernaryFalse {
-					result &= r.isRelatedTo(source.AsConditionalType().extendsType, target.AsConditionalType().extendsType, RecursionFlagsBoth, false /*reportErrors*/)
+					result &= r.isRelatedTo(s.AsConditionalType().extendsType, t.AsConditionalType().extendsType, RecursionFlagsBoth, false /*reportErrors*/)
 					if result != TernaryFalse {
-						result &= r.isRelatedTo(r.c.getTrueTypeFromConditionalType(source), r.c.getTrueTypeFromConditionalType(target), RecursionFlagsBoth, false /*reportErrors*/)
+						result &= r.isRelatedTo(r.c.getTrueTypeFromConditionalType(s), r.c.getTrueTypeFromConditionalType(t), RecursionFlagsBoth, false /*reportErrors*/)
 						if result != TernaryFalse {
-							result &= r.isRelatedTo(r.c.getFalseTypeFromConditionalType(source), r.c.getFalseTypeFromConditionalType(target), RecursionFlagsBoth, false /*reportErrors*/)
+							result &= r.isRelatedTo(r.c.getFalseTypeFromConditionalType(s), r.c.getFalseTypeFromConditionalType(t), RecursionFlagsBoth, false /*reportErrors*/)
 							if result != TernaryFalse {
 								return result
 							}

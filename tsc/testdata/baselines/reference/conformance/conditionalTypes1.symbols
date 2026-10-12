@@ -1898,3 +1898,50 @@ let g: <A>(m: A, r: (a: A extends string ? A : 0) => void) => void = f;
 >A : Symbol(A, Decl(conditionalTypes1.ts, 471, 8))
 >f : Symbol(f, Decl(conditionalTypes1.ts, 470, 11))
 
+type SigA = { m<T, U extends T extends 0 ? 1 : 2>(u: U): void };
+>SigA : Symbol(SigA, Decl(conditionalTypes1.ts, 471, 71))
+>m : Symbol(m, Decl(conditionalTypes1.ts, 473, 13))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 473, 16))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 473, 18))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 473, 16))
+>u : Symbol(u, Decl(conditionalTypes1.ts, 473, 50))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 473, 18))
+
+type SigB = { m<T, U extends T extends 0 ? 1 : 2>(u: U): void };
+>SigB : Symbol(SigB, Decl(conditionalTypes1.ts, 473, 64))
+>m : Symbol(m, Decl(conditionalTypes1.ts, 474, 13))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 474, 16))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 474, 18))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 474, 16))
+>u : Symbol(u, Decl(conditionalTypes1.ts, 474, 50))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 474, 18))
+
+declare const sigs: SigA | SigB;
+>sigs : Symbol(sigs, Decl(conditionalTypes1.ts, 475, 13))
+>SigA : Symbol(SigA, Decl(conditionalTypes1.ts, 471, 71))
+>SigB : Symbol(SigB, Decl(conditionalTypes1.ts, 473, 64))
+
+sigs.m(2);
+>sigs.m : Symbol(m, Decl(conditionalTypes1.ts, 473, 13), Decl(conditionalTypes1.ts, 474, 13))
+>sigs : Symbol(sigs, Decl(conditionalTypes1.ts, 475, 13))
+>m : Symbol(m, Decl(conditionalTypes1.ts, 473, 13), Decl(conditionalTypes1.ts, 474, 13))
+
+function conditionalRelations13<T>() {
+>conditionalRelations13 : Symbol(conditionalRelations13, Decl(conditionalTypes1.ts, 476, 10))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 478, 32))
+
+    type C<X> = X extends 0 ? 1 : 2;
+>C : Symbol(C, Decl(conditionalTypes1.ts, 478, 38))
+>X : Symbol(X, Decl(conditionalTypes1.ts, 479, 11))
+>X : Symbol(X, Decl(conditionalTypes1.ts, 479, 11))
+
+    var a: T extends 0 ? 1 : 2;
+>a : Symbol(a, Decl(conditionalTypes1.ts, 480, 7), Decl(conditionalTypes1.ts, 481, 7))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 478, 32))
+
+    var a: C<T>;
+>a : Symbol(a, Decl(conditionalTypes1.ts, 480, 7), Decl(conditionalTypes1.ts, 481, 7))
+>C : Symbol(C, Decl(conditionalTypes1.ts, 478, 38))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 478, 32))
+}
+

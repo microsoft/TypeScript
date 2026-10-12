@@ -1450,3 +1450,36 @@ let g: <A>(m: A, r: (a: A extends string ? A : 0) => void) => void = f;
 >a : A extends string ? A : 0
 >f : <A>(m: A, r: (a: A extends string ? A : 0) => void) => void
 
+type SigA = { m<T, U extends T extends 0 ? 1 : 2>(u: U): void };
+>SigA : SigA
+>m : <T, U extends T extends 0 ? 1 : 2>(u: U) => void
+>u : U
+
+type SigB = { m<T, U extends T extends 0 ? 1 : 2>(u: U): void };
+>SigB : SigB
+>m : <T, U extends T extends 0 ? 1 : 2>(u: U) => void
+>u : U
+
+declare const sigs: SigA | SigB;
+>sigs : SigA | SigB
+
+sigs.m(2);
+>sigs.m(2) : void
+>sigs.m : (<T, U extends T extends 0 ? 1 : 2>(u: U) => void) | (<T, U extends T extends 0 ? 1 : 2>(u: U) => void)
+>sigs : SigA | SigB
+>m : (<T, U extends T extends 0 ? 1 : 2>(u: U) => void) | (<T, U extends T extends 0 ? 1 : 2>(u: U) => void)
+>2 : 2
+
+function conditionalRelations13<T>() {
+>conditionalRelations13 : <T>() => void
+
+    type C<X> = X extends 0 ? 1 : 2;
+>C : X extends 0 ? 1 : 2
+
+    var a: T extends 0 ? 1 : 2;
+>a : T extends 0 ? 1 : 2
+
+    var a: C<T>;
+>a : T extends 0 ? 1 : 2
+}
+
