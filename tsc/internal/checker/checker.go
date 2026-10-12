@@ -14901,8 +14901,11 @@ func (c *Checker) resolveExportByName(moduleSymbol *ast.Symbol, name string, sou
 	if exportValue != nil {
 		exportSymbol = c.getPropertyOfTypeEx(c.getTypeOfSymbol(exportValue), name, true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/)
 	} else {
-		exportSymbol = c.getExportsOfSymbol(moduleSymbol)[name]
-		exportStarDeclaration = c.moduleSymbolLinks.Get(moduleSymbol).typeOnlyExportStarMap[name]
+		exportSymbol = moduleSymbol.Exports()[name]
+		if exportSymbol == nil && name == ast.InternalSymbolNameDefault {
+			exportSymbol = c.getExportsOfSymbol(moduleSymbol)[name]
+			exportStarDeclaration = c.moduleSymbolLinks.Get(moduleSymbol).typeOnlyExportStarMap[name]
+		}
 	}
 	resolved := c.resolveSymbolEx(exportSymbol, dontResolveAlias)
 	c.markSymbolOfAliasDeclarationIfTypeOnly(sourceNode, exportStarDeclaration)

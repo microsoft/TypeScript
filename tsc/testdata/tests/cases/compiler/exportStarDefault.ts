@@ -26,6 +26,11 @@ export * from "./default";
 export * from "./other";
 export default class Local {}
 
+// @filename: /localDefaultExpression.ts
+export * from "./default";
+export * from "./other";
+export default 1;
+
 // @filename: /defaultType.ts
 export default interface DefaultType {
     value: string;
@@ -38,10 +43,12 @@ export type * from "./defaultType";
 import Default, { named } from "./reexport";
 import Resolved from "./resolved";
 import Local from "./localDefault";
+import valueDefault from "./localDefaultExpression";
 import type DefaultType from "./reexportType";
 
 new Default();
 new Resolved();
 new Local();
+valueDefault.toFixed();
 const value: DefaultType = { value: "" };
 named;
