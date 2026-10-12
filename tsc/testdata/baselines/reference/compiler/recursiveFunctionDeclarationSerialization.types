@@ -2671,3 +2671,111 @@ const shadowedValue: number = shadowedCycle.Node.next(1).next("text").value;
 >"text" : "text"
 >value : number
 
+=== globalRecursiveA.ts ===
+function makeA() {
+>makeA : () => { value: number; self(): { value: number; self(): any; }; }
+
+    return {
+>{        value: 1,        self() { return this; },    } : { value: number; self(): any; }
+
+        value: 1,
+>value : number
+>1 : 1
+
+        self() { return this; },
+>self : () => { value: number; self(): any; }
+>this : { value: number; self(): any; }
+
+    };
+}
+type makeReserved_recursive = "reserved";
+>makeReserved_recursive : "reserved"
+
+function makeReserved() {
+>makeReserved : () => { value: boolean; self(): { value: boolean; self(): any; }; }
+
+    return {
+>{        value: true,        self() { return this; },    } : { value: boolean; self(): any; }
+
+        value: true,
+>value : boolean
+>true : true
+
+        self() { return this; },
+>self : () => { value: boolean; self(): any; }
+>this : { value: boolean; self(): any; }
+
+    };
+}
+class GlobalA {
+>GlobalA : GlobalA
+
+    static create<T>(value: T) {
+>create : <T>(value: T) => { value: T; next: () => typeof node; }
+>value : T
+
+        const node = { value, next: () => node };
+>node : { value: T; next: () => typeof node; }
+>{ value, next: () => node } : { value: T; next: () => typeof node; }
+>value : T
+>next : () => { value: T; next: (typeof node)["next"]; }
+>() => node : () => { value: T; next: (typeof node)["next"]; }
+>node : { value: T; next: () => typeof node; }
+
+        return node;
+>node : { value: T; next: () => typeof node; }
+    }
+    static "a-b"() {
+>"a-b" : () => { value: boolean; next: () => typeof node; }
+
+        const node = { value: true, next: () => node };
+>node : { value: boolean; next: () => typeof node; }
+>{ value: true, next: () => node } : { value: boolean; next: () => typeof node; }
+>value : boolean
+>true : true
+>next : () => { value: boolean; next: (typeof node)["next"]; }
+>() => node : () => { value: boolean; next: (typeof node)["next"]; }
+>node : { value: boolean; next: () => typeof node; }
+
+        return node;
+>node : { value: boolean; next: () => typeof node; }
+    }
+}
+
+=== globalRecursiveB.ts ===
+function makeB() {
+>makeB : () => { value: string; self(): { value: string; self(): any; }; }
+
+    return {
+>{        value: "text",        self() { return this; },    } : { value: string; self(): any; }
+
+        value: "text",
+>value : string
+>"text" : "text"
+
+        self() { return this; },
+>self : () => { value: string; self(): any; }
+>this : { value: string; self(): any; }
+
+    };
+}
+class GlobalB {
+>GlobalB : GlobalB
+
+    static create<T>(value: T) {
+>create : <T>(value: T) => { value: T; next: () => typeof node; }
+>value : T
+
+        const node = { value, next: () => node };
+>node : { value: T; next: () => typeof node; }
+>{ value, next: () => node } : { value: T; next: () => typeof node; }
+>value : T
+>next : () => { value: T; next: (typeof node)["next"]; }
+>() => node : () => { value: T; next: (typeof node)["next"]; }
+>node : { value: T; next: () => typeof node; }
+
+        return node;
+>node : { value: T; next: () => typeof node; }
+    }
+}
+

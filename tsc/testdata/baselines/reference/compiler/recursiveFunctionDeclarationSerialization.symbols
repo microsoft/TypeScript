@@ -2644,3 +2644,99 @@ const shadowedValue: number = shadowedCycle.Node.next(1).next("text").value;
 >next : Symbol(next, Decl(shadowedMappedCycle.ts, 5, 59))
 >value : Symbol(value, Decl(shadowedMappedCycle.ts, 5, 44))
 
+=== globalRecursiveA.ts ===
+function makeA() {
+>makeA : Symbol(makeA, Decl(globalRecursiveA.ts, 0, 0))
+
+    return {
+        value: 1,
+>value : Symbol(value, Decl(globalRecursiveA.ts, 1, 12))
+
+        self() { return this; },
+>self : Symbol(self, Decl(globalRecursiveA.ts, 2, 17))
+>this : Symbol(__object, Decl(globalRecursiveA.ts, 1, 10))
+
+    };
+}
+type makeReserved_recursive = "reserved";
+>makeReserved_recursive : Symbol(makeReserved_recursive, Decl(globalRecursiveA.ts, 5, 1))
+
+function makeReserved() {
+>makeReserved : Symbol(makeReserved, Decl(globalRecursiveA.ts, 6, 41))
+
+    return {
+        value: true,
+>value : Symbol(value, Decl(globalRecursiveA.ts, 8, 12))
+
+        self() { return this; },
+>self : Symbol(self, Decl(globalRecursiveA.ts, 9, 20))
+>this : Symbol(__object, Decl(globalRecursiveA.ts, 8, 10))
+
+    };
+}
+class GlobalA {
+>GlobalA : Symbol(GlobalA, Decl(globalRecursiveA.ts, 12, 1))
+
+    static create<T>(value: T) {
+>create : Symbol(GlobalA.create, Decl(globalRecursiveA.ts, 13, 15))
+>T : Symbol(T, Decl(globalRecursiveA.ts, 14, 18))
+>value : Symbol(value, Decl(globalRecursiveA.ts, 14, 21))
+>T : Symbol(T, Decl(globalRecursiveA.ts, 14, 18))
+
+        const node = { value, next: () => node };
+>node : Symbol(node, Decl(globalRecursiveA.ts, 15, 13))
+>value : Symbol(value, Decl(globalRecursiveA.ts, 15, 22))
+>next : Symbol(next, Decl(globalRecursiveA.ts, 15, 29))
+>node : Symbol(node, Decl(globalRecursiveA.ts, 15, 13))
+
+        return node;
+>node : Symbol(node, Decl(globalRecursiveA.ts, 15, 13))
+    }
+    static "a-b"() {
+>"a-b" : Symbol(GlobalA["a-b"], Decl(globalRecursiveA.ts, 17, 5))
+
+        const node = { value: true, next: () => node };
+>node : Symbol(node, Decl(globalRecursiveA.ts, 19, 13))
+>value : Symbol(value, Decl(globalRecursiveA.ts, 19, 22))
+>next : Symbol(next, Decl(globalRecursiveA.ts, 19, 35))
+>node : Symbol(node, Decl(globalRecursiveA.ts, 19, 13))
+
+        return node;
+>node : Symbol(node, Decl(globalRecursiveA.ts, 19, 13))
+    }
+}
+
+=== globalRecursiveB.ts ===
+function makeB() {
+>makeB : Symbol(makeB, Decl(globalRecursiveB.ts, 0, 0))
+
+    return {
+        value: "text",
+>value : Symbol(value, Decl(globalRecursiveB.ts, 1, 12))
+
+        self() { return this; },
+>self : Symbol(self, Decl(globalRecursiveB.ts, 2, 22))
+>this : Symbol(__object, Decl(globalRecursiveB.ts, 1, 10))
+
+    };
+}
+class GlobalB {
+>GlobalB : Symbol(GlobalB, Decl(globalRecursiveB.ts, 5, 1))
+
+    static create<T>(value: T) {
+>create : Symbol(GlobalB.create, Decl(globalRecursiveB.ts, 6, 15))
+>T : Symbol(T, Decl(globalRecursiveB.ts, 7, 18))
+>value : Symbol(value, Decl(globalRecursiveB.ts, 7, 21))
+>T : Symbol(T, Decl(globalRecursiveB.ts, 7, 18))
+
+        const node = { value, next: () => node };
+>node : Symbol(node, Decl(globalRecursiveB.ts, 8, 13))
+>value : Symbol(value, Decl(globalRecursiveB.ts, 8, 22))
+>next : Symbol(next, Decl(globalRecursiveB.ts, 8, 29))
+>node : Symbol(node, Decl(globalRecursiveB.ts, 8, 13))
+
+        return node;
+>node : Symbol(node, Decl(globalRecursiveB.ts, 8, 13))
+    }
+}
+

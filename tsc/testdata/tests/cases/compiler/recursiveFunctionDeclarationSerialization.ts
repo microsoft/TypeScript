@@ -500,3 +500,42 @@ type Resolve<M, K extends keyof M> = Show<{
 declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
 export const shadowedCycle = build<{ Node: { value: number; next: "ref" } }>();
 const shadowedValue: number = shadowedCycle.Node.next(1).next("text").value;
+
+// @filename: globalRecursiveA.ts
+function makeA() {
+    return {
+        value: 1,
+        self() { return this; },
+    };
+}
+type makeReserved_recursive = "reserved";
+function makeReserved() {
+    return {
+        value: true,
+        self() { return this; },
+    };
+}
+class GlobalA {
+    static create<T>(value: T) {
+        const node = { value, next: () => node };
+        return node;
+    }
+    static "a-b"() {
+        const node = { value: true, next: () => node };
+        return node;
+    }
+}
+
+// @filename: globalRecursiveB.ts
+function makeB() {
+    return {
+        value: "text",
+        self() { return this; },
+    };
+}
+class GlobalB {
+    static create<T>(value: T) {
+        const node = { value, next: () => node };
+        return node;
+    }
+}

@@ -2945,6 +2945,84 @@ func TestTscIncremental(t *testing.T) {
 			},
 		},
 		{
+			subScenario: "recursive global declaration consumption",
+			files: FileMap{
+				"/home/src/workspaces/project/first/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "composite": true, "outDir": "dist" },
+					"files": ["index.ts"]
+				}`,
+				"/home/src/workspaces/project/first/index.ts": stringtestutil.Dedent(`
+					function makeA() {
+						return { value: 1, self() { return this; } };
+					}
+					type makeReserved_recursive = "reserved";
+					function makeReserved() {
+						return { value: true, self() { return this; } };
+					}
+					class GlobalA {
+						static create<T>(value: T) {
+							const node = { value, next: () => node };
+							return node;
+						}
+						static "a-b"() {
+							const node = { value: true, next: () => node };
+							return node;
+						}
+					}
+				`),
+				"/home/src/workspaces/project/second/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "composite": true, "outDir": "dist" },
+					"files": ["index.ts"]
+				}`,
+				"/home/src/workspaces/project/second/index.ts": stringtestutil.Dedent(`
+					function makeB() {
+						return { value: "text", self() { return this; } };
+					}
+					class GlobalB {
+						static create<T>(value: T) {
+							const node = { value, next: () => node };
+							return node;
+						}
+					}
+				`),
+				"/home/src/workspaces/project/consumer/tsconfig.json": `{
+					"compilerOptions": { "strict": true, "composite": true, "skipLibCheck": false },
+					"files": ["index.ts", "../first/dist/index.d.ts", "../second/dist/index.d.ts"],
+					"references": [{ "path": "../first" }, { "path": "../second" }]
+				}`,
+				"/home/src/workspaces/project/consumer/index.ts": stringtestutil.Dedent(`
+					export {};
+					const fromA: number = makeA().self().value;
+					const fromB: string = makeB().self().value;
+					const reserved: boolean = makeReserved().self().value;
+					const genericA: string = GlobalA.create("text").next().value;
+					const genericB: number = GlobalB.create(1).next().value;
+					const quoted: boolean = GlobalA["a-b"]().next().value;
+					const invalidA: string = makeA().self().value;
+					const invalidB: number = makeB().self().value;
+				`),
+			},
+			commandLineArgs: []string{"--build", "consumer"},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "add a comment to the first script",
+					edit: func(sys *TestSys) {
+						sys.appendFile("/home/src/workspaces/project/first/index.ts", "\n// comment-only edit\n")
+					},
+				},
+				noChange,
+				{
+					caption: "check both declarations with skipLibCheck",
+					edit: func(sys *TestSys) {
+						path := "/home/src/workspaces/project/consumer/tsconfig.json"
+						sys.writeFileNoError(path, strings.ReplaceAll(sys.readFileNoError(path), `"skipLibCheck": false`, `"skipLibCheck": true`))
+					},
+				},
+				noChange,
+			},
+		},
+		{
 			subScenario: "json module diagnostics are cleared after fixing the json file",
 			files: FileMap{
 				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
