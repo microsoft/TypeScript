@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/contextualRuleMessageInference.ts] ////
+
+=== contextualRuleMessageInference.ts ===
+type DeferredInference<T> = [T][T extends unknown ? 0 : never];
+>DeferredInference : DeferredInference<T>
+
+declare function runRule<Message extends string>(
+>runRule : <Message extends string>(rule: Message, tests: { invalid: readonly { errors: readonly { messageId: DeferredInference<Message>; }[]; }[]; }) => void
+
+    rule: Message,
+>rule : Message
+
+    tests: { invalid: readonly { errors: readonly { messageId: DeferredInference<Message> }[] }[] },
+>tests : { invalid: readonly { errors: readonly { messageId: DeferredInference<Message>; }[]; }[]; }
+>invalid : readonly { errors: readonly { messageId: DeferredInference<Message>; }[]; }[]
+>errors : readonly { messageId: DeferredInference<Message>; }[]
+>messageId : DeferredInference<Message>
+
+): void;
+
+runRule("forbiddenAct", {
+>runRule("forbiddenAct", {    invalid: ["act()"].map(() => ({        errors: [{ messageId: "forbiddenAct" }],    })),}) : void
+>runRule : <Message extends string>(rule: Message, tests: { invalid: readonly { errors: readonly { messageId: DeferredInference<Message>; }[]; }[]; }) => void
+>"forbiddenAct" : "forbiddenAct"
+>{    invalid: ["act()"].map(() => ({        errors: [{ messageId: "forbiddenAct" }],    })),} : { invalid: { errors: { messageId: "forbiddenAct"; }[]; }[]; }
+
+    invalid: ["act()"].map(() => ({
+>invalid : { errors: { messageId: "forbiddenAct"; }[]; }[]
+>["act()"].map(() => ({        errors: [{ messageId: "forbiddenAct" }],    })) : { errors: { messageId: "forbiddenAct"; }[]; }[]
+>["act()"].map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>["act()"] : string[]
+>"act()" : "act()"
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>() => ({        errors: [{ messageId: "forbiddenAct" }],    }) : () => { errors: { messageId: "forbiddenAct"; }[]; }
+>({        errors: [{ messageId: "forbiddenAct" }],    }) : { errors: { messageId: "forbiddenAct"; }[]; }
+>{        errors: [{ messageId: "forbiddenAct" }],    } : { errors: { messageId: "forbiddenAct"; }[]; }
+
+        errors: [{ messageId: "forbiddenAct" }],
+>errors : { messageId: "forbiddenAct"; }[]
+>[{ messageId: "forbiddenAct" }] : { messageId: "forbiddenAct"; }[]
+>{ messageId: "forbiddenAct" } : { messageId: "forbiddenAct"; }
+>messageId : "forbiddenAct"
+>"forbiddenAct" : "forbiddenAct"
+
+    })),
+});
+
