@@ -7,7 +7,6 @@ import {
     existsSync,
     mkdirSync,
     rmSync,
-    symlinkSync,
     writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
@@ -16,16 +15,16 @@ import {
     repoRoot,
 } from "./config.mjs";
 
-const name = process.argv[2];
-if (!name || !/^[\w.-]+$/.test(name)) throw new Error("Usage: node snapshot-build.mjs <name>");
+const [name, sourceRoot = repoRoot] = process.argv.slice(2);
+if (!name || !/^[\w.-]+$/.test(name)) throw new Error("Usage: node snapshot-build.mjs <name> [source-checkout]");
 const destination = join(outputRoot, "builds", name);
 if (existsSync(destination)) rmSync(destination, { recursive: true });
 mkdirSync(destination, { recursive: true });
-const client = join(repoRoot, "packages/typescript");
+const client = join(sourceRoot, "packages/typescript");
 for (const entry of ["dist", "lib", "package.json"]) cpSync(join(client, entry), join(destination, entry), { recursive: true });
-symlinkSync(join(client, "vendor"), join(destination, "vendor"));
-cpSync(join(repoRoot, "built/local"), join(destination, "built"), { recursive: true });
-const sha = execFileSync("git", ["rev-parse", "HEAD"], { cwd: repoRoot, encoding: "utf8" }).trim();
-const dirty = execFileSync("git", ["status", "--porcelain", "--", "packages", "tsc"], { cwd: repoRoot, encoding: "utf8" }).trim();
+cpSync(join(client, "vendor"), join(destination, "vendor"), { recursive: true });
+cpSync(join(sourceRoot, "built/local"), join(destination, "built"), { recursive: true });
+const sha = execFileSync("git", ["rev-parse", "HEAD"], { cwd: sourceRoot, encoding: "utf8" }).trim();
+const dirty = execFileSync("git", ["status", "--porcelain", "--", "packages", "tsc"], { cwd: sourceRoot, encoding: "utf8" }).trim();
 writeFileSync(join(destination, "provenance.json"), JSON.stringify({ name, sha, dirty, created: new Date().toISOString() }, null, 2));
 console.log(`Saved ${destination} (${sha}${dirty ? ", dirty" : ""})`);

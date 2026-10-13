@@ -204,6 +204,8 @@ git am --keep-cr temporary/api-client-perf/opus-patches/000*.patch
 
 ## Reproduction
 
+To reproduce on another machine (e.g. macOS), see [MACOS.md](MACOS.md): `scripts/platform-comparison.mjs` builds base and series, then runs every microbenchmark and comparison.
+
 ```sh
 export API_OUTPUT_DIR=$PWD/temporary/api-client-perf/runs/opus
 npx hereby build build:api
