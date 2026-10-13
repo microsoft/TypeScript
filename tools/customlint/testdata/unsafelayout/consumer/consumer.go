@@ -86,3 +86,18 @@ func copies(records map[string]ast.Identifier, channel chan ast.Identifier, get 
 	_ = len(slice[:1])
 	return &record
 }
+
+func rangeCopies(records []ast.Identifier, byKey map[string]ast.Identifier, channel chan ast.Identifier) {
+	for _, record := range records {
+		_ = record.Text
+	}
+	for _, record := range byKey {
+		_ = record.Text
+	}
+	for record := range channel {
+		_ = record.Text
+	}
+	for i := range records {
+		_ = &records[i]
+	}
+}

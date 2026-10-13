@@ -27,6 +27,9 @@ var unsafeLayoutAnalyzer = &analysis.Analyzer{
 			if expr, ok := c.Node().(ast.Expr); ok {
 				p.checkCopy(c, expr)
 			}
+			if name, ok := c.Node().(*ast.Ident); ok {
+				p.checkDeclaration(c, name)
+			}
 		}
 		return nil, nil
 	},
@@ -333,21 +336,21 @@ func (p *unsafeLayoutPass) check(c inspector.Cursor) {
 				}
 			}
 		}
-	case *ast.FuncType:
-		if test {
-			return
-		}
-		for _, list := range []*ast.FieldList{node.Params, node.Results} {
-			if list == nil {
-				continue
-			}
-			for _, field := range list.List {
-				if typ := p.pass.TypesInfo.TypeOf(field.Type); typ != nil && holdsRecordByValue(typ) {
-					p.pass.Reportf(field.Pos(), "passing or returning a compiler record by value bypasses checked construction; use a pointer")
-				}
-			}
-		}
 	}
+}
+
+// Covers receivers, parameters, results, and := and range variables; plain
+// var declarations are reported by the zero-value rule.
+func (p *unsafeLayoutPass) checkDeclaration(c inspector.Cursor, name *ast.Ident) {
+	variable, ok := p.pass.TypesInfo.Defs[name].(*types.Var)
+	if !ok || variable.IsField() || !holdsRecordByValue(variable.Type()) ||
+		strings.HasSuffix(p.pass.Fset.Position(name.Pos()).Filename, "_test.go") {
+		return
+	}
+	if _, ok := c.Parent().Node().(*ast.ValueSpec); ok {
+		return
+	}
+	p.pass.Reportf(name.Pos(), "declaring a compiler record by value copies or detaches its tagged header; use a pointer")
 }
 
 // Reports whether typ is or contains a compiler record by value, including mappers.

@@ -97,3 +97,7 @@ func zeroValueNode() *Identifier {
 	var n Identifier
 	return &n
 }
+
+func (n Identifier) ValueReceiver() string {
+	return n.Text
+}
