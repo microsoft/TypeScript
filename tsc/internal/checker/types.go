@@ -1177,14 +1177,7 @@ type memberIndex struct {
 // Property order is semantic. Keep it unchanged and index it with pointer-free
 // slots instead of retaining a second map of names and symbol pointers.
 func (c *Checker) newMemberIndex(members ast.SymbolTable, properties []*ast.Symbol, index *memberIndex) *memberIndex {
-	needsFallback := len(members) != len(properties)
-	for _, symbol := range properties {
-		if members[symbol.Name()] != symbol {
-			needsFallback = true
-			break
-		}
-	}
-	if needsFallback {
+	if len(members) != len(properties) || !symbolTableKeysMatchNames(members) {
 		if index == nil {
 			index = c.memberIndexArena.New()
 		}
@@ -1195,6 +1188,18 @@ func (c *Checker) newMemberIndex(members ast.SymbolTable, properties []*ast.Symb
 		index.fallback = nil
 	}
 	return c.newPropertyIndex(properties, index)
+}
+
+// Reports whether every symbol is stored under its own name. Checking the
+// table's pairs, rather than looking each property up by name, also rejects a
+// symbol aliased under a second key, which a name-keyed index would drop.
+func symbolTableKeysMatchNames(members ast.SymbolTable) bool {
+	for name, symbol := range members {
+		if symbol.Name() != name {
+			return false
+		}
+	}
+	return true
 }
 
 func (c *Checker) newPropertyIndex(properties []*ast.Symbol, index *memberIndex) *memberIndex {
