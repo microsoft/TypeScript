@@ -204,3 +204,14 @@
 		}
 	}
 	
+	func bulkCopies(dst, src []ast.Identifier, pointers []*ast.Identifier) []ast.Identifier {
+		copy(dst, src)
+		~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
+		pointers = append(pointers, pointers...)
+		copy(pointers, pointers)
+		return append(dst, src...)
+		       ~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
+	}
+	

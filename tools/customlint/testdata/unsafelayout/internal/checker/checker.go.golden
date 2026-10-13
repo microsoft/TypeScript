@@ -31,6 +31,12 @@
 	
 	func (c *Checker) newType(flags, objectFlags int, typ *Type, kind typeKind) *Type {
 		typ.kind = kind
+		if flags != 0 {
+			kind := typeKindObject
+			typ.kind = kind
+			~
+!!! unsafelayout: checked construction must initialize the tag from its kind parameter
+		}
 		return typ
 	}
 	

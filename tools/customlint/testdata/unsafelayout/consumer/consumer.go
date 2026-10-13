@@ -101,3 +101,10 @@ func rangeCopies(records []ast.Identifier, byKey map[string]ast.Identifier, chan
 		_ = &records[i]
 	}
 }
+
+func bulkCopies(dst, src []ast.Identifier, pointers []*ast.Identifier) []ast.Identifier {
+	copy(dst, src)
+	pointers = append(pointers, pointers...)
+	copy(pointers, pointers)
+	return append(dst, src...)
+}
