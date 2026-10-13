@@ -169,7 +169,7 @@ func (sd *snapshotData) getProject(projectHandle project.Handle) (*project.Proje
 	return proj, nil
 }
 
-// nodeHandleFrom creates an index-based node handle (index.kind.path), building a node index table
+// nodeHandleFrom creates an exact-AST response handle (index.kind.#fileID.path), building a node index table
 // for the file on-demand if needed.
 func (sd *snapshotData) nodeHandleFrom(node *ast.Node) NodeHandle {
 	return nodeHandleFrom(node)
@@ -295,7 +295,7 @@ func nodeHandleFrom(node *ast.Node) NodeHandle {
 	sourceFile := ast.GetSourceFileOfNode(node)
 	table := encoder.GetNodeIndexTable(sourceFile)
 	idx := table.GetIndex(node)
-	return NodeHandle(fmt.Sprintf("%d.%d.%s", idx, node.Kind, sourceFile.PathKey()))
+	return NodeHandle(fmt.Sprintf("%d.%d.#%d.%s", idx, node.Kind, sourceFileNodeID(sourceFile), sourceFile.PathKey()))
 }
 
 // registerSymbol registers a symbol in the snapshot's registry and returns its handle along with
@@ -5011,27 +5011,24 @@ func (s *Session) handleGetFalseTypeOfConditionalType(ctx context.Context, param
 
 func (sd *snapshotData) resolveNodeHandle(program *compiler.Program, handle NodeHandle) (*ast.Node, error) {
 	s := string(handle)
-	// Format: "index.kind.path" — we need index and path, kind is informational only.
-	firstDot := strings.IndexByte(s, '.')
-	if firstDot == -1 {
-		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
-	}
-	secondDot := strings.IndexByte(s[firstDot+1:], '.')
-	if secondDot == -1 {
-		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
-	}
-	secondDot += firstDot + 1 // adjust to absolute index
-
-	idx, err := strconv.ParseUint(s[:firstDot], 10, 32)
-	if err != nil {
-		return nil, fmt.Errorf("%w: invalid node handle %q: %w", ErrClientError, handle, err)
-	}
-	path, ok := tspath.TryPathKeyFromCanonical(s[secondDot+1:])
+	// Request format: "index.#sourceFileID".
+	indexText, fileKey, ok := strings.Cut(s, ".")
 	if !ok {
 		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
 	}
+	idx, err := strconv.ParseUint(indexText, 10, 32)
+	if err != nil {
+		return nil, fmt.Errorf("%w: invalid node handle %q: %w", ErrClientError, handle, err)
+	}
 
-	sourceFile := program.GetSourceFileByPath(path)
+	if !strings.HasPrefix(fileKey, "#") {
+		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
+	}
+	nodeID, err := strconv.ParseUint(fileKey[1:], 10, 64)
+	if err != nil || nodeID == 0 {
+		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
+	}
+	sourceFile := program.GetSourceFileByNodeID(ast.NodeId(nodeID))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: node handle %q could not be resolved (file may not be loaded or handle may be stale)", ErrClientError, handle)
 	}

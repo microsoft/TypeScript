@@ -138,6 +138,8 @@ import {
     parseNodeHandleFromCompiler,
     RemoteSourceFile,
 } from "../../src/api/node/node.ts";
+// @ts-ignore -- Internal request format is exercised by source tests.
+import { getNodeRequestHandle } from "../../src/api/node/node.ts";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
 import {
     areTestsFiltered,
@@ -664,7 +666,7 @@ describe("API", { concurrency }, () => {
         assert.equal((await getSymbol(recreatedDeclaration))?.name, "present");
     });
 
-    test("createSourceFile can be used with a compatible program", async () => {
+    test("createSourceFile cannot substitute a distinct program AST with the same text", async () => {
         const sourceText = "export const element = <div />;";
         await using api = spawnAPI({
             "/component.tsx": sourceText,
@@ -674,7 +676,8 @@ describe("API", { concurrency }, () => {
         const snapshot = await api.createSnapshot({ openFiles: ["/component.tsx"] });
         const project = snapshot.getProjects()[0];
         assert.equal((await api.printer.printNode(sourceFile)).trimEnd(), sourceText);
-        assert.ok(await project.checker.getTypeAtLocation(sourceFile.statements[0]));
+        assert.notStrictEqual(await project.program.getSourceFile("/component.tsx"), sourceFile);
+        await assert.rejects(project.checker.getTypeAtLocation(sourceFile.statements[0]), /could not be resolved/); // @sync: assert.throws(() => project.checker.getTypeAtLocation(sourceFile.statements[0]), /could not be resolved/);
         assert.equal(await project.program.isSourceFileDefaultLibrary(sourceFile), false);
         await snapshot.dispose();
     });
@@ -689,6 +692,42 @@ describe("API", { concurrency }, () => {
         const project = snapshot.getProjects()[0];
         assert.strictEqual(await project.program.getSourceFile("/component.d.ts"), retained.sourceFile);
         await snapshot.dispose();
+    });
+
+    test("node handles reject a different source-file version but accept an unchanged AST", async () => {
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/index.ts": "export function f() { return 1; }",
+            "/other.ts": "export const other = 1;",
+        });
+        await using api = disposableAPI;
+        const first = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const firstProject = first.getConfiguredProject("/tsconfig.json")!;
+        const file = await firstProject.program.getSourceFile("/index.ts");
+        assert.ok(file instanceof RemoteSourceFile);
+        const declaration = file.statements[0];
+        const symbol = await firstProject.checker.getSymbolAtPosition("/index.ts", 16);
+        assert.ok(symbol);
+        const type = await firstProject.checker.getTypeOfSymbol(symbol);
+        const signatures = await firstProject.checker.getSignaturesOfType(type, SignatureKind.Call);
+        const handle = signatures[0].declaration;
+        assert.ok(handle);
+        assert.equal(handle.path, file.path);
+        assert.equal(handle.sourceFileId, parseNodeHandleFromCompiler(getNodeId(file)).sourceFileId);
+        const parsed = parseNodeHandleFromCompiler(getNodeId(declaration));
+        assert.equal(getNodeRequestHandle(declaration), `${parsed.index}.#${parsed.sourceFileId}`);
+
+        fs.writeFile!(toRootedFilePath("/other.ts", undefined), "export const other = 2;");
+        const unchanged = await api.createSnapshot({ openProjects: ["/tsconfig.json"], fileNotifications: { changed: ["/other.ts"] } });
+        const unchangedProject = unchanged.getConfiguredProject("/tsconfig.json")!;
+        assert.ok(await unchangedProject.checker.getTypeAtLocation(declaration));
+        assert.strictEqual(await handle.resolve(unchangedProject), declaration);
+
+        fs.writeFile!(toRootedFilePath("/index.ts", undefined), "export function f() { return 'changed'; }");
+        const changed = await api.createSnapshot({ openProjects: ["/tsconfig.json"], fileNotifications: { changed: ["/index.ts"] } });
+        const changedProject = changed.getConfiguredProject("/tsconfig.json")!;
+        await assert.rejects(changedProject.checker.getTypeAtLocation(declaration), /could not be resolved/); // @sync: assert.throws(() => changedProject.checker.getTypeAtLocation(declaration), /could not be resolved/);
+        await assert.rejects(handle.resolve(changedProject), /source file is not part of the requested program/); // @sync: assert.throws(() => handle.resolve(changedProject), /source file is not part of the requested program/);
     });
 
     test("retainSourceFile keeps a borrowed program file available", async () => {

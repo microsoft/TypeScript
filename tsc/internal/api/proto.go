@@ -44,7 +44,9 @@ type (
 	SymbolID            uint64
 	TypeID              uint32
 	SignatureID         uint64
-	NodeHandle          string
+	// NodeHandle identifies a node in an exact source-file AST. Requests use
+	// "index.#sourceFileID"; responses use "index.kind.#sourceFileID.path".
+	NodeHandle string
 )
 
 var nextBuildOrchestratorId atomic.Uint64
