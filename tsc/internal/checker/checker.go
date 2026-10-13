@@ -1066,8 +1066,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.flowLoopCache = make(map[FlowLoopKey]*Type)
 	c.flowNodeReachable = make(map[*ast.FlowNode]bool)
 	c.flowNodePostSuper = make(map[*ast.FlowNode]bool)
-	c.subtypeRelation = &Relation{}
-	c.strictSubtypeRelation = &Relation{}
+	c.subtypeRelation, c.strictSubtypeRelation = newSubtypeRelationPair()
 	c.assignableRelation = &Relation{}
 	c.comparableRelation = &Relation{}
 	c.identityRelation = &Relation{}

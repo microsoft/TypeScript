@@ -96,21 +96,81 @@ func asRecursionId[T *ast.Node | *ast.Symbol | *Type](value T) RecursionId {
 }
 
 type Relation struct {
-	results map[CacheHashKey]RelationComparisonResult
+	results       map[CacheHashKey]RelationComparisonResult
+	packedResults *packedRelationCache
+	packedShift   uint8
+	count         int
+	implySuccess  *Relation
+	implyFailure  *Relation
+}
+
+type packedRelationCache struct {
+	results map[CacheHashKey]uint16
+}
+
+func newSubtypeRelationPair() (*Relation, *Relation) {
+	packedResults := &packedRelationCache{}
+	subtype := &Relation{packedResults: packedResults}
+	strictSubtype := &Relation{packedResults: packedResults, packedShift: 6}
+	subtype.implyFailure = strictSubtype
+	strictSubtype.implySuccess = subtype
+	return subtype, strictSubtype
 }
 
 func (r *Relation) get(key CacheHashKey) RelationComparisonResult {
+	if r.packedResults != nil {
+		return RelationComparisonResult(r.packedResults.results[key]>>r.packedShift) & relationComparisonResultMask
+	}
 	return r.results[key]
 }
 
 func (r *Relation) set(key CacheHashKey, result RelationComparisonResult) {
+	if r.packedResults != nil {
+		r.setPacked(key, result)
+		return
+	}
 	if r.results == nil {
 		r.results = make(map[CacheHashKey]RelationComparisonResult)
 	}
 	r.results[key] = result
 }
 
+const relationComparisonResultMask = RelationComparisonResultSucceeded |
+	RelationComparisonResultFailed |
+	RelationComparisonResultReportsUnmeasurable |
+	RelationComparisonResultReportsUnreliable |
+	RelationComparisonResultComplexityOverflow
+
+func (r *Relation) setPacked(key CacheHashKey, result RelationComparisonResult) {
+	if r.packedResults.results == nil {
+		r.packedResults.results = make(map[CacheHashKey]uint16)
+	}
+	packed := r.packedResults.results[key]
+	packed = r.setPackedResult(packed, result, false)
+	if result&RelationComparisonResultSucceeded != 0 && r.implySuccess != nil {
+		packed = r.implySuccess.setPackedResult(packed, result, true)
+	}
+	if result&RelationComparisonResultFailed != 0 && result&RelationComparisonResultOverflow == 0 && r.implyFailure != nil {
+		packed = r.implyFailure.setPackedResult(packed, result, true)
+	}
+	r.packedResults.results[key] = packed
+}
+
+func (r *Relation) setPackedResult(packed uint16, result RelationComparisonResult, onlyIfEmpty bool) uint16 {
+	mask := uint16(relationComparisonResultMask) << r.packedShift
+	if onlyIfEmpty && packed&mask != 0 {
+		return packed
+	}
+	if packed&mask == 0 {
+		r.count++
+	}
+	return packed&^mask | uint16(result&relationComparisonResultMask)<<r.packedShift
+}
+
 func (r *Relation) size() int {
+	if r.packedResults != nil {
+		return r.count
+	}
 	return len(r.results)
 }
 
