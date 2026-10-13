@@ -181,7 +181,6 @@ type SymbolReferenceLinks struct {
 
 type ValueSymbolLinks struct {
 	resolvedType   *Type // Type of value symbol
-	writeType      *Type
 	target         *ast.Symbol
 	mapper         *TypeMapper
 	nameType       *Type
