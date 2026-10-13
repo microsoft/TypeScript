@@ -692,6 +692,7 @@ type Checker struct {
 	structuredTypeExtraArena                    core.Arena[structuredTypeExtra]
 	freeTypeSets                                *temporaryTypeSet
 	freePropertyCounts                          *temporaryPropertyCounts
+	freeNameSets                                []*collections.Set[string]
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
 	factory                                     ast.NodeFactory
@@ -19323,12 +19324,12 @@ func (c *Checker) getPropertiesOfObjectType(t *Type) []*ast.Symbol {
 func (c *Checker) getPropertiesOfUnionOrIntersectionType(t *Type) []*ast.Symbol {
 	d := t.AsUnionOrIntersectionType()
 	if d.resolvedProperties == nil {
-		var checked collections.Set[string]
+		checked := c.getTemporaryNameSet()
+		defer c.releaseTemporaryNameSet(checked)
 		props := []*ast.Symbol{}
 		for _, current := range d.types {
 			for _, prop := range c.getPropertiesOfType(current) {
-				if !checked.Has(prop.Name()) {
-					checked.Add(prop.Name())
+				if checked.AddIfAbsent(prop.Name()) {
 					combinedProp := c.getPropertyOfUnionOrIntersectionType(t, prop.Name(), t.flags&TypeFlagsIntersection != 0 /*skipObjectFunctionPropertyAugment*/)
 					if combinedProp != nil {
 						props = append(props, combinedProp)
