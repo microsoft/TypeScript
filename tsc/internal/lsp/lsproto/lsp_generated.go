@@ -9129,6 +9129,9 @@ type ContentMapperManifest struct {
 
 	// Whether the mapper uses project-scoped dynamic configuration.
 	DynamicConfig *bool `json:"dynamicConfig,omitzero"`
+
+	// Default source-to-runtime output extension mappings.
+	OutputExtensions *map[string]string `json:"outputExtensions,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*ContentMapperManifest)(nil)

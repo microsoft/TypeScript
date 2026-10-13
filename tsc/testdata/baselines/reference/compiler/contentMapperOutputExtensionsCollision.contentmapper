@@ -1,0 +1,10 @@
+//// [/component.astro] (ScriptKind: ScriptKindTS, ContentMapper: [.astro])
+--- Original ---
+export const fromAstro = true;
+--- Transformed ---
+const __VERSION = "1.0.0";
+export const fromAstro = true;
+
+=== Diagnostics ===
+
+<no content>
