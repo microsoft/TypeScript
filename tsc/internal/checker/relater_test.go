@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"strconv"
 	"testing"
 
 	"gotest.tools/v3/assert"
@@ -9,7 +10,7 @@ import (
 func TestSubtypeRelationImplications(t *testing.T) {
 	t.Parallel()
 
-	subtype, strictSubtype := newSubtypeRelationPair()
+	subtype, strictSubtype, _, _, _ := newRelations()
 	strictSuccessKey := CacheHashKey{Lo: 1}
 	strictFailureKey := CacheHashKey{Lo: 2}
 	subtypeSuccessKey := CacheHashKey{Lo: 3}
@@ -35,7 +36,7 @@ func TestSubtypeRelationImplications(t *testing.T) {
 func TestSubtypeRelationLocalResultTakesPrecedence(t *testing.T) {
 	t.Parallel()
 
-	subtype, strictSubtype := newSubtypeRelationPair()
+	subtype, strictSubtype, _, _, _ := newRelations()
 	key := CacheHashKey{Lo: 1}
 
 	strictSubtype.set(key, RelationComparisonResultSucceeded)
@@ -48,12 +49,76 @@ func TestSubtypeRelationLocalResultTakesPrecedence(t *testing.T) {
 func TestIndependentRelationCache(t *testing.T) {
 	t.Parallel()
 
-	relation := &Relation{}
+	relation, _, _, _, _ := newRelations()
 	key := CacheHashKey{Lo: 1}
 
 	relation.set(key, RelationComparisonResultSucceeded)
 	assert.Equal(t, relation.get(key), RelationComparisonResultSucceeded)
 	assert.Equal(t, relation.size(), 1)
+}
+
+func TestPackedRelationSlots(t *testing.T) {
+	t.Parallel()
+
+	subtype, strictSubtype, assignable, comparableRelation, identity := newRelations()
+	key := CacheHashKey{Lo: 1}
+	relations := []*Relation{subtype, strictSubtype, assignable, comparableRelation, identity}
+	results := []RelationComparisonResult{
+		RelationComparisonResultSucceeded,
+		RelationComparisonResultFailed,
+		RelationComparisonResultSucceeded | RelationComparisonResultReportsUnmeasurable,
+		RelationComparisonResultFailed | RelationComparisonResultReportsUnreliable,
+		RelationComparisonResultFailed | RelationComparisonResultComplexityOverflow,
+	}
+
+	for index, relation := range relations {
+		relation.set(key, results[index])
+	}
+	for index, relation := range relations {
+		assert.Equal(t, relation.get(key), results[index])
+		assert.Equal(t, relation.size(), 1)
+	}
+	assert.Equal(t, len(subtype.packedResults.results), 1)
+}
+
+func TestPackedRelationImplications(t *testing.T) {
+	t.Parallel()
+
+	for sourceRank := range packedRelationCount {
+		t.Run("success/"+strconv.Itoa(sourceRank), func(t *testing.T) {
+			t.Parallel()
+
+			subtype, strictSubtype, assignable, comparableRelation, identity := newRelations()
+			relations := []*Relation{identity, strictSubtype, subtype, assignable, comparableRelation}
+			key := CacheHashKey{Lo: 1}
+			result := RelationComparisonResultSucceeded | RelationComparisonResultReportsUnreliable
+			relations[sourceRank].set(key, result)
+			for rank, relation := range relations {
+				expected := RelationComparisonResultNone
+				if rank >= sourceRank {
+					expected = result
+				}
+				assert.Equal(t, relation.get(key), expected)
+			}
+		})
+
+		t.Run("failure/"+strconv.Itoa(sourceRank), func(t *testing.T) {
+			t.Parallel()
+
+			subtype, strictSubtype, assignable, comparableRelation, identity := newRelations()
+			relations := []*Relation{identity, strictSubtype, subtype, assignable, comparableRelation}
+			key := CacheHashKey{Lo: 1}
+			result := RelationComparisonResultFailed | RelationComparisonResultReportsUnmeasurable
+			relations[sourceRank].set(key, result)
+			for rank, relation := range relations {
+				expected := RelationComparisonResultNone
+				if rank <= sourceRank {
+					expected = result
+				}
+				assert.Equal(t, relation.get(key), expected)
+			}
+		})
+	}
 }
 
 func BenchmarkSubtypeRelationCacheStorage(b *testing.B) {
@@ -70,11 +135,18 @@ func BenchmarkSubtypeRelationCacheStorage(b *testing.B) {
 	}{
 		{
 			name: "independent",
-			new:  func() (*Relation, *Relation) { return &Relation{}, &Relation{} },
+			new: func() (*Relation, *Relation) {
+				subtype, _, _, _, _ := newRelations()
+				strictSubtype, _, _, _, _ := newRelations()
+				return subtype, strictSubtype
+			},
 		},
 		{
 			name: "packed",
-			new:  newSubtypeRelationPair,
+			new: func() (*Relation, *Relation) {
+				subtype, strictSubtype, _, _, _ := newRelations()
+				return subtype, strictSubtype
+			},
 		},
 	} {
 		b.Run(test.name, func(b *testing.B) {
