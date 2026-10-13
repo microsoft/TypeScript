@@ -1,7 +1,9 @@
 package ast_test
 
 import (
+	"reflect"
 	"runtime"
+	"slices"
 	"testing"
 	"unsafe"
 
@@ -9,6 +11,48 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 	"gotest.tools/v3/assert"
 )
+
+func TestNodeFactoryKinds(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name  string
+		kinds []ast.Kind
+	}{
+		{"ForInOrOfStatement", []ast.Kind{ast.KindForInStatement, ast.KindForOfStatement}},
+		{"CaseOrDefaultClause", []ast.Kind{ast.KindCaseClause, ast.KindDefaultClause}},
+		{"BindingPattern", []ast.Kind{ast.KindArrayBindingPattern, ast.KindObjectBindingPattern}},
+		{"KeywordExpression", []ast.Kind{ast.KindFalseKeyword, ast.KindImportKeyword, ast.KindNullKeyword, ast.KindSuperKeyword, ast.KindThisKeyword, ast.KindTrueKeyword}},
+		{"KeywordTypeNode", []ast.Kind{ast.KindVoidKeyword, ast.KindAnyKeyword, ast.KindBooleanKeyword, ast.KindIntrinsicKeyword, ast.KindNeverKeyword, ast.KindNumberKeyword, ast.KindObjectKeyword, ast.KindStringKeyword, ast.KindSymbolKeyword, ast.KindUndefinedKeyword, ast.KindUnknownKeyword, ast.KindBigIntKeyword}},
+		{"JSDocParameterOrPropertyTag", []ast.Kind{ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			factory := reflect.ValueOf(ast.NewNodeFactory(ast.NodeFactoryHooks{}))
+			constructor := factory.MethodByName("New" + test.name)
+			args := make([]reflect.Value, constructor.Type().NumIn())
+			for i := range args {
+				args[i] = reflect.Zero(constructor.Type().In(i))
+			}
+			for kind := ast.Kind(-1); kind <= ast.KindCount+2; kind++ {
+				args[0] = reflect.ValueOf(kind)
+				var node *ast.Node
+				panicked := func() (panicked bool) {
+					defer func() { panicked = recover() != nil }()
+					node = constructor.Call(args)[0].Interface().(*ast.Node)
+					return false
+				}()
+				valid := slices.Contains(test.kinds, kind)
+				if panicked == valid {
+					t.Fatalf("New%s(%v): valid=%v, panicked=%v", test.name, kind, valid, panicked)
+				}
+				if valid {
+					assert.Equal(t, node.Kind, kind)
+					assert.Assert(t, reflect.ValueOf(node).MethodByName("As" + test.name).Call(nil)[0].Pointer() != 0)
+				}
+			}
+		})
+	}
+}
 
 func TestNodeAccessors(t *testing.T) {
 	t.Parallel()

@@ -1068,6 +1068,11 @@ type ForInOrOfStatement struct {
 }
 
 func (f *NodeFactory) NewForInOrOfStatement(kind Kind, awaitModifier *AwaitKeyword, initializer *ForInitializer, expression *Expression, statement *Statement) *Node {
+	switch kind {
+	case KindForInStatement, KindForOfStatement:
+	default:
+		panic("Invalid node kind for ForInOrOfStatement")
+	}
 	data := &ForInOrOfStatement{}
 	data.AwaitModifier = awaitModifier
 	data.Initializer = initializer
@@ -1370,6 +1375,11 @@ type CaseOrDefaultClause struct {
 }
 
 func (f *NodeFactory) NewCaseOrDefaultClause(kind Kind, expression *Expression, statements *StatementList) *Node {
+	switch kind {
+	case KindCaseClause, KindDefaultClause:
+	default:
+		panic("Invalid node kind for CaseOrDefaultClause")
+	}
 	data := &CaseOrDefaultClause{}
 	data.Expression = expression
 	data.Statements = statements
@@ -1843,6 +1853,11 @@ type BindingPattern struct {
 }
 
 func (f *NodeFactory) NewBindingPattern(kind Kind, elements *BindingElementList) *Node {
+	switch kind {
+	case KindObjectBindingPattern, KindArrayBindingPattern:
+	default:
+		panic("Invalid node kind for BindingPattern")
+	}
 	data := &BindingPattern{}
 	data.Elements = elements
 	return f.newNode(kind, data.AsNode())
@@ -3620,6 +3635,11 @@ type KeywordExpression struct {
 }
 
 func (f *NodeFactory) NewKeywordExpression(kind KeywordExpressionSyntaxKind) *Node {
+	switch kind {
+	case KindFalseKeyword, KindImportKeyword, KindNullKeyword, KindSuperKeyword, KindThisKeyword, KindTrueKeyword:
+	default:
+		panic("Invalid node kind for KeywordExpression")
+	}
 	data := f.keywordExpressionArena.New()
 	return f.newNode(kind, data.AsNode())
 }
@@ -5154,6 +5174,11 @@ type KeywordTypeNode struct {
 }
 
 func (f *NodeFactory) NewKeywordTypeNode(kind KeywordTypeSyntaxKind) *Node {
+	switch kind {
+	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
+	default:
+		panic("Invalid node kind for KeywordTypeNode")
+	}
 	data := f.keywordTypeNodeArena.New()
 	return f.newNode(kind, data.AsNode())
 }
@@ -8691,6 +8716,11 @@ type JSDocParameterOrPropertyTag struct {
 }
 
 func (f *NodeFactory) NewJSDocParameterOrPropertyTag(kind Kind, tagName *IdentifierNode, name *EntityName, isBracketed bool, typeExpression *TypeNode, isNameFirst bool, comment *NodeList) *Node {
+	switch kind {
+	case KindJSDocParameterTag, KindJSDocPropertyTag:
+	default:
+		panic("Invalid node kind for JSDocParameterOrPropertyTag")
+	}
 	data := &JSDocParameterOrPropertyTag{}
 	data.TagName = tagName
 	data.name = name

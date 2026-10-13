@@ -374,27 +374,31 @@ function generateBaseStructDefs(w: CodeWriter) {
 
 // ── Generate As*() cast methods ────────────────────────────────────────────
 
-function generateAsCast(w: CodeWriter, node: NodeType) {
-    const structName = node.name;
+function generateKindCheck(w: CodeWriter, node: NodeType, expression: string, message: string) {
     const kinds = canonicalNodesByKind().get(node) ?? [];
-    w.write(`func (n *Node) As${structName}() *${structName} {`);
-    w.push();
     if (kinds.length === 1) {
-        w.write(`if n.Kind != ${kinds[0]} {`);
+        w.write(`if ${expression} != ${kinds[0]} {`);
         w.push();
-        w.write(`panic("Invalid node cast to ${structName}")`);
+        w.write(`panic("${message}")`);
         w.pop();
         w.write("}");
     }
     else {
-        w.write("switch n.Kind {");
+        w.write(`switch ${expression} {`);
         w.write(`case ${kinds.join(", ")}:`);
         w.write("default:");
         w.push();
-        w.write(`panic("Invalid node cast to ${structName}")`);
+        w.write(`panic("${message}")`);
         w.pop();
         w.write("}");
     }
+}
+
+function generateAsCast(w: CodeWriter, node: NodeType) {
+    const structName = node.name;
+    w.write(`func (n *Node) As${structName}() *${structName} {`);
+    w.push();
+    generateKindCheck(w, node, "n.Kind", `Invalid node cast to ${structName}`);
     w.write(`return (*${structName})(unsafe.Pointer(n))`);
     w.pop();
     w.write("}");
@@ -443,6 +447,10 @@ function emitNewFactory(
 
     w.write(`func (f *NodeFactory) ${funcName}(${params}) *Node {`);
     w.push();
+
+    if (kindMember) {
+        generateKindCheck(w, node, kindMember.goParamName(), `Invalid node kind for ${structName}`);
+    }
 
     if (node.arena) {
         w.write(`data := f.${api.uncapitalize(structName)}Arena.New()`);
