@@ -5,6 +5,6 @@ var x = `abc${ function y() { return y; } }def`;
 >x : string
 >`abc${ function y() { return y; } }def` : string
 >function y() { return y; } : () => any
->y : () => any
->y : () => any
+>y : () => typeof y
+>y : () => typeof y
 

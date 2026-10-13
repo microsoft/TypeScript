@@ -830,23 +830,21 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			return node
 		}
 		recover_ := bound.startRecoveryScope()
-		introducesNewScope := ast.IsFunctionLike(node) || ast.IsMappedTypeNode(node)
 		var exit func()
-		if introducesNewScope {
-			var params []*ast.Symbol
-			var typeParams []*Type
-			if ast.IsFunctionLike(node) {
-				sig := b.ch.getSignatureFromDeclaration(node)
-				params = sig.parameters
-				typeParams = sig.typeParameters
-			} else if ast.IsConditionalTypeNode(node) { // !!! TODO: impossible in combination with the scope start check???
-				typeParams = b.ch.getInferTypeParameters(node)
-			} else if ast.IsMappedTypeNode(node) {
-				typeParams = []*Type{b.ch.getDeclaredTypeOfTypeParameter(b.ch.getSymbolOfDeclaration(node.AsMappedTypeNode().TypeParameter))}
-			}
-			exit = b.enterNewScope(node, params, typeParams, nil, nil)
+		if ast.IsFunctionLike(node) {
+			_, exit = b.enterSignatureScope(b.ch.getSignatureFromDeclaration(node))
+		} else if ast.IsMappedTypeNode(node) {
+			typeParams := []*Type{b.ch.getDeclaredTypeOfTypeParameter(b.ch.getSymbolOfDeclaration(node.AsMappedTypeNode().TypeParameter))}
+			exit = b.enterNewScope(node, nil, typeParams, nil, nil)
+		}
+		var exitDeferredTypeScope func()
+		if ast.IsTypeLiteralNode(node) || node.Parent != nil && ast.IsMappedTypeNode(node.Parent) && node.Parent.Type() == node {
+			exitDeferredTypeScope = b.enterDeferredTypeScope()
 		}
 		result := visitExistingNodeTreeSymbolsWorker(node)
+		if exitDeferredTypeScope != nil {
+			exitDeferredTypeScope()
+		}
 		if exit != nil {
 			exit()
 		}

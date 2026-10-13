@@ -2,10 +2,9 @@ growing.ts(1,17): error TS7056: The inferred type of this node exceeds the maxim
 local.ts(1,17): error TS5088: The inferred type of 'localArrow' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 local.ts(5,17): error TS5088: The inferred type of 'localDeclaration' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 local.ts(9,17): error TS5088: The inferred type of 'localInstantiation' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-local.ts(13,14): error TS5088: The inferred type of 'object' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 
 
-==== local.ts (4 errors) ====
+==== local.ts (3 errors) ====
     export function localArrow() {
                     ~~~~~~~~~~
 !!! error TS5088: The inferred type of 'localArrow' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
@@ -25,8 +24,6 @@ local.ts(13,14): error TS5088: The inferred type of 'object' references a type w
         return inner<number>;
     }
     export const object = {
-                 ~~~~~~
-!!! error TS5088: The inferred type of 'object' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         self() { return object; }
     };
     export const annotatedObject: { self(): typeof annotatedObject } = {

@@ -1911,6 +1911,15 @@ func walkUpOuterExpressions(node *ast.Node) *ast.Node {
 	return parent
 }
 
+func getAssignedValueDeclaration(node *ast.Node) *ast.Node {
+	parent := walkUpOuterExpressions(node)
+	if parent != nil && (ast.IsVariableDeclaration(parent) || ast.IsPropertyDeclaration(parent)) &&
+		parent.Initializer() != nil && ast.SkipOuterExpressions(parent.Initializer(), ast.OEKAll) == node {
+		return parent
+	}
+	return nil
+}
+
 func GetSetAccessorValueParameter(accessor *ast.Node) *ast.Node {
 	parameters := accessor.Parameters()
 	if len(parameters) > 0 {

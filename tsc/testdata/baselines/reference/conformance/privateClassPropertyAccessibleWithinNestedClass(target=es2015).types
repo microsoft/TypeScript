@@ -27,10 +27,10 @@ class C {
 >x : string
 
     private foo() { return this.foo; }
->foo : () => any
->this.foo : () => any
+>foo : () => C["foo"]
+>this.foo : () => C["foo"]
 >this : this
->foo : () => any
+>foo : () => C["foo"]
 
     private static x: string;
 >x : string
@@ -53,17 +53,17 @@ class C {
 >x : string
 
     private static foo() { return this.foo; }
->foo : () => typeof C.foo
->this.foo : () => typeof C.foo
+>foo : () => (typeof C)["foo"]
+>this.foo : () => (typeof C)["foo"]
 >this : typeof C
->foo : () => typeof C.foo
+>foo : () => (typeof C)["foo"]
 
     private static bar() { this.foo(); }
 >bar : () => void
->this.foo() : () => typeof C.foo
->this.foo : () => typeof C.foo
+>this.foo() : () => (typeof C)["foo"]
+>this.foo : () => (typeof C)["foo"]
 >this : typeof C
->foo : () => typeof C.foo
+>foo : () => (typeof C)["foo"]
 
     private bar() {
 >bar : () => void
@@ -120,10 +120,10 @@ class C {
 >bar : () => void
 
                 var sx4 = C.foo;
->sx4 : () => typeof C.foo
->C.foo : () => typeof C.foo
+>sx4 : () => (typeof C)["foo"]
+>C.foo : () => (typeof C)["foo"]
 >C : typeof C
->foo : () => typeof C.foo
+>foo : () => (typeof C)["foo"]
 
                 let y = new C();
 >y : C

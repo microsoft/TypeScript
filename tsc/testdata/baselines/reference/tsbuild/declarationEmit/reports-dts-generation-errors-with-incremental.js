@@ -5,7 +5,8 @@ Input::
 import ky from 'ky';
 export const api = ky.extend({});
 //// [/home/src/workspaces/project/node_modules/ky/distribution/index.d.ts] *new* 
-type KyInstance = {
+declare class KyInstance {
+    private brand;
     extend(options: Record<string,unknown>): KyInstance;
 }
 declare const ky: KyInstance;
@@ -43,10 +44,14 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
+[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'brand' of exported anonymous class type may not be private or protected.
 
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
+
+  [96mindex.ts[0m:[93m2[0m:[93m14[0m - Add a type annotation to the variable api.
+    [7m2[0m export const api = ky.extend({});
+    [7m [0m [96m             ~~~[0m
 
 TSFILE: /home/src/workspaces/project/index.js
 TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
@@ -89,7 +94,7 @@ import ky from 'ky';
 export const api = ky.extend({});
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"packageJsons":["./node_modules/ky/package.json","./package.json"],"missingPackageJsons":["./node_modules/ky/distribution/package.json"],"fileNames":["lib.es2026.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b9b50c37c18e43d94b0dd4fb43967f10-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;","impliedNodeFormat":99},{"version":"0f5091e963c17913313e4969c59e6eb4-import ky from 'ky';\nexport const api = ky.extend({});","impliedNodeFormat":99}],"fileIdsList":[[2]],"options":{"composite":false,"declaration":true,"module":199,"skipLibCheck":true,"skipDefaultLibCheck":true},"referencedMap":[[3,1]],"emitDiagnosticsPerFile":[[3,[{"pos":34,"end":37,"code":4023,"category":1,"messageKey":"Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named_4023","messageArgs":["api","KyInstance","\"/home/src/workspaces/project/node_modules/ky/distribution/index\""]}]]]}
+{"version":"FakeTSVersion","root":[3],"packageJsons":["./node_modules/ky/package.json","./package.json"],"missingPackageJsons":["./node_modules/ky/distribution/package.json"],"fileNames":["lib.es2026.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"778e62a60976d425122b5f7908b0c56f-declare class KyInstance {\n    private brand;\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;","impliedNodeFormat":99},{"version":"0f5091e963c17913313e4969c59e6eb4-import ky from 'ky';\nexport const api = ky.extend({});","impliedNodeFormat":99}],"fileIdsList":[[2]],"options":{"composite":false,"declaration":true,"module":199,"skipLibCheck":true,"skipDefaultLibCheck":true},"referencedMap":[[3,1]],"emitDiagnosticsPerFile":[[3,[{"pos":34,"end":37,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["brand"],"relatedInformation":[{"pos":34,"end":37,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["api"]}]}]]]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -128,11 +133,11 @@ export const api = ky.extend({});
     },
     {
       "fileName": "./node_modules/ky/distribution/index.d.ts",
-      "version": "b9b50c37c18e43d94b0dd4fb43967f10-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;",
-      "signature": "b9b50c37c18e43d94b0dd4fb43967f10-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;",
+      "version": "778e62a60976d425122b5f7908b0c56f-declare class KyInstance {\n    private brand;\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;",
+      "signature": "778e62a60976d425122b5f7908b0c56f-declare class KyInstance {\n    private brand;\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;",
       "impliedNodeFormat": "ESNext",
       "original": {
-        "version": "b9b50c37c18e43d94b0dd4fb43967f10-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;",
+        "version": "778e62a60976d425122b5f7908b0c56f-declare class KyInstance {\n    private brand;\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;",
         "impliedNodeFormat": 99
       }
     },
@@ -171,19 +176,29 @@ export const api = ky.extend({});
         {
           "pos": 34,
           "end": 37,
-          "code": 4023,
+          "code": 4094,
           "category": 1,
-          "messageKey": "Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named_4023",
+          "messageKey": "Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094",
           "messageArgs": [
-            "api",
-            "KyInstance",
-            "\"/home/src/workspaces/project/node_modules/ky/distribution/index\""
+            "brand"
+          ],
+          "relatedInformation": [
+            {
+              "pos": 34,
+              "end": 37,
+              "code": 9027,
+              "category": 1,
+              "messageKey": "Add_a_type_annotation_to_the_variable_0_9027",
+              "messageArgs": [
+                "api"
+              ]
+            }
           ]
         }
       ]
     ]
   ],
-  "size": 1823
+  "size": 1909
 }
 
 tsconfig.json::
@@ -206,10 +221,14 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
+[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'brand' of exported anonymous class type may not be private or protected.
 
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
+
+  [96mindex.ts[0m:[93m2[0m:[93m14[0m - Add a type annotation to the variable api.
+    [7m2[0m export const api = ky.extend({});
+    [7m [0m [96m             ~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2026.full.d.ts
    Default library for target 'ES2026'

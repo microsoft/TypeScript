@@ -1,0 +1,1189 @@
+//// [tests/cases/compiler/recursiveFunctionDeclarationSerialization.ts] ////
+
+=== script.ts ===
+const scriptArrow = () => scriptArrow;
+>scriptArrow : Symbol(scriptArrow, Decl(script.ts, 0, 5))
+>scriptArrow : Symbol(scriptArrow, Decl(script.ts, 0, 5))
+
+const scriptExpression = function () { return scriptExpression; };
+>scriptExpression : Symbol(scriptExpression, Decl(script.ts, 1, 5))
+>scriptExpression : Symbol(scriptExpression, Decl(script.ts, 1, 5))
+
+function scriptDeclaration() { return scriptDeclaration; }
+>scriptDeclaration : Symbol(scriptDeclaration, Decl(script.ts, 1, 66))
+>scriptDeclaration : Symbol(scriptDeclaration, Decl(script.ts, 1, 66))
+
+=== exported.ts ===
+export const arrow = () => arrow;
+>arrow : Symbol(arrow, Decl(exported.ts, 0, 12))
+>arrow : Symbol(arrow, Decl(exported.ts, 0, 12))
+
+export const expression = function () { return expression; };
+>expression : Symbol(expression, Decl(exported.ts, 1, 12))
+>expression : Symbol(expression, Decl(exported.ts, 1, 12))
+
+export function declaration() { return declaration; }
+>declaration : Symbol(declaration, Decl(exported.ts, 1, 61))
+>declaration : Symbol(declaration, Decl(exported.ts, 1, 61))
+
+export const annotated: () => typeof annotated = () => annotated;
+>annotated : Symbol(annotated, Decl(exported.ts, 3, 12))
+>annotated : Symbol(annotated, Decl(exported.ts, 3, 12))
+>annotated : Symbol(annotated, Decl(exported.ts, 3, 12))
+
+export const first = () => second;
+>first : Symbol(first, Decl(exported.ts, 4, 12))
+>second : Symbol(second, Decl(exported.ts, 5, 12))
+
+export const second = () => first;
+>second : Symbol(second, Decl(exported.ts, 5, 12))
+>first : Symbol(first, Decl(exported.ts, 4, 12))
+
+export const generic = <T>(value: T) => generic;
+>generic : Symbol(generic, Decl(exported.ts, 6, 12))
+>T : Symbol(T, Decl(exported.ts, 6, 24))
+>value : Symbol(value, Decl(exported.ts, 6, 27))
+>T : Symbol(T, Decl(exported.ts, 6, 24))
+>generic : Symbol(generic, Decl(exported.ts, 6, 12))
+
+export const finite = () => () => 1;
+>finite : Symbol(finite, Decl(exported.ts, 7, 12))
+
+export const wrapped = { arrow };
+>wrapped : Symbol(wrapped, Decl(exported.ts, 8, 12))
+>arrow : Symbol(arrow, Decl(exported.ts, 8, 24))
+
+export const tuple = [arrow] as const;
+>tuple : Symbol(tuple, Decl(exported.ts, 9, 12))
+>arrow : Symbol(arrow, Decl(exported.ts, 0, 12))
+>const : Symbol(const)
+
+export const named = function self() { return self; };
+>named : Symbol(named, Decl(exported.ts, 10, 12))
+>self : Symbol(self, Decl(exported.ts, 10, 20))
+>self : Symbol(self, Decl(exported.ts, 10, 20))
+
+export const broad: unknown = function self() { return self; };
+>broad : Symbol(broad, Decl(exported.ts, 11, 12))
+>self : Symbol(self, Decl(exported.ts, 11, 29))
+>self : Symbol(self, Decl(exported.ts, 11, 29))
+
+export const contextual: () => unknown = function self() { return self; };
+>contextual : Symbol(contextual, Decl(exported.ts, 12, 12))
+>self : Symbol(self, Decl(exported.ts, 12, 40))
+>self : Symbol(self, Decl(exported.ts, 12, 40))
+
+export const specialized = generic<number>;
+>specialized : Symbol(specialized, Decl(exported.ts, 13, 12))
+>generic : Symbol(generic, Decl(exported.ts, 6, 12))
+
+export const annotatedParameter = (value: string | number) => annotatedParameter;
+>annotatedParameter : Symbol(annotatedParameter, Decl(exported.ts, 14, 12))
+>value : Symbol(value, Decl(exported.ts, 14, 35))
+>annotatedParameter : Symbol(annotatedParameter, Decl(exported.ts, 14, 12))
+
+export const renamedParameter = (other: number | string) => renamedParameter;
+>renamedParameter : Symbol(renamedParameter, Decl(exported.ts, 15, 12))
+>other : Symbol(other, Decl(exported.ts, 15, 33))
+>renamedParameter : Symbol(renamedParameter, Decl(exported.ts, 15, 12))
+
+export const optionalParameter = (value?: string) => optionalParameter;
+>optionalParameter : Symbol(optionalParameter, Decl(exported.ts, 16, 12))
+>value : Symbol(value, Decl(exported.ts, 16, 34))
+>optionalParameter : Symbol(optionalParameter, Decl(exported.ts, 16, 12))
+
+export const restParameter = (...values: string[]) => restParameter;
+>restParameter : Symbol(restParameter, Decl(exported.ts, 17, 12))
+>values : Symbol(values, Decl(exported.ts, 17, 30))
+>restParameter : Symbol(restParameter, Decl(exported.ts, 17, 12))
+
+export const nestedReturn = () => () => nestedReturn;
+>nestedReturn : Symbol(nestedReturn, Decl(exported.ts, 18, 12))
+>nestedReturn : Symbol(nestedReturn, Decl(exported.ts, 18, 12))
+
+export const finiteObject = { call: (value: string) => ({ value }) };
+>finiteObject : Symbol(finiteObject, Decl(exported.ts, 19, 12))
+>call : Symbol(call, Decl(exported.ts, 19, 29))
+>value : Symbol(value, Decl(exported.ts, 19, 37))
+>value : Symbol(value, Decl(exported.ts, 19, 57))
+
+export const finiteTuple = [(value: number) => [value] as const] as const;
+>finiteTuple : Symbol(finiteTuple, Decl(exported.ts, 20, 12))
+>value : Symbol(value, Decl(exported.ts, 20, 29))
+>value : Symbol(value, Decl(exported.ts, 20, 29))
+>const : Symbol(const)
+>const : Symbol(const)
+
+export const nestedGeneric = <T>(value: T) => ({
+>nestedGeneric : Symbol(nestedGeneric, Decl(exported.ts, 21, 12))
+>T : Symbol(T, Decl(exported.ts, 21, 30))
+>value : Symbol(value, Decl(exported.ts, 21, 33))
+>T : Symbol(T, Decl(exported.ts, 21, 30))
+
+    call: (other: T) => [value, other] as const,
+>call : Symbol(call, Decl(exported.ts, 21, 48))
+>other : Symbol(other, Decl(exported.ts, 22, 11))
+>T : Symbol(T, Decl(exported.ts, 21, 30))
+>value : Symbol(value, Decl(exported.ts, 21, 33))
+>other : Symbol(other, Decl(exported.ts, 22, 11))
+>const : Symbol(const)
+
+});
+export const instantiatedNested = nestedGeneric("text");
+>instantiatedNested : Symbol(instantiatedNested, Decl(exported.ts, 24, 12))
+>nestedGeneric : Symbol(nestedGeneric, Decl(exported.ts, 21, 12))
+
+export const objectReturn = () => ({ call: objectReturn });
+>objectReturn : Symbol(objectReturn, Decl(exported.ts, 25, 12))
+>call : Symbol(call, Decl(exported.ts, 25, 36))
+>objectReturn : Symbol(objectReturn, Decl(exported.ts, 25, 12))
+
+export const tupleReturn = () => [tupleReturn] as const;
+>tupleReturn : Symbol(tupleReturn, Decl(exported.ts, 26, 12))
+>tupleReturn : Symbol(tupleReturn, Decl(exported.ts, 26, 12))
+>const : Symbol(const)
+
+export const shadowed = function self(shadowed: number) { return self; };
+>shadowed : Symbol(shadowed, Decl(exported.ts, 27, 12))
+>self : Symbol(self, Decl(exported.ts, 27, 23))
+>shadowed : Symbol(shadowed, Decl(exported.ts, 27, 38))
+>self : Symbol(self, Decl(exported.ts, 27, 23))
+
+=== consumer.ts ===
+import { arrow, expression, declaration, first, generic, finite, wrapped, tuple } from "./exported";
+>arrow : Symbol(arrow, Decl(consumer.ts, 0, 8))
+>expression : Symbol(expression, Decl(consumer.ts, 0, 15))
+>declaration : Symbol(declaration, Decl(consumer.ts, 0, 27))
+>first : Symbol(first, Decl(consumer.ts, 0, 40))
+>generic : Symbol(generic, Decl(consumer.ts, 0, 47))
+>finite : Symbol(finite, Decl(consumer.ts, 0, 56))
+>wrapped : Symbol(wrapped, Decl(consumer.ts, 0, 64))
+>tuple : Symbol(tuple, Decl(consumer.ts, 0, 73))
+
+import { instantiatedNested, objectReturn, tupleReturn, shadowed } from "./exported";
+>instantiatedNested : Symbol(instantiatedNested, Decl(consumer.ts, 1, 8))
+>objectReturn : Symbol(objectReturn, Decl(consumer.ts, 1, 28))
+>tupleReturn : Symbol(tupleReturn, Decl(consumer.ts, 1, 42))
+>shadowed : Symbol(shadowed, Decl(consumer.ts, 1, 55))
+
+const a: typeof arrow = arrow()()();
+>a : Symbol(a, Decl(consumer.ts, 2, 5))
+>arrow : Symbol(arrow, Decl(consumer.ts, 0, 8))
+>arrow : Symbol(arrow, Decl(consumer.ts, 0, 8))
+
+const b: typeof expression = expression()()();
+>b : Symbol(b, Decl(consumer.ts, 3, 5))
+>expression : Symbol(expression, Decl(consumer.ts, 0, 15))
+>expression : Symbol(expression, Decl(consumer.ts, 0, 15))
+
+const c: typeof declaration = declaration()()();
+>c : Symbol(c, Decl(consumer.ts, 4, 5))
+>declaration : Symbol(declaration, Decl(consumer.ts, 0, 27))
+>declaration : Symbol(declaration, Decl(consumer.ts, 0, 27))
+
+const d: typeof first = first()()();
+>d : Symbol(d, Decl(consumer.ts, 5, 5))
+>first : Symbol(first, Decl(consumer.ts, 0, 40))
+>first : Symbol(first, Decl(consumer.ts, 0, 40))
+
+const e: typeof generic = generic(1)("text")(true);
+>e : Symbol(e, Decl(consumer.ts, 6, 5))
+>generic : Symbol(generic, Decl(consumer.ts, 0, 47))
+>generic : Symbol(generic, Decl(consumer.ts, 0, 47))
+
+const f: number = finite()();
+>f : Symbol(f, Decl(consumer.ts, 7, 5))
+>finite : Symbol(finite, Decl(consumer.ts, 0, 56))
+
+const g: typeof arrow = wrapped.arrow()();
+>g : Symbol(g, Decl(consumer.ts, 8, 5))
+>arrow : Symbol(arrow, Decl(consumer.ts, 0, 8))
+>wrapped.arrow : Symbol(arrow, Decl(exported.ts, 8, 24))
+>wrapped : Symbol(wrapped, Decl(consumer.ts, 0, 64))
+>arrow : Symbol(arrow, Decl(exported.ts, 8, 24))
+
+const h: typeof arrow = tuple[0]()();
+>h : Symbol(h, Decl(consumer.ts, 9, 5))
+>arrow : Symbol(arrow, Decl(consumer.ts, 0, 8))
+>tuple : Symbol(tuple, Decl(consumer.ts, 0, 73))
+>0 : Symbol(0)
+
+const invalid: number = arrow()()();
+>invalid : Symbol(invalid, Decl(consumer.ts, 10, 5))
+>arrow : Symbol(arrow, Decl(consumer.ts, 0, 8))
+
+const nestedResult: readonly [string, string] = instantiatedNested.call("other");
+>nestedResult : Symbol(nestedResult, Decl(consumer.ts, 11, 5))
+>instantiatedNested.call : Symbol(call, Decl(exported.ts, 21, 48))
+>instantiatedNested : Symbol(instantiatedNested, Decl(consumer.ts, 1, 8))
+>call : Symbol(call, Decl(exported.ts, 21, 48))
+
+instantiatedNested.call(1);
+>instantiatedNested.call : Symbol(call, Decl(exported.ts, 21, 48))
+>instantiatedNested : Symbol(instantiatedNested, Decl(consumer.ts, 1, 8))
+>call : Symbol(call, Decl(exported.ts, 21, 48))
+
+const objectCall: typeof objectReturn = objectReturn().call().call;
+>objectCall : Symbol(objectCall, Decl(consumer.ts, 13, 5))
+>objectReturn : Symbol(objectReturn, Decl(consumer.ts, 1, 28))
+>objectReturn().call().call : Symbol(call, Decl(exported.ts, 25, 36))
+>objectReturn().call : Symbol(call, Decl(exported.ts, 25, 36))
+>objectReturn : Symbol(objectReturn, Decl(consumer.ts, 1, 28))
+>call : Symbol(call, Decl(exported.ts, 25, 36))
+>call : Symbol(call, Decl(exported.ts, 25, 36))
+
+const tupleCall: typeof tupleReturn = tupleReturn()[0]()[0];
+>tupleCall : Symbol(tupleCall, Decl(consumer.ts, 14, 5))
+>tupleReturn : Symbol(tupleReturn, Decl(consumer.ts, 1, 42))
+>tupleReturn : Symbol(tupleReturn, Decl(consumer.ts, 1, 42))
+>0 : Symbol(0)
+>0 : Symbol(0)
+
+const shadowedCall: typeof shadowed = shadowed(1)(2);
+>shadowedCall : Symbol(shadowedCall, Decl(consumer.ts, 15, 5))
+>shadowed : Symbol(shadowed, Decl(consumer.ts, 1, 55))
+>shadowed : Symbol(shadowed, Decl(consumer.ts, 1, 55))
+
+=== recursiveObject.ts ===
+export function recursiveObject<T>() {
+>recursiveObject : Symbol(recursiveObject, Decl(recursiveObject.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveObject.ts, 0, 32))
+
+    const value = {
+>value : Symbol(value, Decl(recursiveObject.ts, 1, 9))
+
+        call: <U>(arg: U) => value,
+>call : Symbol(call, Decl(recursiveObject.ts, 1, 19))
+>U : Symbol(U, Decl(recursiveObject.ts, 2, 15))
+>arg : Symbol(arg, Decl(recursiveObject.ts, 2, 18))
+>U : Symbol(U, Decl(recursiveObject.ts, 2, 15))
+>value : Symbol(value, Decl(recursiveObject.ts, 1, 9))
+
+        consume: (arg: T) => value,
+>consume : Symbol(consume, Decl(recursiveObject.ts, 2, 35))
+>arg : Symbol(arg, Decl(recursiveObject.ts, 3, 18))
+>T : Symbol(T, Decl(recursiveObject.ts, 0, 32))
+>value : Symbol(value, Decl(recursiveObject.ts, 1, 9))
+
+    };
+    return value;
+>value : Symbol(value, Decl(recursiveObject.ts, 1, 9))
+}
+
+const result = recursiveObject<number>().call("hello").consume(1);
+>result : Symbol(result, Decl(recursiveObject.ts, 8, 5))
+>recursiveObject<number>().call("hello").consume : Symbol(consume, Decl(recursiveObject.ts, 2, 35))
+>recursiveObject<number>().call : Symbol(call, Decl(recursiveObject.ts, 1, 19))
+>recursiveObject : Symbol(recursiveObject, Decl(recursiveObject.ts, 0, 0))
+>call : Symbol(call, Decl(recursiveObject.ts, 1, 19))
+>consume : Symbol(consume, Decl(recursiveObject.ts, 2, 35))
+
+type IsAny<T> = 0 extends (1 & T) ? true : false;
+>IsAny : Symbol(IsAny, Decl(recursiveObject.ts, 8, 66))
+>T : Symbol(T, Decl(recursiveObject.ts, 9, 11))
+>T : Symbol(T, Decl(recursiveObject.ts, 9, 11))
+
+const notAny: false = null as unknown as IsAny<typeof result.call>;
+>notAny : Symbol(notAny, Decl(recursiveObject.ts, 10, 5))
+>IsAny : Symbol(IsAny, Decl(recursiveObject.ts, 8, 66))
+>result.call : Symbol(call, Decl(recursiveObject.ts, 1, 19))
+>result : Symbol(result, Decl(recursiveObject.ts, 8, 5))
+>call : Symbol(call, Decl(recursiveObject.ts, 1, 19))
+
+const invalidCall: number = result.call;
+>invalidCall : Symbol(invalidCall, Decl(recursiveObject.ts, 11, 5))
+>result.call : Symbol(call, Decl(recursiveObject.ts, 1, 19))
+>result : Symbol(result, Decl(recursiveObject.ts, 8, 5))
+>call : Symbol(call, Decl(recursiveObject.ts, 1, 19))
+
+result.consume("wrong");
+>result.consume : Symbol(consume, Decl(recursiveObject.ts, 2, 35))
+>result : Symbol(result, Decl(recursiveObject.ts, 8, 5))
+>consume : Symbol(consume, Decl(recursiveObject.ts, 2, 35))
+
+=== nestedNamedFunctions.ts ===
+export const nestedObject = { recur: () => nestedObject.recur };
+>nestedObject : Symbol(nestedObject, Decl(nestedNamedFunctions.ts, 0, 12))
+>recur : Symbol(recur, Decl(nestedNamedFunctions.ts, 0, 29))
+>nestedObject.recur : Symbol(recur, Decl(nestedNamedFunctions.ts, 0, 29))
+>nestedObject : Symbol(nestedObject, Decl(nestedNamedFunctions.ts, 0, 12))
+>recur : Symbol(recur, Decl(nestedNamedFunctions.ts, 0, 29))
+
+export const nestedTuple = [() => nestedTuple[0]] as const;
+>nestedTuple : Symbol(nestedTuple, Decl(nestedNamedFunctions.ts, 1, 12))
+>nestedTuple : Symbol(nestedTuple, Decl(nestedNamedFunctions.ts, 1, 12))
+>0 : Symbol(0)
+>const : Symbol(const)
+
+export const object = { recur: function self() { return self; } };
+>object : Symbol(object, Decl(nestedNamedFunctions.ts, 2, 12))
+>recur : Symbol(recur, Decl(nestedNamedFunctions.ts, 2, 23))
+>self : Symbol(self, Decl(nestedNamedFunctions.ts, 2, 30))
+>self : Symbol(self, Decl(nestedNamedFunctions.ts, 2, 30))
+
+export const tuple = [function self() { return self; }] as const;
+>tuple : Symbol(tuple, Decl(nestedNamedFunctions.ts, 3, 12))
+>self : Symbol(self, Decl(nestedNamedFunctions.ts, 3, 22))
+>self : Symbol(self, Decl(nestedNamedFunctions.ts, 3, 22))
+>const : Symbol(const)
+
+export const factory = () => function self() { return self; };
+>factory : Symbol(factory, Decl(nestedNamedFunctions.ts, 4, 12))
+>self : Symbol(self, Decl(nestedNamedFunctions.ts, 4, 28))
+>self : Symbol(self, Decl(nestedNamedFunctions.ts, 4, 28))
+
+export const method = { recur() { return method; } };
+>method : Symbol(method, Decl(nestedNamedFunctions.ts, 5, 12))
+>recur : Symbol(recur, Decl(nestedNamedFunctions.ts, 5, 23))
+>method : Symbol(method, Decl(nestedNamedFunctions.ts, 5, 12))
+
+export const accessor = { get recur() { return accessor; } };
+>accessor : Symbol(accessor, Decl(nestedNamedFunctions.ts, 6, 12))
+>recur : Symbol(recur, Decl(nestedNamedFunctions.ts, 6, 25))
+>accessor : Symbol(accessor, Decl(nestedNamedFunctions.ts, 6, 12))
+
+export function local() {
+>local : Symbol(local, Decl(nestedNamedFunctions.ts, 6, 61))
+
+    function recur() { return recur; }
+>recur : Symbol(recur, Decl(nestedNamedFunctions.ts, 7, 25))
+>recur : Symbol(recur, Decl(nestedNamedFunctions.ts, 7, 25))
+
+    return recur;
+>recur : Symbol(recur, Decl(nestedNamedFunctions.ts, 7, 25))
+}
+
+=== recursiveStructures.ts ===
+export const object = { value: 1, next: () => object };
+>object : Symbol(object, Decl(recursiveStructures.ts, 0, 12))
+>value : Symbol(value, Decl(recursiveStructures.ts, 0, 23))
+>next : Symbol(next, Decl(recursiveStructures.ts, 0, 33))
+>object : Symbol(object, Decl(recursiveStructures.ts, 0, 12))
+
+export const method = { value: 1, next() { return method; } };
+>method : Symbol(method, Decl(recursiveStructures.ts, 1, 12))
+>value : Symbol(value, Decl(recursiveStructures.ts, 1, 23))
+>next : Symbol(next, Decl(recursiveStructures.ts, 1, 33))
+>method : Symbol(method, Decl(recursiveStructures.ts, 1, 12))
+
+export const accessor = { value: 1, get next() { return accessor; } };
+>accessor : Symbol(accessor, Decl(recursiveStructures.ts, 2, 12))
+>value : Symbol(value, Decl(recursiveStructures.ts, 2, 25))
+>next : Symbol(next, Decl(recursiveStructures.ts, 2, 35))
+>accessor : Symbol(accessor, Decl(recursiveStructures.ts, 2, 12))
+
+export const tuple = [() => tuple] as const;
+>tuple : Symbol(tuple, Decl(recursiveStructures.ts, 3, 12))
+>tuple : Symbol(tuple, Decl(recursiveStructures.ts, 3, 12))
+>const : Symbol(const)
+
+export const tupleObject = [{ next: () => tupleObject }] as const;
+>tupleObject : Symbol(tupleObject, Decl(recursiveStructures.ts, 4, 12))
+>next : Symbol(next, Decl(recursiveStructures.ts, 4, 29))
+>tupleObject : Symbol(tupleObject, Decl(recursiveStructures.ts, 4, 12))
+>const : Symbol(const)
+
+export const array = [() => array];
+>array : Symbol(array, Decl(recursiveStructures.ts, 5, 12))
+>array : Symbol(array, Decl(recursiveStructures.ts, 5, 12))
+
+export const first = { next: () => second };
+>first : Symbol(first, Decl(recursiveStructures.ts, 6, 12))
+>next : Symbol(next, Decl(recursiveStructures.ts, 6, 22))
+>second : Symbol(second, Decl(recursiveStructures.ts, 7, 12))
+
+export const second = { next: () => first };
+>second : Symbol(second, Decl(recursiveStructures.ts, 7, 12))
+>next : Symbol(next, Decl(recursiveStructures.ts, 7, 23))
+>first : Symbol(first, Decl(recursiveStructures.ts, 6, 12))
+
+export const nested = { inner: { next() { return nested.inner; } } };
+>nested : Symbol(nested, Decl(recursiveStructures.ts, 8, 12))
+>inner : Symbol(inner, Decl(recursiveStructures.ts, 8, 23))
+>next : Symbol(next, Decl(recursiveStructures.ts, 8, 32))
+>nested.inner : Symbol(inner, Decl(recursiveStructures.ts, 8, 23))
+>nested : Symbol(nested, Decl(recursiveStructures.ts, 8, 12))
+>inner : Symbol(inner, Decl(recursiveStructures.ts, 8, 23))
+
+export const shadowed = { next: function self(shadowed: number) { return self; } };
+>shadowed : Symbol(shadowed, Decl(recursiveStructures.ts, 9, 12))
+>next : Symbol(next, Decl(recursiveStructures.ts, 9, 25))
+>self : Symbol(self, Decl(recursiveStructures.ts, 9, 31))
+>shadowed : Symbol(shadowed, Decl(recursiveStructures.ts, 9, 46))
+>self : Symbol(self, Decl(recursiveStructures.ts, 9, 31))
+
+export const memberTuple = [function self() { return self; }] as const;
+>memberTuple : Symbol(memberTuple, Decl(recursiveStructures.ts, 10, 12))
+>self : Symbol(self, Decl(recursiveStructures.ts, 10, 28))
+>self : Symbol(self, Decl(recursiveStructures.ts, 10, 28))
+>const : Symbol(const)
+
+export const memberArray = [function self() { return self; }];
+>memberArray : Symbol(memberArray, Decl(recursiveStructures.ts, 11, 12))
+>self : Symbol(self, Decl(recursiveStructures.ts, 11, 28))
+>self : Symbol(self, Decl(recursiveStructures.ts, 11, 28))
+
+export const quoted = { "a-b": function self() { return self; } };
+>quoted : Symbol(quoted, Decl(recursiveStructures.ts, 12, 12))
+>"a-b" : Symbol("a-b", Decl(recursiveStructures.ts, 12, 23))
+>self : Symbol(self, Decl(recursiveStructures.ts, 12, 30))
+>self : Symbol(self, Decl(recursiveStructures.ts, 12, 30))
+
+export const numeric = { 0: function self() { return self; } };
+>numeric : Symbol(numeric, Decl(recursiveStructures.ts, 13, 12))
+>0 : Symbol(0, Decl(recursiveStructures.ts, 13, 24))
+>self : Symbol(self, Decl(recursiveStructures.ts, 13, 27))
+>self : Symbol(self, Decl(recursiveStructures.ts, 13, 27))
+
+export const key = Symbol();
+>key : Symbol(key, Decl(recursiveStructures.ts, 14, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export const computed = { [key]: function self() { return self; } };
+>computed : Symbol(computed, Decl(recursiveStructures.ts, 15, 12))
+>[key] : Symbol([key], Decl(recursiveStructures.ts, 15, 25))
+>key : Symbol(key, Decl(recursiveStructures.ts, 14, 12))
+>self : Symbol(self, Decl(recursiveStructures.ts, 15, 32))
+>self : Symbol(self, Decl(recursiveStructures.ts, 15, 32))
+
+export const union = Math.random() ? { next: () => union } : undefined;
+>union : Symbol(union, Decl(recursiveStructures.ts, 16, 12))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>next : Symbol(next, Decl(recursiveStructures.ts, 16, 38))
+>union : Symbol(union, Decl(recursiveStructures.ts, 16, 12))
+>undefined : Symbol(undefined)
+
+function create<T>(value: T) {
+>create : Symbol(create, Decl(recursiveStructures.ts, 16, 71))
+>T : Symbol(T, Decl(recursiveStructures.ts, 18, 16))
+>value : Symbol(value, Decl(recursiveStructures.ts, 18, 19))
+>T : Symbol(T, Decl(recursiveStructures.ts, 18, 16))
+
+    const result = { value, next: () => result };
+>result : Symbol(result, Decl(recursiveStructures.ts, 19, 9))
+>value : Symbol(value, Decl(recursiveStructures.ts, 19, 20))
+>next : Symbol(next, Decl(recursiveStructures.ts, 19, 27))
+>result : Symbol(result, Decl(recursiveStructures.ts, 19, 9))
+
+    return result;
+>result : Symbol(result, Decl(recursiveStructures.ts, 19, 9))
+}
+export const specialized = create("text");
+>specialized : Symbol(specialized, Decl(recursiveStructures.ts, 22, 12))
+>create : Symbol(create, Decl(recursiveStructures.ts, 16, 71))
+
+export const broad: unknown = { next() { return this; } };
+>broad : Symbol(broad, Decl(recursiveStructures.ts, 23, 12))
+>next : Symbol(next, Decl(recursiveStructures.ts, 23, 31))
+
+function createIndexed() {
+>createIndexed : Symbol(createIndexed, Decl(recursiveStructures.ts, 23, 58))
+
+    const value: { [key: string]: typeof value } = {};
+>value : Symbol(value, Decl(recursiveStructures.ts, 25, 9))
+>key : Symbol(key, Decl(recursiveStructures.ts, 25, 20))
+>value : Symbol(value, Decl(recursiveStructures.ts, 25, 9))
+
+    return value;
+>value : Symbol(value, Decl(recursiveStructures.ts, 25, 9))
+}
+export const indexed = createIndexed();
+>indexed : Symbol(indexed, Decl(recursiveStructures.ts, 28, 12))
+>createIndexed : Symbol(createIndexed, Decl(recursiveStructures.ts, 23, 58))
+
+function createMapped<T>() {
+>createMapped : Symbol(createMapped, Decl(recursiveStructures.ts, 28, 39))
+>T : Symbol(T, Decl(recursiveStructures.ts, 29, 22))
+
+    const value: { [K in keyof T]: typeof value } = null!;
+>value : Symbol(value, Decl(recursiveStructures.ts, 30, 9))
+>K : Symbol(K, Decl(recursiveStructures.ts, 30, 20))
+>T : Symbol(T, Decl(recursiveStructures.ts, 29, 22))
+>value : Symbol(value, Decl(recursiveStructures.ts, 30, 9))
+
+    return value;
+>value : Symbol(value, Decl(recursiveStructures.ts, 30, 9))
+}
+export const mapped = createMapped<{ next: unknown }>();
+>mapped : Symbol(mapped, Decl(recursiveStructures.ts, 33, 12))
+>createMapped : Symbol(createMapped, Decl(recursiveStructures.ts, 28, 39))
+>next : Symbol(next, Decl(recursiveStructures.ts, 33, 36))
+
+function createAnnotated<T>(value: T) {
+>createAnnotated : Symbol(createAnnotated, Decl(recursiveStructures.ts, 33, 56))
+>T : Symbol(T, Decl(recursiveStructures.ts, 34, 25))
+>value : Symbol(value, Decl(recursiveStructures.ts, 34, 28))
+>T : Symbol(T, Decl(recursiveStructures.ts, 34, 25))
+
+    const node: { value: T; next: () => typeof node } = { value, next: () => node };
+>node : Symbol(node, Decl(recursiveStructures.ts, 35, 9))
+>value : Symbol(value, Decl(recursiveStructures.ts, 35, 17))
+>T : Symbol(T, Decl(recursiveStructures.ts, 34, 25))
+>next : Symbol(next, Decl(recursiveStructures.ts, 35, 27))
+>node : Symbol(node, Decl(recursiveStructures.ts, 35, 9))
+>value : Symbol(value, Decl(recursiveStructures.ts, 35, 57))
+>next : Symbol(next, Decl(recursiveStructures.ts, 35, 64))
+>node : Symbol(node, Decl(recursiveStructures.ts, 35, 9))
+
+    return node;
+>node : Symbol(node, Decl(recursiveStructures.ts, 35, 9))
+}
+export const viaAnnotation = createAnnotated("text");
+>viaAnnotation : Symbol(viaAnnotation, Decl(recursiveStructures.ts, 38, 12))
+>createAnnotated : Symbol(createAnnotated, Decl(recursiveStructures.ts, 33, 56))
+
+const objectValue: number = object.next().next().value;
+>objectValue : Symbol(objectValue, Decl(recursiveStructures.ts, 40, 5))
+>object.next().next().value : Symbol(value, Decl(recursiveStructures.ts, 0, 23))
+>object.next().next : Symbol(next, Decl(recursiveStructures.ts, 0, 33))
+>object.next : Symbol(next, Decl(recursiveStructures.ts, 0, 33))
+>object : Symbol(object, Decl(recursiveStructures.ts, 0, 12))
+>next : Symbol(next, Decl(recursiveStructures.ts, 0, 33))
+>next : Symbol(next, Decl(recursiveStructures.ts, 0, 33))
+>value : Symbol(value, Decl(recursiveStructures.ts, 0, 23))
+
+const tupleValue: typeof tuple = tuple[0]()[0]();
+>tupleValue : Symbol(tupleValue, Decl(recursiveStructures.ts, 41, 5))
+>tuple : Symbol(tuple, Decl(recursiveStructures.ts, 3, 12))
+>tuple : Symbol(tuple, Decl(recursiveStructures.ts, 3, 12))
+>0 : Symbol(0)
+>0 : Symbol(0)
+
+const tupleObjectValue: typeof tupleObject = tupleObject[0].next();
+>tupleObjectValue : Symbol(tupleObjectValue, Decl(recursiveStructures.ts, 42, 5))
+>tupleObject : Symbol(tupleObject, Decl(recursiveStructures.ts, 4, 12))
+>tupleObject[0].next : Symbol(next, Decl(recursiveStructures.ts, 4, 29))
+>tupleObject : Symbol(tupleObject, Decl(recursiveStructures.ts, 4, 12))
+>0 : Symbol(0)
+>next : Symbol(next, Decl(recursiveStructures.ts, 4, 29))
+
+const arrayValue: typeof array = array[0]()[0]();
+>arrayValue : Symbol(arrayValue, Decl(recursiveStructures.ts, 43, 5))
+>array : Symbol(array, Decl(recursiveStructures.ts, 5, 12))
+>array : Symbol(array, Decl(recursiveStructures.ts, 5, 12))
+
+const nestedValue: typeof nested.inner = nested.inner.next().next();
+>nestedValue : Symbol(nestedValue, Decl(recursiveStructures.ts, 44, 5))
+>nested.inner : Symbol(inner, Decl(recursiveStructures.ts, 8, 23))
+>nested : Symbol(nested, Decl(recursiveStructures.ts, 8, 12))
+>inner : Symbol(inner, Decl(recursiveStructures.ts, 8, 23))
+>nested.inner.next().next : Symbol(next, Decl(recursiveStructures.ts, 8, 32))
+>nested.inner.next : Symbol(next, Decl(recursiveStructures.ts, 8, 32))
+>nested.inner : Symbol(inner, Decl(recursiveStructures.ts, 8, 23))
+>nested : Symbol(nested, Decl(recursiveStructures.ts, 8, 12))
+>inner : Symbol(inner, Decl(recursiveStructures.ts, 8, 23))
+>next : Symbol(next, Decl(recursiveStructures.ts, 8, 32))
+>next : Symbol(next, Decl(recursiveStructures.ts, 8, 32))
+
+const specializedValue: string = specialized.next().next().value;
+>specializedValue : Symbol(specializedValue, Decl(recursiveStructures.ts, 45, 5))
+>specialized.next().next().value : Symbol(value, Decl(recursiveStructures.ts, 19, 20))
+>specialized.next().next : Symbol(next, Decl(recursiveStructures.ts, 19, 27))
+>specialized.next : Symbol(next, Decl(recursiveStructures.ts, 19, 27))
+>specialized : Symbol(specialized, Decl(recursiveStructures.ts, 22, 12))
+>next : Symbol(next, Decl(recursiveStructures.ts, 19, 27))
+>next : Symbol(next, Decl(recursiveStructures.ts, 19, 27))
+>value : Symbol(value, Decl(recursiveStructures.ts, 19, 20))
+
+const invalidValue: number = specialized.next().value;
+>invalidValue : Symbol(invalidValue, Decl(recursiveStructures.ts, 46, 5))
+>specialized.next().value : Symbol(value, Decl(recursiveStructures.ts, 19, 20))
+>specialized.next : Symbol(next, Decl(recursiveStructures.ts, 19, 27))
+>specialized : Symbol(specialized, Decl(recursiveStructures.ts, 22, 12))
+>next : Symbol(next, Decl(recursiveStructures.ts, 19, 27))
+>value : Symbol(value, Decl(recursiveStructures.ts, 19, 20))
+
+=== recursiveAnnotations.ts ===
+declare const object: { next: typeof object };
+>object : Symbol(object, Decl(recursiveAnnotations.ts, 0, 13))
+>next : Symbol(next, Decl(recursiveAnnotations.ts, 0, 23))
+>object : Symbol(object, Decl(recursiveAnnotations.ts, 0, 13))
+
+declare const tuple: readonly [typeof tuple];
+>tuple : Symbol(tuple, Decl(recursiveAnnotations.ts, 1, 13))
+>tuple : Symbol(tuple, Decl(recursiveAnnotations.ts, 1, 13))
+
+declare const array: Array<typeof array>;
+>array : Symbol(array, Decl(recursiveAnnotations.ts, 2, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>array : Symbol(array, Decl(recursiveAnnotations.ts, 2, 13))
+
+declare const tupleFunction: readonly [() => typeof tupleFunction];
+>tupleFunction : Symbol(tupleFunction, Decl(recursiveAnnotations.ts, 3, 13))
+>tupleFunction : Symbol(tupleFunction, Decl(recursiveAnnotations.ts, 3, 13))
+
+declare const tupleObject: readonly [{ next: typeof tupleObject }];
+>tupleObject : Symbol(tupleObject, Decl(recursiveAnnotations.ts, 4, 13))
+>next : Symbol(next, Decl(recursiveAnnotations.ts, 4, 38))
+>tupleObject : Symbol(tupleObject, Decl(recursiveAnnotations.ts, 4, 13))
+
+declare const objectTuple: { next: readonly [typeof objectTuple] };
+>objectTuple : Symbol(objectTuple, Decl(recursiveAnnotations.ts, 5, 13))
+>next : Symbol(next, Decl(recursiveAnnotations.ts, 5, 28))
+>objectTuple : Symbol(objectTuple, Decl(recursiveAnnotations.ts, 5, 13))
+
+declare const mapped: { [K in "next"]: typeof mapped };
+>mapped : Symbol(mapped, Decl(recursiveAnnotations.ts, 6, 13))
+>K : Symbol(K, Decl(recursiveAnnotations.ts, 6, 25))
+>mapped : Symbol(mapped, Decl(recursiveAnnotations.ts, 6, 13))
+
+declare const union: typeof union | undefined;
+>union : Symbol(union, Decl(recursiveAnnotations.ts, 7, 13))
+>union : Symbol(union, Decl(recursiveAnnotations.ts, 7, 13))
+
+declare const conditional: true extends false ? never : typeof conditional;
+>conditional : Symbol(conditional, Decl(recursiveAnnotations.ts, 8, 13))
+>conditional : Symbol(conditional, Decl(recursiveAnnotations.ts, 8, 13))
+
+=== namedReferences.ts ===
+export type Link<T> = { value: T; next: Link<T> };
+>Link : Symbol(Link, Decl(namedReferences.ts, 0, 0))
+>T : Symbol(T, Decl(namedReferences.ts, 0, 17))
+>value : Symbol(value, Decl(namedReferences.ts, 0, 23))
+>T : Symbol(T, Decl(namedReferences.ts, 0, 17))
+>next : Symbol(next, Decl(namedReferences.ts, 0, 33))
+>Link : Symbol(Link, Decl(namedReferences.ts, 0, 0))
+>T : Symbol(T, Decl(namedReferences.ts, 0, 17))
+
+export type Callable<T> = { (value: T): Callable<T>; link: Link<T> };
+>Callable : Symbol(Callable, Decl(namedReferences.ts, 0, 50))
+>T : Symbol(T, Decl(namedReferences.ts, 1, 21))
+>value : Symbol(value, Decl(namedReferences.ts, 1, 29))
+>T : Symbol(T, Decl(namedReferences.ts, 1, 21))
+>Callable : Symbol(Callable, Decl(namedReferences.ts, 0, 50))
+>T : Symbol(T, Decl(namedReferences.ts, 1, 21))
+>link : Symbol(link, Decl(namedReferences.ts, 1, 52))
+>Link : Symbol(Link, Decl(namedReferences.ts, 0, 0))
+>T : Symbol(T, Decl(namedReferences.ts, 1, 21))
+
+export type Wrapped = ( { next: Wrapped } );
+>Wrapped : Symbol(Wrapped, Decl(namedReferences.ts, 1, 69))
+>next : Symbol(next, Decl(namedReferences.ts, 2, 25))
+>Wrapped : Symbol(Wrapped, Decl(namedReferences.ts, 1, 69))
+
+export declare const link: Link<string>;
+>link : Symbol(link, Decl(namedReferences.ts, 3, 20))
+>Link : Symbol(Link, Decl(namedReferences.ts, 0, 0))
+
+export declare const callable: Callable<number>;
+>callable : Symbol(callable, Decl(namedReferences.ts, 4, 20))
+>Callable : Symbol(Callable, Decl(namedReferences.ts, 0, 50))
+
+export const nextLink = link.next;
+>nextLink : Symbol(nextLink, Decl(namedReferences.ts, 5, 12))
+>link.next : Symbol(next, Decl(namedReferences.ts, 0, 33))
+>link : Symbol(link, Decl(namedReferences.ts, 3, 20))
+>next : Symbol(next, Decl(namedReferences.ts, 0, 33))
+
+export const nextCallable = callable(1);
+>nextCallable : Symbol(nextCallable, Decl(namedReferences.ts, 6, 12))
+>callable : Symbol(callable, Decl(namedReferences.ts, 4, 20))
+
+export const parenthesized = (function self() { return self; });
+>parenthesized : Symbol(parenthesized, Decl(namedReferences.ts, 7, 12))
+>self : Symbol(self, Decl(namedReferences.ts, 7, 30))
+>self : Symbol(self, Decl(namedReferences.ts, 7, 30))
+
+export const asserted = (function self() { return self; }) satisfies () => unknown;
+>asserted : Symbol(asserted, Decl(namedReferences.ts, 8, 12))
+>self : Symbol(self, Decl(namedReferences.ts, 8, 25))
+>self : Symbol(self, Decl(namedReferences.ts, 8, 25))
+
+export const widened: () => unknown = (function self() { return self; });
+>widened : Symbol(widened, Decl(namedReferences.ts, 9, 12))
+>self : Symbol(self, Decl(namedReferences.ts, 9, 39))
+>self : Symbol(self, Decl(namedReferences.ts, 9, 39))
+
+function createHidden<T>(value: T) {
+>createHidden : Symbol(createHidden, Decl(namedReferences.ts, 9, 73))
+>T : Symbol(T, Decl(namedReferences.ts, 10, 22))
+>value : Symbol(value, Decl(namedReferences.ts, 10, 25))
+>T : Symbol(T, Decl(namedReferences.ts, 10, 22))
+
+    type Hidden = { value: T; next: Hidden };
+>Hidden : Symbol(Hidden, Decl(namedReferences.ts, 10, 36))
+>value : Symbol(value, Decl(namedReferences.ts, 11, 19))
+>T : Symbol(T, Decl(namedReferences.ts, 10, 22))
+>next : Symbol(next, Decl(namedReferences.ts, 11, 29))
+>Hidden : Symbol(Hidden, Decl(namedReferences.ts, 10, 36))
+
+    return null! as Hidden;
+>Hidden : Symbol(Hidden, Decl(namedReferences.ts, 10, 36))
+}
+export const hiddenAlias = createHidden("text");
+>hiddenAlias : Symbol(hiddenAlias, Decl(namedReferences.ts, 14, 12))
+>createHidden : Symbol(createHidden, Decl(namedReferences.ts, 9, 73))
+
+export const siblingHiddenAliases = { first: hiddenAlias, second: hiddenAlias };
+>siblingHiddenAliases : Symbol(siblingHiddenAliases, Decl(namedReferences.ts, 15, 12))
+>first : Symbol(first, Decl(namedReferences.ts, 15, 37))
+>hiddenAlias : Symbol(hiddenAlias, Decl(namedReferences.ts, 14, 12))
+>second : Symbol(second, Decl(namedReferences.ts, 15, 57))
+>hiddenAlias : Symbol(hiddenAlias, Decl(namedReferences.ts, 14, 12))
+
+export const methodKey = Symbol();
+>methodKey : Symbol(methodKey, Decl(namedReferences.ts, 16, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export class Methods {
+>Methods : Symbol(Methods, Decl(namedReferences.ts, 16, 34))
+
+    static recur() { return Methods.recur; }
+>recur : Symbol(Methods.recur, Decl(namedReferences.ts, 17, 22))
+>Methods.recur : Symbol(Methods.recur, Decl(namedReferences.ts, 17, 22))
+>Methods : Symbol(Methods, Decl(namedReferences.ts, 16, 34))
+>recur : Symbol(Methods.recur, Decl(namedReferences.ts, 17, 22))
+
+    static "a-b"() { return Methods["a-b"]; }
+>"a-b" : Symbol(Methods["a-b"], Decl(namedReferences.ts, 18, 44))
+>Methods : Symbol(Methods, Decl(namedReferences.ts, 16, 34))
+>"a-b" : Symbol(Methods["a-b"], Decl(namedReferences.ts, 18, 44))
+
+    static [methodKey]() { return Methods[methodKey]; }
+>[methodKey] : Symbol(Methods[methodKey], Decl(namedReferences.ts, 19, 45))
+>methodKey : Symbol(methodKey, Decl(namedReferences.ts, 16, 12))
+>Methods : Symbol(Methods, Decl(namedReferences.ts, 16, 34))
+>methodKey : Symbol(methodKey, Decl(namedReferences.ts, 16, 12))
+
+    recur() { return this.recur; }
+>recur : Symbol(Methods.recur, Decl(namedReferences.ts, 20, 55))
+>this.recur : Symbol(Methods.recur, Decl(namedReferences.ts, 20, 55))
+>this : Symbol(Methods, Decl(namedReferences.ts, 16, 34))
+>recur : Symbol(Methods.recur, Decl(namedReferences.ts, 20, 55))
+}
+export function overloaded(value: string): typeof overloaded;
+>overloaded : Symbol(overloaded, Decl(namedReferences.ts, 22, 1), Decl(namedReferences.ts, 23, 61), Decl(namedReferences.ts, 24, 61))
+>value : Symbol(value, Decl(namedReferences.ts, 23, 27))
+>overloaded : Symbol(overloaded, Decl(namedReferences.ts, 22, 1), Decl(namedReferences.ts, 23, 61), Decl(namedReferences.ts, 24, 61))
+
+export function overloaded(value: number): typeof overloaded;
+>overloaded : Symbol(overloaded, Decl(namedReferences.ts, 22, 1), Decl(namedReferences.ts, 23, 61), Decl(namedReferences.ts, 24, 61))
+>value : Symbol(value, Decl(namedReferences.ts, 24, 27))
+>overloaded : Symbol(overloaded, Decl(namedReferences.ts, 22, 1), Decl(namedReferences.ts, 23, 61), Decl(namedReferences.ts, 24, 61))
+
+export function overloaded(value: string | number) { return overloaded; }
+>overloaded : Symbol(overloaded, Decl(namedReferences.ts, 22, 1), Decl(namedReferences.ts, 23, 61), Decl(namedReferences.ts, 24, 61))
+>value : Symbol(value, Decl(namedReferences.ts, 25, 27))
+>overloaded : Symbol(overloaded, Decl(namedReferences.ts, 22, 1), Decl(namedReferences.ts, 23, 61), Decl(namedReferences.ts, 24, 61))
+
+const text: string = nextLink.next.value;
+>text : Symbol(text, Decl(namedReferences.ts, 26, 5))
+>nextLink.next.value : Symbol(value, Decl(namedReferences.ts, 0, 23))
+>nextLink.next : Symbol(next, Decl(namedReferences.ts, 0, 33))
+>nextLink : Symbol(nextLink, Decl(namedReferences.ts, 5, 12))
+>next : Symbol(next, Decl(namedReferences.ts, 0, 33))
+>value : Symbol(value, Decl(namedReferences.ts, 0, 23))
+
+const invalid: number = nextLink.next.value;
+>invalid : Symbol(invalid, Decl(namedReferences.ts, 27, 5))
+>nextLink.next.value : Symbol(value, Decl(namedReferences.ts, 0, 23))
+>nextLink.next : Symbol(next, Decl(namedReferences.ts, 0, 33))
+>nextLink : Symbol(nextLink, Decl(namedReferences.ts, 5, 12))
+>next : Symbol(next, Decl(namedReferences.ts, 0, 33))
+>value : Symbol(value, Decl(namedReferences.ts, 0, 23))
+
+nextCallable("wrong");
+>nextCallable : Symbol(nextCallable, Decl(namedReferences.ts, 6, 12))
+
+=== hiddenReferences.ts ===
+export class Hidden {
+>Hidden : Symbol(Hidden, Decl(hiddenReferences.ts, 0, 0))
+
+    private static recur() { return Hidden.recur; }
+>recur : Symbol(Hidden.recur, Decl(hiddenReferences.ts, 0, 21))
+>Hidden.recur : Symbol(Hidden.recur, Decl(hiddenReferences.ts, 0, 21))
+>Hidden : Symbol(Hidden, Decl(hiddenReferences.ts, 0, 0))
+>recur : Symbol(Hidden.recur, Decl(hiddenReferences.ts, 0, 21))
+
+    static expose() { return Hidden.recur; }
+>expose : Symbol(Hidden.expose, Decl(hiddenReferences.ts, 1, 51))
+>Hidden.recur : Symbol(Hidden.recur, Decl(hiddenReferences.ts, 0, 21))
+>Hidden : Symbol(Hidden, Decl(hiddenReferences.ts, 0, 0))
+>recur : Symbol(Hidden.recur, Decl(hiddenReferences.ts, 0, 21))
+
+    protected next() { return this.next; }
+>next : Symbol(Hidden.next, Decl(hiddenReferences.ts, 2, 44))
+>this.next : Symbol(Hidden.next, Decl(hiddenReferences.ts, 2, 44))
+>this : Symbol(Hidden, Decl(hiddenReferences.ts, 0, 0))
+>next : Symbol(Hidden.next, Decl(hiddenReferences.ts, 2, 44))
+
+    expose() { return this.next; }
+>expose : Symbol(Hidden.expose, Decl(hiddenReferences.ts, 3, 42))
+>this.next : Symbol(Hidden.next, Decl(hiddenReferences.ts, 2, 44))
+>this : Symbol(Hidden, Decl(hiddenReferences.ts, 0, 0))
+>next : Symbol(Hidden.next, Decl(hiddenReferences.ts, 2, 44))
+}
+
+=== signatureScopes.ts ===
+export const scoped = {
+>scoped : Symbol(scoped, Decl(signatureScopes.ts, 0, 12))
+
+    first<T>(outer: T) {
+>first : Symbol(first, Decl(signatureScopes.ts, 0, 23))
+>T : Symbol(T, Decl(signatureScopes.ts, 1, 10))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 1, 13))
+>T : Symbol(T, Decl(signatureScopes.ts, 1, 10))
+
+        return {
+            nested<T>(inner: T) { return { outer, inner, next: scoped }; },
+>nested : Symbol(nested, Decl(signatureScopes.ts, 2, 16))
+>T : Symbol(T, Decl(signatureScopes.ts, 3, 19))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 3, 22))
+>T : Symbol(T, Decl(signatureScopes.ts, 3, 19))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 3, 42))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 3, 49))
+>next : Symbol(next, Decl(signatureScopes.ts, 3, 56))
+>scoped : Symbol(scoped, Decl(signatureScopes.ts, 0, 12))
+
+            sibling<T>(inner: T) { return { outer, inner, next: scoped }; },
+>sibling : Symbol(sibling, Decl(signatureScopes.ts, 3, 75))
+>T : Symbol(T, Decl(signatureScopes.ts, 4, 20))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 4, 23))
+>T : Symbol(T, Decl(signatureScopes.ts, 4, 20))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 4, 43))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 4, 50))
+>next : Symbol(next, Decl(signatureScopes.ts, 4, 57))
+>scoped : Symbol(scoped, Decl(signatureScopes.ts, 0, 12))
+
+        };
+    },
+    second<T>(value: T) { return { value, next: scoped }; },
+>second : Symbol(second, Decl(signatureScopes.ts, 6, 6))
+>T : Symbol(T, Decl(signatureScopes.ts, 7, 11))
+>value : Symbol(value, Decl(signatureScopes.ts, 7, 14))
+>T : Symbol(T, Decl(signatureScopes.ts, 7, 11))
+>value : Symbol(value, Decl(signatureScopes.ts, 7, 34))
+>next : Symbol(next, Decl(signatureScopes.ts, 7, 41))
+>scoped : Symbol(scoped, Decl(signatureScopes.ts, 0, 12))
+
+};
+export const numberScope = scoped.first(1);
+>numberScope : Symbol(numberScope, Decl(signatureScopes.ts, 9, 12))
+>scoped.first : Symbol(first, Decl(signatureScopes.ts, 0, 23))
+>scoped : Symbol(scoped, Decl(signatureScopes.ts, 0, 12))
+>first : Symbol(first, Decl(signatureScopes.ts, 0, 23))
+
+export const stringScope = scoped.first("outer");
+>stringScope : Symbol(stringScope, Decl(signatureScopes.ts, 10, 12))
+>scoped.first : Symbol(first, Decl(signatureScopes.ts, 0, 23))
+>scoped : Symbol(scoped, Decl(signatureScopes.ts, 0, 12))
+>first : Symbol(first, Decl(signatureScopes.ts, 0, 23))
+
+const nested = numberScope.nested("inner");
+>nested : Symbol(nested, Decl(signatureScopes.ts, 11, 5))
+>numberScope.nested : Symbol(nested, Decl(signatureScopes.ts, 2, 16))
+>numberScope : Symbol(numberScope, Decl(signatureScopes.ts, 9, 12))
+>nested : Symbol(nested, Decl(signatureScopes.ts, 2, 16))
+
+const sibling = numberScope.sibling(true);
+>sibling : Symbol(sibling, Decl(signatureScopes.ts, 12, 5))
+>numberScope.sibling : Symbol(sibling, Decl(signatureScopes.ts, 3, 75))
+>numberScope : Symbol(numberScope, Decl(signatureScopes.ts, 9, 12))
+>sibling : Symbol(sibling, Decl(signatureScopes.ts, 3, 75))
+
+const nestedOuter: number = nested.outer;
+>nestedOuter : Symbol(nestedOuter, Decl(signatureScopes.ts, 13, 5))
+>nested.outer : Symbol(outer, Decl(signatureScopes.ts, 3, 42))
+>nested : Symbol(nested, Decl(signatureScopes.ts, 11, 5))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 3, 42))
+
+const nestedInner: string = nested.inner;
+>nestedInner : Symbol(nestedInner, Decl(signatureScopes.ts, 14, 5))
+>nested.inner : Symbol(inner, Decl(signatureScopes.ts, 3, 49))
+>nested : Symbol(nested, Decl(signatureScopes.ts, 11, 5))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 3, 49))
+
+const siblingOuter: number = sibling.outer;
+>siblingOuter : Symbol(siblingOuter, Decl(signatureScopes.ts, 15, 5))
+>sibling.outer : Symbol(outer, Decl(signatureScopes.ts, 4, 43))
+>sibling : Symbol(sibling, Decl(signatureScopes.ts, 12, 5))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 4, 43))
+
+const siblingInner: boolean = sibling.inner;
+>siblingInner : Symbol(siblingInner, Decl(signatureScopes.ts, 16, 5))
+>sibling.inner : Symbol(inner, Decl(signatureScopes.ts, 4, 50))
+>sibling : Symbol(sibling, Decl(signatureScopes.ts, 12, 5))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 4, 50))
+
+const stringOuter: string = stringScope.nested(1).outer;
+>stringOuter : Symbol(stringOuter, Decl(signatureScopes.ts, 17, 5))
+>stringScope.nested(1).outer : Symbol(outer, Decl(signatureScopes.ts, 3, 42))
+>stringScope.nested : Symbol(nested, Decl(signatureScopes.ts, 2, 16))
+>stringScope : Symbol(stringScope, Decl(signatureScopes.ts, 10, 12))
+>nested : Symbol(nested, Decl(signatureScopes.ts, 2, 16))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 3, 42))
+
+const again: number = nested.next.second(1).value;
+>again : Symbol(again, Decl(signatureScopes.ts, 18, 5))
+>nested.next.second(1).value : Symbol(value, Decl(signatureScopes.ts, 7, 34))
+>nested.next.second : Symbol(second, Decl(signatureScopes.ts, 6, 6))
+>nested.next : Symbol(next, Decl(signatureScopes.ts, 3, 56))
+>nested : Symbol(nested, Decl(signatureScopes.ts, 11, 5))
+>next : Symbol(next, Decl(signatureScopes.ts, 3, 56))
+>second : Symbol(second, Decl(signatureScopes.ts, 6, 6))
+>value : Symbol(value, Decl(signatureScopes.ts, 7, 34))
+
+export const nestedOwner = {
+>nestedOwner : Symbol(nestedOwner, Decl(signatureScopes.ts, 20, 12))
+
+    make<T>(outer: T) {
+>make : Symbol(make, Decl(signatureScopes.ts, 20, 28))
+>T : Symbol(T, Decl(signatureScopes.ts, 21, 9))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 21, 12))
+>T : Symbol(T, Decl(signatureScopes.ts, 21, 9))
+
+        return {
+            nested<U>(inner: U) { return { outer, inner, owner: nestedOwner }; },
+>nested : Symbol(nested, Decl(signatureScopes.ts, 22, 16))
+>U : Symbol(U, Decl(signatureScopes.ts, 23, 19))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 23, 22))
+>U : Symbol(U, Decl(signatureScopes.ts, 23, 19))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 23, 42))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 23, 49))
+>owner : Symbol(owner, Decl(signatureScopes.ts, 23, 56))
+>nestedOwner : Symbol(nestedOwner, Decl(signatureScopes.ts, 20, 12))
+
+            constrained<U extends T = T>(inner: U) { return { outer, inner, owner: nestedOwner }; },
+>constrained : Symbol(constrained, Decl(signatureScopes.ts, 23, 81))
+>U : Symbol(U, Decl(signatureScopes.ts, 24, 24))
+>T : Symbol(T, Decl(signatureScopes.ts, 21, 9))
+>T : Symbol(T, Decl(signatureScopes.ts, 21, 9))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 24, 41))
+>U : Symbol(U, Decl(signatureScopes.ts, 24, 24))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 24, 61))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 24, 68))
+>owner : Symbol(owner, Decl(signatureScopes.ts, 24, 75))
+>nestedOwner : Symbol(nestedOwner, Decl(signatureScopes.ts, 20, 12))
+
+            copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner } {
+>copied : Symbol(copied, Decl(signatureScopes.ts, 24, 100))
+>U : Symbol(U, Decl(signatureScopes.ts, 25, 19))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 25, 22))
+>U : Symbol(U, Decl(signatureScopes.ts, 25, 19))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 25, 34))
+>T : Symbol(T, Decl(signatureScopes.ts, 21, 9))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 25, 44))
+>U : Symbol(U, Decl(signatureScopes.ts, 25, 19))
+>owner : Symbol(owner, Decl(signatureScopes.ts, 25, 54))
+>nestedOwner : Symbol(nestedOwner, Decl(signatureScopes.ts, 20, 12))
+
+                return { outer, inner, owner: nestedOwner };
+>outer : Symbol(outer, Decl(signatureScopes.ts, 26, 24))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 26, 31))
+>owner : Symbol(owner, Decl(signatureScopes.ts, 26, 38))
+>nestedOwner : Symbol(nestedOwner, Decl(signatureScopes.ts, 20, 12))
+
+            },
+            rest<U>(...values: [U]) { return { outer, inner: values[0], owner: nestedOwner }; },
+>rest : Symbol(rest, Decl(signatureScopes.ts, 27, 14))
+>U : Symbol(U, Decl(signatureScopes.ts, 28, 17))
+>values : Symbol(values, Decl(signatureScopes.ts, 28, 20))
+>U : Symbol(U, Decl(signatureScopes.ts, 28, 17))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 28, 46))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 28, 53))
+>values : Symbol(values, Decl(signatureScopes.ts, 28, 20))
+>0 : Symbol(0)
+>owner : Symbol(owner, Decl(signatureScopes.ts, 28, 71))
+>nestedOwner : Symbol(nestedOwner, Decl(signatureScopes.ts, 20, 12))
+
+        };
+    },
+};
+export const nestedNumber = nestedOwner.make(1);
+>nestedNumber : Symbol(nestedNumber, Decl(signatureScopes.ts, 32, 12))
+>nestedOwner.make : Symbol(make, Decl(signatureScopes.ts, 20, 28))
+>nestedOwner : Symbol(nestedOwner, Decl(signatureScopes.ts, 20, 12))
+>make : Symbol(make, Decl(signatureScopes.ts, 20, 28))
+
+export const nestedString = nestedNumber.nested(true).owner.make("text").nested(2);
+>nestedString : Symbol(nestedString, Decl(signatureScopes.ts, 33, 12))
+>nestedNumber.nested(true).owner.make("text").nested : Symbol(nested, Decl(signatureScopes.ts, 22, 16))
+>nestedNumber.nested(true).owner.make : Symbol(make, Decl(signatureScopes.ts, 20, 28))
+>nestedNumber.nested(true).owner : Symbol(owner, Decl(signatureScopes.ts, 23, 56))
+>nestedNumber.nested : Symbol(nested, Decl(signatureScopes.ts, 22, 16))
+>nestedNumber : Symbol(nestedNumber, Decl(signatureScopes.ts, 32, 12))
+>nested : Symbol(nested, Decl(signatureScopes.ts, 22, 16))
+>owner : Symbol(owner, Decl(signatureScopes.ts, 23, 56))
+>make : Symbol(make, Decl(signatureScopes.ts, 20, 28))
+>nested : Symbol(nested, Decl(signatureScopes.ts, 22, 16))
+
+export const nestedBoolean = nestedString.owner.make(true).nested("inner");
+>nestedBoolean : Symbol(nestedBoolean, Decl(signatureScopes.ts, 34, 12))
+>nestedString.owner.make(true).nested : Symbol(nested, Decl(signatureScopes.ts, 22, 16))
+>nestedString.owner.make : Symbol(make, Decl(signatureScopes.ts, 20, 28))
+>nestedString.owner : Symbol(owner, Decl(signatureScopes.ts, 23, 56))
+>nestedString : Symbol(nestedString, Decl(signatureScopes.ts, 33, 12))
+>owner : Symbol(owner, Decl(signatureScopes.ts, 23, 56))
+>make : Symbol(make, Decl(signatureScopes.ts, 20, 28))
+>nested : Symbol(nested, Decl(signatureScopes.ts, 22, 16))
+
+const nestedStringOuter: string = nestedString.outer;
+>nestedStringOuter : Symbol(nestedStringOuter, Decl(signatureScopes.ts, 35, 5))
+>nestedString.outer : Symbol(outer, Decl(signatureScopes.ts, 23, 42))
+>nestedString : Symbol(nestedString, Decl(signatureScopes.ts, 33, 12))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 23, 42))
+
+const nestedStringInner: number = nestedString.inner;
+>nestedStringInner : Symbol(nestedStringInner, Decl(signatureScopes.ts, 36, 5))
+>nestedString.inner : Symbol(inner, Decl(signatureScopes.ts, 23, 49))
+>nestedString : Symbol(nestedString, Decl(signatureScopes.ts, 33, 12))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 23, 49))
+
+const nestedBooleanOuter: boolean = nestedBoolean.outer;
+>nestedBooleanOuter : Symbol(nestedBooleanOuter, Decl(signatureScopes.ts, 37, 5))
+>nestedBoolean.outer : Symbol(outer, Decl(signatureScopes.ts, 23, 42))
+>nestedBoolean : Symbol(nestedBoolean, Decl(signatureScopes.ts, 34, 12))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 23, 42))
+
+const nestedBooleanInner: string = nestedBoolean.inner;
+>nestedBooleanInner : Symbol(nestedBooleanInner, Decl(signatureScopes.ts, 38, 5))
+>nestedBoolean.inner : Symbol(inner, Decl(signatureScopes.ts, 23, 49))
+>nestedBoolean : Symbol(nestedBoolean, Decl(signatureScopes.ts, 34, 12))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 23, 49))
+
+const constrainedOuter: number = nestedNumber.constrained(2).outer;
+>constrainedOuter : Symbol(constrainedOuter, Decl(signatureScopes.ts, 39, 5))
+>nestedNumber.constrained(2).outer : Symbol(outer, Decl(signatureScopes.ts, 24, 61))
+>nestedNumber.constrained : Symbol(constrained, Decl(signatureScopes.ts, 23, 81))
+>nestedNumber : Symbol(nestedNumber, Decl(signatureScopes.ts, 32, 12))
+>constrained : Symbol(constrained, Decl(signatureScopes.ts, 23, 81))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 24, 61))
+
+const constrainedInner: number = nestedNumber.constrained(2).inner;
+>constrainedInner : Symbol(constrainedInner, Decl(signatureScopes.ts, 40, 5))
+>nestedNumber.constrained(2).inner : Symbol(inner, Decl(signatureScopes.ts, 24, 68))
+>nestedNumber.constrained : Symbol(constrained, Decl(signatureScopes.ts, 23, 81))
+>nestedNumber : Symbol(nestedNumber, Decl(signatureScopes.ts, 32, 12))
+>constrained : Symbol(constrained, Decl(signatureScopes.ts, 23, 81))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 24, 68))
+
+const copiedOuter: number = nestedNumber.copied("inner").outer;
+>copiedOuter : Symbol(copiedOuter, Decl(signatureScopes.ts, 41, 5))
+>nestedNumber.copied("inner").outer : Symbol(outer, Decl(signatureScopes.ts, 25, 34))
+>nestedNumber.copied : Symbol(copied, Decl(signatureScopes.ts, 24, 100))
+>nestedNumber : Symbol(nestedNumber, Decl(signatureScopes.ts, 32, 12))
+>copied : Symbol(copied, Decl(signatureScopes.ts, 24, 100))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 25, 34))
+
+const copiedInner: string = nestedNumber.copied("inner").inner;
+>copiedInner : Symbol(copiedInner, Decl(signatureScopes.ts, 42, 5))
+>nestedNumber.copied("inner").inner : Symbol(inner, Decl(signatureScopes.ts, 25, 44))
+>nestedNumber.copied : Symbol(copied, Decl(signatureScopes.ts, 24, 100))
+>nestedNumber : Symbol(nestedNumber, Decl(signatureScopes.ts, 32, 12))
+>copied : Symbol(copied, Decl(signatureScopes.ts, 24, 100))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 25, 44))
+
+const restOuter: number = nestedNumber.rest(true).outer;
+>restOuter : Symbol(restOuter, Decl(signatureScopes.ts, 43, 5))
+>nestedNumber.rest(true).outer : Symbol(outer, Decl(signatureScopes.ts, 28, 46))
+>nestedNumber.rest : Symbol(rest, Decl(signatureScopes.ts, 27, 14))
+>nestedNumber : Symbol(nestedNumber, Decl(signatureScopes.ts, 32, 12))
+>rest : Symbol(rest, Decl(signatureScopes.ts, 27, 14))
+>outer : Symbol(outer, Decl(signatureScopes.ts, 28, 46))
+
+const restInner: boolean = nestedNumber.rest(true).inner;
+>restInner : Symbol(restInner, Decl(signatureScopes.ts, 44, 5))
+>nestedNumber.rest(true).inner : Symbol(inner, Decl(signatureScopes.ts, 28, 53))
+>nestedNumber.rest : Symbol(rest, Decl(signatureScopes.ts, 27, 14))
+>nestedNumber : Symbol(nestedNumber, Decl(signatureScopes.ts, 32, 12))
+>rest : Symbol(rest, Decl(signatureScopes.ts, 27, 14))
+>inner : Symbol(inner, Decl(signatureScopes.ts, 28, 53))
+
+export declare const reused: {
+>reused : Symbol(reused, Decl(signatureScopes.ts, 46, 20))
+
+    first<T>(...values: [T]): { value: T; next: typeof reused };
+>first : Symbol(first, Decl(signatureScopes.ts, 46, 30))
+>T : Symbol(T, Decl(signatureScopes.ts, 47, 10))
+>values : Symbol(values, Decl(signatureScopes.ts, 47, 13))
+>T : Symbol(T, Decl(signatureScopes.ts, 47, 10))
+>value : Symbol(value, Decl(signatureScopes.ts, 47, 31))
+>T : Symbol(T, Decl(signatureScopes.ts, 47, 10))
+>next : Symbol(next, Decl(signatureScopes.ts, 47, 41))
+>reused : Symbol(reused, Decl(signatureScopes.ts, 46, 20))
+
+    second<T>(value: T): { value: T; next: typeof reused };
+>second : Symbol(second, Decl(signatureScopes.ts, 47, 64))
+>T : Symbol(T, Decl(signatureScopes.ts, 48, 11))
+>value : Symbol(value, Decl(signatureScopes.ts, 48, 14))
+>T : Symbol(T, Decl(signatureScopes.ts, 48, 11))
+>value : Symbol(value, Decl(signatureScopes.ts, 48, 26))
+>T : Symbol(T, Decl(signatureScopes.ts, 48, 11))
+>next : Symbol(next, Decl(signatureScopes.ts, 48, 36))
+>reused : Symbol(reused, Decl(signatureScopes.ts, 46, 20))
+
+    shadowed<T>(reused: T): { value: T; next: typeof reused };
+>shadowed : Symbol(shadowed, Decl(signatureScopes.ts, 48, 59))
+>T : Symbol(T, Decl(signatureScopes.ts, 49, 13))
+>reused : Symbol(reused, Decl(signatureScopes.ts, 49, 16))
+>T : Symbol(T, Decl(signatureScopes.ts, 49, 13))
+>value : Symbol(value, Decl(signatureScopes.ts, 49, 29))
+>T : Symbol(T, Decl(signatureScopes.ts, 49, 13))
+>next : Symbol(next, Decl(signatureScopes.ts, 49, 39))
+>reused : Symbol(reused, Decl(signatureScopes.ts, 49, 16))
+
+};
+export const copy = reused;
+>copy : Symbol(copy, Decl(signatureScopes.ts, 51, 12))
+>reused : Symbol(reused, Decl(signatureScopes.ts, 46, 20))
+
+const restValue: number = copy.first(1).next.second(2).value;
+>restValue : Symbol(restValue, Decl(signatureScopes.ts, 52, 5))
+>copy.first(1).next.second(2).value : Symbol(value, Decl(signatureScopes.ts, 48, 26))
+>copy.first(1).next.second : Symbol(second, Decl(signatureScopes.ts, 47, 64))
+>copy.first(1).next : Symbol(next, Decl(signatureScopes.ts, 47, 41))
+>copy.first : Symbol(first, Decl(signatureScopes.ts, 46, 30))
+>copy : Symbol(copy, Decl(signatureScopes.ts, 51, 12))
+>first : Symbol(first, Decl(signatureScopes.ts, 46, 30))
+>next : Symbol(next, Decl(signatureScopes.ts, 47, 41))
+>second : Symbol(second, Decl(signatureScopes.ts, 47, 64))
+>value : Symbol(value, Decl(signatureScopes.ts, 48, 26))
+
+const shadowedValue: number = copy.shadowed(1).next;
+>shadowedValue : Symbol(shadowedValue, Decl(signatureScopes.ts, 53, 5))
+>copy.shadowed(1).next : Symbol(next, Decl(signatureScopes.ts, 49, 39))
+>copy.shadowed : Symbol(shadowed, Decl(signatureScopes.ts, 48, 59))
+>copy : Symbol(copy, Decl(signatureScopes.ts, 51, 12))
+>shadowed : Symbol(shadowed, Decl(signatureScopes.ts, 48, 59))
+>next : Symbol(next, Decl(signatureScopes.ts, 49, 39))
+
+export type Inferred<T> = T extends (value: infer U) => infer R
+>Inferred : Symbol(Inferred, Decl(signatureScopes.ts, 53, 52))
+>T : Symbol(T, Decl(signatureScopes.ts, 55, 21))
+>T : Symbol(T, Decl(signatureScopes.ts, 55, 21))
+>value : Symbol(value, Decl(signatureScopes.ts, 55, 37))
+>U : Symbol(U, Decl(signatureScopes.ts, 55, 49))
+>R : Symbol(R, Decl(signatureScopes.ts, 55, 61))
+
+    ? { [K in keyof R]: (value: U) => R[K] }
+>K : Symbol(K, Decl(signatureScopes.ts, 56, 9))
+>R : Symbol(R, Decl(signatureScopes.ts, 55, 61))
+>value : Symbol(value, Decl(signatureScopes.ts, 56, 25))
+>U : Symbol(U, Decl(signatureScopes.ts, 55, 49))
+>R : Symbol(R, Decl(signatureScopes.ts, 55, 61))
+>K : Symbol(K, Decl(signatureScopes.ts, 56, 9))
+
+    : never;
+export declare const inferred: Inferred<(value: number) => { next: typeof reused }>;
+>inferred : Symbol(inferred, Decl(signatureScopes.ts, 58, 20))
+>Inferred : Symbol(Inferred, Decl(signatureScopes.ts, 53, 52))
+>value : Symbol(value, Decl(signatureScopes.ts, 58, 41))
+>next : Symbol(next, Decl(signatureScopes.ts, 58, 60))
+>reused : Symbol(reused, Decl(signatureScopes.ts, 46, 20))
+
+export const inferredCopy = inferred;
+>inferredCopy : Symbol(inferredCopy, Decl(signatureScopes.ts, 59, 12))
+>inferred : Symbol(inferred, Decl(signatureScopes.ts, 58, 20))
+
+const inferredValue: string = inferredCopy.next(1).second("text").value;
+>inferredValue : Symbol(inferredValue, Decl(signatureScopes.ts, 60, 5))
+>inferredCopy.next(1).second("text").value : Symbol(value, Decl(signatureScopes.ts, 48, 26))
+>inferredCopy.next(1).second : Symbol(second, Decl(signatureScopes.ts, 47, 64))
+>inferredCopy.next : Symbol(next, Decl(signatureScopes.ts, 58, 60))
+>inferredCopy : Symbol(inferredCopy, Decl(signatureScopes.ts, 59, 12))
+>next : Symbol(next, Decl(signatureScopes.ts, 58, 60))
+>second : Symbol(second, Decl(signatureScopes.ts, 47, 64))
+>value : Symbol(value, Decl(signatureScopes.ts, 48, 26))
+
