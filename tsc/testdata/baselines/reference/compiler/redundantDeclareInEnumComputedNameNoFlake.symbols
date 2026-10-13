@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/redundantDeclareInEnumComputedNameNoFlake.ts] ////
+
+=== redundantDeclareInEnumComputedNameNoFlake.ts ===
+// TS1038: A 'declare' modifier cannot be used in an already ambient context.
+export enum Values {
+>Values : Symbol(Values, Decl(redundantDeclareInEnumComputedNameNoFlake.ts, 0, 0))
+
+    [(function () {
+>[(function () {        declare namespace Nested {            declare const value: number;        }    }).name] : Symbol(Values[(function () {
+        declare namespace Nested {
+            declare const value: number;
+        }
+    }).name], Decl(redundantDeclareInEnumComputedNameNoFlake.ts, 1, 20))
+>(function () {        declare namespace Nested {            declare const value: number;        }    }).name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
+
+        declare namespace Nested {
+>Nested : Symbol(Nested, Decl(redundantDeclareInEnumComputedNameNoFlake.ts, 2, 19))
+
+            declare const value: number;
+>value : Symbol(value, Decl(redundantDeclareInEnumComputedNameNoFlake.ts, 4, 25))
+        }
+    }).name] = 1,
+>name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
+}

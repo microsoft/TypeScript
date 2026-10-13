@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/incompatibleAssignmentInEnumComputedNameNoFlake.ts] ////
+
+=== incompatibleAssignmentInEnumComputedNameNoFlake.ts ===
+// TS2322: Type 'string' is not assignable to type 'number'.
+let target: number;
+>target : Symbol(target, Decl(incompatibleAssignmentInEnumComputedNameNoFlake.ts, 1, 3))
+
+enum E {
+>E : Symbol(E, Decl(incompatibleAssignmentInEnumComputedNameNoFlake.ts, 1, 19))
+
+    [(() => {
+>[(() => {        const text = (target = "value");        return text.length;    })()] : Symbol(E[(() => {
+        const text = (target = "value");
+        return text.length;
+    })()], Decl(incompatibleAssignmentInEnumComputedNameNoFlake.ts, 2, 8))
+
+        const text = (target = "value");
+>text : Symbol(text, Decl(incompatibleAssignmentInEnumComputedNameNoFlake.ts, 4, 13))
+>target : Symbol(target, Decl(incompatibleAssignmentInEnumComputedNameNoFlake.ts, 1, 3))
+
+        return text.length;
+>text.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>text : Symbol(text, Decl(incompatibleAssignmentInEnumComputedNameNoFlake.ts, 4, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    })()]
+}

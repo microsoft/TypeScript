@@ -11,8 +11,8 @@ describe("browser API bundle", () => {
             stdin: {
                 contents: `
                     import { wasmURL } from "@typescript/typescript-wasip1-wasm";
-                    import { API as AsyncAPI } from "typescript/unstable/async";
-                    import { API as SyncAPI } from "typescript/unstable/sync";
+                    import { API as AsyncAPI } from "typescript/async";
+                    import { API as SyncAPI } from "typescript/sync";
                     import { WasmTransport } from "typescript/unstable/wasm";
                     globalThis.typescriptAPI = { AsyncAPI, SyncAPI, WasmTransport, wasmURL };
                 `,

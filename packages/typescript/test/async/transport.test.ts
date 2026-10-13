@@ -1,7 +1,7 @@
 import {
     API,
     type ParsedCommandLine,
-} from "@typescript/typescript/unstable/async";
+} from "@typescript/typescript/async";
 import assert from "node:assert";
 import {
     describe,
@@ -174,6 +174,7 @@ describe("async transport", () => {
 
     test("can close a process client while initialization is manually batched", async () => {
         const api = new API({ cwd: process.cwd() });
+        // @ts-ignore -- Internal client transport is exercised by source tests.
         await api["client"].connect();
         const batch = api.batchContext();
         const request = api.parseCommandLine([]);

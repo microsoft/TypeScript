@@ -26,8 +26,8 @@ describe("API over WebAssembly in a browser", () => {
         const result = await build({
             stdin: {
                 contents: `
-                    import { API as AsyncAPI } from "typescript/unstable/async";
-                    import { API as SyncAPI } from "typescript/unstable/sync";
+                    import { API as AsyncAPI } from "typescript/async";
+                    import { API as SyncAPI } from "typescript/sync";
                     import { instantiateWasm, WasmTransport } from "typescript/unstable/wasm";
 
                     async function check(API, module) {

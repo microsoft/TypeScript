@@ -1,7 +1,7 @@
 import {
     API,
     type ParsedCommandLine,
-} from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/sync";
 import {
     type WasmReactorExports,
     WasmTransport,

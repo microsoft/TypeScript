@@ -1,8 +1,8 @@
-import type { FileSystemCallbacks } from "@typescript/typescript/unstable/fs";
+import type { FileSystemCallbacks } from "@typescript/typescript/fs";
 import {
     toRootedDirectoryPath,
     toRootedFilePath,
-} from "@typescript/typescript/unstable/path";
+} from "@typescript/typescript/path";
 import {
     instantiateWasm,
     type WasmReactorInstance,

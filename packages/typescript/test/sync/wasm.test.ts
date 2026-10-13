@@ -2,9 +2,9 @@ import { wasmURL } from "@typescript/typescript-wasip1-wasm";
 import {
     isIdentifier,
     isVariableStatement,
-} from "@typescript/typescript/unstable/ast";
-import { API as AsyncAPI } from "@typescript/typescript/unstable/async";
-import { API as SyncAPI } from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/ast";
+import { API as AsyncAPI } from "@typescript/typescript/async";
+import { API as SyncAPI } from "@typescript/typescript/sync";
 import {
     instantiateWasm,
     instantiateWasmSync,
