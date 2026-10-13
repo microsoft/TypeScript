@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/syntheticDefaultCallbackContext.ts] ////
+
+=== stream.d.ts ===
+export interface Stream {
+    emit(event: string, data?: any): void;
+>emit : (event: string, data?: any) => void
+>event : string
+>data : any
+}
+export function through(write?: (this: Stream, data: any) => void, end?: (this: Stream) => void): Stream;
+>through : (write?: (this: Stream, data: any) => void, end?: (this: Stream) => void) => Stream
+>write : ((this: Stream, data: any) => void) | undefined
+>this : Stream
+>data : any
+>end : ((this: Stream) => void) | undefined
+>this : Stream
+
+=== main.ts ===
+import stream from "./stream";
+>stream : typeof stream
+
+stream.through(function (data) {
+>stream.through(function (data) {    this.emit("data", data);}, function () {    this.emit("end");}) : stream.Stream
+>stream.through : (write?: (this: stream.Stream, data: any) => void, end?: (this: stream.Stream) => void) => stream.Stream
+>stream : typeof stream
+>through : (write?: (this: stream.Stream, data: any) => void, end?: (this: stream.Stream) => void) => stream.Stream
+>function (data) {    this.emit("data", data);} : (this: stream.Stream, data: any) => void
+>data : any
+
+    this.emit("data", data);
+>this.emit("data", data) : void
+>this.emit : (event: string, data?: any) => void
+>this : stream.Stream
+>emit : (event: string, data?: any) => void
+>"data" : "data"
+>data : any
+
+}, function () {
+>function () {    this.emit("end");} : (this: stream.Stream) => void
+
+    this.emit("end");
+>this.emit("end") : void
+>this.emit : (event: string, data?: any) => void
+>this : stream.Stream
+>emit : (event: string, data?: any) => void
+>"end" : "end"
+
+});
+
