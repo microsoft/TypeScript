@@ -1791,12 +1791,17 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 
 func (tx *DeclarationTransformer) transformTypeAliasDeclaration(input *ast.TypeAliasDeclaration) *ast.Node {
 	tx.needsDeclare = false
+	t := tx.Visitor().Visit(input.Type)
+	if t == nil {
+		// stripInternal can elide an @internal type RHS; fall back like index signatures
+		t = tx.Factory().NewKeywordTypeNode(ast.KindAnyKeyword)
+	}
 	return tx.Factory().UpdateTypeAliasDeclaration(
 		input,
 		tx.ensureModifiers(input.AsNode()),
 		input.Name(),
 		tx.Visitor().VisitNodes(input.TypeParameters),
-		tx.Visitor().Visit(input.Type),
+		t,
 	)
 }
 
