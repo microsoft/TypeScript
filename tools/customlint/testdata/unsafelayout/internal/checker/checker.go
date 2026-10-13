@@ -31,6 +31,10 @@ type Checker struct{}
 
 func (c *Checker) newType(flags, objectFlags int, typ *Type, kind typeKind) *Type {
 	typ.kind = kind
+	if flags != 0 {
+		kind := typeKindObject
+		typ.kind = kind
+	}
 	return typ
 }
 

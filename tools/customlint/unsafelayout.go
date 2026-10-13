@@ -501,13 +501,13 @@ func (p *unsafeLayoutPass) checkTagWrite(c inspector.Cursor, selector *ast.Selec
 	switch family {
 	case "Node":
 		if p.ownerFunction(c, family, "newNode") && layoutFunction(c).Recv == nil {
-			p.checkInitializer(selector, assignment)
+			p.checkInitializer(c, selector, assignment)
 			return
 		}
 		p.pass.Reportf(selector.Pos(), "AST kind is immutable outside checked construction; create a new node")
 	case "Type":
 		if p.ownerFunction(c, family, "newType") {
-			p.checkInitializer(selector, assignment)
+			p.checkInitializer(c, selector, assignment)
 			return
 		}
 		p.pass.Reportf(selector.Pos(), "type kind is immutable outside checked construction")
@@ -520,10 +520,20 @@ func (p *unsafeLayoutPass) checkTagWrite(c inspector.Cursor, selector *ast.Selec
 	}
 }
 
-func (p *unsafeLayoutPass) checkInitializer(selector *ast.SelectorExpr, assignment *ast.AssignStmt) {
+// The tag must come from the constructor's own kind parameter, not from a
+// shadowing local that happens to share its name.
+func (p *unsafeLayoutPass) checkInitializer(c inspector.Cursor, selector *ast.SelectorExpr, assignment *ast.AssignStmt) {
 	if assignment.Tok == token.ASSIGN && len(assignment.Lhs) == 1 && len(assignment.Rhs) == 1 {
-		if kind, ok := assignment.Rhs[0].(*ast.Ident); ok && kind.Name == "kind" {
-			return
+		if kind, ok := ast.Unparen(assignment.Rhs[0]).(*ast.Ident); ok {
+			if function := layoutFunction(c); function != nil && function.Type.Params != nil {
+				for _, field := range function.Type.Params.List {
+					for _, name := range field.Names {
+						if name.Name == "kind" && p.pass.TypesInfo.Uses[kind] == p.pass.TypesInfo.Defs[name] {
+							return
+						}
+					}
+				}
+			}
 		}
 	}
 	p.pass.Reportf(selector.Pos(), "checked construction must initialize the tag from its kind parameter")
@@ -581,6 +591,17 @@ func (p *unsafeLayoutPass) checkCall(c inspector.Cursor, call *ast.CallExpr, tes
 		}
 		if allocated != nil && !direct && containsLayoutRecord(allocated) {
 			p.pass.Reportf(call.Pos(), "a zero-value compiler record bypasses checked construction; use its owning factory")
+		}
+	}
+	if builtin, ok := ast.Unparen(call.Fun).(*ast.Ident); ok && !test && len(call.Args) != 0 {
+		if _, ok := p.pass.TypesInfo.Uses[builtin].(*types.Builtin); ok &&
+			(builtin.Name == "copy" || builtin.Name == "append" && call.Ellipsis.IsValid()) {
+			// Element-wise copies are invisible to checkCopy because the
+			// arguments are slices.
+			if slice, ok := types.Unalias(p.pass.TypesInfo.TypeOf(call.Args[0])).Underlying().(*types.Slice); ok &&
+				holdsRecordByValue(slice.Elem()) {
+				p.pass.Reportf(call.Pos(), "copying a compiler record by value can detach its tagged header; keep a pointer")
+			}
 		}
 	}
 	if len(call.Args) != 1 {
