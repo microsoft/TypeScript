@@ -957,6 +957,26 @@ func (c *Checker) releaseTemporaryPropertyCounts(counts *temporaryPropertyCounts
 	c.freePropertyCounts = counts
 }
 
+// Property enumeration of a combined type may recursively enumerate other
+// combined types, so each call borrows a separate name set.
+func (c *Checker) getTemporaryNameSet() map[string]struct{} {
+	if n := len(c.freeNameSets); n != 0 {
+		set := c.freeNameSets[n-1]
+		c.freeNameSets = c.freeNameSets[:n-1]
+		return set
+	}
+	return make(map[string]struct{})
+}
+
+func (c *Checker) releaseTemporaryNameSet(set map[string]struct{}) {
+	// Do not retain unusually large tables in the free list.
+	if len(set) > 4096 {
+		return
+	}
+	clear(set)
+	c.freeNameSets = append(c.freeNameSets, set)
+}
+
 func (s *orderedSet[T]) contains(value T) bool {
 	if s.valuesByKey == nil {
 		return slices.Contains(s.values, value)
