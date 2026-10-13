@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -30,6 +31,11 @@ const (
 )
 
 type ID string
+
+// Handle identifies a project's lifetime across snapshot clones.
+type Handle uint64
+
+var nextProjectHandle atomic.Uint64
 
 type ConfiguredProjectID struct {
 	pathKey tspath.PathKey
@@ -153,6 +159,7 @@ const (
 type Project struct {
 	Kind             Kind
 	id               ID
+	handle           Handle
 	projectDirectory tspath.RootedDirectoryPath
 	configFileName   tspath.RootedFilePath
 	configFilePath   tspath.PathKey
@@ -292,6 +299,7 @@ func NewProject(
 	project := &Project{
 		Kind:             kind,
 		id:               id,
+		handle:           Handle(nextProjectHandle.Add(1)),
 		projectDirectory: projectDirectory,
 		dirty:            true,
 	}
@@ -349,6 +357,10 @@ func (p *Project) DisplayName(cwd tspath.RootedDirectoryPath) string {
 
 func (p *Project) ID() ID {
 	return p.id
+}
+
+func (p *Project) Handle() Handle {
+	return p.handle
 }
 
 // ConfigFileName panics if Kind() is not KindConfigured.
@@ -410,6 +422,7 @@ func (p *Project) Clone() *Project {
 	return &Project{
 		Kind:             p.Kind,
 		id:               p.id,
+		handle:           p.handle,
 		projectDirectory: p.projectDirectory,
 		configFileName:   p.configFileName,
 		configFilePath:   p.configFilePath,

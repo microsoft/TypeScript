@@ -37,6 +37,9 @@ type ProjectCollection struct {
 
 	openConfiguredProjectsOnce sync.Once
 	openConfiguredProjects     *collections.Set[ConfiguredProjectID]
+
+	projectsByHandleOnce sync.Once
+	projectsByHandle     map[Handle]*Project
 }
 
 // APIState tracks the projects and files that API clients have explicitly opened.
@@ -80,6 +83,7 @@ func (c *ProjectCollection) GetProject(id ID) *Project {
 	if _, ok := id.Inferred(); ok {
 		return c.inferredProject
 	}
+
 	if syntheticID, ok := id.Synthetic(); ok {
 		return c.syntheticProjects[syntheticID]
 	}
@@ -87,6 +91,26 @@ func (c *ProjectCollection) GetProject(id ID) *Project {
 		return c.configuredProjects[configuredID]
 	}
 	return nil
+}
+
+// GetProjectByHandle resolves a project identity only within this snapshot's collection.
+func (c *ProjectCollection) GetProjectByHandle(handle Handle) *Project {
+	if handle == 0 {
+		return nil
+	}
+	c.projectsByHandleOnce.Do(func() {
+		c.projectsByHandle = make(map[Handle]*Project, len(c.configuredProjects)+len(c.syntheticProjects)+1)
+		for _, p := range c.configuredProjects {
+			c.projectsByHandle[p.Handle()] = p
+		}
+		for _, p := range c.syntheticProjects {
+			c.projectsByHandle[p.Handle()] = p
+		}
+		if p := c.inferredProject; p != nil {
+			c.projectsByHandle[p.Handle()] = p
+		}
+	})
+	return c.projectsByHandle[handle]
 }
 
 // ConfiguredProjects returns all configured projects in a stable order.

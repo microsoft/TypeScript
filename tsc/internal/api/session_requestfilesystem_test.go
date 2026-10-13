@@ -523,7 +523,7 @@ func TestCreateProgramRetainsFullFileSystem(t *testing.T) {
 
 	snapshot, err := session.getSnapshotData(created.Snapshot)
 	assert.NilError(t, err)
-	program, err := snapshot.getProgram(project.ID((*created.Operation.CreatedPrograms)[0]))
+	program, err := snapshot.getProgram(snapshot.snapshot.ProjectCollection.GetProject((*created.Operation.CreatedPrograms)[0].AsID()).Handle())
 	assert.NilError(t, err)
 	assert.Assert(t, program.GetSourceFile("/new.ts") != nil)
 }
@@ -753,7 +753,7 @@ func TestEmitFromLayerOverFullFileSystemReturnsFileContents(t *testing.T) {
 
 	emitted, err := session.handleEmit(ctx, &EmitParams{
 		Snapshot: layered.Snapshot,
-		Project:  base.Projects[0].Id,
+		Project:  base.Projects[0].Handle,
 	})
 	assert.NilError(t, err)
 	assert.DeepEqual(t, emitted.EmittedFiles, []tspath.RootedFilePath{"/out/src/main.js"})
@@ -763,7 +763,7 @@ func TestEmitFromLayerOverFullFileSystemReturnsFileContents(t *testing.T) {
 	assert.NilError(t, err)
 	emittedAfterRelease, err := session.handleEmit(ctx, &EmitParams{
 		Snapshot: layered.Snapshot,
-		Project:  base.Projects[0].Id,
+		Project:  base.Projects[0].Handle,
 	})
 	assert.NilError(t, err)
 	assert.DeepEqual(t, emittedAfterRelease.EmittedFiles, emitted.EmittedFiles)

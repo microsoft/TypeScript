@@ -30,7 +30,7 @@ func newTestSnapshotData() *snapshotData {
 	return &snapshotData{
 		handle:                  1,
 		symbolRegistry:          make(map[SymbolID]*ast.Symbol),
-		symbolCanonicalProjects: make(map[SymbolID]project.ID),
+		symbolCanonicalProjects: make(map[SymbolID]project.Handle),
 	}
 }
 
@@ -42,6 +42,7 @@ func TestFileSymbolResponseSerializesDescriptorOnce(t *testing.T) {
 	encoded, err := json.Marshal(response)
 	assert.NilError(t, err)
 	assert.Equal(t, strings.Count(string(encoded), `"contentHash"`), 1)
+	assert.Assert(t, !strings.Contains(string(encoded), `"project"`))
 }
 
 func TestFileOwnedSymbolsAreNotRegisteredInSnapshot(t *testing.T) {
@@ -49,7 +50,7 @@ func TestFileOwnedSymbolsAreNotRegisteredInSnapshot(t *testing.T) {
 	sourceFile := parseAndBind(t, "/file.ts", `export class C { property = 1 }`)
 	sd := newTestSnapshotData()
 
-	response := sd.newSymbolResponse(sourceFile.Statements.Nodes[0].Symbol(), "/tsconfig.json")
+	response := sd.newSymbolResponse(sourceFile.Statements.Nodes[0].Symbol(), 1)
 	assert.Equal(t, response.Reference.Kind, SymbolOwnerKindFile)
 	assert.Equal(t, len(sd.symbolRegistry), 0)
 	assert.Equal(t, len(sd.symbolCanonicalProjects), 0)
@@ -65,7 +66,7 @@ func TestTransientSymbolWithFileDeclarationIsSnapshotOwned(t *testing.T) {
 	symbol.SetDeclarations([]*ast.Node{class})
 	sd := newTestSnapshotData()
 
-	response := sd.newSymbolResponse(symbol, "/tsconfig.json")
+	response := sd.newSymbolResponse(symbol, 1)
 	assert.Equal(t, response.Reference.Kind, SymbolOwnerKindSnapshot)
 	resolved, err := sd.resolveSymbolHandle(response.Reference.Id)
 	assert.NilError(t, err)
@@ -101,7 +102,7 @@ func TestContentMappedSymbolsAreSnapshotOwned(t *testing.T) {
 	class := sourceFile.Statements.Nodes[0].Symbol()
 	sd := newTestSnapshotData()
 
-	response := sd.newSymbolResponse(class, "/tsconfig.json")
+	response := sd.newSymbolResponse(class, 1)
 	assert.Equal(t, response.Reference.Kind, SymbolOwnerKindSnapshot)
 	assert.Assert(t, response.Reference.File == nil)
 	assert.Equal(t, response.Reference.Snapshot, SnapshotID(1))

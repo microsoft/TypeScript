@@ -42,7 +42,7 @@ func TestHandleBatchRequestsRecoversPerRequestPanics(t *testing.T) {
 	response, err := session.handleBatchRequests(context.Background(), &BatchRequestsParams{
 		Requests: []BatchRequest{
 			{Method: "ping", Params: json.Value{}},
-			{Method: MethodGetAnyType, Params: json.Value(`{"snapshot":1,"project":"project"}`)},
+			{Method: MethodGetAnyType, Params: json.Value(`{"snapshot":1,"project":1}`)},
 			{Method: "ping", Params: json.Value{}},
 		},
 	})
