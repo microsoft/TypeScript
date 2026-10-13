@@ -19666,7 +19666,12 @@ type lazyMembers struct {
 func (c *Checker) getMemberLayout(source *Type, bases []*Type) *memberLayout {
 	d := source.AsInterfaceType()
 	if d.memberLayout != nil {
-		return d.memberLayout
+		// A base type instantiation that hit an instantiation limit is the error type, which has
+		// none of the members the shared layout expects to find in it.
+		if !slices.Contains(bases, c.errorType) || slices.Contains(c.getBaseTypes(source), c.errorType) {
+			return d.memberLayout
+		}
+		return c.buildMemberLayout(source, bases)
 	}
 	layout := c.buildMemberLayout(source, bases)
 	if layout.shared {
