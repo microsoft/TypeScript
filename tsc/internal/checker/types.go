@@ -961,27 +961,19 @@ func (t *StructuredType) Properties() []*ast.Symbol {
 	return t.properties
 }
 
-// Returns the number of properties without resolving them.
-func (t *StructuredType) propertyCount() int {
+// Like Properties, but returns symbols with only the right names and flags, without resolving lazy members.
+func (t *StructuredType) propertyShapes() []*ast.Symbol {
 	if t.properties == nil && t.lazy != nil {
-		return t.lazy.layout.namedCount
+		return t.lazy.layout.properties()
 	}
-	return len(t.properties)
+	return t.properties
 }
 
-// Reports whether every property has the given symbol flags, without resolving the properties. Instantiation
-// preserves symbol flags, so the layout's representative symbols answer this for every instantiation.
-func (t *StructuredType) everyPropertyHasFlags(flags ast.SymbolFlags) bool {
-	properties := t.properties
-	if properties == nil && t.lazy != nil {
-		properties = t.lazy.layout.symbols[:t.lazy.layout.namedCount]
+func (t *StructuredType) property(i int) *ast.Symbol {
+	if t.properties == nil && t.lazy != nil {
+		return t.lazy.c.getLazyMember(t.lazy, i)
 	}
-	for _, p := range properties {
-		if p.Flags()&flags == 0 {
-			return false
-		}
-	}
-	return true
+	return t.properties[i]
 }
 
 func (t *StructuredType) getMember(name string) *ast.Symbol {
