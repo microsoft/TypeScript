@@ -64,3 +64,25 @@ func zeroValues(node *ast.Node) {
 	_ = (*ast.Identifier)(Pointer(node))
 	_ = (*ast.Identifier)(PointerAlias(node))
 }
+
+func retag(node *ast.Node, kinds []ast.Kind) {
+	for _, node.Kind = range kinds {
+	}
+}
+
+func zeroResult() (n ast.Identifier) {
+	return
+}
+
+func byValueParam(identifier ast.Identifier, identifiers [2]ast.Identifier) {}
+
+func copies(records map[string]ast.Identifier, channel chan ast.Identifier, get func() ast.Identifier, slice []ast.Identifier) *ast.Identifier {
+	record := records["key"]
+	_ = <-channel
+	_ = get()
+	_ = slice[0]
+	_ = &slice[0]
+	_ = slice[0].Text
+	_ = len(slice[:1])
+	return &record
+}

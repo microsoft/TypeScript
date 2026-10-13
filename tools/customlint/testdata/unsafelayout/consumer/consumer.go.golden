@@ -141,3 +141,43 @@
 !!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
 	}
 	
+	func retag(node *ast.Node, kinds []ast.Kind) {
+		for _, node.Kind = range kinds {
+		       ~
+!!! unsafelayout: range assignment to a compiler tag bypasses checked tag assignment
+		}
+	}
+	
+	func zeroResult() (n ast.Identifier) {
+	                   ~
+!!! unsafelayout: passing or returning a compiler record by value bypasses checked construction; use a pointer
+		return
+	}
+	
+	func byValueParam(identifier ast.Identifier, identifiers [2]ast.Identifier) {}
+	                  ~
+!!! unsafelayout: passing or returning a compiler record by value bypasses checked construction; use a pointer
+	                                             ~
+!!! unsafelayout: passing or returning a compiler record by value bypasses checked construction; use a pointer
+	
+	func copies(records map[string]ast.Identifier, channel chan ast.Identifier, get func() ast.Identifier, slice []ast.Identifier) *ast.Identifier {
+	                                                                                       ~
+!!! unsafelayout: passing or returning a compiler record by value bypasses checked construction; use a pointer
+		record := records["key"]
+		          ~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
+		_ = <-channel
+		    ~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
+		_ = get()
+		    ~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
+		_ = slice[0]
+		    ~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
+		_ = &slice[0]
+		_ = slice[0].Text
+		_ = len(slice[:1])
+		return &record
+	}
+	
