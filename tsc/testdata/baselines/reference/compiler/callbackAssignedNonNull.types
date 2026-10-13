@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/callbackAssignedNonNull.ts] ////
+
+=== callbackAssignedNonNull.ts ===
+declare function initialize(callback: (cancel: () => void) => void): void;
+>initialize : (callback: (cancel: () => void) => void) => void
+>callback : (cancel: () => void) => void
+>cancel : () => void
+
+function start() {
+>start : () => void
+
+    let cancel;
+>cancel : any
+
+    initialize(value => {
+>initialize(value => {        cancel = value;    }) : void
+>initialize : (callback: (cancel: () => void) => void) => void
+>value => {        cancel = value;    } : (value: () => void) => void
+>value : () => void
+
+        cancel = value;
+>cancel = value : () => void
+>cancel : any
+>value : () => void
+
+    });
+    cancel!();
+>cancel!() : any
+>cancel! : any
+>cancel : any
+}
+
