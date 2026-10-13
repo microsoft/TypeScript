@@ -228,3 +228,16 @@ function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnde
 >key : K
 }
 
+type M2<T> = { [K in keyof T & string as [K] extends ['a'] ? 'x' : 'y']: 1 };
+>M2 : M2<T>
+
+function bare<T>(k: keyof M2<T>): 'x' | 'y' { return k; }
+>bare : <T>(k: keyof M2<T>) => 'x' | 'y'
+>k : keyof M2<T>
+>k : "x" | "y"
+
+function inTemplate<T>(k: `p${keyof M2<T>}`): 'px' | 'py' { return k; }
+>inTemplate : <T>(k: `p${keyof M2<T>}`) => 'px' | 'py'
+>k : `p${keyof M2<T>}`
+>k : "px" | "py"
+

@@ -122,3 +122,7 @@ mappedTypeConstraints2.ts(90,9): error TS2322: Type 'ObjectWithUnderscoredKeys<K
 !!! error TS2322:   Type 'ObjectWithUnderscoredKeys<K>[`_${string}`]' is not assignable to type 'true'.
     }
     
+    type M2<T> = { [K in keyof T & string as [K] extends ['a'] ? 'x' : 'y']: 1 };
+    function bare<T>(k: keyof M2<T>): 'x' | 'y' { return k; }
+    function inTemplate<T>(k: `p${keyof M2<T>}`): 'px' | 'py' { return k; }
+    
