@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/constEnumInfinityShadow.ts] ////
+
+=== constEnumInfinityShadow.ts ===
+const Infinity = 0;
+>Infinity : 0
+>0 : 0
+
+const enum E {
+>E : E
+
+    value = 1e999,
+>value : E.value
+>1e999 : 1e999
+}
+
+export const value = E.value;
+>value : E.value
+>E.value : E
+>E : typeof E
+>value : E
+

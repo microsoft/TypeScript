@@ -3,9 +3,11 @@ package checker
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
+	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/pseudochecker"
+	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
 // pseudoTypeToNodeWithCheckerFallback is like pseudoTypeToNode but when the top-level pseudo type
@@ -317,11 +319,39 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		return result
 	case pseudochecker.PseudoTypeKindStringLiteral, pseudochecker.PseudoTypeKindNumericLiteral, pseudochecker.PseudoTypeKindBigIntLiteral:
 		source := t.AsPseudoTypeLiteral().Node
-		return b.f.NewLiteralTypeNode(b.reuseNode(source))
+		reused := b.reuseNode(source)
+		if t.Kind == pseudochecker.PseudoTypeKindNumericLiteral {
+			sourceLiteral := source
+			reusedLiteral := reused
+			if ast.IsPrefixUnaryExpression(source) {
+				sourceLiteral = source.AsPrefixUnaryExpression().Operand
+				reusedLiteral = reused.AsPrefixUnaryExpression().Operand
+			}
+			if isDirectlyConstAssertedNumericLiteral(source) {
+				// Numeric literal text stores the rounded value, so recover the source spelling for reused const assertions.
+				sourceFile := ast.GetSourceFileOfNode(sourceLiteral)
+				reusedLiteral.LiteralLikeData().Text = scanner.GetSourceTextOfNodeFromSourceFile(sourceFile, sourceLiteral, false)
+			} else if jsnum.FromString(sourceLiteral.Text()).IsInf() {
+				reusedLiteral.LiteralLikeData().Text = jsnum.InfinityLiteralText
+			}
+		}
+		return b.f.NewLiteralTypeNode(reused)
 	default:
 		debug.AssertNever(t.Kind, "Unhandled pseudotype kind in pseudotype node construction")
 		return nil
 	}
+}
+
+func isDirectlyConstAssertedNumericLiteral(node *ast.Node) bool {
+	for parent := node.Parent; parent != nil; parent = parent.Parent {
+		if ast.IsConstAssertion(parent) {
+			return true
+		}
+		if !ast.IsPrefixUnaryExpression(parent) && !ast.IsParenthesizedExpression(parent) {
+			return false
+		}
+	}
+	return false
 }
 
 func (b *NodeBuilderImpl) pseudoParametersToNodeList(params []*pseudochecker.PseudoParameter) *ast.NodeList {

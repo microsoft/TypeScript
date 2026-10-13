@@ -44,9 +44,9 @@ func (tx *ConstEnumInliningTransformer) visit(node *ast.Node) *ast.Node {
 				case jsnum.Number:
 					if v.IsInf() {
 						if v.Abs() == v {
-							replacement = tx.Factory().NewIdentifier("Infinity")
+							replacement = tx.Factory().NewNumericLiteral(jsnum.InfinityLiteralText, ast.TokenFlagsNone)
 						} else {
-							replacement = tx.Factory().NewPrefixUnaryExpression(ast.KindMinusToken, tx.Factory().NewIdentifier("Infinity"))
+							replacement = tx.Factory().NewPrefixUnaryExpression(ast.KindMinusToken, tx.Factory().NewNumericLiteral(jsnum.InfinityLiteralText, ast.TokenFlagsNone))
 						}
 					} else if v.IsNaN() {
 						replacement = tx.Factory().NewIdentifier("NaN")

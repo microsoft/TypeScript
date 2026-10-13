@@ -17,3 +17,8 @@ namespace X {
 }
 
 export const m = X.f();
+
+const Infinity = 0;
+export enum Bar {
+    A = 1e999,
+}

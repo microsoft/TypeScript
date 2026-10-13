@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/constEnumInfinityShadow.ts] ////
+
+=== constEnumInfinityShadow.ts ===
+const Infinity = 0;
+>Infinity : Symbol(Infinity, Decl(constEnumInfinityShadow.ts, 0, 5))
+
+const enum E {
+>E : Symbol(E, Decl(constEnumInfinityShadow.ts, 0, 19))
+
+    value = 1e999,
+>value : Symbol(E.value, Decl(constEnumInfinityShadow.ts, 2, 14))
+}
+
+export const value = E.value;
+>value : Symbol(value, Decl(constEnumInfinityShadow.ts, 6, 12))
+>E.value : Symbol(E.value, Decl(constEnumInfinityShadow.ts, 2, 14))
+>E : Symbol(E, Decl(constEnumInfinityShadow.ts, 0, 19))
+>value : Symbol(E.value, Decl(constEnumInfinityShadow.ts, 2, 14))
+
