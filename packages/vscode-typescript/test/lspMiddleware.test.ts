@@ -1,4 +1,4 @@
-import type { ExtensionAPI } from "@typescript/typescript/unstable/vscode";
+import type { ExtensionAPI } from "@typescript/typescript/vscode";
 import assert from "node:assert/strict";
 import { PassThrough } from "node:stream";
 import test, { describe } from "node:test";

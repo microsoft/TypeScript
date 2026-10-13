@@ -400,7 +400,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 			return n.PropertyNameOrName().Text()
 		})...)
 		uniques := core.Filter(exports, func(e *ast.Symbol) bool {
-			return e.Name != ast.InternalSymbolNameDefault && !existing.Has(e.Name)
+			return e.Name() != ast.InternalSymbolNameDefault && !existing.Has(e.Name())
 		})
 		return &stringLiteralCompletions{
 			fromProperties: &completionsFromProperties{
@@ -415,7 +415,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 			return &stringLiteralCompletions{
 				fromProperties: &completionsFromProperties{
 					symbols: core.Filter(properties, func(s *ast.Symbol) bool {
-						return s.ValueDeclaration == nil || !ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration)
+						return s.ValueDeclaration() == nil || !ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration())
 					}),
 					hasIndexSignature: false,
 				},
@@ -522,7 +522,7 @@ func fromUnionableLiteralType(
 				fromProperties: &completionsFromProperties{
 					symbols: core.Filter(
 						result.symbols,
-						func(s *ast.Symbol) bool { return !slices.Contains(alreadyUsedTypes, s.Name) },
+						func(s *ast.Symbol) bool { return !slices.Contains(alreadyUsedTypes, s.Name()) },
 					),
 					hasIndexSignature: result.hasIndexSignature,
 				},
@@ -578,7 +578,7 @@ func stringLiteralCompletionsForObjectLiteral(
 func stringLiteralCompletionsFromProperties(t *checker.Type, typeChecker *checker.Checker) *completionsFromProperties {
 	return &completionsFromProperties{
 		symbols: core.Filter(typeChecker.GetApparentProperties(t), func(s *ast.Symbol) bool {
-			return !(s.ValueDeclaration != nil && ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration))
+			return !(s.ValueDeclaration() != nil && ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration()))
 		}),
 		hasIndexSignature: hasIndexSignature(t, typeChecker),
 	}
@@ -929,7 +929,7 @@ func getAmbientModuleName(symbol *ast.Symbol) string {
 	if declaration != nil && ast.IsModuleWithStringLiteralName(declaration) {
 		return declaration.Name().Text()
 	}
-	return stringutil.StripQuotes(symbol.Name)
+	return stringutil.StripQuotes(symbol.Name())
 }
 
 func (l *LanguageService) getCompletionEntriesFromTypings(
@@ -2089,7 +2089,7 @@ func (l *LanguageService) stringLiteralCompletionDetails(
 	case completion.fromProperties != nil:
 		properties := completion.fromProperties
 		for _, symbol := range properties.symbols {
-			if symbol.Name == name {
+			if symbol.Name() == name {
 				return l.createCompletionDetailsForSymbol(item, symbol, checker, location, position, docFormat)
 			}
 		}

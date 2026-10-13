@@ -21,7 +21,8 @@
         }
     },
     "files": [
-        "lib",
+        "node_modules/typescript",
+        "node_modules/@typescript",
         "LICENSE",
         "NOTICE.txt",
         "README.md",

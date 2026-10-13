@@ -181,6 +181,65 @@ func TestCreateProgramUsesStaticModuleResolutions(t *testing.T) {
 	assert.DeepEqual(t, fileNames, []tspath.RootedFilePath{provided, root})
 }
 
+func TestCustomModuleResolutionsSkipUnsafeRewriteDiagnostic(t *testing.T) {
+	t.Parallel()
+
+	const root = "/home/projects/p/src/a.ts"
+	const staticTarget = "/home/projects/p/src/b.ts"
+	const callbackTarget = "/home/projects/p/src/c.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		root:           `import { b } from "./b.ts"; import { c } from "./c.ts"; export const a = b + c;`,
+		staticTarget:   `export const b = 1;`,
+		callbackTarget: `export const c = 2;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	session.conn = &callbackTestConn{responses: map[string]json.Value{
+		"resolveModuleName/1": json.Value(`{"resolvedFileName":"` + callbackTarget + `"}`),
+	}}
+	compilerOptions := func() core.CompilerOptions {
+		return core.CompilerOptions{
+			NoLib:                           core.TSTrue,
+			Module:                          core.ModuleKindNodeNext,
+			ModuleResolution:                core.ModuleResolutionKindNodeNext,
+			RewriteRelativeImportExtensions: core.TSTrue,
+			OutDir:                          "/home/projects/p/out",
+		}
+	}
+	resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
+		CompilerOptions: compilerOptions(),
+		ModuleResolutions: &ModuleResolutionSpec{
+			Fallback: ModuleResolutionFallbackResolve,
+			Entries: []*ModuleResolutionEntry{
+				staticResolutionEntry("./b.ts", "", nil, staticTarget),
+			},
+		},
+		ResolveModuleNameCallback: "resolveModuleName/1",
+	})
+	assert.NilError(t, err)
+
+	response, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{ //nolint:modernize
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles:       []DocumentIdentifier{{FileName: root}, {FileName: staticTarget}, {FileName: callbackTarget}},
+				CompilerOptions: compilerOptions(),
+				Options:         &CreateProgramOptions{ModuleResolver: resolver},
+			}},
+		},
+	})
+	assert.NilError(t, err)
+	diagnostics, err := session.handleGetSemanticDiagnostics(t.Context(), &GetDiagnosticsParams{
+		Snapshot: response.Snapshot,
+		Project:  (*response.Operation.CreatedPrograms)[0].AsID(),
+		Files:    []DocumentIdentifier{{FileName: root}},
+	})
+	assert.NilError(t, err)
+	for _, diagnostic := range diagnostics {
+		t.Errorf("handleGetSemanticDiagnostics(%s) reported TS%d at %d: %s", root, diagnostic.Code, diagnostic.Pos, diagnostic.Text)
+	}
+}
+
 func TestStaticModuleResolutionPreservesStaticIdentity(t *testing.T) {
 	t.Parallel()
 

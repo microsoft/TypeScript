@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/unusedCommaOperandInEnumComputedNameNoFlake.ts] ////
+
+=== unusedCommaOperandInEnumComputedNameNoFlake.ts ===
+// TS2695: Left side of comma operator is unused and has no side effects.
+export enum Values {
+>Values : Values
+
+    [(1, 2).valueOf] = 1,
+>[(1, 2).valueOf] : Values
+>(1, 2).valueOf : () => number
+>(1, 2) : 2
+>1, 2 : 2
+>1 : 1
+>2 : 2
+>valueOf : () => number
+>1 : 1
+}
+

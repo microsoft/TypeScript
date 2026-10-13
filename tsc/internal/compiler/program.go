@@ -2427,6 +2427,7 @@ var plainJSErrors = collections.NewSetFromItems(
 	diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement.Code(),
 	diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement.Code(),
 	diagnostics.A_default_export_must_be_at_the_top_level_of_a_file_or_module_declaration.Code(),
+	diagnostics.A_deferred_import_must_specify_a_namespace_binding.Code(),
 	diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context.Code(),
 	diagnostics.A_destructuring_declaration_must_have_an_initializer.Code(),
 	diagnostics.A_get_accessor_cannot_have_parameters.Code(),

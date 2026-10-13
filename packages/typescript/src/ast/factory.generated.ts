@@ -273,6 +273,7 @@ import {
     yieldEachChildOfJSDocPropertyTag,
 } from "./visitor.ts";
 
+/** @internal */
 export class NodeObject {
     readonly kind: SyntaxKind;
     flags: NodeFlags = 0 as NodeFlags;

@@ -60,11 +60,11 @@ func isModuleSpecifierLike(node *ast.Node) bool {
 }
 
 func getNonModuleSymbolOfMergedModuleSymbol(symbol *ast.Symbol) *ast.Symbol {
-	if len(symbol.Declarations) == 0 || (symbol.Flags&(ast.SymbolFlagsModule|ast.SymbolFlagsTransient)) == 0 {
+	if len(symbol.Declarations()) == 0 || (symbol.Flags()&(ast.SymbolFlagsModule|ast.SymbolFlagsTransient)) == 0 {
 		return nil
 	}
 
-	if decl := core.Find(symbol.Declarations, func(d *ast.Node) bool { return !ast.IsSourceFile(d) && !ast.IsModuleDeclaration(d) }); decl != nil {
+	if decl := core.Find(symbol.Declarations(), func(d *ast.Node) bool { return !ast.IsSourceFile(d) && !ast.IsModuleDeclaration(d) }); decl != nil {
 		return decl.Symbol()
 	}
 	return nil
@@ -386,10 +386,10 @@ func isRightSideOfPropertyAccess(node *ast.Node) bool {
 }
 
 func isStaticSymbol(symbol *ast.Symbol) bool {
-	if symbol.ValueDeclaration == nil {
+	if symbol.ValueDeclaration() == nil {
 		return false
 	}
-	modifierFlags := symbol.ValueDeclaration.ModifierFlags()
+	modifierFlags := symbol.ValueDeclaration().ModifierFlags()
 	return modifierFlags&ast.ModifierFlagsStatic != 0
 }
 
@@ -884,7 +884,7 @@ func getIntersectingMeaningFromDeclarations(node *ast.Node, symbol *ast.Symbol, 
 	}
 
 	meaning := getMeaningFromLocation(node)
-	declarations := symbol.Declarations
+	declarations := symbol.Declarations()
 	if len(declarations) == 0 {
 		return meaning
 	}
@@ -943,11 +943,11 @@ func getParentSymbolsOfPropertyAccess(location *ast.Node, symbol *ast.Symbol, ch
 	var possibleSymbols []*checker.Type
 	if lhsType.Flags()&checker.TypeFlagsUnionOrIntersection != 0 {
 		possibleSymbols = lhsType.Types()
-	} else if lhsType.Symbol() != symbol.Parent {
+	} else if lhsType.Symbol() != symbol.Parent() {
 		possibleSymbols = []*checker.Type{lhsType}
 	}
 	return core.MapNonNil(possibleSymbols, func(t *checker.Type) *ast.Symbol {
-		if t.Symbol() != nil && t.Symbol().Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0 {
+		if t.Symbol() != nil && t.Symbol().Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0 {
 			return t.Symbol()
 		}
 		return nil
@@ -968,10 +968,10 @@ func getPropertySymbolsFromBaseTypes(symbol *ast.Symbol, propertyName string, ch
 		//      interface C extends C {
 		//          /*findRef*/propName: string;
 		//      }
-		if symbol.Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) == 0 || !seen.AddIfAbsent(symbol) {
+		if symbol.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) == 0 || !seen.AddIfAbsent(symbol) {
 			return nil
 		}
-		for _, declaration := range symbol.Declarations {
+		for _, declaration := range symbol.Declarations() {
 			for _, typeReference := range getAllSuperTypeNodes(declaration) {
 				if propertyType := checker.GetTypeAtLocation(typeReference); propertyType != nil && propertyType.Symbol() != nil {
 					// Visit the typeReference as well to see if it directly or indirectly uses that property
@@ -1090,8 +1090,8 @@ func newCaseClauseTracker(typeChecker *checker.Checker, clauses []*ast.CaseOrDef
 				}
 			} else {
 				symbol := typeChecker.GetSymbolAtLocation(clause.Expression())
-				if symbol != nil && symbol.ValueDeclaration != nil && ast.IsEnumMember(symbol.ValueDeclaration) {
-					enumValue := typeChecker.GetConstantValue(symbol.ValueDeclaration)
+				if symbol != nil && symbol.ValueDeclaration() != nil && ast.IsEnumMember(symbol.ValueDeclaration()) {
+					enumValue := typeChecker.GetConstantValue(symbol.ValueDeclaration())
 					if enumValue != nil {
 						c.addValue(enumValue)
 					}
