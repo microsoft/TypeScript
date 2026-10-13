@@ -7,9 +7,9 @@ var obj = {
 
     [Symbol.for]: 0
 >[Symbol.for] : number
->Symbol.for : (key: string) => symbol
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : (key: string) => symbol
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >0 : 0
 
 };
@@ -17,7 +17,7 @@ var obj = {
 obj[Symbol.for];
 >obj[Symbol.for] : any
 >obj : {}
->Symbol.for : (key: string) => symbol
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : (key: string) => symbol
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 

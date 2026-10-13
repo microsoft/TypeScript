@@ -472,11 +472,11 @@ const testPromiseReject = Promise.reject();
 >reject : <T = never>(reason?: any) => Promise<T>
 
 const testSymbolFor = Symbol.for('a');
->testSymbolFor : unique symbol
->Symbol.for('a') : unique symbol
->Symbol.for : (key: string) => symbol
+>testSymbolFor : RegisteredSymbol<"a">
+>Symbol.for('a') : RegisteredSymbol<"a">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : (key: string) => symbol
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >'a' : "a"
 
 const testSymbolKeyFor = Symbol.keyFor(testSymbolFor);
@@ -485,7 +485,7 @@ const testSymbolKeyFor = Symbol.keyFor(testSymbolFor);
 >Symbol.keyFor : (sym: symbol) => string | undefined
 >Symbol : SymbolConstructor
 >keyFor : (sym: symbol) => string | undefined
->testSymbolFor : unique symbol
+>testSymbolFor : RegisteredSymbol<"a">
 
 const testWeakMap: WeakMap<any, any> = null as any;
 >testWeakMap : WeakMap<any, any>

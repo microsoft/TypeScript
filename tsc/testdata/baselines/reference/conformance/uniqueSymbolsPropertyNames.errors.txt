@@ -1,13 +1,17 @@
+uniqueSymbolsPropertyNames.ts(21,21): error TS2352: Conversion of type '{ equal: RegisteredSymbol<"equal">; }' to type 'OpTypes' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Types of property 'equal' are incompatible.
+    Type 'RegisteredSymbol<"equal">' is not comparable to type 'unique symbol'.
 uniqueSymbolsPropertyNames.ts(27,3): error TS1117: An object literal cannot have multiple properties with the same name.
 uniqueSymbolsPropertyNames.ts(28,3): error TS1117: An object literal cannot have multiple properties with the same name.
 uniqueSymbolsPropertyNames.ts(33,3): error TS1117: An object literal cannot have multiple properties with the same name.
 uniqueSymbolsPropertyNames.ts(38,3): error TS1117: An object literal cannot have multiple properties with the same name.
 uniqueSymbolsPropertyNames.ts(43,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(44,3): error TS1117: An object literal cannot have multiple properties with the same name.
 uniqueSymbolsPropertyNames.ts(45,3): error TS1117: An object literal cannot have multiple properties with the same name.
 uniqueSymbolsPropertyNames.ts(49,3): error TS2300: Duplicate identifier '[uniqueSymbol0]'.
 uniqueSymbolsPropertyNames.ts(50,3): error TS2300: Duplicate identifier '[uniqueSymbol0]'.
-uniqueSymbolsPropertyNames.ts(51,3): error TS2300: Duplicate identifier '[uniqueSymbol1]'.
-uniqueSymbolsPropertyNames.ts(52,3): error TS2300: Duplicate identifier '[uniqueSymbol1]'.
+uniqueSymbolsPropertyNames.ts(51,3): error TS2300: Duplicate identifier '[uniqueSymbol0]'.
+uniqueSymbolsPropertyNames.ts(52,3): error TS2300: Duplicate identifier '[uniqueSymbol0]'.
 uniqueSymbolsPropertyNames.ts(56,3): error TS2300: Duplicate identifier '[OpNamespace.equal]'.
 uniqueSymbolsPropertyNames.ts(57,3): error TS2300: Duplicate identifier '[OpNamespace.equal]'.
 uniqueSymbolsPropertyNames.ts(61,3): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
@@ -16,7 +20,7 @@ uniqueSymbolsPropertyNames.ts(63,3): error TS1166: A computed property name in a
 uniqueSymbolsPropertyNames.ts(64,3): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 
 
-==== uniqueSymbolsPropertyNames.ts (16 errors) ====
+==== uniqueSymbolsPropertyNames.ts (18 errors) ====
     interface OpTypes {
       readonly equal: unique symbol;
     }
@@ -38,8 +42,14 @@ uniqueSymbolsPropertyNames.ts(64,3): error TS1166: A computed property name in a
       }
     
     const Op: OpTypes = {
+                        ~
       equal: Symbol.for("equal"),
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     } as OpTypes;
+    ~~~~~~~~~~~~
+!!! error TS2352: Conversion of type '{ equal: RegisteredSymbol<"equal">; }' to type 'OpTypes' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Types of property 'equal' are incompatible.
+!!! error TS2352:     Type 'RegisteredSymbol<"equal">' is not comparable to type 'unique symbol'.
     
     const t0 = {
       equal: "first",
@@ -71,6 +81,8 @@ uniqueSymbolsPropertyNames.ts(64,3): error TS1166: A computed property name in a
       ~~~~~~~~~~~~~~~~~~~~
 !!! error TS1117: An object literal cannot have multiple properties with the same name.
       [getUniqueSymbol1()]: "first",
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
       [getUniqueSymbol1()]: "last",
       ~~~~~~~~~~~~~~~~~~~~
 !!! error TS1117: An object literal cannot have multiple properties with the same name.
@@ -85,10 +97,10 @@ uniqueSymbolsPropertyNames.ts(64,3): error TS1166: A computed property name in a
 !!! error TS2300: Duplicate identifier '[uniqueSymbol0]'.
       [uniqueSymbol1] = "first";
       ~~~~~~~~~~~~~~~
-!!! error TS2300: Duplicate identifier '[uniqueSymbol1]'.
+!!! error TS2300: Duplicate identifier '[uniqueSymbol0]'.
       [uniqueSymbol1] = "last";
       ~~~~~~~~~~~~~~~
-!!! error TS2300: Duplicate identifier '[uniqueSymbol1]'.
+!!! error TS2300: Duplicate identifier '[uniqueSymbol0]'.
     }
     
     class Cls2 {

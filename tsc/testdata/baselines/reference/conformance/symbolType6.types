@@ -3,10 +3,10 @@
 === symbolType6.ts ===
 var s = Symbol.for("add");
 >s : symbol
->Symbol.for("add") : symbol
->Symbol.for : (key: string) => symbol
+>Symbol.for("add") : RegisteredSymbol<"add">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : (key: string) => symbol
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >"add" : "add"
 
 var a: any;

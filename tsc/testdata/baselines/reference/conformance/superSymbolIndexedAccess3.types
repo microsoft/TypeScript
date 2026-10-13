@@ -3,10 +3,10 @@
 === superSymbolIndexedAccess3.ts ===
 var symbol = Symbol.for('myThing');
 >symbol : symbol
->Symbol.for('myThing') : symbol
->Symbol.for : (key: string) => symbol
+>Symbol.for('myThing') : RegisteredSymbol<"myThing">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : (key: string) => symbol
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
 >'myThing' : "myThing"
 
 class Foo {

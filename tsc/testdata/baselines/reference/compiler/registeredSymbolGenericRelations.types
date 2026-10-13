@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/registeredSymbolGenericRelations.ts] ////
+
+=== registeredSymbolGenericRelations.ts ===
+type Equal<A, B> =
+>Equal : Equal<A, B>
+
+    (<T>() => T extends A ? 1 : 2) extends
+    (<T>() => T extends B ? 1 : 2) ? true : false;
+>true : true
+>false : false
+
+declare function inferKey<K extends string>(value: RegisteredSymbol<K>): K;
+>inferKey : <K extends string>(value: RegisteredSymbol<K>) => K
+>value : RegisteredSymbol<K>
+
+const inferred: "foo" = inferKey(Symbol.for("foo"));
+>inferred : "foo"
+>inferKey(Symbol.for("foo")) : "foo"
+>inferKey : <K extends string>(value: RegisteredSymbol<K>) => K
+>Symbol.for("foo") : RegisteredSymbol<"foo">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>"foo" : "foo"
+
+function simplify<K extends string>() {
+>simplify : <K extends string>() => { unionIsSymbol: true; intersectionIsRegistered: true; }
+
+    const unionIsSymbol: true = null! as Equal<RegisteredSymbol<K> | symbol, symbol>;
+>unionIsSymbol : true
+>true : true
+>null! as Equal<RegisteredSymbol<K> | symbol, symbol> : true
+>null! : never
+
+    const intersectionIsRegistered: true = null! as Equal<RegisteredSymbol<K> & symbol, RegisteredSymbol<K>>;
+>intersectionIsRegistered : true
+>true : true
+>null! as Equal<RegisteredSymbol<K> & symbol, RegisteredSymbol<K>> : true
+>null! : never
+
+    return { unionIsSymbol, intersectionIsRegistered };
+>{ unionIsSymbol, intersectionIsRegistered } : { unionIsSymbol: true; intersectionIsRegistered: true; }
+>unionIsSymbol : true
+>intersectionIsRegistered : true
+}
+
+function widenKey<K extends "foo" | "bar">(value: RegisteredSymbol<K>): RegisteredSymbol<"foo" | "bar"> {
+>widenKey : <K extends "foo" | "bar">(value: RegisteredSymbol<K>) => RegisteredSymbol<"foo" | "bar">
+>value : RegisteredSymbol<K>
+
+    return value;
+>value : RegisteredSymbol<"bar"> | RegisteredSymbol<"foo">
+}
+
+function widenGeneric<K extends L, L extends string>(value: RegisteredSymbol<K>): RegisteredSymbol<L> {
+>widenGeneric : <K extends L, L extends string>(value: RegisteredSymbol<K>) => RegisteredSymbol<L>
+>value : RegisteredSymbol<K>
+
+    return value;
+>value : RegisteredSymbol<K>
+}
+
+function commonSymbol<K extends string>(value: RegisteredSymbol<K>): symbol {
+>commonSymbol : <K extends string>(value: RegisteredSymbol<K>) => symbol
+>value : RegisteredSymbol<K>
+
+    return value;
+>value : RegisteredSymbol<K>
+}
+
+function intersect<K extends string>(value: RegisteredSymbol<K>): RegisteredSymbol<K> & symbol {
+>intersect : <K extends string>(value: RegisteredSymbol<K>) => RegisteredSymbol<K> & symbol
+>value : RegisteredSymbol<K>
+
+    return value;
+>value : RegisteredSymbol<K>
+}
+

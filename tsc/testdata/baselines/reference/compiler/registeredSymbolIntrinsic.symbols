@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/registeredSymbolIntrinsic.ts] ////
+
+=== registeredSymbolIntrinsic.ts ===
+const foo = Symbol.for("foo");
+>foo : Symbol(foo, Decl(registeredSymbolIntrinsic.ts, 0, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const fooAgain = Symbol.for("foo");
+>fooAgain : Symbol(fooAgain, Decl(registeredSymbolIntrinsic.ts, 1, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const bar = Symbol.for("bar");
+>bar : Symbol(bar, Decl(registeredSymbolIntrinsic.ts, 2, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+let sameStringKey: typeof foo = fooAgain;
+>sameStringKey : Symbol(sameStringKey, Decl(registeredSymbolIntrinsic.ts, 4, 3))
+>foo : Symbol(foo, Decl(registeredSymbolIntrinsic.ts, 0, 5))
+>fooAgain : Symbol(fooAgain, Decl(registeredSymbolIntrinsic.ts, 1, 5))
+
+let registeredStringKey: RegisteredSymbol<"foo"> = foo;
+>registeredStringKey : Symbol(registeredStringKey, Decl(registeredSymbolIntrinsic.ts, 5, 3))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>foo : Symbol(foo, Decl(registeredSymbolIntrinsic.ts, 0, 5))
+
+let registeredBarKey: RegisteredSymbol<"bar"> = bar;
+>registeredBarKey : Symbol(registeredBarKey, Decl(registeredSymbolIntrinsic.ts, 6, 3))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>bar : Symbol(bar, Decl(registeredSymbolIntrinsic.ts, 2, 5))
+
+let widenedSymbol: symbol = foo;
+>widenedSymbol : Symbol(widenedSymbol, Decl(registeredSymbolIntrinsic.ts, 7, 3))
+>foo : Symbol(foo, Decl(registeredSymbolIntrinsic.ts, 0, 5))
+
+declare const key: string;
+>key : Symbol(key, Decl(registeredSymbolIntrinsic.ts, 9, 13))
+
+let registeredString: RegisteredSymbol<string> = Symbol.for(key);
+>registeredString : Symbol(registeredString, Decl(registeredSymbolIntrinsic.ts, 10, 3))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>key : Symbol(key, Decl(registeredSymbolIntrinsic.ts, 9, 13))
+
+let dynamic = Symbol.for(key);
+>dynamic : Symbol(dynamic, Decl(registeredSymbolIntrinsic.ts, 11, 3))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>key : Symbol(key, Decl(registeredSymbolIntrinsic.ts, 9, 13))
+
+let invalidDynamicKey: typeof foo = dynamic;
+>invalidDynamicKey : Symbol(invalidDynamicKey, Decl(registeredSymbolIntrinsic.ts, 12, 3))
+>foo : Symbol(foo, Decl(registeredSymbolIntrinsic.ts, 0, 5))
+>dynamic : Symbol(dynamic, Decl(registeredSymbolIntrinsic.ts, 11, 3))
+
+declare const unionKey: "foo" | "bar";
+>unionKey : Symbol(unionKey, Decl(registeredSymbolIntrinsic.ts, 14, 13))
+
+let registeredUnion: RegisteredSymbol<"foo" | "bar"> = Symbol.for(unionKey);
+>registeredUnion : Symbol(registeredUnion, Decl(registeredSymbolIntrinsic.ts, 15, 3))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>unionKey : Symbol(unionKey, Decl(registeredSymbolIntrinsic.ts, 14, 13))
+
+let invalidUnionKey: typeof foo = registeredUnion;
+>invalidUnionKey : Symbol(invalidUnionKey, Decl(registeredSymbolIntrinsic.ts, 16, 3))
+>foo : Symbol(foo, Decl(registeredSymbolIntrinsic.ts, 0, 5))
+>registeredUnion : Symbol(registeredUnion, Decl(registeredSymbolIntrinsic.ts, 15, 3))
+
+interface WithRegisteredKeys {
+>WithRegisteredKeys : Symbol(WithRegisteredKeys, Decl(registeredSymbolIntrinsic.ts, 16, 50))
+
+    [foo]: string;
+>[foo] : Symbol(WithRegisteredKeys[foo], Decl(registeredSymbolIntrinsic.ts, 18, 30))
+>foo : Symbol(foo, Decl(registeredSymbolIntrinsic.ts, 0, 5))
+
+    [bar]: number;
+>[bar] : Symbol(WithRegisteredKeys[bar], Decl(registeredSymbolIntrinsic.ts, 19, 18))
+>bar : Symbol(bar, Decl(registeredSymbolIntrinsic.ts, 2, 5))
+}
+

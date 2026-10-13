@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/registeredSymbolIntrinsic.ts] ////
+
+=== registeredSymbolIntrinsic.ts ===
+const foo = Symbol.for("foo");
+>foo : RegisteredSymbol<"foo">
+>Symbol.for("foo") : RegisteredSymbol<"foo">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>"foo" : "foo"
+
+const fooAgain = Symbol.for("foo");
+>fooAgain : RegisteredSymbol<"foo">
+>Symbol.for("foo") : RegisteredSymbol<"foo">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>"foo" : "foo"
+
+const bar = Symbol.for("bar");
+>bar : RegisteredSymbol<"bar">
+>Symbol.for("bar") : RegisteredSymbol<"bar">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>"bar" : "bar"
+
+let sameStringKey: typeof foo = fooAgain;
+>sameStringKey : RegisteredSymbol<"foo">
+>foo : RegisteredSymbol<"foo">
+>fooAgain : RegisteredSymbol<"foo">
+
+let registeredStringKey: RegisteredSymbol<"foo"> = foo;
+>registeredStringKey : RegisteredSymbol<"foo">
+>foo : RegisteredSymbol<"foo">
+
+let registeredBarKey: RegisteredSymbol<"bar"> = bar;
+>registeredBarKey : RegisteredSymbol<"bar">
+>bar : RegisteredSymbol<"bar">
+
+let widenedSymbol: symbol = foo;
+>widenedSymbol : symbol
+>foo : RegisteredSymbol<"foo">
+
+declare const key: string;
+>key : string
+
+let registeredString: RegisteredSymbol<string> = Symbol.for(key);
+>registeredString : symbol
+>Symbol.for(key) : symbol
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>key : string
+
+let dynamic = Symbol.for(key);
+>dynamic : symbol
+>Symbol.for(key) : symbol
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>key : string
+
+let invalidDynamicKey: typeof foo = dynamic;
+>invalidDynamicKey : RegisteredSymbol<"foo">
+>foo : RegisteredSymbol<"foo">
+>dynamic : symbol
+
+declare const unionKey: "foo" | "bar";
+>unionKey : "bar" | "foo"
+
+let registeredUnion: RegisteredSymbol<"foo" | "bar"> = Symbol.for(unionKey);
+>registeredUnion : RegisteredSymbol<"bar"> | RegisteredSymbol<"foo">
+>Symbol.for(unionKey) : RegisteredSymbol<"bar"> | RegisteredSymbol<"foo">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>unionKey : "bar" | "foo"
+
+let invalidUnionKey: typeof foo = registeredUnion;
+>invalidUnionKey : RegisteredSymbol<"foo">
+>foo : RegisteredSymbol<"foo">
+>registeredUnion : RegisteredSymbol<"bar"> | RegisteredSymbol<"foo">
+
+interface WithRegisteredKeys {
+    [foo]: string;
+>[foo] : string
+>foo : RegisteredSymbol<"foo">
+
+    [bar]: number;
+>[bar] : number
+>bar : RegisteredSymbol<"bar">
+}
+

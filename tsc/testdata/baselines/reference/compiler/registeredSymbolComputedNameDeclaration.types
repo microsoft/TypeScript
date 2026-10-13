@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/registeredSymbolComputedNameDeclaration.ts] ////
+
+=== registeredSymbolComputedNameDeclaration.ts ===
+export const key = Symbol.for("abc");
+>key : RegisteredSymbol<"abc">
+>Symbol.for("abc") : RegisteredSymbol<"abc">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>"abc" : "abc"
+
+export function getKey(): typeof key { return key; }
+>getKey : () => typeof key
+>key : RegisteredSymbol<"abc">
+>key : RegisteredSymbol<"abc">
+
+export const value = {
+>value : { ordinary: number; } & {    [K in RegisteredSymbol<"abc">]: string;} & {    [K in RegisteredSymbol<"other">]: boolean;}
+>{    ordinary: 1,    [getKey()]: "text",    [Symbol.for("other")]: true,} : { ordinary: number; } & {    [K in RegisteredSymbol<"abc">]: string;} & {    [K in RegisteredSymbol<"other">]: boolean;}
+
+    ordinary: 1,
+>ordinary : number
+>1 : 1
+
+    [getKey()]: "text",
+>[getKey()] : string
+>getKey() : RegisteredSymbol<"abc">
+>getKey : () => typeof key
+>"text" : "text"
+
+    [Symbol.for("other")]: true,
+>[Symbol.for("other")] : boolean
+>Symbol.for("other") : RegisteredSymbol<"other">
+>Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>"other" : "other"
+>true : true
+
+};
+
+export const readonlyValue = { [getKey()]: "fixed" } as const;
+>readonlyValue : {    readonly [K in RegisteredSymbol<"abc">]: "fixed";}
+>{ [getKey()]: "fixed" } as const : {    readonly [K in RegisteredSymbol<"abc">]: "fixed";}
+>{ [getKey()]: "fixed" } : {    readonly [K in RegisteredSymbol<"abc">]: "fixed";}
+>[getKey()] : "fixed"
+>getKey() : RegisteredSymbol<"abc">
+>getKey : () => typeof key
+>"fixed" : "fixed"
+

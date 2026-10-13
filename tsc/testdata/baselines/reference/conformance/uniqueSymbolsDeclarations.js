@@ -415,10 +415,10 @@ declare let letCall: symbol;
 declare var varCall: symbol;
 declare const constType: unique symbol;
 declare const constTypeAndCall: unique symbol;
-declare const constInitToConstCall: symbol;
+declare const constInitToConstCall: typeof constCall;
 declare const constInitToLetCall: symbol;
 declare const constInitToVarCall: symbol;
-declare const constInitToConstDeclAmbient: symbol;
+declare const constInitToConstDeclAmbient: typeof constType;
 declare let letInitToConstCall: symbol;
 declare let letInitToLetCall: symbol;
 declare let letInitToVarCall: symbol;
@@ -452,9 +452,9 @@ declare class C {
     readwriteCall: symbol;
 }
 declare const c: C;
-declare const constInitToCReadonlyStaticCall: symbol;
-declare const constInitToCReadonlyStaticType: symbol;
-declare const constInitToCReadonlyStaticTypeAndCall: symbol;
+declare const constInitToCReadonlyStaticCall: typeof C.readonlyStaticCall;
+declare const constInitToCReadonlyStaticType: typeof C.readonlyStaticType;
+declare const constInitToCReadonlyStaticTypeAndCall: typeof C.readonlyStaticTypeAndCall;
 declare const constInitToCReadwriteStaticCall: symbol;
 declare const constInitToCReadonlyStaticCallWithTypeQuery: typeof C.readonlyStaticCall;
 declare const constInitToCReadonlyStaticTypeWithTypeQuery: typeof C.readonlyStaticType;
@@ -470,7 +470,7 @@ interface I {
     readonly readonlyType: unique symbol;
 }
 declare const i: I;
-declare const constInitToIReadonlyType: symbol;
+declare const constInitToIReadonlyType: I["readonlyType"];
 declare const constInitToIReadonlyTypeWithTypeQuery: typeof i.readonlyType;
 declare const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"];
 type L = {
@@ -480,8 +480,8 @@ type L = {
     };
 };
 declare const l: L;
-declare const constInitToLReadonlyType: symbol;
-declare const constInitToLReadonlyNestedType: symbol;
+declare const constInitToLReadonlyType: typeof l.readonlyType;
+declare const constInitToLReadonlyNestedType: typeof l.nested.readonlyNestedType;
 declare const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType;
 declare const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNestedType;
 declare const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"];
@@ -510,15 +510,15 @@ declare const o2: {
     method5(p?: symbol): symbol;
 };
 declare class C0 {
-    static readonly a: symbol;
-    static readonly b: symbol;
-    static readonly c: symbol;
+    static readonly a: typeof s;
+    static readonly b: typeof N.s;
+    static readonly c: typeof N.s;
     static d: symbol;
     static e: symbol;
     static f: symbol;
-    readonly a: symbol;
-    readonly b: symbol;
-    readonly c: symbol;
+    readonly a: typeof s;
+    readonly b: typeof N.s;
+    readonly c: typeof N.s;
     d: symbol;
     e: symbol;
     f: symbol;
