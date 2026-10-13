@@ -597,6 +597,8 @@ type Checker struct {
 	TotalInstantiationCount                     uint32
 	instantiationCount                          uint32
 	instantiationStack                          []*Type
+	layoutEntries                               []layoutEntry
+	layoutIndex                                 map[string]int
 	conditionalConstraintDepth                  uint32
 	inlineLevel                                 int
 	serializationLevel                          int
@@ -19680,102 +19682,110 @@ func (c *Checker) getMemberLayout(source *Type, bases []*Type) *memberLayout {
 	return layout
 }
 
+type layoutEntry struct {
+	key    string
+	symbol *ast.Symbol
+	origin memberOrigin
+	rank   int
+}
+
 func (c *Checker) buildMemberLayout(source *Type, bases []*Type) *memberLayout {
-	type entry struct {
-		key    string
-		symbol *ast.Symbol
-		origin memberOrigin
+	type baseMembers struct {
+		layout  *memberLayout
+		symbols []*ast.Symbol
+		byName  bool
 	}
 	declared := source.AsInterfaceType().declaredMembers
-	entries := make([]entry, 0, len(declared))
-	index := make(map[string]int, len(declared))
-	for key, symbol := range declared {
-		index[key] = len(entries)
-		entries = append(entries, entry{key, symbol, memberOrigin{memberOriginOwn, 0}})
-	}
 	// A layout computed while base types are still being resolved may be missing inherited members.
 	shared := source.AsInterfaceType().baseTypesResolved
 	var declaredBases []*Type
 	if shared {
 		declaredBases = c.getBaseTypes(source)
 	}
+	// Resolve base members before taking the scratch storage below, since this may build other layouts.
+	baseMembersList := make([]baseMembers, len(bases))
+	capacity := len(declared)
 	for k, base := range bases {
 		if base == c.anyType {
 			continue
 		}
-		var baseLayout *memberLayout
-		var baseSymbols []*ast.Symbol
 		if base.flags&TypeFlagsObject != 0 && base.objectFlags&(ObjectFlagsReference|ObjectFlagsClassOrInterface) != 0 {
 			if resolved := c.resolveStructuredTypeMembers(base); resolved.lazy != nil {
-				baseLayout = resolved.lazy.layout
-			}
-		}
-		count := 0
-		byName := false
-		if baseLayout != nil {
-			shared = shared && baseLayout.shared
-			count = baseLayout.namedCount
-		} else {
-			// The properties of a base type without a layout have the same names in every instantiation
-			// when the declared base type references no type parameters, so they can be found by name.
-			byName = shared && k < len(declaredBases) && !c.couldContainTypeVariables(declaredBases[k])
-			shared = byName
-			baseSymbols = c.getPropertiesOfType(base)
-			count = len(baseSymbols)
-		}
-		for i := range count {
-			var symbol *ast.Symbol
-			var origin memberOrigin
-			if baseLayout != nil {
-				symbol = baseLayout.symbols[i]
-				origin = memberOrigin{int32(k), int32(i)}
-			} else {
-				symbol = baseSymbols[i]
-				origin = memberOrigin{memberOriginFixed, 0}
-				if byName {
-					origin = memberOrigin{int32(k), memberSlotByName}
-				}
-			}
-			if isStaticPrivateIdentifierProperty(symbol) {
+				baseMembersList[k].layout = resolved.lazy.layout
+				shared = shared && resolved.lazy.layout.shared
+				capacity += resolved.lazy.layout.namedCount
 				continue
 			}
-			name := symbol.Name()
-			if j, ok := index[name]; !ok {
-				index[name] = len(entries)
-				entries = append(entries, entry{name, symbol, origin})
-			} else if entries[j].symbol.Flags()&ast.SymbolFlagsValue == 0 {
-				entries[j] = entry{name, symbol, origin}
+		}
+		// The properties of a base type without a layout have the same names in every instantiation
+		// when the declared base type references no type parameters, so they can be found by name.
+		byName := shared && k < len(declaredBases) && !c.couldContainTypeVariables(declaredBases[k])
+		shared = byName
+		baseMembersList[k].byName = byName
+		baseMembersList[k].symbols = c.getPropertiesOfType(base)
+		capacity += len(baseMembersList[k].symbols)
+	}
+	entries, index := c.layoutEntries[:0], c.layoutIndex
+	c.layoutEntries, c.layoutIndex = nil, nil
+	if cap(entries) < capacity {
+		entries = make([]layoutEntry, 0, capacity)
+	}
+	if index == nil {
+		index = make(map[string]int, capacity)
+	}
+	add := func(name string, symbol *ast.Symbol, origin memberOrigin) {
+		if isStaticPrivateIdentifierProperty(symbol) {
+			return
+		}
+		if j, ok := index[name]; !ok {
+			index[name] = len(entries)
+			entries = append(entries, layoutEntry{key: name, symbol: symbol, origin: origin})
+		} else if entries[j].symbol.Flags()&ast.SymbolFlagsValue == 0 {
+			entries[j] = layoutEntry{key: name, symbol: symbol, origin: origin}
+		}
+	}
+	for key, symbol := range declared {
+		index[key] = len(entries)
+		entries = append(entries, layoutEntry{key: key, symbol: symbol, origin: memberOrigin{memberOriginOwn, 0}})
+	}
+	for k, base := range baseMembersList {
+		if base.layout != nil {
+			for i, symbol := range base.layout.symbols[:base.layout.namedCount] {
+				add(symbol.Name(), symbol, memberOrigin{int32(k), int32(i)})
 			}
+			continue
+		}
+		origin := memberOrigin{memberOriginFixed, 0}
+		if base.byName {
+			origin = memberOrigin{int32(k), memberSlotByName}
+		}
+		for _, symbol := range base.symbols {
+			add(symbol.Name(), symbol, origin)
 		}
 	}
 	// For classes and interfaces, explicitly declared members come ahead of inherited members (see getNamedMembers).
 	container := source.symbol
 	isClassOrInterface := container != nil && container.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0
-	rank := func(e entry) int {
+	namedCount := 0
+	for i := range entries {
+		e := &entries[i]
 		switch {
 		case !c.isNamedMember(e.symbol, e.key):
-			return 2
+			e.rank = 2
 		case isClassOrInterface && c.isDeclarationContainedBy(e.symbol, container):
-			return 0
+			e.rank = 0
 		default:
-			return 1
+			e.rank = 1
 		}
-	}
-	ranks := make(map[string]int, len(entries))
-	namedCount := 0
-	for _, e := range entries {
-		r := rank(e)
-		ranks[e.key] = r
-		if r != 2 {
+		if e.rank != 2 {
 			namedCount++
 		}
 	}
-	slices.SortFunc(entries, func(a, b entry) int {
-		ra, rb := ranks[a.key], ranks[b.key]
-		if ra != rb {
-			return ra - rb
+	slices.SortFunc(entries, func(a, b layoutEntry) int {
+		if a.rank != b.rank {
+			return a.rank - b.rank
 		}
-		if ra == 2 {
+		if a.rank == 2 {
 			return 0
 		}
 		return c.compareSymbols(a.symbol, b.symbol)
@@ -19799,6 +19809,9 @@ func (c *Checker) buildMemberLayout(source *Type, bases []*Type) *memberLayout {
 			layout.keys[i] = e.key
 		}
 	}
+	clear(entries)
+	clear(index)
+	c.layoutEntries, c.layoutIndex = entries, index
 	layout.buildIndex()
 	return layout
 }
