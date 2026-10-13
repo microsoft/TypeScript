@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"testing"
-	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -517,38 +516,22 @@ func TestOpenProjectsWithCircularExtendsReportCircularity(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	type snapshotResult struct {
-		response *CreateSnapshotResponse
-		err      error
+	_, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: first}},
+	})
+	assert.NilError(t, err)
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: second}},
+	})
+	assert.NilError(t, err)
+	diagnostics, err := session.handleGetConfigFileParsingDiagnostics(context.Background(), &GetProjectDiagnosticsParams{
+		Snapshot: response.Snapshot,
+		Project:  configuredProjectID(second),
+	})
+	assert.NilError(t, err)
+	codes := make([]int32, 0, len(diagnostics))
+	for _, diagnostic := range diagnostics {
+		codes = append(codes, diagnostic.Code)
 	}
-	result := make(chan snapshotResult, 1)
-	go func() {
-		if _, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-			OpenProjects: []DocumentIdentifier{{FileName: first}},
-		}); err != nil {
-			result <- snapshotResult{err: err}
-			return
-		}
-		response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-			OpenProjects: []DocumentIdentifier{{FileName: second}},
-		})
-		result <- snapshotResult{response: response, err: err}
-	}()
-
-	select {
-	case snapshot := <-result:
-		assert.NilError(t, snapshot.err)
-		diagnostics, err := session.handleGetConfigFileParsingDiagnostics(context.Background(), &GetProjectDiagnosticsParams{
-			Snapshot: snapshot.response.Snapshot,
-			Project:  configuredProjectID(second),
-		})
-		assert.NilError(t, err)
-		codes := make([]int32, 0, len(diagnostics))
-		for _, diagnostic := range diagnostics {
-			codes = append(codes, diagnostic.Code)
-		}
-		assert.DeepEqual(t, codes, []int32{18000})
-	case <-time.After(10 * time.Second):
-		t.Fatal("opening a project with a circular extends chain deadlocked")
-	}
+	assert.DeepEqual(t, codes, []int32{18000})
 }
