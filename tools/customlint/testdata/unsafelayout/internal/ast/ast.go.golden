@@ -127,3 +127,10 @@
 !!! unsafelayout: a fresh compiler record must be checked-constructed before it escapes
 	}
 	
+	func zeroValueNode() *Identifier {
+		var n Identifier
+		    ~
+!!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
+		return &n
+	}
+	

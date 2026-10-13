@@ -43,3 +43,24 @@ func uses(node *ast.Node, declaration *ast.ImportDeclaration, kind ast.Kind, typ
 	borrowed.Kind = ast.KindIdentifier
 	_ = &borrowed.Kind
 }
+
+type Pointer unsafe.Pointer
+
+type PointerAlias = unsafe.Pointer
+
+func zeroValues(node *ast.Node) {
+	var identifier ast.Identifier
+	_ = &identifier
+	var identifiers [2]ast.Identifier
+	_ = &identifiers[0]
+	var holder struct{ identifier ast.Identifier }
+	_ = &holder.identifier
+	var pointers [2]*ast.Identifier
+	_ = pointers
+	_ = new([2]ast.Identifier)
+	_ = make([]ast.Identifier, 1)
+	_ = make([]*ast.Identifier, 1)
+	_ = [2]ast.Identifier{}
+	_ = (*ast.Identifier)(Pointer(node))
+	_ = (*ast.Identifier)(PointerAlias(node))
+}

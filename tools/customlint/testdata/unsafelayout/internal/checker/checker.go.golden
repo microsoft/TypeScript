@@ -198,3 +198,16 @@
 !!! unsafelayout: a fresh compiler record must be checked-constructed before it escapes
 	}
 	
+	func zeroValueRecords() (*LiteralType, *SimpleTypeMapper) {
+		var literal LiteralType
+		    ~
+!!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
+		var literals [2]LiteralType
+		    ~
+!!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
+		_ = literals
+		var mappers [2]SimpleTypeMapper
+		mappers[0].kind = typeMapperSimple
+		return &literal, &mappers[0]
+	}
+	

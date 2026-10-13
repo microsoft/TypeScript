@@ -92,3 +92,8 @@ func freshNodes() *Node {
 	_ = newNode(KindIdentifier, tagged.AsNode())
 	return (&Identifier{}).AsNode()
 }
+
+func zeroValueNode() *Identifier {
+	var n Identifier
+	return &n
+}
