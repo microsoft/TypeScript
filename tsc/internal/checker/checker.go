@@ -21916,15 +21916,34 @@ func (c *Checker) getUnionOrIntersectionProperty(t *Type, name string, skipObjec
 	return prop
 }
 
-func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name string, skipObjectFunctionPropertyAugment bool) *ast.Symbol {
+// unionOrIntersectionPropertySources describes the constituent properties from
+// which a union or intersection property would be synthesized.
+type unionOrIntersectionPropertySources struct {
+	singleProp           *ast.Symbol
+	propSet              collections.OrderedSet[*ast.Symbol]
+	indexTypes           []*Type
+	propFlags            ast.SymbolFlags
+	optionalFlag         ast.SymbolFlags
+	checkFlags           ast.CheckFlags
+	syntheticFlag        ast.CheckFlags
+	mergedInstantiations bool
+}
+
+// isSynthetic reports whether the sources require a new synthetic symbol rather
+// than reusing (or cloning) singleProp.
+func (s *unionOrIntersectionPropertySources) isSynthetic() bool {
+	return s.propSet.Size() != 0 || s.checkFlags&ast.CheckFlagsReadPartial != 0 || len(s.indexTypes) != 0
+}
+
+func (c *Checker) getUnionOrIntersectionPropertySources(containingType *Type, name string, skipObjectFunctionPropertyAugment bool, sources *unionOrIntersectionPropertySources) bool {
 	propFlags := ast.SymbolFlagsNone
-	var singleProp *ast.Symbol
-	var propSet collections.OrderedSet[*ast.Symbol]
-	var indexTypes []*Type
 	isUnion := containingType.flags&TypeFlagsUnion != 0
 	// Flags we want to propagate to the result if they exist in all source symbols
 	var checkFlags ast.CheckFlags
 	var optionalFlag ast.SymbolFlags
+	var singleProp *ast.Symbol
+	propSet := &sources.propSet
+	var indexTypes []*Type
 	if !isUnion {
 		checkFlags = ast.CheckFlagsReadonly
 		optionalFlag = ast.SymbolFlagsOptional
@@ -22026,17 +22045,17 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 	}
 	if singleProp == nil {
 		// No property was found
-		return nil
+		return false
 	}
 	if isUnion &&
 		(propSet.Size() != 0 || checkFlags&ast.CheckFlagsPartial != 0) &&
 		checkFlags&(ast.CheckFlagsContainsPrivate|ast.CheckFlagsContainsProtected|ast.CheckFlagsContainsWritePrivate|ast.CheckFlagsContainsWriteProtected) != 0 &&
-		!(propSet.Size() != 0 && c.hasCommonDeclaration(&propSet)) {
+		!(propSet.Size() != 0 && c.hasCommonDeclaration(propSet)) {
 		// A property in a union has a private or protected declaration in one constituent, but is missing
 		// or has a different declaration in another constituent. If the private or protected declaration is
 		// for reading, we don't create a property.
 		if checkFlags&(ast.CheckFlagsContainsPrivate|ast.CheckFlagsContainsProtected) != 0 {
-			return nil
+			return false
 		}
 		// Otherwise, if the private or protected declaration is for writing, reduce accessibility to that of
 		// the most restricted constituent.
@@ -22046,8 +22065,31 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 			checkFlags &^= ast.CheckFlagsContainsWritePublic
 		}
 	}
-	if propSet.Size() == 0 && checkFlags&ast.CheckFlagsReadPartial == 0 && len(indexTypes) == 0 {
-		if !mergedInstantiations {
+	sources.singleProp = singleProp
+	sources.indexTypes = indexTypes
+	sources.propFlags = propFlags
+	sources.optionalFlag = optionalFlag
+	sources.checkFlags = checkFlags
+	sources.syntheticFlag = syntheticFlag
+	sources.mergedInstantiations = mergedInstantiations
+	return true
+}
+
+func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name string, skipObjectFunctionPropertyAugment bool) *ast.Symbol {
+	var sources unionOrIntersectionPropertySources
+	if !c.getUnionOrIntersectionPropertySources(containingType, name, skipObjectFunctionPropertyAugment, &sources) {
+		return nil
+	}
+	singleProp := sources.singleProp
+	propSet := &sources.propSet
+	indexTypes := sources.indexTypes
+	propFlags := sources.propFlags
+	optionalFlag := sources.optionalFlag
+	checkFlags := sources.checkFlags
+	syntheticFlag := sources.syntheticFlag
+	isUnion := containingType.flags&TypeFlagsUnion != 0
+	if !sources.isSynthetic() {
+		if !sources.mergedInstantiations {
 			return singleProp
 		}
 		// No symbol from a union/intersection should have a `.parent` set (since unions/intersections don't act as symbol parents)
@@ -22356,12 +22398,70 @@ func (c *Checker) somePropertyReducesToNever(t *Type) bool {
 	// Go in the order the properties were found so the combined properties are created in the same order every time.
 	for propName, count := range counts.Entries() {
 		if count > 1 {
-			if prop := c.getPropertyOfUnionOrIntersectionType(t, propName, true /*skipObjectFunctionPropertyAugment*/); prop != nil && c.isNeverReducedProperty(prop) {
+			if c.intersectionPropertyReducesToNever(t, propName) {
 				return true
 			}
 		}
 	}
 	return false
+}
+
+// intersectionPropertyReducesToNever reports whether the combined property named
+// name would satisfy isNeverReducedProperty, without creating and caching that
+// property. Most such properties are never otherwise looked up, so creating
+// them only to inspect their flags retains a large number of symbols.
+func (c *Checker) intersectionPropertyReducesToNever(t *Type, name string) bool {
+	if prop := t.AsUnionOrIntersectionType().propertyCacheWithoutFunctionPropertyAugment[name]; prop != nil {
+		return c.isNeverReducedProperty(prop)
+	}
+	var sources unionOrIntersectionPropertySources
+	if !c.getUnionOrIntersectionPropertySources(t, name, true /*skipObjectFunctionPropertyAugment*/, &sources) {
+		return false
+	}
+	if !sources.isSynthetic() {
+		if !sources.mergedInstantiations {
+			return c.isNeverReducedProperty(sources.singleProp)
+		}
+		prop := c.getUnionOrIntersectionProperty(t, name, true /*skipObjectFunctionPropertyAugment*/)
+		return prop != nil && c.isNeverReducedProperty(prop)
+	}
+	if sources.propSet.Size() == 0 {
+		sources.propSet.Add(sources.singleProp)
+	}
+	checkFlags := sources.checkFlags
+	var firstType *Type
+	var firstValueDeclaration *ast.Node
+	hasNonUniformValueDeclaration := false
+	propTypes := make([]*Type, 0, sources.propSet.Size()+len(sources.indexTypes))
+	for prop := range sources.propSet.Values() {
+		if firstValueDeclaration == nil {
+			firstValueDeclaration = prop.ValueDeclaration()
+		} else if prop.ValueDeclaration() != nil && prop.ValueDeclaration() != firstValueDeclaration {
+			hasNonUniformValueDeclaration = true
+		}
+		propType := c.getTypeOfSymbol(prop)
+		if firstType == nil {
+			firstType = propType
+		}
+		if propType != firstType {
+			checkFlags |= ast.CheckFlagsHasNonUniformType
+		}
+		if isLiteralType(propType) || c.isPatternLiteralType(propType) {
+			checkFlags |= ast.CheckFlagsHasLiteralType
+		}
+		if propType.flags&TypeFlagsNever != 0 && propType != c.uniqueLiteralType {
+			checkFlags |= ast.CheckFlagsHasNeverType
+		}
+		propTypes = append(propTypes, propType)
+	}
+	propTypes = append(propTypes, sources.indexTypes...)
+	hasValueDeclaration := !hasNonUniformValueDeclaration && firstValueDeclaration != nil
+	if !hasValueDeclaration && checkFlags&ast.CheckFlagsContainsPrivate != 0 {
+		return true
+	}
+	return (sources.propFlags|sources.optionalFlag)&ast.SymbolFlagsOptional == 0 &&
+		checkFlags&(ast.CheckFlagsNonUniformAndLiteral|ast.CheckFlagsHasNeverType) == ast.CheckFlagsNonUniformAndLiteral &&
+		c.getIntersectionType(propTypes).flags&TypeFlagsNever != 0
 }
 
 func (c *Checker) getReducedUnionType(unionType *Type) *Type {
