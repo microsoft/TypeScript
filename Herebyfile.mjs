@@ -2032,6 +2032,7 @@ const mainNativePreviewPackage = {
 
 const wasip1Package = {
     npmPackageName: "@typescript/typescript-wasip1-wasm",
+    npmDirName: "typescript-wasip1-wasm",
     npmDir: path.join(builtNpm, "typescript-wasip1-wasm"),
     npmTarball: path.join(builtNpm, "typescript-wasip1-wasm.tgz"),
 };
@@ -2416,6 +2417,7 @@ async function runBuildNativePreviewPackages() {
 
     const platforms = getPlatforms();
     await buildMainNativePreviewPackage(platforms);
+    await buildWasip1Package();
 
     if (isCI) {
         for (const platform of platforms) {
@@ -2457,6 +2459,12 @@ export const buildNativePreviewPlatformTask = task({
             throw new Error("typescript:build-platform requires --platform.");
         }
 
+        if (options.platform === "wasip1-wasm") {
+            await rimraf(wasip1Package.npmDir);
+            await buildWasip1Package();
+            return;
+        }
+
         const platform = getPlatforms().find(({ nodeOs, nodeArch }) => `${nodeOs}-${nodeArch}` === options.platform);
         if (!platform) {
             throw new Error(`Unknown release platform: ${options.platform}`);
@@ -2472,10 +2480,13 @@ export const buildNativePreviewPlatformMatrix = task({
     hiddenFromTaskList: true,
     run: () => {
         const matrix = Object.fromEntries(
-            getPlatforms().map(({ nodeOs, nodeArch, npmDirName }) => {
-                const platform = `${nodeOs}-${nodeArch}`;
-                return [platform.replaceAll("-", "_"), { platform, npmDirName }];
-            }),
+            [
+                ...getPlatforms().map(({ nodeOs, nodeArch, npmDirName }) => {
+                    const platform = `${nodeOs}-${nodeArch}`;
+                    return [platform.replaceAll("-", "_"), { platform, npmDirName }];
+                }),
+                ["wasip1_wasm", { platform: "wasip1-wasm", npmDirName: wasip1Package.npmDirName }],
+            ],
         );
         console.log(`##vso[task.setvariable variable=matrix;isOutput=true]${JSON.stringify(matrix)}`);
         console.log(`##vso[task.setvariable variable=packageBaseName;isOutput=true]${path.basename(mainNativePreviewPackage.npmDir)}`);
@@ -2548,7 +2559,10 @@ async function buildMainNativePreviewPackage(platforms) {
     if (importErrors.length) {
         throw new Error(`Found external imports in .d.ts files:\n${importErrors.map(e => "  " + e).join("\n")}`);
     }
+}
 
+async function buildWasip1Package() {
+    const inputPackageJson = await createNativePreviewInputPackageJson();
     const wasmInputDir = "./packages/typescript-wasip1-wasm";
     const extraFlags = options.respectGoEnv
         ? []
@@ -2708,6 +2722,7 @@ async function testNativePreviewPackage(platforms) {
         }
 
         const wasmPackageJson = JSON.parse(await fs.promises.readFile(path.join(wasmPackageDir, "package.json"), "utf8"));
+        assert.equal(wasmPackageJson.version, getVersion(), "WASI artifact package must match the main package version");
         assert.equal(wasmPackageJson.peerDependencies, undefined, "WASI artifact package must not depend on the main package");
         const libFiles = JSON.parse(await fs.promises.readFile(path.join(wasmPackageDir, "lib", "libFiles.json"), "utf8"));
         const expectedLibFiles = (await fs.promises.readdir(path.join(wasmPackageDir, "lib")))
@@ -2719,6 +2734,7 @@ async function testNativePreviewPackage(platforms) {
         /** @type {{ files: { path: string }[] }[]} */
         const wasmPacked = JSON.parse(wasmPackOutput);
         const wasmFiles = new Set(wasmPacked[0].files.map(file => file.path));
+        assert(wasmFiles.has("lib/tsc.wasm"), "WASI artifact package is missing its compiler");
         assert(wasmFiles.has("dist/index.js"), "WASI artifact package is missing its URL helper");
         assert(wasmFiles.has("lib/libFiles.json"), "WASI artifact package is missing its library file list");
         assert(!wasmFiles.has("dist/transport.js"), "WASI artifact package contains the reactor transport");
