@@ -3359,13 +3359,15 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		case source.flags&TypeFlagsConditional != 0:
 			if source.AsConditionalType().root.isDistributive == target.AsConditionalType().root.isDistributive {
-				result = r.isRelatedTo(source.AsConditionalType().checkType, target.AsConditionalType().checkType, RecursionFlagsBoth, false /*reportErrors*/)
+				s := r.c.getNonDistributedConditionalType(source)
+				t := r.c.getNonDistributedConditionalType(target)
+				result = r.isRelatedTo(s.AsConditionalType().checkType, t.AsConditionalType().checkType, RecursionFlagsBoth, false /*reportErrors*/)
 				if result != TernaryFalse {
-					result &= r.isRelatedTo(source.AsConditionalType().extendsType, target.AsConditionalType().extendsType, RecursionFlagsBoth, false /*reportErrors*/)
+					result &= r.isRelatedTo(s.AsConditionalType().extendsType, t.AsConditionalType().extendsType, RecursionFlagsBoth, false /*reportErrors*/)
 					if result != TernaryFalse {
-						result &= r.isRelatedTo(r.c.getTrueTypeFromConditionalType(source), r.c.getTrueTypeFromConditionalType(target), RecursionFlagsBoth, false /*reportErrors*/)
+						result &= r.isRelatedTo(r.c.getTrueTypeFromConditionalType(s), r.c.getTrueTypeFromConditionalType(t), RecursionFlagsBoth, false /*reportErrors*/)
 						if result != TernaryFalse {
-							result &= r.isRelatedTo(r.c.getFalseTypeFromConditionalType(source), r.c.getFalseTypeFromConditionalType(target), RecursionFlagsBoth, false /*reportErrors*/)
+							result &= r.isRelatedTo(r.c.getFalseTypeFromConditionalType(s), r.c.getFalseTypeFromConditionalType(t), RecursionFlagsBoth, false /*reportErrors*/)
 							if result != TernaryFalse {
 								return result
 							}
@@ -3757,23 +3759,28 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			return TernaryMaybe
 		}
 		if target.flags&TypeFlagsConditional != 0 {
+			// The constituent types of an uninstantiated distributive conditional type reference the distributed
+			// form of the check type parameter. Normalize both sides to their non-distributed form such that the
+			// comparison doesn't depend on whether either side has been instantiated.
+			s := r.c.getNonDistributedConditionalType(source)
+			t := r.c.getNonDistributedConditionalType(target)
 			// Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
 			// one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
 			// and Y1 is related to Y2.
-			sourceParams := source.AsConditionalType().root.inferTypeParameters
-			sourceExtends := source.AsConditionalType().extendsType
+			sourceParams := s.AsConditionalType().root.inferTypeParameters
+			sourceExtends := s.AsConditionalType().extendsType
 			var mapper *TypeMapper
 			if len(sourceParams) != 0 {
 				// If the source has infer type parameters, we instantiate them in the context of the target
 				ctx := r.c.newInferenceContext(sourceParams, nil /*signature*/, InferenceFlagsNone, r.isRelatedToWorker)
-				r.c.inferTypes(ctx.inferences, target.AsConditionalType().extendsType, sourceExtends, InferencePriorityNoConstraints|InferencePriorityAlwaysStrict, false)
+				r.c.inferTypes(ctx.inferences, t.AsConditionalType().extendsType, sourceExtends, InferencePriorityNoConstraints|InferencePriorityAlwaysStrict, false)
 				sourceExtends = r.c.instantiateType(sourceExtends, ctx.mapper)
 				mapper = ctx.mapper
 			}
-			if r.c.isTypeIdenticalTo(sourceExtends, target.AsConditionalType().extendsType) && (r.isRelatedTo(source.AsConditionalType().checkType, target.AsConditionalType().checkType, RecursionFlagsBoth, false) != 0 || r.isRelatedTo(target.AsConditionalType().checkType, source.AsConditionalType().checkType, RecursionFlagsBoth, false) != 0) {
-				result = r.isRelatedTo(r.c.instantiateType(r.c.getTrueTypeFromConditionalType(source), mapper), r.c.getTrueTypeFromConditionalType(target), RecursionFlagsBoth, reportErrors)
+			if r.c.isTypeIdenticalTo(sourceExtends, t.AsConditionalType().extendsType) && (r.isRelatedTo(s.AsConditionalType().checkType, t.AsConditionalType().checkType, RecursionFlagsBoth, false) != 0 || r.isRelatedTo(t.AsConditionalType().checkType, s.AsConditionalType().checkType, RecursionFlagsBoth, false) != 0) {
+				result = r.isRelatedTo(r.c.instantiateType(r.c.getTrueTypeFromConditionalType(s), mapper), r.c.getTrueTypeFromConditionalType(t), RecursionFlagsBoth, reportErrors)
 				if result != TernaryFalse {
-					result &= r.isRelatedTo(r.c.getFalseTypeFromConditionalType(source), r.c.getFalseTypeFromConditionalType(target), RecursionFlagsBoth, reportErrors)
+					result &= r.isRelatedTo(r.c.getFalseTypeFromConditionalType(s), r.c.getFalseTypeFromConditionalType(t), RecursionFlagsBoth, reportErrors)
 				}
 				if result != TernaryFalse {
 					return result
