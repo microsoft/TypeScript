@@ -936,6 +936,7 @@ type StructuredType struct {
 	ConstrainedType
 	members            ast.SymbolTable
 	properties         []*ast.Symbol
+	lazy               *lazyMembers // Members resolved on demand, in which case members and properties are nil until needed
 	signatures         []*Signature // Signatures (call + construct)
 	callSignatureCount int          // Count of call signatures
 	indexInfos         []*IndexInfo
@@ -954,7 +955,47 @@ func (t *StructuredType) ConstructSignatures() []*Signature {
 }
 
 func (t *StructuredType) Properties() []*ast.Symbol {
+	if t.properties == nil && t.lazy != nil {
+		t.properties = t.lazy.c.getLazyProperties(t.lazy)
+	}
 	return t.properties
+}
+
+// Returns the number of properties without resolving them.
+func (t *StructuredType) propertyCount() int {
+	if t.properties == nil && t.lazy != nil {
+		return t.lazy.layout.namedCount
+	}
+	return len(t.properties)
+}
+
+// Reports whether every property has the given symbol flags, without resolving the properties. Instantiation
+// preserves symbol flags, so the layout's representative symbols answer this for every instantiation.
+func (t *StructuredType) everyPropertyHasFlags(flags ast.SymbolFlags) bool {
+	properties := t.properties
+	if properties == nil && t.lazy != nil {
+		properties = t.lazy.layout.symbols[:t.lazy.layout.namedCount]
+	}
+	for _, p := range properties {
+		if p.Flags()&flags == 0 {
+			return false
+		}
+	}
+	return true
+}
+
+func (t *StructuredType) getMember(name string) *ast.Symbol {
+	if t.lazy != nil {
+		return t.lazy.c.getLazyMemberByName(t.lazy, name)
+	}
+	return t.members[name]
+}
+
+func (t *StructuredType) getMembers() ast.SymbolTable {
+	if t.members == nil && t.lazy != nil {
+		t.members = t.lazy.c.getLazyMemberTable(t.lazy)
+	}
+	return t.members
 }
 
 // Except for tuple type references and reverse mapped types, all object types have an associated symbol.
@@ -1024,6 +1065,7 @@ type InterfaceType struct {
 	declaredCallSignatures      []*Signature    // Declared call signatures
 	declaredConstructSignatures []*Signature    // Declared construct signatures
 	declaredIndexInfos          []*IndexInfo    // Declared index signatures
+	memberLayout                *memberLayout   // Member layout shared by all instantiations, if possible
 }
 
 func (t *InterfaceType) AsInterfaceType() *InterfaceType { return t }

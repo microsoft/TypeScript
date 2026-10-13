@@ -263,7 +263,7 @@ func (b *NodeBuilderImpl) expandInterfaceDecl(symbol *ast.Symbol) *ast.Node {
 		members = append(members, b.signatureToSignatureDeclarationHelper(sig, ast.KindCallSignature, nil))
 	}
 	// Properties, filtering inherited
-	filteredProps := b.filterInheritedProperties(interfaceType, baseTypes, resolved.properties)
+	filteredProps := b.filterInheritedProperties(interfaceType, baseTypes, resolved.Properties())
 	members = b.serializePropertiesWithTruncation(filteredProps, members)
 
 	// Heritage clauses
