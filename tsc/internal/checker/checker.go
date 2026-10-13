@@ -647,6 +647,7 @@ type Checker struct {
 	iterationTypesCache                         map[IterationTypesKey]IterationTypes
 	markerTypes                                 collections.Set[*Type]
 	resolvingExplicitTypeOfSymbol               collections.Set[*ast.Symbol]
+	constructorOrFunctionChecked                collections.Set[*ast.Symbol]
 	undefinedSymbol                             *ast.Symbol
 	argumentsSymbol                             *ast.Symbol
 	requireSymbol                               *ast.Symbol
@@ -3492,8 +3493,7 @@ func (c *Checker) checkFunctionOrMethodDeclaration(node *ast.Node) {
 
 func (c *Checker) checkFunctionOrConstructorSymbol(symbol *ast.Symbol) {
 	// Only check the symbol once
-	if links := c.valueSymbolLinks.Get(symbol); !links.functionOrConstructorChecked {
-		links.functionOrConstructorChecked = true
+	if c.constructorOrFunctionChecked.AddIfAbsent(symbol) {
 		c.checkFunctionOrConstructorSymbolWorker(symbol)
 	}
 }
