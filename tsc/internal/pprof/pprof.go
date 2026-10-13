@@ -17,6 +17,7 @@ type ProfileSession struct {
 	memFilePath string
 	cpuFile     *os.File
 	logWriter   io.Writer
+	stopOnce    sync.Once
 }
 
 // BeginProfiling starts CPU and memory profiling, writing the profiles to the specified directory.
@@ -47,22 +48,24 @@ func BeginProfiling(profileDir string, logWriter io.Writer) *ProfileSession {
 }
 
 func (p *ProfileSession) Stop() {
-	pprof.StopCPUProfile()
-	p.cpuFile.Close()
+	p.stopOnce.Do(func() {
+		pprof.StopCPUProfile()
+		p.cpuFile.Close()
 
-	if p.memFilePath != "" {
-		memFile, err := os.Create(p.memFilePath)
-		if err != nil {
-			panic(err)
+		if p.memFilePath != "" {
+			memFile, err := os.Create(p.memFilePath)
+			if err != nil {
+				panic(err)
+			}
+			if err := pprof.Lookup("allocs").WriteTo(memFile, 0); err != nil {
+				panic(err)
+			}
+			memFile.Close()
+			fmt.Fprintf(p.logWriter, "Memory profile: %v\n", p.memFilePath)
 		}
-		if err := pprof.Lookup("allocs").WriteTo(memFile, 0); err != nil {
-			panic(err)
-		}
-		memFile.Close()
-		fmt.Fprintf(p.logWriter, "Memory profile: %v\n", p.memFilePath)
-	}
 
-	fmt.Fprintf(p.logWriter, "CPU profile: %v\n", p.cpuFilePath)
+		fmt.Fprintf(p.logWriter, "CPU profile: %v\n", p.cpuFilePath)
+	})
 }
 
 // CPUProfiler manages on-demand CPU profiling.

@@ -117,7 +117,7 @@ func (b *buildOrderTestCase) run(t *testing.T) {
 			Sys:     sys,
 			Command: buildCommand,
 		})
-		orchestrator.GenerateGraph(nil)
+		orchestrator.GenerateGraph(t.Context(), nil)
 		buildOrder := core.Map(orchestrator.Order(), func(config tspath.RootedFilePath) string { return b.projectName(config.AsString()) })
 		assert.DeepEqual(t, buildOrder, b.expected)
 		verifyDeps(orchestrator, buildOrder, false)
@@ -141,7 +141,7 @@ func (b *buildOrderTestCase) run(t *testing.T) {
 			}
 		}
 
-		orchestrator.GenerateGraphReusingOldTasks()
+		orchestrator.GenerateGraphReusingOldTasks(t.Context())
 		buildOrder2 := core.Map(orchestrator.Order(), func(config tspath.RootedFilePath) string { return b.projectName(config.AsString()) })
 		assert.DeepEqual(t, buildOrder2, b.expected)
 
@@ -151,7 +151,7 @@ func (b *buildOrderTestCase) run(t *testing.T) {
 			Sys:     sys,
 			Command: buildCommandWatch,
 		})
-		orchestrator.GenerateGraph(nil)
+		orchestrator.GenerateGraph(t.Context(), nil)
 		buildOrder3 := core.Map(orchestrator.Order(), func(config tspath.RootedFilePath) string { return b.projectName(config.AsString()) })
 		verifyDeps(orchestrator, buildOrder3, true)
 	})

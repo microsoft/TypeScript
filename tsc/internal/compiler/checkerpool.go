@@ -474,6 +474,13 @@ func (p *checkerPool) GetGlobalDiagnostics() []*ast.Diagnostic {
 // the provided files, processing only those assigned to its checker. Within each
 // checker's set, files are visited in their original order.
 func (p *checkerPool) forEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
+	if ctx.Err() != nil {
+		return
+	}
+	p.program.bindSourceFiles(ctx)
+	if ctx.Err() != nil {
+		return
+	}
 	p.createCheckers()
 
 	checkerCount := len(p.checkers)
@@ -483,6 +490,9 @@ func (p *checkerPool) forEachCheckerGroupDo(ctx context.Context, files []*ast.So
 			p.locks[checkerIdx].Lock()
 			defer p.locks[checkerIdx].Unlock()
 			for i, file := range files {
+				if ctx.Err() != nil {
+					return
+				}
 				if checker := p.checkers[checkerIdx]; checker == p.fileAssociations[file] {
 					cb(checker, i, file)
 				}

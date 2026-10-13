@@ -1,22 +1,203 @@
 package tsctests
 
 import (
+	"context"
 	"fmt"
 	"slices"
 	"strconv"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/execute"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/stringtestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+type cancellingBuildFS struct {
+	vfs.FS
+	cancel                   context.CancelFunc
+	cancelPath               tspath.RootedFilePath
+	once                     sync.Once
+	cancelled                atomic.Bool
+	configReads              atomic.Int64
+	postCancelDirectoryReads atomic.Int64
+}
+
+func (f *cancellingBuildFS) ReadFile(path tspath.RootedFilePath) (string, bool) {
+	content, ok := f.FS.ReadFile(path)
+	if path.BaseName() == "tsconfig.json" {
+		f.configReads.Add(1)
+	}
+	if path == f.cancelPath {
+		f.once.Do(func() {
+			f.cancel()
+			f.cancelled.Store(true)
+		})
+	}
+	return content, ok
+}
+
+func (f *cancellingBuildFS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
+	if f.cancelled.Load() {
+		f.postCancelDirectoryReads.Add(1)
+	}
+	return f.FS.DirectoryExists(path)
+}
+
+type cancellingBuildSystem struct {
+	*TestSys
+	fs vfs.FS
+}
+
+func (s *cancellingBuildSystem) FS() vfs.FS {
+	return s.fs
+}
+
+func TestBuildCancellationAcrossReferencesAndRetry(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		cancelPath  tspath.RootedFilePath
+		configReads int64
+	}{
+		{"", 0},
+		{"/home/src/workspaces/project/tsconfig.json", 1},
+		{"/home/src/workspaces/project/middle/tsconfig.json", 2},
+		{"/home/src/workspaces/project/leaf/a.ts", 3},
+	} {
+		for _, singleThreaded := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/singleThreaded=%t", test.cancelPath, singleThreaded), func(t *testing.T) {
+				t.Parallel()
+				sys := newTestSys(&tscInput{
+					files: FileMap{
+						"/home/src/workspaces/project/tsconfig.json":        `{"files":[],"references":[{"path":"./middle"}]}`,
+						"/home/src/workspaces/project/middle/tsconfig.json": `{"compilerOptions":{"composite":true},"references":[{"path":"../leaf"}]}`,
+						"/home/src/workspaces/project/middle/b.ts":          `import { a } from "../leaf/a"; export const b = a;`,
+						"/home/src/workspaces/project/leaf/tsconfig.json":   `{"compilerOptions":{"composite":true}}`,
+						"/home/src/workspaces/project/leaf/a.ts":            `export const a = 1;`,
+					},
+					commandLineArgs: []string{"--build", "--extendedDiagnostics"},
+				}, false)
+				ctx, cancel := context.WithCancel(t.Context())
+				defer cancel()
+				fs := &cancellingBuildFS{FS: sys.FS(), cancel: cancel, cancelPath: test.cancelPath}
+				wrapped := &cancellingBuildSystem{TestSys: sys, fs: fs}
+				if test.cancelPath == "" {
+					cancel()
+				}
+				args := []string{"--extendedDiagnostics"}
+				if singleThreaded {
+					args = append(args, "--singleThreaded")
+				}
+				orchestrator := build.NewOrchestrator(build.Options{
+					Sys:     wrapped,
+					Command: tsoptions.ParseBuildCommandLine(args, wrapped.FS(), sys.GetCurrentDirectory()),
+					Testing: sys,
+				})
+				result := orchestrator.Build(ctx, "")
+				assert.Equal(t, result.Result.Status, tsc.ExitStatusCancelled)
+				assert.Equal(t, len(result.Errors), 0)
+				assert.Equal(t, fs.configReads.Load(), test.configReads)
+				if test.configReads < 3 {
+					assert.Equal(t, len(orchestrator.Order()), 0)
+				}
+				assert.Assert(t, !strings.Contains(sys.currentWrite.String(), "Total time:"))
+				assert.Assert(t, !wrapped.FS().FileExists("/home/src/workspaces/project/leaf/a.js"))
+				assert.Assert(t, !wrapped.FS().FileExists("/home/src/workspaces/project/middle/b.js"))
+
+				result = orchestrator.Build(t.Context(), "")
+				assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
+				assert.Equal(t, len(result.Errors), 0)
+				assert.Assert(t, wrapped.FS().FileExists("/home/src/workspaces/project/leaf/a.js"))
+				assert.Assert(t, wrapped.FS().FileExists("/home/src/workspaces/project/middle/b.js"))
+			})
+		}
+	}
+}
+
+type cancellingBuildStatusFS struct {
+	vfs.FS
+	cancel      context.CancelFunc
+	phase       string
+	sourceStats int
+	sourceReads int
+	timestamps  int
+}
+
+func (f *cancellingBuildStatusFS) Stat(path tspath.RootedPath) vfs.FileInfo {
+	info := f.FS.Stat(path)
+	if strings.HasSuffix(path.AsString(), ".ts") {
+		f.sourceStats++
+		if f.phase == "stat" {
+			f.cancel()
+		}
+	}
+	return info
+}
+
+func (f *cancellingBuildStatusFS) ReadFile(path tspath.RootedFilePath) (string, bool) {
+	text, ok := f.FS.ReadFile(path)
+	if strings.HasSuffix(path.AsString(), ".ts") {
+		f.sourceReads++
+		if f.phase == "hash" {
+			f.cancel()
+		}
+	}
+	return text, ok
+}
+
+func (f *cancellingBuildStatusFS) Chtimes(path tspath.RootedPath, aTime, mTime time.Time) error {
+	f.timestamps++
+	return f.FS.Chtimes(path, aTime, mTime)
+}
+
+func TestBuildStatusStopsOnCancellation(t *testing.T) {
+	t.Parallel()
+	for _, phase := range []string{"stat", "hash"} {
+		t.Run(phase, func(t *testing.T) {
+			t.Parallel()
+			sys := newTestSys(&tscInput{
+				files: FileMap{
+					"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions":{"composite":true,"noCheck":true,"noLib":true},"files":["a.ts","b.ts","globals.d.ts"]}`,
+					"/home/src/workspaces/project/a.ts":          `export const a = 1;`,
+					"/home/src/workspaces/project/b.ts":          `export const b = 2;`,
+					"/home/src/workspaces/project/globals.d.ts":  tscDefaultLibContent,
+				},
+			}, false)
+			args := []string{"--build", "--singleThreaded", "--verbose", "--extendedDiagnostics"}
+			result := execute.CommandLine(t.Context(), sys, args, sys)
+			assert.Equal(t, result.Status, tsc.ExitStatusSuccess)
+			for _, file := range []tspath.RootedPath{"/home/src/workspaces/project/a.ts", "/home/src/workspaces/project/b.ts"} {
+				assert.NilError(t, sys.FS().Chtimes(file, time.Time{}, sys.Now().Add(time.Hour)))
+			}
+			ctx, cancel := context.WithCancel(t.Context())
+			defer cancel()
+			fs := &cancellingBuildStatusFS{FS: sys.FS(), cancel: cancel, phase: phase}
+			wrapped := &cancellingBuildSystem{TestSys: sys, fs: fs}
+			sys.clearOutput()
+
+			result = execute.CommandLine(ctx, wrapped, args, sys)
+
+			assert.Equal(t, result.Status, tsc.ExitStatusCancelled)
+			assert.Equal(t, fs.sourceStats, 1)
+			assert.Equal(t, fs.sourceReads, core.IfElse(phase == "hash", 1, 0))
+			assert.Equal(t, fs.timestamps, 0)
+			assert.Assert(t, !strings.Contains(sys.currentWrite.String(), "Updating output timestamps"))
+			assert.Assert(t, !strings.Contains(sys.currentWrite.String(), "Total time:"))
+		})
+	}
+}
 
 func TestBuildCommandLine(t *testing.T) {
 	t.Parallel()

@@ -594,7 +594,9 @@ func TestRefCountingCaches(t *testing.T) {
 			uri := lsproto.DocumentUri("file:///user/username/projects/myproject/src/main.ts")
 			baseSnapshot := session.Snapshot()
 			extendedConfigPath := tspath.PathKey("/user/username/projects/myproject/tsconfig.base.json")
-			clone := baseSnapshot.Clone(context.Background(), SnapshotChange{
+			ctx, cancel := context.WithCancel(t.Context())
+			cancel()
+			clone := baseSnapshot.Clone(ctx, SnapshotChange{
 				reason:    UpdateReasonRequestedLanguageServiceProjectNotLoaded,
 				Documents: []lsproto.DocumentUri{uri},
 			}, baseSnapshot.overlays(), nil, nil)
