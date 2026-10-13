@@ -338,9 +338,12 @@ export interface GetCurrentLanguageServerSnapshotParams {
     changes?: LanguageServerSnapshotChanges | undefined;
 }
 
-export interface CreateBuildOrchestratorParams extends BuildOptions, CompilerOptions {
+export interface CreateBuildOrchestratorParams {
     rootNames: readonly string[] | null;
     cwd?: RootedDirectoryPath | undefined;
+    /** Only a subset of these options are exposed in the API */
+    buildOptions?: BuildOptions | undefined;
+    compilerOptions?: CompilerOptions | undefined;
 }
 
 export interface CreateBuildOrchestratorResponse {
