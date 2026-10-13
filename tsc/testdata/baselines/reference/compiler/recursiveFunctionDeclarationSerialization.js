@@ -243,6 +243,302 @@ export declare const inferred: Inferred<(value: number) => { next: typeof reused
 export const inferredCopy = inferred;
 const inferredValue: string = inferredCopy.next(1).second("text").value;
 
+//// [mappedCycles.ts]
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+type Resolve<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
+export const mappedCycle = build<{ Node: { value: number; next: "ref" } }>();
+export const mappedCycleCopy = mappedCycle;
+export const nestedCycle = { wrapped: build<{ Node: { value: string; next: "ref" } }>() };
+export const cycleKey = Symbol();
+export const keyedCycles = build<{
+    "a-b": { value: string; next: "ref" };
+    0: { value: boolean; next: "ref" };
+    [cycleKey]: { value: number; next: "ref" };
+}>();
+export const sharedCycles = {
+    first: mappedCycle,
+    second: mappedCycle,
+};
+export const broadCycle: { Node: unknown } = mappedCycle;
+
+type ResolveMutual<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends { ref: infer R extends keyof M } ? ResolveMutual<M, R> : M[K][P];
+}>;
+declare const buildMutual: <M>() => { [K in keyof M]: ResolveMutual<M, K> };
+export const mutualCycle = buildMutual<{
+    First: { value: number; next: { ref: "Second" } };
+    Second: { value: string; next: { ref: "First" } };
+}>();
+
+const mappedValue: number = mappedCycle.Node.next.next.value;
+const nestedMappedValue: string = nestedCycle.wrapped.Node.next.next.value;
+const quotedMappedValue: string = keyedCycles["a-b"].next.next.value;
+const numericMappedValue: boolean = keyedCycles[0].next.next.value;
+const symbolMappedValue: number = keyedCycles[cycleKey].next.next.value;
+const sharedMappedValue: number = sharedCycles.second.Node.next.next.value;
+const mutualFirstValue: number = mutualCycle.First.next.next.value;
+const mutualSecondValue: string = mutualCycle.First.next.value;
+const invalidMappedValue: string = mappedCycle.Node.next.next.value;
+const invalidMutualValue: number = mutualCycle.First.next.value;
+
+//// [optionalMappedCycle.ts]
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+type Resolve<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+}>;
+declare const build: <M>() => { [K in keyof M]?: Resolve<M, K> };
+export const optionalCycle = build<{ Node: { value: number; next: "ref" } }>();
+const optionalValue: number | undefined = optionalCycle.Node?.next.next.value;
+export const optionalCopy = optionalCycle;
+declare const buildNullable: <M>() => { [K in keyof M]: Resolve<M, K> | null };
+export const nullableCycle = buildNullable<{ Node: { value: string; next: "ref" } }>();
+declare const wrap: <T>(value: T) => { required: T; optional?: T | null };
+export const mixedCycles = wrap(optionalCycle);
+export const sharedOptionalCycles = { first: optionalCycle, second: optionalCycle };
+export const nullableKey = Symbol();
+export const nullableKeys = buildNullable<{
+    "a-b": { value: string; next: "ref" };
+    0: { value: boolean; next: "ref" };
+    [nullableKey]: { value: number; next: "ref" };
+}>();
+declare const buildNullableRoot: <M>() => Resolve<M, keyof M> | null;
+export const nullableRoot = buildNullableRoot<{ Node: { value: number; next: "ref" } }>();
+declare const buildOptionalRoot: <M>() => Resolve<M, keyof M> | undefined;
+export const optionalRoot = buildOptionalRoot<{ Node: { value: string; next: "ref" } }>();
+type ResolveNullable<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullable<M, K> | null : M[K][P];
+}>;
+declare const buildNullableLinks: <M>() => { [K in keyof M]: ResolveNullable<M, K> | null };
+export const nullableLinks = buildNullableLinks<{ Node: { value: number; next: "ref" } }>();
+declare const buildOptionalNullableLinks: <M>() => { [K in keyof M]?: ResolveNullable<M, K> | null };
+export const optionalNullableLinks = buildOptionalNullableLinks<{ Node: { value: number; next: "ref" } }>();
+type ResolveOptional<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveOptional<M, K> | undefined : M[K][P];
+}>;
+declare const buildNullableOptionalLinks: <M>() => { [K in keyof M]: ResolveOptional<M, K> | null };
+export const nullableOptionalLinks = buildNullableOptionalLinks<{ Node: { value: number; next: "ref" } }>();
+type ResolveNullish<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullish<M, K> | null | undefined : M[K][P];
+}>;
+declare const buildNullishLinks: <M>() => { [K in keyof M]?: ResolveNullish<M, K> | null };
+export const nullishLinks = buildNullishLinks<{ Node: { value: number; next: "ref" } }>();
+type NonNullable<T> = "shadowed";
+type OptionalNode = (typeof optionalCycle)["Node"] & {};
+type NullableNode = (typeof nullableCycle)["Node"] & {};
+type NullableLinkNode = (typeof nullableLinks)["Node"] & {};
+type NullishLinkNode = (typeof nullishLinks)["Node"] & {};
+type OptionalNullableLinkNode = (typeof optionalNullableLinks)["Node"] & {};
+type NullableOptionalLinkNode = (typeof nullableOptionalLinks)["Node"] & {};
+const copiedValue: number | undefined = optionalCopy.Node?.next.next.value;
+const nullableValue: string | undefined = nullableCycle.Node?.next.next.value;
+const mixedValue: number | undefined = mixedCycles.optional?.Node?.next.next.value;
+const sharedValue: number | undefined = sharedOptionalCycles.second.Node?.next.next.value;
+const quotedValue: string | undefined = nullableKeys["a-b"]?.next.next.value;
+const numericValue: boolean | undefined = nullableKeys[0]?.next.next.value;
+const symbolValue: number | undefined = nullableKeys[nullableKey]?.next.next.value;
+const nullableRootValue: number | undefined = nullableRoot?.next.next.value;
+const optionalRootValue: string | undefined = optionalRoot?.next.next.value;
+const nullableLinkValue: number | undefined = nullableLinks.Node?.next?.next?.value;
+const nullishLinkValue: number | undefined = nullishLinks.Node?.next?.next?.value;
+const optionalNullableLinkValue: number | undefined = optionalNullableLinks.Node?.next?.next?.value;
+const nullableOptionalLinkValue: number | undefined = nullableOptionalLinks.Node?.next?.next?.value;
+const optionalNextHasNull: null extends OptionalNode["next"] ? true : false = false;
+const optionalNextHasUndefined: undefined extends OptionalNode["next"] ? true : false = false;
+const nullableNextHasNull: null extends NullableNode["next"] ? true : false = false;
+const nullableNextHasUndefined: undefined extends NullableNode["next"] ? true : false = false;
+const nullableLinkHasNull: null extends NullableLinkNode["next"] ? true : false = true;
+const nullableLinkHasUndefined: undefined extends NullableLinkNode["next"] ? true : false = false;
+const nullishLinkHasNull: null extends NullishLinkNode["next"] ? true : false = true;
+const nullishLinkHasUndefined: undefined extends NullishLinkNode["next"] ? true : false = true;
+const optionalNullableLinkHasNull: null extends OptionalNullableLinkNode["next"] ? true : false = true;
+const optionalNullableLinkHasUndefined: undefined extends OptionalNullableLinkNode["next"] ? true : false = false;
+const nullableOptionalLinkHasNull: null extends NullableOptionalLinkNode["next"] ? true : false = false;
+const nullableOptionalLinkHasUndefined: undefined extends NullableOptionalLinkNode["next"] ? true : false = true;
+const invalidNullNext: OptionalNode["next"] = null;
+const invalidUndefinedNext: OptionalNode["next"] = undefined;
+const invalidNullableLinkValue: number = nullableLinks.Node!.next.value;
+const invalidNullishLinkValue: number = nullishLinks.Node!.next.value;
+
+//// [mixedMappedCycle.ts]
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+type Resolve<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> | false | null };
+export const mixedCycle = build<{ Node: { value: number; next: "ref" } }>();
+if (mixedCycle.Node) {
+    const value: number = mixedCycle.Node.next.next.value;
+}
+
+//// [anonymousThisReturn.ts]
+export function test() {
+    return {
+        relyingOnThis() {
+            return this;
+        },
+    };
+}
+test().relyingOnThis();
+
+//// [recursiveConditionalAliasUtils.ts]
+type Recursive<T> = T extends Array<infer V> ? Recursive<V> : T;
+export const f = <T>(): Recursive<T> => {
+    return null!;
+};
+
+//// [recursiveConditionalAliasCopy.ts]
+import { f } from "./recursiveConditionalAliasUtils";
+export const a = f;
+const numberValue: number = a<number[][][][][][][][][][][][][][][][]>();
+const stringValue: string = a<string[][]>();
+
+//// [anonymousBindings.ts]
+export const _recursive = 1;
+export const factory = () => function self() { return self; };
+export function captured<T>(value: T) {
+    const node = { value, next: () => node, consume: (other: T) => node };
+    return node;
+}
+export function nestedCaptured<T>(outer: T) {
+    return <U>(inner: U) => {
+        const node = {
+            outer,
+            inner,
+            next: () => node,
+            shadow: <T>(value: T) => ({ outer, inner, value, next: node }),
+        };
+        return node;
+    };
+}
+export function constrained<T extends { value: number }, K extends keyof T>(key: K) {
+    const node = { value: null! as T[K], next: () => node };
+    return node;
+}
+export function optionalCaptured<T>(value: T) {
+    type Node = { value: T; next: Node };
+    return null! as { node?: Node | false | null };
+}
+export function annotatedCaptured<T>(value: T) {
+    const node: { value: typeof value; next: typeof node } = { value, next: null! };
+    return node;
+}
+export function recursiveTuple<T>(value: T) {
+    type Tuple = readonly [T, Tuple];
+    return null! as Tuple;
+}
+export function inferredCaptured<T>() {
+    type Node<V> = { value: V; next: Node<V> };
+    return null! as (T extends () => infer U ? Node<U> : never);
+}
+export function mappedCaptured<T>() {
+    type Node = { [K in keyof T]: { value: T[K]; next: Node } };
+    return null! as Node;
+}
+export function freshGeneric<T>(unused: T) {
+    const recur = <U>(value: U) => recur;
+    return recur;
+}
+export function mutualCaptured<T, U>(left: T, right: U) {
+    type Left = { left: T; next: Right };
+    type Right = { right: U; self: Right; next: Left };
+    return { left: null! as Left, right: null! as Right };
+}
+export class CapturedClass<T> {
+    constructor(public value: T) {}
+    make<U extends T>(inner: U) {
+        const node = { outer: this.value, inner, next: () => node };
+        return node;
+    }
+}
+export function covariantClass() {
+    return class Node<out T> {
+        value!: T;
+        next(): Node<T> { return this; }
+    };
+}
+export function contravariantClass() {
+    return class Node<in T> {
+        consume!: (value: T) => void;
+        next(): Node<T> { return this; }
+    };
+}
+export namespace Nested {
+    export function captured<T>(value: T) {
+        const node = { value, next: () => node };
+        return node;
+    }
+}
+const capturedValue: string = captured("text").next().consume("other").value;
+const nestedValue = nestedCaptured(1)("text").shadow(true).next.next();
+const nestedOuter: number = nestedValue.outer;
+const nestedInner: string = nestedValue.inner;
+const constrainedValue: number = constrained<{ value: number }, "value">("value").next().value;
+const annotatedValue: string = annotatedCaptured("text").next.next.value;
+const tupleValue: string = recursiveTuple("text")[1][1][0];
+const namespaceValue: number = Nested.captured(1).next().next().value;
+const inferredValue: string = inferredCaptured<() => string>().next.next.value;
+const mappedValue: number = mappedCaptured<{ value: number }>().value.next.value.value;
+const freshValue = freshGeneric(1)("text")(true)(2);
+const mutualValue: string = mutualCaptured(1, "text").left.next.self.next.next.right;
+const classValue: string = new CapturedClass("text").make("other").next().outer;
+const optional = optionalCaptured("text");
+if (optional.node) {
+    const value: string = optional.node.next.next.value;
+}
+captured("text").consume(1);
+const invalidTupleValue: number = recursiveTuple("text")[1][0];
+
+//// [shadowedMappedCycle.ts]
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+type Resolve<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? <T>(shadowedCycle: T) => Resolve<M, K> : M[K][P];
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
+export const shadowedCycle = build<{ Node: { value: number; next: "ref" } }>();
+const shadowedValue: number = shadowedCycle.Node.next(1).next("text").value;
+
+//// [globalRecursiveA.ts]
+function makeA() {
+    return {
+        value: 1,
+        self() { return this; },
+    };
+}
+type makeReserved_recursive = "reserved";
+function makeReserved() {
+    return {
+        value: true,
+        self() { return this; },
+    };
+}
+class GlobalA {
+    static create<T>(value: T) {
+        const node = { value, next: () => node };
+        return node;
+    }
+    static "a-b"() {
+        const node = { value: true, next: () => node };
+        return node;
+    }
+}
+
+//// [globalRecursiveB.ts]
+function makeB() {
+    return {
+        value: "text",
+        self() { return this; },
+    };
+}
+class GlobalB {
+    static create<T>(value: T) {
+        const node = { value, next: () => node };
+        return node;
+    }
+}
+
 
 //// [script.js]
 "use strict";
@@ -446,6 +742,230 @@ const restValue = copy.first(1).next.second(2).value;
 const shadowedValue = copy.shadowed(1).next;
 export const inferredCopy = inferred;
 const inferredValue = inferredCopy.next(1).second("text").value;
+//// [mappedCycles.js]
+export const mappedCycle = build();
+export const mappedCycleCopy = mappedCycle;
+export const nestedCycle = { wrapped: build() };
+export const cycleKey = Symbol();
+export const keyedCycles = build();
+export const sharedCycles = {
+    first: mappedCycle,
+    second: mappedCycle,
+};
+export const broadCycle = mappedCycle;
+export const mutualCycle = buildMutual();
+const mappedValue = mappedCycle.Node.next.next.value;
+const nestedMappedValue = nestedCycle.wrapped.Node.next.next.value;
+const quotedMappedValue = keyedCycles["a-b"].next.next.value;
+const numericMappedValue = keyedCycles[0].next.next.value;
+const symbolMappedValue = keyedCycles[cycleKey].next.next.value;
+const sharedMappedValue = sharedCycles.second.Node.next.next.value;
+const mutualFirstValue = mutualCycle.First.next.next.value;
+const mutualSecondValue = mutualCycle.First.next.value;
+const invalidMappedValue = mappedCycle.Node.next.next.value;
+const invalidMutualValue = mutualCycle.First.next.value;
+//// [optionalMappedCycle.js]
+export const optionalCycle = build();
+const optionalValue = optionalCycle.Node?.next.next.value;
+export const optionalCopy = optionalCycle;
+export const nullableCycle = buildNullable();
+export const mixedCycles = wrap(optionalCycle);
+export const sharedOptionalCycles = { first: optionalCycle, second: optionalCycle };
+export const nullableKey = Symbol();
+export const nullableKeys = buildNullable();
+export const nullableRoot = buildNullableRoot();
+export const optionalRoot = buildOptionalRoot();
+export const nullableLinks = buildNullableLinks();
+export const optionalNullableLinks = buildOptionalNullableLinks();
+export const nullableOptionalLinks = buildNullableOptionalLinks();
+export const nullishLinks = buildNullishLinks();
+const copiedValue = optionalCopy.Node?.next.next.value;
+const nullableValue = nullableCycle.Node?.next.next.value;
+const mixedValue = mixedCycles.optional?.Node?.next.next.value;
+const sharedValue = sharedOptionalCycles.second.Node?.next.next.value;
+const quotedValue = nullableKeys["a-b"]?.next.next.value;
+const numericValue = nullableKeys[0]?.next.next.value;
+const symbolValue = nullableKeys[nullableKey]?.next.next.value;
+const nullableRootValue = nullableRoot?.next.next.value;
+const optionalRootValue = optionalRoot?.next.next.value;
+const nullableLinkValue = nullableLinks.Node?.next?.next?.value;
+const nullishLinkValue = nullishLinks.Node?.next?.next?.value;
+const optionalNullableLinkValue = optionalNullableLinks.Node?.next?.next?.value;
+const nullableOptionalLinkValue = nullableOptionalLinks.Node?.next?.next?.value;
+const optionalNextHasNull = false;
+const optionalNextHasUndefined = false;
+const nullableNextHasNull = false;
+const nullableNextHasUndefined = false;
+const nullableLinkHasNull = true;
+const nullableLinkHasUndefined = false;
+const nullishLinkHasNull = true;
+const nullishLinkHasUndefined = true;
+const optionalNullableLinkHasNull = true;
+const optionalNullableLinkHasUndefined = false;
+const nullableOptionalLinkHasNull = false;
+const nullableOptionalLinkHasUndefined = true;
+const invalidNullNext = null;
+const invalidUndefinedNext = undefined;
+const invalidNullableLinkValue = nullableLinks.Node.next.value;
+const invalidNullishLinkValue = nullishLinks.Node.next.value;
+//// [mixedMappedCycle.js]
+export const mixedCycle = build();
+if (mixedCycle.Node) {
+    const value = mixedCycle.Node.next.next.value;
+}
+//// [anonymousThisReturn.js]
+export function test() {
+    return {
+        relyingOnThis() {
+            return this;
+        },
+    };
+}
+test().relyingOnThis();
+//// [recursiveConditionalAliasUtils.js]
+export const f = () => {
+    return null;
+};
+//// [recursiveConditionalAliasCopy.js]
+import { f } from "./recursiveConditionalAliasUtils";
+export const a = f;
+const numberValue = a();
+const stringValue = a();
+//// [anonymousBindings.js]
+export const _recursive = 1;
+export const factory = () => function self() { return self; };
+export function captured(value) {
+    const node = { value, next: () => node, consume: (other) => node };
+    return node;
+}
+export function nestedCaptured(outer) {
+    return (inner) => {
+        const node = {
+            outer,
+            inner,
+            next: () => node,
+            shadow: (value) => ({ outer, inner, value, next: node }),
+        };
+        return node;
+    };
+}
+export function constrained(key) {
+    const node = { value: null, next: () => node };
+    return node;
+}
+export function optionalCaptured(value) {
+    return null;
+}
+export function annotatedCaptured(value) {
+    const node = { value, next: null };
+    return node;
+}
+export function recursiveTuple(value) {
+    return null;
+}
+export function inferredCaptured() {
+    return null;
+}
+export function mappedCaptured() {
+    return null;
+}
+export function freshGeneric(unused) {
+    const recur = (value) => recur;
+    return recur;
+}
+export function mutualCaptured(left, right) {
+    return { left: null, right: null };
+}
+export class CapturedClass {
+    value;
+    constructor(value) {
+        this.value = value;
+    }
+    make(inner) {
+        const node = { outer: this.value, inner, next: () => node };
+        return node;
+    }
+}
+export function covariantClass() {
+    return class Node {
+        value;
+        next() { return this; }
+    };
+}
+export function contravariantClass() {
+    return class Node {
+        consume;
+        next() { return this; }
+    };
+}
+export var Nested;
+(function (Nested) {
+    function captured(value) {
+        const node = { value, next: () => node };
+        return node;
+    }
+    Nested.captured = captured;
+})(Nested || (Nested = {}));
+const capturedValue = captured("text").next().consume("other").value;
+const nestedValue = nestedCaptured(1)("text").shadow(true).next.next();
+const nestedOuter = nestedValue.outer;
+const nestedInner = nestedValue.inner;
+const constrainedValue = constrained("value").next().value;
+const annotatedValue = annotatedCaptured("text").next.next.value;
+const tupleValue = recursiveTuple("text")[1][1][0];
+const namespaceValue = Nested.captured(1).next().next().value;
+const inferredValue = inferredCaptured().next.next.value;
+const mappedValue = mappedCaptured().value.next.value.value;
+const freshValue = freshGeneric(1)("text")(true)(2);
+const mutualValue = mutualCaptured(1, "text").left.next.self.next.next.right;
+const classValue = new CapturedClass("text").make("other").next().outer;
+const optional = optionalCaptured("text");
+if (optional.node) {
+    const value = optional.node.next.next.value;
+}
+captured("text").consume(1);
+const invalidTupleValue = recursiveTuple("text")[1][0];
+//// [shadowedMappedCycle.js]
+export const shadowedCycle = build();
+const shadowedValue = shadowedCycle.Node.next(1).next("text").value;
+//// [globalRecursiveA.js]
+"use strict";
+function makeA() {
+    return {
+        value: 1,
+        self() { return this; },
+    };
+}
+function makeReserved() {
+    return {
+        value: true,
+        self() { return this; },
+    };
+}
+class GlobalA {
+    static create(value) {
+        const node = { value, next: () => node };
+        return node;
+    }
+    static "a-b"() {
+        const node = { value: true, next: () => node };
+        return node;
+    }
+}
+//// [globalRecursiveB.js]
+"use strict";
+function makeB() {
+    return {
+        value: "text",
+        self() { return this; },
+    };
+}
+class GlobalB {
+    static create(value) {
+        const node = { value, next: () => node };
+        return node;
+    }
+}
 
 
 //// [script.d.ts]
@@ -493,6 +1013,33 @@ export declare const tupleReturn: () => readonly [typeof tupleReturn];
 export declare const shadowed: (shadowed: number) => typeof import("./exported").shadowed;
 //// [consumer.d.ts]
 export {};
+//// [recursiveObject.d.ts]
+type recursiveObject_recursive<T> = {
+    call: <U>(arg: U) => recursiveObject_recursive<T>;
+    consume: (arg: T) => recursiveObject_recursive<T>;
+};
+export declare function recursiveObject<T>(): recursiveObject_recursive<T>;
+export {};
+//// [nestedNamedFunctions.d.ts]
+type factory_recursive = () => factory_recursive;
+type local_recursive = () => local_recursive;
+export declare const nestedObject: {
+    recur: () => () => (typeof nestedObject)["recur"];
+};
+export declare const nestedTuple: readonly [() => () => (typeof nestedTuple)[0]];
+export declare const object: {
+    recur: () => () => (typeof object)["recur"];
+};
+export declare const tuple: readonly [() => () => (typeof tuple)[0]];
+export declare const factory: () => () => factory_recursive;
+export declare const method: {
+    recur(): typeof method;
+};
+export declare const accessor: {
+    readonly recur: typeof accessor;
+};
+export declare function local(): local_recursive;
+export {};
 //// [recursiveStructures.d.ts]
 export declare const object: {
     value: number;
@@ -529,15 +1076,15 @@ export declare const nested: {
     };
 };
 export declare const shadowed: {
-    next: (shadowed: number) => typeof import("./recursiveStructures").shadowed["next"];
+    next: (shadowed: number) => (shadowed: number) => typeof import("./recursiveStructures").shadowed["next"];
 };
-export declare const memberTuple: readonly [() => (typeof memberTuple)[0]];
+export declare const memberTuple: readonly [() => () => (typeof memberTuple)[0]];
 export declare const memberArray: (() => (typeof memberArray)[0])[];
 export declare const quoted: {
-    "a-b": () => (typeof quoted)["a-b"];
+    "a-b": () => () => (typeof quoted)["a-b"];
 };
 export declare const numeric: {
-    0: () => (typeof numeric)[0];
+    0: () => () => (typeof numeric)[0];
 };
 export declare const key: unique symbol;
 export declare const computed: {
@@ -621,6 +1168,17 @@ export declare class Methods {
 }
 export declare function overloaded(value: string): typeof overloaded;
 export declare function overloaded(value: number): typeof overloaded;
+//// [hiddenReferences.d.ts]
+type Hidden_expose_recursive = () => Hidden_expose_recursive;
+type Hidden_next_recursive = () => Hidden_next_recursive;
+type Hidden_expose_recursive_1 = () => Hidden_expose_recursive_1;
+export declare class Hidden {
+    private static recur;
+    static expose(): Hidden_expose_recursive;
+    protected next(): Hidden_next_recursive;
+    expose(): Hidden_expose_recursive_1;
+}
+export {};
 //// [signatureScopes.d.ts]
 export declare const scoped: {
     first<T>(outer: T): {
@@ -855,12 +1413,12 @@ export declare const nestedString: {
             nested<U>(inner: U): {
                 outer: T;
                 inner: U;
-                owner: typeof nestedOwner;
+                owner: (typeof nestedString)["owner"];
             };
             constrained<U extends T = T>(inner: U): {
                 outer: T;
                 inner: U;
-                owner: typeof nestedOwner;
+                owner: (typeof nestedString)["owner"];
             };
             copied<U>(inner: U): {
                 outer: T;
@@ -870,7 +1428,7 @@ export declare const nestedString: {
             rest<U>(values_0: U): {
                 outer: T;
                 inner: U;
-                owner: typeof nestedOwner;
+                owner: (typeof nestedString)["owner"];
             };
         };
     };
@@ -883,12 +1441,12 @@ export declare const nestedBoolean: {
             nested<U>(inner: U): {
                 outer: T;
                 inner: U;
-                owner: typeof nestedOwner;
+                owner: (typeof nestedBoolean)["owner"];
             };
             constrained<U extends T = T>(inner: U): {
                 outer: T;
                 inner: U;
-                owner: typeof nestedOwner;
+                owner: (typeof nestedBoolean)["owner"];
             };
             copied<U>(inner: U): {
                 outer: T;
@@ -898,7 +1456,7 @@ export declare const nestedBoolean: {
             rest<U>(values_0: U): {
                 outer: T;
                 inner: U;
-                owner: typeof nestedOwner;
+                owner: (typeof nestedBoolean)["owner"];
             };
         };
     };
@@ -953,3 +1511,353 @@ export declare const inferredCopy: {
         };
     };
 };
+//// [mappedCycles.d.ts]
+export declare const mappedCycle: {
+    Node: {
+        value: number;
+        next: (typeof mappedCycle)["Node"];
+    };
+};
+export declare const mappedCycleCopy: {
+    Node: {
+        value: number;
+        next: (typeof mappedCycleCopy)["Node"];
+    };
+};
+export declare const nestedCycle: {
+    wrapped: {
+        Node: {
+            value: string;
+            next: (typeof nestedCycle)["wrapped"]["Node"];
+        };
+    };
+};
+export declare const cycleKey: unique symbol;
+export declare const keyedCycles: {
+    "a-b": {
+        value: string;
+        next: (typeof keyedCycles)["a-b"];
+    };
+    0: {
+        value: boolean;
+        next: (typeof keyedCycles)[0];
+    };
+    [cycleKey]: {
+        value: number;
+        next: (typeof keyedCycles)[typeof cycleKey];
+    };
+};
+export declare const sharedCycles: {
+    first: {
+        Node: {
+            value: number;
+            next: (typeof sharedCycles)["first"]["Node"];
+        };
+    };
+    second: {
+        Node: {
+            value: number;
+            next: (typeof sharedCycles)["second"]["Node"];
+        };
+    };
+};
+export declare const broadCycle: {
+    Node: unknown;
+};
+export declare const mutualCycle: {
+    First: {
+        value: number;
+        next: {
+            value: string;
+            next: (typeof mutualCycle)["First"];
+        };
+    };
+    Second: {
+        value: string;
+        next: {
+            value: number;
+            next: (typeof mutualCycle)["Second"];
+        };
+    };
+};
+//// [optionalMappedCycle.d.ts]
+type optionalCycle_recursive = {
+    value: number;
+    next: optionalCycle_recursive;
+};
+type optionalCopy_recursive = {
+    value: number;
+    next: optionalCopy_recursive;
+};
+type nullableCycle_recursive = {
+    value: string;
+    next: nullableCycle_recursive;
+};
+type mixedCycles_recursive = {
+    value: number;
+    next: mixedCycles_recursive;
+};
+type sharedOptionalCycles_recursive = {
+    value: number;
+    next: sharedOptionalCycles_recursive;
+};
+type nullableKeys_recursive = {
+    value: string;
+    next: nullableKeys_recursive;
+};
+type nullableKeys_recursive_1 = {
+    value: boolean;
+    next: nullableKeys_recursive_1;
+};
+type nullableKeys_recursive_2 = {
+    value: number;
+    next: nullableKeys_recursive_2;
+};
+type nullableRoot_recursive = {
+    value: number;
+    next: nullableRoot_recursive;
+};
+type optionalRoot_recursive = {
+    value: string;
+    next: optionalRoot_recursive;
+};
+type optionalNullableLinks_recursive = {
+    value: number;
+    next: optionalNullableLinks_recursive | null;
+};
+type nullableOptionalLinks_recursive = {
+    value: number;
+    next: nullableOptionalLinks_recursive | undefined;
+};
+export declare const optionalCycle: {
+    Node?: optionalCycle_recursive | undefined;
+};
+export declare const optionalCopy: {
+    Node?: optionalCopy_recursive | undefined;
+};
+export declare const nullableCycle: {
+    Node: nullableCycle_recursive | null;
+};
+export declare const mixedCycles: {
+    required: {
+        Node?: mixedCycles_recursive | undefined;
+    };
+    optional?: {
+        Node?: mixedCycles_recursive | undefined;
+    } | null | undefined;
+};
+export declare const sharedOptionalCycles: {
+    first: {
+        Node?: sharedOptionalCycles_recursive | undefined;
+    };
+    second: {
+        Node?: sharedOptionalCycles_recursive | undefined;
+    };
+};
+export declare const nullableKey: unique symbol;
+export declare const nullableKeys: {
+    "a-b": nullableKeys_recursive | null;
+    0: nullableKeys_recursive_1 | null;
+    [nullableKey]: nullableKeys_recursive_2 | null;
+};
+export declare const nullableRoot: nullableRoot_recursive | null;
+export declare const optionalRoot: optionalRoot_recursive | undefined;
+export declare const nullableLinks: {
+    Node: {
+        value: number;
+        next: (typeof nullableLinks)["Node"];
+    } | null;
+};
+export declare const optionalNullableLinks: {
+    Node?: optionalNullableLinks_recursive | null | undefined;
+};
+export declare const nullableOptionalLinks: {
+    Node: nullableOptionalLinks_recursive | null;
+};
+export declare const nullishLinks: {
+    Node?: {
+        value: number;
+        next: (typeof nullishLinks)["Node"];
+    } | null | undefined;
+};
+export {};
+//// [mixedMappedCycle.d.ts]
+type mixedCycle_recursive = {
+    value: number;
+    next: mixedCycle_recursive;
+};
+export declare const mixedCycle: {
+    Node: false | mixedCycle_recursive | null;
+};
+export {};
+//// [anonymousThisReturn.d.ts]
+type test_recursive = {
+    relyingOnThis(): test_recursive;
+};
+export declare function test(): {
+    relyingOnThis(): test_recursive;
+};
+export {};
+//// [recursiveConditionalAliasUtils.d.ts]
+type Recursive<T> = T extends Array<infer V> ? Recursive<V> : T;
+export declare const f: <T>() => Recursive<T>;
+export {};
+//// [recursiveConditionalAliasCopy.d.ts]
+import { f } from "./recursiveConditionalAliasUtils";
+export declare const a: typeof f;
+//// [anonymousBindings.d.ts]
+type factory_recursive = () => factory_recursive;
+type captured_recursive<T> = {
+    value: T;
+    next: () => captured_recursive<T>;
+    consume: (other: T) => captured_recursive<T>;
+};
+type nestedCaptured_recursive<T, U> = {
+    outer: T;
+    inner: U;
+    next: () => nestedCaptured_recursive<T, U>;
+    shadow: <T_1>(value: T_1) => {
+        outer: T;
+        inner: U;
+        value: T_1;
+        next: nestedCaptured_recursive<T, U>;
+    };
+};
+type constrained_recursive<T extends {
+    value: number;
+}, K extends keyof T> = {
+    value: T[K];
+    next: () => constrained_recursive<T, K>;
+};
+type optionalCaptured_recursive<T> = {
+    value: T;
+    next: optionalCaptured_recursive<T>;
+};
+type annotatedCaptured_recursive<T> = {
+    value: T;
+    next: annotatedCaptured_recursive<T>;
+};
+type recursiveTuple_recursive<T> = readonly [T, recursiveTuple_recursive<T>];
+type inferredCaptured_recursive<U> = {
+    value: U;
+    next: inferredCaptured_recursive<U>;
+};
+type mappedCaptured_recursive<T> = { [K in keyof T]: {
+    value: T[K];
+    next: mappedCaptured_recursive<T>;
+}; };
+type freshGeneric_recursive = <U>(value: U) => freshGeneric_recursive;
+type mutualCaptured_recursive<T, U> = {
+    right: U;
+    self: mutualCaptured_recursive<T, U>;
+    next: mutualCaptured_recursive_1<T, U>;
+};
+type mutualCaptured_recursive_1<T, U> = {
+    left: T;
+    next: mutualCaptured_recursive<T, U>;
+};
+type CapturedClass_make_recursive<T, U extends T> = {
+    outer: T;
+    inner: U;
+    next: () => CapturedClass_make_recursive<T, U>;
+};
+type covariantClass_recursive<out T> = {
+    value: T;
+    next(): covariantClass_recursive<T>;
+};
+type contravariantClass_recursive<in T> = {
+    consume: (value: T) => void;
+    next(): contravariantClass_recursive<T>;
+};
+export declare const _recursive = 1;
+export declare const factory: () => () => factory_recursive;
+export declare function captured<T>(value: T): captured_recursive<T>;
+export declare function nestedCaptured<T>(outer: T): <U>(inner: U) => nestedCaptured_recursive<T, U>;
+export declare function constrained<T extends {
+    value: number;
+}, K extends keyof T>(key: K): constrained_recursive<T, K>;
+export declare function optionalCaptured<T>(value: T): {
+    node?: optionalCaptured_recursive<T> | false | null;
+};
+export declare function annotatedCaptured<T>(value: T): annotatedCaptured_recursive<T>;
+export declare function recursiveTuple<T>(value: T): recursiveTuple_recursive<T>;
+export declare function inferredCaptured<T>(): (T extends () => infer U ? inferredCaptured_recursive<U> : never);
+export declare function mappedCaptured<T>(): mappedCaptured_recursive<T>;
+export declare function freshGeneric<T>(unused: T): freshGeneric_recursive;
+export declare function mutualCaptured<T, U>(left: T, right: U): {
+    left: mutualCaptured_recursive_1<T, U>;
+    right: mutualCaptured_recursive<T, U>;
+};
+export declare class CapturedClass<T> {
+    value: T;
+    constructor(value: T);
+    make<U extends T>(inner: U): CapturedClass_make_recursive<T, U>;
+}
+export declare function covariantClass(): {
+    new <T>(): covariantClass_recursive<T>;
+};
+export declare function contravariantClass(): {
+    new <T>(): contravariantClass_recursive<T>;
+};
+export declare namespace Nested {
+    type captured_recursive_1<T> = {
+        value: T;
+        next: () => captured_recursive_1<T>;
+    };
+    export function captured<T>(value: T): captured_recursive_1<T>;
+    export {};
+}
+export {};
+//// [shadowedMappedCycle.d.ts]
+export declare const shadowedCycle: {
+    Node: {
+        value: number;
+        next: <T>(shadowedCycle: T) => typeof import("./shadowedMappedCycle").shadowedCycle["Node"];
+    };
+};
+//// [globalRecursiveA.d.ts]
+type makeA_recursive = {
+    value: number;
+    self(): makeA_recursive;
+};
+type makeReserved_recursive_1 = {
+    value: boolean;
+    self(): makeReserved_recursive_1;
+};
+type GlobalA_create_recursive<T> = {
+    value: T;
+    next: () => GlobalA_create_recursive<T>;
+};
+type GlobalA_a_b_recursive = {
+    value: boolean;
+    next: () => GlobalA_a_b_recursive;
+};
+declare function makeA(): {
+    value: number;
+    self(): makeA_recursive;
+};
+type makeReserved_recursive = "reserved";
+declare function makeReserved(): {
+    value: boolean;
+    self(): makeReserved_recursive_1;
+};
+declare class GlobalA {
+    static create<T>(value: T): GlobalA_create_recursive<T>;
+    static "a-b"(): GlobalA_a_b_recursive;
+}
+//// [globalRecursiveB.d.ts]
+type makeB_recursive = {
+    value: string;
+    self(): makeB_recursive;
+};
+type GlobalB_create_recursive<T> = {
+    value: T;
+    next: () => GlobalB_create_recursive<T>;
+};
+declare function makeB(): {
+    value: string;
+    self(): makeB_recursive;
+};
+declare class GlobalB {
+    static create<T>(value: T): GlobalB_create_recursive<T>;
+}

@@ -136,6 +136,14 @@ type wrappingTracker struct {
 	bound   *recoveryBoundary
 }
 
+func (w *wrappingTracker) TypeAliasScope() *ast.Node {
+	return w.wrapped.TypeAliasScope()
+}
+
+func (w *wrappingTracker) AddTypeAliasDeclaration(declaration *ast.Node) {
+	w.wrapped.AddTypeAliasDeclaration(declaration)
+}
+
 func (w *wrappingTracker) PopErrorFallbackNode() {
 	w.wrapped.PopErrorFallbackNode()
 }
