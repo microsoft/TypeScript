@@ -34,6 +34,7 @@ import {
 import {
     HEADER_OFFSET_EXTENDED_DATA,
     HEADER_OFFSET_NODES,
+    HEADER_OFFSET_SOURCE_FILE_ID,
     HEADER_OFFSET_STRING_TABLE,
     HEADER_OFFSET_STRING_TABLE_OFFSETS,
     HEADER_OFFSET_STRUCTURED_DATA,
@@ -106,6 +107,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     private _cachedSupplementalSourceFileNames: readonly RootedFilePath[] | undefined;
     private _cachedDiagnosticDirectives: readonly MappedDiagnosticDirective[] | undefined;
     private _diagnosticDirectivesRead = false;
+    private _handleFileKey: string | undefined;
 
     constructor(
         data: Uint8Array,
@@ -145,6 +147,20 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     /** @internal */
     get nodeId(): string {
         return readSourceFileNodeId(this.view);
+    }
+
+    /**
+     * The file component of node handles sent to the server: `#` followed by the
+     * server's identity for this exact source file, or the file's path when the
+     * file has no server identity (e.g. synthesized nodes).
+     * @internal
+     */
+    get handleFileKey(): string {
+        if (this._handleFileKey === undefined) {
+            const nodeId = this.view.getBigUint64(HEADER_OFFSET_SOURCE_FILE_ID, true);
+            this._handleFileKey = nodeId === 0n ? this.path! : `#${nodeId}`;
+        }
+        return this._handleFileKey;
     }
 
     readFileReferences(structuredDataOffset: number): readonly FileReference[] {
@@ -535,6 +551,23 @@ export function decodeNode(data: Uint8Array): Node {
 export function getNodeId(node: Node): string {
     if (!(node instanceof RemoteNode)) {
         throw new Error("getNodeId requires a RemoteNode");
+    }
+    return node.id;
+}
+
+/**
+ * Get the compact handle used to identify a remote node in requests. Unlike
+ * {@link getNodeId}, the file is identified by the server's identity for the
+ * exact source file the node was decoded from, when it has one.
+ * @internal
+ */
+export function getNodeRequestHandle(node: Node): string {
+    if (!(node instanceof RemoteNode)) {
+        throw new Error("getNodeRequestHandle requires a RemoteNode");
+    }
+    const sourceFile = node["_sourceFile"];
+    if (sourceFile instanceof RemoteSourceFile) {
+        return `${node["index"]}.${node.kind}.${sourceFile.handleFileKey}`;
     }
     return node.id;
 }

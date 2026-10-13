@@ -64,6 +64,7 @@ import {
 import {
     decodeNode,
     getNodeId,
+    getNodeRequestHandle,
     parseNodeHandleFromCompiler,
     readParseOptionsKey,
     readSourceFileHash,
@@ -2736,8 +2737,8 @@ export class LanguageService {
             function (node: Node, position: number): ReferencedSymbolEntry[] {
                 const data = owner.client.apiRequest("getReferencedSymbolsForNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    node: getNodeId(node),
+                    project: owner.project.handle,
+                    node: getNodeRequestHandle(node),
                     position,
                 });
                 return (data ?? []).map(entry => ({
@@ -2749,8 +2750,8 @@ export class LanguageService {
             function* (node: Node, position: number): Generator<ProtocolRequest, ReferencedSymbolEntry[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getReferencedSymbolsForNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    node: getNodeId(node),
+                    project: owner.project.handle,
+                    node: getNodeRequestHandle(node),
                     position,
                 });
                 return (data ?? []).map(entry => ({
@@ -2773,8 +2774,8 @@ export class LanguageService {
             function (signatureDecl: Node): SignatureUsage[] {
                 const data = owner.client.apiRequest("getSignatureUsages", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    signatureDecl: getNodeId(signatureDecl),
+                    project: owner.project.handle,
+                    signatureDecl: getNodeRequestHandle(signatureDecl),
                 });
                 return (data ?? []).map(entry => ({
                     name: new NodeHandle(entry.name, owner.project),
@@ -2784,8 +2785,8 @@ export class LanguageService {
             function* (signatureDecl: Node): Generator<ProtocolRequest, SignatureUsage[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSignatureUsages", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    signatureDecl: getNodeId(signatureDecl),
+                    project: owner.project.handle,
+                    signatureDecl: getNodeRequestHandle(signatureDecl),
                 });
                 return (data ?? []).map(entry => ({
                     name: new NodeHandle(entry.name, owner.project),
@@ -3118,7 +3119,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                     file,
-                    usage: getNodeId(usage),
+                    usage: getNodeRequestHandle(usage),
                 });
             },
             function* (file: DocumentIdentifier, usage: StringLiteralLikeNode): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]> {
@@ -3126,7 +3127,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                     file,
-                    usage: getNodeId(usage),
+                    usage: getNodeRequestHandle(usage),
                 });
             },
         );
@@ -3170,8 +3171,8 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModule | undefined {
                 const result = owner.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    moduleSpecifier: getNodeId(moduleSpecifier),
+                    project: owner.project.handle,
+                    moduleSpecifier: getNodeRequestHandle(moduleSpecifier),
                     sourceFile,
                 });
                 return result ?? undefined;
@@ -3179,8 +3180,8 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function* (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
                 const result = yield* apiRequest("getResolvedModuleFromModuleSpecifier", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    moduleSpecifier: getNodeId(moduleSpecifier),
+                    project: owner.project.handle,
+                    moduleSpecifier: getNodeRequestHandle(moduleSpecifier),
                     sourceFile,
                 });
                 return result ?? undefined;
@@ -4185,16 +4186,16 @@ export class Checker {
             function (node: Node): Symbol | undefined {
                 const data = owner.client.apiRequest("getSymbolOfNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
             function* (node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSymbolOfNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -4213,8 +4214,8 @@ export class Checker {
             function (node: Declaration): Symbol {
                 const data = owner.client.apiRequest("getSymbolOfDeclarationForChecker", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 // Declarations normally have symbols, but preserve unexpected null results at runtime.
                 return (data && owner.objectRegistry.getOrCreateSymbol(data))!;
@@ -4222,8 +4223,8 @@ export class Checker {
             function* (node: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSymbolOfDeclarationForChecker", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 // Declarations normally have symbols, but preserve unexpected null results at runtime.
                 return (data && owner.objectRegistry.getOrCreateSymbol(data))!;
@@ -4272,15 +4273,15 @@ export class Checker {
             if (Array.isArray(nodeOrNodes)) {
                 const data = owner.client.apiRequest("getSymbolsAtLocations", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    locations: nodeOrNodes.map(node => getNodeId(node)),
+                    project: owner.project.handle,
+                    locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
                 });
                 return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
             }
             const data = owner.client.apiRequest("getSymbolAtLocation", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
-                location: getNodeId(nodeOrNodes as Node),
+                project: owner.project.handle,
+                location: getNodeRequestHandle(nodeOrNodes as Node),
             });
             return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
         }
@@ -4290,15 +4291,15 @@ export class Checker {
             if (Array.isArray(nodeOrNodes)) {
                 const data = yield* apiRequest("getSymbolsAtLocations", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    locations: nodeOrNodes.map(node => getNodeId(node)),
+                    project: owner.project.handle,
+                    locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
                 });
                 return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
             }
             const data = yield* apiRequest("getSymbolAtLocation", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
-                location: getNodeId(nodeOrNodes as Node),
+                project: owner.project.handle,
+                location: getNodeRequestHandle(nodeOrNodes as Node),
             });
             return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
         }
@@ -4564,15 +4565,15 @@ export class Checker {
             if (Array.isArray(nodeOrNodes)) {
                 const data = owner.client.apiRequest("getTypeAtLocations", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    locations: nodeOrNodes.map(node => getNodeId(node)),
+                    project: owner.project.handle,
+                    locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
                 });
                 return data.map(d => owner.objectRegistry.getOrCreateType(d));
             }
             const data = owner.client.apiRequest("getTypeAtLocation", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
-                location: getNodeId(nodeOrNodes as Node),
+                project: owner.project.handle,
+                location: getNodeRequestHandle(nodeOrNodes as Node),
             });
             return owner.objectRegistry.getOrCreateType(data);
         }
@@ -4582,15 +4583,15 @@ export class Checker {
             if (Array.isArray(nodeOrNodes)) {
                 const data = yield* apiRequest("getTypeAtLocations", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    locations: nodeOrNodes.map(node => getNodeId(node)),
+                    project: owner.project.handle,
+                    locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
                 });
                 return data.map(d => owner.objectRegistry.getOrCreateType(d));
             }
             const data = yield* apiRequest("getTypeAtLocation", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
-                location: getNodeId(nodeOrNodes as Node),
+                project: owner.project.handle,
+                location: getNodeRequestHandle(nodeOrNodes as Node),
             });
             return owner.objectRegistry.getOrCreateType(data);
         }
@@ -4630,16 +4631,16 @@ export class Checker {
             function (node: Node): Signature {
                 const data = owner.client.apiRequest("getResolvedSignature", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return owner.objectRegistry.getOrCreateSignature(data);
             },
             function* (node: Node): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getResolvedSignature", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return owner.objectRegistry.getOrCreateSignature(data);
             },
@@ -4712,7 +4713,7 @@ export class Checker {
                     project: owner.project.handle,
                     name,
                     meaning,
-                    location: isNode ? getNodeId(location as Node) : undefined,
+                    location: isNode ? getNodeRequestHandle(location as Node) : undefined,
                     file: !isNode && location ? (location as DocumentPosition).document : undefined,
                     position: !isNode && location ? (location as DocumentPosition).position : undefined,
                     excludeGlobals,
@@ -4727,7 +4728,7 @@ export class Checker {
                     project: owner.project.handle,
                     name,
                     meaning,
-                    location: isNode ? getNodeId(location as Node) : undefined,
+                    location: isNode ? getNodeRequestHandle(location as Node) : undefined,
                     file: !isNode && location ? (location as DocumentPosition).document : undefined,
                     position: !isNode && location ? (location as DocumentPosition).position : undefined,
                     excludeGlobals,
@@ -4755,7 +4756,7 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                     meaning,
-                    location: isNode ? getNodeId(location as Node) : undefined,
+                    location: isNode ? getNodeRequestHandle(location as Node) : undefined,
                     file: isNode ? undefined : (location as DocumentPosition).document,
                     position: isNode ? undefined : (location as DocumentPosition).position,
                 });
@@ -4768,7 +4769,7 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                     meaning,
-                    location: isNode ? getNodeId(location as Node) : undefined,
+                    location: isNode ? getNodeRequestHandle(location as Node) : undefined,
                     file: isNode ? undefined : (location as DocumentPosition).document,
                     position: isNode ? undefined : (location as DocumentPosition).position,
                 });
@@ -4809,16 +4810,16 @@ export class Checker {
             function (node: Expression): Type | undefined {
                 const data = owner.client.apiRequest("getContextualType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
             },
             function* (node: Expression): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getContextualType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
             },
@@ -4836,8 +4837,8 @@ export class Checker {
             function (node: CallLikeExpression, argIndex: number): Type | undefined {
                 const data = owner.client.apiRequest("getContextualTypeForArgument", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                     index: argIndex,
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
@@ -4845,8 +4846,8 @@ export class Checker {
             function* (node: CallLikeExpression, argIndex: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getContextualTypeForArgument", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                     index: argIndex,
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
@@ -4943,16 +4944,16 @@ export class Checker {
             function (node: TypeNode): Type {
                 const data = owner.client.apiRequest("getTypeFromTypeNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
             function* (node: TypeNode): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getTypeFromTypeNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
@@ -5083,16 +5084,16 @@ export class Checker {
             function (node: Node): Symbol | undefined {
                 const data = owner.client.apiRequest("getShorthandAssignmentValueSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
             function* (node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getShorthandAssignmentValueSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -5117,7 +5118,7 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                     symbol: symbol.reference,
-                    location: getNodeId(location),
+                    location: getNodeRequestHandle(location),
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
@@ -5126,7 +5127,7 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                     symbol: symbol.reference,
-                    location: getNodeId(location),
+                    location: getNodeRequestHandle(location),
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
@@ -5364,7 +5365,7 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                     type: type.id,
-                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
                     flags,
                 });
                 if (!binaryData) return undefined;
@@ -5376,7 +5377,7 @@ export class Checker {
                         snapshot: owner.snapshotId,
                         project: owner.project.handle,
                         type: type.id,
-                        location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
                         flags,
                     }),
                 );
@@ -5400,7 +5401,7 @@ export class Checker {
                     project: owner.project.handle,
                     signature: signature.id,
                     kind,
-                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
                     flags,
                 });
                 if (!binaryData) return undefined;
@@ -5413,7 +5414,7 @@ export class Checker {
                         project: owner.project.handle,
                         signature: signature.id,
                         kind,
-                        location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
                         flags,
                     }),
                 );
@@ -5436,7 +5437,7 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                     type: type.id,
-                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
                     flags,
                 });
                 if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
@@ -5447,7 +5448,7 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                     type: type.id,
-                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
                     flags,
                 });
                 if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
@@ -5467,15 +5468,15 @@ export class Checker {
             function (node: Node): boolean {
                 return owner.client.apiRequest("isContextSensitive", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
             },
             function* (node: Node): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
                 return yield* apiRequest("isContextSensitive", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
             },
         );
@@ -5943,8 +5944,8 @@ export class Checker {
             function (node: Node): string | number | undefined {
                 const data = owner.client.apiRequest("getConstantValue", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 if (!data || (typeof data.value !== "string" && typeof data.value !== "number")) {
                     return undefined;
@@ -5963,8 +5964,8 @@ export class Checker {
             function* (node: Node): Generator<ProtocolRequest, string | number | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getConstantValue", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 if (!data || (typeof data.value !== "string" && typeof data.value !== "number")) {
                     return undefined;
@@ -5995,16 +5996,16 @@ export class Checker {
             function (node: Node): Signature {
                 const data = owner.client.apiRequest("getSignatureFromDeclaration", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return owner.objectRegistry.getOrCreateSignature(data);
             },
             function* (node: Node): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSignatureFromDeclaration", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return owner.objectRegistry.getOrCreateSignature(data);
             },
@@ -6022,16 +6023,16 @@ export class Checker {
             function (node: Node): Symbol | undefined {
                 const data = owner.client.apiRequest("getExportSpecifierLocalTargetSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
             function* (node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getExportSpecifierLocalTargetSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },

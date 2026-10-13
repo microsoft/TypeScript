@@ -125,6 +125,10 @@ type snapshotData struct {
 
 	projectRegistries   map[project.ID]*projectRegistryData
 	projectRegistriesMu sync.RWMutex
+
+	// sourceFilesByNodeID maps each program in the snapshot to its source files keyed by
+	// sourceFileNodeID, for resolving node handles that identify their file that way.
+	sourceFilesByNodeID sync.Map // *compiler.Program -> map[uint64]*ast.SourceFile
 }
 
 type moduleResolverRegistration struct {
@@ -2132,7 +2136,7 @@ func (s *Session) encodeLeasedSourceFile(lease *project.SourceFileLease) (any, e
 		lease.Release()
 		return nil, fmt.Errorf("failed to encode source file: %w", err)
 	}
-	encoder.SetSourceFileID(data, sourceFileNodeID(lease.SourceFile()))
+	setEncodedSourceFileID(data, lease.SourceFile())
 	id := s.registerSourceFileLease(lease)
 	encoder.SetSourceFileLease(data, uint64(id))
 	if s.useBinaryResponses {
@@ -2445,7 +2449,7 @@ func (s *Session) encodeSourceFileResponse(sourceFile *ast.SourceFile) (any, err
 	if err != nil {
 		return nil, fmt.Errorf("failed to encode source file: %w", err)
 	}
-	encoder.SetSourceFileID(data, sourceFileNodeID(sourceFile))
+	setEncodedSourceFileID(data, sourceFile)
 
 	if s.useBinaryResponses {
 		return RawBinary(data), nil
@@ -5004,6 +5008,35 @@ func (s *Session) handleGetFalseTypeOfConditionalType(ctx context.Context, param
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetFalseTypeOfConditionalType(t), setup.checker), nil
 }
 
+// encodedSourceFilePaths records the path of every source file encoded for a client, keyed by
+// sourceFileNodeID, so that node handles identifying a file not in the requested program (for
+// example, a standalone file created with the same text) still resolve by path.
+var encodedSourceFilePaths sync.Map // uint64 -> tspath.PathKey
+
+func setEncodedSourceFileID(data []byte, sourceFile *ast.SourceFile) {
+	nodeID := sourceFileNodeID(sourceFile)
+	encodedSourceFilePaths.LoadOrStore(nodeID, sourceFile.PathKey())
+	encoder.SetSourceFileID(data, nodeID)
+}
+
+func (sd *snapshotData) sourceFileByNodeID(program *compiler.Program, nodeID uint64) *ast.SourceFile {
+	files, ok := sd.sourceFilesByNodeID.Load(program)
+	if !ok {
+		byID := make(map[uint64]*ast.SourceFile, len(program.GetSourceFiles()))
+		for _, file := range program.GetSourceFiles() {
+			byID[sourceFileNodeID(file)] = file
+		}
+		files, _ = sd.sourceFilesByNodeID.LoadOrStore(program, byID)
+	}
+	if file := files.(map[uint64]*ast.SourceFile)[nodeID]; file != nil {
+		return file
+	}
+	if path, ok := encodedSourceFilePaths.Load(nodeID); ok {
+		return program.GetSourceFileByPath(path.(tspath.PathKey))
+	}
+	return nil
+}
+
 func (sd *snapshotData) resolveNodeHandle(program *compiler.Program, handle NodeHandle) (*ast.Node, error) {
 	s := string(handle)
 	// Format: "index.kind.path" — we need index and path, kind is informational only.
@@ -5021,12 +5054,22 @@ func (sd *snapshotData) resolveNodeHandle(program *compiler.Program, handle Node
 	if err != nil {
 		return nil, fmt.Errorf("%w: invalid node handle %q: %w", ErrClientError, handle, err)
 	}
-	path, ok := tspath.TryPathKeyFromCanonical(s[secondDot+1:])
-	if !ok {
-		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
-	}
 
-	sourceFile := program.GetSourceFileByPath(path)
+	var sourceFile *ast.SourceFile
+	if fileKey := s[secondDot+1:]; strings.HasPrefix(fileKey, "#") {
+		// "index.kind.#nodeID" identifies the exact source file by its sourceFileNodeID.
+		nodeID, err := strconv.ParseUint(fileKey[1:], 10, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%w: invalid node handle %q: %w", ErrClientError, handle, err)
+		}
+		sourceFile = sd.sourceFileByNodeID(program, nodeID)
+	} else {
+		path, ok := tspath.TryPathKeyFromCanonical(fileKey)
+		if !ok {
+			return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
+		}
+		sourceFile = program.GetSourceFileByPath(path)
+	}
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: node handle %q could not be resolved (file may not be loaded or handle may be stale)", ErrClientError, handle)
 	}
