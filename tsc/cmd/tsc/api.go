@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
@@ -17,13 +18,14 @@ import (
 )
 
 type apiFlags struct {
-	cwd             string
-	pipePath        string
-	callbacks       string
-	caseSensitive   bool
-	async           bool
-	timing          bool
-	runExternalCode bool
+	cwd                     string
+	pipePath                string
+	callbacks               string
+	caseSensitive           bool
+	async                   bool
+	timing                  bool
+	runExternalCode         bool
+	requestPollMicroseconds int
 }
 
 func parseAPIFlags(args []string) (apiFlags, error) {
@@ -36,6 +38,7 @@ func parseAPIFlags(args []string) (apiFlags, error) {
 	flags.BoolVar(&result.async, "async", false, "use JSON-RPC protocol instead of MessagePack (for async API)")
 	flags.BoolVar(&result.timing, "timing", false, "collect per-request server processing time, folded into the client's timing snapshot")
 	flags.BoolVar(&result.runExternalCode, "runExternalCode", false, "allow projects to execute configured external plugins")
+	flags.IntVar(&result.requestPollMicroseconds, "requestPollMicroseconds", 0, "poll for each request for up to this many microseconds before blocking (sync STDIO API only)")
 	if err := flags.Parse(args); err != nil {
 		return apiFlags{}, err
 	}
@@ -66,6 +69,7 @@ func runAPI(args []string) int {
 		Async:                     flags.async,
 		CollectTiming:             flags.timing,
 		RunExternalCode:           flags.runExternalCode,
+		RequestPollWindow:         time.Duration(flags.requestPollMicroseconds) * time.Microsecond,
 		ContentMapperSpawner:      system,
 	}
 	if flags.pipePath != "" {

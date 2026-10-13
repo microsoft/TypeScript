@@ -35,6 +35,21 @@ export interface ClientSpawnOptions {
      * {@link API.getTimingInfo}.
      */
     collectTiming?: boolean | undefined;
+    /**
+     * Synchronous API only. How long, in microseconds, the client polls for
+     * each response before blocking. Polling avoids the operating system's
+     * wakeup latency when the server answers quickly, at the cost of some CPU
+     * time while waiting. Defaults to 100; 0 disables polling. Ignored on
+     * Windows.
+     */
+    responsePollMicroseconds?: number | undefined;
+    /**
+     * Synchronous API only. How long, in microseconds, the server polls for
+     * the next request before blocking. This reduces round-trip latency further
+     * but makes the server spend CPU time while the client works between
+     * requests. Defaults to 0 (disabled). Ignored on Windows.
+     */
+    serverRequestPollMicroseconds?: number | undefined;
 }
 
 export type ClientOptions = ClientSocketOptions | ClientSpawnOptions;
@@ -54,6 +69,7 @@ export function getAPIProcessArgs(options: ClientSpawnOptions, async: boolean): 
     args.push(`--useCaseSensitiveFileNames=${options.useCaseSensitiveFileNames ?? inferUseCaseSensitiveFileNames()}`);
     if (options.runExternalCode) args.push("--runExternalCode");
     if (options.collectTiming) args.push("--timing");
+    if (!async && options.serverRequestPollMicroseconds) args.push(`--requestPollMicroseconds=${options.serverRequestPollMicroseconds}`);
     return args;
 }
 

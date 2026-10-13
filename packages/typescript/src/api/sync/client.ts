@@ -28,6 +28,8 @@ import {
 
 export type { ClientOptions, ClientSocketOptions, ClientSpawnOptions };
 
+const defaultResponsePollMicroseconds = 100;
+
 export class Client {
     private channel: SyncRpcChannel;
     private encoder = new TextEncoder();
@@ -52,7 +54,7 @@ export class Client {
             this.timing = new TimingCollector();
         }
 
-        const channel = new SyncRpcChannel(resolveExePath(options), args, collectTiming);
+        const channel = new SyncRpcChannel(resolveExePath(options), args, collectTiming, options.responsePollMicroseconds ?? defaultResponsePollMicroseconds);
         this.channel = channel;
 
         if (options.fs) {

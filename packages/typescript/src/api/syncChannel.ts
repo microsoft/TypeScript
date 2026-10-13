@@ -105,6 +105,11 @@ process.on("exit", () => {
 export class SyncRpcChannel {
     private child: ChildProcess;
     private readFd: number;
+    // When positive, response reads poll a non-blocking pipe for this many
+    // milliseconds before switching it back to blocking mode.
+    private pollMs = 0;
+    private setReadBlocking: ((value: boolean) => void) | undefined;
+    private readBlocking = true;
     private writeFd: number;
     private pipeFd: number | undefined;
     private callbacks = new Map<string, (name: string, payload: string) => string>();
@@ -137,7 +142,12 @@ export class SyncRpcChannel {
     // Write buffer – assembles entire tuples for a single writeSync.
     private writeBuf = Buffer.allocUnsafe(65536);
 
-    constructor(exe: string, args: string[], collectTiming = false) {
+    /**
+     * @param pollMicroseconds How long to poll for each response before
+     * blocking (POSIX only). Polling avoids the scheduler wakeup latency of a
+     * blocking read when the child answers quickly, at the cost of CPU time.
+     */
+    constructor(exe: string, args: string[], collectTiming = false, pollMicroseconds = 0) {
         this.collectTiming = collectTiming;
         const isWindows = process.platform === "win32";
 
@@ -204,6 +214,10 @@ export class SyncRpcChannel {
             // blocking mode ensures readSync blocks properly until data
             // arrives, matching the behavior of the native libsyncrpc.
             stdout._handle.setBlocking?.(true);
+            if (pollMicroseconds > 0 && stdout._handle.setBlocking) {
+                this.pollMs = pollMicroseconds / 1000;
+                this.setReadBlocking = value => stdout._handle.setBlocking!(value);
+            }
             stdin._handle.setBlocking?.(true);
 
             // Prevent Node's event-loop from reading stdout or keeping the
@@ -539,6 +553,7 @@ export class SyncRpcChannel {
     private fillReadBuffer(): void {
         this.readBufPos = 0;
         this.readBufLen = 0;
+        if (this.pollMs > 0 && this.pollFillReadBuffer()) return;
         for (;;) {
             try {
                 const n = readSync(this.readFd, this.readBuf, 0, this.readBuf.length, null);
@@ -556,6 +571,41 @@ export class SyncRpcChannel {
                 throw e;
             }
         }
+    }
+
+    /**
+     * Poll the non-blocking pipe until data arrives or the poll window
+     * elapses. Returns false, leaving the pipe in blocking mode, on timeout.
+     */
+    private pollFillReadBuffer(): boolean {
+        if (this.readBlocking) {
+            this.setReadBlocking!(false);
+            this.readBlocking = false;
+        }
+        // Each empty poll throws EAGAIN; skip capturing stack traces for them.
+        const stackTraceLimit = Error.stackTraceLimit;
+        Error.stackTraceLimit = 0;
+        try {
+            const deadline = performance.now() + this.pollMs;
+            do {
+                try {
+                    const n = readSync(this.readFd, this.readBuf, 0, this.readBuf.length, null);
+                    if (n === 0) throw this.eofError();
+                    this.readBufLen = n;
+                    return true;
+                }
+                catch (e: unknown) {
+                    if (!(e instanceof Error && (e as NodeJS.ErrnoException).code === "EAGAIN")) throw e;
+                }
+            }
+            while (performance.now() < deadline);
+        }
+        finally {
+            Error.stackTraceLimit = stackTraceLimit;
+        }
+        this.setReadBlocking!(true);
+        this.readBlocking = true;
+        return false;
     }
 
     /**
@@ -578,6 +628,10 @@ export class SyncRpcChannel {
             else if (length - pos >= this.readBuf.length) {
                 // Remaining data is larger than read buffer; read directly
                 // into the target to avoid unnecessary copying.
+                if (!this.readBlocking) {
+                    this.setReadBlocking!(true);
+                    this.readBlocking = true;
+                }
                 try {
                     const n = readSync(this.readFd, buffer, pos, length - pos, null);
                     if (n === 0) {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
@@ -38,6 +39,9 @@ type StdioServerOptions struct {
 	// left unchanged; the client folds this data into its own timing snapshot
 	// on demand via getServerTiming / resetServerTiming requests.
 	CollectTiming bool
+	// RequestPollWindow, when positive, makes the synchronous STDIO server poll for each
+	// request for up to this long before blocking, trading CPU time for lower latency.
+	RequestPollWindow time.Duration
 	// RunExternalCode allows configured content mappers to execute.
 	RunExternalCode      bool
 	ContentMapperSpawner contentmapper.Spawner
@@ -72,7 +76,11 @@ func (s *StdioServer) Run(ctx context.Context) error {
 		defer t.Close()
 		transport = t
 	} else {
-		t := ipc.NewStdioTransport(s.options.In, s.options.Out)
+		in := s.options.In
+		if !s.options.Async {
+			in = ipc.NewPollingReader(in, s.options.RequestPollWindow)
+		}
+		t := ipc.NewStdioTransport(in, s.options.Out)
 		defer t.Close()
 		transport = t
 	}
