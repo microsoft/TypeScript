@@ -139,3 +139,12 @@ func arenaRecords(c *Checker, literals *arena[LiteralType]) *LiteralType {
 	c.newType(0, 0, data.AsType(), typeKindLiteral)
 	return literals.New()
 }
+
+func zeroValueRecords() (*LiteralType, *SimpleTypeMapper) {
+	var literal LiteralType
+	var literals [2]LiteralType
+	_ = literals
+	var mappers [2]SimpleTypeMapper
+	mappers[0].kind = typeMapperSimple
+	return &literal, &mappers[0]
+}

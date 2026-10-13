@@ -24,7 +24,7 @@ var unsafeLayoutAnalyzer = &analysis.Analyzer{
 		p.collectNodeLayouts()
 		for c := range in.Root().Preorder(
 			(*ast.AssignStmt)(nil), (*ast.IncDecStmt)(nil), (*ast.UnaryExpr)(nil), (*ast.CompositeLit)(nil),
-			(*ast.CallExpr)(nil), (*ast.IndexExpr)(nil), (*ast.TypeSpec)(nil),
+			(*ast.CallExpr)(nil), (*ast.IndexExpr)(nil), (*ast.TypeSpec)(nil), (*ast.ValueSpec)(nil),
 			(*ast.StarExpr)(nil), (*ast.SelectorExpr)(nil), (*ast.Ident)(nil),
 		) {
 			p.check(c)
@@ -130,6 +130,28 @@ func layoutFamily(typ types.Type) string {
 	return ""
 }
 
+// Reports whether typ holds a node or type record by value, directly or
+// inside arrays or structs, so declaring it yields untagged zero-value records.
+// Mappers are exempt: coallocated mapper storage is tagged by a matching
+// kind assignment, which checkTagWrite already verifies.
+func containsLayoutRecord(typ types.Type) bool {
+	if family := layoutFamily(typ); family != "" {
+		_, pointer := types.Unalias(typ).(*types.Pointer)
+		return !pointer && family != "TypeMapper"
+	}
+	switch underlying := types.Unalias(typ).Underlying().(type) {
+	case *types.Array:
+		return containsLayoutRecord(underlying.Elem())
+	case *types.Struct:
+		for field := range underlying.Fields() {
+			if containsLayoutRecord(field.Type()) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func layoutKind(typ types.Type) *types.Const {
 	named := layoutNamedType(typ)
 	if named == nil || named.Obj().Pkg() == nil {
@@ -210,6 +232,15 @@ func (p *unsafeLayoutPass) check(c inspector.Cursor) {
 				p.pass.Reportf(node.Pos(), "defining a new compiler-record type bypasses checked construction; use a type alias")
 			}
 		}
+	case *ast.ValueSpec:
+		if test || len(node.Values) != 0 || p.layoutConstant(c) {
+			return
+		}
+		for _, name := range node.Names {
+			if variable := p.pass.TypesInfo.Defs[name]; variable != nil && containsLayoutRecord(variable.Type()) {
+				p.pass.Reportf(name.Pos(), "a zero-value compiler record bypasses checked construction; use its owning factory")
+			}
+		}
 	case *ast.IndexExpr:
 		if function, ok := node.X.(*ast.Ident); ok {
 			object, _ := p.pass.TypesInfo.Uses[function].(*types.Func)
@@ -242,7 +273,13 @@ func (p *unsafeLayoutPass) check(c inspector.Cursor) {
 			}
 		}
 	case *ast.CompositeLit:
-		if test || layoutFamily(p.pass.TypesInfo.TypeOf(node)) == "" || p.layoutConstant(c) {
+		if test || p.layoutConstant(c) {
+			return
+		}
+		if typ := p.pass.TypesInfo.TypeOf(node); layoutFamily(typ) == "" {
+			if _, slice := typ.Underlying().(*types.Slice); !slice && containsLayoutRecord(typ) {
+				p.pass.Reportf(node.Pos(), "a zero-value compiler record bypasses checked construction; use its owning factory")
+			}
 			return
 		}
 		family := layoutFamily(p.pass.TypesInfo.TypeOf(node))
@@ -421,6 +458,17 @@ func (p *unsafeLayoutPass) checkCall(c inspector.Cursor, call *ast.CallExpr, tes
 			p.checkFreshRecord(c, family)
 		}
 	}
+	if builtin, ok := call.Fun.(*ast.Ident); ok && (builtin.Name == "new" || builtin.Name == "make") && !test && len(call.Args) != 0 {
+		allocated := p.pass.TypesInfo.TypeOf(call.Args[0])
+		// new(T) of a record itself is reported with the allocation rules below.
+		direct := builtin.Name == "new" && layoutFamily(allocated) != ""
+		if slice, ok := types.Unalias(allocated).(*types.Slice); ok && builtin.Name == "make" {
+			allocated = slice.Elem()
+		}
+		if allocated != nil && !direct && containsLayoutRecord(allocated) {
+			p.pass.Reportf(call.Pos(), "a zero-value compiler record bypasses checked construction; use its owning factory")
+		}
+	}
 	if len(call.Args) != 1 {
 		return
 	}
@@ -445,7 +493,11 @@ func (p *unsafeLayoutPass) checkCall(c inspector.Cursor, call *ast.CallExpr, tes
 	source := p.pass.TypesInfo.TypeOf(call.Args[0])
 	target := p.pass.TypesInfo.TypeOf(call)
 	isUnsafePointer := func(typ types.Type) bool {
-		basic, ok := typ.(*types.Basic)
+		if typ == nil {
+			return false
+		}
+		// Aliases and defined types share unsafe.Pointer's conversion rules.
+		basic, ok := typ.Underlying().(*types.Basic)
 		return ok && basic.Kind() == types.UnsafePointer
 	}
 	if !isUnsafePointer(source) && !isUnsafePointer(target) {

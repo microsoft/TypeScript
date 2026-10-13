@@ -100,3 +100,44 @@
 !!! unsafelayout: taking a compiler tag's address bypasses checked tag assignment
 	}
 	
+	type Pointer unsafe.Pointer
+	
+	type PointerAlias = unsafe.Pointer
+	
+	func zeroValues(node *ast.Node) {
+		var identifier ast.Identifier
+		    ~
+!!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
+		_ = &identifier
+		var identifiers [2]ast.Identifier
+		    ~
+!!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
+		_ = &identifiers[0]
+		var holder struct{ identifier ast.Identifier }
+		    ~
+!!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
+		_ = &holder.identifier
+		var pointers [2]*ast.Identifier
+		_ = pointers
+		_ = new([2]ast.Identifier)
+		    ~
+!!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
+		_ = make([]ast.Identifier, 1)
+		    ~
+!!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
+		_ = make([]*ast.Identifier, 1)
+		_ = [2]ast.Identifier{}
+		    ~
+!!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
+		_ = (*ast.Identifier)(Pointer(node))
+		    ~
+!!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
+		                      ~
+!!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
+		_ = (*ast.Identifier)(PointerAlias(node))
+		    ~
+!!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
+		                      ~
+!!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
+	}
+	
