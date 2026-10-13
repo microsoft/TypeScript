@@ -7,9 +7,6 @@
 This package contains the TypeScript compiler and language server artifacts
 for `wasip1/wasm`, plus a list of the bundled library files.
 
-Nightly builds publish this package alongside the TypeScript package with the
-same version and `next` tag.
-
 Install the same exact version of this package and the TypeScript package that
 provides `typescript/unstable/wasm`. When loading both packages from a CDN,
 select one version and use it for both package URLs.
