@@ -563,8 +563,6 @@ func (n *Node) MemberList() *NodeList {
 		return n.AsInterfaceDeclaration().Members
 	case KindEnumDeclaration:
 		return n.AsEnumDeclaration().Members
-	case KindModuleBlock:
-		return n.AsModuleBlock().Statements
 	case KindTypeLiteral:
 		return n.AsTypeLiteralNode().Members
 	case KindMappedType:
