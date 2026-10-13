@@ -235,6 +235,11 @@ export {};
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/pkg2
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg2/tsconfig.json::
@@ -345,6 +350,11 @@ exports.theNum = 42;
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/pkg2
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg1/tsconfig.json::
@@ -433,6 +443,11 @@ export const theNum = 42;
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/pkg2
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg1/tsconfig.json::
@@ -534,6 +549,11 @@ exports.theNum = 42;
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/pkg2
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg1/tsconfig.json::
@@ -722,6 +742,11 @@ export type { TheNum } from './const.cjs';
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/pkg2
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg2/tsconfig.json::

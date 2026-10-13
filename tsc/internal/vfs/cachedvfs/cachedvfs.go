@@ -5,8 +5,10 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/watchalias"
 )
 
 type FS struct {
@@ -99,13 +101,23 @@ func (fsys *FS) ReadFile(path tspath.RootedFilePath) (contents string, ok bool) 
 }
 
 func (fsys *FS) Realpath(path tspath.RootedPath) tspath.RootedPath {
+	return fsys.cachedRealpath(path, fsys.fs.Realpath)
+}
+
+func (fsys *FS) RealpathWithParent(path tspath.RootedPath, realpath func(tspath.RootedPath) tspath.RootedPath) tspath.RootedPath {
+	return fsys.cachedRealpath(path, func(path tspath.RootedPath) tspath.RootedPath {
+		return vfs.RealpathWithParent(fsys.fs, path, realpath)
+	})
+}
+
+func (fsys *FS) cachedRealpath(path tspath.RootedPath, resolve func(tspath.RootedPath) tspath.RootedPath) tspath.RootedPath {
 	if fsys.enabled.Load() {
 		if ret, ok := fsys.realpathCache.Load(path); ok {
 			return ret
 		}
 	}
 
-	ret := fsys.fs.Realpath(path)
+	ret := resolve(path)
 
 	if fsys.enabled.Load() {
 		fsys.realpathCache.Store(path, ret)
@@ -140,6 +152,19 @@ func (fsys *FS) Stat(path tspath.RootedPath) vfs.FileInfo {
 
 func (fsys *FS) CaseSensitivity() tspath.CaseSensitivity {
 	return fsys.fs.CaseSensitivity()
+}
+
+func (fsys *FS) WatchPathComparer(directory string) (fswatch.PathComparer, error) {
+	if provider, ok := fsys.fs.(interface {
+		WatchPathComparer(directory string) (fswatch.PathComparer, error)
+	}); ok {
+		return provider.WatchPathComparer(directory)
+	}
+	return fswatch.PathComparer{}, nil
+}
+
+func (fsys *FS) WatchPathComparisonEnabled() bool {
+	return watchalias.Enabled(fsys.fs)
 }
 
 func (fsys *FS) WriteFile(path tspath.RootedFilePath, data string) error {

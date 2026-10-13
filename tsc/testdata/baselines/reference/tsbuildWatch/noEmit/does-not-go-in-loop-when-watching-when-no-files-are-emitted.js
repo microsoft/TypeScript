@@ -74,6 +74,7 @@ declare const console: { log(msg: any): void; };
 
 Watch Registrations::
 Directory watches::
+  /home/src/tslibs/TS/Lib
   /user/username/projects/myproject (recursive)
 tsconfig.json::
 SemanticDiagnostics::
@@ -104,6 +105,7 @@ Output::
 
 Watch Registrations::
 Directory watches::
+  /home/src/tslibs/TS/Lib
   /user/username/projects/myproject (recursive)
 tsconfig.json::
 SemanticDiagnostics::
@@ -135,6 +137,7 @@ Output::
 
 Watch Registrations::
 Directory watches::
+  /home/src/tslibs/TS/Lib
   /user/username/projects/myproject (recursive)
 tsconfig.json::
 SemanticDiagnostics::

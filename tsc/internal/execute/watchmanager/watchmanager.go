@@ -5,11 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"maps"
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/watchalias"
 )
 
 type watchedDir struct {
@@ -22,6 +25,16 @@ type dirWatchUpdate struct {
 	key       tspath.PathKey
 	dir       tspath.RootedDirectoryPath
 	recursive bool
+}
+
+type watchRequest struct {
+	dependency bool
+	directory  bool
+}
+
+type Changes struct {
+	watchalias.Matches
+	Overflow bool
 }
 
 // WatchManager manages fswatch directory watches, event accumulation,
@@ -38,6 +51,10 @@ type WatchManager struct {
 	watchedDirs     map[tspath.PathKey]*watchedDir
 	doCycleCh       chan struct{}
 	caseSensitivity tspath.CaseSensitivity
+	filesystem      vfs.FS
+	aliases         *watchalias.Index
+	resolvedPaths   map[string]string
+	registrations   map[string]watchRequest
 
 	// DebugLog receives verbose watch diagnostics when non-nil
 	DebugLog io.Writer
@@ -50,14 +67,25 @@ type WatchManager struct {
 	changedOverflow bool
 }
 
-func NewWatchManager(warnWriter io.Writer, dirExists func(tspath.RootedDirectoryPath) bool, caseSensitivity tspath.CaseSensitivity) *WatchManager {
+func NewWatchManager(warnWriter io.Writer, dirExists func(tspath.RootedDirectoryPath) bool, caseSensitivity tspath.CaseSensitivity, filesystem vfs.FS) *WatchManager {
 	return &WatchManager{
 		watchedDirs:     make(map[tspath.PathKey]*watchedDir),
 		doCycleCh:       make(chan struct{}, 1),
 		warnWriter:      warnWriter,
 		dirExists:       dirExists,
 		caseSensitivity: caseSensitivity,
+		filesystem:      filesystem,
 	}
+}
+
+func (wm *WatchManager) WatchFiles() []string {
+	files := make([]string, 0, len(wm.registrations))
+	for name, request := range wm.registrations {
+		if request.dependency {
+			files = append(files, name)
+		}
+	}
+	return files
 }
 
 func (wm *WatchManager) SetBackend(b WatchBackend) { wm.backend = b }
@@ -80,14 +108,70 @@ func (wm *WatchManager) Unlock() { wm.mu.Unlock() }
 
 func (wm *WatchManager) DoCycleCh() <-chan struct{} { return wm.doCycleCh }
 
-func (wm *WatchManager) DrainEvents() (changed map[tspath.RootedPath]fswatch.EventKind, overflow bool) {
+func (wm *WatchManager) DrainEvents() Changes {
 	wm.changedMu.Lock()
-	changed = wm.changedPaths
-	overflow = wm.changedOverflow
+	changed := wm.changedPaths
+	overflow := wm.changedOverflow
 	wm.changedPaths = nil
 	wm.changedOverflow = false
 	wm.changedMu.Unlock()
-	return
+	named := make(map[string]fswatch.EventKind, len(changed))
+	for path, kind := range changed {
+		named[path.AsString()] = kind
+	}
+	if wm.aliases != nil && len(named) != 0 {
+		return Changes{Matches: wm.aliases.Match(named), Overflow: overflow}
+	}
+	return Changes{Changes: named, Overflow: overflow || wm.aliases == nil && wm.registrations != nil}
+}
+
+// Realpath shares watch resolution between computing subscription directories
+// and registering aliases. Filesystems may authoritatively resolve a leaf using
+// its cached parent; others retain their full resolver.
+func (wm *WatchManager) Realpath(name string, filesystem vfs.FS) string {
+	if filesystem == nil {
+		filesystem = wm.filesystem
+	}
+	if filesystem == nil {
+		return name
+	}
+	if resolved := wm.resolvedPaths[name]; resolved != "" {
+		return resolved
+	}
+	if wm.resolvedPaths == nil {
+		wm.resolvedPaths = make(map[string]string)
+	}
+	resolved := vfs.RealpathWithParent(filesystem, tspath.RootedPathFromNormalized(name), func(parent tspath.RootedPath) tspath.RootedPath {
+		return tspath.RootedPathFromNormalized(wm.Realpath(parent.AsString(), filesystem))
+	}).AsString()
+	wm.resolvedPaths[name] = resolved
+	return resolved
+}
+
+// RefreshResolutions runs once under the cycle lock, after matching with the
+// old index and before any build decision. Publishing here also handles cycles
+// that subsequently return early without compiling or reconciling subscriptions.
+func (wm *WatchManager) RefreshResolutions(changes Changes) (bool, error) {
+	retargeted := false
+	if changes.Overflow {
+		wm.resolvedPaths = nil
+	} else {
+		// Empty paths mark stale entries. Invalidate all affected parents before
+		// resolving children; the old alias index retains the paths to compare.
+		for _, name := range changes.Affected {
+			wm.resolvedPaths[name] = ""
+		}
+		for _, name := range changes.Affected {
+			resolved := wm.Realpath(name, wm.filesystem)
+			if !wm.aliases.Covers(watchalias.Registration{Name: name, Realpath: resolved}) {
+				retargeted = true
+			}
+		}
+	}
+	if changes.Overflow || changes.NamespaceChanged || retargeted {
+		return retargeted, wm.rebuildAliases(wm.registrations, wm.filesystem)
+	}
+	return retargeted, nil
 }
 
 func (wm *WatchManager) ForceOverflow() {
@@ -243,9 +327,29 @@ func (wm *WatchManager) ResolveDesiredDirs(desiredDirs map[tspath.RootedDirector
 	return resolved
 }
 
-func (wm *WatchManager) ReconcileWatches(desiredDirs map[tspath.RootedDirectoryPath]bool) error {
+// logicalDirs retain directory aliases even when subscriptions use resolved paths.
+func (wm *WatchManager) ReconcileWatches(files []string, desiredDirs map[tspath.RootedDirectoryPath]bool, filesystem vfs.FS, logicalDirs ...string) error {
+	registrations := make(map[string]watchRequest, len(files)+len(desiredDirs)+len(logicalDirs))
+	for _, name := range files {
+		registrations[name] = watchRequest{dependency: true}
+	}
+	for dir := range desiredDirs {
+		name := dir.AsString()
+		request := registrations[name]
+		request.directory = true
+		registrations[name] = request
+	}
+	for _, name := range logicalDirs {
+		request := registrations[name]
+		request.directory = true
+		registrations[name] = request
+	}
+	var aliasErr error
+	if wm.aliases == nil || !maps.Equal(wm.registrations, registrations) {
+		aliasErr = wm.rebuildAliases(registrations, filesystem)
+	}
 	if wm.backend == nil {
-		return nil
+		return aliasErr
 	}
 
 	desiredByPath := make(map[tspath.PathKey]dirWatchUpdate, len(desiredDirs))
@@ -259,6 +363,7 @@ func (wm *WatchManager) ReconcileWatches(desiredDirs map[tspath.RootedDirectoryP
 		}
 	}
 
+	// Install watches even if alias indexing failed so later events can retry it.
 	var additions []dirWatchUpdate
 	var changes []dirWatchUpdate
 
@@ -289,7 +394,46 @@ func (wm *WatchManager) ReconcileWatches(desiredDirs map[tspath.RootedDirectoryP
 		},
 	)
 	additions = append(additions, changes...)
-	return wm.createDirWatches(additions)
+	return errors.Join(aliasErr, wm.createDirWatches(additions))
+}
+
+func (wm *WatchManager) rebuildAliases(registrations map[string]watchRequest, filesystem vfs.FS) error {
+	aliases := watchalias.New(wm.filesystem)
+	wm.registrations = registrations
+	register := func(name string, request watchRequest) error {
+		for {
+			registration := watchalias.Registration{
+				Name: name, Realpath: wm.Realpath(name, filesystem),
+				Dependency: request.dependency, Directory: request.directory,
+			}
+			if aliases.Covers(registration) {
+				break
+			}
+			if err := aliases.Register(registration); err != nil {
+				return err
+			}
+			parent := tspath.GetDirectoryPath(name)
+			if parent == name || parent == "" {
+				break
+			}
+			name = parent
+			request = watchRequest{directory: true}
+		}
+		return nil
+	}
+	for name, request := range registrations {
+		if err := register(name, request); err != nil {
+			wm.aliases = nil
+			return err
+		}
+	}
+	for name, resolved := range wm.resolvedPaths {
+		if !aliases.Covers(watchalias.Registration{Name: name, Realpath: resolved}) {
+			delete(wm.resolvedPaths, name)
+		}
+	}
+	wm.aliases = aliases
+	return nil
 }
 
 func (wm *WatchManager) createDirWatches(updates []dirWatchUpdate) error {

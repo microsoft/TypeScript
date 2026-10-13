@@ -326,7 +326,7 @@ func (o *Orchestrator) start(ctx context.Context, project string, onlyReferences
 		}
 		order = order[:len(order)-1]
 	}
-	result := o.buildOrCleanOrder(order)
+	result := o.buildOrCleanOrder(order, false)
 	if o.opts.Command.CompilerOptions.Watch.IsTrue() {
 		o.Watch(ctx)
 		result.Result.Watcher = o
@@ -481,8 +481,8 @@ func (o *Orchestrator) Watch(ctx context.Context) {
 	}
 
 	o.updateWatch()
-	desiredDirs := o.computeDesiredWatches()
-	if err := o.wm.ReconcileWatches(desiredDirs); err != nil {
+	watchFiles, logicalDirs, desiredDirs := o.computeDesiredWatches()
+	if err := o.wm.ReconcileWatches(watchFiles, desiredDirs, o.host.FS(), logicalDirs...); err != nil {
 		fmt.Fprintf(o.opts.Sys.Writer(), "%v\n", err)
 		o.wm.ForceOverflow()
 	}
@@ -512,10 +512,10 @@ func (o *Orchestrator) resetCaches() {
 	o.host.configTimes = collections.SyncMap[tspath.PathKey, time.Duration]{}
 }
 
-func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedPath]fswatch.EventKind, needsConfigUpdate, needsUpdate *atomic.Bool) {
+func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[string]fswatch.EventKind, needsConfigUpdate, needsUpdate *atomic.Bool) {
 	normalizedPaths := make(map[tspath.PathKey]fswatch.EventKind, len(changedPaths))
 	for eventPath, kind := range changedPaths {
-		normalizedPaths[o.caseSensitivity.PathKey(eventPath)] = kind
+		normalizedPaths[o.caseSensitivity.PathKey(tspath.RootedPathFromNormalized(eventPath))] = kind
 	}
 
 	for i := range o.order {
@@ -615,14 +615,14 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedP
 					}
 				}
 				for packageJson := range bi.buildInfo.GetPackageJsons(buildInfoDir) {
-					if o.packageJsonLookupChanged(packageJson, normalizedPaths) {
+					if o.watchFileChanged(packageJson, normalizedPaths) {
 						task.resetStatus()
 						needsUpdate.Store(true)
 						break
 					}
 				}
 				for packageJson := range bi.buildInfo.GetMissingPackageJsons(buildInfoDir) {
-					if o.packageJsonLookupChanged(packageJson, normalizedPaths) {
+					if o.watchFileChanged(packageJson, normalizedPaths) {
 						task.resetStatus()
 						needsUpdate.Store(true)
 						break
@@ -630,7 +630,7 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedP
 				}
 			}
 			for _, packageJson := range task.packageJsons {
-				if o.packageJsonLookupChanged(packageJson, normalizedPaths) {
+				if o.watchFileChanged(packageJson, normalizedPaths) {
 					task.resetStatus()
 					needsUpdate.Store(true)
 					break
@@ -652,8 +652,9 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedP
 
 	if !needsUpdate.Load() {
 		for eventPath := range changedPaths {
-			if o.host.FS().DirectoryExists(tspath.RootedDirectoryPathFromPath(eventPath)) {
-				if o.wm.IsPathUnderWatch(eventPath) {
+			rootedPath := tspath.RootedPathFromNormalized(eventPath)
+			if o.host.FS().DirectoryExists(tspath.RootedDirectoryPathFromPath(rootedPath)) {
+				if o.wm.IsPathUnderWatch(rootedPath) {
 					o.rangeTask(func(path tspath.PathKey, task *BuildTask) {
 						task.resetStatus()
 						task.built = make(chan struct{})
@@ -667,29 +668,82 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedP
 	}
 }
 
-func (o *Orchestrator) packageJsonLookupChanged(packageJson tspath.RootedFilePath, changedPaths map[tspath.PathKey]fswatch.EventKind) bool {
-	packageJsonPath := o.caseSensitivity.PathKey(tspath.RootedPath(packageJson))
-	if _, changed := changedPaths[packageJsonPath]; changed {
-		return true
-	}
-	for changedPath, kind := range changedPaths {
-		if kind == fswatch.EventDelete && changedPath.ContainsPath(packageJsonPath) {
-			return true
-		}
-	}
-	return false
+func (o *Orchestrator) watchFileChanged(fileName tspath.RootedFilePath, changedPaths map[tspath.PathKey]fswatch.EventKind) bool {
+	_, changed := changedPaths[o.caseSensitivity.PathKey(tspath.RootedPath(fileName))]
+	return changed
 }
 
-func (o *Orchestrator) computeDesiredWatches() map[tspath.RootedDirectoryPath]bool {
+func (o *Orchestrator) computeDesiredWatches() ([]string, []string, map[tspath.RootedDirectoryPath]bool) {
 	desiredDirs := watchmanager.NewDirWatchSet(o.caseSensitivity)
+
+	realpath := func(p tspath.RootedPath) tspath.RootedPath {
+		return tspath.RootedPathFromNormalized(o.wm.Realpath(p.AsString(), o.host.FS()))
+	}
+	var watchFiles []string
+	var logicalDirs []string
 
 	for i := range o.order {
 		task := o.order[i]
+		watchFiles = append(watchFiles, task.config.AsPath().AsString())
+		for _, p := range task.seenFiles {
+			watchFiles = append(watchFiles, p.AsString())
+		}
+		// Buildinfo and resolved lookups store real (canonicalized) paths, but
+		// the original read may have gone through a symlink such as
+		// node_modules. Index every seen name by its real path so that
+		// looking it up by its resolved identity still finds all of the
+		// logical spellings observed for alias fanout.
+		originals := make(map[tspath.PathKey][]tspath.RootedPath, len(task.seenFiles))
+		for _, name := range task.seenFiles {
+			key := o.caseSensitivity.PathKey(realpath(name))
+			originals[key] = append(originals[key], name)
+		}
+		originalNames := func(name tspath.RootedPath) []tspath.RootedPath {
+			hasAliasIn := func(names []tspath.RootedPath, self tspath.RootedPath) bool {
+				for _, alias := range names {
+					if alias != self {
+						return true
+					}
+				}
+				return false
+			}
+			if names := originals[o.caseSensitivity.PathKey(name)]; len(names) != 0 && hasAliasIn(names, name) {
+				return names
+			}
+			// The exact path was never observed directly (e.g. a nested
+			// package.json probe that doesn't exist), but one of its
+			// ancestors may have been observed through a symlinked alias
+			// (such as node_modules). Splice the logical ancestor spelling
+			// back onto the unresolved suffix.
+			suffix := ""
+			current := name
+			for {
+				parent := current.Directory().AsPath()
+				if parent == "" || parent == current {
+					break
+				}
+				suffix = "/" + current.BaseName() + suffix
+				if names := originals[o.caseSensitivity.PathKey(parent)]; len(names) != 0 && hasAliasIn(names, parent) {
+					results := make([]tspath.RootedPath, 0, len(names))
+					for _, alias := range names {
+						results = append(results, tspath.RootedPathFromNormalized(alias.AsString()+suffix))
+					}
+					return results
+				}
+				current = parent
+			}
+			if names := originals[o.caseSensitivity.PathKey(name)]; len(names) != 0 {
+				return names
+			}
+			return []tspath.RootedPath{name}
+		}
 
 		// Watch config file directory
 		configDir := task.config.Directory()
-		realConfigDir := tspath.RootedDirectoryPathFromPath(o.host.FS().Realpath(configDir.AsPath()))
+		logicalDirs = append(logicalDirs, configDir.AsPath().AsString())
+		realConfigDir := tspath.RootedDirectoryPathFromPath(realpath(configDir.AsPath()))
 		desiredDirs.Set(realConfigDir, false)
+		desiredDirs.Set(realpath(task.config.AsPath()).Directory(), false)
 
 		if task.resolved == nil {
 			continue
@@ -697,26 +751,51 @@ func (o *Orchestrator) computeDesiredWatches() map[tspath.RootedDirectoryPath]bo
 
 		// Extended config file directories
 		for _, cfgPath := range task.resolved.ExtendedSourceFiles() {
-			realPath := o.host.FS().Realpath(cfgPath.AsPath())
+			watchFiles = append(watchFiles, cfgPath.AsPath().AsString())
+			realPath := realpath(cfgPath.AsPath())
 			desiredDirs.Set(realPath.Directory(), false)
 		}
 
 		// Wildcard directories from tsconfig
 		for dir, recursive := range task.resolved.WildcardDirectories() {
-			realDir := tspath.RootedDirectoryPathFromPath(o.host.FS().Realpath(dir.AsPath()))
+			watchFiles = append(watchFiles, dir.AsPath().AsString())
+			logicalDirs = append(logicalDirs, dir.AsPath().AsString())
+			realDir := tspath.RootedDirectoryPathFromPath(realpath(dir.AsPath()))
 			desiredDirs.Set(realDir, recursive)
 		}
 
 		// Input file directories not already covered
 		for _, fileName := range task.resolved.FileNames() {
+			watchFiles = append(watchFiles, fileName.AsPath().AsString())
 			o.addProgramFileWatchDir(desiredDirs, fileName.Directory())
+			o.addProgramFileWatchDir(desiredDirs, realpath(fileName.AsPath()).Directory())
 			for _, mapper := range task.resolved.ContentMappers() {
 				if mapper.PackageDirectory == "" || mapper.ContributionID != "" {
 					continue
 				}
+				watchFiles = append(watchFiles, mapper.PackageDirectory.ResolveFile("package.json").AsPath().AsString())
 				dir := mapper.PackageDirectory
 				if !desiredDirs.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
 					desiredDirs.Set(dir, false)
+				}
+			}
+		}
+
+		// Directories of seen files not already covered. Root files are always
+		// watched, including a logical parent (e.g. a symlinked directory such
+		// as "links/pkg"), so that retargeting the link itself is observed;
+		// other lookups are bounded by CanWatchDirectory.
+		rootFiles := collections.NewSetFromItems(core.Map(task.resolved.FileNames(), func(fileName tspath.RootedFilePath) tspath.PathKey {
+			return o.caseSensitivity.PathKey(fileName.AsPath())
+		})...)
+		for _, p := range task.seenFiles {
+			isRoot := rootFiles.Has(o.caseSensitivity.PathKey(p))
+			for _, name := range []tspath.RootedPath{p, realpath(p)} {
+				dir := name.Directory()
+				if isRoot {
+					o.addProgramFileWatchDir(desiredDirs, dir)
+				} else {
+					o.addWatchDir(desiredDirs, dir)
 				}
 			}
 		}
@@ -726,7 +805,8 @@ func (o *Orchestrator) computeDesiredWatches() map[tspath.RootedDirectoryPath]bo
 				task.contentMapperProjectErr = err
 			}
 			for _, fileName := range watchedFiles {
-				absPath := o.host.FS().Realpath(fileName.AsPath())
+				watchFiles = append(watchFiles, fileName.AsPath().AsString())
+				absPath := realpath(fileName.AsPath())
 				dir := absPath.Directory()
 				if !desiredDirs.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
 					desiredDirs.Set(dir, false)
@@ -744,26 +824,40 @@ func (o *Orchestrator) computeDesiredWatches() map[tspath.RootedDirectoryPath]bo
 				return o.caseSensitivity.PathKey(fileName.AsPath())
 			})...)
 			for _, fileName := range bi.buildInfo.FileNames {
-				absPath := o.host.FS().Realpath(incremental.ResolveBuildInfoFileName(fileName, buildInfoDir, o.host.DefaultLibraryPath()).AsPath())
-				fp := o.caseSensitivity.PathKey(absPath)
-				if roots.Has(fp) {
-					continue
+				resolved := incremental.ResolveBuildInfoFileName(fileName, buildInfoDir, o.host.DefaultLibraryPath())
+				for _, original := range originalNames(resolved.AsPath()) {
+					watchFiles = append(watchFiles, original.AsString())
+					absPath := realpath(original)
+					fp := o.caseSensitivity.PathKey(absPath)
+					if roots.Has(fp) {
+						continue
+					}
+					o.addProgramFileWatchDir(desiredDirs, original.Directory())
+					o.addProgramFileWatchDir(desiredDirs, absPath.Directory())
 				}
-				o.addProgramFileWatchDir(desiredDirs, absPath.Directory())
 			}
 			for packageJson := range bi.buildInfo.GetPackageJsons(buildInfoDir) {
-				o.addPackageJsonWatchDirs(desiredDirs, packageJson)
+				for _, original := range originalNames(packageJson.AsPath()) {
+					watchFiles = append(watchFiles, original.AsString())
+					o.addPackageJsonWatchDirs(desiredDirs, tspath.RootedFilePathFromPath(original))
+				}
 			}
 			for packageJson := range bi.buildInfo.GetMissingPackageJsons(buildInfoDir) {
-				o.addPackageJsonWatchDirs(desiredDirs, packageJson)
+				for _, original := range originalNames(packageJson.AsPath()) {
+					watchFiles = append(watchFiles, original.AsString())
+					o.addPackageJsonWatchDirs(desiredDirs, tspath.RootedFilePathFromPath(original))
+				}
 			}
 		}
 		for _, packageJson := range task.packageJsons {
-			o.addPackageJsonWatchDirs(desiredDirs, packageJson)
+			for _, original := range originalNames(packageJson.AsPath()) {
+				watchFiles = append(watchFiles, original.AsString())
+				o.addPackageJsonWatchDirs(desiredDirs, tspath.RootedFilePathFromPath(original))
+			}
 		}
 	}
 
-	return o.wm.ResolveDesiredDirs(desiredDirs.Dirs())
+	return watchFiles, logicalDirs, o.wm.ResolveDesiredDirs(desiredDirs.Dirs())
 }
 
 func (o *Orchestrator) addWatchDir(desiredDirs *watchmanager.DirWatchSet, dir tspath.RootedDirectoryPath) {
@@ -792,7 +886,17 @@ func (o *Orchestrator) addPackageJsonWatchDirs(desiredDirs *watchmanager.DirWatc
 		dirs = append(dirs, parent)
 		if parent.BaseName() == "node_modules" {
 			foundNodeModules = true
-			if grandparent := parent.AsPath().Directory(); grandparent != "" && grandparent != parent {
+			// If the package root under node_modules is a symlink (e.g. a
+			// monorepo package linked in), watch its real resolved parent
+			// instead, since that's where the actual files live. Otherwise
+			// fall back to watching the grandparent of node_modules, to
+			// notice node_modules itself being replaced.
+			realPath := tspath.RootedPathFromNormalized(o.wm.Realpath(current.AsPath().AsString(), o.host.FS()))
+			if realPath != current.AsPath() {
+				if realParent := realPath.Directory(); realParent != "" {
+					dirs = append(dirs, realParent)
+				}
+			} else if grandparent := parent.AsPath().Directory(); grandparent != "" && grandparent != parent {
 				dirs = append(dirs, grandparent)
 			}
 			break
@@ -813,7 +917,13 @@ func (o *Orchestrator) DoCycle() {
 	o.wm.Lock()
 	defer o.wm.Unlock()
 
-	changedPaths, overflow := o.wm.DrainEvents()
+	changes := o.wm.DrainEvents()
+	realpathsChanged, err := o.wm.RefreshResolutions(changes)
+	changedPaths, overflow := changes.Changes, changes.Overflow
+	if err != nil {
+		fmt.Fprintf(o.opts.Sys.Writer(), "%v\n", err)
+		overflow = true
+	}
 	hasEvents := len(changedPaths) > 0 || overflow
 
 	if !hasEvents {
@@ -826,8 +936,11 @@ func (o *Orchestrator) DoCycle() {
 	var needsConfigUpdate atomic.Bool
 	var needsUpdate atomic.Bool
 
-	if overflow {
-		// Overflow: reset all tasks to force a full rebuild.
+	if realpathsChanged || overflow {
+		o.resetCaches()
+	}
+	if overflow || realpathsChanged {
+		// A new namespace can replace inputs without changing their timestamps.
 		o.rangeTask(func(path tspath.PathKey, task *BuildTask) {
 			task.resetConfig(o, path)
 			task.built = make(chan struct{})
@@ -851,10 +964,10 @@ func (o *Orchestrator) DoCycle() {
 		o.GenerateGraphReusingOldTasks()
 	}
 
-	o.buildOrClean()
+	o.buildOrClean(realpathsChanged || overflow)
 	o.updateWatch()
-	desiredDirs := o.computeDesiredWatches()
-	if err := o.wm.ReconcileWatches(desiredDirs); err != nil {
+	watchFiles, logicalDirs, desiredDirs := o.computeDesiredWatches()
+	if err := o.wm.ReconcileWatches(watchFiles, desiredDirs, o.host.FS(), logicalDirs...); err != nil {
 		fmt.Fprintf(o.opts.Sys.Writer(), "%v\n", err)
 		// Mark overflow so the next event triggers a full rebuild
 		o.wm.ForceOverflow()
@@ -862,11 +975,11 @@ func (o *Orchestrator) DoCycle() {
 	o.resetCaches()
 }
 
-func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
-	return o.buildOrCleanOrder(o.order).Result
+func (o *Orchestrator) buildOrClean(force bool) tsc.CommandLineResult {
+	return o.buildOrCleanOrder(o.order, force).Result
 }
 
-func (o *Orchestrator) buildOrCleanOrder(order []*BuildTask) *OrchestratorResult {
+func (o *Orchestrator) buildOrCleanOrder(order []*BuildTask, force bool) *OrchestratorResult {
 	if !o.opts.Command.BuildOptions.Clean.IsTrue() && o.opts.Command.BuildOptions.Verbose.IsTrue() {
 		o.createBuilderStatusReporter(nil)(ast.NewCompilerDiagnostic(
 			diagnostics.Projects_in_this_build_Colon_0,
@@ -894,7 +1007,7 @@ func (o *Orchestrator) buildOrCleanOrder(order []*BuildTask) *OrchestratorResult
 			}
 		}()
 		o.rangeTasks(order, func(path tspath.PathKey, task *BuildTask) {
-			o.buildOrCleanProject(task, path)
+			o.buildOrCleanProject(task, path, force)
 		})
 		<-reported
 	} else {
@@ -948,12 +1061,12 @@ func (o *Orchestrator) rangeTasks(order []*BuildTask, f func(path tspath.PathKey
 	}
 }
 
-func (o *Orchestrator) buildOrCleanProject(task *BuildTask, path tspath.PathKey) {
+func (o *Orchestrator) buildOrCleanProject(task *BuildTask, path tspath.PathKey, force bool) {
 	task.result = &taskResult{}
 	task.result.reportStatus = o.createBuilderStatusReporter(task)
 	task.result.diagnosticReporter = o.createDiagnosticReporter(task)
 	if !o.opts.Command.BuildOptions.Clean.IsTrue() {
-		task.buildProject(o, path)
+		task.buildProject(o, path, force)
 	} else {
 		task.cleanProject(o, path)
 	}
@@ -983,7 +1096,7 @@ func (o *Orchestrator) createDiagnosticReporter(task *BuildTask) tsc.DiagnosticR
 func NewOrchestrator(opts Options) *Orchestrator {
 	currentDirectory := opts.Sys.GetCurrentDirectory()
 	caseSensitivity := opts.Sys.FS().CaseSensitivity()
-	wm := watchmanager.NewWatchManager(opts.Sys.Writer(), opts.Sys.FS().DirectoryExists, caseSensitivity)
+	wm := watchmanager.NewWatchManager(opts.Sys.Writer(), opts.Sys.FS().DirectoryExists, caseSensitivity, opts.Sys.FS())
 	orchestrator := &Orchestrator{
 		opts:             opts,
 		currentDirectory: currentDirectory,

@@ -123,6 +123,7 @@ Directory watches::
   /home/src/projects/configs/second
   /home/src/projects/myproject
   /home/src/projects/myproject/types
+  /home/src/tslibs/TS/Lib
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
@@ -183,6 +184,7 @@ Directory watches::
   /home/src/projects/configs/second
   /home/src/projects/myproject
   /home/src/projects/myproject/types
+  /home/src/tslibs/TS/Lib
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts

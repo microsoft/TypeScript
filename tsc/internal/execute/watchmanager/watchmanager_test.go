@@ -1,18 +1,314 @@
 package watchmanager
 
 import (
+	"fmt"
 	"io"
+	"io/fs"
+	"slices"
+	"strconv"
 	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/cachedvfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+type eventOnlyFS struct {
+	vfs.FS
+	caseSensitive bool
+}
+
+type countingWatchFS struct {
+	vfs.FS
+	realpathCalls int
+	entriesCalls  int
+}
+
+type comparerWatchFS struct {
+	*countingWatchFS
+	comparerCalls int
+	comparerError error
+}
+
+func (f *comparerWatchFS) WatchPathComparer(string) (fswatch.PathComparer, error) {
+	f.comparerCalls++
+	return fswatch.PathComparer{}, f.comparerError
+}
+
+func TestUnregisteredEventsRetainWatchAliases(t *testing.T) {
+	t.Parallel()
+	filesystem := &comparerWatchFS{countingWatchFS: &countingWatchFS{
+		FS: vfstest.FromMap(map[string]string{"/repo/src/file.ts": ""}, tspath.CaseSensitive),
+	}}
+	wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem.CaseSensitivity(), filesystem)
+	assert.NilError(t, wm.ReconcileWatches([]string{"/repo/src/file.ts"}, map[tspath.RootedDirectoryPath]bool{"/repo": true}, nil))
+	aliases := wm.aliases
+	calls, resolves := filesystem.comparerCalls, filesystem.realpathCalls
+	for _, name := range []string{"/repo/src/file.js", "/repo/new/file.ts", "/unrelated"} {
+		for _, kind := range []fswatch.EventKind{fswatch.EventUpdate, fswatch.EventDelete} {
+			wm.onWatchEvents([]WatchEvent{{Path: tspath.RootedPathFromAbsolute(name), Kind: kind}}, nil)
+			changes := wm.DrainEvents()
+			assert.Equal(t, changes.Changes[name], kind, "unknown events must still reach the compiler")
+			retargeted, err := wm.RefreshResolutions(changes)
+			assert.NilError(t, err)
+			assert.Assert(t, !retargeted)
+			assert.Assert(t, wm.aliases == aliases)
+			assert.Equal(t, filesystem.comparerCalls, calls)
+			assert.Equal(t, filesystem.realpathCalls, resolves)
+		}
+	}
+	wm.onWatchEvents([]WatchEvent{{Path: tspath.RootedPathFromAbsolute("/repo/src"), Kind: fswatch.EventUpdate}}, nil)
+	_, err := wm.RefreshResolutions(wm.DrainEvents())
+	assert.NilError(t, err)
+	assert.Assert(t, wm.aliases != aliases, "known directory events must refresh comparison state")
+}
+
+func TestWatchAliasRecoveryDoesNotRetainOverflow(t *testing.T) {
+	t.Parallel()
+	for _, explicitOverflow := range []bool{false, true} {
+		t.Run(strconv.FormatBool(explicitOverflow), func(t *testing.T) {
+			t.Parallel()
+			filesystem := &comparerWatchFS{countingWatchFS: &countingWatchFS{
+				FS: vfstest.FromMap(map[string]string{"/repo/src/file.ts": ""}, tspath.CaseSensitive),
+			}}
+			wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem.CaseSensitivity(), filesystem)
+			names := []string{"/repo/src/file.ts"}
+			assert.NilError(t, wm.ReconcileWatches(names, nil, nil))
+			filesystem.comparerError = fs.ErrPermission
+			wm.onWatchEvents([]WatchEvent{{Path: tspath.RootedPathFromAbsolute("/repo/src"), Kind: fswatch.EventUpdate}}, nil)
+			_, err := wm.RefreshResolutions(wm.DrainEvents())
+			assert.ErrorIs(t, err, fs.ErrPermission)
+			assert.Assert(t, wm.aliases == nil)
+			if explicitOverflow {
+				wm.ForceOverflow()
+			}
+			filesystem.comparerError = nil
+			assert.NilError(t, wm.ReconcileWatches(names, nil, nil))
+			assert.Equal(t, wm.DrainEvents().Overflow, explicitOverflow)
+
+			filesystem.comparerError = fs.ErrPermission
+			wm.onWatchEvents([]WatchEvent{{Path: tspath.RootedPathFromAbsolute("/repo/src"), Kind: fswatch.EventUpdate}}, nil)
+			_, err = wm.RefreshResolutions(wm.DrainEvents())
+			assert.ErrorIs(t, err, fs.ErrPermission)
+			for range 2 {
+				assert.Assert(t, wm.DrainEvents().Overflow, "an unrecovered failure must keep requesting overflow")
+			}
+		})
+	}
+}
+
+func (f *countingWatchFS) Realpath(path tspath.RootedPath) tspath.RootedPath {
+	f.realpathCalls++
+	return f.FS.Realpath(path)
+}
+
+func (f *countingWatchFS) GetAccessibleEntries(path tspath.RootedDirectoryPath) vfs.Entries {
+	f.entriesCalls++
+	entries := f.FS.GetAccessibleEntries(path)
+	// This fixture contains no symlinks.
+	entries.Symlinks = map[string]struct{}{}
+	return entries
+}
+
+func TestWatchGenerationReusesUnchangedResolution(t *testing.T) {
+	t.Parallel()
+	files := make(map[string]string)
+	var names []string
+	for i := range 1000 {
+		name := fmt.Sprintf("/repo/src/file%d.ts", i)
+		names = append(names, name)
+		files[name] = ""
+	}
+	filesystem := &countingWatchFS{FS: vfstest.FromMap(files, tspath.CaseSensitive)}
+	cached := cachedvfs.From(filesystem)
+	for _, name := range names {
+		cached.Realpath(tspath.RootedPathFromAbsolute(name))
+	}
+	initialCalls := filesystem.realpathCalls
+	wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem.CaseSensitivity(), filesystem)
+	assert.NilError(t, wm.ReconcileWatches(names, map[tspath.RootedDirectoryPath]bool{"/repo": true}, cached))
+	assert.Equal(t, filesystem.entriesCalls, 0, "resolution does not require directory listings")
+	assert.Assert(t, filesystem.realpathCalls-initialCalls < 10, "reuse the build's authoritative resolutions")
+	calls, scans := filesystem.realpathCalls, filesystem.entriesCalls
+	aliases := wm.aliases
+	assert.NilError(t, wm.ReconcileWatches(names, map[tspath.RootedDirectoryPath]bool{"/repo": true}, nil))
+	assert.Equal(t, filesystem.realpathCalls, calls)
+	assert.Equal(t, filesystem.entriesCalls, scans)
+	assert.Assert(t, wm.aliases == aliases, "unchanged generation must retain its alias index")
+	resolved := wm.resolvedPaths[names[0]]
+	wm.onWatchEvents([]WatchEvent{{Path: tspath.RootedPathFromAbsolute(names[0]), Kind: fswatch.EventUpdate}}, nil)
+	changes := wm.DrainEvents()
+	assert.Equal(t, filesystem.realpathCalls, calls, "events must not resolve paths")
+	assert.Equal(t, filesystem.entriesCalls, scans, "events must not scan directories")
+	assert.Equal(t, wm.resolvedPaths[names[0]], resolved, "draining must not mutate cached resolutions")
+	assert.Assert(t, wm.aliases == aliases, "draining must not replace the alias index")
+	retargeted, err := wm.RefreshResolutions(changes)
+	assert.NilError(t, err)
+	assert.Assert(t, !retargeted)
+	assert.NilError(t, wm.ReconcileWatches(names, map[tspath.RootedDirectoryPath]bool{"/repo": true}, nil))
+	assert.Assert(t, filesystem.realpathCalls-calls < 10, "one changed leaf must not resolve all unchanged leaves")
+	assert.Assert(t, filesystem.entriesCalls-scans < 10, "one changed leaf must not scan all directories")
+	assert.Assert(t, wm.aliases == aliases, "ordinary file updates must retain their alias index")
+	reordered := slices.Clone(names)
+	slices.Reverse(reordered)
+	reordered = append(reordered, names[0])
+	assert.NilError(t, wm.ReconcileWatches(reordered, map[tspath.RootedDirectoryPath]bool{"/repo": true}, nil))
+	assert.Assert(t, wm.aliases == aliases, "order and duplicate observations do not change the generation")
+	reordered[0] = names[0]
+	assert.NilError(t, wm.ReconcileWatches(reordered, map[tspath.RootedDirectoryPath]bool{"/repo": true}, nil))
+	assert.Assert(t, wm.aliases != aliases, "replacing a dependency with a duplicate must rebuild the generation")
+}
+
+func TestWatchGenerationReusesRegistrationsWhenRecursionChanges(t *testing.T) {
+	t.Parallel()
+	filesystem := &countingWatchFS{FS: vfstest.FromMap(map[string]string{"/repo/src/file.ts": ""}, tspath.CaseSensitive)}
+	wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem.CaseSensitivity(), filesystem)
+	names := []string{"/repo/src/file.ts"}
+	assert.NilError(t, wm.ReconcileWatches(names, map[tspath.RootedDirectoryPath]bool{"/repo/src": false}, nil))
+	aliases := wm.aliases
+	calls, scans := filesystem.realpathCalls, filesystem.entriesCalls
+	for _, recursive := range []bool{true, false} {
+		assert.NilError(t, wm.ReconcileWatches(names, map[tspath.RootedDirectoryPath]bool{"/repo/src": recursive}, nil))
+		assert.Equal(t, len(wm.registrations), 2)
+		assert.Equal(t, wm.registrations["/repo/src"], watchRequest{directory: true})
+		assert.Equal(t, wm.registrations["/repo/src/file.ts"], watchRequest{dependency: true})
+		assert.Assert(t, wm.aliases == aliases, "subscription recursion does not change the alias generation")
+		assert.Equal(t, filesystem.realpathCalls, calls)
+		assert.Equal(t, filesystem.entriesCalls, scans)
+	}
+}
+
+func TestWatchGenerationMissingLeafUpdate(t *testing.T) {
+	t.Parallel()
+	filesystem := &countingWatchFS{FS: vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)}
+	wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem.CaseSensitivity(), filesystem)
+	names := []string{"/repo/missing.ts"}
+	assert.NilError(t, wm.ReconcileWatches(names, map[tspath.RootedDirectoryPath]bool{"/repo": true}, nil))
+	assert.Equal(t, filesystem.entriesCalls, 0, "resolution must not enumerate directories")
+	aliases := wm.aliases
+	wm.onWatchEvents([]WatchEvent{{Path: tspath.RootedPathFromAbsolute("/repo/missing.ts"), Kind: fswatch.EventUpdate}}, nil)
+	changes := wm.DrainEvents()
+	retargeted, err := wm.RefreshResolutions(changes)
+	assert.NilError(t, err)
+	assert.Assert(t, !retargeted)
+	assert.NilError(t, wm.ReconcileWatches(names, map[tspath.RootedDirectoryPath]bool{"/repo": true}, nil))
+	assert.Assert(t, wm.aliases == aliases, "an unchanged missing resolution must retain its index")
+}
+
+func (f *eventOnlyFS) CaseSensitivity() tspath.CaseSensitivity {
+	if f.caseSensitive {
+		return tspath.CaseSensitive
+	}
+	return tspath.CaseInsensitive
+}
+
+func TestWatchDirectoryDeletionExpandsTrackedSubtree(t *testing.T) {
+	t.Parallel()
+	for _, caseSensitive := range []bool{false, true} {
+		t.Run(strconv.FormatBool(caseSensitive), func(t *testing.T) {
+			t.Parallel()
+			filesystem := vfstest.FromMap(map[string]string{}, caseSensitivity(caseSensitive))
+			wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem.CaseSensitivity(), filesystem)
+			wm.Lock()
+			defer wm.Unlock()
+			files := []string{"/repo/src/a.ts", "/repo/src/nested/b.ts", "/repo/src-other/c.ts", "/repo/SRC/other.ts", "/repo/ſ/d.ts"}
+			for i := range 10000 {
+				files = append(files, fmt.Sprintf("/unrelated/%d/file.ts", i))
+			}
+			assert.NilError(t, wm.ReconcileWatches(files, map[tspath.RootedDirectoryPath]bool{"/repo": true}, nil))
+			// Event processing must not query the filesystem after deletion.
+			wm.filesystem = &eventOnlyFS{caseSensitive: caseSensitive}
+			wm.onWatchEvents([]WatchEvent{
+				{Path: tspath.RootedPathFromAbsolute("/repo/src"), Kind: fswatch.EventDelete},
+				{Path: tspath.RootedPathFromAbsolute("/repo/src/nested"), Kind: fswatch.EventDelete},
+				{Path: tspath.RootedPathFromAbsolute("/repo/src/a.ts"), Kind: fswatch.EventUpdate},
+				{Path: tspath.RootedPathFromAbsolute("/repo/s"), Kind: fswatch.EventDelete},
+				{Path: tspath.RootedPathFromAbsolute("/unknown"), Kind: fswatch.EventDelete},
+			}, nil)
+			changes := wm.DrainEvents()
+			assert.Assert(t, !changes.Overflow)
+			expected := map[string]fswatch.EventKind{
+				"/repo/src":             fswatch.EventDelete,
+				"/repo/src/nested":      fswatch.EventDelete,
+				"/repo/src/a.ts":        fswatch.EventDelete,
+				"/repo/src/nested/b.ts": fswatch.EventDelete,
+				"/repo/s":               fswatch.EventDelete,
+				"/unknown":              fswatch.EventDelete,
+			}
+			if !caseSensitive {
+				expected["/repo/SRC/other.ts"] = fswatch.EventDelete
+			}
+			assert.DeepEqual(t, changes.Changes, expected)
+			wm.filesystem = filesystem
+			_, err := wm.RefreshResolutions(changes)
+			assert.NilError(t, err)
+			assert.NilError(t, wm.ReconcileWatches([]string{"/repo/new.ts"}, map[tspath.RootedDirectoryPath]bool{"/repo": true}, nil))
+			wm.onWatchEvents([]WatchEvent{{Path: tspath.RootedPathFromAbsolute("/repo/src"), Kind: fswatch.EventDelete}}, nil)
+			changes = wm.DrainEvents()
+			assert.Assert(t, !changes.Overflow)
+			assert.DeepEqual(t, changes.Changes, map[string]fswatch.EventKind{"/repo/src": fswatch.EventDelete})
+		})
+	}
+}
+
+func TestWatchAliasesDoNotFoldMockPaths(t *testing.T) {
+	t.Parallel()
+	for _, caseSensitive := range []bool{false, true} {
+		filesystem := vfstest.FromMap(map[string]string{}, caseSensitivity(caseSensitive))
+		wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem.CaseSensitivity(), filesystem)
+		wm.Lock()
+		assert.NilError(t, wm.ReconcileWatches([]string{"/repo/ſ.ts", "/repo/e\u0301.ts"}, map[tspath.RootedDirectoryPath]bool{"/repo": true}, nil))
+		wm.onWatchEvents([]WatchEvent{
+			{Path: tspath.RootedPathFromAbsolute("/repo/s.ts"), Kind: fswatch.EventUpdate},
+			{Path: tspath.RootedPathFromAbsolute("/repo/é.ts"), Kind: fswatch.EventDelete},
+			{Path: tspath.RootedPathFromAbsolute("/repo/new.ts"), Kind: fswatch.EventUpdate},
+		}, nil)
+		changes := wm.DrainEvents()
+		wm.Unlock()
+		assert.Assert(t, !changes.Overflow)
+		assert.DeepEqual(t, changes.Changes, map[string]fswatch.EventKind{
+			"/repo/s.ts":   fswatch.EventUpdate,
+			"/repo/é.ts":   fswatch.EventDelete,
+			"/repo/new.ts": fswatch.EventUpdate,
+		})
+	}
+}
+
+func TestWatchLogicalDirectoryDescendants(t *testing.T) {
+	t.Parallel()
+	filesystem := vfstest.FromMap(map[string]any{
+		"/repo/linked":          vfstest.Symlink("/physical"),
+		"/repo/file.ts":         vfstest.Symlink("/physical/existing.ts"),
+		"/physical/.keep":       "",
+		"/physical/existing.ts": "",
+	}, tspath.CaseSensitive)
+	wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem.CaseSensitivity(), filesystem)
+	assert.NilError(t, wm.ReconcileWatches([]string{"/repo/linked", "/repo/file.ts"}, map[tspath.RootedDirectoryPath]bool{"/physical": true}, nil, "/repo/linked"))
+	for _, kind := range []fswatch.EventKind{fswatch.EventUpdate, fswatch.EventDelete} {
+		wm.onWatchEvents([]WatchEvent{{Path: tspath.RootedPathFromAbsolute("/physical/nested/new.ts"), Kind: kind}}, nil)
+		changes := wm.DrainEvents()
+		assert.DeepEqual(t, changes.Changes, map[string]fswatch.EventKind{
+			"/physical/nested/new.ts":    kind,
+			"/repo/linked/nested/new.ts": kind,
+		})
+	}
+}
 
 var (
 	caseSensitiveOpts   = tspath.CaseSensitive
 	caseInsensitiveOpts = tspath.CaseInsensitive
 )
+
+func caseSensitivity(sensitive bool) tspath.CaseSensitivity {
+	if sensitive {
+		return tspath.CaseSensitive
+	}
+	return tspath.CaseInsensitive
+}
 
 // TestDirWatchSetCoverage checks the core coverage rules: a recursive watch
 // covers itself and all descendants, while a non-recursive watch covers only
@@ -148,7 +444,7 @@ func TestResolveDesiredDirsShallowProject(t *testing.T) {
 		"/": true, "/app": true, "/app/src": true, "/srv": true, "/srv/app": true,
 		"/home": true, "/home/user": true, "/home/user/project": true,
 	}
-	wm := NewWatchManager(io.Discard, func(dir tspath.RootedDirectoryPath) bool { return existing[dir] }, caseSensitiveOpts)
+	wm := NewWatchManager(io.Discard, func(dir tspath.RootedDirectoryPath) bool { return existing[dir] }, caseSensitiveOpts, nil)
 
 	resolved := wm.ResolveDesiredDirs(map[tspath.RootedDirectoryPath]bool{
 		"/app":               true,
@@ -174,7 +470,7 @@ func TestResolveDesiredDirsAncestorFallback(t *testing.T) {
 		"/": true, "/app": true, "/home": true, "/home/user": true,
 		"/repo": true, "/repo/a": true, "/repo/a/b": true, "/repo/a/b/c": true,
 	}
-	wm := NewWatchManager(io.Discard, func(dir tspath.RootedDirectoryPath) bool { return existing[dir] }, caseSensitiveOpts)
+	wm := NewWatchManager(io.Discard, func(dir tspath.RootedDirectoryPath) bool { return existing[dir] }, caseSensitiveOpts, nil)
 
 	resolved := wm.ResolveDesiredDirs(map[tspath.RootedDirectoryPath]bool{
 		"/app/missing":             true, // ancestor /app is too shallow
@@ -191,7 +487,7 @@ func TestResolveDesiredDirsAncestorFallback(t *testing.T) {
 func TestResolveDesiredDirsSkipsNonDiskPaths(t *testing.T) {
 	t.Parallel()
 
-	wm := NewWatchManager(io.Discard, func(dir tspath.RootedDirectoryPath) bool { return true }, caseSensitiveOpts)
+	wm := NewWatchManager(io.Discard, func(dir tspath.RootedDirectoryPath) bool { return true }, caseSensitiveOpts, nil)
 
 	resolved := wm.ResolveDesiredDirs(map[tspath.RootedDirectoryPath]bool{
 		"bundled:///libs": false,
@@ -206,7 +502,7 @@ func TestResolveDesiredDirsDeduplicatesCaseInsensitiveAncestors(t *testing.T) {
 
 	manager := NewWatchManager(io.Discard, func(dir tspath.RootedDirectoryPath) bool {
 		return strings.EqualFold(dir.AsString(), "/home/repo/project/src")
-	}, caseInsensitiveOpts)
+	}, caseInsensitiveOpts, nil)
 	resolved := manager.ResolveDesiredDirs(map[tspath.RootedDirectoryPath]bool{
 		"/home/Repo/Project/Src/missing/a": false,
 		"/home/repo/project/src/missing/b": true,
@@ -235,12 +531,12 @@ func (b *recordingWatchBackend) WatchDirectories(requests []WatchDirectoryReques
 func TestReconcileWatchesIgnoresCaseOnlySpellingChanges(t *testing.T) {
 	t.Parallel()
 
-	manager := NewWatchManager(io.Discard, func(tspath.RootedDirectoryPath) bool { return true }, caseInsensitiveOpts)
+	manager := NewWatchManager(io.Discard, func(tspath.RootedDirectoryPath) bool { return true }, caseInsensitiveOpts, nil)
 	backend := &recordingWatchBackend{}
 	manager.SetBackend(backend)
 
-	assert.NilError(t, manager.ReconcileWatches(map[tspath.RootedDirectoryPath]bool{"/Repo": false}))
-	assert.NilError(t, manager.ReconcileWatches(map[tspath.RootedDirectoryPath]bool{"/repo": false}))
+	assert.NilError(t, manager.ReconcileWatches(nil, map[tspath.RootedDirectoryPath]bool{"/Repo": false}, nil))
+	assert.NilError(t, manager.ReconcileWatches(nil, map[tspath.RootedDirectoryPath]bool{"/repo": false}, nil))
 
 	assert.Equal(t, len(backend.requests), 1)
 	assert.Equal(t, backend.requests[0].Dir.AsString(), "/Repo")
