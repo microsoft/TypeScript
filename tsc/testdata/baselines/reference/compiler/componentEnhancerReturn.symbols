@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/componentEnhancerReturn.ts] ////
+
+=== componentEnhancerReturn.ts ===
+type Component = ((props: number) => number) | (new (props: number) => object);
+>Component : Symbol(Component, Decl(componentEnhancerReturn.ts, 0, 0))
+>props : Symbol(props, Decl(componentEnhancerReturn.ts, 0, 19))
+>props : Symbol(props, Decl(componentEnhancerReturn.ts, 0, 53))
+
+type App = Component & { getInitialProps?: () => object };
+>App : Symbol(App, Decl(componentEnhancerReturn.ts, 0, 79))
+>Component : Symbol(Component, Decl(componentEnhancerReturn.ts, 0, 0))
+>getInitialProps : Symbol(getInitialProps, Decl(componentEnhancerReturn.ts, 1, 24))
+
+declare function render(enhance: (app: App) => App): void;
+>render : Symbol(render, Decl(componentEnhancerReturn.ts, 1, 58))
+>enhance : Symbol(enhance, Decl(componentEnhancerReturn.ts, 2, 24))
+>app : Symbol(app, Decl(componentEnhancerReturn.ts, 2, 34))
+>App : Symbol(App, Decl(componentEnhancerReturn.ts, 0, 79))
+>App : Symbol(App, Decl(componentEnhancerReturn.ts, 0, 79))
+
+render(app => props => props);
+>render : Symbol(render, Decl(componentEnhancerReturn.ts, 1, 58))
+>app : Symbol(app, Decl(componentEnhancerReturn.ts, 3, 7))
+>props : Symbol(props, Decl(componentEnhancerReturn.ts, 3, 13))
+>props : Symbol(props, Decl(componentEnhancerReturn.ts, 3, 13))
+
+interface RenderPlugin { enhance(app: Component): (props: number) => number }
+>RenderPlugin : Symbol(RenderPlugin, Decl(componentEnhancerReturn.ts, 3, 30))
+>enhance : Symbol(RenderPlugin.enhance, Decl(componentEnhancerReturn.ts, 5, 24))
+>app : Symbol(app, Decl(componentEnhancerReturn.ts, 5, 33))
+>Component : Symbol(Component, Decl(componentEnhancerReturn.ts, 0, 0))
+>props : Symbol(props, Decl(componentEnhancerReturn.ts, 5, 51))
+
+declare const plugins: RenderPlugin[];
+>plugins : Symbol(plugins, Decl(componentEnhancerReturn.ts, 6, 13))
+>RenderPlugin : Symbol(RenderPlugin, Decl(componentEnhancerReturn.ts, 3, 30))
+
+render(app => plugins.reduce((result, plugin) => plugin.enhance(result), app));
+>render : Symbol(render, Decl(componentEnhancerReturn.ts, 1, 58))
+>app : Symbol(app, Decl(componentEnhancerReturn.ts, 7, 7))
+>plugins.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>plugins : Symbol(plugins, Decl(componentEnhancerReturn.ts, 6, 13))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(componentEnhancerReturn.ts, 7, 30))
+>plugin : Symbol(plugin, Decl(componentEnhancerReturn.ts, 7, 37))
+>plugin.enhance : Symbol(RenderPlugin.enhance, Decl(componentEnhancerReturn.ts, 5, 24))
+>plugin : Symbol(plugin, Decl(componentEnhancerReturn.ts, 7, 37))
+>enhance : Symbol(RenderPlugin.enhance, Decl(componentEnhancerReturn.ts, 5, 24))
+>result : Symbol(result, Decl(componentEnhancerReturn.ts, 7, 30))
+>app : Symbol(app, Decl(componentEnhancerReturn.ts, 7, 7))
+
