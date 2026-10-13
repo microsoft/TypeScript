@@ -1,0 +1,72 @@
+[
+    {
+        "build": "base",
+        "wallMs": {
+            "median": null,
+            "min": null,
+            "max": null
+        },
+        "userMs": {
+            "median": null,
+            "min": null,
+            "max": null
+        },
+        "systemMs": {
+            "median": null,
+            "min": null,
+            "max": null
+        },
+        "serverCpuMs": {
+            "median": null,
+            "min": null,
+            "max": null
+        },
+        "maxRSSMiB": {
+            "median": null,
+            "min": null,
+            "max": null
+        }
+    },
+    {
+        "build": "p2",
+        "wallMs": {
+            "median": null,
+            "min": null,
+            "max": null
+        },
+        "userMs": {
+            "median": null,
+            "min": null,
+            "max": null
+        },
+        "systemMs": {
+            "median": null,
+            "min": null,
+            "max": null
+        },
+        "serverCpuMs": {
+            "median": null,
+            "min": null,
+            "max": null
+        },
+        "maxRSSMiB": {
+            "median": null,
+            "min": null,
+            "max": null
+        },
+        "wallMsPairedDelta": {
+            "median": null,
+            "min": null,
+            "max": null,
+            "negative": 0,
+            "n": 0
+        },
+        "userMsPairedDelta": {
+            "median": null,
+            "min": null,
+            "max": null,
+            "negative": 0,
+            "n": 0
+        }
+    }
+]

@@ -1,0 +1,504 @@
+From eb124fe8ccad3156655e34b7f9a4bc1e9863ad89 Mon Sep 17 00:00:00 2001
+From: Andrew Branch <andrewbranch@users.noreply.github.com>
+Date: Tue, 13 Oct 2026 17:59:02 +0000
+Subject: [PATCH 6/6] Poll for sync API messages briefly before blocking
+
+Most synchronous API round trips are dominated by the scheduler wakeup latency
+of blocking pipe reads rather than by the work done on either side. The sync
+client now polls its non-blocking stdout pipe for up to
+responsePollMicroseconds (default 100) before switching back to a blocking
+read. The server can likewise poll for the next request when the client sets
+serverRequestPollMicroseconds (--requestPollMicroseconds, default 0), at a
+larger CPU cost since it polls while the client works between requests.
+
+Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+---
+ packages/typescript/src/api/options.ts        | 16 ++++
+ packages/typescript/src/api/sync/client.ts    |  4 +-
+ packages/typescript/src/api/syncChannel.ts    | 56 +++++++++++-
+ packages/typescript/test/sync/polling.test.ts | 51 +++++++++++
+ tsc/cmd/tsc/api.go                            | 18 ++--
+ tsc/internal/api/server.go                    | 10 ++-
+ tsc/internal/ipc/pollreader_unix.go           | 88 +++++++++++++++++++
+ tsc/internal/ipc/pollreader_unix_test.go      | 54 ++++++++++++
+ tsc/internal/ipc/pollreader_windows.go        | 11 +++
+ 9 files changed, 298 insertions(+), 10 deletions(-)
+ create mode 100644 packages/typescript/test/sync/polling.test.ts
+ create mode 100644 tsc/internal/ipc/pollreader_unix.go
+ create mode 100644 tsc/internal/ipc/pollreader_unix_test.go
+ create mode 100644 tsc/internal/ipc/pollreader_windows.go
+
+diff --git a/packages/typescript/src/api/options.ts b/packages/typescript/src/api/options.ts
+index 2e8954c83a..79216318ce 100644
+--- a/packages/typescript/src/api/options.ts
++++ b/packages/typescript/src/api/options.ts
+@@ -35,6 +35,21 @@ export interface ClientSpawnOptions {
+      * {@link API.getTimingInfo}.
+      */
+     collectTiming?: boolean | undefined;
++    /**
++     * Synchronous API only. How long, in microseconds, the client polls for
++     * each response before blocking. Polling avoids the operating system's
++     * wakeup latency when the server answers quickly, at the cost of some CPU
++     * time while waiting. Defaults to 100; 0 disables polling. Ignored on
++     * Windows.
++     */
++    responsePollMicroseconds?: number | undefined;
++    /**
++     * Synchronous API only. How long, in microseconds, the server polls for
++     * the next request before blocking. This reduces round-trip latency further
++     * but makes the server spend CPU time while the client works between
++     * requests. Defaults to 0 (disabled). Ignored on Windows.
++     */
++    serverRequestPollMicroseconds?: number | undefined;
+ }
+ 
+ export type ClientOptions = ClientSocketOptions | ClientSpawnOptions;
+@@ -54,6 +69,7 @@ export function getAPIProcessArgs(options: ClientSpawnOptions, async: boolean):
+     args.push(`--useCaseSensitiveFileNames=${options.useCaseSensitiveFileNames ?? inferUseCaseSensitiveFileNames()}`);
+     if (options.runExternalCode) args.push("--runExternalCode");
+     if (options.collectTiming) args.push("--timing");
++    if (!async && options.serverRequestPollMicroseconds) args.push(`--requestPollMicroseconds=${options.serverRequestPollMicroseconds}`);
+     return args;
+ }
+ 
+diff --git a/packages/typescript/src/api/sync/client.ts b/packages/typescript/src/api/sync/client.ts
+index 42255e9513..38282b6dac 100644
+--- a/packages/typescript/src/api/sync/client.ts
++++ b/packages/typescript/src/api/sync/client.ts
+@@ -28,6 +28,8 @@ import {
+ 
+ export type { ClientOptions, ClientSocketOptions, ClientSpawnOptions };
+ 
++const defaultResponsePollMicroseconds = 100;
++
+ export class Client {
+     private channel: SyncRpcChannel;
+     private encoder = new TextEncoder();
+@@ -52,7 +54,7 @@ export class Client {
+             this.timing = new TimingCollector();
+         }
+ 
+-        const channel = new SyncRpcChannel(resolveExePath(options), args, collectTiming);
++        const channel = new SyncRpcChannel(resolveExePath(options), args, collectTiming, options.responsePollMicroseconds ?? defaultResponsePollMicroseconds);
+         this.channel = channel;
+ 
+         if (options.fs) {
+diff --git a/packages/typescript/src/api/syncChannel.ts b/packages/typescript/src/api/syncChannel.ts
+index 6672c5aa79..f3a9a4e532 100644
+--- a/packages/typescript/src/api/syncChannel.ts
++++ b/packages/typescript/src/api/syncChannel.ts
+@@ -105,6 +105,11 @@ process.on("exit", () => {
+ export class SyncRpcChannel {
+     private child: ChildProcess;
+     private readFd: number;
++    // When positive, response reads poll a non-blocking pipe for this many
++    // milliseconds before switching it back to blocking mode.
++    private pollMs = 0;
++    private setReadBlocking: ((value: boolean) => void) | undefined;
++    private readBlocking = true;
+     private writeFd: number;
+     private pipeFd: number | undefined;
+     private callbacks = new Map<string, (name: string, payload: string) => string>();
+@@ -137,7 +142,12 @@ export class SyncRpcChannel {
+     // Write buffer – assembles entire tuples for a single writeSync.
+     private writeBuf = Buffer.allocUnsafe(65536);
+ 
+-    constructor(exe: string, args: string[], collectTiming = false) {
++    /**
++     * @param pollMicroseconds How long to poll for each response before
++     * blocking (POSIX only). Polling avoids the scheduler wakeup latency of a
++     * blocking read when the child answers quickly, at the cost of CPU time.
++     */
++    constructor(exe: string, args: string[], collectTiming = false, pollMicroseconds = 0) {
+         this.collectTiming = collectTiming;
+         const isWindows = process.platform === "win32";
+ 
+@@ -204,6 +214,10 @@ export class SyncRpcChannel {
+             // blocking mode ensures readSync blocks properly until data
+             // arrives, matching the behavior of the native libsyncrpc.
+             stdout._handle.setBlocking?.(true);
++            if (pollMicroseconds > 0 && stdout._handle.setBlocking) {
++                this.pollMs = pollMicroseconds / 1000;
++                this.setReadBlocking = value => stdout._handle.setBlocking!(value);
++            }
+             stdin._handle.setBlocking?.(true);
+ 
+             // Prevent Node's event-loop from reading stdout or keeping the
+@@ -539,6 +553,7 @@ export class SyncRpcChannel {
+     private fillReadBuffer(): void {
+         this.readBufPos = 0;
+         this.readBufLen = 0;
++        if (this.pollMs > 0 && this.pollFillReadBuffer()) return;
+         for (;;) {
+             try {
+                 const n = readSync(this.readFd, this.readBuf, 0, this.readBuf.length, null);
+@@ -558,6 +573,41 @@ export class SyncRpcChannel {
+         }
+     }
+ 
++    /**
++     * Poll the non-blocking pipe until data arrives or the poll window
++     * elapses. Returns false, leaving the pipe in blocking mode, on timeout.
++     */
++    private pollFillReadBuffer(): boolean {
++        if (this.readBlocking) {
++            this.setReadBlocking!(false);
++            this.readBlocking = false;
++        }
++        // Each empty poll throws EAGAIN; skip capturing stack traces for them.
++        const stackTraceLimit = Error.stackTraceLimit;
++        Error.stackTraceLimit = 0;
++        try {
++            const deadline = performance.now() + this.pollMs;
++            do {
++                try {
++                    const n = readSync(this.readFd, this.readBuf, 0, this.readBuf.length, null);
++                    if (n === 0) throw this.eofError();
++                    this.readBufLen = n;
++                    return true;
++                }
++                catch (e: unknown) {
++                    if (!(e instanceof Error && (e as NodeJS.ErrnoException).code === "EAGAIN")) throw e;
++                }
++            }
++            while (performance.now() < deadline);
++        }
++        finally {
++            Error.stackTraceLimit = stackTraceLimit;
++        }
++        this.setReadBlocking!(true);
++        this.readBlocking = true;
++        return false;
++    }
++
+     /**
+      * Synchronously read exactly `length` bytes into `buffer`.
+      * Serves from the internal read-ahead buffer first; for large reads
+@@ -578,6 +628,10 @@ export class SyncRpcChannel {
+             else if (length - pos >= this.readBuf.length) {
+                 // Remaining data is larger than read buffer; read directly
+                 // into the target to avoid unnecessary copying.
++                if (!this.readBlocking) {
++                    this.setReadBlocking!(true);
++                    this.readBlocking = true;
++                }
+                 try {
+                     const n = readSync(this.readFd, buffer, pos, length - pos, null);
+                     if (n === 0) {
+diff --git a/packages/typescript/test/sync/polling.test.ts b/packages/typescript/test/sync/polling.test.ts
+new file mode 100644
+index 0000000000..ba338bbcd1
+--- /dev/null
++++ b/packages/typescript/test/sync/polling.test.ts
+@@ -0,0 +1,51 @@
++import { API } from "@typescript/typescript/sync";
++import assert from "node:assert";
++import {
++    describe,
++    test,
++} from "node:test";
++import { fileURLToPath } from "node:url";
++import { createVirtualFileSystem } from "../testUtils.ts";
++
++interface EchoClient {
++    echo(payload: string): string;
++}
++
++const cwd = fileURLToPath(new URL("../../../../", import.meta.url).toString());
++const sleep = new Int32Array(new SharedArrayBuffer(4));
++
++describe("sync transport polling", () => {
++    for (const responsePollMicroseconds of [0, 100]) {
++        for (const serverRequestPollMicroseconds of [0, 50]) {
++            test(`client ${responsePollMicroseconds}us, server ${serverRequestPollMicroseconds}us`, () => {
++                const fs = createVirtualFileSystem({ "/tsconfig.json": "{}", "/index.ts": "export const x = 1;" });
++                const readFile = fs.readFile!;
++                using api = new API({
++                    cwd,
++                    responsePollMicroseconds,
++                    serverRequestPollMicroseconds,
++                    fs: {
++                        ...fs,
++                        readFile: fileName => {
++                            // Respond well after any poll window so reads must fall back to blocking.
++                            Atomics.wait(sleep, 0, 0, 5);
++                            return readFile(fileName);
++                        },
++                    },
++                });
++                const client = (api as unknown as { client: EchoClient; }).client;
++                for (const payload of ["x", "y".repeat(1000), "z".repeat(200_000)]) {
++                    assert.equal(client.echo(payload), payload);
++                }
++
++                const snapshot = api.createSnapshot({ openFiles: ["/index.ts"] });
++                const project = snapshot.getProjects()[0];
++                const sourceFile = project.program.getSourceFile("/index.ts");
++                assert.ok(sourceFile);
++                const type = project.checker.getTypeAtLocation(sourceFile.statements[0]);
++                assert.ok(type);
++                assert.equal(client.echo("after"), "after");
++            });
++        }
++    }
++});
+diff --git a/tsc/cmd/tsc/api.go b/tsc/cmd/tsc/api.go
+index 71cfe9e944..f195e2f830 100644
+--- a/tsc/cmd/tsc/api.go
++++ b/tsc/cmd/tsc/api.go
+@@ -8,6 +8,7 @@ import (
+ 	"os/signal"
+ 	"strings"
+ 	"syscall"
++	"time"
+ 
+ 	"github.com/microsoft/TypeScript/tsc/internal/api"
+ 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+@@ -17,13 +18,14 @@ import (
+ )
+ 
+ type apiFlags struct {
+-	cwd             string
+-	pipePath        string
+-	callbacks       string
+-	caseSensitive   bool
+-	async           bool
+-	timing          bool
+-	runExternalCode bool
++	cwd                     string
++	pipePath                string
++	callbacks               string
++	caseSensitive           bool
++	async                   bool
++	timing                  bool
++	runExternalCode         bool
++	requestPollMicroseconds int
+ }
+ 
+ func parseAPIFlags(args []string) (apiFlags, error) {
+@@ -36,6 +38,7 @@ func parseAPIFlags(args []string) (apiFlags, error) {
+ 	flags.BoolVar(&result.async, "async", false, "use JSON-RPC protocol instead of MessagePack (for async API)")
+ 	flags.BoolVar(&result.timing, "timing", false, "collect per-request server processing time, folded into the client's timing snapshot")
+ 	flags.BoolVar(&result.runExternalCode, "runExternalCode", false, "allow projects to execute configured external plugins")
++	flags.IntVar(&result.requestPollMicroseconds, "requestPollMicroseconds", 0, "poll for each request for up to this many microseconds before blocking (sync STDIO API only)")
+ 	if err := flags.Parse(args); err != nil {
+ 		return apiFlags{}, err
+ 	}
+@@ -66,6 +69,7 @@ func runAPI(args []string) int {
+ 		Async:                     flags.async,
+ 		CollectTiming:             flags.timing,
+ 		RunExternalCode:           flags.runExternalCode,
++		RequestPollWindow:         time.Duration(flags.requestPollMicroseconds) * time.Microsecond,
+ 		ContentMapperSpawner:      system,
+ 	}
+ 	if flags.pipePath != "" {
+diff --git a/tsc/internal/api/server.go b/tsc/internal/api/server.go
+index 3a0996ed79..797f5bec9a 100644
+--- a/tsc/internal/api/server.go
++++ b/tsc/internal/api/server.go
+@@ -4,6 +4,7 @@ import (
+ 	"context"
+ 	"fmt"
+ 	"io"
++	"time"
+ 
+ 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+ 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+@@ -38,6 +39,9 @@ type StdioServerOptions struct {
+ 	// left unchanged; the client folds this data into its own timing snapshot
+ 	// on demand via getServerTiming / resetServerTiming requests.
+ 	CollectTiming bool
++	// RequestPollWindow, when positive, makes the synchronous STDIO server poll for each
++	// request for up to this long before blocking, trading CPU time for lower latency.
++	RequestPollWindow time.Duration
+ 	// RunExternalCode allows configured content mappers to execute.
+ 	RunExternalCode      bool
+ 	ContentMapperSpawner contentmapper.Spawner
+@@ -72,7 +76,11 @@ func (s *StdioServer) Run(ctx context.Context) error {
+ 		defer t.Close()
+ 		transport = t
+ 	} else {
+-		t := ipc.NewStdioTransport(s.options.In, s.options.Out)
++		in := s.options.In
++		if !s.options.Async {
++			in = ipc.NewPollingReader(in, s.options.RequestPollWindow)
++		}
++		t := ipc.NewStdioTransport(in, s.options.Out)
+ 		defer t.Close()
+ 		transport = t
+ 	}
+diff --git a/tsc/internal/ipc/pollreader_unix.go b/tsc/internal/ipc/pollreader_unix.go
+new file mode 100644
+index 0000000000..dac64b6640
+--- /dev/null
++++ b/tsc/internal/ipc/pollreader_unix.go
+@@ -0,0 +1,88 @@
++//go:build !windows
++
++package ipc
++
++import (
++	"errors"
++	"io"
++	"syscall"
++	"time"
++
++	"golang.org/x/sys/unix"
++)
++
++// NewPollingReader wraps r so that reads poll a non-blocking pipe or socket for up to window
++// before falling back to a blocking wait. Synchronous clients typically send their next
++// request within tens of microseconds of receiving a response; polling for that long avoids
++// the scheduler wakeup latency of a blocking read. It returns r unchanged when window is not
++// positive or r is not backed by a pipe or socket file descriptor.
++func NewPollingReader(r io.ReadCloser, window time.Duration) io.ReadCloser {
++	conn, ok := r.(syscall.Conn)
++	if !ok || window <= 0 {
++		return r
++	}
++	raw, err := conn.SyscallConn()
++	if err != nil {
++		return r
++	}
++	fd := -1
++	if err := raw.Control(func(descriptor uintptr) { fd = int(descriptor) }); err != nil || fd < 0 {
++		return r
++	}
++	var stat unix.Stat_t
++	if err := unix.Fstat(fd, &stat); err != nil {
++		return r
++	}
++	if mode := stat.Mode & unix.S_IFMT; mode != unix.S_IFIFO && mode != unix.S_IFSOCK {
++		return r
++	}
++	// All further reads go through raw syscalls below, so switching the descriptor to
++	// non-blocking mode does not affect r's own reads.
++	if err := unix.SetNonblock(fd, true); err != nil {
++		return r
++	}
++	return &pollingReader{closer: r, fd: fd, window: window}
++}
++
++type pollingReader struct {
++	closer io.Closer
++	fd     int
++	window time.Duration
++}
++
++func (p *pollingReader) Read(b []byte) (int, error) {
++	if len(b) == 0 {
++		return 0, nil
++	}
++	var deadline time.Time
++	for {
++		n, err := unix.Read(p.fd, b)
++		switch {
++		case err == nil:
++			if n == 0 {
++				return 0, io.EOF
++			}
++			return n, nil
++		case errors.Is(err, unix.EINTR):
++			continue
++		case !errors.Is(err, unix.EAGAIN):
++			return 0, err
++		}
++		now := time.Now()
++		if deadline.IsZero() {
++			deadline = now.Add(p.window)
++			continue
++		}
++		if now.Before(deadline) {
++			continue
++		}
++		fds := []unix.PollFd{{Fd: int32(p.fd), Events: unix.POLLIN}}
++		if _, err := unix.Poll(fds, -1); err != nil && !errors.Is(err, unix.EINTR) {
++			return 0, err
++		}
++	}
++}
++
++func (p *pollingReader) Close() error {
++	return p.closer.Close()
++}
+diff --git a/tsc/internal/ipc/pollreader_unix_test.go b/tsc/internal/ipc/pollreader_unix_test.go
+new file mode 100644
+index 0000000000..09d4e2040f
+--- /dev/null
++++ b/tsc/internal/ipc/pollreader_unix_test.go
+@@ -0,0 +1,54 @@
++//go:build !windows
++
++package ipc
++
++import (
++	"io"
++	"os"
++	"testing"
++	"time"
++
++	"gotest.tools/v3/assert"
++)
++
++func TestPollingReader(t *testing.T) {
++	t.Parallel()
++
++	t.Run("returns readers unchanged when polling is disabled", func(t *testing.T) {
++		t.Parallel()
++		r, w, err := os.Pipe()
++		assert.NilError(t, err)
++		defer w.Close()
++		assert.Equal(t, NewPollingReader(r, 0), io.ReadCloser(r))
++		r.Close()
++	})
++
++	t.Run("reads data that arrives during and after the poll window", func(t *testing.T) {
++		t.Parallel()
++		r, w, err := os.Pipe()
++		assert.NilError(t, err)
++		reader := NewPollingReader(r, 50*time.Microsecond)
++		defer reader.Close()
++		assert.Assert(t, reader != io.ReadCloser(r))
++
++		buf := make([]byte, 16)
++		_, err = w.WriteString("now")
++		assert.NilError(t, err)
++		n, err := reader.Read(buf)
++		assert.NilError(t, err)
++		assert.Equal(t, string(buf[:n]), "now")
++
++		// Arrives long after the poll window, so the read must block.
++		go func() {
++			time.Sleep(20 * time.Millisecond)
++			_, _ = w.WriteString("later")
++			w.Close()
++		}()
++		n, err = reader.Read(buf)
++		assert.NilError(t, err)
++		assert.Equal(t, string(buf[:n]), "later")
++
++		_, err = reader.Read(buf)
++		assert.Equal(t, err, io.EOF)
++	})
++}
+diff --git a/tsc/internal/ipc/pollreader_windows.go b/tsc/internal/ipc/pollreader_windows.go
+new file mode 100644
+index 0000000000..92280b0291
+--- /dev/null
++++ b/tsc/internal/ipc/pollreader_windows.go
+@@ -0,0 +1,11 @@
++package ipc
++
++import (
++	"io"
++	"time"
++)
++
++// NewPollingReader returns r unchanged; polling reads are only implemented for POSIX pipes.
++func NewPollingReader(r io.ReadCloser, window time.Duration) io.ReadCloser {
++	return r
++}
+-- 
+2.55.0
+

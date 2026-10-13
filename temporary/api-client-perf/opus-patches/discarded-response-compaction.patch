@@ -1,0 +1,158 @@
+diff --git a/packages/typescript/src/api/async/api.ts b/packages/typescript/src/api/async/api.ts
+index c450fb523f..25f385f59f 100644
+--- a/packages/typescript/src/api/async/api.ts
++++ b/packages/typescript/src/api/async/api.ts
+@@ -1236,7 +1236,7 @@ class SnapshotObjectRegistry {
+     }
+ 
+     addProjectRegistry(registry: ProjectObjectRegistry): void {
+-        this.projectRegistries.set(registry.project.id, registry);
++        this.projectRegistries.set(registry.project.handle, registry);
+     }
+ 
+     getOrCreateSymbol(data: SymbolResponse): Symbol {
+@@ -3294,7 +3294,12 @@ export class Symbol {
+         // A file-owned symbol has no canonical project; its declarations resolve through its file.
+         return this.storage.kind === SymbolOwnerKind.Snapshot
+             ? new NodeHandle<Declaration>(handle, this.storage.registry.project)
+-            : new NodeHandle<Declaration>(handle, undefined, this.storage.owner);
++            : new NodeHandle<Declaration>(
++                // File-owned declarations are in the owning file, so the server omits its path.
++                handle.indexOf(".") === handle.lastIndexOf(".") ? `${handle}.${this.storage.owner.record.descriptor.path}` : handle,
++                undefined,
++                this.storage.owner,
++            );
+     }
+ 
+     async getParent(): Promise<Symbol | undefined> {
+diff --git a/packages/typescript/src/api/proto.generated.ts b/packages/typescript/src/api/proto.generated.ts
+index 7bde80665e..2b4f6aa897 100644
+--- a/packages/typescript/src/api/proto.generated.ts
++++ b/packages/typescript/src/api/proto.generated.ts
+@@ -1124,7 +1124,8 @@ export interface ProfileResult {
+ }
+ 
+ export interface SourceFileDescriptor {
+-    fileName: RootedFilePath;
++    /** FileName is omitted on the wire when it equals Path. */
++    fileName?: RootedFilePath | undefined;
+     path: PathKey;
+     contentHash: string;
+     parseOptionsKey: string;
+diff --git a/packages/typescript/src/api/proto.ts b/packages/typescript/src/api/proto.ts
+index 1cf9a8a7ab..f2aea4a2ec 100644
+--- a/packages/typescript/src/api/proto.ts
++++ b/packages/typescript/src/api/proto.ts
+@@ -47,6 +47,8 @@ export function validateSymbolOwner(owner: ProtocolSymbolOwner): asserts owner i
+             if (!owner.file || owner.snapshot !== undefined || owner.project !== undefined) {
+                 throw new Error("Invalid file symbol owner");
+             }
++            // The server omits a file name that is equal to the file's path.
++            owner.file.fileName ??= owner.file.path as string as NonNullable<SourceFileDescriptor["fileName"]>;
+             return;
+         case SymbolOwnerKind.Snapshot:
+             if (owner.file !== undefined || owner.snapshot === undefined || owner.project === undefined) {
+diff --git a/packages/typescript/src/api/sync/api.ts b/packages/typescript/src/api/sync/api.ts
+index 989065a7f1..4da4a2ec44 100644
+--- a/packages/typescript/src/api/sync/api.ts
++++ b/packages/typescript/src/api/sync/api.ts
+@@ -1968,7 +1968,7 @@ class SnapshotObjectRegistry {
+     }
+ 
+     addProjectRegistry(registry: ProjectObjectRegistry): void {
+-        this.projectRegistries.set(registry.project.id, registry);
++        this.projectRegistries.set(registry.project.handle, registry);
+     }
+ 
+     getOrCreateSymbol(data: SymbolResponse): Symbol {
+@@ -6721,7 +6721,12 @@ export class Symbol {
+         // A file-owned symbol has no canonical project; its declarations resolve through its file.
+         return this.storage.kind === SymbolOwnerKind.Snapshot
+             ? new NodeHandle<Declaration>(handle, this.storage.registry.project)
+-            : new NodeHandle<Declaration>(handle, undefined, this.storage.owner);
++            : new NodeHandle<Declaration>(
++                // File-owned declarations are in the owning file, so the server omits its path.
++                handle.indexOf(".") === handle.lastIndexOf(".") ? `${handle}.${this.storage.owner.record.descriptor.path}` : handle,
++                undefined,
++                this.storage.owner,
++            );
+     }
+ 
+     get getParent(): {
+diff --git a/tsc/internal/api/proto.go b/tsc/internal/api/proto.go
+index de128db876..dff1e5355a 100644
+--- a/tsc/internal/api/proto.go
++++ b/tsc/internal/api/proto.go
+@@ -928,7 +928,8 @@ type ReleaseSourceFileParams struct {
+ }
+ 
+ type SourceFileDescriptor struct {
+-	FileName        tspath.RootedFilePath `json:"fileName"`
++	// FileName is omitted on the wire when it equals Path.
++	FileName        tspath.RootedFilePath `json:"fileName,omitzero"`
+ 	Path            tspath.PathKey        `json:"path"`
+ 	ContentHash     string                `json:"contentHash"`
+ 	ParseOptionsKey string                `json:"parseOptionsKey"`
+@@ -936,6 +937,34 @@ type SourceFileDescriptor struct {
+ 	NodeID          string                `json:"nodeId"`
+ }
+ 
++// sourceFileDescriptorWire is SourceFileDescriptor without its JSON methods.
++type sourceFileDescriptorWire SourceFileDescriptor
++
++var (
++	_ json.MarshalerTo     = SourceFileDescriptor{}
++	_ json.UnmarshalerFrom = (*SourceFileDescriptor)(nil)
++)
++
++func (d SourceFileDescriptor) MarshalJSONTo(enc *json.Encoder) error {
++	wire := sourceFileDescriptorWire(d)
++	if string(wire.FileName) == string(wire.Path) {
++		wire.FileName = ""
++	}
++	return json.MarshalEncode(enc, &wire)
++}
++
++func (d *SourceFileDescriptor) UnmarshalJSONFrom(dec *json.Decoder) error {
++	var wire sourceFileDescriptorWire
++	if err := json.UnmarshalDecode(dec, &wire); err != nil {
++		return err
++	}
++	if wire.FileName == "" {
++		wire.FileName = tspath.RootedFilePath(wire.Path)
++	}
++	*d = SourceFileDescriptor(wire)
++	return nil
++}
++
+ type RetainSourceFileParams struct {
+ 	File SourceFileDescriptor `json:"file"`
+ }
+diff --git a/tsc/internal/api/session.go b/tsc/internal/api/session.go
+index 4bd117cdff..8f9ebbf36c 100644
+--- a/tsc/internal/api/session.go
++++ b/tsc/internal/api/session.go
+@@ -232,7 +232,7 @@ func (sd *snapshotData) newSymbolResponse(symbol *ast.Symbol, canonicalProject p
+ 		Id:       id,
+ 		Kind:     SymbolOwnerKindSnapshot,
+ 		Snapshot: sd.handle,
+-		Project:  project,
++		Project:  projectHandles.handleIDFor(project),
+ 	}
+ 	return buildSymbolResponse(symbol, reference, nil)
+ }
+@@ -288,9 +288,14 @@ func newSymbolReference(symbol *ast.Symbol) *CompactSymbolReference {
+ 	return reference
+ }
+ 
++// symbolNodeHandleFrom creates a declaration handle for a symbol response. Declarations of a
++// file-owned symbol are always in its owning file, which the response already describes, so
++// their handles omit the path ("index.kind").
+ func symbolNodeHandleFrom(node *ast.Node, owner *ast.SourceFile) NodeHandle {
+ 	if owner != nil {
+ 		compilerdebug.Assert(ast.GetSourceFileOfNode(node) == owner, "File-owned symbol declaration belongs to another source file")
++		idx := encoder.GetNodeIndexTable(owner).GetIndex(node)
++		return NodeHandle(strconv.FormatUint(uint64(idx), 10) + "." + strconv.Itoa(int(node.Kind)))
+ 	}
+ 	return nodeHandleFrom(node)
+ }

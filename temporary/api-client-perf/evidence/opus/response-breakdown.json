@@ -1,0 +1,28 @@
+{
+    "beforeResponseCompaction": {
+        "response.totalChars": 71408925,
+        "response.projectField.chars": 6499172,
+        "response.projectField.count": 41134,
+        "response.typeObjects.chars": 4732127,
+        "response.typeObjects.count": 255065,
+        "response.handlePath.chars": 21495325,
+        "response.handlePath.count": 162516,
+        "response.symbolReference.chars": 20357301,
+        "response.symbolReference.count": 64742,
+        "response.fileDescriptor.chars": 11084725,
+        "response.fileDescriptor.count": 23609
+    },
+    "afterResponseCompaction": {
+        "response.totalChars": 53686147,
+        "response.projectField.chars": 576006,
+        "response.projectField.count": 41133,
+        "response.typeObjects.chars": 4732140,
+        "response.typeObjects.count": 255065,
+        "response.handlePath.chars": 13630717,
+        "response.handlePath.count": 118094,
+        "response.symbolReference.chars": 10131244,
+        "response.symbolReference.count": 64739,
+        "response.fileDescriptor.chars": 6783754,
+        "response.fileDescriptor.count": 23607
+    }
+}

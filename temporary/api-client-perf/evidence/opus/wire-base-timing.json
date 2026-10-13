@@ -1,0 +1,63 @@
+[
+    {
+        "enabled": true,
+        "totals": {
+            "requestCount": 125761,
+            "roundTripMs": 8890.23423599971,
+            "bytesSent": 87748084,
+            "bytesReceived": 99438841,
+            "serverTimeMs": 2849.739697999953,
+            "transportOverheadMs": 6040.494537999756,
+            "nodesMaterialized": 425949,
+            "sourceFilesFetched": 1051,
+            "nodesFetched": 455120
+        },
+        "recentRequests": [
+            {
+                "method": "getParametersOfSignature",
+                "roundTripMs": 0.04582699999809847,
+                "bytesSent": 190,
+                "bytesReceived": 832,
+                "timestamp": 1791905409835,
+                "serverTimeMs": 0.005789,
+                "transportOverheadMs": 0.04003799999809847
+            },
+            {
+                "method": "getNonMissingTypeOfSymbol",
+                "roundTripMs": 0.0453269999998156,
+                "bytesSent": 377,
+                "bytesReceived": 99,
+                "timestamp": 1791905409835,
+                "serverTimeMs": 0.008553,
+                "transportOverheadMs": 0.0367739999998156
+            },
+            {
+                "method": "getApparentType",
+                "roundTripMs": 0.03788599999825237,
+                "bytesSent": 191,
+                "bytesReceived": 99,
+                "timestamp": 1791905409835,
+                "serverTimeMs": 0.002474,
+                "transportOverheadMs": 0.035411999998252376
+            },
+            {
+                "method": "getTypesOfType",
+                "roundTripMs": 0.04068099999858532,
+                "bytesSent": 191,
+                "bytesReceived": 365,
+                "timestamp": 1791905409835,
+                "serverTimeMs": 0.003806,
+                "transportOverheadMs": 0.036874999998585324
+            },
+            {
+                "method": "getSignaturesOfType",
+                "roundTripMs": 0.0393980000008014,
+                "bytesSent": 196,
+                "bytesReceived": 138,
+                "timestamp": 1791905409835,
+                "serverTimeMs": 0.004677,
+                "transportOverheadMs": 0.0347210000008014
+            }
+        ]
+    }
+]

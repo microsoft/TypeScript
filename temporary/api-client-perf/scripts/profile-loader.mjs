@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
     checkVariant,
+    clientRoot,
     generatedRoot,
     repoRoot as root,
     runtimeRoot,
@@ -16,10 +17,10 @@ if (process.env.TYPESCRIPT_ESLINT_NATIVE_BINARY || process.env.TSRS_NAPI || proc
 }
 const paths = {
     sync: new URL("./profile-api.mjs", import.meta.url).href,
-    fs: pathToFileURL(`${root}/packages/typescript/dist/api/fs.js`).href,
-    path: pathToFileURL(`${root}/packages/typescript/dist/api/typedPaths.js`).href,
-    proto: pathToFileURL(`${root}/packages/typescript/dist/api/proto.js`).href,
-    ast: pathToFileURL(`${root}/packages/typescript/dist/ast/index.js`).href,
+    fs: pathToFileURL(`${clientRoot}/dist/api/fs.js`).href,
+    path: pathToFileURL(`${clientRoot}/dist/api/typedPaths.js`).href,
+    proto: pathToFileURL(`${clientRoot}/dist/api/proto.js`).href,
+    ast: pathToFileURL(`${clientRoot}/dist/ast/index.js`).href,
 };
 
 registerHooks({
@@ -28,16 +29,22 @@ registerHooks({
         if (specifier.startsWith(prefix)) {
             const suffix = specifier.slice(prefix.length);
             const url = paths[suffix] ?? (suffix.startsWith("ast/")
-                ? pathToFileURL(`${root}/packages/typescript/dist/${suffix}.js`).href
+                ? pathToFileURL(`${clientRoot}/dist/${suffix}.js`).href
                 : undefined);
             if (!url) throw new Error(`Unmapped native API import: ${specifier}`);
             return { url, format: "module", shortCircuit: true };
         }
-        return nextResolve(specifier, context);
+        const resolved = nextResolve(specifier, context);
+        const repoDist = pathToFileURL(`${root}/packages/typescript/dist/`).href;
+        const clientDist = pathToFileURL(`${clientRoot}/dist/`).href;
+        if (repoDist !== clientDist && resolved.url?.startsWith(repoDist)) {
+            return { ...resolved, url: clientDist + resolved.url.slice(repoDist.length) };
+        }
+        return resolved;
     },
     load(url, context, nextLoad) {
         let result = nextLoad(url, context);
-        if ((url.startsWith(pathToFileURL(`${runtimeRoot}/packages/`).href) || url.startsWith(pathToFileURL(`${root}/packages/typescript/dist/`).href)) && result.source) {
+        if ((url.startsWith(pathToFileURL(`${runtimeRoot}/packages/`).href) || url.startsWith(pathToFileURL(`${clientRoot}/dist/`).href)) && result.source) {
             recordSource(url, result.source);
         }
         const variants = (process.env.API_VARIANT ?? "").split(",");
@@ -51,11 +58,11 @@ registerHooks({
             ["bound-methods", "/api/sync/api.js", "bound-methods"],
         ];
         for (const [variant, suffix, filename] of replacements) {
-            if (variants.includes(variant) && url.includes("/packages/typescript/dist/") && url.endsWith(suffix)) {
+            if (variants.includes(variant) && url.startsWith(pathToFileURL(`${clientRoot}/dist/`).href) && url.endsWith(suffix)) {
                 result = { ...result, source: readFileSync(join(generatedRoot, `${filename}.js`), "utf8") };
             }
         }
-        if (process.env.API_INSTRUMENT !== "1" || !url.includes("/packages/typescript/dist/") || !result.source) return result;
+        if (process.env.API_INSTRUMENT !== "1" || !url.startsWith(pathToFileURL(`${clientRoot}/dist/`).href) || !result.source) return result;
         let source = result.source.toString();
         const telemetry = new URL("./telemetry.mjs", import.meta.url).href;
         const prefix = `import { count, countHandle, countMethod, jsonParse, jsonStringify } from ${JSON.stringify(telemetry)};\n`;

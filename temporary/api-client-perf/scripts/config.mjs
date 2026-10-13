@@ -13,6 +13,7 @@ export const runtimeRoot = resolve(process.env.API_BENCHMARK_ROOT ?? join(artifa
 export const outputRoot = resolve(process.env.API_OUTPUT_DIR ?? join(artifactRoot, "runs"));
 export const generatedRoot = join(outputRoot, "generated");
 export const caseRoot = join(runtimeRoot, "cases", process.env.API_BENCHMARK_CASE ?? "files-1024-layout-even-rules-recommended-singlerun-false-types-native");
+export const clientRoot = resolve(process.env.API_CLIENT_ROOT ?? join(repoRoot, "packages/typescript"));
 export const binary = resolve(process.env.API_BINARY ?? join(repoRoot, "built/local/tsc"));
 export const variantNames = new Set(["scanner-pool", "pooled-buffers", "handle-cache", "string-cache", "method-sidecar", "bound-methods"]);
 

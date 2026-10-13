@@ -1,0 +1,166 @@
+Sampled wall time: 21016.7 ms
+
+Categories
+   7464.0 ms  35.51% Transport (includes blocking I/O)
+   5358.4 ms  25.50% typescript-eslint
+   2580.3 ms  12.28% API client
+   2410.0 ms  11.47% Other
+   1265.3 ms   6.02% ESLint
+   1164.5 ms   5.54% GC
+    774.0 ms   3.68% Node builtins
+
+Self
+   6351.9 ms  30.22% read :0
+   1164.5 ms   5.54% (garbage collector) :0
+    988.3 ms   4.70% writeBuffer :0
+    841.4 ms   4.00% apiRequest file:///workspaces/TypeScript/packages/typescript/dist/api/sync/client.js:47
+    430.2 ms   2.05% getMemoEntry file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeCheckerAdapter.js:415
+    406.4 ms   1.93% (anonymous) file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/esquery/dist/esquery.min.js:1
+    311.9 ms   1.48% stat :0
+    249.0 ms   1.18% (program) :0
+    232.5 ms   1.11% populateGlobalsFromLib file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/referencer/Referencer.js:30
+    226.5 ms   1.08% get file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:452
+    211.6 ms   1.01% (anonymous) :0
+    197.8 ms   0.94% traverseSync file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/linter/source-code-traverser.js:269
+    184.5 ms   0.88% getChildren file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:248
+    180.7 ms   0.86% defineVariable file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/scope/ScopeBase.js:246
+    169.9 ms   0.81% wrap file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeTypeAdapter.js:124
+    163.3 ms   0.78% convertNode file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/convert.js:481
+    162.5 ms   0.77% VariableBase file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/variable/VariableBase.js:42
+    158.3 ms   0.75% walk file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/node-utils.js:528
+    152.2 ms   0.72% createNode file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/convert.js:2266
+    137.1 ms   0.65% (idle) :0
+    134.4 ms   0.64% visitChildren file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/referencer/VisitorBase.js:24
+    133.1 ms   0.63% _traverse file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/shared/traverser.js:130
+    130.3 ms   0.62% visit file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/referencer/VisitorBase.js:53
+    120.0 ms   0.57% structuredClone node:internal/worker/js_transferable:113
+    112.2 ms   0.53% createScanner file:///workspaces/TypeScript/packages/typescript/dist/ast/scanner.js:734
+    108.9 ms   0.52% readNative file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:299
+    107.4 ms   0.51% parseNodeHandleFromCompiler file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.js:404
+     99.8 ms   0.48% cacheGeneratorMethod file:///workspaces/TypeScript/packages/typescript/dist/api/sync/generatorSupport.js:1
+     87.4 ms   0.42% wrapSafe node:internal/modules/cjs/loader:1819
+     82.8 ms   0.39% e file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/esquery/dist/esquery.min.js:1
+     81.1 ms   0.39% createUnsafeBuffer node:internal/buffer:1106
+     78.5 ms   0.37% runRules file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/linter/linter.js:523
+     77.2 ms   0.37% adaptArray file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:215
+     72.7 ms   0.35% collectUnusedVariables file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/eslint-plugin/dist/util/collectUnusedVariables.js:95
+     67.1 ms   0.32% getOrCreateToken file:///workspaces/TypeScript/packages/typescript/dist/ast/astnav.js:519
+     63.0 ms   0.30% scan file:///workspaces/TypeScript/packages/typescript/dist/ast/scanner.js:1317
+     60.9 ms   0.29% (anonymous) file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeCheckerAdapter.js:445
+     58.2 ms   0.28% decodeUTF8 :0
+     53.6 ms   0.25% getString file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:311
+     53.4 ms   0.25% calculateSelectors file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/linter/source-code-traverser.js:156
+     53.4 ms   0.25% getOrCreateType file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1208
+     52.4 ms   0.25% wrapNode file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:514
+     51.3 ms   0.24% ruleErrorHandler file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/linter/linter.js:643
+     50.3 ms   0.24% readBin file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:370
+     50.2 ms   0.24% isFlagSetOnObject file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/ts-api-utils/lib/index.cjs:161
+     49.7 ms   0.24% TypeObject file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:4669
+     49.4 ms   0.24% iterateComments file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/ts-api-utils/lib/index.cjs:44
+     49.1 ms   0.23% get file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeTypeAdapter.js:112
+     48.2 ms   0.23% (anonymous) file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:276
+     47.1 ms   0.22% iterateTokens file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/ts-api-utils/lib/index.cjs:15
+
+Inclusive client
+   8531.3 ms  40.59% apiRequest file:///workspaces/TypeScript/packages/typescript/dist/api/sync/client.js:47
+   7779.2 ms  37.01% requestBytesSync file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:216
+   7666.4 ms  36.48% requestSync file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:162
+   6610.3 ms  31.45% readTuple file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:347
+   6347.5 ms  30.20% fillReadBuffer file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:427
+   6347.5 ms  30.20% readByte file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:401
+   2115.3 ms  10.06% batch file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:155
+   2114.2 ms  10.06% executeRequestGenerators file:///workspaces/TypeScript/packages/typescript/dist/api/sync/generatorSupport.js:54
+   1948.4 ms   9.27% getTypeAtLocation file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:3051
+   1900.1 ms   9.04% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:156
+   1899.1 ms   9.04% batchRequests file:///workspaces/TypeScript/packages/typescript/dist/api/sync/client.js:61
+   1130.4 ms   5.38% writeTuple file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:287
+   1059.0 ms   5.04% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1546
+   1052.6 ms   5.01% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:4813
+    996.8 ms   4.74% writeAllBuf file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:493
+    570.0 ms   2.71% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:4791
+    568.9 ms   2.71% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1526
+    567.2 ms   2.70% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1280
+    565.1 ms   2.69% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1244
+    499.3 ms   2.38% getChildren file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:302
+    498.3 ms   2.37% getChildren file:///workspaces/TypeScript/packages/typescript/dist/ast/astnav.js:541
+    471.5 ms   2.24% createChildren file:///workspaces/TypeScript/packages/typescript/dist/ast/astnav.js:567
+    372.5 ms   1.77% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:5380
+    367.5 ms   1.75% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1294
+    367.5 ms   1.75% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:4769
+    360.9 ms   1.72% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:4971
+    359.8 ms   1.71% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1362
+    355.5 ms   1.69% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:3008
+    314.7 ms   1.50% getSymbolAtLocation file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:2826
+    305.3 ms   1.45% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1490
+    305.3 ms   1.45% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:4777
+    296.0 ms   1.41% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1414
+    296.0 ms   1.41% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:5356
+    287.8 ms   1.37% forEachChild file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:196
+    274.6 ms   1.31% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1444
+    257.5 ms   1.22% readBin file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:370
+    226.1 ms   1.08% getOrCreateSymbol file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1182
+    216.9 ms   1.03% getString file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:311
+    205.0 ms   0.98% readExact file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:407
+    203.2 ms   0.97% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:3803
+    202.2 ms   0.96% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1959
+    193.6 ms   0.92% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:4901
+    189.4 ms   0.90% advanceGenerator file:///workspaces/TypeScript/packages/typescript/dist/api/sync/generatorSupport.js:99
+    182.1 ms   0.87% apiRequestBinary file:///workspaces/TypeScript/packages/typescript/dist/api/sync/client.js:89
+    180.8 ms   0.86% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:3253
+    173.5 ms   0.83% createSnapshot file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:430
+    168.3 ms   0.80% requestBinarySync file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:171
+    167.8 ms   0.80% addSyntheticNodes file:///workspaces/TypeScript/packages/typescript/dist/ast/astnav.js:606
+    166.8 ms   0.79% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1932
+    162.2 ms   0.77% decode file:///workspaces/TypeScript/packages/typescript/dist/api/node/wtf8.js:100
+
+Self client
+    841.4 ms   4.00% apiRequest file:///workspaces/TypeScript/packages/typescript/dist/api/sync/client.js:47
+    112.2 ms   0.53% createScanner file:///workspaces/TypeScript/packages/typescript/dist/ast/scanner.js:734
+    107.4 ms   0.51% parseNodeHandleFromCompiler file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.js:404
+     99.8 ms   0.48% cacheGeneratorMethod file:///workspaces/TypeScript/packages/typescript/dist/api/sync/generatorSupport.js:1
+     67.1 ms   0.32% getOrCreateToken file:///workspaces/TypeScript/packages/typescript/dist/ast/astnav.js:519
+     63.0 ms   0.30% scan file:///workspaces/TypeScript/packages/typescript/dist/ast/scanner.js:1317
+     53.6 ms   0.25% getString file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:311
+     53.4 ms   0.25% getOrCreateType file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1208
+     50.3 ms   0.24% readBin file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:370
+     49.7 ms   0.24% TypeObject file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:4669
+     45.9 ms   0.22% getTokenPosOfNode file:///workspaces/TypeScript/packages/typescript/dist/ast/astnav.js:263
+     40.6 ms   0.19% get jsDoc file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:253
+     39.5 ms   0.19% createChildren file:///workspaces/TypeScript/packages/typescript/dist/ast/astnav.js:567
+     35.3 ms   0.17% forEachChild file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:196
+     34.3 ms   0.16% advanceGenerator file:///workspaces/TypeScript/packages/typescript/dist/api/sync/generatorSupport.js:99
+     34.2 ms   0.16% writeTuple file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:287
+     33.2 ms   0.16% getLineAndCharacterOfPosition file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.js:345
+     32.1 ms   0.15% retainRecordForSnapshot file:///workspaces/TypeScript/packages/typescript/dist/api/sourceFileCache.js:167
+     31.2 ms   0.15% processNodes file:///workspaces/TypeScript/packages/typescript/dist/ast/astnav.js:587
+     31.0 ms   0.15% getTypeAtLocation file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:3051
+     25.7 ms   0.12% getOrCreateSymbol file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1182
+     25.6 ms   0.12% processNode file:///workspaces/TypeScript/packages/typescript/dist/ast/astnav.js:577
+     24.6 ms   0.12% getOrCreateSymbol file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1139
+     22.5 ms   0.11% getIdentifierToken file:///workspaces/TypeScript/packages/typescript/dist/ast/scanner.js:1260
+     21.4 ms   0.10% getNamedChild file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:340
+     20.3 ms   0.10% getRetained file:///workspaces/TypeScript/packages/typescript/dist/api/sourceFileCache.js:60
+     20.3 ms   0.10% getChildren file:///workspaces/TypeScript/packages/typescript/dist/ast/astnav.js:541
+     19.5 ms   0.09% skipTrivia file:///workspaces/TypeScript/packages/typescript/dist/ast/scanner.js:359
+     19.2 ms   0.09% getOrCreateRecord file:///workspaces/TypeScript/packages/typescript/dist/api/sourceFileCache.js:71
+     18.2 ms   0.09% Symbol file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:4453
+     17.1 ms   0.08% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sourceFileCache.js:65
+     16.2 ms   0.08% RemoteNodeList file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:41
+     12.8 ms   0.06% NodeHandle file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:4377
+     12.8 ms   0.06% createSyntaxListNode file:///workspaces/TypeScript/packages/typescript/dist/ast/astnav.js:628
+     12.8 ms   0.06% getOrCreateSignature file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1222
+     12.8 ms   0.06% requestBytesSync file:///workspaces/TypeScript/packages/typescript/dist/api/syncChannel.js:216
+     12.8 ms   0.06% get kind file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.infrastructure.js:67
+     12.2 ms   0.06% getChildAtOrder file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:352
+     11.8 ms   0.06% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:106
+     10.7 ms   0.05% get name file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:698
+      9.6 ms   0.05% hasSurrogateLeadByte file:///workspaces/TypeScript/packages/typescript/dist/api/node/wtf8.js:22
+      9.6 ms   0.05% getNodeId file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.js:447
+      9.6 ms   0.05% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:3242
+      8.8 ms   0.04% get id file:///workspaces/TypeScript/packages/typescript/dist/api/node/node.generated.js:189
+      8.6 ms   0.04% getCachedSymbol file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:1196
+      8.6 ms   0.04% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:3056
+      8.6 ms   0.04% (anonymous) file:///workspaces/TypeScript/packages/typescript/dist/api/sync/api.js:5358
+      8.5 ms   0.04% executeRequestGenerators file:///workspaces/TypeScript/packages/typescript/dist/api/sync/generatorSupport.js:54
+      8.5 ms   0.04% addGenerator file:///workspaces/TypeScript/packages/typescript/dist/api/sync/generatorSupport.js:154
+      8.5 ms   0.04% addSyntheticNodes file:///workspaces/TypeScript/packages/typescript/dist/ast/astnav.js:606

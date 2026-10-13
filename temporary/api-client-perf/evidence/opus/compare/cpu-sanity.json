@@ -1,0 +1,50 @@
+[
+    {
+        "build": "base",
+        "index": "warmup",
+        "wallMs": 20160.069481000002,
+        "userMs": 18087.143,
+        "systemMs": 2946.947,
+        "maxRSSMiB": 1232.4765625,
+        "heapUsedMiB": 1010.8797988891602,
+        "serverCpuMs": 7730,
+        "digest": "3ea3297381a0204a6c9ef1372882074d1c86ed29c4487c0d4401360b9c93fdd5",
+        "fixtureDigest": "a7009cf785309e05c96a2ef69a29a49c5427f49291abcd319c81dc60b91354d3"
+    },
+    {
+        "build": "spin1000",
+        "index": "warmup",
+        "wallMs": 18987.942495999996,
+        "userMs": 17984.338,
+        "systemMs": 2659.333,
+        "maxRSSMiB": 1258.6640625,
+        "heapUsedMiB": 999.4263153076172,
+        "serverCpuMs": 14660,
+        "digest": "3ea3297381a0204a6c9ef1372882074d1c86ed29c4487c0d4401360b9c93fdd5",
+        "fixtureDigest": "a7009cf785309e05c96a2ef69a29a49c5427f49291abcd319c81dc60b91354d3"
+    },
+    {
+        "build": "base",
+        "index": 0,
+        "wallMs": 20095.991223000005,
+        "userMs": 17935.114,
+        "systemMs": 2986.991,
+        "maxRSSMiB": 1248.359375,
+        "heapUsedMiB": 981.2561569213867,
+        "serverCpuMs": 7670,
+        "digest": "3ea3297381a0204a6c9ef1372882074d1c86ed29c4487c0d4401360b9c93fdd5",
+        "fixtureDigest": "a7009cf785309e05c96a2ef69a29a49c5427f49291abcd319c81dc60b91354d3"
+    },
+    {
+        "build": "spin1000",
+        "index": 0,
+        "wallMs": 19003.204533000004,
+        "userMs": 18149.406,
+        "systemMs": 2517.695,
+        "maxRSSMiB": 1231.24609375,
+        "heapUsedMiB": 991.9054260253906,
+        "serverCpuMs": 14690,
+        "digest": "3ea3297381a0204a6c9ef1372882074d1c86ed29c4487c0d4401360b9c93fdd5",
+        "fixtureDigest": "a7009cf785309e05c96a2ef69a29a49c5427f49291abcd319c81dc60b91354d3"
+    }
+]

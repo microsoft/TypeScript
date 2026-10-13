@@ -1,0 +1,49 @@
+Sampled bytes 6593460984
+
+Self
+   864.66 MiB  13.75% createScanner file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/ast/scanner.js:735
+   400.54 MiB   6.37% set :0
+   250.08 MiB   3.98% ESLintScopeVariable /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/variable/ESLintScopeVariable.js:9
+   215.36 MiB   3.42% iterateComments /workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/ts-api-utils/lib/index.cjs:44
+   190.28 MiB   3.03% VariableBase /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/variable/VariableBase.js:42
+   172.98 MiB   2.75% (anonymous) /workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/esquery/dist/esquery.min.js:1
+   155.70 MiB   2.48% next :0
+   150.83 MiB   2.40% Set :0
+   139.44 MiB   2.22% populateGlobalsFromLib /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/referencer/Referencer.js:30
+   134.05 MiB   2.13% walk /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/node-utils.js:528
+   130.57 MiB   2.08% _traverse /workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/shared/traverser.js:130
+   128.98 MiB   2.05% visitChildren /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/referencer/VisitorBase.js:24
+   117.54 MiB   1.87% createNode /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/convert.js:2266
+   100.14 MiB   1.59% push :0
+    99.37 MiB   1.58% Map :0
+    97.94 MiB   1.56% traverseSync /workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/linter/source-code-traverser.js:269
+    94.96 MiB   1.51% processCodePathToEnter /workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/linter/code-path-analysis/code-path-analyzer.js:392
+    78.35 MiB   1.25% slice :0
+    74.25 MiB   1.18% resolve node:path:1245
+    69.09 MiB   1.10% convertNode /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/convert.js:481
+    60.37 MiB   0.96% wrapNode /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:514
+    58.92 MiB   0.94% getLineAndCharacterOfPosition file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/api/node/node.js:360
+    53.29 MiB   0.85% readBin file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/api/syncChannel.js:371
+    51.91 MiB   0.83% processCodePathToExit /workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/linter/code-path-analysis/code-path-analyzer.js:547
+    51.63 MiB   0.82% run /workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/p-limit/index.js:20
+    47.21 MiB   0.75% toString node:buffer:918
+    47.20 MiB   0.75% enqueue /workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/p-limit/index.js:34
+    46.53 MiB   0.74% testElement /workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/p-locate/index.js:12
+    45.10 MiB   0.72% createChildren file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/ast/astnav.js:568
+    44.56 MiB   0.71% flatMap :0
+    44.13 MiB   0.70% createIndexMap /workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/languages/js/source-code/token-store/index.js:36
+    43.65 MiB   0.69% isUsedVariable /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/eslint-plugin/dist/util/collectUnusedVariables.js:341
+    42.56 MiB   0.68% getString file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/api/node/node.generated.js:312
+    40.24 MiB   0.64% callSync /workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/linter/source-code-visitor.js:74
+    38.35 MiB   0.61% jsonParse file:///workspaces/TypeScript/temporary/api-client-perf/scripts/telemetry.mjs:63
+    36.88 MiB   0.59% (anonymous) /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:276
+    36.63 MiB   0.58% Identifier /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/eslint-plugin/dist/util/collectUnusedVariables.js:54
+    35.84 MiB   0.57% readClassic /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:379
+    34.71 MiB   0.55% getChildren /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:248
+    34.46 MiB   0.55% getLineAndCharacterFor /workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/node-utils.js:222
+
+Self client
+
+
+Inclusive client
+

@@ -1,0 +1,209 @@
+From c5f5be5e4b18b462923f7e3d360a0b18e4411787 Mon Sep 17 00:00:00 2001
+From: Andrew Branch <andrewbranch@users.noreply.github.com>
+Date: Tue, 13 Oct 2026 17:54:38 +0000
+Subject: [PATCH 5/6] Materialize declaration node handles on first access
+
+Symbols and signatures parsed every declaration handle into a NodeHandle as
+soon as they were received, although most are never read. Keep the wire
+strings and create the NodeHandles when declarations, valueDeclaration, or
+declaration is first accessed.
+
+Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+---
+ packages/typescript/src/api/async/api.ts | 51 +++++++++++++++++++-----
+ packages/typescript/src/api/sync/api.ts  | 51 +++++++++++++++++++-----
+ 2 files changed, 80 insertions(+), 22 deletions(-)
+
+diff --git a/packages/typescript/src/api/async/api.ts b/packages/typescript/src/api/async/api.ts
+index f9790366e9..c450fb523f 100644
+--- a/packages/typescript/src/api/async/api.ts
++++ b/packages/typescript/src/api/async/api.ts
+@@ -3251,8 +3251,11 @@ export class Symbol {
+     readonly checkFlags: CheckFlags;
+     /** @internal */
+     readonly reference: SymbolReference;
+-    readonly declarations: readonly NodeHandle<Declaration>[];
+-    readonly valueDeclaration: NodeHandle<Declaration> | undefined;
++    // Declaration handles are kept in their wire form until first accessed.
++    private readonly declarationHandles: readonly string[] | undefined;
++    private readonly valueDeclarationHandle: string | undefined;
++    private declarationsCache: readonly NodeHandle<Declaration>[] | undefined;
++    private valueDeclarationCache: NodeHandle<Declaration> | undefined;
+     private readonly parent!: CompactSymbolReference;
+     private readonly exportSymbol!: CompactSymbolReference;
+     private membersCache: Promise<ReadonlyMap<__String, Symbol>> | undefined;
+@@ -3267,18 +3270,33 @@ export class Symbol {
+         this.name = unescapeLeadingUnderscores(data.name as __String);
+         this.flags = data.flags;
+         this.checkFlags = data.checkFlags ?? 0;
+-        // A file-owned symbol has no canonical project; its declarations resolve through its file.
+-        const project = storage.kind === SymbolOwnerKind.Snapshot ? storage.registry.project : undefined;
+-        const fileOwner = storage.kind === SymbolOwnerKind.File ? storage.owner : undefined;
+-        this.declarations = (data.declarations ?? []).map(handle => new NodeHandle<Declaration>(handle, project, fileOwner));
+-        this.valueDeclaration = data.valueDeclaration
+-            ? new NodeHandle<Declaration>(data.valueDeclaration, project, fileOwner)
+-            : undefined;
++        this.declarationHandles = data.declarations;
++        this.valueDeclarationHandle = data.valueDeclaration;
++        this.declarationsCache = undefined;
++        this.valueDeclarationCache = undefined;
+ 
+         if (data.parent !== undefined) this.parent = data.parent;
+         if (data.exportSymbol !== undefined) this.exportSymbol = data.exportSymbol;
+     }
+ 
++    get declarations(): readonly NodeHandle<Declaration>[] {
++        return this.declarationsCache ??= this.declarationHandles?.map(handle => this.createDeclarationHandle(handle)) ?? [];
++    }
++
++    get valueDeclaration(): NodeHandle<Declaration> | undefined {
++        if (this.valueDeclarationCache === undefined && this.valueDeclarationHandle) {
++            this.valueDeclarationCache = this.createDeclarationHandle(this.valueDeclarationHandle);
++        }
++        return this.valueDeclarationCache;
++    }
++
++    private createDeclarationHandle(handle: string): NodeHandle<Declaration> {
++        // A file-owned symbol has no canonical project; its declarations resolve through its file.
++        return this.storage.kind === SymbolOwnerKind.Snapshot
++            ? new NodeHandle<Declaration>(handle, this.storage.registry.project)
++            : new NodeHandle<Declaration>(handle, undefined, this.storage.owner);
++    }
++
+     async getParent(): Promise<Symbol | undefined> {
+         if (!this.parent) return undefined;
+         return this.fetchSymbol("getParentOfSymbol", this.parent);
+@@ -3889,7 +3907,9 @@ export class Signature {
+     private objectRegistry: ProjectObjectRegistry;
+ 
+     readonly id: number;
+-    readonly declaration?: NodeHandle<Declaration> | undefined;
++    private readonly project: Project;
++    private readonly declarationHandle: string | undefined;
++    private declarationCache: NodeHandle<Declaration> | undefined;
+     readonly typeParameters?: readonly number[] | undefined;
+     readonly parameters: readonly CompactSymbolReference[];
+     readonly thisParameter?: CompactSymbolReference | undefined;
+@@ -3900,7 +3920,9 @@ export class Signature {
+         this.id = data.id;
+         this.flags = data.flags ?? 0;
+         this.objectRegistry = objectRegistry;
+-        this.declaration = data.declaration ? new NodeHandle<Declaration>(data.declaration, project) : undefined;
++        this.project = project;
++        this.declarationHandle = data.declaration;
++        this.declarationCache = undefined;
+         this.typeParameters = data.typeParameters ?? [];
+         this.parameters = data.parameters ?? [];
+         this.thisParameter = data.thisParameter;
+@@ -3908,6 +3930,13 @@ export class Signature {
+         this.returnType = false;
+     }
+ 
++    get declaration(): NodeHandle<Declaration> | undefined {
++        if (this.declarationCache === undefined && this.declarationHandle) {
++            this.declarationCache = new NodeHandle<Declaration>(this.declarationHandle, this.project);
++        }
++        return this.declarationCache;
++    }
++
+     async getTypeParameters(): Promise<readonly TypeParameter[]> {
+         return this.objectRegistry.fetchTypes(this, "getTypeParametersOfSignature", this.typeParameters) as Promise<readonly TypeParameter[]>;
+     }
+diff --git a/packages/typescript/src/api/sync/api.ts b/packages/typescript/src/api/sync/api.ts
+index 30d2c32476..989065a7f1 100644
+--- a/packages/typescript/src/api/sync/api.ts
++++ b/packages/typescript/src/api/sync/api.ts
+@@ -6678,8 +6678,11 @@ export class Symbol {
+     readonly checkFlags: CheckFlags;
+     /** @internal */
+     readonly reference: SymbolReference;
+-    readonly declarations: readonly NodeHandle<Declaration>[];
+-    readonly valueDeclaration: NodeHandle<Declaration> | undefined;
++    // Declaration handles are kept in their wire form until first accessed.
++    private readonly declarationHandles: readonly string[] | undefined;
++    private readonly valueDeclarationHandle: string | undefined;
++    private declarationsCache: readonly NodeHandle<Declaration>[] | undefined;
++    private valueDeclarationCache: NodeHandle<Declaration> | undefined;
+     private readonly parent!: CompactSymbolReference;
+     private readonly exportSymbol!: CompactSymbolReference;
+     private membersCache: ReadonlyMap<__String, Symbol> | undefined;
+@@ -6694,18 +6697,33 @@ export class Symbol {
+         this.name = unescapeLeadingUnderscores(data.name as __String);
+         this.flags = data.flags;
+         this.checkFlags = data.checkFlags ?? 0;
+-        // A file-owned symbol has no canonical project; its declarations resolve through its file.
+-        const project = storage.kind === SymbolOwnerKind.Snapshot ? storage.registry.project : undefined;
+-        const fileOwner = storage.kind === SymbolOwnerKind.File ? storage.owner : undefined;
+-        this.declarations = (data.declarations ?? []).map(handle => new NodeHandle<Declaration>(handle, project, fileOwner));
+-        this.valueDeclaration = data.valueDeclaration
+-            ? new NodeHandle<Declaration>(data.valueDeclaration, project, fileOwner)
+-            : undefined;
++        this.declarationHandles = data.declarations;
++        this.valueDeclarationHandle = data.valueDeclaration;
++        this.declarationsCache = undefined;
++        this.valueDeclarationCache = undefined;
+ 
+         if (data.parent !== undefined) this.parent = data.parent;
+         if (data.exportSymbol !== undefined) this.exportSymbol = data.exportSymbol;
+     }
+ 
++    get declarations(): readonly NodeHandle<Declaration>[] {
++        return this.declarationsCache ??= this.declarationHandles?.map(handle => this.createDeclarationHandle(handle)) ?? [];
++    }
++
++    get valueDeclaration(): NodeHandle<Declaration> | undefined {
++        if (this.valueDeclarationCache === undefined && this.valueDeclarationHandle) {
++            this.valueDeclarationCache = this.createDeclarationHandle(this.valueDeclarationHandle);
++        }
++        return this.valueDeclarationCache;
++    }
++
++    private createDeclarationHandle(handle: string): NodeHandle<Declaration> {
++        // A file-owned symbol has no canonical project; its declarations resolve through its file.
++        return this.storage.kind === SymbolOwnerKind.Snapshot
++            ? new NodeHandle<Declaration>(handle, this.storage.registry.project)
++            : new NodeHandle<Declaration>(handle, undefined, this.storage.owner);
++    }
++
+     get getParent(): {
+         (): Symbol | undefined;
+         gen(): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+@@ -8005,7 +8023,9 @@ export class Signature {
+     private objectRegistry: ProjectObjectRegistry;
+ 
+     readonly id: number;
+-    readonly declaration?: NodeHandle<Declaration> | undefined;
++    private readonly project: Project;
++    private readonly declarationHandle: string | undefined;
++    private declarationCache: NodeHandle<Declaration> | undefined;
+     readonly typeParameters?: readonly number[] | undefined;
+     readonly parameters: readonly CompactSymbolReference[];
+     readonly thisParameter?: CompactSymbolReference | undefined;
+@@ -8016,7 +8036,9 @@ export class Signature {
+         this.id = data.id;
+         this.flags = data.flags ?? 0;
+         this.objectRegistry = objectRegistry;
+-        this.declaration = data.declaration ? new NodeHandle<Declaration>(data.declaration, project) : undefined;
++        this.project = project;
++        this.declarationHandle = data.declaration;
++        this.declarationCache = undefined;
+         this.typeParameters = data.typeParameters ?? [];
+         this.parameters = data.parameters ?? [];
+         this.thisParameter = data.thisParameter;
+@@ -8024,6 +8046,13 @@ export class Signature {
+         this.returnType = false;
+     }
+ 
++    get declaration(): NodeHandle<Declaration> | undefined {
++        if (this.declarationCache === undefined && this.declarationHandle) {
++            this.declarationCache = new NodeHandle<Declaration>(this.declarationHandle, this.project);
++        }
++        return this.declarationCache;
++    }
++
+     get getTypeParameters(): {
+         (): readonly TypeParameter[];
+         gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
+-- 
+2.55.0
+

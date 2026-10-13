@@ -1,0 +1,101 @@
+diff --git a/packages/typescript/src/api/syncChannel.ts b/packages/typescript/src/api/syncChannel.ts
+index 6672c5a..8462eb0 100644
+--- a/packages/typescript/src/api/syncChannel.ts
++++ b/packages/typescript/src/api/syncChannel.ts
+@@ -126,6 +126,11 @@ export class SyncRpcChannel {
+     private _msgType = 0;
+     private _msgName: Buffer = EMPTY_BUF;
+     private _msgPayload: Buffer = EMPTY_BUF;
++    // When set, a response payload is decoded straight to `_msgPayloadString`
++    // (leaving `_msgPayload` empty) so that small string responses can be read
++    // out of the read-ahead buffer without allocating an intermediate Buffer.
++    private decodeResponseString = false;
++    private _msgPayloadString = "";
+ 
+     private headerBuf = Buffer.allocUnsafe(4);
+ 
+@@ -226,8 +231,16 @@ export class SyncRpcChannel {
+      */
+     requestSync(method: string, payload: string): string {
+         this.ensureOpen();
+-        const result = this.requestBytesSync(method, payload);
+-        return result.toString("utf-8");
++        this.decodeResponseString = true;
++        try {
++            this.requestBytesSync(method, payload);
++        }
++        finally {
++            this.decodeResponseString = false;
++        }
++        const result = this._msgPayloadString;
++        this._msgPayloadString = "";
++        return result;
+     }
+ 
+     /**
+@@ -307,7 +320,7 @@ export class SyncRpcChannel {
+                             `name mismatch for response: expected \`${method}\`, got \`${this._msgName.toString("utf-8")}\``,
+                         );
+                     }
+-                    if (this.collectTiming) {
++                    if (this.collectTiming && !this.decodeResponseString) {
+                         this.lastBytesReceived = this._msgPayload.length;
+                     }
+                     return this._msgPayload;
+@@ -467,13 +480,45 @@ export class SyncRpcChannel {
+         }
+ 
+         this._msgName = this.readBin();
+-        this._msgPayload = this.readBin();
++        if (this.decodeResponseString && this._msgType === MSG_RESPONSE) {
++            this._msgPayload = EMPTY_BUF;
++            this._msgPayloadString = this.readBinString();
++        }
++        else {
++            this._msgPayload = this.readBin();
++        }
+     }
+ 
+     /**
+      * Read a MessagePack bin field.
+      */
+     private readBin(): Buffer {
++        const size = this.readBinHeader();
++        if (size === 0) return EMPTY_BUF;
++        return this.readExact(size);
++    }
++
++    /**
++     * Read a MessagePack bin field and decode it as UTF-8. Payloads already
++     * present in the read-ahead buffer are decoded in place.
++     */
++    private readBinString(): string {
++        const size = this.readBinHeader();
++        if (size === 0) return "";
++        if (this.collectTiming) {
++            this.lastBytesReceived = size;
++        }
++        const start = this.readBufPos;
++        if (this.readBufLen - start >= size) {
++            this.readBufPos = start + size;
++            return this.readBuf.toString("utf-8", start, start + size);
++        }
++        const buf = Buffer.allocUnsafe(size);
++        this.readExactInto(buf, size);
++        return buf.toString("utf-8", 0, size);
++    }
++
++    private readBinHeader(): number {
+         const marker = this.readByte();
+         let size: number;
+         switch (marker) {
+@@ -493,8 +538,7 @@ export class SyncRpcChannel {
+                     `Expected binary data (0xc4-0xc6), received: 0x${marker.toString(16)}`,
+                 );
+         }
+-        if (size === 0) return EMPTY_BUF;
+-        return this.readExact(size);
++        return size;
+     }
+ 
+     // ── Low-level synchronous I/O ───────────────────────────────────

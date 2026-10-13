@@ -1,0 +1,26 @@
+[
+    {
+        "build": "base",
+        "index": "warmup",
+        "wallMs": 25162.90069,
+        "userMs": 21184.378,
+        "systemMs": 3562.887,
+        "maxRSSMiB": 1252.2421875,
+        "heapUsedMiB": 998.3264999389648,
+        "serverCpuMs": 9230,
+        "digest": "3ea3297381a0204a6c9ef1372882074d1c86ed29c4487c0d4401360b9c93fdd5",
+        "fixtureDigest": "a7009cf785309e05c96a2ef69a29a49c5427f49291abcd319c81dc60b91354d3"
+    },
+    {
+        "build": "p2",
+        "index": "warmup",
+        "wallMs": 23939.920391000003,
+        "userMs": 20560.2,
+        "systemMs": 3276.064,
+        "maxRSSMiB": 1224.73828125,
+        "heapUsedMiB": 1006.6354446411133,
+        "serverCpuMs": 8970,
+        "digest": "3ea3297381a0204a6c9ef1372882074d1c86ed29c4487c0d4401360b9c93fdd5",
+        "fixtureDigest": "a7009cf785309e05c96a2ef69a29a49c5427f49291abcd319c81dc60b91354d3"
+    }
+]

@@ -1,0 +1,67 @@
+Sampled wall time: 21217.6 ms
+
+Categories
+   8123.0 ms  38.28% Transport (includes blocking I/O)
+   5490.5 ms  25.88% typescript-eslint
+   4416.2 ms  20.81% Other
+   1329.3 ms   6.26% ESLint
+   1147.9 ms   5.41% GC
+    710.8 ms   3.35% Node builtins
+
+Self
+   6971.5 ms  32.86% read :0
+   1147.9 ms   5.41% (garbage collector) :0
+    981.6 ms   4.63% writeBuffer :0
+    692.8 ms   3.27% apiRequest file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/api/sync/client.js:47
+    486.8 ms   2.29% getMemoEntry file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeCheckerAdapter.js:415
+    398.3 ms   1.88% (anonymous) file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/esquery/dist/esquery.min.js:1
+    328.9 ms   1.55% stat :0
+    242.2 ms   1.14% populateGlobalsFromLib file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/referencer/Referencer.js:30
+    239.3 ms   1.13% get file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:452
+    213.1 ms   1.00% traverseSync file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/linter/source-code-traverser.js:269
+    184.3 ms   0.87% (anonymous) :0
+    177.9 ms   0.84% (program) :0
+    173.7 ms   0.82% convertNode file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/convert.js:481
+    171.0 ms   0.81% wrap file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeTypeAdapter.js:124
+    165.0 ms   0.78% getChildren file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:248
+    156.7 ms   0.74% createNode file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/convert.js:2266
+    146.3 ms   0.69% (idle) :0
+    140.7 ms   0.66% defineVariable file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/scope/ScopeBase.js:246
+    135.7 ms   0.64% walk file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/node-utils.js:528
+    134.2 ms   0.63% _traverse file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/shared/traverser.js:130
+    128.6 ms   0.61% visit file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/referencer/VisitorBase.js:53
+    121.5 ms   0.57% VariableBase file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/variable/VariableBase.js:42
+    120.8 ms   0.57% createScanner file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/ast/scanner.js:734
+    119.2 ms   0.56% structuredClone node:internal/worker/js_transferable:113
+    114.2 ms   0.54% visitChildren file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/scope-manager/dist/referencer/VisitorBase.js:24
+     98.8 ms   0.47% cacheGeneratorMethod file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/api/sync/generatorSupport.js:1
+     93.7 ms   0.44% runRules file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/linter/linter.js:523
+     91.4 ms   0.43% readNative file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:299
+     89.7 ms   0.42% createUnsafeBuffer node:internal/buffer:1106
+     80.4 ms   0.38% adaptArray file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:215
+     78.8 ms   0.37% e file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/esquery/dist/esquery.min.js:1
+     73.9 ms   0.35% TypeObject file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/api/sync/api.js:4690
+     71.4 ms   0.34% ruleErrorHandler file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/linter/linter.js:643
+     70.7 ms   0.33% collectUnusedVariables file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/eslint-plugin/dist/util/collectUnusedVariables.js:95
+     68.8 ms   0.32% get file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeTypeAdapter.js:112
+     62.8 ms   0.30% getOrCreateToken file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/ast/astnav.js:519
+     62.7 ms   0.30% readBin file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/api/syncChannel.js:370
+     60.5 ms   0.29% wrapNode file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:514
+     59.7 ms   0.28% wrapSafe node:internal/modules/cjs/loader:1819
+     57.4 ms   0.27% registerTSNodeInNodeMap file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/convert.js:2418
+     55.4 ms   0.26% calculateSelectors file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/linter/source-code-traverser.js:156
+     54.9 ms   0.26% iterateTokens file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/ts-api-utils/lib/index.cjs:15
+     52.8 ms   0.25% (anonymous) file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeCheckerAdapter.js:445
+     51.2 ms   0.24% getProperty file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeTypeAdapter.js:206
+     48.2 ms   0.23% getOrCreateType file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/api/sync/api.js:1208
+     46.6 ms   0.22% retainRecordForSnapshot file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/api/sourceFileCache.js:167
+     46.4 ms   0.22% (anonymous) file:///workspaces/TypeScript/temporary/api-client-perf/runtime/packages/typescript-estree/dist/native/nativeNodeAdapter.js:276
+     46.4 ms   0.22% applyLanguageOptions file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/eslint/lib/languages/js/source-code/source-code.js:946
+     46.4 ms   0.22% get jsDoc file:///workspaces/TypeScript/temporary/api-client-perf/runs/opus/builds/lazy/dist/api/node/node.generated.js:253
+     45.8 ms   0.22% iterateComments file:///workspaces/TypeScript/temporary/api-client-perf/runtime/node_modules/ts-api-utils/lib/index.cjs:44
+
+Inclusive client
+
+
+Self client
+

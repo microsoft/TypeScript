@@ -41,6 +41,15 @@ export function recordWire(method, request, response) {
     entry.maxResponseBytes = Math.max(entry.maxResponseBytes, responseBytes);
     if (!entry.requestExample) entry.requestExample = typeof request === "string" ? request.slice(0, 1500) : "";
     if (!entry.responseExample) entry.responseExample = typeof response === "string" ? response.slice(0, 1500) : "<binary>";
+    if (process.env.API_RESPONSE_BREAKDOWN === "1" && typeof response === "string") {
+        for (const [label, pattern] of [["projectField", /"project":"[^"]+"/g], ["handlePath", /"\d+\.\d+\.[^"#][^"]*"/g], ["fileDescriptor", /"file":\{[^}]*\}/g], ["symbolReference", /"reference":\{"kind":\d[^}]*\}(\}|,"id":\d+\})?/g], ["typeObjects", /\{"id":\d+,"flags":/g]]) {
+            for (const match of response.matchAll(pattern)) {
+                count(`response.${label}.chars`, match[0].length);
+                count(`response.${label}.count`);
+            }
+        }
+        count("response.totalChars", response.length);
+    }
     if (process.env.API_COMPACT_ESTIMATE === "1") {
         for (const [label, value] of [["request", request], ["response", response]]) {
             if (typeof value !== "string") continue;
@@ -102,6 +111,7 @@ process.on("exit", () => {
                 methods: Object.fromEntries([...methods].sort((a, b) => b[1] - a[1])),
                 wire: Object.fromEntries([...wire].sort((a, b) => b[1].responseBytes - a[1].responseBytes)),
                 sourceDigest: createHash("sha256").update(JSON.stringify([...sourceHashes].sort(([a], [b]) => a.localeCompare(b)))).digest("hex"),
+                fixtureDigest: createHash("sha256").update(JSON.stringify([...sourceHashes].filter(([key]) => key.startsWith("fixture/")).sort(([a], [b]) => a.localeCompare(b)))).digest("hex"),
                 sourceHashes: Object.fromEntries(sourceHashes),
             },
             null,
