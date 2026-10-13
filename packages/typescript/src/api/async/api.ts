@@ -3259,7 +3259,7 @@ export class Symbol {
         this.escapedName = data.name as __String;
         this.name = unescapeLeadingUnderscores(data.name as __String);
         this.flags = data.flags;
-        this.checkFlags = data.checkFlags;
+        this.checkFlags = data.checkFlags ?? 0;
         // A file-owned symbol has no canonical project; its declarations resolve through its file.
         const project = storage.kind === SymbolOwnerKind.Snapshot ? storage.registry.project : undefined;
         const fileOwner = storage.kind === SymbolOwnerKind.File ? storage.owner : undefined;
@@ -3410,7 +3410,7 @@ class TypeObject implements Type {
 
         this.id = data.id;
         this.flags = data.flags;
-        if (data.objectFlags !== undefined) this.objectFlags = data.objectFlags;
+        this.objectFlags = data.objectFlags ?? 0;
         if (data.symbol !== undefined) this.symbol = data.symbol;
         if (data.value != null) {
             // BigInt literal values are serialized as decimal strings (e.g. "-123") because
@@ -3436,7 +3436,7 @@ class TypeObject implements Type {
             }
         }
         if (data.intrinsicName !== undefined) this.intrinsicName = data.intrinsicName;
-        if (data.isThisType !== undefined) this.isThisType = data.isThisType;
+        this.isThisType = data.isThisType ?? false;
         if (data.freshType !== undefined) this.freshType = data.freshType;
         if (data.regularType !== undefined) this.regularType = data.regularType;
         if (data.target !== undefined) this.target = data.target;
@@ -3891,7 +3891,7 @@ export class Signature {
 
     constructor(data: SignatureResponse, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.id = data.id;
-        this.flags = data.flags;
+        this.flags = data.flags ?? 0;
         this.objectRegistry = objectRegistry;
         this.declaration = data.declaration ? new NodeHandle<Declaration>(data.declaration, project) : undefined;
         this.typeParameters = data.typeParameters ?? [];
