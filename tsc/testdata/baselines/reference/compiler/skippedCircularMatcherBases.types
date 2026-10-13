@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/skippedCircularMatcherBases.ts] ////
+
+=== matchers.d.ts ===
+interface Expect extends Matchers {}
+interface MatcherResult<Result> {}
+interface Matchers {
+    containing(value: string): unknown;
+>containing : (value: string) => unknown
+>value : string
+}
+interface Matchers extends MatcherResult<ReturnType<typeof expect.containing>> {}
+>expect.containing : (value: string) => unknown
+>expect : Expect
+>containing : (value: string) => unknown
+
+declare const expect: Expect;
+>expect : Expect
+
+=== main.ts ===
+expect.containing("value");
+>expect.containing("value") : unknown
+>expect.containing : (value: string) => unknown
+>expect : Expect
+>containing : (value: string) => unknown
+>"value" : "value"
+
