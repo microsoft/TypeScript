@@ -85,3 +85,10 @@ func illegalWrites(node *Node, identifier *Identifier, declaration *ImportDeclar
 	(node.Kind)++
 	_ = &(node.Kind)
 }
+
+func freshNodes() *Node {
+	tagged := &Identifier{}
+	tagged.Text = "x"
+	_ = newNode(KindIdentifier, tagged.AsNode())
+	return (&Identifier{}).AsNode()
+}

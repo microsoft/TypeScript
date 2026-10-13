@@ -145,3 +145,56 @@
 !!! unsafelayout: reinterpret compiler records only through checked casts or generated AST dispatch
 	}
 	
+	func freshRecords(c *Checker) *Type {
+		tagged := &LiteralType{}
+		c.newType(0, 0, tagged.AsType(), typeKindLiteral)
+		_ = (&LiteralType{}).AsType()
+		    ~
+!!! unsafelayout: a fresh compiler record must be checked-constructed before it escapes
+		escaped := &LiteralType{}
+		           ~
+!!! unsafelayout: a fresh compiler record must be checked-constructed before it escapes
+		c.newType(0, 0, escaped.AsType(), typeKindLiteral)
+		_ = escaped.AsType()
+		header := &ObjectType{}
+		          ~
+!!! unsafelayout: a fresh compiler record must be checked-constructed before it escapes
+		_ = &header.TypeBase
+		c.newType(0, 0, header.AsType(), typeKindObject)
+		unused := &ObjectType{}
+		          ~
+!!! unsafelayout: a fresh compiler record must be checked-constructed before it escapes
+		_ = unused
+		value := LiteralType{}
+		         ~
+!!! unsafelayout: allocate compiler records by pointer so checked construction can tag them
+		_ = value
+		    ~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
+		return new(LiteralType).AsType()
+		       ~
+!!! unsafelayout: a fresh compiler record must be checked-constructed before it escapes
+	}
+	
+	func freshMappers() (*TypeMapper, *TypeMapper) {
+		tagged := &SimpleTypeMapper{}
+		tagged.kind = typeMapperSimple
+		untagged := &ArrayTypeMapper{}
+		            ~
+!!! unsafelayout: a fresh mapper must be tagged by the statement after its allocation
+		return &tagged.TypeMapper, &untagged.TypeMapper
+	}
+	
+	type arena[T any] struct{}
+	
+	func (a *arena[T]) New() *T { return new(T) }
+	
+	func arenaRecords(c *Checker, literals *arena[LiteralType]) *LiteralType {
+		c.newType(0, 0, literals.New().AsType(), typeKindLiteral)
+		data := literals.New()
+		c.newType(0, 0, data.AsType(), typeKindLiteral)
+		return literals.New()
+		       ~
+!!! unsafelayout: a fresh compiler record must be checked-constructed before it escapes
+	}
+	

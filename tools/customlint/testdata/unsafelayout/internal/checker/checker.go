@@ -104,3 +104,38 @@ func mapperCalls(simple *SimpleTypeMapper, header *TypeMapper) {
 	_ = castTypeMapper[SimpleTypeMapper](header, typeMapperArray)
 	_ = (*SimpleTypeMapper)(unsafe.Pointer(header))
 }
+
+func freshRecords(c *Checker) *Type {
+	tagged := &LiteralType{}
+	c.newType(0, 0, tagged.AsType(), typeKindLiteral)
+	_ = (&LiteralType{}).AsType()
+	escaped := &LiteralType{}
+	c.newType(0, 0, escaped.AsType(), typeKindLiteral)
+	_ = escaped.AsType()
+	header := &ObjectType{}
+	_ = &header.TypeBase
+	c.newType(0, 0, header.AsType(), typeKindObject)
+	unused := &ObjectType{}
+	_ = unused
+	value := LiteralType{}
+	_ = value
+	return new(LiteralType).AsType()
+}
+
+func freshMappers() (*TypeMapper, *TypeMapper) {
+	tagged := &SimpleTypeMapper{}
+	tagged.kind = typeMapperSimple
+	untagged := &ArrayTypeMapper{}
+	return &tagged.TypeMapper, &untagged.TypeMapper
+}
+
+type arena[T any] struct{}
+
+func (a *arena[T]) New() *T { return new(T) }
+
+func arenaRecords(c *Checker, literals *arena[LiteralType]) *LiteralType {
+	c.newType(0, 0, literals.New().AsType(), typeKindLiteral)
+	data := literals.New()
+	c.newType(0, 0, data.AsType(), typeKindLiteral)
+	return literals.New()
+}
