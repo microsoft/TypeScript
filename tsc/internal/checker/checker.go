@@ -8427,16 +8427,9 @@ func (c *Checker) checkIndexedAccessIndexType(t *Type, accessNode *ast.Node) *Ty
 	// Check if the index type is assignable to 'keyof T' for the object type.
 	objectType := t.AsIndexedAccessType().objectType
 	indexType := t.AsIndexedAccessType().indexType
-	// skip index type deferral on remapping mapped types
-	var objectIndexType *Type
-	if c.isGenericMappedType(objectType) && c.getMappedTypeNameTypeKind(objectType) == MappedTypeNameTypeKindRemapping {
-		objectIndexType = c.getIndexTypeForMappedType(objectType, IndexFlagsNone)
-	} else {
-		objectIndexType = c.getIndexTypeEx(objectType, IndexFlagsNone)
-	}
 	hasNumberIndexInfo := c.getIndexInfoOfType(objectType, c.numberType) != nil
 	if everyType(indexType, func(t *Type) bool {
-		return c.isTypeAssignableTo(t, objectIndexType) || hasNumberIndexInfo && c.isApplicableIndexType(t, c.numberType)
+		return c.isTypeAssignableTo(t, c.getIndexTypeEx(objectType, IndexFlagsNone)) || hasNumberIndexInfo && c.isApplicableIndexType(t, c.numberType)
 	}) {
 		if accessNode.Kind == ast.KindElementAccessExpression && ast.IsAssignmentTarget(accessNode) && objectType.objectFlags&ObjectFlagsMapped != 0 && getMappedTypeModifiers(objectType)&MappedTypeModifiersIncludeReadonly != 0 {
 			c.error(accessNode, diagnostics.Index_signature_in_type_0_only_permits_reading, c.TypeToString(objectType))
