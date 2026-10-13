@@ -3251,8 +3251,11 @@ export class Symbol {
     readonly checkFlags: CheckFlags;
     /** @internal */
     readonly reference: SymbolReference;
-    readonly declarations: readonly NodeHandle<Declaration>[];
-    readonly valueDeclaration: NodeHandle<Declaration> | undefined;
+    // Declaration handles are kept in their wire form until first accessed.
+    private readonly declarationHandles: readonly string[] | undefined;
+    private readonly valueDeclarationHandle: string | undefined;
+    private declarationsCache: readonly NodeHandle<Declaration>[] | undefined;
+    private valueDeclarationCache: NodeHandle<Declaration> | undefined;
     private readonly parent!: CompactSymbolReference;
     private readonly exportSymbol!: CompactSymbolReference;
     private membersCache: Promise<ReadonlyMap<__String, Symbol>> | undefined;
@@ -3267,16 +3270,31 @@ export class Symbol {
         this.name = unescapeLeadingUnderscores(data.name as __String);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags ?? 0;
-        // A file-owned symbol has no canonical project; its declarations resolve through its file.
-        const project = storage.kind === SymbolOwnerKind.Snapshot ? storage.registry.project : undefined;
-        const fileOwner = storage.kind === SymbolOwnerKind.File ? storage.owner : undefined;
-        this.declarations = (data.declarations ?? []).map(handle => new NodeHandle<Declaration>(handle, project, fileOwner));
-        this.valueDeclaration = data.valueDeclaration
-            ? new NodeHandle<Declaration>(data.valueDeclaration, project, fileOwner)
-            : undefined;
+        this.declarationHandles = data.declarations;
+        this.valueDeclarationHandle = data.valueDeclaration;
+        this.declarationsCache = undefined;
+        this.valueDeclarationCache = undefined;
 
         if (data.parent !== undefined) this.parent = data.parent;
         if (data.exportSymbol !== undefined) this.exportSymbol = data.exportSymbol;
+    }
+
+    get declarations(): readonly NodeHandle<Declaration>[] {
+        return this.declarationsCache ??= this.declarationHandles?.map(handle => this.createDeclarationHandle(handle)) ?? [];
+    }
+
+    get valueDeclaration(): NodeHandle<Declaration> | undefined {
+        if (this.valueDeclarationCache === undefined && this.valueDeclarationHandle) {
+            this.valueDeclarationCache = this.createDeclarationHandle(this.valueDeclarationHandle);
+        }
+        return this.valueDeclarationCache;
+    }
+
+    private createDeclarationHandle(handle: string): NodeHandle<Declaration> {
+        // A file-owned symbol has no canonical project; its declarations resolve through its file.
+        return this.storage.kind === SymbolOwnerKind.Snapshot
+            ? new NodeHandle<Declaration>(handle, this.storage.registry.project)
+            : new NodeHandle<Declaration>(handle, undefined, this.storage.owner);
     }
 
     async getParent(): Promise<Symbol | undefined> {
@@ -3889,7 +3907,9 @@ export class Signature {
     private objectRegistry: ProjectObjectRegistry;
 
     readonly id: number;
-    readonly declaration?: NodeHandle<Declaration> | undefined;
+    private readonly project: Project;
+    private readonly declarationHandle: string | undefined;
+    private declarationCache: NodeHandle<Declaration> | undefined;
     readonly typeParameters?: readonly number[] | undefined;
     readonly parameters: readonly CompactSymbolReference[];
     readonly thisParameter?: CompactSymbolReference | undefined;
@@ -3900,12 +3920,21 @@ export class Signature {
         this.id = data.id;
         this.flags = data.flags ?? 0;
         this.objectRegistry = objectRegistry;
-        this.declaration = data.declaration ? new NodeHandle<Declaration>(data.declaration, project) : undefined;
+        this.project = project;
+        this.declarationHandle = data.declaration;
+        this.declarationCache = undefined;
         this.typeParameters = data.typeParameters ?? [];
         this.parameters = data.parameters ?? [];
         this.thisParameter = data.thisParameter;
         this.target = data.target;
         this.returnType = false;
+    }
+
+    get declaration(): NodeHandle<Declaration> | undefined {
+        if (this.declarationCache === undefined && this.declarationHandle) {
+            this.declarationCache = new NodeHandle<Declaration>(this.declarationHandle, this.project);
+        }
+        return this.declarationCache;
     }
 
     async getTypeParameters(): Promise<readonly TypeParameter[]> {
