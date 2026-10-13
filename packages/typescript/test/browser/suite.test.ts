@@ -251,10 +251,10 @@ function browserTestPlugin(mode: "async" | "sync"): Plugin {
             build.onResolve({ filter: /^node:module$/ }, () => ({ path: "node-module", namespace: "browser-shim" }));
             build.onResolve({ filter: /^node:path$/ }, () => ({ path: "node-path", namespace: "browser-shim" }));
             build.onResolve({ filter: /^node:url$/ }, () => ({ path: "node-url", namespace: "browser-shim" }));
-            build.onResolve({ filter: /^@typescript\/typescript\/unstable\/async$/ }, () => ({
+            build.onResolve({ filter: /^@typescript\/typescript\/async$/ }, () => ({
                 path: mode === "async" ? api : path.join(browserDir, "asyncAPI.ts"),
             }));
-            build.onResolve({ filter: /^@typescript\/typescript\/unstable\/sync$/ }, () => ({
+            build.onResolve({ filter: /^@typescript\/typescript\/sync$/ }, () => ({
                 path: mode === "sync" ? api : path.join(browserDir, "syncAPI.ts"),
             }));
             build.onResolve({ filter: /^\.\/api\.bench\.ts$/ }, () => ({ path: "api-bench", namespace: "browser-shim" }));
