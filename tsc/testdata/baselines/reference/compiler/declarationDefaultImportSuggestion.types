@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/declarationDefaultImportSuggestion.ts] ////
+
+=== store.d.ts ===
+
+export interface Store {}
+
+=== main.ts ===
+import Store from "./store";
+>Store : typeof Store
+
