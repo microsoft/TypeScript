@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/genericValueMarker.ts] ////
+
+=== genericValueMarker.ts ===
+declare const valueMarker: unique symbol;
+>valueMarker : unique symbol
+
+type AnyValue = { [valueMarker]?: undefined } | number;
+>AnyValue : AnyValue
+>[valueMarker] : undefined
+>valueMarker : unique symbol
+
+declare function compare<Value>(value: Value & AnyValue): void;
+>compare : <Value>(value: Value & AnyValue) => void
+>value : Value & AnyValue
+
+compare((): number => 0);
+>compare((): number => 0) : void
+>compare : <Value>(value: Value & AnyValue) => void
+>(): number => 0 : () => number
+>0 : 0
+
