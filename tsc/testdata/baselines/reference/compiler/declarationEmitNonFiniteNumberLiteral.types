@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/declarationEmitNonFiniteNumberLiteral.ts] ////
+
+=== declarationEmitNonFiniteNumberLiteral.ts ===
+// Numeric literals that overflow to Infinity have number literal types, but Infinity has no literal
+// syntax: `declare const a = Infinity;` is an error in a .d.ts (TS1254), so these get type annotations.
+
+export const a = 1e400;
+>a : Infinity
+>1e400 : Infinity
+
+export const b = -1e400;
+>b : -Infinity
+>-1e400 : -Infinity
+>1e400 : Infinity
+
+export const c = 1.7976931348623159e308;
+>c : Infinity
+>1.7976931348623159e308 : Infinity
+
+export const d = 1e308;
+>d : 1e+308
+>1e308 : 1e+308
+
+export class C {
+>C : C
+
+    static readonly e = 1e400;
+>e : Infinity
+>1e400 : Infinity
+
+    readonly f = -2e308;
+>f : -Infinity
+>-2e308 : -Infinity
+>2e308 : Infinity
+}
+
+// References to enum members are valid initializers whatever their value.
+export enum E {
+>E : E
+
+    A = NaN,
+>A : E.A
+>NaN : number
+
+    B = Infinity,
+>B : E.B
+>Infinity : number
+}
+export const g = E.A;
+>g : E.A
+>E.A : E.A
+>E : typeof E
+>A : E.A
+
+export const h = E.B;
+>h : E.B
+>E.B : E.B
+>E : typeof E
+>B : E.B
+
+export default 1e400;
+
