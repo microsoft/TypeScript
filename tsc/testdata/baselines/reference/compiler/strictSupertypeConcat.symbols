@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/strictSupertypeConcat.ts] ////
+
+=== strictSupertypeConcat.ts ===
+declare class User {
+>User : Symbol(User, Decl(strictSupertypeConcat.ts, 0, 0))
+
+    get initial(): string;
+>initial : Symbol(User.initial, Decl(strictSupertypeConcat.ts, 0, 20))
+}
+declare class Group {
+>Group : Symbol(Group, Decl(strictSupertypeConcat.ts, 2, 1))
+
+    memberCount: number;
+>memberCount : Symbol(Group.memberCount, Decl(strictSupertypeConcat.ts, 3, 21))
+}
+interface Suggestion {
+>Suggestion : Symbol(Suggestion, Decl(strictSupertypeConcat.ts, 5, 1))
+
+    initial?: string;
+>initial : Symbol(Suggestion.initial, Decl(strictSupertypeConcat.ts, 6, 22))
+}
+type Many<Value> = Value | readonly Value[];
+>Many : Symbol(Many, Decl(strictSupertypeConcat.ts, 8, 1))
+>Value : Symbol(Value, Decl(strictSupertypeConcat.ts, 9, 10))
+>Value : Symbol(Value, Decl(strictSupertypeConcat.ts, 9, 10))
+>Value : Symbol(Value, Decl(strictSupertypeConcat.ts, 9, 10))
+
+declare function concat<Value>(...values: Many<Value>[]): Value[];
+>concat : Symbol(concat, Decl(strictSupertypeConcat.ts, 9, 44))
+>Value : Symbol(Value, Decl(strictSupertypeConcat.ts, 11, 24))
+>values : Symbol(values, Decl(strictSupertypeConcat.ts, 11, 31))
+>Many : Symbol(Many, Decl(strictSupertypeConcat.ts, 8, 1))
+>Value : Symbol(Value, Decl(strictSupertypeConcat.ts, 11, 24))
+>Value : Symbol(Value, Decl(strictSupertypeConcat.ts, 11, 24))
+
+declare const pending: User[];
+>pending : Symbol(pending, Decl(strictSupertypeConcat.ts, 12, 13))
+>User : Symbol(User, Decl(strictSupertypeConcat.ts, 0, 0))
+
+declare const suggestions: (Group | Suggestion)[];
+>suggestions : Symbol(suggestions, Decl(strictSupertypeConcat.ts, 13, 13))
+>Group : Symbol(Group, Decl(strictSupertypeConcat.ts, 2, 1))
+>Suggestion : Symbol(Suggestion, Decl(strictSupertypeConcat.ts, 5, 1))
+
+const items = concat(pending, suggestions);
+>items : Symbol(items, Decl(strictSupertypeConcat.ts, 15, 5))
+>concat : Symbol(concat, Decl(strictSupertypeConcat.ts, 9, 44))
+>pending : Symbol(pending, Decl(strictSupertypeConcat.ts, 12, 13))
+>suggestions : Symbol(suggestions, Decl(strictSupertypeConcat.ts, 13, 13))
+
