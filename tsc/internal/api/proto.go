@@ -1030,7 +1030,9 @@ type GetDefaultProjectForFileParams struct {
 }
 
 type ProjectResponse struct {
-	Id                project.ID                 `json:"id"`
+	Id project.ID `json:"id"`
+	// Handle is a compact alias for Id that requests may use in its place.
+	Handle            string                     `json:"handle"`
 	ConfigFileName    *tspath.RootedFilePath     `json:"configFileName,omitempty"`
 	CurrentDirectory  tspath.RootedDirectoryPath `json:"currentDirectory"`
 	Dirty             bool                       `json:"dirty"`
@@ -1076,6 +1078,7 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 	}
 	return &ProjectResponse{
 		Id:                p.ID(),
+		Handle:            projectHandles.handleFor(p.ID()),
 		ConfigFileName:    configFileName,
 		CurrentDirectory:  p.CurrentDirectory(),
 		Dirty:             p.IsDirty(),
@@ -2070,7 +2073,7 @@ func unmarshalPayload(method string, payload json.Value) (any, error) {
 
 func unmarshallerFor[T any](data []byte) (any, error) {
 	var v T
-	if err := json.Unmarshal(data, &v); err != nil {
+	if err := json.Unmarshal(data, &v, requestUnmarshalOptions); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal %T: %w", (*T)(nil), err)
 	}
 	return &v, nil

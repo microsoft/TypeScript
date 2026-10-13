@@ -467,6 +467,8 @@ export interface GetDefaultProjectForFileParams {
 
 export interface ProjectResponse {
     id: ProjectId;
+    /** Handle is a compact alias for Id that requests may use in its place. */
+    handle: string;
     configFileName?: RootedFilePath | undefined;
     currentDirectory: RootedDirectoryPath;
     dirty: boolean;

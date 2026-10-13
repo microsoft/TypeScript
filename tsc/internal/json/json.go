@@ -65,6 +65,15 @@ func UnmarshalRead(in io.Reader, out any, opts ...json.Options) (err error) {
 	return json.UnmarshalRead(in, out, opts...)
 }
 
+// UnmarshalFromFunc wraps a type-specific decoding function for use with WithUnmarshalers.
+func UnmarshalFromFunc[T any](fn func(*jsontext.Decoder, T) error) *json.Unmarshalers {
+	return json.UnmarshalFromFunc(fn)
+}
+
+func WithUnmarshalers(unmarshalers *json.Unmarshalers) json.Options {
+	return json.WithUnmarshalers(unmarshalers)
+}
+
 func AllowDuplicateNames(allow bool) json.Options {
 	return jsontext.AllowDuplicateNames(allow)
 }
@@ -82,6 +91,7 @@ func NewDecoder(r io.Reader) *jsontext.Decoder {
 }
 
 type (
+	Options         = json.Options
 	Value           = jsontext.Value
 	Kind            = jsontext.Kind
 	UnmarshalerFrom = json.UnmarshalerFrom
