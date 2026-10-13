@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/distributedRecursiveMappedType.ts] ////
+
+=== distributedRecursiveMappedType.ts ===
+type Exact<Shape, Input extends Shape> = Shape extends Shape
+>Exact : Exact<Shape, Input>
+
+    ? { [Key in keyof Shape]: Exact<Shape[Key], Input[Key]> }
+    : never;
+
