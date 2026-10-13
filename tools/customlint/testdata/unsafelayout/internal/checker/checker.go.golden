@@ -206,6 +206,8 @@
 		    ~
 !!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
 		_ = literals
+		    ~
+!!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
 		var mappers [2]SimpleTypeMapper
 		mappers[0].kind = typeMapperSimple
 		return &literal, &mappers[0]

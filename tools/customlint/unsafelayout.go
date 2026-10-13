@@ -22,12 +22,11 @@ var unsafeLayoutAnalyzer = &analysis.Analyzer{
 		in := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
 		p := unsafeLayoutPass{pass: pass}
 		p.collectNodeLayouts()
-		for c := range in.Root().Preorder(
-			(*ast.AssignStmt)(nil), (*ast.IncDecStmt)(nil), (*ast.UnaryExpr)(nil), (*ast.CompositeLit)(nil),
-			(*ast.CallExpr)(nil), (*ast.IndexExpr)(nil), (*ast.TypeSpec)(nil), (*ast.ValueSpec)(nil),
-			(*ast.StarExpr)(nil), (*ast.SelectorExpr)(nil), (*ast.Ident)(nil),
-		) {
+		for c := range in.Root().Preorder() {
 			p.check(c)
+			if expr, ok := c.Node().(ast.Expr); ok {
+				p.checkCopy(c, expr)
+			}
 		}
 		return nil, nil
 	},
@@ -326,29 +325,79 @@ func (p *unsafeLayoutPass) check(c inspector.Cursor) {
 				}
 			}
 		}
+	case *ast.RangeStmt:
+		if node.Tok == token.ASSIGN && !test {
+			for _, target := range []ast.Expr{node.Key, node.Value} {
+				if selector, ok := ast.Unparen(target).(*ast.SelectorExpr); ok && p.protectedTag(selector) {
+					p.pass.Reportf(selector.Pos(), "range assignment to a compiler tag bypasses checked tag assignment")
+				}
+			}
+		}
+	case *ast.FuncType:
 		if test {
 			return
 		}
-		expr := node.(ast.Expr)
-		value := p.pass.TypesInfo.Types[expr]
-		if value.IsType() || value.Type == nil {
-			return
-		}
-		if _, pointer := types.Unalias(value.Type).(*types.Pointer); pointer || layoutFamily(value.Type) == "" || p.layoutConstant(c) {
-			return
-		}
-		switch parent := c.Parent().Node().(type) {
-		case *ast.SelectorExpr:
-			if parent.X == expr {
-				return
+		for _, list := range []*ast.FieldList{node.Params, node.Results} {
+			if list == nil {
+				continue
 			}
-		case *ast.UnaryExpr:
-			if parent.Op == token.AND {
-				return
+			for _, field := range list.List {
+				if typ := p.pass.TypesInfo.TypeOf(field.Type); typ != nil && holdsRecordByValue(typ) {
+					p.pass.Reportf(field.Pos(), "passing or returning a compiler record by value bypasses checked construction; use a pointer")
+				}
 			}
 		}
-		p.pass.Reportf(expr.Pos(), "copying a compiler record by value can detach its tagged header; keep a pointer")
 	}
+}
+
+// Reports whether typ is or contains a compiler record by value, including mappers.
+func holdsRecordByValue(typ types.Type) bool {
+	if _, pointer := types.Unalias(typ).(*types.Pointer); pointer {
+		return false
+	}
+	return layoutFamily(typ) != "" || containsLayoutRecord(typ)
+}
+
+// Every value-producing expression holding a record by value is a copy unless it
+// is only addressed, has a field or method selected, or is an indexed array.
+func (p *unsafeLayoutPass) checkCopy(c inspector.Cursor, expr ast.Expr) {
+	switch expr.(type) {
+	case *ast.CompositeLit, *ast.ParenExpr, *ast.FuncLit, *ast.KeyValueExpr:
+		return
+	}
+	if strings.HasSuffix(p.pass.Fset.Position(expr.Pos()).Filename, "_test.go") {
+		return
+	}
+	value, ok := p.pass.TypesInfo.Types[expr]
+	if !ok || value.IsType() || value.Type == nil || !holdsRecordByValue(value.Type) || p.layoutConstant(c) {
+		return
+	}
+	parent := c.Parent()
+	for {
+		if _, ok := parent.Node().(*ast.ParenExpr); !ok {
+			break
+		}
+		parent = parent.Parent()
+	}
+	switch parent := parent.Node().(type) {
+	case *ast.SelectorExpr:
+		if ast.Unparen(parent.X) == expr {
+			return
+		}
+	case *ast.UnaryExpr:
+		if parent.Op == token.AND {
+			return
+		}
+	case *ast.IndexExpr:
+		if _, array := value.Type.Underlying().(*types.Array); array && ast.Unparen(parent.X) == expr {
+			return
+		}
+	case *ast.SliceExpr:
+		if ast.Unparen(parent.X) == expr {
+			return
+		}
+	}
+	p.pass.Reportf(expr.Pos(), "copying a compiler record by value can detach its tagged header; keep a pointer")
 }
 
 func (p *unsafeLayoutPass) protectedTag(selector *ast.SelectorExpr) bool {
