@@ -1,0 +1,19 @@
+anonymousClassDeclarationWithClassDecorator.ts(3,1): error TS1211: A class declaration without the 'default' modifier must have a name.
+anonymousClassDeclarationWithClassDecorator.ts(8,1): error TS1029: 'export' modifier must precede 'default' modifier.
+
+
+==== anonymousClassDeclarationWithClassDecorator.ts (2 errors) ====
+    declare var dec: any;
+    
+    @dec
+    ~
+!!! error TS1211: A class declaration without the 'default' modifier must have a name.
+    class {
+    }
+    
+    @dec
+    default class {
+    ~~~~~~~
+!!! error TS1029: 'export' modifier must precede 'default' modifier.
+    }
+    
