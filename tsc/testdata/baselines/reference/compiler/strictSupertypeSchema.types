@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/strictSupertypeSchema.ts] ////
+
+=== strictSupertypeSchema.ts ===
+interface Schema {
+    [name: string]: any;
+>name : string
+}
+
+declare function choose<Result>(...callbacks: (() => Result)[]): Result;
+>choose : <Result>(...callbacks: (() => Result)[]) => Result
+>callbacks : (() => Result)[]
+
+declare const schema: Schema;
+>schema : Schema
+
+const result = choose(() => ({}), () => schema);
+>result : {}
+>choose(() => ({}), () => schema) : {}
+>choose : <Result>(...callbacks: (() => Result)[]) => Result
+>() => ({}) : () => {}
+>({}) : {}
+>{} : {}
+>() => schema : () => Schema
+>schema : Schema
+
+result.$ref;
+>result.$ref : any
+>result : {}
+>$ref : any
+
