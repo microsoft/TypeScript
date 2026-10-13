@@ -1667,7 +1667,7 @@ describe("BuildOrchestrator", () => {
             overrideCompilerOptions: {
                 incremental: true,
                 assumeChangesOnlyAffectDirectDependencies: true,
-                declaration: false,
+                declaration: true,
                 declarationMap: true,
                 emitDeclarationOnly: false,
                 sourceMap: false,
@@ -1684,6 +1684,42 @@ describe("BuildOrchestrator", () => {
         assert.equal((await orchestrator.build()).status, 0);
         assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined))!, /export const a = 1/);
         assert.match(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined))!, /export const b = 2/);
+    });
+
+    test("applies overrideCompilerOptions to the build", async () => {
+        const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
+        await using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
+        const orchestrator = await api.createBuildOrchestrator(
+            ["/a/tsconfig.json"],
+            { cwd: "/", overrideCompilerOptions: { declarationMap: true } },
+        );
+
+        assert.equal((await orchestrator.build()).status, 0);
+        assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.d.ts.map", undefined))!, /"sources":\["\.\.\/src\/index\.ts"\]/);
+    });
+
+    test("does not emit when noEmit is overridden", async () => {
+        const source = `export const value: string = 1;`;
+        const { api: disposableApi, fs } = spawnAPIWithFS({
+            "/a/tsconfig.json": JSON.stringify({
+                compilerOptions: { outDir: "dist", rootDir: "src" },
+                files: ["src/index.ts"],
+            }),
+            "/a/src/index.ts": source,
+        });
+        await using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
+        const orchestrator = await api.createBuildOrchestrator(
+            ["/a/tsconfig.json"],
+            { cwd: "/", overrideCompilerOptions: { noEmit: true } },
+        );
+
+        const response = await orchestrator.build();
+        assert.equal(response.status, 2);
+        assert.equal(response.diagnostics?.length, 1);
+        assert.equal(response.diagnostics[0].code, 2322);
+        assert.equal(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined)), serverFS.useOS);
     });
 
     test("returns diagnostics in build response information", async () => {
