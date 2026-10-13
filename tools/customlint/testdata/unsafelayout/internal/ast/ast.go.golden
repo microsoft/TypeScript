@@ -134,3 +134,9 @@
 		return &n
 	}
 	
+	func (n Identifier) ValueReceiver() string {
+	      ~
+!!! unsafelayout: declaring a compiler record by value copies or detaches its tagged header; use a pointer
+		return n.Text
+	}
+	

@@ -82,6 +82,8 @@
 		    ~
 !!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
 		copy := *node
+		~
+!!! unsafelayout: declaring a compiler record by value copies or detaches its tagged header; use a pointer
 		        ~
 !!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
 		_ = copy
@@ -150,20 +152,20 @@
 	
 	func zeroResult() (n ast.Identifier) {
 	                   ~
-!!! unsafelayout: passing or returning a compiler record by value bypasses checked construction; use a pointer
+!!! unsafelayout: declaring a compiler record by value copies or detaches its tagged header; use a pointer
 		return
 	}
 	
 	func byValueParam(identifier ast.Identifier, identifiers [2]ast.Identifier) {}
 	                  ~
-!!! unsafelayout: passing or returning a compiler record by value bypasses checked construction; use a pointer
+!!! unsafelayout: declaring a compiler record by value copies or detaches its tagged header; use a pointer
 	                                             ~
-!!! unsafelayout: passing or returning a compiler record by value bypasses checked construction; use a pointer
+!!! unsafelayout: declaring a compiler record by value copies or detaches its tagged header; use a pointer
 	
 	func copies(records map[string]ast.Identifier, channel chan ast.Identifier, get func() ast.Identifier, slice []ast.Identifier) *ast.Identifier {
-	                                                                                       ~
-!!! unsafelayout: passing or returning a compiler record by value bypasses checked construction; use a pointer
 		record := records["key"]
+		~
+!!! unsafelayout: declaring a compiler record by value copies or detaches its tagged header; use a pointer
 		          ~
 !!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
 		_ = <-channel
@@ -179,5 +181,26 @@
 		_ = slice[0].Text
 		_ = len(slice[:1])
 		return &record
+	}
+	
+	func rangeCopies(records []ast.Identifier, byKey map[string]ast.Identifier, channel chan ast.Identifier) {
+		for _, record := range records {
+		       ~
+!!! unsafelayout: declaring a compiler record by value copies or detaches its tagged header; use a pointer
+			_ = record.Text
+		}
+		for _, record := range byKey {
+		       ~
+!!! unsafelayout: declaring a compiler record by value copies or detaches its tagged header; use a pointer
+			_ = record.Text
+		}
+		for record := range channel {
+		    ~
+!!! unsafelayout: declaring a compiler record by value copies or detaches its tagged header; use a pointer
+			_ = record.Text
+		}
+		for i := range records {
+			_ = &records[i]
+		}
 	}
 	

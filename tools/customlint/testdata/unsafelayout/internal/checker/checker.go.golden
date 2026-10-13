@@ -166,6 +166,8 @@
 !!! unsafelayout: a fresh compiler record must be checked-constructed before it escapes
 		_ = unused
 		value := LiteralType{}
+		~
+!!! unsafelayout: declaring a compiler record by value copies or detaches its tagged header; use a pointer
 		         ~
 !!! unsafelayout: allocate compiler records by pointer so checked construction can tag them
 		_ = value
