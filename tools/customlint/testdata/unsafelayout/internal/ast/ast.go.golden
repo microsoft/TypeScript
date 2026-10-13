@@ -118,3 +118,12 @@
 !!! unsafelayout: taking a compiler tag's address bypasses checked tag assignment
 	}
 	
+	func freshNodes() *Node {
+		tagged := &Identifier{}
+		tagged.Text = "x"
+		_ = newNode(KindIdentifier, tagged.AsNode())
+		return (&Identifier{}).AsNode()
+		       ~
+!!! unsafelayout: a fresh compiler record must be checked-constructed before it escapes
+	}
+	

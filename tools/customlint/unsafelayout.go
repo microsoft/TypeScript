@@ -256,6 +256,10 @@ func (p *unsafeLayoutPass) check(c inspector.Cursor) {
 		}
 		if !strings.HasSuffix(p.pass.Pkg.Path(), owner) {
 			p.pass.Reportf(node.Pos(), "construct compiler records through their owning factories, not struct literals")
+		} else if unary, ok := c.Parent().Node().(*ast.UnaryExpr); ok && unary.Op == token.AND {
+			p.checkFreshRecord(c.Parent(), family)
+		} else {
+			p.pass.Reportf(node.Pos(), "allocate compiler records by pointer so checked construction can tag them")
 		}
 		for _, element := range node.Elts {
 			if field, ok := element.(*ast.KeyValueExpr); ok {
@@ -412,6 +416,11 @@ func (p *unsafeLayoutPass) checkCall(c inspector.Cursor, call *ast.CallExpr, tes
 			}
 		}
 	}
+	if selector, ok := call.Fun.(*ast.SelectorExpr); ok && selector.Sel.Name == "New" && len(call.Args) == 0 && !test {
+		if family := layoutFamily(p.pass.TypesInfo.TypeOf(call)); family != "" {
+			p.checkFreshRecord(c, family)
+		}
+	}
 	if len(call.Args) != 1 {
 		return
 	}
@@ -428,6 +437,8 @@ func (p *unsafeLayoutPass) checkCall(c inspector.Cursor, call *ast.CallExpr, tes
 			}
 			if !strings.HasSuffix(p.pass.Pkg.Path(), owner) {
 				p.pass.Reportf(call.Pos(), "allocate compiler records through their owning factories")
+			} else {
+				p.checkFreshRecord(c, family)
 			}
 		}
 	}
@@ -504,4 +515,122 @@ func (p *unsafeLayoutPass) matchingUpcast(expr, kind ast.Expr, family string, ge
 			(generated && p.pass.TypesInfo.Types[kind].Value == nil)
 	}
 	return p.matchingKind(p.pass.TypesInfo.TypeOf(method.X), kind)
+}
+
+// A fresh record has a zero tag until checked construction assigns one, so it
+// must not escape before then. Types and nodes must be upcast straight into
+// newType or newNode, or held in a local that is only used through its own
+// fields until that upcast. Mappers must be tagged by the next statement.
+func (p *unsafeLayoutPass) checkFreshRecord(alloc inspector.Cursor, family string) {
+	parent := alloc.Parent()
+	for {
+		if _, ok := parent.Node().(*ast.ParenExpr); !ok {
+			break
+		}
+		alloc, parent = parent, parent.Parent()
+	}
+	if p.constructorUpcast(alloc, family) {
+		return
+	}
+	assignment, ok := parent.Node().(*ast.AssignStmt)
+	if !ok || assignment.Tok != token.DEFINE || len(assignment.Lhs) != 1 || len(assignment.Rhs) != 1 {
+		p.pass.Reportf(alloc.Node().Pos(), "a fresh compiler record must be checked-constructed before it escapes")
+		return
+	}
+	name, _ := assignment.Lhs[0].(*ast.Ident)
+	variable := p.pass.TypesInfo.Defs[name]
+	if variable == nil {
+		p.pass.Reportf(alloc.Node().Pos(), "a fresh compiler record must be checked-constructed before it escapes")
+		return
+	}
+	if family == "TypeMapper" {
+		if next, ok := parent.NextSibling(); ok {
+			if tag, ok := next.Node().(*ast.AssignStmt); ok && len(tag.Lhs) == 1 {
+				if selector, ok := tag.Lhs[0].(*ast.SelectorExpr); ok && p.protectedTag(selector) {
+					if x, ok := selector.X.(*ast.Ident); ok && p.pass.TypesInfo.Uses[x] == variable {
+						return
+					}
+				}
+			}
+		}
+		p.pass.Reportf(alloc.Node().Pos(), "a fresh mapper must be tagged by the statement after its allocation")
+		return
+	}
+	scope := parent.Parent()
+	for scope.Node() != nil {
+		if _, ok := scope.Node().(*ast.BlockStmt); ok {
+			if _, ok := scope.Parent().Node().(*ast.FuncDecl); ok {
+				break
+			}
+			if _, ok := scope.Parent().Node().(*ast.FuncLit); ok {
+				break
+			}
+		}
+		scope = scope.Parent()
+	}
+	constructed := false
+	escaped := false
+	for use := range scope.Preorder((*ast.Ident)(nil)) {
+		if p.pass.TypesInfo.Uses[use.Node().(*ast.Ident)] != variable {
+			continue
+		}
+		selector, ok := use.Parent().Node().(*ast.SelectorExpr)
+		if !ok || selector.X != use.Node() {
+			escaped = true
+			continue
+		}
+		selection := p.pass.TypesInfo.Selections[selector]
+		switch {
+		case selection == nil:
+			escaped = true
+		case selection.Kind() == types.FieldVal:
+			if field := selection.Obj().(*types.Var); field.Embedded() {
+				escaped = true
+			}
+		case p.constructorUpcast(use, family):
+			constructed = true
+		default:
+			escaped = true
+		}
+	}
+	if escaped || !constructed {
+		p.pass.Reportf(alloc.Node().Pos(), "a fresh compiler record must be checked-constructed before it escapes")
+	}
+}
+
+// Reports whether receiver is upcast directly into the record argument of
+// newType or newNode. checkCall separately verifies the kind pairing.
+func (p *unsafeLayoutPass) constructorUpcast(receiver inspector.Cursor, family string) bool {
+	method, ok := receiver.Parent().Node().(*ast.SelectorExpr)
+	if !ok || method.X != receiver.Node() || method.Sel.Name != "As"+family {
+		return false
+	}
+	upcast, ok := receiver.Parent().Parent().Node().(*ast.CallExpr)
+	if !ok || upcast.Fun != method {
+		return false
+	}
+	constructor, ok := receiver.Parent().Parent().Parent().Node().(*ast.CallExpr)
+	if !ok {
+		return false
+	}
+	var name *ast.Ident
+	switch fun := constructor.Fun.(type) {
+	case *ast.SelectorExpr:
+		name = fun.Sel
+	case *ast.Ident:
+		name = fun
+	}
+	function, _ := p.pass.TypesInfo.Uses[name].(*types.Func)
+	if function == nil || function.Pkg() == nil {
+		return false
+	}
+	switch family {
+	case "Type":
+		return strings.HasSuffix(function.Pkg().Path(), "/internal/checker") && function.Name() == "newType" &&
+			len(constructor.Args) == 4 && constructor.Args[2] == upcast
+	case "Node":
+		return strings.HasSuffix(function.Pkg().Path(), "/internal/ast") && function.Name() == "newNode" &&
+			len(constructor.Args) >= 2 && constructor.Args[1] == upcast
+	}
+	return false
 }
