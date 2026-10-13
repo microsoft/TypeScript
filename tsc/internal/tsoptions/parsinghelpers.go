@@ -161,10 +161,12 @@ func parseContentMapper(value any) (*contentmapper.Mapper, []*ast.Diagnostic) {
 		errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.extensions", "string[]"))
 	}
 	if outputExtensions, ok := v.Get("outputExtensions"); ok {
-		if values, isStringMap := parseStringStringMapStrict(outputExtensions); isStringMap {
+		if outputExtensions == nil {
+			mapper.Definition.OutputExtensions = map[string]string{}
+		} else if values, isStringMap := parseStringStringMapStrict(outputExtensions); isStringMap {
 			mapper.Definition.OutputExtensions = values
 		} else {
-			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.outputExtensions", "object"))
+			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.outputExtensions", "object or null"))
 		}
 	}
 	if options, ok := v.Get("options"); ok {

@@ -1142,6 +1142,61 @@ func TestParseNullEnumCompilerOptions(t *testing.T) {
 	}
 }
 
+func TestContentMapperOutputExtensionsReset(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name             string
+		override         string
+		rewrite          bool
+		declaration      tspath.RootedFilePath
+		manifestDefaults bool
+	}{
+		{"omitted", "", true, "/dist/Card.d.ts", true},
+		{"null", `, "outputExtensions": null`, false, "/dist/Card.d.astro.ts", false},
+		{"empty object", `, "outputExtensions": {}`, false, "/dist/Card.d.astro.ts", false},
+	} {
+		for name, getParsed := range map[string]func(testConfig, vfs.FS, tspath.RootedDirectoryPath) *tsoptions.ParsedCommandLine{
+			"json api":           getParsedWithJsonApi,
+			"jsonSourceFile api": getParsedWithJsonSourceFileApi,
+		} {
+			t.Run(test.name+"/"+name, func(t *testing.T) {
+				t.Parallel()
+				config := testConfig{
+					jsonText: fmt.Sprintf(`{
+						"compilerOptions": {
+							"declaration": true, "rootDir": "/src", "outDir": "/dist",
+							"rewriteRelativeImportExtensions": %t
+						},
+						"contentMappers": [{ "package": "mapper", "extensions": [".astro"]%s }],
+						"files": ["/src/Card.astro"]
+					}`, test.rewrite, test.override),
+					configFileName:  "tsconfig.json",
+					basePath:        "/",
+					existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+				}
+				files := map[string]string{
+					"/tsconfig.json":  config.jsonText,
+					"/src/Card.astro": "export {};",
+					"/node_modules/mapper/package.json": `{
+						"name": "mapper",
+						"typescript": { "contentMapper": {
+							"exec": ["mapper"], "outputExtensions": {".astro": ".js"}
+						} }
+					}`,
+				}
+				config.allFileList = files
+				parsed := getParsed(config, tsoptionstest.NewVFS(files, tspath.CaseSensitive), config.basePath)
+				assert.Equal(t, len(parsed.Errors), 0)
+				assert.Equal(t, len(parsed.ContentMappers()), 1)
+				mapper := parsed.ContentMappers()[0]
+				assert.Equal(t, mapper.Definition.OutputExtensions == nil, test.manifestDefaults)
+				assert.Equal(t, len(parsed.ContentMapperExtensionRewrites()) > 0, test.manifestDefaults)
+				assert.DeepEqual(t, slices.Collect(parsed.GetOutputFileNames()), []tspath.RootedFilePath{test.declaration})
+			})
+		}
+	}
+}
+
 func TestContentMappers(t *testing.T) {
 	t.Parallel()
 

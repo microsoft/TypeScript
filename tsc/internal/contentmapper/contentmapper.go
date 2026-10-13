@@ -33,7 +33,7 @@ var ErrProjectUnavailable = errors.New("content mapper project is unavailable")
 type Definition struct {
 	Package    string   `json:"package"`
 	Extensions []string `json:"extensions"`
-	// OutputExtensions replaces the manifest defaults, including when the map is empty.
+	// OutputExtensions replaces the manifest defaults. An explicit null in tsconfig is represented by an empty map.
 	OutputExtensions map[string]string `json:"outputExtensions,omitzero"`
 	Options          json.Value        `json:"options,omitempty"`
 }
