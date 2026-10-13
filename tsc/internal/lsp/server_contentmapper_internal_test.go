@@ -58,6 +58,11 @@ func TestParseContentMapperContributions(t *testing.T) {
 	assert.Equal(t, mapper.Identity(), "publisher.extension[0] (Vue mapper@2.3.4)")
 	assert.Equal(t, mapper.PackageDirectory.AsString(), cwd)
 	assert.DeepEqual(t, mapper.Manifest.DefaultOutputExtensions, map[string]string{".vue": ".js"})
+	assert.DeepEqual(t, mapper.Definition.OutputExtensions, map[string]string{".vue": ".js"})
+	outputExtensions[".vue"] = ".mjs"
+	assert.Equal(t, mapper.Definition.OutputExtensions[".vue"], ".js")
+	mapper.Manifest.DefaultOutputExtensions[".vue"] = ".cjs"
+	assert.Equal(t, mapper.Definition.OutputExtensions[".vue"], ".js")
 	assert.Equal(t, string(mapper.Definition.Options), `{"mode":"embedded"}`)
 }
 

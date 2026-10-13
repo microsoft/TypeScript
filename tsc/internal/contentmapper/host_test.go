@@ -37,7 +37,7 @@ func TestEmptyOutputExtensionsOverrideSurvivesSerialization(t *testing.T) {
 	assert.Assert(t, parsed.OutputExtensions != nil)
 	mapper := &contentmapper.Mapper{Definition: parsed}
 	mapper.Manifest.DefaultOutputExtensions = map[string]string{".vue": ".js"}
-	assert.Equal(t, len(mapper.EffectiveOutputExtensions()), 0)
+	assert.Equal(t, len(mapper.Definition.OutputExtensions), 0)
 }
 
 type responseMapper struct {

@@ -1149,11 +1149,12 @@ func TestContentMapperOutputExtensionsReset(t *testing.T) {
 		override         string
 		rewrite          bool
 		declaration      tspath.RootedFilePath
-		manifestDefaults bool
+		outputExtensions map[string]string
 	}{
-		{"omitted", "", true, "/dist/Card.d.ts", true},
-		{"null", `, "outputExtensions": null`, false, "/dist/Card.d.astro.ts", false},
-		{"empty object", `, "outputExtensions": {}`, false, "/dist/Card.d.astro.ts", false},
+		{"omitted", "", true, "/dist/Card.d.ts", map[string]string{".astro": ".js"}},
+		{"null", `, "outputExtensions": null`, false, "/dist/Card.d.astro.ts", nil},
+		{"empty object", `, "outputExtensions": {}`, false, "/dist/Card.d.astro.ts", map[string]string{}},
+		{"replacement", `, "outputExtensions": {".astro": ".mjs"}`, true, "/dist/Card.d.mts", map[string]string{".astro": ".mjs"}},
 	} {
 		for name, getParsed := range map[string]func(testConfig, vfs.FS, tspath.RootedDirectoryPath) *tsoptions.ParsedCommandLine{
 			"json api":           getParsedWithJsonApi,
@@ -1189,9 +1190,11 @@ func TestContentMapperOutputExtensionsReset(t *testing.T) {
 				assert.Equal(t, len(parsed.Errors), 0)
 				assert.Equal(t, len(parsed.ContentMappers()), 1)
 				mapper := parsed.ContentMappers()[0]
-				assert.Equal(t, mapper.Definition.OutputExtensions == nil, test.manifestDefaults)
-				assert.Equal(t, len(parsed.ContentMapperExtensionRewrites()) > 0, test.manifestDefaults)
+				assert.DeepEqual(t, mapper.Definition.OutputExtensions, test.outputExtensions)
+				assert.Equal(t, len(parsed.ContentMapperExtensionRewrites()) > 0, test.rewrite)
 				assert.DeepEqual(t, slices.Collect(parsed.GetOutputFileNames()), []tspath.RootedFilePath{test.declaration})
+				mapper.Manifest.DefaultOutputExtensions[".astro"] = ".cjs"
+				assert.DeepEqual(t, mapper.Definition.OutputExtensions, test.outputExtensions)
 			})
 		}
 	}

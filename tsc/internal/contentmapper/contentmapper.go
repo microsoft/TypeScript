@@ -33,7 +33,7 @@ var ErrProjectUnavailable = errors.New("content mapper project is unavailable")
 type Definition struct {
 	Package    string   `json:"package"`
 	Extensions []string `json:"extensions"`
-	// OutputExtensions replaces the manifest defaults. An explicit null in tsconfig is represented by an empty map.
+	// OutputExtensions contains the resolved mapping after applying manifest defaults and project overrides.
 	OutputExtensions map[string]string `json:"outputExtensions,omitzero"`
 	Options          json.Value        `json:"options,omitempty"`
 }
@@ -145,14 +145,6 @@ func (m *Mapper) Equals(other *Mapper) bool {
 		m.ContributionID == other.ContributionID
 }
 
-// EffectiveOutputExtensions returns the project override when present, otherwise the manifest defaults.
-func (m *Mapper) EffectiveOutputExtensions() map[string]string {
-	if m.Definition.OutputExtensions != nil {
-		return m.Definition.OutputExtensions
-	}
-	return m.Manifest.DefaultOutputExtensions
-}
-
 // TransformIdentity fingerprints the mapper's identity, declared compiler options, and runtime output
 // contract so both transformed-file caches and incremental emit are invalidated when these change.
 // It is a pure function of the mapper and options and never starts the mapper process.
@@ -160,8 +152,8 @@ func (m *Mapper) TransformIdentity(options *core.CompilerOptions) xxh3.Uint128 {
 	declared, _ := m.MarshalDeclaredOptions(options)
 	optionsJSON, _ := json.Marshal(declared)
 	var outputExtensionsJSON []byte
-	if len(m.EffectiveOutputExtensions()) > 0 {
-		outputExtensionsJSON, _ = json.Marshal(m.EffectiveOutputExtensions(), json.Deterministic(true))
+	if len(m.Definition.OutputExtensions) > 0 {
+		outputExtensionsJSON, _ = json.Marshal(m.Definition.OutputExtensions, json.Deterministic(true))
 	}
 	buf := make([]byte, 0, len(m.Identity())+3+len(m.Options)+len(optionsJSON)+len(outputExtensionsJSON))
 	buf = append(buf, m.Identity()...)

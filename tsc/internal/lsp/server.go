@@ -2591,6 +2591,7 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			ContributionID:  identity,
 		}
 		mapper.Manifest.DefaultOutputExtensions = maps.Clone(valueOrZero(manifest.OutputExtensions))
+		mapper.Definition.OutputExtensions = maps.Clone(mapper.Manifest.DefaultOutputExtensions)
 		if manifest.Cwd != nil {
 			if !tspath.PathIsAbsolute(*manifest.Cwd) {
 				return result, fmt.Errorf("content mapper contribution %q has non-absolute cwd", identity)

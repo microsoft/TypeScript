@@ -411,7 +411,7 @@ func (p *ParsedCommandLine) computeContentMapperExtensionRewrites() []tspath.Ext
 	hasNonIdentityMapping := false
 	ignoreCase := p.CaseSensitivity().IsCaseInsensitive()
 	for _, mapper := range p.ContentMappers() {
-		outputExtensions := mapper.EffectiveOutputExtensions()
+		outputExtensions := mapper.Definition.OutputExtensions
 		for _, source := range mapper.Definition.Extensions {
 			target, ok := getContentMapperOutputExtension(outputExtensions, source, ignoreCase)
 			if !ok || target == source || ignoreCase && strings.EqualFold(target, source) {

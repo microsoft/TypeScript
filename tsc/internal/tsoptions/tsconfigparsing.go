@@ -1367,8 +1367,12 @@ func parseJsonConfigFileContentWorker(
 				continue
 			}
 			mapper.Manifest = manifest
+			rawMapper := contentMappersOfRaw.sliceValue[contentMapperIndices[j]].(*collections.OrderedMap[string, any])
+			if _, present := rawMapper.Get("outputExtensions"); !present {
+				mapper.Definition.OutputExtensions = maps.Clone(manifest.DefaultOutputExtensions)
+			}
 			for _, sourceExtension := range mapper.Definition.Extensions {
-				outputExtension, ok := getContentMapperOutputExtension(mapper.EffectiveOutputExtensions(), sourceExtension, fs.CaseSensitivity().IsCaseInsensitive())
+				outputExtension, ok := getContentMapperOutputExtension(mapper.Definition.OutputExtensions, sourceExtension, fs.CaseSensitivity().IsCaseInsensitive())
 				identity := sourceExtension == outputExtension || fs.CaseSensitivity().IsCaseInsensitive() && strings.EqualFold(sourceExtension, outputExtension)
 				if ok && !identity && !parsedConfig.options.RewriteRelativeImportExtensions.IsTrue() {
 					errors = append(errors, setContentMapperDiagnosticLocation(
