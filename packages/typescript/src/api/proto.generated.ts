@@ -271,7 +271,7 @@ export interface SymbolResponse {
     reference: SymbolReference;
     name: string;
     flags: number;
-    checkFlags: number;
+    checkFlags?: number | undefined;
     declarations?: string[] | undefined;
     valueDeclaration?: string | undefined;
     parent?: CompactSymbolReference | undefined;
@@ -524,9 +524,9 @@ export interface TypeResponse {
     isTupleType?: boolean | undefined;
     /**
      * Value is literal type data. BigInt literals are encoded as signed decimal
-     * strings because JSON cannot represent bigint; absent values are null.
+     * strings because JSON cannot represent bigint; absent values are omitted.
      */
-    value: unknown;
+    value?: unknown | undefined;
     /** ObjectType / TypeReference / StringMappingType / IndexType target */
     target?: number | undefined;
     /** InterfaceType type parameters */
@@ -708,7 +708,7 @@ export interface GetSignaturesOfTypeParams {
 
 export interface SignatureResponse {
     id: number;
-    flags: number;
+    flags?: number | undefined;
     declaration?: string | undefined;
     typeParameters?: number[] | undefined;
     parameters?: CompactSymbolReference[] | undefined;

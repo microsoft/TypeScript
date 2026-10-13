@@ -1125,7 +1125,7 @@ type SymbolResponse struct {
 	Reference        SymbolReference         `json:"reference"`
 	Name             string                  `json:"name"`
 	Flags            uint32                  `json:"flags"`
-	CheckFlags       uint32                  `json:"checkFlags"`
+	CheckFlags       uint32                  `json:"checkFlags,omitzero"`
 	Declarations     []NodeHandle            `json:"declarations,omitempty"`
 	ValueDeclaration NodeHandle              `json:"valueDeclaration,omitempty"`
 	Parent           *CompactSymbolReference `json:"parent,omitempty"`
@@ -1176,12 +1176,12 @@ type GetTypesOfSymbolsParams struct {
 type TypeResponse struct {
 	Id          TypeID `json:"id"`
 	Flags       uint32 `json:"flags"`
-	ObjectFlags uint32 `json:"objectFlags,omitempty"`
-	IsTupleType bool   `json:"isTupleType,omitempty"`
+	ObjectFlags uint32 `json:"objectFlags,omitzero"`
+	IsTupleType bool   `json:"isTupleType,omitzero"`
 
 	// Value is literal type data. BigInt literals are encoded as signed decimal
-	// strings because JSON cannot represent bigint; absent values are null.
-	Value any `json:"value"`
+	// strings because JSON cannot represent bigint; absent values are omitted.
+	Value any `json:"value,omitzero"`
 
 	// ObjectType / TypeReference / StringMappingType / IndexType target
 	Target TypeID `json:"target,omitzero"`
@@ -1223,7 +1223,7 @@ type TypeResponse struct {
 	RegularType TypeID `json:"regularType,omitzero"`
 
 	// TypeParameter data
-	IsThisType bool `json:"isThisType,omitempty"`
+	IsThisType bool `json:"isThisType,omitzero"`
 
 	// InterfaceType data
 	ThisType TypeID `json:"thisType,omitzero"`
@@ -1363,7 +1363,7 @@ type ConstantValueResponse struct {
 
 type SignatureResponse struct {
 	Id             SignatureID              `json:"id"`
-	Flags          uint32                   `json:"flags"`
+	Flags          uint32                   `json:"flags,omitzero"`
 	Declaration    NodeHandle               `json:"declaration,omitempty"`
 	TypeParameters []TypeID                 `json:"typeParameters,omitempty"`
 	Parameters     []CompactSymbolReference `json:"parameters,omitempty"`
