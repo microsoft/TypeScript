@@ -589,7 +589,10 @@ func (c *Checker) narrowTypeByEquality(t *Type, operator ast.Kind, value *ast.No
 		if !doubleEquals && valueType.flags&TypeFlagsPrimitive != 0 && c.isUniformUnionType(t) {
 			regularType := c.getRegularTypeOfLiteralType(valueType)
 			if c.unionContainsType(t, regularType, false /*matchSymbol*/) {
-				return regularType
+				// When the union contains the literal itself, the result is that (regular) constituent. Otherwise
+				// the union contains the base primitive of the literal, and the general path below would replace
+				// that primitive with valueType, so return valueType to preserve its freshness (widening).
+				return core.IfElse(containsType(t.Types(), regularType), regularType, valueType)
 			}
 		}
 		filteredType := c.filterType(t, func(t *Type) bool {

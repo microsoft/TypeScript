@@ -1,0 +1,203 @@
+//// [tests/cases/compiler/narrowingByEqualityPreservesWideningLiterals.ts] ////
+
+=== narrowingByEqualityPreservesWideningLiterals.ts ===
+// https://github.com/microsoft/TypeScript/issues/64766
+
+declare const kind: string | undefined;
+>kind : string | undefined
+
+if (kind === "a") {
+>kind === "a" : boolean
+>kind : string | undefined
+>"a" : "a"
+
+    let copy = kind;
+>copy : string
+>kind : "a"
+
+    copy = "b";
+>copy = "b" : "b"
+>copy : string
+>"b" : "b"
+
+    const obj = { kind };
+>obj : { kind: string; }
+>{ kind } : { kind: string; }
+>kind : string
+
+    obj.kind = "b";
+>obj.kind = "b" : "b"
+>obj.kind : string
+>obj : { kind: string; }
+>kind : string
+>"b" : "b"
+
+    const arr = [kind];
+>arr : string[]
+>[kind] : string[]
+>kind : "a"
+
+    arr.push("b");
+>arr.push("b") : number
+>arr.push : (...items: string[]) => number
+>arr : string[]
+>push : (...items: string[]) => number
+>"b" : "b"
+}
+
+declare const count: number | undefined;
+>count : number | undefined
+
+if (count === 1) {
+>count === 1 : boolean
+>count : number | undefined
+>1 : 1
+
+    let copy = count;
+>copy : number
+>count : 1
+
+    copy = 2;
+>copy = 2 : 2
+>copy : number
+>2 : 2
+}
+
+declare const big: bigint | null;
+>big : bigint | null
+
+if (big === 1n) {
+>big === 1n : boolean
+>big : bigint | null
+>1n : 1n
+
+    let copy = big;
+>copy : bigint
+>big : 1n
+
+    copy = 2n;
+>copy = 2n : 2n
+>copy : bigint
+>2n : 2n
+}
+
+declare const constKind = "a";
+>constKind : "a"
+>"a" : "a"
+
+if (constKind === "a") {
+>constKind === "a" : boolean
+>constKind : "a"
+>"a" : "a"
+
+    let copy = constKind;
+>copy : string
+>constKind : "a"
+
+    copy = "b";
+>copy = "b" : "b"
+>copy : string
+>"b" : "b"
+}
+
+declare const annotatedKind: "a";
+>annotatedKind : "a"
+
+if (annotatedKind === "a") {
+>annotatedKind === "a" : boolean
+>annotatedKind : "a"
+>"a" : "a"
+
+    let copy = annotatedKind;
+>copy : "a"
+>annotatedKind : "a"
+
+    copy = "b";
+>copy = "b" : "b"
+>copy : "a"
+>"b" : "b"
+}
+
+declare const lit: "a" | "b" | undefined;
+>lit : "a" | "b" | undefined
+
+if (lit === "a") {
+>lit === "a" : boolean
+>lit : "a" | "b" | undefined
+>"a" : "a"
+
+    let copy = lit;
+>copy : "a"
+>lit : "a"
+
+    copy = "b";
+>copy = "b" : "b"
+>copy : "a"
+>"b" : "b"
+}
+
+if (kind !== undefined) {
+>kind !== undefined : boolean
+>kind : string | undefined
+>undefined : undefined
+
+    switch (kind) {
+>kind : string
+
+        case "a":
+>"a" : "a"
+
+            let copy = kind;
+>copy : "a"
+>kind : "a"
+
+            copy = "b";
+>copy = "b" : "b"
+>copy : "a"
+>"b" : "b"
+    }
+}
+
+declare const requests: Array<{ parameterPath?: string }>;
+>requests : { parameterPath?: string; }[]
+>parameterPath : string | undefined
+
+requests.flatMap((request) => {
+>requests.flatMap((request) => {    if (request.parameterPath === "lookupFields") return [{ parameterPath: request.parameterPath }];    if (request.parameterPath === "recordFields") return [{ parameterPath: request.parameterPath }];    return [];}) : { parameterPath: string; }[]
+>requests.flatMap : <U, This = undefined>(callback: (this: This, value: { parameterPath?: string; }, index: number, array: { parameterPath?: string; }[]) => U | readonly U[], thisArg?: This | undefined) => U[]
+>requests : { parameterPath?: string; }[]
+>flatMap : <U, This = undefined>(callback: (this: This, value: { parameterPath?: string; }, index: number, array: { parameterPath?: string; }[]) => U | readonly U[], thisArg?: This | undefined) => U[]
+>(request) => {    if (request.parameterPath === "lookupFields") return [{ parameterPath: request.parameterPath }];    if (request.parameterPath === "recordFields") return [{ parameterPath: request.parameterPath }];    return [];} : (this: undefined, request: { parameterPath?: string; }) => { parameterPath: string; }[]
+>request : { parameterPath?: string; }
+
+    if (request.parameterPath === "lookupFields") return [{ parameterPath: request.parameterPath }];
+>request.parameterPath === "lookupFields" : boolean
+>request.parameterPath : string | undefined
+>request : { parameterPath?: string; }
+>parameterPath : string | undefined
+>"lookupFields" : "lookupFields"
+>[{ parameterPath: request.parameterPath }] : { parameterPath: string; }[]
+>{ parameterPath: request.parameterPath } : { parameterPath: string; }
+>parameterPath : string
+>request.parameterPath : "lookupFields"
+>request : { parameterPath?: string; }
+>parameterPath : "lookupFields"
+
+    if (request.parameterPath === "recordFields") return [{ parameterPath: request.parameterPath }];
+>request.parameterPath === "recordFields" : boolean
+>request.parameterPath : string | undefined
+>request : { parameterPath?: string; }
+>parameterPath : string | undefined
+>"recordFields" : "recordFields"
+>[{ parameterPath: request.parameterPath }] : { parameterPath: string; }[]
+>{ parameterPath: request.parameterPath } : { parameterPath: string; }
+>parameterPath : string
+>request.parameterPath : "recordFields"
+>request : { parameterPath?: string; }
+>parameterPath : "recordFields"
+
+    return [];
+>[] : never[]
+
+});
+
