@@ -211,7 +211,41 @@
 		    ~
 !!! unsafelayout: copying a compiler record by value can detach its tagged header; keep a pointer
 		var mappers [2]SimpleTypeMapper
+		    ~
+!!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
 		mappers[0].kind = typeMapperSimple
 		return &literal, &mappers[0]
+		                 ~
+!!! unsafelayout: mapper storage held by value is untagged until an init*TypeMapper function tags it; pass its address there first
+	}
+	
+	func (m *SimpleTypeMapper) Map(t *Type) *Type { return t }
+	
+	func initSimpleTypeMapper(m *SimpleTypeMapper) *TypeMapper {
+		m.kind = typeMapperSimple
+		return &m.TypeMapper
+	}
+	
+	type mapperOwner struct {
+		mapperStorage [2]SimpleTypeMapper
+	}
+	
+	func coallocatedMappers(owner *mapperOwner, t *Type) (*TypeMapper, *TypeMapper, *Type) {
+		tagged := initSimpleTypeMapper(&owner.mapperStorage[0])
+		escaped := &owner.mapperStorage[1].TypeMapper
+		           ~
+!!! unsafelayout: mapper storage held by value is untagged until an init*TypeMapper function tags it; pass its address there first
+		return tagged, escaped, owner.mapperStorage[1].Map(t)
+		                        ~
+!!! unsafelayout: mapper storage held by value is untagged until an init*TypeMapper function tags it; pass its address there first
+	}
+	
+	func zeroValueMapper() *TypeMapper {
+		var m SimpleTypeMapper
+		    ~
+!!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
+		return &m.TypeMapper
+		       ~
+!!! unsafelayout: mapper storage held by value is untagged until an init*TypeMapper function tags it; pass its address there first
 	}
 	

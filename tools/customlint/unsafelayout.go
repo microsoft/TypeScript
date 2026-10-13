@@ -132,26 +132,76 @@ func layoutFamily(typ types.Type) string {
 	return ""
 }
 
-// Reports whether typ holds a node or type record by value, directly or
-// inside arrays or structs, so declaring it yields untagged zero-value records.
-// Mappers are exempt: coallocated mapper storage is tagged by a matching
-// kind assignment, which checkTagWrite already verifies.
+// Reports whether typ holds a compiler record by value, directly or inside
+// arrays or structs, so declaring it yields untagged zero-value records.
+// Mappers coallocated as struct fields are exempt; checkMapperAddress makes
+// sure their storage only escapes through a tagging init function.
 func containsLayoutRecord(typ types.Type) bool {
+	return containsRecord(typ, false)
+}
+
+func containsRecord(typ types.Type, field bool) bool {
 	if family := layoutFamily(typ); family != "" {
 		_, pointer := types.Unalias(typ).(*types.Pointer)
-		return !pointer && family != "TypeMapper"
+		return !pointer && (family != "TypeMapper" || !field)
 	}
 	switch underlying := types.Unalias(typ).Underlying().(type) {
 	case *types.Array:
-		return containsLayoutRecord(underlying.Elem())
+		return containsRecord(underlying.Elem(), field)
 	case *types.Struct:
-		for field := range underlying.Fields() {
-			if containsLayoutRecord(field.Type()) {
+		for f := range underlying.Fields() {
+			if containsRecord(f.Type(), true) {
 				return true
 			}
 		}
 	}
 	return false
+}
+
+func isMapperValue(typ types.Type) bool {
+	if typ == nil {
+		return false
+	}
+	_, pointer := types.Unalias(typ).(*types.Pointer)
+	return !pointer && layoutFamily(typ) == "TypeMapper"
+}
+
+// Mapper storage held by value starts with a zero tag, so its address may
+// only escape as an argument to a checker init*TypeMapper function, which
+// tags it. Selecting the embedded base of a mapper reached through a pointer
+// is an ordinary upcast of an already-tagged record.
+func (p *unsafeLayoutPass) checkMapperAddress(c inspector.Cursor, operand ast.Expr, pos token.Pos, what string) {
+	operand = ast.Unparen(operand)
+	if _, ok := operand.(*ast.CompositeLit); ok || !isMapperValue(p.pass.TypesInfo.TypeOf(operand)) {
+		return
+	}
+	if selector, ok := operand.(*ast.SelectorExpr); ok {
+		if _, pointer := types.Unalias(p.pass.TypesInfo.TypeOf(selector.X)).(*types.Pointer); pointer &&
+			layoutFamily(p.pass.TypesInfo.TypeOf(selector.X)) == "TypeMapper" {
+			return
+		}
+	}
+	parent := c.Parent()
+	for {
+		if _, ok := parent.Node().(*ast.ParenExpr); !ok {
+			break
+		}
+		parent = parent.Parent()
+	}
+	if call, ok := parent.Node().(*ast.CallExpr); ok && what == "address" {
+		var object *types.Func
+		switch fun := ast.Unparen(call.Fun).(type) {
+		case *ast.SelectorExpr:
+			object, _ = p.pass.TypesInfo.Uses[fun.Sel].(*types.Func)
+		case *ast.Ident:
+			object, _ = p.pass.TypesInfo.Uses[fun].(*types.Func)
+		}
+		if object != nil && object.Pkg() != nil && strings.HasSuffix(object.Pkg().Path(), "/internal/checker") &&
+			strings.HasPrefix(object.Name(), "init") && strings.HasSuffix(object.Name(), "TypeMapper") {
+			return
+		}
+	}
+	p.pass.Reportf(pos, "mapper storage held by value is untagged until an init*TypeMapper function tags it; pass its address there first")
 }
 
 func layoutKind(typ types.Type) *types.Const {
@@ -270,6 +320,9 @@ func (p *unsafeLayoutPass) check(c inspector.Cursor) {
 		}
 	case *ast.UnaryExpr:
 		if node.Op == token.AND {
+			if !test {
+				p.checkMapperAddress(c, node.X, node.Pos(), "address")
+			}
 			if selector, ok := ast.Unparen(node.X).(*ast.SelectorExpr); ok && p.protectedTag(selector) && !test {
 				p.pass.Reportf(node.Pos(), "taking a compiler tag's address bypasses checked tag assignment")
 			}
@@ -310,6 +363,15 @@ func (p *unsafeLayoutPass) check(c inspector.Cursor) {
 	case *ast.CallExpr:
 		p.checkCall(c, node, test)
 	case *ast.StarExpr, *ast.SelectorExpr, *ast.Ident:
+		if selector, ok := node.(*ast.SelectorExpr); ok && !test {
+			if selection := p.pass.TypesInfo.Selections[selector]; selection != nil && selection.Kind() == types.MethodVal {
+				if signature, ok := selection.Obj().Type().(*types.Signature); ok && signature.Recv() != nil {
+					if _, pointer := types.Unalias(signature.Recv().Type()).(*types.Pointer); pointer {
+						p.checkMapperAddress(c, selector.X, selector.Pos(), "method")
+					}
+				}
+			}
+		}
 		var object *types.Func
 		switch expr := node.(type) {
 		case *ast.SelectorExpr:

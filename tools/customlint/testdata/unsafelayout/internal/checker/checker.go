@@ -148,3 +148,25 @@ func zeroValueRecords() (*LiteralType, *SimpleTypeMapper) {
 	mappers[0].kind = typeMapperSimple
 	return &literal, &mappers[0]
 }
+
+func (m *SimpleTypeMapper) Map(t *Type) *Type { return t }
+
+func initSimpleTypeMapper(m *SimpleTypeMapper) *TypeMapper {
+	m.kind = typeMapperSimple
+	return &m.TypeMapper
+}
+
+type mapperOwner struct {
+	mapperStorage [2]SimpleTypeMapper
+}
+
+func coallocatedMappers(owner *mapperOwner, t *Type) (*TypeMapper, *TypeMapper, *Type) {
+	tagged := initSimpleTypeMapper(&owner.mapperStorage[0])
+	escaped := &owner.mapperStorage[1].TypeMapper
+	return tagged, escaped, owner.mapperStorage[1].Map(t)
+}
+
+func zeroValueMapper() *TypeMapper {
+	var m SimpleTypeMapper
+	return &m.TypeMapper
+}
