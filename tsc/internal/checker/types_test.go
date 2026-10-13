@@ -575,6 +575,16 @@ func TestStructuredMembersLookup(t *testing.T) {
 	member := c.newAnonymousType(nil, ast.SymbolTable{"different": renamed}, nil, nil, nil).AsStructuredType()
 	assert.Equal(t, member.getMember("different"), renamed)
 	assert.Assert(t, member.getMember("original") == nil)
+	aliased := c.newSymbol(ast.SymbolFlagsProperty, "original")
+	aliasedMembers := ast.SymbolTable{"original": aliased, "different": aliased}
+	for i := range 10 {
+		name := "p" + strconv.Itoa(i)
+		aliasedMembers[name] = c.newSymbol(ast.SymbolFlagsProperty, name)
+	}
+	aliasedType := c.newAnonymousType(nil, aliasedMembers, nil, nil, nil).AsStructuredType()
+	for name, symbol := range aliasedMembers {
+		assert.Equal(t, aliasedType.getMember(name), symbol)
+	}
 }
 
 func TestCompactStructuredTypeLayout(t *testing.T) {

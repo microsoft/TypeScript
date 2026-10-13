@@ -19587,18 +19587,13 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 	} else {
 		instantiated = true
 		mapper = newTypeMapper(typeParameters, typeArguments)
-		properties = c.getNamedMembers(resolved.declaredMembers, t.symbol)
-		for _, symbol := range properties {
-			if resolved.declaredMembers[symbol.Name()] != symbol {
-				members = c.instantiateSymbolTable(resolved.declaredMembers, mapper)
-				properties = nil
-				break
-			}
-		}
-		if members == nil {
+		if symbolTableKeysMatchNames(resolved.declaredMembers) {
+			properties = c.getNamedMembers(resolved.declaredMembers, t.symbol)
 			for i, symbol := range properties {
 				properties[i] = c.instantiateSymbol(symbol, mapper)
 			}
+		} else {
+			members = c.instantiateSymbolTable(resolved.declaredMembers, mapper)
 		}
 		callSignatures = c.instantiateSignatures(resolved.declaredCallSignatures, mapper)
 		constructSignatures = c.instantiateSignatures(resolved.declaredConstructSignatures, mapper)
