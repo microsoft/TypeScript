@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/regexpUnmatchedCaptureIndices.ts] ////
+
+=== regexpUnmatchedCaptureIndices.ts ===
+const match = /(section)?/d.exec("");
+>match : RegExpExecArray | null
+>/(section)?/d.exec("") : RegExpExecArray | null
+>/(section)?/d.exec : (string: string) => RegExpExecArray | null
+>/(section)?/d : RegExp
+>exec : (string: string) => RegExpExecArray | null
+>"" : ""
+
+if (match) {
+>match : RegExpExecArray | null
+
+    match.indices![1][0];
+>match.indices![1][0] : number
+>match.indices![1] : [number, number] | undefined
+>match.indices! : RegExpIndicesArray
+>match.indices : RegExpIndicesArray | undefined
+>match : RegExpExecArray
+>indices : RegExpIndicesArray | undefined
+>1 : 1
+>0 : 0
+
+    match.indices![1][1];
+>match.indices![1][1] : number
+>match.indices![1] : [number, number] | undefined
+>match.indices! : RegExpIndicesArray
+>match.indices : RegExpIndicesArray | undefined
+>match : RegExpExecArray
+>indices : RegExpIndicesArray | undefined
+>1 : 1
+>1 : 1
+
+    const indices = match.indices![1];
+>indices : [number, number] | undefined
+>match.indices![1] : [number, number] | undefined
+>match.indices! : RegExpIndicesArray
+>match.indices : RegExpIndicesArray | undefined
+>match : RegExpExecArray
+>indices : RegExpIndicesArray | undefined
+>1 : 1
+
+    if (indices) {
+>indices : [number, number] | undefined
+
+        indices[0];
+>indices[0] : number
+>indices : [number, number]
+>0 : 0
+
+        indices[1];
+>indices[1] : number
+>indices : [number, number]
+>1 : 1
+    }
+}
+
