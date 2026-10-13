@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/strictSupertypeInjection.ts] ////
+
+=== strictSupertypeInjection.ts ===
+interface Reference<Value> {
+    get value(): Value;
+>value : Value
+
+    set value(value: Value);
+>value : Value
+>value : Value
+}
+interface ComputedReference<Value> extends Reference<Value> {
+    readonly value: Value;
+>value : Value
+
+    effect: unknown;
+>effect : unknown
+}
+interface InjectionConstraint<Value> {}
+type InjectionKey<Value> = symbol & InjectionConstraint<Value>;
+>InjectionKey : InjectionKey<Value>
+
+declare function inject<Value>(key: InjectionKey<Value> | string, fallback: Value): Value;
+>inject : <Value>(key: InjectionKey<Value> | string, fallback: Value) => Value
+>key : string | InjectionKey<Value>
+>fallback : Value
+
+declare function ref<Value = any>(): Reference<Value | undefined>;
+>ref : <Value = any>() => Reference<Value | undefined>
+
+declare const key: InjectionKey<{ visibleIds: ComputedReference<unknown> }>;
+>key : InjectionKey<{ visibleIds: ComputedReference<unknown>; }>
+>visibleIds : ComputedReference<unknown>
+
+const visibleIds = inject(key, { visibleIds: ref() }).visibleIds;
+>visibleIds : Reference<any>
+>inject(key, { visibleIds: ref() }).visibleIds : Reference<any>
+>inject(key, { visibleIds: ref() }) : { visibleIds: Reference<any>; }
+>inject : <Value>(key: InjectionKey<Value> | string, fallback: Value) => Value
+>key : InjectionKey<{ visibleIds: ComputedReference<unknown>; }>
+>{ visibleIds: ref() } : { visibleIds: Reference<any>; }
+>visibleIds : Reference<any>
+>ref() : Reference<any>
+>ref : <Value = any>() => Reference<Value | undefined>
+>visibleIds : Reference<any>
+
