@@ -65,5 +65,31 @@ export class B {
     /** ECMAScript private property. */
     #e = 1;
 >#e : Symbol(B.#e, Decl(b.js, 14, 19))
+
+    constructor() {
+        /** Public constructor property. */
+        this.f = 1;
+>this.f : Symbol(B.f, Decl(b.js, 19, 19))
+>this : Symbol(B, Decl(b.js, 0, 0))
+>f : Symbol(B.f, Decl(b.js, 19, 19))
+
+        /**
+         * Protected constructor property.
+         * @protected
+         */
+        this.g = 1;
+>this.g : Symbol(B.g, Decl(b.js, 21, 19))
+>this : Symbol(B, Decl(b.js, 0, 0))
+>g : Symbol(B.g, Decl(b.js, 21, 19))
+
+        /**
+         * Private constructor property.
+         * @private
+         */
+        this.h = 1;
+>this.h : Symbol(B.h, Decl(b.js, 27, 19))
+>this : Symbol(B, Decl(b.js, 0, 0))
+>h : Symbol(B.h, Decl(b.js, 27, 19))
+    }
 }
 

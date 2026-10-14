@@ -48,4 +48,21 @@ export class B {
 
     /** ECMAScript private property. */
     #e = 1;
+
+    constructor() {
+        /** Public constructor property. */
+        this.f = 1;
+
+        /**
+         * Protected constructor property.
+         * @protected
+         */
+        this.g = 1;
+
+        /**
+         * Private constructor property.
+         * @private
+         */
+        this.h = 1;
+    }
 }

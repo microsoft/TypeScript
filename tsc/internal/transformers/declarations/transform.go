@@ -2188,7 +2188,9 @@ caseBlock:
 			tx.ensureType(node, false),
 			nil,
 		)
-		if ast.IsExpressionStatement(node.Parent) {
+		if modifierFlags&ast.ModifierFlagsPrivate != 0 {
+			tx.suppressJsDoc(prop)
+		} else if ast.IsExpressionStatement(node.Parent) {
 			tx.preserveJsDoc(prop, node.Parent)
 		}
 		tx.thisPropertyAssignmentsCollected = append(tx.thisPropertyAssignmentsCollected, prop)

@@ -73,5 +73,37 @@ export class B {
     #e = 1;
 >#e : number
 >1 : 1
+
+    constructor() {
+        /** Public constructor property. */
+        this.f = 1;
+>this.f = 1 : 1
+>this.f : any
+>this : this
+>f : any
+>1 : 1
+
+        /**
+         * Protected constructor property.
+         * @protected
+         */
+        this.g = 1;
+>this.g = 1 : 1
+>this.g : any
+>this : this
+>g : any
+>1 : 1
+
+        /**
+         * Private constructor property.
+         * @private
+         */
+        this.h = 1;
+>this.h = 1 : 1
+>this.h : any
+>this : this
+>h : any
+>1 : 1
+    }
 }
 

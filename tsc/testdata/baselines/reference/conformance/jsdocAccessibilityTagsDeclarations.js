@@ -93,7 +93,6 @@ declare class Protected {
     protected set p(value: any);
 }
 declare class Private {
-    /** @private */
     private c;
     /** @private */
     private constructor();

@@ -45,6 +45,23 @@ export class B {
 
     /** ECMAScript private property. */
     #e = 1;
+
+    constructor() {
+        /** Public constructor property. */
+        this.f = 1;
+
+        /**
+         * Protected constructor property.
+         * @protected
+         */
+        this.g = 1;
+
+        /**
+         * Private constructor property.
+         * @private
+         */
+        this.h = 1;
+    }
 }
 
 
@@ -67,10 +84,19 @@ export declare class A {
 //// [b.d.ts]
 export declare class B {
     #private;
+    /** Public constructor property. */
+    f: number;
+    /**
+     * Protected constructor property.
+     * @protected
+     */
+    protected g: number;
+    private h;
     /** Public property. */
     a: number;
     private b;
     private c;
     private get d();
     private set d(value);
+    constructor();
 }
