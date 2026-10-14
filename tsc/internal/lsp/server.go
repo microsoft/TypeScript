@@ -1740,15 +1740,13 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 	var apiSession *api.Session
 	apiSession = api.NewSession(s.session, nil)
 
-	// Use provided pipe path or generate a unique one
-	var pipePath string
+	var transport *api.PipeTransport
+	var err error
 	if params.Pipe != nil && *params.Pipe != "" {
-		pipePath = *params.Pipe
+		transport, err = api.NewPipeTransport(*params.Pipe)
 	} else {
-		pipePath = s.generateAPIPipePath()
+		transport, err = api.NewPrivatePipeTransport(s.generateAPIPipeName())
 	}
-
-	transport, err := api.NewPipeTransport(pipePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create API transport: %w", err)
 	}
@@ -1793,15 +1791,14 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 
 	return &lsproto.InitializeAPISessionResult{
 		SessionId: apiSession.ID(),
-		Pipe:      pipePath,
+		Pipe:      transport.Path(),
 	}, nil
 }
 
-func (s *Server) generateAPIPipePath() string {
-	// Generate a high-entropy path using time and random source
+func (s *Server) generateAPIPipeName() string {
 	now := time.Now().UnixNano()
 	rnd := rand.Uint64()
-	return api.GeneratePipePath(fmt.Sprintf("tsgo-api-%x-%x", now, rnd))
+	return fmt.Sprintf("tsgo-api-%x-%x", now, rnd)
 }
 
 func (s *Server) removeAPISession(id string) {

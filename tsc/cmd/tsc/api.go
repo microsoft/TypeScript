@@ -17,7 +17,7 @@ import (
 func runAPI(args []string) int {
 	flag := flag.NewFlagSet("api", flag.ContinueOnError)
 	cwd := flag.String("cwd", core.Must(os.Getwd()), "current working directory")
-	pipePath := flag.String("pipe", "", "use named pipe or Unix domain socket for communication instead of stdio")
+	pipePath := flag.String("pipe", "", "use a named pipe (Windows) or create a private Unix socket at <path>/socket, where <path> must not exist")
 	callbacks := flag.String("callbacks", "", "comma-separated list of FS callbacks to enable (readFile,fileExists,directoryExists,getAccessibleEntries,realpath)")
 	async := flag.Bool("async", false, "use JSON-RPC protocol instead of MessagePack (for async API)")
 	timing := flag.Bool("timing", false, "collect per-request server processing time, folded into the client's timing snapshot")
