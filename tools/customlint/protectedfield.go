@@ -38,6 +38,7 @@ func (p *protectedFieldPass) run() (any, error) {
 	for c := range in.Root().Preorder(
 		(*ast.AssignStmt)(nil),
 		(*ast.IncDecStmt)(nil),
+		(*ast.RangeStmt)(nil),
 		(*ast.UnaryExpr)(nil),
 		(*ast.CompositeLit)(nil),
 		(*ast.FuncType)(nil),
@@ -50,6 +51,13 @@ func (p *protectedFieldPass) run() (any, error) {
 			}
 		case *ast.IncDecStmt:
 			p.checkWrite(node.X, "write to")
+		case *ast.RangeStmt:
+			if node.Key != nil {
+				p.checkWrite(node.Key, "write to")
+			}
+			if node.Value != nil {
+				p.checkWrite(node.Value, "write to")
+			}
 		case *ast.UnaryExpr:
 			if node.Op == token.AND {
 				p.checkWrite(node.X, "address of")
@@ -107,7 +115,12 @@ func (p *protectedFieldPass) checkWrite(expr ast.Expr, what string) {
 }
 
 func (p *protectedFieldPass) checkLiteral(lit *ast.CompositeLit) {
-	st, ok := p.pass.TypesInfo.TypeOf(lit).Underlying().(*types.Struct)
+	typ := p.pass.TypesInfo.TypeOf(lit)
+	// Elided literals in []*T or map[K]*T composites have type *T.
+	if ptr, ok := typ.Underlying().(*types.Pointer); ok {
+		typ = ptr.Elem()
+	}
+	st, ok := typ.Underlying().(*types.Struct)
 	if !ok {
 		return
 	}

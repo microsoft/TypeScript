@@ -29,6 +29,18 @@
 		h.Flags = 1
 		_ = &h.Flags
 		_ = h.Kind
+		for _, h.Kind = range []record.Kind{record.KindLarge} {
+		         ~
+!!! protectedfield: write to protected field Kind
+		}
+		for h.Kind = range record.Kind(2) {
+		      ~
+!!! protectedfield: write to protected field Kind
+		}
+		var kinds []record.Kind
+		for _, kind := range kinds {
+			_ = kind
+		}
 	}
 	
 	func literals() {
@@ -43,6 +55,16 @@
 		_ = &record.Alias{Kind: record.KindSmall}
 		                  ~
 !!! protectedfield: write to protected field Kind
+		_ = []*record.Header{{Kind: record.KindLarge}}
+		                      ~
+!!! protectedfield: write to protected field Kind
+		_ = []*record.Header{{record.KindLarge, 1}}
+		                      ~
+!!! protectedfield: write to protected field Kind
+		_ = map[int]*record.Header{0: {Kind: record.KindLarge}}
+		                               ~
+!!! protectedfield: write to protected field Kind
+		_ = []*record.Header{{Flags: 1}}
 	}
 	
 	func copies(h *record.Header, s *record.Small, hs []record.Header) {
