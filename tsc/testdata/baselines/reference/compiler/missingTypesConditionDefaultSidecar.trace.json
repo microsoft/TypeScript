@@ -1,0 +1,23 @@
+======== Resolving module 'font/sans' from '/.src/main.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/.src/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'font/sans' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Found 'package.json' at '/.src/node_modules/font/package.json'.
+Entering conditional exports.
+Matched 'exports' condition 'types'.
+Using 'exports' subpath './sans' with target './missing.d.ts'.
+File '/.src/node_modules/font/missing.d.ts' does not exist.
+Failed to resolve under condition 'types'.
+Matched 'exports' condition 'default'.
+Using 'exports' subpath './sans' with target './sans.js'.
+File name '/.src/node_modules/font/sans.js' has a '.js' extension - stripping it.
+File '/.src/node_modules/font/sans.ts' does not exist.
+File '/.src/node_modules/font/sans.tsx' does not exist.
+File '/.src/node_modules/font/sans.d.ts' exists - use it as a name resolution result.
+Resolved under condition 'default'.
+Exiting conditional exports.
+Resolving real path for '/.src/node_modules/font/sans.d.ts', result '/.src/node_modules/font/sans.d.ts'.
+======== Module name 'font/sans' was successfully resolved to '/.src/node_modules/font/sans.d.ts'. ========
