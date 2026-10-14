@@ -22,17 +22,17 @@ export = callable;
 
 === main.ts ===
 import * as ns from "./mod";
->ns : {}
+>ns : { value: string; __esModule: true; other: number; }
 
 const value: string = ns.value;
 >value : string
->ns.value : any
->ns : {}
->value : any
+>ns.value : string
+>ns : { value: string; __esModule: true; other: number; }
+>value : string
 
 const other: number = ns.other;
 >other : number
->ns.other : any
->ns : {}
->other : any
+>ns.other : number
+>ns : { value: string; __esModule: true; other: number; }
+>other : number
 
