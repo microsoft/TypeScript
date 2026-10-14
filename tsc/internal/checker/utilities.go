@@ -962,6 +962,7 @@ func (c *Checker) releaseTemporaryPropertyCounts(counts *temporaryPropertyCounts
 func (c *Checker) getTemporaryNameSet() *collections.Set[string] {
 	if n := len(c.freeNameSets); n != 0 {
 		set := c.freeNameSets[n-1]
+		c.freeNameSets[n-1] = nil
 		c.freeNameSets = c.freeNameSets[:n-1]
 		return set
 	}
