@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/contentMapperOutputExtensionsUnsafeRewrite.ts] ////
+
+=== /components.astro/index.ts ===
+export const directory = 1;
+>directory : Symbol(directory, Decl(index.ts, 0, 12))
+
+=== /actual.astro ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(actual.astro, 0, 5))
+
+export const actual = 1;
+>actual : Symbol(actual, Decl(actual.astro, 1, 12))
+
+=== /ambient.d.astro.ts ===
+export const ambient: number;
+>ambient : Symbol(ambient, Decl(ambient.d.astro.ts, 0, 12))
+
+=== /main.ts ===
+import { directory } from "./components.astro";
+>directory : Symbol(directory, Decl(main.ts, 0, 8))
+
+import { actual } from "./actual.astro";
+>actual : Symbol(actual, Decl(main.ts, 1, 8))
+
+import { ambient } from "./ambient.astro";
+>ambient : Symbol(ambient, Decl(main.ts, 2, 8))
+
+import { actual as aliased } from "alias";
+>actual : Symbol(actual, Decl(actual.astro, 1, 12))
+>aliased : Symbol(aliased, Decl(main.ts, 3, 8))
+
+console.log(directory, actual, ambient, aliased);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>directory : Symbol(directory, Decl(main.ts, 0, 8))
+>actual : Symbol(actual, Decl(main.ts, 1, 8))
+>ambient : Symbol(ambient, Decl(main.ts, 2, 8))
+>aliased : Symbol(aliased, Decl(main.ts, 3, 8))
+

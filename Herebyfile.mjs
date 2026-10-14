@@ -88,6 +88,7 @@ const { values: rawOptions } = parseArgs({
         forRelease: { type: "boolean" },
         respectGoEnv: { type: "boolean" },
         vscodeTypescriptRelease: { type: "boolean" },
+        platform: { type: "string" },
 
         race: { type: "boolean", default: parseEnvBoolean("RACE") },
         noembed: { type: "boolean", default: parseEnvBoolean("NOEMBED") },
@@ -1034,6 +1035,17 @@ export const buildAPI = task({
     },
 });
 
+async function runCheckAPIDeclarations() {
+    await run("node", ["./node_modules/typescript/bin/tsc", "-p", "packages/typescript/tsconfig.dist.json"]);
+}
+
+export const checkAPIDeclarations = task({
+    name: "check:api-declarations",
+    description: "Type-checks the emitted @typescript/typescript declaration files.",
+    dependencies: [buildAPI],
+    run: runCheckAPIDeclarations,
+});
+
 async function runBuildAPITests(generateSources = true) {
     if (generateSources) await runGenerateSync();
     await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
@@ -1221,6 +1233,7 @@ export const validate = task({
 
         await runValidation("test:tsc", runTests);
         await runValidation("test:extension", runTestExtension);
+        await runValidation("check:api-declarations", runCheckAPIDeclarations);
         if (options.api || options.all) {
             if (!options.all) await runGenerateEnums();
             await runBuildAPITests(!options.all);
@@ -2277,10 +2290,185 @@ async function runBuildNativePreviewPackages() {
     await rimraf(builtNpm);
 
     const platforms = getPlatforms();
+    await buildMainNativePreviewPackage(platforms);
 
+    if (isCI) {
+        for (const platform of platforms) {
+            await buildNativePreviewPlatform(platform);
+            // Build machines have too little space.
+            // Clear the Go build cache between platforms.
+            await run("go", ["clean", "-cache"]);
+        }
+    }
+    else {
+        await runWithConcurrencyLimit(platforms.map(platform => () => buildNativePreviewPlatform(platform)), os.availableParallelism());
+    }
+}
+
+export const buildMainNativePreviewPackageTask = task({
+    name: "typescript:build-main",
+    hiddenFromTaskList: true,
+    run: async () => {
+        if (usePublishedPlatformPackagesForVsix) {
+            checkPublishedPlatformPackagesForVsix();
+            await rimraf(builtNpm);
+            console.log("Skipping npm package build; VSIX packaging will use published platform packages.");
+            return;
+        }
+
+        await rimraf(builtNpm);
+        await buildMainNativePreviewPackage(getPlatforms());
+    },
+});
+
+export const buildNativePreviewPlatformTask = task({
+    name: "typescript:build-platform",
+    hiddenFromTaskList: true,
+    run: async () => {
+        if (usePublishedPlatformPackagesForVsix) {
+            throw new Error("Platform packages are not built when VSIX packaging uses published platform packages.");
+        }
+        if (!options.platform) {
+            throw new Error("typescript:build-platform requires --platform.");
+        }
+
+        const platform = getPlatforms().find(({ nodeOs, nodeArch }) => `${nodeOs}-${nodeArch}` === options.platform);
+        if (!platform) {
+            throw new Error(`Unknown release platform: ${options.platform}`);
+        }
+
+        await rimraf(platform.npmDir);
+        await buildNativePreviewPlatform(platform);
+    },
+});
+
+export const buildNativePreviewPlatformMatrix = task({
+    name: "typescript:build-platform-matrix",
+    hiddenFromTaskList: true,
+    run: () => {
+        const matrix = Object.fromEntries(
+            getPlatforms().map(({ nodeOs, nodeArch, npmDirName }) => {
+                const platform = `${nodeOs}-${nodeArch}`;
+                return [platform.replaceAll("-", "_"), { platform, npmDirName }];
+            }),
+        );
+        console.log(`##vso[task.setvariable variable=matrix;isOutput=true]${JSON.stringify(matrix)}`);
+        console.log(`##vso[task.setvariable variable=packageBaseName;isOutput=true]${path.basename(mainNativePreviewPackage.npmDir)}`);
+    },
+});
+
+/**
+ * @param {ReturnType<typeof getPlatforms>} platforms
+ */
+async function buildMainNativePreviewPackage(platforms) {
     const inputDir = "./packages/typescript";
+    const inputPackageJson = await createNativePreviewInputPackageJson();
 
-    const inputPackageJson = JSON.parse(fs.readFileSync(path.join(inputDir, "package.json"), "utf8"));
+    const mainPackage = {
+        ...inputPackageJson,
+        name: mainNativePreviewPackage.npmPackageName,
+        optionalDependencies: Object.fromEntries(platforms.map(p => [p.npmPackageName, getVersion()])),
+    };
+
+    const mainPackageDir = mainNativePreviewPackage.npmDir;
+
+    await fs.promises.mkdir(mainPackageDir, { recursive: true });
+
+    // Copy package contents excluding node_modules and dist (dist is copied separately after build).
+    // The package.json "files" field controls what npm pack actually includes.
+    await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
+    if (publishAsTypescript) {
+        await fs.promises.writeFile(path.join(mainPackageDir, "bin", "tsc"), '#!/usr/bin/env node\nimport "../lib/tsc.js";\n');
+        await fs.promises.chmod(path.join(mainPackageDir, "bin", "tsc"), 0o755);
+        await fs.promises.copyFile(path.join(inputDir, "typescript-package-readme.md"), path.join(mainPackageDir, "README.md"));
+    }
+
+    await fs.promises.writeFile(path.join(mainPackageDir, "package.json"), JSON.stringify(mainPackage, undefined, 4));
+    await fs.promises.copyFile("LICENSE.txt", path.join(mainPackageDir, "LICENSE"));
+    await fs.promises.copyFile("NOTICE.txt", path.join(mainPackageDir, "NOTICE.txt"));
+
+    // Build JS API and copy dist into the package.
+    await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
+    await runCheckAPIDeclarations();
+    await cpRecursive(path.join(inputDir, "dist"), path.join(mainPackageDir, "dist"));
+
+    // Validate that .d.ts files contain no external imports (all imports must start with "." or "#").
+    const dtsFiles = await globFiles(`${mainPackageDir}/dist/**/*.d.ts`);
+    const importErrors = [];
+    for (const dtsFile of dtsFiles) {
+        const content = await fs.promises.readFile(dtsFile, "utf-8");
+        const relPath = path.relative(mainPackageDir, dtsFile);
+        for (const [i, line] of content.split("\n").entries()) {
+            // Match: import ... from "specifier" / export ... from "specifier"
+            const fromMatch = line.match(/(?:import|export)\s.*?\sfrom\s+["']([^"']+)["']/);
+            if (fromMatch && !fromMatch[1].startsWith(".") && !fromMatch[1].startsWith("#")) {
+                importErrors.push(`${relPath}:${i + 1}: external import declaration "${fromMatch[1]}"`);
+            }
+            // Match: import("specifier")
+            for (const m of line.matchAll(/import\(["']([^"']+)["']\)/g)) {
+                if (!m[1].startsWith(".") && !m[1].startsWith("#")) {
+                    importErrors.push(`${relPath}:${i + 1}: external dynamic import "${m[1]}"`);
+                }
+            }
+        }
+    }
+    if (importErrors.length) {
+        throw new Error(`Found external imports in .d.ts files:\n${importErrors.map(e => "  " + e).join("\n")}`);
+    }
+}
+
+/**
+ * @param {ReturnType<typeof getPlatforms>[number]} platform
+ */
+async function buildNativePreviewPlatform({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) {
+    const inputPackageJson = await createNativePreviewInputPackageJson();
+
+    const packageJson = {
+        ...inputPackageJson,
+        bin: undefined,
+        files: ["lib", "NOTICE.txt"],
+        imports: undefined,
+        dependencies: undefined,
+        name: npmPackageName,
+        os: [nodeOs],
+        cpu: [nodeArch],
+        exports: {
+            "./package.json": "./package.json",
+        },
+    };
+
+    const out = path.join(npmDir, "lib");
+    await fs.promises.mkdir(out, { recursive: true });
+    await fs.promises.writeFile(path.join(npmDir, "package.json"), JSON.stringify(packageJson, undefined, 4));
+    await fs.promises.copyFile("LICENSE.txt", path.join(npmDir, "LICENSE"));
+    await fs.promises.copyFile("NOTICE.txt", path.join(npmDir, "NOTICE.txt"));
+
+    const readme = [
+        `# \`${npmPackageName}\``,
+        "",
+        `This package provides ${nodeOs}-${nodeArch} support for [${mainNativePreviewPackage.npmPackageName}](https://www.npmjs.com/package/${mainNativePreviewPackage.npmPackageName}).`,
+    ];
+
+    await fs.promises.writeFile(path.join(npmDir, "README.md"), readme.join("\n") + "\n");
+
+    await generateLibs(out);
+
+    const exeName = nativePreviewExeName(nodeOs);
+    await buildTsc({
+        out: publishAsTypescript ? path.join(out, exeName) : out,
+        env: {
+            GOOS: goos,
+            GOARCH: goarch,
+            ...(options.respectGoEnv ? {} : { GOARM: "6", CGO_ENABLED: "0" }),
+        },
+        extraFlags: options.respectGoEnv
+            ? []
+            : getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined),
+    });
+}
+
+async function createNativePreviewInputPackageJson() {
+    const inputPackageJson = JSON.parse(fs.readFileSync("./packages/typescript/package.json", "utf8"));
     inputPackageJson.version = getVersion();
     delete inputPackageJson.private;
     inputPackageJson.files = [...new Set([...(inputPackageJson.files ?? []), "NOTICE.txt"])];
@@ -2318,115 +2506,7 @@ async function runBuildNativePreviewPackages() {
         tag: getPublishTag(),
     };
 
-    const mainPackage = {
-        ...inputPackageJson,
-        name: mainNativePreviewPackage.npmPackageName,
-        optionalDependencies: Object.fromEntries(platforms.map(p => [p.npmPackageName, getVersion()])),
-    };
-
-    const mainPackageDir = mainNativePreviewPackage.npmDir;
-
-    await fs.promises.mkdir(mainPackageDir, { recursive: true });
-
-    // Copy package contents excluding node_modules and dist (dist is copied separately after build).
-    // The package.json "files" field controls what npm pack actually includes.
-    await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
-    if (publishAsTypescript) {
-        await fs.promises.writeFile(path.join(mainPackageDir, "bin", "tsc"), '#!/usr/bin/env node\nimport "../lib/tsc.js";\n');
-        await fs.promises.chmod(path.join(mainPackageDir, "bin", "tsc"), 0o755);
-        await fs.promises.copyFile(path.join(inputDir, "typescript-package-readme.md"), path.join(mainPackageDir, "README.md"));
-    }
-
-    await fs.promises.writeFile(path.join(mainPackageDir, "package.json"), JSON.stringify(mainPackage, undefined, 4));
-    await fs.promises.copyFile("LICENSE.txt", path.join(mainPackageDir, "LICENSE"));
-    await fs.promises.copyFile("NOTICE.txt", path.join(mainPackageDir, "NOTICE.txt"));
-
-    // Build JS API and copy dist into the package.
-    await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
-    await cpRecursive(path.join(inputDir, "dist"), path.join(mainPackageDir, "dist"));
-
-    // Validate that .d.ts files contain no external imports (all imports must start with "." or "#").
-    const dtsFiles = await globFiles(`${mainPackageDir}/dist/**/*.d.ts`);
-    const importErrors = [];
-    for (const dtsFile of dtsFiles) {
-        const content = await fs.promises.readFile(dtsFile, "utf-8");
-        const relPath = path.relative(mainPackageDir, dtsFile);
-        for (const [i, line] of content.split("\n").entries()) {
-            // Match: import ... from "specifier" / export ... from "specifier"
-            const fromMatch = line.match(/(?:import|export)\s.*?\sfrom\s+["']([^"']+)["']/);
-            if (fromMatch && !fromMatch[1].startsWith(".") && !fromMatch[1].startsWith("#")) {
-                importErrors.push(`${relPath}:${i + 1}: external import declaration "${fromMatch[1]}"`);
-            }
-            // Match: import("specifier")
-            for (const m of line.matchAll(/import\(["']([^"']+)["']\)/g)) {
-                if (!m[1].startsWith(".") && !m[1].startsWith("#")) {
-                    importErrors.push(`${relPath}:${i + 1}: external dynamic import "${m[1]}"`);
-                }
-            }
-        }
-    }
-    if (importErrors.length) {
-        throw new Error(`Found external imports in .d.ts files:\n${importErrors.map(e => "  " + e).join("\n")}`);
-    }
-
-    const extraFlags = options.respectGoEnv
-        ? []
-        : getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined);
-
-    const platformBuilders = platforms.map(({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) => async () => {
-        const packageJson = {
-            ...inputPackageJson,
-            bin: undefined,
-            files: ["lib", "NOTICE.txt"],
-            imports: undefined,
-            dependencies: undefined,
-            name: npmPackageName,
-            os: [nodeOs],
-            cpu: [nodeArch],
-            exports: {
-                "./package.json": "./package.json",
-            },
-        };
-
-        const out = path.join(npmDir, "lib");
-        await fs.promises.mkdir(out, { recursive: true });
-        await fs.promises.writeFile(path.join(npmDir, "package.json"), JSON.stringify(packageJson, undefined, 4));
-        await fs.promises.copyFile("LICENSE.txt", path.join(npmDir, "LICENSE"));
-        await fs.promises.copyFile("NOTICE.txt", path.join(npmDir, "NOTICE.txt"));
-
-        const readme = [
-            `# \`${npmPackageName}\``,
-            "",
-            `This package provides ${nodeOs}-${nodeArch} support for [${mainNativePreviewPackage.npmPackageName}](https://www.npmjs.com/package/${mainNativePreviewPackage.npmPackageName}).`,
-        ];
-
-        await fs.promises.writeFile(path.join(npmDir, "README.md"), readme.join("\n") + "\n");
-
-        await generateLibs(out);
-
-        const exeName = nativePreviewExeName(nodeOs);
-        await buildTsc({
-            out: publishAsTypescript ? path.join(out, exeName) : out,
-            env: {
-                GOOS: goos,
-                GOARCH: goarch,
-                ...(options.respectGoEnv ? {} : { GOARM: "6", CGO_ENABLED: "0" }),
-            },
-            extraFlags,
-        });
-    });
-
-    if (isCI) {
-        for (const build of platformBuilders) {
-            await build();
-            // Build machines have too little space.
-            // Clear the Go build cache between platforms.
-            await run("go", ["clean", "-cache"]);
-        }
-    }
-    else {
-        await runWithConcurrencyLimit(platformBuilders, os.availableParallelism());
-    }
+    return inputPackageJson;
 }
 
 /**
@@ -2938,7 +3018,8 @@ async function testVsixPackage(vsixPath, extensionPath, platformPackageName, nod
             const require = createRequire(process.cwd() + "/extension/node_modules/typescript/package.json");
             const manifest = require("./package.json");
             for (const mode of ["async", "sync"]) {
-                const { API } = await import(pathToFileURL(require.resolve(manifest.name + "/unstable/" + mode)).href);
+                const exportPath = manifest.exports?.["./" + mode] ? mode : "unstable/" + mode;
+                const { API } = await import(pathToFileURL(require.resolve(manifest.name + "/" + exportPath)).href);
                 const api = new API();
                 try {
                     assert.ok(await api.parseConfigFile(process.cwd() + "/tsconfig.json"));

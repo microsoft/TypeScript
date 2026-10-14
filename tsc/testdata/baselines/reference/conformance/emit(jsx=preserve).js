@@ -56,8 +56,17 @@ require("node:path");
 
 
 //// [main.js]
-var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
+var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx, extraExtensions, ignoreCase) {
     if (typeof path === "string" && /^\.\.?\//.test(path)) {
+        if (extraExtensions) {
+            for (var extension in extraExtensions) {
+                var suffix = path.slice(-extension.length);
+                if (suffix === extension || ignoreCase && suffix.toLowerCase() === extension.toLowerCase()) {
+                    var output = extraExtensions[extension];
+                    return output === extension ? path : path.slice(0, -extension.length) + output;
+                }
+            }
+        }
         return path.replace(/\.(tsx)$|((?:\.d)?)((?:\.[^./]+?)?)\.([cm]?)ts$/i, function (m, tsx, d, ext, cm) {
             return tsx ? preserveJsx ? ".jsx" : ".js" : d && (!ext || !cm) ? m : (d + ext + "." + cm.toLowerCase() + "js");
         });
@@ -80,8 +89,17 @@ acceptAny(import("./foo.js"));
 import("./foo.js", { with: { attr: "value" } });
 import(__rewriteRelativeImportExtension("" + "./foo.ts", true));
 //// [js.js]
-var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
+var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx, extraExtensions, ignoreCase) {
     if (typeof path === "string" && /^\.\.?\//.test(path)) {
+        if (extraExtensions) {
+            for (var extension in extraExtensions) {
+                var suffix = path.slice(-extension.length);
+                if (suffix === extension || ignoreCase && suffix.toLowerCase() === extension.toLowerCase()) {
+                    var output = extraExtensions[extension];
+                    return output === extension ? path : path.slice(0, -extension.length) + output;
+                }
+            }
+        }
         return path.replace(/\.(tsx)$|((?:\.d)?)((?:\.[^./]+?)?)\.([cm]?)ts$/i, function (m, tsx, d, ext, cm) {
             return tsx ? preserveJsx ? ".jsx" : ".js" : d && (!ext || !cm) ? m : (d + ext + "." + cm.toLowerCase() + "js");
         });

@@ -1,0 +1,10 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "composite": false,
+        "module": "node16",
+        "noEmit": true,
+        "skipLibCheck": false
+    },
+    "include": ["dist"]
+}

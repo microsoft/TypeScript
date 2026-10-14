@@ -33,6 +33,7 @@ type OutputPaths interface {
 // Used to be passed in the TransformationContext, which is now just an EmitContext
 type DeclarationEmitHost interface {
 	modulespecifiers.ModuleSpecifierGenerationHost
+	ContentMapperExtensionRewrites() []tspath.ExtensionRewrite
 	CaseSensitivity() tspath.CaseSensitivity
 	GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.FileReference) *ast.SourceFile
 
@@ -118,8 +119,8 @@ func NewDeclarationTransformer(host DeclarationEmitHost, resolver printer.EmitRe
 		}
 		props := resolver.GetPropertiesOfContainerFunction(node)
 		for _, p := range props {
-			if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration) {
-				errorTarget := p.ValueDeclaration
+			if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration()) {
+				errorTarget := p.ValueDeclaration()
 				if ast.IsBinaryExpression(errorTarget) {
 					errorTarget = errorTarget.AsBinaryExpression().Left
 				}
@@ -218,7 +219,7 @@ const declarationEmitNodeBuilderFlags = nodebuilder.FlagsMultilineObjectLiterals
 	nodebuilder.FlagsGenerateNamesForShadowedTypeParams |
 	nodebuilder.FlagsNoTruncation
 
-const declarationEmitInternalNodeBuilderFlags = nodebuilder.InternalFlagsAllowUnresolvedNames
+const declarationEmitInternalNodeBuilderFlags = nodebuilder.InternalFlagsAllowUnresolvedNames | nodebuilder.InternalFlagsRewriteModuleSpecifiers
 
 // functions as both `visitDeclarationStatements` and `transformRoot`, utilitzing SyntaxList nodes
 func (tx *DeclarationTransformer) visit(node *ast.Node) *ast.Node {
@@ -354,8 +355,8 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast
 	combinedStatements.Loc = statements.Loc // setTextRange
 	if ast.IsExternalOrCommonJSModule(node) {
 		if ast.IsInJSFile(node.AsNode()) {
-			if exportEquals := node.Symbol.Exports[ast.InternalSymbolNameExportEquals]; exportEquals != nil && len(exportEquals.Declarations) > 1 {
-				for _, node := range exportEquals.Declarations {
+			if exportEquals := node.Symbol.Exports()[ast.InternalSymbolNameExportEquals]; exportEquals != nil && len(exportEquals.Declarations()) > 1 {
+				for _, node := range exportEquals.Declarations() {
 					tx.state.addDiagnostic(createDiagnosticForNode(node, diagnostics.Multiple_module_exports_assignments_cannot_be_serialized_for_declaration_emit))
 				}
 			}
@@ -1088,7 +1089,7 @@ func (tx *DeclarationTransformer) transformConstructSignatureDeclaration(input *
 }
 
 func (tx *DeclarationTransformer) omitPrivateMethodType(input *ast.Node) *ast.Node {
-	if input.Symbol() != nil && len(input.Symbol().Declarations) > 0 && input.Symbol().Declarations[0] != input {
+	if input.Symbol() != nil && len(input.Symbol().Declarations()) > 0 && input.Symbol().Declarations()[0] != input {
 		return nil
 	}
 	var result *ast.Node
@@ -1562,7 +1563,7 @@ func (tx *DeclarationTransformer) wrapInCJSExportNamespace(content *ast.Node) *a
 
 func isCommonJSAliasExport(node *ast.Node) bool {
 	if ast.IsBinaryExpression(node) && ast.IsIdentifier(node.AsBinaryExpression().Right) {
-		if symbol := node.Symbol(); symbol != nil && len(symbol.Declarations) == 1 {
+		if symbol := node.Symbol(); symbol != nil && len(symbol.Declarations()) == 1 {
 			return true
 		}
 	}
@@ -1604,6 +1605,20 @@ func (tx *DeclarationTransformer) rewriteModuleSpecifier(parent *ast.Node, input
 		return nil
 	}
 	tx.resultHasExternalModuleIndicator = tx.resultHasExternalModuleIndicator || (parent.Kind != ast.KindModuleDeclaration && parent.Kind != ast.KindImportType)
+	if ast.IsStringLiteral(input) && tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
+		specifier := tspath.ToModuleSpecifier(input.Text())
+		rewrites := tx.host.ContentMapperExtensionRewrites()
+		caseSensitivity := tx.host.CaseSensitivity()
+		if !specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
+			return input
+		}
+		if rewritten, ok := specifier.RewriteExtension(rewrites, caseSensitivity); ok {
+			result := tx.Factory().NewStringLiteral(rewritten.AsString(), input.AsStringLiteral().TokenFlags)
+			tx.EmitContext().SetOriginal(result, input)
+			tx.EmitContext().AssignCommentAndSourceMapRanges(result, input)
+			return result
+		}
+	}
 	return input
 }
 
@@ -1791,12 +1806,17 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 
 func (tx *DeclarationTransformer) transformTypeAliasDeclaration(input *ast.TypeAliasDeclaration) *ast.Node {
 	tx.needsDeclare = false
+	t := tx.Visitor().Visit(input.Type)
+	if t == nil {
+		// stripInternal can elide an @internal type RHS; fall back like index signatures
+		t = tx.Factory().NewKeywordTypeNode(ast.KindAnyKeyword)
+	}
 	return tx.Factory().UpdateTypeAliasDeclaration(
 		input,
 		tx.ensureModifiers(input.AsNode()),
 		input.Name(),
 		tx.Visitor().VisitNodes(input.TypeParameters),
-		tx.Visitor().Visit(input.Type),
+		t,
 	)
 }
 
@@ -2118,9 +2138,13 @@ caseBlock:
 			}
 		}
 
-		var mods *ast.ModifierList
+		modifierFlags := tx.ensureModifierFlags(node)
 		if isStatic {
-			mods = tx.Factory().NewModifierList([]*ast.Node{tx.Factory().NewModifier(ast.KindStaticKeyword)})
+			modifierFlags |= ast.ModifierFlagsStatic
+		}
+		var mods *ast.ModifierList
+		if modifierFlags != ast.ModifierFlagsNone {
+			mods = tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier))
 		}
 		if ast.HasDynamicName(node) {
 			if !transformers.IsSimpleInlineableExpression(name) {
@@ -2728,7 +2752,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 	left := node.Left
 
 	symbol := node.Symbol
-	if symbol == nil || symbol.Flags&ast.SymbolFlagsAssignment == 0 {
+	if symbol == nil || symbol.Flags()&ast.SymbolFlagsAssignment == 0 {
 		return
 	}
 

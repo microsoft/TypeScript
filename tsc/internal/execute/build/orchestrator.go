@@ -124,14 +124,14 @@ func (o *Orchestrator) ScheduleOrder() []string {
 // picked up may not be done yet, so a builder can take a dependent of a slow project and
 // wait on that project while a later project's upstream has already finished. The stable
 // sort preserves the original order within a depth, and reporting still follows Order().
-func (o *Orchestrator) computeScheduleOrder() []*BuildTask {
+func (o *Orchestrator) computeScheduleOrder(order []*BuildTask) []*BuildTask {
 	type scheduleEntry struct {
 		task  *BuildTask
 		depth int
 	}
-	entries := make([]scheduleEntry, len(o.order))
-	depths := make(map[*BuildTask]int, len(o.order))
-	for i, task := range o.order {
+	entries := make([]scheduleEntry, len(order))
+	depths := make(map[*BuildTask]int, len(order))
+	for i, task := range order {
 		depth := 0
 		for _, upstream := range task.upStream {
 			depth = max(depth, depths[upstream.task]+1)
@@ -271,7 +271,7 @@ func (o *Orchestrator) GenerateGraph(oldTasks *collections.SyncMap[tspath.PathKe
 	for _, project := range projects {
 		o.setupBuildTask(project, nil, false, &completed, &analyzing, circularityStack)
 	}
-	o.scheduleOrder = o.computeScheduleOrder()
+	o.scheduleOrder = o.computeScheduleOrder(o.order)
 	if oldTasks != nil {
 		oldTasks.Range(func(path tspath.PathKey, oldTask *BuildTask) bool {
 			if task, ok := o.tasks.Load(path); ok && task == oldTask {
@@ -884,7 +884,11 @@ func (o *Orchestrator) buildOrCleanOrder(order []*BuildTask) *OrchestratorResult
 		// 	prevReporter = task
 		// }
 		buildResult.Statistics.Projects = len(order)
-		// Builders pick up projects in scheduleOrder; results are reported in Order(), waiting for each project to finish
+		scheduleOrder := o.scheduleOrder
+		if len(order) != len(o.order) {
+			scheduleOrder = o.computeScheduleOrder(order)
+		}
+		// Builders pick up selected projects in dependency-depth order; reporting preserves the selected build order.
 		reported := make(chan struct{})
 		go func() {
 			defer close(reported)
@@ -893,7 +897,7 @@ func (o *Orchestrator) buildOrCleanOrder(order []*BuildTask) *OrchestratorResult
 				task.report(o, task.path, buildResult)
 			}
 		}()
-		o.rangeTasks(order, func(path tspath.PathKey, task *BuildTask) {
+		o.rangeTasks(scheduleOrder, func(path tspath.PathKey, task *BuildTask) {
 			o.buildOrCleanProject(task, path)
 		})
 		<-reported
