@@ -414,15 +414,15 @@ func TestTypeMapperDispatch(t *testing.T) {
 		{simple, TypeMapperKindSimple, target},
 		{array, TypeMapperKindArray, target},
 		{merged, TypeMapperKindMerged, target},
-		{newArrayToSingleTypeMapper([]*Type{source}, target), TypeMapperKindUnknown, target},
-		{newDeferredTypeMapper([]*Type{source}, []func() *Type{func() *Type { return target }}), TypeMapperKindUnknown, target},
+		{newArrayToSingleTypeMapper([]*Type{source}, target), TypeMapperKindArrayToSingle, target},
+		{newDeferredTypeMapper([]*Type{source}, []func() *Type{func() *Type { return target }}), TypeMapperKindDeferred, target},
 		{newFunctionTypeMapper(func(typ *Type) *Type {
 			if typ == source {
 				return target
 			}
 			return typ
-		}), TypeMapperKindUnknown, target},
-		{newCompositeTypeMapper(c, newSimpleTypeMapper(other, target), simple), TypeMapperKindUnknown, target},
+		}), TypeMapperKindFunction, target},
+		{newCompositeTypeMapper(c, newSimpleTypeMapper(other, target), simple), TypeMapperKindComposite, target},
 	} {
 		assert.Equal(t, test.mapper.Kind(), test.kind)
 		assert.Equal(t, test.mapper.Map(source), test.result)
@@ -460,7 +460,9 @@ func TestCompactTypeMapperLayout(t *testing.T) {
 	}{
 		{TypeMapperKindSimple, mapper, func(m *TypeMapper) any { return castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple) }},
 		{TypeMapperKindArray, newArrayTypeMapper(nil, nil), func(m *TypeMapper) any { return castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray) }},
-		{TypeMapperKindArrayToSingle, newArrayToSingleTypeMapper(nil, nil), func(m *TypeMapper) any { return castTypeMapper[ArrayToSingleTypeMapper](m, TypeMapperKindArrayToSingle) }},
+		{TypeMapperKindArrayToSingle, newArrayToSingleTypeMapper(nil, nil), func(m *TypeMapper) any {
+			return castTypeMapper[ArrayToSingleTypeMapper](m, TypeMapperKindArrayToSingle)
+		}},
 		{TypeMapperKindDeferred, newDeferredTypeMapper(nil, nil), func(m *TypeMapper) any { return castTypeMapper[DeferredTypeMapper](m, TypeMapperKindDeferred) }},
 		{TypeMapperKindFunction, newFunctionTypeMapper(func(t *Type) *Type { return t }), func(m *TypeMapper) any { return castTypeMapper[FunctionTypeMapper](m, TypeMapperKindFunction) }},
 		{TypeMapperKindMerged, newMergedTypeMapper(mapper, mapper), func(m *TypeMapper) any { return castTypeMapper[MergedTypeMapper](m, TypeMapperKindMerged) }},

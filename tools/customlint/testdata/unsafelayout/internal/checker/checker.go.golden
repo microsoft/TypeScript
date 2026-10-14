@@ -106,15 +106,15 @@
 !!! unsafelayout: newType must directly pair a concrete AsType() receiver with its matching constant kind
 	}
 	
-	type typeMapperKind uint8
+	type TypeMapperKind uint8
 	
 	const (
-		typeMapperSimple typeMapperKind = iota
-		typeMapperArray
+		TypeMapperKindSimple TypeMapperKind = iota
+		TypeMapperKindArray
 	)
 	
 	type TypeMapper struct {
-		kind typeMapperKind
+		kind TypeMapperKind
 	}
 	
 	type SimpleTypeMapper struct {
@@ -125,7 +125,7 @@
 		TypeMapper
 	}
 	
-	func castTypeMapper[T any](m *TypeMapper, kind typeMapperKind) *T {
+	func castTypeMapper[T any](m *TypeMapper, kind TypeMapperKind) *T {
 		if m.kind != kind {
 			panic("Invalid type mapper cast")
 		}
@@ -133,15 +133,15 @@
 	}
 	
 	func mapperCalls(simple *SimpleTypeMapper, header *TypeMapper) {
-		simple.kind = typeMapperSimple
-		simple.kind = typeMapperArray
+		simple.kind = TypeMapperKindSimple
+		simple.kind = TypeMapperKindArray
 		~
 !!! unsafelayout: mapper tag must match the concrete mapper allocation
-		header.kind = typeMapperSimple
+		header.kind = TypeMapperKindSimple
 		~
 !!! unsafelayout: mapper tag must match the concrete mapper allocation
-		_ = castTypeMapper[SimpleTypeMapper](header, typeMapperSimple)
-		_ = castTypeMapper[SimpleTypeMapper](header, typeMapperArray)
+		_ = castTypeMapper[SimpleTypeMapper](header, TypeMapperKindSimple)
+		_ = castTypeMapper[SimpleTypeMapper](header, TypeMapperKindArray)
 		    ~
 !!! unsafelayout: checked cast must directly pair its concrete target type with its matching constant kind
 		_ = (*SimpleTypeMapper)(unsafe.Pointer(header))
@@ -186,7 +186,7 @@
 	
 	func freshMappers() (*TypeMapper, *TypeMapper) {
 		tagged := &SimpleTypeMapper{}
-		tagged.kind = typeMapperSimple
+		tagged.kind = TypeMapperKindSimple
 		untagged := &ArrayTypeMapper{}
 		            ~
 !!! unsafelayout: a fresh mapper must be tagged by the statement after its allocation
@@ -219,7 +219,7 @@
 		var mappers [2]SimpleTypeMapper
 		    ~
 !!! unsafelayout: a zero-value compiler record bypasses checked construction; use its owning factory
-		mappers[0].kind = typeMapperSimple
+		mappers[0].kind = TypeMapperKindSimple
 		return &literal, &mappers[0]
 		                 ~
 !!! unsafelayout: mapper storage held by value is untagged until an init*TypeMapper function tags it; pass its address there first
@@ -228,7 +228,7 @@
 	func (m *SimpleTypeMapper) Map(t *Type) *Type { return t }
 	
 	func initSimpleTypeMapper(m *SimpleTypeMapper) *TypeMapper {
-		m.kind = typeMapperSimple
+		m.kind = TypeMapperKindSimple
 		return &m.TypeMapper
 	}
 	
