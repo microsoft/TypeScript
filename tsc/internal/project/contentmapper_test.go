@@ -373,10 +373,10 @@ func TestContentMapperPackageMustBeInWorkspace(t *testing.T) {
 
 			workspaceRoots := make([]tspath.RootedDirectoryPath, len(test.workspaceRoots))
 			for i, root := range test.workspaceRoots {
-				workspaceRoots[i] = tspath.RootedDirectoryPath(tspath.RootedPathFromAbsolute(root))
+				workspaceRoots[i] = tspath.RootedDirectoryPathFromAbsolute(root)
 			}
-			currentDirectory := tspath.RootedDirectoryPath(tspath.RootedPathFromAbsolute(test.projectDirectory))
-			boxFilePath := tspath.RootedFilePath(tspath.RootedPathFromAbsolute(boxPath))
+			currentDirectory := tspath.RootedDirectoryPathFromAbsolute(test.projectDirectory)
+			boxFilePath := tspath.RootedFilePathFromAbsolute(boxPath)
 			init, _ := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
 				CurrentDirectory:      currentDirectory,
 				DefaultLibraryPath:    bundled.LibPath(),

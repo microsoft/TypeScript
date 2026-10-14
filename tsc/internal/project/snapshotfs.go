@@ -819,12 +819,10 @@ func (fs *sourceFS) IsContentMapperPackageAllowed(packageDirectory tspath.Rooted
 	if fs.contentMapperWorkspaceRoots == nil {
 		return true
 	}
-	nodeModulesIndex := strings.LastIndex(packageDirectory.AsString(), "/node_modules/")
-	if nodeModulesIndex < 0 {
+	_, nodeModulesPath, ok := tspath.RootedFilePathFromPath(packageDirectory.AsPath()).SplitAtLastComponent("node_modules")
+	if !ok {
 		return false
 	}
-	nodeModulesDirectory := packageDirectory.AsString()[:nodeModulesIndex+len("/node_modules")]
-	nodeModulesPath := tspath.RootedDirectoryPath(tspath.RootedPath(nodeModulesDirectory))
 	return slices.ContainsFunc(fs.contentMapperWorkspaceRoots, func(root tspath.RootedDirectoryPath) bool {
 		return fs.caseSensitivity.ContainsPath(root, nodeModulesPath.AsPath())
 	})

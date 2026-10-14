@@ -1846,13 +1846,13 @@ func getInitialWorkspaceRoots(params *lsproto.InitializeParams) []tspath.RootedD
 		for _, folder := range *params.WorkspaceFolders.WorkspaceFolders {
 			uri := lsproto.DocumentUri(folder.Uri)
 			if strings.HasPrefix(string(uri), "file://") {
-				workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPath(uri.Path()))
+				workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromPath(uri.Path()))
 			}
 		}
 	} else if params.RootUri.DocumentUri != nil && strings.HasPrefix(string(*params.RootUri.DocumentUri), "file://") {
-		workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPath(params.RootUri.DocumentUri.Path()))
+		workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromPath(params.RootUri.DocumentUri.Path()))
 	} else if params.RootPath != nil && params.RootPath.String != nil && tspath.PathIsAbsolute(*params.RootPath.String) {
-		workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPath(tspath.RootedPathFromAbsolute(*params.RootPath.String)))
+		workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromAbsolute(*params.RootPath.String))
 	}
 	return workspaceRoots
 }
