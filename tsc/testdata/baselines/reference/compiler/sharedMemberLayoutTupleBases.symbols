@@ -34,6 +34,7 @@ declare const fixed: FromTuple<[string]>;
 const fixedSecond = fixed[1];
 >fixedSecond : Symbol(fixedSecond, Decl(sharedMemberLayoutTupleBases.ts, 8, 5))
 >fixed : Symbol(fixed, Decl(sharedMemberLayoutTupleBases.ts, 7, 13))
+>1 : Symbol(1)
 
 const fixedAll = { ...fixed };
 >fixedAll : Symbol(fixedAll, Decl(sharedMemberLayoutTupleBases.ts, 9, 5))

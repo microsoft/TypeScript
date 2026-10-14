@@ -19623,6 +19623,12 @@ type memberLayout struct {
 	index         []uint32 // Open-addressed hash table of 1-based member indices, or nil for small layouts
 	propertyCount int      // The properties are the first members, in property order
 	shared        bool
+	bases         []memberLayoutBase // The bases the layout was built from, which a shared layout's instantiations must match
+}
+
+type memberLayoutBase struct {
+	layout *memberLayout // Layout of a base type with one, through which inherited members are found
+	isAny  bool
 }
 
 type memberOrigin struct {
@@ -19705,28 +19711,34 @@ func (c *Checker) getMemberLayout(source *Type, bases []*Type) *memberLayout {
 		}
 		return layout
 	}
-	if !c.canShareMemberLayout(source, bases) {
+	if !c.canShareMemberLayout(d.memberLayout, source, bases) {
 		return c.buildMemberLayout(source, bases)
 	}
 	return d.memberLayout
 }
 
-// Reports whether the bases of an instantiation have the members the shared layout expects. A base
-// type instantiation that hit an instantiation limit is the error type, which has no members, and
-// a base whose own base hit the limit has a smaller layout that isn't shared.
-func (c *Checker) canShareMemberLayout(source *Type, bases []*Type) bool {
+// Reports whether the bases of an instantiation have the layouts the shared layout was built from, since
+// inherited members are found through their slots in those layouts. Instantiations of a variadic tuple
+// base can have different tuple targets, a base type instantiation that hit an instantiation limit is
+// the error type, and a base whose own base hit the limit has a smaller layout that isn't shared.
+func (c *Checker) canShareMemberLayout(layout *memberLayout, source *Type, bases []*Type) bool {
 	declaredBases := c.getBaseTypes(source)
 	for k, base := range bases {
-		if base == c.errorType {
-			if declaredBases[k] != c.errorType {
+		expected := layout.bases[k]
+		if base == c.anyType || expected.isAny {
+			if base != c.anyType || !expected.isAny {
 				return false
 			}
 			continue
 		}
+		var baseLayout *memberLayout
 		if base.flags&TypeFlagsObject != 0 && base.objectFlags&(ObjectFlagsReference|ObjectFlagsClassOrInterface) != 0 {
-			if lazy := c.resolveStructuredTypeMembers(base).lazy; lazy != nil && !lazy.layout.shared {
-				return false
+			if lazy := c.resolveStructuredTypeMembers(base).lazy; lazy != nil {
+				baseLayout = lazy.layout
 			}
+		}
+		if baseLayout != expected.layout || base == c.errorType && declaredBases[k] != c.errorType {
+			return false
 		}
 	}
 	return true
@@ -19764,14 +19776,17 @@ func (c *Checker) buildMemberLayout(source *Type, bases []*Type) *memberLayout {
 	// Resolve the bases first, since this may build other layouts with the scratch storage below.
 	baseMembersList := make([]baseMembers, len(bases))
 	capacity := len(d.declaredMembers)
+	layoutBases := make([]memberLayoutBase, len(bases))
 	for k, base := range bases {
 		if base == c.anyType {
+			layoutBases[k].isAny = true
 			continue
 		}
 		if base.flags&TypeFlagsObject != 0 && base.objectFlags&(ObjectFlagsReference|ObjectFlagsClassOrInterface) != 0 {
 			if lazy := c.resolveStructuredTypeMembers(base).lazy; lazy != nil {
 				shared = shared && lazy.layout.shared
 				baseMembersList[k] = baseMembers{layout: lazy.layout, kind: memberOriginBaseLayout}
+				layoutBases[k].layout = lazy.layout
 				capacity += lazy.layout.propertyCount
 				continue
 			}
@@ -19849,6 +19864,9 @@ func (c *Checker) buildMemberLayout(source *Type, bases []*Type) *memberLayout {
 		origins:       make([]memberOrigin, len(entries)),
 		propertyCount: propertyCount,
 		shared:        shared,
+	}
+	if shared {
+		layout.bases = layoutBases
 	}
 	for i, e := range entries {
 		layout.symbols[i] = e.symbol
