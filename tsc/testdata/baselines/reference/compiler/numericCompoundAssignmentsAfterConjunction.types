@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/numericCompoundAssignmentsAfterConjunction.ts] ////
+
+=== numericCompoundAssignmentsAfterConjunction.ts ===
+function scale(left: number, right: number) {
+>scale : (left: number, right: number) => void
+>left : number
+>right : number
+
+    if (left !== 0 && right !== 0) {
+>left !== 0 && right !== 0 : boolean
+>left !== 0 : boolean
+>left : number
+>0 : 0
+>right !== 0 : boolean
+>right : number
+>0 : 0
+
+        left *= -1.5;
+>left *= -1.5 : number
+>left : number
+>-1.5 : -1.5
+>1.5 : 1.5
+
+        right *= -1.5;
+>right *= -1.5 : number
+>right : number
+>-1.5 : -1.5
+>1.5 : 1.5
+
+    } else if (left !== 0) {
+>left !== 0 : boolean
+>left : number
+>0 : 0
+
+        left *= -2;
+>left *= -2 : number
+>left : number
+>-2 : -2
+>2 : 2
+
+    } else if (right !== 0) {
+>right !== 0 : boolean
+>right : number
+>0 : 0
+
+        right *= -2;
+>right *= -2 : number
+>right : number
+>-2 : -2
+>2 : 2
+    }
+}
+
