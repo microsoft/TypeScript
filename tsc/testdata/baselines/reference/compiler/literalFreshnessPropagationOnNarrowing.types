@@ -165,10 +165,10 @@ function f5() {
     // Desired: OK
     // Error in all extant branches
     arr = [...['y']];
->arr = [...['y']] : string[]
+>arr = [...['y']] : "y"[]
 >arr : ("x" | "y")[]
->[...['y']] : string[]
->...['y'] : string
->['y'] : string[]
+>[...['y']] : "y"[]
+>...['y'] : "y"
+>['y'] : "y"[]
 >'y' : "y"
 }

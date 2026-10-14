@@ -321,7 +321,7 @@ func (c *Checker) isOptionalParameter(node *ast.Node) bool {
 		parameterIndex := core.FindIndex(node.Parent.Parameters(), func(p *ast.ParameterDeclarationNode) bool { return p == node })
 		return node.Type() == nil &&
 			node.AsParameterDeclaration().DotDotDotToken == nil &&
-			parameterIndex >= len(c.getEffectiveCallArguments(iife))
+			parameterIndex >= len(c.getEffectiveCallArguments(iife, nil /*contextualSignature*/))
 	}
 	return false
 }
