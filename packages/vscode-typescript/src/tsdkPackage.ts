@@ -56,7 +56,7 @@ export function resolvePackageExecutable(packageJsonPath: string, platformPackag
 export function createTypeScriptSDK(
     version: string,
     packageJsonPath: string | undefined,
-    openAPIPipe: (pipe?: string) => Promise<string>,
+    openAPIPipe: (pipe?: string, synchronous?: boolean) => Promise<string>,
     isCurrent: () => boolean,
 ): TypeScriptSDK {
     const loader = packageJsonPath ? createTypeScriptModuleLoader(packageJsonPath) : undefined;
@@ -75,11 +75,11 @@ export function createTypeScriptSDK(
         packageJsonPath,
         isCurrent,
         importModule,
-        async initializeAPIConnection(pipe?: string): Promise<string> {
+        async initializeAPIConnection(pipe?: string, synchronous?: boolean): Promise<string> {
             if (packageJsonPath) {
                 await readAPIManifest(packageJsonPath, version);
             }
-            return openAPIPipe(pipe);
+            return openAPIPipe(pipe, synchronous);
         },
     };
 }

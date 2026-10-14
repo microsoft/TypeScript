@@ -358,6 +358,15 @@ describe("TypeScript API module loading", { concurrency: true }, () => {
         assert.equal(await connection, "restarted-pipe");
     });
 
+    test("SDK connection creation forwards the synchronous transport selection", async () => {
+        const sdk = createTypeScriptSDK("local", undefined, async (pipe, synchronous) => {
+            assert.equal(pipe, "sync-pipe");
+            assert.equal(synchronous, true);
+            return pipe;
+        }, () => true);
+        assert.equal(await sdk.initializeAPIConnection("sync-pipe", true), "sync-pipe");
+    });
+
     test("isCurrent is a synchronous live snapshot without opening a pipe", () => {
         let current = true;
         const sdk = createTypeScriptSDK("1", undefined, async () => assert.fail("isCurrent must not open a pipe"), () => current);
