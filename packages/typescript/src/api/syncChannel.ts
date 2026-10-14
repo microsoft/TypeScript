@@ -14,6 +14,7 @@ import {
     type ChildProcess,
     spawn,
 } from "node:child_process";
+import { randomBytes } from "node:crypto";
 import {
     closeSync,
     openSync,
@@ -86,6 +87,10 @@ process.on("exit", () => {
     liveChildren.clear();
 });
 
+export function createPipePath(): string {
+    return `\\\\.\\pipe\\tsgo-sync-${process.pid}-${randomBytes(16).toString("hex")}`;
+}
+
 /**
  * SyncRpcChannel – drop-in replacement for the native libsyncrpc class.
  *
@@ -147,7 +152,7 @@ export class SyncRpcChannel {
             // we create a Windows named pipe path, pass it to the child
             // via --pipe, and open it with fs.openSync which returns a
             // real C-runtime fd backed by a proper HANDLE.
-            const pipePath = `\\\\.\\pipe\\tsgo-sync-${process.pid}-${Date.now()}`;
+            const pipePath = createPipePath();
             this.child = spawn(exe, [...args, "--pipe", pipePath], {
                 stdio: ["ignore", "ignore", "inherit"],
             });
