@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/identityOfInstantiatedMappedIntersection.ts] ////
+
+=== identityOfInstantiatedMappedIntersection.ts ===
+declare const brand: unique symbol;
+>brand : Symbol(brand, Decl(identityOfInstantiatedMappedIntersection.ts, 0, 13))
+
+type Equal<T, U> = (<V>() => V extends T ? 1 : 2) extends (<V>() => V extends U ? 1 : 2) ? true : false;
+>Equal : Symbol(Equal, Decl(identityOfInstantiatedMappedIntersection.ts, 0, 35))
+>T : Symbol(T, Decl(identityOfInstantiatedMappedIntersection.ts, 1, 11))
+>U : Symbol(U, Decl(identityOfInstantiatedMappedIntersection.ts, 1, 13))
+>V : Symbol(V, Decl(identityOfInstantiatedMappedIntersection.ts, 1, 21))
+>V : Symbol(V, Decl(identityOfInstantiatedMappedIntersection.ts, 1, 21))
+>T : Symbol(T, Decl(identityOfInstantiatedMappedIntersection.ts, 1, 11))
+>V : Symbol(V, Decl(identityOfInstantiatedMappedIntersection.ts, 1, 60))
+>V : Symbol(V, Decl(identityOfInstantiatedMappedIntersection.ts, 1, 60))
+>U : Symbol(U, Decl(identityOfInstantiatedMappedIntersection.ts, 1, 13))
+
+declare function assertEqual<T, U>(value: Equal<T, U>): void;
+>assertEqual : Symbol(assertEqual, Decl(identityOfInstantiatedMappedIntersection.ts, 1, 104))
+>T : Symbol(T, Decl(identityOfInstantiatedMappedIntersection.ts, 2, 29))
+>U : Symbol(U, Decl(identityOfInstantiatedMappedIntersection.ts, 2, 31))
+>value : Symbol(value, Decl(identityOfInstantiatedMappedIntersection.ts, 2, 35))
+>Equal : Symbol(Equal, Decl(identityOfInstantiatedMappedIntersection.ts, 0, 35))
+>T : Symbol(T, Decl(identityOfInstantiatedMappedIntersection.ts, 2, 29))
+>U : Symbol(U, Decl(identityOfInstantiatedMappedIntersection.ts, 2, 31))
+
+type Flatten<T> = { [K in keyof T]: T[K] };
+>Flatten : Symbol(Flatten, Decl(identityOfInstantiatedMappedIntersection.ts, 2, 61))
+>T : Symbol(T, Decl(identityOfInstantiatedMappedIntersection.ts, 4, 13))
+>K : Symbol(K, Decl(identityOfInstantiatedMappedIntersection.ts, 4, 21))
+>T : Symbol(T, Decl(identityOfInstantiatedMappedIntersection.ts, 4, 13))
+>T : Symbol(T, Decl(identityOfInstantiatedMappedIntersection.ts, 4, 13))
+>K : Symbol(K, Decl(identityOfInstantiatedMappedIntersection.ts, 4, 21))
+
+type Branded = Flatten<{ name: string }> & { [brand]: { label: true } };
+>Branded : Symbol(Branded, Decl(identityOfInstantiatedMappedIntersection.ts, 4, 43))
+>Flatten : Symbol(Flatten, Decl(identityOfInstantiatedMappedIntersection.ts, 2, 61))
+>name : Symbol(name, Decl(identityOfInstantiatedMappedIntersection.ts, 5, 24))
+>[brand] : Symbol([brand], Decl(identityOfInstantiatedMappedIntersection.ts, 5, 44))
+>brand : Symbol(brand, Decl(identityOfInstantiatedMappedIntersection.ts, 0, 13))
+>label : Symbol(label, Decl(identityOfInstantiatedMappedIntersection.ts, 5, 55))
+
+assertEqual<Branded, { name: string } & { [brand]: { label: true } }>(true);
+>assertEqual : Symbol(assertEqual, Decl(identityOfInstantiatedMappedIntersection.ts, 1, 104))
+>Branded : Symbol(Branded, Decl(identityOfInstantiatedMappedIntersection.ts, 4, 43))
+>name : Symbol(name, Decl(identityOfInstantiatedMappedIntersection.ts, 6, 22))
+>[brand] : Symbol([brand], Decl(identityOfInstantiatedMappedIntersection.ts, 6, 41))
+>brand : Symbol(brand, Decl(identityOfInstantiatedMappedIntersection.ts, 0, 13))
+>label : Symbol(label, Decl(identityOfInstantiatedMappedIntersection.ts, 6, 52))
+
