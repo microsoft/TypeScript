@@ -341,7 +341,6 @@ func newCheckerPoolWithTracing(program *Program, tr *tracing.Tracing) *checkerPo
 	options := program.Options()
 	if maxMemory := options.MaxMemory; maxMemory != nil &&
 		*maxMemory > 0 &&
-		checkerCount > 1 &&
 		options.NoEmit.IsTrue() &&
 		!options.GetEmitDeclarations() &&
 		!options.IsIncremental() &&
@@ -507,9 +506,11 @@ func (p *checkerPool) forEachCheckerGroupDo(ctx context.Context, files []*ast.So
 	p.createCheckers()
 
 	checkerCount := len(p.checkers)
-	remaining := make([]int, checkerCount)
+	remainingCheckable := make([]int, checkerCount)
 	for _, file := range files {
-		remaining[p.fileAssociations[file]]++
+		if !p.program.SkipTypeChecking(file, false) {
+			remainingCheckable[p.fileAssociations[file]]++
+		}
 	}
 	wg := core.NewWorkGroup(singleThreaded)
 	for checkerIdx := range checkerCount {
@@ -520,8 +521,11 @@ func (p *checkerPool) forEachCheckerGroupDo(ctx context.Context, files []*ast.So
 			for i, file := range files {
 				if checkerIdx == p.fileAssociations[file] {
 					cb(current, i, file)
-					remaining[checkerIdx]--
-					if remaining[checkerIdx] != 0 {
+					if p.program.SkipTypeChecking(file, false) {
+						continue
+					}
+					remainingCheckable[checkerIdx]--
+					if remainingCheckable[checkerIdx] != 0 {
 						current = p.recycleCheckerIfOverBudget(checkerIdx, current)
 					}
 				}

@@ -128,12 +128,13 @@ func TestCheckerRecyclingPreservesDiagnosticsAndStatistics(t *testing.T) {
 	t.Parallel()
 	fs := vfstest.FromMap(map[string]any{
 		"/tsconfig.json": `{
-			"compilerOptions": { "noLib": true },
-			"files": ["/a.ts", "/b.ts", "/c.ts"]
+			"compilerOptions": { "noLib": true, "skipLibCheck": true },
+			"files": ["/a.ts", "/skip.d.ts", "/b.ts", "/c.ts"]
 		}`,
-		"/a.ts": `const a: string = 1;`,
-		"/b.ts": `const b: number = "b";`,
-		"/c.ts": `const c: boolean = 0;`,
+		"/a.ts":      `const a: string = 1;`,
+		"/skip.d.ts": `declare const skipped: Missing;`,
+		"/b.ts":      `const b: number = "b";`,
+		"/c.ts":      `const c: boolean = 0;`,
 	}, tspath.CaseSensitive)
 	config, configDiagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", nil, nil, fs, nil)
 	if len(configDiagnostics) != 0 {
@@ -141,7 +142,7 @@ func TestCheckerRecyclingPreservesDiagnosticsAndStatistics(t *testing.T) {
 	}
 	config.SetCompilerOptions(config.CompilerOptions().Clone())
 	config.CompilerOptions().NoEmit = core.TSTrue
-	config.CompilerOptions().Checkers = new(2)
+	config.CompilerOptions().Checkers = new(1)
 	config.CompilerOptions().MaxMemory = new(1)
 
 	program := NewProgram(ProgramOptions{
@@ -157,8 +158,8 @@ func TestCheckerRecyclingPreservesDiagnosticsAndStatistics(t *testing.T) {
 	if len(diagnostics) != 3 {
 		t.Fatalf("got %d diagnostics, want 3", len(diagnostics))
 	}
-	if got := program.RetiredCheckerCount(); got != 1 {
-		t.Fatalf("RetiredCheckerCount() = %d, want 1", got)
+	if got := program.RetiredCheckerCount(); got != 2 {
+		t.Fatalf("RetiredCheckerCount() = %d, want 2", got)
 	}
 	if program.TypeCount() == 0 || program.SymbolCount() == 0 {
 		t.Fatal("retired checker statistics were not preserved")
