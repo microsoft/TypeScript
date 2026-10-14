@@ -8,6 +8,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -927,6 +928,33 @@ func (c *Checker) releaseTemporaryTypeSet(set *temporaryTypeSet) {
 	}
 	set.next = c.freeTypeSets
 	c.freeTypeSets = set
+}
+
+type temporaryPropertyCounts struct {
+	collections.OrderedMap[string, int]
+	next *temporaryPropertyCounts
+}
+
+func (c *Checker) getTemporaryPropertyCounts() *temporaryPropertyCounts {
+	counts := c.freePropertyCounts
+	if counts == nil {
+		return &temporaryPropertyCounts{}
+	}
+	c.freePropertyCounts = counts.next
+	counts.next = nil
+	return counts
+}
+
+func (c *Checker) releaseTemporaryPropertyCounts(counts *temporaryPropertyCounts) {
+	size := counts.Size()
+	counts.Clear()
+	// Recursive reductions borrow separate maps. Do not retain unusually
+	// large property tables or references to their names in the free list.
+	if size > 4096 {
+		return
+	}
+	counts.next = c.freePropertyCounts
+	c.freePropertyCounts = counts
 }
 
 func (s *orderedSet[T]) contains(value T) bool {
