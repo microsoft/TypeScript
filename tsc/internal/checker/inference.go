@@ -1154,12 +1154,8 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 }
 
 func (c *Checker) getTypeOfReverseMappedSymbol(symbol *ast.Symbol) *Type {
-	links := c.valueSymbolLinks.Get(symbol)
-	if links.resolvedType == nil {
-		reverseLinks := c.ReverseMappedSymbolLinks.Get(symbol)
-		links.resolvedType = core.OrElse(c.inferReverseMappedType(reverseLinks.propertyType, reverseLinks.mappedType, reverseLinks.constraintType), c.unknownType)
-	}
-	return links.resolvedType
+	reverseLinks := c.ReverseMappedSymbolLinks.Get(symbol)
+	return core.OrElse(c.inferReverseMappedType(reverseLinks.propertyType, reverseLinks.mappedType, reverseLinks.constraintType), c.unknownType)
 }
 
 // If the original mapped type had an intersection constraint we extract its components,

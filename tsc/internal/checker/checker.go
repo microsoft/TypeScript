@@ -3021,7 +3021,7 @@ func (c *Checker) checkAccessorDeclaration(node *ast.Node) {
 			}
 		}
 	}
-	returnType := c.getTypeOfAccessors(c.getSymbolOfDeclaration(node))
+	returnType := c.getTypeOfSymbol(c.getSymbolOfDeclaration(node))
 	if node.Kind == ast.KindGetAccessor {
 		c.checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnType)
 	}
@@ -6088,7 +6088,7 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 		// Node is the primary declaration of the symbol, just validate the initializer
 		// Don't validate for-in initializer as it is already an error
 		if initializer != nil && !ast.IsForInStatement(node.Parent.Parent) {
-			initializerType := c.checkExpressionCached(initializer)
+			initializerType := c.checkExpression(initializer)
 			c.checkTypeAssignableToAndOptionallyElaborate(initializerType, t, node, initializer, nil /*headMessage*/, nil)
 			blockScopeKind := c.getCombinedNodeFlagsCached(node) & ast.NodeFlagsBlockScoped
 			if blockScopeKind == ast.NodeFlagsAwaitUsing {
@@ -16794,16 +16794,11 @@ func (c *Checker) getDeclarationOfAliasSymbol(symbol *ast.Symbol) *ast.Node {
 }
 
 func (c *Checker) getTypeOfSymbolWithDeferredType(symbol *ast.Symbol) *Type {
-	links := c.valueSymbolLinks.Get(symbol)
-	if links.resolvedType == nil {
-		deferred := c.deferredSymbolLinks.Get(symbol)
-		if deferred.parent.flags&TypeFlagsUnion != 0 {
-			links.resolvedType = c.getUnionType(deferred.constituents)
-		} else {
-			links.resolvedType = c.getIntersectionType(deferred.constituents)
-		}
+	deferred := c.deferredSymbolLinks.Get(symbol)
+	if deferred.parent.flags&TypeFlagsUnion != 0 {
+		return c.getUnionType(deferred.constituents)
 	}
-	return links.resolvedType
+	return c.getIntersectionType(deferred.constituents)
 }
 
 func (c *Checker) getWriteTypeOfSymbolWithDeferredType(symbol *ast.Symbol) *Type {
@@ -16817,7 +16812,7 @@ func (c *Checker) getWriteTypeOfSymbolWithDeferredType(symbol *ast.Symbol) *Type
 				links.writeType = c.getIntersectionType(deferred.writeConstituents)
 			}
 		} else {
-			links.writeType = c.getTypeOfSymbolWithDeferredType(symbol)
+			links.writeType = c.getTypeOfSymbol(symbol)
 		}
 	}
 	return links.writeType
@@ -16886,6 +16881,37 @@ func (c *Checker) GetTypeOfSymbolAtLocation(symbol *ast.Symbol, location *ast.No
 }
 
 func (c *Checker) getTypeOfSymbol(symbol *ast.Symbol) *Type {
+	links := c.valueSymbolLinks.Get(symbol)
+	if links.resolvedType != nil {
+		return links.resolvedType
+	}
+	if !c.pushTypeResolution(symbol, TypeSystemPropertyNameType) {
+		if symbol.CheckFlags()&(ast.CheckFlagsDeferredType|ast.CheckFlagsInstantiated) == 0 && symbol.CheckFlags()&ast.CheckFlagsMapped != 0 {
+			links.containingType.AsMappedType().containsError = true
+		}
+		return c.errorType
+	}
+	result := c.getTypeOfSymbolWorker(symbol)
+	if result == nil {
+		panic("Unexpected nil type")
+	}
+	if !c.popTypeResolution() {
+		links.resolvedType = c.errorType
+		c.reportSymbolTypeCircularity(symbol)
+		return links.resolvedType
+	}
+	// For a contextually typed parameter it is possible that a type has already
+	// been assigned (in assignTypeToParameterAndFixTypeParameters), and we want
+	// to preserve this type. In fact, we need to _prefer_ that type, but it won't
+	// be assigned until contextual typing is complete, so we need to defer in
+	// cases where contextual typing may take place.
+	if links.resolvedType == nil && !c.isParameterOfContextSensitiveSignature(symbol) {
+		links.resolvedType = result
+	}
+	return core.OrElse(links.resolvedType, result)
+}
+
+func (c *Checker) getTypeOfSymbolWorker(symbol *ast.Symbol) *Type {
 	if symbol.CheckFlags()&ast.CheckFlagsDeferredType != 0 {
 		return c.getTypeOfSymbolWithDeferredType(symbol)
 	}
@@ -16916,16 +16942,49 @@ func (c *Checker) getTypeOfSymbol(symbol *ast.Symbol) *Type {
 	return c.errorType
 }
 
+func (c *Checker) reportSymbolTypeCircularity(symbol *ast.Symbol) {
+	if symbol.CheckFlags()&(ast.CheckFlagsDeferredType|ast.CheckFlagsInstantiated) != 0 {
+		c.reportCircularityError(symbol)
+		return
+	}
+	if symbol.CheckFlags()&ast.CheckFlagsMapped != 0 {
+		c.error(c.currentNode, diagnostics.Type_of_property_0_circularly_references_itself_in_mapped_type_1, c.symbolToString(symbol), c.TypeToString(c.valueSymbolLinks.Get(symbol).containingType))
+		return
+	}
+	if symbol.CheckFlags()&ast.CheckFlagsReverseMapped != 0 {
+		c.reportCircularityError(symbol)
+		return
+	}
+	if symbol.Flags()&ast.SymbolFlagsAccessor != 0 {
+		getter := ast.GetDeclarationOfKind(symbol, ast.KindGetAccessor)
+		setter := ast.GetDeclarationOfKind(symbol, ast.KindSetAccessor)
+		accessor := core.Find(symbol.Declarations(), ast.IsAutoAccessorPropertyDeclaration)
+		if c.getAnnotatedAccessorTypeNode(getter) != nil {
+			c.error(getter, diagnostics.X_0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, c.symbolToString(symbol))
+		} else if c.getAnnotatedAccessorTypeNode(setter) != nil {
+			c.error(setter, diagnostics.X_0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, c.symbolToString(symbol))
+		} else if c.getAnnotatedAccessorTypeNode(accessor) != nil {
+			c.error(setter, diagnostics.X_0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, c.symbolToString(symbol))
+		} else if getter != nil && c.noImplicitAny {
+			c.error(getter, diagnostics.X_0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, c.symbolToString(symbol))
+		}
+		return
+	}
+	if symbol.Flags()&(ast.SymbolFlagsVariable|ast.SymbolFlagsProperty|ast.SymbolFlagsFunction|ast.SymbolFlagsMethod|ast.SymbolFlagsClass|ast.SymbolFlagsEnum|ast.SymbolFlagsValueModule|ast.SymbolFlagsEnumMember) == 0 && symbol.Flags()&ast.SymbolFlagsAlias != 0 {
+		exportSymbol := c.getTargetOfAliasDeclaration(c.getDeclarationOfAliasSymbol(symbol))
+		c.reportCircularityError(core.OrElse(exportSymbol, symbol))
+		return
+	}
+	c.reportCircularityError(symbol)
+}
+
 func (c *Checker) getNonMissingTypeOfSymbol(symbol *ast.Symbol) *Type {
 	return c.removeMissingType(c.getTypeOfSymbol(symbol), symbol.Flags()&ast.SymbolFlagsOptional != 0)
 }
 
 func (c *Checker) getTypeOfInstantiatedSymbol(symbol *ast.Symbol) *Type {
 	links := c.valueSymbolLinks.Get(symbol)
-	if links.resolvedType == nil {
-		links.resolvedType = c.instantiateType(c.getTypeOfSymbol(links.target), links.mapper)
-	}
-	return links.resolvedType
+	return c.instantiateType(c.getTypeOfSymbol(links.target), links.mapper)
 }
 
 func (c *Checker) getWriteTypeOfInstantiatedSymbol(symbol *ast.Symbol) *Type {
@@ -16934,26 +16993,6 @@ func (c *Checker) getWriteTypeOfInstantiatedSymbol(symbol *ast.Symbol) *Type {
 		links.writeType = c.instantiateType(c.getWriteTypeOfSymbol(links.target), links.mapper)
 	}
 	return links.writeType
-}
-
-func (c *Checker) getTypeOfVariableOrParameterOrProperty(symbol *ast.Symbol) *Type {
-	links := c.valueSymbolLinks.Get(symbol)
-	if links.resolvedType == nil {
-		t := c.getTypeOfVariableOrParameterOrPropertyWorker(symbol)
-		if t == nil {
-			panic("Unexpected nil type")
-		}
-		// For a contextually typed parameter it is possible that a type has already
-		// been assigned (in assignTypeToParameterAndFixTypeParameters), and we want
-		// to preserve this type. In fact, we need to _prefer_ that type, but it won't
-		// be assigned until contextual typing is complete, so we need to defer in
-		// cases where contextual typing may take place.
-		if links.resolvedType == nil && !c.isParameterOfContextSensitiveSignature(symbol) {
-			links.resolvedType = t
-		}
-		return t
-	}
-	return links.resolvedType
 }
 
 func (c *Checker) isParameterOfContextSensitiveSignature(symbol *ast.Symbol) bool {
@@ -16970,7 +17009,7 @@ func (c *Checker) isParameterOfContextSensitiveSignature(symbol *ast.Symbol) boo
 	return false
 }
 
-func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbol) *Type {
+func (c *Checker) getTypeOfVariableOrParameterOrProperty(symbol *ast.Symbol) *Type {
 	// Handle prototype property
 	if symbol.Flags()&ast.SymbolFlagsPrototype != 0 {
 		return c.getTypeOfPrototypeProperty(symbol)
@@ -16989,9 +17028,6 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 		return c.getWidenedType(c.getWidenedLiteralType(c.checkExpression(statements[0].Expression())))
 	}
 	// Handle variable, parameter or property
-	if !c.pushTypeResolution(symbol, TypeSystemPropertyNameType) {
-		return c.reportCircularityError(symbol)
-	}
 	if symbol.Flags()&ast.SymbolFlagsModuleExports != 0 {
 		if symbol.Name() == "exports" {
 			return c.getTypeOfSymbol(c.resolveExternalModuleSymbol(symbol.ValueDeclaration().Symbol(), false /*dontResolveAlias*/))
@@ -17023,9 +17059,6 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 		result = c.getTypeOfEnumMember(symbol)
 	default:
 		panic("Unhandled case in getTypeOfVariableOrParameterOrPropertyWorker: " + declaration.Kind.String())
-	}
-	if !c.popTypeResolution() {
-		return c.reportCircularityError(symbol)
 	}
 	return result
 }
@@ -17298,14 +17331,6 @@ func (c *Checker) getWidenedLiteralTypeForInitializer(declaration *ast.Node, t *
 }
 
 func (c *Checker) getTypeOfFuncClassEnumModule(symbol *ast.Symbol) *Type {
-	links := c.valueSymbolLinks.Get(symbol)
-	if links.resolvedType == nil {
-		links.resolvedType = c.getTypeOfFuncClassEnumModuleWorker(symbol)
-	}
-	return links.resolvedType
-}
-
-func (c *Checker) getTypeOfFuncClassEnumModuleWorker(symbol *ast.Symbol) *Type {
 	if symbol.Flags()&ast.SymbolFlagsModule != 0 && isShorthandAmbientModuleSymbol(symbol) {
 		return c.anyType
 	} else if symbol.Flags()&ast.SymbolFlagsValueModule != 0 && symbol.ValueDeclaration() != nil &&
@@ -18917,66 +18942,41 @@ func (c *Checker) getUndefinedProperty(prop *ast.Symbol) *ast.Symbol {
 }
 
 func (c *Checker) getTypeOfEnumMember(symbol *ast.Symbol) *Type {
-	links := c.valueSymbolLinks.Get(symbol)
-	if links.resolvedType == nil {
-		links.resolvedType = c.getDeclaredTypeOfEnumMember(symbol)
-	}
-	return links.resolvedType
+	return c.getDeclaredTypeOfEnumMember(symbol)
 }
 
 func (c *Checker) getTypeOfAccessors(symbol *ast.Symbol) *Type {
-	links := c.valueSymbolLinks.Get(symbol)
-	if links.resolvedType == nil {
-		if !c.pushTypeResolution(symbol, TypeSystemPropertyNameType) {
-			return c.errorType
-		}
-		getter := ast.GetDeclarationOfKind(symbol, ast.KindGetAccessor)
-		setter := ast.GetDeclarationOfKind(symbol, ast.KindSetAccessor)
-		accessor := core.Find(symbol.Declarations(), ast.IsAutoAccessorPropertyDeclaration)
-		// We try to resolve a getter type annotation, a setter type annotation, or a getter function
-		// body return type inference, in that order.
-		t := c.getAnnotatedAccessorType(getter)
-		if t == nil {
-			t = c.getAnnotatedAccessorType(setter)
-		}
-		if t == nil {
-			t = c.getAnnotatedAccessorType(accessor)
-		}
-		if t == nil && getter != nil {
-			if body := getter.Body(); body != nil {
-				t = c.getReturnTypeFromBody(getter, CheckModeNormal)
-			}
-		}
-		if t == nil && accessor != nil {
-			t = c.getWidenedTypeForVariableLikeDeclaration(accessor, true /*reportErrors*/)
-		}
-		if t == nil {
-			if setter != nil && !isPrivateWithinAmbient(setter) {
-				c.errorOrSuggestion(c.noImplicitAny, setter, diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, c.symbolToString(symbol))
-			} else if getter != nil && !isPrivateWithinAmbient(getter) {
-				c.errorOrSuggestion(c.noImplicitAny, getter, diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, c.symbolToString(symbol))
-			} else if accessor != nil && !isPrivateWithinAmbient(accessor) {
-				c.errorOrSuggestion(c.noImplicitAny, accessor, diagnostics.Member_0_implicitly_has_an_1_type, c.symbolToString(symbol), "any")
-			}
-			t = c.anyType
-		}
-		if !c.popTypeResolution() {
-			if c.getAnnotatedAccessorTypeNode(getter) != nil {
-				c.error(getter, diagnostics.X_0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, c.symbolToString(symbol))
-			} else if c.getAnnotatedAccessorTypeNode(setter) != nil {
-				c.error(setter, diagnostics.X_0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, c.symbolToString(symbol))
-			} else if c.getAnnotatedAccessorTypeNode(accessor) != nil {
-				c.error(setter, diagnostics.X_0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, c.symbolToString(symbol))
-			} else if getter != nil && c.noImplicitAny {
-				c.error(getter, diagnostics.X_0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, c.symbolToString(symbol))
-			}
-			t = c.anyType
-		}
-		if links.resolvedType == nil {
-			links.resolvedType = t
+	getter := ast.GetDeclarationOfKind(symbol, ast.KindGetAccessor)
+	setter := ast.GetDeclarationOfKind(symbol, ast.KindSetAccessor)
+	accessor := core.Find(symbol.Declarations(), ast.IsAutoAccessorPropertyDeclaration)
+	// We try to resolve a getter type annotation, a setter type annotation, or a getter function
+	// body return type inference, in that order.
+	t := c.getAnnotatedAccessorType(getter)
+	if t == nil {
+		t = c.getAnnotatedAccessorType(setter)
+	}
+	if t == nil {
+		t = c.getAnnotatedAccessorType(accessor)
+	}
+	if t == nil && getter != nil {
+		if body := getter.Body(); body != nil {
+			t = c.getReturnTypeFromBody(getter, CheckModeNormal)
 		}
 	}
-	return links.resolvedType
+	if t == nil && accessor != nil {
+		t = c.getWidenedTypeForVariableLikeDeclaration(accessor, true /*reportErrors*/)
+	}
+	if t == nil {
+		if setter != nil && !isPrivateWithinAmbient(setter) {
+			c.errorOrSuggestion(c.noImplicitAny, setter, diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, c.symbolToString(symbol))
+		} else if getter != nil && !isPrivateWithinAmbient(getter) {
+			c.errorOrSuggestion(c.noImplicitAny, getter, diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, c.symbolToString(symbol))
+		} else if accessor != nil && !isPrivateWithinAmbient(accessor) {
+			c.errorOrSuggestion(c.noImplicitAny, accessor, diagnostics.Member_0_implicitly_has_an_1_type, c.symbolToString(symbol), "any")
+		}
+		t = c.anyType
+	}
+	return t
 }
 
 func (c *Checker) getWriteTypeOfAccessors(symbol *ast.Symbol) *Type {
@@ -19004,7 +19004,7 @@ func (c *Checker) getWriteTypeOfAccessors(symbol *ast.Symbol) *Type {
 			if writeType != nil {
 				links.writeType = writeType
 			} else {
-				links.writeType = c.getTypeOfAccessors(symbol)
+				links.writeType = c.getTypeOfSymbol(symbol)
 			}
 		}
 	}
@@ -19012,34 +19012,16 @@ func (c *Checker) getWriteTypeOfAccessors(symbol *ast.Symbol) *Type {
 }
 
 func (c *Checker) getTypeOfAlias(symbol *ast.Symbol) *Type {
-	links := c.valueSymbolLinks.Get(symbol)
-	if links.resolvedType == nil {
-		if !c.pushTypeResolution(symbol, TypeSystemPropertyNameType) {
-			return c.errorType
-		}
-		targetSymbol := c.resolveAlias(symbol)
-		exportSymbol := c.getTargetOfAliasDeclaration(c.getDeclarationOfAliasSymbol(symbol))
-		// It only makes sense to get the type of a value symbol. If the result of resolving
-		// the alias is not a value, then it has no type. To get the type associated with a
-		// type symbol, call getDeclaredTypeOfSymbol.
-		// This check is important because without it, a call to getTypeOfSymbol could end
-		// up recursively calling getTypeOfAlias, causing a stack overflow.
-		if links.resolvedType == nil {
-			if c.getSymbolFlags(targetSymbol)&ast.SymbolFlagsValue != 0 {
-				links.resolvedType = c.getTypeOfSymbol(targetSymbol)
-			} else {
-				links.resolvedType = c.errorType
-			}
-		}
-		if !c.popTypeResolution() {
-			c.reportCircularityError(core.OrElse(exportSymbol, symbol))
-			if links.resolvedType == nil {
-				links.resolvedType = c.errorType
-			}
-			return links.resolvedType
-		}
+	targetSymbol := c.resolveAlias(symbol)
+	// It only makes sense to get the type of a value symbol. If the result of resolving
+	// the alias is not a value, then it has no type. To get the type associated with a
+	// type symbol, call getDeclaredTypeOfSymbol.
+	// This check is important because without it, a call to getTypeOfSymbol could end
+	// up recursively calling getTypeOfAlias, causing a stack overflow.
+	if c.getSymbolFlags(targetSymbol)&ast.SymbolFlagsValue != 0 {
+		return c.getTypeOfSymbol(targetSymbol)
 	}
-	return links.resolvedType
+	return c.errorType
 }
 
 func (c *Checker) addOptionality(t *Type) *Type {
@@ -21392,36 +21374,20 @@ func (c *Checker) resolveMappedTypeMembers(t *Type) {
 
 func (c *Checker) getTypeOfMappedSymbol(symbol *ast.Symbol) *Type {
 	links := c.valueSymbolLinks.Get(symbol)
-	if links.resolvedType == nil {
-		mappedType := links.containingType
-		if !c.pushTypeResolution(symbol, TypeSystemPropertyNameType) {
-			mappedType.AsMappedType().containsError = true
-			return c.errorType
-		}
-		templateType := c.getTemplateTypeFromMappedType(core.OrElse(mappedType.AsMappedType().target, mappedType))
-		mapper := appendTypeMapping(mappedType.AsMappedType().mapper, c.getTypeParameterFromMappedType(mappedType), c.mappedSymbolLinks.Get(symbol).keyType)
-		propType := c.instantiateType(templateType, mapper)
-		// When creating an optional property in strictNullChecks mode, if 'undefined' isn't assignable to the
-		// type, we include 'undefined' in the type. Similarly, when creating a non-optional property in strictNullChecks
-		// mode, if the underlying property is optional we remove 'undefined' from the type.
-		switch {
-		case c.strictNullChecks && symbol.Flags()&ast.SymbolFlagsOptional != 0 && !c.maybeTypeOfKind(propType, TypeFlagsUndefined|TypeFlagsVoid):
-			propType = c.getOptionalType(propType, true /*isProperty*/)
-		case symbol.CheckFlags()&ast.CheckFlagsStripOptional != 0:
-			propType = c.removeMissingOrUndefinedType(propType)
-		}
-		if c.popTypeResolution() {
-			if links.resolvedType == nil {
-				links.resolvedType = propType
-			}
-		} else {
-			if links.resolvedType == nil {
-				links.resolvedType = c.errorType
-			}
-			c.error(c.currentNode, diagnostics.Type_of_property_0_circularly_references_itself_in_mapped_type_1, c.symbolToString(symbol), c.TypeToString(mappedType))
-		}
+	mappedType := links.containingType
+	templateType := c.getTemplateTypeFromMappedType(core.OrElse(mappedType.AsMappedType().target, mappedType))
+	mapper := appendTypeMapping(mappedType.AsMappedType().mapper, c.getTypeParameterFromMappedType(mappedType), c.mappedSymbolLinks.Get(symbol).keyType)
+	propType := c.instantiateType(templateType, mapper)
+	// When creating an optional property in strictNullChecks mode, if 'undefined' isn't assignable to the
+	// type, we include 'undefined' in the type. Similarly, when creating a non-optional property in strictNullChecks
+	// mode, if the underlying property is optional we remove 'undefined' from the type.
+	switch {
+	case c.strictNullChecks && symbol.Flags()&ast.SymbolFlagsOptional != 0 && !c.maybeTypeOfKind(propType, TypeFlagsUndefined|TypeFlagsVoid):
+		propType = c.getOptionalType(propType, true /*isProperty*/)
+	case symbol.CheckFlags()&ast.CheckFlagsStripOptional != 0:
+		propType = c.removeMissingOrUndefinedType(propType)
 	}
-	return links.resolvedType
+	return propType
 }
 
 // Return the lower bound of the key type in a mapped type. Intuitively, the lower

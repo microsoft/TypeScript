@@ -1,0 +1,19 @@
+file.js(4,11): error TS7022: 'pixel' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+file.js(4,19): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ skip: any; }'.
+file.js(5,24): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ skip: any; }'.
+
+
+==== file.js (3 errors) ====
+    /** @param {any} axis @param {any} value */
+    function updateElements(axis, value) {
+        const properties = {};
+        const pixel = properties[axis] = value;
+              ~~~~~
+!!! error TS7022: 'pixel' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                      ~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ skip: any; }'.
+        const otherPixel = properties[axis] = value;
+                           ~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ skip: any; }'.
+        properties.skip = isNaN(pixel) || isNaN(otherPixel);
+    }
