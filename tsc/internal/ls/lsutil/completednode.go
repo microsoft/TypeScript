@@ -21,7 +21,7 @@ func IsCompletedNode(n *ast.Node, sourceFile *ast.SourceFile) bool {
 		return false
 	}
 
-	switch n.Kind {
+	switch n.Kind() {
 	case ast.KindClassDeclaration,
 		ast.KindInterfaceDeclaration,
 		ast.KindEnumDeclaration,
@@ -183,10 +183,10 @@ func nodeEndsWith(n *ast.Node, expectedLastToken ast.Kind, sourceFile *ast.Sourc
 		return false
 	}
 	lastChild := lastNodeAndTokens[len(lastNodeAndTokens)-1]
-	if lastChild.Kind == expectedLastToken {
+	if lastChild.Kind() == expectedLastToken {
 		return true
-	} else if lastChild.Kind == ast.KindSemicolonToken && len(lastNodeAndTokens) > 1 {
-		return lastNodeAndTokens[len(lastNodeAndTokens)-2].Kind == expectedLastToken
+	} else if lastChild.Kind() == ast.KindSemicolonToken && len(lastNodeAndTokens) > 1 {
+		return lastNodeAndTokens[len(lastNodeAndTokens)-2].Kind() == expectedLastToken
 	}
 	return false
 }

@@ -49,13 +49,13 @@ func (v *NodeVisitor) VisitNode(node *Node) *Node {
 
 	if v.Visit != nil {
 		visited := v.Visit(node)
-		if visited != nil && visited.Kind == KindSyntaxList {
+		if visited != nil && visited.Kind() == KindSyntaxList {
 			nodes := visited.AsSyntaxList().Children
 			if len(nodes) != 1 {
 				panic("Expected only a single node to be written to output")
 			}
 			visited = nodes[0]
-			if visited != nil && visited.Kind == KindSyntaxList {
+			if visited != nil && visited.Kind() == KindSyntaxList {
 				panic("The result of visiting and lifting a Node may not be SyntaxList")
 			}
 		}
@@ -153,7 +153,7 @@ func (v *NodeVisitor) VisitSlice(nodes []*Node) (result []*Node, changed bool) {
 				// finish prior loop
 				switch {
 				case visited == nil: // do nothing
-				case visited.Kind == KindSyntaxList:
+				case visited.Kind() == KindSyntaxList:
 					updated = append(updated, visited.AsSyntaxList().Children...)
 				default:
 					updated = append(updated, visited)
@@ -260,7 +260,7 @@ func (v *NodeVisitor) visitTopLevelStatements(nodes *StatementList) *StatementLi
 func (v *NodeVisitor) liftToBlock(node *Statement) *Statement {
 	var nodes []*Node
 	if node != nil {
-		if node.Kind == KindSyntaxList {
+		if node.Kind() == KindSyntaxList {
 			nodes = node.AsSyntaxList().Children
 		} else {
 			nodes = []*Node{node}
@@ -271,7 +271,7 @@ func (v *NodeVisitor) liftToBlock(node *Statement) *Statement {
 	} else {
 		node = v.Factory.NewBlock(v.Factory.NewNodeList(nodes), true /*multiLine*/)
 	}
-	if node.Kind == KindSyntaxList {
+	if node.Kind() == KindSyntaxList {
 		panic("The result of visiting and lifting a Node may not be SyntaxList")
 	}
 	return node

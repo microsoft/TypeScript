@@ -78,7 +78,7 @@ func getSelectionChildren(factory *ast.NodeFactory, node *ast.Node, sourceFile *
 
 	openBraceToken := children[0]
 	closeBraceToken := children[len(children)-1]
-	if openBraceToken.Kind != ast.KindOpenBraceToken || closeBraceToken.Kind != ast.KindCloseBraceToken {
+	if openBraceToken.Kind() != ast.KindOpenBraceToken || closeBraceToken.Kind() != ast.KindCloseBraceToken {
 		return children
 	}
 
@@ -88,16 +88,16 @@ func getSelectionChildren(factory *ast.NodeFactory, node *ast.Node, sourceFile *
 	// Group `-/+readonly` and `-/+?`.
 	groupedWithPlusMinusTokens := groupChildren(factory, children, func(child *ast.Node) bool {
 		return child == mappedType.ReadonlyToken ||
-			child.Kind == ast.KindReadonlyKeyword ||
+			child.Kind() == ast.KindReadonlyKeyword ||
 			child == mappedType.QuestionToken ||
-			child.Kind == ast.KindQuestionToken
+			child.Kind() == ast.KindQuestionToken
 	})
 
 	// Group the type parameter with its surrounding brackets.
 	groupedWithBrackets := groupChildren(factory, groupedWithPlusMinusTokens, func(child *ast.Node) bool {
-		return child.Kind == ast.KindOpenBracketToken ||
-			child.Kind == ast.KindTypeParameter ||
-			child.Kind == ast.KindCloseBracketToken
+		return child.Kind() == ast.KindOpenBracketToken ||
+			child.Kind() == ast.KindTypeParameter ||
+			child.Kind() == ast.KindCloseBracketToken
 	})
 
 	// Go exposes the trailing semicolon directly, so keep it in the right-hand
@@ -105,7 +105,7 @@ func getSelectionChildren(factory *ast.NodeFactory, node *ast.Node, sourceFile *
 	return []*ast.Node{
 		openBraceToken,
 		createSyntaxList(factory, splitChildren(factory, groupedWithBrackets, func(child *ast.Node) bool {
-			return child.Kind == ast.KindColonToken
+			return child.Kind() == ast.KindColonToken
 		}, false)),
 		closeBraceToken,
 	}
@@ -155,7 +155,7 @@ func splitChildren(
 	leftChildren := children[:splitTokenIndex]
 	splitToken := children[splitTokenIndex]
 	lastToken := children[len(children)-1]
-	separateLastToken := separateTrailingSemicolon && lastToken.Kind == ast.KindSemicolonToken
+	separateLastToken := separateTrailingSemicolon && lastToken.Kind() == ast.KindSemicolonToken
 	rightEnd := len(children)
 	if separateLastToken {
 		rightEnd--
@@ -178,7 +178,7 @@ func splitChildren(
 
 func createSyntaxList(factory *ast.NodeFactory, children []*ast.Node) *ast.Node {
 	list := factory.NewSyntaxList(children)
-	list.Loc = core.NewTextRange(children[0].Pos(), children[len(children)-1].End())
+	list.SetLoc(core.NewTextRange(children[0].Pos(), children[len(children)-1].End()))
 	return list
 }
 
@@ -353,7 +353,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 						}
 
 						// String literals should have a stop both inside and outside their quotes.
-						if ast.IsStringLiteral(node) || node.Kind == ast.KindTemplateExpression || node.Kind == ast.KindNoSubstitutionTemplateLiteral {
+						if ast.IsStringLiteral(node) || node.Kind() == ast.KindTemplateExpression || node.Kind() == ast.KindNoSubstitutionTemplateLiteral {
 							// Only add inner content range if there's actually content (handles unterminated literals)
 							if start+1 < end-1 {
 								pushSelectionRange(start+1, end-1)

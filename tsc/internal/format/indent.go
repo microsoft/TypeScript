@@ -44,7 +44,7 @@ func GetIndentation(position int, sourceFile *ast.SourceFile, options lsutil.For
 	}
 
 	// no indentation in string/regex/template literals
-	if isStringOrRegularExpressionOrTemplateLiteral(precedingToken.Kind) {
+	if isStringOrRegularExpressionOrTemplateLiteral(precedingToken.Kind()) {
 		tokenStart := scanner.GetTokenPosOfNode(precedingToken, sourceFile, false)
 		if tokenStart <= position && position < precedingToken.End() {
 			return 0
@@ -77,12 +77,12 @@ func GetIndentation(position int, sourceFile *ast.SourceFile, options lsutil.For
 	//          y: undefined,
 	//      }
 	// ```
-	isObjectLiteral := currentToken.Kind == ast.KindOpenBraceToken && currentToken.Parent != nil && currentToken.Parent.Kind == ast.KindObjectLiteralExpression
+	isObjectLiteral := currentToken.Kind() == ast.KindOpenBraceToken && currentToken.Parent() != nil && currentToken.Parent().Kind() == ast.KindObjectLiteralExpression
 	if options.IndentStyle == lsutil.IndentStyleBlock || isObjectLiteral {
 		return getBlockIndent(sourceFile, position, options)
 	}
 
-	if precedingToken.Kind == ast.KindCommaToken && precedingToken.Parent != nil && precedingToken.Parent.Kind != ast.KindBinaryExpression {
+	if precedingToken.Kind() == ast.KindCommaToken && precedingToken.Parent() != nil && precedingToken.Parent().Kind() != ast.KindBinaryExpression {
 		// previous token is comma that separates items in list - find the previous item and try to derive indentation from it
 		actualIndentation := getActualIndentationForListItemBeforeComma(precedingToken, sourceFile, options)
 		if actualIndentation != -1 {
@@ -90,10 +90,10 @@ func GetIndentation(position int, sourceFile *ast.SourceFile, options lsutil.For
 		}
 	}
 
-	containerList := getListByPosition(position, precedingToken.Parent, sourceFile)
+	containerList := getListByPosition(position, precedingToken.Parent(), sourceFile)
 	// use list position if the preceding token is before any list items
-	if containerList != nil && !precedingToken.Loc.ContainedBy(containerList.Loc) {
-		useTheSameBaseIndentation := currentToken.Parent != nil && (currentToken.Parent.Kind == ast.KindFunctionExpression || currentToken.Parent.Kind == ast.KindArrowFunction)
+	if containerList != nil && !precedingToken.Loc().ContainedBy(containerList.Loc) {
+		useTheSameBaseIndentation := currentToken.Parent() != nil && (currentToken.Parent().Kind() == ast.KindFunctionExpression || currentToken.Parent().Kind() == ast.KindArrowFunction)
 		indentSize := 0
 		if !useTheSameBaseIndentation {
 			indentSize = options.IndentSize
@@ -135,7 +135,7 @@ func getCommentIndent(sourceFile *ast.SourceFile, position int, options lsutil.F
 }
 
 func getLeadingCommentRangesOfNode(node *ast.Node, file *ast.SourceFile) iter.Seq[ast.CommentRange] {
-	if node.Kind == ast.KindJsxText {
+	if node.Kind() == ast.KindJsxText {
 		return nil
 	}
 	return scanner.GetLeadingCommentRanges(&ast.NodeFactory{}, file.Text(), node.Pos())
@@ -149,7 +149,7 @@ func getRangeOfEnclosingComment(
 	tokenAtPosition := astnav.GetTokenAtPosition(sourceFile, position)
 	jsdoc := ast.FindAncestor(tokenAtPosition, (*ast.Node).IsJSDoc)
 	if jsdoc != nil {
-		tokenAtPosition = jsdoc.Parent
+		tokenAtPosition = jsdoc.Parent()
 	}
 	tokenStart := astnav.GetStartOfNode(tokenAtPosition, sourceFile, false /*includeJSDoc*/)
 	if tokenStart <= position && position < tokenAtPosition.End() {
@@ -192,7 +192,7 @@ func getBlockIndent(sourceFile *ast.SourceFile, position int, options lsutil.For
 
 func getActualIndentationForListItemBeforeComma(commaToken *ast.Node, sourceFile *ast.SourceFile, options lsutil.FormatCodeSettings) int {
 	// previous token is comma that separates items in list - find the previous item and try to derive indentation from it
-	if commaToken.Parent == nil {
+	if commaToken.Parent() == nil {
 		return -1
 	}
 	containingList := GetContainingList(commaToken, sourceFile)
@@ -220,10 +220,10 @@ func nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken *ast.Node, current *
 		return nextTokenKindUnknown
 	}
 
-	if nextToken.Kind == ast.KindOpenBraceToken {
+	if nextToken.Kind() == ast.KindOpenBraceToken {
 		// open braces are always indented at the parent level
 		return nextTokenKindOpenBrace
-	} else if nextToken.Kind == ast.KindCloseBraceToken {
+	} else if nextToken.Kind() == ast.KindCloseBraceToken {
 		// close braces are indented at the parent level if they are located on the same line with cursor
 		nextTokenStartLine := getStartLineForNode(nextToken, sourceFile)
 		if lineAtPosition == nextTokenStartLine {
@@ -270,7 +270,7 @@ func getSmartIndent(sourceFile *ast.SourceFile, position int, precedingToken *as
 		}
 
 		previous = current
-		current = current.Parent
+		current = current.Parent()
 	}
 	// no parent was found - return the base indentation of the SourceFile
 	return options.BaseIndentSize
@@ -286,7 +286,7 @@ func getIndentationForNodeWorker(
 	isNextChild bool,
 	options lsutil.FormatCodeSettings,
 ) int {
-	parent := current.Parent
+	parent := current.Parent()
 
 	// Walk up the tree and collect indentation for parent-child node pairs. Indentation is not added if
 	// * parent and child nodes start on the same line, or
@@ -359,7 +359,7 @@ func getIndentationForNodeWorker(
 		useTrueStart := isArgumentAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStartLine, sourceFile)
 
 		current = parent
-		parent = current.Parent
+		parent = current.Parent()
 
 		if useTrueStart {
 			currentStartLine, currentStartCharacter = scanner.GetECMALineAndByteOffsetOfPosition(sourceFile, scanner.GetTokenPosOfNode(current, sourceFile, false))
@@ -379,7 +379,7 @@ func getActualIndentationForNode(current *ast.Node, parent *ast.Node, cuurentLin
 	// actual indentation is used for statements\declarations if one of cases below is true:
 	// - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
 	// - parent and child are not on the same line
-	useActualIndentation := (ast.IsDeclaration(current) || ast.IsStatementButNotDeclaration(current)) && (parent.Kind == ast.KindSourceFile || !parentAndChildShareLine)
+	useActualIndentation := (ast.IsDeclaration(current) || ast.IsStatementButNotDeclaration(current)) && (parent.Kind() == ast.KindSourceFile || !parentAndChildShareLine)
 
 	if !useActualIndentation {
 		return -1
@@ -398,7 +398,7 @@ func isArgumentAndStartLineOverlapsExpressionBeingCalled(parent *ast.Node, child
 }
 
 func getActualIndentationForListItem(node *ast.Node, sourceFile *ast.SourceFile, options lsutil.FormatCodeSettings, listIndentsChild bool) int {
-	if node.Parent != nil && node.Parent.Kind == ast.KindVariableDeclarationList {
+	if node.Parent() != nil && node.Parent().Kind() == ast.KindVariableDeclarationList {
 		// VariableDeclarationList has no wrapping tokens
 		return -1
 	}
@@ -443,7 +443,7 @@ func deriveActualIndentationFromList(list *ast.NodeList, index int, sourceFile *
 	line, char := getStartLineAndCharacterForNode(node, sourceFile)
 
 	for i := index; i >= 0; i-- {
-		if list.Nodes[i].Kind == ast.KindCommaToken {
+		if list.Nodes[i].Kind() == ast.KindCommaToken {
 			continue
 		}
 		// skip list items that ends on the same line with the current list element
@@ -498,7 +498,7 @@ func findFirstNonWhitespaceCharacterAndColumn(startPos int, endPos int, sourceFi
 }
 
 func childStartsOnTheSameLineWithElseInIfStatement(parent *ast.Node, child *ast.Node, childStartLine int, sourceFile *ast.SourceFile) bool {
-	if parent.Kind == ast.KindIfStatement && parent.AsIfStatement().ElseStatement == child {
+	if parent.Kind() == ast.KindIfStatement && parent.AsIfStatement().ElseStatement == child {
 		elseKeyword := astnav.FindPrecedingToken(sourceFile, child.Pos())
 		debug.Assert(elseKeyword != nil)
 		elseKeywordStartLine := getStartLineForNode(elseKeyword, sourceFile)
@@ -516,10 +516,10 @@ func getStartLineForNode(n *ast.Node, sourceFile *ast.SourceFile) int {
 }
 
 func GetContainingList(node *ast.Node, sourceFile *ast.SourceFile) *ast.NodeList {
-	if node.Parent == nil {
+	if node.Parent() == nil {
 		return nil
 	}
-	return getListByRange(scanner.GetTokenPosOfNode(node, sourceFile, false), node.End(), node.Parent, sourceFile)
+	return getListByRange(scanner.GetTokenPosOfNode(node, sourceFile, false), node.End(), node.Parent(), sourceFile)
 }
 
 func getListByPosition(pos int, node *ast.Node, sourceFile *ast.SourceFile) *ast.NodeList {
@@ -531,7 +531,7 @@ func getListByPosition(pos int, node *ast.Node, sourceFile *ast.SourceFile) *ast
 
 func getListByRange(start int, end int, node *ast.Node, sourceFile *ast.SourceFile) *ast.NodeList {
 	r := core.NewTextRange(start, end)
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindTypeReference:
 		return getList(node.TypeArgumentList(), r, node, sourceFile)
 	case ast.KindObjectLiteralExpression:
@@ -640,16 +640,16 @@ func ShouldIndentChildNode(settings lsutil.FormatCodeSettings, parent *ast.Node,
 		isNextChild = isNextChildArg[0]
 	}
 
-	return NodeWillIndentChild(settings, parent, child, sourceFile, false) && !(isNextChild && child != nil && isControlFlowEndingStatement(child.Kind, parent.Kind))
+	return NodeWillIndentChild(settings, parent, child, sourceFile, false) && !(isNextChild && child != nil && isControlFlowEndingStatement(child.Kind(), parent.Kind()))
 }
 
 func NodeWillIndentChild(settings lsutil.FormatCodeSettings, parent *ast.Node, child *ast.Node, sourceFile *ast.SourceFile, indentByDefault bool) bool {
 	childKind := ast.KindUnknown
 	if child != nil {
-		childKind = child.Kind
+		childKind = child.Kind()
 	}
 
-	switch parent.Kind {
+	switch parent.Kind() {
 	case ast.KindExpressionStatement,
 		ast.KindClassDeclaration,
 		ast.KindClassExpression,
@@ -698,14 +698,14 @@ func NodeWillIndentChild(settings lsutil.FormatCodeSettings, parent *ast.Node, c
 		return settings.IndentSwitchCase.IsTrueOrUnknown()
 	case ast.KindVariableDeclaration, ast.KindPropertyAssignment, ast.KindBinaryExpression:
 		if settings.IndentMultiLineObjectLiteralBeginningOnBlankLine.IsFalseOrUnknown() && sourceFile != nil && childKind == ast.KindObjectLiteralExpression {
-			return rangeIsOnOneLine(child.Loc, sourceFile)
+			return rangeIsOnOneLine(child.Loc(), sourceFile)
 		}
-		if parent.Kind == ast.KindBinaryExpression && sourceFile != nil && childKind == ast.KindJsxElement {
+		if parent.Kind() == ast.KindBinaryExpression && sourceFile != nil && childKind == ast.KindJsxElement {
 			parentStartLine := scanner.GetECMALineOfPosition(sourceFile, scanner.SkipTrivia(sourceFile.Text(), parent.Pos()))
 			childStartLine := scanner.GetECMALineOfPosition(sourceFile, scanner.SkipTrivia(sourceFile.Text(), child.Pos()))
 			return parentStartLine != childStartLine
 		}
-		if parent.Kind != ast.KindBinaryExpression {
+		if parent.Kind() != ast.KindBinaryExpression {
 			return true
 		}
 		return indentByDefault
@@ -724,13 +724,13 @@ func NodeWillIndentChild(settings lsutil.FormatCodeSettings, parent *ast.Node, c
 		return childKind != ast.KindBlock
 	case ast.KindArrowFunction:
 		if sourceFile != nil && childKind == ast.KindParenthesizedExpression {
-			return rangeIsOnOneLine(child.Loc, sourceFile)
+			return rangeIsOnOneLine(child.Loc(), sourceFile)
 		}
 		return childKind != ast.KindBlock
 	case ast.KindExportDeclaration:
 		return childKind != ast.KindNamedExports
 	case ast.KindImportDeclaration:
-		return childKind != ast.KindImportClause || (child.AsImportClause().NamedBindings != nil && child.AsImportClause().NamedBindings.Kind != ast.KindNamedImports)
+		return childKind != ast.KindImportClause || (child.AsImportClause().NamedBindings != nil && child.AsImportClause().NamedBindings.Kind() != ast.KindNamedImports)
 	case ast.KindJsxElement:
 		return childKind != ast.KindJsxClosingElement
 	case ast.KindJsxFragment:
@@ -777,7 +777,7 @@ func NodeWillIndentChild(settings lsutil.FormatCodeSettings, parent *ast.Node, c
 // we check for the whenTrue branch beginning on the line that the condition ends, and the whenFalse
 // branch beginning on the line that the whenTrue branch ends.
 func childIsUnindentedBranchOfConditionalExpression(parent *ast.Node, child *ast.Node, childStartLine int, sourceFile *ast.SourceFile) bool {
-	if parent.Kind == ast.KindConditionalExpression && (child == parent.AsConditionalExpression().WhenTrue || child == parent.AsConditionalExpression().WhenFalse) {
+	if parent.Kind() == ast.KindConditionalExpression && (child == parent.AsConditionalExpression().WhenTrue || child == parent.AsConditionalExpression().WhenFalse) {
 		conditionEndLine := scanner.GetECMALineOfPosition(sourceFile, parent.AsConditionalExpression().Condition.End())
 		if child == parent.AsConditionalExpression().WhenTrue {
 			return childStartLine == conditionEndLine

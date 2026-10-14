@@ -38,7 +38,7 @@ func PrintAndPositionNode(factory *ast.NodeFactory, node *ast.Node, sourceFile *
 // positions assigned (e.g. via PrintAndPositionNode or AssignPositionsToNode).
 func CreateSyntheticSourceFile(factory *ast.NodeFactory, node *ast.Node, text string, parseOptions ast.SourceFileParseOptions) *ast.SourceFile {
 	eof := factory.NewToken(ast.KindEndOfFile)
-	eof.Loc = core.NewTextRange(len(text), len(text))
+	eof.SetLoc(core.NewTextRange(len(text), len(text)))
 	statements := factory.NewNodeList([]*ast.Node{node})
 	statements.Loc = core.NewTextRange(node.Pos(), node.End())
 	syntheticFile := factory.NewSourceFile(
@@ -47,7 +47,7 @@ func CreateSyntheticSourceFile(factory *ast.NodeFactory, node *ast.Node, text st
 		statements,
 		eof,
 	)
-	syntheticFile.Loc = core.NewTextRange(0, len(text))
+	syntheticFile.SetLoc(core.NewTextRange(0, len(text)))
 	ast.SetParentInChildren(syntheticFile)
 	return syntheticFile.AsSourceFile()
 }

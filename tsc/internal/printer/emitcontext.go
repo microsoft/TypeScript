@@ -48,7 +48,7 @@ func NewEmitContext() *EmitContext {
 }
 
 func (c *EmitContext) onCreate(node *ast.Node) {
-	node.Flags |= ast.NodeFlagsSynthesized
+	node.SetFlags(node.Flags() | ast.NodeFlagsSynthesized)
 }
 
 func (c *EmitContext) onUpdate(updated *ast.Node, original *ast.Node) {
@@ -583,7 +583,7 @@ func (c *EmitContext) CommentRange(node *ast.Node) core.TextRange {
 	if emitNode := c.emitNodes.TryGet(node); emitNode != nil && emitNode.flags&hasCommentRange != 0 {
 		return emitNode.commentRange
 	}
-	return node.Loc
+	return node.Loc()
 }
 
 // Sets the range to use for a node when emitting comments.
@@ -603,7 +603,7 @@ func (c *EmitContext) SourceMapRange(node *ast.Node) core.TextRange {
 	if emitNode := c.emitNodes.TryGet(node); emitNode != nil && emitNode.flags&hasSourceMapRange != 0 {
 		return emitNode.sourceMapRange
 	}
-	return node.Loc
+	return node.Loc()
 }
 
 // Sets the range to use for a node when emitting source maps.
@@ -876,10 +876,10 @@ func (c *EmitContext) addDefaultValueAssignmentForInitializer(parameter *ast.Par
 		nameClone,
 		initializer,
 	)
-	initAssignment.Loc = parameter.Loc
+	initAssignment.SetLoc(parameter.Loc())
 	c.AddEmitFlags(initAssignment, EFNoComments)
 	initBlock := c.Factory.NewBlock(c.Factory.NewNodeList([]*ast.Node{c.Factory.NewExpressionStatement(initAssignment)}), false)
-	initBlock.Loc = parameter.Loc
+	initBlock.SetLoc(parameter.Loc())
 	c.AddEmitFlags(initBlock, EFSingleLine|EFNoTrailingSourceMap|EFNoTokenSourceMaps|EFNoComments)
 	c.AddInitializationStatement(c.Factory.NewIfStatement(
 		c.Factory.NewTypeCheck(name.Clone(c.Factory), "undefined"),
@@ -911,11 +911,11 @@ func (c *EmitContext) ConvertToFunctionBlock(node *ast.Node, multiLine bool) *as
 		return node
 	}
 	returnStatement := c.Factory.NewReturnStatement(node)
-	returnStatement.Loc = node.Loc
+	returnStatement.SetLoc(node.Loc())
 	statements := c.Factory.NewNodeList([]*ast.Node{returnStatement})
-	statements.Loc = node.Loc
+	statements.Loc = node.Loc()
 	block := c.Factory.NewBlock(statements, multiLine)
-	block.Loc = node.Loc
+	block.SetLoc(node.Loc())
 	return block
 }
 
@@ -981,7 +981,7 @@ func (c *EmitContext) VisitEmbeddedStatement(node *ast.Statement, visitor *ast.N
 	embeddedStatement := visitor.VisitEmbeddedStatement(node)
 	if embeddedStatement == nil || ast.IsNotEmittedStatement(embeddedStatement) {
 		emptyStatement := visitor.Factory.NewEmptyStatement()
-		emptyStatement.Loc = node.Loc
+		emptyStatement.SetLoc(node.Loc())
 		c.SetOriginal(emptyStatement, node)
 		c.AssignCommentRange(emptyStatement, node)
 		return emptyStatement
@@ -1039,7 +1039,7 @@ func (c *EmitContext) GetTypeNode(node *ast.Node) *ast.TypeNode {
 
 func (c *EmitContext) NewNotEmittedStatement(node *ast.Node) *ast.Statement {
 	statement := c.Factory.NewNotEmittedStatement()
-	statement.Loc = node.Loc
+	statement.SetLoc(node.Loc())
 	c.SetOriginal(statement, node)
 	c.AssignCommentRange(statement, node)
 	return statement

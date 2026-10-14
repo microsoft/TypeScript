@@ -237,7 +237,7 @@ func fileAffectsGlobalScope(file *ast.SourceFile) bool {
 	// if file contains anything that augments to global scope we need to build them as if
 	// they are global files as well as module
 	if core.Some(file.ModuleAugmentations, func(augmentation *ast.ModuleName) bool {
-		return ast.IsGlobalScopeAugmentation(augmentation.Parent)
+		return ast.IsGlobalScopeAugmentation(augmentation.Parent())
 	}) {
 		return true
 	}

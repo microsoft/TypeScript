@@ -138,7 +138,7 @@ func (s *SymbolTrackerImpl) ReportPrivateInBaseOfClassExpression(propertyName st
 	location := s.errorLocation()
 	if location != nil {
 		diag := createDiagnosticForNode(location, diagnostics.Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected, propertyName)
-		if ast.IsVariableDeclaration(location.Parent) {
+		if ast.IsVariableDeclaration(location.Parent()) {
 			related := createDiagnosticForNode(location, diagnostics.Add_a_type_annotation_to_the_variable_0, s.errorDeclarationNameWithFallback())
 			diag.AddRelatedInfo(related)
 		}

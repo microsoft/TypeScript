@@ -39,7 +39,7 @@ func GetLastToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 		return nil
 	}
 
-	if ast.IsTokenKind(node.Kind) || ast.IsIdentifier(node) {
+	if ast.IsTokenKind(node.Kind()) || ast.IsIdentifier(node) {
 		return nil
 	}
 
@@ -50,7 +50,7 @@ func GetLastToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 		return nil
 	}
 
-	if lastChild.Kind < ast.KindFirstNode {
+	if lastChild.Kind() < ast.KindFirstNode {
 		return lastChild
 	} else {
 		return GetLastToken(lastChild, sourceFile)
@@ -63,7 +63,7 @@ func GetLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 	var lastChild *ast.Node
 
 	visitNode := func(n *ast.Node, _ *ast.NodeVisitor) *ast.Node {
-		if n != nil && n.Flags&ast.NodeFlagsReparsed == 0 {
+		if n != nil && n.Flags()&ast.NodeFlagsReparsed == 0 {
 			lastChild = n
 		}
 		return n
@@ -71,7 +71,7 @@ func GetLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 	visitNodeList := func(nodeList *ast.NodeList, _ *ast.NodeVisitor) *ast.NodeList {
 		if nodeList != nil && len(nodeList.Nodes) > 0 {
 			for _, v := range slices.Backward(nodeList.Nodes) {
-				if v.Flags&ast.NodeFlagsReparsed == 0 {
+				if v.Flags()&ast.NodeFlagsReparsed == 0 {
 					lastChild = v
 					break
 				}
@@ -85,13 +85,13 @@ func GetLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 }
 
 func GetFirstToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
-	if ast.IsIdentifier(node) || ast.IsTokenKind(node.Kind) {
+	if ast.IsIdentifier(node) || ast.IsTokenKind(node.Kind()) {
 		return nil
 	}
 	AssertHasRealPosition(node)
 	var firstChild *ast.Node
 	node.ForEachChild(func(n *ast.Node) bool {
-		if n == nil || node.Flags&ast.NodeFlagsReparsed != 0 {
+		if n == nil || node.Flags()&ast.NodeFlagsReparsed != 0 {
 			return false
 		}
 		firstChild = n
@@ -119,7 +119,7 @@ func GetFirstToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 	if firstChild == nil {
 		return nil
 	}
-	if firstChild.Kind < ast.KindFirstNode {
+	if firstChild.Kind() < ast.KindFirstNode {
 		return firstChild
 	}
 	return GetFirstToken(firstChild, sourceFile)

@@ -35,8 +35,8 @@ func DecodeSourceFile(data []byte) (*ast.SourceFile, error) {
 	if err != nil {
 		return nil, err
 	}
-	if node.Kind != ast.KindSourceFile {
-		return nil, fmt.Errorf("expected SourceFile root, got %v", node.Kind)
+	if node.Kind() != ast.KindSourceFile {
+		return nil, fmt.Errorf("expected SourceFile root, got %v", node.Kind())
 	}
 	return node.AsSourceFile(), nil
 }
@@ -171,10 +171,10 @@ func (d *astDecoder) decode() (*ast.Node, error) {
 		if err != nil {
 			return nil, fmt.Errorf("at node %d (kind %v): %w", i, ast.Kind(kind), err)
 		}
-		node.Loc = core.NewTextRange(int(pos), int(end))
-		node.Flags = ast.NodeFlags(d.nodeField(i, NodeOffsetFlags))
+		node.SetLoc(core.NewTextRange(int(pos), int(end)))
+		node.SetFlags(ast.NodeFlags(d.nodeField(i, NodeOffsetFlags)))
 		if kind == uint32(ast.KindSourceFile) {
-			node.AsSourceFile().IsDeclarationFile = node.Flags&ast.NodeFlagsAmbient != 0
+			node.AsSourceFile().IsDeclarationFile = node.Flags()&ast.NodeFlagsAmbient != 0
 		}
 		d.nodes[i] = node
 	}
@@ -293,7 +293,7 @@ func (d *astDecoder) decodeExtendedData_SourceFile(data uint32, childIndices []i
 	for _, ci := range childIndices {
 		if d.nodeField(ci, NodeOffsetKind) == SyntaxKindNodeList {
 			stmts = d.nodeListAt(ci)
-		} else if d.nodes[ci] != nil && d.nodes[ci].Kind == ast.KindEndOfFile {
+		} else if d.nodes[ci] != nil && d.nodes[ci].Kind() == ast.KindEndOfFile {
 			endOfFile = d.nodes[ci]
 		}
 	}

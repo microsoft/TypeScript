@@ -63,7 +63,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevel(node *ast.Node) *ast.Node {
 	grandparentNode := tx.pushNode(node)
 	defer tx.popNode(grandparentNode)
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindImportDeclaration:
 		node = tx.visitTopLevelImportDeclaration(node.AsImportDeclaration())
 	case ast.KindImportEqualsDeclaration:
@@ -94,7 +94,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelNested(node *ast.Node) *ast.No
 
 // Visits nested elements at the top-level of a module without ancestor tracking.
 func (tx *CommonJSModuleTransformer) visitTopLevelNestedNoStack(node *ast.Node) *ast.Node {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindVariableStatement:
 		node = tx.visitTopLevelVariableStatement(node.AsVariableStatement())
 	case ast.KindForStatement:
@@ -144,7 +144,7 @@ func (tx *CommonJSModuleTransformer) visitNoStack(node *ast.Node, resultIsDiscar
 		return node
 	}
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindSourceFile:
 		node = tx.visitSourceFile(node.AsSourceFile())
 	case ast.KindForStatement:
@@ -196,7 +196,7 @@ func (tx *CommonJSModuleTransformer) visitAssignmentPattern(node *ast.Node) *ast
 }
 
 func (tx *CommonJSModuleTransformer) visitAssignmentPatternNoStack(node *ast.Node) *ast.Node {
-	switch node.Kind {
+	switch node.Kind() {
 	// AssignmentPattern
 	case ast.KindObjectLiteralExpression, ast.KindArrayLiteralExpression:
 		node = tx.assignmentPatternVisitor.VisitEachChild(node)
@@ -245,7 +245,7 @@ func (tx *CommonJSModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.
 func (tx *CommonJSModuleTransformer) shouldEmitUnderscoreUnderscoreESModule() bool {
 	if tx.currentSourceFile.FileName().ExtensionIsOneOf(tspath.SupportedJSExtensionsFlat) &&
 		tx.currentSourceFile.CommonJSModuleIndicator != nil &&
-		(tx.currentSourceFile.ExternalModuleIndicator == nil || tx.currentSourceFile.ExternalModuleIndicator.Kind == ast.KindSourceFile) {
+		(tx.currentSourceFile.ExternalModuleIndicator == nil || tx.currentSourceFile.ExternalModuleIndicator.Kind() == ast.KindSourceFile) {
 		return false
 	}
 	if tx.currentModuleInfo.exportEquals == nil && ast.IsExternalModule(tx.currentSourceFile) {
@@ -313,7 +313,7 @@ func (tx *CommonJSModuleTransformer) transformCommonJSModule(node *ast.SourceFil
 			right := tx.Factory().NewVoidZeroExpression()
 			for _, nextId := range tx.currentModuleInfo.exportedNames[i:min(i+chunkSize, l)] {
 				var left *ast.Expression
-				if nextId.Kind == ast.KindStringLiteral {
+				if nextId.Kind() == ast.KindStringLiteral {
 					left = tx.Factory().NewElementAccessExpression(
 						tx.Factory().NewIdentifier("exports"),
 						nil, /*questionDotToken*/
@@ -436,7 +436,7 @@ func (tx *CommonJSModuleTransformer) appendExportsOfImportDeclaration(statements
 
 	namedBindings := importClause.AsImportClause().NamedBindings
 	if namedBindings != nil {
-		switch namedBindings.Kind {
+		switch namedBindings.Kind() {
 		case ast.KindNamespaceImport:
 			statements = tx.appendExportsOfDeclaration(statements, namedBindings, seen, false /*liveBinding*/)
 
@@ -516,7 +516,7 @@ func (tx *CommonJSModuleTransformer) appendExportsOfClassOrFunctionDeclaration(s
 		}
 
 		exportValue := tx.Factory().GetLocalName(decl)
-		statements = tx.appendExportStatement(statements, seen, exportName, exportValue, &decl.Loc, false /*allowComments*/, false /*liveBinding*/)
+		statements = tx.appendExportStatement(statements, seen, exportName, exportValue, new(decl.Loc()), false /*allowComments*/, false /*liveBinding*/)
 	}
 
 	if decl.Name() != nil {
@@ -545,7 +545,7 @@ func (tx *CommonJSModuleTransformer) appendExportsOfDeclaration(statements []*as
 		if len(exportSpecifiers) > 0 {
 			exportValue := tx.visitExpressionIdentifier(name)
 			for _, exportSpecifier := range exportSpecifiers {
-				statements = tx.appendExportStatement(statements, seen, exportSpecifier.Name(), exportValue, &exportSpecifier.Name().Loc /*location*/, false /*allowComments*/, liveBinding)
+				statements = tx.appendExportStatement(statements, seen, exportSpecifier.Name(), exportValue, new(exportSpecifier.Name().Loc()) /*location*/, false /*allowComments*/, liveBinding)
 			}
 		}
 	}
@@ -561,7 +561,7 @@ func (tx *CommonJSModuleTransformer) appendExportsOfDeclaration(statements []*as
 //   - The `location` parameter is the location to use for source maps and comments for the export.
 //   - The `allowComments` parameter indicates whether to allow comments on the export.
 func (tx *CommonJSModuleTransformer) appendExportStatement(statements []*ast.Statement, seen *collections.Set[string], exportName *ast.ModuleExportName, expression *ast.Expression, location *core.TextRange, allowComments bool, liveBinding bool) []*ast.Statement {
-	if exportName.Kind != ast.KindStringLiteral {
+	if exportName.Kind() != ast.KindStringLiteral {
 		if seen.Has(exportName.Text()) {
 			return statements
 		}
@@ -650,7 +650,7 @@ func (tx *CommonJSModuleTransformer) createExportExpression(name *ast.ModuleExpo
 	} else {
 		// Otherwise, we emit a simple property assignment.
 		var left *ast.Expression
-		if name.Kind == ast.KindStringLiteral {
+		if name.Kind() == ast.KindStringLiteral {
 			// emits:
 			//  exports["<name>"] = <value>;
 			left = tx.Factory().NewElementAccessExpression(
@@ -789,7 +789,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelImportEqualsDeclaration(node *
 			tx.createExportExpression(
 				node.Name(),
 				tx.createRequireCall(node.AsNode()),
-				&node.Loc,
+				new(node.Loc()),
 				false, /*liveBinding*/
 			),
 		)
@@ -933,9 +933,9 @@ func (tx *CommonJSModuleTransformer) visitTopLevelExportAssignment(node *ast.Exp
 	return tx.createExportStatement(
 		tx.Factory().NewIdentifier("default"),
 		tx.Visitor().VisitNode(node.Expression),
-		&node.Loc, /*location*/
-		true,      /*allowComments*/
-		false,     /*liveBinding*/
+		new(node.Loc()), /*location*/
+		true,            /*allowComments*/
+		false,           /*liveBinding*/
 	)
 }
 
@@ -992,7 +992,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelVariableStatement(node *ast.Va
 					tx.Factory().UpdateVariableDeclarationList(
 						node.DeclarationList.AsVariableDeclarationList(),
 						variableList,
-						node.DeclarationList.Flags,
+						node.DeclarationList.Flags(),
 					),
 				)
 				if len(statements) > 0 {
@@ -1148,7 +1148,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelNestedVariableStatement(node *
 // Visits a top-level nested `for` statement as it may contain `var` declarations that are hoisted and may still be
 // exported with `export {}`.
 func (tx *CommonJSModuleTransformer) visitTopLevelNestedForStatement(node *ast.ForStatement) *ast.Node {
-	if node.Initializer != nil && ast.IsVariableDeclarationList(node.Initializer) && node.Initializer.Flags&ast.NodeFlagsBlockScoped == 0 {
+	if node.Initializer != nil && ast.IsVariableDeclarationList(node.Initializer) && node.Initializer.Flags()&ast.NodeFlagsBlockScoped == 0 {
 		exportStatements := tx.appendExportsOfVariableDeclarationList(nil /*statements*/, node.Initializer.AsVariableDeclarationList(), false /*isForInOrOfInitializer*/)
 		if len(exportStatements) > 0 {
 			// given:
@@ -1190,7 +1190,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelNestedForStatement(node *ast.F
 // Visits a top-level nested `for..in` or `for..of` statement as it may contain `var` declarations that are hoisted and
 // may still be exported with `export {}`.
 func (tx *CommonJSModuleTransformer) visitTopLevelNestedForInOrOfStatement(node *ast.ForInOrOfStatement) *ast.Node {
-	if ast.IsVariableDeclarationList(node.Initializer) && node.Initializer.Flags&ast.NodeFlagsBlockScoped == 0 {
+	if ast.IsVariableDeclarationList(node.Initializer) && node.Initializer.Flags()&ast.NodeFlagsBlockScoped == 0 {
 		exportStatements := tx.appendExportsOfVariableDeclarationList(nil /*statements*/, node.Initializer.AsVariableDeclarationList(), true /*isForInOrOfInitializer*/)
 		if len(exportStatements) > 0 {
 			// given:
@@ -1408,7 +1408,7 @@ func (tx *CommonJSModuleTransformer) visitAssignmentExpression(node *ast.BinaryE
 			// For each additional export of the declaration, apply an export assignment.
 			expression := tx.Visitor().VisitEachChild(node.AsNode())
 			for _, exportName := range exportedNames {
-				expression = tx.createExportExpression(exportName, expression, &node.Loc /*location*/, false /*liveBinding*/)
+				expression = tx.createExportExpression(exportName, expression, new(node.Loc()) /*location*/, false /*liveBinding*/)
 			}
 			return expression
 		}
@@ -1436,7 +1436,7 @@ func (tx *CommonJSModuleTransformer) visitDestructuringAssignment(node *ast.Bina
 func (tx *CommonJSModuleTransformer) destructuringNeedsFlattening(node *ast.Node) bool {
 	if ast.IsObjectLiteralExpression(node) {
 		for _, elem := range node.Properties() {
-			switch elem.Kind {
+			switch elem.Kind() {
 			case ast.KindPropertyAssignment:
 				if tx.destructuringNeedsFlattening(elem.Initializer()) {
 					return true
@@ -1608,7 +1608,7 @@ func (tx *CommonJSModuleTransformer) visitAssignmentRestElement(node *ast.Spread
 func (tx *CommonJSModuleTransformer) visitAssignmentElement(node *ast.Node) *ast.Node {
 	if ast.IsBinaryExpression(node) {
 		n := node.AsBinaryExpression()
-		if n.OperatorToken.Kind == ast.KindEqualsToken {
+		if n.OperatorToken.Kind() == ast.KindEqualsToken {
 			return tx.Factory().UpdateBinaryExpression(
 				n,
 				nil, /*modifiers*/
@@ -1627,7 +1627,7 @@ func (tx *CommonJSModuleTransformer) visitDestructuringAssignmentTarget(node *as
 	grandparentNode := tx.pushNode(node)
 	defer tx.popNode(grandparentNode)
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindObjectLiteralExpression, ast.KindArrayLiteralExpression:
 		node = tx.visitAssignmentPatternNoStack(node)
 	default:
@@ -1813,7 +1813,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 			needsRewrite = true
 		}
 	}
-	if node.Expression.Kind == ast.KindImportKeyword && tx.shouldTransformImportCall() {
+	if node.Expression.Kind() == ast.KindImportKeyword && tx.shouldTransformImportCall() {
 		return tx.visitImportCallExpression(node, needsRewrite)
 	}
 	if needsRewrite {
@@ -1835,7 +1835,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 			node.QuestionDotToken,
 			nil, /*typeArguments*/
 			tx.Visitor().VisitNodes(node.Arguments),
-			node.Flags,
+			node.Flags(),
 		)
 		if !ast.IsIdentifier(expression) && !transformers.IsHelperName(tx.EmitContext(), node.Expression) {
 			tx.EmitContext().AddEmitFlags(updated, printer.EFIndirectCall)
@@ -1995,7 +1995,7 @@ func (tx *CommonJSModuleTransformer) shimOrRewriteImportOrRequireCall(node *ast.
 		node.QuestionDotToken,
 		nil, /*typeArguments*/
 		argumentsList,
-		node.Flags,
+		node.Flags(),
 	)
 }
 
@@ -2018,7 +2018,7 @@ func (tx *CommonJSModuleTransformer) visitTaggedTemplateExpression(node *ast.Tag
 			nil, /*questionDotToken*/
 			nil, /*typeArguments*/
 			tx.Visitor().VisitNode(node.Template),
-			node.Flags,
+			node.Flags(),
 		)
 		if !ast.IsIdentifier(expression) && !transformers.IsHelperName(tx.EmitContext(), node.Tag) {
 			tx.EmitContext().AddEmitFlags(updated, printer.EFIndirectCall)
@@ -2043,7 +2043,7 @@ func (tx *CommonJSModuleTransformer) visitShorthandPropertyAssignment(node *ast.
 			)
 		}
 		assignment := tx.Factory().NewPropertyAssignment(nil /*modifiers*/, name, nil /*postfixToken*/, nil /*typeNode*/, expression)
-		assignment.Loc = node.Loc
+		assignment.SetLoc(node.Loc())
 		tx.EmitContext().AssignCommentAndSourceMapRanges(assignment, node.AsNode())
 		return assignment
 	}
@@ -2081,7 +2081,7 @@ func (tx *CommonJSModuleTransformer) visitExpressionIdentifier(node *ast.Identif
 				ast.NodeFlagsNone,
 			)
 			tx.EmitContext().AssignCommentAndSourceMapRanges(reference, node)
-			reference.Loc = node.Loc
+			reference.SetLoc(node.Loc())
 			return reference
 		}
 
@@ -2089,13 +2089,13 @@ func (tx *CommonJSModuleTransformer) visitExpressionIdentifier(node *ast.Identif
 		if importDeclaration != nil {
 			if ast.IsImportClause(importDeclaration) {
 				reference := tx.Factory().NewPropertyAccessExpression(
-					tx.Factory().NewGeneratedNameForNode(importDeclaration.Parent), //nolint:customlint // Resolver returns parse-tree declarations; Parent is used to find the owning import declaration.
+					tx.Factory().NewGeneratedNameForNode(importDeclaration.Parent()), //nolint:customlint // Resolver returns parse-tree declarations; Parent is used to find the owning import declaration.
 					nil, /*questionDotToken*/
 					tx.Factory().NewIdentifier("default"),
 					ast.NodeFlagsNone,
 				)
 				tx.EmitContext().AssignCommentAndSourceMapRanges(reference, node)
-				reference.Loc = node.Loc
+				reference.SetLoc(node.Loc())
 				return reference
 			}
 			if ast.IsImportSpecifier(importDeclaration) {
@@ -2121,7 +2121,7 @@ func (tx *CommonJSModuleTransformer) visitExpressionIdentifier(node *ast.Identif
 					)
 				}
 				tx.EmitContext().AssignCommentAndSourceMapRanges(reference, node)
-				reference.Loc = node.Loc
+				reference.SetLoc(node.Loc())
 				return reference
 			}
 		}

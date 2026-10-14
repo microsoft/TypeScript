@@ -187,15 +187,15 @@ const (
 )
 
 func getOperator(expression *Expression) Kind {
-	switch expression.Kind {
+	switch expression.Kind() {
 	case KindBinaryExpression:
-		return expression.AsBinaryExpression().OperatorToken.Kind
+		return expression.AsBinaryExpression().OperatorToken.Kind()
 	case KindPrefixUnaryExpression:
 		return expression.AsPrefixUnaryExpression().Operator
 	case KindPostfixUnaryExpression:
 		return expression.AsPostfixUnaryExpression().Operator
 	default:
-		return expression.Kind
+		return expression.Kind()
 	}
 }
 
@@ -203,12 +203,12 @@ func getOperator(expression *Expression) Kind {
 func GetExpressionPrecedence(expression *Expression) OperatorPrecedence {
 	operator := getOperator(expression)
 	var flags OperatorPrecedenceFlags
-	if expression.Kind == KindNewExpression && expression.ArgumentList() == nil {
+	if expression.Kind() == KindNewExpression && expression.ArgumentList() == nil {
 		flags = OperatorPrecedenceFlagsNewWithoutArguments
 	} else if IsOptionalChain(expression) {
 		flags = OperatorPrecedenceFlagsOptionalChain
 	}
-	return GetOperatorPrecedence(expression.Kind, operator, flags)
+	return GetOperatorPrecedence(expression.Kind(), operator, flags)
 }
 
 type OperatorPrecedenceFlags int
@@ -369,7 +369,7 @@ func GetBinaryOperatorPrecedence(operatorKind Kind) OperatorPrecedence {
 // Gets the leftmost expression of an expression, e.g. `a` in `a.b`, `a[b]`, `a++`, `a+b`, `a?b:c`, `a as B`, etc.
 func GetLeftmostExpression(node *Expression, stopAtCallExpressions bool) *Expression {
 	for {
-		switch node.Kind {
+		switch node.Kind() {
 		case KindPostfixUnaryExpression:
 			node = node.AsPostfixUnaryExpression().Operand
 			continue
@@ -653,7 +653,7 @@ const (
 
 // Gets the precedence of a TypeNode
 func GetTypeNodePrecedence(n *TypeNode) TypePrecedence {
-	switch n.Kind {
+	switch n.Kind() {
 	case KindConditionalType:
 		return TypePrecedenceConditional
 	case KindJSDocOptionalType, KindJSDocVariadicType:
@@ -712,6 +712,6 @@ func GetTypeNodePrecedence(n *TypeNode) TypePrecedence {
 		KindExpressionWithTypeArguments:
 		return TypePrecedenceNonArray
 	default:
-		panic(fmt.Sprintf("unhandled TypeNode: %v", n.Kind))
+		panic(fmt.Sprintf("unhandled TypeNode: %v", n.Kind()))
 	}
 }

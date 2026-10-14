@@ -29,7 +29,7 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 		tx.emitResolver.MarkLinkedReferencesRecursively(tx.EmitContext().MostOriginal(node).AsSourceFile())
 	}
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindImportEqualsDeclaration:
 		if ast.IsExternalModuleImportEqualsDeclaration(node) {
 			if !tx.shouldEmitAliasDeclaration(node) {

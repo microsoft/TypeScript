@@ -446,7 +446,7 @@ func (c *Checker) elaborateError(node *ast.Node, source *Type, target *Type, rel
 		c.elaborateDidYouMeanToCallOrConstruct(node, source, target, relation, SignatureKindCall, headMessage, diagnosticOutput) {
 		return true
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindAsExpression:
 		if !ast.IsConstAssertion(node) {
 			break
@@ -455,7 +455,7 @@ func (c *Checker) elaborateError(node *ast.Node, source *Type, target *Type, rel
 	case ast.KindJsxExpression, ast.KindParenthesizedExpression:
 		return c.elaborateError(node.Expression(), source, target, relation, headMessage, diagnosticOutput)
 	case ast.KindBinaryExpression:
-		switch node.AsBinaryExpression().OperatorToken.Kind {
+		switch node.AsBinaryExpression().OperatorToken.Kind() {
 		case ast.KindEqualsToken, ast.KindCommaToken:
 			return c.elaborateError(node.AsBinaryExpression().Right, source, target, relation, headMessage, diagnosticOutput)
 		}
@@ -506,7 +506,7 @@ func (c *Checker) elaborateObjectLiteral(node *ast.Node, source *Type, target *T
 		if nameType == nil || nameType.flags&TypeFlagsNever != 0 {
 			continue
 		}
-		switch prop.Kind {
+		switch prop.Kind() {
 		case ast.KindSetAccessor, ast.KindGetAccessor, ast.KindMethodDeclaration, ast.KindShorthandPropertyAssignment:
 			reportedError = c.elaborateElement(source, target, relation, prop.Name(), nil, nameType, nil, nil, diagnosticOutput) || reportedError
 		case ast.KindPropertyAssignment:
@@ -1527,7 +1527,7 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 	}
 	kind := ast.KindUnknown
 	if target.declaration != nil {
-		kind = target.declaration.Kind
+		kind = target.declaration.Kind()
 	}
 	strictVariance := checkMode&SignatureCheckModeCallback == 0 && c.strictFunctionTypes && kind != ast.KindMethodDeclaration && kind != ast.KindMethodSignature && kind != ast.KindConstructor
 	result := TernaryTrue
@@ -1991,7 +1991,7 @@ func (c *Checker) getTupleElementLabel(elementInfo TupleElementInfo, restSymbol 
 
 func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index int, elementFlags ElementFlags) string {
 	if node.Name() != nil {
-		switch node.Name().Kind {
+		switch node.Name().Kind() {
 		case ast.KindIdentifier:
 			name := node.Name().Text()
 			if hasDotDotDotToken(node) {
@@ -2776,7 +2776,7 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 					if r.errorNode == nil {
 						panic("No errorNode in hasExcessProperties")
 					}
-					if ast.IsJsxAttributes(r.errorNode) || ast.IsJsxOpeningLikeElement(r.errorNode) || ast.IsJsxOpeningLikeElement(r.errorNode.Parent) {
+					if ast.IsJsxAttributes(r.errorNode) || ast.IsJsxOpeningLikeElement(r.errorNode) || ast.IsJsxOpeningLikeElement(r.errorNode.Parent()) {
 						// JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
 						// However, using an object-literal error message will be very confusing to the users so we give different a message.
 						if prop.ValueDeclaration() != nil && ast.IsJsxAttribute(prop.ValueDeclaration()) && ast.GetSourceFileOfNode(r.errorNode) == ast.GetSourceFileOfNode(prop.ValueDeclaration().Name()) {
@@ -2854,7 +2854,7 @@ func (c *Checker) getTypeOfPropertyInType(t *Type, name string) *Type {
 }
 
 func shouldCheckAsExcessProperty(prop *ast.Symbol, container *ast.Symbol) bool {
-	return prop.ValueDeclaration() != nil && container.ValueDeclaration() != nil && prop.ValueDeclaration().Parent == container.ValueDeclaration()
+	return prop.ValueDeclaration() != nil && container.ValueDeclaration() != nil && prop.ValueDeclaration().Parent() == container.ValueDeclaration()
 }
 
 func isIgnoredJsxProperty(source *Type, sourceProp *ast.Symbol) bool {

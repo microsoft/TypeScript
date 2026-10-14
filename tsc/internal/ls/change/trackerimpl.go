@@ -295,7 +295,7 @@ func (t *Tracker) getAdjustedStartPosition(sourceFile *ast.SourceFile, node *ast
 	case LeadingTriviaOptionExclude:
 		return start
 	case LeadingTriviaOptionStartLine:
-		if node.Loc.ContainsInclusive(startOfLinePos) {
+		if node.Loc().ContainsInclusive(startOfLinePos) {
 			return startOfLinePos
 		}
 		return start
@@ -414,7 +414,7 @@ func hasCommentsBeforeLineBreak(text string, start int) bool {
 func needSemicolonBetween(a, b *ast.Node) bool {
 	return (ast.IsPropertySignatureDeclaration(a) || ast.IsPropertyDeclaration(a)) &&
 		ast.IsClassOrTypeElement(b) &&
-		b.Name().Kind == ast.KindComputedPropertyName ||
+		b.Name().Kind() == ast.KindComputedPropertyName ||
 		ast.IsStatementButNotDeclaration(a) &&
 			ast.IsStatementButNotDeclaration(b) // TODO: only if b would start with a `(` or `[`
 }

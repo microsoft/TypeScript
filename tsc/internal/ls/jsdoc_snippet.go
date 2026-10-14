@@ -206,7 +206,7 @@ func skipWhitespace(text string, position int) int {
 }
 
 func getCommentOwnerInfo(tokenAtPos *ast.Node, generateReturnInDocTemplate bool) *commentOwnerInfo {
-	for node := tokenAtPos; node != nil; node = node.Parent {
+	for node := tokenAtPos; node != nil; node = node.Parent() {
 		info, quit := getCommentOwnerInfoWorker(node, generateReturnInDocTemplate)
 		if info != nil || quit {
 			return info
@@ -219,7 +219,7 @@ func getCommentOwnerInfoWorker(commentOwner *ast.Node, generateReturnInDocTempla
 	if commentOwner == nil {
 		return nil, false
 	}
-	switch commentOwner.Kind {
+	switch commentOwner.Kind() {
 	case ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindMethodDeclaration, ast.KindConstructor, ast.KindMethodSignature, ast.KindArrowFunction:
 		return &commentOwnerInfo{commentOwner: commentOwner, parameters: commentOwner.Parameters(), hasReturn: hasReturn(commentOwner, generateReturnInDocTemplate)}, false
 	case ast.KindPropertyAssignment:
@@ -244,7 +244,7 @@ func getCommentOwnerInfoWorker(commentOwner *ast.Node, generateReturnInDocTempla
 	case ast.KindSourceFile:
 		return nil, true
 	case ast.KindModuleDeclaration:
-		if commentOwner.Parent.Kind == ast.KindModuleDeclaration {
+		if commentOwner.Parent().Kind() == ast.KindModuleDeclaration {
 			return nil, false
 		}
 		return &commentOwnerInfo{commentOwner: commentOwner}, false
@@ -288,10 +288,10 @@ func getRightHandSideOfAssignment(rightHandSide *ast.Node) *ast.Node {
 	if rightHandSide == nil {
 		return nil
 	}
-	for rightHandSide.Kind == ast.KindParenthesizedExpression {
+	for rightHandSide.Kind() == ast.KindParenthesizedExpression {
 		rightHandSide = rightHandSide.AsParenthesizedExpression().Expression
 	}
-	switch rightHandSide.Kind {
+	switch rightHandSide.Kind() {
 	case ast.KindFunctionExpression, ast.KindArrowFunction:
 		return rightHandSide
 	case ast.KindClassExpression:

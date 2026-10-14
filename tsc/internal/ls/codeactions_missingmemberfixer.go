@@ -54,12 +54,12 @@ func (f *missingMemberFixer) createMemberFromSymbol(symbol *ast.Symbol, enclosin
 	declaration := core.FirstOrNil(declarations)
 
 	quotePreference := lsutil.GetQuotePreference(sourceFile, f.preferences)
-	ambient := enclosingDeclaration.Flags&ast.NodeFlagsAmbient != 0
+	ambient := enclosingDeclaration.Flags()&ast.NodeFlagsAmbient != 0
 	signatureOnly := ambient || abstract
 	optional := symbol.Flags()&ast.SymbolFlagsOptional != 0
 	kind := ast.KindPropertySignature
 	if declaration != nil {
-		kind = declaration.Kind
+		kind = declaration.Kind()
 	}
 	declarationName := createDeclarationName(f.changeTracker.NodeFactory, f.typeChecker, symbol, declaration)
 	modifiers := f.createModifiers(symbol, declaration)
@@ -135,7 +135,7 @@ func (f *missingMemberFixer) createMemberFromSymbol(symbol *ast.Symbol, enclosin
 		}
 
 		for _, signature := range signatures {
-			if signature.Declaration() != nil && signature.Declaration().Flags&ast.NodeFlagsAmbient != 0 {
+			if signature.Declaration() != nil && signature.Declaration().Flags()&ast.NodeFlagsAmbient != 0 {
 				continue
 			}
 

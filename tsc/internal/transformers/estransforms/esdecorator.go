@@ -142,19 +142,19 @@ func newESDecoratorTransformer(opts *transformers.TransformOptions) *transformer
 	tx.arrayAssignmentVisitor = ec.NewNodeVisitor(tx.visitArrayAssignmentElement)
 	tx.objectAssignmentVisitor = ec.NewNodeVisitor(tx.visitObjectAssignmentElement)
 	tx.staticOnlyModifierVisitor = ec.NewNodeVisitor(func(node *ast.Node) *ast.Node {
-		if node.Kind == ast.KindStaticKeyword {
+		if node.Kind() == ast.KindStaticKeyword {
 			return node
 		}
 		return nil
 	})
 	tx.asyncOnlyModifierVisitor = ec.NewNodeVisitor(func(node *ast.Node) *ast.Node {
-		if node.Kind == ast.KindAsyncKeyword {
+		if node.Kind() == ast.KindAsyncKeyword {
 			return node
 		}
 		return nil
 	})
 	tx.accessorStrippingModifierVisitor = ec.NewNodeVisitor(func(node *ast.Node) *ast.Node {
-		if node.Kind == ast.KindAccessorKeyword {
+		if node.Kind() == ast.KindAccessorKeyword {
 			return nil
 		}
 		return node
@@ -281,10 +281,10 @@ func (tx *esDecoratorTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 }
 
 func (tx *esDecoratorTransformer) outerThisVisit(n *ast.Node) *ast.Node {
-	if n.SubtreeFacts()&ast.SubtreeContainsLexicalThis == 0 && n.Kind != ast.KindThisKeyword {
+	if n.SubtreeFacts()&ast.SubtreeContainsLexicalThis == 0 && n.Kind() != ast.KindThisKeyword {
 		return n
 	}
-	if n.Kind == ast.KindThisKeyword {
+	if n.Kind() == ast.KindThisKeyword {
 		if tx.outerThis == nil {
 			tx.outerThis = tx.Factory().NewUniqueNameEx("_outerThis", printer.AutoGenerateOptions{
 				Flags: printer.GeneratedIdentifierFlagsOptimistic,
@@ -302,13 +302,13 @@ func (tx *esDecoratorTransformer) shouldVisitNode(node *ast.Node) bool {
 }
 
 func (tx *esDecoratorTransformer) visit(node *ast.Node) *ast.Node {
-	if node.Kind == ast.KindSourceFile {
+	if node.Kind() == ast.KindSourceFile {
 		return tx.visitSourceFile(node.AsSourceFile())
 	}
 	if !tx.shouldVisitNode(node) {
 		return node
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindDecorator:
 		// Decorators are elided. In Strada, a separate `modifierVisitor` drops decorators
 		// before they reach `visitor` via visitEachChild. Here, `visit` serves as both
@@ -367,14 +367,14 @@ func (tx *esDecoratorTransformer) visit(node *ast.Node) *ast.Node {
 }
 
 func (tx *esDecoratorTransformer) modifierVisitorVisit(node *ast.Node) *ast.Node {
-	if node.Kind == ast.KindDecorator {
+	if node.Kind() == ast.KindDecorator {
 		return nil
 	}
 	return node
 }
 
 func (tx *esDecoratorTransformer) classElementVisitorVisit(node *ast.Node) *ast.Node {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindConstructor:
 		return tx.visitConstructorDeclaration(node)
 	case ast.KindMethodDeclaration:
@@ -393,7 +393,7 @@ func (tx *esDecoratorTransformer) classElementVisitorVisit(node *ast.Node) *ast.
 }
 
 func (tx *esDecoratorTransformer) discardedValueVisit(node *ast.Node) *ast.Node {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindPrefixUnaryExpression, ast.KindPostfixUnaryExpression:
 		return tx.visitPreOrPostfixUnaryExpression(node, true /*discarded*/)
 	case ast.KindBinaryExpression:
@@ -422,7 +422,7 @@ func (tx *esDecoratorTransformer) constructorClassElementVisit(node *ast.Node) *
 }
 
 func (tx *esDecoratorTransformer) exportStrippingModifierVisit(node *ast.Node) *ast.Node {
-	if node.Kind == ast.KindExportKeyword {
+	if node.Kind() == ast.KindExportKeyword {
 		return nil
 	}
 	return tx.modifierVisitorVisit(node)
@@ -522,7 +522,7 @@ func (tx *esDecoratorTransformer) createClassInfo(node *ast.Node) *classInfo {
 					initializer := f.NewRunInitializersHelper(renamedClassThis, ci.staticMethodExtraInitializersName, nil)
 					nameRange := node.Name()
 					if nameRange != nil {
-						tx.EmitContext().SetSourceMapRange(initializer, nameRange.Loc)
+						tx.EmitContext().SetSourceMapRange(initializer, nameRange.Loc())
 					} else {
 						tx.EmitContext().SetSourceMapRange(initializer, transformers.MoveRangePastDecorators(node))
 					}
@@ -536,7 +536,7 @@ func (tx *esDecoratorTransformer) createClassInfo(node *ast.Node) *classInfo {
 					initializer := f.NewRunInitializersHelper(f.NewThisExpression(), ci.instanceMethodExtraInitializersName, nil)
 					nameRange := node.Name()
 					if nameRange != nil {
-						tx.EmitContext().SetSourceMapRange(initializer, nameRange.Loc)
+						tx.EmitContext().SetSourceMapRange(initializer, nameRange.Loc())
 					} else {
 						tx.EmitContext().SetSourceMapRange(initializer, transformers.MoveRangePastDecorators(node))
 					}
@@ -734,7 +734,7 @@ func (tx *esDecoratorTransformer) transformClassLike(node *ast.Node) *ast.Expres
 	if len(ci.pendingInstanceInitializers) > 0 && ast.GetFirstConstructorWithBody(node) == nil {
 		initializerStatements := tx.prepareConstructor(ci)
 		if len(initializerStatements) > 0 {
-			isDerivedClass := extendsElement != nil && ast.SkipOuterExpressions(extendsElement.AsExpressionWithTypeArguments().Expression, ast.OEKAll).Kind != ast.KindNullKeyword
+			isDerivedClass := extendsElement != nil && ast.SkipOuterExpressions(extendsElement.AsExpressionWithTypeArguments().Expression, ast.OEKAll).Kind() != ast.KindNullKeyword
 			constructorStatements := []*ast.Statement{}
 			if isDerivedClass {
 				spreadArguments := f.NewSpreadElement(f.NewIdentifier("arguments"))
@@ -835,7 +835,7 @@ func (tx *esDecoratorTransformer) transformClassLike(node *ast.Node) *ast.Expres
 		runClassInitializersHelper := f.NewRunInitializersHelper(renamedClassThis, ci.classExtraInitializersName, nil)
 		runClassInitializersStatement := f.NewExpressionStatement(runClassInitializersHelper)
 		if node.Name() != nil {
-			ec.SetSourceMapRange(runClassInitializersStatement, node.Name().Loc)
+			ec.SetSourceMapRange(runClassInitializersStatement, node.Name().Loc())
 		} else {
 			ec.SetSourceMapRange(runClassInitializersStatement, transformers.MoveRangePastDecorators(node))
 		}
@@ -1155,7 +1155,7 @@ func (tx *esDecoratorTransformer) transformConstructorBodyWorker(statementsOut [
 		// Use the original try block's range even though the statements may differ due to
 		// injected initializer statements. This preserves source map fidelity for the enclosing
 		// try statement.
-		newTryBlock.Loc = tryBlockNode.Loc
+		newTryBlock.SetLoc(tryBlockNode.Loc())
 
 		var catchClause *ast.Node
 		if superStatement.AsTryStatement().CatchClause != nil {
@@ -1208,7 +1208,7 @@ func (tx *esDecoratorTransformer) visitConstructorDeclaration(node *ast.Node) *a
 
 			body = tx.Factory().NewBlock(tx.Factory().NewNodeList(stmts), true)
 			tx.EmitContext().SetOriginal(body, ctor.Body.AsNode())
-			body.Loc = ctor.Body.Loc
+			body.SetLoc(ctor.Body.Loc())
 		}
 	}
 
@@ -1683,11 +1683,11 @@ func (tx *esDecoratorTransformer) visitPropertyDeclaration(node *ast.Node) *ast.
 				setterName = f.UpdateComputedPropertyName(propName.AsComputedPropertyName(), cacheAssignment.Left)
 			} else {
 				temp := f.NewTempVariable()
-				ec.SetSourceMapRange(temp, propName.Expression().Loc)
+				ec.SetSourceMapRange(temp, propName.Expression().Loc())
 				ec.AddVariableDeclaration(temp)
 				expression := tx.Visitor().VisitNode(propName.Expression())
 				assignment := f.NewAssignmentExpression(temp, expression)
-				ec.SetSourceMapRange(assignment, propName.Expression().Loc)
+				ec.SetSourceMapRange(assignment, propName.Expression().Loc())
 				getterName = f.UpdateComputedPropertyName(propName.AsComputedPropertyName(), assignment)
 				setterName = f.UpdateComputedPropertyName(propName.AsComputedPropertyName(), temp)
 			}
@@ -1735,7 +1735,7 @@ func (tx *esDecoratorTransformer) visitCallExpression(node *ast.Node) *ast.Node 
 		argumentsList := tx.Visitor().VisitNodes(call.Arguments)
 		invocation := tx.Factory().NewFunctionCallCall(expression, tx.classThis, argumentsList.Nodes)
 		tx.EmitContext().SetOriginal(invocation, node)
-		invocation.Loc = node.Loc
+		invocation.SetLoc(node.Loc())
 		return invocation
 	}
 	return tx.Visitor().VisitEachChild(node)
@@ -1747,9 +1747,9 @@ func (tx *esDecoratorTransformer) visitTaggedTemplateExpression(node *ast.Node) 
 		tag := tx.Visitor().VisitNode(tte.Tag)
 		boundTag := tx.Factory().NewFunctionBindCall(tag, tx.classThis, []*ast.Expression{})
 		tx.EmitContext().SetOriginal(boundTag, node)
-		boundTag.Loc = node.Loc
+		boundTag.SetLoc(node.Loc())
 		template := tx.Visitor().VisitNode(tte.Template)
-		return tx.Factory().UpdateTaggedTemplateExpression(tte, boundTag, nil, nil, template, tte.Flags)
+		return tx.Factory().UpdateTaggedTemplateExpression(tte, boundTag, nil, nil, template, tte.Flags())
 	}
 	return tx.Visitor().VisitEachChild(node)
 }
@@ -1760,7 +1760,7 @@ func (tx *esDecoratorTransformer) visitPropertyAccessExpression(node *ast.Node) 
 		propertyName := tx.Factory().NewStringLiteralFromNode(pa.Name())
 		superProperty := tx.Factory().NewReflectGetCall(tx.classSuper, propertyName, tx.classThis)
 		tx.EmitContext().SetOriginal(superProperty, pa.Expression)
-		superProperty.Loc = pa.Expression.Loc
+		superProperty.SetLoc(pa.Expression.Loc())
 		return superProperty
 	}
 	return tx.Visitor().VisitEachChild(node)
@@ -1772,7 +1772,7 @@ func (tx *esDecoratorTransformer) visitElementAccessExpression(node *ast.Node) *
 		propertyName := tx.Visitor().VisitNode(ea.ArgumentExpression)
 		superProperty := tx.Factory().NewReflectGetCall(tx.classSuper, propertyName, tx.classThis)
 		tx.EmitContext().SetOriginal(superProperty, ea.Expression)
-		superProperty.Loc = ea.Expression.Loc
+		superProperty.SetLoc(ea.Expression.Loc())
 		return superProperty
 	}
 	return tx.Visitor().VisitEachChild(node)
@@ -1814,9 +1814,9 @@ func (tx *esDecoratorTransformer) visitParameterDeclaration(node *ast.ParameterD
 	if updated != paramNode {
 		// While we emit the source map for the node after skipping decorators and modifiers,
 		// we need to emit the comments for the original range.
-		tx.EmitContext().SetCommentRange(updated, paramNode.Loc)
+		tx.EmitContext().SetCommentRange(updated, paramNode.Loc())
 		newLoc := transformers.MoveRangePastModifiers(paramNode)
-		updated.Loc = newLoc
+		updated.SetLoc(newLoc)
 		tx.EmitContext().SetSourceMapRange(updated, newLoc)
 		tx.EmitContext().SetEmitFlags(updated.Name(), printer.EFNoTrailingSourceMap)
 	}
@@ -1962,7 +1962,7 @@ func (tx *esDecoratorTransformer) visitBinaryExpression(node *ast.Node, discarde
 				// super[x] = ...
 				// super[x] += ...
 				expression := tx.Visitor().VisitNode(bin.Right)
-				if ast.IsCompoundAssignment(bin.OperatorToken.Kind) {
+				if ast.IsCompoundAssignment(bin.OperatorToken.Kind()) {
 					getterName := setterName
 					if !transformers.IsSimpleInlineableExpression(setterName) {
 						getterName = f.NewTempVariable()
@@ -1971,15 +1971,15 @@ func (tx *esDecoratorTransformer) visitBinaryExpression(node *ast.Node, discarde
 					}
 					superPropertyGet := f.NewReflectGetCall(tx.classSuper, getterName, tx.classThis)
 					ec.SetOriginal(superPropertyGet, bin.Left)
-					superPropertyGet.Loc = bin.Left.Loc
+					superPropertyGet.SetLoc(bin.Left.Loc())
 					expression = f.AsNodeFactory().NewBinaryExpression(
 						nil,
 						superPropertyGet,
 						nil,
-						f.NewToken(transformers.GetNonAssignmentOperatorForCompoundAssignment(bin.OperatorToken.Kind)),
+						f.NewToken(transformers.GetNonAssignmentOperatorForCompoundAssignment(bin.OperatorToken.Kind())),
 						expression,
 					)
-					expression.Loc = node.Loc
+					expression.SetLoc(node.Loc())
 				}
 				var temp *ast.Expression
 				if !discarded {
@@ -1988,21 +1988,21 @@ func (tx *esDecoratorTransformer) visitBinaryExpression(node *ast.Node, discarde
 				}
 				if temp != nil {
 					expression = f.NewAssignmentExpression(temp, expression)
-					expression.Loc = node.Loc
+					expression.SetLoc(node.Loc())
 				}
 				expression = f.NewReflectSetCall(tx.classSuper, setterName, expression, tx.classThis)
 				ec.SetOriginal(expression, node)
-				expression.Loc = node.Loc
+				expression.SetLoc(node.Loc())
 				if temp != nil {
 					expression = f.NewCommaExpression(expression, temp)
-					expression.Loc = node.Loc
+					expression.SetLoc(node.Loc())
 				}
 				return expression
 			}
 		}
 	}
 
-	if bin.OperatorToken.Kind == ast.KindCommaToken {
+	if bin.OperatorToken.Kind() == ast.KindCommaToken {
 		left := tx.discardedVisitor.VisitNode(bin.Left)
 		var right *ast.Node
 		if discarded {
@@ -2049,7 +2049,7 @@ func (tx *esDecoratorTransformer) visitPreOrPostfixUnaryExpression(node *ast.Nod
 
 				expression := f.NewReflectGetCall(tx.classSuper, getterName, tx.classThis)
 				ec.SetOriginal(expression, node)
-				expression.Loc = node.Loc
+				expression.SetLoc(node.Loc())
 
 				// If the result of this expression is discarded (i.e., it's in a position where the result
 				// will be otherwise unused, such as in an expression statement or the left side of a comma), we
@@ -2081,11 +2081,11 @@ func (tx *esDecoratorTransformer) visitPreOrPostfixUnaryExpression(node *ast.Nod
 
 				expression = f.NewReflectSetCall(tx.classSuper, setterName, expression, tx.classThis)
 				ec.SetOriginal(expression, node)
-				expression.Loc = node.Loc
+				expression.SetLoc(node.Loc())
 
 				if temp != nil {
 					expression = f.NewCommaExpression(expression, temp)
-					expression.Loc = node.Loc
+					expression.SetLoc(node.Loc())
 				}
 
 				return expression
@@ -2157,7 +2157,7 @@ func (tx *esDecoratorTransformer) visitDestructuringAssignmentTarget(node *ast.N
 				),
 			)
 			ec.SetOriginal(expression, node)
-			expression.Loc = node.Loc
+			expression.SetLoc(node.Loc())
 			return expression
 		}
 	}
@@ -2403,7 +2403,7 @@ func (tx *esDecoratorTransformer) createCallBinding(expression *ast.Expression) 
 	if ast.IsSuperProperty(callee) {
 		return callee, f.NewThisExpression()
 	}
-	if callee.Kind == ast.KindSuperKeyword {
+	if callee.Kind() == ast.KindSuperKeyword {
 		return callee, f.NewThisExpression()
 	}
 	if tx.EmitContext().EmitFlags(callee)&printer.EFHelperName != 0 {
@@ -2415,9 +2415,9 @@ func (tx *esDecoratorTransformer) createCallBinding(expression *ast.Expression) 
 			thisArg := f.NewTempVariable()
 			tx.EmitContext().AddVariableDeclaration(thisArg)
 			assign := f.NewAssignmentExpression(thisArg, pa.Expression)
-			assign.Loc = pa.Expression.Loc
+			assign.SetLoc(pa.Expression.Loc())
 			target := f.NewPropertyAccessExpression(assign, nil, pa.Name(), ast.NodeFlagsNone)
-			target.Loc = callee.Loc
+			target.SetLoc(callee.Loc())
 			return target, thisArg
 		}
 		return callee, pa.Expression
@@ -2428,9 +2428,9 @@ func (tx *esDecoratorTransformer) createCallBinding(expression *ast.Expression) 
 			thisArg := f.NewTempVariable()
 			tx.EmitContext().AddVariableDeclaration(thisArg)
 			assign := f.NewAssignmentExpression(thisArg, ea.Expression)
-			assign.Loc = ea.Expression.Loc
+			assign.SetLoc(ea.Expression.Loc())
 			target := f.NewElementAccessExpression(assign, nil, ea.ArgumentExpression, ast.NodeFlagsNone)
-			target.Loc = callee.Loc
+			target.SetLoc(callee.Loc())
 			return target, thisArg
 		}
 		return callee, ea.Expression
@@ -2443,7 +2443,7 @@ func (tx *esDecoratorTransformer) shouldBeCapturedInTempVariable(node *ast.Expre
 	// nodeFactory with cacheIdentifiers=true, since createCallBinding in this transform
 	// always caches identifiers.
 	target := ast.SkipParentheses(node)
-	switch target.Kind {
+	switch target.Kind() {
 	case ast.KindIdentifier:
 		// cacheIdentifiers is always true for this transform's createCallBinding
 		return true
@@ -2729,7 +2729,7 @@ func injectClassThisAssignmentIfMissing(ec *printer.EmitContext, f *printer.Node
 	ec.SetClassThis(staticBlock, classThis)
 
 	if node.Name() != nil {
-		ec.SetSourceMapRange(statement, node.Name().Loc)
+		ec.SetSourceMapRange(statement, node.Name().Loc())
 	}
 
 	newMembers := make([]*ast.Node, 0, 1+len(node.Members()))

@@ -113,7 +113,7 @@ func (r *EmitResolver) GetEnumMemberValue(node *ast.Node) evaluator.Result {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
-	r.checker.computeEnumMemberValues(node.Parent)
+	r.checker.computeEnumMemberValues(node.Parent())
 	if !r.checker.enumMemberLinks.Has(node) {
 		return evaluator.NewResult(nil, false, false, false)
 	}
@@ -141,8 +141,8 @@ func (r *EmitResolver) PrecalculateDeclarationEmitVisibility(file *ast.SourceFil
 }
 
 func isCommonJSModuleExports(node *ast.Node) bool {
-	if ast.IsBinaryExpression(node) && ast.IsExpressionStatement(node.Parent) && ast.IsSourceFile(node.Parent.Parent) &&
-		node.Parent.Parent.AsSourceFile().CommonJSModuleIndicator != nil {
+	if ast.IsBinaryExpression(node) && ast.IsExpressionStatement(node.Parent()) && ast.IsSourceFile(node.Parent().Parent()) &&
+		node.Parent().Parent().AsSourceFile().CommonJSModuleIndicator != nil {
 		switch ast.GetAssignmentDeclarationKind(node) {
 		case ast.JSDeclarationKindModuleExports, ast.JSDeclarationKindExportsProperty:
 			return true
@@ -152,13 +152,13 @@ func isCommonJSModuleExports(node *ast.Node) bool {
 }
 
 func (r *EmitResolver) aliasMarkingVisitorWorker(node *ast.Node) bool {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindBinaryExpression:
 		if isCommonJSModuleExports(node) && ast.IsIdentifier(node.AsBinaryExpression().Right) {
 			r.markLinkedAliases(node.AsBinaryExpression().Right)
 		}
 	case ast.KindExportAssignment:
-		if node.Expression().Kind == ast.KindIdentifier {
+		if node.Expression().Kind() == ast.KindIdentifier {
 			r.markLinkedAliases(node.Expression())
 		}
 	case ast.KindExportSpecifier:
@@ -171,10 +171,10 @@ func (r *EmitResolver) aliasMarkingVisitorWorker(node *ast.Node) bool {
 // Follows chains of import d = a.b.c
 func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 	var exportSymbol *ast.Symbol
-	if node.Kind != ast.KindStringLiteral && node.Parent != nil && (ast.IsExportAssignment(node.Parent) || isCommonJSModuleExports(node.Parent)) {
+	if node.Kind() != ast.KindStringLiteral && node.Parent() != nil && (ast.IsExportAssignment(node.Parent()) || isCommonJSModuleExports(node.Parent())) {
 		exportSymbol = r.checker.resolveName(node, node.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias /*nameNotFoundMessage*/, nil /*isUse*/, false, false)
-	} else if node.Parent.Kind == ast.KindExportSpecifier {
-		exportSymbol = r.checker.getTargetOfExportSpecifier(node.Parent, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias, false)
+	} else if node.Parent().Kind() == ast.KindExportSpecifier {
+		exportSymbol = r.checker.getTargetOfExportSpecifier(node.Parent(), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias, false)
 	}
 
 	visited := make(map[ast.SymbolId]struct{}, 2) // guard against circular imports
@@ -241,7 +241,7 @@ func (r *EmitResolver) IsImplementationOfOverload(node *ast.SignatureDeclaration
 				return false
 			}
 			declaration := signature.declaration
-			if declaration != node && declaration.Flags&ast.NodeFlagsJSDoc == 0 {
+			if declaration != node && declaration.Flags()&ast.NodeFlagsJSDoc == 0 {
 				return true
 			}
 		}
@@ -291,7 +291,7 @@ func (r *EmitResolver) IsDefinitelyReferenceToGlobalSymbolObject(node *ast.Node)
 		!ast.IsPropertyAccessExpression(node.Expression()) && !ast.IsIdentifier(node.Expression()) {
 		return false
 	}
-	if node.Expression().Kind == ast.KindIdentifier {
+	if node.Expression().Kind() == ast.KindIdentifier {
 		if node.Expression().Text() != "Symbol" {
 			return false
 		}
@@ -300,7 +300,7 @@ func (r *EmitResolver) IsDefinitelyReferenceToGlobalSymbolObject(node *ast.Node)
 		// Exactly `Symbol.something` and `Symbol` either does not resolve or definitely resolves to the global Symbol
 		return r.checker.getResolvedSymbol(node.Expression()) == r.checker.getGlobalSymbol("Symbol", ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*diagnostic*/)
 	}
-	if node.Expression().Expression().Kind != ast.KindIdentifier || node.Expression().Expression().Text() != "globalThis" || node.Expression().Name().Text() != "Symbol" {
+	if node.Expression().Expression().Kind() != ast.KindIdentifier || node.Expression().Expression().Text() != "globalThis" || node.Expression().Name().Text() != "Symbol" {
 		return false
 	}
 	r.checkerMu.Lock()
@@ -425,7 +425,7 @@ func (r *EmitResolver) IsValueAliasDeclaration(node *ast.Node) bool {
 func (r *EmitResolver) isValueAliasDeclarationWorker(node *ast.Node) bool {
 	c := r.checker
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindImportEqualsDeclaration:
 		return r.isAliasResolvedToValue(c.getSymbolOfDeclaration(node), false /*excludeTypeOnlyValues*/)
 	case ast.KindImportClause,
@@ -439,7 +439,7 @@ func (r *EmitResolver) isValueAliasDeclarationWorker(node *ast.Node) bool {
 		return exportClause != nil && (ast.IsNamespaceExport(exportClause) ||
 			core.Some(exportClause.Elements(), r.isValueAliasDeclaration))
 	case ast.KindExportAssignment:
-		if node.Expression() != nil && node.Expression().Kind == ast.KindIdentifier {
+		if node.Expression() != nil && node.Expression().Kind() == ast.KindIdentifier {
 			return r.isAliasResolvedToValue(c.getSymbolOfDeclaration(node), true /*excludeTypeOnlyValues*/)
 		}
 		return true
@@ -481,11 +481,11 @@ func (r *EmitResolver) IsTopLevelValueImportEqualsWithEntityName(node *ast.Node)
 	if !c.canCollectSymbolAliasAccessibilityData {
 		return true
 	}
-	if !ast.IsParseTreeNode(node) || node.Kind != ast.KindImportEqualsDeclaration || node.Parent.Kind != ast.KindSourceFile {
+	if !ast.IsParseTreeNode(node) || node.Kind() != ast.KindImportEqualsDeclaration || node.Parent().Kind() != ast.KindSourceFile {
 		return false
 	}
 	if ast.IsImportEqualsDeclaration(node) &&
-		(ast.NodeIsMissing(node.AsImportEqualsDeclaration().ModuleReference) || node.AsImportEqualsDeclaration().ModuleReference.Kind == ast.KindExternalModuleReference) {
+		(ast.NodeIsMissing(node.AsImportEqualsDeclaration().ModuleReference) || node.AsImportEqualsDeclaration().ModuleReference.Kind() == ast.KindExternalModuleReference) {
 		return false
 	}
 

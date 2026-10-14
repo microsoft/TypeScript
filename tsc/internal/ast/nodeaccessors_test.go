@@ -46,7 +46,7 @@ func TestNodeFactoryKinds(t *testing.T) {
 					t.Fatalf("New%s(%v): valid=%v, panicked=%v", test.name, kind, valid, panicked)
 				}
 				if valid {
-					assert.Equal(t, node.Kind, kind)
+					assert.Equal(t, node.Kind(), kind)
 					assert.Assert(t, reflect.ValueOf(node).MethodByName("As" + test.name).Call(nil)[0].Pointer() != 0)
 				}
 			}
@@ -85,7 +85,7 @@ func TestNodeAccessorsSharedKinds(t *testing.T) {
 	data := node.AsTypeAliasDeclaration()
 
 	for _, kind := range []ast.Kind{ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration} {
-		node.Kind = kind
+		node.SetKind(kind)
 		assert.Equal(t, node.Name(), name)
 		assert.Equal(t, node.Modifiers(), modifiers)
 		assert.Equal(t, node.DeclarationData(), &data.DeclarationBase)
@@ -106,7 +106,7 @@ func TestNodeAccessorsMissing(t *testing.T) {
 	}
 
 	for _, node := range nodes {
-		t.Run(node.Kind.String(), func(t *testing.T) {
+		t.Run(node.Kind().String(), func(t *testing.T) {
 			t.Parallel()
 			assert.Equal(t, node.Name(), (*ast.Node)(nil))
 			assert.Equal(t, node.Modifiers(), (*ast.ModifierList)(nil))
@@ -149,7 +149,7 @@ func TestNodeCastRejectsWrongKind(t *testing.T) {
 			factory.NewToken(kind).AsToken()
 		}, "Invalid node cast to Token")
 	}
-	assert.Equal(t, factory.NewToken(ast.KindPlusToken).AsToken().Kind, ast.KindPlusToken)
+	assert.Equal(t, factory.NewToken(ast.KindPlusToken).AsToken().Kind(), ast.KindPlusToken)
 	testutil.AssertPanics(t, func() {
 		factory.NewToken(ast.KindFunctionDeclaration)
 	}, "Invalid token kind")
@@ -160,7 +160,7 @@ func TestNodeHeaderKeepsPayloadAlive(t *testing.T) {
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 	name := factory.NewIdentifier("property")
 	root := factory.NewPropertyAccessExpression(factory.NewIdentifier("object"), nil, name, ast.NodeFlagsNone)
-	name.Parent = root
+	name.SetParent(root)
 	for range 1000 {
 		factory.NewPropertyAccessExpression(factory.NewIdentifier("other"), nil, factory.NewIdentifier("field"), ast.NodeFlagsNone)
 	}
@@ -168,7 +168,7 @@ func TestNodeHeaderKeepsPayloadAlive(t *testing.T) {
 	runtime.GC()
 	assert.Equal(t, root.AsPropertyAccessExpression().Name(), name)
 	assert.Equal(t, name.AsIdentifier().Text, "property")
-	assert.Equal(t, name.Parent, root)
+	assert.Equal(t, name.Parent(), root)
 	clone := root.Clone(ast.NewNodeFactory(ast.NodeFactoryHooks{}))
 	runtime.GC()
 	assert.Assert(t, clone != root)

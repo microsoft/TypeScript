@@ -120,7 +120,7 @@ func (f *flattener) emitAssignment(target *ast.Node, value *ast.Node, location c
 		expression = f.createAssignmentCallback(target, value, &location)
 	} else {
 		expression = f.tx.Factory().NewAssignmentExpression(f.tx.Visitor().VisitNode(target), value)
-		expression.Loc = location
+		expression.SetLoc(location)
 	}
 	f.tx.EmitContext().SetOriginal(expression, original)
 	f.emitExpression(expression)
@@ -167,7 +167,7 @@ func (f *flattener) ensureIdentifier(value *ast.Node, reuseIdentifierExpressions
 	if f.hoistTempVariables {
 		f.tx.EmitContext().AddVariableDeclaration(temp)
 		assign := f.tx.Factory().NewAssignmentExpression(temp, value)
-		assign.Loc = location
+		assign.SetLoc(location)
 		f.emitExpression(assign)
 	} else {
 		f.emitBindingOrAssignment(f, temp, value, location, nil)
@@ -188,7 +188,7 @@ func (f *flattener) createDefaultValueCheck(value *ast.Expression, defaultValue 
 
 func (f *flattener) createDestructuringPropertyAccess(value *ast.Node, propertyName *ast.Node) *ast.Node {
 	if ast.IsComputedPropertyName(propertyName) {
-		argumentExpression := f.ensureIdentifier(f.tx.Visitor().VisitNode(propertyName.Expression()), false, propertyName.Loc)
+		argumentExpression := f.ensureIdentifier(f.tx.Visitor().VisitNode(propertyName.Expression()), false, propertyName.Loc())
 		return f.tx.Factory().NewElementAccessExpression(value, nil, argumentExpression, ast.NodeFlagsNone)
 	} else if ast.IsStringOrNumericLiteralLike(propertyName) || ast.IsBigIntLiteral(propertyName) {
 		argumentExpression := propertyName.Clone(f.tx.Factory())
@@ -202,14 +202,14 @@ func (f *flattener) createDestructuringPropertyAccess(value *ast.Node, propertyN
 // --- Entry points ---
 
 func (f *flattener) flattenDestructuringAssignment(node *ast.Node, needsValue bool) *ast.Expression {
-	location := node.Loc
+	location := node.Loc()
 	var value *ast.Node
 	if ast.IsDestructuringAssignment(node) {
 		value = node.AsBinaryExpression().Right
 		for ast.IsEmptyArrayLiteral(node.AsBinaryExpression().Left) || ast.IsEmptyObjectLiteral(node.AsBinaryExpression().Left) {
 			if ast.IsDestructuringAssignment(value) {
 				node = value
-				location = node.Loc
+				location = node.Loc()
 				value = node.AsBinaryExpression().Right
 			} else {
 				return f.tx.Visitor().VisitNode(value)
@@ -224,7 +224,7 @@ func (f *flattener) flattenDestructuringAssignment(node *ast.Node, needsValue bo
 		} else if needsValue {
 			value = f.ensureIdentifier(value, true, location)
 		} else if ast.NodeIsSynthesized(node) {
-			location = value.Loc
+			location = value.Loc()
 		}
 	}
 
@@ -248,12 +248,12 @@ func (f *flattener) flattenDestructuringBinding(node *ast.Node, rval *ast.Node, 
 	if ast.IsVariableDeclaration(node) {
 		initializer := GetInitializerOfBindingOrAssignmentElement(node)
 		if initializer != nil && (ast.IsIdentifier(initializer) && BindingOrAssignmentElementAssignsToName(node, initializer.Text()) || BindingOrAssignmentElementContainsNonLiteralComputedName(node)) {
-			initializer = f.ensureIdentifier(f.tx.Visitor().VisitNode(initializer), false, initializer.Loc)
+			initializer = f.ensureIdentifier(f.tx.Visitor().VisitNode(initializer), false, initializer.Loc())
 			node = f.tx.Factory().UpdateVariableDeclaration(node.AsVariableDeclaration(), node.Name(), nil, nil, initializer)
 		}
 	}
 
-	f.flattenBindingOrAssignmentElement(node, rval, node.Loc, skipInitializer)
+	f.flattenBindingOrAssignmentElement(node, rval, node.Loc(), skipInitializer)
 
 	if len(f.expressions) > 0 {
 		temp := f.tx.Factory().NewTempVariable()
@@ -277,7 +277,7 @@ func (f *flattener) flattenDestructuringBinding(node *ast.Node, rval *ast.Node, 
 			expr = f.tx.Factory().InlineExpressions(append(pending.pendingExpressions, pending.value))
 		}
 		decl := f.tx.Factory().NewVariableDeclaration(pending.name, nil, nil, expr)
-		decl.Loc = pending.location
+		decl.SetLoc(pending.location)
 		if pending.original != nil {
 			f.tx.EmitContext().SetOriginal(decl, pending.original)
 		}
@@ -351,15 +351,15 @@ func (f *flattener) flattenObjectBindingOrAssignmentPattern(parent *ast.Node, pa
 				if ast.IsComputedPropertyName(propertyName) {
 					computedTempVariables = append(computedTempVariables, rhsValue.AsElementAccessExpression().ArgumentExpression)
 				}
-				f.flattenBindingOrAssignmentElement(element, rhsValue, element.Loc, false)
+				f.flattenBindingOrAssignmentElement(element, rhsValue, element.Loc(), false)
 			}
 		} else if i == numElements-1 {
 			if len(bindingElements) > 0 {
 				f.emitBindingOrAssignment(f, f.createObjectBindingOrAssignmentPattern(f, bindingElements), value, location, pattern)
 				bindingElements = nil
 			}
-			rhsValue := f.tx.Factory().NewRestHelper(value, elements, computedTempVariables, pattern.Loc)
-			f.flattenBindingOrAssignmentElement(element, rhsValue, element.Loc, false)
+			rhsValue := f.tx.Factory().NewRestHelper(value, elements, computedTempVariables, pattern.Loc())
+			f.flattenBindingOrAssignmentElement(element, rhsValue, element.Loc(), false)
 		}
 	}
 	if len(bindingElements) > 0 {
@@ -398,10 +398,10 @@ func (f *flattener) flattenArrayBindingOrAssignmentPattern(parent *ast.Node, pat
 			continue
 		} else if ast.GetRestIndicatorOfBindingOrAssignmentElement(element) == nil {
 			rhsValue := f.tx.Factory().NewElementAccessExpression(value, nil, f.tx.Factory().NewNumericLiteral(strconv.Itoa(i), ast.TokenFlagsNone), ast.NodeFlagsNone)
-			f.flattenBindingOrAssignmentElement(element, rhsValue, element.Loc, false)
+			f.flattenBindingOrAssignmentElement(element, rhsValue, element.Loc(), false)
 		} else if i == numElements-1 {
 			rhsValue := f.tx.Factory().NewArraySliceCall(value, i)
-			f.flattenBindingOrAssignmentElement(element, rhsValue, element.Loc, false)
+			f.flattenBindingOrAssignmentElement(element, rhsValue, element.Loc(), false)
 		}
 	}
 	if len(bindingElements) > 0 {
@@ -409,7 +409,7 @@ func (f *flattener) flattenArrayBindingOrAssignmentPattern(parent *ast.Node, pat
 	}
 	if len(restContainingElements) > 0 {
 		for _, pair := range restContainingElements {
-			f.flattenBindingOrAssignmentElement(pair.element, pair.id, pair.element.Loc, false)
+			f.flattenBindingOrAssignmentElement(pair.element, pair.id, pair.element.Loc(), false)
 		}
 	}
 }
@@ -483,11 +483,11 @@ func GetInitializerOfBindingOrAssignmentElement(bindingElement *ast.Node) *ast.N
 }
 
 func isObjectBindingOrAssignmentPattern(node *ast.Node) bool {
-	return node != nil && (node.Kind == ast.KindObjectBindingPattern || node.Kind == ast.KindObjectLiteralExpression)
+	return node != nil && (node.Kind() == ast.KindObjectBindingPattern || node.Kind() == ast.KindObjectLiteralExpression)
 }
 
 func isArrayBindingOrAssignmentPattern(node *ast.Node) bool {
-	return node != nil && (node.Kind == ast.KindArrayBindingPattern || node.Kind == ast.KindArrayLiteralExpression)
+	return node != nil && (node.Kind() == ast.KindArrayBindingPattern || node.Kind() == ast.KindArrayLiteralExpression)
 }
 
 func isSimpleBindingOrAssignmentElement(element *ast.Node) bool {

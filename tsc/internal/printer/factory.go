@@ -165,7 +165,7 @@ func (f *NodeFactory) NewGeneratedPrivateNameForNodeEx(node *ast.Node, options A
 // string representation of an Identifier or NumericLiteral.
 func (f *NodeFactory) NewStringLiteralFromNode(textSourceNode *ast.Node) *ast.Node {
 	var text string
-	switch textSourceNode.Kind {
+	switch textSourceNode.Kind() {
 	case ast.KindIdentifier,
 		ast.KindPrivateIdentifier,
 		ast.KindJsxNamespacedName,
@@ -244,7 +244,7 @@ func (f *NodeFactory) NewVoidZeroExpression() *ast.Expression {
 }
 
 func flattenCommaElement(node *ast.Expression, expressions []*ast.Expression) []*ast.Expression {
-	if ast.IsBinaryExpression(node) && ast.NodeIsSynthesized(node) && node.AsBinaryExpression().OperatorToken.Kind == ast.KindCommaToken {
+	if ast.IsBinaryExpression(node) && ast.NodeIsSynthesized(node) && node.AsBinaryExpression().OperatorToken.Kind() == ast.KindCommaToken {
 		expressions = flattenCommaElement(node.AsBinaryExpression().Left, expressions)
 		expressions = flattenCommaElement(node.AsBinaryExpression().Right, expressions)
 	} else {
@@ -285,17 +285,17 @@ func (f *NodeFactory) CreateExpressionFromEntityName(node *ast.Node) *ast.Expres
 	if ast.IsQualifiedName(node) {
 		left := f.CreateExpressionFromEntityName(node.AsQualifiedName().Left)
 		right := node.AsQualifiedName().Right.Clone(f.AsNodeFactory())
-		right.Loc = node.AsQualifiedName().Right.Loc
+		right.SetLoc(node.AsQualifiedName().Right.Loc())
 		// TODO(rbuckton): Does this need to be parented?
-		right.Parent = node.AsQualifiedName().Right.Parent
+		right.SetParent(node.AsQualifiedName().Right.Parent())
 		propAccess := f.NewPropertyAccessExpression(left, nil, right, ast.NodeFlagsNone)
-		propAccess.Loc = node.Loc
+		propAccess.SetLoc(node.Loc())
 		return propAccess
 	}
 	res := node.Clone(f.AsNodeFactory())
-	res.Loc = node.Loc
+	res.SetLoc(node.Loc())
 	// TODO(rbuckton): Does this need to be parented?
-	res.Parent = node.Parent
+	res.SetParent(node.Parent())
 	return res
 }
 
@@ -330,16 +330,16 @@ func (f *NodeFactory) CreateForOfBindingStatement(node *ast.Node, boundValue *as
 			f.UpdateVariableDeclarationList(
 				node.AsVariableDeclarationList(),
 				f.NewNodeList([]*ast.Node{updatedDeclaration}),
-				node.AsVariableDeclarationList().Flags,
+				node.AsVariableDeclarationList().Flags(),
 			),
 		)
-		statement.Loc = node.Loc
+		statement.SetLoc(node.Loc())
 		return statement
 	}
 	updatedExpression := f.NewAssignmentExpression(node, boundValue)
-	updatedExpression.Loc = node.Loc
+	updatedExpression.SetLoc(node.Loc())
 	statement := f.NewExpressionStatement(updatedExpression)
-	statement.Loc = node.Loc
+	statement.SetLoc(node.Loc())
 	return statement
 }
 
@@ -355,7 +355,7 @@ func (f *NodeFactory) NewTypeCheck(value *ast.Node, tag string) *ast.Node {
 
 func (f *NodeFactory) NewMethodCall(object *ast.Node, methodName *ast.Node, argumentsList []*ast.Node) *ast.Node {
 	// Preserve the optionality of `object`.
-	if ast.IsCallExpression(object) && (object.Flags&ast.NodeFlagsOptionalChain != 0) {
+	if ast.IsCallExpression(object) && (object.Flags()&ast.NodeFlagsOptionalChain != 0) {
 		return f.NewCallExpression(
 			f.NewPropertyAccessExpression(object, nil, methodName, ast.NodeFlagsNone),
 			nil,
@@ -415,7 +415,7 @@ func (f *NodeFactory) isIgnorableParen(node *ast.Expression) bool {
 }
 
 func (f *NodeFactory) updateOuterExpression(outerExpression *ast.Expression /*OuterExpression*/, expression *ast.Expression) *ast.Expression {
-	switch outerExpression.Kind {
+	switch outerExpression.Kind() {
 	case ast.KindParenthesizedExpression:
 		return f.UpdateParenthesizedExpression(outerExpression.AsParenthesizedExpression(), expression)
 	case ast.KindTypeAssertionExpression:
@@ -425,13 +425,13 @@ func (f *NodeFactory) updateOuterExpression(outerExpression *ast.Expression /*Ou
 	case ast.KindSatisfiesExpression:
 		return f.UpdateSatisfiesExpression(outerExpression.AsSatisfiesExpression(), expression, outerExpression.Type())
 	case ast.KindNonNullExpression:
-		return f.UpdateNonNullExpression(outerExpression.AsNonNullExpression(), expression, outerExpression.Flags)
+		return f.UpdateNonNullExpression(outerExpression.AsNonNullExpression(), expression, outerExpression.Flags())
 	case ast.KindExpressionWithTypeArguments:
 		return f.UpdateExpressionWithTypeArguments(outerExpression.AsExpressionWithTypeArguments(), expression, outerExpression.TypeArgumentList())
 	case ast.KindPartiallyEmittedExpression:
 		return f.UpdatePartiallyEmittedExpression(outerExpression.AsPartiallyEmittedExpression(), expression)
 	default:
-		panic(fmt.Sprintf("Unexpected outer expression kind: %s", outerExpression.Kind))
+		panic(fmt.Sprintf("Unexpected outer expression kind: %s", outerExpression.Kind()))
 	}
 }
 
@@ -645,7 +645,7 @@ func (f *NodeFactory) NewParamHelper(expression *ast.Node, parameterOffset int, 
 		f.NewNodeList([]*ast.Expression{f.NewNumericLiteral(strconv.Itoa(parameterOffset), ast.TokenFlagsNone), expression}),
 		ast.NodeFlagsNone,
 	)
-	helper.Loc = location
+	helper.SetLoc(location)
 	return helper
 }
 
@@ -853,7 +853,7 @@ func (f *NodeFactory) NewRestHelper(value *ast.Expression, elements []*ast.Node,
 		}
 	}
 	propNames := f.NewArrayLiteralExpression(f.NewNodeList(propertyNames), false)
-	propNames.Loc = location
+	propNames.SetLoc(location)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__rest"),
 		nil,

@@ -186,7 +186,7 @@ func (l *LanguageService) newCodeLensForNode(fileUri lsproto.DocumentUri, file *
 }
 
 func isValidImplementationsCodeLensNode(node *ast.Node, userPrefs lsutil.CodeLensUserPreferences) bool {
-	switch node.Kind {
+	switch node.Kind() {
 	// Always show on interfaces
 	case ast.KindInterfaceDeclaration:
 		// TODO: ast.KindTypeAliasDeclaration?
@@ -194,12 +194,12 @@ func isValidImplementationsCodeLensNode(node *ast.Node, userPrefs lsutil.CodeLen
 
 	// If configured, show on interface methods
 	case ast.KindMethodSignature:
-		return userPrefs.ImplementationsCodeLensShowOnInterfaceMethods.IsTrue() && node.Parent.Kind == ast.KindInterfaceDeclaration
+		return userPrefs.ImplementationsCodeLensShowOnInterfaceMethods.IsTrue() && node.Parent().Kind() == ast.KindInterfaceDeclaration
 
 	// If configured, show on all class methods - but not private ones.
 	case ast.KindMethodDeclaration:
-		if userPrefs.ImplementationsCodeLensShowOnAllClassMethods.IsTrue() && node.Parent.Kind == ast.KindClassDeclaration {
-			return !ast.HasModifier(node, ast.ModifierFlagsPrivate) && node.Name().Kind != ast.KindPrivateIdentifier
+		if userPrefs.ImplementationsCodeLensShowOnAllClassMethods.IsTrue() && node.Parent().Kind() == ast.KindClassDeclaration {
+			return !ast.HasModifier(node, ast.ModifierFlagsPrivate) && node.Name().Kind() != ast.KindPrivateIdentifier
 		}
 		fallthrough
 
@@ -213,7 +213,7 @@ func isValidImplementationsCodeLensNode(node *ast.Node, userPrefs lsutil.CodeLen
 }
 
 func isValidReferenceLensNode(node *ast.Node, userPrefs lsutil.CodeLensUserPreferences) bool {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindFunctionDeclaration:
 		if userPrefs.ReferencesCodeLensShowOnAllFunctions.IsTrue() {
 			return true
@@ -233,7 +233,7 @@ func isValidReferenceLensNode(node *ast.Node, userPrefs lsutil.CodeLensUserPrefe
 		// For https://github.com/microsoft/vscode/issues/90396
 		// !!!
 
-		switch node.Parent.Kind {
+		switch node.Parent().Kind() {
 		case ast.KindClassDeclaration, ast.KindInterfaceDeclaration, ast.KindTypeLiteral:
 			return true
 		}

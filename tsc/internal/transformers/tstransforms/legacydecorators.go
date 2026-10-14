@@ -33,7 +33,7 @@ func (tx *LegacyDecoratorsTransformer) visit(node *ast.Node) *ast.Node {
 		return node
 	}
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindIdentifier:
 		return tx.visitIdentifier(node.AsIdentifier())
 	case ast.KindPropertyAccessExpression:
@@ -86,7 +86,7 @@ func (tx *LegacyDecoratorsTransformer) visitPropertyAccessExpression(node *ast.P
 	// .name of PropertyAccessExpression.
 	expression := tx.Visitor().VisitNode(node.Expression)
 	if expression != node.Expression {
-		return tx.Factory().UpdatePropertyAccessExpression(node, expression, node.QuestionDotToken, node.Name(), node.Flags)
+		return tx.Factory().UpdatePropertyAccessExpression(node, expression, node.QuestionDotToken, node.Name(), node.Flags())
 	}
 	return node.AsNode()
 }
@@ -119,7 +119,7 @@ func (tx *LegacyDecoratorsTransformer) finishClassElement(updated *ast.Node, ori
 	if updated != original {
 		// While we emit the source map for the node after skipping decorators and modifiers,
 		// we need to emit the comments for the original range.
-		tx.EmitContext().SetCommentRange(updated, original.Loc)
+		tx.EmitContext().SetCommentRange(updated, original.Loc())
 		tx.EmitContext().SetSourceMapRange(updated, transformers.MoveRangePastModifiers(original))
 	}
 	return updated
@@ -138,9 +138,9 @@ func (tx *LegacyDecoratorsTransformer) visitParamerDeclaration(node *ast.Paramet
 	if updated != node.AsNode() {
 		// While we emit the source map for the node after skipping decorators and modifiers,
 		// we need to emit the comments for the original range.
-		tx.EmitContext().SetCommentRange(updated, node.Loc)
+		tx.EmitContext().SetCommentRange(updated, node.Loc())
 		newLoc := transformers.MoveRangePastModifiers(node.AsNode())
-		updated.Loc = newLoc
+		updated.SetLoc(newLoc)
 		tx.EmitContext().SetSourceMapRange(updated, newLoc)
 		tx.EmitContext().SetEmitFlags(updated.Name(), printer.EFNoTrailingSourceMap)
 	}
@@ -165,7 +165,7 @@ func (tx *LegacyDecoratorsTransformer) visitPropertyNameOfClassElement(member *a
 }
 
 func (tx *LegacyDecoratorsTransformer) visitPropertyDeclaration(node *ast.PropertyDeclaration) *ast.Node {
-	if (node.Flags & ast.NodeFlagsAmbient) != 0 {
+	if (node.Flags() & ast.NodeFlagsAmbient) != 0 {
 		return nil
 	}
 	if ast.HasSyntacticModifier(node.AsNode(), ast.ModifierFlagsAmbient|ast.ModifierFlagsAbstract) {
@@ -467,7 +467,7 @@ func (tx *LegacyDecoratorsTransformer) transformClassDeclarationWithClassDecorat
 	)
 
 	tx.EmitContext().SetOriginal(classExpression, node.AsNode())
-	classExpression.Loc = location
+	classExpression.SetLoc(location)
 
 	//  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
 	//                                         or decoratedClassAlias if the class contain self-reference.
@@ -486,8 +486,8 @@ func (tx *LegacyDecoratorsTransformer) transformClassDeclarationWithClassDecorat
 	varDeclList := tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsLet)
 	varStatement := tx.Factory().NewVariableStatement(nil, varDeclList)
 	tx.EmitContext().SetOriginal(varStatement, node.AsNode())
-	varStatement.Loc = location
-	tx.EmitContext().SetCommentRange(varStatement, node.Loc)
+	varStatement.SetLoc(location)
+	tx.EmitContext().SetCommentRange(varStatement, node.Loc())
 
 	statements := []*ast.Node{varStatement}
 	statements = append(statements, decorationStatements...)
@@ -616,7 +616,7 @@ func isClassStaticBlockDeclarationOrStaticProperty(node *ast.Node) bool {
 }
 
 func isNotExportOrDefaultOrDecorator(node *ast.Node) bool {
-	return !(ast.IsDecorator(node) || node.Kind == ast.KindExportKeyword || node.Kind == ast.KindDefaultKeyword)
+	return !(ast.IsDecorator(node) || node.Kind() == ast.KindExportKeyword || node.Kind() == ast.KindDefaultKeyword)
 }
 
 func decoratorContainsPrivateIdentifierInExpression(decorator *ast.Node) bool {
@@ -683,7 +683,7 @@ func getAllDecoratorsOfClass(node *ast.ClassDeclaration, useLegacyDecorators boo
  * @internal
  */
 func getAllDecoratorsOfClassElement(member *ast.Node, parent *ast.ClassDeclaration, useLegacyDecorators bool) *allDecorators {
-	switch member.Kind {
+	switch member.Kind() {
 	case ast.KindGetAccessor, ast.KindSetAccessor:
 		if !useLegacyDecorators {
 			return getAllDecoratorsOfMethod(member, false)
@@ -924,7 +924,7 @@ func (tx *LegacyDecoratorsTransformer) generateClassElementDecorationExpression(
 	//
 
 	prefix := tx.getClassMemberPrefix(node, member)
-	memberName := tx.getExpressionForPropertyName(member, member.Flags&ast.NodeFlagsAmbient == 0)
+	memberName := tx.getExpressionForPropertyName(member, member.Flags()&ast.NodeFlagsAmbient == 0)
 	var descriptor *ast.Node
 	if ast.IsPropertyDeclaration(member) && !ast.HasAccessorModifier(member) {
 		// We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
@@ -982,7 +982,7 @@ func (tx *LegacyDecoratorsTransformer) transformDecoratorsOfParameters(parameter
 				helper := tx.Factory().NewParamHelper(
 					tx.Visitor().VisitNode(decorator.Expression()),
 					i,
-					decorator.Expression().Loc,
+					decorator.Expression().Loc(),
 				)
 				tx.EmitContext().SetEmitFlags(helper, printer.EFNoComments)
 				results = append(results, helper)

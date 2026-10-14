@@ -26,7 +26,7 @@ func IsExportName(emitContext *printer.EmitContext, name *ast.IdentifierNode) bo
 }
 
 func IsIdentifierReference(name *ast.IdentifierNode, parent *ast.Node) bool {
-	switch parent.Kind {
+	switch parent.Kind() {
 	case ast.KindBinaryExpression,
 		ast.KindPrefixUnaryExpression,
 		ast.KindPostfixUnaryExpression,
@@ -167,7 +167,7 @@ func convertBindingElementToObjectAssignmentElement(emitContext *printer.EmitCon
 }
 
 func ConvertBindingPatternToAssignmentPattern(emitContext *printer.EmitContext, element *ast.BindingPattern) *ast.Expression {
-	switch element.Kind {
+	switch element.Kind() {
 	case ast.KindArrayBindingPattern:
 		return convertBindingElementToArrayAssignmentPattern(emitContext, element)
 	case ast.KindObjectBindingPattern:
@@ -241,7 +241,7 @@ func SingleOrMany(nodes []*ast.Node, factory *printer.NodeFactory) *ast.Node {
 func IsSimpleCopiableExpression(expression *ast.Expression) bool {
 	return ast.IsStringLiteralLike(expression) ||
 		ast.IsNumericLiteral(expression) ||
-		ast.IsKeywordKind(expression.Kind) ||
+		ast.IsKeywordKind(expression.Kind()) ||
 		ast.IsIdentifier(expression)
 }
 
@@ -257,8 +257,8 @@ func IsOriginalNodeSingleLine(emitContext *printer.EmitContext, node *ast.Node) 
 	if source == nil {
 		return false
 	}
-	startLine := scanner.GetECMALineOfPosition(source, original.Loc.Pos())
-	endLine := scanner.GetECMALineOfPosition(source, original.Loc.End())
+	startLine := scanner.GetECMALineOfPosition(source, original.Loc().Pos())
+	endLine := scanner.GetECMALineOfPosition(source, original.Loc().End())
 	return startLine == endLine
 }
 
@@ -334,7 +334,7 @@ func MoveRangePastDecorators(node *ast.Node) core.TextRange {
 	if lastDecorator != nil && !ast.PositionIsSynthesized(lastDecorator.End()) {
 		return core.NewTextRange(lastDecorator.End(), node.End())
 	}
-	return node.Loc
+	return node.Loc()
 }
 
 // GetNonAssignmentOperatorForCompoundAssignment returns the non-assignment operator for a compound assignment.

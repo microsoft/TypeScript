@@ -22,7 +22,7 @@ func NewImpliedModuleTransformer(opts *transformers.TransformOptions) *transform
 }
 
 func (tx *ImpliedModuleTransformer) visit(node *ast.Node) *ast.Node {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindSourceFile:
 		node = tx.visitSourceFile(node.AsSourceFile())
 	}

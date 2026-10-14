@@ -87,8 +87,8 @@ func (r *referenceResolver) getReferencedValueSymbol(reference *ast.IdentifierNo
 	}
 
 	location := reference
-	if startInDeclarationContainer && reference.Parent != nil && ast.IsDeclaration(reference.Parent) && reference.Parent.Name() == reference {
-		location = ast.GetDeclarationContainer(reference.Parent)
+	if startInDeclarationContainer && reference.Parent() != nil && ast.IsDeclaration(reference.Parent()) && reference.Parent().Name() == reference {
+		location = ast.GetDeclarationContainer(reference.Parent())
 	}
 
 	if r.hooks.ResolveName != nil {
@@ -112,17 +112,17 @@ func (r *referenceResolver) isTypeOnlyAliasDeclaration(symbol *ast.Symbol) bool 
 
 		node := r.getDeclarationOfAliasSymbol(symbol)
 		for node != nil {
-			switch node.Kind {
+			switch node.Kind() {
 			case ast.KindImportEqualsDeclaration, ast.KindExportDeclaration:
 				return node.IsTypeOnly()
 			case ast.KindImportClause, ast.KindImportSpecifier, ast.KindExportSpecifier:
 				if node.IsTypeOnly() {
 					return true
 				}
-				node = node.Parent
+				node = node.Parent()
 				continue
 			case ast.KindNamedImports, ast.KindNamedExports:
-				node = node.Parent
+				node = node.Parent()
 				continue
 			}
 			break
@@ -153,7 +153,7 @@ func (r *referenceResolver) GetReferencedExportContainer(node *ast.IdentifierNod
 	// declaration, we need to start resolution at the declaration's container.
 	// Otherwise, we could incorrectly resolve the export as the
 	// declaration if it contains an exported member with the same name.
-	startInDeclarationContainer := node.Parent != nil && (node.Parent.Kind == ast.KindModuleDeclaration || node.Parent.Kind == ast.KindEnumDeclaration) && node == node.Parent.Name()
+	startInDeclarationContainer := node.Parent() != nil && (node.Parent().Kind() == ast.KindModuleDeclaration || node.Parent().Kind() == ast.KindEnumDeclaration) && node == node.Parent().Name()
 	if symbol := r.getReferencedValueSymbol(node, startInDeclarationContainer); symbol != nil {
 		if symbol.Flags()&ast.SymbolFlagsExportValue != 0 {
 			// If we reference an exported entity within the same module declaration, then whether
@@ -167,7 +167,7 @@ func (r *referenceResolver) GetReferencedExportContainer(node *ast.IdentifierNod
 		}
 		parentSymbol := r.getParentOfSymbol(symbol)
 		if parentSymbol != nil {
-			if parentSymbol.Flags()&ast.SymbolFlagsValueModule != 0 && parentSymbol.ValueDeclaration() != nil && parentSymbol.ValueDeclaration().Kind == ast.KindSourceFile {
+			if parentSymbol.Flags()&ast.SymbolFlagsValueModule != 0 && parentSymbol.ValueDeclaration() != nil && parentSymbol.ValueDeclaration().Kind() == ast.KindSourceFile {
 				symbolFile := parentSymbol.ValueDeclaration().AsSourceFile()
 				referenceFile := ast.GetSourceFileOfNode(node)
 				// If `node` accesses an export and that export isn't in the same file, then symbol is a namespace export, so return nil.
@@ -178,9 +178,9 @@ func (r *referenceResolver) GetReferencedExportContainer(node *ast.IdentifierNod
 				return symbolFile.AsNode()
 			}
 			isMatchingContainer := func(n *ast.Node) bool {
-				return (n.Kind == ast.KindModuleDeclaration || n.Kind == ast.KindEnumDeclaration) && r.getSymbolOfDeclaration(n) == parentSymbol
+				return (n.Kind() == ast.KindModuleDeclaration || n.Kind() == ast.KindEnumDeclaration) && r.getSymbolOfDeclaration(n) == parentSymbol
 			}
-			return ast.FindAncestor(node.Parent, isMatchingContainer)
+			return ast.FindAncestor(node.Parent(), isMatchingContainer)
 		}
 	}
 
@@ -211,7 +211,7 @@ func (r *referenceResolver) GetReferencedValueDeclarations(node *ast.IdentifierN
 	if symbol := r.getReferencedValueSymbol(node, false /*startInDeclarationContainer*/); symbol != nil {
 		symbol = r.getExportSymbolOfValueSymbolIfExported(symbol)
 		for _, declaration := range symbol.Declarations() {
-			switch declaration.Kind {
+			switch declaration.Kind() {
 			case ast.KindVariableDeclaration,
 				ast.KindParameter,
 				ast.KindBindingElement,

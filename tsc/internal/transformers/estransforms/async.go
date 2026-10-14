@@ -95,7 +95,7 @@ func (tx *asyncTransformer) fallbackVisitor(node *ast.Node) *ast.Node {
 		return node
 	}
 	tx.trackSuperAccess(node)
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindFunctionExpression,
 		ast.KindFunctionDeclaration,
 		ast.KindMethodDeclaration,
@@ -133,7 +133,7 @@ func (tx *asyncTransformer) visit(node *ast.Node) *ast.Node {
 		return tx.fallbackVisitor(node)
 	}
 	tx.trackSuperAccess(node)
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindAsyncKeyword:
 		// ES2017 async modifier should be elided for targets < ES2017
 		return nil
@@ -164,7 +164,7 @@ func (tx *asyncTransformer) visit(node *ast.Node) *ast.Node {
 
 func (tx *asyncTransformer) visitAsyncBodyNode(node *ast.Node) *ast.Node {
 	if isNodeWithPossibleHoistedDeclaration(node) {
-		switch node.Kind {
+		switch node.Kind() {
 		case ast.KindVariableStatement:
 			return tx.visitVariableStatementInAsyncBody(node)
 		case ast.KindForStatement:
@@ -295,7 +295,7 @@ func (tx *asyncTransformer) visitAwaitExpression(node *ast.AwaitExpression) *ast
 		nil, /*asteriskToken*/
 		tx.Visitor().VisitNode(node.Expression),
 	)
-	yieldExpr.Loc = node.Loc
+	yieldExpr.SetLoc(node.Loc())
 	tx.EmitContext().SetOriginal(yieldExpr, node.AsNode())
 	return yieldExpr
 }
@@ -518,7 +518,7 @@ func (tx *asyncTransformer) recordDeclarationName(node *ast.Node, names *collect
 func (tx *asyncTransformer) isVariableDeclarationListWithCollidingName(node *ast.Node) bool {
 	return node != nil &&
 		ast.IsVariableDeclarationList(node) &&
-		node.Flags&ast.NodeFlagsBlockScoped == 0 &&
+		node.Flags()&ast.NodeFlagsBlockScoped == 0 &&
 		slices.ContainsFunc(node.AsVariableDeclarationList().Declarations.Nodes, tx.collidesWithParameterName)
 }
 
@@ -583,7 +583,7 @@ func (tx *asyncTransformer) transformInitializedVariable(node *ast.VariableDecla
 		target = node.Name()
 	}
 	converted := tx.Factory().NewAssignmentExpression(target, node.Initializer)
-	tx.EmitContext().SetSourceMapRange(converted, node.Loc)
+	tx.EmitContext().SetSourceMapRange(converted, node.Loc())
 	return tx.Visitor().VisitNode(converted)
 }
 
@@ -633,7 +633,7 @@ func (tx *asyncTransformer) transformMethodBody(node *ast.Node) *ast.Node {
 	mergedStatements := tx.EmitContext().EndAndMergeVariableEnvironmentList(updated.StatementList())
 	if emitSuperHelpers && tx.hasSuperElementAccess && !updated.AsBlock().MultiLine {
 		newBlock := tx.Factory().NewBlock(mergedStatements, true)
-		newBlock.Loc = updated.Loc
+		newBlock.SetLoc(updated.Loc())
 		updated = newBlock
 	} else {
 		updated = tx.Factory().UpdateBlock(updated.AsBlock(), mergedStatements, updated.AsBlock().MultiLine)
@@ -679,7 +679,7 @@ func (tx *asyncTransformer) transformAsyncFunctionParameterList(node *ast.Node) 
 		if param.Initializer != nil || param.DotDotDotToken != nil {
 			// for an arrow function, capture the remaining arguments in a rest parameter.
 			// for any other function/method this isn't necessary as we can just use `arguments`.
-			if node.Kind == ast.KindArrowFunction {
+			if node.Kind() == ast.KindArrowFunction {
 				restParameter := tx.Factory().NewParameterDeclaration(
 					nil,
 					tx.Factory().NewToken(ast.KindDotDotDotToken),
@@ -710,7 +710,7 @@ func (tx *asyncTransformer) transformAsyncFunctionParameterList(node *ast.Node) 
 }
 
 func (tx *asyncTransformer) transformAsyncFunctionBody(node *ast.Node, outerParameters *ast.NodeList) *ast.Node {
-	isArrow := node.Kind == ast.KindArrowFunction
+	isArrow := node.Kind() == ast.KindArrowFunction
 	savedCapturedSuperProperties := tx.capturedSuperProperties
 	savedHasSuperElementAccess := tx.hasSuperElementAccess
 	savedHasSuperPropertyAssignment := tx.hasSuperPropertyAssignment
@@ -821,7 +821,7 @@ func (tx *asyncTransformer) transformAsyncFunctionBody(node *ast.Node, outerPara
 			tx.EmitContext().EndAndMergeVariableEnvironmentList(tx.Factory().NewNodeList(statements)),
 			true,
 		)
-		block.Loc = node.Body().Loc
+		block.SetLoc(node.Body().Loc())
 
 		if emitSuperHelpers && tx.hasSuperElementAccess {
 			if tx.hasSuperPropertyAssignment {
@@ -884,11 +884,11 @@ func (tx *asyncTransformer) transformAsyncFunctionBodyWorker(body *ast.Node) *as
 	// Convert expression body to block body with return statement
 	visited := tx.asyncBodyVisitor.VisitNode(body)
 	ret := tx.Factory().NewReturnStatement(visited)
-	ret.Loc = body.Loc
+	ret.SetLoc(body.Loc())
 	list := tx.Factory().NewNodeList([]*ast.Node{ret})
-	list.Loc = body.Loc
+	list.Loc = body.Loc()
 	block := tx.Factory().NewBlock(list, false /*multiLine*/)
-	block.Loc = body.Loc
+	block.SetLoc(body.Loc())
 	return block
 }
 
@@ -897,16 +897,16 @@ func (tx *asyncTransformer) transformAsyncFunctionBodyWorker(body *ast.Node) *as
 // This avoids relying on parent pointers (IsAssignmentTarget) which may not be set
 // on synthesized AST nodes from prior transforms.
 func assignmentTargetContainsSuperProperty(node *ast.Node) bool {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression:
-		return node.Expression().Kind == ast.KindSuperKeyword
+		return node.Expression().Kind() == ast.KindSuperKeyword
 	case ast.KindParenthesizedExpression:
 		return assignmentTargetContainsSuperProperty(node.AsParenthesizedExpression().Expression)
 	case ast.KindArrayLiteralExpression:
 		return slices.ContainsFunc(node.AsArrayLiteralExpression().Elements.Nodes, assignmentTargetContainsSuperProperty)
 	case ast.KindObjectLiteralExpression:
 		for _, prop := range node.AsObjectLiteralExpression().Properties.Nodes {
-			switch prop.Kind {
+			switch prop.Kind() {
 			case ast.KindPropertyAssignment:
 				if assignmentTargetContainsSuperProperty(prop.AsPropertyAssignment().Initializer) {
 					return true
@@ -961,7 +961,7 @@ func isSimpleParameterList(params []*ast.Node) bool {
 
 // isNodeWithPossibleHoistedDeclaration checks if a node could contain hoisted declarations.
 func isNodeWithPossibleHoistedDeclaration(node *ast.Node) bool {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindBlock,
 		ast.KindVariableStatement,
 		ast.KindWithStatement,

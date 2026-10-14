@@ -13,7 +13,7 @@ func (ch *nullishCoalescingTransformer) visit(node *ast.Node) *ast.Node {
 	if node.SubtreeFacts()&ast.SubtreeContainsNullishCoalescing == 0 {
 		return node
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindBinaryExpression:
 		return ch.visitBinaryExpression(node.AsBinaryExpression())
 	default:
@@ -22,7 +22,7 @@ func (ch *nullishCoalescingTransformer) visit(node *ast.Node) *ast.Node {
 }
 
 func (ch *nullishCoalescingTransformer) visitBinaryExpression(node *ast.BinaryExpression) *ast.Node {
-	switch node.OperatorToken.Kind {
+	switch node.OperatorToken.Kind() {
 	case ast.KindQuestionQuestionToken:
 		left := ch.Visitor().VisitNode(node.Left)
 		right := left

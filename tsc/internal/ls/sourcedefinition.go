@@ -54,7 +54,7 @@ func (l *LanguageService) provideSourceDefinitionAtPosition(
 	resolver := l.newSourceDefResolver(program, file.FileName())
 	node := astnav.GetTouchingPropertyName(file, pos)
 
-	if node.Kind == ast.KindSourceFile {
+	if node.Kind() == ast.KindSourceFile {
 		// Triple-slash directives are comments, not AST nodes, so
 		// GetTouchingPropertyName returns the SourceFile node.
 		if declarations, ref := resolver.resolveTripleSlashReference(file, pos, program); len(declarations) != 0 {
@@ -67,7 +67,7 @@ func (l *LanguageService) provideSourceDefinitionAtPosition(
 	originSelectionRange, _ := l.createLspRangeFromNode(node, file)
 
 	containingModuleSpecifier := findContainingModuleSpecifier(node)
-	if containingModuleSpecifier != nil && ast.IsSourcePhaseImport(containingModuleSpecifier.Parent) {
+	if containingModuleSpecifier != nil && ast.IsSourcePhaseImport(containingModuleSpecifier.Parent()) {
 		return l.provideDefinitionAtPosition(ctx, program, file, textPos, clientSupportsLink), nil
 	}
 
@@ -226,9 +226,9 @@ func getSourceDefCheckerInfo(
 	defer done()
 
 	declarations := getDeclarationsFromLocation(c, node)
-	isPropertyName := node.Parent != nil && ast.IsAccessExpression(node.Parent) && node.Parent.Name() == node
+	isPropertyName := node.Parent() != nil && ast.IsAccessExpression(node.Parent()) && node.Parent().Name() == node
 	if len(declarations) == 0 && isPropertyName {
-		if left := node.Parent.Expression(); left != nil {
+		if left := node.Parent().Expression(); left != nil {
 			if prop := c.GetPropertyOfType(c.GetTypeAtLocation(left), node.Text()); prop != nil {
 				declarations = prop.Declarations()
 			}
@@ -245,7 +245,7 @@ func getSourceDefCheckerInfo(
 	var moduleSpecifier string
 	resolveNode := node
 	if isPropertyName {
-		expr := node.Parent.Expression()
+		expr := node.Parent().Expression()
 		for expr != nil && ast.IsAccessExpression(expr) {
 			expr = expr.Expression()
 		}
@@ -331,10 +331,10 @@ func (r *sourceDefResolver) searchImplementationFile(
 }
 
 func isDefaultImportName(node *ast.Node) bool {
-	if node == nil || node.Parent == nil || !ast.IsImportClause(node.Parent) || node.Parent.Name() != node || node.Parent.Parent == nil {
+	if node == nil || node.Parent() == nil || !ast.IsImportClause(node.Parent()) || node.Parent().Name() != node || node.Parent().Parent() == nil {
 		return false
 	}
-	return ast.IsDefaultImport(node.Parent.Parent)
+	return ast.IsDefaultImport(node.Parent().Parent())
 }
 
 func getSourceDefinitionEntryNode(sourceFile *ast.SourceFile) *ast.Node {
@@ -487,7 +487,7 @@ func (r *sourceDefResolver) inferImpliedNodeFormat(fileName tspath.RootedFilePat
 }
 
 func findContainingModuleSpecifier(node *ast.Node) *ast.Node {
-	for current := node; current != nil; current = current.Parent {
+	for current := node; current != nil; current = current.Parent() {
 		if ast.IsAnyImportOrReExport(current) || ast.IsRequireCall(current, true /*requireStringLiteralLikeArgument*/) || ast.IsImportCall(current) {
 			if moduleSpecifier := ast.GetExternalModuleName(current); moduleSpecifier != nil && ast.IsStringLiteralLike(moduleSpecifier) {
 				return moduleSpecifier
@@ -553,7 +553,7 @@ func getCandidateSourceDeclarationNames(originalNode *ast.Node, declaration *ast
 				names = append(names, text)
 			}
 		}
-		if declaration.Kind == ast.KindExportAssignment {
+		if declaration.Kind() == ast.KindExportAssignment {
 			names = append(names, "default")
 		}
 		if (ast.IsFunctionDeclaration(declaration) || ast.IsClassDeclaration(declaration)) && declaration.ModifierFlags()&ast.ModifierFlagsExportDefault == ast.ModifierFlagsExportDefault {
@@ -572,9 +572,9 @@ func getCandidateSourceDeclarationNames(originalNode *ast.Node, declaration *ast
 		if isDefaultImportName(originalNode) {
 			names = append(names, "default")
 		}
-		if originalNode.Parent != nil {
-			if ast.IsImportSpecifier(originalNode.Parent) || ast.IsExportSpecifier(originalNode.Parent) {
-				if propName := originalNode.Parent.PropertyName(); propName != nil {
+		if originalNode.Parent() != nil {
+			if ast.IsImportSpecifier(originalNode.Parent()) || ast.IsExportSpecifier(originalNode.Parent()) {
+				if propName := originalNode.Parent().PropertyName(); propName != nil {
 					names = append(names, propName.Text())
 				}
 			}
@@ -616,7 +616,7 @@ func findDeclarationNodesByName(sourceFile *ast.SourceFile, names []string) []*a
 				}
 			}
 		}
-		if wantDefault && node.Kind == ast.KindExportAssignment {
+		if wantDefault && node.Kind() == ast.KindExportAssignment {
 			matched = true
 		}
 		if wantDefault && (ast.IsFunctionDeclaration(node) || ast.IsClassDeclaration(node)) && node.ModifierFlags()&ast.ModifierFlagsExportDefault == ast.ModifierFlagsExportDefault {
@@ -669,11 +669,11 @@ func filterPreferredSourceDeclarations(originalNode *ast.Node, declarations []*a
 }
 
 func getPropertyLikeSourceDeclarations(originalNode *ast.Node, declarations []*ast.Node) []*ast.Node {
-	if originalNode.Parent == nil || !ast.IsAccessExpression(originalNode.Parent) || originalNode.Parent.Name() != originalNode {
+	if originalNode.Parent() == nil || !ast.IsAccessExpression(originalNode.Parent()) || originalNode.Parent().Name() != originalNode {
 		return nil
 	}
 	return core.Filter(declarations, func(node *ast.Node) bool {
-		switch node.Kind {
+		switch node.Kind() {
 		case ast.KindPropertyAssignment,
 			ast.KindShorthandPropertyAssignment,
 			ast.KindPropertyDeclaration,
@@ -695,13 +695,13 @@ func hasConcreteSourceDeclarations(declarations []*ast.Node) bool {
 }
 
 func isConcreteSourceDeclaration(node *ast.Node) bool {
-	if !ast.IsDeclaration(node) || node.Kind == ast.KindExportAssignment {
+	if !ast.IsDeclaration(node) || node.Kind() == ast.KindExportAssignment {
 		return false
 	}
 	if (ast.IsBinaryExpression(node) || ast.IsCallExpression(node)) && ast.GetAssignmentDeclarationKind(node) != ast.JSDeclarationKindNone {
 		return false
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindParameter,
 		ast.KindTypeParameter,
 		ast.KindBindingElement,
@@ -729,7 +729,7 @@ func uniqueDeclarationNodes(nodes []*ast.Node) []*ast.Node {
 			continue
 		}
 		fileName := ast.GetSourceFileOfNode(node).FileName()
-		key := declarationKey{fileName: fileName, loc: node.Loc}
+		key := declarationKey{fileName: fileName, loc: node.Loc()}
 		if !seen.AddIfAbsent(key) {
 			continue
 		}
@@ -740,8 +740,8 @@ func uniqueDeclarationNodes(nodes []*ast.Node) []*ast.Node {
 
 func findClosestDeclarationNode(sourceFile *ast.SourceFile, pos int) *ast.Node {
 	node := astnav.GetTouchingPropertyName(sourceFile, pos)
-	for current := node; current != nil; current = current.Parent {
-		if ast.IsDeclaration(current) || current.Kind == ast.KindExportAssignment {
+	for current := node; current != nil; current = current.Parent() {
+		if ast.IsDeclaration(current) || current.Kind() == ast.KindExportAssignment {
 			return current
 		}
 	}

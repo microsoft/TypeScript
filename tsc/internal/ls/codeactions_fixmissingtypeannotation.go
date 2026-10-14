@@ -300,7 +300,7 @@ func (f *isolatedDeclarationsFixer) createNamespaceForExpandoProperties(expandoF
 		factory.NewModuleBlock(factory.NewNodeList(newProperties)),
 	)
 	// Set the flags for namespace
-	namespace.Flags = ast.NodeFlagsAmbient | ast.NodeFlagsExportContext | ast.NodeFlagsContextFlags
+	namespace.SetFlags(ast.NodeFlagsAmbient | ast.NodeFlagsExportContext | ast.NodeFlagsContextFlags)
 
 	f.changeTracker.InsertNodeAfter(f.sourceFile, expandoFunc, namespace)
 	return diagnostics.Annotate_types_of_properties_expando_function_in_a_namespace.Localize(f.locale)
@@ -329,7 +329,7 @@ func (f *isolatedDeclarationsFixer) addInlineAssertion(span core.TextRange) stri
 	}
 
 	targetNode := findBestFittingNode(nodeWithDiag, span)
-	if targetNode == nil || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.Parent) {
+	if targetNode == nil || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.Parent()) {
 		return ""
 	}
 
@@ -406,7 +406,7 @@ func (f *isolatedDeclarationsFixer) addInlineAssertion(span core.TextRange) stri
 func (f *isolatedDeclarationsFixer) extractAsVariable(span core.TextRange) string {
 	nodeWithDiag := astnav.GetTokenAtPosition(f.sourceFile, span.Pos())
 	targetNode := findBestFittingNode(nodeWithDiag, span)
-	if targetNode == nil || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.Parent) {
+	if targetNode == nil || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.Parent()) {
 		return ""
 	}
 
@@ -427,7 +427,7 @@ func (f *isolatedDeclarationsFixer) extractAsVariable(span core.TextRange) strin
 	parentPropertyAssignment := ast.FindAncestorKind(targetNode, ast.KindPropertyAssignment)
 	if parentPropertyAssignment != nil {
 		// Identifiers or entity names can already be typeof-ed
-		if parentPropertyAssignment == targetNode.Parent && ast.IsEntityNameExpression(targetNode) {
+		if parentPropertyAssignment == targetNode.Parent() && ast.IsEntityNameExpression(targetNode) {
 			return ""
 		}
 
@@ -438,9 +438,9 @@ func (f *isolatedDeclarationsFixer) extractAsVariable(span core.TextRange) strin
 
 		// Handle spread elements: walk up to the spread's parent and handle const assertions
 		if ast.IsSpreadElement(replacementTarget) {
-			replacementTarget = ast.WalkUpParenthesizedExpressions(replacementTarget.Parent)
-			if isConstAssertion(replacementTarget.Parent) {
-				replacementTarget = replacementTarget.Parent
+			replacementTarget = ast.WalkUpParenthesizedExpressions(replacementTarget.Parent())
+			if isConstAssertion(replacementTarget.Parent()) {
+				replacementTarget = replacementTarget.Parent()
 				initializationNode = replacementTarget
 			} else {
 				constRef := factory.NewTypeReferenceNode(factory.NewIdentifier("const"), nil)
@@ -523,7 +523,7 @@ func findExpandoFunction(ch *checker.Checker, node *ast.Node) *ast.Node {
 	properties := ch.GetPropertiesOfType(targetType)
 	found := false
 	for _, p := range properties {
-		if p.ValueDeclaration() == expandoDeclaration || p.ValueDeclaration() == expandoDeclaration.Parent {
+		if p.ValueDeclaration() == expandoDeclaration || p.ValueDeclaration() == expandoDeclaration.Parent() {
 			found = true
 			break
 		}
@@ -538,8 +538,8 @@ func findExpandoFunction(ch *checker.Checker, node *ast.Node) *ast.Node {
 	}
 
 	fn := symbol.ValueDeclaration()
-	if (ast.IsFunctionExpression(fn) || ast.IsArrowFunction(fn)) && ast.IsVariableDeclaration(fn.Parent) {
-		return fn.Parent
+	if (ast.IsFunctionExpression(fn) || ast.IsArrowFunction(fn)) && ast.IsVariableDeclaration(fn.Parent()) {
+		return fn.Parent()
 	}
 	if ast.IsFunctionDeclaration(fn) {
 		return fn
@@ -555,7 +555,7 @@ func (f *isolatedDeclarationsFixer) fixIsolatedDeclarationError(node *ast.Node) 
 	}
 	f.fixedNodes[node] = true
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindParameter, ast.KindPropertyDeclaration, ast.KindVariableDeclaration:
 		return f.addTypeToVariableLike(node)
 	case ast.KindArrowFunction, ast.KindFunctionExpression, ast.KindFunctionDeclaration,
@@ -663,11 +663,11 @@ func (f *isolatedDeclarationsFixer) transformExtendsClauseWithExpression(classDe
 }
 
 func (f *isolatedDeclarationsFixer) transformDestructuringPatterns(bindingPattern *ast.Node) string {
-	enclosingVariableDeclaration := bindingPattern.Parent
+	enclosingVariableDeclaration := bindingPattern.Parent()
 	if !ast.IsVariableDeclaration(enclosingVariableDeclaration) {
 		return ""
 	}
-	enclosingVarStmt := enclosingVariableDeclaration.Parent.Parent
+	enclosingVarStmt := enclosingVariableDeclaration.Parent().Parent()
 	if !ast.IsVariableStatement(enclosingVarStmt) {
 		return ""
 	}
@@ -718,7 +718,7 @@ func (f *isolatedDeclarationsFixer) transformDestructuringPatterns(bindingPatter
 				factory.UpdateVariableDeclarationList(
 					declList,
 					factory.NewNodeList(remainingDecls),
-					declList.Flags,
+					declList.Flags(),
 				),
 			))
 		}
@@ -1269,8 +1269,8 @@ func (f *isolatedDeclarationsFixer) addTypeToVariableLike(decl *ast.Node) string
 		// Parenthesize paren-less arrow function parameters (`x => ...`) so the inserted `: T`
 		// produces `(x: T) => ...` instead of the invalid `x: T => ...`. Queued after the type
 		// annotation so that the `)` edit at param.End() sorts after the annotation insertion.
-		if ast.IsParameterDeclaration(decl) && decl.Parent != nil && ast.IsArrowFunction(decl.Parent) {
-			f.changeTracker.ParenthesizeArrowParameters(f.sourceFile, decl.Parent)
+		if ast.IsParameterDeclaration(decl) && decl.Parent() != nil && ast.IsArrowFunction(decl.Parent()) {
+			f.changeTracker.ParenthesizeArrowParameters(f.sourceFile, decl.Parent())
 		}
 	}
 	return diagnostics.Add_annotation_of_type_0.Localize(f.locale, typeToStringForDiag(typeNode, f.sourceFile, f.changeTracker))
@@ -1305,11 +1305,11 @@ func typeToStringForDiag(typeNode *ast.Node, sourceFile *ast.SourceFile, ct *cha
 // can have a type annotation and is missing one.
 func findAncestorWithMissingType(node *ast.Node) *ast.Node {
 	return ast.FindAncestor(node, func(n *ast.Node) bool {
-		if !canHaveTypeAnnotationKinds[n.Kind] {
+		if !canHaveTypeAnnotationKinds[n.Kind()] {
 			return false
 		}
 		if ast.IsObjectBindingPattern(n) || ast.IsArrayBindingPattern(n) {
-			return ast.IsVariableDeclaration(n.Parent)
+			return ast.IsVariableDeclaration(n.Parent())
 		}
 		return true
 	})
@@ -1321,16 +1321,16 @@ func findBestFittingNode(node *ast.Node, span core.TextRange) *ast.Node {
 		return nil
 	}
 	for node != nil && node.End() < span.Pos()+span.Len() {
-		node = node.Parent
+		node = node.Parent()
 	}
-	for node.Parent != nil && node.Parent.Pos() == node.Pos() && node.Parent.End() == node.End() {
-		node = node.Parent
+	for node.Parent() != nil && node.Parent().Pos() == node.Pos() && node.Parent().End() == node.End() {
+		node = node.Parent()
 	}
-	if ast.IsIdentifier(node) && ast.HasInitializer(node.Parent) && node.Parent.Initializer() != nil {
-		return node.Parent.Initializer()
+	if ast.IsIdentifier(node) && ast.HasInitializer(node.Parent()) && node.Parent().Initializer() != nil {
+		return node.Parent().Initializer()
 	}
-	if ast.IsIdentifier(node) && ast.IsShorthandPropertyAssignment(node.Parent) {
-		return node.Parent
+	if ast.IsIdentifier(node) && ast.IsShorthandPropertyAssignment(node.Parent()) {
+		return node.Parent()
 	}
 	return node
 }
@@ -1339,7 +1339,7 @@ func findBestFittingNode(node *ast.Node, span core.TextRange) *ast.Node {
 // Go's IsDeclaration returns true for any node with DeclarationData (including CallExpression),
 // while TS's isDeclaration only returns true for specific named declaration kinds.
 func isNamedDeclarationKind(node *ast.Node) bool {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindArrowFunction, ast.KindBindingElement, ast.KindClassDeclaration, ast.KindClassExpression,
 		ast.KindClassStaticBlockDeclaration, ast.KindConstructor, ast.KindEnumDeclaration, ast.KindEnumMember,
 		ast.KindExportSpecifier, ast.KindFunctionDeclaration, ast.KindFunctionExpression,

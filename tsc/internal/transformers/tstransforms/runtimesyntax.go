@@ -52,7 +52,7 @@ func (tx *RuntimeSyntaxTransformer) popNode(grandparentNode *ast.Node) {
 func (tx *RuntimeSyntaxTransformer) pushScope(node *ast.Node) (savedCurrentScope *ast.Node, savedCurrentScopeFirstDeclarationsOfName map[string]*ast.Node) {
 	savedCurrentScope = tx.currentScope
 	savedCurrentScopeFirstDeclarationsOfName = tx.currentScopeFirstDeclarationsOfName
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindSourceFile:
 		tx.currentScope = node
 		tx.currentSourceFile = node
@@ -87,7 +87,7 @@ func (tx *RuntimeSyntaxTransformer) visit(node *ast.Node) *ast.Node {
 		return node
 	}
 
-	switch node.Kind {
+	switch node.Kind() {
 	// TypeScript parameter property modifiers are elided
 	case ast.KindPublicKeyword,
 		ast.KindPrivateKeyword,
@@ -110,17 +110,17 @@ func (tx *RuntimeSyntaxTransformer) visit(node *ast.Node) *ast.Node {
 	case ast.KindVariableStatement:
 		node = tx.visitVariableStatement(node.AsVariableStatement())
 	case ast.KindExportDeclaration, ast.KindImportDeclaration, ast.KindImportClause:
-		if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind != ast.KindBlock {
+		if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind() != ast.KindBlock {
 			// do not emit ES6 imports and exports since they are illegal inside a namespace
 			node = nil
 		} else {
 			node = tx.Visitor().VisitEachChild(node)
 		}
 	case ast.KindImportEqualsDeclaration:
-		if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind != ast.KindBlock && node.AsImportEqualsDeclaration().ModuleReference.Kind == ast.KindExternalModuleReference {
+		if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind() != ast.KindBlock && node.AsImportEqualsDeclaration().ModuleReference.Kind() == ast.KindExternalModuleReference {
 			// do not emit ES6 imports and exports since they are illegal inside a namespace
 			node = nil
-		} else if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind == ast.KindBlock && node.AsImportEqualsDeclaration().ModuleReference.Kind != ast.KindExternalModuleReference {
+		} else if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind() == ast.KindBlock && node.AsImportEqualsDeclaration().ModuleReference.Kind() != ast.KindExternalModuleReference {
 			// inside a block within a namespace, elide internal import aliases
 			node = nil
 		} else {
@@ -138,7 +138,7 @@ func (tx *RuntimeSyntaxTransformer) visit(node *ast.Node) *ast.Node {
 
 // Records that a declaration was emitted in the current scope, if it was the first declaration for the provided symbol.
 func (tx *RuntimeSyntaxTransformer) recordDeclarationInScope(node *ast.Node) {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindVariableStatement:
 		tx.recordDeclarationInScope(node.AsVariableStatement().DeclarationList)
 		return
@@ -182,13 +182,13 @@ func (tx *RuntimeSyntaxTransformer) isFirstDeclarationInScope(node *ast.Node) bo
 }
 
 func (tx *RuntimeSyntaxTransformer) isExportOfNamespace(node *ast.Node) bool {
-	return tx.currentNamespace != nil && (tx.currentScope == nil || tx.currentScope.Kind != ast.KindBlock) && node.ModifierFlags()&ast.ModifierFlagsExport != 0
+	return tx.currentNamespace != nil && (tx.currentScope == nil || tx.currentScope.Kind() != ast.KindBlock) && node.ModifierFlags()&ast.ModifierFlagsExport != 0
 }
 
 // Gets an expression that represents a property name, such as `"foo"` for the identifier `foo`.
 func (tx *RuntimeSyntaxTransformer) getExpressionForPropertyName(member *ast.EnumMember) *ast.Expression {
 	name := member.Name()
-	switch name.Kind {
+	switch name.Kind() {
 	case ast.KindPrivateIdentifier:
 		return tx.Factory().NewIdentifier("")
 	case ast.KindComputedPropertyName:
@@ -263,9 +263,9 @@ func (tx *RuntimeSyntaxTransformer) addVarForDeclaration(statements []*ast.State
 
 	// Adjust the source map emit to match the old emitter.
 	if ast.IsEnumDeclaration(node) {
-		tx.EmitContext().SetSourceMapRange(varDecls, node.Loc)
+		tx.EmitContext().SetSourceMapRange(varDecls, node.Loc())
 	} else {
-		tx.EmitContext().SetSourceMapRange(varStatement, node.Loc)
+		tx.EmitContext().SetSourceMapRange(varStatement, node.Loc())
 	}
 
 	// Trailing comments for enum declaration should be emitted after the function closure
@@ -284,7 +284,7 @@ func (tx *RuntimeSyntaxTransformer) addVarForDeclaration(statements []*ast.State
 	//         E[E["A"] = 0] = "A";
 	//     })(E || (E = {})); // trailing comment
 	//
-	tx.EmitContext().SetCommentRange(varStatement, node.Loc)
+	tx.EmitContext().SetCommentRange(varStatement, node.Loc())
 	tx.EmitContext().AddEmitFlags(varStatement, printer.EFNoTrailingComments)
 	statements = append(statements, varStatement)
 
@@ -329,7 +329,7 @@ func (tx *RuntimeSyntaxTransformer) visitEnumDeclaration(node *ast.EnumDeclarati
 
 	// (function (name) { ... })(name || (name = {}))
 	enumParamName := tx.Factory().NewGeneratedNameForNode(node.AsNode())
-	tx.EmitContext().SetSourceMapRange(enumParamName, node.Name().Loc)
+	tx.EmitContext().SetSourceMapRange(enumParamName, node.Name().Loc())
 
 	enumParam := tx.Factory().NewParameterDeclaration(nil, nil, enumParamName, nil, nil, nil)
 	enumBody := tx.transformEnumBody(node)
@@ -471,7 +471,7 @@ func (tx *RuntimeSyntaxTransformer) visitModuleDeclaration(node *ast.ModuleDecla
 
 	// (function (name) { ... })(name || (name = {}))
 	moduleParamName := tx.Factory().NewGeneratedNameForNode(node.AsNode())
-	tx.EmitContext().SetSourceMapRange(moduleParamName, node.Name().Loc)
+	tx.EmitContext().SetSourceMapRange(moduleParamName, node.Name().Loc())
 
 	moduleParam := tx.Factory().NewParameterDeclaration(nil, nil, moduleParamName, nil, nil, nil)
 	moduleBody := tx.transformModuleBody(node, tx.getNamespaceContainerName(node.AsNode()))
@@ -498,13 +498,13 @@ func (tx *RuntimeSyntaxTransformer) transformModuleBody(node *ast.ModuleDeclarat
 	var statementsLocation core.TextRange
 	var blockLocation core.TextRange
 	if node.Body != nil {
-		if node.Body.Kind == ast.KindModuleBlock {
+		if node.Body.Kind() == ast.KindModuleBlock {
 			// visit the children of `node` in advance to capture any references to namespace members
 			node = tx.Visitor().VisitEachChild(node.AsNode()).AsModuleDeclaration()
 			body := node.Body.AsModuleBlock()
 			statements = body.Statements.Nodes
 			statementsLocation = body.Statements.Loc
-			blockLocation = body.Loc
+			blockLocation = body.Loc()
 		} else { // node.Body.Kind == ast.KindModuleDeclaration
 			// !!! Strada didn't do this; why?
 			// tx.currentScope = node.AsNode()
@@ -522,7 +522,7 @@ func (tx *RuntimeSyntaxTransformer) transformModuleBody(node *ast.ModuleDeclarat
 	statementList := tx.Factory().NewNodeList(statements)
 	statementList.Loc = statementsLocation
 	block := tx.Factory().NewBlock(statementList, true /*multiline*/)
-	block.Loc = blockLocation
+	block.SetLoc(blockLocation)
 
 	//  namespace hello.hi.world {
 	//       function foo() {}
@@ -545,14 +545,14 @@ func (tx *RuntimeSyntaxTransformer) transformModuleBody(node *ast.ModuleDeclarat
 	//  })(hello || (hello = {}));
 	//
 	// We only want to emit comment on the namespace which contains block body itself, not the containing namespaces.
-	if node.Body == nil || node.Body.Kind != ast.KindModuleBlock {
+	if node.Body == nil || node.Body.Kind() != ast.KindModuleBlock {
 		tx.EmitContext().AddEmitFlags(block, printer.EFNoComments)
 	}
 	return block
 }
 
 func (tx *RuntimeSyntaxTransformer) visitImportEqualsDeclaration(node *ast.ImportEqualsDeclaration) *ast.Node {
-	if node.ModuleReference.Kind == ast.KindExternalModuleReference {
+	if node.ModuleReference.Kind() == ast.KindExternalModuleReference {
 		return tx.Visitor().VisitEachChild(node.AsNode())
 	}
 
@@ -571,8 +571,8 @@ func (tx *RuntimeSyntaxTransformer) visitImportEqualsDeclaration(node *ast.Impor
 		return varStatement
 	} else {
 		// exports.${name} = ${moduleReference};
-		statement := tx.createExportStatement(node.Name(), moduleReference, node.Loc, node.Loc, node.AsNode())
-		statement.Loc = node.Loc
+		statement := tx.createExportStatement(node.Name(), moduleReference, node.Loc(), node.Loc(), node.AsNode())
+		statement.SetLoc(node.Loc())
 		return statement
 	}
 }
@@ -627,7 +627,7 @@ func (tx *RuntimeSyntaxTransformer) createNamespaceExportExpression(exportName *
 	memberName := tx.getNamespaceQualifiedProperty(tx.getNamespaceContainerName(tx.currentNamespace), exportName)
 	expression := tx.Factory().NewAssignmentExpression(memberName, exportValue)
 	if location != nil {
-		expression.Loc = *location
+		expression.SetLoc(*location)
 	}
 	return expression
 }
@@ -787,11 +787,11 @@ func (tx *RuntimeSyntaxTransformer) visitConstructorBody(body *ast.Block, constr
 	for _, parameter := range parameterProperties {
 		if ast.IsIdentifier(parameter.Name()) {
 			propertyName := parameter.Name().Clone(tx.Factory())
-			propertyName.Parent = parameter.Name().Parent //nolint:customlint // .Parent set to get node to printback using text from original file instead of processed text; TODO: this should be achievable via EmitFlags instead
+			propertyName.SetParent(parameter.Name().Parent()) //nolint:customlint // .Parent set to get node to printback using text from original file instead of processed text; TODO: this should be achievable via EmitFlags instead
 			tx.EmitContext().AddEmitFlags(propertyName, printer.EFNoComments|printer.EFNoSourceMap)
 
 			localName := parameter.Name().Clone(tx.Factory())
-			localName.Parent = parameter.Name().Parent //nolint:customlint // .Parent set to get node to printback using text from original file instead of processed text; TODO: this should be achievable via EmitFlags instead
+			localName.SetParent(parameter.Name().Parent()) //nolint:customlint // .Parent set to get node to printback using text from original file instead of processed text; TODO: this should be achievable via EmitFlags instead
 			tx.EmitContext().AddEmitFlags(localName, printer.EFNoComments)
 
 			parameterProperty := tx.Factory().NewExpressionStatement(
@@ -828,7 +828,7 @@ func (tx *RuntimeSyntaxTransformer) visitConstructorBody(body *ast.Block, constr
 	tx.popNode(grandparentOfBody)
 	updated := tx.Factory().NewBlock(statementList /*multiline*/, true)
 	tx.EmitContext().SetOriginal(updated, body.AsNode())
-	updated.Loc = body.Loc
+	updated.SetLoc(body.Loc())
 	return updated
 }
 
@@ -905,7 +905,7 @@ func (tx *RuntimeSyntaxTransformer) visitShorthandPropertyAssignment(node *ast.S
 		}
 
 		updated := tx.Factory().NewPropertyAssignment(nil /*modifiers*/, node.Name(), nil /*postfixToken*/, nil /*typeNode*/, expression)
-		updated.Loc = node.Loc
+		updated.SetLoc(node.Loc())
 		tx.EmitContext().SetOriginal(updated, node.AsNode())
 		tx.EmitContext().AssignCommentAndSourceMapRanges(updated, node.AsNode())
 		return updated
@@ -950,14 +950,14 @@ func (tx *RuntimeSyntaxTransformer) createExportStatementForDeclaration(node *as
 	exportName := tx.Factory().GetExternalModuleOrNamespaceExportName(tx.getNamespaceContainerName(tx.currentNamespace), node, false /*allowComments*/, true /*allowSourceMaps*/)
 	localName := tx.Factory().GetLocalName(node)
 	expression := tx.Factory().NewAssignmentExpression(exportName, localName)
-	exportAssignmentSourceMapRange := node.Loc
+	exportAssignmentSourceMapRange := node.Loc()
 	if node.Name() != nil {
 		exportAssignmentSourceMapRange = exportAssignmentSourceMapRange.WithPos(node.Name().Pos())
 	}
 	tx.EmitContext().SetSourceMapRange(expression, exportAssignmentSourceMapRange)
 
 	statement := tx.Factory().NewExpressionStatement(expression)
-	exportStatementSourceMapRange := node.Loc.WithPos(-1)
+	exportStatementSourceMapRange := node.Loc().WithPos(-1)
 	tx.EmitContext().SetSourceMapRange(statement, exportStatementSourceMapRange)
 	return statement
 }
@@ -991,7 +991,7 @@ func (tx *RuntimeSyntaxTransformer) shouldEmitModuleDeclaration(node *ast.Module
 }
 
 func getInnermostModuleDeclarationFromDottedModule(moduleDeclaration *ast.ModuleDeclaration) *ast.ModuleDeclaration {
-	for moduleDeclaration.Body != nil && moduleDeclaration.Body.Kind == ast.KindModuleDeclaration {
+	for moduleDeclaration.Body != nil && moduleDeclaration.Body.Kind() == ast.KindModuleDeclaration {
 		moduleDeclaration = moduleDeclaration.Body.AsModuleDeclaration()
 	}
 	return moduleDeclaration

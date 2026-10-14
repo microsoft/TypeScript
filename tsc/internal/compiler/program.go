@@ -480,7 +480,7 @@ func (p *Program) canReplaceFileInProgram(file1 *ast.SourceFile, file2 *ast.Sour
 		slices.EqualFunc(file1.Imports(), file2.Imports(), func(n1 *ast.Node, n2 *ast.Node) bool {
 			return equalModuleSpecifiers(n1, n2) &&
 				p.GetModeForUsageLocation(file1, n1) == p.GetModeForUsageLocation(file2, n2) &&
-				ast.IsSourcePhaseImport(n1.Parent) == ast.IsSourcePhaseImport(n2.Parent)
+				ast.IsSourcePhaseImport(n1.Parent()) == ast.IsSourcePhaseImport(n2.Parent())
 		}) &&
 		slices.EqualFunc(file1.ModuleAugmentations, file2.ModuleAugmentations, equalModuleAugmentationNames) &&
 		slices.Equal(file1.AmbientModuleNames, file2.AmbientModuleNames) &&
@@ -514,11 +514,11 @@ func (p *Program) jsxRuntimeImportSpecifier(file *ast.SourceFile) string {
 }
 
 func equalModuleSpecifiers(n1 *ast.Node, n2 *ast.Node) bool {
-	return n1.Kind == n2.Kind && (!ast.IsStringLiteral(n1) || n1.Text() == n2.Text())
+	return n1.Kind() == n2.Kind() && (!ast.IsStringLiteral(n1) || n1.Text() == n2.Text())
 }
 
 func equalModuleAugmentationNames(n1 *ast.Node, n2 *ast.Node) bool {
-	return n1.Kind == n2.Kind && n1.Text() == n2.Text()
+	return n1.Kind() == n2.Kind() && n1.Text() == n2.Text()
 }
 
 func equalFileReferences(f1 *ast.FileReference, f2 *ast.FileReference) bool {
@@ -658,7 +658,7 @@ func (p *Program) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, mod
 	if !ast.IsStringLiteralLike(moduleSpecifier) {
 		panic("moduleSpecifier must be a StringLiteralLike")
 	}
-	if ast.IsSourcePhaseImport(moduleSpecifier.Parent) {
+	if ast.IsSourcePhaseImport(moduleSpecifier.Parent()) {
 		return nil
 	}
 	mode := p.GetModeForUsageLocation(file, moduleSpecifier)
@@ -799,10 +799,10 @@ func getAdditionalJSSyntacticDiagnostics(file *ast.SourceFile, options *core.Com
 		if node.SubtreeFacts()&ast.SubtreeContainsDecorators == 0 {
 			return false
 		}
-		if node.Kind == ast.KindParameter && ast.HasDecorators(node) {
+		if node.Kind() == ast.KindParameter && ast.HasDecorators(node) {
 			decorator := core.Find(node.ModifierNodes(), ast.IsDecorator)
 			if decorator != nil {
-				diags = append(diags, ast.NewDiagnostic(file, decorator.Loc, diagnostics.Decorators_are_not_valid_here))
+				diags = append(diags, ast.NewDiagnostic(file, decorator.Loc(), diagnostics.Decorators_are_not_valid_here))
 			}
 		}
 		node.ForEachChild(walk)
@@ -1797,7 +1797,7 @@ func (p *Program) GetModeForResolutionAtIndex(sourceFile *ast.SourceFile, index 
 	}
 	index -= len(imports)
 	for _, augmentation := range sourceFile.ModuleAugmentations {
-		if augmentation.Kind == ast.KindStringLiteral {
+		if augmentation.Kind() == ast.KindStringLiteral {
 			if index == 0 {
 				return p.GetModeForUsageLocation(sourceFile, augmentation)
 			}
@@ -2273,7 +2273,7 @@ func (p *Program) collectPackageNames() *packageNamesInfo {
 				continue
 			}
 			for _, imp := range file.Imports() {
-				if ast.IsSourcePhaseImport(imp.Parent) || tspath.IsExternalModuleNameRelative(imp.Text()) {
+				if ast.IsSourcePhaseImport(imp.Parent()) || tspath.IsExternalModuleNameRelative(imp.Text()) {
 					continue
 				}
 				if resolvedModules, ok := p.resolvedModules[file.PathKey()]; ok {

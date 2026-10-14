@@ -220,7 +220,7 @@ func getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker *
 		if typeChecker.IsArgumentsSymbol(symbol) {
 			return ScriptElementKindLocalVariableElement
 		}
-		if location.Kind == ast.KindThisKeyword && ast.IsExpression(location) ||
+		if location.Kind() == ast.KindThisKeyword && ast.IsExpression(location) ||
 			ast.IsThisInTypeQuery(location) {
 			return ScriptElementKindParameterElement
 		}
@@ -321,19 +321,19 @@ func isLocalVariableOrFunction(symbol *ast.Symbol) bool {
 
 	for _, decl := range symbol.Declarations() {
 		// Function expressions are local
-		if decl.Kind == ast.KindFunctionExpression {
+		if decl.Kind() == ast.KindFunctionExpression {
 			return true
 		}
 
-		if decl.Kind != ast.KindVariableDeclaration && decl.Kind != ast.KindFunctionDeclaration {
+		if decl.Kind() != ast.KindVariableDeclaration && decl.Kind() != ast.KindFunctionDeclaration {
 			continue
 		}
 
 		// If the parent is not source file or module block, it is a local variable.
-		parent := decl.Parent
-		for ; !ast.IsFunctionBlock(parent); parent = parent.Parent {
+		parent := decl.Parent()
+		for ; !ast.IsFunctionBlock(parent); parent = parent.Parent() {
 			// Reached source file or module block
-			if parent.Kind == ast.KindSourceFile || parent.Kind == ast.KindModuleBlock {
+			if parent.Kind() == ast.KindSourceFile || parent.Kind() == ast.KindModuleBlock {
 				break
 			}
 		}
@@ -427,10 +427,10 @@ func getNodeModifiers(typeChecker *checker.Checker, node *ast.Node, excludeFlags
 	if flags&ast.ModifierFlagsAmbient != 0 {
 		result |= ScriptElementKindModifierAmbient
 	}
-	if node.Flags&ast.NodeFlagsAmbient != 0 {
+	if node.Flags()&ast.NodeFlagsAmbient != 0 {
 		result |= ScriptElementKindModifierAmbient
 	}
-	if node.Kind == ast.KindExportAssignment {
+	if node.Kind() == ast.KindExportAssignment {
 		result |= ScriptElementKindModifierExported
 	}
 

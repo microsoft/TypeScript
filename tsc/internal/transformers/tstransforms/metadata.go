@@ -36,7 +36,7 @@ func (tx *MetadataTransformer) visit(node *ast.Node) *ast.Node {
 		return node
 	}
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindClassDeclaration:
 		return tx.visitClassDeclaration(node.AsClassDeclaration())
 	case ast.KindClassExpression:
@@ -211,9 +211,9 @@ func (tx *MetadataTransformer) injectClassTypeMetadata(list *ast.ModifierList, n
 			return res
 		}
 		var modifiersArray []*ast.Node
-		if ast.IsModifier(originalNodes[0]) && (originalNodes[0].Kind == ast.KindDefaultKeyword || originalNodes[0].Kind == ast.KindExportKeyword) {
+		if ast.IsModifier(originalNodes[0]) && (originalNodes[0].Kind() == ast.KindDefaultKeyword || originalNodes[0].Kind() == ast.KindExportKeyword) {
 			modifiersArray = append(modifiersArray, originalNodes[0])
-			if len(originalNodes) > 1 && (originalNodes[1].Kind == ast.KindDefaultKeyword || originalNodes[1].Kind == ast.KindExportKeyword) {
+			if len(originalNodes) > 1 && (originalNodes[1].Kind() == ast.KindDefaultKeyword || originalNodes[1].Kind() == ast.KindExportKeyword) {
 				modifiersArray = append(modifiersArray, originalNodes[1])
 			}
 		}
@@ -364,7 +364,7 @@ func (tx *MetadataTransformer) getNewTypeMetadata(node *ast.Node, container *ast
 * @param node The node to test.
  */
 func (tx *MetadataTransformer) shouldAddTypeMetadata(node *ast.Node) bool {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindPropertyDeclaration:
 		return true
 	}
@@ -379,7 +379,7 @@ func (tx *MetadataTransformer) shouldAddTypeMetadata(node *ast.Node) bool {
 * @param node The node to test.
  */
 func (tx *MetadataTransformer) shouldAddReturnTypeMetadata(node *ast.Node) bool {
-	return node.Kind == ast.KindMethodDeclaration
+	return node.Kind() == ast.KindMethodDeclaration
 }
 
 /**
@@ -390,7 +390,7 @@ func (tx *MetadataTransformer) shouldAddReturnTypeMetadata(node *ast.Node) bool 
 * @param node The node to test.
  */
 func (tx *MetadataTransformer) shouldAddParamTypesMetadata(node *ast.Node) bool {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindClassDeclaration, ast.KindClassExpression:
 		return ast.GetFirstConstructorWithBody(node) != nil
 	case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:

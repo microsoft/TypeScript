@@ -138,8 +138,8 @@ func TestBuildNodeIndexTableMatchesEncode(t *testing.T) {
 		}
 		encIdx := encodeTable.GetIndex(node)
 		buildIdx := buildTable.GetIndex(node)
-		assert.Equal(t, encIdx, uint32(i), "encodeTable.GetIndex mismatch at index %d, node kind=%s", i, node.Kind.String())
-		assert.Equal(t, buildIdx, encIdx, "buildTable.GetIndex mismatch for node kind=%s", node.Kind.String())
+		assert.Equal(t, encIdx, uint32(i), "encodeTable.GetIndex mismatch at index %d, node kind=%s", i, node.Kind().String())
+		assert.Equal(t, buildIdx, encIdx, "buildTable.GetIndex mismatch for node kind=%s", node.Kind().String())
 	}
 }
 

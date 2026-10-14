@@ -104,11 +104,11 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 					existingFakeScope = b.ctx.enclosingDeclaration
 				}
 			}
-			if existingFakeScope == nil && b.ctx.enclosingDeclaration.Parent != nil {
-				if b.links.Has(b.ctx.enclosingDeclaration.Parent) {
-					links := b.links.Get(b.ctx.enclosingDeclaration.Parent)
+			if existingFakeScope == nil && b.ctx.enclosingDeclaration.Parent() != nil {
+				if b.links.Has(b.ctx.enclosingDeclaration.Parent()) {
+					links := b.links.Get(b.ctx.enclosingDeclaration.Parent())
 					if links.fakeScopeForSignatureDeclaration != nil && *links.fakeScopeForSignatureDeclaration == kind {
-						existingFakeScope = b.ctx.enclosingDeclaration.Parent
+						existingFakeScope = b.ctx.enclosingDeclaration.Parent()
 					}
 				}
 			}
@@ -143,7 +143,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 				b.links.Get(fakeScope).fakeScopeForSignatureDeclaration = &kind
 				data := fakeScope.LocalsContainerData()
 				data.Locals = locals
-				fakeScope.Parent = b.ctx.enclosingDeclaration
+				fakeScope.SetParent(b.ctx.enclosingDeclaration)
 				b.ctx.enclosingDeclaration = fakeScope
 				return nil
 			} else {
@@ -183,7 +183,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 
 						bindPatternWorker := func(p *ast.BindingPattern) {
 							for _, e := range p.Elements.Nodes {
-								switch e.Kind {
+								switch e.Kind() {
 								case ast.KindOmittedExpression:
 									return
 								case ast.KindBindingElement:

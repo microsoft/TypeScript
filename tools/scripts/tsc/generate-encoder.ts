@@ -368,7 +368,7 @@ function generateGoEncoder(): string {
 function generateGoGetNodeDataType(w: CodeWriter) {
     w.write("func getNodeDataType(node *ast.Node) uint32 {");
     w.push();
-    w.write("switch node.Kind {");
+    w.write("switch node.Kind() {");
 
     const stringKinds: string[] = [];
     const extendedKinds: string[] = [];
@@ -411,7 +411,7 @@ function generateGoGetNodeDataType(w: CodeWriter) {
 function generateGoGetChildrenPropertyMask(w: CodeWriter) {
     w.write("func getChildrenPropertyMask(node *ast.Node) uint8 {");
     w.push();
-    w.write("switch node.Kind {");
+    w.write("switch node.Kind() {");
 
     for (const node of api.nodes()) {
         const info = analyzeNode(node);
@@ -461,7 +461,7 @@ function generateGoGetChildrenPropertyMask(w: CodeWriter) {
 function generateGoGetNodeCommonData(w: CodeWriter) {
     w.write("func getNodeCommonData(node *ast.Node) uint32 {");
     w.push();
-    w.write("switch node.Kind {");
+    w.write("switch node.Kind() {");
 
     for (const node of api.nodes()) {
         const info = analyzeNode(node);
@@ -527,7 +527,7 @@ function generateGoGetNodeCommonData(w: CodeWriter) {
 function generateGoRecordNodeStrings(w: CodeWriter) {
     w.write("func recordNodeStrings(node *ast.Node, strs *stringTable) uint32 {");
     w.push();
-    w.write("switch node.Kind {");
+    w.write("switch node.Kind() {");
 
     for (const node of api.nodes()) {
         const info = analyzeNode(node);
@@ -541,13 +541,13 @@ function generateGoRecordNodeStrings(w: CodeWriter) {
 
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
-        w.write(`return strs.add(${textAccess}, node.Kind, node.Pos(), node.End())`);
+        w.write(`return strs.add(${textAccess}, node.Kind(), node.Pos(), node.End())`);
         w.pop();
     }
 
     w.write("default:");
     w.push();
-    w.write(`panic(fmt.Sprintf("Unexpected node kind %v", node.Kind))`);
+    w.write(`panic(fmt.Sprintf("Unexpected node kind %v", node.Kind()))`);
     w.pop();
     w.write("}");
     w.pop();
@@ -559,7 +559,7 @@ function generateGoRecordExtendedData(w: CodeWriter) {
     w.write("func recordExtendedData(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) uint32 {");
     w.push();
     w.write("offset := uint32(len(*extendedData))");
-    w.write("switch node.Kind {");
+    w.write("switch node.Kind() {");
 
     for (const node of api.nodes()) {
         const info = analyzeNode(node);
@@ -575,7 +575,7 @@ function generateGoRecordExtendedData(w: CodeWriter) {
 
     w.write("default:");
     w.push();
-    w.write(`panic(fmt.Sprintf("unknown extended data node kind %v", node.Kind))`);
+    w.write(`panic(fmt.Sprintf("unknown extended data node kind %v", node.Kind()))`);
     w.pop();
     w.write("}");
     w.write("return offset");

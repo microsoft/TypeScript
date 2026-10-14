@@ -62,7 +62,7 @@ type anonymousFunctionDefinition = ast.Node // ClassExpression | FunctionExpress
 // See https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
 func isAnonymousFunctionDefinition(emitContext *printer.EmitContext, node *ast.Expression, cb func(*anonymousFunctionDefinition) bool) bool {
 	node = ast.SkipOuterExpressions(node, ast.OEKAll)
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindClassExpression:
 		if classHasDeclaredOrExplicitlyAssignedName(emitContext, node) {
 			return false
@@ -90,7 +90,7 @@ func isNamedEvaluationAnd(emitContext *printer.EmitContext, node *ast.Node, cb f
 	if !ast.IsNamedEvaluationSource(node) {
 		return false
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindShorthandPropertyAssignment:
 		return isAnonymousFunctionDefinition(emitContext, node.AsShorthandPropertyAssignment().ObjectAssignmentInitializer, cb)
 	case ast.KindPropertyAssignment, ast.KindVariableDeclaration, ast.KindParameter, ast.KindBindingElement, ast.KindPropertyDeclaration:
@@ -199,7 +199,7 @@ func injectClassNamedEvaluationHelperBlockIfMissing(
 	factory := emitContext.Factory
 	namedEvaluationBlock := createClassNamedEvaluationHelperBlock(emitContext, assignedName, thisExpression)
 	if node.Name() != nil {
-		emitContext.SetSourceMapRange(namedEvaluationBlock.Body().Statements()[0], node.Name().Loc)
+		emitContext.SetSourceMapRange(namedEvaluationBlock.Body().Statements()[0], node.Name().Loc())
 	}
 
 	insertionIndex := slices.IndexFunc(node.Members(), func(n *ast.Node) bool {
@@ -511,7 +511,7 @@ func transformNamedEvaluationOfExportAssignment(emitContext *printer.EmitContext
 
 // Performs a shallow transformation of a `NamedEvaluation` node, such that a valid name will be assigned.
 func transformNamedEvaluation(context *printer.EmitContext, node *ast.Node /*NamedEvaluation*/, ignoreEmptyStringLiteral bool, assignedName string) *ast.Expression {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindPropertyAssignment:
 		return transformNamedEvaluationOfPropertyAssignment(context, node.AsPropertyAssignment(), ignoreEmptyStringLiteral, assignedName)
 	case ast.KindShorthandPropertyAssignment:

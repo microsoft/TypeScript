@@ -22,7 +22,7 @@ func findEnclosingNode(r core.TextRange, sourceFile *ast.SourceFile) *ast.Node {
 	find = func(n *ast.Node) *ast.Node {
 		var candidate *ast.Node
 		n.ForEachChild(func(c *ast.Node) bool {
-			if c.Flags&ast.NodeFlagsReparsed != 0 {
+			if c.Flags()&ast.NodeFlagsReparsed != 0 {
 				return false
 			}
 			if r.ContainedBy(withTokenStart(c, sourceFile)) {
@@ -101,7 +101,7 @@ func getOwnOrInheritedDelta(n *ast.Node, options lsutil.FormatCodeSettings, sour
 
 		previousLine = line
 		child = n
-		n = n.Parent
+		n = n.Parent()
 	}
 	return 0
 }
@@ -309,7 +309,7 @@ func (w *formatSpanWorker) execute(s *formattingScanner) []core.TextChange {
 			// pair here, we're already done and we can ignore it.
 			parent := astnav.FindPrecedingToken(w.sourceFile, tokenInfo.Loc.End())
 			if parent != nil {
-				parent = parent.Parent
+				parent = parent.Parent()
 			}
 			if parent == nil {
 				parent = w.previousParent
@@ -347,7 +347,7 @@ func (w *formatSpanWorker) processChildNode(
 ) int {
 	debug.Assert(!ast.NodeIsSynthesized(child))
 
-	if ast.NodeIsMissing(child) || child.Flags&ast.NodeFlagsReparsed != 0 {
+	if ast.NodeIsMissing(child) || child.Flags()&ast.NodeFlagsReparsed != 0 {
 		return inheritedIndentation
 	}
 	childStartPos := scanner.GetTokenPosOfNode(child, w.sourceFile, false)
@@ -358,11 +358,11 @@ func (w *formatSpanWorker) processChildNode(
 		undecoratedChildStartLine = scanner.GetECMALineOfPosition(w.sourceFile, getNonDecoratorTokenPosOfNode(child, w.sourceFile))
 	}
 
-	isErrorMemberListElement := child.Flags&ast.NodeFlagsThisNodeHasError != 0 && isMemberListElement(parent, child)
+	isErrorMemberListElement := child.Flags()&ast.NodeFlagsThisNodeHasError != 0 && isMemberListElement(parent, child)
 	// if child is a list item - try to get its indentation, only if parent is within the original range.
 	childIndentationAmount := -1
 
-	if !isErrorMemberListElement && isListItem && parent.Loc.ContainedBy(w.originalRange) {
+	if !isErrorMemberListElement && isListItem && parent.Loc().ContainedBy(w.originalRange) {
 		childIndentationAmount = w.tryComputeIndentationForListItem(childStartPos, child.End(), parentStartLine, w.originalRange, inheritedIndentation)
 		if childIndentationAmount != -1 {
 			inheritedIndentation = childIndentationAmount
@@ -370,14 +370,14 @@ func (w *formatSpanWorker) processChildNode(
 	}
 
 	// child node is outside the target range - do not dive inside
-	if !w.originalRange.Overlaps(child.Loc) {
+	if !w.originalRange.Overlaps(child.Loc()) {
 		if child.End() < w.originalRange.Pos() {
-			w.formattingScanner.skipToEndOf(&child.Loc)
+			w.formattingScanner.skipToEndOf(new(child.Loc()))
 		}
 		return inheritedIndentation
 	}
 
-	if child.Loc.Len() == 0 {
+	if child.Loc().Len() == 0 {
 		return inheritedIndentation
 	}
 
@@ -389,7 +389,7 @@ func (w *formatSpanWorker) processChildNode(
 		}
 		if tokenInfo.token.Loc.End() > childStartPos {
 			if tokenInfo.token.Loc.Pos() > childStartPos {
-				w.formattingScanner.skipToStartOf(&child.Loc)
+				w.formattingScanner.skipToStartOf(new(child.Loc()))
 			}
 			// stop when formatting scanner advances past the beginning of the child
 			break
@@ -402,19 +402,19 @@ func (w *formatSpanWorker) processChildNode(
 		return inheritedIndentation
 	}
 
-	if ast.IsTokenKind(child.Kind) {
+	if ast.IsTokenKind(child.Kind()) {
 		// if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
 		tokenInfo := w.formattingScanner.readTokenInfo(child)
 		// JSX text shouldn't affect indenting
-		if child.Kind != ast.KindJsxText {
-			debug.Assert(tokenInfo.token.Loc.End() == child.Loc.End(), "Token end is child end")
+		if child.Kind() != ast.KindJsxText {
+			debug.Assert(tokenInfo.token.Loc.End() == child.Loc().End(), "Token end is child end")
 			w.consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child, false)
 			return inheritedIndentation
 		}
 	}
 
 	effectiveParentStartLine := undecoratedParentStartLine
-	if child.Kind == ast.KindDecorator {
+	if child.Kind() == ast.KindDecorator {
 		effectiveParentStartLine = childStartLine
 	}
 	childIndentation := 0
@@ -429,7 +429,7 @@ func (w *formatSpanWorker) processChildNode(
 
 	w.childContextNode = node
 
-	if isFirstListItem && parent.Kind == ast.KindArrayLiteralExpression && inheritedIndentation == -1 {
+	if isFirstListItem && parent.Kind() == ast.KindArrayLiteralExpression && inheritedIndentation == -1 {
 		inheritedIndentation = childIndentation
 	}
 
@@ -457,7 +457,7 @@ func (w *formatSpanWorker) processChildNodes(
 
 	// node range is outside the target range - do not dive inside
 	if !w.originalRange.Overlaps(nodes.Loc) {
-		if nodes.End() < w.originalRange.Pos() && (len(nodes.Nodes) == 0 || nodes.Nodes[0].Flags&ast.NodeFlagsReparsed == 0) {
+		if nodes.End() < w.originalRange.Pos() && (len(nodes.Nodes) == 0 || nodes.Nodes[0].Flags()&ast.NodeFlagsReparsed == 0) {
 			w.formattingScanner.skipToEndOf(&nodes.Loc)
 		}
 		return
@@ -518,7 +518,7 @@ func (w *formatSpanWorker) processChildNodes(
 		// there might be the case when current token matches end token but does not considered as one
 		// function (x: function) <--
 		// without this check close paren will be interpreted as list end token for function expression which is wrong
-		if tokenInfo.token.Kind == listEndToken && tokenInfo.token.Loc.ContainedBy(parent.Loc) {
+		if tokenInfo.token.Kind == listEndToken && tokenInfo.token.Loc.ContainedBy(parent.Loc()) {
 			// consume list end token
 			w.consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent /*isListEndToken*/, true)
 		}
@@ -563,7 +563,7 @@ func (w *formatSpanWorker) computeIndentation(node *ast.Node, startLine int, inh
 		delta = min(w.formattingContext.Options.IndentSize, parentDynamicIndentation.getDelta(node)+delta)
 		return indentation, delta
 	} else if inheritedIndentation == -1 {
-		if node.Kind == ast.KindOpenParenToken && startLine == w.lastIndentedLine {
+		if node.Kind() == ast.KindOpenParenToken && startLine == w.lastIndentedLine {
 			// the is used for chaining methods formatting
 			// - we need to get the indentation on last line and the delta of parent
 			return w.indentationOnLastIndentedLine, parentDynamicIndentation.getDelta(node)
@@ -1196,12 +1196,12 @@ func (i *dynamicIndenter) shouldAddDelta(line int, kind ast.Kind, container *ast
 	case ast.KindOpenBraceToken, ast.KindCloseBraceToken, ast.KindCloseParenToken, ast.KindElseKeyword, ast.KindWhileKeyword, ast.KindAtToken:
 		return false
 	case ast.KindSlashToken, ast.KindGreaterThanToken:
-		switch container.Kind {
+		switch container.Kind() {
 		case ast.KindJsxOpeningElement, ast.KindJsxClosingElement, ast.KindJsxSelfClosingElement:
 			return false
 		}
 	case ast.KindOpenBracketToken, ast.KindCloseBracketToken:
-		if container.Kind != ast.KindMappedType {
+		if container.Kind() != ast.KindMappedType {
 			return false
 		}
 	}
@@ -1215,11 +1215,11 @@ func getFirstNonDecoratorTokenOfNode(node *ast.Node) ast.Kind {
 	if ast.CanHaveModifiers(node) {
 		modifier := core.Find(node.ModifierNodes()[core.FindIndex(node.ModifierNodes(), ast.IsDecorator):], ast.IsModifier)
 		if modifier != nil {
-			return modifier.Kind
+			return modifier.Kind()
 		}
 	}
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindClassDeclaration:
 		return ast.KindClassKeyword
 	case ast.KindInterfaceDeclaration:
@@ -1241,7 +1241,7 @@ func getFirstNonDecoratorTokenOfNode(node *ast.Node) ast.Kind {
 	case ast.KindPropertyDeclaration, ast.KindParameter:
 		name := ast.GetNameOfDeclaration(node)
 		if name != nil {
-			return name.Kind
+			return name.Kind()
 		}
 	}
 

@@ -241,7 +241,7 @@ func convertConfigFileToObject(
 	if len(sourceFile.Statements.Nodes) > 0 {
 		rootExpression = sourceFile.Statements.Nodes[0].Expression()
 	}
-	if rootExpression != nil && rootExpression.Kind != ast.KindObjectLiteralExpression {
+	if rootExpression != nil && rootExpression.Kind() != ast.KindObjectLiteralExpression {
 		baseFileName := "tsconfig.json"
 		if sourceFile.FileName().BaseName() == "jsconfig.json" {
 			baseFileName = "jsconfig.json"
@@ -650,13 +650,13 @@ func convertObjectLiteralExpressionToJson(
 	}
 	var errors []*ast.Diagnostic
 	for _, element := range node.Properties.Nodes {
-		if element.Kind != ast.KindPropertyAssignment {
-			errors = append(errors, ast.NewDiagnostic(sourceFile, element.Loc, diagnostics.Property_assignment_expected))
+		if element.Kind() != ast.KindPropertyAssignment {
+			errors = append(errors, ast.NewDiagnostic(sourceFile, element.Loc(), diagnostics.Property_assignment_expected))
 			continue
 		}
 
 		if token := element.QuestionToken(); token != nil {
-			errors = append(errors, ast.NewDiagnostic(sourceFile, token.Loc, diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"))
+			errors = append(errors, ast.NewDiagnostic(sourceFile, token.Loc(), diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"))
 		}
 		textOfKey := ""
 		if !ast.IsComputedNonLiteralName(element.Name()) {
@@ -714,7 +714,7 @@ func isDoubleQuotedString(node *ast.Node) bool {
 }
 
 func convertPropertyValueToJson(sourceFile *ast.SourceFile, valueExpression *ast.Expression, option *CommandLineOption, returnValue bool, jsonConversionNotifier *jsonConversionNotifier) (any, []*ast.Diagnostic) {
-	switch valueExpression.Kind {
+	switch valueExpression.Kind() {
 	case ast.KindTrueKeyword:
 		return true, nil
 	case ast.KindFalseKeyword:
@@ -724,14 +724,14 @@ func convertPropertyValueToJson(sourceFile *ast.SourceFile, valueExpression *ast
 
 	case ast.KindStringLiteral:
 		if !isDoubleQuotedString(valueExpression) {
-			return valueExpression.Text(), []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc, diagnostics.String_literal_with_double_quotes_expected)}
+			return valueExpression.Text(), []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc(), diagnostics.String_literal_with_double_quotes_expected)}
 		}
 		return valueExpression.Text(), nil
 
 	case ast.KindNumericLiteral:
 		return float64(jsnum.FromString(valueExpression.Text())), nil
 	case ast.KindPrefixUnaryExpression:
-		if valueExpression.AsPrefixUnaryExpression().Operator != ast.KindMinusToken || valueExpression.AsPrefixUnaryExpression().Operand.Kind != ast.KindNumericLiteral {
+		if valueExpression.AsPrefixUnaryExpression().Operator != ast.KindMinusToken || valueExpression.AsPrefixUnaryExpression().Operand.Kind() != ast.KindNumericLiteral {
 			break // not valid JSON syntax
 		}
 		return float64(-jsnum.FromString(valueExpression.AsPrefixUnaryExpression().Operand.Text())), nil
@@ -756,9 +756,9 @@ func convertPropertyValueToJson(sourceFile *ast.SourceFile, valueExpression *ast
 	// Not in expected format
 	var errors []*ast.Diagnostic
 	if option != nil {
-		errors = []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc, diagnostics.Compiler_option_0_requires_a_value_of_type_1, option.Name, getCompilerOptionValueTypeString(option))}
+		errors = []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc(), diagnostics.Compiler_option_0_requires_a_value_of_type_1, option.Name, getCompilerOptionValueTypeString(option))}
 	} else {
-		errors = []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc, diagnostics.Property_value_can_only_be_string_literal_numeric_literal_true_false_null_object_literal_or_array_literal)}
+		errors = []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc(), diagnostics.Property_value_can_only_be_string_literal_numeric_literal_true_false_null_object_literal_or_array_literal)}
 	}
 	return nil, errors
 }

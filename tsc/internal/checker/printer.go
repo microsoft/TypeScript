@@ -159,7 +159,7 @@ func (c *Checker) symbolToStringEx(symbol *ast.Symbol, enclosingDeclaration *ast
 	}
 	var printer_ *printer.Printer
 	// add neverAsciiEscape for GH#39027
-	if enclosingDeclaration != nil && enclosingDeclaration.Kind == ast.KindSourceFile {
+	if enclosingDeclaration != nil && enclosingDeclaration.Kind() == ast.KindSourceFile {
 		printer_ = createPrinterWithRemoveCommentsOmitTrailingSemicolonNeverAsciiEscape(nodeBuilder.EmitContext())
 	} else {
 		printer_ = createPrinterWithRemoveCommentsOmitTrailingSemicolon(nodeBuilder.EmitContext())

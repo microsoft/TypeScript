@@ -295,7 +295,7 @@ func nodeHandleFrom(node *ast.Node) NodeHandle {
 	sourceFile := ast.GetSourceFileOfNode(node)
 	table := encoder.GetNodeIndexTable(sourceFile)
 	idx := table.GetIndex(node)
-	return NodeHandle(fmt.Sprintf("%d.%d.%s", idx, node.Kind, sourceFile.PathKey()))
+	return NodeHandle(fmt.Sprintf("%d.%d.%s", idx, node.Kind(), sourceFile.PathKey()))
 }
 
 // registerSymbol registers a symbol in the snapshot's registry and returns its handle along with
@@ -2571,7 +2571,7 @@ func (s *Session) handleGetModeForResolutionAtIndex(ctx context.Context, params 
 	}
 	resolutionCount := len(sourceFile.Imports())
 	for _, augmentation := range sourceFile.ModuleAugmentations {
-		if augmentation.Kind == ast.KindStringLiteral {
+		if augmentation.Kind() == ast.KindStringLiteral {
 			resolutionCount++
 		}
 	}

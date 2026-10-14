@@ -10,7 +10,7 @@ func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 			visited := visitor.VisitEachChild(node)
 			if visited != node {
 				if syntheticLocation {
-					visited.Loc = core.NewTextRange(-1, -1)
+					visited.SetLoc(core.NewTextRange(-1, -1))
 				}
 				return visited
 			}
@@ -19,7 +19,7 @@ func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 			// Node.Clone in corsa reliably uses `Update` calls for all nodes and so copies locations by default.
 			// Deep clones are done to copy a node across files, so here, we explicitly make the location range synthetic on all cloned nodes
 			if syntheticLocation {
-				c.Loc = core.NewTextRange(-1, -1)
+				c.SetLoc(core.NewTextRange(-1, -1))
 			}
 			return c
 		},
@@ -39,7 +39,7 @@ func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 				if syntheticLocation {
 					newList.Loc = core.NewTextRange(-1, -1)
 					if nodes.HasTrailingComma() {
-						newList.Nodes[len(newList.Nodes)-1].Loc = core.NewTextRange(-2, -2)
+						newList.Nodes[len(newList.Nodes)-1].SetLoc(core.NewTextRange(-2, -2))
 					}
 				}
 				return newList
@@ -58,7 +58,7 @@ func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 				if syntheticLocation {
 					newList.Loc = core.NewTextRange(-1, -1)
 					if nodes.HasTrailingComma() {
-						newList.Nodes[len(newList.Nodes)-1].Loc = core.NewTextRange(-2, -2)
+						newList.Nodes[len(newList.Nodes)-1].SetLoc(core.NewTextRange(-2, -2))
 					}
 				}
 				return newList
@@ -76,7 +76,7 @@ func (f *NodeFactory) DeepCloneReparse(node *Node) *Node {
 	if node != nil {
 		node = getDeepCloneVisitor(f, false /*syntheticLocation*/).VisitNode(node)
 		SetParentInChildren(node)
-		node.Flags |= NodeFlagsReparsed
+		node.SetFlags(node.Flags() | NodeFlagsReparsed)
 	}
 	return node
 }

@@ -866,7 +866,7 @@ func (c *Checker) inferFromSignature(n *InferenceState, source *Signature, targe
 		saveBivariant := n.bivariant
 		kind := ast.KindUnknown
 		if target.declaration != nil {
-			kind = target.declaration.Kind
+			kind = target.declaration.Kind()
 		}
 		// Once we descend into a bivariant signature we remain bivariant for all nested inferences
 		n.bivariant = n.bivariant || kind == ast.KindMethodDeclaration || kind == ast.KindMethodSignature || kind == ast.KindConstructor

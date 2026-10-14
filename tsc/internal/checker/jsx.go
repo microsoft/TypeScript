@@ -125,7 +125,7 @@ func (c *Checker) checkJsxFragment(node *ast.Node) *Type {
 
 func (c *Checker) checkJsxAttributes(node *ast.Node, checkMode CheckMode) *Type {
 	c.checkNodeDeferred(node)
-	return c.createJsxAttributesTypeFromAttributesProperty(node.Parent, checkMode)
+	return c.createJsxAttributesTypeFromAttributesProperty(node.Parent(), checkMode)
 }
 
 func (c *Checker) checkJsxOpeningLikeElementOrOpeningFragment(node *ast.Node) {
@@ -204,10 +204,10 @@ func (c *Checker) inferJsxTypeArguments(node *ast.Node, signature *Signature, ch
 
 func (c *Checker) getContextualTypeForJsxExpression(node *ast.Node, contextFlags ContextFlags) *Type {
 	switch {
-	case ast.IsJsxAttributeLike(node.Parent):
+	case ast.IsJsxAttributeLike(node.Parent()):
 		return c.getContextualType(node, contextFlags)
-	case ast.IsJsxElement(node.Parent):
-		return c.getContextualTypeForChildJsxExpression(node.Parent, node, contextFlags)
+	case ast.IsJsxElement(node.Parent()):
+		return c.getContextualTypeForChildJsxExpression(node.Parent(), node, contextFlags)
 	}
 	return nil
 }
@@ -217,18 +217,18 @@ func (c *Checker) getContextualTypeForJsxAttribute(attribute *ast.Node, contextF
 	// which is a type of the parameter of the signature we are trying out.
 	// If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
 	if ast.IsJsxAttribute(attribute) {
-		attributesType := c.getApparentTypeOfContextualType(attribute.Parent, contextFlags)
+		attributesType := c.getApparentTypeOfContextualType(attribute.Parent(), contextFlags)
 		if attributesType == nil || IsTypeAny(attributesType) {
 			return nil
 		}
 		return c.getTypeOfPropertyOfContextualType(attributesType, attribute.Name().Text())
 	}
-	return c.getContextualType(attribute.Parent, contextFlags)
+	return c.getContextualType(attribute.Parent(), contextFlags)
 }
 
 func (c *Checker) getContextualJsxElementAttributesType(node *ast.Node, contextFlags ContextFlags) *Type {
 	if ast.IsJsxOpeningElement(node) && contextFlags != ContextFlagsIgnoreNodeInferences {
-		index := c.findContextualNode(node.Parent, contextFlags == ContextFlagsNone)
+		index := c.findContextualNode(node.Parent(), contextFlags == ContextFlagsNone)
 		if index >= 0 {
 			// Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
 			// _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
@@ -281,7 +281,7 @@ func (c *Checker) discriminateContextualTypeByJSXAttributes(node *ast.Node, cont
 		if s.Flags()&ast.SymbolFlagsOptional == 0 || node.Symbol() == nil {
 			return false
 		}
-		element := node.Parent.Parent
+		element := node.Parent().Parent()
 		if s.Name() == jsxChildrenPropertyName && ast.IsJsxElement(element) && len(ast.GetSemanticJsxChildren(element.Children().Nodes)) != 0 {
 			return false
 		}
@@ -303,8 +303,8 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 			}
 		}
 	}
-	if ast.IsJsxOpeningElement(node.Parent) && ast.IsJsxElement(node.Parent.Parent) {
-		containingElement := node.Parent.Parent // Containing JSXElement
+	if ast.IsJsxOpeningElement(node.Parent()) && ast.IsJsxElement(node.Parent().Parent()) {
+		containingElement := node.Parent().Parent() // Containing JSXElement
 		childrenPropName := c.getJsxElementChildrenPropertyName(c.getJsxNamespaceAt(node))
 		if childrenPropName == ast.InternalSymbolNameMissing {
 			childrenPropName = "children"
@@ -331,7 +331,7 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 		var invalidTextDiagnosticArgs []any
 		getInvalidTextualChildDiagnostic := func() (*diagnostics.Message, []any) {
 			if invalidTextDiagnostic == nil {
-				tagNameText := scanner.GetTextOfNode(node.Parent.TagName())
+				tagNameText := scanner.GetTextOfNode(node.Parent().TagName())
 				invalidTextDiagnostic = diagnostics.X_0_components_don_t_accept_text_as_child_elements_Text_in_JSX_has_the_type_string_but_the_expected_type_of_1_is_2
 				invalidTextDiagnosticArgs = []any{tagNameText, childrenPropName, c.TypeToString(childrenTargetType)}
 			}
@@ -391,7 +391,7 @@ func (c *Checker) generateJsxChildren(node *ast.Node, getInvalidTextDiagnostic f
 }
 
 func (c *Checker) getElaborationElementForJsxChild(child *ast.Node, nameType *Type, getInvalidTextDiagnostic func() (*diagnostics.Message, []any)) JsxElaborationElement {
-	switch child.Kind {
+	switch child.Kind() {
 	case ast.KindJsxExpression:
 		// child is of the type of the expression
 		return JsxElaborationElement{errorNode: child, innerExpression: child.Expression(), nameType: nameType}
@@ -765,7 +765,7 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 					c.addIntraExpressionInferenceSite(inferenceContext, inferenceNode, exprType)
 				}
 			} else {
-				debug.Assert(attributeDecl.Kind == ast.KindJsxSpreadAttribute)
+				debug.Assert(attributeDecl.Kind() == ast.KindJsxSpreadAttribute)
 				if len(attributesTable) != 0 {
 					spread = c.getSpreadType(spread, createJsxAttributesType(), attributesSymbol, objectFlags, false /*readonly*/)
 					attributesTable = make(ast.SymbolTable)
@@ -797,7 +797,7 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 	}
 	parentHasSemanticJsxChildren := func(openingLikeElement *ast.Node) bool {
 		// Handle children attribute
-		parent := openingLikeElement.Parent
+		parent := openingLikeElement.Parent()
 		if parent == nil {
 			return false
 		}
@@ -817,7 +817,7 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 		return len(ast.GetSemanticJsxChildren(children)) != 0
 	}
 	if parentHasSemanticJsxChildren(openingLikeElement) {
-		var childTypes []*Type = c.checkJsxChildren(openingLikeElement.Parent, checkMode)
+		var childTypes []*Type = c.checkJsxChildren(openingLikeElement.Parent(), checkMode)
 		if !hasSpreadAnyType && jsxChildrenPropertyName != ast.InternalSymbolNameMissing && jsxChildrenPropertyName != "" {
 			// Error if there is a attribute named "children" explicitly specified and children element.
 			// This is because children element will overwrite the value from attributes.
@@ -844,7 +844,7 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 			}
 			// Fake up a property declaration for the children
 			childrenPropSymbol.SetValueDeclaration(c.factory.NewPropertySignatureDeclaration(nil, c.factory.NewIdentifier(jsxChildrenPropertyName), nil /*postfixToken*/, nil /*type*/, nil /*initializer*/))
-			childrenPropSymbol.ValueDeclaration().Parent = attributeParent
+			childrenPropSymbol.ValueDeclaration().SetParent(attributeParent)
 			childrenPropSymbol.ValueDeclaration().AsPropertySignatureDeclaration().Symbol = childrenPropSymbol
 			childPropMap := make(ast.SymbolTable)
 			childPropMap[jsxChildrenPropertyName] = childrenPropSymbol
@@ -1441,7 +1441,7 @@ func (c *Checker) parseIsolatedEntityName(name string) *ast.Node {
 }
 
 func markAsSynthetic(node *ast.Node) bool {
-	node.Loc = core.NewTextRange(-1, -1)
+	node.SetLoc(core.NewTextRange(-1, -1))
 	node.ForEachChild(markAsSynthetic)
 	return false
 }

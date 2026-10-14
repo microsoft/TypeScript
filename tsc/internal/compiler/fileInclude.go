@@ -52,7 +52,7 @@ type referenceFileLocation struct {
 func (r *referenceFileLocation) text() string {
 	if r.node != nil {
 		if !ast.NodeIsSynthesized(r.node) {
-			return r.file.Text()[scanner.SkipTrivia(r.file.Text(), r.node.Loc.Pos()):r.node.End()]
+			return r.file.Text()[scanner.SkipTrivia(r.file.Text(), r.node.Loc().Pos()):r.node.End()]
 		} else {
 			return fmt.Sprintf(`"%s"`, r.node.Text())
 		}
@@ -109,7 +109,7 @@ func (r *FileIncludeReason) getReferencedLocation(program *Program) *referenceFi
 		} else {
 			augIndex := len(file.Imports())
 			for _, imp := range file.ModuleAugmentations {
-				if imp.Kind == ast.KindStringLiteral {
+				if imp.Kind() == ast.KindStringLiteral {
 					if augIndex == ref.index {
 						specifier = imp
 						break

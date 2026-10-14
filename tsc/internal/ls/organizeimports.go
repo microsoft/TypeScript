@@ -104,7 +104,7 @@ func (l *LanguageService) OrganizeImports(
 		if kind != lsproto.CodeActionKindSourceRemoveUnusedImportsTs {
 			var ambientModuleExportDecls []*ast.Statement
 			for _, s := range moduleBody.Statements.Nodes {
-				if s.Kind == ast.KindExportDeclaration {
+				if s.Kind() == ast.KindExportDeclaration {
 					ambientModuleExportDecls = append(ambientModuleExportDecls, s)
 				}
 			}
@@ -261,7 +261,7 @@ func removeUnusedImports(oldImports []*ast.Statement, sourceFile *ast.SourceFile
 		}
 
 		if namedBindings != nil {
-			switch namedBindings.Kind {
+			switch namedBindings.Kind() {
 			case ast.KindNamespaceImport:
 				nsImport := namedBindings.AsNamespaceImport()
 				if !typeChecker.IsDeclarationUsed(sourceFile, nsImport.Name().AsIdentifier(), jsxElementsPresent, jsxModeNeedsExplicitImport) {
@@ -278,7 +278,7 @@ func removeUnusedImports(oldImports []*ast.Statement, sourceFile *ast.SourceFile
 					updatedNamedImports := factory.UpdateNamedImports(namedImports, newList)
 					namedBindings = updatedNamedImports.AsNode()
 				}
-				if namedBindings != nil && !ast.NodeIsSynthesized(originalBindings.AsNode()) && !printer.RangeIsOnSingleLine(originalBindings.Loc, sourceFile) {
+				if namedBindings != nil && !ast.NodeIsSynthesized(originalBindings.AsNode()) && !printer.RangeIsOnSingleLine(originalBindings.Loc(), sourceFile) {
 					changeTracker.SetEmitFlags(namedBindings, printer.EFMultiLine)
 				}
 			}
@@ -598,7 +598,7 @@ func coalesceImportsWorker(
 
 			if sourceFile != nil && newNamedImports != nil && firstNamedImport != nil {
 				firstNamedBindings := firstNamedImport.AsImportDeclaration().ImportClause.AsImportClause().NamedBindings
-				if !ast.NodeIsSynthesized(firstNamedBindings.AsNode()) && !printer.RangeIsOnSingleLine(firstNamedBindings.Loc, sourceFile) {
+				if !ast.NodeIsSynthesized(firstNamedBindings.AsNode()) && !printer.RangeIsOnSingleLine(firstNamedBindings.Loc(), sourceFile) {
 					changeTracker.SetEmitFlags(newNamedImports.AsNode(), printer.EFMultiLine)
 				}
 			}
@@ -696,7 +696,7 @@ func getCategorizedImports(importDecls []*ast.Statement) categorizedImports {
 		}
 
 		if namedBindings != nil {
-			switch namedBindings.Kind {
+			switch namedBindings.Kind() {
 			case ast.KindNamespaceImport:
 				group.namespaceImports = append(group.namespaceImports, importDecl)
 			case ast.KindNamedImports:
@@ -744,7 +744,7 @@ func getNewImportSpecifiers(namedImports []*ast.Statement, factory *ast.NodeFact
 }
 
 func tryGetNamedBindingElements(namedImport *ast.Statement) []*ast.Statement {
-	if namedImport.Kind != ast.KindImportDeclaration {
+	if namedImport.Kind() != ast.KindImportDeclaration {
 		return nil
 	}
 
@@ -756,7 +756,7 @@ func tryGetNamedBindingElements(namedImport *ast.Statement) []*ast.Statement {
 	clause := importDecl.ImportClause.AsImportClause()
 	namedBindings := clause.NamedBindings
 
-	if namedBindings != nil && namedBindings.Kind == ast.KindNamedImports {
+	if namedBindings != nil && namedBindings.Kind() == ast.KindNamedImports {
 		namedImportsNode := namedBindings.AsNamedImports()
 		return namedImportsNode.Elements.Nodes
 	}
@@ -772,7 +772,7 @@ func getTopLevelExportGroups(sourceFile *ast.SourceFile) [][]*ast.Statement {
 	i := 0
 	groupIndex := 0
 	for i < statementsLen {
-		if statements[i].Kind == ast.KindExportDeclaration {
+		if statements[i].Kind() == ast.KindExportDeclaration {
 			if groupIndex >= len(topLevelExportGroups) {
 				topLevelExportGroups = append(topLevelExportGroups, []*ast.Statement{})
 			}
@@ -781,7 +781,7 @@ func getTopLevelExportGroups(sourceFile *ast.SourceFile) [][]*ast.Statement {
 				topLevelExportGroups[groupIndex] = append(topLevelExportGroups[groupIndex], statements[i])
 				i++
 			} else {
-				for i < statementsLen && statements[i].Kind == ast.KindExportDeclaration {
+				for i < statementsLen && statements[i].Kind() == ast.KindExportDeclaration {
 					topLevelExportGroups[groupIndex] = append(topLevelExportGroups[groupIndex], statements[i])
 					i++
 				}
@@ -909,7 +909,7 @@ func coalesceExportsWorker(
 			var newExportSpecifiers []*ast.Node
 			for _, exportDecl := range subGroup {
 				exportClause := exportDecl.AsExportDeclaration().ExportClause
-				if exportClause != nil && exportClause.Kind == ast.KindNamedExports {
+				if exportClause != nil && exportClause.Kind() == ast.KindNamedExports {
 					namedExports := exportClause.AsNamedExports()
 					newExportSpecifiers = append(newExportSpecifiers, namedExports.Elements.Nodes...)
 				}
@@ -921,12 +921,12 @@ func coalesceExportsWorker(
 
 			var updatedExportClause *ast.NamedExportBindings
 			if exportDecl.ExportClause != nil {
-				if exportDecl.ExportClause.Kind == ast.KindNamedExports {
+				if exportDecl.ExportClause.Kind() == ast.KindNamedExports {
 					namedExports := exportDecl.ExportClause.AsNamedExports()
 					sortedList := factory.NewNodeList(newExportSpecifiers)
 					updatedExportClause = factory.UpdateNamedExports(namedExports, sortedList)
 
-					if sourceFile != nil && !ast.NodeIsSynthesized(namedExports.AsNode()) && !printer.RangeIsOnSingleLine(namedExports.Loc, sourceFile) {
+					if sourceFile != nil && !ast.NodeIsSynthesized(namedExports.AsNode()) && !printer.RangeIsOnSingleLine(namedExports.Loc(), sourceFile) {
 						changeTracker.SetEmitFlags(updatedExportClause.AsNode(), printer.EFMultiLine)
 					}
 				} else {

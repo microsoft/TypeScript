@@ -19,21 +19,21 @@ func ProbablyUsesSemicolons(file *ast.SourceFile) bool {
 
 	var visit func(node *ast.Node) bool
 	visit = func(node *ast.Node) bool {
-		if node.Flags&ast.NodeFlagsReparsed != 0 {
+		if node.Flags()&ast.NodeFlagsReparsed != 0 {
 			return false
 		}
-		if SyntaxRequiresTrailingSemicolonOrASI(node.Kind) {
+		if SyntaxRequiresTrailingSemicolonOrASI(node.Kind()) {
 			lastToken := GetLastToken(node, file)
-			if lastToken != nil && lastToken.Kind == ast.KindSemicolonToken {
+			if lastToken != nil && lastToken.Kind() == ast.KindSemicolonToken {
 				withSemicolon++
 			} else {
 				withoutSemicolon++
 			}
-		} else if SyntaxRequiresTrailingCommaOrSemicolonOrASI(node.Kind) {
+		} else if SyntaxRequiresTrailingCommaOrSemicolonOrASI(node.Kind()) {
 			lastToken := GetLastToken(node, file)
-			if lastToken != nil && lastToken.Kind == ast.KindSemicolonToken {
+			if lastToken != nil && lastToken.Kind() == ast.KindSemicolonToken {
 				withSemicolon++
-			} else if lastToken != nil && lastToken.Kind != ast.KindCommaToken {
+			} else if lastToken != nil && lastToken.Kind() != ast.KindCommaToken {
 				lastTokenLine := scanner.GetECMALineOfPosition(
 					file,
 					astnav.GetStartOfNode(lastToken, file, false /*includeJSDoc*/),
@@ -104,7 +104,7 @@ func GetQuotePreference(sourceFile *ast.SourceFile, preferences UserPreferences)
 	}
 	// ignore synthetic import added when importHelpers: true
 	firstModuleSpecifier := core.Find(sourceFile.Imports(), func(n *ast.Node) bool {
-		return ast.IsStringLiteral(n) && !ast.NodeIsSynthesized(n.Parent)
+		return ast.IsStringLiteral(n) && !ast.NodeIsSynthesized(n.Parent())
 	})
 	if firstModuleSpecifier != nil {
 		return QuotePreferenceFromString(firstModuleSpecifier.AsStringLiteral())

@@ -213,5 +213,5 @@ func isFirstDeclarationOfSymbolParameter(symbol *ast.Symbol) bool {
 	if len(declarations) == 0 {
 		return false
 	}
-	return declarations[0].Kind == ast.KindParameter
+	return declarations[0].Kind() == ast.KindParameter
 }

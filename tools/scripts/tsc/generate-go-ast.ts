@@ -292,7 +292,7 @@ function buildFieldComment(m: MemberInfo): string {
 }
 
 function goSubtreeFactsTerm(m: MemberInfo): string {
-    const access = `node.${m.name}`;
+    const access = fieldAccess(m);
     if (m.listKind === "ModifierList") {
         return `propagateModifierListSubtreeFacts(${access})`;
     }
@@ -398,7 +398,7 @@ function generateAsCast(w: CodeWriter, node: NodeType) {
     const structName = node.name;
     w.write(`func (n *Node) As${structName}() *${structName} {`);
     w.push();
-    generateKindCheck(w, node, "n.Kind", `Invalid node cast to ${structName}`);
+    generateKindCheck(w, node, "n.Kind()", `Invalid node cast to ${structName}`);
     w.write(`return (*${structName})(unsafe.Pointer(n))`);
     w.pop();
     w.write("}");
@@ -406,6 +406,10 @@ function generateAsCast(w: CodeWriter, node: NodeType) {
 }
 
 // ── Generate New*() factory methods ────────────────────────────────────────
+
+function fieldAccess(m: MemberInfo, recv = "node"): string {
+    return isNodeFlagsMember(m) ? `${recv}.Flags()` : `${recv}.${m.name}`;
+}
 
 function isNodeFlagsMember(m: MemberInfo): boolean {
     const type = m.type;
@@ -477,10 +481,10 @@ function emitNewFactory(
         for (const m of nodeFlagsMembers) {
             const param = m.goParamName();
             if (m.bitmask) {
-                w.write(`node.Flags |= ${param} & ${m.bitmask}`);
+                w.write(`node.SetFlags(node.Flags() | (${param} & ${m.bitmask}))`);
             }
             else {
-                w.write(`node.Flags = ${param}`);
+                w.write(`node.SetFlags(${param})`);
             }
         }
         w.write("return node");
@@ -565,9 +569,9 @@ function generateUpdateFactory(w: CodeWriter, node: NodeType) {
         const type = m.type;
         // Slices can't be compared with != in Go
         if (type.kind === "list" && type.listKind === "raw") {
-            return `!core.Same(${m.goParamName()}, node.${m.name})`;
+            return `!core.Same(${m.goParamName()}, ${fieldAccess(m)})`;
         }
-        return `${m.goParamName()} != node.${m.name}`;
+        return `${m.goParamName()} != ${fieldAccess(m)}`;
     });
 
     w.write(`if ${comparisons.join(" || ")} {`);
@@ -576,13 +580,13 @@ function generateUpdateFactory(w: CodeWriter, node: NodeType) {
     // Call New with all members (Kind from original, everything else from params)
     const newArgs = members.map(m => {
         if (m.isKindParam()) {
-            return "node.Kind";
+            return "node.Kind()";
         }
         return m.goParamName();
     }).join(", ");
 
     if (node.kindAliases.length > 0) {
-        w.write("switch node.Kind {");
+        w.write("switch node.Kind() {");
         w.push();
         w.write(`case ${api.kindType(`SyntaxKind.${node.syntaxKindName}`).formatGoConstant()}:`);
         w.push();
@@ -596,7 +600,7 @@ function generateUpdateFactory(w: CodeWriter, node: NodeType) {
         }
         w.write("default:");
         w.push();
-        w.write(`panic("unexpected kind in Update${node.name}: " + node.Kind.String())`);
+        w.write(`panic("unexpected kind in Update${node.name}: " + node.Kind().String())`);
         w.pop();
         w.pop();
         w.write("}");
@@ -639,7 +643,7 @@ function generateForEachChild(w: CodeWriter, node: NodeType) {
 
     // Build visit chain: visit(v, node.Field) || visitNodeList(v, node.Field) || ...
     const parts = childMembers.map(m => {
-        const access = `node.${m.name}`;
+        const access = fieldAccess(m);
         const type = m.type;
         const listKind = m.listKind;
         if (listKind === "raw") {
@@ -697,7 +701,7 @@ function hasForEachChild(node: NodeType): boolean {
 function generateForEachChildDispatch(w: CodeWriter) {
     w.write("func (n *Node) ForEachChild(v Visitor) bool {");
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.Kind() {");
     for (const node of api.nodes()) {
         if (!hasForEachChild(node)) continue;
         const kinds = node.allKinds().map(k => k.formatGoConstant());
@@ -720,7 +724,7 @@ function generateForEachChildDispatch(w: CodeWriter) {
 function generateVisitEachChildDispatch(w: CodeWriter) {
     w.write("func (n *Node) VisitEachChild(v *NodeVisitor) *Node {");
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.Kind() {");
     for (const node of api.nodes()) {
         if (!hasForEachChild(node)) continue;
         const kinds = node.allKinds().map(kind => kind.formatGoConstant());
@@ -743,7 +747,7 @@ function generateVisitEachChildDispatch(w: CodeWriter) {
 function generateCloneDispatch(w: CodeWriter) {
     w.write("func (n *Node) Clone(f NodeFactoryCoercible) *Node {");
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.Kind() {");
     w.write("case kindFlowSwitchClauseData, kindFlowReduceLabelData:");
     w.push();
     w.write("return nil");
@@ -767,7 +771,7 @@ function generateCloneDispatch(w: CodeWriter) {
 function generateSubtreeFactsDispatch(w: CodeWriter) {
     w.write("func (n *Node) SubtreeFacts() SubtreeFacts {");
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.Kind() {");
     w.write("case kindFlowSwitchClauseData, kindFlowReduceLabelData:");
     w.push();
     w.write("return SubtreeFactsNone");
@@ -796,7 +800,7 @@ function generateSubtreeFactsDispatch(w: CodeWriter) {
 function generateComputeSubtreeFactsDispatch(w: CodeWriter) {
     w.write("func (n *Node) computeSubtreeFacts() SubtreeFacts {");
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.Kind() {");
     for (const [node, kinds] of canonicalNodesByKind()) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
@@ -816,7 +820,7 @@ function generateComputeSubtreeFactsDispatch(w: CodeWriter) {
 function generatePropagateSubtreeFactsDispatch(w: CodeWriter) {
     w.write("func (n *Node) propagateSubtreeFacts() SubtreeFacts {");
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.Kind() {");
     for (const [node, kinds] of canonicalNodesByKind()) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
@@ -890,10 +894,10 @@ function generateNodeAccessorDispatch(w: CodeWriter, method: string, ret: string
     w.write(`func (n *Node) ${method}() ${ret} {`);
     w.push();
     if (useDispatchTable) {
-        w.write(`switch ${table}[n.Kind] {`);
+        w.write(`switch ${table}[n.Kind()] {`);
     }
     else {
-        w.write("switch n.Kind {");
+        w.write("switch n.Kind() {");
     }
     for (const [index, { node, kinds }] of cases.entries()) {
         w.write(`case ${useDispatchTable ? index + 1 : kinds.join(", ")}:`);
@@ -932,7 +936,7 @@ function generateModifiersDispatch(w: CodeWriter) {
 function generateSetModifiersDispatch(w: CodeWriter) {
     w.write("func (n *MutableNode) SetModifiers(modifiers *ModifierList) {");
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.kind {");
     for (const node of api.nodes()) {
         if (!hasMember(node, "modifiers")) continue;
         const kinds = node.allKinds().map(kind => kind.formatGoConstant());
@@ -977,13 +981,13 @@ function generateVisitEachChild(w: CodeWriter, node: NodeType) {
         if (m.isChild() && type.kind === "list" && type.listKind === "raw") {
             const localName = m.goParamName();
             rawListLocals.set(m.name, localName);
-            w.write(`${localName} := core.SameMap(node.${m.name}, func(n *Node) *Node { return v.visitNode(n) })`);
+            w.write(`${localName} := core.SameMap(${fieldAccess(m)}, func(n *Node) *Node { return v.visitNode(n) })`);
         }
     }
 
     const args = updateMembers.map(m => {
         if (!m.isChild()) {
-            return `node.${m.name}`;
+            return fieldAccess(m);
         }
 
         // Raw list: use the local variable
@@ -991,7 +995,7 @@ function generateVisitEachChild(w: CodeWriter, node: NodeType) {
             return rawListLocals.get(m.name)!;
         }
 
-        const access = `node.${m.name}`;
+        const access = fieldAccess(m);
         const type = m.type;
         const listKind = m.listKind;
 
@@ -1028,7 +1032,7 @@ function generateClone(w: CodeWriter, node: NodeType) {
     // Clone is a struct method, so it can access private fields directly
     const args = members.map(m => {
         if (m.isKindParam()) {
-            return "node.Kind";
+            return "node.Kind()";
         }
         const type = m.declaredType;
 
@@ -1036,11 +1040,11 @@ function generateClone(w: CodeWriter, node: NodeType) {
             return "node.Modifiers()";
         }
         // Use direct field access (Clone is a struct method, can access private fields)
-        return `node.${m.name}`;
+        return fieldAccess(m);
     }).join(", ");
 
     if (node.kindAliases.length > 0) {
-        w.write("switch node.Kind {");
+        w.write("switch node.Kind() {");
         w.push();
         w.write(`case ${api.kindType(`SyntaxKind.${node.syntaxKindName}`).formatGoConstant()}:`);
         w.push();
@@ -1054,7 +1058,7 @@ function generateClone(w: CodeWriter, node: NodeType) {
         }
         w.write("default:");
         w.push();
-        w.write(`panic("unexpected kind in ${structName}.Clone: " + node.Kind.String())`);
+        w.write(`panic("unexpected kind in ${structName}.Clone: " + node.Kind().String())`);
         w.pop();
         w.pop();
         w.write("}");
@@ -1075,7 +1079,7 @@ function generateIsFunction(w: CodeWriter, node: NodeType) {
     if (node.kindType.kind === "typeParameter") {
         w.write(`func Is${node.name}(node *Node) bool {`);
         w.push();
-        w.write("switch node.Kind {");
+        w.write("switch node.Kind() {");
         w.write(`case ${kindTypes.map(kind => kind.formatGoConstant()).join(", ")}:`);
         w.push();
         w.write("return true");
@@ -1093,7 +1097,7 @@ function generateIsFunction(w: CodeWriter, node: NodeType) {
             const kindName = kind.name;
             w.write(`func Is${kindName}(node *Node) bool {`);
             w.push();
-            w.write(`return node.Kind == ${kind.formatGoConstant()}`);
+            w.write(`return node.Kind() == ${kind.formatGoConstant()}`);
             w.pop();
             w.write("}");
             w.write("");
@@ -1103,14 +1107,14 @@ function generateIsFunction(w: CodeWriter, node: NodeType) {
 
     w.write(`func Is${node.name}(node *Node) bool {`);
     w.push();
-    w.write(`return node.Kind == ${api.kindType(`SyntaxKind.${node.syntaxKindName}`).formatGoConstant()}`);
+    w.write(`return node.Kind() == ${api.kindType(`SyntaxKind.${node.syntaxKindName}`).formatGoConstant()}`);
     w.pop();
     w.write("}");
     w.write("");
     for (const alias of node.kindAliases) {
         w.write(`func Is${alias}(node *Node) bool {`);
         w.push();
-        w.write(`return node.Kind == Kind${alias}`);
+        w.write(`return node.Kind() == Kind${alias}`);
         w.pop();
         w.write("}");
         w.write("");

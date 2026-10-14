@@ -40,7 +40,7 @@ func NewEvaluator(evaluateEntity Evaluator, outerExpressionsToSkip ast.OuterExpr
 		// our evaluation results, so we're currently being conservative so as to issue errors
 		// on code that might break Babel.
 		expr = ast.SkipOuterExpressions(expr, outerExpressionsToSkip|ast.OEKParentheses)
-		switch expr.Kind {
+		switch expr.Kind() {
 		case ast.KindPrefixUnaryExpression:
 			result := evaluate(expr.AsPrefixUnaryExpression().Operand, location)
 			resolvedOtherFiles = result.ResolvedOtherFiles
@@ -58,8 +58,8 @@ func NewEvaluator(evaluateEntity Evaluator, outerExpressionsToSkip ast.OuterExpr
 		case ast.KindBinaryExpression:
 			left := evaluate(expr.AsBinaryExpression().Left, location)
 			right := evaluate(expr.AsBinaryExpression().Right, location)
-			operator := expr.AsBinaryExpression().OperatorToken.Kind
-			isSyntacticallyString = (left.IsSyntacticallyString || right.IsSyntacticallyString) && expr.AsBinaryExpression().OperatorToken.Kind == ast.KindPlusToken
+			operator := expr.AsBinaryExpression().OperatorToken.Kind()
+			isSyntacticallyString = (left.IsSyntacticallyString || right.IsSyntacticallyString) && expr.AsBinaryExpression().OperatorToken.Kind() == ast.KindPlusToken
 			resolvedOtherFiles = left.ResolvedOtherFiles || right.ResolvedOtherFiles
 			hasExternalReferences = left.HasExternalReferences || right.HasExternalReferences
 			leftNum, leftIsNum := left.Value.(jsnum.Number)

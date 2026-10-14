@@ -16,7 +16,7 @@ func convertClassDeclarationToClassExpression(emitContext *printer.EmitContext, 
 		node.Members,
 	)
 	emitContext.SetOriginal(updated, node.AsNode())
-	updated.Loc = node.Loc
+	updated.SetLoc(node.Loc())
 	return updated
 }
 
@@ -75,7 +75,7 @@ func (s *superAccessState) initSuperAccessVisitor(emitContext *printer.EmitConte
 // accesses with _super/_superIndex references. This is necessary because the async body
 // ends up inside a generator function where `super` is not valid.
 func (s *superAccessState) visitSuperAccessNode(node *ast.Node) *ast.Node {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindCallExpression:
 		call := node.AsCallExpression()
 		if ast.IsSuperProperty(call.Expression) {
@@ -83,7 +83,7 @@ func (s *superAccessState) visitSuperAccessNode(node *ast.Node) *ast.Node {
 		}
 		return s.superAccessVisitor.VisitEachChild(node)
 	case ast.KindPropertyAccessExpression:
-		if node.Expression().Kind == ast.KindSuperKeyword {
+		if node.Expression().Kind() == ast.KindSuperKeyword {
 			// super.x → _super.x
 			return s.factory.NewPropertyAccessExpression(
 				s.superBinding, nil, node.Name(), ast.NodeFlagsNone,
@@ -91,7 +91,7 @@ func (s *superAccessState) visitSuperAccessNode(node *ast.Node) *ast.Node {
 		}
 		return s.superAccessVisitor.VisitEachChild(node)
 	case ast.KindElementAccessExpression:
-		if node.Expression().Kind == ast.KindSuperKeyword {
+		if node.Expression().Kind() == ast.KindSuperKeyword {
 			// super[x] → _superIndex(x) or _superIndex(x).value
 			return s.createSuperElementAccessInAsyncMethod(
 				node.AsElementAccessExpression().ArgumentExpression,
@@ -150,7 +150,7 @@ func (s *superAccessState) substituteCallExpressionWithSuperAccess(call *ast.Cal
 		callTarget, nil, nil,
 		s.factory.NewNodeList(allArgs), ast.NodeFlagsNone,
 	)
-	result.Loc = call.Loc
+	result.SetLoc(call.Loc())
 	return result
 }
 
@@ -252,17 +252,17 @@ func (s *superAccessState) trackSuperAccess(node *ast.Node) {
 	if s.capturedSuperProperties == nil {
 		return
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindPropertyAccessExpression:
-		if node.Expression().Kind == ast.KindSuperKeyword {
+		if node.Expression().Kind() == ast.KindSuperKeyword {
 			s.capturedSuperProperties.Add(node.Name().Text())
 		}
 	case ast.KindElementAccessExpression:
-		if node.Expression().Kind == ast.KindSuperKeyword {
+		if node.Expression().Kind() == ast.KindSuperKeyword {
 			s.hasSuperElementAccess = true
 		}
 	case ast.KindBinaryExpression:
-		if ast.IsAssignmentOperator(node.AsBinaryExpression().OperatorToken.Kind) && assignmentTargetContainsSuperProperty(node.AsBinaryExpression().Left) {
+		if ast.IsAssignmentOperator(node.AsBinaryExpression().OperatorToken.Kind()) && assignmentTargetContainsSuperProperty(node.AsBinaryExpression().Left) {
 			s.hasSuperPropertyAssignment = true
 		}
 	case ast.KindPrefixUnaryExpression:

@@ -55,11 +55,11 @@ func (l *LanguageService) provideDocumentHighlightsAtPosition(ctx context.Contex
 	node := astnav.GetTouchingPropertyName(sourceFile, position)
 
 	// Cheap JSX check before resolving files to search.
-	if node.Parent != nil && (node.Parent.Kind == ast.KindJsxClosingElement || (node.Parent.Kind == ast.KindJsxOpeningElement && node.Parent.TagName() == node)) {
+	if node.Parent() != nil && (node.Parent().Kind() == ast.KindJsxClosingElement || (node.Parent().Kind() == ast.KindJsxOpeningElement && node.Parent().TagName() == node)) {
 		var openingElement, closingElement *ast.Node
-		if ast.IsJsxElement(node.Parent.Parent) {
-			openingElement = node.Parent.Parent.AsJsxElement().OpeningElement
-			closingElement = node.Parent.Parent.AsJsxElement().ClosingElement
+		if ast.IsJsxElement(node.Parent().Parent()) {
+			openingElement = node.Parent().Parent().AsJsxElement().OpeningElement
+			closingElement = node.Parent().Parent().AsJsxElement().ClosingElement
 		}
 		var highlights []*lsproto.DocumentHighlight
 		kind := lsproto.DocumentHighlightKindRead
@@ -199,35 +199,35 @@ func (l *LanguageService) toDocumentHighlight(entry *ReferenceEntry) (string, *l
 }
 
 func (l *LanguageService) getSyntacticDocumentHighlights(node *ast.Node, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindIfKeyword, ast.KindElseKeyword:
-		if ast.IsIfStatement(node.Parent) {
-			return l.getIfElseOccurrences(node.Parent.AsIfStatement(), sourceFile)
+		if ast.IsIfStatement(node.Parent()) {
+			return l.getIfElseOccurrences(node.Parent().AsIfStatement(), sourceFile)
 		}
 		return nil
 	case ast.KindReturnKeyword:
-		return l.useParent(node.Parent, ast.IsReturnStatement, getReturnOccurrences, sourceFile)
+		return l.useParent(node.Parent(), ast.IsReturnStatement, getReturnOccurrences, sourceFile)
 	case ast.KindThrowKeyword:
-		return l.useParent(node.Parent, ast.IsThrowStatement, getThrowOccurrences, sourceFile)
+		return l.useParent(node.Parent(), ast.IsThrowStatement, getThrowOccurrences, sourceFile)
 	case ast.KindTryKeyword, ast.KindCatchKeyword, ast.KindFinallyKeyword:
 		var tryStatement *ast.Node
-		if node.Kind == ast.KindCatchKeyword {
-			tryStatement = node.Parent.Parent
+		if node.Kind() == ast.KindCatchKeyword {
+			tryStatement = node.Parent().Parent()
 		} else {
-			tryStatement = node.Parent
+			tryStatement = node.Parent()
 		}
 		return l.useParent(tryStatement, ast.IsTryStatement, getTryCatchFinallyOccurrences, sourceFile)
 	case ast.KindSwitchKeyword:
-		return l.useParent(node.Parent, ast.IsSwitchStatement, getSwitchCaseDefaultOccurrences, sourceFile)
+		return l.useParent(node.Parent(), ast.IsSwitchStatement, getSwitchCaseDefaultOccurrences, sourceFile)
 	case ast.KindCaseKeyword, ast.KindDefaultKeyword:
-		if ast.IsDefaultClause(node.Parent) || ast.IsCaseClause(node.Parent) {
-			return l.useParent(node.Parent.Parent.Parent, ast.IsSwitchStatement, getSwitchCaseDefaultOccurrences, sourceFile)
+		if ast.IsDefaultClause(node.Parent()) || ast.IsCaseClause(node.Parent()) {
+			return l.useParent(node.Parent().Parent().Parent(), ast.IsSwitchStatement, getSwitchCaseDefaultOccurrences, sourceFile)
 		}
 		return nil
 	case ast.KindBreakKeyword, ast.KindContinueKeyword:
-		return l.useParent(node.Parent, ast.IsBreakOrContinueStatement, getBreakOrContinueStatementOccurrences, sourceFile)
+		return l.useParent(node.Parent(), ast.IsBreakOrContinueStatement, getBreakOrContinueStatementOccurrences, sourceFile)
 	case ast.KindForKeyword, ast.KindWhileKeyword, ast.KindDoKeyword:
-		return l.useParent(node.Parent, func(n *ast.Node) bool {
+		return l.useParent(node.Parent(), func(n *ast.Node) bool {
 			return ast.IsIterationStatement(n, true)
 		}, getLoopBreakContinueOccurrences, sourceFile)
 	case ast.KindConstructorKeyword:
@@ -235,7 +235,7 @@ func (l *LanguageService) getSyntacticDocumentHighlights(node *ast.Node, sourceF
 	case ast.KindGetKeyword, ast.KindSetKeyword:
 		return l.getFromAllDeclarations(ast.IsAccessor, []ast.Kind{ast.KindGetKeyword, ast.KindSetKeyword}, node, sourceFile)
 	case ast.KindAwaitKeyword:
-		return l.useParent(node.Parent, ast.IsAwaitExpression, getAsyncAndAwaitOccurrences, sourceFile)
+		return l.useParent(node.Parent(), ast.IsAwaitExpression, getAsyncAndAwaitOccurrences, sourceFile)
 	case ast.KindAsyncKeyword:
 		return l.highlightSpans(getAsyncAndAwaitOccurrences(node, sourceFile), sourceFile)
 	case ast.KindYieldKeyword:
@@ -243,8 +243,8 @@ func (l *LanguageService) getSyntacticDocumentHighlights(node *ast.Node, sourceF
 	case ast.KindInKeyword, ast.KindOutKeyword:
 		return nil
 	default:
-		if ast.IsModifierKind(node.Kind) && (ast.IsDeclaration(node.Parent) || ast.IsVariableStatement(node.Parent)) {
-			return l.highlightSpans(getModifierOccurrences(node.Kind, node.Parent, sourceFile), sourceFile)
+		if ast.IsModifierKind(node.Kind()) && (ast.IsDeclaration(node.Parent()) || ast.IsVariableStatement(node.Parent())) {
+			return l.highlightSpans(getModifierOccurrences(node.Kind(), node.Parent(), sourceFile), sourceFile)
 		}
 		return nil
 	}
@@ -274,7 +274,7 @@ func (l *LanguageService) highlightSpans(nodes []*ast.Node, sourceFile *ast.Sour
 }
 
 func (l *LanguageService) getFromAllDeclarations(nodeTest func(*ast.Node) bool, keywords []ast.Kind, node *ast.Node, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
-	return l.useParent(node.Parent, nodeTest, func(decl *ast.Node, sf *ast.SourceFile) []*ast.Node {
+	return l.useParent(node.Parent(), nodeTest, func(decl *ast.Node, sf *ast.SourceFile) []*ast.Node {
 		var symbolDecls []*ast.Node
 		if ast.CanHaveSymbol(decl) {
 			if symbol := decl.Symbol(); symbol != nil {
@@ -283,7 +283,7 @@ func (l *LanguageService) getFromAllDeclarations(nodeTest func(*ast.Node) bool, 
 					outer:
 						for _, c := range getChildrenFromNonJSDocNode(d, sourceFile) {
 							for _, k := range keywords {
-								if c.Kind == k {
+								if c.Kind() == k {
 									symbolDecls = append(symbolDecls, c)
 									break outer
 								}
@@ -305,7 +305,7 @@ func (l *LanguageService) getIfElseOccurrences(ifStatement *ast.IfStatement, sou
 	// We'd like to highlight else/ifs together if they are only separated by whitespace
 	// (i.e. the keywords are separated by no comments, no newlines).
 	for i := 0; i < len(keywords); i++ {
-		if keywords[i].Kind == ast.KindElseKeyword && i < len(keywords)-1 {
+		if keywords[i].Kind() == ast.KindElseKeyword && i < len(keywords)-1 {
 			elseKeyword := keywords[i]
 			ifKeyword := keywords[i+1] // this *should* always be an 'if' keyword.
 			shouldCombine := true
@@ -347,9 +347,9 @@ func getIfElseKeywords(ifStatement *ast.IfStatement, sourceFile *ast.SourceFile)
 	//   ````
 	//
 	// Traverse upwards through all parent if-statements linked by their else-branches.
-	for ast.IsIfStatement(ifStatement.Parent) {
+	for ast.IsIfStatement(ifStatement.Parent()) {
 		// See if the parent's `else` is actually the current `if` statement.
-		parentingIf := ifStatement.Parent.AsIfStatement()
+		parentingIf := ifStatement.Parent().AsIfStatement()
 		elseStatement := parentingIf.ElseStatement
 		if elseStatement != ifStatement.AsNode() {
 			break
@@ -362,12 +362,12 @@ func getIfElseKeywords(ifStatement *ast.IfStatement, sourceFile *ast.SourceFile)
 	// Traverse back down through the else branches, aggregating if/else keywords of if-statements.
 	for {
 		children := getChildrenFromNonJSDocNode(ifStatement.AsNode(), sourceFile)
-		if len(children) > 0 && children[0].Kind == ast.KindIfKeyword {
+		if len(children) > 0 && children[0].Kind() == ast.KindIfKeyword {
 			keywords = append(keywords, children[0])
 		}
 		// Generally the 'else' keyword is second-to-last, so traverse backwards.
 		for _, c := range slices.Backward(children) {
-			if c.Kind == ast.KindElseKeyword {
+			if c.Kind() == ast.KindElseKeyword {
 				keywords = append(keywords, c)
 				break
 			}
@@ -382,7 +382,7 @@ func getIfElseKeywords(ifStatement *ast.IfStatement, sourceFile *ast.SourceFile)
 }
 
 func getReturnOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
-	funcNode := ast.FindAncestor(node.Parent, ast.IsFunctionLike)
+	funcNode := ast.FindAncestor(node.Parent(), ast.IsFunctionLike)
 	if funcNode == nil {
 		return nil
 	}
@@ -489,10 +489,10 @@ func getThrowOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node
 // function-block, or source file.
 func getThrowStatementOwner(throwStatement *ast.Node) *ast.Node {
 	child := throwStatement
-	for child.Parent != nil {
-		parent := child.Parent
+	for child.Parent() != nil {
+		parent := child.Parent()
 
-		if ast.IsFunctionBlock(parent) || parent.Kind == ast.KindSourceFile {
+		if ast.IsFunctionBlock(parent) || parent.Kind() == ast.KindSourceFile {
 			return parent
 		}
 
@@ -515,7 +515,7 @@ func getTryCatchFinallyOccurrences(node *ast.Node, sourceFile *ast.SourceFile) [
 
 	var keywords []*ast.Node
 	token := lsutil.GetFirstToken(node, sourceFile)
-	if token != nil && token.Kind == ast.KindTryKeyword {
+	if token != nil && token.Kind() == ast.KindTryKeyword {
 		keywords = append(keywords, token)
 	}
 
@@ -539,20 +539,20 @@ func getSwitchCaseDefaultOccurrences(node *ast.Node, sourceFile *ast.SourceFile)
 
 	var keywords []*ast.Node
 	token := lsutil.GetFirstToken(node, sourceFile)
-	if token.Kind == ast.KindSwitchKeyword {
+	if token.Kind() == ast.KindSwitchKeyword {
 		keywords = append(keywords, token)
 	}
 
 	clauses := switchStatement.CaseBlock.AsCaseBlock().Clauses
 	for _, clause := range clauses.Nodes {
 		clauseToken := lsutil.GetFirstToken(clause.AsNode(), sourceFile)
-		if clauseToken.Kind == ast.KindCaseKeyword || clauseToken.Kind == ast.KindDefaultKeyword {
+		if clauseToken.Kind() == ast.KindCaseKeyword || clauseToken.Kind() == ast.KindDefaultKeyword {
 			keywords = append(keywords, clauseToken)
 		}
 
 		breakAndContinueStatements := aggregateAllBreakAndContinueStatements(clause, sourceFile)
 		for _, statement := range breakAndContinueStatements {
-			if statement.Kind == ast.KindBreakStatement && ownsBreakOrContinueStatement(switchStatement.AsNode(), statement) {
+			if statement.Kind() == ast.KindBreakStatement && ownsBreakOrContinueStatement(switchStatement.AsNode(), statement) {
 				keywords = append(keywords, lsutil.GetFirstToken(statement, sourceFile))
 			}
 		}
@@ -581,9 +581,9 @@ func ownsBreakOrContinueStatement(owner *ast.Node, statement *ast.Node) bool {
 
 func getBreakOrContinueOwner(statement *ast.Node) *ast.Node {
 	return ast.FindAncestorOrQuit(statement, func(node *ast.Node) ast.FindAncestorResult {
-		switch node.Kind {
+		switch node.Kind() {
 		case ast.KindSwitchStatement:
-			if statement.Kind == ast.KindContinueStatement {
+			if statement.Kind() == ast.KindContinueStatement {
 				return ast.FindAncestorFalse
 			}
 			fallthrough
@@ -610,7 +610,7 @@ func getBreakOrContinueOwner(statement *ast.Node) *ast.Node {
 // Whether or not a 'node' is preceded by a label of the given string.
 // Note: 'node' cannot be a SourceFile.
 func isLabeledBy(node *ast.Node, labelName string) bool {
-	return ast.FindAncestorOrQuit(node.Parent, func(owner *ast.Node) ast.FindAncestorResult {
+	return ast.FindAncestorOrQuit(node.Parent(), func(owner *ast.Node) ast.FindAncestorResult {
 		if !ast.IsLabeledStatement(owner) {
 			return ast.FindAncestorQuit
 		}
@@ -623,7 +623,7 @@ func isLabeledBy(node *ast.Node, labelName string) bool {
 
 func getBreakOrContinueStatementOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
 	if owner := getBreakOrContinueOwner(node); owner != nil {
-		switch owner.Kind {
+		switch owner.Kind() {
 		case ast.KindForStatement, ast.KindForInStatement, ast.KindForOfStatement, ast.KindDoStatement, ast.KindWhileStatement:
 			return getLoopBreakContinueOccurrences(owner, sourceFile)
 		case ast.KindSwitchStatement:
@@ -637,12 +637,12 @@ func getLoopBreakContinueOccurrences(node *ast.Node, sourceFile *ast.SourceFile)
 	var keywords []*ast.Node
 
 	token := lsutil.GetFirstToken(node, sourceFile)
-	if token.Kind == ast.KindForKeyword || token.Kind == ast.KindDoKeyword || token.Kind == ast.KindWhileKeyword {
+	if token.Kind() == ast.KindForKeyword || token.Kind() == ast.KindDoKeyword || token.Kind() == ast.KindWhileKeyword {
 		keywords = append(keywords, token)
-		if node.Kind == ast.KindDoStatement {
+		if node.Kind() == ast.KindDoStatement {
 			loopTokens := getChildrenFromNonJSDocNode(node, sourceFile)
 			for _, loopToken := range slices.Backward(loopTokens) {
-				if loopToken.Kind == ast.KindWhileKeyword {
+				if loopToken.Kind() == ast.KindWhileKeyword {
 					keywords = append(keywords, loopToken)
 					break
 				}
@@ -653,7 +653,7 @@ func getLoopBreakContinueOccurrences(node *ast.Node, sourceFile *ast.SourceFile)
 	breakAndContinueStatements := aggregateAllBreakAndContinueStatements(node, sourceFile)
 	for _, statement := range breakAndContinueStatements {
 		token := lsutil.GetFirstToken(statement, sourceFile)
-		if ownsBreakOrContinueStatement(node, statement) && (token.Kind == ast.KindBreakKeyword || token.Kind == ast.KindContinueKeyword) {
+		if ownsBreakOrContinueStatement(node, statement) && (token.Kind() == ast.KindBreakKeyword || token.Kind() == ast.KindContinueKeyword) {
 			keywords = append(keywords, token)
 		}
 	}
@@ -670,7 +670,7 @@ func getAsyncAndAwaitOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*
 	var keywords []*ast.Node
 
 	for _, modifier := range fun.ModifierNodes() {
-		if modifier.Kind == ast.KindAsyncKeyword {
+		if modifier.Kind() == ast.KindAsyncKeyword {
 			keywords = append(keywords, modifier)
 		}
 	}
@@ -679,7 +679,7 @@ func getAsyncAndAwaitOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*
 		traverseWithoutCrossingFunction(child, sourceFile, func(child *ast.Node) {
 			if ast.IsAwaitExpression(child) {
 				token := lsutil.GetFirstToken(child, sourceFile)
-				if token.Kind == ast.KindAwaitKeyword {
+				if token.Kind() == ast.KindAwaitKeyword {
 					keywords = append(keywords, token)
 				}
 			}
@@ -691,7 +691,7 @@ func getAsyncAndAwaitOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*
 }
 
 func getYieldOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
-	parentFunc := ast.FindAncestor(node.Parent, ast.IsFunctionLike)
+	parentFunc := ast.FindAncestor(node.Parent(), ast.IsFunctionLike)
 	if parentFunc == nil {
 		return nil
 	}
@@ -702,7 +702,7 @@ func getYieldOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node
 		traverseWithoutCrossingFunction(child, sourceFile, func(child *ast.Node) {
 			if ast.IsYieldExpression(child) {
 				token := lsutil.GetFirstToken(child, sourceFile)
-				if token.Kind == ast.KindYieldKeyword {
+				if token.Kind() == ast.KindYieldKeyword {
 					keywords = append(keywords, token)
 				}
 			}
@@ -739,13 +739,13 @@ func getModifierOccurrences(kind ast.Kind, node *ast.Node, sourceFile *ast.Sourc
 func getNodesToSearchForModifier(declaration *ast.Node, modifierFlag ast.ModifierFlags) []*ast.Node {
 	var result []*ast.Node
 
-	container := declaration.Parent
+	container := declaration.Parent()
 	if container == nil {
 		return nil
 	}
 
 	// Types of node whose children might have modifiers.
-	switch container.Kind {
+	switch container.Kind() {
 	case ast.KindModuleBlock, ast.KindSourceFile, ast.KindBlock, ast.KindCaseClause, ast.KindDefaultClause:
 		// Container is either a class declaration or the declaration is a classDeclaration
 		if (modifierFlag&ast.ModifierFlagsAbstract) != 0 && ast.IsClassDeclaration(declaration) {
@@ -756,8 +756,8 @@ func getNodesToSearchForModifier(declaration *ast.Node, modifierFlag ast.Modifie
 	case ast.KindConstructor, ast.KindMethodDeclaration, ast.KindFunctionDeclaration:
 		// Parameters and, if inside a class, also class members
 		result = append(result, container.Parameters()...)
-		if ast.IsClassLike(container.Parent) {
-			result = append(result, container.Parent.Members()...)
+		if ast.IsClassLike(container.Parent()) {
+			result = append(result, container.Parent().Members()...)
 		}
 		return result
 	case ast.KindClassDeclaration, ast.KindClassExpression, ast.KindInterfaceDeclaration, ast.KindTypeLiteral:
@@ -789,7 +789,7 @@ func getNodesToSearchForModifier(declaration *ast.Node, modifierFlag ast.Modifie
 
 func findModifier(node *ast.Node, kind ast.Kind) *ast.Node {
 	for _, modifier := range node.ModifierNodes() {
-		if modifier.Kind == kind {
+		if modifier.Kind() == kind {
 			return modifier
 		}
 	}

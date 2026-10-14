@@ -9,7 +9,7 @@ import (
 )
 
 func getNodeDataType(node *ast.Node) uint32 {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindIdentifier,
 		ast.KindPrivateIdentifier,
 		ast.KindJsxText,
@@ -34,7 +34,7 @@ func getNodeDataType(node *ast.Node) uint32 {
 }
 
 func getChildrenPropertyMask(node *ast.Node) uint8 {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindQualifiedName:
 		n := node.AsQualifiedName()
 		return (boolToByte(n.Left != nil) << 0) | (boolToByte(n.Right != nil) << 1)
@@ -539,7 +539,7 @@ func getChildrenPropertyMask(node *ast.Node) uint8 {
 }
 
 func getNodeCommonData(node *ast.Node) uint32 {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindBlock:
 		n := node.AsBlock()
 		return uint32(boolToByte(n.MultiLine)) << 24
@@ -661,29 +661,29 @@ func getNodeCommonData(node *ast.Node) uint32 {
 }
 
 func recordNodeStrings(node *ast.Node, strs *stringTable) uint32 {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindIdentifier:
-		return strs.add(node.AsIdentifier().Text, node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsIdentifier().Text, node.Kind(), node.Pos(), node.End())
 	case ast.KindPrivateIdentifier:
-		return strs.add(node.AsPrivateIdentifier().Text, node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsPrivateIdentifier().Text, node.Kind(), node.Pos(), node.End())
 	case ast.KindJsxText:
-		return strs.add(node.AsJsxText().Text, node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsJsxText().Text, node.Kind(), node.Pos(), node.End())
 	case ast.KindJSDocText:
-		return strs.add(node.AsJSDocText().Text(), node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsJSDocText().Text(), node.Kind(), node.Pos(), node.End())
 	case ast.KindJSDocLink:
-		return strs.add(node.AsJSDocLink().Text(), node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsJSDocLink().Text(), node.Kind(), node.Pos(), node.End())
 	case ast.KindJSDocLinkPlain:
-		return strs.add(node.AsJSDocLinkPlain().Text(), node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsJSDocLinkPlain().Text(), node.Kind(), node.Pos(), node.End())
 	case ast.KindJSDocLinkCode:
-		return strs.add(node.AsJSDocLinkCode().Text(), node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsJSDocLinkCode().Text(), node.Kind(), node.Pos(), node.End())
 	default:
-		panic(fmt.Sprintf("Unexpected node kind %v", node.Kind))
+		panic(fmt.Sprintf("Unexpected node kind %v", node.Kind()))
 	}
 }
 
 func recordExtendedData(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) uint32 {
 	offset := uint32(len(*extendedData))
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindStringLiteral:
 		recordExtendedData_StringLiteral(node, strs, positionMap, extendedData, structuredData)
 	case ast.KindNumericLiteral:
@@ -703,7 +703,7 @@ func recordExtendedData(node *ast.Node, strs *stringTable, positionMap *ast.Posi
 	case ast.KindSourceFile:
 		recordExtendedData_SourceFile(node, strs, positionMap, extendedData, structuredData)
 	default:
-		panic(fmt.Sprintf("unknown extended data node kind %v", node.Kind))
+		panic(fmt.Sprintf("unknown extended data node kind %v", node.Kind()))
 	}
 	return offset
 }

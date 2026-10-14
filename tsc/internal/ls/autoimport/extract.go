@@ -96,7 +96,7 @@ func (e *symbolExtractor) getModuleIDForSymbol(symbol *ast.Symbol) (ModuleID, bo
 	// If fileName is set, this is a source file that may need realpath normalization
 	if fileName != "" && e.realpath != nil {
 		decl := ast.GetNonAugmentationDeclaration(symbol)
-		if decl != nil && decl.Kind == ast.KindSourceFile {
+		if decl != nil && decl.Kind() == ast.KindSourceFile {
 			return e.getModuleID(decl.AsSourceFile()), true
 		}
 	}
@@ -136,7 +136,7 @@ func isNonPatternAmbientModuleDeclaration(file *ast.SourceFile, decl *ast.Module
 
 func (e *exportExtractor) extractFromModule(file *ast.SourceFile) []*Export {
 	moduleAugmentations := core.MapNonNil(file.ModuleAugmentations, func(name *ast.ModuleName) *ast.ModuleDeclaration {
-		decl := name.Parent
+		decl := name.Parent()
 		if ast.IsGlobalScopeAugmentation(decl) {
 			return nil
 		}
@@ -244,13 +244,13 @@ func (e *symbolExtractor) extractFromSymbol(name string, symbol *ast.Symbol, mod
 		}
 	} else if syntax == ExportSyntaxCommonJSModuleExports {
 		expression := symbol.Declarations()[0].AsBinaryExpression().Right
-		if expression.Kind == ast.KindObjectLiteralExpression {
+		if expression.Kind() == ast.KindObjectLiteralExpression {
 			// what is actually desirable here? I think it would be reasonable to only treat these as exports
 			// if *every* property is a shorthand property or identifier: identifier
 			// At least, it would be sketchy if there were any methods, computed properties...
 			*exports = slices.Grow(*exports, len(expression.AsObjectLiteralExpression().Properties.Nodes))
 			for _, prop := range expression.AsObjectLiteralExpression().Properties.Nodes {
-				if ast.IsShorthandPropertyAssignment(prop) || ast.IsPropertyAssignment(prop) && prop.AsPropertyAssignment().Name().Kind == ast.KindIdentifier {
+				if ast.IsShorthandPropertyAssignment(prop) || ast.IsPropertyAssignment(prop) && prop.AsPropertyAssignment().Name().Kind() == ast.KindIdentifier {
 					export, _ := e.createExport(expression.Symbol().Members()[prop.Name().Text()], moduleID, moduleFileName, syntax, file, checkerLease)
 					if export != nil {
 						export.through = name
@@ -378,8 +378,8 @@ func (e *symbolExtractor) tryResolveSymbol(symbol *ast.Symbol, syntax ExportSynt
 	switch syntax {
 	case ExportSyntaxNamed:
 		decl := ast.GetDeclarationOfKind(symbol, ast.KindExportSpecifier)
-		if decl.Parent.Parent.AsExportDeclaration().ModuleSpecifier == nil {
-			if n := core.FirstNonZero(decl.Name(), decl.PropertyName()); n.Kind == ast.KindIdentifier {
+		if decl.Parent().Parent().AsExportDeclaration().ModuleSpecifier == nil {
+			if n := core.FirstNonZero(decl.Name(), decl.PropertyName()); n.Kind() == ast.KindIdentifier {
 				loc = n
 				name = n.Text()
 			}
@@ -392,7 +392,7 @@ func (e *symbolExtractor) tryResolveSymbol(symbol *ast.Symbol, syntax ExportSynt
 		fallthrough
 	case ExportSyntaxDefaultDeclaration:
 		decl := ast.GetDeclarationOfKind(symbol, ast.KindExportAssignment)
-		if decl.Expression().Kind == ast.KindIdentifier {
+		if decl.Expression().Kind() == ast.KindIdentifier {
 			loc = decl.Expression()
 			name = loc.Text()
 		}
@@ -421,7 +421,7 @@ func shouldIgnoreSymbol(symbol *ast.Symbol) bool {
 
 func getSyntax(symbol *ast.Symbol) ExportSyntax {
 	for _, decl := range symbol.Declarations() {
-		switch decl.Kind {
+		switch decl.Kind() {
 		case ast.KindExportSpecifier:
 			return ExportSyntaxNamed
 		case ast.KindExportAssignment:

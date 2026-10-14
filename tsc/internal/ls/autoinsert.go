@@ -33,10 +33,10 @@ func (l *LanguageService) ProvideOnAutoInsert(ctx context.Context, params *lspro
 
 	var closingText string
 	var element *ast.Node
-	if token.Kind == ast.KindGreaterThanToken && ast.IsJsxOpeningElement(token.Parent) {
-		element = token.Parent.Parent
-	} else if ast.IsJsxText(token) && ast.IsJsxElement(token.Parent) {
-		element = token.Parent
+	if token.Kind() == ast.KindGreaterThanToken && ast.IsJsxOpeningElement(token.Parent()) {
+		element = token.Parent().Parent()
+	} else if ast.IsJsxText(token) && ast.IsJsxElement(token.Parent()) {
+		element = token.Parent()
 	}
 
 	if element != nil && isUnclosedTag(element.AsJsxElement()) {
@@ -45,10 +45,10 @@ func (l *LanguageService) ProvideOnAutoInsert(ctx context.Context, params *lspro
 		closingText = "</" + ast.EntityNameToString(tagNameNode, scanner.GetTextOfNode) + ">"
 	} else {
 		var fragment *ast.Node
-		if token.Kind == ast.KindGreaterThanToken && ast.IsJsxOpeningFragment(token.Parent) {
-			fragment = token.Parent.Parent
-		} else if ast.IsJsxText(token) && ast.IsJsxFragment(token.Parent) {
-			fragment = token.Parent
+		if token.Kind() == ast.KindGreaterThanToken && ast.IsJsxOpeningFragment(token.Parent()) {
+			fragment = token.Parent().Parent()
+		} else if ast.IsJsxText(token) && ast.IsJsxFragment(token.Parent()) {
+			fragment = token.Parent()
 		}
 
 		if fragment != nil && isUnclosedFragment(fragment.AsJsxFragment()) {
@@ -81,7 +81,7 @@ func isUnclosedTag(node *ast.JsxElement) bool {
 		return true
 	}
 
-	parent := node.Parent
+	parent := node.Parent()
 	if ast.IsJsxElement(parent) {
 		parent := parent.AsJsxElement()
 		return ast.TagNamesAreEquivalent(openingElement.TagName(), parent.OpeningElement.TagName()) && isUnclosedTag(parent)
@@ -92,11 +92,11 @@ func isUnclosedTag(node *ast.JsxElement) bool {
 
 func isUnclosedFragment(node *ast.JsxFragment) bool {
 	closingFragment := node.ClosingFragment
-	if closingFragment.Flags&ast.NodeFlagsThisNodeHasError != 0 {
+	if closingFragment.Flags()&ast.NodeFlagsThisNodeHasError != 0 {
 		return true
 	}
 
-	parent := node.Parent
+	parent := node.Parent()
 	if ast.IsJsxFragment(parent) && isUnclosedFragment(parent.AsJsxFragment()) {
 		return true
 	}

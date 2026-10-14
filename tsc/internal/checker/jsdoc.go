@@ -10,7 +10,7 @@ import (
 func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 	var jsdocParameters []*ast.Node
 	for _, tag := range getAllJSDocTags(node) {
-		if tag.Kind == ast.KindJSDocParameterTag {
+		if tag.Kind() == ast.KindJSDocParameterTag {
 			name := tag.AsJSDocParameterOrPropertyTag().Name()
 			if ast.IsIdentifier(name) && len(name.Text()) == 0 {
 				continue
@@ -85,7 +85,7 @@ func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 }
 
 func getAllJSDocTags(node *ast.Node) []*ast.Node {
-	if node.Flags&ast.NodeFlagsJSDoc == 0 {
+	if node.Flags()&ast.NodeFlagsJSDoc == 0 {
 		for current := node; current != nil; current = ast.GetNextJSDocCommentLocation(current) {
 			jsdocs := current.JSDoc(nil)
 			if len(jsdocs) == 0 {
@@ -110,7 +110,7 @@ func (c *Checker) checkJSDocAugmentsTagMatchesExtends(node *ast.Node, baseTypeNo
 			continue
 		}
 		for _, tag := range j.AsJSDoc().Tags.Nodes {
-			if tag.Kind != ast.KindJSDocAugmentsTag {
+			if tag.Kind() != ast.KindJSDocAugmentsTag {
 				continue
 			}
 			sourceTypeNode := tag.ClassName()

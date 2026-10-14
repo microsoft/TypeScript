@@ -11,7 +11,7 @@ type modifierVisitor struct {
 }
 
 func (v *modifierVisitor) visit(node *ast.Node) *ast.Node {
-	flags := ast.ModifierToFlag(node.Kind)
+	flags := ast.ModifierToFlag(node.Kind())
 	if flags != ast.ModifierFlagsNone && flags&v.AllowedModifiers == 0 {
 		return nil
 	}

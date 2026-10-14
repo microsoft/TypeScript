@@ -36,7 +36,7 @@ func (tx *usingDeclarationTransformer) visit(node *ast.Node) *ast.Node {
 		return node
 	}
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindSourceFile:
 		node = tx.visitSourceFile(node.AsSourceFile())
 	case ast.KindBlock:
@@ -311,7 +311,7 @@ func (tx *usingDeclarationTransformer) transformUsingDeclarations(statementsIn [
 			return node
 		}
 
-		switch node.Kind {
+		switch node.Kind() {
 		case ast.KindImportDeclaration,
 			ast.KindImportEqualsDeclaration,
 			ast.KindExportDeclaration,
@@ -375,14 +375,14 @@ func (tx *usingDeclarationTransformer) transformUsingDeclarations(statementsIn [
 			if len(declarations) > 0 {
 				varList := tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList(declarations), ast.NodeFlagsConst)
 				tx.EmitContext().SetOriginal(varList, declarationList)
-				varList.Loc = declarationList.Loc
+				varList.SetLoc(declarationList.Loc())
 				hoistOrAppendNode(tx.Factory().UpdateVariableStatement(varStatement, nil /*modifiers*/, varList))
 				continue
 			}
 		}
 
 		if result := tx.visit(statement); result != nil {
-			if result.Kind == ast.KindSyntaxList {
+			if result.Kind() == ast.KindSyntaxList {
 				for _, node := range result.AsSyntaxList().Children {
 					hoistOrAppendNode(node)
 				}
@@ -513,8 +513,8 @@ func (tx *usingDeclarationTransformer) hoistClassDeclaration(node *ast.ClassDecl
 		tx.hoistBindingIdentifier(tx.Factory().GetLocalName(node.AsNode()), isExported && !isDefault, nil /*exportAlias*/, node.AsNode())
 		expression = tx.Factory().NewAssignmentExpression(tx.Factory().GetDeclarationName(node.AsNode()), expression)
 		tx.EmitContext().SetOriginal(expression, node.AsNode())
-		tx.EmitContext().SetSourceMapRange(expression, node.Loc)
-		tx.EmitContext().SetCommentRange(expression, node.Loc)
+		tx.EmitContext().SetSourceMapRange(expression, node.Loc())
+		tx.EmitContext().SetCommentRange(expression, node.Loc())
 		if isNamedEvaluation(tx.EmitContext(), expression) {
 			expression = transformNamedEvaluation(tx.EmitContext(), expression, false /*ignoreEmptyStringLiteral*/, "" /*assignedName*/)
 		}
@@ -572,8 +572,8 @@ func (tx *usingDeclarationTransformer) hoistVariableStatement(node *ast.Variable
 	if len(expressions) > 0 {
 		statement := tx.Factory().NewExpressionStatement(tx.Factory().InlineExpressions(expressions))
 		tx.EmitContext().SetOriginal(statement, node.AsNode())
-		tx.EmitContext().SetCommentRange(statement, node.Loc)
-		tx.EmitContext().SetSourceMapRange(statement, node.Loc)
+		tx.EmitContext().SetCommentRange(statement, node.Loc())
+		tx.EmitContext().SetSourceMapRange(statement, node.Loc())
 		return statement
 	}
 	return nil
@@ -594,8 +594,8 @@ func (tx *usingDeclarationTransformer) hoistInitializedVariable(node *ast.Variab
 
 	assignment := tx.Factory().NewAssignmentExpression(target, node.Initializer)
 	tx.EmitContext().SetOriginal(assignment, node.AsNode())
-	tx.EmitContext().SetCommentRange(assignment, node.Loc)
-	tx.EmitContext().SetSourceMapRange(assignment, node.Loc)
+	tx.EmitContext().SetCommentRange(assignment, node.Loc())
+	tx.EmitContext().SetSourceMapRange(assignment, node.Loc())
 	return assignment
 }
 
@@ -763,7 +763,7 @@ func isUsingVariableDeclarationList(node *ast.ForInitializer) bool {
 }
 
 func getUsingKindOfVariableDeclarationList(node *ast.VariableDeclarationList) usingKind {
-	switch node.Flags & ast.NodeFlagsBlockScoped {
+	switch node.Flags() & ast.NodeFlagsBlockScoped {
 	case ast.NodeFlagsAwaitUsing:
 		return usingKindAsync
 	case ast.NodeFlagsUsing:

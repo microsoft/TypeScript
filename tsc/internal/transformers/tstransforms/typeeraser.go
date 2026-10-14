@@ -52,7 +52,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 	grandparentNode := tx.pushNode(node)
 	defer tx.popNode(grandparentNode)
 
-	switch node.Kind {
+	switch node.Kind() {
 	case
 		// TypeScript accessibility and readonly modifiers are elided
 		ast.KindPublicKeyword,
@@ -250,7 +250,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindCallExpression:
 		n := node.AsCallExpression()
-		return tx.Factory().UpdateCallExpression(n, tx.Visitor().VisitNode(n.Expression), n.QuestionDotToken, nil, tx.Visitor().VisitNodes(n.Arguments), n.Flags)
+		return tx.Factory().UpdateCallExpression(n, tx.Visitor().VisitNode(n.Expression), n.QuestionDotToken, nil, tx.Visitor().VisitNodes(n.Arguments), n.Flags())
 
 	case ast.KindNewExpression:
 		n := node.AsNewExpression()
@@ -258,12 +258,12 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindTaggedTemplateExpression:
 		n := node.AsTaggedTemplateExpression()
-		return tx.Factory().UpdateTaggedTemplateExpression(n, tx.Visitor().VisitNode(n.Tag), n.QuestionDotToken, nil, tx.Visitor().VisitNode(n.Template), n.Flags)
+		return tx.Factory().UpdateTaggedTemplateExpression(n, tx.Visitor().VisitNode(n.Tag), n.QuestionDotToken, nil, tx.Visitor().VisitNode(n.Template), n.Flags())
 
 	case ast.KindNonNullExpression, ast.KindTypeAssertionExpression, ast.KindAsExpression, ast.KindSatisfiesExpression:
 		partial := tx.Factory().NewPartiallyEmittedExpression(tx.Visitor().VisitNode(node.Expression()))
 		tx.EmitContext().SetOriginal(partial, node)
-		partial.Loc = node.Loc
+		partial.SetLoc(node.Loc())
 		return partial
 
 	case ast.KindParenthesizedExpression:
@@ -273,7 +273,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 			if ast.IsAssertionExpression(expression) || ast.IsSatisfiesExpression(expression) {
 				partial := tx.Factory().NewPartiallyEmittedExpression(tx.Visitor().VisitNode(n.Expression))
 				tx.EmitContext().SetOriginal(partial, node)
-				partial.Loc = node.Loc
+				partial.SetLoc(node.Loc())
 				return partial
 			}
 		}

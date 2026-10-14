@@ -28,7 +28,7 @@ func (tx *taggedTemplateTransformer) visit(node *ast.Node) *ast.Node {
 	if node.SubtreeFacts()&ast.SubtreeContainsInvalidTemplateEscape == 0 {
 		return node
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindSourceFile:
 		return tx.visitSourceFile(node.AsSourceFile())
 	case ast.KindTaggedTemplateExpression:
@@ -121,7 +121,7 @@ func (tx *taggedTemplateTransformer) processTaggedTemplateExpression(node *ast.T
 	}
 
 	call := f.NewCallExpression(tag, nil /*questionDotToken*/, nil /*typeArguments*/, f.NewNodeList(templateArguments), ast.NodeFlagsNone)
-	call.Loc = node.Loc
+	call.SetLoc(node.Loc())
 	return call
 }
 
@@ -140,7 +140,7 @@ func getRawLiteral(f *printer.NodeFactory, node *ast.Node) *ast.Node {
 		// thus we need to remove those characters.
 		// First template piece starts with "`", others with "}"
 		// Last template piece ends with "`", others with "${"
-		isLast := node.Kind == ast.KindNoSubstitutionTemplateLiteral || node.Kind == ast.KindTemplateTail
+		isLast := node.Kind() == ast.KindNoSubstitutionTemplateLiteral || node.Kind() == ast.KindTemplateTail
 		endLen := 2
 		if isLast {
 			endLen = 1
@@ -154,7 +154,7 @@ func getRawLiteral(f *printer.NodeFactory, node *ast.Node) *ast.Node {
 	text = newlineNormalizer.Replace(text)
 
 	result := f.NewStringLiteral(text, ast.TokenFlagsNone)
-	result.Loc = node.Loc
+	result.SetLoc(node.Loc())
 	return result
 }
 

@@ -228,7 +228,7 @@ func (b *NodeBuilderImpl) tryReuseExistingNodeHelper(existing *ast.TypeNode) *as
 	if !b.finalizeBoundary(bound) {
 		return nil
 	}
-	b.ctx.approximateLength += existing.Loc.End() - existing.Loc.Pos()
+	b.ctx.approximateLength += existing.Loc().End() - existing.Loc().Pos()
 	return transformed
 }
 
@@ -284,7 +284,7 @@ func (b *NodeBuilderImpl) rewriteModuleSpecifier(parent *ast.Node, lit *ast.Node
 func (b *NodeBuilderImpl) getEnclosingDeclarationIgnoringFakeScope() *ast.Node {
 	enc := b.ctx.enclosingDeclaration
 	for enc != nil && b.links.Get(enc).fakeScopeForSignatureDeclaration != nil {
-		enc = enc.Parent
+		enc = enc.Parent()
 	}
 	return enc
 }
@@ -325,7 +325,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		}
 		introducesError := false
 		leftmost := ast.GetFirstIdentifier(node)
-		if ast.IsInJSFile(node) && (ast.IsExportsIdentifier(leftmost) || ast.IsModuleExportsAccessExpression(leftmost.Parent) || (ast.IsQualifiedName(leftmost.Parent) && ast.IsModuleIdentifier(leftmost.Parent.AsQualifiedName().Left) && ast.IsExportsIdentifier(leftmost.Parent.AsQualifiedName().Right))) {
+		if ast.IsInJSFile(node) && (ast.IsExportsIdentifier(leftmost) || ast.IsModuleExportsAccessExpression(leftmost.Parent()) || (ast.IsQualifiedName(leftmost.Parent()) && ast.IsModuleIdentifier(leftmost.Parent().AsQualifiedName().Left) && ast.IsExportsIdentifier(leftmost.Parent().AsQualifiedName().Right))) {
 			introducesError = true
 			return introducesError, b.setTextRange(b.f.DeepCloneNode(node), node), nil
 		}
@@ -455,7 +455,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 	}
 	tryVisitSimpleTypeNode = func(node *ast.Node) *ast.Node {
 		innerNode := ast.SkipParentheses(node)
-		switch innerNode.Kind {
+		switch innerNode.Kind() {
 		case ast.KindTypeReference:
 			return tryVisitTypeReference(innerNode)
 		case ast.KindTypeQuery:
@@ -476,43 +476,43 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		// accidentally.
 		// Still, what can be ported of the logic is here, just in case.
 		// Begin JSDoc handling
-		if node.Kind == ast.KindJSDocTypeExpression {
+		if node.Kind() == ast.KindJSDocTypeExpression {
 			// Unwrap JSDocTypeExpressions
 			return visitor.VisitNode(node.AsJSDocTypeExpression().Type)
 		}
 		// !!! TODO: We don't _actually_ support jsdoc namepath types, emit `any` instead; verify we handle as gracefully as strada
-		if node.Kind == ast.KindJSDocAllType /* || node.Kind == ast.JSDocNamepathType */ {
+		if node.Kind() == ast.KindJSDocAllType /* || node.Kind == ast.JSDocNamepathType */ {
 			return factory.NewKeywordTypeNode(ast.KindAnyKeyword)
 		}
 		// !!! TODO: verify JSDocUnknwonType is hopefully just parsed into `unknown` upfront; the kind no longer exists
 		// if node.Kind == ast.KindJSDocUnknownType {
 		// 	return factory.NewKeywordTypeNode(ast.KindUnknownKeyword)
 		// }
-		if node.Kind == ast.KindJSDocNullableType {
+		if node.Kind() == ast.KindJSDocNullableType {
 			unionMembers := []*ast.Node{
 				visitor.VisitNode(node.AsJSDocNullableType().Type),
 				factory.NewLiteralTypeNode(factory.NewKeywordExpression(ast.KindNullKeyword)),
 			}
 			return factory.NewUnionTypeNode(factory.NewNodeList(unionMembers))
 		}
-		if node.Kind == ast.KindJSDocOptionalType {
+		if node.Kind() == ast.KindJSDocOptionalType {
 			unionMembers := []*ast.Node{
 				visitor.VisitNode(node.AsJSDocOptionalType().Type),
 				factory.NewKeywordTypeNode(ast.KindUndefinedKeyword),
 			}
 			return factory.NewUnionTypeNode(factory.NewNodeList(unionMembers))
 		}
-		if node.Kind == ast.KindJSDocNonNullableType {
+		if node.Kind() == ast.KindJSDocNonNullableType {
 			// Unwrap
 			return visitor.VisitNode(node.AsJSDocNonNullableType().Type)
 		}
-		if node.Kind == ast.KindJSDocVariadicType { // !!! TODO: verify this matches how jsdoc variadics are actually handled now?
+		if node.Kind() == ast.KindJSDocVariadicType { // !!! TODO: verify this matches how jsdoc variadics are actually handled now?
 			return factory.NewArrayTypeNode(visitor.VisitNode(node.AsJSDocVariadicType().Type))
 		}
-		if node.Kind == ast.KindJSDocTypeLiteral {
+		if node.Kind() == ast.KindJSDocTypeLiteral {
 			var members []*ast.Node
 			for _, t := range node.AsJSDocTypeLiteral().JSDocPropertyTags {
-				if t.Kind != ast.KindJSDocPropertyTag && t.Kind != ast.KindJSDocParameterTag {
+				if t.Kind() != ast.KindJSDocPropertyTag && t.Kind() != ast.KindJSDocParameterTag {
 					continue
 				}
 				n := t.Name()
@@ -523,7 +523,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 					targetName = n.AsQualifiedName().Right // !!! TODO: without typesystem backup, doing this cast unguarded seems really suspect, even though it is what strada does
 				}
 				name := visitor.VisitNode(targetName)
-				shouldBeOptional := t.AsJSDocParameterOrPropertyTag().IsBracketed || (t.TypeExpression() != nil && t.TypeExpression().Kind == ast.KindJSDocOptionalType)
+				shouldBeOptional := t.AsJSDocParameterOrPropertyTag().IsBracketed || (t.TypeExpression() != nil && t.TypeExpression().Kind() == ast.KindJSDocOptionalType)
 				var question *ast.Node
 				if shouldBeOptional {
 					question = factory.NewToken(ast.KindQuestionToken)
@@ -597,7 +597,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			return node
 		}
 		if ast.IsTypeOperatorNode(node) {
-			if node.AsTypeOperatorNode().Operator == ast.KindUniqueKeyword && node.AsTypeOperatorNode().Type.Kind == ast.KindSymbolKeyword {
+			if node.AsTypeOperatorNode().Operator == ast.KindUniqueKeyword && node.AsTypeOperatorNode().Type.Kind() == ast.KindSymbolKeyword {
 				nonFakeEnclosing := b.getEnclosingDeclarationIgnoringFakeScope()
 				sameScope := ast.FindAncestor(node, func(a *ast.Node) bool {
 					return a == nonFakeEnclosing
@@ -649,7 +649,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				visitor.VisitNodes(node.AsImportTypeNode().TypeArguments),
 			)
 		}
-		if node.Name() != nil && node.Name().Kind == ast.KindComputedPropertyName && !b.ch.hasLateBindableName(node) {
+		if node.Name() != nil && node.Name().Kind() == ast.KindComputedPropertyName && !b.ch.hasLateBindableName(node) {
 			if !ast.HasDynamicName(node) {
 				// !!! TODO: This matches strada, but rather than recursing, this should probably fall down to later cases.
 				// Take a `["field"]` property declaration - it still needs a `: any` appended to it
@@ -668,7 +668,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			}
 			node = visited
 			newType := factory.NewKeywordTypeNode(ast.KindAnyKeyword)
-			switch node.Kind {
+			switch node.Kind() {
 			case ast.KindPropertyDeclaration:
 				return factory.UpdatePropertyDeclaration(
 					node.AsPropertyDeclaration(),

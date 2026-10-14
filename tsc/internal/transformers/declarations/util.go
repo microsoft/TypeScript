@@ -11,7 +11,7 @@ func needsScopeMarker(result *ast.Node) bool {
 }
 
 func canHaveLiteralInitializer(resolver printer.EmitResolver, node *ast.Node) bool {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindPropertyDeclaration,
 		ast.KindPropertySignature:
 		return resolver.GetEffectiveDeclarationFlags(node, ast.ModifierFlagsPrivate) == 0
@@ -51,7 +51,7 @@ func canProduceDiagnostics(node *ast.Node) bool {
 
 func canReuseModifierNodes(nodes []*ast.Node) bool {
 	for _, node := range nodes {
-		if ast.IsModifier(node) && node.Flags&ast.NodeFlagsReparsed != 0 {
+		if ast.IsModifier(node) && node.Flags()&ast.NodeFlagsReparsed != 0 {
 			return false
 		}
 	}
@@ -60,7 +60,7 @@ func canReuseModifierNodes(nodes []*ast.Node) bool {
 
 func isDeclarationAndNotVisible(emitContext *printer.EmitContext, resolver printer.EmitResolver, node *ast.Node) bool {
 	node = emitContext.ParseNode(node)
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindFunctionDeclaration,
 		ast.KindModuleDeclaration,
 		ast.KindInterfaceDeclaration,
@@ -120,7 +120,7 @@ func isEnclosingDeclaration(node *ast.Node) bool {
 }
 
 func isAlwaysType(node *ast.Node) bool {
-	if node.Kind == ast.KindInterfaceDeclaration {
+	if node.Kind() == ast.KindInterfaceDeclaration {
 		return true
 	}
 	return false
@@ -140,14 +140,14 @@ func maskModifierFlags(node *ast.Node, modifierMask ast.ModifierFlags, modifierA
 }
 
 func unwrapParenthesizedExpression(o *ast.Node) *ast.Node {
-	for o.Kind == ast.KindParenthesizedExpression {
+	for o.Kind() == ast.KindParenthesizedExpression {
 		o = o.Expression()
 	}
 	return o
 }
 
 func isPrivateMethodTypeParameter(resolver printer.EmitResolver, node *ast.TypeParameterDeclaration) bool {
-	return node.AsNode().Parent.Kind == ast.KindMethodDeclaration && resolver.GetEffectiveDeclarationFlags(node.AsNode().Parent, ast.ModifierFlagsPrivate) != 0
+	return node.AsNode().Parent().Kind() == ast.KindMethodDeclaration && resolver.GetEffectiveDeclarationFlags(node.AsNode().Parent(), ast.ModifierFlagsPrivate) != 0
 }
 
 // Returns true if expando properties should be emitted for this function.

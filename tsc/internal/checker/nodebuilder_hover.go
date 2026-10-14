@@ -216,7 +216,7 @@ func (b *NodeBuilderImpl) addClassModifiers(members []*ast.Node, isStatic bool) 
 // used as members of a ClassDeclaration. Nodes that are already ClassElements pass through unchanged.
 func typeElementsToClassElements(f *ast.NodeFactory, members []*ast.Node) []*ast.Node {
 	for i, m := range members {
-		switch m.Kind {
+		switch m.Kind() {
 		case ast.KindPropertySignature:
 			ps := m.AsPropertySignatureDeclaration()
 			members[i] = f.NewPropertyDeclaration(m.Modifiers(), ps.Name(), ps.QuestionToken(), ps.Type, nil)
@@ -597,7 +597,7 @@ func (b *NodeBuilderImpl) filterInheritedProperties(t *Type, baseTypes []*Type, 
 
 func (b *NodeBuilderImpl) isNamespaceMember(p *ast.Symbol) bool {
 	return p.Flags()&(ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias) != 0 ||
-		!(p.Flags()&ast.SymbolFlagsPrototype != 0 || p.Name() == "prototype" || (p.ValueDeclaration() != nil && ast.HasStaticModifier(p.ValueDeclaration()) && ast.IsClassLike(p.ValueDeclaration().Parent)))
+		!(p.Flags()&ast.SymbolFlagsPrototype != 0 || p.Name() == "prototype" || (p.ValueDeclaration() != nil && ast.HasStaticModifier(p.ValueDeclaration()) && ast.IsClassLike(p.ValueDeclaration().Parent())))
 }
 
 func isHashPrivate(s *ast.Symbol) bool {

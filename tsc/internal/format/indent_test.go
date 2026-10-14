@@ -41,7 +41,7 @@ func TestGetContainingList_NamedImports(t *testing.T) {
 
 func forEachDescendantOfKind(node *ast.Node, kind ast.Kind, action func(*ast.Node)) {
 	node.ForEachChild(func(child *ast.Node) bool {
-		if child.Kind == kind {
+		if child.Kind() == kind {
 			action(child)
 		}
 		forEachDescendantOfKind(child, kind, action)

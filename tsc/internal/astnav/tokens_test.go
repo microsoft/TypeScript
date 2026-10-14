@@ -71,8 +71,8 @@ func TestGetTokenAtPosition(t *testing.T) {
 
 		// The function may return either the identifier itself or the containing
 		// parenthesized expression, depending on how the AST is structured
-		if token.Kind != ast.KindIdentifier && token.Kind != ast.KindParenthesizedExpression {
-			t.Errorf("Expected identifier or parenthesized expression, got %s", token.Kind)
+		if token.Kind() != ast.KindIdentifier && token.Kind() != ast.KindParenthesizedExpression {
+			t.Errorf("Expected identifier or parenthesized expression, got %s", token.Kind())
 		}
 	})
 
@@ -263,7 +263,7 @@ func toTokenInfo(node *ast.Node) *tokenInfo {
 	if node == nil {
 		return nil
 	}
-	kind := strings.Replace(node.Kind.String(), "Kind", "", 1)
+	kind := strings.Replace(node.Kind().String(), "Kind", "", 1)
 	switch kind {
 	case "EndOfFile":
 		kind = "EndOfFileToken"
@@ -577,7 +577,7 @@ export function isAnyDirectorySeparator(charCode: number): boolean {
 				PathKey:  "/file.ts",
 			}, testCase.fileContent, core.ScriptKindTS)
 			token := astnav.FindPrecedingToken(file, testCase.position)
-			assert.Equal(t, token.Kind, testCase.expectedKind)
+			assert.Equal(t, token.Kind(), testCase.expectedKind)
 		})
 	}
 }

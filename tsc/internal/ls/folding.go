@@ -201,15 +201,15 @@ func (l *LanguageService) addRegionOutliningSpans(ctx context.Context, sourceFil
 }
 
 func visitNode(ctx context.Context, n *ast.Node, depthRemaining int, sourceFile *ast.SourceFile, l *LanguageService) []*lsproto.FoldingRange {
-	if n.Flags&ast.NodeFlagsReparsed != 0 || depthRemaining == 0 || ctx.Err() != nil {
+	if n.Flags()&ast.NodeFlagsReparsed != 0 || depthRemaining == 0 || ctx.Err() != nil {
 		return nil
 	}
 	foldingRange := make([]*lsproto.FoldingRange, 0, 40)
-	if (!ast.IsBinaryExpression(n) && ast.IsDeclaration(n)) || ast.IsVariableStatement(n) || ast.IsReturnStatement(n) || ast.IsCallOrNewExpression(n) || n.Kind == ast.KindEndOfFile {
+	if (!ast.IsBinaryExpression(n) && ast.IsDeclaration(n)) || ast.IsVariableStatement(n) || ast.IsReturnStatement(n) || ast.IsCallOrNewExpression(n) || n.Kind() == ast.KindEndOfFile {
 		foldingRange = append(foldingRange, addOutliningForLeadingCommentsForNode(ctx, n, sourceFile, l)...)
 	}
-	if ast.IsFunctionLike(n) && n.Parent != nil && ast.IsBinaryExpression(n.Parent) && n.Parent.AsBinaryExpression().Left != nil && ast.IsPropertyAccessExpression(n.Parent.AsBinaryExpression().Left) {
-		foldingRange = append(foldingRange, addOutliningForLeadingCommentsForNode(ctx, n.Parent.AsBinaryExpression().Left, sourceFile, l)...)
+	if ast.IsFunctionLike(n) && n.Parent() != nil && ast.IsBinaryExpression(n.Parent()) && n.Parent().AsBinaryExpression().Left != nil && ast.IsPropertyAccessExpression(n.Parent().AsBinaryExpression().Left) {
+		foldingRange = append(foldingRange, addOutliningForLeadingCommentsForNode(ctx, n.Parent().AsBinaryExpression().Left, sourceFile, l)...)
 	}
 	if ast.IsBlock(n) {
 		statements := n.AsBlock().Statements
@@ -398,20 +398,20 @@ func parseRegionDelimiter(lineText string) *regionDelimiterResult {
 }
 
 func getOutliningSpanForNode(ctx context.Context, n *ast.Node, sourceFile *ast.SourceFile, l *LanguageService) *lsproto.FoldingRange {
-	switch n.Kind {
+	switch n.Kind() {
 	case ast.KindBlock:
-		if ast.IsFunctionLike(n.Parent) {
-			return functionSpan(ctx, n.Parent, n, sourceFile, l)
+		if ast.IsFunctionLike(n.Parent()) {
+			return functionSpan(ctx, n.Parent(), n, sourceFile, l)
 		}
 		// Check if the block is standalone, or 'attached' to some parent statement.
 		// If the latter, we want to collapse the block, but consider its hint span
 		// to be the entire span of the parent.
-		switch n.Parent.Kind {
+		switch n.Parent().Kind() {
 		case ast.KindDoStatement, ast.KindForInStatement, ast.KindForOfStatement, ast.KindForStatement, ast.KindIfStatement, ast.KindWhileStatement, ast.KindWithStatement, ast.KindCatchClause:
 			return spanForNode(ctx, n, ast.KindOpenBraceToken, true /*useFullStart*/, sourceFile, l)
 		case ast.KindTryStatement:
 			// Could be the try-block, or the finally-block.
-			tryStatement := n.Parent.AsTryStatement()
+			tryStatement := n.Parent().AsTryStatement()
 			if tryStatement.TryBlock == n {
 				return spanForNode(ctx, n, ast.KindOpenBraceToken, true /*useFullStart*/, sourceFile, l)
 			} else if tryStatement.FinallyBlock == n {
@@ -434,13 +434,13 @@ func getOutliningSpanForNode(ctx context.Context, n *ast.Node, sourceFile *ast.S
 	case ast.KindClassDeclaration, ast.KindClassExpression, ast.KindInterfaceDeclaration, ast.KindEnumDeclaration, ast.KindCaseBlock, ast.KindTypeLiteral, ast.KindObjectBindingPattern:
 		return spanForNode(ctx, n, ast.KindOpenBraceToken, true /*useFullStart*/, sourceFile, l)
 	case ast.KindTupleType:
-		return spanForNode(ctx, n, ast.KindOpenBracketToken, !ast.IsTupleTypeNode(n.Parent) /*useFullStart*/, sourceFile, l)
+		return spanForNode(ctx, n, ast.KindOpenBracketToken, !ast.IsTupleTypeNode(n.Parent()) /*useFullStart*/, sourceFile, l)
 	case ast.KindCaseClause, ast.KindDefaultClause:
 		return spanForNodeArray(ctx, n.AsCaseOrDefaultClause().Statements, sourceFile, l)
 	case ast.KindObjectLiteralExpression:
-		return spanForNode(ctx, n, ast.KindOpenBraceToken, !ast.IsArrayLiteralExpression(n.Parent) && !ast.IsCallExpression(n.Parent) /*useFullStart*/, sourceFile, l)
+		return spanForNode(ctx, n, ast.KindOpenBraceToken, !ast.IsArrayLiteralExpression(n.Parent()) && !ast.IsCallExpression(n.Parent()) /*useFullStart*/, sourceFile, l)
 	case ast.KindArrayLiteralExpression:
-		return spanForNode(ctx, n, ast.KindOpenBracketToken, !ast.IsArrayLiteralExpression(n.Parent) && !ast.IsCallExpression(n.Parent) /*useFullStart*/, sourceFile, l)
+		return spanForNode(ctx, n, ast.KindOpenBracketToken, !ast.IsArrayLiteralExpression(n.Parent()) && !ast.IsCallExpression(n.Parent()) /*useFullStart*/, sourceFile, l)
 	case ast.KindJsxElement, ast.KindJsxFragment:
 		return spanForJSXElement(ctx, n, sourceFile, l)
 	case ast.KindJsxSelfClosingElement, ast.KindJsxOpeningElement:
@@ -448,7 +448,7 @@ func getOutliningSpanForNode(ctx context.Context, n *ast.Node, sourceFile *ast.S
 	case ast.KindTemplateExpression, ast.KindNoSubstitutionTemplateLiteral:
 		return spanForTemplateLiteral(ctx, n, sourceFile, l)
 	case ast.KindArrayBindingPattern:
-		return spanForNode(ctx, n, ast.KindOpenBracketToken, !ast.IsBindingElement(n.Parent) /*useFullStart*/, sourceFile, l)
+		return spanForNode(ctx, n, ast.KindOpenBracketToken, !ast.IsBindingElement(n.Parent()) /*useFullStart*/, sourceFile, l)
 	case ast.KindArrowFunction:
 		return spanForArrowFunction(ctx, n, sourceFile, l)
 	case ast.KindCallExpression:
@@ -463,7 +463,7 @@ func getOutliningSpanForNode(ctx context.Context, n *ast.Node, sourceFile *ast.S
 
 func spanForImportExportElements(ctx context.Context, node *ast.Node, sourceFile *ast.SourceFile, l *LanguageService) *lsproto.FoldingRange {
 	var elements *ast.NodeList
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindNamedImports:
 		elements = node.AsNamedImports().Elements
 	case ast.KindNamedExports:
@@ -520,14 +520,14 @@ func spanForArrowFunction(ctx context.Context, node *ast.Node, sourceFile *ast.S
 }
 
 func spanForTemplateLiteral(ctx context.Context, node *ast.Node, sourceFile *ast.SourceFile, l *LanguageService) *lsproto.FoldingRange {
-	if node.Kind == ast.KindNoSubstitutionTemplateLiteral && len(node.Text()) == 0 {
+	if node.Kind() == ast.KindNoSubstitutionTemplateLiteral && len(node.Text()) == 0 {
 		return nil
 	}
 	return createFoldingRangeFromBounds(ctx, astnav.GetStartOfNode(node, sourceFile, false /*includeJSDoc*/), node.End(), "", sourceFile, l)
 }
 
 func spanForJSXElement(ctx context.Context, node *ast.Node, sourceFile *ast.SourceFile, l *LanguageService) *lsproto.FoldingRange {
-	if node.Kind == ast.KindJsxElement {
+	if node.Kind() == ast.KindJsxElement {
 		jsxElement := node.AsJsxElement()
 		textRange, fidelity := l.createFoldingRangeFromBounds(astnav.GetStartOfNode(jsxElement.OpeningElement, sourceFile, false /*includeJSDoc*/), jsxElement.ClosingElement.End(), sourceFile)
 		if fidelity.IsNone() {
@@ -548,7 +548,7 @@ func spanForJSXElement(ctx context.Context, node *ast.Node, sourceFile *ast.Sour
 
 func spanForJSXAttributes(ctx context.Context, node *ast.Node, sourceFile *ast.SourceFile, l *LanguageService) *lsproto.FoldingRange {
 	var attributes *ast.JsxAttributesNode
-	if node.Kind == ast.KindJsxSelfClosingElement {
+	if node.Kind() == ast.KindJsxSelfClosingElement {
 		attributes = node.AsJsxSelfClosingElement().Attributes
 	} else {
 		attributes = node.AsJsxOpeningElement().Attributes

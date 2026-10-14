@@ -510,7 +510,7 @@ func (b *NodeBuilderImpl) canReuseExistingJSTypeNode(existing *ast.TypeNode, t *
 }
 
 func (b *NodeBuilderImpl) tryGetResolvedSymbolFromTypeNode(node *ast.Node) *ast.Symbol {
-	if node == nil || node.Parent == nil {
+	if node == nil || node.Parent() == nil {
 		return nil
 	}
 	b.ch.getTypeFromTypeNode(node)
@@ -931,7 +931,7 @@ func startsWithSquareBracket(str string) bool {
 }
 
 func isDefaultBindingContext(location *ast.Node) bool {
-	return location.Kind == ast.KindSourceFile || ast.IsAmbientModule(location)
+	return location.Kind() == ast.KindSourceFile || ast.IsAmbientModule(location)
 }
 
 func (b *NodeBuilderImpl) getNameOfSymbolFromNameType(symbol *ast.Symbol) string {
@@ -1003,14 +1003,14 @@ func (b *NodeBuilderImpl) getNameOfSymbolAsWritten(symbol *ast.Symbol) string {
 			return scanner.DeclarationNameToString(name)
 		}
 		declaration := symbol.Declarations()[0] // Declaration may be nameless, but we'll try anyway
-		if declaration.Parent != nil && declaration.Parent.Kind == ast.KindVariableDeclaration {
-			return scanner.DeclarationNameToString(declaration.Parent.AsVariableDeclaration().Name())
+		if declaration.Parent() != nil && declaration.Parent().Kind() == ast.KindVariableDeclaration {
+			return scanner.DeclarationNameToString(declaration.Parent().AsVariableDeclaration().Name())
 		}
 		if ast.IsClassExpression(declaration) || ast.IsFunctionExpression(declaration) || ast.IsArrowFunction(declaration) {
 			if b.ctx != nil && !b.ctx.encounteredError && b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
 				b.ctx.encounteredError = true
 			}
-			switch declaration.Kind {
+			switch declaration.Kind() {
 			case ast.KindClassExpression:
 				return "(Anonymous class)"
 			case ast.KindFunctionExpression, ast.KindArrowFunction:
@@ -1174,7 +1174,7 @@ func canHaveModuleSpecifier(node *ast.Node) bool {
 	if node == nil {
 		return false
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindVariableDeclaration,
 		ast.KindBindingElement,
 		ast.KindImportDeclaration,
@@ -1200,7 +1200,7 @@ func TryGetModuleSpecifierFromDeclaration(node *ast.Node) *ast.Node {
 }
 
 func tryGetModuleSpecifierFromDeclarationWorker(node *ast.Node) *ast.Node {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindVariableDeclaration, ast.KindBindingElement:
 		moduleCall := ast.FindAncestor(node.Initializer(), func(node *ast.Node) bool {
 			return ast.IsRequireCall(node, true /*requireStringLiteralLikeArgument*/) || ast.IsImportCall(node)
@@ -1213,29 +1213,29 @@ func tryGetModuleSpecifierFromDeclarationWorker(node *ast.Node) *ast.Node {
 		return node.ModuleSpecifier()
 	case ast.KindImportEqualsDeclaration:
 		ref := node.AsImportEqualsDeclaration().ModuleReference
-		if ref.Kind != ast.KindExternalModuleReference {
+		if ref.Kind() != ast.KindExternalModuleReference {
 			return nil
 		}
 		return ref.Expression()
 	case ast.KindImportClause:
-		if ast.IsImportDeclaration(node.Parent) {
-			return node.Parent.ModuleSpecifier()
+		if ast.IsImportDeclaration(node.Parent()) {
+			return node.Parent().ModuleSpecifier()
 		}
-		return node.Parent.ModuleSpecifier()
+		return node.Parent().ModuleSpecifier()
 	case ast.KindNamespaceExport:
-		return node.Parent.ModuleSpecifier()
+		return node.Parent().ModuleSpecifier()
 	case ast.KindNamespaceImport:
-		if ast.IsImportDeclaration(node.Parent.Parent) {
-			return node.Parent.Parent.ModuleSpecifier()
+		if ast.IsImportDeclaration(node.Parent().Parent()) {
+			return node.Parent().Parent().ModuleSpecifier()
 		}
-		return node.Parent.Parent.ModuleSpecifier()
+		return node.Parent().Parent().ModuleSpecifier()
 	case ast.KindExportSpecifier:
-		return node.Parent.Parent.ModuleSpecifier()
+		return node.Parent().Parent().ModuleSpecifier()
 	case ast.KindImportSpecifier:
-		if ast.IsImportDeclaration(node.Parent.Parent.Parent) {
-			return node.Parent.Parent.Parent.ModuleSpecifier()
+		if ast.IsImportDeclaration(node.Parent().Parent().Parent()) {
+			return node.Parent().Parent().Parent().ModuleSpecifier()
 		}
-		return node.Parent.Parent.Parent.ModuleSpecifier()
+		return node.Parent().Parent().Parent().ModuleSpecifier()
 	case ast.KindImportType:
 		if ast.IsLiteralImportTypeNode(node) {
 			return node.AsImportTypeNode().Argument.AsLiteralTypeNode().Literal
@@ -1449,10 +1449,10 @@ func (b *NodeBuilderImpl) setTextRange(range_ *ast.Node, location *ast.Node) *as
 	if range_ == nil {
 		return range_
 	}
-	if !ast.NodeIsSynthesized(range_) || (range_.Flags&ast.NodeFlagsSynthesized == 0) || b.ctx.enclosingFile == nil || b.ctx.enclosingFile != ast.GetSourceFileOfNode(b.e.MostOriginal(range_)) {
+	if !ast.NodeIsSynthesized(range_) || (range_.Flags()&ast.NodeFlagsSynthesized == 0) || b.ctx.enclosingFile == nil || b.ctx.enclosingFile != ast.GetSourceFileOfNode(b.e.MostOriginal(range_)) {
 		original := range_
 		range_ = range_.Clone(b.f) // if `range` is synthesized or originates in another file, copy it so it definitely has synthetic positions
-		range_.Loc = core.NewTextRange(-1, -1)
+		range_.SetLoc(core.NewTextRange(-1, -1))
 		if symbol, ok := b.idToSymbol[original]; ok {
 			b.idToSymbol[range_] = symbol
 		}
@@ -1471,10 +1471,10 @@ func (b *NodeBuilderImpl) setTextRange(range_ *ast.Node, location *ast.Node) *as
 
 	// only set positions if range comes from the same file since copying text across files isn't supported by the emitter
 	if b.ctx.enclosingFile != nil && b.ctx.enclosingFile == ast.GetSourceFileOfNode(b.e.MostOriginal(location)) {
-		range_.Loc = location.Loc
+		range_.SetLoc(location.Loc())
 		return range_
 	} else {
-		range_.Loc = core.NewTextRange(-1, -1)
+		range_.SetLoc(core.NewTextRange(-1, -1))
 	}
 	return range_
 }
@@ -1546,11 +1546,11 @@ func (b *NodeBuilderImpl) createMappedTypeNodeFromType(t *Type) *ast.TypeNode {
 	mapped := t.AsMappedType()
 	var readonlyToken *ast.Node
 	if mapped.declaration.ReadonlyToken != nil {
-		readonlyToken = b.f.NewToken(mapped.declaration.ReadonlyToken.Kind)
+		readonlyToken = b.f.NewToken(mapped.declaration.ReadonlyToken.Kind())
 	}
 	var questionToken *ast.Node
 	if mapped.declaration.QuestionToken != nil {
-		questionToken = b.f.NewToken(mapped.declaration.QuestionToken.Kind)
+		questionToken = b.f.NewToken(mapped.declaration.QuestionToken.Kind())
 	}
 	var appropriateConstraintTypeNode *ast.Node
 	var newTypeVariable *ast.Node
@@ -1780,7 +1780,7 @@ func (b *NodeBuilderImpl) parameterToParameterDeclarationName(parameterSymbol *a
 	}
 
 	name := parameterDeclaration.Name()
-	switch name.Kind {
+	switch name.Kind() {
 	case ast.KindIdentifier:
 		cloned := b.f.DeepCloneNode(name)
 		b.e.SetEmitFlags(cloned, printer.EFNoAsciiEscaping)
@@ -2206,7 +2206,7 @@ func (b *NodeBuilderImpl) indexInfoToObjectComputedNamesOrSignatureDeclaration(i
 						currentTypeNode,
 						nil,
 					)
-					sig.Loc = e.Loc
+					sig.SetLoc(e.Loc())
 					return sig
 				}
 				bailed = true
@@ -2286,7 +2286,7 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 		} else {
 			t = b.ctx.enclosingSymbolTypes[ast.GetSymbolId(symbol)]
 			if t == nil {
-				if symbol.Flags()&ast.SymbolFlagsAccessor != 0 && declaration.Kind == ast.KindSetAccessor {
+				if symbol.Flags()&ast.SymbolFlagsAccessor != 0 && declaration.Kind() == ast.KindSetAccessor {
 					t = b.ch.instantiateType(b.ch.getWriteTypeOfSymbol(symbol), b.ctx.mapper)
 				} else if symbol != nil && (symbol.Flags()&(ast.SymbolFlagsTypeLiteral|ast.SymbolFlagsSignature) == 0) {
 					t = b.ch.instantiateType(b.ch.getWidenedLiteralType(b.ch.getTypeOfSymbol(symbol)), b.ctx.mapper)
@@ -2659,7 +2659,7 @@ func (b *NodeBuilderImpl) addPropertyToElementList(propertySymbol *ast.Symbol, t
 				}
 				return typeElements
 			} else if propertySymbol.Parent() != nil && propertySymbol.Parent().Flags()&ast.SymbolFlagsClass != 0 && propDeclaration != nil && core.Find(propDeclaration.ModifierNodes(), func(m *ast.Node) bool {
-				return m.Kind == ast.KindAccessorKeyword
+				return m.Kind() == ast.KindAccessorKeyword
 			}) != nil {
 				fakeGetterSignature := b.ch.newSignature(SignatureFlagsNone, nil, nil, nil, nil, propertyType, nil, 0)
 				fakeGetterDeclaration := b.signatureToSignatureDeclarationHelper(fakeGetterSignature, ast.KindGetAccessor, &SignatureToSignatureDeclarationOptions{
@@ -2861,7 +2861,7 @@ func (b *NodeBuilderImpl) createTypeNodeFromObjectType(t *Type) *ast.TypeNode {
 
 func getTypeAliasForTypeLiteral(c *Checker, t *Type) *ast.Symbol {
 	if t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsTypeLiteral != 0 && t.symbol.Declarations() != nil {
-		node := ast.WalkUpParenthesizedTypes(t.symbol.Declarations()[0].Parent)
+		node := ast.WalkUpParenthesizedTypes(t.symbol.Declarations()[0].Parent())
 		if ast.IsTypeAliasDeclaration(node) {
 			return c.getSymbolOfDeclaration(node)
 		}
@@ -2881,14 +2881,14 @@ func (b *NodeBuilderImpl) shouldWriteTypeOfFunctionSymbol(symbol *ast.Symbol, ty
 			isNonLocalFunctionSymbol = true
 		} else {
 			for _, declaration := range symbol.Declarations() {
-				if declaration.Parent.Kind == ast.KindSourceFile || declaration.Parent.Kind == ast.KindModuleBlock {
+				if declaration.Parent().Kind() == ast.KindSourceFile || declaration.Parent().Kind() == ast.KindModuleBlock {
 					isNonLocalFunctionSymbol = true
 					break
 				}
-				if ast.IsFunctionExpressionOrArrowFunction(declaration) && ast.IsVariableDeclaration(declaration.Parent) &&
-					ast.IsVariableDeclarationList(declaration.Parent.Parent) && ast.IsVariableStatement(declaration.Parent.Parent.Parent) &&
-					declaration.Parent.Parent.Parent.Parent != nil &&
-					(declaration.Parent.Parent.Parent.Parent.Kind == ast.KindSourceFile || declaration.Parent.Parent.Parent.Parent.Kind == ast.KindModuleBlock) {
+				if ast.IsFunctionExpressionOrArrowFunction(declaration) && ast.IsVariableDeclaration(declaration.Parent()) &&
+					ast.IsVariableDeclarationList(declaration.Parent().Parent()) && ast.IsVariableStatement(declaration.Parent().Parent().Parent()) &&
+					declaration.Parent().Parent().Parent().Parent() != nil &&
+					(declaration.Parent().Parent().Parent().Parent().Kind() == ast.KindSourceFile || declaration.Parent().Parent().Parent().Parent().Kind() == ast.KindModuleBlock) {
 					isNonLocalFunctionSymbol = true
 					isFunctionExpressionSymbol = true
 					break
@@ -2897,8 +2897,8 @@ func (b *NodeBuilderImpl) shouldWriteTypeOfFunctionSymbol(symbol *ast.Symbol, ty
 		}
 	}
 	if isStaticMethodSymbol || isNonLocalFunctionSymbol {
-		if isFunctionExpressionSymbol && symbol.ValueDeclaration() != nil && symbol.ValueDeclaration().Parent != nil && symbol.ValueDeclaration().Parent != b.ctx.enclosingDeclaration {
-			symbol = b.ch.getMergedSymbol(symbol.ValueDeclaration().Parent.Symbol())
+		if isFunctionExpressionSymbol && symbol.ValueDeclaration() != nil && symbol.ValueDeclaration().Parent() != nil && symbol.ValueDeclaration().Parent() != b.ctx.enclosingDeclaration {
+			symbol = b.ch.getMergedSymbol(symbol.ValueDeclaration().Parent().Symbol())
 		}
 		// typeof is allowed only for static/non local functions
 		return (b.ctx.flags&nodebuilder.FlagsUseTypeOfFunction != 0 || b.ctx.visitedTypes.Has(typeId)) && // it is type of the symbol uses itself recursively
@@ -3002,7 +3002,7 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 
 func (b *NodeBuilderImpl) getTypeFromTypeNode(node *ast.TypeNode, noMappedTypes bool) *Type {
 	// !!! noMappedTypes optional param support
-	if node.Parent == nil {
+	if node.Parent() == nil {
 		return b.ch.errorType
 	}
 	t := b.ch.getTypeFromTypeNode(node)
@@ -3088,7 +3088,7 @@ func (b *NodeBuilderImpl) getParentSymbolOfTypeParameter(typeParameter *TypePara
 	// if ast.IsJSDocTemplateTag(tp.Parent) {
 	// 	host = getEffectiveContainerForJSDocTemplateTag(tp.Parent)
 	// } else {
-	host = tp.Parent
+	host = tp.Parent()
 	// }
 	if host == nil {
 		return nil
@@ -3725,7 +3725,7 @@ func (b *NodeBuilderImpl) createAccessExpression(node *ast.Node) *ast.Expression
 	case ast.IsIdentifier(node), ast.IsPropertyAccessExpression(node), ast.IsExpressionWithTypeArguments(node):
 		return b.f.DeepCloneNode(node)
 	default:
-		panic("unexpected access node kind: " + node.Kind.String())
+		panic("unexpected access node kind: " + node.Kind().String())
 	}
 }
 

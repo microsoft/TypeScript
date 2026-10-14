@@ -43,7 +43,7 @@ loop:
 			// If lastLocation is the name of a namespace or enum, skip the parent since it will have is own locals that could
 			// conflict.
 			lastLocation = location
-			location = location.Parent
+			location = location.Parent()
 		}
 		isModuleAttributes := ast.IsModuleDeclaration(location) &&
 			location.AsModuleDeclaration().Attributes != nil &&
@@ -63,16 +63,16 @@ loop:
 					// - parameters are only in the scope of function body
 					// This restriction does not apply to JSDoc comment types because they are parented
 					// at a higher level than type parameters would normally be
-					if meaning&result.Flags()&ast.SymbolFlagsType != 0 && lastLocation.Kind != ast.KindJSDoc {
+					if meaning&result.Flags()&ast.SymbolFlagsType != 0 && lastLocation.Kind() != ast.KindJSDoc {
 						// type parameters are visible in parameter list, return type and type parameter list.
 						// Synthetic fake scopes are added for signatures so type parameters are accessible from them.
 						useResult = result.Flags()&ast.SymbolFlagsTypeParameter != 0 &&
-							(lastLocation.Flags&ast.NodeFlagsSynthesized != 0 ||
+							(lastLocation.Flags()&ast.NodeFlagsSynthesized != 0 ||
 								lastLocation == location.Type() ||
-								lastLocation.Kind == ast.KindParameter ||
-								lastLocation.Kind == ast.KindJSDocParameterTag ||
-								lastLocation.Kind == ast.KindJSDocReturnTag ||
-								lastLocation.Kind == ast.KindTypeParameter)
+								lastLocation.Kind() == ast.KindParameter ||
+								lastLocation.Kind() == ast.KindJSDocParameterTag ||
+								lastLocation.Kind() == ast.KindJSDocReturnTag ||
+								lastLocation.Kind() == ast.KindTypeParameter)
 					}
 					if meaning&result.Flags()&ast.SymbolFlagsVariable != 0 {
 						// expression inside parameter will lookup as normal variable scope when targeting es2015+
@@ -83,12 +83,12 @@ loop:
 							// technically for parameter list case here we might mix parameters and variables declared in function,
 							// however it is detected separately when checking initializers of parameters
 							// to make sure that they reference no variables declared after them.
-							useResult = lastLocation.Kind == ast.KindParameter ||
-								lastLocation.Flags&ast.NodeFlagsSynthesized != 0 ||
+							useResult = lastLocation.Kind() == ast.KindParameter ||
+								lastLocation.Flags()&ast.NodeFlagsSynthesized != 0 ||
 								lastLocation == location.Type() && ast.FindAncestor(result.ValueDeclaration(), ast.IsParameterDeclaration) != nil
 						}
 					}
-				} else if location.Kind == ast.KindConditionalType {
+				} else if location.Kind() == ast.KindConditionalType {
 					// A type parameter declared using 'infer T' in a conditional type is visible only in
 					// the true branch of the conditional type.
 					useResult = lastLocation == location.AsConditionalTypeNode().TrueType
@@ -100,7 +100,7 @@ loop:
 			}
 		}
 		withinDeferredContext = withinDeferredContext || getIsDeferredContext(location, lastLocation)
-		switch location.Kind {
+		switch location.Kind() {
 		case ast.KindSourceFile:
 			if !ast.IsExternalOrCommonJSModule(location.AsSourceFile()) {
 				break
@@ -115,7 +115,7 @@ loop:
 				break
 			}
 			moduleExports := moduleSymbol.Exports()
-			if ast.IsSourceFile(location) || (ast.IsModuleDeclaration(location) && location.Flags&ast.NodeFlagsAmbient != 0 && !ast.IsGlobalScopeAugmentation(location)) {
+			if ast.IsSourceFile(location) || (ast.IsModuleDeclaration(location) && location.Flags()&ast.NodeFlagsAmbient != 0 && !ast.IsGlobalScopeAugmentation(location)) {
 				// It's an external module. First see if the module has an export default and if the local
 				// name of that export default matches.
 				result = moduleExports[ast.InternalSymbolNameDefault]
@@ -158,7 +158,7 @@ loop:
 			}
 			result = r.lookup(enumSymbol.Exports(), name, meaning&ast.SymbolFlagsEnumMember)
 			if result != nil {
-				if nameNotFoundMessage != nil && r.CompilerOptions.GetIsolatedModules() && location.Flags&ast.NodeFlagsAmbient == 0 && ast.GetSourceFileOfNode(location) != ast.GetSourceFileOfNode(result.ValueDeclaration()) {
+				if nameNotFoundMessage != nil && r.CompilerOptions.GetIsolatedModules() && location.Flags()&ast.NodeFlagsAmbient == 0 && ast.GetSourceFileOfNode(location) != ast.GetSourceFileOfNode(result.ValueDeclaration()) {
 					isolatedModulesLikeFlagName := core.IfElse(r.CompilerOptions.VerbatimModuleSyntax == core.TSTrue, "verbatimModuleSyntax", "isolatedModules")
 					r.error(originalLocation, diagnostics.Cannot_access_0_from_another_file_without_qualification_when_1_is_enabled_Use_2_instead,
 						name, isolatedModulesLikeFlagName, enumSymbol.Name()+"."+name)
@@ -167,7 +167,7 @@ loop:
 			}
 		case ast.KindPropertyDeclaration:
 			if !ast.IsStatic(location) {
-				ctor := ast.FindConstructorDeclaration(location.Parent)
+				ctor := ast.FindConstructorDeclaration(location.Parent())
 				if ctor != nil && ctor.Locals() != nil {
 					if r.lookup(ctor.Locals(), name, meaning&ast.SymbolFlagsValue) != nil {
 						// Remember the property node, it will be used later to report appropriate error
@@ -202,8 +202,8 @@ loop:
 				}
 			}
 		case ast.KindExpressionWithTypeArguments:
-			if lastLocation == location.Expression() && ast.IsHeritageClause(location.Parent) && location.Parent.AsHeritageClause().Token == ast.KindExtendsKeyword {
-				container := location.Parent.Parent
+			if lastLocation == location.Expression() && ast.IsHeritageClause(location.Parent()) && location.Parent().AsHeritageClause().Token == ast.KindExtendsKeyword {
+				container := location.Parent().Parent()
 				if ast.IsClassLike(container) {
 					result = r.lookup(r.getSymbolOfDeclaration(container).Members(), name, meaning&ast.SymbolFlagsType)
 					if result != nil {
@@ -222,7 +222,7 @@ loop:
 		//       [foo<T>()]() { } // <-- Reference to T from class's own computed property
 		//   }
 		case ast.KindComputedPropertyName:
-			grandparent = location.Parent.Parent
+			grandparent = location.Parent().Parent()
 			if ast.IsClassLike(grandparent) || ast.IsInterfaceDeclaration(grandparent) {
 				// A reference to this grandparent's type parameters would be an error
 				result = r.lookup(r.getSymbolOfDeclaration(grandparent).Members(), name, meaning&ast.SymbolFlagsType)
@@ -259,8 +259,8 @@ loop:
 			//       method(@y x, y) {} // <-- decorator y should be resolved at the class declaration, not the parameter.
 			//   }
 			//
-			if location.Parent != nil && location.Parent.Kind == ast.KindParameter {
-				location = location.Parent
+			if location.Parent() != nil && location.Parent().Kind() == ast.KindParameter {
+				location = location.Parent()
 			}
 			//   function y() {}
 			//   class C {
@@ -273,8 +273,8 @@ loop:
 			//   declare function y(x: T): any;
 			//   @param(1 as T) // <-- T should resolve to the type alias outside of class C
 			//   class C<T> {}
-			if location.Parent != nil && (ast.IsClassElement(location.Parent) || location.Parent.Kind == ast.KindClassDeclaration) {
-				location = location.Parent
+			if location.Parent() != nil && (ast.IsClassElement(location.Parent()) || location.Parent().Kind() == ast.KindClassDeclaration) {
+				location = location.Parent()
 			}
 		case ast.KindParameter:
 			parameterDeclaration := location.AsParameterDeclaration()
@@ -302,8 +302,8 @@ loop:
 			}
 		case ast.KindExportSpecifier:
 			exportSpecifier := location.AsExportSpecifier()
-			if lastLocation != nil && lastLocation == exportSpecifier.PropertyName && location.Parent.Parent.ModuleSpecifier() != nil {
-				location = location.Parent.Parent.Parent
+			if lastLocation != nil && lastLocation == exportSpecifier.PropertyName && location.Parent().Parent().ModuleSpecifier() != nil {
+				location = location.Parent().Parent().Parent()
 			}
 		}
 		if isSelfReferenceLocation(location, lastLocation) {
@@ -314,7 +314,7 @@ loop:
 		// getEffectiveContainerForJSDocTemplateTag/getHostSignatureFromJSDoc instead of location.parent.
 		// This is a no-op currently because JSDoc nodes have no locals and getEffectiveJSDocHost is not
 		// fully ported for JS assignment patterns.
-		location = location.Parent
+		location = location.Parent()
 	}
 	// We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
 	// If `result === lastSelfReferenceLocation.symbol`, that means that we are somewhere inside `lastSelfReferenceLocation` looking up a name, and resolving to `lastLocation` itself.
@@ -328,8 +328,8 @@ loop:
 		result = r.lookup(r.Globals, name, meaning|ast.SymbolFlagsGlobalLookup)
 	}
 	if result == nil {
-		if originalLocation != nil && ast.IsInJSFile(originalLocation) && originalLocation.Parent != nil {
-			if ast.IsRequireCall(originalLocation.Parent, false /*requireStringLiteralLikeArgument*/) {
+		if originalLocation != nil && ast.IsInJSFile(originalLocation) && originalLocation.Parent() != nil {
+			if ast.IsRequireCall(originalLocation.Parent(), false /*requireStringLiteralLikeArgument*/) {
 				return r.RequireSymbol
 			}
 		}
@@ -383,7 +383,7 @@ func (r *NameResolver) requiresScopeChange(node *ast.Node) bool {
 }
 
 func (r *NameResolver) requiresScopeChangeWorker(node *ast.Node) bool {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindArrowFunction, ast.KindFunctionExpression, ast.KindFunctionDeclaration, ast.KindConstructor:
 		return false
 	case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindPropertyAssignment:
@@ -397,7 +397,7 @@ func (r *NameResolver) requiresScopeChangeWorker(node *ast.Node) bool {
 		if ast.IsNullishCoalesce(node) || ast.IsOptionalChain(node) {
 			return r.CompilerOptions.GetEmitScriptTarget() < core.ScriptTargetES2020
 		}
-		if ast.IsBindingElement(node) && node.AsBindingElement().DotDotDotToken != nil && ast.IsObjectBindingPattern(node.Parent) {
+		if ast.IsBindingElement(node) && node.AsBindingElement().DotDotDotToken != nil && ast.IsObjectBindingPattern(node.Parent()) {
 			return r.CompilerOptions.GetEmitScriptTarget() < core.ScriptTargetES2017
 		}
 		if ast.IsTypeNode(node) {
@@ -467,11 +467,11 @@ func isExportDefaultSymbol(symbol *ast.Symbol) bool {
 }
 
 func getIsDeferredContext(location *ast.Node, lastLocation *ast.Node) bool {
-	if location.Kind != ast.KindArrowFunction && location.Kind != ast.KindFunctionExpression {
+	if location.Kind() != ast.KindArrowFunction && location.Kind() != ast.KindFunctionExpression {
 		// initializers in instance property declaration of class like entities are executed in constructor and thus deferred
 		// A name is evaluated within the enclosing scope - so it shouldn't count as deferred
 		return ast.IsTypeQueryNode(location) ||
-			(ast.IsFunctionLikeDeclaration(location) || location.Kind == ast.KindPropertyDeclaration && !ast.IsStatic(location)) &&
+			(ast.IsFunctionLikeDeclaration(location) || location.Kind() == ast.KindPropertyDeclaration && !ast.IsStatic(location)) &&
 				(lastLocation == nil || lastLocation != location.Name())
 	}
 	if lastLocation != nil && lastLocation == location.Name() {
@@ -486,8 +486,8 @@ func getIsDeferredContext(location *ast.Node, lastLocation *ast.Node) bool {
 
 func isTypeParameterSymbolDeclaredInContainer(symbol *ast.Symbol, container *ast.Node) bool {
 	for _, decl := range symbol.Declarations() {
-		if decl.Kind == ast.KindTypeParameter {
-			parent := decl.Parent
+		if decl.Kind() == ast.KindTypeParameter {
+			parent := decl.Parent()
 			if parent == container {
 				return true
 			}
@@ -497,7 +497,7 @@ func isTypeParameterSymbolDeclaredInContainer(symbol *ast.Symbol, container *ast
 }
 
 func isSelfReferenceLocation(node *ast.Node, lastLocation *ast.Node) bool {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindParameter:
 		return lastLocation != nil && lastLocation == node.Name()
 	case ast.KindFunctionDeclaration, ast.KindClassDeclaration, ast.KindInterfaceDeclaration, ast.KindEnumDeclaration,

@@ -117,8 +117,8 @@ func (f *Fix) Edits(
 		return edits, diagnostics.Add_import_from_0.Localize(locale, f.ModuleSpecifier), safe
 	case lsproto.AutoImportFixKindPromoteTypeOnly:
 		promotedDeclaration := promoteFromTypeOnly(tracker, f.TypeOnlyAliasDeclaration, compilerOptions, file, preferences)
-		if promotedDeclaration.Kind == ast.KindImportSpecifier {
-			moduleSpec := getModuleSpecifierText(promotedDeclaration.Parent.Parent)
+		if promotedDeclaration.Kind() == ast.KindImportSpecifier {
+			moduleSpec := getModuleSpecifierText(promotedDeclaration.Parent().Parent())
 			edits, safe := fileEdits(tracker, file)
 			return edits, diagnostics.Remove_type_from_import_of_0_from_1.Localize(locale, f.Name, moduleSpec), safe
 		}
@@ -175,17 +175,17 @@ func getAddToExistingImportFix(file *ast.SourceFile, fix *Fix) *addToExistingImp
 		panic("expected import declaration")
 	}
 	var importClauseOrBindingPattern *ast.Node
-	switch importNode.Kind {
+	switch importNode.Kind() {
 	case ast.KindImportDeclaration:
 		importClauseOrBindingPattern = importNode.ImportClause()
 		if importClauseOrBindingPattern == nil {
 			panic("expected import clause")
 		}
 	case ast.KindCallExpression:
-		if !ast.IsVariableDeclarationInitializedToRequire(importNode.Parent) {
+		if !ast.IsVariableDeclarationInitializedToRequire(importNode.Parent()) {
 			panic("expected require call expression to be in variable declaration")
 		}
-		importClauseOrBindingPattern = importNode.Parent.Name()
+		importClauseOrBindingPattern = importNode.Parent().Name()
 		if importClauseOrBindingPattern == nil || !ast.IsObjectBindingPattern(importClauseOrBindingPattern) {
 			panic("expected object binding pattern in variable declaration")
 		}
@@ -210,7 +210,7 @@ func addToExistingImport(
 	namedImports []*newImportBinding,
 	preferences lsutil.UserPreferences,
 ) {
-	switch importClauseOrBindingPattern.Kind {
+	switch importClauseOrBindingPattern.Kind() {
 	case ast.KindObjectBindingPattern:
 		bindingPattern := importClauseOrBindingPattern.AsBindingPattern()
 		if defaultImport != nil {
@@ -232,7 +232,7 @@ func addToExistingImport(
 		})
 
 		var existingSpecifiers []*ast.Node
-		if importClause.NamedBindings != nil && importClause.NamedBindings.Kind == ast.KindNamedImports {
+		if importClause.NamedBindings != nil && importClause.NamedBindings.Kind() == ast.KindNamedImports {
 			existingSpecifiers = importClause.NamedBindings.Elements()
 		}
 
@@ -242,7 +242,7 @@ func addToExistingImport(
 		}
 
 		if len(namedImports) > 0 {
-			specifierComparer, isSorted := lsutil.GetNamedImportSpecifierComparerWithDetection(importClause.Parent, file, preferences)
+			specifierComparer, isSorted := lsutil.GetNamedImportSpecifierComparerWithDetection(importClause.Parent(), file, preferences)
 			newSpecifiers := core.Map(namedImports, func(namedImport *newImportBinding) *ast.Node {
 				var identifier *ast.Node
 				if namedImport.propertyName != "" {
@@ -510,7 +510,7 @@ func createConstEqualsRequireDeclaration(changeTracker *change.Tracker, name *as
 func insertImports(ct *change.Tracker, sourceFile *ast.SourceFile, imports []*ast.AnyImportOrRequireStatement, blankLineBetween bool, preferences lsutil.UserPreferences) {
 	var existingImportStatements []*ast.Statement
 
-	if imports[0].Kind == ast.KindVariableStatement {
+	if imports[0].Kind() == ast.KindVariableStatement {
 		existingImportStatements = core.Filter(sourceFile.Statements.Nodes, ast.IsRequireVariableStatement)
 	} else {
 		existingImportStatements = core.Filter(sourceFile.Statements.Nodes, ast.IsAnyImportSyntax)
@@ -674,10 +674,10 @@ func (v *View) tryUseExistingNamespaceImport(export *Export, usagePosition *lspr
 }
 
 func getNamespaceLikeImportText(declaration *ast.Node) string {
-	switch declaration.Kind {
+	switch declaration.Kind() {
 	case ast.KindVariableDeclaration:
 		name := declaration.Name()
-		if name != nil && name.Kind == ast.KindIdentifier {
+		if name != nil && name.Kind() == ast.KindIdentifier {
 			return name.Text()
 		}
 		return ""
@@ -685,7 +685,7 @@ func getNamespaceLikeImportText(declaration *ast.Node) string {
 		return declaration.Name().Text()
 	case ast.KindJSDocImportTag, ast.KindImportDeclaration:
 		importClause := declaration.ImportClause()
-		if importClause != nil && importClause.AsImportClause().NamedBindings != nil && importClause.AsImportClause().NamedBindings.Kind == ast.KindNamespaceImport {
+		if importClause != nil && importClause.AsImportClause().NamedBindings != nil && importClause.AsImportClause().NamedBindings.Kind() == ast.KindNamespaceImport {
 			return importClause.AsImportClause().NamedBindings.Name().Text()
 		}
 		return ""
@@ -720,12 +720,12 @@ func (v *View) tryAddToExistingImport(
 
 	var best *Fix
 	for _, existingImport := range matchingDeclarations {
-		if existingImport.node.Kind == ast.KindImportEqualsDeclaration {
+		if existingImport.node.Kind() == ast.KindImportEqualsDeclaration {
 			continue
 		}
 
-		if existingImport.node.Kind == ast.KindVariableDeclaration {
-			if (importKind == lsproto.ImportKindNamed || importKind == lsproto.ImportKindDefault) && existingImport.node.Name().Kind == ast.KindObjectBindingPattern {
+		if existingImport.node.Kind() == ast.KindVariableDeclaration {
+			if (importKind == lsproto.ImportKindNamed || importKind == lsproto.ImportKindDefault) && existingImport.node.Name().Kind() == ast.KindObjectBindingPattern {
 				fix := &Fix{
 					AutoImportFix: &lsproto.AutoImportFix{
 						Kind:            lsproto.AutoImportFixKindAddToExisting,
@@ -773,7 +773,7 @@ func (v *View) tryAddToExistingImport(
 		}
 
 		// Cannot add a named import to a declaration that has a namespace import
-		if importKind == lsproto.ImportKindNamed && namedBindings != nil && namedBindings.Kind == ast.KindNamespaceImport {
+		if importKind == lsproto.ImportKindNamed && namedBindings != nil && namedBindings.Kind() == ast.KindNamespaceImport {
 			continue
 		}
 
@@ -863,14 +863,14 @@ func (v *View) getExistingImports() *collections.MultiMap[ModuleID, existingImpo
 	for i, moduleSpecifier := range v.importingFile.Imports() {
 		node := ast.TryGetImportFromModuleSpecifier(moduleSpecifier)
 		if node == nil {
-			panic("error: did not expect node kind " + moduleSpecifier.Kind.String())
-		} else if ast.IsVariableDeclarationInitializedToRequire(node.Parent) {
+			panic("error: did not expect node kind " + moduleSpecifier.Kind().String())
+		} else if ast.IsVariableDeclarationInitializedToRequire(node.Parent()) {
 			if moduleSymbol := v.checker.ResolveExternalModuleName(moduleSpecifier, nil /*importAttributesType*/); moduleSymbol != nil {
 				if moduleID, _, ok := tryGetModuleIDAndFileNameOfModuleSymbol(moduleSymbol); ok {
-					result.Add(moduleID, existingImport{node: node.Parent, moduleSpecifier: moduleSpecifier.Text(), index: i})
+					result.Add(moduleID, existingImport{node: node.Parent(), moduleSpecifier: moduleSpecifier.Text(), index: i})
 				}
 			}
-		} else if node.Kind == ast.KindImportDeclaration || node.Kind == ast.KindImportEqualsDeclaration || node.Kind == ast.KindJSDocImportTag {
+		} else if node.Kind() == ast.KindImportDeclaration || node.Kind() == ast.KindImportEqualsDeclaration || node.Kind() == ast.KindJSDocImportTag {
 			if moduleSymbol := v.checker.GetSymbolAtLocation(moduleSpecifier); moduleSymbol != nil {
 				if moduleID, _, ok := tryGetModuleIDAndFileNameOfModuleSymbol(moduleSymbol); ok {
 					result.Add(moduleID, existingImport{node: node, moduleSpecifier: moduleSpecifier.Text(), index: i})
@@ -936,14 +936,14 @@ func detectSyntaxIndicators(file *ast.SourceFile, options *core.CompilerOptions)
 	// Fall back to scanning Imports() for actual import/export declarations
 	// (not require() calls or dynamic imports).
 	for _, imp := range file.Imports() {
-		if imp.Flags&ast.NodeFlagsSynthesized != 0 {
+		if imp.Flags()&ast.NodeFlagsSynthesized != 0 {
 			continue
 		}
-		parent := imp.Parent
+		parent := imp.Parent()
 		if parent == nil {
 			continue
 		}
-		switch parent.Kind {
+		switch parent.Kind() {
 		case ast.KindImportDeclaration, ast.KindJSImportDeclaration, ast.KindExportDeclaration:
 			return true, hasCJS
 		case ast.KindExternalModuleReference:
@@ -1126,12 +1126,12 @@ func promoteFromTypeOnly(
 	// See comment in `doAddExistingFix` on constant with the same name.
 	convertExistingToTypeOnly := compilerOptions.VerbatimModuleSyntax
 
-	switch aliasDeclaration.Kind {
+	switch aliasDeclaration.Kind() {
 	case ast.KindImportSpecifier:
 		spec := aliasDeclaration.AsImportSpecifier()
 		if spec.IsTypeOnly {
-			if spec.Parent != nil && spec.Parent.Kind == ast.KindNamedImports {
-				namedImportsNode := spec.Parent.AsNamedImports()
+			if spec.Parent() != nil && spec.Parent().Kind() == ast.KindNamedImports {
+				namedImportsNode := spec.Parent().AsNamedImports()
 				elements := namedImportsNode.Elements.Nodes
 				if len(elements) > 1 {
 					// Create a synthetic specifier with isTypeOnly=false to compute sorted position
@@ -1145,7 +1145,7 @@ func promoteFromTypeOnly(
 						changes.NodeFactory.NewIdentifier(spec.Name().Text()),
 					)
 					specifierComparer, _ := lsutil.GetNamedImportSpecifierComparerWithDetection(
-						spec.Parent.Parent.Parent, // ImportDeclaration
+						spec.Parent().Parent().Parent(), // ImportDeclaration
 						sourceFile,
 						preferences,
 					)
@@ -1153,7 +1153,7 @@ func promoteFromTypeOnly(
 					currentIndex := slices.Index(elements, aliasDeclaration)
 					if insertionIndex != currentIndex {
 						changes.Delete(sourceFile, aliasDeclaration)
-						changes.InsertImportSpecifierAtIndex(sourceFile, newSpecifier, spec.Parent, insertionIndex)
+						changes.InsertImportSpecifierAtIndex(sourceFile, newSpecifier, spec.Parent(), insertionIndex)
 						return aliasDeclaration
 					}
 				}
@@ -1172,14 +1172,14 @@ func promoteFromTypeOnly(
 			return aliasDeclaration
 		} else {
 			// The parent import clause is type-only
-			if spec.Parent == nil || spec.Parent.Kind != ast.KindNamedImports {
+			if spec.Parent() == nil || spec.Parent().Kind() != ast.KindNamedImports {
 				panic("ImportSpecifier parent must be NamedImports")
 			}
-			if spec.Parent.Parent == nil || spec.Parent.Parent.Kind != ast.KindImportClause {
+			if spec.Parent().Parent() == nil || spec.Parent().Parent().Kind() != ast.KindImportClause {
 				panic("NamedImports parent must be ImportClause")
 			}
-			promoteImportClause(changes, spec.Parent.Parent.AsImportClause(), compilerOptions, sourceFile, preferences, convertExistingToTypeOnly, aliasDeclaration)
-			return spec.Parent.Parent
+			promoteImportClause(changes, spec.Parent().Parent().AsImportClause(), compilerOptions, sourceFile, preferences, convertExistingToTypeOnly, aliasDeclaration)
+			return spec.Parent().Parent()
 		}
 
 	case ast.KindImportClause:
@@ -1188,11 +1188,11 @@ func promoteFromTypeOnly(
 
 	case ast.KindNamespaceImport:
 		// Promote the parent import clause
-		if aliasDeclaration.Parent == nil || aliasDeclaration.Parent.Kind != ast.KindImportClause {
+		if aliasDeclaration.Parent() == nil || aliasDeclaration.Parent().Kind() != ast.KindImportClause {
 			panic("NamespaceImport parent must be ImportClause")
 		}
-		promoteImportClause(changes, aliasDeclaration.Parent.AsImportClause(), compilerOptions, sourceFile, preferences, convertExistingToTypeOnly, aliasDeclaration)
-		return aliasDeclaration.Parent
+		promoteImportClause(changes, aliasDeclaration.Parent().AsImportClause(), compilerOptions, sourceFile, preferences, convertExistingToTypeOnly, aliasDeclaration)
+		return aliasDeclaration.Parent()
 
 	case ast.KindImportEqualsDeclaration:
 		// Remove the 'type' keyword (which is the second token: 'import' 'type' name '=' ...)
@@ -1204,7 +1204,7 @@ func promoteFromTypeOnly(
 		deleteTypeKeyword(changes, sourceFile, scan.TokenStart())
 		return aliasDeclaration
 	default:
-		panic(fmt.Sprintf("Unexpected alias declaration kind: %v", aliasDeclaration.Kind))
+		panic(fmt.Sprintf("Unexpected alias declaration kind: %v", aliasDeclaration.Kind()))
 	}
 }
 
@@ -1225,7 +1225,7 @@ func promoteImportClause(
 
 	// Handle .ts extension conversion to .js if necessary
 	if compilerOptions.AllowImportingTsExtensions.IsFalse() {
-		moduleSpecifier := checker.TryGetModuleSpecifierFromDeclaration(importClause.Parent)
+		moduleSpecifier := checker.TryGetModuleSpecifierFromDeclaration(importClause.Parent())
 		if moduleSpecifier != nil {
 			// Note: We can't check ResolvedUsingTsExtension without program, so we'll skip this optimization
 			// The fix will still work, just might not change .ts to .js extensions in all cases
@@ -1237,12 +1237,12 @@ func promoteImportClause(
 	// in the same import declaration
 	if convertExistingToTypeOnly.IsTrue() {
 		namedImports := importClause.NamedBindings
-		if namedImports != nil && namedImports.Kind == ast.KindNamedImports {
+		if namedImports != nil && namedImports.Kind() == ast.KindNamedImports {
 			namedImportsData := namedImports.AsNamedImports()
 			if len(namedImportsData.Elements.Nodes) > 1 {
 				// Check if the list is sorted and if we need to reorder
 				_, isSorted := lsutil.GetNamedImportSpecifierComparerWithDetection(
-					importClause.Parent,
+					importClause.Parent(),
 					sourceFile,
 					preferences,
 				)
@@ -1251,7 +1251,7 @@ func promoteImportClause(
 				// move it to index 0 (since it will be the only non-type-only import)
 				if isSorted.IsFalse() == false && // isSorted !== false
 					aliasDeclaration != nil &&
-					aliasDeclaration.Kind == ast.KindImportSpecifier {
+					aliasDeclaration.Kind() == ast.KindImportSpecifier {
 					// Find the index of the alias declaration
 					aliasIndex := -1
 					for i, element := range namedImportsData.Elements.Nodes {
@@ -1273,7 +1273,7 @@ func promoteImportClause(
 				for _, element := range namedImportsData.Elements.Nodes {
 					spec := element.AsImportSpecifier()
 					// Skip the specifier being promoted (if aliasDeclaration is an ImportSpecifier)
-					if aliasDeclaration != nil && aliasDeclaration.Kind == ast.KindImportSpecifier {
+					if aliasDeclaration != nil && aliasDeclaration.Kind() == ast.KindImportSpecifier {
 						if element == aliasDeclaration {
 							continue
 						}
@@ -1306,7 +1306,7 @@ func deleteTypeKeyword(changes *change.Tracker, sourceFile *ast.SourceFile, star
 }
 
 func getModuleSpecifierText(promotedDeclaration *ast.Node) string {
-	if promotedDeclaration.Kind == ast.KindImportEqualsDeclaration {
+	if promotedDeclaration.Kind() == ast.KindImportEqualsDeclaration {
 		importEqualsDeclaration := promotedDeclaration.AsImportEqualsDeclaration()
 		if ast.IsExternalModuleReference(importEqualsDeclaration.ModuleReference) {
 			expr := importEqualsDeclaration.ModuleReference.Expression()
@@ -1319,7 +1319,7 @@ func getModuleSpecifierText(promotedDeclaration *ast.Node) string {
 		}
 		return scanner.GetTextOfNode(importEqualsDeclaration.ModuleReference)
 	}
-	moduleSpecifier := promotedDeclaration.Parent.ModuleSpecifier()
+	moduleSpecifier := promotedDeclaration.Parent().ModuleSpecifier()
 	if ast.IsStringLiteralLike(moduleSpecifier) {
 		return moduleSpecifier.Text()
 	}

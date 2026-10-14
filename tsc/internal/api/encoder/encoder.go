@@ -454,7 +454,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 	var structuredData []byte
 	var strs *stringTable
 	var positionMap *ast.PositionMap
-	if rootNode.Kind == ast.KindSourceFile {
+	if rootNode.Kind() == ast.KindSourceFile {
 		strs = newStringTable(sourceFile.Text(), sourceFile.TextCount)
 		positionMap = sourceFile.GetPositionMap()
 	} else {
@@ -483,7 +483,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 	// Values start at 0 and are filled in during the walk.
 	var nodeIndexMap map[*ast.Node]uint32
 	var sfExtendedDataOffset int // byte offset in extendedData where SourceFile fields start
-	if rootNode.Kind == ast.KindSourceFile {
+	if rootNode.Kind() == ast.KindSourceFile {
 		sf := rootNode.AsSourceFile()
 		total := len(sf.Imports()) + len(sf.ModuleAugmentations)
 		if sf.ExternalModuleIndicator != nil && sf.ExternalModuleIndicator != rootNode {
@@ -554,7 +554,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 			nodes[prevIndex*NodeSize+NodeOffsetNext+3] = b3
 		}
 
-		nodes = appendUint32s(nodes, uint32(node.Kind), utf16(node.Pos()), utf16(node.End()), 0, parentIndex, getNodeData(node, strs, positionMap, &extendedData, &structuredData), uint32(node.Flags))
+		nodes = appendUint32s(nodes, uint32(node.Kind()), utf16(node.Pos()), utf16(node.End()), 0, parentIndex, getNodeData(node, strs, positionMap, &extendedData, &structuredData), uint32(node.Flags()))
 
 		if nodeIndexMap != nil {
 			if _, ok := nodeIndexMap[node]; ok {
@@ -585,7 +585,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 	nodeTable = append(nodeTable, rootNode) // index 1 = root node
 
 	sfExtendedDataOffset = len(extendedData)
-	nodes = appendUint32s(nodes, uint32(rootNode.Kind), utf16(rootNode.Pos()), utf16(rootNode.End()), 0, 0, getNodeData(rootNode, strs, positionMap, &extendedData, &structuredData), uint32(rootNode.Flags))
+	nodes = appendUint32s(nodes, uint32(rootNode.Kind()), utf16(rootNode.Pos()), utf16(rootNode.End()), 0, 0, getNodeData(rootNode, strs, positionMap, &extendedData, &structuredData), uint32(rootNode.Flags()))
 
 	visitor.VisitEachChild(rootNode)
 	if sourceFile != nil {
@@ -596,7 +596,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 
 	var hash xxh3.Uint128
 	var parseOpts uint32
-	if rootNode.Kind == ast.KindSourceFile {
+	if rootNode.Kind() == ast.KindSourceFile {
 		hash = sourceFile.Hash
 		parseOpts = encodeParseOptions(sourceFile.ParseOptions().ExternalModuleIndicatorOptions)
 
@@ -682,7 +682,7 @@ const noStructuredData = 0xFFFFFFFF
 
 func recordExtendedData_SourceFile(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) {
 	sf := node.AsSourceFile()
-	textIndex := strs.add(sf.Text(), sf.Kind, sf.Pos(), sf.End())
+	textIndex := strs.add(sf.Text(), sf.Kind(), sf.Pos(), sf.End())
 	originalTextIndex := textIndex
 	if sf.OriginalText() != sf.Text() {
 		originalTextIndex = strs.add(sf.OriginalText(), 0, 0, 0)
@@ -718,22 +718,22 @@ func recordExtendedData_SourceFile(node *ast.Node, strs *stringTable, positionMa
 
 func recordExtendedData_TemplateHead(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) {
 	n := node.AsTemplateHead()
-	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
-	rawTextIndex := strs.add(n.RawText, node.Kind, node.Pos(), node.End())
+	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
+	rawTextIndex := strs.add(n.RawText, node.Kind(), node.Pos(), node.End())
 	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, uint32(n.TemplateFlags))
 }
 
 func recordExtendedData_TemplateMiddle(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) {
 	n := node.AsTemplateMiddle()
-	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
-	rawTextIndex := strs.add(n.RawText, node.Kind, node.Pos(), node.End())
+	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
+	rawTextIndex := strs.add(n.RawText, node.Kind(), node.Pos(), node.End())
 	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, uint32(n.TemplateFlags))
 }
 
 func recordExtendedData_TemplateTail(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) {
 	n := node.AsTemplateTail()
-	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
-	rawTextIndex := strs.add(n.RawText, node.Kind, node.Pos(), node.End())
+	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
+	rawTextIndex := strs.add(n.RawText, node.Kind(), node.Pos(), node.End())
 	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, uint32(n.TemplateFlags))
 }
 
@@ -927,30 +927,30 @@ func getNodeCommonData_SyntheticExpression(_ *ast.Node) uint32 {
 
 func recordExtendedData_StringLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
 	n := node.AsStringLiteral()
-	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
 	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags))
 }
 
 func recordExtendedData_NumericLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
 	n := node.AsNumericLiteral()
-	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
 	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags))
 }
 
 func recordExtendedData_BigIntLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
 	n := node.AsBigIntLiteral()
-	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
 	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags))
 }
 
 func recordExtendedData_RegularExpressionLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
 	n := node.AsRegularExpressionLiteral()
-	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
 	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags))
 }
 
 func recordExtendedData_NoSubstitutionTemplateLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
 	n := node.AsNoSubstitutionTemplateLiteral()
-	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
 	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TemplateFlags))
 }

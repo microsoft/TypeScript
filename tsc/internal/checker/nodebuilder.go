@@ -168,7 +168,7 @@ func (b *NodeBuilder) ExpandSymbolForHover(symbol *ast.Symbol, meaning ast.Symbo
 	// Simplify declarations by applying original modifiers
 	result := make([]*ast.Node, 0, len(nodes))
 	for _, node := range nodes {
-		switch node.Kind {
+		switch node.Kind() {
 		case ast.KindClassDeclaration:
 			result = append(result, simplifyClassDeclaration(b.impl.f, node, symbol))
 		case ast.KindEnumDeclaration:

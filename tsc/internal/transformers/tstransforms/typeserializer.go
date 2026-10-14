@@ -91,7 +91,7 @@ func getAccessorTypeNode(node *ast.Node, container *ast.Node) *ast.Node {
 * @param node The node that should have its type serialized.
  */
 func (s *metadataSerializer) serializeTypeOfNode(node *ast.Node, container *ast.Node) *ast.Node {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindPropertyDeclaration, ast.KindParameter:
 		return s.serializeTypeNode(node.Type())
 	case ast.KindGetAccessor, ast.KindSetAccessor:
@@ -135,7 +135,7 @@ func (s *metadataSerializer) serializeParameterTypesOfNode(node *ast.Node, conta
 }
 
 func getParametersOfDecoratedDeclaration(node *ast.Node, container *ast.Node) *ast.NodeList {
-	if container != nil && node.Kind == ast.KindGetAccessor {
+	if container != nil && node.Kind() == ast.KindGetAccessor {
 		acc := ast.GetAllAccessorDeclarations(container.Members(), node)
 		if acc.SetAccessor != nil {
 			return acc.SetAccessor.Parameters
@@ -182,7 +182,7 @@ func (s *metadataSerializer) serializeTypeNode(node *ast.Node) *ast.Node {
 
 	node = ast.SkipTypeParentheses(node)
 
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindVoidKeyword, ast.KindUndefinedKeyword, ast.KindNeverKeyword:
 		return s.f.NewVoidZeroExpression()
 	case ast.KindFunctionType, ast.KindConstructorType:
@@ -244,25 +244,25 @@ func (s *metadataSerializer) serializeUnionOrIntersectionConstituents(types []*a
 	var serializedType *ast.Node
 	for _, typeNode := range types {
 		typeNode = ast.SkipTypeParentheses(typeNode)
-		if typeNode.Kind == ast.KindNeverKeyword {
+		if typeNode.Kind() == ast.KindNeverKeyword {
 			if isIntersection {
 				return s.f.NewVoidZeroExpression() // Reduce to `never` in an intersection
 			}
 			continue // Elide `never` in a union
 		}
 
-		if typeNode.Kind == ast.KindUnknownKeyword {
+		if typeNode.Kind() == ast.KindUnknownKeyword {
 			if !isIntersection {
 				return s.f.NewIdentifier("Object") // Reduce to `unknown` in a union
 			}
 			continue // Elide `unknown` in an intersection
 		}
 
-		if typeNode.Kind == ast.KindAnyKeyword {
+		if typeNode.Kind() == ast.KindAnyKeyword {
 			return s.f.NewIdentifier("Object") // Reduce to `any` in a union or intersection
 		}
 
-		if !s.strictNullChecks && ((ast.IsLiteralTypeNode(typeNode) && typeNode.AsLiteralTypeNode().Literal.Kind == ast.KindNullKeyword) || typeNode.Kind == ast.KindUndefinedKeyword) {
+		if !s.strictNullChecks && ((ast.IsLiteralTypeNode(typeNode) && typeNode.AsLiteralTypeNode().Literal.Kind() == ast.KindNullKeyword) || typeNode.Kind() == ast.KindUndefinedKeyword) {
 			continue // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
 		}
 
@@ -293,12 +293,12 @@ func (s *metadataSerializer) serializeUnionOrIntersectionConstituents(types []*a
 }
 
 func (s *metadataSerializer) serializeLiteralOfLiteralTypeNode(node *ast.Node) *ast.Node {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindStringLiteral, ast.KindNoSubstitutionTemplateLiteral:
 		return s.f.NewIdentifier("String")
 	case ast.KindPrefixUnaryExpression:
 		operand := node.AsPrefixUnaryExpression().Operand
-		switch operand.Kind {
+		switch operand.Kind() {
 		case ast.KindNumericLiteral, ast.KindBigIntLiteral:
 			return s.serializeLiteralOfLiteralTypeNode(operand)
 		default:
@@ -403,14 +403,14 @@ func (s *metadataSerializer) serializeBigIntConstructor() *ast.Node {
 * @param node The entity name to serialize.
  */
 func (s *metadataSerializer) serializeEntityNameAsExpression(node *ast.EntityName) *ast.Node {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindIdentifier:
 		// Create a clone of the name with a new parent, and treat it as if it were
 		// a source tree node for the purposes of the checker.
 		name := node.Clone(s.f)
-		name.Loc = node.Loc
-		s.ec.UnsetOriginal(name)                              // make this identifier emulate a parse node, making it behave correctly when inspected by the module transforms
-		name.Parent = s.ec.ParseNode(s.c.currentLexicalScope) //nolint:customlint // ensure the parent is set to a parse tree node.
+		name.SetLoc(node.Loc())
+		s.ec.UnsetOriginal(name)                                // make this identifier emulate a parse node, making it behave correctly when inspected by the module transforms
+		name.SetParent(s.ec.ParseNode(s.c.currentLexicalScope)) //nolint:customlint // ensure the parent is set to a parse tree node.
 		return name
 	case ast.KindQualifiedName:
 		return s.serializeQualifiedNameAsExpression(node.AsQualifiedName())
@@ -431,12 +431,12 @@ func (s *metadataSerializer) serializeQualifiedNameAsExpression(node *ast.Qualif
 * @param node The entity name to serialize.
  */
 func (s *metadataSerializer) serializeEntityNameAsExpressionFallback(node *ast.EntityName) *ast.Node {
-	if node.Kind == ast.KindIdentifier {
+	if node.Kind() == ast.KindIdentifier {
 		// A -> typeof A !== "undefined" && A
 		copied := s.serializeEntityNameAsExpression(node)
 		return s.createCheckedValue(copied, copied)
 	}
-	if node.AsQualifiedName().Left.Kind == ast.KindIdentifier {
+	if node.AsQualifiedName().Left.Kind() == ast.KindIdentifier {
 		// A.B -> typeof A !== "undefined" && A.B
 		return s.createCheckedValue(s.serializeEntityNameAsExpression(node.AsQualifiedName().Left), s.serializeEntityNameAsExpression(node))
 	}
@@ -505,7 +505,7 @@ func (s *metadataSerializer) equateSerializedTypeNodes(left *ast.Node, right *as
 	}
 	// logical binary and assignments used in fallback
 	if ast.IsBinaryExpression(left) {
-		return ast.IsBinaryExpression(right) && left.AsBinaryExpression().OperatorToken.Kind == right.AsBinaryExpression().OperatorToken.Kind && s.equateSerializedTypeNodes(left.AsBinaryExpression().Left, right.AsBinaryExpression().Left) && s.equateSerializedTypeNodes(left.AsBinaryExpression().Right, right.AsBinaryExpression().Right)
+		return ast.IsBinaryExpression(right) && left.AsBinaryExpression().OperatorToken.Kind() == right.AsBinaryExpression().OperatorToken.Kind() && s.equateSerializedTypeNodes(left.AsBinaryExpression().Left, right.AsBinaryExpression().Left) && s.equateSerializedTypeNodes(left.AsBinaryExpression().Right, right.AsBinaryExpression().Right)
 	}
 	return false
 }

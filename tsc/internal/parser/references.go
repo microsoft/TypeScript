@@ -13,7 +13,7 @@ func collectExternalModuleReferences(file *ast.SourceFile) {
 		collectModuleReferences(file, node, false /*inAmbientModule*/)
 	}
 
-	if file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0 || ast.IsInJSFile(file.AsNode()) {
+	if file.Flags()&ast.NodeFlagsPossiblyContainsDynamicImport != 0 || ast.IsInJSFile(file.AsNode()) {
 		ast.ForEachDynamicImportOrRequireCall(file /*includeTypeSpaceImports*/, true /*requireStringLiteralLikeArgument*/, true, func(node *ast.Node, moduleSpecifier *ast.Expression) bool {
 			ast.SetImportsOfSourceFile(file, append(file.Imports(), moduleSpecifier))
 			return false

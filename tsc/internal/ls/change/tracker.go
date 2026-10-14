@@ -279,7 +279,7 @@ func (t *Tracker) TryInsertTypeAnnotation(sourceFile *ast.SourceFile, node *ast.
 			endNode = params[0]
 		}
 	} else {
-		switch node.Kind {
+		switch node.Kind() {
 		case ast.KindVariableDeclaration:
 			endNode = node.AsVariableDeclaration().ExclamationToken
 		case ast.KindPropertySignature:
@@ -321,8 +321,8 @@ func (t *Tracker) ParenthesizeArrowParameters(sourceFile *ast.SourceFile, arrowF
 func (t *Tracker) InsertModifierBefore(sourceFile *ast.SourceFile, modifier ast.Kind, before *ast.Node) {
 	pos := astnav.GetStartOfNode(before, sourceFile, false)
 	token := t.NewToken(modifier)
-	token.Loc = core.NewTextRange(pos, pos)
-	token.Parent = before.Parent
+	token.SetLoc(core.NewTextRange(pos, pos))
+	token.SetParent(before.Parent())
 	t.InsertNodeAt(sourceFile, core.TextPos(pos), token, NodeOptions{Suffix: " "})
 }
 
@@ -401,8 +401,8 @@ func (t *Tracker) endPosForInsertNodeAfter(sourceFile *ast.SourceFile, after *as
 		// if not - insert semicolon to preserve the code from changing the meaning due to ASI
 		endPos := core.TextPos(after.End())
 		semicolon := t.NewToken(ast.KindSemicolonToken)
-		semicolon.Loc = core.NewTextRange(after.End(), after.End())
-		semicolon.Parent = after.Parent
+		semicolon.SetLoc(core.NewTextRange(after.End(), after.End()))
+		semicolon.SetParent(after.Parent())
 		t.ReplaceRange(
 			sourceFile,
 			core.NewTextRange(int(endPos), int(endPos)),
@@ -455,7 +455,7 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 			startPos := scanner.SkipTriviaEx(sourceFile.Text(), nextNode.Pos(), &scanner.SkipTriviaOptions{StopAfterLineBreak: false, StopAtComments: true})
 
 			// write separator and leading trivia of the next element as suffix
-			suffix := scanner.TokenToString(nextToken.Kind) + sourceFile.Text()[nextToken.End():startPos]
+			suffix := scanner.TokenToString(nextToken.Kind()) + sourceFile.Text()[nextToken.End():startPos]
 			t.InsertNodesAt(sourceFile, core.TextPos(startPos), []*ast.Node{newNode}, NodeOptions{Suffix: suffix})
 		}
 		return
@@ -477,7 +477,7 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 	if len(containingList.Nodes) != 1 {
 		// otherwise, if list has more than one element, pick separator from the list
 		tokenBeforeInsertPosition := astnav.FindPrecedingToken(sourceFile, after.Pos())
-		separator = core.IfElse(isSeparator(after, tokenBeforeInsertPosition), tokenBeforeInsertPosition.Kind, ast.KindCommaToken)
+		separator = core.IfElse(isSeparator(after, tokenBeforeInsertPosition), tokenBeforeInsertPosition.Kind(), ast.KindCommaToken)
 		// determine if list is multiline by checking lines of after element and element that precedes it.
 		afterMinusOneStartLinePosition := format.GetLineStartPositionForPosition(astnav.GetStartOfNode(containingList.Nodes[index-1], sourceFile, false), sourceFile)
 		multilineList = afterMinusOneStartLinePosition != afterStartLinePosition
@@ -490,8 +490,8 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 		// insert separator immediately following the 'after' node to preserve comments in trailing trivia
 		separatorToken := t.NewToken(separator)
 		separatorString := scanner.TokenToString(separator)
-		separatorToken.Loc = core.NewTextRange(end, end+len(separatorString))
-		separatorToken.Parent = after.Parent
+		separatorToken.SetLoc(core.NewTextRange(end, end+len(separatorString)))
+		separatorToken.SetParent(after.Parent())
 		endPos := core.TextPos(end)
 		t.ReplaceRange(sourceFile, core.NewTextRange(int(endPos), int(endPos)), separatorToken, NodeOptions{})
 		// use the same indentation as 'after' item
@@ -535,7 +535,7 @@ func (t *Tracker) InsertImportSpecifierAtIndex(sourceFile *ast.SourceFile, newSp
 			sourceFile,
 			elements[0],
 			newSpecifier,
-			!positionsAreOnSameLine(astnav.GetStartOfNode(elements[0], sourceFile, false), astnav.GetStartOfNode(namedImports.Parent.Parent, sourceFile, false), sourceFile),
+			!positionsAreOnSameLine(astnav.GetStartOfNode(elements[0], sourceFile, false), astnav.GetStartOfNode(namedImports.Parent().Parent(), sourceFile, false), sourceFile),
 			LeadingTriviaOptionNone,
 		)
 	}
@@ -633,7 +633,7 @@ func (t *Tracker) tryComputeIndentationFromExistingMembers(sourceFile *ast.Sourc
 		if member == nil {
 			continue
 		}
-		if printer.RangeStartPositionsAreOnSameLine(last.Loc, member.Loc, sourceFile) {
+		if printer.RangeStartPositionsAreOnSameLine(last.Loc(), member.Loc(), sourceFile) {
 			return -1
 		}
 
@@ -662,7 +662,7 @@ func (t *Tracker) tryComputeIndentationFromExistingMembers(sourceFile *ast.Sourc
 func (t *Tracker) getInsertNodeAfterOptions(sourceFile *ast.SourceFile, node *ast.Node) NodeOptions {
 	newLineChar := t.newLine
 	var options NodeOptions
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindParameter:
 		// default opts
 		options = NodeOptions{}
@@ -681,7 +681,7 @@ func (t *Tracker) getInsertNodeAfterOptions(sourceFile *ast.SourceFile, node *as
 	default:
 		if !(ast.IsStatement(node) || ast.IsClassOrTypeElement(node)) {
 			// Else we haven't handled this kind of node yet -- add it
-			panic("unimplemented node type " + node.Kind.String() + " in changeTracker.getInsertNodeAfterOptions")
+			panic("unimplemented node type " + node.Kind().String() + " in changeTracker.getInsertNodeAfterOptions")
 		}
 		options = NodeOptions{Suffix: newLineChar}
 	}
@@ -698,17 +698,17 @@ func (t *Tracker) getOptionsForInsertNodeBefore(before *ast.Node, inserted *ast.
 			return NodeOptions{Suffix: t.newLine + t.newLine}
 		}
 		return NodeOptions{Suffix: t.newLine}
-	} else if before.Kind == ast.KindVariableDeclaration {
+	} else if before.Kind() == ast.KindVariableDeclaration {
 		// insert `x = 1, ` into `const x = 1, y = 2;
 		return NodeOptions{Suffix: ", "}
-	} else if before.Kind == ast.KindParameter {
-		if inserted.Kind == ast.KindParameter {
+	} else if before.Kind() == ast.KindParameter {
+		if inserted.Kind() == ast.KindParameter {
 			return NodeOptions{Suffix: ", "}
 		}
 		return NodeOptions{}
-	} else if (before.Kind == ast.KindStringLiteral && before.Parent != nil && before.Parent.Kind == ast.KindImportDeclaration) || before.Kind == ast.KindNamedImports {
+	} else if (before.Kind() == ast.KindStringLiteral && before.Parent() != nil && before.Parent().Kind() == ast.KindImportDeclaration) || before.Kind() == ast.KindNamedImports {
 		return NodeOptions{Suffix: ", "}
-	} else if before.Kind == ast.KindImportSpecifier {
+	} else if before.Kind() == ast.KindImportSpecifier {
 		suffix := ","
 		if blankLineBetween {
 			suffix += t.newLine
@@ -718,7 +718,7 @@ func (t *Tracker) getOptionsForInsertNodeBefore(before *ast.Node, inserted *ast.
 		return NodeOptions{Suffix: suffix}
 	}
 	// We haven't handled this kind of node yet -- add it
-	panic("unimplemented node type " + before.Kind.String() + " in changeTracker.getOptionsForInsertNodeBefore")
+	panic("unimplemented node type " + before.Kind().String() + " in changeTracker.getOptionsForInsertNodeBefore")
 }
 
 func (t *Tracker) getInsertNodeAtStartInsertOptions(sourceFile *ast.SourceFile, node *ast.Node, indentation int) NodeOptions {
@@ -798,7 +798,7 @@ func rangeContainsRangeExclusive(outer *ast.Node, inner *ast.Node) bool {
 }
 
 func isSeparator(node *ast.Node, candidate *ast.Node) bool {
-	return candidate != nil && node.Parent != nil && (candidate.Kind == ast.KindCommaToken || (candidate.Kind == ast.KindSemicolonToken && node.Parent.Kind == ast.KindObjectLiteralExpression))
+	return candidate != nil && node.Parent() != nil && (candidate.Kind() == ast.KindCommaToken || (candidate.Kind() == ast.KindSemicolonToken && node.Parent().Kind() == ast.KindObjectLiteralExpression))
 }
 
 func findIndentationColumn(text string, lineStart, memberStart, tabSize int) int {

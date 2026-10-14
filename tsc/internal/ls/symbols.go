@@ -96,7 +96,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 	var symbols []*lsproto.DocumentSymbol
 	expandoTargets := collections.Set[string]{}
 	addSymbolForNode := func(node *ast.Node, name *ast.Node, children []*lsproto.DocumentSymbol) {
-		if node.Flags&ast.NodeFlagsReparsed == 0 {
+		if node.Flags()&ast.NodeFlagsReparsed == 0 {
 			symbol := l.newDocumentSymbol(node, name, children)
 			if symbol != nil {
 				symbols = append(symbols, symbol)
@@ -148,7 +148,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 		if ctx.Err() != nil {
 			return true
 		}
-		if node.Flags&ast.NodeFlagsReparsed == 0 {
+		if node.Flags()&ast.NodeFlagsReparsed == 0 {
 			if jsdocs := node.JSDoc(file); len(jsdocs) > 0 {
 				for _, jsdoc := range jsdocs {
 					if tagList := jsdoc.AsJSDoc().Tags; tagList != nil {
@@ -161,10 +161,10 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 				}
 			}
 		}
-		if node.Parent.Kind == ast.KindSourceFile && ast.IsImportOrImportEqualsDeclaration(node) {
+		if node.Parent().Kind() == ast.KindSourceFile && ast.IsImportOrImportEqualsDeclaration(node) {
 			return false
 		}
-		switch node.Kind {
+		switch node.Kind() {
 		case ast.KindClassDeclaration, ast.KindClassExpression, ast.KindInterfaceDeclaration, ast.KindEnumDeclaration:
 			if ast.IsClassLike(node) && ast.GetDeclarationName(node) != "" {
 				expandoTargets.Add(ast.GetDeclarationName(node))
@@ -210,7 +210,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 			//    import * as NS from "mod";
 			//    import {a, b as B} from "mod";
 			if namedBindings := node.AsImportClause().NamedBindings; namedBindings != nil {
-				if namedBindings.Kind == ast.KindNamespaceImport {
+				if namedBindings.Kind() == ast.KindNamespaceImport {
 					addSymbolForNode(namedBindings, nil /*name*/, nil /*children*/)
 				} else {
 					for _, element := range namedBindings.Elements() {
@@ -431,7 +431,7 @@ func isAnonymousName(name string) bool {
 }
 
 func getTextOfName(node *ast.Node) string {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindIdentifier, ast.KindPrivateIdentifier, ast.KindNumericLiteral:
 		return node.Text()
 	case ast.KindStringLiteral:
@@ -447,25 +447,25 @@ func getTextOfName(node *ast.Node) string {
 }
 
 func getUnnamedNodeLabel(node *ast.Node) string {
-	if parent := ast.WalkUpParenthesizedExpressions(node.Parent); parent != nil && ast.IsExportAssignment(parent) {
+	if parent := ast.WalkUpParenthesizedExpressions(node.Parent()); parent != nil && ast.IsExportAssignment(parent) {
 		if parent.AsExportAssignment().IsExportEquals {
 			return "export="
 		}
 		return "default"
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindArrowFunction:
 		if node.ModifierFlags()&ast.ModifierFlagsDefault != 0 {
 			return "default"
 		}
-		if ast.IsCallExpression(node.Parent) {
-			name := getCallExpressionName(node.Parent.Expression())
+		if ast.IsCallExpression(node.Parent()) {
+			name := getCallExpressionName(node.Parent().Expression())
 			if name != "" {
 				name = cleanCallbackText(name)
 				if len(name) > maxLength {
 					return name + " callback"
 				}
-				args := cleanCallbackText(getCallExpressionLiteralArgs(node.Parent))
+				args := cleanCallbackText(getCallExpressionLiteralArgs(node.Parent()))
 				return name + "(" + args + ") callback"
 			}
 		}
@@ -488,7 +488,7 @@ func getUnnamedNodeLabel(node *ast.Node) string {
 }
 
 func getCallExpressionName(node *ast.Node) string {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindIdentifier, ast.KindPrivateIdentifier:
 		return node.Text()
 	case ast.KindPropertyAccessExpression:
@@ -671,7 +671,7 @@ func compareDeclarationInfos(d1, d2 DeclarationInfo) int {
 // getSymbolKindFromNode converts an AST node to an LSP SymbolKind.
 // Combines getNodeKind with VS Code's fromProtocolScriptElementKind.
 func getSymbolKindFromNode(node *ast.Node) lsproto.SymbolKind {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindSourceFile:
 		if ast.IsExternalModule(node.AsSourceFile()) {
 			return lsproto.SymbolKindModule

@@ -36,7 +36,7 @@ func NewESModuleTransformer(opts *transformers.TransformOptions) *transformers.T
 
 // Visits source elements that are not top-level or top-level nested statements.
 func (tx *ESModuleTransformer) visit(node *ast.Node) *ast.Node {
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindSourceFile:
 		node = tx.visitSourceFile(node.AsSourceFile())
 	case ast.KindImportDeclaration:
@@ -286,7 +286,7 @@ func (tx *ESModuleTransformer) visitImportOrRequireCall(node *ast.CallExpression
 		node.QuestionDotToken,
 		nil, /*typeArguments*/
 		argumentList,
-		node.Flags,
+		node.Flags(),
 	)
 }
 

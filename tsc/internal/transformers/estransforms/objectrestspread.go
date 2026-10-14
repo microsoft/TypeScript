@@ -26,7 +26,7 @@ func (ch *objectRestSpreadTransformer) visit(node *ast.Node) *ast.Node {
 	expressionResultIsUnused := ch.expressionResultIsUnused
 	ch.expressionResultIsUnused = false
 	defer func() { ch.expressionResultIsUnused = expressionResultIsUnused }()
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindSourceFile:
 		return ch.visitSourceFile(node.AsSourceFile())
 	case ast.KindObjectLiteralExpression:
@@ -273,9 +273,9 @@ func (ch *objectRestSpreadTransformer) transformFunctionBody(node *ast.Node) *as
 		}
 	} else {
 		ret := ch.Factory().NewReturnStatement(body)
-		ret.Loc = body.Loc
+		ret.SetLoc(body.Loc())
 		list := ch.Factory().NewNodeList([]*ast.Node{})
-		list.Loc = body.Loc
+		list.Loc = body.Loc()
 		body = ch.Factory().NewBlock(list, true)
 		suffix = append(suffix, ret)
 	}
@@ -303,7 +303,7 @@ func (ch *objectRestSpreadTransformer) collectObjectRestAssignments(node *ast.No
 					if declarations != nil {
 						declarationList := ch.Factory().NewVariableDeclarationList(ch.Factory().NewNodeList([]*ast.Node{}), ast.NodeFlagsNone)
 						decls := []*ast.Node{declarations}
-						if declarations.Kind == ast.KindSyntaxList {
+						if declarations.Kind() == ast.KindSyntaxList {
 							decls = declarations.AsSyntaxList().Children
 						}
 						declarationList.AsVariableDeclarationList().Declarations.Nodes = append(declarationList.AsVariableDeclarationList().Declarations.Nodes, decls...)
@@ -331,23 +331,23 @@ func (ch *objectRestSpreadTransformer) collectObjectRestAssignments(node *ast.No
 				//    if (typeof x === "undefined") { x = 1; }
 				//  }
 				name := parameter.Name().Clone(ch.Factory())
-				name.Loc = parameter.Name().Loc
+				name.SetLoc(parameter.Name().Loc())
 				ch.EmitContext().AddEmitFlags(name, printer.EFNoSourceMap)
 
 				initializer := ch.Visitor().VisitNode(parameter.Initializer())
 				ch.EmitContext().AddEmitFlags(initializer, printer.EFNoSourceMap|printer.EFNoComments)
 
 				assignment := ch.Factory().NewAssignmentExpression(name, initializer)
-				assignment.Loc = parameter.Loc
+				assignment.SetLoc(parameter.Loc())
 				ch.EmitContext().AddEmitFlags(assignment, printer.EFNoComments)
 
 				block := ch.Factory().NewBlock(ch.Factory().NewNodeList([]*ast.Node{ch.Factory().NewExpressionStatement(assignment)}), false)
-				block.Loc = parameter.Loc
+				block.SetLoc(parameter.Loc())
 				ch.EmitContext().AddEmitFlags(block, printer.EFSingleLine|printer.EFNoTrailingSourceMap|printer.EFNoTokenSourceMaps|printer.EFNoComments)
 
 				typeCheck := ch.Factory().NewTypeCheck(name.Clone(ch.Factory()), "undefined")
 				statement := ch.Factory().NewIfStatement(typeCheck, block, nil)
-				statement.Loc = parameter.Loc
+				statement.SetLoc(parameter.Loc())
 				ch.EmitContext().AddEmitFlags(statement, printer.EFNoTokenSourceMaps|printer.EFNoTrailingSourceMap|printer.EFCustomPrologue|printer.EFNoComments|printer.EFStartOnNewLine)
 				results = append(results, statement)
 			}
@@ -361,7 +361,7 @@ func (ch *objectRestSpreadTransformer) collectObjectRestAssignments(node *ast.No
 			if declarations != nil {
 				declarationList := ch.Factory().NewVariableDeclarationList(ch.Factory().NewNodeList([]*ast.Node{}), ast.NodeFlagsNone)
 				decls := []*ast.Node{declarations}
-				if declarations.Kind == ast.KindSyntaxList {
+				if declarations.Kind() == ast.KindSyntaxList {
 					decls = declarations.AsSyntaxList().Children
 				}
 				declarationList.AsVariableDeclarationList().Declarations.Nodes = append(declarationList.AsVariableDeclarationList().Declarations.Nodes, decls...)
@@ -387,7 +387,7 @@ func (ch *objectRestSpreadTransformer) visitCatchClause(node *ast.CatchClause) *
 		block := ch.Visitor().VisitNode(node.Block)
 		if visitedBindings != nil {
 			var decls []*ast.Node
-			if visitedBindings.Kind == ast.KindSyntaxList {
+			if visitedBindings.Kind() == ast.KindSyntaxList {
 				decls = visitedBindings.AsSyntaxList().Children
 			} else {
 				decls = []*ast.Node{visitedBindings}
@@ -461,19 +461,19 @@ func (ch *objectRestSpreadTransformer) visitForOftatement(node *ast.ForInOrOfSta
 						statements = append(statements, visited)
 					}
 				}
-				bodyLocation = node.Statement.Loc
+				bodyLocation = node.Statement.Loc()
 				statementsLocation = node.Statement.StatementList().Loc
 			} else if node.Statement != nil {
 				statements = append(statements, ch.Visitor().VisitEachChild(node.Statement))
-				bodyLocation = node.Statement.Loc
-				statementsLocation = node.Statement.Loc
+				bodyLocation = node.Statement.Loc()
+				statementsLocation = node.Statement.Loc()
 			}
 
 			list := ch.Factory().NewVariableDeclarationList(
 				ch.Factory().NewNodeList([]*ast.Node{ch.Factory().NewVariableDeclaration(temp, nil, nil, nil)}),
 				ast.NodeFlagsLet,
 			)
-			list.Loc = node.Initializer.Loc
+			list.SetLoc(node.Initializer.Loc())
 
 			expr := ch.Visitor().VisitEachChild(node.Expression)
 
@@ -481,7 +481,7 @@ func (ch *objectRestSpreadTransformer) visitForOftatement(node *ast.ForInOrOfSta
 			statementsList.Loc = statementsLocation
 
 			block := ch.Factory().NewBlock(statementsList, true)
-			block.Loc = bodyLocation
+			block.SetLoc(bodyLocation)
 
 			return ch.Factory().UpdateForInOrOfStatement(
 				node,
@@ -503,7 +503,7 @@ func (ch *objectRestSpreadTransformer) visitBinaryExpression(node *ast.BinaryExp
 			transformers.FlattenLevelObjectRest, nil,
 		)
 	}
-	if node.OperatorToken.Kind == ast.KindCommaToken {
+	if node.OperatorToken.Kind() == ast.KindCommaToken {
 		ch.expressionResultIsUnused = true
 		left := ch.Visitor().VisitNode(node.Left)
 		ch.expressionResultIsUnused = expressionResultIsUnused
@@ -540,7 +540,7 @@ func (ch *objectRestSpreadTransformer) visitObjectLiteralExpression(node *ast.Ob
 	// end up with `{ a: 1, b: 2, c: 3 }`
 
 	objects := ch.chunkObjectLiteralElements(node.Properties)
-	if len(objects) > 0 && objects[0].Kind != ast.KindObjectLiteralExpression {
+	if len(objects) > 0 && objects[0].Kind() != ast.KindObjectLiteralExpression {
 		objects = append([]*ast.Node{ch.Factory().NewObjectLiteralExpression(ch.Factory().NewNodeList(nil), false)}, objects...)
 	}
 	expression := objects[0]
@@ -564,7 +564,7 @@ func (ch *objectRestSpreadTransformer) chunkObjectLiteralElements(list *ast.Node
 	var chunkObject []*ast.Node
 	objects := make([]*ast.Node, 0, 1)
 	for _, e := range elements {
-		if e.Kind == ast.KindSpreadAssignment {
+		if e.Kind() == ast.KindSpreadAssignment {
 			if len(chunkObject) > 0 {
 				objects = append(objects, ch.Factory().NewObjectLiteralExpression(ch.Factory().NewNodeList(chunkObject), false))
 				chunkObject = nil
@@ -573,7 +573,7 @@ func (ch *objectRestSpreadTransformer) chunkObjectLiteralElements(list *ast.Node
 			objects = append(objects, ch.Visitor().VisitNode(target))
 		} else {
 			var elem *ast.Node
-			if e.Kind == ast.KindPropertyAssignment {
+			if e.Kind() == ast.KindPropertyAssignment {
 				elem = ch.Factory().NewPropertyAssignment(nil, e.Name(), nil, nil, ch.Visitor().VisitNode(e.Initializer()))
 			} else {
 				elem = ch.Visitor().VisitNode(e)

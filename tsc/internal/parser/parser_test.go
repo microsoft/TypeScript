@@ -172,20 +172,20 @@ class MissingImplements implements B. {}
 	}, sourceText, core.ScriptKindTS)
 
 	classDecl := file.Statements.Nodes[0].AsClassDeclaration()
-	assert.Equal(t, classDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
-	assert.Equal(t, classDecl.HeritageClauses.Nodes[1].AsHeritageClause().Types.Nodes[0].Kind, ast.KindTypeReference)
+	assert.Equal(t, classDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind(), ast.KindExpressionWithTypeArguments)
+	assert.Equal(t, classDecl.HeritageClauses.Nodes[1].AsHeritageClause().Types.Nodes[0].Kind(), ast.KindTypeReference)
 
 	interfaceDecl := file.Statements.Nodes[1].AsInterfaceDeclaration()
-	assert.Equal(t, interfaceDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindTypeReference)
+	assert.Equal(t, interfaceDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind(), ast.KindTypeReference)
 
 	invalidInterfaceDecl := file.Statements.Nodes[2].AsInterfaceDeclaration()
-	assert.Equal(t, invalidInterfaceDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+	assert.Equal(t, invalidInterfaceDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind(), ast.KindExpressionWithTypeArguments)
 
 	missingExtendsDecl := file.Statements.Nodes[3].AsInterfaceDeclaration()
-	assert.Equal(t, missingExtendsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+	assert.Equal(t, missingExtendsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind(), ast.KindExpressionWithTypeArguments)
 
 	missingImplementsDecl := file.Statements.Nodes[4].AsClassDeclaration()
-	assert.Equal(t, missingImplementsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+	assert.Equal(t, missingImplementsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind(), ast.KindExpressionWithTypeArguments)
 }
 
 func TestParseStaticSourcePhaseImport(t *testing.T) {
@@ -326,8 +326,8 @@ func TestParseDynamicSourcePhaseImport(t *testing.T) {
 	assert.Equal(t, metaProperty.AsMetaProperty().KeywordToken, ast.KindImportKeyword)
 	assert.Equal(t, metaProperty.Text(), "source")
 	assert.Equal(t, len(call.Arguments()), 2)
-	assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
-	assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
+	assert.Equal(t, file.Flags()&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
+	assert.Equal(t, file.Flags()&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
 	assert.Equal(t, file.ExternalModuleIndicator == nil, true)
 }
 
@@ -359,8 +359,8 @@ func TestParseEscapedDynamicImportPhase(t *testing.T) {
 			metaProperty := call.Expression()
 			assert.Assert(t, ast.IsMetaProperty(metaProperty))
 			assert.Equal(t, metaProperty.Text(), test.phaseName)
-			assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
-			assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
+			assert.Equal(t, file.Flags()&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
+			assert.Equal(t, file.Flags()&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
 		})
 	}
 }
@@ -399,8 +399,8 @@ test("", async function () {
 
 	for i := 1; i < len(file.ReparsedClones); i++ {
 		a, b := file.ReparsedClones[i-1], file.ReparsedClones[i]
-		if a.Pos() == b.Pos() && a.End() == b.End() && a.Kind == b.Kind {
-			t.Errorf("duplicate ReparsedClones at [%d] and [%d]: %s pos=%d end=%d", i-1, i, a.Kind.String(), a.Pos(), a.End())
+		if a.Pos() == b.Pos() && a.End() == b.End() && a.Kind() == b.Kind() {
+			t.Errorf("duplicate ReparsedClones at [%d] and [%d]: %s pos=%d end=%d", i-1, i, a.Kind().String(), a.Pos(), a.End())
 		}
 	}
 
@@ -480,7 +480,7 @@ function foo(options) {}`
 
 	typeNode := function.Parameters()[0].Type()
 	assert.Assert(t, typeNode != nil)
-	assert.Assert(t, typeNode.Flags&ast.NodeFlagsReparsed != 0)
+	assert.Assert(t, typeNode.Flags()&ast.NodeFlagsReparsed != 0)
 
 	expected := strings.Join([]string{"{", "value: string", "}"}, core.NewLineKindLF.GetNewLineCharacter())
 	assert.Equal(t, scanner.GetTextOfNode(typeNode), expected)
@@ -537,9 +537,9 @@ func TestJSDocAugmentsHeritage(t *testing.T) {
 			if test.augments {
 				assert.Equal(t, len(typeArguments), 1)
 				typeArgument := typeArguments[0]
-				assert.Equal(t, typeArgument.Kind, ast.KindStringKeyword)
-				assert.Assert(t, typeArgument.Flags&ast.NodeFlagsReparsed != 0)
-				assert.Equal(t, typeArgument.Parent, baseType)
+				assert.Equal(t, typeArgument.Kind(), ast.KindStringKeyword)
+				assert.Assert(t, typeArgument.Flags()&ast.NodeFlagsReparsed != 0)
+				assert.Equal(t, typeArgument.Parent(), baseType)
 				assert.Equal(t, scanner.GetTextOfNode(typeArgument), "string")
 				assert.Equal(t, ast.GetReparsedNodeForNode(sourceTypeArguments[0]), typeArgument)
 			} else {

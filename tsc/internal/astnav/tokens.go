@@ -23,7 +23,7 @@ func scanNavigationToken(s *scanner.Scanner, containingNode *ast.Node) ast.Kind 
 
 func GetTouchingPropertyName(sourceFile *ast.SourceFile, position int) *ast.Node {
 	return getTokenAtPosition(sourceFile, position, false /*allowPositionInLeadingTrivia*/, func(node *ast.Node) bool {
-		return ast.IsPropertyNameLiteral(node) || ast.IsKeywordKind(node.Kind) || ast.IsPrivateIdentifier(node)
+		return ast.IsPropertyNameLiteral(node) || ast.IsKeywordKind(node.Kind()) || ast.IsPrivateIdentifier(node)
 	})
 }
 
@@ -73,8 +73,8 @@ func getTokenAtPosition(
 	}
 
 	testNode := func(node *ast.Node) int {
-		if node.Kind != ast.KindEndOfFile && node.End() == position &&
-			includePrecedingTokenAtEndPosition != nil && node.Flags&ast.NodeFlagsReparsed == 0 {
+		if node.Kind() != ast.KindEndOfFile && node.End() == position &&
+			includePrecedingTokenAtEndPosition != nil && node.Flags()&ast.NodeFlagsReparsed == 0 {
 			if prevSubtree != nil && getIncludedPrecedingToken(prevSubtree) != nil {
 				return 0
 			}
@@ -85,8 +85,8 @@ func getTokenAtPosition(
 		// treat end as inclusive (there's nowhere else to look). This applies to the EOF
 		// token itself, and to JSDoc nodes reaching EOF (e.g. unterminated JSDoc comments).
 		if node.End() < position || node.End() == position &&
-			node.Kind != ast.KindEndOfFile &&
-			(!ast.IsJSDocKind(node.Kind) || node.End() != sourceFile.EndOfFileToken.End()) {
+			node.Kind() != ast.KindEndOfFile &&
+			(!ast.IsJSDocKind(node.Kind()) || node.End() != sourceFile.EndOfFileToken.End()) {
 			return -1
 		}
 		nodePos := getPosition(node, sourceFile, allowPositionInLeadingTrivia)
@@ -102,7 +102,7 @@ func getTokenAtPosition(
 	visitNode := func(node *ast.Node, _ *ast.NodeVisitor) *ast.Node {
 		// We can't abort visiting children, so once a match is found, we set `next`
 		// and do nothing on subsequent visits.
-		if node == nil || node.Flags&ast.NodeFlagsReparsed != 0 {
+		if node == nil || node.Flags()&ast.NodeFlagsReparsed != 0 {
 			return nil
 		}
 		if nodeAfterLeft == nil {
@@ -112,7 +112,7 @@ func getTokenAtPosition(
 			result := testNode(node)
 			switch result {
 			case -1:
-				if !ast.IsJSDocKind(node.Kind) {
+				if !ast.IsJSDocKind(node.Kind()) {
 					// We can't move the left boundary into or beyond JSDoc,
 					// because we may end up returning the token after this JSDoc,
 					// constructing it with the scanner, and we need to include
@@ -133,7 +133,7 @@ func getTokenAtPosition(
 		}
 		if nodeAfterLeft == nil {
 			for _, node := range nodeList.Nodes {
-				if node.Flags&ast.NodeFlagsReparsed == 0 {
+				if node.Flags()&ast.NodeFlagsReparsed == 0 {
 					nodeAfterLeft = node
 					break
 				}
@@ -144,7 +144,7 @@ func getTokenAtPosition(
 				left = nodeList.End()
 				nodeAfterLeft = nil
 				for _, v := range slices.Backward(nodeList.Nodes) {
-					if v.Flags&ast.NodeFlagsReparsed == 0 {
+					if v.Flags()&ast.NodeFlagsReparsed == 0 {
 						prevSubtree = v
 						break
 					}
@@ -155,7 +155,7 @@ func getTokenAtPosition(
 			} else if nodeList.Pos() <= position {
 				nodes := nodeList.Nodes
 				index, match := core.BinarySearchUniqueFunc(nodes, func(middle int, node *ast.Node) int {
-					if node.Flags&ast.NodeFlagsReparsed != 0 {
+					if node.Flags()&ast.NodeFlagsReparsed != 0 {
 						return 0
 					}
 					cmp := testNode(node)
@@ -163,7 +163,7 @@ func getTokenAtPosition(
 						left = node.End()
 						nodeAfterLeft = nil
 						for i := middle + 1; i < len(nodes); i++ {
-							if nodes[i].Flags&ast.NodeFlagsReparsed == 0 {
+							if nodes[i].Flags()&ast.NodeFlagsReparsed == 0 {
 								nodeAfterLeft = nodes[i]
 								break
 							}
@@ -171,10 +171,10 @@ func getTokenAtPosition(
 					}
 					return cmp
 				})
-				if match && nodes[index].Flags&ast.NodeFlagsReparsed != 0 {
+				if match && nodes[index].Flags()&ast.NodeFlagsReparsed != 0 {
 					// filter and search again
 					nodes = core.Filter(nodes, func(node *ast.Node) bool {
-						return node.Flags&ast.NodeFlagsReparsed == 0
+						return node.Flags()&ast.NodeFlagsReparsed == 0
 					})
 					index, match = core.BinarySearchUniqueFunc(nodes, func(middle int, node *ast.Node) int {
 						cmp := testNode(node)
@@ -215,7 +215,7 @@ func getTokenAtPosition(
 		// we can in the AST. We've either found a token, or we need to run the scanner
 		// to construct one that isn't stored in the AST.
 		if next == nil {
-			if ast.IsTokenKind(current.Kind) || shouldSkipChild(current) {
+			if ast.IsTokenKind(current.Kind()) || shouldSkipChild(current) {
 				return current
 			}
 			scanner := scanner.GetScannerForSourceFile(sourceFile, left)
@@ -248,10 +248,10 @@ func getTokenAtPosition(
 				}
 				if tokenStart <= position && (position < tokenEnd) {
 					if token == ast.KindIdentifier || !ast.IsTokenKind(token) {
-						if ast.IsJSDocKind(current.Kind) {
+						if ast.IsJSDocKind(current.Kind()) {
 							return current
 						}
-						panic(fmt.Sprintf("did not expect %s to have %s in its trivia", current.Kind.String(), token.String()))
+						panic(fmt.Sprintf("did not expect %s to have %s in its trivia", current.Kind().String(), token.String()))
 					}
 					return sourceFile.GetOrCreateToken(token, tokenFullStart, tokenEnd, current, flags)
 				}
@@ -343,7 +343,7 @@ func FindPrecedingToken(sourceFile *ast.SourceFile, position int) *ast.Node {
 func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode *ast.Node, excludeJSDoc bool) *ast.Node {
 	var find func(node *ast.Node) *ast.Node
 	find = func(n *ast.Node) *ast.Node {
-		if ast.IsNonWhitespaceToken(n) && n.Kind != ast.KindEndOfFile {
+		if ast.IsNonWhitespaceToken(n) && n.Kind() != ast.KindEndOfFile {
 			return n
 		}
 
@@ -352,7 +352,7 @@ func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode *a
 		var foundChild, prevChild *ast.Node
 		visitNode := func(node *ast.Node, _ *ast.NodeVisitor) *ast.Node {
 			// skip synthesized nodes (that will exist now because of jsdoc handling)
-			if node == nil || node.Flags&ast.NodeFlagsReparsed != 0 {
+			if node == nil || node.Flags()&ast.NodeFlagsReparsed != 0 {
 				return node
 			}
 			if foundChild != nil { // We cannot abort visiting children, so once the desired child is found, we do nothing.
@@ -373,7 +373,7 @@ func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode *a
 				nodes := nodeList.Nodes
 				index, match := core.BinarySearchUniqueFunc(nodes, func(middle int, _ *ast.Node) int {
 					// synthetic jsdoc nodes should have jsdocNode.End() <= n.Pos()
-					if nodes[middle].Flags&ast.NodeFlagsReparsed != 0 {
+					if nodes[middle].Flags()&ast.NodeFlagsReparsed != 0 {
 						return comparisonLessThan
 					}
 					if position < nodes[middle].End() {
@@ -391,7 +391,7 @@ func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode *a
 
 				validLookupIndex := core.IfElse(match, index-1, len(nodes)-1)
 				for i := validLookupIndex; i >= 0; i-- {
-					if nodes[i].Flags&ast.NodeFlagsReparsed != 0 {
+					if nodes[i].Flags()&ast.NodeFlagsReparsed != 0 {
 						continue
 					}
 					if prevChild == nil {
@@ -463,7 +463,7 @@ func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode *a
 }
 
 func isValidPrecedingNode(node *ast.Node, sourceFile *ast.SourceFile) bool {
-	if node.Kind == ast.KindEndOfFile {
+	if node.Kind() == ast.KindEndOfFile {
 		return len(node.JSDoc(sourceFile)) > 0
 	}
 	start := GetStartOfNode(node, sourceFile, false /*includeJSDoc*/)
@@ -495,11 +495,11 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 		hasChildren := false
 		shouldVisitNode := func(node *ast.Node) bool {
 			// Node is synthetic or out of the desired range: don't visit it.
-			return !(node.Flags&ast.NodeFlagsReparsed != 0 ||
+			return !(node.Flags()&ast.NodeFlagsReparsed != 0 ||
 				node.End() > endPos || GetStartOfNode(node, sourceFile, !excludeJSDoc /*includeJSDoc*/) >= position)
 		}
 		visitNode := func(node *ast.Node, _ *ast.NodeVisitor) *ast.Node {
-			if node == nil || node.Flags&ast.NodeFlagsReparsed != 0 {
+			if node == nil || node.Flags()&ast.NodeFlagsReparsed != 0 {
 				return node
 			}
 			hasChildren = true
@@ -622,14 +622,14 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 func FindNextToken(previousToken *ast.Node, parent *ast.Node, file *ast.SourceFile) *ast.Node {
 	var find func(n *ast.Node) *ast.Node
 	find = func(n *ast.Node) *ast.Node {
-		if ast.IsTokenKind(n.Kind) && n.Pos() == previousToken.End() {
+		if ast.IsTokenKind(n.Kind()) && n.Pos() == previousToken.End() {
 			// this is token that starts at the end of previous token - return it
 			return n
 		}
 		// Node that contains `previousToken` or occurs immediately after it.
 		var foundNode *ast.Node
 		visitNode := func(node *ast.Node, _ *ast.NodeVisitor) *ast.Node {
-			if node != nil && node.Flags&ast.NodeFlagsReparsed == 0 &&
+			if node != nil && node.Flags()&ast.NodeFlagsReparsed == 0 &&
 				node.Pos() <= previousToken.End() && node.End() > previousToken.End() {
 				foundNode = node
 			}
@@ -639,7 +639,7 @@ func FindNextToken(previousToken *ast.Node, parent *ast.Node, file *ast.SourceFi
 			if nodeList != nil && len(nodeList.Nodes) > 0 && foundNode == nil {
 				nodes := nodeList.Nodes
 				index, match := core.BinarySearchUniqueFunc(nodes, func(_ int, node *ast.Node) int {
-					if node.Flags&ast.NodeFlagsReparsed != 0 {
+					if node.Flags()&ast.NodeFlagsReparsed != 0 {
 						return comparisonLessThan
 					}
 					if node.Pos() > previousToken.End() {
@@ -726,10 +726,10 @@ func getNodeVisitor(
 }
 
 func shouldSkipChild(node *ast.Node) bool {
-	return node.Kind == ast.KindJSDoc ||
-		node.Kind == ast.KindJSDocText ||
-		node.Kind == ast.KindJSDocTypeLiteral ||
-		node.Kind == ast.KindJSDocSignature ||
+	return node.Kind() == ast.KindJSDoc ||
+		node.Kind() == ast.KindJSDocText ||
+		node.Kind() == ast.KindJSDocTypeLiteral ||
+		node.Kind() == ast.KindJSDocSignature ||
 		ast.IsJSDocLinkLike(node) ||
 		ast.IsJSDocTag(node)
 }
@@ -742,7 +742,7 @@ func FindChildOfKind(containingNode *ast.Node, kind ast.Kind, sourceFile *ast.So
 
 	var foundChild *ast.Node
 	visitNode := func(node *ast.Node) bool {
-		if node == nil || node.Flags&ast.NodeFlagsReparsed != 0 {
+		if node == nil || node.Flags()&ast.NodeFlagsReparsed != 0 {
 			return false
 		}
 		// Look for child in preceding tokens.
@@ -760,7 +760,7 @@ func FindChildOfKind(containingNode *ast.Node, kind ast.Kind, sourceFile *ast.So
 			scan.Scan()
 		}
 
-		if node.Kind == kind {
+		if node.Kind() == kind {
 			foundChild = node
 			return true
 		}

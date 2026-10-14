@@ -99,7 +99,7 @@ func isAnExternalModuleIndicatorNode(node *Node) bool {
 }
 
 func getImportMetaIfNecessary(sourceFile *SourceFile) *Node {
-	if sourceFile.AsNode().Flags&NodeFlagsPossiblyContainsImportMeta != 0 {
+	if sourceFile.AsNode().Flags()&NodeFlagsPossiblyContainsImportMeta != 0 {
 		return findChildNode(sourceFile.AsNode(), IsImportMeta)
 	}
 	return nil

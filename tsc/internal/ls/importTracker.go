@@ -117,7 +117,7 @@ func forEachImport(program *compiler.Program, sourceFile *ast.SourceFile, action
 		}
 	} else {
 		forEachPossibleImportOrExportStatement(sourceFile.AsNode(), func(node *ast.Node) bool {
-			switch node.Kind {
+			switch node.Kind() {
 			case ast.KindExportDeclaration, ast.KindImportDeclaration, ast.KindJSImportDeclaration:
 				if specifier := node.ModuleSpecifier(); specifier != nil && ast.IsStringLiteral(specifier) {
 					action(node, specifier)
@@ -145,12 +145,12 @@ func getSourceFileLikeForImportDeclaration(node *ast.Node) *ast.Node {
 	if ast.IsCallExpression(node) || ast.IsJSDocImportTag(node) {
 		return ast.GetSourceFileOfNode(node).AsNode()
 	}
-	parent := node.Parent
+	parent := node.Parent()
 	if ast.IsSourceFile(parent) {
 		return parent
 	}
-	debug.Assert(ast.IsModuleBlock(parent) && isAmbientModuleDeclaration(parent.Parent))
-	return parent.Parent
+	debug.Assert(ast.IsModuleBlock(parent) && isAmbientModuleDeclaration(parent.Parent()))
+	return parent.Parent()
 }
 
 func isAmbientModuleDeclaration(node *ast.Node) bool {
@@ -216,7 +216,7 @@ func getImportersForExport(
 			if ast.HasSyntacticModifier(node, ast.ModifierFlagsExport) {
 				return true
 			}
-			node = node.Parent
+			node = node.Parent()
 		}
 		return false
 	}
@@ -250,12 +250,12 @@ func getImportersForExport(
 				continue
 			}
 			// !!! cancellation
-			switch direct.Kind {
+			switch direct.Kind() {
 			case ast.KindCallExpression:
 				if ast.IsImportCall(direct) {
 					handleImportCall(direct)
 				} else if !isAvailableThroughGlobal {
-					parent := direct.Parent
+					parent := direct.Parent()
 					if exportInfo.exportKind == ExportKindExportEquals && ast.IsVariableDeclaration(parent) {
 						name := parent.Name()
 						if ast.IsIdentifier(name) {
@@ -435,7 +435,7 @@ func getSearchesFromDirectImports(
 		}
 		if importClause := decl.ImportClause(); importClause != nil {
 			if namedBindings := importClause.AsImportClause().NamedBindings; namedBindings != nil {
-				switch namedBindings.Kind {
+				switch namedBindings.Kind() {
 				case ast.KindNamespaceImport:
 					handleNamespaceImportLike(namedBindings.Name())
 				case ast.KindNamedImports:
@@ -517,8 +517,8 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 			return exportInfo(sym, kind)
 		}
 
-		parent := node.Parent
-		grandparent := parent.Parent
+		parent := node.Parent()
+		grandparent := parent.Parent()
 		if symbol.ExportSymbol() != nil {
 			if ast.IsPropertyAccessExpression(parent) {
 				// When accessing an export of a JS module, there's no alias. The symbol will still be flagged as an export even though we're at the use.
@@ -635,8 +635,8 @@ func getExportNode(parent *ast.Node, node *ast.Node) *ast.Node {
 		declaration = ast.WalkUpBindingElementsAndPatterns(parent)
 	}
 	if declaration != nil {
-		if parent.Name() == node && !ast.IsCatchClause(declaration.Parent) && ast.IsVariableStatement(declaration.Parent.Parent) {
-			return declaration.Parent.Parent
+		if parent.Name() == node && !ast.IsCatchClause(declaration.Parent()) && ast.IsVariableStatement(declaration.Parent().Parent()) {
+			return declaration.Parent().Parent()
 		}
 		return nil
 	}
@@ -644,8 +644,8 @@ func getExportNode(parent *ast.Node, node *ast.Node) *ast.Node {
 }
 
 func isNodeImport(node *ast.Node) bool {
-	parent := node.Parent
-	switch parent.Kind {
+	parent := node.Parent()
+	switch parent.Kind() {
 	case ast.KindImportEqualsDeclaration:
 		return parent.Name() == node && isExternalModuleImportEquals(parent)
 	case ast.KindImportSpecifier:
@@ -655,14 +655,14 @@ func isNodeImport(node *ast.Node) bool {
 		debug.Assert(parent.Name() == node)
 		return true
 	case ast.KindBindingElement:
-		return ast.IsInJSFile(node) && ast.IsVariableDeclarationInitializedToBareOrAccessedRequire(parent.Parent.Parent)
+		return ast.IsInJSFile(node) && ast.IsVariableDeclarationInitializedToBareOrAccessedRequire(parent.Parent().Parent())
 	}
 	return false
 }
 
 func isExternalModuleImportEquals(node *ast.Node) bool {
 	moduleReference := node.AsImportEqualsDeclaration().ModuleReference
-	return ast.IsExternalModuleReference(moduleReference) && moduleReference.Expression().Kind == ast.KindStringLiteral
+	return ast.IsExternalModuleReference(moduleReference) && moduleReference.Expression().Kind() == ast.KindStringLiteral
 }
 
 // If at an export specifier, go to the symbol it refers to. */
@@ -670,12 +670,12 @@ func skipExportSpecifierSymbol(symbol *ast.Symbol, checker *checker.Checker) *as
 	// For `export { foo } from './bar", there's nothing to skip, because it does not create a new alias. But `export { foo } does.
 	for _, declaration := range symbol.Declarations() {
 		switch {
-		case ast.IsExportSpecifier(declaration) && declaration.PropertyName() == nil && declaration.Parent.Parent.ModuleSpecifier() == nil:
+		case ast.IsExportSpecifier(declaration) && declaration.PropertyName() == nil && declaration.Parent().Parent().ModuleSpecifier() == nil:
 			return core.OrElse(checker.GetExportSpecifierLocalTargetSymbol(declaration), symbol)
 		case ast.IsPropertyAccessExpression(declaration) && ast.IsModuleExportsAccessExpression(declaration.Expression()) && !ast.IsPrivateIdentifier(declaration.Name()):
 			// Export of form 'module.exports.propName = expr';
 			return checker.GetSymbolAtLocation(declaration)
-		case ast.IsShorthandPropertyAssignment(declaration) && ast.IsBinaryExpression(declaration.Parent.Parent) && ast.GetAssignmentDeclarationKind(declaration.Parent.Parent) == ast.JSDeclarationKindModuleExports:
+		case ast.IsShorthandPropertyAssignment(declaration) && ast.IsBinaryExpression(declaration.Parent().Parent()) && ast.GetAssignmentDeclarationKind(declaration.Parent().Parent()) == ast.JSDeclarationKindModuleExports:
 			return checker.GetExportSpecifierLocalTargetSymbol(declaration.Name())
 		}
 	}
@@ -719,7 +719,7 @@ func findModuleReferences(program *compiler.Program, sourceFiles []*ast.SourceFi
 
 	for _, referencingFile := range sourceFiles {
 		searchSourceFile := searchModuleSymbol.ValueDeclaration()
-		if searchSourceFile != nil && searchSourceFile.Kind == ast.KindSourceFile {
+		if searchSourceFile != nil && searchSourceFile.Kind() == ast.KindSourceFile {
 			// Check <reference path> directives
 			for _, ref := range referencingFile.ReferencedFiles {
 				if program.GetSourceFileFromReference(referencingFile, ref) == searchSourceFile.AsSourceFile() {
