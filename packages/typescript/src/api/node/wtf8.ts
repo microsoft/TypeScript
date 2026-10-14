@@ -1,12 +1,10 @@
-import { Buffer } from "node:buffer";
-
 const surrogateLeadByte = 0xED;
 const surrogateSecondByteMin = 0xA0;
 const surrogateSecondByteMax = 0xBF;
 const continuationByteMin = 0x80;
 const continuationByteMax = 0xBF;
 const textEncoder = new TextEncoder();
-const replacementCharacterUtf8 = Buffer.from([0xEF, 0xBF, 0xBD]);
+const replacementCharacterUtf8 = new Uint8Array([0xEF, 0xBF, 0xBD]);
 const loneSurrogateRegExp = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]/;
 const shortStringLength = 64;
 type DecodeInput = ArrayBufferView | ArrayBufferLike | null;
@@ -28,7 +26,20 @@ function getSurrogateCodeUnit(bytes: Uint8Array, index: number): number {
 }
 
 function hasSurrogateLeadByte(bytes: Uint8Array): boolean {
-    return Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).indexOf(surrogateLeadByte) >= 0;
+    return bytes.includes(surrogateLeadByte);
+}
+
+function hasReplacementCharacter(bytes: Uint8Array): boolean {
+    for (let i = 0; i <= bytes.length - replacementCharacterUtf8.length; i++) {
+        if (
+            bytes[i] === replacementCharacterUtf8[0]
+            && bytes[i + 1] === replacementCharacterUtf8[1]
+            && bytes[i + 2] === replacementCharacterUtf8[2]
+        ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function toUint8Array(input: Exclude<DecodeInput, null | undefined>): Uint8Array {
@@ -45,7 +56,7 @@ export function encodeWtf8(text: string): Uint8Array {
     if (text.length > shortStringLength) {
         const utf8 = textEncoder.encode(text);
         if (
-            Buffer.from(utf8.buffer, utf8.byteOffset, utf8.byteLength).indexOf(replacementCharacterUtf8) < 0
+            !hasReplacementCharacter(utf8)
             || !loneSurrogateRegExp.test(text)
         ) {
             return utf8;
