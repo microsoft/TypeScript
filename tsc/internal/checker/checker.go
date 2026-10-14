@@ -24197,6 +24197,11 @@ func (c *Checker) getInheritTypeArguments(node *ast.Node) []*Type {
 		if name == "" {
 			return nil
 		}
+		// A setter's parameter inherits the field type of the member, not a method parameter type.
+		// `set foo(v: inherit)` -> inherit<Base, "foo", "Field">
+		if ast.IsSetAccessorDeclaration(method) {
+			return []*Type{baseType, stringArg(name), stringArg("Field")}
+		}
 		params := method.Parameters()
 		index := -1
 		for i, p := range params {
@@ -24217,11 +24222,16 @@ func (c *Checker) getInheritTypeArguments(node *ast.Node) []*Type {
 		return []*Type{baseType, stringArg(name), stringArg("Param"), idxArg}
 
 	case ast.IsFunctionLikeDeclaration(parent) && parent.Type() == cur:
-		// Method return type: `foo(): inherit` -> inherit<Base, name, "Return">
 		name := c.getInheritMemberName(parent)
 		if name == "" {
 			return nil
 		}
+		// A getter's return type inherits the field type of the member, not a method return type.
+		// `get foo(): inherit` -> inherit<Base, "foo", "Field">
+		if ast.IsGetAccessorDeclaration(parent) {
+			return []*Type{baseType, stringArg(name), stringArg("Field")}
+		}
+		// Method return type: `foo(): inherit` -> inherit<Base, name, "Return">
 		return []*Type{baseType, stringArg(name), stringArg("Return")}
 	}
 

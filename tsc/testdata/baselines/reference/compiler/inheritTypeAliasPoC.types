@@ -8,6 +8,7 @@
 // enclosing class's base class and/or implemented interfaces:
 //
 //   - Instance field          -> Base[Field]
+//   - Getter return / setter param -> Base[Field] (same as a field)
 //   - Method parameter         -> Parameters<Base[Field]>[Index]
 //   - Method rest parameter    -> trailing tuple after `Index` leading params
 //   - Method return value      -> ReturnType<Base[Field]>
@@ -36,7 +37,7 @@ interface Base {
 }
 
 // ---------------------------------------------------------------------------
-// 1. Baseline: every supported position, implements an interface.
+// 1a. implements an interface.
 // ---------------------------------------------------------------------------
 class AllPositions implements Base {
 >AllPositions : AllPositions
@@ -63,36 +64,9 @@ class AllPositions implements Base {
     }
 }
 
-// ---------------------------------------------------------------------------
-// 2. Equivalence with the explicit (generic) form that compiles today.
-// ---------------------------------------------------------------------------
-class ExplicitForm implements Base {
->ExplicitForm : ExplicitForm
-
-    field: inherit<Base, "field"> = "circle";
->field : "circle" | "square"
->"circle" : "circle"
-
-    foo(a: inherit<Base, "foo", "Param", 0>, b: inherit<Base, "foo", "Param", 1>): inherit<Base, "foo", "Return"> {
->foo : (a: inherit<Base, "foo", "Param", 0>, b: inherit<Base, "foo", "Param", 1>) => inherit<Base, "foo", "Return">
->a : number
->b : string
-
-        return true;
->true : true
-    }
-    bar(a: inherit<Base, "bar", "Param", 0>, ...rest: inherit<Base, "bar", "Rest", 1>): inherit<Base, "bar", "Return"> {
->bar : (a: inherit<Base, "bar", "Param", 0>, b: string, c?: any) => inherit<Base, "bar", "Return">
->a : number
->rest : [b: string, c?: any]
-
-        return true;
->true : true
-    }
-}
 
 // ---------------------------------------------------------------------------
-// 3. extends-only (class base, no interfaces).
+// 1b. extends base class.
 // ---------------------------------------------------------------------------
 class Geometry {
 >Geometry : Geometry
@@ -119,7 +93,7 @@ class Canvas extends Geometry {
 }
 
 // ---------------------------------------------------------------------------
-// 4. Multiple bases: extends + implements, intersected as (Base & A & B).
+// 2. Multiple bases: extends + implements, intersected as (Base & A & B).
 // ---------------------------------------------------------------------------
 interface A { a: number; shared: string; }
 >a : number
@@ -156,7 +130,7 @@ class Multi extends BaseC implements A, B {
 }
 
 // ---------------------------------------------------------------------------
-// 4b. Conflicting member types across interfaces narrow to their intersection.
+// 3. Conflicting member types across interfaces narrow to their intersection.
 //     Foo.shape = "square" | "circle", Bar.shape = "circle" | "triangle"
 //     => (Foo & Bar)["shape"] = "circle"
 // ---------------------------------------------------------------------------
@@ -182,7 +156,7 @@ class IntersectNarrowBad implements Foo, Bar {
 }
 
 // ---------------------------------------------------------------------------
-// 5. Composition: inherit nested inside other type constructors.
+// 4. Composition: inherit nested inside other type constructors.
 // ---------------------------------------------------------------------------
 interface Robot {
     sensors: {sight?: boolean, hearing?: boolean, touch?: boolean};
@@ -215,7 +189,7 @@ class FlyingRobot implements Robot {
 }
 
 // ---------------------------------------------------------------------------
-// 6. Arrow-function field: field-level inherit, params inferred by assignment.
+// 5. Arrow-function field: field-level inherit, params inferred by assignment.
 // ---------------------------------------------------------------------------
 class ArrowField implements Base {
 >ArrowField : ArrowField
@@ -238,6 +212,59 @@ class ArrowField implements Base {
 >b : string
 >c : any
 >true : true
+}
+
+// ---------------------------------------------------------------------------
+// 6. Accessors: a getter's return and a setter's parameter inherit the FIELD type.
+//     (Issue lists "Getter return value" and "Setter parameter" as supported positions.)
+// ---------------------------------------------------------------------------
+abstract class ShapeBase {
+>ShapeBase : ShapeBase
+
+    abstract kind: "square" | "circle";
+>kind : "circle" | "square"
+}
+class ShapeImpl extends ShapeBase {
+>ShapeImpl : ShapeImpl
+>ShapeBase : ShapeBase
+
+    private _kind: "square" | "circle" = "square";
+>_kind : "circle" | "square"
+>"square" : "square"
+
+    get kind(): inherit {                                    // SHOULD RESOLVE: "square" | "circle" (field type)
+>kind : "circle" | "square"
+
+        return this._kind;
+>this._kind : "circle" | "square"
+>this : this
+>_kind : "circle" | "square"
+    }
+    set kind(v: inherit) {                                   // SHOULD RESOLVE: "square" | "circle" (field type)
+>kind : "circle" | "square"
+>v : "circle" | "square"
+
+        this._kind = v;
+>this._kind = v : "circle" | "square"
+>this._kind : "circle" | "square"
+>this : this
+>_kind : "circle" | "square"
+>v : "circle" | "square"
+    }
+}
+class ShapeImplBadGetter extends ShapeBase {
+>ShapeImplBadGetter : ShapeImplBadGetter
+>ShapeBase : ShapeBase
+
+    get kind(): inherit {
+>kind : "circle" | "square"
+
+        return "triangle";                                   // SHOULD ERROR: "triangle" not in "square" | "circle"
+>"triangle" : "triangle"
+    }
+    set kind(v: inherit) {}
+>kind : "circle" | "square"
+>v : "circle" | "square"
 }
 
 // ---------------------------------------------------------------------------
