@@ -1,6 +1,9 @@
 package core
 
-import "slices"
+import (
+	"slices"
+	"unsafe"
+)
 
 // Arena allocator
 
@@ -8,11 +11,11 @@ type Arena[T any] struct {
 	data []T
 }
 
-// Allocate a single element in the arena and return a pointer to the element. If the arena is at capacity,
-// a new arena of the next size up is allocated.
+// Allocate a single element at a stable address. Small chunks bound the unused
+// capacity and unrelated values retained by a surviving pointer into a chunk.
 func (a *Arena[T]) New() *T {
 	if len(a.data) == cap(a.data) {
-		nextSize := nextArenaSize(len(a.data))
+		nextSize := nextArenaSize[T](len(a.data))
 		// Use the same trick as slices.Concat; Grow rounds up to the next size class.
 		a.data = slices.Grow[[]T](nil, nextSize)
 	}
@@ -30,7 +33,7 @@ func (a *Arena[T]) NewSlice(size int) []T {
 		return nil
 	}
 	if len(a.data)+size > cap(a.data) {
-		nextSize := nextArenaSize(len(a.data))
+		nextSize := nextArenaSize[T](len(a.data))
 		if size > nextSize {
 			return make([]T, size)
 		}
@@ -58,9 +61,11 @@ func (a *Arena[T]) Clone(t []T) []T {
 	return slice
 }
 
-func nextArenaSize(size int) int {
-	// This compiles down branch-free.
+func nextArenaSize[T any](size int) int {
+	// Target 512 bytes before allocator size-class rounding, with at least one
+	// value. A surviving interior pointer retains and scans the whole chunk.
+	maxSize := max(512/max(int(unsafe.Sizeof(*new(T))), 1), 1)
 	size = max(size, 1)
-	size = min(size*2, 256)
+	size = min(size*2, 256, maxSize)
 	return size
 }

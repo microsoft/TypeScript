@@ -679,7 +679,7 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 func (c *Checker) isWeakType(t *Type) bool {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
-		return len(resolved.signatures) == 0 && len(resolved.indexInfos) == 0 && len(resolved.properties) > 0 && core.Every(resolved.properties, func(p *ast.Symbol) bool {
+		return len(resolved.getSignatures()) == 0 && len(resolved.getIndexInfos()) == 0 && len(resolved.properties) > 0 && core.Every(resolved.properties, func(p *ast.Symbol) bool {
 			return p.Flags()&ast.SymbolFlagsOptional != 0
 		})
 	}
@@ -1515,7 +1515,7 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 		}
 		return TernaryFalse
 	}
-	if len(source.typeParameters) != 0 && !core.Same(source.typeParameters, target.typeParameters) {
+	if len(source.TypeParameters()) != 0 && !core.Same(source.TypeParameters(), target.TypeParameters()) {
 		target = c.getCanonicalSignature(target)
 		source = c.instantiateSignatureInContextOf(source, target /*inferenceContext*/, nil, compareTypes)
 	}
@@ -1706,7 +1706,7 @@ func (c *Checker) compareTypePredicateRelatedTo(source *TypePredicate, target *T
 
 // Returns true if `s` is `(...args: A) => R` where `A` is `any`, `any[]`, `never`, or `never[]`, and `R` is `any` or `unknown`.
 func (c *Checker) isTopSignature(s *Signature) bool {
-	if len(s.typeParameters) == 0 && (s.thisParameter == nil || IsTypeAny(c.getTypeOfParameter(s.thisParameter))) && len(s.parameters) == 1 && signatureHasRestParameter(s) {
+	if len(s.TypeParameters()) == 0 && (s.ThisParameter() == nil || IsTypeAny(c.getTypeOfParameter(s.ThisParameter()))) && len(s.parameters) == 1 && signatureHasRestParameter(s) {
 		paramType := c.getTypeOfParameter(s.parameters[0])
 		var restType *Type
 		if c.isArrayType(paramType) {
@@ -1945,8 +1945,8 @@ func (c *Checker) getRestArrayTypeOfTupleType(t *Type) *Type {
 }
 
 func (c *Checker) getThisTypeOfSignature(signature *Signature) *Type {
-	if signature.thisParameter != nil {
-		return c.getTypeOfSymbol(signature.thisParameter)
+	if signature.ThisParameter() != nil {
+		return c.getTypeOfSymbol(signature.ThisParameter())
 	}
 	return nil
 }
@@ -2047,37 +2047,38 @@ func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index i
 }
 
 func (c *Checker) getTypePredicateOfSignature(sig *Signature) *TypePredicate {
-	if sig.resolvedTypePredicate == nil {
+	if sig.getResolvedTypePredicate(c) == nil {
 		switch {
 		case sig.target != nil:
 			targetTypePredicate := c.getTypePredicateOfSignature(sig.target)
 			if targetTypePredicate != nil {
-				sig.resolvedTypePredicate = c.instantiateTypePredicate(targetTypePredicate, sig.mapper)
+				sig.setResolvedTypePredicate(c, c.instantiateTypePredicate(targetTypePredicate, sig.mapper))
 			}
-		case sig.composite != nil:
-			sig.resolvedTypePredicate = c.getUnionOrIntersectionTypePredicate(sig.composite.signatures, sig.composite.isUnion)
+		case sig.getComposite() != nil:
+			sig.setResolvedTypePredicate(c, c.getUnionOrIntersectionTypePredicate(sig.getComposite().signatures, sig.getComposite().isUnion))
 		default:
 			if sig.declaration != nil {
 				typeNode := sig.declaration.Type()
 				switch {
 				case typeNode != nil:
 					if ast.IsTypePredicateNode(typeNode) {
-						sig.resolvedTypePredicate = c.createTypePredicateFromTypePredicateNode(typeNode, sig)
+						sig.setResolvedTypePredicate(c, c.createTypePredicateFromTypePredicateNode(typeNode, sig))
 					}
 				case ast.IsFunctionLikeDeclaration(sig.declaration) && (sig.resolvedReturnType == nil || sig.resolvedReturnType.flags&TypeFlagsBoolean != 0) && c.getParameterCount(sig) > 0:
-					sig.resolvedTypePredicate = c.noTypePredicate // avoid infinite loop
-					sig.resolvedTypePredicate = c.getTypePredicateFromBody(sig.declaration)
+					sig.setResolvedTypePredicate(c, c.noTypePredicate) // avoid infinite loop
+					sig.setResolvedTypePredicate(c, c.getTypePredicateFromBody(sig.declaration))
 				}
 			}
 		}
-		if sig.resolvedTypePredicate == nil {
-			sig.resolvedTypePredicate = c.noTypePredicate
+		if sig.getResolvedTypePredicate(c) == nil {
+			sig.setResolvedTypePredicate(c, c.noTypePredicate)
 		}
 	}
-	if sig.resolvedTypePredicate == c.noTypePredicate {
+	predicate := sig.getResolvedTypePredicate(c)
+	if predicate == c.noTypePredicate {
 		return nil
 	}
-	return sig.resolvedTypePredicate
+	return predicate
 }
 
 func (c *Checker) getUnionOrIntersectionTypePredicate(signatures []*Signature, isUnion bool) *TypePredicate {
@@ -2143,14 +2144,14 @@ func (c *Checker) newTypePredicate(kind TypePredicateKind, parameterName string,
 }
 
 func (c *Checker) isResolvingReturnTypeOfSignature(signature *Signature) bool {
-	if signature.composite != nil && core.Some(signature.composite.signatures, c.isResolvingReturnTypeOfSignature) {
+	if signature.getComposite() != nil && core.Some(signature.getComposite().signatures, c.isResolvingReturnTypeOfSignature) {
 		return true
 	}
 	return signature.resolvedReturnType == nil && c.findResolutionCycleStartIndex(signature, TypeSystemPropertyNameResolvedReturnType) >= 0
 }
 
 func (c *Checker) findMatchingSignatures(signatureLists [][]*Signature, signature *Signature, listIndex int) []*Signature {
-	if len(signature.typeParameters) != 0 {
+	if len(signature.TypeParameters()) != 0 {
 		// We require an exact match for generic signatures, so we only return signatures from the first
 		// signature list and only if they have exact matches in the other signature lists.
 		if listIndex > 0 {
@@ -2205,16 +2206,16 @@ func (c *Checker) compareSignaturesIdentical(source *Signature, target *Signatur
 		return TernaryFalse
 	}
 	// Check that the two signatures have the same number of type parameters.
-	if len(source.typeParameters) != len(target.typeParameters) {
+	if len(source.TypeParameters()) != len(target.TypeParameters()) {
 		return TernaryFalse
 	}
 	// Check that type parameter constraints and defaults match. If they do, instantiate the source
 	// signature with the type parameters of the target signature and continue the comparison.
-	if len(target.typeParameters) != 0 {
-		mapper := newTypeMapper(source.typeParameters, target.typeParameters)
-		for i := range len(target.typeParameters) {
-			s := source.typeParameters[i]
-			t := target.typeParameters[i]
+	if len(target.TypeParameters()) != 0 {
+		mapper := newTypeMapper(source.TypeParameters(), target.TypeParameters())
+		for i := range len(target.TypeParameters()) {
+			s := source.TypeParameters()[i]
+			t := target.TypeParameters()[i]
 			if !(s == t || compareTypes(c.instantiateType(c.getConstraintOrUnknownFromTypeParameter(s), mapper), c.getConstraintOrUnknownFromTypeParameter(t)) != TernaryFalse &&
 				compareTypes(c.instantiateType(c.getDefaultOrUnknownFromTypeParameter(s), mapper), c.getDefaultOrUnknownFromTypeParameter(t)) != TernaryFalse) {
 				return TernaryFalse

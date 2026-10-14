@@ -987,14 +987,14 @@ func (c *Checker) getJsxPropsTypeFromClassType(sig *Signature, context *ast.Node
 }
 
 func (c *Checker) getJsxPropsTypeForSignatureFromMember(sig *Signature, forcedLookupLocation string) *Type {
-	if sig.composite != nil {
+	if sig.getComposite() != nil {
 		// JSX Elements using the legacy `props`-field based lookup (eg, react class components) need to treat the `props` member as an input
 		// instead of an output position when resolving the signature. We need to go back to the input signatures of the composite signature,
 		// get the type of `props` on each return type individually, and then _intersect them_, rather than union them (as would normally occur
 		// for a union signature). It's an unfortunate quirk of looking in the output of the signature for the type we want to use for the input.
 		// The default behavior of `getTypeOfFirstParameterOfSignatureWithFallback` when no `props` member name is defined is much more sane.
 		var results []*Type
-		for _, signature := range sig.composite.signatures {
+		for _, signature := range sig.getComposite().signatures {
 			instance := c.getReturnTypeOfSignature(signature)
 			if IsTypeAny(instance) {
 				return instance
