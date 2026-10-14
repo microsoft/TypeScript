@@ -509,7 +509,7 @@ func TestCompactValueSymbolLinksLayout(t *testing.T) {
 
 func TestCompactStructuredTypeLayout(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, unsafe.Sizeof(StructuredType{}), unsafe.Sizeof(ConstrainedType{})+5*unsafe.Sizeof(uintptr(0)))
+	assert.Equal(t, unsafe.Sizeof(StructuredType{}), unsafe.Sizeof(ConstrainedType{})+6*unsafe.Sizeof(uintptr(0)))
 }
 
 func TestStructuredTypeExtra(t *testing.T) {
