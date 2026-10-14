@@ -120,11 +120,34 @@ func newRelation(packedResults *packedRelationCache, packedShift uint8) *Relatio
 }
 
 func (r *Relation) get(key CacheHashKey) RelationComparisonResult {
-	return RelationComparisonResult(r.packedResults.results[key]>>r.packedShift) & relationComparisonResultMask
+	packed := r.packedResults.results[key]
+	if packed == 0 {
+		return RelationComparisonResultNone
+	}
+	result := RelationComparisonResult(packed>>r.packedShift) & relationComparisonResultMask
+	if result != RelationComparisonResultNone {
+		return result
+	}
+	for implied := packed >> (r.packedShift + packedRelationResultBits); implied != 0; implied >>= packedRelationResultBits {
+		result = RelationComparisonResult(implied) & relationComparisonResultMask
+		if result&RelationComparisonResultFailed != 0 && result&RelationComparisonResultOverflow == 0 {
+			return r.setPacked(key, packed, result)
+		}
+	}
+	for implied := packed & (uint32(1)<<r.packedShift - 1); implied != 0; implied >>= packedRelationResultBits {
+		result = RelationComparisonResult(implied) & relationComparisonResultMask
+		if result&RelationComparisonResultSucceeded != 0 {
+			return r.setPacked(key, packed, result)
+		}
+	}
+	return RelationComparisonResultNone
 }
 
 func (r *Relation) set(key CacheHashKey, result RelationComparisonResult) {
-	r.setPacked(key, result)
+	if r.packedResults.results == nil {
+		r.packedResults.results = make(map[CacheHashKey]uint32)
+	}
+	r.setPacked(key, r.packedResults.results[key], result)
 }
 
 const relationComparisonResultMask = RelationComparisonResultSucceeded |
@@ -134,40 +157,19 @@ const relationComparisonResultMask = RelationComparisonResultSucceeded |
 	RelationComparisonResultComplexityOverflow
 
 const (
-	packedRelationResultBits  = 6
-	packedRelationCount       = 5
-	packedRelationResultsMask = 1<<(packedRelationResultBits*packedRelationCount) - 1
+	packedRelationResultBits = 6
+	packedRelationCount      = 5
 )
 
-func (r *Relation) setPacked(key CacheHashKey, result RelationComparisonResult) {
-	if r.packedResults.results == nil {
-		r.packedResults.results = make(map[CacheHashKey]uint32)
-	}
-	packed := r.packedResults.results[key]
+func (r *Relation) setPacked(key CacheHashKey, packed uint32, result RelationComparisonResult) RelationComparisonResult {
+	result &= relationComparisonResultMask
 	shiftedResult := uint32(result&relationComparisonResultMask) << r.packedShift
-	packed = r.packedResults.setPackedResult(packed, shiftedResult, r.packedShift, false)
-	if result&RelationComparisonResultSucceeded != 0 {
-		for implied, shift := shiftedResult<<packedRelationResultBits&packedRelationResultsMask, r.packedShift+packedRelationResultBits; implied != 0; implied, shift = implied<<packedRelationResultBits&packedRelationResultsMask, shift+packedRelationResultBits {
-			packed = r.packedResults.setPackedResult(packed, implied, shift, true)
-		}
-	}
-	if result&RelationComparisonResultFailed != 0 && result&RelationComparisonResultOverflow == 0 {
-		for implied, shift := shiftedResult>>packedRelationResultBits, int(r.packedShift)-packedRelationResultBits; implied != 0; implied, shift = implied>>packedRelationResultBits, shift-packedRelationResultBits {
-			packed = r.packedResults.setPackedResult(packed, implied, uint8(shift), true)
-		}
-	}
-	r.packedResults.results[key] = packed
-}
-
-func (c *packedRelationCache) setPackedResult(packed uint32, shiftedResult uint32, shift uint8, onlyIfEmpty bool) uint32 {
-	mask := uint32(relationComparisonResultMask) << shift
-	if onlyIfEmpty && packed&mask != 0 {
-		return packed
-	}
+	mask := uint32(relationComparisonResultMask) << r.packedShift
 	if packed&mask == 0 {
-		c.counts[shift/packedRelationResultBits]++
+		r.packedResults.counts[r.packedShift/packedRelationResultBits]++
 	}
-	return packed&^mask | shiftedResult
+	r.packedResults.results[key] = packed&^mask | shiftedResult
+	return result
 }
 
 func (r *Relation) size() int {

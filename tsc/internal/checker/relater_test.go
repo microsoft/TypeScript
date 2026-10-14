@@ -46,6 +46,77 @@ func TestSubtypeRelationLocalResultTakesPrecedence(t *testing.T) {
 	assert.Equal(t, strictSubtype.get(key), RelationComparisonResultSucceeded)
 }
 
+func TestPackedRelationImplicationsAreLazy(t *testing.T) {
+	t.Parallel()
+
+	t.Run("success", func(t *testing.T) {
+		t.Parallel()
+
+		subtype, strictSubtype, assignable, comparableRelation, identity := newRelations()
+		key := CacheHashKey{Lo: 1}
+		result := RelationComparisonResultSucceeded | RelationComparisonResultReportsUnreliable
+
+		identity.set(key, result)
+		assert.Equal(t, identity.size(), 1)
+		assert.Equal(t, strictSubtype.size(), 0)
+		assert.Equal(t, subtype.size(), 0)
+		assert.Equal(t, assignable.size(), 0)
+		assert.Equal(t, comparableRelation.size(), 0)
+
+		assert.Equal(t, assignable.get(key), result)
+		assert.Equal(t, identity.size(), 1)
+		assert.Equal(t, strictSubtype.size(), 0)
+		assert.Equal(t, subtype.size(), 0)
+		assert.Equal(t, assignable.size(), 1)
+		assert.Equal(t, comparableRelation.size(), 0)
+
+		assert.Equal(t, assignable.get(key), result)
+		assert.Equal(t, assignable.size(), 1)
+	})
+
+	t.Run("failure", func(t *testing.T) {
+		t.Parallel()
+
+		subtype, strictSubtype, assignable, comparableRelation, identity := newRelations()
+		key := CacheHashKey{Lo: 1}
+		result := RelationComparisonResultFailed | RelationComparisonResultReportsUnmeasurable
+
+		comparableRelation.set(key, result)
+		assert.Equal(t, identity.size(), 0)
+		assert.Equal(t, strictSubtype.size(), 0)
+		assert.Equal(t, subtype.size(), 0)
+		assert.Equal(t, assignable.size(), 0)
+		assert.Equal(t, comparableRelation.size(), 1)
+
+		assert.Equal(t, strictSubtype.get(key), result)
+		assert.Equal(t, identity.size(), 0)
+		assert.Equal(t, strictSubtype.size(), 1)
+		assert.Equal(t, subtype.size(), 0)
+		assert.Equal(t, assignable.size(), 0)
+		assert.Equal(t, comparableRelation.size(), 1)
+
+		assert.Equal(t, strictSubtype.get(key), result)
+		assert.Equal(t, strictSubtype.size(), 1)
+	})
+}
+
+func TestIdentityRelationDoesNotCountDirectionalImplication(t *testing.T) {
+	t.Parallel()
+
+	_, _, assignable, _, identity := newRelations()
+	lowerId := &Type{id: 1}
+	higherId := &Type{id: 2}
+	directionalKey, _ := getRelationKey(higherId, lowerId, IntersectionStateNone, false, false)
+	identityKey, _ := getRelationKey(higherId, lowerId, IntersectionStateNone, true, false)
+
+	assert.Assert(t, directionalKey != identityKey)
+	assignable.set(directionalKey, RelationComparisonResultFailed)
+
+	assert.Equal(t, identity.size(), 0)
+	assert.Equal(t, identity.get(identityKey), RelationComparisonResultNone)
+	assert.Equal(t, identity.size(), 0)
+}
+
 func TestIndependentRelationCache(t *testing.T) {
 	t.Parallel()
 
