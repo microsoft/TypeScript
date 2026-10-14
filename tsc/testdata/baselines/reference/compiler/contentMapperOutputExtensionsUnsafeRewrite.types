@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/contentMapperOutputExtensionsUnsafeRewrite.ts] ////
+
+=== /components.astro/index.ts ===
+export const directory = 1;
+>directory : 1
+>1 : 1
+
+=== /actual.astro ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export const actual = 1;
+>actual : 1
+>1 : 1
+
+=== /ambient.d.astro.ts ===
+export const ambient: number;
+>ambient : number
+
+=== /main.ts ===
+import { directory } from "./components.astro";
+>directory : 1
+
+import { actual } from "./actual.astro";
+>actual : 1
+
+import { ambient } from "./ambient.astro";
+>ambient : number
+
+import { actual as aliased } from "alias";
+>actual : 1
+>aliased : 1
+
+console.log(directory, actual, ambient, aliased);
+>console.log(directory, actual, ambient, aliased) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>directory : 1
+>actual : 1
+>ambient : number
+>aliased : 1
+

@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
@@ -18,8 +19,8 @@ type StdioServerOptions struct {
 	In                 io.ReadCloser
 	Out                io.WriteCloser
 	Err                io.Writer
-	Cwd                string
-	DefaultLibraryPath string
+	Cwd                tspath.RootedDirectoryPath
+	DefaultLibraryPath tspath.RootedDirectoryPath
 	// PipePath, if set, listens on a named pipe (Windows) or Unix domain
 	// socket instead of using In/Out for communication.
 	PipePath string

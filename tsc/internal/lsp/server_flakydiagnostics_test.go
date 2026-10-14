@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -31,10 +32,12 @@ func TestFlakyDiagnosticTrackingParallelEmit(t *testing.T) {
 				"/src/b.ts": `import { box } from "./a"; export const b = box("b");`,
 				"/src/c.ts": `import { box } from "./a"; export const c = box(1);`,
 			}
+			fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive))
+			assert.Equal(t, fs.CaseSensitivity(), tspath.CaseInsensitive)
 			client, closeClient := lsptestutil.NewLSPClient(t, lsp.ServerOptions{
 				Err:                io.Discard,
 				Cwd:                "/src",
-				FS:                 bundled.WrapFS(vfstest.FromMap(files, false)),
+				FS:                 fs,
 				DefaultLibraryPath: bundled.LibPath(),
 			}, func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 				switch req.Method {

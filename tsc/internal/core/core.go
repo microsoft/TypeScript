@@ -522,10 +522,9 @@ func StringifyJson(input any, prefix string, indent string) (string, error) {
 	return string(output), err
 }
 
-func GetScriptKindFromFileName(fileName string) ScriptKind {
-	dotPos := strings.LastIndex(fileName, ".")
-	if dotPos >= 0 {
-		switch strings.ToLower(fileName[dotPos:]) {
+func GetScriptKindFromFileName(fileName tspath.RootedFilePath) ScriptKind {
+	if extension := fileName.AnyExtension(nil, tspath.CaseSensitive); extension != "" {
+		switch strings.ToLower(extension) {
 		case tspath.ExtensionJs, tspath.ExtensionCjs, tspath.ExtensionMjs:
 			return ScriptKindJS
 		case tspath.ExtensionJsx:
@@ -559,7 +558,7 @@ func GetDefaultExtensionForScriptKind(scriptKind ScriptKind) string {
 // EnsureScriptKindFromFileName is like GetScriptKindFromFileName, but defaults to
 // ScriptKindTS when the file name has no recognized extension (e.g. files included
 // with allowNonTsExtensions), so the result is always safe to hand to the parser.
-func EnsureScriptKindFromFileName(fileName string) ScriptKind {
+func EnsureScriptKindFromFileName(fileName tspath.RootedFilePath) ScriptKind {
 	if kind := GetScriptKindFromFileName(fileName); kind != ScriptKindUnknown {
 		return kind
 	}
@@ -719,10 +718,6 @@ func IndexAfter(s string, pattern string, startIndex int) int {
 	} else {
 		return matched + startIndex
 	}
-}
-
-func ShouldRewriteModuleSpecifier(specifier string, compilerOptions *CompilerOptions) bool {
-	return compilerOptions.RewriteRelativeImportExtensions.IsTrue() && tspath.PathIsRelative(specifier) && !tspath.IsDeclarationFileName(specifier) && tspath.HasTSFileExtension(specifier)
 }
 
 func SingleElementSlice[T any](element *T) []*T {

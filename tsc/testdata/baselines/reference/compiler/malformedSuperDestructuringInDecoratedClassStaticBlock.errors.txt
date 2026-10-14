@@ -1,0 +1,21 @@
+malformedSuperDestructuringInDecoratedClassStaticBlock.ts(1,3): error TS2304: Cannot find name 'c'.
+malformedSuperDestructuringInDecoratedClassStaticBlock.ts(2,15): error TS2304: Cannot find name 'B'.
+malformedSuperDestructuringInDecoratedClassStaticBlock.ts(2,33): error TS1005: ',' expected.
+malformedSuperDestructuringInDecoratedClassStaticBlock.ts(2,33): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+malformedSuperDestructuringInDecoratedClassStaticBlock.ts(2,33): error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
+
+
+==== malformedSuperDestructuringInDecoratedClassStaticBlock.ts (5 errors) ====
+    (@c
+      ~
+!!! error TS2304: Cannot find name 'c'.
+    class extends B{static{[super.x 0]=[1];}});
+                  ~
+!!! error TS2304: Cannot find name 'B'.
+                                    ~
+!!! error TS1005: ',' expected.
+                                    ~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+                                    ~
+!!! error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
+    

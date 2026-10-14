@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
 
@@ -33,11 +34,11 @@ func TestCallbackFSDefaults(t *testing.T) {
 
 	base := vfstest.FromMap(map[string]string{
 		"/file.ts": "content",
-	}, false)
+	}, tspath.CaseInsensitive)
 	caseSensitive := true
 	fs := newCallbackFS(base, []string{"realpath:identity", "stat:fakeStat"}, &caseSensitive)
 
-	if !fs.UseCaseSensitiveFileNames() {
+	if !fs.CaseSensitivity().IsCaseSensitive() {
 		t.Fatal("expected configured case sensitivity")
 	}
 	if got := fs.Realpath("/file.ts"); got != "/file.ts" {
@@ -57,7 +58,7 @@ func TestCallbackFSDefaults(t *testing.T) {
 func TestCallbackFSStatAndEntries(t *testing.T) {
 	t.Parallel()
 
-	base := vfstest.FromMap(map[string]string{}, true)
+	base := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 	fs := newCallbackFS(base, []string{"stat", "getAccessibleEntries"}, nil)
 	conn := &callbackTestConn{
 		responses: map[string]json.Value{
@@ -126,7 +127,7 @@ func TestNodeFileModeToGoFileMode(t *testing.T) {
 func TestCallbackFSWriteFilePassthrough(t *testing.T) {
 	t.Parallel()
 
-	base := vfstest.FromMap(map[string]string{}, true)
+	base := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 	fs := newCallbackFS(base, []string{"writeFile"}, nil)
 	conn := &callbackTestConn{responses: map[string]json.Value{callbackWriteFile: []byte(`{"kind":"useOS"}`)}}
 	fs.SetConnection(t.Context(), conn)
@@ -158,7 +159,7 @@ func TestCallbackFSWriteFilePassthrough(t *testing.T) {
 func TestCallbackFSWriteFileNoop(t *testing.T) {
 	t.Parallel()
 
-	base := vfstest.FromMap(map[string]string{}, true)
+	base := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 	fs := newCallbackFS(base, []string{"writeFile:noop"}, nil)
 
 	if err := fs.WriteFile("/ignored.ts", "content"); err != nil {
@@ -172,7 +173,7 @@ func TestCallbackFSWriteFileNoop(t *testing.T) {
 func TestCallbackFSPerCallFakeStat(t *testing.T) {
 	t.Parallel()
 
-	base := vfstest.FromMap(map[string]string{}, true)
+	base := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 	fs := newCallbackFS(base, []string{"stat", "directoryExists", "fileExists"}, nil)
 	fs.SetConnection(t.Context(), &callbackTestConn{
 		responses: map[string]json.Value{
@@ -191,7 +192,7 @@ func TestCallbackFSPerCallFakeStat(t *testing.T) {
 func TestCallbackFSPerCallIdentityRealpath(t *testing.T) {
 	t.Parallel()
 
-	base := vfstest.FromMap(map[string]string{}, true)
+	base := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 	fs := newCallbackFS(base, []string{"realpath"}, nil)
 	fs.SetConnection(t.Context(), &callbackTestConn{
 		responses: map[string]json.Value{
@@ -222,7 +223,7 @@ func TestCallbackFSError(t *testing.T) {
 	for i, name := range names {
 		callbacks[i] = name + ":error"
 	}
-	base := vfstest.FromMap(map[string]string{}, true)
+	base := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 	fs := newCallbackFS(base, callbacks, nil)
 	for _, name := range names {
 		if !fs.errorCallbacks[name] {
@@ -247,7 +248,7 @@ func TestCallbackFSError(t *testing.T) {
 func TestCallbackFSRemoveFileNoop(t *testing.T) {
 	t.Parallel()
 
-	base := vfstest.FromMap(map[string]string{"/retained.ts": "content"}, true)
+	base := vfstest.FromMap(map[string]string{"/retained.ts": "content"}, tspath.CaseSensitive)
 	fs := newCallbackFS(base, []string{"removeFile:noop"}, nil)
 
 	if err := fs.Remove("/retained.ts"); err != nil {

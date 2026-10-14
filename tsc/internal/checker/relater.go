@@ -235,7 +235,7 @@ func (c *Checker) isSimpleTypeRelatedTo(source *Type, target *Type, relation *Re
 	if s&TypeFlagsESSymbolLike != 0 && t&TypeFlagsESSymbol != 0 {
 		return true
 	}
-	if s&TypeFlagsEnum != 0 && t&TypeFlagsEnum != 0 && source.symbol.Name == target.symbol.Name && c.isEnumTypeRelatedTo(source.symbol, target.symbol, errorReporter) {
+	if s&TypeFlagsEnum != 0 && t&TypeFlagsEnum != 0 && source.symbol.Name() == target.symbol.Name() && c.isEnumTypeRelatedTo(source.symbol, target.symbol, errorReporter) {
 		return true
 	}
 	if s&TypeFlagsEnumLiteral != 0 && t&TypeFlagsEnumLiteral != 0 {
@@ -279,12 +279,12 @@ func (c *Checker) isSimpleTypeRelatedTo(source *Type, target *Type, relation *Re
 }
 
 func (c *Checker) isEnumTypeRelatedTo(source *ast.Symbol, target *ast.Symbol, errorReporter ErrorReporter) bool {
-	sourceSymbol := core.IfElse(source.Flags&ast.SymbolFlagsEnumMember != 0, c.getParentOfSymbol(source), source)
-	targetSymbol := core.IfElse(target.Flags&ast.SymbolFlagsEnumMember != 0, c.getParentOfSymbol(target), target)
+	sourceSymbol := core.IfElse(source.Flags()&ast.SymbolFlagsEnumMember != 0, c.getParentOfSymbol(source), source)
+	targetSymbol := core.IfElse(target.Flags()&ast.SymbolFlagsEnumMember != 0, c.getParentOfSymbol(target), target)
 	if sourceSymbol == targetSymbol {
 		return true
 	}
-	if sourceSymbol.Name != targetSymbol.Name || sourceSymbol.Flags&ast.SymbolFlagsRegularEnum == 0 || targetSymbol.Flags&ast.SymbolFlagsRegularEnum == 0 {
+	if sourceSymbol.Name() != targetSymbol.Name() || sourceSymbol.Flags()&ast.SymbolFlagsRegularEnum == 0 || targetSymbol.Flags()&ast.SymbolFlagsRegularEnum == 0 {
 		return false
 	}
 	key := EnumRelationKey{sourceId: ast.GetSymbolId(sourceSymbol), targetId: ast.GetSymbolId(targetSymbol)}
@@ -293,9 +293,9 @@ func (c *Checker) isEnumTypeRelatedTo(source *ast.Symbol, target *ast.Symbol, er
 	}
 	targetEnumType := c.getTypeOfSymbol(targetSymbol)
 	for _, sourceProperty := range c.getPropertiesOfType(c.getTypeOfSymbol(sourceSymbol)) {
-		if sourceProperty.Flags&ast.SymbolFlagsEnumMember != 0 {
-			targetProperty := c.getPropertyOfType(targetEnumType, sourceProperty.Name)
-			if targetProperty == nil || targetProperty.Flags&ast.SymbolFlagsEnumMember == 0 {
+		if sourceProperty.Flags()&ast.SymbolFlagsEnumMember != 0 {
+			targetProperty := c.getPropertyOfType(targetEnumType, sourceProperty.Name())
+			if targetProperty == nil || targetProperty.Flags()&ast.SymbolFlagsEnumMember == 0 {
 				if errorReporter != nil {
 					errorReporter(diagnostics.Property_0_is_missing_in_type_1, c.symbolToString(sourceProperty), c.TypeToStringEx(c.getDeclaredTypeOfSymbol(targetSymbol), nil /*enclosingDeclaration*/, TypeFormatFlagsUseFullyQualifiedType, nil))
 				}
@@ -569,8 +569,8 @@ func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relatio
 		diags = append(diags, createDiagnosticForNode(prop, diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target, c.TypeToString(specificSource), c.TypeToString(targetPropType)))
 	} else {
 		propName := c.getPropertyNameFromIndex(nameType, nil /*accessNode*/)
-		targetIsOptional := core.OrElse(c.getPropertyOfType(target, propName), c.unknownSymbol).Flags&ast.SymbolFlagsOptional != 0
-		sourceIsOptional := core.OrElse(c.getPropertyOfType(source, propName), c.unknownSymbol).Flags&ast.SymbolFlagsOptional != 0
+		targetIsOptional := core.OrElse(c.getPropertyOfType(target, propName), c.unknownSymbol).Flags()&ast.SymbolFlagsOptional != 0
+		sourceIsOptional := core.OrElse(c.getPropertyOfType(source, propName), c.unknownSymbol).Flags()&ast.SymbolFlagsOptional != 0
 		targetPropType = c.removeMissingType(targetPropType, targetIsOptional)
 		sourcePropType = c.removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional)
 		result := c.checkTypeRelatedToEx(specificSource, targetPropType, relation, prop, errorMessage, &diags)
@@ -592,22 +592,22 @@ func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relatio
 	issuedElaboration := false
 	if targetProp == nil {
 		indexInfo := c.getApplicableIndexInfo(target, nameType)
-		if indexInfo != nil && indexInfo.declaration != nil && !c.program.IsSourceFileDefaultLibrary(ast.GetSourceFileOfNode(indexInfo.declaration).Path()) {
+		if indexInfo != nil && indexInfo.declaration != nil && !c.program.IsSourceFileDefaultLibrary(ast.GetSourceFileOfNode(indexInfo.declaration).PathKey()) {
 			issuedElaboration = true
 			diagnostic.AddRelatedInfo(createDiagnosticForNode(indexInfo.declaration, diagnostics.The_expected_type_comes_from_this_index_signature))
 		}
 	}
-	if !issuedElaboration && (targetProp != nil && len(targetProp.Declarations) != 0 || target.symbol != nil && len(target.symbol.Declarations) != 0) {
+	if !issuedElaboration && (targetProp != nil && len(targetProp.Declarations()) != 0 || target.symbol != nil && len(target.symbol.Declarations()) != 0) {
 		var targetNode *ast.Node
-		if targetProp != nil && len(targetProp.Declarations) != 0 {
-			targetNode = targetProp.Declarations[0]
+		if targetProp != nil && len(targetProp.Declarations()) != 0 {
+			targetNode = targetProp.Declarations()[0]
 		} else {
-			targetNode = target.symbol.Declarations[0]
+			targetNode = target.symbol.Declarations()[0]
 		}
 		if propertyName == "" || nameType.flags&TypeFlagsUniqueESSymbol != 0 {
 			propertyName = c.TypeToString(nameType)
 		}
-		if !c.program.IsSourceFileDefaultLibrary(ast.GetSourceFileOfNode(targetNode).Path()) {
+		if !c.program.IsSourceFileDefaultLibrary(ast.GetSourceFileOfNode(targetNode).PathKey()) {
 			diagnostic.AddRelatedInfo(createDiagnosticForNode(targetNode, diagnostics.The_expected_type_comes_from_property_0_which_is_declared_here_on_type_1, propertyName, c.TypeToString(target)))
 		}
 	}
@@ -662,8 +662,8 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 	c.checkTypeRelatedToEx(sourceReturn, targetReturn, relation, returnExpression, nil /*headMessage*/, &diags)
 	if len(diags) != 0 {
 		diagnostic := diags[0]
-		if target.symbol != nil && len(target.symbol.Declarations) != 0 {
-			diagnostic.AddRelatedInfo(createDiagnosticForNode(target.symbol.Declarations[0], diagnostics.The_expected_type_comes_from_the_return_type_of_this_signature))
+		if target.symbol != nil && len(target.symbol.Declarations()) != 0 {
+			diagnostic.AddRelatedInfo(createDiagnosticForNode(target.symbol.Declarations()[0], diagnostics.The_expected_type_comes_from_the_return_type_of_this_signature))
 		}
 		if ast.GetFunctionFlags(node)&ast.FunctionFlagsAsync == 0 && c.getTypeOfPropertyOfType(sourceReturn, "then") == nil && c.checkTypeRelatedTo(c.createPromiseType(sourceReturn), targetReturn, relation, nil /*errorNode*/) {
 			diagnostic.AddRelatedInfo(createDiagnosticForNode(node, diagnostics.Did_you_mean_to_mark_this_function_as_async))
@@ -680,7 +680,7 @@ func (c *Checker) isWeakType(t *Type) bool {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
 		return len(resolved.signatures) == 0 && len(resolved.indexInfos) == 0 && len(resolved.properties) > 0 && core.Every(resolved.properties, func(p *ast.Symbol) bool {
-			return p.Flags&ast.SymbolFlagsOptional != 0
+			return p.Flags()&ast.SymbolFlagsOptional != 0
 		})
 	}
 	if t.flags&TypeFlagsSubstitution != 0 {
@@ -694,7 +694,7 @@ func (c *Checker) isWeakType(t *Type) bool {
 
 func (c *Checker) hasCommonProperties(source *Type, target *Type, isComparingJsxAttributes bool) bool {
 	for _, prop := range c.getPropertiesOfType(source) {
-		if c.isKnownProperty(target, prop.Name, isComparingJsxAttributes) {
+		if c.isKnownProperty(target, prop.Name(), isComparingJsxAttributes) {
 			return true
 		}
 	}
@@ -846,7 +846,7 @@ func getRecursionIdentityFromTarget(t *Type) RecursionId {
 			// unique AST node.
 			return asRecursionId(t.AsTypeReference().node)
 		}
-		if t.symbol != nil && !(t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol.Flags&ast.SymbolFlagsClass != 0) && t.objectFlags&ObjectFlagsFromTypeNode == 0 {
+		if t.symbol != nil && !(t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol.Flags()&ast.SymbolFlagsClass != 0) && t.objectFlags&ObjectFlagsFromTypeNode == 0 {
 			// We track object types that have a symbol by that symbol (representing the origin of the type), but
 			// exclude the static sides of classes (since they share their symbols with the instance sides) and type
 			// references that originate in resolution of AST type nodes (since such type nodes cannot be the source
@@ -981,8 +981,8 @@ func (c *Checker) getUnmatchedPropertiesWorker(source *Type, target *Type, requi
 		if isStaticPrivateIdentifierProperty(targetProp) {
 			continue
 		}
-		if requireOptionalProperties || targetProp.Flags&ast.SymbolFlagsOptional == 0 && targetProp.CheckFlags&ast.CheckFlagsPartial == 0 {
-			sourceProp := c.getPropertyOfType(source, targetProp.Name)
+		if requireOptionalProperties || targetProp.Flags()&ast.SymbolFlagsOptional == 0 && targetProp.CheckFlags()&ast.CheckFlagsPartial == 0 {
+			sourceProp := c.getPropertyOfType(source, targetProp.Name())
 			if sourceProp == nil {
 				if propsOut == nil {
 					return targetProp
@@ -1012,7 +1012,7 @@ func excludeProperties(properties []*ast.Symbol, excludedProperties collections.
 	var reduced []*ast.Symbol
 	var excluded bool
 	for i, prop := range properties {
-		if !excludedProperties.Has(prop.Name) {
+		if !excludedProperties.Has(prop.Name()) {
 			if excluded {
 				reduced = append(reduced, prop)
 			}
@@ -1038,7 +1038,7 @@ func (d *TypeDiscriminator) len() int {
 }
 
 func (d *TypeDiscriminator) name(index int) string {
-	return d.props[index].Name
+	return d.props[index].Name()
 }
 
 func (d *TypeDiscriminator) matches(index int, t *Type) bool {
@@ -1070,7 +1070,7 @@ func (c *Checker) findMatchingDiscriminantType(source *Type, target *Type, isRel
 func (c *Checker) findDiscriminantProperties(sourceProperties []*ast.Symbol, target *Type) []*ast.Symbol {
 	var result []*ast.Symbol
 	for _, sourceProperty := range sourceProperties {
-		if c.isDiscriminantProperty(target, sourceProperty.Name) {
+		if c.isDiscriminantProperty(target, sourceProperty.Name()) {
 			result = append(result, sourceProperty)
 		}
 	}
@@ -1080,14 +1080,14 @@ func (c *Checker) findDiscriminantProperties(sourceProperties []*ast.Symbol, tar
 func (c *Checker) isDiscriminantProperty(t *Type, name string) bool {
 	if t != nil && t.flags&TypeFlagsUnion != 0 {
 		prop := c.getUnionOrIntersectionProperty(t, name, false /*skipObjectFunctionPropertyAugment*/)
-		if prop != nil && prop.CheckFlags&ast.CheckFlagsSyntheticProperty != 0 {
-			if prop.CheckFlags&ast.CheckFlagsIsDiscriminantComputed == 0 {
-				prop.CheckFlags |= ast.CheckFlagsIsDiscriminantComputed
-				if prop.CheckFlags&ast.CheckFlagsNonUniformAndLiteral == ast.CheckFlagsNonUniformAndLiteral && !c.isGenericType(c.getTypeOfSymbol(prop)) {
-					prop.CheckFlags |= ast.CheckFlagsIsDiscriminant
+		if prop != nil && prop.CheckFlags()&ast.CheckFlagsSyntheticProperty != 0 {
+			if prop.CheckFlags()&ast.CheckFlagsIsDiscriminantComputed == 0 {
+				prop.SetCheckFlags(prop.CheckFlags() | ast.CheckFlagsIsDiscriminantComputed)
+				if prop.CheckFlags()&ast.CheckFlagsNonUniformAndLiteral == ast.CheckFlagsNonUniformAndLiteral && !c.isGenericType(c.getTypeOfSymbol(prop)) {
+					prop.SetCheckFlags(prop.CheckFlags() | ast.CheckFlagsIsDiscriminant)
 				}
 			}
-			return prop.CheckFlags&ast.CheckFlagsIsDiscriminant != 0
+			return prop.CheckFlags()&ast.CheckFlagsIsDiscriminant != 0
 		}
 	}
 	return false
@@ -1154,7 +1154,7 @@ func (c *Checker) getKeyPropertyCandidateName(types []*Type) string {
 		if t.flags&(TypeFlagsObject|TypeFlagsInstantiableNonPrimitive) != 0 {
 			for _, p := range c.getPropertiesOfType(t) {
 				if isUnitType(c.getTypeOfSymbol(p)) {
-					return p.Name
+					return p.Name()
 				}
 			}
 		}
@@ -1270,13 +1270,13 @@ func isNonPrimitiveType(t *Type) bool {
 func (c *Checker) getTypeNamesForErrorDisplay(left *Type, right *Type) (string, string) {
 	var leftStr string
 	if c.symbolValueDeclarationIsContextSensitive(left.symbol) {
-		leftStr = c.typeToString(left, left.symbol.ValueDeclaration)
+		leftStr = c.typeToString(left, left.symbol.ValueDeclaration())
 	} else {
 		leftStr = c.TypeToString(left)
 	}
 	var rightStr string
 	if c.symbolValueDeclarationIsContextSensitive(right.symbol) {
-		rightStr = c.typeToString(right, right.symbol.ValueDeclaration)
+		rightStr = c.typeToString(right, right.symbol.ValueDeclaration())
 	} else {
 		rightStr = c.TypeToString(right)
 	}
@@ -1292,7 +1292,7 @@ func (c *Checker) getTypeNameForErrorDisplay(t *Type) string {
 }
 
 func (c *Checker) symbolValueDeclarationIsContextSensitive(symbol *ast.Symbol) bool {
-	return symbol != nil && symbol.ValueDeclaration != nil && ast.IsExpression(symbol.ValueDeclaration) && !c.isContextSensitive(symbol.ValueDeclaration)
+	return symbol != nil && symbol.ValueDeclaration() != nil && ast.IsExpression(symbol.ValueDeclaration()) && !c.isContextSensitive(symbol.ValueDeclaration())
 }
 
 func (c *Checker) typeCouldHaveTopLevelSingletonTypes(t *Type) bool {
@@ -1450,7 +1450,7 @@ func (c *Checker) createMarkerType(symbol *ast.Symbol, source *Type, target *Typ
 		return t
 	}
 	var result *Type
-	if symbol.Flags&ast.SymbolFlagsTypeAlias != 0 {
+	if symbol.Flags()&ast.SymbolFlagsTypeAlias != 0 {
 		result = c.getTypeAliasInstantiation(symbol, c.instantiateTypes(c.typeAliasLinks.Get(symbol).typeParameters, mapper), nil)
 	} else {
 		result = c.createTypeReference(t, c.instantiateTypes(t.AsInterfaceType().TypeParameters(), mapper))
@@ -1466,7 +1466,7 @@ func (c *Checker) isMarkerType(t *Type) bool {
 func (c *Checker) getTypeParameterModifiers(tp *Type) ast.ModifierFlags {
 	var flags ast.ModifierFlags
 	if tp.symbol != nil {
-		for _, d := range tp.symbol.Declarations {
+		for _, d := range tp.symbol.Declarations() {
 			flags |= d.ModifierFlags()
 		}
 	}
@@ -1860,7 +1860,7 @@ func (c *Checker) getRestTypeAtPosition(source *Signature, pos int, readonly boo
 func (c *Checker) getNameableDeclarationAtPosition(signature *Signature, pos int) *ast.Node {
 	paramCount := len(signature.parameters) - core.IfElse(signatureHasRestParameter(signature), 1, 0)
 	if pos < paramCount {
-		decl := signature.parameters[pos].ValueDeclaration
+		decl := signature.parameters[pos].ValueDeclaration()
 		if decl != nil && c.isValidDeclarationForTupleLabel(decl) {
 			return decl
 		}
@@ -1877,8 +1877,8 @@ func (c *Checker) getNameableDeclarationAtPosition(signature *Signature, pos int
 			}
 			return nil
 		}
-		if restParameter.ValueDeclaration != nil && c.isValidDeclarationForTupleLabel(restParameter.ValueDeclaration) {
-			return restParameter.ValueDeclaration
+		if restParameter.ValueDeclaration() != nil && c.isValidDeclarationForTupleLabel(restParameter.ValueDeclaration()) {
+			return restParameter.ValueDeclaration()
 		}
 	}
 	return nil
@@ -1962,7 +1962,7 @@ func (c *Checker) isInstantiatedGenericParameter(signature *Signature, pos int) 
 func (c *Checker) getParameterNameAtPosition(signature *Signature, pos int) string {
 	paramCount := len(signature.parameters) - core.IfElse(signatureHasRestParameter(signature), 1, 0)
 	if pos < paramCount {
-		return signature.parameters[pos].Name
+		return signature.parameters[pos].Name()
 	}
 	restParameter := signature.parameters[paramCount]
 	restType := c.getTypeOfSymbol(restParameter)
@@ -1970,19 +1970,19 @@ func (c *Checker) getParameterNameAtPosition(signature *Signature, pos int) stri
 		index := pos - paramCount
 		return c.getTupleElementLabel(restType.TargetTupleType().elementInfos[index], restParameter, index)
 	}
-	return restParameter.Name
+	return restParameter.Name()
 }
 
 func (c *Checker) getTupleElementLabel(elementInfo TupleElementInfo, restSymbol *ast.Symbol, index int) string {
 	if elementInfo.labeledDeclaration != nil {
 		return elementInfo.labeledDeclaration.Name().Text()
 	}
-	if restSymbol != nil && restSymbol.ValueDeclaration != nil && ast.IsParameterDeclaration(restSymbol.ValueDeclaration) {
-		return c.getTupleElementLabelFromBindingElement(restSymbol.ValueDeclaration, index, elementInfo.flags)
+	if restSymbol != nil && restSymbol.ValueDeclaration() != nil && ast.IsParameterDeclaration(restSymbol.ValueDeclaration()) {
+		return c.getTupleElementLabelFromBindingElement(restSymbol.ValueDeclaration(), index, elementInfo.flags)
 	}
 	var rootName string
 	if restSymbol != nil {
-		rootName = restSymbol.Name
+		rootName = restSymbol.Name()
 	} else {
 		rootName = "arg"
 	}
@@ -2126,7 +2126,7 @@ func (c *Checker) createTypePredicateFromTypePredicateNode(node *ast.Node, signa
 	}
 	kind := core.IfElse(predicateNode.AssertsModifier != nil, TypePredicateKindAssertsIdentifier, TypePredicateKindIdentifier)
 	name := predicateNode.ParameterName.Text()
-	index := core.FindIndex(signature.parameters, func(p *ast.Symbol) bool { return p.Name == name })
+	index := core.FindIndex(signature.parameters, func(p *ast.Symbol) bool { return p.Name() == name })
 	return c.newTypePredicate(kind, name, int32(index), t)
 }
 
@@ -2764,7 +2764,7 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 	}
 	for _, prop := range r.c.getPropertiesOfType(source) {
 		if shouldCheckAsExcessProperty(prop, source.symbol) && !isIgnoredJsxProperty(source, prop) {
-			if !r.c.isKnownProperty(reducedTarget, prop.Name, isComparingJsxAttributes) {
+			if !r.c.isKnownProperty(reducedTarget, prop.Name(), isComparingJsxAttributes) {
 				if reportErrors {
 					// Report error in terms of object types in the target as those are the only ones
 					// we check in isKnownProperty.
@@ -2778,10 +2778,10 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 					if ast.IsJsxAttributes(r.errorNode) || ast.IsJsxOpeningLikeElement(r.errorNode) || ast.IsJsxOpeningLikeElement(r.errorNode.Parent) {
 						// JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
 						// However, using an object-literal error message will be very confusing to the users so we give different a message.
-						if prop.ValueDeclaration != nil && ast.IsJsxAttribute(prop.ValueDeclaration) && ast.GetSourceFileOfNode(r.errorNode) == ast.GetSourceFileOfNode(prop.ValueDeclaration.Name()) {
+						if prop.ValueDeclaration() != nil && ast.IsJsxAttribute(prop.ValueDeclaration()) && ast.GetSourceFileOfNode(r.errorNode) == ast.GetSourceFileOfNode(prop.ValueDeclaration().Name()) {
 							// Note that extraneous children (as in `<NoChild>extra</NoChild>`) don't pass this check,
 							// since `children` is a Kind.PropertySignature instead of a Kind.JsxAttribute.
-							r.errorNode = prop.ValueDeclaration.Name()
+							r.errorNode = prop.ValueDeclaration().Name()
 						}
 						propName := r.c.symbolToString(prop)
 						suggestionSymbol := r.c.getSuggestedSymbolForNonexistentJSXAttribute(propName, errorTarget)
@@ -2794,13 +2794,13 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 						// use the property's value declaration if the property is assigned inside the literal itself
 						var objectLiteralDeclaration *ast.Node
 						if source.symbol != nil {
-							objectLiteralDeclaration = core.FirstOrNil(source.symbol.Declarations)
+							objectLiteralDeclaration = core.FirstOrNil(source.symbol.Declarations())
 						}
 						var suggestion string
-						if prop.ValueDeclaration != nil && ast.IsObjectLiteralElement(prop.ValueDeclaration) &&
-							ast.FindAncestor(prop.ValueDeclaration, func(d *ast.Node) bool { return d == objectLiteralDeclaration }) != nil &&
+						if prop.ValueDeclaration() != nil && ast.IsObjectLiteralElement(prop.ValueDeclaration()) &&
+							ast.FindAncestor(prop.ValueDeclaration(), func(d *ast.Node) bool { return d == objectLiteralDeclaration }) != nil &&
 							ast.GetSourceFileOfNode(objectLiteralDeclaration) == ast.GetSourceFileOfNode(r.errorNode) {
-							name := prop.ValueDeclaration.Name()
+							name := prop.ValueDeclaration().Name()
 							r.errorNode = name
 							if ast.IsIdentifier(name) {
 								suggestion = r.c.getSuggestionForNonexistentProperty(name.Text(), errorTarget)
@@ -2815,7 +2815,7 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 				}
 				return true
 			}
-			if checkTypes != nil && r.isRelatedTo(r.c.getTypeOfSymbol(prop), r.c.getTypeOfPropertyInTypes(checkTypes, prop.Name), RecursionFlagsBoth, reportErrors) == TernaryFalse {
+			if checkTypes != nil && r.isRelatedTo(r.c.getTypeOfSymbol(prop), r.c.getTypeOfPropertyInTypes(checkTypes, prop.Name()), RecursionFlagsBoth, reportErrors) == TernaryFalse {
 				if reportErrors {
 					r.reportError(diagnostics.Types_of_property_0_are_incompatible, r.c.symbolToString(prop))
 				}
@@ -2853,11 +2853,11 @@ func (c *Checker) getTypeOfPropertyInType(t *Type, name string) *Type {
 }
 
 func shouldCheckAsExcessProperty(prop *ast.Symbol, container *ast.Symbol) bool {
-	return prop.ValueDeclaration != nil && container.ValueDeclaration != nil && prop.ValueDeclaration.Parent == container.ValueDeclaration
+	return prop.ValueDeclaration() != nil && container.ValueDeclaration() != nil && prop.ValueDeclaration().Parent == container.ValueDeclaration()
 }
 
 func isIgnoredJsxProperty(source *Type, sourceProp *ast.Symbol) bool {
-	return source.objectFlags&ObjectFlagsJsxAttributes != 0 && isHyphenatedJsxName(sourceProp.Name)
+	return source.objectFlags&ObjectFlagsJsxAttributes != 0 && isHyphenatedJsxName(sourceProp.Name())
 }
 
 func (c *Checker) isTypeSubsetOf(source *Type, target *Type) bool {
@@ -3429,7 +3429,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		}
 		params := r.c.typeAliasLinks.Get(source.alias.symbol).typeParameters
 		minParams := r.c.getMinTypeArgumentCount(params)
-		nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration)
+		nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration())
 		sourceTypes := r.c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
 		targetTypes := r.c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
 		varianceResult, ok := relateVariances(sourceTypes, targetTypes, variances, intersectionState)
@@ -4057,7 +4057,7 @@ func (r *Relater) typeRelatedToDiscriminatedType(source *Type, target *Type) Ter
 	for i, sourceProperty := range sourcePropertiesFiltered {
 		sourcePropertyType := r.c.getNonMissingTypeOfSymbol(sourceProperty)
 		sourceDiscriminantTypes[i] = sourcePropertyType.Distributed()
-		excludedProperties.Add(sourceProperty.Name)
+		excludedProperties.Add(sourceProperty.Name())
 	}
 	// Build the cartesian product
 	discriminantCombinations := make([][]*Type, numCombinations)
@@ -4081,7 +4081,7 @@ func (r *Relater) typeRelatedToDiscriminatedType(source *Type, target *Type) Ter
 		for _, t := range target.Types() {
 			for i := range sourcePropertiesFiltered {
 				sourceProperty := sourcePropertiesFiltered[i]
-				targetProperty := r.c.getPropertyOfType(t, sourceProperty.Name)
+				targetProperty := r.c.getPropertyOfType(t, sourceProperty.Name())
 				if targetProperty == nil {
 					continue outer
 				}
@@ -4271,7 +4271,7 @@ func (r *Relater) propertiesRelatedTo(source *Type, target *Type, reportErrors b
 	}
 	if isObjectLiteralType(target) {
 		for _, sourceProp := range excludeProperties(r.c.getPropertiesOfType(source), excludedProperties) {
-			if r.c.getPropertyOfObjectType(target, sourceProp.Name) == nil {
+			if r.c.getPropertyOfObjectType(target, sourceProp.Name()) == nil {
 				if reportErrors {
 					r.reportError(diagnostics.Property_0_does_not_exist_on_type_1, r.c.symbolToString(sourceProp), r.c.TypeToString(target))
 				}
@@ -4284,8 +4284,8 @@ func (r *Relater) propertiesRelatedTo(source *Type, target *Type, reportErrors b
 	properties := r.c.getPropertiesOfType(target)
 	numericNamesOnly := isTupleType(source) && isTupleType(target)
 	for _, targetProp := range excludeProperties(properties, excludedProperties) {
-		name := targetProp.Name
-		if targetProp.Flags&ast.SymbolFlagsPrototype == 0 && (!numericNamesOnly || isNumericLiteralName(name) || name == "length") && (!optionalsOnly || targetProp.Flags&ast.SymbolFlagsOptional != 0) {
+		name := targetProp.Name()
+		if targetProp.Flags()&ast.SymbolFlagsPrototype == 0 && (!numericNamesOnly || isNumericLiteralName(name) || name == "length") && (!optionalsOnly || targetProp.Flags()&ast.SymbolFlagsOptional != 0) {
 			sourceProp := r.c.getPropertyOfType(source, name)
 			if sourceProp != nil && sourceProp != targetProp {
 				related := r.propertyRelatedTo(source, target, sourceProp, targetProp, r.c.getNonMissingTypeOfSymbol, reportErrors, intersectionState, r.relation == r.c.comparableRelation)
@@ -4304,7 +4304,7 @@ func (r *Relater) propertyRelatedTo(source *Type, target *Type, sourceProp *ast.
 	targetPropFlags := getDeclarationModifierFlagsFromSymbol(targetProp)
 	switch {
 	case sourcePropFlags&ast.ModifierFlagsPrivate != 0 || targetPropFlags&ast.ModifierFlagsPrivate != 0:
-		if sourceProp.ValueDeclaration != targetProp.ValueDeclaration {
+		if sourceProp.ValueDeclaration() != targetProp.ValueDeclaration() {
 			if reportErrors {
 				if sourcePropFlags&ast.ModifierFlagsPrivate != 0 && targetPropFlags&ast.ModifierFlagsPrivate != 0 {
 					r.reportError(diagnostics.Types_have_separate_declarations_of_a_private_property_0, r.c.symbolToString(targetProp))
@@ -4347,7 +4347,7 @@ func (r *Relater) propertyRelatedTo(source *Type, target *Type, sourceProp *ast.
 		return TernaryFalse
 	}
 	// When checking for comparability, be more lenient with optional properties.
-	if !skipOptional && sourceProp.Flags&ast.SymbolFlagsOptional != 0 && targetProp.Flags&ast.SymbolFlagsClassMember != 0 && targetProp.Flags&ast.SymbolFlagsOptional == 0 {
+	if !skipOptional && sourceProp.Flags()&ast.SymbolFlagsOptional != 0 && targetProp.Flags()&ast.SymbolFlagsClassMember != 0 && targetProp.Flags()&ast.SymbolFlagsOptional == 0 {
 		// TypeScript 1.0 spec (April 2014): 3.8.3
 		// S is a subtype of a type T, and T is a supertype of S if ...
 		// S' and T are object types and, for each member M in T..
@@ -4364,7 +4364,7 @@ func (r *Relater) propertyRelatedTo(source *Type, target *Type, sourceProp *ast.
 }
 
 func (r *Relater) isPropertySymbolTypeRelated(sourceProp *ast.Symbol, targetProp *ast.Symbol, getTypeOfSourceProperty func(sym *ast.Symbol) *Type, reportErrors bool, intersectionState IntersectionState) Ternary {
-	targetIsOptional := r.c.strictNullChecks && targetProp.CheckFlags&ast.CheckFlagsPartial != 0
+	targetIsOptional := r.c.strictNullChecks && targetProp.CheckFlags()&ast.CheckFlagsPartial != 0
 	effectiveTarget := r.c.addOptionalityEx(r.c.getNonMissingTypeOfSymbol(targetProp), false /*isProperty*/, targetIsOptional)
 	// source could resolve to `any` and that's not related to `unknown` target under strict subtype relation
 	if effectiveTarget.flags&core.IfElse(r.relation == r.c.strictSubtypeRelation, TypeFlagsAny, TypeFlagsAnyOrUnknown) != 0 {
@@ -4376,12 +4376,12 @@ func (r *Relater) isPropertySymbolTypeRelated(sourceProp *ast.Symbol, targetProp
 
 func (r *Relater) reportUnmatchedProperty(source *Type, target *Type, unmatchedProperty *ast.Symbol, requireOptionalProperties bool) {
 	// give specific error in case where private names have the same description
-	if unmatchedProperty.ValueDeclaration != nil &&
-		unmatchedProperty.ValueDeclaration.Name() != nil &&
-		ast.IsPrivateIdentifier(unmatchedProperty.ValueDeclaration.Name()) &&
+	if unmatchedProperty.ValueDeclaration() != nil &&
+		unmatchedProperty.ValueDeclaration().Name() != nil &&
+		ast.IsPrivateIdentifier(unmatchedProperty.ValueDeclaration().Name()) &&
 		source.symbol != nil &&
-		source.symbol.Flags&ast.SymbolFlagsClass != 0 {
-		privateIdentifierDescription := unmatchedProperty.ValueDeclaration.Name().Text()
+		source.symbol.Flags()&ast.SymbolFlagsClass != 0 {
+		privateIdentifierDescription := unmatchedProperty.ValueDeclaration().Name().Text()
 		symbolTableKey := binder.GetSymbolNameForPrivateIdentifier(source.symbol, privateIdentifierDescription)
 		if r.c.getPropertyOfType(source, symbolTableKey) != nil {
 			r.reportError(diagnostics.Property_0_in_type_1_refers_to_a_different_member_that_cannot_be_accessed_from_within_type_2, privateIdentifierDescription, r.c.SymbolToString(source.symbol), r.c.SymbolToString(target.symbol))
@@ -4393,8 +4393,8 @@ func (r *Relater) reportUnmatchedProperty(source *Type, target *Type, unmatchedP
 		sourceType, targetType := r.c.getTypeNamesForErrorDisplay(source, target)
 		propName := r.c.symbolToString(unmatchedProperty)
 		r.reportError(diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, sourceType, targetType)
-		if len(unmatchedProperty.Declarations) != 0 {
-			r.relatedInfo = append(r.relatedInfo, createDiagnosticForNode(unmatchedProperty.Declarations[0], diagnostics.X_0_is_declared_here, propName))
+		if len(unmatchedProperty.Declarations()) != 0 {
+			r.relatedInfo = append(r.relatedInfo, createDiagnosticForNode(unmatchedProperty.Declarations()[0], diagnostics.X_0_is_declared_here, propName))
 		}
 	} else if r.tryElaborateArrayLikeErrors(source, target, false /*reportErrors*/) {
 		sourceType, targetType := r.c.getTypeNamesForErrorDisplay(source, target)
@@ -4457,7 +4457,7 @@ func (r *Relater) propertiesIdenticalTo(source *Type, target *Type, excludedProp
 	}
 	result := TernaryTrue
 	for _, sourceProp := range sourceProperties {
-		targetProp := r.c.getPropertyOfObjectType(target, sourceProp.Name)
+		targetProp := r.c.getPropertyOfObjectType(target, sourceProp.Name())
 		if targetProp == nil {
 			return TernaryFalse
 		}
@@ -4658,7 +4658,7 @@ func (c *Checker) isObjectTypeWithInferableIndex(t *Type) bool {
 		return core.Every(t.Types(), c.isObjectTypeWithInferableIndex)
 	}
 	return t.symbol != nil &&
-		t.symbol.Flags&(ast.SymbolFlagsObjectLiteral|ast.SymbolFlagsTypeLiteral|ast.SymbolFlagsEnum|ast.SymbolFlagsValueModule) != 0 && t.symbol.Flags&ast.SymbolFlagsClass == 0 && !c.typeHasCallOrConstructSignatures(t) ||
+		t.symbol.Flags()&(ast.SymbolFlagsObjectLiteral|ast.SymbolFlagsTypeLiteral|ast.SymbolFlagsEnum|ast.SymbolFlagsValueModule) != 0 && t.symbol.Flags()&ast.SymbolFlagsClass == 0 && !c.typeHasCallOrConstructSignatures(t) ||
 		t.objectFlags&(ObjectFlagsJSLiteral|ObjectFlagsObjectRestType) != 0 ||
 		t.objectFlags&ObjectFlagsReverseMapped != 0 && c.isObjectTypeWithInferableIndex(t.AsReverseMappedType().source)
 }
@@ -4680,7 +4680,7 @@ func (r *Relater) membersRelatedToIndexInfo(source *Type, targetInfo *IndexInfo,
 		if r.c.isApplicableIndexType(r.c.getLiteralTypeFromProperty(prop, TypeFlagsStringOrNumberLiteralOrUnique, false), keyType) {
 			propType := r.c.getNonMissingTypeOfSymbol(prop)
 			var t *Type
-			if r.c.exactOptionalPropertyTypes || propType.flags&TypeFlagsUndefined != 0 || keyType == r.c.numberType || prop.Flags&ast.SymbolFlagsOptional == 0 {
+			if r.c.exactOptionalPropertyTypes || propType.flags&TypeFlagsUndefined != 0 || keyType == r.c.numberType || prop.Flags()&ast.SymbolFlagsOptional == 0 {
 				t = propType
 			} else {
 				t = r.c.getTypeWithFacts(propType, TypeFactsNEUndefined)
@@ -4770,12 +4770,12 @@ func (r *Relater) reportErrorResults(originalSource *Type, originalTarget *Type,
 		}
 	}
 	r.reportRelationError(headMessage, source, target)
-	if source.flags&TypeFlagsTypeParameter != 0 && source.symbol != nil && len(source.symbol.Declarations) != 0 && r.c.getConstraintOfType(source) == nil {
+	if source.flags&TypeFlagsTypeParameter != 0 && source.symbol != nil && len(source.symbol.Declarations()) != 0 && r.c.getConstraintOfType(source) == nil {
 		syntheticParam := r.c.cloneTypeParameter(source)
 		syntheticParam.AsTypeParameter().constraint = r.c.instantiateType(target, newSimpleTypeMapper(source, syntheticParam))
 		if r.c.hasNonCircularBaseConstraint(syntheticParam) {
 			targetConstraintString := r.c.TypeToString(target)
-			r.relatedInfo = append(r.relatedInfo, NewDiagnosticForNode(source.symbol.Declarations[0], diagnostics.This_type_parameter_might_need_an_extends_0_constraint, targetConstraintString))
+			r.relatedInfo = append(r.relatedInfo, NewDiagnosticForNode(source.symbol.Declarations()[0], diagnostics.This_type_parameter_might_need_an_extends_0_constraint, targetConstraintString))
 		}
 	}
 }

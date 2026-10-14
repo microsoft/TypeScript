@@ -1,0 +1,53 @@
+// === findRenameLocations ===
+// === /a.d.ts ===
+// declare module "m" {
+//     export default function /*RENAME*/[|fRENAME|](): void;
+// }
+// 
+
+// === /b.ts ===
+// import [|fRENAME|] from "m";
+// [|fRENAME|]();
+// 
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import /*RENAME*/[|fRENAME|] from "m";
+// [|fRENAME|]();
+// 
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import source /*RENAME*/[|fRENAME|] from "m";
+// [|fRENAME|];
+// export { [|fRENAME|] as f/*END SUFFIX*/ };
+// 
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import source [|fRENAME|] from "m";
+// /*RENAME*/[|fRENAME|];
+// export { [|fRENAME|] as f/*END SUFFIX*/ };
+// 
+
+
+
+// === findRenameLocations ===
+// === /d.ts ===
+// import { /*START PREFIX*/f as /*RENAME*/[|fRENAME|] } from "./c";
+// [|fRENAME|];
+// 
+
+
+
+// === findRenameLocations ===
+// === /e.ts ===
+// import source /*RENAME*/[|gRENAME|] from "m";
+// [|gRENAME|];
+// import.source("m");

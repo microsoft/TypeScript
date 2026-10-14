@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsctests"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -111,11 +112,11 @@ func newCleanTestSystem() *cleanTestSystem {
 		}`,
 		"/project/cycle2/index.ts":      "export const cycle2 = 1;",
 		"/project/cycle2/dist/index.js": "export const cycle2 = 1;",
-	}, true, "/project")}
+	}, tspath.CaseSensitive, "/project")}
 }
 
 func newCleanTestOrchestrator(sys tsc.System, args ...string) *build.Orchestrator {
-	command := tsoptions.ParseBuildCommandLine(append([]string{"--build"}, args...), sys)
+	command := tsoptions.ParseBuildCommandLine(append([]string{"--build"}, args...), sys.FS(), sys.GetCurrentDirectory())
 	return build.NewOrchestrator(build.Options{
 		Sys:     sys,
 		Command: command,

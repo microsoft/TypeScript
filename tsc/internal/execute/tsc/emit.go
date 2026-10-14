@@ -39,7 +39,7 @@ type EmitInput struct {
 	WriteFile          compiler.WriteFile
 	CompileTimes       *CompileTimes
 	Testing            CommandLineTesting
-	TestingMTimesCache *collections.SyncMap[tspath.Path, time.Time]
+	TestingMTimesCache *collections.SyncMap[tspath.PathKey, time.Time]
 	Tracing            *tracing.Tracing
 }
 
@@ -149,11 +149,11 @@ func listFiles(input EmitInput, emitResult *compiler.EmitResult) {
 	options := input.Program.Options()
 	if options.ListEmittedFiles.IsTrue() {
 		for _, file := range emitResult.EmittedFiles {
-			fmt.Fprintln(input.Writer, "TSFILE:", tspath.GetNormalizedAbsolutePath(file, input.Program.GetCurrentDirectory()))
+			fmt.Fprintln(input.Writer, "TSFILE:", file.AsString())
 		}
 	}
 	if options.ExplainFiles.IsTrue() {
-		input.Program.ExplainFiles(input.Writer, input.Config.Locale())
+		input.Program.ExplainFiles(input.Writer, input.Config.Locale(), input.Sys.GetCurrentDirectory())
 	} else if options.ListFiles.IsTrue() || options.ListFilesOnly.IsTrue() {
 		for _, file := range input.Program.GetSourceFiles() {
 			fmt.Fprintln(input.Writer, file.FileName())

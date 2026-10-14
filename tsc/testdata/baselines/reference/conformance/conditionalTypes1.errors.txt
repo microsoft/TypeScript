@@ -72,8 +72,8 @@ conditionalTypes1.ts(159,5): error TS2322: Type 'ZeroOf<T>' is not assignable to
 conditionalTypes1.ts(160,5): error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
   Type 'string | number' is not assignable to type 'ZeroOf<T>'.
     Type 'string' is not assignable to type 'ZeroOf<T>'.
-conditionalTypes1.ts(263,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
-conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
+conditionalTypes1.ts(279,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
+conditionalTypes1.ts(304,43): error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
   Type 'number | boolean' is not assignable to type 'T94<U>'.
     Type 'number' is not assignable to type 'T94<U>'.
       Type 'boolean' is not assignable to type 'true'.
@@ -396,6 +396,22 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
         let e = x[0];  // string
     }
     
+    function inferTuple<T>(x: T extends [infer U, infer V] ? [U, V] : never) {
+        return x;
+    }
+    
+    function inferObject<T>(x: T extends { value: infer U } ? { value: U } : never) {
+        return x;
+    }
+    
+    function inferFunction<T>(x: T extends () => infer U ? () => U : never) {
+        return x;
+    }
+    
+    function inferNested<T>(x: T extends (infer U)[] ? U extends (infer V)[] ? [U[], V[]] : U[] : never) {
+        return x;
+    }
+    
     // Repros from #21664
     
     type Eq<T, U> = T extends U ? U extends T ? true : false : false;
@@ -439,7 +455,7 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
         var z: T2;  // Error, T2 is distributive, T1 isn't
             ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
-!!! related TS6203 conditionalTypes1.ts:262:9: 'z' was also declared here.
+!!! related TS6203 conditionalTypes1.ts:278:9: 'z' was also declared here.
     }
     
     function f33<T, U>() {

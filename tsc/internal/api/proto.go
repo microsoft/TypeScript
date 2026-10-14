@@ -19,6 +19,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
@@ -65,10 +66,11 @@ func SignatureHandle(sig *checker.Signature) SignatureID {
 }
 
 const (
-	MethodRelease             Method = "release"
-	MethodReleaseSourceFile   Method = "releaseSourceFile"
-	MethodRetainSourceFile    Method = "retainSourceFile"
-	MethodGetCachedSourceFile Method = "getCachedSourceFile"
+	MethodRelease                Method = "release"
+	MethodReleaseSourceFile      Method = "releaseSourceFile"
+	MethodRetainSourceFile       Method = "retainSourceFile"
+	MethodGetCachedSourceFile    Method = "getCachedSourceFile"
+	MethodGetSymbolOfDeclaration Method = "getSymbolOfDeclaration"
 
 	MethodBatchRequests                                  Method = "batchRequests"
 	MethodInitialize                                     Method = "initialize"
@@ -203,6 +205,10 @@ const (
 	MethodGetAliasedSymbol                  Method = "getAliasedSymbol"
 	MethodGetImmediateAliasedSymbol         Method = "getImmediateAliasedSymbol"
 	MethodGetTargetSymbol                   Method = "getTargetSymbol"
+	MethodGetMergedSymbol                   Method = "getMergedSymbol"
+	MethodGetSymbolOfNode                   Method = "getSymbolOfNode"
+	MethodGetSymbolOfDeclarationForChecker  Method = "getSymbolOfDeclarationForChecker"
+	MethodGetParentOfSymbolForChecker       Method = "getParentOfSymbolForChecker"
 	MethodGetExportSymbolOfSymbolForChecker Method = "getExportSymbolOfSymbolForChecker"
 	MethodGetFullyQualifiedName             Method = "getFullyQualifiedName"
 	MethodGetExportsOfModule                Method = "getExportsOfModule"
@@ -219,6 +225,7 @@ const (
 
 	// Language service methods
 	MethodGetCompletionsAtPosition Method = "getCompletionsAtPosition"
+	MethodFormatNodeForInsertion   Method = "formatNodeForInsertion"
 
 	// Diagnostic methods
 	MethodGetSyntacticDiagnostics         Method = "getSyntacticDiagnostics"
@@ -230,12 +237,11 @@ const (
 	MethodGetGlobalDiagnostics            Method = "getGlobalDiagnostics"
 	MethodGetConfigFileParsingDiagnostics Method = "getConfigFileParsingDiagnostics"
 	// Printer methods
-	MethodPrintNode              Method = "printNode"
-	MethodFormatNodeForInsertion Method = "formatNodeForInsertion"
-	MethodEmit                   Method = "emit"
-	MethodEmitToString           Method = "emitToString"
-	MethodGetJavaScriptEmit      Method = "getJavaScriptEmit"
-	MethodGetDeclarationEmit     Method = "getDeclarationEmit"
+	MethodPrintNode          Method = "printNode"
+	MethodEmit               Method = "emit"
+	MethodEmitToString       Method = "emitToString"
+	MethodGetJavaScriptEmit  Method = "getJavaScriptEmit"
+	MethodGetDeclarationEmit Method = "getDeclarationEmit"
 
 	// Intrinsic type getters
 	MethodGetAnyType          Method = "getAnyType"
@@ -265,10 +271,10 @@ const (
 
 // InitializeResponse is returned by the initialize method.
 type InitializeResponse struct {
-	// UseCaseSensitiveFileNames indicates whether the host file system is case-sensitive.
-	UseCaseSensitiveFileNames bool `json:"useCaseSensitiveFileNames"`
+	// CaseSensitivity determines how the host file system compares paths.
+	CaseSensitivity tspath.CaseSensitivity `json:"caseSensitivity"`
 	// CurrentDirectory is the server's current working directory.
-	CurrentDirectory string `json:"currentDirectory"`
+	CurrentDirectory tspath.RootedDirectoryPath `json:"currentDirectory"`
 }
 
 // DocumentIdentifier identifies a document by either a file name (plain string) or a URI object.
@@ -291,6 +297,7 @@ type DocumentIdentifier struct {
 var _ json.UnmarshalerFrom = (*DocumentIdentifier)(nil)
 
 func (d *DocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
+	*d = DocumentIdentifier{}
 	// Try reading as a plain string first
 	tok, err := dec.ReadToken()
 	if err != nil {
@@ -298,27 +305,44 @@ func (d *DocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 	}
 	switch tok.Kind() {
 	case '"':
+		if tok.String() == "" {
+			return errors.New("DocumentIdentifier: file name must not be empty")
+		}
 		d.FileName = tok.String()
 		return nil
 	case '{':
-		// Read the object fields
+		foundURI := false
 		for dec.PeekKind() != '}' {
 			key, err := dec.ReadToken()
 			if err != nil {
 				return err
 			}
-			isURI := key.String() == "uri"
-			val, err := dec.ReadToken()
-			if err != nil {
-				return err
+			if key.Kind() != '"' {
+				return fmt.Errorf("DocumentIdentifier: expected object field name, got %v", key.Kind())
 			}
-			if isURI {
+			if key.String() == "uri" {
+				if foundURI {
+					return fmt.Errorf("DocumentIdentifier: duplicate field %q", key.String())
+				}
+				val, err := dec.ReadToken()
+				if err != nil {
+					return err
+				}
+				if val.Kind() != '"' || val.String() == "" {
+					return errors.New("DocumentIdentifier: uri must be a non-empty string")
+				}
 				d.URI = lsproto.DocumentUri(val.String())
+				foundURI = true
+			} else if err := dec.SkipValue(); err != nil {
+				return err
 			}
 		}
 		// Consume the closing brace
 		if _, err := dec.ReadToken(); err != nil {
 			return err
+		}
+		if !foundURI {
+			return errors.New("DocumentIdentifier: object must contain uri")
 		}
 		return nil
 	default:
@@ -326,28 +350,21 @@ func (d *DocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 	}
 }
 
-func (d DocumentIdentifier) ToFileName() string {
+func (d DocumentIdentifier) ToFileName(cwd tspath.RootedDirectoryPath) tspath.RootedFilePath {
 	if d.URI != "" {
 		return d.URI.FileName()
 	}
-	return d.FileName
+	return tspath.ToRootedFilePath(d.FileName, cwd)
 }
 
 // ToURI returns the document URI for this identifier. An explicitly provided URI
 // is returned as-is; a file name is first normalized to an absolute path against
 // cwd before being converted to a URI.
-func (d DocumentIdentifier) ToURI(cwd string) lsproto.DocumentUri {
+func (d DocumentIdentifier) ToURI(cwd tspath.RootedDirectoryPath) lsproto.DocumentUri {
 	if d.URI != "" {
 		return d.URI
 	}
-	return lsconv.FileNameToDocumentURI(tspath.GetNormalizedAbsolutePath(d.FileName, cwd))
-}
-
-func (d DocumentIdentifier) ToAbsoluteFileName(cwd string) string {
-	if d.URI != "" {
-		return d.URI.FileName()
-	}
-	return tspath.GetNormalizedAbsolutePath(d.FileName, cwd)
+	return lsconv.FileNameToDocumentURI(d.ToFileName(cwd))
 }
 
 func (d DocumentIdentifier) String() string {
@@ -422,6 +439,10 @@ func (e *EnsurePrograms) UnmarshalJSONFrom(dec *json.Decoder) error {
 // CreateSnapshotParams are the parameters for creating a new independent snapshot.
 type CreateSnapshotParams struct {
 	SnapshotRequestChangesParams
+	// UserPreferences configures language service behavior in the new snapshot.
+	UserPreferences *lsutil.UserPreferences `json:"userPreferences,omitempty"`
+	// PrepareAutoImports identifies the file whose auto-import indexes should be ready in the new snapshot.
+	PrepareAutoImports *DocumentIdentifier `json:"prepareAutoImports,omitempty"`
 	// FileNotifications describes host file system changes to invalidate while creating the snapshot.
 	FileNotifications *FileNotifications `json:"fileNotifications,omitempty"`
 	// FileSystem supplies file contents and directory listings for the new snapshot.
@@ -431,16 +452,18 @@ type CreateSnapshotParams struct {
 }
 
 type CreateSnapshotProgramParams struct {
-	RootFiles       []DocumentIdentifier  `json:"rootFiles"`
-	CompilerOptions core.CompilerOptions  `json:"compilerOptions"`
-	Options         *CreateProgramOptions `json:"options,omitempty"`
+	RootFiles            []DocumentIdentifier          `json:"rootFiles"`
+	CompilerOptions      core.CompilerOptions          `json:"-"`
+	CompilerOptionsInput *tsoptions.RawCompilerOptions `json:"compilerOptions" nonnil:"true"`
+	Options              *CreateProgramOptions         `json:"options,omitempty"`
 }
 
 type ReconfigureSnapshotProgramParams struct {
-	Id              project.SyntheticProjectID `json:"id"`
-	RootFiles       []DocumentIdentifier       `json:"rootFiles"`
-	CompilerOptions core.CompilerOptions       `json:"compilerOptions"`
-	Options         *CreateProgramOptions      `json:"options,omitempty"`
+	Id                   project.SyntheticProjectID    `json:"id"`
+	RootFiles            []DocumentIdentifier          `json:"rootFiles"`
+	CompilerOptions      core.CompilerOptions          `json:"-"`
+	CompilerOptionsInput *tsoptions.RawCompilerOptions `json:"compilerOptions" nonnil:"true"`
+	Options              *CreateProgramOptions         `json:"options,omitempty"`
 }
 
 type UpdateSnapshotParams struct {
@@ -529,9 +552,9 @@ type ResolveModuleNameResult struct {
 // ProjectFileChanges describes what source files changed within a single project.
 type ProjectFileChanges struct {
 	// ChangedFiles lists source file paths whose content differs.
-	ChangedFiles []tspath.Path `json:"changedFiles,omitempty"`
+	ChangedFiles []tspath.PathKey `json:"changedFiles,omitempty"`
 	// DeletedFiles lists source file paths removed from the project's program.
-	DeletedFiles []tspath.Path `json:"deletedFiles,omitempty"`
+	DeletedFiles []tspath.PathKey `json:"deletedFiles,omitempty"`
 }
 
 // SnapshotChanges describes what changed between a response base and a new
@@ -574,6 +597,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodReleaseSourceFile:                              unmarshallerFor[ReleaseSourceFileParams],
 	MethodRetainSourceFile:                               unmarshallerFor[RetainSourceFileParams],
 	MethodGetCachedSourceFile:                            unmarshallerFor[GetCachedSourceFileParams],
+	MethodGetSymbolOfDeclaration:                         unmarshallerFor[GetSymbolOfDeclarationParams],
 	MethodInitialize:                                     noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
@@ -702,6 +726,10 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetAliasedSymbol:                  unmarshallerFor[CheckerSymbolParams],
 	MethodGetImmediateAliasedSymbol:         unmarshallerFor[CheckerSymbolParams],
 	MethodGetTargetSymbol:                   unmarshallerFor[CheckerSymbolParams],
+	MethodGetMergedSymbol:                   unmarshallerFor[CheckerSymbolParams],
+	MethodGetSymbolOfNode:                   unmarshallerFor[CheckerNodeParams],
+	MethodGetSymbolOfDeclarationForChecker:  unmarshallerFor[CheckerNodeParams],
+	MethodGetParentOfSymbolForChecker:       unmarshallerFor[CheckerSymbolParams],
 	MethodGetExportSymbolOfSymbolForChecker: unmarshallerFor[CheckerSymbolParams],
 	MethodGetFullyQualifiedName:             unmarshallerFor[CheckerSymbolParams],
 	MethodGetExportsOfModule:                unmarshallerFor[CheckerSymbolParams],
@@ -714,8 +742,8 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetReferencedSymbolsForNode:       unmarshallerFor[GetReferencedSymbolsForNodeParams],
 	MethodGetSignatureUsages:                unmarshallerFor[GetSignatureUsagesParams],
 	MethodGetCompletionsAtPosition:          unmarshallerFor[GetCompletionsAtPositionParams],
-	MethodPrintNode:                         unmarshallerFor[PrintNodeParams],
 	MethodFormatNodeForInsertion:            unmarshallerFor[FormatNodeForInsertionParams],
+	MethodPrintNode:                         unmarshallerFor[PrintNodeParams],
 	MethodEmit:                              unmarshallerFor[EmitParams],
 	MethodEmitToString:                      unmarshallerFor[EmitParams],
 	MethodGetJavaScriptEmit:                 unmarshallerFor[SelectedFilesEmitParams],
@@ -791,9 +819,10 @@ func jsonValueToAny(value packagejson.JSONValue) any {
 }
 
 type TranspileOptions struct {
-	CompilerOptions   *core.CompilerOptions `json:"compilerOptions,omitempty"`
-	FileName          string                `json:"fileName,omitempty"`
-	ReportDiagnostics bool                  `json:"reportDiagnostics,omitempty"`
+	CompilerOptions      *core.CompilerOptions         `json:"-"`
+	CompilerOptionsInput *tsoptions.RawCompilerOptions `json:"compilerOptions,omitempty"`
+	FileName             string                        `json:"fileName,omitempty"`
+	ReportDiagnostics    bool                          `json:"reportDiagnostics,omitempty"`
 }
 
 type CreateSourceFileOptions struct {
@@ -899,12 +928,12 @@ type ReleaseSourceFileParams struct {
 }
 
 type SourceFileDescriptor struct {
-	FileName        string          `json:"fileName"`
-	Path            tspath.Path     `json:"path"`
-	ContentHash     string          `json:"contentHash"`
-	ParseOptionsKey string          `json:"parseOptionsKey"`
-	ScriptKind      core.ScriptKind `json:"scriptKind"`
-	NodeID          string          `json:"nodeId"`
+	FileName        tspath.RootedFilePath `json:"fileName"`
+	Path            tspath.PathKey        `json:"path"`
+	ContentHash     string                `json:"contentHash"`
+	ParseOptionsKey string                `json:"parseOptionsKey"`
+	ScriptKind      core.ScriptKind       `json:"scriptKind"`
+	NodeID          string                `json:"nodeId"`
 }
 
 type RetainSourceFileParams struct {
@@ -921,17 +950,22 @@ type GetCachedSourceFileParams struct {
 	File SourceFileDescriptor `json:"file"`
 }
 
+type GetSymbolOfDeclarationParams struct {
+	File  SourceFileDescriptor `json:"file"`
+	Index uint32               `json:"index"`
+}
+
 type ProfileParams struct {
 	Dir string `json:"dir"`
 }
 
 type ProfileResult struct {
-	File string `json:"file"`
+	File tspath.RootedFilePath `json:"file"`
 }
 
 type CreateBuildOrchestratorParams struct {
-	RootNames []string `json:"rootNames"`
-	Cwd       string   `json:"cwd,omitempty"`
+	RootNames []string                   `json:"rootNames"`
+	Cwd       tspath.RootedDirectoryPath `json:"cwd,omitempty"`
 	// Only a subset of these options are exposed  the API
 	*core.BuildOptions    `json:"buildOptions,omitempty"`
 	*core.CompilerOptions `json:"compilerOptions,omitempty"`
@@ -962,10 +996,10 @@ type CleanBuildParams struct {
 }
 
 type CleanBuildResponse struct {
-	Status       tsc.ExitStatus        `json:"status"`
-	Diagnostics  []*DiagnosticResponse `json:"diagnostics,omitempty"`
-	Statistics   tsc.Statistics        `json:"statistics"`
-	FilesDeleted []string              `json:"filesDeleted,omitempty"`
+	Status       tsc.ExitStatus          `json:"status"`
+	Diagnostics  []*DiagnosticResponse   `json:"diagnostics,omitempty"`
+	Statistics   tsc.Statistics          `json:"statistics"`
+	FilesDeleted []tspath.RootedFilePath `json:"filesDeleted,omitempty"`
 }
 
 type BuildOrchestrator struct {
@@ -975,7 +1009,7 @@ type BuildOrchestrator struct {
 }
 
 type ConfigFileResponse struct {
-	FileNames         []string                 `json:"fileNames" nonnil:"true"`
+	FileNames         []tspath.RootedFilePath  `json:"fileNames" nonnil:"true"`
 	Options           *core.CompilerOptions    `json:"options" nonnil:"true"`
 	BuildOptions      *core.BuildOptions       `json:"buildOptions,omitempty"`
 	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitempty"`
@@ -996,15 +1030,11 @@ type GetDefaultProjectForFileParams struct {
 }
 
 type ProjectResponse struct {
-	Id                project.ID          `json:"id"`
-	ConfigFileName    string              `json:"configFileName"`
-	CurrentDirectory  string              `json:"currentDirectory"`
-	Dirty             bool                `json:"dirty"`
-	ParsedCommandLine *ConfigFileResponse `json:"parsedCommandLine" nonnil:"true"`
-	// Deprecated: Use parsedCommandLine.fileNames.
-	RootFiles []string `json:"rootFiles" nonnil:"true"`
-	// Deprecated: Use parsedCommandLine.options.
-	CompilerOptions *core.CompilerOptions `json:"compilerOptions" nonnil:"true"`
+	Id                project.ID                 `json:"id"`
+	ConfigFileName    *tspath.RootedFilePath     `json:"configFileName,omitempty"`
+	CurrentDirectory  tspath.RootedDirectoryPath `json:"currentDirectory"`
+	Dirty             bool                       `json:"dirty"`
+	ParsedCommandLine *ConfigFileResponse        `json:"parsedCommandLine" nonnil:"true"`
 }
 
 func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *ConfigFileResponse {
@@ -1030,33 +1060,8 @@ func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *Conf
 		ProjectReferences: parsedCommandLine.ProjectReferences(),
 		TypeAcquisition:   parsedCommandLine.TypeAcquisition(),
 		CompileOnSave:     compileOnSave,
-		Raw:               toProtocolJSONValue(parsedCommandLine.Raw),
+		Raw:               parsedCommandLine.Raw,
 		Errors:            errors,
-	}
-}
-
-func toProtocolJSONValue(value any) any {
-	switch value := value.(type) {
-	case core.WatchFileKind:
-		return int(value) - 1
-	case core.WatchDirectoryKind:
-		return int(value) - 1
-	case core.PollingKind:
-		return int(value) - 1
-	case *collections.OrderedMap[string, any]:
-		result := collections.NewOrderedMapWithSizeHint[string, any](value.Size())
-		for key, child := range value.Entries() {
-			result.Set(key, toProtocolJSONValue(child))
-		}
-		return result
-	case []any:
-		result := make([]any, len(value))
-		for i, child := range value {
-			result[i] = toProtocolJSONValue(child)
-		}
-		return result
-	default:
-		return value
 	}
 }
 
@@ -1064,9 +1069,10 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 	if p == nil || p.CommandLine == nil {
 		panic("NewProjectResponse called with unloaded project")
 	}
-	configFileName := ""
+	var configFileName *tspath.RootedFilePath
 	if p.Kind == project.KindConfigured {
-		configFileName = p.ConfigFileName()
+		value := p.ConfigFileName()
+		configFileName = &value
 	}
 	return &ProjectResponse{
 		Id:                p.ID(),
@@ -1074,8 +1080,6 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 		CurrentDirectory:  p.CurrentDirectory(),
 		Dirty:             p.IsDirty(),
 		ParsedCommandLine: NewConfigFileResponse(p.CommandLine),
-		RootFiles:         p.CommandLine.FileNames(),
-		CompilerOptions:   p.CommandLine.CompilerOptions(),
 	}
 }
 
@@ -1463,11 +1467,11 @@ type ResolvedTypeReferenceDirective struct {
 
 // SourceFileMetadata carries program-stored metadata about a single source file.
 type SourceFileMetadata struct {
-	IsDefaultLibrary      bool                `json:"isDefaultLibrary"`
-	IsFromExternalLibrary bool                `json:"isFromExternalLibrary"`
-	PackageJsonType       string              `json:"packageJsonType"`
-	PackageJsonDirectory  string              `json:"packageJsonDirectory"`
-	ImpliedNodeFormat     core.ResolutionMode `json:"impliedNodeFormat"`
+	IsDefaultLibrary      bool                       `json:"isDefaultLibrary"`
+	IsFromExternalLibrary bool                       `json:"isFromExternalLibrary"`
+	PackageJsonType       string                     `json:"packageJsonType"`
+	PackageJsonDirectory  tspath.RootedDirectoryPath `json:"packageJsonDirectory"`
+	ImpliedNodeFormat     core.ResolutionMode        `json:"impliedNodeFormat"`
 }
 
 type ResolveNameParams struct {
@@ -1577,6 +1581,15 @@ type GetCompletionsAtPositionParams struct {
 	Position         uint32             `json:"position"`
 	TriggerCharacter *string            `json:"triggerCharacter,omitempty"`
 	IncludeSymbol    bool               `json:"includeSymbol,omitempty"`
+}
+
+// FormatNodeForInsertionParams are the parameters for the formatNodeForInsertion method.
+type FormatNodeForInsertionParams struct {
+	Snapshot SnapshotID         `json:"snapshot"`
+	Project  project.ID         `json:"project"`
+	File     DocumentIdentifier `json:"file"`     // target file where the node will be inserted
+	Position uint32             `json:"position"` // UTF-16 code-unit offset of the insertion position in the target file
+	Data     string             `json:"data"`     // base64-encoded binary AST data for the synthesized node
 }
 
 // CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry.
@@ -1780,33 +1793,24 @@ type SelectedFilesEmitParams struct {
 }
 
 type EmitResponse struct {
-	EmitSkipped  bool                  `json:"emitSkipped"`
-	Diagnostics  []*DiagnosticResponse `json:"diagnostics" nonnil:"true"`
-	EmittedFiles []string              `json:"emittedFiles" nonnil:"true"`
+	EmitSkipped  bool                    `json:"emitSkipped"`
+	Diagnostics  []*DiagnosticResponse   `json:"diagnostics" nonnil:"true"`
+	EmittedFiles []tspath.RootedFilePath `json:"emittedFiles" nonnil:"true"`
 	// EmittedFilesContents contains contents parallel to EmittedFiles when the
 	// source snapshot uses a full filesystem. It is empty for write-through emits.
 	EmittedFilesContents []string `json:"emittedFilesContents" nonnil:"true"`
 }
 
 type EmitOutputFile struct {
-	FileName       string  `json:"fileName"`
-	Text           string  `json:"text"`
-	SourceFileName *string `json:"sourceFileName,omitempty"`
+	FileName       tspath.RootedFilePath  `json:"fileName"`
+	Text           string                 `json:"text"`
+	SourceFileName *tspath.RootedFilePath `json:"sourceFileName,omitempty"`
 }
 
 type EmitOutputResponse struct {
 	EmitSkipped bool                  `json:"emitSkipped"`
 	Diagnostics []*DiagnosticResponse `json:"diagnostics" nonnil:"true"`
 	OutputFiles []*EmitOutputFile     `json:"outputFiles" nonnil:"true"`
-}
-
-// FormatNodeForInsertionParams are the parameters for the formatNodeForInsertion method.
-type FormatNodeForInsertionParams struct {
-	Snapshot SnapshotID         `json:"snapshot"`
-	Project  project.ID         `json:"project"`
-	File     DocumentIdentifier `json:"file"`     // target file where the node will be inserted
-	Position uint32             `json:"position"` // UTF-16 code-unit offset of the insertion position in the target file
-	Data     string             `json:"data"`     // base64-encoded binary AST data for the synthesized node
 }
 
 // CheckerTypeParams are parameters for checker methods that operate on a type.
@@ -1905,8 +1909,8 @@ type GetProjectDiagnosticsParams struct {
 
 // DiagnosticResponse is the API response for a single diagnostic.
 type DiagnosticResponse struct {
-	// FileName is the path of the file this diagnostic belongs to, if any.
-	FileName string `json:"fileName,omitempty"`
+	// The file name of the file this diagnostic belongs to, if any.
+	FileName tspath.RootedFilePath `json:"fileName,omitempty"`
 	// Pos is the start position of the diagnostic in the source file.
 	Pos int `json:"pos"`
 	// End is the end position of the diagnostic in the source file.

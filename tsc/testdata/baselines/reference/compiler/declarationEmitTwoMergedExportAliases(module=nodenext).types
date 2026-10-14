@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/declarationEmitTwoMergedExportAliases.ts] ////
+
+=== a.ts ===
+class Route<T> {
+>Route : Route<T>
+
+    private parts = 0;
+>parts : number
+>0 : 0
+
+    readonly schema: T;
+>schema : T
+
+    constructor(schema: T) { this.schema = schema; }
+>schema : T
+>this.schema = schema : T
+>this.schema : T
+>this : this
+>schema : T
+>schema : T
+}
+export { Route };
+>Route : typeof Route
+
+export function create() { return new Route({ value: 0, enabled: true }); }
+>create : () => Route<{ value: number; enabled: boolean; }>
+>new Route({ value: 0, enabled: true }) : Route<{ value: number; enabled: boolean; }>
+>Route : typeof Route
+>{ value: 0, enabled: true } : { value: number; enabled: true; }
+>value : number
+>0 : 0
+>enabled : true
+>true : true
+
+=== b.ts ===
+export { Route } from "./a";
+>Route : typeof import("./a").Route
+
+export declare namespace Route {
+    export type Schema = { value: number };
+>Schema : Schema
+>value : number
+}
+
+=== c.ts ===
+export { Route as Factory } from "./b";
+>Route : typeof import("./a").Route
+>Factory : typeof import("./a").Route
+
+export declare namespace Factory {
+    export type Options = { enabled: boolean };
+>Options : Options
+>enabled : boolean
+}
+
+=== index.ts ===
+import { Factory } from "./c";
+>Factory : typeof Factory
+
+import { create } from "./a";
+>create : () => Factory<{ value: number; enabled: boolean; }>
+
+export const route = new Factory<Factory.Schema & Factory.Options>({ value: 0, enabled: true });
+>route : Factory<Factory.Schema & Factory.Options>
+>new Factory<Factory.Schema & Factory.Options>({ value: 0, enabled: true }) : Factory<Factory.Schema & Factory.Options>
+>Factory : typeof Factory
+>Factory : any
+>Factory : any
+>{ value: 0, enabled: true } : { value: number; enabled: true; }
+>value : number
+>0 : 0
+>enabled : true
+>true : true
+
+export const created = create();
+>created : Factory<{ value: number; enabled: boolean; }>
+>create() : Factory<{ value: number; enabled: boolean; }>
+>create : () => Factory<{ value: number; enabled: boolean; }>
+
+export const constructor = Factory;
+>constructor : typeof Factory
+>Factory : typeof Factory
+
+export type Config = Factory.Schema & Factory.Options;
+>Config : Config
+>Factory : any
+>Factory : any
+

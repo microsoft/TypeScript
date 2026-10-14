@@ -6,15 +6,15 @@ import a = require("./a");
 
 const c1 = a.a;
 >c1 : Symbol(c1, Decl(b.ts, 1, 5))
->a.a : Symbol(mod.a, Decl(a.ts, 5, 16))
+>a.a : Symbol(a.a, Decl(a.ts, 5, 16))
 >a : Symbol(a, Decl(b.ts, 0, 0))
->a : Symbol(mod.a, Decl(a.ts, 5, 16))
+>a : Symbol(a.a, Decl(a.ts, 5, 16))
 
 const c2 = a.b;
 >c2 : Symbol(c2, Decl(b.ts, 2, 5))
->a.b : Symbol(mod.b, Decl(a.ts, 6, 16))
+>a.b : Symbol(a.b, Decl(a.ts, 6, 16))
 >a : Symbol(a, Decl(b.ts, 0, 0))
->b : Symbol(mod.b, Decl(a.ts, 6, 16))
+>b : Symbol(a.b, Decl(a.ts, 6, 16))
 
 let v1: a.Foo = { x: "test" };
 >v1 : Symbol(v1, Decl(b.ts, 3, 3))

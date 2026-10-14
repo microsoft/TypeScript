@@ -159,7 +159,8 @@ export type KeywordSyntaxKind =
     | SyntaxKind.BigIntKeyword
     | SyntaxKind.OverrideKeyword
     | SyntaxKind.OfKeyword
-    | SyntaxKind.DeferKeyword;
+    | SyntaxKind.DeferKeyword
+    | SyntaxKind.SourceKeyword;
 export type ModifierSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.ExportKeyword | SyntaxKind.InKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.StaticKeyword;
 export type KeywordTypeSyntaxKind = SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword;
 export type KeywordExpressionSyntaxKind = SyntaxKind.NullKeyword | SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword | SyntaxKind.ThisKeyword | SyntaxKind.SuperKeyword | SyntaxKind.ImportKeyword;
@@ -330,7 +331,8 @@ export type TokenSyntaxKind =
     | SyntaxKind.BigIntKeyword
     | SyntaxKind.OverrideKeyword
     | SyntaxKind.OfKeyword
-    | SyntaxKind.DeferKeyword;
+    | SyntaxKind.DeferKeyword
+    | SyntaxKind.SourceKeyword;
 export type JsxTokenSyntaxKind = SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFile | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken;
 export type JSDocNodeSyntaxKind =
     | SyntaxKind.JSDocTypeExpression
@@ -369,7 +371,7 @@ export type JSDocNodeSyntaxKind =
     | SyntaxKind.JSDocThrowsTag
     | SyntaxKind.JSDocSatisfiesTag
     | SyntaxKind.JSDocImportTag;
-export type ImportPhaseModifierSyntaxKind = SyntaxKind.TypeKeyword | SyntaxKind.DeferKeyword;
+export type ImportPhaseModifierSyntaxKind = SyntaxKind.TypeKeyword | SyntaxKind.DeferKeyword | SyntaxKind.SourceKeyword;
 export type PostfixUnaryOperator = SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken;
 export type PrefixUnaryOperator = SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.TildeToken | SyntaxKind.ExclamationToken | SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken;
 export type AssignmentOperator = SyntaxKind.EqualsToken | CompoundAssignmentOperator;

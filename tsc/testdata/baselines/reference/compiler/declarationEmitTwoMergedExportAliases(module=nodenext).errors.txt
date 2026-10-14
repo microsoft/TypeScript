@@ -1,0 +1,33 @@
+c.ts(1,10): error TS2484: Export declaration conflicts with exported declaration of 'Factory'.
+
+
+==== a.ts (0 errors) ====
+    class Route<T> {
+        private parts = 0;
+        readonly schema: T;
+        constructor(schema: T) { this.schema = schema; }
+    }
+    export { Route };
+    export function create() { return new Route({ value: 0, enabled: true }); }
+    
+==== b.ts (0 errors) ====
+    export { Route } from "./a";
+    export declare namespace Route {
+        export type Schema = { value: number };
+    }
+    
+==== c.ts (1 errors) ====
+    export { Route as Factory } from "./b";
+             ~~~~~~~~~~~~~~~~
+!!! error TS2484: Export declaration conflicts with exported declaration of 'Factory'.
+    export declare namespace Factory {
+        export type Options = { enabled: boolean };
+    }
+    
+==== index.ts (0 errors) ====
+    import { Factory } from "./c";
+    import { create } from "./a";
+    export const route = new Factory<Factory.Schema & Factory.Options>({ value: 0, enabled: true });
+    export const created = create();
+    export const constructor = Factory;
+    export type Config = Factory.Schema & Factory.Options;

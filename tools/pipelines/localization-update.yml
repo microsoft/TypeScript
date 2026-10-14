@@ -1,9 +1,6 @@
 trigger: none
 pr: none
 
-# Before OneLoc assigns an LCL package ID, this pipeline publishes the initial
-# localization handoff. After the package ID is configured, it applies packaged
-# handbacks, generates deterministic runtime gzip files, and updates a pull request.
 schedules:
   - cron: '0 7 * * *'
     displayName: Daily localization update
@@ -13,9 +10,8 @@ schedules:
         - main
 
 variables:
-  # Fill this in after the localization team assigns the LCL package ID.
   - name: OneLocLclPackageId
-    value: ''
+    value: LCL-JUNO-PROD-TYPESCRIPT
   - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
     value: Iv23li4GolzJSEp1mzHI
   - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID
@@ -55,7 +51,7 @@ jobs:
         displayName: Cache Go modules
         condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
         inputs:
-          key: '"go-modules" | "$(Agent.OS)" | "$(GoVersion)" | **/go.mod,**/go.sum | go.work | go.work.sum'
+          key: '"go-modules" | "$(Agent.OS)" | "$(GoVersion)" | **/go.mod,**/go.sum | go.work'
           path: $(Pipeline.Workspace)/go/pkg/mod
           cacheHitVar: GO_MODULES_CACHE_HIT
 
@@ -107,6 +103,7 @@ jobs:
 
       - pwsh: |
           $ErrorActionPreference = "Stop"
+          $PSNativeCommandUseErrorActionPreference = $true
           # OneLoc leaves native files in the artifact directory. Its manifests
           # pair each generated path with the repository path selected by the
           # LocProject CopyOption and OutputPath.
@@ -121,6 +118,9 @@ jobs:
           }
 
           $sourceRoot = [IO.Path]::GetFullPath("$(Build.SourcesDirectory)") + [IO.Path]::DirectorySeparatorChar
+          $importer = Join-Path "$(Agent.TempDirectory)" "import-localization.exe"
+          go -C ./tools build -o $importer ./cmd/import-localization
+          $englishSource = Join-Path $sourceRoot "tsc/internal/diagnostics/diagnosticMessages.generated.json"
           $manifestDestinations = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
           for ($i = 0; $i -lt $generatedFiles.Count; $i++) {
               $source = [IO.Path]::GetFullPath($generatedFiles[$i])
@@ -130,6 +130,9 @@ jobs:
               }
               if (!(Test-Path -LiteralPath $source -PathType Leaf)) {
                   throw "OneLocBuild did not produce $source"
+              }
+              if (!(Test-Path -LiteralPath "$source.lct" -PathType Leaf)) {
+                  throw "OneLocBuild did not produce localization metadata for $source"
               }
               $null = $manifestDestinations.Add($destination)
           }
@@ -142,11 +145,12 @@ jobs:
           for ($i = 0; $i -lt $generatedFiles.Count; $i++) {
               $source = [IO.Path]::GetFullPath($generatedFiles[$i])
               $destination = [IO.Path]::GetFullPath($destinationFiles[$i])
-              New-Item -Path (Split-Path -Parent $destination) -ItemType Directory -Force | Out-Null
-              Copy-Item -LiteralPath $source -Destination $destination -Force
+              & $importer -source $englishSource -handback $source -out $destination
           }
         displayName: Apply localized files
         condition: and(succeeded(), ne(variables['OneLocLclPackageId'], ''))
+        env:
+          GOMODCACHE: $(Pipeline.Workspace)/go/pkg/mod
 
       - pwsh: |
           $ErrorActionPreference = "Stop"
@@ -206,7 +210,7 @@ jobs:
                 $remoteBranch = git ls-remote --heads origin $branch
                 $branchExists = [bool] $remoteBranch
                 if ($branchExists) {
-                    git fetch origin "refs/heads/${branch}:refs/remotes/origin/${branch}"
+                    git fetch --depth=1 --no-tags --progress origin "refs/heads/${branch}:refs/remotes/origin/${branch}"
                 }
 
                 $shouldPush = $true

@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/verbatimModuleSyntaxDefaultImportTypeOnlyNamed.ts] ////
+
+=== /a.ts ===
+export default class A {}
+>A : A
+
+export type T = number;
+>T : number
+
+export const v = 0;
+>v : 0
+>0 : 0
+
+=== /b.ts ===
+import A1, { type T } from "./a";
+>A1 : typeof A1
+>T : any
+
+import A2, { type T as T2, v } from "./a";
+>A2 : typeof A1
+>T : any
+>T2 : any
+>v : 0
+
+import { type T as T3 } from "./a";
+>T : any
+>T3 : any
+
+import A4, {} from "./a";
+>A4 : typeof A1
+
+import A5, { /* comment */ type T as T5 } from "./a";
+>A5 : typeof A1
+>T : any
+>T5 : any
+
+import A6, {
+>A6 : typeof A1
+
+    type T as T6,
+>T : any
+>T6 : any
+
+} from "./a";
+
+export { A1, A2, A4, A5, A6, v };
+>A1 : typeof A1
+>A2 : typeof A1
+>A4 : typeof A1
+>A5 : typeof A1
+>A6 : typeof A1
+>v : 0
+

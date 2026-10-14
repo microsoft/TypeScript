@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/withStatementCommonJsEmit.ts] ////
+
+=== withStatementCommonJsEmit.cts ===
+declare const obj: object;
+>obj : object
+
+with (obj) export let a;
+>obj : object
+>a : any
+
+with (obj) export let d = 1;
+>obj : object
+>d : any
+>1 : any
+
+with (obj) var local = 2;
+>obj : object
+>local : any
+>2 : any
+
+with (obj) {
+>obj : object
+
+    export let e;
+>e : any
+}
+

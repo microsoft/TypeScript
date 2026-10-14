@@ -1,5 +1,10 @@
 import getExePath from "#getExePath";
 import { dirname } from "node:path";
+import type {
+    RootedDirectoryPath,
+    RootedFilePath,
+    RootedPath,
+} from "../ast/index.ts";
 import { normalizePath } from "./path.ts";
 import type {
     RequestDirectoryEntries,
@@ -54,15 +59,15 @@ export const serverFS: {
 
 export interface FileSystemCallbacks {
     directoryExists:
-        | ((directoryName: string) => boolean | typeof serverFS.useOS | typeof serverFS.error)
+        | ((directoryName: RootedDirectoryPath) => boolean | typeof serverFS.useOS | typeof serverFS.error)
         | typeof serverFS.useOS
         | typeof serverFS.error;
     fileExists:
-        | ((fileName: string) => boolean | typeof serverFS.useOS | typeof serverFS.error)
+        | ((fileName: RootedFilePath) => boolean | typeof serverFS.useOS | typeof serverFS.error)
         | typeof serverFS.useOS
         | typeof serverFS.error;
     getAccessibleEntries:
-        | ((directoryName: string) => FileSystemEntries | typeof serverFS.useOS | typeof serverFS.error)
+        | ((directoryName: RootedDirectoryPath) => FileSystemEntries | typeof serverFS.useOS | typeof serverFS.error)
         | typeof serverFS.useOS
         | typeof serverFS.error;
     /**
@@ -72,26 +77,27 @@ export interface FileSystemCallbacks {
      * - Return {@link serverFS.useOS} to fall back to the server's operating-system filesystem.
      */
     readFile:
-        | ((fileName: string) => string | undefined | typeof serverFS.useOS | typeof serverFS.error)
+        | ((fileName: RootedFilePath) => string | undefined | typeof serverFS.useOS | typeof serverFS.error)
         | typeof serverFS.useOS
         | typeof serverFS.error;
+    /** Relative results are resolved against the queried path's directory by the server. */
     realpath:
-        | ((path: string) => string | typeof serverFS.useOS | typeof serverFS.identity | typeof serverFS.error)
+        | ((path: RootedPath) => string | typeof serverFS.useOS | typeof serverFS.identity | typeof serverFS.error)
         | typeof serverFS.useOS
         | typeof serverFS.identity
         | typeof serverFS.error;
     stat:
-        | ((path: string) => FileSystemStat | undefined | typeof serverFS.useOS | typeof serverFS.fakeStat | typeof serverFS.error)
+        | ((path: RootedPath) => FileSystemStat | undefined | typeof serverFS.useOS | typeof serverFS.fakeStat | typeof serverFS.error)
         | typeof serverFS.useOS
         | typeof serverFS.fakeStat
         | typeof serverFS.error;
     writeFile:
-        | ((path: string, content: string) => void | typeof serverFS.useOS | typeof serverFS.noop | typeof serverFS.error)
+        | ((path: RootedFilePath, content: string) => void | typeof serverFS.useOS | typeof serverFS.noop | typeof serverFS.error)
         | typeof serverFS.useOS
         | typeof serverFS.noop
         | typeof serverFS.error;
     removeFile:
-        | ((path: string) => void | typeof serverFS.useOS | typeof serverFS.noop | typeof serverFS.error)
+        | ((path: RootedPath) => void | typeof serverFS.useOS | typeof serverFS.noop | typeof serverFS.error)
         | typeof serverFS.useOS
         | typeof serverFS.noop
         | typeof serverFS.error;

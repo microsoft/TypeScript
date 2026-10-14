@@ -1,0 +1,21 @@
+simplifiedConditionalTypeWritingCache.ts(7,9): error TS2322: Type 'T["a"]' is not assignable to type 'Value<T>'.
+  Type 'string' is not assignable to type 'T["a"] & T["b"]'.
+    Type 'string' is not assignable to type 'T["b"]'.
+      'T["b"]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+
+
+==== simplifiedConditionalTypeWritingCache.ts (1 errors) ====
+    type Value<T extends { a: string; b: number }> = T["a" | "b"] extends unknown
+      ? T["a" | "b"]
+      : never;
+    
+    function test<T extends { a: string; b: number }>(value: Value<T>, a: T["a"]) {
+      const read: T["a"] | T["b"] = value;
+      const write: Value<T> = a;
+            ~~~~~
+!!! error TS2322: Type 'T["a"]' is not assignable to type 'Value<T>'.
+!!! error TS2322:   Type 'string' is not assignable to type 'T["a"] & T["b"]'.
+!!! error TS2322:     Type 'string' is not assignable to type 'T["b"]'.
+!!! error TS2322:       'T["b"]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+    }
+    

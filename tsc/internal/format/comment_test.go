@@ -38,7 +38,7 @@ func TestCommentFormatting(t *testing.T) {
 
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.ts",
-			Path:     "/test.ts",
+			PathKey:  "/test.ts",
 		}, originalText, core.ScriptKindTS)
 
 		// Apply formatting once
@@ -53,7 +53,7 @@ func TestCommentFormatting(t *testing.T) {
 		// Apply formatting a second time to test stability
 		sourceFile2 := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.ts",
-			Path:     "/test.ts",
+			PathKey:  "/test.ts",
 		}, firstFormatted, core.ScriptKindTS)
 
 		edits2 := format.FormatDocument(ctx, sourceFile2)
@@ -82,7 +82,7 @@ func TestCommentFormatting(t *testing.T) {
 
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.ts",
-			Path:     "/test.ts",
+			PathKey:  "/test.ts",
 		}, originalText, core.ScriptKindTS)
 
 		// Apply formatting
@@ -117,7 +117,7 @@ func TestCommentFormatting(t *testing.T) {
 
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.ts",
-			Path:     "/test.ts",
+			PathKey:  "/test.ts",
 		}, originalText, core.ScriptKindTS)
 
 		// Apply formatting
@@ -148,7 +148,7 @@ func TestCommentFormatting(t *testing.T) {
 
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.ts",
-			Path:     "/test.ts",
+			PathKey:  "/test.ts",
 		}, originalText, core.ScriptKindTS)
 
 		// Apply formatting
@@ -181,7 +181,7 @@ func TestCommentFormatting(t *testing.T) {
 
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.ts",
-			Path:     "/test.ts",
+			PathKey:  "/test.ts",
 		}, originalText, core.ScriptKindTS)
 
 		// Apply formatting - should not panic
@@ -212,7 +212,7 @@ func TestCommentFormatting(t *testing.T) {
 
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.js",
-			Path:     "/test.js",
+			PathKey:  "/test.js",
 		}, originalText, core.ScriptKindJS)
 
 		edits := format.FormatDocument(ctx, sourceFile)
@@ -239,7 +239,7 @@ func TestCommentFormatting(t *testing.T) {
 
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.ts",
-			Path:     "/test.ts",
+			PathKey:  "/test.ts",
 		}, originalText, core.ScriptKindTS)
 
 		edits := format.FormatDocument(ctx, sourceFile)
@@ -269,7 +269,7 @@ func TestFormatSelectionPreservesComments(t *testing.T) {
 
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.ts",
-			Path:     "/test.ts",
+			PathKey:  "/test.ts",
 		}, originalText, core.ScriptKindTS)
 
 		// Select a range that starts at the beginning of the line and ends inside the block comment.
@@ -300,7 +300,7 @@ func TestFormatSelectionPreservesComments(t *testing.T) {
 
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.ts",
-			Path:     "/test.ts",
+			PathKey:  "/test.ts",
 		}, originalText, core.ScriptKindTS)
 
 		// Select from inside the comment to the end
@@ -331,7 +331,7 @@ func TestFormatSelectionPreservesComments(t *testing.T) {
 
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.ts",
-			Path:     "/test.ts",
+			PathKey:  "/test.ts",
 		}, originalText, core.ScriptKindTS)
 
 		edits := format.FormatDocument(ctx, sourceFile)
@@ -366,7 +366,7 @@ func TestSliceBoundsPanic(t *testing.T) {
 
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/test.ts",
-			Path:     "/test.ts",
+			PathKey:  "/test.ts",
 		}, originalText, core.ScriptKindTS)
 
 		// This should not panic

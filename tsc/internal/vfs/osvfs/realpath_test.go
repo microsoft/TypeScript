@@ -21,8 +21,8 @@ func TestSymlinkRealpath(t *testing.T) {
 
 	fs := FS()
 
-	targetRealpath := fs.Realpath(tspath.NormalizePath(targetFile))
-	linkRealpath := fs.Realpath(tspath.NormalizePath(linkFile))
+	targetRealpath := fs.Realpath(tspath.RootedFilePathFromAbsolute(targetFile).AsPath())
+	linkRealpath := fs.Realpath(tspath.RootedFilePathFromAbsolute(linkFile).AsPath())
 
 	if targetRealpath != linkRealpath {
 		t.Errorf("expected realpath of target and link to be equal, got %q and %q", targetRealpath, linkRealpath)
@@ -56,14 +56,14 @@ func BenchmarkRealpath(b *testing.B) {
 	targetFile, linkFile := setupSymlinks(b)
 
 	fs := FS()
-	normalizedTargetFile := tspath.NormalizePath(targetFile)
-	normalizedLinkFile := tspath.NormalizePath(linkFile)
+	normalizedTargetFile := tspath.RootedFilePathFromAbsolute(targetFile)
+	normalizedLinkFile := tspath.RootedFilePathFromAbsolute(linkFile)
 
 	b.Run("target", func(b *testing.B) {
 		b.ReportAllocs()
 
 		for b.Loop() {
-			fs.Realpath(normalizedTargetFile)
+			fs.Realpath(normalizedTargetFile.AsPath())
 		}
 	})
 
@@ -71,7 +71,7 @@ func BenchmarkRealpath(b *testing.B) {
 		b.ReportAllocs()
 
 		for b.Loop() {
-			fs.Realpath(normalizedLinkFile)
+			fs.Realpath(normalizedLinkFile.AsPath())
 		}
 	})
 
@@ -83,19 +83,19 @@ func BenchmarkRealpath(b *testing.B) {
 	assert.NilError(b, os.MkdirAll(deepDir, 0o777))
 	deepFile := filepath.Join(deepDir, "index.js")
 	assert.NilError(b, os.WriteFile(deepFile, []byte("module.exports = {}"), 0o666))
-	normalizedDeepFile := tspath.NormalizePath(deepFile)
+	normalizedDeepFile := tspath.RootedFilePathFromAbsolute(deepFile)
 
 	b.Run("deep", func(b *testing.B) {
 		b.ReportAllocs()
 
 		for b.Loop() {
-			fs.Realpath(normalizedDeepFile)
+			fs.Realpath(normalizedDeepFile.AsPath())
 		}
 	})
 
 	b.Run("deep_evalSymlinks", func(b *testing.B) {
 		b.ReportAllocs()
-		deepNative := filepath.FromSlash(normalizedDeepFile)
+		deepNative := filepath.FromSlash(normalizedDeepFile.AsString())
 
 		for b.Loop() {
 			filepath.EvalSymlinks(deepNative) //nolint:errcheck
@@ -132,7 +132,7 @@ func TestGetAccessibleEntries(t *testing.T) {
 
 	fs := FS()
 
-	entries := fs.GetAccessibleEntries(tspath.NormalizePath(link))
+	entries := fs.GetAccessibleEntries(tspath.RootedDirectoryPathFromAbsolute(link))
 
 	assert.DeepEqual(t, entries.Directories, []string{"dir1", "dir2"})
 	assert.DeepEqual(t, entries.Files, []string{"file1", "file2"})
@@ -144,7 +144,7 @@ func TestGetAccessibleEntries(t *testing.T) {
 	}
 
 	// Non-symlink directory should have empty Symlinks.
-	entries = fs.GetAccessibleEntries(tspath.NormalizePath(target))
+	entries = fs.GetAccessibleEntries(tspath.RootedDirectoryPathFromAbsolute(target))
 	assert.DeepEqual(t, entries.Directories, []string{"dir1", "dir2"})
 	assert.DeepEqual(t, entries.Files, []string{"file1", "file2"})
 	assert.Check(t, entries.Symlinks != nil, "expected Symlinks to be non-nil for directory without symlinks")

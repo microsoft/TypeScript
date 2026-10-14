@@ -3,6 +3,7 @@ package cachedvfs_test
 import (
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/cachedvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmock"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -12,7 +13,7 @@ import (
 func createMockFS() *vfsmock.FSMock {
 	return vfsmock.Wrap(vfstest.FromMap(map[string]string{
 		"/some/path/file.txt": "hello world",
-	}, true))
+	}, tspath.CaseSensitive))
 }
 
 func TestDirectoryExists(t *testing.T) {
@@ -216,35 +217,35 @@ func TestReadFile(t *testing.T) {
 	assert.Equal(t, 7, len(underlying.ReadFileCalls()))
 }
 
-func TestUseCaseSensitiveFileNames(t *testing.T) {
+func TestCaseSensitivity(t *testing.T) {
 	t.Parallel()
 
 	underlying := createMockFS()
 	cached := cachedvfs.From(underlying)
 
-	cached.UseCaseSensitiveFileNames()
-	assert.Equal(t, 1, len(underlying.UseCaseSensitiveFileNamesCalls()))
+	cached.CaseSensitivity()
+	assert.Equal(t, 1, len(underlying.CaseSensitivityCalls()))
 
-	cached.UseCaseSensitiveFileNames()
-	assert.Equal(t, 2, len(underlying.UseCaseSensitiveFileNamesCalls()))
+	cached.CaseSensitivity()
+	assert.Equal(t, 2, len(underlying.CaseSensitivityCalls()))
 
 	cached.ClearCache()
-	cached.UseCaseSensitiveFileNames()
-	assert.Equal(t, 3, len(underlying.UseCaseSensitiveFileNamesCalls()))
+	cached.CaseSensitivity()
+	assert.Equal(t, 3, len(underlying.CaseSensitivityCalls()))
 
 	cached.DisableAndClearCache()
-	cached.UseCaseSensitiveFileNames()
-	assert.Equal(t, 4, len(underlying.UseCaseSensitiveFileNamesCalls()))
+	cached.CaseSensitivity()
+	assert.Equal(t, 4, len(underlying.CaseSensitivityCalls()))
 
-	cached.UseCaseSensitiveFileNames()
-	assert.Equal(t, 5, len(underlying.UseCaseSensitiveFileNamesCalls()))
+	cached.CaseSensitivity()
+	assert.Equal(t, 5, len(underlying.CaseSensitivityCalls()))
 
 	cached.Enable()
-	cached.UseCaseSensitiveFileNames()
-	assert.Equal(t, 6, len(underlying.UseCaseSensitiveFileNamesCalls()))
+	cached.CaseSensitivity()
+	assert.Equal(t, 6, len(underlying.CaseSensitivityCalls()))
 
-	cached.UseCaseSensitiveFileNames()
-	assert.Equal(t, 7, len(underlying.UseCaseSensitiveFileNamesCalls()))
+	cached.CaseSensitivity()
+	assert.Equal(t, 7, len(underlying.CaseSensitivityCalls()))
 }
 
 func TestRemove(t *testing.T) {
@@ -295,7 +296,7 @@ func TestWriteFile(t *testing.T) {
 	assert.Equal(t, 3, len(underlying.WriteFileCalls()))
 
 	call := underlying.WriteFileCalls()[2]
-	assert.Equal(t, "/some/path/file.txt", call.Path)
+	assert.Equal(t, "/some/path/file.txt", call.Path.AsString())
 	assert.Equal(t, "third content", call.Data)
 
 	cached.DisableAndClearCache()

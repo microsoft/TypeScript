@@ -153,19 +153,22 @@ func (fs *callbackFS) panicIfError(name string) {
 	}
 }
 
-// UseCaseSensitiveFileNames implements vfs.FS.
-func (fs *callbackFS) UseCaseSensitiveFileNames() bool {
+// CaseSensitivity implements vfs.FS.
+func (fs *callbackFS) CaseSensitivity() tspath.CaseSensitivity {
 	if fs.caseSensitive != nil {
-		return *fs.caseSensitive
+		if *fs.caseSensitive {
+			return tspath.CaseSensitive
+		}
+		return tspath.CaseInsensitive
 	}
-	return fs.base.UseCaseSensitiveFileNames()
+	return fs.base.CaseSensitivity()
 }
 
 // ReadFile implements vfs.FS.
-func (fs *callbackFS) ReadFile(path string) (contents string, ok bool) {
+func (fs *callbackFS) ReadFile(path tspath.RootedFilePath) (contents string, ok bool) {
 	fs.panicIfError(callbackReadFile)
 	if fs.isEnabled(callbackReadFile) {
-		result, err := fs.call(callbackReadFile, path)
+		result, err := fs.call(callbackReadFile, path.AsString())
 		if err != nil {
 			panic(err)
 		}
@@ -189,10 +192,10 @@ func (fs *callbackFS) ReadFile(path string) (contents string, ok bool) {
 }
 
 // FileExists implements vfs.FS.
-func (fs *callbackFS) FileExists(path string) bool {
+func (fs *callbackFS) FileExists(path tspath.RootedFilePath) bool {
 	fs.panicIfError(callbackFileExists)
 	if fs.isEnabled(callbackFileExists) {
-		result, err := fs.call(callbackFileExists, path)
+		result, err := fs.call(callbackFileExists, path.AsString())
 		if err != nil {
 			panic(err)
 		}
@@ -214,10 +217,10 @@ func (fs *callbackFS) FileExists(path string) bool {
 }
 
 // DirectoryExists implements vfs.FS.
-func (fs *callbackFS) DirectoryExists(path string) bool {
+func (fs *callbackFS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
 	fs.panicIfError(callbackDirectoryExists)
 	if fs.isEnabled(callbackDirectoryExists) {
-		result, err := fs.call(callbackDirectoryExists, path)
+		result, err := fs.call(callbackDirectoryExists, path.AsString())
 		if err != nil {
 			panic(err)
 		}
@@ -239,10 +242,10 @@ func (fs *callbackFS) DirectoryExists(path string) bool {
 }
 
 // GetAccessibleEntries implements vfs.FS.
-func (fs *callbackFS) GetAccessibleEntries(path string) vfs.Entries {
+func (fs *callbackFS) GetAccessibleEntries(path tspath.RootedDirectoryPath) vfs.Entries {
 	fs.panicIfError(callbackGetAccessibleEntries)
 	if fs.isEnabled(callbackGetAccessibleEntries) {
-		result, err := fs.call(callbackGetAccessibleEntries, path)
+		result, err := fs.call(callbackGetAccessibleEntries, path.AsString())
 		if err != nil {
 			panic(err)
 		}
@@ -278,10 +281,10 @@ func (fs *callbackFS) GetAccessibleEntries(path string) vfs.Entries {
 }
 
 // Realpath implements vfs.FS.
-func (fs *callbackFS) Realpath(path string) string {
+func (fs *callbackFS) Realpath(path tspath.RootedPath) tspath.RootedPath {
 	fs.panicIfError(callbackRealpath)
 	if fs.isEnabled(callbackRealpath) {
-		result, err := fs.call(callbackRealpath, path)
+		result, err := fs.call(callbackRealpath, path.AsString())
 		if err != nil {
 			panic(err)
 		}
@@ -292,7 +295,7 @@ func (fs *callbackFS) Realpath(path string) string {
 			if err := json.Unmarshal(response.Value, &realpath); err != nil {
 				panic(err)
 			}
-			return realpath
+			return tspath.ToRootedPath(realpath, path.Directory())
 		case "identity":
 			return path
 		case "useOS":
@@ -322,10 +325,10 @@ func (info *callbackFileInfo) IsDir() bool         { return info.mode.IsDir() }
 func (info *callbackFileInfo) Sys() any            { return nil }
 
 // Stat implements vfs.FS.
-func (fs *callbackFS) Stat(path string) vfs.FileInfo {
+func (fs *callbackFS) Stat(path tspath.RootedPath) vfs.FileInfo {
 	fs.panicIfError(callbackStat)
 	if fs.isEnabled(callbackStat) {
-		result, err := fs.call(callbackStat, path)
+		result, err := fs.call(callbackStat, path.AsString())
 		if err != nil {
 			panic(err)
 		}
@@ -341,7 +344,7 @@ func (fs *callbackFS) Stat(path string) vfs.FileInfo {
 				panic(unmarshalErr)
 			}
 			info := &callbackFileInfo{
-				name: tspath.GetBaseFileName(path),
+				name: path.BaseName(),
 				size: stat.Size,
 				mode: nodeFileModeToGoFileMode(stat.Mode),
 			}
@@ -366,12 +369,12 @@ func (fs *callbackFS) Stat(path string) vfs.FileInfo {
 	return fs.base.Stat(path)
 }
 
-func (fs *callbackFS) fakeStatForPath(path string) vfs.FileInfo {
-	if fs.DirectoryExists(path) {
-		return &callbackFileInfo{name: tspath.GetBaseFileName(path), mode: iofs.ModeDir | 0o555}
+func (fs *callbackFS) fakeStatForPath(path tspath.RootedPath) vfs.FileInfo {
+	if fs.DirectoryExists(tspath.RootedDirectoryPathFromNormalized(path.AsString())) {
+		return &callbackFileInfo{name: path.BaseName(), mode: iofs.ModeDir | 0o555}
 	}
-	if fs.FileExists(path) {
-		return &callbackFileInfo{name: tspath.GetBaseFileName(path), mode: 0o444}
+	if fs.FileExists(tspath.RootedFilePathFromNormalized(path.AsString())) {
+		return &callbackFileInfo{name: path.BaseName(), mode: 0o444}
 	}
 	return nil
 }
@@ -409,13 +412,13 @@ func nodeFileModeToGoFileMode(mode uint32) iofs.FileMode {
 }
 
 // WriteFile implements vfs.FS.
-func (fs *callbackFS) WriteFile(path string, data string) error {
+func (fs *callbackFS) WriteFile(path tspath.RootedFilePath, data string) error {
 	fs.panicIfError(callbackWriteFile)
 	if fs.isEnabled(callbackWriteFile) {
 		payload := struct {
 			Path string `json:"path"`
 			Data string `json:"data"`
-		}{Path: path, Data: data}
+		}{Path: path.AsString(), Data: data}
 
 		result, err := fs.call(callbackWriteFile, payload)
 		if err != nil {
@@ -439,15 +442,15 @@ func (fs *callbackFS) WriteFile(path string, data string) error {
 }
 
 // AppendFile implements vfs.FS - always delegates to base (no callback support).
-func (fs *callbackFS) AppendFile(path string, data string) error {
+func (fs *callbackFS) AppendFile(path tspath.RootedFilePath, data string) error {
 	return fs.base.AppendFile(path, data)
 }
 
 // Remove implements vfs.FS.
-func (fs *callbackFS) Remove(path string) error {
+func (fs *callbackFS) Remove(path tspath.RootedPath) error {
 	fs.panicIfError(callbackRemoveFile)
 	if fs.isEnabled(callbackRemoveFile) {
-		result, err := fs.call(callbackRemoveFile, path)
+		result, err := fs.call(callbackRemoveFile, path.AsString())
 		if err != nil {
 			return err
 		}
@@ -468,6 +471,6 @@ func (fs *callbackFS) Remove(path string) error {
 }
 
 // Chtimes implements vfs.FS - always delegates to base (no callback support).
-func (fs *callbackFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+func (fs *callbackFS) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Time) error {
 	return fs.base.Chtimes(path, aTime, mTime)
 }

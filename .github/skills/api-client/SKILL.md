@@ -48,3 +48,7 @@ What doesn't matter:
 
 * `uint64` overflow
 * Passing objects between multiple `API` instances in the same JS process. We may eventually add some kind of central provenance validation. Do not add it on individual methods or flag it in reviews for now. It's not a realistic concern.
+
+## Reference equality guarantees are forfeited by disposing owners and clearing the source file cache
+
+It's not a bug to observe a new object identity for an object whose owner was previously disposed or manually removed by `api.clearSourceFileCache()`. Review comments and tests that assert an ownership or lifetime bug that rely on testing reference equality after disposal or cache clearing will be rejected.

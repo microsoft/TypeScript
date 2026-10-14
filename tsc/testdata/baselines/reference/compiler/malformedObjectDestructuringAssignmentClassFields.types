@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/malformedObjectDestructuringAssignmentClassFields.ts] ////
+
+=== malformedObjectDestructuringAssignmentClassFields.ts ===
+({x(A.#}=
+>({x(A.#}= : any
+>{x(A.#}= : any
+>{x(A.#} : { x(A: any): any; "": any; }
+>x : (A: any) => any
+>A : any
+> : any
+>.# : any
+> : any
+
+> : any
+

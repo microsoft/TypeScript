@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/importSource/importSource21.ts] ////
+
+=== index.ts ===
+import source a from "./a.wasm";
+>a : Symbol(a, Decl(index.ts, 0, 6))
+
+import source b from "./b.wasm";
+>b : Symbol(b, Decl(index.ts, 1, 6))
+
+import source c from "./c.wasm";
+>c : Symbol(c, Decl(index.ts, 2, 6))
+
+export type A = typeof a;
+>A : Symbol(A, Decl(index.ts, 2, 32))
+>a : Symbol(a, Decl(index.ts, 0, 6))
+
+export const d = c;
+>d : Symbol(d, Decl(index.ts, 4, 12))
+>c : Symbol(c, Decl(index.ts, 2, 6))
+

@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/projects/container/compositeExec/index.ts] *new* 
 import { Pointable } from "../lib";
 class Point2 implements Pointable {

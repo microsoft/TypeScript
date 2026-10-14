@@ -17,9 +17,10 @@ import (
 
 func parseAndBind(t *testing.T, fileName string, text string) *ast.SourceFile {
 	t.Helper()
+	rootedFileName := tspath.ToRootedFilePath(fileName, "/")
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: fileName,
-		Path:     tspath.Path(fileName),
+		FileName: rootedFileName,
+		PathKey:  tspath.CaseSensitive.PathKey(rootedFileName.AsPath()),
 	}, text, core.ScriptKindTS)
 	binder.BindSourceFile(sourceFile)
 	return sourceFile
@@ -58,11 +59,10 @@ func TestTransientSymbolWithFileDeclarationIsSnapshotOwned(t *testing.T) {
 	t.Parallel()
 	sourceFile := parseAndBind(t, "/file.ts", `export class C { property = 1 }`)
 	class := sourceFile.Statements.Nodes[0]
-	symbol := &ast.Symbol{
-		Flags:        ast.SymbolFlagsClass | ast.SymbolFlagsTransient,
-		Name:         "C",
-		Declarations: []*ast.Node{class},
-	}
+	symbol := ast.NewSymbol()
+	symbol.SetFlags(ast.SymbolFlagsClass | ast.SymbolFlagsTransient)
+	symbol.SetName("C")
+	symbol.SetDeclarations([]*ast.Node{class})
 	sd := newTestSnapshotData()
 
 	response := sd.newSymbolResponse(symbol, "/tsconfig.json")
@@ -85,7 +85,7 @@ func TestSymbolReferencesIdentifyOwnerWithoutDescriptor(t *testing.T) {
 	assert.Assert(t, !strings.Contains(string(encoded), "contentHash"))
 
 	// A file-owned symbol's relationships are references into the same file.
-	member := class.Members["property"]
+	member := class.Members()["property"]
 	response := newFileSymbolResponse(member)
 	assert.DeepEqual(t, response.Parent, reference)
 }
@@ -94,7 +94,7 @@ func TestContentMappedSymbolsAreSnapshotOwned(t *testing.T) {
 	t.Parallel()
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/component.vue.ts",
-		Path:     tspath.Path("/component.vue.ts"),
+		PathKey:  "/component.vue.ts",
 	}, `export class C { property = 1 }`, core.ScriptKindTS)
 	sourceFile.SetContentMapperInfo(ast.ContentMapperSourceFileInfo{ContentMapper: "mapper"})
 	binder.BindSourceFile(sourceFile)
@@ -109,6 +109,6 @@ func TestContentMappedSymbolsAreSnapshotOwned(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, resolved, class)
 
-	reference := newSymbolReference(class.Members["property"])
+	reference := newSymbolReference(class.Members()["property"])
 	assert.Equal(t, reference.File, "")
 }

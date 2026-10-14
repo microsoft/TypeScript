@@ -1,6 +1,10 @@
 package tsoptions
 
 import (
+	"maps"
+	"slices"
+	"strings"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -8,25 +12,39 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 // resolveContentMapperManifest locates packageName in node_modules (walking up from the directory of
 // containingFile via node module resolution) and reads its package.json to produce the mapper's manifest
 // and package directory. It never executes the package. On failure it returns a diagnostic describing why
 // the mapper could not be resolved; on success the diagnostic is nil.
-func resolveContentMapperManifest(host ParseConfigHost, containingFile string, packageName string) (contentmapper.Manifest, string, *ast.Diagnostic) {
+type contentMapperResolutionHost struct {
+	fs               vfs.FS
+	currentDirectory tspath.RootedDirectoryPath
+}
+
+func (h *contentMapperResolutionHost) FS() vfs.FS {
+	return h.fs
+}
+
+func (h *contentMapperResolutionHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
+	return h.currentDirectory
+}
+
+func resolveContentMapperManifest(fs vfs.FS, containingFile tspath.RootedFilePath, packageName string) (contentmapper.Manifest, tspath.RootedDirectoryPath, *ast.Diagnostic) {
 	resolver := module.NewResolver(module.ResolverOptions{
-		Host:            host,
+		Host:            &contentMapperResolutionHost{fs: fs, currentDirectory: containingFile.Directory()},
 		CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindBundler},
 	})
 	resolved := resolver.ResolvePackageDirectory(packageName, containingFile, core.ResolutionModeNone, nil)
 	if resolved == nil || resolved.ResolvedFileName == "" {
 		return contentmapper.Manifest{}, "", ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_package_0_could_not_be_resolved, packageName)
 	}
-	packageDirectory := resolved.ResolvedFileName
+	packageDirectory := tspath.RootedDirectoryPathFromPath(tspath.RootedPath(resolved.ResolvedFileName))
 
-	packageJsonPath := tspath.CombinePaths(packageDirectory, "package.json")
-	contents, ok := host.FS().ReadFile(packageJsonPath)
+	packageJsonPath := packageDirectory.ResolveFile("package.json")
+	contents, ok := fs.ReadFile(packageJsonPath)
 	if !ok {
 		return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_package_0_could_not_be_resolved, packageName)
 	}
@@ -52,5 +70,31 @@ func resolveContentMapperManifest(host ParseConfigHost, containingFile string, p
 	}
 	compilerOptions, _ := cm.CompilerOptions.GetValue()
 	dynamicConfig, _ := cm.DynamicConfig.GetValue()
-	return contentmapper.Manifest{Name: name, Version: version, Exec: exec, CompilerOptions: compilerOptions, DynamicConfig: dynamicConfig}, packageDirectory, nil
+	outputExtensions, valid := cm.OutputExtensions.GetValue()
+	if cm.OutputExtensions.IsPresent() && !valid {
+		return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+			diagnostics.The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
+			packageName,
+		)
+	}
+	for _, source := range slices.Sorted(maps.Keys(outputExtensions)) {
+		output := outputExtensions[source]
+		for _, extension := range []string{source, output} {
+			if strings.ContainsAny(extension, "/\\") {
+				return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+					diagnostics.Content_mapper_extension_0_must_not_contain_path_separators,
+					extension,
+				)
+			}
+		}
+		if !contentmapper.IsValidExtension(source) || !contentmapper.IsValidExtension(output) {
+			return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+				diagnostics.The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a,
+				packageName,
+				source,
+				output,
+			)
+		}
+	}
+	return contentmapper.Manifest{Name: name, Version: version, Exec: exec, CompilerOptions: compilerOptions, DynamicConfig: dynamicConfig, DefaultOutputExtensions: outputExtensions}, packageDirectory, nil
 }

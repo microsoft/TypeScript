@@ -20,11 +20,13 @@ import {
     type Node,
     type SourceFile,
     SyntaxKind,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
+import { cloneNode } from "@typescript/typescript/ast/factory";
+import { toRootedFilePath } from "@typescript/typescript/path";
 import type {
     APIRequest,
     APIResponse,
-} from "@typescript/typescript/unstable/proto";
+} from "@typescript/typescript/proto";
 import {
     all,
     type AllAPIRequestGenerator,
@@ -34,6 +36,7 @@ import {
     type ConditionalType,
     defer,
     type DeferredAPIRequestGenerator,
+    getSymbol,
     type IndexedAccessType,
     type IndexInfo,
     IndexKind,
@@ -59,7 +62,7 @@ import {
     type TypePredicate,
     type TypeReference,
     type UnionOrIntersectionType,
-} from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/sync";
 import assert from "node:assert";
 import {
     describe,
@@ -154,12 +157,13 @@ const exercisedMethods = new Set<string>();
 const publicGeneratorExemptions = new Map<string, string>([
     ["API.fromLSPConnection", "requires an existing LSP API session"],
     ["API.getCurrentLanguageServerSnapshot", "requires an existing LSP API session"],
-    ["InternalAPI.startCPUProfile", "writes a CPU profile and changes process-global profiling state"],
-    ["InternalAPI.stopCPUProfile", "requires a matching active CPU profile"],
-    ["InternalAPI.saveHeapProfile", "writes a potentially large heap profile to disk"],
+    ["DebugHandlers.startCPUProfile", "writes a CPU profile and changes process-global profiling state"],
+    ["DebugHandlers.stopCPUProfile", "requires a matching active CPU profile"],
+    ["DebugHandlers.saveHeapProfile", "writes a potentially large heap profile to disk"],
 ]);
 const privateGeneratorGetters = new Set([
     "API.ensureInitialized",
+    "API.fetchDeclarationSymbol",
     "API.initializeWorker",
     "API.updateSnapshot",
     "Checker.getIntrinsicType",
@@ -168,6 +172,7 @@ const privateGeneratorGetters = new Set([
     "NodeHandle.fetchOwnerFile",
     "Program.disposeWorker",
     "Program.fetchSourceFileMetadata",
+    "Program.getSourceFileWorker",
     "Snapshot.disposeWorker",
     "Symbol.fetchSymbol",
     "Symbol.fetchSymbols",
@@ -337,7 +342,7 @@ function assertProjectsEquivalent(actual: Project, expected: Project, message?: 
     assert.equal(actual.id, expected.id, message);
     assert.equal(actual.configFileName, expected.configFileName, message);
     assert.equal(actual.dirty, expected.dirty, message);
-    assert.deepEqual(actual.rootFiles, expected.rootFiles, message);
+    assert.deepEqual(actual.parsedCommandLine.fileNames, expected.parsedCommandLine.fileNames, message);
 }
 
 function assertOptionalProjectsEquivalent(actual: Project | undefined, expected: Project | undefined, message?: string): void {
@@ -411,6 +416,7 @@ function observeRequestBatches(
     requestBatches: string[][],
     context: TestContext,
 ): void {
+    // @ts-ignore -- Internal client transport is exercised by source tests.
     const client = api["client"];
     const batchRequests = client.batchRequests.bind(client);
     context.mock.method(client, "batchRequests", (requests: readonly APIRequest[]) => {
@@ -437,6 +443,20 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
 }
 
 describe("API - generator batching", { concurrency: areTestsFiltered() }, () => {
+    test("looks up binder symbols through standalone and API generators", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/symbols.ts", "function present() {}");
+        const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
+        const [symbol] = api.batch(getSymbol.gen(declaration));
+        assert.ok(symbol);
+        assert.equal(symbol.name, "present");
+        const [cached] = api.batch(api.getSymbol.gen(declaration));
+        assert.strictEqual(cached, symbol);
+        const clone = cloneNode(declaration);
+        assert.throws(() => api.batch(getSymbol.gen(clone)), /Source file not found/);
+        assert.throws(() => api.batch(api.getSymbol.gen(clone)), /Source file not found/);
+    });
+
     test("batches source file requests", context => {
         const api = spawnAPI(parityFiles);
         context.after(() => api.close());
@@ -1344,7 +1364,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("yields source file metadata requests on cache misses", () => {
         const api = spawnAPI();
         try {
-            using snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+            using snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
             const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
             const sourceFile = program.getSourceFile("/src/index.ts")!;
             const state = program.getSourceFileMetadataByPath.gen(sourceFile.path).next();
@@ -1360,7 +1380,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("uses generators attached to sync API methods", () => {
         const api = spawnAPI();
         try {
-            using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+            using snapshot = api.batch(api.createSnapshot.gen({ openProjects: ["/tsconfig.json"] }))[0];
             const project = snapshot.getConfiguredProject("/tsconfig.json")!;
             const sourceFile = project.program.getSourceFile("/src/index.ts");
             assert.ok(sourceFile);
@@ -1374,8 +1394,8 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 project.program.getSourceFileNames.gen(),
             );
             assert.strictEqual(defaultProject, project);
-            assert.ok(sourceFileNames.includes("/src/foo.ts"));
-            assert.ok(sourceFileNames.includes("/src/index.ts"));
+            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/foo.ts", undefined)));
+            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/index.ts", undefined)));
 
             const [symbol, type] = api.batch(
                 project.checker.getSymbolAtLocation.gen(node),
@@ -1412,7 +1432,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("keeps every publicly reachable generator-backed method in sync", () => {
         const api = spawnAPI(parityFiles);
         try {
-            using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+            using snapshot = api.batch(api.createSnapshot.gen({ openProjects: ["/tsconfig.json"] }))[0];
             const project = snapshot.getConfiguredProject("/tsconfig.json")!;
             const { checker, languageService, program } = project;
             const { printer } = api;
@@ -1540,7 +1560,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             timingGeneratorAPI.close();
             timingSyncAPI.close();
 
-            assert.ok(project.getImportAdderEdits("/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]).length > 0);
+            assert.ok(project.languageService.getImportAdderEdits("/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]).length > 0);
             assert.ok(program.getSyntacticDiagnostics("/src/syntax.ts").length > 0);
             assert.ok(program.getBindDiagnostics("/src/bind.ts").length > 0);
             assert.ok(program.getSuggestionDiagnostics("/src/suggestions.ts").length > 0);
@@ -1570,28 +1590,28 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("API", "createSourceFile", api.createSourceFile, assertRetainedSourceFilesEquivalent, "/generated.ts", "export const generated = true;"),
                 parityCase("API", "createSourceFileFromFile", api.createSourceFileFromFile, assertRetainedSourceFilesEquivalent, "/src/index.ts"),
                 parityCase("API", "retainSourceFile", api.retainSourceFile, assertRetainedSourceFilesEquivalent, indexFile),
+                parityCase("API", "getSymbol", api.getSymbol, assertOptionalSymbolsEquivalent, combineDeclaration),
                 parityCase("API", "transpileModule", api.transpileModule, assertDeepEquivalent, "export const value: number = 1;", { compilerOptions: { module: 99 } }),
                 parityCase("API", "transpileModuleFromFile", api.transpileModuleFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "transpileDeclaration", api.transpileDeclaration, assertDeepEquivalent, "export function declared(value: string): number { return value.length; }"),
                 parityCase("API", "transpileDeclarationFromFile", api.transpileDeclarationFromFile, assertDeepEquivalent, "/src/index.ts"),
-                parityCase("API", "createSnapshot", api.createSnapshot as GeneratorMethod<[params: { openProject: string; }], Snapshot>, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
+                parityCase("API", "createSnapshot", api.createSnapshot as GeneratorMethod<[params: { openProjects: string[]; }], Snapshot>, assertSnapshotsEquivalent, { openProjects: ["/tsconfig.json"] }),
                 parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { noLib: true }),
+                // @ts-ignore -- Internal API exercised by source tests.
                 parityCase("API", "createBuildOrchestrator", api.createBuildOrchestrator, assertBuildOrchestratorsEquivalent, ["/tsconfig.json"], { cwd: "/" }),
                 parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
-                    temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
+                    temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName!);
                 }),
                 parityCase("Snapshot", "getDefaultProjectForFile", snapshot.getDefaultProjectForFile, assertOptionalProjectsEquivalent, "/src/index.ts"),
                 parityCase("ModuleResolver", "resolveModuleName", moduleResolver.resolveModuleName, assertDeepEquivalent, "models", "/src"),
                 parityCase("Snapshot", "update", snapshot.update, assertSnapshotsEquivalent, {}),
-
-                parityCase("Project", "getImportAdderEdits", project.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),
-                parityCase("Project", "getImportEditsForSymbols", project.getImportEditsForSymbols, assertDeepEquivalent, "/src/index.ts", [unimportedSymbol]),
 
                 parityCase("LanguageService", "getImportAdderEdits", languageService.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),
                 parityCase("LanguageService", "getImportEditsForSymbols", languageService.getImportEditsForSymbols, assertDeepEquivalent, "/src/index.ts", [unimportedSymbol], { isValidTypeOnlyUseSite: true }),
                 parityCase("LanguageService", "getReferencedSymbolsForNode", languageService.getReferencedSymbolsForNode, assertDeepEquivalent, combineDeclaration.name!, combineDeclaration.name!.end),
                 parityCase("LanguageService", "getSignatureUsage", languageService.getSignatureUsage, assertDeepEquivalent, combineDeclaration),
                 parityCase("LanguageService", "getCompletionsAtPosition", languageService.getCompletionsAtPosition, assertDeepEquivalent, "/src/index.ts", completionPosition, { includeSymbol: true }),
+                parityCase("LanguageService", "formatNodeForInsertion", languageService.formatNodeForInsertion, assertDeepEquivalent, combineDeclaration, "/src/index.ts", combineDeclaration.pos),
 
                 parityCase("Program", "getSourceFile", program.getSourceFile, assertOptionalSourceFilesEquivalent, "/src/index.ts"),
                 parityCase("Program", "getModeForUsageLocation", program.getModeForUsageLocation, assertDeepEquivalent, "/src/index.ts", importSpecifier),
@@ -1600,6 +1620,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getResolvedModuleFromModuleSpecifier", program.getResolvedModuleFromModuleSpecifier, assertDeepEquivalent, importSpecifier),
                 parityCase("Program", "getResolvedTypeReferenceDirective", program.getResolvedTypeReferenceDirective, assertDeepEquivalent, "/src/index.ts", "parity", ModuleKind.CommonJS),
                 parityCase("Program", "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective, assertDeepEquivalent, typeReferenceDirective, "/src/index.ts"),
+                parityCase("Program", "getSourceFileByPath", program.getSourceFileByPath, assertOptionalSourceFilesEquivalent, indexFile.path),
                 parityCase("Program", "getSourceFileNames", program.getSourceFileNames, assertDeepEquivalent),
                 parityCase("Program", "getSourceFileMetadata", program.getSourceFileMetadata, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("Program", "getSourceFileMetadataByPath", program.getSourceFileMetadataByPath, assertDeepEquivalent, indexFile.path),
@@ -1624,6 +1645,11 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getJavaScriptEmit", program.getJavaScriptEmit, assertDeepEquivalent, ["/src/index.ts"]),
                 parityCase("Program", "getDeclarationEmit", program.getDeclarationEmit, assertDeepEquivalent, ["/src/index.ts"]),
 
+                parityCase("Checker", "getMergedSymbol", checker.getMergedSymbol, assertSymbolsEquivalent, interfaceSymbol),
+                parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration),
+                parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration.name),
+                parityCase("Checker", "getSymbolOfDeclaration", checker.getSymbolOfDeclaration, assertSymbolsEquivalent, interfaceDeclaration),
+                parityCase("Checker", "getParentOfSymbol", checker.getParentOfSymbol, assertOptionalSymbolsEquivalent, unimportedSymbol),
                 parityCase("Checker", "getSymbolAtLocation", selectGeneratorMethod<[node: Node], Symbol | undefined>(checker.getSymbolAtLocation), assertOptionalSymbolsEquivalent, importedDerived),
                 parityCase("Checker", "getSymbolAtLocation", checker.getSymbolAtLocation, assertOptionalSymbolArraysEquivalent, [importedDerived, combineDeclaration.name!]),
                 parityCase("Checker", "getSymbolAtPosition", selectGeneratorMethod<[file: string, position: number], Symbol | undefined>(checker.getSymbolAtPosition), assertOptionalSymbolsEquivalent, "/src/index.ts", importedDerived.pos),
@@ -1634,9 +1660,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getTypeOfSymbol", checker.getTypeOfSymbol, assertTypeArraysEquivalent, [derivedClassSymbol, combineSymbol]),
                 parityCase("Checker", "getDeclaredTypeOfSymbol", checker.getDeclaredTypeOfSymbol, assertTypesEquivalent, interfaceSymbol),
                 parityCase("Checker", "getReferencesToSymbolInFile", checker.getReferencesToSymbolInFile, assertNodeHandleArraysEquivalent, "/src/index.ts", derivedSymbol),
-                parityCase("Checker", "getReferencedSymbolsForNode", checker.getReferencedSymbolsForNode, assertDeepEquivalent, combineDeclaration.name!, combineDeclaration.name!.end),
-                parityCase("Checker", "getSignatureUsage", checker.getSignatureUsage, assertDeepEquivalent, combineDeclaration),
-                parityCase("Checker", "getCompletionsAtPosition", checker.getCompletionsAtPosition, assertDeepEquivalent, "/src/index.ts", completionPosition, { includeSymbol: true }),
                 parityCase("Checker", "getTypeAtLocation", selectGeneratorMethod<[node: Node], Type>(checker.getTypeAtLocation), assertTypesEquivalent, boxDeclaration.name),
                 parityCase("Checker", "getTypeAtLocation", checker.getTypeAtLocation, assertTypeArraysEquivalent, [boxDeclaration.name, combineDeclaration.name!]),
                 parityCase("Checker", "getSignaturesOfType", checker.getSignaturesOfType, assertSignatureArraysEquivalent, checker.getTypeAtLocation(combineDeclaration.name!), SignatureKind.Call),
@@ -1716,7 +1739,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
                 parityCase("Printer", "printNode", printer.printNode, assertDeepEquivalent, combineDeclaration, { preserveSourceNewlines: true }),
                 parityCase("Printer", "printFile", printer.printFile, assertDeepEquivalent, indexFile, { preserveSourceNewlines: true }),
-                parityCase("SnapshotInternalAPI", "formatNodeForInsertion", snapshot.internal.formatNodeForInsertion, assertDeepEquivalent, combineDeclaration, "/src/index.ts", combineDeclaration.pos),
                 parityCase("NodeHandle", "resolve", nodeHandle.resolve, assertOptionalNodesEquivalent),
                 parityCase("NodeHandle", "resolve", nodeHandle.resolve, assertOptionalNodesEquivalent, project),
 
@@ -1778,8 +1800,8 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             const snapshotGeneratorAPI = spawnAPI(parityFiles);
             const snapshotSyncAPI = spawnAPI(parityFiles);
             try {
-                const generatorBase = snapshotGeneratorAPI.batch(snapshotGeneratorAPI.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
-                const syncBase = snapshotSyncAPI.createSnapshot({ openProject: "/tsconfig.json" });
+                const generatorBase = snapshotGeneratorAPI.batch(snapshotGeneratorAPI.createSnapshot.gen({ openProjects: ["/tsconfig.json"] }))[0];
+                const syncBase = snapshotSyncAPI.createSnapshot({ openProjects: ["/tsconfig.json"] });
                 const generatorUpdated = snapshotGeneratorAPI.batch(generatorBase.update.gen({}))[0];
                 const syncUpdated = syncBase.update({});
                 assertSnapshotsEquivalent(generatorUpdated, syncUpdated, "Snapshot.update");
@@ -1791,7 +1813,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             }
 
             const destructiveAPI = spawnAPI(parityFiles);
-            const disposableSnapshot = destructiveAPI.batch(destructiveAPI.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+            const disposableSnapshot = destructiveAPI.batch(destructiveAPI.createSnapshot.gen({ openProjects: ["/tsconfig.json"] }))[0];
             destructiveAPI.batch(disposableSnapshot.dispose.gen());
             assert.equal(disposableSnapshot.isDisposed(), true);
             assert.equal(disposableSnapshot.dispose(), undefined);
@@ -1812,7 +1834,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             assertPublicGeneratorCoverage([
                 { name: "API", value: api },
                 { name: "API", value: api.constructor as object, own: true },
-                { name: "InternalAPI", value: api.internal },
+                { name: "DebugHandlers", value: api.debug },
                 { name: "Snapshot", value: snapshot },
                 { name: "ModuleResolver", value: moduleResolver },
                 { name: "Project", value: project },
@@ -1820,7 +1842,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 { name: "Program", value: program },
                 { name: "Checker", value: checker },
                 { name: "Printer", value: printer },
-                { name: "SnapshotInternalAPI", value: snapshot.internal },
                 { name: "NodeHandle", value: nodeHandle },
                 { name: "Symbol", value: combineSymbol },
                 { name: "Type", value: interfaceType },

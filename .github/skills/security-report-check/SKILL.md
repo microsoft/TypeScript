@@ -84,6 +84,24 @@ If this file is modified, it can cause `tsc` to e.g. fail to build a file becaus
 The TypeScript Language Service (LS) only executes in the context of a [trusted workspace (VS Code)](https://code.visualstudio.com/docs/editing/workspaces/workspace-trust) or [trusted folder (VS)](https://learn.microsoft.com/en-us/visualstudio/ide/trust-settings?view=visualstudio).
 Similar to tsc, there are no guaranteed resource caps in the LS, and "hangs" may occur in the presence of adversarial inputs.
 
+### Workspace Trust is Your Responsibility
+
+Remember the definition of Workspace Trust (emphasis added):
+
+> The Workspace Trust feature lets you decide whether **code in your project** folder can be **executed** by VS Code and extensions **without your explicit approval**.
+
+Features like Content Mappers, including when they come from `node_modules`, are part of this "code in your project" and will run if you trust a workspace containing them.
+This also includes TypeScript itself if you have enabled using the workspace version of TypeScript (again e.g. from `node_modules`).
+The TypeScript Language Service doesn't provide additional barriers to this execution.
+Remember to only enable Workspace Trust for workspaces that you trust, i.e. are willing to run code from.
+
+### Go Compiler CVEs
+
+The Go compiler is frequently updated to address CVEs in its core components and standard library.
+These normally do not affect TypeScript - for example, a CVE in Go's HTTP library is not reachable from tsc, so is not relevant to TypeScript security.
+We do not issue patch releases of TypeScript to adopt newer versions of Go **unless** there is an identified path to a particular CVE.
+We recommend using `govulncheck` instead of a blanket version-based scan to identify potential issues.
+
 ## Examples
 
 ### Hypothetically Valid Security Reports

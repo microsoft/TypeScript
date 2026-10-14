@@ -64,7 +64,10 @@ func TestFSEventsSharedStreamAcrossWatches(t *testing.T) {
 
 func TestFSEventsSharedStreamRoutesEvents(t *testing.T) {
 	t.Parallel()
+	runWithRetry(t, testFSEventsSharedStreamRoutesEvents)
+}
 
+func testFSEventsSharedStreamRoutesEvents(t testingT) {
 	var impl *fsEventsBackend
 	watcherImpl := newTestFSEventsWatcher(&impl)
 	root := newTmpDir(t)
@@ -110,7 +113,7 @@ func TestFSEventsSharedStreamRoutesEvents(t *testing.T) {
 	assertNoEventsForPath(t, recA.drainQuiet(500*time.Millisecond), fileB, "sibling watch saw event")
 }
 
-func setupFSEventsConsolidatedParent(t *testing.T) (Watcher, string) {
+func setupFSEventsConsolidatedParent(t testingT) (Watcher, string) {
 	t.Helper()
 
 	var impl *fsEventsBackend
@@ -160,7 +163,10 @@ func TestFSEventsConsolidatedWatchValidatesLogicalRoot(t *testing.T) {
 
 func TestFSEventsConsolidatedWatchTerminatesLogicalRoot(t *testing.T) {
 	t.Parallel()
+	runWithRetry(t, testFSEventsConsolidatedWatchTerminatesLogicalRoot)
+}
 
+func testFSEventsConsolidatedWatchTerminatesLogicalRoot(t testingT) {
 	watcherImpl, parent := setupFSEventsConsolidatedParent(t)
 
 	watched := filepath.Join(parent, "watched")

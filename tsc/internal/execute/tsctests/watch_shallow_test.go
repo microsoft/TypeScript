@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/execute"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -24,7 +25,7 @@ export const x = s;`,
 }
 
 // isWatched reports whether dir has an open watch. The mock keeps closed watches in Dirs, so a nil check is not enough.
-func isWatched(sys *TestSys, dir string) bool {
+func isWatched(sys *TestSys, dir tspath.RootedDirectoryPath) bool {
 	w := sys.mockWatchBackend.Dirs[dir]
 	return w != nil && !w.Closed
 }

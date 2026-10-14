@@ -4,9 +4,11 @@
 package projecttestutil
 
 import (
+	"context"
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 // Ensure, that NpmExecutorMock does implement ata.NpmExecutor.
@@ -19,7 +21,7 @@ var _ ata.NpmExecutor = &NpmExecutorMock{}
 //
 //		// make and configure a mocked ata.NpmExecutor
 //		mockedNpmExecutor := &NpmExecutorMock{
-//			NpmInstallFunc: func(cwd string, args []string) ([]byte, error) {
+//			NpmInstallFunc: func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
 //				panic("mock out the NpmInstall method")
 //			},
 //		}
@@ -30,14 +32,16 @@ var _ ata.NpmExecutor = &NpmExecutorMock{}
 //	}
 type NpmExecutorMock struct {
 	// NpmInstallFunc mocks the NpmInstall method.
-	NpmInstallFunc func(cwd string, args []string) ([]byte, error)
+	NpmInstallFunc func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
 		// NpmInstall holds details about calls to the NpmInstall method.
 		NpmInstall []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
 			// Cwd is the cwd argument value.
-			Cwd string
+			Cwd tspath.RootedDirectoryPath
 			// Args is the args argument value.
 			Args []string
 		}
@@ -46,11 +50,13 @@ type NpmExecutorMock struct {
 }
 
 // NpmInstall calls NpmInstallFunc.
-func (mock *NpmExecutorMock) NpmInstall(cwd string, args []string) ([]byte, error) {
+func (mock *NpmExecutorMock) NpmInstall(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
 	callInfo := struct {
-		Cwd  string
+		Ctx  context.Context
+		Cwd  tspath.RootedDirectoryPath
 		Args []string
 	}{
+		Ctx:  ctx,
 		Cwd:  cwd,
 		Args: args,
 	}
@@ -64,7 +70,7 @@ func (mock *NpmExecutorMock) NpmInstall(cwd string, args []string) ([]byte, erro
 		)
 		return bytesOut, errOut
 	}
-	return mock.NpmInstallFunc(cwd, args)
+	return mock.NpmInstallFunc(ctx, cwd, args)
 }
 
 // NpmInstallCalls gets all the calls that were made to NpmInstall.
@@ -72,11 +78,13 @@ func (mock *NpmExecutorMock) NpmInstall(cwd string, args []string) ([]byte, erro
 //
 //	len(mockedNpmExecutor.NpmInstallCalls())
 func (mock *NpmExecutorMock) NpmInstallCalls() []struct {
-	Cwd  string
+	Ctx  context.Context
+	Cwd  tspath.RootedDirectoryPath
 	Args []string
 } {
 	var calls []struct {
-		Cwd  string
+		Ctx  context.Context
+		Cwd  tspath.RootedDirectoryPath
 		Args []string
 	}
 	mock.lockNpmInstall.RLock()

@@ -10,14 +10,17 @@ import {
 } from "../src/api/proto.ts";
 import type { ProjectId } from "../src/api/proto.ts";
 import { SourceFileCache } from "../src/api/sourceFileCache.ts";
-import type { Path } from "../src/ast/index.ts";
+import type {
+    PathKey,
+    RootedFilePath,
+} from "../src/ast/index.ts";
 import { SymbolOwnerKind } from "../src/enums/symbolOwnerKind.ts";
 
 test("symbol ownership protocol validation rejects mixed variants", () => {
     const project = "/tsconfig.json" as ProjectId;
     const file = {
-        fileName: "/file.ts",
-        path: "/file.ts" as Path,
+        fileName: "/file.ts" as RootedFilePath,
+        path: "/file.ts" as PathKey,
         contentHash: "0".repeat(32),
         parseOptionsKey: "0",
         scriptKind: 3,
@@ -54,9 +57,10 @@ test("symbol ownership protocol validation rejects mixed variants", () => {
 
 test("source file cache resolves references without creating records", () => {
     const cache = new SourceFileCache<object>();
+    const project = "/tsconfig.json" as ProjectId;
     const file = {
-        fileName: "/file.ts",
-        path: "/file.ts" as Path,
+        fileName: "/file.ts" as RootedFilePath,
+        path: "/file.ts" as PathKey,
         contentHash: "0".repeat(32),
         parseOptionsKey: "0",
         scriptKind: 3,
@@ -65,7 +69,7 @@ test("source file cache resolves references without creating records", () => {
     assert.strictEqual(cache.findRecord("7"), undefined);
     assert.equal(cache.size, 0);
 
-    const record = cache.getOrCreateRecord(file, 1, "/tsconfig.json");
+    const record = cache.getOrCreateRecord(file, 1, project);
     assert.strictEqual(cache.findRecord("7"), record);
     cache.releaseSnapshot(1);
     assert.strictEqual(cache.findRecord("7"), undefined);
@@ -73,20 +77,21 @@ test("source file cache resolves references without creating records", () => {
 
 test("source file cache transfers record ownership between snapshots", () => {
     const cache = new SourceFileCache<object>();
+    const project = "/tsconfig.json" as ProjectId;
     const file = {
-        fileName: "/file.ts",
-        path: "/file.ts" as Path,
+        fileName: "/file.ts" as RootedFilePath,
+        path: "/file.ts" as PathKey,
         contentHash: "0".repeat(32),
         parseOptionsKey: "0",
         scriptKind: 3,
         nodeId: "7",
     };
-    const record = cache.getOrCreateRecord(file, 1, "/tsconfig.json");
+    const record = cache.getOrCreateRecord(file, 1, project);
 
     // Reusing an object from this record in another snapshot gives that
     // snapshot an independent owner. Releasing the original owner must not
     // evict the shared record.
-    cache.retainRecord(record, 2, "/tsconfig.json");
+    cache.retainRecord(record, 2, project);
     cache.releaseSnapshot(1);
     assert.strictEqual(cache.findRecord("7"), record);
 
@@ -94,5 +99,5 @@ test("source file cache transfers record ownership between snapshots", () => {
     // stale wrapper cannot resurrect the evicted record.
     cache.releaseSnapshot(2);
     assert.strictEqual(cache.findRecord("7"), undefined);
-    assert.throws(() => cache.retainRecord(record, 3, "/tsconfig.json"), /is no longer cached/);
+    assert.throws(() => cache.retainRecord(record, 3, project), /is no longer cached/);
 });

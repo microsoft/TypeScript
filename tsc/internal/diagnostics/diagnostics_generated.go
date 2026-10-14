@@ -3792,7 +3792,7 @@ var Named_imports_are_not_allowed_in_a_deferred_import = &Message{code: 18059, c
 
 var Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve = &Message{code: 18060, category: CategoryError, key: "Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve_18060", text: "Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'."}
 
-var X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer = &Message{code: 18061, category: CategoryError, key: "_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer_18061", text: "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?"}
+var X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source = &Message{code: 18061, category: CategoryError, key: "_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source_18061", text: "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?"}
 
 var Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later = &Message{code: 18062, category: CategoryError, key: "Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later_18062", text: "Regular expression pattern modifiers are only available when targeting '{0}' or later."}
 
@@ -3891,6 +3891,32 @@ var The_content_mapper_returned_diagnostic_directives_with_overlapping_virtual_r
 var The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the_content_mapper = &Message{code: 18109, category: CategoryMessage, key: "The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the_content_mapper_18109", text: "The invalid diagnostic directive is in supplemental output {0} returned by the content mapper."}
 
 var Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex = &Message{code: 18110, category: CategoryMessage, key: "Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex_18110", text: "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'."}
+
+var A_source_phase_import_must_specify_a_local_binding = &Message{code: 18111, category: CategoryError, key: "A_source_phase_import_must_specify_a_local_binding_18111", text: "A source phase import must specify a local binding."}
+
+var Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import = &Message{code: 18112, category: CategoryError, key: "Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import_18112", text: "Named and namespace imports are not allowed in a source phase import."}
+
+var Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve = &Message{code: 18113, category: CategoryError, key: "Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve_18113", text: "Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'."}
+
+var Optional_chaining_cannot_be_used_with_import_source = &Message{code: 18114, category: CategoryError, key: "Optional_chaining_cannot_be_used_with_import_source_18114", text: "Optional chaining cannot be used with 'import.source'."}
+
+var Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls = &Message{code: 18115, category: CategoryError, key: "Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls_18115", text: "Source phase imports are not allowed on statements that compile to CommonJS 'require' calls."}
+
+var This_initializer_has_a_Symbol_asyncDispose_method_Did_you_mean_to_use_await_using = &Message{code: 18116, category: CategoryError, key: "This_initializer_has_a_Symbol_asyncDispose_method_Did_you_mean_to_use_await_using_18116", text: "This initializer has a '[Symbol.asyncDispose]()' method. Did you mean to use 'await using'?"}
+
+var A_deferred_import_must_specify_a_namespace_binding = &Message{code: 18117, category: CategoryError, key: "A_deferred_import_must_specify_a_namespace_binding_18117", text: "A deferred import must specify a namespace binding."}
+
+var Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a = &Message{code: 18118, category: CategoryError, key: "Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a_18118", text: "Content mapper output extension '{0}' must be non-empty and begin with a '.'."}
+
+var Content_mapper_output_extension_mapping_source_0_is_not_registered_by_this_content_mapper = &Message{code: 18119, category: CategoryError, key: "Content_mapper_output_extension_mapping_source_0_is_not_registered_by_this_content_mapper_18119", text: "Content mapper output extension mapping source '{0}' is not registered by this content mapper."}
+
+var Content_mapper_output_extension_mapping_from_0_to_1_requires_rewriteRelativeImportExtensions_to_be_enabled = &Message{code: 18120, category: CategoryError, key: "Content_mapper_output_extension_mapping_from_0_to_1_requires_rewriteRelativeImportExtensions_to_be_e_18120", text: "Content mapper output extension mapping from '{0}' to '{1}' requires 'rewriteRelativeImportExtensions' to be enabled."}
+
+var The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a = &Message{code: 18121, category: CategoryError, key: "The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_ma_18121", text: "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' contains an invalid mapping from '{1}' to '{2}'. Extensions must be non-empty and begin with a '.'."}
+
+var The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values = &Message{code: 18122, category: CategoryError, key: "The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_18122", text: "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' must be an object with string values."}
+
+var Content_mapper_extension_0_must_not_contain_path_separators = &Message{code: 18123, category: CategoryError, key: "Content_mapper_extension_0_must_not_contain_path_separators_18123", text: "Content mapper extension '{0}' must not contain path separators."}
 
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
@@ -6328,7 +6354,7 @@ var allMessages = [...]**Message{
 	&Default_imports_are_not_allowed_in_a_deferred_import,
 	&Named_imports_are_not_allowed_in_a_deferred_import,
 	&Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve,
-	&X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer,
+	&X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source,
 	&Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later,
 	&Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later,
 	&Private_identifiers_cannot_be_used_in_destructuring_patterns,
@@ -6378,6 +6404,19 @@ var allMessages = [...]**Message{
 	&The_content_mapper_returned_diagnostic_directives_with_overlapping_virtual_ranges,
 	&The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the_content_mapper,
 	&Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex,
+	&A_source_phase_import_must_specify_a_local_binding,
+	&Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import,
+	&Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve,
+	&Optional_chaining_cannot_be_used_with_import_source,
+	&Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls,
+	&This_initializer_has_a_Symbol_asyncDispose_method_Did_you_mean_to_use_await_using,
+	&A_deferred_import_must_specify_a_namespace_binding,
+	&Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a,
+	&Content_mapper_output_extension_mapping_source_0_is_not_registered_by_this_content_mapper,
+	&Content_mapper_output_extension_mapping_from_0_to_1_requires_rewriteRelativeImportExtensions_to_be_enabled,
+	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a,
+	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
+	&Content_mapper_extension_0_must_not_contain_path_separators,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,

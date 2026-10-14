@@ -56,7 +56,7 @@ declare const console: { log(msg: any): void; };
 export declare function multiply(a: number, b: number): number;
 //# sourceMappingURL=index.d.ts.map
 //// [/home/src/workspaces/solution/core/index.d.ts.map] *new* 
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,wBAAgB,QAAQ,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB"}
+{"version":3,"file":"index.d.ts","sources":["index.ts"],"names":[],"mappings":"AAAA,wBAAgB,QAAQ,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB"}
 //// [/home/src/workspaces/solution/core/index.js] *new* 
 export function multiply(a, b) { return a * b; }
 
