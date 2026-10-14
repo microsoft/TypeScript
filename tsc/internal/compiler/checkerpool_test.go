@@ -1,12 +1,16 @@
 package compiler
 
 import (
+	"context"
 	"slices"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
 
 func TestGetSourceFileForResolvedModuleUsesResolvedPath(t *testing.T) {
@@ -117,6 +121,47 @@ func TestGetCheckerAssociationOrder(t *testing.T) {
 	}
 	if got := getCheckerAssociationOrder([]int{5}, []bool{false}, false); got != nil {
 		t.Fatalf("getCheckerAssociationOrder() = %v, want nil", got)
+	}
+}
+
+func TestCheckerRecyclingPreservesDiagnosticsAndStatistics(t *testing.T) {
+	t.Parallel()
+	fs := vfstest.FromMap(map[string]any{
+		"/tsconfig.json": `{
+			"compilerOptions": { "noLib": true },
+			"files": ["/a.ts", "/b.ts", "/c.ts"]
+		}`,
+		"/a.ts": `const a: string = 1;`,
+		"/b.ts": `const b: number = "b";`,
+		"/c.ts": `const c: boolean = 0;`,
+	}, tspath.CaseSensitive)
+	config, configDiagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", nil, nil, fs, nil)
+	if len(configDiagnostics) != 0 {
+		t.Fatalf("unexpected config diagnostics: %v", configDiagnostics)
+	}
+	config.SetCompilerOptions(config.CompilerOptions().Clone())
+	config.CompilerOptions().NoEmit = core.TSTrue
+	config.CompilerOptions().Checkers = new(2)
+	config.CompilerOptions().MaxMemory = new(1)
+
+	program := NewProgram(ProgramOptions{
+		Config: config,
+		Host:   NewCompilerHost(fs, "/", nil, nil, nil),
+	})
+	pool := program.compilerCheckerPool
+	pool.readMemoryAllocationInBytes = func() uint64 {
+		return pool.maxMemoryBytes + 1
+	}
+
+	diagnostics := program.GetSemanticDiagnostics(context.Background(), nil)
+	if len(diagnostics) != 3 {
+		t.Fatalf("got %d diagnostics, want 3", len(diagnostics))
+	}
+	if got := program.RetiredCheckerCount(); got != 1 {
+		t.Fatalf("RetiredCheckerCount() = %d, want 1", got)
+	}
+	if program.TypeCount() == 0 || program.SymbolCount() == 0 {
+		t.Fatal("retired checker statistics were not preserved")
 	}
 }
 
