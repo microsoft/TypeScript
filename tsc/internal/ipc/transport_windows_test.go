@@ -22,25 +22,6 @@ func TestPipeTransportPermissions(t *testing.T) {
 	}
 	defer transport.Close()
 
-	sd, err := windows.GetNamedSecurityInfo(transport.Path(), windows.SE_FILE_OBJECT, windows.DACL_SECURITY_INFORMATION)
-	if err != nil {
-		t.Fatal(err)
-	}
-	dacl, _, err := sd.DACL()
-	if err != nil {
-		t.Fatal(err)
-	}
-	if dacl == nil || dacl.AceCount != 1 {
-		t.Fatalf("expected exactly one access-control entry: %s", sd.String())
-	}
-	user, err := windows.GetCurrentProcessToken().GetTokenUser()
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !strings.Contains(sd.String(), ";;;"+user.User.Sid.String()+")") {
-		t.Fatalf("pipe access is not restricted to the current user: %s", sd.String())
-	}
-
 	accepted := make(chan error, 1)
 	done := make(chan struct{})
 	defer close(done)
@@ -67,5 +48,25 @@ func TestPipeTransportPermissions(t *testing.T) {
 		}
 	case <-time.After(timeout):
 		t.Fatal("timed out accepting current user connection")
+	}
+
+	handle := windows.Handle(conn.(interface{ Fd() uintptr }).Fd())
+	sd, err := windows.GetSecurityInfo(handle, windows.SE_FILE_OBJECT, windows.DACL_SECURITY_INFORMATION)
+	if err != nil {
+		t.Fatal(err)
+	}
+	dacl, _, err := sd.DACL()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if dacl == nil || dacl.AceCount != 1 {
+		t.Fatalf("expected exactly one access-control entry: %s", sd.String())
+	}
+	user, err := windows.GetCurrentProcessToken().GetTokenUser()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(sd.String(), ";;;"+user.User.Sid.String()+")") {
+		t.Fatalf("pipe access is not restricted to the current user: %s", sd.String())
 	}
 }
