@@ -19705,12 +19705,31 @@ func (c *Checker) getMemberLayout(source *Type, bases []*Type) *memberLayout {
 		}
 		return layout
 	}
-	// A base type instantiation that hit an instantiation limit is the error type, which has
-	// none of the members the shared layout expects to find in it.
-	if slices.Contains(bases, c.errorType) && !slices.Contains(c.getBaseTypes(source), c.errorType) {
+	if !c.canShareMemberLayout(source, bases) {
 		return c.buildMemberLayout(source, bases)
 	}
 	return d.memberLayout
+}
+
+// Reports whether the bases of an instantiation have the members the shared layout expects. A base
+// type instantiation that hit an instantiation limit is the error type, which has no members, and
+// a base whose own base hit the limit has a smaller layout that isn't shared.
+func (c *Checker) canShareMemberLayout(source *Type, bases []*Type) bool {
+	declaredBases := c.getBaseTypes(source)
+	for k, base := range bases {
+		if base == c.errorType {
+			if declaredBases[k] != c.errorType {
+				return false
+			}
+			continue
+		}
+		if base.flags&TypeFlagsObject != 0 && base.objectFlags&(ObjectFlagsReference|ObjectFlagsClassOrInterface) != 0 {
+			if lazy := c.resolveStructuredTypeMembers(base).lazy; lazy != nil && !lazy.layout.shared {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 type layoutEntry struct {

@@ -240,7 +240,6 @@ export type B = Base<number>;
 	c.RunAtInstantiationLimit(func() {
 		assert.Equal(t, len(c.GetPropertiesOfType(base)), 1)
 	})
-	// BUG: Derived<number> reuses slots from the shared layout of Base, which this base doesn't have.
 	names := core.Map(c.GetPropertiesOfType(derived), (*ast.Symbol).Name)
-	assert.DeepEqual(t, names, []string{"derived", "T", "base"})
+	assert.DeepEqual(t, names, []string{"derived", "base"})
 }
