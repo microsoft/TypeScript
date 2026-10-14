@@ -502,6 +502,7 @@ func TestJSDocAugmentsHeritage(t *testing.T) {
 		{"element access", `ns["A"]`, "A", true},
 		{"conditional", "(cond ? A : A)", "A", true},
 		{"parenthesized name", "(A)", "A", true},
+		{"null", "null", "A", false},
 		{"mismatched identifier", "A", "Other", false},
 		{"mismatched dotted name", "ns.A", "ns.Other", false},
 	} {
