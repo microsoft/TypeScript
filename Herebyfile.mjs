@@ -88,6 +88,7 @@ const { values: rawOptions } = parseArgs({
         forRelease: { type: "boolean" },
         respectGoEnv: { type: "boolean" },
         vscodeTypescriptRelease: { type: "boolean" },
+        platform: { type: "string" },
 
         race: { type: "boolean", default: parseEnvBoolean("RACE") },
         noembed: { type: "boolean", default: parseEnvBoolean("NOEMBED") },
@@ -2289,46 +2290,79 @@ async function runBuildNativePreviewPackages() {
     await rimraf(builtNpm);
 
     const platforms = getPlatforms();
+    await buildMainNativePreviewPackage(platforms);
 
+    if (isCI) {
+        for (const platform of platforms) {
+            await buildNativePreviewPlatform(platform);
+            // Build machines have too little space.
+            // Clear the Go build cache between platforms.
+            await run("go", ["clean", "-cache"]);
+        }
+    }
+    else {
+        await runWithConcurrencyLimit(platforms.map(platform => () => buildNativePreviewPlatform(platform)), os.availableParallelism());
+    }
+}
+
+export const buildMainNativePreviewPackageTask = task({
+    name: "typescript:build-main",
+    hiddenFromTaskList: true,
+    run: async () => {
+        if (usePublishedPlatformPackagesForVsix) {
+            checkPublishedPlatformPackagesForVsix();
+            await rimraf(builtNpm);
+            console.log("Skipping npm package build; VSIX packaging will use published platform packages.");
+            return;
+        }
+
+        await rimraf(builtNpm);
+        await buildMainNativePreviewPackage(getPlatforms());
+    },
+});
+
+export const buildNativePreviewPlatformTask = task({
+    name: "typescript:build-platform",
+    hiddenFromTaskList: true,
+    run: async () => {
+        if (usePublishedPlatformPackagesForVsix) {
+            throw new Error("Platform packages are not built when VSIX packaging uses published platform packages.");
+        }
+        if (!options.platform) {
+            throw new Error("typescript:build-platform requires --platform.");
+        }
+
+        const platform = getPlatforms().find(({ nodeOs, nodeArch }) => `${nodeOs}-${nodeArch}` === options.platform);
+        if (!platform) {
+            throw new Error(`Unknown release platform: ${options.platform}`);
+        }
+
+        await rimraf(platform.npmDir);
+        await buildNativePreviewPlatform(platform);
+    },
+});
+
+export const buildNativePreviewPlatformMatrix = task({
+    name: "typescript:build-platform-matrix",
+    hiddenFromTaskList: true,
+    run: () => {
+        const matrix = Object.fromEntries(
+            getPlatforms().map(({ nodeOs, nodeArch, npmDirName }) => {
+                const platform = `${nodeOs}-${nodeArch}`;
+                return [platform.replaceAll("-", "_"), { platform, npmDirName }];
+            }),
+        );
+        console.log(`##vso[task.setvariable variable=matrix;isOutput=true]${JSON.stringify(matrix)}`);
+        console.log(`##vso[task.setvariable variable=packageBaseName;isOutput=true]${path.basename(mainNativePreviewPackage.npmDir)}`);
+    },
+});
+
+/**
+ * @param {ReturnType<typeof getPlatforms>} platforms
+ */
+async function buildMainNativePreviewPackage(platforms) {
     const inputDir = "./packages/typescript";
-
-    const inputPackageJson = JSON.parse(fs.readFileSync(path.join(inputDir, "package.json"), "utf8"));
-    inputPackageJson.version = getVersion();
-    delete inputPackageJson.private;
-    inputPackageJson.files = [...new Set([...(inputPackageJson.files ?? []), "NOTICE.txt"])];
-    if (publishAsTypescript) {
-        inputPackageJson.bin = {
-            tsc: "./bin/tsc",
-        };
-        inputPackageJson.description = "TypeScript is a language for application scale JavaScript development";
-        inputPackageJson.homepage = "https://www.typescriptlang.org/";
-        inputPackageJson.keywords = [
-            "TypeScript",
-            "Microsoft",
-            "compiler",
-            "language",
-            "javascript",
-        ];
-        inputPackageJson.bugs = {
-            url: "https://github.com/microsoft/TypeScript/issues",
-        };
-        inputPackageJson.repository = {
-            type: "git",
-            url: "https://github.com/microsoft/TypeScript.git",
-        };
-        delete inputPackageJson.scripts;
-        delete inputPackageJson.devDependencies;
-    }
-    stripSourceConditions(inputPackageJson);
-
-    if (fs.existsSync(".git")) {
-        const { stdout: gitHead } = await runOutput("git", ["rev-parse", "HEAD"]);
-        inputPackageJson.gitHead = gitHead.trim();
-    }
-    inputPackageJson.publishConfig = {
-        access: "public",
-        tag: getPublishTag(),
-    };
+    const inputPackageJson = await createNativePreviewInputPackageJson();
 
     const mainPackage = {
         ...inputPackageJson,
@@ -2381,65 +2415,98 @@ async function runBuildNativePreviewPackages() {
     if (importErrors.length) {
         throw new Error(`Found external imports in .d.ts files:\n${importErrors.map(e => "  " + e).join("\n")}`);
     }
+}
 
-    const extraFlags = options.respectGoEnv
-        ? []
-        : getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined);
+/**
+ * @param {ReturnType<typeof getPlatforms>[number]} platform
+ */
+async function buildNativePreviewPlatform({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) {
+    const inputPackageJson = await createNativePreviewInputPackageJson();
 
-    const platformBuilders = platforms.map(({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) => async () => {
-        const packageJson = {
-            ...inputPackageJson,
-            bin: undefined,
-            files: ["lib", "NOTICE.txt"],
-            imports: undefined,
-            dependencies: undefined,
-            name: npmPackageName,
-            os: [nodeOs],
-            cpu: [nodeArch],
-            exports: {
-                "./package.json": "./package.json",
-            },
-        };
+    const packageJson = {
+        ...inputPackageJson,
+        bin: undefined,
+        files: ["lib", "NOTICE.txt"],
+        imports: undefined,
+        dependencies: undefined,
+        name: npmPackageName,
+        os: [nodeOs],
+        cpu: [nodeArch],
+        exports: {
+            "./package.json": "./package.json",
+        },
+    };
 
-        const out = path.join(npmDir, "lib");
-        await fs.promises.mkdir(out, { recursive: true });
-        await fs.promises.writeFile(path.join(npmDir, "package.json"), JSON.stringify(packageJson, undefined, 4));
-        await fs.promises.copyFile("LICENSE.txt", path.join(npmDir, "LICENSE"));
-        await fs.promises.copyFile("NOTICE.txt", path.join(npmDir, "NOTICE.txt"));
+    const out = path.join(npmDir, "lib");
+    await fs.promises.mkdir(out, { recursive: true });
+    await fs.promises.writeFile(path.join(npmDir, "package.json"), JSON.stringify(packageJson, undefined, 4));
+    await fs.promises.copyFile("LICENSE.txt", path.join(npmDir, "LICENSE"));
+    await fs.promises.copyFile("NOTICE.txt", path.join(npmDir, "NOTICE.txt"));
 
-        const readme = [
-            `# \`${npmPackageName}\``,
-            "",
-            `This package provides ${nodeOs}-${nodeArch} support for [${mainNativePreviewPackage.npmPackageName}](https://www.npmjs.com/package/${mainNativePreviewPackage.npmPackageName}).`,
-        ];
+    const readme = [
+        `# \`${npmPackageName}\``,
+        "",
+        `This package provides ${nodeOs}-${nodeArch} support for [${mainNativePreviewPackage.npmPackageName}](https://www.npmjs.com/package/${mainNativePreviewPackage.npmPackageName}).`,
+    ];
 
-        await fs.promises.writeFile(path.join(npmDir, "README.md"), readme.join("\n") + "\n");
+    await fs.promises.writeFile(path.join(npmDir, "README.md"), readme.join("\n") + "\n");
 
-        await generateLibs(out);
+    await generateLibs(out);
 
-        const exeName = nativePreviewExeName(nodeOs);
-        await buildTsc({
-            out: publishAsTypescript ? path.join(out, exeName) : out,
-            env: {
-                GOOS: goos,
-                GOARCH: goarch,
-                ...(options.respectGoEnv ? {} : { GOARM: "6", CGO_ENABLED: "0" }),
-            },
-            extraFlags,
-        });
+    const exeName = nativePreviewExeName(nodeOs);
+    await buildTsc({
+        out: publishAsTypescript ? path.join(out, exeName) : out,
+        env: {
+            GOOS: goos,
+            GOARCH: goarch,
+            ...(options.respectGoEnv ? {} : { GOARM: "6", CGO_ENABLED: "0" }),
+        },
+        extraFlags: options.respectGoEnv
+            ? []
+            : getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined),
     });
+}
 
-    if (isCI) {
-        for (const build of platformBuilders) {
-            await build();
-            // Build machines have too little space.
-            // Clear the Go build cache between platforms.
-            await run("go", ["clean", "-cache"]);
-        }
+async function createNativePreviewInputPackageJson() {
+    const inputPackageJson = JSON.parse(fs.readFileSync("./packages/typescript/package.json", "utf8"));
+    inputPackageJson.version = getVersion();
+    delete inputPackageJson.private;
+    inputPackageJson.files = [...new Set([...(inputPackageJson.files ?? []), "NOTICE.txt"])];
+    if (publishAsTypescript) {
+        inputPackageJson.bin = {
+            tsc: "./bin/tsc",
+        };
+        inputPackageJson.description = "TypeScript is a language for application scale JavaScript development";
+        inputPackageJson.homepage = "https://www.typescriptlang.org/";
+        inputPackageJson.keywords = [
+            "TypeScript",
+            "Microsoft",
+            "compiler",
+            "language",
+            "javascript",
+        ];
+        inputPackageJson.bugs = {
+            url: "https://github.com/microsoft/TypeScript/issues",
+        };
+        inputPackageJson.repository = {
+            type: "git",
+            url: "https://github.com/microsoft/TypeScript.git",
+        };
+        delete inputPackageJson.scripts;
+        delete inputPackageJson.devDependencies;
     }
-    else {
-        await runWithConcurrencyLimit(platformBuilders, os.availableParallelism());
+    stripSourceConditions(inputPackageJson);
+
+    if (fs.existsSync(".git")) {
+        const { stdout: gitHead } = await runOutput("git", ["rev-parse", "HEAD"]);
+        inputPackageJson.gitHead = gitHead.trim();
     }
+    inputPackageJson.publishConfig = {
+        access: "public",
+        tag: getPublishTag(),
+    };
+
+    return inputPackageJson;
 }
 
 /**

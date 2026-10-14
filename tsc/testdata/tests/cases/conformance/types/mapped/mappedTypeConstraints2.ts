@@ -93,3 +93,7 @@ type ObjectWithUnderscoredKeys<K extends string> = {
 function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
   const shouldBeTrue: true = objectWithUnderscoredKeys[`_${key}`]; // assignability fails here, but ideally should not
 }
+
+type M2<T> = { [K in keyof T & string as [K] extends ['a'] ? 'x' : 'y']: 1 };
+function bare<T>(k: keyof M2<T>): 'x' | 'y' { return k; }
+function inTemplate<T>(k: `p${keyof M2<T>}`): 'px' | 'py' { return k; }

@@ -140,6 +140,8 @@ const (
 	CachedTypeKindDecoratorContextStatic
 	CachedTypeKindDecoratorContextPrivate
 	CachedTypeKindDecoratorContextPrivateStatic
+	CachedTypeKindSimplifiedConditionalTypeForReading
+	CachedTypeKindSimplifiedConditionalTypeForWriting
 )
 
 // CachedTypeKey
@@ -671,6 +673,16 @@ type Checker struct {
 	symbolWithDataArena                         core.Arena[ast.SymbolWithData]
 	signatureArena                              core.Arena[Signature]
 	indexInfoArena                              core.Arena[IndexInfo]
+	literalTypeArena                            core.Arena[LiteralType]
+	objectTypeArena                             core.Arena[ObjectType]
+	typeReferenceArena                          core.Arena[TypeReference]
+	interfaceTypeArena                          core.Arena[InterfaceType]
+	mappedTypeArena                             core.Arena[MappedType]
+	unionTypeArena                              core.Arena[UnionType]
+	intersectionTypeArena                       core.Arena[IntersectionType]
+	typeParameterArena                          core.Arena[TypeParameter]
+	indexedAccessTypeArena                      core.Arena[IndexedAccessType]
+	conditionalTypeArena                        core.Arena[ConditionalType]
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
 	factory                                     ast.NodeFactory
@@ -8427,16 +8439,9 @@ func (c *Checker) checkIndexedAccessIndexType(t *Type, accessNode *ast.Node) *Ty
 	// Check if the index type is assignable to 'keyof T' for the object type.
 	objectType := t.AsIndexedAccessType().objectType
 	indexType := t.AsIndexedAccessType().indexType
-	// skip index type deferral on remapping mapped types
-	var objectIndexType *Type
-	if c.isGenericMappedType(objectType) && c.getMappedTypeNameTypeKind(objectType) == MappedTypeNameTypeKindRemapping {
-		objectIndexType = c.getIndexTypeForMappedType(objectType, IndexFlagsNone)
-	} else {
-		objectIndexType = c.getIndexTypeEx(objectType, IndexFlagsNone)
-	}
 	hasNumberIndexInfo := c.getIndexInfoOfType(objectType, c.numberType) != nil
 	if everyType(indexType, func(t *Type) bool {
-		return c.isTypeAssignableTo(t, objectIndexType) || hasNumberIndexInfo && c.isApplicableIndexType(t, c.numberType)
+		return c.isTypeAssignableTo(t, c.getIndexTypeEx(objectType, IndexFlagsNone)) || hasNumberIndexInfo && c.isApplicableIndexType(t, c.numberType)
 	}) {
 		if accessNode.Kind == ast.KindElementAccessExpression && ast.IsAssignmentTarget(accessNode) && objectType.objectFlags&ObjectFlagsMapped != 0 && getMappedTypeModifiers(objectType)&MappedTypeModifiersIncludeReadonly != 0 {
 			c.error(accessNode, diagnostics.Index_signature_in_type_0_only_permits_reading, c.TypeToString(objectType))
@@ -8476,6 +8481,9 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
 		return c.createPromiseReturnType(node, c.anyType) //nolint:customlint // no arguments to check
 	}
 	specifier := args[0]
+	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() && !ast.IsStringLiteralLike(specifier) {
+		c.checkExternalEmitHelpers(node, ExternalEmitHelpersRewriteRelativeImportExtension)
+	}
 	specifierType := c.checkExpressionCached(specifier)
 	var optionsType *Type
 	if len(args) > 1 {
@@ -8528,6 +8536,11 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
  * @returns On success, the expression's signature's return type. On failure, anyType.
  */
 func (c *Checker) checkCallExpression(node *ast.Node, checkMode CheckMode) *Type {
+	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
+		ast.IsInJSFile(node) && ast.IsRequireCall(node, false /*requireStringLiteralLikeArgument*/) &&
+		!ast.IsStringLiteralLike(node.Arguments()[0]) {
+		c.checkExternalEmitHelpers(node, ExternalEmitHelpersRewriteRelativeImportExtension)
+	}
 	c.checkGrammarTypeArguments(node, node.TypeArgumentList())
 	signature := c.getResolvedSignature(node, nil /*candidatesOutArray*/, checkMode)
 	if signature == c.resolvingSignature {
@@ -15547,6 +15560,12 @@ func (c *Checker) resolveExternalModule(
 		}
 
 		if errorNode != nil && !resolvedModule.IsCustomResolution {
+			rewrites := c.program.ContentMapperExtensionRewrites()
+			caseSensitivity := c.program.CaseSensitivity()
+			specifier := tspath.ToModuleSpecifier(moduleReference)
+			_, mappedSpecifier := specifier.RewriteExtension(rewrites, caseSensitivity)
+			checkDeclarationRewrite := c.compilerOptions.GetEmitDeclarations() && mappedSpecifier &&
+				tspath.PathIsRelative(moduleReference) && !importingSourceFile.IsDeclarationFile
 			if resolvedModule.ResolvedUsingTsExtension && tspath.IsDeclarationFileName(moduleReference) {
 				if ast.FindAncestor(location, ast.IsEmittableImport) != nil {
 					tsExtension := tspath.TryExtractTSExtension(moduleReference)
@@ -15583,12 +15602,18 @@ func (c *Checker) resolveExternalModule(
 					)
 				}
 			} else if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
-				location.Flags&ast.NodeFlagsAmbient == 0 &&
+				(location.Flags&ast.NodeFlagsAmbient == 0 || checkDeclarationRewrite) &&
 				!tspath.IsDeclarationFileName(moduleReference) &&
-				!ast.IsLiteralImportTypeNode(location) &&
-				!ast.IsPartOfTypeOnlyImportOrExportDeclaration(location) {
-				shouldRewrite := core.ShouldRewriteModuleSpecifier(moduleReference, c.compilerOptions)
-				if !resolvedModule.ResolvedUsingTsExtension && shouldRewrite {
+				(!ast.IsLiteralImportTypeNode(location) && !ast.IsPartOfTypeOnlyImportOrExportDeclaration(location) ||
+					checkDeclarationRewrite) {
+				shouldRewrite := specifier.ShouldRewriteExtension(rewrites, caseSensitivity)
+				mappedSource := false
+				if sourceFile.ContentMapper() != "" {
+					_, mappedSource = sourceFile.FileName().RewriteExtension(rewrites, caseSensitivity)
+				}
+				resolvedUsingRewritableExtension := resolvedModule.ResolvedUsingTsExtension ||
+					resolvedModule.ResolvedUsingExtraExtensions && sourceFile.ContentMapper() != "" && mappedSource
+				if !resolvedUsingRewritableExtension && shouldRewrite {
 					relativeToSourceFile := resolvedModule.ResolvedFileName.AsString()
 					if relativePath, ok := c.program.CaseSensitivity().RelativePathFromFile(
 						importingSourceFile.FileName(),
@@ -15602,13 +15627,18 @@ func (c *Checker) resolveExternalModule(
 						diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_looks_like_a_file_name_but_actually_resolves_to_0,
 						relativeToSourceFile,
 					)
-				} else if resolvedModule.ResolvedUsingTsExtension && !shouldRewrite && c.program.SourceFileMayBeEmitted(sourceFile, false) {
+				} else if resolvedUsingRewritableExtension && !shouldRewrite && (mappedSource || c.program.SourceFileMayBeEmitted(sourceFile, false)) {
+					extension := tspath.GetAnyExtensionFromPath(moduleReference, nil, tspath.CaseSensitive)
+					if mappedSource {
+						rewrite, _ := sourceFile.FileName().GetExtensionRewrite(rewrites, caseSensitivity)
+						extension = rewrite.Source
+					}
 					c.error(
 						errorNode,
 						diagnostics.This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_will_not_be_rewritten_during_emit_because_it_is_not_a_relative_path,
-						tspath.GetAnyExtensionFromPath(moduleReference, nil, tspath.CaseSensitive),
+						extension,
 					)
-				} else if resolvedModule.ResolvedUsingTsExtension && shouldRewrite {
+				} else if resolvedUsingRewritableExtension && shouldRewrite {
 					if redirect := c.program.GetRedirectForResolution(sourceFile); redirect != nil {
 						ownRootDir := c.program.CommonSourceDirectory()
 						otherRootDir := redirect.CommonSourceDirectory()
@@ -17796,6 +17826,12 @@ func (b *keyBuilder) spill() {
 	b.inlineLength = 0
 }
 
+func (b *keyBuilder) reserve(size int) {
+	if b.overflowBuffer != nil || b.inlineLength+size > len(b.inlineBuffer) {
+		b.overflowBuffer = slices.Grow(b.overflowBuffer, b.inlineLength+size)
+	}
+}
+
 func (b *keyBuilder) writeByte(c byte) {
 	if b.inlineLength == len(b.inlineBuffer) {
 		b.spill()
@@ -17844,6 +17880,7 @@ func (b *keyBuilder) writeType(t *Type) {
 }
 
 func (b *keyBuilder) writeTypes(types []*Type) {
+	b.reserve(8 + 4*len(types))
 	b.writeInt(len(types))
 	for _, t := range types {
 		b.writeType(t)
@@ -25539,14 +25576,13 @@ func isUnaryTupleTypeNode(node *ast.Node) bool {
 	return ast.IsTupleTypeNode(node) && len(node.Elements()) == 1
 }
 
-func (c *Checker) newType(flags TypeFlags, objectFlags ObjectFlags, data TypeData) *Type {
+func (c *Checker) newType(flags TypeFlags, objectFlags ObjectFlags, t *Type, kind typeKind) *Type {
 	c.TypeCount++
-	t := data.AsType()
 	t.flags = flags
 	t.objectFlags = objectFlags &^ (ObjectFlagsCouldContainTypeVariablesComputed | ObjectFlagsCouldContainTypeVariables | ObjectFlagsMembersResolved)
 	t.id = TypeId(c.TypeCount)
+	t.kind = kind
 	t.checker = c
-	t.data = data
 	if c.tracer != nil {
 		c.tracer.RecordType(t)
 	}
@@ -25560,7 +25596,7 @@ func (c *Checker) newIntrinsicType(flags TypeFlags, intrinsicName string) *Type 
 func (c *Checker) newIntrinsicTypeEx(flags TypeFlags, intrinsicName string, objectFlags ObjectFlags) *Type {
 	data := &IntrinsicType{}
 	data.intrinsicName = intrinsicName
-	return c.newType(flags, objectFlags, data)
+	return c.newType(flags, objectFlags, data.AsType(), typeKindIntrinsic)
 }
 
 func (c *Checker) createWideningType(nonWideningType *Type) *Type {
@@ -25580,9 +25616,9 @@ func (c *Checker) createUnknownUnionType() *Type {
 }
 
 func (c *Checker) newLiteralType(flags TypeFlags, value any, regularType *Type) *Type {
-	data := &LiteralType{}
+	data := c.literalTypeArena.New()
 	data.value = value
-	t := c.newType(flags, ObjectFlagsNone, data)
+	t := c.newType(flags, ObjectFlagsNone, data.AsType(), typeKindLiteral)
 	if regularType != nil {
 		data.regularType = regularType
 	} else {
@@ -25594,34 +25630,43 @@ func (c *Checker) newLiteralType(flags TypeFlags, value any, regularType *Type) 
 func (c *Checker) newUniqueESSymbolType(symbol *ast.Symbol, name string) *Type {
 	data := &UniqueESSymbolType{}
 	data.name = name
-	t := c.newType(TypeFlagsUniqueESSymbol, ObjectFlagsNone, data)
+	t := c.newType(TypeFlagsUniqueESSymbol, ObjectFlagsNone, data.AsType(), typeKindUniqueESSymbol)
 	t.symbol = symbol
 	return t
 }
 
 func (c *Checker) newObjectType(objectFlags ObjectFlags, symbol *ast.Symbol) *Type {
-	var data TypeData
+	var t *Type
+	var kind typeKind
 	switch {
 	case objectFlags&ObjectFlagsClassOrInterface != 0:
-		data = &InterfaceType{}
+		t = c.interfaceTypeArena.New().AsType()
+		kind = typeKindInterface
 	case objectFlags&ObjectFlagsTuple != 0:
-		data = &TupleType{}
+		t = (&TupleType{}).AsType()
+		kind = typeKindTuple
 	case objectFlags&ObjectFlagsReference != 0:
-		data = &TypeReference{}
+		t = c.typeReferenceArena.New().AsType()
+		kind = typeKindTypeReference
 	case objectFlags&ObjectFlagsMapped != 0:
-		data = &MappedType{}
+		t = c.mappedTypeArena.New().AsType()
+		kind = typeKindMapped
 	case objectFlags&ObjectFlagsReverseMapped != 0:
-		data = &ReverseMappedType{}
+		t = (&ReverseMappedType{}).AsType()
+		kind = typeKindReverseMapped
 	case objectFlags&ObjectFlagsEvolvingArray != 0:
-		data = &EvolvingArrayType{}
+		t = (&EvolvingArrayType{}).AsType()
+		kind = typeKindEvolvingArray
 	case objectFlags&ObjectFlagsInstantiationExpressionType != 0:
-		data = &InstantiationExpressionType{}
+		t = (&InstantiationExpressionType{}).AsType()
+		kind = typeKindInstantiationExpression
 	case objectFlags&ObjectFlagsAnonymous != 0:
-		data = &ObjectType{}
+		t = c.objectTypeArena.New().AsType()
+		kind = typeKindObject
 	default:
 		panic("Unhandled case in newObjectType")
 	}
-	t := c.newType(TypeFlagsObject, objectFlags, data)
+	c.newType(TypeFlagsObject, objectFlags, t, kind)
 	t.symbol = symbol
 	return t
 }
@@ -25705,7 +25750,7 @@ func (c *Checker) setStructuredTypeMembers(t *Type, members ast.SymbolTable, cal
 }
 
 func (c *Checker) newTypeParameter(symbol *ast.Symbol) *Type {
-	t := c.newType(TypeFlagsTypeParameter, ObjectFlagsNone, &TypeParameter{})
+	t := c.newType(TypeFlagsTypeParameter, ObjectFlagsNone, c.typeParameterArena.New().AsType(), typeKindTypeParameter)
 	t.symbol = symbol
 	return t
 }
@@ -25725,62 +25770,62 @@ func (c *Checker) getPropagatingFlagsOfTypes(types []*Type, excludeKinds TypeFla
 }
 
 func (c *Checker) newUnionType(objectFlags ObjectFlags, types []*Type) *Type {
-	data := &UnionType{}
+	data := c.unionTypeArena.New()
 	data.types = types
-	return c.newType(TypeFlagsUnion, objectFlags, data)
+	return c.newType(TypeFlagsUnion, objectFlags, data.AsType(), typeKindUnion)
 }
 
 func (c *Checker) newIntersectionType(objectFlags ObjectFlags, types []*Type) *Type {
-	data := &IntersectionType{}
+	data := c.intersectionTypeArena.New()
 	data.types = types
-	return c.newType(TypeFlagsIntersection, objectFlags, data)
+	return c.newType(TypeFlagsIntersection, objectFlags, data.AsType(), typeKindIntersection)
 }
 
 func (c *Checker) newIndexedAccessType(objectType *Type, indexType *Type, accessFlags AccessFlags) *Type {
-	data := &IndexedAccessType{}
+	data := c.indexedAccessTypeArena.New()
 	data.objectType = objectType
 	data.indexType = indexType
 	data.accessFlags = accessFlags
-	return c.newType(TypeFlagsIndexedAccess, ObjectFlagsNone, data)
+	return c.newType(TypeFlagsIndexedAccess, ObjectFlagsNone, data.AsType(), typeKindIndexedAccess)
 }
 
 func (c *Checker) newIndexType(target *Type, indexFlags IndexFlags) *Type {
 	data := &IndexType{}
 	data.target = target
 	data.indexFlags = indexFlags
-	return c.newType(TypeFlagsIndex, ObjectFlagsNone, data)
+	return c.newType(TypeFlagsIndex, ObjectFlagsNone, data.AsType(), typeKindIndex)
 }
 
 func (c *Checker) newTemplateLiteralType(texts []string, types []*Type) *Type {
 	data := &TemplateLiteralType{}
 	data.texts = texts
 	data.types = types
-	return c.newType(TypeFlagsTemplateLiteral, ObjectFlagsNone, data)
+	return c.newType(TypeFlagsTemplateLiteral, ObjectFlagsNone, data.AsType(), typeKindTemplateLiteral)
 }
 
 func (c *Checker) newStringMappingType(symbol *ast.Symbol, target *Type) *Type {
 	data := &StringMappingType{}
 	data.target = target
-	t := c.newType(TypeFlagsStringMapping, ObjectFlagsNone, data)
+	t := c.newType(TypeFlagsStringMapping, ObjectFlagsNone, data.AsType(), typeKindStringMapping)
 	t.symbol = symbol
 	return t
 }
 
 func (c *Checker) newConditionalType(root *ConditionalRoot, mapper *TypeMapper, combinedMapper *TypeMapper) *Type {
-	data := &ConditionalType{}
+	data := c.conditionalTypeArena.New()
 	data.root = root
 	data.checkType = c.instantiateType(root.checkType, mapper)
 	data.extendsType = c.instantiateType(root.extendsType, mapper)
 	data.mapper = mapper
 	data.combinedMapper = combinedMapper
-	return c.newType(TypeFlagsConditional, ObjectFlagsNone, data)
+	return c.newType(TypeFlagsConditional, ObjectFlagsNone, data.AsType(), typeKindConditional)
 }
 
 func (c *Checker) newSubstitutionType(baseType *Type, constraint *Type) *Type {
 	data := &SubstitutionType{}
 	data.baseType = baseType
 	data.constraint = constraint
-	return c.newType(TypeFlagsSubstitution, ObjectFlagsNone, data)
+	return c.newType(TypeFlagsSubstitution, ObjectFlagsNone, data.AsType(), typeKindSubstitution)
 }
 
 func (c *Checker) newSignature(flags SignatureFlags, declaration *ast.Node, typeParameters []*Type, thisParameter *ast.Symbol, parameters []*ast.Symbol, resolvedReturnType *Type, resolvedTypePredicate *TypePredicate, minArgumentCount int) *Signature {
@@ -28444,6 +28489,16 @@ func (c *Checker) getSimplifiedType(t *Type, writing bool) *Type {
 		return c.getSimplifiedIndexedAccessType(t, writing)
 	case t.flags&TypeFlagsConditional != 0:
 		return c.getSimplifiedConditionalType(t, writing)
+	case t.flags&TypeFlagsIndex != 0:
+		return c.getSimplifiedIndexType(t)
+	}
+	return t
+}
+
+func (c *Checker) getSimplifiedIndexType(t *Type) *Type {
+	target := t.AsIndexType().target
+	if c.isGenericMappedType(target) && c.getNameTypeFromMappedType(target) != nil && !c.isMappedTypeWithKeyofConstraintDeclaration(target) {
+		return c.getIndexTypeForMappedType(target, IndexFlagsNone)
 	}
 	return t
 }
@@ -28543,6 +28598,16 @@ func (c *Checker) distributeIndexOverObjectType(objectType *Type, indexType *Typ
 }
 
 func (c *Checker) getSimplifiedConditionalType(t *Type, writing bool) *Type {
+	key := CachedTypeKey{kind: core.IfElse(writing, CachedTypeKindSimplifiedConditionalTypeForWriting, CachedTypeKindSimplifiedConditionalTypeForReading), typeId: t.id}
+	if cached, ok := c.cachedTypes[key]; ok {
+		return cached
+	}
+	result := c.getSimplifiedConditionalTypeWorker(t, writing)
+	c.cachedTypes[key] = result
+	return result
+}
+
+func (c *Checker) getSimplifiedConditionalTypeWorker(t *Type, writing bool) *Type {
 	checkType := t.AsConditionalType().checkType
 	extendsType := t.AsConditionalType().extendsType
 	trueType := c.getTrueTypeFromConditionalType(t)
@@ -29137,6 +29202,10 @@ func (c *Checker) checkExternalEmitHelpers(location *ast.Node, helpers ExternalE
 				} else if helper&ExternalEmitHelpersClassPrivateFieldSet != 0 {
 					if !c.hasSignatureWithArityGreaterThan(symbol, 4) {
 						c.error(location, diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 5)
+					}
+				} else if helper&ExternalEmitHelpersRewriteRelativeImportExtension != 0 && len(c.program.ContentMapperExtensionRewrites()) > 0 {
+					if !c.hasSignatureWithArityGreaterThan(symbol, 3) {
+						c.error(location, diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 4)
 					}
 				}
 			}

@@ -45,6 +45,30 @@ func TestStaticContentMapperTransformIdentity(t *testing.T) {
 	assert.Assert(t, optionsA.TransformIdentity(&core.CompilerOptions{}) != optionsB.TransformIdentity(&core.CompilerOptions{}))
 }
 
+func TestContentMapperOutputExtensionsAffectIdentity(t *testing.T) {
+	t.Parallel()
+	mapper := &contentmapper.Mapper{Name: "mapper", Version: "1.0.0", Extensions: []string{".astro"}}
+	identityMapping := mapper.TransformIdentity(&core.CompilerOptions{})
+	mapper.Manifest.DefaultOutputExtensions = map[string]string{".astro": ".js"}
+	assert.Equal(t, mapper.TransformIdentity(&core.CompilerOptions{}), identityMapping)
+	mapper.Definition.OutputExtensions = map[string]string{".astro": ".js"}
+	jsIdentity := mapper.TransformIdentity(&core.CompilerOptions{})
+	mapper.Definition.OutputExtensions[".astro"] = ".jsx"
+	jsxIdentity := mapper.TransformIdentity(&core.CompilerOptions{})
+	assert.Assert(t, jsIdentity != jsxIdentity)
+	mapper.Definition.OutputExtensions = map[string]string{".astro": ".js"}
+	assert.Equal(t, mapper.TransformIdentity(&core.CompilerOptions{}), jsIdentity)
+	mapper.Definition.OutputExtensions[".astro"] = ".jsx"
+	assert.Equal(t, mapper.TransformIdentity(&core.CompilerOptions{}), jsxIdentity)
+	mapper.Definition.OutputExtensions = nil
+	assert.Equal(t, mapper.TransformIdentity(&core.CompilerOptions{}), identityMapping)
+	mapper.Definition.OutputExtensions = map[string]string{".astro": ".js", ".vue": ".mjs", ".svelte": ".cjs"}
+	identity := mapper.TransformIdentity(&core.CompilerOptions{})
+	for range 100 {
+		assert.Equal(t, mapper.TransformIdentity(&core.CompilerOptions{}), identity)
+	}
+}
+
 type fakeBuildInfoReader struct {
 	buildInfo *incremental.BuildInfo
 }

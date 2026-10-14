@@ -877,6 +877,18 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			}
 
 			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
+			// We know moduleName resolves to an ambient module provided that moduleName:
+			// - is in the list of ambient modules locally declared in the current source file.
+			if slices.Contains(file.AmbientModuleNames, moduleName) {
+				if optionsForFile.TraceResolution.IsTrue() {
+					resolutionsTrace = append(resolutionsTrace, module.DiagAndArgs{
+						Message: diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1,
+						Args:    []any{moduleName, file.FileName()},
+					})
+				}
+				resolutionsInFile[module.ModeAwareCacheKey{Name: moduleName, Mode: mode}] = &module.ResolvedModule{}
+				continue
+			}
 			var resolvedModule *module.ResolvedModule
 			var trace []module.DiagAndArgs
 			var err error

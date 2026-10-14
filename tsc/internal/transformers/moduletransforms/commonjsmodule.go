@@ -14,25 +14,27 @@ import (
 
 type CommonJSModuleTransformer struct {
 	transformers.Transformer
-	topLevelVisitor           *ast.NodeVisitor // visits statements at top level of a module
-	topLevelNestedVisitor     *ast.NodeVisitor // visits nested statements at top level of a module
-	discardedValueVisitor     *ast.NodeVisitor // visits expressions whose values would be discarded at runtime
-	assignmentPatternVisitor  *ast.NodeVisitor // visits assignment patterns in a destructuring assignment
-	compilerOptions           *core.CompilerOptions
-	resolver                  binder.ReferenceResolver
-	getEmitModuleFormatOfFile func(file ast.HasFileName) core.ModuleKind
-	moduleKind                core.ModuleKind
-	languageVersion           core.ScriptTarget
-	currentSourceFile         *ast.SourceFile
-	currentModuleInfo         *externalModuleInfo
-	parentNode                *ast.Node // used for ancestor tracking via pushNode/popNode to detect expression identifiers
-	currentNode               *ast.Node // used for ancestor tracking via pushNode/popNode to detect expression identifiers
+	topLevelVisitor                *ast.NodeVisitor // visits statements at top level of a module
+	topLevelNestedVisitor          *ast.NodeVisitor // visits nested statements at top level of a module
+	discardedValueVisitor          *ast.NodeVisitor // visits expressions whose values would be discarded at runtime
+	assignmentPatternVisitor       *ast.NodeVisitor // visits assignment patterns in a destructuring assignment
+	compilerOptions                *core.CompilerOptions
+	resolver                       binder.ReferenceResolver
+	getEmitModuleFormatOfFile      func(file ast.HasFileName) core.ModuleKind
+	moduleKind                     core.ModuleKind
+	languageVersion                core.ScriptTarget
+	currentSourceFile              *ast.SourceFile
+	currentModuleInfo              *externalModuleInfo
+	parentNode                     *ast.Node // used for ancestor tracking via pushNode/popNode to detect expression identifiers
+	currentNode                    *ast.Node // used for ancestor tracking via pushNode/popNode to detect expression identifiers
+	contentMapperExtensionRewrites []tspath.ExtensionRewrite
+	caseSensitivity                tspath.CaseSensitivity
 }
 
 func NewCommonJSModuleTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
 	compilerOptions := opts.CompilerOptions
 	emitContext := opts.Context
-	tx := &CommonJSModuleTransformer{compilerOptions: compilerOptions, resolver: opts.Resolver, getEmitModuleFormatOfFile: opts.GetEmitModuleFormatOfFile}
+	tx := &CommonJSModuleTransformer{compilerOptions: compilerOptions, resolver: opts.Resolver, getEmitModuleFormatOfFile: opts.GetEmitModuleFormatOfFile, contentMapperExtensionRewrites: opts.ContentMapperExtensionRewrites, caseSensitivity: opts.CaseSensitivity}
 	tx.topLevelVisitor = emitContext.NewNodeVisitor(tx.visitTopLevel)
 	tx.topLevelNestedVisitor = emitContext.NewNodeVisitor(tx.visitTopLevelNested)
 	tx.discardedValueVisitor = emitContext.NewNodeVisitor(tx.visitDiscardedValue)
@@ -680,7 +682,7 @@ func (tx *CommonJSModuleTransformer) createRequireCall(node *ast.Node /*ImportDe
 	var args []*ast.Expression
 	moduleName := getExternalModuleNameLiteral(tx.Factory(), node, tx.currentSourceFile, nil /*host*/, nil /*resolver*/, tx.compilerOptions)
 	if moduleName != nil {
-		args = append(args, rewriteModuleSpecifier(tx.EmitContext(), moduleName, tx.compilerOptions))
+		args = append(args, rewriteModuleSpecifier(tx.EmitContext(), moduleName, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity))
 	}
 	return tx.Factory().NewCallExpression(
 		tx.Factory().NewIdentifier("require"),
@@ -1861,9 +1863,9 @@ func (tx *CommonJSModuleTransformer) visitImportCallExpression(node *ast.CallExp
 		argument = externalModuleName
 	} else if firstArgument != nil && rewriteOrShim {
 		if ast.IsStringLiteral(firstArgument) {
-			argument = rewriteModuleSpecifier(tx.EmitContext(), firstArgument, tx.compilerOptions)
+			argument = rewriteModuleSpecifier(tx.EmitContext(), firstArgument, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
 		} else {
-			argument = tx.Factory().NewRewriteRelativeImportExtensionsHelper(firstArgument, tx.compilerOptions.Jsx == core.JsxEmitPreserve)
+			argument = tx.Factory().NewRewriteRelativeImportExtensionsHelper(firstArgument, tx.compilerOptions.Jsx == core.JsxEmitPreserve, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
 		}
 	} else {
 		argument = firstArgument
@@ -1971,11 +1973,11 @@ func (tx *CommonJSModuleTransformer) shimOrRewriteImportOrRequireCall(node *ast.
 		firstArgument := tx.Visitor().VisitNode(node.Arguments.Nodes[0])
 		firstArgumentChanged := false
 		if ast.IsStringLiteralLike(firstArgument) {
-			rewritten := rewriteModuleSpecifier(tx.EmitContext(), firstArgument, tx.compilerOptions)
+			rewritten := rewriteModuleSpecifier(tx.EmitContext(), firstArgument, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
 			firstArgumentChanged = rewritten != firstArgument
 			firstArgument = rewritten
 		} else {
-			firstArgument = tx.Factory().NewRewriteRelativeImportExtensionsHelper(firstArgument, tx.compilerOptions.Jsx == core.JsxEmitPreserve)
+			firstArgument = tx.Factory().NewRewriteRelativeImportExtensionsHelper(firstArgument, tx.compilerOptions.Jsx == core.JsxEmitPreserve, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
 			firstArgumentChanged = true
 		}
 
