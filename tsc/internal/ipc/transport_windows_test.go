@@ -5,7 +5,6 @@ package ipc
 import (
 	"fmt"
 	"os"
-	"strings"
 	"testing"
 	"time"
 
@@ -66,7 +65,12 @@ func TestPipeTransportPermissions(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(sd.String(), ";;;"+user.User.Sid.String()+")") {
-		t.Fatalf("pipe access is not restricted to the current user: %s", sd.String())
+	// Windows maps generic all access to file all access and may abbreviate well-known SIDs.
+	expected, err := windows.SecurityDescriptorFromString("D:P(A;;FA;;;" + user.User.Sid.String() + ")")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := sd.String(), expected.String(); got != want {
+		t.Fatalf("pipe security descriptor = %s, want %s", got, want)
 	}
 }
