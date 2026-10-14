@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/numericCompoundAssignmentsInNonzeroBranch.ts] ////
+
+=== numericCompoundAssignmentsInNonzeroBranch.ts ===
+function scale(value: number, factor: number) {
+>scale : Symbol(scale, Decl(numericCompoundAssignmentsInNonzeroBranch.ts, 0, 0))
+>value : Symbol(value, Decl(numericCompoundAssignmentsInNonzeroBranch.ts, 0, 15))
+>factor : Symbol(factor, Decl(numericCompoundAssignmentsInNonzeroBranch.ts, 0, 29))
+
+    if (value !== 0) {
+>value : Symbol(value, Decl(numericCompoundAssignmentsInNonzeroBranch.ts, 0, 15))
+
+        value *= -1;
+>value : Symbol(value, Decl(numericCompoundAssignmentsInNonzeroBranch.ts, 0, 15))
+
+        value *= factor;
+>value : Symbol(value, Decl(numericCompoundAssignmentsInNonzeroBranch.ts, 0, 15))
+>factor : Symbol(factor, Decl(numericCompoundAssignmentsInNonzeroBranch.ts, 0, 29))
+    }
+}
+
