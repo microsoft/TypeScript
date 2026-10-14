@@ -157,6 +157,26 @@ func BenchmarkCheck(b *testing.B) {
 	}
 }
 
+func BenchmarkCheckFreshProgram(b *testing.B) {
+	fs := bundled.WrapFS(osvfs.FS())
+	rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, fs, nil)
+	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
+	ctx := b.Context()
+
+	b.ReportAllocs()
+	for b.Loop() {
+		program := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
+		program.BindSourceFiles()
+		c, _ := checker.NewChecker(program, nil)
+		for _, file := range program.GetSourceFiles() {
+			assert.Equal(b, len(c.GetDiagnostics(ctx, file)), 0)
+		}
+		assert.Equal(b, len(c.GetGlobalDiagnostics()), 0)
+	}
+}
+
 func TestTypeAllocationAcrossCheckerGrowth(t *testing.T) {
 	t.Parallel()
 	var content strings.Builder
