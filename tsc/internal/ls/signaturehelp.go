@@ -991,7 +991,7 @@ func getImmediatelyContainingArgumentInfo(node *ast.Node, position int, sourceFi
 			return nil
 		}
 
-		spanIndex := ast.IndexOfNode(templateSpan.Parent().AsTemplateExpression().TemplateSpans.Nodes, templateSpan)
+		spanIndex := ast.IndexOfNode(templateSpan.Parent().AsTemplateExpression().TemplateSpans().Nodes(), templateSpan)
 		argumentIndex := getArgumentIndexForTemplatePiece(spanIndex, node, position, sourceFile)
 
 		return getArgumentListInfoForTemplate(tagExpression.AsTaggedTemplateExpression(), argumentIndex, sourceFile)
@@ -1079,7 +1079,7 @@ type contextualSignatureLocationInfo struct {
 }
 
 func getSpreadElementCount(node *ast.SpreadElement, c *checker.Checker) int {
-	spreadType := c.GetTypeAtLocation(node.Expression)
+	spreadType := c.GetTypeAtLocation(node.Expression())
 	if checker.IsTupleType(spreadType) {
 		tupleType := spreadType.Target().AsTupleType()
 		if tupleType == nil {
@@ -1254,13 +1254,13 @@ func getChildListThatStartsWithOpenerToken(parent *ast.Node, openerToken *ast.No
 		if openerToken.Kind() == ast.KindLessThanToken {
 			return parentCallExpression.TypeArgumentList()
 		}
-		return parentCallExpression.Arguments
+		return parentCallExpression.Arguments()
 	} else if ast.IsNewExpression(parent) {
 		parentNewExpression := parent.AsNewExpression()
 		if openerToken.Kind() == ast.KindLessThanToken {
 			return parentNewExpression.TypeArgumentList()
 		}
-		return parentNewExpression.Arguments
+		return parentNewExpression.Arguments()
 	}
 	return nil
 }
@@ -1373,8 +1373,8 @@ func getHighestBinary(b *ast.BinaryExpression) *ast.BinaryExpression {
 }
 
 func countBinaryExpressionParameters(b *ast.BinaryExpression) int {
-	if ast.IsBinaryExpression(b.Left) {
-		return countBinaryExpressionParameters(b.Left.AsBinaryExpression()) + 1
+	if ast.IsBinaryExpression(b.Left()) {
+		return countBinaryExpressionParameters(b.Left().AsBinaryExpression()) + 1
 	}
 	return 2
 }
@@ -1387,9 +1387,9 @@ func getTokenFromNodeList(nodeList *ast.NodeList, nodeListParent *ast.Node, sour
 	nodeListIndex := 0
 	var tokens []*ast.Node
 	for left < nodeList.End() {
-		if len(nodeList.Nodes) > nodeListIndex && left == nodeList.Nodes[nodeListIndex].Pos() {
-			tokens = append(tokens, nodeList.Nodes[nodeListIndex])
-			left = nodeList.Nodes[nodeListIndex].End()
+		if len(nodeList.Nodes()) > nodeListIndex && left == nodeList.Nodes()[nodeListIndex].Pos() {
+			tokens = append(tokens, nodeList.Nodes()[nodeListIndex])
+			left = nodeList.Nodes()[nodeListIndex].End()
 			nodeListIndex++
 		} else {
 			scanner := scanner.GetScannerForSourceFile(sourceFile, left)
@@ -1406,8 +1406,8 @@ func getTokenFromNodeList(nodeList *ast.NodeList, nodeListParent *ast.Node, sour
 func getArgumentListInfoForTemplate(tagExpression *ast.TaggedTemplateExpression, argumentIndex int, sourceFile *ast.SourceFile) *argumentListInfo {
 	// argumentCount is either 1 or (numSpans + 1) to account for the template strings array argument.
 	argumentCount := 1
-	if !isNoSubstitutionTemplateLiteral(tagExpression.Template) {
-		argumentCount = len(tagExpression.Template.AsTemplateExpression().TemplateSpans.Nodes) + 1
+	if !isNoSubstitutionTemplateLiteral(tagExpression.Template()) {
+		argumentCount = len(tagExpression.Template().AsTemplateExpression().TemplateSpans().Nodes()) + 1
 	}
 	if argumentIndex != 0 {
 		debug.Assert(argumentIndex < argumentCount)
@@ -1422,7 +1422,7 @@ func getArgumentListInfoForTemplate(tagExpression *ast.TaggedTemplateExpression,
 }
 
 func getApplicableRangeForTaggedTemplate(taggedTemplate *ast.TaggedTemplateExpression, sourceFile *ast.SourceFile) core.TextRange {
-	template := taggedTemplate.Template
+	template := taggedTemplate.Template()
 	applicableSpanStart := scanner.GetTokenPosOfNode(template, sourceFile, false)
 	applicableSpanEnd := template.End()
 
@@ -1435,9 +1435,9 @@ func getApplicableRangeForTaggedTemplate(taggedTemplate *ast.TaggedTemplateExpre
 	// This is because a Missing node has no width. However, what we actually want is to include trivia
 	// leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
 	if template.Kind() == ast.KindTemplateExpression {
-		templateSpans := template.AsTemplateExpression().TemplateSpans
-		lastSpan := templateSpans.Nodes[len(templateSpans.Nodes)-1]
-		if lastSpan.AsTemplateSpan().Literal.End()-lastSpan.AsTemplateSpan().Literal.Pos() == 0 {
+		templateSpans := template.AsTemplateExpression().TemplateSpans()
+		lastSpan := templateSpans.Nodes()[len(templateSpans.Nodes())-1]
+		if lastSpan.AsTemplateSpan().Literal().End()-lastSpan.AsTemplateSpan().Literal().Pos() == 0 {
 			applicableSpanEnd = scanner.SkipTrivia(sourceFile.Text(), applicableSpanEnd)
 		}
 	}

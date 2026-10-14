@@ -119,7 +119,7 @@ func propagateNodeListSubtreeFacts(children *NodeList, propagate func(*Node) Sub
 		return SubtreeFactsNone
 	}
 	facts := SubtreeFactsNone
-	for _, child := range children.Nodes {
+	for _, child := range children.Nodes() {
 		facts |= propagate(child)
 	}
 	return facts

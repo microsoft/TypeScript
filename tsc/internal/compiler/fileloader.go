@@ -1054,11 +1054,11 @@ func getModeForUsageLocation(fileName tspath.RootedFilePath, meta ast.SourceFile
 			var ok bool
 			switch usage.Parent().Kind() {
 			case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
-				override, ok = usage.Parent().AsImportDeclaration().Attributes.GetResolutionModeOverride(nil)
+				override, ok = usage.Parent().AsImportDeclaration().Attributes().GetResolutionModeOverride(nil)
 			case ast.KindExportDeclaration:
-				override, ok = usage.Parent().AsExportDeclaration().Attributes.GetResolutionModeOverride(nil)
+				override, ok = usage.Parent().AsExportDeclaration().Attributes().GetResolutionModeOverride(nil)
 			case ast.KindJSDocImportTag:
-				override, ok = usage.Parent().AsJSDocImportTag().Attributes.GetResolutionModeOverride(nil)
+				override, ok = usage.Parent().AsJSDocImportTag().Attributes().GetResolutionModeOverride(nil)
 			}
 			if ok {
 				return override
@@ -1066,7 +1066,7 @@ func getModeForUsageLocation(fileName tspath.RootedFilePath, meta ast.SourceFile
 		}
 	}
 	if ast.IsLiteralTypeNode(usage.Parent()) && ast.IsImportTypeNode(usage.Parent().Parent()) {
-		if override, ok := usage.Parent().Parent().AsImportTypeNode().Attributes.GetResolutionModeOverride(nil); ok {
+		if override, ok := usage.Parent().Parent().AsImportTypeNode().Attributes().GetResolutionModeOverride(nil); ok {
 			return override
 		}
 	}

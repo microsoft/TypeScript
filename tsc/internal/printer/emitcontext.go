@@ -115,12 +115,12 @@ func (c *EmitContext) EndVariableEnvironment() []*ast.Statement {
 func (c *EmitContext) EndAndMergeVariableEnvironmentList(statements *ast.StatementList) *ast.StatementList {
 	var nodes []*ast.Statement
 	if statements != nil {
-		nodes = statements.Nodes
+		nodes = statements.Nodes()
 	}
 
 	if result, changed := c.endAndMergeVariableEnvironment(nodes); changed {
 		list := c.Factory.NewNodeList(result)
-		list.Loc = statements.Loc
+		list.SetLoc(statements.Loc())
 		return list
 	}
 
@@ -189,12 +189,12 @@ func (c *EmitContext) EndLexicalEnvironment() []*ast.Statement {
 func (c *EmitContext) EndAndMergeLexicalEnvironmentList(statements *ast.StatementList) *ast.StatementList {
 	var nodes []*ast.Statement
 	if statements != nil {
-		nodes = statements.Nodes
+		nodes = statements.Nodes()
 	}
 
 	if result, changed := c.endAndMergeLexicalEnvironment(nodes); changed {
 		list := c.Factory.NewNodeList(result)
-		list.Loc = statements.Loc
+		list.SetLoc(statements.Loc())
 		return list
 	}
 
@@ -222,9 +222,9 @@ func (c *EmitContext) AddLexicalDeclaration(name *ast.IdentifierNode) {
 
 // Merges declarations produced by c.EndVariableEnvironment() or c.EndLexicalEnvironment() into a statement list
 func (c *EmitContext) MergeEnvironmentList(statements *ast.StatementList, declarations []*ast.Statement) *ast.StatementList {
-	if result, changed := c.mergeEnvironment(statements.Nodes, declarations); changed {
+	if result, changed := c.mergeEnvironment(statements.Nodes(), declarations); changed {
 		list := c.Factory.NewNodeList(result)
-		list.Loc = statements.Loc
+		list.SetLoc(statements.Loc())
 		return list
 	}
 	return statements
@@ -345,7 +345,7 @@ func isHoistedVariable(node *ast.VariableDeclarationNode) bool {
 func (c *EmitContext) isHoistedVariableStatement(node *ast.Statement) bool {
 	return c.isCustomPrologue(node) &&
 		ast.IsVariableStatement(node) &&
-		core.Every(node.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes, isHoistedVariable)
+		core.Every(node.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes(), isHoistedVariable)
 }
 
 //
@@ -801,7 +801,7 @@ func (c *EmitContext) addDefaultValueAssignmentsIfNeeded(nodeList *ast.Parameter
 		return nodeList
 	}
 	var result []*ast.Node
-	nodes := nodeList.Nodes
+	nodes := nodeList.Nodes()
 	for i, parameter := range nodes {
 		updated := c.addDefaultValueAssignmentIfNeeded(parameter.AsParameterDeclaration())
 		if updated != parameter {
@@ -813,7 +813,7 @@ func (c *EmitContext) addDefaultValueAssignmentsIfNeeded(nodeList *ast.Parameter
 	}
 	if result != nil {
 		res := c.Factory.NewNodeList(result)
-		res.Loc = nodeList.Loc
+		res.SetLoc(nodeList.Loc())
 		return res
 	}
 	return nodeList
@@ -822,26 +822,26 @@ func (c *EmitContext) addDefaultValueAssignmentsIfNeeded(nodeList *ast.Parameter
 func (c *EmitContext) addDefaultValueAssignmentIfNeeded(parameter *ast.ParameterDeclaration) *ast.Node {
 	// A rest parameter cannot have a binding pattern or an initializer,
 	// so let's just ignore it.
-	if parameter.DotDotDotToken != nil {
+	if parameter.DotDotDotToken() != nil {
 		return parameter.AsNode()
 	} else if ast.IsBindingPattern(parameter.Name()) {
 		return c.addDefaultValueAssignmentForBindingPattern(parameter)
-	} else if parameter.Initializer != nil {
-		return c.addDefaultValueAssignmentForInitializer(parameter, parameter.Name(), parameter.Initializer)
+	} else if parameter.Initializer() != nil {
+		return c.addDefaultValueAssignmentForInitializer(parameter, parameter.Name(), parameter.Initializer())
 	}
 	return parameter.AsNode()
 }
 
 func (c *EmitContext) addDefaultValueAssignmentForBindingPattern(parameter *ast.ParameterDeclaration) *ast.Node {
 	var initNode *ast.Node
-	if parameter.Initializer != nil {
+	if parameter.Initializer() != nil {
 		initNode = c.Factory.NewConditionalExpression(
 			c.Factory.NewStrictEqualityExpression(
 				c.Factory.NewGeneratedNameForNode(parameter.AsNode()),
 				c.Factory.NewVoidZeroExpression(),
 			),
 			c.Factory.NewToken(ast.KindQuestionToken),
-			parameter.Initializer,
+			parameter.Initializer(),
 			c.Factory.NewToken(ast.KindColonToken),
 			c.Factory.NewGeneratedNameForNode(parameter.AsNode()),
 		)
@@ -853,17 +853,17 @@ func (c *EmitContext) addDefaultValueAssignmentForBindingPattern(parameter *ast.
 		c.Factory.NewVariableDeclarationList(c.Factory.NewNodeList([]*ast.Node{c.Factory.NewVariableDeclaration(
 			parameter.Name(),
 			nil,
-			parameter.Type,
+			parameter.Type(),
 			initNode,
 		)}), ast.NodeFlagsNone),
 	))
 	return c.Factory.UpdateParameterDeclaration(
 		parameter,
 		parameter.Modifiers(),
-		parameter.DotDotDotToken,
+		parameter.DotDotDotToken(),
 		c.Factory.NewGeneratedNameForNode(parameter.AsNode()),
-		parameter.QuestionToken,
-		parameter.Type,
+		parameter.QuestionToken(),
+		parameter.Type(),
 		nil,
 	)
 }
@@ -889,10 +889,10 @@ func (c *EmitContext) addDefaultValueAssignmentForInitializer(parameter *ast.Par
 	return c.Factory.UpdateParameterDeclaration(
 		parameter,
 		parameter.Modifiers(),
-		parameter.DotDotDotToken,
+		parameter.DotDotDotToken(),
 		parameter.Name(),
-		parameter.QuestionToken,
-		parameter.Type,
+		parameter.QuestionToken(),
+		parameter.Type(),
 		nil,
 	)
 }
@@ -913,7 +913,7 @@ func (c *EmitContext) ConvertToFunctionBlock(node *ast.Node, multiLine bool) *as
 	returnStatement := c.Factory.NewReturnStatement(node)
 	returnStatement.SetLoc(node.Loc())
 	statements := c.Factory.NewNodeList([]*ast.Node{returnStatement})
-	statements.Loc = node.Loc()
+	statements.SetLoc(node.Loc())
 	block := c.Factory.NewBlock(statements, multiLine)
 	block.SetLoc(node.Loc())
 	return block
@@ -937,14 +937,14 @@ func (c *EmitContext) VisitFunctionBody(node *ast.BlockOrExpression, visitor *as
 		return c.Factory.UpdateBlock(
 			block.AsBlock(),
 			c.MergeEnvironmentList(block.StatementList(), declarations),
-			block.AsBlock().MultiLine,
+			block.AsBlock().MultiLine(),
 		)
 	}
 
 	return c.Factory.UpdateBlock(
 		updated.AsBlock(),
 		c.MergeEnvironmentList(updated.StatementList(), declarations),
-		updated.AsBlock().MultiLine,
+		updated.AsBlock().MultiLine(),
 	)
 }
 
@@ -964,8 +964,8 @@ func (c *EmitContext) VisitIterationBody(body *ast.Statement, visitor *ast.NodeV
 		if ast.IsBlock(updated) {
 			statements = append(statements, updated.Statements()...)
 			statementsList := c.Factory.NewNodeList(statements)
-			statementsList.Loc = updated.StatementList().Loc
-			return c.Factory.UpdateBlock(updated.AsBlock(), statementsList, updated.AsBlock().MultiLine)
+			statementsList.SetLoc(updated.StatementList().Loc())
+			return c.Factory.UpdateBlock(updated.AsBlock(), statementsList, updated.AsBlock().MultiLine())
 		}
 		statements = append(statements, updated)
 		return c.Factory.NewBlock(c.Factory.NewNodeList(statements), true /*multiLine*/)

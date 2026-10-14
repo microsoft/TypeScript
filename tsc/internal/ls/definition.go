@@ -195,7 +195,7 @@ func combineDefinitionResponses(results []lsproto.DefinitionResponse, links bool
 func getDeclarationNameForKeyword(node *ast.Node) *ast.Node {
 	if node.Kind() >= ast.KindFirstKeyword && node.Kind() <= ast.KindLastKeyword {
 		if ast.IsVariableDeclarationList(node.Parent()) {
-			if decl := core.FirstOrNil(node.Parent().AsVariableDeclarationList().Declarations.Nodes); decl != nil && decl.Name() != nil {
+			if decl := core.FirstOrNil(node.Parent().AsVariableDeclarationList().Declarations().Nodes()); decl != nil && decl.Name() != nil {
 				return decl.Name()
 			}
 		} else if node.Parent().DeclarationData() != nil && node.Parent().Name() != nil && node.Pos() < node.Parent().Name().Pos() {
@@ -331,7 +331,7 @@ func getDeclarationsFromLocation(c *checker.Checker, node *ast.Node) []*ast.Node
 		//      interface Test { prop1: number }
 		//      bar<Test>(({ prop1 }) => {});  => should navigate to prop1 in Test
 		bindingEl := node.Parent().AsBindingElement()
-		if bindingEl.DotDotDotToken == nil && node == core.OrElse(bindingEl.PropertyName, node.Parent().Name()) {
+		if bindingEl.DotDotDotToken() == nil && node == core.OrElse(bindingEl.PropertyName(), node.Parent().Name()) {
 			if name, ok := ast.TryGetTextOfPropertyName(node); ok {
 				t := c.GetTypeAtLocation(node.Parent().Parent())
 				types := []*checker.Type{t}

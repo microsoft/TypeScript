@@ -393,7 +393,7 @@ func (tx *classFieldsTransformer) visitDestructuringAssignmentTarget(node *ast.N
 		if data.classConstructor != nil && data.superClassReference != nil {
 			var name *ast.Expression
 			if ast.IsElementAccessExpression(node) {
-				name = tx.Visitor().VisitNode(node.AsElementAccessExpression().ArgumentExpression)
+				name = tx.Visitor().VisitNode(node.AsElementAccessExpression().ArgumentExpression())
 			} else if ast.IsPropertyAccessExpression(node) && ast.IsIdentifier(node.AsPropertyAccessExpression().Name()) {
 				name = tx.Factory().NewStringLiteralFromNode(node.AsPropertyAccessExpression().Name())
 			}
@@ -490,9 +490,9 @@ func (tx *classFieldsTransformer) visitPrivateIdentifier(node *ast.Node) *ast.No
 
 // transformPrivateIdentifierInInExpression visits `#id in expr`.
 func (tx *classFieldsTransformer) transformPrivateIdentifierInInExpression(node *ast.BinaryExpression) *ast.Node {
-	info := tx.accessPrivateIdentifier(node.Left)
+	info := tx.accessPrivateIdentifier(node.Left())
 	if info != nil {
-		receiver := tx.Visitor().VisitNode(node.Right)
+		receiver := tx.Visitor().VisitNode(node.Right())
 		result := tx.Factory().NewClassPrivateFieldInHelper(info.brandCheckIdentifier, receiver)
 		tx.EmitContext().SetOriginal(result, node.AsNode())
 		return result
@@ -612,7 +612,7 @@ func (tx *classFieldsTransformer) visitExportAssignment(node *ast.ExportAssignme
 
 	if isNamedEvaluationAnd(tx.EmitContext(), node.AsNode(), tx.isAnonymousClassNeedingAssignedName) {
 		assignedName := ""
-		if !node.IsExportEquals {
+		if !node.IsExportEquals() {
 			assignedName = "default"
 		}
 		node = transformNamedEvaluation(tx.EmitContext(), node.AsNode(), true /*ignoreEmptyStringLiteral*/, assignedName).AsExportAssignment()
@@ -647,7 +647,7 @@ func (tx *classFieldsTransformer) visitComputedPropertyName(node *ast.ComputedPr
 	if tx.lexicalEnvironment != nil && tx.lexicalEnvironment.previous != nil {
 		tx.lexicalEnvironment = tx.lexicalEnvironment.previous
 	}
-	expression := tx.Visitor().VisitNode(node.Expression)
+	expression := tx.Visitor().VisitNode(node.Expression())
 	tx.lexicalEnvironment = savedLexicalEnvironment
 	tx.insideComputedPropertyName = savedInsideComputedPropertyName
 	return tx.Factory().UpdateComputedPropertyName(node, tx.injectPendingExpressions(expression))
@@ -702,7 +702,7 @@ func (tx *classFieldsTransformer) visitMethodOrAccessorDeclaration(node *ast.Nod
 		params := tx.Visitor().VisitNodes(node.ParameterList())
 		tx.inIterationStatement = saved
 
-		funcExpr := tx.Factory().NewFunctionExpression(modifiers, node.BodyData().AsteriskToken, functionName, nil, params, nil, nil, body)
+		funcExpr := tx.Factory().NewFunctionExpression(modifiers, node.BodyData().AsteriskToken(), functionName, nil, params, nil, nil, body)
 		assignment := tx.Factory().NewAssignmentExpression(functionName, funcExpr)
 		tx.addPendingExpressions(assignment)
 	}
@@ -843,7 +843,7 @@ func (tx *classFieldsTransformer) transformAutoAccessor(node *ast.PropertyDeclar
 		cacheAssignment := findComputedPropertyNameCacheAssignment(tx.EmitContext(), name)
 		if cacheAssignment != nil {
 			getterName = tx.Factory().UpdateComputedPropertyName(name.AsComputedPropertyName(), tx.Visitor().VisitNode(name.Expression()))
-			setterName = tx.Factory().UpdateComputedPropertyName(name.AsComputedPropertyName(), cacheAssignment.Left)
+			setterName = tx.Factory().UpdateComputedPropertyName(name.AsComputedPropertyName(), cacheAssignment.Left())
 		} else {
 			temp := tx.Factory().NewTempVariable()
 			tx.EmitContext().SetSourceMapRange(temp, name.Expression().Loc())
@@ -857,7 +857,7 @@ func (tx *classFieldsTransformer) transformAutoAccessor(node *ast.PropertyDeclar
 	}
 
 	modifiers := tx.modifierVisitor.VisitModifiers(node.Modifiers())
-	backingField := createAccessorPropertyBackingField(tx.Factory(), node, modifiers, node.Initializer)
+	backingField := createAccessorPropertyBackingField(tx.Factory(), node, modifiers, node.Initializer())
 	tx.EmitContext().SetOriginal(backingField, node.AsNode())
 	tx.EmitContext().AddEmitFlags(backingField, printer.EFNoComments)
 	tx.EmitContext().SetSourceMapRange(backingField, sourceMapRange)
@@ -880,7 +880,7 @@ func (tx *classFieldsTransformer) transformAutoAccessor(node *ast.PropertyDeclar
 	// create a fresh copy of the modifiers so that we don't duplicate comments
 	var setterModifiers *ast.ModifierList
 	if modifiers != nil {
-		setterModifiers = tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifiers.ModifierFlags, tx.Factory().NewModifier))
+		setterModifiers = tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifiers.ModifierFlags(), tx.Factory().NewModifier))
 	}
 	setter := tx.createAccessorPropertySetRedirector(node, setterModifiers, setterName, receiver)
 	tx.EmitContext().SetOriginal(setter, node.AsNode())
@@ -942,7 +942,7 @@ func (tx *classFieldsTransformer) transformPrivateFieldInitializer(node *ast.Pro
 		tx.visitPropertyName(node.Name()),
 		nil, /*postfixToken*/
 		nil, /*typeNode*/
-		tx.Visitor().VisitNode(node.Initializer),
+		tx.Visitor().VisitNode(node.Initializer()),
 	)
 }
 
@@ -950,7 +950,7 @@ func (tx *classFieldsTransformer) transformPublicFieldInitializer(node *ast.Prop
 	if tx.shouldTransformInitializers && !ast.IsAutoAccessorPropertyDeclaration(node.AsNode()) {
 		// Elide the property declaration; the initializer will be moved to the constructor.
 		// For computed property names, we still need to emit the expression.
-		expr := tx.getPropertyNameExpressionIfNeeded(node.Name(), node.Initializer != nil || tx.compilerOptions.GetUseDefineForClassFields())
+		expr := tx.getPropertyNameExpressionIfNeeded(node.Name(), node.Initializer() != nil || tx.compilerOptions.GetUseDefineForClassFields())
 		if expr != nil {
 			for e := range flattenCommaList(expr) {
 				tx.addPendingExpressions(e)
@@ -986,7 +986,7 @@ func (tx *classFieldsTransformer) transformPublicFieldInitializer(node *ast.Prop
 		tx.visitPropertyName(node.Name()),
 		nil, /*postfixToken*/
 		nil, /*typeNode*/
-		tx.Visitor().VisitNode(node.Initializer),
+		tx.Visitor().VisitNode(node.Initializer()),
 	)
 }
 
@@ -1065,7 +1065,7 @@ func (tx *classFieldsTransformer) visitPropertyAccessExpression(node *ast.Proper
 	if ast.IsPrivateIdentifier(node.Name()) {
 		info := tx.accessPrivateIdentifier(node.Name())
 		if info != nil {
-			result := tx.createPrivateIdentifierAccess(info, node.Expression)
+			result := tx.createPrivateIdentifierAccess(info, node.Expression())
 			tx.EmitContext().SetOriginal(result, node.AsNode())
 			result.SetLoc(node.Loc())
 			return result
@@ -1086,8 +1086,8 @@ func (tx *classFieldsTransformer) visitPropertyAccessExpression(node *ast.Proper
 				tx.Factory().NewStringLiteralFromNode(node.Name()),
 				data.classConstructor,
 			)
-			tx.EmitContext().SetOriginal(superProperty, node.Expression)
-			superProperty.SetLoc(node.Expression.Loc())
+			tx.EmitContext().SetOriginal(superProperty, node.Expression())
+			superProperty.SetLoc(node.Expression().Loc())
 			return superProperty
 		}
 	}
@@ -1106,9 +1106,9 @@ func (tx *classFieldsTransformer) visitPropertyAccessExpression(node *ast.Proper
 // leaving the name unchanged. This prevents the name from being treated as a standalone identifier
 // reference and incorrectly substituted with a class alias.
 func (tx *classFieldsTransformer) visitPropertyAccessExpressionForSubstitution(node *ast.PropertyAccessExpression, visitor *ast.NodeVisitor) *ast.Node {
-	expression := visitor.VisitNode(node.Expression)
-	if expression != node.Expression {
-		return tx.Factory().UpdatePropertyAccessExpression(node, expression, node.QuestionDotToken, node.Name(), node.Flags())
+	expression := visitor.VisitNode(node.Expression())
+	if expression != node.Expression() {
+		return tx.Factory().UpdatePropertyAccessExpression(node, expression, node.QuestionDotToken(), node.Name(), node.Flags())
 	}
 	return node.AsNode()
 }
@@ -1126,11 +1126,11 @@ func (tx *classFieldsTransformer) visitElementAccessExpression(node *ast.Element
 			// converts `super[x]` into `Reflect.get(_baseTemp, x, _classTemp)`
 			superProperty := tx.Factory().NewReflectGetCall(
 				data.superClassReference,
-				tx.Visitor().VisitNode(node.ArgumentExpression),
+				tx.Visitor().VisitNode(node.ArgumentExpression()),
 				data.classConstructor,
 			)
-			tx.EmitContext().SetOriginal(superProperty, node.Expression)
-			superProperty.SetLoc(node.Expression.Loc())
+			tx.EmitContext().SetOriginal(superProperty, node.Expression())
+			superProperty.SetLoc(node.Expression().Loc())
 			return superProperty
 		}
 	}
@@ -1141,11 +1141,11 @@ func (tx *classFieldsTransformer) visitPreOrPostfixUnaryExpression(node *ast.Nod
 	var operator ast.Kind
 	var operand *ast.Node
 	if ast.IsPrefixUnaryExpression(node) {
-		operator = node.AsPrefixUnaryExpression().Operator
-		operand = node.AsPrefixUnaryExpression().Operand
+		operator = node.AsPrefixUnaryExpression().Operator()
+		operand = node.AsPrefixUnaryExpression().Operand()
 	} else {
-		operator = node.AsPostfixUnaryExpression().Operator
-		operand = node.AsPostfixUnaryExpression().Operand
+		operator = node.AsPostfixUnaryExpression().Operator()
+		operand = node.AsPostfixUnaryExpression().Operand()
 	}
 
 	if operator == ast.KindPlusPlusToken || operator == ast.KindMinusMinusToken {
@@ -1194,9 +1194,9 @@ func (tx *classFieldsTransformer) visitPreOrPostfixUnaryExpression(node *ast.Nod
 			if data.facts&classFactsClassWasDecorated != 0 {
 				visitedExpr := tx.visitInvalidSuperProperty(operandSkipped)
 				if ast.IsPrefixUnaryExpression(node) {
-					return tx.Factory().UpdatePrefixUnaryExpression(node.AsPrefixUnaryExpression(), node.AsPrefixUnaryExpression().Operator, visitedExpr)
+					return tx.Factory().UpdatePrefixUnaryExpression(node.AsPrefixUnaryExpression(), node.AsPrefixUnaryExpression().Operator(), visitedExpr)
 				}
-				return tx.Factory().UpdatePostfixUnaryExpression(node.AsPostfixUnaryExpression(), visitedExpr, node.AsPostfixUnaryExpression().Operator)
+				return tx.Factory().UpdatePostfixUnaryExpression(node.AsPostfixUnaryExpression(), visitedExpr, node.AsPostfixUnaryExpression().Operator())
 			}
 			if data.classConstructor != nil && data.superClassReference != nil {
 				var setterName *ast.Expression
@@ -1207,13 +1207,13 @@ func (tx *classFieldsTransformer) visitPreOrPostfixUnaryExpression(node *ast.Nod
 						setterName = getterName
 					}
 				} else if ast.IsElementAccessExpression(operandSkipped) {
-					if transformers.IsSimpleInlineableExpression(operandSkipped.AsElementAccessExpression().ArgumentExpression) {
-						getterName = operandSkipped.AsElementAccessExpression().ArgumentExpression
+					if transformers.IsSimpleInlineableExpression(operandSkipped.AsElementAccessExpression().ArgumentExpression()) {
+						getterName = operandSkipped.AsElementAccessExpression().ArgumentExpression()
 						setterName = getterName
 					} else {
 						getterName = tx.Factory().NewTempVariable()
 						tx.EmitContext().AddVariableDeclaration(getterName)
-						setterName = tx.Factory().NewAssignmentExpression(getterName, tx.Visitor().VisitNode(operandSkipped.AsElementAccessExpression().ArgumentExpression))
+						setterName = tx.Factory().NewAssignmentExpression(getterName, tx.Visitor().VisitNode(operandSkipped.AsElementAccessExpression().ArgumentExpression()))
 					}
 				}
 				if setterName != nil && getterName != nil {
@@ -1242,12 +1242,12 @@ func (tx *classFieldsTransformer) visitPreOrPostfixUnaryExpression(node *ast.Nod
 }
 
 func (tx *classFieldsTransformer) visitForStatement(node *ast.ForStatement) *ast.Node {
-	initializer := tx.discardedValueVisitor.VisitNode(node.Initializer)
-	condition := tx.Visitor().VisitNode(node.Condition)
-	incrementor := tx.discardedValueVisitor.VisitNode(node.Incrementor)
+	initializer := tx.discardedValueVisitor.VisitNode(node.Initializer())
+	condition := tx.Visitor().VisitNode(node.Condition())
+	incrementor := tx.discardedValueVisitor.VisitNode(node.Incrementor())
 	saved := tx.inIterationStatement
 	tx.inIterationStatement = true
-	body := tx.EmitContext().VisitIterationBody(node.Statement, tx.Visitor())
+	body := tx.EmitContext().VisitIterationBody(node.Statement(), tx.Visitor())
 	tx.inIterationStatement = saved
 	return tx.Factory().UpdateForStatement(node, initializer, condition, incrementor, body)
 }
@@ -1257,12 +1257,12 @@ func (tx *classFieldsTransformer) visitExpressionStatement(node *ast.ExpressionS
 	// ExpressionStatement (e.g., `#;`). This is error-recovery output from the parser
 	// for invalid syntax. Keeping it ensures the runtime throws a SyntaxError rather
 	// than silently succeeding with an empty statement.
-	if ast.IsPrivateIdentifier(node.Expression) && tx.shouldTransformPrivateElementsOrClassStaticBlocks {
+	if ast.IsPrivateIdentifier(node.Expression()) && tx.shouldTransformPrivateElementsOrClassStaticBlocks {
 		return node.AsNode()
 	}
 	return tx.Factory().UpdateExpressionStatement(
 		node,
-		tx.discardedValueVisitor.VisitNode(node.Expression),
+		tx.discardedValueVisitor.VisitNode(node.Expression()),
 	)
 }
 
@@ -1281,22 +1281,22 @@ func (tx *classFieldsTransformer) createCopiableReceiverExpr(receiver *ast.Expre
 }
 
 func (tx *classFieldsTransformer) visitCallExpression(node *ast.CallExpression) *ast.Node {
-	if ast.IsPropertyAccessExpression(node.Expression) && ast.IsPrivateIdentifier(node.Expression.AsPropertyAccessExpression().Name()) &&
-		tx.accessPrivateIdentifier(node.Expression.AsPropertyAccessExpression().Name()) != nil {
+	if ast.IsPropertyAccessExpression(node.Expression()) && ast.IsPrivateIdentifier(node.Expression().AsPropertyAccessExpression().Name()) &&
+		tx.accessPrivateIdentifier(node.Expression().AsPropertyAccessExpression().Name()) != nil {
 		// obj.#x()
 
 		// Transform call expressions of private names to properly bind the `this` parameter.
-		thisArg, target := tx.createCallBinding(node.Expression)
+		thisArg, target := tx.createCallBinding(node.Expression())
 		visitedTarget := tx.Visitor().VisitNode(target)
 		visitedThisArg := tx.Visitor().VisitNode(thisArg)
-		visitedArgs := tx.Visitor().VisitNodes(node.Arguments)
-		allArgs := make([]*ast.Node, 0, 1+len(visitedArgs.Nodes))
+		visitedArgs := tx.Visitor().VisitNodes(node.Arguments())
+		allArgs := make([]*ast.Node, 0, 1+len(visitedArgs.Nodes()))
 		allArgs = append(allArgs, visitedThisArg)
-		allArgs = append(allArgs, visitedArgs.Nodes...)
+		allArgs = append(allArgs, visitedArgs.Nodes()...)
 		if node.Flags()&ast.NodeFlagsOptionalChain != 0 {
 			return tx.Factory().UpdateCallExpression(
 				node,
-				tx.Factory().NewPropertyAccessExpression(visitedTarget, node.QuestionDotToken, tx.Factory().NewIdentifier("call"), ast.NodeFlagsOptionalChain),
+				tx.Factory().NewPropertyAccessExpression(visitedTarget, node.QuestionDotToken(), tx.Factory().NewIdentifier("call"), ast.NodeFlagsOptionalChain),
 				nil, /*questionDotToken*/
 				nil, /*typeArguments*/
 				tx.Factory().NewNodeList(allArgs),
@@ -1314,7 +1314,7 @@ func (tx *classFieldsTransformer) visitCallExpression(node *ast.CallExpression) 
 	}
 
 	if tx.shouldTransformSuperInStaticInitializers && tx.currentClassElement != nil &&
-		ast.IsSuperProperty(node.Expression) &&
+		ast.IsSuperProperty(node.Expression()) &&
 		isStaticPropertyDeclarationOrClassStaticBlock(tx.currentClassElement) &&
 		tx.lexicalEnvironment != nil && tx.lexicalEnvironment.data != nil &&
 		tx.lexicalEnvironment.data.classConstructor != nil {
@@ -1323,9 +1323,9 @@ func (tx *classFieldsTransformer) visitCallExpression(node *ast.CallExpression) 
 
 		// converts `super.f(...)` into `Reflect.get(_baseTemp, "f", _classTemp).call(_classTemp, ...)`
 		invocation := tx.Factory().NewFunctionCallCall(
-			tx.Visitor().VisitNode(node.Expression),
+			tx.Visitor().VisitNode(node.Expression()),
 			tx.lexicalEnvironment.data.classConstructor,
-			tx.Visitor().VisitNodes(node.Arguments).Nodes,
+			tx.Visitor().VisitNodes(node.Arguments()).Nodes(),
 		)
 		tx.EmitContext().SetOriginal(invocation, node.AsNode())
 		invocation.SetLoc(node.Loc())
@@ -1336,10 +1336,10 @@ func (tx *classFieldsTransformer) visitCallExpression(node *ast.CallExpression) 
 }
 
 func (tx *classFieldsTransformer) visitTaggedTemplateExpression(node *ast.TaggedTemplateExpression) *ast.Node {
-	if ast.IsPropertyAccessExpression(node.Tag) && ast.IsPrivateIdentifier(node.Tag.AsPropertyAccessExpression().Name()) &&
-		tx.accessPrivateIdentifier(node.Tag.AsPropertyAccessExpression().Name()) != nil {
+	if ast.IsPropertyAccessExpression(node.Tag()) && ast.IsPrivateIdentifier(node.Tag().AsPropertyAccessExpression().Name()) &&
+		tx.accessPrivateIdentifier(node.Tag().AsPropertyAccessExpression().Name()) != nil {
 		// Bind the `this` correctly for tagged template literals when the tag is a private identifier property access.
-		thisArg, target := tx.createCallBinding(node.Tag)
+		thisArg, target := tx.createCallBinding(node.Tag())
 		bindExpr := tx.Factory().NewCallExpression(
 			tx.Factory().NewPropertyAccessExpression(tx.Visitor().VisitNode(target), nil, tx.Factory().NewIdentifier("bind"), ast.NodeFlagsNone),
 			nil, /*questionDotToken*/
@@ -1352,19 +1352,19 @@ func (tx *classFieldsTransformer) visitTaggedTemplateExpression(node *ast.Tagged
 			bindExpr,
 			nil, /*questionDotToken*/
 			nil, /*typeArguments*/
-			tx.Visitor().VisitNode(node.Template),
+			tx.Visitor().VisitNode(node.Template()),
 			node.Flags(),
 		)
 	}
 
 	if tx.shouldTransformSuperInStaticInitializers && tx.currentClassElement != nil &&
-		ast.IsSuperProperty(node.Tag) &&
+		ast.IsSuperProperty(node.Tag()) &&
 		isStaticPropertyDeclarationOrClassStaticBlock(tx.currentClassElement) &&
 		tx.lexicalEnvironment != nil && tx.lexicalEnvironment.data != nil &&
 		tx.lexicalEnvironment.data.classConstructor != nil {
 		// converts `` super.f`x` `` into `` Reflect.get(_baseTemp, "f", _classTemp).bind(_classTemp)`x` ``
 		invocation := tx.Factory().NewFunctionBindCall(
-			tx.Visitor().VisitNode(node.Tag),
+			tx.Visitor().VisitNode(node.Tag()),
 			tx.lexicalEnvironment.data.classConstructor,
 			nil,
 		)
@@ -1375,7 +1375,7 @@ func (tx *classFieldsTransformer) visitTaggedTemplateExpression(node *ast.Tagged
 			invocation,
 			nil, /*questionDotToken*/
 			nil, /*typeArguments*/
-			tx.Visitor().VisitNode(node.Template),
+			tx.Visitor().VisitNode(node.Template()),
 			node.Flags(),
 		)
 	}
@@ -1386,12 +1386,12 @@ func (tx *classFieldsTransformer) visitTaggedTemplateExpression(node *ast.Tagged
 func (tx *classFieldsTransformer) transformClassStaticBlockDeclaration(node *ast.Node) *ast.Expression {
 	if tx.shouldTransformPrivateElementsOrClassStaticBlocks {
 		if isClassThisAssignmentBlock(tx.EmitContext(), node) {
-			result := tx.Visitor().VisitNode(node.AsClassStaticBlockDeclaration().Body.AsBlock().Statements.Nodes[0].Expression())
+			result := tx.Visitor().VisitNode(node.AsClassStaticBlockDeclaration().Body().AsBlock().Statements().Nodes()[0].Expression())
 			// If the generated `_classThis` assignment is a noop (i.e., `_classThis = _classThis`), we can
 			// eliminate the expression
 			if ast.IsAssignmentExpression(result, true /*excludeCompoundAssignment*/) {
 				binary := result.AsBinaryExpression()
-				if binary.Left == binary.Right {
+				if binary.Left() == binary.Right() {
 					return nil
 				}
 			}
@@ -1399,11 +1399,11 @@ func (tx *classFieldsTransformer) transformClassStaticBlockDeclaration(node *ast
 		}
 
 		if isClassNamedEvaluationHelperBlock(tx.EmitContext(), node) {
-			return tx.Visitor().VisitNode(node.AsClassStaticBlockDeclaration().Body.AsBlock().Statements.Nodes[0].Expression())
+			return tx.Visitor().VisitNode(node.AsClassStaticBlockDeclaration().Body().AsBlock().Statements().Nodes()[0].Expression())
 		}
 
 		tx.EmitContext().StartVariableEnvironment()
-		statements := tx.setCurrentClassElementAndVisitStatements(node, node.AsClassStaticBlockDeclaration().Body.AsBlock().Statements.Nodes)
+		statements := tx.setCurrentClassElementAndVisitStatements(node, node.AsClassStaticBlockDeclaration().Body().AsBlock().Statements().Nodes())
 		statements = tx.EmitContext().EndAndMergeVariableEnvironment(statements)
 
 		iife := tx.Factory().NewImmediatelyInvokedArrowFunction(statements)
@@ -1412,7 +1412,7 @@ func (tx *classFieldsTransformer) transformClassStaticBlockDeclaration(node *ast
 		tx.EmitContext().AddEmitFlags(arrowFunction, printer.EFNoLexicalArguments)
 		// Preserve the statement list source range so the printer can emit detached comments
 		// (e.g., `// do` inside an otherwise empty static block)
-		arrowFunction.AsArrowFunction().Body.AsBlock().Statements.Loc = node.AsClassStaticBlockDeclaration().Body.AsBlock().Statements.Loc
+		arrowFunction.AsArrowFunction().Body().AsBlock().Statements().SetLoc(node.AsClassStaticBlockDeclaration().Body().AsBlock().Statements().Loc())
 		tx.EmitContext().SetOriginal(iife, node)
 		tx.EmitContext().AssignSourceMapRange(iife, node)
 		tx.EmitContext().AddEmitFlags(arrowFunction, printer.EFNoLexicalThis)
@@ -1459,10 +1459,10 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 		updated := tx.Factory().UpdateBinaryExpression(
 			node,
 			nil,
-			tx.assignmentTargetVisitor.VisitNode(node.Left),
+			tx.assignmentTargetVisitor.VisitNode(node.Left()),
 			nil,
-			node.OperatorToken,
-			tx.Visitor().VisitNode(node.Right),
+			node.OperatorToken(),
+			tx.Visitor().VisitNode(node.Right()),
 		)
 		var result *ast.Expression
 		if len(tx.pendingExpressions) > 0 {
@@ -1507,18 +1507,18 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 			debug.Assert(node.AsNode() != nil && ast.IsAssignmentExpression(node.AsNode(), false))
 		}
 
-		left := ast.SkipOuterExpressions(node.Left, ast.OEKPartiallyEmittedExpressions|ast.OEKParentheses)
+		left := ast.SkipOuterExpressions(node.Left(), ast.OEKPartiallyEmittedExpressions|ast.OEKParentheses)
 		if ast.IsPropertyAccessExpression(left) && ast.IsPrivateIdentifier(left.Name()) {
 			// obj.#x = ...
 			info := tx.accessPrivateIdentifier(left.Name())
 			if info != nil {
-				result := tx.createPrivateIdentifierAssignment(info, left.Expression(), node.Right, node.OperatorToken.Kind())
+				result := tx.createPrivateIdentifierAssignment(info, left.Expression(), node.Right(), node.OperatorToken().Kind())
 				tx.EmitContext().SetOriginal(result, node.AsNode())
 				result.SetLoc(node.Loc())
 				return result
 			}
 		} else if tx.shouldTransformSuperInStaticInitializers && tx.currentClassElement != nil &&
-			ast.IsSuperProperty(node.Left) &&
+			ast.IsSuperProperty(node.Left()) &&
 			isStaticPropertyDeclarationOrClassStaticBlock(tx.currentClassElement) &&
 			tx.lexicalEnvironment != nil && tx.lexicalEnvironment.data != nil {
 			// super.x = ...
@@ -1530,18 +1530,18 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 				return tx.Factory().UpdateBinaryExpression(
 					node,
 					nil,
-					tx.visitInvalidSuperProperty(node.Left),
+					tx.visitInvalidSuperProperty(node.Left()),
 					nil,
-					node.OperatorToken,
-					tx.Visitor().VisitNode(node.Right),
+					node.OperatorToken(),
+					tx.Visitor().VisitNode(node.Right()),
 				)
 			}
 			if data.classConstructor != nil && data.superClassReference != nil {
 				var setterName *ast.Expression
-				if ast.IsElementAccessExpression(node.Left) {
-					setterName = tx.Visitor().VisitNode(node.Left.AsElementAccessExpression().ArgumentExpression)
-				} else if ast.IsPropertyAccessExpression(node.Left) && ast.IsIdentifier(node.Left.AsPropertyAccessExpression().Name()) {
-					setterName = tx.Factory().NewStringLiteralFromNode(node.Left.AsPropertyAccessExpression().Name())
+				if ast.IsElementAccessExpression(node.Left()) {
+					setterName = tx.Visitor().VisitNode(node.Left().AsElementAccessExpression().ArgumentExpression())
+				} else if ast.IsPropertyAccessExpression(node.Left()) && ast.IsIdentifier(node.Left().AsPropertyAccessExpression().Name()) {
+					setterName = tx.Factory().NewStringLiteralFromNode(node.Left().AsPropertyAccessExpression().Name())
 				}
 				if setterName != nil {
 					// converts `super.x = 1` into `(Reflect.set(_baseTemp, "x", _a = 1, _classTemp), _a)`
@@ -1549,8 +1549,8 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 					// converts `super.x += 1` into `(Reflect.set(_baseTemp, "x", _a = Reflect.get(_baseTemp, "x", _classtemp) + 1, _classTemp), _a)`
 					// converts `super[f()] += 1` into `(Reflect.set(_baseTemp, _a = f(), _b = Reflect.get(_baseTemp, _a, _classtemp) + 1, _classTemp), _b)`
 
-					expression := tx.Visitor().VisitNode(node.Right)
-					if ast.IsCompoundAssignment(node.OperatorToken.Kind()) {
+					expression := tx.Visitor().VisitNode(node.Right())
+					if ast.IsCompoundAssignment(node.OperatorToken().Kind()) {
 						getterName := setterName
 						if !transformers.IsSimpleInlineableExpression(setterName) {
 							getterName = tx.Factory().NewTempVariable()
@@ -1562,13 +1562,13 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 							getterName,
 							data.classConstructor,
 						)
-						tx.EmitContext().SetOriginal(superPropertyGet, node.Left)
-						superPropertyGet.SetLoc(node.Left.Loc())
+						tx.EmitContext().SetOriginal(superPropertyGet, node.Left())
+						superPropertyGet.SetLoc(node.Left().Loc())
 						expression = tx.Factory().NewBinaryExpression(
 							nil,
 							superPropertyGet,
 							nil,
-							tx.Factory().NewToken(transformers.GetNonAssignmentOperatorForCompoundAssignment(node.OperatorToken.Kind())),
+							tx.Factory().NewToken(transformers.GetNonAssignmentOperatorForCompoundAssignment(node.OperatorToken().Kind())),
 							expression,
 						)
 						expression.SetLoc(node.Loc())
@@ -1603,7 +1603,7 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 		}
 	}
 
-	if node.OperatorToken.Kind() == ast.KindInKeyword && ast.IsPrivateIdentifier(node.Left) {
+	if node.OperatorToken().Kind() == ast.KindInKeyword && ast.IsPrivateIdentifier(node.Left()) {
 		// #x in obj
 		return tx.transformPrivateIdentifierInInExpression(node)
 	}
@@ -1617,10 +1617,10 @@ func (tx *classFieldsTransformer) visitParenthesizedExpression(node *ast.Parenth
 	//     ...
 	//     2. Return ? NamedEvaluation of |Expression| with argument _name_.
 	if discarded {
-		expression := tx.discardedValueVisitor.VisitNode(node.Expression)
+		expression := tx.discardedValueVisitor.VisitNode(node.Expression())
 		return tx.Factory().UpdateParenthesizedExpression(node, expression)
 	}
-	expression := tx.Visitor().VisitNode(node.Expression)
+	expression := tx.Visitor().VisitNode(node.Expression())
 	return tx.Factory().UpdateParenthesizedExpression(node, expression)
 }
 
@@ -1713,7 +1713,7 @@ func (tx *classFieldsTransformer) memberContainsConstructorReference(member *ast
 	// Check only the body/initializer of the member, not the name (which may be
 	// a computed property name that shouldn't trigger alias substitution).
 	if ast.IsClassStaticBlockDeclaration(member) {
-		body := member.AsClassStaticBlockDeclaration().Body
+		body := member.AsClassStaticBlockDeclaration().Body()
 		if body != nil && check(body.AsNode()) {
 			return true
 		}
@@ -1825,7 +1825,7 @@ func (tx *classFieldsTransformer) visitExpressionWithTypeArgumentsInHeritageClau
 		tx.getClassLexicalEnvironment().superClassReference = temp
 		return tx.Factory().UpdateExpressionWithTypeArguments(
 			node,
-			tx.Factory().NewAssignmentExpression(temp, tx.Visitor().VisitNode(node.Expression)),
+			tx.Factory().NewAssignmentExpression(temp, tx.Visitor().VisitNode(node.Expression())),
 			nil, /*typeArguments*/
 		)
 	}
@@ -1939,7 +1939,7 @@ func (tx *classFieldsTransformer) visitClassDeclarationInNewClassLexicalEnvironm
 	}
 
 	modifiers := tx.modifierVisitor.VisitModifiers(classDecl.Modifiers())
-	heritageClauses := tx.heritageClauseVisitor.VisitNodes(classDecl.HeritageClauses)
+	heritageClauses := tx.heritageClauseVisitor.VisitNodes(classDecl.HeritageClauses())
 	members, membersPrologue := tx.transformClassMembers(node)
 
 	var statements []*ast.Node
@@ -2086,7 +2086,7 @@ func (tx *classFieldsTransformer) visitClassExpressionInNewClassLexicalEnvironme
 	}
 
 	modifiers := tx.modifierVisitor.VisitModifiers(classExpr.Modifiers())
-	heritageClauses := tx.heritageClauseVisitor.VisitNodes(classExpr.HeritageClauses)
+	heritageClauses := tx.heritageClauseVisitor.VisitNodes(classExpr.HeritageClauses())
 	members, membersPrologue := tx.transformClassMembers(node)
 
 	if deferTempDeclaration {
@@ -2272,7 +2272,7 @@ func (tx *classFieldsTransformer) transformClassMembers(node *ast.Node) (members
 
 	// Create a synthetic constructor if necessary
 	var syntheticConstructor *ast.Node
-	if !core.Some(members.Nodes, ast.IsConstructorDeclaration) {
+	if !core.Some(members.Nodes(), ast.IsConstructorDeclaration) {
 		syntheticConstructor = tx.transformConstructor(nil, node)
 	}
 
@@ -2311,21 +2311,21 @@ func (tx *classFieldsTransformer) transformClassMembers(node *ast.Node) (members
 
 	// If we created a synthetic constructor or class static block, add them to the visited members
 	if syntheticConstructor != nil || syntheticStaticBlock != nil {
-		membersArray := make([]*ast.Node, 0, len(members.Nodes)+2)
+		membersArray := make([]*ast.Node, 0, len(members.Nodes())+2)
 
 		// Find and preserve classThis assignment block and named evaluation helper block at the top
-		classThisIdx := slices.IndexFunc(members.Nodes, func(n *ast.Node) bool {
+		classThisIdx := slices.IndexFunc(members.Nodes(), func(n *ast.Node) bool {
 			return isClassThisAssignmentBlock(tx.EmitContext(), n)
 		})
-		namedEvalIdx := slices.IndexFunc(members.Nodes, func(n *ast.Node) bool {
+		namedEvalIdx := slices.IndexFunc(members.Nodes(), func(n *ast.Node) bool {
 			return isClassNamedEvaluationHelperBlock(tx.EmitContext(), n)
 		})
 
 		if classThisIdx >= 0 {
-			membersArray = append(membersArray, members.Nodes[classThisIdx])
+			membersArray = append(membersArray, members.Nodes()[classThisIdx])
 		}
 		if namedEvalIdx >= 0 {
-			membersArray = append(membersArray, members.Nodes[namedEvalIdx])
+			membersArray = append(membersArray, members.Nodes()[namedEvalIdx])
 		}
 		if syntheticConstructor != nil {
 			membersArray = append(membersArray, syntheticConstructor)
@@ -2334,13 +2334,13 @@ func (tx *classFieldsTransformer) transformClassMembers(node *ast.Node) (members
 			membersArray = append(membersArray, syntheticStaticBlock)
 		}
 
-		for i, member := range members.Nodes {
+		for i, member := range members.Nodes() {
 			if i != classThisIdx && i != namedEvalIdx {
 				membersArray = append(membersArray, member)
 			}
 		}
 		members = tx.Factory().NewNodeList(membersArray)
-		members.Loc = node.MemberList().Loc
+		members.SetLoc(node.MemberList().Loc())
 	}
 
 	return members, prologue
@@ -2382,7 +2382,7 @@ func (tx *classFieldsTransformer) transformConstructor(constructor *ast.Construc
 
 	var parameters *ast.NodeList
 	if constructor != nil {
-		parameters = tx.Visitor().VisitNodes(constructor.Parameters)
+		parameters = tx.Visitor().VisitNodes(constructor.Parameters())
 	}
 
 	body := tx.transformConstructorBody(container, constructor, isDerivedClass)
@@ -2440,10 +2440,10 @@ func (tx *classFieldsTransformer) transformConstructorBodyWorker(
 	statementOffset = superStatementIndex + 1
 
 	if ast.IsTryStatement(superStatement) {
-		tryBlock := superStatement.AsTryStatement().TryBlock.AsBlock()
+		tryBlock := superStatement.AsTryStatement().TryBlock().AsBlock()
 		tryBlockStatements := tx.transformConstructorBodyWorker(
 			nil,
-			tryBlock.Statements.Nodes,
+			tryBlock.Statements().Nodes(),
 			0, /*statementOffset*/
 			superPath,
 			superPathDepth+1,
@@ -2451,14 +2451,14 @@ func (tx *classFieldsTransformer) transformConstructorBodyWorker(
 			constructor,
 		)
 		tryStatementList := tx.Factory().NewNodeList(tryBlockStatements)
-		tryStatementList.Loc = tryBlock.Statements.Loc
+		tryStatementList.SetLoc(tryBlock.Statements().Loc())
 
-		catchClause := tx.Visitor().VisitNode(superStatement.AsTryStatement().CatchClause)
-		finallyBlock := tx.Visitor().VisitNode(superStatement.AsTryStatement().FinallyBlock)
+		catchClause := tx.Visitor().VisitNode(superStatement.AsTryStatement().CatchClause())
+		finallyBlock := tx.Visitor().VisitNode(superStatement.AsTryStatement().FinallyBlock())
 
 		updated := tx.Factory().UpdateTryStatement(
 			superStatement.AsTryStatement(),
-			tx.Factory().UpdateBlock(tryBlock, tryStatementList, tryBlock.MultiLine),
+			tx.Factory().UpdateBlock(tryBlock, tryStatementList, tryBlock.MultiLine()),
 			catchClause,
 			finallyBlock,
 		)
@@ -2552,11 +2552,11 @@ func (tx *classFieldsTransformer) transformConstructorBody(container *ast.Node, 
 		initializerStatements = tx.addPropertyOrClassStaticBlockStatements(initializerStatements, properties, receiver)
 	}
 
-	if constructor != nil && constructor.Body != nil {
-		body := constructor.Body.AsBlock()
+	if constructor != nil && constructor.Body() != nil {
+		body := constructor.Body().AsBlock()
 
 		// Copy prologue
-		for _, stmt := range body.Statements.Nodes {
+		for _, stmt := range body.Statements().Nodes() {
 			if ast.IsPrologueDirective(stmt) {
 				statements = append(statements, stmt)
 			} else {
@@ -2565,14 +2565,14 @@ func (tx *classFieldsTransformer) transformConstructorBody(container *ast.Node, 
 		}
 		statementOffset := len(statements)
 
-		superPath := transformers.FindSuperStatementIndexPath(body.Statements.Nodes, statementOffset)
+		superPath := transformers.FindSuperStatementIndexPath(body.Statements().Nodes(), statementOffset)
 		if len(superPath) > 0 {
-			statements = tx.transformConstructorBodyWorker(statements, body.Statements.Nodes, statementOffset, superPath, 0, initializerStatements, constructor)
+			statements = tx.transformConstructorBodyWorker(statements, body.Statements().Nodes(), statementOffset, superPath, 0, initializerStatements, constructor)
 		} else {
 			// parameter-property assignments should occur immediately after the prologue and `super()`,
 			// so only count the statements that immediately follow.
-			for statementOffset < len(body.Statements.Nodes) {
-				stmt := body.Statements.Nodes[statementOffset]
+			for statementOffset < len(body.Statements().Nodes()) {
+				stmt := body.Statements().Nodes()[statementOffset]
 				orig := tx.EmitContext().MostOriginal(stmt)
 				if ast.IsParameterPropertyDeclaration(orig, constructor.AsNode()) {
 					statementOffset++
@@ -2581,7 +2581,7 @@ func (tx *classFieldsTransformer) transformConstructorBody(container *ast.Node, 
 				}
 			}
 			statements = append(statements, initializerStatements...)
-			visited, _ := tx.Visitor().VisitSlice(body.Statements.Nodes[statementOffset:])
+			visited, _ := tx.Visitor().VisitSlice(body.Statements().Nodes()[statementOffset:])
 			statements = append(statements, visited...)
 		}
 	} else {
@@ -2613,23 +2613,23 @@ func (tx *classFieldsTransformer) transformConstructorBody(container *ast.Node, 
 	}
 
 	var multiLine bool
-	if constructor != nil && constructor.Body != nil &&
-		len(constructor.Body.AsBlock().Statements.Nodes) >= len(statements) {
-		multiLine = constructor.Body.AsBlock().MultiLine
+	if constructor != nil && constructor.Body() != nil &&
+		len(constructor.Body().AsBlock().Statements().Nodes()) >= len(statements) {
+		multiLine = constructor.Body().AsBlock().MultiLine()
 	} else {
 		multiLine = len(statements) > 0
 	}
 
 	statementList := tx.Factory().NewNodeList(statements)
-	if constructor != nil && constructor.Body != nil {
-		statementList.Loc = constructor.Body.AsBlock().Statements.Loc
+	if constructor != nil && constructor.Body() != nil {
+		statementList.SetLoc(constructor.Body().AsBlock().Statements().Loc())
 	} else {
-		statementList.Loc = core.NewTextRange(container.MemberList().Loc.Pos(), container.MemberList().Loc.End())
+		statementList.SetLoc(core.NewTextRange(container.MemberList().Loc().Pos(), container.MemberList().Loc().End()))
 	}
 
 	block := tx.Factory().NewBlock(statementList, multiLine)
-	if constructor != nil && constructor.Body != nil {
-		block.SetLoc(constructor.Body.Loc())
+	if constructor != nil && constructor.Body() != nil {
+		block.SetLoc(constructor.Body().Loc())
 	}
 	return block
 }
@@ -2757,14 +2757,14 @@ func (tx *classFieldsTransformer) transformPropertyWorker(property *ast.Property
 					return createPrivateInstanceFieldInitializer(
 						tx.Factory(),
 						receiver,
-						tx.Visitor().VisitNode(property.Initializer),
+						tx.Visitor().VisitNode(property.Initializer()),
 						info.brandCheckIdentifier,
 					)
 				}
 				return createPrivateStaticFieldInitializer(
 					tx.Factory(),
 					info.variableName,
-					tx.Visitor().VisitNode(property.Initializer),
+					tx.Visitor().VisitNode(property.Initializer()),
 				)
 			}
 			return nil
@@ -2773,7 +2773,7 @@ func (tx *classFieldsTransformer) transformPropertyWorker(property *ast.Property
 		}
 	}
 
-	if (ast.IsPrivateIdentifier(propertyName) || ast.HasStaticModifier(property.AsNode())) && property.Initializer == nil {
+	if (ast.IsPrivateIdentifier(propertyName) || ast.HasStaticModifier(property.AsNode())) && property.Initializer() == nil {
 		return nil
 	}
 
@@ -2782,7 +2782,7 @@ func (tx *classFieldsTransformer) transformPropertyWorker(property *ast.Property
 		return nil
 	}
 
-	initializer := tx.Visitor().VisitNode(property.Initializer)
+	initializer := tx.Visitor().VisitNode(property.Initializer())
 	propertyOriginalNode := tx.EmitContext().MostOriginal(property.AsNode())
 	if ast.IsParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.Parent()) && ast.IsIdentifier(propertyName) { //nolint:customlint // MostOriginal returns parse-tree nodes, and this parent relationship is intentional.
 		// A parameter-property declaration always overrides the initializer. The only time a parameter-property
@@ -2793,10 +2793,10 @@ func (tx *classFieldsTransformer) transformPropertyWorker(property *ast.Property
 			// unwrap `(__runInitializers(this, _instanceExtraInitializers), void 0)`
 			if ast.IsParenthesizedExpression(initializer) &&
 				ast.IsCommaExpression(initializer.Expression()) &&
-				tx.EmitContext().IsCallToHelper(initializer.Expression().AsBinaryExpression().Left, "__runInitializers") &&
-				ast.IsVoidExpression(initializer.Expression().AsBinaryExpression().Right) &&
-				ast.IsNumericLiteral(initializer.Expression().AsBinaryExpression().Right.Expression()) {
-				initializer = initializer.Expression().AsBinaryExpression().Left
+				tx.EmitContext().IsCallToHelper(initializer.Expression().AsBinaryExpression().Left(), "__runInitializers") &&
+				ast.IsVoidExpression(initializer.Expression().AsBinaryExpression().Right()) &&
+				ast.IsNumericLiteral(initializer.Expression().AsBinaryExpression().Right().Expression()) {
+				initializer = initializer.Expression().AsBinaryExpression().Left()
 			}
 			initializer = tx.Factory().InlineExpressions([]*ast.Expression{initializer, localName})
 		} else {
@@ -2865,7 +2865,7 @@ func (tx *classFieldsTransformer) visitInvalidSuperProperty(node *ast.Node) *ast
 		node.AsElementAccessExpression(),
 		tx.Factory().NewVoidZeroExpression(),
 		nil,
-		tx.Visitor().VisitNode(node.AsElementAccessExpression().ArgumentExpression),
+		tx.Visitor().VisitNode(node.AsElementAccessExpression().ArgumentExpression()),
 		node.Flags(),
 	)
 }
@@ -2892,7 +2892,7 @@ func (tx *classFieldsTransformer) getPropertyNameExpressionIfNeeded(name *ast.Pr
 	tx.insideComputedPropertyName = savedInsideComputedPropertyName
 	innerExpression := ast.SkipPartiallyEmittedExpressions(expression)
 	inlinable := transformers.IsSimpleInlineableExpression(innerExpression)
-	alreadyTransformed := cacheAssignment != nil || (ast.IsAssignmentExpression(innerExpression, true /*excludeCompoundAssignment*/) && ast.IsIdentifier(innerExpression.AsBinaryExpression().Left) && transformers.IsGeneratedIdentifier(tx.EmitContext(), innerExpression.AsBinaryExpression().Left))
+	alreadyTransformed := cacheAssignment != nil || (ast.IsAssignmentExpression(innerExpression, true /*excludeCompoundAssignment*/) && ast.IsIdentifier(innerExpression.AsBinaryExpression().Left()) && transformers.IsGeneratedIdentifier(tx.EmitContext(), innerExpression.AsBinaryExpression().Left()))
 	if !alreadyTransformed && !inlinable && shouldHoist {
 		generatedName := tx.Factory().NewGeneratedNameForNode(name)
 		if tx.requiresBlockScopedVar() {
@@ -3200,18 +3200,18 @@ func (tx *classFieldsTransformer) wrapPrivateIdentifierForDestructuringTarget(no
 	if info == nil {
 		return tx.Visitor().VisitEachChild(node)
 	}
-	receiver := prop.Expression
+	receiver := prop.Expression()
 	// We cannot copy `this` or `super` into the function because they will be bound
 	// differently inside the function.
-	isThisOrSuperProperty := prop.Expression.Kind() == ast.KindThisKeyword || prop.Expression.Kind() == ast.KindSuperKeyword
-	if isThisOrSuperProperty || !transformers.IsSimpleCopiableExpression(prop.Expression) {
+	isThisOrSuperProperty := prop.Expression().Kind() == ast.KindThisKeyword || prop.Expression().Kind() == ast.KindSuperKeyword
+	if isThisOrSuperProperty || !transformers.IsSimpleCopiableExpression(prop.Expression()) {
 		receiver = tx.Factory().NewTempVariableEx(printer.AutoGenerateOptions{
 			Flags: printer.GeneratedIdentifierFlagsReservedInNestedScopes,
 		})
 		tx.EmitContext().AddVariableDeclaration(receiver)
 		tx.pendingExpressions = append(
 			tx.pendingExpressions,
-			tx.Factory().NewAssignmentExpression(receiver, tx.Visitor().VisitNode(prop.Expression)),
+			tx.Factory().NewAssignmentExpression(receiver, tx.Visitor().VisitNode(prop.Expression())),
 		)
 	}
 	assignExpr := tx.createPrivateIdentifierAssignment(info, receiver, parameter, ast.KindEqualsToken)
@@ -3231,14 +3231,14 @@ func (tx *classFieldsTransformer) visitAssignmentElement(node *ast.Node) *ast.No
 		node = transformNamedEvaluation(tx.EmitContext(), node, false /*ignoreEmptyStringLiteral*/, "" /*assignedName*/)
 	}
 	if ast.IsAssignmentExpression(node, true /*excludeCompoundAssignment*/) {
-		left := tx.visitDestructuringAssignmentTarget(node.AsBinaryExpression().Left)
-		right := tx.Visitor().VisitNode(node.AsBinaryExpression().Right)
+		left := tx.visitDestructuringAssignmentTarget(node.AsBinaryExpression().Left())
+		right := tx.Visitor().VisitNode(node.AsBinaryExpression().Right())
 		return tx.Factory().UpdateBinaryExpression(
 			node.AsBinaryExpression(),
 			nil,
 			left,
 			nil,
-			node.AsBinaryExpression().OperatorToken,
+			node.AsBinaryExpression().OperatorToken(),
 			right,
 		)
 	}
@@ -3247,8 +3247,8 @@ func (tx *classFieldsTransformer) visitAssignmentElement(node *ast.Node) *ast.No
 
 func (tx *classFieldsTransformer) visitAssignmentRestElement(node *ast.Node) *ast.Node {
 	spread := node.AsSpreadElement()
-	if ast.IsLeftHandSideExpression(spread.Expression) {
-		expr := tx.visitDestructuringAssignmentTarget(spread.Expression)
+	if ast.IsLeftHandSideExpression(spread.Expression()) {
+		expr := tx.visitDestructuringAssignmentTarget(spread.Expression())
 		return tx.Factory().UpdateSpreadElement(spread, expr)
 	}
 	return tx.Visitor().VisitEachChild(node)
@@ -3280,7 +3280,7 @@ func (tx *classFieldsTransformer) visitAssignmentProperty(node *ast.Node) *ast.N
 
 	prop := node.AsPropertyAssignment()
 	name := tx.Visitor().VisitNode(prop.Name())
-	init := prop.Initializer
+	init := prop.Initializer()
 	if ast.IsAssignmentExpression(init, true /*excludeCompoundAssignment*/) {
 		assignElem := tx.visitAssignmentElement(init)
 		return tx.Factory().UpdatePropertyAssignment(prop, nil, name, nil, nil, assignElem)
@@ -3311,8 +3311,8 @@ func (tx *classFieldsTransformer) visitShorthandAssignmentProperty(node *ast.Nod
 
 func (tx *classFieldsTransformer) visitAssignmentRestProperty(node *ast.Node) *ast.Node {
 	spread := node.AsSpreadAssignment()
-	if ast.IsLeftHandSideExpression(spread.Expression) {
-		expr := tx.visitDestructuringAssignmentTarget(spread.Expression)
+	if ast.IsLeftHandSideExpression(spread.Expression()) {
+		expr := tx.visitDestructuringAssignmentTarget(spread.Expression())
 		return tx.Factory().UpdateSpreadAssignment(spread, expr)
 	}
 	return tx.Visitor().VisitEachChild(node)
@@ -3344,8 +3344,8 @@ func (tx *classFieldsTransformer) visitAssignmentPattern(node *ast.Node) *ast.No
 		// [ { set value(x) { this.#myProp = x; } }.value ] = [ "hello" ];
 		return tx.Factory().UpdateArrayLiteralExpression(
 			node.AsArrayLiteralExpression(),
-			tx.arrayAssignmentElementVisitor.VisitNodes(node.AsArrayLiteralExpression().Elements),
-			node.AsArrayLiteralExpression().MultiLine,
+			tx.arrayAssignmentElementVisitor.VisitNodes(node.AsArrayLiteralExpression().Elements()),
+			node.AsArrayLiteralExpression().MultiLine(),
 		)
 	}
 	// Transforms private names in destructuring assignment object bindings.
@@ -3358,8 +3358,8 @@ func (tx *classFieldsTransformer) visitAssignmentPattern(node *ast.Node) *ast.No
 	// ({ stringProperty: { set value(x) { this.#myProp = x; } }.value }) = { stringProperty: "hello" };
 	return tx.Factory().UpdateObjectLiteralExpression(
 		node.AsObjectLiteralExpression(),
-		tx.objectAssignmentElementVisitor.VisitNodes(node.AsObjectLiteralExpression().Properties),
-		node.AsObjectLiteralExpression().MultiLine,
+		tx.objectAssignmentElementVisitor.VisitNodes(node.AsObjectLiteralExpression().Properties()),
+		node.AsObjectLiteralExpression().MultiLine(),
 	)
 }
 
@@ -3461,12 +3461,12 @@ func (tx *classFieldsTransformer) createCallBinding(node *ast.Node) (thisArg *as
 	}
 	if ast.IsPropertyAccessExpression(node) {
 		expr := node.AsPropertyAccessExpression()
-		if shouldBeCapturedInTempVariable(expr.Expression) {
+		if shouldBeCapturedInTempVariable(expr.Expression()) {
 			thisArg = tx.Factory().NewTempVariable()
 			tx.EmitContext().AddVariableDeclaration(thisArg)
 			target = tx.Factory().NewPropertyAccessExpression(
 				tx.Factory().NewParenthesizedExpression( // TODO: do we even need these?
-					tx.Factory().NewAssignmentExpression(thisArg, expr.Expression),
+					tx.Factory().NewAssignmentExpression(thisArg, expr.Expression()),
 				),
 				nil,
 				expr.Name(),
@@ -3474,7 +3474,7 @@ func (tx *classFieldsTransformer) createCallBinding(node *ast.Node) (thisArg *as
 			)
 			return thisArg, target
 		}
-		return expr.Expression, node
+		return expr.Expression(), node
 	}
 	thisArg = tx.Factory().NewVoidZeroExpression()
 	target = node
@@ -3555,8 +3555,8 @@ func flattenCommaListWorker(node *ast.Expression, yield func(*ast.Expression) bo
 	if ast.IsParenthesizedExpression(node) && ast.NodeIsSynthesized(node) {
 		return flattenCommaListWorker(node.Expression(), yield)
 	} else if ast.IsCommaExpression(node.AsNode()) {
-		return flattenCommaListWorker(node.AsBinaryExpression().Left, yield) &&
-			flattenCommaListWorker(node.AsBinaryExpression().Right, yield)
+		return flattenCommaListWorker(node.AsBinaryExpression().Left(), yield) &&
+			flattenCommaListWorker(node.AsBinaryExpression().Right(), yield)
 	} else {
 		return yield(node)
 	}
@@ -3566,11 +3566,11 @@ func findComputedPropertyNameCacheAssignment(emitContext *printer.EmitContext, n
 	node := name.Expression()
 	for {
 		node = ast.SkipOuterExpressions(node, 0)
-		if ast.IsBinaryExpression(node) && node.AsBinaryExpression().OperatorToken.Kind() == ast.KindCommaToken {
-			node = node.AsBinaryExpression().Right
+		if ast.IsBinaryExpression(node) && node.AsBinaryExpression().OperatorToken().Kind() == ast.KindCommaToken {
+			node = node.AsBinaryExpression().Right()
 			continue
 		}
-		if ast.IsAssignmentExpression(node, true /*excludeCompoundAssignment*/) && ast.IsIdentifier(node.AsBinaryExpression().Left) {
+		if ast.IsAssignmentExpression(node, true /*excludeCompoundAssignment*/) && ast.IsIdentifier(node.AsBinaryExpression().Left()) {
 			return node.AsBinaryExpression()
 		}
 		break
@@ -3582,11 +3582,11 @@ func expandPreOrPostfixIncrementOrDecrementExpression(factory *printer.NodeFacto
 	var operator ast.Kind
 	var operand *ast.Node
 	if ast.IsPrefixUnaryExpression(node) {
-		operator = node.AsPrefixUnaryExpression().Operator
-		operand = node.AsPrefixUnaryExpression().Operand
+		operator = node.AsPrefixUnaryExpression().Operator()
+		operand = node.AsPrefixUnaryExpression().Operand()
 	} else {
-		operator = node.AsPostfixUnaryExpression().Operator
-		operand = node.AsPostfixUnaryExpression().Operand
+		operator = node.AsPostfixUnaryExpression().Operator()
+		operand = node.AsPostfixUnaryExpression().Operand()
 	}
 
 	temp := factory.NewTempVariable()

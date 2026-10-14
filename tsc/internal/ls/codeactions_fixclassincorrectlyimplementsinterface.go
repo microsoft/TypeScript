@@ -167,7 +167,7 @@ func getConstructor(classDeclaration *ast.Node) *ast.Node {
 	if classDeclaration == nil || classDeclaration.MemberList() == nil {
 		return nil
 	}
-	for _, member := range classDeclaration.MemberList().Nodes {
+	for _, member := range classDeclaration.MemberList().Nodes() {
 		if member != nil && ast.IsConstructorDeclaration(member) {
 			return member
 		}

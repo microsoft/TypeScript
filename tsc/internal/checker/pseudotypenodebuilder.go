@@ -73,7 +73,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 			}
 			return b.serializeReturnTypeForSignature(b.ch.getSignatureFromDeclaration(enclosing), false)
 		}
-		if ast.IsArrowFunction(node.Parent()) && node.Parent().AsArrowFunction().Body == node {
+		if ast.IsArrowFunction(node.Parent()) && node.Parent().AsArrowFunction().Body() == node {
 			return b.serializeReturnTypeForSignature(b.ch.getSignatureFromDeclaration(node.Parent()), false)
 		}
 		if ast.IsDeclaration(node.Parent()) {
@@ -118,7 +118,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		var appendTypeNode func(node *ast.Node)
 		appendTypeNode = func(node *ast.Node) {
 			if ast.IsUnionTypeNode(node) {
-				for _, node := range node.AsUnionTypeNode().Types.Nodes {
+				for _, node := range node.AsUnionTypeNode().Types().Nodes() {
 					appendTypeNode(node)
 				}
 				return
@@ -652,35 +652,35 @@ func (b *NodeBuilderImpl) pseudoReturnTypeMatchesPredicate(rt *pseudochecker.Pse
 	}
 	tp := node.AsTypePredicateNode()
 	// Check asserts modifier matches
-	isAsserts := tp.AssertsModifier != nil
+	isAsserts := tp.AssertsModifier() != nil
 	predicateIsAsserts := predicate.kind == TypePredicateKindAssertsThis || predicate.kind == TypePredicateKindAssertsIdentifier
 	if isAsserts != predicateIsAsserts {
 		return false
 	}
 	// Check this vs identifier matches
-	isThis := ast.IsThisTypeNode(tp.ParameterName)
+	isThis := ast.IsThisTypeNode(tp.ParameterName())
 	predicateIsThis := predicate.kind == TypePredicateKindThis || predicate.kind == TypePredicateKindAssertsThis
 	if isThis != predicateIsThis {
 		return false
 	}
 	// For identifier predicates, check parameter name matches
 	if !isThis {
-		if tp.ParameterName.Text() != predicate.parameterName {
+		if tp.ParameterName().Text() != predicate.parameterName {
 			return false
 		}
 	}
 	// Check the narrowed type, if any
 	if predicate.t != nil {
-		if tp.Type == nil {
+		if tp.Type() == nil {
 			return false
 		}
-		predicateTypeFromNode := b.ch.getTypeFromTypeNode(tp.Type)
+		predicateTypeFromNode := b.ch.getTypeFromTypeNode(tp.Type())
 		if predicateTypeFromNode != predicate.t {
 			if b.ch.compareTypesIdentical(predicateTypeFromNode, predicate.t) != TernaryTrue {
 				return false
 			}
 		}
-	} else if tp.Type != nil {
+	} else if tp.Type() != nil {
 		return false
 	}
 	return true

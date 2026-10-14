@@ -49,38 +49,50 @@ const (
 
 type FlowSwitchClauseData struct {
 	NodeBase
-	SwitchStatement *Node
-	ClauseStart     int32 // Start index of case/default clause range
-	ClauseEnd       int32 // End index of case/default clause range
+	switchStatement *Node
+	clauseStart     int32 // Start index of case/default clause range
+	clauseEnd       int32 // End index of case/default clause range
 }
+
+func (node *FlowSwitchClauseData) SwitchStatement() *Node         { return node.switchStatement }
+func (node *FlowSwitchClauseData) SetSwitchStatement(value *Node) { node.switchStatement = value }
+func (node *FlowSwitchClauseData) ClauseStart() int32             { return node.clauseStart }
+func (node *FlowSwitchClauseData) SetClauseStart(value int32)     { node.clauseStart = value }
+func (node *FlowSwitchClauseData) ClauseEnd() int32               { return node.clauseEnd }
+func (node *FlowSwitchClauseData) SetClauseEnd(value int32)       { node.clauseEnd = value }
 
 var _ [0 - unsafe.Offsetof(FlowSwitchClauseData{}.Node)]byte
 
 func NewFlowSwitchClauseData(switchStatement *Node, clauseStart int, clauseEnd int) *Node {
 	node := &FlowSwitchClauseData{}
-	node.SwitchStatement = switchStatement
-	node.ClauseStart = int32(clauseStart)
-	node.ClauseEnd = int32(clauseEnd)
+	node.SetSwitchStatement(switchStatement)
+	node.SetClauseStart(int32(clauseStart))
+	node.SetClauseEnd(int32(clauseEnd))
 	return newNode(kindFlowSwitchClauseData, node.AsNode(), NodeFactoryHooks{})
 }
 
 func (node *FlowSwitchClauseData) IsEmpty() bool {
-	return node.ClauseStart == node.ClauseEnd
+	return node.ClauseStart() == node.ClauseEnd()
 }
 
 // FlowReduceLabelData (synthetic AST node for FlowFlagsReduceLabel)
 
 type FlowReduceLabelData struct {
 	NodeBase
-	Target      *FlowLabel // Target label
-	Antecedents *FlowList  // Temporary antecedent list
+	target      *FlowLabel // Target label
+	antecedents *FlowList  // Temporary antecedent list
 }
+
+func (node *FlowReduceLabelData) Target() *FlowLabel             { return node.target }
+func (node *FlowReduceLabelData) SetTarget(value *FlowLabel)     { node.target = value }
+func (node *FlowReduceLabelData) Antecedents() *FlowList         { return node.antecedents }
+func (node *FlowReduceLabelData) SetAntecedents(value *FlowList) { node.antecedents = value }
 
 var _ [0 - unsafe.Offsetof(FlowReduceLabelData{}.Node)]byte
 
 func NewFlowReduceLabelData(target *FlowLabel, antecedents *FlowList) *Node {
 	node := &FlowReduceLabelData{}
-	node.Target = target
-	node.Antecedents = antecedents
+	node.SetTarget(target)
+	node.SetAntecedents(antecedents)
 	return newNode(kindFlowReduceLabelData, node.AsNode(), NodeFactoryHooks{})
 }

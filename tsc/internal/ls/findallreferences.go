@@ -236,7 +236,7 @@ func getContextNodeForNodeEntry(node *ast.Node) *ast.Node {
 			var binaryExpression *ast.Node
 			if ast.IsBinaryExpression(node.Parent()) {
 				binaryExpression = node.Parent()
-			} else if ast.IsAccessExpression(node.Parent()) && ast.IsBinaryExpression(node.Parent().Parent()) && node.Parent().Parent().AsBinaryExpression().Left == node.Parent() {
+			} else if ast.IsAccessExpression(node.Parent()) && ast.IsBinaryExpression(node.Parent().Parent()) && node.Parent().Parent().AsBinaryExpression().Left() == node.Parent() {
 				binaryExpression = node.Parent().Parent()
 			}
 			if binaryExpression != nil && ast.GetAssignmentDeclarationKind(binaryExpression) != ast.JSDeclarationKindNone {
@@ -289,7 +289,7 @@ func getContextNode(node *ast.Node) *ast.Node {
 	}
 	switch node.Kind() {
 	case ast.KindVariableDeclaration:
-		if !ast.IsVariableDeclarationList(node.Parent()) || len(node.Parent().AsVariableDeclarationList().Declarations.Nodes) != 1 {
+		if !ast.IsVariableDeclarationList(node.Parent()) || len(node.Parent().AsVariableDeclarationList().Declarations().Nodes()) != 1 {
 			return node
 		} else if ast.IsVariableStatement(node.Parent().Parent()) {
 			return node.Parent().Parent()
@@ -1286,7 +1286,7 @@ func (l *LanguageService) getReferencedSymbolsForNode(ctx context.Context, posit
 			return nil
 		}
 
-		if moduleSymbol := checker.GetMergedSymbol(resolvedRef.file.Symbol); moduleSymbol != nil {
+		if moduleSymbol := checker.GetMergedSymbol(resolvedRef.file.Symbol()); moduleSymbol != nil {
 			return l.getReferencedSymbolsForModule(checker, program, moduleSymbol /*excludeImportTypeOfExportEquals*/, false, sourceFiles, sourceFilesSet)
 		}
 
@@ -1744,7 +1744,7 @@ func (l *LanguageService) getReferencedSymbolsForModule(checker *checker.Checker
 				importType := parent.Parent()
 				if ast.IsImportTypeNode(importType) {
 					importTypeNode := importType.AsImportTypeNode()
-					if excludeImportTypeOfExportEquals && importTypeNode.Qualifier == nil {
+					if excludeImportTypeOfExportEquals && importTypeNode.Qualifier() == nil {
 						return nil
 					}
 				}
@@ -1762,8 +1762,8 @@ func (l *LanguageService) getReferencedSymbolsForModule(checker *checker.Checker
 			}
 
 			if rangeNode == nil {
-				if reference.referencingFile.Statements != nil && len(reference.referencingFile.Statements.Nodes) > 0 {
-					rangeNode = reference.referencingFile.Statements.Nodes[0]
+				if reference.referencingFile.Statements != nil && len(reference.referencingFile.Statements.Nodes()) > 0 {
+					rangeNode = reference.referencingFile.Statements.Nodes()[0]
 				} else {
 					rangeNode = reference.referencingFile.AsNode()
 				}
@@ -1805,8 +1805,8 @@ func (l *LanguageService) getReferencedSymbolsForModule(checker *checker.Checker
 			if sourceFilesSet.Has(sourceFile.FileName()) {
 				var node *ast.Node
 				// At `module.exports = ...`, reference node is `module`
-				if ast.IsBinaryExpression(decl) && ast.IsPropertyAccessExpression(decl.AsBinaryExpression().Left) {
-					node = decl.AsBinaryExpression().Left.Expression()
+				if ast.IsBinaryExpression(decl) && ast.IsPropertyAccessExpression(decl.AsBinaryExpression().Left()) {
+					node = decl.AsBinaryExpression().Left().Expression()
 				} else if ast.IsExportAssignment(decl) {
 					// Find the export keyword
 					node = astnav.FindChildOfKind(decl, ast.KindExportKeyword, sourceFile)
@@ -2387,7 +2387,7 @@ func (state *refState) getReferencesAtExportSpecifier(
 	debug.Assert(!alwaysGetReferences || state.options.useAliasesForRename, "If alwaysGetReferences is true, then prefix/suffix text must be enabled")
 
 	exportDeclaration := exportSpecifier.Parent().Parent().AsExportDeclaration()
-	propertyName := exportSpecifier.PropertyName
+	propertyName := exportSpecifier.PropertyName()
 	name := exportSpecifier.Name()
 	localSymbol := getLocalSymbolForExportSpecifier(referenceLocation, referenceSymbol, exportSpecifier, state.checker)
 
@@ -2409,7 +2409,7 @@ func (state *refState) getReferencesAtExportSpecifier(
 	} else if referenceLocation == propertyName.AsNode() {
 		// For `export { foo as bar } from "baz"`, "`foo`" will be added from the singleReferences for import searches of the original export.
 		// For `export { foo as bar };`, where `foo` is a local, so add it now.
-		if exportDeclaration.ModuleSpecifier == nil {
+		if exportDeclaration.ModuleSpecifier() == nil {
 			addRef()
 		}
 
@@ -2440,7 +2440,7 @@ func (state *refState) getReferencesAtExportSpecifier(
 	}
 
 	// At `export { x } from "foo"`, also search for the imported symbol `"foo".x`.
-	if search.comingFrom != ImpExpKindExport && exportDeclaration.ModuleSpecifier != nil && propertyName == nil && !isForRenameWithPrefixAndSuffixText(state.options) {
+	if search.comingFrom != ImpExpKindExport && exportDeclaration.ModuleSpecifier() != nil && propertyName == nil && !isForRenameWithPrefixAndSuffixText(state.options) {
 		imported := state.checker.GetExportSpecifierLocalTargetSymbol(exportSpecifier.AsNode())
 		if imported != nil {
 			state.searchForImportedSymbol(imported)

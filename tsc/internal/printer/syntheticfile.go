@@ -40,7 +40,7 @@ func CreateSyntheticSourceFile(factory *ast.NodeFactory, node *ast.Node, text st
 	eof := factory.NewToken(ast.KindEndOfFile)
 	eof.SetLoc(core.NewTextRange(len(text), len(text)))
 	statements := factory.NewNodeList([]*ast.Node{node})
-	statements.Loc = core.NewTextRange(node.Pos(), node.End())
+	statements.SetLoc(core.NewTextRange(node.Pos(), node.End()))
 	syntheticFile := factory.NewSourceFile(
 		parseOptions,
 		text,

@@ -31,8 +31,8 @@ func (l *LanguageService) ProvideLinkedEditingRange(ctx context.Context, params 
 
 	if ast.IsJsxFragment(token.Parent().Parent()) {
 		fragment := token.Parent().Parent().AsJsxFragment()
-		openFragment := fragment.OpeningFragment
-		closeFragment := fragment.ClosingFragment
+		openFragment := fragment.OpeningFragment()
+		closeFragment := fragment.ClosingFragment()
 		if openFragment.Flags()&ast.NodeFlagsThisNodeOrAnySubNodesHasError != 0 || closeFragment.Flags()&ast.NodeFlagsThisNodeOrAnySubNodesHasError != 0 {
 			return lsproto.LinkedEditingRangeResponse{}, nil
 		}
@@ -73,8 +73,8 @@ func (l *LanguageService) ProvideLinkedEditingRange(ctx context.Context, params 
 		debug.Assert(ast.IsJsxOpeningElement(tag) || ast.IsJsxClosingElement(tag), "tag should be opening or closing element")
 
 		jsxElement := tag.Parent().AsJsxElement()
-		openTag := jsxElement.OpeningElement
-		closeTag := jsxElement.ClosingElement
+		openTag := jsxElement.OpeningElement()
+		closeTag := jsxElement.ClosingElement()
 
 		openTagNameStart := astnav.GetStartOfNode(openTag.TagName().AsNode(), sourceFile, false)
 		openTagNameEnd := openTag.TagName().End()

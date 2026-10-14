@@ -123,7 +123,7 @@ func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
 	// the named binding; it contributes to the symbol's external visibility.
 	case ast.KindExportSpecifier:
 		exportDecl := node.Parent().Parent()
-		if ast.IsExportDeclaration(exportDecl) && exportDecl.AsExportDeclaration().ModuleSpecifier == nil {
+		if ast.IsExportDeclaration(exportDecl) && exportDecl.AsExportDeclaration().ModuleSpecifier() == nil {
 			return c.isDeclarationVisible(exportDecl.Parent())
 		}
 		return false
@@ -138,14 +138,14 @@ func getMeaningOfEntityNameReference(entityName *ast.Node) ast.SymbolFlags {
 	if entityName.Parent().Kind() == ast.KindTypeQuery ||
 		entityName.Parent().Kind() == ast.KindExpressionWithTypeArguments && !ast.IsPartOfTypeNode(entityName.Parent()) ||
 		entityName.Parent().Kind() == ast.KindComputedPropertyName ||
-		entityName.Parent().Kind() == ast.KindTypePredicate && entityName.Parent().AsTypePredicateNode().ParameterName == entityName ||
+		entityName.Parent().Kind() == ast.KindTypePredicate && entityName.Parent().AsTypePredicateNode().ParameterName() == entityName ||
 		entityName.Parent().Kind() == ast.KindBinaryExpression {
 		// Typeof value
 		return ast.SymbolFlagsValue | ast.SymbolFlagsExportValue
 	}
 	if entityName.Kind() == ast.KindQualifiedName || entityName.Kind() == ast.KindPropertyAccessExpression ||
 		entityName.Parent().Kind() == ast.KindImportEqualsDeclaration ||
-		(entityName.Parent().Kind() == ast.KindQualifiedName && entityName.Parent().AsQualifiedName().Left == entityName) ||
+		(entityName.Parent().Kind() == ast.KindQualifiedName && entityName.Parent().AsQualifiedName().Left() == entityName) ||
 		(entityName.Parent().Kind() == ast.KindPropertyAccessExpression && entityName.Parent().Expression() == entityName) ||
 		(entityName.Parent().Kind() == ast.KindElementAccessExpression && entityName.Parent().Expression() == entityName) {
 		// Left identifier from type reference or TypeAlias

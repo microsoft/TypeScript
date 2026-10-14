@@ -40,7 +40,7 @@ func (l *LanguageService) ProvideOnAutoInsert(ctx context.Context, params *lspro
 	}
 
 	if element != nil && isUnclosedTag(element.AsJsxElement()) {
-		tagNameNode := element.AsJsxElement().OpeningElement.TagName()
+		tagNameNode := element.AsJsxElement().OpeningElement().TagName()
 		// Slight divergence from Strada - we don't use the verbatim text from the opening tag.
 		closingText = "</" + ast.EntityNameToString(tagNameNode, scanner.GetTextOfNode) + ">"
 	} else {
@@ -75,8 +75,8 @@ func (l *LanguageService) ProvideOnAutoInsert(ctx context.Context, params *lspro
 }
 
 func isUnclosedTag(node *ast.JsxElement) bool {
-	openingElement := node.OpeningElement
-	closingElement := node.ClosingElement
+	openingElement := node.OpeningElement()
+	closingElement := node.ClosingElement()
 	if !ast.TagNamesAreEquivalent(openingElement.TagName(), closingElement.TagName()) {
 		return true
 	}
@@ -84,14 +84,14 @@ func isUnclosedTag(node *ast.JsxElement) bool {
 	parent := node.Parent()
 	if ast.IsJsxElement(parent) {
 		parent := parent.AsJsxElement()
-		return ast.TagNamesAreEquivalent(openingElement.TagName(), parent.OpeningElement.TagName()) && isUnclosedTag(parent)
+		return ast.TagNamesAreEquivalent(openingElement.TagName(), parent.OpeningElement().TagName()) && isUnclosedTag(parent)
 	}
 
 	return false
 }
 
 func isUnclosedFragment(node *ast.JsxFragment) bool {
-	closingFragment := node.ClosingFragment
+	closingFragment := node.ClosingFragment()
 	if closingFragment.Flags()&ast.NodeFlagsThisNodeHasError != 0 {
 		return true
 	}

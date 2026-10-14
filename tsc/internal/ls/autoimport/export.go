@@ -154,11 +154,11 @@ func SymbolToExport(symbol *ast.Symbol, ch *checker.Checker) *Export {
 	}
 
 	file := ast.GetSourceFileOfNode(declaration)
-	if file.Symbol == nil {
+	if file.Symbol() == nil {
 		return nil
 	}
 
-	moduleSymbol := ch.GetMergedSymbol(file.Symbol)
+	moduleSymbol := ch.GetMergedSymbol(file.Symbol())
 	moduleID := fileModuleID(file.PathKey())
 	moduleFileName := file.FileName()
 	target := ch.GetMergedSymbol(ch.SkipAlias(symbol))

@@ -312,8 +312,8 @@ func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapp
 	if jsdoc := getJSDocOrTag(c, declaration, &collections.Set[*ast.Symbol]{}); jsdoc != nil && !(declaration.Flags()&ast.NodeFlagsReparsed == 0 && containsTypedefTag(jsdoc)) {
 		writeComments(getMappedLocation, &b, c, jsdoc.Comments(), isMarkdown)
 		if jsdoc.Kind() == ast.KindJSDoc && !commentOnly {
-			if tags := jsdoc.AsJSDoc().Tags; tags != nil {
-				for _, tag := range tags.Nodes {
+			if tags := jsdoc.AsJSDoc().Tags(); tags != nil {
+				for _, tag := range tags.Nodes() {
 					if tag.Kind() == ast.KindJSDocTypeTag || tag.Kind() == ast.KindJSDocTypedefTag || tag.Kind() == ast.KindJSDocCallbackTag {
 						continue
 					}
@@ -365,16 +365,16 @@ func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapp
 						} else {
 							writeCode(&b, "tsx", commentText)
 						}
-					} else if tag.Kind() == ast.KindJSDocSeeTag && tag.AsJSDocSeeTag().NameExpression != nil {
+					} else if tag.Kind() == ast.KindJSDocSeeTag && tag.AsJSDocSeeTag().NameExpression() != nil {
 						b.WriteString(" — ")
-						writeNameLink(getMappedLocation, &b, c, tag.AsJSDocSeeTag().NameExpression.Name(), "", false /*quote*/, isMarkdown)
+						writeNameLink(getMappedLocation, &b, c, tag.AsJSDocSeeTag().NameExpression().Name(), "", false /*quote*/, isMarkdown)
 						if len(comments) != 0 {
 							b.WriteString(" ")
 							writeComments(getMappedLocation, &b, c, comments, isMarkdown)
 						}
-					} else if tag.Kind() == ast.KindJSDocThrowsTag && tag.AsJSDocThrowsTag().TypeExpression != nil {
+					} else if tag.Kind() == ast.KindJSDocThrowsTag && tag.AsJSDocThrowsTag().TypeExpression() != nil {
 						b.WriteString(" — ")
-						b.WriteString(scanner.GetTextOfNode(tag.AsJSDocThrowsTag().TypeExpression))
+						b.WriteString(scanner.GetTextOfNode(tag.AsJSDocThrowsTag().TypeExpression()))
 						if len(comments) != 0 {
 							b.WriteString(" ")
 							writeComments(getMappedLocation, &b, c, comments, isMarkdown)
@@ -522,12 +522,12 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 	}
 	writeModuleImportAttributes := func(symbol *ast.Symbol) {
 		declaration := core.Find(symbol.Declarations(), func(declaration *ast.Node) bool {
-			return ast.IsModuleDeclaration(declaration) && declaration.AsModuleDeclaration().Attributes != nil
+			return ast.IsModuleDeclaration(declaration) && declaration.AsModuleDeclaration().Attributes() != nil
 		})
 		if declaration == nil {
 			return
 		}
-		attributes := declaration.AsModuleDeclaration().Attributes
+		attributes := declaration.AsModuleDeclaration().Attributes()
 		emitContext := getEmitContext()
 		emitContext.SetEmitFlags(attributes, printer.EFSingleLine)
 		p := printer.NewPrinter(printer.PrinterOptions{NewLine: core.NewLineKindLF}, printer.PrintHandlers{}, emitContext)
@@ -1017,8 +1017,8 @@ func getCallOrNewExpression(node *ast.Node) *ast.Node {
 
 func containsTypedefTag(jsdoc *ast.Node) bool {
 	if jsdoc.Kind() == ast.KindJSDoc {
-		if tags := jsdoc.AsJSDoc().Tags; tags != nil {
-			for _, tag := range tags.Nodes {
+		if tags := jsdoc.AsJSDoc().Tags(); tags != nil {
+			for _, tag := range tags.Nodes() {
 				if tag.Kind() == ast.KindJSDocTypedefTag || tag.Kind() == ast.KindJSDocCallbackTag {
 					return true
 				}
@@ -1157,9 +1157,9 @@ func writeEntityNameParts(b *strings.Builder, node *ast.Node) {
 	case ast.KindIdentifier:
 		b.WriteString(node.Text())
 	case ast.KindQualifiedName:
-		writeEntityNameParts(b, node.AsQualifiedName().Left)
+		writeEntityNameParts(b, node.AsQualifiedName().Left())
 		b.WriteByte('.')
-		writeEntityNameParts(b, node.AsQualifiedName().Right)
+		writeEntityNameParts(b, node.AsQualifiedName().Right())
 	case ast.KindPropertyAccessExpression:
 		writeEntityNameParts(b, node.Expression())
 		b.WriteByte('.')

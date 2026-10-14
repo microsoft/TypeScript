@@ -251,8 +251,8 @@ func fileAffectsGlobalScope(file *ast.SourceFile) bool {
 	// there are no point to rebuild all script files if these special files have changed. However, if any statement
 	// in the file is not ambient external module, we treat it as a regular script file.
 	return file.Statements != nil &&
-		file.Statements.Nodes != nil &&
-		core.Some(file.Statements.Nodes, func(stmt *ast.Node) bool {
+		file.Statements.Nodes() != nil &&
+		core.Some(file.Statements.Nodes(), func(stmt *ast.Node) bool {
 			return !ast.IsModuleWithStringLiteralName(stmt)
 		})
 }

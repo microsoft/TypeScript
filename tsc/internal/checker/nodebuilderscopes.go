@@ -142,7 +142,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 				fakeScope := b.f.NewBlock(b.f.NewNodeList([]*ast.Node{}), false)
 				b.links.Get(fakeScope).fakeScopeForSignatureDeclaration = &kind
 				data := fakeScope.LocalsContainerData()
-				data.Locals = locals
+				data.SetLocals(locals)
 				fakeScope.SetParent(b.ctx.enclosingDeclaration)
 				b.ctx.enclosingDeclaration = fakeScope
 				return nil
@@ -182,7 +182,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 						var bindPattern func(e *ast.BindingPattern)
 
 						bindPatternWorker := func(p *ast.BindingPattern) {
-							for _, e := range p.Elements.Nodes {
+							for _, e := range p.Elements().Nodes() {
 								switch e.Kind() {
 								case ast.KindOmittedExpression:
 									return
@@ -229,7 +229,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 					if typeParam == nil {
 						continue
 					}
-					typeParamName := b.typeParameterToName(typeParam).Text
+					typeParamName := b.typeParameterToName(typeParam).Text()
 					add(typeParamName, typeParam.symbol)
 				}
 			})

@@ -89,7 +89,7 @@ func ShouldUseUriStyleNodeCoreModules(file *ast.SourceFile, program *compiler.Pr
 }
 
 func QuotePreferenceFromString(str *ast.StringLiteral) QuotePreference {
-	if str.TokenFlags&ast.TokenFlagsSingleQuote != 0 {
+	if str.TokenFlags()&ast.TokenFlagsSingleQuote != 0 {
 		return QuotePreferenceSingle
 	}
 	return QuotePreferenceDouble

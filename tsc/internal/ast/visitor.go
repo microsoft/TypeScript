@@ -50,7 +50,7 @@ func (v *NodeVisitor) VisitNode(node *Node) *Node {
 	if v.Visit != nil {
 		visited := v.Visit(node)
 		if visited != nil && visited.Kind() == KindSyntaxList {
-			nodes := visited.AsSyntaxList().Children
+			nodes := visited.AsSyntaxList().Children()
 			if len(nodes) != 1 {
 				panic("Expected only a single node to be written to output")
 			}
@@ -96,9 +96,9 @@ func (v *NodeVisitor) VisitNodes(nodes *NodeList) *NodeList {
 		return nodes
 	}
 
-	if result, changed := v.VisitSlice(nodes.Nodes); changed {
+	if result, changed := v.VisitSlice(nodes.Nodes()); changed {
 		list := v.Factory.NewNodeList(result)
-		list.Loc = nodes.Loc
+		list.SetLoc(nodes.Loc())
 		return list
 	}
 
@@ -118,9 +118,9 @@ func (v *NodeVisitor) VisitModifiers(nodes *ModifierList) *ModifierList {
 		return nodes
 	}
 
-	if result, changed := v.VisitSlice(nodes.Nodes); changed {
+	if result, changed := v.VisitSlice(nodes.Nodes()); changed {
 		list := v.Factory.NewModifierList(result)
-		list.Loc = nodes.Loc
+		list.SetLoc(nodes.Loc())
 		return list
 	}
 
@@ -154,7 +154,7 @@ func (v *NodeVisitor) VisitSlice(nodes []*Node) (result []*Node, changed bool) {
 				switch {
 				case visited == nil: // do nothing
 				case visited.Kind() == KindSyntaxList:
-					updated = append(updated, visited.AsSyntaxList().Children...)
+					updated = append(updated, visited.AsSyntaxList().Children()...)
 				default:
 					updated = append(updated, visited)
 				}
@@ -261,7 +261,7 @@ func (v *NodeVisitor) liftToBlock(node *Statement) *Statement {
 	var nodes []*Node
 	if node != nil {
 		if node.Kind() == KindSyntaxList {
-			nodes = node.AsSyntaxList().Children
+			nodes = node.AsSyntaxList().Children()
 		} else {
 			nodes = []*Node{node}
 		}

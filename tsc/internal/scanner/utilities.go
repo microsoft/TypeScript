@@ -16,7 +16,7 @@ func tokenIsIdentifierOrKeyword(token ast.Kind) bool {
 }
 
 func IdentifierToKeywordKind(node *ast.Identifier) ast.Kind {
-	return textToKeyword[node.Text]
+	return textToKeyword[node.Text()]
 }
 
 func GetSourceTextOfNodeFromSourceFile(sourceFile *ast.SourceFile, node *ast.Node, includeTrivia bool) string {
@@ -84,7 +84,7 @@ func GetTextOfNodeFromSourceText(sourceText string, node *ast.Node, includeTrivi
 	if node.Flags()&ast.NodeFlagsReparserTransformedLiteral != 0 {
 		// This is similar to `getLiteralTextOfNode` in the printer, but without the context of an `emitContext` to provide overrides
 		if ast.IsStringLiteral(node) {
-			if node.AsStringLiteral().TokenFlags&ast.TokenFlagsSingleQuote != 0 {
+			if node.AsStringLiteral().TokenFlags()&ast.TokenFlagsSingleQuote != 0 {
 				return "'" + text + "'"
 			}
 			return "\"" + text + "\""
@@ -108,7 +108,7 @@ func GetTextOfJSDocComment(comment *ast.NodeList) string {
 		return ""
 	}
 	var b strings.Builder
-	for _, n := range comment.Nodes {
+	for _, n := range comment.Nodes() {
 		switch n.Kind() {
 		case ast.KindJSDocText:
 			b.WriteString(n.Text())

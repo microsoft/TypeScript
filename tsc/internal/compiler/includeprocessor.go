@@ -102,9 +102,9 @@ func (i *includeProcessor) getCompilerOptionsObjectLiteralSyntax(program *Progra
 		configFile := program.opts.Config.ConfigFile
 		if configFile != nil {
 			if compilerOptionsProperty := tsoptions.ForEachTsConfigPropArray(configFile.SourceFile, "compilerOptions", core.Identity); compilerOptionsProperty != nil &&
-				compilerOptionsProperty.Initializer != nil &&
-				ast.IsObjectLiteralExpression(compilerOptionsProperty.Initializer) {
-				i.compilerOptionsSyntax = compilerOptionsProperty.Initializer.AsObjectLiteralExpression()
+				compilerOptionsProperty.Initializer() != nil &&
+				ast.IsObjectLiteralExpression(compilerOptionsProperty.Initializer()) {
+				i.compilerOptionsSyntax = compilerOptionsProperty.Initializer().AsObjectLiteralExpression()
 			}
 		} else {
 			i.compilerOptionsSyntax = nil

@@ -820,11 +820,11 @@ func isObjectOrObjectArrayTypeReference(node *ast.TypeNode) bool {
 	case ast.KindObjectKeyword:
 		return true
 	case ast.KindArrayType:
-		return isObjectOrObjectArrayTypeReference(node.AsArrayTypeNode().ElementType)
+		return isObjectOrObjectArrayTypeReference(node.AsArrayTypeNode().ElementType())
 	default:
 		if ast.IsTypeReferenceNode(node) {
 			ref := node.AsTypeReferenceNode()
-			return ast.IsIdentifier(ref.TypeName) && ref.TypeName.Text() == "Object" && ref.TypeArguments == nil
+			return ast.IsIdentifier(ref.TypeName()) && ref.TypeName().Text() == "Object" && ref.TypeArguments() == nil
 		}
 		return false
 	}
@@ -1059,8 +1059,8 @@ func (p *Parser) parseTypedefTag(start int, tagName *ast.IdentifierNode, indent 
 		if hasChildren {
 			isArrayType := typeExpression != nil && typeExpression.Type().Kind() == ast.KindArrayType
 			jsdocTypeLiteral := p.factory.NewJSDocTypeLiteral(jsdocPropertyTags, isArrayType)
-			if childTypeTag != nil && childTypeTag.TypeExpression != nil && !isObjectOrObjectArrayTypeReference(childTypeTag.TypeExpression.Type()) {
-				typeExpression = childTypeTag.TypeExpression
+			if childTypeTag != nil && childTypeTag.TypeExpression() != nil && !isObjectOrObjectArrayTypeReference(childTypeTag.TypeExpression().Type()) {
+				typeExpression = childTypeTag.TypeExpression()
 			} else {
 				// !!! This differs from Strada but prevents a crash
 				pos := start
@@ -1173,9 +1173,9 @@ func (p *Parser) parseOverloadTag(start int, tagName *ast.IdentifierNode, indent
 
 func textsEqual(a *ast.EntityName, b *ast.EntityName) bool {
 	for !ast.IsIdentifier(a) || !ast.IsIdentifier(b) {
-		if !ast.IsIdentifier(a) && !ast.IsIdentifier(b) && a.AsQualifiedName().Right.Text() == b.AsQualifiedName().Right.Text() {
-			a = a.AsQualifiedName().Left
-			b = b.AsQualifiedName().Left
+		if !ast.IsIdentifier(a) && !ast.IsIdentifier(b) && a.AsQualifiedName().Right().Text() == b.AsQualifiedName().Right().Text() {
+			a = a.AsQualifiedName().Left()
+			b = b.AsQualifiedName().Left()
 		} else {
 			return false
 		}
@@ -1197,7 +1197,7 @@ func (p *Parser) parseChildParameterOrPropertyTag(target propertyLikeParse, inde
 				child := p.tryParseChildTag(target, indent)
 				if child != nil && name != nil &&
 					(child.Kind() == ast.KindJSDocParameterTag || child.Kind() == ast.KindJSDocPropertyTag) &&
-					(ast.IsIdentifier(child.Name()) || !textsEqual(name, child.Name().AsQualifiedName().Left)) {
+					(ast.IsIdentifier(child.Name()) || !textsEqual(name, child.Name().AsQualifiedName().Left())) {
 					return nil
 				}
 				return child
@@ -1283,7 +1283,7 @@ func (p *Parser) parseTemplateTagTypeParameters() *ast.TypeParameterList {
 		p.skipWhitespace()
 		node := p.parseTemplateTagTypeParameter()
 		if node != nil {
-			typeParameters.Nodes = append(typeParameters.Nodes, node)
+			typeParameters.SetNodes(append(typeParameters.Nodes(), node))
 		}
 		p.skipWhitespaceOrAsterisk()
 	}

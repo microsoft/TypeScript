@@ -154,8 +154,8 @@ func isCommonJSModuleExports(node *ast.Node) bool {
 func (r *EmitResolver) aliasMarkingVisitorWorker(node *ast.Node) bool {
 	switch node.Kind() {
 	case ast.KindBinaryExpression:
-		if isCommonJSModuleExports(node) && ast.IsIdentifier(node.AsBinaryExpression().Right) {
-			r.markLinkedAliases(node.AsBinaryExpression().Right)
+		if isCommonJSModuleExports(node) && ast.IsIdentifier(node.AsBinaryExpression().Right()) {
+			r.markLinkedAliases(node.AsBinaryExpression().Right())
 		}
 	case ast.KindExportAssignment:
 		if node.Expression().Kind() == ast.KindIdentifier {
@@ -191,7 +191,7 @@ func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 
 			if ast.IsInternalModuleImportEqualsDeclaration(declaration) {
 				// Add the referenced top container visible
-				internalModuleReference := declaration.AsImportEqualsDeclaration().ModuleReference
+				internalModuleReference := declaration.AsImportEqualsDeclaration().ModuleReference()
 				firstIdentifier := ast.GetFirstIdentifier(internalModuleReference)
 				importSymbol := r.checker.resolveName(declaration, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias /*nameNotFoundMessage*/, nil /*isUse*/, false, false)
 				nextSymbol = importSymbol
@@ -255,7 +255,7 @@ func (r *EmitResolver) IsImportRequiredByAugmentation(decl *ast.ImportDeclaratio
 		return false
 	}
 	file := ast.GetSourceFileOfNode(decl.AsNode())
-	if file.Symbol == nil {
+	if file.Symbol() == nil {
 		// script file
 		return false
 	}
@@ -268,7 +268,7 @@ func (r *EmitResolver) IsImportRequiredByAugmentation(decl *ast.ImportDeclaratio
 	}
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	exports := r.checker.getExportsOfModule(file.Symbol)
+	exports := r.checker.getExportsOfModule(file.Symbol())
 	for s := range maps.Values(exports) {
 		merged := r.checker.getMergedSymbol(s)
 		if merged != s {
@@ -435,7 +435,7 @@ func (r *EmitResolver) isValueAliasDeclarationWorker(node *ast.Node) bool {
 		symbol := c.getSymbolOfDeclaration(node)
 		return symbol != nil && r.isAliasResolvedToValue(symbol, true /*excludeTypeOnlyValues*/)
 	case ast.KindExportDeclaration:
-		exportClause := node.AsExportDeclaration().ExportClause
+		exportClause := node.AsExportDeclaration().ExportClause()
 		return exportClause != nil && (ast.IsNamespaceExport(exportClause) ||
 			core.Some(exportClause.Elements(), r.isValueAliasDeclaration))
 	case ast.KindExportAssignment:
@@ -444,7 +444,7 @@ func (r *EmitResolver) isValueAliasDeclarationWorker(node *ast.Node) bool {
 		}
 		return true
 	case ast.KindBinaryExpression:
-		if isCommonJSModuleExports(node) && ast.IsIdentifier(node.AsBinaryExpression().Right) {
+		if isCommonJSModuleExports(node) && ast.IsIdentifier(node.AsBinaryExpression().Right()) {
 			return r.isAliasResolvedToValue(c.getSymbolOfDeclaration(node), true /*excludeTypeOnlyValues*/)
 		}
 	}
@@ -485,7 +485,7 @@ func (r *EmitResolver) IsTopLevelValueImportEqualsWithEntityName(node *ast.Node)
 		return false
 	}
 	if ast.IsImportEqualsDeclaration(node) &&
-		(ast.NodeIsMissing(node.AsImportEqualsDeclaration().ModuleReference) || node.AsImportEqualsDeclaration().ModuleReference.Kind() == ast.KindExternalModuleReference) {
+		(ast.NodeIsMissing(node.AsImportEqualsDeclaration().ModuleReference()) || node.AsImportEqualsDeclaration().ModuleReference().Kind() == ast.KindExternalModuleReference) {
 		return false
 	}
 

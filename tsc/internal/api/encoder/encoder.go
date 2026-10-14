@@ -379,11 +379,11 @@ func BuildNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
 				}
 				nodeCount++
 				nodeTable = append(nodeTable, nil) // NodeLists are not *ast.Node
-				visitor.VisitSlice(nodeList.Nodes)
+				visitor.VisitSlice(nodeList.Nodes())
 				return nodeList
 			},
 			VisitModifiers: func(modifiers *ast.ModifierList, visitor *ast.NodeVisitor) *ast.ModifierList {
-				if modifiers != nil && len(modifiers.Nodes) > 0 {
+				if modifiers != nil && len(modifiers.Nodes()) > 0 {
 					visitor.Hooks.VisitNodes(&modifiers.NodeList, visitor)
 				}
 				return modifiers
@@ -521,21 +521,21 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 					nodes[prevIndex*NodeSize+NodeOffsetNext+3] = b3
 				}
 
-				nodes = appendUint32s(nodes, SyntaxKindNodeList, utf16(nodeList.Pos()), utf16(nodeList.End()), 0, parentIndex, uint32(len(nodeList.Nodes)), uint32(boolToByte(nodeList.HasTrailingComma())))
+				nodes = appendUint32s(nodes, SyntaxKindNodeList, utf16(nodeList.Pos()), utf16(nodeList.End()), 0, parentIndex, uint32(len(nodeList.Nodes())), uint32(boolToByte(nodeList.HasTrailingComma())))
 
 				saveParentIndex := parentIndex
 
 				currentIndex := nodeCount
 				prevIndex = 0
 				parentIndex = currentIndex
-				visitor.VisitSlice(nodeList.Nodes)
+				visitor.VisitSlice(nodeList.Nodes())
 				prevIndex = currentIndex
 				parentIndex = saveParentIndex
 
 				return nodeList
 			},
 			VisitModifiers: func(modifiers *ast.ModifierList, visitor *ast.NodeVisitor) *ast.ModifierList {
-				if modifiers != nil && len(modifiers.Nodes) > 0 {
+				if modifiers != nil && len(modifiers.Nodes()) > 0 {
 					visitor.Hooks.VisitNodes(&modifiers.NodeList, visitor)
 				}
 				return modifiers
@@ -718,23 +718,23 @@ func recordExtendedData_SourceFile(node *ast.Node, strs *stringTable, positionMa
 
 func recordExtendedData_TemplateHead(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) {
 	n := node.AsTemplateHead()
-	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
-	rawTextIndex := strs.add(n.RawText, node.Kind(), node.Pos(), node.End())
-	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, uint32(n.TemplateFlags))
+	textIndex := strs.add(n.Text(), node.Kind(), node.Pos(), node.End())
+	rawTextIndex := strs.add(n.RawText(), node.Kind(), node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, uint32(n.TemplateFlags()))
 }
 
 func recordExtendedData_TemplateMiddle(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) {
 	n := node.AsTemplateMiddle()
-	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
-	rawTextIndex := strs.add(n.RawText, node.Kind(), node.Pos(), node.End())
-	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, uint32(n.TemplateFlags))
+	textIndex := strs.add(n.Text(), node.Kind(), node.Pos(), node.End())
+	rawTextIndex := strs.add(n.RawText(), node.Kind(), node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, uint32(n.TemplateFlags()))
 }
 
 func recordExtendedData_TemplateTail(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) {
 	n := node.AsTemplateTail()
-	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
-	rawTextIndex := strs.add(n.RawText, node.Kind(), node.Pos(), node.End())
-	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, uint32(n.TemplateFlags))
+	textIndex := strs.add(n.Text(), node.Kind(), node.Pos(), node.End())
+	rawTextIndex := strs.add(n.RawText(), node.Kind(), node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, uint32(n.TemplateFlags()))
 }
 
 func boolToByte(b bool) byte {
@@ -746,7 +746,7 @@ func boolToByte(b bool) byte {
 
 // hasModifiers returns true if the modifier list is non-nil and has at least one modifier.
 func hasModifiers(modifiers *ast.ModifierList) bool {
-	return modifiers != nil && len(modifiers.Nodes) > 0
+	return modifiers != nil && len(modifiers.Nodes()) > 0
 }
 
 // encodeFileReferences encodes a slice of FileReferences as a msgpack array of tuples
@@ -927,30 +927,30 @@ func getNodeCommonData_SyntheticExpression(_ *ast.Node) uint32 {
 
 func recordExtendedData_StringLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
 	n := node.AsStringLiteral()
-	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
-	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags))
+	textIndex := strs.add(n.Text(), node.Kind(), node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags()))
 }
 
 func recordExtendedData_NumericLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
 	n := node.AsNumericLiteral()
-	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
-	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags))
+	textIndex := strs.add(n.Text(), node.Kind(), node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags()))
 }
 
 func recordExtendedData_BigIntLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
 	n := node.AsBigIntLiteral()
-	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
-	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags))
+	textIndex := strs.add(n.Text(), node.Kind(), node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags()))
 }
 
 func recordExtendedData_RegularExpressionLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
 	n := node.AsRegularExpressionLiteral()
-	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
-	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags))
+	textIndex := strs.add(n.Text(), node.Kind(), node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags()))
 }
 
 func recordExtendedData_NoSubstitutionTemplateLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
 	n := node.AsNoSubstitutionTemplateLiteral()
-	textIndex := strs.add(n.Text, node.Kind(), node.Pos(), node.End())
-	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TemplateFlags))
+	textIndex := strs.add(n.Text(), node.Kind(), node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TemplateFlags()))
 }

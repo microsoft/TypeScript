@@ -137,7 +137,7 @@ func getCallHierarchyDeclarationReferenceNode(node *ast.Node) *ast.Node {
 	}
 
 	if modifiers := node.Modifiers(); modifiers != nil {
-		for _, mod := range modifiers.Nodes {
+		for _, mod := range modifiers.Nodes() {
 			if mod.Kind() == ast.KindDefaultKeyword {
 				return mod
 			}
@@ -168,7 +168,7 @@ func getCallHierarchyItemName(program *compiler.Program, node *ast.Node) (text s
 
 	if (ast.IsFunctionDeclaration(node) || ast.IsClassDeclaration(node)) && node.Name() == nil {
 		if modifiers := node.Modifiers(); modifiers != nil {
-			for _, mod := range modifiers.Nodes {
+			for _, mod := range modifiers.Nodes() {
 				if mod.Kind() == ast.KindDefaultKeyword {
 					sourceFile := ast.GetSourceFileOfNode(node)
 					start := scanner.SkipTrivia(sourceFile.Text(), mod.Pos())
@@ -298,8 +298,8 @@ func getCallHierarchyItemContainerName(program *compiler.Program, node *ast.Node
 }
 
 func moveRangePastModifiers(node *ast.Node) core.TextRange {
-	if modifiers := node.Modifiers(); modifiers != nil && len(modifiers.Nodes) > 0 {
-		lastMod := modifiers.Nodes[len(modifiers.Nodes)-1]
+	if modifiers := node.Modifiers(); modifiers != nil && len(modifiers.Nodes()) > 0 {
+		lastMod := modifiers.Nodes()[len(modifiers.Nodes())-1]
 		return core.NewTextRange(lastMod.End(), node.End())
 	}
 	return core.NewTextRange(node.Pos(), node.End())
@@ -720,7 +720,7 @@ func (c *callSiteCollector) recordCallSite(node *ast.Node) {
 
 	switch {
 	case ast.IsTaggedTemplateExpression(node):
-		target = node.AsTaggedTemplateExpression().Tag
+		target = node.AsTaggedTemplateExpression().Tag()
 	case ast.IsJsxOpeningElement(node):
 		target = node.TagName()
 	case ast.IsJsxSelfClosingElement(node):
@@ -831,8 +831,8 @@ func (c *callSiteCollector) collect(node *ast.Node) {
 		// do not descend into the type arguments of a tagged template expression
 		c.recordCallSite(node)
 		taggedTemplate := node.AsTaggedTemplateExpression()
-		c.collect(taggedTemplate.Tag)
-		c.collect(taggedTemplate.Template)
+		c.collect(taggedTemplate.Tag())
+		c.collect(taggedTemplate.Template())
 		return
 	case ast.KindJsxOpeningElement, ast.KindJsxSelfClosingElement:
 		// do not descend into the type arguments of a JsxOpeningLikeElement
@@ -899,7 +899,7 @@ func collectCallSites(program *compiler.Program, c *checker.Checker, node *ast.N
 
 	case ast.KindClassDeclaration, ast.KindClassExpression:
 		if modifiers := node.Modifiers(); modifiers != nil {
-			for _, mod := range modifiers.Nodes {
+			for _, mod := range modifiers.Nodes() {
 				collector.collect(mod)
 			}
 		}
@@ -911,7 +911,7 @@ func collectCallSites(program *compiler.Program, c *checker.Checker, node *ast.N
 
 		for _, member := range node.Members() {
 			if ast.CanHaveModifiers(member) && member.Modifiers() != nil {
-				for _, mod := range member.Modifiers().Nodes {
+				for _, mod := range member.Modifiers().Nodes() {
 					collector.collect(mod)
 				}
 			}
@@ -932,7 +932,7 @@ func collectCallSites(program *compiler.Program, c *checker.Checker, node *ast.N
 
 	case ast.KindClassStaticBlockDeclaration:
 		staticBlock := node.AsClassStaticBlockDeclaration()
-		collector.collect(staticBlock.Body)
+		collector.collect(staticBlock.Body())
 
 	default:
 		debug.AssertNever(node)

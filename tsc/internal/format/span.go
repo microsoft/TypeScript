@@ -456,9 +456,9 @@ func (w *formatSpanWorker) processChildNodes(
 	startLine := parentStartLine
 
 	// node range is outside the target range - do not dive inside
-	if !w.originalRange.Overlaps(nodes.Loc) {
-		if nodes.End() < w.originalRange.Pos() && (len(nodes.Nodes) == 0 || nodes.Nodes[0].Flags()&ast.NodeFlagsReparsed == 0) {
-			w.formattingScanner.skipToEndOf(&nodes.Loc)
+	if !w.originalRange.Overlaps(nodes.Loc()) {
+		if nodes.End() < w.originalRange.Pos() && (len(nodes.Nodes()) == 0 || nodes.Nodes()[0].Flags()&ast.NodeFlagsReparsed == 0) {
+			w.formattingScanner.skipToEndOf(new(nodes.Loc()))
 		}
 		return
 	}
@@ -496,8 +496,8 @@ func (w *formatSpanWorker) processChildNodes(
 	}
 
 	inheritedIndentation := -1
-	for i := range len(nodes.Nodes) {
-		child := nodes.Nodes[i]
+	for i := range len(nodes.Nodes()) {
+		child := nodes.Nodes()[i]
 		inheritedIndentation = w.processChildNode(node, indenter, nodeStartLine, undecoratedNodeStartLine, child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, true, i == 0)
 	}
 
@@ -1233,7 +1233,7 @@ func getFirstNonDecoratorTokenOfNode(node *ast.Node) ast.Kind {
 	case ast.KindSetAccessor:
 		return ast.KindSetKeyword
 	case ast.KindMethodDeclaration:
-		if node.AsMethodDeclaration().AsteriskToken != nil {
+		if node.AsMethodDeclaration().AsteriskToken() != nil {
 			return ast.KindAsteriskToken
 		}
 		fallthrough

@@ -455,9 +455,9 @@ func (c *Checker) elaborateError(node *ast.Node, source *Type, target *Type, rel
 	case ast.KindJsxExpression, ast.KindParenthesizedExpression:
 		return c.elaborateError(node.Expression(), source, target, relation, headMessage, diagnosticOutput)
 	case ast.KindBinaryExpression:
-		switch node.AsBinaryExpression().OperatorToken.Kind() {
+		switch node.AsBinaryExpression().OperatorToken().Kind() {
 		case ast.KindEqualsToken, ast.KindCommaToken:
-			return c.elaborateError(node.AsBinaryExpression().Right, source, target, relation, headMessage, diagnosticOutput)
+			return c.elaborateError(node.AsBinaryExpression().Right(), source, target, relation, headMessage, diagnosticOutput)
 		}
 	case ast.KindObjectLiteralExpression:
 		return c.elaborateObjectLiteral(node, source, target, relation, diagnosticOutput)
@@ -2118,15 +2118,15 @@ func (c *Checker) typePredicateKindsMatch(a *TypePredicate, b *TypePredicate) bo
 func (c *Checker) createTypePredicateFromTypePredicateNode(node *ast.Node, signature *Signature) *TypePredicate {
 	predicateNode := node.AsTypePredicateNode()
 	var t *Type
-	if predicateNode.Type != nil {
-		t = c.getTypeFromTypeNode(predicateNode.Type)
+	if predicateNode.Type() != nil {
+		t = c.getTypeFromTypeNode(predicateNode.Type())
 	}
-	if ast.IsThisTypeNode(predicateNode.ParameterName) {
-		kind := core.IfElse(predicateNode.AssertsModifier != nil, TypePredicateKindAssertsThis, TypePredicateKindThis)
+	if ast.IsThisTypeNode(predicateNode.ParameterName()) {
+		kind := core.IfElse(predicateNode.AssertsModifier() != nil, TypePredicateKindAssertsThis, TypePredicateKindThis)
 		return c.newTypePredicate(kind, "" /*parameterName*/, 0 /*parameterIndex*/, t)
 	}
-	kind := core.IfElse(predicateNode.AssertsModifier != nil, TypePredicateKindAssertsIdentifier, TypePredicateKindIdentifier)
-	name := predicateNode.ParameterName.Text()
+	kind := core.IfElse(predicateNode.AssertsModifier() != nil, TypePredicateKindAssertsIdentifier, TypePredicateKindIdentifier)
+	name := predicateNode.ParameterName().Text()
 	index := core.FindIndex(signature.parameters, func(p *ast.Symbol) bool { return p.Name() == name })
 	return c.newTypePredicate(kind, name, int32(index), t)
 }
@@ -3455,7 +3455,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 	switch {
 	case target.flags&TypeFlagsTypeParameter != 0:
 		// A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
-		if source.objectFlags&ObjectFlagsMapped != 0 && source.AsMappedType().declaration.NameType == nil && r.isRelatedTo(r.c.getIndexType(target), r.c.getConstraintTypeFromMappedType(source), RecursionFlagsBoth, false) != TernaryFalse {
+		if source.objectFlags&ObjectFlagsMapped != 0 && source.AsMappedType().declaration.NameType() == nil && r.isRelatedTo(r.c.getIndexType(target), r.c.getConstraintTypeFromMappedType(source), RecursionFlagsBoth, false) != TernaryFalse {
 			if getMappedTypeModifiers(source)&MappedTypeModifiersIncludeOptional == 0 {
 				templateType := r.c.getTemplateTypeFromMappedType(source)
 				indexedAccessType := r.c.getIndexedAccessType(target, r.c.getTypeParameterFromMappedType(source))
@@ -3625,7 +3625,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		}
 	case r.c.isGenericMappedType(target) && r.relation != r.c.identityRelation:
 		// Check if source type `S` is related to target type `{ [P in Q]: T }` or `{ [P in Q as R]: T}`.
-		keysRemapped := target.AsMappedType().declaration.NameType != nil
+		keysRemapped := target.AsMappedType().declaration.NameType() != nil
 		templateType := r.c.getTemplateTypeFromMappedType(target)
 		modifiers := getMappedTypeModifiers(target)
 		if modifiers&MappedTypeModifiersExcludeOptional == 0 {
@@ -5025,7 +5025,7 @@ func (c *Checker) isTypeDerivedFrom(source *Type, target *Type) bool {
 }
 
 func (c *Checker) isDistributionDependent(root *ConditionalRoot) bool {
-	return root.isDistributive && (c.isTypeParameterPossiblyReferenced(root.checkType, root.node.TrueType) || c.isTypeParameterPossiblyReferenced(root.checkType, root.node.FalseType))
+	return root.isDistributive && (c.isTypeParameterPossiblyReferenced(root.checkType, root.node.TrueType()) || c.isTypeParameterPossiblyReferenced(root.checkType, root.node.FalseType()))
 }
 
 func (r *Relater) traceUnionsOrIntersectionsTooLarge(source *Type, target *Type) {

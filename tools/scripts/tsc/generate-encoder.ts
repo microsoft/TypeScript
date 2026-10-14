@@ -228,10 +228,9 @@ function goParamName(m: MemberInfo): string {
     return m.goParamName();
 }
 
-/** Get the Go accessor for a member on a cast struct (e.g., "n.IsTypeOnly", "n.Name()"). */
+/** Get the Go accessor for a member on a cast struct (e.g., "n.IsTypeOnly()", "n.Name()"). */
 function goFieldAccess(m: MemberInfo): string {
-    if (m.private) return `n.${api.capitalize(m.name)}()`;
-    return `n.${m.name}`;
+    return `n.${api.capitalize(m.name)}()`;
 }
 
 /** Get the default Go value for a non-encoded factory parameter. */
@@ -535,9 +534,7 @@ function generateGoRecordNodeStrings(w: CodeWriter) {
 
         const kinds = getGoKinds(node);
         const castName = goCastName(node);
-        const textAccess = info.textMember.private
-            ? `node.${castName}().${api.capitalize(info.textMember.name)}()`
-            : `node.${castName}().${info.textMember.name}`;
+        const textAccess = `node.${castName}().${api.capitalize(info.textMember.name)}()`;
 
         w.write(`case ${kinds.join(", ")}:`);
         w.push();

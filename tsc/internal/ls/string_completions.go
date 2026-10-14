@@ -311,7 +311,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		}
 	case ast.KindElementAccessExpression:
 		expression := parent.Expression()
-		argumentExpression := parent.AsElementAccessExpression().ArgumentExpression
+		argumentExpression := parent.AsElementAccessExpression().ArgumentExpression()
 		if node == ast.SkipParentheses(argumentExpression) {
 			// Get all names of properties on the expression
 			// i.e. interface A {
@@ -361,7 +361,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		//      export * from "/*completion position*/";
 		return l.getStringLiteralCompletionsFromModuleNames(file, node, l.GetProgram(), typeChecker)
 	case ast.KindCaseClause:
-		tracker := newCaseClauseTracker(typeChecker, parent.Parent().AsCaseBlock().Clauses.Nodes)
+		tracker := newCaseClauseTracker(typeChecker, parent.Parent().AsCaseBlock().Clauses().Nodes())
 		contextualTypes := fromContextualType(checker.ContextFlagsIgnoreNodeInferences, node, typeChecker)
 		if contextualTypes == nil {
 			return nil
@@ -409,8 +409,8 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 			},
 		}
 	case ast.KindBinaryExpression:
-		if parent.AsBinaryExpression().OperatorToken.Kind() == ast.KindInKeyword {
-			t := typeChecker.GetTypeAtLocation(parent.AsBinaryExpression().Right)
+		if parent.AsBinaryExpression().OperatorToken().Kind() == ast.KindInKeyword {
+			t := typeChecker.GetTypeAtLocation(parent.AsBinaryExpression().Right())
 			properties := getPropertiesForCompletion(t, typeChecker)
 			return &stringLiteralCompletions{
 				fromProperties: &completionsFromProperties{
@@ -495,8 +495,8 @@ func fromUnionableLiteralType(
 		//          bar: string;
 		//      }
 		//      let x: Foo["/*completion position*/"]
-		indexType := grandparent.AsIndexedAccessTypeNode().IndexType
-		objectType := grandparent.AsIndexedAccessTypeNode().ObjectType
+		indexType := grandparent.AsIndexedAccessTypeNode().IndexType()
+		objectType := grandparent.AsIndexedAccessTypeNode().ObjectType()
 		if !indexType.Loc().ContainsInclusive(position) {
 			return nil
 		}
@@ -1943,15 +1943,15 @@ func getStringLiteralTypes(t *checker.Type, uniques *collections.Set[string], ty
 }
 
 func getAlreadyUsedTypesInStringLiteralUnion(union *ast.UnionTypeNodeNode, current *ast.LiteralTypeNodeNode) []string {
-	typesList := union.AsUnionTypeNode().Types
+	typesList := union.AsUnionTypeNode().Types()
 	if typesList == nil {
 		return nil
 	}
 	var values []string
-	for _, typeNode := range typesList.Nodes {
+	for _, typeNode := range typesList.Nodes() {
 		if typeNode != current && ast.IsLiteralTypeNode(typeNode) &&
-			ast.IsStringLiteral(typeNode.AsLiteralTypeNode().Literal) {
-			values = append(values, typeNode.AsLiteralTypeNode().Literal.Text())
+			ast.IsStringLiteral(typeNode.AsLiteralTypeNode().Literal()) {
+			values = append(values, typeNode.AsLiteralTypeNode().Literal().Text())
 		}
 	}
 	return values

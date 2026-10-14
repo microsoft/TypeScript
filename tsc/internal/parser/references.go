@@ -9,7 +9,7 @@ import (
 )
 
 func collectExternalModuleReferences(file *ast.SourceFile) {
-	for _, node := range file.Statements.Nodes {
+	for _, node := range file.Statements.Nodes() {
 		collectModuleReferences(file, node, false /*inAmbientModule*/)
 	}
 

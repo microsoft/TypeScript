@@ -121,14 +121,14 @@ func findOutermostNodeWithinListLevel(node *ast.Node) *ast.Node {
 func isListElement(parent *ast.Node, node *ast.Node) bool {
 	switch parent.Kind() {
 	case ast.KindClassDeclaration, ast.KindInterfaceDeclaration:
-		return node.Loc().ContainedBy(parent.MemberList().Loc)
+		return node.Loc().ContainedBy(parent.MemberList().Loc())
 	case ast.KindModuleDeclaration:
 		body := parent.Body()
-		return body != nil && body.Kind() == ast.KindModuleBlock && node.Loc().ContainedBy(body.StatementList().Loc)
+		return body != nil && body.Kind() == ast.KindModuleBlock && node.Loc().ContainedBy(body.StatementList().Loc())
 	case ast.KindSourceFile, ast.KindBlock, ast.KindModuleBlock:
-		return node.Loc().ContainedBy(parent.StatementList().Loc)
+		return node.Loc().ContainedBy(parent.StatementList().Loc())
 	case ast.KindCatchClause:
-		return node.Loc().ContainedBy(parent.AsCatchClause().Block.StatementList().Loc)
+		return node.Loc().ContainedBy(parent.AsCatchClause().Block().StatementList().Loc())
 	}
 
 	return false
@@ -142,7 +142,7 @@ func isMemberListElement(parent *ast.Node, node *ast.Node) bool {
 		ast.KindEnumDeclaration,
 		ast.KindTypeLiteral,
 		ast.KindMappedType:
-		return node.Loc().ContainedBy(parent.MemberList().Loc)
+		return node.Loc().ContainedBy(parent.MemberList().Loc())
 	}
 	return false
 }

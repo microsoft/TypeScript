@@ -46,10 +46,10 @@ func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 			if excludedParameters.Has(lastJSDocParamIndex) || parameters.Has(lastJSDocParam.Name().Text()) {
 				return
 			}
-			if lastJSDocParam.TypeExpression == nil || lastJSDocParam.TypeExpression.Type() == nil {
+			if lastJSDocParam.TypeExpression() == nil || lastJSDocParam.TypeExpression().Type() == nil {
 				return
 			}
-			if c.isArrayType(c.getTypeFromTypeNode(lastJSDocParam.TypeExpression.Type())) {
+			if c.isArrayType(c.getTypeFromTypeNode(lastJSDocParam.TypeExpression().Type())) {
 				return
 			}
 			c.error(lastJSDocParam.Name(), diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_It_would_match_arguments_if_it_had_an_array_type, lastJSDocParam.Name().Text())
@@ -57,7 +57,7 @@ func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 	} else {
 		for index, tag := range jsdocParameters {
 			name := tag.AsJSDocParameterOrPropertyTag().Name()
-			isNameFirst := tag.AsJSDocParameterOrPropertyTag().IsNameFirst
+			isNameFirst := tag.AsJSDocParameterOrPropertyTag().IsNameFirst()
 
 			if excludedParameters.Has(index) || (ast.IsIdentifier(name) && parameters.Has(name.Text())) {
 				continue
@@ -68,7 +68,7 @@ func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 					c.error(
 						name, diagnostics.Qualified_name_0_is_not_allowed_without_a_leading_param_object_1,
 						entityNameToString(name),
-						entityNameToString(name.AsQualifiedName().Left),
+						entityNameToString(name.AsQualifiedName().Left()),
 					)
 				}
 			} else {
@@ -92,8 +92,8 @@ func getAllJSDocTags(node *ast.Node) []*ast.Node {
 				continue
 			}
 			lastJSDoc := jsdocs[len(jsdocs)-1].AsJSDoc()
-			if lastJSDoc.Tags != nil {
-				return lastJSDoc.Tags.Nodes
+			if lastJSDoc.Tags() != nil {
+				return lastJSDoc.Tags().Nodes()
 			}
 		}
 	}
@@ -106,10 +106,10 @@ func (c *Checker) checkJSDocAugmentsTagMatchesExtends(node *ast.Node, baseTypeNo
 	}
 	file := ast.GetSourceFileOfNode(node)
 	for _, j := range node.EagerJSDoc(file) {
-		if j.AsJSDoc().Tags == nil {
+		if j.AsJSDoc().Tags() == nil {
 			continue
 		}
-		for _, tag := range j.AsJSDoc().Tags.Nodes {
+		for _, tag := range j.AsJSDoc().Tags().Nodes() {
 			if tag.Kind() != ast.KindJSDocAugmentsTag {
 				continue
 			}

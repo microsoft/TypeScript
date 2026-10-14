@@ -421,7 +421,7 @@ func needSemicolonBetween(a, b *ast.Node) bool {
 
 func (t *Tracker) getInsertionPositionAtSourceFileTop(sourceFile *ast.SourceFile) int {
 	var lastPrologue *ast.Node
-	for _, node := range sourceFile.Statements.Nodes {
+	for _, node := range sourceFile.Statements.Nodes() {
 		if ast.IsPrologueDirective(node) {
 			lastPrologue = node
 		} else {
@@ -463,7 +463,7 @@ func (t *Tracker) getInsertionPositionAtSourceFileTop(sourceFile *ast.SourceFile
 	pinnedOrTripleSlash := false
 	firstNodeLine := -1
 
-	lenStatements := len(sourceFile.Statements.Nodes)
+	lenStatements := len(sourceFile.Statements.Nodes())
 	lineMap := sourceFile.ECMALineMap()
 	for _, r := range ranges {
 		if r.Kind == ast.KindMultiLineCommentTrivia {
@@ -495,7 +495,7 @@ func (t *Tracker) getInsertionPositionAtSourceFileTop(sourceFile *ast.SourceFile
 
 		if lenStatements > 0 {
 			if firstNodeLine == -1 {
-				firstNodeLine = scanner.ComputeLineOfPosition(lineMap, astnav.GetStartOfNode(sourceFile.Statements.Nodes[0], sourceFile, false))
+				firstNodeLine = scanner.ComputeLineOfPosition(lineMap, astnav.GetStartOfNode(sourceFile.Statements.Nodes()[0], sourceFile, false))
 			}
 			commentEndLine := scanner.ComputeLineOfPosition(lineMap, r.End())
 			if firstNodeLine < commentEndLine+2 {

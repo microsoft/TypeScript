@@ -936,16 +936,16 @@ func (p *Program) verifyCompilerOptions() {
 	getCompilerOptionsObjectLiteralSyntax := core.Memoize(func() *ast.ObjectLiteralExpression {
 		compilerOptionsProperty := getCompilerOptionsPropertySyntax()
 		if compilerOptionsProperty != nil &&
-			compilerOptionsProperty.Initializer != nil &&
-			ast.IsObjectLiteralExpression(compilerOptionsProperty.Initializer) {
-			return compilerOptionsProperty.Initializer.AsObjectLiteralExpression()
+			compilerOptionsProperty.Initializer() != nil &&
+			ast.IsObjectLiteralExpression(compilerOptionsProperty.Initializer()) {
+			return compilerOptionsProperty.Initializer().AsObjectLiteralExpression()
 		}
 		return nil
 	})
 
 	createOptionDiagnosticInObjectLiteralSyntax := func(objectLiteral *ast.ObjectLiteralExpression, onKey bool, key1 string, key2 string, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 		diag := tsoptions.ForEachPropertyAssignment(objectLiteral, key1, func(property *ast.PropertyAssignment) *ast.Diagnostic {
-			return tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile(), core.IfElse(onKey, property.Name(), property.Initializer), message, args...)
+			return tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile(), core.IfElse(onKey, property.Name(), property.Initializer()), message, args...)
 		}, key2)
 		if diag != nil {
 			p.programDiagnostics = append(p.programDiagnostics, diag)
@@ -1129,8 +1129,8 @@ func (p *Program) verifyCompilerOptions() {
 
 	createDiagnosticForOptionPaths := func(onKey bool, key string, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 		diag := forEachOptionPathsSyntax(func(pathProp *ast.PropertyAssignment) *ast.Diagnostic {
-			if ast.IsObjectLiteralExpression(pathProp.Initializer) {
-				return createOptionDiagnosticInObjectLiteralSyntax(pathProp.Initializer.AsObjectLiteralExpression(), onKey, key, "", message, args...)
+			if ast.IsObjectLiteralExpression(pathProp.Initializer()) {
+				return createOptionDiagnosticInObjectLiteralSyntax(pathProp.Initializer().AsObjectLiteralExpression(), onKey, key, "", message, args...)
 			}
 			return nil
 		})
@@ -1142,13 +1142,13 @@ func (p *Program) verifyCompilerOptions() {
 
 	createDiagnosticForOptionPathKeyValue := func(key string, valueIndex int, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 		diag := forEachOptionPathsSyntax(func(pathProp *ast.PropertyAssignment) *ast.Diagnostic {
-			if ast.IsObjectLiteralExpression(pathProp.Initializer) {
-				return tsoptions.ForEachPropertyAssignment(pathProp.Initializer.AsObjectLiteralExpression(), key, func(keyProps *ast.PropertyAssignment) *ast.Diagnostic {
-					initializer := keyProps.Initializer
+			if ast.IsObjectLiteralExpression(pathProp.Initializer()) {
+				return tsoptions.ForEachPropertyAssignment(pathProp.Initializer().AsObjectLiteralExpression(), key, func(keyProps *ast.PropertyAssignment) *ast.Diagnostic {
+					initializer := keyProps.Initializer()
 					if ast.IsArrayLiteralExpression(initializer) {
 						elements := initializer.ElementList()
-						if elements != nil && len(elements.Nodes) > valueIndex {
-							diag := tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile(), elements.Nodes[valueIndex], message, args...)
+						if elements != nil && len(elements.Nodes()) > valueIndex {
+							diag := tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile(), elements.Nodes()[valueIndex], message, args...)
 							p.programDiagnostics = append(p.programDiagnostics, diag)
 							return diag
 						}

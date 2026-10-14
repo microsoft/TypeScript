@@ -162,7 +162,7 @@ func (d *astDecoder) decode() (*ast.Node, error) {
 				}
 			}
 			nl := d.factory.NewNodeList(childNodes)
-			nl.Loc = core.NewTextRange(int(pos), int(end))
+			nl.SetLoc(core.NewTextRange(int(pos), int(end)))
 			d.nodeLists[i] = nl
 			continue
 		}
@@ -188,8 +188,8 @@ func (d *astDecoder) getModifierList(ci int) *ast.ModifierList {
 	if nl == nil {
 		return nil
 	}
-	ml := d.factory.NewModifierList(nl.Nodes)
-	ml.Loc = nl.Loc
+	ml := d.factory.NewModifierList(nl.Nodes())
+	ml.SetLoc(nl.Loc())
 	return ml
 }
 

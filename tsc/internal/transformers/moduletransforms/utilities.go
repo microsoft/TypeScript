@@ -33,7 +33,7 @@ func rewriteModuleSpecifier(emitContext *printer.EmitContext, node *ast.Expressi
 		updatedText = tspath.ChangeExtension(node.Text(), outputpaths.GetOutputExtension(node.Text(), compilerOptions.Jsx))
 	}
 	if updatedText != node.Text() {
-		updated := emitContext.Factory.NewStringLiteral(updatedText, node.AsStringLiteral().TokenFlags)
+		updated := emitContext.Factory.NewStringLiteral(updatedText, node.AsStringLiteral().TokenFlags())
 		emitContext.SetOriginal(updated, node)
 		emitContext.AssignCommentAndSourceMapRanges(updated, node)
 		return updated

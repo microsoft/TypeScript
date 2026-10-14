@@ -124,7 +124,7 @@ func forEachImport(program *compiler.Program, sourceFile *ast.SourceFile, action
 				}
 			case ast.KindImportEqualsDeclaration:
 				if isExternalModuleImportEquals(node) {
-					action(node, node.AsImportEqualsDeclaration().ModuleReference.Expression())
+					action(node, node.AsImportEqualsDeclaration().ModuleReference().Expression())
 				}
 			}
 			return false
@@ -270,7 +270,7 @@ func getImportersForExport(
 			case ast.KindImportDeclaration, ast.KindJSImportDeclaration, ast.KindJSDocImportTag:
 				directImports = append(directImports, direct)
 				if importClause := direct.ImportClause(); importClause != nil {
-					if namedBindings := importClause.AsImportClause().NamedBindings; namedBindings != nil && ast.IsNamespaceImport(namedBindings) {
+					if namedBindings := importClause.AsImportClause().NamedBindings(); namedBindings != nil && ast.IsNamespaceImport(namedBindings) {
 						handleNamespaceImport(direct, namedBindings.Name(), false /*isReExport*/, true /*alreadyAddedDirect*/)
 						break
 					}
@@ -280,7 +280,7 @@ func getImportersForExport(
 					// Add a check for indirect uses to handle synthetic default imports
 				}
 			case ast.KindExportDeclaration:
-				exportClause := direct.AsExportDeclaration().ExportClause
+				exportClause := direct.AsExportDeclaration().ExportClause()
 				if exportClause == nil {
 					// This is `export * from "foo"`, so imports of this module may import the export too.
 					handleDirectImports(getContainingModuleSymbol(direct, checker))
@@ -293,7 +293,7 @@ func getImportersForExport(
 				}
 			case ast.KindImportType:
 				// Only check for typeof import('xyz')
-				if !isAvailableThroughGlobal && direct.AsImportTypeNode().IsTypeOf && direct.AsImportTypeNode().Qualifier == nil && isExported(direct, false) {
+				if !isAvailableThroughGlobal && direct.AsImportTypeNode().IsTypeOf() && direct.AsImportTypeNode().Qualifier() == nil && isExported(direct, false) {
 					addIndirectUser(ast.GetSourceFileOfNode(direct).AsNode(), true /*addTransitiveDependencies*/)
 				}
 				directImports = append(directImports, direct)
@@ -333,7 +333,7 @@ func findNamespaceReExports(sourceFileLike *ast.Node, name *ast.Node, checker *c
 		if !ast.IsExportDeclaration(statement) {
 			return false
 		}
-		exportClause := statement.AsExportDeclaration().ExportClause
+		exportClause := statement.AsExportDeclaration().ExportClause()
 		moduleSpecifier := statement.ModuleSpecifier()
 		return moduleSpecifier == nil && exportClause != nil && ast.IsNamedExports(exportClause) && core.Some(exportClause.Elements(), func(element *ast.Node) bool {
 			return checker.GetExportSpecifierLocalTargetSymbol(element) == namespaceImportSymbol
@@ -413,13 +413,13 @@ func getSearchesFromDirectImports(
 			return
 		}
 		if ast.IsImportTypeNode(decl) {
-			if qualifier := decl.AsImportTypeNode().Qualifier; qualifier != nil {
+			if qualifier := decl.AsImportTypeNode().Qualifier(); qualifier != nil {
 				firstIdentifier := ast.GetFirstIdentifier(qualifier)
 				if firstIdentifier.Text() == ast.SymbolName(exportSymbol) {
 					singleReferences = append(singleReferences, firstIdentifier)
 				}
 			} else if exportKind == ExportKindExportEquals {
-				singleReferences = append(singleReferences, decl.AsImportTypeNode().Argument.AsLiteralTypeNode().Literal)
+				singleReferences = append(singleReferences, decl.AsImportTypeNode().Argument().AsLiteralTypeNode().Literal())
 			}
 			return
 		}
@@ -428,13 +428,13 @@ func getSearchesFromDirectImports(
 			return
 		}
 		if ast.IsExportDeclaration(decl) {
-			if exportClause := decl.AsExportDeclaration().ExportClause; exportClause != nil && ast.IsNamedExports(exportClause) {
+			if exportClause := decl.AsExportDeclaration().ExportClause(); exportClause != nil && ast.IsNamedExports(exportClause) {
 				searchForNamedImport(exportClause)
 			}
 			return
 		}
 		if importClause := decl.ImportClause(); importClause != nil {
-			if namedBindings := importClause.AsImportClause().NamedBindings; namedBindings != nil {
+			if namedBindings := importClause.AsImportClause().NamedBindings(); namedBindings != nil {
 				switch namedBindings.Kind() {
 				case ast.KindNamespaceImport:
 					handleNamespaceImportLike(namedBindings.Name())
@@ -478,7 +478,7 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 			if ex.Symbol().Parent() == nil {
 				return nil
 			}
-			exportKind := core.IfElse(ex.AsExportAssignment().IsExportEquals, ExportKindExportEquals, ExportKindDefault)
+			exportKind := core.IfElse(ex.AsExportAssignment().IsExportEquals(), ExportKindExportEquals, ExportKindDefault)
 			return &ImportExportSymbol{
 				kind:   ImpExpKindExport,
 				symbol: symbol,
@@ -533,7 +533,7 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 			exportNode := getExportNode(parent, node)
 			switch {
 			case exportNode != nil && (ast.HasSyntacticModifier(exportNode, ast.ModifierFlagsExport) || ast.IsImplicitlyExportedJSDocDeclaration(exportNode)):
-				if ast.IsImportEqualsDeclaration(exportNode) && exportNode.AsImportEqualsDeclaration().ModuleReference == node {
+				if ast.IsImportEqualsDeclaration(exportNode) && exportNode.AsImportEqualsDeclaration().ModuleReference() == node {
 					// We're at `Y` in `export import X = Y`. This is not the exported symbol, the left-hand-side is. So treat this as an import statement.
 					if comingFromExport {
 						return nil
@@ -661,7 +661,7 @@ func isNodeImport(node *ast.Node) bool {
 }
 
 func isExternalModuleImportEquals(node *ast.Node) bool {
-	moduleReference := node.AsImportEqualsDeclaration().ModuleReference
+	moduleReference := node.AsImportEqualsDeclaration().ModuleReference()
 	return ast.IsExternalModuleReference(moduleReference) && moduleReference.Expression().Kind() == ast.KindStringLiteral
 }
 
@@ -692,7 +692,7 @@ func getExportEqualsLocalSymbol(importedSymbol *ast.Symbol, checker *checker.Che
 	case ast.IsExportAssignment(decl):
 		return decl.Expression().Symbol()
 	case ast.IsBinaryExpression(decl):
-		return decl.AsBinaryExpression().Right.Symbol()
+		return decl.AsBinaryExpression().Right().Symbol()
 	case ast.IsSourceFile(decl):
 		return decl.Symbol()
 	}

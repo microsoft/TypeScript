@@ -142,7 +142,7 @@ func hasKeyAfterPropsSpread(node *ast.Node) bool {
 	spread := false
 	opener := node
 	if node.Kind() == ast.KindJsxElement {
-		opener = node.AsJsxElement().OpeningElement
+		opener = node.AsJsxElement().OpeningElement()
 	} // otherwise self-closing
 	for _, elem := range opener.Attributes().Properties() {
 		if ast.IsJsxSpreadAttribute(elem) && (!ast.IsObjectLiteralExpression(elem.Expression()) || core.Some(elem.Expression().Properties(), ast.IsSpreadAssignment)) {
@@ -283,7 +283,7 @@ func (tx *JSXTransformer) visitJsxElement(element *ast.JsxElement) *ast.Node {
 		tagTransform = (*JSXTransformer).visitJsxOpeningLikeElementCreateElement
 	}
 	location := core.NewTextRange(scanner.SkipTrivia(tx.currentSourceFile.Text(), element.Pos()), element.End())
-	return tagTransform(tx, element.OpeningElement, element.Children, location)
+	return tagTransform(tx, element.OpeningElement(), element.Children(), location)
 }
 
 func (tx *JSXTransformer) visitJsxSelfClosingElement(element *ast.JsxSelfClosingElement) *ast.Node {
@@ -301,7 +301,7 @@ func (tx *JSXTransformer) visitJsxFragment(fragment *ast.JsxFragment) *ast.Node 
 		tagTransform = (*JSXTransformer).visitJsxOpeningFragmentCreateElement
 	}
 	location := core.NewTextRange(scanner.SkipTrivia(tx.currentSourceFile.Text(), fragment.Pos()), fragment.End())
-	return tagTransform(tx, fragment.OpeningFragment.AsJsxOpeningFragment(), fragment.Children, location)
+	return tagTransform(tx, fragment.OpeningFragment().AsJsxOpeningFragment(), fragment.Children(), location)
 }
 
 func (tx *JSXTransformer) convertJsxChildrenToChildrenPropObject(children []*ast.JsxChild) *ast.Node {
@@ -321,7 +321,7 @@ func (tx *JSXTransformer) transformJsxChildToExpression(node *ast.Node) *ast.Nod
 
 func (tx *JSXTransformer) convertJsxChildrenToChildrenPropAssignment(children []*ast.JsxChild) *ast.Node {
 	nonWhitespceChildren := ast.GetSemanticJsxChildren(children)
-	if len(nonWhitespceChildren) == 1 && (nonWhitespceChildren[0].Kind() != ast.KindJsxExpression || nonWhitespceChildren[0].AsJsxExpression().DotDotDotToken == nil) {
+	if len(nonWhitespceChildren) == 1 && (nonWhitespceChildren[0].Kind() != ast.KindJsxExpression || nonWhitespceChildren[0].AsJsxExpression().DotDotDotToken() == nil) {
 		result := tx.transformJsxChildToExpression(nonWhitespceChildren[0])
 		if result == nil {
 			return nil
@@ -347,14 +347,14 @@ func (tx *JSXTransformer) convertJsxChildrenToChildrenPropAssignment(children []
 
 func (tx *JSXTransformer) getTagName(node *ast.Node) *ast.Node {
 	if node.Kind() == ast.KindJsxElement {
-		return tx.getTagName(node.AsJsxElement().OpeningElement)
+		return tx.getTagName(node.AsJsxElement().OpeningElement())
 	} else if ast.IsJsxOpeningLikeElement(node) {
 		tagName := node.TagName()
 		if ast.IsIdentifier(tagName) && scanner.IsIntrinsicJsxName(tagName.Text()) {
 			return tx.Factory().NewStringLiteral(tagName.Text(), ast.TokenFlagsNone)
 		} else if ast.IsJsxNamespacedName(tagName) {
 			return tx.Factory().NewStringLiteral(
-				tagName.AsJsxNamespacedName().Namespace.Text()+":"+tagName.AsJsxNamespacedName().Name().Text(), ast.TokenFlagsNone,
+				tagName.AsJsxNamespacedName().Namespace().Text()+":"+tagName.AsJsxNamespacedName().Name().Text(), ast.TokenFlagsNone,
 			)
 		} else {
 			return tx.Factory().CreateExpressionFromEntityName(tagName)
@@ -367,8 +367,8 @@ func (tx *JSXTransformer) getTagName(node *ast.Node) *ast.Node {
 func (tx *JSXTransformer) visitJsxOpeningLikeElementJSX(element *ast.Node, children *ast.NodeList, location core.TextRange) *ast.Node {
 	tagName := tx.getTagName(element)
 	var childrenProp *ast.Node
-	if children != nil && len(children.Nodes) > 0 {
-		childrenProp = tx.convertJsxChildrenToChildrenPropAssignment(children.Nodes)
+	if children != nil && len(children.Nodes()) > 0 {
+		childrenProp = tx.convertJsxChildrenToChildrenPropAssignment(children.Nodes())
 	}
 	var keyAttr *ast.Node
 	attrs := element.Attributes().Properties()
@@ -479,7 +479,7 @@ func (tx *JSXTransformer) transformJsxAttributesToProps(attrs []*ast.Node, child
 }
 
 func hasProto(obj *ast.ObjectLiteralExpression) bool {
-	for _, p := range obj.Properties.Nodes {
+	for _, p := range obj.Properties().Nodes() {
 		if ast.IsPropertyAssignment(p) && (ast.IsStringLiteral(p.Name()) || ast.IsIdentifier(p.Name())) && p.Name().Text() == "__proto__" {
 			return true
 		}
@@ -488,16 +488,16 @@ func hasProto(obj *ast.ObjectLiteralExpression) bool {
 }
 
 func (tx *JSXTransformer) transformJsxSpreadAttributesToProps(node *ast.JsxSpreadAttribute) []*ast.Node {
-	if ast.IsObjectLiteralExpression(node.Expression) && !hasProto(node.Expression.AsObjectLiteralExpression()) {
-		res, _ := tx.Visitor().VisitSlice(node.Expression.Properties())
+	if ast.IsObjectLiteralExpression(node.Expression()) && !hasProto(node.Expression().AsObjectLiteralExpression()) {
+		res, _ := tx.Visitor().VisitSlice(node.Expression().Properties())
 		return res
 	}
-	return []*ast.Node{tx.Factory().NewSpreadAssignment(tx.Visitor().Visit(node.Expression))}
+	return []*ast.Node{tx.Factory().NewSpreadAssignment(tx.Visitor().Visit(node.Expression()))}
 }
 
 func (tx *JSXTransformer) transformJsxAttributeToObjectLiteralElement(node *ast.JsxAttribute) *ast.Node {
 	name := tx.getAttributeName(node)
-	expression := tx.transformJsxAttributeInitializer(node.Initializer)
+	expression := tx.transformJsxAttributeInitializer(node.Initializer())
 	return tx.Factory().NewPropertyAssignment(nil, name, nil, nil, expression)
 }
 
@@ -517,7 +517,7 @@ func (tx *JSXTransformer) getAttributeName(node *ast.JsxAttribute) *ast.Node {
 	}
 	// must be jsx namespace
 	return tx.Factory().NewStringLiteral(
-		name.AsJsxNamespacedName().Namespace.Text()+":"+name.AsJsxNamespacedName().Name().Text(), ast.TokenFlagsNone,
+		name.AsJsxNamespacedName().Namespace().Text()+":"+name.AsJsxNamespacedName().Name().Text(), ast.TokenFlagsNone,
 	)
 }
 
@@ -528,10 +528,10 @@ func (tx *JSXTransformer) transformJsxAttributeInitializer(node *ast.Node) *ast.
 	if node.Kind() == ast.KindStringLiteral {
 		// Always recreate the literal to escape any escape sequences or newlines which may be in the original jsx string and which
 		// Need to be escaped to be handled correctly in a normal string
-		res := tx.Factory().NewStringLiteral(decodeEntities(node.Text()), node.AsStringLiteral().TokenFlags)
+		res := tx.Factory().NewStringLiteral(decodeEntities(node.Text()), node.AsStringLiteral().TokenFlags())
 		res.SetLoc(node.Loc())
 		// Preserve the original quote style (single vs double quotes)
-		res.AsStringLiteral().TokenFlags = node.AsStringLiteral().TokenFlags
+		res.AsStringLiteral().SetTokenFlags(node.AsStringLiteral().TokenFlags())
 		return res
 	}
 	if node.Kind() == ast.KindJsxExpression {
@@ -556,9 +556,9 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementOrFragmentJSX(
 ) *ast.Node {
 	var nonWhitespaceChildren []*ast.Node
 	if children != nil {
-		nonWhitespaceChildren = ast.GetSemanticJsxChildren(children.Nodes)
+		nonWhitespaceChildren = ast.GetSemanticJsxChildren(children.Nodes())
 	}
-	isStaticChildren := len(nonWhitespaceChildren) > 1 || (len(nonWhitespaceChildren) == 1 && ast.IsJsxExpression(nonWhitespaceChildren[0]) && nonWhitespaceChildren[0].AsJsxExpression().DotDotDotToken != nil)
+	isStaticChildren := len(nonWhitespaceChildren) > 1 || (len(nonWhitespaceChildren) == 1 && ast.IsJsxExpression(nonWhitespaceChildren[0]) && nonWhitespaceChildren[0].AsJsxExpression().DotDotDotToken() != nil)
 	args := make([]*ast.Node, 0, 3)
 	args = append(args, tagName, object)
 	// function jsx(type, config, maybeKey) {}
@@ -604,8 +604,8 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementOrFragmentJSX(
 
 func (tx *JSXTransformer) visitJsxOpeningFragmentJSX(fragment *ast.JsxOpeningFragment, children *ast.NodeList, location core.TextRange) *ast.Node {
 	var childrenProps *ast.Expression
-	if children != nil && len(children.Nodes) > 0 {
-		result := tx.convertJsxChildrenToChildrenPropObject(children.Nodes)
+	if children != nil && len(children.Nodes()) > 0 {
+		result := tx.convertJsxChildrenToChildrenPropObject(children.Nodes())
 		if result != nil {
 			childrenProps = result
 		}
@@ -635,7 +635,7 @@ func (tx *JSXTransformer) createReactNamespace(reactNamespace string, parent *as
 
 	// Set the parent that is in parse tree
 	// this makes sure that parent chain is intact for checker to traverse complete scope tree
-	react.SetParent(tx.EmitContext().ParseNode(parent)) //nolint:customlint // Parent is intentionally wired to a parse-tree node for resolver traversal.
+	react.SetParent(tx.EmitContext().ParseNode(parent))
 
 	// If the identifier refers to an exported member of a namespace, substitute with
 	// a qualified namespace property access (e.g., `React` -> `M.React`).
@@ -650,8 +650,8 @@ func (tx *JSXTransformer) createReactNamespace(reactNamespace string, parent *as
 
 func (tx *JSXTransformer) createJsxFactoryExpressionFromEntityName(e *ast.Node, parent *ast.Node) *ast.Node {
 	if ast.IsQualifiedName(e) {
-		left := tx.createJsxFactoryExpressionFromEntityName(e.AsQualifiedName().Left, parent)
-		right := tx.Factory().NewIdentifier(e.AsQualifiedName().Right.Text())
+		left := tx.createJsxFactoryExpressionFromEntityName(e.AsQualifiedName().Left(), parent)
+		right := tx.Factory().NewIdentifier(e.AsQualifiedName().Right().Text())
 		return tx.Factory().NewPropertyAccessExpression(left, nil, right, ast.NodeFlagsNone)
 	}
 	return tx.createReactNamespace(e.Text(), parent)
@@ -697,8 +697,8 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementCreateElement(element *ast.N
 	}
 
 	var newChildren []*ast.Node
-	if children != nil && len(children.Nodes) > 0 {
-		for _, c := range children.Nodes {
+	if children != nil && len(children.Nodes()) > 0 {
+		for _, c := range children.Nodes() {
 			res := tx.transformJsxChildToExpression(c)
 			if res != nil {
 				newChildren = append(newChildren, res)
@@ -738,8 +738,8 @@ func (tx *JSXTransformer) visitJsxOpeningFragmentCreateElement(fragment *ast.Jsx
 	callee := tx.createJsxFactoryExpression(fragment.AsNode())
 
 	var newChildren []*ast.Node
-	if children != nil && len(children.Nodes) > 0 {
-		for _, c := range children.Nodes {
+	if children != nil && len(children.Nodes()) > 0 {
+		for _, c := range children.Nodes() {
 			res := tx.transformJsxChildToExpression(c)
 			if res != nil {
 				newChildren = append(newChildren, res)
@@ -775,7 +775,7 @@ func (tx *JSXTransformer) visitJsxOpeningFragmentCreateElement(fragment *ast.Jsx
 }
 
 func (tx *JSXTransformer) visitJsxText(text *ast.JsxText) *ast.Node {
-	fixed := fixupWhitespaceAndDecodeEntities(text.Text)
+	fixed := fixupWhitespaceAndDecodeEntities(text.Text())
 	if len(fixed) == 0 {
 		return nil
 	}
@@ -850,8 +850,8 @@ func fixupWhitespaceAndDecodeEntities(text string) string {
 }
 
 func (tx *JSXTransformer) visitJsxExpression(expression *ast.JsxExpression) *ast.Node {
-	e := tx.Visitor().Visit(expression.Expression)
-	if expression.DotDotDotToken != nil {
+	e := tx.Visitor().Visit(expression.Expression())
+	if expression.DotDotDotToken() != nil {
 		return tx.Factory().NewSpreadElement(e)
 	}
 	return e

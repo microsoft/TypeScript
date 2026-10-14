@@ -256,7 +256,7 @@ func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Sym
 	sym := symbol
 	if !preferences.ProvidePrefixAndSuffixTextForRename.IsTrueOrUnknown() && sym.Flags()&ast.SymbolFlagsAlias != 0 {
 		importSpecifier := core.Find(sym.Declarations(), ast.IsImportSpecifier)
-		if importSpecifier != nil && importSpecifier.AsImportSpecifier().PropertyName == nil {
+		if importSpecifier != nil && importSpecifier.AsImportSpecifier().PropertyName() == nil {
 			sym = ch.GetAliasedSymbol(sym)
 		}
 	}
@@ -382,7 +382,7 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 		name := originalNode.Text()
 		isShorthandAssignment := ast.IsShorthandPropertyAssignment(parent)
 		switch {
-		case isShorthandAssignment || (isObjectBindingElementWithoutPropertyName(parent) && parent.Name() == node && parent.AsBindingElement().DotDotDotToken == nil):
+		case isShorthandAssignment || (isObjectBindingElementWithoutPropertyName(parent) && parent.Name() == node && parent.AsBindingElement().DotDotDotToken() == nil):
 			if kind == entryKindSearchedLocalFoundProperty {
 				return name + ": " + newText
 			}
@@ -393,7 +393,7 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 			// For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
 			if isShorthandAssignment {
 				grandParent := parent.Parent()
-				if ast.IsObjectLiteralExpression(grandParent) && ast.IsBinaryExpression(grandParent.Parent()) && ast.IsModuleExportsAccessExpression(grandParent.Parent().AsBinaryExpression().Left) {
+				if ast.IsObjectLiteralExpression(grandParent) && ast.IsBinaryExpression(grandParent.Parent()) && ast.IsModuleExportsAccessExpression(grandParent.Parent().AsBinaryExpression().Left()) {
 					return name + ": " + newText
 				}
 				return newText + ": " + name

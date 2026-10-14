@@ -118,7 +118,7 @@ func (ct *ChangeTrackerWriter) AssignPositionsToNode(node *ast.Node, factory *as
 					newNodeList := ct.assignPositionsToNodeArray(&modifiers.NodeList, v)
 					// Return a new ModifierList so that VisitEachChild/Update detects the
 					// change and creates a new node with reassigned child positions.
-					return factory.NewModifierList(newNodeList.Nodes)
+					return factory.NewModifierList(newNodeList.Nodes())
 				}
 				return modifiers
 			},
@@ -169,7 +169,7 @@ func (ct *ChangeTrackerWriter) assignPositionsToNodeArray(
 		nodeArray = visited.Clone(v.Factory)
 	}
 
-	nodeArray.Loc = core.NewTextRange(ct.getPos(nodes), ct.getEnd(nodes))
+	nodeArray.SetLoc(core.NewTextRange(ct.getPos(nodes), ct.getEnd(nodes)))
 	return nodeArray
 }
 

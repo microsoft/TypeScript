@@ -46,8 +46,8 @@ loop:
 			location = location.Parent()
 		}
 		isModuleAttributes := ast.IsModuleDeclaration(location) &&
-			location.AsModuleDeclaration().Attributes != nil &&
-			lastLocation == location.AsModuleDeclaration().Attributes
+			location.AsModuleDeclaration().Attributes() != nil &&
+			lastLocation == location.AsModuleDeclaration().Attributes()
 		locals := location.Locals()
 		// Locals of a source file are not in scope (because they get merged into the global symbol table)
 		if locals != nil && !ast.IsGlobalSourceFile(location) {
@@ -91,7 +91,7 @@ loop:
 				} else if location.Kind() == ast.KindConditionalType {
 					// A type parameter declared using 'infer T' in a conditional type is visible only in
 					// the true branch of the conditional type.
-					useResult = lastLocation == location.AsConditionalTypeNode().TrueType
+					useResult = lastLocation == location.AsConditionalTypeNode().TrueType()
 				}
 				if useResult {
 					break loop
@@ -202,7 +202,7 @@ loop:
 				}
 			}
 		case ast.KindExpressionWithTypeArguments:
-			if lastLocation == location.Expression() && ast.IsHeritageClause(location.Parent()) && location.Parent().AsHeritageClause().Token == ast.KindExtendsKeyword {
+			if lastLocation == location.Expression() && ast.IsHeritageClause(location.Parent()) && location.Parent().AsHeritageClause().Token() == ast.KindExtendsKeyword {
 				container := location.Parent().Parent()
 				if ast.IsClassLike(container) {
 					result = r.lookup(r.getSymbolOfDeclaration(container).Members(), name, meaning&ast.SymbolFlagsType)
@@ -278,7 +278,7 @@ loop:
 			}
 		case ast.KindParameter:
 			parameterDeclaration := location.AsParameterDeclaration()
-			if lastLocation != nil && (lastLocation == parameterDeclaration.Initializer ||
+			if lastLocation != nil && (lastLocation == parameterDeclaration.Initializer() ||
 				lastLocation == parameterDeclaration.Name() && ast.IsBindingPattern(lastLocation)) {
 				if associatedDeclarationForContainingInitializerOrBindingName == nil {
 					associatedDeclarationForContainingInitializerOrBindingName = location
@@ -286,7 +286,7 @@ loop:
 			}
 		case ast.KindBindingElement:
 			bindingElement := location.AsBindingElement()
-			if lastLocation != nil && (lastLocation == bindingElement.Initializer ||
+			if lastLocation != nil && (lastLocation == bindingElement.Initializer() ||
 				lastLocation == bindingElement.Name() && ast.IsBindingPattern(lastLocation)) {
 				if ast.IsPartOfParameterDeclaration(location) && associatedDeclarationForContainingInitializerOrBindingName == nil {
 					associatedDeclarationForContainingInitializerOrBindingName = location
@@ -294,15 +294,15 @@ loop:
 			}
 		case ast.KindInferType:
 			if meaning&ast.SymbolFlagsTypeParameter != 0 {
-				parameterName := location.AsInferTypeNode().TypeParameter.AsTypeParameterDeclaration().Name()
+				parameterName := location.AsInferTypeNode().TypeParameter().AsTypeParameterDeclaration().Name()
 				if parameterName != nil && name == parameterName.Text() {
-					result = location.AsInferTypeNode().TypeParameter.Symbol()
+					result = location.AsInferTypeNode().TypeParameter().Symbol()
 					break loop
 				}
 			}
 		case ast.KindExportSpecifier:
 			exportSpecifier := location.AsExportSpecifier()
-			if lastLocation != nil && lastLocation == exportSpecifier.PropertyName && location.Parent().Parent().ModuleSpecifier() != nil {
+			if lastLocation != nil && lastLocation == exportSpecifier.PropertyName() && location.Parent().Parent().ModuleSpecifier() != nil {
 				location = location.Parent().Parent().Parent()
 			}
 		}
@@ -379,7 +379,7 @@ func (r *NameResolver) useOuterVariableScopeInParameter(result *ast.Symbol, loca
 
 func (r *NameResolver) requiresScopeChange(node *ast.Node) bool {
 	d := node.AsParameterDeclaration()
-	return r.requiresScopeChangeWorker(d.Name()) || d.Initializer != nil && r.requiresScopeChangeWorker(d.Initializer)
+	return r.requiresScopeChangeWorker(d.Name()) || d.Initializer() != nil && r.requiresScopeChangeWorker(d.Initializer())
 }
 
 func (r *NameResolver) requiresScopeChangeWorker(node *ast.Node) bool {
@@ -397,7 +397,7 @@ func (r *NameResolver) requiresScopeChangeWorker(node *ast.Node) bool {
 		if ast.IsNullishCoalesce(node) || ast.IsOptionalChain(node) {
 			return r.CompilerOptions.GetEmitScriptTarget() < core.ScriptTargetES2020
 		}
-		if ast.IsBindingElement(node) && node.AsBindingElement().DotDotDotToken != nil && ast.IsObjectBindingPattern(node.Parent()) {
+		if ast.IsBindingElement(node) && node.AsBindingElement().DotDotDotToken() != nil && ast.IsObjectBindingPattern(node.Parent()) {
 			return r.CompilerOptions.GetEmitScriptTarget() < core.ScriptTargetES2017
 		}
 		if ast.IsTypeNode(node) {
@@ -478,7 +478,7 @@ func getIsDeferredContext(location *ast.Node, lastLocation *ast.Node) bool {
 		return false
 	}
 	// generator functions and async functions are not inlined in control flow when immediately invoked
-	if location.BodyData().AsteriskToken != nil || ast.HasSyntacticModifier(location, ast.ModifierFlagsAsync) {
+	if location.BodyData().AsteriskToken() != nil || ast.HasSyntacticModifier(location, ast.ModifierFlagsAsync) {
 		return true
 	}
 	return ast.GetImmediatelyInvokedFunctionExpression(location) == nil

@@ -104,18 +104,18 @@ func (e *symbolExtractor) getModuleIDForSymbol(symbol *ast.Symbol) (ModuleID, bo
 }
 
 func (e *exportExtractor) extractFromFile(file *ast.SourceFile) []*Export {
-	if file.Symbol != nil {
+	if file.Symbol() != nil {
 		return e.extractFromModule(file)
 	}
 	if len(file.AmbientModuleNames) > 0 {
 		var exportCount int
-		for _, statement := range file.Statements.Nodes {
+		for _, statement := range file.Statements.Nodes() {
 			if ast.IsModuleWithStringLiteralName(statement) && isNonPatternAmbientModuleDeclaration(file, statement.AsModuleDeclaration()) {
-				exportCount += len(statement.AsModuleDeclaration().Symbol.Exports())
+				exportCount += len(statement.AsModuleDeclaration().Symbol().Exports())
 			}
 		}
 		exports := make([]*Export, 0, exportCount)
-		for _, statement := range file.Statements.Nodes {
+		for _, statement := range file.Statements.Nodes() {
 			if ast.IsModuleWithStringLiteralName(statement) && isNonPatternAmbientModuleDeclaration(file, statement.AsModuleDeclaration()) {
 				e.extractFromModuleDeclaration(statement.AsModuleDeclaration(), file, ambientModuleID(statement.Name().Text()), "", &exports)
 			}
@@ -127,7 +127,7 @@ func (e *exportExtractor) extractFromFile(file *ast.SourceFile) []*Export {
 
 func isNonPatternAmbientModuleDeclaration(file *ast.SourceFile, decl *ast.ModuleDeclaration) bool {
 	for _, module := range file.PatternAmbientModules {
-		if module.Symbol == decl.Symbol {
+		if module.Symbol == decl.Symbol() {
 			return false
 		}
 	}
@@ -144,15 +144,15 @@ func (e *exportExtractor) extractFromModule(file *ast.SourceFile) []*Export {
 	})
 	var augmentationExportCount int
 	for _, decl := range moduleAugmentations {
-		augmentationExportCount += len(decl.Symbol.Exports())
+		augmentationExportCount += len(decl.Symbol().Exports())
 	}
 	moduleID := e.getModuleID(file)
-	exports := make([]*Export, 0, len(file.Symbol.Exports())+augmentationExportCount)
-	for name, symbol := range file.Symbol.Exports() {
+	exports := make([]*Export, 0, len(file.Symbol().Exports())+augmentationExportCount)
+	for name, symbol := range file.Symbol().Exports() {
 		e.extractFromSymbol(name, symbol, moduleID, file.FileName(), file, &exports)
 	}
 	for _, decl := range moduleAugmentations {
-		name := decl.Name().AsStringLiteral().Text
+		name := decl.Name().AsStringLiteral().Text()
 		moduleID := ambientModuleID(name)
 		var moduleFileName tspath.RootedFilePath
 		var unresolvedModuleSpecifier tspath.ModuleSpecifier
@@ -176,7 +176,7 @@ func (e *exportExtractor) extractFromModule(file *ast.SourceFile) []*Export {
 }
 
 func (e *exportExtractor) extractFromModuleDeclaration(decl *ast.ModuleDeclaration, file *ast.SourceFile, moduleID ModuleID, moduleFileName tspath.RootedFilePath, exports *[]*Export) {
-	for name, symbol := range decl.Symbol.Exports() {
+	for name, symbol := range decl.Symbol().Exports() {
 		e.extractFromSymbol(name, symbol, moduleID, moduleFileName, file, exports)
 	}
 }
@@ -243,13 +243,13 @@ func (e *symbolExtractor) extractFromSymbol(name string, symbol *ast.Symbol, mod
 			}
 		}
 	} else if syntax == ExportSyntaxCommonJSModuleExports {
-		expression := symbol.Declarations()[0].AsBinaryExpression().Right
+		expression := symbol.Declarations()[0].AsBinaryExpression().Right()
 		if expression.Kind() == ast.KindObjectLiteralExpression {
 			// what is actually desirable here? I think it would be reasonable to only treat these as exports
 			// if *every* property is a shorthand property or identifier: identifier
 			// At least, it would be sketchy if there were any methods, computed properties...
-			*exports = slices.Grow(*exports, len(expression.AsObjectLiteralExpression().Properties.Nodes))
-			for _, prop := range expression.AsObjectLiteralExpression().Properties.Nodes {
+			*exports = slices.Grow(*exports, len(expression.AsObjectLiteralExpression().Properties().Nodes()))
+			for _, prop := range expression.AsObjectLiteralExpression().Properties().Nodes() {
 				if ast.IsShorthandPropertyAssignment(prop) || ast.IsPropertyAssignment(prop) && prop.AsPropertyAssignment().Name().Kind() == ast.KindIdentifier {
 					export, _ := e.createExport(expression.Symbol().Members()[prop.Name().Text()], moduleID, moduleFileName, syntax, file, checkerLease)
 					if export != nil {
@@ -378,7 +378,7 @@ func (e *symbolExtractor) tryResolveSymbol(symbol *ast.Symbol, syntax ExportSynt
 	switch syntax {
 	case ExportSyntaxNamed:
 		decl := ast.GetDeclarationOfKind(symbol, ast.KindExportSpecifier)
-		if decl.Parent().Parent().AsExportDeclaration().ModuleSpecifier == nil {
+		if decl.Parent().Parent().AsExportDeclaration().ModuleSpecifier() == nil {
 			if n := core.FirstNonZero(decl.Name(), decl.PropertyName()); n.Kind() == ast.KindIdentifier {
 				loc = n
 				name = n.Text()
@@ -426,7 +426,7 @@ func getSyntax(symbol *ast.Symbol) ExportSyntax {
 			return ExportSyntaxNamed
 		case ast.KindExportAssignment:
 			return core.IfElse(
-				decl.AsExportAssignment().IsExportEquals,
+				decl.AsExportAssignment().IsExportEquals(),
 				ExportSyntaxEquals,
 				ExportSyntaxDefaultDeclaration,
 			)

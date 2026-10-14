@@ -2554,7 +2554,7 @@ func getErrorRangeForArrowFunction(sourceFile *ast.SourceFile, node *ast.Node) c
 }
 
 func findOriginatingJSDocSatisfiesTag(sourceFile *ast.SourceFile, node *ast.Node) *ast.Node {
-	targetType := node.AsSatisfiesExpression().Type
+	targetType := node.AsSatisfiesExpression().Type()
 	if targetType.Flags()&ast.NodeFlagsReparsed == 0 {
 		return nil
 	}
@@ -2564,15 +2564,15 @@ func findOriginatingJSDocSatisfiesTag(sourceFile *ast.SourceFile, node *ast.Node
 		}
 		var firstSatisfiesTag *ast.Node
 		for _, jsDoc := range current.EagerJSDoc(sourceFile) {
-			if tags := jsDoc.AsJSDoc().Tags; tags != nil {
-				for _, tag := range tags.Nodes {
+			if tags := jsDoc.AsJSDoc().Tags(); tags != nil {
+				for _, tag := range tags.Nodes() {
 					if !ast.IsJSDocSatisfiesTag(tag) {
 						continue
 					}
 					if firstSatisfiesTag == nil {
 						firstSatisfiesTag = tag
 					}
-					if typeExpr := tag.AsJSDocSatisfiesTag().TypeExpression; typeExpr != nil {
+					if typeExpr := tag.AsJSDocSatisfiesTag().TypeExpression(); typeExpr != nil {
 						if t := typeExpr.Type(); t != nil && t.Loc() == targetType.Loc() {
 							return tag
 						}
@@ -2627,7 +2627,7 @@ func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 			pos := SkipTrivia(sourceFile.Text(), jsDocSatisfiesTag.TagName().Pos())
 			return GetRangeOfTokenAtPosition(sourceFile, pos)
 		}
-		pos := SkipTrivia(sourceFile.Text(), node.AsSatisfiesExpression().Expression.End())
+		pos := SkipTrivia(sourceFile.Text(), node.AsSatisfiesExpression().Expression().End())
 		return GetRangeOfTokenAtPosition(sourceFile, pos)
 	case ast.KindConstructor:
 		if node.Flags()&ast.NodeFlagsReparsed != 0 {

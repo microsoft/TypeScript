@@ -65,8 +65,8 @@ func (c *Checker) getSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags)
 		var lastLocation *ast.Node
 		for location != nil {
 			if ast.IsModuleDeclaration(location) &&
-				location.AsModuleDeclaration().Attributes != nil &&
-				lastLocation == location.AsModuleDeclaration().Attributes {
+				location.AsModuleDeclaration().Attributes() != nil &&
+				lastLocation == location.AsModuleDeclaration().Attributes() {
 				// Module declaration is not in scope inside its attributes.
 				lastLocation = location
 				location = location.Parent()
@@ -170,7 +170,7 @@ func (c *Checker) isValidPropertyAccess(node *ast.Node, propertyName string) boo
 	case ast.KindPropertyAccessExpression:
 		return c.isValidPropertyAccessWithType(node, node.Expression().Kind() == ast.KindSuperKeyword, propertyName, c.getWidenedType(c.checkExpression(node.Expression())))
 	case ast.KindQualifiedName:
-		return c.isValidPropertyAccessWithType(node, false /*isSuper*/, propertyName, c.getWidenedType(c.checkExpression(node.AsQualifiedName().Left)))
+		return c.isValidPropertyAccessWithType(node, false /*isSuper*/, propertyName, c.getWidenedType(c.checkExpression(node.AsQualifiedName().Left())))
 	case ast.KindImportType:
 		return c.isValidPropertyAccessWithType(node, false /*isSuper*/, propertyName, c.getTypeFromTypeNode(node))
 	}
@@ -529,7 +529,7 @@ func (c *Checker) IsDeclarationUsed(
 	if jsxElementsPresent && jsxModeNeedsExplicitImport {
 		jsxNamespace := c.getJsxNamespace(sourceFile.AsNode())
 		jsxFragmentFactory := c.GetJsxFragmentFactory(sourceFile.AsNode())
-		identifierText := identifier.Text
+		identifierText := identifier.Text()
 		if identifierText == jsxNamespace {
 			return true
 		}
@@ -553,13 +553,13 @@ func (c *Checker) IsSymbolReferencedInFile(
 	definition *ast.Identifier,
 	symbol *ast.Symbol,
 ) bool {
-	identifierText := definition.Text
+	identifierText := definition.Text()
 	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText, sourceFile.AsNode()) {
 		if !ast.IsIdentifier(token) {
 			continue
 		}
 		id := token.AsIdentifier()
-		if id == definition || id.Text != identifierText {
+		if id == definition || id.Text() != identifierText {
 			continue
 		}
 		refSymbol := c.GetSymbolAtLocation(token)
@@ -594,7 +594,7 @@ func (c *Checker) GetReferencesToSymbolInFile(
 			continue
 		}
 		id := token.AsIdentifier()
-		if id.Text != identifierText {
+		if id.Text() != identifierText {
 			continue
 		}
 		refSymbol := c.GetSymbolAtLocation(token)
@@ -630,8 +630,8 @@ func (c *Checker) getLocalSymbolForExportSpecifier(referenceLocation *ast.Identi
 }
 
 func isExportSpecifierAlias(referenceLocation *ast.Identifier, exportSpecifier *ast.ExportSpecifier) bool {
-	debug.Assert(exportSpecifier.PropertyName == referenceLocation.AsNode() || exportSpecifier.Name() == referenceLocation.AsNode(), "referenceLocation is not export specifier name or property name")
-	propertyName := exportSpecifier.PropertyName
+	debug.Assert(exportSpecifier.PropertyName() == referenceLocation.AsNode() || exportSpecifier.Name() == referenceLocation.AsNode(), "referenceLocation is not export specifier name or property name")
+	propertyName := exportSpecifier.PropertyName()
 	if propertyName != nil {
 		// Given `export { foo as bar } [from "someModule"]`: It's an alias at `foo`, but at `bar` it's a new symbol.
 		return propertyName == referenceLocation.AsNode()
@@ -716,7 +716,7 @@ func (c *Checker) getUninstantiatedSignatures(node *ast.Node) []*Signature {
 		}
 		return c.getSignaturesOfType(c.getTypeOfExpression(node.TagName()), SignatureKindCall)
 	case ast.KindTaggedTemplateExpression:
-		return c.getSignaturesOfType(c.getTypeOfExpression(node.AsTaggedTemplateExpression().Tag), SignatureKindCall)
+		return c.getSignaturesOfType(c.getTypeOfExpression(node.AsTaggedTemplateExpression().Tag()), SignatureKindCall)
 	case ast.KindBinaryExpression, ast.KindJsxOpeningFragment:
 		return nil
 	}
@@ -1096,7 +1096,7 @@ func (c *Checker) getTypeOfAssignmentPattern(expr *ast.Node) *Type {
 	// If this is from "for" initializer
 	//     for ({a } = elems[0];.....) { }
 	if ast.IsBinaryExpression(expr.Parent()) {
-		iteratedType := c.getTypeOfExpression(expr.Parent().AsBinaryExpression().Right)
+		iteratedType := c.getTypeOfExpression(expr.Parent().AsBinaryExpression().Right())
 		return c.checkDestructuringAssignment(expr, core.OrElse(iteratedType, c.errorType), CheckModeNormal, false)
 	}
 	// If this is from nested object binding pattern

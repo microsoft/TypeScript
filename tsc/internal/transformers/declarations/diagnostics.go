@@ -157,7 +157,7 @@ func createGetSymbolAccessibilityDiagnosticForNode(node *ast.Node) GetSymbolAcce
 			// Heritage clause is written by user so it can always be named
 			if ast.IsClassDeclaration(node.Parent().Parent()) {
 				// Class or Interface implemented/extended is inaccessible
-				if ast.IsHeritageClause(node.Parent()) && node.Parent().AsHeritageClause().Token == ast.KindImplementsKeyword {
+				if ast.IsHeritageClause(node.Parent()) && node.Parent().AsHeritageClause().Token() == ast.KindImplementsKeyword {
 					diagnosticMessage = diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1
 				} else {
 					if node.Parent().Parent().Name() != nil {

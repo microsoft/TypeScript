@@ -264,11 +264,13 @@ function generateStructDef(w: CodeWriter, node: NodeType) {
     }
 
     // Fields from members (skip inherited, Kind params, and noGo)
+    const accessors: { name: string; goType: string; }[] = [];
     if (node.members.length > 0) {
         for (const m of node.members) {
             if (m.inherited || m.isKindParam() || m.noGo) continue;
-            const fieldName = m.name;
+            const fieldName = goStorageName(m.name);
             const goType = m.goOnly ? m.rawType as string : m.type.formatGoReference();
+            accessors.push({ name: m.name, goType });
             const comment = buildFieldComment(m);
             if (comment) {
                 w.write(`${fieldName} ${goType} ${comment}`);
@@ -282,6 +284,7 @@ function generateStructDef(w: CodeWriter, node: NodeType) {
     w.pop();
     w.write("}");
     w.write("");
+    generateFieldAccessors(w, structName, accessors);
 }
 
 function buildFieldComment(m: MemberInfo): string {
@@ -357,18 +360,21 @@ function generateBaseStructDefs(w: CodeWriter) {
         }
 
         // Schema fields
+        const accessors: { name: string; goType: string; }[] = [];
         if (base.fields.length > 0) {
             for (const field of base.fields) {
                 if (field.noGo) continue;
                 const goType = field.goOnly ? field.rawType as string : field.type.formatGoReference();
+                accessors.push({ name: field.name, goType });
                 const comment = field.optional ? " // Optional" : "";
-                w.write(`${field.name} ${goType}${comment}`);
+                w.write(`${goStorageName(field.name)} ${goType}${comment}`);
             }
         }
 
         w.pop();
         w.write("}");
         w.write("");
+        generateFieldAccessors(w, structName, accessors);
     }
 }
 
@@ -407,8 +413,63 @@ function generateAsCast(w: CodeWriter, node: NodeType) {
 
 // ── Generate New*() factory methods ────────────────────────────────────────
 
+const GO_KEYWORDS = new Set([
+    "break",
+    "case",
+    "chan",
+    "const",
+    "continue",
+    "default",
+    "defer",
+    "else",
+    "fallthrough",
+    "for",
+    "func",
+    "go",
+    "goto",
+    "if",
+    "import",
+    "interface",
+    "map",
+    "package",
+    "range",
+    "return",
+    "select",
+    "struct",
+    "switch",
+    "type",
+    "var",
+]);
+
+// Exported schema fields are stored in unexported Go fields and exposed through
+// generated accessors, so storage can change without touching consumers.
+function goStorageName(name: string): string {
+    if (name[0] === name[0].toLowerCase()) return name;
+    let i = 0;
+    while (i < name.length && name[i] !== name[i].toLowerCase()) i++;
+    const upperRun = i === name.length || i === 1 ? i : i - 1;
+    const lower = name.slice(0, upperRun).toLowerCase() + name.slice(upperRun);
+    return GO_KEYWORDS.has(lower) ? lower + "Field" : lower;
+}
+
+function isExportedField(name: string): boolean {
+    return name[0] !== name[0].toLowerCase();
+}
+
+function generateFieldAccessors(w: CodeWriter, structName: string, fields: { name: string; goType: string; }[]) {
+    for (const { name, goType } of fields) {
+        if (!isExportedField(name)) continue;
+        const storage = goStorageName(name);
+        w.write(`func (node *${structName}) ${name}() ${goType} { return node.${storage} }`);
+        w.write(`func (node *${structName}) Set${name}(value ${goType}) { node.${storage} = value }`);
+    }
+    if (fields.some(f => isExportedField(f.name))) {
+        w.write("");
+    }
+}
+
 function fieldAccess(m: MemberInfo, recv = "node"): string {
-    return isNodeFlagsMember(m) ? `${recv}.Flags()` : `${recv}.${m.name}`;
+    return isNodeFlagsMember(m) ? `${recv}.Flags()` : `${recv}.${goStorageName(m.name)}`;
 }
 
 function isNodeFlagsMember(m: MemberInfo): boolean {
@@ -467,7 +528,7 @@ function emitNewFactory(
         if (m.isKindParam()) continue;
         if (isNodeFlagsMember(m)) continue;
         const value = m.bitmask ? `${m.goParamName()} & ${m.bitmask}` : m.goParamName();
-        w.write(`data.${m.name} = ${value}`);
+        w.write(`data.${goStorageName(m.name)} = ${value}`);
     }
 
     if (hasTextContent(node)) {

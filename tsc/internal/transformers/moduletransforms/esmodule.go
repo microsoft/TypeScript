@@ -69,7 +69,7 @@ func (tx *ESModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 
 	externalHelpersImportDeclaration := createExternalHelpersImportDeclarationIfNeeded(tx.EmitContext(), result, tx.compilerOptions, tx.getEmitModuleFormatOfFile(node), false /*hasExportStarsToExportValues*/, false /*hasImportStar*/, false /*hasImportDefault*/)
 	if externalHelpersImportDeclaration != nil || tx.importRequireStatements != nil {
-		prologue, rest := tx.Factory().SplitStandardPrologue(result.Statements.Nodes)
+		prologue, rest := tx.Factory().SplitStandardPrologue(result.Statements.Nodes())
 		custom, rest := tx.Factory().SplitCustomPrologue(rest)
 		statements := slices.Clone(prologue)
 		statements = append(statements, custom...)
@@ -84,17 +84,17 @@ func (tx *ESModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 		}
 		statements = append(statements, rest...)
 		statementList := tx.Factory().NewNodeList(statements)
-		statementList.Loc = result.Statements.Loc
+		statementList.SetLoc(result.Statements.Loc())
 		result = tx.Factory().UpdateSourceFile(result, statementList, node.EndOfFileToken).AsSourceFile()
 	}
 
 	if ast.IsExternalModule(result) &&
 		tx.compilerOptions.GetEmitModuleKind() != core.ModuleKindPreserve &&
-		!core.Some(result.Statements.Nodes, ast.IsExternalModuleIndicator) {
-		statements := slices.Clone(result.Statements.Nodes)
+		!core.Some(result.Statements.Nodes(), ast.IsExternalModuleIndicator) {
+		statements := slices.Clone(result.Statements.Nodes())
 		statements = append(statements, createEmptyImports(tx.Factory()))
 		statementList := tx.Factory().NewNodeList(statements)
-		statementList.Loc = result.Statements.Loc
+		statementList.SetLoc(result.Statements.Loc())
 		result = tx.Factory().UpdateSourceFile(result, statementList, node.EndOfFileToken).AsSourceFile()
 	}
 
@@ -107,13 +107,13 @@ func (tx *ESModuleTransformer) visitImportDeclaration(node *ast.ImportDeclaratio
 	if !tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		return node.AsNode()
 	}
-	updatedModuleSpecifier := rewriteModuleSpecifier(tx.EmitContext(), node.ModuleSpecifier, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
+	updatedModuleSpecifier := rewriteModuleSpecifier(tx.EmitContext(), node.ModuleSpecifier(), tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
 	return tx.Factory().UpdateImportDeclaration(
 		node,
 		nil, /*modifiers*/
-		tx.Visitor().VisitNode(node.ImportClause),
+		tx.Visitor().VisitNode(node.ImportClause()),
 		updatedModuleSpecifier,
-		tx.Visitor().VisitNode(node.Attributes),
+		tx.Visitor().VisitNode(node.Attributes()),
 	)
 }
 
@@ -174,7 +174,7 @@ func (tx *ESModuleTransformer) appendExportsOfImportEqualsDeclaration(statements
 }
 
 func (tx *ESModuleTransformer) visitExportAssignment(node *ast.ExportAssignment) *ast.Node {
-	if !node.IsExportEquals {
+	if !node.IsExportEquals() {
 		return tx.Visitor().VisitEachChild(node.AsNode())
 	}
 	if tx.compilerOptions.GetEmitModuleKind() != core.ModuleKindPreserve {
@@ -189,7 +189,7 @@ func (tx *ESModuleTransformer) visitExportAssignment(node *ast.ExportAssignment)
 				tx.Factory().NewIdentifier("exports"),
 				ast.NodeFlagsNone,
 			),
-			tx.Visitor().VisitNode(node.Expression),
+			tx.Visitor().VisitNode(node.Expression()),
 		),
 	)
 	tx.EmitContext().SetOriginal(statement, node.AsNode())
@@ -197,24 +197,24 @@ func (tx *ESModuleTransformer) visitExportAssignment(node *ast.ExportAssignment)
 }
 
 func (tx *ESModuleTransformer) visitExportDeclaration(node *ast.ExportDeclaration) *ast.Node {
-	if node.ModuleSpecifier == nil {
+	if node.ModuleSpecifier() == nil {
 		return node.AsNode()
 	}
 
-	updatedModuleSpecifier := rewriteModuleSpecifier(tx.EmitContext(), node.ModuleSpecifier, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
-	if tx.compilerOptions.Module > core.ModuleKindES2015 || node.ExportClause == nil || !ast.IsNamespaceExport(node.ExportClause) {
+	updatedModuleSpecifier := rewriteModuleSpecifier(tx.EmitContext(), node.ModuleSpecifier(), tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
+	if tx.compilerOptions.Module > core.ModuleKindES2015 || node.ExportClause() == nil || !ast.IsNamespaceExport(node.ExportClause()) {
 		// Either ill-formed or don't need to be transformed.
 		return tx.Factory().UpdateExportDeclaration(
 			node,
 			nil,   /*modifiers*/
 			false, /*isTypeOnly*/
-			node.ExportClause,
+			node.ExportClause(),
 			updatedModuleSpecifier,
-			tx.Visitor().VisitNode(node.Attributes),
+			tx.Visitor().VisitNode(node.Attributes()),
 		)
 	}
 
-	oldIdentifier := node.ExportClause.Name()
+	oldIdentifier := node.ExportClause().Name()
 	synthName := tx.Factory().NewGeneratedNameForNode(oldIdentifier)
 	importDecl := tx.Factory().NewImportDeclaration(
 		nil, /*modifiers*/
@@ -224,9 +224,9 @@ func (tx *ESModuleTransformer) visitExportDeclaration(node *ast.ExportDeclaratio
 			tx.Factory().NewNamespaceImport(synthName),
 		),
 		updatedModuleSpecifier,
-		tx.Visitor().VisitNode(node.Attributes),
+		tx.Visitor().VisitNode(node.Attributes()),
 	)
-	tx.EmitContext().SetOriginal(importDecl, node.ExportClause)
+	tx.EmitContext().SetOriginal(importDecl, node.ExportClause())
 
 	var exportDecl *ast.Node
 	if ast.IsExportNamespaceAsDefaultDeclaration(node.AsNode()) {
@@ -250,7 +250,7 @@ func (tx *ESModuleTransformer) visitExportDeclaration(node *ast.ExportDeclaratio
 
 func (tx *ESModuleTransformer) visitCallExpression(node *ast.CallExpression) *ast.Node {
 	if tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
-		if ast.IsImportCall(node.AsNode()) && len(node.Arguments.Nodes) > 0 ||
+		if ast.IsImportCall(node.AsNode()) && len(node.Arguments().Nodes()) > 0 ||
 			ast.IsInJSFile(node.AsNode()) && ast.IsRequireCall(node.AsNode(), false /*requireStringLiteralLikeArgument*/) {
 			return tx.visitImportOrRequireCall(node)
 		}
@@ -259,31 +259,31 @@ func (tx *ESModuleTransformer) visitCallExpression(node *ast.CallExpression) *as
 }
 
 func (tx *ESModuleTransformer) visitImportOrRequireCall(node *ast.CallExpression) *ast.Node {
-	if len(node.Arguments.Nodes) == 0 {
+	if len(node.Arguments().Nodes()) == 0 {
 		return tx.Visitor().VisitEachChild(node.AsNode())
 	}
 
-	expression := tx.Visitor().VisitNode(node.Expression)
+	expression := tx.Visitor().VisitNode(node.Expression())
 
 	var argument *ast.Expression
-	if ast.IsStringLiteralLike(node.Arguments.Nodes[0]) {
-		argument = rewriteModuleSpecifier(tx.EmitContext(), node.Arguments.Nodes[0], tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
+	if ast.IsStringLiteralLike(node.Arguments().Nodes()[0]) {
+		argument = rewriteModuleSpecifier(tx.EmitContext(), node.Arguments().Nodes()[0], tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
 	} else {
-		argument = tx.Factory().NewRewriteRelativeImportExtensionsHelper(node.Arguments.Nodes[0], tx.compilerOptions.Jsx == core.JsxEmitPreserve, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
+		argument = tx.Factory().NewRewriteRelativeImportExtensionsHelper(node.Arguments().Nodes()[0], tx.compilerOptions.Jsx == core.JsxEmitPreserve, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
 	}
 
 	var arguments []*ast.Expression
 	arguments = append(arguments, argument)
 
-	rest := core.FirstResult(tx.Visitor().VisitSlice(node.Arguments.Nodes[1:]))
+	rest := core.FirstResult(tx.Visitor().VisitSlice(node.Arguments().Nodes()[1:]))
 	arguments = append(arguments, rest...)
 
 	argumentList := tx.Factory().NewNodeList(arguments)
-	argumentList.Loc = node.Arguments.Loc
+	argumentList.SetLoc(node.Arguments().Loc())
 	return tx.Factory().UpdateCallExpression(
 		node,
 		expression,
-		node.QuestionDotToken,
+		node.QuestionDotToken(),
 		nil, /*typeArguments*/
 		argumentList,
 		node.Flags(),

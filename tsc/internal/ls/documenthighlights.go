@@ -58,8 +58,8 @@ func (l *LanguageService) provideDocumentHighlightsAtPosition(ctx context.Contex
 	if node.Parent() != nil && (node.Parent().Kind() == ast.KindJsxClosingElement || (node.Parent().Kind() == ast.KindJsxOpeningElement && node.Parent().TagName() == node)) {
 		var openingElement, closingElement *ast.Node
 		if ast.IsJsxElement(node.Parent().Parent()) {
-			openingElement = node.Parent().Parent().AsJsxElement().OpeningElement
-			closingElement = node.Parent().Parent().AsJsxElement().ClosingElement
+			openingElement = node.Parent().Parent().AsJsxElement().OpeningElement()
+			closingElement = node.Parent().Parent().AsJsxElement().ClosingElement()
 		}
 		var highlights []*lsproto.DocumentHighlight
 		kind := lsproto.DocumentHighlightKindRead
@@ -350,7 +350,7 @@ func getIfElseKeywords(ifStatement *ast.IfStatement, sourceFile *ast.SourceFile)
 	for ast.IsIfStatement(ifStatement.Parent()) {
 		// See if the parent's `else` is actually the current `if` statement.
 		parentingIf := ifStatement.Parent().AsIfStatement()
-		elseStatement := parentingIf.ElseStatement
+		elseStatement := parentingIf.ElseStatement()
 		if elseStatement != ifStatement.AsNode() {
 			break
 		}
@@ -372,7 +372,7 @@ func getIfElseKeywords(ifStatement *ast.IfStatement, sourceFile *ast.SourceFile)
 				break
 			}
 		}
-		elseStatement := ifStatement.ElseStatement
+		elseStatement := ifStatement.ElseStatement()
 		if elseStatement == nil || !ast.IsIfStatement(elseStatement) {
 			break
 		}
@@ -417,9 +417,9 @@ func aggregateOwnedThrowStatements(node *ast.Node, sourceFile *ast.SourceFile) [
 	if ast.IsTryStatement(node) {
 		// Exceptions thrown within a try block lacking a catch clause are "owned" in the current context.
 		statement := node.AsTryStatement()
-		tryBlock := statement.TryBlock
-		catchClause := statement.CatchClause
-		finallyBlock := statement.FinallyBlock
+		tryBlock := statement.TryBlock()
+		catchClause := statement.CatchClause()
+		finallyBlock := statement.FinallyBlock()
 
 		var result []*ast.Node
 		if catchClause != nil {
@@ -500,7 +500,7 @@ func getThrowStatementOwner(throwStatement *ast.Node) *ast.Node {
 		// a catch clause, and if the throw-statement occurs within the try block.
 		if ast.IsTryStatement(parent) {
 			tryStatement := parent.AsTryStatement()
-			if tryStatement.TryBlock == child && tryStatement.CatchClause != nil {
+			if tryStatement.TryBlock() == child && tryStatement.CatchClause() != nil {
 				return child
 			}
 		}
@@ -519,13 +519,13 @@ func getTryCatchFinallyOccurrences(node *ast.Node, sourceFile *ast.SourceFile) [
 		keywords = append(keywords, token)
 	}
 
-	if tryStatement.CatchClause != nil {
+	if tryStatement.CatchClause() != nil {
 		if catchToken := astnav.FindChildOfKind(node, ast.KindCatchKeyword, sourceFile); catchToken != nil {
 			keywords = append(keywords, catchToken)
 		}
 	}
 
-	if tryStatement.FinallyBlock != nil {
+	if tryStatement.FinallyBlock() != nil {
 		if finallyKeyword := astnav.FindChildOfKind(node, ast.KindFinallyKeyword, sourceFile); finallyKeyword != nil {
 			keywords = append(keywords, finallyKeyword)
 		}
@@ -543,8 +543,8 @@ func getSwitchCaseDefaultOccurrences(node *ast.Node, sourceFile *ast.SourceFile)
 		keywords = append(keywords, token)
 	}
 
-	clauses := switchStatement.CaseBlock.AsCaseBlock().Clauses
-	for _, clause := range clauses.Nodes {
+	clauses := switchStatement.CaseBlock().AsCaseBlock().Clauses()
+	for _, clause := range clauses.Nodes() {
 		clauseToken := lsutil.GetFirstToken(clause.AsNode(), sourceFile)
 		if clauseToken.Kind() == ast.KindCaseKeyword || clauseToken.Kind() == ast.KindDefaultKeyword {
 			keywords = append(keywords, clauseToken)

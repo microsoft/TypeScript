@@ -205,7 +205,7 @@ func canUseOriginalText(node *ast.LiteralLikeNode, flags getLiteralTextFlags) bo
 	}
 
 	if node.Kind() == ast.KindNumericLiteral {
-		tokenFlags := node.AsNumericLiteral().TokenFlags
+		tokenFlags := node.AsNumericLiteral().TokenFlags()
 		// For a numeric literal, we cannot use the original text if the original text was an invalid literal
 		if tokenFlags&ast.TokenFlagsIsInvalid != 0 {
 			return false
@@ -237,7 +237,7 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 	case ast.KindStringLiteral:
 		var b strings.Builder
 		var quoteChar QuoteChar
-		if node.AsStringLiteral().TokenFlags&ast.TokenFlagsSingleQuote != 0 {
+		if node.AsStringLiteral().TokenFlags()&ast.TokenFlagsSingleQuote != 0 {
 			quoteChar = QuoteCharSingleQuote
 		} else {
 			quoteChar = QuoteCharDoubleQuote
@@ -265,7 +265,7 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 		// had to include a backslash: `not \${a} substitution`.
 		var b strings.Builder
 		text := node.Text()
-		rawText := node.TemplateLiteralLikeData().RawText
+		rawText := node.TemplateLiteralLikeData().RawText()
 		raw := len(rawText) > 0 || len(text) == 0
 
 		var textLen int
@@ -433,8 +433,8 @@ func siblingNodePositionsAreComparable(emitContext *EmitContext, previousNode *a
 
 	parentNodeArray := getContainingNodeArray(previousNode)
 	if parentNodeArray != nil {
-		prevNodeIndex := slices.Index(parentNodeArray.Nodes, previousNode)
-		return prevNodeIndex >= 0 && slices.Index(parentNodeArray.Nodes, nextNode) == prevNodeIndex+1
+		prevNodeIndex := slices.Index(parentNodeArray.Nodes(), previousNode)
+		return prevNodeIndex >= 0 && slices.Index(parentNodeArray.Nodes(), nextNode) == prevNodeIndex+1
 	}
 
 	return false
@@ -458,11 +458,11 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 		}
 
 	case ast.KindParameter:
-		return node.Parent().FunctionLikeData().Parameters
+		return node.Parent().FunctionLikeData().Parameters()
 	case ast.KindTemplateLiteralTypeSpan:
-		return node.Parent().AsTemplateLiteralTypeNode().TemplateSpans
+		return node.Parent().AsTemplateLiteralTypeNode().TemplateSpans()
 	case ast.KindTemplateSpan:
-		return node.Parent().AsTemplateExpression().TemplateSpans
+		return node.Parent().AsTemplateExpression().TemplateSpans()
 	case ast.KindDecorator:
 		if canHaveDecorators(node.Parent()) {
 			if modifiers := node.Parent().Modifiers(); modifiers != nil {
@@ -472,9 +472,9 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 		return nil
 	case ast.KindHeritageClause:
 		if ast.IsClassLike(node.Parent()) {
-			return node.Parent().ClassLikeData().HeritageClauses
+			return node.Parent().ClassLikeData().HeritageClauses()
 		} else {
-			return node.Parent().AsInterfaceDeclaration().HeritageClauses
+			return node.Parent().AsInterfaceDeclaration().HeritageClauses()
 		}
 	}
 
@@ -492,9 +492,9 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 			return parent.MemberList()
 		}
 	case ast.KindUnionType:
-		return parent.AsUnionTypeNode().Types
+		return parent.AsUnionTypeNode().Types()
 	case ast.KindIntersectionType:
-		return parent.AsIntersectionTypeNode().Types
+		return parent.AsIntersectionTypeNode().Types()
 	case ast.KindArrayLiteralExpression, ast.KindTupleType, ast.KindNamedImports, ast.KindNamedExports:
 		return parent.ElementList()
 	case ast.KindObjectLiteralExpression, ast.KindJsxAttributes:
@@ -503,17 +503,17 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 		p := parent.AsCallExpression()
 		switch {
 		case ast.IsTypeNode(node):
-			return p.TypeArguments
-		case node != p.Expression:
-			return p.Arguments
+			return p.TypeArguments()
+		case node != p.Expression():
+			return p.Arguments()
 		}
 	case ast.KindNewExpression:
 		p := parent.AsNewExpression()
 		switch {
 		case ast.IsTypeNode(node):
-			return p.TypeArguments
-		case node != p.Expression:
-			return p.Arguments
+			return p.TypeArguments()
+		case node != p.Expression():
+			return p.Arguments()
 		}
 	case ast.KindJsxElement, ast.KindJsxFragment:
 		if ast.IsJsxChild(node) {
@@ -526,7 +526,7 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 	case ast.KindBlock, ast.KindModuleBlock, ast.KindCaseClause, ast.KindDefaultClause:
 		return parent.StatementList()
 	case ast.KindCaseBlock:
-		return parent.AsCaseBlock().Clauses
+		return parent.AsCaseBlock().Clauses()
 	case ast.KindClassDeclaration, ast.KindClassExpression:
 		if ast.IsClassElement(node) {
 			return parent.MemberList()
@@ -625,7 +625,7 @@ func isNewExpressionWithoutArguments(node *ast.Node) bool {
 func isBinaryOperation(node *ast.Node, token ast.Kind) bool {
 	node = ast.SkipPartiallyEmittedExpressions(node)
 	return node.Kind() == ast.KindBinaryExpression &&
-		node.AsBinaryExpression().OperatorToken.Kind() == token
+		node.AsBinaryExpression().OperatorToken().Kind() == token
 }
 
 func mixingBinaryOperatorsRequiresParentheses(a ast.Kind, b ast.Kind) bool {

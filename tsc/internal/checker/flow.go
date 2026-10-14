@@ -69,7 +69,7 @@ func (c *Checker) putFlowState(f *FlowState) {
 func getFlowNodeOfNode(node *ast.Node) *ast.FlowNode {
 	flowNodeData := node.FlowNodeData()
 	if flowNodeData != nil {
-		return flowNodeData.FlowNode
+		return flowNodeData.FlowNode()
 	}
 	return nil
 }
@@ -186,7 +186,7 @@ func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 			// Check if we should continue with the control flow of the containing function.
 			container := flow.Node
 			if container != nil && container != f.flowContainer && !ast.IsPropertyAccessExpression(f.reference) && !ast.IsElementAccessExpression(f.reference) && !(f.reference.Kind() == ast.KindThisKeyword && !ast.IsArrowFunction(container)) {
-				flow = container.FlowNodeData().FlowNode
+				flow = container.FlowNodeData().FlowNode()
 				continue
 			}
 			// At the top of the flow we have the initial type.
@@ -210,8 +210,8 @@ func getBranchLabelAntecedents(flow *ast.FlowNode, reduceLabels []*ast.FlowReduc
 	for i != 0 {
 		i--
 		data := reduceLabels[i]
-		if data.Target == flow {
-			return data.Antecedents
+		if data.Target() == flow {
+			return data.Antecedents()
 		}
 	}
 	return flow.Antecedents
@@ -282,7 +282,7 @@ func (c *Checker) getInitialOrAssignedType(f *FlowState, flow *ast.FlowNode) *Ty
 
 func (c *Checker) isEmptyArrayAssignment(node *ast.Node) bool {
 	return ast.IsVariableDeclaration(node) && node.Initializer() != nil && isEmptyArrayLiteral(node.Initializer()) ||
-		!ast.IsBindingElement(node) && ast.IsBinaryExpression(node.Parent()) && isEmptyArrayLiteral(node.Parent().AsBinaryExpression().Right)
+		!ast.IsBindingElement(node) && ast.IsBinaryExpression(node.Parent()) && isEmptyArrayLiteral(node.Parent().AsBinaryExpression().Right())
 }
 
 func (c *Checker) getTypeAtFlowCall(f *FlowState, flow *ast.FlowNode) FlowType {
@@ -341,11 +341,11 @@ func (c *Checker) narrowTypeByAssertion(f *FlowState, t *Type, expr *ast.Node) *
 		return c.unreachableNeverType
 	}
 	if node.Kind() == ast.KindBinaryExpression {
-		if node.AsBinaryExpression().OperatorToken.Kind() == ast.KindAmpersandAmpersandToken {
-			return c.narrowTypeByAssertion(f, c.narrowTypeByAssertion(f, t, node.AsBinaryExpression().Left), node.AsBinaryExpression().Right)
+		if node.AsBinaryExpression().OperatorToken().Kind() == ast.KindAmpersandAmpersandToken {
+			return c.narrowTypeByAssertion(f, c.narrowTypeByAssertion(f, t, node.AsBinaryExpression().Left()), node.AsBinaryExpression().Right())
 		}
-		if node.AsBinaryExpression().OperatorToken.Kind() == ast.KindBarBarToken {
-			return c.getUnionType([]*Type{c.narrowTypeByAssertion(f, t, node.AsBinaryExpression().Left), c.narrowTypeByAssertion(f, t, node.AsBinaryExpression().Right)})
+		if node.AsBinaryExpression().OperatorToken().Kind() == ast.KindBarBarToken {
+			return c.getUnionType([]*Type{c.narrowTypeByAssertion(f, t, node.AsBinaryExpression().Left()), c.narrowTypeByAssertion(f, t, node.AsBinaryExpression().Right())})
 		}
 	}
 	return c.narrowType(f, t, node, true /*assumeTrue*/)
@@ -376,7 +376,7 @@ func (c *Checker) getTypeAtFlowCondition(f *FlowState, flow *ast.FlowNode) FlowT
 // will be a subtype or the same type as the argument.
 func (c *Checker) narrowType(f *FlowState, t *Type, expr *ast.Node, assumeTrue bool) *Type {
 	// for `a?.b`, we emulate a synthetic `a !== null && a !== undefined` condition for `a`
-	if ast.IsExpressionOfOptionalChainRoot(expr) || ast.IsBinaryExpression(expr.Parent()) && (expr.Parent().AsBinaryExpression().OperatorToken.Kind() == ast.KindQuestionQuestionToken || expr.Parent().AsBinaryExpression().OperatorToken.Kind() == ast.KindQuestionQuestionEqualsToken) && expr.Parent().AsBinaryExpression().Left == expr {
+	if ast.IsExpressionOfOptionalChainRoot(expr) || ast.IsBinaryExpression(expr.Parent()) && (expr.Parent().AsBinaryExpression().OperatorToken().Kind() == ast.KindQuestionQuestionToken || expr.Parent().AsBinaryExpression().OperatorToken().Kind() == ast.KindQuestionQuestionEqualsToken) && expr.Parent().AsBinaryExpression().Left() == expr {
 		return c.narrowTypeByOptionality(f, t, expr, assumeTrue)
 	}
 	switch expr.Kind() {
@@ -405,8 +405,8 @@ func (c *Checker) narrowType(f *FlowState, t *Type, expr *ast.Node, assumeTrue b
 	case ast.KindBinaryExpression:
 		return c.narrowTypeByBinaryExpression(f, t, expr.AsBinaryExpression(), assumeTrue)
 	case ast.KindPrefixUnaryExpression:
-		if expr.AsPrefixUnaryExpression().Operator == ast.KindExclamationToken {
-			return c.narrowType(f, t, expr.AsPrefixUnaryExpression().Operand, !assumeTrue)
+		if expr.AsPrefixUnaryExpression().Operator() == ast.KindExclamationToken {
+			return c.narrowType(f, t, expr.AsPrefixUnaryExpression().Operand(), !assumeTrue)
 		}
 	}
 	return t
@@ -467,13 +467,13 @@ func (c *Checker) narrowTypeByCallExpression(f *FlowState, t *Type, callExpressi
 }
 
 func (c *Checker) narrowTypeByBinaryExpression(f *FlowState, t *Type, expr *ast.BinaryExpression, assumeTrue bool) *Type {
-	switch expr.OperatorToken.Kind() {
+	switch expr.OperatorToken().Kind() {
 	case ast.KindEqualsToken, ast.KindBarBarEqualsToken, ast.KindAmpersandAmpersandEqualsToken, ast.KindQuestionQuestionEqualsToken:
-		return c.narrowTypeByTruthiness(f, c.narrowType(f, t, expr.Right, assumeTrue), expr.Left, assumeTrue)
+		return c.narrowTypeByTruthiness(f, c.narrowType(f, t, expr.Right(), assumeTrue), expr.Left(), assumeTrue)
 	case ast.KindEqualsEqualsToken, ast.KindExclamationEqualsToken, ast.KindEqualsEqualsEqualsToken, ast.KindExclamationEqualsEqualsToken:
-		operator := expr.OperatorToken.Kind()
-		left := c.getReferenceCandidate(expr.Left)
-		right := c.getReferenceCandidate(expr.Right)
+		operator := expr.OperatorToken().Kind()
+		left := c.getReferenceCandidate(expr.Left())
+		right := c.getReferenceCandidate(expr.Right())
 		if left.Kind() == ast.KindTypeOfExpression && ast.IsStringLiteralLike(right) {
 			return c.narrowTypeByTypeof(f, t, left.AsTypeOfExpression(), operator, right, assumeTrue)
 		}
@@ -516,12 +516,12 @@ func (c *Checker) narrowTypeByBinaryExpression(f *FlowState, t *Type, expr *ast.
 	case ast.KindInstanceOfKeyword:
 		return c.narrowTypeByInstanceof(f, t, expr, assumeTrue)
 	case ast.KindInKeyword:
-		if ast.IsPrivateIdentifier(expr.Left) {
+		if ast.IsPrivateIdentifier(expr.Left()) {
 			return c.narrowTypeByPrivateIdentifierInInExpression(f, t, expr, assumeTrue)
 		}
-		target := c.getReferenceCandidate(expr.Right)
+		target := c.getReferenceCandidate(expr.Right())
 		if c.containsMissingType(t) && ast.IsAccessExpression(f.reference) && c.isMatchingReference(f.reference.Expression(), target) {
-			leftType := c.getTypeOfExpression(expr.Left)
+			leftType := c.getTypeOfExpression(expr.Left())
 			if isTypeUsableAsPropertyName(leftType) {
 				if accessedName, ok := c.getAccessedPropertyName(f.reference); ok && accessedName == getPropertyNameFromType(leftType) {
 					return c.getTypeWithFacts(t, core.IfElse(assumeTrue, TypeFactsNEUndefined, TypeFactsEQUndefined))
@@ -529,26 +529,26 @@ func (c *Checker) narrowTypeByBinaryExpression(f *FlowState, t *Type, expr *ast.
 			}
 		}
 		if c.isMatchingReference(f.reference, target) {
-			leftType := c.getTypeOfExpression(expr.Left)
+			leftType := c.getTypeOfExpression(expr.Left())
 			if isTypeUsableAsPropertyName(leftType) {
 				return c.narrowTypeByInKeyword(f, t, leftType, assumeTrue)
 			}
 		}
 	case ast.KindCommaToken:
-		return c.narrowType(f, t, expr.Right, assumeTrue)
+		return c.narrowType(f, t, expr.Right(), assumeTrue)
 	case ast.KindAmpersandAmpersandToken:
 		// Ordinarily we won't see && and || expressions in control flow analysis because the Binder breaks those
 		// expressions down to individual conditional control flows. However, we may encounter them when analyzing
 		// aliased conditional expressions.
 		if assumeTrue {
-			return c.narrowType(f, c.narrowType(f, t, expr.Left, true /*assumeTrue*/), expr.Right, true /*assumeTrue*/)
+			return c.narrowType(f, c.narrowType(f, t, expr.Left(), true /*assumeTrue*/), expr.Right(), true /*assumeTrue*/)
 		}
-		return c.getUnionType([]*Type{c.narrowType(f, t, expr.Left, false /*assumeTrue*/), c.narrowType(f, t, expr.Right, false /*assumeTrue*/)})
+		return c.getUnionType([]*Type{c.narrowType(f, t, expr.Left(), false /*assumeTrue*/), c.narrowType(f, t, expr.Right(), false /*assumeTrue*/)})
 	case ast.KindBarBarToken:
 		if assumeTrue {
-			return c.getUnionType([]*Type{c.narrowType(f, t, expr.Left, true /*assumeTrue*/), c.narrowType(f, t, expr.Right, true /*assumeTrue*/)})
+			return c.getUnionType([]*Type{c.narrowType(f, t, expr.Left(), true /*assumeTrue*/), c.narrowType(f, t, expr.Right(), true /*assumeTrue*/)})
 		}
-		return c.narrowType(f, c.narrowType(f, t, expr.Left, false /*assumeTrue*/), expr.Right, false /*assumeTrue*/)
+		return c.narrowType(f, c.narrowType(f, t, expr.Left(), false /*assumeTrue*/), expr.Right(), false /*assumeTrue*/)
 	}
 	return t
 }
@@ -616,7 +616,7 @@ func (c *Checker) narrowTypeByTypeof(f *FlowState, t *Type, typeOfExpr *ast.Type
 	if operator == ast.KindExclamationEqualsToken || operator == ast.KindExclamationEqualsEqualsToken {
 		assumeTrue = !assumeTrue
 	}
-	target := c.getReferenceCandidate(typeOfExpr.Expression)
+	target := c.getReferenceCandidate(typeOfExpr.Expression())
 	if !c.isMatchingReference(f.reference, target) {
 		if c.strictNullChecks && c.optionalChainContainsReference(target, f.reference) && assumeTrue == (literal.Text() != "undefined") {
 			t = c.getAdjustedTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
@@ -751,8 +751,8 @@ func (c *Checker) isMatchingConstructorReference(f *FlowState, expr *ast.Node) b
 	var name *ast.Node
 	if ast.IsPropertyAccessExpression(expr) {
 		name = expr.AsPropertyAccessExpression().Name()
-	} else if ast.IsElementAccessExpression(expr) && ast.IsStringLiteralLike(expr.AsElementAccessExpression().ArgumentExpression) {
-		name = expr.AsElementAccessExpression().ArgumentExpression
+	} else if ast.IsElementAccessExpression(expr) && ast.IsStringLiteralLike(expr.AsElementAccessExpression().ArgumentExpression()) {
+		name = expr.AsElementAccessExpression().ArgumentExpression()
 	}
 	return name != nil && name.Text() == "constructor" && c.isMatchingReference(f.reference, expr.Expression())
 }
@@ -809,14 +809,14 @@ func (c *Checker) narrowTypeByBooleanComparison(f *FlowState, t *Type, expr *ast
 }
 
 func (c *Checker) narrowTypeByInstanceof(f *FlowState, t *Type, expr *ast.BinaryExpression, assumeTrue bool) *Type {
-	left := c.getReferenceCandidate(expr.Left)
+	left := c.getReferenceCandidate(expr.Left())
 	if !c.isMatchingReference(f.reference, left) {
 		if assumeTrue && c.strictNullChecks && c.optionalChainContainsReference(left, f.reference) {
 			return c.getAdjustedTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
 		}
 		return t
 	}
-	right := expr.Right
+	right := expr.Right()
 	rightType := c.getTypeOfExpression(right)
 	if !c.isTypeDerivedFrom(rightType, c.globalObjectType) {
 		return t
@@ -980,11 +980,11 @@ func (c *Checker) getInstanceType(constructorType *Type) *Type {
 }
 
 func (c *Checker) narrowTypeByPrivateIdentifierInInExpression(f *FlowState, t *Type, expr *ast.BinaryExpression, assumeTrue bool) *Type {
-	target := c.getReferenceCandidate(expr.Right)
+	target := c.getReferenceCandidate(expr.Right())
 	if !c.isMatchingReference(f.reference, target) {
 		return t
 	}
-	symbol := c.getSymbolForPrivateIdentifierExpression(expr.Left)
+	symbol := c.getSymbolForPrivateIdentifierExpression(expr.Left())
 	if symbol == nil {
 		return t
 	}
@@ -1058,7 +1058,7 @@ func (c *Checker) narrowTypeByOptionalChainContainment(f *FlowState, t *Type, op
 
 func (c *Checker) getTypeAtSwitchClause(f *FlowState, flow *ast.FlowNode) FlowType {
 	data := flow.Node.AsFlowSwitchClauseData()
-	expr := ast.SkipParentheses(data.SwitchStatement.Expression())
+	expr := ast.SkipParentheses(data.SwitchStatement().Expression())
 	flowType := c.getTypeAtFlowNode(f, flow.Antecedent)
 	t := flowType.t
 	switch {
@@ -1093,12 +1093,12 @@ func (c *Checker) narrowTypeBySwitchOnDiscriminant(t *Type, data *ast.FlowSwitch
 	// values with unit types, except for the case where
 	// `type` is unknown. In this instance we map object
 	// types to the nonPrimitive type and narrow with that.
-	switchTypes := c.getSwitchClauseTypes(data.SwitchStatement)
+	switchTypes := c.getSwitchClauseTypes(data.SwitchStatement())
 	if len(switchTypes) == 0 {
 		return t
 	}
-	clauseTypes := switchTypes[data.ClauseStart:data.ClauseEnd]
-	hasDefaultClause := data.ClauseStart == data.ClauseEnd || slices.Contains(clauseTypes, c.neverType)
+	clauseTypes := switchTypes[data.ClauseStart():data.ClauseEnd()]
+	hasDefaultClause := data.ClauseStart() == data.ClauseEnd() || slices.Contains(clauseTypes, c.neverType)
 	if (t.flags&TypeFlagsUnknown != 0) && !hasDefaultClause {
 		var groundClauseTypes []*Type
 		for i, s := range clauseTypes {
@@ -1155,17 +1155,17 @@ func (c *Checker) narrowTypeBySwitchOnDiscriminant(t *Type, data *ast.FlowSwitch
 }
 
 func (c *Checker) narrowTypeBySwitchOnTypeOf(t *Type, data *ast.FlowSwitchClauseData) *Type {
-	witnesses := c.getSwitchClauseTypeOfWitnesses(data.SwitchStatement)
+	witnesses := c.getSwitchClauseTypeOfWitnesses(data.SwitchStatement())
 	if witnesses == nil {
 		return t
 	}
-	clauses := data.SwitchStatement.AsSwitchStatement().CaseBlock.AsCaseBlock().Clauses.Nodes
+	clauses := data.SwitchStatement().AsSwitchStatement().CaseBlock().AsCaseBlock().Clauses().Nodes()
 	// Equal start and end denotes implicit fallthrough; undefined marks explicit default clause.
 	defaultIndex := core.FindIndex(clauses, func(clause *ast.Node) bool {
 		return clause.Kind() == ast.KindDefaultClause
 	})
-	clauseStart := int(data.ClauseStart)
-	clauseEnd := int(data.ClauseEnd)
+	clauseStart := int(data.ClauseStart())
+	clauseEnd := int(data.ClauseEnd())
 	hasDefaultClause := clauseStart == clauseEnd || (defaultIndex >= clauseStart && defaultIndex < clauseEnd)
 	if hasDefaultClause {
 		// In the default clause we filter constituents down to those that are not-equal to all handled cases.
@@ -1185,12 +1185,12 @@ func (c *Checker) narrowTypeBySwitchOnTypeOf(t *Type, data *ast.FlowSwitchClause
 }
 
 func (c *Checker) narrowTypeBySwitchOnTrue(f *FlowState, t *Type, data *ast.FlowSwitchClauseData) *Type {
-	clauses := data.SwitchStatement.AsSwitchStatement().CaseBlock.AsCaseBlock().Clauses.Nodes
+	clauses := data.SwitchStatement().AsSwitchStatement().CaseBlock().AsCaseBlock().Clauses().Nodes()
 	defaultIndex := core.FindIndex(clauses, func(clause *ast.Node) bool {
 		return clause.Kind() == ast.KindDefaultClause
 	})
-	clauseStart := int(data.ClauseStart)
-	clauseEnd := int(data.ClauseEnd)
+	clauseStart := int(data.ClauseStart())
+	clauseEnd := int(data.ClauseEnd())
 	hasDefaultClause := clauseStart == clauseEnd || (defaultIndex >= clauseStart && defaultIndex < clauseEnd)
 	// First, narrow away all of the cases that preceded this set of cases.
 	for i := range clauseStart {
@@ -1221,7 +1221,7 @@ func (c *Checker) narrowTypeBySwitchOnTrue(f *FlowState, t *Type, data *ast.Flow
 }
 
 func (c *Checker) narrowTypeBySwitchOptionalChainContainment(t *Type, data *ast.FlowSwitchClauseData, clauseCheck func(t *Type) bool) *Type {
-	everyClauseChecks := data.ClauseStart != data.ClauseEnd && core.Every(c.getSwitchClauseTypes(data.SwitchStatement)[data.ClauseStart:data.ClauseEnd], clauseCheck)
+	everyClauseChecks := data.ClauseStart() != data.ClauseEnd() && core.Every(c.getSwitchClauseTypes(data.SwitchStatement())[data.ClauseStart():data.ClauseEnd()], clauseCheck)
 	if everyClauseChecks {
 		return c.getTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
 	}
@@ -1229,10 +1229,10 @@ func (c *Checker) narrowTypeBySwitchOptionalChainContainment(t *Type, data *ast.
 }
 
 func (c *Checker) narrowTypeBySwitchOnDiscriminantProperty(t *Type, access *ast.Node, data *ast.FlowSwitchClauseData) *Type {
-	if data.ClauseStart < data.ClauseEnd && t.flags&TypeFlagsUnion != 0 {
+	if data.ClauseStart() < data.ClauseEnd() && t.flags&TypeFlagsUnion != 0 {
 		accessedName, _ := c.getAccessedPropertyName(access)
 		if accessedName != "" && c.getKeyPropertyName(t) == accessedName {
-			clauseTypes := c.getSwitchClauseTypes(data.SwitchStatement)[data.ClauseStart:data.ClauseEnd]
+			clauseTypes := c.getSwitchClauseTypes(data.SwitchStatement())[data.ClauseStart():data.ClauseEnd()]
 			candidate := c.getUnionType(core.Map(clauseTypes, func(s *Type) *Type {
 				result := c.getConstituentTypeForKeyType(t, s)
 				if result != nil {
@@ -1289,7 +1289,7 @@ func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode, ant
 		// If the bypass flow contributes a type we haven't seen yet and the switch statement
 		// isn't exhaustive, process the bypass flow type. Since exhaustiveness checks increase
 		// the risk of circularities, we only want to perform them when they make a difference.
-		if flowType.t.flags&TypeFlagsNever == 0 && !slices.Contains(c.antecedentTypes[antecedentStart:], flowType.t) && !c.isExhaustiveSwitchStatement(bypassFlow.Node.AsFlowSwitchClauseData().SwitchStatement) {
+		if flowType.t.flags&TypeFlagsNever == 0 && !slices.Contains(c.antecedentTypes[antecedentStart:], flowType.t) && !c.isExhaustiveSwitchStatement(bypassFlow.Node.AsFlowSwitchClauseData().SwitchStatement()) {
 			if flowType.t == f.declaredType && f.declaredType == f.initialType {
 				c.antecedentTypes = c.antecedentTypes[:antecedentStart]
 				return FlowType{t: flowType.t}
@@ -1408,7 +1408,7 @@ func (c *Checker) getTypeAtFlowArrayMutation(f *FlowState, flow *ast.FlowNode) F
 		if ast.IsCallExpression(node) {
 			expr = node.Expression().Expression()
 		} else {
-			expr = node.AsBinaryExpression().Left.Expression()
+			expr = node.AsBinaryExpression().Left().Expression()
 		}
 		if c.isMatchingReference(f.reference, c.getReferenceCandidate(expr)) {
 			flowType := c.getTypeAtFlowNode(f, flow.Antecedent)
@@ -1420,9 +1420,9 @@ func (c *Checker) getTypeAtFlowArrayMutation(f *FlowState, flow *ast.FlowNode) F
 					}
 				} else {
 					// We must get the context free expression type so as to not recur in an uncached fashion on the LHS (which causes exponential blowup in compile time)
-					indexType := c.getContextFreeTypeOfExpression(node.AsBinaryExpression().Left.AsElementAccessExpression().ArgumentExpression)
+					indexType := c.getContextFreeTypeOfExpression(node.AsBinaryExpression().Left().AsElementAccessExpression().ArgumentExpression())
 					if c.isTypeAssignableToKind(indexType, TypeFlagsNumberLike) {
-						evolvedType = c.addEvolvingArrayElementType(evolvedType, node.AsBinaryExpression().Right)
+						evolvedType = c.addEvolvingArrayElementType(evolvedType, node.AsBinaryExpression().Right())
 					}
 				}
 				return c.newFlowType(evolvedType, flowType.incomplete)
@@ -1545,9 +1545,9 @@ func (c *Checker) isEvolvingArrayOperationTarget(node *ast.Node) bool {
 	isLengthPushOrUnshift := ast.IsPropertyAccessExpression(parent) && (parent.Name().Text() == "length" ||
 		ast.IsCallExpression(parent.Parent()) && ast.IsIdentifier(parent.Name()) && ast.IsPushOrUnshiftIdentifier(parent.Name()))
 	isElementAssignment := ast.IsElementAccessExpression(parent) && parent.Expression() == root &&
-		ast.IsBinaryExpression(parent.Parent()) && parent.Parent().AsBinaryExpression().OperatorToken.Kind() == ast.KindEqualsToken &&
-		parent.Parent().AsBinaryExpression().Left == parent && !ast.IsAssignmentTarget(parent.Parent()) &&
-		c.isTypeAssignableToKind(c.getTypeOfExpression(parent.AsElementAccessExpression().ArgumentExpression), TypeFlagsNumberLike)
+		ast.IsBinaryExpression(parent.Parent()) && parent.Parent().AsBinaryExpression().OperatorToken().Kind() == ast.KindEqualsToken &&
+		parent.Parent().AsBinaryExpression().Left() == parent && !ast.IsAssignmentTarget(parent.Parent()) &&
+		c.isTypeAssignableToKind(c.getTypeOfExpression(parent.AsElementAccessExpression().ArgumentExpression()), TypeFlagsNumberLike)
 	return isLengthPushOrUnshift || isElementAssignment
 }
 
@@ -1599,13 +1599,13 @@ func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 	case ast.KindParenthesizedExpression, ast.KindNonNullExpression:
 		return c.isMatchingReference(source, target.Expression())
 	case ast.KindBinaryExpression:
-		return ast.IsAssignmentExpression(target, false) && c.isMatchingReference(source, target.AsBinaryExpression().Left) ||
-			ast.IsBinaryExpression(target) && target.AsBinaryExpression().OperatorToken.Kind() == ast.KindCommaToken &&
-				c.isMatchingReference(source, target.AsBinaryExpression().Right)
+		return ast.IsAssignmentExpression(target, false) && c.isMatchingReference(source, target.AsBinaryExpression().Left()) ||
+			ast.IsBinaryExpression(target) && target.AsBinaryExpression().OperatorToken().Kind() == ast.KindCommaToken &&
+				c.isMatchingReference(source, target.AsBinaryExpression().Right())
 	}
 	switch source.Kind() {
 	case ast.KindMetaProperty:
-		return ast.IsMetaProperty(target) && source.AsMetaProperty().KeywordToken == target.AsMetaProperty().KeywordToken && source.Name().Text() == target.Name().Text()
+		return ast.IsMetaProperty(target) && source.AsMetaProperty().KeywordToken() == target.AsMetaProperty().KeywordToken() && source.Name().Text() == target.Name().Text()
 	case ast.KindIdentifier, ast.KindPrivateIdentifier:
 		if ast.IsThisInTypeQuery(source) {
 			return target.Kind() == ast.KindThisKeyword
@@ -1627,8 +1627,8 @@ func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 			}
 		}
 		if ast.IsElementAccessExpression(source) && ast.IsElementAccessExpression(target) {
-			sourceArg := source.AsElementAccessExpression().ArgumentExpression
-			targetArg := target.AsElementAccessExpression().ArgumentExpression
+			sourceArg := source.AsElementAccessExpression().ArgumentExpression()
+			targetArg := target.AsElementAccessExpression().ArgumentExpression()
 			if ast.IsIdentifier(sourceArg) && ast.IsIdentifier(targetArg) {
 				symbol := c.getResolvedSymbol(sourceArg)
 				if symbol == c.getResolvedSymbol(targetArg) && (c.isConstantVariable(symbol) || c.isParameterOrMutableLocalVariable(symbol) && !c.isSymbolAssigned(symbol)) {
@@ -1639,11 +1639,11 @@ func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 	case ast.KindQualifiedName:
 		if ast.IsAccessExpression(target) {
 			if targetPropertyName, ok := c.getAccessedPropertyName(target); ok {
-				return source.AsQualifiedName().Right.Text() == targetPropertyName && c.isMatchingReference(source.AsQualifiedName().Left, target.Expression())
+				return source.AsQualifiedName().Right().Text() == targetPropertyName && c.isMatchingReference(source.AsQualifiedName().Left(), target.Expression())
 			}
 		}
 	case ast.KindBinaryExpression:
-		return ast.IsBinaryExpression(source) && source.AsBinaryExpression().OperatorToken.Kind() == ast.KindCommaToken && c.isMatchingReference(source.AsBinaryExpression().Right, target)
+		return ast.IsBinaryExpression(source) && source.AsBinaryExpression().OperatorToken().Kind() == ast.KindCommaToken && c.isMatchingReference(source.AsBinaryExpression().Right(), target)
 	}
 	return false
 }
@@ -1688,11 +1688,11 @@ func (c *Checker) writeFlowCacheKey(b *keyBuilder, node *ast.Node, declaredType 
 	case ast.KindNonNullExpression, ast.KindParenthesizedExpression:
 		return c.writeFlowCacheKey(b, node.Expression(), declaredType, initialType, flowContainer)
 	case ast.KindQualifiedName:
-		if !c.writeFlowCacheKey(b, node.AsQualifiedName().Left, declaredType, initialType, flowContainer) {
+		if !c.writeFlowCacheKey(b, node.AsQualifiedName().Left(), declaredType, initialType, flowContainer) {
 			return false
 		}
 		b.writeByte('.')
-		b.writeString(node.AsQualifiedName().Right.Text())
+		b.writeString(node.AsQualifiedName().Right().Text())
 		return true
 	case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression:
 		if propName, ok := c.getAccessedPropertyName(node); ok {
@@ -1703,8 +1703,8 @@ func (c *Checker) writeFlowCacheKey(b *keyBuilder, node *ast.Node, declaredType 
 			b.writeString(propName)
 			return true
 		}
-		if ast.IsElementAccessExpression(node) && ast.IsIdentifier(node.AsElementAccessExpression().ArgumentExpression) {
-			symbol := c.getResolvedSymbol(node.AsElementAccessExpression().ArgumentExpression)
+		if ast.IsElementAccessExpression(node) && ast.IsIdentifier(node.AsElementAccessExpression().ArgumentExpression()) {
+			symbol := c.getResolvedSymbol(node.AsElementAccessExpression().ArgumentExpression())
 			if c.isConstantVariable(symbol) || c.isParameterOrMutableLocalVariable(symbol) && !c.isSymbolAssigned(symbol) {
 				if !c.writeFlowCacheKey(b, node.Expression(), declaredType, initialType, flowContainer) {
 					return false
@@ -1742,10 +1742,10 @@ func (c *Checker) getAccessedPropertyName(access *ast.Node) (string, bool) {
 
 func (c *Checker) tryGetElementAccessExpressionName(node *ast.ElementAccessExpression) (string, bool) {
 	switch {
-	case ast.IsStringOrNumericLiteralLike(node.ArgumentExpression):
-		return node.ArgumentExpression.Text(), true
-	case ast.IsEntityNameExpression(node.ArgumentExpression):
-		return c.tryGetNameFromEntityNameExpression(node.ArgumentExpression)
+	case ast.IsStringOrNumericLiteralLike(node.ArgumentExpression()):
+		return node.ArgumentExpression().Text(), true
+	case ast.IsEntityNameExpression(node.ArgumentExpression()):
+		return c.tryGetNameFromEntityNameExpression(node.ArgumentExpression())
 	}
 	return "", false
 }
@@ -1863,11 +1863,11 @@ func (c *Checker) getReferenceCandidate(node *ast.Node) *ast.Node {
 	case ast.KindParenthesizedExpression:
 		return c.getReferenceCandidate(node.Expression())
 	case ast.KindBinaryExpression:
-		switch node.AsBinaryExpression().OperatorToken.Kind() {
+		switch node.AsBinaryExpression().OperatorToken().Kind() {
 		case ast.KindEqualsToken, ast.KindBarBarEqualsToken, ast.KindAmpersandAmpersandEqualsToken, ast.KindQuestionQuestionEqualsToken:
-			return c.getReferenceCandidate(node.AsBinaryExpression().Left)
+			return c.getReferenceCandidate(node.AsBinaryExpression().Left())
 		case ast.KindCommaToken:
-			return c.getReferenceCandidate(node.AsBinaryExpression().Right)
+			return c.getReferenceCandidate(node.AsBinaryExpression().Right())
 		}
 	}
 	return node
@@ -1876,8 +1876,8 @@ func (c *Checker) getReferenceCandidate(node *ast.Node) *ast.Node {
 func (c *Checker) getReferenceRoot(node *ast.Node) *ast.Node {
 	parent := node.Parent()
 	if ast.IsParenthesizedExpression(parent) ||
-		ast.IsBinaryExpression(parent) && parent.AsBinaryExpression().OperatorToken.Kind() == ast.KindEqualsToken && parent.AsBinaryExpression().Left == node ||
-		ast.IsBinaryExpression(parent) && parent.AsBinaryExpression().OperatorToken.Kind() == ast.KindCommaToken && parent.AsBinaryExpression().Right == node {
+		ast.IsBinaryExpression(parent) && parent.AsBinaryExpression().OperatorToken().Kind() == ast.KindEqualsToken && parent.AsBinaryExpression().Left() == node ||
+		ast.IsBinaryExpression(parent) && parent.AsBinaryExpression().OperatorToken().Kind() == ast.KindCommaToken && parent.AsBinaryExpression().Right() == node {
 		return c.getReferenceRoot(parent)
 	}
 	return node
@@ -1989,7 +1989,7 @@ func (c *Checker) eachTypeContainedIn(source *Type, types []*Type) bool {
 func (c *Checker) getSwitchClauseTypeOfWitnesses(node *ast.Node) []string {
 	links := c.switchStatementLinks.Get(node)
 	if !links.witnessesComputed {
-		clauses := node.AsSwitchStatement().CaseBlock.AsCaseBlock().Clauses.Nodes
+		clauses := node.AsSwitchStatement().CaseBlock().AsCaseBlock().Clauses().Nodes()
 		witnesses := make([]string, len(clauses))
 		for i, clause := range clauses {
 			if clause.Kind() == ast.KindCaseClause {
@@ -2026,7 +2026,7 @@ func (c *Checker) getNotEqualFactsFromTypeofSwitch(start int, end int, witnesses
 func (c *Checker) getSwitchClauseTypes(node *ast.Node) []*Type {
 	links := c.switchStatementLinks.Get(node)
 	if !links.switchTypesComputed {
-		clauses := node.AsSwitchStatement().CaseBlock.AsCaseBlock().Clauses.Nodes
+		clauses := node.AsSwitchStatement().CaseBlock().AsCaseBlock().Clauses().Nodes()
 		types := make([]*Type, len(clauses))
 		for i, clause := range clauses {
 			types[i] = c.getTypeOfSwitchClause(clause)
@@ -2054,7 +2054,7 @@ func (c *Checker) getEffectsSignature(node *ast.Node) *Signature {
 		// target expression of an assertion.
 		var funcType *Type
 		if ast.IsBinaryExpression(node) {
-			rightType := c.checkNonNullExpression(node.AsBinaryExpression().Right)
+			rightType := c.checkNonNullExpression(node.AsBinaryExpression().Right())
 			funcType = c.getSymbolHasInstanceMethodOfObjectType(rightType)
 		} else if ast.IsExpressionStatement(node.Parent()) {
 			funcType = c.getTypeOfDottedName(node.Expression(), nil /*diagnostic*/)
@@ -2178,7 +2178,7 @@ func (c *Checker) getExplicitTypeOfSymbol(symbol *ast.Symbol, diagnostic *ast.Di
 				expressionType := c.getTypeOfDottedName(statement.Expression(), nil /*diagnostic*/)
 				if expressionType != nil {
 					var use IterationUse
-					if statement.AsForInOrOfStatement().AwaitModifier != nil {
+					if statement.AsForInOrOfStatement().AwaitModifier() != nil {
 						use = IterationUseForAwaitOf
 					} else {
 						use = IterationUseForOf
@@ -2201,7 +2201,7 @@ func (c *Checker) isDeclarationWithExplicitTypeAnnotation(node *ast.Node) bool {
 
 func (c *Checker) isExpandoPropertyFunctionWithReturnTypeAnnotation(node *ast.Node) bool {
 	if ast.IsBinaryExpression(node) {
-		if expr := node.AsBinaryExpression().Right; ast.IsFunctionLike(expr) && expr.Type() != nil {
+		if expr := node.AsBinaryExpression().Right(); ast.IsFunctionLike(expr) && expr.Type() != nil {
 			return true
 		}
 	}
@@ -2315,9 +2315,9 @@ func (c *Checker) getAssignedTypeOfBinaryExpression(node *ast.Node) *Type {
 	isDestructuringDefaultAssignment := ast.IsArrayLiteralExpression(node.Parent()) && c.isDestructuringAssignmentTarget(node.Parent()) ||
 		ast.IsPropertyAssignment(node.Parent()) && c.isDestructuringAssignmentTarget(node.Parent().Parent())
 	if isDestructuringDefaultAssignment {
-		return c.getTypeWithDefault(c.getAssignedType(node), node.AsBinaryExpression().Right)
+		return c.getTypeWithDefault(c.getAssignedType(node), node.AsBinaryExpression().Right())
 	}
-	return c.getTypeOfExpression(node.AsBinaryExpression().Right)
+	return c.getTypeOfExpression(node.AsBinaryExpression().Right())
 }
 
 func (c *Checker) getAssignedTypeOfArrayLiteralElement(node *ast.Node, element *ast.Node) *Type {
@@ -2378,11 +2378,11 @@ func (c *Checker) getTypeOfDestructuredProperty(t *Type, name *ast.Node) *Type {
 }
 
 func (c *Checker) getAssignedTypeOfShorthandPropertyAssignment(node *ast.Node) *Type {
-	return c.getTypeWithDefault(c.getAssignedTypeOfPropertyAssignment(node), node.AsShorthandPropertyAssignment().ObjectAssignmentInitializer)
+	return c.getTypeWithDefault(c.getAssignedTypeOfPropertyAssignment(node), node.AsShorthandPropertyAssignment().ObjectAssignmentInitializer())
 }
 
 func (c *Checker) isDestructuringAssignmentTarget(parent *ast.Node) bool {
-	return ast.IsBinaryExpression(parent.Parent()) && parent.Parent().AsBinaryExpression().Left == parent ||
+	return ast.IsBinaryExpression(parent.Parent()) && parent.Parent().AsBinaryExpression().Left() == parent ||
 		ast.IsForOfStatement(parent.Parent()) && parent.Parent().Initializer() == parent
 }
 
@@ -2473,7 +2473,7 @@ func (c *Checker) getFlowTypeInConstructor(symbol *ast.Symbol, constructor *ast.
 	reference := c.factory.NewPropertyAccessExpression(c.factory.NewKeywordExpression(ast.KindThisKeyword), nil, accessName, ast.NodeFlagsNone)
 	reference.Expression().SetParent(reference)
 	reference.SetParent(constructor)
-	reference.FlowNodeData().FlowNode = constructor.AsConstructorDeclaration().ReturnFlowNode
+	reference.FlowNodeData().SetFlowNode(constructor.AsConstructorDeclaration().ReturnFlowNode())
 	flowType := c.getFlowTypeOfProperty(reference, symbol)
 	if c.noImplicitAny && (flowType == c.autoType || flowType == c.autoArrayType) {
 		c.error(symbol.ValueDeclaration(), diagnostics.Member_0_implicitly_has_an_1_type, c.symbolToString(symbol), c.TypeToString(flowType))
@@ -2496,7 +2496,7 @@ func (c *Checker) getFlowTypeInStaticBlocks(symbol *ast.Symbol, staticBlocks []*
 		reference := c.factory.NewPropertyAccessExpression(c.factory.NewKeywordExpression(ast.KindThisKeyword), nil, accessName, ast.NodeFlagsNone)
 		reference.Expression().SetParent(reference)
 		reference.SetParent(staticBlock)
-		reference.FlowNodeData().FlowNode = staticBlock.AsClassStaticBlockDeclaration().ReturnFlowNode
+		reference.FlowNodeData().SetFlowNode(staticBlock.AsClassStaticBlockDeclaration().ReturnFlowNode())
 		flowType := c.getFlowTypeOfProperty(reference, symbol)
 		if c.noImplicitAny && (flowType == c.autoType || flowType == c.autoArrayType) {
 			c.error(symbol.ValueDeclaration(), diagnostics.Member_0_implicitly_has_an_1_type, c.symbolToString(symbol), c.TypeToString(flowType))
@@ -2569,7 +2569,7 @@ func (c *Checker) isReachableFlowNodeWorker(f *FlowState, flow *ast.FlowNode, no
 			// The control flow path representing an unmatched value in a switch statement with
 			// no default clause is unreachable if the switch statement is exhaustive.
 			data := flow.Node.AsFlowSwitchClauseData()
-			if data.ClauseStart == data.ClauseEnd && c.isExhaustiveSwitchStatement(data.SwitchStatement) {
+			if data.ClauseStart() == data.ClauseEnd() && c.isExhaustiveSwitchStatement(data.SwitchStatement()) {
 				return false
 			}
 			flow = flow.Antecedent
@@ -2593,8 +2593,8 @@ func (c *Checker) isFalseExpression(expr *ast.Node) bool {
 	}
 	if ast.IsBinaryExpression(node) {
 		binary := node.AsBinaryExpression()
-		return binary.OperatorToken.Kind() == ast.KindAmpersandAmpersandToken && (c.isFalseExpression(binary.Left) || c.isFalseExpression(binary.Right)) ||
-			binary.OperatorToken.Kind() == ast.KindBarBarToken && c.isFalseExpression(binary.Left) && c.isFalseExpression(binary.Right)
+		return binary.OperatorToken().Kind() == ast.KindAmpersandAmpersandToken && (c.isFalseExpression(binary.Left()) || c.isFalseExpression(binary.Right())) ||
+			binary.OperatorToken().Kind() == ast.KindBarBarToken && c.isFalseExpression(binary.Left()) && c.isFalseExpression(binary.Right())
 	}
 	return false
 }
@@ -2723,7 +2723,7 @@ func (c *Checker) markNodeAssignmentsWorker(node *ast.Node) bool {
 	case ast.KindExportSpecifier:
 		exportDeclaration := node.AsExportSpecifier().Parent().Parent().AsExportDeclaration()
 		name := node.PropertyNameOrName()
-		if !node.IsTypeOnly() && !exportDeclaration.IsTypeOnly && exportDeclaration.ModuleSpecifier == nil && !ast.IsStringLiteral(name) {
+		if !node.IsTypeOnly() && !exportDeclaration.IsTypeOnly() && exportDeclaration.ModuleSpecifier() == nil && !ast.IsStringLiteral(name) {
 			symbol := c.resolveEntityName(name, ast.SymbolFlagsValue, true /*ignoreErrors*/, true /*dontResolveAlias*/, nil)
 			if symbol != nil && c.isParameterOrMutableLocalVariable(symbol) {
 				links := c.markedAssignmentSymbolLinks.Get(symbol)

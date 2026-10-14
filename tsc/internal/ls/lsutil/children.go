@@ -69,8 +69,8 @@ func GetLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 		return n
 	}
 	visitNodeList := func(nodeList *ast.NodeList, _ *ast.NodeVisitor) *ast.NodeList {
-		if nodeList != nil && len(nodeList.Nodes) > 0 {
-			for _, v := range slices.Backward(nodeList.Nodes) {
+		if nodeList != nil && len(nodeList.Nodes()) > 0 {
+			for _, v := range slices.Backward(nodeList.Nodes()) {
 				if v.Flags()&ast.NodeFlagsReparsed == 0 {
 					lastChild = v
 					break

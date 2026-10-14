@@ -58,12 +58,12 @@ func (s *SymbolTrackerImpl) ReportInaccessibleUniqueSymbolError() {
 }
 
 func (s *SymbolTrackerImpl) isBoundExpando(node *ast.Node) bool {
-	if !(ast.IsExpandoPropertyDeclaration(node) && ast.IsPropertyAccessExpression(node.AsBinaryExpression().Left)) {
+	if !(ast.IsExpandoPropertyDeclaration(node) && ast.IsPropertyAccessExpression(node.AsBinaryExpression().Left())) {
 		return false
 	}
 	// Match transformExpandoAssignment: only an assignment rooted at an identifier (`f.x = ...`) can bind an expando
 	// property; `this.x = ...`, `super.x = ...`, `f().x = ...` and the like have no referenced declaration.
-	ns := ast.GetLeftmostAccessExpression(node.AsBinaryExpression().Left)
+	ns := ast.GetLeftmostAccessExpression(node.AsBinaryExpression().Left())
 	if !ast.IsIdentifier(ns) {
 		return false
 	}
@@ -177,7 +177,7 @@ func (s *SymbolTrackerImpl) errorDeclarationNameWithFallback() string {
 		return scanner.DeclarationNameToString(ast.GetNameOfDeclaration(s.errorFallbackNode()))
 	}
 	if s.errorFallbackNode() != nil && ast.IsExportAssignment(s.errorFallbackNode()) {
-		if s.errorFallbackNode().AsExportAssignment().IsExportEquals {
+		if s.errorFallbackNode().AsExportAssignment().IsExportEquals() {
 			return "export="
 		}
 		return "default"

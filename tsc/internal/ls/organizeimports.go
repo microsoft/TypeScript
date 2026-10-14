@@ -32,7 +32,7 @@ func (l *LanguageService) OrganizeImports(
 	shouldSort := kind == lsproto.CodeActionKindSourceSortImportsTs || kind == lsproto.CodeActionKindSourceOrganizeImportsTs
 	shouldCombine := shouldSort
 	shouldRemove := kind == lsproto.CodeActionKindSourceRemoveUnusedImportsTs || kind == lsproto.CodeActionKindSourceOrganizeImportsTs
-	topLevelImportDecls := lsutil.FilterImportDeclarations(sourceFile.Statements.Nodes)
+	topLevelImportDecls := lsutil.FilterImportDeclarations(sourceFile.Statements.Nodes())
 	topLevelImportGroupDecls := groupByNewlineContiguous(sourceFile, topLevelImportDecls)
 
 	preferences := l.UserPreferences()
@@ -82,19 +82,19 @@ func (l *LanguageService) OrganizeImports(
 		}
 	}
 
-	for _, stmt := range sourceFile.Statements.Nodes {
+	for _, stmt := range sourceFile.Statements.Nodes() {
 		if !ast.IsAmbientModule(stmt.AsNode()) {
 			continue
 		}
 
 		ambientModule := stmt.AsModuleDeclaration()
-		if ambientModule.Body == nil {
+		if ambientModule.Body() == nil {
 			continue
 		}
 
-		moduleBody := ambientModule.Body.AsModuleBlock()
+		moduleBody := ambientModule.Body().AsModuleBlock()
 
-		ambientModuleImportDecls := lsutil.FilterImportDeclarations(moduleBody.Statements.Nodes)
+		ambientModuleImportDecls := lsutil.FilterImportDeclarations(moduleBody.Statements().Nodes())
 		ambientModuleImportGroupDecls := groupByNewlineContiguous(sourceFile, ambientModuleImportDecls)
 
 		for _, importGroupDecl := range ambientModuleImportGroupDecls {
@@ -103,7 +103,7 @@ func (l *LanguageService) OrganizeImports(
 
 		if kind != lsproto.CodeActionKindSourceRemoveUnusedImportsTs {
 			var ambientModuleExportDecls []*ast.Statement
-			for _, s := range moduleBody.Statements.Nodes {
+			for _, s := range moduleBody.Statements().Nodes() {
 				if s.Kind() == ast.KindExportDeclaration {
 					ambientModuleExportDecls = append(ambientModuleExportDecls, s)
 				}
@@ -246,7 +246,7 @@ func removeUnusedImports(oldImports []*ast.Statement, sourceFile *ast.SourceFile
 	usedImports := make([]*ast.Statement, 0, len(oldImports))
 
 	for _, importDecl := range oldImports {
-		importClause := importDecl.AsImportDeclaration().ImportClause
+		importClause := importDecl.AsImportDeclaration().ImportClause()
 		if importClause == nil {
 			usedImports = append(usedImports, importDecl)
 			continue
@@ -254,7 +254,7 @@ func removeUnusedImports(oldImports []*ast.Statement, sourceFile *ast.SourceFile
 
 		clause := importClause.AsImportClause()
 		name := clause.Name()
-		namedBindings := clause.NamedBindings
+		namedBindings := clause.NamedBindings()
 
 		if name != nil && !typeChecker.IsDeclarationUsed(sourceFile, name.AsIdentifier(), jsxElementsPresent, jsxModeNeedsExplicitImport) {
 			name = nil
@@ -270,10 +270,10 @@ func removeUnusedImports(oldImports []*ast.Statement, sourceFile *ast.SourceFile
 			case ast.KindNamedImports:
 				namedImports := namedBindings.AsNamedImports()
 				originalBindings := namedBindings
-				newElements := filterUsedImportSpecifiers(namedImports.Elements.Nodes, typeChecker, sourceFile, jsxElementsPresent, jsxModeNeedsExplicitImport)
+				newElements := filterUsedImportSpecifiers(namedImports.Elements().Nodes(), typeChecker, sourceFile, jsxElementsPresent, jsxModeNeedsExplicitImport)
 				if len(newElements) == 0 {
 					namedBindings = nil
-				} else if len(newElements) < len(namedImports.Elements.Nodes) {
+				} else if len(newElements) < len(namedImports.Elements().Nodes()) {
 					newList := factory.NewNodeList(newElements)
 					updatedNamedImports := factory.UpdateNamedImports(namedImports, newList)
 					namedBindings = updatedNamedImports.AsNode()
@@ -286,13 +286,13 @@ func removeUnusedImports(oldImports []*ast.Statement, sourceFile *ast.SourceFile
 
 		if name != nil || namedBindings != nil {
 			importDeclNode := importDecl.AsImportDeclaration()
-			newClause := factory.UpdateImportClause(clause, clause.PhaseModifier, name, namedBindings)
+			newClause := factory.UpdateImportClause(clause, clause.PhaseModifier(), name, namedBindings)
 			newImportDecl := factory.UpdateImportDeclaration(
 				importDeclNode,
 				importDeclNode.Modifiers(),
 				newClause.AsNode(),
-				importDeclNode.ModuleSpecifier,
-				importDeclNode.Attributes,
+				importDeclNode.ModuleSpecifier(),
+				importDeclNode.Attributes(),
 			)
 			usedImports = append(usedImports, newImportDecl)
 		} else {
@@ -304,8 +304,8 @@ func removeUnusedImports(oldImports []*ast.Statement, sourceFile *ast.SourceFile
 						importDeclNode,
 						importDeclNode.Modifiers(),
 						nil, // no import clause
-						importDeclNode.ModuleSpecifier,
-						importDeclNode.Attributes,
+						importDeclNode.ModuleSpecifier(),
+						importDeclNode.Attributes(),
 					)
 					usedImports = append(usedImports, newImportDecl)
 				} else {
@@ -358,11 +358,11 @@ func getImportAttributesKey(attributes *ast.ImportAttributesNode) string {
 
 	importAttrs := attributes.AsImportAttributes()
 	var key strings.Builder
-	key.WriteString(importAttrs.Token.String())
+	key.WriteString(importAttrs.Token().String())
 	key.WriteString(" ")
 
-	attrNodes := make([]*ast.Node, len(importAttrs.Attributes.Nodes))
-	copy(attrNodes, importAttrs.Attributes.Nodes)
+	attrNodes := make([]*ast.Node, len(importAttrs.Attributes().Nodes()))
+	copy(attrNodes, importAttrs.Attributes().Nodes())
 	slices.SortFunc(attrNodes, func(a, b *ast.Node) int {
 		aName := a.AsImportAttribute().Name().Text()
 		bName := b.AsImportAttribute().Name().Text()
@@ -373,12 +373,12 @@ func getImportAttributesKey(attributes *ast.ImportAttributesNode) string {
 		attr := attrNode.AsImportAttribute()
 		key.WriteString(attr.Name().Text())
 		key.WriteString(":")
-		if ast.IsStringLiteralLike(attr.Value.AsNode()) {
+		if ast.IsStringLiteralLike(attr.Value().AsNode()) {
 			key.WriteString(`"`)
-			key.WriteString(attr.Value.Text())
+			key.WriteString(attr.Value().Text())
 			key.WriteString(`"`)
 		} else {
-			key.WriteString(attr.Value.AsNode().Text())
+			key.WriteString(attr.Value().AsNode().Text())
 		}
 		key.WriteString(" ")
 	}
@@ -458,7 +458,7 @@ func coalesceImportsWorker(
 	var attributeKeys []string
 
 	for _, importDecl := range importDecls {
-		key := getImportAttributesKey(importDecl.AsImportDeclaration().Attributes)
+		key := getImportAttributesKey(importDecl.AsImportDeclaration().Attributes())
 		if _, exists := importGroupsByAttributes[key]; !exists {
 			attributeKeys = append(attributeKeys, key)
 		}
@@ -475,8 +475,8 @@ func coalesceImportsWorker(
 			coalescedImports = append(coalescedImports, categorized.importWithoutClause)
 		}
 		slices.SortStableFunc(categorized.sourcePhaseImports, func(a, b *ast.Statement) int {
-			a = a.AsImportDeclaration().ImportClause
-			b = b.AsImportDeclaration().ImportClause
+			a = a.AsImportDeclaration().ImportClause()
+			b = b.AsImportDeclaration().ImportClause()
 			if a.Name() == nil && b.Name() == nil {
 				return 0
 			}
@@ -503,38 +503,38 @@ func coalesceImportsWorker(
 				defaultImport := group.defaultImports[0]
 				namespaceImport := group.namespaceImports[0]
 
-				defaultClause := defaultImport.AsImportDeclaration().ImportClause.AsImportClause()
-				namespaceBindings := namespaceImport.AsImportDeclaration().ImportClause.AsImportClause().NamedBindings
+				defaultClause := defaultImport.AsImportDeclaration().ImportClause().AsImportClause()
+				namespaceBindings := namespaceImport.AsImportDeclaration().ImportClause().AsImportClause().NamedBindings()
 
-				newClause := factory.UpdateImportClause(defaultClause, defaultClause.PhaseModifier, defaultClause.Name(), namespaceBindings)
+				newClause := factory.UpdateImportClause(defaultClause, defaultClause.PhaseModifier(), defaultClause.Name(), namespaceBindings)
 				defaultDeclNode := defaultImport.AsImportDeclaration()
 				newImportDecl := factory.UpdateImportDeclaration(
 					defaultDeclNode,
 					defaultDeclNode.Modifiers(),
 					newClause,
-					defaultDeclNode.ModuleSpecifier,
-					defaultDeclNode.Attributes,
+					defaultDeclNode.ModuleSpecifier(),
+					defaultDeclNode.Attributes(),
 				)
 				coalescedImports = append(coalescedImports, newImportDecl)
 				continue
 			}
 
 			slices.SortFunc(group.namespaceImports, func(a, b *ast.Statement) int {
-				n1 := a.AsImportDeclaration().ImportClause.AsImportClause().NamedBindings.AsNamespaceImport().Name()
-				n2 := b.AsImportDeclaration().ImportClause.AsImportClause().NamedBindings.AsNamespaceImport().Name()
+				n1 := a.AsImportDeclaration().ImportClause().AsImportClause().NamedBindings().AsNamespaceImport().Name()
+				n2 := b.AsImportDeclaration().ImportClause().AsImportClause().NamedBindings().AsNamespaceImport().Name()
 				return comparer(n1.Text(), n2.Text())
 			})
 
 			for _, nsImport := range group.namespaceImports {
 				nsImportDecl := nsImport.AsImportDeclaration()
-				clause := nsImportDecl.ImportClause.AsImportClause()
-				newClause := factory.UpdateImportClause(clause, clause.PhaseModifier, nil, clause.NamedBindings)
+				clause := nsImportDecl.ImportClause().AsImportClause()
+				newClause := factory.UpdateImportClause(clause, clause.PhaseModifier(), nil, clause.NamedBindings())
 				newImportDecl := factory.UpdateImportDeclaration(
 					nsImportDecl,
 					nsImportDecl.Modifiers(),
 					newClause,
-					nsImportDecl.ModuleSpecifier,
-					nsImportDecl.Attributes,
+					nsImportDecl.ModuleSpecifier(),
+					nsImportDecl.Attributes(),
 				)
 				coalescedImports = append(coalescedImports, newImportDecl)
 			}
@@ -561,10 +561,10 @@ func coalesceImportsWorker(
 			var newImportSpecifiers []*ast.Node
 
 			if len(group.defaultImports) == 1 {
-				newDefaultImport = group.defaultImports[0].AsImportDeclaration().ImportClause.AsImportClause().Name()
+				newDefaultImport = group.defaultImports[0].AsImportDeclaration().ImportClause().AsImportClause().Name()
 			} else {
 				for _, defaultImport := range group.defaultImports {
-					defaultClause := defaultImport.AsImportDeclaration().ImportClause.AsImportClause()
+					defaultClause := defaultImport.AsImportDeclaration().ImportClause().AsImportClause()
 					defaultName := defaultClause.Name()
 					propertyName := factory.NewIdentifier("default")
 					importSpec := factory.NewImportSpecifier(false, propertyName, defaultName)
@@ -585,10 +585,10 @@ func coalesceImportsWorker(
 			} else {
 				sortedList := factory.NewNodeList(newImportSpecifiers)
 				if firstNamedImport != nil {
-					firstNamedBindings := firstNamedImport.AsImportDeclaration().ImportClause.AsImportClause().NamedBindings.AsNamedImports()
-					originalElements := firstNamedBindings.Elements
+					firstNamedBindings := firstNamedImport.AsImportDeclaration().ImportClause().AsImportClause().NamedBindings().AsNamedImports()
+					originalElements := firstNamedBindings.Elements()
 					if originalElements.HasTrailingComma() {
-						sortedList.Loc = originalElements.Loc
+						sortedList.SetLoc(originalElements.Loc())
 					}
 					newNamedImports = factory.UpdateNamedImports(firstNamedBindings, sortedList).AsNode()
 				} else {
@@ -597,7 +597,7 @@ func coalesceImportsWorker(
 			}
 
 			if sourceFile != nil && newNamedImports != nil && firstNamedImport != nil {
-				firstNamedBindings := firstNamedImport.AsImportDeclaration().ImportClause.AsImportClause().NamedBindings
+				firstNamedBindings := firstNamedImport.AsImportDeclaration().ImportClause().AsImportClause().NamedBindings()
 				if !ast.NodeIsSynthesized(firstNamedBindings.AsNode()) && !printer.RangeIsOnSingleLine(firstNamedBindings.Loc(), sourceFile) {
 					changeTracker.SetEmitFlags(newNamedImports.AsNode(), printer.EFMultiLine)
 				}
@@ -606,13 +606,13 @@ func coalesceImportsWorker(
 			if isTypeOnly && newDefaultImport != nil && newNamedImports != nil {
 				importDeclNode := importDecl.AsImportDeclaration()
 
-				defaultClause := factory.NewImportClause(importDeclNode.ImportClause.AsImportClause().PhaseModifier, newDefaultImport, nil)
+				defaultClause := factory.NewImportClause(importDeclNode.ImportClause().AsImportClause().PhaseModifier(), newDefaultImport, nil)
 				defaultImportDecl := factory.UpdateImportDeclaration(
 					importDeclNode,
 					importDeclNode.Modifiers(),
 					defaultClause,
-					importDeclNode.ModuleSpecifier,
-					importDeclNode.Attributes,
+					importDeclNode.ModuleSpecifier(),
+					importDeclNode.Attributes(),
 				)
 				coalescedImports = append(coalescedImports, defaultImportDecl)
 
@@ -621,25 +621,25 @@ func coalesceImportsWorker(
 					namedDeclNode = importDecl
 				}
 				namedImportDeclNode := namedDeclNode.AsImportDeclaration()
-				namedClause := factory.NewImportClause(namedImportDeclNode.ImportClause.AsImportClause().PhaseModifier, nil, newNamedImports)
+				namedClause := factory.NewImportClause(namedImportDeclNode.ImportClause().AsImportClause().PhaseModifier(), nil, newNamedImports)
 				namedImportDecl := factory.UpdateImportDeclaration(
 					namedImportDeclNode,
 					namedImportDeclNode.Modifiers(),
 					namedClause,
-					namedImportDeclNode.ModuleSpecifier,
-					namedImportDeclNode.Attributes,
+					namedImportDeclNode.ModuleSpecifier(),
+					namedImportDeclNode.Attributes(),
 				)
 				coalescedImports = append(coalescedImports, namedImportDecl)
 			} else {
 				importDeclNode := importDecl.AsImportDeclaration()
-				clauseNode := importDeclNode.ImportClause.AsImportClause()
-				newClause := factory.UpdateImportClause(clauseNode, clauseNode.PhaseModifier, newDefaultImport, newNamedImports)
+				clauseNode := importDeclNode.ImportClause().AsImportClause()
+				newClause := factory.UpdateImportClause(clauseNode, clauseNode.PhaseModifier(), newDefaultImport, newNamedImports)
 				newImportDecl := factory.UpdateImportDeclaration(
 					importDeclNode,
 					importDeclNode.Modifiers(),
 					newClause,
-					importDeclNode.ModuleSpecifier,
-					importDeclNode.Attributes,
+					importDeclNode.ModuleSpecifier(),
+					importDeclNode.Attributes(),
 				)
 				coalescedImports = append(coalescedImports, newImportDecl)
 			}
@@ -671,15 +671,15 @@ func getCategorizedImports(importDecls []*ast.Statement) categorizedImports {
 	var typeOnlyImports, regularImports importGroup
 
 	for _, importDecl := range importDecls {
-		if importDecl.AsImportDeclaration().ImportClause == nil {
+		if importDecl.AsImportDeclaration().ImportClause() == nil {
 			if importWithoutClause == nil {
 				importWithoutClause = importDecl
 			}
 			continue
 		}
 
-		clause := importDecl.AsImportDeclaration().ImportClause.AsImportClause()
-		if clause.PhaseModifier == ast.KindSourceKeyword {
+		clause := importDecl.AsImportDeclaration().ImportClause().AsImportClause()
+		if clause.PhaseModifier() == ast.KindSourceKeyword {
 			sourcePhaseImports = append(sourcePhaseImports, importDecl)
 			continue
 		}
@@ -689,7 +689,7 @@ func getCategorizedImports(importDecls []*ast.Statement) categorizedImports {
 		}
 
 		name := clause.Name()
-		namedBindings := clause.NamedBindings
+		namedBindings := clause.NamedBindings()
 
 		if name != nil {
 			group.defaultImports = append(group.defaultImports, importDecl)
@@ -725,12 +725,12 @@ func getNewImportSpecifiers(namedImports []*ast.Statement, factory *ast.NodeFact
 		for _, elem := range elements {
 			spec := elem.AsImportSpecifier()
 
-			if spec.PropertyName != nil && spec.Name() != nil {
-				propertyText := spec.PropertyName.Text()
+			if spec.PropertyName() != nil && spec.Name() != nil {
+				propertyText := spec.PropertyName().Text()
 				nameText := spec.Name().Text()
 
 				if propertyText == nameText {
-					normalized := factory.UpdateImportSpecifier(spec, spec.IsTypeOnly, nil, spec.Name())
+					normalized := factory.UpdateImportSpecifier(spec, spec.IsTypeOnly(), nil, spec.Name())
 					result = append(result, normalized)
 					continue
 				}
@@ -749,16 +749,16 @@ func tryGetNamedBindingElements(namedImport *ast.Statement) []*ast.Statement {
 	}
 
 	importDecl := namedImport.AsImportDeclaration()
-	if importDecl.ImportClause == nil {
+	if importDecl.ImportClause() == nil {
 		return nil
 	}
 
-	clause := importDecl.ImportClause.AsImportClause()
-	namedBindings := clause.NamedBindings
+	clause := importDecl.ImportClause().AsImportClause()
+	namedBindings := clause.NamedBindings()
 
 	if namedBindings != nil && namedBindings.Kind() == ast.KindNamedImports {
 		namedImportsNode := namedBindings.AsNamedImports()
-		return namedImportsNode.Elements.Nodes
+		return namedImportsNode.Elements().Nodes()
 	}
 
 	return nil
@@ -766,7 +766,7 @@ func tryGetNamedBindingElements(namedImport *ast.Statement) []*ast.Statement {
 
 func getTopLevelExportGroups(sourceFile *ast.SourceFile) [][]*ast.Statement {
 	var topLevelExportGroups [][]*ast.Statement
-	statements := sourceFile.Statements.Nodes
+	statements := sourceFile.Statements.Nodes()
 	statementsLen := len(statements)
 
 	i := 0
@@ -777,7 +777,7 @@ func getTopLevelExportGroups(sourceFile *ast.SourceFile) [][]*ast.Statement {
 				topLevelExportGroups = append(topLevelExportGroups, []*ast.Statement{})
 			}
 			exportDecl := statements[i].AsExportDeclaration()
-			if exportDecl.ModuleSpecifier != nil {
+			if exportDecl.ModuleSpecifier() != nil {
 				topLevelExportGroups[groupIndex] = append(topLevelExportGroups[groupIndex], statements[i])
 				i++
 			} else {
@@ -870,8 +870,8 @@ func coalesceExportsWorker(
 	for _, exportDecl := range exportGroup {
 		export := exportDecl.AsExportDeclaration()
 		var moduleSpecifier string
-		if export.ModuleSpecifier != nil {
-			moduleSpecifier = export.ModuleSpecifier.Text()
+		if export.ModuleSpecifier() != nil {
+			moduleSpecifier = export.ModuleSpecifier().Text()
 		}
 		if _, exists := exportsByModuleSpecifier[moduleSpecifier]; !exists {
 			moduleSpecifierOrder = append(moduleSpecifierOrder, moduleSpecifier)
@@ -908,10 +908,10 @@ func coalesceExportsWorker(
 
 			var newExportSpecifiers []*ast.Node
 			for _, exportDecl := range subGroup {
-				exportClause := exportDecl.AsExportDeclaration().ExportClause
+				exportClause := exportDecl.AsExportDeclaration().ExportClause()
 				if exportClause != nil && exportClause.Kind() == ast.KindNamedExports {
 					namedExports := exportClause.AsNamedExports()
-					newExportSpecifiers = append(newExportSpecifiers, namedExports.Elements.Nodes...)
+					newExportSpecifiers = append(newExportSpecifiers, namedExports.Elements().Nodes()...)
 				}
 			}
 
@@ -920,9 +920,9 @@ func coalesceExportsWorker(
 			exportDecl := subGroup[0].AsExportDeclaration()
 
 			var updatedExportClause *ast.NamedExportBindings
-			if exportDecl.ExportClause != nil {
-				if exportDecl.ExportClause.Kind() == ast.KindNamedExports {
-					namedExports := exportDecl.ExportClause.AsNamedExports()
+			if exportDecl.ExportClause() != nil {
+				if exportDecl.ExportClause().Kind() == ast.KindNamedExports {
+					namedExports := exportDecl.ExportClause().AsNamedExports()
 					sortedList := factory.NewNodeList(newExportSpecifiers)
 					updatedExportClause = factory.UpdateNamedExports(namedExports, sortedList)
 
@@ -930,17 +930,17 @@ func coalesceExportsWorker(
 						changeTracker.SetEmitFlags(updatedExportClause.AsNode(), printer.EFMultiLine)
 					}
 				} else {
-					updatedExportClause = exportDecl.ExportClause
+					updatedExportClause = exportDecl.ExportClause()
 				}
 			}
 
 			newExportDecl := factory.UpdateExportDeclaration(
 				exportDecl,
 				exportDecl.Modifiers(),
-				exportDecl.IsTypeOnly,
+				exportDecl.IsTypeOnly(),
 				updatedExportClause,
-				exportDecl.ModuleSpecifier,
-				exportDecl.Attributes,
+				exportDecl.ModuleSpecifier(),
+				exportDecl.Attributes(),
 			)
 			coalescedExports = append(coalescedExports, newExportDecl)
 		}
@@ -961,11 +961,11 @@ func getCategorizedExports(exportGroup []*ast.Statement) categorizedExports {
 
 	for _, exportDecl := range exportGroup {
 		export := exportDecl.AsExportDeclaration()
-		if export.ExportClause == nil {
+		if export.ExportClause() == nil {
 			if exportWithoutClause == nil {
 				exportWithoutClause = exportDecl
 			}
-		} else if export.IsTypeOnly {
+		} else if export.IsTypeOnly() {
 			typeOnlyExports = append(typeOnlyExports, exportDecl)
 		} else {
 			namedExports = append(namedExports, exportDecl)

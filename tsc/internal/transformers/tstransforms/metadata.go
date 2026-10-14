@@ -99,9 +99,9 @@ func (tx *MetadataTransformer) visitClassExpression(node *ast.ClassExpression) *
 		node,
 		modifiers,
 		tx.Visitor().VisitNode(node.Name()),
-		tx.Visitor().VisitNodes(node.TypeParameters),
-		tx.Visitor().VisitNodes(node.HeritageClauses),
-		tx.Visitor().VisitNodes(node.Members),
+		tx.Visitor().VisitNodes(node.TypeParameters()),
+		tx.Visitor().VisitNodes(node.HeritageClauses()),
+		tx.Visitor().VisitNodes(node.Members()),
 	)
 }
 
@@ -118,9 +118,9 @@ func (tx *MetadataTransformer) visitClassDeclaration(node *ast.ClassDeclaration)
 		node,
 		modifiers,
 		tx.Visitor().VisitNode(node.Name()),
-		tx.Visitor().VisitNodes(node.TypeParameters),
-		tx.Visitor().VisitNodes(node.HeritageClauses),
-		tx.Visitor().VisitNodes(node.Members),
+		tx.Visitor().VisitNodes(node.TypeParameters()),
+		tx.Visitor().VisitNodes(node.HeritageClauses()),
+		tx.Visitor().VisitNodes(node.Members()),
 	)
 }
 
@@ -134,9 +134,9 @@ func (tx *MetadataTransformer) visitPropertyDeclaration(node *ast.PropertyDeclar
 		node,
 		modifiers,
 		tx.Visitor().VisitNode(node.Name()),
-		tx.Visitor().VisitNode(node.PostfixToken),
-		tx.Visitor().VisitNode(node.Type),
-		tx.Visitor().VisitNode(node.Initializer),
+		tx.Visitor().VisitNode(node.PostfixToken()),
+		tx.Visitor().VisitNode(node.Type()),
+		tx.Visitor().VisitNode(node.Initializer()),
 	)
 }
 
@@ -149,14 +149,14 @@ func (tx *MetadataTransformer) visitMethodDeclaration(node *ast.MethodDeclaratio
 	return tx.Factory().UpdateMethodDeclaration(
 		node,
 		modifiers,
-		tx.Visitor().VisitNode(node.AsteriskToken),
+		tx.Visitor().VisitNode(node.AsteriskToken()),
 		tx.Visitor().VisitNode(node.Name()),
-		tx.Visitor().VisitNode(node.PostfixToken),
-		tx.Visitor().VisitNodes(node.TypeParameters),
-		tx.Visitor().VisitNodes(node.Parameters),
-		tx.Visitor().VisitNode(node.Type),
-		tx.Visitor().VisitNode(node.FullSignature),
-		tx.Visitor().VisitNode(node.Body),
+		tx.Visitor().VisitNode(node.PostfixToken()),
+		tx.Visitor().VisitNodes(node.TypeParameters()),
+		tx.Visitor().VisitNodes(node.Parameters()),
+		tx.Visitor().VisitNode(node.Type()),
+		tx.Visitor().VisitNode(node.FullSignature()),
+		tx.Visitor().VisitNode(node.Body()),
 	)
 }
 
@@ -170,11 +170,11 @@ func (tx *MetadataTransformer) visitSetAccessor(node *ast.SetAccessorDeclaration
 		node,
 		modifiers,
 		tx.Visitor().VisitNode(node.Name()),
-		tx.Visitor().VisitNodes(node.TypeParameters),
-		tx.Visitor().VisitNodes(node.Parameters),
-		tx.Visitor().VisitNode(node.Type),
-		tx.Visitor().VisitNode(node.FullSignature),
-		tx.Visitor().VisitNode(node.Body),
+		tx.Visitor().VisitNodes(node.TypeParameters()),
+		tx.Visitor().VisitNodes(node.Parameters()),
+		tx.Visitor().VisitNode(node.Type()),
+		tx.Visitor().VisitNode(node.FullSignature()),
+		tx.Visitor().VisitNode(node.Body()),
 	)
 }
 
@@ -188,11 +188,11 @@ func (tx *MetadataTransformer) visitGetAccessor(node *ast.GetAccessorDeclaration
 		node,
 		modifiers,
 		tx.Visitor().VisitNode(node.Name()),
-		tx.Visitor().VisitNodes(node.TypeParameters),
-		tx.Visitor().VisitNodes(node.Parameters),
-		tx.Visitor().VisitNode(node.Type),
-		tx.Visitor().VisitNode(node.FullSignature),
-		tx.Visitor().VisitNode(node.Body),
+		tx.Visitor().VisitNodes(node.TypeParameters()),
+		tx.Visitor().VisitNodes(node.Parameters()),
+		tx.Visitor().VisitNode(node.Type()),
+		tx.Visitor().VisitNode(node.FullSignature()),
+		tx.Visitor().VisitNode(node.Body()),
 	)
 }
 
@@ -201,12 +201,12 @@ func (tx *MetadataTransformer) injectClassTypeMetadata(list *ast.ModifierList, n
 	if len(metadata) > 0 {
 		var originalNodes []*ast.Node
 		if list != nil {
-			originalNodes = list.Nodes
+			originalNodes = list.Nodes()
 		}
 		if len(originalNodes) == 0 {
 			res := tx.Factory().NewModifierList(metadata)
 			if list != nil {
-				res.Loc = list.Loc
+				res.SetLoc(list.Loc())
 			}
 			return res
 		}
@@ -224,7 +224,7 @@ func (tx *MetadataTransformer) injectClassTypeMetadata(list *ast.ModifierList, n
 		otherModifiers := core.Filter(originalNodes[restStart:], ast.IsModifier)
 		modifiersArray = append(modifiersArray, otherModifiers...)
 		res := tx.Factory().NewModifierList(modifiersArray)
-		res.Loc = list.Loc
+		res.SetLoc(list.Loc())
 		return res
 	}
 	return list
@@ -241,12 +241,12 @@ func (tx *MetadataTransformer) injectClassElementTypeMetadata(list *ast.Modifier
 	if len(metadata) > 0 {
 		var originalNodes []*ast.Node
 		if list != nil {
-			originalNodes = list.Nodes
+			originalNodes = list.Nodes()
 		}
 		if len(originalNodes) == 0 {
 			res := tx.Factory().NewModifierList(metadata)
 			if list != nil {
-				res.Loc = list.Loc
+				res.SetLoc(list.Loc())
 			}
 			return res
 		}
@@ -257,7 +257,7 @@ func (tx *MetadataTransformer) injectClassElementTypeMetadata(list *ast.Modifier
 		modifiers := core.Filter(originalNodes, ast.IsModifier)
 		modifiersArray = append(modifiersArray, modifiers...)
 		res := tx.Factory().NewModifierList(modifiersArray)
-		res.Loc = list.Loc
+		res.SetLoc(list.Loc())
 		return res
 	}
 	return list

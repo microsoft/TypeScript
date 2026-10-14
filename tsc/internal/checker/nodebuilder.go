@@ -201,9 +201,9 @@ func simplifyClassDeclaration(f *ast.NodeFactory, classDecl *ast.Node, symbol *a
 			cd,
 			classDecl.Modifiers(),
 			nil,
-			cd.TypeParameters,
-			cd.HeritageClauses,
-			cd.Members,
+			cd.TypeParameters(),
+			cd.HeritageClauses(),
+			cd.Members(),
 		)
 	}
 	return ast.ReplaceModifiers(f, classDecl, f.NewModifierList(ast.CreateModifiersFromModifierFlags(modifiers, f.NewModifier)))

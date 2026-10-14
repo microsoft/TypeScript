@@ -365,16 +365,16 @@ func (c *Checker) getContainersOfSymbol(symbol *ast.Symbol, enclosingDeclaration
 				continue
 			}
 		}
-		if ast.IsClassExpression(d) && ast.IsBinaryExpression(d.Parent()) && d.Parent().AsBinaryExpression().OperatorToken.Kind() == ast.KindEqualsToken && ast.IsAccessExpression(d.Parent().AsBinaryExpression().Left) && ast.IsEntityNameExpression(d.Parent().AsBinaryExpression().Left.Expression()) {
-			if ast.IsModuleExportsAccessExpression(d.Parent().AsBinaryExpression().Left) || ast.IsExportsIdentifier(d.Parent().AsBinaryExpression().Left.Expression()) {
+		if ast.IsClassExpression(d) && ast.IsBinaryExpression(d.Parent()) && d.Parent().AsBinaryExpression().OperatorToken().Kind() == ast.KindEqualsToken && ast.IsAccessExpression(d.Parent().AsBinaryExpression().Left()) && ast.IsEntityNameExpression(d.Parent().AsBinaryExpression().Left().Expression()) {
+			if ast.IsModuleExportsAccessExpression(d.Parent().AsBinaryExpression().Left()) || ast.IsExportsIdentifier(d.Parent().AsBinaryExpression().Left().Expression()) {
 				sym := c.getSymbolOfDeclaration(ast.GetSourceFileOfNode(d).AsNode())
 				if sym != nil && !slices.Contains(candidates, sym) {
 					candidates = append(candidates, sym)
 				}
 				continue
 			}
-			c.checkExpressionCached(d.Parent().AsBinaryExpression().Left.Expression())
-			sym := c.symbolNodeLinks.Get(d.Parent().AsBinaryExpression().Left.Expression()).resolvedSymbol
+			c.checkExpressionCached(d.Parent().AsBinaryExpression().Left().Expression())
+			sym := c.symbolNodeLinks.Get(d.Parent().AsBinaryExpression().Left().Expression()).resolvedSymbol
 			if sym != nil && !slices.Contains(candidates, sym) {
 				candidates = append(candidates, sym)
 			}

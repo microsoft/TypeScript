@@ -355,7 +355,7 @@ func (g *NameGenerator) checkUniqueName(name string, privateName bool, checkFn f
 func nextContainer(node *ast.Node) *ast.Node {
 	data := node.LocalsContainerData()
 	if data != nil {
-		return data.NextContainer
+		return data.NextContainer()
 	}
 	return nil
 }

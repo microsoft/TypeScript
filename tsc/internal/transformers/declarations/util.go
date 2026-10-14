@@ -153,11 +153,11 @@ func isPrivateMethodTypeParameter(resolver printer.EmitResolver, node *ast.TypeP
 // Returns true if expando properties should be emitted for this function.
 // Properties are emitted if any overload in the symbol has a body (implementation).
 func shouldEmitFunctionProperties(input *ast.FunctionDeclaration) bool {
-	if input.Body != nil {
+	if input.Body() != nil {
 		return true
 	}
-	return !core.Every(input.Symbol.Declarations(), func(decl *ast.Node) bool {
-		return !ast.IsFunctionDeclaration(decl) || decl.AsFunctionDeclaration().Body == nil
+	return !core.Every(input.Symbol().Declarations(), func(decl *ast.Node) bool {
+		return !ast.IsFunctionDeclaration(decl) || decl.AsFunctionDeclaration().Body() == nil
 	})
 }
 
@@ -169,5 +169,5 @@ func hasScopeMarker(statements *ast.StatementList) bool {
 	if statements == nil {
 		return false
 	}
-	return core.Some(statements.Nodes, isScopeMarker)
+	return core.Some(statements.Nodes(), isScopeMarker)
 }

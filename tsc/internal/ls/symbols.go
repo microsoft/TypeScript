@@ -151,8 +151,8 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 		if node.Flags()&ast.NodeFlagsReparsed == 0 {
 			if jsdocs := node.JSDoc(file); len(jsdocs) > 0 {
 				for _, jsdoc := range jsdocs {
-					if tagList := jsdoc.AsJSDoc().Tags; tagList != nil {
-						for _, tag := range tagList.Nodes {
+					if tagList := jsdoc.AsJSDoc().Tags(); tagList != nil {
+						for _, tag := range tagList.Nodes() {
 							if ast.IsJSDocTypedefTag(tag) || ast.IsJSDocCallbackTag(tag) {
 								addSymbolForNode(tag, nil /*name*/, nil /*children*/)
 							}
@@ -209,7 +209,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 			// Handle named bindings in imports e.g.:
 			//    import * as NS from "mod";
 			//    import {a, b as B} from "mod";
-			if namedBindings := node.AsImportClause().NamedBindings; namedBindings != nil {
+			if namedBindings := node.AsImportClause().NamedBindings(); namedBindings != nil {
 				if namedBindings.Kind() == ast.KindNamespaceImport {
 					addSymbolForNode(namedBindings, nil /*name*/, nil /*children*/)
 				} else {
@@ -235,14 +235,14 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 				// `A.b = ... ` or `A.prototype.b = ...`
 				if ast.IsBinaryExpression(node) {
 					binaryExpr := node.AsBinaryExpression()
-					target = binaryExpr.Left
+					target = binaryExpr.Left()
 					targetFunction = target.Expression()
-					definition = binaryExpr.Right
+					definition = binaryExpr.Right()
 					// `A.b` or `A.prototype.b`
 					if ast.IsPropertyAccessExpression(target) {
 						propertyName = target.AsPropertyAccessExpression().Name()
 					} else { // `A["b"]` or `A.prototype["b"]`
-						propertyName = target.AsElementAccessExpression().ArgumentExpression
+						propertyName = target.AsElementAccessExpression().ArgumentExpression()
 					}
 				} else { // `Object.defineProperty(A, "b", {...})`
 					args := node.Arguments()
@@ -268,7 +268,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 				}
 			}
 		case ast.KindExportAssignment:
-			if node.AsExportAssignment().IsExportEquals {
+			if node.AsExportAssignment().IsExportEquals() {
 				addSymbolForNode(node, nil /*name*/, getSymbolsForNode(node.Expression()))
 			} else {
 				node.ForEachChild(visit)
@@ -306,7 +306,7 @@ func (l *LanguageService) newDocumentSymbol(node *ast.Node, name *ast.Node, chil
 		text = getModuleName(node)
 		nameStartPos = scanner.SkipTrivia(file.Text(), name.Pos())
 		nameEndPos = getInteriorModule(node).Name().End()
-	} else if ast.IsAnyExportAssignment(node) && node.AsExportAssignment().IsExportEquals {
+	} else if ast.IsAnyExportAssignment(node) && node.AsExportAssignment().IsExportEquals() {
 		text = "export="
 		if !ast.NodeIsMissing(name) {
 			nameStartPos = scanner.SkipTrivia(file.Text(), name.Pos())
@@ -448,7 +448,7 @@ func getTextOfName(node *ast.Node) string {
 
 func getUnnamedNodeLabel(node *ast.Node) string {
 	if parent := ast.WalkUpParenthesizedExpressions(node.Parent()); parent != nil && ast.IsExportAssignment(parent) {
-		if parent.AsExportAssignment().IsExportEquals {
+		if parent.AsExportAssignment().IsExportEquals() {
 			return "export="
 		}
 		return "default"
