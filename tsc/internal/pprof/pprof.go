@@ -10,6 +10,8 @@ import (
 	"runtime/pprof"
 	"sync"
 	"time"
+
+	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
 )
 
 type ProfileSession struct {
@@ -21,6 +23,9 @@ type ProfileSession struct {
 
 // BeginProfiling starts CPU and memory profiling, writing the profiles to the specified directory.
 func BeginProfiling(profileDir string, logWriter io.Writer) *ProfileSession {
+	if nativepath.IsNetworkPath(profileDir) {
+		panic("network paths are not supported: " + profileDir)
+	}
 	if err := os.MkdirAll(profileDir, 0o755); err != nil {
 		panic(err)
 	}
