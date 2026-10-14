@@ -162,9 +162,7 @@ func BenchmarkCheckFreshProgram(b *testing.B) {
 	rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, fs, nil)
-	for _, diagnostic := range errors {
-		b.Fatal(diagnostic.String())
-	}
+	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
 	ctx := b.Context()
 
 	b.ReportAllocs()
@@ -173,9 +171,7 @@ func BenchmarkCheckFreshProgram(b *testing.B) {
 		program.BindSourceFiles()
 		c, _ := checker.NewChecker(program, nil)
 		for _, file := range program.GetSourceFiles() {
-			for _, diagnostic := range c.GetDiagnostics(ctx, file) {
-				b.Fatal(diagnostic.String())
-			}
+			assert.Equal(b, len(c.GetDiagnostics(ctx, file)), 0)
 		}
 		assert.Equal(b, len(c.GetGlobalDiagnostics()), 0)
 	}
