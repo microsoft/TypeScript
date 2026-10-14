@@ -24138,6 +24138,129 @@ func (c *Checker) getTupleElementType(t *Type, index int) *Type {
 	return nil
 }
 
+// getInheritTypeArguments implements the `inherit` proof-of-concept. Given a `TypeReferenceNode`
+// that refers to the global `inherit` type alias and was written with no explicit type arguments,
+// it synthesizes the type arguments the alias expects based on where `inherit` appears:
+//
+//	inherit<BaseType, Field, Pos, Idx>
+//
+// where:
+//   - BaseType is the intersection of the enclosing class's extends type and all implemented interfaces,
+//   - Field is a string-literal type of the member name,
+//   - Pos is one of "Field" | "Param" | "Return" | "Rest",
+//   - Idx is a number-literal type (parameter index for "Param", count of leading params for "Rest").
+//
+// It returns nil when `inherit` is used in a position that is not supported (e.g. outside a class, or
+// not in a field/parameter/return type), so that the caller reports the normal diagnostic.
+func (c *Checker) getInheritTypeArguments(node *ast.Node) []*Type {
+	// Determine the enclosing class and its base-type intersection.
+	classNode := ast.GetContainingClass(node)
+	if classNode == nil {
+		return nil
+	}
+	baseType := c.getInheritBaseType(classNode)
+	if baseType == nil {
+		return nil
+	}
+
+	// Classify the position of `inherit`. `inherit` may be the direct type of a declaration
+	// (`foo: inherit`) or nested inside a composed type (`foo: Readonly<inherit>`,
+	// `foo: inherit | "x"`). Walk up through any enclosing type nodes so that composition works;
+	// the walk stops at the first non-type ancestor, which should be the owning declaration.
+	cur := node
+	for cur.Parent != nil && ast.IsTypeNode(cur.Parent) {
+		cur = cur.Parent
+	}
+	parent := cur.Parent
+	if parent == nil {
+		return nil
+	}
+	stringArg := func(s string) *Type { return c.getStringLiteralType(s) }
+
+	switch {
+	case ast.IsPropertyDeclaration(parent) && parent.Type() == cur:
+		// `public foo: inherit` -> inherit<Base, "foo", "Field">
+		name := c.getInheritMemberName(parent)
+		if name == "" {
+			return nil
+		}
+		return []*Type{baseType, stringArg(name), stringArg("Field")}
+
+	case ast.IsParameterDeclaration(parent) && parent.Type() == cur:
+		// Parameter type: either a normal parameter or a rest parameter of a method.
+		paramNode := parent
+		method := paramNode.Parent
+		if method == nil || !ast.IsFunctionLikeDeclaration(method) {
+			return nil
+		}
+		name := c.getInheritMemberName(method)
+		if name == "" {
+			return nil
+		}
+		params := method.Parameters()
+		index := -1
+		for i, p := range params {
+			if p == paramNode {
+				index = i
+				break
+			}
+		}
+		if index < 0 {
+			return nil
+		}
+		idxArg := c.getNumberLiteralType(jsnum.Number(index))
+		if paramNode.AsParameterDeclaration().DotDotDotToken != nil {
+			// `...rest: inherit` -> inherit<Base, name, "Rest", index>
+			return []*Type{baseType, stringArg(name), stringArg("Rest"), idxArg}
+		}
+		// `param: inherit` -> inherit<Base, name, "Param", index>
+		return []*Type{baseType, stringArg(name), stringArg("Param"), idxArg}
+
+	case ast.IsFunctionLikeDeclaration(parent) && parent.Type() == cur:
+		// Method return type: `foo(): inherit` -> inherit<Base, name, "Return">
+		name := c.getInheritMemberName(parent)
+		if name == "" {
+			return nil
+		}
+		return []*Type{baseType, stringArg(name), stringArg("Return")}
+	}
+
+	return nil
+}
+
+// getInheritMemberName returns the text of a declaration's name, or "" if it is not a simple
+// identifier/string name (e.g. a computed property name, which `inherit` does not support).
+func (c *Checker) getInheritMemberName(decl *ast.Node) string {
+	name := decl.Name()
+	if name == nil {
+		return ""
+	}
+	switch name.Kind {
+	case ast.KindIdentifier, ast.KindStringLiteral, ast.KindNumericLiteral, ast.KindPrivateIdentifier:
+		return name.Text()
+	}
+	return ""
+}
+
+// getInheritBaseType computes the BaseType argument for `inherit`: the intersection of the class's
+// extends type (if any) and all implemented interface types. Returns nil if the class neither
+// extends nor implements anything.
+func (c *Checker) getInheritBaseType(classNode *ast.Node) *Type {
+	classType := c.getDeclaredTypeOfSymbol(c.getSymbolOfDeclaration(classNode))
+	var baseTypes []*Type
+	baseTypes = append(baseTypes, c.getBaseTypes(classType)...)
+	for _, typeRefNode := range ast.GetImplementsHeritageClauseElements(classNode) {
+		t := c.getReducedType(c.getTypeFromTypeNode(typeRefNode))
+		if !c.isErrorType(t) {
+			baseTypes = append(baseTypes, t)
+		}
+	}
+	if len(baseTypes) == 0 {
+		return nil
+	}
+	return c.getIntersectionType(baseTypes)
+}
+
 /**
  * Get type from reference to type alias. When a type alias is generic, the declared type of the type alias may include
  * references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
@@ -24160,6 +24283,16 @@ func (c *Checker) getTypeFromTypeAliasReference(node *ast.Node, symbol *ast.Symb
 	typeParameters := c.typeAliasLinks.Get(symbol).typeParameters
 	if len(typeParameters) != 0 {
 		numTypeArguments := len(typeArguments)
+		// `inherit` proof-of-concept: when the global `inherit` type alias is used with no explicit
+		// type arguments, synthesize them from the syntactic position in the enclosing class (base
+		// type(s), member name, position kind, and index) and instantiate the alias with those.
+		// If the position is not a valid use of `inherit`, fall through so the normal
+		// "requires N type arguments" diagnostic is reported.
+		if numTypeArguments == 0 && symbol.Name() == "inherit" {
+			if inheritArgs := c.getInheritTypeArguments(node); inheritArgs != nil {
+				return c.getTypeAliasInstantiation(symbol, inheritArgs, nil)
+			}
+		}
 		minTypeArgumentCount := c.getMinTypeArgumentCount(typeParameters)
 		if numTypeArguments < minTypeArgumentCount || numTypeArguments > len(typeParameters) {
 			message := core.IfElse(minTypeArgumentCount == len(typeParameters),

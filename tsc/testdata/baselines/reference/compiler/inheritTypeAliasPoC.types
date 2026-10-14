@@ -1,0 +1,323 @@
+//// [tests/cases/compiler/inheritTypeAliasPoC.ts] ////
+
+=== inheritTypeAliasPoC.ts ===
+// Proof-of-concept test suite for the `inherit` type alias (issue #36165).
+//
+// `inherit` is a global type alias (defined in lib.es5.d.ts) that, when used with no explicit
+// type arguments, is resolved contextually by the checker to the matching member type of the
+// enclosing class's base class and/or implemented interfaces:
+//
+//   - Instance field          -> Base[Field]
+//   - Method parameter         -> Parameters<Base[Field]>[Index]
+//   - Method rest parameter    -> trailing tuple after `Index` leading params
+//   - Method return value      -> ReturnType<Base[Field]>
+//
+// where Base is the intersection of the extends type and all implemented interfaces.
+//
+// This file is both a demonstration and an executable spec. Cases marked "SHOULD RESOLVE" are the
+// intended behavior; cases marked "SHOULD ERROR" document intentional constraints. Where the
+// current PoC does not yet match the intended behavior (notably `inherit` nested inside a composed
+// type such as `Readonly<inherit>` or `inherit | "x"`), the baseline will reveal the gap.
+
+interface Base {
+    field: "square" | "circle";
+>field : "circle" | "square"
+
+    foo(a: number, b: string): boolean;
+>foo : (a: number, b: string) => boolean
+>a : number
+>b : string
+
+    bar(a: number, b: string, c?: any): boolean;
+>bar : (a: number, b: string, c?: any) => boolean
+>a : number
+>b : string
+>c : any
+}
+
+// ---------------------------------------------------------------------------
+// 1. Baseline: every supported position, implements an interface.
+// ---------------------------------------------------------------------------
+class AllPositions implements Base {
+>AllPositions : AllPositions
+
+    field: inherit = "square";                               // SHOULD RESOLVE: "square" | "circle"
+>field : "circle" | "square"
+>"square" : "square"
+
+    foo(a: inherit, b: inherit): inherit {                   // SHOULD RESOLVE: a:number, b:string, ret:boolean
+>foo : (a: inherit, b: inherit) => inherit
+>a : number
+>b : string
+
+        return true;
+>true : true
+    }
+    bar(a: inherit, ...rest: inherit): inherit {             // SHOULD RESOLVE: a:number, rest:[string, any?], ret:boolean
+>bar : (a: inherit, b: string, c?: any) => inherit
+>a : number
+>rest : [b: string, c?: any]
+
+        return true;
+>true : true
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 2. Equivalence with the explicit (generic) form that compiles today.
+// ---------------------------------------------------------------------------
+class ExplicitForm implements Base {
+>ExplicitForm : ExplicitForm
+
+    field: inherit<Base, "field"> = "circle";
+>field : "circle" | "square"
+>"circle" : "circle"
+
+    foo(a: inherit<Base, "foo", "Param", 0>, b: inherit<Base, "foo", "Param", 1>): inherit<Base, "foo", "Return"> {
+>foo : (a: inherit<Base, "foo", "Param", 0>, b: inherit<Base, "foo", "Param", 1>) => inherit<Base, "foo", "Return">
+>a : number
+>b : string
+
+        return true;
+>true : true
+    }
+    bar(a: inherit<Base, "bar", "Param", 0>, ...rest: inherit<Base, "bar", "Rest", 1>): inherit<Base, "bar", "Return"> {
+>bar : (a: inherit<Base, "bar", "Param", 0>, b: string, c?: any) => inherit<Base, "bar", "Return">
+>a : number
+>rest : [b: string, c?: any]
+
+        return true;
+>true : true
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 3. extends-only (class base, no interfaces).
+// ---------------------------------------------------------------------------
+class Geometry {
+>Geometry : Geometry
+
+    model: "square" | "circle" = "square";
+>model : "circle" | "square"
+>"square" : "square"
+
+    render(scale: number): void {}
+>render : (scale: number) => void
+>scale : number
+}
+class Canvas extends Geometry {
+>Canvas : Canvas
+>Geometry : Geometry
+
+    model: inherit = "square";                               // SHOULD RESOLVE: "square" | "circle"
+>model : "circle" | "square"
+>"square" : "square"
+
+    render(scale: inherit): inherit {}                       // SHOULD RESOLVE: scale:number, ret:void
+>render : (scale: inherit) => inherit
+>scale : number
+}
+
+// ---------------------------------------------------------------------------
+// 4. Multiple bases: extends + implements, intersected as (Base & A & B).
+// ---------------------------------------------------------------------------
+interface A { a: number; shared: string; }
+>a : number
+>shared : string
+
+interface B { b: "x" | "y"; shared: string; }
+>b : "x" | "y"
+>shared : string
+
+class BaseC { c: boolean = true; }
+>BaseC : BaseC
+>c : boolean
+>true : true
+
+class Multi extends BaseC implements A, B {
+>Multi : Multi
+>BaseC : BaseC
+
+    a: inherit = 1;                                          // SHOULD RESOLVE: number
+>a : number
+>1 : 1
+
+    b: inherit = "x";                                        // SHOULD RESOLVE: "x" | "y"
+>b : "x" | "y"
+>"x" : "x"
+
+    c: inherit = false;                                      // SHOULD RESOLVE: boolean (from extends)
+>c : boolean
+>false : false
+
+    shared: inherit = "s";                                   // SHOULD RESOLVE: string (A & B agree)
+>shared : string
+>"s" : "s"
+}
+
+// ---------------------------------------------------------------------------
+// 4b. Conflicting member types across interfaces narrow to their intersection.
+//     Foo.shape = "square" | "circle", Bar.shape = "circle" | "triangle"
+//     => (Foo & Bar)["shape"] = "circle"
+// ---------------------------------------------------------------------------
+interface Foo { shape: "square" | "circle"; }
+>shape : "circle" | "square"
+
+interface Bar { shape: "circle" | "triangle"; }
+>shape : "circle" | "triangle"
+
+class IntersectNarrow implements Foo, Bar {
+>IntersectNarrow : IntersectNarrow
+
+    shape: inherit = "circle";                               // SHOULD RESOLVE: "circle" (only common member)
+>shape : "circle"
+>"circle" : "circle"
+}
+class IntersectNarrowBad implements Foo, Bar {
+>IntersectNarrowBad : IntersectNarrowBad
+
+    shape: inherit = "square";                               // SHOULD ERROR: "square" not in the intersection "circle"
+>shape : "circle"
+>"square" : "square"
+}
+
+// ---------------------------------------------------------------------------
+// 5. Composition: inherit nested inside other type constructors.
+// ---------------------------------------------------------------------------
+interface Robot {
+    sensors: {sight?: boolean, hearing?: boolean, touch?: boolean};
+>sensors : { sight?: boolean; hearing?: boolean; touch?: boolean; }
+>sight : boolean | undefined
+>hearing : boolean | undefined
+>touch : boolean | undefined
+
+    doAction(action: "walk" | "turn"): void;
+>doAction : (action: "walk" | "turn") => void
+>action : "turn" | "walk"
+}
+class FlyingRobot implements Robot {
+>FlyingRobot : FlyingRobot
+
+    sensors: Required<inherit> = {sight: true, hearing: false, touch: false};  // SHOULD RESOLVE: {sight: boolean, hearing: boolean, touch: boolean};
+>sensors : Required<{ sight?: boolean; hearing?: boolean; touch?: boolean; }>
+>{sight: true, hearing: false, touch: false} : { sight: true; hearing: false; touch: false; }
+>sight : true
+>true : true
+>hearing : false
+>false : false
+>touch : false
+>false : false
+
+    doAction(action: inherit | "fly"): inherit {             // SHOULD RESOLVE: action:"walk"|"turn"|"fly"
+>doAction : (action: inherit | "fly") => inherit
+>action : "fly" | "turn" | "walk"
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 6. Arrow-function field: field-level inherit, params inferred by assignment.
+// ---------------------------------------------------------------------------
+class ArrowField implements Base {
+>ArrowField : ArrowField
+
+    field: inherit = "square";
+>field : "circle" | "square"
+>"square" : "square"
+
+    foo: inherit = (a, b) => true;                           // SHOULD RESOLVE: foo:(a:number,b:string)=>boolean
+>foo : (a: number, b: string) => boolean
+>(a, b) => true : (a: number, b: string) => true
+>a : number
+>b : string
+>true : true
+
+    bar: inherit = (a, b, c) => true;
+>bar : (a: number, b: string, c?: any) => boolean
+>(a, b, c) => true : (a: number, b: string, c: any) => true
+>a : number
+>b : string
+>c : any
+>true : true
+}
+
+// ---------------------------------------------------------------------------
+// 7. Negative / assignment checks: inherit must produce the NARROW type, not `any`.
+// ---------------------------------------------------------------------------
+class WrongField implements Base {
+>WrongField : WrongField
+
+    field: inherit = "triangle";                             // SHOULD ERROR: not "square" | "circle"
+>field : "circle" | "square"
+>"triangle" : "triangle"
+
+    foo(a: inherit, b: inherit): inherit { return true; }
+>foo : (a: inherit, b: inherit) => inherit
+>a : number
+>b : string
+>true : true
+
+    bar(a: inherit, ...rest: inherit): inherit { return true; }
+>bar : (a: inherit, b: string, c?: any) => inherit
+>a : number
+>rest : [b: string, c?: any]
+>true : true
+}
+class WrongReturn implements Base {
+>WrongReturn : WrongReturn
+
+    field: inherit = "square";
+>field : "circle" | "square"
+>"square" : "square"
+
+    foo(a: inherit, b: inherit): inherit { return "nope"; }  // SHOULD ERROR: string not assignable to boolean
+>foo : (a: inherit, b: inherit) => inherit
+>a : number
+>b : string
+>"nope" : "nope"
+
+    bar(a: inherit, ...rest: inherit): inherit { return true; }
+>bar : (a: inherit, b: string, c?: any) => inherit
+>a : number
+>rest : [b: string, c?: any]
+>true : true
+}
+class WrongParamUse implements Base {
+>WrongParamUse : WrongParamUse
+
+    field: inherit = "square";
+>field : "circle" | "square"
+>"square" : "square"
+
+    foo(a: inherit, b: inherit): inherit {
+>foo : (a: inherit, b: inherit) => inherit
+>a : number
+>b : string
+
+        const s: string = a;                                 // SHOULD ERROR: number not assignable to string
+>s : string
+>a : number
+
+        return true;
+>true : true
+    }
+    bar(a: inherit, ...rest: inherit): inherit { return true; }
+>bar : (a: inherit, b: string, c?: any) => inherit
+>a : number
+>rest : [b: string, c?: any]
+>true : true
+}
+
+// ---------------------------------------------------------------------------
+// 8. Invalid positions / constraints.
+// ---------------------------------------------------------------------------
+class NoBase {
+>NoBase : NoBase
+
+    x: inherit = 1;                                          // SHOULD ERROR: class has no base/interfaces
+>x : any
+>1 : 1
+}
+
+type OutsideClass = inherit;                                 // SHOULD ERROR: inherit used outside a class
+>OutsideClass : any
+

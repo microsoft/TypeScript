@@ -1577,6 +1577,46 @@ interface ArrayLike<T> {
     readonly [n: number]: T;
 }
 
+declare namespace inherit {
+type _Func = (...args: any[]) => any;
+
+// given number of normal parameters before the rest parameter, this gives the appropriate type for the rest parameter.
+// there might be a way to define this recursively but for now it is only well defined for 0 to 4 arguments.
+// otherwise this returns a string constant explaining limitation in implementation.
+type _GetRestParam<F extends _Func, P extends number> = P extends 0 ? F extends ((...args: infer A)=>any) ? A : never
+    : P extends 1 ? F extends ((x0: any, ...args: infer A) => any) ? A : never
+    : P extends 2 ? F extends ((x0: any, x1: any, ...args: infer A) => any) ? A : never
+    : P extends 3 ? F extends ((x0: any, x1: any, x2:any, ...args: infer A) => any) ? A : never
+    : P extends 4 ? F extends ((x0: any, x1: any, x2:any, x3:any, ...args: infer A) => any) ? A : never
+    : "REST PARAMETERS ONLY IMPLEMENTED FOR UP TO 4 PRIOR ARGUMENTS"
+
+type _KeysOfMethods<BaseType> = { [K in keyof BaseType]: BaseType[K] extends _Func ? K : never }[keyof BaseType];
+
+}
+/**
+ * demonstration of how the `inherit` keyword would work as working with explicit type arguments.
+ * @param BaseType - intersection of extended base class and all implemented interfaces
+ * @param Field - the field name or method name being used. if Pos is not "Field" this must point to a method.
+ * @param Pos - one of:
+ *              "Field" for the type of the defined field (default if not given)
+ *              "Return" for the return type of the method
+ *              "Param" for a parameter of the method (Idx specifies position)
+ *              "Rest" for a rest parameter (...args).
+ * @param Idx - when Pos is "Param" this is the position of the parameter,
+ *              when Pos is "Rest" this is the number of parameters before the rest parameter.
+ */
+type inherit<BaseType, Field extends (Pos extends ("Param" | "Return" | "Rest") ? inherit._KeysOfMethods<BaseType> : keyof BaseType),
+    Pos extends "Field" | "Param" | "Return" | "Rest" = "Field",
+    Idx extends (Pos extends "Param" | "Rest" ? number : never) = never
+    > = Pos extends "Field" ? BaseType[Field]
+    : BaseType[Field] extends inherit._Func
+    ? Pos extends "Return" ? ReturnType<BaseType[Field]>
+    : Pos extends "Param" ? Parameters<BaseType[Field]>[Idx]
+    : Pos extends "Rest" ? inherit._GetRestParam<BaseType[Field], Idx>
+    : never // case where Pos is not one of the 4 choices
+    : never; // case where BaseType[Field] is not a function for one of the choices that require a function
+
+
 /**
  * Make all properties in T optional
  */
