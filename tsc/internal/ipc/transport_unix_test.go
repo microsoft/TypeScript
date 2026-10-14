@@ -3,15 +3,46 @@
 package ipc
 
 import (
+	"errors"
 	"fmt"
+	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"syscall"
 	"testing"
+	"time"
 )
 
 const privatePipeHelperEnv = "TSGO_PRIVATE_PIPE_HELPER"
+
+func TestPipeTransportClosePreservesReplacement(t *testing.T) {
+	t.Parallel()
+
+	transport, err := NewPrivatePipeTransport("tsgo-api-test")
+	if err != nil {
+		t.Fatal(err)
+	}
+	socketPath := transport.Path()
+	if closeErr := transport.Close(); closeErr != nil {
+		t.Fatal(closeErr)
+	}
+
+	replacement, err := NewPipeTransport(filepath.Dir(socketPath))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer replacement.Close()
+
+	if closeErr := transport.Close(); !errors.Is(closeErr, net.ErrClosed) {
+		t.Fatalf("second Close returned %v, want net.ErrClosed", closeErr)
+	}
+	conn, err := net.DialTimeout("unix", socketPath, time.Second)
+	if err != nil {
+		t.Fatalf("replacement socket is unreachable: %v", err)
+	}
+	defer conn.Close()
+}
 
 func TestPipeTransportPermissions(t *testing.T) {
 	t.Parallel()

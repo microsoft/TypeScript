@@ -54,7 +54,7 @@ func (t *PipeTransport) Accept() (io.ReadWriteCloser, error) {
 // Close implements Transport.
 func (t *PipeTransport) Close() error {
 	closeErr := t.listener.Close()
-	if t.cleanup == nil {
+	if t.cleanup == nil || errors.Is(closeErr, net.ErrClosed) {
 		return closeErr
 	}
 	return errors.Join(closeErr, t.cleanup())
