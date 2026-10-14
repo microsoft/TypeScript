@@ -25603,7 +25603,7 @@ func (c *Checker) newType(flags TypeFlags, objectFlags ObjectFlags, t *Type, kin
 	t.flags = flags
 	t.objectFlags = objectFlags &^ (ObjectFlagsCouldContainTypeVariablesComputed | ObjectFlagsCouldContainTypeVariables | ObjectFlagsMembersResolved)
 	t.id = TypeId(c.TypeCount)
-	t.kind = kind
+	t.kind = kind //nolint:customlint
 	t.checker = c
 	if c.tracer != nil {
 		c.tracer.RecordType(t)

@@ -1,0 +1,96 @@
+	package consumer
+	
+	import "testdata/protectedfield/record"
+	
+	type Container struct {
+		header *record.Header
+		small  record.Small
+	}
+	
+	func writes(h *record.Header, s *record.Small, d *record.Defined) {
+		h.Kind = record.KindLarge
+		  ~
+!!! protectedfield: write to protected field Kind
+		s.Kind = record.KindLarge
+		  ~
+!!! protectedfield: write to protected field Kind
+		s.Header.Kind++
+		         ~
+!!! protectedfield: write to protected field Kind
+		d.Kind = record.KindLarge
+		  ~
+!!! protectedfield: write to protected field Kind
+		h.Kind, h.Flags = record.KindLarge, 1
+		  ~
+!!! protectedfield: write to protected field Kind
+		_ = &h.Kind
+		       ~
+!!! protectedfield: address of protected field Kind
+		h.Flags = 1
+		_ = &h.Flags
+		_ = h.Kind
+	}
+	
+	func literals() {
+		_ = &record.Header{Kind: record.KindLarge}
+		                   ~
+!!! protectedfield: write to protected field Kind
+		_ = &record.Header{record.KindLarge, 1}
+		                   ~
+!!! protectedfield: write to protected field Kind
+		_ = &record.Header{Flags: 1}
+		_ = &record.Small{}
+		_ = &record.Alias{Kind: record.KindSmall}
+		                  ~
+!!! protectedfield: write to protected field Kind
+	}
+	
+	func copies(h *record.Header, s *record.Small, hs []record.Header) {
+		*h = *record.NewSmall(1)
+		~
+!!! protectedfield: by-value copy of testdata/protectedfield/record.Header, which contains a protected field
+		     ~
+!!! protectedfield: by-value copy of testdata/protectedfield/record.Header, which contains a protected field
+		small := *s
+		~
+!!! protectedfield: variable small holds testdata/protectedfield/record.Small by value, which contains a protected field
+		         ~
+!!! protectedfield: by-value copy of testdata/protectedfield/record.Small, which contains a protected field
+		var local record.Header
+		    ~
+!!! protectedfield: variable local holds testdata/protectedfield/record.Header by value, which contains a protected field
+		_ = record.Small{}
+		    ~
+!!! protectedfield: by-value copy of testdata/protectedfield/record.Small, which contains a protected field
+		_ = hs[0]
+		    ~
+!!! protectedfield: by-value copy of testdata/protectedfield/record.Header, which contains a protected field
+		_ = &hs[0]
+		_ = hs[0].Flags
+		_ = (*h).Flags
+		_ = &(*h)
+		_ = s.Header
+		    ~
+!!! protectedfield: by-value copy of testdata/protectedfield/record.Header, which contains a protected field
+		_ = &s.Header
+		for _, v := range hs {
+		       ~
+!!! protectedfield: variable v holds testdata/protectedfield/record.Header by value, which contains a protected field
+			_ = v
+		}
+		_, _ = small, local
+		_ = h.AsLarge()
+	}
+	
+	func param(h record.Header) {}
+	             ~
+!!! protectedfield: parameter holds testdata/protectedfield/record.Header by value, which contains a protected field
+	
+	func result() (h *record.Header) { return nil }
+	
+	func valueResult() record.Small { return record.Small{} }
+	                   ~
+!!! protectedfield: result holds testdata/protectedfield/record.Small by value, which contains a protected field
+	                                         ~
+!!! protectedfield: by-value copy of testdata/protectedfield/record.Small, which contains a protected field
+	
