@@ -74,15 +74,15 @@ func shadowedUpcast(c *Checker) {
 	c.newType(0, 0, data.AsType(), typeKindLiteral)
 }
 
-type typeMapperKind uint8
+type TypeMapperKind uint8
 
 const (
-	typeMapperSimple typeMapperKind = iota
-	typeMapperArray
+	TypeMapperKindSimple TypeMapperKind = iota
+	TypeMapperKindArray
 )
 
 type TypeMapper struct {
-	kind typeMapperKind
+	kind TypeMapperKind
 }
 
 type SimpleTypeMapper struct {
@@ -93,7 +93,7 @@ type ArrayTypeMapper struct {
 	TypeMapper
 }
 
-func castTypeMapper[T any](m *TypeMapper, kind typeMapperKind) *T {
+func castTypeMapper[T any](m *TypeMapper, kind TypeMapperKind) *T {
 	if m.kind != kind {
 		panic("Invalid type mapper cast")
 	}
@@ -101,11 +101,11 @@ func castTypeMapper[T any](m *TypeMapper, kind typeMapperKind) *T {
 }
 
 func mapperCalls(simple *SimpleTypeMapper, header *TypeMapper) {
-	simple.kind = typeMapperSimple
-	simple.kind = typeMapperArray
-	header.kind = typeMapperSimple
-	_ = castTypeMapper[SimpleTypeMapper](header, typeMapperSimple)
-	_ = castTypeMapper[SimpleTypeMapper](header, typeMapperArray)
+	simple.kind = TypeMapperKindSimple
+	simple.kind = TypeMapperKindArray
+	header.kind = TypeMapperKindSimple
+	_ = castTypeMapper[SimpleTypeMapper](header, TypeMapperKindSimple)
+	_ = castTypeMapper[SimpleTypeMapper](header, TypeMapperKindArray)
 	_ = (*SimpleTypeMapper)(unsafe.Pointer(header))
 }
 
@@ -128,7 +128,7 @@ func freshRecords(c *Checker) *Type {
 
 func freshMappers() (*TypeMapper, *TypeMapper) {
 	tagged := &SimpleTypeMapper{}
-	tagged.kind = typeMapperSimple
+	tagged.kind = TypeMapperKindSimple
 	untagged := &ArrayTypeMapper{}
 	return &tagged.TypeMapper, &untagged.TypeMapper
 }
@@ -149,14 +149,14 @@ func zeroValueRecords() (*LiteralType, *SimpleTypeMapper) {
 	var literals [2]LiteralType
 	_ = literals
 	var mappers [2]SimpleTypeMapper
-	mappers[0].kind = typeMapperSimple
+	mappers[0].kind = TypeMapperKindSimple
 	return &literal, &mappers[0]
 }
 
 func (m *SimpleTypeMapper) Map(t *Type) *Type { return t }
 
 func initSimpleTypeMapper(m *SimpleTypeMapper) *TypeMapper {
-	m.kind = typeMapperSimple
+	m.kind = TypeMapperKindSimple
 	return &m.TypeMapper
 }
 

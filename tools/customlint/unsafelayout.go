@@ -214,7 +214,7 @@ func layoutKind(typ types.Type) *types.Const {
 	case "Type":
 		name = "typeKind" + strings.TrimSuffix(named.Obj().Name(), "Type")
 	case "TypeMapper":
-		name = "typeMapper" + strings.TrimSuffix(named.Obj().Name(), "TypeMapper")
+		name = "TypeMapperKind" + strings.TrimSuffix(named.Obj().Name(), "TypeMapper")
 	default:
 		return nil
 	}
