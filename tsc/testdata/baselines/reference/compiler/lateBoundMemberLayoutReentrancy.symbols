@@ -30,11 +30,15 @@ declare const rI2: RI<"b">;
 
 export const v1 = rI2.a;
 >v1 : Symbol(v1, Decl(lateBoundMemberLayoutReentrancy.ts, 7, 12))
+>rI2.a : Symbol(RI[rI.x], Decl(lateBoundMemberLayoutReentrancy.ts, 3, 9))
 >rI2 : Symbol(rI2, Decl(lateBoundMemberLayoutReentrancy.ts, 6, 13))
+>a : Symbol(RI[rI.x], Decl(lateBoundMemberLayoutReentrancy.ts, 3, 9))
 
 export const v2 = rI.a;
 >v2 : Symbol(v2, Decl(lateBoundMemberLayoutReentrancy.ts, 8, 12))
+>rI.a : Symbol(RI[rI.x], Decl(lateBoundMemberLayoutReentrancy.ts, 3, 9))
 >rI : Symbol(rI, Decl(lateBoundMemberLayoutReentrancy.ts, 0, 13))
+>a : Symbol(RI[rI.x], Decl(lateBoundMemberLayoutReentrancy.ts, 3, 9))
 
 export type K2 = keyof RI<"b">;
 >K2 : Symbol(K2, Decl(lateBoundMemberLayoutReentrancy.ts, 8, 23))
@@ -79,9 +83,13 @@ declare const rC2: RC<"b">;
 
 export const w1 = rC2.a;
 >w1 : Symbol(w1, Decl(lateBoundMemberLayoutReentrancy.ts, 20, 12))
+>rC2.a : Symbol(RC[rC.x], Decl(lateBoundMemberLayoutReentrancy.ts, 16, 9))
 >rC2 : Symbol(rC2, Decl(lateBoundMemberLayoutReentrancy.ts, 19, 13))
+>a : Symbol(RC[rC.x], Decl(lateBoundMemberLayoutReentrancy.ts, 16, 9))
 
 export const w2 = rC.a;
 >w2 : Symbol(w2, Decl(lateBoundMemberLayoutReentrancy.ts, 21, 12))
+>rC.a : Symbol(RC[rC.x], Decl(lateBoundMemberLayoutReentrancy.ts, 16, 9))
 >rC : Symbol(rC, Decl(lateBoundMemberLayoutReentrancy.ts, 13, 13))
+>a : Symbol(RC[rC.x], Decl(lateBoundMemberLayoutReentrancy.ts, 16, 9))
 

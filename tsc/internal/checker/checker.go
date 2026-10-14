@@ -20399,6 +20399,11 @@ func (c *Checker) resolveDeclaredMembers(t *Type) *InterfaceType {
 	d := t.AsInterfaceType()
 	if !d.declaredMembersResolved {
 		members := c.getMembersOfSymbol(t.symbol)
+		if d.declaredMembersResolved {
+			// Late binding resolved the declared members again, before its late-bound members were
+			// known, so a member layout built since then is missing them.
+			d.memberLayout = nil
+		}
 		d.declaredMembersResolved = true
 		d.declaredMembers = members
 		d.declaredCallSignatures = c.getSignaturesOfSymbol(d.declaredMembers[ast.InternalSymbolNameCall])

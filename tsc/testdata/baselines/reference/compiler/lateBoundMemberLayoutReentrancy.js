@@ -42,11 +42,11 @@ interface RI<T extends "a" | "b"> {
     x: T;
     [rI.x]: "b";
 }
-export declare const v1: any;
-export declare const v2: any;
+export declare const v1: "b";
+export declare const v2: "b";
 export type K2 = keyof RI<"b">;
 export declare const k: K2;
 export declare const o: RI<"b">;
-export declare const w1: any;
-export declare const w2: any;
+export declare const w1: "b";
+export declare const w2: "b";
 export {};

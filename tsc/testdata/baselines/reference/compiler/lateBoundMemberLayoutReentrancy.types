@@ -23,30 +23,30 @@ declare const rI2: RI<"b">;
 >rI2 : RI<"b">
 
 export const v1 = rI2.a;
->v1 : any
->rI2.a : any
+>v1 : "b"
+>rI2.a : "b"
 >rI2 : RI<"b">
->a : any
+>a : "b"
 
 export const v2 = rI.a;
->v2 : any
->rI.a : any
+>v2 : "b"
+>rI.a : "b"
 >rI : RI<"a">
->a : any
+>a : "b"
 
 export type K2 = keyof RI<"b">;
->K2 : "x"
+>K2 : keyof RI<"b">
 
 export const k: K2 = "a";
->k : "x"
+>k : keyof RI<"b">
 >"a" : "a"
 
 export const o: RI<"b"> = { x: "b", a: "b" };
 >o : RI<"b">
->{ x: "b", a: "b" } : { x: "b"; a: string; }
+>{ x: "b", a: "b" } : { x: "b"; a: "b"; }
 >x : "b"
 >"b" : "b"
->a : string
+>a : "b"
 >"b" : "b"
 
 declare const rC: RC<"a">;
@@ -73,14 +73,14 @@ declare const rC2: RC<"b">;
 >rC2 : RC<"b">
 
 export const w1 = rC2.a;
->w1 : any
->rC2.a : any
+>w1 : "b"
+>rC2.a : "b"
 >rC2 : RC<"b">
->a : any
+>a : "b"
 
 export const w2 = rC.a;
->w2 : any
->rC.a : any
+>w2 : "b"
+>rC.a : "b"
 >rC : RC<"a">
->a : any
+>a : "b"
 
