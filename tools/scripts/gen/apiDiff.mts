@@ -18,7 +18,7 @@ const newApiEntryPoints = [
     "src/ast/clone.ts",
 ].map(file => path.join(newApiPackageDirectory, file));
 const outputPath = path.join(repoRoot, "tsc", "testdata", "apiDiff.txt");
-const typeMappings = new Map([
+const typeMappings = new Map<string, string | string[]>([
     ["TypeChecker", "Checker"],
     ["BuilderProgram", "Program"],
     ["Program", "Program"],
@@ -33,7 +33,7 @@ const typeMappings = new Map([
     ["Type", "Type"],
     ["Node", "Node"],
     ["NodeFactory", "ts"],
-    ["ts", "ts"],
+    ["ts", ["ts", "API"]],
 ]);
 
 const typescriptVersion = JSON.parse(
@@ -58,37 +58,42 @@ const report: string[] = [
     "# New API: public package entry points",
 ];
 
-const comparisons = [...typeMappings].map(([oldType, newType]) => {
+const comparisons = [...typeMappings].map(([oldType, newTypes]) => {
     const oldMethods = oldApiTypes.get(oldType)!;
-    const newMethods = newApiTypes.get(newType)!;
     const acceptedChanges = acceptedDiffs.get(oldType) ?? new Map<string, string>();
+    let missing: string[] = [...oldMethods.keys()];
     const present: string[] = [];
-    const missing: string[] = [];
-    for (const method of oldMethods) {
-        if (newMethods[0].has(method)) {
-            present.push(method);
-            newMethods[0].delete(method);
-            newMethods[1].add(method);
-        }
-        else if (newMethods[1].has(method)) {
-            present.push(method);
-        }
-        else if (acceptedChanges.has(method)) {
-            present.push(method);
-            const [newType, newMethodName] = acceptedChanges.get(method)!.split(".");
-            const actualNewType = newApiTypes.get(newType);
-            if (actualNewType) {
-                actualNewType[0].delete(newMethodName);
-                actualNewType[1].add(method);
+    const newTypeArray = Array.isArray(newTypes) ? newTypes : [newTypes];
+    for (const newType of newTypeArray) {
+        const currMissing: string[] = [];
+        const newMethods = newApiTypes.get(newType)!;
+        for (const method of missing) {
+            if (newMethods[0].has(method)) {
+                present.push(method);
+                newMethods[0].delete(method);
+                newMethods[1].add(method);
+            }
+            else if (newMethods[1].has(method)) {
+                present.push(method);
+            }
+            else if (acceptedChanges.has(method)) {
+                present.push(method);
+                const [newType, newMethodName] = acceptedChanges.get(method)!.split(".");
+                const actualNewType = newApiTypes.get(newType);
+                if (actualNewType) {
+                    actualNewType[0].delete(newMethodName);
+                    actualNewType[1].add(method);
+                }
+            }
+            else {
+                currMissing.push(method);
             }
         }
-        else {
-            missing.push(method);
-        }
+        missing = currMissing;
     }
     return {
         oldType,
-        newType,
+        newTypes,
         present: present.sort(),
         missing: missing.sort(),
     };
@@ -105,7 +110,8 @@ report.push(
 );
 
 for (const comparison of comparisons) {
-    const { oldType, newType, present, missing } = comparison;
+    const { oldType, newTypes, present, missing } = comparison;
+    const newType = Array.isArray(newTypes) ? newTypes.join(", ") : newTypes;
     report.push(
         "",
         `# ${oldType} (old) methods compared to ${newType} (new).`,
@@ -116,6 +122,8 @@ for (const comparison of comparisons) {
         "",
     );
 }
+
+report.push("\n\n # New Methods in async API (temporarily reported for increased ease of matching)");
 
 for (const [newType, newMethods] of newApiTypes) {
     report.push(

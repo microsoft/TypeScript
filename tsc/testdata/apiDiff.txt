@@ -454,10 +454,10 @@ updatePropertySignature
 updateTemplateLiteralType
 
 
-# ts (old) methods compared to ts (new).
-## (275) ts methods matched in async ts  ##
+# ts (old) methods compared to ts, API (new).
+## (278) ts methods matched in async ts, API  ##
 
-## ts methods missing from async ts (213) ##
+## ts methods missing from async ts, API (210) ##
 addEmitHelper
 addEmitHelpers
 addSyntheticLeadingComment
@@ -482,7 +482,6 @@ createLanguageService
 createLanguageServiceSourceFile
 createModuleResolutionCache
 createPrinter
-createProgram
 createSemanticDiagnosticsBuilderProgram
 createSolutionBuilder
 createSolutionBuilderHost
@@ -661,8 +660,6 @@ textSpanOverlapsWith
 toEditorSettings
 transform
 transpile
-transpileDeclaration
-transpileModule
 updateLanguageServiceSourceFile
 validateLocaleAndSetLanguage
 visitCommaListElements
@@ -672,6 +669,9 @@ visitLexicalEnvironment
 visitParameterList
 walkUpBindingElementsAndPatterns
 
+
+
+ # New Methods in async API (temporarily reported for increased ease of matching)
 ## New ConditionalType methods in async API (4) ##
 getCheckType
 getExtendsType
@@ -758,7 +758,7 @@ getTarget
 ## New UnionOrIntersectionType methods in async API (1) ##
 getTypes
 
-## New API methods in async API (23) ##
+## New API methods in async API (20) ##
 getSymbol
 fromLSPConnection
 batchContext
@@ -769,9 +769,7 @@ createBuildOrchestrator
 createSourceFile
 createSourceFileFromFile
 retainSourceFile
-transpileModule
 transpileModuleFromFile
-transpileDeclaration
 transpileDeclarationFromFile
 createSnapshot
 getCurrentLanguageServerSnapshot
@@ -781,7 +779,6 @@ clearSourceFileCache
 runWithTemporaryFileUpdate
 getTimingInfo
 resetTimingInfo
-createProgram
 
 ## New RetainedSourceFile methods in async API (1) ##
 dispose
