@@ -21166,7 +21166,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 		}
 	}
 	if indexInfos != nil || d.extra != nil {
-		d.ensureExtra(c).indexInfos = indexInfos
+		d.ensureExtra().indexInfos = indexInfos
 	}
 	// We resolve the members before computing the signatures because a signature may use
 	// typeof with a qualified name expression that circularly references the type we are
@@ -21175,7 +21175,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	if symbol.Flags()&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0 {
 		signatures := c.getSignaturesOfSymbol(symbol)
 		if signatures != nil || d.extra != nil {
-			extra := d.ensureExtra(c)
+			extra := d.ensureExtra()
 			extra.signatures = signatures
 			extra.callSignatureCount = len(signatures)
 		}
@@ -21188,7 +21188,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 			constructSignatures = c.getDefaultConstructSignatures(classType)
 		}
 		if len(constructSignatures) != 0 {
-			extra := d.ensureExtra(c)
+			extra := d.ensureExtra()
 			extra.signatures = append(extra.signatures, constructSignatures...)
 		}
 	}
@@ -25756,7 +25756,7 @@ func (c *Checker) setStructuredTypeSignatures(data *StructuredType, callSignatur
 	if data.extra == nil && callSignatures == nil && constructSignatures == nil && indexInfos == nil {
 		return
 	}
-	extra := data.ensureExtra(c)
+	extra := data.ensureExtra()
 	if len(callSignatures) != 0 {
 		if len(constructSignatures) != 0 {
 			extra.signatures = core.Concatenate(callSignatures, constructSignatures)

@@ -1139,9 +1139,9 @@ func (t *StructuredType) getIndexInfos() []*IndexInfo {
 	return t.extra.indexInfos
 }
 
-func (t *StructuredType) ensureExtra(c *Checker) *structuredTypeExtra {
+func (t *StructuredType) ensureExtra() *structuredTypeExtra {
 	if t.extra == nil {
-		t.extra = c.structuredTypeExtraArena.New()
+		t.extra = t.checker.structuredTypeExtraArena.New()
 	}
 	return t.extra
 }
