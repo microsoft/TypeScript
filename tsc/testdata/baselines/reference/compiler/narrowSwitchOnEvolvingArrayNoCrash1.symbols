@@ -1,38 +1,84 @@
 //// [tests/cases/compiler/narrowSwitchOnEvolvingArrayNoCrash1.ts] ////
 
 === narrowSwitchOnEvolvingArrayNoCrash1.ts ===
-const a = [];
->a : Symbol(a, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 0, 5))
+function f1() {
+>f1 : Symbol(f1, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 0, 0))
 
-while (true) switch (a) { case 0: }
->a : Symbol(a, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 0, 5))
+  const a = [];
+>a : Symbol(a, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 1, 7))
 
-const b = [];
->b : Symbol(b, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 3, 5))
-
-switch (b) {
->b : Symbol(b, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 3, 5))
-
-  case 0:
-    b;
->b : Symbol(b, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 3, 5))
+  while (true) switch (a) { case 0: }
+>a : Symbol(a, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 1, 7))
 }
 
-let c = [];
->c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 9, 3))
+function f2() {
+>f2 : Symbol(f2, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 3, 1))
 
-switch (typeof c) {
->c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 9, 3))
+  const b = [];
+>b : Symbol(b, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 6, 7))
 
-  case "object": {
-    c.push("x");
+  switch (b) {
+>b : Symbol(b, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 6, 7))
+
+    case 0:
+      b;
+>b : Symbol(b, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 6, 7))
+  }
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 11, 1))
+
+  const b = [];
+>b : Symbol(b, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 14, 7))
+
+  if (b === 0) {
+>b : Symbol(b, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 14, 7))
+
+    b;
+>b : Symbol(b, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 14, 7))
+  }
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 18, 1))
+
+  let c = [];
+>c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 21, 5))
+
+  switch (typeof c) {
+>c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 21, 5))
+
+    case "object": {
+      c.push("x");
 >c.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 9, 3))
+>c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 21, 5))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
-    const arr: string[] = c;
->arr : Symbol(arr, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 13, 9))
->c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 9, 3))
+      const arr: number[] = c;
+>arr : Symbol(arr, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 25, 11))
+>c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 21, 5))
+    }
+  }
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 28, 1))
+
+  let c = [];
+>c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 31, 5))
+
+  if (typeof c === "object") {
+>c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 31, 5))
+
+    c.push("x");
+>c.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 31, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    const arr: number[] = c;
+>arr : Symbol(arr, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 34, 9))
+>c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 31, 5))
   }
 }
 

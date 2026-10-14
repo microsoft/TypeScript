@@ -2,19 +2,40 @@
 // @strict: true
 // @noEmit: true
 
-const a = [];
-while (true) switch (a) { case 0: }
-
-const b = [];
-switch (b) {
-  case 0:
-    b;
+function f1() {
+  const a = [];
+  while (true) switch (a) { case 0: }
 }
 
-let c = [];
-switch (typeof c) {
-  case "object": {
+function f2() {
+  const b = [];
+  switch (b) {
+    case 0:
+      b;
+  }
+}
+
+function f3() {
+  const b = [];
+  if (b === 0) {
+    b;
+  }
+}
+
+function f4() {
+  let c = [];
+  switch (typeof c) {
+    case "object": {
+      c.push("x");
+      const arr: number[] = c;
+    }
+  }
+}
+
+function f5() {
+  let c = [];
+  if (typeof c === "object") {
     c.push("x");
-    const arr: string[] = c;
+    const arr: number[] = c;
   }
 }
