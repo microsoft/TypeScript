@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/skippedImplicitHandlerParameters.ts] ////
+
+=== handlers.d.ts ===
+interface FilterHandlers {
+>FilterHandlers : Symbol(FilterHandlers, Decl(handlers.d.ts, 0, 0))
+
+    update: (value: object) => void;
+>update : Symbol(FilterHandlers.update, Decl(handlers.d.ts, 0, 26))
+>value : Symbol(value, Decl(handlers.d.ts, 1, 13))
+
+    remove: (value: string) => void;
+>remove : Symbol(FilterHandlers.remove, Decl(handlers.d.ts, 1, 36))
+>value : Symbol(value, Decl(handlers.d.ts, 2, 13))
+}
+interface ServerHandlers {
+>ServerHandlers : Symbol(ServerHandlers, Decl(handlers.d.ts, 3, 1))
+
+    save: (value) => "saved";
+>save : Symbol(ServerHandlers.save, Decl(handlers.d.ts, 4, 26))
+>value : Symbol(value, Decl(handlers.d.ts, 5, 11))
+}
+interface Handlers extends ServerHandlers, FilterHandlers {}
+>Handlers : Symbol(Handlers, Decl(handlers.d.ts, 6, 1))
+>ServerHandlers : Symbol(ServerHandlers, Decl(handlers.d.ts, 3, 1))
+>FilterHandlers : Symbol(FilterHandlers, Decl(handlers.d.ts, 0, 0))
+
+=== main.ts ===
+function runHandler<T extends Handlers[keyof Handlers]>(handler: T, value: Parameters<T>[0]) {
+>runHandler : Symbol(runHandler, Decl(main.ts, 0, 0))
+>T : Symbol(T, Decl(main.ts, 0, 20))
+>Handlers : Symbol(Handlers, Decl(handlers.d.ts, 6, 1))
+>Handlers : Symbol(Handlers, Decl(handlers.d.ts, 6, 1))
+>handler : Symbol(handler, Decl(main.ts, 0, 56))
+>T : Symbol(T, Decl(main.ts, 0, 20))
+>value : Symbol(value, Decl(main.ts, 0, 67))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(main.ts, 0, 20))
+
+    handler(value);
+>handler : Symbol(handler, Decl(main.ts, 0, 56))
+>value : Symbol(value, Decl(main.ts, 0, 67))
+}
+
