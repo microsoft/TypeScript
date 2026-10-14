@@ -72,16 +72,16 @@ type Statistics struct {
 
 func statisticsFromProgram(input EmitInput, memStats *runtime.MemStats) *Statistics {
 	return &Statistics{
-		files:          len(input.Program.SourceFiles()),
-		lines:          input.Program.LineCount(),
-		identifiers:    input.Program.IdentifierCount(),
-		symbols:        input.Program.SymbolCount(),
-		types:          input.Program.TypeCount(),
-		instantiations: input.Program.InstantiationCount(),
+		files:           len(input.Program.SourceFiles()),
+		lines:           input.Program.LineCount(),
+		identifiers:     input.Program.IdentifierCount(),
+		symbols:         input.Program.SymbolCount(),
+		types:           input.Program.TypeCount(),
+		instantiations:  input.Program.InstantiationCount(),
 		retiredCheckers: input.Program.RetiredCheckerCount(),
-		memoryUsed:     memStats.Alloc,
-		memoryAllocs:   memStats.Mallocs,
-		compileTimes:   input.CompileTimes,
+		memoryUsed:      memStats.Alloc,
+		memoryAllocs:    memStats.Mallocs,
+		compileTimes:    input.CompileTimes,
 	}
 }
 

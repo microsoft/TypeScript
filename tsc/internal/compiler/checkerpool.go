@@ -346,8 +346,7 @@ func newCheckerPoolWithTracing(program *Program, tr *tracing.Tracing) *checkerPo
 		!options.GetEmitDeclarations() &&
 		!options.IsIncremental() &&
 		options.GenerateTrace == "" &&
-		options.Watch.IsFalseOrUnknown() &&
-		options.Build.IsFalseOrUnknown() {
+		options.Watch.IsFalseOrUnknown() {
 		pool.maxMemoryBytes = uint64(*maxMemory) * 1024 * 1024
 	}
 
