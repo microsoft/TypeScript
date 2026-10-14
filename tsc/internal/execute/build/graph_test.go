@@ -2,15 +2,19 @@ package build_test
 
 import (
 	"fmt"
+	"io"
 	"slices"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsctests"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"gotest.tools/v3/assert"
 )
 
@@ -30,6 +34,123 @@ func TestBuildOrderGenerator(t *testing.T) {
 	for _, testcase := range testCases {
 		testcase.run(t)
 	}
+}
+
+func TestBuildScheduling(t *testing.T) {
+	t.Parallel()
+	for _, operation := range []struct {
+		name     string
+		project  string
+		refsOnly bool
+		order    []string
+	}{
+		{"full build", "", false, []string{"Leaf", "Middle", "Independent", "Root", "Other"}},
+		{"selected project", "Root", false, []string{"Leaf", "Middle", "Independent", "Root"}},
+		{"selected references", "Root", true, []string{"Leaf", "Middle", "Independent"}},
+	} {
+		t.Run(operation.name, func(t *testing.T) {
+			t.Parallel()
+			sys := newSchedulingTestSystem()
+			independentStarted := make(chan struct{})
+			sys.fs.onRead = func(path tspath.RootedFilePath) {
+				if path.BaseName() != "index.ts" {
+					return
+				}
+				switch path.Directory().BaseName() {
+				case "Leaf":
+					// Independent must start while Leaf is still occupying a builder.
+					select {
+					case <-independentStarted:
+						return
+					case <-time.After(30 * time.Second):
+						t.Error("Independent was queued behind a builder waiting on Leaf")
+					}
+				case "Independent":
+					close(independentStarted)
+				}
+			}
+			command := tsoptions.ParseBuildCommandLine([]string{"--build", "--verbose", "--builders", "2", "Root", "Other"}, sys.FS(), sys.GetCurrentDirectory())
+			orchestrator := build.NewOrchestrator(build.Options{Sys: sys, Command: command})
+			var result *build.OrchestratorResult
+			if operation.refsOnly {
+				result = orchestrator.BuildReferences(t.Context(), operation.project)
+			} else {
+				result = orchestrator.Build(t.Context(), operation.project)
+			}
+			assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
+			assert.Equal(t, result.Statistics.Projects, len(operation.order))
+			assert.Equal(t, result.Statistics.ProjectsBuilt, len(operation.order))
+			reported := []string{}
+			for line := range strings.SplitSeq(sys.output.String(), "\n") {
+				if strings.Contains(line, "Building project") {
+					for _, project := range operation.order {
+						if strings.Contains(line, "'"+project+"/tsconfig.json'") {
+							reported = append(reported, project)
+						}
+					}
+				}
+			}
+			assert.DeepEqual(t, reported, operation.order)
+			for _, project := range []string{"Leaf", "Middle", "Independent", "Root", "Other"} {
+				assert.Equal(t, sys.FS().FileExists(sys.GetCurrentDirectory().ResolveFile(project+"/dist/index.js")), slices.Contains(operation.order, project))
+			}
+		})
+	}
+}
+
+type schedulingTestFS struct {
+	vfs.FS
+	onRead func(tspath.RootedFilePath)
+}
+
+func (f *schedulingTestFS) ReadFile(path tspath.RootedFilePath) (string, bool) {
+	f.onRead(path)
+	return f.FS.ReadFile(path)
+}
+
+type schedulingTestSystem struct {
+	*tsctests.TestSys
+	fs     *schedulingTestFS
+	output strings.Builder
+}
+
+func (s *schedulingTestSystem) FS() vfs.FS        { return s.fs }
+func (s *schedulingTestSystem) Writer() io.Writer { return &s.output }
+
+func newSchedulingTestSystem() *schedulingTestSystem {
+	files := tsctests.FileMap{
+		"/project/lib.d.ts": `
+interface Array<T> {}
+interface Boolean {}
+interface CallableFunction {}
+interface Function {}
+interface IArguments {}
+interface NewableFunction {}
+interface Number {}
+interface Object {}
+interface RegExp {}
+interface String {}
+`,
+	}
+	deps := map[string][]string{
+		"Root":        {"Middle", "Independent"},
+		"Middle":      {"Leaf"},
+		"Leaf":        {},
+		"Independent": {},
+		"Other":       {},
+	}
+	for project, references := range deps {
+		files["/project/"+project+"/index.ts"] = "export const value = 1;"
+		files["/project/"+project+"/tsconfig.json"] = fmt.Sprintf(`{
+			"compilerOptions": { "composite": true, "noLib": true, "outDir": "dist" },
+			"files": ["../lib.d.ts", "index.ts"],
+			"references": [%s]
+		}`, strings.Join(core.Map(references, func(ref string) string {
+			return fmt.Sprintf(`{ "path": "../%s" }`, ref)
+		}), ","))
+	}
+	sys := tsctests.NewTscSystem(files, tspath.CaseSensitive, "/project")
+	return &schedulingTestSystem{TestSys: sys, fs: &schedulingTestFS{FS: sys.FS()}}
 }
 
 type buildOrderTestCase struct {

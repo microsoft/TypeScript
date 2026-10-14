@@ -1,0 +1,40 @@
+//// [tests/cases/conformance/jsdoc/extendsTag7.ts] ////
+
+=== a.js ===
+/** @template T */
+class A {
+>A : A<T>
+
+    /** @returns {T} */
+    get value() {
+>value : T
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+
+    /** @returns {typeof A} */
+    static extend() {
+>extend : () => typeof A
+
+        return this;
+>this : typeof A
+    }
+}
+
+/** @extends {A<string>} */
+class B extends A.extend() {}
+>B : B
+>A.extend() : A<string>
+>A.extend : () => typeof A
+>A : typeof A
+>extend : () => typeof A
+
+const value = new B().value;
+>value : string
+>new B().value : string
+>new B() : B
+>B : typeof B
+>value : string
+
