@@ -43,6 +43,7 @@
   "A_default_clause_cannot_appear_more_than_once_in_a_switch_statement_1113": "Uma cláusula 'default' não pode aparecer mais de uma vez em uma instrução 'switch'.",
   "A_default_export_can_only_be_used_in_an_ECMAScript_style_module_1319": "Uma exportação padrão só pode ser usada em um módulo do estilo ECMAScript.",
   "A_default_export_must_be_at_the_top_level_of_a_file_or_module_declaration_1258": "Uma exportação padrão deve estar no nível superior de uma declaração de arquivo ou módulo.",
+  "A_deferred_import_must_specify_a_namespace_binding_18117": "Uma importação adiada precisa especificar uma associação de namespace.",
   "A_definite_assignment_assertion_is_not_permitted_in_this_context_1255": "Uma declaração de atribuição definitiva '!' não é permitida neste contexto.",
   "A_destructuring_declaration_must_have_an_initializer_1182": "Uma declaração de desestruturação deve ter um inicializador.",
   "A_dynamic_import_call_in_ES5_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_t_2712": "Uma chamada de importação dinâmica no ES5 requer o construtor 'Promise'.  Verifique se você tem uma declaração para o construtor 'Promise' ou inclua 'ES2015' na sua opção '--lib'.",

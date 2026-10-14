@@ -43,6 +43,7 @@
   "A_default_clause_cannot_appear_more_than_once_in_a_switch_statement_1113": "'default' yan tümcesi, 'switch' deyiminde birden fazla kez bulunamaz.",
   "A_default_export_can_only_be_used_in_an_ECMAScript_style_module_1319": "Varsayılan dışarı aktarma, yalnızca ECMAScript stili bir modülde kullanılabilir.",
   "A_default_export_must_be_at_the_top_level_of_a_file_or_module_declaration_1258": "Varsayılan dışarı aktarma, bir dosyanın veya modül bildiriminin en üst düzeyinde olmalıdır.",
+  "A_deferred_import_must_specify_a_namespace_binding_18117": "Gecikmeli bir içeri aktarma, bir ad alanı bağlaması belirtmelidir.",
   "A_definite_assignment_assertion_is_not_permitted_in_this_context_1255": "Bu bağlamda '!' belirli atama onayına izin verilmez.",
   "A_destructuring_declaration_must_have_an_initializer_1182": "Yok etme bildiriminin bir başlatıcısı olmalıdır.",
   "A_dynamic_import_call_in_ES5_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_t_2712": "ES5'teki dinamik içe aktarma çağrısı 'Promise' oluşturucusu gerektirir.  'Promise' oluşturucusu için bir bildiriminiz olduğundan emin olun veya '--lib' seçeneğinize 'ES2015' ekleyin.",
