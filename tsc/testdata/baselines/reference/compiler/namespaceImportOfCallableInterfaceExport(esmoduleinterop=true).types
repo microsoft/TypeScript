@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/namespaceImportOfCallableInterfaceExport.ts] ////
+
+=== mod.d.ts ===
+interface Base<T> {
+    value: T;
+>value : T
+}
+interface Callable extends Base<string> {
+    (): void;
+    __esModule: true;
+>__esModule : true
+>true : true
+
+    other: number;
+>other : number
+}
+declare const callable: Callable;
+>callable : Callable
+
+export = callable;
+>callable : Callable
+
+=== main.ts ===
+import * as ns from "./mod";
+>ns : {}
+
+const value: string = ns.value;
+>value : string
+>ns.value : any
+>ns : {}
+>value : any
+
+const other: number = ns.other;
+>other : number
+>ns.other : any
+>ns : {}
+>other : any
+

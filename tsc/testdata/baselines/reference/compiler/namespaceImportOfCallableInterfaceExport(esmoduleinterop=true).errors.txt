@@ -1,0 +1,25 @@
+main.ts(2,26): error TS2339: Property 'value' does not exist on type '{}'.
+main.ts(3,26): error TS2339: Property 'other' does not exist on type '{}'.
+
+
+==== mod.d.ts (0 errors) ====
+    interface Base<T> {
+        value: T;
+    }
+    interface Callable extends Base<string> {
+        (): void;
+        __esModule: true;
+        other: number;
+    }
+    declare const callable: Callable;
+    export = callable;
+    
+==== main.ts (2 errors) ====
+    import * as ns from "./mod";
+    const value: string = ns.value;
+                             ~~~~~
+!!! error TS2339: Property 'value' does not exist on type '{}'.
+    const other: number = ns.other;
+                             ~~~~~
+!!! error TS2339: Property 'other' does not exist on type '{}'.
+    
