@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/numericCompoundAssignmentInWhileLoopAfterExcludedZero.ts] ////
+
+=== numericCompoundAssignmentInWhileLoopAfterExcludedZero.ts ===
+function rewind(index: number) {
+>rewind : (index: number) => void
+>index : number
+
+    while (index !== 0) {
+>index !== 0 : boolean
+>index : number
+>0 : 0
+
+        index -= 1;
+>index -= 1 : number
+>index : number
+>1 : 1
+    }
+}
+
