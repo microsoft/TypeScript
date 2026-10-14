@@ -1,0 +1,146 @@
+//// [tests/cases/compiler/lazyInheritedMemberLookup.ts] ////
+
+=== lazyInheritedMemberLookup.ts ===
+// Inherited members are looked up individually before the members of each type are enumerated.
+
+interface Grand<T> {
+>Grand : Symbol(Grand, Decl(lazyInheritedMemberLookup.ts, 0, 0))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 2, 16))
+
+    grand: T;
+>grand : Symbol(Grand.grand, Decl(lazyInheritedMemberLookup.ts, 2, 20))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 2, 16))
+
+    shared: T;
+>shared : Symbol(Grand.shared, Decl(lazyInheritedMemberLookup.ts, 3, 13))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 2, 16))
+}
+type Mixin<T> = { mixin: T };
+>Mixin : Symbol(Mixin, Decl(lazyInheritedMemberLookup.ts, 5, 1))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 6, 11))
+>mixin : Symbol(mixin, Decl(lazyInheritedMemberLookup.ts, 6, 17))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 6, 11))
+
+type Fixed = { fixed: string };
+>Fixed : Symbol(Fixed, Decl(lazyInheritedMemberLookup.ts, 6, 29))
+>fixed : Symbol(fixed, Decl(lazyInheritedMemberLookup.ts, 7, 14))
+
+interface Base<T> extends Grand<T[]> {
+>Base : Symbol(Base, Decl(lazyInheritedMemberLookup.ts, 7, 31))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 8, 15))
+>Grand : Symbol(Grand, Decl(lazyInheritedMemberLookup.ts, 0, 0))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 8, 15))
+
+    base: T;
+>base : Symbol(Base.base, Decl(lazyInheritedMemberLookup.ts, 8, 38))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 8, 15))
+}
+interface Derived<T> extends Base<T>, Mixin<T>, Fixed {
+>Derived : Symbol(Derived, Decl(lazyInheritedMemberLookup.ts, 10, 1))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 11, 18))
+>Base : Symbol(Base, Decl(lazyInheritedMemberLookup.ts, 7, 31))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 11, 18))
+>Mixin : Symbol(Mixin, Decl(lazyInheritedMemberLookup.ts, 5, 1))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 11, 18))
+>Fixed : Symbol(Fixed, Decl(lazyInheritedMemberLookup.ts, 6, 29))
+
+    shared: T[];
+>shared : Symbol(Derived.shared, Decl(lazyInheritedMemberLookup.ts, 11, 55))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 11, 18))
+
+    derived: T;
+>derived : Symbol(Derived.derived, Decl(lazyInheritedMemberLookup.ts, 12, 16))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 11, 18))
+}
+class C<T> {
+>C : Symbol(C, Decl(lazyInheritedMemberLookup.ts, 14, 1))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 15, 8))
+
+    declared!: T;
+>declared : Symbol(C.declared, Decl(lazyInheritedMemberLookup.ts, 15, 12))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 15, 8))
+}
+class D<T> extends C<T[]> implements Derived<T> {
+>D : Symbol(D, Decl(lazyInheritedMemberLookup.ts, 17, 1))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 18, 8))
+>C : Symbol(C, Decl(lazyInheritedMemberLookup.ts, 14, 1))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 18, 8))
+>Derived : Symbol(Derived, Decl(lazyInheritedMemberLookup.ts, 10, 1))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 18, 8))
+
+    grand!: T[];
+>grand : Symbol(D.grand, Decl(lazyInheritedMemberLookup.ts, 18, 49))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 18, 8))
+
+    shared!: T[];
+>shared : Symbol(D.shared, Decl(lazyInheritedMemberLookup.ts, 19, 16))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 18, 8))
+
+    mixin!: T;
+>mixin : Symbol(D.mixin, Decl(lazyInheritedMemberLookup.ts, 20, 17))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 18, 8))
+
+    fixed!: string;
+>fixed : Symbol(D.fixed, Decl(lazyInheritedMemberLookup.ts, 21, 14))
+
+    base!: T;
+>base : Symbol(D.base, Decl(lazyInheritedMemberLookup.ts, 22, 19))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 18, 8))
+
+    derived!: T;
+>derived : Symbol(D.derived, Decl(lazyInheritedMemberLookup.ts, 23, 13))
+>T : Symbol(T, Decl(lazyInheritedMemberLookup.ts, 18, 8))
+}
+
+declare const d: Derived<number>;
+>d : Symbol(d, Decl(lazyInheritedMemberLookup.ts, 27, 13))
+>Derived : Symbol(Derived, Decl(lazyInheritedMemberLookup.ts, 10, 1))
+
+const grand = d.grand;
+>grand : Symbol(grand, Decl(lazyInheritedMemberLookup.ts, 28, 5))
+>d.grand : Symbol(Grand.grand, Decl(lazyInheritedMemberLookup.ts, 2, 20))
+>d : Symbol(d, Decl(lazyInheritedMemberLookup.ts, 27, 13))
+>grand : Symbol(Grand.grand, Decl(lazyInheritedMemberLookup.ts, 2, 20))
+
+const mixin = d.mixin;
+>mixin : Symbol(mixin, Decl(lazyInheritedMemberLookup.ts, 29, 5))
+>d.mixin : Symbol(mixin, Decl(lazyInheritedMemberLookup.ts, 6, 17))
+>d : Symbol(d, Decl(lazyInheritedMemberLookup.ts, 27, 13))
+>mixin : Symbol(mixin, Decl(lazyInheritedMemberLookup.ts, 6, 17))
+
+const fixed = d.fixed;
+>fixed : Symbol(fixed, Decl(lazyInheritedMemberLookup.ts, 30, 5))
+>d.fixed : Symbol(fixed, Decl(lazyInheritedMemberLookup.ts, 7, 14))
+>d : Symbol(d, Decl(lazyInheritedMemberLookup.ts, 27, 13))
+>fixed : Symbol(fixed, Decl(lazyInheritedMemberLookup.ts, 7, 14))
+
+const shared = d.shared;
+>shared : Symbol(shared, Decl(lazyInheritedMemberLookup.ts, 31, 5))
+>d.shared : Symbol(Derived.shared, Decl(lazyInheritedMemberLookup.ts, 11, 55))
+>d : Symbol(d, Decl(lazyInheritedMemberLookup.ts, 27, 13))
+>shared : Symbol(Derived.shared, Decl(lazyInheritedMemberLookup.ts, 11, 55))
+
+const all = { ...d };
+>all : Symbol(all, Decl(lazyInheritedMemberLookup.ts, 32, 5))
+>d : Symbol(d, Decl(lazyInheritedMemberLookup.ts, 27, 13))
+
+declare const keys: { [K in keyof Derived<boolean>]: K };
+>keys : Symbol(keys, Decl(lazyInheritedMemberLookup.ts, 33, 13))
+>K : Symbol(K, Decl(lazyInheritedMemberLookup.ts, 33, 23))
+>Derived : Symbol(Derived, Decl(lazyInheritedMemberLookup.ts, 10, 1))
+>K : Symbol(K, Decl(lazyInheritedMemberLookup.ts, 33, 23))
+
+declare const e: D<string>;
+>e : Symbol(e, Decl(lazyInheritedMemberLookup.ts, 35, 13))
+>D : Symbol(D, Decl(lazyInheritedMemberLookup.ts, 17, 1))
+
+const declared = e.declared;
+>declared : Symbol(declared, Decl(lazyInheritedMemberLookup.ts, 36, 5))
+>e.declared : Symbol(C.declared, Decl(lazyInheritedMemberLookup.ts, 15, 12))
+>e : Symbol(e, Decl(lazyInheritedMemberLookup.ts, 35, 13))
+>declared : Symbol(C.declared, Decl(lazyInheritedMemberLookup.ts, 15, 12))
+
+const allE = { ...e };
+>allE : Symbol(allE, Decl(lazyInheritedMemberLookup.ts, 37, 5))
+>e : Symbol(e, Decl(lazyInheritedMemberLookup.ts, 35, 13))
+
