@@ -288,15 +288,15 @@ func TestTypeMapperDispatch(t *testing.T) {
 		{simple, TypeMapperKindSimple, target},
 		{array, TypeMapperKindArray, target},
 		{merged, TypeMapperKindMerged, target},
-		{newArrayToSingleTypeMapper([]*Type{source}, target), TypeMapperKindUnknown, target},
-		{newDeferredTypeMapper([]*Type{source}, []func() *Type{func() *Type { return target }}), TypeMapperKindUnknown, target},
+		{newArrayToSingleTypeMapper([]*Type{source}, target), TypeMapperKindArrayToSingle, target},
+		{newDeferredTypeMapper([]*Type{source}, []func() *Type{func() *Type { return target }}), TypeMapperKindDeferred, target},
 		{newFunctionTypeMapper(func(typ *Type) *Type {
 			if typ == source {
 				return target
 			}
 			return typ
-		}), TypeMapperKindUnknown, target},
-		{newCompositeTypeMapper(c, newSimpleTypeMapper(other, target), simple), TypeMapperKindUnknown, target},
+		}), TypeMapperKindFunction, target},
+		{newCompositeTypeMapper(c, newSimpleTypeMapper(other, target), simple), TypeMapperKindComposite, target},
 	} {
 		assert.Equal(t, test.mapper.Kind(), test.kind)
 		assert.Equal(t, test.mapper.Map(source), test.result)
@@ -325,10 +325,10 @@ func TestCompactTypeMapperLayout(t *testing.T) {
 	assert.Assert(t, unsafe.Sizeof(MergedTypeMapper{}) <= 3*unsafe.Sizeof(uintptr(0)))
 	c, types := newCompositeTestChecker()
 	mapper := newSimpleTypeMapper(types[0], types[1])
-	assert.Assert(t, castTypeMapper[SimpleTypeMapper](mapper, typeMapperSimple).source == types[0])
+	assert.Assert(t, castTypeMapper[SimpleTypeMapper](mapper, TypeMapperKindSimple).source == types[0])
 	func() {
 		defer func() { assert.Assert(t, recover() != nil) }()
-		castTypeMapper[ArrayTypeMapper](mapper, typeMapperArray)
+		castTypeMapper[ArrayTypeMapper](mapper, TypeMapperKindArray)
 	}()
 	runtime.GC()
 	assert.Equal(t, mapper.Map(types[0]), types[1])

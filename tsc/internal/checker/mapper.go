@@ -7,38 +7,28 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
-// TypeMapperKind
+// TypeMapper
 
-type TypeMapperKind int32
+type TypeMapper struct {
+	kind TypeMapperKind
+}
+
+type TypeMapperKind uint8
 
 const (
 	TypeMapperKindUnknown TypeMapperKind = iota
 	TypeMapperKindSimple
 	TypeMapperKindArray
+	TypeMapperKindArrayToSingle
+	TypeMapperKindDeferred
+	TypeMapperKindFunction
 	TypeMapperKindMerged
-)
-
-// TypeMapper
-
-type TypeMapper struct {
-	kind typeMapperKind
-}
-
-type typeMapperKind uint8
-
-const (
-	typeMapperSimple typeMapperKind = iota + 1
-	typeMapperArray
-	typeMapperArrayToSingle
-	typeMapperDeferred
-	typeMapperFunction
-	typeMapperMerged
-	typeMapperComposite
-	typeMapperInference
+	TypeMapperKindComposite
+	TypeMapperKindInference
 )
 
 // Each concrete mapper embeds the immutable kind header at offset zero.
-func castTypeMapper[T any](m *TypeMapper, kind typeMapperKind) *T {
+func castTypeMapper[T any](m *TypeMapper, kind TypeMapperKind) *T {
 	if m.kind != kind {
 		panic("Incorrect type mapper kind")
 	}
@@ -59,50 +49,39 @@ var (
 
 func (m *TypeMapper) Map(t *Type) *Type {
 	switch m.kind {
-	case typeMapperSimple:
-		return castTypeMapper[SimpleTypeMapper](m, typeMapperSimple).Map(t)
-	case typeMapperArray:
-		return castTypeMapper[ArrayTypeMapper](m, typeMapperArray).Map(t)
-	case typeMapperArrayToSingle:
-		return castTypeMapper[ArrayToSingleTypeMapper](m, typeMapperArrayToSingle).Map(t)
-	case typeMapperDeferred:
-		return castTypeMapper[DeferredTypeMapper](m, typeMapperDeferred).Map(t)
-	case typeMapperFunction:
-		return castTypeMapper[FunctionTypeMapper](m, typeMapperFunction).Map(t)
-	case typeMapperMerged:
-		return castTypeMapper[MergedTypeMapper](m, typeMapperMerged).Map(t)
-	case typeMapperComposite:
-		return castTypeMapper[CompositeTypeMapper](m, typeMapperComposite).Map(t)
-	case typeMapperInference:
-		return castTypeMapper[InferenceTypeMapper](m, typeMapperInference).Map(t)
+	case TypeMapperKindSimple:
+		return castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple).Map(t)
+	case TypeMapperKindArray:
+		return castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray).Map(t)
+	case TypeMapperKindArrayToSingle:
+		return castTypeMapper[ArrayToSingleTypeMapper](m, TypeMapperKindArrayToSingle).Map(t)
+	case TypeMapperKindDeferred:
+		return castTypeMapper[DeferredTypeMapper](m, TypeMapperKindDeferred).Map(t)
+	case TypeMapperKindFunction:
+		return castTypeMapper[FunctionTypeMapper](m, TypeMapperKindFunction).Map(t)
+	case TypeMapperKindMerged:
+		return castTypeMapper[MergedTypeMapper](m, TypeMapperKindMerged).Map(t)
+	case TypeMapperKindComposite:
+		return castTypeMapper[CompositeTypeMapper](m, TypeMapperKindComposite).Map(t)
+	case TypeMapperKindInference:
+		return castTypeMapper[InferenceTypeMapper](m, TypeMapperKindInference).Map(t)
 	default:
 		panic("Invalid type mapper kind")
 	}
 }
 
-func (m *TypeMapper) Kind() TypeMapperKind {
-	switch m.kind {
-	case typeMapperSimple:
-		return TypeMapperKindSimple
-	case typeMapperArray:
-		return TypeMapperKindArray
-	case typeMapperMerged:
-		return TypeMapperKindMerged
-	default:
-		return TypeMapperKindUnknown
-	}
-}
+func (m *TypeMapper) Kind() TypeMapperKind { return m.kind }
 
 func (m *TypeMapper) MapsThisOnly() bool {
 	switch m.kind {
-	case typeMapperSimple:
-		return castTypeMapper[SimpleTypeMapper](m, typeMapperSimple).MapsThisOnly()
-	case typeMapperArray:
-		return castTypeMapper[ArrayTypeMapper](m, typeMapperArray).MapsThisOnly()
-	case typeMapperArrayToSingle:
-		return castTypeMapper[ArrayToSingleTypeMapper](m, typeMapperArrayToSingle).MapsThisOnly()
-	case typeMapperDeferred:
-		return castTypeMapper[DeferredTypeMapper](m, typeMapperDeferred).MapsThisOnly()
+	case TypeMapperKindSimple:
+		return castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple).MapsThisOnly()
+	case TypeMapperKindArray:
+		return castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray).MapsThisOnly()
+	case TypeMapperKindArrayToSingle:
+		return castTypeMapper[ArrayToSingleTypeMapper](m, TypeMapperKindArrayToSingle).MapsThisOnly()
+	case TypeMapperKindDeferred:
+		return castTypeMapper[DeferredTypeMapper](m, TypeMapperKindDeferred).MapsThisOnly()
 	default:
 		return false
 	}
@@ -176,9 +155,8 @@ type TypeMapperBase struct {
 	TypeMapper
 }
 
-func (m *TypeMapperBase) Map(t *Type) *Type    { return t }
-func (m *TypeMapperBase) Kind() TypeMapperKind { return TypeMapperKindUnknown }
-func (m *TypeMapperBase) MapsThisOnly() bool   { return false }
+func (m *TypeMapperBase) Map(t *Type) *Type  { return t }
+func (m *TypeMapperBase) MapsThisOnly() bool { return false }
 
 // SimpleTypeMapper
 
@@ -190,7 +168,7 @@ type SimpleTypeMapper struct {
 
 func newSimpleTypeMapper(source *Type, target *Type) *TypeMapper {
 	m := &SimpleTypeMapper{}
-	m.kind = typeMapperSimple
+	m.kind = TypeMapperKindSimple
 	m.source = source
 	m.target = target
 	return &m.TypeMapper
@@ -201,10 +179,6 @@ func (m *SimpleTypeMapper) Map(t *Type) *Type {
 		return m.target
 	}
 	return t
-}
-
-func (m *SimpleTypeMapper) Kind() TypeMapperKind {
-	return TypeMapperKindSimple
 }
 
 func (m *SimpleTypeMapper) MapsThisOnly() bool {
@@ -221,7 +195,7 @@ type ArrayTypeMapper struct {
 
 func newArrayTypeMapper(sources []*Type, targets []*Type) *TypeMapper {
 	m := &ArrayTypeMapper{}
-	m.kind = typeMapperArray
+	m.kind = TypeMapperKindArray
 	m.sources = sources
 	m.targets = targets
 	return &m.TypeMapper
@@ -234,10 +208,6 @@ func (m *ArrayTypeMapper) Map(t *Type) *Type {
 		}
 	}
 	return t
-}
-
-func (m *ArrayTypeMapper) Kind() TypeMapperKind {
-	return TypeMapperKindArray
 }
 
 func (m *ArrayTypeMapper) MapsThisOnly() bool {
@@ -254,7 +224,7 @@ type ArrayToSingleTypeMapper struct {
 
 func newArrayToSingleTypeMapper(sources []*Type, target *Type) *TypeMapper {
 	m := &ArrayToSingleTypeMapper{}
-	m.kind = typeMapperArrayToSingle
+	m.kind = TypeMapperKindArrayToSingle
 	m.sources = sources
 	m.target = target
 	return &m.TypeMapper
@@ -281,7 +251,7 @@ type DeferredTypeMapper struct {
 
 func newDeferredTypeMapper(sources []*Type, targets []func() *Type) *TypeMapper {
 	m := &DeferredTypeMapper{}
-	m.kind = typeMapperDeferred
+	m.kind = TypeMapperKindDeferred
 	m.sources = sources
 	m.targets = targets
 	return &m.TypeMapper
@@ -309,7 +279,7 @@ type FunctionTypeMapper struct {
 
 func newFunctionTypeMapper(fn func(*Type) *Type) *TypeMapper {
 	m := &FunctionTypeMapper{}
-	m.kind = typeMapperFunction
+	m.kind = TypeMapperKindFunction
 	m.fn = fn
 	return &m.TypeMapper
 }
@@ -328,7 +298,7 @@ type MergedTypeMapper struct {
 
 func newMergedTypeMapper(m1 *TypeMapper, m2 *TypeMapper) *TypeMapper {
 	m := &MergedTypeMapper{}
-	m.kind = typeMapperMerged
+	m.kind = TypeMapperKindMerged
 	m.m1 = m1
 	m.m2 = m2
 	return &m.TypeMapper
@@ -336,10 +306,6 @@ func newMergedTypeMapper(m1 *TypeMapper, m2 *TypeMapper) *TypeMapper {
 
 func (m *MergedTypeMapper) Map(t *Type) *Type {
 	return m.m2.Map(m.m1.Map(t))
-}
-
-func (m *MergedTypeMapper) Kind() TypeMapperKind {
-	return TypeMapperKindMerged
 }
 
 // CompositeTypeMapper
@@ -353,7 +319,7 @@ type CompositeTypeMapper struct {
 
 func newCompositeTypeMapper(c *Checker, m1 *TypeMapper, m2 *TypeMapper) *TypeMapper {
 	m := &CompositeTypeMapper{}
-	m.kind = typeMapperComposite
+	m.kind = TypeMapperKindComposite
 	m.c = c
 	m.m1 = m1
 	m.m2 = m2
@@ -378,7 +344,7 @@ type InferenceTypeMapper struct {
 }
 
 func (c *Checker) initInferenceTypeMapper(m *InferenceTypeMapper, n *InferenceContext, fixing bool) *TypeMapper {
-	m.kind = typeMapperInference
+	m.kind = TypeMapperKindInference
 	m.c = c
 	m.n = n
 	m.fixing = fixing

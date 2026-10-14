@@ -513,10 +513,10 @@ func CompareTypes(t1, t2 *Type) int {
 				// instantiateAnonymousType prepends a fresh type parameter mapping.
 				// Compare the effective instantiation, not the identity of that fresh parameter.
 				if m1 != nil {
-					m1 = castTypeMapper[CompositeTypeMapper](m1, typeMapperComposite).m2
+					m1 = castTypeMapper[CompositeTypeMapper](m1, TypeMapperKindComposite).m2
 				}
 				if m2 != nil {
-					m2 = castTypeMapper[CompositeTypeMapper](m2, typeMapperComposite).m2
+					m2 = castTypeMapper[CompositeTypeMapper](m2, TypeMapperKindComposite).m2
 				}
 			}
 			if c := compareTypeMappers(m1, m2); c != 0 {
@@ -723,35 +723,45 @@ func compareTypeMappers(m1, m2 *TypeMapper) int {
 	if m2 == nil {
 		return -1
 	}
-	kind1 := m1.Kind()
-	kind2 := m2.Kind()
+	kind1 := comparableMapperKind(m1.Kind())
+	kind2 := comparableMapperKind(m2.Kind())
 	if kind1 != kind2 {
 		return int(kind1) - int(kind2)
 	}
 	switch kind1 {
 	case TypeMapperKindSimple:
-		m1 := castTypeMapper[SimpleTypeMapper](m1, typeMapperSimple)
-		m2 := castTypeMapper[SimpleTypeMapper](m2, typeMapperSimple)
+		m1 := castTypeMapper[SimpleTypeMapper](m1, TypeMapperKindSimple)
+		m2 := castTypeMapper[SimpleTypeMapper](m2, TypeMapperKindSimple)
 		if c := CompareTypes(m1.source, m2.source); c != 0 {
 			return c
 		}
 		return CompareTypes(m1.target, m2.target)
 	case TypeMapperKindArray:
-		m1 := castTypeMapper[ArrayTypeMapper](m1, typeMapperArray)
-		m2 := castTypeMapper[ArrayTypeMapper](m2, typeMapperArray)
+		m1 := castTypeMapper[ArrayTypeMapper](m1, TypeMapperKindArray)
+		m2 := castTypeMapper[ArrayTypeMapper](m2, TypeMapperKindArray)
 		if c := compareTypeLists(m1.sources, m2.sources); c != 0 {
 			return c
 		}
 		return compareTypeLists(m1.targets, m2.targets)
 	case TypeMapperKindMerged:
-		m1 := castTypeMapper[MergedTypeMapper](m1, typeMapperMerged)
-		m2 := castTypeMapper[MergedTypeMapper](m2, typeMapperMerged)
+		m1 := castTypeMapper[MergedTypeMapper](m1, TypeMapperKindMerged)
+		m2 := castTypeMapper[MergedTypeMapper](m2, TypeMapperKindMerged)
 		if c := compareTypeMappers(m1.m1, m2.m1); c != 0 {
 			return c
 		}
 		return compareTypeMappers(m1.m2, m2.m2)
 	}
 	return 0
+}
+
+// Only simple, array, and merged mappers have a structural ordering; all other
+// kinds compare as equal.
+func comparableMapperKind(kind TypeMapperKind) TypeMapperKind {
+	switch kind {
+	case TypeMapperKindSimple, TypeMapperKindArray, TypeMapperKindMerged:
+		return kind
+	}
+	return TypeMapperKindUnknown
 }
 
 func getDeclarationModifierFlagsFromSymbol(s *ast.Symbol) ast.ModifierFlags {
