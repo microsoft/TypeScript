@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"math/bits"
 	"slices"
 	"strconv"
 	"strings"
@@ -64,12 +65,18 @@ const (
 type RelationComparisonResult uint32
 
 const (
+	relationComparisonResultSucceededBitShift           = 0
+	relationComparisonResultFailedBitShift              = 1
+	relationComparisonResultReportsUnmeasurableBitShift = 3
+	relationComparisonResultReportsUnreliableBitShift   = 4
+	relationComparisonResultOverflowBitShift            = 5
+
 	RelationComparisonResultNone                RelationComparisonResult = 0
-	RelationComparisonResultSucceeded           RelationComparisonResult = 1 << 0
-	RelationComparisonResultFailed              RelationComparisonResult = 1 << 1
-	RelationComparisonResultReportsUnmeasurable RelationComparisonResult = 1 << 3
-	RelationComparisonResultReportsUnreliable   RelationComparisonResult = 1 << 4
-	RelationComparisonResultComplexityOverflow  RelationComparisonResult = 1 << 5
+	RelationComparisonResultSucceeded           RelationComparisonResult = 1 << relationComparisonResultSucceededBitShift
+	RelationComparisonResultFailed              RelationComparisonResult = 1 << relationComparisonResultFailedBitShift
+	RelationComparisonResultReportsUnmeasurable RelationComparisonResult = 1 << relationComparisonResultReportsUnmeasurableBitShift
+	RelationComparisonResultReportsUnreliable   RelationComparisonResult = 1 << relationComparisonResultReportsUnreliableBitShift
+	RelationComparisonResultComplexityOverflow  RelationComparisonResult = 1 << relationComparisonResultOverflowBitShift
 	RelationComparisonResultReportsMask                                  = RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable
 	RelationComparisonResultOverflow                                     = RelationComparisonResultComplexityOverflow
 )
@@ -128,17 +135,28 @@ func (r *Relation) get(key CacheHashKey) RelationComparisonResult {
 	if result != RelationComparisonResultNone {
 		return result
 	}
-	for implied := packed >> (r.packedShift + packedRelationResultBits); implied != 0; implied >>= packedRelationResultBits {
-		result = RelationComparisonResult(implied) & relationComparisonResultMask
-		if result&RelationComparisonResultFailed != 0 && result&RelationComparisonResultOverflow == 0 {
-			return r.setPacked(key, packed, result)
-		}
+
+	// A failure in a laxer relation implies failure in this relation. Align each
+	// slot's failure and overflow bits with its respective slot marker, then keep
+	// failures that did not result from an overflow. The mask excludes this and
+	// all stricter relations.
+	laxerSlots := packedRelationSlotMask &^ (uint32(1)<<(r.packedShift+packedRelationResultBits) - 1)
+	if failedSlots := ((packed >> relationComparisonResultFailedBitShift) &^ (packed >> relationComparisonResultOverflowBitShift)) & laxerSlots; failedSlots != 0 {
+		// The lowest set marker is the nearest laxer relation with a usable failure.
+		shift := bits.TrailingZeros32(failedSlots)
+		result = RelationComparisonResult(packed>>shift) & relationComparisonResultMask
+		return r.setPacked(key, packed, result)
 	}
-	for implied := packed & (uint32(1)<<r.packedShift - 1); implied != 0; implied >>= packedRelationResultBits {
-		result = RelationComparisonResult(implied) & relationComparisonResultMask
-		if result&RelationComparisonResultSucceeded != 0 {
-			return r.setPacked(key, packed, result)
-		}
+
+	// A success in a stricter relation implies success in this relation. Align
+	// each slot's success bit with its respective slot marker, then exclude this
+	// and all laxer relations.
+	stricterSlots := packedRelationSlotMask & (uint32(1)<<r.packedShift - 1)
+	if succeededSlots := (packed >> relationComparisonResultSucceededBitShift) & stricterSlots; succeededSlots != 0 {
+		// Prefer the strictest available success, matching the previous scan order.
+		shift := bits.TrailingZeros32(succeededSlots)
+		result = RelationComparisonResult(packed>>shift) & relationComparisonResultMask
+		return r.setPacked(key, packed, result)
 	}
 	return RelationComparisonResultNone
 }
@@ -156,9 +174,13 @@ const relationComparisonResultMask = RelationComparisonResultSucceeded |
 	RelationComparisonResultReportsUnreliable |
 	RelationComparisonResultComplexityOverflow
 
+// Each map value contains one six-bit result slot per relation, ordered from
+// strictest to laxest: identity, strict subtype, subtype, assignable, comparable.
 const (
 	packedRelationResultBits = 6
 	packedRelationCount      = 5
+	// Marks the low bit of every slot, which is also its success bit.
+	packedRelationSlotMask = 1 | 1<<6 | 1<<12 | 1<<18 | 1<<24
 )
 
 func (r *Relation) setPacked(key CacheHashKey, packed uint32, result RelationComparisonResult) RelationComparisonResult {

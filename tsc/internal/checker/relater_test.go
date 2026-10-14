@@ -100,6 +100,27 @@ func TestPackedRelationImplicationsAreLazy(t *testing.T) {
 	})
 }
 
+func TestPackedRelationImplicationPrecedence(t *testing.T) {
+	t.Parallel()
+
+	subtype, strictSubtype, _, comparableRelation, identity := newRelations()
+	failureKey := CacheHashKey{Lo: 1}
+	successKey := CacheHashKey{Lo: 2}
+	overflowKey := CacheHashKey{Lo: 3}
+
+	subtype.set(failureKey, RelationComparisonResultFailed|RelationComparisonResultReportsUnreliable)
+	comparableRelation.set(failureKey, RelationComparisonResultFailed|RelationComparisonResultReportsUnmeasurable)
+	assert.Equal(t, strictSubtype.get(failureKey), RelationComparisonResultFailed|RelationComparisonResultReportsUnreliable)
+
+	identity.set(successKey, RelationComparisonResultSucceeded|RelationComparisonResultReportsUnreliable)
+	subtype.set(successKey, RelationComparisonResultSucceeded|RelationComparisonResultReportsUnmeasurable)
+	assert.Equal(t, comparableRelation.get(successKey), RelationComparisonResultSucceeded|RelationComparisonResultReportsUnreliable)
+
+	subtype.set(overflowKey, RelationComparisonResultFailed|RelationComparisonResultComplexityOverflow)
+	comparableRelation.set(overflowKey, RelationComparisonResultFailed|RelationComparisonResultReportsUnmeasurable)
+	assert.Equal(t, strictSubtype.get(overflowKey), RelationComparisonResultFailed|RelationComparisonResultReportsUnmeasurable)
+}
+
 func TestIdentityRelationDoesNotCountDirectionalImplication(t *testing.T) {
 	t.Parallel()
 
