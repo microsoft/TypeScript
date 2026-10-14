@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/narrowSwitchOnEvolvingArrayNoCrash1.ts] ////
+
+=== narrowSwitchOnEvolvingArrayNoCrash1.ts ===
+const a = [];
+>a : Symbol(a, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 0, 5))
+
+while (true) switch (a) { case 0: }
+>a : Symbol(a, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 0, 5))
+
+const b = [];
+>b : Symbol(b, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 3, 5))
+
+switch (b) {
+>b : Symbol(b, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 3, 5))
+
+  case 0:
+    b;
+>b : Symbol(b, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 3, 5))
+}
+
+let c = [];
+>c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 9, 3))
+
+switch (typeof c) {
+>c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 9, 3))
+
+  case "object": {
+    c.push("x");
+>c.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 9, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    const arr: string[] = c;
+>arr : Symbol(arr, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 13, 9))
+>c : Symbol(c, Decl(narrowSwitchOnEvolvingArrayNoCrash1.ts, 9, 3))
+  }
+}
+

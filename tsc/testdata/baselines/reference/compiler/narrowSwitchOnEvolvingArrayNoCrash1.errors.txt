@@ -1,0 +1,32 @@
+narrowSwitchOnEvolvingArrayNoCrash1.ts(1,7): error TS7034: Variable 'a' implicitly has type 'any[]' in some locations where its type cannot be determined.
+narrowSwitchOnEvolvingArrayNoCrash1.ts(2,22): error TS7005: Variable 'a' implicitly has an 'any[]' type.
+narrowSwitchOnEvolvingArrayNoCrash1.ts(2,32): error TS2678: Type 'number' is not comparable to type 'any[]'.
+narrowSwitchOnEvolvingArrayNoCrash1.ts(6,8): error TS2678: Type 'number' is not comparable to type 'any[]'.
+
+
+==== narrowSwitchOnEvolvingArrayNoCrash1.ts (4 errors) ====
+    const a = [];
+          ~
+!!! error TS7034: Variable 'a' implicitly has type 'any[]' in some locations where its type cannot be determined.
+    while (true) switch (a) { case 0: }
+                         ~
+!!! error TS7005: Variable 'a' implicitly has an 'any[]' type.
+                                   ~
+!!! error TS2678: Type 'number' is not comparable to type 'any[]'.
+    
+    const b = [];
+    switch (b) {
+      case 0:
+           ~
+!!! error TS2678: Type 'number' is not comparable to type 'any[]'.
+        b;
+    }
+    
+    let c = [];
+    switch (typeof c) {
+      case "object": {
+        c.push("x");
+        const arr: string[] = c;
+      }
+    }
+    

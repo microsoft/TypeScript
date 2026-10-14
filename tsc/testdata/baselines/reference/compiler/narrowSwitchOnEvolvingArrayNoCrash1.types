@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/narrowSwitchOnEvolvingArrayNoCrash1.ts] ////
+
+=== narrowSwitchOnEvolvingArrayNoCrash1.ts ===
+const a = [];
+>a : any[]
+>[] : never[]
+
+while (true) switch (a) { case 0: }
+>true : true
+>a : any[]
+>0 : 0
+
+const b = [];
+>b : any[]
+>[] : never[]
+
+switch (b) {
+>b : any[]
+
+  case 0:
+>0 : 0
+
+    b;
+>b : any[]
+}
+
+let c = [];
+>c : any[]
+>[] : never[]
+
+switch (typeof c) {
+>typeof c : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>c : any[]
+
+  case "object": {
+>"object" : "object"
+
+    c.push("x");
+>c.push("x") : number
+>c.push : (...items: any[]) => number
+>c : any[]
+>push : (...items: any[]) => number
+>"x" : "x"
+
+    const arr: string[] = c;
+>arr : string[]
+>c : any[]
+  }
+}
+
