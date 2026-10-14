@@ -674,6 +674,7 @@ type Checker struct {
 	symbolWithDataArena                         core.Arena[ast.SymbolWithData]
 	symbolExtraArena                            ast.SymbolExtraArena
 	signatureArena                              core.Arena[Signature]
+	signatureExtraArena                         core.Arena[signatureExtra]
 	indexInfoArena                              core.Arena[IndexInfo]
 	literalTypeArena                            core.Arena[LiteralType]
 	objectTypeArena                             core.Arena[ObjectType]
@@ -686,6 +687,7 @@ type Checker struct {
 	indexedAccessTypeArena                      core.Arena[IndexedAccessType]
 	conditionalTypeArena                        core.Arena[ConditionalType]
 	typeListArena                               core.Arena[*Type]
+	outerTypeParameterListArena                 core.Arena[[]*Type]
 	valueSymbolExtraArena                       core.Arena[valueSymbolExtra]
 	structuredTypeExtraArena                    core.Arena[structuredTypeExtra]
 	freeTypeSets                                *temporaryTypeSet
@@ -4388,7 +4390,7 @@ func (c *Checker) checkClassLikeDeclaration(node *ast.Node) {
 			if len(baseTypeNode.TypeArguments()) != 0 {
 				c.checkSourceElements(baseTypeNode.TypeArguments())
 				for _, constructor := range c.getConstructorsForTypeArguments(staticBaseType, baseTypeNode.TypeArguments(), baseTypeNode) {
-					if !c.checkTypeArgumentConstraints(baseTypeNode, constructor.typeParameters) {
+					if !c.checkTypeArgumentConstraints(baseTypeNode, constructor.TypeParameters()) {
 						break
 					}
 				}
@@ -7607,7 +7609,7 @@ func (c *Checker) getQuickTypeOfExpression(node *ast.Node) *Type {
 
 func (c *Checker) getReturnTypeOfSingleNonGenericSignature(funcType *Type, kind SignatureKind) *Type {
 	signature := c.getSingleSignature(funcType, kind, true /*allowMembers*/)
-	if signature != nil && len(signature.typeParameters) == 0 {
+	if signature != nil && len(signature.TypeParameters()) == 0 {
 		return c.getReturnTypeOfSignature(signature)
 	}
 	return nil
@@ -7824,7 +7826,7 @@ func (c *Checker) instantiateTypeWithSingleGenericCallSignature(node *ast.Node, 
 	callSignature := c.getSingleSignature(t, SignatureKindCall, true /*allowMembers*/)
 	constructSignature := c.getSingleSignature(t, SignatureKindConstruct, true /*allowMembers*/)
 	signature := core.OrElse(callSignature, constructSignature)
-	if signature == nil || len(signature.typeParameters) == 0 {
+	if signature == nil || len(signature.TypeParameters()) == 0 {
 		return t
 	}
 	contextualType := c.getApparentTypeOfContextualType(node, ContextFlagsNoConstraints)
@@ -7832,7 +7834,7 @@ func (c *Checker) instantiateTypeWithSingleGenericCallSignature(node *ast.Node, 
 		return t
 	}
 	contextualSignature := c.getSingleSignature(c.GetNonNullableType(contextualType), core.IfElse(callSignature != nil, SignatureKindCall, SignatureKindConstruct), false /*allowMembers*/)
-	if contextualSignature == nil || len(contextualSignature.typeParameters) != 0 {
+	if contextualSignature == nil || len(contextualSignature.TypeParameters()) != 0 {
 		return t
 	}
 	if checkMode&CheckModeSkipGenericFunctions != 0 {
@@ -7853,10 +7855,10 @@ func (c *Checker) instantiateTypeWithSingleGenericCallSignature(node *ast.Node, 
 			returnSignature = c.getSingleCallOrConstructSignature(returnType)
 		}
 	}
-	if returnSignature != nil && len(returnSignature.typeParameters) == 0 && !core.Every(context.inferences, hasInferenceCandidates) {
+	if returnSignature != nil && len(returnSignature.TypeParameters()) == 0 && !core.Every(context.inferences, hasInferenceCandidates) {
 		// Instantiate the signature with its own type parameters as type arguments, possibly
 		// renaming the type parameters to ensure they have unique names.
-		uniqueTypeParameters := c.getUniqueTypeParameters(context, signature.typeParameters)
+		uniqueTypeParameters := c.getUniqueTypeParameters(context, signature.TypeParameters())
 		instantiatedSignature := c.getSignatureInstantiationWithoutFillingInTypeArguments(signature, uniqueTypeParameters)
 		// Infer from the parameters of the instantiated signature to the parameters of the
 		// contextual signature starting with an empty set of inference candidates.
@@ -8946,7 +8948,7 @@ func (c *Checker) typeHasProtectedAccessibleBase(target *ast.Symbol, t *Type) bo
 
 func someSignature(signatures []*Signature, f func(s *Signature) bool) bool {
 	for _, sig := range signatures {
-		if sig.composite != nil && sig.composite.isUnion && core.Some(sig.composite.signatures, f) || sig.composite == nil && f(sig) {
+		if sig.getComposite() != nil && sig.getComposite().isUnion && core.Some(sig.getComposite().signatures, f) || sig.getComposite() == nil && f(sig) {
 			return true
 		}
 	}
@@ -9117,7 +9119,7 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	//
 	// For a decorator, no arguments are susceptible to contextual typing due to the fact
 	// decorators are applied to a declaration by the emitter, and not to an expression.
-	s.isSingleNonGenericCandidate = len(s.candidates) == 1 && len(s.candidates[0].typeParameters) == 0
+	s.isSingleNonGenericCandidate = len(s.candidates) == 1 && len(s.candidates[0].TypeParameters()) == 0
 	if !isDecorator && !s.isSingleNonGenericCandidate && core.Some(s.args, c.isContextSensitive) {
 		s.argCheckMode = CheckModeSkipContextSensitive
 	} else {
@@ -9284,7 +9286,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 		}
 		var checkCandidate *Signature
 		var inferenceContext *InferenceContext
-		if len(candidate.typeParameters) != 0 {
+		if len(candidate.TypeParameters()) != 0 {
 			var typeArgumentTypes []*Type
 			if len(s.typeArguments) != 0 {
 				typeArgumentTypes = c.checkTypeArguments(candidate, s.typeArguments, false /*reportErrors*/, nil)
@@ -9297,7 +9299,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 				// type inference to avoid circularity errors. For example, see #64192.
 				inferenceFlags := core.IfElse(s.recursiveResolution && len(s.candidates) == 1, InferenceFlagsNoConstraintChecks, InferenceFlagsNone) |
 					core.IfElse(ast.IsInJSFile(s.node), InferenceFlagsAnyDefault, InferenceFlagsNone)
-				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, inferenceFlags /*flags*/, nil)
+				inferenceContext = c.newInferenceContext(candidate.TypeParameters(), candidate, inferenceFlags /*flags*/, nil)
 				typeArgumentTypes = c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode|CheckModeSkipGenericFunctions, inferenceContext)
 				if inferenceContext.flags&InferenceFlagsSkippedGenericFunction != 0 {
 					s.argCheckMode |= CheckModeSkipGenericFunctions
@@ -9459,14 +9461,14 @@ func (c *Checker) getLegacyDecoratorArgumentCount(node *ast.Node, signature *Sig
 func (c *Checker) hasCorrectTypeArgumentArity(signature *Signature, typeArguments []*ast.Node) bool {
 	// If the user supplied type arguments, but the number of type arguments does not match
 	// the declared number of type parameters, the call has an incorrect arity.
-	numTypeParameters := len(signature.typeParameters)
-	minTypeArgumentCount := c.getMinTypeArgumentCount(signature.typeParameters)
+	numTypeParameters := len(signature.TypeParameters())
+	minTypeArgumentCount := c.getMinTypeArgumentCount(signature.TypeParameters())
 	return len(typeArguments) == 0 || len(typeArguments) >= minTypeArgumentCount && len(typeArguments) <= numTypeParameters
 }
 
 func (c *Checker) checkTypeArguments(signature *Signature, typeArgumentNodes []*ast.Node, reportErrors bool, headMessage *diagnostics.Message) []*Type {
 	isJavaScript := ast.IsInJSFile(signature.declaration)
-	typeParameters := signature.typeParameters
+	typeParameters := signature.TypeParameters()
 	typeArgumentTypes := c.fillMissingTypeArguments(core.Map(typeArgumentNodes, c.getTypeFromTypeNode), typeParameters, c.getMinTypeArgumentCount(typeParameters), isJavaScript)
 	var mapper *TypeMapper
 	for i := range typeArgumentNodes {
@@ -9641,7 +9643,7 @@ func (c *Checker) inferTypeArguments(node *ast.Node, signature *Signature, args 
 	// 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type of 'f' to the
 	// return type of 'wrap'.
 	if !ast.IsDecorator(node) && !ast.IsBinaryExpression(node) {
-		skipBindingPatterns := core.Every(signature.typeParameters, func(p *Type) bool { return c.getDefaultFromTypeParameter(p) != nil })
+		skipBindingPatterns := core.Every(signature.TypeParameters(), func(p *Type) bool { return c.getDefaultFromTypeParameter(p) != nil })
 		contextualType := c.getContextualType(node, core.IfElse(skipBindingPatterns, ContextFlagsSkipBindingPatterns, ContextFlagsNone))
 		if contextualType != nil {
 			inferenceTargetType := c.getReturnTypeOfSignature(signature)
@@ -9673,8 +9675,8 @@ func (c *Checker) inferTypeArguments(node *ast.Node, signature *Signature, args 
 					// Above, the type of the 'value' parameter is inferred to be 'A'.
 					contextualSignature := c.getSingleCallSignature(instantiatedType)
 					var inferenceSourceType *Type
-					if contextualSignature != nil && len(contextualSignature.typeParameters) != 0 {
-						inferenceSourceType = c.getOrCreateTypeFromSignature(c.getSignatureInstantiationWithoutFillingInTypeArguments(contextualSignature, contextualSignature.typeParameters))
+					if contextualSignature != nil && len(contextualSignature.TypeParameters()) != 0 {
+						inferenceSourceType = c.getOrCreateTypeFromSignature(c.getSignatureInstantiationWithoutFillingInTypeArguments(contextualSignature, contextualSignature.TypeParameters()))
 					} else {
 						inferenceSourceType = instantiatedType
 					}
@@ -9689,7 +9691,7 @@ func (c *Checker) inferTypeArguments(node *ast.Node, signature *Signature, args 
 				// replaced with inferences produced from the outer return type or preceding outer arguments.
 				// This protects against circular inferences, i.e. avoiding situations where inferences reference
 				// type parameters for which the inferences are being made.
-				returnContext := c.newInferenceContext(signature.typeParameters, signature, context.flags, nil)
+				returnContext := c.newInferenceContext(signature.TypeParameters(), signature, context.flags, nil)
 				var outerReturnMapper *TypeMapper
 				if outerContext != nil {
 					outerReturnMapper = c.createOuterReturnMapper(outerContext)
@@ -9746,7 +9748,7 @@ func (c *Checker) getCandidateForOverloadFailure(node *ast.Node, candidates []*S
 	// Normally we will combine overloads. Skip this if they have type parameters since that's hard to combine.
 	// Don't do this if there is a `candidatesOutArray`,
 	// because then we want the chosen best candidate to be one of the overloads, not a combination.
-	if hasCandidatesOutArray || len(candidates) == 1 || core.Some(candidates, func(s *Signature) bool { return len(s.typeParameters) != 0 }) {
+	if hasCandidatesOutArray || len(candidates) == 1 || core.Some(candidates, func(s *Signature) bool { return len(s.TypeParameters()) != 0 }) {
 		return c.pickLongestCandidateSignature(node, candidates, args, checkMode)
 	}
 	return c.createUnionOfSignaturesForOverloadFailure(candidates)
@@ -9765,7 +9767,7 @@ func (c *Checker) pickLongestCandidateSignature(node *ast.Node, candidates []*Si
 	}
 	bestIndex := c.getLongestCandidateIndex(candidates, argCount)
 	candidate := candidates[bestIndex]
-	typeParameters := candidate.typeParameters
+	typeParameters := candidate.TypeParameters()
 	if len(typeParameters) == 0 {
 		return candidate
 	}
@@ -9824,7 +9826,7 @@ func (c *Checker) inferSignatureInstantiationForOverloadFailure(node *ast.Node, 
 }
 
 func (c *Checker) createUnionOfSignaturesForOverloadFailure(candidates []*Signature) *Signature {
-	thisParameters := core.MapNonNil(candidates, func(c *Signature) *ast.Symbol { return c.thisParameter })
+	thisParameters := core.MapNonNil(candidates, func(c *Signature) *ast.Symbol { return c.ThisParameter() })
 	var thisParameter *ast.Symbol
 	if len(thisParameters) != 0 {
 		thisParameter = c.createCombinedSymbolFromTypes(thisParameters, core.Map(thisParameters, c.getTypeOfParameter))
@@ -9938,7 +9940,7 @@ func (c *Checker) addImplementationSuccessElaboration(s *CallState, failed *Sign
 				candidate := c.getSignatureFromDeclaration(implementation)
 				localState := *s
 				localState.candidates = []*Signature{candidate}
-				localState.isSingleNonGenericCandidate = len(candidate.typeParameters) == 0
+				localState.isSingleNonGenericCandidate = len(candidate.TypeParameters()) == 0
 				if c.chooseOverload(&localState, c.assignableRelation) != nil {
 					diagnostic.AddRelatedInfo(NewDiagnosticForNode(implementation, diagnostics.The_call_would_have_succeeded_against_this_implementation_but_implementation_signatures_of_overloads_are_not_externally_visible))
 				}
@@ -10020,7 +10022,7 @@ func (c *Checker) getArgumentArityError(node *ast.Node, signatures []*Signature,
 		}
 		var parameter *ast.Node
 		if closestSignature != nil && closestSignature.declaration != nil {
-			parameter = core.ElementOrNil(closestSignature.declaration.Parameters(), len(args)+core.IfElse(closestSignature.thisParameter != nil, 1, 0))
+			parameter = core.ElementOrNil(closestSignature.declaration.Parameters(), len(args)+core.IfElse(closestSignature.ThisParameter() != nil, 1, 0))
 		}
 		if parameter != nil {
 			var related *ast.Diagnostic
@@ -10104,8 +10106,8 @@ func (c *Checker) getTypeArgumentArityError(node *ast.Node, signatures []*Signat
 	if len(signatures) == 1 {
 		// No overloads exist
 		sig := signatures[0]
-		minCount := c.getMinTypeArgumentCount(sig.typeParameters)
-		maxCount := len(sig.typeParameters)
+		minCount := c.getMinTypeArgumentCount(sig.TypeParameters())
+		maxCount := len(sig.TypeParameters())
 		expected := strconv.Itoa(minCount)
 		if minCount < maxCount {
 			expected = expected + "-" + strconv.Itoa(maxCount)
@@ -10116,8 +10118,8 @@ func (c *Checker) getTypeArgumentArityError(node *ast.Node, signatures []*Signat
 		belowArgCount := math.MinInt
 		aboveArgCount := math.MaxInt
 		for _, sig := range signatures {
-			minCount := c.getMinTypeArgumentCount(sig.typeParameters)
-			maxCount := len(sig.typeParameters)
+			minCount := c.getMinTypeArgumentCount(sig.TypeParameters())
+			maxCount := len(sig.TypeParameters())
 			if minCount > argCount {
 				aboveArgCount = min(aboveArgCount, minCount)
 			} else if maxCount < argCount {
@@ -10264,7 +10266,7 @@ func (c *Checker) invocationErrorRecovery(apparentType *Type, kind SignatureKind
 }
 
 func (c *Checker) isGenericFunctionReturningFunction(signature *Signature) bool {
-	return len(signature.typeParameters) != 0 && c.isFunctionType(c.getReturnTypeOfSignature(signature))
+	return len(signature.TypeParameters()) != 0 && c.isFunctionType(c.getReturnTypeOfSignature(signature))
 }
 
 func (c *Checker) skippedGenericFunction(node *ast.Node, checkMode CheckMode) {
@@ -10545,7 +10547,7 @@ func (c *Checker) getContextualSignature(node *ast.Node) *Signature {
 
 func (c *Checker) createUnionSignature(sig *Signature, unionSignatures []*Signature) *Signature {
 	result := c.cloneSignature(sig)
-	result.composite = &CompositeSignature{isUnion: true, signatures: unionSignatures}
+	result.setComposite(c, &CompositeSignature{isUnion: true, signatures: unionSignatures})
 	result.target = nil
 	result.mapper = nil
 	return result
@@ -10571,7 +10573,7 @@ func (c *Checker) getIntersectedSignatures(signatures []*Signature) *Signature {
 		switch {
 		case combined == sig || combined == nil:
 			combined = sig
-		case c.compareTypeParametersIdentical(combined.typeParameters, sig.typeParameters):
+		case c.compareTypeParametersIdentical(combined.TypeParameters(), sig.TypeParameters()):
 			combined = c.combineUnionOrIntersectionMemberSignatures(combined, sig, false /*isUnion*/)
 		default:
 			return nil
@@ -10598,20 +10600,20 @@ func (c *Checker) isAritySmaller(signature *Signature, target *ast.Node) bool {
 }
 
 func (c *Checker) assignContextualParameterTypes(sig *Signature, context *Signature) {
-	if len(context.typeParameters) != 0 {
-		if len(sig.typeParameters) != 0 {
+	if len(context.TypeParameters()) != 0 {
+		if len(sig.TypeParameters()) != 0 {
 			// This signature has already has a contextual inference performed and cached on it
 			return
 		}
-		sig.typeParameters = context.typeParameters
+		sig.setTypeParameters(c, context.TypeParameters())
 	}
-	if context.thisParameter != nil {
-		parameter := sig.thisParameter
+	if context.ThisParameter() != nil {
+		parameter := sig.ThisParameter()
 		if parameter == nil || parameter.ValueDeclaration() != nil && parameter.ValueDeclaration().Type() == nil {
 			if parameter == nil {
-				sig.thisParameter = c.createSymbolWithType(context.thisParameter, nil /*type*/)
+				sig.setThisParameter(c, c.createSymbolWithType(context.ThisParameter(), nil /*type*/))
 			}
-			c.assignParameterType(sig.thisParameter, c.getTypeOfSymbol(context.thisParameter))
+			c.assignParameterType(sig.ThisParameter(), c.getTypeOfSymbol(context.ThisParameter()))
 		}
 	}
 	length := len(sig.parameters) - core.IfElse(signatureHasRestParameter(sig), 1, 0)
@@ -10644,8 +10646,8 @@ func (c *Checker) assignContextualParameterTypes(sig *Signature, context *Signat
 }
 
 func (c *Checker) assignNonContextualParameterTypes(signature *Signature) {
-	if signature.thisParameter != nil {
-		c.assignParameterType(signature.thisParameter, nil)
+	if signature.ThisParameter() != nil {
+		c.assignParameterType(signature.ThisParameter(), nil)
 	}
 	for _, parameter := range signature.parameters {
 		c.assignParameterType(parameter, nil)
@@ -10921,7 +10923,7 @@ func (c *Checker) getInstantiationExpressionType(exprType *Type, node *ast.Node)
 	var nonApplicableType *Type
 	getInstantiatedSignatures := func(signatures []*Signature) []*Signature {
 		applicableSignatures := core.Filter(signatures, func(sig *Signature) bool {
-			return len(sig.typeParameters) != 0 && c.hasCorrectTypeArgumentArity(sig, typeArguments.Nodes)
+			return len(sig.TypeParameters()) != 0 && c.hasCorrectTypeArgumentArity(sig, typeArguments.Nodes)
 		})
 		return core.SameMap(applicableSignatures, func(sig *Signature) *Signature {
 			typeArgumentTypes := c.checkTypeArguments(sig, typeArguments.Nodes, true /*reportErrors*/, nil)
@@ -12284,7 +12286,7 @@ func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 	if c.isContextSensitiveFunctionOrObjectLiteralMethod(fn) {
 		contextualSignature := c.getContextualSignature(fn)
 		if contextualSignature != nil {
-			thisParameter := contextualSignature.thisParameter
+			thisParameter := contextualSignature.ThisParameter()
 			if thisParameter != nil {
 				return c.getTypeOfSymbol(thisParameter)
 			}
@@ -17155,7 +17157,7 @@ func (c *Checker) getTypeForVariableLikeDeclaration(declaration *ast.Node, inclu
 				if thisParameter != nil && declaration == thisParameter {
 					// Use the type from the *getter*
 					debug.Assert(thisParameter.Type() == nil)
-					return c.getTypeOfSymbol(getterSignature.thisParameter)
+					return c.getTypeOfSymbol(getterSignature.ThisParameter())
 				}
 				return c.getReturnTypeOfSignature(getterSignature)
 			}
@@ -17459,7 +17461,7 @@ func (c *Checker) isMixinConstructorType(t *Type) bool {
 	signatures := c.getSignaturesOfType(t, SignatureKindConstruct)
 	if len(signatures) == 1 {
 		s := signatures[0]
-		if len(s.typeParameters) == 0 && len(s.parameters) == 1 && signatureHasRestParameter(s) {
+		if len(s.TypeParameters()) == 0 && len(s.parameters) == 1 && signatureHasRestParameter(s) {
 			paramType := c.getTypeOfParameter(s.parameters[0])
 			return IsTypeAny(paramType) || c.getElementTypeOfArrayType(paramType) == c.anyType
 		}
@@ -19735,7 +19737,7 @@ func (c *Checker) getInstantiatedConstructorsForTypeArguments(t *Type, typeArgum
 	signatures := c.getConstructorsForTypeArguments(t, typeArgumentNodes, location)
 	typeArguments := core.Map(typeArgumentNodes, c.getTypeFromTypeNode)
 	return core.SameMap(signatures, func(sig *Signature) *Signature {
-		if len(sig.typeParameters) != 0 {
+		if len(sig.TypeParameters()) != 0 {
 			return c.getSignatureInstantiation(sig, typeArguments, ast.IsInJSFile(location), nil)
 		}
 		return sig
@@ -19745,17 +19747,17 @@ func (c *Checker) getInstantiatedConstructorsForTypeArguments(t *Type, typeArgum
 func (c *Checker) getConstructorsForTypeArguments(t *Type, typeArgumentNodes []*ast.Node, location *ast.Node) []*Signature {
 	typeArgCount := len(typeArgumentNodes)
 	return core.Filter(c.getSignaturesOfType(t, SignatureKindConstruct), func(sig *Signature) bool {
-		return typeArgCount >= c.getMinTypeArgumentCount(sig.typeParameters) && typeArgCount <= len(sig.typeParameters)
+		return typeArgCount >= c.getMinTypeArgumentCount(sig.TypeParameters()) && typeArgCount <= len(sig.TypeParameters())
 	})
 }
 
 func (c *Checker) getSignatureInstantiation(sig *Signature, typeArguments []*Type, isJavaScript bool, inferredTypeParameters []*Type) *Signature {
-	instantiatedSignature := c.getSignatureInstantiationWithoutFillingInTypeArguments(sig, c.fillMissingTypeArguments(typeArguments, sig.typeParameters, c.getMinTypeArgumentCount(sig.typeParameters), isJavaScript))
+	instantiatedSignature := c.getSignatureInstantiationWithoutFillingInTypeArguments(sig, c.fillMissingTypeArguments(typeArguments, sig.TypeParameters(), c.getMinTypeArgumentCount(sig.TypeParameters()), isJavaScript))
 	if len(inferredTypeParameters) != 0 {
 		returnSignature := c.getSingleCallOrConstructSignature(c.getReturnTypeOfSignature(instantiatedSignature))
 		if returnSignature != nil {
 			newReturnSignature := c.cloneSignature(returnSignature)
-			newReturnSignature.typeParameters = inferredTypeParameters
+			newReturnSignature.setTypeParameters(c, inferredTypeParameters)
 			newReturnType := c.getOrCreateTypeFromSignature(newReturnSignature)
 			newReturnType.AsObjectType().mapper = instantiatedSignature.mapper
 			newInstantiatedSignature := c.cloneSignature(instantiatedSignature)
@@ -19767,10 +19769,10 @@ func (c *Checker) getSignatureInstantiation(sig *Signature, typeArguments []*Typ
 }
 
 func (c *Checker) cloneSignature(sig *Signature) *Signature {
-	result := c.newSignature(sig.flags&SignatureFlagsPropagatingFlags, sig.declaration, sig.typeParameters, sig.thisParameter, sig.parameters, nil, nil, int(sig.minArgumentCount))
+	result := c.newSignature(sig.flags&SignatureFlagsPropagatingFlags, sig.declaration, sig.TypeParameters(), sig.ThisParameter(), sig.parameters, nil, nil, int(sig.minArgumentCount))
 	result.target = sig.target
 	result.mapper = sig.mapper
-	result.composite = sig.composite
+	result.setComposite(c, sig.getComposite())
 	return result
 }
 
@@ -19793,7 +19795,7 @@ func (c *Checker) createSignatureTypeMapper(sig *Signature, typeArguments []*Typ
 }
 
 func (c *Checker) getTypeParametersForMapper(sig *Signature) []*Type {
-	return core.SameMap(sig.typeParameters, func(tp *Type) *Type { return c.instantiateType(tp, tp.Mapper()) })
+	return core.SameMap(sig.TypeParameters(), func(tp *Type) *Type { return c.instantiateType(tp, tp.Mapper()) })
 }
 
 // If type has a single call signature and no other members, return that signature. Otherwise, return nil.
@@ -19829,7 +19831,7 @@ func (c *Checker) getOrCreateTypeFromSignature(sig *Signature) *Type {
 	// using the constructor keyword, and the other is declaring a bare construct signature in an
 	// object type literal or interface (using the new keyword). Each way of declaring a constructor
 	// will result in a different declaration kind.
-	if sig.isolatedSignatureType == nil {
+	if sig.getIsolatedSignatureType() == nil {
 		var kind ast.Kind
 		if sig.declaration != nil {
 			kind = sig.declaration.Kind
@@ -19847,26 +19849,26 @@ func (c *Checker) getOrCreateTypeFromSignature(sig *Signature) *Type {
 		} else {
 			c.setStructuredTypeMembers(t, nil, []*Signature{sig}, nil, nil)
 		}
-		sig.isolatedSignatureType = t
+		sig.ensureExtra(c).isolatedSignatureType = t
 	}
-	return sig.isolatedSignatureType
+	return sig.getIsolatedSignatureType()
 }
 
 func (c *Checker) getErasedSignature(signature *Signature) *Signature {
-	if len(signature.typeParameters) == 0 {
+	if len(signature.TypeParameters()) == 0 {
 		return signature
 	}
 	key := CachedSignatureKey{sig: signature, key: SignatureKeyErased}
 	erased := c.cachedSignatures[key]
 	if erased == nil {
-		erased = c.instantiateSignatureEx(signature, newArrayToSingleTypeMapper(signature.typeParameters, c.anyType), true /*eraseTypeParameters*/)
+		erased = c.instantiateSignatureEx(signature, newArrayToSingleTypeMapper(signature.TypeParameters(), c.anyType), true /*eraseTypeParameters*/)
 		c.cachedSignatures[key] = erased
 	}
 	return erased
 }
 
 func (c *Checker) getCanonicalSignature(signature *Signature) *Signature {
-	if len(signature.typeParameters) == 0 {
+	if len(signature.TypeParameters()) == 0 {
 		return signature
 	}
 	key := CachedSignatureKey{sig: signature, key: SignatureKeyCanonical}
@@ -19885,7 +19887,7 @@ func (c *Checker) createCanonicalSignature(signature *Signature) *Signature {
 	// where different generations of the same type parameter are in scope). This leads to a lot of new type
 	// identities, and potentially a lot of work comparing those identities, so here we create an instantiation
 	// that uses the original type identities for all unconstrained type parameters.
-	typeArguments := core.Map(signature.typeParameters, func(tp *Type) *Type {
+	typeArguments := core.Map(signature.TypeParameters(), func(tp *Type) *Type {
 		if tp.Target() != nil && c.getConstraintOfTypeParameter(tp.Target()) == nil {
 			return tp.Target()
 		}
@@ -19895,7 +19897,7 @@ func (c *Checker) createCanonicalSignature(signature *Signature) *Signature {
 }
 
 func (c *Checker) getBaseSignature(signature *Signature) *Signature {
-	typeParameters := signature.typeParameters
+	typeParameters := signature.TypeParameters()
 	if len(typeParameters) == 0 {
 		return signature
 	}
@@ -20468,8 +20470,8 @@ func (c *Checker) getReturnTypeOfSignature(sig *Signature) *Type {
 	switch {
 	case sig.target != nil:
 		t = c.instantiateType(c.getReturnTypeOfSignature(sig.target), sig.mapper)
-	case sig.composite != nil:
-		t = c.instantiateType(c.getUnionOrIntersectionType(core.Map(sig.composite.signatures, c.getReturnTypeOfSignature), sig.composite.isUnion, UnionReductionSubtype), sig.mapper)
+	case sig.getComposite() != nil:
+		t = c.instantiateType(c.getUnionOrIntersectionType(core.Map(sig.getComposite().signatures, c.getReturnTypeOfSignature), sig.getComposite().isUnion, UnionReductionSubtype), sig.mapper)
 	default:
 		t = c.getReturnTypeFromAnnotation(sig.declaration)
 		if t == nil {
@@ -21077,12 +21079,12 @@ func (c *Checker) instantiateSignature(sig *Signature, m *TypeMapper) *Signature
 
 func (c *Checker) instantiateSignatureEx(sig *Signature, m *TypeMapper, eraseTypeParameters bool) *Signature {
 	var freshTypeParameters []*Type
-	if len(sig.typeParameters) != 0 && !eraseTypeParameters {
+	if len(sig.TypeParameters()) != 0 && !eraseTypeParameters {
 		// First create a fresh set of type parameters, then include a mapping from the old to the
 		// new type parameters in the mapper function. Finally store this mapper in the new type
 		// parameters such that we can use it when instantiating constraints.
-		freshTypeParameters = core.Map(sig.typeParameters, c.cloneTypeParameter)
-		m = c.combineTypeMappers(newTypeMapper(sig.typeParameters, freshTypeParameters), m)
+		freshTypeParameters = core.Map(sig.TypeParameters(), c.cloneTypeParameter)
+		m = c.combineTypeMappers(newTypeMapper(sig.TypeParameters(), freshTypeParameters), m)
 		for _, tp := range freshTypeParameters {
 			tp.AsTypeParameter().mapper = m
 		}
@@ -21091,7 +21093,7 @@ func (c *Checker) instantiateSignatureEx(sig *Signature, m *TypeMapper, eraseTyp
 	// because using `mapper` now could trigger inferences to become fixed. (See `createInferenceContext`.)
 	// See GH#17600.
 	result := c.newSignature(sig.flags&SignatureFlagsPropagatingFlags, sig.declaration, freshTypeParameters,
-		c.instantiateSymbol(sig.thisParameter, m), c.instantiateSymbols(sig.parameters, m),
+		c.instantiateSymbol(sig.ThisParameter(), m), c.instantiateSymbols(sig.parameters, m),
 		nil /*resolvedReturnType*/, nil /*resolvedTypePredicate*/, int(sig.minArgumentCount))
 	result.target = sig
 	result.mapper = m
@@ -21333,16 +21335,16 @@ func (c *Checker) getDefaultConstructSignatures(classType *Type) []*Signature {
 	typeArgCount := len(typeArguments)
 	var result []*Signature
 	for _, baseSig := range baseSignatures {
-		minTypeArgumentCount := c.getMinTypeArgumentCount(baseSig.typeParameters)
-		typeParamCount := len(baseSig.typeParameters)
+		minTypeArgumentCount := c.getMinTypeArgumentCount(baseSig.TypeParameters())
+		typeParamCount := len(baseSig.TypeParameters())
 		if isJavaScript || typeArgCount >= minTypeArgumentCount && typeArgCount <= typeParamCount {
 			var sig *Signature
 			if typeParamCount != 0 {
-				sig = c.createSignatureInstantiation(baseSig, c.fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, isJavaScript))
+				sig = c.createSignatureInstantiation(baseSig, c.fillMissingTypeArguments(typeArguments, baseSig.TypeParameters(), minTypeArgumentCount, isJavaScript))
 			} else {
 				sig = c.cloneSignature(baseSig)
 			}
-			sig.typeParameters = classType.AsInterfaceType().LocalTypeParameters()
+			sig.setTypeParameters(c, classType.AsInterfaceType().LocalTypeParameters())
 			sig.resolvedReturnType = classType
 			if isAbstract {
 				sig.flags |= SignatureFlagsAbstract
@@ -21593,21 +21595,21 @@ func (c *Checker) getUnionSignatures(signatureLists [][]*Signature) []*Signature
 					s := signature
 					// Union the result types when more than one signature matches
 					if len(unionSignatures) > 1 {
-						thisParameter := signature.thisParameter
+						thisParameter := signature.ThisParameter()
 						firstThisParameterOfUnionSignatures := core.FirstNonNil(unionSignatures, func(sig *Signature) *ast.Symbol {
-							return sig.thisParameter
+							return sig.ThisParameter()
 						})
 						if firstThisParameterOfUnionSignatures != nil {
 							thisType := c.getIntersectionType(core.MapNonNil(unionSignatures, func(sig *Signature) *Type {
-								if sig.thisParameter != nil {
-									return c.getTypeOfSymbol(sig.thisParameter)
+								if sig.ThisParameter() != nil {
+									return c.getTypeOfSymbol(sig.ThisParameter())
 								}
 								return nil
 							}))
 							thisParameter = c.createSymbolWithType(firstThisParameterOfUnionSignatures, thisType)
 						}
 						s = c.createUnionSignature(signature, unionSignatures)
-						s.thisParameter = thisParameter
+						s.setThisParameter(c, thisParameter)
 					}
 					result = append(result, s)
 				}
@@ -21625,8 +21627,8 @@ func (c *Checker) getUnionSignatures(signatureLists [][]*Signature) []*Signature
 			if !core.Same(signatures, masterList) {
 				signature := signatures[0]
 				debug.Assert(signature != nil, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass")
-				if len(signature.typeParameters) != 0 && core.Some(results, func(s *Signature) bool {
-					return len(s.typeParameters) != 0 && !c.compareTypeParametersIdentical(signature.typeParameters, s.typeParameters)
+				if len(signature.TypeParameters()) != 0 && core.Some(results, func(s *Signature) bool {
+					return len(s.TypeParameters()) != 0 && !c.compareTypeParametersIdentical(signature.TypeParameters(), s.TypeParameters())
 				}) {
 					results = nil
 				} else {
@@ -21645,14 +21647,14 @@ func (c *Checker) getUnionSignatures(signatureLists [][]*Signature) []*Signature
 }
 
 func (c *Checker) combineUnionOrIntersectionMemberSignatures(left *Signature, right *Signature, isUnion bool) *Signature {
-	typeParams := left.typeParameters
+	typeParams := left.TypeParameters()
 	if len(typeParams) == 0 {
-		typeParams = right.typeParameters
+		typeParams = right.TypeParameters()
 	}
 	var paramMapper *TypeMapper
-	if len(left.typeParameters) != 0 && len(right.typeParameters) != 0 {
+	if len(left.TypeParameters()) != 0 && len(right.TypeParameters()) != 0 {
 		// We just use the type parameter defaults from the first signature
-		paramMapper = newTypeMapper(right.typeParameters, left.typeParameters)
+		paramMapper = newTypeMapper(right.TypeParameters(), left.TypeParameters())
 	}
 	flags := (left.flags | right.flags) & (SignatureFlagsPropagatingFlags & ^SignatureFlagsHasRestParameter)
 	declaration := left.declaration
@@ -21661,23 +21663,23 @@ func (c *Checker) combineUnionOrIntersectionMemberSignatures(left *Signature, ri
 	if lastParam != nil && lastParam.CheckFlags()&ast.CheckFlagsRestParameter != 0 {
 		flags |= SignatureFlagsHasRestParameter
 	}
-	thisParam := c.combineUnionOrIntersectionThisParam(left.thisParameter, right.thisParameter, paramMapper, isUnion)
+	thisParam := c.combineUnionOrIntersectionThisParam(left.ThisParameter(), right.ThisParameter(), paramMapper, isUnion)
 	minArgCount := int(max(left.minArgumentCount, right.minArgumentCount))
 	result := c.newSignature(flags, declaration, typeParams, thisParam, params, nil, nil, minArgCount)
 	var leftSignatures []*Signature
-	if left.composite != nil && left.composite.isUnion {
-		leftSignatures = left.composite.signatures
+	if left.getComposite() != nil && left.getComposite().isUnion {
+		leftSignatures = left.getComposite().signatures
 	} else {
 		leftSignatures = []*Signature{left}
 	}
-	result.composite = &CompositeSignature{isUnion: isUnion, signatures: append(leftSignatures, right)}
+	result.setComposite(c, &CompositeSignature{isUnion: isUnion, signatures: append(leftSignatures, right)})
 	if paramMapper != nil {
-		if left.composite != nil && left.composite.isUnion == isUnion && left.mapper != nil {
+		if left.getComposite() != nil && left.getComposite().isUnion == isUnion && left.mapper != nil {
 			result.mapper = c.combineTypeMappers(left.mapper, paramMapper)
 		} else {
 			result.mapper = paramMapper
 		}
-	} else if left.composite != nil && left.composite.isUnion == isUnion {
+	} else if left.getComposite() != nil && left.getComposite().isUnion == isUnion {
 		result.mapper = left.mapper
 	}
 	return result
@@ -22870,7 +22872,7 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	default:
 		target = t
 	}
-	typeParameters = links.outerTypeParameters
+	typeParameters = links.getOuterTypeParameters()
 	if typeParameters == nil {
 		// The first time an anonymous type is instantiated we compute and store a list of the type
 		// parameters that are in scope (and therefore potentially referenced). For type literals that
@@ -22893,7 +22895,7 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 		if typeParameters == nil {
 			typeParameters = []*Type{}
 		}
-		links.outerTypeParameters = typeParameters
+		links.setOuterTypeParameters(c, typeParameters)
 	}
 	if len(typeParameters) == 0 {
 		return t
@@ -24361,8 +24363,8 @@ func (c *Checker) getOuterTypeParameters(node *ast.Node, includeThisTypes bool) 
 			outerTypeParameters := c.getOuterTypeParameters(node, includeThisTypes)
 			if (kind == ast.KindFunctionExpression || kind == ast.KindArrowFunction || ast.IsObjectLiteralMethod(node)) && c.isContextSensitive(node) {
 				signature := core.FirstOrNil(c.getSignaturesOfType(c.getTypeOfSymbol(c.getSymbolOfDeclaration(node)), SignatureKindCall))
-				if signature != nil && len(signature.typeParameters) != 0 {
-					return append(outerTypeParameters, signature.typeParameters...)
+				if signature != nil && len(signature.TypeParameters()) != 0 {
+					return append(outerTypeParameters, signature.TypeParameters()...)
 				}
 			}
 			if kind == ast.KindMappedType {
@@ -25860,11 +25862,11 @@ func (c *Checker) newSignature(flags SignatureFlags, declaration *ast.Node, type
 	sig.id = SignatureId(c.SignatureCount)
 	sig.flags = flags
 	sig.declaration = declaration
-	sig.typeParameters = typeParameters
+	sig.setTypeParameters(c, typeParameters)
 	sig.parameters = parameters
-	sig.thisParameter = thisParameter
+	sig.setThisParameter(c, thisParameter)
 	sig.resolvedReturnType = resolvedReturnType
-	sig.resolvedTypePredicate = resolvedTypePredicate
+	sig.setResolvedTypePredicate(c, resolvedTypePredicate)
 	sig.minArgumentCount = int32(minArgumentCount)
 	sig.resolvedMinArgumentCount = -1
 	return sig
@@ -32331,8 +32333,8 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 		container := c.getThisContainer(node, false /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/)
 		if ast.IsFunctionLike(container) {
 			sig := c.getSignatureFromDeclaration(container)
-			if sig.thisParameter != nil {
-				return sig.thisParameter
+			if sig.ThisParameter() != nil {
+				return sig.ThisParameter()
 			}
 		}
 		if ast.IsInExpressionContext(node) {
