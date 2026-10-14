@@ -208,3 +208,39 @@ export type Initial = Box<"first">;
 	assert.Equal(t, c.TypeToString(initial), "Initial")
 	assert.Equal(t, len(c.GetDiagnostics(t.Context(), file)), 0)
 }
+
+func TestMemberLayoutAfterBaseInstantiationLimit(t *testing.T) {
+	t.Parallel()
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/foo.ts": `interface Grand<T> { grand: T }
+interface Base<T> extends Grand<T> { base: T }
+interface Derived<T> extends Base<T> { derived: T }
+export type S = Derived<string>;
+export type N = Derived<number>;
+export type B = Base<number>;
+`,
+	}, tspath.CaseSensitive))
+	opts := &core.CompilerOptions{NoLib: core.TSTrue}
+	program := compiler.NewProgram(compiler.ProgramOptions{
+		Config: tsoptions.NewParsedCommandLine(opts, []tspath.RootedFilePath{"/foo.ts"}, nil, "/", fs.CaseSensitivity()),
+		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+	})
+	program.BindSourceFiles()
+	c, done := program.GetTypeChecker(t.Context())
+	defer done()
+	file := program.GetSourceFile("/foo.ts")
+	typeOfAlias := func(i int) *checker.Type {
+		return c.GetTypeAtLocation(file.Statements.Nodes[i].AsTypeAliasDeclaration().Type)
+	}
+	// Share the member layouts of Derived, Base, and Grand.
+	assert.Equal(t, len(c.GetPropertiesOfType(typeOfAlias(3))), 3)
+	// Resolve the base of Derived<number> after instantiating Grand<number> has hit the limit.
+	derived := typeOfAlias(4)
+	base := c.GetTypeWithThisArgument(typeOfAlias(5), derived)
+	c.RunAtInstantiationLimit(func() {
+		assert.Equal(t, len(c.GetPropertiesOfType(base)), 1)
+	})
+	// BUG: Derived<number> reuses slots from the shared layout of Base, which this base doesn't have.
+	names := core.Map(c.GetPropertiesOfType(derived), (*ast.Symbol).Name)
+	assert.DeepEqual(t, names, []string{"derived", "T", "base"})
+}
