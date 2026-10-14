@@ -41,10 +41,31 @@ func TestPipeTransportPermissions(t *testing.T) {
 		t.Fatalf("pipe access is not restricted to the current user: %s", sd.String())
 	}
 
+	accepted := make(chan error, 1)
+	done := make(chan struct{})
+	defer close(done)
+	go func() {
+		server, acceptErr := transport.Accept()
+		if acceptErr == nil {
+			defer server.Close()
+		}
+		accepted <- acceptErr
+		<-done
+	}()
+
 	timeout := time.Second
 	conn, err := winio.DialPipe(transport.Path(), &timeout)
 	if err != nil {
 		t.Fatalf("current user cannot connect: %v", err)
 	}
 	defer conn.Close()
+
+	select {
+	case acceptErr := <-accepted:
+		if acceptErr != nil {
+			t.Fatalf("failed to accept current user connection: %v", acceptErr)
+		}
+	case <-time.After(timeout):
+		t.Fatal("timed out accepting current user connection")
+	}
 }
