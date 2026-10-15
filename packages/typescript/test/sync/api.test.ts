@@ -3981,6 +3981,64 @@ export const value = 1;
         assert.equal((api.getTimingInfo()).totals.requestCount, 0);
     });
 
+    test("node handles are lazily interned within a snapshot", () => {
+        const source = `interface Box<T> { value: T; method(value: T): T; extra: T; }
+declare const first: Box<string>;
+declare const second: Box<number>;
+first;
+second;`;
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ files: ["/index.ts"] }),
+            "/other/tsconfig.json": JSON.stringify({ files: ["/index.ts"] }),
+            "/index.ts": source,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json", "/other/tsconfig.json"] });
+        const registry = (snapshot as unknown as {
+            snapshotRegistry: { nodeHandles: Map<string, unknown>; };
+        }).snapshotRegistry;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const otherProject = snapshot.getConfiguredProject("/other/tsconfig.json")!;
+        const firstType = project.checker.getTypeAtPosition("/index.ts", source.lastIndexOf("first"));
+        const secondType = otherProject.checker.getTypeAtPosition("/index.ts", source.lastIndexOf("second"));
+        assert.ok(firstType && secondType);
+        const [firstValue, firstMethod, firstExtra] = firstType.getProperties();
+        const [secondValue, secondMethod] = secondType.getProperties();
+        assert.ok(firstValue.checkFlags & CheckFlags.Instantiated);
+        assert.ok(secondValue.checkFlags & CheckFlags.Instantiated);
+        assert.equal(registry.nodeHandles.size, 0);
+
+        const handle = firstValue.declarations[0];
+        assert.ok(handle);
+        assert.strictEqual(handle, firstValue.valueDeclaration);
+        assert.strictEqual(handle, secondValue.declarations[0]);
+        assert.strictEqual(handle, secondValue.valueDeclaration);
+        assert.strictEqual(handle.resolve(), handle.resolve(otherProject));
+
+        const firstMethodType = project.checker.getTypeOfSymbol(firstMethod);
+        const secondMethodType = otherProject.checker.getTypeOfSymbol(secondMethod);
+        const [firstSignature] = firstMethodType.getCallSignatures();
+        const [secondSignature] = secondMethodType.getCallSignatures();
+        assert.ok(firstSignature.declaration);
+        assert.strictEqual(firstSignature.declaration, secondSignature.declaration);
+        assert.strictEqual(firstSignature.declaration, firstMethod.declarations[0]);
+        assert.strictEqual(firstSignature.declaration, secondMethod.declarations[0]);
+
+        const updated = snapshot.update({});
+        const updatedProject = updated.getConfiguredProject("/tsconfig.json")!;
+        const updatedType = updatedProject.checker.getTypeAtPosition("/index.ts", source.lastIndexOf("first"));
+        assert.ok(updatedType);
+        const [updatedValue] = updatedType.getProperties();
+        const updatedHandle = updatedValue.declarations[0];
+        assert.notStrictEqual(updatedHandle, handle);
+        assert.equal(updatedHandle.sourceFileId, handle.sourceFileId);
+        snapshot.dispose();
+        assert.equal(registry.nodeHandles.size, 0);
+        assert.ok(firstExtra.valueDeclaration);
+        assert.equal(registry.nodeHandles.size, 0);
+        assert.ok(updatedHandle.resolve());
+        updated.dispose();
+    });
+
     test("compact symbol references retain reused file-owned symbols", () => {
         const source = `interface Box<T> { value: T; }\ndeclare const box: Box<string>;\nbox;`;
         using api = spawnAPI({

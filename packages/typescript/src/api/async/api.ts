@@ -1228,8 +1228,10 @@ export class ModuleResolver {
 
 class SnapshotObjectRegistry {
     private readonly symbols: Map<number, Symbol> = new Map();
+    private readonly nodeHandles: Map<string, NodeHandle> = new Map();
     private readonly projectRegistries: Map<number, ProjectObjectRegistry> = new Map();
     private readonly snapshotId: number;
+    private disposed = false;
 
     constructor(snapshotId: number) {
         this.snapshotId = snapshotId;
@@ -1259,8 +1261,19 @@ class SnapshotObjectRegistry {
         return this.symbols.get(id);
     }
 
+    getOrCreateNodeHandle<T extends Node>(handle: string, project: Project): NodeHandle<T> {
+        let node = this.nodeHandles.get(handle);
+        if (!node) {
+            node = new NodeHandle<T>(handle, project);
+            if (!this.disposed) this.nodeHandles.set(handle, node);
+        }
+        return node as NodeHandle<T>;
+    }
+
     clear(): void {
+        this.disposed = true;
         this.symbols.clear();
+        this.nodeHandles.clear();
     }
 }
 
@@ -1330,7 +1343,7 @@ class ProjectObjectRegistry {
     }
 
     createNodeHandle<T extends Node>(handle: string): NodeHandle<T> {
-        return new NodeHandle<T>(handle, this.project);
+        return this.snapshotRegistry.getOrCreateNodeHandle<T>(handle, this.project);
     }
 
     getOrCreateSignature(data: SignatureResponse): Signature {
@@ -1517,7 +1530,7 @@ class ProjectObjectRegistry {
             keyType: this.getOrCreateType(info.keyType),
             valueType: this.getOrCreateType(info.valueType),
             isReadonly: info.isReadonly ?? false,
-            declaration: info.declaration ? new NodeHandle<IndexSignatureDeclaration>(info.declaration, this.project) : undefined,
+            declaration: info.declaration ? this.createNodeHandle<IndexSignatureDeclaration>(info.declaration) : undefined,
         }));
     }
 
@@ -1640,9 +1653,9 @@ export class LanguageService {
             position,
         });
         return (data ?? []).map(entry => ({
-            definition: new NodeHandle(entry.definition, this.project),
+            definition: this.objectRegistry.createNodeHandle(entry.definition),
             symbol: entry.symbol ? this.objectRegistry.getOrCreateSymbol(entry.symbol) : undefined,
-            references: (entry.references ?? []).map(h => new NodeHandle(h, this.project)),
+            references: (entry.references ?? []).map(h => this.objectRegistry.createNodeHandle(h)),
         }));
     }
 
@@ -1653,8 +1666,8 @@ export class LanguageService {
             signatureDecl: getNodeRequestHandle(signatureDecl),
         });
         return (data ?? []).map(entry => ({
-            name: new NodeHandle(entry.name, this.project),
-            call: entry.call ? new NodeHandle(entry.call, this.project) : undefined,
+            name: this.objectRegistry.createNodeHandle(entry.name),
+            call: entry.call ? this.objectRegistry.createNodeHandle(entry.call) : undefined,
         }));
     }
 
@@ -2444,7 +2457,7 @@ export class Checker {
             file,
             symbol: symbol.reference,
         });
-        return (data ?? []).map(h => new NodeHandle(h, this.project));
+        return (data ?? []).map(h => this.objectRegistry.createNodeHandle(h));
     }
 
     /**
@@ -2869,7 +2882,7 @@ export class Checker {
             keyType: this.objectRegistry.getOrCreateType(data.keyType),
             valueType: this.objectRegistry.getOrCreateType(data.valueType),
             isReadonly: data.isReadonly ?? false,
-            declaration: data.declaration ? new NodeHandle<IndexSignatureDeclaration>(data.declaration, this.project) : undefined,
+            declaration: data.declaration ? this.objectRegistry.createNodeHandle<IndexSignatureDeclaration>(data.declaration) : undefined,
         } : undefined;
     }
 
@@ -3160,7 +3173,7 @@ export class Printer {
 
 export class NodeHandle<out T extends Node = Node> {
     /**
-     * The project this handle was produced in, used as the default for {@link resolve}.
+     * The project where this handle was first materialized, used as the default for {@link resolve}.
      * Node handles are only meaningful within a project's program, so the producing project
      * is remembered so callers don't have to pass it explicitly.
      */
@@ -3309,7 +3322,7 @@ export class Symbol {
     private createDeclarationHandle(handle: string): NodeHandle<Declaration> {
         // A file-owned symbol has no canonical project; its declarations resolve through its file.
         return this.storage.kind === SymbolOwnerKind.Snapshot
-            ? new NodeHandle<Declaration>(handle, this.storage.registry.project)
+            ? this.storage.registry.createNodeHandle<Declaration>(handle)
             : new NodeHandle<Declaration>(handle, undefined, this.storage.owner);
     }
 
@@ -3948,7 +3961,7 @@ export class Signature {
 
     get declaration(): NodeHandle<Declaration> | undefined {
         if (this.declarationCache === undefined && this.declarationHandle) {
-            this.declarationCache = new NodeHandle<Declaration>(this.declarationHandle, this.project);
+            this.declarationCache = this.objectRegistry.createNodeHandle<Declaration>(this.declarationHandle);
         }
         return this.declarationCache;
     }
