@@ -19595,7 +19595,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 	}
 	// Members are resolved on demand through a layout that is computed once and shared by all instantiations
 	// when possible. The layout must be computed before inherited signatures, which may circularly depend on it.
-	layout := c.getMemberLayout(source, instantiatedBaseTypes)
+	layout, baseMembers := c.getMemberLayout(source, instantiatedBaseTypes)
 	for _, instantiatedBaseType := range instantiatedBaseTypes {
 		callSignatures = core.Concatenate(callSignatures, c.getSignaturesOfType(instantiatedBaseType, SignatureKindCall))
 		constructSignatures = core.Concatenate(constructSignatures, c.getSignaturesOfType(instantiatedBaseType, SignatureKindConstruct))
@@ -19609,7 +19609,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 			return findIndexInfo(indexInfos, info.keyType) == nil
 		}))
 	}
-	c.setLazyStructuredTypeMembers(t, &lazyMembers{layout: layout, mapper: mapper, bases: instantiatedBaseTypes}, callSignatures, constructSignatures, indexInfos)
+	c.setLazyStructuredTypeMembers(t, &lazyMembers{layout: layout, mapper: mapper, bases: baseMembers}, callSignatures, constructSignatures, indexInfos)
 }
 
 // A memberLayout describes the members of a class or interface type and of its instantiations:
@@ -19689,38 +19689,49 @@ func (l *memberLayout) buildIndex() {
 type lazyMembers struct {
 	layout *memberLayout
 	mapper *TypeMapper // Instantiation mapper, nil for the declared type
-	bases  []*Type     // Base types, instantiated and with this-type arguments
+	bases  []*lazyMembers // Members of the base types with the layout's base layouts, or nil when there are none
 	slots  []*ast.Symbol
 }
 
-func (c *Checker) getMemberLayout(source *Type, bases []*Type) *memberLayout {
-	d := source.AsInterfaceType()
-	if layout := d.memberLayout; layout != nil && c.hasMemberLayoutBases(layout, bases) {
-		return layout
+// Returns the layout for the given base types, along with the lazy members of the bases that have
+// layouts. Inherited members are found through those, so that they always match the layout's slots.
+func (c *Checker) getMemberLayout(source *Type, bases []*Type) (*memberLayout, []*lazyMembers) {
+	var baseMembers []*lazyMembers
+	for k, base := range bases {
+		if base.flags&TypeFlagsObject != 0 && base.objectFlags&(ObjectFlagsReference|ObjectFlagsClassOrInterface) != 0 {
+			if lazy := c.resolveStructuredTypeMembers(base).lazy; lazy != nil {
+				if baseMembers == nil {
+					baseMembers = make([]*lazyMembers, len(bases))
+				}
+				baseMembers[k] = lazy
+			}
+		}
 	}
-	layout := c.buildMemberLayout(source, bases)
+	d := source.AsInterfaceType()
+	if layout := d.memberLayout; layout != nil && hasMemberLayoutBases(layout, bases, baseMembers) {
+		return layout, baseMembers
+	}
+	layout := c.buildMemberLayout(source, bases, baseMembers)
 	// A layout computed while base types are still being resolved may be missing inherited members.
 	if d.baseTypesResolved {
 		d.memberLayout = layout
 	}
-	return layout
+	return layout, baseMembers
 }
 
-func (c *Checker) getMemberLayoutBase(base *Type) memberLayoutBase {
-	if base.flags&TypeFlagsObject != 0 && base.objectFlags&(ObjectFlagsReference|ObjectFlagsClassOrInterface) != 0 {
-		if lazy := c.resolveStructuredTypeMembers(base).lazy; lazy != nil {
-			return memberLayoutBase{layout: lazy.layout}
-		}
+func getMemberLayoutBase(bases []*Type, baseMembers []*lazyMembers, k int) memberLayoutBase {
+	if baseMembers != nil && baseMembers[k] != nil {
+		return memberLayoutBase{layout: baseMembers[k].layout}
 	}
-	return memberLayoutBase{t: base}
+	return memberLayoutBase{t: bases[k]}
 }
 
-func (c *Checker) hasMemberLayoutBases(layout *memberLayout, bases []*Type) bool {
+func hasMemberLayoutBases(layout *memberLayout, bases []*Type, baseMembers []*lazyMembers) bool {
 	if len(layout.bases) != len(bases) {
 		return false
 	}
-	for k, base := range bases {
-		if c.getMemberLayoutBase(base) != layout.bases[k] {
+	for k := range bases {
+		if getMemberLayoutBase(bases, baseMembers, k) != layout.bases[k] {
 			return false
 		}
 	}
@@ -19742,14 +19753,14 @@ const (
 	memberRankUnnamed                     // Then members that aren't properties
 )
 
-func (c *Checker) buildMemberLayout(source *Type, bases []*Type) *memberLayout {
+func (c *Checker) buildMemberLayout(source *Type, bases []*Type, baseMembers []*lazyMembers) *memberLayout {
 	d := source.AsInterfaceType()
 	// Resolve the bases first, since this may build other layouts with the scratch storage below.
 	layoutBases := make([]memberLayoutBase, len(bases))
 	baseProperties := make([][]*ast.Symbol, len(bases))
 	capacity := len(d.declaredMembers)
 	for k, base := range bases {
-		layoutBases[k] = c.getMemberLayoutBase(base)
+		layoutBases[k] = getMemberLayoutBase(bases, baseMembers, k)
 		if baseLayout := layoutBases[k].layout; baseLayout != nil {
 			baseProperties[k] = baseLayout.properties()
 		} else {
@@ -19853,9 +19864,7 @@ func (c *Checker) getLazyMember(l *lazyMembers, i int) *ast.Symbol {
 			symbol = c.instantiateSymbol(symbol, l.mapper)
 		}
 	case memberOriginBaseLayout:
-		base := c.resolveStructuredTypeMembers(l.bases[origin.base]).lazy
-		debug.Assert(base != nil, "Base type must have lazy members")
-		symbol = c.getLazyMember(base, int(origin.slot))
+		symbol = c.getLazyMember(l.bases[origin.base], int(origin.slot))
 	}
 	l.slots[i] = symbol
 	return symbol
