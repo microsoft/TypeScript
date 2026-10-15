@@ -205,87 +205,102 @@ func (l *LanguageService) documentationLocationMapper(feature spanmap.Feature) d
 	}
 }
 
-// getDocumentationForSymbol tries each documentation source in turn (call-signature documentation,
-// an alias's own JSDoc, root-symbol JSDoc, declaration JSDoc, alias target JSDoc) and returns the
-// first non-empty result, formatted for contentFormat. At a call site the alias's own JSDoc is tried
-// after the declaration's instead. commentOnly restricts the result to the JSDoc summary, excluding
-// the @tag section.
+// getDocumentationForSymbol assembles the documentation shown for symbol at node. Every alias on
+// the way from symbol to the implementation contributes the JSDoc written on its own declaration,
+// outermost first, and the implementation contributes the first of: the resolved call or construct
+// signature's declaration, the root symbols, declaration (the one quick info picked), the alias
+// target's declaration. Descriptions are joined with a newline, then the tag sections follow in the
+// same order, with exact duplicates dropped from both. node only decides which implementation
+// declaration is picked, so a reference and a call to the same alias show the same lines. commentOnly
+// leaves the tag sections out.
 func getDocumentationForSymbol(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, declaration *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
-	callNode := getCallOrNewExpression(node)
-	documentation := documentationFromSignature(getMappedLocation, c, symbol, callNode, node, contentFormat, commentOnly)
-	if documentation != "" {
-		return documentation
+	var parts documentationParts
+	for _, aliasDeclaration := range aliasChainDeclarations(c, symbol) {
+		parts.add(getDocumentationPartsFromDeclaration(getMappedLocation, c, symbol, aliasDeclaration, node, contentFormat))
 	}
-
-	// For an alias, declaration is the target's, and the alias's own JSDoc comes before it. At a
-	// call site declaration is the resolved signature's instead, and that comes first.
-	if callNode == nil {
-		documentation = documentationFromAliasDeclaration(getMappedLocation, c, symbol, node, contentFormat, commentOnly)
-		if documentation != "" {
-			return documentation
-		}
+	description, tags := documentationFromSignature(getMappedLocation, c, symbol, getCallOrNewExpression(node), node, contentFormat)
+	if description == "" && tags == "" {
+		description, tags = documentationFromRootSymbols(getMappedLocation, c, symbol, node, contentFormat)
 	}
-
-	documentation = documentationFromRootSymbols(getMappedLocation, c, symbol, node, contentFormat, commentOnly)
-	if documentation != "" {
-		return documentation
+	if description == "" && tags == "" {
+		description, tags = getDocumentationPartsFromDeclaration(getMappedLocation, c, symbol, declaration, node, contentFormat)
 	}
-
-	documentation = getDocumentationFromDeclaration(getMappedLocation, c, symbol, declaration, node, contentFormat, commentOnly)
-	if documentation != "" {
-		return documentation
+	if description == "" && tags == "" {
+		description, tags = documentationFromAlias(getMappedLocation, c, symbol, node, contentFormat)
 	}
-
-	if callNode != nil {
-		documentation = documentationFromAliasDeclaration(getMappedLocation, c, symbol, node, contentFormat, commentOnly)
-		if documentation != "" {
-			return documentation
-		}
-	}
-
-	return documentationFromAlias(getMappedLocation, c, symbol, node, contentFormat, commentOnly)
+	parts.add(description, tags)
+	return parts.join(commentOnly)
 }
 
-func documentationFromSignature(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+// documentationParts collects the descriptions and tag sections of several declarations, keeping
+// each distinct one once in the order it was added.
+type documentationParts struct {
+	descriptions []string
+	tags         []string
+}
+
+func (p *documentationParts) add(description string, tags string) {
+	if description != "" {
+		p.descriptions = core.AppendIfUnique(p.descriptions, description)
+	}
+	if tags != "" {
+		p.tags = core.AppendIfUnique(p.tags, tags)
+	}
+}
+
+func (p *documentationParts) join(commentOnly bool) string {
+	documentation := strings.Join(p.descriptions, "\n")
+	if commentOnly {
+		return documentation
+	}
+	return documentation + strings.Join(p.tags, "")
+}
+
+// aliasChainDeclarations returns the alias declaration of symbol and of each alias it resolves
+// through, outermost first, up to the first symbol that is not an alias.
+func aliasChainDeclarations(c *checker.Checker, symbol *ast.Symbol) []*ast.Node {
+	var declarations []*ast.Node
+	var visited collections.Set[*ast.Symbol]
+	for symbol != nil && symbol.Flags()&ast.SymbolFlagsAlias != 0 && visited.AddIfAbsent(symbol) {
+		declaration := c.GetDeclarationOfAliasSymbol(symbol)
+		if declaration == nil {
+			break
+		}
+		declarations = append(declarations, declaration)
+		symbol = c.GetImmediateAliasedSymbol(symbol)
+		if symbol == c.GetUnknownSymbol() {
+			break
+		}
+	}
+	return declarations
+}
+
+func documentationFromSignature(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind) (string, string) {
 	if node == nil {
-		return ""
+		return "", ""
 	}
 	signature := c.GetResolvedSignature(node)
 	if signature == nil {
-		return ""
+		return "", ""
 	}
 	declaration := signature.Declaration()
 	if declaration == nil {
-		return ""
+		return "", ""
 	}
 	if ast.IsCallSignatureDeclaration(declaration) || ast.IsConstructSignatureDeclaration(declaration) {
-		return getDocumentationFromDeclaration(getMappedLocation, c, symbol, declaration, location, contentFormat, commentOnly)
+		return getDocumentationPartsFromDeclaration(getMappedLocation, c, symbol, declaration, location, contentFormat)
 	}
-	return ""
+	return "", ""
 }
 
-// documentationFromAliasDeclaration returns the JSDoc written on the alias itself, as on
-// `/** ... */ import x = a.x`. A comment made only of tags leaves the target's documentation in
-// place, so it returns nothing for one.
-func documentationFromAliasDeclaration(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
-	if symbol == nil || symbol.Flags&ast.SymbolFlagsAlias == 0 {
-		return ""
-	}
-	declaration := c.GetDeclarationOfAliasSymbol(symbol)
-	if getDocumentationFromDeclaration(getMappedLocation, c, symbol, declaration, node, contentFormat, true /*commentOnly*/) == "" {
-		return ""
-	}
-	return getDocumentationFromDeclaration(getMappedLocation, c, symbol, declaration, node, contentFormat, commentOnly)
-}
-
-func documentationFromAlias(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+func documentationFromAlias(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind) (string, string) {
 	if symbol == nil || symbol.Flags()&ast.SymbolFlagsAlias == 0 {
-		return ""
+		return "", ""
 	}
 
 	aliasedSymbol := c.GetAliasedSymbol(symbol)
 	if aliasedSymbol == nil || aliasedSymbol == c.GetUnknownSymbol() {
-		return ""
+		return "", ""
 	}
 
 	candidates := []*ast.Symbol{aliasedSymbol}
@@ -299,25 +314,25 @@ func documentationFromAlias(getMappedLocation documentationLocationMapper, c *ch
 			continue
 		}
 
-		if documentation := getDocumentationFromDeclaration(getMappedLocation, c, candidate, aliasedDeclaration, node, contentFormat, commentOnly); documentation != "" {
-			return documentation
+		if description, tags := getDocumentationPartsFromDeclaration(getMappedLocation, c, candidate, aliasedDeclaration, node, contentFormat); description != "" || tags != "" {
+			return description, tags
 		}
 	}
 
-	return ""
+	return "", ""
 }
 
-func documentationFromRootSymbols(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+func documentationFromRootSymbols(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind) (string, string) {
 	if symbol == nil {
-		return ""
+		return "", ""
 	}
 
 	rootSymbols := c.GetRootSymbols(symbol)
 	if len(rootSymbols) <= 1 {
-		return ""
+		return "", ""
 	}
 
-	var docs []string
+	var parts documentationParts
 	for _, rootSymbol := range rootSymbols {
 		if rootSymbol == nil {
 			continue
@@ -327,23 +342,31 @@ func documentationFromRootSymbols(getMappedLocation documentationLocationMapper,
 			declarations = []*ast.Node{rootSymbol.ValueDeclaration()}
 		}
 		for _, declaration := range declarations {
-			if documentation := getDocumentationFromDeclaration(getMappedLocation, c, rootSymbol, declaration, node, contentFormat, commentOnly); documentation != "" {
-				docs = core.AppendIfUnique(docs, documentation)
-			}
+			parts.add(getDocumentationPartsFromDeclaration(getMappedLocation, c, rootSymbol, declaration, node, contentFormat))
 		}
 	}
-	return strings.Join(docs, "\n")
+	return strings.Join(parts.descriptions, "\n"), strings.Join(parts.tags, "")
 }
 
 func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, declaration *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+	description, tags := getDocumentationPartsFromDeclaration(getMappedLocation, c, symbol, declaration, location, contentFormat)
+	if commentOnly {
+		return description
+	}
+	return description + tags
+}
+
+// getDocumentationPartsFromDeclaration renders the JSDoc on declaration as its description and its
+// tag section, each empty when there is none.
+func getDocumentationPartsFromDeclaration(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, declaration *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind) (string, string) {
 	if declaration == nil {
-		return ""
+		return "", ""
 	}
 	isMarkdown := contentFormat == lsproto.MarkupKindMarkdown
-	var b strings.Builder
+	var description, b strings.Builder
 	if jsdoc := getJSDocOrTag(c, declaration, &collections.Set[*ast.Symbol]{}); jsdoc != nil && !(declaration.Flags&ast.NodeFlagsReparsed == 0 && containsTypedefTag(jsdoc)) {
-		writeComments(getMappedLocation, &b, c, jsdoc.Comments(), isMarkdown)
-		if jsdoc.Kind == ast.KindJSDoc && !commentOnly {
+		writeComments(getMappedLocation, &description, c, jsdoc.Comments(), isMarkdown)
+		if jsdoc.Kind == ast.KindJSDoc {
 			if tags := jsdoc.AsJSDoc().Tags; tags != nil {
 				for _, tag := range tags.Nodes {
 					if tag.Kind == ast.KindJSDocTypeTag || tag.Kind == ast.KindJSDocTypedefTag || tag.Kind == ast.KindJSDocCallbackTag {
@@ -422,7 +445,7 @@ func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapp
 			}
 		}
 	}
-	return b.String()
+	return description.String(), b.String()
 }
 
 func formatQuickInfo(quickInfo string) string {
