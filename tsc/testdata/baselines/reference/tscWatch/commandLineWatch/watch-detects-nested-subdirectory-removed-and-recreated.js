@@ -62,7 +62,11 @@ Edit [0]:: remove nested dir
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS18003: [0mNo inputs were found in config file '/home/src/workspaces/project/tsconfig.json'. Specified 'include' paths were '["src/**/*.ts"]' and 'exclude' paths were '[]'.
+
+Found 1 error.
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 Watch Registrations::
@@ -73,15 +77,6 @@ tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
-
-Diff:: incremental has prior state and does not report no-inputs error
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -1,4 +0,0 @@
--[91merror[0m[90m TS18003: [0mNo inputs were found in config file '/home/src/workspaces/project/tsconfig.json'. Specified 'include' paths were '["src/**/*.ts"]' and 'exclude' paths were '[]'.
--
--Found 1 error.
--
 
 Edit [1]:: recreate nested dir with new content
 //// [/home/src/workspaces/project/src/lib/helper.ts] *new* 

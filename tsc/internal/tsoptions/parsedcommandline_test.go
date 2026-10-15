@@ -4,7 +4,9 @@ import (
 	"slices"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions/tsoptionstest"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -14,6 +16,42 @@ import (
 
 func TestParsedCommandLine(t *testing.T) {
 	t.Parallel()
+	t.Run("ReloadFileNames updates no-input diagnostics", func(t *testing.T) {
+		t.Parallel()
+		for _, config := range []string{
+			`{"include": ["*.ts"]}`,
+			`{"files": [], "include": ["*.ts"]}`,
+			`{"references": [], "include": ["*.ts"]}`,
+			`{"compilerOptions": {"strict": "invalid"}, "include": ["*.ts"]}`,
+		} {
+			t.Run(config, func(t *testing.T) {
+				t.Parallel()
+				withFiles := map[string]string{"/dev/a.ts": ""}
+				withoutFiles := map[string]string{}
+				initial := tsoptionstest.GetParsedCommandLine(t, config, withFiles, "/dev", tspath.CaseSensitive)
+				originalErrors := slices.Clone(initial.Errors)
+				empty := initial.ReloadFileNamesOfParsedCommandLine(vfstest.FromMap(withoutFiles, tspath.CaseSensitive))
+				cleanEmpty := tsoptionstest.GetParsedCommandLine(t, config, withoutFiles, "/dev", tspath.CaseSensitive)
+				compareDiagnostics := func(actual, expected []*ast.Diagnostic) {
+					t.Helper()
+					assert.Equal(t, len(actual), len(expected))
+					for i := range actual {
+						assert.Equal(t, ast.CompareDiagnostics(actual[i], expected[i]), 0)
+					}
+				}
+				compareDiagnostics(empty.Errors, cleanEmpty.Errors)
+				assert.Assert(t, slices.Equal(initial.Errors, originalErrors))
+				reloadedEmpty := empty.ReloadFileNamesOfParsedCommandLine(vfstest.FromMap(withoutFiles, tspath.CaseSensitive))
+				compareDiagnostics(reloadedEmpty.Errors, cleanEmpty.Errors)
+				restored := empty.ReloadFileNamesOfParsedCommandLine(vfstest.FromMap(withFiles, tspath.CaseSensitive))
+				compareDiagnostics(restored.Errors, initial.Errors)
+				compareDiagnostics(empty.Errors, cleanEmpty.Errors)
+				for _, diagnostic := range restored.Errors {
+					assert.Assert(t, diagnostic.Code() != diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.Code())
+				}
+			})
+		}
+	})
 	t.Run("PossiblyMatchesFileName", func(t *testing.T) {
 		t.Parallel()
 
