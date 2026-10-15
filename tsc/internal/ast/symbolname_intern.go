@@ -136,6 +136,31 @@ func storeSymbolNameSlot(slots []atomic.Uint64, hash uint64, v uint64) {
 	}
 }
 
+// SymbolNameCache is a small direct-mapped cache in front of the global intern
+// table, for callers like the parser that intern many repeated names. It holds
+// no pointers, so updating it needs no write barriers.
+type SymbolNameCache struct {
+	slots [symbolNameCacheSize]symbolNameCacheSlot
+}
+
+type symbolNameCacheSlot struct {
+	hash uint32
+	id   uint32
+}
+
+const symbolNameCacheSize = 4096
+
+func (c *SymbolNameCache) Make(text string) SymbolName {
+	hash := hashSymbolNameText(text)
+	slot := &c.slots[hash&(symbolNameCacheSize-1)]
+	if slot.id != 0 && slot.hash == uint32(hash>>32) && symbolNames.text(slot.id) == text {
+		return SymbolName{slot.id}
+	}
+	id := symbolNames.internHashed(text, hash)
+	*slot = symbolNameCacheSlot{hash: uint32(hash >> 32), id: id}
+	return SymbolName{id}
+}
+
 // hashSymbolNameText is FNV-1a with a final mix. Names are short, so this
 // inlines well and beats a general-purpose hash call.
 func hashSymbolNameText(text string) uint64 {

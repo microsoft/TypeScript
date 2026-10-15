@@ -84,6 +84,7 @@ type Parser struct {
 	hasParseError               bool
 
 	identifierCount            int
+	identifierNames            *ast.SymbolNameCache
 	notParenthesizedArrow      collections.Set[int]
 	nodeSliceArena             core.Arena[*ast.Node]
 	stringSliceArena           core.Arena[string]
@@ -101,7 +102,7 @@ type Parser struct {
 }
 
 func newParser() *Parser {
-	res := &Parser{}
+	res := &Parser{identifierNames: &ast.SymbolNameCache{}}
 	res.initializeClosures()
 	return res
 }
@@ -127,7 +128,7 @@ func getParser() *Parser {
 }
 
 func putParser(p *Parser) {
-	*p = Parser{scanner: p.scanner, setParentFromContext: p.setParentFromContext}
+	*p = Parser{scanner: p.scanner, setParentFromContext: p.setParentFromContext, identifierNames: p.identifierNames}
 	parserPool.Put(p)
 }
 
@@ -3040,7 +3041,7 @@ func (p *Parser) parseRightSideOfDot(allowIdentifierNames bool, allowPrivateIden
 
 func (p *Parser) newIdentifier(text string) *ast.Node {
 	p.identifierCount++
-	id := p.factory.NewIdentifier(text)
+	id := p.factory.NewIdentifierFromSymbolName(p.identifierNames.Make(text))
 	if text == "await" {
 		p.statementHasAwaitIdentifier = true
 	}

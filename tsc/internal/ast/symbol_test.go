@@ -52,12 +52,17 @@ func TestConcurrentSymbolNameInterning(t *testing.T) {
 	var wg sync.WaitGroup
 	for w := range workers {
 		wg.Go(func() {
+			var cache ast.SymbolNameCache
 			names := make([]ast.SymbolName, count)
 			for i := range count {
 				// Workers start at different offsets so inserts race.
 				j := (i + w*count/workers) % count
 				text := "concurrentName" + strconv.Itoa(j)
-				names[j] = ast.MakeSymbolName(text)
+				if i%2 == 0 {
+					names[j] = cache.Make(text)
+				} else {
+					names[j] = ast.MakeSymbolName(text)
+				}
 			}
 			results[w] = names
 		})
