@@ -55,14 +55,11 @@ func (fs *projectReferenceDtsFakingVfs) CaseSensitivity() tspath.CaseSensitivity
 
 // FileExists implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) FileExists(path tspath.RootedFilePath) bool {
-	if fs.host.FS().FileExists(path) {
+	// Prefer referenced sources so resolution does not probe their declaration outputs.
+	if path.IsDeclarationFile() && fs.fileExistsUsingSource(path) {
 		return true
 	}
-	if !path.IsDeclarationFile() {
-		return false
-	}
-	// Project references go to source file instead of .d.ts file
-	return fs.fileExistsUsingSource(path)
+	return fs.host.FS().FileExists(path)
 }
 
 // ReadFile implements vfs.FS.
@@ -93,11 +90,14 @@ func (fs *projectReferenceDtsFakingVfs) Chtimes(path tspath.RootedPath, aTime ti
 
 // DirectoryExists implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) DirectoryExists(path tspath.RootedDirectoryPath) bool {
+	if fs.directoryExistsUsingSource(path) {
+		return true
+	}
 	if fs.host.FS().DirectoryExists(path) {
 		fs.handleDirectoryCouldBeSymlink(path)
 		return true
 	}
-	return fs.directoryExistsUsingSource(path)
+	return false
 }
 
 // GetAccessibleEntries implements vfs.FS.
@@ -201,7 +201,12 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(
 		fs.handleDirectoryCouldBeSymlink(packageRoot)
 	}
 	knownDirectoryLinks := fs.knownSymlinks.Directories()
-	if knownDirectoryLinks.Size() == 0 {
+	hasDirectoryLinks := false
+	knownDirectoryLinks.Range(func(tspath.PathKey, *symlinks.KnownDirectoryLink) bool {
+		hasDirectoryLinks = true
+		return false
+	})
+	if !hasDirectoryLinks {
 		return false
 	}
 	if onFileExists != nil {
@@ -209,6 +214,26 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(
 		if ok {
 			return true
 		}
+	}
+
+	// Avoid scanning unrelated links for files or directories in external packages.
+	canMap := false
+	for directory := fileOrDirectory.Directory(); ; {
+		if link, ok := knownDirectoryLinks.Load(fs.pathKey(directory.AsPath())); ok && link != nil {
+			realFile, ok := link.ResolveFilePath(tspath.RootedFilePathFromPath(fileOrDirectory), fs.CaseSensitivity())
+			if ok && existsUsingSource(tspath.RootedPath(realFile)).IsTrue() {
+				canMap = true
+				break
+			}
+		}
+		parent := directory.AsPath().Directory()
+		if parent == directory {
+			break
+		}
+		directory = parent
+	}
+	if !canMap {
+		return false
 	}
 
 	// If it contains node_modules check if its one of the symlinked path we know of
