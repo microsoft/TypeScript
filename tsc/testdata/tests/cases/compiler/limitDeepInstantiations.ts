@@ -1,6 +1,10 @@
 // @target: es2015
-// Repro from #14837
+// @strict: true
 
-type Foo<T extends "true", B> = { "true": Foo<T, Foo<T, B>> }[T];
-let f1: Foo<"true", {}>;
-let f2: Foo<"false", {}>;
+type BuildTuple<Length extends number, Elements extends unknown[] = []> =
+	Elements["length"] extends Length ? [] : [unknown, ...BuildTuple<Length, [unknown, ...Elements]>];
+
+declare const shallow: BuildTuple<8>;
+const shallowLength: 8 = shallow.length;
+
+type Deep = BuildTuple<200>;

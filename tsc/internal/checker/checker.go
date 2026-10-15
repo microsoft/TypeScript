@@ -2561,6 +2561,8 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 		c.checkFunctionExpressionOrObjectLiteralMethodDeferred(node)
 	case ast.KindGetAccessor, ast.KindSetAccessor:
 		c.checkAccessorDeclaration(node)
+	case ast.KindClassDeclaration:
+		c.checkClassLikeDeclarationDeferred(node)
 	case ast.KindClassExpression:
 		c.checkClassExpressionDeferred(node)
 	case ast.KindTypeParameter:
@@ -4318,6 +4320,7 @@ func (c *Checker) checkClassDeclaration(node *ast.Node) {
 		c.grammarErrorOnFirstToken(node, diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name)
 	}
 	c.checkClassLikeDeclaration(node)
+	c.checkNodeDeferred(node)
 	c.checkSourceElements(node.Members())
 	c.checkConstructorDeclaredProperties(node)
 	c.registerForUnusedIdentifiersCheck(node)
@@ -4366,7 +4369,6 @@ func (c *Checker) checkClassLikeDeclaration(node *ast.Node) {
 			baseConstructorType := c.getBaseConstructorTypeOfClass(classType)
 			staticBaseType := c.getApparentType(baseConstructorType)
 			c.checkBaseTypeAccessibility(staticBaseType, baseTypeNode)
-			c.checkSourceElement(baseTypeNode.Expression())
 			if len(baseTypeNode.TypeArguments()) != 0 {
 				c.checkSourceElements(baseTypeNode.TypeArguments())
 				for _, constructor := range c.getConstructorsForTypeArguments(staticBaseType, baseTypeNode.TypeArguments(), baseTypeNode) {
@@ -4436,6 +4438,12 @@ func (c *Checker) checkClassLikeDeclaration(node *ast.Node) {
 	c.checkIndexConstraints(staticType, symbol, true /*isStaticIndex*/)
 	c.checkClassOrInterfaceForDuplicateIndexSignatures(node)
 	c.checkPropertyInitialization(node)
+}
+
+func (c *Checker) checkClassLikeDeclarationDeferred(node *ast.Node) {
+	if baseTypeNode := ast.GetClassExtendsHeritageElement(node); baseTypeNode != nil {
+		c.checkExpression(baseTypeNode.Expression())
+	}
 }
 
 func (c *Checker) checkJSDocAugmentsTagMatchesExtends(node *ast.Node, baseTypeNode *ast.ExpressionWithTypeArgumentsNode, baseType *Type) {
@@ -5239,7 +5247,10 @@ func (c *Checker) checkEnumMember(node *ast.Node) {
 		c.checkExpression(node.Name().Expression())
 	}
 	if node.Initializer() != nil {
-		c.checkExpression(node.Initializer())
+		initializerType := c.checkExpression(node.Initializer())
+		if c.getEnumMemberValue(node).Value == nil && !ast.IsEnumConst(node.Parent) && node.Parent.Flags&ast.NodeFlagsAmbient == 0 {
+			c.checkTypeAssignableTo(initializerType, c.numberType, node.Initializer(), diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values)
+		}
 	}
 }
 
@@ -10271,7 +10282,6 @@ func (c *Checker) checkParenthesizedExpression(node *ast.Node, checkMode CheckMo
 }
 
 func (c *Checker) checkClassExpression(node *ast.Node) *Type {
-	c.checkClassLikeDeclaration(node)
 	c.checkNodeDeferred(node)
 	c.checkClassExpressionExternalHelpers(node)
 	return c.getTypeOfSymbol(c.getSymbolOfDeclaration(node))
@@ -10333,6 +10343,8 @@ func (c *Checker) checkClassExpressionExternalHelpers(node *ast.ClassExpressionN
 }
 
 func (c *Checker) checkClassExpressionDeferred(node *ast.Node) {
+	c.checkClassLikeDeclaration(node)
+	c.checkClassLikeDeclarationDeferred(node)
 	c.checkSourceElements(node.Members())
 	c.checkConstructorDeclaredProperties(node)
 	c.registerForUnusedIdentifiersCheck(node)
@@ -16881,6 +16893,10 @@ func (c *Checker) GetTypeOfSymbolAtLocation(symbol *ast.Symbol, location *ast.No
 }
 
 func (c *Checker) getTypeOfSymbol(symbol *ast.Symbol) *Type {
+	return c.getTypeWithBaseTypeVariable(c.getTypeOfSymbolWithCache(symbol))
+}
+
+func (c *Checker) getTypeOfSymbolWithCache(symbol *ast.Symbol) *Type {
 	links := c.valueSymbolLinks.Get(symbol)
 	if links.resolvedType != nil {
 		return links.resolvedType
@@ -17342,14 +17358,23 @@ func (c *Checker) getTypeOfFuncClassEnumModule(symbol *ast.Symbol) *Type {
 	}
 	t := c.newObjectType(ObjectFlagsAnonymous, symbol)
 	if symbol.Flags()&ast.SymbolFlagsClass != 0 {
-		baseTypeVariable := c.getBaseTypeVariableOfClass(symbol)
-		if baseTypeVariable != nil {
-			return c.getIntersectionType([]*Type{t, baseTypeVariable})
-		}
 		return t
 	}
 	if c.strictNullChecks && symbol.Flags()&ast.SymbolFlagsOptional != 0 {
 		return c.getOptionalType(t /*isProperty*/, true)
+	}
+	return t
+}
+
+func (c *Checker) getTypeWithBaseTypeVariable(t *Type) *Type {
+	if t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsClass != 0 {
+		baseTypeVariable := c.getBaseTypeVariableOfClass(t.symbol)
+		if baseTypeVariable != nil {
+			if mapper := t.AsObjectType().mapper; mapper != nil {
+				baseTypeVariable = c.instantiateType(baseTypeVariable, mapper)
+			}
+			return c.getIntersectionType([]*Type{t, baseTypeVariable})
+		}
 	}
 	return t
 }
@@ -17388,7 +17413,7 @@ func (c *Checker) getBaseConstructorTypeOfClass(t *Type) *Type {
 	if !c.pushTypeResolution(t, TypeSystemPropertyNameResolvedBaseConstructorType) {
 		return c.errorType
 	}
-	baseConstructorType := c.checkExpression(baseTypeNode.Expression())
+	baseConstructorType := c.getTypeOfExpression(baseTypeNode.Expression())
 	if baseConstructorType.flags&(TypeFlagsObject|TypeFlagsIntersection) != 0 {
 		// Resolving the members of a class requires us to resolve the base class of that class.
 		// We force resolution here such that we catch circularities now.
@@ -19227,7 +19252,11 @@ func (c *Checker) reportCircularityError(symbol *ast.Symbol) *Type {
 		}
 		// Check if variable has initializer that circularly references the variable itself
 		if c.noImplicitAny && (!ast.IsParameterDeclaration(declaration) || declaration.Initializer() != nil) {
-			c.error(symbol.ValueDeclaration(), diagnostics.X_0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer, c.symbolToString(symbol))
+			message := diagnostics.X_0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer
+			if ast.IsGetAccessorDeclaration(declaration) {
+				message = diagnostics.X_0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions
+			}
+			c.error(declaration, message, c.symbolToString(symbol))
 		}
 	} else if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		node := c.getDeclarationOfAliasSymbol(symbol)
@@ -24441,6 +24470,7 @@ func (c *Checker) getDeclaredTypeOfEnumMember(symbol *ast.Symbol) *Type {
 }
 
 func (c *Checker) computeEnumMemberValues(node *ast.Node) {
+	// Initializer type-checking belongs in checkEnumMember: doing it here can cache enum types from incomplete values.
 	nodeLinks := c.nodeLinks.Get(node)
 	if !(nodeLinks.flags&NodeCheckFlagsEnumValuesComputed != 0) {
 		nodeLinks.flags |= NodeCheckFlagsEnumValuesComputed
@@ -24520,8 +24550,6 @@ func (c *Checker) computeConstantEnumMemberValue(member *ast.Node) evaluator.Res
 		c.error(initializer, diagnostics.X_const_enum_member_initializers_must_be_constant_expressions)
 	case member.Parent.Flags&ast.NodeFlagsAmbient != 0:
 		c.error(initializer, diagnostics.In_ambient_enum_declarations_member_initializer_must_be_constant_expression)
-	default:
-		c.checkTypeAssignableTo(c.checkExpression(initializer), c.numberType, initializer, diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values)
 	}
 	return result
 }

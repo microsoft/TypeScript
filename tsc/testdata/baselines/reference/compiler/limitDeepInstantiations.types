@@ -1,15 +1,20 @@
 //// [tests/cases/compiler/limitDeepInstantiations.ts] ////
 
 === limitDeepInstantiations.ts ===
-// Repro from #14837
+type BuildTuple<Length extends number, Elements extends unknown[] = []> =
+>BuildTuple : BuildTuple<Length, Elements>
 
-type Foo<T extends "true", B> = { "true": Foo<T, Foo<T, B>> }[T];
->Foo : Foo<T, B>
->"true" : Foo<T, Foo<T, B>>
+	Elements["length"] extends Length ? [] : [unknown, ...BuildTuple<Length, [unknown, ...Elements]>];
 
-let f1: Foo<"true", {}>;
->f1 : any
+declare const shallow: BuildTuple<8>;
+>shallow : [unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown]
 
-let f2: Foo<"false", {}>;
->f2 : unknown
+const shallowLength: 8 = shallow.length;
+>shallowLength : 8
+>shallow.length : 8
+>shallow : [unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown]
+>length : 8
+
+type Deep = BuildTuple<200>;
+>Deep : [unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, ...any[]]
 
