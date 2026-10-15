@@ -524,7 +524,24 @@ function generateLayouts(w: CodeWriter) {
     w.pop();
     w.write(")");
     w.write("");
-    w.write("// layoutRecord returns a zero record of layout, for tests.");
+    w.write("// allocRecords allocates n zeroed records of layout.");
+    w.write("func allocRecords(layout nodeLayout, n int) unsafe.Pointer {");
+    w.push();
+    w.write("switch layout {");
+    for (const node of api.nodes()) {
+        w.write(`case ${layoutName(node)}:`);
+        w.write(`return unsafe.Pointer(unsafe.SliceData(make([]${dataName(node)}, n)))`);
+    }
+    for (const name of EXTRA_LAYOUTS) {
+        w.write(`case layout${name}:`);
+        w.write(`return unsafe.Pointer(unsafe.SliceData(make([]${name[0].toLowerCase()}${name.slice(1)}, n)))`);
+    }
+    w.write("}");
+    w.write(`panic("unknown node layout")`);
+    w.pop();
+    w.write("}");
+    w.write("");
+    w.write("// layoutRecord returns a zero record of layout.");
     w.write("func layoutRecord(layout nodeLayout) any {");
     w.push();
     w.write("switch layout {");

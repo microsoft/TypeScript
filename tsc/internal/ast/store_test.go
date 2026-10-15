@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"gotest.tools/v3/assert"
+	"gotest.tools/v3/assert/cmp"
 )
 
 // Records must hold no Go pointers, so the garbage collector can skip
@@ -48,28 +49,25 @@ func TestNodeStoreCompaction(t *testing.T) {
 		before = append(before, factory.NewExpressionStatement(factory.NewIdentifier(strconv.Itoa(i))))
 	}
 	factory.CompactStore()
-	var after []Node
-	for i := range 100 {
-		after = append(after, factory.NewExpressionStatement(factory.NewIdentifier(strconv.Itoa(100+i))))
-	}
-	for i, node := range append(before, after...) {
+	for i, node := range before {
 		assert.Equal(t, node.Expression().Text(), strconv.Itoa(i))
 	}
 	store := factory.store
-	assert.Equal(t, store.flat[layoutIdentifier].n, uint32(100))
+	assert.Assert(t, store.records[layoutIdentifier].sealed)
 	assert.Equal(t, store.records[layoutIdentifier].n, uint32(100))
+	assert.Assert(t, cmp.Panics(func() { factory.NewIdentifier("late") }))
 
 	store.compactSide()
 	before[0].Expression().AsIdentifier().SetText("renamed")
 	assert.Equal(t, before[0].Expression().Text(), "renamed")
-	assert.Equal(t, after[99].Expression().Text(), "199")
+	assert.Equal(t, before[99].Expression().Text(), "99")
 }
 
 func TestNodeSideTableZeroValues(t *testing.T) {
 	t.Parallel()
 	factory := NewNodeFactory(NodeFactoryHooks{})
 	node := factory.NewBlock(nil, false)
-	assert.Equal(t, factory.store.nodeLists.tail.n, uint32(0))
+	assert.Equal(t, len(factory.store.nodeLists.items), 0)
 	assert.Assert(t, node.AsBlock().Locals() == nil)
 
 	locals := SymbolTable{}
@@ -77,7 +75,7 @@ func TestNodeSideTableZeroValues(t *testing.T) {
 	assert.Assert(t, node.AsBlock().Locals() != nil)
 	node.AsBlock().SetLocals(nil)
 	assert.Assert(t, node.AsBlock().Locals() == nil)
-	assert.Equal(t, factory.store.symbolTables.tail.n, uint32(1))
+	assert.Equal(t, len(factory.store.symbolTables.items), 1)
 }
 
 func TestNodeTextRefs(t *testing.T) {

@@ -789,7 +789,402 @@ const (
 	_ = -unsafe.Offsetof(flowReduceLabelData{}.nodeBaseData)
 )
 
-// layoutRecord returns a zero record of layout, for tests.
+// allocRecords allocates n zeroed records of layout.
+func allocRecords(layout nodeLayout, n int) unsafe.Pointer {
+	switch layout {
+	case layoutToken:
+		return unsafe.Pointer(unsafe.SliceData(make([]tokenData, n)))
+	case layoutIdentifier:
+		return unsafe.Pointer(unsafe.SliceData(make([]identifierData, n)))
+	case layoutPrivateIdentifier:
+		return unsafe.Pointer(unsafe.SliceData(make([]privateIdentifierData, n)))
+	case layoutQualifiedName:
+		return unsafe.Pointer(unsafe.SliceData(make([]qualifiedNameData, n)))
+	case layoutComputedPropertyName:
+		return unsafe.Pointer(unsafe.SliceData(make([]computedPropertyNameData, n)))
+	case layoutDecorator:
+		return unsafe.Pointer(unsafe.SliceData(make([]decoratorData, n)))
+	case layoutEmptyStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]emptyStatementData, n)))
+	case layoutIfStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]ifStatementData, n)))
+	case layoutDoStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]doStatementData, n)))
+	case layoutWhileStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]whileStatementData, n)))
+	case layoutForStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]forStatementData, n)))
+	case layoutForInOrOfStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]forInOrOfStatementData, n)))
+	case layoutBreakStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]breakStatementData, n)))
+	case layoutContinueStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]continueStatementData, n)))
+	case layoutReturnStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]returnStatementData, n)))
+	case layoutWithStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]withStatementData, n)))
+	case layoutSwitchStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]switchStatementData, n)))
+	case layoutCaseBlock:
+		return unsafe.Pointer(unsafe.SliceData(make([]caseBlockData, n)))
+	case layoutCaseOrDefaultClause:
+		return unsafe.Pointer(unsafe.SliceData(make([]caseOrDefaultClauseData, n)))
+	case layoutThrowStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]throwStatementData, n)))
+	case layoutTryStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]tryStatementData, n)))
+	case layoutCatchClause:
+		return unsafe.Pointer(unsafe.SliceData(make([]catchClauseData, n)))
+	case layoutDebuggerStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]debuggerStatementData, n)))
+	case layoutLabeledStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]labeledStatementData, n)))
+	case layoutExpressionStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]expressionStatementData, n)))
+	case layoutBlock:
+		return unsafe.Pointer(unsafe.SliceData(make([]blockData, n)))
+	case layoutVariableStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]variableStatementData, n)))
+	case layoutVariableDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]variableDeclarationData, n)))
+	case layoutVariableDeclarationList:
+		return unsafe.Pointer(unsafe.SliceData(make([]variableDeclarationListData, n)))
+	case layoutBindingPattern:
+		return unsafe.Pointer(unsafe.SliceData(make([]bindingPatternData, n)))
+	case layoutParameterDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]parameterDeclarationData, n)))
+	case layoutBindingElement:
+		return unsafe.Pointer(unsafe.SliceData(make([]bindingElementData, n)))
+	case layoutMissingDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]missingDeclarationData, n)))
+	case layoutFunctionDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]functionDeclarationData, n)))
+	case layoutClassDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]classDeclarationData, n)))
+	case layoutClassExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]classExpressionData, n)))
+	case layoutHeritageClause:
+		return unsafe.Pointer(unsafe.SliceData(make([]heritageClauseData, n)))
+	case layoutInterfaceDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]interfaceDeclarationData, n)))
+	case layoutTypeAliasDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]typeAliasDeclarationData, n)))
+	case layoutEnumMember:
+		return unsafe.Pointer(unsafe.SliceData(make([]enumMemberData, n)))
+	case layoutEnumDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]enumDeclarationData, n)))
+	case layoutModuleBlock:
+		return unsafe.Pointer(unsafe.SliceData(make([]moduleBlockData, n)))
+	case layoutNotEmittedStatement:
+		return unsafe.Pointer(unsafe.SliceData(make([]notEmittedStatementData, n)))
+	case layoutNotEmittedTypeElement:
+		return unsafe.Pointer(unsafe.SliceData(make([]notEmittedTypeElementData, n)))
+	case layoutImportDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]importDeclarationData, n)))
+	case layoutExternalModuleReference:
+		return unsafe.Pointer(unsafe.SliceData(make([]externalModuleReferenceData, n)))
+	case layoutNamespaceImport:
+		return unsafe.Pointer(unsafe.SliceData(make([]namespaceImportData, n)))
+	case layoutNamedImports:
+		return unsafe.Pointer(unsafe.SliceData(make([]namedImportsData, n)))
+	case layoutExportAssignment:
+		return unsafe.Pointer(unsafe.SliceData(make([]exportAssignmentData, n)))
+	case layoutNamespaceExportDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]namespaceExportDeclarationData, n)))
+	case layoutNamespaceExport:
+		return unsafe.Pointer(unsafe.SliceData(make([]namespaceExportData, n)))
+	case layoutNamedExports:
+		return unsafe.Pointer(unsafe.SliceData(make([]namedExportsData, n)))
+	case layoutExportSpecifier:
+		return unsafe.Pointer(unsafe.SliceData(make([]exportSpecifierData, n)))
+	case layoutCallSignatureDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]callSignatureDeclarationData, n)))
+	case layoutConstructSignatureDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]constructSignatureDeclarationData, n)))
+	case layoutConstructorDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]constructorDeclarationData, n)))
+	case layoutGetAccessorDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]getAccessorDeclarationData, n)))
+	case layoutSetAccessorDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]setAccessorDeclarationData, n)))
+	case layoutIndexSignatureDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]indexSignatureDeclarationData, n)))
+	case layoutMethodSignatureDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]methodSignatureDeclarationData, n)))
+	case layoutMethodDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]methodDeclarationData, n)))
+	case layoutPropertySignatureDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]propertySignatureDeclarationData, n)))
+	case layoutPropertyDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]propertyDeclarationData, n)))
+	case layoutSemicolonClassElement:
+		return unsafe.Pointer(unsafe.SliceData(make([]semicolonClassElementData, n)))
+	case layoutClassStaticBlockDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]classStaticBlockDeclarationData, n)))
+	case layoutOmittedExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]omittedExpressionData, n)))
+	case layoutKeywordExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]keywordExpressionData, n)))
+	case layoutStringLiteral:
+		return unsafe.Pointer(unsafe.SliceData(make([]stringLiteralData, n)))
+	case layoutNumericLiteral:
+		return unsafe.Pointer(unsafe.SliceData(make([]numericLiteralData, n)))
+	case layoutBigIntLiteral:
+		return unsafe.Pointer(unsafe.SliceData(make([]bigIntLiteralData, n)))
+	case layoutRegularExpressionLiteral:
+		return unsafe.Pointer(unsafe.SliceData(make([]regularExpressionLiteralData, n)))
+	case layoutNoSubstitutionTemplateLiteral:
+		return unsafe.Pointer(unsafe.SliceData(make([]noSubstitutionTemplateLiteralData, n)))
+	case layoutBinaryExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]binaryExpressionData, n)))
+	case layoutPrefixUnaryExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]prefixUnaryExpressionData, n)))
+	case layoutPostfixUnaryExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]postfixUnaryExpressionData, n)))
+	case layoutYieldExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]yieldExpressionData, n)))
+	case layoutArrowFunction:
+		return unsafe.Pointer(unsafe.SliceData(make([]arrowFunctionData, n)))
+	case layoutFunctionExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]functionExpressionData, n)))
+	case layoutAsExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]asExpressionData, n)))
+	case layoutSatisfiesExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]satisfiesExpressionData, n)))
+	case layoutConditionalExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]conditionalExpressionData, n)))
+	case layoutPropertyAccessExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]propertyAccessExpressionData, n)))
+	case layoutElementAccessExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]elementAccessExpressionData, n)))
+	case layoutCallExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]callExpressionData, n)))
+	case layoutNewExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]newExpressionData, n)))
+	case layoutMetaProperty:
+		return unsafe.Pointer(unsafe.SliceData(make([]metaPropertyData, n)))
+	case layoutNonNullExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]nonNullExpressionData, n)))
+	case layoutSpreadElement:
+		return unsafe.Pointer(unsafe.SliceData(make([]spreadElementData, n)))
+	case layoutTemplateExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]templateExpressionData, n)))
+	case layoutTemplateSpan:
+		return unsafe.Pointer(unsafe.SliceData(make([]templateSpanData, n)))
+	case layoutTaggedTemplateExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]taggedTemplateExpressionData, n)))
+	case layoutParenthesizedExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]parenthesizedExpressionData, n)))
+	case layoutArrayLiteralExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]arrayLiteralExpressionData, n)))
+	case layoutObjectLiteralExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]objectLiteralExpressionData, n)))
+	case layoutSpreadAssignment:
+		return unsafe.Pointer(unsafe.SliceData(make([]spreadAssignmentData, n)))
+	case layoutPropertyAssignment:
+		return unsafe.Pointer(unsafe.SliceData(make([]propertyAssignmentData, n)))
+	case layoutShorthandPropertyAssignment:
+		return unsafe.Pointer(unsafe.SliceData(make([]shorthandPropertyAssignmentData, n)))
+	case layoutDeleteExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]deleteExpressionData, n)))
+	case layoutTypeOfExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]typeOfExpressionData, n)))
+	case layoutVoidExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]voidExpressionData, n)))
+	case layoutAwaitExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]awaitExpressionData, n)))
+	case layoutTypeAssertion:
+		return unsafe.Pointer(unsafe.SliceData(make([]typeAssertionData, n)))
+	case layoutKeywordTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]keywordTypeNodeData, n)))
+	case layoutUnionTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]unionTypeNodeData, n)))
+	case layoutIntersectionTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]intersectionTypeNodeData, n)))
+	case layoutConditionalTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]conditionalTypeNodeData, n)))
+	case layoutTypeOperatorNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]typeOperatorNodeData, n)))
+	case layoutInferTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]inferTypeNodeData, n)))
+	case layoutArrayTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]arrayTypeNodeData, n)))
+	case layoutIndexedAccessTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]indexedAccessTypeNodeData, n)))
+	case layoutTypeReferenceNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]typeReferenceNodeData, n)))
+	case layoutExpressionWithTypeArguments:
+		return unsafe.Pointer(unsafe.SliceData(make([]expressionWithTypeArgumentsData, n)))
+	case layoutLiteralTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]literalTypeNodeData, n)))
+	case layoutThisTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]thisTypeNodeData, n)))
+	case layoutTypePredicateNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]typePredicateNodeData, n)))
+	case layoutImportAttribute:
+		return unsafe.Pointer(unsafe.SliceData(make([]importAttributeData, n)))
+	case layoutImportAttributes:
+		return unsafe.Pointer(unsafe.SliceData(make([]importAttributesData, n)))
+	case layoutTypeQueryNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]typeQueryNodeData, n)))
+	case layoutMappedTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]mappedTypeNodeData, n)))
+	case layoutTypeLiteralNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]typeLiteralNodeData, n)))
+	case layoutTupleTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]tupleTypeNodeData, n)))
+	case layoutNamedTupleMember:
+		return unsafe.Pointer(unsafe.SliceData(make([]namedTupleMemberData, n)))
+	case layoutOptionalTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]optionalTypeNodeData, n)))
+	case layoutRestTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]restTypeNodeData, n)))
+	case layoutParenthesizedTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]parenthesizedTypeNodeData, n)))
+	case layoutFunctionTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]functionTypeNodeData, n)))
+	case layoutConstructorTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]constructorTypeNodeData, n)))
+	case layoutTemplateHead:
+		return unsafe.Pointer(unsafe.SliceData(make([]templateHeadData, n)))
+	case layoutTemplateMiddle:
+		return unsafe.Pointer(unsafe.SliceData(make([]templateMiddleData, n)))
+	case layoutTemplateTail:
+		return unsafe.Pointer(unsafe.SliceData(make([]templateTailData, n)))
+	case layoutTemplateLiteralTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]templateLiteralTypeNodeData, n)))
+	case layoutTemplateLiteralTypeSpan:
+		return unsafe.Pointer(unsafe.SliceData(make([]templateLiteralTypeSpanData, n)))
+	case layoutSyntheticExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]syntheticExpressionData, n)))
+	case layoutPartiallyEmittedExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]partiallyEmittedExpressionData, n)))
+	case layoutJsxElement:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxElementData, n)))
+	case layoutJsxAttributes:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxAttributesData, n)))
+	case layoutJsxNamespacedName:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxNamespacedNameData, n)))
+	case layoutJsxOpeningElement:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxOpeningElementData, n)))
+	case layoutJsxSelfClosingElement:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxSelfClosingElementData, n)))
+	case layoutJsxFragment:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxFragmentData, n)))
+	case layoutJsxOpeningFragment:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxOpeningFragmentData, n)))
+	case layoutJsxClosingFragment:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxClosingFragmentData, n)))
+	case layoutJsxAttribute:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxAttributeData, n)))
+	case layoutJsxSpreadAttribute:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxSpreadAttributeData, n)))
+	case layoutJsxClosingElement:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxClosingElementData, n)))
+	case layoutJsxExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxExpressionData, n)))
+	case layoutJsxText:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsxTextData, n)))
+	case layoutSyntaxList:
+		return unsafe.Pointer(unsafe.SliceData(make([]syntaxListData, n)))
+	case layoutJSDoc:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocData, n)))
+	case layoutJSDocTypeExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocTypeExpressionData, n)))
+	case layoutJSDocNonNullableType:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocNonNullableTypeData, n)))
+	case layoutJSDocNullableType:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocNullableTypeData, n)))
+	case layoutJSDocAllType:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocAllTypeData, n)))
+	case layoutJSDocVariadicType:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocVariadicTypeData, n)))
+	case layoutJSDocOptionalType:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocOptionalTypeData, n)))
+	case layoutJSDocTypeTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocTypeTagData, n)))
+	case layoutJSDocUnknownTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocUnknownTagData, n)))
+	case layoutJSDocTemplateTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocTemplateTagData, n)))
+	case layoutJSDocReturnTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocReturnTagData, n)))
+	case layoutJSDocPublicTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocPublicTagData, n)))
+	case layoutJSDocPrivateTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocPrivateTagData, n)))
+	case layoutJSDocProtectedTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocProtectedTagData, n)))
+	case layoutJSDocReadonlyTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocReadonlyTagData, n)))
+	case layoutJSDocOverrideTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocOverrideTagData, n)))
+	case layoutJSDocDeprecatedTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocDeprecatedTagData, n)))
+	case layoutJSDocSeeTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocSeeTagData, n)))
+	case layoutJSDocImplementsTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocImplementsTagData, n)))
+	case layoutJSDocAugmentsTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocAugmentsTagData, n)))
+	case layoutJSDocSatisfiesTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocSatisfiesTagData, n)))
+	case layoutJSDocThrowsTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocThrowsTagData, n)))
+	case layoutJSDocThisTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocThisTagData, n)))
+	case layoutJSDocImportTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocImportTagData, n)))
+	case layoutJSDocCallbackTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocCallbackTagData, n)))
+	case layoutJSDocOverloadTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocOverloadTagData, n)))
+	case layoutJSDocTypedefTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocTypedefTagData, n)))
+	case layoutJSDocSignature:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocSignatureData, n)))
+	case layoutJSDocNameReference:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocNameReferenceData, n)))
+	case layoutSourceFile:
+		return unsafe.Pointer(unsafe.SliceData(make([]SourceFile, n)))
+	case layoutModuleDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]moduleDeclarationData, n)))
+	case layoutImportEqualsDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]importEqualsDeclarationData, n)))
+	case layoutExportDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]exportDeclarationData, n)))
+	case layoutImportTypeNode:
+		return unsafe.Pointer(unsafe.SliceData(make([]importTypeNodeData, n)))
+	case layoutImportClause:
+		return unsafe.Pointer(unsafe.SliceData(make([]importClauseData, n)))
+	case layoutImportSpecifier:
+		return unsafe.Pointer(unsafe.SliceData(make([]importSpecifierData, n)))
+	case layoutJSDocText:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocTextData, n)))
+	case layoutJSDocLink:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocLinkData, n)))
+	case layoutJSDocLinkPlain:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocLinkPlainData, n)))
+	case layoutJSDocLinkCode:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocLinkCodeData, n)))
+	case layoutTypeParameterDeclaration:
+		return unsafe.Pointer(unsafe.SliceData(make([]typeParameterDeclarationData, n)))
+	case layoutSyntheticReferenceExpression:
+		return unsafe.Pointer(unsafe.SliceData(make([]syntheticReferenceExpressionData, n)))
+	case layoutJSDocTypeLiteral:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocTypeLiteralData, n)))
+	case layoutJSDocParameterOrPropertyTag:
+		return unsafe.Pointer(unsafe.SliceData(make([]jsDocParameterOrPropertyTagData, n)))
+	case layoutFlowSwitchClauseData:
+		return unsafe.Pointer(unsafe.SliceData(make([]flowSwitchClauseData, n)))
+	case layoutFlowReduceLabelData:
+		return unsafe.Pointer(unsafe.SliceData(make([]flowReduceLabelData, n)))
+	}
+	panic("unknown node layout")
+}
+
+// layoutRecord returns a zero record of layout.
 func layoutRecord(layout nodeLayout) any {
 	switch layout {
 	case layoutToken:

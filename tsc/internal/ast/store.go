@@ -2,6 +2,8 @@ package ast
 
 import (
 	"math/bits"
+	"reflect"
+	"slices"
 	"sync"
 	"sync/atomic"
 	"unsafe"
@@ -12,14 +14,16 @@ import (
 // A nodeStore holds the nodes created by one NodeFactory (for parsed files,
 // one store per file). Each node is a row in the record table for its
 // layout; every record begins with the shared node header (nodeBaseData).
-// Rows never move once allocated, so records may be addressed directly and
-// read concurrently once published, while a single owner appends.
+//
+// Records live in fixed-size pages, so they never move while a store is
+// being built and may be addressed directly. Once a parse completes, each
+// layout that is not appended to afterwards is compacted into a single,
+// exactly sized page and sealed.
 type nodeStore struct {
-	// Once a parse completes, each layout's rows are compacted into one
-	// contiguous, exactly sized slice; rows appended afterwards go to the
-	// segmented tail in records, numbered after the compacted rows.
-	flat    [layoutCount]flatTable
-	records [layoutCount]*recordTable
+	// base holds the record array of each sealed layout, which is indexed
+	// directly; other layouts are paged.
+	base    [layoutCount]unsafe.Pointer
+	records [layoutCount]recordTable
 
 	// Fields that hold Go pointers live in side tables rather than in the
 	// records, so that the records themselves contain no pointers and the
@@ -35,9 +39,13 @@ type nodeStore struct {
 	values        sideTable[any]
 
 	// Children stored in another store, or whose rows do not fit in a
-	// nodeRef, are recorded as foreign refs.
+	// nodeRef, are recorded as foreign refs. Readers load foreign without
+	// locking; writers append under foreignMu, replacing foreign with a
+	// larger copy when it is full, so published entries never change.
+	foreign      unsafe.Pointer // *[foreignCap]Node, accessed atomically
 	foreignMu    sync.Mutex
-	foreign      segTable[Node]
+	foreignN     uint32
+	foreignCap   uint32
 	foreignIndex map[Node]nodeRef
 }
 
@@ -67,17 +75,25 @@ const (
 	_              uint    = uint(nodeRefMaxKind) - uint(kindFlowReduceLabelData+1) // kinds must fit in a nodeRef
 )
 
+// refLayout maps the biased kind of a local nodeRef to its layout.
+var refLayout = func() (t [1 << (32 - nodeRefRowBits)]uint16) {
+	for k, l := range kindLayout {
+		t[k+1] = uint16(l)
+	}
+	return t
+}()
+
 func (s *nodeStore) ref(n Node) nodeRef {
-	if n.s == s && nodeRef(n.row) <= nodeRefRowMask {
+	if n.s == s && n.row>>nodeRefRowBits == 0 {
 		return nodeRef(n.kind+1)<<nodeRefRowBits | nodeRef(n.row)
 	}
+	return s.refSlow(n)
+}
+
+func (s *nodeStore) refSlow(n Node) nodeRef {
 	if n.s == nil {
 		return 0
 	}
-	return s.foreignRef(n)
-}
-
-func (s *nodeStore) foreignRef(n Node) nodeRef {
 	s.foreignMu.Lock()
 	defer s.foreignMu.Unlock()
 	if r, ok := s.foreignIndex[n]; ok {
@@ -86,25 +102,35 @@ func (s *nodeStore) foreignRef(n Node) nodeRef {
 	if s.foreignIndex == nil {
 		s.foreignIndex = make(map[Node]nodeRef)
 	}
-	i, slot := s.foreign.alloc()
+	i := s.foreignN
 	if nodeRef(i)&nodeRefForeign != 0 {
 		panic("too many foreign node references")
 	}
-	*slot = n
+	if i == s.foreignCap {
+		s.foreignCap = max(8, 2*s.foreignCap)
+		grown := make([]Node, s.foreignCap)
+		if i != 0 {
+			copy(grown, unsafe.Slice((*Node)(s.foreign), i))
+		}
+		grown[i] = n
+		atomic.StorePointer(&s.foreign, unsafe.Pointer(unsafe.SliceData(grown)))
+	} else {
+		*(*Node)(unsafe.Add(s.foreign, uintptr(i)*unsafe.Sizeof(Node{}))) = n
+	}
+	s.foreignN++
 	r := nodeRef(i) | nodeRefForeign
 	s.foreignIndex[n] = r
 	return r
 }
 
 func (s *nodeStore) deref(r nodeRef) Node {
-	if r&nodeRefForeign == 0 {
-		if r == 0 {
-			return Node{}
-		}
-		kind := Kind(r>>nodeRefRowBits) - 1
-		return Node{s: s, row: uint32(r & nodeRefRowMask), kind: kind, layout: uint16(kindLayout[kind])}
+	if r&nodeRefForeign != 0 {
+		return *(*Node)(unsafe.Add(atomic.LoadPointer(&s.foreign), uintptr(r&^nodeRefForeign)*unsafe.Sizeof(Node{})))
 	}
-	return *s.foreign.at(uint32(r &^ nodeRefForeign))
+	if r == 0 {
+		return Node{}
+	}
+	return Node{s: s, row: uint32(r & nodeRefRowMask), kind: Kind(r>>nodeRefRowBits) - 1, layout: refLayout[r>>nodeRefRowBits]}
 }
 
 func (s *nodeStore) newNode(kind Kind, layout nodeLayout, row uint32) Node {
@@ -114,44 +140,82 @@ func (s *nodeStore) newNode(kind Kind, layout nodeLayout, row uint32) Node {
 	return Node{s: s, row: row, kind: kind, layout: uint16(layout)}
 }
 
-// newRecord allocates a zeroed record of type T in the table for layout.
-func newRecord[T any](s *nodeStore, layout nodeLayout) (*T, uint32) {
-	t := s.records[layout]
-	if t == nil {
-		t = &recordTable{size: unsafe.Sizeof(*new(T)), compact: compactRecords[T]}
-		s.records[layout] = t
-	}
-	i := t.n
-	k, off := segLocate(i)
-	if t.segs[k] == nil {
-		t.segs[k] = unsafe.Pointer(unsafe.SliceData(make([]T, segLen(k))))
-	}
-	t.n++
-	return (*T)(unsafe.Add(t.segs[k], uintptr(off)*t.size)), s.flat[layout].n + i
+// A recordTable addresses row r of an unsealed layout as
+// dir[r>>shift] + (r & (1<<shift - 1)) * size.
+type recordTable struct {
+	dir    unsafe.Pointer // *[dirCap]unsafe.Pointer
+	n      uint32
+	size   uint32
+	dirCap uint32
+	shift  uint8
+	sealed bool
 }
 
-type flatTable struct {
-	base unsafe.Pointer
-	n    uint32
-	size uint32
-}
+// layoutSize is the record size of each layout.
+var layoutSize = func() (t [layoutCount]uintptr) {
+	for l := range t {
+		if r := layoutRecord(nodeLayout(l)); r != nil {
+			t[l] = reflect.TypeOf(r).Size()
+		}
+	}
+	return t
+}()
 
 // at returns the record for row.
 func (s *nodeStore) at(layout uint16, row uint32) unsafe.Pointer {
-	f := &s.flat[layout]
-	if row < f.n {
-		return unsafe.Add(f.base, uintptr(row)*uintptr(f.size))
+	if b := s.base[layout]; b != nil {
+		return unsafe.Add(b, uintptr(row)*layoutSize[layout])
 	}
-	return s.tailAt(layout, row-f.n)
+	return s.pagedAt(layout, row)
 }
 
-//go:noinline
-func (s *nodeStore) tailAt(layout uint16, row uint32) unsafe.Pointer {
-	return s.records[layout].at(row)
+func (s *nodeStore) pagedAt(layout uint16, row uint32) unsafe.Pointer {
+	t := &s.records[layout]
+	page := *(*unsafe.Pointer)(unsafe.Add(t.dir, uintptr(row>>t.shift)*unsafe.Sizeof(t.dir)))
+	return unsafe.Add(page, uintptr(row&(1<<t.shift-1))*uintptr(t.size))
 }
 
-// pinnedLayout reports whether records of layout are addressed by pointer
-// (*SourceFile and the flow data records), and so must never move.
+// Pages hold about this many bytes of records.
+const (
+	pageBytes       = 4096
+	pinnedPageBytes = 512
+)
+
+// newRecord allocates a zeroed record of type T in the table for layout.
+func newRecord[T any](s *nodeStore, layout nodeLayout) (*T, uint32) {
+	t := &s.records[layout]
+	if t.dir == nil {
+		size := unsafe.Sizeof(*new(T))
+		t.size = uint32(size)
+		bytes := uintptr(pageBytes)
+		if pinnedLayout(layout) {
+			bytes = pinnedPageBytes
+		}
+		t.shift = uint8(max(0, bits.Len(uint(bytes/size))-1))
+	} else if t.sealed {
+		panic("node store layout is sealed")
+	}
+	i := t.n
+	p := i >> t.shift
+	off := i & (1<<t.shift - 1)
+	if off == 0 {
+		if p == t.dirCap {
+			t.dirCap = max(1, 2*t.dirCap)
+			dir := make([]unsafe.Pointer, t.dirCap)
+			if p != 0 {
+				copy(dir, unsafe.Slice((*unsafe.Pointer)(t.dir), p))
+			}
+			t.dir = unsafe.Pointer(unsafe.SliceData(dir))
+		}
+		*(*unsafe.Pointer)(unsafe.Add(t.dir, uintptr(p)*unsafe.Sizeof(t.dir))) = unsafe.Pointer(unsafe.SliceData(make([]T, 1<<t.shift)))
+	}
+	t.n++
+	return (*T)(s.pagedAt(uint16(layout), i)), i
+}
+
+// pinnedLayout reports whether a layout's records must not move once
+// parsing completes: *SourceFile is addressed by pointer, and the binder
+// appends flow data records.
 func pinnedLayout(layout nodeLayout) bool {
 	switch layout {
 	case layoutSourceFile, layoutFlowSwitchClauseData, layoutFlowReduceLabelData:
@@ -161,38 +225,35 @@ func pinnedLayout(layout nodeLayout) bool {
 }
 
 // compact moves the rows of every unpinned layout into one exactly sized
-// slice. Rows keep their numbers, so existing Nodes remain valid, but
-// record pointers obtained earlier do not; it must only be called before
-// the store is shared, with no record pointers outstanding.
+// page and seals the layout. Rows keep their numbers, so existing Nodes
+// remain valid, but record pointers obtained earlier do not; it must only
+// be called before the store is shared, with no record pointers
+// outstanding.
 func (s *nodeStore) compact() {
 	s.compactSide()
-	for l, t := range s.records {
-		if t == nil || t.n == 0 {
+	for l := range s.records {
+		t := &s.records[l]
+		if t.n == 0 || t.sealed || pinnedLayout(nodeLayout(l)) {
 			continue
 		}
-		f := &s.flat[l]
-		if f.n != 0 {
-			panic("node store compacted twice")
+		flat := allocRecords(nodeLayout(l), int(t.n))
+		pageLen := uintptr(t.size) << t.shift
+		for p, copied := uint32(0), uintptr(0); copied < uintptr(t.n)*uintptr(t.size); p++ {
+			page := *(*unsafe.Pointer)(unsafe.Add(t.dir, uintptr(p)*unsafe.Sizeof(t.dir)))
+			n := min(pageLen, uintptr(t.n)*uintptr(t.size)-copied)
+			copy(unsafe.Slice((*byte)(unsafe.Add(flat, copied)), n), unsafe.Slice((*byte)(page), n))
+			copied += n
 		}
-		base := t.segs[0]
-		if pinnedLayout(nodeLayout(l)) {
-			// Pinned records cannot move, but rows that all fit in the
-			// first segment are already contiguous.
-			if t.n > segLen(0) {
-				continue
-			}
-		} else {
-			base = t.compact(t)
-		}
-		*f = flatTable{base: base, n: t.n, size: uint32(t.size)}
-		t.segs = [segCount]unsafe.Pointer{}
-		t.n = 0
+		s.base[l] = flat
+		t.dir = nil
+		t.dirCap = 0
+		t.sealed = true
 	}
 }
 
-// compactSide packs the side tables that have grown since the last
-// compaction. Side values are never addressed, so this is safe whenever the
-// store is not being read concurrently.
+// compactSide trims the side tables to size. Side values are never
+// addressed, so this is safe whenever the store is not being read
+// concurrently.
 func (s *nodeStore) compactSide() {
 	s.symbols.compact()
 	s.flowNodes.compact()
@@ -208,9 +269,10 @@ func (s *nodeStore) compactSide() {
 // zero means the zero value without a slot.
 type sideRef uint32
 
+// A sideTable is appended to only by its store's owner, before the store
+// is shared.
 type sideTable[T any] struct {
-	flat []T
-	tail segTable[T]
+	items []T
 }
 
 func (t *sideTable[T]) get(r sideRef) T {
@@ -218,102 +280,25 @@ func (t *sideTable[T]) get(r sideRef) T {
 		var zero T
 		return zero
 	}
-	i := uint32(r) - 1
-	if i < uint32(len(t.flat)) {
-		return t.flat[i]
-	}
-	return *t.tail.at(i - uint32(len(t.flat)))
+	return t.items[r-1]
 }
 
 // set stores v in r's slot, allocating one unless v is the zero value.
 func (t *sideTable[T]) set(r *sideRef, v T, isZero bool) {
-	if *r == 0 {
-		if isZero {
-			return
-		}
-		i, slot := t.tail.alloc()
-		*slot = v
-		*r = sideRef(uint32(len(t.flat)) + i + 1)
+	if *r != 0 {
+		t.items[*r-1] = v
 		return
 	}
-	i := uint32(*r) - 1
-	if i < uint32(len(t.flat)) {
-		t.flat[i] = v
-	} else {
-		*t.tail.at(i - uint32(len(t.flat))) = v
+	if !isZero {
+		t.items = append(t.items, v)
+		*r = sideRef(len(t.items))
 	}
 }
 
 func (t *sideTable[T]) compact() {
-	n := t.tail.n
-	if n == 0 {
-		return
+	if len(t.items) != cap(t.items) {
+		t.items = slices.Clip(slices.Clone(t.items))
 	}
-	flat := make([]T, len(t.flat)+int(n))
-	copied := copy(flat, t.flat)
-	for k := uint32(0); copied < len(flat); k++ {
-		copied += copy(flat[copied:], unsafe.Slice(t.tail.segs[k], segLen(k)))
-	}
-	t.flat = flat
-	t.tail = segTable[T]{}
-}
-
-func compactRecords[T any](t *recordTable) unsafe.Pointer {
-	flat := make([]T, t.n)
-	for k, copied := uint32(0), 0; copied < len(flat); k++ {
-		copied += copy(flat[copied:], unsafe.Slice((*T)(t.segs[k]), segLen(k)))
-	}
-	return unsafe.Pointer(unsafe.SliceData(flat))
-}
-
-// Segmented tables grow by adding segments of doubling length, so rows
-// never move and the fixed segment directory is never reallocated.
-
-const (
-	segBaseShift = 3
-	segCount     = 29
-)
-
-func segLen(k uint32) uint32 { return 1 << (k + segBaseShift) }
-
-func segLocate(i uint32) (k, off uint32) {
-	j := i + 1<<segBaseShift
-	k = uint32(bits.Len32(j)) - (segBaseShift + 1)
-	return k, j - segLen(k)
-}
-
-type segTable[T any] struct {
-	segs [segCount]*T
-	n    uint32
-}
-
-func (t *segTable[T]) at(i uint32) *T {
-	k, off := segLocate(i)
-	return (*T)(unsafe.Add(unsafe.Pointer(t.segs[k]), uintptr(off)*unsafe.Sizeof(*new(T))))
-}
-
-func (t *segTable[T]) alloc() (uint32, *T) {
-	i := t.n
-	k, off := segLocate(i)
-	if t.segs[k] == nil {
-		t.segs[k] = unsafe.SliceData(make([]T, segLen(k)))
-	}
-	t.n++
-	return i, (*T)(unsafe.Add(unsafe.Pointer(t.segs[k]), uintptr(off)*unsafe.Sizeof(*new(T))))
-}
-
-// recordTable is an untyped segTable; each segment is allocated with its
-// record type so the garbage collector sees the records' real layout.
-type recordTable struct {
-	segs    [segCount]unsafe.Pointer
-	n       uint32
-	size    uintptr
-	compact func(*recordTable) unsafe.Pointer
-}
-
-func (t *recordTable) at(i uint32) unsafe.Pointer {
-	k, off := segLocate(i)
-	return unsafe.Add(t.segs[k], uintptr(off)*t.size)
 }
 
 // A textRef is a string field: a range of the store's source text, or,
@@ -330,7 +315,7 @@ const textRefArena = 1 << 31
 // chunks that are never moved or modified, so strings may alias them.
 type textStore struct {
 	source string
-	chunks [segCount]*byte
+	chunks [32 - textBaseShift]*byte
 	next   uint32
 }
 
