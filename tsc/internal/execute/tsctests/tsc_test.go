@@ -282,6 +282,20 @@ func TestTscCommandline(t *testing.T) {
 		},
 	}
 
+	for _, value := range []string{"false", "true", "omitted"} {
+		option := ""
+		if value != "omitted" {
+			option = `, "alwaysStrict": ` + value
+		}
+		testCases = append(testCases, &tscInput{
+			subScenario: "alwaysStrict " + value + " in configuration",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": fmt.Sprintf(`{"compilerOptions": {"target": "es2015"%s}}`, option),
+				"/home/src/workspaces/project/index.ts":      "export {};",
+			},
+			commandLineArgs: []string{"--noEmit"},
+		})
+	}
 	for _, testCase := range testCases {
 		testCase.run(t, "commandLine")
 	}
