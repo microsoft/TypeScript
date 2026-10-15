@@ -1349,7 +1349,7 @@ func (p *Parser) parseJSDocIdentifierName(diagnosticMessage *diagnostics.Message
 	}
 	pos := p.scanner.TokenStart()
 	end := p.scanner.TokenEnd()
-	text := p.scanner.TokenValue()
+	identifier := p.newScannedIdentifier(p.scanner.TokenValue())
 	p.nextTokenJSDoc()
-	return p.finishNodeWithEnd(p.newIdentifier(text), pos, end)
+	return p.finishNodeWithEnd(identifier, pos, end)
 }

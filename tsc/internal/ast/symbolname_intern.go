@@ -151,7 +151,12 @@ type symbolNameCacheSlot struct {
 const symbolNameCacheSize = 4096
 
 func (c *SymbolNameCache) Make(text string) SymbolName {
-	hash := hashSymbolNameText(text)
+	return c.MakeHashed(text, hashSymbolNameText(text))
+}
+
+// MakeHashed is Make for callers that already computed the name's hash with
+// SymbolNameHashSeed, SymbolNameHashAdd, and SymbolNameHashFinish.
+func (c *SymbolNameCache) MakeHashed(text string, hash uint64) SymbolName {
 	slot := &c.slots[hash&(symbolNameCacheSize-1)]
 	if slot.id != 0 && slot.hash == uint32(hash>>32) && symbolNames.text(slot.id) == text {
 		return SymbolName{slot.id}
@@ -161,16 +166,26 @@ func (c *SymbolNameCache) Make(text string) SymbolName {
 	return SymbolName{id}
 }
 
-// hashSymbolNameText is FNV-1a with a final mix. Names are short, so this
-// inlines well and beats a general-purpose hash call.
-func hashSymbolNameText(text string) uint64 {
-	h := uint64(14695981039346656037)
-	for i := range len(text) {
-		h ^= uint64(text[i])
-		h *= 1099511628211
-	}
+// Symbol name hashes are FNV-1a with a final mix. Names are short, so this
+// inlines well and beats a general-purpose hash call. The incremental form lets
+// the scanner hash identifiers while it scans them.
+const SymbolNameHashSeed uint64 = 14695981039346656037
+
+func SymbolNameHashAdd(h uint64, b byte) uint64 {
+	return (h ^ uint64(b)) * 1099511628211
+}
+
+func SymbolNameHashFinish(h uint64) uint64 {
 	h ^= h >> 32
 	h *= 0x9E3779B97F4A7C15
 	h ^= h >> 29
 	return h
+}
+
+func hashSymbolNameText(text string) uint64 {
+	h := SymbolNameHashSeed
+	for i := range len(text) {
+		h = SymbolNameHashAdd(h, text[i])
+	}
+	return SymbolNameHashFinish(h)
 }
