@@ -602,6 +602,7 @@ type Checker struct {
 	TotalInstantiationCount                     uint32
 	instantiationCount                          uint32
 	instantiationStack                          []*Type
+	memberLayoutVerifications                   []memberLayoutVerification
 	conditionalConstraintDepth                  uint32
 	inlineLevel                                 int
 	serializationLevel                          int
@@ -14232,6 +14233,9 @@ func (c *Checker) getDiagnostics(ctx context.Context, sourceFile *ast.SourceFile
 	c.checkNotCanceled()
 	checkUnused := c.compilerOptions.NoUnusedLocals.IsTrue() || c.compilerOptions.NoUnusedParameters.IsTrue() || collection == &c.suggestionDiagnostics
 	c.checkSourceFile(ctx, sourceFile, checkUnused)
+	if verifyMemberLayouts {
+		c.verifyMemberLayouts()
+	}
 	if c.wasCanceled {
 		return nil
 	}
@@ -19610,6 +19614,9 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 		}))
 	}
 	c.setLazyStructuredTypeMembers(t, &lazyMembers{layout: layout, mapper: mapper, bases: baseMembers}, callSignatures, constructSignatures, indexInfos)
+	if verifyMemberLayouts {
+		c.recordMemberLayoutVerification(t, source, instantiatedBaseTypes)
+	}
 }
 
 // A memberLayout describes the members of a class or interface type and of its instantiations:
@@ -19824,6 +19831,9 @@ func (c *Checker) getLazyMember(l *lazyMembers, i int) *ast.Symbol {
 			symbol = c.instantiateSymbol(symbol, l.mapper)
 		}
 	case memberOriginBaseLayout:
+		if verifyMemberLayouts {
+			c.verifyMemberLayoutSlot(l, i, int(origin.base), int(origin.slot))
+		}
 		symbol = c.getLazyMember(l.bases[origin.base], int(origin.slot))
 	}
 	l.slots[i] = symbol
