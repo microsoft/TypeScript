@@ -3,7 +3,9 @@ package ast_test
 import (
 	"reflect"
 	"runtime"
+	"strconv"
 	"strings"
+	"sync"
 	"testing"
 	"unsafe"
 
@@ -40,6 +42,34 @@ func TestSymbolNameInterning(t *testing.T) {
 	assert.Assert(t, ast.NewSymbol().Name() == ast.MakeSymbolName(""))
 	assert.Assert(t, new(ast.SymbolWithData).Initialize().Name() == ast.MakeSymbolName(""))
 	assert.Equal(t, reflect.TypeFor[ast.SymbolName]().Name(), "SymbolName")
+}
+
+func TestConcurrentSymbolNameInterning(t *testing.T) {
+	t.Parallel()
+	const workers = 8
+	const count = 50_000
+	results := make([][]ast.SymbolName, workers)
+	var wg sync.WaitGroup
+	for w := range workers {
+		wg.Go(func() {
+			names := make([]ast.SymbolName, count)
+			for i := range count {
+				// Workers start at different offsets so inserts race.
+				j := (i + w*count/workers) % count
+				text := "concurrentName" + strconv.Itoa(j)
+				names[j] = ast.MakeSymbolName(text)
+			}
+			results[w] = names
+		})
+	}
+	wg.Wait()
+	for i := range count {
+		text := "concurrentName" + strconv.Itoa(i)
+		for w := range workers {
+			assert.Assert(t, results[w][i] == results[0][i])
+		}
+		assert.Equal(t, results[0][i].Value(), text)
+	}
 }
 
 func TestPreinternedSymbolNames(t *testing.T) {

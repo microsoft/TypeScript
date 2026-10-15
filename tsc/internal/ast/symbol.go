@@ -6,7 +6,6 @@ import (
 	"strings"
 	"sync/atomic"
 	"unicode/utf8"
-	"unique"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
@@ -171,14 +170,16 @@ func (s *Symbol) CombinedLocalAndExportSymbolFlags() SymbolFlags {
 
 // SymbolName is an interned name used for symbol identity and lookup.
 // Its zero value denotes an unset name and must not be passed to Value.
-type SymbolName unique.Handle[string]
+type SymbolName struct {
+	id uint32
+}
 
 func MakeSymbolName(text string) SymbolName {
-	return SymbolName(unique.Make(text))
+	return SymbolName{symbolNames.intern(text)}
 }
 
 func (name SymbolName) Value() string {
-	return unique.Handle[string](name).Value()
+	return symbolNames.text(name.id)
 }
 
 func (name SymbolName) IsZero() bool {
