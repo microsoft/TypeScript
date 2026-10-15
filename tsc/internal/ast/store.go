@@ -23,7 +23,6 @@ import (
 // hold Go pointers are kept in the store's side tables instead.
 type nodeStore struct {
 	chunk    unsafe.Pointer // the chunk being filled
-	cur      uint32         // index of the chunk being filled
 	used     uintptr        // bytes used in the current chunk
 	capacity uintptr        // size of the current chunk
 	total    uintptr        // size of all chunks
@@ -38,21 +37,16 @@ type nodeStore struct {
 	nodeSlices    sideTable[[]Node]
 	values        sideTable[any]
 
-	// far holds the nodes referred to by far refs. Readers load it without
-	// locking; writers append under farMu, replacing far with a larger
-	// copy when it is full, so published entries never change. Entry zero
-	// is the nil Node.
-	far      unsafe.Pointer // *[farCap]Node, accessed atomically
-	farMu    sync.Mutex
-	farN     uint32
-	farCap   uint32
-	farIndex map[Node]nodeRef
+	// chunks keeps every chunk alive, since refs between records are
+	// invisible to the garbage collector. keep does the same for records
+	// outside the chunks that the store's records refer to.
+	chunks []unsafe.Pointer
+	keepMu sync.Mutex
+	keep   map[unsafe.Pointer]struct{}
 }
 
-var noFarNodes [1]Node
-
 func newNodeStore() *nodeStore {
-	return &nodeStore{far: unsafe.Pointer(&noFarNodes), farN: 1, farCap: 1}
+	return &nodeStore{}
 }
 
 // nodeBaseData is the header at the start of every node record.
@@ -60,97 +54,63 @@ type nodeBaseData struct {
 	id     atomic.Uint64
 	loc    core.TextRange
 	flags  NodeFlags
+	self   uint32 // the record's offset in its chunk, in words
 	parent nodeRef
-	self   nodeRef // this record's own location
 	kind   Kind
 }
 
-// A nodeRef is a reference from one record to another. A near ref, to a
-// record in the same chunk, holds the chunk's index and the record's offset
-// in it, in words, exactly as the record's own self does; it resolves
-// relative to the referring record. Any other reference, including to no
-// node at all, is a far ref: an index into the store's far table, with
-// nodeRefFar set (the zero nodeRef is index zero, the nil Node). Chunk
-// indexes start at one, so a far ref never matches a record's chunk.
-type nodeRef uint32
+// A nodeRef is the address of the record of the node a field refers to, or
+// zero for no node. It is not a Go pointer, so the garbage collector does
+// not trace it; the referring store keeps the record alive instead.
+type nodeRef uintptr
 
 const (
-	nodeRefOffsetBits         = 24
-	nodeRefOffsetMask nodeRef = 1<<nodeRefOffsetBits - 1
-	nodeRefFar        nodeRef = 1 << 31
-	chunkCount                = int(nodeRefFar >> nodeRefOffsetBits)
-
 	// Records with Go pointers are each allocated alone, behind their own
-	// store pointer, and identify themselves with this chunk index. They
-	// are always referred to by far refs.
-	standaloneChunk = nodeRef(chunkCount - 1)
-	standaloneSelf  = standaloneChunk<<nodeRefOffsetBits | 1
+	// store pointer.
+	standaloneSelf = 1
 
 	wordSize     = unsafe.Sizeof(uintptr(0))
-	maxChunkSize = uintptr(nodeRefOffsetMask) * wordSize
+	maxChunkSize = uintptr(1<<32-1) * wordSize
 )
 
 func (n Node) hdr() *nodeBaseData { return (*nodeBaseData)(n.p) }
 
 // store returns the store that owns n.
 func (n Node) store() *nodeStore {
-	return *(**nodeStore)(unsafe.Add(n.p, -int(n.hdr().self&nodeRefOffsetMask)*int(wordSize)))
+	return *(**nodeStore)(unsafe.Add(n.p, -int(n.hdr().self)*int(wordSize)))
 }
 
-// deref returns the node that r, stored in one of n's fields, refers to.
-func (n Node) deref(r nodeRef) Node {
-	self := n.hdr().self
-	if (r^self)>>nodeRefOffsetBits == 0 {
-		// The chunk bits cancel, leaving the distance between the records.
-		return Node{unsafe.Add(n.p, (int(r)-int(self))*int(wordSize))}
-	}
-	return *(*Node)(unsafe.Add(atomic.LoadPointer(&n.store().far), uintptr(r&^nodeRefFar)*unsafe.Sizeof(Node{})))
+// deref returns the node that the field f of n refers to.
+func (n Node) deref(f *nodeRef) Node {
+	return Node{*(*unsafe.Pointer)(unsafe.Pointer(f))}
 }
 
-// ref returns a nodeRef to v for one of n's fields.
-func (n Node) ref(v Node) nodeRef {
-	return n.store().refAt(n.p, v)
+// setRef makes the field f of n refer to v.
+func (n Node) setRef(f *nodeRef, v Node) {
+	*f = n.store().refAt(n.p, f, v)
 }
 
-// refAt returns a nodeRef to v for a field of the record at owner, which
-// must belong to s.
-func (s *nodeStore) refAt(owner unsafe.Pointer, v Node) nodeRef {
+// refAt returns a nodeRef to v for the field f of the record at owner,
+// which must belong to s.
+func (s *nodeStore) refAt(owner unsafe.Pointer, f *nodeRef, v Node) nodeRef {
 	if v.p == nil {
 		return 0
 	}
-	self := (*nodeBaseData)(owner).self
-	if near := v.hdr().self; (near^self)>>nodeRefOffsetBits == 0 && self>>nodeRefOffsetBits != standaloneChunk && v.store() == s {
-		return near
+	if standaloneLayout(kindLayout[v.Kind()]) {
+		s.keepAlive(v.p)
+	} else if other := v.store(); other != s {
+		s.keepAlive(unsafe.Pointer(other))
 	}
-	return s.farRef(v)
+	return nodeRef(uintptr(v.p))
 }
 
-func (s *nodeStore) farRef(n Node) nodeRef {
-	s.farMu.Lock()
-	defer s.farMu.Unlock()
-	if r, ok := s.farIndex[n]; ok {
-		return r
+func (s *nodeStore) keepAlive(p unsafe.Pointer) {
+	s.keepMu.Lock()
+	defer s.keepMu.Unlock()
+	if s.keep == nil {
+		s.keep = make(map[unsafe.Pointer]struct{})
 	}
-	if s.farIndex == nil {
-		s.farIndex = make(map[Node]nodeRef)
-	}
-	i := s.farN
-	if nodeRef(i)&nodeRefFar != 0 {
-		panic("too many far node references")
-	}
-	if i == s.farCap {
-		s.farCap *= 2
-		grown := make([]Node, s.farCap)
-		copy(grown, unsafe.Slice((*Node)(s.far), i))
-		grown[i] = n
-		atomic.StorePointer(&s.far, unsafe.Pointer(unsafe.SliceData(grown)))
-	} else {
-		*(*Node)(unsafe.Add(s.far, uintptr(i)*unsafe.Sizeof(Node{}))) = n
-	}
-	s.farN++
-	r := nodeRef(i) | nodeRefFar
-	s.farIndex[n] = r
-	return r
+	s.keep[p] = struct{}{}
 }
 
 func (s *nodeStore) newNode(kind Kind, layout nodeLayout, rec unsafe.Pointer) Node {
@@ -192,8 +152,7 @@ func standaloneLayout(layout nodeLayout) bool {
 
 // Each chunk adds a quarter to the store's size, at least minChunkSize.
 // Records do not move, so the unused end of the last chunk is never
-// reclaimed; slower growth wastes less of it, at the cost of more
-// references between chunks.
+// reclaimed; slower growth wastes less of it.
 const minChunkSize = 4 << 10
 
 // alloc allocates size zeroed bytes for a record and sets its self.
@@ -204,20 +163,17 @@ func (s *nodeStore) alloc(size uintptr) unsafe.Pointer {
 	off := s.used
 	s.used += size
 	p := unsafe.Add(s.chunk, off)
-	(*nodeBaseData)(p).self = nodeRef(s.cur)<<nodeRefOffsetBits | nodeRef(off/wordSize)
+	(*nodeBaseData)(p).self = uint32(off / wordSize)
 	return p
 }
 
 func (s *nodeStore) grow(size uintptr) {
-	s.cur++
-	if nodeRef(s.cur) >= standaloneChunk {
-		panic("node store is full")
-	}
 	next := min(max(minChunkSize, s.total/4, size+wordSize), maxChunkSize)
 	typ := chunkType(next)
 	chunk := reflect.New(typ).UnsafePointer()
 	*(**nodeStore)(chunk) = s
 	s.chunk = chunk
+	s.chunks = append(s.chunks, chunk)
 	s.used = wordSize
 	s.capacity = typ.Size()
 	s.total += s.capacity

@@ -220,10 +220,10 @@ func (n Node) IsNil() bool               { return n.p == nil }
 func (n Node) Kind() Kind                { return n.hdr().kind }
 func (n Node) Flags() NodeFlags          { return n.hdr().flags }
 func (n Node) Loc() core.TextRange       { return n.hdr().loc }
-func (n Node) Parent() Node              { return n.deref(n.hdr().parent) }
+func (n Node) Parent() Node              { return n.deref(&n.hdr().parent) }
 func (n Node) SetFlags(flags NodeFlags)  { n.hdr().flags = flags }
 func (n Node) SetLoc(loc core.TextRange) { n.hdr().loc = loc }
-func (n Node) SetParent(parent Node)     { n.hdr().parent = n.ref(parent) }
+func (n Node) SetParent(parent Node)     { n.setRef(&n.hdr().parent, parent) }
 
 // Shared node accessors dispatch on Kind to the enclosing concrete node.
 

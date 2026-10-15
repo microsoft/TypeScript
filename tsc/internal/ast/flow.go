@@ -59,11 +59,11 @@ func (node FlowSwitchClauseData) data() *flowSwitchClauseData {
 }
 
 func (node FlowSwitchClauseData) SwitchStatement() Node {
-	return node.deref(node.data().switchStatement)
+	return node.deref(&node.data().switchStatement)
 }
 
 func (node FlowSwitchClauseData) SetSwitchStatement(value Node) {
-	node.data().switchStatement = node.ref(value)
+	node.setRef(&node.data().switchStatement, value)
 }
 func (node FlowSwitchClauseData) ClauseStart() int32         { return node.data().clauseStart }
 func (node FlowSwitchClauseData) SetClauseStart(value int32) { node.data().clauseStart = value }
@@ -75,7 +75,7 @@ func (node FlowSwitchClauseData) SetClauseEnd(value int32)   { node.data().claus
 func NewFlowSwitchClauseData(switchStatement Node, clauseStart int, clauseEnd int) Node {
 	s := switchStatement.store()
 	data, i := newRecord[flowSwitchClauseData](s, layoutFlowSwitchClauseData)
-	data.switchStatement = s.refAt(i, switchStatement)
+	data.switchStatement = s.refAt(i, &data.switchStatement, switchStatement)
 	data.clauseStart = int32(clauseStart)
 	data.clauseEnd = int32(clauseEnd)
 	return newNode(s, kindFlowSwitchClauseData, layoutFlowSwitchClauseData, i, NodeFactoryHooks{})

@@ -1345,11 +1345,11 @@ func (node IterationStatementBase) SetFlowNode(value *FlowNode) {
 }
 
 func (node IterationStatementBase) Statement() Statement {
-	return node.deref(node.iterationStatementBaseData().statement)
+	return node.deref(&node.iterationStatementBaseData().statement)
 }
 
 func (node IterationStatementBase) SetStatement(value Statement) {
-	node.iterationStatementBaseData().statement = node.ref(value)
+	node.setRef(&node.iterationStatementBaseData().statement, value)
 }
 
 type expressionBaseData struct {
@@ -1925,11 +1925,11 @@ func (node LocalsContainerBase) SetLocals(value SymbolTable) {
 }
 
 func (node LocalsContainerBase) NextContainer() Node {
-	return node.deref(node.localsContainerBaseData().nextContainer)
+	return node.deref(&node.localsContainerBaseData().nextContainer)
 }
 
 func (node LocalsContainerBase) SetNextContainer(value Node) {
-	node.localsContainerBaseData().nextContainer = node.ref(value)
+	node.setRef(&node.localsContainerBaseData().nextContainer, value)
 }
 
 type flowNodeBaseData struct {
@@ -2404,11 +2404,11 @@ func (node FunctionLikeBase) SetLocals(value SymbolTable) {
 }
 
 func (node FunctionLikeBase) NextContainer() Node {
-	return node.deref(node.functionLikeBaseData().nextContainer)
+	return node.deref(&node.functionLikeBaseData().nextContainer)
 }
 
 func (node FunctionLikeBase) SetNextContainer(value Node) {
-	node.functionLikeBaseData().nextContainer = node.ref(value)
+	node.setRef(&node.functionLikeBaseData().nextContainer, value)
 }
 
 func (node FunctionLikeBase) TypeParameters() *TypeParameterList {
@@ -2428,19 +2428,19 @@ func (node FunctionLikeBase) SetParameters(value *ParameterList) {
 }
 
 func (node FunctionLikeBase) Type() TypeNode {
-	return node.deref(node.functionLikeBaseData().typeField)
+	return node.deref(&node.functionLikeBaseData().typeField)
 }
 
 func (node FunctionLikeBase) SetType(value TypeNode) {
-	node.functionLikeBaseData().typeField = node.ref(value)
+	node.setRef(&node.functionLikeBaseData().typeField, value)
 }
 
 func (node FunctionLikeBase) FullSignature() TypeNode {
-	return node.deref(node.functionLikeBaseData().fullSignature)
+	return node.deref(&node.functionLikeBaseData().fullSignature)
 }
 
 func (node FunctionLikeBase) SetFullSignature(value TypeNode) {
-	node.functionLikeBaseData().fullSignature = node.ref(value)
+	node.setRef(&node.functionLikeBaseData().fullSignature, value)
 }
 
 type bodyBaseData struct {
@@ -2485,14 +2485,14 @@ func (n Node) bodyBaseData() *bodyBaseData {
 }
 
 func (node BodyBase) AsteriskToken() AsteriskToken {
-	return node.deref(node.bodyBaseData().asteriskToken)
+	return node.deref(&node.bodyBaseData().asteriskToken)
 }
 
 func (node BodyBase) SetAsteriskToken(value AsteriskToken) {
-	node.bodyBaseData().asteriskToken = node.ref(value)
+	node.setRef(&node.bodyBaseData().asteriskToken, value)
 }
-func (node BodyBase) Body() NodeBody         { return node.deref(node.bodyBaseData().body) }
-func (node BodyBase) SetBody(value NodeBody) { node.bodyBaseData().body = node.ref(value) }
+func (node BodyBase) Body() NodeBody         { return node.deref(&node.bodyBaseData().body) }
+func (node BodyBase) SetBody(value NodeBody) { node.setRef(&node.bodyBaseData().body, value) }
 func (node BodyBase) EndFlowNode() *FlowNode {
 	return node.store().flowNodes.get(node.bodyBaseData().endFlowNode)
 }
@@ -2547,11 +2547,11 @@ func (node FunctionLikeWithBodyBase) SetLocals(value SymbolTable) {
 }
 
 func (node FunctionLikeWithBodyBase) NextContainer() Node {
-	return node.deref(node.functionLikeWithBodyBaseData().nextContainer)
+	return node.deref(&node.functionLikeWithBodyBaseData().nextContainer)
 }
 
 func (node FunctionLikeWithBodyBase) SetNextContainer(value Node) {
-	node.functionLikeWithBodyBaseData().nextContainer = node.ref(value)
+	node.setRef(&node.functionLikeWithBodyBaseData().nextContainer, value)
 }
 
 func (node FunctionLikeWithBodyBase) TypeParameters() *TypeParameterList {
@@ -2571,35 +2571,35 @@ func (node FunctionLikeWithBodyBase) SetParameters(value *ParameterList) {
 }
 
 func (node FunctionLikeWithBodyBase) Type() TypeNode {
-	return node.deref(node.functionLikeWithBodyBaseData().typeField)
+	return node.deref(&node.functionLikeWithBodyBaseData().typeField)
 }
 
 func (node FunctionLikeWithBodyBase) SetType(value TypeNode) {
-	node.functionLikeWithBodyBaseData().typeField = node.ref(value)
+	node.setRef(&node.functionLikeWithBodyBaseData().typeField, value)
 }
 
 func (node FunctionLikeWithBodyBase) FullSignature() TypeNode {
-	return node.deref(node.functionLikeWithBodyBaseData().fullSignature)
+	return node.deref(&node.functionLikeWithBodyBaseData().fullSignature)
 }
 
 func (node FunctionLikeWithBodyBase) SetFullSignature(value TypeNode) {
-	node.functionLikeWithBodyBaseData().fullSignature = node.ref(value)
+	node.setRef(&node.functionLikeWithBodyBaseData().fullSignature, value)
 }
 
 func (node FunctionLikeWithBodyBase) AsteriskToken() AsteriskToken {
-	return node.deref(node.functionLikeWithBodyBaseData().asteriskToken)
+	return node.deref(&node.functionLikeWithBodyBaseData().asteriskToken)
 }
 
 func (node FunctionLikeWithBodyBase) SetAsteriskToken(value AsteriskToken) {
-	node.functionLikeWithBodyBaseData().asteriskToken = node.ref(value)
+	node.setRef(&node.functionLikeWithBodyBaseData().asteriskToken, value)
 }
 
 func (node FunctionLikeWithBodyBase) Body() NodeBody {
-	return node.deref(node.functionLikeWithBodyBaseData().body)
+	return node.deref(&node.functionLikeWithBodyBaseData().body)
 }
 
 func (node FunctionLikeWithBodyBase) SetBody(value NodeBody) {
-	node.functionLikeWithBodyBaseData().body = node.ref(value)
+	node.setRef(&node.functionLikeWithBodyBaseData().body, value)
 }
 
 func (node FunctionLikeWithBodyBase) EndFlowNode() *FlowNode {
@@ -2663,15 +2663,17 @@ func (node ClassLikeBase) SetLocals(value SymbolTable) {
 }
 
 func (node ClassLikeBase) NextContainer() Node {
-	return node.deref(node.classLikeBaseData().nextContainer)
+	return node.deref(&node.classLikeBaseData().nextContainer)
 }
 
 func (node ClassLikeBase) SetNextContainer(value Node) {
-	node.classLikeBaseData().nextContainer = node.ref(value)
+	node.setRef(&node.classLikeBaseData().nextContainer, value)
 }
-func (node ClassLikeBase) Name() IdentifierNode { return node.deref(node.classLikeBaseData().name) }
+
+func (node ClassLikeBase) Name() IdentifierNode { return node.deref(&node.classLikeBaseData().name) }
+
 func (node ClassLikeBase) setName(value IdentifierNode) {
-	node.classLikeBaseData().name = node.ref(value)
+	node.setRef(&node.classLikeBaseData().name, value)
 }
 
 func (node ClassLikeBase) TypeParameters() *TypeParameterList {
@@ -2922,18 +2924,18 @@ func (node NamedMemberBase) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.namedMemberBaseData().modifiers, value, value == nil)
 }
 
-func (node NamedMemberBase) Name() PropertyName { return node.deref(node.namedMemberBaseData().name) }
+func (node NamedMemberBase) Name() PropertyName { return node.deref(&node.namedMemberBaseData().name) }
 
 func (node NamedMemberBase) setName(value PropertyName) {
-	node.namedMemberBaseData().name = node.ref(value)
+	node.setRef(&node.namedMemberBaseData().name, value)
 }
 
 func (node NamedMemberBase) PostfixToken() TokenNode {
-	return node.deref(node.namedMemberBaseData().postfixToken)
+	return node.deref(&node.namedMemberBaseData().postfixToken)
 }
 
 func (node NamedMemberBase) SetPostfixToken(value TokenNode) {
-	node.namedMemberBaseData().postfixToken = node.ref(value)
+	node.setRef(&node.namedMemberBaseData().postfixToken, value)
 }
 
 type objectLiteralElementBaseData struct{}
@@ -2986,19 +2988,19 @@ func (node AccessorDeclarationBase) setModifiers(value *ModifierList) {
 }
 
 func (node AccessorDeclarationBase) Name() PropertyName {
-	return node.deref(node.accessorDeclarationBaseData().name)
+	return node.deref(&node.accessorDeclarationBaseData().name)
 }
 
 func (node AccessorDeclarationBase) setName(value PropertyName) {
-	node.accessorDeclarationBaseData().name = node.ref(value)
+	node.setRef(&node.accessorDeclarationBaseData().name, value)
 }
 
 func (node AccessorDeclarationBase) PostfixToken() TokenNode {
-	return node.deref(node.accessorDeclarationBaseData().postfixToken)
+	return node.deref(&node.accessorDeclarationBaseData().postfixToken)
 }
 
 func (node AccessorDeclarationBase) SetPostfixToken(value TokenNode) {
-	node.accessorDeclarationBaseData().postfixToken = node.ref(value)
+	node.setRef(&node.accessorDeclarationBaseData().postfixToken, value)
 }
 
 func (node AccessorDeclarationBase) Locals() SymbolTable {
@@ -3010,11 +3012,11 @@ func (node AccessorDeclarationBase) SetLocals(value SymbolTable) {
 }
 
 func (node AccessorDeclarationBase) NextContainer() Node {
-	return node.deref(node.accessorDeclarationBaseData().nextContainer)
+	return node.deref(&node.accessorDeclarationBaseData().nextContainer)
 }
 
 func (node AccessorDeclarationBase) SetNextContainer(value Node) {
-	node.accessorDeclarationBaseData().nextContainer = node.ref(value)
+	node.setRef(&node.accessorDeclarationBaseData().nextContainer, value)
 }
 
 func (node AccessorDeclarationBase) TypeParameters() *TypeParameterList {
@@ -3034,35 +3036,35 @@ func (node AccessorDeclarationBase) SetParameters(value *ParameterList) {
 }
 
 func (node AccessorDeclarationBase) Type() TypeNode {
-	return node.deref(node.accessorDeclarationBaseData().typeField)
+	return node.deref(&node.accessorDeclarationBaseData().typeField)
 }
 
 func (node AccessorDeclarationBase) SetType(value TypeNode) {
-	node.accessorDeclarationBaseData().typeField = node.ref(value)
+	node.setRef(&node.accessorDeclarationBaseData().typeField, value)
 }
 
 func (node AccessorDeclarationBase) FullSignature() TypeNode {
-	return node.deref(node.accessorDeclarationBaseData().fullSignature)
+	return node.deref(&node.accessorDeclarationBaseData().fullSignature)
 }
 
 func (node AccessorDeclarationBase) SetFullSignature(value TypeNode) {
-	node.accessorDeclarationBaseData().fullSignature = node.ref(value)
+	node.setRef(&node.accessorDeclarationBaseData().fullSignature, value)
 }
 
 func (node AccessorDeclarationBase) AsteriskToken() AsteriskToken {
-	return node.deref(node.accessorDeclarationBaseData().asteriskToken)
+	return node.deref(&node.accessorDeclarationBaseData().asteriskToken)
 }
 
 func (node AccessorDeclarationBase) SetAsteriskToken(value AsteriskToken) {
-	node.accessorDeclarationBaseData().asteriskToken = node.ref(value)
+	node.setRef(&node.accessorDeclarationBaseData().asteriskToken, value)
 }
 
 func (node AccessorDeclarationBase) Body() NodeBody {
-	return node.deref(node.accessorDeclarationBaseData().body)
+	return node.deref(&node.accessorDeclarationBaseData().body)
 }
 
 func (node AccessorDeclarationBase) SetBody(value NodeBody) {
-	node.accessorDeclarationBaseData().body = node.ref(value)
+	node.setRef(&node.accessorDeclarationBaseData().body, value)
 }
 
 func (node AccessorDeclarationBase) EndFlowNode() *FlowNode {
@@ -3130,11 +3132,11 @@ func (node FunctionOrConstructorTypeNodeBase) SetLocals(value SymbolTable) {
 }
 
 func (node FunctionOrConstructorTypeNodeBase) NextContainer() Node {
-	return node.deref(node.functionOrConstructorTypeNodeBaseData().nextContainer)
+	return node.deref(&node.functionOrConstructorTypeNodeBaseData().nextContainer)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetNextContainer(value Node) {
-	node.functionOrConstructorTypeNodeBaseData().nextContainer = node.ref(value)
+	node.setRef(&node.functionOrConstructorTypeNodeBaseData().nextContainer, value)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) TypeParameters() *TypeParameterList {
@@ -3154,19 +3156,19 @@ func (node FunctionOrConstructorTypeNodeBase) SetParameters(value *ParameterList
 }
 
 func (node FunctionOrConstructorTypeNodeBase) Type() TypeNode {
-	return node.deref(node.functionOrConstructorTypeNodeBaseData().typeField)
+	return node.deref(&node.functionOrConstructorTypeNodeBaseData().typeField)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetType(value TypeNode) {
-	node.functionOrConstructorTypeNodeBaseData().typeField = node.ref(value)
+	node.setRef(&node.functionOrConstructorTypeNodeBaseData().typeField, value)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) FullSignature() TypeNode {
-	return node.deref(node.functionOrConstructorTypeNodeBaseData().fullSignature)
+	return node.deref(&node.functionOrConstructorTypeNodeBaseData().fullSignature)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetFullSignature(value TypeNode) {
-	node.functionOrConstructorTypeNodeBaseData().fullSignature = node.ref(value)
+	node.setRef(&node.functionOrConstructorTypeNodeBaseData().fullSignature, value)
 }
 
 type unionOrIntersectionTypeNodeBaseData struct {
@@ -3280,10 +3282,12 @@ func (n Node) jsDocTagBaseData() *jsDocTagBaseData {
 	return nil
 }
 
-func (node JSDocTagBase) TagName() IdentifierNode { return node.deref(node.jsDocTagBaseData().tagName) }
+func (node JSDocTagBase) TagName() IdentifierNode {
+	return node.deref(&node.jsDocTagBaseData().tagName)
+}
 
 func (node JSDocTagBase) SetTagName(value IdentifierNode) {
-	node.jsDocTagBaseData().tagName = node.ref(value)
+	node.setRef(&node.jsDocTagBaseData().tagName, value)
 }
 
 func (node JSDocTagBase) Comment() *NodeList {
@@ -3848,16 +3852,16 @@ func (node QualifiedName) FlowNode() *FlowNode {
 func (node QualifiedName) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
-func (node QualifiedName) Left() EntityName          { return node.deref(node.data().left) }
-func (node QualifiedName) SetLeft(value EntityName)  { node.data().left = node.ref(value) }
-func (node QualifiedName) Right() MemberName         { return node.deref(node.data().right) }
-func (node QualifiedName) SetRight(value MemberName) { node.data().right = node.ref(value) }
+func (node QualifiedName) Left() EntityName          { return node.deref(&node.data().left) }
+func (node QualifiedName) SetLeft(value EntityName)  { node.setRef(&node.data().left, value) }
+func (node QualifiedName) Right() MemberName         { return node.deref(&node.data().right) }
+func (node QualifiedName) SetRight(value MemberName) { node.setRef(&node.data().right, value) }
 
 func (f *NodeFactory) NewQualifiedName(left EntityName, right MemberName) Node {
 	s := f.nodeStore()
 	data, i := newRecord[qualifiedNameData](s, layoutQualifiedName)
-	data.left = s.refAt(i, left)
-	data.right = s.refAt(i, right)
+	data.left = s.refAt(i, &data.left, left)
+	data.right = s.refAt(i, &data.right, right)
 	return f.newNode(KindQualifiedName, layoutQualifiedName, i)
 }
 
@@ -3905,16 +3909,16 @@ func (node ComputedPropertyName) data() *computedPropertyNameData {
 	return (*computedPropertyNameData)(node.rec())
 }
 
-func (node ComputedPropertyName) Expression() Expression { return node.deref(node.data().expression) }
+func (node ComputedPropertyName) Expression() Expression { return node.deref(&node.data().expression) }
 
 func (node ComputedPropertyName) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (f *NodeFactory) NewComputedPropertyName(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[computedPropertyNameData](s, layoutComputedPropertyName)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindComputedPropertyName, layoutComputedPropertyName, i)
 }
 
@@ -3959,16 +3963,16 @@ type Decorator struct{ Node }
 
 func (node Decorator) data() *decoratorData { return (*decoratorData)(node.rec()) }
 
-func (node Decorator) Expression() LeftHandSideExpression { return node.deref(node.data().expression) }
+func (node Decorator) Expression() LeftHandSideExpression { return node.deref(&node.data().expression) }
 
 func (node Decorator) SetExpression(value LeftHandSideExpression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (f *NodeFactory) NewDecorator(expression LeftHandSideExpression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[decoratorData](s, layoutDecorator)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindDecorator, layoutDecorator, i)
 }
 
@@ -4050,24 +4054,26 @@ func (node IfStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
 
-func (node IfStatement) Expression() Expression         { return node.deref(node.data().expression) }
-func (node IfStatement) SetExpression(value Expression) { node.data().expression = node.ref(value) }
-func (node IfStatement) ThenStatement() Statement       { return node.deref(node.data().thenStatement) }
+func (node IfStatement) Expression() Expression { return node.deref(&node.data().expression) }
+
+func (node IfStatement) SetExpression(value Expression) { node.setRef(&node.data().expression, value) }
+
+func (node IfStatement) ThenStatement() Statement { return node.deref(&node.data().thenStatement) }
 
 func (node IfStatement) SetThenStatement(value Statement) {
-	node.data().thenStatement = node.ref(value)
+	node.setRef(&node.data().thenStatement, value)
 }
-func (node IfStatement) ElseStatement() Statement { return node.deref(node.data().elseStatement) }
+func (node IfStatement) ElseStatement() Statement { return node.deref(&node.data().elseStatement) }
 func (node IfStatement) SetElseStatement(value Statement) {
-	node.data().elseStatement = node.ref(value)
+	node.setRef(&node.data().elseStatement, value)
 }
 
 func (f *NodeFactory) NewIfStatement(expression Expression, thenStatement Statement, elseStatement Statement) Node {
 	s := f.nodeStore()
 	data, i := newRecord[ifStatementData](s, layoutIfStatement)
-	data.expression = s.refAt(i, expression)
-	data.thenStatement = s.refAt(i, thenStatement)
-	data.elseStatement = s.refAt(i, elseStatement)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.thenStatement = s.refAt(i, &data.thenStatement, thenStatement)
+	data.elseStatement = s.refAt(i, &data.elseStatement, elseStatement)
 	return f.newNode(KindIfStatement, layoutIfStatement, i)
 }
 
@@ -4119,16 +4125,20 @@ func (node DoStatement) FlowNode() *FlowNode { return node.store().flowNodes.get
 func (node DoStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
-func (node DoStatement) Statement() Statement           { return node.deref(node.data().statement) }
-func (node DoStatement) SetStatement(value Statement)   { node.data().statement = node.ref(value) }
-func (node DoStatement) Expression() Expression         { return node.deref(node.data().expression) }
-func (node DoStatement) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+
+func (node DoStatement) Statement() Statement { return node.deref(&node.data().statement) }
+
+func (node DoStatement) SetStatement(value Statement) { node.setRef(&node.data().statement, value) }
+
+func (node DoStatement) Expression() Expression { return node.deref(&node.data().expression) }
+
+func (node DoStatement) SetExpression(value Expression) { node.setRef(&node.data().expression, value) }
 
 func (f *NodeFactory) NewDoStatement(statement Statement, expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[doStatementData](s, layoutDoStatement)
-	data.statement = s.refAt(i, statement)
-	data.expression = s.refAt(i, expression)
+	data.statement = s.refAt(i, &data.statement, statement)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindDoStatement, layoutDoStatement, i)
 }
 
@@ -4182,19 +4192,21 @@ func (node WhileStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
 
-func (node WhileStatement) Statement() Statement { return node.deref(node.data().statement) }
+func (node WhileStatement) Statement() Statement { return node.deref(&node.data().statement) }
 
-func (node WhileStatement) SetStatement(value Statement) { node.data().statement = node.ref(value) }
+func (node WhileStatement) SetStatement(value Statement) { node.setRef(&node.data().statement, value) }
 
-func (node WhileStatement) Expression() Expression { return node.deref(node.data().expression) }
+func (node WhileStatement) Expression() Expression { return node.deref(&node.data().expression) }
 
-func (node WhileStatement) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+func (node WhileStatement) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
 
 func (f *NodeFactory) NewWhileStatement(expression Expression, statement Statement) Node {
 	s := f.nodeStore()
 	data, i := newRecord[whileStatementData](s, layoutWhileStatement)
-	data.expression = s.refAt(i, expression)
-	data.statement = s.refAt(i, statement)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.statement = s.refAt(i, &data.statement, statement)
 	return f.newNode(KindWhileStatement, layoutWhileStatement, i)
 }
 
@@ -4250,8 +4262,9 @@ func (node ForStatement) FlowNode() *FlowNode {
 func (node ForStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
-func (node ForStatement) Statement() Statement         { return node.deref(node.data().statement) }
-func (node ForStatement) SetStatement(value Statement) { node.data().statement = node.ref(value) }
+func (node ForStatement) Statement() Statement         { return node.deref(&node.data().statement) }
+func (node ForStatement) SetStatement(value Statement) { node.setRef(&node.data().statement, value) }
+
 func (node ForStatement) Locals() SymbolTable {
 	return node.store().symbolTables.get(node.data().locals)
 }
@@ -4260,29 +4273,33 @@ func (node ForStatement) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
 
-func (node ForStatement) NextContainer() Node { return node.deref(node.data().nextContainer) }
+func (node ForStatement) NextContainer() Node { return node.deref(&node.data().nextContainer) }
 
-func (node ForStatement) SetNextContainer(value Node) { node.data().nextContainer = node.ref(value) }
-func (node ForStatement) Initializer() ForInitializer { return node.deref(node.data().initializer) }
+func (node ForStatement) SetNextContainer(value Node) { node.setRef(&node.data().nextContainer, value) }
+
+func (node ForStatement) Initializer() ForInitializer { return node.deref(&node.data().initializer) }
+
 func (node ForStatement) SetInitializer(value ForInitializer) {
-	node.data().initializer = node.ref(value)
+	node.setRef(&node.data().initializer, value)
 }
 
-func (node ForStatement) Condition() Expression { return node.deref(node.data().condition) }
+func (node ForStatement) Condition() Expression { return node.deref(&node.data().condition) }
 
-func (node ForStatement) SetCondition(value Expression) { node.data().condition = node.ref(value) }
+func (node ForStatement) SetCondition(value Expression) { node.setRef(&node.data().condition, value) }
 
-func (node ForStatement) Incrementor() Expression { return node.deref(node.data().incrementor) }
+func (node ForStatement) Incrementor() Expression { return node.deref(&node.data().incrementor) }
 
-func (node ForStatement) SetIncrementor(value Expression) { node.data().incrementor = node.ref(value) }
+func (node ForStatement) SetIncrementor(value Expression) {
+	node.setRef(&node.data().incrementor, value)
+}
 
 func (f *NodeFactory) NewForStatement(initializer ForInitializer, condition Expression, incrementor Expression, statement Statement) Node {
 	s := f.nodeStore()
 	data, i := newRecord[forStatementData](s, layoutForStatement)
-	data.initializer = s.refAt(i, initializer)
-	data.condition = s.refAt(i, condition)
-	data.incrementor = s.refAt(i, incrementor)
-	data.statement = s.refAt(i, statement)
+	data.initializer = s.refAt(i, &data.initializer, initializer)
+	data.condition = s.refAt(i, &data.condition, condition)
+	data.incrementor = s.refAt(i, &data.incrementor, incrementor)
+	data.statement = s.refAt(i, &data.statement, statement)
 	return f.newNode(KindForStatement, layoutForStatement, i)
 }
 
@@ -4354,34 +4371,38 @@ func (node ForInOrOfStatement) Locals() SymbolTable {
 func (node ForInOrOfStatement) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-func (node ForInOrOfStatement) NextContainer() Node { return node.deref(node.data().nextContainer) }
+
+func (node ForInOrOfStatement) NextContainer() Node { return node.deref(&node.data().nextContainer) }
+
 func (node ForInOrOfStatement) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node ForInOrOfStatement) AwaitModifier() AwaitKeyword {
-	return node.deref(node.data().awaitModifier)
+	return node.deref(&node.data().awaitModifier)
 }
 
 func (node ForInOrOfStatement) SetAwaitModifier(value AwaitKeyword) {
-	node.data().awaitModifier = node.ref(value)
+	node.setRef(&node.data().awaitModifier, value)
 }
 
 func (node ForInOrOfStatement) Initializer() ForInitializer {
-	return node.deref(node.data().initializer)
+	return node.deref(&node.data().initializer)
 }
 
 func (node ForInOrOfStatement) SetInitializer(value ForInitializer) {
-	node.data().initializer = node.ref(value)
+	node.setRef(&node.data().initializer, value)
 }
-func (node ForInOrOfStatement) Expression() Expression { return node.deref(node.data().expression) }
+
+func (node ForInOrOfStatement) Expression() Expression { return node.deref(&node.data().expression) }
+
 func (node ForInOrOfStatement) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
-
-func (node ForInOrOfStatement) Statement() Statement { return node.deref(node.data().statement) }
-
-func (node ForInOrOfStatement) SetStatement(value Statement) { node.data().statement = node.ref(value) }
+func (node ForInOrOfStatement) Statement() Statement { return node.deref(&node.data().statement) }
+func (node ForInOrOfStatement) SetStatement(value Statement) {
+	node.setRef(&node.data().statement, value)
+}
 
 func (f *NodeFactory) NewForInOrOfStatement(kind Kind, awaitModifier AwaitKeyword, initializer ForInitializer, expression Expression, statement Statement) Node {
 	switch kind {
@@ -4391,10 +4412,10 @@ func (f *NodeFactory) NewForInOrOfStatement(kind Kind, awaitModifier AwaitKeywor
 	}
 	s := f.nodeStore()
 	data, i := newRecord[forInOrOfStatementData](s, layoutForInOrOfStatement)
-	data.awaitModifier = s.refAt(i, awaitModifier)
-	data.initializer = s.refAt(i, initializer)
-	data.expression = s.refAt(i, expression)
-	data.statement = s.refAt(i, statement)
+	data.awaitModifier = s.refAt(i, &data.awaitModifier, awaitModifier)
+	data.initializer = s.refAt(i, &data.initializer, initializer)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.statement = s.refAt(i, &data.statement, statement)
 	return f.newNode(kind, layoutForInOrOfStatement, i)
 }
 
@@ -4448,13 +4469,13 @@ func (node BreakStatement) FlowNode() *FlowNode {
 func (node BreakStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
-func (node BreakStatement) Label() IdentifierNode         { return node.deref(node.data().label) }
-func (node BreakStatement) SetLabel(value IdentifierNode) { node.data().label = node.ref(value) }
+func (node BreakStatement) Label() IdentifierNode         { return node.deref(&node.data().label) }
+func (node BreakStatement) SetLabel(value IdentifierNode) { node.setRef(&node.data().label, value) }
 
 func (f *NodeFactory) NewBreakStatement(label IdentifierNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[breakStatementData](s, layoutBreakStatement)
-	data.label = s.refAt(i, label)
+	data.label = s.refAt(i, &data.label, label)
 	return f.newNode(KindBreakStatement, layoutBreakStatement, i)
 }
 
@@ -4504,13 +4525,14 @@ func (node ContinueStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
 
-func (node ContinueStatement) Label() IdentifierNode         { return node.deref(node.data().label) }
-func (node ContinueStatement) SetLabel(value IdentifierNode) { node.data().label = node.ref(value) }
+func (node ContinueStatement) Label() IdentifierNode { return node.deref(&node.data().label) }
+
+func (node ContinueStatement) SetLabel(value IdentifierNode) { node.setRef(&node.data().label, value) }
 
 func (f *NodeFactory) NewContinueStatement(label IdentifierNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[continueStatementData](s, layoutContinueStatement)
-	data.label = s.refAt(i, label)
+	data.label = s.refAt(i, &data.label, label)
 	return f.newNode(KindContinueStatement, layoutContinueStatement, i)
 }
 
@@ -4558,15 +4580,15 @@ func (node ReturnStatement) FlowNode() *FlowNode {
 func (node ReturnStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
-
-func (node ReturnStatement) Expression() Expression { return node.deref(node.data().expression) }
-
-func (node ReturnStatement) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+func (node ReturnStatement) Expression() Expression { return node.deref(&node.data().expression) }
+func (node ReturnStatement) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
 
 func (f *NodeFactory) NewReturnStatement(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[returnStatementData](s, layoutReturnStatement)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindReturnStatement, layoutReturnStatement, i)
 }
 
@@ -4615,20 +4637,20 @@ func (node WithStatement) FlowNode() *FlowNode {
 func (node WithStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
+func (node WithStatement) Expression() Expression { return node.deref(&node.data().expression) }
+func (node WithStatement) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
 
-func (node WithStatement) Expression() Expression { return node.deref(node.data().expression) }
+func (node WithStatement) Statement() Statement { return node.deref(&node.data().statement) }
 
-func (node WithStatement) SetExpression(value Expression) { node.data().expression = node.ref(value) }
-
-func (node WithStatement) Statement() Statement { return node.deref(node.data().statement) }
-
-func (node WithStatement) SetStatement(value Statement) { node.data().statement = node.ref(value) }
+func (node WithStatement) SetStatement(value Statement) { node.setRef(&node.data().statement, value) }
 
 func (f *NodeFactory) NewWithStatement(expression Expression, statement Statement) Node {
 	s := f.nodeStore()
 	data, i := newRecord[withStatementData](s, layoutWithStatement)
-	data.expression = s.refAt(i, expression)
-	data.statement = s.refAt(i, statement)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.statement = s.refAt(i, &data.statement, statement)
 	return f.newNode(KindWithStatement, layoutWithStatement, i)
 }
 
@@ -4682,22 +4704,20 @@ func (node SwitchStatement) FlowNode() *FlowNode {
 func (node SwitchStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
-
-func (node SwitchStatement) Expression() Expression { return node.deref(node.data().expression) }
-
-func (node SwitchStatement) SetExpression(value Expression) { node.data().expression = node.ref(value) }
-
-func (node SwitchStatement) CaseBlock() CaseBlockNode { return node.deref(node.data().caseBlock) }
-
+func (node SwitchStatement) Expression() Expression { return node.deref(&node.data().expression) }
+func (node SwitchStatement) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
+func (node SwitchStatement) CaseBlock() CaseBlockNode { return node.deref(&node.data().caseBlock) }
 func (node SwitchStatement) SetCaseBlock(value CaseBlockNode) {
-	node.data().caseBlock = node.ref(value)
+	node.setRef(&node.data().caseBlock, value)
 }
 
 func (f *NodeFactory) NewSwitchStatement(expression Expression, caseBlock CaseBlockNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[switchStatementData](s, layoutSwitchStatement)
-	data.expression = s.refAt(i, expression)
-	data.caseBlock = s.refAt(i, caseBlock)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.caseBlock = s.refAt(i, &data.caseBlock, caseBlock)
 	return f.newNode(KindSwitchStatement, layoutSwitchStatement, i)
 }
 
@@ -4749,8 +4769,9 @@ func (node CaseBlock) Locals() SymbolTable { return node.store().symbolTables.ge
 func (node CaseBlock) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-func (node CaseBlock) NextContainer() Node         { return node.deref(node.data().nextContainer) }
-func (node CaseBlock) SetNextContainer(value Node) { node.data().nextContainer = node.ref(value) }
+func (node CaseBlock) NextContainer() Node         { return node.deref(&node.data().nextContainer) }
+func (node CaseBlock) SetNextContainer(value Node) { node.setRef(&node.data().nextContainer, value) }
+
 func (node CaseBlock) Clauses() *CaseClausesList {
 	return node.store().nodeLists.get(node.data().clauses)
 }
@@ -4811,10 +4832,10 @@ func (node CaseOrDefaultClause) data() *caseOrDefaultClauseData {
 	return (*caseOrDefaultClauseData)(node.rec())
 }
 
-func (node CaseOrDefaultClause) Expression() Expression { return node.deref(node.data().expression) }
+func (node CaseOrDefaultClause) Expression() Expression { return node.deref(&node.data().expression) }
 
 func (node CaseOrDefaultClause) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (node CaseOrDefaultClause) Statements() *StatementList {
@@ -4841,7 +4862,7 @@ func (f *NodeFactory) NewCaseOrDefaultClause(kind Kind, expression Expression, s
 	}
 	s := f.nodeStore()
 	data, i := newRecord[caseOrDefaultClauseData](s, layoutCaseOrDefaultClause)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	s.nodeLists.set(&data.statements, statements, statements == nil)
 	return f.newNode(kind, layoutCaseOrDefaultClause, i)
 }
@@ -4899,15 +4920,15 @@ func (node ThrowStatement) FlowNode() *FlowNode {
 func (node ThrowStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
-
-func (node ThrowStatement) Expression() Expression { return node.deref(node.data().expression) }
-
-func (node ThrowStatement) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+func (node ThrowStatement) Expression() Expression { return node.deref(&node.data().expression) }
+func (node ThrowStatement) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
 
 func (f *NodeFactory) NewThrowStatement(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[throwStatementData](s, layoutThrowStatement)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindThrowStatement, layoutThrowStatement, i)
 }
 
@@ -4961,24 +4982,24 @@ func (node TryStatement) FlowNode() *FlowNode {
 func (node TryStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
-func (node TryStatement) TryBlock() BlockNode          { return node.deref(node.data().tryBlock) }
-func (node TryStatement) SetTryBlock(value BlockNode)  { node.data().tryBlock = node.ref(value) }
-func (node TryStatement) CatchClause() CatchClauseNode { return node.deref(node.data().catchClause) }
+func (node TryStatement) TryBlock() BlockNode          { return node.deref(&node.data().tryBlock) }
+func (node TryStatement) SetTryBlock(value BlockNode)  { node.setRef(&node.data().tryBlock, value) }
+func (node TryStatement) CatchClause() CatchClauseNode { return node.deref(&node.data().catchClause) }
 
 func (node TryStatement) SetCatchClause(value CatchClauseNode) {
-	node.data().catchClause = node.ref(value)
+	node.setRef(&node.data().catchClause, value)
 }
-
-func (node TryStatement) FinallyBlock() BlockNode { return node.deref(node.data().finallyBlock) }
-
-func (node TryStatement) SetFinallyBlock(value BlockNode) { node.data().finallyBlock = node.ref(value) }
+func (node TryStatement) FinallyBlock() BlockNode { return node.deref(&node.data().finallyBlock) }
+func (node TryStatement) SetFinallyBlock(value BlockNode) {
+	node.setRef(&node.data().finallyBlock, value)
+}
 
 func (f *NodeFactory) NewTryStatement(tryBlock BlockNode, catchClause CatchClauseNode, finallyBlock BlockNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[tryStatementData](s, layoutTryStatement)
-	data.tryBlock = s.refAt(i, tryBlock)
-	data.catchClause = s.refAt(i, catchClause)
-	data.finallyBlock = s.refAt(i, finallyBlock)
+	data.tryBlock = s.refAt(i, &data.tryBlock, tryBlock)
+	data.catchClause = s.refAt(i, &data.catchClause, catchClause)
+	data.finallyBlock = s.refAt(i, &data.finallyBlock, finallyBlock)
 	return f.newNode(KindTryStatement, layoutTryStatement, i)
 }
 
@@ -5035,23 +5056,25 @@ func (node CatchClause) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
 
-func (node CatchClause) NextContainer() Node         { return node.deref(node.data().nextContainer) }
-func (node CatchClause) SetNextContainer(value Node) { node.data().nextContainer = node.ref(value) }
+func (node CatchClause) NextContainer() Node { return node.deref(&node.data().nextContainer) }
+
+func (node CatchClause) SetNextContainer(value Node) { node.setRef(&node.data().nextContainer, value) }
+
 func (node CatchClause) VariableDeclaration() VariableDeclarationNode {
-	return node.deref(node.data().variableDeclaration)
+	return node.deref(&node.data().variableDeclaration)
 }
 
 func (node CatchClause) SetVariableDeclaration(value VariableDeclarationNode) {
-	node.data().variableDeclaration = node.ref(value)
+	node.setRef(&node.data().variableDeclaration, value)
 }
-func (node CatchClause) Block() BlockNode         { return node.deref(node.data().block) }
-func (node CatchClause) SetBlock(value BlockNode) { node.data().block = node.ref(value) }
+func (node CatchClause) Block() BlockNode         { return node.deref(&node.data().block) }
+func (node CatchClause) SetBlock(value BlockNode) { node.setRef(&node.data().block, value) }
 
 func (f *NodeFactory) NewCatchClause(variableDeclaration VariableDeclarationNode, block BlockNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[catchClauseData](s, layoutCatchClause)
-	data.variableDeclaration = s.refAt(i, variableDeclaration)
-	data.block = s.refAt(i, block)
+	data.variableDeclaration = s.refAt(i, &data.variableDeclaration, variableDeclaration)
+	data.block = s.refAt(i, &data.block, block)
 	return f.newNode(KindCatchClause, layoutCatchClause, i)
 }
 
@@ -5134,17 +5157,22 @@ func (node LabeledStatement) FlowNode() *FlowNode {
 func (node LabeledStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
-func (node LabeledStatement) Label() IdentifierNode         { return node.deref(node.data().label) }
-func (node LabeledStatement) SetLabel(value IdentifierNode) { node.data().label = node.ref(value) }
-func (node LabeledStatement) Statement() Statement          { return node.deref(node.data().statement) }
 
-func (node LabeledStatement) SetStatement(value Statement) { node.data().statement = node.ref(value) }
+func (node LabeledStatement) Label() IdentifierNode { return node.deref(&node.data().label) }
+
+func (node LabeledStatement) SetLabel(value IdentifierNode) { node.setRef(&node.data().label, value) }
+
+func (node LabeledStatement) Statement() Statement { return node.deref(&node.data().statement) }
+
+func (node LabeledStatement) SetStatement(value Statement) {
+	node.setRef(&node.data().statement, value)
+}
 
 func (f *NodeFactory) NewLabeledStatement(label IdentifierNode, statement Statement) Node {
 	s := f.nodeStore()
 	data, i := newRecord[labeledStatementData](s, layoutLabeledStatement)
-	data.label = s.refAt(i, label)
-	data.statement = s.refAt(i, statement)
+	data.label = s.refAt(i, &data.label, label)
+	data.statement = s.refAt(i, &data.statement, statement)
 	return f.newNode(KindLabeledStatement, layoutLabeledStatement, i)
 }
 
@@ -5199,16 +5227,16 @@ func (node ExpressionStatement) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
 
-func (node ExpressionStatement) Expression() Expression { return node.deref(node.data().expression) }
+func (node ExpressionStatement) Expression() Expression { return node.deref(&node.data().expression) }
 
 func (node ExpressionStatement) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (f *NodeFactory) NewExpressionStatement(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[expressionStatementData](s, layoutExpressionStatement)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindExpressionStatement, layoutExpressionStatement, i)
 }
 
@@ -5263,8 +5291,8 @@ func (node Block) Locals() SymbolTable { return node.store().symbolTables.get(no
 func (node Block) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-func (node Block) NextContainer() Node         { return node.deref(node.data().nextContainer) }
-func (node Block) SetNextContainer(value Node) { node.data().nextContainer = node.ref(value) }
+func (node Block) NextContainer() Node         { return node.deref(&node.data().nextContainer) }
+func (node Block) SetNextContainer(value Node) { node.setRef(&node.data().nextContainer, value) }
 func (node Block) Statements() *StatementList {
 	return node.store().nodeLists.get(node.data().statements)
 }
@@ -5344,18 +5372,18 @@ func (node VariableStatement) setModifiers(value *ModifierList) {
 }
 
 func (node VariableStatement) DeclarationList() VariableDeclarationListNode {
-	return node.deref(node.data().declarationList)
+	return node.deref(&node.data().declarationList)
 }
 
 func (node VariableStatement) SetDeclarationList(value VariableDeclarationListNode) {
-	node.data().declarationList = node.ref(value)
+	node.setRef(&node.data().declarationList, value)
 }
 
 func (f *NodeFactory) NewVariableStatement(modifiers *ModifierList, declarationList VariableDeclarationListNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[variableStatementData](s, layoutVariableStatement)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.declarationList = s.refAt(i, declarationList)
+	data.declarationList = s.refAt(i, &data.declarationList, declarationList)
 	return f.newNode(KindVariableStatement, layoutVariableStatement, i)
 }
 
@@ -5416,31 +5444,33 @@ func (node VariableDeclaration) LocalSymbol() *Symbol {
 func (node VariableDeclaration) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().localSymbol, value, value == nil)
 }
-func (node VariableDeclaration) Name() BindingName         { return node.deref(node.data().name) }
-func (node VariableDeclaration) setName(value BindingName) { node.data().name = node.ref(value) }
+func (node VariableDeclaration) Name() BindingName         { return node.deref(&node.data().name) }
+func (node VariableDeclaration) setName(value BindingName) { node.setRef(&node.data().name, value) }
 func (node VariableDeclaration) ExclamationToken() ExclamationToken {
-	return node.deref(node.data().exclamationToken)
+	return node.deref(&node.data().exclamationToken)
 }
 
 func (node VariableDeclaration) SetExclamationToken(value ExclamationToken) {
-	node.data().exclamationToken = node.ref(value)
+	node.setRef(&node.data().exclamationToken, value)
 }
 
-func (node VariableDeclaration) Type() TypeNode          { return node.deref(node.data().typeField) }
-func (node VariableDeclaration) SetType(value TypeNode)  { node.data().typeField = node.ref(value) }
-func (node VariableDeclaration) Initializer() Expression { return node.deref(node.data().initializer) }
+func (node VariableDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
+
+func (node VariableDeclaration) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
+
+func (node VariableDeclaration) Initializer() Expression { return node.deref(&node.data().initializer) }
 
 func (node VariableDeclaration) SetInitializer(value Expression) {
-	node.data().initializer = node.ref(value)
+	node.setRef(&node.data().initializer, value)
 }
 
 func (f *NodeFactory) NewVariableDeclaration(name BindingName, exclamationToken ExclamationToken, typeNode TypeNode, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[variableDeclarationData](s, layoutVariableDeclaration)
-	data.name = s.refAt(i, name)
-	data.exclamationToken = s.refAt(i, exclamationToken)
-	data.typeField = s.refAt(i, typeNode)
-	data.initializer = s.refAt(i, initializer)
+	data.name = s.refAt(i, &data.name, name)
+	data.exclamationToken = s.refAt(i, &data.exclamationToken, exclamationToken)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.initializer = s.refAt(i, &data.initializer, initializer)
 	return f.newNode(KindVariableDeclaration, layoutVariableDeclaration, i)
 }
 
@@ -5626,41 +5656,44 @@ func (node ParameterDeclaration) setModifiers(value *ModifierList) {
 }
 
 func (node ParameterDeclaration) DotDotDotToken() DotDotDotToken {
-	return node.deref(node.data().dotDotDotToken)
+	return node.deref(&node.data().dotDotDotToken)
 }
 
 func (node ParameterDeclaration) SetDotDotDotToken(value DotDotDotToken) {
-	node.data().dotDotDotToken = node.ref(value)
+	node.setRef(&node.data().dotDotDotToken, value)
 }
-func (node ParameterDeclaration) Name() BindingName         { return node.deref(node.data().name) }
-func (node ParameterDeclaration) setName(value BindingName) { node.data().name = node.ref(value) }
+func (node ParameterDeclaration) Name() BindingName         { return node.deref(&node.data().name) }
+func (node ParameterDeclaration) setName(value BindingName) { node.setRef(&node.data().name, value) }
+
 func (node ParameterDeclaration) QuestionToken() QuestionToken {
-	return node.deref(node.data().questionToken)
+	return node.deref(&node.data().questionToken)
 }
 
 func (node ParameterDeclaration) SetQuestionToken(value QuestionToken) {
-	node.data().questionToken = node.ref(value)
+	node.setRef(&node.data().questionToken, value)
 }
 
-func (node ParameterDeclaration) Type() TypeNode { return node.deref(node.data().typeField) }
+func (node ParameterDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
 
-func (node ParameterDeclaration) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node ParameterDeclaration) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
-func (node ParameterDeclaration) Initializer() Expression { return node.deref(node.data().initializer) }
+func (node ParameterDeclaration) Initializer() Expression {
+	return node.deref(&node.data().initializer)
+}
 
 func (node ParameterDeclaration) SetInitializer(value Expression) {
-	node.data().initializer = node.ref(value)
+	node.setRef(&node.data().initializer, value)
 }
 
 func (f *NodeFactory) NewParameterDeclaration(modifiers *ModifierList, dotDotDotToken DotDotDotToken, name BindingName, questionToken QuestionToken, typeNode TypeNode, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[parameterDeclarationData](s, layoutParameterDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.dotDotDotToken = s.refAt(i, dotDotDotToken)
-	data.name = s.refAt(i, name)
-	data.questionToken = s.refAt(i, questionToken)
-	data.typeField = s.refAt(i, typeNode)
-	data.initializer = s.refAt(i, initializer)
+	data.dotDotDotToken = s.refAt(i, &data.dotDotDotToken, dotDotDotToken)
+	data.name = s.refAt(i, &data.name, name)
+	data.questionToken = s.refAt(i, &data.questionToken, questionToken)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.initializer = s.refAt(i, &data.initializer, initializer)
 	return f.newNode(KindParameter, layoutParameterDeclaration, i)
 }
 
@@ -5734,32 +5767,33 @@ func (node BindingElement) SetFlowNode(value *FlowNode) {
 }
 
 func (node BindingElement) DotDotDotToken() DotDotDotToken {
-	return node.deref(node.data().dotDotDotToken)
+	return node.deref(&node.data().dotDotDotToken)
 }
 
 func (node BindingElement) SetDotDotDotToken(value DotDotDotToken) {
-	node.data().dotDotDotToken = node.ref(value)
+	node.setRef(&node.data().dotDotDotToken, value)
 }
 
-func (node BindingElement) PropertyName() PropertyName { return node.deref(node.data().propertyName) }
+func (node BindingElement) PropertyName() PropertyName { return node.deref(&node.data().propertyName) }
 
 func (node BindingElement) SetPropertyName(value PropertyName) {
-	node.data().propertyName = node.ref(value)
+	node.setRef(&node.data().propertyName, value)
 }
-func (node BindingElement) Name() BindingName         { return node.deref(node.data().name) }
-func (node BindingElement) setName(value BindingName) { node.data().name = node.ref(value) }
-func (node BindingElement) Initializer() Expression   { return node.deref(node.data().initializer) }
+func (node BindingElement) Name() BindingName         { return node.deref(&node.data().name) }
+func (node BindingElement) setName(value BindingName) { node.setRef(&node.data().name, value) }
+func (node BindingElement) Initializer() Expression   { return node.deref(&node.data().initializer) }
+
 func (node BindingElement) SetInitializer(value Expression) {
-	node.data().initializer = node.ref(value)
+	node.setRef(&node.data().initializer, value)
 }
 
 func (f *NodeFactory) NewBindingElement(dotDotDotToken DotDotDotToken, propertyName PropertyName, name BindingName, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[bindingElementData](s, layoutBindingElement)
-	data.dotDotDotToken = s.refAt(i, dotDotDotToken)
-	data.propertyName = s.refAt(i, propertyName)
-	data.name = s.refAt(i, name)
-	data.initializer = s.refAt(i, initializer)
+	data.dotDotDotToken = s.refAt(i, &data.dotDotDotToken, dotDotDotToken)
+	data.propertyName = s.refAt(i, &data.propertyName, propertyName)
+	data.name = s.refAt(i, &data.name, name)
+	data.initializer = s.refAt(i, &data.initializer, initializer)
 	return f.newNode(KindBindingElement, layoutBindingElement, i)
 }
 
@@ -5916,10 +5950,10 @@ func (node FunctionDeclaration) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
 
-func (node FunctionDeclaration) NextContainer() Node { return node.deref(node.data().nextContainer) }
+func (node FunctionDeclaration) NextContainer() Node { return node.deref(&node.data().nextContainer) }
 
 func (node FunctionDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node FunctionDeclaration) TypeParameters() *TypeParameterList {
@@ -5937,25 +5971,28 @@ func (node FunctionDeclaration) Parameters() *ParameterList {
 func (node FunctionDeclaration) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-func (node FunctionDeclaration) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node FunctionDeclaration) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+
+func (node FunctionDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
+
+func (node FunctionDeclaration) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
+
 func (node FunctionDeclaration) FullSignature() TypeNode {
-	return node.deref(node.data().fullSignature)
+	return node.deref(&node.data().fullSignature)
 }
 
 func (node FunctionDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (node FunctionDeclaration) AsteriskToken() AsteriskToken {
-	return node.deref(node.data().asteriskToken)
+	return node.deref(&node.data().asteriskToken)
 }
 
 func (node FunctionDeclaration) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = node.ref(value)
+	node.setRef(&node.data().asteriskToken, value)
 }
-func (node FunctionDeclaration) Body() NodeBody         { return node.deref(node.data().body) }
-func (node FunctionDeclaration) SetBody(value NodeBody) { node.data().body = node.ref(value) }
+func (node FunctionDeclaration) Body() NodeBody         { return node.deref(&node.data().body) }
+func (node FunctionDeclaration) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
 func (node FunctionDeclaration) EndFlowNode() *FlowNode {
 	return node.store().flowNodes.get(node.data().endFlowNode)
 }
@@ -5964,8 +6001,10 @@ func (node FunctionDeclaration) SetEndFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().endFlowNode, value, value == nil)
 }
 
-func (node FunctionDeclaration) Name() IdentifierNode         { return node.deref(node.data().name) }
-func (node FunctionDeclaration) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node FunctionDeclaration) Name() IdentifierNode { return node.deref(&node.data().name) }
+
+func (node FunctionDeclaration) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
+
 func (node FunctionDeclaration) ReturnFlowNode() *FlowNode {
 	return node.store().flowNodes.get(node.data().returnFlowNode)
 }
@@ -5978,13 +6017,13 @@ func (f *NodeFactory) NewFunctionDeclaration(modifiers *ModifierList, asteriskTo
 	s := f.nodeStore()
 	data, i := newRecord[functionDeclarationData](s, layoutFunctionDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.asteriskToken = s.refAt(i, asteriskToken)
-	data.name = s.refAt(i, name)
+	data.asteriskToken = s.refAt(i, &data.asteriskToken, asteriskToken)
+	data.name = s.refAt(i, &data.name, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.body = s.refAt(i, body)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.fullSignature = s.refAt(i, &data.fullSignature, fullSignature)
+	data.body = s.refAt(i, &data.body, body)
 	return f.newNode(KindFunctionDeclaration, layoutFunctionDeclaration, i)
 }
 
@@ -6069,12 +6108,12 @@ func (node ClassDeclaration) Locals() SymbolTable {
 func (node ClassDeclaration) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-func (node ClassDeclaration) NextContainer() Node { return node.deref(node.data().nextContainer) }
+func (node ClassDeclaration) NextContainer() Node { return node.deref(&node.data().nextContainer) }
 func (node ClassDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
-func (node ClassDeclaration) Name() IdentifierNode         { return node.deref(node.data().name) }
-func (node ClassDeclaration) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node ClassDeclaration) Name() IdentifierNode         { return node.deref(&node.data().name) }
+func (node ClassDeclaration) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 func (node ClassDeclaration) TypeParameters() *TypeParameterList {
 	return node.store().nodeLists.get(node.data().typeParameters)
 }
@@ -6103,7 +6142,7 @@ func (f *NodeFactory) NewClassDeclaration(modifiers *ModifierList, name Identifi
 	s := f.nodeStore()
 	data, i := newRecord[classDeclarationData](s, layoutClassDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.heritageClauses, heritageClauses, heritageClauses == nil)
 	s.nodeLists.set(&data.members, members, members == nil)
@@ -6179,12 +6218,12 @@ func (node ClassExpression) Locals() SymbolTable {
 func (node ClassExpression) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-
-func (node ClassExpression) NextContainer() Node { return node.deref(node.data().nextContainer) }
-
-func (node ClassExpression) SetNextContainer(value Node)  { node.data().nextContainer = node.ref(value) }
-func (node ClassExpression) Name() IdentifierNode         { return node.deref(node.data().name) }
-func (node ClassExpression) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node ClassExpression) NextContainer() Node { return node.deref(&node.data().nextContainer) }
+func (node ClassExpression) SetNextContainer(value Node) {
+	node.setRef(&node.data().nextContainer, value)
+}
+func (node ClassExpression) Name() IdentifierNode         { return node.deref(&node.data().name) }
+func (node ClassExpression) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 func (node ClassExpression) TypeParameters() *TypeParameterList {
 	return node.store().nodeLists.get(node.data().typeParameters)
 }
@@ -6213,7 +6252,7 @@ func (f *NodeFactory) NewClassExpression(modifiers *ModifierList, name Identifie
 	s := f.nodeStore()
 	data, i := newRecord[classExpressionData](s, layoutClassExpression)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.heritageClauses, heritageClauses, heritageClauses == nil)
 	s.nodeLists.set(&data.members, members, members == nil)
@@ -6357,9 +6396,9 @@ func (node InterfaceDeclaration) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
 
-func (node InterfaceDeclaration) Name() IdentifierNode { return node.deref(node.data().name) }
+func (node InterfaceDeclaration) Name() IdentifierNode { return node.deref(&node.data().name) }
 
-func (node InterfaceDeclaration) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node InterfaceDeclaration) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 
 func (node InterfaceDeclaration) TypeParameters() *TypeParameterList {
 	return node.store().nodeLists.get(node.data().typeParameters)
@@ -6389,7 +6428,7 @@ func (f *NodeFactory) NewInterfaceDeclaration(modifiers *ModifierList, name Iden
 	s := f.nodeStore()
 	data, i := newRecord[interfaceDeclarationData](s, layoutInterfaceDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.heritageClauses, heritageClauses, heritageClauses == nil)
 	s.nodeLists.set(&data.members, members, members == nil)
@@ -6485,15 +6524,15 @@ func (node TypeAliasDeclaration) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
 
-func (node TypeAliasDeclaration) NextContainer() Node { return node.deref(node.data().nextContainer) }
+func (node TypeAliasDeclaration) NextContainer() Node { return node.deref(&node.data().nextContainer) }
 
 func (node TypeAliasDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node TypeAliasDeclaration) Name() IdentifierNode { return node.deref(node.data().name) }
+func (node TypeAliasDeclaration) Name() IdentifierNode { return node.deref(&node.data().name) }
 
-func (node TypeAliasDeclaration) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node TypeAliasDeclaration) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 
 func (node TypeAliasDeclaration) TypeParameters() *TypeParameterList {
 	return node.store().nodeLists.get(node.data().typeParameters)
@@ -6503,16 +6542,17 @@ func (node TypeAliasDeclaration) SetTypeParameters(value *TypeParameterList) {
 	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
 }
 
-func (node TypeAliasDeclaration) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node TypeAliasDeclaration) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node TypeAliasDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
+
+func (node TypeAliasDeclaration) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewTypeAliasDeclaration(modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeAliasDeclarationData](s, layoutTypeAliasDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindTypeAliasDeclaration, layoutTypeAliasDeclaration, i)
 }
 
@@ -6520,9 +6560,9 @@ func (f *NodeFactory) NewJSTypeAliasDeclaration(modifiers *ModifierList, name Id
 	s := f.nodeStore()
 	data, i := newRecord[typeAliasDeclarationData](s, layoutTypeAliasDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindJSTypeAliasDeclaration, layoutTypeAliasDeclaration, i)
 }
 
@@ -6603,21 +6643,22 @@ func (node EnumMember) Modifiers() *ModifierList {
 func (node EnumMember) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
-func (node EnumMember) Name() PropertyName         { return node.deref(node.data().name) }
-func (node EnumMember) setName(value PropertyName) { node.data().name = node.ref(value) }
-func (node EnumMember) PostfixToken() TokenNode    { return node.deref(node.data().postfixToken) }
+func (node EnumMember) Name() PropertyName         { return node.deref(&node.data().name) }
+func (node EnumMember) setName(value PropertyName) { node.setRef(&node.data().name, value) }
+func (node EnumMember) PostfixToken() TokenNode    { return node.deref(&node.data().postfixToken) }
+func (node EnumMember) SetPostfixToken(value TokenNode) {
+	node.setRef(&node.data().postfixToken, value)
+}
 
-func (node EnumMember) SetPostfixToken(value TokenNode) { node.data().postfixToken = node.ref(value) }
+func (node EnumMember) Initializer() Expression { return node.deref(&node.data().initializer) }
 
-func (node EnumMember) Initializer() Expression { return node.deref(node.data().initializer) }
-
-func (node EnumMember) SetInitializer(value Expression) { node.data().initializer = node.ref(value) }
+func (node EnumMember) SetInitializer(value Expression) { node.setRef(&node.data().initializer, value) }
 
 func (f *NodeFactory) NewEnumMember(name PropertyName, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[enumMemberData](s, layoutEnumMember)
-	data.name = s.refAt(i, name)
-	data.initializer = s.refAt(i, initializer)
+	data.name = s.refAt(i, &data.name, name)
+	data.initializer = s.refAt(i, &data.initializer, initializer)
 	return f.newNode(KindEnumMember, layoutEnumMember, i)
 }
 
@@ -6689,8 +6730,8 @@ func (node EnumDeclaration) Modifiers() *ModifierList {
 func (node EnumDeclaration) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
-func (node EnumDeclaration) Name() IdentifierNode         { return node.deref(node.data().name) }
-func (node EnumDeclaration) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node EnumDeclaration) Name() IdentifierNode         { return node.deref(&node.data().name) }
+func (node EnumDeclaration) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 func (node EnumDeclaration) Members() *EnumMemberList {
 	return node.store().nodeLists.get(node.data().members)
 }
@@ -6703,7 +6744,7 @@ func (f *NodeFactory) NewEnumDeclaration(modifiers *ModifierList, name Identifie
 	s := f.nodeStore()
 	data, i := newRecord[enumDeclarationData](s, layoutEnumDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	s.nodeLists.set(&data.members, members, members == nil)
 	return f.newNode(KindEnumDeclaration, layoutEnumDeclaration, i)
 }
@@ -6908,36 +6949,36 @@ func (node ImportDeclaration) SetSymbol(value *Symbol) {
 }
 
 func (node ImportDeclaration) ImportClause() ImportClauseNode {
-	return node.deref(node.data().importClause)
+	return node.deref(&node.data().importClause)
 }
 
 func (node ImportDeclaration) SetImportClause(value ImportClauseNode) {
-	node.data().importClause = node.ref(value)
+	node.setRef(&node.data().importClause, value)
 }
 
 func (node ImportDeclaration) ModuleSpecifier() Expression {
-	return node.deref(node.data().moduleSpecifier)
+	return node.deref(&node.data().moduleSpecifier)
 }
 
 func (node ImportDeclaration) SetModuleSpecifier(value Expression) {
-	node.data().moduleSpecifier = node.ref(value)
+	node.setRef(&node.data().moduleSpecifier, value)
 }
 
 func (node ImportDeclaration) Attributes() ImportAttributesNode {
-	return node.deref(node.data().attributes)
+	return node.deref(&node.data().attributes)
 }
 
 func (node ImportDeclaration) SetAttributes(value ImportAttributesNode) {
-	node.data().attributes = node.ref(value)
+	node.setRef(&node.data().attributes, value)
 }
 
 func (f *NodeFactory) NewImportDeclaration(modifiers *ModifierList, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[importDeclarationData](s, layoutImportDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.importClause = s.refAt(i, importClause)
-	data.moduleSpecifier = s.refAt(i, moduleSpecifier)
-	data.attributes = s.refAt(i, attributes)
+	data.importClause = s.refAt(i, &data.importClause, importClause)
+	data.moduleSpecifier = s.refAt(i, &data.moduleSpecifier, moduleSpecifier)
+	data.attributes = s.refAt(i, &data.attributes, attributes)
 	return f.newNode(KindImportDeclaration, layoutImportDeclaration, i)
 }
 
@@ -6945,9 +6986,9 @@ func (f *NodeFactory) NewJSImportDeclaration(modifiers *ModifierList, importClau
 	s := f.nodeStore()
 	data, i := newRecord[importDeclarationData](s, layoutImportDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.importClause = s.refAt(i, importClause)
-	data.moduleSpecifier = s.refAt(i, moduleSpecifier)
-	data.attributes = s.refAt(i, attributes)
+	data.importClause = s.refAt(i, &data.importClause, importClause)
+	data.moduleSpecifier = s.refAt(i, &data.moduleSpecifier, moduleSpecifier)
+	data.attributes = s.refAt(i, &data.attributes, attributes)
 	return f.newNode(KindJSImportDeclaration, layoutImportDeclaration, i)
 }
 
@@ -7021,17 +7062,17 @@ func (node ExternalModuleReference) data() *externalModuleReferenceData {
 }
 
 func (node ExternalModuleReference) Expression() Expression {
-	return node.deref(node.data().expression)
+	return node.deref(&node.data().expression)
 }
 
 func (node ExternalModuleReference) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (f *NodeFactory) NewExternalModuleReference(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[externalModuleReferenceData](s, layoutExternalModuleReference)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindExternalModuleReference, layoutExternalModuleReference, i)
 }
 
@@ -7089,13 +7130,13 @@ func (node NamespaceImport) LocalSymbol() *Symbol {
 func (node NamespaceImport) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().localSymbol, value, value == nil)
 }
-func (node NamespaceImport) Name() IdentifierNode         { return node.deref(node.data().name) }
-func (node NamespaceImport) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node NamespaceImport) Name() IdentifierNode         { return node.deref(&node.data().name) }
+func (node NamespaceImport) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewNamespaceImport(name IdentifierNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[namespaceImportData](s, layoutNamespaceImport)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	return f.newNode(KindNamespaceImport, layoutNamespaceImport, i)
 }
 
@@ -7223,14 +7264,14 @@ func (node ExportAssignment) setModifiers(value *ModifierList) {
 }
 func (node ExportAssignment) IsExportEquals() bool         { return node.data().isExportEquals }
 func (node ExportAssignment) SetIsExportEquals(value bool) { node.data().isExportEquals = value }
-func (node ExportAssignment) Type() TypeNode               { return node.deref(node.data().typeField) }
+func (node ExportAssignment) Type() TypeNode               { return node.deref(&node.data().typeField) }
 
-func (node ExportAssignment) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node ExportAssignment) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
-func (node ExportAssignment) Expression() Expression { return node.deref(node.data().expression) }
+func (node ExportAssignment) Expression() Expression { return node.deref(&node.data().expression) }
 
 func (node ExportAssignment) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (f *NodeFactory) NewExportAssignment(modifiers *ModifierList, isExportEquals bool, typeNode TypeNode, expression Expression) Node {
@@ -7238,8 +7279,8 @@ func (f *NodeFactory) NewExportAssignment(modifiers *ModifierList, isExportEqual
 	data, i := newRecord[exportAssignmentData](s, layoutExportAssignment)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	data.isExportEquals = isExportEquals
-	data.typeField = s.refAt(i, typeNode)
-	data.expression = s.refAt(i, expression)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindExportAssignment, layoutExportAssignment, i)
 }
 
@@ -7307,16 +7348,18 @@ func (node NamespaceExportDeclaration) Modifiers() *ModifierList {
 func (node NamespaceExportDeclaration) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
-func (node NamespaceExportDeclaration) Name() IdentifierNode { return node.deref(node.data().name) }
+
+func (node NamespaceExportDeclaration) Name() IdentifierNode { return node.deref(&node.data().name) }
+
 func (node NamespaceExportDeclaration) setName(value IdentifierNode) {
-	node.data().name = node.ref(value)
+	node.setRef(&node.data().name, value)
 }
 
 func (f *NodeFactory) NewNamespaceExportDeclaration(modifiers *ModifierList, name IdentifierNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[namespaceExportDeclarationData](s, layoutNamespaceExportDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	return f.newNode(KindNamespaceExportDeclaration, layoutNamespaceExportDeclaration, i)
 }
 
@@ -7361,13 +7404,13 @@ func (node NamespaceExport) Symbol() *Symbol { return node.store().symbols.get(n
 func (node NamespaceExport) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
-func (node NamespaceExport) Name() ModuleExportName         { return node.deref(node.data().name) }
-func (node NamespaceExport) setName(value ModuleExportName) { node.data().name = node.ref(value) }
+func (node NamespaceExport) Name() ModuleExportName         { return node.deref(&node.data().name) }
+func (node NamespaceExport) setName(value ModuleExportName) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewNamespaceExport(name ModuleExportName) Node {
 	s := f.nodeStore()
 	data, i := newRecord[namespaceExportData](s, layoutNamespaceExport)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	return f.newNode(KindNamespaceExport, layoutNamespaceExport, i)
 }
 
@@ -7487,21 +7530,21 @@ func (node ExportSpecifier) SetLocalSymbol(value *Symbol) {
 func (node ExportSpecifier) IsTypeOnly() bool         { return node.data().isTypeOnly }
 func (node ExportSpecifier) SetIsTypeOnly(value bool) { node.data().isTypeOnly = value }
 func (node ExportSpecifier) PropertyName() ModuleExportName {
-	return node.deref(node.data().propertyName)
+	return node.deref(&node.data().propertyName)
 }
 
 func (node ExportSpecifier) SetPropertyName(value ModuleExportName) {
-	node.data().propertyName = node.ref(value)
+	node.setRef(&node.data().propertyName, value)
 }
-func (node ExportSpecifier) Name() ModuleExportName         { return node.deref(node.data().name) }
-func (node ExportSpecifier) setName(value ModuleExportName) { node.data().name = node.ref(value) }
+func (node ExportSpecifier) Name() ModuleExportName         { return node.deref(&node.data().name) }
+func (node ExportSpecifier) setName(value ModuleExportName) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewExportSpecifier(isTypeOnly bool, propertyName ModuleExportName, name ModuleExportName) Node {
 	s := f.nodeStore()
 	data, i := newRecord[exportSpecifierData](s, layoutExportSpecifier)
 	data.isTypeOnly = isTypeOnly
-	data.propertyName = s.refAt(i, propertyName)
-	data.name = s.refAt(i, name)
+	data.propertyName = s.refAt(i, &data.propertyName, propertyName)
+	data.name = s.refAt(i, &data.name, name)
 	return f.newNode(KindExportSpecifier, layoutExportSpecifier, i)
 }
 
@@ -7563,11 +7606,11 @@ func (node CallSignatureDeclaration) SetLocals(value SymbolTable) {
 }
 
 func (node CallSignatureDeclaration) NextContainer() Node {
-	return node.deref(node.data().nextContainer)
+	return node.deref(&node.data().nextContainer)
 }
 
 func (node CallSignatureDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node CallSignatureDeclaration) TypeParameters() *TypeParameterList {
@@ -7585,17 +7628,17 @@ func (node CallSignatureDeclaration) Parameters() *ParameterList {
 func (node CallSignatureDeclaration) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-
-func (node CallSignatureDeclaration) Type() TypeNode { return node.deref(node.data().typeField) }
-
-func (node CallSignatureDeclaration) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node CallSignatureDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
+func (node CallSignatureDeclaration) SetType(value TypeNode) {
+	node.setRef(&node.data().typeField, value)
+}
 
 func (node CallSignatureDeclaration) FullSignature() TypeNode {
-	return node.deref(node.data().fullSignature)
+	return node.deref(&node.data().fullSignature)
 }
 
 func (node CallSignatureDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (f *NodeFactory) NewCallSignatureDeclaration(typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -7603,7 +7646,7 @@ func (f *NodeFactory) NewCallSignatureDeclaration(typeParameters *TypeParameterL
 	data, i := newRecord[callSignatureDeclarationData](s, layoutCallSignatureDeclaration)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindCallSignature, layoutCallSignatureDeclaration, i)
 }
 
@@ -7665,11 +7708,11 @@ func (node ConstructSignatureDeclaration) SetLocals(value SymbolTable) {
 }
 
 func (node ConstructSignatureDeclaration) NextContainer() Node {
-	return node.deref(node.data().nextContainer)
+	return node.deref(&node.data().nextContainer)
 }
 
 func (node ConstructSignatureDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node ConstructSignatureDeclaration) TypeParameters() *TypeParameterList {
@@ -7688,18 +7731,18 @@ func (node ConstructSignatureDeclaration) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
 
-func (node ConstructSignatureDeclaration) Type() TypeNode { return node.deref(node.data().typeField) }
+func (node ConstructSignatureDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
 
 func (node ConstructSignatureDeclaration) SetType(value TypeNode) {
-	node.data().typeField = node.ref(value)
+	node.setRef(&node.data().typeField, value)
 }
 
 func (node ConstructSignatureDeclaration) FullSignature() TypeNode {
-	return node.deref(node.data().fullSignature)
+	return node.deref(&node.data().fullSignature)
 }
 
 func (node ConstructSignatureDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (f *NodeFactory) NewConstructSignatureDeclaration(typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -7707,7 +7750,7 @@ func (f *NodeFactory) NewConstructSignatureDeclaration(typeParameters *TypeParam
 	data, i := newRecord[constructSignatureDeclarationData](s, layoutConstructSignatureDeclaration)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindConstructSignature, layoutConstructSignatureDeclaration, i)
 }
 
@@ -7778,10 +7821,12 @@ func (node ConstructorDeclaration) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
 
-func (node ConstructorDeclaration) NextContainer() Node { return node.deref(node.data().nextContainer) }
+func (node ConstructorDeclaration) NextContainer() Node {
+	return node.deref(&node.data().nextContainer)
+}
 
 func (node ConstructorDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node ConstructorDeclaration) TypeParameters() *TypeParameterList {
@@ -7799,28 +7844,28 @@ func (node ConstructorDeclaration) Parameters() *ParameterList {
 func (node ConstructorDeclaration) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-
-func (node ConstructorDeclaration) Type() TypeNode { return node.deref(node.data().typeField) }
-
-func (node ConstructorDeclaration) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node ConstructorDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
+func (node ConstructorDeclaration) SetType(value TypeNode) {
+	node.setRef(&node.data().typeField, value)
+}
 
 func (node ConstructorDeclaration) FullSignature() TypeNode {
-	return node.deref(node.data().fullSignature)
+	return node.deref(&node.data().fullSignature)
 }
 
 func (node ConstructorDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (node ConstructorDeclaration) AsteriskToken() AsteriskToken {
-	return node.deref(node.data().asteriskToken)
+	return node.deref(&node.data().asteriskToken)
 }
 
 func (node ConstructorDeclaration) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = node.ref(value)
+	node.setRef(&node.data().asteriskToken, value)
 }
-func (node ConstructorDeclaration) Body() NodeBody         { return node.deref(node.data().body) }
-func (node ConstructorDeclaration) SetBody(value NodeBody) { node.data().body = node.ref(value) }
+func (node ConstructorDeclaration) Body() NodeBody         { return node.deref(&node.data().body) }
+func (node ConstructorDeclaration) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
 func (node ConstructorDeclaration) EndFlowNode() *FlowNode {
 	return node.store().flowNodes.get(node.data().endFlowNode)
 }
@@ -7843,9 +7888,9 @@ func (f *NodeFactory) NewConstructorDeclaration(modifiers *ModifierList, typePar
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.body = s.refAt(i, body)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.fullSignature = s.refAt(i, &data.fullSignature, fullSignature)
+	data.body = s.refAt(i, &data.body, body)
 	return f.newNode(KindConstructor, layoutConstructorDeclaration, i)
 }
 
@@ -7907,16 +7952,16 @@ func (node GetAccessorDeclaration) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
 
-func (node GetAccessorDeclaration) Name() PropertyName { return node.deref(node.data().name) }
+func (node GetAccessorDeclaration) Name() PropertyName { return node.deref(&node.data().name) }
 
-func (node GetAccessorDeclaration) setName(value PropertyName) { node.data().name = node.ref(value) }
+func (node GetAccessorDeclaration) setName(value PropertyName) { node.setRef(&node.data().name, value) }
 
 func (node GetAccessorDeclaration) PostfixToken() TokenNode {
-	return node.deref(node.data().postfixToken)
+	return node.deref(&node.data().postfixToken)
 }
 
 func (node GetAccessorDeclaration) SetPostfixToken(value TokenNode) {
-	node.data().postfixToken = node.ref(value)
+	node.setRef(&node.data().postfixToken, value)
 }
 
 func (node GetAccessorDeclaration) Locals() SymbolTable {
@@ -7927,10 +7972,12 @@ func (node GetAccessorDeclaration) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
 
-func (node GetAccessorDeclaration) NextContainer() Node { return node.deref(node.data().nextContainer) }
+func (node GetAccessorDeclaration) NextContainer() Node {
+	return node.deref(&node.data().nextContainer)
+}
 
 func (node GetAccessorDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node GetAccessorDeclaration) TypeParameters() *TypeParameterList {
@@ -7948,28 +7995,28 @@ func (node GetAccessorDeclaration) Parameters() *ParameterList {
 func (node GetAccessorDeclaration) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-
-func (node GetAccessorDeclaration) Type() TypeNode { return node.deref(node.data().typeField) }
-
-func (node GetAccessorDeclaration) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node GetAccessorDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
+func (node GetAccessorDeclaration) SetType(value TypeNode) {
+	node.setRef(&node.data().typeField, value)
+}
 
 func (node GetAccessorDeclaration) FullSignature() TypeNode {
-	return node.deref(node.data().fullSignature)
+	return node.deref(&node.data().fullSignature)
 }
 
 func (node GetAccessorDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (node GetAccessorDeclaration) AsteriskToken() AsteriskToken {
-	return node.deref(node.data().asteriskToken)
+	return node.deref(&node.data().asteriskToken)
 }
 
 func (node GetAccessorDeclaration) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = node.ref(value)
+	node.setRef(&node.data().asteriskToken, value)
 }
-func (node GetAccessorDeclaration) Body() NodeBody         { return node.deref(node.data().body) }
-func (node GetAccessorDeclaration) SetBody(value NodeBody) { node.data().body = node.ref(value) }
+func (node GetAccessorDeclaration) Body() NodeBody         { return node.deref(&node.data().body) }
+func (node GetAccessorDeclaration) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
 func (node GetAccessorDeclaration) EndFlowNode() *FlowNode {
 	return node.store().flowNodes.get(node.data().endFlowNode)
 }
@@ -7990,12 +8037,12 @@ func (f *NodeFactory) NewGetAccessorDeclaration(modifiers *ModifierList, name Pr
 	s := f.nodeStore()
 	data, i := newRecord[getAccessorDeclarationData](s, layoutGetAccessorDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.body = s.refAt(i, body)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.fullSignature = s.refAt(i, &data.fullSignature, fullSignature)
+	data.body = s.refAt(i, &data.body, body)
 	return f.newNode(KindGetAccessor, layoutGetAccessorDeclaration, i)
 }
 
@@ -8058,16 +8105,16 @@ func (node SetAccessorDeclaration) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
 
-func (node SetAccessorDeclaration) Name() PropertyName { return node.deref(node.data().name) }
+func (node SetAccessorDeclaration) Name() PropertyName { return node.deref(&node.data().name) }
 
-func (node SetAccessorDeclaration) setName(value PropertyName) { node.data().name = node.ref(value) }
+func (node SetAccessorDeclaration) setName(value PropertyName) { node.setRef(&node.data().name, value) }
 
 func (node SetAccessorDeclaration) PostfixToken() TokenNode {
-	return node.deref(node.data().postfixToken)
+	return node.deref(&node.data().postfixToken)
 }
 
 func (node SetAccessorDeclaration) SetPostfixToken(value TokenNode) {
-	node.data().postfixToken = node.ref(value)
+	node.setRef(&node.data().postfixToken, value)
 }
 
 func (node SetAccessorDeclaration) Locals() SymbolTable {
@@ -8078,10 +8125,12 @@ func (node SetAccessorDeclaration) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
 
-func (node SetAccessorDeclaration) NextContainer() Node { return node.deref(node.data().nextContainer) }
+func (node SetAccessorDeclaration) NextContainer() Node {
+	return node.deref(&node.data().nextContainer)
+}
 
 func (node SetAccessorDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node SetAccessorDeclaration) TypeParameters() *TypeParameterList {
@@ -8099,28 +8148,28 @@ func (node SetAccessorDeclaration) Parameters() *ParameterList {
 func (node SetAccessorDeclaration) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-
-func (node SetAccessorDeclaration) Type() TypeNode { return node.deref(node.data().typeField) }
-
-func (node SetAccessorDeclaration) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node SetAccessorDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
+func (node SetAccessorDeclaration) SetType(value TypeNode) {
+	node.setRef(&node.data().typeField, value)
+}
 
 func (node SetAccessorDeclaration) FullSignature() TypeNode {
-	return node.deref(node.data().fullSignature)
+	return node.deref(&node.data().fullSignature)
 }
 
 func (node SetAccessorDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (node SetAccessorDeclaration) AsteriskToken() AsteriskToken {
-	return node.deref(node.data().asteriskToken)
+	return node.deref(&node.data().asteriskToken)
 }
 
 func (node SetAccessorDeclaration) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = node.ref(value)
+	node.setRef(&node.data().asteriskToken, value)
 }
-func (node SetAccessorDeclaration) Body() NodeBody         { return node.deref(node.data().body) }
-func (node SetAccessorDeclaration) SetBody(value NodeBody) { node.data().body = node.ref(value) }
+func (node SetAccessorDeclaration) Body() NodeBody         { return node.deref(&node.data().body) }
+func (node SetAccessorDeclaration) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
 func (node SetAccessorDeclaration) EndFlowNode() *FlowNode {
 	return node.store().flowNodes.get(node.data().endFlowNode)
 }
@@ -8141,12 +8190,12 @@ func (f *NodeFactory) NewSetAccessorDeclaration(modifiers *ModifierList, name Pr
 	s := f.nodeStore()
 	data, i := newRecord[setAccessorDeclarationData](s, layoutSetAccessorDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.body = s.refAt(i, body)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.fullSignature = s.refAt(i, &data.fullSignature, fullSignature)
+	data.body = s.refAt(i, &data.body, body)
 	return f.newNode(KindSetAccessor, layoutSetAccessorDeclaration, i)
 }
 
@@ -8224,11 +8273,11 @@ func (node IndexSignatureDeclaration) SetLocals(value SymbolTable) {
 }
 
 func (node IndexSignatureDeclaration) NextContainer() Node {
-	return node.deref(node.data().nextContainer)
+	return node.deref(&node.data().nextContainer)
 }
 
 func (node IndexSignatureDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node IndexSignatureDeclaration) TypeParameters() *TypeParameterList {
@@ -8246,17 +8295,17 @@ func (node IndexSignatureDeclaration) Parameters() *ParameterList {
 func (node IndexSignatureDeclaration) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-func (node IndexSignatureDeclaration) Type() TypeNode { return node.deref(node.data().typeField) }
+func (node IndexSignatureDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
 func (node IndexSignatureDeclaration) SetType(value TypeNode) {
-	node.data().typeField = node.ref(value)
+	node.setRef(&node.data().typeField, value)
 }
 
 func (node IndexSignatureDeclaration) FullSignature() TypeNode {
-	return node.deref(node.data().fullSignature)
+	return node.deref(&node.data().fullSignature)
 }
 
 func (node IndexSignatureDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (f *NodeFactory) NewIndexSignatureDeclaration(modifiers *ModifierList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -8264,7 +8313,7 @@ func (f *NodeFactory) NewIndexSignatureDeclaration(modifiers *ModifierList, para
 	data, i := newRecord[indexSignatureDeclarationData](s, layoutIndexSignatureDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindIndexSignature, layoutIndexSignatureDeclaration, i)
 }
 
@@ -8325,17 +8374,17 @@ func (node MethodSignatureDeclaration) Modifiers() *ModifierList {
 func (node MethodSignatureDeclaration) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
-func (node MethodSignatureDeclaration) Name() PropertyName { return node.deref(node.data().name) }
+func (node MethodSignatureDeclaration) Name() PropertyName { return node.deref(&node.data().name) }
 func (node MethodSignatureDeclaration) setName(value PropertyName) {
-	node.data().name = node.ref(value)
+	node.setRef(&node.data().name, value)
 }
 
 func (node MethodSignatureDeclaration) PostfixToken() TokenNode {
-	return node.deref(node.data().postfixToken)
+	return node.deref(&node.data().postfixToken)
 }
 
 func (node MethodSignatureDeclaration) SetPostfixToken(value TokenNode) {
-	node.data().postfixToken = node.ref(value)
+	node.setRef(&node.data().postfixToken, value)
 }
 
 func (node MethodSignatureDeclaration) Locals() SymbolTable {
@@ -8347,11 +8396,11 @@ func (node MethodSignatureDeclaration) SetLocals(value SymbolTable) {
 }
 
 func (node MethodSignatureDeclaration) NextContainer() Node {
-	return node.deref(node.data().nextContainer)
+	return node.deref(&node.data().nextContainer)
 }
 
 func (node MethodSignatureDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node MethodSignatureDeclaration) TypeParameters() *TypeParameterList {
@@ -8369,28 +8418,28 @@ func (node MethodSignatureDeclaration) Parameters() *ParameterList {
 func (node MethodSignatureDeclaration) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-func (node MethodSignatureDeclaration) Type() TypeNode { return node.deref(node.data().typeField) }
+func (node MethodSignatureDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
 func (node MethodSignatureDeclaration) SetType(value TypeNode) {
-	node.data().typeField = node.ref(value)
+	node.setRef(&node.data().typeField, value)
 }
 
 func (node MethodSignatureDeclaration) FullSignature() TypeNode {
-	return node.deref(node.data().fullSignature)
+	return node.deref(&node.data().fullSignature)
 }
 
 func (node MethodSignatureDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (f *NodeFactory) NewMethodSignatureDeclaration(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[methodSignatureDeclarationData](s, layoutMethodSignatureDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
-	data.postfixToken = s.refAt(i, postfixToken)
+	data.name = s.refAt(i, &data.name, name)
+	data.postfixToken = s.refAt(i, &data.postfixToken, postfixToken)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindMethodSignature, layoutMethodSignatureDeclaration, i)
 }
 
@@ -8456,12 +8505,12 @@ func (node MethodDeclaration) Modifiers() *ModifierList {
 func (node MethodDeclaration) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
-func (node MethodDeclaration) Name() PropertyName         { return node.deref(node.data().name) }
-func (node MethodDeclaration) setName(value PropertyName) { node.data().name = node.ref(value) }
-func (node MethodDeclaration) PostfixToken() TokenNode    { return node.deref(node.data().postfixToken) }
+func (node MethodDeclaration) Name() PropertyName         { return node.deref(&node.data().name) }
+func (node MethodDeclaration) setName(value PropertyName) { node.setRef(&node.data().name, value) }
+func (node MethodDeclaration) PostfixToken() TokenNode    { return node.deref(&node.data().postfixToken) }
 
 func (node MethodDeclaration) SetPostfixToken(value TokenNode) {
-	node.data().postfixToken = node.ref(value)
+	node.setRef(&node.data().postfixToken, value)
 }
 
 func (node MethodDeclaration) Locals() SymbolTable {
@@ -8471,9 +8520,9 @@ func (node MethodDeclaration) Locals() SymbolTable {
 func (node MethodDeclaration) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-func (node MethodDeclaration) NextContainer() Node { return node.deref(node.data().nextContainer) }
+func (node MethodDeclaration) NextContainer() Node { return node.deref(&node.data().nextContainer) }
 func (node MethodDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node MethodDeclaration) TypeParameters() *TypeParameterList {
@@ -8491,23 +8540,24 @@ func (node MethodDeclaration) Parameters() *ParameterList {
 func (node MethodDeclaration) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-func (node MethodDeclaration) Type() TypeNode          { return node.deref(node.data().typeField) }
-func (node MethodDeclaration) SetType(value TypeNode)  { node.data().typeField = node.ref(value) }
-func (node MethodDeclaration) FullSignature() TypeNode { return node.deref(node.data().fullSignature) }
+func (node MethodDeclaration) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node MethodDeclaration) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
+
+func (node MethodDeclaration) FullSignature() TypeNode { return node.deref(&node.data().fullSignature) }
 
 func (node MethodDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (node MethodDeclaration) AsteriskToken() AsteriskToken {
-	return node.deref(node.data().asteriskToken)
+	return node.deref(&node.data().asteriskToken)
 }
 
 func (node MethodDeclaration) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = node.ref(value)
+	node.setRef(&node.data().asteriskToken, value)
 }
-func (node MethodDeclaration) Body() NodeBody         { return node.deref(node.data().body) }
-func (node MethodDeclaration) SetBody(value NodeBody) { node.data().body = node.ref(value) }
+func (node MethodDeclaration) Body() NodeBody         { return node.deref(&node.data().body) }
+func (node MethodDeclaration) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
 func (node MethodDeclaration) EndFlowNode() *FlowNode {
 	return node.store().flowNodes.get(node.data().endFlowNode)
 }
@@ -8528,14 +8578,14 @@ func (f *NodeFactory) NewMethodDeclaration(modifiers *ModifierList, asteriskToke
 	s := f.nodeStore()
 	data, i := newRecord[methodDeclarationData](s, layoutMethodDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.asteriskToken = s.refAt(i, asteriskToken)
-	data.name = s.refAt(i, name)
-	data.postfixToken = s.refAt(i, postfixToken)
+	data.asteriskToken = s.refAt(i, &data.asteriskToken, asteriskToken)
+	data.name = s.refAt(i, &data.name, name)
+	data.postfixToken = s.refAt(i, &data.postfixToken, postfixToken)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.body = s.refAt(i, body)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.fullSignature = s.refAt(i, &data.fullSignature, fullSignature)
+	data.body = s.refAt(i, &data.body, body)
 	return f.newNode(KindMethodDeclaration, layoutMethodDeclaration, i)
 }
 
@@ -8605,41 +8655,43 @@ func (node PropertySignatureDeclaration) Modifiers() *ModifierList {
 func (node PropertySignatureDeclaration) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
-func (node PropertySignatureDeclaration) Name() PropertyName { return node.deref(node.data().name) }
+
+func (node PropertySignatureDeclaration) Name() PropertyName { return node.deref(&node.data().name) }
+
 func (node PropertySignatureDeclaration) setName(value PropertyName) {
-	node.data().name = node.ref(value)
+	node.setRef(&node.data().name, value)
 }
 
 func (node PropertySignatureDeclaration) PostfixToken() TokenNode {
-	return node.deref(node.data().postfixToken)
+	return node.deref(&node.data().postfixToken)
 }
 
 func (node PropertySignatureDeclaration) SetPostfixToken(value TokenNode) {
-	node.data().postfixToken = node.ref(value)
+	node.setRef(&node.data().postfixToken, value)
 }
 
-func (node PropertySignatureDeclaration) Type() TypeNode { return node.deref(node.data().typeField) }
+func (node PropertySignatureDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
 
 func (node PropertySignatureDeclaration) SetType(value TypeNode) {
-	node.data().typeField = node.ref(value)
+	node.setRef(&node.data().typeField, value)
 }
 
 func (node PropertySignatureDeclaration) Initializer() Expression {
-	return node.deref(node.data().initializer)
+	return node.deref(&node.data().initializer)
 }
 
 func (node PropertySignatureDeclaration) SetInitializer(value Expression) {
-	node.data().initializer = node.ref(value)
+	node.setRef(&node.data().initializer, value)
 }
 
 func (f *NodeFactory) NewPropertySignatureDeclaration(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[propertySignatureDeclarationData](s, layoutPropertySignatureDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
-	data.postfixToken = s.refAt(i, postfixToken)
-	data.typeField = s.refAt(i, typeNode)
-	data.initializer = s.refAt(i, initializer)
+	data.name = s.refAt(i, &data.name, name)
+	data.postfixToken = s.refAt(i, &data.postfixToken, postfixToken)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.initializer = s.refAt(i, &data.initializer, initializer)
 	return f.newNode(KindPropertySignature, layoutPropertySignatureDeclaration, i)
 }
 
@@ -8703,30 +8755,35 @@ func (node PropertyDeclaration) Modifiers() *ModifierList {
 func (node PropertyDeclaration) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
-func (node PropertyDeclaration) Name() PropertyName         { return node.deref(node.data().name) }
-func (node PropertyDeclaration) setName(value PropertyName) { node.data().name = node.ref(value) }
-func (node PropertyDeclaration) PostfixToken() TokenNode    { return node.deref(node.data().postfixToken) }
+func (node PropertyDeclaration) Name() PropertyName         { return node.deref(&node.data().name) }
+func (node PropertyDeclaration) setName(value PropertyName) { node.setRef(&node.data().name, value) }
 
-func (node PropertyDeclaration) SetPostfixToken(value TokenNode) {
-	node.data().postfixToken = node.ref(value)
+func (node PropertyDeclaration) PostfixToken() TokenNode {
+	return node.deref(&node.data().postfixToken)
 }
 
-func (node PropertyDeclaration) Type() TypeNode          { return node.deref(node.data().typeField) }
-func (node PropertyDeclaration) SetType(value TypeNode)  { node.data().typeField = node.ref(value) }
-func (node PropertyDeclaration) Initializer() Expression { return node.deref(node.data().initializer) }
+func (node PropertyDeclaration) SetPostfixToken(value TokenNode) {
+	node.setRef(&node.data().postfixToken, value)
+}
+
+func (node PropertyDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
+
+func (node PropertyDeclaration) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
+
+func (node PropertyDeclaration) Initializer() Expression { return node.deref(&node.data().initializer) }
 
 func (node PropertyDeclaration) SetInitializer(value Expression) {
-	node.data().initializer = node.ref(value)
+	node.setRef(&node.data().initializer, value)
 }
 
 func (f *NodeFactory) NewPropertyDeclaration(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[propertyDeclarationData](s, layoutPropertyDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
-	data.postfixToken = s.refAt(i, postfixToken)
-	data.typeField = s.refAt(i, typeNode)
-	data.initializer = s.refAt(i, initializer)
+	data.name = s.refAt(i, &data.name, name)
+	data.postfixToken = s.refAt(i, &data.postfixToken, postfixToken)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.initializer = s.refAt(i, &data.initializer, initializer)
 	return f.newNode(KindPropertyDeclaration, layoutPropertyDeclaration, i)
 }
 
@@ -8840,16 +8897,16 @@ func (node ClassStaticBlockDeclaration) SetLocals(value SymbolTable) {
 }
 
 func (node ClassStaticBlockDeclaration) NextContainer() Node {
-	return node.deref(node.data().nextContainer)
+	return node.deref(&node.data().nextContainer)
 }
 
 func (node ClassStaticBlockDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
-
-func (node ClassStaticBlockDeclaration) Body() BlockNode { return node.deref(node.data().body) }
-
-func (node ClassStaticBlockDeclaration) SetBody(value BlockNode) { node.data().body = node.ref(value) }
+func (node ClassStaticBlockDeclaration) Body() BlockNode { return node.deref(&node.data().body) }
+func (node ClassStaticBlockDeclaration) SetBody(value BlockNode) {
+	node.setRef(&node.data().body, value)
+}
 
 func (node ClassStaticBlockDeclaration) ReturnFlowNode() *FlowNode {
 	return node.store().flowNodes.get(node.data().returnFlowNode)
@@ -8863,7 +8920,7 @@ func (f *NodeFactory) NewClassStaticBlockDeclaration(modifiers *ModifierList, bo
 	s := f.nodeStore()
 	data, i := newRecord[classStaticBlockDeclarationData](s, layoutClassStaticBlockDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.body = s.refAt(i, body)
+	data.body = s.refAt(i, &data.body, body)
 	return f.newNode(KindClassStaticBlockDeclaration, layoutClassStaticBlockDeclaration, i)
 }
 
@@ -9212,28 +9269,29 @@ func (node BinaryExpression) Modifiers() *ModifierList {
 func (node BinaryExpression) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
-func (node BinaryExpression) Left() Expression         { return node.deref(node.data().left) }
-func (node BinaryExpression) SetLeft(value Expression) { node.data().left = node.ref(value) }
-func (node BinaryExpression) Type() TypeNode           { return node.deref(node.data().typeField) }
-func (node BinaryExpression) SetType(value TypeNode)   { node.data().typeField = node.ref(value) }
+func (node BinaryExpression) Left() Expression         { return node.deref(&node.data().left) }
+func (node BinaryExpression) SetLeft(value Expression) { node.setRef(&node.data().left, value) }
+func (node BinaryExpression) Type() TypeNode           { return node.deref(&node.data().typeField) }
+func (node BinaryExpression) SetType(value TypeNode)   { node.setRef(&node.data().typeField, value) }
+
 func (node BinaryExpression) OperatorToken() BinaryOperatorToken {
-	return node.deref(node.data().operatorToken)
+	return node.deref(&node.data().operatorToken)
 }
 
 func (node BinaryExpression) SetOperatorToken(value BinaryOperatorToken) {
-	node.data().operatorToken = node.ref(value)
+	node.setRef(&node.data().operatorToken, value)
 }
-func (node BinaryExpression) Right() Expression         { return node.deref(node.data().right) }
-func (node BinaryExpression) SetRight(value Expression) { node.data().right = node.ref(value) }
+func (node BinaryExpression) Right() Expression         { return node.deref(&node.data().right) }
+func (node BinaryExpression) SetRight(value Expression) { node.setRef(&node.data().right, value) }
 
 func (f *NodeFactory) NewBinaryExpression(modifiers *ModifierList, left Expression, typeNode TypeNode, operatorToken BinaryOperatorToken, right Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[binaryExpressionData](s, layoutBinaryExpression)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.left = s.refAt(i, left)
-	data.typeField = s.refAt(i, typeNode)
-	data.operatorToken = s.refAt(i, operatorToken)
-	data.right = s.refAt(i, right)
+	data.left = s.refAt(i, &data.left, left)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.operatorToken = s.refAt(i, &data.operatorToken, operatorToken)
+	data.right = s.refAt(i, &data.right, right)
 	return f.newNode(KindBinaryExpression, layoutBinaryExpression, i)
 }
 
@@ -9282,15 +9340,17 @@ func (node PrefixUnaryExpression) data() *prefixUnaryExpressionData {
 
 func (node PrefixUnaryExpression) Operator() Kind         { return node.data().operator }
 func (node PrefixUnaryExpression) SetOperator(value Kind) { node.data().operator = value }
-func (node PrefixUnaryExpression) Operand() Expression    { return node.deref(node.data().operand) }
+func (node PrefixUnaryExpression) Operand() Expression    { return node.deref(&node.data().operand) }
 
-func (node PrefixUnaryExpression) SetOperand(value Expression) { node.data().operand = node.ref(value) }
+func (node PrefixUnaryExpression) SetOperand(value Expression) {
+	node.setRef(&node.data().operand, value)
+}
 
 func (f *NodeFactory) NewPrefixUnaryExpression(operator Kind, operand Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[prefixUnaryExpressionData](s, layoutPrefixUnaryExpression)
 	data.operator = operator
-	data.operand = s.refAt(i, operand)
+	data.operand = s.refAt(i, &data.operand, operand)
 	return f.newNode(KindPrefixUnaryExpression, layoutPrefixUnaryExpression, i)
 }
 
@@ -9337,9 +9397,9 @@ func (node PostfixUnaryExpression) data() *postfixUnaryExpressionData {
 	return (*postfixUnaryExpressionData)(node.rec())
 }
 
-func (node PostfixUnaryExpression) Operand() Expression { return node.deref(node.data().operand) }
+func (node PostfixUnaryExpression) Operand() Expression { return node.deref(&node.data().operand) }
 func (node PostfixUnaryExpression) SetOperand(value Expression) {
-	node.data().operand = node.ref(value)
+	node.setRef(&node.data().operand, value)
 }
 func (node PostfixUnaryExpression) Operator() Kind         { return node.data().operator }
 func (node PostfixUnaryExpression) SetOperator(value Kind) { node.data().operator = value }
@@ -9347,7 +9407,7 @@ func (node PostfixUnaryExpression) SetOperator(value Kind) { node.data().operato
 func (f *NodeFactory) NewPostfixUnaryExpression(operand Expression, operator Kind) Node {
 	s := f.nodeStore()
 	data, i := newRecord[postfixUnaryExpressionData](s, layoutPostfixUnaryExpression)
-	data.operand = s.refAt(i, operand)
+	data.operand = s.refAt(i, &data.operand, operand)
 	data.operator = operator
 	return f.newNode(KindPostfixUnaryExpression, layoutPostfixUnaryExpression, i)
 }
@@ -9394,22 +9454,22 @@ type YieldExpression struct{ Node }
 func (node YieldExpression) data() *yieldExpressionData { return (*yieldExpressionData)(node.rec()) }
 
 func (node YieldExpression) AsteriskToken() AsteriskToken {
-	return node.deref(node.data().asteriskToken)
+	return node.deref(&node.data().asteriskToken)
 }
 
 func (node YieldExpression) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = node.ref(value)
+	node.setRef(&node.data().asteriskToken, value)
 }
-
-func (node YieldExpression) Expression() Expression { return node.deref(node.data().expression) }
-
-func (node YieldExpression) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+func (node YieldExpression) Expression() Expression { return node.deref(&node.data().expression) }
+func (node YieldExpression) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
 
 func (f *NodeFactory) NewYieldExpression(asteriskToken AsteriskToken, expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[yieldExpressionData](s, layoutYieldExpression)
-	data.asteriskToken = s.refAt(i, asteriskToken)
-	data.expression = s.refAt(i, expression)
+	data.asteriskToken = s.refAt(i, &data.asteriskToken, asteriskToken)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindYieldExpression, layoutYieldExpression, i)
 }
 
@@ -9474,10 +9534,10 @@ func (node ArrowFunction) Locals() SymbolTable {
 func (node ArrowFunction) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-
-func (node ArrowFunction) NextContainer() Node { return node.deref(node.data().nextContainer) }
-
-func (node ArrowFunction) SetNextContainer(value Node) { node.data().nextContainer = node.ref(value) }
+func (node ArrowFunction) NextContainer() Node { return node.deref(&node.data().nextContainer) }
+func (node ArrowFunction) SetNextContainer(value Node) {
+	node.setRef(&node.data().nextContainer, value)
+}
 
 func (node ArrowFunction) TypeParameters() *TypeParameterList {
 	return node.store().nodeLists.get(node.data().typeParameters)
@@ -9494,20 +9554,22 @@ func (node ArrowFunction) Parameters() *ParameterList {
 func (node ArrowFunction) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-func (node ArrowFunction) Type() TypeNode          { return node.deref(node.data().typeField) }
-func (node ArrowFunction) SetType(value TypeNode)  { node.data().typeField = node.ref(value) }
-func (node ArrowFunction) FullSignature() TypeNode { return node.deref(node.data().fullSignature) }
+func (node ArrowFunction) Type() TypeNode          { return node.deref(&node.data().typeField) }
+func (node ArrowFunction) SetType(value TypeNode)  { node.setRef(&node.data().typeField, value) }
+func (node ArrowFunction) FullSignature() TypeNode { return node.deref(&node.data().fullSignature) }
 func (node ArrowFunction) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
-func (node ArrowFunction) AsteriskToken() AsteriskToken { return node.deref(node.data().asteriskToken) }
+func (node ArrowFunction) AsteriskToken() AsteriskToken {
+	return node.deref(&node.data().asteriskToken)
+}
 
 func (node ArrowFunction) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = node.ref(value)
+	node.setRef(&node.data().asteriskToken, value)
 }
-func (node ArrowFunction) Body() NodeBody         { return node.deref(node.data().body) }
-func (node ArrowFunction) SetBody(value NodeBody) { node.data().body = node.ref(value) }
+func (node ArrowFunction) Body() NodeBody         { return node.deref(&node.data().body) }
+func (node ArrowFunction) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
 func (node ArrowFunction) EndFlowNode() *FlowNode {
 	return node.store().flowNodes.get(node.data().endFlowNode)
 }
@@ -9525,11 +9587,11 @@ func (node ArrowFunction) SetFlowNode(value *FlowNode) {
 }
 
 func (node ArrowFunction) EqualsGreaterThanToken() EqualsGreaterThanToken {
-	return node.deref(node.data().equalsGreaterThanToken)
+	return node.deref(&node.data().equalsGreaterThanToken)
 }
 
 func (node ArrowFunction) SetEqualsGreaterThanToken(value EqualsGreaterThanToken) {
-	node.data().equalsGreaterThanToken = node.ref(value)
+	node.setRef(&node.data().equalsGreaterThanToken, value)
 }
 
 func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, equalsGreaterThanToken EqualsGreaterThanToken, body ConciseBody) Node {
@@ -9538,10 +9600,10 @@ func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.equalsGreaterThanToken = s.refAt(i, equalsGreaterThanToken)
-	data.body = s.refAt(i, body)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.fullSignature = s.refAt(i, &data.fullSignature, fullSignature)
+	data.equalsGreaterThanToken = s.refAt(i, &data.equalsGreaterThanToken, equalsGreaterThanToken)
+	data.body = s.refAt(i, &data.body, body)
 	return f.newNode(KindArrowFunction, layoutArrowFunction, i)
 }
 
@@ -9616,9 +9678,11 @@ func (node FunctionExpression) Locals() SymbolTable {
 func (node FunctionExpression) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-func (node FunctionExpression) NextContainer() Node { return node.deref(node.data().nextContainer) }
+
+func (node FunctionExpression) NextContainer() Node { return node.deref(&node.data().nextContainer) }
+
 func (node FunctionExpression) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node FunctionExpression) TypeParameters() *TypeParameterList {
@@ -9636,23 +9700,26 @@ func (node FunctionExpression) Parameters() *ParameterList {
 func (node FunctionExpression) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-func (node FunctionExpression) Type() TypeNode          { return node.deref(node.data().typeField) }
-func (node FunctionExpression) SetType(value TypeNode)  { node.data().typeField = node.ref(value) }
-func (node FunctionExpression) FullSignature() TypeNode { return node.deref(node.data().fullSignature) }
+func (node FunctionExpression) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node FunctionExpression) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
+
+func (node FunctionExpression) FullSignature() TypeNode {
+	return node.deref(&node.data().fullSignature)
+}
 
 func (node FunctionExpression) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (node FunctionExpression) AsteriskToken() AsteriskToken {
-	return node.deref(node.data().asteriskToken)
+	return node.deref(&node.data().asteriskToken)
 }
 
 func (node FunctionExpression) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = node.ref(value)
+	node.setRef(&node.data().asteriskToken, value)
 }
-func (node FunctionExpression) Body() NodeBody         { return node.deref(node.data().body) }
-func (node FunctionExpression) SetBody(value NodeBody) { node.data().body = node.ref(value) }
+func (node FunctionExpression) Body() NodeBody         { return node.deref(&node.data().body) }
+func (node FunctionExpression) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
 func (node FunctionExpression) EndFlowNode() *FlowNode {
 	return node.store().flowNodes.get(node.data().endFlowNode)
 }
@@ -9668,8 +9735,11 @@ func (node FunctionExpression) FlowNode() *FlowNode {
 func (node FunctionExpression) SetFlowNode(value *FlowNode) {
 	node.store().flowNodes.set(&node.data().flowNode, value, value == nil)
 }
-func (node FunctionExpression) Name() IdentifierNode         { return node.deref(node.data().name) }
-func (node FunctionExpression) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+
+func (node FunctionExpression) Name() IdentifierNode { return node.deref(&node.data().name) }
+
+func (node FunctionExpression) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
+
 func (node FunctionExpression) ReturnFlowNode() *FlowNode {
 	return node.store().flowNodes.get(node.data().returnFlowNode)
 }
@@ -9682,13 +9752,13 @@ func (f *NodeFactory) NewFunctionExpression(modifiers *ModifierList, asteriskTok
 	s := f.nodeStore()
 	data, i := newRecord[functionExpressionData](s, layoutFunctionExpression)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.asteriskToken = s.refAt(i, asteriskToken)
-	data.name = s.refAt(i, name)
+	data.asteriskToken = s.refAt(i, &data.asteriskToken, asteriskToken)
+	data.name = s.refAt(i, &data.name, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.body = s.refAt(i, body)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.fullSignature = s.refAt(i, &data.fullSignature, fullSignature)
+	data.body = s.refAt(i, &data.body, body)
 	return f.newNode(KindFunctionExpression, layoutFunctionExpression, i)
 }
 
@@ -9736,18 +9806,19 @@ type AsExpression struct{ Node }
 
 func (node AsExpression) data() *asExpressionData { return (*asExpressionData)(node.rec()) }
 
-func (node AsExpression) Expression() Expression { return node.deref(node.data().expression) }
+func (node AsExpression) Expression() Expression { return node.deref(&node.data().expression) }
 
-func (node AsExpression) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+func (node AsExpression) SetExpression(value Expression) { node.setRef(&node.data().expression, value) }
 
-func (node AsExpression) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node AsExpression) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node AsExpression) Type() TypeNode { return node.deref(&node.data().typeField) }
+
+func (node AsExpression) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewAsExpression(expression Expression, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[asExpressionData](s, layoutAsExpression)
-	data.expression = s.refAt(i, expression)
-	data.typeField = s.refAt(i, typeNode)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindAsExpression, layoutAsExpression, i)
 }
 
@@ -9790,19 +9861,21 @@ func (node SatisfiesExpression) data() *satisfiesExpressionData {
 	return (*satisfiesExpressionData)(node.rec())
 }
 
-func (node SatisfiesExpression) Expression() Expression { return node.deref(node.data().expression) }
+func (node SatisfiesExpression) Expression() Expression { return node.deref(&node.data().expression) }
 
 func (node SatisfiesExpression) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
-func (node SatisfiesExpression) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node SatisfiesExpression) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+
+func (node SatisfiesExpression) Type() TypeNode { return node.deref(&node.data().typeField) }
+
+func (node SatisfiesExpression) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewSatisfiesExpression(expression Expression, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[satisfiesExpressionData](s, layoutSatisfiesExpression)
-	data.expression = s.refAt(i, expression)
-	data.typeField = s.refAt(i, typeNode)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindSatisfiesExpression, layoutSatisfiesExpression, i)
 }
 
@@ -9849,44 +9922,44 @@ func (node ConditionalExpression) data() *conditionalExpressionData {
 	return (*conditionalExpressionData)(node.rec())
 }
 
-func (node ConditionalExpression) Condition() Expression { return node.deref(node.data().condition) }
+func (node ConditionalExpression) Condition() Expression { return node.deref(&node.data().condition) }
 
 func (node ConditionalExpression) SetCondition(value Expression) {
-	node.data().condition = node.ref(value)
+	node.setRef(&node.data().condition, value)
 }
 
 func (node ConditionalExpression) QuestionToken() QuestionToken {
-	return node.deref(node.data().questionToken)
+	return node.deref(&node.data().questionToken)
 }
 
 func (node ConditionalExpression) SetQuestionToken(value QuestionToken) {
-	node.data().questionToken = node.ref(value)
+	node.setRef(&node.data().questionToken, value)
 }
-func (node ConditionalExpression) WhenTrue() Expression { return node.deref(node.data().whenTrue) }
+func (node ConditionalExpression) WhenTrue() Expression { return node.deref(&node.data().whenTrue) }
 func (node ConditionalExpression) SetWhenTrue(value Expression) {
-	node.data().whenTrue = node.ref(value)
+	node.setRef(&node.data().whenTrue, value)
 }
 
-func (node ConditionalExpression) ColonToken() ColonToken { return node.deref(node.data().colonToken) }
+func (node ConditionalExpression) ColonToken() ColonToken { return node.deref(&node.data().colonToken) }
 
 func (node ConditionalExpression) SetColonToken(value ColonToken) {
-	node.data().colonToken = node.ref(value)
+	node.setRef(&node.data().colonToken, value)
 }
 
-func (node ConditionalExpression) WhenFalse() Expression { return node.deref(node.data().whenFalse) }
+func (node ConditionalExpression) WhenFalse() Expression { return node.deref(&node.data().whenFalse) }
 
 func (node ConditionalExpression) SetWhenFalse(value Expression) {
-	node.data().whenFalse = node.ref(value)
+	node.setRef(&node.data().whenFalse, value)
 }
 
 func (f *NodeFactory) NewConditionalExpression(condition Expression, questionToken QuestionToken, whenTrue Expression, colonToken ColonToken, whenFalse Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[conditionalExpressionData](s, layoutConditionalExpression)
-	data.condition = s.refAt(i, condition)
-	data.questionToken = s.refAt(i, questionToken)
-	data.whenTrue = s.refAt(i, whenTrue)
-	data.colonToken = s.refAt(i, colonToken)
-	data.whenFalse = s.refAt(i, whenFalse)
+	data.condition = s.refAt(i, &data.condition, condition)
+	data.questionToken = s.refAt(i, &data.questionToken, questionToken)
+	data.whenTrue = s.refAt(i, &data.whenTrue, whenTrue)
+	data.colonToken = s.refAt(i, &data.colonToken, colonToken)
+	data.whenFalse = s.refAt(i, &data.whenFalse, whenFalse)
 	return f.newNode(KindConditionalExpression, layoutConditionalExpression, i)
 }
 
@@ -9953,31 +10026,31 @@ func (node PropertyAccessExpression) SetFlowNode(value *FlowNode) {
 }
 
 func (node PropertyAccessExpression) Expression() Expression {
-	return node.deref(node.data().expression)
+	return node.deref(&node.data().expression)
 }
 
 func (node PropertyAccessExpression) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (node PropertyAccessExpression) QuestionDotToken() QuestionDotToken {
-	return node.deref(node.data().questionDotToken)
+	return node.deref(&node.data().questionDotToken)
 }
 
 func (node PropertyAccessExpression) SetQuestionDotToken(value QuestionDotToken) {
-	node.data().questionDotToken = node.ref(value)
+	node.setRef(&node.data().questionDotToken, value)
 }
 
-func (node PropertyAccessExpression) Name() MemberName { return node.deref(node.data().name) }
+func (node PropertyAccessExpression) Name() MemberName { return node.deref(&node.data().name) }
 
-func (node PropertyAccessExpression) setName(value MemberName) { node.data().name = node.ref(value) }
+func (node PropertyAccessExpression) setName(value MemberName) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewPropertyAccessExpression(expression Expression, questionDotToken QuestionDotToken, name MemberName, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[propertyAccessExpressionData](s, layoutPropertyAccessExpression)
-	data.expression = s.refAt(i, expression)
-	data.questionDotToken = s.refAt(i, questionDotToken)
-	data.name = s.refAt(i, name)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.questionDotToken = s.refAt(i, &data.questionDotToken, questionDotToken)
+	data.name = s.refAt(i, &data.name, name)
 	node := f.newNode(KindPropertyAccessExpression, layoutPropertyAccessExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
@@ -10034,35 +10107,35 @@ func (node ElementAccessExpression) SetFlowNode(value *FlowNode) {
 }
 
 func (node ElementAccessExpression) Expression() Expression {
-	return node.deref(node.data().expression)
+	return node.deref(&node.data().expression)
 }
 
 func (node ElementAccessExpression) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (node ElementAccessExpression) QuestionDotToken() QuestionDotToken {
-	return node.deref(node.data().questionDotToken)
+	return node.deref(&node.data().questionDotToken)
 }
 
 func (node ElementAccessExpression) SetQuestionDotToken(value QuestionDotToken) {
-	node.data().questionDotToken = node.ref(value)
+	node.setRef(&node.data().questionDotToken, value)
 }
 
 func (node ElementAccessExpression) ArgumentExpression() Expression {
-	return node.deref(node.data().argumentExpression)
+	return node.deref(&node.data().argumentExpression)
 }
 
 func (node ElementAccessExpression) SetArgumentExpression(value Expression) {
-	node.data().argumentExpression = node.ref(value)
+	node.setRef(&node.data().argumentExpression, value)
 }
 
 func (f *NodeFactory) NewElementAccessExpression(expression Expression, questionDotToken QuestionDotToken, argumentExpression Expression, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[elementAccessExpressionData](s, layoutElementAccessExpression)
-	data.expression = s.refAt(i, expression)
-	data.questionDotToken = s.refAt(i, questionDotToken)
-	data.argumentExpression = s.refAt(i, argumentExpression)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.questionDotToken = s.refAt(i, &data.questionDotToken, questionDotToken)
+	data.argumentExpression = s.refAt(i, &data.argumentExpression, argumentExpression)
 	node := f.newNode(KindElementAccessExpression, layoutElementAccessExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
@@ -10119,17 +10192,17 @@ func (node CallExpression) Symbol() *Symbol { return node.store().symbols.get(no
 func (node CallExpression) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
-
-func (node CallExpression) Expression() Expression { return node.deref(node.data().expression) }
-
-func (node CallExpression) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+func (node CallExpression) Expression() Expression { return node.deref(&node.data().expression) }
+func (node CallExpression) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
 
 func (node CallExpression) QuestionDotToken() QuestionDotToken {
-	return node.deref(node.data().questionDotToken)
+	return node.deref(&node.data().questionDotToken)
 }
 
 func (node CallExpression) SetQuestionDotToken(value QuestionDotToken) {
-	node.data().questionDotToken = node.ref(value)
+	node.setRef(&node.data().questionDotToken, value)
 }
 
 func (node CallExpression) TypeArguments() *TypeList {
@@ -10151,8 +10224,8 @@ func (node CallExpression) SetArguments(value *ElementList) {
 func (f *NodeFactory) NewCallExpression(expression Expression, questionDotToken QuestionDotToken, typeArguments *TypeList, arguments *ElementList, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[callExpressionData](s, layoutCallExpression)
-	data.expression = s.refAt(i, expression)
-	data.questionDotToken = s.refAt(i, questionDotToken)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.questionDotToken = s.refAt(i, &data.questionDotToken, questionDotToken)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
 	s.nodeLists.set(&data.arguments, arguments, arguments == nil)
 	node := f.newNode(KindCallExpression, layoutCallExpression, i)
@@ -10202,9 +10275,10 @@ type NewExpression struct{ Node }
 
 func (node NewExpression) data() *newExpressionData { return (*newExpressionData)(node.rec()) }
 
-func (node NewExpression) Expression() Expression { return node.deref(node.data().expression) }
-
-func (node NewExpression) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+func (node NewExpression) Expression() Expression { return node.deref(&node.data().expression) }
+func (node NewExpression) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
 
 func (node NewExpression) TypeArguments() *TypeList {
 	return node.store().nodeLists.get(node.data().typeArguments)
@@ -10225,7 +10299,7 @@ func (node NewExpression) SetArguments(value *ElementList) {
 func (f *NodeFactory) NewNewExpression(expression Expression, typeArguments *TypeList, arguments *ElementList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[newExpressionData](s, layoutNewExpression)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
 	s.nodeLists.set(&data.arguments, arguments, arguments == nil)
 	return f.newNode(KindNewExpression, layoutNewExpression, i)
@@ -10279,14 +10353,14 @@ func (node MetaProperty) SetFlowNode(value *FlowNode) {
 }
 func (node MetaProperty) KeywordToken() Kind           { return node.data().keywordToken }
 func (node MetaProperty) SetKeywordToken(value Kind)   { node.data().keywordToken = value }
-func (node MetaProperty) Name() IdentifierNode         { return node.deref(node.data().name) }
-func (node MetaProperty) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node MetaProperty) Name() IdentifierNode         { return node.deref(&node.data().name) }
+func (node MetaProperty) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewMetaProperty(keywordToken Kind, name IdentifierNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[metaPropertyData](s, layoutMetaProperty)
 	data.keywordToken = keywordToken
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	return f.newNode(KindMetaProperty, layoutMetaProperty, i)
 }
 
@@ -10328,15 +10402,15 @@ func (node NonNullExpression) data() *nonNullExpressionData {
 	return (*nonNullExpressionData)(node.rec())
 }
 
-func (node NonNullExpression) Expression() Expression { return node.deref(node.data().expression) }
+func (node NonNullExpression) Expression() Expression { return node.deref(&node.data().expression) }
 func (node NonNullExpression) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (f *NodeFactory) NewNonNullExpression(expression Expression, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[nonNullExpressionData](s, layoutNonNullExpression)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	node := f.newNode(KindNonNullExpression, layoutNonNullExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
@@ -10378,14 +10452,15 @@ type SpreadElement struct{ Node }
 
 func (node SpreadElement) data() *spreadElementData { return (*spreadElementData)(node.rec()) }
 
-func (node SpreadElement) Expression() Expression { return node.deref(node.data().expression) }
-
-func (node SpreadElement) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+func (node SpreadElement) Expression() Expression { return node.deref(&node.data().expression) }
+func (node SpreadElement) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
 
 func (f *NodeFactory) NewSpreadElement(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[spreadElementData](s, layoutSpreadElement)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindSpreadElement, layoutSpreadElement, i)
 }
 
@@ -10429,9 +10504,9 @@ func (node TemplateExpression) data() *templateExpressionData {
 	return (*templateExpressionData)(node.rec())
 }
 
-func (node TemplateExpression) Head() TemplateHeadNode { return node.deref(node.data().head) }
+func (node TemplateExpression) Head() TemplateHeadNode { return node.deref(&node.data().head) }
 
-func (node TemplateExpression) SetHead(value TemplateHeadNode) { node.data().head = node.ref(value) }
+func (node TemplateExpression) SetHead(value TemplateHeadNode) { node.setRef(&node.data().head, value) }
 
 func (node TemplateExpression) TemplateSpans() *TemplateSpanList {
 	return node.store().nodeLists.get(node.data().templateSpans)
@@ -10444,7 +10519,7 @@ func (node TemplateExpression) SetTemplateSpans(value *TemplateSpanList) {
 func (f *NodeFactory) NewTemplateExpression(head TemplateHeadNode, templateSpans *TemplateSpanList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateExpressionData](s, layoutTemplateExpression)
-	data.head = s.refAt(i, head)
+	data.head = s.refAt(i, &data.head, head)
 	s.nodeLists.set(&data.templateSpans, templateSpans, templateSpans == nil)
 	return f.newNode(KindTemplateExpression, layoutTemplateExpression, i)
 }
@@ -10491,19 +10566,19 @@ type TemplateSpan struct{ Node }
 
 func (node TemplateSpan) data() *templateSpanData { return (*templateSpanData)(node.rec()) }
 
-func (node TemplateSpan) Expression() Expression { return node.deref(node.data().expression) }
+func (node TemplateSpan) Expression() Expression { return node.deref(&node.data().expression) }
 
-func (node TemplateSpan) SetExpression(value Expression) { node.data().expression = node.ref(value) }
-func (node TemplateSpan) Literal() TemplateMiddleOrTail  { return node.deref(node.data().literal) }
+func (node TemplateSpan) SetExpression(value Expression) { node.setRef(&node.data().expression, value) }
+func (node TemplateSpan) Literal() TemplateMiddleOrTail  { return node.deref(&node.data().literal) }
 func (node TemplateSpan) SetLiteral(value TemplateMiddleOrTail) {
-	node.data().literal = node.ref(value)
+	node.setRef(&node.data().literal, value)
 }
 
 func (f *NodeFactory) NewTemplateSpan(expression Expression, literal TemplateMiddleOrTail) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateSpanData](s, layoutTemplateSpan)
-	data.expression = s.refAt(i, expression)
-	data.literal = s.refAt(i, literal)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.literal = s.refAt(i, &data.literal, literal)
 	return f.newNode(KindTemplateSpan, layoutTemplateSpan, i)
 }
 
@@ -10554,14 +10629,16 @@ func (node TaggedTemplateExpression) data() *taggedTemplateExpressionData {
 	return (*taggedTemplateExpressionData)(node.rec())
 }
 
-func (node TaggedTemplateExpression) Tag() Expression         { return node.deref(node.data().tag) }
-func (node TaggedTemplateExpression) SetTag(value Expression) { node.data().tag = node.ref(value) }
+func (node TaggedTemplateExpression) Tag() Expression { return node.deref(&node.data().tag) }
+
+func (node TaggedTemplateExpression) SetTag(value Expression) { node.setRef(&node.data().tag, value) }
+
 func (node TaggedTemplateExpression) QuestionDotToken() QuestionDotToken {
-	return node.deref(node.data().questionDotToken)
+	return node.deref(&node.data().questionDotToken)
 }
 
 func (node TaggedTemplateExpression) SetQuestionDotToken(value QuestionDotToken) {
-	node.data().questionDotToken = node.ref(value)
+	node.setRef(&node.data().questionDotToken, value)
 }
 
 func (node TaggedTemplateExpression) TypeArguments() *TypeList {
@@ -10573,20 +10650,20 @@ func (node TaggedTemplateExpression) SetTypeArguments(value *TypeList) {
 }
 
 func (node TaggedTemplateExpression) Template() TemplateLiteral {
-	return node.deref(node.data().template)
+	return node.deref(&node.data().template)
 }
 
 func (node TaggedTemplateExpression) SetTemplate(value TemplateLiteral) {
-	node.data().template = node.ref(value)
+	node.setRef(&node.data().template, value)
 }
 
 func (f *NodeFactory) NewTaggedTemplateExpression(tag Expression, questionDotToken QuestionDotToken, typeArguments *TypeList, template TemplateLiteral, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[taggedTemplateExpressionData](s, layoutTaggedTemplateExpression)
-	data.tag = s.refAt(i, tag)
-	data.questionDotToken = s.refAt(i, questionDotToken)
+	data.tag = s.refAt(i, &data.tag, tag)
+	data.questionDotToken = s.refAt(i, &data.questionDotToken, questionDotToken)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
-	data.template = s.refAt(i, template)
+	data.template = s.refAt(i, &data.template, template)
 	node := f.newNode(KindTaggedTemplateExpression, layoutTaggedTemplateExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
@@ -10634,17 +10711,17 @@ func (node ParenthesizedExpression) data() *parenthesizedExpressionData {
 }
 
 func (node ParenthesizedExpression) Expression() Expression {
-	return node.deref(node.data().expression)
+	return node.deref(&node.data().expression)
 }
 
 func (node ParenthesizedExpression) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (f *NodeFactory) NewParenthesizedExpression(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[parenthesizedExpressionData](s, layoutParenthesizedExpression)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindParenthesizedExpression, layoutParenthesizedExpression, i)
 }
 
@@ -10828,15 +10905,15 @@ func (node SpreadAssignment) Symbol() *Symbol { return node.store().symbols.get(
 func (node SpreadAssignment) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
-func (node SpreadAssignment) Expression() Expression { return node.deref(node.data().expression) }
+func (node SpreadAssignment) Expression() Expression { return node.deref(&node.data().expression) }
 func (node SpreadAssignment) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (f *NodeFactory) NewSpreadAssignment(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[spreadAssignmentData](s, layoutSpreadAssignment)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindSpreadAssignment, layoutSpreadAssignment, i)
 }
 
@@ -10896,29 +10973,30 @@ func (node PropertyAssignment) Modifiers() *ModifierList {
 func (node PropertyAssignment) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
-func (node PropertyAssignment) Name() PropertyName         { return node.deref(node.data().name) }
-func (node PropertyAssignment) setName(value PropertyName) { node.data().name = node.ref(value) }
-func (node PropertyAssignment) PostfixToken() TokenNode    { return node.deref(node.data().postfixToken) }
+func (node PropertyAssignment) Name() PropertyName         { return node.deref(&node.data().name) }
+func (node PropertyAssignment) setName(value PropertyName) { node.setRef(&node.data().name, value) }
+func (node PropertyAssignment) PostfixToken() TokenNode    { return node.deref(&node.data().postfixToken) }
 
 func (node PropertyAssignment) SetPostfixToken(value TokenNode) {
-	node.data().postfixToken = node.ref(value)
+	node.setRef(&node.data().postfixToken, value)
 }
-func (node PropertyAssignment) Type() TypeNode          { return node.deref(node.data().typeField) }
-func (node PropertyAssignment) SetType(value TypeNode)  { node.data().typeField = node.ref(value) }
-func (node PropertyAssignment) Initializer() Expression { return node.deref(node.data().initializer) }
+func (node PropertyAssignment) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node PropertyAssignment) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
+
+func (node PropertyAssignment) Initializer() Expression { return node.deref(&node.data().initializer) }
 
 func (node PropertyAssignment) SetInitializer(value Expression) {
-	node.data().initializer = node.ref(value)
+	node.setRef(&node.data().initializer, value)
 }
 
 func (f *NodeFactory) NewPropertyAssignment(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[propertyAssignmentData](s, layoutPropertyAssignment)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
-	data.postfixToken = s.refAt(i, postfixToken)
-	data.typeField = s.refAt(i, typeNode)
-	data.initializer = s.refAt(i, initializer)
+	data.name = s.refAt(i, &data.name, name)
+	data.postfixToken = s.refAt(i, &data.postfixToken, postfixToken)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.initializer = s.refAt(i, &data.initializer, initializer)
 	return f.newNode(KindPropertyAssignment, layoutPropertyAssignment, i)
 }
 
@@ -10985,48 +11063,50 @@ func (node ShorthandPropertyAssignment) Modifiers() *ModifierList {
 func (node ShorthandPropertyAssignment) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
-func (node ShorthandPropertyAssignment) Name() PropertyName { return node.deref(node.data().name) }
+func (node ShorthandPropertyAssignment) Name() PropertyName { return node.deref(&node.data().name) }
 func (node ShorthandPropertyAssignment) setName(value PropertyName) {
-	node.data().name = node.ref(value)
+	node.setRef(&node.data().name, value)
 }
 
 func (node ShorthandPropertyAssignment) PostfixToken() TokenNode {
-	return node.deref(node.data().postfixToken)
+	return node.deref(&node.data().postfixToken)
 }
 
 func (node ShorthandPropertyAssignment) SetPostfixToken(value TokenNode) {
-	node.data().postfixToken = node.ref(value)
+	node.setRef(&node.data().postfixToken, value)
 }
-func (node ShorthandPropertyAssignment) Type() TypeNode { return node.deref(node.data().typeField) }
+
+func (node ShorthandPropertyAssignment) Type() TypeNode { return node.deref(&node.data().typeField) }
+
 func (node ShorthandPropertyAssignment) SetType(value TypeNode) {
-	node.data().typeField = node.ref(value)
+	node.setRef(&node.data().typeField, value)
 }
 
 func (node ShorthandPropertyAssignment) EqualsToken() EqualsToken {
-	return node.deref(node.data().equalsToken)
+	return node.deref(&node.data().equalsToken)
 }
 
 func (node ShorthandPropertyAssignment) SetEqualsToken(value EqualsToken) {
-	node.data().equalsToken = node.ref(value)
+	node.setRef(&node.data().equalsToken, value)
 }
 
 func (node ShorthandPropertyAssignment) ObjectAssignmentInitializer() Expression {
-	return node.deref(node.data().objectAssignmentInitializer)
+	return node.deref(&node.data().objectAssignmentInitializer)
 }
 
 func (node ShorthandPropertyAssignment) SetObjectAssignmentInitializer(value Expression) {
-	node.data().objectAssignmentInitializer = node.ref(value)
+	node.setRef(&node.data().objectAssignmentInitializer, value)
 }
 
 func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, equalsToken EqualsToken, objectAssignmentInitializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[shorthandPropertyAssignmentData](s, layoutShorthandPropertyAssignment)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
-	data.postfixToken = s.refAt(i, postfixToken)
-	data.typeField = s.refAt(i, typeNode)
-	data.equalsToken = s.refAt(i, equalsToken)
-	data.objectAssignmentInitializer = s.refAt(i, objectAssignmentInitializer)
+	data.name = s.refAt(i, &data.name, name)
+	data.postfixToken = s.refAt(i, &data.postfixToken, postfixToken)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.equalsToken = s.refAt(i, &data.equalsToken, equalsToken)
+	data.objectAssignmentInitializer = s.refAt(i, &data.objectAssignmentInitializer, objectAssignmentInitializer)
 	return f.newNode(KindShorthandPropertyAssignment, layoutShorthandPropertyAssignment, i)
 }
 
@@ -11071,15 +11151,15 @@ type DeleteExpression struct{ Node }
 
 func (node DeleteExpression) data() *deleteExpressionData { return (*deleteExpressionData)(node.rec()) }
 
-func (node DeleteExpression) Expression() Expression { return node.deref(node.data().expression) }
+func (node DeleteExpression) Expression() Expression { return node.deref(&node.data().expression) }
 func (node DeleteExpression) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (f *NodeFactory) NewDeleteExpression(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[deleteExpressionData](s, layoutDeleteExpression)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindDeleteExpression, layoutDeleteExpression, i)
 }
 
@@ -11123,15 +11203,15 @@ type TypeOfExpression struct{ Node }
 
 func (node TypeOfExpression) data() *typeOfExpressionData { return (*typeOfExpressionData)(node.rec()) }
 
-func (node TypeOfExpression) Expression() Expression { return node.deref(node.data().expression) }
+func (node TypeOfExpression) Expression() Expression { return node.deref(&node.data().expression) }
 func (node TypeOfExpression) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (f *NodeFactory) NewTypeOfExpression(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeOfExpressionData](s, layoutTypeOfExpression)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindTypeOfExpression, layoutTypeOfExpression, i)
 }
 
@@ -11175,14 +11255,15 @@ type VoidExpression struct{ Node }
 
 func (node VoidExpression) data() *voidExpressionData { return (*voidExpressionData)(node.rec()) }
 
-func (node VoidExpression) Expression() Expression { return node.deref(node.data().expression) }
-
-func (node VoidExpression) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+func (node VoidExpression) Expression() Expression { return node.deref(&node.data().expression) }
+func (node VoidExpression) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
 
 func (f *NodeFactory) NewVoidExpression(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[voidExpressionData](s, layoutVoidExpression)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindVoidExpression, layoutVoidExpression, i)
 }
 
@@ -11226,14 +11307,15 @@ type AwaitExpression struct{ Node }
 
 func (node AwaitExpression) data() *awaitExpressionData { return (*awaitExpressionData)(node.rec()) }
 
-func (node AwaitExpression) Expression() Expression { return node.deref(node.data().expression) }
-
-func (node AwaitExpression) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+func (node AwaitExpression) Expression() Expression { return node.deref(&node.data().expression) }
+func (node AwaitExpression) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
 
 func (f *NodeFactory) NewAwaitExpression(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[awaitExpressionData](s, layoutAwaitExpression)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindAwaitExpression, layoutAwaitExpression, i)
 }
 
@@ -11274,19 +11356,18 @@ type TypeAssertion struct{ Node }
 
 func (node TypeAssertion) data() *typeAssertionData { return (*typeAssertionData)(node.rec()) }
 
-func (node TypeAssertion) Type() TypeNode { return node.deref(node.data().typeField) }
-
-func (node TypeAssertion) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
-
-func (node TypeAssertion) Expression() Expression { return node.deref(node.data().expression) }
-
-func (node TypeAssertion) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+func (node TypeAssertion) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node TypeAssertion) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
+func (node TypeAssertion) Expression() Expression { return node.deref(&node.data().expression) }
+func (node TypeAssertion) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
 
 func (f *NodeFactory) NewTypeAssertion(typeNode TypeNode, expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeAssertionData](s, layoutTypeAssertion)
-	data.typeField = s.refAt(i, typeNode)
-	data.expression = s.refAt(i, expression)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindTypeAssertionExpression, layoutTypeAssertion, i)
 }
 
@@ -11473,37 +11554,37 @@ func (node ConditionalTypeNode) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
 
-func (node ConditionalTypeNode) NextContainer() Node { return node.deref(node.data().nextContainer) }
+func (node ConditionalTypeNode) NextContainer() Node { return node.deref(&node.data().nextContainer) }
 
 func (node ConditionalTypeNode) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
+}
+func (node ConditionalTypeNode) CheckType() TypeNode { return node.deref(&node.data().checkType) }
+func (node ConditionalTypeNode) SetCheckType(value TypeNode) {
+	node.setRef(&node.data().checkType, value)
 }
 
-func (node ConditionalTypeNode) CheckType() TypeNode { return node.deref(node.data().checkType) }
-
-func (node ConditionalTypeNode) SetCheckType(value TypeNode) { node.data().checkType = node.ref(value) }
-
-func (node ConditionalTypeNode) ExtendsType() TypeNode { return node.deref(node.data().extendsType) }
+func (node ConditionalTypeNode) ExtendsType() TypeNode { return node.deref(&node.data().extendsType) }
 
 func (node ConditionalTypeNode) SetExtendsType(value TypeNode) {
-	node.data().extendsType = node.ref(value)
+	node.setRef(&node.data().extendsType, value)
 }
-
-func (node ConditionalTypeNode) TrueType() TypeNode { return node.deref(node.data().trueType) }
-
-func (node ConditionalTypeNode) SetTrueType(value TypeNode) { node.data().trueType = node.ref(value) }
-
-func (node ConditionalTypeNode) FalseType() TypeNode { return node.deref(node.data().falseType) }
-
-func (node ConditionalTypeNode) SetFalseType(value TypeNode) { node.data().falseType = node.ref(value) }
+func (node ConditionalTypeNode) TrueType() TypeNode { return node.deref(&node.data().trueType) }
+func (node ConditionalTypeNode) SetTrueType(value TypeNode) {
+	node.setRef(&node.data().trueType, value)
+}
+func (node ConditionalTypeNode) FalseType() TypeNode { return node.deref(&node.data().falseType) }
+func (node ConditionalTypeNode) SetFalseType(value TypeNode) {
+	node.setRef(&node.data().falseType, value)
+}
 
 func (f *NodeFactory) NewConditionalTypeNode(checkType TypeNode, extendsType TypeNode, trueType TypeNode, falseType TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[conditionalTypeNodeData](s, layoutConditionalTypeNode)
-	data.checkType = s.refAt(i, checkType)
-	data.extendsType = s.refAt(i, extendsType)
-	data.trueType = s.refAt(i, trueType)
-	data.falseType = s.refAt(i, falseType)
+	data.checkType = s.refAt(i, &data.checkType, checkType)
+	data.extendsType = s.refAt(i, &data.extendsType, extendsType)
+	data.trueType = s.refAt(i, &data.trueType, trueType)
+	data.falseType = s.refAt(i, &data.falseType, falseType)
 	return f.newNode(KindConditionalType, layoutConditionalTypeNode, i)
 }
 
@@ -11549,14 +11630,14 @@ func (node TypeOperatorNode) data() *typeOperatorNodeData { return (*typeOperato
 
 func (node TypeOperatorNode) Operator() Kind         { return node.data().operator }
 func (node TypeOperatorNode) SetOperator(value Kind) { node.data().operator = value }
-func (node TypeOperatorNode) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node TypeOperatorNode) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node TypeOperatorNode) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node TypeOperatorNode) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewTypeOperatorNode(operator Kind, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeOperatorNodeData](s, layoutTypeOperatorNode)
 	data.operator = operator
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindTypeOperator, layoutTypeOperatorNode, i)
 }
 
@@ -11597,17 +11678,17 @@ type InferTypeNode struct{ Node }
 func (node InferTypeNode) data() *inferTypeNodeData { return (*inferTypeNodeData)(node.rec()) }
 
 func (node InferTypeNode) TypeParameter() TypeParameterDeclarationNode {
-	return node.deref(node.data().typeParameter)
+	return node.deref(&node.data().typeParameter)
 }
 
 func (node InferTypeNode) SetTypeParameter(value TypeParameterDeclarationNode) {
-	node.data().typeParameter = node.ref(value)
+	node.setRef(&node.data().typeParameter, value)
 }
 
 func (f *NodeFactory) NewInferTypeNode(typeParameter TypeParameterDeclarationNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[inferTypeNodeData](s, layoutInferTypeNode)
-	data.typeParameter = s.refAt(i, typeParameter)
+	data.typeParameter = s.refAt(i, &data.typeParameter, typeParameter)
 	return f.newNode(KindInferType, layoutInferTypeNode, i)
 }
 
@@ -11647,14 +11728,15 @@ type ArrayTypeNode struct{ Node }
 
 func (node ArrayTypeNode) data() *arrayTypeNodeData { return (*arrayTypeNodeData)(node.rec()) }
 
-func (node ArrayTypeNode) ElementType() TypeNode { return node.deref(node.data().elementType) }
-
-func (node ArrayTypeNode) SetElementType(value TypeNode) { node.data().elementType = node.ref(value) }
+func (node ArrayTypeNode) ElementType() TypeNode { return node.deref(&node.data().elementType) }
+func (node ArrayTypeNode) SetElementType(value TypeNode) {
+	node.setRef(&node.data().elementType, value)
+}
 
 func (f *NodeFactory) NewArrayTypeNode(elementType TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[arrayTypeNodeData](s, layoutArrayTypeNode)
-	data.elementType = s.refAt(i, elementType)
+	data.elementType = s.refAt(i, &data.elementType, elementType)
 	return f.newNode(KindArrayType, layoutArrayTypeNode, i)
 }
 
@@ -11697,21 +11779,21 @@ func (node IndexedAccessTypeNode) data() *indexedAccessTypeNodeData {
 	return (*indexedAccessTypeNodeData)(node.rec())
 }
 
-func (node IndexedAccessTypeNode) ObjectType() TypeNode { return node.deref(node.data().objectType) }
+func (node IndexedAccessTypeNode) ObjectType() TypeNode { return node.deref(&node.data().objectType) }
 
 func (node IndexedAccessTypeNode) SetObjectType(value TypeNode) {
-	node.data().objectType = node.ref(value)
+	node.setRef(&node.data().objectType, value)
 }
-func (node IndexedAccessTypeNode) IndexType() TypeNode { return node.deref(node.data().indexType) }
+func (node IndexedAccessTypeNode) IndexType() TypeNode { return node.deref(&node.data().indexType) }
 func (node IndexedAccessTypeNode) SetIndexType(value TypeNode) {
-	node.data().indexType = node.ref(value)
+	node.setRef(&node.data().indexType, value)
 }
 
 func (f *NodeFactory) NewIndexedAccessTypeNode(objectType TypeNode, indexType TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[indexedAccessTypeNodeData](s, layoutIndexedAccessTypeNode)
-	data.objectType = s.refAt(i, objectType)
-	data.indexType = s.refAt(i, indexType)
+	data.objectType = s.refAt(i, &data.objectType, objectType)
+	data.indexType = s.refAt(i, &data.indexType, indexType)
 	return f.newNode(KindIndexedAccessType, layoutIndexedAccessTypeNode, i)
 }
 
@@ -11760,15 +11842,15 @@ func (node TypeReferenceNode) TypeArguments() *TypeList {
 func (node TypeReferenceNode) SetTypeArguments(value *TypeList) {
 	node.store().nodeLists.set(&node.data().typeArguments, value, value == nil)
 }
-
-func (node TypeReferenceNode) TypeName() EntityName { return node.deref(node.data().typeName) }
-
-func (node TypeReferenceNode) SetTypeName(value EntityName) { node.data().typeName = node.ref(value) }
+func (node TypeReferenceNode) TypeName() EntityName { return node.deref(&node.data().typeName) }
+func (node TypeReferenceNode) SetTypeName(value EntityName) {
+	node.setRef(&node.data().typeName, value)
+}
 
 func (f *NodeFactory) NewTypeReferenceNode(typeName EntityName, typeArguments *TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeReferenceNodeData](s, layoutTypeReferenceNode)
-	data.typeName = s.refAt(i, typeName)
+	data.typeName = s.refAt(i, &data.typeName, typeName)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
 	return f.newNode(KindTypeReference, layoutTypeReferenceNode, i)
 }
@@ -11814,11 +11896,11 @@ func (node ExpressionWithTypeArguments) data() *expressionWithTypeArgumentsData 
 }
 
 func (node ExpressionWithTypeArguments) Expression() Expression {
-	return node.deref(node.data().expression)
+	return node.deref(&node.data().expression)
 }
 
 func (node ExpressionWithTypeArguments) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (node ExpressionWithTypeArguments) TypeArguments() *TypeList {
@@ -11832,7 +11914,7 @@ func (node ExpressionWithTypeArguments) SetTypeArguments(value *TypeList) {
 func (f *NodeFactory) NewExpressionWithTypeArguments(expression Expression, typeArguments *TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[expressionWithTypeArgumentsData](s, layoutExpressionWithTypeArguments)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
 	return f.newNode(KindExpressionWithTypeArguments, layoutExpressionWithTypeArguments, i)
 }
@@ -11873,13 +11955,13 @@ type LiteralTypeNode struct{ Node }
 
 func (node LiteralTypeNode) data() *literalTypeNodeData { return (*literalTypeNodeData)(node.rec()) }
 
-func (node LiteralTypeNode) Literal() Node         { return node.deref(node.data().literal) }
-func (node LiteralTypeNode) SetLiteral(value Node) { node.data().literal = node.ref(value) }
+func (node LiteralTypeNode) Literal() Node         { return node.deref(&node.data().literal) }
+func (node LiteralTypeNode) SetLiteral(value Node) { node.setRef(&node.data().literal, value) }
 
 func (f *NodeFactory) NewLiteralTypeNode(literal Node) Node {
 	s := f.nodeStore()
 	data, i := newRecord[literalTypeNodeData](s, layoutLiteralTypeNode)
-	data.literal = s.refAt(i, literal)
+	data.literal = s.refAt(i, &data.literal, literal)
 	return f.newNode(KindLiteralType, layoutLiteralTypeNode, i)
 }
 
@@ -11949,29 +12031,29 @@ func (node TypePredicateNode) data() *typePredicateNodeData {
 }
 
 func (node TypePredicateNode) AssertsModifier() AssertsKeyword {
-	return node.deref(node.data().assertsModifier)
+	return node.deref(&node.data().assertsModifier)
 }
 
 func (node TypePredicateNode) SetAssertsModifier(value AssertsKeyword) {
-	node.data().assertsModifier = node.ref(value)
+	node.setRef(&node.data().assertsModifier, value)
 }
 
 func (node TypePredicateNode) ParameterName() TypePredicateParameterName {
-	return node.deref(node.data().parameterName)
+	return node.deref(&node.data().parameterName)
 }
 
 func (node TypePredicateNode) SetParameterName(value TypePredicateParameterName) {
-	node.data().parameterName = node.ref(value)
+	node.setRef(&node.data().parameterName, value)
 }
-func (node TypePredicateNode) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node TypePredicateNode) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node TypePredicateNode) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node TypePredicateNode) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewTypePredicateNode(assertsModifier AssertsKeyword, parameterName TypePredicateParameterName, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typePredicateNodeData](s, layoutTypePredicateNode)
-	data.assertsModifier = s.refAt(i, assertsModifier)
-	data.parameterName = s.refAt(i, parameterName)
-	data.typeField = s.refAt(i, typeNode)
+	data.assertsModifier = s.refAt(i, &data.assertsModifier, assertsModifier)
+	data.parameterName = s.refAt(i, &data.parameterName, parameterName)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindTypePredicate, layoutTypePredicateNode, i)
 }
 
@@ -12013,19 +12095,19 @@ type ImportAttribute struct{ Node }
 
 func (node ImportAttribute) data() *importAttributeData { return (*importAttributeData)(node.rec()) }
 
-func (node ImportAttribute) Name() ImportAttributeName { return node.deref(node.data().name) }
+func (node ImportAttribute) Name() ImportAttributeName { return node.deref(&node.data().name) }
 
-func (node ImportAttribute) setName(value ImportAttributeName) { node.data().name = node.ref(value) }
+func (node ImportAttribute) setName(value ImportAttributeName) { node.setRef(&node.data().name, value) }
 
-func (node ImportAttribute) Value() Expression { return node.deref(node.data().value) }
+func (node ImportAttribute) Value() Expression { return node.deref(&node.data().value) }
 
-func (node ImportAttribute) SetValue(value Expression) { node.data().value = node.ref(value) }
+func (node ImportAttribute) SetValue(value Expression) { node.setRef(&node.data().value, value) }
 
 func (f *NodeFactory) NewImportAttribute(name ImportAttributeName, value Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[importAttributeData](s, layoutImportAttribute)
-	data.name = s.refAt(i, name)
-	data.value = s.refAt(i, value)
+	data.name = s.refAt(i, &data.name, name)
+	data.value = s.refAt(i, &data.value, value)
 	return f.newNode(KindImportAttribute, layoutImportAttribute, i)
 }
 
@@ -12141,13 +12223,13 @@ func (node TypeQueryNode) TypeArguments() *TypeList {
 func (node TypeQueryNode) SetTypeArguments(value *TypeList) {
 	node.store().nodeLists.set(&node.data().typeArguments, value, value == nil)
 }
-func (node TypeQueryNode) ExprName() EntityName         { return node.deref(node.data().exprName) }
-func (node TypeQueryNode) SetExprName(value EntityName) { node.data().exprName = node.ref(value) }
+func (node TypeQueryNode) ExprName() EntityName         { return node.deref(&node.data().exprName) }
+func (node TypeQueryNode) SetExprName(value EntityName) { node.setRef(&node.data().exprName, value) }
 
 func (f *NodeFactory) NewTypeQueryNode(exprName EntityName, typeArguments *TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeQueryNodeData](s, layoutTypeQueryNode)
-	data.exprName = s.refAt(i, exprName)
+	data.exprName = s.refAt(i, &data.exprName, exprName)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
 	return f.newNode(KindTypeQuery, layoutTypeQueryNode, i)
 }
@@ -12207,33 +12289,33 @@ func (node MappedTypeNode) Locals() SymbolTable {
 func (node MappedTypeNode) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
+func (node MappedTypeNode) NextContainer() Node { return node.deref(&node.data().nextContainer) }
+func (node MappedTypeNode) SetNextContainer(value Node) {
+	node.setRef(&node.data().nextContainer, value)
+}
 
-func (node MappedTypeNode) NextContainer() Node { return node.deref(node.data().nextContainer) }
-
-func (node MappedTypeNode) SetNextContainer(value Node) { node.data().nextContainer = node.ref(value) }
-
-func (node MappedTypeNode) ReadonlyToken() TokenNode { return node.deref(node.data().readonlyToken) }
+func (node MappedTypeNode) ReadonlyToken() TokenNode { return node.deref(&node.data().readonlyToken) }
 
 func (node MappedTypeNode) SetReadonlyToken(value TokenNode) {
-	node.data().readonlyToken = node.ref(value)
+	node.setRef(&node.data().readonlyToken, value)
 }
 
 func (node MappedTypeNode) TypeParameter() TypeParameterDeclarationNode {
-	return node.deref(node.data().typeParameter)
+	return node.deref(&node.data().typeParameter)
 }
 
 func (node MappedTypeNode) SetTypeParameter(value TypeParameterDeclarationNode) {
-	node.data().typeParameter = node.ref(value)
+	node.setRef(&node.data().typeParameter, value)
 }
-func (node MappedTypeNode) NameType() TypeNode         { return node.deref(node.data().nameType) }
-func (node MappedTypeNode) SetNameType(value TypeNode) { node.data().nameType = node.ref(value) }
-func (node MappedTypeNode) QuestionToken() TokenNode   { return node.deref(node.data().questionToken) }
+func (node MappedTypeNode) NameType() TypeNode         { return node.deref(&node.data().nameType) }
+func (node MappedTypeNode) SetNameType(value TypeNode) { node.setRef(&node.data().nameType, value) }
+func (node MappedTypeNode) QuestionToken() TokenNode   { return node.deref(&node.data().questionToken) }
 
 func (node MappedTypeNode) SetQuestionToken(value TokenNode) {
-	node.data().questionToken = node.ref(value)
+	node.setRef(&node.data().questionToken, value)
 }
-func (node MappedTypeNode) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node MappedTypeNode) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node MappedTypeNode) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node MappedTypeNode) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 func (node MappedTypeNode) Members() *TypeElementList {
 	return node.store().nodeLists.get(node.data().members)
 }
@@ -12245,11 +12327,11 @@ func (node MappedTypeNode) SetMembers(value *TypeElementList) {
 func (f *NodeFactory) NewMappedTypeNode(readonlyToken TokenNode, typeParameter TypeParameterDeclarationNode, nameType TypeNode, questionToken TokenNode, typeNode TypeNode, members *TypeElementList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[mappedTypeNodeData](s, layoutMappedTypeNode)
-	data.readonlyToken = s.refAt(i, readonlyToken)
-	data.typeParameter = s.refAt(i, typeParameter)
-	data.nameType = s.refAt(i, nameType)
-	data.questionToken = s.refAt(i, questionToken)
-	data.typeField = s.refAt(i, typeNode)
+	data.readonlyToken = s.refAt(i, &data.readonlyToken, readonlyToken)
+	data.typeParameter = s.refAt(i, &data.typeParameter, typeParameter)
+	data.nameType = s.refAt(i, &data.nameType, nameType)
+	data.questionToken = s.refAt(i, &data.questionToken, questionToken)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	s.nodeLists.set(&data.members, members, members == nil)
 	return f.newNode(KindMappedType, layoutMappedTypeNode, i)
 }
@@ -12414,31 +12496,31 @@ func (node NamedTupleMember) SetSymbol(value *Symbol) {
 }
 
 func (node NamedTupleMember) DotDotDotToken() DotDotDotToken {
-	return node.deref(node.data().dotDotDotToken)
+	return node.deref(&node.data().dotDotDotToken)
 }
 
 func (node NamedTupleMember) SetDotDotDotToken(value DotDotDotToken) {
-	node.data().dotDotDotToken = node.ref(value)
+	node.setRef(&node.data().dotDotDotToken, value)
 }
-func (node NamedTupleMember) Name() IdentifierNode         { return node.deref(node.data().name) }
-func (node NamedTupleMember) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node NamedTupleMember) Name() IdentifierNode         { return node.deref(&node.data().name) }
+func (node NamedTupleMember) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 func (node NamedTupleMember) QuestionToken() QuestionToken {
-	return node.deref(node.data().questionToken)
+	return node.deref(&node.data().questionToken)
 }
 
 func (node NamedTupleMember) SetQuestionToken(value QuestionToken) {
-	node.data().questionToken = node.ref(value)
+	node.setRef(&node.data().questionToken, value)
 }
-func (node NamedTupleMember) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node NamedTupleMember) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node NamedTupleMember) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node NamedTupleMember) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewNamedTupleMember(dotDotDotToken DotDotDotToken, name IdentifierNode, questionToken QuestionToken, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[namedTupleMemberData](s, layoutNamedTupleMember)
-	data.dotDotDotToken = s.refAt(i, dotDotDotToken)
-	data.name = s.refAt(i, name)
-	data.questionToken = s.refAt(i, questionToken)
-	data.typeField = s.refAt(i, typeNode)
+	data.dotDotDotToken = s.refAt(i, &data.dotDotDotToken, dotDotDotToken)
+	data.name = s.refAt(i, &data.name, name)
+	data.questionToken = s.refAt(i, &data.questionToken, questionToken)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindNamedTupleMember, layoutNamedTupleMember, i)
 }
 
@@ -12481,13 +12563,13 @@ type OptionalTypeNode struct{ Node }
 
 func (node OptionalTypeNode) data() *optionalTypeNodeData { return (*optionalTypeNodeData)(node.rec()) }
 
-func (node OptionalTypeNode) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node OptionalTypeNode) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node OptionalTypeNode) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node OptionalTypeNode) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewOptionalTypeNode(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[optionalTypeNodeData](s, layoutOptionalTypeNode)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindOptionalType, layoutOptionalTypeNode, i)
 }
 
@@ -12527,13 +12609,13 @@ type RestTypeNode struct{ Node }
 
 func (node RestTypeNode) data() *restTypeNodeData { return (*restTypeNodeData)(node.rec()) }
 
-func (node RestTypeNode) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node RestTypeNode) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node RestTypeNode) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node RestTypeNode) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewRestTypeNode(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[restTypeNodeData](s, layoutRestTypeNode)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindRestType, layoutRestTypeNode, i)
 }
 
@@ -12575,14 +12657,14 @@ func (node ParenthesizedTypeNode) data() *parenthesizedTypeNodeData {
 	return (*parenthesizedTypeNodeData)(node.rec())
 }
 
-func (node ParenthesizedTypeNode) Type() TypeNode { return node.deref(node.data().typeField) }
+func (node ParenthesizedTypeNode) Type() TypeNode { return node.deref(&node.data().typeField) }
 
-func (node ParenthesizedTypeNode) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node ParenthesizedTypeNode) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewParenthesizedTypeNode(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[parenthesizedTypeNodeData](s, layoutParenthesizedTypeNode)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindParenthesizedType, layoutParenthesizedTypeNode, i)
 }
 
@@ -12642,9 +12724,9 @@ func (node FunctionTypeNode) Locals() SymbolTable {
 func (node FunctionTypeNode) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-func (node FunctionTypeNode) NextContainer() Node { return node.deref(node.data().nextContainer) }
+func (node FunctionTypeNode) NextContainer() Node { return node.deref(&node.data().nextContainer) }
 func (node FunctionTypeNode) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node FunctionTypeNode) TypeParameters() *TypeParameterList {
@@ -12662,12 +12744,12 @@ func (node FunctionTypeNode) Parameters() *ParameterList {
 func (node FunctionTypeNode) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-func (node FunctionTypeNode) Type() TypeNode          { return node.deref(node.data().typeField) }
-func (node FunctionTypeNode) SetType(value TypeNode)  { node.data().typeField = node.ref(value) }
-func (node FunctionTypeNode) FullSignature() TypeNode { return node.deref(node.data().fullSignature) }
+func (node FunctionTypeNode) Type() TypeNode          { return node.deref(&node.data().typeField) }
+func (node FunctionTypeNode) SetType(value TypeNode)  { node.setRef(&node.data().typeField, value) }
+func (node FunctionTypeNode) FullSignature() TypeNode { return node.deref(&node.data().fullSignature) }
 
 func (node FunctionTypeNode) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (f *NodeFactory) NewFunctionTypeNode(typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -12675,7 +12757,7 @@ func (f *NodeFactory) NewFunctionTypeNode(typeParameters *TypeParameterList, par
 	data, i := newRecord[functionTypeNodeData](s, layoutFunctionTypeNode)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindFunctionType, layoutFunctionTypeNode, i)
 }
 
@@ -12738,10 +12820,10 @@ func (node ConstructorTypeNode) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
 
-func (node ConstructorTypeNode) NextContainer() Node { return node.deref(node.data().nextContainer) }
+func (node ConstructorTypeNode) NextContainer() Node { return node.deref(&node.data().nextContainer) }
 
 func (node ConstructorTypeNode) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node ConstructorTypeNode) TypeParameters() *TypeParameterList {
@@ -12759,14 +12841,17 @@ func (node ConstructorTypeNode) Parameters() *ParameterList {
 func (node ConstructorTypeNode) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-func (node ConstructorTypeNode) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node ConstructorTypeNode) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+
+func (node ConstructorTypeNode) Type() TypeNode { return node.deref(&node.data().typeField) }
+
+func (node ConstructorTypeNode) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
+
 func (node ConstructorTypeNode) FullSignature() TypeNode {
-	return node.deref(node.data().fullSignature)
+	return node.deref(&node.data().fullSignature)
 }
 
 func (node ConstructorTypeNode) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (f *NodeFactory) NewConstructorTypeNode(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -12775,7 +12860,7 @@ func (f *NodeFactory) NewConstructorTypeNode(modifiers *ModifierList, typeParame
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindConstructorType, layoutConstructorTypeNode, i)
 }
 
@@ -12956,9 +13041,9 @@ func (node TemplateLiteralTypeNode) data() *templateLiteralTypeNodeData {
 	return (*templateLiteralTypeNodeData)(node.rec())
 }
 
-func (node TemplateLiteralTypeNode) Head() TemplateHeadNode { return node.deref(node.data().head) }
+func (node TemplateLiteralTypeNode) Head() TemplateHeadNode { return node.deref(&node.data().head) }
 func (node TemplateLiteralTypeNode) SetHead(value TemplateHeadNode) {
-	node.data().head = node.ref(value)
+	node.setRef(&node.data().head, value)
 }
 
 func (node TemplateLiteralTypeNode) TemplateSpans() *TemplateLiteralTypeSpanList {
@@ -12972,7 +13057,7 @@ func (node TemplateLiteralTypeNode) SetTemplateSpans(value *TemplateLiteralTypeS
 func (f *NodeFactory) NewTemplateLiteralTypeNode(head TemplateHeadNode, templateSpans *TemplateLiteralTypeSpanList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateLiteralTypeNodeData](s, layoutTemplateLiteralTypeNode)
-	data.head = s.refAt(i, head)
+	data.head = s.refAt(i, &data.head, head)
 	s.nodeLists.set(&data.templateSpans, templateSpans, templateSpans == nil)
 	return f.newNode(KindTemplateLiteralType, layoutTemplateLiteralTypeNode, i)
 }
@@ -13016,23 +13101,24 @@ func (node TemplateLiteralTypeSpan) data() *templateLiteralTypeSpanData {
 	return (*templateLiteralTypeSpanData)(node.rec())
 }
 
-func (node TemplateLiteralTypeSpan) Type() TypeNode { return node.deref(node.data().typeField) }
-
-func (node TemplateLiteralTypeSpan) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node TemplateLiteralTypeSpan) Type() TypeNode { return node.deref(&node.data().typeField) }
+func (node TemplateLiteralTypeSpan) SetType(value TypeNode) {
+	node.setRef(&node.data().typeField, value)
+}
 
 func (node TemplateLiteralTypeSpan) Literal() TemplateMiddleOrTail {
-	return node.deref(node.data().literal)
+	return node.deref(&node.data().literal)
 }
 
 func (node TemplateLiteralTypeSpan) SetLiteral(value TemplateMiddleOrTail) {
-	node.data().literal = node.ref(value)
+	node.setRef(&node.data().literal, value)
 }
 
 func (f *NodeFactory) NewTemplateLiteralTypeSpan(typeNode TypeNode, literal TemplateMiddleOrTail) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateLiteralTypeSpanData](s, layoutTemplateLiteralTypeSpan)
-	data.typeField = s.refAt(i, typeNode)
-	data.literal = s.refAt(i, literal)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
+	data.literal = s.refAt(i, &data.literal, literal)
 	return f.newNode(KindTemplateLiteralTypeSpan, layoutTemplateLiteralTypeSpan, i)
 }
 
@@ -13083,11 +13169,11 @@ func (node SyntheticExpression) SetType(value any) {
 func (node SyntheticExpression) IsSpread() bool         { return node.data().isSpread }
 func (node SyntheticExpression) SetIsSpread(value bool) { node.data().isSpread = value }
 func (node SyntheticExpression) TupleNameSource() Node {
-	return node.deref(node.data().tupleNameSource)
+	return node.deref(&node.data().tupleNameSource)
 }
 
 func (node SyntheticExpression) SetTupleNameSource(value Node) {
-	node.data().tupleNameSource = node.ref(value)
+	node.setRef(&node.data().tupleNameSource, value)
 }
 
 func (f *NodeFactory) NewSyntheticExpression(typeNode any, isSpread bool, tupleNameSource Node) Node {
@@ -13095,7 +13181,7 @@ func (f *NodeFactory) NewSyntheticExpression(typeNode any, isSpread bool, tupleN
 	data, i := newRecord[syntheticExpressionData](s, layoutSyntheticExpression)
 	s.values.set(&data.typeField, typeNode, typeNode == nil)
 	data.isSpread = isSpread
-	data.tupleNameSource = s.refAt(i, tupleNameSource)
+	data.tupleNameSource = s.refAt(i, &data.tupleNameSource, tupleNameSource)
 	return f.newNode(KindSyntheticExpression, layoutSyntheticExpression, i)
 }
 
@@ -13138,17 +13224,17 @@ func (node PartiallyEmittedExpression) data() *partiallyEmittedExpressionData {
 }
 
 func (node PartiallyEmittedExpression) Expression() Expression {
-	return node.deref(node.data().expression)
+	return node.deref(&node.data().expression)
 }
 
 func (node PartiallyEmittedExpression) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (f *NodeFactory) NewPartiallyEmittedExpression(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[partiallyEmittedExpressionData](s, layoutPartiallyEmittedExpression)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindPartiallyEmittedExpression, layoutPartiallyEmittedExpression, i)
 }
 
@@ -13196,11 +13282,11 @@ type JsxElement struct{ Node }
 func (node JsxElement) data() *jsxElementData { return (*jsxElementData)(node.rec()) }
 
 func (node JsxElement) OpeningElement() JsxOpeningElementNode {
-	return node.deref(node.data().openingElement)
+	return node.deref(&node.data().openingElement)
 }
 
 func (node JsxElement) SetOpeningElement(value JsxOpeningElementNode) {
-	node.data().openingElement = node.ref(value)
+	node.setRef(&node.data().openingElement, value)
 }
 
 func (node JsxElement) Children() *JsxChildList {
@@ -13212,19 +13298,19 @@ func (node JsxElement) SetChildren(value *JsxChildList) {
 }
 
 func (node JsxElement) ClosingElement() JsxClosingElementNode {
-	return node.deref(node.data().closingElement)
+	return node.deref(&node.data().closingElement)
 }
 
 func (node JsxElement) SetClosingElement(value JsxClosingElementNode) {
-	node.data().closingElement = node.ref(value)
+	node.setRef(&node.data().closingElement, value)
 }
 
 func (f *NodeFactory) NewJsxElement(openingElement JsxOpeningElementNode, children *JsxChildList, closingElement JsxClosingElementNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxElementData](s, layoutJsxElement)
-	data.openingElement = s.refAt(i, openingElement)
+	data.openingElement = s.refAt(i, &data.openingElement, openingElement)
 	s.nodeLists.set(&data.children, children, children == nil)
-	data.closingElement = s.refAt(i, closingElement)
+	data.closingElement = s.refAt(i, &data.closingElement, closingElement)
 	return f.newNode(KindJsxElement, layoutJsxElement, i)
 }
 
@@ -13326,19 +13412,19 @@ func (node JsxNamespacedName) data() *jsxNamespacedNameData {
 	return (*jsxNamespacedNameData)(node.rec())
 }
 
-func (node JsxNamespacedName) Namespace() IdentifierNode { return node.deref(node.data().namespace) }
+func (node JsxNamespacedName) Namespace() IdentifierNode { return node.deref(&node.data().namespace) }
 
 func (node JsxNamespacedName) SetNamespace(value IdentifierNode) {
-	node.data().namespace = node.ref(value)
+	node.setRef(&node.data().namespace, value)
 }
-func (node JsxNamespacedName) Name() IdentifierNode         { return node.deref(node.data().name) }
-func (node JsxNamespacedName) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node JsxNamespacedName) Name() IdentifierNode         { return node.deref(&node.data().name) }
+func (node JsxNamespacedName) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewJsxNamespacedName(namespace IdentifierNode, name IdentifierNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxNamespacedNameData](s, layoutJsxNamespacedName)
-	data.namespace = s.refAt(i, namespace)
-	data.name = s.refAt(i, name)
+	data.namespace = s.refAt(i, &data.namespace, namespace)
+	data.name = s.refAt(i, &data.name, name)
 	return f.newNode(KindJsxNamespacedName, layoutJsxNamespacedName, i)
 }
 
@@ -13383,10 +13469,10 @@ func (node JsxOpeningElement) data() *jsxOpeningElementData {
 	return (*jsxOpeningElementData)(node.rec())
 }
 
-func (node JsxOpeningElement) TagName() JsxTagNameExpression { return node.deref(node.data().tagName) }
+func (node JsxOpeningElement) TagName() JsxTagNameExpression { return node.deref(&node.data().tagName) }
 
 func (node JsxOpeningElement) SetTagName(value JsxTagNameExpression) {
-	node.data().tagName = node.ref(value)
+	node.setRef(&node.data().tagName, value)
 }
 
 func (node JsxOpeningElement) TypeArguments() *TypeList {
@@ -13398,19 +13484,19 @@ func (node JsxOpeningElement) SetTypeArguments(value *TypeList) {
 }
 
 func (node JsxOpeningElement) Attributes() JsxAttributesNode {
-	return node.deref(node.data().attributes)
+	return node.deref(&node.data().attributes)
 }
 
 func (node JsxOpeningElement) SetAttributes(value JsxAttributesNode) {
-	node.data().attributes = node.ref(value)
+	node.setRef(&node.data().attributes, value)
 }
 
 func (f *NodeFactory) NewJsxOpeningElement(tagName JsxTagNameExpression, typeArguments *TypeList, attributes JsxAttributesNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxOpeningElementData](s, layoutJsxOpeningElement)
-	data.tagName = s.refAt(i, tagName)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
-	data.attributes = s.refAt(i, attributes)
+	data.attributes = s.refAt(i, &data.attributes, attributes)
 	return f.newNode(KindJsxOpeningElement, layoutJsxOpeningElement, i)
 }
 
@@ -13456,11 +13542,11 @@ func (node JsxSelfClosingElement) data() *jsxSelfClosingElementData {
 }
 
 func (node JsxSelfClosingElement) TagName() JsxTagNameExpression {
-	return node.deref(node.data().tagName)
+	return node.deref(&node.data().tagName)
 }
 
 func (node JsxSelfClosingElement) SetTagName(value JsxTagNameExpression) {
-	node.data().tagName = node.ref(value)
+	node.setRef(&node.data().tagName, value)
 }
 
 func (node JsxSelfClosingElement) TypeArguments() *TypeList {
@@ -13472,19 +13558,19 @@ func (node JsxSelfClosingElement) SetTypeArguments(value *TypeList) {
 }
 
 func (node JsxSelfClosingElement) Attributes() JsxAttributesNode {
-	return node.deref(node.data().attributes)
+	return node.deref(&node.data().attributes)
 }
 
 func (node JsxSelfClosingElement) SetAttributes(value JsxAttributesNode) {
-	node.data().attributes = node.ref(value)
+	node.setRef(&node.data().attributes, value)
 }
 
 func (f *NodeFactory) NewJsxSelfClosingElement(tagName JsxTagNameExpression, typeArguments *TypeList, attributes JsxAttributesNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxSelfClosingElementData](s, layoutJsxSelfClosingElement)
-	data.tagName = s.refAt(i, tagName)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
-	data.attributes = s.refAt(i, attributes)
+	data.attributes = s.refAt(i, &data.attributes, attributes)
 	return f.newNode(KindJsxSelfClosingElement, layoutJsxSelfClosingElement, i)
 }
 
@@ -13528,11 +13614,11 @@ type JsxFragment struct{ Node }
 func (node JsxFragment) data() *jsxFragmentData { return (*jsxFragmentData)(node.rec()) }
 
 func (node JsxFragment) OpeningFragment() JsxOpeningFragmentNode {
-	return node.deref(node.data().openingFragment)
+	return node.deref(&node.data().openingFragment)
 }
 
 func (node JsxFragment) SetOpeningFragment(value JsxOpeningFragmentNode) {
-	node.data().openingFragment = node.ref(value)
+	node.setRef(&node.data().openingFragment, value)
 }
 
 func (node JsxFragment) Children() *JsxChildList {
@@ -13544,19 +13630,19 @@ func (node JsxFragment) SetChildren(value *JsxChildList) {
 }
 
 func (node JsxFragment) ClosingFragment() JsxClosingFragmentNode {
-	return node.deref(node.data().closingFragment)
+	return node.deref(&node.data().closingFragment)
 }
 
 func (node JsxFragment) SetClosingFragment(value JsxClosingFragmentNode) {
-	node.data().closingFragment = node.ref(value)
+	node.setRef(&node.data().closingFragment, value)
 }
 
 func (f *NodeFactory) NewJsxFragment(openingFragment JsxOpeningFragmentNode, children *JsxChildList, closingFragment JsxClosingFragmentNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxFragmentData](s, layoutJsxFragment)
-	data.openingFragment = s.refAt(i, openingFragment)
+	data.openingFragment = s.refAt(i, &data.openingFragment, openingFragment)
 	s.nodeLists.set(&data.children, children, children == nil)
-	data.closingFragment = s.refAt(i, closingFragment)
+	data.closingFragment = s.refAt(i, &data.closingFragment, closingFragment)
 	return f.newNode(KindJsxFragment, layoutJsxFragment, i)
 }
 
@@ -13657,19 +13743,19 @@ func (node JsxAttribute) Symbol() *Symbol { return node.store().symbols.get(node
 func (node JsxAttribute) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
-func (node JsxAttribute) Name() JsxAttributeName         { return node.deref(node.data().name) }
-func (node JsxAttribute) setName(value JsxAttributeName) { node.data().name = node.ref(value) }
-func (node JsxAttribute) Initializer() JsxAttributeValue { return node.deref(node.data().initializer) }
+func (node JsxAttribute) Name() JsxAttributeName         { return node.deref(&node.data().name) }
+func (node JsxAttribute) setName(value JsxAttributeName) { node.setRef(&node.data().name, value) }
+func (node JsxAttribute) Initializer() JsxAttributeValue { return node.deref(&node.data().initializer) }
 
 func (node JsxAttribute) SetInitializer(value JsxAttributeValue) {
-	node.data().initializer = node.ref(value)
+	node.setRef(&node.data().initializer, value)
 }
 
 func (f *NodeFactory) NewJsxAttribute(name JsxAttributeName, initializer JsxAttributeValue) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxAttributeData](s, layoutJsxAttribute)
-	data.name = s.refAt(i, name)
-	data.initializer = s.refAt(i, initializer)
+	data.name = s.refAt(i, &data.name, name)
+	data.initializer = s.refAt(i, &data.initializer, initializer)
 	return f.newNode(KindJsxAttribute, layoutJsxAttribute, i)
 }
 
@@ -13718,15 +13804,17 @@ func (node JsxSpreadAttribute) Symbol() *Symbol { return node.store().symbols.ge
 func (node JsxSpreadAttribute) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
-func (node JsxSpreadAttribute) Expression() Expression { return node.deref(node.data().expression) }
+
+func (node JsxSpreadAttribute) Expression() Expression { return node.deref(&node.data().expression) }
+
 func (node JsxSpreadAttribute) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (f *NodeFactory) NewJsxSpreadAttribute(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxSpreadAttributeData](s, layoutJsxSpreadAttribute)
-	data.expression = s.refAt(i, expression)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindJsxSpreadAttribute, layoutJsxSpreadAttribute, i)
 }
 
@@ -13768,16 +13856,16 @@ func (node JsxClosingElement) data() *jsxClosingElementData {
 	return (*jsxClosingElementData)(node.rec())
 }
 
-func (node JsxClosingElement) TagName() JsxTagNameExpression { return node.deref(node.data().tagName) }
+func (node JsxClosingElement) TagName() JsxTagNameExpression { return node.deref(&node.data().tagName) }
 
 func (node JsxClosingElement) SetTagName(value JsxTagNameExpression) {
-	node.data().tagName = node.ref(value)
+	node.setRef(&node.data().tagName, value)
 }
 
 func (f *NodeFactory) NewJsxClosingElement(tagName JsxTagNameExpression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxClosingElementData](s, layoutJsxClosingElement)
-	data.tagName = s.refAt(i, tagName)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
 	return f.newNode(KindJsxClosingElement, layoutJsxClosingElement, i)
 }
 
@@ -13819,22 +13907,22 @@ type JsxExpression struct{ Node }
 func (node JsxExpression) data() *jsxExpressionData { return (*jsxExpressionData)(node.rec()) }
 
 func (node JsxExpression) DotDotDotToken() DotDotDotToken {
-	return node.deref(node.data().dotDotDotToken)
+	return node.deref(&node.data().dotDotDotToken)
 }
 
 func (node JsxExpression) SetDotDotDotToken(value DotDotDotToken) {
-	node.data().dotDotDotToken = node.ref(value)
+	node.setRef(&node.data().dotDotDotToken, value)
 }
-
-func (node JsxExpression) Expression() Expression { return node.deref(node.data().expression) }
-
-func (node JsxExpression) SetExpression(value Expression) { node.data().expression = node.ref(value) }
+func (node JsxExpression) Expression() Expression { return node.deref(&node.data().expression) }
+func (node JsxExpression) SetExpression(value Expression) {
+	node.setRef(&node.data().expression, value)
+}
 
 func (f *NodeFactory) NewJsxExpression(dotDotDotToken DotDotDotToken, expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxExpressionData](s, layoutJsxExpression)
-	data.dotDotDotToken = s.refAt(i, dotDotDotToken)
-	data.expression = s.refAt(i, expression)
+	data.dotDotDotToken = s.refAt(i, &data.dotDotDotToken, dotDotDotToken)
+	data.expression = s.refAt(i, &data.expression, expression)
 	return f.newNode(KindJsxExpression, layoutJsxExpression, i)
 }
 
@@ -14025,13 +14113,14 @@ func (node JSDocTypeExpression) data() *jsDocTypeExpressionData {
 	return (*jsDocTypeExpressionData)(node.rec())
 }
 
-func (node JSDocTypeExpression) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node JSDocTypeExpression) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node JSDocTypeExpression) Type() TypeNode { return node.deref(&node.data().typeField) }
+
+func (node JSDocTypeExpression) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewJSDocTypeExpression(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocTypeExpressionData](s, layoutJSDocTypeExpression)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindJSDocTypeExpression, layoutJSDocTypeExpression, i)
 }
 
@@ -14073,13 +14162,14 @@ func (node JSDocNonNullableType) data() *jsDocNonNullableTypeData {
 	return (*jsDocNonNullableTypeData)(node.rec())
 }
 
-func (node JSDocNonNullableType) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node JSDocNonNullableType) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node JSDocNonNullableType) Type() TypeNode { return node.deref(&node.data().typeField) }
+
+func (node JSDocNonNullableType) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewJSDocNonNullableType(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocNonNullableTypeData](s, layoutJSDocNonNullableType)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindJSDocNonNullableType, layoutJSDocNonNullableType, i)
 }
 
@@ -14121,13 +14211,13 @@ func (node JSDocNullableType) data() *jsDocNullableTypeData {
 	return (*jsDocNullableTypeData)(node.rec())
 }
 
-func (node JSDocNullableType) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node JSDocNullableType) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node JSDocNullableType) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node JSDocNullableType) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewJSDocNullableType(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocNullableTypeData](s, layoutJSDocNullableType)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindJSDocNullableType, layoutJSDocNullableType, i)
 }
 
@@ -14194,13 +14284,13 @@ func (node JSDocVariadicType) data() *jsDocVariadicTypeData {
 	return (*jsDocVariadicTypeData)(node.rec())
 }
 
-func (node JSDocVariadicType) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node JSDocVariadicType) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node JSDocVariadicType) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node JSDocVariadicType) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewJSDocVariadicType(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocVariadicTypeData](s, layoutJSDocVariadicType)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindJSDocVariadicType, layoutJSDocVariadicType, i)
 }
 
@@ -14242,13 +14332,13 @@ func (node JSDocOptionalType) data() *jsDocOptionalTypeData {
 	return (*jsDocOptionalTypeData)(node.rec())
 }
 
-func (node JSDocOptionalType) Type() TypeNode         { return node.deref(node.data().typeField) }
-func (node JSDocOptionalType) SetType(value TypeNode) { node.data().typeField = node.ref(value) }
+func (node JSDocOptionalType) Type() TypeNode         { return node.deref(&node.data().typeField) }
+func (node JSDocOptionalType) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
 func (f *NodeFactory) NewJSDocOptionalType(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocOptionalTypeData](s, layoutJSDocOptionalType)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindJSDocOptionalType, layoutJSDocOptionalType, i)
 }
 
@@ -14288,23 +14378,25 @@ type JSDocTypeTag struct{ Node }
 
 func (node JSDocTypeTag) data() *jsDocTypeTagData { return (*jsDocTypeTagData)(node.rec()) }
 
-func (node JSDocTypeTag) TagName() IdentifierNode         { return node.deref(node.data().tagName) }
-func (node JSDocTypeTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
-func (node JSDocTypeTag) Comment() *NodeList              { return node.store().nodeLists.get(node.data().comment) }
+func (node JSDocTypeTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+
+func (node JSDocTypeTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
+
+func (node JSDocTypeTag) Comment() *NodeList { return node.store().nodeLists.get(node.data().comment) }
 
 func (node JSDocTypeTag) SetComment(value *NodeList) {
 	node.store().nodeLists.set(&node.data().comment, value, value == nil)
 }
-
-func (node JSDocTypeTag) TypeExpression() Node { return node.deref(node.data().typeExpression) }
-
-func (node JSDocTypeTag) SetTypeExpression(value Node) { node.data().typeExpression = node.ref(value) }
+func (node JSDocTypeTag) TypeExpression() Node { return node.deref(&node.data().typeExpression) }
+func (node JSDocTypeTag) SetTypeExpression(value Node) {
+	node.setRef(&node.data().typeExpression, value)
+}
 
 func (f *NodeFactory) NewJSDocTypeTag(tagName IdentifierNode, typeExpression Node, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocTypeTagData](s, layoutJSDocTypeTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.typeExpression = s.refAt(i, &data.typeExpression, typeExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocTypeTag, layoutJSDocTypeTag, i)
 }
@@ -14344,9 +14436,10 @@ type JSDocUnknownTag struct{ Node }
 
 func (node JSDocUnknownTag) data() *jsDocUnknownTagData { return (*jsDocUnknownTagData)(node.rec()) }
 
-func (node JSDocUnknownTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
-
-func (node JSDocUnknownTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocUnknownTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+func (node JSDocUnknownTag) SetTagName(value IdentifierNode) {
+	node.setRef(&node.data().tagName, value)
+}
 
 func (node JSDocUnknownTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -14359,7 +14452,7 @@ func (node JSDocUnknownTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocUnknownTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocUnknownTagData](s, layoutJSDocUnknownTag)
-	data.tagName = s.refAt(i, tagName)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocUnknownTag, layoutJSDocUnknownTag, i)
 }
@@ -14401,9 +14494,10 @@ type JSDocTemplateTag struct{ Node }
 
 func (node JSDocTemplateTag) data() *jsDocTemplateTagData { return (*jsDocTemplateTagData)(node.rec()) }
 
-func (node JSDocTemplateTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
-
-func (node JSDocTemplateTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocTemplateTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+func (node JSDocTemplateTag) SetTagName(value IdentifierNode) {
+	node.setRef(&node.data().tagName, value)
+}
 
 func (node JSDocTemplateTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -14412,8 +14506,11 @@ func (node JSDocTemplateTag) Comment() *NodeList {
 func (node JSDocTemplateTag) SetComment(value *NodeList) {
 	node.store().nodeLists.set(&node.data().comment, value, value == nil)
 }
-func (node JSDocTemplateTag) Constraint() Node         { return node.deref(node.data().constraint) }
-func (node JSDocTemplateTag) SetConstraint(value Node) { node.data().constraint = node.ref(value) }
+
+func (node JSDocTemplateTag) Constraint() Node { return node.deref(&node.data().constraint) }
+
+func (node JSDocTemplateTag) SetConstraint(value Node) { node.setRef(&node.data().constraint, value) }
+
 func (node JSDocTemplateTag) TypeParameters() *TypeParameterList {
 	return node.store().nodeLists.get(node.data().typeParameters)
 }
@@ -14425,8 +14522,8 @@ func (node JSDocTemplateTag) SetTypeParameters(value *TypeParameterList) {
 func (f *NodeFactory) NewJSDocTemplateTag(tagName IdentifierNode, constraint Node, typeParameters *TypeParameterList, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocTemplateTagData](s, layoutJSDocTemplateTag)
-	data.tagName = s.refAt(i, tagName)
-	data.constraint = s.refAt(i, constraint)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.constraint = s.refAt(i, &data.constraint, constraint)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocTemplateTag, layoutJSDocTemplateTag, i)
@@ -14471,9 +14568,9 @@ type JSDocReturnTag struct{ Node }
 
 func (node JSDocReturnTag) data() *jsDocReturnTagData { return (*jsDocReturnTagData)(node.rec()) }
 
-func (node JSDocReturnTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
+func (node JSDocReturnTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
 
-func (node JSDocReturnTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocReturnTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
 
 func (node JSDocReturnTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -14483,17 +14580,17 @@ func (node JSDocReturnTag) SetComment(value *NodeList) {
 	node.store().nodeLists.set(&node.data().comment, value, value == nil)
 }
 
-func (node JSDocReturnTag) TypeExpression() TypeNode { return node.deref(node.data().typeExpression) }
+func (node JSDocReturnTag) TypeExpression() TypeNode { return node.deref(&node.data().typeExpression) }
 
 func (node JSDocReturnTag) SetTypeExpression(value TypeNode) {
-	node.data().typeExpression = node.ref(value)
+	node.setRef(&node.data().typeExpression, value)
 }
 
 func (f *NodeFactory) NewJSDocReturnTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocReturnTagData](s, layoutJSDocReturnTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.typeExpression = s.refAt(i, &data.typeExpression, typeExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocReturnTag, layoutJSDocReturnTag, i)
 }
@@ -14533,9 +14630,9 @@ type JSDocPublicTag struct{ Node }
 
 func (node JSDocPublicTag) data() *jsDocPublicTagData { return (*jsDocPublicTagData)(node.rec()) }
 
-func (node JSDocPublicTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
+func (node JSDocPublicTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
 
-func (node JSDocPublicTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocPublicTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
 
 func (node JSDocPublicTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -14548,7 +14645,7 @@ func (node JSDocPublicTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocPublicTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocPublicTagData](s, layoutJSDocPublicTag)
-	data.tagName = s.refAt(i, tagName)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocPublicTag, layoutJSDocPublicTag, i)
 }
@@ -14588,9 +14685,10 @@ type JSDocPrivateTag struct{ Node }
 
 func (node JSDocPrivateTag) data() *jsDocPrivateTagData { return (*jsDocPrivateTagData)(node.rec()) }
 
-func (node JSDocPrivateTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
-
-func (node JSDocPrivateTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocPrivateTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+func (node JSDocPrivateTag) SetTagName(value IdentifierNode) {
+	node.setRef(&node.data().tagName, value)
+}
 
 func (node JSDocPrivateTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -14603,7 +14701,7 @@ func (node JSDocPrivateTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocPrivateTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocPrivateTagData](s, layoutJSDocPrivateTag)
-	data.tagName = s.refAt(i, tagName)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocPrivateTag, layoutJSDocPrivateTag, i)
 }
@@ -14645,9 +14743,10 @@ func (node JSDocProtectedTag) data() *jsDocProtectedTagData {
 	return (*jsDocProtectedTagData)(node.rec())
 }
 
-func (node JSDocProtectedTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
-
-func (node JSDocProtectedTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocProtectedTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+func (node JSDocProtectedTag) SetTagName(value IdentifierNode) {
+	node.setRef(&node.data().tagName, value)
+}
 
 func (node JSDocProtectedTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -14660,7 +14759,7 @@ func (node JSDocProtectedTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocProtectedTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocProtectedTagData](s, layoutJSDocProtectedTag)
-	data.tagName = s.refAt(i, tagName)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocProtectedTag, layoutJSDocProtectedTag, i)
 }
@@ -14700,9 +14799,10 @@ type JSDocReadonlyTag struct{ Node }
 
 func (node JSDocReadonlyTag) data() *jsDocReadonlyTagData { return (*jsDocReadonlyTagData)(node.rec()) }
 
-func (node JSDocReadonlyTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
-
-func (node JSDocReadonlyTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocReadonlyTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+func (node JSDocReadonlyTag) SetTagName(value IdentifierNode) {
+	node.setRef(&node.data().tagName, value)
+}
 
 func (node JSDocReadonlyTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -14715,7 +14815,7 @@ func (node JSDocReadonlyTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocReadonlyTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocReadonlyTagData](s, layoutJSDocReadonlyTag)
-	data.tagName = s.refAt(i, tagName)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocReadonlyTag, layoutJSDocReadonlyTag, i)
 }
@@ -14755,9 +14855,10 @@ type JSDocOverrideTag struct{ Node }
 
 func (node JSDocOverrideTag) data() *jsDocOverrideTagData { return (*jsDocOverrideTagData)(node.rec()) }
 
-func (node JSDocOverrideTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
-
-func (node JSDocOverrideTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocOverrideTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+func (node JSDocOverrideTag) SetTagName(value IdentifierNode) {
+	node.setRef(&node.data().tagName, value)
+}
 
 func (node JSDocOverrideTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -14770,7 +14871,7 @@ func (node JSDocOverrideTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocOverrideTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocOverrideTagData](s, layoutJSDocOverrideTag)
-	data.tagName = s.refAt(i, tagName)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocOverrideTag, layoutJSDocOverrideTag, i)
 }
@@ -14812,9 +14913,9 @@ func (node JSDocDeprecatedTag) data() *jsDocDeprecatedTagData {
 	return (*jsDocDeprecatedTagData)(node.rec())
 }
 
-func (node JSDocDeprecatedTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
+func (node JSDocDeprecatedTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
 func (node JSDocDeprecatedTag) SetTagName(value IdentifierNode) {
-	node.data().tagName = node.ref(value)
+	node.setRef(&node.data().tagName, value)
 }
 
 func (node JSDocDeprecatedTag) Comment() *NodeList {
@@ -14828,7 +14929,7 @@ func (node JSDocDeprecatedTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocDeprecatedTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocDeprecatedTagData](s, layoutJSDocDeprecatedTag)
-	data.tagName = s.refAt(i, tagName)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocDeprecatedTag, layoutJSDocDeprecatedTag, i)
 }
@@ -14869,23 +14970,24 @@ type JSDocSeeTag struct{ Node }
 
 func (node JSDocSeeTag) data() *jsDocSeeTagData { return (*jsDocSeeTagData)(node.rec()) }
 
-func (node JSDocSeeTag) TagName() IdentifierNode         { return node.deref(node.data().tagName) }
-func (node JSDocSeeTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
-func (node JSDocSeeTag) Comment() *NodeList              { return node.store().nodeLists.get(node.data().comment) }
+func (node JSDocSeeTag) TagName() IdentifierNode         { return node.deref(&node.data().tagName) }
+func (node JSDocSeeTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
+
+func (node JSDocSeeTag) Comment() *NodeList { return node.store().nodeLists.get(node.data().comment) }
 
 func (node JSDocSeeTag) SetComment(value *NodeList) {
 	node.store().nodeLists.set(&node.data().comment, value, value == nil)
 }
-func (node JSDocSeeTag) NameExpression() TypeNode { return node.deref(node.data().nameExpression) }
+func (node JSDocSeeTag) NameExpression() TypeNode { return node.deref(&node.data().nameExpression) }
 func (node JSDocSeeTag) SetNameExpression(value TypeNode) {
-	node.data().nameExpression = node.ref(value)
+	node.setRef(&node.data().nameExpression, value)
 }
 
 func (f *NodeFactory) NewJSDocSeeTag(tagName IdentifierNode, nameExpression TypeNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocSeeTagData](s, layoutJSDocSeeTag)
-	data.tagName = s.refAt(i, tagName)
-	data.nameExpression = s.refAt(i, nameExpression)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.nameExpression = s.refAt(i, &data.nameExpression, nameExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocSeeTag, layoutJSDocSeeTag, i)
 }
@@ -14928,9 +15030,9 @@ func (node JSDocImplementsTag) data() *jsDocImplementsTagData {
 	return (*jsDocImplementsTagData)(node.rec())
 }
 
-func (node JSDocImplementsTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
+func (node JSDocImplementsTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
 func (node JSDocImplementsTag) SetTagName(value IdentifierNode) {
-	node.data().tagName = node.ref(value)
+	node.setRef(&node.data().tagName, value)
 }
 
 func (node JSDocImplementsTag) Comment() *NodeList {
@@ -14942,18 +15044,18 @@ func (node JSDocImplementsTag) SetComment(value *NodeList) {
 }
 
 func (node JSDocImplementsTag) ClassName() ExpressionWithTypeArgumentsNode {
-	return node.deref(node.data().className)
+	return node.deref(&node.data().className)
 }
 
 func (node JSDocImplementsTag) SetClassName(value ExpressionWithTypeArgumentsNode) {
-	node.data().className = node.ref(value)
+	node.setRef(&node.data().className, value)
 }
 
 func (f *NodeFactory) NewJSDocImplementsTag(tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocImplementsTagData](s, layoutJSDocImplementsTag)
-	data.tagName = s.refAt(i, tagName)
-	data.className = s.refAt(i, className)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.className = s.refAt(i, &data.className, className)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocImplementsTag, layoutJSDocImplementsTag, i)
 }
@@ -14994,9 +15096,10 @@ type JSDocAugmentsTag struct{ Node }
 
 func (node JSDocAugmentsTag) data() *jsDocAugmentsTagData { return (*jsDocAugmentsTagData)(node.rec()) }
 
-func (node JSDocAugmentsTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
-
-func (node JSDocAugmentsTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocAugmentsTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+func (node JSDocAugmentsTag) SetTagName(value IdentifierNode) {
+	node.setRef(&node.data().tagName, value)
+}
 
 func (node JSDocAugmentsTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -15007,18 +15110,18 @@ func (node JSDocAugmentsTag) SetComment(value *NodeList) {
 }
 
 func (node JSDocAugmentsTag) ClassName() ExpressionWithTypeArgumentsNode {
-	return node.deref(node.data().className)
+	return node.deref(&node.data().className)
 }
 
 func (node JSDocAugmentsTag) SetClassName(value ExpressionWithTypeArgumentsNode) {
-	node.data().className = node.ref(value)
+	node.setRef(&node.data().className, value)
 }
 
 func (f *NodeFactory) NewJSDocAugmentsTag(tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocAugmentsTagData](s, layoutJSDocAugmentsTag)
-	data.tagName = s.refAt(i, tagName)
-	data.className = s.refAt(i, className)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.className = s.refAt(i, &data.className, className)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocAugmentsTag, layoutJSDocAugmentsTag, i)
 }
@@ -15061,9 +15164,10 @@ func (node JSDocSatisfiesTag) data() *jsDocSatisfiesTagData {
 	return (*jsDocSatisfiesTagData)(node.rec())
 }
 
-func (node JSDocSatisfiesTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
-
-func (node JSDocSatisfiesTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocSatisfiesTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+func (node JSDocSatisfiesTag) SetTagName(value IdentifierNode) {
+	node.setRef(&node.data().tagName, value)
+}
 
 func (node JSDocSatisfiesTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -15074,18 +15178,18 @@ func (node JSDocSatisfiesTag) SetComment(value *NodeList) {
 }
 
 func (node JSDocSatisfiesTag) TypeExpression() TypeNode {
-	return node.deref(node.data().typeExpression)
+	return node.deref(&node.data().typeExpression)
 }
 
 func (node JSDocSatisfiesTag) SetTypeExpression(value TypeNode) {
-	node.data().typeExpression = node.ref(value)
+	node.setRef(&node.data().typeExpression, value)
 }
 
 func (f *NodeFactory) NewJSDocSatisfiesTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocSatisfiesTagData](s, layoutJSDocSatisfiesTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.typeExpression = s.refAt(i, &data.typeExpression, typeExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocSatisfiesTag, layoutJSDocSatisfiesTag, i)
 }
@@ -15126,9 +15230,9 @@ type JSDocThrowsTag struct{ Node }
 
 func (node JSDocThrowsTag) data() *jsDocThrowsTagData { return (*jsDocThrowsTagData)(node.rec()) }
 
-func (node JSDocThrowsTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
+func (node JSDocThrowsTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
 
-func (node JSDocThrowsTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocThrowsTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
 
 func (node JSDocThrowsTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -15138,17 +15242,17 @@ func (node JSDocThrowsTag) SetComment(value *NodeList) {
 	node.store().nodeLists.set(&node.data().comment, value, value == nil)
 }
 
-func (node JSDocThrowsTag) TypeExpression() TypeNode { return node.deref(node.data().typeExpression) }
+func (node JSDocThrowsTag) TypeExpression() TypeNode { return node.deref(&node.data().typeExpression) }
 
 func (node JSDocThrowsTag) SetTypeExpression(value TypeNode) {
-	node.data().typeExpression = node.ref(value)
+	node.setRef(&node.data().typeExpression, value)
 }
 
 func (f *NodeFactory) NewJSDocThrowsTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocThrowsTagData](s, layoutJSDocThrowsTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.typeExpression = s.refAt(i, &data.typeExpression, typeExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocThrowsTag, layoutJSDocThrowsTag, i)
 }
@@ -15189,23 +15293,27 @@ type JSDocThisTag struct{ Node }
 
 func (node JSDocThisTag) data() *jsDocThisTagData { return (*jsDocThisTagData)(node.rec()) }
 
-func (node JSDocThisTag) TagName() IdentifierNode         { return node.deref(node.data().tagName) }
-func (node JSDocThisTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
-func (node JSDocThisTag) Comment() *NodeList              { return node.store().nodeLists.get(node.data().comment) }
+func (node JSDocThisTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+
+func (node JSDocThisTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
+
+func (node JSDocThisTag) Comment() *NodeList { return node.store().nodeLists.get(node.data().comment) }
 
 func (node JSDocThisTag) SetComment(value *NodeList) {
 	node.store().nodeLists.set(&node.data().comment, value, value == nil)
 }
-func (node JSDocThisTag) TypeExpression() TypeNode { return node.deref(node.data().typeExpression) }
+
+func (node JSDocThisTag) TypeExpression() TypeNode { return node.deref(&node.data().typeExpression) }
+
 func (node JSDocThisTag) SetTypeExpression(value TypeNode) {
-	node.data().typeExpression = node.ref(value)
+	node.setRef(&node.data().typeExpression, value)
 }
 
 func (f *NodeFactory) NewJSDocThisTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocThisTagData](s, layoutJSDocThisTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.typeExpression = s.refAt(i, &data.typeExpression, typeExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocThisTag, layoutJSDocThisTag, i)
 }
@@ -15248,9 +15356,9 @@ type JSDocImportTag struct{ Node }
 
 func (node JSDocImportTag) data() *jsDocImportTagData { return (*jsDocImportTagData)(node.rec()) }
 
-func (node JSDocImportTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
+func (node JSDocImportTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
 
-func (node JSDocImportTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocImportTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
 
 func (node JSDocImportTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -15261,36 +15369,36 @@ func (node JSDocImportTag) SetComment(value *NodeList) {
 }
 
 func (node JSDocImportTag) ImportClause() ImportClauseNode {
-	return node.deref(node.data().importClause)
+	return node.deref(&node.data().importClause)
 }
 
 func (node JSDocImportTag) SetImportClause(value ImportClauseNode) {
-	node.data().importClause = node.ref(value)
+	node.setRef(&node.data().importClause, value)
 }
 
 func (node JSDocImportTag) ModuleSpecifier() Expression {
-	return node.deref(node.data().moduleSpecifier)
+	return node.deref(&node.data().moduleSpecifier)
 }
 
 func (node JSDocImportTag) SetModuleSpecifier(value Expression) {
-	node.data().moduleSpecifier = node.ref(value)
+	node.setRef(&node.data().moduleSpecifier, value)
 }
 
 func (node JSDocImportTag) Attributes() ImportAttributesNode {
-	return node.deref(node.data().attributes)
+	return node.deref(&node.data().attributes)
 }
 
 func (node JSDocImportTag) SetAttributes(value ImportAttributesNode) {
-	node.data().attributes = node.ref(value)
+	node.setRef(&node.data().attributes, value)
 }
 
 func (f *NodeFactory) NewJSDocImportTag(tagName IdentifierNode, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocImportTagData](s, layoutJSDocImportTag)
-	data.tagName = s.refAt(i, tagName)
-	data.importClause = s.refAt(i, importClause)
-	data.moduleSpecifier = s.refAt(i, moduleSpecifier)
-	data.attributes = s.refAt(i, attributes)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.importClause = s.refAt(i, &data.importClause, importClause)
+	data.moduleSpecifier = s.refAt(i, &data.moduleSpecifier, moduleSpecifier)
+	data.attributes = s.refAt(i, &data.attributes, attributes)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocImportTag, layoutJSDocImportTag, i)
 }
@@ -15336,9 +15444,10 @@ type JSDocCallbackTag struct{ Node }
 
 func (node JSDocCallbackTag) data() *jsDocCallbackTagData { return (*jsDocCallbackTagData)(node.rec()) }
 
-func (node JSDocCallbackTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
-
-func (node JSDocCallbackTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocCallbackTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+func (node JSDocCallbackTag) SetTagName(value IdentifierNode) {
+	node.setRef(&node.data().tagName, value)
+}
 
 func (node JSDocCallbackTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -15348,20 +15457,22 @@ func (node JSDocCallbackTag) SetComment(value *NodeList) {
 	node.store().nodeLists.set(&node.data().comment, value, value == nil)
 }
 
-func (node JSDocCallbackTag) TypeExpression() TypeNode { return node.deref(node.data().typeExpression) }
+func (node JSDocCallbackTag) TypeExpression() TypeNode {
+	return node.deref(&node.data().typeExpression)
+}
 
 func (node JSDocCallbackTag) SetTypeExpression(value TypeNode) {
-	node.data().typeExpression = node.ref(value)
+	node.setRef(&node.data().typeExpression, value)
 }
-func (node JSDocCallbackTag) Name() JSDocFullName         { return node.deref(node.data().name) }
-func (node JSDocCallbackTag) setName(value JSDocFullName) { node.data().name = node.ref(value) }
+func (node JSDocCallbackTag) Name() JSDocFullName         { return node.deref(&node.data().name) }
+func (node JSDocCallbackTag) setName(value JSDocFullName) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewJSDocCallbackTag(tagName IdentifierNode, typeExpression TypeNode, name JSDocFullName, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocCallbackTagData](s, layoutJSDocCallbackTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
-	data.name = s.refAt(i, name)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.typeExpression = s.refAt(i, &data.typeExpression, typeExpression)
+	data.name = s.refAt(i, &data.name, name)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocCallbackTag, layoutJSDocCallbackTag, i)
 }
@@ -15405,9 +15516,10 @@ type JSDocOverloadTag struct{ Node }
 
 func (node JSDocOverloadTag) data() *jsDocOverloadTagData { return (*jsDocOverloadTagData)(node.rec()) }
 
-func (node JSDocOverloadTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
-
-func (node JSDocOverloadTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocOverloadTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+func (node JSDocOverloadTag) SetTagName(value IdentifierNode) {
+	node.setRef(&node.data().tagName, value)
+}
 
 func (node JSDocOverloadTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -15417,17 +15529,19 @@ func (node JSDocOverloadTag) SetComment(value *NodeList) {
 	node.store().nodeLists.set(&node.data().comment, value, value == nil)
 }
 
-func (node JSDocOverloadTag) TypeExpression() TypeNode { return node.deref(node.data().typeExpression) }
+func (node JSDocOverloadTag) TypeExpression() TypeNode {
+	return node.deref(&node.data().typeExpression)
+}
 
 func (node JSDocOverloadTag) SetTypeExpression(value TypeNode) {
-	node.data().typeExpression = node.ref(value)
+	node.setRef(&node.data().typeExpression, value)
 }
 
 func (f *NodeFactory) NewJSDocOverloadTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocOverloadTagData](s, layoutJSDocOverloadTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.typeExpression = s.refAt(i, &data.typeExpression, typeExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocOverloadTag, layoutJSDocOverloadTag, i)
 }
@@ -15469,9 +15583,10 @@ type JSDocTypedefTag struct{ Node }
 
 func (node JSDocTypedefTag) data() *jsDocTypedefTagData { return (*jsDocTypedefTagData)(node.rec()) }
 
-func (node JSDocTypedefTag) TagName() IdentifierNode { return node.deref(node.data().tagName) }
-
-func (node JSDocTypedefTag) SetTagName(value IdentifierNode) { node.data().tagName = node.ref(value) }
+func (node JSDocTypedefTag) TagName() IdentifierNode { return node.deref(&node.data().tagName) }
+func (node JSDocTypedefTag) SetTagName(value IdentifierNode) {
+	node.setRef(&node.data().tagName, value)
+}
 
 func (node JSDocTypedefTag) Comment() *NodeList {
 	return node.store().nodeLists.get(node.data().comment)
@@ -15480,19 +15595,19 @@ func (node JSDocTypedefTag) Comment() *NodeList {
 func (node JSDocTypedefTag) SetComment(value *NodeList) {
 	node.store().nodeLists.set(&node.data().comment, value, value == nil)
 }
-func (node JSDocTypedefTag) TypeExpression() Node { return node.deref(node.data().typeExpression) }
+func (node JSDocTypedefTag) TypeExpression() Node { return node.deref(&node.data().typeExpression) }
 func (node JSDocTypedefTag) SetTypeExpression(value Node) {
-	node.data().typeExpression = node.ref(value)
+	node.setRef(&node.data().typeExpression, value)
 }
-func (node JSDocTypedefTag) Name() JSDocFullName         { return node.deref(node.data().name) }
-func (node JSDocTypedefTag) setName(value JSDocFullName) { node.data().name = node.ref(value) }
+func (node JSDocTypedefTag) Name() JSDocFullName         { return node.deref(&node.data().name) }
+func (node JSDocTypedefTag) setName(value JSDocFullName) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewJSDocTypedefTag(tagName IdentifierNode, typeExpression Node, name JSDocFullName, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocTypedefTagData](s, layoutJSDocTypedefTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
-	data.name = s.refAt(i, name)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.typeExpression = s.refAt(i, &data.typeExpression, typeExpression)
+	data.name = s.refAt(i, &data.name, name)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocTypedefTag, layoutJSDocTypedefTag, i)
 }
@@ -15549,10 +15664,10 @@ func (node JSDocSignature) Locals() SymbolTable {
 func (node JSDocSignature) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-
-func (node JSDocSignature) NextContainer() Node { return node.deref(node.data().nextContainer) }
-
-func (node JSDocSignature) SetNextContainer(value Node) { node.data().nextContainer = node.ref(value) }
+func (node JSDocSignature) NextContainer() Node { return node.deref(&node.data().nextContainer) }
+func (node JSDocSignature) SetNextContainer(value Node) {
+	node.setRef(&node.data().nextContainer, value)
+}
 
 func (node JSDocSignature) TypeParameters() *TypeParameterList {
 	return node.store().nodeLists.get(node.data().typeParameters)
@@ -15569,11 +15684,12 @@ func (node JSDocSignature) Parameters() *ParameterList {
 func (node JSDocSignature) SetParameters(value *ParameterList) {
 	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
 }
-func (node JSDocSignature) Type() TypeNode          { return node.deref(node.data().typeField) }
-func (node JSDocSignature) SetType(value TypeNode)  { node.data().typeField = node.ref(value) }
-func (node JSDocSignature) FullSignature() TypeNode { return node.deref(node.data().fullSignature) }
+func (node JSDocSignature) Type() TypeNode          { return node.deref(&node.data().typeField) }
+func (node JSDocSignature) SetType(value TypeNode)  { node.setRef(&node.data().typeField, value) }
+func (node JSDocSignature) FullSignature() TypeNode { return node.deref(&node.data().fullSignature) }
+
 func (node JSDocSignature) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = node.ref(value)
+	node.setRef(&node.data().fullSignature, value)
 }
 
 func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -15581,7 +15697,7 @@ func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, param
 	data, i := newRecord[jsDocSignatureData](s, layoutJSDocSignature)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	data.typeField = s.refAt(i, &data.typeField, typeNode)
 	return f.newNode(KindJSDocSignature, layoutJSDocSignature, i)
 }
 
@@ -15623,13 +15739,13 @@ func (node JSDocNameReference) data() *jsDocNameReferenceData {
 	return (*jsDocNameReferenceData)(node.rec())
 }
 
-func (node JSDocNameReference) Name() EntityName         { return node.deref(node.data().name) }
-func (node JSDocNameReference) setName(value EntityName) { node.data().name = node.ref(value) }
+func (node JSDocNameReference) Name() EntityName         { return node.deref(&node.data().name) }
+func (node JSDocNameReference) setName(value EntityName) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewJSDocNameReference(name EntityName) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocNameReferenceData](s, layoutJSDocNameReference)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	return f.newNode(KindJSDocNameReference, layoutJSDocNameReference, i)
 }
 
@@ -15725,20 +15841,20 @@ func (node ModuleDeclaration) Locals() SymbolTable {
 func (node ModuleDeclaration) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-func (node ModuleDeclaration) NextContainer() Node { return node.deref(node.data().nextContainer) }
+func (node ModuleDeclaration) NextContainer() Node { return node.deref(&node.data().nextContainer) }
 func (node ModuleDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = node.ref(value)
+	node.setRef(&node.data().nextContainer, value)
 }
 
 func (node ModuleDeclaration) AsteriskToken() AsteriskToken {
-	return node.deref(node.data().asteriskToken)
+	return node.deref(&node.data().asteriskToken)
 }
 
 func (node ModuleDeclaration) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = node.ref(value)
+	node.setRef(&node.data().asteriskToken, value)
 }
-func (node ModuleDeclaration) Body() NodeBody         { return node.deref(node.data().body) }
-func (node ModuleDeclaration) SetBody(value NodeBody) { node.data().body = node.ref(value) }
+func (node ModuleDeclaration) Body() NodeBody         { return node.deref(&node.data().body) }
+func (node ModuleDeclaration) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
 func (node ModuleDeclaration) EndFlowNode() *FlowNode {
 	return node.store().flowNodes.get(node.data().endFlowNode)
 }
@@ -15748,14 +15864,14 @@ func (node ModuleDeclaration) SetEndFlowNode(value *FlowNode) {
 }
 func (node ModuleDeclaration) Keyword() Kind            { return node.data().keyword }
 func (node ModuleDeclaration) SetKeyword(value Kind)    { node.data().keyword = value }
-func (node ModuleDeclaration) Name() ModuleName         { return node.deref(node.data().name) }
-func (node ModuleDeclaration) setName(value ModuleName) { node.data().name = node.ref(value) }
+func (node ModuleDeclaration) Name() ModuleName         { return node.deref(&node.data().name) }
+func (node ModuleDeclaration) setName(value ModuleName) { node.setRef(&node.data().name, value) }
 func (node ModuleDeclaration) Attributes() TypeLiteralNodeNode {
-	return node.deref(node.data().attributes)
+	return node.deref(&node.data().attributes)
 }
 
 func (node ModuleDeclaration) SetAttributes(value TypeLiteralNodeNode) {
-	node.data().attributes = node.ref(value)
+	node.setRef(&node.data().attributes, value)
 }
 
 func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, keyword Kind, name ModuleName, attributes TypeLiteralNodeNode, body ModuleBody) Node {
@@ -15763,9 +15879,9 @@ func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, keyword Kind
 	data, i := newRecord[moduleDeclarationData](s, layoutModuleDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	data.keyword = keyword
-	data.name = s.refAt(i, name)
-	data.attributes = s.refAt(i, attributes)
-	data.body = s.refAt(i, body)
+	data.name = s.refAt(i, &data.name, name)
+	data.attributes = s.refAt(i, &data.attributes, attributes)
+	data.body = s.refAt(i, &data.body, body)
 	return f.newNode(KindModuleDeclaration, layoutModuleDeclaration, i)
 }
 
@@ -15849,16 +15965,18 @@ func (node ImportEqualsDeclaration) setModifiers(value *ModifierList) {
 }
 func (node ImportEqualsDeclaration) IsTypeOnly() bool         { return node.data().isTypeOnly }
 func (node ImportEqualsDeclaration) SetIsTypeOnly(value bool) { node.data().isTypeOnly = value }
-func (node ImportEqualsDeclaration) Name() IdentifierNode     { return node.deref(node.data().name) }
+func (node ImportEqualsDeclaration) Name() IdentifierNode     { return node.deref(&node.data().name) }
 
-func (node ImportEqualsDeclaration) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node ImportEqualsDeclaration) setName(value IdentifierNode) {
+	node.setRef(&node.data().name, value)
+}
 
 func (node ImportEqualsDeclaration) ModuleReference() ModuleReference {
-	return node.deref(node.data().moduleReference)
+	return node.deref(&node.data().moduleReference)
 }
 
 func (node ImportEqualsDeclaration) SetModuleReference(value ModuleReference) {
-	node.data().moduleReference = node.ref(value)
+	node.setRef(&node.data().moduleReference, value)
 }
 
 func (f *NodeFactory) NewImportEqualsDeclaration(modifiers *ModifierList, isTypeOnly bool, name IdentifierNode, moduleReference ModuleReference) Node {
@@ -15866,8 +15984,8 @@ func (f *NodeFactory) NewImportEqualsDeclaration(modifiers *ModifierList, isType
 	data, i := newRecord[importEqualsDeclarationData](s, layoutImportEqualsDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	data.isTypeOnly = isTypeOnly
-	data.name = s.refAt(i, name)
-	data.moduleReference = s.refAt(i, moduleReference)
+	data.name = s.refAt(i, &data.name, name)
+	data.moduleReference = s.refAt(i, &data.moduleReference, moduleReference)
 	return f.newNode(KindImportEqualsDeclaration, layoutImportEqualsDeclaration, i)
 }
 
@@ -15939,27 +16057,27 @@ func (node ExportDeclaration) setModifiers(value *ModifierList) {
 func (node ExportDeclaration) IsTypeOnly() bool         { return node.data().isTypeOnly }
 func (node ExportDeclaration) SetIsTypeOnly(value bool) { node.data().isTypeOnly = value }
 func (node ExportDeclaration) ExportClause() NamedExportBindings {
-	return node.deref(node.data().exportClause)
+	return node.deref(&node.data().exportClause)
 }
 
 func (node ExportDeclaration) SetExportClause(value NamedExportBindings) {
-	node.data().exportClause = node.ref(value)
+	node.setRef(&node.data().exportClause, value)
 }
 
 func (node ExportDeclaration) ModuleSpecifier() Expression {
-	return node.deref(node.data().moduleSpecifier)
+	return node.deref(&node.data().moduleSpecifier)
 }
 
 func (node ExportDeclaration) SetModuleSpecifier(value Expression) {
-	node.data().moduleSpecifier = node.ref(value)
+	node.setRef(&node.data().moduleSpecifier, value)
 }
 
 func (node ExportDeclaration) Attributes() ImportAttributesNode {
-	return node.deref(node.data().attributes)
+	return node.deref(&node.data().attributes)
 }
 
 func (node ExportDeclaration) SetAttributes(value ImportAttributesNode) {
-	node.data().attributes = node.ref(value)
+	node.setRef(&node.data().attributes, value)
 }
 
 func (f *NodeFactory) NewExportDeclaration(modifiers *ModifierList, isTypeOnly bool, exportClause NamedExportBindings, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
@@ -15967,9 +16085,9 @@ func (f *NodeFactory) NewExportDeclaration(modifiers *ModifierList, isTypeOnly b
 	data, i := newRecord[exportDeclarationData](s, layoutExportDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	data.isTypeOnly = isTypeOnly
-	data.exportClause = s.refAt(i, exportClause)
-	data.moduleSpecifier = s.refAt(i, moduleSpecifier)
-	data.attributes = s.refAt(i, attributes)
+	data.exportClause = s.refAt(i, &data.exportClause, exportClause)
+	data.moduleSpecifier = s.refAt(i, &data.moduleSpecifier, moduleSpecifier)
+	data.attributes = s.refAt(i, &data.attributes, attributes)
 	return f.newNode(KindExportDeclaration, layoutExportDeclaration, i)
 }
 
@@ -16024,27 +16142,27 @@ func (node ImportTypeNode) SetTypeArguments(value *TypeList) {
 }
 func (node ImportTypeNode) IsTypeOf() bool             { return node.data().isTypeOf }
 func (node ImportTypeNode) SetIsTypeOf(value bool)     { node.data().isTypeOf = value }
-func (node ImportTypeNode) Argument() TypeNode         { return node.deref(node.data().argument) }
-func (node ImportTypeNode) SetArgument(value TypeNode) { node.data().argument = node.ref(value) }
+func (node ImportTypeNode) Argument() TypeNode         { return node.deref(&node.data().argument) }
+func (node ImportTypeNode) SetArgument(value TypeNode) { node.setRef(&node.data().argument, value) }
 func (node ImportTypeNode) Attributes() ImportAttributesNode {
-	return node.deref(node.data().attributes)
+	return node.deref(&node.data().attributes)
 }
 
 func (node ImportTypeNode) SetAttributes(value ImportAttributesNode) {
-	node.data().attributes = node.ref(value)
+	node.setRef(&node.data().attributes, value)
 }
 
-func (node ImportTypeNode) Qualifier() EntityName { return node.deref(node.data().qualifier) }
+func (node ImportTypeNode) Qualifier() EntityName { return node.deref(&node.data().qualifier) }
 
-func (node ImportTypeNode) SetQualifier(value EntityName) { node.data().qualifier = node.ref(value) }
+func (node ImportTypeNode) SetQualifier(value EntityName) { node.setRef(&node.data().qualifier, value) }
 
 func (f *NodeFactory) NewImportTypeNode(isTypeOf bool, argument TypeNode, attributes ImportAttributesNode, qualifier EntityName, typeArguments *TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[importTypeNodeData](s, layoutImportTypeNode)
 	data.isTypeOf = isTypeOf
-	data.argument = s.refAt(i, argument)
-	data.attributes = s.refAt(i, attributes)
-	data.qualifier = s.refAt(i, qualifier)
+	data.argument = s.refAt(i, &data.argument, argument)
+	data.attributes = s.refAt(i, &data.attributes, attributes)
+	data.qualifier = s.refAt(i, &data.qualifier, qualifier)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
 	return f.newNode(KindImportType, layoutImportTypeNode, i)
 }
@@ -16113,22 +16231,22 @@ func (node ImportClause) PhaseModifier() ImportPhaseModifierSyntaxKind {
 func (node ImportClause) SetPhaseModifier(value ImportPhaseModifierSyntaxKind) {
 	node.data().phaseModifier = value
 }
-func (node ImportClause) Name() IdentifierNode         { return node.deref(node.data().name) }
-func (node ImportClause) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node ImportClause) Name() IdentifierNode         { return node.deref(&node.data().name) }
+func (node ImportClause) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 func (node ImportClause) NamedBindings() NamedImportBindings {
-	return node.deref(node.data().namedBindings)
+	return node.deref(&node.data().namedBindings)
 }
 
 func (node ImportClause) SetNamedBindings(value NamedImportBindings) {
-	node.data().namedBindings = node.ref(value)
+	node.setRef(&node.data().namedBindings, value)
 }
 
 func (f *NodeFactory) NewImportClause(phaseModifier ImportPhaseModifierSyntaxKind, name IdentifierNode, namedBindings NamedImportBindings) Node {
 	s := f.nodeStore()
 	data, i := newRecord[importClauseData](s, layoutImportClause)
 	data.phaseModifier = phaseModifier
-	data.name = s.refAt(i, name)
-	data.namedBindings = s.refAt(i, namedBindings)
+	data.name = s.refAt(i, &data.name, name)
+	data.namedBindings = s.refAt(i, &data.namedBindings, namedBindings)
 	return f.newNode(KindImportClause, layoutImportClause, i)
 }
 
@@ -16188,21 +16306,21 @@ func (node ImportSpecifier) SetLocalSymbol(value *Symbol) {
 func (node ImportSpecifier) IsTypeOnly() bool         { return node.data().isTypeOnly }
 func (node ImportSpecifier) SetIsTypeOnly(value bool) { node.data().isTypeOnly = value }
 func (node ImportSpecifier) PropertyName() ModuleExportName {
-	return node.deref(node.data().propertyName)
+	return node.deref(&node.data().propertyName)
 }
 
 func (node ImportSpecifier) SetPropertyName(value ModuleExportName) {
-	node.data().propertyName = node.ref(value)
+	node.setRef(&node.data().propertyName, value)
 }
-func (node ImportSpecifier) Name() IdentifierNode         { return node.deref(node.data().name) }
-func (node ImportSpecifier) setName(value IdentifierNode) { node.data().name = node.ref(value) }
+func (node ImportSpecifier) Name() IdentifierNode         { return node.deref(&node.data().name) }
+func (node ImportSpecifier) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewImportSpecifier(isTypeOnly bool, propertyName ModuleExportName, name IdentifierNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[importSpecifierData](s, layoutImportSpecifier)
 	data.isTypeOnly = isTypeOnly
-	data.propertyName = s.refAt(i, propertyName)
-	data.name = s.refAt(i, name)
+	data.propertyName = s.refAt(i, &data.propertyName, propertyName)
+	data.name = s.refAt(i, &data.name, name)
 	return f.newNode(KindImportSpecifier, layoutImportSpecifier, i)
 }
 
@@ -16279,13 +16397,13 @@ func (node JSDocLink) text() []string { return node.store().stringLists.get(node
 func (node JSDocLink) setText(value []string) {
 	node.store().stringLists.set(&node.data().text, value, value == nil)
 }
-func (node JSDocLink) Name() EntityName         { return node.deref(node.data().name) }
-func (node JSDocLink) setName(value EntityName) { node.data().name = node.ref(value) }
+func (node JSDocLink) Name() EntityName         { return node.deref(&node.data().name) }
+func (node JSDocLink) setName(value EntityName) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewJSDocLink(name EntityName, text []string) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocLinkData](s, layoutJSDocLink)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	s.stringLists.set(&data.text, text, text == nil)
 	f.textCount++
 	return f.newNode(KindJSDocLink, layoutJSDocLink, i)
@@ -16331,13 +16449,13 @@ func (node JSDocLinkPlain) text() []string { return node.store().stringLists.get
 func (node JSDocLinkPlain) setText(value []string) {
 	node.store().stringLists.set(&node.data().text, value, value == nil)
 }
-func (node JSDocLinkPlain) Name() EntityName         { return node.deref(node.data().name) }
-func (node JSDocLinkPlain) setName(value EntityName) { node.data().name = node.ref(value) }
+func (node JSDocLinkPlain) Name() EntityName         { return node.deref(&node.data().name) }
+func (node JSDocLinkPlain) setName(value EntityName) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewJSDocLinkPlain(name EntityName, text []string) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocLinkPlainData](s, layoutJSDocLinkPlain)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	s.stringLists.set(&data.text, text, text == nil)
 	f.textCount++
 	return f.newNode(KindJSDocLinkPlain, layoutJSDocLinkPlain, i)
@@ -16383,13 +16501,13 @@ func (node JSDocLinkCode) text() []string { return node.store().stringLists.get(
 func (node JSDocLinkCode) setText(value []string) {
 	node.store().stringLists.set(&node.data().text, value, value == nil)
 }
-func (node JSDocLinkCode) Name() EntityName         { return node.deref(node.data().name) }
-func (node JSDocLinkCode) setName(value EntityName) { node.data().name = node.ref(value) }
+func (node JSDocLinkCode) Name() EntityName         { return node.deref(&node.data().name) }
+func (node JSDocLinkCode) setName(value EntityName) { node.setRef(&node.data().name, value) }
 
 func (f *NodeFactory) NewJSDocLinkCode(name EntityName, text []string) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocLinkCodeData](s, layoutJSDocLinkCode)
-	data.name = s.refAt(i, name)
+	data.name = s.refAt(i, &data.name, name)
 	s.stringLists.set(&data.text, text, text == nil)
 	f.textCount++
 	return f.newNode(KindJSDocLinkCode, layoutJSDocLinkCode, i)
@@ -16454,41 +16572,43 @@ func (node TypeParameterDeclaration) Modifiers() *ModifierList {
 func (node TypeParameterDeclaration) setModifiers(value *ModifierList) {
 	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
 }
-func (node TypeParameterDeclaration) Name() IdentifierNode { return node.deref(node.data().name) }
+func (node TypeParameterDeclaration) Name() IdentifierNode { return node.deref(&node.data().name) }
 func (node TypeParameterDeclaration) setName(value IdentifierNode) {
-	node.data().name = node.ref(value)
+	node.setRef(&node.data().name, value)
 }
 
-func (node TypeParameterDeclaration) Constraint() TypeNode { return node.deref(node.data().constraint) }
+func (node TypeParameterDeclaration) Constraint() TypeNode {
+	return node.deref(&node.data().constraint)
+}
 
 func (node TypeParameterDeclaration) SetConstraint(value TypeNode) {
-	node.data().constraint = node.ref(value)
+	node.setRef(&node.data().constraint, value)
 }
 
 func (node TypeParameterDeclaration) Expression() Expression {
-	return node.deref(node.data().expression)
+	return node.deref(&node.data().expression)
 }
 
 func (node TypeParameterDeclaration) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
 func (node TypeParameterDeclaration) DefaultType() TypeNode {
-	return node.deref(node.data().defaultType)
+	return node.deref(&node.data().defaultType)
 }
 
 func (node TypeParameterDeclaration) SetDefaultType(value TypeNode) {
-	node.data().defaultType = node.ref(value)
+	node.setRef(&node.data().defaultType, value)
 }
 
 func (f *NodeFactory) NewTypeParameterDeclaration(modifiers *ModifierList, name IdentifierNode, constraint TypeNode, expression Expression, defaultType TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeParameterDeclarationData](s, layoutTypeParameterDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
-	data.constraint = s.refAt(i, constraint)
-	data.expression = s.refAt(i, expression)
-	data.defaultType = s.refAt(i, defaultType)
+	data.name = s.refAt(i, &data.name, name)
+	data.constraint = s.refAt(i, &data.constraint, constraint)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.defaultType = s.refAt(i, &data.defaultType, defaultType)
 	return f.newNode(KindTypeParameter, layoutTypeParameterDeclaration, i)
 }
 
@@ -16536,24 +16656,26 @@ func (node SyntheticReferenceExpression) data() *syntheticReferenceExpressionDat
 }
 
 func (node SyntheticReferenceExpression) Expression() Expression {
-	return node.deref(node.data().expression)
+	return node.deref(&node.data().expression)
 }
 
 func (node SyntheticReferenceExpression) SetExpression(value Expression) {
-	node.data().expression = node.ref(value)
+	node.setRef(&node.data().expression, value)
 }
 
-func (node SyntheticReferenceExpression) ThisArg() Expression { return node.deref(node.data().thisArg) }
+func (node SyntheticReferenceExpression) ThisArg() Expression {
+	return node.deref(&node.data().thisArg)
+}
 
 func (node SyntheticReferenceExpression) SetThisArg(value Expression) {
-	node.data().thisArg = node.ref(value)
+	node.setRef(&node.data().thisArg, value)
 }
 
 func (f *NodeFactory) NewSyntheticReferenceExpression(expression Expression, thisArg Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[syntheticReferenceExpressionData](s, layoutSyntheticReferenceExpression)
-	data.expression = s.refAt(i, expression)
-	data.thisArg = s.refAt(i, thisArg)
+	data.expression = s.refAt(i, &data.expression, expression)
+	data.thisArg = s.refAt(i, &data.thisArg, thisArg)
 	return f.newNode(KindSyntheticReferenceExpression, layoutSyntheticReferenceExpression, i)
 }
 
@@ -16667,11 +16789,11 @@ func (node JSDocParameterOrPropertyTag) data() *jsDocParameterOrPropertyTagData 
 }
 
 func (node JSDocParameterOrPropertyTag) TagName() IdentifierNode {
-	return node.deref(node.data().tagName)
+	return node.deref(&node.data().tagName)
 }
 
 func (node JSDocParameterOrPropertyTag) SetTagName(value IdentifierNode) {
-	node.data().tagName = node.ref(value)
+	node.setRef(&node.data().tagName, value)
 }
 
 func (node JSDocParameterOrPropertyTag) Comment() *NodeList {
@@ -16681,21 +16803,21 @@ func (node JSDocParameterOrPropertyTag) Comment() *NodeList {
 func (node JSDocParameterOrPropertyTag) SetComment(value *NodeList) {
 	node.store().nodeLists.set(&node.data().comment, value, value == nil)
 }
-
-func (node JSDocParameterOrPropertyTag) Name() EntityName { return node.deref(node.data().name) }
-
-func (node JSDocParameterOrPropertyTag) setName(value EntityName) { node.data().name = node.ref(value) }
+func (node JSDocParameterOrPropertyTag) Name() EntityName { return node.deref(&node.data().name) }
+func (node JSDocParameterOrPropertyTag) setName(value EntityName) {
+	node.setRef(&node.data().name, value)
+}
 
 func (node JSDocParameterOrPropertyTag) IsBracketed() bool { return node.data().isBracketed }
 
 func (node JSDocParameterOrPropertyTag) SetIsBracketed(value bool) { node.data().isBracketed = value }
 
 func (node JSDocParameterOrPropertyTag) TypeExpression() TypeNode {
-	return node.deref(node.data().typeExpression)
+	return node.deref(&node.data().typeExpression)
 }
 
 func (node JSDocParameterOrPropertyTag) SetTypeExpression(value TypeNode) {
-	node.data().typeExpression = node.ref(value)
+	node.setRef(&node.data().typeExpression, value)
 }
 
 func (node JSDocParameterOrPropertyTag) IsNameFirst() bool { return node.data().isNameFirst }
@@ -16710,10 +16832,10 @@ func (f *NodeFactory) NewJSDocParameterOrPropertyTag(kind Kind, tagName Identifi
 	}
 	s := f.nodeStore()
 	data, i := newRecord[jsDocParameterOrPropertyTagData](s, layoutJSDocParameterOrPropertyTag)
-	data.tagName = s.refAt(i, tagName)
-	data.name = s.refAt(i, name)
+	data.tagName = s.refAt(i, &data.tagName, tagName)
+	data.name = s.refAt(i, &data.name, name)
 	data.isBracketed = isBracketed
-	data.typeExpression = s.refAt(i, typeExpression)
+	data.typeExpression = s.refAt(i, &data.typeExpression, typeExpression)
 	data.isNameFirst = isNameFirst
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(kind, layoutJSDocParameterOrPropertyTag, i)

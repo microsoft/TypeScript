@@ -667,8 +667,8 @@ function generateFieldAccessors(w: CodeWriter, structName: string, fields: GoFie
         const storage = goStorageName(name);
         const side = sideTableOf(goType);
         if (isNode) {
-            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.deref(${data}.${storage}) }`);
-            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { ${data}.${storage} = node.ref(value) }`);
+            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.deref(&${data}.${storage}) }`);
+            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { node.setRef(&${data}.${storage}, value) }`);
         }
         else if (side) {
             w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.store().${side}.get(${data}.${storage}) }`);
@@ -753,7 +753,7 @@ function emitNewFactory(
             w.write(`s.${side}.set(&data.${goStorageName(m.name)}, ${value}, ${zeroCheck(m.type.formatGoReference(), value)})`);
             continue;
         }
-        if (isNodeField(m)) value = `s.refAt(i, ${value})`;
+        if (isNodeField(m)) value = `s.refAt(i, &data.${goStorageName(m.name)}, ${value})`;
         w.write(`data.${goStorageName(m.name)} = ${value}`);
     }
 

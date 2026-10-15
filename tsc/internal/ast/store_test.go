@@ -2,11 +2,12 @@ package ast
 
 import (
 	"reflect"
+	"slices"
 	"strconv"
 	"testing"
+	"unsafe"
 
 	"gotest.tools/v3/assert"
-	"gotest.tools/v3/assert/cmp"
 )
 
 // Records must hold no Go pointers, so the garbage collector can skip
@@ -49,11 +50,14 @@ func TestNodeStoreChunks(t *testing.T) {
 		statements = append(statements, factory.NewExpressionStatement(factory.NewIdentifier(strconv.Itoa(i))))
 	}
 	store := factory.store
-	assert.Assert(t, store.cur > 2, "nodes should span several chunks")
+	assert.Assert(t, len(store.chunks) > 2, "nodes should span several chunks")
+	chunkOf := func(n Node) int {
+		return slices.Index(store.chunks, unsafe.Add(n.p, -int(n.hdr().self)*int(wordSize)))
+	}
 	crossed := 0
 	for i, statement := range statements {
 		expression := statement.Expression()
-		if expression.hdr().self>>nodeRefOffsetBits != statement.hdr().self>>nodeRefOffsetBits {
+		if chunkOf(expression) != chunkOf(statement) {
 			crossed++
 		}
 		assert.Equal(t, expression.Text(), strconv.Itoa(i))
@@ -64,12 +68,6 @@ func TestNodeStoreChunks(t *testing.T) {
 	assert.Assert(t, crossed > 0, "some children should be in an earlier chunk than their parents")
 	factory.CompactStore()
 	assert.Equal(t, statements[0].Expression().Text(), "0")
-	assert.Assert(t, cmp.Panics(func() {
-		var full nodeStore
-		full.cur = uint32(standaloneChunk) - 1
-		full.capacity = 1
-		full.alloc(64)
-	}))
 }
 
 func TestNodeSideTableZeroValues(t *testing.T) {
