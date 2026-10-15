@@ -162,7 +162,7 @@ namespace MultipleOverloads {
 >"other" : "other"
 
     alphaBeta.foo("str", false);
->alphaBeta.foo("str", false) : string
+>alphaBeta.foo("str", false) : string | number
 >alphaBeta.foo : { (type: "num", opts?: unknown): number; (type: "str", opts?: unknown): string; (type: string, opts?: unknown): number | string; } | { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
 >alphaBeta : Alpha | Beta
 >foo : { (type: "num", opts?: unknown): number; (type: "str", opts?: unknown): string; (type: string, opts?: unknown): number | string; } | { (type: "num", opts?: { a?: string; }): number; (type: "str", opts?: { b?: string; }): string; (type: "num" | "str", opts?: unknown): number | string; }
