@@ -37,8 +37,14 @@ func NewOwnerCache[K comparable, V any, LoadArgs any](
 
 func (c *OwnerCache[K, V, LoadArgs]) LoadAndAcquire(identity K, owner uint64, loadArgs LoadArgs) V {
 	entry, loaded := c.loadOrStoreLockedEntry(identity)
+	if loaded && c.isExpired != nil && c.isExpired(identity, entry.value, loadArgs) {
+		entry.mu.Unlock()
+		value := c.parse(identity, loadArgs)
+		entry, _ = c.loadOrStoreLockedEntry(identity)
+		entry.value = value
+	}
 	defer entry.mu.Unlock()
-	if !loaded || c.isExpired != nil && c.isExpired(identity, entry.value, loadArgs) {
+	if !loaded {
 		entry.value = c.parse(identity, loadArgs)
 	}
 	entry.owners[owner] = struct{}{}
