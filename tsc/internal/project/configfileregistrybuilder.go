@@ -796,7 +796,7 @@ func (c *configFileRegistryBuilder) GetExtendedConfig(fileName tspath.RootedFile
 		content = fh.Content()
 	}
 
-	return c.extendedConfigCache.LoadAndAcquire(path, c.snapshotID, ExtendedConfigParseArgs{
+	entry := c.extendedConfigCache.LoadAndAcquire(path, c.snapshotID, ExtendedConfigParseArgs{
 		FileName:        fileName,
 		Content:         content,
 		FS:              c.fs.source,
@@ -804,6 +804,13 @@ func (c *configFileRegistryBuilder) GetExtendedConfig(fileName tspath.RootedFile
 		ConfigFS:        fs,
 		Cache:           c,
 	}).ExtendedConfigCacheEntry
+	for _, extendedFileName := range entry.ExtendedFileNames() {
+		extendedPath := fs.CaseSensitivity().PathKey(extendedFileName.AsPath())
+		if !slices.Contains(resolutionStack, extendedPath) && !c.extendedConfigCache.TryAddOwner(extendedPath, c.snapshotID) {
+			return tsoptions.ParseExtendedConfig(fileName, path, resolutionStack, fs, c)
+		}
+	}
+	return entry
 }
 
 func (c *configFileRegistryBuilder) Cleanup() {
