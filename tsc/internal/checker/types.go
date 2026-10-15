@@ -1167,7 +1167,7 @@ func (t *StructuredType) ensureExtra() *structuredTypeExtra {
 
 func (t *StructuredType) Properties() []*ast.Symbol {
 	if t.properties == nil && t.lazy != nil {
-		t.properties = t.lazy.c.getLazyProperties(t.lazy)
+		t.properties = t.checker.getLazyProperties(t.lazy)
 	}
 	return t.properties
 }
@@ -1182,21 +1182,21 @@ func (t *StructuredType) propertyShapes() []*ast.Symbol {
 
 func (t *StructuredType) property(i int) *ast.Symbol {
 	if t.properties == nil && t.lazy != nil {
-		return t.lazy.c.getLazyMember(t.lazy, i)
+		return t.checker.getLazyMember(t.lazy, i)
 	}
 	return t.properties[i]
 }
 
 func (t *StructuredType) getMember(name string) *ast.Symbol {
 	if t.lazy != nil {
-		return t.lazy.c.getLazyMemberByName(t.lazy, name)
+		return t.checker.getLazyMemberByName(t.lazy, name)
 	}
 	return t.members[name]
 }
 
 func (t *StructuredType) getMembers() ast.SymbolTable {
 	if t.members == nil && t.lazy != nil {
-		t.members = t.lazy.c.getLazyMemberTable(t.lazy)
+		t.members = t.checker.getLazyMemberTable(t.lazy)
 	}
 	return t.members
 }

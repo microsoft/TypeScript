@@ -19609,7 +19609,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 			return findIndexInfo(indexInfos, info.keyType) == nil
 		}))
 	}
-	c.setLazyStructuredTypeMembers(t, &lazyMembers{c: c, layout: layout, mapper: mapper, bases: instantiatedBaseTypes}, callSignatures, constructSignatures, indexInfos)
+	c.setLazyStructuredTypeMembers(t, &lazyMembers{layout: layout, mapper: mapper, bases: instantiatedBaseTypes}, callSignatures, constructSignatures, indexInfos)
 }
 
 // A memberLayout describes the members of a class or interface type and of its instantiations:
@@ -19696,7 +19696,6 @@ func (l *memberLayout) buildIndex() {
 // The members of a class or interface type or one of its instantiations. Each member is
 // resolved on first use and cached in its slot, so full resolution is just resolving every slot.
 type lazyMembers struct {
-	c      *Checker
 	layout *memberLayout
 	mapper *TypeMapper // Instantiation mapper, nil for the declared type
 	bases  []*Type     // Base types, instantiated and with this-type arguments
@@ -19883,7 +19882,7 @@ func (c *Checker) setLazyStructuredTypeMembers(t *Type, lazy *lazyMembers, callS
 
 func (c *Checker) getLazyMember(l *lazyMembers, i int) *ast.Symbol {
 	if l.slots == nil {
-		l.slots = make([]*ast.Symbol, len(l.layout.symbols))
+		l.slots = make([]*ast.Symbol, l.memberCount())
 	}
 	if symbol := l.slots[i]; symbol != nil {
 		return symbol
@@ -19903,7 +19902,8 @@ func (c *Checker) getLazyMember(l *lazyMembers, i int) *ast.Symbol {
 	return symbol
 }
 
-// Returns the number of members, which for instantiations are only the properties (see instantiateSymbolTable).
+// Returns the number of members, which for instantiations are only the properties, as members that
+// aren't named aren't instantiated.
 func (l *lazyMembers) memberCount() int {
 	if l.mapper != nil {
 		return l.layout.propertyCount
@@ -21533,19 +21533,6 @@ func (c *Checker) createInstantiatedSymbolTable(symbols []*ast.Symbol, m *TypeMa
 	result := make(ast.SymbolTable, len(symbols))
 	for _, symbol := range symbols {
 		result[symbol.Name()] = c.instantiateSymbol(symbol, m)
-	}
-	return result
-}
-
-func (c *Checker) instantiateSymbolTable(symbols ast.SymbolTable, m *TypeMapper) ast.SymbolTable {
-	if len(symbols) == 0 {
-		return nil
-	}
-	result := make(ast.SymbolTable, len(symbols))
-	for id, symbol := range symbols {
-		if c.isNamedMember(symbol, id) {
-			result[id] = c.instantiateSymbol(symbol, m)
-		}
 	}
 	return result
 }
