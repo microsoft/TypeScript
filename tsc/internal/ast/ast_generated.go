@@ -667,10 +667,14 @@ func IsToken(node *Node) bool {
 type Identifier struct {
 	PrimaryExpressionBase
 	FlowNodeBase
-	Text string
+	Text SymbolName
 }
 
 func (f *NodeFactory) NewIdentifier(text string) *Node {
+	return f.NewIdentifierFromSymbolName(MakeSymbolName(text))
+}
+
+func (f *NodeFactory) NewIdentifierFromSymbolName(text SymbolName) *Node {
 	data := f.identifierArena.New()
 	data.Text = text
 	f.textCount++
@@ -678,7 +682,7 @@ func (f *NodeFactory) NewIdentifier(text string) *Node {
 }
 
 func (node *Identifier) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewIdentifier(node.Text), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewIdentifierFromSymbolName(node.Text), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsIdentifier(node *Node) bool {

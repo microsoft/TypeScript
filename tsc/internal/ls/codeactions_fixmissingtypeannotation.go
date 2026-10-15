@@ -1134,7 +1134,7 @@ func (f *isolatedDeclarationsFixer) relativeType(node *ast.Node) *ast.TypeNode {
 		varDecl := ast.FindAncestorKind(node, ast.KindVariableDeclaration)
 		partName := ""
 		if varDecl != nil && ast.IsIdentifier(varDecl.Name()) {
-			partName = varDecl.Name().AsIdentifier().Text
+			partName = varDecl.Name().Text()
 		}
 		return f.typeFromArraySpreadElements(node.AsArrayLiteralExpression(), partName)
 	}
@@ -1142,7 +1142,7 @@ func (f *isolatedDeclarationsFixer) relativeType(node *ast.Node) *ast.TypeNode {
 		varDecl := ast.FindAncestorKind(node, ast.KindVariableDeclaration)
 		partName := ""
 		if varDecl != nil && ast.IsIdentifier(varDecl.Name()) {
-			partName = varDecl.Name().AsIdentifier().Text
+			partName = varDecl.Name().Text()
 		}
 		return f.typeFromObjectSpreadAssignment(node.AsObjectLiteralExpression(), partName)
 	}

@@ -995,7 +995,7 @@ func getPropertySymbolsFromBaseTypes(symbol *ast.Symbol, propertyName ast.Symbol
 
 func getPropertySymbolFromBindingElement(checker *checker.Checker, bindingElement *ast.Node) *ast.Symbol {
 	if typeOfPattern := checker.GetTypeAtLocation(bindingElement.Parent); typeOfPattern != nil {
-		return checker.GetPropertyOfType(typeOfPattern, ast.MakeSymbolName(bindingElement.Name().Text()))
+		return checker.GetPropertyOfType(typeOfPattern, bindingElement.Name().TextSymbolName())
 	}
 	return nil
 }

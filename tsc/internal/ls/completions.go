@@ -1331,7 +1331,7 @@ func (l *LanguageService) getCompletionData(
 			if isCurrentlyEditingNode(element, file, position) {
 				continue
 			}
-			existing.Add(ast.MakeSymbolName(element.PropertyNameOrName().Text()))
+			existing.Add(element.PropertyNameOrName().TextSymbolName())
 		}
 		uniques := core.Filter(exports, func(symbol *ast.Symbol) bool {
 			return symbol.Name() != ast.InternalSymbolNameDefault && !existing.Has(symbol.Name())
@@ -1367,7 +1367,7 @@ func (l *LanguageService) getCompletionData(
 			elements = importAttributes.AsImportAttributes().Attributes.Nodes
 		}
 		attributeNames := core.Map(elements, func(el *ast.Node) ast.SymbolName {
-			return ast.MakeSymbolName(el.AsImportAttribute().Name().Text())
+			return el.AsImportAttribute().Name().TextSymbolName()
 		})
 		existing := collections.NewSetFromItems(attributeNames...)
 		uniques := core.Filter(
@@ -4823,7 +4823,7 @@ func filterJsxAttributes(
 		}
 
 		if attr.Kind == ast.KindJsxAttribute {
-			existingNames.Add(ast.MakeSymbolName(attr.Name().Text()))
+			existingNames.Add(attr.Name().TextSymbolName())
 		} else if ast.IsJsxSpreadAttribute(attr) {
 			setMemberDeclaredBySpreadAssignment(attr, &membersDeclaredBySpreadAssignment, typeChecker)
 		}

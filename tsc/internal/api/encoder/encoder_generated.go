@@ -663,7 +663,7 @@ func getNodeCommonData(node *ast.Node) uint32 {
 func recordNodeStrings(node *ast.Node, strs *stringTable) uint32 {
 	switch node.Kind {
 	case ast.KindIdentifier:
-		return strs.add(node.AsIdentifier().Text, node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsIdentifier().Text.Value(), node.Kind, node.Pos(), node.End())
 	case ast.KindPrivateIdentifier:
 		return strs.add(node.AsPrivateIdentifier().Text, node.Kind, node.Pos(), node.End())
 	case ast.KindJsxText:

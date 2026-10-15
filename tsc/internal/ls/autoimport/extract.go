@@ -251,7 +251,7 @@ func (e *symbolExtractor) extractFromSymbol(name ast.SymbolName, symbol *ast.Sym
 			*exports = slices.Grow(*exports, len(expression.AsObjectLiteralExpression().Properties.Nodes))
 			for _, prop := range expression.AsObjectLiteralExpression().Properties.Nodes {
 				if ast.IsShorthandPropertyAssignment(prop) || ast.IsPropertyAssignment(prop) && prop.AsPropertyAssignment().Name().Kind == ast.KindIdentifier {
-					export, _ := e.createExport(expression.Symbol().Members()[ast.MakeSymbolName(prop.Name().Text())], moduleID, moduleFileName, syntax, file, checkerLease)
+					export, _ := e.createExport(expression.Symbol().Members()[prop.Name().TextSymbolName()], moduleID, moduleFileName, syntax, file, checkerLease)
 					if export != nil {
 						export.through = name
 						*exports = append(*exports, export)

@@ -167,7 +167,7 @@ func TestNodeHeaderKeepsPayloadAlive(t *testing.T) {
 	factory = nil
 	runtime.GC()
 	assert.Equal(t, root.AsPropertyAccessExpression().Name(), name)
-	assert.Equal(t, name.AsIdentifier().Text, "property")
+	assert.Equal(t, name.Text(), "property")
 	assert.Equal(t, name.Parent, root)
 	clone := root.Clone(ast.NewNodeFactory(ast.NodeFactoryHooks{}))
 	runtime.GC()

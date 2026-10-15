@@ -221,7 +221,7 @@ func (c *Checker) getContextualTypeForJsxAttribute(attribute *ast.Node, contextF
 		if attributesType == nil || IsTypeAny(attributesType) {
 			return nil
 		}
-		return c.getTypeOfPropertyOfContextualType(attributesType, ast.MakeSymbolName(attribute.Name().Text()))
+		return c.getTypeOfPropertyOfContextualType(attributesType, attribute.Name().TextSymbolName())
 	}
 	return c.getContextualType(attribute.Parent, contextFlags)
 }
@@ -754,7 +754,7 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 				if allAttributesTable != nil {
 					allAttributesTable[attributeSymbol.Name()] = attributeSymbol
 				}
-				if ast.MakeSymbolName(attributeDecl.Name().Text()) == jsxChildrenPropertyName {
+				if attributeDecl.Name().TextSymbolName() == jsxChildrenPropertyName {
 					explicitlySpecifyChildrenAttribute = true
 				}
 				if contextualType != nil && checkMode&CheckModeInferential != 0 && checkMode&CheckModeSkipContextSensitive == 0 && c.isContextSensitive(attributeDecl) {
@@ -1197,7 +1197,7 @@ func (c *Checker) getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node *ast.
 		return links.resolvedJsxElementAttributesType
 	}
 	if links.jsxFlags&JsxFlagsIntrinsicIndexedElement != 0 {
-		indexInfo := c.getApplicableIndexInfoForName(c.getJsxType(JsxNames.IntrinsicElements, node), ast.MakeSymbolName(node.TagName().Text()))
+		indexInfo := c.getApplicableIndexInfoForName(c.getJsxType(JsxNames.IntrinsicElements, node), node.TagName().TextSymbolName())
 		if indexInfo != nil {
 			links.resolvedJsxElementAttributesType = indexInfo.valueType
 			return links.resolvedJsxElementAttributesType

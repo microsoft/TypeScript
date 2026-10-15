@@ -1978,7 +1978,7 @@ func (c *Checker) getParameterNameAtPosition(signature *Signature, pos int) ast.
 
 func (c *Checker) getTupleElementLabel(elementInfo TupleElementInfo, restSymbol *ast.Symbol, index int) ast.SymbolName {
 	if elementInfo.labeledDeclaration != nil {
-		return ast.MakeSymbolName(elementInfo.labeledDeclaration.Name().Text())
+		return elementInfo.labeledDeclaration.Name().TextSymbolName()
 	}
 	if restSymbol != nil && restSymbol.ValueDeclaration() != nil && ast.IsParameterDeclaration(restSymbol.ValueDeclaration()) {
 		return c.getTupleElementLabelFromBindingElement(restSymbol.ValueDeclaration(), index, elementInfo.flags)
@@ -2805,7 +2805,7 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 							name := prop.ValueDeclaration().Name()
 							r.errorNode = name
 							if ast.IsIdentifier(name) {
-								suggestion = r.c.getSuggestionForNonexistentProperty(ast.MakeSymbolName(name.Text()), errorTarget)
+								suggestion = r.c.getSuggestionForNonexistentProperty(name.TextSymbolName(), errorTarget)
 							}
 						}
 						if suggestion != "" {

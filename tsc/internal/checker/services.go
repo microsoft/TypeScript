@@ -529,7 +529,7 @@ func (c *Checker) IsDeclarationUsed(
 	if jsxElementsPresent && jsxModeNeedsExplicitImport {
 		jsxNamespace := c.getJsxNamespace(sourceFile.AsNode())
 		jsxFragmentFactory := c.GetJsxFragmentFactory(sourceFile.AsNode())
-		identifierText := identifier.Text
+		identifierText := identifier.Text.Value()
 		if identifierText == jsxNamespace {
 			return true
 		}
@@ -554,7 +554,7 @@ func (c *Checker) IsSymbolReferencedInFile(
 	symbol *ast.Symbol,
 ) bool {
 	identifierText := definition.Text
-	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText, sourceFile.AsNode()) {
+	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText.Value(), sourceFile.AsNode()) {
 		if !ast.IsIdentifier(token) {
 			continue
 		}
@@ -594,7 +594,7 @@ func (c *Checker) GetReferencesToSymbolInFile(
 			continue
 		}
 		id := token.AsIdentifier()
-		if ast.MakeSymbolName(id.Text) != identifierText {
+		if id.Text != identifierText {
 			continue
 		}
 		refSymbol := c.GetSymbolAtLocation(token)
@@ -1070,7 +1070,7 @@ func (c *Checker) GetPropertySymbolOfDestructuringAssignment(location *ast.Node)
 	if ast.IsArrayLiteralOrObjectLiteralDestructuringPattern(location.Parent.Parent) {
 		// Get the type of the object or array literal and then look for property of given name in the type
 		if typeOfObjectLiteral := c.getTypeOfAssignmentPattern(location.Parent.Parent); typeOfObjectLiteral != nil {
-			return c.getPropertyOfType(typeOfObjectLiteral, ast.MakeSymbolName(location.Text()))
+			return c.getPropertyOfType(typeOfObjectLiteral, location.TextSymbolName())
 		}
 	}
 	return nil
