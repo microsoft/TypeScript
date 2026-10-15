@@ -594,14 +594,14 @@ type Checker struct {
 	fileIndexMap                                map[*ast.SourceFile]int
 	compareSymbols                              func(*ast.Symbol, *ast.Symbol) int
 	compareSymbolChains                         func([]*ast.Symbol, []*ast.Symbol) int
+	layoutMembers                               ast.SymbolTable
+	layoutOrigins                               map[string]memberOrigin
 	TypeCount                                   uint32
 	SymbolCount                                 uint32
 	SignatureCount                              uint32
 	TotalInstantiationCount                     uint32
 	instantiationCount                          uint32
 	instantiationStack                          []*Type
-	layoutEntries                               []layoutEntry
-	layoutIndex                                 map[string]int
 	conditionalConstraintDepth                  uint32
 	inlineLevel                                 int
 	serializationLevel                          int
@@ -19688,7 +19688,7 @@ func (l *memberLayout) buildIndex() {
 // resolved on first use and cached in its slot, so full resolution is just resolving every slot.
 type lazyMembers struct {
 	layout *memberLayout
-	mapper *TypeMapper // Instantiation mapper, nil for the declared type
+	mapper *TypeMapper    // Instantiation mapper, nil for the declared type
 	bases  []*lazyMembers // Members of the base types with the layout's base layouts, or nil when there are none
 	slots  []*ast.Symbol
 }
@@ -19738,24 +19738,8 @@ func hasMemberLayoutBases(layout *memberLayout, bases []*Type, baseMembers []*la
 	return true
 }
 
-type layoutEntry struct {
-	symbol *ast.Symbol
-	origin memberOrigin
-	rank   memberRank
-}
-
-// Members are ordered as in getNamedMembers.
-type memberRank uint8
-
-const (
-	memberRankDeclared  memberRank = iota // Properties declared in a class or interface come first
-	memberRankInherited                   // Then other properties
-	memberRankUnnamed                     // Then members that aren't properties
-)
-
 func (c *Checker) buildMemberLayout(source *Type, bases []*Type, baseMembers []*lazyMembers) *memberLayout {
 	d := source.AsInterfaceType()
-	// Resolve the bases first, since this may build other layouts with the scratch storage below.
 	layoutBases := make([]memberLayoutBase, len(bases))
 	baseProperties := make([][]*ast.Symbol, len(bases))
 	capacity := len(d.declaredMembers)
@@ -19768,19 +19752,17 @@ func (c *Checker) buildMemberLayout(source *Type, bases []*Type, baseMembers []*
 		}
 		capacity += len(baseProperties[k])
 	}
-	// Reuse scratch storage, since this runs for every class and interface.
-	entries, index := c.layoutEntries[:0], c.layoutIndex
-	c.layoutEntries, c.layoutIndex = nil, nil
-	if cap(entries) < capacity {
-		entries = make([]layoutEntry, 0, capacity)
-	}
-	if index == nil {
-		index = make(map[string]int, capacity)
+	// Reuse scratch maps, since this runs for every class and interface. They're taken rather than shared,
+	// since building the layout can build other layouts.
+	members, origins := c.layoutMembers, c.layoutOrigins
+	c.layoutMembers, c.layoutOrigins = nil, nil
+	if members == nil {
+		members, origins = make(ast.SymbolTable, capacity), make(map[string]memberOrigin, capacity)
 	}
 	for key, symbol := range d.declaredMembers {
-		index[key] = len(entries)
 		debug.Assert(key == symbol.Name(), "Member key must be its symbol's name")
-		entries = append(entries, layoutEntry{symbol: symbol, origin: memberOrigin{kind: memberOriginDeclared}})
+		members[key] = symbol
+		origins[key] = memberOrigin{kind: memberOriginDeclared}
 	}
 	// Same as addInheritedMembers.
 	for k, properties := range baseProperties {
@@ -19792,53 +19774,31 @@ func (c *Checker) buildMemberLayout(source *Type, bases []*Type, baseMembers []*
 			if isStaticPrivateIdentifierProperty(symbol) {
 				continue
 			}
-			entry := layoutEntry{symbol: symbol, origin: memberOrigin{kind: kind, base: int32(k), slot: int32(i)}}
-			if j, ok := index[symbol.Name()]; !ok {
-				index[symbol.Name()] = len(entries)
-				entries = append(entries, entry)
-			} else if entries[j].symbol.Flags()&ast.SymbolFlagsValue == 0 {
-				entries[j] = entry
+			if existing, ok := members[symbol.Name()]; !ok || existing.Flags()&ast.SymbolFlagsValue == 0 {
+				members[symbol.Name()] = symbol
+				origins[symbol.Name()] = memberOrigin{kind: kind, base: int32(k), slot: int32(i)}
 			}
 		}
 	}
-	container := source.symbol
-	isClassOrInterface := container != nil && container.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0
-	propertyCount := 0
-	for i := range entries {
-		e := &entries[i]
-		switch {
-		case !c.isNamedMember(e.symbol, e.symbol.Name()):
-			e.rank = memberRankUnnamed
-			continue
-		case isClassOrInterface && c.isDeclarationContainedBy(e.symbol, container):
-			e.rank = memberRankDeclared
-		default:
-			e.rank = memberRankInherited
+	symbols := c.getNamedMembers(members, source.symbol)
+	propertyCount := len(symbols)
+	for name, symbol := range members {
+		if !c.isNamedMember(symbol, name) {
+			symbols = append(symbols, symbol)
 		}
-		propertyCount++
 	}
-	slices.SortFunc(entries, func(a, b layoutEntry) int {
-		if a.rank != b.rank {
-			return int(a.rank) - int(b.rank)
-		}
-		if a.rank == memberRankUnnamed {
-			return 0
-		}
-		return c.compareSymbols(a.symbol, b.symbol)
-	})
 	layout := &memberLayout{
-		symbols:       make([]*ast.Symbol, len(entries)),
-		origins:       make([]memberOrigin, len(entries)),
+		symbols:       symbols,
+		origins:       make([]memberOrigin, len(symbols)),
 		propertyCount: propertyCount,
 		bases:         layoutBases,
 	}
-	for i, e := range entries {
-		layout.symbols[i] = e.symbol
-		layout.origins[i] = e.origin
+	for i, symbol := range symbols {
+		layout.origins[i] = origins[symbol.Name()]
 	}
-	clear(entries)
-	clear(index)
-	c.layoutEntries, c.layoutIndex = entries, index
+	clear(members)
+	clear(origins)
+	c.layoutMembers, c.layoutOrigins = members, origins
 	layout.buildIndex()
 	return layout
 }
