@@ -228,10 +228,14 @@ func (vfs *osFS) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Tim
 	return os.Chtimes(path.AsString(), aTime, mTime)
 }
 
-func GetGlobalTypingsCacheLocation() string {
+func GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPath {
 	cacheDir, err := os.UserCacheDir()
 	if err != nil {
-		cacheDir = os.TempDir()
+		return ""
+	}
+	cachePath, ok := tspath.TryRootedPathFromAbsolute(cacheDir)
+	if !ok {
+		return ""
 	}
 
 	var subdir string
@@ -240,5 +244,5 @@ func GetGlobalTypingsCacheLocation() string {
 	} else {
 		subdir = "typescript"
 	}
-	return tspath.CombinePaths(cacheDir, subdir, core.VersionMajorMinor())
+	return tspath.RootedDirectoryPathFromPath(cachePath).ResolveDirectory(subdir).ResolveDirectory(core.VersionMajorMinor())
 }

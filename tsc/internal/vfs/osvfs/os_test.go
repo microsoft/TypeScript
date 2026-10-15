@@ -8,12 +8,55 @@ import (
 	"testing"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 	"gotest.tools/v3/assert"
 )
+
+func TestGetGlobalTypingsCacheLocation(t *testing.T) {
+	t.Run("user cache", func(t *testing.T) {
+		cacheRoot := t.TempDir()
+		t.Setenv("HOME", cacheRoot)
+		t.Setenv("home", cacheRoot)
+		t.Setenv("LocalAppData", cacheRoot)
+		t.Setenv("XDG_CACHE_HOME", cacheRoot)
+		cacheDir, err := os.UserCacheDir()
+		assert.NilError(t, err)
+
+		subdir := "typescript"
+		if runtime.GOOS == "windows" {
+			subdir = "Microsoft/TypeScript"
+		}
+		assert.Equal(t, osvfs.GetGlobalTypingsCacheLocation(), tspath.RootedDirectoryPathFromAbsolute(tspath.CombinePaths(cacheDir, subdir, core.VersionMajorMinor())))
+	})
+
+	t.Run("missing user cache", func(t *testing.T) {
+		for _, name := range []string{"HOME", "home", "LocalAppData", "XDG_CACHE_HOME"} {
+			t.Setenv(name, "")
+		}
+		assert.Equal(t, osvfs.GetGlobalTypingsCacheLocation(), tspath.RootedDirectoryPath(""))
+	})
+
+	t.Run("relative XDG cache", func(t *testing.T) {
+		switch runtime.GOOS {
+		case "windows", "darwin", "ios", "plan9":
+			t.Skip("XDG_CACHE_HOME is not used on this platform")
+		}
+		t.Setenv("XDG_CACHE_HOME", "relative")
+		assert.Equal(t, osvfs.GetGlobalTypingsCacheLocation(), tspath.RootedDirectoryPath(""))
+	})
+
+	t.Run("relative user cache", func(t *testing.T) {
+		t.Setenv("XDG_CACHE_HOME", "")
+		for _, name := range []string{"HOME", "home", "LocalAppData"} {
+			t.Setenv(name, "relative-home")
+		}
+		assert.Equal(t, osvfs.GetGlobalTypingsCacheLocation(), tspath.RootedDirectoryPath(""))
+	})
+}
 
 func TestOS(t *testing.T) {
 	t.Parallel()
