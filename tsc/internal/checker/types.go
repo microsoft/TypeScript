@@ -1172,8 +1172,9 @@ func (t *StructuredType) Properties() []*ast.Symbol {
 	return t.properties
 }
 
-// Like Properties, but returns symbols with only the right names and flags, without resolving lazy members.
-func (t *StructuredType) propertyShapes() []*ast.Symbol {
+// Like Properties, but without resolving lazy members, so the properties may be the symbols they would be
+// instantiated from. These have the same names and flags as the actual properties, but not the same types.
+func (t *StructuredType) uninstantiatedProperties() []*ast.Symbol {
 	if t.properties == nil && t.lazy != nil {
 		return t.lazy.layout.properties()
 	}

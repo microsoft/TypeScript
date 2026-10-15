@@ -679,7 +679,7 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 func (c *Checker) isWeakType(t *Type) bool {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
-		properties := resolved.propertyShapes()
+		properties := resolved.uninstantiatedProperties()
 		return len(resolved.getSignatures()) == 0 && len(resolved.getIndexInfos()) == 0 && len(properties) > 0 && core.Every(properties, func(p *ast.Symbol) bool {
 			return p.Flags()&ast.SymbolFlagsOptional != 0
 		})
@@ -979,7 +979,7 @@ func (c *Checker) getUnmatchedPropertiesWorker(source *Type, target *Type, requi
 	// Names and flags of properties are known without resolving them, so only resolve the ones we report or compare.
 	// Reduce the target once, since getting its apparent type can allocate.
 	target = c.getReducedApparentType(target)
-	for i, targetProp := range c.getPropertyShapesOfType(target) {
+	for i, targetProp := range c.getUninstantiatedPropertiesOfType(target) {
 		// TODO: remove this when we support static private identifier fields and find other solutions to get privateNamesAndStaticFields test to pass
 		if isStaticPrivateIdentifierProperty(targetProp) {
 			continue

@@ -19291,11 +19291,13 @@ func (c *Checker) getPropertiesOfType(t *Type) []*ast.Symbol {
 	return c.getPropertiesOfObjectType(t)
 }
 
-// Like getPropertiesOfType, but returns symbols with only the right names and flags, without resolving lazy members.
-func (c *Checker) getPropertyShapesOfType(t *Type) []*ast.Symbol {
+// Like getPropertiesOfType, but without resolving lazy members, so the properties of an instantiated class or
+// interface may be the symbols they would be instantiated from. These have the same names and flags as the
+// actual properties, but not the same types, so only use this for names and flags.
+func (c *Checker) getUninstantiatedPropertiesOfType(t *Type) []*ast.Symbol {
 	t = c.getReducedApparentType(t)
 	if t.flags&TypeFlagsObject != 0 {
-		return c.resolveStructuredTypeMembers(t).propertyShapes()
+		return c.resolveStructuredTypeMembers(t).uninstantiatedProperties()
 	}
 	return c.getPropertiesOfType(t)
 }
@@ -20067,7 +20069,7 @@ func (c *Checker) getSingleCallOrConstructSignature(t *Type) *Signature {
 func (c *Checker) getSingleSignature(t *Type, kind SignatureKind, allowMembers bool) *Signature {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
-		if allowMembers || len(resolved.propertyShapes()) == 0 && len(resolved.getIndexInfos()) == 0 {
+		if allowMembers || len(resolved.uninstantiatedProperties()) == 0 && len(resolved.getIndexInfos()) == 0 {
 			if kind == SignatureKindCall && len(resolved.CallSignatures()) == 1 && len(resolved.ConstructSignatures()) == 0 {
 				return resolved.CallSignatures()[0]
 			}
@@ -22592,7 +22594,7 @@ func (c *Checker) somePropertyReducesToNever(t *Type) bool {
 	counts := c.getTemporaryPropertyCounts()
 	defer c.releaseTemporaryPropertyCounts(counts)
 	for _, t := range t.Types() {
-		for _, prop := range c.getPropertyShapesOfType(t) {
+		for _, prop := range c.getUninstantiatedPropertiesOfType(t) {
 			counts.Set(prop.Name(), counts.GetOrZero(prop.Name())+1)
 		}
 	}
@@ -27350,7 +27352,7 @@ func (c *Checker) IsEmptyAnonymousObjectType(t *Type) bool {
 }
 
 func (c *Checker) isEmptyResolvedType(t *StructuredType) bool {
-	return t.AsType() != c.anyFunctionType && len(t.propertyShapes()) == 0 && len(t.getSignatures()) == 0 && len(t.getIndexInfos()) == 0
+	return t.AsType() != c.anyFunctionType && len(t.uninstantiatedProperties()) == 0 && len(t.getSignatures()) == 0 && len(t.getIndexInfos()) == 0
 }
 
 func (c *Checker) isEmptyObjectType(t *Type) bool {
@@ -28238,7 +28240,7 @@ func (c *Checker) getPropertyNameFromIndex(indexType *Type, accessNode *ast.Node
 }
 
 func (c *Checker) isStringIndexSignatureOnlyTypeWorker(t *Type) bool {
-	return t.flags&TypeFlagsObject != 0 && !c.isGenericMappedType(t) && len(c.getPropertyShapesOfType(t)) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
+	return t.flags&TypeFlagsObject != 0 && !c.isGenericMappedType(t) && len(c.getUninstantiatedPropertiesOfType(t)) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
 		t.flags&TypeFlagsUnionOrIntersection != 0 && core.Every(t.Types(), c.isStringIndexSignatureOnlyType)
 }
 
