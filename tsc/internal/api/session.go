@@ -3982,14 +3982,13 @@ func (s *Session) handleSymbolToString(ctx context.Context, params *SymbolToStri
 		}
 	}
 
+	// Like Strada, an omitted meaning is passed through as SymbolFlagsNone, while
+	// omitted flags default to AllowAnyNodeKind; an explicit None is preserved.
 	meaning := ast.SymbolFlags(params.Meaning)
-	if params.Meaning == 0 {
-		meaning = ast.SymbolFlagsAll
-	}
 
-	flags := checker.SymbolFormatFlags(params.Flags)
-	if params.Flags == 0 {
-		flags = checker.SymbolFormatFlagsAllowAnyNodeKind
+	flags := checker.SymbolFormatFlagsAllowAnyNodeKind
+	if params.Flags != nil {
+		flags = checker.SymbolFormatFlags(*params.Flags)
 	}
 
 	return setup.checker.SymbolToStringEx(symbol, enclosingDeclaration, meaning, flags), nil

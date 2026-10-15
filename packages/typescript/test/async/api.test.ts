@@ -8156,6 +8156,73 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.strictEqual(text, "greet");
     });
 
+    test("symbolToString preserves an explicit SymbolFormatFlags.None", async () => {
+        const src = `export const obj = { "a-b": 1 };\nexport namespace NS { export const other = 0; }`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const { checker } = project;
+        const property = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf(`"a-b"`));
+        const other = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf("other"));
+        assert.ok(property && other);
+        const enclosingDeclaration = await other.valueDeclaration!.resolve(project);
+        assert.ok(enclosingDeclaration);
+
+        // Omitted flags default to AllowAnyNodeKind, which may produce an element access.
+        assert.strictEqual(await checker.symbolToString(property, enclosingDeclaration, SymbolFlags.All), `obj["a-b"]`);
+        // An explicit None must not be replaced by the default, so an entity name is produced.
+        assert.strictEqual(await checker.symbolToString(property, enclosingDeclaration, SymbolFlags.All, SymbolFormatFlags.None), `obj."a-b"`);
+    });
+
+    test("symbolToString treats an omitted meaning as SymbolFlags.None", async () => {
+        const src = `export namespace NS { export function greet(): void {} export const alias = greet; }`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const { checker } = project;
+        const greet = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf("greet"));
+        const alias = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf("alias"));
+        assert.ok(greet && alias);
+        const enclosingDeclaration = await alias.valueDeclaration!.resolve(project);
+        assert.ok(enclosingDeclaration);
+
+        assert.strictEqual(await checker.symbolToString(greet, enclosingDeclaration), "greet");
+        assert.strictEqual(await checker.symbolToString(greet, enclosingDeclaration, SymbolFlags.None), "greet");
+        assert.strictEqual(await checker.symbolToString(greet, enclosingDeclaration, SymbolFlags.All), "NS.greet");
+    });
+
+    test("UniqueESSymbolType exposes its escaped name", async () => {
+        const src = `export const key: unique symbol = Symbol("key");\nexport let plain = Symbol("plain");`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true, lib: ["esnext"] } }),
+            "/src/main.ts": src,
+        });
+
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const key = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf("key"));
+        const plain = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf("plain"));
+        assert.ok(key && plain);
+
+        const keyType = await checker.getTypeOfSymbol(key);
+        assert.ok(keyType.isUniqueESSymbolType());
+        const escapedName: __String = keyType.escapedName;
+        assert.match(escapedName, /^__@key@\d+$/);
+        assert.strictEqual(await checker.typeToString(keyType), "unique symbol");
+
+        const plainType = await checker.getTypeOfSymbol(plain);
+        assert.ok(!plainType.isUniqueESSymbolType());
+        assert.strictEqual(plainType.flags & TypeFlags.UniqueESSymbol, 0);
+    });
+
     test("printNode with terminateUnterminatedLiterals option", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),

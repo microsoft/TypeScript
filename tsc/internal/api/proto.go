@@ -1790,7 +1790,7 @@ type SymbolToStringParams struct {
 	Symbol   SymbolReference `json:"symbol"`
 	Location NodeHandle      `json:"location,omitempty"`
 	Meaning  uint32          `json:"meaning,omitempty"`
-	Flags    int32           `json:"flags,omitempty"`
+	Flags    *int32          `json:"flags,omitempty"`
 }
 
 // SignatureToSignatureDeclarationParams are the parameters for the signatureToSignatureDeclaration method.

@@ -3372,7 +3372,7 @@ class TypeObject implements Type {
     readonly symbol!: CompactSymbolReference;
     readonly value!: string | number | boolean | bigint;
     readonly intrinsicName!: string;
-    readonly escapedName!: string;
+    readonly escapedName!: __String;
     readonly isThisType!: boolean;
     readonly freshType!: number;
     readonly regularType!: number;
@@ -3455,7 +3455,7 @@ class TypeObject implements Type {
             }
         }
         if (data.intrinsicName !== undefined) this.intrinsicName = data.intrinsicName;
-        if (data.escapedName !== undefined) this.escapedName = data.escapedName;
+        if (data.escapedName !== undefined) this.escapedName = data.escapedName as __String;
         if (data.isThisType !== undefined) this.isThisType = data.isThisType;
         if (data.freshType !== undefined) this.freshType = data.freshType;
         if (data.regularType !== undefined) this.regularType = data.regularType;

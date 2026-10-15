@@ -21,7 +21,10 @@ import type {
     NamedTupleMember,
     ParameterDeclaration,
 } from "../../ast/ast.ts";
-import type { RootedFilePath } from "../../ast/index.ts";
+import type {
+    __String,
+    RootedFilePath,
+} from "../../ast/index.ts";
 import type {
     Diagnostic,
     RequestFileSystem,
@@ -470,7 +473,7 @@ export interface IntrinsicType extends Type {
 /** Unique symbol types — `unique symbol` (TypeFlags.UniqueESSymbol) */
 export interface UniqueESSymbolType extends Type {
     /** The escaped name of the unique symbol, e.g. `"__@startWork@7"` */
-    readonly escapedName: string;
+    readonly escapedName: __String;
 }
 
 /** Base for all type predicates */
