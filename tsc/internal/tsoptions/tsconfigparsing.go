@@ -622,9 +622,31 @@ func ParseConfigFileTextToJson(fileName tspath.RootedFilePath, path tspath.PathK
 	return config, errors
 }
 
+type ParseConfigHost interface {
+	FS() vfs.FS
+	IsContentMapperPackageAllowed(packageDirectory tspath.RootedDirectoryPath) bool
+}
+
+type defaultParseConfigHost struct {
+	fs vfs.FS
+}
+
+// NewDefaultParseConfigHost leaves external code authorization to the runExternalCode option.
+func NewDefaultParseConfigHost(fs vfs.FS) ParseConfigHost {
+	return &defaultParseConfigHost{fs: fs}
+}
+
+func (h *defaultParseConfigHost) FS() vfs.FS {
+	return h.fs
+}
+
+func (h *defaultParseConfigHost) IsContentMapperPackageAllowed(packageDirectory tspath.RootedDirectoryPath) bool {
+	return true
+}
+
 func ParseJsonSourceFileConfigFileContent(
 	sourceFile *TsConfigSourceFile,
-	fs vfs.FS,
+	host ParseConfigHost,
 	basePath tspath.RootedDirectoryPath,
 	existingOptions *core.CompilerOptions,
 	existingOptionsRaw *collections.OrderedMap[string, any],
@@ -632,7 +654,7 @@ func ParseJsonSourceFileConfigFileContent(
 	extendedConfigCache ExtendedConfigCache,
 ) *ParsedCommandLine {
 	// tracing?.push(tracing.Phase.Parse, "parseJsonSourceFileConfigFileContent", { path: sourceFile.fileName });
-	result := parseJsonConfigFileContentWorker(nil /*json*/, sourceFile, fs, basePath, existingOptions, existingOptionsRaw, sourceFile.SourceFile.FileName(), resolutionStack, extendedConfigCache)
+	result := parseJsonConfigFileContentWorker(nil /*json*/, sourceFile, host, basePath, existingOptions, existingOptionsRaw, sourceFile.SourceFile.FileName(), resolutionStack, extendedConfigCache)
 	// tracing?.pop();
 	return result
 }
@@ -765,15 +787,15 @@ func convertPropertyValueToJson(sourceFile *ast.SourceFile, valueExpression *ast
 
 // ParseJsonConfigFileContent parses the contents of a config file (tsconfig.json).
 // jsonNode: The contents of the config file to parse
-// fs: File system used to resolve and enumerate config inputs.
+// host: File system and content mapper authorization used to parse config inputs.
 // basePath: A root directory to resolve relative path entries in the config file to. e.g. outDir
-func ParseJsonConfigFileContent(json any, fs vfs.FS, basePath tspath.RootedDirectoryPath, existingOptions *core.CompilerOptions, configFileName tspath.RootedFilePath, resolutionStack []tspath.PathKey, extendedConfigCache ExtendedConfigCache) *ParsedCommandLine {
+func ParseJsonConfigFileContent(json any, host ParseConfigHost, basePath tspath.RootedDirectoryPath, existingOptions *core.CompilerOptions, configFileName tspath.RootedFilePath, resolutionStack []tspath.PathKey, extendedConfigCache ExtendedConfigCache) *ParsedCommandLine {
 	normalized := normalizeJsonValue(json)
 	jsonObject, ok := normalized.(*collections.OrderedMap[string, any])
 	if !ok {
 		jsonObject = &collections.OrderedMap[string, any]{}
 	}
-	result := parseJsonConfigFileContentWorker(jsonObject, nil /*sourceFile*/, fs, basePath, existingOptions, nil /*existingOptionsRaw*/, configFileName, resolutionStack, extendedConfigCache)
+	result := parseJsonConfigFileContentWorker(jsonObject, nil /*sourceFile*/, host, basePath, existingOptions, nil /*existingOptionsRaw*/, configFileName, resolutionStack, extendedConfigCache)
 	return result
 }
 
@@ -1120,7 +1142,7 @@ func isStringValue(value any) bool {
 func parseJsonConfigFileContentWorker(
 	json *collections.OrderedMap[string, any],
 	sourceFile *TsConfigSourceFile,
-	fs vfs.FS,
+	host ParseConfigHost,
 	basePath tspath.RootedDirectoryPath,
 	existingOptions *core.CompilerOptions,
 	existingOptionsRaw *collections.OrderedMap[string, any],
@@ -1128,6 +1150,7 @@ func parseJsonConfigFileContentWorker(
 	resolutionStack []tspath.PathKey,
 	extendedConfigCache ExtendedConfigCache,
 ) *ParsedCommandLine {
+	fs := host.FS()
 	debug.Assert((json == nil && sourceFile != nil) || (json != nil && sourceFile == nil))
 
 	baseDirectory := basePath
@@ -1362,7 +1385,7 @@ func parseJsonConfigFileContentWorker(
 		}
 		resolvedContentMappers := make([]*contentmapper.Mapper, 0, len(contentMappers))
 		for j, mapper := range contentMappers {
-			manifest, packageDirectory, diagnostic := resolveContentMapperManifest(fs, containingFile, mapper.Package)
+			manifest, packageDirectory, diagnostic := resolveContentMapperManifest(host, containingFile, mapper.Package)
 			mapper.PackageDirectory = packageDirectory
 			if diagnostic != nil {
 				errors = append(errors, setContentMapperDiagnosticLocation(diagnostic, contentMapperSourceFile, getContentMapperSyntax(contentMapperSourceFile, contentMapperIndices[j], "package")))
@@ -1956,10 +1979,10 @@ func GetParsedCommandLineOfConfigFile(
 	configFileName tspath.RootedFilePath,
 	options *core.CompilerOptions,
 	optionsRaw *collections.OrderedMap[string, any],
-	fs vfs.FS,
+	host ParseConfigHost,
 	extendedConfigCache ExtendedConfigCache,
 ) (*ParsedCommandLine, []*ast.Diagnostic) {
-	return GetParsedCommandLineOfConfigFilePath(configFileName, fs.CaseSensitivity().PathKey(configFileName.AsPath()), options, optionsRaw, fs, extendedConfigCache)
+	return GetParsedCommandLineOfConfigFilePath(configFileName, host.FS().CaseSensitivity().PathKey(configFileName.AsPath()), options, optionsRaw, host, extendedConfigCache)
 }
 
 func GetParsedCommandLineOfConfigFilePath(
@@ -1967,11 +1990,11 @@ func GetParsedCommandLineOfConfigFilePath(
 	path tspath.PathKey,
 	options *core.CompilerOptions,
 	optionsRaw *collections.OrderedMap[string, any],
-	fs vfs.FS,
+	host ParseConfigHost,
 	extendedConfigCache ExtendedConfigCache,
 ) (*ParsedCommandLine, []*ast.Diagnostic) {
 	errors := []*ast.Diagnostic{}
-	configFileText, errors := tryReadFile(configFileName, fs.ReadFile, errors)
+	configFileText, errors := tryReadFile(configFileName, host.FS().ReadFile, errors)
 	if len(errors) > 0 {
 		// these are unrecoverable errors--exit to report them as diagnostics
 		return nil, errors
@@ -1982,7 +2005,7 @@ func GetParsedCommandLineOfConfigFilePath(
 	// tsConfigSourceFile.originalFileName = tsConfigSourceFile.FileName()
 	return ParseJsonSourceFileConfigFileContent(
 		tsConfigSourceFile,
-		fs,
+		host,
 		configFileName.Directory(),
 		options,
 		optionsRaw,

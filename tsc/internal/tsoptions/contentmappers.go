@@ -32,11 +32,8 @@ func (h *contentMapperResolutionHost) GetCurrentDirectory() tspath.RootedDirecto
 	return h.currentDirectory
 }
 
-type contentMapperPackagePolicy interface {
-	IsContentMapperPackageAllowed(packageDirectory tspath.RootedDirectoryPath) bool
-}
-
-func resolveContentMapperManifest(fs vfs.FS, containingFile tspath.RootedFilePath, packageName string) (contentmapper.Manifest, tspath.RootedDirectoryPath, *ast.Diagnostic) {
+func resolveContentMapperManifest(host ParseConfigHost, containingFile tspath.RootedFilePath, packageName string) (contentmapper.Manifest, tspath.RootedDirectoryPath, *ast.Diagnostic) {
+	fs := host.FS()
 	resolver := module.NewResolver(module.ResolverOptions{
 		Host:            &contentMapperResolutionHost{fs: fs, currentDirectory: containingFile.Directory()},
 		CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindBundler},
@@ -50,7 +47,7 @@ func resolveContentMapperManifest(fs vfs.FS, containingFile tspath.RootedFilePat
 		logicalPackageDirectory = resolved.ResolvedFileName
 	}
 	logicalPackageDirectoryPath := tspath.RootedDirectoryPathFromPath(tspath.RootedPath(logicalPackageDirectory))
-	if policy, ok := fs.(contentMapperPackagePolicy); ok && !policy.IsContentMapperPackageAllowed(logicalPackageDirectoryPath) {
+	if !host.IsContentMapperPackageAllowed(logicalPackageDirectoryPath) {
 		return contentmapper.Manifest{}, "", ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded, packageName)
 	}
 	packageDirectory := tspath.RootedDirectoryPathFromPath(tspath.RootedPath(resolved.ResolvedFileName))
