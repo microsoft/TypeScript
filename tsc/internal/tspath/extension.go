@@ -57,7 +57,7 @@ func RemoveAnyFileExtension(path string) string {
 	if withoutExtension := RemoveFileExtension(path); withoutExtension != path {
 		return withoutExtension
 	}
-	if extension := GetAnyExtensionFromPath(path, nil, false); extension != "" {
+	if extension := GetAnyExtensionFromPath(path, nil, CaseSensitive); extension != "" {
 		return RemoveExtension(path, extension)
 	}
 	return path
@@ -119,7 +119,11 @@ func ExtensionIsOneOf(ext string, extensions []string) bool {
 }
 
 func GetDeclarationFileExtension(fileName string) string {
-	base := GetBaseFileName(fileName)
+	return getDeclarationFileExtensionFromNormalized(NormalizeSlashes(fileName))
+}
+
+func getDeclarationFileExtensionFromNormalized(fileName string) string {
+	base := getBaseFileNameFromNormalized(fileName)
 	for _, ext := range SupportedDeclarationExtensions {
 		if strings.HasSuffix(base, ext) {
 			return ext
@@ -143,7 +147,7 @@ func GetDeclarationEmitExtensionForPath(path string) string {
 	case FileExtensionIsOneOf(path, []string{ExtensionTs, ExtensionTsx, ExtensionJs, ExtensionJsx}):
 		return ExtensionDts
 	default:
-		ext := GetAnyExtensionFromPath(path, nil, false)
+		ext := GetAnyExtensionFromPath(path, nil, CaseSensitive)
 		if ext != "" {
 			return ".d" + ext + ".ts"
 		}
@@ -156,8 +160,8 @@ func GetDeclarationEmitExtensionForPath(path string) string {
 // ChangeAnyExtension("/path/to/file.ext", ".js", ".ext") === "/path/to/file.js"
 // ChangeAnyExtension("/path/to/file.ext", ".js", ".ts") === "/path/to/file.ext"
 // ChangeAnyExtension("/path/to/file.ext", ".js", [".ext", ".ts"]) === "/path/to/file.js"
-func ChangeAnyExtension(path string, ext string, extensions []string, ignoreCase bool) string {
-	pathext := GetAnyExtensionFromPath(path, extensions, ignoreCase)
+func ChangeAnyExtension(path string, ext string, extensions []string, caseSensitivity CaseSensitivity) string {
+	pathext := GetAnyExtensionFromPath(path, extensions, caseSensitivity)
 	if pathext != "" {
 		result := path[:len(path)-len(pathext)]
 		if ext == "" {
@@ -172,7 +176,7 @@ func ChangeAnyExtension(path string, ext string, extensions []string, ignoreCase
 }
 
 func ChangeExtension(path string, newExtension string) string {
-	return ChangeAnyExtension(path, newExtension, extensionsToRemove, false /*ignoreCase*/)
+	return ChangeAnyExtension(path, newExtension, extensionsToRemove, CaseSensitive)
 }
 
 // Like `changeAnyExtension`, but declaration file extensions are recognized
@@ -184,6 +188,9 @@ func ChangeFullExtension(path string, newExtension string) string {
 	declarationExtension := GetDeclarationFileExtension(path)
 	if declarationExtension != "" {
 		ext := newExtension
+		if ext == "" {
+			return path[:len(path)-len(declarationExtension)]
+		}
 		if !strings.HasPrefix(ext, ".") {
 			ext = "." + ext
 		}

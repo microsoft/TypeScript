@@ -463,7 +463,7 @@ func TryGetAutoImportableReferenceFromTypeNode(importTypeNode *ast.TypeNode, idT
 // If a type checker and multiple files are available, consider using `forEachNameOfDefaultExport`
 // instead, which searches for names of re-exported defaults/namespaces in target files.
 func getNameForExportedSymbol(symbol *ast.Symbol, preferCapitalized bool) string {
-	if symbol.Name == ast.InternalSymbolNameExportEquals || symbol.Name == ast.InternalSymbolNameDefault {
+	if symbol.Name() == ast.InternalSymbolNameExportEquals || symbol.Name() == ast.InternalSymbolNameDefault {
 		// Names for default exports:
 		// - export default foo => foo
 		// - export { foo as default } => foo
@@ -472,10 +472,10 @@ func getNameForExportedSymbol(symbol *ast.Symbol, preferCapitalized bool) string
 		if name != "" {
 			return name
 		}
-		debug.Assert(symbol.Parent != nil, "Expected exported symbol to have module symbol as parent")
-		return lsutil.ModuleSymbolToValidIdentifier(symbol.Parent, preferCapitalized)
+		debug.Assert(symbol.Parent() != nil, "Expected exported symbol to have module symbol as parent")
+		return lsutil.ModuleSymbolToValidIdentifier(symbol.Parent(), preferCapitalized)
 	}
-	return symbol.Name
+	return symbol.Name()
 }
 
 func replaceFirstIdentifierOfEntityName(factory *ast.NodeFactory, name *ast.EntityName, newIdentifier *ast.IdentifierNode) *ast.EntityName {

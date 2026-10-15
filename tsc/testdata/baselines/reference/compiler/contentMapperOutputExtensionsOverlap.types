@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/contentMapperOutputExtensionsOverlap.ts] ////
+
+=== /Widget.z ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export const short = 1;
+>short : 1
+>1 : 1
+
+=== /Widget.y.z ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export const long = 1;
+>long : 1
+>1 : 1
+
+=== /Widget.identity.y.z ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export const identity = 1;
+>identity : 1
+>1 : 1
+
+=== /Widget.unmapped.y.z ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export const unmapped = 1;
+>unmapped : 1
+>1 : 1
+
+=== /main.ts ===
+export { short } from "./Widget.z";
+>short : 1
+
+export { long } from "./Widget.y.z";
+>long : 1
+
+export { identity } from "./Widget.identity.y.z";
+>identity : 1
+
+export { unmapped } from "./Widget.unmapped.y.z";
+>unmapped : 1
+
+export function literal() { return import("./Widget.y.z"); }
+>literal : () => Promise<typeof import("./Widget.y.z")>
+>import("./Widget.y.z") : Promise<typeof import("./Widget.y.z")>
+>"./Widget.y.z" : "./Widget.y.z"
+
+export function dynamic(path: string) { return import(path); }
+>dynamic : (path: string) => Promise<any>
+>path : string
+>import(path) : Promise<any>
+>path : string
+
+export const inferred = import("./Widget.y.z");
+>inferred : Promise<typeof import("./Widget.y.z")>
+>import("./Widget.y.z") : Promise<typeof import("./Widget.y.z")>
+>"./Widget.y.z" : "./Widget.y.z"
+

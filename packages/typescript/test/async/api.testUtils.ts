@@ -1,9 +1,9 @@
 import {
     API,
     type APIOptions,
-} from "@typescript/typescript/unstable/async";
-import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
+} from "@typescript/typescript/async";
 import { fileURLToPath } from "node:url";
+import { createVirtualFileSystem } from "../testUtils.ts";
 
 export const defaultFiles = {
     "/tsconfig.json": "{}",

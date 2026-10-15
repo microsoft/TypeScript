@@ -7,13 +7,18 @@ export interface NestedProps {}
 export interface OtherIndexProps {}
 // @filename: r/node_modules/foo/other.d.ts
 export interface OtherProps {}
+// @filename: r/node_modules/foo/subpkg/package.json
+{ "types": "main.d.ts" }
+// @filename: r/node_modules/foo/subpkg/main.d.ts
+export interface SubpkgProps {}
 // @filename: r/node_modules/foo/index.d.ts
 import { OtherProps } from "./other";
 import { OtherIndexProps } from "./other/index";
+import { SubpkgProps } from "./subpkg/main";
 import { NestedProps } from "nested";
 export interface SomeProps {}
 
-export function foo(): [SomeProps, OtherProps, OtherIndexProps, NestedProps];
+export function foo(): [SomeProps, OtherProps, OtherIndexProps, SubpkgProps, NestedProps];
 // @filename: node_modules/root/index.d.ts
 export interface RootProps {}
 

@@ -1,0 +1,21 @@
+malformedObjectDestructuringAssignmentESDecorators.ts(6,12): error TS1136: Property assignment expected.
+malformedObjectDestructuringAssignmentESDecorators.ts(6,24): error TS1136: Property assignment expected.
+malformedObjectDestructuringAssignmentESDecorators.ts(6,47): error TS1136: Property assignment expected.
+
+
+==== malformedObjectDestructuringAssignmentESDecorators.ts (3 errors) ====
+    declare function dec(...args: any[]): any;
+    
+    @dec
+    class C {
+        static {
+            ({ m() {}, get g() { return 1; }, set s(v) {} } = this);
+               ~
+!!! error TS1136: Property assignment expected.
+                           ~
+!!! error TS1136: Property assignment expected.
+                                                  ~
+!!! error TS1136: Property assignment expected.
+        }
+    }
+    

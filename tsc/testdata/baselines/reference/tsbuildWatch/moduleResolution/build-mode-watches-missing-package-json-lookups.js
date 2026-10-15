@@ -58,7 +58,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -108,7 +108,7 @@ Directory watches::
   /user/username/projects/myproject/packages/pkg1 (recursive)
 packages/pkg1/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /user/username/projects/myproject/packages/pkg1/index.ts
 Signatures::
 
@@ -190,7 +190,7 @@ Directory watches::
   /user/username/projects/myproject/packages/pkg1 (recursive)
 packages/pkg1/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /user/username/projects/myproject/node_modules/pkg2/index.d.ts
 *refresh*    /user/username/projects/myproject/packages/pkg1/index.ts
 Signatures::
@@ -287,6 +287,6 @@ Directory watches::
   /user/username/projects/myproject/packages/pkg1 (recursive)
 packages/pkg1/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /user/username/projects/myproject/packages/pkg1/index.ts
 Signatures::

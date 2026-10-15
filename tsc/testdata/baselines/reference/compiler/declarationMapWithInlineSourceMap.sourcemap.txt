@@ -1,6 +1,6 @@
 ===================================================================
 JsFile: declarationMapWithInlineSourceMap.js
-mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25NYXBXaXRoSW5saW5lU291cmNlTWFwLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiZGVjbGFyYXRpb25NYXBXaXRoSW5saW5lU291cmNlTWFwLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE1BQU0sQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMifQ==
+mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25NYXBXaXRoSW5saW5lU291cmNlTWFwLmpzIiwic291cmNlcyI6WyJkZWNsYXJhdGlvbk1hcFdpdGhJbmxpbmVTb3VyY2VNYXAudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsTUFBTSxDQUFDLE1BQU0sQ0FBQyxHQUFHLENBQUMsQ0FBQyJ9
 sourceRoot: 
 sources: declarationMapWithInlineSourceMap.ts
 ===================================================================
@@ -17,7 +17,7 @@ sourceFile:declarationMapWithInlineSourceMap.ts
 6 >              ^^^
 7 >                 ^
 8 >                  ^
-9 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >export
 3 >       
@@ -35,7 +35,7 @@ sourceFile:declarationMapWithInlineSourceMap.ts
 7 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
 8 >Emitted(1, 20) Source(1, 20) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25NYXBXaXRoSW5saW5lU291cmNlTWFwLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiZGVjbGFyYXRpb25NYXBXaXRoSW5saW5lU291cmNlTWFwLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE1BQU0sQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMifQ=====================================================================
+>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25NYXBXaXRoSW5saW5lU291cmNlTWFwLmpzIiwic291cmNlcyI6WyJkZWNsYXJhdGlvbk1hcFdpdGhJbmxpbmVTb3VyY2VNYXAudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsTUFBTSxDQUFDLE1BQU0sQ0FBQyxHQUFHLENBQUMsQ0FBQyJ9===================================================================
 JsFile: declarationMapWithInlineSourceMap.d.ts
 mapUrl: declarationMapWithInlineSourceMap.d.ts.map
 sourceRoot: 

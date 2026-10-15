@@ -303,7 +303,7 @@ type LetterMap = { A: string, B: number }
 >A : Symbol(A, Decl(correlatedUnions.ts, 88, 18))
 >B : Symbol(B, Decl(correlatedUnions.ts, 88, 29))
 
-type LetterCaller<K extends keyof LetterMap> = { [P in K]: { letter: Record<P, LetterMap[P]>, caller: (x: Record<P, LetterMap[P]>) => void } }[K];
+type LetterCaller<K extends keyof LetterMap> = { [P in K]: { letter: Record<P, LetterMap[P]>, caller: (x: NoInfer<Record<P, LetterMap[P]>>) => void } }[K];
 >LetterCaller : Symbol(LetterCaller, Decl(correlatedUnions.ts, 88, 41))
 >K : Symbol(K, Decl(correlatedUnions.ts, 89, 18))
 >LetterMap : Symbol(LetterMap, Decl(correlatedUnions.ts, 84, 40))
@@ -316,6 +316,7 @@ type LetterCaller<K extends keyof LetterMap> = { [P in K]: { letter: Record<P, L
 >P : Symbol(P, Decl(correlatedUnions.ts, 89, 50))
 >caller : Symbol(caller, Decl(correlatedUnions.ts, 89, 93))
 >x : Symbol(x, Decl(correlatedUnions.ts, 89, 103))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(correlatedUnions.ts, 89, 50))
 >LetterMap : Symbol(LetterMap, Decl(correlatedUnions.ts, 84, 40))
@@ -323,7 +324,7 @@ type LetterCaller<K extends keyof LetterMap> = { [P in K]: { letter: Record<P, L
 >K : Symbol(K, Decl(correlatedUnions.ts, 89, 18))
 
 function call<K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>): void {
->call : Symbol(call, Decl(correlatedUnions.ts, 89, 146))
+>call : Symbol(call, Decl(correlatedUnions.ts, 89, 155))
 >K : Symbol(K, Decl(correlatedUnions.ts, 91, 14))
 >LetterMap : Symbol(LetterMap, Decl(correlatedUnions.ts, 84, 40))
 >letter : Symbol(letter, Decl(correlatedUnions.ts, 91, 42))
@@ -366,7 +367,7 @@ declare const xx: { letter: A, caller: ACaller } | { letter: B, caller: BCaller 
 >BCaller : Symbol(BCaller, Decl(correlatedUnions.ts, 97, 30))
 
 call(xx);
->call : Symbol(call, Decl(correlatedUnions.ts, 89, 146))
+>call : Symbol(call, Decl(correlatedUnions.ts, 89, 155))
 >xx : Symbol(xx, Decl(correlatedUnions.ts, 100, 13))
 
 // --------

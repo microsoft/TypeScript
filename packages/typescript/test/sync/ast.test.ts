@@ -3,19 +3,25 @@ import type {
     BindingElement,
     CallExpression,
     ClassDeclaration,
+    ClassElement,
+    Declaration,
     ExportAssignment,
     ExpressionStatement,
     FunctionDeclaration,
     Identifier,
+    InterfaceDeclaration,
     JSDoc,
     MethodDeclaration,
     Node,
     NodeArray,
     ObjectBindingPattern,
+    ObjectLiteralElement,
+    ObjectLiteralExpression,
     SourceFile,
     StringLiteralLikeNode,
+    TypeElement,
     VariableStatement,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     getCombinedModifierFlags,
     getNameOfDeclaration,
@@ -31,11 +37,11 @@ import {
     NodeFlags,
     SyntaxKind,
     TokenFlags,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     getSynthesizedDeepClone,
     getSynthesizedDeepClones,
-} from "@typescript/typescript/unstable/ast/clone";
+} from "@typescript/typescript/ast/clone";
 import {
     cloneNode,
     createBinaryExpression,
@@ -50,26 +56,28 @@ import {
     createSourceFile,
     createStringLiteral,
     createToken,
-    NodeObject,
-} from "@typescript/typescript/unstable/ast/factory";
+} from "@typescript/typescript/ast/factory";
 import {
     visitEachChild,
     visitNode,
     visitNodes,
-} from "@typescript/typescript/unstable/ast/visitor";
-import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
+} from "@typescript/typescript/ast/visitor";
 import {
     API,
     Checker,
+    isRemoteNode,
     TypeFlags,
-} from "@typescript/typescript/unstable/sync";
+} from "@typescript/typescript/sync";
 import assert from "node:assert";
 import {
     describe,
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
-import { areTestsFiltered } from "../testUtils.ts";
+import {
+    areTestsFiltered,
+    createVirtualFileSystem,
+} from "../testUtils.ts";
 import { runBenchmarks } from "./ast.bench.ts";
 
 const concurrency = areTestsFiltered();
@@ -609,7 +617,7 @@ function spawnAPI(files: Record<string, string> = {
 }
 
 function getRemoteSourceFileAndChecker(api: API, configPath: string, filePath: string) {
-    const snapshot = api.createSnapshot({ openProject: configPath });
+    const snapshot = api.createSnapshot({ openProjects: [configPath] });
     const project = snapshot.getConfiguredProject(configPath)!;
     return [project.program.getSourceFile(filePath)!, project.checker] as const;
 }
@@ -672,6 +680,27 @@ describe("declaration utilities", { concurrency }, () => {
             getCombinedModifierFlags(binding),
             ModifierFlags.Export,
         );
+    });
+
+    test("element categories are named declarations", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `
+class C { public member = 1; }
+interface I { member?: number; }
+const object = { member: 1 };
+`,
+        });
+        const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
+        const classElement: ClassElement = (sf.statements[0] as ClassDeclaration).members[0];
+        const typeElement: TypeElement = (sf.statements[1] as InterfaceDeclaration).members[0];
+        const variable = sf.statements[2] as VariableStatement;
+        const objectLiteral = variable.declarationList.declarations[0].initializer as ObjectLiteralExpression;
+        const objectLiteralElement: ObjectLiteralElement = objectLiteral.properties[0];
+        const declarations: readonly Declaration[] = [classElement, typeElement, objectLiteralElement];
+
+        assert.deepStrictEqual(declarations.map(declaration => getNameOfDeclaration(declaration)?.getText()), ["member", "member", "member"]);
+        assert.strictEqual(getCombinedModifierFlags(classElement), ModifierFlags.Public);
     });
 
     test("getNameOfDeclaration returns declared and assigned names", () => {
@@ -762,13 +791,14 @@ interface I extends Parent<boolean> {}
         }
     });
 
-    test("cloneNode produces a NodeObject from a RemoteNode", () => {
+    test("cloneNode produces a synthesized node from a remote node", () => {
         const api = spawnAPI();
         try {
             const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/foo.ts");
             const clone = cloneNode(sf);
             assert.notStrictEqual(clone, sf);
-            assert.ok(clone instanceof NodeObject);
+            assert.ok(isRemoteNode(sf));
+            assert.ok(!isRemoteNode(clone));
             assert.strictEqual(clone.statements, sf.statements);
             assert.strictEqual(clone.text, sf.text);
             assert.strictEqual(clone.fileName, sf.fileName);
@@ -848,7 +878,7 @@ describe("RemoteNode + visitEachChild", { concurrency }, () => {
         }
     });
 
-    test("visitor can transform remote tree into NodeObject tree", () => {
+    test("visitor can transform a remote tree into a synthesized tree", () => {
         const api = spawnAPI();
         try {
             const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
@@ -927,7 +957,7 @@ describe("RemoteNode + getSynthesizedDeepClone", { concurrency }, () => {
         }
     });
 
-    test("deep clone of remote tree produces independent NodeObject tree", () => {
+    test("deep clone of remote tree produces an independent synthesized tree", () => {
         const api = spawnAPI();
         try {
             const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/foo.ts");
@@ -941,7 +971,7 @@ describe("RemoteNode + getSynthesizedDeepClone", { concurrency }, () => {
 
             // But be entirely separate objects
             clone.forEachChild(function visit(node) {
-                assert.ok(node instanceof NodeObject);
+                assert.ok(!isRemoteNode(node));
                 node.forEachChild(visit);
             });
         }

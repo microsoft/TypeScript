@@ -40,7 +40,7 @@ jobs:
         id: source
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 'lts/*'
 
@@ -60,6 +60,7 @@ jobs:
           npm version "$BUMP" \
             --workspace native-preview \
             --no-git-tag-version \
+            --package-lock-only
 
           packageVersion="$(jq -r '.version' packages/vscode-typescript/package.json)"
           lockVersion="$(jq -r '.packages["packages/vscode-typescript"].version' package-lock.json)"
@@ -76,7 +77,7 @@ jobs:
       - name: Create version bump patch
         run: git diff --binary -- packages/vscode-typescript/package.json package-lock.json > vscode-typescript-bump.patch
 
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: vscode-typescript-bump
           path: vscode-typescript-bump.patch
@@ -101,7 +102,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: vscode-typescript-bump
           path: ${{ runner.temp }}

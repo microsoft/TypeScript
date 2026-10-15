@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/es2026/errorIsError.ts] ////
+
+=== errorIsError.ts ===
+declare const value: unknown;
+>value : unknown
+
+if (Error.isError(value)) {
+>Error.isError(value) : boolean
+>Error.isError : (error: unknown) => error is Error
+>Error : ErrorConstructor
+>isError : (error: unknown) => error is Error
+>value : unknown
+
+    const message: string = value.message;
+>message : string
+>value.message : string
+>value : Error
+>message : string
+}
+

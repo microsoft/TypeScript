@@ -64,9 +64,10 @@ varianceAnnotations.ts(160,68): error TS2345: Argument of type 'ActionObject<{ t
           Types of property '_storedEvent' are incompatible.
             Type '{ type: "PLAY"; value: number; } | { type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
               Property 'value' is missing in type '{ type: "RESET"; }' but required in type '{ type: "PLAY"; value: number; }'.
+varianceAnnotations.ts(170,5): error TS5088: The inferred type of 'OuterC' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 
 
-==== varianceAnnotations.ts (31 errors) ====
+==== varianceAnnotations.ts (32 errors) ====
     type Covariant<out T> = {
         x: T;
     }
@@ -335,6 +336,8 @@ varianceAnnotations.ts(160,68): error TS2345: Argument of type 'ActionObject<{ t
     }
     
     let OuterC = class C<out T> {
+        ~~~~~~
+!!! error TS5088: The inferred type of 'OuterC' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         foo(): C<T> {
             return this;
         }

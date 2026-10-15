@@ -311,8 +311,8 @@ func (c *Checker) ExpandSymbolForHover(symbol *ast.Symbol, meaning ast.SymbolFla
 	}
 	p := createPrinterWithRemoveComments(nodeBuilder.EmitContext())
 	var sourceFile *ast.SourceFile
-	if symbol.ValueDeclaration != nil {
-		sourceFile = ast.GetSourceFileOfNode(symbol.ValueDeclaration)
+	if symbol.ValueDeclaration() != nil {
+		sourceFile = ast.GetSourceFileOfNode(symbol.ValueDeclaration())
 	}
 	var b strings.Builder
 	for i, node := range nodes {

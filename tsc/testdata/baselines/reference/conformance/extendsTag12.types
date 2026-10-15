@@ -1,0 +1,166 @@
+//// [tests/cases/conformance/jsdoc/extendsTag12.ts] ////
+
+=== a.js ===
+/** @template T */
+class A {
+>A : A<T>
+
+    /** @param {T} value */
+    constructor(value) {
+>value : T
+
+        this.value = value;
+>this.value = value : T
+>this.value : any
+>this : this
+>value : any
+>value : T
+    }
+}
+
+/**
+ * @template T
+ * @extends {A<T>}
+ */
+class Sub extends A {
+>Sub : Sub<T>
+>A : A<T>
+
+    /** @returns {typeof Sub} */
+    static extend() {
+>extend : () => typeof Sub
+
+        return this;
+>this : typeof Sub
+    }
+}
+
+/** @template T */
+class Other {
+>Other : Other<T>
+
+    /** @param {T} other */
+    constructor(other) {
+>other : T
+
+        this.other = other;
+>this.other = other : T
+>this.other : any
+>this : this
+>other : any
+>other : T
+    }
+}
+
+/**
+ * @template {new (...args: any[]) => any} C
+ * @param {C} Base
+ */
+function mixin(Base) {
+>mixin : <C extends new (...args: any[]) => any>(Base: C) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & C
+>Base : C
+
+    return class extends Base {
+>class extends Base {        extra = 1;    } : { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & C
+>Base : C
+
+        extra = 1;
+>extra : number
+>1 : 1
+
+    };
+}
+
+const ns = { A };
+>ns : { A: typeof A; }
+>{ A } : { A: typeof A; }
+>A : typeof A
+
+/** @type {boolean} */
+let cond = true;
+>cond : boolean
+>true : true
+
+/** @extends {A<string>} */
+class ViaMixin extends mixin(A) {}
+>ViaMixin : ViaMixin
+>mixin(A) : mixin.(Anonymous class) & A<string>
+>mixin : <C extends new (...args: any[]) => any>(Base: C) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & C
+>A : typeof A
+
+/** @type {string} */
+const viaMixin = new ViaMixin("ok").value;
+>viaMixin : string
+>new ViaMixin("ok").value : string
+>new ViaMixin("ok") : ViaMixin
+>ViaMixin : typeof ViaMixin
+>"ok" : "ok"
+>value : string
+
+/** @type {number} */
+const viaMixinExtra = new ViaMixin("ok").extra;
+>viaMixinExtra : number
+>new ViaMixin("ok").extra : number
+>new ViaMixin("ok") : ViaMixin
+>ViaMixin : typeof ViaMixin
+>"ok" : "ok"
+>extra : number
+
+/** @extends {Other<string>} */
+class MismatchedMixin extends mixin(A) {}
+>MismatchedMixin : MismatchedMixin
+>mixin(A) : mixin.(Anonymous class) & A<string>
+>mixin : <C extends new (...args: any[]) => any>(Base: C) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & C
+>A : typeof A
+
+/** @extends {A<string>} */
+class ViaSubclass extends Sub.extend() {}
+>ViaSubclass : ViaSubclass
+>Sub.extend() : Sub<string>
+>Sub.extend : () => typeof Sub
+>Sub : typeof Sub
+>extend : () => typeof Sub
+
+/** @type {string} */
+const viaSubclass = new ViaSubclass("ok").value;
+>viaSubclass : string
+>new ViaSubclass("ok").value : string
+>new ViaSubclass("ok") : ViaSubclass
+>ViaSubclass : typeof ViaSubclass
+>"ok" : "ok"
+>value : string
+
+/** @extends {A<string>} */
+class ViaElementAccess extends ns["A"] {}
+>ViaElementAccess : ViaElementAccess
+>ns["A"] : A<string>
+>ns : { A: typeof A; }
+>"A" : "A"
+
+/** @type {string} */
+const viaElementAccess = new ViaElementAccess("ok").value;
+>viaElementAccess : string
+>new ViaElementAccess("ok").value : string
+>new ViaElementAccess("ok") : ViaElementAccess
+>ViaElementAccess : typeof ViaElementAccess
+>"ok" : "ok"
+>value : string
+
+/** @extends {A<string>} */
+class ViaConditional extends (cond ? A : A) {}
+>ViaConditional : ViaConditional
+>(cond ? A : A) : A<string>
+>cond ? A : A : typeof A
+>cond : true
+>A : typeof A
+>A : typeof A
+
+/** @type {string} */
+const viaConditional = new ViaConditional("ok").value;
+>viaConditional : string
+>new ViaConditional("ok").value : string
+>new ViaConditional("ok") : ViaConditional
+>ViaConditional : typeof ViaConditional
+>"ok" : "ok"
+>value : string
+

@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/thisPropertyAssignmentUsedBeforeAssignedJs1.ts] ////
+
+=== index.js ===
+export class BaseProduct {
+>BaseProduct : Symbol(BaseProduct, Decl(index.js, 0, 0))
+
+  Price = 0;
+>Price : Symbol(BaseProduct.Price, Decl(index.js, 0, 26))
+}
+
+export class Product extends BaseProduct {
+>Product : Symbol(Product, Decl(index.js, 2, 1))
+>BaseProduct : Symbol(BaseProduct, Decl(index.js, 0, 0))
+
+  Compute() {
+>Compute : Symbol(Product.Compute, Decl(index.js, 4, 42))
+
+    this.Price = Number(this.Price);
+>this.Price : Symbol(Product.Price, Decl(index.js, 5, 13))
+>this : Symbol(Product, Decl(index.js, 2, 1))
+>Price : Symbol(Product.Price, Decl(index.js, 5, 13))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
+>this.Price : Symbol(Product.Price, Decl(index.js, 5, 13))
+>this : Symbol(Product, Decl(index.js, 2, 1))
+>Price : Symbol(Product.Price, Decl(index.js, 5, 13))
+  }
+}
+
+export class Annotated {
+>Annotated : Symbol(Annotated, Decl(index.js, 8, 1))
+
+  Compute() {
+>Compute : Symbol(Annotated.Compute, Decl(index.js, 10, 24))
+
+    /** @type {number} */
+    this.Price = this.Price + 1;
+>this.Price : Symbol(Annotated.Price, Decl(index.js, 11, 13))
+>this : Symbol(Annotated, Decl(index.js, 8, 1))
+>Price : Symbol(Annotated.Price, Decl(index.js, 11, 13))
+>this.Price : Symbol(Annotated.Price, Decl(index.js, 11, 13))
+>this : Symbol(Annotated, Decl(index.js, 8, 1))
+>Price : Symbol(Annotated.Price, Decl(index.js, 11, 13))
+  }
+}
+

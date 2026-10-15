@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/pprof"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
@@ -44,6 +45,7 @@ func runLSP(args []string) int {
 	fs := bundled.WrapFS(osvfs.FS())
 	defaultLibraryPath := bundled.LibPath()
 	typingsLocation := osvfs.GetGlobalTypingsCacheLocation()
+	cwd := tspath.RootedDirectoryPathFromAbsolute(core.Must(os.Getwd()))
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
@@ -52,12 +54,12 @@ func runLSP(args []string) int {
 		In:                 lsp.ToReader(os.Stdin),
 		Out:                lsp.ToWriter(os.Stdout),
 		Err:                os.Stderr,
-		Cwd:                core.Must(os.Getwd()),
+		Cwd:                cwd,
 		FS:                 fs,
 		DefaultLibraryPath: defaultLibraryPath,
-		TypingsLocation:    typingsLocation,
-		NpmInstall: func(cwd string, args []string) ([]byte, error) {
-			cmd := exec.Command("npm", args...)
+		TypingsLocation:    tspath.ToRootedDirectoryPath(typingsLocation, cwd),
+		NpmInstall: func(ctx context.Context, cwd string, args []string) ([]byte, error) {
+			cmd := exec.CommandContext(ctx, "npm", args...)
 			cmd.Dir = cwd
 			return cmd.Output()
 		},

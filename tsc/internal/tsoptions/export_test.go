@@ -3,6 +3,7 @@ package tsoptions
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
@@ -17,7 +18,7 @@ func ParseCommandLineTestWorker(
 	decls []*CommandLineOption,
 	commandLine []string,
 	fs vfs.FS,
-	currentDirectory string,
+	currentDirectory tspath.RootedDirectoryPath,
 ) *TestCommandLineParser {
 	parser := &commandLineParser{
 		fs:                fs,
