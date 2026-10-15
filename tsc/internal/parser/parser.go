@@ -136,10 +136,14 @@ func ParseSourceFile(opts ast.SourceFileParseOptions, sourceText string, scriptK
 	defer putParser(p)
 	p.initializeState(opts, sourceText, scriptKind)
 	p.nextToken()
+	var result *ast.SourceFile
 	if p.scriptKind == core.ScriptKindJSON {
-		return p.parseJSONText()
+		result = p.parseJSONText()
+	} else {
+		result = p.parseSourceFileWorker()
 	}
-	return p.parseSourceFileWorker()
+	p.factory.CompactStore()
+	return result
 }
 
 func (p *Parser) initializeClosures() {

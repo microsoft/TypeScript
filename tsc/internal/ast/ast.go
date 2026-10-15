@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -72,18 +73,34 @@ func NewNodeFactory(hooks NodeFactoryHooks) *NodeFactory {
 	return &NodeFactory{hooks: hooks}
 }
 
-func newNode(kind Kind, n Node, hooks NodeFactoryHooks) Node {
+func newNode(s *nodeStore, kind Kind, layout nodeLayout, row uint32, hooks NodeFactoryHooks) Node {
+	n := s.newNode(kind, layout, row)
 	n.SetLoc(core.UndefinedTextRange())
-	n.SetKind(kind)
 	if hooks.OnCreate != nil {
 		hooks.OnCreate(n)
 	}
 	return n
 }
 
-func (f *NodeFactory) newNode(kind Kind, n Node) Node {
+func (f *NodeFactory) nodeStore() *nodeStore {
+	if f.store == nil {
+		f.store = newNodeStore()
+	}
+	return f.store
+}
+
+// CompactStore packs the nodes created so far into contiguous storage.
+// Existing Nodes remain valid. It must be called before the nodes are
+// shared with other goroutines.
+func (f *NodeFactory) CompactStore() {
+	if f.store != nil {
+		f.store.compact()
+	}
+}
+
+func (f *NodeFactory) newNode(kind Kind, layout nodeLayout, row uint32) Node {
 	f.nodeCount++
-	return newNode(kind, n, f.hooks)
+	return newNode(f.store, kind, layout, row, f.hooks)
 }
 
 func (f *NodeFactory) NodeCount() int {
@@ -179,37 +196,29 @@ func (list *ModifierList) Clone(f *NodeFactory) *ModifierList {
 	return res
 }
 
-// Node is a handle to an AST node. Every node's storage begins with a
-// nodeHeader, and Kind identifies the enclosing storage struct, which
-// generated accessors recover without a separate data pointer.
+// Node is a handle to an AST node: a row in the record table for its
+// layout in the nodeStore that owns it. The handle carries the node's kind,
+// which never changes. The zero Node is the absent node.
 type Node struct {
-	h *nodeHeader
-}
-
-type nodeHeader struct {
+	s      *nodeStore
+	row    uint32
 	kind   Kind
-	flags  NodeFlags
-	loc    core.TextRange
-	id     atomic.Uint64
-	parent Node
+	layout uint16 // a nodeLayout, widened so that Node has no padding
 }
 
-func (h *nodeHeader) asNode() Node { return Node{h} }
+// rec returns the node's record, which begins with its nodeBaseData.
+func (n Node) rec() unsafe.Pointer { return n.s.at(n.layout, n.row) }
 
-// nodeBaseData is the storage shared by every node.
-type nodeBaseData struct {
-	nodeHeader
-}
+func (n Node) hdr() *nodeBaseData { return (*nodeBaseData)(n.rec()) }
 
-func (n Node) IsNil() bool               { return n.h == nil }
-func (n Node) Kind() Kind                { return n.h.kind }
-func (n Node) Flags() NodeFlags          { return n.h.flags }
-func (n Node) Loc() core.TextRange       { return n.h.loc }
-func (n Node) Parent() Node              { return n.h.parent }
-func (n Node) SetKind(kind Kind)         { n.h.kind = kind }
-func (n Node) SetFlags(flags NodeFlags)  { n.h.flags = flags }
-func (n Node) SetLoc(loc core.TextRange) { n.h.loc = loc }
-func (n Node) SetParent(parent Node)     { n.h.parent = parent }
+func (n Node) IsNil() bool               { return n.s == nil }
+func (n Node) Kind() Kind                { return n.kind }
+func (n Node) Flags() NodeFlags          { return n.hdr().flags }
+func (n Node) Loc() core.TextRange       { return n.hdr().loc }
+func (n Node) Parent() Node              { return n.s.deref(n.hdr().parent) }
+func (n Node) SetFlags(flags NodeFlags)  { n.hdr().flags = flags }
+func (n Node) SetLoc(loc core.TextRange) { n.hdr().loc = loc }
+func (n Node) SetParent(parent Node)     { n.hdr().parent = n.s.ref(parent) }
 
 // Shared node accessors dispatch on Kind to the enclosing concrete node.
 
@@ -2415,14 +2424,15 @@ type SourceFile struct {
 }
 
 func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, statements *NodeList, endOfFileToken TokenNode) Node {
-	data := &SourceFile{}
+	store := f.nodeStore()
+	data, i := newRecord[SourceFile](store, layoutSourceFile)
 	data.fileName = opts.FileName
 	data.parseOptions = opts
 	data.text = text
 	data.Statements = statements
 	data.EndOfFileToken = endOfFileToken
-	data.Node = data.asNode()
-	return f.newNode(KindSourceFile, data.Node)
+	data.Node = f.newNode(KindSourceFile, layoutSourceFile, i)
+	return data.Node
 }
 
 func (node *SourceFile) ParseOptions() SourceFileParseOptions {

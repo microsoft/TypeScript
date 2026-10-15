@@ -19,59 +19,775 @@ var (
 // ──────────────────────────────────────────────────────────────────────
 
 type NodeFactory struct {
-	hooks                              NodeFactoryHooks
-	arrayTypeNodeArena                 core.Arena[arrayTypeNodeData]
-	binaryExpressionArena              core.Arena[binaryExpressionData]
-	blockArena                         core.Arena[blockData]
-	callExpressionArena                core.Arena[callExpressionData]
-	conditionalExpressionArena         core.Arena[conditionalExpressionData]
-	constructSignatureDeclarationArena core.Arena[constructSignatureDeclarationData]
-	elementAccessExpressionArena       core.Arena[elementAccessExpressionData]
-	expressionStatementArena           core.Arena[expressionStatementData]
-	expressionWithTypeArgumentsArena   core.Arena[expressionWithTypeArgumentsData]
-	functionDeclarationArena           core.Arena[functionDeclarationData]
-	functionTypeNodeArena              core.Arena[functionTypeNodeData]
-	heritageClauseArena                core.Arena[heritageClauseData]
-	identifierArena                    core.Arena[identifierData]
-	ifStatementArena                   core.Arena[ifStatementData]
-	importSpecifierArena               core.Arena[importSpecifierData]
-	indexedAccessTypeNodeArena         core.Arena[indexedAccessTypeNodeData]
-	interfaceDeclarationArena          core.Arena[interfaceDeclarationData]
-	intersectionTypeNodeArena          core.Arena[intersectionTypeNodeData]
-	jsdocArena                         core.Arena[jsDocData]
-	jsdocDeprecatedTagArena            core.Arena[jsDocDeprecatedTagData]
-	jsdocTextArena                     core.Arena[jsDocTextData]
-	jsdocUnknownTagArena               core.Arena[jsDocUnknownTagData]
-	keywordExpressionArena             core.Arena[keywordExpressionData]
-	keywordTypeNodeArena               core.Arena[keywordTypeNodeData]
-	literalTypeNodeArena               core.Arena[literalTypeNodeData]
-	methodSignatureDeclarationArena    core.Arena[methodSignatureDeclarationData]
-	modifierListArena                  core.Arena[ModifierList]
-	nodeListArena                      core.Arena[NodeList]
-	numericLiteralArena                core.Arena[numericLiteralData]
-	parameterDeclarationArena          core.Arena[parameterDeclarationData]
-	parenthesizedExpressionArena       core.Arena[parenthesizedExpressionData]
-	parenthesizedTypeNodeArena         core.Arena[parenthesizedTypeNodeData]
-	prefixUnaryExpressionArena         core.Arena[prefixUnaryExpressionData]
-	propertyAccessExpressionArena      core.Arena[propertyAccessExpressionData]
-	propertyAssignmentArena            core.Arena[propertyAssignmentData]
-	propertySignatureDeclarationArena  core.Arena[propertySignatureDeclarationData]
-	returnStatementArena               core.Arena[returnStatementData]
-	stringLiteralArena                 core.Arena[stringLiteralData]
-	tokenArena                         core.Arena[tokenData]
-	typeAliasDeclarationArena          core.Arena[typeAliasDeclarationData]
-	typeLiteralNodeArena               core.Arena[typeLiteralNodeData]
-	typeOperatorNodeArena              core.Arena[typeOperatorNodeData]
-	typeParameterDeclarationArena      core.Arena[typeParameterDeclarationData]
-	typeReferenceNodeArena             core.Arena[typeReferenceNodeData]
-	unionTypeNodeArena                 core.Arena[unionTypeNodeData]
-	variableDeclarationArena           core.Arena[variableDeclarationData]
-	variableDeclarationListArena       core.Arena[variableDeclarationListData]
-	variableStatementArena             core.Arena[variableStatementData]
+	hooks             NodeFactoryHooks
+	store             *nodeStore
+	modifierListArena core.Arena[ModifierList]
+	nodeListArena     core.Arena[NodeList]
 
 	nodeCount int
 	textCount int
 }
+
+// ──────────────────────────────────────────────────────────────────────
+// Record layouts
+// ──────────────────────────────────────────────────────────────────────
+
+// nodeLayout identifies the record table holding a node's fields.
+type nodeLayout uint8
+
+const (
+	layoutNone nodeLayout = iota
+	layoutToken
+	layoutIdentifier
+	layoutPrivateIdentifier
+	layoutQualifiedName
+	layoutComputedPropertyName
+	layoutDecorator
+	layoutEmptyStatement
+	layoutIfStatement
+	layoutDoStatement
+	layoutWhileStatement
+	layoutForStatement
+	layoutForInOrOfStatement
+	layoutBreakStatement
+	layoutContinueStatement
+	layoutReturnStatement
+	layoutWithStatement
+	layoutSwitchStatement
+	layoutCaseBlock
+	layoutCaseOrDefaultClause
+	layoutThrowStatement
+	layoutTryStatement
+	layoutCatchClause
+	layoutDebuggerStatement
+	layoutLabeledStatement
+	layoutExpressionStatement
+	layoutBlock
+	layoutVariableStatement
+	layoutVariableDeclaration
+	layoutVariableDeclarationList
+	layoutBindingPattern
+	layoutParameterDeclaration
+	layoutBindingElement
+	layoutMissingDeclaration
+	layoutFunctionDeclaration
+	layoutClassDeclaration
+	layoutClassExpression
+	layoutHeritageClause
+	layoutInterfaceDeclaration
+	layoutTypeAliasDeclaration
+	layoutEnumMember
+	layoutEnumDeclaration
+	layoutModuleBlock
+	layoutNotEmittedStatement
+	layoutNotEmittedTypeElement
+	layoutImportDeclaration
+	layoutExternalModuleReference
+	layoutNamespaceImport
+	layoutNamedImports
+	layoutExportAssignment
+	layoutNamespaceExportDeclaration
+	layoutNamespaceExport
+	layoutNamedExports
+	layoutExportSpecifier
+	layoutCallSignatureDeclaration
+	layoutConstructSignatureDeclaration
+	layoutConstructorDeclaration
+	layoutGetAccessorDeclaration
+	layoutSetAccessorDeclaration
+	layoutIndexSignatureDeclaration
+	layoutMethodSignatureDeclaration
+	layoutMethodDeclaration
+	layoutPropertySignatureDeclaration
+	layoutPropertyDeclaration
+	layoutSemicolonClassElement
+	layoutClassStaticBlockDeclaration
+	layoutOmittedExpression
+	layoutKeywordExpression
+	layoutStringLiteral
+	layoutNumericLiteral
+	layoutBigIntLiteral
+	layoutRegularExpressionLiteral
+	layoutNoSubstitutionTemplateLiteral
+	layoutBinaryExpression
+	layoutPrefixUnaryExpression
+	layoutPostfixUnaryExpression
+	layoutYieldExpression
+	layoutArrowFunction
+	layoutFunctionExpression
+	layoutAsExpression
+	layoutSatisfiesExpression
+	layoutConditionalExpression
+	layoutPropertyAccessExpression
+	layoutElementAccessExpression
+	layoutCallExpression
+	layoutNewExpression
+	layoutMetaProperty
+	layoutNonNullExpression
+	layoutSpreadElement
+	layoutTemplateExpression
+	layoutTemplateSpan
+	layoutTaggedTemplateExpression
+	layoutParenthesizedExpression
+	layoutArrayLiteralExpression
+	layoutObjectLiteralExpression
+	layoutSpreadAssignment
+	layoutPropertyAssignment
+	layoutShorthandPropertyAssignment
+	layoutDeleteExpression
+	layoutTypeOfExpression
+	layoutVoidExpression
+	layoutAwaitExpression
+	layoutTypeAssertion
+	layoutKeywordTypeNode
+	layoutUnionTypeNode
+	layoutIntersectionTypeNode
+	layoutConditionalTypeNode
+	layoutTypeOperatorNode
+	layoutInferTypeNode
+	layoutArrayTypeNode
+	layoutIndexedAccessTypeNode
+	layoutTypeReferenceNode
+	layoutExpressionWithTypeArguments
+	layoutLiteralTypeNode
+	layoutThisTypeNode
+	layoutTypePredicateNode
+	layoutImportAttribute
+	layoutImportAttributes
+	layoutTypeQueryNode
+	layoutMappedTypeNode
+	layoutTypeLiteralNode
+	layoutTupleTypeNode
+	layoutNamedTupleMember
+	layoutOptionalTypeNode
+	layoutRestTypeNode
+	layoutParenthesizedTypeNode
+	layoutFunctionTypeNode
+	layoutConstructorTypeNode
+	layoutTemplateHead
+	layoutTemplateMiddle
+	layoutTemplateTail
+	layoutTemplateLiteralTypeNode
+	layoutTemplateLiteralTypeSpan
+	layoutSyntheticExpression
+	layoutPartiallyEmittedExpression
+	layoutJsxElement
+	layoutJsxAttributes
+	layoutJsxNamespacedName
+	layoutJsxOpeningElement
+	layoutJsxSelfClosingElement
+	layoutJsxFragment
+	layoutJsxOpeningFragment
+	layoutJsxClosingFragment
+	layoutJsxAttribute
+	layoutJsxSpreadAttribute
+	layoutJsxClosingElement
+	layoutJsxExpression
+	layoutJsxText
+	layoutSyntaxList
+	layoutJSDoc
+	layoutJSDocTypeExpression
+	layoutJSDocNonNullableType
+	layoutJSDocNullableType
+	layoutJSDocAllType
+	layoutJSDocVariadicType
+	layoutJSDocOptionalType
+	layoutJSDocTypeTag
+	layoutJSDocUnknownTag
+	layoutJSDocTemplateTag
+	layoutJSDocReturnTag
+	layoutJSDocPublicTag
+	layoutJSDocPrivateTag
+	layoutJSDocProtectedTag
+	layoutJSDocReadonlyTag
+	layoutJSDocOverrideTag
+	layoutJSDocDeprecatedTag
+	layoutJSDocSeeTag
+	layoutJSDocImplementsTag
+	layoutJSDocAugmentsTag
+	layoutJSDocSatisfiesTag
+	layoutJSDocThrowsTag
+	layoutJSDocThisTag
+	layoutJSDocImportTag
+	layoutJSDocCallbackTag
+	layoutJSDocOverloadTag
+	layoutJSDocTypedefTag
+	layoutJSDocSignature
+	layoutJSDocNameReference
+	layoutSourceFile
+	layoutModuleDeclaration
+	layoutImportEqualsDeclaration
+	layoutExportDeclaration
+	layoutImportTypeNode
+	layoutImportClause
+	layoutImportSpecifier
+	layoutJSDocText
+	layoutJSDocLink
+	layoutJSDocLinkPlain
+	layoutJSDocLinkCode
+	layoutTypeParameterDeclaration
+	layoutSyntheticReferenceExpression
+	layoutJSDocTypeLiteral
+	layoutJSDocParameterOrPropertyTag
+	layoutFlowSwitchClauseData
+	layoutFlowReduceLabelData
+	layoutCount
+)
+
+var kindLayout = [kindFlowReduceLabelData + 1]nodeLayout{
+	KindUnknown:                                      layoutToken,
+	KindEndOfFile:                                    layoutToken,
+	KindSingleLineCommentTrivia:                      layoutToken,
+	KindMultiLineCommentTrivia:                       layoutToken,
+	KindNewLineTrivia:                                layoutToken,
+	KindWhitespaceTrivia:                             layoutToken,
+	KindConflictMarkerTrivia:                         layoutToken,
+	KindNonTextFileMarkerTrivia:                      layoutToken,
+	KindJsxTextAllWhiteSpaces:                        layoutToken,
+	KindOpenBraceToken:                               layoutToken,
+	KindCloseBraceToken:                              layoutToken,
+	KindOpenParenToken:                               layoutToken,
+	KindCloseParenToken:                              layoutToken,
+	KindOpenBracketToken:                             layoutToken,
+	KindCloseBracketToken:                            layoutToken,
+	KindDotToken:                                     layoutToken,
+	KindDotDotDotToken:                               layoutToken,
+	KindSemicolonToken:                               layoutToken,
+	KindCommaToken:                                   layoutToken,
+	KindQuestionDotToken:                             layoutToken,
+	KindLessThanToken:                                layoutToken,
+	KindLessThanSlashToken:                           layoutToken,
+	KindGreaterThanToken:                             layoutToken,
+	KindLessThanEqualsToken:                          layoutToken,
+	KindGreaterThanEqualsToken:                       layoutToken,
+	KindEqualsEqualsToken:                            layoutToken,
+	KindExclamationEqualsToken:                       layoutToken,
+	KindEqualsEqualsEqualsToken:                      layoutToken,
+	KindExclamationEqualsEqualsToken:                 layoutToken,
+	KindEqualsGreaterThanToken:                       layoutToken,
+	KindPlusToken:                                    layoutToken,
+	KindMinusToken:                                   layoutToken,
+	KindAsteriskToken:                                layoutToken,
+	KindAsteriskAsteriskToken:                        layoutToken,
+	KindSlashToken:                                   layoutToken,
+	KindPercentToken:                                 layoutToken,
+	KindPlusPlusToken:                                layoutToken,
+	KindMinusMinusToken:                              layoutToken,
+	KindLessThanLessThanToken:                        layoutToken,
+	KindGreaterThanGreaterThanToken:                  layoutToken,
+	KindGreaterThanGreaterThanGreaterThanToken:       layoutToken,
+	KindAmpersandToken:                               layoutToken,
+	KindBarToken:                                     layoutToken,
+	KindCaretToken:                                   layoutToken,
+	KindExclamationToken:                             layoutToken,
+	KindTildeToken:                                   layoutToken,
+	KindAmpersandAmpersandToken:                      layoutToken,
+	KindBarBarToken:                                  layoutToken,
+	KindQuestionToken:                                layoutToken,
+	KindColonToken:                                   layoutToken,
+	KindAtToken:                                      layoutToken,
+	KindQuestionQuestionToken:                        layoutToken,
+	KindBacktickToken:                                layoutToken,
+	KindHashToken:                                    layoutToken,
+	KindEqualsToken:                                  layoutToken,
+	KindPlusEqualsToken:                              layoutToken,
+	KindMinusEqualsToken:                             layoutToken,
+	KindAsteriskEqualsToken:                          layoutToken,
+	KindAsteriskAsteriskEqualsToken:                  layoutToken,
+	KindSlashEqualsToken:                             layoutToken,
+	KindPercentEqualsToken:                           layoutToken,
+	KindLessThanLessThanEqualsToken:                  layoutToken,
+	KindGreaterThanGreaterThanEqualsToken:            layoutToken,
+	KindGreaterThanGreaterThanGreaterThanEqualsToken: layoutToken,
+	KindAmpersandEqualsToken:                         layoutToken,
+	KindBarEqualsToken:                               layoutToken,
+	KindBarBarEqualsToken:                            layoutToken,
+	KindAmpersandAmpersandEqualsToken:                layoutToken,
+	KindQuestionQuestionEqualsToken:                  layoutToken,
+	KindCaretEqualsToken:                             layoutToken,
+	KindJSDocCommentTextToken:                        layoutToken,
+	KindBreakKeyword:                                 layoutToken,
+	KindCaseKeyword:                                  layoutToken,
+	KindCatchKeyword:                                 layoutToken,
+	KindClassKeyword:                                 layoutToken,
+	KindConstKeyword:                                 layoutToken,
+	KindContinueKeyword:                              layoutToken,
+	KindDebuggerKeyword:                              layoutToken,
+	KindDefaultKeyword:                               layoutToken,
+	KindDeleteKeyword:                                layoutToken,
+	KindDoKeyword:                                    layoutToken,
+	KindElseKeyword:                                  layoutToken,
+	KindEnumKeyword:                                  layoutToken,
+	KindExportKeyword:                                layoutToken,
+	KindExtendsKeyword:                               layoutToken,
+	KindFinallyKeyword:                               layoutToken,
+	KindForKeyword:                                   layoutToken,
+	KindFunctionKeyword:                              layoutToken,
+	KindIfKeyword:                                    layoutToken,
+	KindInKeyword:                                    layoutToken,
+	KindInstanceOfKeyword:                            layoutToken,
+	KindNewKeyword:                                   layoutToken,
+	KindReturnKeyword:                                layoutToken,
+	KindSwitchKeyword:                                layoutToken,
+	KindThrowKeyword:                                 layoutToken,
+	KindTryKeyword:                                   layoutToken,
+	KindTypeOfKeyword:                                layoutToken,
+	KindVarKeyword:                                   layoutToken,
+	KindWhileKeyword:                                 layoutToken,
+	KindWithKeyword:                                  layoutToken,
+	KindImplementsKeyword:                            layoutToken,
+	KindInterfaceKeyword:                             layoutToken,
+	KindLetKeyword:                                   layoutToken,
+	KindPackageKeyword:                               layoutToken,
+	KindPrivateKeyword:                               layoutToken,
+	KindProtectedKeyword:                             layoutToken,
+	KindPublicKeyword:                                layoutToken,
+	KindStaticKeyword:                                layoutToken,
+	KindYieldKeyword:                                 layoutToken,
+	KindAbstractKeyword:                              layoutToken,
+	KindAccessorKeyword:                              layoutToken,
+	KindAsKeyword:                                    layoutToken,
+	KindAssertsKeyword:                               layoutToken,
+	KindAssertKeyword:                                layoutToken,
+	KindAsyncKeyword:                                 layoutToken,
+	KindAwaitKeyword:                                 layoutToken,
+	KindConstructorKeyword:                           layoutToken,
+	KindDeclareKeyword:                               layoutToken,
+	KindGetKeyword:                                   layoutToken,
+	KindImmediateKeyword:                             layoutToken,
+	KindInferKeyword:                                 layoutToken,
+	KindIsKeyword:                                    layoutToken,
+	KindKeyOfKeyword:                                 layoutToken,
+	KindModuleKeyword:                                layoutToken,
+	KindNamespaceKeyword:                             layoutToken,
+	KindOutKeyword:                                   layoutToken,
+	KindReadonlyKeyword:                              layoutToken,
+	KindRequireKeyword:                               layoutToken,
+	KindSatisfiesKeyword:                             layoutToken,
+	KindSetKeyword:                                   layoutToken,
+	KindTypeKeyword:                                  layoutToken,
+	KindUniqueKeyword:                                layoutToken,
+	KindUsingKeyword:                                 layoutToken,
+	KindFromKeyword:                                  layoutToken,
+	KindGlobalKeyword:                                layoutToken,
+	KindOverrideKeyword:                              layoutToken,
+	KindOfKeyword:                                    layoutToken,
+	KindDeferKeyword:                                 layoutToken,
+	KindSourceKeyword:                                layoutToken,
+	KindNumericLiteral:                               layoutNumericLiteral,
+	KindBigIntLiteral:                                layoutBigIntLiteral,
+	KindStringLiteral:                                layoutStringLiteral,
+	KindJsxText:                                      layoutJsxText,
+	KindRegularExpressionLiteral:                     layoutRegularExpressionLiteral,
+	KindNoSubstitutionTemplateLiteral:                layoutNoSubstitutionTemplateLiteral,
+	KindTemplateHead:                                 layoutTemplateHead,
+	KindTemplateMiddle:                               layoutTemplateMiddle,
+	KindTemplateTail:                                 layoutTemplateTail,
+	KindIdentifier:                                   layoutIdentifier,
+	KindPrivateIdentifier:                            layoutPrivateIdentifier,
+	KindFalseKeyword:                                 layoutKeywordExpression,
+	KindImportKeyword:                                layoutKeywordExpression,
+	KindNullKeyword:                                  layoutKeywordExpression,
+	KindSuperKeyword:                                 layoutKeywordExpression,
+	KindThisKeyword:                                  layoutKeywordExpression,
+	KindTrueKeyword:                                  layoutKeywordExpression,
+	KindVoidKeyword:                                  layoutKeywordTypeNode,
+	KindAnyKeyword:                                   layoutKeywordTypeNode,
+	KindBooleanKeyword:                               layoutKeywordTypeNode,
+	KindIntrinsicKeyword:                             layoutKeywordTypeNode,
+	KindNeverKeyword:                                 layoutKeywordTypeNode,
+	KindNumberKeyword:                                layoutKeywordTypeNode,
+	KindObjectKeyword:                                layoutKeywordTypeNode,
+	KindStringKeyword:                                layoutKeywordTypeNode,
+	KindSymbolKeyword:                                layoutKeywordTypeNode,
+	KindUndefinedKeyword:                             layoutKeywordTypeNode,
+	KindUnknownKeyword:                               layoutKeywordTypeNode,
+	KindBigIntKeyword:                                layoutKeywordTypeNode,
+	KindQualifiedName:                                layoutQualifiedName,
+	KindComputedPropertyName:                         layoutComputedPropertyName,
+	KindDecorator:                                    layoutDecorator,
+	KindEmptyStatement:                               layoutEmptyStatement,
+	KindIfStatement:                                  layoutIfStatement,
+	KindDoStatement:                                  layoutDoStatement,
+	KindWhileStatement:                               layoutWhileStatement,
+	KindForStatement:                                 layoutForStatement,
+	KindForInStatement:                               layoutForInOrOfStatement,
+	KindForOfStatement:                               layoutForInOrOfStatement,
+	KindBreakStatement:                               layoutBreakStatement,
+	KindContinueStatement:                            layoutContinueStatement,
+	KindReturnStatement:                              layoutReturnStatement,
+	KindWithStatement:                                layoutWithStatement,
+	KindSwitchStatement:                              layoutSwitchStatement,
+	KindCaseBlock:                                    layoutCaseBlock,
+	KindCaseClause:                                   layoutCaseOrDefaultClause,
+	KindDefaultClause:                                layoutCaseOrDefaultClause,
+	KindThrowStatement:                               layoutThrowStatement,
+	KindTryStatement:                                 layoutTryStatement,
+	KindCatchClause:                                  layoutCatchClause,
+	KindDebuggerStatement:                            layoutDebuggerStatement,
+	KindLabeledStatement:                             layoutLabeledStatement,
+	KindExpressionStatement:                          layoutExpressionStatement,
+	KindBlock:                                        layoutBlock,
+	KindVariableStatement:                            layoutVariableStatement,
+	KindVariableDeclaration:                          layoutVariableDeclaration,
+	KindVariableDeclarationList:                      layoutVariableDeclarationList,
+	KindObjectBindingPattern:                         layoutBindingPattern,
+	KindArrayBindingPattern:                          layoutBindingPattern,
+	KindParameter:                                    layoutParameterDeclaration,
+	KindBindingElement:                               layoutBindingElement,
+	KindMissingDeclaration:                           layoutMissingDeclaration,
+	KindFunctionDeclaration:                          layoutFunctionDeclaration,
+	KindClassDeclaration:                             layoutClassDeclaration,
+	KindClassExpression:                              layoutClassExpression,
+	KindHeritageClause:                               layoutHeritageClause,
+	KindInterfaceDeclaration:                         layoutInterfaceDeclaration,
+	KindTypeAliasDeclaration:                         layoutTypeAliasDeclaration,
+	KindJSTypeAliasDeclaration:                       layoutTypeAliasDeclaration,
+	KindEnumMember:                                   layoutEnumMember,
+	KindEnumDeclaration:                              layoutEnumDeclaration,
+	KindModuleBlock:                                  layoutModuleBlock,
+	KindNotEmittedStatement:                          layoutNotEmittedStatement,
+	KindNotEmittedTypeElement:                        layoutNotEmittedTypeElement,
+	KindImportDeclaration:                            layoutImportDeclaration,
+	KindJSImportDeclaration:                          layoutImportDeclaration,
+	KindExternalModuleReference:                      layoutExternalModuleReference,
+	KindNamespaceImport:                              layoutNamespaceImport,
+	KindNamedImports:                                 layoutNamedImports,
+	KindExportAssignment:                             layoutExportAssignment,
+	KindNamespaceExportDeclaration:                   layoutNamespaceExportDeclaration,
+	KindNamespaceExport:                              layoutNamespaceExport,
+	KindNamedExports:                                 layoutNamedExports,
+	KindExportSpecifier:                              layoutExportSpecifier,
+	KindCallSignature:                                layoutCallSignatureDeclaration,
+	KindConstructSignature:                           layoutConstructSignatureDeclaration,
+	KindConstructor:                                  layoutConstructorDeclaration,
+	KindGetAccessor:                                  layoutGetAccessorDeclaration,
+	KindSetAccessor:                                  layoutSetAccessorDeclaration,
+	KindIndexSignature:                               layoutIndexSignatureDeclaration,
+	KindMethodSignature:                              layoutMethodSignatureDeclaration,
+	KindMethodDeclaration:                            layoutMethodDeclaration,
+	KindPropertySignature:                            layoutPropertySignatureDeclaration,
+	KindPropertyDeclaration:                          layoutPropertyDeclaration,
+	KindSemicolonClassElement:                        layoutSemicolonClassElement,
+	KindClassStaticBlockDeclaration:                  layoutClassStaticBlockDeclaration,
+	KindOmittedExpression:                            layoutOmittedExpression,
+	KindBinaryExpression:                             layoutBinaryExpression,
+	KindPrefixUnaryExpression:                        layoutPrefixUnaryExpression,
+	KindPostfixUnaryExpression:                       layoutPostfixUnaryExpression,
+	KindYieldExpression:                              layoutYieldExpression,
+	KindArrowFunction:                                layoutArrowFunction,
+	KindFunctionExpression:                           layoutFunctionExpression,
+	KindAsExpression:                                 layoutAsExpression,
+	KindSatisfiesExpression:                          layoutSatisfiesExpression,
+	KindConditionalExpression:                        layoutConditionalExpression,
+	KindPropertyAccessExpression:                     layoutPropertyAccessExpression,
+	KindElementAccessExpression:                      layoutElementAccessExpression,
+	KindCallExpression:                               layoutCallExpression,
+	KindNewExpression:                                layoutNewExpression,
+	KindMetaProperty:                                 layoutMetaProperty,
+	KindNonNullExpression:                            layoutNonNullExpression,
+	KindSpreadElement:                                layoutSpreadElement,
+	KindTemplateExpression:                           layoutTemplateExpression,
+	KindTemplateSpan:                                 layoutTemplateSpan,
+	KindTaggedTemplateExpression:                     layoutTaggedTemplateExpression,
+	KindParenthesizedExpression:                      layoutParenthesizedExpression,
+	KindArrayLiteralExpression:                       layoutArrayLiteralExpression,
+	KindObjectLiteralExpression:                      layoutObjectLiteralExpression,
+	KindSpreadAssignment:                             layoutSpreadAssignment,
+	KindPropertyAssignment:                           layoutPropertyAssignment,
+	KindShorthandPropertyAssignment:                  layoutShorthandPropertyAssignment,
+	KindDeleteExpression:                             layoutDeleteExpression,
+	KindTypeOfExpression:                             layoutTypeOfExpression,
+	KindVoidExpression:                               layoutVoidExpression,
+	KindAwaitExpression:                              layoutAwaitExpression,
+	KindTypeAssertionExpression:                      layoutTypeAssertion,
+	KindUnionType:                                    layoutUnionTypeNode,
+	KindIntersectionType:                             layoutIntersectionTypeNode,
+	KindConditionalType:                              layoutConditionalTypeNode,
+	KindTypeOperator:                                 layoutTypeOperatorNode,
+	KindInferType:                                    layoutInferTypeNode,
+	KindArrayType:                                    layoutArrayTypeNode,
+	KindIndexedAccessType:                            layoutIndexedAccessTypeNode,
+	KindTypeReference:                                layoutTypeReferenceNode,
+	KindExpressionWithTypeArguments:                  layoutExpressionWithTypeArguments,
+	KindLiteralType:                                  layoutLiteralTypeNode,
+	KindThisType:                                     layoutThisTypeNode,
+	KindTypePredicate:                                layoutTypePredicateNode,
+	KindImportAttribute:                              layoutImportAttribute,
+	KindImportAttributes:                             layoutImportAttributes,
+	KindTypeQuery:                                    layoutTypeQueryNode,
+	KindMappedType:                                   layoutMappedTypeNode,
+	KindTypeLiteral:                                  layoutTypeLiteralNode,
+	KindTupleType:                                    layoutTupleTypeNode,
+	KindNamedTupleMember:                             layoutNamedTupleMember,
+	KindOptionalType:                                 layoutOptionalTypeNode,
+	KindRestType:                                     layoutRestTypeNode,
+	KindParenthesizedType:                            layoutParenthesizedTypeNode,
+	KindFunctionType:                                 layoutFunctionTypeNode,
+	KindConstructorType:                              layoutConstructorTypeNode,
+	KindTemplateLiteralType:                          layoutTemplateLiteralTypeNode,
+	KindTemplateLiteralTypeSpan:                      layoutTemplateLiteralTypeSpan,
+	KindSyntheticExpression:                          layoutSyntheticExpression,
+	KindPartiallyEmittedExpression:                   layoutPartiallyEmittedExpression,
+	KindJsxElement:                                   layoutJsxElement,
+	KindJsxAttributes:                                layoutJsxAttributes,
+	KindJsxNamespacedName:                            layoutJsxNamespacedName,
+	KindJsxOpeningElement:                            layoutJsxOpeningElement,
+	KindJsxSelfClosingElement:                        layoutJsxSelfClosingElement,
+	KindJsxFragment:                                  layoutJsxFragment,
+	KindJsxOpeningFragment:                           layoutJsxOpeningFragment,
+	KindJsxClosingFragment:                           layoutJsxClosingFragment,
+	KindJsxAttribute:                                 layoutJsxAttribute,
+	KindJsxSpreadAttribute:                           layoutJsxSpreadAttribute,
+	KindJsxClosingElement:                            layoutJsxClosingElement,
+	KindJsxExpression:                                layoutJsxExpression,
+	KindSyntaxList:                                   layoutSyntaxList,
+	KindJSDoc:                                        layoutJSDoc,
+	KindJSDocTypeExpression:                          layoutJSDocTypeExpression,
+	KindJSDocNonNullableType:                         layoutJSDocNonNullableType,
+	KindJSDocNullableType:                            layoutJSDocNullableType,
+	KindJSDocAllType:                                 layoutJSDocAllType,
+	KindJSDocVariadicType:                            layoutJSDocVariadicType,
+	KindJSDocOptionalType:                            layoutJSDocOptionalType,
+	KindJSDocTypeTag:                                 layoutJSDocTypeTag,
+	KindJSDocUnknownTag:                              layoutJSDocUnknownTag,
+	KindJSDocTemplateTag:                             layoutJSDocTemplateTag,
+	KindJSDocReturnTag:                               layoutJSDocReturnTag,
+	KindJSDocPublicTag:                               layoutJSDocPublicTag,
+	KindJSDocPrivateTag:                              layoutJSDocPrivateTag,
+	KindJSDocProtectedTag:                            layoutJSDocProtectedTag,
+	KindJSDocReadonlyTag:                             layoutJSDocReadonlyTag,
+	KindJSDocOverrideTag:                             layoutJSDocOverrideTag,
+	KindJSDocDeprecatedTag:                           layoutJSDocDeprecatedTag,
+	KindJSDocSeeTag:                                  layoutJSDocSeeTag,
+	KindJSDocImplementsTag:                           layoutJSDocImplementsTag,
+	KindJSDocAugmentsTag:                             layoutJSDocAugmentsTag,
+	KindJSDocSatisfiesTag:                            layoutJSDocSatisfiesTag,
+	KindJSDocThrowsTag:                               layoutJSDocThrowsTag,
+	KindJSDocThisTag:                                 layoutJSDocThisTag,
+	KindJSDocImportTag:                               layoutJSDocImportTag,
+	KindJSDocCallbackTag:                             layoutJSDocCallbackTag,
+	KindJSDocOverloadTag:                             layoutJSDocOverloadTag,
+	KindJSDocTypedefTag:                              layoutJSDocTypedefTag,
+	KindJSDocSignature:                               layoutJSDocSignature,
+	KindJSDocNameReference:                           layoutJSDocNameReference,
+	KindSourceFile:                                   layoutSourceFile,
+	KindModuleDeclaration:                            layoutModuleDeclaration,
+	KindImportEqualsDeclaration:                      layoutImportEqualsDeclaration,
+	KindExportDeclaration:                            layoutExportDeclaration,
+	KindImportType:                                   layoutImportTypeNode,
+	KindImportClause:                                 layoutImportClause,
+	KindImportSpecifier:                              layoutImportSpecifier,
+	KindJSDocText:                                    layoutJSDocText,
+	KindJSDocLink:                                    layoutJSDocLink,
+	KindJSDocLinkPlain:                               layoutJSDocLinkPlain,
+	KindJSDocLinkCode:                                layoutJSDocLinkCode,
+	KindTypeParameter:                                layoutTypeParameterDeclaration,
+	KindSyntheticReferenceExpression:                 layoutSyntheticReferenceExpression,
+	KindJSDocTypeLiteral:                             layoutJSDocTypeLiteral,
+	KindJSDocParameterTag:                            layoutJSDocParameterOrPropertyTag,
+	KindJSDocPropertyTag:                             layoutJSDocParameterOrPropertyTag,
+	kindFlowSwitchClauseData:                         layoutFlowSwitchClauseData,
+	kindFlowReduceLabelData:                          layoutFlowReduceLabelData,
+}
+
+// Every record must begin with its nodeBaseData header.
+const (
+	_ = -unsafe.Offsetof(tokenData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(identifierData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(privateIdentifierData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(qualifiedNameData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(computedPropertyNameData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(decoratorData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(emptyStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(ifStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(doStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(whileStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(forStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(forInOrOfStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(breakStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(continueStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(returnStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(withStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(switchStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(caseBlockData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(caseOrDefaultClauseData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(throwStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(tryStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(catchClauseData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(debuggerStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(labeledStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(expressionStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(blockData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(variableStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(variableDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(variableDeclarationListData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(bindingPatternData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(parameterDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(bindingElementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(missingDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(functionDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(classDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(classExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(heritageClauseData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(interfaceDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(typeAliasDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(enumMemberData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(enumDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(moduleBlockData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(notEmittedStatementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(notEmittedTypeElementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(importDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(externalModuleReferenceData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(namespaceImportData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(namedImportsData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(exportAssignmentData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(namespaceExportDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(namespaceExportData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(namedExportsData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(exportSpecifierData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(callSignatureDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(constructSignatureDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(constructorDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(getAccessorDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(setAccessorDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(indexSignatureDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(methodSignatureDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(methodDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(propertySignatureDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(propertyDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(semicolonClassElementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(classStaticBlockDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(omittedExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(keywordExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(stringLiteralData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(numericLiteralData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(bigIntLiteralData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(regularExpressionLiteralData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(noSubstitutionTemplateLiteralData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(binaryExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(prefixUnaryExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(postfixUnaryExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(yieldExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(arrowFunctionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(functionExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(asExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(satisfiesExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(conditionalExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(propertyAccessExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(elementAccessExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(callExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(newExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(metaPropertyData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(nonNullExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(spreadElementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(templateExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(templateSpanData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(taggedTemplateExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(parenthesizedExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(arrayLiteralExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(objectLiteralExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(spreadAssignmentData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(propertyAssignmentData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(shorthandPropertyAssignmentData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(deleteExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(typeOfExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(voidExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(awaitExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(typeAssertionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(keywordTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(unionTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(intersectionTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(conditionalTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(typeOperatorNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(inferTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(arrayTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(indexedAccessTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(typeReferenceNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(expressionWithTypeArgumentsData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(literalTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(thisTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(typePredicateNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(importAttributeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(importAttributesData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(typeQueryNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(mappedTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(typeLiteralNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(tupleTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(namedTupleMemberData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(optionalTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(restTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(parenthesizedTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(functionTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(constructorTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(templateHeadData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(templateMiddleData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(templateTailData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(templateLiteralTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(templateLiteralTypeSpanData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(syntheticExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(partiallyEmittedExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxElementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxAttributesData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxNamespacedNameData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxOpeningElementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxSelfClosingElementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxFragmentData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxOpeningFragmentData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxClosingFragmentData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxAttributeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxSpreadAttributeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxClosingElementData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsxTextData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(syntaxListData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocTypeExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocNonNullableTypeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocNullableTypeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocAllTypeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocVariadicTypeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocOptionalTypeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocTypeTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocUnknownTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocTemplateTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocReturnTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocPublicTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocPrivateTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocProtectedTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocReadonlyTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocOverrideTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocDeprecatedTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocSeeTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocImplementsTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocAugmentsTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocSatisfiesTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocThrowsTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocThisTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocImportTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocCallbackTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocOverloadTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocTypedefTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocSignatureData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocNameReferenceData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(SourceFile{}.nodeBaseData)
+	_ = -unsafe.Offsetof(moduleDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(importEqualsDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(exportDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(importTypeNodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(importClauseData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(importSpecifierData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocTextData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocLinkData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocLinkPlainData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocLinkCodeData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(typeParameterDeclarationData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(syntheticReferenceExpressionData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocTypeLiteralData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(jsDocParameterOrPropertyTagData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(flowSwitchClauseData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(flowReduceLabelData{}.nodeBaseData)
+)
 
 // ──────────────────────────────────────────────────────────────────────
 // Base struct definitions
@@ -125,69 +841,69 @@ var statementBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) statementBaseData() *statementBaseData {
 	switch statementBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*emptyStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*emptyStatementData)(n.rec()).statementBaseData
 	case 2:
-		return &(*ifStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*ifStatementData)(n.rec()).statementBaseData
 	case 3:
-		return &(*doStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*doStatementData)(n.rec()).statementBaseData
 	case 4:
-		return &(*whileStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*whileStatementData)(n.rec()).statementBaseData
 	case 5:
-		return &(*forStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*forStatementData)(n.rec()).statementBaseData
 	case 6:
-		return &(*forInOrOfStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*forInOrOfStatementData)(n.rec()).statementBaseData
 	case 7:
-		return &(*breakStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*breakStatementData)(n.rec()).statementBaseData
 	case 8:
-		return &(*continueStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*continueStatementData)(n.rec()).statementBaseData
 	case 9:
-		return &(*returnStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*returnStatementData)(n.rec()).statementBaseData
 	case 10:
-		return &(*withStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*withStatementData)(n.rec()).statementBaseData
 	case 11:
-		return &(*switchStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*switchStatementData)(n.rec()).statementBaseData
 	case 12:
-		return &(*throwStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*throwStatementData)(n.rec()).statementBaseData
 	case 13:
-		return &(*tryStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*tryStatementData)(n.rec()).statementBaseData
 	case 14:
-		return &(*debuggerStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*debuggerStatementData)(n.rec()).statementBaseData
 	case 15:
-		return &(*labeledStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*labeledStatementData)(n.rec()).statementBaseData
 	case 16:
-		return &(*expressionStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*expressionStatementData)(n.rec()).statementBaseData
 	case 17:
-		return &(*blockData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*blockData)(n.rec()).statementBaseData
 	case 18:
-		return &(*variableStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*variableStatementData)(n.rec()).statementBaseData
 	case 19:
-		return &(*missingDeclarationData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*missingDeclarationData)(n.rec()).statementBaseData
 	case 20:
-		return &(*functionDeclarationData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*functionDeclarationData)(n.rec()).statementBaseData
 	case 21:
-		return &(*classDeclarationData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*classDeclarationData)(n.rec()).statementBaseData
 	case 22:
-		return &(*interfaceDeclarationData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*interfaceDeclarationData)(n.rec()).statementBaseData
 	case 23:
-		return &(*typeAliasDeclarationData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*typeAliasDeclarationData)(n.rec()).statementBaseData
 	case 24:
-		return &(*enumDeclarationData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*enumDeclarationData)(n.rec()).statementBaseData
 	case 25:
-		return &(*moduleBlockData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*moduleBlockData)(n.rec()).statementBaseData
 	case 26:
-		return &(*notEmittedStatementData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*notEmittedStatementData)(n.rec()).statementBaseData
 	case 27:
-		return &(*importDeclarationData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*importDeclarationData)(n.rec()).statementBaseData
 	case 28:
-		return &(*exportAssignmentData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*exportAssignmentData)(n.rec()).statementBaseData
 	case 29:
-		return &(*namespaceExportDeclarationData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*namespaceExportDeclarationData)(n.rec()).statementBaseData
 	case 30:
-		return &(*moduleDeclarationData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*moduleDeclarationData)(n.rec()).statementBaseData
 	case 31:
-		return &(*importEqualsDeclarationData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*importEqualsDeclarationData)(n.rec()).statementBaseData
 	case 32:
-		return &(*exportDeclarationData)(unsafe.Pointer(n.h)).statementBaseData
+		return &(*exportDeclarationData)(n.rec()).statementBaseData
 	}
 	return nil
 }
@@ -197,7 +913,7 @@ func (node StatementBase) SetFlowNode(value *FlowNode) { node.statementBaseData(
 
 type iterationStatementBaseData struct {
 	statementBaseData
-	statement Statement
+	statement nodeRef // Statement
 }
 
 type IterationStatementBase struct{ Node }
@@ -211,11 +927,11 @@ var iterationStatementBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) iterationStatementBaseData() *iterationStatementBaseData {
 	switch iterationStatementBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*doStatementData)(unsafe.Pointer(n.h)).iterationStatementBaseData
+		return &(*doStatementData)(n.rec()).iterationStatementBaseData
 	case 2:
-		return &(*whileStatementData)(unsafe.Pointer(n.h)).iterationStatementBaseData
+		return &(*whileStatementData)(n.rec()).iterationStatementBaseData
 	case 3:
-		return &(*forStatementData)(unsafe.Pointer(n.h)).iterationStatementBaseData
+		return &(*forStatementData)(n.rec()).iterationStatementBaseData
 	}
 	return nil
 }
@@ -229,11 +945,11 @@ func (node IterationStatementBase) SetFlowNode(value *FlowNode) {
 }
 
 func (node IterationStatementBase) Statement() Statement {
-	return node.iterationStatementBaseData().statement
+	return node.s.deref(node.iterationStatementBaseData().statement)
 }
 
 func (node IterationStatementBase) SetStatement(value Statement) {
-	node.iterationStatementBaseData().statement = value
+	node.iterationStatementBaseData().statement = node.s.ref(value)
 }
 
 type expressionBaseData struct {
@@ -295,11 +1011,11 @@ var nodeWithTypeArgumentsBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) nodeWithTypeArgumentsBaseData() *nodeWithTypeArgumentsBaseData {
 	switch nodeWithTypeArgumentsBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*typeReferenceNodeData)(unsafe.Pointer(n.h)).nodeWithTypeArgumentsBaseData
+		return &(*typeReferenceNodeData)(n.rec()).nodeWithTypeArgumentsBaseData
 	case 2:
-		return &(*typeQueryNodeData)(unsafe.Pointer(n.h)).nodeWithTypeArgumentsBaseData
+		return &(*typeQueryNodeData)(n.rec()).nodeWithTypeArgumentsBaseData
 	case 3:
-		return &(*importTypeNodeData)(unsafe.Pointer(n.h)).nodeWithTypeArgumentsBaseData
+		return &(*importTypeNodeData)(n.rec()).nodeWithTypeArgumentsBaseData
 	}
 	return nil
 }
@@ -388,117 +1104,117 @@ var declarationBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) declarationBaseData() *declarationBaseData {
 	switch declarationBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*variableDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*variableDeclarationData)(n.rec()).declarationBaseData
 	case 2:
-		return &(*parameterDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*parameterDeclarationData)(n.rec()).declarationBaseData
 	case 3:
-		return &(*bindingElementData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*bindingElementData)(n.rec()).declarationBaseData
 	case 4:
-		return &(*missingDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*missingDeclarationData)(n.rec()).declarationBaseData
 	case 5:
-		return &(*functionDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*functionDeclarationData)(n.rec()).declarationBaseData
 	case 6:
-		return &(*classDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*classDeclarationData)(n.rec()).declarationBaseData
 	case 7:
-		return &(*classExpressionData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*classExpressionData)(n.rec()).declarationBaseData
 	case 8:
-		return &(*interfaceDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*interfaceDeclarationData)(n.rec()).declarationBaseData
 	case 9:
-		return &(*typeAliasDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*typeAliasDeclarationData)(n.rec()).declarationBaseData
 	case 10:
-		return &(*enumMemberData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*enumMemberData)(n.rec()).declarationBaseData
 	case 11:
-		return &(*enumDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*enumDeclarationData)(n.rec()).declarationBaseData
 	case 12:
-		return &(*notEmittedTypeElementData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*notEmittedTypeElementData)(n.rec()).declarationBaseData
 	case 13:
-		return &(*importDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*importDeclarationData)(n.rec()).declarationBaseData
 	case 14:
-		return &(*namespaceImportData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*namespaceImportData)(n.rec()).declarationBaseData
 	case 15:
-		return &(*exportAssignmentData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*exportAssignmentData)(n.rec()).declarationBaseData
 	case 16:
-		return &(*namespaceExportDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*namespaceExportDeclarationData)(n.rec()).declarationBaseData
 	case 17:
-		return &(*namespaceExportData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*namespaceExportData)(n.rec()).declarationBaseData
 	case 18:
-		return &(*exportSpecifierData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*exportSpecifierData)(n.rec()).declarationBaseData
 	case 19:
-		return &(*callSignatureDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*callSignatureDeclarationData)(n.rec()).declarationBaseData
 	case 20:
-		return &(*constructSignatureDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*constructSignatureDeclarationData)(n.rec()).declarationBaseData
 	case 21:
-		return &(*constructorDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*constructorDeclarationData)(n.rec()).declarationBaseData
 	case 22:
-		return &(*getAccessorDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*getAccessorDeclarationData)(n.rec()).declarationBaseData
 	case 23:
-		return &(*setAccessorDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*setAccessorDeclarationData)(n.rec()).declarationBaseData
 	case 24:
-		return &(*indexSignatureDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*indexSignatureDeclarationData)(n.rec()).declarationBaseData
 	case 25:
-		return &(*methodSignatureDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*methodSignatureDeclarationData)(n.rec()).declarationBaseData
 	case 26:
-		return &(*methodDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*methodDeclarationData)(n.rec()).declarationBaseData
 	case 27:
-		return &(*propertySignatureDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*propertySignatureDeclarationData)(n.rec()).declarationBaseData
 	case 28:
-		return &(*propertyDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*propertyDeclarationData)(n.rec()).declarationBaseData
 	case 29:
-		return &(*semicolonClassElementData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*semicolonClassElementData)(n.rec()).declarationBaseData
 	case 30:
-		return &(*classStaticBlockDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*classStaticBlockDeclarationData)(n.rec()).declarationBaseData
 	case 31:
-		return &(*noSubstitutionTemplateLiteralData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*noSubstitutionTemplateLiteralData)(n.rec()).declarationBaseData
 	case 32:
-		return &(*binaryExpressionData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*binaryExpressionData)(n.rec()).declarationBaseData
 	case 33:
-		return &(*arrowFunctionData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*arrowFunctionData)(n.rec()).declarationBaseData
 	case 34:
-		return &(*functionExpressionData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*functionExpressionData)(n.rec()).declarationBaseData
 	case 35:
-		return &(*callExpressionData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*callExpressionData)(n.rec()).declarationBaseData
 	case 36:
-		return &(*objectLiteralExpressionData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*objectLiteralExpressionData)(n.rec()).declarationBaseData
 	case 37:
-		return &(*spreadAssignmentData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*spreadAssignmentData)(n.rec()).declarationBaseData
 	case 38:
-		return &(*propertyAssignmentData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*propertyAssignmentData)(n.rec()).declarationBaseData
 	case 39:
-		return &(*shorthandPropertyAssignmentData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*shorthandPropertyAssignmentData)(n.rec()).declarationBaseData
 	case 40:
-		return &(*mappedTypeNodeData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*mappedTypeNodeData)(n.rec()).declarationBaseData
 	case 41:
-		return &(*typeLiteralNodeData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*typeLiteralNodeData)(n.rec()).declarationBaseData
 	case 42:
-		return &(*namedTupleMemberData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*namedTupleMemberData)(n.rec()).declarationBaseData
 	case 43:
-		return &(*functionTypeNodeData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*functionTypeNodeData)(n.rec()).declarationBaseData
 	case 44:
-		return &(*constructorTypeNodeData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*constructorTypeNodeData)(n.rec()).declarationBaseData
 	case 45:
-		return &(*jsxAttributesData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*jsxAttributesData)(n.rec()).declarationBaseData
 	case 46:
-		return &(*jsxAttributeData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*jsxAttributeData)(n.rec()).declarationBaseData
 	case 47:
-		return &(*jsxSpreadAttributeData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*jsxSpreadAttributeData)(n.rec()).declarationBaseData
 	case 48:
-		return &(*jsDocSignatureData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*jsDocSignatureData)(n.rec()).declarationBaseData
 	case 49:
-		return &(*SourceFile)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*SourceFile)(n.rec()).declarationBaseData
 	case 50:
-		return &(*moduleDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*moduleDeclarationData)(n.rec()).declarationBaseData
 	case 51:
-		return &(*importEqualsDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*importEqualsDeclarationData)(n.rec()).declarationBaseData
 	case 52:
-		return &(*exportDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*exportDeclarationData)(n.rec()).declarationBaseData
 	case 53:
-		return &(*importClauseData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*importClauseData)(n.rec()).declarationBaseData
 	case 54:
-		return &(*importSpecifierData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*importSpecifierData)(n.rec()).declarationBaseData
 	case 55:
-		return &(*typeParameterDeclarationData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*typeParameterDeclarationData)(n.rec()).declarationBaseData
 	case 56:
-		return &(*jsDocTypeLiteralData)(unsafe.Pointer(n.h)).declarationBaseData
+		return &(*jsDocTypeLiteralData)(n.rec()).declarationBaseData
 	}
 	return nil
 }
@@ -533,33 +1249,33 @@ var exportableBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) exportableBaseData() *exportableBaseData {
 	switch exportableBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*variableDeclarationData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*variableDeclarationData)(n.rec()).exportableBaseData
 	case 2:
-		return &(*bindingElementData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*bindingElementData)(n.rec()).exportableBaseData
 	case 3:
-		return &(*functionDeclarationData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*functionDeclarationData)(n.rec()).exportableBaseData
 	case 4:
-		return &(*classDeclarationData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*classDeclarationData)(n.rec()).exportableBaseData
 	case 5:
-		return &(*classExpressionData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*classExpressionData)(n.rec()).exportableBaseData
 	case 6:
-		return &(*interfaceDeclarationData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*interfaceDeclarationData)(n.rec()).exportableBaseData
 	case 7:
-		return &(*typeAliasDeclarationData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*typeAliasDeclarationData)(n.rec()).exportableBaseData
 	case 8:
-		return &(*enumDeclarationData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*enumDeclarationData)(n.rec()).exportableBaseData
 	case 9:
-		return &(*namespaceImportData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*namespaceImportData)(n.rec()).exportableBaseData
 	case 10:
-		return &(*exportSpecifierData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*exportSpecifierData)(n.rec()).exportableBaseData
 	case 11:
-		return &(*moduleDeclarationData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*moduleDeclarationData)(n.rec()).exportableBaseData
 	case 12:
-		return &(*importEqualsDeclarationData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*importEqualsDeclarationData)(n.rec()).exportableBaseData
 	case 13:
-		return &(*importClauseData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*importClauseData)(n.rec()).exportableBaseData
 	case 14:
-		return &(*importSpecifierData)(unsafe.Pointer(n.h)).exportableBaseData
+		return &(*importSpecifierData)(n.rec()).exportableBaseData
 	}
 	return nil
 }
@@ -616,71 +1332,71 @@ var modifiersBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) modifiersBaseData() *modifiersBaseData {
 	switch modifiersBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*variableStatementData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*variableStatementData)(n.rec()).modifiersBaseData
 	case 2:
-		return &(*parameterDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*parameterDeclarationData)(n.rec()).modifiersBaseData
 	case 3:
-		return &(*missingDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*missingDeclarationData)(n.rec()).modifiersBaseData
 	case 4:
-		return &(*functionDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*functionDeclarationData)(n.rec()).modifiersBaseData
 	case 5:
-		return &(*classDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*classDeclarationData)(n.rec()).modifiersBaseData
 	case 6:
-		return &(*classExpressionData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*classExpressionData)(n.rec()).modifiersBaseData
 	case 7:
-		return &(*interfaceDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*interfaceDeclarationData)(n.rec()).modifiersBaseData
 	case 8:
-		return &(*typeAliasDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*typeAliasDeclarationData)(n.rec()).modifiersBaseData
 	case 9:
-		return &(*enumMemberData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*enumMemberData)(n.rec()).modifiersBaseData
 	case 10:
-		return &(*enumDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*enumDeclarationData)(n.rec()).modifiersBaseData
 	case 11:
-		return &(*importDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*importDeclarationData)(n.rec()).modifiersBaseData
 	case 12:
-		return &(*exportAssignmentData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*exportAssignmentData)(n.rec()).modifiersBaseData
 	case 13:
-		return &(*namespaceExportDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*namespaceExportDeclarationData)(n.rec()).modifiersBaseData
 	case 14:
-		return &(*constructorDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*constructorDeclarationData)(n.rec()).modifiersBaseData
 	case 15:
-		return &(*getAccessorDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*getAccessorDeclarationData)(n.rec()).modifiersBaseData
 	case 16:
-		return &(*setAccessorDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*setAccessorDeclarationData)(n.rec()).modifiersBaseData
 	case 17:
-		return &(*indexSignatureDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*indexSignatureDeclarationData)(n.rec()).modifiersBaseData
 	case 18:
-		return &(*methodSignatureDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*methodSignatureDeclarationData)(n.rec()).modifiersBaseData
 	case 19:
-		return &(*methodDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*methodDeclarationData)(n.rec()).modifiersBaseData
 	case 20:
-		return &(*propertySignatureDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*propertySignatureDeclarationData)(n.rec()).modifiersBaseData
 	case 21:
-		return &(*propertyDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*propertyDeclarationData)(n.rec()).modifiersBaseData
 	case 22:
-		return &(*classStaticBlockDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*classStaticBlockDeclarationData)(n.rec()).modifiersBaseData
 	case 23:
-		return &(*binaryExpressionData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*binaryExpressionData)(n.rec()).modifiersBaseData
 	case 24:
-		return &(*arrowFunctionData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*arrowFunctionData)(n.rec()).modifiersBaseData
 	case 25:
-		return &(*functionExpressionData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*functionExpressionData)(n.rec()).modifiersBaseData
 	case 26:
-		return &(*propertyAssignmentData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*propertyAssignmentData)(n.rec()).modifiersBaseData
 	case 27:
-		return &(*shorthandPropertyAssignmentData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*shorthandPropertyAssignmentData)(n.rec()).modifiersBaseData
 	case 28:
-		return &(*functionTypeNodeData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*functionTypeNodeData)(n.rec()).modifiersBaseData
 	case 29:
-		return &(*constructorTypeNodeData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*constructorTypeNodeData)(n.rec()).modifiersBaseData
 	case 30:
-		return &(*moduleDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*moduleDeclarationData)(n.rec()).modifiersBaseData
 	case 31:
-		return &(*importEqualsDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*importEqualsDeclarationData)(n.rec()).modifiersBaseData
 	case 32:
-		return &(*exportDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*exportDeclarationData)(n.rec()).modifiersBaseData
 	case 33:
-		return &(*typeParameterDeclarationData)(unsafe.Pointer(n.h)).modifiersBaseData
+		return &(*typeParameterDeclarationData)(n.rec()).modifiersBaseData
 	}
 	return nil
 }
@@ -692,7 +1408,7 @@ func (node ModifiersBase) setModifiers(value *ModifierList) {
 
 type localsContainerBaseData struct {
 	locals        SymbolTable
-	nextContainer Node
+	nextContainer nodeRef // Node
 }
 
 type LocalsContainerBase struct{ Node }
@@ -732,59 +1448,59 @@ var localsContainerBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) localsContainerBaseData() *localsContainerBaseData {
 	switch localsContainerBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*forStatementData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*forStatementData)(n.rec()).localsContainerBaseData
 	case 2:
-		return &(*forInOrOfStatementData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*forInOrOfStatementData)(n.rec()).localsContainerBaseData
 	case 3:
-		return &(*caseBlockData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*caseBlockData)(n.rec()).localsContainerBaseData
 	case 4:
-		return &(*catchClauseData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*catchClauseData)(n.rec()).localsContainerBaseData
 	case 5:
-		return &(*blockData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*blockData)(n.rec()).localsContainerBaseData
 	case 6:
-		return &(*functionDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*functionDeclarationData)(n.rec()).localsContainerBaseData
 	case 7:
-		return &(*classDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*classDeclarationData)(n.rec()).localsContainerBaseData
 	case 8:
-		return &(*classExpressionData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*classExpressionData)(n.rec()).localsContainerBaseData
 	case 9:
-		return &(*typeAliasDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*typeAliasDeclarationData)(n.rec()).localsContainerBaseData
 	case 10:
-		return &(*callSignatureDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*callSignatureDeclarationData)(n.rec()).localsContainerBaseData
 	case 11:
-		return &(*constructSignatureDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*constructSignatureDeclarationData)(n.rec()).localsContainerBaseData
 	case 12:
-		return &(*constructorDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*constructorDeclarationData)(n.rec()).localsContainerBaseData
 	case 13:
-		return &(*getAccessorDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*getAccessorDeclarationData)(n.rec()).localsContainerBaseData
 	case 14:
-		return &(*setAccessorDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*setAccessorDeclarationData)(n.rec()).localsContainerBaseData
 	case 15:
-		return &(*indexSignatureDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*indexSignatureDeclarationData)(n.rec()).localsContainerBaseData
 	case 16:
-		return &(*methodSignatureDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*methodSignatureDeclarationData)(n.rec()).localsContainerBaseData
 	case 17:
-		return &(*methodDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*methodDeclarationData)(n.rec()).localsContainerBaseData
 	case 18:
-		return &(*classStaticBlockDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*classStaticBlockDeclarationData)(n.rec()).localsContainerBaseData
 	case 19:
-		return &(*arrowFunctionData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*arrowFunctionData)(n.rec()).localsContainerBaseData
 	case 20:
-		return &(*functionExpressionData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*functionExpressionData)(n.rec()).localsContainerBaseData
 	case 21:
-		return &(*conditionalTypeNodeData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*conditionalTypeNodeData)(n.rec()).localsContainerBaseData
 	case 22:
-		return &(*mappedTypeNodeData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*mappedTypeNodeData)(n.rec()).localsContainerBaseData
 	case 23:
-		return &(*functionTypeNodeData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*functionTypeNodeData)(n.rec()).localsContainerBaseData
 	case 24:
-		return &(*constructorTypeNodeData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*constructorTypeNodeData)(n.rec()).localsContainerBaseData
 	case 25:
-		return &(*jsDocSignatureData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*jsDocSignatureData)(n.rec()).localsContainerBaseData
 	case 26:
-		return &(*SourceFile)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*SourceFile)(n.rec()).localsContainerBaseData
 	case 27:
-		return &(*moduleDeclarationData)(unsafe.Pointer(n.h)).localsContainerBaseData
+		return &(*moduleDeclarationData)(n.rec()).localsContainerBaseData
 	}
 	return nil
 }
@@ -796,11 +1512,11 @@ func (node LocalsContainerBase) SetLocals(value SymbolTable) {
 }
 
 func (node LocalsContainerBase) NextContainer() Node {
-	return node.localsContainerBaseData().nextContainer
+	return node.s.deref(node.localsContainerBaseData().nextContainer)
 }
 
 func (node LocalsContainerBase) SetNextContainer(value Node) {
-	node.localsContainerBaseData().nextContainer = value
+	node.localsContainerBaseData().nextContainer = node.s.ref(value)
 }
 
 type flowNodeBaseData struct {
@@ -867,93 +1583,93 @@ var flowNodeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) flowNodeBaseData() *flowNodeBaseData {
 	switch flowNodeBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*identifierData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*identifierData)(n.rec()).flowNodeBaseData
 	case 2:
-		return &(*qualifiedNameData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*qualifiedNameData)(n.rec()).flowNodeBaseData
 	case 3:
-		return &(*emptyStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*emptyStatementData)(n.rec()).flowNodeBaseData
 	case 4:
-		return &(*ifStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*ifStatementData)(n.rec()).flowNodeBaseData
 	case 5:
-		return &(*doStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*doStatementData)(n.rec()).flowNodeBaseData
 	case 6:
-		return &(*whileStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*whileStatementData)(n.rec()).flowNodeBaseData
 	case 7:
-		return &(*forStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*forStatementData)(n.rec()).flowNodeBaseData
 	case 8:
-		return &(*forInOrOfStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*forInOrOfStatementData)(n.rec()).flowNodeBaseData
 	case 9:
-		return &(*breakStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*breakStatementData)(n.rec()).flowNodeBaseData
 	case 10:
-		return &(*continueStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*continueStatementData)(n.rec()).flowNodeBaseData
 	case 11:
-		return &(*returnStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*returnStatementData)(n.rec()).flowNodeBaseData
 	case 12:
-		return &(*withStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*withStatementData)(n.rec()).flowNodeBaseData
 	case 13:
-		return &(*switchStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*switchStatementData)(n.rec()).flowNodeBaseData
 	case 14:
-		return &(*throwStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*throwStatementData)(n.rec()).flowNodeBaseData
 	case 15:
-		return &(*tryStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*tryStatementData)(n.rec()).flowNodeBaseData
 	case 16:
-		return &(*debuggerStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*debuggerStatementData)(n.rec()).flowNodeBaseData
 	case 17:
-		return &(*labeledStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*labeledStatementData)(n.rec()).flowNodeBaseData
 	case 18:
-		return &(*expressionStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*expressionStatementData)(n.rec()).flowNodeBaseData
 	case 19:
-		return &(*blockData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*blockData)(n.rec()).flowNodeBaseData
 	case 20:
-		return &(*variableStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*variableStatementData)(n.rec()).flowNodeBaseData
 	case 21:
-		return &(*bindingElementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*bindingElementData)(n.rec()).flowNodeBaseData
 	case 22:
-		return &(*missingDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*missingDeclarationData)(n.rec()).flowNodeBaseData
 	case 23:
-		return &(*functionDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*functionDeclarationData)(n.rec()).flowNodeBaseData
 	case 24:
-		return &(*classDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*classDeclarationData)(n.rec()).flowNodeBaseData
 	case 25:
-		return &(*interfaceDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*interfaceDeclarationData)(n.rec()).flowNodeBaseData
 	case 26:
-		return &(*typeAliasDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*typeAliasDeclarationData)(n.rec()).flowNodeBaseData
 	case 27:
-		return &(*enumDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*enumDeclarationData)(n.rec()).flowNodeBaseData
 	case 28:
-		return &(*moduleBlockData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*moduleBlockData)(n.rec()).flowNodeBaseData
 	case 29:
-		return &(*notEmittedStatementData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*notEmittedStatementData)(n.rec()).flowNodeBaseData
 	case 30:
-		return &(*importDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*importDeclarationData)(n.rec()).flowNodeBaseData
 	case 31:
-		return &(*exportAssignmentData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*exportAssignmentData)(n.rec()).flowNodeBaseData
 	case 32:
-		return &(*namespaceExportDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*namespaceExportDeclarationData)(n.rec()).flowNodeBaseData
 	case 33:
-		return &(*getAccessorDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*getAccessorDeclarationData)(n.rec()).flowNodeBaseData
 	case 34:
-		return &(*setAccessorDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*setAccessorDeclarationData)(n.rec()).flowNodeBaseData
 	case 35:
-		return &(*methodDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*methodDeclarationData)(n.rec()).flowNodeBaseData
 	case 36:
-		return &(*keywordExpressionData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*keywordExpressionData)(n.rec()).flowNodeBaseData
 	case 37:
-		return &(*arrowFunctionData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*arrowFunctionData)(n.rec()).flowNodeBaseData
 	case 38:
-		return &(*functionExpressionData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*functionExpressionData)(n.rec()).flowNodeBaseData
 	case 39:
-		return &(*propertyAccessExpressionData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*propertyAccessExpressionData)(n.rec()).flowNodeBaseData
 	case 40:
-		return &(*elementAccessExpressionData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*elementAccessExpressionData)(n.rec()).flowNodeBaseData
 	case 41:
-		return &(*metaPropertyData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*metaPropertyData)(n.rec()).flowNodeBaseData
 	case 42:
-		return &(*moduleDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*moduleDeclarationData)(n.rec()).flowNodeBaseData
 	case 43:
-		return &(*importEqualsDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*importEqualsDeclarationData)(n.rec()).flowNodeBaseData
 	case 44:
-		return &(*exportDeclarationData)(unsafe.Pointer(n.h)).flowNodeBaseData
+		return &(*exportDeclarationData)(n.rec()).flowNodeBaseData
 	}
 	return nil
 }
@@ -1049,149 +1765,149 @@ var compositeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) compositeBaseData() *compositeBaseData {
 	switch compositeBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*qualifiedNameData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*qualifiedNameData)(n.rec()).compositeBaseData
 	case 2:
-		return &(*computedPropertyNameData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*computedPropertyNameData)(n.rec()).compositeBaseData
 	case 3:
-		return &(*decoratorData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*decoratorData)(n.rec()).compositeBaseData
 	case 4:
-		return &(*ifStatementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*ifStatementData)(n.rec()).compositeBaseData
 	case 5:
-		return &(*doStatementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*doStatementData)(n.rec()).compositeBaseData
 	case 6:
-		return &(*whileStatementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*whileStatementData)(n.rec()).compositeBaseData
 	case 7:
-		return &(*forStatementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*forStatementData)(n.rec()).compositeBaseData
 	case 8:
-		return &(*forInOrOfStatementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*forInOrOfStatementData)(n.rec()).compositeBaseData
 	case 9:
-		return &(*returnStatementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*returnStatementData)(n.rec()).compositeBaseData
 	case 10:
-		return &(*withStatementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*withStatementData)(n.rec()).compositeBaseData
 	case 11:
-		return &(*switchStatementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*switchStatementData)(n.rec()).compositeBaseData
 	case 12:
-		return &(*caseBlockData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*caseBlockData)(n.rec()).compositeBaseData
 	case 13:
-		return &(*caseOrDefaultClauseData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*caseOrDefaultClauseData)(n.rec()).compositeBaseData
 	case 14:
-		return &(*throwStatementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*throwStatementData)(n.rec()).compositeBaseData
 	case 15:
-		return &(*tryStatementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*tryStatementData)(n.rec()).compositeBaseData
 	case 16:
-		return &(*catchClauseData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*catchClauseData)(n.rec()).compositeBaseData
 	case 17:
-		return &(*blockData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*blockData)(n.rec()).compositeBaseData
 	case 18:
-		return &(*variableStatementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*variableStatementData)(n.rec()).compositeBaseData
 	case 19:
-		return &(*variableDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*variableDeclarationData)(n.rec()).compositeBaseData
 	case 20:
-		return &(*variableDeclarationListData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*variableDeclarationListData)(n.rec()).compositeBaseData
 	case 21:
-		return &(*bindingPatternData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*bindingPatternData)(n.rec()).compositeBaseData
 	case 22:
-		return &(*parameterDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*parameterDeclarationData)(n.rec()).compositeBaseData
 	case 23:
-		return &(*bindingElementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*bindingElementData)(n.rec()).compositeBaseData
 	case 24:
-		return &(*functionDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*functionDeclarationData)(n.rec()).compositeBaseData
 	case 25:
-		return &(*classDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*classDeclarationData)(n.rec()).compositeBaseData
 	case 26:
-		return &(*classExpressionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*classExpressionData)(n.rec()).compositeBaseData
 	case 27:
-		return &(*heritageClauseData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*heritageClauseData)(n.rec()).compositeBaseData
 	case 28:
-		return &(*enumMemberData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*enumMemberData)(n.rec()).compositeBaseData
 	case 29:
-		return &(*enumDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*enumDeclarationData)(n.rec()).compositeBaseData
 	case 30:
-		return &(*moduleBlockData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*moduleBlockData)(n.rec()).compositeBaseData
 	case 31:
-		return &(*importDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*importDeclarationData)(n.rec()).compositeBaseData
 	case 32:
-		return &(*namedImportsData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*namedImportsData)(n.rec()).compositeBaseData
 	case 33:
-		return &(*exportAssignmentData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*exportAssignmentData)(n.rec()).compositeBaseData
 	case 34:
-		return &(*namedExportsData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*namedExportsData)(n.rec()).compositeBaseData
 	case 35:
-		return &(*exportSpecifierData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*exportSpecifierData)(n.rec()).compositeBaseData
 	case 36:
-		return &(*constructorDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*constructorDeclarationData)(n.rec()).compositeBaseData
 	case 37:
-		return &(*getAccessorDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*getAccessorDeclarationData)(n.rec()).compositeBaseData
 	case 38:
-		return &(*setAccessorDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*setAccessorDeclarationData)(n.rec()).compositeBaseData
 	case 39:
-		return &(*methodDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*methodDeclarationData)(n.rec()).compositeBaseData
 	case 40:
-		return &(*propertyDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*propertyDeclarationData)(n.rec()).compositeBaseData
 	case 41:
-		return &(*classStaticBlockDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*classStaticBlockDeclarationData)(n.rec()).compositeBaseData
 	case 42:
-		return &(*binaryExpressionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*binaryExpressionData)(n.rec()).compositeBaseData
 	case 43:
-		return &(*arrowFunctionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*arrowFunctionData)(n.rec()).compositeBaseData
 	case 44:
-		return &(*functionExpressionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*functionExpressionData)(n.rec()).compositeBaseData
 	case 45:
-		return &(*conditionalExpressionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*conditionalExpressionData)(n.rec()).compositeBaseData
 	case 46:
-		return &(*propertyAccessExpressionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*propertyAccessExpressionData)(n.rec()).compositeBaseData
 	case 47:
-		return &(*elementAccessExpressionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*elementAccessExpressionData)(n.rec()).compositeBaseData
 	case 48:
-		return &(*callExpressionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*callExpressionData)(n.rec()).compositeBaseData
 	case 49:
-		return &(*newExpressionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*newExpressionData)(n.rec()).compositeBaseData
 	case 50:
-		return &(*metaPropertyData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*metaPropertyData)(n.rec()).compositeBaseData
 	case 51:
-		return &(*templateExpressionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*templateExpressionData)(n.rec()).compositeBaseData
 	case 52:
-		return &(*taggedTemplateExpressionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*taggedTemplateExpressionData)(n.rec()).compositeBaseData
 	case 53:
-		return &(*arrayLiteralExpressionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*arrayLiteralExpressionData)(n.rec()).compositeBaseData
 	case 54:
-		return &(*objectLiteralExpressionData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*objectLiteralExpressionData)(n.rec()).compositeBaseData
 	case 55:
-		return &(*propertyAssignmentData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*propertyAssignmentData)(n.rec()).compositeBaseData
 	case 56:
-		return &(*shorthandPropertyAssignmentData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*shorthandPropertyAssignmentData)(n.rec()).compositeBaseData
 	case 57:
-		return &(*expressionWithTypeArgumentsData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*expressionWithTypeArgumentsData)(n.rec()).compositeBaseData
 	case 58:
-		return &(*importAttributeData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*importAttributeData)(n.rec()).compositeBaseData
 	case 59:
-		return &(*importAttributesData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*importAttributesData)(n.rec()).compositeBaseData
 	case 60:
-		return &(*jsxElementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*jsxElementData)(n.rec()).compositeBaseData
 	case 61:
-		return &(*jsxAttributesData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*jsxAttributesData)(n.rec()).compositeBaseData
 	case 62:
-		return &(*jsxNamespacedNameData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*jsxNamespacedNameData)(n.rec()).compositeBaseData
 	case 63:
-		return &(*jsxOpeningElementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*jsxOpeningElementData)(n.rec()).compositeBaseData
 	case 64:
-		return &(*jsxSelfClosingElementData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*jsxSelfClosingElementData)(n.rec()).compositeBaseData
 	case 65:
-		return &(*jsxFragmentData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*jsxFragmentData)(n.rec()).compositeBaseData
 	case 66:
-		return &(*jsxAttributeData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*jsxAttributeData)(n.rec()).compositeBaseData
 	case 67:
-		return &(*SourceFile)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*SourceFile)(n.rec()).compositeBaseData
 	case 68:
-		return &(*moduleDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*moduleDeclarationData)(n.rec()).compositeBaseData
 	case 69:
-		return &(*importEqualsDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*importEqualsDeclarationData)(n.rec()).compositeBaseData
 	case 70:
-		return &(*exportDeclarationData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*exportDeclarationData)(n.rec()).compositeBaseData
 	case 71:
-		return &(*importClauseData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*importClauseData)(n.rec()).compositeBaseData
 	case 72:
-		return &(*importSpecifierData)(unsafe.Pointer(n.h)).compositeBaseData
+		return &(*importSpecifierData)(n.rec()).compositeBaseData
 	}
 	return nil
 }
@@ -1204,8 +1920,8 @@ type functionLikeBaseData struct {
 	localsContainerBaseData
 	typeParameters *TypeParameterList // Optional
 	parameters     *ParameterList
-	typeField      TypeNode // Optional
-	fullSignature  TypeNode // Optional
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
 }
 
 type FunctionLikeBase struct{ Node }
@@ -1230,33 +1946,33 @@ var functionLikeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) functionLikeBaseData() *functionLikeBaseData {
 	switch functionLikeBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*functionDeclarationData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*functionDeclarationData)(n.rec()).functionLikeBaseData
 	case 2:
-		return &(*callSignatureDeclarationData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*callSignatureDeclarationData)(n.rec()).functionLikeBaseData
 	case 3:
-		return &(*constructSignatureDeclarationData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*constructSignatureDeclarationData)(n.rec()).functionLikeBaseData
 	case 4:
-		return &(*constructorDeclarationData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*constructorDeclarationData)(n.rec()).functionLikeBaseData
 	case 5:
-		return &(*getAccessorDeclarationData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*getAccessorDeclarationData)(n.rec()).functionLikeBaseData
 	case 6:
-		return &(*setAccessorDeclarationData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*setAccessorDeclarationData)(n.rec()).functionLikeBaseData
 	case 7:
-		return &(*indexSignatureDeclarationData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*indexSignatureDeclarationData)(n.rec()).functionLikeBaseData
 	case 8:
-		return &(*methodSignatureDeclarationData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*methodSignatureDeclarationData)(n.rec()).functionLikeBaseData
 	case 9:
-		return &(*methodDeclarationData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*methodDeclarationData)(n.rec()).functionLikeBaseData
 	case 10:
-		return &(*arrowFunctionData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*arrowFunctionData)(n.rec()).functionLikeBaseData
 	case 11:
-		return &(*functionExpressionData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*functionExpressionData)(n.rec()).functionLikeBaseData
 	case 12:
-		return &(*functionTypeNodeData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*functionTypeNodeData)(n.rec()).functionLikeBaseData
 	case 13:
-		return &(*constructorTypeNodeData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*constructorTypeNodeData)(n.rec()).functionLikeBaseData
 	case 14:
-		return &(*jsDocSignatureData)(unsafe.Pointer(n.h)).functionLikeBaseData
+		return &(*jsDocSignatureData)(n.rec()).functionLikeBaseData
 	}
 	return nil
 }
@@ -1265,10 +1981,12 @@ func (node FunctionLikeBase) Locals() SymbolTable { return node.functionLikeBase
 
 func (node FunctionLikeBase) SetLocals(value SymbolTable) { node.functionLikeBaseData().locals = value }
 
-func (node FunctionLikeBase) NextContainer() Node { return node.functionLikeBaseData().nextContainer }
+func (node FunctionLikeBase) NextContainer() Node {
+	return node.s.deref(node.functionLikeBaseData().nextContainer)
+}
 
 func (node FunctionLikeBase) SetNextContainer(value Node) {
-	node.functionLikeBaseData().nextContainer = value
+	node.functionLikeBaseData().nextContainer = node.s.ref(value)
 }
 
 func (node FunctionLikeBase) TypeParameters() *TypeParameterList {
@@ -1287,21 +2005,25 @@ func (node FunctionLikeBase) SetParameters(value *ParameterList) {
 	node.functionLikeBaseData().parameters = value
 }
 
-func (node FunctionLikeBase) Type() TypeNode { return node.functionLikeBaseData().typeField }
+func (node FunctionLikeBase) Type() TypeNode {
+	return node.s.deref(node.functionLikeBaseData().typeField)
+}
 
-func (node FunctionLikeBase) SetType(value TypeNode) { node.functionLikeBaseData().typeField = value }
+func (node FunctionLikeBase) SetType(value TypeNode) {
+	node.functionLikeBaseData().typeField = node.s.ref(value)
+}
 
 func (node FunctionLikeBase) FullSignature() TypeNode {
-	return node.functionLikeBaseData().fullSignature
+	return node.s.deref(node.functionLikeBaseData().fullSignature)
 }
 
 func (node FunctionLikeBase) SetFullSignature(value TypeNode) {
-	node.functionLikeBaseData().fullSignature = value
+	node.functionLikeBaseData().fullSignature = node.s.ref(value)
 }
 
 type bodyBaseData struct {
-	asteriskToken AsteriskToken // Optional
-	body          NodeBody      // Optional
+	asteriskToken nodeRef // AsteriskToken. Optional
+	body          nodeRef // NodeBody. Optional
 	endFlowNode   *FlowNode
 }
 
@@ -1321,32 +2043,37 @@ var bodyBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) bodyBaseData() *bodyBaseData {
 	switch bodyBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*functionDeclarationData)(unsafe.Pointer(n.h)).bodyBaseData
+		return &(*functionDeclarationData)(n.rec()).bodyBaseData
 	case 2:
-		return &(*constructorDeclarationData)(unsafe.Pointer(n.h)).bodyBaseData
+		return &(*constructorDeclarationData)(n.rec()).bodyBaseData
 	case 3:
-		return &(*getAccessorDeclarationData)(unsafe.Pointer(n.h)).bodyBaseData
+		return &(*getAccessorDeclarationData)(n.rec()).bodyBaseData
 	case 4:
-		return &(*setAccessorDeclarationData)(unsafe.Pointer(n.h)).bodyBaseData
+		return &(*setAccessorDeclarationData)(n.rec()).bodyBaseData
 	case 5:
-		return &(*methodDeclarationData)(unsafe.Pointer(n.h)).bodyBaseData
+		return &(*methodDeclarationData)(n.rec()).bodyBaseData
 	case 6:
-		return &(*arrowFunctionData)(unsafe.Pointer(n.h)).bodyBaseData
+		return &(*arrowFunctionData)(n.rec()).bodyBaseData
 	case 7:
-		return &(*functionExpressionData)(unsafe.Pointer(n.h)).bodyBaseData
+		return &(*functionExpressionData)(n.rec()).bodyBaseData
 	case 8:
-		return &(*moduleDeclarationData)(unsafe.Pointer(n.h)).bodyBaseData
+		return &(*moduleDeclarationData)(n.rec()).bodyBaseData
 	}
 	return nil
 }
 
-func (node BodyBase) AsteriskToken() AsteriskToken { return node.bodyBaseData().asteriskToken }
+func (node BodyBase) AsteriskToken() AsteriskToken {
+	return node.s.deref(node.bodyBaseData().asteriskToken)
+}
 
-func (node BodyBase) SetAsteriskToken(value AsteriskToken) { node.bodyBaseData().asteriskToken = value }
-func (node BodyBase) Body() NodeBody                       { return node.bodyBaseData().body }
-func (node BodyBase) SetBody(value NodeBody)               { node.bodyBaseData().body = value }
-func (node BodyBase) EndFlowNode() *FlowNode               { return node.bodyBaseData().endFlowNode }
+func (node BodyBase) SetAsteriskToken(value AsteriskToken) {
+	node.bodyBaseData().asteriskToken = node.s.ref(value)
+}
 
+func (node BodyBase) Body() NodeBody { return node.s.deref(node.bodyBaseData().body) }
+
+func (node BodyBase) SetBody(value NodeBody)         { node.bodyBaseData().body = node.s.ref(value) }
+func (node BodyBase) EndFlowNode() *FlowNode         { return node.bodyBaseData().endFlowNode }
 func (node BodyBase) SetEndFlowNode(value *FlowNode) { node.bodyBaseData().endFlowNode = value }
 
 type functionLikeWithBodyBaseData struct {
@@ -1369,19 +2096,19 @@ var functionLikeWithBodyBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) functionLikeWithBodyBaseData() *functionLikeWithBodyBaseData {
 	switch functionLikeWithBodyBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*functionDeclarationData)(unsafe.Pointer(n.h)).functionLikeWithBodyBaseData
+		return &(*functionDeclarationData)(n.rec()).functionLikeWithBodyBaseData
 	case 2:
-		return &(*constructorDeclarationData)(unsafe.Pointer(n.h)).functionLikeWithBodyBaseData
+		return &(*constructorDeclarationData)(n.rec()).functionLikeWithBodyBaseData
 	case 3:
-		return &(*getAccessorDeclarationData)(unsafe.Pointer(n.h)).functionLikeWithBodyBaseData
+		return &(*getAccessorDeclarationData)(n.rec()).functionLikeWithBodyBaseData
 	case 4:
-		return &(*setAccessorDeclarationData)(unsafe.Pointer(n.h)).functionLikeWithBodyBaseData
+		return &(*setAccessorDeclarationData)(n.rec()).functionLikeWithBodyBaseData
 	case 5:
-		return &(*methodDeclarationData)(unsafe.Pointer(n.h)).functionLikeWithBodyBaseData
+		return &(*methodDeclarationData)(n.rec()).functionLikeWithBodyBaseData
 	case 6:
-		return &(*arrowFunctionData)(unsafe.Pointer(n.h)).functionLikeWithBodyBaseData
+		return &(*arrowFunctionData)(n.rec()).functionLikeWithBodyBaseData
 	case 7:
-		return &(*functionExpressionData)(unsafe.Pointer(n.h)).functionLikeWithBodyBaseData
+		return &(*functionExpressionData)(n.rec()).functionLikeWithBodyBaseData
 	}
 	return nil
 }
@@ -1395,11 +2122,11 @@ func (node FunctionLikeWithBodyBase) SetLocals(value SymbolTable) {
 }
 
 func (node FunctionLikeWithBodyBase) NextContainer() Node {
-	return node.functionLikeWithBodyBaseData().nextContainer
+	return node.s.deref(node.functionLikeWithBodyBaseData().nextContainer)
 }
 
 func (node FunctionLikeWithBodyBase) SetNextContainer(value Node) {
-	node.functionLikeWithBodyBaseData().nextContainer = value
+	node.functionLikeWithBodyBaseData().nextContainer = node.s.ref(value)
 }
 
 func (node FunctionLikeWithBodyBase) TypeParameters() *TypeParameterList {
@@ -1419,33 +2146,35 @@ func (node FunctionLikeWithBodyBase) SetParameters(value *ParameterList) {
 }
 
 func (node FunctionLikeWithBodyBase) Type() TypeNode {
-	return node.functionLikeWithBodyBaseData().typeField
+	return node.s.deref(node.functionLikeWithBodyBaseData().typeField)
 }
 
 func (node FunctionLikeWithBodyBase) SetType(value TypeNode) {
-	node.functionLikeWithBodyBaseData().typeField = value
+	node.functionLikeWithBodyBaseData().typeField = node.s.ref(value)
 }
 
 func (node FunctionLikeWithBodyBase) FullSignature() TypeNode {
-	return node.functionLikeWithBodyBaseData().fullSignature
+	return node.s.deref(node.functionLikeWithBodyBaseData().fullSignature)
 }
 
 func (node FunctionLikeWithBodyBase) SetFullSignature(value TypeNode) {
-	node.functionLikeWithBodyBaseData().fullSignature = value
+	node.functionLikeWithBodyBaseData().fullSignature = node.s.ref(value)
 }
 
 func (node FunctionLikeWithBodyBase) AsteriskToken() AsteriskToken {
-	return node.functionLikeWithBodyBaseData().asteriskToken
+	return node.s.deref(node.functionLikeWithBodyBaseData().asteriskToken)
 }
 
 func (node FunctionLikeWithBodyBase) SetAsteriskToken(value AsteriskToken) {
-	node.functionLikeWithBodyBaseData().asteriskToken = value
+	node.functionLikeWithBodyBaseData().asteriskToken = node.s.ref(value)
 }
 
-func (node FunctionLikeWithBodyBase) Body() NodeBody { return node.functionLikeWithBodyBaseData().body }
+func (node FunctionLikeWithBodyBase) Body() NodeBody {
+	return node.s.deref(node.functionLikeWithBodyBaseData().body)
+}
 
 func (node FunctionLikeWithBodyBase) SetBody(value NodeBody) {
-	node.functionLikeWithBodyBaseData().body = value
+	node.functionLikeWithBodyBaseData().body = node.s.ref(value)
 }
 
 func (node FunctionLikeWithBodyBase) EndFlowNode() *FlowNode {
@@ -1461,7 +2190,7 @@ type classLikeBaseData struct {
 	modifiersBaseData
 	localsContainerBaseData
 	compositeBaseData
-	name            IdentifierNode      // Optional
+	name            nodeRef             // IdentifierNode. Optional
 	typeParameters  *TypeParameterList  // Optional
 	heritageClauses *HeritageClauseList // Optional
 	members         *ClassElementList
@@ -1477,9 +2206,9 @@ var classLikeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) classLikeBaseData() *classLikeBaseData {
 	switch classLikeBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*classDeclarationData)(unsafe.Pointer(n.h)).classLikeBaseData
+		return &(*classDeclarationData)(n.rec()).classLikeBaseData
 	case 2:
-		return &(*classExpressionData)(unsafe.Pointer(n.h)).classLikeBaseData
+		return &(*classExpressionData)(n.rec()).classLikeBaseData
 	}
 	return nil
 }
@@ -1495,13 +2224,20 @@ func (node ClassLikeBase) setModifiers(value *ModifierList) {
 }
 func (node ClassLikeBase) Locals() SymbolTable         { return node.classLikeBaseData().locals }
 func (node ClassLikeBase) SetLocals(value SymbolTable) { node.classLikeBaseData().locals = value }
-func (node ClassLikeBase) NextContainer() Node         { return node.classLikeBaseData().nextContainer }
+func (node ClassLikeBase) NextContainer() Node {
+	return node.s.deref(node.classLikeBaseData().nextContainer)
+}
 
 func (node ClassLikeBase) SetNextContainer(value Node) {
-	node.classLikeBaseData().nextContainer = value
+	node.classLikeBaseData().nextContainer = node.s.ref(value)
 }
-func (node ClassLikeBase) Name() IdentifierNode         { return node.classLikeBaseData().name }
-func (node ClassLikeBase) setName(value IdentifierNode) { node.classLikeBaseData().name = value }
+
+func (node ClassLikeBase) Name() IdentifierNode { return node.s.deref(node.classLikeBaseData().name) }
+
+func (node ClassLikeBase) setName(value IdentifierNode) {
+	node.classLikeBaseData().name = node.s.ref(value)
+}
+
 func (node ClassLikeBase) TypeParameters() *TypeParameterList {
 	return node.classLikeBaseData().typeParameters
 }
@@ -1544,23 +2280,23 @@ var literalLikeNodeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) literalLikeNodeBaseData() *literalLikeNodeBaseData {
 	switch literalLikeNodeBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*stringLiteralData)(unsafe.Pointer(n.h)).literalLikeNodeBaseData
+		return &(*stringLiteralData)(n.rec()).literalLikeNodeBaseData
 	case 2:
-		return &(*numericLiteralData)(unsafe.Pointer(n.h)).literalLikeNodeBaseData
+		return &(*numericLiteralData)(n.rec()).literalLikeNodeBaseData
 	case 3:
-		return &(*bigIntLiteralData)(unsafe.Pointer(n.h)).literalLikeNodeBaseData
+		return &(*bigIntLiteralData)(n.rec()).literalLikeNodeBaseData
 	case 4:
-		return &(*regularExpressionLiteralData)(unsafe.Pointer(n.h)).literalLikeNodeBaseData
+		return &(*regularExpressionLiteralData)(n.rec()).literalLikeNodeBaseData
 	case 5:
-		return &(*noSubstitutionTemplateLiteralData)(unsafe.Pointer(n.h)).literalLikeNodeBaseData
+		return &(*noSubstitutionTemplateLiteralData)(n.rec()).literalLikeNodeBaseData
 	case 6:
-		return &(*templateHeadData)(unsafe.Pointer(n.h)).literalLikeNodeBaseData
+		return &(*templateHeadData)(n.rec()).literalLikeNodeBaseData
 	case 7:
-		return &(*templateMiddleData)(unsafe.Pointer(n.h)).literalLikeNodeBaseData
+		return &(*templateMiddleData)(n.rec()).literalLikeNodeBaseData
 	case 8:
-		return &(*templateTailData)(unsafe.Pointer(n.h)).literalLikeNodeBaseData
+		return &(*templateTailData)(n.rec()).literalLikeNodeBaseData
 	case 9:
-		return &(*jsxTextData)(unsafe.Pointer(n.h)).literalLikeNodeBaseData
+		return &(*jsxTextData)(n.rec()).literalLikeNodeBaseData
 	}
 	return nil
 }
@@ -1593,13 +2329,13 @@ var literalExpressionBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) literalExpressionBaseData() *literalExpressionBaseData {
 	switch literalExpressionBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*stringLiteralData)(unsafe.Pointer(n.h)).literalExpressionBaseData
+		return &(*stringLiteralData)(n.rec()).literalExpressionBaseData
 	case 2:
-		return &(*numericLiteralData)(unsafe.Pointer(n.h)).literalExpressionBaseData
+		return &(*numericLiteralData)(n.rec()).literalExpressionBaseData
 	case 3:
-		return &(*bigIntLiteralData)(unsafe.Pointer(n.h)).literalExpressionBaseData
+		return &(*bigIntLiteralData)(n.rec()).literalExpressionBaseData
 	case 4:
-		return &(*regularExpressionLiteralData)(unsafe.Pointer(n.h)).literalExpressionBaseData
+		return &(*regularExpressionLiteralData)(n.rec()).literalExpressionBaseData
 	}
 	return nil
 }
@@ -1635,13 +2371,13 @@ var templateLiteralLikeNodeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8
 func (n Node) templateLiteralLikeNodeBaseData() *templateLiteralLikeNodeBaseData {
 	switch templateLiteralLikeNodeBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*noSubstitutionTemplateLiteralData)(unsafe.Pointer(n.h)).templateLiteralLikeNodeBaseData
+		return &(*noSubstitutionTemplateLiteralData)(n.rec()).templateLiteralLikeNodeBaseData
 	case 2:
-		return &(*templateHeadData)(unsafe.Pointer(n.h)).templateLiteralLikeNodeBaseData
+		return &(*templateHeadData)(n.rec()).templateLiteralLikeNodeBaseData
 	case 3:
-		return &(*templateMiddleData)(unsafe.Pointer(n.h)).templateLiteralLikeNodeBaseData
+		return &(*templateMiddleData)(n.rec()).templateLiteralLikeNodeBaseData
 	case 4:
-		return &(*templateTailData)(unsafe.Pointer(n.h)).templateLiteralLikeNodeBaseData
+		return &(*templateTailData)(n.rec()).templateLiteralLikeNodeBaseData
 	}
 	return nil
 }
@@ -1688,8 +2424,8 @@ type ClassElementBase struct{ Node }
 
 type namedMemberBaseData struct {
 	modifiersBaseData
-	name         PropertyName
-	postfixToken TokenNode // Optional
+	name         nodeRef // PropertyName
+	postfixToken nodeRef // TokenNode. Optional
 }
 
 type NamedMemberBase struct{ Node }
@@ -1709,23 +2445,23 @@ var namedMemberBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) namedMemberBaseData() *namedMemberBaseData {
 	switch namedMemberBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*enumMemberData)(unsafe.Pointer(n.h)).namedMemberBaseData
+		return &(*enumMemberData)(n.rec()).namedMemberBaseData
 	case 2:
-		return &(*getAccessorDeclarationData)(unsafe.Pointer(n.h)).namedMemberBaseData
+		return &(*getAccessorDeclarationData)(n.rec()).namedMemberBaseData
 	case 3:
-		return &(*setAccessorDeclarationData)(unsafe.Pointer(n.h)).namedMemberBaseData
+		return &(*setAccessorDeclarationData)(n.rec()).namedMemberBaseData
 	case 4:
-		return &(*methodSignatureDeclarationData)(unsafe.Pointer(n.h)).namedMemberBaseData
+		return &(*methodSignatureDeclarationData)(n.rec()).namedMemberBaseData
 	case 5:
-		return &(*methodDeclarationData)(unsafe.Pointer(n.h)).namedMemberBaseData
+		return &(*methodDeclarationData)(n.rec()).namedMemberBaseData
 	case 6:
-		return &(*propertySignatureDeclarationData)(unsafe.Pointer(n.h)).namedMemberBaseData
+		return &(*propertySignatureDeclarationData)(n.rec()).namedMemberBaseData
 	case 7:
-		return &(*propertyDeclarationData)(unsafe.Pointer(n.h)).namedMemberBaseData
+		return &(*propertyDeclarationData)(n.rec()).namedMemberBaseData
 	case 8:
-		return &(*propertyAssignmentData)(unsafe.Pointer(n.h)).namedMemberBaseData
+		return &(*propertyAssignmentData)(n.rec()).namedMemberBaseData
 	case 9:
-		return &(*shorthandPropertyAssignmentData)(unsafe.Pointer(n.h)).namedMemberBaseData
+		return &(*shorthandPropertyAssignmentData)(n.rec()).namedMemberBaseData
 	}
 	return nil
 }
@@ -1735,12 +2471,19 @@ func (node NamedMemberBase) Modifiers() *ModifierList { return node.namedMemberB
 func (node NamedMemberBase) setModifiers(value *ModifierList) {
 	node.namedMemberBaseData().modifiers = value
 }
-func (node NamedMemberBase) Name() PropertyName         { return node.namedMemberBaseData().name }
-func (node NamedMemberBase) setName(value PropertyName) { node.namedMemberBaseData().name = value }
-func (node NamedMemberBase) PostfixToken() TokenNode    { return node.namedMemberBaseData().postfixToken }
+
+func (node NamedMemberBase) Name() PropertyName { return node.s.deref(node.namedMemberBaseData().name) }
+
+func (node NamedMemberBase) setName(value PropertyName) {
+	node.namedMemberBaseData().name = node.s.ref(value)
+}
+
+func (node NamedMemberBase) PostfixToken() TokenNode {
+	return node.s.deref(node.namedMemberBaseData().postfixToken)
+}
 
 func (node NamedMemberBase) SetPostfixToken(value TokenNode) {
-	node.namedMemberBaseData().postfixToken = value
+	node.namedMemberBaseData().postfixToken = node.s.ref(value)
 }
 
 type objectLiteralElementBaseData struct{}
@@ -1769,9 +2512,9 @@ var accessorDeclarationBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) accessorDeclarationBaseData() *accessorDeclarationBaseData {
 	switch accessorDeclarationBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*getAccessorDeclarationData)(unsafe.Pointer(n.h)).accessorDeclarationBaseData
+		return &(*getAccessorDeclarationData)(n.rec()).accessorDeclarationBaseData
 	case 2:
-		return &(*setAccessorDeclarationData)(unsafe.Pointer(n.h)).accessorDeclarationBaseData
+		return &(*setAccessorDeclarationData)(n.rec()).accessorDeclarationBaseData
 	}
 	return nil
 }
@@ -1793,19 +2536,19 @@ func (node AccessorDeclarationBase) setModifiers(value *ModifierList) {
 }
 
 func (node AccessorDeclarationBase) Name() PropertyName {
-	return node.accessorDeclarationBaseData().name
+	return node.s.deref(node.accessorDeclarationBaseData().name)
 }
 
 func (node AccessorDeclarationBase) setName(value PropertyName) {
-	node.accessorDeclarationBaseData().name = value
+	node.accessorDeclarationBaseData().name = node.s.ref(value)
 }
 
 func (node AccessorDeclarationBase) PostfixToken() TokenNode {
-	return node.accessorDeclarationBaseData().postfixToken
+	return node.s.deref(node.accessorDeclarationBaseData().postfixToken)
 }
 
 func (node AccessorDeclarationBase) SetPostfixToken(value TokenNode) {
-	node.accessorDeclarationBaseData().postfixToken = value
+	node.accessorDeclarationBaseData().postfixToken = node.s.ref(value)
 }
 
 func (node AccessorDeclarationBase) Locals() SymbolTable {
@@ -1817,11 +2560,11 @@ func (node AccessorDeclarationBase) SetLocals(value SymbolTable) {
 }
 
 func (node AccessorDeclarationBase) NextContainer() Node {
-	return node.accessorDeclarationBaseData().nextContainer
+	return node.s.deref(node.accessorDeclarationBaseData().nextContainer)
 }
 
 func (node AccessorDeclarationBase) SetNextContainer(value Node) {
-	node.accessorDeclarationBaseData().nextContainer = value
+	node.accessorDeclarationBaseData().nextContainer = node.s.ref(value)
 }
 
 func (node AccessorDeclarationBase) TypeParameters() *TypeParameterList {
@@ -1841,33 +2584,35 @@ func (node AccessorDeclarationBase) SetParameters(value *ParameterList) {
 }
 
 func (node AccessorDeclarationBase) Type() TypeNode {
-	return node.accessorDeclarationBaseData().typeField
+	return node.s.deref(node.accessorDeclarationBaseData().typeField)
 }
 
 func (node AccessorDeclarationBase) SetType(value TypeNode) {
-	node.accessorDeclarationBaseData().typeField = value
+	node.accessorDeclarationBaseData().typeField = node.s.ref(value)
 }
 
 func (node AccessorDeclarationBase) FullSignature() TypeNode {
-	return node.accessorDeclarationBaseData().fullSignature
+	return node.s.deref(node.accessorDeclarationBaseData().fullSignature)
 }
 
 func (node AccessorDeclarationBase) SetFullSignature(value TypeNode) {
-	node.accessorDeclarationBaseData().fullSignature = value
+	node.accessorDeclarationBaseData().fullSignature = node.s.ref(value)
 }
 
 func (node AccessorDeclarationBase) AsteriskToken() AsteriskToken {
-	return node.accessorDeclarationBaseData().asteriskToken
+	return node.s.deref(node.accessorDeclarationBaseData().asteriskToken)
 }
 
 func (node AccessorDeclarationBase) SetAsteriskToken(value AsteriskToken) {
-	node.accessorDeclarationBaseData().asteriskToken = value
+	node.accessorDeclarationBaseData().asteriskToken = node.s.ref(value)
 }
 
-func (node AccessorDeclarationBase) Body() NodeBody { return node.accessorDeclarationBaseData().body }
+func (node AccessorDeclarationBase) Body() NodeBody {
+	return node.s.deref(node.accessorDeclarationBaseData().body)
+}
 
 func (node AccessorDeclarationBase) SetBody(value NodeBody) {
-	node.accessorDeclarationBaseData().body = value
+	node.accessorDeclarationBaseData().body = node.s.ref(value)
 }
 
 func (node AccessorDeclarationBase) EndFlowNode() *FlowNode {
@@ -1903,9 +2648,9 @@ var functionOrConstructorTypeNodeBaseDataDispatch = [kindFlowReduceLabelData + 1
 func (n Node) functionOrConstructorTypeNodeBaseData() *functionOrConstructorTypeNodeBaseData {
 	switch functionOrConstructorTypeNodeBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*functionTypeNodeData)(unsafe.Pointer(n.h)).functionOrConstructorTypeNodeBaseData
+		return &(*functionTypeNodeData)(n.rec()).functionOrConstructorTypeNodeBaseData
 	case 2:
-		return &(*constructorTypeNodeData)(unsafe.Pointer(n.h)).functionOrConstructorTypeNodeBaseData
+		return &(*constructorTypeNodeData)(n.rec()).functionOrConstructorTypeNodeBaseData
 	}
 	return nil
 }
@@ -1935,11 +2680,11 @@ func (node FunctionOrConstructorTypeNodeBase) SetLocals(value SymbolTable) {
 }
 
 func (node FunctionOrConstructorTypeNodeBase) NextContainer() Node {
-	return node.functionOrConstructorTypeNodeBaseData().nextContainer
+	return node.s.deref(node.functionOrConstructorTypeNodeBaseData().nextContainer)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetNextContainer(value Node) {
-	node.functionOrConstructorTypeNodeBaseData().nextContainer = value
+	node.functionOrConstructorTypeNodeBaseData().nextContainer = node.s.ref(value)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) TypeParameters() *TypeParameterList {
@@ -1959,19 +2704,19 @@ func (node FunctionOrConstructorTypeNodeBase) SetParameters(value *ParameterList
 }
 
 func (node FunctionOrConstructorTypeNodeBase) Type() TypeNode {
-	return node.functionOrConstructorTypeNodeBaseData().typeField
+	return node.s.deref(node.functionOrConstructorTypeNodeBaseData().typeField)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetType(value TypeNode) {
-	node.functionOrConstructorTypeNodeBaseData().typeField = value
+	node.functionOrConstructorTypeNodeBaseData().typeField = node.s.ref(value)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) FullSignature() TypeNode {
-	return node.functionOrConstructorTypeNodeBaseData().fullSignature
+	return node.s.deref(node.functionOrConstructorTypeNodeBaseData().fullSignature)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetFullSignature(value TypeNode) {
-	node.functionOrConstructorTypeNodeBaseData().fullSignature = value
+	node.functionOrConstructorTypeNodeBaseData().fullSignature = node.s.ref(value)
 }
 
 type unionOrIntersectionTypeNodeBaseData struct {
@@ -1989,9 +2734,9 @@ var unionOrIntersectionTypeNodeBaseDataDispatch = [kindFlowReduceLabelData + 1]u
 func (n Node) unionOrIntersectionTypeNodeBaseData() *unionOrIntersectionTypeNodeBaseData {
 	switch unionOrIntersectionTypeNodeBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*unionTypeNodeData)(unsafe.Pointer(n.h)).unionOrIntersectionTypeNodeBaseData
+		return &(*unionTypeNodeData)(n.rec()).unionOrIntersectionTypeNodeBaseData
 	case 2:
-		return &(*intersectionTypeNodeData)(unsafe.Pointer(n.h)).unionOrIntersectionTypeNodeBaseData
+		return &(*intersectionTypeNodeData)(n.rec()).unionOrIntersectionTypeNodeBaseData
 	}
 	return nil
 }
@@ -2006,7 +2751,7 @@ func (node UnionOrIntersectionTypeNodeBase) SetTypes(value *TypeList) {
 
 type jsDocTagBaseData struct {
 	nodeBaseData
-	tagName IdentifierNode
+	tagName nodeRef   // IdentifierNode
 	comment *NodeList // Optional
 }
 
@@ -2040,55 +2785,60 @@ var jsDocTagBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) jsDocTagBaseData() *jsDocTagBaseData {
 	switch jsDocTagBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*jsDocTypeTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocTypeTagData)(n.rec()).jsDocTagBaseData
 	case 2:
-		return &(*jsDocUnknownTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocUnknownTagData)(n.rec()).jsDocTagBaseData
 	case 3:
-		return &(*jsDocTemplateTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocTemplateTagData)(n.rec()).jsDocTagBaseData
 	case 4:
-		return &(*jsDocReturnTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocReturnTagData)(n.rec()).jsDocTagBaseData
 	case 5:
-		return &(*jsDocPublicTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocPublicTagData)(n.rec()).jsDocTagBaseData
 	case 6:
-		return &(*jsDocPrivateTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocPrivateTagData)(n.rec()).jsDocTagBaseData
 	case 7:
-		return &(*jsDocProtectedTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocProtectedTagData)(n.rec()).jsDocTagBaseData
 	case 8:
-		return &(*jsDocReadonlyTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocReadonlyTagData)(n.rec()).jsDocTagBaseData
 	case 9:
-		return &(*jsDocOverrideTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocOverrideTagData)(n.rec()).jsDocTagBaseData
 	case 10:
-		return &(*jsDocDeprecatedTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocDeprecatedTagData)(n.rec()).jsDocTagBaseData
 	case 11:
-		return &(*jsDocSeeTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocSeeTagData)(n.rec()).jsDocTagBaseData
 	case 12:
-		return &(*jsDocImplementsTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocImplementsTagData)(n.rec()).jsDocTagBaseData
 	case 13:
-		return &(*jsDocAugmentsTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocAugmentsTagData)(n.rec()).jsDocTagBaseData
 	case 14:
-		return &(*jsDocSatisfiesTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocSatisfiesTagData)(n.rec()).jsDocTagBaseData
 	case 15:
-		return &(*jsDocThrowsTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocThrowsTagData)(n.rec()).jsDocTagBaseData
 	case 16:
-		return &(*jsDocThisTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocThisTagData)(n.rec()).jsDocTagBaseData
 	case 17:
-		return &(*jsDocImportTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocImportTagData)(n.rec()).jsDocTagBaseData
 	case 18:
-		return &(*jsDocCallbackTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocCallbackTagData)(n.rec()).jsDocTagBaseData
 	case 19:
-		return &(*jsDocOverloadTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocOverloadTagData)(n.rec()).jsDocTagBaseData
 	case 20:
-		return &(*jsDocTypedefTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocTypedefTagData)(n.rec()).jsDocTagBaseData
 	case 21:
-		return &(*jsDocParameterOrPropertyTagData)(unsafe.Pointer(n.h)).jsDocTagBaseData
+		return &(*jsDocParameterOrPropertyTagData)(n.rec()).jsDocTagBaseData
 	}
 	return nil
 }
 
-func (node JSDocTagBase) TagName() IdentifierNode         { return node.jsDocTagBaseData().tagName }
-func (node JSDocTagBase) SetTagName(value IdentifierNode) { node.jsDocTagBaseData().tagName = value }
-func (node JSDocTagBase) Comment() *NodeList              { return node.jsDocTagBaseData().comment }
-func (node JSDocTagBase) SetComment(value *NodeList)      { node.jsDocTagBaseData().comment = value }
+func (node JSDocTagBase) TagName() IdentifierNode {
+	return node.s.deref(node.jsDocTagBaseData().tagName)
+}
+
+func (node JSDocTagBase) SetTagName(value IdentifierNode) {
+	node.jsDocTagBaseData().tagName = node.s.ref(value)
+}
+func (node JSDocTagBase) Comment() *NodeList         { return node.jsDocTagBaseData().comment }
+func (node JSDocTagBase) SetComment(value *NodeList) { node.jsDocTagBaseData().comment = value }
 
 type jsDocCommentBaseData struct {
 	nodeBaseData
@@ -2107,13 +2857,13 @@ var jsDocCommentBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n Node) jsDocCommentBaseData() *jsDocCommentBaseData {
 	switch jsDocCommentBaseDataDispatch[n.Kind()] {
 	case 1:
-		return &(*jsDocTextData)(unsafe.Pointer(n.h)).jsDocCommentBaseData
+		return &(*jsDocTextData)(n.rec()).jsDocCommentBaseData
 	case 2:
-		return &(*jsDocLinkData)(unsafe.Pointer(n.h)).jsDocCommentBaseData
+		return &(*jsDocLinkData)(n.rec()).jsDocCommentBaseData
 	case 3:
-		return &(*jsDocLinkPlainData)(unsafe.Pointer(n.h)).jsDocCommentBaseData
+		return &(*jsDocLinkPlainData)(n.rec()).jsDocCommentBaseData
 	case 4:
-		return &(*jsDocLinkCodeData)(unsafe.Pointer(n.h)).jsDocCommentBaseData
+		return &(*jsDocLinkCodeData)(n.rec()).jsDocCommentBaseData
 	}
 	return nil
 }
@@ -2476,7 +3226,7 @@ type tokenData struct {
 
 type Token struct{ Node }
 
-func (node Token) data() *tokenData { return (*tokenData)(unsafe.Pointer(node.h)) }
+func (node Token) data() *tokenData { return (*tokenData)(node.rec()) }
 
 func (f *NodeFactory) NewToken(kind TokenSyntaxKind) Node {
 	if !IsTokenKind(kind) {
@@ -2484,47 +3234,47 @@ func (f *NodeFactory) NewToken(kind TokenSyntaxKind) Node {
 	}
 	switch kind {
 	case KindNumericLiteral:
-		data := f.numericLiteralArena.New()
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[numericLiteralData](f.nodeStore(), layoutNumericLiteral)
+		return f.newNode(kind, layoutNumericLiteral, i)
 	case KindBigIntLiteral:
-		data := &bigIntLiteralData{}
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[bigIntLiteralData](f.nodeStore(), layoutBigIntLiteral)
+		return f.newNode(kind, layoutBigIntLiteral, i)
 	case KindStringLiteral:
-		data := f.stringLiteralArena.New()
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[stringLiteralData](f.nodeStore(), layoutStringLiteral)
+		return f.newNode(kind, layoutStringLiteral, i)
 	case KindJsxText:
-		data := &jsxTextData{}
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[jsxTextData](f.nodeStore(), layoutJsxText)
+		return f.newNode(kind, layoutJsxText, i)
 	case KindRegularExpressionLiteral:
-		data := &regularExpressionLiteralData{}
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[regularExpressionLiteralData](f.nodeStore(), layoutRegularExpressionLiteral)
+		return f.newNode(kind, layoutRegularExpressionLiteral, i)
 	case KindNoSubstitutionTemplateLiteral:
-		data := &noSubstitutionTemplateLiteralData{}
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[noSubstitutionTemplateLiteralData](f.nodeStore(), layoutNoSubstitutionTemplateLiteral)
+		return f.newNode(kind, layoutNoSubstitutionTemplateLiteral, i)
 	case KindTemplateHead:
-		data := &templateHeadData{}
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[templateHeadData](f.nodeStore(), layoutTemplateHead)
+		return f.newNode(kind, layoutTemplateHead, i)
 	case KindTemplateMiddle:
-		data := &templateMiddleData{}
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[templateMiddleData](f.nodeStore(), layoutTemplateMiddle)
+		return f.newNode(kind, layoutTemplateMiddle, i)
 	case KindTemplateTail:
-		data := &templateTailData{}
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[templateTailData](f.nodeStore(), layoutTemplateTail)
+		return f.newNode(kind, layoutTemplateTail, i)
 	case KindIdentifier:
-		data := f.identifierArena.New()
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[identifierData](f.nodeStore(), layoutIdentifier)
+		return f.newNode(kind, layoutIdentifier, i)
 	case KindPrivateIdentifier:
-		data := &privateIdentifierData{}
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[privateIdentifierData](f.nodeStore(), layoutPrivateIdentifier)
+		return f.newNode(kind, layoutPrivateIdentifier, i)
 	case KindFalseKeyword, KindImportKeyword, KindNullKeyword, KindSuperKeyword, KindThisKeyword, KindTrueKeyword:
-		data := f.keywordExpressionArena.New()
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[keywordExpressionData](f.nodeStore(), layoutKeywordExpression)
+		return f.newNode(kind, layoutKeywordExpression, i)
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
-		data := f.keywordTypeNodeArena.New()
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[keywordTypeNodeData](f.nodeStore(), layoutKeywordTypeNode)
+		return f.newNode(kind, layoutKeywordTypeNode, i)
 	default:
-		data := f.tokenArena.New()
-		return f.newNode(kind, data.asNode())
+		_, i := newRecord[tokenData](f.nodeStore(), layoutToken)
+		return f.newNode(kind, layoutToken, i)
 	}
 }
 
@@ -2552,7 +3302,7 @@ type identifierData struct {
 
 type Identifier struct{ Node }
 
-func (node Identifier) data() *identifierData { return (*identifierData)(unsafe.Pointer(node.h)) }
+func (node Identifier) data() *identifierData { return (*identifierData)(node.rec()) }
 
 func (node Identifier) FlowNode() *FlowNode         { return node.data().flowNode }
 func (node Identifier) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
@@ -2560,10 +3310,10 @@ func (node Identifier) Text() string                { return node.data().text }
 func (node Identifier) SetText(value string)        { node.data().text = value }
 
 func (f *NodeFactory) NewIdentifier(text string) Node {
-	data := f.identifierArena.New()
+	data, i := newRecord[identifierData](f.nodeStore(), layoutIdentifier)
 	data.text = text
 	f.textCount++
-	return f.newNode(KindIdentifier, data.asNode())
+	return f.newNode(KindIdentifier, layoutIdentifier, i)
 }
 
 func (node Identifier) Clone(f NodeFactoryCoercible) Node {
@@ -2586,17 +3336,17 @@ type privateIdentifierData struct {
 type PrivateIdentifier struct{ Node }
 
 func (node PrivateIdentifier) data() *privateIdentifierData {
-	return (*privateIdentifierData)(unsafe.Pointer(node.h))
+	return (*privateIdentifierData)(node.rec())
 }
 
 func (node PrivateIdentifier) Text() string         { return node.data().text }
 func (node PrivateIdentifier) SetText(value string) { node.data().text = value }
 
 func (f *NodeFactory) NewPrivateIdentifier(text string) Node {
-	data := &privateIdentifierData{}
+	data, i := newRecord[privateIdentifierData](f.nodeStore(), layoutPrivateIdentifier)
 	data.text = text
 	f.textCount++
-	return f.newNode(KindPrivateIdentifier, data.asNode())
+	return f.newNode(KindPrivateIdentifier, layoutPrivateIdentifier, i)
 }
 
 func (node PrivateIdentifier) Clone(f NodeFactoryCoercible) Node {
@@ -2615,28 +3365,27 @@ type qualifiedNameData struct {
 	nodeBaseData
 	flowNodeBaseData
 	compositeBaseData
-	left  EntityName
-	right MemberName
+	left  nodeRef // EntityName
+	right nodeRef // MemberName
 }
 
 type QualifiedName struct{ Node }
 
-func (node QualifiedName) data() *qualifiedNameData {
-	return (*qualifiedNameData)(unsafe.Pointer(node.h))
-}
+func (node QualifiedName) data() *qualifiedNameData { return (*qualifiedNameData)(node.rec()) }
 
 func (node QualifiedName) FlowNode() *FlowNode         { return node.data().flowNode }
 func (node QualifiedName) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
-func (node QualifiedName) Left() EntityName            { return node.data().left }
-func (node QualifiedName) SetLeft(value EntityName)    { node.data().left = value }
-func (node QualifiedName) Right() MemberName           { return node.data().right }
-func (node QualifiedName) SetRight(value MemberName)   { node.data().right = value }
+func (node QualifiedName) Left() EntityName            { return node.s.deref(node.data().left) }
+func (node QualifiedName) SetLeft(value EntityName)    { node.data().left = node.s.ref(value) }
+func (node QualifiedName) Right() MemberName           { return node.s.deref(node.data().right) }
+func (node QualifiedName) SetRight(value MemberName)   { node.data().right = node.s.ref(value) }
 
 func (f *NodeFactory) NewQualifiedName(left EntityName, right MemberName) Node {
-	data := &qualifiedNameData{}
-	data.left = left
-	data.right = right
-	return f.newNode(KindQualifiedName, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[qualifiedNameData](s, layoutQualifiedName)
+	data.left = s.ref(left)
+	data.right = s.ref(right)
+	return f.newNode(KindQualifiedName, layoutQualifiedName, i)
 }
 
 func (f *NodeFactory) UpdateQualifiedName(node QualifiedName, left EntityName, right MemberName) Node {
@@ -2674,22 +3423,26 @@ func IsQualifiedName(node Node) bool {
 type computedPropertyNameData struct {
 	nodeBaseData
 	compositeBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type ComputedPropertyName struct{ Node }
 
 func (node ComputedPropertyName) data() *computedPropertyNameData {
-	return (*computedPropertyNameData)(unsafe.Pointer(node.h))
+	return (*computedPropertyNameData)(node.rec())
 }
 
-func (node ComputedPropertyName) Expression() Expression         { return node.data().expression }
-func (node ComputedPropertyName) SetExpression(value Expression) { node.data().expression = value }
+func (node ComputedPropertyName) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node ComputedPropertyName) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewComputedPropertyName(expression Expression) Node {
-	data := &computedPropertyNameData{}
-	data.expression = expression
-	return f.newNode(KindComputedPropertyName, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[computedPropertyNameData](s, layoutComputedPropertyName)
+	data.expression = s.ref(expression)
+	return f.newNode(KindComputedPropertyName, layoutComputedPropertyName, i)
 }
 
 func (f *NodeFactory) UpdateComputedPropertyName(node ComputedPropertyName, expression Expression) Node {
@@ -2726,20 +3479,26 @@ func IsComputedPropertyName(node Node) bool {
 type decoratorData struct {
 	nodeBaseData
 	compositeBaseData
-	expression LeftHandSideExpression
+	expression nodeRef // LeftHandSideExpression
 }
 
 type Decorator struct{ Node }
 
-func (node Decorator) data() *decoratorData { return (*decoratorData)(unsafe.Pointer(node.h)) }
+func (node Decorator) data() *decoratorData { return (*decoratorData)(node.rec()) }
 
-func (node Decorator) Expression() LeftHandSideExpression         { return node.data().expression }
-func (node Decorator) SetExpression(value LeftHandSideExpression) { node.data().expression = value }
+func (node Decorator) Expression() LeftHandSideExpression {
+	return node.s.deref(node.data().expression)
+}
+
+func (node Decorator) SetExpression(value LeftHandSideExpression) {
+	node.data().expression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewDecorator(expression LeftHandSideExpression) Node {
-	data := &decoratorData{}
-	data.expression = expression
-	return f.newNode(KindDecorator, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[decoratorData](s, layoutDecorator)
+	data.expression = s.ref(expression)
+	return f.newNode(KindDecorator, layoutDecorator, i)
 }
 
 func (f *NodeFactory) UpdateDecorator(node Decorator, expression LeftHandSideExpression) Node {
@@ -2775,16 +3534,14 @@ type emptyStatementData struct {
 
 type EmptyStatement struct{ Node }
 
-func (node EmptyStatement) data() *emptyStatementData {
-	return (*emptyStatementData)(unsafe.Pointer(node.h))
-}
+func (node EmptyStatement) data() *emptyStatementData { return (*emptyStatementData)(node.rec()) }
 
 func (node EmptyStatement) FlowNode() *FlowNode         { return node.data().flowNode }
 func (node EmptyStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
 
 func (f *NodeFactory) NewEmptyStatement() Node {
-	data := &emptyStatementData{}
-	return f.newNode(KindEmptyStatement, data.asNode())
+	_, i := newRecord[emptyStatementData](f.nodeStore(), layoutEmptyStatement)
+	return f.newNode(KindEmptyStatement, layoutEmptyStatement, i)
 }
 
 func (node EmptyStatement) Clone(f NodeFactoryCoercible) Node {
@@ -2802,30 +3559,38 @@ func IsEmptyStatement(node Node) bool {
 type ifStatementData struct {
 	statementBaseData
 	compositeBaseData
-	expression    Expression
-	thenStatement Statement
-	elseStatement Statement // Optional
+	expression    nodeRef // Expression
+	thenStatement nodeRef // Statement
+	elseStatement nodeRef // Statement. Optional
 }
 
 type IfStatement struct{ Node }
 
-func (node IfStatement) data() *ifStatementData { return (*ifStatementData)(unsafe.Pointer(node.h)) }
+func (node IfStatement) data() *ifStatementData { return (*ifStatementData)(node.rec()) }
 
-func (node IfStatement) FlowNode() *FlowNode              { return node.data().flowNode }
-func (node IfStatement) SetFlowNode(value *FlowNode)      { node.data().flowNode = value }
-func (node IfStatement) Expression() Expression           { return node.data().expression }
-func (node IfStatement) SetExpression(value Expression)   { node.data().expression = value }
-func (node IfStatement) ThenStatement() Statement         { return node.data().thenStatement }
-func (node IfStatement) SetThenStatement(value Statement) { node.data().thenStatement = value }
-func (node IfStatement) ElseStatement() Statement         { return node.data().elseStatement }
-func (node IfStatement) SetElseStatement(value Statement) { node.data().elseStatement = value }
+func (node IfStatement) FlowNode() *FlowNode         { return node.data().flowNode }
+func (node IfStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
+func (node IfStatement) Expression() Expression      { return node.s.deref(node.data().expression) }
+
+func (node IfStatement) SetExpression(value Expression) { node.data().expression = node.s.ref(value) }
+
+func (node IfStatement) ThenStatement() Statement { return node.s.deref(node.data().thenStatement) }
+
+func (node IfStatement) SetThenStatement(value Statement) {
+	node.data().thenStatement = node.s.ref(value)
+}
+func (node IfStatement) ElseStatement() Statement { return node.s.deref(node.data().elseStatement) }
+func (node IfStatement) SetElseStatement(value Statement) {
+	node.data().elseStatement = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewIfStatement(expression Expression, thenStatement Statement, elseStatement Statement) Node {
-	data := f.ifStatementArena.New()
-	data.expression = expression
-	data.thenStatement = thenStatement
-	data.elseStatement = elseStatement
-	return f.newNode(KindIfStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[ifStatementData](s, layoutIfStatement)
+	data.expression = s.ref(expression)
+	data.thenStatement = s.ref(thenStatement)
+	data.elseStatement = s.ref(elseStatement)
+	return f.newNode(KindIfStatement, layoutIfStatement, i)
 }
 
 func (f *NodeFactory) UpdateIfStatement(node IfStatement, expression Expression, thenStatement Statement, elseStatement Statement) Node {
@@ -2864,25 +3629,29 @@ func IsIfStatement(node Node) bool {
 type doStatementData struct {
 	iterationStatementBaseData
 	compositeBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type DoStatement struct{ Node }
 
-func (node DoStatement) data() *doStatementData { return (*doStatementData)(unsafe.Pointer(node.h)) }
+func (node DoStatement) data() *doStatementData { return (*doStatementData)(node.rec()) }
 
-func (node DoStatement) FlowNode() *FlowNode            { return node.data().flowNode }
-func (node DoStatement) SetFlowNode(value *FlowNode)    { node.data().flowNode = value }
-func (node DoStatement) Statement() Statement           { return node.data().statement }
-func (node DoStatement) SetStatement(value Statement)   { node.data().statement = value }
-func (node DoStatement) Expression() Expression         { return node.data().expression }
-func (node DoStatement) SetExpression(value Expression) { node.data().expression = value }
+func (node DoStatement) FlowNode() *FlowNode         { return node.data().flowNode }
+func (node DoStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
+func (node DoStatement) Statement() Statement        { return node.s.deref(node.data().statement) }
+
+func (node DoStatement) SetStatement(value Statement) { node.data().statement = node.s.ref(value) }
+
+func (node DoStatement) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node DoStatement) SetExpression(value Expression) { node.data().expression = node.s.ref(value) }
 
 func (f *NodeFactory) NewDoStatement(statement Statement, expression Expression) Node {
-	data := &doStatementData{}
-	data.statement = statement
-	data.expression = expression
-	return f.newNode(KindDoStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[doStatementData](s, layoutDoStatement)
+	data.statement = s.ref(statement)
+	data.expression = s.ref(expression)
+	return f.newNode(KindDoStatement, layoutDoStatement, i)
 }
 
 func (f *NodeFactory) UpdateDoStatement(node DoStatement, statement Statement, expression Expression) Node {
@@ -2920,27 +3689,31 @@ func IsDoStatement(node Node) bool {
 type whileStatementData struct {
 	iterationStatementBaseData
 	compositeBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type WhileStatement struct{ Node }
 
-func (node WhileStatement) data() *whileStatementData {
-	return (*whileStatementData)(unsafe.Pointer(node.h))
+func (node WhileStatement) data() *whileStatementData { return (*whileStatementData)(node.rec()) }
+
+func (node WhileStatement) FlowNode() *FlowNode         { return node.data().flowNode }
+func (node WhileStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
+func (node WhileStatement) Statement() Statement        { return node.s.deref(node.data().statement) }
+
+func (node WhileStatement) SetStatement(value Statement) { node.data().statement = node.s.ref(value) }
+
+func (node WhileStatement) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node WhileStatement) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
 }
 
-func (node WhileStatement) FlowNode() *FlowNode            { return node.data().flowNode }
-func (node WhileStatement) SetFlowNode(value *FlowNode)    { node.data().flowNode = value }
-func (node WhileStatement) Statement() Statement           { return node.data().statement }
-func (node WhileStatement) SetStatement(value Statement)   { node.data().statement = value }
-func (node WhileStatement) Expression() Expression         { return node.data().expression }
-func (node WhileStatement) SetExpression(value Expression) { node.data().expression = value }
-
 func (f *NodeFactory) NewWhileStatement(expression Expression, statement Statement) Node {
-	data := &whileStatementData{}
-	data.expression = expression
-	data.statement = statement
-	return f.newNode(KindWhileStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[whileStatementData](s, layoutWhileStatement)
+	data.expression = s.ref(expression)
+	data.statement = s.ref(statement)
+	return f.newNode(KindWhileStatement, layoutWhileStatement, i)
 }
 
 func (f *NodeFactory) UpdateWhileStatement(node WhileStatement, expression Expression, statement Statement) Node {
@@ -2979,37 +3752,49 @@ type forStatementData struct {
 	iterationStatementBaseData
 	localsContainerBaseData
 	compositeBaseData
-	initializer ForInitializer // Optional
-	condition   Expression     // Optional
-	incrementor Expression     // Optional
+	initializer nodeRef // ForInitializer. Optional
+	condition   nodeRef // Expression. Optional
+	incrementor nodeRef // Expression. Optional
 }
 
 type ForStatement struct{ Node }
 
-func (node ForStatement) data() *forStatementData { return (*forStatementData)(unsafe.Pointer(node.h)) }
+func (node ForStatement) data() *forStatementData { return (*forStatementData)(node.rec()) }
 
-func (node ForStatement) FlowNode() *FlowNode                 { return node.data().flowNode }
-func (node ForStatement) SetFlowNode(value *FlowNode)         { node.data().flowNode = value }
-func (node ForStatement) Statement() Statement                { return node.data().statement }
-func (node ForStatement) SetStatement(value Statement)        { node.data().statement = value }
-func (node ForStatement) Locals() SymbolTable                 { return node.data().locals }
-func (node ForStatement) SetLocals(value SymbolTable)         { node.data().locals = value }
-func (node ForStatement) NextContainer() Node                 { return node.data().nextContainer }
-func (node ForStatement) SetNextContainer(value Node)         { node.data().nextContainer = value }
-func (node ForStatement) Initializer() ForInitializer         { return node.data().initializer }
-func (node ForStatement) SetInitializer(value ForInitializer) { node.data().initializer = value }
-func (node ForStatement) Condition() Expression               { return node.data().condition }
-func (node ForStatement) SetCondition(value Expression)       { node.data().condition = value }
-func (node ForStatement) Incrementor() Expression             { return node.data().incrementor }
-func (node ForStatement) SetIncrementor(value Expression)     { node.data().incrementor = value }
+func (node ForStatement) FlowNode() *FlowNode          { return node.data().flowNode }
+func (node ForStatement) SetFlowNode(value *FlowNode)  { node.data().flowNode = value }
+func (node ForStatement) Statement() Statement         { return node.s.deref(node.data().statement) }
+func (node ForStatement) SetStatement(value Statement) { node.data().statement = node.s.ref(value) }
+func (node ForStatement) Locals() SymbolTable          { return node.data().locals }
+func (node ForStatement) SetLocals(value SymbolTable)  { node.data().locals = value }
+func (node ForStatement) NextContainer() Node          { return node.s.deref(node.data().nextContainer) }
+
+func (node ForStatement) SetNextContainer(value Node) { node.data().nextContainer = node.s.ref(value) }
+
+func (node ForStatement) Initializer() ForInitializer { return node.s.deref(node.data().initializer) }
+
+func (node ForStatement) SetInitializer(value ForInitializer) {
+	node.data().initializer = node.s.ref(value)
+}
+
+func (node ForStatement) Condition() Expression { return node.s.deref(node.data().condition) }
+
+func (node ForStatement) SetCondition(value Expression) { node.data().condition = node.s.ref(value) }
+
+func (node ForStatement) Incrementor() Expression { return node.s.deref(node.data().incrementor) }
+
+func (node ForStatement) SetIncrementor(value Expression) {
+	node.data().incrementor = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewForStatement(initializer ForInitializer, condition Expression, incrementor Expression, statement Statement) Node {
-	data := &forStatementData{}
-	data.initializer = initializer
-	data.condition = condition
-	data.incrementor = incrementor
-	data.statement = statement
-	return f.newNode(KindForStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[forStatementData](s, layoutForStatement)
+	data.initializer = s.ref(initializer)
+	data.condition = s.ref(condition)
+	data.incrementor = s.ref(incrementor)
+	data.statement = s.ref(statement)
+	return f.newNode(KindForStatement, layoutForStatement, i)
 }
 
 func (f *NodeFactory) UpdateForStatement(node ForStatement, initializer ForInitializer, condition Expression, incrementor Expression, statement Statement) Node {
@@ -3053,38 +3838,53 @@ type forInOrOfStatementData struct {
 	statementBaseData
 	localsContainerBaseData
 	compositeBaseData
-	awaitModifier AwaitKeyword // Optional
-	initializer   ForInitializer
-	expression    Expression
-	statement     Statement
+	awaitModifier nodeRef // AwaitKeyword. Optional
+	initializer   nodeRef // ForInitializer
+	expression    nodeRef // Expression
+	statement     nodeRef // Statement
 }
 
 type ForInOrOfStatement struct{ Node }
 
 func (node ForInOrOfStatement) data() *forInOrOfStatementData {
-	return (*forInOrOfStatementData)(unsafe.Pointer(node.h))
+	return (*forInOrOfStatementData)(node.rec())
 }
 
 func (node ForInOrOfStatement) FlowNode() *FlowNode         { return node.data().flowNode }
 func (node ForInOrOfStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
 func (node ForInOrOfStatement) Locals() SymbolTable         { return node.data().locals }
 func (node ForInOrOfStatement) SetLocals(value SymbolTable) { node.data().locals = value }
-func (node ForInOrOfStatement) NextContainer() Node         { return node.data().nextContainer }
-func (node ForInOrOfStatement) SetNextContainer(value Node) { node.data().nextContainer = value }
-func (node ForInOrOfStatement) AwaitModifier() AwaitKeyword { return node.data().awaitModifier }
-func (node ForInOrOfStatement) SetAwaitModifier(value AwaitKeyword) {
-	node.data().awaitModifier = value
+func (node ForInOrOfStatement) NextContainer() Node         { return node.s.deref(node.data().nextContainer) }
+
+func (node ForInOrOfStatement) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
 }
 
-func (node ForInOrOfStatement) Initializer() ForInitializer { return node.data().initializer }
+func (node ForInOrOfStatement) AwaitModifier() AwaitKeyword {
+	return node.s.deref(node.data().awaitModifier)
+}
 
-func (node ForInOrOfStatement) SetInitializer(value ForInitializer) { node.data().initializer = value }
+func (node ForInOrOfStatement) SetAwaitModifier(value AwaitKeyword) {
+	node.data().awaitModifier = node.s.ref(value)
+}
 
-func (node ForInOrOfStatement) Expression() Expression { return node.data().expression }
+func (node ForInOrOfStatement) Initializer() ForInitializer {
+	return node.s.deref(node.data().initializer)
+}
 
-func (node ForInOrOfStatement) SetExpression(value Expression) { node.data().expression = value }
-func (node ForInOrOfStatement) Statement() Statement           { return node.data().statement }
-func (node ForInOrOfStatement) SetStatement(value Statement)   { node.data().statement = value }
+func (node ForInOrOfStatement) SetInitializer(value ForInitializer) {
+	node.data().initializer = node.s.ref(value)
+}
+
+func (node ForInOrOfStatement) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node ForInOrOfStatement) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
+func (node ForInOrOfStatement) Statement() Statement { return node.s.deref(node.data().statement) }
+func (node ForInOrOfStatement) SetStatement(value Statement) {
+	node.data().statement = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewForInOrOfStatement(kind Kind, awaitModifier AwaitKeyword, initializer ForInitializer, expression Expression, statement Statement) Node {
 	switch kind {
@@ -3092,12 +3892,13 @@ func (f *NodeFactory) NewForInOrOfStatement(kind Kind, awaitModifier AwaitKeywor
 	default:
 		panic("Invalid node kind for ForInOrOfStatement")
 	}
-	data := &forInOrOfStatementData{}
-	data.awaitModifier = awaitModifier
-	data.initializer = initializer
-	data.expression = expression
-	data.statement = statement
-	return f.newNode(kind, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[forInOrOfStatementData](s, layoutForInOrOfStatement)
+	data.awaitModifier = s.ref(awaitModifier)
+	data.initializer = s.ref(initializer)
+	data.expression = s.ref(expression)
+	data.statement = s.ref(statement)
+	return f.newNode(kind, layoutForInOrOfStatement, i)
 }
 
 func (f *NodeFactory) UpdateForInOrOfStatement(node ForInOrOfStatement, awaitModifier AwaitKeyword, initializer ForInitializer, expression Expression, statement Statement) Node {
@@ -3136,24 +3937,23 @@ func IsForOfStatement(node Node) bool {
 
 type breakStatementData struct {
 	statementBaseData
-	label IdentifierNode // Optional
+	label nodeRef // IdentifierNode. Optional
 }
 
 type BreakStatement struct{ Node }
 
-func (node BreakStatement) data() *breakStatementData {
-	return (*breakStatementData)(unsafe.Pointer(node.h))
-}
+func (node BreakStatement) data() *breakStatementData { return (*breakStatementData)(node.rec()) }
 
 func (node BreakStatement) FlowNode() *FlowNode           { return node.data().flowNode }
 func (node BreakStatement) SetFlowNode(value *FlowNode)   { node.data().flowNode = value }
-func (node BreakStatement) Label() IdentifierNode         { return node.data().label }
-func (node BreakStatement) SetLabel(value IdentifierNode) { node.data().label = value }
+func (node BreakStatement) Label() IdentifierNode         { return node.s.deref(node.data().label) }
+func (node BreakStatement) SetLabel(value IdentifierNode) { node.data().label = node.s.ref(value) }
 
 func (f *NodeFactory) NewBreakStatement(label IdentifierNode) Node {
-	data := &breakStatementData{}
-	data.label = label
-	return f.newNode(KindBreakStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[breakStatementData](s, layoutBreakStatement)
+	data.label = s.ref(label)
+	return f.newNode(KindBreakStatement, layoutBreakStatement, i)
 }
 
 func (f *NodeFactory) UpdateBreakStatement(node BreakStatement, label IdentifierNode) Node {
@@ -3185,24 +3985,26 @@ func IsBreakStatement(node Node) bool {
 
 type continueStatementData struct {
 	statementBaseData
-	label IdentifierNode // Optional
+	label nodeRef // IdentifierNode. Optional
 }
 
 type ContinueStatement struct{ Node }
 
 func (node ContinueStatement) data() *continueStatementData {
-	return (*continueStatementData)(unsafe.Pointer(node.h))
+	return (*continueStatementData)(node.rec())
 }
 
-func (node ContinueStatement) FlowNode() *FlowNode           { return node.data().flowNode }
-func (node ContinueStatement) SetFlowNode(value *FlowNode)   { node.data().flowNode = value }
-func (node ContinueStatement) Label() IdentifierNode         { return node.data().label }
-func (node ContinueStatement) SetLabel(value IdentifierNode) { node.data().label = value }
+func (node ContinueStatement) FlowNode() *FlowNode         { return node.data().flowNode }
+func (node ContinueStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
+func (node ContinueStatement) Label() IdentifierNode       { return node.s.deref(node.data().label) }
+
+func (node ContinueStatement) SetLabel(value IdentifierNode) { node.data().label = node.s.ref(value) }
 
 func (f *NodeFactory) NewContinueStatement(label IdentifierNode) Node {
-	data := &continueStatementData{}
-	data.label = label
-	return f.newNode(KindContinueStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[continueStatementData](s, layoutContinueStatement)
+	data.label = s.ref(label)
+	return f.newNode(KindContinueStatement, layoutContinueStatement, i)
 }
 
 func (f *NodeFactory) UpdateContinueStatement(node ContinueStatement, label IdentifierNode) Node {
@@ -3235,24 +4037,26 @@ func IsContinueStatement(node Node) bool {
 type returnStatementData struct {
 	statementBaseData
 	compositeBaseData
-	expression Expression // Optional
+	expression nodeRef // Expression. Optional
 }
 
 type ReturnStatement struct{ Node }
 
-func (node ReturnStatement) data() *returnStatementData {
-	return (*returnStatementData)(unsafe.Pointer(node.h))
+func (node ReturnStatement) data() *returnStatementData { return (*returnStatementData)(node.rec()) }
+
+func (node ReturnStatement) FlowNode() *FlowNode         { return node.data().flowNode }
+func (node ReturnStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
+func (node ReturnStatement) Expression() Expression      { return node.s.deref(node.data().expression) }
+
+func (node ReturnStatement) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
 }
 
-func (node ReturnStatement) FlowNode() *FlowNode            { return node.data().flowNode }
-func (node ReturnStatement) SetFlowNode(value *FlowNode)    { node.data().flowNode = value }
-func (node ReturnStatement) Expression() Expression         { return node.data().expression }
-func (node ReturnStatement) SetExpression(value Expression) { node.data().expression = value }
-
 func (f *NodeFactory) NewReturnStatement(expression Expression) Node {
-	data := f.returnStatementArena.New()
-	data.expression = expression
-	return f.newNode(KindReturnStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[returnStatementData](s, layoutReturnStatement)
+	data.expression = s.ref(expression)
+	return f.newNode(KindReturnStatement, layoutReturnStatement, i)
 }
 
 func (f *NodeFactory) UpdateReturnStatement(node ReturnStatement, expression Expression) Node {
@@ -3285,28 +4089,30 @@ func IsReturnStatement(node Node) bool {
 type withStatementData struct {
 	statementBaseData
 	compositeBaseData
-	expression Expression
-	statement  Statement
+	expression nodeRef // Expression
+	statement  nodeRef // Statement
 }
 
 type WithStatement struct{ Node }
 
-func (node WithStatement) data() *withStatementData {
-	return (*withStatementData)(unsafe.Pointer(node.h))
-}
+func (node WithStatement) data() *withStatementData { return (*withStatementData)(node.rec()) }
 
-func (node WithStatement) FlowNode() *FlowNode            { return node.data().flowNode }
-func (node WithStatement) SetFlowNode(value *FlowNode)    { node.data().flowNode = value }
-func (node WithStatement) Expression() Expression         { return node.data().expression }
-func (node WithStatement) SetExpression(value Expression) { node.data().expression = value }
-func (node WithStatement) Statement() Statement           { return node.data().statement }
-func (node WithStatement) SetStatement(value Statement)   { node.data().statement = value }
+func (node WithStatement) FlowNode() *FlowNode         { return node.data().flowNode }
+func (node WithStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
+func (node WithStatement) Expression() Expression      { return node.s.deref(node.data().expression) }
+
+func (node WithStatement) SetExpression(value Expression) { node.data().expression = node.s.ref(value) }
+
+func (node WithStatement) Statement() Statement { return node.s.deref(node.data().statement) }
+
+func (node WithStatement) SetStatement(value Statement) { node.data().statement = node.s.ref(value) }
 
 func (f *NodeFactory) NewWithStatement(expression Expression, statement Statement) Node {
-	data := &withStatementData{}
-	data.expression = expression
-	data.statement = statement
-	return f.newNode(KindWithStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[withStatementData](s, layoutWithStatement)
+	data.expression = s.ref(expression)
+	data.statement = s.ref(statement)
+	return f.newNode(KindWithStatement, layoutWithStatement, i)
 }
 
 func (f *NodeFactory) UpdateWithStatement(node WithStatement, expression Expression, statement Statement) Node {
@@ -3344,28 +4150,32 @@ func IsWithStatement(node Node) bool {
 type switchStatementData struct {
 	statementBaseData
 	compositeBaseData
-	expression Expression
-	caseBlock  CaseBlockNode
+	expression nodeRef // Expression
+	caseBlock  nodeRef // CaseBlockNode
 }
 
 type SwitchStatement struct{ Node }
 
-func (node SwitchStatement) data() *switchStatementData {
-	return (*switchStatementData)(unsafe.Pointer(node.h))
+func (node SwitchStatement) data() *switchStatementData { return (*switchStatementData)(node.rec()) }
+
+func (node SwitchStatement) FlowNode() *FlowNode         { return node.data().flowNode }
+func (node SwitchStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
+func (node SwitchStatement) Expression() Expression      { return node.s.deref(node.data().expression) }
+
+func (node SwitchStatement) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
+func (node SwitchStatement) CaseBlock() CaseBlockNode { return node.s.deref(node.data().caseBlock) }
+func (node SwitchStatement) SetCaseBlock(value CaseBlockNode) {
+	node.data().caseBlock = node.s.ref(value)
 }
 
-func (node SwitchStatement) FlowNode() *FlowNode              { return node.data().flowNode }
-func (node SwitchStatement) SetFlowNode(value *FlowNode)      { node.data().flowNode = value }
-func (node SwitchStatement) Expression() Expression           { return node.data().expression }
-func (node SwitchStatement) SetExpression(value Expression)   { node.data().expression = value }
-func (node SwitchStatement) CaseBlock() CaseBlockNode         { return node.data().caseBlock }
-func (node SwitchStatement) SetCaseBlock(value CaseBlockNode) { node.data().caseBlock = value }
-
 func (f *NodeFactory) NewSwitchStatement(expression Expression, caseBlock CaseBlockNode) Node {
-	data := &switchStatementData{}
-	data.expression = expression
-	data.caseBlock = caseBlock
-	return f.newNode(KindSwitchStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[switchStatementData](s, layoutSwitchStatement)
+	data.expression = s.ref(expression)
+	data.caseBlock = s.ref(caseBlock)
+	return f.newNode(KindSwitchStatement, layoutSwitchStatement, i)
 }
 
 func (f *NodeFactory) UpdateSwitchStatement(node SwitchStatement, expression Expression, caseBlock CaseBlockNode) Node {
@@ -3409,19 +4219,20 @@ type caseBlockData struct {
 
 type CaseBlock struct{ Node }
 
-func (node CaseBlock) data() *caseBlockData { return (*caseBlockData)(unsafe.Pointer(node.h)) }
+func (node CaseBlock) data() *caseBlockData { return (*caseBlockData)(node.rec()) }
 
-func (node CaseBlock) Locals() SymbolTable               { return node.data().locals }
-func (node CaseBlock) SetLocals(value SymbolTable)       { node.data().locals = value }
-func (node CaseBlock) NextContainer() Node               { return node.data().nextContainer }
-func (node CaseBlock) SetNextContainer(value Node)       { node.data().nextContainer = value }
+func (node CaseBlock) Locals() SymbolTable         { return node.data().locals }
+func (node CaseBlock) SetLocals(value SymbolTable) { node.data().locals = value }
+func (node CaseBlock) NextContainer() Node         { return node.s.deref(node.data().nextContainer) }
+
+func (node CaseBlock) SetNextContainer(value Node)       { node.data().nextContainer = node.s.ref(value) }
 func (node CaseBlock) Clauses() *CaseClausesList         { return node.data().clauses }
 func (node CaseBlock) SetClauses(value *CaseClausesList) { node.data().clauses = value }
 
 func (f *NodeFactory) NewCaseBlock(clauses *CaseClausesList) Node {
-	data := &caseBlockData{}
+	data, i := newRecord[caseBlockData](f.nodeStore(), layoutCaseBlock)
 	data.clauses = clauses
-	return f.newNode(KindCaseBlock, data.asNode())
+	return f.newNode(KindCaseBlock, layoutCaseBlock, i)
 }
 
 func (f *NodeFactory) UpdateCaseBlock(node CaseBlock, clauses *CaseClausesList) Node {
@@ -3458,7 +4269,7 @@ func IsCaseBlock(node Node) bool {
 type caseOrDefaultClauseData struct {
 	nodeBaseData
 	compositeBaseData
-	expression          Expression
+	expression          nodeRef // Expression
 	statements          *StatementList
 	fallthroughFlowNode *FlowNode
 }
@@ -3466,12 +4277,14 @@ type caseOrDefaultClauseData struct {
 type CaseOrDefaultClause struct{ Node }
 
 func (node CaseOrDefaultClause) data() *caseOrDefaultClauseData {
-	return (*caseOrDefaultClauseData)(unsafe.Pointer(node.h))
+	return (*caseOrDefaultClauseData)(node.rec())
 }
 
-func (node CaseOrDefaultClause) Expression() Expression { return node.data().expression }
+func (node CaseOrDefaultClause) Expression() Expression { return node.s.deref(node.data().expression) }
 
-func (node CaseOrDefaultClause) SetExpression(value Expression) { node.data().expression = value }
+func (node CaseOrDefaultClause) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
 
 func (node CaseOrDefaultClause) Statements() *StatementList { return node.data().statements }
 
@@ -3491,10 +4304,11 @@ func (f *NodeFactory) NewCaseOrDefaultClause(kind Kind, expression Expression, s
 	default:
 		panic("Invalid node kind for CaseOrDefaultClause")
 	}
-	data := &caseOrDefaultClauseData{}
-	data.expression = expression
+	s := f.nodeStore()
+	data, i := newRecord[caseOrDefaultClauseData](s, layoutCaseOrDefaultClause)
+	data.expression = s.ref(expression)
 	data.statements = statements
-	return f.newNode(kind, data.asNode())
+	return f.newNode(kind, layoutCaseOrDefaultClause, i)
 }
 
 func (f *NodeFactory) UpdateCaseOrDefaultClause(node CaseOrDefaultClause, expression Expression, statements *StatementList) Node {
@@ -3536,24 +4350,26 @@ func IsDefaultClause(node Node) bool {
 type throwStatementData struct {
 	statementBaseData
 	compositeBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type ThrowStatement struct{ Node }
 
-func (node ThrowStatement) data() *throwStatementData {
-	return (*throwStatementData)(unsafe.Pointer(node.h))
+func (node ThrowStatement) data() *throwStatementData { return (*throwStatementData)(node.rec()) }
+
+func (node ThrowStatement) FlowNode() *FlowNode         { return node.data().flowNode }
+func (node ThrowStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
+func (node ThrowStatement) Expression() Expression      { return node.s.deref(node.data().expression) }
+
+func (node ThrowStatement) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
 }
 
-func (node ThrowStatement) FlowNode() *FlowNode            { return node.data().flowNode }
-func (node ThrowStatement) SetFlowNode(value *FlowNode)    { node.data().flowNode = value }
-func (node ThrowStatement) Expression() Expression         { return node.data().expression }
-func (node ThrowStatement) SetExpression(value Expression) { node.data().expression = value }
-
 func (f *NodeFactory) NewThrowStatement(expression Expression) Node {
-	data := &throwStatementData{}
-	data.expression = expression
-	return f.newNode(KindThrowStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[throwStatementData](s, layoutThrowStatement)
+	data.expression = s.ref(expression)
+	return f.newNode(KindThrowStatement, layoutThrowStatement, i)
 }
 
 func (f *NodeFactory) UpdateThrowStatement(node ThrowStatement, expression Expression) Node {
@@ -3590,30 +4406,36 @@ func IsThrowStatement(node Node) bool {
 type tryStatementData struct {
 	statementBaseData
 	compositeBaseData
-	tryBlock     BlockNode
-	catchClause  CatchClauseNode // Optional
-	finallyBlock BlockNode       // Optional
+	tryBlock     nodeRef // BlockNode
+	catchClause  nodeRef // CatchClauseNode. Optional
+	finallyBlock nodeRef // BlockNode. Optional
 }
 
 type TryStatement struct{ Node }
 
-func (node TryStatement) data() *tryStatementData { return (*tryStatementData)(unsafe.Pointer(node.h)) }
+func (node TryStatement) data() *tryStatementData { return (*tryStatementData)(node.rec()) }
 
-func (node TryStatement) FlowNode() *FlowNode                  { return node.data().flowNode }
-func (node TryStatement) SetFlowNode(value *FlowNode)          { node.data().flowNode = value }
-func (node TryStatement) TryBlock() BlockNode                  { return node.data().tryBlock }
-func (node TryStatement) SetTryBlock(value BlockNode)          { node.data().tryBlock = value }
-func (node TryStatement) CatchClause() CatchClauseNode         { return node.data().catchClause }
-func (node TryStatement) SetCatchClause(value CatchClauseNode) { node.data().catchClause = value }
-func (node TryStatement) FinallyBlock() BlockNode              { return node.data().finallyBlock }
-func (node TryStatement) SetFinallyBlock(value BlockNode)      { node.data().finallyBlock = value }
+func (node TryStatement) FlowNode() *FlowNode          { return node.data().flowNode }
+func (node TryStatement) SetFlowNode(value *FlowNode)  { node.data().flowNode = value }
+func (node TryStatement) TryBlock() BlockNode          { return node.s.deref(node.data().tryBlock) }
+func (node TryStatement) SetTryBlock(value BlockNode)  { node.data().tryBlock = node.s.ref(value) }
+func (node TryStatement) CatchClause() CatchClauseNode { return node.s.deref(node.data().catchClause) }
+
+func (node TryStatement) SetCatchClause(value CatchClauseNode) {
+	node.data().catchClause = node.s.ref(value)
+}
+func (node TryStatement) FinallyBlock() BlockNode { return node.s.deref(node.data().finallyBlock) }
+func (node TryStatement) SetFinallyBlock(value BlockNode) {
+	node.data().finallyBlock = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewTryStatement(tryBlock BlockNode, catchClause CatchClauseNode, finallyBlock BlockNode) Node {
-	data := &tryStatementData{}
-	data.tryBlock = tryBlock
-	data.catchClause = catchClause
-	data.finallyBlock = finallyBlock
-	return f.newNode(KindTryStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[tryStatementData](s, layoutTryStatement)
+	data.tryBlock = s.ref(tryBlock)
+	data.catchClause = s.ref(catchClause)
+	data.finallyBlock = s.ref(finallyBlock)
+	return f.newNode(KindTryStatement, layoutTryStatement, i)
 }
 
 func (f *NodeFactory) UpdateTryStatement(node TryStatement, tryBlock BlockNode, catchClause CatchClauseNode, finallyBlock BlockNode) Node {
@@ -3653,33 +4475,36 @@ type catchClauseData struct {
 	nodeBaseData
 	localsContainerBaseData
 	compositeBaseData
-	variableDeclaration VariableDeclarationNode // Optional
-	block               BlockNode
+	variableDeclaration nodeRef // VariableDeclarationNode. Optional
+	block               nodeRef // BlockNode
 }
 
 type CatchClause struct{ Node }
 
-func (node CatchClause) data() *catchClauseData { return (*catchClauseData)(unsafe.Pointer(node.h)) }
+func (node CatchClause) data() *catchClauseData { return (*catchClauseData)(node.rec()) }
 
 func (node CatchClause) Locals() SymbolTable         { return node.data().locals }
 func (node CatchClause) SetLocals(value SymbolTable) { node.data().locals = value }
-func (node CatchClause) NextContainer() Node         { return node.data().nextContainer }
-func (node CatchClause) SetNextContainer(value Node) { node.data().nextContainer = value }
+func (node CatchClause) NextContainer() Node         { return node.s.deref(node.data().nextContainer) }
+
+func (node CatchClause) SetNextContainer(value Node) { node.data().nextContainer = node.s.ref(value) }
+
 func (node CatchClause) VariableDeclaration() VariableDeclarationNode {
-	return node.data().variableDeclaration
+	return node.s.deref(node.data().variableDeclaration)
 }
 
 func (node CatchClause) SetVariableDeclaration(value VariableDeclarationNode) {
-	node.data().variableDeclaration = value
+	node.data().variableDeclaration = node.s.ref(value)
 }
-func (node CatchClause) Block() BlockNode         { return node.data().block }
-func (node CatchClause) SetBlock(value BlockNode) { node.data().block = value }
+func (node CatchClause) Block() BlockNode         { return node.s.deref(node.data().block) }
+func (node CatchClause) SetBlock(value BlockNode) { node.data().block = node.s.ref(value) }
 
 func (f *NodeFactory) NewCatchClause(variableDeclaration VariableDeclarationNode, block BlockNode) Node {
-	data := &catchClauseData{}
-	data.variableDeclaration = variableDeclaration
-	data.block = block
-	return f.newNode(KindCatchClause, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[catchClauseData](s, layoutCatchClause)
+	data.variableDeclaration = s.ref(variableDeclaration)
+	data.block = s.ref(block)
+	return f.newNode(KindCatchClause, layoutCatchClause, i)
 }
 
 func (f *NodeFactory) UpdateCatchClause(node CatchClause, variableDeclaration VariableDeclarationNode, block BlockNode) Node {
@@ -3716,15 +4541,15 @@ type debuggerStatementData struct {
 type DebuggerStatement struct{ Node }
 
 func (node DebuggerStatement) data() *debuggerStatementData {
-	return (*debuggerStatementData)(unsafe.Pointer(node.h))
+	return (*debuggerStatementData)(node.rec())
 }
 
 func (node DebuggerStatement) FlowNode() *FlowNode         { return node.data().flowNode }
 func (node DebuggerStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
 
 func (f *NodeFactory) NewDebuggerStatement() Node {
-	data := &debuggerStatementData{}
-	return f.newNode(KindDebuggerStatement, data.asNode())
+	_, i := newRecord[debuggerStatementData](f.nodeStore(), layoutDebuggerStatement)
+	return f.newNode(KindDebuggerStatement, layoutDebuggerStatement, i)
 }
 
 func (node DebuggerStatement) Clone(f NodeFactoryCoercible) Node {
@@ -3741,28 +4566,30 @@ func IsDebuggerStatement(node Node) bool {
 
 type labeledStatementData struct {
 	statementBaseData
-	label     IdentifierNode
-	statement Statement
+	label     nodeRef // IdentifierNode
+	statement nodeRef // Statement
 }
 
 type LabeledStatement struct{ Node }
 
-func (node LabeledStatement) data() *labeledStatementData {
-	return (*labeledStatementData)(unsafe.Pointer(node.h))
-}
+func (node LabeledStatement) data() *labeledStatementData { return (*labeledStatementData)(node.rec()) }
 
-func (node LabeledStatement) FlowNode() *FlowNode           { return node.data().flowNode }
-func (node LabeledStatement) SetFlowNode(value *FlowNode)   { node.data().flowNode = value }
-func (node LabeledStatement) Label() IdentifierNode         { return node.data().label }
-func (node LabeledStatement) SetLabel(value IdentifierNode) { node.data().label = value }
-func (node LabeledStatement) Statement() Statement          { return node.data().statement }
-func (node LabeledStatement) SetStatement(value Statement)  { node.data().statement = value }
+func (node LabeledStatement) FlowNode() *FlowNode         { return node.data().flowNode }
+func (node LabeledStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
+func (node LabeledStatement) Label() IdentifierNode       { return node.s.deref(node.data().label) }
+
+func (node LabeledStatement) SetLabel(value IdentifierNode) { node.data().label = node.s.ref(value) }
+
+func (node LabeledStatement) Statement() Statement { return node.s.deref(node.data().statement) }
+
+func (node LabeledStatement) SetStatement(value Statement) { node.data().statement = node.s.ref(value) }
 
 func (f *NodeFactory) NewLabeledStatement(label IdentifierNode, statement Statement) Node {
-	data := &labeledStatementData{}
-	data.label = label
-	data.statement = statement
-	return f.newNode(KindLabeledStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[labeledStatementData](s, layoutLabeledStatement)
+	data.label = s.ref(label)
+	data.statement = s.ref(statement)
+	return f.newNode(KindLabeledStatement, layoutLabeledStatement, i)
 }
 
 func (f *NodeFactory) UpdateLabeledStatement(node LabeledStatement, label IdentifierNode, statement Statement) Node {
@@ -3799,24 +4626,28 @@ func IsLabeledStatement(node Node) bool {
 
 type expressionStatementData struct {
 	statementBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type ExpressionStatement struct{ Node }
 
 func (node ExpressionStatement) data() *expressionStatementData {
-	return (*expressionStatementData)(unsafe.Pointer(node.h))
+	return (*expressionStatementData)(node.rec())
 }
 
-func (node ExpressionStatement) FlowNode() *FlowNode            { return node.data().flowNode }
-func (node ExpressionStatement) SetFlowNode(value *FlowNode)    { node.data().flowNode = value }
-func (node ExpressionStatement) Expression() Expression         { return node.data().expression }
-func (node ExpressionStatement) SetExpression(value Expression) { node.data().expression = value }
+func (node ExpressionStatement) FlowNode() *FlowNode         { return node.data().flowNode }
+func (node ExpressionStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
+func (node ExpressionStatement) Expression() Expression      { return node.s.deref(node.data().expression) }
+
+func (node ExpressionStatement) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewExpressionStatement(expression Expression) Node {
-	data := f.expressionStatementArena.New()
-	data.expression = expression
-	return f.newNode(KindExpressionStatement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[expressionStatementData](s, layoutExpressionStatement)
+	data.expression = s.ref(expression)
+	return f.newNode(KindExpressionStatement, layoutExpressionStatement, i)
 }
 
 func (f *NodeFactory) UpdateExpressionStatement(node ExpressionStatement, expression Expression) Node {
@@ -3860,24 +4691,25 @@ type blockData struct {
 
 type Block struct{ Node }
 
-func (node Block) data() *blockData { return (*blockData)(unsafe.Pointer(node.h)) }
+func (node Block) data() *blockData { return (*blockData)(node.rec()) }
 
-func (node Block) FlowNode() *FlowNode                { return node.data().flowNode }
-func (node Block) SetFlowNode(value *FlowNode)        { node.data().flowNode = value }
-func (node Block) Locals() SymbolTable                { return node.data().locals }
-func (node Block) SetLocals(value SymbolTable)        { node.data().locals = value }
-func (node Block) NextContainer() Node                { return node.data().nextContainer }
-func (node Block) SetNextContainer(value Node)        { node.data().nextContainer = value }
+func (node Block) FlowNode() *FlowNode         { return node.data().flowNode }
+func (node Block) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
+func (node Block) Locals() SymbolTable         { return node.data().locals }
+func (node Block) SetLocals(value SymbolTable) { node.data().locals = value }
+func (node Block) NextContainer() Node         { return node.s.deref(node.data().nextContainer) }
+
+func (node Block) SetNextContainer(value Node)        { node.data().nextContainer = node.s.ref(value) }
 func (node Block) Statements() *StatementList         { return node.data().statements }
 func (node Block) SetStatements(value *StatementList) { node.data().statements = value }
 func (node Block) MultiLine() bool                    { return node.data().multiLine }
 func (node Block) SetMultiLine(value bool)            { node.data().multiLine = value }
 
 func (f *NodeFactory) NewBlock(statements *StatementList, multiLine bool) Node {
-	data := f.blockArena.New()
+	data, i := newRecord[blockData](f.nodeStore(), layoutBlock)
 	data.statements = statements
 	data.multiLine = multiLine
-	return f.newNode(KindBlock, data.asNode())
+	return f.newNode(KindBlock, layoutBlock, i)
 }
 
 func (f *NodeFactory) UpdateBlock(node Block, statements *StatementList, multiLine bool) Node {
@@ -3915,13 +4747,13 @@ type variableStatementData struct {
 	statementBaseData
 	modifiersBaseData
 	compositeBaseData
-	declarationList VariableDeclarationListNode
+	declarationList nodeRef // VariableDeclarationListNode
 }
 
 type VariableStatement struct{ Node }
 
 func (node VariableStatement) data() *variableStatementData {
-	return (*variableStatementData)(unsafe.Pointer(node.h))
+	return (*variableStatementData)(node.rec())
 }
 
 func (node VariableStatement) FlowNode() *FlowNode              { return node.data().flowNode }
@@ -3929,18 +4761,19 @@ func (node VariableStatement) SetFlowNode(value *FlowNode)      { node.data().fl
 func (node VariableStatement) Modifiers() *ModifierList         { return node.data().modifiers }
 func (node VariableStatement) setModifiers(value *ModifierList) { node.data().modifiers = value }
 func (node VariableStatement) DeclarationList() VariableDeclarationListNode {
-	return node.data().declarationList
+	return node.s.deref(node.data().declarationList)
 }
 
 func (node VariableStatement) SetDeclarationList(value VariableDeclarationListNode) {
-	node.data().declarationList = value
+	node.data().declarationList = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewVariableStatement(modifiers *ModifierList, declarationList VariableDeclarationListNode) Node {
-	data := f.variableStatementArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[variableStatementData](s, layoutVariableStatement)
 	data.modifiers = modifiers
-	data.declarationList = declarationList
-	return f.newNode(KindVariableStatement, data.asNode())
+	data.declarationList = s.ref(declarationList)
+	return f.newNode(KindVariableStatement, layoutVariableStatement, i)
 }
 
 func (f *NodeFactory) UpdateVariableStatement(node VariableStatement, modifiers *ModifierList, declarationList VariableDeclarationListNode) Node {
@@ -3975,43 +4808,54 @@ type variableDeclarationData struct {
 	declarationBaseData
 	exportableBaseData
 	compositeBaseData
-	name             BindingName
-	exclamationToken ExclamationToken // Optional
-	typeField        TypeNode         // Optional
-	initializer      Expression       // Optional
+	name             nodeRef // BindingName
+	exclamationToken nodeRef // ExclamationToken. Optional
+	typeField        nodeRef // TypeNode. Optional
+	initializer      nodeRef // Expression. Optional
 }
 
 type VariableDeclaration struct{ Node }
 
 func (node VariableDeclaration) data() *variableDeclarationData {
-	return (*variableDeclarationData)(unsafe.Pointer(node.h))
+	return (*variableDeclarationData)(node.rec())
 }
 
 func (node VariableDeclaration) Symbol() *Symbol              { return node.data().symbol }
 func (node VariableDeclaration) SetSymbol(value *Symbol)      { node.data().symbol = value }
 func (node VariableDeclaration) LocalSymbol() *Symbol         { return node.data().localSymbol }
 func (node VariableDeclaration) SetLocalSymbol(value *Symbol) { node.data().localSymbol = value }
-func (node VariableDeclaration) Name() BindingName            { return node.data().name }
-func (node VariableDeclaration) setName(value BindingName)    { node.data().name = value }
+func (node VariableDeclaration) Name() BindingName            { return node.s.deref(node.data().name) }
+
+func (node VariableDeclaration) setName(value BindingName) { node.data().name = node.s.ref(value) }
+
 func (node VariableDeclaration) ExclamationToken() ExclamationToken {
-	return node.data().exclamationToken
+	return node.s.deref(node.data().exclamationToken)
 }
 
 func (node VariableDeclaration) SetExclamationToken(value ExclamationToken) {
-	node.data().exclamationToken = value
+	node.data().exclamationToken = node.s.ref(value)
 }
-func (node VariableDeclaration) Type() TypeNode                  { return node.data().typeField }
-func (node VariableDeclaration) SetType(value TypeNode)          { node.data().typeField = value }
-func (node VariableDeclaration) Initializer() Expression         { return node.data().initializer }
-func (node VariableDeclaration) SetInitializer(value Expression) { node.data().initializer = value }
+
+func (node VariableDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node VariableDeclaration) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node VariableDeclaration) Initializer() Expression {
+	return node.s.deref(node.data().initializer)
+}
+
+func (node VariableDeclaration) SetInitializer(value Expression) {
+	node.data().initializer = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewVariableDeclaration(name BindingName, exclamationToken ExclamationToken, typeNode TypeNode, initializer Expression) Node {
-	data := f.variableDeclarationArena.New()
-	data.name = name
-	data.exclamationToken = exclamationToken
-	data.typeField = typeNode
-	data.initializer = initializer
-	return f.newNode(KindVariableDeclaration, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[variableDeclarationData](s, layoutVariableDeclaration)
+	data.name = s.ref(name)
+	data.exclamationToken = s.ref(exclamationToken)
+	data.typeField = s.ref(typeNode)
+	data.initializer = s.ref(initializer)
+	return f.newNode(KindVariableDeclaration, layoutVariableDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateVariableDeclaration(node VariableDeclaration, name BindingName, exclamationToken ExclamationToken, typeNode TypeNode, initializer Expression) Node {
@@ -4053,7 +4897,7 @@ type variableDeclarationListData struct {
 type VariableDeclarationList struct{ Node }
 
 func (node VariableDeclarationList) data() *variableDeclarationListData {
-	return (*variableDeclarationListData)(unsafe.Pointer(node.h))
+	return (*variableDeclarationListData)(node.rec())
 }
 
 func (node VariableDeclarationList) Declarations() *VariableDeclarationNodeList {
@@ -4065,9 +4909,9 @@ func (node VariableDeclarationList) SetDeclarations(value *VariableDeclarationNo
 }
 
 func (f *NodeFactory) NewVariableDeclarationList(declarations *VariableDeclarationNodeList, flags NodeFlags) Node {
-	data := f.variableDeclarationListArena.New()
+	data, i := newRecord[variableDeclarationListData](f.nodeStore(), layoutVariableDeclarationList)
 	data.declarations = declarations
-	node := f.newNode(KindVariableDeclarationList, data.asNode())
+	node := f.newNode(KindVariableDeclarationList, layoutVariableDeclarationList, i)
 	node.SetFlags(flags)
 	return node
 }
@@ -4107,9 +4951,7 @@ type bindingPatternData struct {
 
 type BindingPattern struct{ Node }
 
-func (node BindingPattern) data() *bindingPatternData {
-	return (*bindingPatternData)(unsafe.Pointer(node.h))
-}
+func (node BindingPattern) data() *bindingPatternData { return (*bindingPatternData)(node.rec()) }
 
 func (node BindingPattern) Elements() *BindingElementList         { return node.data().elements }
 func (node BindingPattern) SetElements(value *BindingElementList) { node.data().elements = value }
@@ -4120,9 +4962,9 @@ func (f *NodeFactory) NewBindingPattern(kind Kind, elements *BindingElementList)
 	default:
 		panic("Invalid node kind for BindingPattern")
 	}
-	data := &bindingPatternData{}
+	data, i := newRecord[bindingPatternData](f.nodeStore(), layoutBindingPattern)
 	data.elements = elements
-	return f.newNode(kind, data.asNode())
+	return f.newNode(kind, layoutBindingPattern, i)
 }
 
 func (f *NodeFactory) UpdateBindingPattern(node BindingPattern, elements *BindingElementList) Node {
@@ -4161,48 +5003,63 @@ type parameterDeclarationData struct {
 	declarationBaseData
 	modifiersBaseData
 	compositeBaseData
-	dotDotDotToken DotDotDotToken // Optional
-	name           BindingName
-	questionToken  QuestionToken // Optional
-	typeField      TypeNode      // Optional
-	initializer    Expression    // Optional
+	dotDotDotToken nodeRef // DotDotDotToken. Optional
+	name           nodeRef // BindingName
+	questionToken  nodeRef // QuestionToken. Optional
+	typeField      nodeRef // TypeNode. Optional
+	initializer    nodeRef // Expression. Optional
 }
 
 type ParameterDeclaration struct{ Node }
 
 func (node ParameterDeclaration) data() *parameterDeclarationData {
-	return (*parameterDeclarationData)(unsafe.Pointer(node.h))
+	return (*parameterDeclarationData)(node.rec())
 }
 
 func (node ParameterDeclaration) Symbol() *Symbol                  { return node.data().symbol }
 func (node ParameterDeclaration) SetSymbol(value *Symbol)          { node.data().symbol = value }
 func (node ParameterDeclaration) Modifiers() *ModifierList         { return node.data().modifiers }
 func (node ParameterDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
-func (node ParameterDeclaration) DotDotDotToken() DotDotDotToken   { return node.data().dotDotDotToken }
+func (node ParameterDeclaration) DotDotDotToken() DotDotDotToken {
+	return node.s.deref(node.data().dotDotDotToken)
+}
 
 func (node ParameterDeclaration) SetDotDotDotToken(value DotDotDotToken) {
-	node.data().dotDotDotToken = value
+	node.data().dotDotDotToken = node.s.ref(value)
 }
-func (node ParameterDeclaration) Name() BindingName            { return node.data().name }
-func (node ParameterDeclaration) setName(value BindingName)    { node.data().name = value }
-func (node ParameterDeclaration) QuestionToken() QuestionToken { return node.data().questionToken }
+
+func (node ParameterDeclaration) Name() BindingName         { return node.s.deref(node.data().name) }
+func (node ParameterDeclaration) setName(value BindingName) { node.data().name = node.s.ref(value) }
+func (node ParameterDeclaration) QuestionToken() QuestionToken {
+	return node.s.deref(node.data().questionToken)
+}
+
 func (node ParameterDeclaration) SetQuestionToken(value QuestionToken) {
-	node.data().questionToken = value
+	node.data().questionToken = node.s.ref(value)
 }
-func (node ParameterDeclaration) Type() TypeNode                  { return node.data().typeField }
-func (node ParameterDeclaration) SetType(value TypeNode)          { node.data().typeField = value }
-func (node ParameterDeclaration) Initializer() Expression         { return node.data().initializer }
-func (node ParameterDeclaration) SetInitializer(value Expression) { node.data().initializer = value }
+
+func (node ParameterDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node ParameterDeclaration) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node ParameterDeclaration) Initializer() Expression {
+	return node.s.deref(node.data().initializer)
+}
+
+func (node ParameterDeclaration) SetInitializer(value Expression) {
+	node.data().initializer = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewParameterDeclaration(modifiers *ModifierList, dotDotDotToken DotDotDotToken, name BindingName, questionToken QuestionToken, typeNode TypeNode, initializer Expression) Node {
-	data := f.parameterDeclarationArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[parameterDeclarationData](s, layoutParameterDeclaration)
 	data.modifiers = modifiers
-	data.dotDotDotToken = dotDotDotToken
-	data.name = name
-	data.questionToken = questionToken
-	data.typeField = typeNode
-	data.initializer = initializer
-	return f.newNode(KindParameter, data.asNode())
+	data.dotDotDotToken = s.ref(dotDotDotToken)
+	data.name = s.ref(name)
+	data.questionToken = s.ref(questionToken)
+	data.typeField = s.ref(typeNode)
+	data.initializer = s.ref(initializer)
+	return f.newNode(KindParameter, layoutParameterDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateParameterDeclaration(node ParameterDeclaration, modifiers *ModifierList, dotDotDotToken DotDotDotToken, name BindingName, questionToken QuestionToken, typeNode TypeNode, initializer Expression) Node {
@@ -4243,42 +5100,51 @@ type bindingElementData struct {
 	exportableBaseData
 	flowNodeBaseData
 	compositeBaseData
-	dotDotDotToken DotDotDotToken // Optional
-	propertyName   PropertyName   // Optional
-	name           BindingName    // Optional
-	initializer    Expression     // Optional
+	dotDotDotToken nodeRef // DotDotDotToken. Optional
+	propertyName   nodeRef // PropertyName. Optional
+	name           nodeRef // BindingName. Optional
+	initializer    nodeRef // Expression. Optional
 }
 
 type BindingElement struct{ Node }
 
-func (node BindingElement) data() *bindingElementData {
-	return (*bindingElementData)(unsafe.Pointer(node.h))
+func (node BindingElement) data() *bindingElementData { return (*bindingElementData)(node.rec()) }
+
+func (node BindingElement) Symbol() *Symbol              { return node.data().symbol }
+func (node BindingElement) SetSymbol(value *Symbol)      { node.data().symbol = value }
+func (node BindingElement) LocalSymbol() *Symbol         { return node.data().localSymbol }
+func (node BindingElement) SetLocalSymbol(value *Symbol) { node.data().localSymbol = value }
+func (node BindingElement) FlowNode() *FlowNode          { return node.data().flowNode }
+func (node BindingElement) SetFlowNode(value *FlowNode)  { node.data().flowNode = value }
+func (node BindingElement) DotDotDotToken() DotDotDotToken {
+	return node.s.deref(node.data().dotDotDotToken)
 }
 
-func (node BindingElement) Symbol() *Symbol                { return node.data().symbol }
-func (node BindingElement) SetSymbol(value *Symbol)        { node.data().symbol = value }
-func (node BindingElement) LocalSymbol() *Symbol           { return node.data().localSymbol }
-func (node BindingElement) SetLocalSymbol(value *Symbol)   { node.data().localSymbol = value }
-func (node BindingElement) FlowNode() *FlowNode            { return node.data().flowNode }
-func (node BindingElement) SetFlowNode(value *FlowNode)    { node.data().flowNode = value }
-func (node BindingElement) DotDotDotToken() DotDotDotToken { return node.data().dotDotDotToken }
 func (node BindingElement) SetDotDotDotToken(value DotDotDotToken) {
-	node.data().dotDotDotToken = value
+	node.data().dotDotDotToken = node.s.ref(value)
 }
-func (node BindingElement) PropertyName() PropertyName         { return node.data().propertyName }
-func (node BindingElement) SetPropertyName(value PropertyName) { node.data().propertyName = value }
-func (node BindingElement) Name() BindingName                  { return node.data().name }
-func (node BindingElement) setName(value BindingName)          { node.data().name = value }
-func (node BindingElement) Initializer() Expression            { return node.data().initializer }
-func (node BindingElement) SetInitializer(value Expression)    { node.data().initializer = value }
+
+func (node BindingElement) PropertyName() PropertyName { return node.s.deref(node.data().propertyName) }
+
+func (node BindingElement) SetPropertyName(value PropertyName) {
+	node.data().propertyName = node.s.ref(value)
+}
+func (node BindingElement) Name() BindingName         { return node.s.deref(node.data().name) }
+func (node BindingElement) setName(value BindingName) { node.data().name = node.s.ref(value) }
+func (node BindingElement) Initializer() Expression   { return node.s.deref(node.data().initializer) }
+
+func (node BindingElement) SetInitializer(value Expression) {
+	node.data().initializer = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewBindingElement(dotDotDotToken DotDotDotToken, propertyName PropertyName, name BindingName, initializer Expression) Node {
-	data := &bindingElementData{}
-	data.dotDotDotToken = dotDotDotToken
-	data.propertyName = propertyName
-	data.name = name
-	data.initializer = initializer
-	return f.newNode(KindBindingElement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[bindingElementData](s, layoutBindingElement)
+	data.dotDotDotToken = s.ref(dotDotDotToken)
+	data.propertyName = s.ref(propertyName)
+	data.name = s.ref(name)
+	data.initializer = s.ref(initializer)
+	return f.newNode(KindBindingElement, layoutBindingElement, i)
 }
 
 func (f *NodeFactory) UpdateBindingElement(node BindingElement, dotDotDotToken DotDotDotToken, propertyName PropertyName, name BindingName, initializer Expression) Node {
@@ -4320,7 +5186,7 @@ type missingDeclarationData struct {
 type MissingDeclaration struct{ Node }
 
 func (node MissingDeclaration) data() *missingDeclarationData {
-	return (*missingDeclarationData)(unsafe.Pointer(node.h))
+	return (*missingDeclarationData)(node.rec())
 }
 
 func (node MissingDeclaration) FlowNode() *FlowNode              { return node.data().flowNode }
@@ -4331,9 +5197,9 @@ func (node MissingDeclaration) Modifiers() *ModifierList         { return node.d
 func (node MissingDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
 
 func (f *NodeFactory) NewMissingDeclaration(modifiers *ModifierList) Node {
-	data := &missingDeclarationData{}
+	data, i := newRecord[missingDeclarationData](f.nodeStore(), layoutMissingDeclaration)
 	data.modifiers = modifiers
-	return f.newNode(KindMissingDeclaration, data.asNode())
+	return f.newNode(KindMissingDeclaration, layoutMissingDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateMissingDeclaration(node MissingDeclaration, modifiers *ModifierList) Node {
@@ -4370,14 +5236,14 @@ type functionDeclarationData struct {
 	modifiersBaseData
 	functionLikeWithBodyBaseData
 	compositeBaseData
-	name           IdentifierNode // Optional
+	name           nodeRef // IdentifierNode. Optional
 	returnFlowNode *FlowNode
 }
 
 type FunctionDeclaration struct{ Node }
 
 func (node FunctionDeclaration) data() *functionDeclarationData {
-	return (*functionDeclarationData)(unsafe.Pointer(node.h))
+	return (*functionDeclarationData)(node.rec())
 }
 
 func (node FunctionDeclaration) FlowNode() *FlowNode              { return node.data().flowNode }
@@ -4390,9 +5256,11 @@ func (node FunctionDeclaration) Modifiers() *ModifierList         { return node.
 func (node FunctionDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
 func (node FunctionDeclaration) Locals() SymbolTable              { return node.data().locals }
 func (node FunctionDeclaration) SetLocals(value SymbolTable)      { node.data().locals = value }
-func (node FunctionDeclaration) NextContainer() Node              { return node.data().nextContainer }
+func (node FunctionDeclaration) NextContainer() Node              { return node.s.deref(node.data().nextContainer) }
 
-func (node FunctionDeclaration) SetNextContainer(value Node) { node.data().nextContainer = value }
+func (node FunctionDeclaration) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
 
 func (node FunctionDeclaration) TypeParameters() *TypeParameterList {
 	return node.data().typeParameters
@@ -4405,41 +5273,54 @@ func (node FunctionDeclaration) SetTypeParameters(value *TypeParameterList) {
 func (node FunctionDeclaration) Parameters() *ParameterList { return node.data().parameters }
 
 func (node FunctionDeclaration) SetParameters(value *ParameterList) { node.data().parameters = value }
-func (node FunctionDeclaration) Type() TypeNode                     { return node.data().typeField }
-func (node FunctionDeclaration) SetType(value TypeNode)             { node.data().typeField = value }
 
-func (node FunctionDeclaration) FullSignature() TypeNode { return node.data().fullSignature }
+func (node FunctionDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
 
-func (node FunctionDeclaration) SetFullSignature(value TypeNode) { node.data().fullSignature = value }
+func (node FunctionDeclaration) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
-func (node FunctionDeclaration) AsteriskToken() AsteriskToken { return node.data().asteriskToken }
+func (node FunctionDeclaration) FullSignature() TypeNode {
+	return node.s.deref(node.data().fullSignature)
+}
+
+func (node FunctionDeclaration) SetFullSignature(value TypeNode) {
+	node.data().fullSignature = node.s.ref(value)
+}
+
+func (node FunctionDeclaration) AsteriskToken() AsteriskToken {
+	return node.s.deref(node.data().asteriskToken)
+}
 
 func (node FunctionDeclaration) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = value
+	node.data().asteriskToken = node.s.ref(value)
 }
-func (node FunctionDeclaration) Body() NodeBody                 { return node.data().body }
-func (node FunctionDeclaration) SetBody(value NodeBody)         { node.data().body = value }
+
+func (node FunctionDeclaration) Body() NodeBody { return node.s.deref(node.data().body) }
+
+func (node FunctionDeclaration) SetBody(value NodeBody)         { node.data().body = node.s.ref(value) }
 func (node FunctionDeclaration) EndFlowNode() *FlowNode         { return node.data().endFlowNode }
 func (node FunctionDeclaration) SetEndFlowNode(value *FlowNode) { node.data().endFlowNode = value }
-func (node FunctionDeclaration) Name() IdentifierNode           { return node.data().name }
-func (node FunctionDeclaration) setName(value IdentifierNode)   { node.data().name = value }
-func (node FunctionDeclaration) ReturnFlowNode() *FlowNode      { return node.data().returnFlowNode }
+func (node FunctionDeclaration) Name() IdentifierNode           { return node.s.deref(node.data().name) }
+
+func (node FunctionDeclaration) setName(value IdentifierNode) { node.data().name = node.s.ref(value) }
+
+func (node FunctionDeclaration) ReturnFlowNode() *FlowNode { return node.data().returnFlowNode }
 
 func (node FunctionDeclaration) SetReturnFlowNode(value *FlowNode) {
 	node.data().returnFlowNode = value
 }
 
 func (f *NodeFactory) NewFunctionDeclaration(modifiers *ModifierList, asteriskToken AsteriskToken, name IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
-	data := f.functionDeclarationArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[functionDeclarationData](s, layoutFunctionDeclaration)
 	data.modifiers = modifiers
-	data.asteriskToken = asteriskToken
-	data.name = name
+	data.asteriskToken = s.ref(asteriskToken)
+	data.name = s.ref(name)
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	data.fullSignature = fullSignature
-	data.body = body
-	return f.newNode(KindFunctionDeclaration, data.asNode())
+	data.typeField = s.ref(typeNode)
+	data.fullSignature = s.ref(fullSignature)
+	data.body = s.ref(body)
+	return f.newNode(KindFunctionDeclaration, layoutFunctionDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateFunctionDeclaration(node FunctionDeclaration, modifiers *ModifierList, asteriskToken AsteriskToken, name IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
@@ -4484,9 +5365,7 @@ type classDeclarationData struct {
 
 type ClassDeclaration struct{ Node }
 
-func (node ClassDeclaration) data() *classDeclarationData {
-	return (*classDeclarationData)(unsafe.Pointer(node.h))
-}
+func (node ClassDeclaration) data() *classDeclarationData { return (*classDeclarationData)(node.rec()) }
 
 func (node ClassDeclaration) FlowNode() *FlowNode              { return node.data().flowNode }
 func (node ClassDeclaration) SetFlowNode(value *FlowNode)      { node.data().flowNode = value }
@@ -4498,11 +5377,16 @@ func (node ClassDeclaration) Modifiers() *ModifierList         { return node.dat
 func (node ClassDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
 func (node ClassDeclaration) Locals() SymbolTable              { return node.data().locals }
 func (node ClassDeclaration) SetLocals(value SymbolTable)      { node.data().locals = value }
-func (node ClassDeclaration) NextContainer() Node              { return node.data().nextContainer }
+func (node ClassDeclaration) NextContainer() Node              { return node.s.deref(node.data().nextContainer) }
 
-func (node ClassDeclaration) SetNextContainer(value Node)        { node.data().nextContainer = value }
-func (node ClassDeclaration) Name() IdentifierNode               { return node.data().name }
-func (node ClassDeclaration) setName(value IdentifierNode)       { node.data().name = value }
+func (node ClassDeclaration) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
+
+func (node ClassDeclaration) Name() IdentifierNode { return node.s.deref(node.data().name) }
+
+func (node ClassDeclaration) setName(value IdentifierNode) { node.data().name = node.s.ref(value) }
+
 func (node ClassDeclaration) TypeParameters() *TypeParameterList { return node.data().typeParameters }
 
 func (node ClassDeclaration) SetTypeParameters(value *TypeParameterList) {
@@ -4520,13 +5404,14 @@ func (node ClassDeclaration) Members() *ClassElementList         { return node.d
 func (node ClassDeclaration) SetMembers(value *ClassElementList) { node.data().members = value }
 
 func (f *NodeFactory) NewClassDeclaration(modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) Node {
-	data := &classDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[classDeclarationData](s, layoutClassDeclaration)
 	data.modifiers = modifiers
-	data.name = name
+	data.name = s.ref(name)
 	data.typeParameters = typeParameters
 	data.heritageClauses = heritageClauses
 	data.members = members
-	return f.newNode(KindClassDeclaration, data.asNode())
+	return f.newNode(KindClassDeclaration, layoutClassDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateClassDeclaration(node ClassDeclaration, modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) Node {
@@ -4568,22 +5453,26 @@ type classExpressionData struct {
 
 type ClassExpression struct{ Node }
 
-func (node ClassExpression) data() *classExpressionData {
-	return (*classExpressionData)(unsafe.Pointer(node.h))
+func (node ClassExpression) data() *classExpressionData { return (*classExpressionData)(node.rec()) }
+
+func (node ClassExpression) Symbol() *Symbol                  { return node.data().symbol }
+func (node ClassExpression) SetSymbol(value *Symbol)          { node.data().symbol = value }
+func (node ClassExpression) LocalSymbol() *Symbol             { return node.data().localSymbol }
+func (node ClassExpression) SetLocalSymbol(value *Symbol)     { node.data().localSymbol = value }
+func (node ClassExpression) Modifiers() *ModifierList         { return node.data().modifiers }
+func (node ClassExpression) setModifiers(value *ModifierList) { node.data().modifiers = value }
+func (node ClassExpression) Locals() SymbolTable              { return node.data().locals }
+func (node ClassExpression) SetLocals(value SymbolTable)      { node.data().locals = value }
+func (node ClassExpression) NextContainer() Node              { return node.s.deref(node.data().nextContainer) }
+
+func (node ClassExpression) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
 }
 
-func (node ClassExpression) Symbol() *Symbol                    { return node.data().symbol }
-func (node ClassExpression) SetSymbol(value *Symbol)            { node.data().symbol = value }
-func (node ClassExpression) LocalSymbol() *Symbol               { return node.data().localSymbol }
-func (node ClassExpression) SetLocalSymbol(value *Symbol)       { node.data().localSymbol = value }
-func (node ClassExpression) Modifiers() *ModifierList           { return node.data().modifiers }
-func (node ClassExpression) setModifiers(value *ModifierList)   { node.data().modifiers = value }
-func (node ClassExpression) Locals() SymbolTable                { return node.data().locals }
-func (node ClassExpression) SetLocals(value SymbolTable)        { node.data().locals = value }
-func (node ClassExpression) NextContainer() Node                { return node.data().nextContainer }
-func (node ClassExpression) SetNextContainer(value Node)        { node.data().nextContainer = value }
-func (node ClassExpression) Name() IdentifierNode               { return node.data().name }
-func (node ClassExpression) setName(value IdentifierNode)       { node.data().name = value }
+func (node ClassExpression) Name() IdentifierNode { return node.s.deref(node.data().name) }
+
+func (node ClassExpression) setName(value IdentifierNode) { node.data().name = node.s.ref(value) }
+
 func (node ClassExpression) TypeParameters() *TypeParameterList { return node.data().typeParameters }
 
 func (node ClassExpression) SetTypeParameters(value *TypeParameterList) {
@@ -4599,13 +5488,14 @@ func (node ClassExpression) Members() *ClassElementList         { return node.da
 func (node ClassExpression) SetMembers(value *ClassElementList) { node.data().members = value }
 
 func (f *NodeFactory) NewClassExpression(modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) Node {
-	data := &classExpressionData{}
+	s := f.nodeStore()
+	data, i := newRecord[classExpressionData](s, layoutClassExpression)
 	data.modifiers = modifiers
-	data.name = name
+	data.name = s.ref(name)
 	data.typeParameters = typeParameters
 	data.heritageClauses = heritageClauses
 	data.members = members
-	return f.newNode(KindClassExpression, data.asNode())
+	return f.newNode(KindClassExpression, layoutClassExpression, i)
 }
 
 func (f *NodeFactory) UpdateClassExpression(node ClassExpression, modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) Node {
@@ -4648,9 +5538,7 @@ type heritageClauseData struct {
 
 type HeritageClause struct{ Node }
 
-func (node HeritageClause) data() *heritageClauseData {
-	return (*heritageClauseData)(unsafe.Pointer(node.h))
-}
+func (node HeritageClause) data() *heritageClauseData { return (*heritageClauseData)(node.rec()) }
 
 func (node HeritageClause) Token() Kind                               { return node.data().token }
 func (node HeritageClause) SetToken(value Kind)                       { node.data().token = value }
@@ -4658,10 +5546,10 @@ func (node HeritageClause) Types() *HeritageClauseElementList         { return n
 func (node HeritageClause) SetTypes(value *HeritageClauseElementList) { node.data().types = value }
 
 func (f *NodeFactory) NewHeritageClause(token Kind, types *HeritageClauseElementList) Node {
-	data := f.heritageClauseArena.New()
+	data, i := newRecord[heritageClauseData](f.nodeStore(), layoutHeritageClause)
 	data.token = token
 	data.types = types
-	return f.newNode(KindHeritageClause, data.asNode())
+	return f.newNode(KindHeritageClause, layoutHeritageClause, i)
 }
 
 func (f *NodeFactory) UpdateHeritageClause(node HeritageClause, token Kind, types *HeritageClauseElementList) Node {
@@ -4697,7 +5585,7 @@ type interfaceDeclarationData struct {
 	declarationBaseData
 	exportableBaseData
 	modifiersBaseData
-	name            IdentifierNode
+	name            nodeRef             // IdentifierNode
 	typeParameters  *TypeParameterList  // Optional
 	heritageClauses *HeritageClauseList // Optional
 	members         *TypeElementList
@@ -4706,7 +5594,7 @@ type interfaceDeclarationData struct {
 type InterfaceDeclaration struct{ Node }
 
 func (node InterfaceDeclaration) data() *interfaceDeclarationData {
-	return (*interfaceDeclarationData)(unsafe.Pointer(node.h))
+	return (*interfaceDeclarationData)(node.rec())
 }
 
 func (node InterfaceDeclaration) FlowNode() *FlowNode         { return node.data().flowNode }
@@ -4718,8 +5606,10 @@ func (node InterfaceDeclaration) LocalSymbol() *Symbol        { return node.data
 func (node InterfaceDeclaration) SetLocalSymbol(value *Symbol)     { node.data().localSymbol = value }
 func (node InterfaceDeclaration) Modifiers() *ModifierList         { return node.data().modifiers }
 func (node InterfaceDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
-func (node InterfaceDeclaration) Name() IdentifierNode             { return node.data().name }
-func (node InterfaceDeclaration) setName(value IdentifierNode)     { node.data().name = value }
+func (node InterfaceDeclaration) Name() IdentifierNode             { return node.s.deref(node.data().name) }
+
+func (node InterfaceDeclaration) setName(value IdentifierNode) { node.data().name = node.s.ref(value) }
+
 func (node InterfaceDeclaration) TypeParameters() *TypeParameterList {
 	return node.data().typeParameters
 }
@@ -4739,13 +5629,14 @@ func (node InterfaceDeclaration) Members() *TypeElementList         { return nod
 func (node InterfaceDeclaration) SetMembers(value *TypeElementList) { node.data().members = value }
 
 func (f *NodeFactory) NewInterfaceDeclaration(modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *TypeElementList) Node {
-	data := f.interfaceDeclarationArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[interfaceDeclarationData](s, layoutInterfaceDeclaration)
 	data.modifiers = modifiers
-	data.name = name
+	data.name = s.ref(name)
 	data.typeParameters = typeParameters
 	data.heritageClauses = heritageClauses
 	data.members = members
-	return f.newNode(KindInterfaceDeclaration, data.asNode())
+	return f.newNode(KindInterfaceDeclaration, layoutInterfaceDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateInterfaceDeclaration(node InterfaceDeclaration, modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *TypeElementList) Node {
@@ -4786,15 +5677,15 @@ type typeAliasDeclarationData struct {
 	exportableBaseData
 	modifiersBaseData
 	localsContainerBaseData
-	name           IdentifierNode
+	name           nodeRef            // IdentifierNode
 	typeParameters *TypeParameterList // Optional
-	typeField      TypeNode
+	typeField      nodeRef            // TypeNode
 }
 
 type TypeAliasDeclaration struct{ Node }
 
 func (node TypeAliasDeclaration) data() *typeAliasDeclarationData {
-	return (*typeAliasDeclarationData)(unsafe.Pointer(node.h))
+	return (*typeAliasDeclarationData)(node.rec())
 }
 
 func (node TypeAliasDeclaration) FlowNode() *FlowNode         { return node.data().flowNode }
@@ -4808,11 +5699,16 @@ func (node TypeAliasDeclaration) Modifiers() *ModifierList         { return node
 func (node TypeAliasDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
 func (node TypeAliasDeclaration) Locals() SymbolTable              { return node.data().locals }
 func (node TypeAliasDeclaration) SetLocals(value SymbolTable)      { node.data().locals = value }
-func (node TypeAliasDeclaration) NextContainer() Node              { return node.data().nextContainer }
+func (node TypeAliasDeclaration) NextContainer() Node              { return node.s.deref(node.data().nextContainer) }
 
-func (node TypeAliasDeclaration) SetNextContainer(value Node)  { node.data().nextContainer = value }
-func (node TypeAliasDeclaration) Name() IdentifierNode         { return node.data().name }
-func (node TypeAliasDeclaration) setName(value IdentifierNode) { node.data().name = value }
+func (node TypeAliasDeclaration) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
+
+func (node TypeAliasDeclaration) Name() IdentifierNode { return node.s.deref(node.data().name) }
+
+func (node TypeAliasDeclaration) setName(value IdentifierNode) { node.data().name = node.s.ref(value) }
+
 func (node TypeAliasDeclaration) TypeParameters() *TypeParameterList {
 	return node.data().typeParameters
 }
@@ -4820,25 +5716,29 @@ func (node TypeAliasDeclaration) TypeParameters() *TypeParameterList {
 func (node TypeAliasDeclaration) SetTypeParameters(value *TypeParameterList) {
 	node.data().typeParameters = value
 }
-func (node TypeAliasDeclaration) Type() TypeNode         { return node.data().typeField }
-func (node TypeAliasDeclaration) SetType(value TypeNode) { node.data().typeField = value }
+
+func (node TypeAliasDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node TypeAliasDeclaration) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewTypeAliasDeclaration(modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, typeNode TypeNode) Node {
-	data := f.typeAliasDeclarationArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[typeAliasDeclarationData](s, layoutTypeAliasDeclaration)
 	data.modifiers = modifiers
-	data.name = name
+	data.name = s.ref(name)
 	data.typeParameters = typeParameters
-	data.typeField = typeNode
-	return f.newNode(KindTypeAliasDeclaration, data.asNode())
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindTypeAliasDeclaration, layoutTypeAliasDeclaration, i)
 }
 
 func (f *NodeFactory) NewJSTypeAliasDeclaration(modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, typeNode TypeNode) Node {
-	data := f.typeAliasDeclarationArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[typeAliasDeclarationData](s, layoutTypeAliasDeclaration)
 	data.modifiers = modifiers
-	data.name = name
+	data.name = s.ref(name)
 	data.typeParameters = typeParameters
-	data.typeField = typeNode
-	return f.newNode(KindJSTypeAliasDeclaration, data.asNode())
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindJSTypeAliasDeclaration, layoutTypeAliasDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateTypeAliasDeclaration(node TypeAliasDeclaration, modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, typeNode TypeNode) Node {
@@ -4867,13 +5767,18 @@ func (node TypeAliasDeclaration) VisitEachChild(v *NodeVisitor) Node {
 }
 
 func (node TypeAliasDeclaration) Clone(f NodeFactoryCoercible) Node {
-	switch node.Kind() {
+	return node.CloneAs(f, node.Kind())
+}
+
+// CloneAs clones node as kind, which may be any of its kind aliases.
+func (node TypeAliasDeclaration) CloneAs(f NodeFactoryCoercible, kind Kind) Node {
+	switch kind {
 	case KindTypeAliasDeclaration:
 		return cloneNode(f.AsNodeFactory().NewTypeAliasDeclaration(node.Modifiers(), node.Name(), node.TypeParameters(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 	case KindJSTypeAliasDeclaration:
 		return cloneNode(f.AsNodeFactory().NewJSTypeAliasDeclaration(node.Modifiers(), node.Name(), node.TypeParameters(), node.Type()), node.AsNode(), f.AsNodeFactory().hooks)
 	default:
-		panic("unexpected kind in TypeAliasDeclaration.Clone: " + node.Kind().String())
+		panic("unexpected kind in TypeAliasDeclaration.CloneAs: " + kind.String())
 	}
 }
 
@@ -4894,29 +5799,33 @@ type enumMemberData struct {
 	declarationBaseData
 	namedMemberBaseData
 	compositeBaseData
-	initializer Expression // Optional
+	initializer nodeRef // Expression. Optional
 }
 
 type EnumMember struct{ Node }
 
-func (node EnumMember) data() *enumMemberData { return (*enumMemberData)(unsafe.Pointer(node.h)) }
+func (node EnumMember) data() *enumMemberData { return (*enumMemberData)(node.rec()) }
 
 func (node EnumMember) Symbol() *Symbol                  { return node.data().symbol }
 func (node EnumMember) SetSymbol(value *Symbol)          { node.data().symbol = value }
 func (node EnumMember) Modifiers() *ModifierList         { return node.data().modifiers }
 func (node EnumMember) setModifiers(value *ModifierList) { node.data().modifiers = value }
-func (node EnumMember) Name() PropertyName               { return node.data().name }
-func (node EnumMember) setName(value PropertyName)       { node.data().name = value }
-func (node EnumMember) PostfixToken() TokenNode          { return node.data().postfixToken }
-func (node EnumMember) SetPostfixToken(value TokenNode)  { node.data().postfixToken = value }
-func (node EnumMember) Initializer() Expression          { return node.data().initializer }
-func (node EnumMember) SetInitializer(value Expression)  { node.data().initializer = value }
+func (node EnumMember) Name() PropertyName               { return node.s.deref(node.data().name) }
+func (node EnumMember) setName(value PropertyName)       { node.data().name = node.s.ref(value) }
+func (node EnumMember) PostfixToken() TokenNode          { return node.s.deref(node.data().postfixToken) }
+
+func (node EnumMember) SetPostfixToken(value TokenNode) { node.data().postfixToken = node.s.ref(value) }
+
+func (node EnumMember) Initializer() Expression { return node.s.deref(node.data().initializer) }
+
+func (node EnumMember) SetInitializer(value Expression) { node.data().initializer = node.s.ref(value) }
 
 func (f *NodeFactory) NewEnumMember(name PropertyName, initializer Expression) Node {
-	data := &enumMemberData{}
-	data.name = name
-	data.initializer = initializer
-	return f.newNode(KindEnumMember, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[enumMemberData](s, layoutEnumMember)
+	data.name = s.ref(name)
+	data.initializer = s.ref(initializer)
+	return f.newNode(KindEnumMember, layoutEnumMember, i)
 }
 
 func (f *NodeFactory) UpdateEnumMember(node EnumMember, name PropertyName, initializer Expression) Node {
@@ -4952,15 +5861,13 @@ type enumDeclarationData struct {
 	exportableBaseData
 	modifiersBaseData
 	compositeBaseData
-	name    IdentifierNode
+	name    nodeRef // IdentifierNode
 	members *EnumMemberList
 }
 
 type EnumDeclaration struct{ Node }
 
-func (node EnumDeclaration) data() *enumDeclarationData {
-	return (*enumDeclarationData)(unsafe.Pointer(node.h))
-}
+func (node EnumDeclaration) data() *enumDeclarationData { return (*enumDeclarationData)(node.rec()) }
 
 func (node EnumDeclaration) FlowNode() *FlowNode              { return node.data().flowNode }
 func (node EnumDeclaration) SetFlowNode(value *FlowNode)      { node.data().flowNode = value }
@@ -4970,17 +5877,19 @@ func (node EnumDeclaration) LocalSymbol() *Symbol             { return node.data
 func (node EnumDeclaration) SetLocalSymbol(value *Symbol)     { node.data().localSymbol = value }
 func (node EnumDeclaration) Modifiers() *ModifierList         { return node.data().modifiers }
 func (node EnumDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
-func (node EnumDeclaration) Name() IdentifierNode             { return node.data().name }
-func (node EnumDeclaration) setName(value IdentifierNode)     { node.data().name = value }
+func (node EnumDeclaration) Name() IdentifierNode             { return node.s.deref(node.data().name) }
+
+func (node EnumDeclaration) setName(value IdentifierNode)     { node.data().name = node.s.ref(value) }
 func (node EnumDeclaration) Members() *EnumMemberList         { return node.data().members }
 func (node EnumDeclaration) SetMembers(value *EnumMemberList) { node.data().members = value }
 
 func (f *NodeFactory) NewEnumDeclaration(modifiers *ModifierList, name IdentifierNode, members *EnumMemberList) Node {
-	data := &enumDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[enumDeclarationData](s, layoutEnumDeclaration)
 	data.modifiers = modifiers
-	data.name = name
+	data.name = s.ref(name)
 	data.members = members
-	return f.newNode(KindEnumDeclaration, data.asNode())
+	return f.newNode(KindEnumDeclaration, layoutEnumDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateEnumDeclaration(node EnumDeclaration, modifiers *ModifierList, name IdentifierNode, members *EnumMemberList) Node {
@@ -5018,7 +5927,7 @@ type moduleBlockData struct {
 
 type ModuleBlock struct{ Node }
 
-func (node ModuleBlock) data() *moduleBlockData { return (*moduleBlockData)(unsafe.Pointer(node.h)) }
+func (node ModuleBlock) data() *moduleBlockData { return (*moduleBlockData)(node.rec()) }
 
 func (node ModuleBlock) FlowNode() *FlowNode                { return node.data().flowNode }
 func (node ModuleBlock) SetFlowNode(value *FlowNode)        { node.data().flowNode = value }
@@ -5026,9 +5935,9 @@ func (node ModuleBlock) Statements() *StatementList         { return node.data()
 func (node ModuleBlock) SetStatements(value *StatementList) { node.data().statements = value }
 
 func (f *NodeFactory) NewModuleBlock(statements *StatementList) Node {
-	data := &moduleBlockData{}
+	data, i := newRecord[moduleBlockData](f.nodeStore(), layoutModuleBlock)
 	data.statements = statements
-	return f.newNode(KindModuleBlock, data.asNode())
+	return f.newNode(KindModuleBlock, layoutModuleBlock, i)
 }
 
 func (f *NodeFactory) UpdateModuleBlock(node ModuleBlock, statements *StatementList) Node {
@@ -5069,15 +5978,15 @@ type notEmittedStatementData struct {
 type NotEmittedStatement struct{ Node }
 
 func (node NotEmittedStatement) data() *notEmittedStatementData {
-	return (*notEmittedStatementData)(unsafe.Pointer(node.h))
+	return (*notEmittedStatementData)(node.rec())
 }
 
 func (node NotEmittedStatement) FlowNode() *FlowNode         { return node.data().flowNode }
 func (node NotEmittedStatement) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
 
 func (f *NodeFactory) NewNotEmittedStatement() Node {
-	data := &notEmittedStatementData{}
-	return f.newNode(KindNotEmittedStatement, data.asNode())
+	_, i := newRecord[notEmittedStatementData](f.nodeStore(), layoutNotEmittedStatement)
+	return f.newNode(KindNotEmittedStatement, layoutNotEmittedStatement, i)
 }
 
 func (node NotEmittedStatement) Clone(f NodeFactoryCoercible) Node {
@@ -5101,15 +6010,15 @@ type notEmittedTypeElementData struct {
 type NotEmittedTypeElement struct{ Node }
 
 func (node NotEmittedTypeElement) data() *notEmittedTypeElementData {
-	return (*notEmittedTypeElementData)(unsafe.Pointer(node.h))
+	return (*notEmittedTypeElementData)(node.rec())
 }
 
 func (node NotEmittedTypeElement) Symbol() *Symbol         { return node.data().symbol }
 func (node NotEmittedTypeElement) SetSymbol(value *Symbol) { node.data().symbol = value }
 
 func (f *NodeFactory) NewNotEmittedTypeElement() Node {
-	data := &notEmittedTypeElementData{}
-	return f.newNode(KindNotEmittedTypeElement, data.asNode())
+	_, i := newRecord[notEmittedTypeElementData](f.nodeStore(), layoutNotEmittedTypeElement)
+	return f.newNode(KindNotEmittedTypeElement, layoutNotEmittedTypeElement, i)
 }
 
 func (node NotEmittedTypeElement) Clone(f NodeFactoryCoercible) Node {
@@ -5129,15 +6038,15 @@ type importDeclarationData struct {
 	modifiersBaseData
 	compositeBaseData
 	declarationBaseData
-	importClause    ImportClauseNode // Optional
-	moduleSpecifier Expression
-	attributes      ImportAttributesNode // Optional
+	importClause    nodeRef // ImportClauseNode. Optional
+	moduleSpecifier nodeRef // Expression
+	attributes      nodeRef // ImportAttributesNode. Optional
 }
 
 type ImportDeclaration struct{ Node }
 
 func (node ImportDeclaration) data() *importDeclarationData {
-	return (*importDeclarationData)(unsafe.Pointer(node.h))
+	return (*importDeclarationData)(node.rec())
 }
 
 func (node ImportDeclaration) FlowNode() *FlowNode              { return node.data().flowNode }
@@ -5146,35 +6055,48 @@ func (node ImportDeclaration) Modifiers() *ModifierList         { return node.da
 func (node ImportDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
 func (node ImportDeclaration) Symbol() *Symbol                  { return node.data().symbol }
 func (node ImportDeclaration) SetSymbol(value *Symbol)          { node.data().symbol = value }
-func (node ImportDeclaration) ImportClause() ImportClauseNode   { return node.data().importClause }
+func (node ImportDeclaration) ImportClause() ImportClauseNode {
+	return node.s.deref(node.data().importClause)
+}
+
 func (node ImportDeclaration) SetImportClause(value ImportClauseNode) {
-	node.data().importClause = value
+	node.data().importClause = node.s.ref(value)
 }
-func (node ImportDeclaration) ModuleSpecifier() Expression { return node.data().moduleSpecifier }
+
+func (node ImportDeclaration) ModuleSpecifier() Expression {
+	return node.s.deref(node.data().moduleSpecifier)
+}
+
 func (node ImportDeclaration) SetModuleSpecifier(value Expression) {
-	node.data().moduleSpecifier = value
+	node.data().moduleSpecifier = node.s.ref(value)
 }
-func (node ImportDeclaration) Attributes() ImportAttributesNode { return node.data().attributes }
+
+func (node ImportDeclaration) Attributes() ImportAttributesNode {
+	return node.s.deref(node.data().attributes)
+}
+
 func (node ImportDeclaration) SetAttributes(value ImportAttributesNode) {
-	node.data().attributes = value
+	node.data().attributes = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewImportDeclaration(modifiers *ModifierList, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
-	data := &importDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[importDeclarationData](s, layoutImportDeclaration)
 	data.modifiers = modifiers
-	data.importClause = importClause
-	data.moduleSpecifier = moduleSpecifier
-	data.attributes = attributes
-	return f.newNode(KindImportDeclaration, data.asNode())
+	data.importClause = s.ref(importClause)
+	data.moduleSpecifier = s.ref(moduleSpecifier)
+	data.attributes = s.ref(attributes)
+	return f.newNode(KindImportDeclaration, layoutImportDeclaration, i)
 }
 
 func (f *NodeFactory) NewJSImportDeclaration(modifiers *ModifierList, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
-	data := &importDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[importDeclarationData](s, layoutImportDeclaration)
 	data.modifiers = modifiers
-	data.importClause = importClause
-	data.moduleSpecifier = moduleSpecifier
-	data.attributes = attributes
-	return f.newNode(KindJSImportDeclaration, data.asNode())
+	data.importClause = s.ref(importClause)
+	data.moduleSpecifier = s.ref(moduleSpecifier)
+	data.attributes = s.ref(attributes)
+	return f.newNode(KindJSImportDeclaration, layoutImportDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateImportDeclaration(node ImportDeclaration, modifiers *ModifierList, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
@@ -5202,14 +6124,17 @@ func (node ImportDeclaration) VisitEachChild(v *NodeVisitor) Node {
 	return v.Factory.UpdateImportDeclaration(node, v.visitModifiers(node.Modifiers()), v.visitNode(node.ImportClause()), v.visitNode(node.ModuleSpecifier()), v.visitNode(node.Attributes()))
 }
 
-func (node ImportDeclaration) Clone(f NodeFactoryCoercible) Node {
-	switch node.Kind() {
+func (node ImportDeclaration) Clone(f NodeFactoryCoercible) Node { return node.CloneAs(f, node.Kind()) }
+
+// CloneAs clones node as kind, which may be any of its kind aliases.
+func (node ImportDeclaration) CloneAs(f NodeFactoryCoercible, kind Kind) Node {
+	switch kind {
 	case KindImportDeclaration:
 		return cloneNode(f.AsNodeFactory().NewImportDeclaration(node.Modifiers(), node.ImportClause(), node.ModuleSpecifier(), node.Attributes()), node.AsNode(), f.AsNodeFactory().hooks)
 	case KindJSImportDeclaration:
 		return cloneNode(f.AsNodeFactory().NewJSImportDeclaration(node.Modifiers(), node.ImportClause(), node.ModuleSpecifier(), node.Attributes()), node.AsNode(), f.AsNodeFactory().hooks)
 	default:
-		panic("unexpected kind in ImportDeclaration.Clone: " + node.Kind().String())
+		panic("unexpected kind in ImportDeclaration.CloneAs: " + kind.String())
 	}
 }
 
@@ -5234,23 +6159,28 @@ func IsJSImportDeclaration(node Node) bool {
 
 type externalModuleReferenceData struct {
 	nodeBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type ExternalModuleReference struct{ Node }
 
 func (node ExternalModuleReference) data() *externalModuleReferenceData {
-	return (*externalModuleReferenceData)(unsafe.Pointer(node.h))
+	return (*externalModuleReferenceData)(node.rec())
 }
 
-func (node ExternalModuleReference) Expression() Expression { return node.data().expression }
+func (node ExternalModuleReference) Expression() Expression {
+	return node.s.deref(node.data().expression)
+}
 
-func (node ExternalModuleReference) SetExpression(value Expression) { node.data().expression = value }
+func (node ExternalModuleReference) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewExternalModuleReference(expression Expression) Node {
-	data := &externalModuleReferenceData{}
-	data.expression = expression
-	return f.newNode(KindExternalModuleReference, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[externalModuleReferenceData](s, layoutExternalModuleReference)
+	data.expression = s.ref(expression)
+	return f.newNode(KindExternalModuleReference, layoutExternalModuleReference, i)
 }
 
 func (f *NodeFactory) UpdateExternalModuleReference(node ExternalModuleReference, expression Expression) Node {
@@ -5288,26 +6218,25 @@ type namespaceImportData struct {
 	nodeBaseData
 	declarationBaseData
 	exportableBaseData
-	name IdentifierNode
+	name nodeRef // IdentifierNode
 }
 
 type NamespaceImport struct{ Node }
 
-func (node NamespaceImport) data() *namespaceImportData {
-	return (*namespaceImportData)(unsafe.Pointer(node.h))
-}
+func (node NamespaceImport) data() *namespaceImportData { return (*namespaceImportData)(node.rec()) }
 
 func (node NamespaceImport) Symbol() *Symbol              { return node.data().symbol }
 func (node NamespaceImport) SetSymbol(value *Symbol)      { node.data().symbol = value }
 func (node NamespaceImport) LocalSymbol() *Symbol         { return node.data().localSymbol }
 func (node NamespaceImport) SetLocalSymbol(value *Symbol) { node.data().localSymbol = value }
-func (node NamespaceImport) Name() IdentifierNode         { return node.data().name }
-func (node NamespaceImport) setName(value IdentifierNode) { node.data().name = value }
+func (node NamespaceImport) Name() IdentifierNode         { return node.s.deref(node.data().name) }
+func (node NamespaceImport) setName(value IdentifierNode) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewNamespaceImport(name IdentifierNode) Node {
-	data := &namespaceImportData{}
-	data.name = name
-	return f.newNode(KindNamespaceImport, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[namespaceImportData](s, layoutNamespaceImport)
+	data.name = s.ref(name)
+	return f.newNode(KindNamespaceImport, layoutNamespaceImport, i)
 }
 
 func (f *NodeFactory) UpdateNamespaceImport(node NamespaceImport, name IdentifierNode) Node {
@@ -5349,15 +6278,15 @@ type namedImportsData struct {
 
 type NamedImports struct{ Node }
 
-func (node NamedImports) data() *namedImportsData { return (*namedImportsData)(unsafe.Pointer(node.h)) }
+func (node NamedImports) data() *namedImportsData { return (*namedImportsData)(node.rec()) }
 
 func (node NamedImports) Elements() *ImportSpecifierList         { return node.data().elements }
 func (node NamedImports) SetElements(value *ImportSpecifierList) { node.data().elements = value }
 
 func (f *NodeFactory) NewNamedImports(elements *ImportSpecifierList) Node {
-	data := &namedImportsData{}
+	data, i := newRecord[namedImportsData](f.nodeStore(), layoutNamedImports)
 	data.elements = elements
-	return f.newNode(KindNamedImports, data.asNode())
+	return f.newNode(KindNamedImports, layoutNamedImports, i)
 }
 
 func (f *NodeFactory) UpdateNamedImports(node NamedImports, elements *ImportSpecifierList) Node {
@@ -5397,15 +6326,13 @@ type exportAssignmentData struct {
 	modifiersBaseData
 	compositeBaseData
 	isExportEquals bool
-	typeField      TypeNode
-	expression     Expression
+	typeField      nodeRef // TypeNode
+	expression     nodeRef // Expression
 }
 
 type ExportAssignment struct{ Node }
 
-func (node ExportAssignment) data() *exportAssignmentData {
-	return (*exportAssignmentData)(unsafe.Pointer(node.h))
-}
+func (node ExportAssignment) data() *exportAssignmentData { return (*exportAssignmentData)(node.rec()) }
 
 func (node ExportAssignment) FlowNode() *FlowNode              { return node.data().flowNode }
 func (node ExportAssignment) SetFlowNode(value *FlowNode)      { node.data().flowNode = value }
@@ -5415,18 +6342,25 @@ func (node ExportAssignment) Modifiers() *ModifierList         { return node.dat
 func (node ExportAssignment) setModifiers(value *ModifierList) { node.data().modifiers = value }
 func (node ExportAssignment) IsExportEquals() bool             { return node.data().isExportEquals }
 func (node ExportAssignment) SetIsExportEquals(value bool)     { node.data().isExportEquals = value }
-func (node ExportAssignment) Type() TypeNode                   { return node.data().typeField }
-func (node ExportAssignment) SetType(value TypeNode)           { node.data().typeField = value }
-func (node ExportAssignment) Expression() Expression           { return node.data().expression }
-func (node ExportAssignment) SetExpression(value Expression)   { node.data().expression = value }
+
+func (node ExportAssignment) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node ExportAssignment) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node ExportAssignment) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node ExportAssignment) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewExportAssignment(modifiers *ModifierList, isExportEquals bool, typeNode TypeNode, expression Expression) Node {
-	data := &exportAssignmentData{}
+	s := f.nodeStore()
+	data, i := newRecord[exportAssignmentData](s, layoutExportAssignment)
 	data.modifiers = modifiers
 	data.isExportEquals = isExportEquals
-	data.typeField = typeNode
-	data.expression = expression
-	return f.newNode(KindExportAssignment, data.asNode())
+	data.typeField = s.ref(typeNode)
+	data.expression = s.ref(expression)
+	return f.newNode(KindExportAssignment, layoutExportAssignment, i)
 }
 
 func (f *NodeFactory) UpdateExportAssignment(node ExportAssignment, modifiers *ModifierList, isExportEquals bool, typeNode TypeNode, expression Expression) Node {
@@ -5461,13 +6395,13 @@ type namespaceExportDeclarationData struct {
 	statementBaseData
 	declarationBaseData
 	modifiersBaseData
-	name IdentifierNode
+	name nodeRef // IdentifierNode
 }
 
 type NamespaceExportDeclaration struct{ Node }
 
 func (node NamespaceExportDeclaration) data() *namespaceExportDeclarationData {
-	return (*namespaceExportDeclarationData)(unsafe.Pointer(node.h))
+	return (*namespaceExportDeclarationData)(node.rec())
 }
 
 func (node NamespaceExportDeclaration) FlowNode() *FlowNode         { return node.data().flowNode }
@@ -5478,14 +6412,19 @@ func (node NamespaceExportDeclaration) Modifiers() *ModifierList    { return nod
 func (node NamespaceExportDeclaration) setModifiers(value *ModifierList) {
 	node.data().modifiers = value
 }
-func (node NamespaceExportDeclaration) Name() IdentifierNode         { return node.data().name }
-func (node NamespaceExportDeclaration) setName(value IdentifierNode) { node.data().name = value }
+
+func (node NamespaceExportDeclaration) Name() IdentifierNode { return node.s.deref(node.data().name) }
+
+func (node NamespaceExportDeclaration) setName(value IdentifierNode) {
+	node.data().name = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewNamespaceExportDeclaration(modifiers *ModifierList, name IdentifierNode) Node {
-	data := &namespaceExportDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[namespaceExportDeclarationData](s, layoutNamespaceExportDeclaration)
 	data.modifiers = modifiers
-	data.name = name
-	return f.newNode(KindNamespaceExportDeclaration, data.asNode())
+	data.name = s.ref(name)
+	return f.newNode(KindNamespaceExportDeclaration, layoutNamespaceExportDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateNamespaceExportDeclaration(node NamespaceExportDeclaration, modifiers *ModifierList, name IdentifierNode) Node {
@@ -5518,24 +6457,23 @@ func IsNamespaceExportDeclaration(node Node) bool {
 type namespaceExportData struct {
 	nodeBaseData
 	declarationBaseData
-	name ModuleExportName
+	name nodeRef // ModuleExportName
 }
 
 type NamespaceExport struct{ Node }
 
-func (node NamespaceExport) data() *namespaceExportData {
-	return (*namespaceExportData)(unsafe.Pointer(node.h))
-}
+func (node NamespaceExport) data() *namespaceExportData { return (*namespaceExportData)(node.rec()) }
 
 func (node NamespaceExport) Symbol() *Symbol                { return node.data().symbol }
 func (node NamespaceExport) SetSymbol(value *Symbol)        { node.data().symbol = value }
-func (node NamespaceExport) Name() ModuleExportName         { return node.data().name }
-func (node NamespaceExport) setName(value ModuleExportName) { node.data().name = value }
+func (node NamespaceExport) Name() ModuleExportName         { return node.s.deref(node.data().name) }
+func (node NamespaceExport) setName(value ModuleExportName) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewNamespaceExport(name ModuleExportName) Node {
-	data := &namespaceExportData{}
-	data.name = name
-	return f.newNode(KindNamespaceExport, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[namespaceExportData](s, layoutNamespaceExport)
+	data.name = s.ref(name)
+	return f.newNode(KindNamespaceExport, layoutNamespaceExport, i)
 }
 
 func (f *NodeFactory) UpdateNamespaceExport(node NamespaceExport, name ModuleExportName) Node {
@@ -5577,15 +6515,15 @@ type namedExportsData struct {
 
 type NamedExports struct{ Node }
 
-func (node NamedExports) data() *namedExportsData { return (*namedExportsData)(unsafe.Pointer(node.h)) }
+func (node NamedExports) data() *namedExportsData { return (*namedExportsData)(node.rec()) }
 
 func (node NamedExports) Elements() *ExportSpecifierList         { return node.data().elements }
 func (node NamedExports) SetElements(value *ExportSpecifierList) { node.data().elements = value }
 
 func (f *NodeFactory) NewNamedExports(elements *ExportSpecifierList) Node {
-	data := &namedExportsData{}
+	data, i := newRecord[namedExportsData](f.nodeStore(), layoutNamedExports)
 	data.elements = elements
-	return f.newNode(KindNamedExports, data.asNode())
+	return f.newNode(KindNamedExports, layoutNamedExports, i)
 }
 
 func (f *NodeFactory) UpdateNamedExports(node NamedExports, elements *ExportSpecifierList) Node {
@@ -5625,38 +6563,38 @@ type exportSpecifierData struct {
 	exportableBaseData
 	compositeBaseData
 	isTypeOnly   bool
-	propertyName ModuleExportName // Optional
-	name         ModuleExportName
+	propertyName nodeRef // ModuleExportName. Optional
+	name         nodeRef // ModuleExportName
 }
 
 type ExportSpecifier struct{ Node }
 
-func (node ExportSpecifier) data() *exportSpecifierData {
-	return (*exportSpecifierData)(unsafe.Pointer(node.h))
+func (node ExportSpecifier) data() *exportSpecifierData { return (*exportSpecifierData)(node.rec()) }
+
+func (node ExportSpecifier) Symbol() *Symbol              { return node.data().symbol }
+func (node ExportSpecifier) SetSymbol(value *Symbol)      { node.data().symbol = value }
+func (node ExportSpecifier) LocalSymbol() *Symbol         { return node.data().localSymbol }
+func (node ExportSpecifier) SetLocalSymbol(value *Symbol) { node.data().localSymbol = value }
+func (node ExportSpecifier) IsTypeOnly() bool             { return node.data().isTypeOnly }
+func (node ExportSpecifier) SetIsTypeOnly(value bool)     { node.data().isTypeOnly = value }
+func (node ExportSpecifier) PropertyName() ModuleExportName {
+	return node.s.deref(node.data().propertyName)
 }
 
-func (node ExportSpecifier) Symbol() *Symbol         { return node.data().symbol }
-func (node ExportSpecifier) SetSymbol(value *Symbol) { node.data().symbol = value }
-func (node ExportSpecifier) LocalSymbol() *Symbol    { return node.data().localSymbol }
+func (node ExportSpecifier) SetPropertyName(value ModuleExportName) {
+	node.data().propertyName = node.s.ref(value)
+}
 
-func (node ExportSpecifier) SetLocalSymbol(value *Symbol) { node.data().localSymbol = value }
-
-func (node ExportSpecifier) IsTypeOnly() bool { return node.data().isTypeOnly }
-
-func (node ExportSpecifier) SetIsTypeOnly(value bool) { node.data().isTypeOnly = value }
-
-func (node ExportSpecifier) PropertyName() ModuleExportName { return node.data().propertyName }
-
-func (node ExportSpecifier) SetPropertyName(value ModuleExportName) { node.data().propertyName = value }
-func (node ExportSpecifier) Name() ModuleExportName                 { return node.data().name }
-func (node ExportSpecifier) setName(value ModuleExportName)         { node.data().name = value }
+func (node ExportSpecifier) Name() ModuleExportName         { return node.s.deref(node.data().name) }
+func (node ExportSpecifier) setName(value ModuleExportName) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewExportSpecifier(isTypeOnly bool, propertyName ModuleExportName, name ModuleExportName) Node {
-	data := &exportSpecifierData{}
+	s := f.nodeStore()
+	data, i := newRecord[exportSpecifierData](s, layoutExportSpecifier)
 	data.isTypeOnly = isTypeOnly
-	data.propertyName = propertyName
-	data.name = name
-	return f.newNode(KindExportSpecifier, data.asNode())
+	data.propertyName = s.ref(propertyName)
+	data.name = s.ref(name)
+	return f.newNode(KindExportSpecifier, layoutExportSpecifier, i)
 }
 
 func (f *NodeFactory) UpdateExportSpecifier(node ExportSpecifier, isTypeOnly bool, propertyName ModuleExportName, name ModuleExportName) Node {
@@ -5697,16 +6635,20 @@ type callSignatureDeclarationData struct {
 type CallSignatureDeclaration struct{ Node }
 
 func (node CallSignatureDeclaration) data() *callSignatureDeclarationData {
-	return (*callSignatureDeclarationData)(unsafe.Pointer(node.h))
+	return (*callSignatureDeclarationData)(node.rec())
 }
 
 func (node CallSignatureDeclaration) Symbol() *Symbol             { return node.data().symbol }
 func (node CallSignatureDeclaration) SetSymbol(value *Symbol)     { node.data().symbol = value }
 func (node CallSignatureDeclaration) Locals() SymbolTable         { return node.data().locals }
 func (node CallSignatureDeclaration) SetLocals(value SymbolTable) { node.data().locals = value }
-func (node CallSignatureDeclaration) NextContainer() Node         { return node.data().nextContainer }
+func (node CallSignatureDeclaration) NextContainer() Node {
+	return node.s.deref(node.data().nextContainer)
+}
 
-func (node CallSignatureDeclaration) SetNextContainer(value Node) { node.data().nextContainer = value }
+func (node CallSignatureDeclaration) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
 
 func (node CallSignatureDeclaration) TypeParameters() *TypeParameterList {
 	return node.data().typeParameters
@@ -5719,19 +6661,26 @@ func (node CallSignatureDeclaration) Parameters() *ParameterList { return node.d
 func (node CallSignatureDeclaration) SetParameters(value *ParameterList) {
 	node.data().parameters = value
 }
-func (node CallSignatureDeclaration) Type() TypeNode          { return node.data().typeField }
-func (node CallSignatureDeclaration) SetType(value TypeNode)  { node.data().typeField = value }
-func (node CallSignatureDeclaration) FullSignature() TypeNode { return node.data().fullSignature }
+func (node CallSignatureDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
+func (node CallSignatureDeclaration) SetType(value TypeNode) {
+	node.data().typeField = node.s.ref(value)
+}
+
+func (node CallSignatureDeclaration) FullSignature() TypeNode {
+	return node.s.deref(node.data().fullSignature)
+}
+
 func (node CallSignatureDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = value
+	node.data().fullSignature = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewCallSignatureDeclaration(typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
-	data := &callSignatureDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[callSignatureDeclarationData](s, layoutCallSignatureDeclaration)
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	return f.newNode(KindCallSignature, data.asNode())
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindCallSignature, layoutCallSignatureDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateCallSignatureDeclaration(node CallSignatureDeclaration, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -5772,7 +6721,7 @@ type constructSignatureDeclarationData struct {
 type ConstructSignatureDeclaration struct{ Node }
 
 func (node ConstructSignatureDeclaration) data() *constructSignatureDeclarationData {
-	return (*constructSignatureDeclarationData)(unsafe.Pointer(node.h))
+	return (*constructSignatureDeclarationData)(node.rec())
 }
 
 func (node ConstructSignatureDeclaration) Symbol() *Symbol             { return node.data().symbol }
@@ -5780,10 +6729,12 @@ func (node ConstructSignatureDeclaration) SetSymbol(value *Symbol)     { node.da
 func (node ConstructSignatureDeclaration) Locals() SymbolTable         { return node.data().locals }
 func (node ConstructSignatureDeclaration) SetLocals(value SymbolTable) { node.data().locals = value }
 
-func (node ConstructSignatureDeclaration) NextContainer() Node { return node.data().nextContainer }
+func (node ConstructSignatureDeclaration) NextContainer() Node {
+	return node.s.deref(node.data().nextContainer)
+}
 
 func (node ConstructSignatureDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = value
+	node.data().nextContainer = node.s.ref(value)
 }
 
 func (node ConstructSignatureDeclaration) TypeParameters() *TypeParameterList {
@@ -5799,20 +6750,28 @@ func (node ConstructSignatureDeclaration) Parameters() *ParameterList { return n
 func (node ConstructSignatureDeclaration) SetParameters(value *ParameterList) {
 	node.data().parameters = value
 }
-func (node ConstructSignatureDeclaration) Type() TypeNode          { return node.data().typeField }
-func (node ConstructSignatureDeclaration) SetType(value TypeNode)  { node.data().typeField = value }
-func (node ConstructSignatureDeclaration) FullSignature() TypeNode { return node.data().fullSignature }
+
+func (node ConstructSignatureDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node ConstructSignatureDeclaration) SetType(value TypeNode) {
+	node.data().typeField = node.s.ref(value)
+}
+
+func (node ConstructSignatureDeclaration) FullSignature() TypeNode {
+	return node.s.deref(node.data().fullSignature)
+}
 
 func (node ConstructSignatureDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = value
+	node.data().fullSignature = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewConstructSignatureDeclaration(typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
-	data := f.constructSignatureDeclarationArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[constructSignatureDeclarationData](s, layoutConstructSignatureDeclaration)
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	return f.newNode(KindConstructSignature, data.asNode())
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindConstructSignature, layoutConstructSignatureDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateConstructSignatureDeclaration(node ConstructSignatureDeclaration, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -5855,7 +6814,7 @@ type constructorDeclarationData struct {
 type ConstructorDeclaration struct{ Node }
 
 func (node ConstructorDeclaration) data() *constructorDeclarationData {
-	return (*constructorDeclarationData)(unsafe.Pointer(node.h))
+	return (*constructorDeclarationData)(node.rec())
 }
 
 func (node ConstructorDeclaration) Symbol() *Symbol          { return node.data().symbol }
@@ -5865,9 +6824,13 @@ func (node ConstructorDeclaration) Modifiers() *ModifierList { return node.data(
 func (node ConstructorDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
 func (node ConstructorDeclaration) Locals() SymbolTable              { return node.data().locals }
 func (node ConstructorDeclaration) SetLocals(value SymbolTable)      { node.data().locals = value }
-func (node ConstructorDeclaration) NextContainer() Node              { return node.data().nextContainer }
+func (node ConstructorDeclaration) NextContainer() Node {
+	return node.s.deref(node.data().nextContainer)
+}
 
-func (node ConstructorDeclaration) SetNextContainer(value Node) { node.data().nextContainer = value }
+func (node ConstructorDeclaration) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
 
 func (node ConstructorDeclaration) TypeParameters() *TypeParameterList {
 	return node.data().typeParameters
@@ -5880,20 +6843,31 @@ func (node ConstructorDeclaration) Parameters() *ParameterList { return node.dat
 func (node ConstructorDeclaration) SetParameters(value *ParameterList) {
 	node.data().parameters = value
 }
-func (node ConstructorDeclaration) Type() TypeNode          { return node.data().typeField }
-func (node ConstructorDeclaration) SetType(value TypeNode)  { node.data().typeField = value }
-func (node ConstructorDeclaration) FullSignature() TypeNode { return node.data().fullSignature }
-func (node ConstructorDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = value
+
+func (node ConstructorDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node ConstructorDeclaration) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node ConstructorDeclaration) FullSignature() TypeNode {
+	return node.s.deref(node.data().fullSignature)
 }
 
-func (node ConstructorDeclaration) AsteriskToken() AsteriskToken { return node.data().asteriskToken }
+func (node ConstructorDeclaration) SetFullSignature(value TypeNode) {
+	node.data().fullSignature = node.s.ref(value)
+}
+
+func (node ConstructorDeclaration) AsteriskToken() AsteriskToken {
+	return node.s.deref(node.data().asteriskToken)
+}
 
 func (node ConstructorDeclaration) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = value
+	node.data().asteriskToken = node.s.ref(value)
 }
-func (node ConstructorDeclaration) Body() NodeBody         { return node.data().body }
-func (node ConstructorDeclaration) SetBody(value NodeBody) { node.data().body = value }
+
+func (node ConstructorDeclaration) Body() NodeBody { return node.s.deref(node.data().body) }
+
+func (node ConstructorDeclaration) SetBody(value NodeBody) { node.data().body = node.s.ref(value) }
+
 func (node ConstructorDeclaration) EndFlowNode() *FlowNode { return node.data().endFlowNode }
 
 func (node ConstructorDeclaration) SetEndFlowNode(value *FlowNode) { node.data().endFlowNode = value }
@@ -5905,14 +6879,15 @@ func (node ConstructorDeclaration) SetReturnFlowNode(value *FlowNode) {
 }
 
 func (f *NodeFactory) NewConstructorDeclaration(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
-	data := &constructorDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[constructorDeclarationData](s, layoutConstructorDeclaration)
 	data.modifiers = modifiers
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	data.fullSignature = fullSignature
-	data.body = body
-	return f.newNode(KindConstructor, data.asNode())
+	data.typeField = s.ref(typeNode)
+	data.fullSignature = s.ref(fullSignature)
+	data.body = s.ref(body)
+	return f.newNode(KindConstructor, layoutConstructorDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateConstructorDeclaration(node ConstructorDeclaration, modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
@@ -5954,7 +6929,7 @@ type getAccessorDeclarationData struct {
 type GetAccessorDeclaration struct{ Node }
 
 func (node GetAccessorDeclaration) data() *getAccessorDeclarationData {
-	return (*getAccessorDeclarationData)(unsafe.Pointer(node.h))
+	return (*getAccessorDeclarationData)(node.rec())
 }
 
 func (node GetAccessorDeclaration) Symbol() *Symbol          { return node.data().symbol }
@@ -5962,16 +6937,27 @@ func (node GetAccessorDeclaration) SetSymbol(value *Symbol)  { node.data().symbo
 func (node GetAccessorDeclaration) Modifiers() *ModifierList { return node.data().modifiers }
 
 func (node GetAccessorDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
-func (node GetAccessorDeclaration) Name() PropertyName               { return node.data().name }
-func (node GetAccessorDeclaration) setName(value PropertyName)       { node.data().name = value }
-func (node GetAccessorDeclaration) PostfixToken() TokenNode          { return node.data().postfixToken }
 
-func (node GetAccessorDeclaration) SetPostfixToken(value TokenNode) { node.data().postfixToken = value }
-func (node GetAccessorDeclaration) Locals() SymbolTable             { return node.data().locals }
-func (node GetAccessorDeclaration) SetLocals(value SymbolTable)     { node.data().locals = value }
-func (node GetAccessorDeclaration) NextContainer() Node             { return node.data().nextContainer }
+func (node GetAccessorDeclaration) Name() PropertyName { return node.s.deref(node.data().name) }
 
-func (node GetAccessorDeclaration) SetNextContainer(value Node) { node.data().nextContainer = value }
+func (node GetAccessorDeclaration) setName(value PropertyName) { node.data().name = node.s.ref(value) }
+
+func (node GetAccessorDeclaration) PostfixToken() TokenNode {
+	return node.s.deref(node.data().postfixToken)
+}
+
+func (node GetAccessorDeclaration) SetPostfixToken(value TokenNode) {
+	node.data().postfixToken = node.s.ref(value)
+}
+func (node GetAccessorDeclaration) Locals() SymbolTable         { return node.data().locals }
+func (node GetAccessorDeclaration) SetLocals(value SymbolTable) { node.data().locals = value }
+func (node GetAccessorDeclaration) NextContainer() Node {
+	return node.s.deref(node.data().nextContainer)
+}
+
+func (node GetAccessorDeclaration) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
 
 func (node GetAccessorDeclaration) TypeParameters() *TypeParameterList {
 	return node.data().typeParameters
@@ -5984,20 +6970,31 @@ func (node GetAccessorDeclaration) Parameters() *ParameterList { return node.dat
 func (node GetAccessorDeclaration) SetParameters(value *ParameterList) {
 	node.data().parameters = value
 }
-func (node GetAccessorDeclaration) Type() TypeNode          { return node.data().typeField }
-func (node GetAccessorDeclaration) SetType(value TypeNode)  { node.data().typeField = value }
-func (node GetAccessorDeclaration) FullSignature() TypeNode { return node.data().fullSignature }
-func (node GetAccessorDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = value
+
+func (node GetAccessorDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node GetAccessorDeclaration) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node GetAccessorDeclaration) FullSignature() TypeNode {
+	return node.s.deref(node.data().fullSignature)
 }
 
-func (node GetAccessorDeclaration) AsteriskToken() AsteriskToken { return node.data().asteriskToken }
+func (node GetAccessorDeclaration) SetFullSignature(value TypeNode) {
+	node.data().fullSignature = node.s.ref(value)
+}
+
+func (node GetAccessorDeclaration) AsteriskToken() AsteriskToken {
+	return node.s.deref(node.data().asteriskToken)
+}
 
 func (node GetAccessorDeclaration) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = value
+	node.data().asteriskToken = node.s.ref(value)
 }
-func (node GetAccessorDeclaration) Body() NodeBody         { return node.data().body }
-func (node GetAccessorDeclaration) SetBody(value NodeBody) { node.data().body = value }
+
+func (node GetAccessorDeclaration) Body() NodeBody { return node.s.deref(node.data().body) }
+
+func (node GetAccessorDeclaration) SetBody(value NodeBody) { node.data().body = node.s.ref(value) }
+
 func (node GetAccessorDeclaration) EndFlowNode() *FlowNode { return node.data().endFlowNode }
 
 func (node GetAccessorDeclaration) SetEndFlowNode(value *FlowNode) { node.data().endFlowNode = value }
@@ -6005,15 +7002,16 @@ func (node GetAccessorDeclaration) FlowNode() *FlowNode            { return node
 func (node GetAccessorDeclaration) SetFlowNode(value *FlowNode)    { node.data().flowNode = value }
 
 func (f *NodeFactory) NewGetAccessorDeclaration(modifiers *ModifierList, name PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
-	data := &getAccessorDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[getAccessorDeclarationData](s, layoutGetAccessorDeclaration)
 	data.modifiers = modifiers
-	data.name = name
+	data.name = s.ref(name)
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	data.fullSignature = fullSignature
-	data.body = body
-	return f.newNode(KindGetAccessor, data.asNode())
+	data.typeField = s.ref(typeNode)
+	data.fullSignature = s.ref(fullSignature)
+	data.body = s.ref(body)
+	return f.newNode(KindGetAccessor, layoutGetAccessorDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateGetAccessorDeclaration(node GetAccessorDeclaration, modifiers *ModifierList, name PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
@@ -6056,7 +7054,7 @@ type setAccessorDeclarationData struct {
 type SetAccessorDeclaration struct{ Node }
 
 func (node SetAccessorDeclaration) data() *setAccessorDeclarationData {
-	return (*setAccessorDeclarationData)(unsafe.Pointer(node.h))
+	return (*setAccessorDeclarationData)(node.rec())
 }
 
 func (node SetAccessorDeclaration) Symbol() *Symbol          { return node.data().symbol }
@@ -6064,16 +7062,27 @@ func (node SetAccessorDeclaration) SetSymbol(value *Symbol)  { node.data().symbo
 func (node SetAccessorDeclaration) Modifiers() *ModifierList { return node.data().modifiers }
 
 func (node SetAccessorDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
-func (node SetAccessorDeclaration) Name() PropertyName               { return node.data().name }
-func (node SetAccessorDeclaration) setName(value PropertyName)       { node.data().name = value }
-func (node SetAccessorDeclaration) PostfixToken() TokenNode          { return node.data().postfixToken }
 
-func (node SetAccessorDeclaration) SetPostfixToken(value TokenNode) { node.data().postfixToken = value }
-func (node SetAccessorDeclaration) Locals() SymbolTable             { return node.data().locals }
-func (node SetAccessorDeclaration) SetLocals(value SymbolTable)     { node.data().locals = value }
-func (node SetAccessorDeclaration) NextContainer() Node             { return node.data().nextContainer }
+func (node SetAccessorDeclaration) Name() PropertyName { return node.s.deref(node.data().name) }
 
-func (node SetAccessorDeclaration) SetNextContainer(value Node) { node.data().nextContainer = value }
+func (node SetAccessorDeclaration) setName(value PropertyName) { node.data().name = node.s.ref(value) }
+
+func (node SetAccessorDeclaration) PostfixToken() TokenNode {
+	return node.s.deref(node.data().postfixToken)
+}
+
+func (node SetAccessorDeclaration) SetPostfixToken(value TokenNode) {
+	node.data().postfixToken = node.s.ref(value)
+}
+func (node SetAccessorDeclaration) Locals() SymbolTable         { return node.data().locals }
+func (node SetAccessorDeclaration) SetLocals(value SymbolTable) { node.data().locals = value }
+func (node SetAccessorDeclaration) NextContainer() Node {
+	return node.s.deref(node.data().nextContainer)
+}
+
+func (node SetAccessorDeclaration) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
 
 func (node SetAccessorDeclaration) TypeParameters() *TypeParameterList {
 	return node.data().typeParameters
@@ -6086,20 +7095,31 @@ func (node SetAccessorDeclaration) Parameters() *ParameterList { return node.dat
 func (node SetAccessorDeclaration) SetParameters(value *ParameterList) {
 	node.data().parameters = value
 }
-func (node SetAccessorDeclaration) Type() TypeNode          { return node.data().typeField }
-func (node SetAccessorDeclaration) SetType(value TypeNode)  { node.data().typeField = value }
-func (node SetAccessorDeclaration) FullSignature() TypeNode { return node.data().fullSignature }
-func (node SetAccessorDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = value
+
+func (node SetAccessorDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node SetAccessorDeclaration) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node SetAccessorDeclaration) FullSignature() TypeNode {
+	return node.s.deref(node.data().fullSignature)
 }
 
-func (node SetAccessorDeclaration) AsteriskToken() AsteriskToken { return node.data().asteriskToken }
+func (node SetAccessorDeclaration) SetFullSignature(value TypeNode) {
+	node.data().fullSignature = node.s.ref(value)
+}
+
+func (node SetAccessorDeclaration) AsteriskToken() AsteriskToken {
+	return node.s.deref(node.data().asteriskToken)
+}
 
 func (node SetAccessorDeclaration) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = value
+	node.data().asteriskToken = node.s.ref(value)
 }
-func (node SetAccessorDeclaration) Body() NodeBody         { return node.data().body }
-func (node SetAccessorDeclaration) SetBody(value NodeBody) { node.data().body = value }
+
+func (node SetAccessorDeclaration) Body() NodeBody { return node.s.deref(node.data().body) }
+
+func (node SetAccessorDeclaration) SetBody(value NodeBody) { node.data().body = node.s.ref(value) }
+
 func (node SetAccessorDeclaration) EndFlowNode() *FlowNode { return node.data().endFlowNode }
 
 func (node SetAccessorDeclaration) SetEndFlowNode(value *FlowNode) { node.data().endFlowNode = value }
@@ -6107,15 +7127,16 @@ func (node SetAccessorDeclaration) FlowNode() *FlowNode            { return node
 func (node SetAccessorDeclaration) SetFlowNode(value *FlowNode)    { node.data().flowNode = value }
 
 func (f *NodeFactory) NewSetAccessorDeclaration(modifiers *ModifierList, name PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
-	data := &setAccessorDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[setAccessorDeclarationData](s, layoutSetAccessorDeclaration)
 	data.modifiers = modifiers
-	data.name = name
+	data.name = s.ref(name)
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	data.fullSignature = fullSignature
-	data.body = body
-	return f.newNode(KindSetAccessor, data.asNode())
+	data.typeField = s.ref(typeNode)
+	data.fullSignature = s.ref(fullSignature)
+	data.body = s.ref(body)
+	return f.newNode(KindSetAccessor, layoutSetAccessorDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateSetAccessorDeclaration(node SetAccessorDeclaration, modifiers *ModifierList, name PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
@@ -6164,7 +7185,7 @@ type indexSignatureDeclarationData struct {
 type IndexSignatureDeclaration struct{ Node }
 
 func (node IndexSignatureDeclaration) data() *indexSignatureDeclarationData {
-	return (*indexSignatureDeclarationData)(unsafe.Pointer(node.h))
+	return (*indexSignatureDeclarationData)(node.rec())
 }
 
 func (node IndexSignatureDeclaration) Symbol() *Symbol          { return node.data().symbol }
@@ -6175,9 +7196,13 @@ func (node IndexSignatureDeclaration) setModifiers(value *ModifierList) {
 }
 func (node IndexSignatureDeclaration) Locals() SymbolTable         { return node.data().locals }
 func (node IndexSignatureDeclaration) SetLocals(value SymbolTable) { node.data().locals = value }
-func (node IndexSignatureDeclaration) NextContainer() Node         { return node.data().nextContainer }
+func (node IndexSignatureDeclaration) NextContainer() Node {
+	return node.s.deref(node.data().nextContainer)
+}
 
-func (node IndexSignatureDeclaration) SetNextContainer(value Node) { node.data().nextContainer = value }
+func (node IndexSignatureDeclaration) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
 
 func (node IndexSignatureDeclaration) TypeParameters() *TypeParameterList {
 	return node.data().typeParameters
@@ -6190,19 +7215,26 @@ func (node IndexSignatureDeclaration) Parameters() *ParameterList { return node.
 func (node IndexSignatureDeclaration) SetParameters(value *ParameterList) {
 	node.data().parameters = value
 }
-func (node IndexSignatureDeclaration) Type() TypeNode          { return node.data().typeField }
-func (node IndexSignatureDeclaration) SetType(value TypeNode)  { node.data().typeField = value }
-func (node IndexSignatureDeclaration) FullSignature() TypeNode { return node.data().fullSignature }
+func (node IndexSignatureDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
+func (node IndexSignatureDeclaration) SetType(value TypeNode) {
+	node.data().typeField = node.s.ref(value)
+}
+
+func (node IndexSignatureDeclaration) FullSignature() TypeNode {
+	return node.s.deref(node.data().fullSignature)
+}
+
 func (node IndexSignatureDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = value
+	node.data().fullSignature = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewIndexSignatureDeclaration(modifiers *ModifierList, parameters *ParameterList, typeNode TypeNode) Node {
-	data := &indexSignatureDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[indexSignatureDeclarationData](s, layoutIndexSignatureDeclaration)
 	data.modifiers = modifiers
 	data.parameters = parameters
-	data.typeField = typeNode
-	return f.newNode(KindIndexSignature, data.asNode())
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindIndexSignature, layoutIndexSignatureDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateIndexSignatureDeclaration(node IndexSignatureDeclaration, modifiers *ModifierList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -6244,7 +7276,7 @@ type methodSignatureDeclarationData struct {
 type MethodSignatureDeclaration struct{ Node }
 
 func (node MethodSignatureDeclaration) data() *methodSignatureDeclarationData {
-	return (*methodSignatureDeclarationData)(unsafe.Pointer(node.h))
+	return (*methodSignatureDeclarationData)(node.rec())
 }
 
 func (node MethodSignatureDeclaration) Symbol() *Symbol          { return node.data().symbol }
@@ -6253,19 +7285,26 @@ func (node MethodSignatureDeclaration) Modifiers() *ModifierList { return node.d
 func (node MethodSignatureDeclaration) setModifiers(value *ModifierList) {
 	node.data().modifiers = value
 }
-func (node MethodSignatureDeclaration) Name() PropertyName         { return node.data().name }
-func (node MethodSignatureDeclaration) setName(value PropertyName) { node.data().name = value }
-func (node MethodSignatureDeclaration) PostfixToken() TokenNode    { return node.data().postfixToken }
+func (node MethodSignatureDeclaration) Name() PropertyName { return node.s.deref(node.data().name) }
+func (node MethodSignatureDeclaration) setName(value PropertyName) {
+	node.data().name = node.s.ref(value)
+}
+
+func (node MethodSignatureDeclaration) PostfixToken() TokenNode {
+	return node.s.deref(node.data().postfixToken)
+}
 
 func (node MethodSignatureDeclaration) SetPostfixToken(value TokenNode) {
-	node.data().postfixToken = value
+	node.data().postfixToken = node.s.ref(value)
 }
 func (node MethodSignatureDeclaration) Locals() SymbolTable         { return node.data().locals }
 func (node MethodSignatureDeclaration) SetLocals(value SymbolTable) { node.data().locals = value }
-func (node MethodSignatureDeclaration) NextContainer() Node         { return node.data().nextContainer }
+func (node MethodSignatureDeclaration) NextContainer() Node {
+	return node.s.deref(node.data().nextContainer)
+}
 
 func (node MethodSignatureDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = value
+	node.data().nextContainer = node.s.ref(value)
 }
 
 func (node MethodSignatureDeclaration) TypeParameters() *TypeParameterList {
@@ -6279,22 +7318,31 @@ func (node MethodSignatureDeclaration) Parameters() *ParameterList { return node
 func (node MethodSignatureDeclaration) SetParameters(value *ParameterList) {
 	node.data().parameters = value
 }
-func (node MethodSignatureDeclaration) Type() TypeNode          { return node.data().typeField }
-func (node MethodSignatureDeclaration) SetType(value TypeNode)  { node.data().typeField = value }
-func (node MethodSignatureDeclaration) FullSignature() TypeNode { return node.data().fullSignature }
+
+func (node MethodSignatureDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node MethodSignatureDeclaration) SetType(value TypeNode) {
+	node.data().typeField = node.s.ref(value)
+}
+
+func (node MethodSignatureDeclaration) FullSignature() TypeNode {
+	return node.s.deref(node.data().fullSignature)
+}
+
 func (node MethodSignatureDeclaration) SetFullSignature(value TypeNode) {
-	node.data().fullSignature = value
+	node.data().fullSignature = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewMethodSignatureDeclaration(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
-	data := f.methodSignatureDeclarationArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[methodSignatureDeclarationData](s, layoutMethodSignatureDeclaration)
 	data.modifiers = modifiers
-	data.name = name
-	data.postfixToken = postfixToken
+	data.name = s.ref(name)
+	data.postfixToken = s.ref(postfixToken)
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	return f.newNode(KindMethodSignature, data.asNode())
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindMethodSignature, layoutMethodSignatureDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateMethodSignatureDeclaration(node MethodSignatureDeclaration, modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -6343,23 +7391,29 @@ type methodDeclarationData struct {
 type MethodDeclaration struct{ Node }
 
 func (node MethodDeclaration) data() *methodDeclarationData {
-	return (*methodDeclarationData)(unsafe.Pointer(node.h))
+	return (*methodDeclarationData)(node.rec())
 }
 
 func (node MethodDeclaration) Symbol() *Symbol                  { return node.data().symbol }
 func (node MethodDeclaration) SetSymbol(value *Symbol)          { node.data().symbol = value }
 func (node MethodDeclaration) Modifiers() *ModifierList         { return node.data().modifiers }
 func (node MethodDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
-func (node MethodDeclaration) Name() PropertyName               { return node.data().name }
-func (node MethodDeclaration) setName(value PropertyName)       { node.data().name = value }
-func (node MethodDeclaration) PostfixToken() TokenNode          { return node.data().postfixToken }
+func (node MethodDeclaration) Name() PropertyName               { return node.s.deref(node.data().name) }
 
-func (node MethodDeclaration) SetPostfixToken(value TokenNode) { node.data().postfixToken = value }
-func (node MethodDeclaration) Locals() SymbolTable             { return node.data().locals }
-func (node MethodDeclaration) SetLocals(value SymbolTable)     { node.data().locals = value }
-func (node MethodDeclaration) NextContainer() Node             { return node.data().nextContainer }
+func (node MethodDeclaration) setName(value PropertyName) { node.data().name = node.s.ref(value) }
 
-func (node MethodDeclaration) SetNextContainer(value Node) { node.data().nextContainer = value }
+func (node MethodDeclaration) PostfixToken() TokenNode { return node.s.deref(node.data().postfixToken) }
+
+func (node MethodDeclaration) SetPostfixToken(value TokenNode) {
+	node.data().postfixToken = node.s.ref(value)
+}
+func (node MethodDeclaration) Locals() SymbolTable         { return node.data().locals }
+func (node MethodDeclaration) SetLocals(value SymbolTable) { node.data().locals = value }
+func (node MethodDeclaration) NextContainer() Node         { return node.s.deref(node.data().nextContainer) }
+
+func (node MethodDeclaration) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
 
 func (node MethodDeclaration) TypeParameters() *TypeParameterList { return node.data().typeParameters }
 
@@ -6368,36 +7422,47 @@ func (node MethodDeclaration) SetTypeParameters(value *TypeParameterList) {
 }
 func (node MethodDeclaration) Parameters() *ParameterList         { return node.data().parameters }
 func (node MethodDeclaration) SetParameters(value *ParameterList) { node.data().parameters = value }
-func (node MethodDeclaration) Type() TypeNode                     { return node.data().typeField }
-func (node MethodDeclaration) SetType(value TypeNode)             { node.data().typeField = value }
-func (node MethodDeclaration) FullSignature() TypeNode            { return node.data().fullSignature }
+func (node MethodDeclaration) Type() TypeNode                     { return node.s.deref(node.data().typeField) }
 
-func (node MethodDeclaration) SetFullSignature(value TypeNode) { node.data().fullSignature = value }
+func (node MethodDeclaration) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
-func (node MethodDeclaration) AsteriskToken() AsteriskToken { return node.data().asteriskToken }
+func (node MethodDeclaration) FullSignature() TypeNode {
+	return node.s.deref(node.data().fullSignature)
+}
+
+func (node MethodDeclaration) SetFullSignature(value TypeNode) {
+	node.data().fullSignature = node.s.ref(value)
+}
+
+func (node MethodDeclaration) AsteriskToken() AsteriskToken {
+	return node.s.deref(node.data().asteriskToken)
+}
 
 func (node MethodDeclaration) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = value
+	node.data().asteriskToken = node.s.ref(value)
 }
-func (node MethodDeclaration) Body() NodeBody                 { return node.data().body }
-func (node MethodDeclaration) SetBody(value NodeBody)         { node.data().body = value }
+
+func (node MethodDeclaration) Body() NodeBody { return node.s.deref(node.data().body) }
+
+func (node MethodDeclaration) SetBody(value NodeBody)         { node.data().body = node.s.ref(value) }
 func (node MethodDeclaration) EndFlowNode() *FlowNode         { return node.data().endFlowNode }
 func (node MethodDeclaration) SetEndFlowNode(value *FlowNode) { node.data().endFlowNode = value }
 func (node MethodDeclaration) FlowNode() *FlowNode            { return node.data().flowNode }
 func (node MethodDeclaration) SetFlowNode(value *FlowNode)    { node.data().flowNode = value }
 
 func (f *NodeFactory) NewMethodDeclaration(modifiers *ModifierList, asteriskToken AsteriskToken, name PropertyName, postfixToken TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
-	data := &methodDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[methodDeclarationData](s, layoutMethodDeclaration)
 	data.modifiers = modifiers
-	data.asteriskToken = asteriskToken
-	data.name = name
-	data.postfixToken = postfixToken
+	data.asteriskToken = s.ref(asteriskToken)
+	data.name = s.ref(name)
+	data.postfixToken = s.ref(postfixToken)
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	data.fullSignature = fullSignature
-	data.body = body
-	return f.newNode(KindMethodDeclaration, data.asNode())
+	data.typeField = s.ref(typeNode)
+	data.fullSignature = s.ref(fullSignature)
+	data.body = s.ref(body)
+	return f.newNode(KindMethodDeclaration, layoutMethodDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateMethodDeclaration(node MethodDeclaration, modifiers *ModifierList, asteriskToken AsteriskToken, name PropertyName, postfixToken TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
@@ -6441,14 +7506,14 @@ type propertySignatureDeclarationData struct {
 	nodeBaseData
 	declarationBaseData
 	namedMemberBaseData
-	typeField   TypeNode
-	initializer Expression
+	typeField   nodeRef // TypeNode
+	initializer nodeRef // Expression
 }
 
 type PropertySignatureDeclaration struct{ Node }
 
 func (node PropertySignatureDeclaration) data() *propertySignatureDeclarationData {
-	return (*propertySignatureDeclarationData)(unsafe.Pointer(node.h))
+	return (*propertySignatureDeclarationData)(node.rec())
 }
 
 func (node PropertySignatureDeclaration) Symbol() *Symbol          { return node.data().symbol }
@@ -6457,28 +7522,44 @@ func (node PropertySignatureDeclaration) Modifiers() *ModifierList { return node
 func (node PropertySignatureDeclaration) setModifiers(value *ModifierList) {
 	node.data().modifiers = value
 }
-func (node PropertySignatureDeclaration) Name() PropertyName         { return node.data().name }
-func (node PropertySignatureDeclaration) setName(value PropertyName) { node.data().name = value }
-func (node PropertySignatureDeclaration) PostfixToken() TokenNode    { return node.data().postfixToken }
+
+func (node PropertySignatureDeclaration) Name() PropertyName { return node.s.deref(node.data().name) }
+
+func (node PropertySignatureDeclaration) setName(value PropertyName) {
+	node.data().name = node.s.ref(value)
+}
+
+func (node PropertySignatureDeclaration) PostfixToken() TokenNode {
+	return node.s.deref(node.data().postfixToken)
+}
 
 func (node PropertySignatureDeclaration) SetPostfixToken(value TokenNode) {
-	node.data().postfixToken = value
+	node.data().postfixToken = node.s.ref(value)
 }
-func (node PropertySignatureDeclaration) Type() TypeNode          { return node.data().typeField }
-func (node PropertySignatureDeclaration) SetType(value TypeNode)  { node.data().typeField = value }
-func (node PropertySignatureDeclaration) Initializer() Expression { return node.data().initializer }
+
+func (node PropertySignatureDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node PropertySignatureDeclaration) SetType(value TypeNode) {
+	node.data().typeField = node.s.ref(value)
+}
+
+func (node PropertySignatureDeclaration) Initializer() Expression {
+	return node.s.deref(node.data().initializer)
+}
+
 func (node PropertySignatureDeclaration) SetInitializer(value Expression) {
-	node.data().initializer = value
+	node.data().initializer = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewPropertySignatureDeclaration(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
-	data := f.propertySignatureDeclarationArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[propertySignatureDeclarationData](s, layoutPropertySignatureDeclaration)
 	data.modifiers = modifiers
-	data.name = name
-	data.postfixToken = postfixToken
-	data.typeField = typeNode
-	data.initializer = initializer
-	return f.newNode(KindPropertySignature, data.asNode())
+	data.name = s.ref(name)
+	data.postfixToken = s.ref(postfixToken)
+	data.typeField = s.ref(typeNode)
+	data.initializer = s.ref(initializer)
+	return f.newNode(KindPropertySignature, layoutPropertySignatureDeclaration, i)
 }
 
 func (f *NodeFactory) UpdatePropertySignatureDeclaration(node PropertySignatureDeclaration, modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
@@ -6518,38 +7599,53 @@ type propertyDeclarationData struct {
 	declarationBaseData
 	namedMemberBaseData
 	compositeBaseData
-	typeField   TypeNode   // Optional
-	initializer Expression // Optional
+	typeField   nodeRef // TypeNode. Optional
+	initializer nodeRef // Expression. Optional
 }
 
 type PropertyDeclaration struct{ Node }
 
 func (node PropertyDeclaration) data() *propertyDeclarationData {
-	return (*propertyDeclarationData)(unsafe.Pointer(node.h))
+	return (*propertyDeclarationData)(node.rec())
 }
 
 func (node PropertyDeclaration) Symbol() *Symbol                  { return node.data().symbol }
 func (node PropertyDeclaration) SetSymbol(value *Symbol)          { node.data().symbol = value }
 func (node PropertyDeclaration) Modifiers() *ModifierList         { return node.data().modifiers }
 func (node PropertyDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
-func (node PropertyDeclaration) Name() PropertyName               { return node.data().name }
-func (node PropertyDeclaration) setName(value PropertyName)       { node.data().name = value }
-func (node PropertyDeclaration) PostfixToken() TokenNode          { return node.data().postfixToken }
+func (node PropertyDeclaration) Name() PropertyName               { return node.s.deref(node.data().name) }
 
-func (node PropertyDeclaration) SetPostfixToken(value TokenNode) { node.data().postfixToken = value }
-func (node PropertyDeclaration) Type() TypeNode                  { return node.data().typeField }
-func (node PropertyDeclaration) SetType(value TypeNode)          { node.data().typeField = value }
-func (node PropertyDeclaration) Initializer() Expression         { return node.data().initializer }
-func (node PropertyDeclaration) SetInitializer(value Expression) { node.data().initializer = value }
+func (node PropertyDeclaration) setName(value PropertyName) { node.data().name = node.s.ref(value) }
+
+func (node PropertyDeclaration) PostfixToken() TokenNode {
+	return node.s.deref(node.data().postfixToken)
+}
+
+func (node PropertyDeclaration) SetPostfixToken(value TokenNode) {
+	node.data().postfixToken = node.s.ref(value)
+}
+
+func (node PropertyDeclaration) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node PropertyDeclaration) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node PropertyDeclaration) Initializer() Expression {
+	return node.s.deref(node.data().initializer)
+}
+
+func (node PropertyDeclaration) SetInitializer(value Expression) {
+	node.data().initializer = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewPropertyDeclaration(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
-	data := &propertyDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[propertyDeclarationData](s, layoutPropertyDeclaration)
 	data.modifiers = modifiers
-	data.name = name
-	data.postfixToken = postfixToken
-	data.typeField = typeNode
-	data.initializer = initializer
-	return f.newNode(KindPropertyDeclaration, data.asNode())
+	data.name = s.ref(name)
+	data.postfixToken = s.ref(postfixToken)
+	data.typeField = s.ref(typeNode)
+	data.initializer = s.ref(initializer)
+	return f.newNode(KindPropertyDeclaration, layoutPropertyDeclaration, i)
 }
 
 func (f *NodeFactory) UpdatePropertyDeclaration(node PropertyDeclaration, modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
@@ -6592,15 +7688,15 @@ type semicolonClassElementData struct {
 type SemicolonClassElement struct{ Node }
 
 func (node SemicolonClassElement) data() *semicolonClassElementData {
-	return (*semicolonClassElementData)(unsafe.Pointer(node.h))
+	return (*semicolonClassElementData)(node.rec())
 }
 
 func (node SemicolonClassElement) Symbol() *Symbol         { return node.data().symbol }
 func (node SemicolonClassElement) SetSymbol(value *Symbol) { node.data().symbol = value }
 
 func (f *NodeFactory) NewSemicolonClassElement() Node {
-	data := &semicolonClassElementData{}
-	return f.newNode(KindSemicolonClassElement, data.asNode())
+	_, i := newRecord[semicolonClassElementData](f.nodeStore(), layoutSemicolonClassElement)
+	return f.newNode(KindSemicolonClassElement, layoutSemicolonClassElement, i)
 }
 
 func (node SemicolonClassElement) Clone(f NodeFactoryCoercible) Node {
@@ -6622,14 +7718,14 @@ type classStaticBlockDeclarationData struct {
 	modifiersBaseData
 	localsContainerBaseData
 	compositeBaseData
-	body           BlockNode
+	body           nodeRef // BlockNode
 	returnFlowNode *FlowNode
 }
 
 type ClassStaticBlockDeclaration struct{ Node }
 
 func (node ClassStaticBlockDeclaration) data() *classStaticBlockDeclarationData {
-	return (*classStaticBlockDeclarationData)(unsafe.Pointer(node.h))
+	return (*classStaticBlockDeclarationData)(node.rec())
 }
 
 func (node ClassStaticBlockDeclaration) Symbol() *Symbol          { return node.data().symbol }
@@ -6640,13 +7736,18 @@ func (node ClassStaticBlockDeclaration) setModifiers(value *ModifierList) {
 }
 func (node ClassStaticBlockDeclaration) Locals() SymbolTable         { return node.data().locals }
 func (node ClassStaticBlockDeclaration) SetLocals(value SymbolTable) { node.data().locals = value }
-func (node ClassStaticBlockDeclaration) NextContainer() Node         { return node.data().nextContainer }
+func (node ClassStaticBlockDeclaration) NextContainer() Node {
+	return node.s.deref(node.data().nextContainer)
+}
 
 func (node ClassStaticBlockDeclaration) SetNextContainer(value Node) {
-	node.data().nextContainer = value
+	node.data().nextContainer = node.s.ref(value)
 }
-func (node ClassStaticBlockDeclaration) Body() BlockNode           { return node.data().body }
-func (node ClassStaticBlockDeclaration) SetBody(value BlockNode)   { node.data().body = value }
+func (node ClassStaticBlockDeclaration) Body() BlockNode { return node.s.deref(node.data().body) }
+func (node ClassStaticBlockDeclaration) SetBody(value BlockNode) {
+	node.data().body = node.s.ref(value)
+}
+
 func (node ClassStaticBlockDeclaration) ReturnFlowNode() *FlowNode { return node.data().returnFlowNode }
 
 func (node ClassStaticBlockDeclaration) SetReturnFlowNode(value *FlowNode) {
@@ -6654,10 +7755,11 @@ func (node ClassStaticBlockDeclaration) SetReturnFlowNode(value *FlowNode) {
 }
 
 func (f *NodeFactory) NewClassStaticBlockDeclaration(modifiers *ModifierList, body BlockNode) Node {
-	data := &classStaticBlockDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[classStaticBlockDeclarationData](s, layoutClassStaticBlockDeclaration)
 	data.modifiers = modifiers
-	data.body = body
-	return f.newNode(KindClassStaticBlockDeclaration, data.asNode())
+	data.body = s.ref(body)
+	return f.newNode(KindClassStaticBlockDeclaration, layoutClassStaticBlockDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateClassStaticBlockDeclaration(node ClassStaticBlockDeclaration, modifiers *ModifierList, body BlockNode) Node {
@@ -6694,12 +7796,12 @@ type omittedExpressionData struct {
 type OmittedExpression struct{ Node }
 
 func (node OmittedExpression) data() *omittedExpressionData {
-	return (*omittedExpressionData)(unsafe.Pointer(node.h))
+	return (*omittedExpressionData)(node.rec())
 }
 
 func (f *NodeFactory) NewOmittedExpression() Node {
-	data := &omittedExpressionData{}
-	return f.newNode(KindOmittedExpression, data.asNode())
+	_, i := newRecord[omittedExpressionData](f.nodeStore(), layoutOmittedExpression)
+	return f.newNode(KindOmittedExpression, layoutOmittedExpression, i)
 }
 
 func (node OmittedExpression) Clone(f NodeFactoryCoercible) Node {
@@ -6722,7 +7824,7 @@ type keywordExpressionData struct {
 type KeywordExpression struct{ Node }
 
 func (node KeywordExpression) data() *keywordExpressionData {
-	return (*keywordExpressionData)(unsafe.Pointer(node.h))
+	return (*keywordExpressionData)(node.rec())
 }
 
 func (node KeywordExpression) FlowNode() *FlowNode         { return node.data().flowNode }
@@ -6734,8 +7836,8 @@ func (f *NodeFactory) NewKeywordExpression(kind KeywordExpressionSyntaxKind) Nod
 	default:
 		panic("Invalid node kind for KeywordExpression")
 	}
-	data := f.keywordExpressionArena.New()
-	return f.newNode(kind, data.asNode())
+	_, i := newRecord[keywordExpressionData](f.nodeStore(), layoutKeywordExpression)
+	return f.newNode(kind, layoutKeywordExpression, i)
 }
 
 func (node KeywordExpression) Clone(f NodeFactoryCoercible) Node {
@@ -6760,9 +7862,7 @@ type stringLiteralData struct {
 
 type StringLiteral struct{ Node }
 
-func (node StringLiteral) data() *stringLiteralData {
-	return (*stringLiteralData)(unsafe.Pointer(node.h))
-}
+func (node StringLiteral) data() *stringLiteralData { return (*stringLiteralData)(node.rec()) }
 
 func (node StringLiteral) Text() string                   { return node.data().text }
 func (node StringLiteral) SetText(value string)           { node.data().text = value }
@@ -6770,11 +7870,11 @@ func (node StringLiteral) TokenFlags() TokenFlags         { return node.data().t
 func (node StringLiteral) SetTokenFlags(value TokenFlags) { node.data().tokenFlags = value }
 
 func (f *NodeFactory) NewStringLiteral(text string, tokenFlags TokenFlags) Node {
-	data := f.stringLiteralArena.New()
+	data, i := newRecord[stringLiteralData](f.nodeStore(), layoutStringLiteral)
 	data.text = text
 	data.tokenFlags = tokenFlags & TokenFlagsStringLiteralFlags
 	f.textCount++
-	return f.newNode(KindStringLiteral, data.asNode())
+	return f.newNode(KindStringLiteral, layoutStringLiteral, i)
 }
 
 func (node StringLiteral) Clone(f NodeFactoryCoercible) Node {
@@ -6795,9 +7895,7 @@ type numericLiteralData struct {
 
 type NumericLiteral struct{ Node }
 
-func (node NumericLiteral) data() *numericLiteralData {
-	return (*numericLiteralData)(unsafe.Pointer(node.h))
-}
+func (node NumericLiteral) data() *numericLiteralData { return (*numericLiteralData)(node.rec()) }
 
 func (node NumericLiteral) Text() string                   { return node.data().text }
 func (node NumericLiteral) SetText(value string)           { node.data().text = value }
@@ -6805,11 +7903,11 @@ func (node NumericLiteral) TokenFlags() TokenFlags         { return node.data().
 func (node NumericLiteral) SetTokenFlags(value TokenFlags) { node.data().tokenFlags = value }
 
 func (f *NodeFactory) NewNumericLiteral(text string, tokenFlags TokenFlags) Node {
-	data := f.numericLiteralArena.New()
+	data, i := newRecord[numericLiteralData](f.nodeStore(), layoutNumericLiteral)
 	data.text = text
 	data.tokenFlags = tokenFlags & TokenFlagsNumericLiteralFlags
 	f.textCount++
-	return f.newNode(KindNumericLiteral, data.asNode())
+	return f.newNode(KindNumericLiteral, layoutNumericLiteral, i)
 }
 
 func (node NumericLiteral) Clone(f NodeFactoryCoercible) Node {
@@ -6830,9 +7928,7 @@ type bigIntLiteralData struct {
 
 type BigIntLiteral struct{ Node }
 
-func (node BigIntLiteral) data() *bigIntLiteralData {
-	return (*bigIntLiteralData)(unsafe.Pointer(node.h))
-}
+func (node BigIntLiteral) data() *bigIntLiteralData { return (*bigIntLiteralData)(node.rec()) }
 
 func (node BigIntLiteral) Text() string                   { return node.data().text }
 func (node BigIntLiteral) SetText(value string)           { node.data().text = value }
@@ -6840,11 +7936,11 @@ func (node BigIntLiteral) TokenFlags() TokenFlags         { return node.data().t
 func (node BigIntLiteral) SetTokenFlags(value TokenFlags) { node.data().tokenFlags = value }
 
 func (f *NodeFactory) NewBigIntLiteral(text string, tokenFlags TokenFlags) Node {
-	data := &bigIntLiteralData{}
+	data, i := newRecord[bigIntLiteralData](f.nodeStore(), layoutBigIntLiteral)
 	data.text = text
 	data.tokenFlags = tokenFlags & TokenFlagsNumericLiteralFlags
 	f.textCount++
-	return f.newNode(KindBigIntLiteral, data.asNode())
+	return f.newNode(KindBigIntLiteral, layoutBigIntLiteral, i)
 }
 
 func (node BigIntLiteral) Clone(f NodeFactoryCoercible) Node {
@@ -6866,7 +7962,7 @@ type regularExpressionLiteralData struct {
 type RegularExpressionLiteral struct{ Node }
 
 func (node RegularExpressionLiteral) data() *regularExpressionLiteralData {
-	return (*regularExpressionLiteralData)(unsafe.Pointer(node.h))
+	return (*regularExpressionLiteralData)(node.rec())
 }
 
 func (node RegularExpressionLiteral) Text() string           { return node.data().text }
@@ -6876,11 +7972,11 @@ func (node RegularExpressionLiteral) TokenFlags() TokenFlags { return node.data(
 func (node RegularExpressionLiteral) SetTokenFlags(value TokenFlags) { node.data().tokenFlags = value }
 
 func (f *NodeFactory) NewRegularExpressionLiteral(text string, tokenFlags TokenFlags) Node {
-	data := &regularExpressionLiteralData{}
+	data, i := newRecord[regularExpressionLiteralData](f.nodeStore(), layoutRegularExpressionLiteral)
 	data.text = text
 	data.tokenFlags = tokenFlags & TokenFlagsRegularExpressionLiteralFlags
 	f.textCount++
-	return f.newNode(KindRegularExpressionLiteral, data.asNode())
+	return f.newNode(KindRegularExpressionLiteral, layoutRegularExpressionLiteral, i)
 }
 
 func (node RegularExpressionLiteral) Clone(f NodeFactoryCoercible) Node {
@@ -6904,7 +8000,7 @@ type noSubstitutionTemplateLiteralData struct {
 type NoSubstitutionTemplateLiteral struct{ Node }
 
 func (node NoSubstitutionTemplateLiteral) data() *noSubstitutionTemplateLiteralData {
-	return (*noSubstitutionTemplateLiteralData)(unsafe.Pointer(node.h))
+	return (*noSubstitutionTemplateLiteralData)(node.rec())
 }
 
 func (node NoSubstitutionTemplateLiteral) Text() string           { return node.data().text }
@@ -6926,11 +8022,11 @@ func (node NoSubstitutionTemplateLiteral) Symbol() *Symbol         { return node
 func (node NoSubstitutionTemplateLiteral) SetSymbol(value *Symbol) { node.data().symbol = value }
 
 func (f *NodeFactory) NewNoSubstitutionTemplateLiteral(text string, templateFlags TokenFlags) Node {
-	data := &noSubstitutionTemplateLiteralData{}
+	data, i := newRecord[noSubstitutionTemplateLiteralData](f.nodeStore(), layoutNoSubstitutionTemplateLiteral)
 	data.text = text
 	data.templateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
-	return f.newNode(KindNoSubstitutionTemplateLiteral, data.asNode())
+	return f.newNode(KindNoSubstitutionTemplateLiteral, layoutNoSubstitutionTemplateLiteral, i)
 }
 
 func (node NoSubstitutionTemplateLiteral) Clone(f NodeFactoryCoercible) Node {
@@ -6950,42 +8046,47 @@ type binaryExpressionData struct {
 	declarationBaseData
 	modifiersBaseData
 	compositeBaseData
-	left          Expression
-	typeField     TypeNode // Optional
-	operatorToken BinaryOperatorToken
-	right         Expression
+	left          nodeRef // Expression
+	typeField     nodeRef // TypeNode. Optional
+	operatorToken nodeRef // BinaryOperatorToken
+	right         nodeRef // Expression
 }
 
 type BinaryExpression struct{ Node }
 
-func (node BinaryExpression) data() *binaryExpressionData {
-	return (*binaryExpressionData)(unsafe.Pointer(node.h))
-}
+func (node BinaryExpression) data() *binaryExpressionData { return (*binaryExpressionData)(node.rec()) }
 
-func (node BinaryExpression) Symbol() *Symbol                    { return node.data().symbol }
-func (node BinaryExpression) SetSymbol(value *Symbol)            { node.data().symbol = value }
-func (node BinaryExpression) Modifiers() *ModifierList           { return node.data().modifiers }
-func (node BinaryExpression) setModifiers(value *ModifierList)   { node.data().modifiers = value }
-func (node BinaryExpression) Left() Expression                   { return node.data().left }
-func (node BinaryExpression) SetLeft(value Expression)           { node.data().left = value }
-func (node BinaryExpression) Type() TypeNode                     { return node.data().typeField }
-func (node BinaryExpression) SetType(value TypeNode)             { node.data().typeField = value }
-func (node BinaryExpression) OperatorToken() BinaryOperatorToken { return node.data().operatorToken }
+func (node BinaryExpression) Symbol() *Symbol                  { return node.data().symbol }
+func (node BinaryExpression) SetSymbol(value *Symbol)          { node.data().symbol = value }
+func (node BinaryExpression) Modifiers() *ModifierList         { return node.data().modifiers }
+func (node BinaryExpression) setModifiers(value *ModifierList) { node.data().modifiers = value }
+func (node BinaryExpression) Left() Expression                 { return node.s.deref(node.data().left) }
+
+func (node BinaryExpression) SetLeft(value Expression) { node.data().left = node.s.ref(value) }
+
+func (node BinaryExpression) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node BinaryExpression) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node BinaryExpression) OperatorToken() BinaryOperatorToken {
+	return node.s.deref(node.data().operatorToken)
+}
 
 func (node BinaryExpression) SetOperatorToken(value BinaryOperatorToken) {
-	node.data().operatorToken = value
+	node.data().operatorToken = node.s.ref(value)
 }
-func (node BinaryExpression) Right() Expression         { return node.data().right }
-func (node BinaryExpression) SetRight(value Expression) { node.data().right = value }
+func (node BinaryExpression) Right() Expression         { return node.s.deref(node.data().right) }
+func (node BinaryExpression) SetRight(value Expression) { node.data().right = node.s.ref(value) }
 
 func (f *NodeFactory) NewBinaryExpression(modifiers *ModifierList, left Expression, typeNode TypeNode, operatorToken BinaryOperatorToken, right Expression) Node {
-	data := f.binaryExpressionArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[binaryExpressionData](s, layoutBinaryExpression)
 	data.modifiers = modifiers
-	data.left = left
-	data.typeField = typeNode
-	data.operatorToken = operatorToken
-	data.right = right
-	return f.newNode(KindBinaryExpression, data.asNode())
+	data.left = s.ref(left)
+	data.typeField = s.ref(typeNode)
+	data.operatorToken = s.ref(operatorToken)
+	data.right = s.ref(right)
+	return f.newNode(KindBinaryExpression, layoutBinaryExpression, i)
 }
 
 func (f *NodeFactory) UpdateBinaryExpression(node BinaryExpression, modifiers *ModifierList, left Expression, typeNode TypeNode, operatorToken BinaryOperatorToken, right Expression) Node {
@@ -7022,25 +8123,29 @@ func IsBinaryExpression(node Node) bool {
 type prefixUnaryExpressionData struct {
 	updateExpressionBaseData
 	operator Kind
-	operand  Expression
+	operand  nodeRef // Expression
 }
 
 type PrefixUnaryExpression struct{ Node }
 
 func (node PrefixUnaryExpression) data() *prefixUnaryExpressionData {
-	return (*prefixUnaryExpressionData)(unsafe.Pointer(node.h))
+	return (*prefixUnaryExpressionData)(node.rec())
 }
 
-func (node PrefixUnaryExpression) Operator() Kind              { return node.data().operator }
-func (node PrefixUnaryExpression) SetOperator(value Kind)      { node.data().operator = value }
-func (node PrefixUnaryExpression) Operand() Expression         { return node.data().operand }
-func (node PrefixUnaryExpression) SetOperand(value Expression) { node.data().operand = value }
+func (node PrefixUnaryExpression) Operator() Kind         { return node.data().operator }
+func (node PrefixUnaryExpression) SetOperator(value Kind) { node.data().operator = value }
+func (node PrefixUnaryExpression) Operand() Expression    { return node.s.deref(node.data().operand) }
+
+func (node PrefixUnaryExpression) SetOperand(value Expression) {
+	node.data().operand = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewPrefixUnaryExpression(operator Kind, operand Expression) Node {
-	data := f.prefixUnaryExpressionArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[prefixUnaryExpressionData](s, layoutPrefixUnaryExpression)
 	data.operator = operator
-	data.operand = operand
-	return f.newNode(KindPrefixUnaryExpression, data.asNode())
+	data.operand = s.ref(operand)
+	return f.newNode(KindPrefixUnaryExpression, layoutPrefixUnaryExpression, i)
 }
 
 func (f *NodeFactory) UpdatePrefixUnaryExpression(node PrefixUnaryExpression, operator Kind, operand Expression) Node {
@@ -7076,26 +8181,29 @@ func IsPrefixUnaryExpression(node Node) bool {
 
 type postfixUnaryExpressionData struct {
 	updateExpressionBaseData
-	operand  Expression
+	operand  nodeRef // Expression
 	operator Kind
 }
 
 type PostfixUnaryExpression struct{ Node }
 
 func (node PostfixUnaryExpression) data() *postfixUnaryExpressionData {
-	return (*postfixUnaryExpressionData)(unsafe.Pointer(node.h))
+	return (*postfixUnaryExpressionData)(node.rec())
 }
 
-func (node PostfixUnaryExpression) Operand() Expression         { return node.data().operand }
-func (node PostfixUnaryExpression) SetOperand(value Expression) { node.data().operand = value }
-func (node PostfixUnaryExpression) Operator() Kind              { return node.data().operator }
-func (node PostfixUnaryExpression) SetOperator(value Kind)      { node.data().operator = value }
+func (node PostfixUnaryExpression) Operand() Expression { return node.s.deref(node.data().operand) }
+func (node PostfixUnaryExpression) SetOperand(value Expression) {
+	node.data().operand = node.s.ref(value)
+}
+func (node PostfixUnaryExpression) Operator() Kind         { return node.data().operator }
+func (node PostfixUnaryExpression) SetOperator(value Kind) { node.data().operator = value }
 
 func (f *NodeFactory) NewPostfixUnaryExpression(operand Expression, operator Kind) Node {
-	data := &postfixUnaryExpressionData{}
-	data.operand = operand
+	s := f.nodeStore()
+	data, i := newRecord[postfixUnaryExpressionData](s, layoutPostfixUnaryExpression)
+	data.operand = s.ref(operand)
 	data.operator = operator
-	return f.newNode(KindPostfixUnaryExpression, data.asNode())
+	return f.newNode(KindPostfixUnaryExpression, layoutPostfixUnaryExpression, i)
 }
 
 func (f *NodeFactory) UpdatePostfixUnaryExpression(node PostfixUnaryExpression, operand Expression, operator Kind) Node {
@@ -7131,27 +8239,32 @@ func IsPostfixUnaryExpression(node Node) bool {
 
 type yieldExpressionData struct {
 	expressionBaseData
-	asteriskToken AsteriskToken // Optional
-	expression    Expression    // Optional
+	asteriskToken nodeRef // AsteriskToken. Optional
+	expression    nodeRef // Expression. Optional
 }
 
 type YieldExpression struct{ Node }
 
-func (node YieldExpression) data() *yieldExpressionData {
-	return (*yieldExpressionData)(unsafe.Pointer(node.h))
+func (node YieldExpression) data() *yieldExpressionData { return (*yieldExpressionData)(node.rec()) }
+
+func (node YieldExpression) AsteriskToken() AsteriskToken {
+	return node.s.deref(node.data().asteriskToken)
 }
 
-func (node YieldExpression) AsteriskToken() AsteriskToken { return node.data().asteriskToken }
-
-func (node YieldExpression) SetAsteriskToken(value AsteriskToken) { node.data().asteriskToken = value }
-func (node YieldExpression) Expression() Expression               { return node.data().expression }
-func (node YieldExpression) SetExpression(value Expression)       { node.data().expression = value }
+func (node YieldExpression) SetAsteriskToken(value AsteriskToken) {
+	node.data().asteriskToken = node.s.ref(value)
+}
+func (node YieldExpression) Expression() Expression { return node.s.deref(node.data().expression) }
+func (node YieldExpression) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewYieldExpression(asteriskToken AsteriskToken, expression Expression) Node {
-	data := &yieldExpressionData{}
-	data.asteriskToken = asteriskToken
-	data.expression = expression
-	return f.newNode(KindYieldExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[yieldExpressionData](s, layoutYieldExpression)
+	data.asteriskToken = s.ref(asteriskToken)
+	data.expression = s.ref(expression)
+	return f.newNode(KindYieldExpression, layoutYieldExpression, i)
 }
 
 func (f *NodeFactory) UpdateYieldExpression(node YieldExpression, asteriskToken AsteriskToken, expression Expression) Node {
@@ -7188,59 +8301,70 @@ type arrowFunctionData struct {
 	functionLikeWithBodyBaseData
 	flowNodeBaseData
 	compositeBaseData
-	equalsGreaterThanToken EqualsGreaterThanToken
+	equalsGreaterThanToken nodeRef // EqualsGreaterThanToken
 }
 
 type ArrowFunction struct{ Node }
 
-func (node ArrowFunction) data() *arrowFunctionData {
-	return (*arrowFunctionData)(unsafe.Pointer(node.h))
-}
+func (node ArrowFunction) data() *arrowFunctionData { return (*arrowFunctionData)(node.rec()) }
 
-func (node ArrowFunction) Symbol() *Symbol                    { return node.data().symbol }
-func (node ArrowFunction) SetSymbol(value *Symbol)            { node.data().symbol = value }
-func (node ArrowFunction) Modifiers() *ModifierList           { return node.data().modifiers }
-func (node ArrowFunction) setModifiers(value *ModifierList)   { node.data().modifiers = value }
-func (node ArrowFunction) Locals() SymbolTable                { return node.data().locals }
-func (node ArrowFunction) SetLocals(value SymbolTable)        { node.data().locals = value }
-func (node ArrowFunction) NextContainer() Node                { return node.data().nextContainer }
-func (node ArrowFunction) SetNextContainer(value Node)        { node.data().nextContainer = value }
+func (node ArrowFunction) Symbol() *Symbol                  { return node.data().symbol }
+func (node ArrowFunction) SetSymbol(value *Symbol)          { node.data().symbol = value }
+func (node ArrowFunction) Modifiers() *ModifierList         { return node.data().modifiers }
+func (node ArrowFunction) setModifiers(value *ModifierList) { node.data().modifiers = value }
+func (node ArrowFunction) Locals() SymbolTable              { return node.data().locals }
+func (node ArrowFunction) SetLocals(value SymbolTable)      { node.data().locals = value }
+func (node ArrowFunction) NextContainer() Node              { return node.s.deref(node.data().nextContainer) }
+
+func (node ArrowFunction) SetNextContainer(value Node)        { node.data().nextContainer = node.s.ref(value) }
 func (node ArrowFunction) TypeParameters() *TypeParameterList { return node.data().typeParameters }
 func (node ArrowFunction) SetTypeParameters(value *TypeParameterList) {
 	node.data().typeParameters = value
 }
-func (node ArrowFunction) Parameters() *ParameterList           { return node.data().parameters }
-func (node ArrowFunction) SetParameters(value *ParameterList)   { node.data().parameters = value }
-func (node ArrowFunction) Type() TypeNode                       { return node.data().typeField }
-func (node ArrowFunction) SetType(value TypeNode)               { node.data().typeField = value }
-func (node ArrowFunction) FullSignature() TypeNode              { return node.data().fullSignature }
-func (node ArrowFunction) SetFullSignature(value TypeNode)      { node.data().fullSignature = value }
-func (node ArrowFunction) AsteriskToken() AsteriskToken         { return node.data().asteriskToken }
-func (node ArrowFunction) SetAsteriskToken(value AsteriskToken) { node.data().asteriskToken = value }
-func (node ArrowFunction) Body() NodeBody                       { return node.data().body }
-func (node ArrowFunction) SetBody(value NodeBody)               { node.data().body = value }
-func (node ArrowFunction) EndFlowNode() *FlowNode               { return node.data().endFlowNode }
-func (node ArrowFunction) SetEndFlowNode(value *FlowNode)       { node.data().endFlowNode = value }
-func (node ArrowFunction) FlowNode() *FlowNode                  { return node.data().flowNode }
-func (node ArrowFunction) SetFlowNode(value *FlowNode)          { node.data().flowNode = value }
+func (node ArrowFunction) Parameters() *ParameterList         { return node.data().parameters }
+func (node ArrowFunction) SetParameters(value *ParameterList) { node.data().parameters = value }
+func (node ArrowFunction) Type() TypeNode                     { return node.s.deref(node.data().typeField) }
+
+func (node ArrowFunction) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node ArrowFunction) FullSignature() TypeNode { return node.s.deref(node.data().fullSignature) }
+
+func (node ArrowFunction) SetFullSignature(value TypeNode) {
+	node.data().fullSignature = node.s.ref(value)
+}
+
+func (node ArrowFunction) AsteriskToken() AsteriskToken {
+	return node.s.deref(node.data().asteriskToken)
+}
+
+func (node ArrowFunction) SetAsteriskToken(value AsteriskToken) {
+	node.data().asteriskToken = node.s.ref(value)
+}
+func (node ArrowFunction) Body() NodeBody                 { return node.s.deref(node.data().body) }
+func (node ArrowFunction) SetBody(value NodeBody)         { node.data().body = node.s.ref(value) }
+func (node ArrowFunction) EndFlowNode() *FlowNode         { return node.data().endFlowNode }
+func (node ArrowFunction) SetEndFlowNode(value *FlowNode) { node.data().endFlowNode = value }
+func (node ArrowFunction) FlowNode() *FlowNode            { return node.data().flowNode }
+func (node ArrowFunction) SetFlowNode(value *FlowNode)    { node.data().flowNode = value }
 func (node ArrowFunction) EqualsGreaterThanToken() EqualsGreaterThanToken {
-	return node.data().equalsGreaterThanToken
+	return node.s.deref(node.data().equalsGreaterThanToken)
 }
 
 func (node ArrowFunction) SetEqualsGreaterThanToken(value EqualsGreaterThanToken) {
-	node.data().equalsGreaterThanToken = value
+	node.data().equalsGreaterThanToken = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, equalsGreaterThanToken EqualsGreaterThanToken, body ConciseBody) Node {
-	data := &arrowFunctionData{}
+	s := f.nodeStore()
+	data, i := newRecord[arrowFunctionData](s, layoutArrowFunction)
 	data.modifiers = modifiers
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	data.fullSignature = fullSignature
-	data.equalsGreaterThanToken = equalsGreaterThanToken
-	data.body = body
-	return f.newNode(KindArrowFunction, data.asNode())
+	data.typeField = s.ref(typeNode)
+	data.fullSignature = s.ref(fullSignature)
+	data.equalsGreaterThanToken = s.ref(equalsGreaterThanToken)
+	data.body = s.ref(body)
+	return f.newNode(KindArrowFunction, layoutArrowFunction, i)
 }
 
 func (f *NodeFactory) UpdateArrowFunction(node ArrowFunction, modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, equalsGreaterThanToken EqualsGreaterThanToken, body ConciseBody) Node {
@@ -7283,14 +8407,14 @@ type functionExpressionData struct {
 	functionLikeWithBodyBaseData
 	flowNodeBaseData
 	compositeBaseData
-	name           IdentifierNode // Optional
+	name           nodeRef // IdentifierNode. Optional
 	returnFlowNode *FlowNode
 }
 
 type FunctionExpression struct{ Node }
 
 func (node FunctionExpression) data() *functionExpressionData {
-	return (*functionExpressionData)(unsafe.Pointer(node.h))
+	return (*functionExpressionData)(node.rec())
 }
 
 func (node FunctionExpression) Symbol() *Symbol                  { return node.data().symbol }
@@ -7299,9 +8423,11 @@ func (node FunctionExpression) Modifiers() *ModifierList         { return node.d
 func (node FunctionExpression) setModifiers(value *ModifierList) { node.data().modifiers = value }
 func (node FunctionExpression) Locals() SymbolTable              { return node.data().locals }
 func (node FunctionExpression) SetLocals(value SymbolTable)      { node.data().locals = value }
-func (node FunctionExpression) NextContainer() Node              { return node.data().nextContainer }
+func (node FunctionExpression) NextContainer() Node              { return node.s.deref(node.data().nextContainer) }
 
-func (node FunctionExpression) SetNextContainer(value Node) { node.data().nextContainer = value }
+func (node FunctionExpression) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
 
 func (node FunctionExpression) TypeParameters() *TypeParameterList { return node.data().typeParameters }
 
@@ -7310,40 +8436,54 @@ func (node FunctionExpression) SetTypeParameters(value *TypeParameterList) {
 }
 func (node FunctionExpression) Parameters() *ParameterList         { return node.data().parameters }
 func (node FunctionExpression) SetParameters(value *ParameterList) { node.data().parameters = value }
-func (node FunctionExpression) Type() TypeNode                     { return node.data().typeField }
-func (node FunctionExpression) SetType(value TypeNode)             { node.data().typeField = value }
-func (node FunctionExpression) FullSignature() TypeNode            { return node.data().fullSignature }
 
-func (node FunctionExpression) SetFullSignature(value TypeNode) { node.data().fullSignature = value }
+func (node FunctionExpression) Type() TypeNode { return node.s.deref(node.data().typeField) }
 
-func (node FunctionExpression) AsteriskToken() AsteriskToken { return node.data().asteriskToken }
+func (node FunctionExpression) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node FunctionExpression) FullSignature() TypeNode {
+	return node.s.deref(node.data().fullSignature)
+}
+
+func (node FunctionExpression) SetFullSignature(value TypeNode) {
+	node.data().fullSignature = node.s.ref(value)
+}
+
+func (node FunctionExpression) AsteriskToken() AsteriskToken {
+	return node.s.deref(node.data().asteriskToken)
+}
 
 func (node FunctionExpression) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = value
+	node.data().asteriskToken = node.s.ref(value)
 }
-func (node FunctionExpression) Body() NodeBody                 { return node.data().body }
-func (node FunctionExpression) SetBody(value NodeBody)         { node.data().body = value }
+
+func (node FunctionExpression) Body() NodeBody { return node.s.deref(node.data().body) }
+
+func (node FunctionExpression) SetBody(value NodeBody)         { node.data().body = node.s.ref(value) }
 func (node FunctionExpression) EndFlowNode() *FlowNode         { return node.data().endFlowNode }
 func (node FunctionExpression) SetEndFlowNode(value *FlowNode) { node.data().endFlowNode = value }
 func (node FunctionExpression) FlowNode() *FlowNode            { return node.data().flowNode }
 func (node FunctionExpression) SetFlowNode(value *FlowNode)    { node.data().flowNode = value }
-func (node FunctionExpression) Name() IdentifierNode           { return node.data().name }
-func (node FunctionExpression) setName(value IdentifierNode)   { node.data().name = value }
-func (node FunctionExpression) ReturnFlowNode() *FlowNode      { return node.data().returnFlowNode }
+func (node FunctionExpression) Name() IdentifierNode           { return node.s.deref(node.data().name) }
+
+func (node FunctionExpression) setName(value IdentifierNode) { node.data().name = node.s.ref(value) }
+
+func (node FunctionExpression) ReturnFlowNode() *FlowNode { return node.data().returnFlowNode }
 
 func (node FunctionExpression) SetReturnFlowNode(value *FlowNode) { node.data().returnFlowNode = value }
 
 func (f *NodeFactory) NewFunctionExpression(modifiers *ModifierList, asteriskToken AsteriskToken, name IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
-	data := &functionExpressionData{}
+	s := f.nodeStore()
+	data, i := newRecord[functionExpressionData](s, layoutFunctionExpression)
 	data.modifiers = modifiers
-	data.asteriskToken = asteriskToken
-	data.name = name
+	data.asteriskToken = s.ref(asteriskToken)
+	data.name = s.ref(name)
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	data.fullSignature = fullSignature
-	data.body = body
-	return f.newNode(KindFunctionExpression, data.asNode())
+	data.typeField = s.ref(typeNode)
+	data.fullSignature = s.ref(fullSignature)
+	data.body = s.ref(body)
+	return f.newNode(KindFunctionExpression, layoutFunctionExpression, i)
 }
 
 func (f *NodeFactory) UpdateFunctionExpression(node FunctionExpression, modifiers *ModifierList, asteriskToken AsteriskToken, name IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
@@ -7382,24 +8522,28 @@ func IsFunctionExpression(node Node) bool {
 
 type asExpressionData struct {
 	expressionBaseData
-	expression Expression
-	typeField  TypeNode
+	expression nodeRef // Expression
+	typeField  nodeRef // TypeNode
 }
 
 type AsExpression struct{ Node }
 
-func (node AsExpression) data() *asExpressionData { return (*asExpressionData)(unsafe.Pointer(node.h)) }
+func (node AsExpression) data() *asExpressionData { return (*asExpressionData)(node.rec()) }
 
-func (node AsExpression) Expression() Expression         { return node.data().expression }
-func (node AsExpression) SetExpression(value Expression) { node.data().expression = value }
-func (node AsExpression) Type() TypeNode                 { return node.data().typeField }
-func (node AsExpression) SetType(value TypeNode)         { node.data().typeField = value }
+func (node AsExpression) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node AsExpression) SetExpression(value Expression) { node.data().expression = node.s.ref(value) }
+
+func (node AsExpression) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node AsExpression) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewAsExpression(expression Expression, typeNode TypeNode) Node {
-	data := &asExpressionData{}
-	data.expression = expression
-	data.typeField = typeNode
-	return f.newNode(KindAsExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[asExpressionData](s, layoutAsExpression)
+	data.expression = s.ref(expression)
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindAsExpression, layoutAsExpression, i)
 }
 
 func (f *NodeFactory) UpdateAsExpression(node AsExpression, expression Expression, typeNode TypeNode) Node {
@@ -7431,26 +8575,32 @@ func IsAsExpression(node Node) bool {
 
 type satisfiesExpressionData struct {
 	expressionBaseData
-	expression Expression
-	typeField  TypeNode
+	expression nodeRef // Expression
+	typeField  nodeRef // TypeNode
 }
 
 type SatisfiesExpression struct{ Node }
 
 func (node SatisfiesExpression) data() *satisfiesExpressionData {
-	return (*satisfiesExpressionData)(unsafe.Pointer(node.h))
+	return (*satisfiesExpressionData)(node.rec())
 }
 
-func (node SatisfiesExpression) Expression() Expression         { return node.data().expression }
-func (node SatisfiesExpression) SetExpression(value Expression) { node.data().expression = value }
-func (node SatisfiesExpression) Type() TypeNode                 { return node.data().typeField }
-func (node SatisfiesExpression) SetType(value TypeNode)         { node.data().typeField = value }
+func (node SatisfiesExpression) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node SatisfiesExpression) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
+
+func (node SatisfiesExpression) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node SatisfiesExpression) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewSatisfiesExpression(expression Expression, typeNode TypeNode) Node {
-	data := &satisfiesExpressionData{}
-	data.expression = expression
-	data.typeField = typeNode
-	return f.newNode(KindSatisfiesExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[satisfiesExpressionData](s, layoutSatisfiesExpression)
+	data.expression = s.ref(expression)
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindSatisfiesExpression, layoutSatisfiesExpression, i)
 }
 
 func (f *NodeFactory) UpdateSatisfiesExpression(node SatisfiesExpression, expression Expression, typeNode TypeNode) Node {
@@ -7483,41 +8633,62 @@ func IsSatisfiesExpression(node Node) bool {
 type conditionalExpressionData struct {
 	expressionBaseData
 	compositeBaseData
-	condition     Expression
-	questionToken QuestionToken
-	whenTrue      Expression
-	colonToken    ColonToken
-	whenFalse     Expression
+	condition     nodeRef // Expression
+	questionToken nodeRef // QuestionToken
+	whenTrue      nodeRef // Expression
+	colonToken    nodeRef // ColonToken
+	whenFalse     nodeRef // Expression
 }
 
 type ConditionalExpression struct{ Node }
 
 func (node ConditionalExpression) data() *conditionalExpressionData {
-	return (*conditionalExpressionData)(unsafe.Pointer(node.h))
+	return (*conditionalExpressionData)(node.rec())
 }
 
-func (node ConditionalExpression) Condition() Expression         { return node.data().condition }
-func (node ConditionalExpression) SetCondition(value Expression) { node.data().condition = value }
-func (node ConditionalExpression) QuestionToken() QuestionToken  { return node.data().questionToken }
+func (node ConditionalExpression) Condition() Expression { return node.s.deref(node.data().condition) }
+
+func (node ConditionalExpression) SetCondition(value Expression) {
+	node.data().condition = node.s.ref(value)
+}
+
+func (node ConditionalExpression) QuestionToken() QuestionToken {
+	return node.s.deref(node.data().questionToken)
+}
 
 func (node ConditionalExpression) SetQuestionToken(value QuestionToken) {
-	node.data().questionToken = value
+	node.data().questionToken = node.s.ref(value)
 }
-func (node ConditionalExpression) WhenTrue() Expression           { return node.data().whenTrue }
-func (node ConditionalExpression) SetWhenTrue(value Expression)   { node.data().whenTrue = value }
-func (node ConditionalExpression) ColonToken() ColonToken         { return node.data().colonToken }
-func (node ConditionalExpression) SetColonToken(value ColonToken) { node.data().colonToken = value }
-func (node ConditionalExpression) WhenFalse() Expression          { return node.data().whenFalse }
-func (node ConditionalExpression) SetWhenFalse(value Expression)  { node.data().whenFalse = value }
+
+func (node ConditionalExpression) WhenTrue() Expression { return node.s.deref(node.data().whenTrue) }
+
+func (node ConditionalExpression) SetWhenTrue(value Expression) {
+	node.data().whenTrue = node.s.ref(value)
+}
+
+func (node ConditionalExpression) ColonToken() ColonToken {
+	return node.s.deref(node.data().colonToken)
+}
+
+func (node ConditionalExpression) SetColonToken(value ColonToken) {
+	node.data().colonToken = node.s.ref(value)
+}
+
+func (node ConditionalExpression) WhenFalse() Expression { return node.s.deref(node.data().whenFalse) }
+
+func (node ConditionalExpression) SetWhenFalse(value Expression) {
+	node.data().whenFalse = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewConditionalExpression(condition Expression, questionToken QuestionToken, whenTrue Expression, colonToken ColonToken, whenFalse Expression) Node {
-	data := f.conditionalExpressionArena.New()
-	data.condition = condition
-	data.questionToken = questionToken
-	data.whenTrue = whenTrue
-	data.colonToken = colonToken
-	data.whenFalse = whenFalse
-	return f.newNode(KindConditionalExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[conditionalExpressionData](s, layoutConditionalExpression)
+	data.condition = s.ref(condition)
+	data.questionToken = s.ref(questionToken)
+	data.whenTrue = s.ref(whenTrue)
+	data.colonToken = s.ref(colonToken)
+	data.whenFalse = s.ref(whenFalse)
+	return f.newNode(KindConditionalExpression, layoutConditionalExpression, i)
 }
 
 func (f *NodeFactory) UpdateConditionalExpression(node ConditionalExpression, condition Expression, questionToken QuestionToken, whenTrue Expression, colonToken ColonToken, whenFalse Expression) Node {
@@ -7563,40 +8734,46 @@ type propertyAccessExpressionData struct {
 	memberExpressionBaseData
 	flowNodeBaseData
 	compositeBaseData
-	expression       Expression
-	questionDotToken QuestionDotToken // Optional
-	name             MemberName
+	expression       nodeRef // Expression
+	questionDotToken nodeRef // QuestionDotToken. Optional
+	name             nodeRef // MemberName
 }
 
 type PropertyAccessExpression struct{ Node }
 
 func (node PropertyAccessExpression) data() *propertyAccessExpressionData {
-	return (*propertyAccessExpressionData)(unsafe.Pointer(node.h))
+	return (*propertyAccessExpressionData)(node.rec())
 }
 
 func (node PropertyAccessExpression) FlowNode() *FlowNode         { return node.data().flowNode }
 func (node PropertyAccessExpression) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
+func (node PropertyAccessExpression) Expression() Expression {
+	return node.s.deref(node.data().expression)
+}
 
-func (node PropertyAccessExpression) Expression() Expression { return node.data().expression }
-
-func (node PropertyAccessExpression) SetExpression(value Expression) { node.data().expression = value }
+func (node PropertyAccessExpression) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
 
 func (node PropertyAccessExpression) QuestionDotToken() QuestionDotToken {
-	return node.data().questionDotToken
+	return node.s.deref(node.data().questionDotToken)
 }
 
 func (node PropertyAccessExpression) SetQuestionDotToken(value QuestionDotToken) {
-	node.data().questionDotToken = value
+	node.data().questionDotToken = node.s.ref(value)
 }
-func (node PropertyAccessExpression) Name() MemberName         { return node.data().name }
-func (node PropertyAccessExpression) setName(value MemberName) { node.data().name = value }
+
+func (node PropertyAccessExpression) Name() MemberName { return node.s.deref(node.data().name) }
+
+func (node PropertyAccessExpression) setName(value MemberName) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewPropertyAccessExpression(expression Expression, questionDotToken QuestionDotToken, name MemberName, flags NodeFlags) Node {
-	data := f.propertyAccessExpressionArena.New()
-	data.expression = expression
-	data.questionDotToken = questionDotToken
-	data.name = name
-	node := f.newNode(KindPropertyAccessExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[propertyAccessExpressionData](s, layoutPropertyAccessExpression)
+	data.expression = s.ref(expression)
+	data.questionDotToken = s.ref(questionDotToken)
+	data.name = s.ref(name)
+	node := f.newNode(KindPropertyAccessExpression, layoutPropertyAccessExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
 }
@@ -7632,45 +8809,50 @@ type elementAccessExpressionData struct {
 	memberExpressionBaseData
 	flowNodeBaseData
 	compositeBaseData
-	expression         Expression
-	questionDotToken   QuestionDotToken // Optional
-	argumentExpression Expression
+	expression         nodeRef // Expression
+	questionDotToken   nodeRef // QuestionDotToken. Optional
+	argumentExpression nodeRef // Expression
 }
 
 type ElementAccessExpression struct{ Node }
 
 func (node ElementAccessExpression) data() *elementAccessExpressionData {
-	return (*elementAccessExpressionData)(unsafe.Pointer(node.h))
+	return (*elementAccessExpressionData)(node.rec())
 }
 
 func (node ElementAccessExpression) FlowNode() *FlowNode         { return node.data().flowNode }
 func (node ElementAccessExpression) SetFlowNode(value *FlowNode) { node.data().flowNode = value }
-func (node ElementAccessExpression) Expression() Expression      { return node.data().expression }
+func (node ElementAccessExpression) Expression() Expression {
+	return node.s.deref(node.data().expression)
+}
 
-func (node ElementAccessExpression) SetExpression(value Expression) { node.data().expression = value }
+func (node ElementAccessExpression) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
 
 func (node ElementAccessExpression) QuestionDotToken() QuestionDotToken {
-	return node.data().questionDotToken
+	return node.s.deref(node.data().questionDotToken)
 }
 
 func (node ElementAccessExpression) SetQuestionDotToken(value QuestionDotToken) {
-	node.data().questionDotToken = value
+	node.data().questionDotToken = node.s.ref(value)
 }
 
 func (node ElementAccessExpression) ArgumentExpression() Expression {
-	return node.data().argumentExpression
+	return node.s.deref(node.data().argumentExpression)
 }
 
 func (node ElementAccessExpression) SetArgumentExpression(value Expression) {
-	node.data().argumentExpression = value
+	node.data().argumentExpression = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewElementAccessExpression(expression Expression, questionDotToken QuestionDotToken, argumentExpression Expression, flags NodeFlags) Node {
-	data := f.elementAccessExpressionArena.New()
-	data.expression = expression
-	data.questionDotToken = questionDotToken
-	data.argumentExpression = argumentExpression
-	node := f.newNode(KindElementAccessExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[elementAccessExpressionData](s, layoutElementAccessExpression)
+	data.expression = s.ref(expression)
+	data.questionDotToken = s.ref(questionDotToken)
+	data.argumentExpression = s.ref(argumentExpression)
+	node := f.newNode(KindElementAccessExpression, layoutElementAccessExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
 }
@@ -7712,26 +8894,29 @@ type callExpressionData struct {
 	leftHandSideExpressionBaseData
 	declarationBaseData
 	compositeBaseData
-	expression       Expression
-	questionDotToken QuestionDotToken // Optional
-	typeArguments    *TypeList        // Optional
+	expression       nodeRef   // Expression
+	questionDotToken nodeRef   // QuestionDotToken. Optional
+	typeArguments    *TypeList // Optional
 	arguments        *ElementList
 }
 
 type CallExpression struct{ Node }
 
-func (node CallExpression) data() *callExpressionData {
-	return (*callExpressionData)(unsafe.Pointer(node.h))
+func (node CallExpression) data() *callExpressionData { return (*callExpressionData)(node.rec()) }
+
+func (node CallExpression) Symbol() *Symbol         { return node.data().symbol }
+func (node CallExpression) SetSymbol(value *Symbol) { node.data().symbol = value }
+func (node CallExpression) Expression() Expression  { return node.s.deref(node.data().expression) }
+func (node CallExpression) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
 }
 
-func (node CallExpression) Symbol() *Symbol                    { return node.data().symbol }
-func (node CallExpression) SetSymbol(value *Symbol)            { node.data().symbol = value }
-func (node CallExpression) Expression() Expression             { return node.data().expression }
-func (node CallExpression) SetExpression(value Expression)     { node.data().expression = value }
-func (node CallExpression) QuestionDotToken() QuestionDotToken { return node.data().questionDotToken }
+func (node CallExpression) QuestionDotToken() QuestionDotToken {
+	return node.s.deref(node.data().questionDotToken)
+}
 
 func (node CallExpression) SetQuestionDotToken(value QuestionDotToken) {
-	node.data().questionDotToken = value
+	node.data().questionDotToken = node.s.ref(value)
 }
 func (node CallExpression) TypeArguments() *TypeList         { return node.data().typeArguments }
 func (node CallExpression) SetTypeArguments(value *TypeList) { node.data().typeArguments = value }
@@ -7739,12 +8924,13 @@ func (node CallExpression) Arguments() *ElementList          { return node.data(
 func (node CallExpression) SetArguments(value *ElementList)  { node.data().arguments = value }
 
 func (f *NodeFactory) NewCallExpression(expression Expression, questionDotToken QuestionDotToken, typeArguments *TypeList, arguments *ElementList, flags NodeFlags) Node {
-	data := f.callExpressionArena.New()
-	data.expression = expression
-	data.questionDotToken = questionDotToken
+	s := f.nodeStore()
+	data, i := newRecord[callExpressionData](s, layoutCallExpression)
+	data.expression = s.ref(expression)
+	data.questionDotToken = s.ref(questionDotToken)
 	data.typeArguments = typeArguments
 	data.arguments = arguments
-	node := f.newNode(KindCallExpression, data.asNode())
+	node := f.newNode(KindCallExpression, layoutCallExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
 }
@@ -7782,30 +8968,30 @@ func IsCallExpression(node Node) bool {
 type newExpressionData struct {
 	primaryExpressionBaseData
 	compositeBaseData
-	expression    Expression
+	expression    nodeRef      // Expression
 	typeArguments *TypeList    // Optional
 	arguments     *ElementList // Optional
 }
 
 type NewExpression struct{ Node }
 
-func (node NewExpression) data() *newExpressionData {
-	return (*newExpressionData)(unsafe.Pointer(node.h))
-}
+func (node NewExpression) data() *newExpressionData { return (*newExpressionData)(node.rec()) }
 
-func (node NewExpression) Expression() Expression           { return node.data().expression }
-func (node NewExpression) SetExpression(value Expression)   { node.data().expression = value }
+func (node NewExpression) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node NewExpression) SetExpression(value Expression)   { node.data().expression = node.s.ref(value) }
 func (node NewExpression) TypeArguments() *TypeList         { return node.data().typeArguments }
 func (node NewExpression) SetTypeArguments(value *TypeList) { node.data().typeArguments = value }
 func (node NewExpression) Arguments() *ElementList          { return node.data().arguments }
 func (node NewExpression) SetArguments(value *ElementList)  { node.data().arguments = value }
 
 func (f *NodeFactory) NewNewExpression(expression Expression, typeArguments *TypeList, arguments *ElementList) Node {
-	data := &newExpressionData{}
-	data.expression = expression
+	s := f.nodeStore()
+	data, i := newRecord[newExpressionData](s, layoutNewExpression)
+	data.expression = s.ref(expression)
 	data.typeArguments = typeArguments
 	data.arguments = arguments
-	return f.newNode(KindNewExpression, data.asNode())
+	return f.newNode(KindNewExpression, layoutNewExpression, i)
 }
 
 func (f *NodeFactory) UpdateNewExpression(node NewExpression, expression Expression, typeArguments *TypeList, arguments *ElementList) Node {
@@ -7840,25 +9026,26 @@ type metaPropertyData struct {
 	flowNodeBaseData
 	compositeBaseData
 	keywordToken Kind
-	name         IdentifierNode
+	name         nodeRef // IdentifierNode
 }
 
 type MetaProperty struct{ Node }
 
-func (node MetaProperty) data() *metaPropertyData { return (*metaPropertyData)(unsafe.Pointer(node.h)) }
+func (node MetaProperty) data() *metaPropertyData { return (*metaPropertyData)(node.rec()) }
 
 func (node MetaProperty) FlowNode() *FlowNode          { return node.data().flowNode }
 func (node MetaProperty) SetFlowNode(value *FlowNode)  { node.data().flowNode = value }
 func (node MetaProperty) KeywordToken() Kind           { return node.data().keywordToken }
 func (node MetaProperty) SetKeywordToken(value Kind)   { node.data().keywordToken = value }
-func (node MetaProperty) Name() IdentifierNode         { return node.data().name }
-func (node MetaProperty) setName(value IdentifierNode) { node.data().name = value }
+func (node MetaProperty) Name() IdentifierNode         { return node.s.deref(node.data().name) }
+func (node MetaProperty) setName(value IdentifierNode) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewMetaProperty(keywordToken Kind, name IdentifierNode) Node {
-	data := &metaPropertyData{}
+	s := f.nodeStore()
+	data, i := newRecord[metaPropertyData](s, layoutMetaProperty)
 	data.keywordToken = keywordToken
-	data.name = name
-	return f.newNode(KindMetaProperty, data.asNode())
+	data.name = s.ref(name)
+	return f.newNode(KindMetaProperty, layoutMetaProperty, i)
 }
 
 func (f *NodeFactory) UpdateMetaProperty(node MetaProperty, keywordToken Kind, name IdentifierNode) Node {
@@ -7890,22 +9077,26 @@ func IsMetaProperty(node Node) bool {
 
 type nonNullExpressionData struct {
 	leftHandSideExpressionBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type NonNullExpression struct{ Node }
 
 func (node NonNullExpression) data() *nonNullExpressionData {
-	return (*nonNullExpressionData)(unsafe.Pointer(node.h))
+	return (*nonNullExpressionData)(node.rec())
 }
 
-func (node NonNullExpression) Expression() Expression         { return node.data().expression }
-func (node NonNullExpression) SetExpression(value Expression) { node.data().expression = value }
+func (node NonNullExpression) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node NonNullExpression) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewNonNullExpression(expression Expression, flags NodeFlags) Node {
-	data := &nonNullExpressionData{}
-	data.expression = expression
-	node := f.newNode(KindNonNullExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[nonNullExpressionData](s, layoutNonNullExpression)
+	data.expression = s.ref(expression)
+	node := f.newNode(KindNonNullExpression, layoutNonNullExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
 }
@@ -7939,22 +9130,22 @@ func IsNonNullExpression(node Node) bool {
 
 type spreadElementData struct {
 	expressionBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type SpreadElement struct{ Node }
 
-func (node SpreadElement) data() *spreadElementData {
-	return (*spreadElementData)(unsafe.Pointer(node.h))
-}
+func (node SpreadElement) data() *spreadElementData { return (*spreadElementData)(node.rec()) }
 
-func (node SpreadElement) Expression() Expression         { return node.data().expression }
-func (node SpreadElement) SetExpression(value Expression) { node.data().expression = value }
+func (node SpreadElement) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node SpreadElement) SetExpression(value Expression) { node.data().expression = node.s.ref(value) }
 
 func (f *NodeFactory) NewSpreadElement(expression Expression) Node {
-	data := &spreadElementData{}
-	data.expression = expression
-	return f.newNode(KindSpreadElement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[spreadElementData](s, layoutSpreadElement)
+	data.expression = s.ref(expression)
+	return f.newNode(KindSpreadElement, layoutSpreadElement, i)
 }
 
 func (f *NodeFactory) UpdateSpreadElement(node SpreadElement, expression Expression) Node {
@@ -7987,18 +9178,20 @@ func IsSpreadElement(node Node) bool {
 type templateExpressionData struct {
 	primaryExpressionBaseData
 	compositeBaseData
-	head          TemplateHeadNode
+	head          nodeRef // TemplateHeadNode
 	templateSpans *TemplateSpanList
 }
 
 type TemplateExpression struct{ Node }
 
 func (node TemplateExpression) data() *templateExpressionData {
-	return (*templateExpressionData)(unsafe.Pointer(node.h))
+	return (*templateExpressionData)(node.rec())
 }
 
-func (node TemplateExpression) Head() TemplateHeadNode           { return node.data().head }
-func (node TemplateExpression) SetHead(value TemplateHeadNode)   { node.data().head = value }
+func (node TemplateExpression) Head() TemplateHeadNode { return node.s.deref(node.data().head) }
+
+func (node TemplateExpression) SetHead(value TemplateHeadNode) { node.data().head = node.s.ref(value) }
+
 func (node TemplateExpression) TemplateSpans() *TemplateSpanList { return node.data().templateSpans }
 
 func (node TemplateExpression) SetTemplateSpans(value *TemplateSpanList) {
@@ -8006,10 +9199,11 @@ func (node TemplateExpression) SetTemplateSpans(value *TemplateSpanList) {
 }
 
 func (f *NodeFactory) NewTemplateExpression(head TemplateHeadNode, templateSpans *TemplateSpanList) Node {
-	data := &templateExpressionData{}
-	data.head = head
+	s := f.nodeStore()
+	data, i := newRecord[templateExpressionData](s, layoutTemplateExpression)
+	data.head = s.ref(head)
 	data.templateSpans = templateSpans
-	return f.newNode(KindTemplateExpression, data.asNode())
+	return f.newNode(KindTemplateExpression, layoutTemplateExpression, i)
 }
 
 func (f *NodeFactory) UpdateTemplateExpression(node TemplateExpression, head TemplateHeadNode, templateSpans *TemplateSpanList) Node {
@@ -8046,24 +9240,30 @@ func IsTemplateExpression(node Node) bool {
 
 type templateSpanData struct {
 	nodeBaseData
-	expression Expression
-	literal    TemplateMiddleOrTail
+	expression nodeRef // Expression
+	literal    nodeRef // TemplateMiddleOrTail
 }
 
 type TemplateSpan struct{ Node }
 
-func (node TemplateSpan) data() *templateSpanData { return (*templateSpanData)(unsafe.Pointer(node.h)) }
+func (node TemplateSpan) data() *templateSpanData { return (*templateSpanData)(node.rec()) }
 
-func (node TemplateSpan) Expression() Expression                { return node.data().expression }
-func (node TemplateSpan) SetExpression(value Expression)        { node.data().expression = value }
-func (node TemplateSpan) Literal() TemplateMiddleOrTail         { return node.data().literal }
-func (node TemplateSpan) SetLiteral(value TemplateMiddleOrTail) { node.data().literal = value }
+func (node TemplateSpan) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node TemplateSpan) SetExpression(value Expression) { node.data().expression = node.s.ref(value) }
+
+func (node TemplateSpan) Literal() TemplateMiddleOrTail { return node.s.deref(node.data().literal) }
+
+func (node TemplateSpan) SetLiteral(value TemplateMiddleOrTail) {
+	node.data().literal = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewTemplateSpan(expression Expression, literal TemplateMiddleOrTail) Node {
-	data := &templateSpanData{}
-	data.expression = expression
-	data.literal = literal
-	return f.newNode(KindTemplateSpan, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[templateSpanData](s, layoutTemplateSpan)
+	data.expression = s.ref(expression)
+	data.literal = s.ref(literal)
+	return f.newNode(KindTemplateSpan, layoutTemplateSpan, i)
 }
 
 func (f *NodeFactory) UpdateTemplateSpan(node TemplateSpan, expression Expression, literal TemplateMiddleOrTail) Node {
@@ -8101,43 +9301,50 @@ func IsTemplateSpan(node Node) bool {
 type taggedTemplateExpressionData struct {
 	memberExpressionBaseData
 	compositeBaseData
-	tag              Expression
-	questionDotToken QuestionDotToken
+	tag              nodeRef   // Expression
+	questionDotToken nodeRef   // QuestionDotToken
 	typeArguments    *TypeList // Optional
-	template         TemplateLiteral
+	template         nodeRef   // TemplateLiteral
 }
 
 type TaggedTemplateExpression struct{ Node }
 
 func (node TaggedTemplateExpression) data() *taggedTemplateExpressionData {
-	return (*taggedTemplateExpressionData)(unsafe.Pointer(node.h))
+	return (*taggedTemplateExpressionData)(node.rec())
 }
 
-func (node TaggedTemplateExpression) Tag() Expression         { return node.data().tag }
-func (node TaggedTemplateExpression) SetTag(value Expression) { node.data().tag = value }
+func (node TaggedTemplateExpression) Tag() Expression { return node.s.deref(node.data().tag) }
+
+func (node TaggedTemplateExpression) SetTag(value Expression) { node.data().tag = node.s.ref(value) }
+
 func (node TaggedTemplateExpression) QuestionDotToken() QuestionDotToken {
-	return node.data().questionDotToken
+	return node.s.deref(node.data().questionDotToken)
 }
 
 func (node TaggedTemplateExpression) SetQuestionDotToken(value QuestionDotToken) {
-	node.data().questionDotToken = value
+	node.data().questionDotToken = node.s.ref(value)
 }
 func (node TaggedTemplateExpression) TypeArguments() *TypeList { return node.data().typeArguments }
 func (node TaggedTemplateExpression) SetTypeArguments(value *TypeList) {
 	node.data().typeArguments = value
 }
 
-func (node TaggedTemplateExpression) Template() TemplateLiteral { return node.data().template }
+func (node TaggedTemplateExpression) Template() TemplateLiteral {
+	return node.s.deref(node.data().template)
+}
 
-func (node TaggedTemplateExpression) SetTemplate(value TemplateLiteral) { node.data().template = value }
+func (node TaggedTemplateExpression) SetTemplate(value TemplateLiteral) {
+	node.data().template = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewTaggedTemplateExpression(tag Expression, questionDotToken QuestionDotToken, typeArguments *TypeList, template TemplateLiteral, flags NodeFlags) Node {
-	data := &taggedTemplateExpressionData{}
-	data.tag = tag
-	data.questionDotToken = questionDotToken
+	s := f.nodeStore()
+	data, i := newRecord[taggedTemplateExpressionData](s, layoutTaggedTemplateExpression)
+	data.tag = s.ref(tag)
+	data.questionDotToken = s.ref(questionDotToken)
 	data.typeArguments = typeArguments
-	data.template = template
-	node := f.newNode(KindTaggedTemplateExpression, data.asNode())
+	data.template = s.ref(template)
+	node := f.newNode(KindTaggedTemplateExpression, layoutTaggedTemplateExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
 }
@@ -8174,23 +9381,28 @@ func IsTaggedTemplateExpression(node Node) bool {
 
 type parenthesizedExpressionData struct {
 	primaryExpressionBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type ParenthesizedExpression struct{ Node }
 
 func (node ParenthesizedExpression) data() *parenthesizedExpressionData {
-	return (*parenthesizedExpressionData)(unsafe.Pointer(node.h))
+	return (*parenthesizedExpressionData)(node.rec())
 }
 
-func (node ParenthesizedExpression) Expression() Expression { return node.data().expression }
+func (node ParenthesizedExpression) Expression() Expression {
+	return node.s.deref(node.data().expression)
+}
 
-func (node ParenthesizedExpression) SetExpression(value Expression) { node.data().expression = value }
+func (node ParenthesizedExpression) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewParenthesizedExpression(expression Expression) Node {
-	data := f.parenthesizedExpressionArena.New()
-	data.expression = expression
-	return f.newNode(KindParenthesizedExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[parenthesizedExpressionData](s, layoutParenthesizedExpression)
+	data.expression = s.ref(expression)
+	return f.newNode(KindParenthesizedExpression, layoutParenthesizedExpression, i)
 }
 
 func (f *NodeFactory) UpdateParenthesizedExpression(node ParenthesizedExpression, expression Expression) Node {
@@ -8234,7 +9446,7 @@ type arrayLiteralExpressionData struct {
 type ArrayLiteralExpression struct{ Node }
 
 func (node ArrayLiteralExpression) data() *arrayLiteralExpressionData {
-	return (*arrayLiteralExpressionData)(unsafe.Pointer(node.h))
+	return (*arrayLiteralExpressionData)(node.rec())
 }
 
 func (node ArrayLiteralExpression) Elements() *ElementList         { return node.data().elements }
@@ -8243,10 +9455,10 @@ func (node ArrayLiteralExpression) MultiLine() bool                { return node
 func (node ArrayLiteralExpression) SetMultiLine(value bool)        { node.data().multiLine = value }
 
 func (f *NodeFactory) NewArrayLiteralExpression(elements *ElementList, multiLine bool) Node {
-	data := &arrayLiteralExpressionData{}
+	data, i := newRecord[arrayLiteralExpressionData](f.nodeStore(), layoutArrayLiteralExpression)
 	data.elements = elements
 	data.multiLine = multiLine
-	return f.newNode(KindArrayLiteralExpression, data.asNode())
+	return f.newNode(KindArrayLiteralExpression, layoutArrayLiteralExpression, i)
 }
 
 func (f *NodeFactory) UpdateArrayLiteralExpression(node ArrayLiteralExpression, elements *ElementList, multiLine bool) Node {
@@ -8291,7 +9503,7 @@ type objectLiteralExpressionData struct {
 type ObjectLiteralExpression struct{ Node }
 
 func (node ObjectLiteralExpression) data() *objectLiteralExpressionData {
-	return (*objectLiteralExpressionData)(unsafe.Pointer(node.h))
+	return (*objectLiteralExpressionData)(node.rec())
 }
 
 func (node ObjectLiteralExpression) Symbol() *Symbol               { return node.data().symbol }
@@ -8302,10 +9514,10 @@ func (node ObjectLiteralExpression) MultiLine() bool               { return node
 func (node ObjectLiteralExpression) SetMultiLine(value bool)       { node.data().multiLine = value }
 
 func (f *NodeFactory) NewObjectLiteralExpression(properties *NodeList, multiLine bool) Node {
-	data := &objectLiteralExpressionData{}
+	data, i := newRecord[objectLiteralExpressionData](f.nodeStore(), layoutObjectLiteralExpression)
 	data.properties = properties
 	data.multiLine = multiLine
-	return f.newNode(KindObjectLiteralExpression, data.asNode())
+	return f.newNode(KindObjectLiteralExpression, layoutObjectLiteralExpression, i)
 }
 
 func (f *NodeFactory) UpdateObjectLiteralExpression(node ObjectLiteralExpression, properties *NodeList, multiLine bool) Node {
@@ -8343,24 +9555,26 @@ type spreadAssignmentData struct {
 	objectLiteralElementBaseData
 	nodeBaseData
 	declarationBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type SpreadAssignment struct{ Node }
 
-func (node SpreadAssignment) data() *spreadAssignmentData {
-	return (*spreadAssignmentData)(unsafe.Pointer(node.h))
+func (node SpreadAssignment) data() *spreadAssignmentData { return (*spreadAssignmentData)(node.rec()) }
+
+func (node SpreadAssignment) Symbol() *Symbol         { return node.data().symbol }
+func (node SpreadAssignment) SetSymbol(value *Symbol) { node.data().symbol = value }
+func (node SpreadAssignment) Expression() Expression  { return node.s.deref(node.data().expression) }
+
+func (node SpreadAssignment) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
 }
 
-func (node SpreadAssignment) Symbol() *Symbol                { return node.data().symbol }
-func (node SpreadAssignment) SetSymbol(value *Symbol)        { node.data().symbol = value }
-func (node SpreadAssignment) Expression() Expression         { return node.data().expression }
-func (node SpreadAssignment) SetExpression(value Expression) { node.data().expression = value }
-
 func (f *NodeFactory) NewSpreadAssignment(expression Expression) Node {
-	data := &spreadAssignmentData{}
-	data.expression = expression
-	return f.newNode(KindSpreadAssignment, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[spreadAssignmentData](s, layoutSpreadAssignment)
+	data.expression = s.ref(expression)
+	return f.newNode(KindSpreadAssignment, layoutSpreadAssignment, i)
 }
 
 func (f *NodeFactory) UpdateSpreadAssignment(node SpreadAssignment, expression Expression) Node {
@@ -8396,37 +9610,51 @@ type propertyAssignmentData struct {
 	declarationBaseData
 	namedMemberBaseData
 	compositeBaseData
-	typeField   TypeNode
-	initializer Expression
+	typeField   nodeRef // TypeNode
+	initializer nodeRef // Expression
 }
 
 type PropertyAssignment struct{ Node }
 
 func (node PropertyAssignment) data() *propertyAssignmentData {
-	return (*propertyAssignmentData)(unsafe.Pointer(node.h))
+	return (*propertyAssignmentData)(node.rec())
 }
 
 func (node PropertyAssignment) Symbol() *Symbol                  { return node.data().symbol }
 func (node PropertyAssignment) SetSymbol(value *Symbol)          { node.data().symbol = value }
 func (node PropertyAssignment) Modifiers() *ModifierList         { return node.data().modifiers }
 func (node PropertyAssignment) setModifiers(value *ModifierList) { node.data().modifiers = value }
-func (node PropertyAssignment) Name() PropertyName               { return node.data().name }
-func (node PropertyAssignment) setName(value PropertyName)       { node.data().name = value }
-func (node PropertyAssignment) PostfixToken() TokenNode          { return node.data().postfixToken }
-func (node PropertyAssignment) SetPostfixToken(value TokenNode)  { node.data().postfixToken = value }
-func (node PropertyAssignment) Type() TypeNode                   { return node.data().typeField }
-func (node PropertyAssignment) SetType(value TypeNode)           { node.data().typeField = value }
-func (node PropertyAssignment) Initializer() Expression          { return node.data().initializer }
-func (node PropertyAssignment) SetInitializer(value Expression)  { node.data().initializer = value }
+func (node PropertyAssignment) Name() PropertyName               { return node.s.deref(node.data().name) }
+
+func (node PropertyAssignment) setName(value PropertyName) { node.data().name = node.s.ref(value) }
+
+func (node PropertyAssignment) PostfixToken() TokenNode {
+	return node.s.deref(node.data().postfixToken)
+}
+
+func (node PropertyAssignment) SetPostfixToken(value TokenNode) {
+	node.data().postfixToken = node.s.ref(value)
+}
+
+func (node PropertyAssignment) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node PropertyAssignment) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node PropertyAssignment) Initializer() Expression { return node.s.deref(node.data().initializer) }
+
+func (node PropertyAssignment) SetInitializer(value Expression) {
+	node.data().initializer = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewPropertyAssignment(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
-	data := f.propertyAssignmentArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[propertyAssignmentData](s, layoutPropertyAssignment)
 	data.modifiers = modifiers
-	data.name = name
-	data.postfixToken = postfixToken
-	data.typeField = typeNode
-	data.initializer = initializer
-	return f.newNode(KindPropertyAssignment, data.asNode())
+	data.name = s.ref(name)
+	data.postfixToken = s.ref(postfixToken)
+	data.typeField = s.ref(typeNode)
+	data.initializer = s.ref(initializer)
+	return f.newNode(KindPropertyAssignment, layoutPropertyAssignment, i)
 }
 
 func (f *NodeFactory) UpdatePropertyAssignment(node PropertyAssignment, modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
@@ -8466,15 +9694,15 @@ type shorthandPropertyAssignmentData struct {
 	declarationBaseData
 	namedMemberBaseData
 	compositeBaseData
-	typeField                   TypeNode
-	equalsToken                 EqualsToken // Optional
-	objectAssignmentInitializer Expression  // Optional
+	typeField                   nodeRef // TypeNode
+	equalsToken                 nodeRef // EqualsToken. Optional
+	objectAssignmentInitializer nodeRef // Expression. Optional
 }
 
 type ShorthandPropertyAssignment struct{ Node }
 
 func (node ShorthandPropertyAssignment) data() *shorthandPropertyAssignmentData {
-	return (*shorthandPropertyAssignmentData)(unsafe.Pointer(node.h))
+	return (*shorthandPropertyAssignmentData)(node.rec())
 }
 
 func (node ShorthandPropertyAssignment) Symbol() *Symbol          { return node.data().symbol }
@@ -8483,37 +9711,53 @@ func (node ShorthandPropertyAssignment) Modifiers() *ModifierList { return node.
 func (node ShorthandPropertyAssignment) setModifiers(value *ModifierList) {
 	node.data().modifiers = value
 }
-func (node ShorthandPropertyAssignment) Name() PropertyName         { return node.data().name }
-func (node ShorthandPropertyAssignment) setName(value PropertyName) { node.data().name = value }
-func (node ShorthandPropertyAssignment) PostfixToken() TokenNode    { return node.data().postfixToken }
+
+func (node ShorthandPropertyAssignment) Name() PropertyName { return node.s.deref(node.data().name) }
+
+func (node ShorthandPropertyAssignment) setName(value PropertyName) {
+	node.data().name = node.s.ref(value)
+}
+
+func (node ShorthandPropertyAssignment) PostfixToken() TokenNode {
+	return node.s.deref(node.data().postfixToken)
+}
 
 func (node ShorthandPropertyAssignment) SetPostfixToken(value TokenNode) {
-	node.data().postfixToken = value
+	node.data().postfixToken = node.s.ref(value)
 }
-func (node ShorthandPropertyAssignment) Type() TypeNode           { return node.data().typeField }
-func (node ShorthandPropertyAssignment) SetType(value TypeNode)   { node.data().typeField = value }
-func (node ShorthandPropertyAssignment) EqualsToken() EqualsToken { return node.data().equalsToken }
+
+func (node ShorthandPropertyAssignment) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node ShorthandPropertyAssignment) SetType(value TypeNode) {
+	node.data().typeField = node.s.ref(value)
+}
+
+func (node ShorthandPropertyAssignment) EqualsToken() EqualsToken {
+	return node.s.deref(node.data().equalsToken)
+}
+
 func (node ShorthandPropertyAssignment) SetEqualsToken(value EqualsToken) {
-	node.data().equalsToken = value
+	node.data().equalsToken = node.s.ref(value)
 }
 
 func (node ShorthandPropertyAssignment) ObjectAssignmentInitializer() Expression {
-	return node.data().objectAssignmentInitializer
+	return node.s.deref(node.data().objectAssignmentInitializer)
 }
 
 func (node ShorthandPropertyAssignment) SetObjectAssignmentInitializer(value Expression) {
-	node.data().objectAssignmentInitializer = value
+	node.data().objectAssignmentInitializer = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, equalsToken EqualsToken, objectAssignmentInitializer Expression) Node {
-	data := &shorthandPropertyAssignmentData{}
+	s := f.nodeStore()
+	data, i := newRecord[shorthandPropertyAssignmentData](s, layoutShorthandPropertyAssignment)
 	data.modifiers = modifiers
-	data.name = name
-	data.postfixToken = postfixToken
-	data.typeField = typeNode
-	data.equalsToken = equalsToken
-	data.objectAssignmentInitializer = objectAssignmentInitializer
-	return f.newNode(KindShorthandPropertyAssignment, data.asNode())
+	data.name = s.ref(name)
+	data.postfixToken = s.ref(postfixToken)
+	data.typeField = s.ref(typeNode)
+	data.equalsToken = s.ref(equalsToken)
+	data.objectAssignmentInitializer = s.ref(objectAssignmentInitializer)
+	return f.newNode(KindShorthandPropertyAssignment, layoutShorthandPropertyAssignment, i)
 }
 
 func (f *NodeFactory) UpdateShorthandPropertyAssignment(node ShorthandPropertyAssignment, modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, equalsToken EqualsToken, objectAssignmentInitializer Expression) Node {
@@ -8550,22 +9794,23 @@ func IsShorthandPropertyAssignment(node Node) bool {
 
 type deleteExpressionData struct {
 	unaryExpressionBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type DeleteExpression struct{ Node }
 
-func (node DeleteExpression) data() *deleteExpressionData {
-	return (*deleteExpressionData)(unsafe.Pointer(node.h))
+func (node DeleteExpression) data() *deleteExpressionData { return (*deleteExpressionData)(node.rec()) }
+
+func (node DeleteExpression) Expression() Expression { return node.s.deref(node.data().expression) }
+func (node DeleteExpression) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
 }
 
-func (node DeleteExpression) Expression() Expression         { return node.data().expression }
-func (node DeleteExpression) SetExpression(value Expression) { node.data().expression = value }
-
 func (f *NodeFactory) NewDeleteExpression(expression Expression) Node {
-	data := &deleteExpressionData{}
-	data.expression = expression
-	return f.newNode(KindDeleteExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[deleteExpressionData](s, layoutDeleteExpression)
+	data.expression = s.ref(expression)
+	return f.newNode(KindDeleteExpression, layoutDeleteExpression, i)
 }
 
 func (f *NodeFactory) UpdateDeleteExpression(node DeleteExpression, expression Expression) Node {
@@ -8601,22 +9846,23 @@ func IsDeleteExpression(node Node) bool {
 
 type typeOfExpressionData struct {
 	unaryExpressionBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type TypeOfExpression struct{ Node }
 
-func (node TypeOfExpression) data() *typeOfExpressionData {
-	return (*typeOfExpressionData)(unsafe.Pointer(node.h))
+func (node TypeOfExpression) data() *typeOfExpressionData { return (*typeOfExpressionData)(node.rec()) }
+
+func (node TypeOfExpression) Expression() Expression { return node.s.deref(node.data().expression) }
+func (node TypeOfExpression) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
 }
 
-func (node TypeOfExpression) Expression() Expression         { return node.data().expression }
-func (node TypeOfExpression) SetExpression(value Expression) { node.data().expression = value }
-
 func (f *NodeFactory) NewTypeOfExpression(expression Expression) Node {
-	data := &typeOfExpressionData{}
-	data.expression = expression
-	return f.newNode(KindTypeOfExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[typeOfExpressionData](s, layoutTypeOfExpression)
+	data.expression = s.ref(expression)
+	return f.newNode(KindTypeOfExpression, layoutTypeOfExpression, i)
 }
 
 func (f *NodeFactory) UpdateTypeOfExpression(node TypeOfExpression, expression Expression) Node {
@@ -8652,22 +9898,23 @@ func IsTypeOfExpression(node Node) bool {
 
 type voidExpressionData struct {
 	unaryExpressionBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type VoidExpression struct{ Node }
 
-func (node VoidExpression) data() *voidExpressionData {
-	return (*voidExpressionData)(unsafe.Pointer(node.h))
+func (node VoidExpression) data() *voidExpressionData { return (*voidExpressionData)(node.rec()) }
+
+func (node VoidExpression) Expression() Expression { return node.s.deref(node.data().expression) }
+func (node VoidExpression) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
 }
 
-func (node VoidExpression) Expression() Expression         { return node.data().expression }
-func (node VoidExpression) SetExpression(value Expression) { node.data().expression = value }
-
 func (f *NodeFactory) NewVoidExpression(expression Expression) Node {
-	data := &voidExpressionData{}
-	data.expression = expression
-	return f.newNode(KindVoidExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[voidExpressionData](s, layoutVoidExpression)
+	data.expression = s.ref(expression)
+	return f.newNode(KindVoidExpression, layoutVoidExpression, i)
 }
 
 func (f *NodeFactory) UpdateVoidExpression(node VoidExpression, expression Expression) Node {
@@ -8703,22 +9950,23 @@ func IsVoidExpression(node Node) bool {
 
 type awaitExpressionData struct {
 	unaryExpressionBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type AwaitExpression struct{ Node }
 
-func (node AwaitExpression) data() *awaitExpressionData {
-	return (*awaitExpressionData)(unsafe.Pointer(node.h))
+func (node AwaitExpression) data() *awaitExpressionData { return (*awaitExpressionData)(node.rec()) }
+
+func (node AwaitExpression) Expression() Expression { return node.s.deref(node.data().expression) }
+func (node AwaitExpression) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
 }
 
-func (node AwaitExpression) Expression() Expression         { return node.data().expression }
-func (node AwaitExpression) SetExpression(value Expression) { node.data().expression = value }
-
 func (f *NodeFactory) NewAwaitExpression(expression Expression) Node {
-	data := &awaitExpressionData{}
-	data.expression = expression
-	return f.newNode(KindAwaitExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[awaitExpressionData](s, layoutAwaitExpression)
+	data.expression = s.ref(expression)
+	return f.newNode(KindAwaitExpression, layoutAwaitExpression, i)
 }
 
 func (f *NodeFactory) UpdateAwaitExpression(node AwaitExpression, expression Expression) Node {
@@ -8750,26 +9998,28 @@ func IsAwaitExpression(node Node) bool {
 
 type typeAssertionData struct {
 	unaryExpressionBaseData
-	typeField  TypeNode
-	expression Expression
+	typeField  nodeRef // TypeNode
+	expression nodeRef // Expression
 }
 
 type TypeAssertion struct{ Node }
 
-func (node TypeAssertion) data() *typeAssertionData {
-	return (*typeAssertionData)(unsafe.Pointer(node.h))
-}
+func (node TypeAssertion) data() *typeAssertionData { return (*typeAssertionData)(node.rec()) }
 
-func (node TypeAssertion) Type() TypeNode                 { return node.data().typeField }
-func (node TypeAssertion) SetType(value TypeNode)         { node.data().typeField = value }
-func (node TypeAssertion) Expression() Expression         { return node.data().expression }
-func (node TypeAssertion) SetExpression(value Expression) { node.data().expression = value }
+func (node TypeAssertion) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node TypeAssertion) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node TypeAssertion) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node TypeAssertion) SetExpression(value Expression) { node.data().expression = node.s.ref(value) }
 
 func (f *NodeFactory) NewTypeAssertion(typeNode TypeNode, expression Expression) Node {
-	data := &typeAssertionData{}
-	data.typeField = typeNode
-	data.expression = expression
-	return f.newNode(KindTypeAssertionExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[typeAssertionData](s, layoutTypeAssertion)
+	data.typeField = s.ref(typeNode)
+	data.expression = s.ref(expression)
+	return f.newNode(KindTypeAssertionExpression, layoutTypeAssertion, i)
 }
 
 func (f *NodeFactory) UpdateTypeAssertion(node TypeAssertion, typeNode TypeNode, expression Expression) Node {
@@ -8805,9 +10055,7 @@ type keywordTypeNodeData struct {
 
 type KeywordTypeNode struct{ Node }
 
-func (node KeywordTypeNode) data() *keywordTypeNodeData {
-	return (*keywordTypeNodeData)(unsafe.Pointer(node.h))
-}
+func (node KeywordTypeNode) data() *keywordTypeNodeData { return (*keywordTypeNodeData)(node.rec()) }
 
 func (f *NodeFactory) NewKeywordTypeNode(kind KeywordTypeSyntaxKind) Node {
 	switch kind {
@@ -8815,8 +10063,8 @@ func (f *NodeFactory) NewKeywordTypeNode(kind KeywordTypeSyntaxKind) Node {
 	default:
 		panic("Invalid node kind for KeywordTypeNode")
 	}
-	data := f.keywordTypeNodeArena.New()
-	return f.newNode(kind, data.asNode())
+	_, i := newRecord[keywordTypeNodeData](f.nodeStore(), layoutKeywordTypeNode)
+	return f.newNode(kind, layoutKeywordTypeNode, i)
 }
 
 func (node KeywordTypeNode) Clone(f NodeFactoryCoercible) Node {
@@ -8841,17 +10089,15 @@ type unionTypeNodeData struct {
 
 type UnionTypeNode struct{ Node }
 
-func (node UnionTypeNode) data() *unionTypeNodeData {
-	return (*unionTypeNodeData)(unsafe.Pointer(node.h))
-}
+func (node UnionTypeNode) data() *unionTypeNodeData { return (*unionTypeNodeData)(node.rec()) }
 
 func (node UnionTypeNode) Types() *TypeList         { return node.data().types }
 func (node UnionTypeNode) SetTypes(value *TypeList) { node.data().types = value }
 
 func (f *NodeFactory) NewUnionTypeNode(types *TypeList) Node {
-	data := f.unionTypeNodeArena.New()
+	data, i := newRecord[unionTypeNodeData](f.nodeStore(), layoutUnionTypeNode)
 	data.types = types
-	return f.newNode(KindUnionType, data.asNode())
+	return f.newNode(KindUnionType, layoutUnionTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateUnionTypeNode(node UnionTypeNode, types *TypeList) Node {
@@ -8888,16 +10134,16 @@ type intersectionTypeNodeData struct {
 type IntersectionTypeNode struct{ Node }
 
 func (node IntersectionTypeNode) data() *intersectionTypeNodeData {
-	return (*intersectionTypeNodeData)(unsafe.Pointer(node.h))
+	return (*intersectionTypeNodeData)(node.rec())
 }
 
 func (node IntersectionTypeNode) Types() *TypeList         { return node.data().types }
 func (node IntersectionTypeNode) SetTypes(value *TypeList) { node.data().types = value }
 
 func (f *NodeFactory) NewIntersectionTypeNode(types *TypeList) Node {
-	data := f.intersectionTypeNodeArena.New()
+	data, i := newRecord[intersectionTypeNodeData](f.nodeStore(), layoutIntersectionTypeNode)
 	data.types = types
-	return f.newNode(KindIntersectionType, data.asNode())
+	return f.newNode(KindIntersectionType, layoutIntersectionTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateIntersectionTypeNode(node IntersectionTypeNode, types *TypeList) Node {
@@ -8930,38 +10176,54 @@ func IsIntersectionTypeNode(node Node) bool {
 type conditionalTypeNodeData struct {
 	typeNodeBaseData
 	localsContainerBaseData
-	checkType   TypeNode
-	extendsType TypeNode
-	trueType    TypeNode
-	falseType   TypeNode
+	checkType   nodeRef // TypeNode
+	extendsType nodeRef // TypeNode
+	trueType    nodeRef // TypeNode
+	falseType   nodeRef // TypeNode
 }
 
 type ConditionalTypeNode struct{ Node }
 
 func (node ConditionalTypeNode) data() *conditionalTypeNodeData {
-	return (*conditionalTypeNodeData)(unsafe.Pointer(node.h))
+	return (*conditionalTypeNodeData)(node.rec())
 }
 
-func (node ConditionalTypeNode) Locals() SymbolTable           { return node.data().locals }
-func (node ConditionalTypeNode) SetLocals(value SymbolTable)   { node.data().locals = value }
-func (node ConditionalTypeNode) NextContainer() Node           { return node.data().nextContainer }
-func (node ConditionalTypeNode) SetNextContainer(value Node)   { node.data().nextContainer = value }
-func (node ConditionalTypeNode) CheckType() TypeNode           { return node.data().checkType }
-func (node ConditionalTypeNode) SetCheckType(value TypeNode)   { node.data().checkType = value }
-func (node ConditionalTypeNode) ExtendsType() TypeNode         { return node.data().extendsType }
-func (node ConditionalTypeNode) SetExtendsType(value TypeNode) { node.data().extendsType = value }
-func (node ConditionalTypeNode) TrueType() TypeNode            { return node.data().trueType }
-func (node ConditionalTypeNode) SetTrueType(value TypeNode)    { node.data().trueType = value }
-func (node ConditionalTypeNode) FalseType() TypeNode           { return node.data().falseType }
-func (node ConditionalTypeNode) SetFalseType(value TypeNode)   { node.data().falseType = value }
+func (node ConditionalTypeNode) Locals() SymbolTable         { return node.data().locals }
+func (node ConditionalTypeNode) SetLocals(value SymbolTable) { node.data().locals = value }
+func (node ConditionalTypeNode) NextContainer() Node         { return node.s.deref(node.data().nextContainer) }
+
+func (node ConditionalTypeNode) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
+func (node ConditionalTypeNode) CheckType() TypeNode { return node.s.deref(node.data().checkType) }
+func (node ConditionalTypeNode) SetCheckType(value TypeNode) {
+	node.data().checkType = node.s.ref(value)
+}
+
+func (node ConditionalTypeNode) ExtendsType() TypeNode { return node.s.deref(node.data().extendsType) }
+
+func (node ConditionalTypeNode) SetExtendsType(value TypeNode) {
+	node.data().extendsType = node.s.ref(value)
+}
+
+func (node ConditionalTypeNode) TrueType() TypeNode { return node.s.deref(node.data().trueType) }
+
+func (node ConditionalTypeNode) SetTrueType(value TypeNode) { node.data().trueType = node.s.ref(value) }
+
+func (node ConditionalTypeNode) FalseType() TypeNode { return node.s.deref(node.data().falseType) }
+
+func (node ConditionalTypeNode) SetFalseType(value TypeNode) {
+	node.data().falseType = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewConditionalTypeNode(checkType TypeNode, extendsType TypeNode, trueType TypeNode, falseType TypeNode) Node {
-	data := &conditionalTypeNodeData{}
-	data.checkType = checkType
-	data.extendsType = extendsType
-	data.trueType = trueType
-	data.falseType = falseType
-	return f.newNode(KindConditionalType, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[conditionalTypeNodeData](s, layoutConditionalTypeNode)
+	data.checkType = s.ref(checkType)
+	data.extendsType = s.ref(extendsType)
+	data.trueType = s.ref(trueType)
+	data.falseType = s.ref(falseType)
+	return f.newNode(KindConditionalType, layoutConditionalTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateConditionalTypeNode(node ConditionalTypeNode, checkType TypeNode, extendsType TypeNode, trueType TypeNode, falseType TypeNode) Node {
@@ -8997,25 +10259,24 @@ func IsConditionalTypeNode(node Node) bool {
 type typeOperatorNodeData struct {
 	typeNodeBaseData
 	operator  Kind
-	typeField TypeNode
+	typeField nodeRef // TypeNode
 }
 
 type TypeOperatorNode struct{ Node }
 
-func (node TypeOperatorNode) data() *typeOperatorNodeData {
-	return (*typeOperatorNodeData)(unsafe.Pointer(node.h))
-}
+func (node TypeOperatorNode) data() *typeOperatorNodeData { return (*typeOperatorNodeData)(node.rec()) }
 
 func (node TypeOperatorNode) Operator() Kind         { return node.data().operator }
 func (node TypeOperatorNode) SetOperator(value Kind) { node.data().operator = value }
-func (node TypeOperatorNode) Type() TypeNode         { return node.data().typeField }
-func (node TypeOperatorNode) SetType(value TypeNode) { node.data().typeField = value }
+func (node TypeOperatorNode) Type() TypeNode         { return node.s.deref(node.data().typeField) }
+func (node TypeOperatorNode) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewTypeOperatorNode(operator Kind, typeNode TypeNode) Node {
-	data := f.typeOperatorNodeArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[typeOperatorNodeData](s, layoutTypeOperatorNode)
 	data.operator = operator
-	data.typeField = typeNode
-	return f.newNode(KindTypeOperator, data.asNode())
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindTypeOperator, layoutTypeOperatorNode, i)
 }
 
 func (f *NodeFactory) UpdateTypeOperatorNode(node TypeOperatorNode, operator Kind, typeNode TypeNode) Node {
@@ -9047,27 +10308,26 @@ func IsTypeOperatorNode(node Node) bool {
 
 type inferTypeNodeData struct {
 	typeNodeBaseData
-	typeParameter TypeParameterDeclarationNode
+	typeParameter nodeRef // TypeParameterDeclarationNode
 }
 
 type InferTypeNode struct{ Node }
 
-func (node InferTypeNode) data() *inferTypeNodeData {
-	return (*inferTypeNodeData)(unsafe.Pointer(node.h))
-}
+func (node InferTypeNode) data() *inferTypeNodeData { return (*inferTypeNodeData)(node.rec()) }
 
 func (node InferTypeNode) TypeParameter() TypeParameterDeclarationNode {
-	return node.data().typeParameter
+	return node.s.deref(node.data().typeParameter)
 }
 
 func (node InferTypeNode) SetTypeParameter(value TypeParameterDeclarationNode) {
-	node.data().typeParameter = value
+	node.data().typeParameter = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewInferTypeNode(typeParameter TypeParameterDeclarationNode) Node {
-	data := &inferTypeNodeData{}
-	data.typeParameter = typeParameter
-	return f.newNode(KindInferType, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[inferTypeNodeData](s, layoutInferTypeNode)
+	data.typeParameter = s.ref(typeParameter)
+	return f.newNode(KindInferType, layoutInferTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateInferTypeNode(node InferTypeNode, typeParameter TypeParameterDeclarationNode) Node {
@@ -9099,22 +10359,22 @@ func IsInferTypeNode(node Node) bool {
 
 type arrayTypeNodeData struct {
 	typeNodeBaseData
-	elementType TypeNode
+	elementType nodeRef // TypeNode
 }
 
 type ArrayTypeNode struct{ Node }
 
-func (node ArrayTypeNode) data() *arrayTypeNodeData {
-	return (*arrayTypeNodeData)(unsafe.Pointer(node.h))
-}
+func (node ArrayTypeNode) data() *arrayTypeNodeData { return (*arrayTypeNodeData)(node.rec()) }
 
-func (node ArrayTypeNode) ElementType() TypeNode         { return node.data().elementType }
-func (node ArrayTypeNode) SetElementType(value TypeNode) { node.data().elementType = value }
+func (node ArrayTypeNode) ElementType() TypeNode { return node.s.deref(node.data().elementType) }
+
+func (node ArrayTypeNode) SetElementType(value TypeNode) { node.data().elementType = node.s.ref(value) }
 
 func (f *NodeFactory) NewArrayTypeNode(elementType TypeNode) Node {
-	data := f.arrayTypeNodeArena.New()
-	data.elementType = elementType
-	return f.newNode(KindArrayType, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[arrayTypeNodeData](s, layoutArrayTypeNode)
+	data.elementType = s.ref(elementType)
+	return f.newNode(KindArrayType, layoutArrayTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateArrayTypeNode(node ArrayTypeNode, elementType TypeNode) Node {
@@ -9146,26 +10406,34 @@ func IsArrayTypeNode(node Node) bool {
 
 type indexedAccessTypeNodeData struct {
 	typeNodeBaseData
-	objectType TypeNode
-	indexType  TypeNode
+	objectType nodeRef // TypeNode
+	indexType  nodeRef // TypeNode
 }
 
 type IndexedAccessTypeNode struct{ Node }
 
 func (node IndexedAccessTypeNode) data() *indexedAccessTypeNodeData {
-	return (*indexedAccessTypeNodeData)(unsafe.Pointer(node.h))
+	return (*indexedAccessTypeNodeData)(node.rec())
 }
 
-func (node IndexedAccessTypeNode) ObjectType() TypeNode         { return node.data().objectType }
-func (node IndexedAccessTypeNode) SetObjectType(value TypeNode) { node.data().objectType = value }
-func (node IndexedAccessTypeNode) IndexType() TypeNode          { return node.data().indexType }
-func (node IndexedAccessTypeNode) SetIndexType(value TypeNode)  { node.data().indexType = value }
+func (node IndexedAccessTypeNode) ObjectType() TypeNode { return node.s.deref(node.data().objectType) }
+
+func (node IndexedAccessTypeNode) SetObjectType(value TypeNode) {
+	node.data().objectType = node.s.ref(value)
+}
+
+func (node IndexedAccessTypeNode) IndexType() TypeNode { return node.s.deref(node.data().indexType) }
+
+func (node IndexedAccessTypeNode) SetIndexType(value TypeNode) {
+	node.data().indexType = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewIndexedAccessTypeNode(objectType TypeNode, indexType TypeNode) Node {
-	data := f.indexedAccessTypeNodeArena.New()
-	data.objectType = objectType
-	data.indexType = indexType
-	return f.newNode(KindIndexedAccessType, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[indexedAccessTypeNodeData](s, layoutIndexedAccessTypeNode)
+	data.objectType = s.ref(objectType)
+	data.indexType = s.ref(indexType)
+	return f.newNode(KindIndexedAccessType, layoutIndexedAccessTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateIndexedAccessTypeNode(node IndexedAccessTypeNode, objectType TypeNode, indexType TypeNode) Node {
@@ -9197,25 +10465,28 @@ func IsIndexedAccessTypeNode(node Node) bool {
 
 type typeReferenceNodeData struct {
 	nodeWithTypeArgumentsBaseData
-	typeName EntityName
+	typeName nodeRef // EntityName
 }
 
 type TypeReferenceNode struct{ Node }
 
 func (node TypeReferenceNode) data() *typeReferenceNodeData {
-	return (*typeReferenceNodeData)(unsafe.Pointer(node.h))
+	return (*typeReferenceNodeData)(node.rec())
 }
 
 func (node TypeReferenceNode) TypeArguments() *TypeList         { return node.data().typeArguments }
 func (node TypeReferenceNode) SetTypeArguments(value *TypeList) { node.data().typeArguments = value }
-func (node TypeReferenceNode) TypeName() EntityName             { return node.data().typeName }
-func (node TypeReferenceNode) SetTypeName(value EntityName)     { node.data().typeName = value }
+
+func (node TypeReferenceNode) TypeName() EntityName { return node.s.deref(node.data().typeName) }
+
+func (node TypeReferenceNode) SetTypeName(value EntityName) { node.data().typeName = node.s.ref(value) }
 
 func (f *NodeFactory) NewTypeReferenceNode(typeName EntityName, typeArguments *TypeList) Node {
-	data := f.typeReferenceNodeArena.New()
-	data.typeName = typeName
+	s := f.nodeStore()
+	data, i := newRecord[typeReferenceNodeData](s, layoutTypeReferenceNode)
+	data.typeName = s.ref(typeName)
 	data.typeArguments = typeArguments
-	return f.newNode(KindTypeReference, data.asNode())
+	return f.newNode(KindTypeReference, layoutTypeReferenceNode, i)
 }
 
 func (f *NodeFactory) UpdateTypeReferenceNode(node TypeReferenceNode, typeName EntityName, typeArguments *TypeList) Node {
@@ -9248,19 +10519,22 @@ func IsTypeReferenceNode(node Node) bool {
 type expressionWithTypeArgumentsData struct {
 	memberExpressionBaseData
 	compositeBaseData
-	expression    Expression
+	expression    nodeRef   // Expression
 	typeArguments *TypeList // Optional
 }
 
 type ExpressionWithTypeArguments struct{ Node }
 
 func (node ExpressionWithTypeArguments) data() *expressionWithTypeArgumentsData {
-	return (*expressionWithTypeArgumentsData)(unsafe.Pointer(node.h))
+	return (*expressionWithTypeArgumentsData)(node.rec())
 }
 
-func (node ExpressionWithTypeArguments) Expression() Expression { return node.data().expression }
+func (node ExpressionWithTypeArguments) Expression() Expression {
+	return node.s.deref(node.data().expression)
+}
+
 func (node ExpressionWithTypeArguments) SetExpression(value Expression) {
-	node.data().expression = value
+	node.data().expression = node.s.ref(value)
 }
 
 func (node ExpressionWithTypeArguments) TypeArguments() *TypeList { return node.data().typeArguments }
@@ -9270,10 +10544,11 @@ func (node ExpressionWithTypeArguments) SetTypeArguments(value *TypeList) {
 }
 
 func (f *NodeFactory) NewExpressionWithTypeArguments(expression Expression, typeArguments *TypeList) Node {
-	data := f.expressionWithTypeArgumentsArena.New()
-	data.expression = expression
+	s := f.nodeStore()
+	data, i := newRecord[expressionWithTypeArgumentsData](s, layoutExpressionWithTypeArguments)
+	data.expression = s.ref(expression)
 	data.typeArguments = typeArguments
-	return f.newNode(KindExpressionWithTypeArguments, data.asNode())
+	return f.newNode(KindExpressionWithTypeArguments, layoutExpressionWithTypeArguments, i)
 }
 
 func (f *NodeFactory) UpdateExpressionWithTypeArguments(node ExpressionWithTypeArguments, expression Expression, typeArguments *TypeList) Node {
@@ -9305,22 +10580,21 @@ func IsExpressionWithTypeArguments(node Node) bool {
 
 type literalTypeNodeData struct {
 	typeNodeBaseData
-	literal Node
+	literal nodeRef // Node
 }
 
 type LiteralTypeNode struct{ Node }
 
-func (node LiteralTypeNode) data() *literalTypeNodeData {
-	return (*literalTypeNodeData)(unsafe.Pointer(node.h))
-}
+func (node LiteralTypeNode) data() *literalTypeNodeData { return (*literalTypeNodeData)(node.rec()) }
 
-func (node LiteralTypeNode) Literal() Node         { return node.data().literal }
-func (node LiteralTypeNode) SetLiteral(value Node) { node.data().literal = value }
+func (node LiteralTypeNode) Literal() Node         { return node.s.deref(node.data().literal) }
+func (node LiteralTypeNode) SetLiteral(value Node) { node.data().literal = node.s.ref(value) }
 
 func (f *NodeFactory) NewLiteralTypeNode(literal Node) Node {
-	data := f.literalTypeNodeArena.New()
-	data.literal = literal
-	return f.newNode(KindLiteralType, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[literalTypeNodeData](s, layoutLiteralTypeNode)
+	data.literal = s.ref(literal)
+	return f.newNode(KindLiteralType, layoutLiteralTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateLiteralTypeNode(node LiteralTypeNode, literal Node) Node {
@@ -9356,11 +10630,11 @@ type thisTypeNodeData struct {
 
 type ThisTypeNode struct{ Node }
 
-func (node ThisTypeNode) data() *thisTypeNodeData { return (*thisTypeNodeData)(unsafe.Pointer(node.h)) }
+func (node ThisTypeNode) data() *thisTypeNodeData { return (*thisTypeNodeData)(node.rec()) }
 
 func (f *NodeFactory) NewThisTypeNode() Node {
-	data := &thisTypeNodeData{}
-	return f.newNode(KindThisType, data.asNode())
+	_, i := newRecord[thisTypeNodeData](f.nodeStore(), layoutThisTypeNode)
+	return f.newNode(KindThisType, layoutThisTypeNode, i)
 }
 
 func (node ThisTypeNode) Clone(f NodeFactoryCoercible) Node {
@@ -9377,39 +10651,42 @@ func IsThisTypeNode(node Node) bool {
 
 type typePredicateNodeData struct {
 	typeNodeBaseData
-	assertsModifier AssertsKeyword // Optional
-	parameterName   TypePredicateParameterName
-	typeField       TypeNode // Optional
+	assertsModifier nodeRef // AssertsKeyword. Optional
+	parameterName   nodeRef // TypePredicateParameterName
+	typeField       nodeRef // TypeNode. Optional
 }
 
 type TypePredicateNode struct{ Node }
 
 func (node TypePredicateNode) data() *typePredicateNodeData {
-	return (*typePredicateNodeData)(unsafe.Pointer(node.h))
+	return (*typePredicateNodeData)(node.rec())
 }
 
-func (node TypePredicateNode) AssertsModifier() AssertsKeyword { return node.data().assertsModifier }
+func (node TypePredicateNode) AssertsModifier() AssertsKeyword {
+	return node.s.deref(node.data().assertsModifier)
+}
 
 func (node TypePredicateNode) SetAssertsModifier(value AssertsKeyword) {
-	node.data().assertsModifier = value
+	node.data().assertsModifier = node.s.ref(value)
 }
 
 func (node TypePredicateNode) ParameterName() TypePredicateParameterName {
-	return node.data().parameterName
+	return node.s.deref(node.data().parameterName)
 }
 
 func (node TypePredicateNode) SetParameterName(value TypePredicateParameterName) {
-	node.data().parameterName = value
+	node.data().parameterName = node.s.ref(value)
 }
-func (node TypePredicateNode) Type() TypeNode         { return node.data().typeField }
-func (node TypePredicateNode) SetType(value TypeNode) { node.data().typeField = value }
+func (node TypePredicateNode) Type() TypeNode         { return node.s.deref(node.data().typeField) }
+func (node TypePredicateNode) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewTypePredicateNode(assertsModifier AssertsKeyword, parameterName TypePredicateParameterName, typeNode TypeNode) Node {
-	data := &typePredicateNodeData{}
-	data.assertsModifier = assertsModifier
-	data.parameterName = parameterName
-	data.typeField = typeNode
-	return f.newNode(KindTypePredicate, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[typePredicateNodeData](s, layoutTypePredicateNode)
+	data.assertsModifier = s.ref(assertsModifier)
+	data.parameterName = s.ref(parameterName)
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindTypePredicate, layoutTypePredicateNode, i)
 }
 
 func (f *NodeFactory) UpdateTypePredicateNode(node TypePredicateNode, assertsModifier AssertsKeyword, parameterName TypePredicateParameterName, typeNode TypeNode) Node {
@@ -9442,26 +10719,28 @@ func IsTypePredicateNode(node Node) bool {
 type importAttributeData struct {
 	nodeBaseData
 	compositeBaseData
-	name  ImportAttributeName
-	value Expression
+	name  nodeRef // ImportAttributeName
+	value nodeRef // Expression
 }
 
 type ImportAttribute struct{ Node }
 
-func (node ImportAttribute) data() *importAttributeData {
-	return (*importAttributeData)(unsafe.Pointer(node.h))
-}
+func (node ImportAttribute) data() *importAttributeData { return (*importAttributeData)(node.rec()) }
 
-func (node ImportAttribute) Name() ImportAttributeName         { return node.data().name }
-func (node ImportAttribute) setName(value ImportAttributeName) { node.data().name = value }
-func (node ImportAttribute) Value() Expression                 { return node.data().value }
-func (node ImportAttribute) SetValue(value Expression)         { node.data().value = value }
+func (node ImportAttribute) Name() ImportAttributeName { return node.s.deref(node.data().name) }
+
+func (node ImportAttribute) setName(value ImportAttributeName) { node.data().name = node.s.ref(value) }
+
+func (node ImportAttribute) Value() Expression { return node.s.deref(node.data().value) }
+
+func (node ImportAttribute) SetValue(value Expression) { node.data().value = node.s.ref(value) }
 
 func (f *NodeFactory) NewImportAttribute(name ImportAttributeName, value Expression) Node {
-	data := &importAttributeData{}
-	data.name = name
-	data.value = value
-	return f.newNode(KindImportAttribute, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[importAttributeData](s, layoutImportAttribute)
+	data.name = s.ref(name)
+	data.value = s.ref(value)
+	return f.newNode(KindImportAttribute, layoutImportAttribute, i)
 }
 
 func (f *NodeFactory) UpdateImportAttribute(node ImportAttribute, name ImportAttributeName, value Expression) Node {
@@ -9506,9 +10785,7 @@ type importAttributesData struct {
 
 type ImportAttributes struct{ Node }
 
-func (node ImportAttributes) data() *importAttributesData {
-	return (*importAttributesData)(unsafe.Pointer(node.h))
-}
+func (node ImportAttributes) data() *importAttributesData { return (*importAttributesData)(node.rec()) }
 
 func (node ImportAttributes) Token() Kind                      { return node.data().token }
 func (node ImportAttributes) SetToken(value Kind)              { node.data().token = value }
@@ -9520,11 +10797,11 @@ func (node ImportAttributes) MultiLine() bool         { return node.data().multi
 func (node ImportAttributes) SetMultiLine(value bool) { node.data().multiLine = value }
 
 func (f *NodeFactory) NewImportAttributes(token Kind, attributes *ImportAttributeList, multiLine bool) Node {
-	data := &importAttributesData{}
+	data, i := newRecord[importAttributesData](f.nodeStore(), layoutImportAttributes)
 	data.token = token
 	data.attributes = attributes
 	data.multiLine = multiLine
-	return f.newNode(KindImportAttributes, data.asNode())
+	return f.newNode(KindImportAttributes, layoutImportAttributes, i)
 }
 
 func (f *NodeFactory) UpdateImportAttributes(node ImportAttributes, token Kind, attributes *ImportAttributeList, multiLine bool) Node {
@@ -9560,25 +10837,25 @@ func IsImportAttributes(node Node) bool {
 
 type typeQueryNodeData struct {
 	nodeWithTypeArgumentsBaseData
-	exprName EntityName
+	exprName nodeRef // EntityName
 }
 
 type TypeQueryNode struct{ Node }
 
-func (node TypeQueryNode) data() *typeQueryNodeData {
-	return (*typeQueryNodeData)(unsafe.Pointer(node.h))
-}
+func (node TypeQueryNode) data() *typeQueryNodeData { return (*typeQueryNodeData)(node.rec()) }
 
 func (node TypeQueryNode) TypeArguments() *TypeList         { return node.data().typeArguments }
 func (node TypeQueryNode) SetTypeArguments(value *TypeList) { node.data().typeArguments = value }
-func (node TypeQueryNode) ExprName() EntityName             { return node.data().exprName }
-func (node TypeQueryNode) SetExprName(value EntityName)     { node.data().exprName = value }
+func (node TypeQueryNode) ExprName() EntityName             { return node.s.deref(node.data().exprName) }
+
+func (node TypeQueryNode) SetExprName(value EntityName) { node.data().exprName = node.s.ref(value) }
 
 func (f *NodeFactory) NewTypeQueryNode(exprName EntityName, typeArguments *TypeList) Node {
-	data := &typeQueryNodeData{}
-	data.exprName = exprName
+	s := f.nodeStore()
+	data, i := newRecord[typeQueryNodeData](s, layoutTypeQueryNode)
+	data.exprName = s.ref(exprName)
 	data.typeArguments = typeArguments
-	return f.newNode(KindTypeQuery, data.asNode())
+	return f.newNode(KindTypeQuery, layoutTypeQueryNode, i)
 }
 
 func (f *NodeFactory) UpdateTypeQueryNode(node TypeQueryNode, exprName EntityName, typeArguments *TypeList) Node {
@@ -9612,53 +10889,65 @@ type mappedTypeNodeData struct {
 	typeNodeBaseData
 	declarationBaseData
 	localsContainerBaseData
-	readonlyToken TokenNode // Optional
-	typeParameter TypeParameterDeclarationNode
-	nameType      TypeNode         // Optional
-	questionToken TokenNode        // Optional
-	typeField     TypeNode         // Optional
+	readonlyToken nodeRef          // TokenNode. Optional
+	typeParameter nodeRef          // TypeParameterDeclarationNode
+	nameType      nodeRef          // TypeNode. Optional
+	questionToken nodeRef          // TokenNode. Optional
+	typeField     nodeRef          // TypeNode. Optional
 	members       *TypeElementList // Optional
 }
 
 type MappedTypeNode struct{ Node }
 
-func (node MappedTypeNode) data() *mappedTypeNodeData {
-	return (*mappedTypeNodeData)(unsafe.Pointer(node.h))
+func (node MappedTypeNode) data() *mappedTypeNodeData { return (*mappedTypeNodeData)(node.rec()) }
+
+func (node MappedTypeNode) Symbol() *Symbol             { return node.data().symbol }
+func (node MappedTypeNode) SetSymbol(value *Symbol)     { node.data().symbol = value }
+func (node MappedTypeNode) Locals() SymbolTable         { return node.data().locals }
+func (node MappedTypeNode) SetLocals(value SymbolTable) { node.data().locals = value }
+func (node MappedTypeNode) NextContainer() Node         { return node.s.deref(node.data().nextContainer) }
+
+func (node MappedTypeNode) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
 }
 
-func (node MappedTypeNode) Symbol() *Symbol                  { return node.data().symbol }
-func (node MappedTypeNode) SetSymbol(value *Symbol)          { node.data().symbol = value }
-func (node MappedTypeNode) Locals() SymbolTable              { return node.data().locals }
-func (node MappedTypeNode) SetLocals(value SymbolTable)      { node.data().locals = value }
-func (node MappedTypeNode) NextContainer() Node              { return node.data().nextContainer }
-func (node MappedTypeNode) SetNextContainer(value Node)      { node.data().nextContainer = value }
-func (node MappedTypeNode) ReadonlyToken() TokenNode         { return node.data().readonlyToken }
-func (node MappedTypeNode) SetReadonlyToken(value TokenNode) { node.data().readonlyToken = value }
+func (node MappedTypeNode) ReadonlyToken() TokenNode { return node.s.deref(node.data().readonlyToken) }
+
+func (node MappedTypeNode) SetReadonlyToken(value TokenNode) {
+	node.data().readonlyToken = node.s.ref(value)
+}
+
 func (node MappedTypeNode) TypeParameter() TypeParameterDeclarationNode {
-	return node.data().typeParameter
+	return node.s.deref(node.data().typeParameter)
 }
 
 func (node MappedTypeNode) SetTypeParameter(value TypeParameterDeclarationNode) {
-	node.data().typeParameter = value
+	node.data().typeParameter = node.s.ref(value)
 }
-func (node MappedTypeNode) NameType() TypeNode                { return node.data().nameType }
-func (node MappedTypeNode) SetNameType(value TypeNode)        { node.data().nameType = value }
-func (node MappedTypeNode) QuestionToken() TokenNode          { return node.data().questionToken }
-func (node MappedTypeNode) SetQuestionToken(value TokenNode)  { node.data().questionToken = value }
-func (node MappedTypeNode) Type() TypeNode                    { return node.data().typeField }
-func (node MappedTypeNode) SetType(value TypeNode)            { node.data().typeField = value }
+func (node MappedTypeNode) NameType() TypeNode         { return node.s.deref(node.data().nameType) }
+func (node MappedTypeNode) SetNameType(value TypeNode) { node.data().nameType = node.s.ref(value) }
+func (node MappedTypeNode) QuestionToken() TokenNode   { return node.s.deref(node.data().questionToken) }
+
+func (node MappedTypeNode) SetQuestionToken(value TokenNode) {
+	node.data().questionToken = node.s.ref(value)
+}
+
+func (node MappedTypeNode) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node MappedTypeNode) SetType(value TypeNode)            { node.data().typeField = node.s.ref(value) }
 func (node MappedTypeNode) Members() *TypeElementList         { return node.data().members }
 func (node MappedTypeNode) SetMembers(value *TypeElementList) { node.data().members = value }
 
 func (f *NodeFactory) NewMappedTypeNode(readonlyToken TokenNode, typeParameter TypeParameterDeclarationNode, nameType TypeNode, questionToken TokenNode, typeNode TypeNode, members *TypeElementList) Node {
-	data := &mappedTypeNodeData{}
-	data.readonlyToken = readonlyToken
-	data.typeParameter = typeParameter
-	data.nameType = nameType
-	data.questionToken = questionToken
-	data.typeField = typeNode
+	s := f.nodeStore()
+	data, i := newRecord[mappedTypeNodeData](s, layoutMappedTypeNode)
+	data.readonlyToken = s.ref(readonlyToken)
+	data.typeParameter = s.ref(typeParameter)
+	data.nameType = s.ref(nameType)
+	data.questionToken = s.ref(questionToken)
+	data.typeField = s.ref(typeNode)
 	data.members = members
-	return f.newNode(KindMappedType, data.asNode())
+	return f.newNode(KindMappedType, layoutMappedTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateMappedTypeNode(node MappedTypeNode, readonlyToken TokenNode, typeParameter TypeParameterDeclarationNode, nameType TypeNode, questionToken TokenNode, typeNode TypeNode, members *TypeElementList) Node {
@@ -9701,9 +10990,7 @@ type typeLiteralNodeData struct {
 
 type TypeLiteralNode struct{ Node }
 
-func (node TypeLiteralNode) data() *typeLiteralNodeData {
-	return (*typeLiteralNodeData)(unsafe.Pointer(node.h))
-}
+func (node TypeLiteralNode) data() *typeLiteralNodeData { return (*typeLiteralNodeData)(node.rec()) }
 
 func (node TypeLiteralNode) Symbol() *Symbol                   { return node.data().symbol }
 func (node TypeLiteralNode) SetSymbol(value *Symbol)           { node.data().symbol = value }
@@ -9711,9 +10998,9 @@ func (node TypeLiteralNode) Members() *TypeElementList         { return node.dat
 func (node TypeLiteralNode) SetMembers(value *TypeElementList) { node.data().members = value }
 
 func (f *NodeFactory) NewTypeLiteralNode(members *TypeElementList) Node {
-	data := f.typeLiteralNodeArena.New()
+	data, i := newRecord[typeLiteralNodeData](f.nodeStore(), layoutTypeLiteralNode)
 	data.members = members
-	return f.newNode(KindTypeLiteral, data.asNode())
+	return f.newNode(KindTypeLiteral, layoutTypeLiteralNode, i)
 }
 
 func (f *NodeFactory) UpdateTypeLiteralNode(node TypeLiteralNode, members *TypeElementList) Node {
@@ -9750,17 +11037,15 @@ type tupleTypeNodeData struct {
 
 type TupleTypeNode struct{ Node }
 
-func (node TupleTypeNode) data() *tupleTypeNodeData {
-	return (*tupleTypeNodeData)(unsafe.Pointer(node.h))
-}
+func (node TupleTypeNode) data() *tupleTypeNodeData { return (*tupleTypeNodeData)(node.rec()) }
 
 func (node TupleTypeNode) Elements() *TypeList         { return node.data().elements }
 func (node TupleTypeNode) SetElements(value *TypeList) { node.data().elements = value }
 
 func (f *NodeFactory) NewTupleTypeNode(elements *TypeList) Node {
-	data := &tupleTypeNodeData{}
+	data, i := newRecord[tupleTypeNodeData](f.nodeStore(), layoutTupleTypeNode)
 	data.elements = elements
-	return f.newNode(KindTupleType, data.asNode())
+	return f.newNode(KindTupleType, layoutTupleTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateTupleTypeNode(node TupleTypeNode, elements *TypeList) Node {
@@ -9793,39 +11078,45 @@ func IsTupleTypeNode(node Node) bool {
 type namedTupleMemberData struct {
 	typeNodeBaseData
 	declarationBaseData
-	dotDotDotToken DotDotDotToken // Optional
-	name           IdentifierNode
-	questionToken  QuestionToken // Optional
-	typeField      TypeNode
+	dotDotDotToken nodeRef // DotDotDotToken. Optional
+	name           nodeRef // IdentifierNode
+	questionToken  nodeRef // QuestionToken. Optional
+	typeField      nodeRef // TypeNode
 }
 
 type NamedTupleMember struct{ Node }
 
-func (node NamedTupleMember) data() *namedTupleMemberData {
-	return (*namedTupleMemberData)(unsafe.Pointer(node.h))
+func (node NamedTupleMember) data() *namedTupleMemberData { return (*namedTupleMemberData)(node.rec()) }
+
+func (node NamedTupleMember) Symbol() *Symbol         { return node.data().symbol }
+func (node NamedTupleMember) SetSymbol(value *Symbol) { node.data().symbol = value }
+func (node NamedTupleMember) DotDotDotToken() DotDotDotToken {
+	return node.s.deref(node.data().dotDotDotToken)
 }
 
-func (node NamedTupleMember) Symbol() *Symbol                { return node.data().symbol }
-func (node NamedTupleMember) SetSymbol(value *Symbol)        { node.data().symbol = value }
-func (node NamedTupleMember) DotDotDotToken() DotDotDotToken { return node.data().dotDotDotToken }
 func (node NamedTupleMember) SetDotDotDotToken(value DotDotDotToken) {
-	node.data().dotDotDotToken = value
+	node.data().dotDotDotToken = node.s.ref(value)
 }
-func (node NamedTupleMember) Name() IdentifierNode         { return node.data().name }
-func (node NamedTupleMember) setName(value IdentifierNode) { node.data().name = value }
-func (node NamedTupleMember) QuestionToken() QuestionToken { return node.data().questionToken }
+func (node NamedTupleMember) Name() IdentifierNode         { return node.s.deref(node.data().name) }
+func (node NamedTupleMember) setName(value IdentifierNode) { node.data().name = node.s.ref(value) }
+func (node NamedTupleMember) QuestionToken() QuestionToken {
+	return node.s.deref(node.data().questionToken)
+}
 
-func (node NamedTupleMember) SetQuestionToken(value QuestionToken) { node.data().questionToken = value }
-func (node NamedTupleMember) Type() TypeNode                       { return node.data().typeField }
-func (node NamedTupleMember) SetType(value TypeNode)               { node.data().typeField = value }
+func (node NamedTupleMember) SetQuestionToken(value QuestionToken) {
+	node.data().questionToken = node.s.ref(value)
+}
+func (node NamedTupleMember) Type() TypeNode         { return node.s.deref(node.data().typeField) }
+func (node NamedTupleMember) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewNamedTupleMember(dotDotDotToken DotDotDotToken, name IdentifierNode, questionToken QuestionToken, typeNode TypeNode) Node {
-	data := &namedTupleMemberData{}
-	data.dotDotDotToken = dotDotDotToken
-	data.name = name
-	data.questionToken = questionToken
-	data.typeField = typeNode
-	return f.newNode(KindNamedTupleMember, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[namedTupleMemberData](s, layoutNamedTupleMember)
+	data.dotDotDotToken = s.ref(dotDotDotToken)
+	data.name = s.ref(name)
+	data.questionToken = s.ref(questionToken)
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindNamedTupleMember, layoutNamedTupleMember, i)
 }
 
 func (f *NodeFactory) UpdateNamedTupleMember(node NamedTupleMember, dotDotDotToken DotDotDotToken, name IdentifierNode, questionToken QuestionToken, typeNode TypeNode) Node {
@@ -9860,22 +11151,21 @@ func IsNamedTupleMember(node Node) bool {
 
 type optionalTypeNodeData struct {
 	typeNodeBaseData
-	typeField TypeNode
+	typeField nodeRef // TypeNode
 }
 
 type OptionalTypeNode struct{ Node }
 
-func (node OptionalTypeNode) data() *optionalTypeNodeData {
-	return (*optionalTypeNodeData)(unsafe.Pointer(node.h))
-}
+func (node OptionalTypeNode) data() *optionalTypeNodeData { return (*optionalTypeNodeData)(node.rec()) }
 
-func (node OptionalTypeNode) Type() TypeNode         { return node.data().typeField }
-func (node OptionalTypeNode) SetType(value TypeNode) { node.data().typeField = value }
+func (node OptionalTypeNode) Type() TypeNode         { return node.s.deref(node.data().typeField) }
+func (node OptionalTypeNode) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewOptionalTypeNode(typeNode TypeNode) Node {
-	data := &optionalTypeNodeData{}
-	data.typeField = typeNode
-	return f.newNode(KindOptionalType, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[optionalTypeNodeData](s, layoutOptionalTypeNode)
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindOptionalType, layoutOptionalTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateOptionalTypeNode(node OptionalTypeNode, typeNode TypeNode) Node {
@@ -9907,20 +11197,21 @@ func IsOptionalTypeNode(node Node) bool {
 
 type restTypeNodeData struct {
 	typeNodeBaseData
-	typeField TypeNode
+	typeField nodeRef // TypeNode
 }
 
 type RestTypeNode struct{ Node }
 
-func (node RestTypeNode) data() *restTypeNodeData { return (*restTypeNodeData)(unsafe.Pointer(node.h)) }
+func (node RestTypeNode) data() *restTypeNodeData { return (*restTypeNodeData)(node.rec()) }
 
-func (node RestTypeNode) Type() TypeNode         { return node.data().typeField }
-func (node RestTypeNode) SetType(value TypeNode) { node.data().typeField = value }
+func (node RestTypeNode) Type() TypeNode         { return node.s.deref(node.data().typeField) }
+func (node RestTypeNode) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewRestTypeNode(typeNode TypeNode) Node {
-	data := &restTypeNodeData{}
-	data.typeField = typeNode
-	return f.newNode(KindRestType, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[restTypeNodeData](s, layoutRestTypeNode)
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindRestType, layoutRestTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateRestTypeNode(node RestTypeNode, typeNode TypeNode) Node {
@@ -9952,22 +11243,24 @@ func IsRestTypeNode(node Node) bool {
 
 type parenthesizedTypeNodeData struct {
 	typeNodeBaseData
-	typeField TypeNode
+	typeField nodeRef // TypeNode
 }
 
 type ParenthesizedTypeNode struct{ Node }
 
 func (node ParenthesizedTypeNode) data() *parenthesizedTypeNodeData {
-	return (*parenthesizedTypeNodeData)(unsafe.Pointer(node.h))
+	return (*parenthesizedTypeNodeData)(node.rec())
 }
 
-func (node ParenthesizedTypeNode) Type() TypeNode         { return node.data().typeField }
-func (node ParenthesizedTypeNode) SetType(value TypeNode) { node.data().typeField = value }
+func (node ParenthesizedTypeNode) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node ParenthesizedTypeNode) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewParenthesizedTypeNode(typeNode TypeNode) Node {
-	data := f.parenthesizedTypeNodeArena.New()
-	data.typeField = typeNode
-	return f.newNode(KindParenthesizedType, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[parenthesizedTypeNodeData](s, layoutParenthesizedTypeNode)
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindParenthesizedType, layoutParenthesizedTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateParenthesizedTypeNode(node ParenthesizedTypeNode, typeNode TypeNode) Node {
@@ -10003,9 +11296,7 @@ type functionTypeNodeData struct {
 
 type FunctionTypeNode struct{ Node }
 
-func (node FunctionTypeNode) data() *functionTypeNodeData {
-	return (*functionTypeNodeData)(unsafe.Pointer(node.h))
-}
+func (node FunctionTypeNode) data() *functionTypeNodeData { return (*functionTypeNodeData)(node.rec()) }
 
 func (node FunctionTypeNode) Symbol() *Symbol                  { return node.data().symbol }
 func (node FunctionTypeNode) SetSymbol(value *Symbol)          { node.data().symbol = value }
@@ -10013,9 +11304,11 @@ func (node FunctionTypeNode) Modifiers() *ModifierList         { return node.dat
 func (node FunctionTypeNode) setModifiers(value *ModifierList) { node.data().modifiers = value }
 func (node FunctionTypeNode) Locals() SymbolTable              { return node.data().locals }
 func (node FunctionTypeNode) SetLocals(value SymbolTable)      { node.data().locals = value }
-func (node FunctionTypeNode) NextContainer() Node              { return node.data().nextContainer }
+func (node FunctionTypeNode) NextContainer() Node              { return node.s.deref(node.data().nextContainer) }
 
-func (node FunctionTypeNode) SetNextContainer(value Node) { node.data().nextContainer = value }
+func (node FunctionTypeNode) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
 
 func (node FunctionTypeNode) TypeParameters() *TypeParameterList { return node.data().typeParameters }
 
@@ -10024,18 +11317,23 @@ func (node FunctionTypeNode) SetTypeParameters(value *TypeParameterList) {
 }
 func (node FunctionTypeNode) Parameters() *ParameterList         { return node.data().parameters }
 func (node FunctionTypeNode) SetParameters(value *ParameterList) { node.data().parameters = value }
-func (node FunctionTypeNode) Type() TypeNode                     { return node.data().typeField }
-func (node FunctionTypeNode) SetType(value TypeNode)             { node.data().typeField = value }
-func (node FunctionTypeNode) FullSignature() TypeNode            { return node.data().fullSignature }
+func (node FunctionTypeNode) Type() TypeNode                     { return node.s.deref(node.data().typeField) }
 
-func (node FunctionTypeNode) SetFullSignature(value TypeNode) { node.data().fullSignature = value }
+func (node FunctionTypeNode) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node FunctionTypeNode) FullSignature() TypeNode { return node.s.deref(node.data().fullSignature) }
+
+func (node FunctionTypeNode) SetFullSignature(value TypeNode) {
+	node.data().fullSignature = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewFunctionTypeNode(typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
-	data := f.functionTypeNodeArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[functionTypeNodeData](s, layoutFunctionTypeNode)
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	return f.newNode(KindFunctionType, data.asNode())
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindFunctionType, layoutFunctionTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateFunctionTypeNode(node FunctionTypeNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -10072,7 +11370,7 @@ type constructorTypeNodeData struct {
 type ConstructorTypeNode struct{ Node }
 
 func (node ConstructorTypeNode) data() *constructorTypeNodeData {
-	return (*constructorTypeNodeData)(unsafe.Pointer(node.h))
+	return (*constructorTypeNodeData)(node.rec())
 }
 
 func (node ConstructorTypeNode) Symbol() *Symbol                  { return node.data().symbol }
@@ -10081,9 +11379,11 @@ func (node ConstructorTypeNode) Modifiers() *ModifierList         { return node.
 func (node ConstructorTypeNode) setModifiers(value *ModifierList) { node.data().modifiers = value }
 func (node ConstructorTypeNode) Locals() SymbolTable              { return node.data().locals }
 func (node ConstructorTypeNode) SetLocals(value SymbolTable)      { node.data().locals = value }
-func (node ConstructorTypeNode) NextContainer() Node              { return node.data().nextContainer }
+func (node ConstructorTypeNode) NextContainer() Node              { return node.s.deref(node.data().nextContainer) }
 
-func (node ConstructorTypeNode) SetNextContainer(value Node) { node.data().nextContainer = value }
+func (node ConstructorTypeNode) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
 
 func (node ConstructorTypeNode) TypeParameters() *TypeParameterList {
 	return node.data().typeParameters
@@ -10096,20 +11396,27 @@ func (node ConstructorTypeNode) SetTypeParameters(value *TypeParameterList) {
 func (node ConstructorTypeNode) Parameters() *ParameterList { return node.data().parameters }
 
 func (node ConstructorTypeNode) SetParameters(value *ParameterList) { node.data().parameters = value }
-func (node ConstructorTypeNode) Type() TypeNode                     { return node.data().typeField }
-func (node ConstructorTypeNode) SetType(value TypeNode)             { node.data().typeField = value }
 
-func (node ConstructorTypeNode) FullSignature() TypeNode { return node.data().fullSignature }
+func (node ConstructorTypeNode) Type() TypeNode { return node.s.deref(node.data().typeField) }
 
-func (node ConstructorTypeNode) SetFullSignature(value TypeNode) { node.data().fullSignature = value }
+func (node ConstructorTypeNode) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node ConstructorTypeNode) FullSignature() TypeNode {
+	return node.s.deref(node.data().fullSignature)
+}
+
+func (node ConstructorTypeNode) SetFullSignature(value TypeNode) {
+	node.data().fullSignature = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewConstructorTypeNode(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
-	data := &constructorTypeNodeData{}
+	s := f.nodeStore()
+	data, i := newRecord[constructorTypeNodeData](s, layoutConstructorTypeNode)
 	data.modifiers = modifiers
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	return f.newNode(KindConstructorType, data.asNode())
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindConstructorType, layoutConstructorTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateConstructorTypeNode(node ConstructorTypeNode, modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -10149,7 +11456,7 @@ type templateHeadData struct {
 
 type TemplateHead struct{ Node }
 
-func (node TemplateHead) data() *templateHeadData { return (*templateHeadData)(unsafe.Pointer(node.h)) }
+func (node TemplateHead) data() *templateHeadData { return (*templateHeadData)(node.rec()) }
 
 func (node TemplateHead) Text() string                      { return node.data().text }
 func (node TemplateHead) SetText(value string)              { node.data().text = value }
@@ -10161,12 +11468,12 @@ func (node TemplateHead) TemplateFlags() TokenFlags         { return node.data()
 func (node TemplateHead) SetTemplateFlags(value TokenFlags) { node.data().templateFlags = value }
 
 func (f *NodeFactory) NewTemplateHead(text string, rawText string, templateFlags TokenFlags) Node {
-	data := &templateHeadData{}
+	data, i := newRecord[templateHeadData](f.nodeStore(), layoutTemplateHead)
 	data.text = text
 	data.rawText = rawText
 	data.templateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
-	return f.newNode(KindTemplateHead, data.asNode())
+	return f.newNode(KindTemplateHead, layoutTemplateHead, i)
 }
 
 func (node TemplateHead) Clone(f NodeFactoryCoercible) Node {
@@ -10188,9 +11495,7 @@ type templateMiddleData struct {
 
 type TemplateMiddle struct{ Node }
 
-func (node TemplateMiddle) data() *templateMiddleData {
-	return (*templateMiddleData)(unsafe.Pointer(node.h))
-}
+func (node TemplateMiddle) data() *templateMiddleData { return (*templateMiddleData)(node.rec()) }
 
 func (node TemplateMiddle) Text() string                      { return node.data().text }
 func (node TemplateMiddle) SetText(value string)              { node.data().text = value }
@@ -10202,12 +11507,12 @@ func (node TemplateMiddle) TemplateFlags() TokenFlags         { return node.data
 func (node TemplateMiddle) SetTemplateFlags(value TokenFlags) { node.data().templateFlags = value }
 
 func (f *NodeFactory) NewTemplateMiddle(text string, rawText string, templateFlags TokenFlags) Node {
-	data := &templateMiddleData{}
+	data, i := newRecord[templateMiddleData](f.nodeStore(), layoutTemplateMiddle)
 	data.text = text
 	data.rawText = rawText
 	data.templateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
-	return f.newNode(KindTemplateMiddle, data.asNode())
+	return f.newNode(KindTemplateMiddle, layoutTemplateMiddle, i)
 }
 
 func (node TemplateMiddle) Clone(f NodeFactoryCoercible) Node {
@@ -10229,7 +11534,7 @@ type templateTailData struct {
 
 type TemplateTail struct{ Node }
 
-func (node TemplateTail) data() *templateTailData { return (*templateTailData)(unsafe.Pointer(node.h)) }
+func (node TemplateTail) data() *templateTailData { return (*templateTailData)(node.rec()) }
 
 func (node TemplateTail) Text() string                      { return node.data().text }
 func (node TemplateTail) SetText(value string)              { node.data().text = value }
@@ -10241,12 +11546,12 @@ func (node TemplateTail) TemplateFlags() TokenFlags         { return node.data()
 func (node TemplateTail) SetTemplateFlags(value TokenFlags) { node.data().templateFlags = value }
 
 func (f *NodeFactory) NewTemplateTail(text string, rawText string, templateFlags TokenFlags) Node {
-	data := &templateTailData{}
+	data, i := newRecord[templateTailData](f.nodeStore(), layoutTemplateTail)
 	data.text = text
 	data.rawText = rawText
 	data.templateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
-	return f.newNode(KindTemplateTail, data.asNode())
+	return f.newNode(KindTemplateTail, layoutTemplateTail, i)
 }
 
 func (node TemplateTail) Clone(f NodeFactoryCoercible) Node {
@@ -10263,18 +11568,22 @@ func IsTemplateTail(node Node) bool {
 
 type templateLiteralTypeNodeData struct {
 	typeNodeBaseData
-	head          TemplateHeadNode
+	head          nodeRef // TemplateHeadNode
 	templateSpans *TemplateLiteralTypeSpanList
 }
 
 type TemplateLiteralTypeNode struct{ Node }
 
 func (node TemplateLiteralTypeNode) data() *templateLiteralTypeNodeData {
-	return (*templateLiteralTypeNodeData)(unsafe.Pointer(node.h))
+	return (*templateLiteralTypeNodeData)(node.rec())
 }
 
-func (node TemplateLiteralTypeNode) Head() TemplateHeadNode         { return node.data().head }
-func (node TemplateLiteralTypeNode) SetHead(value TemplateHeadNode) { node.data().head = value }
+func (node TemplateLiteralTypeNode) Head() TemplateHeadNode { return node.s.deref(node.data().head) }
+
+func (node TemplateLiteralTypeNode) SetHead(value TemplateHeadNode) {
+	node.data().head = node.s.ref(value)
+}
+
 func (node TemplateLiteralTypeNode) TemplateSpans() *TemplateLiteralTypeSpanList {
 	return node.data().templateSpans
 }
@@ -10284,10 +11593,11 @@ func (node TemplateLiteralTypeNode) SetTemplateSpans(value *TemplateLiteralTypeS
 }
 
 func (f *NodeFactory) NewTemplateLiteralTypeNode(head TemplateHeadNode, templateSpans *TemplateLiteralTypeSpanList) Node {
-	data := &templateLiteralTypeNodeData{}
-	data.head = head
+	s := f.nodeStore()
+	data, i := newRecord[templateLiteralTypeNodeData](s, layoutTemplateLiteralTypeNode)
+	data.head = s.ref(head)
 	data.templateSpans = templateSpans
-	return f.newNode(KindTemplateLiteralType, data.asNode())
+	return f.newNode(KindTemplateLiteralType, layoutTemplateLiteralTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateTemplateLiteralTypeNode(node TemplateLiteralTypeNode, head TemplateHeadNode, templateSpans *TemplateLiteralTypeSpanList) Node {
@@ -10319,28 +11629,35 @@ func IsTemplateLiteralTypeNode(node Node) bool {
 
 type templateLiteralTypeSpanData struct {
 	typeNodeBaseData
-	typeField TypeNode
-	literal   TemplateMiddleOrTail
+	typeField nodeRef // TypeNode
+	literal   nodeRef // TemplateMiddleOrTail
 }
 
 type TemplateLiteralTypeSpan struct{ Node }
 
 func (node TemplateLiteralTypeSpan) data() *templateLiteralTypeSpanData {
-	return (*templateLiteralTypeSpanData)(unsafe.Pointer(node.h))
+	return (*templateLiteralTypeSpanData)(node.rec())
 }
 
-func (node TemplateLiteralTypeSpan) Type() TypeNode                { return node.data().typeField }
-func (node TemplateLiteralTypeSpan) SetType(value TypeNode)        { node.data().typeField = value }
-func (node TemplateLiteralTypeSpan) Literal() TemplateMiddleOrTail { return node.data().literal }
+func (node TemplateLiteralTypeSpan) Type() TypeNode { return node.s.deref(node.data().typeField) }
+func (node TemplateLiteralTypeSpan) SetType(value TypeNode) {
+	node.data().typeField = node.s.ref(value)
+}
+
+func (node TemplateLiteralTypeSpan) Literal() TemplateMiddleOrTail {
+	return node.s.deref(node.data().literal)
+}
+
 func (node TemplateLiteralTypeSpan) SetLiteral(value TemplateMiddleOrTail) {
-	node.data().literal = value
+	node.data().literal = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewTemplateLiteralTypeSpan(typeNode TypeNode, literal TemplateMiddleOrTail) Node {
-	data := &templateLiteralTypeSpanData{}
-	data.typeField = typeNode
-	data.literal = literal
-	return f.newNode(KindTemplateLiteralTypeSpan, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[templateLiteralTypeSpanData](s, layoutTemplateLiteralTypeSpan)
+	data.typeField = s.ref(typeNode)
+	data.literal = s.ref(literal)
+	return f.newNode(KindTemplateLiteralTypeSpan, layoutTemplateLiteralTypeSpan, i)
 }
 
 func (f *NodeFactory) UpdateTemplateLiteralTypeSpan(node TemplateLiteralTypeSpan, typeNode TypeNode, literal TemplateMiddleOrTail) Node {
@@ -10374,29 +11691,34 @@ type syntheticExpressionData struct {
 	expressionBaseData
 	typeField       any
 	isSpread        bool
-	tupleNameSource Node // Optional
+	tupleNameSource nodeRef // Node. Optional
 }
 
 type SyntheticExpression struct{ Node }
 
 func (node SyntheticExpression) data() *syntheticExpressionData {
-	return (*syntheticExpressionData)(unsafe.Pointer(node.h))
+	return (*syntheticExpressionData)(node.rec())
 }
 
 func (node SyntheticExpression) Type() any              { return node.data().typeField }
 func (node SyntheticExpression) SetType(value any)      { node.data().typeField = value }
 func (node SyntheticExpression) IsSpread() bool         { return node.data().isSpread }
 func (node SyntheticExpression) SetIsSpread(value bool) { node.data().isSpread = value }
-func (node SyntheticExpression) TupleNameSource() Node  { return node.data().tupleNameSource }
+func (node SyntheticExpression) TupleNameSource() Node {
+	return node.s.deref(node.data().tupleNameSource)
+}
 
-func (node SyntheticExpression) SetTupleNameSource(value Node) { node.data().tupleNameSource = value }
+func (node SyntheticExpression) SetTupleNameSource(value Node) {
+	node.data().tupleNameSource = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewSyntheticExpression(typeNode any, isSpread bool, tupleNameSource Node) Node {
-	data := &syntheticExpressionData{}
+	s := f.nodeStore()
+	data, i := newRecord[syntheticExpressionData](s, layoutSyntheticExpression)
 	data.typeField = typeNode
 	data.isSpread = isSpread
-	data.tupleNameSource = tupleNameSource
-	return f.newNode(KindSyntheticExpression, data.asNode())
+	data.tupleNameSource = s.ref(tupleNameSource)
+	return f.newNode(KindSyntheticExpression, layoutSyntheticExpression, i)
 }
 
 func (f *NodeFactory) UpdateSyntheticExpression(node SyntheticExpression, typeNode any, isSpread bool, tupleNameSource Node) Node {
@@ -10428,24 +11750,28 @@ func IsSyntheticExpression(node Node) bool {
 
 type partiallyEmittedExpressionData struct {
 	leftHandSideExpressionBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type PartiallyEmittedExpression struct{ Node }
 
 func (node PartiallyEmittedExpression) data() *partiallyEmittedExpressionData {
-	return (*partiallyEmittedExpressionData)(unsafe.Pointer(node.h))
+	return (*partiallyEmittedExpressionData)(node.rec())
 }
 
-func (node PartiallyEmittedExpression) Expression() Expression { return node.data().expression }
+func (node PartiallyEmittedExpression) Expression() Expression {
+	return node.s.deref(node.data().expression)
+}
+
 func (node PartiallyEmittedExpression) SetExpression(value Expression) {
-	node.data().expression = value
+	node.data().expression = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewPartiallyEmittedExpression(expression Expression) Node {
-	data := &partiallyEmittedExpressionData{}
-	data.expression = expression
-	return f.newNode(KindPartiallyEmittedExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[partiallyEmittedExpressionData](s, layoutPartiallyEmittedExpression)
+	data.expression = s.ref(expression)
+	return f.newNode(KindPartiallyEmittedExpression, layoutPartiallyEmittedExpression, i)
 }
 
 func (f *NodeFactory) UpdatePartiallyEmittedExpression(node PartiallyEmittedExpression, expression Expression) Node {
@@ -10482,32 +11808,39 @@ func IsPartiallyEmittedExpression(node Node) bool {
 type jsxElementData struct {
 	primaryExpressionBaseData
 	compositeBaseData
-	openingElement JsxOpeningElementNode
+	openingElement nodeRef // JsxOpeningElementNode
 	children       *JsxChildList
-	closingElement JsxClosingElementNode
+	closingElement nodeRef // JsxClosingElementNode
 }
 
 type JsxElement struct{ Node }
 
-func (node JsxElement) data() *jsxElementData { return (*jsxElementData)(unsafe.Pointer(node.h)) }
+func (node JsxElement) data() *jsxElementData { return (*jsxElementData)(node.rec()) }
 
-func (node JsxElement) OpeningElement() JsxOpeningElementNode { return node.data().openingElement }
-func (node JsxElement) SetOpeningElement(value JsxOpeningElementNode) {
-	node.data().openingElement = value
+func (node JsxElement) OpeningElement() JsxOpeningElementNode {
+	return node.s.deref(node.data().openingElement)
 }
-func (node JsxElement) Children() *JsxChildList               { return node.data().children }
-func (node JsxElement) SetChildren(value *JsxChildList)       { node.data().children = value }
-func (node JsxElement) ClosingElement() JsxClosingElementNode { return node.data().closingElement }
+
+func (node JsxElement) SetOpeningElement(value JsxOpeningElementNode) {
+	node.data().openingElement = node.s.ref(value)
+}
+func (node JsxElement) Children() *JsxChildList         { return node.data().children }
+func (node JsxElement) SetChildren(value *JsxChildList) { node.data().children = value }
+func (node JsxElement) ClosingElement() JsxClosingElementNode {
+	return node.s.deref(node.data().closingElement)
+}
+
 func (node JsxElement) SetClosingElement(value JsxClosingElementNode) {
-	node.data().closingElement = value
+	node.data().closingElement = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewJsxElement(openingElement JsxOpeningElementNode, children *JsxChildList, closingElement JsxClosingElementNode) Node {
-	data := &jsxElementData{}
-	data.openingElement = openingElement
+	s := f.nodeStore()
+	data, i := newRecord[jsxElementData](s, layoutJsxElement)
+	data.openingElement = s.ref(openingElement)
 	data.children = children
-	data.closingElement = closingElement
-	return f.newNode(KindJsxElement, data.asNode())
+	data.closingElement = s.ref(closingElement)
+	return f.newNode(KindJsxElement, layoutJsxElement, i)
 }
 
 func (f *NodeFactory) UpdateJsxElement(node JsxElement, openingElement JsxOpeningElementNode, children *JsxChildList, closingElement JsxClosingElementNode) Node {
@@ -10546,9 +11879,7 @@ type jsxAttributesData struct {
 
 type JsxAttributes struct{ Node }
 
-func (node JsxAttributes) data() *jsxAttributesData {
-	return (*jsxAttributesData)(unsafe.Pointer(node.h))
-}
+func (node JsxAttributes) data() *jsxAttributesData { return (*jsxAttributesData)(node.rec()) }
 
 func (node JsxAttributes) Symbol() *Symbol                       { return node.data().symbol }
 func (node JsxAttributes) SetSymbol(value *Symbol)               { node.data().symbol = value }
@@ -10556,9 +11887,9 @@ func (node JsxAttributes) Properties() *JsxAttributeList         { return node.d
 func (node JsxAttributes) SetProperties(value *JsxAttributeList) { node.data().properties = value }
 
 func (f *NodeFactory) NewJsxAttributes(properties *JsxAttributeList) Node {
-	data := &jsxAttributesData{}
+	data, i := newRecord[jsxAttributesData](f.nodeStore(), layoutJsxAttributes)
 	data.properties = properties
-	return f.newNode(KindJsxAttributes, data.asNode())
+	return f.newNode(KindJsxAttributes, layoutJsxAttributes, i)
 }
 
 func (f *NodeFactory) UpdateJsxAttributes(node JsxAttributes, properties *JsxAttributeList) Node {
@@ -10591,26 +11922,31 @@ func IsJsxAttributes(node Node) bool {
 type jsxNamespacedNameData struct {
 	expressionBaseData
 	compositeBaseData
-	namespace IdentifierNode
-	name      IdentifierNode
+	namespace nodeRef // IdentifierNode
+	name      nodeRef // IdentifierNode
 }
 
 type JsxNamespacedName struct{ Node }
 
 func (node JsxNamespacedName) data() *jsxNamespacedNameData {
-	return (*jsxNamespacedNameData)(unsafe.Pointer(node.h))
+	return (*jsxNamespacedNameData)(node.rec())
 }
 
-func (node JsxNamespacedName) Namespace() IdentifierNode         { return node.data().namespace }
-func (node JsxNamespacedName) SetNamespace(value IdentifierNode) { node.data().namespace = value }
-func (node JsxNamespacedName) Name() IdentifierNode              { return node.data().name }
-func (node JsxNamespacedName) setName(value IdentifierNode)      { node.data().name = value }
+func (node JsxNamespacedName) Namespace() IdentifierNode { return node.s.deref(node.data().namespace) }
+
+func (node JsxNamespacedName) SetNamespace(value IdentifierNode) {
+	node.data().namespace = node.s.ref(value)
+}
+
+func (node JsxNamespacedName) Name() IdentifierNode         { return node.s.deref(node.data().name) }
+func (node JsxNamespacedName) setName(value IdentifierNode) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewJsxNamespacedName(namespace IdentifierNode, name IdentifierNode) Node {
-	data := &jsxNamespacedNameData{}
-	data.namespace = namespace
-	data.name = name
-	return f.newNode(KindJsxNamespacedName, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[jsxNamespacedNameData](s, layoutJsxNamespacedName)
+	data.namespace = s.ref(namespace)
+	data.name = s.ref(name)
+	return f.newNode(KindJsxNamespacedName, layoutJsxNamespacedName, i)
 }
 
 func (f *NodeFactory) UpdateJsxNamespacedName(node JsxNamespacedName, namespace IdentifierNode, name IdentifierNode) Node {
@@ -10643,33 +11979,42 @@ func IsJsxNamespacedName(node Node) bool {
 type jsxOpeningElementData struct {
 	expressionBaseData
 	compositeBaseData
-	tagName       JsxTagNameExpression
+	tagName       nodeRef   // JsxTagNameExpression
 	typeArguments *TypeList // Optional
-	attributes    JsxAttributesNode
+	attributes    nodeRef   // JsxAttributesNode
 }
 
 type JsxOpeningElement struct{ Node }
 
 func (node JsxOpeningElement) data() *jsxOpeningElementData {
-	return (*jsxOpeningElementData)(unsafe.Pointer(node.h))
+	return (*jsxOpeningElementData)(node.rec())
 }
 
-func (node JsxOpeningElement) TagName() JsxTagNameExpression         { return node.data().tagName }
-func (node JsxOpeningElement) SetTagName(value JsxTagNameExpression) { node.data().tagName = value }
-func (node JsxOpeningElement) TypeArguments() *TypeList              { return node.data().typeArguments }
+func (node JsxOpeningElement) TagName() JsxTagNameExpression {
+	return node.s.deref(node.data().tagName)
+}
 
+func (node JsxOpeningElement) SetTagName(value JsxTagNameExpression) {
+	node.data().tagName = node.s.ref(value)
+}
+func (node JsxOpeningElement) TypeArguments() *TypeList         { return node.data().typeArguments }
 func (node JsxOpeningElement) SetTypeArguments(value *TypeList) { node.data().typeArguments = value }
 
-func (node JsxOpeningElement) Attributes() JsxAttributesNode { return node.data().attributes }
+func (node JsxOpeningElement) Attributes() JsxAttributesNode {
+	return node.s.deref(node.data().attributes)
+}
 
-func (node JsxOpeningElement) SetAttributes(value JsxAttributesNode) { node.data().attributes = value }
+func (node JsxOpeningElement) SetAttributes(value JsxAttributesNode) {
+	node.data().attributes = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewJsxOpeningElement(tagName JsxTagNameExpression, typeArguments *TypeList, attributes JsxAttributesNode) Node {
-	data := &jsxOpeningElementData{}
-	data.tagName = tagName
+	s := f.nodeStore()
+	data, i := newRecord[jsxOpeningElementData](s, layoutJsxOpeningElement)
+	data.tagName = s.ref(tagName)
 	data.typeArguments = typeArguments
-	data.attributes = attributes
-	return f.newNode(KindJsxOpeningElement, data.asNode())
+	data.attributes = s.ref(attributes)
+	return f.newNode(KindJsxOpeningElement, layoutJsxOpeningElement, i)
 }
 
 func (f *NodeFactory) UpdateJsxOpeningElement(node JsxOpeningElement, tagName JsxTagNameExpression, typeArguments *TypeList, attributes JsxAttributesNode) Node {
@@ -10702,37 +12047,44 @@ func IsJsxOpeningElement(node Node) bool {
 type jsxSelfClosingElementData struct {
 	primaryExpressionBaseData
 	compositeBaseData
-	tagName       JsxTagNameExpression
+	tagName       nodeRef   // JsxTagNameExpression
 	typeArguments *TypeList // Optional
-	attributes    JsxAttributesNode
+	attributes    nodeRef   // JsxAttributesNode
 }
 
 type JsxSelfClosingElement struct{ Node }
 
 func (node JsxSelfClosingElement) data() *jsxSelfClosingElementData {
-	return (*jsxSelfClosingElementData)(unsafe.Pointer(node.h))
+	return (*jsxSelfClosingElementData)(node.rec())
 }
 
-func (node JsxSelfClosingElement) TagName() JsxTagNameExpression { return node.data().tagName }
+func (node JsxSelfClosingElement) TagName() JsxTagNameExpression {
+	return node.s.deref(node.data().tagName)
+}
 
-func (node JsxSelfClosingElement) SetTagName(value JsxTagNameExpression) { node.data().tagName = value }
-
+func (node JsxSelfClosingElement) SetTagName(value JsxTagNameExpression) {
+	node.data().tagName = node.s.ref(value)
+}
 func (node JsxSelfClosingElement) TypeArguments() *TypeList { return node.data().typeArguments }
-
 func (node JsxSelfClosingElement) SetTypeArguments(value *TypeList) {
 	node.data().typeArguments = value
 }
-func (node JsxSelfClosingElement) Attributes() JsxAttributesNode { return node.data().attributes }
+
+func (node JsxSelfClosingElement) Attributes() JsxAttributesNode {
+	return node.s.deref(node.data().attributes)
+}
+
 func (node JsxSelfClosingElement) SetAttributes(value JsxAttributesNode) {
-	node.data().attributes = value
+	node.data().attributes = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewJsxSelfClosingElement(tagName JsxTagNameExpression, typeArguments *TypeList, attributes JsxAttributesNode) Node {
-	data := &jsxSelfClosingElementData{}
-	data.tagName = tagName
+	s := f.nodeStore()
+	data, i := newRecord[jsxSelfClosingElementData](s, layoutJsxSelfClosingElement)
+	data.tagName = s.ref(tagName)
 	data.typeArguments = typeArguments
-	data.attributes = attributes
-	return f.newNode(KindJsxSelfClosingElement, data.asNode())
+	data.attributes = s.ref(attributes)
+	return f.newNode(KindJsxSelfClosingElement, layoutJsxSelfClosingElement, i)
 }
 
 func (f *NodeFactory) UpdateJsxSelfClosingElement(node JsxSelfClosingElement, tagName JsxTagNameExpression, typeArguments *TypeList, attributes JsxAttributesNode) Node {
@@ -10765,34 +12117,39 @@ func IsJsxSelfClosingElement(node Node) bool {
 type jsxFragmentData struct {
 	primaryExpressionBaseData
 	compositeBaseData
-	openingFragment JsxOpeningFragmentNode
+	openingFragment nodeRef // JsxOpeningFragmentNode
 	children        *JsxChildList
-	closingFragment JsxClosingFragmentNode
+	closingFragment nodeRef // JsxClosingFragmentNode
 }
 
 type JsxFragment struct{ Node }
 
-func (node JsxFragment) data() *jsxFragmentData { return (*jsxFragmentData)(unsafe.Pointer(node.h)) }
+func (node JsxFragment) data() *jsxFragmentData { return (*jsxFragmentData)(node.rec()) }
 
-func (node JsxFragment) OpeningFragment() JsxOpeningFragmentNode { return node.data().openingFragment }
+func (node JsxFragment) OpeningFragment() JsxOpeningFragmentNode {
+	return node.s.deref(node.data().openingFragment)
+}
 
 func (node JsxFragment) SetOpeningFragment(value JsxOpeningFragmentNode) {
-	node.data().openingFragment = value
+	node.data().openingFragment = node.s.ref(value)
 }
-func (node JsxFragment) Children() *JsxChildList                 { return node.data().children }
-func (node JsxFragment) SetChildren(value *JsxChildList)         { node.data().children = value }
-func (node JsxFragment) ClosingFragment() JsxClosingFragmentNode { return node.data().closingFragment }
+func (node JsxFragment) Children() *JsxChildList         { return node.data().children }
+func (node JsxFragment) SetChildren(value *JsxChildList) { node.data().children = value }
+func (node JsxFragment) ClosingFragment() JsxClosingFragmentNode {
+	return node.s.deref(node.data().closingFragment)
+}
 
 func (node JsxFragment) SetClosingFragment(value JsxClosingFragmentNode) {
-	node.data().closingFragment = value
+	node.data().closingFragment = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewJsxFragment(openingFragment JsxOpeningFragmentNode, children *JsxChildList, closingFragment JsxClosingFragmentNode) Node {
-	data := &jsxFragmentData{}
-	data.openingFragment = openingFragment
+	s := f.nodeStore()
+	data, i := newRecord[jsxFragmentData](s, layoutJsxFragment)
+	data.openingFragment = s.ref(openingFragment)
 	data.children = children
-	data.closingFragment = closingFragment
-	return f.newNode(KindJsxFragment, data.asNode())
+	data.closingFragment = s.ref(closingFragment)
+	return f.newNode(KindJsxFragment, layoutJsxFragment, i)
 }
 
 func (f *NodeFactory) UpdateJsxFragment(node JsxFragment, openingFragment JsxOpeningFragmentNode, children *JsxChildList, closingFragment JsxClosingFragmentNode) Node {
@@ -10829,12 +12186,12 @@ type jsxOpeningFragmentData struct {
 type JsxOpeningFragment struct{ Node }
 
 func (node JsxOpeningFragment) data() *jsxOpeningFragmentData {
-	return (*jsxOpeningFragmentData)(unsafe.Pointer(node.h))
+	return (*jsxOpeningFragmentData)(node.rec())
 }
 
 func (f *NodeFactory) NewJsxOpeningFragment() Node {
-	data := &jsxOpeningFragmentData{}
-	return f.newNode(KindJsxOpeningFragment, data.asNode())
+	_, i := newRecord[jsxOpeningFragmentData](f.nodeStore(), layoutJsxOpeningFragment)
+	return f.newNode(KindJsxOpeningFragment, layoutJsxOpeningFragment, i)
 }
 
 func (node JsxOpeningFragment) Clone(f NodeFactoryCoercible) Node {
@@ -10856,12 +12213,12 @@ type jsxClosingFragmentData struct {
 type JsxClosingFragment struct{ Node }
 
 func (node JsxClosingFragment) data() *jsxClosingFragmentData {
-	return (*jsxClosingFragmentData)(unsafe.Pointer(node.h))
+	return (*jsxClosingFragmentData)(node.rec())
 }
 
 func (f *NodeFactory) NewJsxClosingFragment() Node {
-	data := &jsxClosingFragmentData{}
-	return f.newNode(KindJsxClosingFragment, data.asNode())
+	_, i := newRecord[jsxClosingFragmentData](f.nodeStore(), layoutJsxClosingFragment)
+	return f.newNode(KindJsxClosingFragment, layoutJsxClosingFragment, i)
 }
 
 func (node JsxClosingFragment) Clone(f NodeFactoryCoercible) Node {
@@ -10880,26 +12237,32 @@ type jsxAttributeData struct {
 	nodeBaseData
 	declarationBaseData
 	compositeBaseData
-	name        JsxAttributeName
-	initializer JsxAttributeValue // Optional
+	name        nodeRef // JsxAttributeName
+	initializer nodeRef // JsxAttributeValue. Optional
 }
 
 type JsxAttribute struct{ Node }
 
-func (node JsxAttribute) data() *jsxAttributeData { return (*jsxAttributeData)(unsafe.Pointer(node.h)) }
+func (node JsxAttribute) data() *jsxAttributeData { return (*jsxAttributeData)(node.rec()) }
 
-func (node JsxAttribute) Symbol() *Symbol                        { return node.data().symbol }
-func (node JsxAttribute) SetSymbol(value *Symbol)                { node.data().symbol = value }
-func (node JsxAttribute) Name() JsxAttributeName                 { return node.data().name }
-func (node JsxAttribute) setName(value JsxAttributeName)         { node.data().name = value }
-func (node JsxAttribute) Initializer() JsxAttributeValue         { return node.data().initializer }
-func (node JsxAttribute) SetInitializer(value JsxAttributeValue) { node.data().initializer = value }
+func (node JsxAttribute) Symbol() *Symbol                { return node.data().symbol }
+func (node JsxAttribute) SetSymbol(value *Symbol)        { node.data().symbol = value }
+func (node JsxAttribute) Name() JsxAttributeName         { return node.s.deref(node.data().name) }
+func (node JsxAttribute) setName(value JsxAttributeName) { node.data().name = node.s.ref(value) }
+func (node JsxAttribute) Initializer() JsxAttributeValue {
+	return node.s.deref(node.data().initializer)
+}
+
+func (node JsxAttribute) SetInitializer(value JsxAttributeValue) {
+	node.data().initializer = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewJsxAttribute(name JsxAttributeName, initializer JsxAttributeValue) Node {
-	data := &jsxAttributeData{}
-	data.name = name
-	data.initializer = initializer
-	return f.newNode(KindJsxAttribute, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[jsxAttributeData](s, layoutJsxAttribute)
+	data.name = s.ref(name)
+	data.initializer = s.ref(initializer)
+	return f.newNode(KindJsxAttribute, layoutJsxAttribute, i)
 }
 
 func (f *NodeFactory) UpdateJsxAttribute(node JsxAttribute, name JsxAttributeName, initializer JsxAttributeValue) Node {
@@ -10933,24 +12296,28 @@ type jsxSpreadAttributeData struct {
 	objectLiteralElementBaseData
 	nodeBaseData
 	declarationBaseData
-	expression Expression
+	expression nodeRef // Expression
 }
 
 type JsxSpreadAttribute struct{ Node }
 
 func (node JsxSpreadAttribute) data() *jsxSpreadAttributeData {
-	return (*jsxSpreadAttributeData)(unsafe.Pointer(node.h))
+	return (*jsxSpreadAttributeData)(node.rec())
 }
 
-func (node JsxSpreadAttribute) Symbol() *Symbol                { return node.data().symbol }
-func (node JsxSpreadAttribute) SetSymbol(value *Symbol)        { node.data().symbol = value }
-func (node JsxSpreadAttribute) Expression() Expression         { return node.data().expression }
-func (node JsxSpreadAttribute) SetExpression(value Expression) { node.data().expression = value }
+func (node JsxSpreadAttribute) Symbol() *Symbol         { return node.data().symbol }
+func (node JsxSpreadAttribute) SetSymbol(value *Symbol) { node.data().symbol = value }
+func (node JsxSpreadAttribute) Expression() Expression  { return node.s.deref(node.data().expression) }
+
+func (node JsxSpreadAttribute) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewJsxSpreadAttribute(expression Expression) Node {
-	data := &jsxSpreadAttributeData{}
-	data.expression = expression
-	return f.newNode(KindJsxSpreadAttribute, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[jsxSpreadAttributeData](s, layoutJsxSpreadAttribute)
+	data.expression = s.ref(expression)
+	return f.newNode(KindJsxSpreadAttribute, layoutJsxSpreadAttribute, i)
 }
 
 func (f *NodeFactory) UpdateJsxSpreadAttribute(node JsxSpreadAttribute, expression Expression) Node {
@@ -10982,22 +12349,28 @@ func IsJsxSpreadAttribute(node Node) bool {
 
 type jsxClosingElementData struct {
 	nodeBaseData
-	tagName JsxTagNameExpression
+	tagName nodeRef // JsxTagNameExpression
 }
 
 type JsxClosingElement struct{ Node }
 
 func (node JsxClosingElement) data() *jsxClosingElementData {
-	return (*jsxClosingElementData)(unsafe.Pointer(node.h))
+	return (*jsxClosingElementData)(node.rec())
 }
 
-func (node JsxClosingElement) TagName() JsxTagNameExpression         { return node.data().tagName }
-func (node JsxClosingElement) SetTagName(value JsxTagNameExpression) { node.data().tagName = value }
+func (node JsxClosingElement) TagName() JsxTagNameExpression {
+	return node.s.deref(node.data().tagName)
+}
+
+func (node JsxClosingElement) SetTagName(value JsxTagNameExpression) {
+	node.data().tagName = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewJsxClosingElement(tagName JsxTagNameExpression) Node {
-	data := &jsxClosingElementData{}
-	data.tagName = tagName
-	return f.newNode(KindJsxClosingElement, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[jsxClosingElementData](s, layoutJsxClosingElement)
+	data.tagName = s.ref(tagName)
+	return f.newNode(KindJsxClosingElement, layoutJsxClosingElement, i)
 }
 
 func (f *NodeFactory) UpdateJsxClosingElement(node JsxClosingElement, tagName JsxTagNameExpression) Node {
@@ -11029,27 +12402,32 @@ func IsJsxClosingElement(node Node) bool {
 
 type jsxExpressionData struct {
 	expressionBaseData
-	dotDotDotToken DotDotDotToken // Optional
-	expression     Expression     // Optional
+	dotDotDotToken nodeRef // DotDotDotToken. Optional
+	expression     nodeRef // Expression. Optional
 }
 
 type JsxExpression struct{ Node }
 
-func (node JsxExpression) data() *jsxExpressionData {
-	return (*jsxExpressionData)(unsafe.Pointer(node.h))
+func (node JsxExpression) data() *jsxExpressionData { return (*jsxExpressionData)(node.rec()) }
+
+func (node JsxExpression) DotDotDotToken() DotDotDotToken {
+	return node.s.deref(node.data().dotDotDotToken)
 }
 
-func (node JsxExpression) DotDotDotToken() DotDotDotToken { return node.data().dotDotDotToken }
+func (node JsxExpression) SetDotDotDotToken(value DotDotDotToken) {
+	node.data().dotDotDotToken = node.s.ref(value)
+}
 
-func (node JsxExpression) SetDotDotDotToken(value DotDotDotToken) { node.data().dotDotDotToken = value }
-func (node JsxExpression) Expression() Expression                 { return node.data().expression }
-func (node JsxExpression) SetExpression(value Expression)         { node.data().expression = value }
+func (node JsxExpression) Expression() Expression { return node.s.deref(node.data().expression) }
+
+func (node JsxExpression) SetExpression(value Expression) { node.data().expression = node.s.ref(value) }
 
 func (f *NodeFactory) NewJsxExpression(dotDotDotToken DotDotDotToken, expression Expression) Node {
-	data := &jsxExpressionData{}
-	data.dotDotDotToken = dotDotDotToken
-	data.expression = expression
-	return f.newNode(KindJsxExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[jsxExpressionData](s, layoutJsxExpression)
+	data.dotDotDotToken = s.ref(dotDotDotToken)
+	data.expression = s.ref(expression)
+	return f.newNode(KindJsxExpression, layoutJsxExpression, i)
 }
 
 func (f *NodeFactory) UpdateJsxExpression(node JsxExpression, dotDotDotToken DotDotDotToken, expression Expression) Node {
@@ -11087,7 +12465,7 @@ type jsxTextData struct {
 
 type JsxText struct{ Node }
 
-func (node JsxText) data() *jsxTextData { return (*jsxTextData)(unsafe.Pointer(node.h)) }
+func (node JsxText) data() *jsxTextData { return (*jsxTextData)(node.rec()) }
 
 func (node JsxText) Text() string                   { return node.data().text }
 func (node JsxText) SetText(value string)           { node.data().text = value }
@@ -11102,11 +12480,11 @@ func (node JsxText) SetContainsOnlyTriviaWhiteSpaces(value bool) {
 }
 
 func (f *NodeFactory) NewJsxText(text string, containsOnlyTriviaWhiteSpaces bool) Node {
-	data := &jsxTextData{}
+	data, i := newRecord[jsxTextData](f.nodeStore(), layoutJsxText)
 	data.text = text
 	data.containsOnlyTriviaWhiteSpaces = containsOnlyTriviaWhiteSpaces
 	f.textCount++
-	return f.newNode(KindJsxText, data.asNode())
+	return f.newNode(KindJsxText, layoutJsxText, i)
 }
 
 func (node JsxText) Clone(f NodeFactoryCoercible) Node {
@@ -11128,15 +12506,15 @@ type syntaxListData struct {
 
 type SyntaxList struct{ Node }
 
-func (node SyntaxList) data() *syntaxListData { return (*syntaxListData)(unsafe.Pointer(node.h)) }
+func (node SyntaxList) data() *syntaxListData { return (*syntaxListData)(node.rec()) }
 
 func (node SyntaxList) Children() []Node         { return node.data().children }
 func (node SyntaxList) SetChildren(value []Node) { node.data().children = value }
 
 func (f *NodeFactory) NewSyntaxList(children []Node) Node {
-	data := &syntaxListData{}
+	data, i := newRecord[syntaxListData](f.nodeStore(), layoutSyntaxList)
 	data.children = children
-	return f.newNode(KindSyntaxList, data.asNode())
+	return f.newNode(KindSyntaxList, layoutSyntaxList, i)
 }
 
 func (f *NodeFactory) UpdateSyntaxList(node SyntaxList, children []Node) Node {
@@ -11175,7 +12553,7 @@ type jsDocData struct {
 
 type JSDoc struct{ Node }
 
-func (node JSDoc) data() *jsDocData { return (*jsDocData)(unsafe.Pointer(node.h)) }
+func (node JSDoc) data() *jsDocData { return (*jsDocData)(node.rec()) }
 
 func (node JSDoc) Comment() *NodeList         { return node.data().comment }
 func (node JSDoc) SetComment(value *NodeList) { node.data().comment = value }
@@ -11183,10 +12561,10 @@ func (node JSDoc) Tags() *NodeList            { return node.data().tags }
 func (node JSDoc) SetTags(value *NodeList)    { node.data().tags = value }
 
 func (f *NodeFactory) NewJSDoc(comment *NodeList, tags *NodeList) Node {
-	data := f.jsdocArena.New()
+	data, i := newRecord[jsDocData](f.nodeStore(), layoutJSDoc)
 	data.comment = comment
 	data.tags = tags
-	return f.newNode(KindJSDoc, data.asNode())
+	return f.newNode(KindJSDoc, layoutJSDoc, i)
 }
 
 func (f *NodeFactory) UpdateJSDoc(node JSDoc, comment *NodeList, tags *NodeList) Node {
@@ -11218,22 +12596,24 @@ func IsJSDoc(node Node) bool {
 
 type jsDocTypeExpressionData struct {
 	typeNodeBaseData
-	typeField TypeNode
+	typeField nodeRef // TypeNode
 }
 
 type JSDocTypeExpression struct{ Node }
 
 func (node JSDocTypeExpression) data() *jsDocTypeExpressionData {
-	return (*jsDocTypeExpressionData)(unsafe.Pointer(node.h))
+	return (*jsDocTypeExpressionData)(node.rec())
 }
 
-func (node JSDocTypeExpression) Type() TypeNode         { return node.data().typeField }
-func (node JSDocTypeExpression) SetType(value TypeNode) { node.data().typeField = value }
+func (node JSDocTypeExpression) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node JSDocTypeExpression) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewJSDocTypeExpression(typeNode TypeNode) Node {
-	data := &jsDocTypeExpressionData{}
-	data.typeField = typeNode
-	return f.newNode(KindJSDocTypeExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[jsDocTypeExpressionData](s, layoutJSDocTypeExpression)
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindJSDocTypeExpression, layoutJSDocTypeExpression, i)
 }
 
 func (f *NodeFactory) UpdateJSDocTypeExpression(node JSDocTypeExpression, typeNode TypeNode) Node {
@@ -11265,22 +12645,24 @@ func IsJSDocTypeExpression(node Node) bool {
 
 type jsDocNonNullableTypeData struct {
 	jsDocTypeBaseData
-	typeField TypeNode
+	typeField nodeRef // TypeNode
 }
 
 type JSDocNonNullableType struct{ Node }
 
 func (node JSDocNonNullableType) data() *jsDocNonNullableTypeData {
-	return (*jsDocNonNullableTypeData)(unsafe.Pointer(node.h))
+	return (*jsDocNonNullableTypeData)(node.rec())
 }
 
-func (node JSDocNonNullableType) Type() TypeNode         { return node.data().typeField }
-func (node JSDocNonNullableType) SetType(value TypeNode) { node.data().typeField = value }
+func (node JSDocNonNullableType) Type() TypeNode { return node.s.deref(node.data().typeField) }
+
+func (node JSDocNonNullableType) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewJSDocNonNullableType(typeNode TypeNode) Node {
-	data := &jsDocNonNullableTypeData{}
-	data.typeField = typeNode
-	return f.newNode(KindJSDocNonNullableType, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[jsDocNonNullableTypeData](s, layoutJSDocNonNullableType)
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindJSDocNonNullableType, layoutJSDocNonNullableType, i)
 }
 
 func (f *NodeFactory) UpdateJSDocNonNullableType(node JSDocNonNullableType, typeNode TypeNode) Node {
@@ -11312,22 +12694,23 @@ func IsJSDocNonNullableType(node Node) bool {
 
 type jsDocNullableTypeData struct {
 	jsDocTypeBaseData
-	typeField TypeNode
+	typeField nodeRef // TypeNode
 }
 
 type JSDocNullableType struct{ Node }
 
 func (node JSDocNullableType) data() *jsDocNullableTypeData {
-	return (*jsDocNullableTypeData)(unsafe.Pointer(node.h))
+	return (*jsDocNullableTypeData)(node.rec())
 }
 
-func (node JSDocNullableType) Type() TypeNode         { return node.data().typeField }
-func (node JSDocNullableType) SetType(value TypeNode) { node.data().typeField = value }
+func (node JSDocNullableType) Type() TypeNode         { return node.s.deref(node.data().typeField) }
+func (node JSDocNullableType) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewJSDocNullableType(typeNode TypeNode) Node {
-	data := &jsDocNullableTypeData{}
-	data.typeField = typeNode
-	return f.newNode(KindJSDocNullableType, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[jsDocNullableTypeData](s, layoutJSDocNullableType)
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindJSDocNullableType, layoutJSDocNullableType, i)
 }
 
 func (f *NodeFactory) UpdateJSDocNullableType(node JSDocNullableType, typeNode TypeNode) Node {
@@ -11363,11 +12746,11 @@ type jsDocAllTypeData struct {
 
 type JSDocAllType struct{ Node }
 
-func (node JSDocAllType) data() *jsDocAllTypeData { return (*jsDocAllTypeData)(unsafe.Pointer(node.h)) }
+func (node JSDocAllType) data() *jsDocAllTypeData { return (*jsDocAllTypeData)(node.rec()) }
 
 func (f *NodeFactory) NewJSDocAllType() Node {
-	data := &jsDocAllTypeData{}
-	return f.newNode(KindJSDocAllType, data.asNode())
+	_, i := newRecord[jsDocAllTypeData](f.nodeStore(), layoutJSDocAllType)
+	return f.newNode(KindJSDocAllType, layoutJSDocAllType, i)
 }
 
 func (node JSDocAllType) Clone(f NodeFactoryCoercible) Node {
@@ -11384,22 +12767,23 @@ func IsJSDocAllType(node Node) bool {
 
 type jsDocVariadicTypeData struct {
 	jsDocTypeBaseData
-	typeField TypeNode
+	typeField nodeRef // TypeNode
 }
 
 type JSDocVariadicType struct{ Node }
 
 func (node JSDocVariadicType) data() *jsDocVariadicTypeData {
-	return (*jsDocVariadicTypeData)(unsafe.Pointer(node.h))
+	return (*jsDocVariadicTypeData)(node.rec())
 }
 
-func (node JSDocVariadicType) Type() TypeNode         { return node.data().typeField }
-func (node JSDocVariadicType) SetType(value TypeNode) { node.data().typeField = value }
+func (node JSDocVariadicType) Type() TypeNode         { return node.s.deref(node.data().typeField) }
+func (node JSDocVariadicType) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewJSDocVariadicType(typeNode TypeNode) Node {
-	data := &jsDocVariadicTypeData{}
-	data.typeField = typeNode
-	return f.newNode(KindJSDocVariadicType, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[jsDocVariadicTypeData](s, layoutJSDocVariadicType)
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindJSDocVariadicType, layoutJSDocVariadicType, i)
 }
 
 func (f *NodeFactory) UpdateJSDocVariadicType(node JSDocVariadicType, typeNode TypeNode) Node {
@@ -11431,22 +12815,23 @@ func IsJSDocVariadicType(node Node) bool {
 
 type jsDocOptionalTypeData struct {
 	jsDocTypeBaseData
-	typeField TypeNode
+	typeField nodeRef // TypeNode
 }
 
 type JSDocOptionalType struct{ Node }
 
 func (node JSDocOptionalType) data() *jsDocOptionalTypeData {
-	return (*jsDocOptionalTypeData)(unsafe.Pointer(node.h))
+	return (*jsDocOptionalTypeData)(node.rec())
 }
 
-func (node JSDocOptionalType) Type() TypeNode         { return node.data().typeField }
-func (node JSDocOptionalType) SetType(value TypeNode) { node.data().typeField = value }
+func (node JSDocOptionalType) Type() TypeNode         { return node.s.deref(node.data().typeField) }
+func (node JSDocOptionalType) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
 
 func (f *NodeFactory) NewJSDocOptionalType(typeNode TypeNode) Node {
-	data := &jsDocOptionalTypeData{}
-	data.typeField = typeNode
-	return f.newNode(KindJSDocOptionalType, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[jsDocOptionalTypeData](s, layoutJSDocOptionalType)
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindJSDocOptionalType, layoutJSDocOptionalType, i)
 }
 
 func (f *NodeFactory) UpdateJSDocOptionalType(node JSDocOptionalType, typeNode TypeNode) Node {
@@ -11478,26 +12863,31 @@ func IsJSDocOptionalType(node Node) bool {
 
 type jsDocTypeTagData struct {
 	jsDocTagBaseData
-	typeExpression Node
+	typeExpression nodeRef // Node
 }
 
 type JSDocTypeTag struct{ Node }
 
-func (node JSDocTypeTag) data() *jsDocTypeTagData { return (*jsDocTypeTagData)(unsafe.Pointer(node.h)) }
+func (node JSDocTypeTag) data() *jsDocTypeTagData { return (*jsDocTypeTagData)(node.rec()) }
 
-func (node JSDocTypeTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocTypeTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
+func (node JSDocTypeTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+
+func (node JSDocTypeTag) SetTagName(value IdentifierNode) { node.data().tagName = node.s.ref(value) }
 func (node JSDocTypeTag) Comment() *NodeList              { return node.data().comment }
 func (node JSDocTypeTag) SetComment(value *NodeList)      { node.data().comment = value }
-func (node JSDocTypeTag) TypeExpression() Node            { return node.data().typeExpression }
-func (node JSDocTypeTag) SetTypeExpression(value Node)    { node.data().typeExpression = value }
+func (node JSDocTypeTag) TypeExpression() Node            { return node.s.deref(node.data().typeExpression) }
+
+func (node JSDocTypeTag) SetTypeExpression(value Node) {
+	node.data().typeExpression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewJSDocTypeTag(tagName IdentifierNode, typeExpression Node, comment *NodeList) Node {
-	data := &jsDocTypeTagData{}
-	data.tagName = tagName
-	data.typeExpression = typeExpression
+	s := f.nodeStore()
+	data, i := newRecord[jsDocTypeTagData](s, layoutJSDocTypeTag)
+	data.tagName = s.ref(tagName)
+	data.typeExpression = s.ref(typeExpression)
 	data.comment = comment
-	return f.newNode(KindJSDocTypeTag, data.asNode())
+	return f.newNode(KindJSDocTypeTag, layoutJSDocTypeTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocTypeTag(node JSDocTypeTag, tagName IdentifierNode, typeExpression Node, comment *NodeList) Node {
@@ -11533,20 +12923,20 @@ type jsDocUnknownTagData struct {
 
 type JSDocUnknownTag struct{ Node }
 
-func (node JSDocUnknownTag) data() *jsDocUnknownTagData {
-	return (*jsDocUnknownTagData)(unsafe.Pointer(node.h))
-}
+func (node JSDocUnknownTag) data() *jsDocUnknownTagData { return (*jsDocUnknownTagData)(node.rec()) }
 
-func (node JSDocUnknownTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocUnknownTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
+func (node JSDocUnknownTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+
+func (node JSDocUnknownTag) SetTagName(value IdentifierNode) { node.data().tagName = node.s.ref(value) }
 func (node JSDocUnknownTag) Comment() *NodeList              { return node.data().comment }
 func (node JSDocUnknownTag) SetComment(value *NodeList)      { node.data().comment = value }
 
 func (f *NodeFactory) NewJSDocUnknownTag(tagName IdentifierNode, comment *NodeList) Node {
-	data := f.jsdocUnknownTagArena.New()
-	data.tagName = tagName
+	s := f.nodeStore()
+	data, i := newRecord[jsDocUnknownTagData](s, layoutJSDocUnknownTag)
+	data.tagName = s.ref(tagName)
 	data.comment = comment
-	return f.newNode(KindJSDocUnknownTag, data.asNode())
+	return f.newNode(KindJSDocUnknownTag, layoutJSDocUnknownTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocUnknownTag(node JSDocUnknownTag, tagName IdentifierNode, comment *NodeList) Node {
@@ -11578,22 +12968,24 @@ func IsJSDocUnknownTag(node Node) bool {
 
 type jsDocTemplateTagData struct {
 	jsDocTagBaseData
-	constraint     Node
+	constraint     nodeRef // Node
 	typeParameters *TypeParameterList
 }
 
 type JSDocTemplateTag struct{ Node }
 
-func (node JSDocTemplateTag) data() *jsDocTemplateTagData {
-	return (*jsDocTemplateTagData)(unsafe.Pointer(node.h))
-}
+func (node JSDocTemplateTag) data() *jsDocTemplateTagData { return (*jsDocTemplateTagData)(node.rec()) }
 
-func (node JSDocTemplateTag) TagName() IdentifierNode            { return node.data().tagName }
-func (node JSDocTemplateTag) SetTagName(value IdentifierNode)    { node.data().tagName = value }
-func (node JSDocTemplateTag) Comment() *NodeList                 { return node.data().comment }
-func (node JSDocTemplateTag) SetComment(value *NodeList)         { node.data().comment = value }
-func (node JSDocTemplateTag) Constraint() Node                   { return node.data().constraint }
-func (node JSDocTemplateTag) SetConstraint(value Node)           { node.data().constraint = value }
+func (node JSDocTemplateTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+func (node JSDocTemplateTag) SetTagName(value IdentifierNode) {
+	node.data().tagName = node.s.ref(value)
+}
+func (node JSDocTemplateTag) Comment() *NodeList         { return node.data().comment }
+func (node JSDocTemplateTag) SetComment(value *NodeList) { node.data().comment = value }
+func (node JSDocTemplateTag) Constraint() Node           { return node.s.deref(node.data().constraint) }
+
+func (node JSDocTemplateTag) SetConstraint(value Node) { node.data().constraint = node.s.ref(value) }
+
 func (node JSDocTemplateTag) TypeParameters() *TypeParameterList { return node.data().typeParameters }
 
 func (node JSDocTemplateTag) SetTypeParameters(value *TypeParameterList) {
@@ -11601,12 +12993,13 @@ func (node JSDocTemplateTag) SetTypeParameters(value *TypeParameterList) {
 }
 
 func (f *NodeFactory) NewJSDocTemplateTag(tagName IdentifierNode, constraint Node, typeParameters *TypeParameterList, comment *NodeList) Node {
-	data := &jsDocTemplateTagData{}
-	data.tagName = tagName
-	data.constraint = constraint
+	s := f.nodeStore()
+	data, i := newRecord[jsDocTemplateTagData](s, layoutJSDocTemplateTag)
+	data.tagName = s.ref(tagName)
+	data.constraint = s.ref(constraint)
 	data.typeParameters = typeParameters
 	data.comment = comment
-	return f.newNode(KindJSDocTemplateTag, data.asNode())
+	return f.newNode(KindJSDocTemplateTag, layoutJSDocTemplateTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocTemplateTag(node JSDocTemplateTag, tagName IdentifierNode, constraint Node, typeParameters *TypeParameterList, comment *NodeList) Node {
@@ -11641,28 +13034,31 @@ func IsJSDocTemplateTag(node Node) bool {
 
 type jsDocReturnTagData struct {
 	jsDocTagBaseData
-	typeExpression TypeNode // Optional
+	typeExpression nodeRef // TypeNode. Optional
 }
 
 type JSDocReturnTag struct{ Node }
 
-func (node JSDocReturnTag) data() *jsDocReturnTagData {
-	return (*jsDocReturnTagData)(unsafe.Pointer(node.h))
+func (node JSDocReturnTag) data() *jsDocReturnTagData { return (*jsDocReturnTagData)(node.rec()) }
+
+func (node JSDocReturnTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+
+func (node JSDocReturnTag) SetTagName(value IdentifierNode) { node.data().tagName = node.s.ref(value) }
+func (node JSDocReturnTag) Comment() *NodeList              { return node.data().comment }
+func (node JSDocReturnTag) SetComment(value *NodeList)      { node.data().comment = value }
+func (node JSDocReturnTag) TypeExpression() TypeNode        { return node.s.deref(node.data().typeExpression) }
+
+func (node JSDocReturnTag) SetTypeExpression(value TypeNode) {
+	node.data().typeExpression = node.s.ref(value)
 }
 
-func (node JSDocReturnTag) TagName() IdentifierNode          { return node.data().tagName }
-func (node JSDocReturnTag) SetTagName(value IdentifierNode)  { node.data().tagName = value }
-func (node JSDocReturnTag) Comment() *NodeList               { return node.data().comment }
-func (node JSDocReturnTag) SetComment(value *NodeList)       { node.data().comment = value }
-func (node JSDocReturnTag) TypeExpression() TypeNode         { return node.data().typeExpression }
-func (node JSDocReturnTag) SetTypeExpression(value TypeNode) { node.data().typeExpression = value }
-
 func (f *NodeFactory) NewJSDocReturnTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
-	data := &jsDocReturnTagData{}
-	data.tagName = tagName
-	data.typeExpression = typeExpression
+	s := f.nodeStore()
+	data, i := newRecord[jsDocReturnTagData](s, layoutJSDocReturnTag)
+	data.tagName = s.ref(tagName)
+	data.typeExpression = s.ref(typeExpression)
 	data.comment = comment
-	return f.newNode(KindJSDocReturnTag, data.asNode())
+	return f.newNode(KindJSDocReturnTag, layoutJSDocReturnTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocReturnTag(node JSDocReturnTag, tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
@@ -11698,20 +13094,20 @@ type jsDocPublicTagData struct {
 
 type JSDocPublicTag struct{ Node }
 
-func (node JSDocPublicTag) data() *jsDocPublicTagData {
-	return (*jsDocPublicTagData)(unsafe.Pointer(node.h))
-}
+func (node JSDocPublicTag) data() *jsDocPublicTagData { return (*jsDocPublicTagData)(node.rec()) }
 
-func (node JSDocPublicTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocPublicTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
+func (node JSDocPublicTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+
+func (node JSDocPublicTag) SetTagName(value IdentifierNode) { node.data().tagName = node.s.ref(value) }
 func (node JSDocPublicTag) Comment() *NodeList              { return node.data().comment }
 func (node JSDocPublicTag) SetComment(value *NodeList)      { node.data().comment = value }
 
 func (f *NodeFactory) NewJSDocPublicTag(tagName IdentifierNode, comment *NodeList) Node {
-	data := &jsDocPublicTagData{}
-	data.tagName = tagName
+	s := f.nodeStore()
+	data, i := newRecord[jsDocPublicTagData](s, layoutJSDocPublicTag)
+	data.tagName = s.ref(tagName)
 	data.comment = comment
-	return f.newNode(KindJSDocPublicTag, data.asNode())
+	return f.newNode(KindJSDocPublicTag, layoutJSDocPublicTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocPublicTag(node JSDocPublicTag, tagName IdentifierNode, comment *NodeList) Node {
@@ -11747,20 +13143,20 @@ type jsDocPrivateTagData struct {
 
 type JSDocPrivateTag struct{ Node }
 
-func (node JSDocPrivateTag) data() *jsDocPrivateTagData {
-	return (*jsDocPrivateTagData)(unsafe.Pointer(node.h))
-}
+func (node JSDocPrivateTag) data() *jsDocPrivateTagData { return (*jsDocPrivateTagData)(node.rec()) }
 
-func (node JSDocPrivateTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocPrivateTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
+func (node JSDocPrivateTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+
+func (node JSDocPrivateTag) SetTagName(value IdentifierNode) { node.data().tagName = node.s.ref(value) }
 func (node JSDocPrivateTag) Comment() *NodeList              { return node.data().comment }
 func (node JSDocPrivateTag) SetComment(value *NodeList)      { node.data().comment = value }
 
 func (f *NodeFactory) NewJSDocPrivateTag(tagName IdentifierNode, comment *NodeList) Node {
-	data := &jsDocPrivateTagData{}
-	data.tagName = tagName
+	s := f.nodeStore()
+	data, i := newRecord[jsDocPrivateTagData](s, layoutJSDocPrivateTag)
+	data.tagName = s.ref(tagName)
 	data.comment = comment
-	return f.newNode(KindJSDocPrivateTag, data.asNode())
+	return f.newNode(KindJSDocPrivateTag, layoutJSDocPrivateTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocPrivateTag(node JSDocPrivateTag, tagName IdentifierNode, comment *NodeList) Node {
@@ -11797,19 +13193,22 @@ type jsDocProtectedTagData struct {
 type JSDocProtectedTag struct{ Node }
 
 func (node JSDocProtectedTag) data() *jsDocProtectedTagData {
-	return (*jsDocProtectedTagData)(unsafe.Pointer(node.h))
+	return (*jsDocProtectedTagData)(node.rec())
 }
 
-func (node JSDocProtectedTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocProtectedTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
-func (node JSDocProtectedTag) Comment() *NodeList              { return node.data().comment }
-func (node JSDocProtectedTag) SetComment(value *NodeList)      { node.data().comment = value }
+func (node JSDocProtectedTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+func (node JSDocProtectedTag) SetTagName(value IdentifierNode) {
+	node.data().tagName = node.s.ref(value)
+}
+func (node JSDocProtectedTag) Comment() *NodeList         { return node.data().comment }
+func (node JSDocProtectedTag) SetComment(value *NodeList) { node.data().comment = value }
 
 func (f *NodeFactory) NewJSDocProtectedTag(tagName IdentifierNode, comment *NodeList) Node {
-	data := &jsDocProtectedTagData{}
-	data.tagName = tagName
+	s := f.nodeStore()
+	data, i := newRecord[jsDocProtectedTagData](s, layoutJSDocProtectedTag)
+	data.tagName = s.ref(tagName)
 	data.comment = comment
-	return f.newNode(KindJSDocProtectedTag, data.asNode())
+	return f.newNode(KindJSDocProtectedTag, layoutJSDocProtectedTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocProtectedTag(node JSDocProtectedTag, tagName IdentifierNode, comment *NodeList) Node {
@@ -11845,20 +13244,21 @@ type jsDocReadonlyTagData struct {
 
 type JSDocReadonlyTag struct{ Node }
 
-func (node JSDocReadonlyTag) data() *jsDocReadonlyTagData {
-	return (*jsDocReadonlyTagData)(unsafe.Pointer(node.h))
-}
+func (node JSDocReadonlyTag) data() *jsDocReadonlyTagData { return (*jsDocReadonlyTagData)(node.rec()) }
 
-func (node JSDocReadonlyTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocReadonlyTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
-func (node JSDocReadonlyTag) Comment() *NodeList              { return node.data().comment }
-func (node JSDocReadonlyTag) SetComment(value *NodeList)      { node.data().comment = value }
+func (node JSDocReadonlyTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+func (node JSDocReadonlyTag) SetTagName(value IdentifierNode) {
+	node.data().tagName = node.s.ref(value)
+}
+func (node JSDocReadonlyTag) Comment() *NodeList         { return node.data().comment }
+func (node JSDocReadonlyTag) SetComment(value *NodeList) { node.data().comment = value }
 
 func (f *NodeFactory) NewJSDocReadonlyTag(tagName IdentifierNode, comment *NodeList) Node {
-	data := &jsDocReadonlyTagData{}
-	data.tagName = tagName
+	s := f.nodeStore()
+	data, i := newRecord[jsDocReadonlyTagData](s, layoutJSDocReadonlyTag)
+	data.tagName = s.ref(tagName)
 	data.comment = comment
-	return f.newNode(KindJSDocReadonlyTag, data.asNode())
+	return f.newNode(KindJSDocReadonlyTag, layoutJSDocReadonlyTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocReadonlyTag(node JSDocReadonlyTag, tagName IdentifierNode, comment *NodeList) Node {
@@ -11894,20 +13294,21 @@ type jsDocOverrideTagData struct {
 
 type JSDocOverrideTag struct{ Node }
 
-func (node JSDocOverrideTag) data() *jsDocOverrideTagData {
-	return (*jsDocOverrideTagData)(unsafe.Pointer(node.h))
-}
+func (node JSDocOverrideTag) data() *jsDocOverrideTagData { return (*jsDocOverrideTagData)(node.rec()) }
 
-func (node JSDocOverrideTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocOverrideTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
-func (node JSDocOverrideTag) Comment() *NodeList              { return node.data().comment }
-func (node JSDocOverrideTag) SetComment(value *NodeList)      { node.data().comment = value }
+func (node JSDocOverrideTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+func (node JSDocOverrideTag) SetTagName(value IdentifierNode) {
+	node.data().tagName = node.s.ref(value)
+}
+func (node JSDocOverrideTag) Comment() *NodeList         { return node.data().comment }
+func (node JSDocOverrideTag) SetComment(value *NodeList) { node.data().comment = value }
 
 func (f *NodeFactory) NewJSDocOverrideTag(tagName IdentifierNode, comment *NodeList) Node {
-	data := &jsDocOverrideTagData{}
-	data.tagName = tagName
+	s := f.nodeStore()
+	data, i := newRecord[jsDocOverrideTagData](s, layoutJSDocOverrideTag)
+	data.tagName = s.ref(tagName)
 	data.comment = comment
-	return f.newNode(KindJSDocOverrideTag, data.asNode())
+	return f.newNode(KindJSDocOverrideTag, layoutJSDocOverrideTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocOverrideTag(node JSDocOverrideTag, tagName IdentifierNode, comment *NodeList) Node {
@@ -11944,19 +13345,22 @@ type jsDocDeprecatedTagData struct {
 type JSDocDeprecatedTag struct{ Node }
 
 func (node JSDocDeprecatedTag) data() *jsDocDeprecatedTagData {
-	return (*jsDocDeprecatedTagData)(unsafe.Pointer(node.h))
+	return (*jsDocDeprecatedTagData)(node.rec())
 }
 
-func (node JSDocDeprecatedTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocDeprecatedTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
-func (node JSDocDeprecatedTag) Comment() *NodeList              { return node.data().comment }
-func (node JSDocDeprecatedTag) SetComment(value *NodeList)      { node.data().comment = value }
+func (node JSDocDeprecatedTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+func (node JSDocDeprecatedTag) SetTagName(value IdentifierNode) {
+	node.data().tagName = node.s.ref(value)
+}
+func (node JSDocDeprecatedTag) Comment() *NodeList         { return node.data().comment }
+func (node JSDocDeprecatedTag) SetComment(value *NodeList) { node.data().comment = value }
 
 func (f *NodeFactory) NewJSDocDeprecatedTag(tagName IdentifierNode, comment *NodeList) Node {
-	data := f.jsdocDeprecatedTagArena.New()
-	data.tagName = tagName
+	s := f.nodeStore()
+	data, i := newRecord[jsDocDeprecatedTagData](s, layoutJSDocDeprecatedTag)
+	data.tagName = s.ref(tagName)
 	data.comment = comment
-	return f.newNode(KindJSDocDeprecatedTag, data.asNode())
+	return f.newNode(KindJSDocDeprecatedTag, layoutJSDocDeprecatedTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocDeprecatedTag(node JSDocDeprecatedTag, tagName IdentifierNode, comment *NodeList) Node {
@@ -11988,26 +13392,30 @@ func IsJSDocDeprecatedTag(node Node) bool {
 
 type jsDocSeeTagData struct {
 	jsDocTagBaseData
-	nameExpression TypeNode
+	nameExpression nodeRef // TypeNode
 }
 
 type JSDocSeeTag struct{ Node }
 
-func (node JSDocSeeTag) data() *jsDocSeeTagData { return (*jsDocSeeTagData)(unsafe.Pointer(node.h)) }
+func (node JSDocSeeTag) data() *jsDocSeeTagData { return (*jsDocSeeTagData)(node.rec()) }
 
-func (node JSDocSeeTag) TagName() IdentifierNode          { return node.data().tagName }
-func (node JSDocSeeTag) SetTagName(value IdentifierNode)  { node.data().tagName = value }
-func (node JSDocSeeTag) Comment() *NodeList               { return node.data().comment }
-func (node JSDocSeeTag) SetComment(value *NodeList)       { node.data().comment = value }
-func (node JSDocSeeTag) NameExpression() TypeNode         { return node.data().nameExpression }
-func (node JSDocSeeTag) SetNameExpression(value TypeNode) { node.data().nameExpression = value }
+func (node JSDocSeeTag) TagName() IdentifierNode         { return node.s.deref(node.data().tagName) }
+func (node JSDocSeeTag) SetTagName(value IdentifierNode) { node.data().tagName = node.s.ref(value) }
+func (node JSDocSeeTag) Comment() *NodeList              { return node.data().comment }
+func (node JSDocSeeTag) SetComment(value *NodeList)      { node.data().comment = value }
+func (node JSDocSeeTag) NameExpression() TypeNode        { return node.s.deref(node.data().nameExpression) }
+
+func (node JSDocSeeTag) SetNameExpression(value TypeNode) {
+	node.data().nameExpression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewJSDocSeeTag(tagName IdentifierNode, nameExpression TypeNode, comment *NodeList) Node {
-	data := &jsDocSeeTagData{}
-	data.tagName = tagName
-	data.nameExpression = nameExpression
+	s := f.nodeStore()
+	data, i := newRecord[jsDocSeeTagData](s, layoutJSDocSeeTag)
+	data.tagName = s.ref(tagName)
+	data.nameExpression = s.ref(nameExpression)
 	data.comment = comment
-	return f.newNode(KindJSDocSeeTag, data.asNode())
+	return f.newNode(KindJSDocSeeTag, layoutJSDocSeeTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocSeeTag(node JSDocSeeTag, tagName IdentifierNode, nameExpression TypeNode, comment *NodeList) Node {
@@ -12039,33 +13447,36 @@ func IsJSDocSeeTag(node Node) bool {
 
 type jsDocImplementsTagData struct {
 	jsDocTagBaseData
-	className ExpressionWithTypeArgumentsNode
+	className nodeRef // ExpressionWithTypeArgumentsNode
 }
 
 type JSDocImplementsTag struct{ Node }
 
 func (node JSDocImplementsTag) data() *jsDocImplementsTagData {
-	return (*jsDocImplementsTagData)(unsafe.Pointer(node.h))
+	return (*jsDocImplementsTagData)(node.rec())
 }
 
-func (node JSDocImplementsTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocImplementsTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
-func (node JSDocImplementsTag) Comment() *NodeList              { return node.data().comment }
-func (node JSDocImplementsTag) SetComment(value *NodeList)      { node.data().comment = value }
+func (node JSDocImplementsTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+func (node JSDocImplementsTag) SetTagName(value IdentifierNode) {
+	node.data().tagName = node.s.ref(value)
+}
+func (node JSDocImplementsTag) Comment() *NodeList         { return node.data().comment }
+func (node JSDocImplementsTag) SetComment(value *NodeList) { node.data().comment = value }
 func (node JSDocImplementsTag) ClassName() ExpressionWithTypeArgumentsNode {
-	return node.data().className
+	return node.s.deref(node.data().className)
 }
 
 func (node JSDocImplementsTag) SetClassName(value ExpressionWithTypeArgumentsNode) {
-	node.data().className = value
+	node.data().className = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewJSDocImplementsTag(tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment *NodeList) Node {
-	data := &jsDocImplementsTagData{}
-	data.tagName = tagName
-	data.className = className
+	s := f.nodeStore()
+	data, i := newRecord[jsDocImplementsTagData](s, layoutJSDocImplementsTag)
+	data.tagName = s.ref(tagName)
+	data.className = s.ref(className)
 	data.comment = comment
-	return f.newNode(KindJSDocImplementsTag, data.asNode())
+	return f.newNode(KindJSDocImplementsTag, layoutJSDocImplementsTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocImplementsTag(node JSDocImplementsTag, tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment *NodeList) Node {
@@ -12097,33 +13508,34 @@ func IsJSDocImplementsTag(node Node) bool {
 
 type jsDocAugmentsTagData struct {
 	jsDocTagBaseData
-	className ExpressionWithTypeArgumentsNode
+	className nodeRef // ExpressionWithTypeArgumentsNode
 }
 
 type JSDocAugmentsTag struct{ Node }
 
-func (node JSDocAugmentsTag) data() *jsDocAugmentsTagData {
-	return (*jsDocAugmentsTagData)(unsafe.Pointer(node.h))
-}
+func (node JSDocAugmentsTag) data() *jsDocAugmentsTagData { return (*jsDocAugmentsTagData)(node.rec()) }
 
-func (node JSDocAugmentsTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocAugmentsTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
-func (node JSDocAugmentsTag) Comment() *NodeList              { return node.data().comment }
-func (node JSDocAugmentsTag) SetComment(value *NodeList)      { node.data().comment = value }
+func (node JSDocAugmentsTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+func (node JSDocAugmentsTag) SetTagName(value IdentifierNode) {
+	node.data().tagName = node.s.ref(value)
+}
+func (node JSDocAugmentsTag) Comment() *NodeList         { return node.data().comment }
+func (node JSDocAugmentsTag) SetComment(value *NodeList) { node.data().comment = value }
 func (node JSDocAugmentsTag) ClassName() ExpressionWithTypeArgumentsNode {
-	return node.data().className
+	return node.s.deref(node.data().className)
 }
 
 func (node JSDocAugmentsTag) SetClassName(value ExpressionWithTypeArgumentsNode) {
-	node.data().className = value
+	node.data().className = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewJSDocAugmentsTag(tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment *NodeList) Node {
-	data := &jsDocAugmentsTagData{}
-	data.tagName = tagName
-	data.className = className
+	s := f.nodeStore()
+	data, i := newRecord[jsDocAugmentsTagData](s, layoutJSDocAugmentsTag)
+	data.tagName = s.ref(tagName)
+	data.className = s.ref(className)
 	data.comment = comment
-	return f.newNode(KindJSDocAugmentsTag, data.asNode())
+	return f.newNode(KindJSDocAugmentsTag, layoutJSDocAugmentsTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocAugmentsTag(node JSDocAugmentsTag, tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment *NodeList) Node {
@@ -12155,29 +13567,36 @@ func IsJSDocAugmentsTag(node Node) bool {
 
 type jsDocSatisfiesTagData struct {
 	jsDocTagBaseData
-	typeExpression TypeNode
+	typeExpression nodeRef // TypeNode
 }
 
 type JSDocSatisfiesTag struct{ Node }
 
 func (node JSDocSatisfiesTag) data() *jsDocSatisfiesTagData {
-	return (*jsDocSatisfiesTagData)(unsafe.Pointer(node.h))
+	return (*jsDocSatisfiesTagData)(node.rec())
 }
 
-func (node JSDocSatisfiesTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocSatisfiesTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
-func (node JSDocSatisfiesTag) Comment() *NodeList              { return node.data().comment }
-func (node JSDocSatisfiesTag) SetComment(value *NodeList)      { node.data().comment = value }
-func (node JSDocSatisfiesTag) TypeExpression() TypeNode        { return node.data().typeExpression }
+func (node JSDocSatisfiesTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+func (node JSDocSatisfiesTag) SetTagName(value IdentifierNode) {
+	node.data().tagName = node.s.ref(value)
+}
+func (node JSDocSatisfiesTag) Comment() *NodeList         { return node.data().comment }
+func (node JSDocSatisfiesTag) SetComment(value *NodeList) { node.data().comment = value }
+func (node JSDocSatisfiesTag) TypeExpression() TypeNode {
+	return node.s.deref(node.data().typeExpression)
+}
 
-func (node JSDocSatisfiesTag) SetTypeExpression(value TypeNode) { node.data().typeExpression = value }
+func (node JSDocSatisfiesTag) SetTypeExpression(value TypeNode) {
+	node.data().typeExpression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewJSDocSatisfiesTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
-	data := &jsDocSatisfiesTagData{}
-	data.tagName = tagName
-	data.typeExpression = typeExpression
+	s := f.nodeStore()
+	data, i := newRecord[jsDocSatisfiesTagData](s, layoutJSDocSatisfiesTag)
+	data.tagName = s.ref(tagName)
+	data.typeExpression = s.ref(typeExpression)
 	data.comment = comment
-	return f.newNode(KindJSDocSatisfiesTag, data.asNode())
+	return f.newNode(KindJSDocSatisfiesTag, layoutJSDocSatisfiesTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocSatisfiesTag(node JSDocSatisfiesTag, tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
@@ -12209,28 +13628,31 @@ func IsJSDocSatisfiesTag(node Node) bool {
 
 type jsDocThrowsTagData struct {
 	jsDocTagBaseData
-	typeExpression TypeNode // Optional
+	typeExpression nodeRef // TypeNode. Optional
 }
 
 type JSDocThrowsTag struct{ Node }
 
-func (node JSDocThrowsTag) data() *jsDocThrowsTagData {
-	return (*jsDocThrowsTagData)(unsafe.Pointer(node.h))
+func (node JSDocThrowsTag) data() *jsDocThrowsTagData { return (*jsDocThrowsTagData)(node.rec()) }
+
+func (node JSDocThrowsTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+
+func (node JSDocThrowsTag) SetTagName(value IdentifierNode) { node.data().tagName = node.s.ref(value) }
+func (node JSDocThrowsTag) Comment() *NodeList              { return node.data().comment }
+func (node JSDocThrowsTag) SetComment(value *NodeList)      { node.data().comment = value }
+func (node JSDocThrowsTag) TypeExpression() TypeNode        { return node.s.deref(node.data().typeExpression) }
+
+func (node JSDocThrowsTag) SetTypeExpression(value TypeNode) {
+	node.data().typeExpression = node.s.ref(value)
 }
 
-func (node JSDocThrowsTag) TagName() IdentifierNode          { return node.data().tagName }
-func (node JSDocThrowsTag) SetTagName(value IdentifierNode)  { node.data().tagName = value }
-func (node JSDocThrowsTag) Comment() *NodeList               { return node.data().comment }
-func (node JSDocThrowsTag) SetComment(value *NodeList)       { node.data().comment = value }
-func (node JSDocThrowsTag) TypeExpression() TypeNode         { return node.data().typeExpression }
-func (node JSDocThrowsTag) SetTypeExpression(value TypeNode) { node.data().typeExpression = value }
-
 func (f *NodeFactory) NewJSDocThrowsTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
-	data := &jsDocThrowsTagData{}
-	data.tagName = tagName
-	data.typeExpression = typeExpression
+	s := f.nodeStore()
+	data, i := newRecord[jsDocThrowsTagData](s, layoutJSDocThrowsTag)
+	data.tagName = s.ref(tagName)
+	data.typeExpression = s.ref(typeExpression)
 	data.comment = comment
-	return f.newNode(KindJSDocThrowsTag, data.asNode())
+	return f.newNode(KindJSDocThrowsTag, layoutJSDocThrowsTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocThrowsTag(node JSDocThrowsTag, tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
@@ -12262,26 +13684,31 @@ func IsJSDocThrowsTag(node Node) bool {
 
 type jsDocThisTagData struct {
 	jsDocTagBaseData
-	typeExpression TypeNode
+	typeExpression nodeRef // TypeNode
 }
 
 type JSDocThisTag struct{ Node }
 
-func (node JSDocThisTag) data() *jsDocThisTagData { return (*jsDocThisTagData)(unsafe.Pointer(node.h)) }
+func (node JSDocThisTag) data() *jsDocThisTagData { return (*jsDocThisTagData)(node.rec()) }
 
-func (node JSDocThisTag) TagName() IdentifierNode          { return node.data().tagName }
-func (node JSDocThisTag) SetTagName(value IdentifierNode)  { node.data().tagName = value }
-func (node JSDocThisTag) Comment() *NodeList               { return node.data().comment }
-func (node JSDocThisTag) SetComment(value *NodeList)       { node.data().comment = value }
-func (node JSDocThisTag) TypeExpression() TypeNode         { return node.data().typeExpression }
-func (node JSDocThisTag) SetTypeExpression(value TypeNode) { node.data().typeExpression = value }
+func (node JSDocThisTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+
+func (node JSDocThisTag) SetTagName(value IdentifierNode) { node.data().tagName = node.s.ref(value) }
+func (node JSDocThisTag) Comment() *NodeList              { return node.data().comment }
+func (node JSDocThisTag) SetComment(value *NodeList)      { node.data().comment = value }
+func (node JSDocThisTag) TypeExpression() TypeNode        { return node.s.deref(node.data().typeExpression) }
+
+func (node JSDocThisTag) SetTypeExpression(value TypeNode) {
+	node.data().typeExpression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewJSDocThisTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
-	data := &jsDocThisTagData{}
-	data.tagName = tagName
-	data.typeExpression = typeExpression
+	s := f.nodeStore()
+	data, i := newRecord[jsDocThisTagData](s, layoutJSDocThisTag)
+	data.tagName = s.ref(tagName)
+	data.typeExpression = s.ref(typeExpression)
 	data.comment = comment
-	return f.newNode(KindJSDocThisTag, data.asNode())
+	return f.newNode(KindJSDocThisTag, layoutJSDocThisTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocThisTag(node JSDocThisTag, tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
@@ -12313,41 +13740,53 @@ func IsJSDocThisTag(node Node) bool {
 
 type jsDocImportTagData struct {
 	jsDocTagBaseData
-	importClause    ImportClauseNode // Optional
-	moduleSpecifier Expression
-	attributes      ImportAttributesNode // Optional
+	importClause    nodeRef // ImportClauseNode. Optional
+	moduleSpecifier nodeRef // Expression
+	attributes      nodeRef // ImportAttributesNode. Optional
 }
 
 type JSDocImportTag struct{ Node }
 
-func (node JSDocImportTag) data() *jsDocImportTagData {
-	return (*jsDocImportTagData)(unsafe.Pointer(node.h))
-}
+func (node JSDocImportTag) data() *jsDocImportTagData { return (*jsDocImportTagData)(node.rec()) }
 
-func (node JSDocImportTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocImportTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
+func (node JSDocImportTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+
+func (node JSDocImportTag) SetTagName(value IdentifierNode) { node.data().tagName = node.s.ref(value) }
 func (node JSDocImportTag) Comment() *NodeList              { return node.data().comment }
 func (node JSDocImportTag) SetComment(value *NodeList)      { node.data().comment = value }
-func (node JSDocImportTag) ImportClause() ImportClauseNode  { return node.data().importClause }
+func (node JSDocImportTag) ImportClause() ImportClauseNode {
+	return node.s.deref(node.data().importClause)
+}
 
-func (node JSDocImportTag) SetImportClause(value ImportClauseNode) { node.data().importClause = value }
+func (node JSDocImportTag) SetImportClause(value ImportClauseNode) {
+	node.data().importClause = node.s.ref(value)
+}
 
-func (node JSDocImportTag) ModuleSpecifier() Expression { return node.data().moduleSpecifier }
+func (node JSDocImportTag) ModuleSpecifier() Expression {
+	return node.s.deref(node.data().moduleSpecifier)
+}
 
-func (node JSDocImportTag) SetModuleSpecifier(value Expression) { node.data().moduleSpecifier = value }
+func (node JSDocImportTag) SetModuleSpecifier(value Expression) {
+	node.data().moduleSpecifier = node.s.ref(value)
+}
 
-func (node JSDocImportTag) Attributes() ImportAttributesNode { return node.data().attributes }
+func (node JSDocImportTag) Attributes() ImportAttributesNode {
+	return node.s.deref(node.data().attributes)
+}
 
-func (node JSDocImportTag) SetAttributes(value ImportAttributesNode) { node.data().attributes = value }
+func (node JSDocImportTag) SetAttributes(value ImportAttributesNode) {
+	node.data().attributes = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewJSDocImportTag(tagName IdentifierNode, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode, comment *NodeList) Node {
-	data := &jsDocImportTagData{}
-	data.tagName = tagName
-	data.importClause = importClause
-	data.moduleSpecifier = moduleSpecifier
-	data.attributes = attributes
+	s := f.nodeStore()
+	data, i := newRecord[jsDocImportTagData](s, layoutJSDocImportTag)
+	data.tagName = s.ref(tagName)
+	data.importClause = s.ref(importClause)
+	data.moduleSpecifier = s.ref(moduleSpecifier)
+	data.attributes = s.ref(attributes)
 	data.comment = comment
-	return f.newNode(KindJSDocImportTag, data.asNode())
+	return f.newNode(KindJSDocImportTag, layoutJSDocImportTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocImportTag(node JSDocImportTag, tagName IdentifierNode, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode, comment *NodeList) Node {
@@ -12383,32 +13822,38 @@ func IsJSDocImportTag(node Node) bool {
 
 type jsDocCallbackTagData struct {
 	jsDocTagBaseData
-	typeExpression TypeNode
-	name           JSDocFullName // Optional
+	typeExpression nodeRef // TypeNode
+	name           nodeRef // JSDocFullName. Optional
 }
 
 type JSDocCallbackTag struct{ Node }
 
-func (node JSDocCallbackTag) data() *jsDocCallbackTagData {
-	return (*jsDocCallbackTagData)(unsafe.Pointer(node.h))
+func (node JSDocCallbackTag) data() *jsDocCallbackTagData { return (*jsDocCallbackTagData)(node.rec()) }
+
+func (node JSDocCallbackTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+func (node JSDocCallbackTag) SetTagName(value IdentifierNode) {
+	node.data().tagName = node.s.ref(value)
+}
+func (node JSDocCallbackTag) Comment() *NodeList         { return node.data().comment }
+func (node JSDocCallbackTag) SetComment(value *NodeList) { node.data().comment = value }
+func (node JSDocCallbackTag) TypeExpression() TypeNode {
+	return node.s.deref(node.data().typeExpression)
 }
 
-func (node JSDocCallbackTag) TagName() IdentifierNode          { return node.data().tagName }
-func (node JSDocCallbackTag) SetTagName(value IdentifierNode)  { node.data().tagName = value }
-func (node JSDocCallbackTag) Comment() *NodeList               { return node.data().comment }
-func (node JSDocCallbackTag) SetComment(value *NodeList)       { node.data().comment = value }
-func (node JSDocCallbackTag) TypeExpression() TypeNode         { return node.data().typeExpression }
-func (node JSDocCallbackTag) SetTypeExpression(value TypeNode) { node.data().typeExpression = value }
-func (node JSDocCallbackTag) Name() JSDocFullName              { return node.data().name }
-func (node JSDocCallbackTag) setName(value JSDocFullName)      { node.data().name = value }
+func (node JSDocCallbackTag) SetTypeExpression(value TypeNode) {
+	node.data().typeExpression = node.s.ref(value)
+}
+func (node JSDocCallbackTag) Name() JSDocFullName         { return node.s.deref(node.data().name) }
+func (node JSDocCallbackTag) setName(value JSDocFullName) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewJSDocCallbackTag(tagName IdentifierNode, typeExpression TypeNode, name JSDocFullName, comment *NodeList) Node {
-	data := &jsDocCallbackTagData{}
-	data.tagName = tagName
-	data.typeExpression = typeExpression
-	data.name = name
+	s := f.nodeStore()
+	data, i := newRecord[jsDocCallbackTagData](s, layoutJSDocCallbackTag)
+	data.tagName = s.ref(tagName)
+	data.typeExpression = s.ref(typeExpression)
+	data.name = s.ref(name)
 	data.comment = comment
-	return f.newNode(KindJSDocCallbackTag, data.asNode())
+	return f.newNode(KindJSDocCallbackTag, layoutJSDocCallbackTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocCallbackTag(node JSDocCallbackTag, tagName IdentifierNode, typeExpression TypeNode, name JSDocFullName, comment *NodeList) Node {
@@ -12443,28 +13888,34 @@ func IsJSDocCallbackTag(node Node) bool {
 
 type jsDocOverloadTagData struct {
 	jsDocTagBaseData
-	typeExpression TypeNode
+	typeExpression nodeRef // TypeNode
 }
 
 type JSDocOverloadTag struct{ Node }
 
-func (node JSDocOverloadTag) data() *jsDocOverloadTagData {
-	return (*jsDocOverloadTagData)(unsafe.Pointer(node.h))
+func (node JSDocOverloadTag) data() *jsDocOverloadTagData { return (*jsDocOverloadTagData)(node.rec()) }
+
+func (node JSDocOverloadTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+func (node JSDocOverloadTag) SetTagName(value IdentifierNode) {
+	node.data().tagName = node.s.ref(value)
+}
+func (node JSDocOverloadTag) Comment() *NodeList         { return node.data().comment }
+func (node JSDocOverloadTag) SetComment(value *NodeList) { node.data().comment = value }
+func (node JSDocOverloadTag) TypeExpression() TypeNode {
+	return node.s.deref(node.data().typeExpression)
 }
 
-func (node JSDocOverloadTag) TagName() IdentifierNode          { return node.data().tagName }
-func (node JSDocOverloadTag) SetTagName(value IdentifierNode)  { node.data().tagName = value }
-func (node JSDocOverloadTag) Comment() *NodeList               { return node.data().comment }
-func (node JSDocOverloadTag) SetComment(value *NodeList)       { node.data().comment = value }
-func (node JSDocOverloadTag) TypeExpression() TypeNode         { return node.data().typeExpression }
-func (node JSDocOverloadTag) SetTypeExpression(value TypeNode) { node.data().typeExpression = value }
+func (node JSDocOverloadTag) SetTypeExpression(value TypeNode) {
+	node.data().typeExpression = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewJSDocOverloadTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
-	data := &jsDocOverloadTagData{}
-	data.tagName = tagName
-	data.typeExpression = typeExpression
+	s := f.nodeStore()
+	data, i := newRecord[jsDocOverloadTagData](s, layoutJSDocOverloadTag)
+	data.tagName = s.ref(tagName)
+	data.typeExpression = s.ref(typeExpression)
 	data.comment = comment
-	return f.newNode(KindJSDocOverloadTag, data.asNode())
+	return f.newNode(KindJSDocOverloadTag, layoutJSDocOverloadTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocOverloadTag(node JSDocOverloadTag, tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
@@ -12496,32 +13947,35 @@ func IsJSDocOverloadTag(node Node) bool {
 
 type jsDocTypedefTagData struct {
 	jsDocTagBaseData
-	typeExpression Node          // Optional
-	name           JSDocFullName // Optional
+	typeExpression nodeRef // Node. Optional
+	name           nodeRef // JSDocFullName. Optional
 }
 
 type JSDocTypedefTag struct{ Node }
 
-func (node JSDocTypedefTag) data() *jsDocTypedefTagData {
-	return (*jsDocTypedefTagData)(unsafe.Pointer(node.h))
-}
+func (node JSDocTypedefTag) data() *jsDocTypedefTagData { return (*jsDocTypedefTagData)(node.rec()) }
 
-func (node JSDocTypedefTag) TagName() IdentifierNode         { return node.data().tagName }
-func (node JSDocTypedefTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
+func (node JSDocTypedefTag) TagName() IdentifierNode { return node.s.deref(node.data().tagName) }
+
+func (node JSDocTypedefTag) SetTagName(value IdentifierNode) { node.data().tagName = node.s.ref(value) }
 func (node JSDocTypedefTag) Comment() *NodeList              { return node.data().comment }
 func (node JSDocTypedefTag) SetComment(value *NodeList)      { node.data().comment = value }
-func (node JSDocTypedefTag) TypeExpression() Node            { return node.data().typeExpression }
-func (node JSDocTypedefTag) SetTypeExpression(value Node)    { node.data().typeExpression = value }
-func (node JSDocTypedefTag) Name() JSDocFullName             { return node.data().name }
-func (node JSDocTypedefTag) setName(value JSDocFullName)     { node.data().name = value }
+func (node JSDocTypedefTag) TypeExpression() Node            { return node.s.deref(node.data().typeExpression) }
+
+func (node JSDocTypedefTag) SetTypeExpression(value Node) {
+	node.data().typeExpression = node.s.ref(value)
+}
+func (node JSDocTypedefTag) Name() JSDocFullName         { return node.s.deref(node.data().name) }
+func (node JSDocTypedefTag) setName(value JSDocFullName) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewJSDocTypedefTag(tagName IdentifierNode, typeExpression Node, name JSDocFullName, comment *NodeList) Node {
-	data := &jsDocTypedefTagData{}
-	data.tagName = tagName
-	data.typeExpression = typeExpression
-	data.name = name
+	s := f.nodeStore()
+	data, i := newRecord[jsDocTypedefTagData](s, layoutJSDocTypedefTag)
+	data.tagName = s.ref(tagName)
+	data.typeExpression = s.ref(typeExpression)
+	data.name = s.ref(name)
 	data.comment = comment
-	return f.newNode(KindJSDocTypedefTag, data.asNode())
+	return f.newNode(KindJSDocTypedefTag, layoutJSDocTypedefTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocTypedefTag(node JSDocTypedefTag, tagName IdentifierNode, typeExpression Node, name JSDocFullName, comment *NodeList) Node {
@@ -12562,33 +14016,40 @@ type jsDocSignatureData struct {
 
 type JSDocSignature struct{ Node }
 
-func (node JSDocSignature) data() *jsDocSignatureData {
-	return (*jsDocSignatureData)(unsafe.Pointer(node.h))
-}
+func (node JSDocSignature) data() *jsDocSignatureData { return (*jsDocSignatureData)(node.rec()) }
 
-func (node JSDocSignature) Symbol() *Symbol                    { return node.data().symbol }
-func (node JSDocSignature) SetSymbol(value *Symbol)            { node.data().symbol = value }
-func (node JSDocSignature) Locals() SymbolTable                { return node.data().locals }
-func (node JSDocSignature) SetLocals(value SymbolTable)        { node.data().locals = value }
-func (node JSDocSignature) NextContainer() Node                { return node.data().nextContainer }
-func (node JSDocSignature) SetNextContainer(value Node)        { node.data().nextContainer = value }
+func (node JSDocSignature) Symbol() *Symbol             { return node.data().symbol }
+func (node JSDocSignature) SetSymbol(value *Symbol)     { node.data().symbol = value }
+func (node JSDocSignature) Locals() SymbolTable         { return node.data().locals }
+func (node JSDocSignature) SetLocals(value SymbolTable) { node.data().locals = value }
+func (node JSDocSignature) NextContainer() Node         { return node.s.deref(node.data().nextContainer) }
+
+func (node JSDocSignature) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
+}
 func (node JSDocSignature) TypeParameters() *TypeParameterList { return node.data().typeParameters }
 func (node JSDocSignature) SetTypeParameters(value *TypeParameterList) {
 	node.data().typeParameters = value
 }
 func (node JSDocSignature) Parameters() *ParameterList         { return node.data().parameters }
 func (node JSDocSignature) SetParameters(value *ParameterList) { node.data().parameters = value }
-func (node JSDocSignature) Type() TypeNode                     { return node.data().typeField }
-func (node JSDocSignature) SetType(value TypeNode)             { node.data().typeField = value }
-func (node JSDocSignature) FullSignature() TypeNode            { return node.data().fullSignature }
-func (node JSDocSignature) SetFullSignature(value TypeNode)    { node.data().fullSignature = value }
+func (node JSDocSignature) Type() TypeNode                     { return node.s.deref(node.data().typeField) }
+
+func (node JSDocSignature) SetType(value TypeNode) { node.data().typeField = node.s.ref(value) }
+
+func (node JSDocSignature) FullSignature() TypeNode { return node.s.deref(node.data().fullSignature) }
+
+func (node JSDocSignature) SetFullSignature(value TypeNode) {
+	node.data().fullSignature = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
-	data := &jsDocSignatureData{}
+	s := f.nodeStore()
+	data, i := newRecord[jsDocSignatureData](s, layoutJSDocSignature)
 	data.typeParameters = typeParameters
 	data.parameters = parameters
-	data.typeField = typeNode
-	return f.newNode(KindJSDocSignature, data.asNode())
+	data.typeField = s.ref(typeNode)
+	return f.newNode(KindJSDocSignature, layoutJSDocSignature, i)
 }
 
 func (f *NodeFactory) UpdateJSDocSignature(node JSDocSignature, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
@@ -12620,22 +14081,23 @@ func IsJSDocSignature(node Node) bool {
 
 type jsDocNameReferenceData struct {
 	typeNodeBaseData
-	name EntityName
+	name nodeRef // EntityName
 }
 
 type JSDocNameReference struct{ Node }
 
 func (node JSDocNameReference) data() *jsDocNameReferenceData {
-	return (*jsDocNameReferenceData)(unsafe.Pointer(node.h))
+	return (*jsDocNameReferenceData)(node.rec())
 }
 
-func (node JSDocNameReference) Name() EntityName         { return node.data().name }
-func (node JSDocNameReference) setName(value EntityName) { node.data().name = value }
+func (node JSDocNameReference) Name() EntityName         { return node.s.deref(node.data().name) }
+func (node JSDocNameReference) setName(value EntityName) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewJSDocNameReference(name EntityName) Node {
-	data := &jsDocNameReferenceData{}
-	data.name = name
-	return f.newNode(KindJSDocNameReference, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[jsDocNameReferenceData](s, layoutJSDocNameReference)
+	data.name = s.ref(name)
+	return f.newNode(KindJSDocNameReference, layoutJSDocNameReference, i)
 }
 
 func (f *NodeFactory) UpdateJSDocNameReference(node JSDocNameReference, name EntityName) Node {
@@ -12683,14 +14145,14 @@ type moduleDeclarationData struct {
 	bodyBaseData
 	compositeBaseData
 	keyword    Kind
-	name       ModuleName
-	attributes TypeLiteralNodeNode // Optional
+	name       nodeRef // ModuleName
+	attributes nodeRef // TypeLiteralNodeNode. Optional
 }
 
 type ModuleDeclaration struct{ Node }
 
 func (node ModuleDeclaration) data() *moduleDeclarationData {
-	return (*moduleDeclarationData)(unsafe.Pointer(node.h))
+	return (*moduleDeclarationData)(node.rec())
 }
 
 func (node ModuleDeclaration) FlowNode() *FlowNode              { return node.data().flowNode }
@@ -12703,33 +14165,48 @@ func (node ModuleDeclaration) Modifiers() *ModifierList         { return node.da
 func (node ModuleDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
 func (node ModuleDeclaration) Locals() SymbolTable              { return node.data().locals }
 func (node ModuleDeclaration) SetLocals(value SymbolTable)      { node.data().locals = value }
-func (node ModuleDeclaration) NextContainer() Node              { return node.data().nextContainer }
-func (node ModuleDeclaration) SetNextContainer(value Node)      { node.data().nextContainer = value }
-func (node ModuleDeclaration) AsteriskToken() AsteriskToken     { return node.data().asteriskToken }
-func (node ModuleDeclaration) SetAsteriskToken(value AsteriskToken) {
-	node.data().asteriskToken = value
+func (node ModuleDeclaration) NextContainer() Node              { return node.s.deref(node.data().nextContainer) }
+
+func (node ModuleDeclaration) SetNextContainer(value Node) {
+	node.data().nextContainer = node.s.ref(value)
 }
-func (node ModuleDeclaration) Body() NodeBody                  { return node.data().body }
-func (node ModuleDeclaration) SetBody(value NodeBody)          { node.data().body = value }
-func (node ModuleDeclaration) EndFlowNode() *FlowNode          { return node.data().endFlowNode }
-func (node ModuleDeclaration) SetEndFlowNode(value *FlowNode)  { node.data().endFlowNode = value }
-func (node ModuleDeclaration) Keyword() Kind                   { return node.data().keyword }
-func (node ModuleDeclaration) SetKeyword(value Kind)           { node.data().keyword = value }
-func (node ModuleDeclaration) Name() ModuleName                { return node.data().name }
-func (node ModuleDeclaration) setName(value ModuleName)        { node.data().name = value }
-func (node ModuleDeclaration) Attributes() TypeLiteralNodeNode { return node.data().attributes }
+
+func (node ModuleDeclaration) AsteriskToken() AsteriskToken {
+	return node.s.deref(node.data().asteriskToken)
+}
+
+func (node ModuleDeclaration) SetAsteriskToken(value AsteriskToken) {
+	node.data().asteriskToken = node.s.ref(value)
+}
+
+func (node ModuleDeclaration) Body() NodeBody { return node.s.deref(node.data().body) }
+
+func (node ModuleDeclaration) SetBody(value NodeBody)         { node.data().body = node.s.ref(value) }
+func (node ModuleDeclaration) EndFlowNode() *FlowNode         { return node.data().endFlowNode }
+func (node ModuleDeclaration) SetEndFlowNode(value *FlowNode) { node.data().endFlowNode = value }
+func (node ModuleDeclaration) Keyword() Kind                  { return node.data().keyword }
+func (node ModuleDeclaration) SetKeyword(value Kind)          { node.data().keyword = value }
+func (node ModuleDeclaration) Name() ModuleName               { return node.s.deref(node.data().name) }
+
+func (node ModuleDeclaration) setName(value ModuleName) { node.data().name = node.s.ref(value) }
+
+func (node ModuleDeclaration) Attributes() TypeLiteralNodeNode {
+	return node.s.deref(node.data().attributes)
+}
+
 func (node ModuleDeclaration) SetAttributes(value TypeLiteralNodeNode) {
-	node.data().attributes = value
+	node.data().attributes = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, keyword Kind, name ModuleName, attributes TypeLiteralNodeNode, body ModuleBody) Node {
-	data := &moduleDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[moduleDeclarationData](s, layoutModuleDeclaration)
 	data.modifiers = modifiers
 	data.keyword = keyword
-	data.name = name
-	data.attributes = attributes
-	data.body = body
-	return f.newNode(KindModuleDeclaration, data.asNode())
+	data.name = s.ref(name)
+	data.attributes = s.ref(attributes)
+	data.body = s.ref(body)
+	return f.newNode(KindModuleDeclaration, layoutModuleDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateModuleDeclaration(node ModuleDeclaration, modifiers *ModifierList, keyword Kind, name ModuleName, attributes TypeLiteralNodeNode, body ModuleBody) Node {
@@ -12769,14 +14246,14 @@ type importEqualsDeclarationData struct {
 	modifiersBaseData
 	compositeBaseData
 	isTypeOnly      bool
-	name            IdentifierNode
-	moduleReference ModuleReference
+	name            nodeRef // IdentifierNode
+	moduleReference nodeRef // ModuleReference
 }
 
 type ImportEqualsDeclaration struct{ Node }
 
 func (node ImportEqualsDeclaration) data() *importEqualsDeclarationData {
-	return (*importEqualsDeclarationData)(unsafe.Pointer(node.h))
+	return (*importEqualsDeclarationData)(node.rec())
 }
 
 func (node ImportEqualsDeclaration) FlowNode() *FlowNode { return node.data().flowNode }
@@ -12794,24 +14271,30 @@ func (node ImportEqualsDeclaration) setModifiers(value *ModifierList) { node.dat
 
 func (node ImportEqualsDeclaration) IsTypeOnly() bool { return node.data().isTypeOnly }
 
-func (node ImportEqualsDeclaration) SetIsTypeOnly(value bool)     { node.data().isTypeOnly = value }
-func (node ImportEqualsDeclaration) Name() IdentifierNode         { return node.data().name }
-func (node ImportEqualsDeclaration) setName(value IdentifierNode) { node.data().name = value }
+func (node ImportEqualsDeclaration) SetIsTypeOnly(value bool) { node.data().isTypeOnly = value }
+
+func (node ImportEqualsDeclaration) Name() IdentifierNode { return node.s.deref(node.data().name) }
+
+func (node ImportEqualsDeclaration) setName(value IdentifierNode) {
+	node.data().name = node.s.ref(value)
+}
+
 func (node ImportEqualsDeclaration) ModuleReference() ModuleReference {
-	return node.data().moduleReference
+	return node.s.deref(node.data().moduleReference)
 }
 
 func (node ImportEqualsDeclaration) SetModuleReference(value ModuleReference) {
-	node.data().moduleReference = value
+	node.data().moduleReference = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewImportEqualsDeclaration(modifiers *ModifierList, isTypeOnly bool, name IdentifierNode, moduleReference ModuleReference) Node {
-	data := &importEqualsDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[importEqualsDeclarationData](s, layoutImportEqualsDeclaration)
 	data.modifiers = modifiers
 	data.isTypeOnly = isTypeOnly
-	data.name = name
-	data.moduleReference = moduleReference
-	return f.newNode(KindImportEqualsDeclaration, data.asNode())
+	data.name = s.ref(name)
+	data.moduleReference = s.ref(moduleReference)
+	return f.newNode(KindImportEqualsDeclaration, layoutImportEqualsDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateImportEqualsDeclaration(node ImportEqualsDeclaration, modifiers *ModifierList, isTypeOnly bool, name IdentifierNode, moduleReference ModuleReference) Node {
@@ -12847,46 +14330,58 @@ type exportDeclarationData struct {
 	modifiersBaseData
 	compositeBaseData
 	isTypeOnly      bool
-	exportClause    NamedExportBindings  // Optional
-	moduleSpecifier Expression           // Optional
-	attributes      ImportAttributesNode // Optional
+	exportClause    nodeRef // NamedExportBindings. Optional
+	moduleSpecifier nodeRef // Expression. Optional
+	attributes      nodeRef // ImportAttributesNode. Optional
 }
 
 type ExportDeclaration struct{ Node }
 
 func (node ExportDeclaration) data() *exportDeclarationData {
-	return (*exportDeclarationData)(unsafe.Pointer(node.h))
+	return (*exportDeclarationData)(node.rec())
 }
 
-func (node ExportDeclaration) FlowNode() *FlowNode               { return node.data().flowNode }
-func (node ExportDeclaration) SetFlowNode(value *FlowNode)       { node.data().flowNode = value }
-func (node ExportDeclaration) Symbol() *Symbol                   { return node.data().symbol }
-func (node ExportDeclaration) SetSymbol(value *Symbol)           { node.data().symbol = value }
-func (node ExportDeclaration) Modifiers() *ModifierList          { return node.data().modifiers }
-func (node ExportDeclaration) setModifiers(value *ModifierList)  { node.data().modifiers = value }
-func (node ExportDeclaration) IsTypeOnly() bool                  { return node.data().isTypeOnly }
-func (node ExportDeclaration) SetIsTypeOnly(value bool)          { node.data().isTypeOnly = value }
-func (node ExportDeclaration) ExportClause() NamedExportBindings { return node.data().exportClause }
+func (node ExportDeclaration) FlowNode() *FlowNode              { return node.data().flowNode }
+func (node ExportDeclaration) SetFlowNode(value *FlowNode)      { node.data().flowNode = value }
+func (node ExportDeclaration) Symbol() *Symbol                  { return node.data().symbol }
+func (node ExportDeclaration) SetSymbol(value *Symbol)          { node.data().symbol = value }
+func (node ExportDeclaration) Modifiers() *ModifierList         { return node.data().modifiers }
+func (node ExportDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
+func (node ExportDeclaration) IsTypeOnly() bool                 { return node.data().isTypeOnly }
+func (node ExportDeclaration) SetIsTypeOnly(value bool)         { node.data().isTypeOnly = value }
+func (node ExportDeclaration) ExportClause() NamedExportBindings {
+	return node.s.deref(node.data().exportClause)
+}
+
 func (node ExportDeclaration) SetExportClause(value NamedExportBindings) {
-	node.data().exportClause = value
+	node.data().exportClause = node.s.ref(value)
 }
-func (node ExportDeclaration) ModuleSpecifier() Expression { return node.data().moduleSpecifier }
+
+func (node ExportDeclaration) ModuleSpecifier() Expression {
+	return node.s.deref(node.data().moduleSpecifier)
+}
+
 func (node ExportDeclaration) SetModuleSpecifier(value Expression) {
-	node.data().moduleSpecifier = value
+	node.data().moduleSpecifier = node.s.ref(value)
 }
-func (node ExportDeclaration) Attributes() ImportAttributesNode { return node.data().attributes }
+
+func (node ExportDeclaration) Attributes() ImportAttributesNode {
+	return node.s.deref(node.data().attributes)
+}
+
 func (node ExportDeclaration) SetAttributes(value ImportAttributesNode) {
-	node.data().attributes = value
+	node.data().attributes = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewExportDeclaration(modifiers *ModifierList, isTypeOnly bool, exportClause NamedExportBindings, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
-	data := &exportDeclarationData{}
+	s := f.nodeStore()
+	data, i := newRecord[exportDeclarationData](s, layoutExportDeclaration)
 	data.modifiers = modifiers
 	data.isTypeOnly = isTypeOnly
-	data.exportClause = exportClause
-	data.moduleSpecifier = moduleSpecifier
-	data.attributes = attributes
-	return f.newNode(KindExportDeclaration, data.asNode())
+	data.exportClause = s.ref(exportClause)
+	data.moduleSpecifier = s.ref(moduleSpecifier)
+	data.attributes = s.ref(attributes)
+	return f.newNode(KindExportDeclaration, layoutExportDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateExportDeclaration(node ExportDeclaration, modifiers *ModifierList, isTypeOnly bool, exportClause NamedExportBindings, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
@@ -12922,41 +14417,44 @@ func IsExportDeclaration(node Node) bool {
 type importTypeNodeData struct {
 	nodeWithTypeArgumentsBaseData
 	isTypeOf   bool
-	argument   TypeNode
-	attributes ImportAttributesNode // Optional
-	qualifier  EntityName           // Optional
+	argument   nodeRef // TypeNode
+	attributes nodeRef // ImportAttributesNode. Optional
+	qualifier  nodeRef // EntityName. Optional
 }
 
 type ImportTypeNode struct{ Node }
 
-func (node ImportTypeNode) data() *importTypeNodeData {
-	return (*importTypeNodeData)(unsafe.Pointer(node.h))
-}
+func (node ImportTypeNode) data() *importTypeNodeData { return (*importTypeNodeData)(node.rec()) }
 
-func (node ImportTypeNode) TypeArguments() *TypeList { return node.data().typeArguments }
-
+func (node ImportTypeNode) TypeArguments() *TypeList         { return node.data().typeArguments }
 func (node ImportTypeNode) SetTypeArguments(value *TypeList) { node.data().typeArguments = value }
 func (node ImportTypeNode) IsTypeOf() bool                   { return node.data().isTypeOf }
 func (node ImportTypeNode) SetIsTypeOf(value bool)           { node.data().isTypeOf = value }
-func (node ImportTypeNode) Argument() TypeNode               { return node.data().argument }
-func (node ImportTypeNode) SetArgument(value TypeNode)       { node.data().argument = value }
+func (node ImportTypeNode) Argument() TypeNode               { return node.s.deref(node.data().argument) }
 
-func (node ImportTypeNode) Attributes() ImportAttributesNode { return node.data().attributes }
+func (node ImportTypeNode) SetArgument(value TypeNode) { node.data().argument = node.s.ref(value) }
 
-func (node ImportTypeNode) SetAttributes(value ImportAttributesNode) { node.data().attributes = value }
+func (node ImportTypeNode) Attributes() ImportAttributesNode {
+	return node.s.deref(node.data().attributes)
+}
 
-func (node ImportTypeNode) Qualifier() EntityName { return node.data().qualifier }
+func (node ImportTypeNode) SetAttributes(value ImportAttributesNode) {
+	node.data().attributes = node.s.ref(value)
+}
 
-func (node ImportTypeNode) SetQualifier(value EntityName) { node.data().qualifier = value }
+func (node ImportTypeNode) Qualifier() EntityName { return node.s.deref(node.data().qualifier) }
+
+func (node ImportTypeNode) SetQualifier(value EntityName) { node.data().qualifier = node.s.ref(value) }
 
 func (f *NodeFactory) NewImportTypeNode(isTypeOf bool, argument TypeNode, attributes ImportAttributesNode, qualifier EntityName, typeArguments *TypeList) Node {
-	data := &importTypeNodeData{}
+	s := f.nodeStore()
+	data, i := newRecord[importTypeNodeData](s, layoutImportTypeNode)
 	data.isTypeOf = isTypeOf
-	data.argument = argument
-	data.attributes = attributes
-	data.qualifier = qualifier
+	data.argument = s.ref(argument)
+	data.attributes = s.ref(attributes)
+	data.qualifier = s.ref(qualifier)
 	data.typeArguments = typeArguments
-	return f.newNode(KindImportType, data.asNode())
+	return f.newNode(KindImportType, layoutImportTypeNode, i)
 }
 
 func (f *NodeFactory) UpdateImportTypeNode(node ImportTypeNode, isTypeOf bool, argument TypeNode, attributes ImportAttributesNode, qualifier EntityName, typeArguments *TypeList) Node {
@@ -12995,13 +14493,13 @@ type importClauseData struct {
 	exportableBaseData
 	compositeBaseData
 	phaseModifier ImportPhaseModifierSyntaxKind // Optional
-	name          IdentifierNode                // Optional
-	namedBindings NamedImportBindings           // Optional
+	name          nodeRef                       // IdentifierNode. Optional
+	namedBindings nodeRef                       // NamedImportBindings. Optional
 }
 
 type ImportClause struct{ Node }
 
-func (node ImportClause) data() *importClauseData { return (*importClauseData)(unsafe.Pointer(node.h)) }
+func (node ImportClause) data() *importClauseData { return (*importClauseData)(node.rec()) }
 
 func (node ImportClause) Symbol() *Symbol              { return node.data().symbol }
 func (node ImportClause) SetSymbol(value *Symbol)      { node.data().symbol = value }
@@ -13014,19 +14512,23 @@ func (node ImportClause) PhaseModifier() ImportPhaseModifierSyntaxKind {
 func (node ImportClause) SetPhaseModifier(value ImportPhaseModifierSyntaxKind) {
 	node.data().phaseModifier = value
 }
-func (node ImportClause) Name() IdentifierNode               { return node.data().name }
-func (node ImportClause) setName(value IdentifierNode)       { node.data().name = value }
-func (node ImportClause) NamedBindings() NamedImportBindings { return node.data().namedBindings }
+func (node ImportClause) Name() IdentifierNode         { return node.s.deref(node.data().name) }
+func (node ImportClause) setName(value IdentifierNode) { node.data().name = node.s.ref(value) }
+func (node ImportClause) NamedBindings() NamedImportBindings {
+	return node.s.deref(node.data().namedBindings)
+}
+
 func (node ImportClause) SetNamedBindings(value NamedImportBindings) {
-	node.data().namedBindings = value
+	node.data().namedBindings = node.s.ref(value)
 }
 
 func (f *NodeFactory) NewImportClause(phaseModifier ImportPhaseModifierSyntaxKind, name IdentifierNode, namedBindings NamedImportBindings) Node {
-	data := &importClauseData{}
+	s := f.nodeStore()
+	data, i := newRecord[importClauseData](s, layoutImportClause)
 	data.phaseModifier = phaseModifier
-	data.name = name
-	data.namedBindings = namedBindings
-	return f.newNode(KindImportClause, data.asNode())
+	data.name = s.ref(name)
+	data.namedBindings = s.ref(namedBindings)
+	return f.newNode(KindImportClause, layoutImportClause, i)
 }
 
 func (f *NodeFactory) UpdateImportClause(node ImportClause, phaseModifier ImportPhaseModifierSyntaxKind, name IdentifierNode, namedBindings NamedImportBindings) Node {
@@ -13062,38 +14564,37 @@ type importSpecifierData struct {
 	exportableBaseData
 	compositeBaseData
 	isTypeOnly   bool
-	propertyName ModuleExportName // Optional
-	name         IdentifierNode
+	propertyName nodeRef // ModuleExportName. Optional
+	name         nodeRef // IdentifierNode
 }
 
 type ImportSpecifier struct{ Node }
 
-func (node ImportSpecifier) data() *importSpecifierData {
-	return (*importSpecifierData)(unsafe.Pointer(node.h))
+func (node ImportSpecifier) data() *importSpecifierData { return (*importSpecifierData)(node.rec()) }
+
+func (node ImportSpecifier) Symbol() *Symbol              { return node.data().symbol }
+func (node ImportSpecifier) SetSymbol(value *Symbol)      { node.data().symbol = value }
+func (node ImportSpecifier) LocalSymbol() *Symbol         { return node.data().localSymbol }
+func (node ImportSpecifier) SetLocalSymbol(value *Symbol) { node.data().localSymbol = value }
+func (node ImportSpecifier) IsTypeOnly() bool             { return node.data().isTypeOnly }
+func (node ImportSpecifier) SetIsTypeOnly(value bool)     { node.data().isTypeOnly = value }
+func (node ImportSpecifier) PropertyName() ModuleExportName {
+	return node.s.deref(node.data().propertyName)
 }
 
-func (node ImportSpecifier) Symbol() *Symbol         { return node.data().symbol }
-func (node ImportSpecifier) SetSymbol(value *Symbol) { node.data().symbol = value }
-func (node ImportSpecifier) LocalSymbol() *Symbol    { return node.data().localSymbol }
-
-func (node ImportSpecifier) SetLocalSymbol(value *Symbol) { node.data().localSymbol = value }
-
-func (node ImportSpecifier) IsTypeOnly() bool { return node.data().isTypeOnly }
-
-func (node ImportSpecifier) SetIsTypeOnly(value bool) { node.data().isTypeOnly = value }
-
-func (node ImportSpecifier) PropertyName() ModuleExportName { return node.data().propertyName }
-
-func (node ImportSpecifier) SetPropertyName(value ModuleExportName) { node.data().propertyName = value }
-func (node ImportSpecifier) Name() IdentifierNode                   { return node.data().name }
-func (node ImportSpecifier) setName(value IdentifierNode)           { node.data().name = value }
+func (node ImportSpecifier) SetPropertyName(value ModuleExportName) {
+	node.data().propertyName = node.s.ref(value)
+}
+func (node ImportSpecifier) Name() IdentifierNode         { return node.s.deref(node.data().name) }
+func (node ImportSpecifier) setName(value IdentifierNode) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewImportSpecifier(isTypeOnly bool, propertyName ModuleExportName, name IdentifierNode) Node {
-	data := f.importSpecifierArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[importSpecifierData](s, layoutImportSpecifier)
 	data.isTypeOnly = isTypeOnly
-	data.propertyName = propertyName
-	data.name = name
-	return f.newNode(KindImportSpecifier, data.asNode())
+	data.propertyName = s.ref(propertyName)
+	data.name = s.ref(name)
+	return f.newNode(KindImportSpecifier, layoutImportSpecifier, i)
 }
 
 func (f *NodeFactory) UpdateImportSpecifier(node ImportSpecifier, isTypeOnly bool, propertyName ModuleExportName, name IdentifierNode) Node {
@@ -13129,16 +14630,16 @@ type jsDocTextData struct {
 
 type JSDocText struct{ Node }
 
-func (node JSDocText) data() *jsDocTextData { return (*jsDocTextData)(unsafe.Pointer(node.h)) }
+func (node JSDocText) data() *jsDocTextData { return (*jsDocTextData)(node.rec()) }
 
 func (node JSDocText) text() []string         { return node.data().text }
 func (node JSDocText) setText(value []string) { node.data().text = value }
 
 func (f *NodeFactory) NewJSDocText(text []string) Node {
-	data := f.jsdocTextArena.New()
+	data, i := newRecord[jsDocTextData](f.nodeStore(), layoutJSDocText)
 	data.text = text
 	f.textCount++
-	return f.newNode(KindJSDocText, data.asNode())
+	return f.newNode(KindJSDocText, layoutJSDocText, i)
 }
 
 func (node JSDocText) Clone(f NodeFactoryCoercible) Node {
@@ -13155,24 +14656,25 @@ func IsJSDocText(node Node) bool {
 
 type jsDocLinkData struct {
 	jsDocCommentBaseData
-	name EntityName // Optional
+	name nodeRef // EntityName. Optional
 }
 
 type JSDocLink struct{ Node }
 
-func (node JSDocLink) data() *jsDocLinkData { return (*jsDocLinkData)(unsafe.Pointer(node.h)) }
+func (node JSDocLink) data() *jsDocLinkData { return (*jsDocLinkData)(node.rec()) }
 
 func (node JSDocLink) text() []string           { return node.data().text }
 func (node JSDocLink) setText(value []string)   { node.data().text = value }
-func (node JSDocLink) Name() EntityName         { return node.data().name }
-func (node JSDocLink) setName(value EntityName) { node.data().name = value }
+func (node JSDocLink) Name() EntityName         { return node.s.deref(node.data().name) }
+func (node JSDocLink) setName(value EntityName) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewJSDocLink(name EntityName, text []string) Node {
-	data := &jsDocLinkData{}
-	data.name = name
+	s := f.nodeStore()
+	data, i := newRecord[jsDocLinkData](s, layoutJSDocLink)
+	data.name = s.ref(name)
 	data.text = text
 	f.textCount++
-	return f.newNode(KindJSDocLink, data.asNode())
+	return f.newNode(KindJSDocLink, layoutJSDocLink, i)
 }
 
 func (f *NodeFactory) UpdateJSDocLink(node JSDocLink, name EntityName, text []string) Node {
@@ -13204,26 +14706,25 @@ func IsJSDocLink(node Node) bool {
 
 type jsDocLinkPlainData struct {
 	jsDocCommentBaseData
-	name EntityName // Optional
+	name nodeRef // EntityName. Optional
 }
 
 type JSDocLinkPlain struct{ Node }
 
-func (node JSDocLinkPlain) data() *jsDocLinkPlainData {
-	return (*jsDocLinkPlainData)(unsafe.Pointer(node.h))
-}
+func (node JSDocLinkPlain) data() *jsDocLinkPlainData { return (*jsDocLinkPlainData)(node.rec()) }
 
 func (node JSDocLinkPlain) text() []string           { return node.data().text }
 func (node JSDocLinkPlain) setText(value []string)   { node.data().text = value }
-func (node JSDocLinkPlain) Name() EntityName         { return node.data().name }
-func (node JSDocLinkPlain) setName(value EntityName) { node.data().name = value }
+func (node JSDocLinkPlain) Name() EntityName         { return node.s.deref(node.data().name) }
+func (node JSDocLinkPlain) setName(value EntityName) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewJSDocLinkPlain(name EntityName, text []string) Node {
-	data := &jsDocLinkPlainData{}
-	data.name = name
+	s := f.nodeStore()
+	data, i := newRecord[jsDocLinkPlainData](s, layoutJSDocLinkPlain)
+	data.name = s.ref(name)
 	data.text = text
 	f.textCount++
-	return f.newNode(KindJSDocLinkPlain, data.asNode())
+	return f.newNode(KindJSDocLinkPlain, layoutJSDocLinkPlain, i)
 }
 
 func (f *NodeFactory) UpdateJSDocLinkPlain(node JSDocLinkPlain, name EntityName, text []string) Node {
@@ -13255,26 +14756,25 @@ func IsJSDocLinkPlain(node Node) bool {
 
 type jsDocLinkCodeData struct {
 	jsDocCommentBaseData
-	name EntityName // Optional
+	name nodeRef // EntityName. Optional
 }
 
 type JSDocLinkCode struct{ Node }
 
-func (node JSDocLinkCode) data() *jsDocLinkCodeData {
-	return (*jsDocLinkCodeData)(unsafe.Pointer(node.h))
-}
+func (node JSDocLinkCode) data() *jsDocLinkCodeData { return (*jsDocLinkCodeData)(node.rec()) }
 
 func (node JSDocLinkCode) text() []string           { return node.data().text }
 func (node JSDocLinkCode) setText(value []string)   { node.data().text = value }
-func (node JSDocLinkCode) Name() EntityName         { return node.data().name }
-func (node JSDocLinkCode) setName(value EntityName) { node.data().name = value }
+func (node JSDocLinkCode) Name() EntityName         { return node.s.deref(node.data().name) }
+func (node JSDocLinkCode) setName(value EntityName) { node.data().name = node.s.ref(value) }
 
 func (f *NodeFactory) NewJSDocLinkCode(name EntityName, text []string) Node {
-	data := &jsDocLinkCodeData{}
-	data.name = name
+	s := f.nodeStore()
+	data, i := newRecord[jsDocLinkCodeData](s, layoutJSDocLinkCode)
+	data.name = s.ref(name)
 	data.text = text
 	f.textCount++
-	return f.newNode(KindJSDocLinkCode, data.asNode())
+	return f.newNode(KindJSDocLinkCode, layoutJSDocLinkCode, i)
 }
 
 func (f *NodeFactory) UpdateJSDocLinkCode(node JSDocLinkCode, name EntityName, text []string) Node {
@@ -13309,16 +14809,16 @@ type typeParameterDeclarationData struct {
 	nodeBaseData
 	declarationBaseData
 	modifiersBaseData
-	name        IdentifierNode
-	constraint  TypeNode   // Optional
-	expression  Expression // Optional
-	defaultType TypeNode   // Optional
+	name        nodeRef // IdentifierNode
+	constraint  nodeRef // TypeNode. Optional
+	expression  nodeRef // Expression. Optional
+	defaultType nodeRef // TypeNode. Optional
 }
 
 type TypeParameterDeclaration struct{ Node }
 
 func (node TypeParameterDeclaration) data() *typeParameterDeclarationData {
-	return (*typeParameterDeclarationData)(unsafe.Pointer(node.h))
+	return (*typeParameterDeclarationData)(node.rec())
 }
 
 func (node TypeParameterDeclaration) Symbol() *Symbol         { return node.data().symbol }
@@ -13327,28 +14827,46 @@ func (node TypeParameterDeclaration) SetSymbol(value *Symbol) { node.data().symb
 func (node TypeParameterDeclaration) Modifiers() *ModifierList { return node.data().modifiers }
 
 func (node TypeParameterDeclaration) setModifiers(value *ModifierList) { node.data().modifiers = value }
-func (node TypeParameterDeclaration) Name() IdentifierNode             { return node.data().name }
-func (node TypeParameterDeclaration) setName(value IdentifierNode)     { node.data().name = value }
-func (node TypeParameterDeclaration) Constraint() TypeNode             { return node.data().constraint }
 
-func (node TypeParameterDeclaration) SetConstraint(value TypeNode) { node.data().constraint = value }
+func (node TypeParameterDeclaration) Name() IdentifierNode { return node.s.deref(node.data().name) }
 
-func (node TypeParameterDeclaration) Expression() Expression { return node.data().expression }
+func (node TypeParameterDeclaration) setName(value IdentifierNode) {
+	node.data().name = node.s.ref(value)
+}
 
-func (node TypeParameterDeclaration) SetExpression(value Expression) { node.data().expression = value }
+func (node TypeParameterDeclaration) Constraint() TypeNode {
+	return node.s.deref(node.data().constraint)
+}
 
-func (node TypeParameterDeclaration) DefaultType() TypeNode { return node.data().defaultType }
+func (node TypeParameterDeclaration) SetConstraint(value TypeNode) {
+	node.data().constraint = node.s.ref(value)
+}
 
-func (node TypeParameterDeclaration) SetDefaultType(value TypeNode) { node.data().defaultType = value }
+func (node TypeParameterDeclaration) Expression() Expression {
+	return node.s.deref(node.data().expression)
+}
+
+func (node TypeParameterDeclaration) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
+
+func (node TypeParameterDeclaration) DefaultType() TypeNode {
+	return node.s.deref(node.data().defaultType)
+}
+
+func (node TypeParameterDeclaration) SetDefaultType(value TypeNode) {
+	node.data().defaultType = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewTypeParameterDeclaration(modifiers *ModifierList, name IdentifierNode, constraint TypeNode, expression Expression, defaultType TypeNode) Node {
-	data := f.typeParameterDeclarationArena.New()
+	s := f.nodeStore()
+	data, i := newRecord[typeParameterDeclarationData](s, layoutTypeParameterDeclaration)
 	data.modifiers = modifiers
-	data.name = name
-	data.constraint = constraint
-	data.expression = expression
-	data.defaultType = defaultType
-	return f.newNode(KindTypeParameter, data.asNode())
+	data.name = s.ref(name)
+	data.constraint = s.ref(constraint)
+	data.expression = s.ref(expression)
+	data.defaultType = s.ref(defaultType)
+	return f.newNode(KindTypeParameter, layoutTypeParameterDeclaration, i)
 }
 
 func (f *NodeFactory) UpdateTypeParameterDeclaration(node TypeParameterDeclaration, modifiers *ModifierList, name IdentifierNode, constraint TypeNode, expression Expression, defaultType TypeNode) Node {
@@ -13384,28 +14902,38 @@ func IsTypeParameterDeclaration(node Node) bool {
 
 type syntheticReferenceExpressionData struct {
 	expressionBaseData
-	expression Expression
-	thisArg    Expression
+	expression nodeRef // Expression
+	thisArg    nodeRef // Expression
 }
 
 type SyntheticReferenceExpression struct{ Node }
 
 func (node SyntheticReferenceExpression) data() *syntheticReferenceExpressionData {
-	return (*syntheticReferenceExpressionData)(unsafe.Pointer(node.h))
+	return (*syntheticReferenceExpressionData)(node.rec())
 }
 
-func (node SyntheticReferenceExpression) Expression() Expression { return node.data().expression }
-func (node SyntheticReferenceExpression) SetExpression(value Expression) {
-	node.data().expression = value
+func (node SyntheticReferenceExpression) Expression() Expression {
+	return node.s.deref(node.data().expression)
 }
-func (node SyntheticReferenceExpression) ThisArg() Expression         { return node.data().thisArg }
-func (node SyntheticReferenceExpression) SetThisArg(value Expression) { node.data().thisArg = value }
+
+func (node SyntheticReferenceExpression) SetExpression(value Expression) {
+	node.data().expression = node.s.ref(value)
+}
+
+func (node SyntheticReferenceExpression) ThisArg() Expression {
+	return node.s.deref(node.data().thisArg)
+}
+
+func (node SyntheticReferenceExpression) SetThisArg(value Expression) {
+	node.data().thisArg = node.s.ref(value)
+}
 
 func (f *NodeFactory) NewSyntheticReferenceExpression(expression Expression, thisArg Expression) Node {
-	data := &syntheticReferenceExpressionData{}
-	data.expression = expression
-	data.thisArg = thisArg
-	return f.newNode(KindSyntheticReferenceExpression, data.asNode())
+	s := f.nodeStore()
+	data, i := newRecord[syntheticReferenceExpressionData](s, layoutSyntheticReferenceExpression)
+	data.expression = s.ref(expression)
+	data.thisArg = s.ref(thisArg)
+	return f.newNode(KindSyntheticReferenceExpression, layoutSyntheticReferenceExpression, i)
 }
 
 func (f *NodeFactory) UpdateSyntheticReferenceExpression(node SyntheticReferenceExpression, expression Expression, thisArg Expression) Node {
@@ -13449,9 +14977,7 @@ type jsDocTypeLiteralData struct {
 
 type JSDocTypeLiteral struct{ Node }
 
-func (node JSDocTypeLiteral) data() *jsDocTypeLiteralData {
-	return (*jsDocTypeLiteralData)(unsafe.Pointer(node.h))
-}
+func (node JSDocTypeLiteral) data() *jsDocTypeLiteralData { return (*jsDocTypeLiteralData)(node.rec()) }
 
 func (node JSDocTypeLiteral) Symbol() *Symbol           { return node.data().symbol }
 func (node JSDocTypeLiteral) SetSymbol(value *Symbol)   { node.data().symbol = value }
@@ -13463,10 +14989,10 @@ func (node JSDocTypeLiteral) IsArrayType() bool         { return node.data().isA
 func (node JSDocTypeLiteral) SetIsArrayType(value bool) { node.data().isArrayType = value }
 
 func (f *NodeFactory) NewJSDocTypeLiteral(jsdocPropertyTags []Node, isArrayType bool) Node {
-	data := &jsDocTypeLiteralData{}
+	data, i := newRecord[jsDocTypeLiteralData](f.nodeStore(), layoutJSDocTypeLiteral)
 	data.jsDocPropertyTags = jsdocPropertyTags
 	data.isArrayType = isArrayType
-	return f.newNode(KindJSDocTypeLiteral, data.asNode())
+	return f.newNode(KindJSDocTypeLiteral, layoutJSDocTypeLiteral, i)
 }
 
 func (f *NodeFactory) UpdateJSDocTypeLiteral(node JSDocTypeLiteral, jsdocPropertyTags []Node, isArrayType bool) Node {
@@ -13499,36 +15025,43 @@ func IsJSDocTypeLiteral(node Node) bool {
 
 type jsDocParameterOrPropertyTagData struct {
 	jsDocTagBaseData
-	name           EntityName
+	name           nodeRef // EntityName
 	isBracketed    bool
-	typeExpression TypeNode // Optional
+	typeExpression nodeRef // TypeNode. Optional
 	isNameFirst    bool
 }
 
 type JSDocParameterOrPropertyTag struct{ Node }
 
 func (node JSDocParameterOrPropertyTag) data() *jsDocParameterOrPropertyTagData {
-	return (*jsDocParameterOrPropertyTagData)(unsafe.Pointer(node.h))
+	return (*jsDocParameterOrPropertyTagData)(node.rec())
 }
 
-func (node JSDocParameterOrPropertyTag) TagName() IdentifierNode { return node.data().tagName }
+func (node JSDocParameterOrPropertyTag) TagName() IdentifierNode {
+	return node.s.deref(node.data().tagName)
+}
 
-func (node JSDocParameterOrPropertyTag) SetTagName(value IdentifierNode) { node.data().tagName = value }
-
-func (node JSDocParameterOrPropertyTag) Comment() *NodeList { return node.data().comment }
-
+func (node JSDocParameterOrPropertyTag) SetTagName(value IdentifierNode) {
+	node.data().tagName = node.s.ref(value)
+}
+func (node JSDocParameterOrPropertyTag) Comment() *NodeList         { return node.data().comment }
 func (node JSDocParameterOrPropertyTag) SetComment(value *NodeList) { node.data().comment = value }
-func (node JSDocParameterOrPropertyTag) Name() EntityName           { return node.data().name }
-func (node JSDocParameterOrPropertyTag) setName(value EntityName)   { node.data().name = value }
+func (node JSDocParameterOrPropertyTag) Name() EntityName           { return node.s.deref(node.data().name) }
+
+func (node JSDocParameterOrPropertyTag) setName(value EntityName) {
+	node.data().name = node.s.ref(value)
+}
 
 func (node JSDocParameterOrPropertyTag) IsBracketed() bool { return node.data().isBracketed }
 
 func (node JSDocParameterOrPropertyTag) SetIsBracketed(value bool) { node.data().isBracketed = value }
 
-func (node JSDocParameterOrPropertyTag) TypeExpression() TypeNode { return node.data().typeExpression }
+func (node JSDocParameterOrPropertyTag) TypeExpression() TypeNode {
+	return node.s.deref(node.data().typeExpression)
+}
 
 func (node JSDocParameterOrPropertyTag) SetTypeExpression(value TypeNode) {
-	node.data().typeExpression = value
+	node.data().typeExpression = node.s.ref(value)
 }
 
 func (node JSDocParameterOrPropertyTag) IsNameFirst() bool { return node.data().isNameFirst }
@@ -13541,14 +15074,15 @@ func (f *NodeFactory) NewJSDocParameterOrPropertyTag(kind Kind, tagName Identifi
 	default:
 		panic("Invalid node kind for JSDocParameterOrPropertyTag")
 	}
-	data := &jsDocParameterOrPropertyTagData{}
-	data.tagName = tagName
-	data.name = name
+	s := f.nodeStore()
+	data, i := newRecord[jsDocParameterOrPropertyTagData](s, layoutJSDocParameterOrPropertyTag)
+	data.tagName = s.ref(tagName)
+	data.name = s.ref(name)
 	data.isBracketed = isBracketed
-	data.typeExpression = typeExpression
+	data.typeExpression = s.ref(typeExpression)
 	data.isNameFirst = isNameFirst
 	data.comment = comment
-	return f.newNode(kind, data.asNode())
+	return f.newNode(kind, layoutJSDocParameterOrPropertyTag, i)
 }
 
 func (f *NodeFactory) UpdateJSDocParameterOrPropertyTag(node JSDocParameterOrPropertyTag, tagName IdentifierNode, name EntityName, isBracketed bool, typeExpression TypeNode, isNameFirst bool, comment *NodeList) Node {
@@ -13891,7 +15425,7 @@ func (n Node) ForEachChild(v Visitor) bool {
 	case KindJSDocNameReference:
 		return JSDocNameReference{n}.ForEachChild(v)
 	case KindSourceFile:
-		return (*SourceFile)(unsafe.Pointer(n.h)).ForEachChild(v)
+		return (*SourceFile)(n.rec()).ForEachChild(v)
 	case KindModuleDeclaration:
 		return ModuleDeclaration{n}.ForEachChild(v)
 	case KindImportEqualsDeclaration:
@@ -14236,7 +15770,7 @@ func (n Node) VisitEachChild(v *NodeVisitor) Node {
 	case KindJSDocNameReference:
 		return JSDocNameReference{n}.VisitEachChild(v)
 	case KindSourceFile:
-		return (*SourceFile)(unsafe.Pointer(n.h)).VisitEachChild(v)
+		return (*SourceFile)(n.rec()).VisitEachChild(v)
 	case KindModuleDeclaration:
 		return ModuleDeclaration{n}.VisitEachChild(v)
 	case KindImportEqualsDeclaration:
@@ -14631,7 +16165,7 @@ func (n Node) Clone(f NodeFactoryCoercible) Node {
 	case KindJSDocNameReference:
 		return JSDocNameReference{n}.Clone(f)
 	case KindSourceFile:
-		return (*SourceFile)(unsafe.Pointer(n.h)).Clone(f)
+		return (*SourceFile)(n.rec()).Clone(f)
 	case KindModuleDeclaration:
 		return ModuleDeclaration{n}.Clone(f)
 	case KindImportEqualsDeclaration:
@@ -14702,43 +16236,43 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
 		return n.computeSubtreeFacts()
 	case KindQualifiedName:
-		return (*qualifiedNameData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*qualifiedNameData)(n.rec()).subtreeFactsWorker(n)
 	case KindComputedPropertyName:
-		return (*computedPropertyNameData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*computedPropertyNameData)(n.rec()).subtreeFactsWorker(n)
 	case KindDecorator:
-		return (*decoratorData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*decoratorData)(n.rec()).subtreeFactsWorker(n)
 	case KindEmptyStatement:
 		return n.computeSubtreeFacts()
 	case KindIfStatement:
-		return (*ifStatementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*ifStatementData)(n.rec()).subtreeFactsWorker(n)
 	case KindDoStatement:
-		return (*doStatementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*doStatementData)(n.rec()).subtreeFactsWorker(n)
 	case KindWhileStatement:
-		return (*whileStatementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*whileStatementData)(n.rec()).subtreeFactsWorker(n)
 	case KindForStatement:
-		return (*forStatementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*forStatementData)(n.rec()).subtreeFactsWorker(n)
 	case KindForInStatement, KindForOfStatement:
-		return (*forInOrOfStatementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*forInOrOfStatementData)(n.rec()).subtreeFactsWorker(n)
 	case KindBreakStatement:
 		return n.computeSubtreeFacts()
 	case KindContinueStatement:
 		return n.computeSubtreeFacts()
 	case KindReturnStatement:
-		return (*returnStatementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*returnStatementData)(n.rec()).subtreeFactsWorker(n)
 	case KindWithStatement:
-		return (*withStatementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*withStatementData)(n.rec()).subtreeFactsWorker(n)
 	case KindSwitchStatement:
-		return (*switchStatementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*switchStatementData)(n.rec()).subtreeFactsWorker(n)
 	case KindCaseBlock:
-		return (*caseBlockData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*caseBlockData)(n.rec()).subtreeFactsWorker(n)
 	case KindCaseClause, KindDefaultClause:
-		return (*caseOrDefaultClauseData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*caseOrDefaultClauseData)(n.rec()).subtreeFactsWorker(n)
 	case KindThrowStatement:
-		return (*throwStatementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*throwStatementData)(n.rec()).subtreeFactsWorker(n)
 	case KindTryStatement:
-		return (*tryStatementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*tryStatementData)(n.rec()).subtreeFactsWorker(n)
 	case KindCatchClause:
-		return (*catchClauseData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*catchClauseData)(n.rec()).subtreeFactsWorker(n)
 	case KindDebuggerStatement:
 		return n.computeSubtreeFacts()
 	case KindLabeledStatement:
@@ -14746,89 +16280,89 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindExpressionStatement:
 		return n.computeSubtreeFacts()
 	case KindBlock:
-		return (*blockData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*blockData)(n.rec()).subtreeFactsWorker(n)
 	case KindVariableStatement:
-		return (*variableStatementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*variableStatementData)(n.rec()).subtreeFactsWorker(n)
 	case KindVariableDeclaration:
-		return (*variableDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*variableDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindVariableDeclarationList:
-		return (*variableDeclarationListData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*variableDeclarationListData)(n.rec()).subtreeFactsWorker(n)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
-		return (*bindingPatternData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*bindingPatternData)(n.rec()).subtreeFactsWorker(n)
 	case KindParameter:
-		return (*parameterDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*parameterDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindBindingElement:
-		return (*bindingElementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*bindingElementData)(n.rec()).subtreeFactsWorker(n)
 	case KindMissingDeclaration:
 		return n.computeSubtreeFacts()
 	case KindFunctionDeclaration:
-		return (*functionDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*functionDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindClassDeclaration:
-		return (*classDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*classDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindClassExpression:
-		return (*classExpressionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*classExpressionData)(n.rec()).subtreeFactsWorker(n)
 	case KindHeritageClause:
-		return (*heritageClauseData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*heritageClauseData)(n.rec()).subtreeFactsWorker(n)
 	case KindInterfaceDeclaration:
 		return n.computeSubtreeFacts()
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
 		return n.computeSubtreeFacts()
 	case KindEnumMember:
-		return (*enumMemberData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*enumMemberData)(n.rec()).subtreeFactsWorker(n)
 	case KindEnumDeclaration:
-		return (*enumDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*enumDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindModuleBlock:
-		return (*moduleBlockData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*moduleBlockData)(n.rec()).subtreeFactsWorker(n)
 	case KindNotEmittedStatement:
 		return n.computeSubtreeFacts()
 	case KindNotEmittedTypeElement:
 		return n.computeSubtreeFacts()
 	case KindImportDeclaration, KindJSImportDeclaration:
-		return (*importDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*importDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindExternalModuleReference:
 		return n.computeSubtreeFacts()
 	case KindNamespaceImport:
 		return n.computeSubtreeFacts()
 	case KindNamedImports:
-		return (*namedImportsData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*namedImportsData)(n.rec()).subtreeFactsWorker(n)
 	case KindExportAssignment:
-		return (*exportAssignmentData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*exportAssignmentData)(n.rec()).subtreeFactsWorker(n)
 	case KindNamespaceExportDeclaration:
 		return n.computeSubtreeFacts()
 	case KindNamespaceExport:
 		return n.computeSubtreeFacts()
 	case KindNamedExports:
-		return (*namedExportsData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*namedExportsData)(n.rec()).subtreeFactsWorker(n)
 	case KindExportSpecifier:
-		return (*exportSpecifierData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*exportSpecifierData)(n.rec()).subtreeFactsWorker(n)
 	case KindCallSignature:
 		return n.computeSubtreeFacts()
 	case KindConstructSignature:
 		return n.computeSubtreeFacts()
 	case KindConstructor:
-		return (*constructorDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*constructorDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindGetAccessor:
-		return (*getAccessorDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*getAccessorDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindSetAccessor:
-		return (*setAccessorDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*setAccessorDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindIndexSignature:
 		return n.computeSubtreeFacts()
 	case KindMethodSignature:
 		return n.computeSubtreeFacts()
 	case KindMethodDeclaration:
-		return (*methodDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*methodDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindPropertySignature:
 		return n.computeSubtreeFacts()
 	case KindPropertyDeclaration:
-		return (*propertyDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*propertyDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindSemicolonClassElement:
 		return n.computeSubtreeFacts()
 	case KindClassStaticBlockDeclaration:
-		return (*classStaticBlockDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*classStaticBlockDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindOmittedExpression:
 		return n.computeSubtreeFacts()
 	case KindBinaryExpression:
-		return (*binaryExpressionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*binaryExpressionData)(n.rec()).subtreeFactsWorker(n)
 	case KindPrefixUnaryExpression:
 		return n.computeSubtreeFacts()
 	case KindPostfixUnaryExpression:
@@ -14836,47 +16370,47 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindYieldExpression:
 		return n.computeSubtreeFacts()
 	case KindArrowFunction:
-		return (*arrowFunctionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*arrowFunctionData)(n.rec()).subtreeFactsWorker(n)
 	case KindFunctionExpression:
-		return (*functionExpressionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*functionExpressionData)(n.rec()).subtreeFactsWorker(n)
 	case KindAsExpression:
 		return n.computeSubtreeFacts()
 	case KindSatisfiesExpression:
 		return n.computeSubtreeFacts()
 	case KindConditionalExpression:
-		return (*conditionalExpressionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*conditionalExpressionData)(n.rec()).subtreeFactsWorker(n)
 	case KindPropertyAccessExpression:
-		return (*propertyAccessExpressionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*propertyAccessExpressionData)(n.rec()).subtreeFactsWorker(n)
 	case KindElementAccessExpression:
-		return (*elementAccessExpressionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*elementAccessExpressionData)(n.rec()).subtreeFactsWorker(n)
 	case KindCallExpression:
-		return (*callExpressionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*callExpressionData)(n.rec()).subtreeFactsWorker(n)
 	case KindNewExpression:
-		return (*newExpressionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*newExpressionData)(n.rec()).subtreeFactsWorker(n)
 	case KindMetaProperty:
-		return (*metaPropertyData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*metaPropertyData)(n.rec()).subtreeFactsWorker(n)
 	case KindNonNullExpression:
 		return n.computeSubtreeFacts()
 	case KindSpreadElement:
 		return n.computeSubtreeFacts()
 	case KindTemplateExpression:
-		return (*templateExpressionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*templateExpressionData)(n.rec()).subtreeFactsWorker(n)
 	case KindTemplateSpan:
 		return n.computeSubtreeFacts()
 	case KindTaggedTemplateExpression:
-		return (*taggedTemplateExpressionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*taggedTemplateExpressionData)(n.rec()).subtreeFactsWorker(n)
 	case KindParenthesizedExpression:
 		return n.computeSubtreeFacts()
 	case KindArrayLiteralExpression:
-		return (*arrayLiteralExpressionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*arrayLiteralExpressionData)(n.rec()).subtreeFactsWorker(n)
 	case KindObjectLiteralExpression:
-		return (*objectLiteralExpressionData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*objectLiteralExpressionData)(n.rec()).subtreeFactsWorker(n)
 	case KindSpreadAssignment:
 		return n.computeSubtreeFacts()
 	case KindPropertyAssignment:
-		return (*propertyAssignmentData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*propertyAssignmentData)(n.rec()).subtreeFactsWorker(n)
 	case KindShorthandPropertyAssignment:
-		return (*shorthandPropertyAssignmentData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*shorthandPropertyAssignmentData)(n.rec()).subtreeFactsWorker(n)
 	case KindDeleteExpression:
 		return n.computeSubtreeFacts()
 	case KindTypeOfExpression:
@@ -14904,7 +16438,7 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindTypeReference:
 		return n.computeSubtreeFacts()
 	case KindExpressionWithTypeArguments:
-		return (*expressionWithTypeArgumentsData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*expressionWithTypeArgumentsData)(n.rec()).subtreeFactsWorker(n)
 	case KindLiteralType:
 		return n.computeSubtreeFacts()
 	case KindThisType:
@@ -14912,9 +16446,9 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindTypePredicate:
 		return n.computeSubtreeFacts()
 	case KindImportAttribute:
-		return (*importAttributeData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*importAttributeData)(n.rec()).subtreeFactsWorker(n)
 	case KindImportAttributes:
-		return (*importAttributesData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*importAttributesData)(n.rec()).subtreeFactsWorker(n)
 	case KindTypeQuery:
 		return n.computeSubtreeFacts()
 	case KindMappedType:
@@ -14944,23 +16478,23 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindPartiallyEmittedExpression:
 		return n.computeSubtreeFacts()
 	case KindJsxElement:
-		return (*jsxElementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*jsxElementData)(n.rec()).subtreeFactsWorker(n)
 	case KindJsxAttributes:
-		return (*jsxAttributesData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*jsxAttributesData)(n.rec()).subtreeFactsWorker(n)
 	case KindJsxNamespacedName:
-		return (*jsxNamespacedNameData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*jsxNamespacedNameData)(n.rec()).subtreeFactsWorker(n)
 	case KindJsxOpeningElement:
-		return (*jsxOpeningElementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*jsxOpeningElementData)(n.rec()).subtreeFactsWorker(n)
 	case KindJsxSelfClosingElement:
-		return (*jsxSelfClosingElementData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*jsxSelfClosingElementData)(n.rec()).subtreeFactsWorker(n)
 	case KindJsxFragment:
-		return (*jsxFragmentData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*jsxFragmentData)(n.rec()).subtreeFactsWorker(n)
 	case KindJsxOpeningFragment:
 		return n.computeSubtreeFacts()
 	case KindJsxClosingFragment:
 		return n.computeSubtreeFacts()
 	case KindJsxAttribute:
-		return (*jsxAttributeData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*jsxAttributeData)(n.rec()).subtreeFactsWorker(n)
 	case KindJsxSpreadAttribute:
 		return n.computeSubtreeFacts()
 	case KindJsxClosingElement:
@@ -15028,19 +16562,19 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindJSDocNameReference:
 		return n.computeSubtreeFacts()
 	case KindSourceFile:
-		return (*SourceFile)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*SourceFile)(n.rec()).subtreeFactsWorker(n)
 	case KindModuleDeclaration:
-		return (*moduleDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*moduleDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindImportEqualsDeclaration:
-		return (*importEqualsDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*importEqualsDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindExportDeclaration:
-		return (*exportDeclarationData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*exportDeclarationData)(n.rec()).subtreeFactsWorker(n)
 	case KindImportType:
 		return n.computeSubtreeFacts()
 	case KindImportClause:
-		return (*importClauseData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*importClauseData)(n.rec()).subtreeFactsWorker(n)
 	case KindImportSpecifier:
-		return (*importSpecifierData)(unsafe.Pointer(n.h)).subtreeFactsWorker(n)
+		return (*importSpecifierData)(n.rec()).subtreeFactsWorker(n)
 	case KindJSDocText:
 		return n.computeSubtreeFacts()
 	case KindJSDocLink:
@@ -15349,7 +16883,7 @@ func (n Node) computeSubtreeFacts() SubtreeFacts {
 	case KindJSDocNameReference:
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindSourceFile:
-		return (*SourceFile)(unsafe.Pointer(n.h)).computeSubtreeFacts()
+		return (*SourceFile)(n.rec()).computeSubtreeFacts()
 	case KindModuleDeclaration:
 		return ModuleDeclaration{n}.computeSubtreeFacts()
 	case KindImportEqualsDeclaration:
@@ -16457,202 +17991,6 @@ func (n MutableNode) SetModifiers(modifiers *ModifierList) {
 // ──────────────────────────────────────────────────────────────────────
 // As*() cast methods
 // ──────────────────────────────────────────────────────────────────────
-
-// Every concrete node embeds its header at offset zero.
-var (
-	_ [0 - unsafe.Offsetof(tokenData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(identifierData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(privateIdentifierData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(qualifiedNameData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(computedPropertyNameData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(decoratorData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(emptyStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(ifStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(doStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(whileStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(forStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(forInOrOfStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(breakStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(continueStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(returnStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(withStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(switchStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(caseBlockData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(caseOrDefaultClauseData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(throwStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(tryStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(catchClauseData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(debuggerStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(labeledStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(expressionStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(blockData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(variableStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(variableDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(variableDeclarationListData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(bindingPatternData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(parameterDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(bindingElementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(missingDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(functionDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(classDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(classExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(heritageClauseData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(interfaceDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(typeAliasDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(enumMemberData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(enumDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(moduleBlockData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(notEmittedStatementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(notEmittedTypeElementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(importDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(externalModuleReferenceData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(namespaceImportData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(namedImportsData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(exportAssignmentData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(namespaceExportDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(namespaceExportData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(namedExportsData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(exportSpecifierData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(callSignatureDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(constructSignatureDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(constructorDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(getAccessorDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(setAccessorDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(indexSignatureDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(methodSignatureDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(methodDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(propertySignatureDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(propertyDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(semicolonClassElementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(classStaticBlockDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(omittedExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(keywordExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(stringLiteralData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(numericLiteralData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(bigIntLiteralData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(regularExpressionLiteralData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(noSubstitutionTemplateLiteralData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(binaryExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(prefixUnaryExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(postfixUnaryExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(yieldExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(arrowFunctionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(functionExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(asExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(satisfiesExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(conditionalExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(propertyAccessExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(elementAccessExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(callExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(newExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(metaPropertyData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(nonNullExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(spreadElementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(templateExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(templateSpanData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(taggedTemplateExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(parenthesizedExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(arrayLiteralExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(objectLiteralExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(spreadAssignmentData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(propertyAssignmentData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(shorthandPropertyAssignmentData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(deleteExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(typeOfExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(voidExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(awaitExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(typeAssertionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(keywordTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(unionTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(intersectionTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(conditionalTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(typeOperatorNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(inferTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(arrayTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(indexedAccessTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(typeReferenceNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(expressionWithTypeArgumentsData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(literalTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(thisTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(typePredicateNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(importAttributeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(importAttributesData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(typeQueryNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(mappedTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(typeLiteralNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(tupleTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(namedTupleMemberData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(optionalTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(restTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(parenthesizedTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(functionTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(constructorTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(templateHeadData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(templateMiddleData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(templateTailData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(templateLiteralTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(templateLiteralTypeSpanData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(syntheticExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(partiallyEmittedExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxElementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxAttributesData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxNamespacedNameData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxOpeningElementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxSelfClosingElementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxFragmentData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxOpeningFragmentData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxClosingFragmentData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxAttributeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxSpreadAttributeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxClosingElementData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsxTextData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(syntaxListData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocTypeExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocNonNullableTypeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocNullableTypeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocAllTypeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocVariadicTypeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocOptionalTypeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocTypeTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocUnknownTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocTemplateTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocReturnTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocPublicTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocPrivateTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocProtectedTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocReadonlyTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocOverrideTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocDeprecatedTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocSeeTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocImplementsTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocAugmentsTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocSatisfiesTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocThrowsTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocThisTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocImportTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocCallbackTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocOverloadTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocTypedefTagData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocSignatureData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocNameReferenceData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(SourceFile{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(moduleDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(importEqualsDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(exportDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(importTypeNodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(importClauseData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(importSpecifierData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocTextData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocLinkData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocLinkPlainData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocLinkCodeData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(typeParameterDeclarationData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(syntheticReferenceExpressionData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocTypeLiteralData{}.nodeHeader)]byte
-	_ [0 - unsafe.Offsetof(jsDocParameterOrPropertyTagData{}.nodeHeader)]byte
-)
 
 func (n Node) AsToken() Token {
 	switch n.Kind() {
@@ -17913,7 +19251,7 @@ func (n Node) AsSourceFile() *SourceFile {
 	if n.Kind() != KindSourceFile {
 		panic("Invalid node cast to SourceFile")
 	}
-	return (*SourceFile)(unsafe.Pointer(n.h))
+	return (*SourceFile)(n.rec())
 }
 
 func (n Node) AsModuleDeclaration() ModuleDeclaration {

@@ -1,7 +1,5 @@
 package ast
 
-import "unsafe"
-
 // FlowFlags
 
 type FlowFlags uint32
@@ -51,31 +49,36 @@ type FlowSwitchClauseData struct{ Node }
 
 type flowSwitchClauseData struct {
 	nodeBaseData
-	switchStatement Node
+	switchStatement nodeRef
 	clauseStart     int32 // Start index of case/default clause range
 	clauseEnd       int32 // End index of case/default clause range
 }
 
 func (node FlowSwitchClauseData) data() *flowSwitchClauseData {
-	return (*flowSwitchClauseData)(unsafe.Pointer(node.h))
+	return (*flowSwitchClauseData)(node.rec())
 }
 
-func (node FlowSwitchClauseData) SwitchStatement() Node { return node.data().switchStatement }
+func (node FlowSwitchClauseData) SwitchStatement() Node {
+	return node.s.deref(node.data().switchStatement)
+}
 
-func (node FlowSwitchClauseData) SetSwitchStatement(value Node) { node.data().switchStatement = value }
-func (node FlowSwitchClauseData) ClauseStart() int32            { return node.data().clauseStart }
-func (node FlowSwitchClauseData) SetClauseStart(value int32)    { node.data().clauseStart = value }
-func (node FlowSwitchClauseData) ClauseEnd() int32              { return node.data().clauseEnd }
-func (node FlowSwitchClauseData) SetClauseEnd(value int32)      { node.data().clauseEnd = value }
+func (node FlowSwitchClauseData) SetSwitchStatement(value Node) {
+	node.data().switchStatement = node.s.ref(value)
+}
+func (node FlowSwitchClauseData) ClauseStart() int32         { return node.data().clauseStart }
+func (node FlowSwitchClauseData) SetClauseStart(value int32) { node.data().clauseStart = value }
+func (node FlowSwitchClauseData) ClauseEnd() int32           { return node.data().clauseEnd }
+func (node FlowSwitchClauseData) SetClauseEnd(value int32)   { node.data().clauseEnd = value }
 
-var _ [0 - unsafe.Offsetof(flowSwitchClauseData{}.nodeHeader)]byte
-
+// NewFlowSwitchClauseData allocates in the store of switchStatement, whose
+// file must not be shared with other writers while it is bound.
 func NewFlowSwitchClauseData(switchStatement Node, clauseStart int, clauseEnd int) Node {
-	data := &flowSwitchClauseData{}
-	data.switchStatement = switchStatement
+	s := switchStatement.s
+	data, i := newRecord[flowSwitchClauseData](s, layoutFlowSwitchClauseData)
+	data.switchStatement = s.ref(switchStatement)
 	data.clauseStart = int32(clauseStart)
 	data.clauseEnd = int32(clauseEnd)
-	return newNode(kindFlowSwitchClauseData, data.asNode(), NodeFactoryHooks{})
+	return newNode(s, kindFlowSwitchClauseData, layoutFlowSwitchClauseData, i, NodeFactoryHooks{})
 }
 
 func (node FlowSwitchClauseData) IsEmpty() bool {
@@ -93,7 +96,7 @@ type flowReduceLabelData struct {
 }
 
 func (node FlowReduceLabelData) data() *flowReduceLabelData {
-	return (*flowReduceLabelData)(unsafe.Pointer(node.h))
+	return (*flowReduceLabelData)(node.rec())
 }
 
 func (node FlowReduceLabelData) Target() *FlowLabel             { return node.data().target }
@@ -101,11 +104,12 @@ func (node FlowReduceLabelData) SetTarget(value *FlowLabel)     { node.data().ta
 func (node FlowReduceLabelData) Antecedents() *FlowList         { return node.data().antecedents }
 func (node FlowReduceLabelData) SetAntecedents(value *FlowList) { node.data().antecedents = value }
 
-var _ [0 - unsafe.Offsetof(flowReduceLabelData{}.nodeHeader)]byte
-
-func NewFlowReduceLabelData(target *FlowLabel, antecedents *FlowList) Node {
-	data := &flowReduceLabelData{}
+// NewFlowReduceLabelData allocates in the store of file, which must not be
+// shared with other writers while it is bound.
+func NewFlowReduceLabelData(file *SourceFile, target *FlowLabel, antecedents *FlowList) Node {
+	s := file.s
+	data, i := newRecord[flowReduceLabelData](s, layoutFlowReduceLabelData)
 	data.target = target
 	data.antecedents = antecedents
-	return newNode(kindFlowReduceLabelData, data.asNode(), NodeFactoryHooks{})
+	return newNode(s, kindFlowReduceLabelData, layoutFlowReduceLabelData, i, NodeFactoryHooks{})
 }

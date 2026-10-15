@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"runtime"
 	"slices"
+	"strconv"
 	"testing"
 	"unsafe"
 
@@ -87,9 +88,10 @@ func TestNodeAccessorsSharedKinds(t *testing.T) {
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 	name := factory.NewIdentifier("T")
 	modifiers := factory.NewModifierList([]ast.Node{factory.NewToken(ast.KindExportKeyword)})
-	node := factory.NewTypeAliasDeclaration(modifiers, name, nil, ast.Node{})
-	for _, kind := range []ast.Kind{ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration} {
-		node.SetKind(kind)
+	for _, node := range []ast.Node{
+		factory.NewTypeAliasDeclaration(modifiers, name, nil, ast.Node{}),
+		factory.NewJSTypeAliasDeclaration(modifiers, name, nil, ast.Node{}),
+	} {
 		assert.Equal(t, node.Name(), name)
 		assert.Equal(t, node.Modifiers(), modifiers)
 		assert.Equal(t, node.DeclarationData(), ast.DeclarationBase{Node: node})
@@ -101,12 +103,13 @@ func TestNodeAccessorsSharedKinds(t *testing.T) {
 func TestNodeAccessorsMissing(t *testing.T) {
 	t.Parallel()
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	file := factory.NewSourceFile(ast.SourceFileParseOptions{}, "", factory.NewNodeList(nil), factory.NewToken(ast.KindEndOfFile)).AsSourceFile()
 	nodes := []ast.Node{
 		factory.NewToken(ast.KindUnknown),
 		factory.NewToken(ast.KindEndOfFile),
 		factory.NewToken(ast.KindPlusToken),
-		ast.NewFlowSwitchClauseData(ast.Node{}, 0, 0),
-		ast.NewFlowReduceLabelData(nil, nil),
+		ast.NewFlowSwitchClauseData(factory.NewToken(ast.KindSwitchKeyword), 0, 0),
+		ast.NewFlowReduceLabelData(file, nil, nil),
 	}
 
 	for _, node := range nodes {
@@ -127,8 +130,54 @@ func TestNodeAccessorsMissing(t *testing.T) {
 
 func TestNodeHandleLayout(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, unsafe.Sizeof(ast.Node{}), unsafe.Sizeof(uintptr(0)))
+	assert.Equal(t, unsafe.Sizeof(ast.Node{}), 2*unsafe.Sizeof(uintptr(0)))
 	assert.Equal(t, unsafe.Sizeof(ast.Identifier{}), unsafe.Sizeof(ast.Node{}))
+}
+
+func TestNodeStoreGrowth(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	var nodes []ast.Node
+	for i := range 5000 {
+		name := factory.NewIdentifier(strconv.Itoa(i))
+		nodes = append(nodes, factory.NewExpressionStatement(name))
+	}
+	for i, node := range nodes {
+		assert.Equal(t, node.Kind(), ast.KindExpressionStatement)
+		assert.Equal(t, node.Expression().Text(), strconv.Itoa(i))
+	}
+}
+
+func TestNodeCrossStoreReferences(t *testing.T) {
+	t.Parallel()
+	f1 := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	f2 := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	inner := f1.NewIdentifier("x")
+	outer := f2.NewParenthesizedExpression(inner)
+	inner.SetParent(outer)
+	again := f2.NewParenthesizedExpression(inner)
+	assert.Equal(t, outer.Expression(), inner)
+	assert.Equal(t, again.Expression(), inner)
+	assert.Equal(t, inner.Parent(), outer)
+
+	local := f2.NewIdentifier("y")
+	outer.AsParenthesizedExpression().SetExpression(local)
+	assert.Equal(t, outer.Expression(), local)
+	outer.AsParenthesizedExpression().SetExpression(ast.Node{})
+	assert.Assert(t, outer.Expression().IsNil())
+}
+
+func TestNodeCloneAsKindAlias(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	name := factory.NewIdentifier("T")
+	node := factory.NewJSTypeAliasDeclaration(nil, name, nil, ast.Node{})
+	clone := node.AsTypeAliasDeclaration().CloneAs(factory, ast.KindTypeAliasDeclaration)
+	assert.Equal(t, clone.Kind(), ast.KindTypeAliasDeclaration)
+	assert.Equal(t, clone.Name(), name)
+	testutil.AssertPanics(t, func() {
+		node.AsTypeAliasDeclaration().CloneAs(factory, ast.KindStringLiteral)
+	}, "unexpected kind in TypeAliasDeclaration.CloneAs: KindStringLiteral")
 }
 
 func TestNodeCastRejectsWrongKind(t *testing.T) {

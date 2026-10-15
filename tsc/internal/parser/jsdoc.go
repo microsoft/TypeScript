@@ -33,6 +33,7 @@ func parseJSDocForNode(sourceFile *ast.SourceFile, node ast.Node) []ast.Node {
 			pos = parsed.End()
 		}
 	}
+	p.factory.CompactStore()
 	return jsdoc
 }
 

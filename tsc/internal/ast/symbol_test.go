@@ -119,7 +119,7 @@ func TestSymbolTableInitialization(t *testing.T) {
 
 func TestSymbolHotRecordLayout(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, unsafe.Sizeof(ast.SymbolWithData{}), unsafe.Sizeof(ast.Symbol{})+8*unsafe.Sizeof(ast.Node{}))
+	assert.Equal(t, unsafe.Sizeof(ast.SymbolWithData{}), unsafe.Sizeof(ast.Symbol{})+7*unsafe.Sizeof(uintptr(0))+unsafe.Sizeof(ast.Node{}))
 }
 
 func TestSymbolNilExtraFieldsDoNotAllocate(t *testing.T) { //nolint:paralleltest

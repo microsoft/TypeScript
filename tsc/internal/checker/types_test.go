@@ -591,7 +591,7 @@ func TestCompactTypeNodeLinksLayout(t *testing.T) {
 
 func TestCompactSignatureLayout(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, unsafe.Sizeof(Signature{}), 16+8*unsafe.Sizeof(uintptr(0)))
+	assert.Equal(t, unsafe.Sizeof(Signature{}), 16+7*unsafe.Sizeof(uintptr(0))+unsafe.Sizeof(ast.Node{}))
 	assert.Equal(t, unsafe.Sizeof(signatureExtra{}), 7*unsafe.Sizeof(uintptr(0)))
 }
 

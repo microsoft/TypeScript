@@ -22,12 +22,12 @@ var (
 )
 
 func GetNodeId(node Node) NodeId {
-	id := node.h.id.Load()
+	id := node.hdr().id.Load()
 	if id == 0 {
 		// Worst case, we burn a few ids if we have to CAS.
 		id = nextNodeId.Add(1)
-		if !node.h.id.CompareAndSwap(0, id) {
-			id = node.h.id.Load()
+		if !node.hdr().id.CompareAndSwap(0, id) {
+			id = node.hdr().id.Load()
 		}
 	}
 	return NodeId(id)
@@ -56,7 +56,7 @@ type NodeIdGenerator struct {
 }
 
 func (a *NodeIdGenerator) GetNodeId(node Node) NodeId {
-	id := node.h.id.Load()
+	id := node.hdr().id.Load()
 	if id == 0 {
 		if a.nextId == a.lastId {
 			a.nextId = nextNodeBlockId.Add(BlockIdSize) - BlockIdSize
@@ -64,8 +64,8 @@ func (a *NodeIdGenerator) GetNodeId(node Node) NodeId {
 		}
 		id = a.nextId + BlockIdOffset
 		a.nextId++
-		if !node.h.id.CompareAndSwap(0, id) {
-			id = node.h.id.Load()
+		if !node.hdr().id.CompareAndSwap(0, id) {
+			id = node.hdr().id.Load()
 		}
 	}
 	return NodeId(id)
