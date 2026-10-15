@@ -19614,22 +19614,21 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 
 // A memberLayout describes the members of a class or interface type and of its instantiations:
 // their names, their order, and where each one comes from. Member names and order don't depend on
-// type arguments when every base type has a shared layout or is any, in which case the layout is
-// computed once per class or interface and shared by every instantiation. Any other base type,
-// even one without type parameters, can have different members in each instantiation, for example
-// an intersection that references the polymorphic this type and reduces to never.
+// type arguments, only on the declared members and the members of the base types. So instantiations
+// whose base types have the same members, because they have the same layout or are the same type,
+// share the layout, which is computed once in the common case where every instantiation's bases do.
 type memberLayout struct {
 	symbols       []*ast.Symbol // Declared or inherited symbols, with the names and flags of every instantiation's members
 	origins       []memberOrigin
 	index         []uint32 // Open-addressed hash table of 1-based member indices, or nil for small layouts
 	propertyCount int      // The properties are the first members, in property order
-	shared        bool
-	bases         []memberLayoutBase // The bases the layout was built from, which a shared layout's instantiations must match
+	bases         []memberLayoutBase
 }
 
+// The base type members a layout was built from, which determine the inherited members.
 type memberLayoutBase struct {
 	layout *memberLayout // Layout of a base type with one, through which inherited members are found
-	isAny  bool
+	t      *Type         // Any other base type, whose properties are the inherited members
 }
 
 type memberOrigin struct {
@@ -19643,7 +19642,7 @@ type memberOriginKind uint8
 const (
 	memberOriginDeclared   memberOriginKind = iota // Declared member, instantiated with the type's mapper
 	memberOriginBaseLayout                         // Member of the base type, through the base type's layout
-	memberOriginFixed                              // The symbol itself, in a layout that isn't shared
+	memberOriginFixed                              // The symbol itself, a property of a base type without a layout
 )
 
 func (l *memberLayout) properties() []*ast.Symbol {
@@ -19696,36 +19695,32 @@ type lazyMembers struct {
 
 func (c *Checker) getMemberLayout(source *Type, bases []*Type) *memberLayout {
 	d := source.AsInterfaceType()
-	if d.memberLayout == nil {
-		layout := c.buildMemberLayout(source, bases)
-		if layout.shared {
-			d.memberLayout = layout
-		}
+	if layout := d.memberLayout; layout != nil && c.hasMemberLayoutBases(layout, bases) {
 		return layout
 	}
-	if !c.canShareMemberLayout(d.memberLayout, bases) {
-		return c.buildMemberLayout(source, bases)
+	layout := c.buildMemberLayout(source, bases)
+	// A layout computed while base types are still being resolved may be missing inherited members.
+	if d.baseTypesResolved {
+		d.memberLayout = layout
 	}
-	return d.memberLayout
+	return layout
 }
 
-// Reports whether the bases of an instantiation have the layouts the shared layout was built from, since
-// inherited members are found through their slots in those layouts. Instantiations of a variadic tuple
-// base can have different tuple targets, a base type instantiation that hit an instantiation limit is
-// the error type, and a base whose own base hit the limit has a smaller layout that isn't shared.
-func (c *Checker) canShareMemberLayout(layout *memberLayout, bases []*Type) bool {
+func (c *Checker) getMemberLayoutBase(base *Type) memberLayoutBase {
+	if base.flags&TypeFlagsObject != 0 && base.objectFlags&(ObjectFlagsReference|ObjectFlagsClassOrInterface) != 0 {
+		if lazy := c.resolveStructuredTypeMembers(base).lazy; lazy != nil {
+			return memberLayoutBase{layout: lazy.layout}
+		}
+	}
+	return memberLayoutBase{t: base}
+}
+
+func (c *Checker) hasMemberLayoutBases(layout *memberLayout, bases []*Type) bool {
+	if len(layout.bases) != len(bases) {
+		return false
+	}
 	for k, base := range bases {
-		expected := layout.bases[k]
-		if base == c.anyType || expected.isAny {
-			if base != c.anyType || !expected.isAny {
-				return false
-			}
-			continue
-		}
-		if base.flags&TypeFlagsObject == 0 || base.objectFlags&(ObjectFlagsReference|ObjectFlagsClassOrInterface) == 0 {
-			return false
-		}
-		if lazy := c.resolveStructuredTypeMembers(base).lazy; lazy == nil || lazy.layout != expected.layout {
+		if c.getMemberLayoutBase(base) != layout.bases[k] {
 			return false
 		}
 	}
@@ -19748,35 +19743,19 @@ const (
 )
 
 func (c *Checker) buildMemberLayout(source *Type, bases []*Type) *memberLayout {
-	type baseMembers struct {
-		layout     *memberLayout
-		properties []*ast.Symbol
-		kind       memberOriginKind
-	}
 	d := source.AsInterfaceType()
-	// A layout computed while base types are still being resolved may be missing inherited members.
-	shared := d.baseTypesResolved
 	// Resolve the bases first, since this may build other layouts with the scratch storage below.
-	baseMembersList := make([]baseMembers, len(bases))
-	capacity := len(d.declaredMembers)
 	layoutBases := make([]memberLayoutBase, len(bases))
+	baseProperties := make([][]*ast.Symbol, len(bases))
+	capacity := len(d.declaredMembers)
 	for k, base := range bases {
-		if base == c.anyType {
-			layoutBases[k].isAny = true
-			continue
+		layoutBases[k] = c.getMemberLayoutBase(base)
+		if baseLayout := layoutBases[k].layout; baseLayout != nil {
+			baseProperties[k] = baseLayout.properties()
+		} else {
+			baseProperties[k] = c.getPropertiesOfType(base)
 		}
-		if base.flags&TypeFlagsObject != 0 && base.objectFlags&(ObjectFlagsReference|ObjectFlagsClassOrInterface) != 0 {
-			if lazy := c.resolveStructuredTypeMembers(base).lazy; lazy != nil {
-				shared = shared && lazy.layout.shared
-				baseMembersList[k] = baseMembers{layout: lazy.layout, kind: memberOriginBaseLayout}
-				layoutBases[k].layout = lazy.layout
-				capacity += lazy.layout.propertyCount
-				continue
-			}
-		}
-		shared = false
-		baseMembersList[k] = baseMembers{properties: c.getPropertiesOfType(base), kind: memberOriginFixed}
-		capacity += len(baseMembersList[k].properties)
+		capacity += len(baseProperties[k])
 	}
 	// Reuse scratch storage, since this runs for every class and interface.
 	entries, index := c.layoutEntries[:0], c.layoutIndex
@@ -19793,16 +19772,16 @@ func (c *Checker) buildMemberLayout(source *Type, bases []*Type) *memberLayout {
 		entries = append(entries, layoutEntry{symbol: symbol, origin: memberOrigin{kind: memberOriginDeclared}})
 	}
 	// Same as addInheritedMembers.
-	for k, base := range baseMembersList {
-		properties := base.properties
-		if base.layout != nil {
-			properties = base.layout.properties()
+	for k, properties := range baseProperties {
+		kind := memberOriginFixed
+		if layoutBases[k].layout != nil {
+			kind = memberOriginBaseLayout
 		}
 		for i, symbol := range properties {
 			if isStaticPrivateIdentifierProperty(symbol) {
 				continue
 			}
-			entry := layoutEntry{symbol: symbol, origin: memberOrigin{kind: base.kind, base: int32(k), slot: int32(i)}}
+			entry := layoutEntry{symbol: symbol, origin: memberOrigin{kind: kind, base: int32(k), slot: int32(i)}}
 			if j, ok := index[symbol.Name()]; !ok {
 				index[symbol.Name()] = len(entries)
 				entries = append(entries, entry)
@@ -19840,10 +19819,7 @@ func (c *Checker) buildMemberLayout(source *Type, bases []*Type) *memberLayout {
 		symbols:       make([]*ast.Symbol, len(entries)),
 		origins:       make([]memberOrigin, len(entries)),
 		propertyCount: propertyCount,
-		shared:        shared,
-	}
-	if shared {
-		layout.bases = layoutBases
+		bases:         layoutBases,
 	}
 	for i, e := range entries {
 		layout.symbols[i] = e.symbol
