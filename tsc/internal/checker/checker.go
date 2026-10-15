@@ -19613,14 +19613,13 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 }
 
 // A memberLayout describes the members of a class or interface type and of its instantiations:
-// their keys, their order, and where each one comes from. Member keys and order don't depend on
+// their names, their order, and where each one comes from. Member names and order don't depend on
 // type arguments when every base type has a shared layout or is any, in which case the layout is
 // computed once per class or interface and shared by every instantiation. Any other base type,
 // even one without type parameters, can have different members in each instantiation, for example
 // an intersection that references the polymorphic this type and reduces to never.
 type memberLayout struct {
 	symbols       []*ast.Symbol // Declared or inherited symbols, with the names and flags of every instantiation's members
-	keys          []string      // Member keys, or nil when every key is its symbol's name
 	origins       []memberOrigin
 	index         []uint32 // Open-addressed hash table of 1-based member indices, or nil for small layouts
 	propertyCount int      // The properties are the first members, in property order
@@ -19651,17 +19650,10 @@ func (l *memberLayout) properties() []*ast.Symbol {
 	return l.symbols[:l.propertyCount]
 }
 
-func (l *memberLayout) key(i int) string {
-	if l.keys != nil {
-		return l.keys[i]
-	}
-	return l.symbols[i].Name()
-}
-
 func (l *memberLayout) find(key string) int {
 	if l.index == nil {
 		for i := range l.symbols {
-			if l.key(i) == key {
+			if l.symbols[i].Name() == key {
 				return i
 			}
 		}
@@ -19669,7 +19661,7 @@ func (l *memberLayout) find(key string) int {
 	}
 	mask := uint64(len(l.index) - 1)
 	for h := xxh3.HashString(key) & mask; l.index[h] != 0; h = (h + 1) & mask {
-		if i := int(l.index[h] - 1); l.key(i) == key {
+		if i := int(l.index[h] - 1); l.symbols[i].Name() == key {
 			return i
 		}
 	}
@@ -19685,7 +19677,7 @@ func (l *memberLayout) buildIndex() {
 	l.index = make([]uint32, 1<<bits.Len(uint(len(l.symbols))*2-1))
 	mask := uint64(len(l.index) - 1)
 	for i := range l.symbols {
-		h := xxh3.HashString(l.key(i)) & mask
+		h := xxh3.HashString(l.symbols[i].Name()) & mask
 		for l.index[h] != 0 {
 			h = (h + 1) & mask
 		}
@@ -19741,7 +19733,6 @@ func (c *Checker) canShareMemberLayout(layout *memberLayout, bases []*Type) bool
 }
 
 type layoutEntry struct {
-	key    string
 	symbol *ast.Symbol
 	origin memberOrigin
 	rank   memberRank
@@ -19798,7 +19789,8 @@ func (c *Checker) buildMemberLayout(source *Type, bases []*Type) *memberLayout {
 	}
 	for key, symbol := range d.declaredMembers {
 		index[key] = len(entries)
-		entries = append(entries, layoutEntry{key: key, symbol: symbol, origin: memberOrigin{kind: memberOriginDeclared}})
+		debug.Assert(key == symbol.Name(), "Member key must be its symbol's name")
+		entries = append(entries, layoutEntry{symbol: symbol, origin: memberOrigin{kind: memberOriginDeclared}})
 	}
 	// Same as addInheritedMembers.
 	for k, base := range baseMembersList {
@@ -19810,9 +19802,9 @@ func (c *Checker) buildMemberLayout(source *Type, bases []*Type) *memberLayout {
 			if isStaticPrivateIdentifierProperty(symbol) {
 				continue
 			}
-			entry := layoutEntry{key: symbol.Name(), symbol: symbol, origin: memberOrigin{kind: base.kind, base: int32(k), slot: int32(i)}}
-			if j, ok := index[entry.key]; !ok {
-				index[entry.key] = len(entries)
+			entry := layoutEntry{symbol: symbol, origin: memberOrigin{kind: base.kind, base: int32(k), slot: int32(i)}}
+			if j, ok := index[symbol.Name()]; !ok {
+				index[symbol.Name()] = len(entries)
 				entries = append(entries, entry)
 			} else if entries[j].symbol.Flags()&ast.SymbolFlagsValue == 0 {
 				entries[j] = entry
@@ -19825,7 +19817,7 @@ func (c *Checker) buildMemberLayout(source *Type, bases []*Type) *memberLayout {
 	for i := range entries {
 		e := &entries[i]
 		switch {
-		case !c.isNamedMember(e.symbol, e.key):
+		case !c.isNamedMember(e.symbol, e.symbol.Name()):
 			e.rank = memberRankUnnamed
 			continue
 		case isClassOrInterface && c.isDeclarationContainedBy(e.symbol, container):
@@ -19856,15 +19848,6 @@ func (c *Checker) buildMemberLayout(source *Type, bases []*Type) *memberLayout {
 	for i, e := range entries {
 		layout.symbols[i] = e.symbol
 		layout.origins[i] = e.origin
-		if e.key != e.symbol.Name() && layout.keys == nil {
-			layout.keys = make([]string, len(entries))
-			for j := range i {
-				layout.keys[j] = entries[j].key
-			}
-		}
-		if layout.keys != nil {
-			layout.keys[i] = e.key
-		}
 	}
 	clear(entries)
 	clear(index)
@@ -19936,7 +19919,7 @@ func (c *Checker) getLazyMemberTable(l *lazyMembers) ast.SymbolTable {
 	}
 	members := make(ast.SymbolTable, n)
 	for i := range n {
-		members[l.layout.key(i)] = c.getLazyMember(l, i)
+		members[l.layout.symbols[i].Name()] = c.getLazyMember(l, i)
 	}
 	return members
 }
