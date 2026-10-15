@@ -283,6 +283,24 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 		}},
 	},
 	{
+		title: "reports errors for network path in string extends",
+		input: []testConfig{{
+			jsonText:       `{ "extends": "\\\\server\\share\\base.json" }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": ""},
+		}},
+	},
+	{
+		title: "reports errors for normalized network path in string extends",
+		input: []testConfig{{
+			jsonText:       `{ "extends": "/x/../??/UNC/server/share/base.json" }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": ""},
+		}},
+	},
+	{
 		title:                  "parses tsconfig with compilerOptions, files, include, and exclude",
 		includeCompilerOptions: true,
 		input: []testConfig{{
