@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/declarationEmitLateVisibleExpandoFunction.ts] ////
+
+=== mainTs.ts ===
+declare function wrap<T>(component: T): T;
+>wrap : Symbol(wrap, Decl(mainTs.ts, 0, 0))
+>T : Symbol(T, Decl(mainTs.ts, 0, 22))
+>component : Symbol(component, Decl(mainTs.ts, 0, 25))
+>T : Symbol(T, Decl(mainTs.ts, 0, 22))
+>T : Symbol(T, Decl(mainTs.ts, 0, 22))
+
+function FunctionComponent() { return null; }
+>FunctionComponent : Symbol(FunctionComponent, Decl(mainTs.ts, 0, 42))
+
+FunctionComponent.propTypes = { num: 0 };
+>FunctionComponent.propTypes : Symbol(FunctionComponent.propTypes, Decl(mainTs.ts, 2, 45))
+>FunctionComponent : Symbol(FunctionComponent, Decl(mainTs.ts, 0, 42))
+>propTypes : Symbol(FunctionComponent.propTypes, Decl(mainTs.ts, 2, 45))
+>num : Symbol(num, Decl(mainTs.ts, 3, 31))
+
+const ArrowComponent = () => null;
+>ArrowComponent : Symbol(ArrowComponent, Decl(mainTs.ts, 5, 5))
+
+ArrowComponent.propTypes = { num: 0 };
+>ArrowComponent.propTypes : Symbol(ArrowComponent.propTypes, Decl(mainTs.ts, 5, 34))
+>ArrowComponent : Symbol(ArrowComponent, Decl(mainTs.ts, 5, 5))
+>propTypes : Symbol(ArrowComponent.propTypes, Decl(mainTs.ts, 5, 34))
+>num : Symbol(num, Decl(mainTs.ts, 6, 28))
+
+function UnusedComponent() { return null; }
+>UnusedComponent : Symbol(UnusedComponent, Decl(mainTs.ts, 6, 38))
+
+UnusedComponent.propTypes = { num: 0 };
+>UnusedComponent.propTypes : Symbol(UnusedComponent.propTypes, Decl(mainTs.ts, 8, 43))
+>UnusedComponent : Symbol(UnusedComponent, Decl(mainTs.ts, 6, 38))
+>propTypes : Symbol(UnusedComponent.propTypes, Decl(mainTs.ts, 8, 43))
+>num : Symbol(num, Decl(mainTs.ts, 9, 29))
+
+export const WrappedFunction = wrap(FunctionComponent);
+>WrappedFunction : Symbol(WrappedFunction, Decl(mainTs.ts, 11, 12))
+>wrap : Symbol(wrap, Decl(mainTs.ts, 0, 0))
+>FunctionComponent : Symbol(FunctionComponent, Decl(mainTs.ts, 0, 42))
+
+export const WrappedArrow = wrap(ArrowComponent);
+>WrappedArrow : Symbol(WrappedArrow, Decl(mainTs.ts, 12, 12))
+>wrap : Symbol(wrap, Decl(mainTs.ts, 0, 0))
+>ArrowComponent : Symbol(ArrowComponent, Decl(mainTs.ts, 5, 5))
+
+=== mainJs.js ===
+/**
+ * @template T
+ * @param {T} component
+ * @returns {T}
+ */
+function wrap(component) { return component; }
+>wrap : Symbol(wrap, Decl(mainJs.js, 0, 0))
+>component : Symbol(component, Decl(mainJs.js, 5, 14))
+>component : Symbol(component, Decl(mainJs.js, 5, 14))
+
+function FunctionComponent() { return null; }
+>FunctionComponent : Symbol(FunctionComponent, Decl(mainJs.js, 5, 46))
+
+FunctionComponent.propTypes = { num: 0 };
+>FunctionComponent.propTypes : Symbol(FunctionComponent.propTypes, Decl(mainJs.js, 7, 45))
+>FunctionComponent : Symbol(FunctionComponent, Decl(mainJs.js, 5, 46))
+>propTypes : Symbol(FunctionComponent.propTypes, Decl(mainJs.js, 7, 45))
+>num : Symbol(num, Decl(mainJs.js, 8, 31))
+
+export const WrappedFunction = wrap(FunctionComponent);
+>WrappedFunction : Symbol(WrappedFunction, Decl(mainJs.js, 10, 12))
+>wrap : Symbol(wrap, Decl(mainJs.js, 0, 0))
+>FunctionComponent : Symbol(FunctionComponent, Decl(mainJs.js, 5, 46))
+
