@@ -2667,7 +2667,7 @@ func GetNamespaceDeclarationNode(node *Node) *Node {
 }
 
 func ModuleExportNameIsDefault(node *Node) bool {
-	return MakeSymbolName(node.Text()) == InternalSymbolNameDefault
+	return node.TextSymbolName() == InternalSymbolNameDefault
 }
 
 func IsDefaultImport(node *Node /*ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration*/) bool {
@@ -3287,11 +3287,11 @@ func GetPropertyNameForPropertyNameNode(name *Node) SymbolName {
 	switch name.Kind {
 	case KindIdentifier, KindPrivateIdentifier, KindStringLiteral, KindNoSubstitutionTemplateLiteral,
 		KindNumericLiteral, KindBigIntLiteral, KindJsxNamespacedName:
-		return MakeSymbolName(name.Text())
+		return name.TextSymbolName()
 	case KindComputedPropertyName:
 		nameExpression := name.Expression()
 		if IsStringOrNumericLiteralLike(nameExpression) {
-			return MakeSymbolName(nameExpression.Text())
+			return nameExpression.TextSymbolName()
 		}
 		if IsSignedNumericLiteral(nameExpression) {
 			text := nameExpression.AsPrefixUnaryExpression().Operand.Text()

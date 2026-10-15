@@ -326,13 +326,13 @@ func (b *Binder) getDeclarationName(node *ast.Node) ast.SymbolName {
 			return GetSymbolNameForPrivateIdentifier(containingClass.Symbol(), name.Text())
 		}
 		if ast.IsPropertyNameLiteral(name) || ast.IsJsxNamespacedName(name) {
-			return ast.MakeSymbolName(name.Text())
+			return name.TextSymbolName()
 		}
 		if ast.IsComputedPropertyName(name) {
 			nameExpression := name.Expression()
 			// treat computed property names where expression is string/numeric literal as just string/numeric literal
 			if ast.IsStringOrNumericLiteralLike(nameExpression) {
-				return ast.MakeSymbolName(nameExpression.Text())
+				return nameExpression.TextSymbolName()
 			}
 			if ast.IsSignedNumericLiteral(nameExpression) {
 				unaryExpression := nameExpression.AsPrefixUnaryExpression()
@@ -919,7 +919,7 @@ func (b *Binder) bindFunctionExpression(node *ast.Node) {
 	bindingName := ast.InternalSymbolNameFunction
 	if ast.IsFunctionExpression(node) && node.AsFunctionExpression().Name() != nil {
 		b.checkStrictModeFunctionName(node)
-		bindingName = ast.MakeSymbolName(node.AsFunctionExpression().Name().Text())
+		bindingName = node.AsFunctionExpression().Name().TextSymbolName()
 	}
 	b.bindAnonymousDeclaration(node, ast.SymbolFlagsFunction, bindingName)
 }
@@ -953,7 +953,7 @@ func (b *Binder) bindClassLikeDeclaration(node *ast.Node) {
 	case ast.KindClassExpression:
 		nameText := ast.InternalSymbolNameClass
 		if name != nil {
-			nameText = ast.MakeSymbolName(name.Text())
+			nameText = name.TextSymbolName()
 		}
 		b.bindAnonymousDeclaration(node, ast.SymbolFlagsClass, nameText)
 	}
@@ -1273,19 +1273,19 @@ func (b *Binder) bindTypeParameter(node *ast.Node) {
 
 func (b *Binder) lookupEntity(node *ast.Node, container *ast.Node) *ast.Symbol {
 	if ast.IsIdentifier(node) {
-		return b.lookupName(ast.MakeSymbolName(node.Text()), container)
+		return b.lookupName(node.TextSymbolName(), container)
 	}
 	if node.Expression().Kind == ast.KindThisKeyword {
 		if _, symbolTable := b.getThisClassAndSymbolTable(); symbolTable != nil {
 			if name := ast.GetElementOrPropertyAccessName(node); name != nil {
-				return symbolTable[ast.MakeSymbolName(name.Text())]
+				return symbolTable[name.TextSymbolName()]
 			}
 		}
 		return nil
 	}
 	if symbol := getInitializerSymbol(b.lookupEntity(node.Expression(), container)); symbol != nil && symbol.Exports() != nil {
 		if name := ast.GetElementOrPropertyAccessName(node); name != nil {
-			return symbol.Exports()[ast.MakeSymbolName(name.Text())]
+			return symbol.Exports()[name.TextSymbolName()]
 		}
 	}
 	return nil

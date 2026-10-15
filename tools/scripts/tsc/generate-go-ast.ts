@@ -44,7 +44,7 @@ function schemaMembers(node: NodeType): MemberInfo[] {
 
 function isTextContentType(type: Type): boolean {
     if (type.kind === "primitive") {
-        return type.name === "string";
+        return type.name === "string" || type.name === "SymbolName";
     }
     if (type.kind === "list" && type.listKind === "raw") {
         return type.elementType.kind === "primitive" && type.elementType.name === "string";
@@ -494,11 +494,39 @@ function emitNewFactory(
     w.write("");
 }
 
+function isSymbolNameMember(m: MemberInfo): boolean {
+    return m.type.kind === "primitive" && m.type.name === "SymbolName";
+}
+
+// Nodes with SymbolName members get a New*FromSymbolName factory taking the
+// interned name, plus a New* convenience factory that accepts a string.
+function factoryName(name: string, node: NodeType): string {
+    return schemaMembers(node).some(isSymbolNameMember) ? `New${name}FromSymbolName` : `New${name}`;
+}
+
+function emitStringFactory(w: CodeWriter, name: string, node: NodeType, members: MemberInfo[]) {
+    const params = members.map(m => `${m.goParamName()} ${isSymbolNameMember(m) ? "string" : m.type.formatGoReference()}`).join(", ");
+    const args = members.map(m => isSymbolNameMember(m) ? `MakeSymbolName(${m.goParamName()})` : m.goParamName()).join(", ");
+    w.write(`func (f *NodeFactory) New${name}(${params}) *Node {`);
+    w.push();
+    w.write(`return f.${factoryName(name, node)}(${args})`);
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
 function generateNewFactory(w: CodeWriter, node: NodeType) {
     const structName = node.name;
     const members = schemaMembers(node);
     const kindMember = members.find(m => m.isKindParam());
     const nodeFlagsMembers = members.filter(m => isNodeFlagsMember(m));
+    const hasSymbolName = members.some(isSymbolNameMember);
+    const emit = (name: string, kindName: string) => {
+        if (hasSymbolName) {
+            emitStringFactory(w, name, node, members);
+        }
+        emitNewFactory(w, factoryName(name, node), kindName, structName, node, members, kindMember, nodeFlagsMembers);
+    };
     if (node.name === "Token") {
         const tokenKinds = new Set(node.allKinds().map(kind => kind.formatGoConstant()));
         w.write("func (f *NodeFactory) NewToken(kind TokenSyntaxKind) *Node {");
@@ -531,10 +559,10 @@ function generateNewFactory(w: CodeWriter, node: NodeType) {
         w.write("");
     }
     else {
-        emitNewFactory(w, `New${node.name}`, node.syntaxKindName, structName, node, members, kindMember, nodeFlagsMembers);
+        emit(node.name, node.syntaxKindName);
     }
     for (const alias of node.kindAliases) {
-        emitNewFactory(w, `New${alias}`, alias, structName, node, members, kindMember, nodeFlagsMembers);
+        emit(alias, alias);
     }
 }
 
@@ -1044,12 +1072,12 @@ function generateClone(w: CodeWriter, node: NodeType) {
         w.push();
         w.write(`case ${api.kindType(`SyntaxKind.${node.syntaxKindName}`).formatGoConstant()}:`);
         w.push();
-        w.write(`return cloneNode(f.AsNodeFactory().New${node.name}(${args}), node.AsNode(), f.AsNodeFactory().hooks)`);
+        w.write(`return cloneNode(f.AsNodeFactory().${factoryName(node.name, node)}(${args}), node.AsNode(), f.AsNodeFactory().hooks)`);
         w.pop();
         for (const alias of node.kindAliases) {
             w.write(`case Kind${alias}:`);
             w.push();
-            w.write(`return cloneNode(f.AsNodeFactory().New${alias}(${args}), node.AsNode(), f.AsNodeFactory().hooks)`);
+            w.write(`return cloneNode(f.AsNodeFactory().${factoryName(alias, node)}(${args}), node.AsNode(), f.AsNodeFactory().hooks)`);
             w.pop();
         }
         w.write("default:");
@@ -1060,7 +1088,7 @@ function generateClone(w: CodeWriter, node: NodeType) {
         w.write("}");
     }
     else {
-        w.write(`return cloneNode(f.AsNodeFactory().New${node.name}(${args}), node.AsNode(), f.AsNodeFactory().hooks)`);
+        w.write(`return cloneNode(f.AsNodeFactory().${factoryName(node.name, node)}(${args}), node.AsNode(), f.AsNodeFactory().hooks)`);
     }
 
     w.pop();

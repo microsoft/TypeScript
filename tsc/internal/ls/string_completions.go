@@ -397,7 +397,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		}
 		exports := typeChecker.GetExportsAndPropertiesOfModule(moduleSpecifierSymbol)
 		existing := collections.NewSetFromItems(core.Map(namedImportsOrExports.Elements(), func(n *ast.Node) ast.SymbolName {
-			return ast.MakeSymbolName(n.PropertyNameOrName().Text())
+			return n.PropertyNameOrName().TextSymbolName()
 		})...)
 		uniques := core.Filter(exports, func(e *ast.Symbol) bool {
 			return e.Name() != ast.InternalSymbolNameDefault && !existing.Has(e.Name())
@@ -2029,7 +2029,7 @@ func getStringLiteralCompletionsFromSignature(
 		}
 		t := typeChecker.GetTypeParameterAtPosition(candidate, argumentInfo.argumentIndex)
 		if ast.IsJsxOpeningLikeElement(call) {
-			propType := typeChecker.GetTypeOfPropertyOfType(t, ast.MakeSymbolName(editingArgument.AsJsxAttribute().Name().Text()))
+			propType := typeChecker.GetTypeOfPropertyOfType(t, editingArgument.AsJsxAttribute().Name().TextSymbolName())
 			if propType != nil {
 				t = propType
 			}

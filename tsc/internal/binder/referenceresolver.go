@@ -92,7 +92,7 @@ func (r *referenceResolver) getReferencedValueSymbol(reference *ast.IdentifierNo
 	}
 
 	if r.hooks.ResolveName != nil {
-		return r.hooks.ResolveName(location, ast.MakeSymbolName(reference.Text()), ast.SymbolFlagsExportValue|ast.SymbolFlagsValue|ast.SymbolFlagsAlias, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
+		return r.hooks.ResolveName(location, reference.TextSymbolName(), ast.SymbolFlagsExportValue|ast.SymbolFlagsValue|ast.SymbolFlagsAlias, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
 	}
 
 	if r.resolver == nil {
@@ -101,7 +101,7 @@ func (r *referenceResolver) getReferencedValueSymbol(reference *ast.IdentifierNo
 		}
 	}
 
-	return r.resolver.Resolve(location, ast.MakeSymbolName(reference.Text()), ast.SymbolFlagsExportValue|ast.SymbolFlagsValue|ast.SymbolFlagsAlias, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
+	return r.resolver.Resolve(location, reference.TextSymbolName(), ast.SymbolFlagsExportValue|ast.SymbolFlagsValue|ast.SymbolFlagsAlias, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
 }
 
 func (r *referenceResolver) isTypeOnlyAliasDeclaration(symbol *ast.Symbol) bool {

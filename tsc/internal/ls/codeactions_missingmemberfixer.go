@@ -111,7 +111,7 @@ func (f *missingMemberFixer) createMemberFromSymbol(symbol *ast.Symbol, enclosin
 
 				nodes = append(nodes, f.changeTracker.NodeFactory.NewSetAccessorDeclaration(
 					modifiers, createPropertyName(f.changeTracker.NodeFactory, declarationName, quotePreference),
-					nil /*typeParameters*/, createDummyParameters(f.changeTracker.NodeFactory, 1, []ast.SymbolName{ast.MakeSymbolName(parameter.Name().Text())}, []*ast.TypeNode{f.createTypeNode(t, enclosingDeclaration, flags, nodeBuilder, idToSymbol)}, 1, ast.IsInJSFile(enclosingDeclaration)),
+					nil /*typeParameters*/, createDummyParameters(f.changeTracker.NodeFactory, 1, []ast.SymbolName{parameter.Name().TextSymbolName()}, []*ast.TypeNode{f.createTypeNode(t, enclosingDeclaration, flags, nodeBuilder, idToSymbol)}, 1, ast.IsInJSFile(enclosingDeclaration)),
 					nil /*type*/, nil /*fullSignature*/, f.createBody(body, quotePreference, signatureOnly),
 				),
 				)

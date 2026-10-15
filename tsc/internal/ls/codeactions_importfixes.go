@@ -387,7 +387,7 @@ func getSymbolNamesToImport(sourceFile *ast.SourceFile, ch *checker.Checker, sym
 		if needsJsxNamespaceFix(jsxNamespace, symbolToken, ch) {
 			var result []symbolNameInfo
 			if !scanner.IsIntrinsicJsxName(symbolToken.Text()) {
-				compSymbol := ch.ResolveName(ast.MakeSymbolName(symbolToken.Text()), symbolToken, ast.SymbolFlagsValue, false /* excludeGlobals */)
+				compSymbol := ch.ResolveName(symbolToken.TextSymbolName(), symbolToken, ast.SymbolFlagsValue, false /* excludeGlobals */)
 				if compSymbol == nil {
 					result = append(result, symbolNameInfo{name: symbolToken.Text()})
 				} else if ch.GetTypeOnlyAliasDeclaration(compSymbol) != nil {
@@ -403,7 +403,7 @@ func getSymbolNamesToImport(sourceFile *ast.SourceFile, ch *checker.Checker, sym
 		}
 	}
 	tokenIsTypeOnly := false
-	if sym := ch.ResolveName(ast.MakeSymbolName(symbolToken.Text()), symbolToken, ast.SymbolFlagsValue, true /* excludeGlobals */); sym != nil {
+	if sym := ch.ResolveName(symbolToken.TextSymbolName(), symbolToken, ast.SymbolFlagsValue, true /* excludeGlobals */); sym != nil {
 		tokenIsTypeOnly = ch.GetTypeOnlyAliasDeclaration(sym) != nil
 	}
 	return []symbolNameInfo{{name: symbolToken.Text(), isTypeOnly: tokenIsTypeOnly}}

@@ -458,7 +458,7 @@ func (c *Checker) narrowTypeByCallExpression(f *FlowState, t *Type, callExpressi
 		callAccess := callExpression.Expression()
 		if c.isMatchingReference(f.reference.Expression(), c.getReferenceCandidate(callAccess.Expression())) && ast.IsIdentifier(callAccess.Name()) && callAccess.Name().Text() == "hasOwnProperty" && len(callExpression.Arguments()) == 1 {
 			argument := callExpression.Arguments()[0]
-			if accessedName, ok := c.getAccessedPropertyName(f.reference); ok && ast.IsStringLiteralLike(argument) && accessedName == ast.MakeSymbolName(argument.Text()) {
+			if accessedName, ok := c.getAccessedPropertyName(f.reference); ok && ast.IsStringLiteralLike(argument) && accessedName == argument.TextSymbolName() {
 				return c.getTypeWithFacts(t, core.IfElse(assumeTrue, TypeFactsNEUndefined, TypeFactsEQUndefined))
 			}
 		}
@@ -1639,7 +1639,7 @@ func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 	case ast.KindQualifiedName:
 		if ast.IsAccessExpression(target) {
 			if targetPropertyName, ok := c.getAccessedPropertyName(target); ok {
-				return ast.MakeSymbolName(source.AsQualifiedName().Right.Text()) == targetPropertyName && c.isMatchingReference(source.AsQualifiedName().Left, target.Expression())
+				return source.AsQualifiedName().Right.TextSymbolName() == targetPropertyName && c.isMatchingReference(source.AsQualifiedName().Left, target.Expression())
 			}
 		}
 	case ast.KindBinaryExpression:
@@ -1726,7 +1726,7 @@ func (c *Checker) writeFlowCacheKey(b *keyBuilder, node *ast.Node, declaredType 
 
 func (c *Checker) getAccessedPropertyName(access *ast.Node) (ast.SymbolName, bool) {
 	if ast.IsPropertyAccessExpression(access) {
-		return ast.MakeSymbolName(access.Name().Text()), true
+		return access.Name().TextSymbolName(), true
 	}
 	if ast.IsElementAccessExpression(access) {
 		return c.tryGetElementAccessExpressionName(access.AsElementAccessExpression())
@@ -1743,7 +1743,7 @@ func (c *Checker) getAccessedPropertyName(access *ast.Node) (ast.SymbolName, boo
 func (c *Checker) tryGetElementAccessExpressionName(node *ast.ElementAccessExpression) (ast.SymbolName, bool) {
 	switch {
 	case ast.IsStringOrNumericLiteralLike(node.ArgumentExpression):
-		return ast.MakeSymbolName(node.ArgumentExpression.Text()), true
+		return node.ArgumentExpression.TextSymbolName(), true
 	case ast.IsEntityNameExpression(node.ArgumentExpression):
 		return c.tryGetNameFromEntityNameExpression(node.ArgumentExpression)
 	}
@@ -2140,7 +2140,7 @@ func (c *Checker) getTypeOfDottedName(node *ast.Node, diagnostic *ast.Diagnostic
 						prop = c.getPropertyOfType(t, binder.GetSymbolNameForPrivateIdentifier(t.symbol, name.Text()))
 					}
 				} else {
-					prop = c.getPropertyOfType(t, ast.MakeSymbolName(name.Text()))
+					prop = c.getPropertyOfType(t, name.TextSymbolName())
 				}
 				if prop != nil {
 					return c.getExplicitTypeOfSymbol(prop, diagnostic)

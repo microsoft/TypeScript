@@ -385,7 +385,7 @@ func getSearchesFromDirectImports(
 				singleReferences = append(singleReferences, propertyName)
 				// If renaming `{ foo as bar }`, don't touch `bar`, just `foo`.
 				// But do rename `foo` in ` { default as foo }` if that's the original export name.
-				if !isForRename || ast.MakeSymbolName(name.Text()) == exportSymbol.Name() {
+				if !isForRename || name.TextSymbolName() == exportSymbol.Name() {
 					// Search locally for `bar`.
 					addSearch(name, checker.GetSymbolAtLocation(name))
 				}
@@ -415,7 +415,7 @@ func getSearchesFromDirectImports(
 		if ast.IsImportTypeNode(decl) {
 			if qualifier := decl.AsImportTypeNode().Qualifier; qualifier != nil {
 				firstIdentifier := ast.GetFirstIdentifier(qualifier)
-				if ast.MakeSymbolName(firstIdentifier.Text()) == exportSymbol.Name() {
+				if firstIdentifier.TextSymbolName() == exportSymbol.Name() {
 					singleReferences = append(singleReferences, firstIdentifier)
 				}
 			} else if exportKind == ExportKindExportEquals {
@@ -448,7 +448,7 @@ func getSearchesFromDirectImports(
 			// `export =` might be imported by a default import if `--allowSyntheticDefaultImports` is on, so this handles both ExportKind.Default and ExportKind.ExportEquals.
 			// If a default import has the same name as the default export, allow to rename it.
 			// Given `import f` and `export default function f`, we will rename both, but for `import g` we will rename just that.
-			if name := importClause.Name(); name != nil && (exportKind == ExportKindDefault || exportKind == ExportKindExportEquals) && (!isForRename || ast.MakeSymbolName(name.Text()) == symbolNameNoDefault(exportSymbol)) {
+			if name := importClause.Name(); name != nil && (exportKind == ExportKindDefault || exportKind == ExportKindExportEquals) && (!isForRename || name.TextSymbolName() == symbolNameNoDefault(exportSymbol)) {
 				defaultImportAlias := checker.GetSymbolAtLocation(name)
 				addSearch(name, defaultImportAlias)
 			}
@@ -706,7 +706,7 @@ func symbolNameNoDefault(symbol *ast.Symbol) ast.SymbolName {
 	for _, decl := range symbol.Declarations() {
 		name := ast.GetNameOfDeclaration(decl)
 		if name != nil && ast.IsIdentifier(name) {
-			return ast.MakeSymbolName(name.Text())
+			return name.TextSymbolName()
 		}
 	}
 	return ast.EmptySymbolName

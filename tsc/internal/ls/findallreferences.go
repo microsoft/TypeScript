@@ -1393,7 +1393,7 @@ func (l *LanguageService) getReferencesForStringLiteral(
 
 func isStringLiteralPropertyReference(node *ast.StringLiteralLike, checker *checker.Checker) bool {
 	if ast.IsPropertySignatureDeclaration(node.Parent) {
-		return checker.GetPropertyOfType(checker.GetTypeAtLocation(node.Parent.Parent), ast.MakeSymbolName(node.Text())) != nil
+		return checker.GetPropertyOfType(checker.GetTypeAtLocation(node.Parent.Parent), node.TextSymbolName()) != nil
 	}
 	return false
 }
