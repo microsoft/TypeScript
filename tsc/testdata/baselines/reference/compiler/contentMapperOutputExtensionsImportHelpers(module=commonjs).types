@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/contentMapperOutputExtensionsImportHelpers.ts] ////
+
+=== /Card.astro ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export const Card = 1;
+>Card : 1
+>1 : 1
+
+=== /main.ts ===
+export function dynamic(path: string) { return import(path); }
+>dynamic : (path: string) => Promise<any>
+>path : string
+>import(path) : Promise<any>
+>path : string
+
+export function literal() { return import("./Card.astro"); }
+>literal : () => Promise<typeof import("./Card.astro")>
+>import("./Card.astro") : Promise<typeof import("./Card.astro")>
+>"./Card.astro" : "./Card.astro"
+
+=== /require.js ===
+/** @param {string} path */
+export function dynamicRequire(path) { return require(path); }
+>dynamicRequire : (path: string) => unknown
+>path : string
+>require(path) : unknown
+>require : (path: string) => unknown
+>path : string
+
+=== /globals.d.ts ===
+declare function require(path: string): unknown;
+>require : (path: string) => unknown
+>path : string
+
+=== /node_modules/tslib/index.d.ts ===
+export declare function __rewriteRelativeImportExtension(path: any, preserveJsx?: boolean): any;
+>__rewriteRelativeImportExtension : (path: any, preserveJsx?: boolean) => any
+>path : any
+>preserveJsx : boolean | undefined
+

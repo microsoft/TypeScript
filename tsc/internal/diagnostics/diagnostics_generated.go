@@ -3906,6 +3906,18 @@ var This_initializer_has_a_Symbol_asyncDispose_method_Did_you_mean_to_use_await_
 
 var A_deferred_import_must_specify_a_namespace_binding = &Message{code: 18117, category: CategoryError, key: "A_deferred_import_must_specify_a_namespace_binding_18117", text: "A deferred import must specify a namespace binding."}
 
+var Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a = &Message{code: 18118, category: CategoryError, key: "Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a_18118", text: "Content mapper output extension '{0}' must be non-empty and begin with a '.'."}
+
+var Content_mapper_output_extension_mapping_source_0_is_not_registered_by_this_content_mapper = &Message{code: 18119, category: CategoryError, key: "Content_mapper_output_extension_mapping_source_0_is_not_registered_by_this_content_mapper_18119", text: "Content mapper output extension mapping source '{0}' is not registered by this content mapper."}
+
+var Content_mapper_output_extension_mapping_from_0_to_1_requires_rewriteRelativeImportExtensions_to_be_enabled = &Message{code: 18120, category: CategoryError, key: "Content_mapper_output_extension_mapping_from_0_to_1_requires_rewriteRelativeImportExtensions_to_be_e_18120", text: "Content mapper output extension mapping from '{0}' to '{1}' requires 'rewriteRelativeImportExtensions' to be enabled."}
+
+var The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a = &Message{code: 18121, category: CategoryError, key: "The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_ma_18121", text: "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' contains an invalid mapping from '{1}' to '{2}'. Extensions must be non-empty and begin with a '.'."}
+
+var The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values = &Message{code: 18122, category: CategoryError, key: "The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_18122", text: "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' must be an object with string values."}
+
+var Content_mapper_extension_0_must_not_contain_path_separators = &Message{code: 18123, category: CategoryError, key: "Content_mapper_extension_0_must_not_contain_path_separators_18123", text: "Content mapper extension '{0}' must not contain path separators."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -6399,6 +6411,12 @@ var allMessages = [...]**Message{
 	&Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls,
 	&This_initializer_has_a_Symbol_asyncDispose_method_Did_you_mean_to_use_await_using,
 	&A_deferred_import_must_specify_a_namespace_binding,
+	&Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a,
+	&Content_mapper_output_extension_mapping_source_0_is_not_registered_by_this_content_mapper,
+	&Content_mapper_output_extension_mapping_from_0_to_1_requires_rewriteRelativeImportExtensions_to_be_enabled,
+	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a,
+	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
+	&Content_mapper_extension_0_must_not_contain_path_separators,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,
