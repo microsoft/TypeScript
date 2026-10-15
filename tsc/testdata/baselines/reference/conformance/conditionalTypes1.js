@@ -223,6 +223,22 @@ function f23<T extends string[]>(x: T extends (infer U)[] ? U[] : never) {
     let e = x[0];  // string
 }
 
+function inferTuple<T>(x: T extends [infer U, infer V] ? [U, V] : never) {
+    return x;
+}
+
+function inferObject<T>(x: T extends { value: infer U } ? { value: U } : never) {
+    return x;
+}
+
+function inferFunction<T>(x: T extends () => infer U ? () => U : never) {
+    return x;
+}
+
+function inferNested<T>(x: T extends (infer U)[] ? U extends (infer V)[] ? [U[], V[]] : U[] : never) {
+    return x;
+}
+
 // Repros from #21664
 
 type Eq<T, U> = T extends U ? U extends T ? true : false : false;
@@ -434,6 +450,18 @@ function f22(x) {
 function f23(x) {
     let e = x[0]; // string
 }
+function inferTuple(x) {
+    return x;
+}
+function inferObject(x) {
+    return x;
+}
+function inferFunction(x) {
+    return x;
+}
+function inferNested(x) {
+    return x;
+}
 const convert = (value) => value;
 const convert2 = (value) => value;
 function f31() {
@@ -630,6 +658,18 @@ type T51 = IsNever<number>;
 type T52 = IsNever<any>;
 declare function f22<T>(x: T extends (infer U)[] ? U[] : never): void;
 declare function f23<T extends string[]>(x: T extends (infer U)[] ? U[] : never): void;
+declare function inferTuple<T>(x: T extends [infer U, infer V] ? [U, V] : never): T extends [infer U, infer V] ? [U, V] : never;
+declare function inferObject<T>(x: T extends {
+    value: infer U;
+} ? {
+    value: U;
+} : never): T extends {
+    value: infer U;
+} ? {
+    value: U;
+} : never;
+declare function inferFunction<T>(x: T extends () => infer U ? () => U : never): T extends () => infer U ? () => U : never;
+declare function inferNested<T>(x: T extends (infer U)[] ? U extends (infer V)[] ? [U[], V[]] : U[] : never): T extends (infer U)[] ? U extends (infer V)[] ? [U[], V[]] : U[] : never;
 type Eq<T, U> = T extends U ? U extends T ? true : false : false;
 type T60 = Eq<true, true>;
 type T61 = Eq<true, false>;

@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/importSource/importSource12.ts] ////
+
+=== b.js ===
+import source a from "./a.wasm";
+>a : AbstractModuleSource
+
+const b = import.source("./a.wasm");
+>b : Promise<AbstractModuleSource>
+>import.source("./a.wasm") : Promise<AbstractModuleSource>
+>source : any
+>"./a.wasm" : "./a.wasm"
+
+/** @type {AbstractModuleSource} */
+const c = a;
+>c : AbstractModuleSource
+>a : AbstractModuleSource
+
+/** @type {Promise<AbstractModuleSource>} */
+const d = b;
+>d : Promise<AbstractModuleSource>
+>b : Promise<AbstractModuleSource>
+

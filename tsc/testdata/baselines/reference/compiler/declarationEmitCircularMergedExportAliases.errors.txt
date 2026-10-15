@@ -1,0 +1,29 @@
+a.ts(1,10): error TS2484: Export declaration conflicts with exported declaration of 'A'.
+b.ts(1,10): error TS2484: Export declaration conflicts with exported declaration of 'B'.
+
+
+==== a.ts (1 errors) ====
+    export { B as A } from "./b";
+             ~~~~~~
+!!! error TS2484: Export declaration conflicts with exported declaration of 'A'.
+    export declare namespace A {
+        export type FromA = number;
+    }
+    export class Route {
+        private parts = 0;
+    }
+    export function create() { return new Route(); }
+    
+==== b.ts (1 errors) ====
+    export { A as B } from "./a";
+             ~~~~~~
+!!! error TS2484: Export declaration conflicts with exported declaration of 'B'.
+    export declare namespace B {
+        export type FromB = string;
+    }
+    
+==== index.ts (0 errors) ====
+    import { A } from "./a";
+    import { create } from "./a";
+    export type Label = A.FromA;
+    export const route = create();

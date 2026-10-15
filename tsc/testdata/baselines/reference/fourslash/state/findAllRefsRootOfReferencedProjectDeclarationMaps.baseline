@@ -1,9 +1,9 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/out/input/keyboard.d.ts] *new* 
 export declare function evaluateKeyboardEvent(): void;
 //# sourceMappingURL=keyboard.d.ts.map
 //// [/out/input/keyboard.d.ts.map] *new* 
-{"version":3,"file":"keyboard.d.ts","sourceRoot":"","sources":["../../src/common/input/keyboard.ts"],"names":[],"mappings":"AACA,wBAAgB,qBAAqB,SAAM"}
+{"version":3,"file":"keyboard.d.ts","sources":["../../src/common/input/keyboard.ts"],"names":[],"mappings":"AACA,wBAAgB,qBAAqB,SAAM"}
 //// [/out/input/keyboard.js] *new* 
 function bar() { return "just a random function so .d.ts location doesnt match"; }
 export function evaluateKeyboardEvent() { }
@@ -12,7 +12,7 @@ export function evaluateKeyboardEvent() { }
 export {};
 //# sourceMappingURL=keyboard.test.d.ts.map
 //// [/out/input/keyboard.test.d.ts.map] *new* 
-{"version":3,"file":"keyboard.test.d.ts","sourceRoot":"","sources":["../../src/common/input/keyboard.test.ts"],"names":[],"mappings":""}
+{"version":3,"file":"keyboard.test.d.ts","sources":["../../src/common/input/keyboard.test.ts"],"names":[],"mappings":""}
 //// [/out/input/keyboard.test.js] *new* 
 import { evaluateKeyboardEvent } from 'common/input/keyboard';
 function testEvaluateKeyboardEvent() {
@@ -115,7 +115,7 @@ function testEvaluateKeyboardEvent() {
 export {};
 //# sourceMappingURL=terminal.d.ts.map
 //// [/out/terminal.d.ts.map] *new* 
-{"version":3,"file":"terminal.d.ts","sourceRoot":"","sources":["../src/terminal.ts"],"names":[],"mappings":""}
+{"version":3,"file":"terminal.d.ts","sources":["../src/terminal.ts"],"names":[],"mappings":""}
 //// [/out/terminal.js] *new* 
 import { evaluateKeyboardEvent } from 'common/input/keyboard';
 function foo() {

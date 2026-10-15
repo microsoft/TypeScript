@@ -27,6 +27,19 @@ import (
 // fakeMapper is an in-process mapper that transforms content verbatim and reports one diagnostic.
 type fakeMapper struct{}
 
+func TestEmptyOutputExtensionsOverrideSurvivesSerialization(t *testing.T) {
+	t.Parallel()
+	definition := contentmapper.Definition{Package: "mapper", Extensions: []string{".vue"}, OutputExtensions: map[string]string{}}
+	data, err := json.Marshal(definition)
+	assert.NilError(t, err)
+	var parsed contentmapper.Definition
+	assert.NilError(t, json.Unmarshal(data, &parsed))
+	assert.Assert(t, parsed.OutputExtensions != nil)
+	mapper := &contentmapper.Mapper{Definition: parsed}
+	mapper.Manifest.DefaultOutputExtensions = map[string]string{".vue": ".js"}
+	assert.Equal(t, len(mapper.Definition.OutputExtensions), 0)
+}
+
 type responseMapper struct {
 	response func(contentmapper.TransformParams) any
 }
@@ -1046,6 +1059,8 @@ func TestProjectLifecycle(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, len(projectAWatchedFiles), 1)
 	assert.Equal(t, len(projectBWatchedFiles), 1)
+	assert.Equal(t, projectAWatchedFiles[0].AsString(), "/repo/a/mapper.config.js")
+	assert.Equal(t, projectBWatchedFiles[0].AsString(), "/repo/b/mapper.config.js")
 
 	_, err = projectA.Transform(dynamicB, contentmapper.Request{FileName: "/repo/a/file.ext", Content: "x"})
 	assert.NilError(t, err)

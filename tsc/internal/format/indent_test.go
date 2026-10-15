@@ -20,7 +20,7 @@ func TestGetContainingList_NamedImports(t *testing.T) {
 
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/test.ts",
-		Path:     "/test.ts",
+		PathKey:  "/test.ts",
 	}, text, core.ScriptKindTS)
 
 	// Find ImportSpecifier nodes (AAA and BBB)

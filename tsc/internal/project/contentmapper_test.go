@@ -126,7 +126,7 @@ func TestContentMapperParallelFileLoading(t *testing.T) {
 	assert.Equal(t, languageService.GetProgram().ContentMapperProject(), mapperProject)
 	for i := range fileCount {
 		fileName := fmt.Sprintf("/home/project/file%d.box", i)
-		file := languageService.GetProgram().GetSourceFile(fileName)
+		file := languageService.GetProgram().GetSourceFile(tspath.RootedFilePathFromAbsolute(fileName))
 		assert.Assert(t, file != nil, "expected %s to be loaded", fileName)
 		assert.Equal(t, file.Text(), "const __VERSION = \"1.0.0\";\nexport const version = 7;\n")
 	}
@@ -335,7 +335,7 @@ func TestContentMapperPackageManifestChangeReloadsConfig(t *testing.T) {
 	assert.Assert(t, configuredProject != nil)
 	mappers := configuredProject.CommandLine.ContentMappers()
 	assert.Equal(t, len(mappers), 1)
-	assert.Equal(t, mappers[0].PackageDirectory, "/home/mapper")
+	assert.Equal(t, mappers[0].PackageDirectory, tspath.RootedDirectoryPath("/home/mapper"))
 	session.WaitForBackgroundTasks()
 	assert.Assert(t, utils.WatchesFile(packageJsonPath), "expected the invalid mapper package manifest to be watched")
 	assert.Assert(t, slices.ContainsFunc(utils.Client().WatchFilesCalls(), func(call struct {
@@ -394,11 +394,11 @@ func TestContentMapperSupplementalFileClonedOnEdit(t *testing.T) {
 	oldCanonical := oldProgram.GetSourceFile("/home/project/app.box")
 	oldSupplemental := oldCanonical.SupplementalSourceFiles()
 	assert.Equal(t, len(oldSupplemental), 1)
-	assert.Equal(t, oldSupplemental[0].FileName(), "/home/project/app.box.0.ts")
-	assert.Equal(t, oldSupplemental[0].Path(), tspath.Path("/home/project/app.box.0.ts"))
+	assert.Equal(t, oldSupplemental[0].FileName().AsString(), "/home/project/app.box.0.ts")
+	assert.Equal(t, oldSupplemental[0].PathKey(), tspath.PathKey("/home/project/app.box.0.ts"))
 	assert.Equal(t, oldSupplemental[0].Hash, oldCanonical.Hash)
-	assert.Assert(t, oldProgram.GetSourceFileByPath(oldSupplemental[0].Path()) == oldSupplemental[0])
-	assert.Assert(t, oldProgram.FilesByPath()[oldSupplemental[0].Path()] == oldSupplemental[0])
+	assert.Assert(t, oldProgram.GetSourceFileByPath(oldSupplemental[0].PathKey()) == oldSupplemental[0])
+	assert.Assert(t, oldProgram.FilesByPath()[oldSupplemental[0].PathKey()] == oldSupplemental[0])
 
 	assert.NilError(t, utils.FS().WriteFile("/home/project/app.box", "declare const supplementalValue: string;\n"))
 	session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
@@ -415,12 +415,12 @@ func TestContentMapperSupplementalFileClonedOnEdit(t *testing.T) {
 	newCanonical := newProgram.GetSourceFile("/home/project/app.box")
 	newSupplemental := newCanonical.SupplementalSourceFiles()
 	assert.Equal(t, len(newSupplemental), 1)
-	assert.Equal(t, newSupplemental[0].Path(), oldSupplemental[0].Path())
+	assert.Equal(t, newSupplemental[0].PathKey(), oldSupplemental[0].PathKey())
 	assert.Assert(t, newCanonical != oldCanonical)
 	assert.Assert(t, newSupplemental[0] != oldSupplemental[0])
 	assert.Equal(t, newSupplemental[0].Hash, newCanonical.Hash)
 	assert.Assert(t, newSupplemental[0].Hash != oldSupplemental[0].Hash)
-	assert.Assert(t, newProgram.FilesByPath()[newSupplemental[0].Path()] == newSupplemental[0])
+	assert.Assert(t, newProgram.FilesByPath()[newSupplemental[0].PathKey()] == newSupplemental[0])
 	assert.Assert(t, strings.Contains(newSupplemental[0].Text(), "supplementalValue: string"))
 	mainFile := newProgram.GetSourceFile("/home/project/main.ts")
 	diagnostics := newProgram.GetSemanticDiagnostics(ctx, mainFile)
@@ -464,7 +464,7 @@ func TestContentMapperModuleExtensionClonedOnUnrelatedEdit(t *testing.T) {
 	assert.NilError(t, err)
 	mappedFile := languageService.GetProgram().GetSourceFile("/home/project/app.box")
 	assert.Assert(t, mappedFile != nil)
-	assert.Equal(t, mappedFile.VirtualFileName(), "/home/project/app.box.mts")
+	assert.Equal(t, mappedFile.VirtualFileName().AsString(), "/home/project/app.box.mts")
 	assert.Assert(t, mappedFile.ParseOptions().ExternalModuleIndicatorOptions.Force)
 
 	session.DidChangeFile(ctx, mainURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
@@ -1026,7 +1026,7 @@ func TestContentMapperInferredProjectSurvivesTypingsInstall(t *testing.T) {
 	assert.Assert(t, !strings.Contains(boxFile.Text(), "#{target}"), "expected loose app.box to be transformed after typings install: %q", boxFile.Text())
 	var typingsFile *ast.SourceFile
 	for _, file := range languageService.GetProgram().SourceFiles() {
-		if strings.HasSuffix(file.FileName(), "@types/jquery/index.d.ts") {
+		if strings.HasSuffix(file.FileName().AsString(), "@types/jquery/index.d.ts") {
 			typingsFile = file
 			break
 		}

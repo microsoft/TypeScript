@@ -68,21 +68,36 @@ func TestCommandLineParseResult(t *testing.T) {
 		{"parse --incremental", []string{"--incremental", "0.ts"}},
 		{"parse --tsBuildInfoFile", []string{"--tsBuildInfoFile", "build.tsbuildinfo", "0.ts"}},
 		{"allows tsconfig only option to be set to null", []string{"--composite", "null", "-tsBuildInfoFile", "null", "0.ts"}},
-
-		// ****** Watch Options ******
-		{"parse --watchFile", []string{"--watchFile", "UseFsEvents", "0.ts"}},
-		{"parse --watchDirectory", []string{"--watchDirectory", "FixedPollingInterval", "0.ts"}},
-		{"parse --fallbackPolling", []string{"--fallbackPolling", "PriorityInterval", "0.ts"}},
-		{"parse --synchronousWatchDirectory", []string{"--synchronousWatchDirectory", "0.ts"}},
-		{"errors on missing argument to --fallbackPolling", []string{"0.ts", "--fallbackPolling"}},
-		{"parse --excludeDirectories", []string{"--excludeDirectories", "**/temp", "0.ts"}},
-		{"errors on invalid excludeDirectories", []string{"--excludeDirectories", "**/../*", "0.ts"}},
-		{"parse --excludeFiles", []string{"--excludeFiles", "**/temp/*.ts", "0.ts"}},
-		{"errors on invalid excludeFiles", []string{"--excludeFiles", "**/../*", "0.ts"}},
 	}
 
 	for _, testCase := range parseCommandLineSubScenarios {
 		testCase.createSubScenario("parseCommandLine").assertParseResult(t)
+	}
+}
+
+func TestRemovedWatchOptions(t *testing.T) {
+	t.Parallel()
+
+	fs := tsoptionstest.NewVFS(map[string]string{}, tspath.CaseSensitive)
+	currentDirectory := tspath.RootedDirectoryPath("/project")
+	for _, option := range []string{
+		"watchInterval", "watchFile", "watchDirectory", "fallbackPolling",
+		"synchronousWatchDirectory", "excludeDirectories", "excludeFiles",
+	} {
+		t.Run(option, func(t *testing.T) {
+			t.Parallel()
+			args := []string{"--watch", "--" + option}
+			parsed := tsoptions.ParseCommandLine(args, fs, currentDirectory)
+			assert.Assert(t, parsed.CompilerOptions().Watch.IsTrue())
+			assert.Equal(t, len(parsed.Errors), 1)
+			build := tsoptions.ParseBuildCommandLine(args, fs, currentDirectory)
+			assert.Assert(t, build.CompilerOptions.Watch.IsTrue())
+			assert.Equal(t, len(build.Errors), 1)
+			var errors strings.Builder
+			diagnosticwriter.WriteFormatDiagnostics(&errors, diagnosticwriter.FromASTDiagnostics(parsed.Errors), &diagnosticwriter.FormattingOptions{NewLine: "\n"})
+			diagnosticwriter.WriteFormatDiagnostics(&errors, diagnosticwriter.FromASTDiagnostics(build.Errors), &diagnosticwriter.FormattingOptions{NewLine: "\n"})
+			baseline.Run(t, option+".js", errors.String(), baseline.Options{Subfolder: "tsoptions/removedWatchOptions"})
+		})
 	}
 }
 
@@ -91,7 +106,7 @@ func TestResponseFileDoesNotPanic(t *testing.T) {
 
 	// Passing `@` with an empty or relative filename should not panic.
 	// It should produce a diagnostic error instead.
-	cwd := t.TempDir()
+	cwd := tspath.RootedDirectoryPathFromAbsolute(t.TempDir())
 	t.Run("empty response file", func(t *testing.T) {
 		t.Parallel()
 		parsed := tsoptions.ParseCommandLineTestWorker(nil, []string{"@"}, osvfs.FS(), cwd)
@@ -110,42 +125,41 @@ func TestResponseFileParsing(t *testing.T) {
 
 	t.Run("final token without trailing whitespace", func(t *testing.T) {
 		t.Parallel()
-		host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		fs := tsoptionstest.NewVFS(map[string]string{
 			"/project/args.txt": "--strict --outDir dist",
-		}, "/project", true)
-		parsed := tsoptions.ParseCommandLine([]string{"@args.txt"}, host)
+		}, tspath.CaseSensitive)
+		parsed := tsoptions.ParseCommandLine([]string{"@args.txt"}, fs, "/project")
 		assert.Equal(t, len(parsed.Errors), 0)
 		assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
-		assert.Equal(t, parsed.CompilerOptions().OutDir, "/project/dist")
+		assert.Equal(t, parsed.CompilerOptions().OutDir, tspath.RootedDirectoryPath("/project/dist"))
 	})
 
 	t.Run("cyclic response files", func(t *testing.T) {
 		t.Parallel()
-		host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		fs := tsoptionstest.NewVFS(map[string]string{
 			"/project/a.txt": "@/project/b.txt --strict",
 			"/project/b.txt": "@/project/a.txt --outDir dist",
-		}, "/project", true)
-		parsed := tsoptions.ParseCommandLine([]string{"@a.txt"}, host)
+		}, tspath.CaseSensitive)
+		parsed := tsoptions.ParseCommandLine([]string{"@a.txt"}, fs, "/project")
 		assert.Equal(t, len(parsed.Errors), 0)
 		assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
-		assert.Equal(t, parsed.CompilerOptions().OutDir, "/project/dist")
+		assert.Equal(t, parsed.CompilerOptions().OutDir, tspath.RootedDirectoryPath("/project/dist"))
 	})
 }
 
 func TestParseCommandLineTypeRootsRelativePath(t *testing.T) {
 	t.Parallel()
 
-	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+	fs := tsoptionstest.NewVFS(map[string]string{
 		"/home/project/bug.ts": `let x = 1;`,
-	}, "/home/project", true)
+	}, tspath.CaseSensitive)
 
-	cmdLine := tsoptions.ParseCommandLine([]string{"--typeRoots", "t", "bug.ts"}, host)
+	cmdLine := tsoptions.ParseCommandLine([]string{"--typeRoots", "t", "bug.ts"}, fs, "/home/project")
 
 	typeRoots := cmdLine.CompilerOptions().TypeRoots
 	assert.Assert(t, typeRoots != nil, "typeRoots should not be nil")
 	assert.Equal(t, len(typeRoots), 1)
-	assert.Assert(t, tspath.IsRootedDiskPath(typeRoots[0]), "typeRoots entry should be an absolute path, got: %s", typeRoots[0])
-	assert.Assert(t, strings.HasSuffix(typeRoots[0], "/t"), "typeRoots entry should end with '/t', got: %s", typeRoots[0])
+	assert.Equal(t, typeRoots[0], tspath.RootedDirectoryPath("/home/project/t"))
 }
 
 func TestCustomConditionsNullOverride(t *testing.T) {
@@ -160,10 +174,10 @@ func TestCustomConditionsNullOverride(t *testing.T) {
 		"/project/index.ts": `console.log("Hello, World!");`,
 	}
 
-	host := tsoptionstest.NewVFSParseConfigHost(files, "/project", true)
+	fs := tsoptionstest.NewVFS(files, tspath.CaseSensitive)
 
 	// Parse command line with --customConditions null
-	cmdLine := tsoptions.ParseCommandLine([]string{"--project", "/project", "--customConditions", "null"}, host)
+	cmdLine := tsoptions.ParseCommandLine([]string{"--project", "/project", "--customConditions", "null"}, fs, "/project")
 
 	// Check that the raw options contain null for customConditions
 	if rawMap, ok := cmdLine.Raw.(*collections.OrderedMap[string, any]); ok {
@@ -182,7 +196,7 @@ func TestCustomConditionsNullOverride(t *testing.T) {
 		"/project/tsconfig.json",
 		cmdLine.CompilerOptions(),
 		wrappedRaw,
-		host,
+		fs,
 		nil,
 	)
 
@@ -277,7 +291,7 @@ func (f commandLineSubScenario) assertParseResult(t *testing.T) {
 		tsBaseline := parseExistingCompilerBaseline(t, originalBaseline)
 
 		// f.workerDiagnostic is either defined or set to default pointer in `createSubScenario`
-		parsed := tsoptions.ParseCommandLineTestWorker(f.optDecls, f.commandLine, osvfs.FS(), t.TempDir())
+		parsed := tsoptions.ParseCommandLineTestWorker(f.optDecls, f.commandLine, osvfs.FS(), tspath.RootedDirectoryPathFromAbsolute(t.TempDir()))
 
 		newBaselineFileNames := strings.Join(parsed.FileNames, ",")
 		assert.Equal(t, tsBaseline.fileNames, newBaselineFileNames)
@@ -287,13 +301,6 @@ func (f commandLineSubScenario) assertParseResult(t *testing.T) {
 		e := json.Unmarshal(o, newParsedCompilerOptions)
 		assert.NilError(t, e)
 		assert.DeepEqual(t, tsBaseline.options, newParsedCompilerOptions, cmpopts.IgnoreUnexported(core.CompilerOptions{}))
-
-		newParsedWatchOptions := core.WatchOptions{}
-		e = json.Unmarshal(o, &newParsedWatchOptions)
-		assert.NilError(t, e)
-
-		// !!! useful for debugging but will not pass due to `none` as enum options
-		// assert.DeepEqual(t, tsBaseline.watchoptions, newParsedWatchOptions)
 
 		var formattedErrors strings.Builder
 		diagnosticwriter.WriteFormatDiagnostics(&formattedErrors, diagnosticwriter.FromASTDiagnostics(parsed.Errors), &diagnosticwriter.FormattingOptions{NewLine: "\n"})
@@ -309,25 +316,18 @@ func (f commandLineSubScenario) assertParseResult(t *testing.T) {
 
 func parseExistingCompilerBaseline(t *testing.T, baseline string) *TestCommandLineParser {
 	_, rest, _ := strings.Cut(baseline, "CompilerOptions::\n")
-	compilerOptions, rest, watchFound := strings.Cut(rest, "\nWatchOptions::\n")
-	watchOptions, rest, _ := strings.Cut(rest, "\nFileNames::\n")
+	compilerOptions, rest, _ := strings.Cut(rest, "\nWatchOptions::\n")
+	_, rest, _ = strings.Cut(rest, "\nFileNames::\n")
 	fileNames, errors, _ := strings.Cut(rest, "\nErrors::\n")
 
 	baselineCompilerOptions := &core.CompilerOptions{}
 	e := json.Unmarshal([]byte(compilerOptions), &baselineCompilerOptions)
 	assert.NilError(t, e)
 
-	baselineWatchOptions := &core.WatchOptions{}
-	if watchFound && watchOptions != "" {
-		e2 := json.Unmarshal([]byte(watchOptions), &baselineWatchOptions)
-		assert.NilError(t, e2)
-	}
-
 	return &TestCommandLineParser{
-		options:      baselineCompilerOptions,
-		watchoptions: baselineWatchOptions,
-		fileNames:    fileNames,
-		errors:       errors,
+		options:   baselineCompilerOptions,
+		fileNames: fileNames,
+		errors:    errors,
 	}
 }
 
@@ -351,8 +351,6 @@ func formatNewBaseline(
 	formatted.WriteByte(']')
 	formatted.WriteString("\n\nCompilerOptions::\n")
 	formatted.Write(opts)
-	// todo: watch options not implemented
-	// formatted.WriteString("WatchOptions::\n")
 	formatted.WriteString("\n\nFileNames::\n")
 	formatted.WriteString(fileNames)
 	formatted.WriteString("\n\nErrors::\n")
@@ -379,10 +377,7 @@ func (f commandLineSubScenario) assertBuildParseResultWithTsBaseline(t *testing.
 		}
 
 		// f.workerDiagnostic is either defined or set to default pointer in `createSubScenario`
-		parsed := tsoptions.ParseBuildCommandLine(f.commandLine, &tsoptionstest.VfsParseConfigHost{
-			Vfs:              osvfs.FS(),
-			CurrentDirectory: tspath.NormalizeSlashes(repo.TestDataPath()),
-		})
+		parsed := tsoptions.ParseBuildCommandLine(f.commandLine, osvfs.FS(), tspath.RootedDirectoryPathFromAbsolute(repo.TestDataPath()))
 
 		newBaselineProjects := strings.Join(parsed.Projects, ",")
 		if getTsBaseline != nil {
@@ -405,13 +400,6 @@ func (f commandLineSubScenario) assertBuildParseResultWithTsBaseline(t *testing.
 			assert.DeepEqual(t, tsBaseline.compilerOptions, newParsedCompilerOptions, cmpopts.IgnoreUnexported(core.CompilerOptions{}))
 		}
 
-		newParsedWatchOptions := core.WatchOptions{}
-		e = json.Unmarshal(o, &newParsedWatchOptions)
-		assert.NilError(t, e)
-
-		// !!! useful for debugging but will not pass due to `none` as enum options
-		// assert.DeepEqual(t, tsBaseline.watchoptions, newParsedWatchOptions)
-
 		var formattedErrors strings.Builder
 		diagnosticwriter.WriteFormatDiagnostics(&formattedErrors, diagnosticwriter.FromASTDiagnostics(parsed.Errors), &diagnosticwriter.FormattingOptions{NewLine: "\n"})
 		newBaselineErrors := formattedErrors.String()
@@ -426,8 +414,8 @@ func (f commandLineSubScenario) assertBuildParseResultWithTsBaseline(t *testing.
 
 func parseExistingCompilerBaselineBuild(t *testing.T, baseline string) *TestCommandLineParserBuild {
 	_, rest, _ := strings.Cut(baseline, "buildOptions::\n")
-	buildOptions, rest, watchFound := strings.Cut(rest, "\nWatchOptions::\n")
-	watchOptions, rest, _ := strings.Cut(rest, "\nProjects::\n")
+	buildOptions, rest, _ := strings.Cut(rest, "\nWatchOptions::\n")
+	_, rest, _ = strings.Cut(rest, "\nProjects::\n")
 	projects, errors, _ := strings.Cut(rest, "\nErrors::\n")
 
 	baselineBuildOptions := &core.BuildOptions{}
@@ -438,16 +426,9 @@ func parseExistingCompilerBaselineBuild(t *testing.T, baseline string) *TestComm
 	e = json.Unmarshal([]byte(buildOptions), &baselineCompilerOptions)
 	assert.NilError(t, e)
 
-	baselineWatchOptions := &core.WatchOptions{}
-	if watchFound && watchOptions != "" {
-		e2 := json.Unmarshal([]byte(watchOptions), &baselineWatchOptions)
-		assert.NilError(t, e2)
-	}
-
 	return &TestCommandLineParserBuild{
 		options:         baselineBuildOptions,
 		compilerOptions: baselineCompilerOptions,
-		watchoptions:    baselineWatchOptions,
 		projects:        projects,
 		errors:          errors,
 	}
@@ -476,8 +457,6 @@ func formatNewBaselineBuild(
 	formatted.Write(opts)
 	formatted.WriteString("\n\ncompilerOptions::\n")
 	formatted.Write(compilerOpts)
-	// todo: watch options not implemented
-	// formatted.WriteString("WatchOptions::\n")
 	formatted.WriteString("\n\nProjects::\n")
 	formatted.WriteString(projects)
 	formatted.WriteString("\n\nErrors::\n")
@@ -526,14 +505,12 @@ type verifyNull struct {
 
 type TestCommandLineParser struct {
 	options           *core.CompilerOptions
-	watchoptions      *core.WatchOptions
 	fileNames, errors string
 }
 
 type TestCommandLineParserBuild struct {
 	options          *core.BuildOptions
 	compilerOptions  *core.CompilerOptions
-	watchoptions     *core.WatchOptions
 	projects, errors string
 }
 
@@ -555,14 +532,6 @@ func TestParseBuildCommandLine(t *testing.T) {
 		{`--clean and --verbose together is invalid`, []string{"--clean", "--verbose"}},
 		{`--clean and --watch together is invalid`, []string{"--clean", "--watch"}},
 		{`--watch and --dry together is invalid`, []string{"--watch", "--dry"}},
-		{"parse --watchFile", []string{"--watchFile", "UseFsEvents", "--verbose"}},
-		{"parse --watchDirectory", []string{"--watchDirectory", "FixedPollingInterval", "--verbose"}},
-		{"parse --fallbackPolling", []string{"--fallbackPolling", "PriorityInterval", "--verbose"}},
-		{"parse --synchronousWatchDirectory", []string{"--synchronousWatchDirectory", "--verbose"}},
-		{"errors on missing argument", []string{"--verbose", "--fallbackPolling"}},
-		{"errors on invalid excludeDirectories", []string{"--excludeDirectories", "**/../*"}},
-		{"parse --excludeFiles", []string{"--excludeFiles", "**/temp/*.ts"}},
-		{"errors on invalid excludeFiles", []string{"--excludeFiles", "**/../*"}},
 	}
 
 	for _, testCase := range parseCommandLineSubScenarios {
@@ -580,17 +549,4 @@ func TestParseBuildCommandLine(t *testing.T) {
 	for _, testCase := range extraScenarios {
 		testCase.createSubScenario("parseBuildOptions").assertBuildParseResultWithTsBaseline(t, nil)
 	}
-}
-
-func TestAffectsBuildInfo(t *testing.T) {
-	t.Parallel()
-	t.Run("should have affectsBuildInfo true for every option with affectsSemanticDiagnostics", func(t *testing.T) {
-		t.Parallel()
-		for _, option := range tsoptions.OptionsDeclarations {
-			if option.AffectsSemanticDiagnostics {
-				// semantic diagnostics affect the build info, so ensure they're included
-				assert.Assert(t, option.AffectsBuildInfo)
-			}
-		}
-	})
 }

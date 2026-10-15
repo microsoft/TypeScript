@@ -34,3 +34,21 @@ If the method is an operation on a single `Type` or `Symbol` that takes no other
 ## Unnecessary spread and `exactOptionalPropertyTypes`
 
 Never write code like `...(options ? { snapshot: options.snapshot } : {})`. All optional properties should tolerate `undefined`. If `--exactOptionalPropertyTypes` is forcing you to write code this way, fix the offending type. Rewriting as `if (options) foo.snapshot = options.snapshot` is not an acceptable workaround; always fix the type. As a rule, object types used in input positions should always define optional properties with `prop?: T | undefined` so this isn't a problem.
+
+## What kinds of ID collisions matter?
+
+Most API objects synchronize their client and server identities by some kind of handle or ID. Some care has to be taken when choosing an ID scheme.
+
+What matters:
+
+* A single `api.Session` in LSP mode can have multiple simultaneous clients. Sometimes those clients will all talk about the same server object. Other times, a single client needs to create objects that are private to it, like resolution contexts or source file leases. In those cases, the server must generate the unique ID after creation to avoid ID collision of private objects between multiple clients.
+
+
+What doesn't matter:
+
+* `uint64` overflow
+* Passing objects between multiple `API` instances in the same JS process. We may eventually add some kind of central provenance validation. Do not add it on individual methods or flag it in reviews for now. It's not a realistic concern.
+
+## Reference equality guarantees are forfeited by disposing owners and clearing the source file cache
+
+It's not a bug to observe a new object identity for an object whose owner was previously disposed or manually removed by `api.clearSourceFileCache()`. Review comments and tests that assert an ownership or lifetime bug that rely on testing reference equality after disposal or cache clearing will be rejected.

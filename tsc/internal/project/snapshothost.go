@@ -18,9 +18,9 @@ import (
 
 // SnapshotHost owns the services shared by a collection of immutable snapshots.
 type SnapshotHost struct {
-	options *SessionOptions
-	toPath  func(string) tspath.Path
-	fs      vfs.FS
+	options         *SessionOptions
+	caseSensitivity tspath.CaseSensitivity
+	fs              vfs.FS
 
 	parseCache              *ParseCache
 	contentMappedParseCache *ContentMappedParseCache
@@ -62,12 +62,19 @@ func (s *SnapshotHost) AcquireSourceFile(options ast.SourceFileParseOptions, tex
 	}
 }
 
-func NewSnapshotHost(init *SessionInit) *SnapshotHost {
-	currentDirectory := init.Options.CurrentDirectory
-	useCaseSensitiveFileNames := init.FS.UseCaseSensitiveFileNames()
-	toPath := func(fileName string) tspath.Path {
-		return tspath.ToPath(fileName, currentDirectory, useCaseSensitiveFileNames)
+func (s *SnapshotHost) AcquireExistingSourceFile(key ParseCacheKey) *SourceFileLease {
+	sourceFile, ok := s.parseCache.AcquireExisting(key)
+	if !ok {
+		return nil
 	}
+	return &SourceFileLease{
+		cache:      s.parseCache,
+		key:        key,
+		sourceFile: sourceFile,
+	}
+}
+
+func NewSnapshotHost(init *SessionInit) *SnapshotHost {
 	parseCache := init.ParseCache
 	if parseCache == nil {
 		parseCache = NewParseCache(RefCountCacheOptions{})
@@ -79,7 +86,7 @@ func NewSnapshotHost(init *SessionInit) *SnapshotHost {
 
 	return &SnapshotHost{
 		options:                 init.Options,
-		toPath:                  toPath,
+		caseSensitivity:         init.FS.CaseSensitivity(),
 		fs:                      init.FS,
 		parseCache:              parseCache,
 		contentMappedParseCache: contentMappedParseCache,
@@ -115,6 +122,11 @@ func (s *SnapshotHost) CloneSnapshot(
 		change.fs = apiRequest.FileSystem
 		change.fileSystemOverride = apiRequest.FileSystem != nil
 		change.replaceFileSystem = apiRequest.ReplaceFileSystem
+		change.newConfig = apiRequest.UserPreferences
+		if apiRequest.PrepareAutoImports != "" {
+			change.ResourceRequest = baseSnapshot.resourceRequestForDocument(apiRequest.PrepareAutoImports)
+			change.AutoImports = apiRequest.PrepareAutoImports
+		}
 	}
 	snapshot := s.update(ctx, baseSnapshot, change)
 	return snapshot, snapshot.apiError
@@ -140,12 +152,12 @@ func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSna
 }
 
 func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *Snapshot {
-	fileSystem := newOverlayFS(s.fs, nil, s.options.PositionEncoding, s.toPath)
+	fileSystem := newOverlayFS(s.fs, nil, s.options.PositionEncoding)
 	return s.newSnapshot(
 		id,
 		&SnapshotFS{
-			toPath: s.toPath,
-			fs:     fileSystem,
+			caseSensitivity: s.caseSensitivity,
+			fs:              fileSystem,
 		},
 		&ConfigFileRegistry{},
 		nil,
@@ -155,7 +167,7 @@ func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *
 			"auto-import",
 			lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
 			relativePatternSupport,
-			func(nodeModulesDirs map[tspath.Path]string) PatternsAndIgnored {
+			func(nodeModulesDirs map[tspath.PathKey]tspath.RootedDirectoryPath) PatternsAndIgnored {
 				patterns := make([]string, 0, len(nodeModulesDirs))
 				for _, dir := range nodeModulesDirs {
 					patterns = append(patterns, getRecursiveGlobPattern(dir))
@@ -173,11 +185,11 @@ func (s *SnapshotHost) FS() vfs.FS {
 	return s.fs
 }
 
-func (s *SnapshotHost) GetCurrentDirectory() string {
+func (s *SnapshotHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return s.options.CurrentDirectory
 }
 
-func (s *SnapshotHost) DefaultLibraryPath() string {
+func (s *SnapshotHost) DefaultLibraryPath() tspath.RootedDirectoryPath {
 	return s.options.DefaultLibraryPath
 }
 

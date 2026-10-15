@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -80,6 +81,71 @@ func TestContentMapperBuildLifecycle(t *testing.T) {
 	assert.Assert(t, result.Watcher == nil)
 	assert.Equal(t, spawner.spawns.Load(), int32(1))
 	assert.Equal(t, spawner.closes.Load(), int32(1))
+}
+
+func TestContentMapperOutputExtensionsIncrementalEmit(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		for _, override := range []bool{false, true} {
+			name := "incremental manifest"
+			if build {
+				name = "build manifest"
+			}
+			if override {
+				name = strings.Replace(name, "manifest", "override", 1)
+			}
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
+				const root = "/home/src/workspaces/project/"
+				config := `{
+					"compilerOptions": {
+						"composite": true, "module": "preserve",
+						"rewriteRelativeImportExtensions": true, "outDir": "dist"
+					},
+					"contentMappers": [{ "package": "mapper", "extensions": [".vue"]`
+				if override {
+					config += `, "outputExtensions": {".vue": ".js"}`
+				}
+				config += `}]
+				}`
+				manifest := strings.Replace(contentmappertest.PackageJSON(contentmappertest.VerbatimMapper),
+					`"exec":`, `"outputExtensions": {".vue": ".js"}, "exec":`, 1)
+				input := &tscInput{files: FileMap{
+					root + "tsconfig.json":                    config,
+					root + "app.vue":                          `export const app = 1;`,
+					root + "main.ts":                          `export { app } from "./app.vue";`,
+					root + "node_modules/mapper/package.json": manifest,
+				}}
+				testSys := newTestSys(input, false)
+				sys := &recordingContentMapperSystem{
+					TestSys: testSys,
+					spawner: &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner()},
+				}
+				args := []string{"--pretty", "false", "--runExternalCode"}
+				if build {
+					args = append([]string{"--build"}, args...)
+				}
+				run := func(extension string) {
+					t.Helper()
+					result := execute.CommandLine(t.Context(), sys, args, testSys)
+					assert.Equal(t, result.Status, tsc.ExitStatusSuccess, testSys.currentWrite.String())
+					for _, file := range []string{"main.js", "main.d.ts"} {
+						text, ok := testSys.FS().ReadFile(tspath.RootedFilePathFromNormalized(root + "dist/" + file))
+						assert.Assert(t, ok)
+						assert.Assert(t, strings.Contains(text, `"./app`+extension+`"`), text)
+					}
+				}
+				run(".js")
+				testSys.clearOutput()
+				if override {
+					testSys.writeFileNoError(root+"tsconfig.json", strings.Replace(config, `".js"`, `".jsx"`, 1))
+				} else {
+					testSys.writeFileNoError(root+"node_modules/mapper/package.json", strings.Replace(manifest, `".js"`, `".jsx"`, 1))
+				}
+				run(".jsx")
+			})
+		}
+	}
 }
 
 func TestContentMapperSupplementalDiagnosticUsesOriginalFileName(t *testing.T) {
@@ -402,6 +468,42 @@ func TestContentMapperBuildWatchSymlinkedManifestChange(t *testing.T) {
 	updatedManifest := strings.Replace(contentmappertest.PackageJSON(contentmappertest.VerbatimMapper), `"version": "1.0.0"`, `"version": "2.0.0"`, 1)
 	testSys.writeFileNoError(manifestTarget, updatedManifest)
 	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: manifestTarget}})
+	result.Watcher.DoCycle()
+
+	assert.Equal(t, spawner.spawns.Load(), int32(2))
+	assert.Equal(t, spawner.closes.Load(), int32(1))
+}
+
+func TestContentMapperWatchManifestChangeIgnoresCase(t *testing.T) {
+	t.Parallel()
+	const (
+		manifestTarget = "/home/src/workspaces/Mapper/package.json"
+		manifestEvent  = "/home/src/workspaces/mapper/package.json"
+	)
+	input := &tscInput{
+		ignoreCase: true,
+		files: FileMap{
+			"/home/src/workspaces/project/tsconfig.json": `{
+				"contentMappers": [{ "package": "mapper", "extensions": [".vue"] }]
+			}`,
+			"/home/src/workspaces/project/app.vue":             `export const app = 1;`,
+			"/home/src/workspaces/project/node_modules/mapper": vfstest.Symlink("/home/src/workspaces/Mapper"),
+			manifestTarget: contentmappertest.PackageJSON(contentmappertest.VerbatimMapper),
+		},
+	}
+	testSys := newTestSys(input, false)
+	spawner := &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner()}
+	sys := &recordingContentMapperSystem{TestSys: testSys, spawner: spawner}
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+
+	result := execute.CommandLine(ctx, sys, []string{"--watch", "--runExternalCode"}, testSys)
+	assert.Equal(t, spawner.spawns.Load(), int32(1))
+	assert.Equal(t, spawner.closes.Load(), int32(0))
+
+	updatedManifest := strings.Replace(contentmappertest.PackageJSON(contentmappertest.VerbatimMapper), `"version": "1.0.0"`, `"version": "2.0.0"`, 1)
+	testSys.writeFileNoError(manifestEvent, updatedManifest)
+	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: manifestEvent}})
 	result.Watcher.DoCycle()
 
 	assert.Equal(t, spawner.spawns.Load(), int32(2))

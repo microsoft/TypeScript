@@ -52,7 +52,7 @@ func (b *NodeBuilderImpl) addSymbolTypeToContext(symbol *ast.Symbol, t *Type) fu
 
 func (b *NodeBuilderImpl) enterSignatureScope(signature *Signature) (expandedParams []*ast.Symbol, cleanup func()) {
 	expandedParams = b.ch.getExpandedParameters(signature, true /*skipUnionExpanding*/)[0]
-	cleanup = b.enterNewScope(signature.declaration, expandedParams, signature.typeParameters, signature.parameters, signature.mapper)
+	cleanup = b.enterNewScope(signature.declaration, expandedParams, signature.TypeParameters(), signature.parameters, signature.mapper)
 	return expandedParams, cleanup
 }
 
@@ -175,9 +175,9 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 					if originalParameters != nil && originalParam != param {
 						// Can't reference the expanded parameter name, just the original, unless we've expanded the param list for some reason
 						if originalParam != nil {
-							add(originalParam.Name, originalParam)
+							add(originalParam.Name(), originalParam)
 						}
-					} else if !core.Some(param.Declarations, func(d *ast.Node) bool {
+					} else if !core.Some(param.Declarations(), func(d *ast.Node) bool {
 						var bindElement func(e *ast.BindingElement)
 						var bindPattern func(e *ast.BindingPattern)
 
@@ -202,7 +202,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 							}
 							symbol := b.ch.getSymbolOfDeclaration(e.AsNode())
 							if symbol != nil { // omitted expressions are now parsed as nameless binding patterns and also have no symbol
-								add(symbol.Name, symbol)
+								add(symbol.Name(), symbol)
 							}
 						}
 						bindElement = bindElementWorker
@@ -214,7 +214,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 						}
 						return false
 					}) {
-						add(param.Name, param)
+						add(param.Name(), param)
 					}
 				}
 			})

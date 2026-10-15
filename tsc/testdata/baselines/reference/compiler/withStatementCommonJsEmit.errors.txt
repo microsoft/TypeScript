@@ -1,0 +1,36 @@
+withStatementCommonJsEmit.cts(3,1): error TS1101: 'with' statements are not allowed in strict mode.
+withStatementCommonJsEmit.cts(3,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+withStatementCommonJsEmit.cts(4,1): error TS1101: 'with' statements are not allowed in strict mode.
+withStatementCommonJsEmit.cts(4,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+withStatementCommonJsEmit.cts(5,1): error TS1101: 'with' statements are not allowed in strict mode.
+withStatementCommonJsEmit.cts(5,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+withStatementCommonJsEmit.cts(6,1): error TS1101: 'with' statements are not allowed in strict mode.
+withStatementCommonJsEmit.cts(6,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+
+
+==== withStatementCommonJsEmit.cts (8 errors) ====
+    declare const obj: object;
+    
+    with (obj) export let a;
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
+    ~~~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+    with (obj) export let d = 1;
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
+    ~~~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+    with (obj) var local = 2;
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
+    ~~~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+    with (obj) {
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
+    ~~~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+        export let e;
+    }
+    

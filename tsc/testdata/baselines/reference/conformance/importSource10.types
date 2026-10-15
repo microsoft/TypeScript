@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/importSource/importSource10.ts] ////
+
+=== a.ts ===
+
+export {};
+
+=== b.ts ===
+import source a from "./a.ts";
+>a : AbstractModuleSource
+
+export { a };
+>a : AbstractModuleSource
+
+export const b = import.source("./a.ts");
+>b : Promise<AbstractModuleSource>
+>import.source("./a.ts") : Promise<AbstractModuleSource>
+>source : any
+>"./a.ts" : "./a.ts"
+

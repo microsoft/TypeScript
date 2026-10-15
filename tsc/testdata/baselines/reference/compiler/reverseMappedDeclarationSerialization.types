@@ -1,0 +1,191 @@
+//// [tests/cases/compiler/reverseMappedDeclarationSerialization.ts] ////
+
+=== finite.ts ===
+declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;
+>unwrap : <T>(input: { [K in keyof T]: { value: T[K]; }; }) => T
+>input : { [K in keyof T]: { value: T[K]; }; }
+>value : T[K]
+
+declare const indexedInput: Record<string, { value: string }>;
+>indexedInput : Record<string, { value: string; }>
+>value : string
+
+export const indexed = unwrap(indexedInput);
+>indexed : { [x: string]: any; }
+>unwrap(indexedInput) : { [x: string]: any; }
+>unwrap : <T>(input: { [K in keyof T]: { value: T[K]; }; }) => T
+>indexedInput : Record<string, { value: string; }>
+
+export const explicit: Record<string, string> = unwrap(indexedInput);
+>explicit : Record<string, string>
+>unwrap(indexedInput) : { [x: string]: any; }
+>unwrap : <T>(input: { [K in keyof T]: { value: T[K]; }; }) => T
+>indexedInput : Record<string, { value: string; }>
+
+export const shallow = unwrap({ name: { value: "text" } });
+>shallow : { name: string; }
+>unwrap({ name: { value: "text" } }) : { name: string; }
+>unwrap : <T>(input: { [K in keyof T]: { value: T[K]; }; }) => T
+>{ name: { value: "text" } } : { name: { value: string; }; }
+>name : { value: string; }
+>{ value: "text" } : { value: string; }
+>value : string
+>"text" : "text"
+
+declare const readonlyInput: {
+>readonlyInput : { readonly [key: string]: { value: string | number; }; }
+
+    readonly [key: string]: { value: string | number };
+>key : string
+>value : string | number
+
+};
+export const readonlyIndexed = unwrap(readonlyInput);
+>readonlyIndexed : { readonly [x: string]: any; }
+>unwrap(readonlyInput) : { readonly [x: string]: any; }
+>unwrap : <T>(input: { [K in keyof T]: { value: T[K]; }; }) => T
+>readonlyInput : { readonly [key: string]: { value: string | number; }; }
+
+type Validator<T> = ((input: unknown) => T | undefined) | {
+>Validator : Validator<T>
+>input : unknown
+
+    [K in keyof T]: Validator<T[K]>;
+};
+declare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;
+>decode : <T>(input: { [K in keyof T]: Validator<T[K]>; }) => T
+>input : { [K in keyof T]: Validator<T[K]>; }
+
+declare const stringValidator: (input: unknown) => string | undefined;
+>stringValidator : (input: unknown) => string | undefined
+>input : unknown
+
+export const deep = decode({ a: { b: { c: { d: stringValidator } } } });
+>deep : { a: { b: { c: { d: any; }; }; }; }
+>decode({ a: { b: { c: { d: stringValidator } } } }) : { a: { b: { c: { d: any; }; }; }; }
+>decode : <T>(input: { [K in keyof T]: Validator<T[K]>; }) => T
+>{ a: { b: { c: { d: stringValidator } } } } : { a: { b: { c: { d: (input: unknown) => string | undefined; }; }; }; }
+>a : { b: { c: { d: (input: unknown) => string | undefined; }; }; }
+>{ b: { c: { d: stringValidator } } } : { b: { c: { d: (input: unknown) => string | undefined; }; }; }
+>b : { c: { d: (input: unknown) => string | undefined; }; }
+>{ c: { d: stringValidator } } : { c: { d: (input: unknown) => string | undefined; }; }
+>c : { d: (input: unknown) => string | undefined; }
+>{ d: stringValidator } : { d: (input: unknown) => string | undefined; }
+>d : (input: unknown) => string | undefined
+>stringValidator : (input: unknown) => string | undefined
+
+interface NamedInput {
+    leaf: typeof stringValidator;
+>leaf : (input: unknown) => string | undefined
+>stringValidator : (input: unknown) => string | undefined
+}
+declare const namedInput: { node: NamedInput };
+>namedInput : { node: NamedInput; }
+>node : NamedInput
+
+export const named = decode(namedInput);
+>named : { node: { leaf: any; }; }
+>decode(namedInput) : { node: { leaf: any; }; }
+>decode : <T>(input: { [K in keyof T]: Validator<T[K]>; }) => T
+>namedInput : { node: NamedInput; }
+
+declare const nestedIndexInput: { node: Record<string, typeof stringValidator> };
+>nestedIndexInput : { node: Record<string, typeof stringValidator>; }
+>node : Record<string, (input: unknown) => string | undefined>
+>stringValidator : (input: unknown) => string | undefined
+
+export const nestedIndexed = decode(nestedIndexInput);
+>nestedIndexed : { node: { [x: string]: any; }; }
+>decode(nestedIndexInput) : { node: { [x: string]: any; }; }
+>decode : <T>(input: { [K in keyof T]: Validator<T[K]>; }) => T
+>nestedIndexInput : { node: Record<string, typeof stringValidator>; }
+
+export const namedExplicit: { node: { leaf: string } } = decode(namedInput);
+>namedExplicit : { node: { leaf: string; }; }
+>node : { leaf: string; }
+>leaf : string
+>decode(namedInput) : { node: { leaf: any; }; }
+>decode : <T>(input: { [K in keyof T]: Validator<T[K]>; }) => T
+>namedInput : { node: NamedInput; }
+
+export const deepExplicit: { a: { b: { c: { d: string } } } } =
+>deepExplicit : { a: { b: { c: { d: string; }; }; }; }
+>a : { b: { c: { d: string; }; }; }
+>b : { c: { d: string; }; }
+>c : { d: string; }
+>d : string
+
+    decode({ a: { b: { c: { d: stringValidator } } } });
+>decode({ a: { b: { c: { d: stringValidator } } } }) : { a: { b: { c: { d: any; }; }; }; }
+>decode : <T>(input: { [K in keyof T]: Validator<T[K]>; }) => T
+>{ a: { b: { c: { d: stringValidator } } } } : { a: { b: { c: { d: (input: unknown) => string | undefined; }; }; }; }
+>a : { b: { c: { d: (input: unknown) => string | undefined; }; }; }
+>{ b: { c: { d: stringValidator } } } : { b: { c: { d: (input: unknown) => string | undefined; }; }; }
+>b : { c: { d: (input: unknown) => string | undefined; }; }
+>{ c: { d: stringValidator } } : { c: { d: (input: unknown) => string | undefined; }; }
+>c : { d: (input: unknown) => string | undefined; }
+>{ d: stringValidator } : { d: (input: unknown) => string | undefined; }
+>d : (input: unknown) => string | undefined
+>stringValidator : (input: unknown) => string | undefined
+
+=== recursive.ts ===
+type Validator<T> = ((input: unknown) => T | undefined) | {
+>Validator : Validator<T>
+>input : unknown
+
+    [K in keyof T]: Validator<T[K]>;
+};
+declare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;
+>decode : <T>(input: { [K in keyof T]: Validator<T[K]>; }) => T
+>input : { [K in keyof T]: Validator<T[K]>; }
+
+type RecursiveInput = {
+>RecursiveInput : RecursiveInput
+
+    value: (input: unknown) => string;
+>value : (input: unknown) => string
+>input : unknown
+
+    next: RecursiveInput;
+>next : RecursiveInput
+
+};
+declare const recursiveInput: RecursiveInput;
+>recursiveInput : RecursiveInput
+
+export const recursive = decode(recursiveInput);
+>recursive : { value: string; next: { value: string; next: { value: string; next: { value: any; next: any; }; }; }; }
+>decode(recursiveInput) : { value: string; next: { value: string; next: { value: string; next: { value: any; next: any; }; }; }; }
+>decode : <T>(input: { [K in keyof T]: Validator<T[K]>; }) => T
+>recursiveInput : RecursiveInput
+
+interface GrowingInput<T> {
+    value: (input: unknown) => T;
+>value : (input: unknown) => T
+>input : unknown
+
+    next: GrowingInput<T[]>;
+>next : GrowingInput<T[]>
+}
+declare const growingInput: GrowingInput<string>;
+>growingInput : GrowingInput<string>
+
+export const growing = decode(growingInput);
+>growing : { value: string; next: { value: any; next: any; }; }
+>decode(growingInput) : { value: string; next: { value: any; next: any; }; }
+>decode : <T>(input: { [K in keyof T]: Validator<T[K]>; }) => T
+>growingInput : GrowingInput<string>
+
+interface RecursiveIndexInput {
+    [key: string]: RecursiveIndexInput;
+>key : string
+}
+declare const recursiveIndexInput: RecursiveIndexInput;
+>recursiveIndexInput : RecursiveIndexInput
+
+export const recursiveIndexed = decode(recursiveIndexInput);
+>recursiveIndexed : { [x: string]: any; }
+>decode(recursiveIndexInput) : { [x: string]: any; }
+>decode : <T>(input: { [K in keyof T]: Validator<T[K]>; }) => T
+>recursiveIndexInput : RecursiveIndexInput
+

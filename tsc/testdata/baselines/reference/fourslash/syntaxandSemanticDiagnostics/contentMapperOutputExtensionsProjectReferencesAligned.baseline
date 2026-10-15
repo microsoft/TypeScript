@@ -1,0 +1,9 @@
+// === Syntax and Semantic Diagnostics ===
+
+
+==== /app/main.ts (0 errors) ====
+    import { component } from "../lib/Component.vue";
+    export const value = component;
+    
+==== /lib/Component.vue (0 errors) ====
+    export const component = 1;
