@@ -51,14 +51,13 @@ func TestReplay(t *testing.T) {
 
 	fs := bundled.WrapFS(osvfs.FS())
 	defaultLibraryPath := bundled.LibPath()
-	typingsLocation := osvfs.GetGlobalTypingsCacheLocation()
 	cwd := tspath.RootedDirectoryPathFromAbsolute(core.Must(os.Getwd()))
 	serverOpts := lsp.ServerOptions{
 		Err:                os.Stderr,
 		Cwd:                cwd,
 		FS:                 fs,
 		DefaultLibraryPath: defaultLibraryPath,
-		TypingsLocation:    tspath.ToRootedDirectoryPath(typingsLocation, cwd),
+		TypingsLocation:    osvfs.GetGlobalTypingsCacheLocation(),
 		NpmInstall: func(ctx context.Context, cwd string, args []string) ([]byte, error) {
 			cmd := exec.CommandContext(ctx, "npm", args...)
 			cmd.Dir = cwd
