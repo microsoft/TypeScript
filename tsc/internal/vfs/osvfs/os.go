@@ -193,6 +193,10 @@ func GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPath {
 	if err != nil {
 		return ""
 	}
+	cachePath, ok := tspath.TryRootedPathFromAbsolute(cacheDir)
+	if !ok {
+		return ""
+	}
 
 	var subdir string
 	if runtime.GOOS == "windows" {
@@ -200,5 +204,5 @@ func GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPath {
 	} else {
 		subdir = "typescript"
 	}
-	return tspath.RootedDirectoryPathFromAbsolute(cacheDir).ResolveDirectory(subdir).ResolveDirectory(core.VersionMajorMinor())
+	return tspath.RootedDirectoryPathFromPath(cachePath).ResolveDirectory(subdir).ResolveDirectory(core.VersionMajorMinor())
 }

@@ -46,6 +46,14 @@ func TestGetGlobalTypingsCacheLocation(t *testing.T) {
 		t.Setenv("XDG_CACHE_HOME", "relative")
 		assert.Equal(t, osvfs.GetGlobalTypingsCacheLocation(), tspath.RootedDirectoryPath(""))
 	})
+
+	t.Run("relative user cache", func(t *testing.T) {
+		t.Setenv("XDG_CACHE_HOME", "")
+		for _, name := range []string{"HOME", "home", "LocalAppData"} {
+			t.Setenv(name, "relative-home")
+		}
+		assert.Equal(t, osvfs.GetGlobalTypingsCacheLocation(), tspath.RootedDirectoryPath(""))
+	})
 }
 
 func TestOS(t *testing.T) {
