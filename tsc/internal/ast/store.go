@@ -53,11 +53,14 @@ func newNodeStore() *nodeStore {
 type nodeBaseData struct {
 	id     atomic.Uint64
 	loc    core.TextRange
-	flags  NodeFlags
-	self   uint32 // the record's offset in its chunk, in words
 	parent nodeRef
+	flags  NodeFlags
+	self   uint16 // the record's offset in its chunk, in words
 	kind   Kind
 }
+
+// Every node has a header, so it must stay small.
+var _ [32 - unsafe.Sizeof(nodeBaseData{})]struct{}
 
 // A nodeRef is the address of the record of the node a field refers to, or
 // zero for no node. It is not a Go pointer, so the garbage collector does
@@ -69,8 +72,9 @@ const (
 	// store pointer.
 	standaloneSelf = 1
 
-	wordSize     = unsafe.Sizeof(uintptr(0))
-	maxChunkSize = uintptr(1<<32-1) * wordSize
+	wordSize = unsafe.Sizeof(uintptr(0))
+	// Chunks are small enough for any record's offset to fit in self.
+	maxChunkSize = (1 << 16) * wordSize
 )
 
 func (n Node) hdr() *nodeBaseData { return (*nodeBaseData)(n.p) }
@@ -164,7 +168,7 @@ func (s *nodeStore) alloc(size uintptr) unsafe.Pointer {
 	off := s.used
 	s.used += size
 	p := unsafe.Add(s.chunk, off)
-	(*nodeBaseData)(p).self = uint32(off / wordSize)
+	(*nodeBaseData)(p).self = uint16(off / wordSize)
 	return p
 }
 
