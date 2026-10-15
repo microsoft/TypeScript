@@ -3040,8 +3040,22 @@ func (p *Parser) parseRightSideOfDot(allowIdentifierNames bool, allowPrivateIden
 }
 
 func (p *Parser) newIdentifier(text string) *ast.Node {
+	return p.newIdentifierFromSymbolName(text, p.identifierNames.Make(text))
+}
+
+// newScannedIdentifier creates an identifier for the current token's value,
+// reusing the hash the scanner computed for it if available. Call it before
+// advancing past the token.
+func (p *Parser) newScannedIdentifier(text string) *ast.Node {
+	if hash, ok := p.scanner.IdentifierHash(text); ok {
+		return p.newIdentifierFromSymbolName(text, p.identifierNames.MakeHashed(text, hash))
+	}
+	return p.newIdentifier(text)
+}
+
+func (p *Parser) newIdentifierFromSymbolName(text string, name ast.SymbolName) *ast.Node {
 	p.identifierCount++
-	id := p.factory.NewIdentifierFromSymbolName(p.identifierNames.Make(text))
+	id := p.factory.NewIdentifierFromSymbolName(name)
 	if text == "await" {
 		p.statementHasAwaitIdentifier = true
 	}
@@ -5937,9 +5951,9 @@ func (p *Parser) createIdentifierWithDiagnostic(isIdentifier bool, diagnosticMes
 		} else {
 			pos = p.nodePos()
 		}
-		text := p.scanner.TokenValue()
+		identifier := p.newScannedIdentifier(p.scanner.TokenValue())
 		p.nextTokenWithoutCheck()
-		return p.finishNode(p.newIdentifier(text), pos)
+		return p.finishNode(identifier, pos)
 	}
 	if p.token == ast.KindPrivateIdentifier {
 		if privateIdentifierDiagnosticMessage != nil {
