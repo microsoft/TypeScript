@@ -14,7 +14,7 @@ import (
 func TestNodeRecordsArePointerFree(t *testing.T) {
 	t.Parallel()
 	for layout := nodeLayout(1); layout < layoutCount; layout++ {
-		if pinnedLayout(layout) {
+		if standaloneLayout(layout) {
 			continue
 		}
 		typ := reflect.TypeOf(layoutRecord(layout))
@@ -41,26 +41,35 @@ func findPointer(typ reflect.Type, path string) string {
 	return ""
 }
 
-func TestNodeStoreCompaction(t *testing.T) {
+func TestNodeStoreChunks(t *testing.T) {
 	t.Parallel()
 	factory := NewNodeFactory(NodeFactoryHooks{})
-	var before []Node
-	for i := range 100 {
-		before = append(before, factory.NewExpressionStatement(factory.NewIdentifier(strconv.Itoa(i))))
-	}
-	factory.CompactStore()
-	for i, node := range before {
-		assert.Equal(t, node.Expression().Text(), strconv.Itoa(i))
+	var statements []Node
+	for i := range 20000 {
+		statements = append(statements, factory.NewExpressionStatement(factory.NewIdentifier(strconv.Itoa(i))))
 	}
 	store := factory.store
-	assert.Assert(t, store.records[layoutIdentifier].sealed)
-	assert.Equal(t, store.records[layoutIdentifier].n, uint32(100))
-	assert.Assert(t, cmp.Panics(func() { factory.NewIdentifier("late") }))
-
-	store.compactSide()
-	before[0].Expression().AsIdentifier().SetText("renamed")
-	assert.Equal(t, before[0].Expression().Text(), "renamed")
-	assert.Equal(t, before[99].Expression().Text(), "99")
+	assert.Assert(t, store.cur > 2, "nodes should span several chunks")
+	crossed := 0
+	for i, statement := range statements {
+		expression := statement.Expression()
+		if expression.hdr().self>>nodeRefOffsetBits != statement.hdr().self>>nodeRefOffsetBits {
+			crossed++
+		}
+		assert.Equal(t, expression.Text(), strconv.Itoa(i))
+		assert.Equal(t, expression.store(), store)
+		expression.SetParent(statement)
+		assert.Equal(t, expression.Parent(), statement)
+	}
+	assert.Assert(t, crossed > 0, "some children should be in an earlier chunk than their parents")
+	factory.CompactStore()
+	assert.Equal(t, statements[0].Expression().Text(), "0")
+	assert.Assert(t, cmp.Panics(func() {
+		var full nodeStore
+		full.cur = uint32(standaloneChunk) - 1
+		full.capacity = 1
+		full.alloc(64)
+	}))
 }
 
 func TestNodeSideTableZeroValues(t *testing.T) {

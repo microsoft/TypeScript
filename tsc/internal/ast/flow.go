@@ -59,11 +59,11 @@ func (node FlowSwitchClauseData) data() *flowSwitchClauseData {
 }
 
 func (node FlowSwitchClauseData) SwitchStatement() Node {
-	return node.s.deref(node.data().switchStatement)
+	return node.deref(node.data().switchStatement)
 }
 
 func (node FlowSwitchClauseData) SetSwitchStatement(value Node) {
-	node.data().switchStatement = node.s.ref(value)
+	node.data().switchStatement = node.ref(value)
 }
 func (node FlowSwitchClauseData) ClauseStart() int32         { return node.data().clauseStart }
 func (node FlowSwitchClauseData) SetClauseStart(value int32) { node.data().clauseStart = value }
@@ -73,9 +73,9 @@ func (node FlowSwitchClauseData) SetClauseEnd(value int32)   { node.data().claus
 // NewFlowSwitchClauseData allocates in the store of switchStatement, whose
 // file must not be shared with other writers while it is bound.
 func NewFlowSwitchClauseData(switchStatement Node, clauseStart int, clauseEnd int) Node {
-	s := switchStatement.s
+	s := switchStatement.store()
 	data, i := newRecord[flowSwitchClauseData](s, layoutFlowSwitchClauseData)
-	data.switchStatement = s.ref(switchStatement)
+	data.switchStatement = s.refAt(i, switchStatement)
 	data.clauseStart = int32(clauseStart)
 	data.clauseEnd = int32(clauseEnd)
 	return newNode(s, kindFlowSwitchClauseData, layoutFlowSwitchClauseData, i, NodeFactoryHooks{})
@@ -107,7 +107,7 @@ func (node FlowReduceLabelData) SetAntecedents(value *FlowList) { node.data().an
 // NewFlowReduceLabelData allocates in the store of file, which must not be
 // shared with other writers while it is bound.
 func NewFlowReduceLabelData(file *SourceFile, target *FlowLabel, antecedents *FlowList) Node {
-	s := file.s
+	s := file.store()
 	data, i := newRecord[flowReduceLabelData](s, layoutFlowReduceLabelData)
 	data.target = target
 	data.antecedents = antecedents

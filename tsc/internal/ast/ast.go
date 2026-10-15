@@ -73,8 +73,8 @@ func NewNodeFactory(hooks NodeFactoryHooks) *NodeFactory {
 	return &NodeFactory{hooks: hooks}
 }
 
-func newNode(s *nodeStore, kind Kind, layout nodeLayout, row uint32, hooks NodeFactoryHooks) Node {
-	n := s.newNode(kind, layout, row)
+func newNode(s *nodeStore, kind Kind, layout nodeLayout, rec unsafe.Pointer, hooks NodeFactoryHooks) Node {
+	n := s.newNode(kind, layout, rec)
 	n.SetLoc(core.UndefinedTextRange())
 	if hooks.OnCreate != nil {
 		hooks.OnCreate(n)
@@ -95,9 +95,8 @@ func (f *NodeFactory) SetSourceText(text string) {
 	f.nodeStore().texts.source = text
 }
 
-// CompactStore packs the nodes created so far into contiguous storage.
-// Existing Nodes remain valid. It must be called before the nodes are
-// shared with other goroutines.
+// CompactStore trims the memory held for the nodes created so far. It must
+// be called before the nodes are shared with other goroutines.
 func (f *NodeFactory) CompactStore() {
 	if f.store != nil {
 		f.store.compact()
@@ -107,12 +106,12 @@ func (f *NodeFactory) CompactStore() {
 // CompactBinderData packs the binder's additions to the file's nodes. It
 // must be called before the file is shared with other goroutines.
 func (node *SourceFile) CompactBinderData() {
-	node.s.compactSide()
+	node.store().compactSide()
 }
 
-func (f *NodeFactory) newNode(kind Kind, layout nodeLayout, row uint32) Node {
+func (f *NodeFactory) newNode(kind Kind, layout nodeLayout, rec unsafe.Pointer) Node {
 	f.nodeCount++
-	return newNode(f.store, kind, layout, row, f.hooks)
+	return newNode(f.store, kind, layout, rec, f.hooks)
 }
 
 func (f *NodeFactory) NodeCount() int {
@@ -208,29 +207,23 @@ func (list *ModifierList) Clone(f *NodeFactory) *ModifierList {
 	return res
 }
 
-// Node is a handle to an AST node: a row in the record table for its
-// layout in the nodeStore that owns it. The handle carries the node's kind,
-// which never changes. The zero Node is the absent node.
+// Node is a handle to an AST node: a pointer to its record in the
+// nodeStore that owns it. The zero Node is the absent node.
 type Node struct {
-	s      *nodeStore
-	row    uint32
-	kind   Kind
-	layout uint16 // a nodeLayout, widened so that Node has no padding
+	p unsafe.Pointer
 }
 
 // rec returns the node's record, which begins with its nodeBaseData.
-func (n Node) rec() unsafe.Pointer { return n.s.at(n.layout, n.row) }
+func (n Node) rec() unsafe.Pointer { return n.p }
 
-func (n Node) hdr() *nodeBaseData { return (*nodeBaseData)(n.rec()) }
-
-func (n Node) IsNil() bool               { return n.s == nil }
-func (n Node) Kind() Kind                { return n.kind }
+func (n Node) IsNil() bool               { return n.p == nil }
+func (n Node) Kind() Kind                { return n.hdr().kind }
 func (n Node) Flags() NodeFlags          { return n.hdr().flags }
 func (n Node) Loc() core.TextRange       { return n.hdr().loc }
-func (n Node) Parent() Node              { return n.s.deref(n.hdr().parent) }
+func (n Node) Parent() Node              { return n.deref(n.hdr().parent) }
 func (n Node) SetFlags(flags NodeFlags)  { n.hdr().flags = flags }
 func (n Node) SetLoc(loc core.TextRange) { n.hdr().loc = loc }
-func (n Node) SetParent(parent Node)     { n.hdr().parent = n.s.ref(parent) }
+func (n Node) SetParent(parent Node)     { n.hdr().parent = n.ref(parent) }
 
 // Shared node accessors dispatch on Kind to the enclosing concrete node.
 

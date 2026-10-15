@@ -130,7 +130,7 @@ func TestNodeAccessorsMissing(t *testing.T) {
 
 func TestNodeHandleLayout(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, unsafe.Sizeof(ast.Node{}), 2*unsafe.Sizeof(uintptr(0)))
+	assert.Equal(t, unsafe.Sizeof(ast.Node{}), unsafe.Sizeof(uintptr(0)))
 	assert.Equal(t, unsafe.Sizeof(ast.Identifier{}), unsafe.Sizeof(ast.Node{}))
 }
 

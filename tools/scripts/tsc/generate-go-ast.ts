@@ -524,23 +524,6 @@ function generateLayouts(w: CodeWriter) {
     w.pop();
     w.write(")");
     w.write("");
-    w.write("// allocRecords allocates n zeroed records of layout.");
-    w.write("func allocRecords(layout nodeLayout, n int) unsafe.Pointer {");
-    w.push();
-    w.write("switch layout {");
-    for (const node of api.nodes()) {
-        w.write(`case ${layoutName(node)}:`);
-        w.write(`return unsafe.Pointer(unsafe.SliceData(make([]${dataName(node)}, n)))`);
-    }
-    for (const name of EXTRA_LAYOUTS) {
-        w.write(`case layout${name}:`);
-        w.write(`return unsafe.Pointer(unsafe.SliceData(make([]${name[0].toLowerCase()}${name.slice(1)}, n)))`);
-    }
-    w.write("}");
-    w.write(`panic("unknown node layout")`);
-    w.pop();
-    w.write("}");
-    w.write("");
     w.write("// layoutRecord returns a zero record of layout.");
     w.write("func layoutRecord(layout nodeLayout) any {");
     w.push();
@@ -684,12 +667,12 @@ function generateFieldAccessors(w: CodeWriter, structName: string, fields: GoFie
         const storage = goStorageName(name);
         const side = sideTableOf(goType);
         if (isNode) {
-            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.s.deref(${data}.${storage}) }`);
-            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { ${data}.${storage} = node.s.ref(value) }`);
+            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.deref(${data}.${storage}) }`);
+            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { ${data}.${storage} = node.ref(value) }`);
         }
         else if (side) {
-            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.s.${side}.get(${data}.${storage}) }`);
-            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { node.s.${side}.set(&${data}.${storage}, value, ${zeroCheck(goType, "value")}) }`);
+            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.store().${side}.get(${data}.${storage}) }`);
+            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { node.store().${side}.set(&${data}.${storage}, value, ${zeroCheck(goType, "value")}) }`);
         }
         else {
             w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return ${data}.${storage} }`);
@@ -770,7 +753,7 @@ function emitNewFactory(
             w.write(`s.${side}.set(&data.${goStorageName(m.name)}, ${value}, ${zeroCheck(m.type.formatGoReference(), value)})`);
             continue;
         }
-        if (isNodeField(m)) value = `s.ref(${value})`;
+        if (isNodeField(m)) value = `s.refAt(i, ${value})`;
         w.write(`data.${goStorageName(m.name)} = ${value}`);
     }
 

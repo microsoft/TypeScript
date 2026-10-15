@@ -12,22 +12,22 @@ import (
 )
 
 // A nodeStore holds the nodes created by one NodeFactory (for parsed files,
-// one store per file). Each node is a row in the record table for its
-// layout; every record begins with the shared node header (nodeBaseData).
+// one store per file). Nodes are records allocated from a sequence of
+// chunks, every record beginning with the shared node header
+// (nodeBaseData). A Node is a pointer to its record. Records never move,
+// so a Node never goes stale.
 //
-// Records live in fixed-size pages, so they never move while a store is
-// being built and may be addressed directly. Once a parse completes, each
-// layout that is not appended to afterwards is compacted into a single,
-// exactly sized page and sealed.
+// A chunk is a single Go object whose first word points to the store and
+// whose remainder holds records. Records contain no Go pointers, so the
+// garbage collector scans only that first word of each chunk; fields that
+// hold Go pointers are kept in the store's side tables instead.
 type nodeStore struct {
-	// base holds the record array of each sealed layout, which is indexed
-	// directly; other layouts are paged.
-	base    [layoutCount]unsafe.Pointer
-	records [layoutCount]recordTable
+	chunk    unsafe.Pointer // the chunk being filled
+	cur      uint32         // index of the chunk being filled
+	used     uintptr        // bytes used in the current chunk
+	capacity uintptr        // size of the current chunk
+	total    uintptr        // size of all chunks
 
-	// Fields that hold Go pointers live in side tables rather than in the
-	// records, so that the records themselves contain no pointers and the
-	// garbage collector never scans them.
 	symbols       sideTable[*Symbol]
 	flowNodes     sideTable[*FlowNode]
 	symbolTables  sideTable[SymbolTable]
@@ -38,19 +38,21 @@ type nodeStore struct {
 	nodeSlices    sideTable[[]Node]
 	values        sideTable[any]
 
-	// Children stored in another store, or whose rows do not fit in a
-	// nodeRef, are recorded as foreign refs. Readers load foreign without
-	// locking; writers append under foreignMu, replacing foreign with a
-	// larger copy when it is full, so published entries never change.
-	foreign      unsafe.Pointer // *[foreignCap]Node, accessed atomically
-	foreignMu    sync.Mutex
-	foreignN     uint32
-	foreignCap   uint32
-	foreignIndex map[Node]nodeRef
+	// far holds the nodes referred to by far refs. Readers load it without
+	// locking; writers append under farMu, replacing far with a larger
+	// copy when it is full, so published entries never change. Entry zero
+	// is the nil Node.
+	far      unsafe.Pointer // *[farCap]Node, accessed atomically
+	farMu    sync.Mutex
+	farN     uint32
+	farCap   uint32
+	farIndex map[Node]nodeRef
 }
 
+var noFarNodes [1]Node
+
 func newNodeStore() *nodeStore {
-	return &nodeStore{}
+	return &nodeStore{far: unsafe.Pointer(&noFarNodes), farN: 1, farCap: 1}
 }
 
 // nodeBaseData is the header at the start of every node record.
@@ -59,164 +61,128 @@ type nodeBaseData struct {
 	loc    core.TextRange
 	flags  NodeFlags
 	parent nodeRef
+	self   nodeRef // this record's own location
+	kind   Kind
 }
 
-// A nodeRef is a node reference stored within a store's records. A local
-// ref packs the node's kind (biased by one, so that the zero nodeRef means
-// "no node") and row, so it can be resolved without loading anything; with
-// nodeRefForeign set, it is a row in the foreign table.
+// A nodeRef is a reference from one record to another. A near ref, to a
+// record in the same chunk, holds the chunk's index and the record's offset
+// in it, in words, exactly as the record's own self does; it resolves
+// relative to the referring record. Any other reference, including to no
+// node at all, is a far ref: an index into the store's far table, with
+// nodeRefFar set (the zero nodeRef is index zero, the nil Node). Chunk
+// indexes start at one, so a far ref never matches a record's chunk.
 type nodeRef uint32
 
 const (
-	nodeRefRowBits         = 22
-	nodeRefRowMask nodeRef = 1<<nodeRefRowBits - 1
-	nodeRefForeign nodeRef = 1 << 31
-	nodeRefMaxKind         = nodeRefForeign>>nodeRefRowBits - 1
-	_              uint    = uint(nodeRefMaxKind) - uint(kindFlowReduceLabelData+1) // kinds must fit in a nodeRef
+	nodeRefOffsetBits         = 24
+	nodeRefOffsetMask nodeRef = 1<<nodeRefOffsetBits - 1
+	nodeRefFar        nodeRef = 1 << 31
+	chunkCount                = int(nodeRefFar >> nodeRefOffsetBits)
+
+	// Records with Go pointers are each allocated alone, behind their own
+	// store pointer, and identify themselves with this chunk index. They
+	// are always referred to by far refs.
+	standaloneChunk = nodeRef(chunkCount - 1)
+	standaloneSelf  = standaloneChunk<<nodeRefOffsetBits | 1
+
+	wordSize     = unsafe.Sizeof(uintptr(0))
+	maxChunkSize = uintptr(nodeRefOffsetMask) * wordSize
 )
 
-// refLayout maps the biased kind of a local nodeRef to its layout.
-var refLayout = func() (t [1 << (32 - nodeRefRowBits)]uint16) {
-	for k, l := range kindLayout {
-		t[k+1] = uint16(l)
-	}
-	return t
-}()
+func (n Node) hdr() *nodeBaseData { return (*nodeBaseData)(n.p) }
 
-func (s *nodeStore) ref(n Node) nodeRef {
-	if n.s == s && n.row>>nodeRefRowBits == 0 {
-		return nodeRef(n.kind+1)<<nodeRefRowBits | nodeRef(n.row)
-	}
-	return s.refSlow(n)
+// store returns the store that owns n.
+func (n Node) store() *nodeStore {
+	return *(**nodeStore)(unsafe.Add(n.p, -int(n.hdr().self&nodeRefOffsetMask)*int(wordSize)))
 }
 
-func (s *nodeStore) refSlow(n Node) nodeRef {
-	if n.s == nil {
+// deref returns the node that r, stored in one of n's fields, refers to.
+func (n Node) deref(r nodeRef) Node {
+	self := n.hdr().self
+	if (r^self)>>nodeRefOffsetBits == 0 {
+		// The chunk bits cancel, leaving the distance between the records.
+		return Node{unsafe.Add(n.p, (int(r)-int(self))*int(wordSize))}
+	}
+	return *(*Node)(unsafe.Add(atomic.LoadPointer(&n.store().far), uintptr(r&^nodeRefFar)*unsafe.Sizeof(Node{})))
+}
+
+// ref returns a nodeRef to v for one of n's fields.
+func (n Node) ref(v Node) nodeRef {
+	return n.store().refAt(n.p, v)
+}
+
+// refAt returns a nodeRef to v for a field of the record at owner, which
+// must belong to s.
+func (s *nodeStore) refAt(owner unsafe.Pointer, v Node) nodeRef {
+	if v.p == nil {
 		return 0
 	}
-	s.foreignMu.Lock()
-	defer s.foreignMu.Unlock()
-	if r, ok := s.foreignIndex[n]; ok {
+	self := (*nodeBaseData)(owner).self
+	if near := v.hdr().self; (near^self)>>nodeRefOffsetBits == 0 && self>>nodeRefOffsetBits != standaloneChunk && v.store() == s {
+		return near
+	}
+	return s.farRef(v)
+}
+
+func (s *nodeStore) farRef(n Node) nodeRef {
+	s.farMu.Lock()
+	defer s.farMu.Unlock()
+	if r, ok := s.farIndex[n]; ok {
 		return r
 	}
-	if s.foreignIndex == nil {
-		s.foreignIndex = make(map[Node]nodeRef)
+	if s.farIndex == nil {
+		s.farIndex = make(map[Node]nodeRef)
 	}
-	i := s.foreignN
-	if nodeRef(i)&nodeRefForeign != 0 {
-		panic("too many foreign node references")
+	i := s.farN
+	if nodeRef(i)&nodeRefFar != 0 {
+		panic("too many far node references")
 	}
-	if i == s.foreignCap {
-		s.foreignCap = max(8, 2*s.foreignCap)
-		grown := make([]Node, s.foreignCap)
-		if i != 0 {
-			copy(grown, unsafe.Slice((*Node)(s.foreign), i))
-		}
+	if i == s.farCap {
+		s.farCap *= 2
+		grown := make([]Node, s.farCap)
+		copy(grown, unsafe.Slice((*Node)(s.far), i))
 		grown[i] = n
-		atomic.StorePointer(&s.foreign, unsafe.Pointer(unsafe.SliceData(grown)))
+		atomic.StorePointer(&s.far, unsafe.Pointer(unsafe.SliceData(grown)))
 	} else {
-		*(*Node)(unsafe.Add(s.foreign, uintptr(i)*unsafe.Sizeof(Node{}))) = n
+		*(*Node)(unsafe.Add(s.far, uintptr(i)*unsafe.Sizeof(Node{}))) = n
 	}
-	s.foreignN++
-	r := nodeRef(i) | nodeRefForeign
-	s.foreignIndex[n] = r
+	s.farN++
+	r := nodeRef(i) | nodeRefFar
+	s.farIndex[n] = r
 	return r
 }
 
-func (s *nodeStore) deref(r nodeRef) Node {
-	if r&nodeRefForeign != 0 {
-		return *(*Node)(unsafe.Add(atomic.LoadPointer(&s.foreign), uintptr(r&^nodeRefForeign)*unsafe.Sizeof(Node{})))
-	}
-	if r == 0 {
-		return Node{}
-	}
-	return Node{s: s, row: uint32(r & nodeRefRowMask), kind: Kind(r>>nodeRefRowBits) - 1, layout: refLayout[r>>nodeRefRowBits]}
-}
-
-func (s *nodeStore) newNode(kind Kind, layout nodeLayout, row uint32) Node {
+func (s *nodeStore) newNode(kind Kind, layout nodeLayout, rec unsafe.Pointer) Node {
 	if kindLayout[kind] != layout {
 		panic("node kind does not match its record layout")
 	}
-	return Node{s: s, row: row, kind: kind, layout: uint16(layout)}
+	n := Node{rec}
+	n.hdr().kind = kind
+	return n
 }
 
-// A recordTable addresses row r of an unsealed layout as
-// dir[r>>shift] + (r & (1<<shift - 1)) * size.
-type recordTable struct {
-	dir    unsafe.Pointer // *[dirCap]unsafe.Pointer
-	n      uint32
-	size   uint32
-	dirCap uint32
-	shift  uint8
-	sealed bool
-}
-
-// layoutSize is the record size of each layout.
-var layoutSize = func() (t [layoutCount]uintptr) {
-	for l := range t {
-		if r := layoutRecord(nodeLayout(l)); r != nil {
-			t[l] = reflect.TypeOf(r).Size()
-		}
+// newRecord allocates a zeroed record of type T, whose first field must be
+// its nodeBaseData.
+func newRecord[T any](s *nodeStore, layout nodeLayout) (*T, unsafe.Pointer) {
+	if standaloneLayout(layout) {
+		c := &standaloneRecord[T]{s: s}
+		p := unsafe.Pointer(&c.rec)
+		(*nodeBaseData)(p).self = standaloneSelf
+		return &c.rec, p
 	}
-	return t
-}()
-
-// at returns the record for row.
-func (s *nodeStore) at(layout uint16, row uint32) unsafe.Pointer {
-	if b := s.base[layout]; b != nil {
-		return unsafe.Add(b, uintptr(row)*layoutSize[layout])
-	}
-	return s.pagedAt(layout, row)
+	p := s.alloc((unsafe.Sizeof(*new(T)) + wordSize - 1) &^ (wordSize - 1))
+	return (*T)(p), p
 }
 
-func (s *nodeStore) pagedAt(layout uint16, row uint32) unsafe.Pointer {
-	t := &s.records[layout]
-	page := *(*unsafe.Pointer)(unsafe.Add(t.dir, uintptr(row>>t.shift)*unsafe.Sizeof(t.dir)))
-	return unsafe.Add(page, uintptr(row&(1<<t.shift-1))*uintptr(t.size))
+type standaloneRecord[T any] struct {
+	s   *nodeStore
+	rec T
 }
 
-// Pages hold about this many bytes of records.
-const (
-	pageBytes       = 4096
-	pinnedPageBytes = 512
-)
-
-// newRecord allocates a zeroed record of type T in the table for layout.
-func newRecord[T any](s *nodeStore, layout nodeLayout) (*T, uint32) {
-	t := &s.records[layout]
-	if t.dir == nil {
-		size := unsafe.Sizeof(*new(T))
-		t.size = uint32(size)
-		bytes := uintptr(pageBytes)
-		if pinnedLayout(layout) {
-			bytes = pinnedPageBytes
-		}
-		t.shift = uint8(max(0, bits.Len(uint(bytes/size))-1))
-	} else if t.sealed {
-		panic("node store layout is sealed")
-	}
-	i := t.n
-	p := i >> t.shift
-	off := i & (1<<t.shift - 1)
-	if off == 0 {
-		if p == t.dirCap {
-			t.dirCap = max(1, 2*t.dirCap)
-			dir := make([]unsafe.Pointer, t.dirCap)
-			if p != 0 {
-				copy(dir, unsafe.Slice((*unsafe.Pointer)(t.dir), p))
-			}
-			t.dir = unsafe.Pointer(unsafe.SliceData(dir))
-		}
-		*(*unsafe.Pointer)(unsafe.Add(t.dir, uintptr(p)*unsafe.Sizeof(t.dir))) = unsafe.Pointer(unsafe.SliceData(make([]T, 1<<t.shift)))
-	}
-	t.n++
-	return (*T)(s.pagedAt(uint16(layout), i)), i
-}
-
-// pinnedLayout reports whether a layout's records must not move once
-// parsing completes: *SourceFile is addressed by pointer, and the binder
-// appends flow data records.
-func pinnedLayout(layout nodeLayout) bool {
+// standaloneLayout reports whether a layout's records hold Go pointers, so
+// must be allocated outside the chunks.
+func standaloneLayout(layout nodeLayout) bool {
 	switch layout {
 	case layoutSourceFile, layoutFlowSwitchClauseData, layoutFlowReduceLabelData:
 		return true
@@ -224,31 +190,64 @@ func pinnedLayout(layout nodeLayout) bool {
 	return false
 }
 
-// compact moves the rows of every unpinned layout into one exactly sized
-// page and seals the layout. Rows keep their numbers, so existing Nodes
-// remain valid, but record pointers obtained earlier do not; it must only
-// be called before the store is shared, with no record pointers
-// outstanding.
+// Each chunk adds a quarter to the store's size, at least minChunkSize.
+// Records do not move, so the unused end of the last chunk is never
+// reclaimed; slower growth wastes less of it, at the cost of more
+// references between chunks.
+const minChunkSize = 4 << 10
+
+// alloc allocates size zeroed bytes for a record and sets its self.
+func (s *nodeStore) alloc(size uintptr) unsafe.Pointer {
+	if s.used+size > s.capacity {
+		s.grow(size)
+	}
+	off := s.used
+	s.used += size
+	p := unsafe.Add(s.chunk, off)
+	(*nodeBaseData)(p).self = nodeRef(s.cur)<<nodeRefOffsetBits | nodeRef(off/wordSize)
+	return p
+}
+
+func (s *nodeStore) grow(size uintptr) {
+	s.cur++
+	if nodeRef(s.cur) >= standaloneChunk {
+		panic("node store is full")
+	}
+	next := min(max(minChunkSize, s.total/4, size+wordSize), maxChunkSize)
+	typ := chunkType(next)
+	chunk := reflect.New(typ).UnsafePointer()
+	*(**nodeStore)(chunk) = s
+	s.chunk = chunk
+	s.used = wordSize
+	s.capacity = typ.Size()
+	s.total += s.capacity
+}
+
+var chunkTypes sync.Map // map[uintptr]reflect.Type
+
+// chunkType returns a struct type holding a store pointer followed by at
+// least size-wordSize bytes of records. Sizes are rounded so that few
+// distinct types are created.
+func chunkType(size uintptr) reflect.Type {
+	step := uintptr(minChunkSize)
+	if size > 64*minChunkSize {
+		step = uintptr(1) << (bits.Len(uint(size)) - 4)
+	}
+	size = (size + step - 1) &^ (step - 1)
+	if t, ok := chunkTypes.Load(size); ok {
+		return t.(reflect.Type)
+	}
+	t, _ := chunkTypes.LoadOrStore(size, reflect.StructOf([]reflect.StructField{
+		{Name: "S", Type: reflect.TypeFor[*nodeStore]()},
+		{Name: "D", Type: reflect.ArrayOf(int(size-wordSize), reflect.TypeFor[byte]())},
+	}))
+	return t.(reflect.Type)
+}
+
+// compact trims the store's side tables. It must only be called before the
+// store is shared.
 func (s *nodeStore) compact() {
 	s.compactSide()
-	for l := range s.records {
-		t := &s.records[l]
-		if t.n == 0 || t.sealed || pinnedLayout(nodeLayout(l)) {
-			continue
-		}
-		flat := allocRecords(nodeLayout(l), int(t.n))
-		pageLen := uintptr(t.size) << t.shift
-		for p, copied := uint32(0), uintptr(0); copied < uintptr(t.n)*uintptr(t.size); p++ {
-			page := *(*unsafe.Pointer)(unsafe.Add(t.dir, uintptr(p)*unsafe.Sizeof(t.dir)))
-			n := min(pageLen, uintptr(t.n)*uintptr(t.size)-copied)
-			copy(unsafe.Slice((*byte)(unsafe.Add(flat, copied)), n), unsafe.Slice((*byte)(page), n))
-			copied += n
-		}
-		s.base[l] = flat
-		t.dir = nil
-		t.dirCap = 0
-		t.sealed = true
-	}
 }
 
 // compactSide trims the side tables to size. Side values are never
