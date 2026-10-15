@@ -8,7 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 )
 
-func (ch *PseudoChecker) GetReturnTypeOfSignature(signatureNode *ast.Node) *PseudoType {
+func (ch *PseudoChecker) GetReturnTypeOfSignature(signatureNode ast.Node) *PseudoType {
 	switch signatureNode.Kind() {
 	case ast.KindGetAccessor:
 		return ch.GetTypeOfAccessor(signatureNode)
@@ -23,15 +23,15 @@ func (ch *PseudoChecker) GetReturnTypeOfSignature(signatureNode *ast.Node) *Pseu
 	}
 }
 
-func (ch *PseudoChecker) GetTypeOfAccessor(accessor *ast.Node) *PseudoType {
+func (ch *PseudoChecker) GetTypeOfAccessor(accessor ast.Node) *PseudoType {
 	return ch.typeFromAccessor(accessor)
 }
 
-func (ch *PseudoChecker) GetTypeOfExpression(node *ast.Node) *PseudoType {
+func (ch *PseudoChecker) GetTypeOfExpression(node ast.Node) *PseudoType {
 	return ch.typeFromExpression(node)
 }
 
-func (ch *PseudoChecker) GetTypeOfDeclaration(node *ast.Node) *PseudoType {
+func (ch *PseudoChecker) GetTypeOfDeclaration(node ast.Node) *PseudoType {
 	switch node.Kind() {
 	case ast.KindParameter:
 		return ch.typeFromParameter(node.AsParameterDeclaration())
@@ -66,14 +66,14 @@ func (ch *PseudoChecker) GetTypeOfDeclaration(node *ast.Node) *PseudoType {
 	}
 }
 
-func (ch *PseudoChecker) typeFromPropertyAssignment(node *ast.Node) *PseudoType {
+func (ch *PseudoChecker) typeFromPropertyAssignment(node ast.Node) *PseudoType {
 	annotation := node.Type()
-	if annotation != nil {
+	if !annotation.IsNil() {
 		return NewPseudoTypeDirect(annotation)
 	}
 	if node.Kind() == ast.KindPropertyAssignment {
 		init := node.Initializer()
-		if init != nil {
+		if !init.IsNil() {
 			expr := ch.typeFromExpression(init)
 			if expr != nil && (expr.Kind != PseudoTypeKindInferred || len(expr.AsPseudoTypeInferred().ErrorNodes) > 0) {
 				return expr
@@ -85,9 +85,9 @@ func (ch *PseudoChecker) typeFromPropertyAssignment(node *ast.Node) *PseudoType 
 }
 
 // This is _not_ redundant with the reparser; see how expandoFunctionSymbolProperty.ts and similar behaves
-func (ch *PseudoChecker) typeFromExpandoProperty(node *ast.Node) *PseudoType {
+func (ch *PseudoChecker) typeFromExpandoProperty(node ast.Node) *PseudoType {
 	declaredType := node.Type()
-	if declaredType != nil {
+	if !declaredType.IsNil() {
 		return NewPseudoTypeDirect(declaredType)
 	}
 	// While `node` is an expression, as an expando, it should also always be a
@@ -95,21 +95,21 @@ func (ch *PseudoChecker) typeFromExpandoProperty(node *ast.Node) *PseudoType {
 	return NewPseudoTypeNoResult(node)
 }
 
-func (ch *PseudoChecker) typeFromProperty(node *ast.Node) *PseudoType {
+func (ch *PseudoChecker) typeFromProperty(node ast.Node) *PseudoType {
 	t := node.Type()
-	if t != nil {
+	if !t.IsNil() {
 		return NewPseudoTypeDirect(t)
 	}
 	if ast.IsPropertyDeclaration(node) {
 		init := node.Initializer()
-		if init != nil && !isContextuallyTyped(node) {
+		if !init.IsNil() && !isContextuallyTyped(node) {
 			// explicit fail on readonly template literals to allow for literal freshness in the future
 			if ast.HasModifier(node, ast.ModifierFlagsReadonly) && ast.IsTemplateExpression(init) {
 				return NewPseudoTypeNoResult(node)
 			}
 			expr := ch.typeFromExpression(init)
 			if expr != nil && (expr.Kind != PseudoTypeKindInferred || len(expr.AsPseudoTypeInferred().ErrorNodes) > 0) {
-				if expr.Kind != PseudoTypeKindDirect && node.AsPropertyDeclaration().PostfixToken() != nil && node.AsPropertyDeclaration().PostfixToken().Kind() == ast.KindQuestionToken {
+				if expr.Kind != PseudoTypeKindDirect && !node.AsPropertyDeclaration().PostfixToken().IsNil() && node.AsPropertyDeclaration().PostfixToken().Kind() == ast.KindQuestionToken {
 					// type comes from the initializer expression on a property with a `?` - add `| undefined` to the type
 					return addUndefinedIfDefinitelyRequired(expr)
 				}
@@ -121,13 +121,13 @@ func (ch *PseudoChecker) typeFromProperty(node *ast.Node) *PseudoType {
 	return NewPseudoTypeNoResult(node)
 }
 
-func (ch *PseudoChecker) typeFromVariable(declaration *ast.VariableDeclaration) *PseudoType {
+func (ch *PseudoChecker) typeFromVariable(declaration ast.VariableDeclaration) *PseudoType {
 	t := declaration.Type()
-	if t != nil {
+	if !t.IsNil() {
 		return NewPseudoTypeDirect(t)
 	}
 	init := declaration.Initializer()
-	if init != nil && declaration.Symbol() != nil && (len(declaration.Symbol().Declarations()) == 1 || core.CountWhere(declaration.Symbol().Declarations(), ast.IsVariableDeclaration) == 1) {
+	if !init.IsNil() && declaration.Symbol() != nil && (len(declaration.Symbol().Declarations()) == 1 || core.CountWhere(declaration.Symbol().Declarations(), ast.IsVariableDeclaration) == 1) {
 		if !isContextuallyTyped(declaration.AsNode()) { // TODO: also should bail on expando declarations; reuse syntactic expando check used in declaration emit
 			// TODO: Strada forces an inference fallback on `const` variables with template expression initializers, to leave space for template literal freshness in the future
 			if ast.IsVarConst(declaration.AsNode()) && ast.IsTemplateExpression(init) {
@@ -143,17 +143,17 @@ func (ch *PseudoChecker) typeFromVariable(declaration *ast.VariableDeclaration) 
 	return NewPseudoTypeNoResult(declaration.AsNode())
 }
 
-func (ch *PseudoChecker) typeFromAccessor(accessor *ast.Node) *PseudoType {
+func (ch *PseudoChecker) typeFromAccessor(accessor ast.Node) *PseudoType {
 	accessorDeclarations := ast.GetAllAccessorDeclarationsForDeclaration(accessor, accessor.DeclarationData().Symbol().Declarations())
 	accessorType := ch.getTypeAnnotationFromAllAccessorDeclarations(accessor, accessorDeclarations)
-	if accessorType != nil && !ast.IsTypePredicateNode(accessorType) {
+	if !accessorType.IsNil() && !ast.IsTypePredicateNode(accessorType) {
 		return NewPseudoTypeDirect(accessorType)
 	}
-	if accessorDeclarations.GetAccessor != nil {
+	if !accessorDeclarations.GetAccessor.IsNil() {
 		res := ch.createReturnFromSignature(accessorDeclarations.GetAccessor.AsNode())
 		if res.Kind == PseudoTypeKindInferred && len(res.AsPseudoTypeInferred().ErrorNodes) == 0 {
-			errorNodes := []*ast.Node{accessorDeclarations.GetAccessor.AsNode()}
-			if accessorDeclarations.SetAccessor != nil {
+			errorNodes := []ast.Node{accessorDeclarations.GetAccessor.AsNode()}
+			if !accessorDeclarations.SetAccessor.IsNil() {
 				errorNodes = append(errorNodes, accessorDeclarations.SetAccessor.AsNode())
 			}
 			res = NewPseudoTypeInferredWithErrors(res.AsPseudoTypeInferred().Expression, res.AsPseudoTypeInferred().IsSignatureReturn, errorNodes) // Move error up to the accessor
@@ -163,20 +163,20 @@ func (ch *PseudoChecker) typeFromAccessor(accessor *ast.Node) *PseudoType {
 	return NewPseudoTypeNoResult(accessor)
 }
 
-func (ch *PseudoChecker) getTypeAnnotationFromAllAccessorDeclarations(node *ast.Node, accessors ast.AllAccessorDeclarations) *ast.Node {
+func (ch *PseudoChecker) getTypeAnnotationFromAllAccessorDeclarations(node ast.Node, accessors ast.AllAccessorDeclarations) ast.Node {
 	accessorType := ch.getTypeAnnotationFromAccessor(node)
-	if accessorType == nil && node != accessors.FirstAccessor {
+	if accessorType.IsNil() && node != accessors.FirstAccessor {
 		accessorType = ch.getTypeAnnotationFromAccessor(accessors.FirstAccessor)
 	}
-	if accessorType == nil && accessors.SecondAccessor != nil && node != accessors.SecondAccessor {
+	if accessorType.IsNil() && !accessors.SecondAccessor.IsNil() && node != accessors.SecondAccessor {
 		accessorType = ch.getTypeAnnotationFromAccessor(accessors.SecondAccessor)
 	}
 	return accessorType
 }
 
-func (ch *PseudoChecker) getTypeAnnotationFromAccessor(node *ast.Node) *ast.Node {
-	if node == nil {
-		return nil
+func (ch *PseudoChecker) getTypeAnnotationFromAccessor(node ast.Node) ast.Node {
+	if node.IsNil() {
+		return ast.Node{}
 	}
 	// !!! TODO: support ripping return type off of .FullSignature
 	if node.Kind() == ast.KindGetAccessor {
@@ -184,26 +184,26 @@ func (ch *PseudoChecker) getTypeAnnotationFromAccessor(node *ast.Node) *ast.Node
 	}
 	set := node.AsSetAccessorDeclaration()
 	if set.Parameters() == nil || len(set.Parameters().Nodes()) < 1 {
-		return nil
+		return ast.Node{}
 	}
 	p := set.Parameters().Nodes()[0]
 	if !ast.IsParameterDeclaration(p) {
-		return nil
+		return ast.Node{}
 	}
 	return p.AsParameterDeclaration().Type()
 }
 
-func isValueSignatureDeclaration(node *ast.Node) bool {
+func isValueSignatureDeclaration(node ast.Node) bool {
 	return ast.IsFunctionExpression(node) || ast.IsArrowFunction(node) || ast.IsMethodDeclaration(node) || ast.IsAccessor(node) || ast.IsFunctionDeclaration(node) || ast.IsConstructorDeclaration(node)
 }
 
 // does not return `nil`, returns a `NoResult` pseudotype instead
-func (ch *PseudoChecker) createReturnFromSignature(fn *ast.Node) *PseudoType {
+func (ch *PseudoChecker) createReturnFromSignature(fn ast.Node) *PseudoType {
 	if ast.IsFunctionLike(fn) {
 		d := fn.FunctionLikeData()
 		// !!! TODO: support ripping return type off of .FullSignature
 		r := d.Type()
-		if r != nil {
+		if !r.IsNil() {
 			return NewPseudoTypeDirect(r)
 		}
 	}
@@ -213,9 +213,9 @@ func (ch *PseudoChecker) createReturnFromSignature(fn *ast.Node) *PseudoType {
 	return NewPseudoTypeNoResult(fn)
 }
 
-func (ch *PseudoChecker) typeFromSingleReturnExpression(fn *ast.Node) *PseudoType {
-	var candidateExpr *ast.Node
-	if fn != nil && !ast.NodeIsMissing(fn.Body()) {
+func (ch *PseudoChecker) typeFromSingleReturnExpression(fn ast.Node) *PseudoType {
+	var candidateExpr ast.Node
+	if !fn.IsNil() && !ast.NodeIsMissing(fn.Body()) {
 		flags := ast.GetFunctionFlags(fn)
 		if flags&ast.FunctionFlagsAsyncGenerator != 0 {
 			return NewPseudoTypeInferred(fn, true)
@@ -223,15 +223,15 @@ func (ch *PseudoChecker) typeFromSingleReturnExpression(fn *ast.Node) *PseudoTyp
 
 		body := fn.Body()
 		if ast.IsBlock(body) {
-			ast.ForEachReturnStatement(body, func(stmt *ast.Node) bool {
+			ast.ForEachReturnStatement(body, func(stmt ast.Node) bool {
 				if stmt.Parent() != body { // Why bail on nested return statements?
-					candidateExpr = nil
+					candidateExpr = ast.Node{}
 					return true
 				}
-				if candidateExpr == nil {
+				if candidateExpr.IsNil() {
 					candidateExpr = stmt.AsReturnStatement().Expression()
 				} else {
-					candidateExpr = nil
+					candidateExpr = ast.Node{}
 					return true
 				}
 				return false
@@ -240,15 +240,15 @@ func (ch *PseudoChecker) typeFromSingleReturnExpression(fn *ast.Node) *PseudoTyp
 			candidateExpr = body
 		}
 	}
-	if candidateExpr != nil {
+	if !candidateExpr.IsNil() {
 		if isContextuallyTyped(candidateExpr) {
-			var t *ast.Node
+			var t ast.Node
 			if candidateExpr.Kind() == ast.KindTypeAssertionExpression {
 				t = candidateExpr.AsTypeAssertion().Type()
 			} else if candidateExpr.Kind() == ast.KindAsExpression {
 				t = candidateExpr.AsAsExpression().Type()
 			}
-			if t != nil && !ast.IsConstTypeReference(t) {
+			if !t.IsNil() && !ast.IsConstTypeReference(t) {
 				return NewPseudoTypeDirect(t)
 			}
 		} else {
@@ -259,7 +259,7 @@ func (ch *PseudoChecker) typeFromSingleReturnExpression(fn *ast.Node) *PseudoTyp
 }
 
 // This is basically `checkExpression` for pseudotypes
-func (ch *PseudoChecker) typeFromExpression(node *ast.Node) *PseudoType {
+func (ch *PseudoChecker) typeFromExpression(node ast.Node) *PseudoType {
 	switch node.Kind() {
 	case ast.KindOmittedExpression:
 		return PseudoTypeUndefined
@@ -289,7 +289,7 @@ func (ch *PseudoChecker) typeFromExpression(node *ast.Node) *PseudoType {
 	case ast.KindObjectLiteralExpression:
 		return ch.typeFromObjectLiteral(node.AsObjectLiteralExpression())
 	case ast.KindClassExpression:
-		return NewPseudoTypeInferredWithErrors(node, false, []*ast.Node{node}) // No possible annotation/directly mappable syntax
+		return NewPseudoTypeInferredWithErrors(node, false, []ast.Node{node}) // No possible annotation/directly mappable syntax
 	case ast.KindTemplateExpression:
 		// templateLitWithHoles as const, not supported
 		if IsInConstContext(node) {
@@ -312,7 +312,7 @@ func (ch *PseudoChecker) typeFromExpression(node *ast.Node) *PseudoType {
 	return NewPseudoTypeInferred(node, false)
 }
 
-func (ch *PseudoChecker) typeFromObjectLiteral(node *ast.ObjectLiteralExpression) *PseudoType {
+func (ch *PseudoChecker) typeFromObjectLiteral(node ast.ObjectLiteralExpression) *PseudoType {
 	if errorNodes := ch.canGetTypeFromObjectLiteral(node); errorNodes != nil {
 		return NewPseudoTypeInferredWithErrors(node.AsNode(), false, errorNodes)
 	}
@@ -324,8 +324,8 @@ func (ch *PseudoChecker) typeFromObjectLiteral(node *ast.ObjectLiteralExpression
 	for _, e := range node.Properties().Nodes() {
 		switch e.Kind() {
 		case ast.KindMethodDeclaration:
-			optional := e.AsMethodDeclaration().PostfixToken() != nil && e.AsMethodDeclaration().PostfixToken().Kind() == ast.KindQuestionToken
-			if e.FunctionLikeData().FullSignature() != nil {
+			optional := !e.AsMethodDeclaration().PostfixToken().IsNil() && e.AsMethodDeclaration().PostfixToken().Kind() == ast.KindQuestionToken
+			if !e.FunctionLikeData().FullSignature().IsNil() {
 				results = append(results, NewPseudoPropertyAssignment(
 					false,
 					e.Name(),
@@ -346,7 +346,7 @@ func (ch *PseudoChecker) typeFromObjectLiteral(node *ast.ObjectLiteralExpression
 			results = append(results, NewPseudoPropertyAssignment(
 				false,
 				e.Name(),
-				e.AsPropertyAssignment().PostfixToken() != nil && e.AsPropertyAssignment().PostfixToken().Kind() == ast.KindQuestionToken,
+				!e.AsPropertyAssignment().PostfixToken().IsNil() && e.AsPropertyAssignment().PostfixToken().Kind() == ast.KindQuestionToken,
 				ch.typeFromExpression(e.Initializer()),
 			))
 		case ast.KindSetAccessor, ast.KindGetAccessor:
@@ -360,12 +360,12 @@ func (ch *PseudoChecker) typeFromObjectLiteral(node *ast.ObjectLiteralExpression
 }
 
 // roughly analogous to typeFromObjectLiteralAccessor in strada
-func (ch *PseudoChecker) getAccessorMember(accessor *ast.Node, name *ast.Node) *PseudoObjectElement {
+func (ch *PseudoChecker) getAccessorMember(accessor ast.Node, name ast.Node) *PseudoObjectElement {
 	allAccessors := ast.GetAllAccessorDeclarationsForDeclaration(accessor, accessor.Symbol().Declarations()) // TODO: node preservation for late-bound accessor pairs?
 
 	// TODO: handle pseudo-annotations from get accessor return positions?
-	if allAccessors.GetAccessor != nil && allAccessors.GetAccessor.Type() != nil &&
-		allAccessors.SetAccessor != nil && len(allAccessors.SetAccessor.Parameters().Nodes()) > 0 && allAccessors.SetAccessor.Parameters().Nodes()[0].AsParameterDeclaration().Type() != nil {
+	if !allAccessors.GetAccessor.IsNil() && !allAccessors.GetAccessor.Type().IsNil() &&
+		!allAccessors.SetAccessor.IsNil() && len(allAccessors.SetAccessor.Parameters().Nodes()) > 0 && !allAccessors.SetAccessor.Parameters().Nodes()[0].AsParameterDeclaration().Type().IsNil() {
 		// We have possible types for both accessors, we can't know if they are the same type so we keep both accessors
 
 		if ast.IsGetAccessorDeclaration(accessor) {
@@ -389,7 +389,7 @@ func (ch *PseudoChecker) getAccessorMember(accessor *ast.Node, name *ast.Node) *
 		// only one annotated accessor; output a property - `readonly` for a single `get` accessor
 
 		accessorType := ch.typeFromAccessor(accessor)
-		readonly := ast.IsGetAccessorDeclaration(accessor) && allAccessors.SecondAccessor == nil
+		readonly := ast.IsGetAccessorDeclaration(accessor) && allAccessors.SecondAccessor.IsNil()
 		return NewPseudoPropertyAssignment(
 			readonly,
 			name,
@@ -403,11 +403,11 @@ func (ch *PseudoChecker) getAccessorMember(accessor *ast.Node, name *ast.Node) *
 // canGetTypeFromObjectLiteral checks whether an object literal can be typed by the pseudochecker.
 // Returns nil if the object can be typed, or a slice of error nodes (shorthand/spread properties,
 // non-literal computed names) that prevent typing.
-func (ch *PseudoChecker) canGetTypeFromObjectLiteral(node *ast.ObjectLiteralExpression) []*ast.Node {
+func (ch *PseudoChecker) canGetTypeFromObjectLiteral(node ast.ObjectLiteralExpression) []ast.Node {
 	if node.Properties() == nil || len(node.Properties().Nodes()) == 0 {
 		return nil // empty object, ok
 	}
-	var errorNodes []*ast.Node
+	var errorNodes []ast.Node
 	for _, e := range node.Properties().Nodes() {
 		if e.Flags()&ast.NodeFlagsThisNodeHasError != 0 {
 			errorNodes = append(errorNodes, e)
@@ -435,7 +435,7 @@ func (ch *PseudoChecker) canGetTypeFromObjectLiteral(node *ast.ObjectLiteralExpr
 	return errorNodes
 }
 
-func (ch *PseudoChecker) typeFromArrayLiteral(node *ast.ArrayLiteralExpression) *PseudoType {
+func (ch *PseudoChecker) typeFromArrayLiteral(node ast.ArrayLiteralExpression) *PseudoType {
 	if errorNodes := ch.canGetTypeFromArrayLiteral(node); errorNodes != nil {
 		return NewPseudoTypeInferredWithErrors(node.AsNode(), false, errorNodes)
 	}
@@ -454,13 +454,13 @@ func (ch *PseudoChecker) typeFromArrayLiteral(node *ast.ArrayLiteralExpression) 
 // Returns nil if the array can be typed, or a slice of error nodes that prevent typing.
 // For non-const arrays, the error node is the array expression itself.
 // For const arrays with spreads, the error node is the spread element.
-func (ch *PseudoChecker) canGetTypeFromArrayLiteral(node *ast.ArrayLiteralExpression) []*ast.Node {
+func (ch *PseudoChecker) canGetTypeFromArrayLiteral(node ast.ArrayLiteralExpression) []ast.Node {
 	if !IsInConstContext(node.AsNode()) {
-		return []*ast.Node{node.AsNode()}
+		return []ast.Node{node.AsNode()}
 	}
 	for _, e := range node.Elements().Nodes() {
 		if e.Kind() == ast.KindSpreadElement {
-			return []*ast.Node{e}
+			return []ast.Node{e}
 		}
 	}
 	return nil
@@ -479,11 +479,11 @@ func isConstContextPropagatingKind(kind ast.Kind) bool {
 
 // IsInConstContext traverses up the parent chain to determine if the node is within a const context without needing any
 // persistent traversal scope tracking (which could be unreliable in the presence of `typeof` queries anyway!)
-func IsInConstContext(node *ast.Node) bool {
+func IsInConstContext(node ast.Node) bool {
 	// An expression is in a const context if an ancestor is a const type maybeAssertion expression
 	maybeAssertion := ast.FindAncestor(
 		node.Parent(),
-		func(n *ast.Node) bool {
+		func(n ast.Node) bool {
 			// stop traversing at assertions or anything not an array/object literal, since only those create or transfer const-ness
 			return ast.IsAssertionExpression(n) || !isConstContextPropagatingKind(n.Kind())
 		},
@@ -491,7 +491,7 @@ func IsInConstContext(node *ast.Node) bool {
 	return ast.IsConstAssertion(maybeAssertion)
 }
 
-func (ch *PseudoChecker) typeFromPrimitiveLiteralPrefix(node *ast.PrefixUnaryExpression) *PseudoType {
+func (ch *PseudoChecker) typeFromPrimitiveLiteralPrefix(node ast.PrefixUnaryExpression) *PseudoType {
 	expr := node.AsNode()
 	if node.Operator() == ast.KindPlusToken {
 		expr = node.Operand()
@@ -507,15 +507,15 @@ func (ch *PseudoChecker) typeFromPrimitiveLiteralPrefix(node *ast.PrefixUnaryExp
 	return nil
 }
 
-func (ch *PseudoChecker) typeFromTypeAssertion(expression *ast.Node, typeNode *ast.Node) *PseudoType {
+func (ch *PseudoChecker) typeFromTypeAssertion(expression ast.Node, typeNode ast.Node) *PseudoType {
 	if ast.IsConstTypeReference(typeNode) {
 		return ch.typeFromExpression(expression)
 	}
 	return NewPseudoTypeDirect(typeNode)
 }
 
-func (ch *PseudoChecker) typeFromFunctionLikeExpression(node *ast.Node) *PseudoType {
-	if node.FunctionLikeData().FullSignature() != nil {
+func (ch *PseudoChecker) typeFromFunctionLikeExpression(node ast.Node) *PseudoType {
+	if !node.FunctionLikeData().FullSignature().IsNil() {
 		return NewPseudoTypeDirect(node.FunctionLikeData().FullSignature())
 	}
 	returnType := ch.createReturnFromSignature(node)
@@ -529,14 +529,14 @@ func (ch *PseudoChecker) typeFromFunctionLikeExpression(node *ast.Node) *PseudoT
 	)
 }
 
-func (ch *PseudoChecker) cloneTypeParameters(nodes *ast.NodeList) []*ast.TypeParameterDeclaration {
+func (ch *PseudoChecker) cloneTypeParameters(nodes *ast.NodeList) []ast.TypeParameterDeclaration {
 	if nodes == nil {
 		return nil
 	}
 	if len(nodes.Nodes()) == 0 {
 		return nil
 	}
-	result := make([]*ast.TypeParameterDeclaration, 0, len(nodes.Nodes()))
+	result := make([]ast.TypeParameterDeclaration, 0, len(nodes.Nodes()))
 	for _, e := range nodes.Nodes() {
 		result = append(result, e.AsTypeParameterDeclaration())
 	}
@@ -547,7 +547,7 @@ func isUndefinedPseudoType(t *PseudoType) bool {
 	return t.Kind == PseudoTypeKindUndefined || (t.Kind == PseudoTypeKindMaybeConstLocation && isUndefinedPseudoType(t.AsPseudoTypeMaybeConstLocation().ConstType))
 }
 
-func typeNodeCouldReferToUndefined(node *ast.Node) bool {
+func typeNodeCouldReferToUndefined(node ast.Node) bool {
 	for node.Kind() == ast.KindParenthesizedType {
 		node = node.AsParenthesizedTypeNode().Type()
 	}
@@ -594,9 +594,9 @@ func CouldAlreadyReferToUndefinedType(t *PseudoType) bool {
 	return false
 }
 
-func isOptionalInitializedOrRestParameter(node *ast.ParameterDeclarationNode) bool {
+func isOptionalInitializedOrRestParameter(node ast.ParameterDeclarationNode) bool {
 	p := node.AsParameterDeclaration()
-	if p.DotDotDotToken() != nil || p.Initializer() != nil || p.QuestionToken() != nil {
+	if !p.DotDotDotToken().IsNil() || !p.Initializer().IsNil() || !p.QuestionToken().IsNil() {
 		return true
 	}
 	return false
@@ -607,7 +607,7 @@ func isOptionalInitializedOrRestParameter(node *ast.ParameterDeclarationNode) bo
 // and no rest token. This is computed in a single reverse pass so callers can
 // determine "has required parameter after index i" with `i+1 < lastRequired`
 // (equivalently, `i < lastRequired-1`) in O(1).
-func lastRequiredParamIndex(params []*ast.Node) int {
+func lastRequiredParamIndex(params []ast.Node) int {
 	for i, param := range slices.Backward(params) {
 		if !isOptionalInitializedOrRestParameter(param) {
 			return i + 1
@@ -628,14 +628,14 @@ func addUndefinedIfDefinitelyRequired(expr *PseudoType) *PseudoType {
 	return NewPseudoTypeUnion([]*PseudoType{expr, PseudoTypeUndefined})
 }
 
-func (ch *PseudoChecker) typeFromParameter(node *ast.ParameterDeclaration) *PseudoType {
+func (ch *PseudoChecker) typeFromParameter(node ast.ParameterDeclaration) *PseudoType {
 	parent := node.Parent()
 	if parent.Kind() == ast.KindSetAccessor {
 		return ch.GetTypeOfAccessor(parent)
 	}
 	// Fast path: no initializer means we never need parameter position info.
-	if node.Initializer() == nil {
-		if node.Type() != nil {
+	if node.Initializer().IsNil() {
+		if !node.Type().IsNil() {
 			return NewPseudoTypeDirect(node.Type())
 		}
 		return NewPseudoTypeNoResult(node.AsNode())
@@ -646,27 +646,27 @@ func (ch *PseudoChecker) typeFromParameter(node *ast.ParameterDeclaration) *Pseu
 	return ch.typeFromParameterWorker(node, selfIdx, lastRequired)
 }
 
-func (ch *PseudoChecker) typeFromParameterWorker(node *ast.ParameterDeclaration, selfIdx int, lastRequired int) *PseudoType {
+func (ch *PseudoChecker) typeFromParameterWorker(node ast.ParameterDeclaration, selfIdx int, lastRequired int) *PseudoType {
 	parent := node.Parent()
 	if parent.Kind() == ast.KindSetAccessor {
 		return ch.GetTypeOfAccessor(parent)
 	}
 	hasRequiredAfter := selfIdx < lastRequired-1
 	declaredType := node.Type()
-	if declaredType != nil {
+	if !declaredType.IsNil() {
 		result := NewPseudoTypeDirect(declaredType)
 		// When the parameter has an initializer and strict null checks are enabled,
 		// check if `| undefined` needs to be added because there are required parameters after this one.
 		// This mirrors the checker's getTypeOfParameter which adds optionality for initialized parameters.
-		if ch.strictNullChecks && node.Initializer() != nil && hasRequiredAfter {
+		if ch.strictNullChecks && !node.Initializer().IsNil() && hasRequiredAfter {
 			return addUndefinedIfDefinitelyRequired(result)
 		}
 		return result
 	}
-	if node.Initializer() != nil && ast.IsIdentifier(node.Name()) && !isContextuallyTyped(node.AsNode()) {
+	if !node.Initializer().IsNil() && ast.IsIdentifier(node.Name()) && !isContextuallyTyped(node.AsNode()) {
 		expr := ch.typeFromExpression(node.Initializer())
 		if expr != nil && (expr.Kind == PseudoTypeKindInferred && len(expr.AsPseudoTypeInferred().ErrorNodes) == 0) {
-			expr = NewPseudoTypeInferredWithErrors(expr.AsPseudoTypeInferred().Expression, false, []*ast.Node{node.AsNode()}) // Move error up to the parameter
+			expr = NewPseudoTypeInferredWithErrors(expr.AsPseudoTypeInferred().Expression, false, []ast.Node{node.AsNode()}) // Move error up to the parameter
 		}
 		if !ch.strictNullChecks {
 			return expr
@@ -695,15 +695,15 @@ func (ch *PseudoChecker) cloneParameters(nodes *ast.NodeList) []*PseudoParameter
 	result := make([]*PseudoParameter, 0, len(nodes.Nodes()))
 	for i, e := range nodes.Nodes() {
 		p := e.AsParameterDeclaration()
-		optional := p.QuestionToken() != nil
-		if !optional && p.Initializer() != nil {
+		optional := !p.QuestionToken().IsNil()
+		if !optional && !p.Initializer().IsNil() {
 			// A parameter with an initializer is optional only if all subsequent
 			// parameters are also optional/have initializers/are rest parameters.
 			// This matches the checker's isOptionalParameter semantics.
 			optional = i >= lastRequired-1
 		}
 		result = append(result, NewPseudoParameter(
-			p.DotDotDotToken() != nil,
+			!p.DotDotDotToken().IsNil(),
 			e.Name(),
 			optional,
 			ch.typeFromParameterWorker(p, i, lastRequired),
@@ -712,8 +712,8 @@ func (ch *PseudoChecker) cloneParameters(nodes *ast.NodeList) []*PseudoParameter
 	return result
 }
 
-func isContextuallyTyped(node *ast.Node) bool {
-	return ast.FindAncestor(node.Parent(), func(n *ast.Node) bool {
+func isContextuallyTyped(node ast.Node) bool {
+	return !ast.FindAncestor(node.Parent(), func(n ast.Node) bool {
 		// Functions calls or parent type annotations (but not the return type of a function expression) may impact the inferred type and local inference is unreliable
 		if ast.IsCallExpression(n) {
 			return true
@@ -721,9 +721,9 @@ func isContextuallyTyped(node *ast.Node) bool {
 		if ast.IsSatisfiesExpression(n) {
 			return true
 		}
-		if (ast.IsVariableParameterOrProperty(n) || ast.IsAssertionExpression(n)) && n.Type() != nil && !ast.IsConstAssertion(n) {
+		if (ast.IsVariableParameterOrProperty(n) || ast.IsAssertionExpression(n)) && !n.Type().IsNil() && !ast.IsConstAssertion(n) {
 			return true
 		}
 		return ast.IsJsxElement(n) || ast.IsJsxExpression(n)
-	}) != nil
+	}).IsNil()
 }

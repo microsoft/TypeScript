@@ -128,7 +128,7 @@ type processedFiles struct {
 	typeResolutionsInFile         map[tspath.PathKey]module.ModeAwareCache[*module.ResolvedTypeReferenceDirective]
 	sourceFileMetaDatas           map[tspath.PathKey]ast.SourceFileMetaData
 	jsxRuntimeImportSpecifiers    map[tspath.PathKey]*jsxRuntimeImportSpecifier
-	importHelpersImportSpecifiers map[tspath.PathKey]*ast.StringLiteralNode
+	importHelpersImportSpecifiers map[tspath.PathKey]ast.StringLiteralNode
 	libFiles                      map[tspath.PathKey]*LibFile
 	// List of present unsupported extensions
 	sourceFilesFoundSearchingNodeModules collections.Set[tspath.PathKey]
@@ -160,7 +160,7 @@ func (h *compilerResolutionHost) GetCurrentDirectory() tspath.RootedDirectoryPat
 
 type jsxRuntimeImportSpecifier struct {
 	moduleReference string
-	specifier       *ast.StringLiteralNode
+	specifier       ast.StringLiteralNode
 }
 
 func processAllProgramFiles(
@@ -825,7 +825,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 	file := t.file
 	meta := t.metadata
 
-	moduleNames := make([]*ast.Node, 0, len(file.Imports())+len(file.ModuleAugmentations)+2)
+	moduleNames := make([]ast.Node, 0, len(file.Imports())+len(file.ModuleAugmentations)+2)
 
 	isJavaScriptFile := ast.IsSourceFileJS(file)
 	isExternalModuleFile := ast.IsExternalModule(file)
@@ -939,7 +939,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 						referencedFile: &referencedFileData{
 							file:      t.path,
 							index:     importIndex,
-							synthetic: core.IfElse(importIndex < 0, entry, nil),
+							synthetic: core.IfElse(importIndex < 0, entry, ast.Node{}),
 						},
 					},
 					packageId: resolvedModule.PackageId,
@@ -952,11 +952,11 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 	}
 }
 
-func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) *ast.StringLiteralNode {
+func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) ast.StringLiteralNode {
 	p.factoryMu.Lock()
 	defer p.factoryMu.Unlock()
 	externalHelpersModuleReference := p.factory.NewStringLiteral(text, ast.TokenFlagsNone)
-	importDecl := p.factory.NewImportDeclaration(nil, nil, externalHelpersModuleReference, nil)
+	importDecl := p.factory.NewImportDeclaration(nil, ast.Node{}, externalHelpersModuleReference, ast.Node{})
 	externalHelpersModuleReference.SetParent(importDecl)
 	importDecl.SetParent(file.AsNode())
 	return externalHelpersModuleReference
@@ -1046,7 +1046,7 @@ func getDefaultResolutionModeForFile(fileName tspath.RootedFilePath, meta ast.So
 	}
 }
 
-func getModeForUsageLocation(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, usage *ast.StringLiteralLike, options *core.CompilerOptions) core.ResolutionMode {
+func getModeForUsageLocation(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, usage ast.StringLiteralLike, options *core.CompilerOptions) core.ResolutionMode {
 	if ast.IsImportDeclaration(usage.Parent()) || usage.Parent().Kind() == ast.KindJSImportDeclaration || ast.IsExportDeclaration(usage.Parent()) || ast.IsJSDocImportTag(usage.Parent()) {
 		isTypeOnly := ast.IsExclusivelyTypeOnlyImportOrExport(usage.Parent())
 		if isTypeOnly {
@@ -1084,7 +1084,7 @@ func importSyntaxAffectsModuleResolution(options *core.CompilerOptions) bool {
 		options.GetResolvePackageJsonExports() || options.GetResolvePackageJsonImports()
 }
 
-func getEmitSyntaxForUsageLocationWorker(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, usage *ast.Node, options *core.CompilerOptions) core.ResolutionMode {
+func getEmitSyntaxForUsageLocationWorker(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, usage ast.Node, options *core.CompilerOptions) core.ResolutionMode {
 	if ast.IsRequireCall(usage.Parent(), false /*requireStringLiteralLikeArgument*/) || ast.IsExternalModuleReference(usage.Parent()) && ast.IsImportEqualsDeclaration(usage.Parent().Parent()) {
 		return core.ModuleKindCommonJS
 	}

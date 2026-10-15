@@ -929,7 +929,7 @@
                     "goOnly": true
                 },
                 "NextContainer": {
-                    "type": "*Node",
+                    "type": "Node",
                     "goOnly": true
                 }
             },

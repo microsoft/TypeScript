@@ -7,8 +7,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
-func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
-	var jsdocParameters []*ast.Node
+func (c *Checker) checkUnmatchedJSDocParameters(node ast.Node) {
+	var jsdocParameters []ast.Node
 	for _, tag := range getAllJSDocTags(node) {
 		if tag.Kind() == ast.KindJSDocParameterTag {
 			name := tag.AsJSDocParameterOrPropertyTag().Name()
@@ -40,13 +40,13 @@ func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 		if isJs {
 			lastJSDocParamIndex := len(jsdocParameters) - 1
 			lastJSDocParam := jsdocParameters[lastJSDocParamIndex].AsJSDocParameterOrPropertyTag()
-			if lastJSDocParam == nil || !ast.IsIdentifier(lastJSDocParam.Name()) {
+			if lastJSDocParam.IsNil() || !ast.IsIdentifier(lastJSDocParam.Name()) {
 				return
 			}
 			if excludedParameters.Has(lastJSDocParamIndex) || parameters.Has(lastJSDocParam.Name().Text()) {
 				return
 			}
-			if lastJSDocParam.TypeExpression() == nil || lastJSDocParam.TypeExpression().Type() == nil {
+			if lastJSDocParam.TypeExpression().IsNil() || lastJSDocParam.TypeExpression().Type().IsNil() {
 				return
 			}
 			if c.isArrayType(c.getTypeFromTypeNode(lastJSDocParam.TypeExpression().Type())) {
@@ -84,9 +84,9 @@ func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 	}
 }
 
-func getAllJSDocTags(node *ast.Node) []*ast.Node {
+func getAllJSDocTags(node ast.Node) []ast.Node {
 	if node.Flags()&ast.NodeFlagsJSDoc == 0 {
-		for current := node; current != nil; current = ast.GetNextJSDocCommentLocation(current) {
+		for current := node; !current.IsNil(); current = ast.GetNextJSDocCommentLocation(current) {
 			jsdocs := current.JSDoc(nil)
 			if len(jsdocs) == 0 {
 				continue
@@ -100,7 +100,7 @@ func getAllJSDocTags(node *ast.Node) []*ast.Node {
 	return nil
 }
 
-func (c *Checker) checkJSDocAugmentsTagMatchesExtends(node *ast.Node, baseTypeNode *ast.ExpressionWithTypeArgumentsNode, baseType *Type) {
+func (c *Checker) checkJSDocAugmentsTagMatchesExtends(node ast.Node, baseTypeNode ast.ExpressionWithTypeArgumentsNode, baseType *Type) {
 	if !ast.IsInJSFile(node) {
 		return
 	}
@@ -121,10 +121,10 @@ func (c *Checker) checkJSDocAugmentsTagMatchesExtends(node *ast.Node, baseTypeNo
 					continue
 				}
 				targetName := getIdentifierFromEntityNameExpression(baseTypeNode.Expression())
-				if targetName != nil && sourceName != nil {
+				if !targetName.IsNil() && !sourceName.IsNil() {
 					c.error(sourceName, diagnostics.JSDoc_0_1_does_not_match_the_extends_2_clause, tag.TagName().Text(), sourceName.Text(), targetName.Text())
 				}
-			} else if sourceName != nil && !c.isTypeAssignableTo(baseType, sourceType) {
+			} else if !sourceName.IsNil() && !c.isTypeAssignableTo(baseType, sourceType) {
 				c.error(sourceName, diagnostics.JSDoc_0_1_does_not_match_the_extends_2_clause, tag.TagName().Text(), sourceName.Text(), scanner.GetTextOfNode(baseTypeNode.Expression()))
 			}
 		}

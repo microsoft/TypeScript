@@ -55,20 +55,20 @@ func (l *LanguageService) provideDocumentHighlightsAtPosition(ctx context.Contex
 	node := astnav.GetTouchingPropertyName(sourceFile, position)
 
 	// Cheap JSX check before resolving files to search.
-	if node.Parent() != nil && (node.Parent().Kind() == ast.KindJsxClosingElement || (node.Parent().Kind() == ast.KindJsxOpeningElement && node.Parent().TagName() == node)) {
-		var openingElement, closingElement *ast.Node
+	if !node.Parent().IsNil() && (node.Parent().Kind() == ast.KindJsxClosingElement || (node.Parent().Kind() == ast.KindJsxOpeningElement && node.Parent().TagName() == node)) {
+		var openingElement, closingElement ast.Node
 		if ast.IsJsxElement(node.Parent().Parent()) {
 			openingElement = node.Parent().Parent().AsJsxElement().OpeningElement()
 			closingElement = node.Parent().Parent().AsJsxElement().ClosingElement()
 		}
 		var highlights []*lsproto.DocumentHighlight
 		kind := lsproto.DocumentHighlightKindRead
-		if openingElement != nil {
+		if !openingElement.IsNil() {
 			if lspRange, fidelity := l.createLspRangeFromNodeForFeature(openingElement, sourceFile, spanmap.FeatureDocumentHighlights); !fidelity.IsNone() {
 				highlights = append(highlights, &lsproto.DocumentHighlight{Range: lspRange, Kind: &kind})
 			}
 		}
-		if closingElement != nil {
+		if !closingElement.IsNil() {
 			if lspRange, fidelity := l.createLspRangeFromNodeForFeature(closingElement, sourceFile, spanmap.FeatureDocumentHighlights); !fidelity.IsNone() {
 				highlights = append(highlights, &lsproto.DocumentHighlight{Range: lspRange, Kind: &kind})
 			}
@@ -137,7 +137,7 @@ func combineMultiDocumentHighlights(results []lsproto.MultiDocumentHighlightsOrN
 	return lsproto.MultiDocumentHighlightsOrNull{MultiDocumentHighlights: &combinedDocuments}
 }
 
-func (l *LanguageService) getSemanticDocumentHighlights(ctx context.Context, position int, node *ast.Node, program *compiler.Program, sourceFiles []*ast.SourceFile) []*lsproto.MultiDocumentHighlight {
+func (l *LanguageService) getSemanticDocumentHighlights(ctx context.Context, position int, node ast.Node, program *compiler.Program, sourceFiles []*ast.SourceFile) []*lsproto.MultiDocumentHighlight {
 	options := refOptions{use: referenceUseNone}
 	referenceEntries := l.getReferencedSymbolsForNode(ctx, position, node, program, sourceFiles, options)
 	if referenceEntries == nil {
@@ -198,7 +198,7 @@ func (l *LanguageService) toDocumentHighlight(entry *ReferenceEntry) (string, *l
 	return fileName, dh
 }
 
-func (l *LanguageService) getSyntacticDocumentHighlights(node *ast.Node, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
+func (l *LanguageService) getSyntacticDocumentHighlights(node ast.Node, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
 	switch node.Kind() {
 	case ast.KindIfKeyword, ast.KindElseKeyword:
 		if ast.IsIfStatement(node.Parent()) {
@@ -210,7 +210,7 @@ func (l *LanguageService) getSyntacticDocumentHighlights(node *ast.Node, sourceF
 	case ast.KindThrowKeyword:
 		return l.useParent(node.Parent(), ast.IsThrowStatement, getThrowOccurrences, sourceFile)
 	case ast.KindTryKeyword, ast.KindCatchKeyword, ast.KindFinallyKeyword:
-		var tryStatement *ast.Node
+		var tryStatement ast.Node
 		if node.Kind() == ast.KindCatchKeyword {
 			tryStatement = node.Parent().Parent()
 		} else {
@@ -227,7 +227,7 @@ func (l *LanguageService) getSyntacticDocumentHighlights(node *ast.Node, sourceF
 	case ast.KindBreakKeyword, ast.KindContinueKeyword:
 		return l.useParent(node.Parent(), ast.IsBreakOrContinueStatement, getBreakOrContinueStatementOccurrences, sourceFile)
 	case ast.KindForKeyword, ast.KindWhileKeyword, ast.KindDoKeyword:
-		return l.useParent(node.Parent(), func(n *ast.Node) bool {
+		return l.useParent(node.Parent(), func(n ast.Node) bool {
 			return ast.IsIterationStatement(n, true)
 		}, getLoopBreakContinueOccurrences, sourceFile)
 	case ast.KindConstructorKeyword:
@@ -250,21 +250,21 @@ func (l *LanguageService) getSyntacticDocumentHighlights(node *ast.Node, sourceF
 	}
 }
 
-func (l *LanguageService) useParent(node *ast.Node, nodeTest func(*ast.Node) bool, getNodes func(*ast.Node, *ast.SourceFile) []*ast.Node, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
+func (l *LanguageService) useParent(node ast.Node, nodeTest func(ast.Node) bool, getNodes func(ast.Node, *ast.SourceFile) []ast.Node, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
 	if nodeTest(node) {
 		return l.highlightSpans(getNodes(node, sourceFile), sourceFile)
 	}
 	return nil
 }
 
-func (l *LanguageService) highlightSpans(nodes []*ast.Node, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
+func (l *LanguageService) highlightSpans(nodes []ast.Node, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
 	if len(nodes) == 0 {
 		return nil
 	}
 	var highlights []*lsproto.DocumentHighlight
 	kind := lsproto.DocumentHighlightKindRead
 	for _, node := range nodes {
-		if node != nil {
+		if !node.IsNil() {
 			if lspRange, fidelity := l.createLspRangeFromNodeForFeature(node, sourceFile, spanmap.FeatureDocumentHighlights); !fidelity.IsNone() {
 				highlights = append(highlights, &lsproto.DocumentHighlight{Range: lspRange, Kind: &kind})
 			}
@@ -273,9 +273,9 @@ func (l *LanguageService) highlightSpans(nodes []*ast.Node, sourceFile *ast.Sour
 	return highlights
 }
 
-func (l *LanguageService) getFromAllDeclarations(nodeTest func(*ast.Node) bool, keywords []ast.Kind, node *ast.Node, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
-	return l.useParent(node.Parent(), nodeTest, func(decl *ast.Node, sf *ast.SourceFile) []*ast.Node {
-		var symbolDecls []*ast.Node
+func (l *LanguageService) getFromAllDeclarations(nodeTest func(ast.Node) bool, keywords []ast.Kind, node ast.Node, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
+	return l.useParent(node.Parent(), nodeTest, func(decl ast.Node, sf *ast.SourceFile) []ast.Node {
+		var symbolDecls []ast.Node
 		if ast.CanHaveSymbol(decl) {
 			if symbol := decl.Symbol(); symbol != nil {
 				for _, d := range symbol.Declarations() {
@@ -297,7 +297,7 @@ func (l *LanguageService) getFromAllDeclarations(nodeTest func(*ast.Node) bool, 
 	}, sourceFile)
 }
 
-func (l *LanguageService) getIfElseOccurrences(ifStatement *ast.IfStatement, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
+func (l *LanguageService) getIfElseOccurrences(ifStatement ast.IfStatement, sourceFile *ast.SourceFile) []*lsproto.DocumentHighlight {
 	keywords := getIfElseKeywords(ifStatement, sourceFile)
 	kind := lsproto.DocumentHighlightKindRead
 	var highlights []*lsproto.DocumentHighlight
@@ -338,7 +338,7 @@ func (l *LanguageService) getIfElseOccurrences(ifStatement *ast.IfStatement, sou
 	return highlights
 }
 
-func getIfElseKeywords(ifStatement *ast.IfStatement, sourceFile *ast.SourceFile) []*ast.Node {
+func getIfElseKeywords(ifStatement ast.IfStatement, sourceFile *ast.SourceFile) []ast.Node {
 	// We may be at an if statement like those in the range below:
 	//
 	//   ```
@@ -357,7 +357,7 @@ func getIfElseKeywords(ifStatement *ast.IfStatement, sourceFile *ast.SourceFile)
 		ifStatement = parentingIf
 	}
 
-	var keywords []*ast.Node
+	var keywords []ast.Node
 
 	// Traverse back down through the else branches, aggregating if/else keywords of if-statements.
 	for {
@@ -373,7 +373,7 @@ func getIfElseKeywords(ifStatement *ast.IfStatement, sourceFile *ast.SourceFile)
 			}
 		}
 		elseStatement := ifStatement.ElseStatement()
-		if elseStatement == nil || !ast.IsIfStatement(elseStatement) {
+		if elseStatement.IsNil() || !ast.IsIfStatement(elseStatement) {
 			break
 		}
 		ifStatement = elseStatement.AsIfStatement()
@@ -381,18 +381,18 @@ func getIfElseKeywords(ifStatement *ast.IfStatement, sourceFile *ast.SourceFile)
 	return keywords
 }
 
-func getReturnOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
+func getReturnOccurrences(node ast.Node, sourceFile *ast.SourceFile) []ast.Node {
 	funcNode := ast.FindAncestor(node.Parent(), ast.IsFunctionLike)
-	if funcNode == nil {
+	if funcNode.IsNil() {
 		return nil
 	}
 
-	var keywords []*ast.Node
+	var keywords []ast.Node
 	body := funcNode.Body()
-	if body != nil {
-		ast.ForEachReturnStatement(body, func(ret *ast.Node) bool {
+	if !body.IsNil() {
+		ast.ForEachReturnStatement(body, func(ret ast.Node) bool {
 			keyword := astnav.FindChildOfKind(ret, ast.KindReturnKeyword, sourceFile)
-			if keyword != nil {
+			if !keyword.IsNil() {
 				keywords = append(keywords, keyword)
 			}
 			return false // continue traversal
@@ -402,7 +402,7 @@ func getReturnOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Nod
 		throwStatements := aggregateOwnedThrowStatements(body, sourceFile)
 		for _, throw := range throwStatements {
 			keyword := astnav.FindChildOfKind(throw, ast.KindThrowKeyword, sourceFile)
-			if keyword != nil {
+			if !keyword.IsNil() {
 				keywords = append(keywords, keyword)
 			}
 		}
@@ -410,9 +410,9 @@ func getReturnOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Nod
 	return keywords
 }
 
-func aggregateOwnedThrowStatements(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
+func aggregateOwnedThrowStatements(node ast.Node, sourceFile *ast.SourceFile) []ast.Node {
 	if ast.IsThrowStatement(node) {
-		return []*ast.Node{node}
+		return []ast.Node{node}
 	}
 	if ast.IsTryStatement(node) {
 		// Exceptions thrown within a try block lacking a catch clause are "owned" in the current context.
@@ -421,13 +421,13 @@ func aggregateOwnedThrowStatements(node *ast.Node, sourceFile *ast.SourceFile) [
 		catchClause := statement.CatchClause()
 		finallyBlock := statement.FinallyBlock()
 
-		var result []*ast.Node
-		if catchClause != nil {
+		var result []ast.Node
+		if !catchClause.IsNil() {
 			result = aggregateOwnedThrowStatements(catchClause, sourceFile)
-		} else if tryBlock != nil {
+		} else if !tryBlock.IsNil() {
 			result = aggregateOwnedThrowStatements(tryBlock, sourceFile)
 		}
-		if finallyBlock != nil {
+		if !finallyBlock.IsNil() {
 			result = append(result, aggregateOwnedThrowStatements(finallyBlock, sourceFile)...)
 		}
 		return result
@@ -439,10 +439,10 @@ func aggregateOwnedThrowStatements(node *ast.Node, sourceFile *ast.SourceFile) [
 	return flatMapChildren(node, sourceFile, aggregateOwnedThrowStatements)
 }
 
-func flatMapChildren[T any](node *ast.Node, sourceFile *ast.SourceFile, cb func(child *ast.Node, sourceFile *ast.SourceFile) []T) []T {
+func flatMapChildren[T any](node ast.Node, sourceFile *ast.SourceFile, cb func(child ast.Node, sourceFile *ast.SourceFile) []T) []T {
 	var result []T
 
-	node.ForEachChild(func(child *ast.Node) bool {
+	node.ForEachChild(func(child ast.Node) bool {
 		value := cb(child, sourceFile)
 		if value != nil {
 			result = append(result, value...)
@@ -452,19 +452,19 @@ func flatMapChildren[T any](node *ast.Node, sourceFile *ast.SourceFile, cb func(
 	return result
 }
 
-func getThrowOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
+func getThrowOccurrences(node ast.Node, sourceFile *ast.SourceFile) []ast.Node {
 	owner := getThrowStatementOwner(node)
-	if owner == nil {
+	if owner.IsNil() {
 		return nil
 	}
 
-	var keywords []*ast.Node
+	var keywords []ast.Node
 
 	// Aggregate all throw statements "owned" by this owner.
 	throwStatements := aggregateOwnedThrowStatements(owner, sourceFile)
 	for _, throw := range throwStatements {
 		keyword := astnav.FindChildOfKind(throw, ast.KindThrowKeyword, sourceFile)
-		if keyword != nil {
+		if !keyword.IsNil() {
 			keywords = append(keywords, keyword)
 		}
 	}
@@ -472,9 +472,9 @@ func getThrowOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node
 	// If the "owner" is a function, then we equate 'return' and 'throw' statements in their
 	// ability to "jump out" of the function, and include occurrences for both
 	if ast.IsFunctionBlock(owner) {
-		ast.ForEachReturnStatement(owner, func(ret *ast.Node) bool {
+		ast.ForEachReturnStatement(owner, func(ret ast.Node) bool {
 			keyword := astnav.FindChildOfKind(ret, ast.KindReturnKeyword, sourceFile)
-			if keyword != nil {
+			if !keyword.IsNil() {
 				keywords = append(keywords, keyword)
 			}
 			return false // continue traversal
@@ -487,9 +487,9 @@ func getThrowOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node
 // For lack of a better name, this function takes a throw statement and returns the
 // nearest ancestor that is a try-block (whose try statement has a catch clause),
 // function-block, or source file.
-func getThrowStatementOwner(throwStatement *ast.Node) *ast.Node {
+func getThrowStatementOwner(throwStatement ast.Node) ast.Node {
 	child := throwStatement
-	for child.Parent() != nil {
+	for !child.Parent().IsNil() {
 		parent := child.Parent()
 
 		if ast.IsFunctionBlock(parent) || parent.Kind() == ast.KindSourceFile {
@@ -500,33 +500,33 @@ func getThrowStatementOwner(throwStatement *ast.Node) *ast.Node {
 		// a catch clause, and if the throw-statement occurs within the try block.
 		if ast.IsTryStatement(parent) {
 			tryStatement := parent.AsTryStatement()
-			if tryStatement.TryBlock() == child && tryStatement.CatchClause() != nil {
+			if tryStatement.TryBlock() == child && !tryStatement.CatchClause().IsNil() {
 				return child
 			}
 		}
 
 		child = parent
 	}
-	return nil
+	return ast.Node{}
 }
 
-func getTryCatchFinallyOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
+func getTryCatchFinallyOccurrences(node ast.Node, sourceFile *ast.SourceFile) []ast.Node {
 	tryStatement := node.AsTryStatement()
 
-	var keywords []*ast.Node
+	var keywords []ast.Node
 	token := lsutil.GetFirstToken(node, sourceFile)
-	if token != nil && token.Kind() == ast.KindTryKeyword {
+	if !token.IsNil() && token.Kind() == ast.KindTryKeyword {
 		keywords = append(keywords, token)
 	}
 
-	if tryStatement.CatchClause() != nil {
-		if catchToken := astnav.FindChildOfKind(node, ast.KindCatchKeyword, sourceFile); catchToken != nil {
+	if !tryStatement.CatchClause().IsNil() {
+		if catchToken := astnav.FindChildOfKind(node, ast.KindCatchKeyword, sourceFile); !catchToken.IsNil() {
 			keywords = append(keywords, catchToken)
 		}
 	}
 
-	if tryStatement.FinallyBlock() != nil {
-		if finallyKeyword := astnav.FindChildOfKind(node, ast.KindFinallyKeyword, sourceFile); finallyKeyword != nil {
+	if !tryStatement.FinallyBlock().IsNil() {
+		if finallyKeyword := astnav.FindChildOfKind(node, ast.KindFinallyKeyword, sourceFile); !finallyKeyword.IsNil() {
 			keywords = append(keywords, finallyKeyword)
 		}
 	}
@@ -534,10 +534,10 @@ func getTryCatchFinallyOccurrences(node *ast.Node, sourceFile *ast.SourceFile) [
 	return keywords
 }
 
-func getSwitchCaseDefaultOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
+func getSwitchCaseDefaultOccurrences(node ast.Node, sourceFile *ast.SourceFile) []ast.Node {
 	switchStatement := node.AsSwitchStatement()
 
-	var keywords []*ast.Node
+	var keywords []ast.Node
 	token := lsutil.GetFirstToken(node, sourceFile)
 	if token.Kind() == ast.KindSwitchKeyword {
 		keywords = append(keywords, token)
@@ -561,9 +561,9 @@ func getSwitchCaseDefaultOccurrences(node *ast.Node, sourceFile *ast.SourceFile)
 	return keywords
 }
 
-func aggregateAllBreakAndContinueStatements(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
+func aggregateAllBreakAndContinueStatements(node ast.Node, sourceFile *ast.SourceFile) []ast.Node {
 	if ast.IsBreakOrContinueStatement(node) {
-		return []*ast.Node{node}
+		return []ast.Node{node}
 	}
 	if ast.IsFunctionLike(node) {
 		return nil
@@ -571,16 +571,16 @@ func aggregateAllBreakAndContinueStatements(node *ast.Node, sourceFile *ast.Sour
 	return flatMapChildren(node, sourceFile, aggregateAllBreakAndContinueStatements)
 }
 
-func ownsBreakOrContinueStatement(owner *ast.Node, statement *ast.Node) bool {
+func ownsBreakOrContinueStatement(owner ast.Node, statement ast.Node) bool {
 	actualOwner := getBreakOrContinueOwner(statement)
-	if actualOwner == nil {
+	if actualOwner.IsNil() {
 		return false
 	}
 	return actualOwner == owner
 }
 
-func getBreakOrContinueOwner(statement *ast.Node) *ast.Node {
-	return ast.FindAncestorOrQuit(statement, func(node *ast.Node) ast.FindAncestorResult {
+func getBreakOrContinueOwner(statement ast.Node) ast.Node {
+	return ast.FindAncestorOrQuit(statement, func(node ast.Node) ast.FindAncestorResult {
 		switch node.Kind() {
 		case ast.KindSwitchStatement:
 			if statement.Kind() == ast.KindContinueStatement {
@@ -593,7 +593,7 @@ func getBreakOrContinueOwner(statement *ast.Node) *ast.Node {
 			ast.KindWhileStatement,
 			ast.KindDoStatement:
 			// If the statement is labeled, check if the node is labeled by the statement's label.
-			if statement.Label() == nil || isLabeledBy(node, statement.Label().Text()) {
+			if statement.Label().IsNil() || isLabeledBy(node, statement.Label().Text()) {
 				return ast.FindAncestorTrue
 			}
 			return ast.FindAncestorFalse
@@ -609,8 +609,8 @@ func getBreakOrContinueOwner(statement *ast.Node) *ast.Node {
 
 // Whether or not a 'node' is preceded by a label of the given string.
 // Note: 'node' cannot be a SourceFile.
-func isLabeledBy(node *ast.Node, labelName string) bool {
-	return ast.FindAncestorOrQuit(node.Parent(), func(owner *ast.Node) ast.FindAncestorResult {
+func isLabeledBy(node ast.Node, labelName string) bool {
+	return !ast.FindAncestorOrQuit(node.Parent(), func(owner ast.Node) ast.FindAncestorResult {
 		if !ast.IsLabeledStatement(owner) {
 			return ast.FindAncestorQuit
 		}
@@ -618,11 +618,11 @@ func isLabeledBy(node *ast.Node, labelName string) bool {
 			return ast.FindAncestorTrue
 		}
 		return ast.FindAncestorFalse
-	}) != nil
+	}).IsNil()
 }
 
-func getBreakOrContinueStatementOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
-	if owner := getBreakOrContinueOwner(node); owner != nil {
+func getBreakOrContinueStatementOccurrences(node ast.Node, sourceFile *ast.SourceFile) []ast.Node {
+	if owner := getBreakOrContinueOwner(node); !owner.IsNil() {
 		switch owner.Kind() {
 		case ast.KindForStatement, ast.KindForInStatement, ast.KindForOfStatement, ast.KindDoStatement, ast.KindWhileStatement:
 			return getLoopBreakContinueOccurrences(owner, sourceFile)
@@ -633,8 +633,8 @@ func getBreakOrContinueStatementOccurrences(node *ast.Node, sourceFile *ast.Sour
 	return nil
 }
 
-func getLoopBreakContinueOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
-	var keywords []*ast.Node
+func getLoopBreakContinueOccurrences(node ast.Node, sourceFile *ast.SourceFile) []ast.Node {
+	var keywords []ast.Node
 
 	token := lsutil.GetFirstToken(node, sourceFile)
 	if token.Kind() == ast.KindForKeyword || token.Kind() == ast.KindDoKeyword || token.Kind() == ast.KindWhileKeyword {
@@ -661,13 +661,13 @@ func getLoopBreakContinueOccurrences(node *ast.Node, sourceFile *ast.SourceFile)
 	return keywords
 }
 
-func getAsyncAndAwaitOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
+func getAsyncAndAwaitOccurrences(node ast.Node, sourceFile *ast.SourceFile) []ast.Node {
 	fun := ast.GetContainingFunction(node)
-	if fun == nil {
+	if fun.IsNil() {
 		return nil
 	}
 
-	var keywords []*ast.Node
+	var keywords []ast.Node
 
 	for _, modifier := range fun.ModifierNodes() {
 		if modifier.Kind() == ast.KindAsyncKeyword {
@@ -675,8 +675,8 @@ func getAsyncAndAwaitOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*
 		}
 	}
 
-	fun.ForEachChild(func(child *ast.Node) bool {
-		traverseWithoutCrossingFunction(child, sourceFile, func(child *ast.Node) {
+	fun.ForEachChild(func(child ast.Node) bool {
+		traverseWithoutCrossingFunction(child, sourceFile, func(child ast.Node) {
 			if ast.IsAwaitExpression(child) {
 				token := lsutil.GetFirstToken(child, sourceFile)
 				if token.Kind() == ast.KindAwaitKeyword {
@@ -690,16 +690,16 @@ func getAsyncAndAwaitOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*
 	return keywords
 }
 
-func getYieldOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
+func getYieldOccurrences(node ast.Node, sourceFile *ast.SourceFile) []ast.Node {
 	parentFunc := ast.FindAncestor(node.Parent(), ast.IsFunctionLike)
-	if parentFunc == nil {
+	if parentFunc.IsNil() {
 		return nil
 	}
 
-	var keywords []*ast.Node
+	var keywords []ast.Node
 
-	parentFunc.ForEachChild(func(child *ast.Node) bool {
-		traverseWithoutCrossingFunction(child, sourceFile, func(child *ast.Node) {
+	parentFunc.ForEachChild(func(child ast.Node) bool {
+		traverseWithoutCrossingFunction(child, sourceFile, func(child ast.Node) {
 			if ast.IsYieldExpression(child) {
 				token := lsutil.GetFirstToken(child, sourceFile)
 				if token.Kind() == ast.KindYieldKeyword {
@@ -713,34 +713,34 @@ func getYieldOccurrences(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node
 	return keywords
 }
 
-func traverseWithoutCrossingFunction(node *ast.Node, sourceFile *ast.SourceFile, cb func(*ast.Node)) {
+func traverseWithoutCrossingFunction(node ast.Node, sourceFile *ast.SourceFile, cb func(ast.Node)) {
 	cb(node)
 	if !ast.IsFunctionLike(node) && !ast.IsClassLike(node) && !ast.IsInterfaceDeclaration(node) && !ast.IsModuleDeclaration(node) && !ast.IsTypeAliasDeclaration(node) && !ast.IsTypeNode(node) {
-		node.ForEachChild(func(child *ast.Node) bool {
+		node.ForEachChild(func(child ast.Node) bool {
 			traverseWithoutCrossingFunction(child, sourceFile, cb)
 			return false // continue traversal
 		})
 	}
 }
 
-func getModifierOccurrences(kind ast.Kind, node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
-	var result []*ast.Node
+func getModifierOccurrences(kind ast.Kind, node ast.Node, sourceFile *ast.SourceFile) []ast.Node {
+	var result []ast.Node
 
 	nodesToSearch := getNodesToSearchForModifier(node, ast.ModifierToFlag(kind))
 	for _, n := range nodesToSearch {
 		modifier := findModifier(n, kind)
-		if modifier != nil {
+		if !modifier.IsNil() {
 			result = append(result, modifier)
 		}
 	}
 	return result
 }
 
-func getNodesToSearchForModifier(declaration *ast.Node, modifierFlag ast.ModifierFlags) []*ast.Node {
-	var result []*ast.Node
+func getNodesToSearchForModifier(declaration ast.Node, modifierFlag ast.ModifierFlags) []ast.Node {
+	var result []ast.Node
 
 	container := declaration.Parent()
-	if container == nil {
+	if container.IsNil() {
 		return nil
 	}
 
@@ -766,7 +766,7 @@ func getNodesToSearchForModifier(declaration *ast.Node, modifierFlag ast.Modifie
 		// If we're an accessibility modifier, we're in an instance member and should search
 		// the constructor's parameter list for instance members as well.
 		if (modifierFlag & (ast.ModifierFlagsAccessibilityModifier | ast.ModifierFlagsReadonly)) != 0 {
-			var constructor *ast.Node
+			var constructor ast.Node
 
 			for _, member := range nodes {
 				if ast.IsConstructorDeclaration(member) {
@@ -774,7 +774,7 @@ func getNodesToSearchForModifier(declaration *ast.Node, modifierFlag ast.Modifie
 					break
 				}
 			}
-			if constructor != nil {
+			if !constructor.IsNil() {
 				result = append(result, constructor.Parameters()...)
 			}
 		} else if (modifierFlag & ast.ModifierFlagsAbstract) != 0 {
@@ -787,11 +787,11 @@ func getNodesToSearchForModifier(declaration *ast.Node, modifierFlag ast.Modifie
 	}
 }
 
-func findModifier(node *ast.Node, kind ast.Kind) *ast.Node {
+func findModifier(node ast.Node, kind ast.Kind) ast.Node {
 	for _, modifier := range node.ModifierNodes() {
 		if modifier.Kind() == kind {
 			return modifier
 		}
 	}
-	return nil
+	return ast.Node{}
 }

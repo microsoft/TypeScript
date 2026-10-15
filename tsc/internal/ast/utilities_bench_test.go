@@ -26,9 +26,9 @@ func BenchmarkGetCombinedFlags(b *testing.B) {
 				PathKey:  path,
 			}, sourceText, scriptKind)
 
-			var decls []*ast.Node
+			var decls []ast.Node
 			var collect ast.Visitor
-			collect = func(n *ast.Node) bool {
+			collect = func(n ast.Node) bool {
 				if ast.IsDeclaration(n) {
 					decls = append(decls, n)
 				}

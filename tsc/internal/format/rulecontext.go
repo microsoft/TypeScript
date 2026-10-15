@@ -254,7 +254,7 @@ func isBeforeBlockContext(context *FormattingContext) bool {
 }
 
 // IMPORTANT!!! This method must return true ONLY for nodes with open and close braces as immediate children
-func nodeIsBlockContext(node *ast.Node) bool {
+func nodeIsBlockContext(node ast.Node) bool {
 	if nodeIsTypeScriptDeclWithBlockContext(node) {
 		// This means we are in a context that looks like a block to the user, but in the grammar is actually not a node (it's a class, module, enum, object type literal, etc).
 		return true
@@ -309,7 +309,7 @@ func isTypeScriptDeclWithBlockContext(context *FormattingContext) bool {
 	return nodeIsTypeScriptDeclWithBlockContext(context.contextNode)
 }
 
-func nodeIsTypeScriptDeclWithBlockContext(node *ast.Node) bool {
+func nodeIsTypeScriptDeclWithBlockContext(node ast.Node) bool {
 	switch node.Kind() {
 	case ast.KindClassDeclaration,
 		ast.KindClassExpression,
@@ -339,7 +339,7 @@ func isAfterCodeBlockContext(context *FormattingContext) bool {
 	case ast.KindBlock:
 		blockParent := context.currentTokenParent.Parent()
 		// In a codefix scenario, we can't rely on parents being set. So just always return true.
-		if blockParent == nil || blockParent.Kind() != ast.KindArrowFunction && blockParent.Kind() != ast.KindFunctionExpression {
+		if blockParent.IsNil() || blockParent.Kind() != ast.KindArrowFunction && blockParent.Kind() != ast.KindFunctionExpression {
 			return true
 		}
 	}
@@ -451,11 +451,11 @@ func isEndOfDecoratorContextOnSameLine(context *FormattingContext) bool {
 		!nodeIsInDecoratorContext(context.nextTokenParent)
 }
 
-func nodeIsInDecoratorContext(node *ast.Node) bool {
-	for node != nil && ast.IsExpression(node) {
+func nodeIsInDecoratorContext(node ast.Node) bool {
+	for !node.IsNil() && ast.IsExpression(node) {
 		node = node.Parent()
 	}
-	return node != nil && node.Kind() == ast.KindDecorator
+	return !node.IsNil() && node.Kind() == ast.KindDecorator
 }
 
 func isStartOfVariableDeclarationList(context *FormattingContext) bool {
@@ -479,7 +479,7 @@ func isConstructorSignatureContext(context *FormattingContext) bool {
 	return context.contextNode.Kind() == ast.KindConstructSignature
 }
 
-func isTypeArgumentOrParameterOrAssertion(token TextRangeWithKind, parent *ast.Node) bool {
+func isTypeArgumentOrParameterOrAssertion(token TextRangeWithKind, parent ast.Node) bool {
 	if token.Kind != ast.KindLessThanToken && token.Kind != ast.KindGreaterThanToken {
 		return false
 	}
@@ -524,7 +524,7 @@ func isVoidOpContext(context *FormattingContext) bool {
 }
 
 func isYieldOrYieldStarWithOperand(context *FormattingContext) bool {
-	return context.contextNode.Kind() == ast.KindYieldExpression && context.contextNode.Expression() != nil
+	return context.contextNode.Kind() == ast.KindYieldExpression && !context.contextNode.Expression().IsNil()
 }
 
 func isNonNullAssertionContext(context *FormattingContext) bool {
@@ -554,7 +554,7 @@ func isSemicolonDeletionContext(context *FormattingContext) bool {
 	nextTokenKind := context.nextTokenSpan.Kind
 	nextTokenStart := context.nextTokenSpan.Loc.Pos()
 	if ast.IsTrivia(nextTokenKind) {
-		var nextRealToken *ast.Node
+		var nextRealToken ast.Node
 		if context.nextTokenParent == context.currentTokenParent {
 			// !!! TODO: very different from strada, but strada's logic here is wonky - find the first ancestor without a parent? that's just the source file.
 			nextRealToken = astnav.FindNextToken(context.nextTokenParent, context.SourceFile.AsNode(), context.SourceFile)
@@ -562,7 +562,7 @@ func isSemicolonDeletionContext(context *FormattingContext) bool {
 			nextRealToken = lsutil.GetFirstToken(context.nextTokenParent, context.SourceFile)
 		}
 
-		if nextRealToken == nil {
+		if nextRealToken.IsNil() {
 			return true
 		}
 		nextTokenKind = nextRealToken.Kind()
@@ -594,12 +594,12 @@ func isSemicolonDeletionContext(context *FormattingContext) bool {
 		//   () void
 		// }
 		return context.currentTokenParent.Kind() != ast.KindPropertySignature ||
-			context.currentTokenParent.Type() != nil ||
+			!context.currentTokenParent.Type().IsNil() ||
 			nextTokenKind != ast.KindOpenParenToken
 	}
 
 	if ast.IsPropertyDeclaration(context.currentTokenParent) {
-		return context.currentTokenParent.Initializer() == nil
+		return context.currentTokenParent.Initializer().IsNil()
 	}
 
 	return context.currentTokenParent.Kind() != ast.KindForStatement &&

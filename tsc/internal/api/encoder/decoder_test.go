@@ -34,7 +34,7 @@ func TestDecodeSourceFile_Basic(t *testing.T) {
 	assert.Equal(t, decoded.FileName().AsString(), "/test.ts")
 	assert.Equal(t, decoded.Text(), "let x = 1;")
 	assert.Assert(t, decoded.Statements != nil)
-	assert.Assert(t, decoded.EndOfFileToken != nil)
+	assert.Assert(t, !decoded.EndOfFileToken.IsNil())
 }
 
 func TestDecodeSourceFile_Metadata(t *testing.T) {
@@ -111,7 +111,7 @@ func TestDecodeSourceFile_VariableDeclaration(t *testing.T) {
 	assert.NilError(t, err)
 
 	varStmt := decoded.Statements.Nodes()[0].AsVariableStatement()
-	assert.Assert(t, varStmt.DeclarationList() != nil)
+	assert.Assert(t, !varStmt.DeclarationList().IsNil())
 	declList := varStmt.DeclarationList().AsVariableDeclarationList()
 	assert.Assert(t, declList.Declarations() != nil)
 	assert.Equal(t, len(declList.Declarations().Nodes()), 1)
@@ -119,7 +119,7 @@ func TestDecodeSourceFile_VariableDeclaration(t *testing.T) {
 	decl := declList.Declarations().Nodes()[0].AsVariableDeclaration()
 	assert.Equal(t, decl.Name().Kind(), ast.KindIdentifier)
 	assert.Equal(t, decl.Name().AsIdentifier().Text(), "x")
-	assert.Assert(t, decl.Initializer() != nil)
+	assert.Assert(t, !decl.Initializer().IsNil())
 	assert.Equal(t, decl.Initializer().Kind(), ast.KindNumericLiteral)
 	assert.Equal(t, decl.Initializer().AsNumericLiteral().Text(), "1")
 }
@@ -164,16 +164,16 @@ func TestDecodeSourceFile_FunctionDeclaration(t *testing.T) {
 	assert.NilError(t, err)
 
 	funcDecl := decoded.Statements.Nodes()[0].AsFunctionDeclaration()
-	assert.Assert(t, funcDecl.Name() != nil)
+	assert.Assert(t, !funcDecl.Name().IsNil())
 	assert.Equal(t, funcDecl.Name().AsIdentifier().Text(), "add")
 	assert.Assert(t, funcDecl.Parameters() != nil)
 	assert.Equal(t, len(funcDecl.Parameters().Nodes()), 2)
-	assert.Assert(t, funcDecl.Type() != nil)
-	assert.Assert(t, funcDecl.Body() != nil)
+	assert.Assert(t, !funcDecl.Type().IsNil())
+	assert.Assert(t, !funcDecl.Body().IsNil())
 
 	param0 := funcDecl.Parameters().Nodes()[0].AsParameterDeclaration()
 	assert.Equal(t, param0.Name().AsIdentifier().Text(), "a")
-	assert.Assert(t, param0.Type() != nil)
+	assert.Assert(t, !param0.Type().IsNil())
 }
 
 func TestDecodeSourceFile_ImportDeclaration(t *testing.T) {
@@ -186,12 +186,12 @@ func TestDecodeSourceFile_ImportDeclaration(t *testing.T) {
 	assert.NilError(t, err)
 
 	imp := decoded.Statements.Nodes()[0].AsImportDeclaration()
-	assert.Assert(t, imp.ImportClause() != nil)
-	assert.Assert(t, imp.ModuleSpecifier() != nil)
+	assert.Assert(t, !imp.ImportClause().IsNil())
+	assert.Assert(t, !imp.ModuleSpecifier().IsNil())
 	assert.Equal(t, imp.ModuleSpecifier().AsStringLiteral().Text(), "bar")
 
 	clause := imp.ImportClause().AsImportClause()
-	assert.Assert(t, clause.NamedBindings() != nil)
+	assert.Assert(t, !clause.NamedBindings().IsNil())
 	namedImports := clause.NamedBindings().AsNamedImports()
 	assert.Assert(t, namedImports.Elements() != nil)
 	assert.Equal(t, len(namedImports.Elements().Nodes()), 1)
@@ -223,9 +223,9 @@ func TestDecodeSourceFile_IfStatement(t *testing.T) {
 	assert.NilError(t, err)
 
 	ifStmt := decoded.Statements.Nodes()[0].AsIfStatement()
-	assert.Assert(t, ifStmt.Expression() != nil)
-	assert.Assert(t, ifStmt.ThenStatement() != nil)
-	assert.Assert(t, ifStmt.ElseStatement() != nil)
+	assert.Assert(t, !ifStmt.Expression().IsNil())
+	assert.Assert(t, !ifStmt.ThenStatement().IsNil())
+	assert.Assert(t, !ifStmt.ElseStatement().IsNil())
 	assert.Equal(t, ifStmt.ThenStatement().Kind(), ast.KindBlock)
 	assert.Equal(t, ifStmt.ElseStatement().Kind(), ast.KindBlock)
 }
@@ -241,15 +241,15 @@ func TestDecodeSourceFile_TemplateExpression(t *testing.T) {
 
 	varDecl := decoded.Statements.Nodes()[0].AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes()[0].AsVariableDeclaration()
 	tmplExpr := varDecl.Initializer().AsTemplateExpression()
-	assert.Assert(t, tmplExpr.Head() != nil)
+	assert.Assert(t, !tmplExpr.Head().IsNil())
 	assert.Equal(t, tmplExpr.Head().AsTemplateHead().Text(), "hello ")
 	assert.Assert(t, tmplExpr.TemplateSpans() != nil)
 	assert.Equal(t, len(tmplExpr.TemplateSpans().Nodes()), 1)
 
 	span := tmplExpr.TemplateSpans().Nodes()[0].AsTemplateSpan()
-	assert.Assert(t, span.Expression() != nil)
+	assert.Assert(t, !span.Expression().IsNil())
 	assert.Equal(t, span.Expression().Kind(), ast.KindIdentifier)
-	assert.Assert(t, span.Literal() != nil)
+	assert.Assert(t, !span.Literal().IsNil())
 	assert.Equal(t, span.Literal().AsTemplateTail().Text(), " world")
 }
 
@@ -292,7 +292,7 @@ func TestDecodeSourceFile_ClassDeclaration(t *testing.T) {
 	assert.NilError(t, err)
 
 	classDecl := decoded.Statements.Nodes()[0].AsClassDeclaration()
-	assert.Assert(t, classDecl.Name() != nil)
+	assert.Assert(t, !classDecl.Name().IsNil())
 	assert.Equal(t, classDecl.Name().AsIdentifier().Text(), "Foo")
 	assert.Assert(t, classDecl.Members() != nil)
 	assert.Equal(t, len(classDecl.Members().Nodes()), 1)
@@ -303,16 +303,16 @@ func TestDecodeNodes_SubtreeRoundTrip(t *testing.T) {
 	t.Parallel()
 	sf := parseSourceFile("function greet(name: string) { return `Hello, ${name}!`; }")
 
-	var funcNode *ast.Node
+	var funcNode ast.Node
 	visitor := &ast.NodeVisitor{}
-	visitor.Visit = func(node *ast.Node) *ast.Node {
-		if node.Kind() == ast.KindFunctionDeclaration && funcNode == nil {
+	visitor.Visit = func(node ast.Node) ast.Node {
+		if node.Kind() == ast.KindFunctionDeclaration && funcNode.IsNil() {
 			funcNode = node
 		}
 		return node
 	}
 	visitor.VisitEachChild(sf.AsNode())
-	assert.Assert(t, funcNode != nil)
+	assert.Assert(t, !funcNode.IsNil())
 
 	buf, _, err := encoder.EncodeNode(funcNode, sf)
 	assert.NilError(t, err)
@@ -322,11 +322,11 @@ func TestDecodeNodes_SubtreeRoundTrip(t *testing.T) {
 
 	assert.Equal(t, decoded.Kind(), ast.KindFunctionDeclaration)
 	funcDecl := decoded.AsFunctionDeclaration()
-	assert.Assert(t, funcDecl.Name() != nil)
+	assert.Assert(t, !funcDecl.Name().IsNil())
 	assert.Equal(t, funcDecl.Name().AsIdentifier().Text(), "greet")
 	assert.Assert(t, funcDecl.Parameters() != nil)
 	assert.Equal(t, len(funcDecl.Parameters().Nodes()), 1)
-	assert.Assert(t, funcDecl.Body() != nil)
+	assert.Assert(t, !funcDecl.Body().IsNil())
 }
 
 func TestDecodeSourceFile_BinaryExpression(t *testing.T) {
@@ -340,9 +340,9 @@ func TestDecodeSourceFile_BinaryExpression(t *testing.T) {
 
 	decl := decoded.Statements.Nodes()[0].AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes()[0].AsVariableDeclaration()
 	binExpr := decl.Initializer().AsBinaryExpression()
-	assert.Assert(t, binExpr.Left() != nil)
-	assert.Assert(t, binExpr.Right() != nil)
-	assert.Assert(t, binExpr.OperatorToken() != nil)
+	assert.Assert(t, !binExpr.Left().IsNil())
+	assert.Assert(t, !binExpr.Right().IsNil())
+	assert.Assert(t, !binExpr.OperatorToken().IsNil())
 	assert.Equal(t, binExpr.Left().Kind(), ast.KindNumericLiteral)
 	assert.Equal(t, binExpr.Right().Kind(), ast.KindNumericLiteral)
 }
@@ -362,7 +362,7 @@ func TestDecodeSourceFile_KeywordExpressions(t *testing.T) {
 	thisExpr := decl.Initializer()
 	assert.Equal(t, thisExpr.Kind(), ast.KindThisKeyword)
 	// This would panic if decoded as Token instead of KeywordExpression
-	assert.Assert(t, thisExpr.AsKeywordExpression() != nil)
+	assert.Assert(t, !thisExpr.AsKeywordExpression().IsNil())
 }
 
 func TestDecodeSourceFile_EmptyModuleBlock(t *testing.T) {
@@ -376,7 +376,7 @@ func TestDecodeSourceFile_EmptyModuleBlock(t *testing.T) {
 
 	// Navigate: namespace N { } -> ModuleDeclaration -> ModuleBlock
 	mod := decoded.Statements.Nodes()[0].AsModuleDeclaration()
-	assert.Assert(t, mod.Body() != nil)
+	assert.Assert(t, !mod.Body().IsNil())
 	block := mod.Body().AsModuleBlock()
 	// Statements must be non-nil even when empty, otherwise the printer panics
 	assert.Assert(t, block.Statements() != nil)
@@ -397,7 +397,7 @@ func TestDecodeSourceFile_EmptyBlockAndParams(t *testing.T) {
 	funcDecl := decoded.Statements.Nodes()[0].AsFunctionDeclaration()
 	assert.Assert(t, funcDecl.Parameters() != nil, "FunctionDeclaration.Parameters must be non-nil for foo()")
 	assert.Equal(t, len(funcDecl.Parameters().Nodes()), 0)
-	assert.Assert(t, funcDecl.Body() != nil)
+	assert.Assert(t, !funcDecl.Body().IsNil())
 	block := funcDecl.Body().AsBlock()
 	assert.Assert(t, block.Statements() != nil, "Block.Statements must be non-nil for empty blocks")
 	assert.Equal(t, len(block.Statements().Nodes()), 0)
@@ -418,7 +418,7 @@ func TestDecodeSourceFile_ArrowFunctionEmptyParams(t *testing.T) {
 	arrow := decl.Initializer().AsArrowFunction()
 	assert.Assert(t, arrow.Parameters() != nil, "ArrowFunction.Parameters must be non-nil for () => {}")
 	assert.Equal(t, len(arrow.Parameters().Nodes()), 0)
-	assert.Assert(t, arrow.Body() != nil)
+	assert.Assert(t, !arrow.Body().IsNil())
 	block := arrow.Body().AsBlock()
 	assert.Assert(t, block.Statements() != nil, "Block.Statements must be non-nil for empty body")
 	assert.Equal(t, len(block.Statements().Nodes()), 0)

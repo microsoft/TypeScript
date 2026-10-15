@@ -90,11 +90,11 @@ func propagateEraseableSyntaxListSubtreeFacts(children *TypeArgumentList) Subtre
 	return core.IfElse(children != nil, SubtreeContainsTypeScript, SubtreeFactsNone)
 }
 
-func propagateEraseableSyntaxSubtreeFacts(child *TypeNode) SubtreeFacts {
-	return core.IfElse(child != nil, SubtreeContainsTypeScript, SubtreeFactsNone)
+func propagateEraseableSyntaxSubtreeFacts(child TypeNode) SubtreeFacts {
+	return core.IfElse(!child.IsNil(), SubtreeContainsTypeScript, SubtreeFactsNone)
 }
 
-func propagateObjectBindingElementSubtreeFacts(child *BindingElementNode) SubtreeFacts {
+func propagateObjectBindingElementSubtreeFacts(child BindingElementNode) SubtreeFacts {
 	facts := propagateSubtreeFacts(child)
 	if facts&SubtreeContainsRestOrSpread != 0 {
 		facts &^= SubtreeContainsRestOrSpread
@@ -103,18 +103,18 @@ func propagateObjectBindingElementSubtreeFacts(child *BindingElementNode) Subtre
 	return facts
 }
 
-func propagateBindingElementSubtreeFacts(child *BindingElementNode) SubtreeFacts {
+func propagateBindingElementSubtreeFacts(child BindingElementNode) SubtreeFacts {
 	return propagateSubtreeFacts(child) & ^SubtreeContainsRestOrSpread
 }
 
-func propagateSubtreeFacts(child *Node) SubtreeFacts {
-	if child == nil {
+func propagateSubtreeFacts(child Node) SubtreeFacts {
+	if child.IsNil() {
 		return SubtreeFactsNone
 	}
 	return child.propagateSubtreeFacts()
 }
 
-func propagateNodeListSubtreeFacts(children *NodeList, propagate func(*Node) SubtreeFacts) SubtreeFacts {
+func propagateNodeListSubtreeFacts(children *NodeList, propagate func(Node) SubtreeFacts) SubtreeFacts {
 	if children == nil {
 		return SubtreeFactsNone
 	}

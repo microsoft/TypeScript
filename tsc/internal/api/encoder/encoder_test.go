@@ -133,7 +133,7 @@ func TestBuildNodeIndexTableMatchesEncode(t *testing.T) {
 
 	// GetIndex on both tables should agree for every non-nil node
 	for i, node := range encodeTable.Nodes {
-		if node == nil {
+		if node.IsNil() {
 			continue
 		}
 		encIdx := encodeTable.GetIndex(node)

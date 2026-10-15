@@ -13,7 +13,7 @@ type chainedTransformer struct {
 	components []*Transformer
 }
 
-func (ch *chainedTransformer) visit(node *ast.Node) *ast.Node {
+func (ch *chainedTransformer) visit(node ast.Node) ast.Node {
 	if node.Kind() != ast.KindSourceFile {
 		panic("Chained transform passed non-sourcefile initial node")
 	}

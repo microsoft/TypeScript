@@ -96,7 +96,7 @@ func (e *symbolExtractor) getModuleIDForSymbol(symbol *ast.Symbol) (ModuleID, bo
 	// If fileName is set, this is a source file that may need realpath normalization
 	if fileName != "" && e.realpath != nil {
 		decl := ast.GetNonAugmentationDeclaration(symbol)
-		if decl != nil && decl.Kind() == ast.KindSourceFile {
+		if !decl.IsNil() && decl.Kind() == ast.KindSourceFile {
 			return e.getModuleID(decl.AsSourceFile()), true
 		}
 	}
@@ -125,7 +125,7 @@ func (e *exportExtractor) extractFromFile(file *ast.SourceFile) []*Export {
 	return nil
 }
 
-func isNonPatternAmbientModuleDeclaration(file *ast.SourceFile, decl *ast.ModuleDeclaration) bool {
+func isNonPatternAmbientModuleDeclaration(file *ast.SourceFile, decl ast.ModuleDeclaration) bool {
 	for _, module := range file.PatternAmbientModules {
 		if module.Symbol == decl.Symbol() {
 			return false
@@ -135,10 +135,10 @@ func isNonPatternAmbientModuleDeclaration(file *ast.SourceFile, decl *ast.Module
 }
 
 func (e *exportExtractor) extractFromModule(file *ast.SourceFile) []*Export {
-	moduleAugmentations := core.MapNonNil(file.ModuleAugmentations, func(name *ast.ModuleName) *ast.ModuleDeclaration {
+	moduleAugmentations := core.MapNonNil(file.ModuleAugmentations, func(name ast.ModuleName) ast.ModuleDeclaration {
 		decl := name.Parent()
 		if ast.IsGlobalScopeAugmentation(decl) {
-			return nil
+			return ast.ModuleDeclaration{}
 		}
 		return decl.AsModuleDeclaration()
 	})
@@ -175,7 +175,7 @@ func (e *exportExtractor) extractFromModule(file *ast.SourceFile) []*Export {
 	return exports
 }
 
-func (e *exportExtractor) extractFromModuleDeclaration(decl *ast.ModuleDeclaration, file *ast.SourceFile, moduleID ModuleID, moduleFileName tspath.RootedFilePath, exports *[]*Export) {
+func (e *exportExtractor) extractFromModuleDeclaration(decl ast.ModuleDeclaration, file *ast.SourceFile, moduleID ModuleID, moduleFileName tspath.RootedFilePath, exports *[]*Export) {
 	for name, symbol := range decl.Symbol().Exports() {
 		e.extractFromSymbol(name, symbol, moduleID, moduleFileName, file, exports)
 	}
@@ -287,7 +287,7 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 	if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		targetSymbol = e.tryResolveSymbol(symbol, syntax, checkerLease)
 		if targetSymbol != nil {
-			var decl *ast.Node
+			var decl ast.Node
 			if len(targetSymbol.Declarations()) > 0 {
 				decl = targetSymbol.Declarations()[0]
 			} else if targetSymbol.CheckFlags()&ast.CheckFlagsMapped != 0 {
@@ -295,18 +295,18 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 					decl = mappedDecl.Declarations()[0]
 				}
 			}
-			if decl == nil {
+			if decl.IsNil() {
 				// !!! consider GetImmediateAliasedSymbol to go as far as we can
 				decl = symbol.Declarations()[0]
 			}
-			if decl == nil {
+			if decl.IsNil() {
 				panic("no declaration for aliased symbol")
 			}
 
 			parent := targetSymbol.Parent()
 			if checker := checkerLease.TryChecker(); checker != nil {
 				export.Flags = checker.GetSymbolFlags(targetSymbol)
-				export.IsTypeOnly = checker.GetTypeOnlyAliasDeclaration(symbol) != nil
+				export.IsTypeOnly = !checker.GetTypeOnlyAliasDeclaration(symbol).IsNil()
 				parent = checker.GetMergedSymbol(parent)
 			} else {
 				export.Flags = targetSymbol.Flags()
@@ -373,12 +373,12 @@ func (e *symbolExtractor) tryResolveSymbol(symbol *ast.Symbol, syntax ExportSynt
 		return symbol
 	}
 
-	var loc *ast.Node
+	var loc ast.Node
 	var name string
 	switch syntax {
 	case ExportSyntaxNamed:
 		decl := ast.GetDeclarationOfKind(symbol, ast.KindExportSpecifier)
-		if decl.Parent().Parent().AsExportDeclaration().ModuleSpecifier() == nil {
+		if decl.Parent().Parent().AsExportDeclaration().ModuleSpecifier().IsNil() {
 			if n := core.FirstNonZero(decl.Name(), decl.PropertyName()); n.Kind() == ast.KindIdentifier {
 				loc = n
 				name = n.Text()
@@ -398,7 +398,7 @@ func (e *symbolExtractor) tryResolveSymbol(symbol *ast.Symbol, syntax ExportSynt
 		}
 	}
 
-	if loc != nil {
+	if !loc.IsNil() {
 		local := e.localNameResolver.Resolve(loc, name, ast.SymbolFlagsAll, nil, false, false)
 		if local != nil && !ast.IsNonLocalAlias(local, ast.SymbolFlagsNone) {
 			return local

@@ -14,7 +14,7 @@ import (
 // preservation.
 // The returned text is the printed source, and positioned is the node with
 // concrete source positions assigned to it and all descendants.
-func PrintAndPositionNode(factory *ast.NodeFactory, node *ast.Node, sourceFile *ast.SourceFile, newLine string, indentSize int, emitContext *EmitContext) (text string, positioned *ast.Node) {
+func PrintAndPositionNode(factory *ast.NodeFactory, node ast.Node, sourceFile *ast.SourceFile, newLine string, indentSize int, emitContext *EmitContext) (text string, positioned ast.Node) {
 	writer := NewChangeTrackerWriter(newLine, indentSize)
 	NewPrinter(
 		PrinterOptions{
@@ -36,10 +36,10 @@ func PrintAndPositionNode(factory *ast.NodeFactory, node *ast.Node, sourceFile *
 // CreateSyntheticSourceFile wraps a positioned node in a synthetic source file
 // suitable for use with the formatter. The node must already have valid source
 // positions assigned (e.g. via PrintAndPositionNode or AssignPositionsToNode).
-func CreateSyntheticSourceFile(factory *ast.NodeFactory, node *ast.Node, text string, parseOptions ast.SourceFileParseOptions) *ast.SourceFile {
+func CreateSyntheticSourceFile(factory *ast.NodeFactory, node ast.Node, text string, parseOptions ast.SourceFileParseOptions) *ast.SourceFile {
 	eof := factory.NewToken(ast.KindEndOfFile)
 	eof.SetLoc(core.NewTextRange(len(text), len(text)))
-	statements := factory.NewNodeList([]*ast.Node{node})
+	statements := factory.NewNodeList([]ast.Node{node})
 	statements.SetLoc(core.NewTextRange(node.Pos(), node.End()))
 	syntheticFile := factory.NewSourceFile(
 		parseOptions,

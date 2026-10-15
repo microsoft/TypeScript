@@ -29,8 +29,8 @@ func (l *LanguageService) ProvideCodeLenses(ctx context.Context, documentURI lsp
 	for _, projection := range projections {
 		// Keeps track of the last symbol to avoid duplicating code lenses across overloads.
 		var lastSymbol *ast.Symbol
-		var visit func(node *ast.Node) bool
-		visit = func(node *ast.Node) bool {
+		var visit func(node ast.Node) bool
+		visit = func(node ast.Node) bool {
 			if ctx.Err() != nil {
 				return true
 			}
@@ -162,10 +162,10 @@ func (l *LanguageService) ResolveCodeLens(ctx context.Context, codeLens *lsproto
 	return codeLens, nil
 }
 
-func (l *LanguageService) newCodeLensForNode(fileUri lsproto.DocumentUri, file *ast.SourceFile, node *ast.Node, kind lsproto.CodeLensKind) *lsproto.CodeLens {
+func (l *LanguageService) newCodeLensForNode(fileUri lsproto.DocumentUri, file *ast.SourceFile, node ast.Node, kind lsproto.CodeLensKind) *lsproto.CodeLens {
 	nodeForRange := node
 	nodeName := node.Name()
-	if nodeName != nil {
+	if !nodeName.IsNil() {
 		nodeForRange = nodeName
 	}
 	pos := scanner.SkipTrivia(file.Text(), nodeForRange.Pos())
@@ -185,7 +185,7 @@ func (l *LanguageService) newCodeLensForNode(fileUri lsproto.DocumentUri, file *
 	}
 }
 
-func isValidImplementationsCodeLensNode(node *ast.Node, userPrefs lsutil.CodeLensUserPreferences) bool {
+func isValidImplementationsCodeLensNode(node ast.Node, userPrefs lsutil.CodeLensUserPreferences) bool {
 	switch node.Kind() {
 	// Always show on interfaces
 	case ast.KindInterfaceDeclaration:
@@ -212,7 +212,7 @@ func isValidImplementationsCodeLensNode(node *ast.Node, userPrefs lsutil.CodeLen
 	return false
 }
 
-func isValidReferenceLensNode(node *ast.Node, userPrefs lsutil.CodeLensUserPreferences) bool {
+func isValidReferenceLensNode(node ast.Node, userPrefs lsutil.CodeLensUserPreferences) bool {
 	switch node.Kind() {
 	case ast.KindFunctionDeclaration:
 		if userPrefs.ReferencesCodeLensShowOnAllFunctions.IsTrue() {

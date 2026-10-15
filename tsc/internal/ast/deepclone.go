@@ -6,7 +6,7 @@ import "github.com/microsoft/TypeScript/tsc/internal/core"
 func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 	var visitor *NodeVisitor
 	visitor = NewNodeVisitor(
-		func(node *Node) *Node {
+		func(node Node) Node {
 			visited := visitor.VisitEachChild(node)
 			if visited != node {
 				if syntheticLocation {
@@ -68,12 +68,12 @@ func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 	return visitor
 }
 
-func (f *NodeFactory) DeepCloneNode(node *Node) *Node {
+func (f *NodeFactory) DeepCloneNode(node Node) Node {
 	return getDeepCloneVisitor(f, true /*syntheticLocation*/).VisitNode(node)
 }
 
-func (f *NodeFactory) DeepCloneReparse(node *Node) *Node {
-	if node != nil {
+func (f *NodeFactory) DeepCloneReparse(node Node) Node {
+	if !node.IsNil() {
 		node = getDeepCloneVisitor(f, false /*syntheticLocation*/).VisitNode(node)
 		SetParentInChildren(node)
 		node.SetFlags(node.Flags() | NodeFlagsReparsed)

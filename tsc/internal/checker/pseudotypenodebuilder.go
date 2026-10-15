@@ -12,7 +12,7 @@ import (
 // is PseudoTypeInferred, it reports any error nodes and then serializes from the checker's type.
 // This avoids incorrect type output when PseudoTypeInferred would derive the type from the
 // original declaration expression in an instantiated context.
-func (b *NodeBuilderImpl) pseudoTypeToNodeWithCheckerFallback(t *pseudochecker.PseudoType, checkerType *Type) *ast.Node {
+func (b *NodeBuilderImpl) pseudoTypeToNodeWithCheckerFallback(t *pseudochecker.PseudoType, checkerType *Type) ast.Node {
 	if t.Kind == pseudochecker.PseudoTypeKindInferred {
 		if !b.ctx.suppressReportInferenceFallback {
 			if errorNodes := t.AsPseudoTypeInferred().ErrorNodes; len(errorNodes) > 0 {
@@ -45,7 +45,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNodeWithCheckerFallback(t *pseudochecker.P
 }
 
 // Maps a pseudochecker's pseudotypes into ast nodes and reports any inference fallback errors the pseudotype structure implies
-func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Node {
+func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) ast.Node {
 	debug.Assert(t != nil, "Attempted to serialize nil pseudotype")
 	switch t.Kind {
 	case pseudochecker.PseudoTypeKindDirect:
@@ -111,12 +111,12 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 			return b.pseudoTypeToNode(d.RegularType)
 		}
 	case pseudochecker.PseudoTypeKindUnion:
-		var res []*ast.Node
+		var res []ast.Node
 		var hasElidedType bool
 		var hasUndefined bool
 		members := t.AsPseudoTypeUnion().Types
-		var appendTypeNode func(node *ast.Node)
-		appendTypeNode = func(node *ast.Node) {
+		var appendTypeNode func(node ast.Node)
+		appendTypeNode = func(node ast.Node) {
 			if ast.IsUnionTypeNode(node) {
 				for _, node := range node.AsUnionTypeNode().Types().Nodes() {
 					appendTypeNode(node)
@@ -182,7 +182,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		defer cleanup()
 		var typeParams *ast.NodeList
 		if len(d.TypeParameters) > 0 {
-			res := make([]*ast.Node, 0, len(d.TypeParameters))
+			res := make([]ast.Node, 0, len(d.TypeParameters))
 			for _, tp := range d.TypeParameters {
 				res = append(res, b.reuseNode(tp.AsNode()))
 			}
@@ -192,7 +192,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		returnType := b.pseudoTypeToNode(d.ReturnType)
 		return b.f.NewFunctionTypeNode(typeParams, params, returnType)
 	case pseudochecker.PseudoTypeKindTuple:
-		var res []*ast.Node
+		var res []ast.Node
 		elements := t.AsPseudoTypeTuple().Elements
 		for _, e := range elements {
 			res = append(res, b.pseudoTypeToNode(e))
@@ -216,7 +216,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		// be from across files). This can't *really* happen in any cases ID doesn't already error on, though.
 		// Just something to keep in mind if the ID checker keeps growing.
 		isConst := b.ch.isConstContext(elements[0].Name.Parent().Parent())
-		newElements := make([]*ast.Node, 0, len(elements))
+		newElements := make([]ast.Node, 0, len(elements))
 
 		// Member types are serialized within an object type literal, so set the
 		// corresponding flag to mirror createTypeNodeFromObjectType. This ensures
@@ -227,7 +227,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		for _, e := range elements {
 			var modifiers *ast.ModifierList
 			if isConst || (e.Kind == pseudochecker.PseudoObjectElementKindPropertyAssignment && e.AsPseudoPropertyAssignment().Readonly) {
-				modifiers = b.f.NewModifierList([]*ast.Node{b.f.NewModifier(ast.KindReadonlyKeyword)})
+				modifiers = b.f.NewModifierList([]ast.Node{b.f.NewModifier(ast.KindReadonlyKeyword)})
 			}
 			var cleanup func()
 			if e.Kind != pseudochecker.PseudoObjectElementKindPropertyAssignment {
@@ -235,13 +235,13 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 				expandedParams := b.ch.getExpandedParameters(signature, true /*skipUnionExpanding*/)[0]
 				cleanup = b.enterNewScope(e.Signature(), expandedParams, signature.TypeParameters(), signature.parameters, signature.mapper)
 			}
-			var newProp *ast.Node
+			var newProp ast.Node
 			switch e.Kind {
 			case pseudochecker.PseudoObjectElementKindMethod:
 				d := e.AsPseudoObjectMethod()
 				var typeParams *ast.NodeList
 				if len(d.TypeParameters) > 0 {
-					res := make([]*ast.Node, 0, len(d.TypeParameters))
+					res := make([]ast.Node, 0, len(d.TypeParameters))
 					for _, tp := range d.TypeParameters {
 						res = append(res, b.reuseNode(tp.AsNode()))
 					}
@@ -251,20 +251,20 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 					newProp = b.f.NewPropertySignatureDeclaration(
 						modifiers,
 						b.reuseName(e.Name, false /*isMethod*/),
-						nil,
+						ast.Node{},
 						b.f.NewFunctionTypeNode(
 							typeParams,
 							b.pseudoParametersToNodeList(d.Parameters),
 							b.pseudoTypeToNode(d.ReturnType),
 						),
-						nil,
+						ast.Node{},
 					)
 					break
 				}
 				newProp = b.f.NewMethodSignatureDeclaration(
 					modifiers,
 					b.reuseName(e.Name, true /*isMethod*/),
-					nil,
+					ast.Node{},
 					typeParams,
 					b.pseudoParametersToNodeList(d.Parameters),
 					b.pseudoTypeToNode(d.ReturnType),
@@ -274,9 +274,9 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 				newProp = b.f.NewPropertySignatureDeclaration(
 					modifiers,
 					b.reuseName(e.Name, false /*isMethod*/),
-					nil,
+					ast.Node{},
 					b.pseudoTypeToNode(d.Type),
-					nil,
+					ast.Node{},
 				)
 			case pseudochecker.PseudoObjectElementKindSetAccessor:
 				d := e.AsPseudoSetAccessor()
@@ -284,10 +284,10 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 					nil,
 					b.reuseName(e.Name, false /*isMethod*/),
 					nil,
-					b.f.NewNodeList([]*ast.Node{b.pseudoParameterToNode(d.Parameter)}),
-					nil,
-					nil,
-					nil,
+					b.f.NewNodeList([]ast.Node{b.pseudoParameterToNode(d.Parameter)}),
+					ast.Node{},
+					ast.Node{},
+					ast.Node{},
 				)
 			case pseudochecker.PseudoObjectElementKindGetAccessor:
 				d := e.AsPseudoGetAccessor()
@@ -297,8 +297,8 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 					nil,
 					nil,
 					b.pseudoTypeToNode(d.Type),
-					nil,
-					nil,
+					ast.Node{},
+					ast.Node{},
 				)
 			}
 			if b.ctx.enclosingFile == ast.GetSourceFileOfNode(e.Name) {
@@ -320,21 +320,21 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		return b.f.NewLiteralTypeNode(b.reuseNode(source))
 	default:
 		debug.AssertNever(t.Kind, "Unhandled pseudotype kind in pseudotype node construction")
-		return nil
+		return ast.Node{}
 	}
 }
 
 func (b *NodeBuilderImpl) pseudoParametersToNodeList(params []*pseudochecker.PseudoParameter) *ast.NodeList {
-	res := make([]*ast.Node, 0, len(params))
+	res := make([]ast.Node, 0, len(params))
 	for _, p := range params {
 		res = append(res, b.pseudoParameterToNode(p))
 	}
 	return b.f.NewNodeList(res)
 }
 
-func (b *NodeBuilderImpl) pseudoParameterToNode(p *pseudochecker.PseudoParameter) *ast.Node {
-	var dotDotDot *ast.Node
-	var questionMark *ast.Node
+func (b *NodeBuilderImpl) pseudoParameterToNode(p *pseudochecker.PseudoParameter) ast.Node {
+	var dotDotDot ast.Node
+	var questionMark ast.Node
 	if p.Rest {
 		dotDotDot = b.f.NewToken(ast.KindDotDotDotToken)
 	}
@@ -348,7 +348,7 @@ func (b *NodeBuilderImpl) pseudoParameterToNode(p *pseudochecker.PseudoParameter
 		b.parameterToParameterDeclarationName(p.Name.Parent().Symbol(), p.Name.Parent()),
 		questionMark,
 		b.pseudoTypeToNode(p.Type),
-		nil,
+		ast.Node{},
 	)
 	if original := p.Name.Parent(); ast.IsParameterDeclaration(original) {
 		b.setCommentRange(parameter, original)
@@ -440,7 +440,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 				// Name lookup failed or returned no result; search target properties
 				// for one whose declaration name node matches the one we have
 				for _, prop := range targetProps {
-					if prop.ValueDeclaration() != nil && prop.ValueDeclaration().Name() == e.Name {
+					if !prop.ValueDeclaration().IsNil() && prop.ValueDeclaration().Name() == e.Name {
 						targetProp = prop
 						break
 					}
@@ -582,7 +582,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 	}
 }
 
-func (b *NodeBuilderImpl) pseudoParametersEquivalentToParameters(params []*pseudochecker.PseudoParameter, targetSig *Signature, reportErrors bool, nonParamErrorLocation *ast.Node) bool {
+func (b *NodeBuilderImpl) pseudoParametersEquivalentToParameters(params []*pseudochecker.PseudoParameter, targetSig *Signature, reportErrors bool, nonParamErrorLocation ast.Node) bool {
 	if targetSig.ThisParameter() != nil && len(params) == 0 {
 		if reportErrors {
 			b.ctx.tracker.ReportInferenceFallback(nonParamErrorLocation) // missing `this` param
@@ -652,7 +652,7 @@ func (b *NodeBuilderImpl) pseudoReturnTypeMatchesPredicate(rt *pseudochecker.Pse
 	}
 	tp := node.AsTypePredicateNode()
 	// Check asserts modifier matches
-	isAsserts := tp.AssertsModifier() != nil
+	isAsserts := !tp.AssertsModifier().IsNil()
 	predicateIsAsserts := predicate.kind == TypePredicateKindAssertsThis || predicate.kind == TypePredicateKindAssertsIdentifier
 	if isAsserts != predicateIsAsserts {
 		return false
@@ -671,7 +671,7 @@ func (b *NodeBuilderImpl) pseudoReturnTypeMatchesPredicate(rt *pseudochecker.Pse
 	}
 	// Check the narrowed type, if any
 	if predicate.t != nil {
-		if tp.Type() == nil {
+		if tp.Type().IsNil() {
 			return false
 		}
 		predicateTypeFromNode := b.ch.getTypeFromTypeNode(tp.Type())
@@ -680,7 +680,7 @@ func (b *NodeBuilderImpl) pseudoReturnTypeMatchesPredicate(rt *pseudochecker.Pse
 				return false
 			}
 		}
-	} else if tp.Type() != nil {
+	} else if !tp.Type().IsNil() {
 		return false
 	}
 	return true

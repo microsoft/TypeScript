@@ -11,7 +11,7 @@ type optionalChainTransformer struct {
 	transformers.Transformer
 }
 
-func (ch *optionalChainTransformer) visit(node *ast.Node) *ast.Node {
+func (ch *optionalChainTransformer) visit(node ast.Node) ast.Node {
 	if node.SubtreeFacts()&ast.SubtreeContainsOptionalChaining == 0 {
 		return node
 	}
@@ -31,7 +31,7 @@ func (ch *optionalChainTransformer) visit(node *ast.Node) *ast.Node {
 	}
 }
 
-func (ch *optionalChainTransformer) visitCallExpression(node *ast.CallExpression, captureThisArg bool) *ast.Node {
+func (ch *optionalChainTransformer) visitCallExpression(node ast.CallExpression, captureThisArg bool) ast.Node {
 	if node.Flags()&ast.NodeFlagsOptionalChain != 0 {
 		// If `node` is an optional chain, then it is the outermost chain of an optional expression.
 		return ch.visitOptionalExpression(node.AsNode(), captureThisArg, false)
@@ -48,13 +48,13 @@ func (ch *optionalChainTransformer) visitCallExpression(node *ast.CallExpression
 				ch.EmitContext().SetOriginal(res, node.AsNode())
 				return res
 			}
-			return ch.Factory().UpdateCallExpression(node, expression, nil /*questionDotToken*/, nil /*typeArguments*/, args, node.Flags())
+			return ch.Factory().UpdateCallExpression(node, expression, ast.Node{} /*questionDotToken*/, nil /*typeArguments*/, args, node.Flags())
 		}
 	}
 	return ch.Visitor().VisitEachChild(node.AsNode())
 }
 
-func (ch *optionalChainTransformer) visitParenthesizedExpression(node *ast.ParenthesizedExpression, captureThisArg bool, isDelete bool) *ast.Node {
+func (ch *optionalChainTransformer) visitParenthesizedExpression(node ast.ParenthesizedExpression, captureThisArg bool, isDelete bool) ast.Node {
 	expr := ch.visitNonOptionalExpression(node.Expression(), captureThisArg, isDelete)
 	if ast.IsSyntheticReferenceExpression(expr) {
 		// `(a.b)` -> { expression `((_a = a).b)`, thisArg: `_a` }
@@ -67,15 +67,15 @@ func (ch *optionalChainTransformer) visitParenthesizedExpression(node *ast.Paren
 	return ch.Factory().UpdateParenthesizedExpression(node, expr)
 }
 
-func (ch *optionalChainTransformer) visitPropertyOrElementAccessExpression(node *ast.Expression, captureThisArg bool, isDelete bool) *ast.Expression {
+func (ch *optionalChainTransformer) visitPropertyOrElementAccessExpression(node ast.Expression, captureThisArg bool, isDelete bool) ast.Expression {
 	if node.Flags()&ast.NodeFlagsOptionalChain != 0 {
 		// If `node` is an optional chain, then it is the outermost chain of an optional expression.
 		return ch.visitOptionalExpression(node.AsNode(), captureThisArg, isDelete)
 	}
 	expression := ch.Visitor().VisitNode(node.Expression())
-	debug.Assert(expression == nil || !ast.IsSyntheticReferenceExpression(expression))
+	debug.Assert(expression.IsNil() || !ast.IsSyntheticReferenceExpression(expression))
 
-	var thisArg *ast.Expression
+	var thisArg ast.Expression
 	if captureThisArg {
 		if !transformers.IsSimpleCopiableExpression(expression) {
 			thisArg = ch.Factory().NewTempVariable()
@@ -88,13 +88,13 @@ func (ch *optionalChainTransformer) visitPropertyOrElementAccessExpression(node 
 
 	if node.Kind() == ast.KindPropertyAccessExpression {
 		p := node.AsPropertyAccessExpression()
-		expression = ch.Factory().UpdatePropertyAccessExpression(p, expression, nil /*questionDotToken*/, ch.Visitor().VisitNode(p.Name()), p.Flags())
+		expression = ch.Factory().UpdatePropertyAccessExpression(p, expression, ast.Node{} /*questionDotToken*/, ch.Visitor().VisitNode(p.Name()), p.Flags())
 	} else {
 		p := node.AsElementAccessExpression()
-		expression = ch.Factory().UpdateElementAccessExpression(p, expression, nil, ch.Visitor().VisitNode(p.AsElementAccessExpression().ArgumentExpression()), p.Flags())
+		expression = ch.Factory().UpdateElementAccessExpression(p, expression, ast.Node{}, ch.Visitor().VisitNode(p.AsElementAccessExpression().ArgumentExpression()), p.Flags())
 	}
 
-	if thisArg != nil {
+	if !thisArg.IsNil() {
 		res := ch.Factory().NewSyntheticReferenceExpression(expression, thisArg)
 		ch.EmitContext().SetOriginal(res, node.AsNode())
 		return res
@@ -102,7 +102,7 @@ func (ch *optionalChainTransformer) visitPropertyOrElementAccessExpression(node 
 	return expression
 }
 
-func (ch *optionalChainTransformer) visitDeleteExpression(node *ast.DeleteExpression) *ast.Node {
+func (ch *optionalChainTransformer) visitDeleteExpression(node ast.DeleteExpression) ast.Node {
 	unwrapped := ast.SkipParentheses(node.Expression())
 	if unwrapped.Flags()&ast.NodeFlagsOptionalChain != 0 {
 		return ch.visitNonOptionalExpression(node.Expression(), false, true)
@@ -110,7 +110,7 @@ func (ch *optionalChainTransformer) visitDeleteExpression(node *ast.DeleteExpres
 	return ch.Visitor().VisitEachChild(node.AsNode())
 }
 
-func (ch *optionalChainTransformer) visitNonOptionalExpression(node *ast.Expression, captureThisArg bool, isDelete bool) *ast.Expression {
+func (ch *optionalChainTransformer) visitNonOptionalExpression(node ast.Expression, captureThisArg bool, isDelete bool) ast.Expression {
 	switch node.Kind() {
 	case ast.KindParenthesizedExpression:
 		return ch.visitParenthesizedExpression(node.AsParenthesizedExpression(), captureThisArg, isDelete)
@@ -124,35 +124,35 @@ func (ch *optionalChainTransformer) visitNonOptionalExpression(node *ast.Express
 }
 
 type flattenResult struct {
-	expression *ast.Expression
-	chain      []*ast.Node
+	expression ast.Expression
+	chain      []ast.Node
 }
 
-func isNonNullChain(node *ast.Node) bool {
+func isNonNullChain(node ast.Node) bool {
 	return ast.IsNonNullExpression(node) && node.Flags()&ast.NodeFlagsOptionalChain != 0
 }
 
-func flattenChain(chain *ast.Node) flattenResult {
+func flattenChain(chain ast.Node) flattenResult {
 	debug.Assert(!isNonNullChain(chain))
-	links := []*ast.Node{chain}
-	for !ast.IsTaggedTemplateExpression(chain) && chain.QuestionDotToken() == nil {
+	links := []ast.Node{chain}
+	for !ast.IsTaggedTemplateExpression(chain) && chain.QuestionDotToken().IsNil() {
 		chain = ast.SkipPartiallyEmittedExpressions(chain.Expression())
 		debug.Assert(!isNonNullChain(chain))
-		links = append([]*ast.Node{chain}, links...)
+		links = append([]ast.Node{chain}, links...)
 	}
 	return flattenResult{chain.Expression(), links}
 }
 
-func isCallChain(node *ast.Node) bool {
+func isCallChain(node ast.Node) bool {
 	return ast.IsCallExpression(node) && node.Flags()&ast.NodeFlagsOptionalChain != 0
 }
 
-func (ch *optionalChainTransformer) visitOptionalExpression(node *ast.Node, captureThisArg bool, isDelete bool) *ast.Node {
+func (ch *optionalChainTransformer) visitOptionalExpression(node ast.Node, captureThisArg bool, isDelete bool) ast.Node {
 	r := flattenChain(node)
 	expression := r.expression
 	chain := r.chain
 	left := ch.visitNonOptionalExpression(ast.SkipPartiallyEmittedExpressions(expression), isCallChain(chain[0]), false)
-	var leftThisArg *ast.Expression
+	var leftThisArg ast.Expression
 	capturedLeft := left
 	if ast.IsSyntheticReferenceExpression(left) {
 		leftThisArg = left.AsSyntheticReferenceExpression().ThisArg()
@@ -165,7 +165,7 @@ func (ch *optionalChainTransformer) visitOptionalExpression(node *ast.Node, capt
 		leftExpression = ch.Factory().NewAssignmentExpression(capturedLeft, leftExpression)
 	}
 	rightExpression := capturedLeft
-	var thisArg *ast.Expression
+	var thisArg ast.Expression
 
 	for i, segment := range chain {
 		switch segment.Kind() {
@@ -180,12 +180,12 @@ func (ch *optionalChainTransformer) visitOptionalExpression(node *ast.Node, capt
 				}
 			}
 			if segment.Kind() == ast.KindElementAccessExpression {
-				rightExpression = ch.Factory().NewElementAccessExpression(rightExpression, nil, ch.Visitor().VisitNode(segment.AsElementAccessExpression().ArgumentExpression()), ast.NodeFlagsNone)
+				rightExpression = ch.Factory().NewElementAccessExpression(rightExpression, ast.Node{}, ch.Visitor().VisitNode(segment.AsElementAccessExpression().ArgumentExpression()), ast.NodeFlagsNone)
 			} else {
-				rightExpression = ch.Factory().NewPropertyAccessExpression(rightExpression, nil, ch.Visitor().VisitNode(segment.AsPropertyAccessExpression().Name()), ast.NodeFlagsNone)
+				rightExpression = ch.Factory().NewPropertyAccessExpression(rightExpression, ast.Node{}, ch.Visitor().VisitNode(segment.AsPropertyAccessExpression().Name()), ast.NodeFlagsNone)
 			}
 		case ast.KindCallExpression:
-			if i == 0 && leftThisArg != nil {
+			if i == 0 && !leftThisArg.IsNil() {
 				if !ch.EmitContext().HasAutoGenerateInfo(leftThisArg) {
 					leftThisArg = leftThisArg.Clone(ch.Factory())
 					ch.EmitContext().AddEmitFlags(leftThisArg, printer.EFNoComments)
@@ -198,7 +198,7 @@ func (ch *optionalChainTransformer) visitOptionalExpression(node *ast.Node, capt
 			} else {
 				rightExpression = ch.Factory().NewCallExpression(
 					rightExpression,
-					nil,
+					ast.Node{},
 					nil,
 					ch.Visitor().VisitNodes(segment.ArgumentList()),
 					ast.NodeFlagsNone,
@@ -208,7 +208,7 @@ func (ch *optionalChainTransformer) visitOptionalExpression(node *ast.Node, capt
 		ch.EmitContext().SetOriginal(rightExpression, segment)
 	}
 
-	var target *ast.Node
+	var target ast.Node
 	if isDelete {
 		target = ch.Factory().NewConditionalExpression(
 			createNotNullCondition(ch.EmitContext(), leftExpression, capturedLeft, true),
@@ -227,7 +227,7 @@ func (ch *optionalChainTransformer) visitOptionalExpression(node *ast.Node, capt
 		)
 	}
 	target.SetLoc(node.Loc())
-	if thisArg != nil {
+	if !thisArg.IsNil() {
 		target = ch.Factory().NewSyntheticReferenceExpression(target, thisArg)
 	}
 	ch.EmitContext().SetOriginal(target, node.AsNode())

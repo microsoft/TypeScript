@@ -9,11 +9,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 )
 
-func (c *Checker) isDeclarationVisible(node *ast.Node) bool {
+func (c *Checker) isDeclarationVisible(node ast.Node) bool {
 	if !ast.IsParseTreeNode(node) {
 		return false
 	}
-	if node == nil {
+	if node.IsNil() {
 		return false
 	}
 
@@ -28,14 +28,14 @@ func (c *Checker) isDeclarationVisible(node *ast.Node) bool {
 	return links.isVisible == core.TSTrue
 }
 
-func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
+func (c *Checker) determineIfDeclarationIsVisible(node ast.Node) bool {
 	switch node.Kind() {
 	case ast.KindJSDocCallbackTag,
 		// ast.KindJSDocEnumTag, // !!! TODO: JSDoc @enum support?
 		ast.KindJSDocTypedefTag:
 		// Top-level jsdoc type aliases are considered exported
 		// First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
-		return node.Parent() != nil && node.Parent().Parent() != nil && node.Parent().Parent().Parent() != nil && ast.IsSourceFile(node.Parent().Parent().Parent())
+		return !node.Parent().IsNil() && !node.Parent().Parent().IsNil() && !node.Parent().Parent().Parent().IsNil() && ast.IsSourceFile(node.Parent().Parent().Parent())
 	case ast.KindBindingElement:
 		return c.isDeclarationVisible(node.Parent().Parent())
 	case ast.KindVariableDeclaration,
@@ -123,7 +123,7 @@ func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
 	// the named binding; it contributes to the symbol's external visibility.
 	case ast.KindExportSpecifier:
 		exportDecl := node.Parent().Parent()
-		if ast.IsExportDeclaration(exportDecl) && exportDecl.AsExportDeclaration().ModuleSpecifier() == nil {
+		if ast.IsExportDeclaration(exportDecl) && exportDecl.AsExportDeclaration().ModuleSpecifier().IsNil() {
 			return c.isDeclarationVisible(exportDecl.Parent())
 		}
 		return false
@@ -133,7 +133,7 @@ func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
 	}
 }
 
-func getMeaningOfEntityNameReference(entityName *ast.Node) ast.SymbolFlags {
+func getMeaningOfEntityNameReference(entityName ast.Node) ast.SymbolFlags {
 	// get symbol of the first identifier of the entityName
 	if entityName.Parent().Kind() == ast.KindTypeQuery ||
 		entityName.Parent().Kind() == ast.KindExpressionWithTypeArguments && !ast.IsPartOfTypeNode(entityName.Parent()) ||
@@ -156,7 +156,7 @@ func getMeaningOfEntityNameReference(entityName *ast.Node) ast.SymbolFlags {
 	return ast.SymbolFlagsType
 }
 
-func (c *Checker) isEntityNameVisible(entityName *ast.Node, enclosingDeclaration *ast.Node, shouldComputeAliasToMakeVisible bool) printer.SymbolAccessibilityResult {
+func (c *Checker) isEntityNameVisible(entityName ast.Node, enclosingDeclaration ast.Node, shouldComputeAliasToMakeVisible bool) printer.SymbolAccessibilityResult {
 	if !ast.IsParseTreeNode(entityName) {
 		return printer.SymbolAccessibilityResult{Accessibility: printer.SymbolAccessibilityNotAccessible}
 	}
@@ -197,17 +197,17 @@ func (c *Checker) isEntityNameVisible(entityName *ast.Node, enclosingDeclaration
 	}
 }
 
-func noopAddVisibleAlias(declaration *ast.Node, aliasingStatement *ast.Node) {}
+func noopAddVisibleAlias(declaration ast.Node, aliasingStatement ast.Node) {}
 
 func (c *Checker) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasToMakeVisible bool) *printer.SymbolAccessibilityResult {
-	var aliasesToMakeVisibleSet map[ast.NodeId]*ast.Node
+	var aliasesToMakeVisibleSet map[ast.NodeId]ast.Node
 
-	var addVisibleAlias func(declaration *ast.Node, aliasingStatement *ast.Node)
+	var addVisibleAlias func(declaration ast.Node, aliasingStatement ast.Node)
 	if shouldComputeAliasToMakeVisible {
-		addVisibleAlias = func(declaration *ast.Node, aliasingStatement *ast.Node) {
+		addVisibleAlias = func(declaration ast.Node, aliasingStatement ast.Node) {
 			c.emitResolverLinks.declarationLinks.Get(declaration).isVisible = core.TSTrue
 			if aliasesToMakeVisibleSet == nil {
-				aliasesToMakeVisibleSet = make(map[ast.NodeId]*ast.Node)
+				aliasesToMakeVisibleSet = make(map[ast.NodeId]ast.Node)
 			}
 			aliasesToMakeVisibleSet[ast.GetNodeId(declaration)] = aliasingStatement
 		}
@@ -223,7 +223,7 @@ func (c *Checker) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasT
 			// Mark the unexported alias as visible if its parent is visible
 			// because these kind of aliases can be used to name types in declaration file
 			anyImportSyntax := getAnyImportSyntax(declaration)
-			if anyImportSyntax != nil &&
+			if !anyImportSyntax.IsNil() &&
 				!ast.HasSyntacticModifier(anyImportSyntax, ast.ModifierFlagsExport) && // import clause without export
 				c.isDeclarationVisible(anyImportSyntax.Parent()) {
 				addVisibleAlias(declaration, anyImportSyntax)
@@ -242,11 +242,11 @@ func (c *Checker) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasT
 				continue
 			}
 			if ast.IsBindingElement(declaration) {
-				if symbol.Flags()&ast.SymbolFlagsAlias != 0 && ast.IsInJSFile(declaration) && declaration.Parent() != nil && declaration.Parent().Parent() != nil && // exported import-like top-level JS require statement
+				if symbol.Flags()&ast.SymbolFlagsAlias != 0 && ast.IsInJSFile(declaration) && !declaration.Parent().IsNil() && !declaration.Parent().Parent().IsNil() && // exported import-like top-level JS require statement
 					ast.IsVariableDeclaration(declaration.Parent().Parent()) &&
-					declaration.Parent().Parent().Parent().Parent() != nil && ast.IsVariableStatement(declaration.Parent().Parent().Parent().Parent()) &&
+					!declaration.Parent().Parent().Parent().Parent().IsNil() && ast.IsVariableStatement(declaration.Parent().Parent().Parent().Parent()) &&
 					!ast.HasSyntacticModifier(declaration.Parent().Parent().Parent().Parent(), ast.ModifierFlagsExport) &&
-					declaration.Parent().Parent().Parent().Parent().Parent() != nil && // check if the thing containing the variable statement is visible (ie, the file)
+					!declaration.Parent().Parent().Parent().Parent().Parent().IsNil() && // check if the thing containing the variable statement is visible (ie, the file)
 					c.isDeclarationVisible(declaration.Parent().Parent().Parent().Parent().Parent()) {
 					addVisibleAlias(declaration, declaration.Parent().Parent().Parent().Parent())
 					continue
@@ -282,7 +282,7 @@ func (c *Checker) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasT
 	}
 }
 
-func (c *Checker) requiresAddingImplicitUndefined(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
+func (c *Checker) requiresAddingImplicitUndefined(declaration ast.Node, symbol *ast.Symbol, enclosingDeclaration ast.Node) bool {
 	if !ast.IsParseTreeNode(declaration) {
 		return false
 	}
@@ -301,14 +301,14 @@ func (c *Checker) requiresAddingImplicitUndefined(declaration *ast.Node, symbol 
 	}
 }
 
-func (c *Checker) requiresAddingImplicitUndefinedWorker(parameter *ast.Node, enclosingDeclaration *ast.Node) bool {
+func (c *Checker) requiresAddingImplicitUndefinedWorker(parameter ast.Node, enclosingDeclaration ast.Node) bool {
 	return (c.isRequiredInitializedParameter(parameter, enclosingDeclaration) || c.isOptionalUninitializedParameterProperty(parameter)) && !c.declaredParameterTypeContainsUndefined(parameter)
 }
 
-func (c *Checker) declaredParameterTypeContainsUndefined(parameter *ast.Node) bool {
+func (c *Checker) declaredParameterTypeContainsUndefined(parameter ast.Node) bool {
 	// typeNode := getNonlocalEffectiveTypeAnnotationNode(parameter); // !!! JSDoc Support
 	typeNode := parameter.Type()
-	if typeNode == nil {
+	if typeNode.IsNil() {
 		return false
 	}
 	t := c.getTypeFromTypeNode(typeNode)
@@ -318,19 +318,19 @@ func (c *Checker) declaredParameterTypeContainsUndefined(parameter *ast.Node) bo
 	return c.isErrorType(t) || c.containsUndefinedType(t)
 }
 
-func (c *Checker) isOptionalUninitializedParameterProperty(parameter *ast.Node) bool {
+func (c *Checker) isOptionalUninitializedParameterProperty(parameter ast.Node) bool {
 	return c.strictNullChecks &&
 		c.isOptionalParameter(parameter) &&
-		( /*isJSDocParameterTag(parameter) ||*/ parameter.Initializer() == nil) && // !!! TODO: JSDoc support
+		( /*isJSDocParameterTag(parameter) ||*/ parameter.Initializer().IsNil()) && // !!! TODO: JSDoc support
 		ast.HasSyntacticModifier(parameter, ast.ModifierFlagsParameterPropertyModifier)
 }
 
-func (c *Checker) isRequiredInitializedParameter(parameter *ast.Node, enclosingDeclaration *ast.Node) bool {
-	if !c.strictNullChecks || c.isOptionalParameter(parameter) || /*isJSDocParameterTag(parameter) ||*/ parameter.Initializer() == nil { // !!! TODO: JSDoc Support
+func (c *Checker) isRequiredInitializedParameter(parameter ast.Node, enclosingDeclaration ast.Node) bool {
+	if !c.strictNullChecks || c.isOptionalParameter(parameter) || /*isJSDocParameterTag(parameter) ||*/ parameter.Initializer().IsNil() { // !!! TODO: JSDoc Support
 		return false
 	}
 	if ast.HasSyntacticModifier(parameter, ast.ModifierFlagsParameterPropertyModifier) {
-		return enclosingDeclaration != nil && ast.IsFunctionLikeDeclaration(enclosingDeclaration)
+		return !enclosingDeclaration.IsNil() && ast.IsFunctionLikeDeclaration(enclosingDeclaration)
 	}
 	return true
 }

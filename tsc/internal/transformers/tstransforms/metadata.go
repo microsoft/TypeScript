@@ -17,8 +17,8 @@ type MetadataTransformer struct {
 	serializer          *metadataSerializer
 	languageVersion     core.ScriptTarget
 	strictNullChecks    bool
-	parent              *ast.Node
-	currentLexicalScope *ast.Node
+	parent              ast.Node
+	currentLexicalScope ast.Node
 }
 
 func NewMetadataTransformer(opt *transformers.TransformOptions) *transformers.Transformer {
@@ -31,7 +31,7 @@ func NewMetadataTransformer(opt *transformers.TransformOptions) *transformers.Tr
 	return tx.NewTransformer(tx.visit, opt.Context)
 }
 
-func (tx *MetadataTransformer) visit(node *ast.Node) *ast.Node {
+func (tx *MetadataTransformer) visit(node ast.Node) ast.Node {
 	if (node.SubtreeFacts() & ast.SubtreeContainsDecorators) == 0 {
 		return node
 	}
@@ -52,10 +52,10 @@ func (tx *MetadataTransformer) visit(node *ast.Node) *ast.Node {
 	case ast.KindGetAccessor:
 		return tx.visitGetAccessor(node.AsGetAccessorDeclaration())
 	case ast.KindSourceFile:
-		tx.parent = nil
-		defer tx.setParent(nil)
+		tx.parent = ast.Node{}
+		defer tx.setParent(ast.Node{})
 		tx.currentLexicalScope = node
-		defer tx.setCurrentLexicalScope(nil)
+		defer tx.setCurrentLexicalScope(ast.Node{})
 		tx.serializer = newMetadataSerializer(tx.resolver, tx.Factory(), tx.EmitContext(), tx.languageVersion, tx.strictNullChecks)
 		updated := tx.Visitor().VisitEachChild(node)
 		tx.EmitContext().AddEmitHelper(updated, tx.EmitContext().ReadEmitHelpers()...)
@@ -70,15 +70,15 @@ func (tx *MetadataTransformer) visit(node *ast.Node) *ast.Node {
 	}
 }
 
-func (tx *MetadataTransformer) setParent(node *ast.Node) {
+func (tx *MetadataTransformer) setParent(node ast.Node) {
 	tx.parent = node
 }
 
-func (tx *MetadataTransformer) setCurrentLexicalScope(node *ast.Node) {
+func (tx *MetadataTransformer) setCurrentLexicalScope(node ast.Node) {
 	tx.currentLexicalScope = node
 }
 
-func (tx *MetadataTransformer) visitObjectLiteralExpression(node *ast.Node) *ast.Node {
+func (tx *MetadataTransformer) visitObjectLiteralExpression(node ast.Node) ast.Node {
 	oldParent := tx.parent
 	tx.parent = node
 	defer tx.setParent(oldParent)
@@ -86,7 +86,7 @@ func (tx *MetadataTransformer) visitObjectLiteralExpression(node *ast.Node) *ast
 	return tx.Visitor().VisitEachChild(node)
 }
 
-func (tx *MetadataTransformer) visitClassExpression(node *ast.ClassExpression) *ast.Node {
+func (tx *MetadataTransformer) visitClassExpression(node ast.ClassExpression) ast.Node {
 	oldParent := tx.parent
 	tx.parent = node.AsNode()
 	defer tx.setParent(oldParent)
@@ -105,7 +105,7 @@ func (tx *MetadataTransformer) visitClassExpression(node *ast.ClassExpression) *
 	)
 }
 
-func (tx *MetadataTransformer) visitClassDeclaration(node *ast.ClassDeclaration) *ast.Node {
+func (tx *MetadataTransformer) visitClassDeclaration(node ast.ClassDeclaration) ast.Node {
 	oldParent := tx.parent
 	tx.parent = node.AsNode()
 	defer tx.setParent(oldParent)
@@ -124,7 +124,7 @@ func (tx *MetadataTransformer) visitClassDeclaration(node *ast.ClassDeclaration)
 	)
 }
 
-func (tx *MetadataTransformer) visitPropertyDeclaration(node *ast.PropertyDeclaration) *ast.Node {
+func (tx *MetadataTransformer) visitPropertyDeclaration(node ast.PropertyDeclaration) ast.Node {
 	if !ast.HasDecorators(node.AsNode()) {
 		return tx.Visitor().VisitEachChild(node.AsNode())
 	}
@@ -140,7 +140,7 @@ func (tx *MetadataTransformer) visitPropertyDeclaration(node *ast.PropertyDeclar
 	)
 }
 
-func (tx *MetadataTransformer) visitMethodDeclaration(node *ast.MethodDeclaration) *ast.Node {
+func (tx *MetadataTransformer) visitMethodDeclaration(node ast.MethodDeclaration) ast.Node {
 	if !ast.HasDecorators(node.AsNode()) && len(getDecoratorsOfParameters(node.AsNode())) == 0 {
 		return tx.Visitor().VisitEachChild(node.AsNode())
 	}
@@ -160,7 +160,7 @@ func (tx *MetadataTransformer) visitMethodDeclaration(node *ast.MethodDeclaratio
 	)
 }
 
-func (tx *MetadataTransformer) visitSetAccessor(node *ast.SetAccessorDeclaration) *ast.Node {
+func (tx *MetadataTransformer) visitSetAccessor(node ast.SetAccessorDeclaration) ast.Node {
 	if !ast.HasDecorators(node.AsNode()) && len(getDecoratorsOfParameters(node.AsNode())) == 0 {
 		return tx.Visitor().VisitEachChild(node.AsNode())
 	}
@@ -178,7 +178,7 @@ func (tx *MetadataTransformer) visitSetAccessor(node *ast.SetAccessorDeclaration
 	)
 }
 
-func (tx *MetadataTransformer) visitGetAccessor(node *ast.GetAccessorDeclaration) *ast.Node {
+func (tx *MetadataTransformer) visitGetAccessor(node ast.GetAccessorDeclaration) ast.Node {
 	if !ast.HasDecorators(node.AsNode()) {
 		return tx.Visitor().VisitEachChild(node.AsNode())
 	}
@@ -196,10 +196,10 @@ func (tx *MetadataTransformer) visitGetAccessor(node *ast.GetAccessorDeclaration
 	)
 }
 
-func (tx *MetadataTransformer) injectClassTypeMetadata(list *ast.ModifierList, node *ast.Node) *ast.ModifierList {
+func (tx *MetadataTransformer) injectClassTypeMetadata(list *ast.ModifierList, node ast.Node) *ast.ModifierList {
 	metadata := tx.getTypeMetadata(node, node)
 	if len(metadata) > 0 {
-		var originalNodes []*ast.Node
+		var originalNodes []ast.Node
 		if list != nil {
 			originalNodes = list.Nodes()
 		}
@@ -210,7 +210,7 @@ func (tx *MetadataTransformer) injectClassTypeMetadata(list *ast.ModifierList, n
 			}
 			return res
 		}
-		var modifiersArray []*ast.Node
+		var modifiersArray []ast.Node
 		if ast.IsModifier(originalNodes[0]) && (originalNodes[0].Kind() == ast.KindDefaultKeyword || originalNodes[0].Kind() == ast.KindExportKeyword) {
 			modifiersArray = append(modifiersArray, originalNodes[0])
 			if len(originalNodes) > 1 && (originalNodes[1].Kind() == ast.KindDefaultKeyword || originalNodes[1].Kind() == ast.KindExportKeyword) {
@@ -230,7 +230,7 @@ func (tx *MetadataTransformer) injectClassTypeMetadata(list *ast.ModifierList, n
 	return list
 }
 
-func (tx *MetadataTransformer) injectClassElementTypeMetadata(list *ast.ModifierList, node *ast.Node, container *ast.Node) *ast.ModifierList {
+func (tx *MetadataTransformer) injectClassElementTypeMetadata(list *ast.ModifierList, node ast.Node, container ast.Node) *ast.ModifierList {
 	if !ast.IsClassLike(container) {
 		return list
 	}
@@ -239,7 +239,7 @@ func (tx *MetadataTransformer) injectClassElementTypeMetadata(list *ast.Modifier
 	}
 	metadata := tx.getTypeMetadata(node, container)
 	if len(metadata) > 0 {
-		var originalNodes []*ast.Node
+		var originalNodes []ast.Node
 		if list != nil {
 			originalNodes = list.Nodes()
 		}
@@ -250,7 +250,7 @@ func (tx *MetadataTransformer) injectClassElementTypeMetadata(list *ast.Modifier
 			}
 			return res
 		}
-		var modifiersArray []*ast.Node
+		var modifiersArray []ast.Node
 		decos := core.Filter(originalNodes, ast.IsDecorator)
 		modifiersArray = append(modifiersArray, decos...)
 		modifiersArray = append(modifiersArray, metadata...)
@@ -268,7 +268,7 @@ func (tx *MetadataTransformer) injectClassElementTypeMetadata(list *ast.Modifier
  *
  * @param node The declaration node.
  */
-func (tx *MetadataTransformer) getTypeMetadata(node *ast.Node, container *ast.Node) []*ast.Node {
+func (tx *MetadataTransformer) getTypeMetadata(node ast.Node, container ast.Node) []ast.Node {
 	// Decorator metadata is not yet supported for ES decorators.
 	if !tx.legacyDecorators {
 		return nil
@@ -279,8 +279,8 @@ func (tx *MetadataTransformer) getTypeMetadata(node *ast.Node, container *ast.No
 	return tx.getOldTypeMetadata(node, container)
 }
 
-func (tx *MetadataTransformer) getOldTypeMetadata(node *ast.Node, container *ast.Node) []*ast.Node {
-	var decorators []*ast.Node
+func (tx *MetadataTransformer) getOldTypeMetadata(node ast.Node, container ast.Node) []ast.Node {
+	var decorators []ast.Node
 	if tx.shouldAddTypeMetadata(node) {
 		typeMetadata := tx.Factory().NewMetadataHelper("design:type", tx.serializer.SerializeTypeOfNode(metadataSerializerContext{currentLexicalScope: tx.currentLexicalScope, currentNameScope: container}, node, container))
 		decorators = append(decorators, tx.Factory().NewDecorator(typeMetadata))
@@ -296,20 +296,20 @@ func (tx *MetadataTransformer) getOldTypeMetadata(node *ast.Node, container *ast
 	return decorators
 }
 
-func (tx *MetadataTransformer) getNewTypeMetadata(node *ast.Node, container *ast.Node) []*ast.Node {
-	var properties []*ast.Node
+func (tx *MetadataTransformer) getNewTypeMetadata(node ast.Node, container ast.Node) []ast.Node {
+	var properties []ast.Node
 	if tx.shouldAddTypeMetadata(node) {
 		properties = append(properties, tx.Factory().NewPropertyAssignment(
 			nil,
 			tx.Factory().NewIdentifier("type"),
-			nil,
-			nil,
+			ast.Node{},
+			ast.Node{},
 			tx.Factory().NewArrowFunction(
 				nil,
 				nil,
-				tx.Factory().NewNodeList([]*ast.Node{}),
-				nil,
-				nil,
+				tx.Factory().NewNodeList([]ast.Node{}),
+				ast.Node{},
+				ast.Node{},
 				tx.Factory().NewToken(ast.KindEqualsGreaterThanToken),
 				tx.serializer.SerializeTypeOfNode(metadataSerializerContext{currentLexicalScope: tx.currentLexicalScope, currentNameScope: container}, node, container),
 			),
@@ -319,14 +319,14 @@ func (tx *MetadataTransformer) getNewTypeMetadata(node *ast.Node, container *ast
 		properties = append(properties, tx.Factory().NewPropertyAssignment(
 			nil,
 			tx.Factory().NewIdentifier("paramTypes"),
-			nil,
-			nil,
+			ast.Node{},
+			ast.Node{},
 			tx.Factory().NewArrowFunction(
 				nil,
 				nil,
-				tx.Factory().NewNodeList([]*ast.Node{}),
-				nil,
-				nil,
+				tx.Factory().NewNodeList([]ast.Node{}),
+				ast.Node{},
+				ast.Node{},
 				tx.Factory().NewToken(ast.KindEqualsGreaterThanToken),
 				tx.serializer.SerializeParameterTypesOfNode(metadataSerializerContext{currentLexicalScope: tx.currentLexicalScope, currentNameScope: container}, node, container),
 			),
@@ -336,14 +336,14 @@ func (tx *MetadataTransformer) getNewTypeMetadata(node *ast.Node, container *ast
 		properties = append(properties, tx.Factory().NewPropertyAssignment(
 			nil,
 			tx.Factory().NewIdentifier("returnType"),
-			nil,
-			nil,
+			ast.Node{},
+			ast.Node{},
 			tx.Factory().NewArrowFunction(
 				nil,
 				nil,
-				tx.Factory().NewNodeList([]*ast.Node{}),
-				nil,
-				nil,
+				tx.Factory().NewNodeList([]ast.Node{}),
+				ast.Node{},
+				ast.Node{},
 				tx.Factory().NewToken(ast.KindEqualsGreaterThanToken),
 				tx.serializer.SerializeReturnTypeOfNode(metadataSerializerContext{currentLexicalScope: tx.currentLexicalScope, currentNameScope: container}, node),
 			),
@@ -351,7 +351,7 @@ func (tx *MetadataTransformer) getNewTypeMetadata(node *ast.Node, container *ast
 	}
 	if len(properties) > 0 {
 		typeInfoMetadata := tx.Factory().NewMetadataHelper("design:typeinfo", tx.Factory().NewObjectLiteralExpression(tx.Factory().NewNodeList(properties), true))
-		return []*ast.Node{tx.Factory().NewDecorator(typeInfoMetadata)}
+		return []ast.Node{tx.Factory().NewDecorator(typeInfoMetadata)}
 	}
 	return nil
 }
@@ -363,7 +363,7 @@ func (tx *MetadataTransformer) getNewTypeMetadata(node *ast.Node, container *ast
 *
 * @param node The node to test.
  */
-func (tx *MetadataTransformer) shouldAddTypeMetadata(node *ast.Node) bool {
+func (tx *MetadataTransformer) shouldAddTypeMetadata(node ast.Node) bool {
 	switch node.Kind() {
 	case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindPropertyDeclaration:
 		return true
@@ -378,7 +378,7 @@ func (tx *MetadataTransformer) shouldAddTypeMetadata(node *ast.Node) bool {
 *
 * @param node The node to test.
  */
-func (tx *MetadataTransformer) shouldAddReturnTypeMetadata(node *ast.Node) bool {
+func (tx *MetadataTransformer) shouldAddReturnTypeMetadata(node ast.Node) bool {
 	return node.Kind() == ast.KindMethodDeclaration
 }
 
@@ -389,10 +389,10 @@ func (tx *MetadataTransformer) shouldAddReturnTypeMetadata(node *ast.Node) bool 
 *
 * @param node The node to test.
  */
-func (tx *MetadataTransformer) shouldAddParamTypesMetadata(node *ast.Node) bool {
+func (tx *MetadataTransformer) shouldAddParamTypesMetadata(node ast.Node) bool {
 	switch node.Kind() {
 	case ast.KindClassDeclaration, ast.KindClassExpression:
-		return ast.GetFirstConstructorWithBody(node) != nil
+		return !ast.GetFirstConstructorWithBody(node).IsNil()
 	case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:
 		return true
 	}

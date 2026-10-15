@@ -264,14 +264,14 @@ type typeWriterWalker struct {
 	program              compiler.ProgramLike
 	hadErrorBaseline     bool
 	currentSourceFile    *ast.SourceFile
-	declarationTextCache map[*ast.Node]string
+	declarationTextCache map[ast.Node]string
 }
 
 func newTypeWriterWalker(program compiler.ProgramLike, hadErrorBaseline bool) *typeWriterWalker {
 	return &typeWriterWalker{
 		program:              program,
 		hadErrorBaseline:     hadErrorBaseline,
-		declarationTextCache: make(map[*ast.Node]string),
+		declarationTextCache: make(map[ast.Node]string),
 	}
 }
 
@@ -301,7 +301,7 @@ func (walker *typeWriterWalker) getSymbols(filename string) []*typeWriterResult 
 	return walker.visitNode(sourceFile.AsNode(), true /*isSymbolWalk*/)
 }
 
-func (walker *typeWriterWalker) visitNode(node *ast.Node, isSymbolWalk bool) []*typeWriterResult {
+func (walker *typeWriterWalker) visitNode(node ast.Node, isSymbolWalk bool) []*typeWriterResult {
 	nodes := forEachASTNode(node)
 	var results []*typeWriterResult
 	for _, n := range nodes {
@@ -316,12 +316,12 @@ func (walker *typeWriterWalker) visitNode(node *ast.Node, isSymbolWalk bool) []*
 	return results
 }
 
-func forEachASTNode(node *ast.Node) []*ast.Node {
-	var result []*ast.Node
-	work := []*ast.Node{node}
+func forEachASTNode(node ast.Node) []ast.Node {
+	var result []ast.Node
+	work := []ast.Node{node}
 
-	var resChildren []*ast.Node
-	addChild := func(child *ast.Node) bool {
+	var resChildren []ast.Node
+	addChild := func(child ast.Node) bool {
 		resChildren = append(resChildren, child)
 		return false
 	}
@@ -343,7 +343,7 @@ func forEachASTNode(node *ast.Node) []*ast.Node {
 	return result
 }
 
-func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk bool) *typeWriterResult {
+func (walker *typeWriterWalker) writeTypeOrSymbol(node ast.Node, isSymbolWalk bool) *typeWriterResult {
 	actualPos := scanner.SkipTrivia(walker.currentSourceFile.Text(), node.Pos())
 	line := scanner.GetECMALineOfPosition(walker.currentSourceFile, actualPos)
 	sourceText := scanner.GetSourceTextOfNodeFromSourceFile(walker.currentSourceFile, node, false /*includeTrivia*/)
@@ -454,7 +454,7 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 	}
 }
 
-func isImportStatementName(node *ast.Node) bool {
+func isImportStatementName(node ast.Node) bool {
 	if ast.IsImportSpecifier(node.Parent()) && (node == node.Parent().Name() || node == node.Parent().PropertyName()) {
 		return true
 	}
@@ -467,7 +467,7 @@ func isImportStatementName(node *ast.Node) bool {
 	return false
 }
 
-func isExportStatementName(node *ast.Node) bool {
+func isExportStatementName(node ast.Node) bool {
 	if ast.IsExportAssignment(node.Parent()) && node == node.Parent().Expression() {
 		return true
 	}
@@ -477,7 +477,7 @@ func isExportStatementName(node *ast.Node) bool {
 	return false
 }
 
-func isIntrinsicJsxTag(node *ast.Node, sourceFile *ast.SourceFile) bool {
+func isIntrinsicJsxTag(node ast.Node, sourceFile *ast.SourceFile) bool {
 	if !(ast.IsJsxOpeningElement(node.Parent()) || ast.IsJsxClosingElement(node.Parent()) || ast.IsJsxSelfClosingElement(node.Parent())) {
 		return false
 	}

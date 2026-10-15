@@ -16,7 +16,7 @@ type taggedTemplateTransformer struct {
 	transformers.Transformer
 	currentSourceFile *ast.SourceFile
 
-	taggedTemplateStringDeclarations []*ast.Node
+	taggedTemplateStringDeclarations []ast.Node
 }
 
 func newTaggedTemplateLiftRestrictionTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
@@ -24,7 +24,7 @@ func newTaggedTemplateLiftRestrictionTransformer(opts *transformers.TransformOpt
 	return tx.NewTransformer(tx.visit, opts.Context)
 }
 
-func (tx *taggedTemplateTransformer) visit(node *ast.Node) *ast.Node {
+func (tx *taggedTemplateTransformer) visit(node ast.Node) ast.Node {
 	if node.SubtreeFacts()&ast.SubtreeContainsInvalidTemplateEscape == 0 {
 		return node
 	}
@@ -38,7 +38,7 @@ func (tx *taggedTemplateTransformer) visit(node *ast.Node) *ast.Node {
 	}
 }
 
-func (tx *taggedTemplateTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
+func (tx *taggedTemplateTransformer) visitSourceFile(node *ast.SourceFile) ast.Node {
 	tx.currentSourceFile = node
 	tx.taggedTemplateStringDeclarations = nil
 	visited := tx.Visitor().VisitEachChild(node.AsNode())
@@ -64,11 +64,11 @@ func (tx *taggedTemplateTransformer) visitSourceFile(node *ast.SourceFile) *ast.
 	return visited
 }
 
-func (tx *taggedTemplateTransformer) visitTaggedTemplateExpression(node *ast.TaggedTemplateExpression) *ast.Node {
+func (tx *taggedTemplateTransformer) visitTaggedTemplateExpression(node ast.TaggedTemplateExpression) ast.Node {
 	return tx.processTaggedTemplateExpression(node)
 }
 
-func (tx *taggedTemplateTransformer) processTaggedTemplateExpression(node *ast.TaggedTemplateExpression) *ast.Node {
+func (tx *taggedTemplateTransformer) processTaggedTemplateExpression(node ast.TaggedTemplateExpression) ast.Node {
 	tag := tx.Visitor().VisitNode(node.Tag())
 	template := node.Template()
 
@@ -79,9 +79,9 @@ func (tx *taggedTemplateTransformer) processTaggedTemplateExpression(node *ast.T
 	f := tx.Factory()
 
 	// Build up the template arguments and the raw and cooked strings for the template.
-	templateArguments := []*ast.Node{nil} // placeholder for the template object
-	var cookedStrings []*ast.Node
-	var rawStrings []*ast.Node
+	templateArguments := []ast.Node{{}} // placeholder for the template object
+	var cookedStrings []ast.Node
+	var rawStrings []ast.Node
 
 	if ast.IsNoSubstitutionTemplateLiteral(template) {
 		cookedStrings = append(cookedStrings, createTemplateCooked(f, template.TemplateLiteralLikeData()))
@@ -110,7 +110,7 @@ func (tx *taggedTemplateTransformer) processTaggedTemplateExpression(node *ast.T
 		tempVar := f.NewUniqueName("templateObject")
 		tx.taggedTemplateStringDeclarations = append(
 			tx.taggedTemplateStringDeclarations,
-			f.NewVariableDeclaration(tempVar, nil, nil, nil),
+			f.NewVariableDeclaration(tempVar, ast.Node{}, ast.Node{}, ast.Node{}),
 		)
 		templateArguments[0] = f.NewLogicalORExpression(
 			tempVar,
@@ -120,19 +120,19 @@ func (tx *taggedTemplateTransformer) processTaggedTemplateExpression(node *ast.T
 		templateArguments[0] = helperCall
 	}
 
-	call := f.NewCallExpression(tag, nil /*questionDotToken*/, nil /*typeArguments*/, f.NewNodeList(templateArguments), ast.NodeFlagsNone)
+	call := f.NewCallExpression(tag, ast.Node{} /*questionDotToken*/, nil /*typeArguments*/, f.NewNodeList(templateArguments), ast.NodeFlagsNone)
 	call.SetLoc(node.Loc())
 	return call
 }
 
-func createTemplateCooked(f *printer.NodeFactory, template *ast.TemplateLiteralLikeNodeBase) *ast.Node {
+func createTemplateCooked(f *printer.NodeFactory, template ast.TemplateLiteralLikeNodeBase) ast.Node {
 	if template.TemplateFlags()&ast.TokenFlagsIsInvalid != 0 {
 		return f.NewVoidZeroExpression()
 	}
 	return f.NewStringLiteral(template.Text(), ast.TokenFlagsNone)
 }
 
-func getRawLiteral(f *printer.NodeFactory, node *ast.Node) *ast.Node {
+func getRawLiteral(f *printer.NodeFactory, node ast.Node) ast.Node {
 	text := node.TemplateLiteralLikeData().RawText()
 	if text == "" {
 		text = scanner.GetSourceTextOfNodeFromSourceFile(ast.GetSourceFileOfNode(node), node, false /*includeTrivia*/)
@@ -158,7 +158,7 @@ func getRawLiteral(f *printer.NodeFactory, node *ast.Node) *ast.Node {
 	return result
 }
 
-func hasInvalidEscape(template *ast.Node) bool {
+func hasInvalidEscape(template ast.Node) bool {
 	if ast.IsNoSubstitutionTemplateLiteral(template) {
 		return template.TemplateLiteralLikeData().TemplateFlags()&ast.TokenFlagsContainsInvalidEscape != 0
 	}

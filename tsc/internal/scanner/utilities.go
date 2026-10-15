@@ -15,22 +15,22 @@ func tokenIsIdentifierOrKeyword(token ast.Kind) bool {
 	return token >= ast.KindIdentifier
 }
 
-func IdentifierToKeywordKind(node *ast.Identifier) ast.Kind {
+func IdentifierToKeywordKind(node ast.Identifier) ast.Kind {
 	return textToKeyword[node.Text()]
 }
 
-func GetSourceTextOfNodeFromSourceFile(sourceFile *ast.SourceFile, node *ast.Node, includeTrivia bool) string {
+func GetSourceTextOfNodeFromSourceFile(sourceFile *ast.SourceFile, node ast.Node, includeTrivia bool) string {
 	return GetTextOfNodeFromSourceText(sourceFile.Text(), node, includeTrivia)
 }
 
-func isJSDocTypeExpressionOrChild(node *ast.Node) bool {
+func isJSDocTypeExpressionOrChild(node ast.Node) bool {
 	if ast.IsJSDocTypeExpression(node) {
 		return true
 	}
 	if node.Flags()&(ast.NodeFlagsJSDoc|ast.NodeFlagsReparsed) == 0 {
 		return false
 	}
-	for current := node; current != nil; current = current.Parent() {
+	for current := node; !current.IsNil(); current = current.Parent() {
 		if ast.IsTypeNode(current) {
 			return true
 		}
@@ -69,7 +69,7 @@ func stripLeadingJSDocComment(line string) string {
 	return strings.TrimLeftFunc(line, stringutil.IsWhiteSpaceLike)
 }
 
-func GetTextOfNodeFromSourceText(sourceText string, node *ast.Node, includeTrivia bool) string {
+func GetTextOfNodeFromSourceText(sourceText string, node ast.Node, includeTrivia bool) string {
 	if ast.NodeIsMissing(node) {
 		return ""
 	}
@@ -99,7 +99,7 @@ func GetTextOfNodeFromSourceText(sourceText string, node *ast.Node, includeTrivi
 	return text
 }
 
-func GetTextOfNode(node *ast.Node) string {
+func GetTextOfNode(node ast.Node) string {
 	return GetSourceTextOfNodeFromSourceFile(ast.GetSourceFileOfNode(node), node, false /*includeTrivia*/)
 }
 
@@ -119,8 +119,8 @@ func GetTextOfJSDocComment(comment *ast.NodeList) string {
 	return strings.TrimRightFunc(b.String(), unicode.IsSpace)
 }
 
-func DeclarationNameToString(name *ast.Node) string {
-	if name == nil || name.Pos() == name.End() {
+func DeclarationNameToString(name ast.Node) string {
+	if name.IsNil() || name.Pos() == name.End() {
 		return "(Missing)"
 	}
 	return GetTextOfNode(name)

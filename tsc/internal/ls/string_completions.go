@@ -58,7 +58,7 @@ func (l *LanguageService) getStringLiteralCompletions(
 	ctx context.Context,
 	file *ast.SourceFile,
 	position int,
-	contextToken *ast.Node,
+	contextToken ast.Node,
 	checker *checker.Checker,
 	compilerOptions *core.CompilerOptions,
 	includeSymbols bool,
@@ -68,7 +68,7 @@ func (l *LanguageService) getStringLiteralCompletions(
 		return l.convertPathCompletions(ctx, completion, file, position)
 	}
 	if IsInString(file, position, contextToken) {
-		if contextToken == nil || !ast.IsStringLiteralLike(contextToken) {
+		if contextToken.IsNil() || !ast.IsStringLiteralLike(contextToken) {
 			return nil
 		}
 		entries := l.getStringLiteralCompletionEntries(
@@ -95,7 +95,7 @@ func (l *LanguageService) getStringLiteralCompletions(
 func (l *LanguageService) convertStringLiteralCompletions(
 	ctx context.Context,
 	completion *stringLiteralCompletions,
-	contextToken *ast.StringLiteralLike,
+	contextToken ast.StringLiteralLike,
 	file *ast.SourceFile,
 	position int,
 	typeChecker *checker.Checker,
@@ -263,7 +263,7 @@ func (l *LanguageService) convertPathCompletions(
 func (l *LanguageService) getStringLiteralCompletionEntries(
 	ctx context.Context,
 	file *ast.SourceFile,
-	node *ast.StringLiteralLike,
+	node ast.StringLiteralLike,
 	position int,
 	typeChecker *checker.Checker,
 ) *stringLiteralCompletions {
@@ -298,7 +298,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 				fromProperties: stringLiteralCompletionsForObjectLiteral(typeChecker, parent.Parent()),
 			}
 		}
-		if ast.FindAncestor(parent.Parent(), ast.IsCallLikeExpression) != nil {
+		if !ast.FindAncestor(parent.Parent(), ast.IsCallLikeExpression).IsNil() {
 			uniques := &collections.Set[string]{}
 			stringLiteralTypes := append(
 				getStringLiteralTypes(typeChecker.GetContextualType(node, checker.ContextFlagsNone), uniques, typeChecker),
@@ -327,7 +327,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		return nil
 	case ast.KindCallExpression, ast.KindNewExpression, ast.KindJsxAttribute:
 		if !isRequireCallArgument(node) && !ast.IsImportCall(parent) {
-			var argumentNode *ast.Node
+			var argumentNode ast.Node
 			if parent.Kind() == ast.KindJsxAttribute {
 				argumentNode = parent.Parent()
 			} else {
@@ -378,17 +378,17 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 	case ast.KindImportSpecifier, ast.KindExportSpecifier:
 		// Complete string aliases in `import { "|" } from` and `export { "|" } from`
 		specifier := parent
-		if propertyName := specifier.PropertyName(); propertyName != nil && node != propertyName {
+		if propertyName := specifier.PropertyName(); !propertyName.IsNil() && node != propertyName {
 			return nil // Don't complete in `export { "..." as "|" } from`
 		}
 		namedImportsOrExports := specifier.Parent()
-		var moduleSpecifier *ast.Node
+		var moduleSpecifier ast.Node
 		if namedImportsOrExports.Kind() == ast.KindNamedImports {
 			moduleSpecifier = namedImportsOrExports.Parent().Parent()
 		} else {
 			moduleSpecifier = namedImportsOrExports.Parent()
 		}
-		if moduleSpecifier == nil {
+		if moduleSpecifier.IsNil() {
 			return nil
 		}
 		moduleSpecifierSymbol := typeChecker.GetSymbolAtLocation(moduleSpecifier)
@@ -396,7 +396,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 			return nil
 		}
 		exports := typeChecker.GetExportsAndPropertiesOfModule(moduleSpecifierSymbol)
-		existing := collections.NewSetFromItems(core.Map(namedImportsOrExports.Elements(), func(n *ast.Node) string {
+		existing := collections.NewSetFromItems(core.Map(namedImportsOrExports.Elements(), func(n ast.Node) string {
 			return n.PropertyNameOrName().Text()
 		})...)
 		uniques := core.Filter(exports, func(e *ast.Symbol) bool {
@@ -415,7 +415,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 			return &stringLiteralCompletions{
 				fromProperties: &completionsFromProperties{
 					symbols: core.Filter(properties, func(s *ast.Symbol) bool {
-						return s.ValueDeclaration() == nil || !ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration())
+						return s.ValueDeclaration().IsNil() || !ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration())
 					}),
 					hasIndexSignature: false,
 				},
@@ -437,7 +437,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 	}
 }
 
-func fromContextualType(contextFlags checker.ContextFlags, node *ast.Node, typeChecker *checker.Checker) *completionsFromTypes {
+func fromContextualType(contextFlags checker.ContextFlags, node ast.Node, typeChecker *checker.Checker) *completionsFromTypes {
 	// Get completion for string literal from string literal type
 	// i.e. var x: "hi" | "hello" = "/*completion position*/"
 	return toCompletionsFromTypes(getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags), nil, typeChecker))
@@ -464,8 +464,8 @@ func toStringLiteralCompletionsFromTypes(types []*checker.StringLiteralType) *st
 }
 
 func fromUnionableLiteralType(
-	grandparent *ast.Node,
-	parent *ast.Node,
+	grandparent ast.Node,
+	parent ast.Node,
 	position int,
 	typeChecker *checker.Checker,
 ) *stringLiteralCompletions {
@@ -477,8 +477,8 @@ func fromUnionableLiteralType(
 		ast.KindNewExpression,
 		ast.KindTaggedTemplateExpression,
 		ast.KindTypeReference:
-		typeArgument := ast.FindAncestor(parent, func(n *ast.Node) bool { return n.Parent() == grandparent })
-		if typeArgument != nil {
+		typeArgument := ast.FindAncestor(parent, func(n ast.Node) bool { return n.Parent() == grandparent })
+		if !typeArgument.IsNil() {
 			t := typeChecker.GetTypeArgumentConstraint(typeArgument)
 			return &stringLiteralCompletions{
 				fromTypes: &completionsFromTypes{
@@ -554,7 +554,7 @@ func fromUnionableLiteralType(
 
 func stringLiteralCompletionsForObjectLiteral(
 	typeChecker *checker.Checker,
-	objectLiteralExpression *ast.ObjectLiteralExpressionNode,
+	objectLiteralExpression ast.ObjectLiteralExpressionNode,
 ) *completionsFromProperties {
 	contextualType := typeChecker.GetContextualType(objectLiteralExpression, checker.ContextFlagsNone)
 	if contextualType == nil {
@@ -578,7 +578,7 @@ func stringLiteralCompletionsForObjectLiteral(
 func stringLiteralCompletionsFromProperties(t *checker.Type, typeChecker *checker.Checker) *completionsFromProperties {
 	return &completionsFromProperties{
 		symbols: core.Filter(typeChecker.GetApparentProperties(t), func(s *ast.Symbol) bool {
-			return !(s.ValueDeclaration() != nil && ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration()))
+			return !(!s.ValueDeclaration().IsNil() && ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration()))
 		}),
 		hasIndexSignature: hasIndexSignature(t, typeChecker),
 	}
@@ -586,7 +586,7 @@ func stringLiteralCompletionsFromProperties(t *checker.Type, typeChecker *checke
 
 func (l *LanguageService) getStringLiteralCompletionsFromModuleNames(
 	file *ast.SourceFile,
-	node *ast.LiteralExpression,
+	node ast.LiteralExpression,
 	program *compiler.Program,
 	checker *checker.Checker,
 ) *stringLiteralCompletions {
@@ -662,7 +662,7 @@ func getDirectoryFragmentRange(text string, textStart int) *core.TextRange {
 
 func (l *LanguageService) getStringLiteralCompletionsFromModuleNamesWorker(
 	file *ast.SourceFile,
-	node *ast.LiteralExpression,
+	node ast.LiteralExpression,
 	program *compiler.Program,
 	checker *checker.Checker,
 ) []moduleCompletionNameAndKind {
@@ -926,7 +926,7 @@ func getAmbientModuleCompletions(fragment string, fragmentDirectory string, type
 
 func getAmbientModuleName(symbol *ast.Symbol) string {
 	declaration := ast.GetNonAugmentationDeclaration(symbol)
-	if declaration != nil && ast.IsModuleWithStringLiteralName(declaration) {
+	if !declaration.IsNil() && ast.IsModuleWithStringLiteralName(declaration) {
 		return declaration.Name().Text()
 	}
 	return stringutil.StripQuotes(symbol.Name())
@@ -1910,7 +1910,7 @@ func getFilenameWithExtensionOption(
 	return name, tspath.TryGetExtensionFromPath(name)
 }
 
-func walkUpParentheses(node *ast.Node) *ast.Node {
+func walkUpParentheses(node ast.Node) ast.Node {
 	switch node.Kind() {
 	case ast.KindParenthesizedType:
 		return ast.WalkUpParenthesizedTypes(node)
@@ -1942,7 +1942,7 @@ func getStringLiteralTypes(t *checker.Type, uniques *collections.Set[string], ty
 	return nil
 }
 
-func getAlreadyUsedTypesInStringLiteralUnion(union *ast.UnionTypeNodeNode, current *ast.LiteralTypeNodeNode) []string {
+func getAlreadyUsedTypesInStringLiteralUnion(union ast.UnionTypeNodeNode, current ast.LiteralTypeNodeNode) []string {
 	typesList := union.AsUnionTypeNode().Types()
 	if typesList == nil {
 		return nil
@@ -1965,7 +1965,7 @@ func hasIndexSignature(t *checker.Type, typeChecker *checker.Checker) bool {
 //
 //	require(""
 //	require("")
-func isRequireCallArgument(node *ast.Node) bool {
+func isRequireCallArgument(node ast.Node) bool {
 	return ast.IsCallExpression(node.Parent()) && len(node.Parent().Arguments()) > 0 && node.Parent().Arguments()[0] == node &&
 		ast.IsIdentifier(node.Parent().Expression()) && node.Parent().Expression().Text() == "require"
 }
@@ -2004,17 +2004,17 @@ func kindModifiersFromExtension(extension string) lsutil.ScriptElementKindModifi
 }
 
 func getStringLiteralCompletionsFromSignature(
-	call *ast.CallLikeExpression,
-	arg *ast.StringLiteralLike,
+	call ast.CallLikeExpression,
+	arg ast.StringLiteralLike,
 	argumentInfo *argumentInfoForCompletions,
 	typeChecker *checker.Checker,
 ) *completionsFromTypes {
 	isNewIdentifier := false
 	uniques := collections.Set[string]{}
-	var editingArgument *ast.Node
+	var editingArgument ast.Node
 	if ast.IsJsxOpeningLikeElement(call) {
 		editingArgument = ast.FindAncestor(arg.Parent(), ast.IsJsxAttribute)
-		if editingArgument == nil {
+		if editingArgument.IsNil() {
 			panic("Expected jsx opening-like element to have a jsx attribute as ancestor.")
 		}
 	} else {
@@ -2052,10 +2052,10 @@ func (l *LanguageService) getStringLiteralCompletionDetails(
 	name string,
 	file *ast.SourceFile,
 	position int,
-	contextToken *ast.Node,
+	contextToken ast.Node,
 	docFormat lsproto.MarkupKind,
 ) *lsproto.CompletionItem {
-	if contextToken == nil || !ast.IsStringLiteralLike(contextToken) {
+	if contextToken.IsNil() || !ast.IsStringLiteralLike(contextToken) {
 		return item
 	}
 	completions := l.getStringLiteralCompletionEntries(
@@ -2074,7 +2074,7 @@ func (l *LanguageService) getStringLiteralCompletionDetails(
 func (l *LanguageService) stringLiteralCompletionDetails(
 	item *lsproto.CompletionItem,
 	name string,
-	location *ast.Node,
+	location ast.Node,
 	position int,
 	completion *stringLiteralCompletions,
 	file *ast.SourceFile,

@@ -9,7 +9,7 @@ type nullishCoalescingTransformer struct {
 	transformers.Transformer
 }
 
-func (ch *nullishCoalescingTransformer) visit(node *ast.Node) *ast.Node {
+func (ch *nullishCoalescingTransformer) visit(node ast.Node) ast.Node {
 	if node.SubtreeFacts()&ast.SubtreeContainsNullishCoalescing == 0 {
 		return node
 	}
@@ -21,7 +21,7 @@ func (ch *nullishCoalescingTransformer) visit(node *ast.Node) *ast.Node {
 	}
 }
 
-func (ch *nullishCoalescingTransformer) visitBinaryExpression(node *ast.BinaryExpression) *ast.Node {
+func (ch *nullishCoalescingTransformer) visitBinaryExpression(node ast.BinaryExpression) ast.Node {
 	switch node.OperatorToken().Kind() {
 	case ast.KindQuestionQuestionToken:
 		left := ch.Visitor().VisitNode(node.Left())

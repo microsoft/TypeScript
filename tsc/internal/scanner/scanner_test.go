@@ -50,25 +50,25 @@ func TestIsJSDocTypeExpressionOrChild(t *testing.T) {
 	t.Parallel()
 
 	var f ast.NodeFactory
-	withFlags := func(node *ast.Node, flags ast.NodeFlags, parent *ast.Node) *ast.Node {
+	withFlags := func(node ast.Node, flags ast.NodeFlags, parent ast.Node) ast.Node {
 		node.SetFlags(flags)
 		node.SetParent(parent)
 		return node
 	}
-	jsDocType := withFlags(f.NewTypeReferenceNode(f.NewIdentifier("T"), nil), ast.NodeFlagsJSDoc, nil)
+	jsDocType := withFlags(f.NewTypeReferenceNode(f.NewIdentifier("T"), nil), ast.NodeFlagsJSDoc, ast.Node{})
 	jsDocTypeChild := withFlags(f.NewIdentifier("T"), ast.NodeFlagsJSDoc, jsDocType)
-	reparsedType := withFlags(f.NewTypeLiteralNode(f.NewNodeList(nil)), ast.NodeFlagsReparsed, nil)
+	reparsedType := withFlags(f.NewTypeLiteralNode(f.NewNodeList(nil)), ast.NodeFlagsReparsed, ast.Node{})
 	reparsedTypeChild := withFlags(f.NewIdentifier("T"), ast.NodeFlagsReparsed, reparsedType)
 	ordinaryType := f.NewTypeReferenceNode(f.NewIdentifier("T"), nil)
-	jsDocTag := withFlags(f.NewJSDocTypeTag(f.NewIdentifier("type"), nil, nil), ast.NodeFlagsJSDoc, nil)
+	jsDocTag := withFlags(f.NewJSDocTypeTag(f.NewIdentifier("type"), ast.Node{}, nil), ast.NodeFlagsJSDoc, ast.Node{})
 	jsDocTagChild := withFlags(f.NewIdentifier("T"), ast.NodeFlagsJSDoc, jsDocTag)
 
 	tests := []struct {
 		name     string
-		node     *ast.Node
+		node     ast.Node
 		expected bool
 	}{
-		{name: "type expression", node: f.NewJSDocTypeExpression(nil), expected: true},
+		{name: "type expression", node: f.NewJSDocTypeExpression(ast.Node{}), expected: true},
 		{name: "JSDoc type", node: jsDocType, expected: true},
 		{name: "JSDoc type child", node: jsDocTypeChild, expected: true},
 		{name: "reparsed type", node: reparsedType, expected: true},

@@ -25,7 +25,7 @@ func tryGetModuleIDAndFileNameOfModuleSymbol(symbol *ast.Symbol) (ModuleID, tspa
 		return ModuleID{}, "", false
 	}
 	decl := ast.GetNonAugmentationDeclaration(symbol)
-	if decl == nil {
+	if decl.IsNil() {
 		return ModuleID{}, "", false
 	}
 	if decl.Kind() == ast.KindSourceFile {
@@ -42,7 +42,7 @@ func getModuleIDAndFileNameOfModuleSymbol(symbol *ast.Symbol) (ModuleID, tspath.
 		panic("symbol is not an external module")
 	}
 	decl := ast.GetNonAugmentationDeclaration(symbol)
-	if decl == nil {
+	if decl.IsNil() {
 		panic("module symbol has no non-augmentation declaration")
 	}
 	if decl.Kind() == ast.KindSourceFile {
@@ -124,14 +124,14 @@ func getDefaultLikeExportNameFromDeclaration(symbol *ast.Symbol) string {
 			continue
 		}
 		// "export { ~ as default }"
-		if ast.IsExportSpecifier(d) && d.Symbol().Flags() == ast.SymbolFlagsAlias && d.PropertyName() != nil {
+		if ast.IsExportSpecifier(d) && d.Symbol().Flags() == ast.SymbolFlagsAlias && !d.PropertyName().IsNil() {
 			if d.PropertyName().Kind() == ast.KindIdentifier {
 				return d.PropertyName().Text()
 			}
 			continue
 		}
 		// GH#52694
-		if name := ast.GetNameOfDeclaration(d); name != nil && name.Kind() == ast.KindIdentifier {
+		if name := ast.GetNameOfDeclaration(d); !name.IsNil() && name.Kind() == ast.KindIdentifier {
 			return name.Text()
 		}
 		if symbol.Parent() != nil && !checker.IsExternalModuleSymbol(symbol.Parent()) {

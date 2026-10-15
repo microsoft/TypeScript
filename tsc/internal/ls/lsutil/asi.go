@@ -6,8 +6,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
-func PositionIsASICandidate(pos int, context *ast.Node, file *ast.SourceFile) bool {
-	contextAncestor := ast.FindAncestorOrQuit(context, func(ancestor *ast.Node) ast.FindAncestorResult {
+func PositionIsASICandidate(pos int, context ast.Node, file *ast.SourceFile) bool {
+	contextAncestor := ast.FindAncestorOrQuit(context, func(ancestor ast.Node) ast.FindAncestorResult {
 		if ancestor.End() != pos {
 			return ast.FindAncestorQuit
 		}
@@ -15,7 +15,7 @@ func PositionIsASICandidate(pos int, context *ast.Node, file *ast.SourceFile) bo
 		return ast.ToFindAncestorResult(SyntaxMayBeASICandidate(ancestor.Kind()))
 	})
 
-	return contextAncestor != nil && NodeIsASICandidate(contextAncestor, file)
+	return !contextAncestor.IsNil() && NodeIsASICandidate(contextAncestor, file)
 }
 
 func SyntaxMayBeASICandidate(kind ast.Kind) bool {
@@ -63,24 +63,24 @@ func SyntaxRequiresTrailingSemicolonOrASI(kind ast.Kind) bool {
 		kind == ast.KindExportAssignment
 }
 
-func NodeIsASICandidate(node *ast.Node, file *ast.SourceFile) bool {
+func NodeIsASICandidate(node ast.Node, file *ast.SourceFile) bool {
 	lastToken := GetLastToken(node, file)
-	if lastToken != nil && lastToken.Kind() == ast.KindSemicolonToken {
+	if !lastToken.IsNil() && lastToken.Kind() == ast.KindSemicolonToken {
 		return false
 	}
 
 	if SyntaxRequiresTrailingCommaOrSemicolonOrASI(node.Kind()) {
-		if lastToken != nil && lastToken.Kind() == ast.KindCommaToken {
+		if !lastToken.IsNil() && lastToken.Kind() == ast.KindCommaToken {
 			return false
 		}
 	} else if SyntaxRequiresTrailingModuleBlockOrSemicolonOrASI(node.Kind()) {
 		lastChild := GetLastChild(node, file)
-		if lastChild != nil && ast.IsModuleBlock(lastChild) {
+		if !lastChild.IsNil() && ast.IsModuleBlock(lastChild) {
 			return false
 		}
 	} else if SyntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(node.Kind()) {
 		lastChild := GetLastChild(node, file)
-		if lastChild != nil && ast.IsFunctionBlock(lastChild) {
+		if !lastChild.IsNil() && ast.IsFunctionBlock(lastChild) {
 			return false
 		}
 	} else if !SyntaxRequiresTrailingSemicolonOrASI(node.Kind()) {
@@ -92,9 +92,9 @@ func NodeIsASICandidate(node *ast.Node, file *ast.SourceFile) bool {
 		return true
 	}
 
-	topNode := ast.FindAncestor(node, func(ancestor *ast.Node) bool { return ancestor.Parent() == nil })
+	topNode := ast.FindAncestor(node, func(ancestor ast.Node) bool { return ancestor.Parent().IsNil() })
 	nextToken := astnav.FindNextToken(node, topNode, file)
-	if nextToken == nil || nextToken.Kind() == ast.KindCloseBraceToken {
+	if nextToken.IsNil() || nextToken.Kind() == ast.KindCloseBraceToken {
 		return true
 	}
 

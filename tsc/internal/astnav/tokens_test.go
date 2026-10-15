@@ -65,7 +65,7 @@ func TestGetTokenAtPosition(t *testing.T) {
 		// This should not panic - it previously panicked with:
 		// "did not expect KindParenthesizedExpression to have KindIdentifier in its trivia"
 		token := astnav.GetTouchingPropertyName(file, position)
-		if token == nil {
+		if token.IsNil() {
 			t.Fatal("Expected to get a token, got nil")
 		}
 
@@ -92,7 +92,7 @@ func TestGetTokenAtPosition(t *testing.T) {
 
 		// This should not panic
 		token := astnav.GetTouchingPropertyName(file, xPos)
-		assert.Assert(t, token != nil, "Expected to get a token")
+		assert.Assert(t, !token.IsNil(), "Expected to get a token")
 	})
 
 	t.Run("pointer equality", func(t *testing.T) {
@@ -259,8 +259,8 @@ type tokenInfo struct {
 	End  int    `json:"end"`
 }
 
-func toTokenInfo(node *ast.Node) *tokenInfo {
-	if node == nil {
+func toTokenInfo(node ast.Node) *tokenInfo {
+	if node.IsNil() {
 		return nil
 	}
 	kind := strings.Replace(node.Kind().String(), "Kind", "", 1)

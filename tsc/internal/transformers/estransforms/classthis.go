@@ -7,7 +7,7 @@ import (
 
 // Gets whether a node is a `static {}` block containing only a single assignment of the static `this` to the `_classThis`
 // (or similar) variable stored in the `classthis` property of the block's `EmitNode`.
-func isClassThisAssignmentBlock(emitContext *printer.EmitContext, node *ast.Node) bool {
+func isClassThisAssignmentBlock(emitContext *printer.EmitContext, node ast.Node) bool {
 	if ast.IsClassStaticBlockDeclaration(node) {
 		n := node.AsClassStaticBlockDeclaration()
 		body := n.Body().AsBlock()

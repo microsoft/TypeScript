@@ -9,13 +9,13 @@ import (
 )
 
 type NodeComparisonWorkItem struct {
-	original *ast.Node
-	copy     *ast.Node
+	original ast.Node
+	copy     ast.Node
 }
 
-func getChildren(node *ast.Node) []*ast.Node {
-	children := []*ast.Node{}
-	node.VisitEachChild(ast.NewNodeVisitor(func(node *ast.Node) *ast.Node {
+func getChildren(node ast.Node) []ast.Node {
+	children := []ast.Node{}
+	node.VisitEachChild(ast.NewNodeVisitor(func(node ast.Node) ast.Node {
 		children = append(children, node)
 		return node
 	}, nil, ast.NodeVisitorHooks{}))

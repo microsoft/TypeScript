@@ -19,7 +19,7 @@ type nodeLinkStore[V any] struct {
 	pages core.PagedLinkStore[V]
 }
 
-func (s *nodeLinkStore[V]) Get(node *ast.Node) *V {
+func (s *nodeLinkStore[V]) Get(node ast.Node) *V {
 	id := uint64(s.gen.GetNodeId(node))
 	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPageLinkCount {
 		return s.pages.Get(id - ast.BlockIdOffset)
@@ -27,11 +27,11 @@ func (s *nodeLinkStore[V]) Get(node *ast.Node) *V {
 	return s.links.Get(id)
 }
 
-func (s *nodeLinkStore[V]) Has(node *ast.Node) bool {
+func (s *nodeLinkStore[V]) Has(node ast.Node) bool {
 	return s.TryGet(node) != nil
 }
 
-func (s *nodeLinkStore[V]) TryGet(node *ast.Node) *V {
+func (s *nodeLinkStore[V]) TryGet(node ast.Node) *V {
 	id := uint64(s.gen.GetNodeId(node))
 	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPageLinkCount {
 		return s.pages.TryGet(id - ast.BlockIdOffset)

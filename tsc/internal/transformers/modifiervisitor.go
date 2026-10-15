@@ -10,10 +10,10 @@ type modifierVisitor struct {
 	AllowedModifiers ast.ModifierFlags
 }
 
-func (v *modifierVisitor) visit(node *ast.Node) *ast.Node {
+func (v *modifierVisitor) visit(node ast.Node) ast.Node {
 	flags := ast.ModifierToFlag(node.Kind())
 	if flags != ast.ModifierFlagsNone && flags&v.AllowedModifiers == 0 {
-		return nil
+		return ast.Node{}
 	}
 	return node
 }

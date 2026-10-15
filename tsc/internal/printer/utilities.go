@@ -196,11 +196,11 @@ func escapeJsxAttributeString(s string, quoteChar QuoteChar) string {
 	return b.String()
 }
 
-func canUseOriginalText(node *ast.LiteralLikeNode, flags getLiteralTextFlags) bool {
+func canUseOriginalText(node ast.LiteralLikeNode, flags getLiteralTextFlags) bool {
 	// A synthetic node has no original text, nor does a node without a parent as we would be unable to find the
 	// containing SourceFile. We also cannot use the original text if the literal was unterminated and the caller has
 	// requested proper termination of unterminated literals
-	if ast.NodeIsSynthesized(node) || node.Parent() == nil || flags&getLiteralTextFlagsTerminateUnterminatedLiterals != 0 && ast.IsUnterminatedLiteral(node) {
+	if ast.NodeIsSynthesized(node) || node.Parent().IsNil() || flags&getLiteralTextFlagsTerminateUnterminatedLiterals != 0 && ast.IsUnterminatedLiteral(node) {
 		return false
 	}
 
@@ -224,7 +224,7 @@ func canUseOriginalText(node *ast.LiteralLikeNode, flags getLiteralTextFlags) bo
 	return node.Kind() != ast.KindBigIntLiteral
 }
 
-func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags getLiteralTextFlags) string {
+func getLiteralText(node ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags getLiteralTextFlags) string {
 	// If we don't need to downlevel and we can reach the original source text using
 	// the node's parent reference, then simply get the text as it was originally written.
 	if sourceFile != nil && canUseOriginalText(node, flags) {
@@ -338,7 +338,7 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 	}
 }
 
-func isNotPrologueDirective(node *ast.Node) bool {
+func isNotPrologueDirective(node ast.Node) bool {
 	return !ast.IsPrologueDirective(node)
 }
 
@@ -419,7 +419,7 @@ func getPreviousNonWhitespacePosition(pos int, stopPos int, sourceFile *ast.Sour
 	return -1
 }
 
-func siblingNodePositionsAreComparable(emitContext *EmitContext, previousNode *ast.Node, nextNode *ast.Node) bool {
+func siblingNodePositionsAreComparable(emitContext *EmitContext, previousNode ast.Node, nextNode ast.Node) bool {
 	if nextNode.Pos() < previousNode.End() {
 		return false
 	}
@@ -427,7 +427,7 @@ func siblingNodePositionsAreComparable(emitContext *EmitContext, previousNode *a
 	previousNode = emitContext.MostOriginal(previousNode)
 	nextNode = emitContext.MostOriginal(nextNode)
 	parent := previousNode.Parent()
-	if parent == nil || parent != nextNode.Parent() {
+	if parent.IsNil() || parent != nextNode.Parent() {
 		return false
 	}
 
@@ -440,9 +440,9 @@ func siblingNodePositionsAreComparable(emitContext *EmitContext, previousNode *a
 	return false
 }
 
-func getContainingNodeArray(node *ast.Node) *ast.NodeList {
+func getContainingNodeArray(node ast.Node) *ast.NodeList {
 	parent := node.Parent()
-	if parent == nil {
+	if parent.IsNil() {
 		return nil
 	}
 
@@ -550,7 +550,7 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 	return nil
 }
 
-func canHaveDecorators(node *ast.Node) bool {
+func canHaveDecorators(node ast.Node) bool {
 	switch node.Kind() {
 	case ast.KindParameter,
 		ast.KindPropertyDeclaration,
@@ -564,9 +564,9 @@ func canHaveDecorators(node *ast.Node) bool {
 	return false
 }
 
-func originalNodesHaveSameParent(emitContext *EmitContext, nodeA *ast.Node, nodeB *ast.Node) bool {
+func originalNodesHaveSameParent(emitContext *EmitContext, nodeA ast.Node, nodeB ast.Node) bool {
 	nodeA = emitContext.MostOriginal(nodeA)
-	if nodeA.Parent() != nil {
+	if !nodeA.Parent().IsNil() {
 		// For performance, do not call `MostOriginal` for `nodeB` if `nodeA` doesn't even
 		// have a parent node.
 		nodeB = emitContext.MostOriginal(nodeB)
@@ -578,8 +578,8 @@ func originalNodesHaveSameParent(emitContext *EmitContext, nodeA *ast.Node, node
 func tryGetEnd(node interface{ End() int }) (int, bool) {
 	// avoid using reflect (via core.IsNil) for common cases
 	switch v := node.(type) {
-	case (*ast.Node):
-		if v != nil {
+	case ast.Node:
+		if !v.IsNil() {
 			return v.End(), true
 		}
 	case (*ast.NodeList):
@@ -611,18 +611,18 @@ func greatestEnd(end int, nodes ...interface{ End() int }) int {
 	return end
 }
 
-func skipSynthesizedParentheses(node *ast.Node) *ast.Node {
+func skipSynthesizedParentheses(node ast.Node) ast.Node {
 	for node.Kind() == ast.KindParenthesizedExpression && ast.NodeIsSynthesized(node) {
 		node = node.Expression()
 	}
 	return node
 }
 
-func isNewExpressionWithoutArguments(node *ast.Node) bool {
+func isNewExpressionWithoutArguments(node ast.Node) bool {
 	return node.Kind() == ast.KindNewExpression && node.ArgumentList() == nil
 }
 
-func isBinaryOperation(node *ast.Node, token ast.Kind) bool {
+func isBinaryOperation(node ast.Node, token ast.Kind) bool {
 	node = ast.SkipPartiallyEmittedExpressions(node)
 	return node.Kind() == ast.KindBinaryExpression &&
 		node.AsBinaryExpression().OperatorToken().Kind() == token
@@ -638,7 +638,7 @@ func mixingBinaryOperatorsRequiresParentheses(a ast.Kind, b ast.Kind) bool {
 	return false
 }
 
-func isImmediatelyInvokedFunctionExpressionOrArrowFunction(node *ast.Expression) bool {
+func isImmediatelyInvokedFunctionExpressionOrArrowFunction(node ast.Expression) bool {
 	node = ast.SkipPartiallyEmittedExpressions(node)
 	if !ast.IsCallExpression(node) {
 		return false

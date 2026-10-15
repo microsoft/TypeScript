@@ -253,13 +253,13 @@ func TestParseStaticSourcePhaseImport(t *testing.T) {
 			assert.Assert(t, ast.IsImportDeclaration(statement))
 
 			declaration := statement.AsImportDeclaration()
-			assert.Assert(t, declaration.ImportClause() != nil)
+			assert.Assert(t, !declaration.ImportClause().IsNil())
 
 			clause := declaration.ImportClause().AsImportClause()
 			assert.Equal(t, clause.PhaseModifier(), test.phaseModifier)
-			assert.Assert(t, clause.Name() != nil)
+			assert.Assert(t, !clause.Name().IsNil())
 			assert.Equal(t, clause.Name().Text(), test.bindingName)
-			assert.Equal(t, declaration.Attributes() != nil, test.hasAttributes)
+			assert.Equal(t, !declaration.Attributes().IsNil(), test.hasAttributes)
 		})
 	}
 }
@@ -298,12 +298,12 @@ func TestParseInvalidStaticSourcePhaseImports(t *testing.T) {
 		assert.Assert(t, ast.IsImportDeclaration(statement))
 
 		declaration := statement.AsImportDeclaration()
-		assert.Assert(t, declaration.ImportClause() != nil)
+		assert.Assert(t, !declaration.ImportClause().IsNil())
 
 		clause := declaration.ImportClause().AsImportClause()
 		assert.Equal(t, clause.PhaseModifier(), ast.KindSourceKeyword)
-		assert.Equal(t, clause.Name() != nil, test.hasName)
-		assert.Equal(t, clause.NamedBindings() != nil, test.hasNamedBindings)
+		assert.Equal(t, !clause.Name().IsNil(), test.hasName)
+		assert.Equal(t, !clause.NamedBindings().IsNil(), test.hasNamedBindings)
 	}
 }
 
@@ -328,7 +328,7 @@ func TestParseDynamicSourcePhaseImport(t *testing.T) {
 	assert.Equal(t, len(call.Arguments()), 2)
 	assert.Equal(t, file.Flags()&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
 	assert.Equal(t, file.Flags()&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
-	assert.Equal(t, file.ExternalModuleIndicator == nil, true)
+	assert.Equal(t, file.ExternalModuleIndicator.IsNil(), true)
 }
 
 func TestParseEscapedDynamicImportPhase(t *testing.T) {
@@ -427,14 +427,14 @@ const value = 0;`
 	}
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
-	var typeAlias *ast.Node
+	var typeAlias ast.Node
 	for _, statement := range file.Statements.Nodes() {
 		if ast.IsJSTypeAliasDeclaration(statement) {
 			typeAlias = statement
 			break
 		}
 	}
-	assert.Assert(t, typeAlias != nil)
+	assert.Assert(t, !typeAlias.IsNil())
 
 	jsDocs := typeAlias.JSDoc(file)
 	assert.Equal(t, len(jsDocs), 1)
@@ -442,12 +442,12 @@ const value = 0;`
 	assert.Equal(t, len(jsDocs[0].AsJSDoc().Tags().Nodes()), 1)
 
 	typeExpression := jsDocs[0].AsJSDoc().Tags().Nodes()[0].TypeExpression()
-	assert.Assert(t, typeExpression != nil)
+	assert.Assert(t, !typeExpression.IsNil())
 
 	expected := strings.Join([]string{"(", `"a" |`, `"b"`, ")[]"}, core.NewLineKindLF.GetNewLineCharacter())
 	tests := []struct {
 		name string
-		node *ast.Node
+		node ast.Node
 	}{
 		{name: "original", node: typeExpression.Type()},
 		{name: "reparsed", node: typeAlias.Type()},
@@ -479,7 +479,7 @@ function foo(options) {}`
 	assert.Equal(t, len(function.Parameters()), 1)
 
 	typeNode := function.Parameters()[0].Type()
-	assert.Assert(t, typeNode != nil)
+	assert.Assert(t, !typeNode.IsNil())
 	assert.Assert(t, typeNode.Flags()&ast.NodeFlagsReparsed != 0)
 
 	expected := strings.Join([]string{"{", "value: string", "}"}, core.NewLineKindLF.GetNewLineCharacter())
@@ -520,7 +520,7 @@ func TestJSDocAugmentsHeritage(t *testing.T) {
 			assert.Assert(t, ast.IsClassDeclaration(classB))
 
 			baseType := ast.GetClassExtendsHeritageElement(classB)
-			assert.Assert(t, baseType != nil)
+			assert.Assert(t, !baseType.IsNil())
 			assert.Equal(t, scanner.GetTextOfNode(baseType.Expression()), test.expression)
 
 			jsDocs := classB.JSDoc(file)

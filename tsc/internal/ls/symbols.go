@@ -92,10 +92,10 @@ func flattenDocumentSymbols(docSymbols []*lsproto.DocumentSymbol, documentURI ls
 	return result
 }
 
-func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, node *ast.Node, file *ast.SourceFile) []*lsproto.DocumentSymbol {
+func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, node ast.Node, file *ast.SourceFile) []*lsproto.DocumentSymbol {
 	var symbols []*lsproto.DocumentSymbol
 	expandoTargets := collections.Set[string]{}
-	addSymbolForNode := func(node *ast.Node, name *ast.Node, children []*lsproto.DocumentSymbol) {
+	addSymbolForNode := func(node ast.Node, name ast.Node, children []*lsproto.DocumentSymbol) {
 		if node.Flags()&ast.NodeFlagsReparsed == 0 {
 			symbol := l.newDocumentSymbol(node, name, children)
 			if symbol != nil {
@@ -103,10 +103,10 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 			}
 		}
 	}
-	var visit func(*ast.Node) bool
-	getSymbolsForChildren := func(node *ast.Node) []*lsproto.DocumentSymbol {
+	var visit func(ast.Node) bool
+	getSymbolsForChildren := func(node ast.Node) []*lsproto.DocumentSymbol {
 		var result []*lsproto.DocumentSymbol
-		if node != nil {
+		if !node.IsNil() {
 			saveExpandoTargets := expandoTargets
 			expandoTargets = collections.Set[string]{}
 			saveSymbols := symbols
@@ -118,8 +118,8 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 		}
 		return result
 	}
-	startNode := func(node *ast.Node, name *ast.Node) func() {
-		if node == nil {
+	startNode := func(node ast.Node, name ast.Node) func() {
+		if node.IsNil() {
 			return func() {}
 		}
 		saveExpandoTargets := expandoTargets
@@ -133,9 +133,9 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 			addSymbolForNode(node, name, result)
 		}
 	}
-	getSymbolsForNode := func(node *ast.Node) []*lsproto.DocumentSymbol {
+	getSymbolsForNode := func(node ast.Node) []*lsproto.DocumentSymbol {
 		var result []*lsproto.DocumentSymbol
-		if node != nil {
+		if !node.IsNil() {
 			saveSymbols := symbols
 			symbols = nil
 			visit(node)
@@ -144,7 +144,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 		}
 		return result
 	}
-	visit = func(node *ast.Node) bool {
+	visit = func(node ast.Node) bool {
 		if ctx.Err() != nil {
 			return true
 		}
@@ -154,7 +154,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 					if tagList := jsdoc.AsJSDoc().Tags(); tagList != nil {
 						for _, tag := range tagList.Nodes() {
 							if ast.IsJSDocTypedefTag(tag) || ast.IsJSDocCallbackTag(tag) {
-								addSymbolForNode(tag, nil /*name*/, nil /*children*/)
+								addSymbolForNode(tag, ast.Node{} /*name*/, nil /*children*/)
 							}
 						}
 					}
@@ -169,14 +169,14 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 			if ast.IsClassLike(node) && ast.GetDeclarationName(node) != "" {
 				expandoTargets.Add(ast.GetDeclarationName(node))
 			}
-			addSymbolForNode(node, nil /*name*/, getSymbolsForChildren(node))
+			addSymbolForNode(node, ast.Node{} /*name*/, getSymbolsForChildren(node))
 		case ast.KindModuleDeclaration:
-			addSymbolForNode(node, nil /*name*/, getSymbolsForChildren(getInteriorModule(node)))
+			addSymbolForNode(node, ast.Node{} /*name*/, getSymbolsForChildren(getInteriorModule(node)))
 		case ast.KindConstructor:
-			addSymbolForNode(node, nil /*name*/, getSymbolsForChildren(node.Body()))
+			addSymbolForNode(node, ast.Node{} /*name*/, getSymbolsForChildren(node.Body()))
 			for _, param := range node.Parameters() {
 				if ast.IsParameterPropertyDeclaration(param, node) {
-					addSymbolForNode(param, nil /*name*/, nil /*children*/)
+					addSymbolForNode(param, ast.Node{} /*name*/, nil /*children*/)
 				}
 			}
 		case ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindArrowFunction, ast.KindMethodDeclaration, ast.KindGetAccessor,
@@ -185,36 +185,36 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 			if declName != "" {
 				expandoTargets.Add(declName)
 			}
-			addSymbolForNode(node, nil /*name*/, getSymbolsForChildren(node.Body()))
+			addSymbolForNode(node, ast.Node{} /*name*/, getSymbolsForChildren(node.Body()))
 		case ast.KindVariableDeclaration, ast.KindBindingElement, ast.KindPropertyAssignment, ast.KindPropertyDeclaration:
 			nodeName := node.Name()
-			if nodeName != nil {
+			if !nodeName.IsNil() {
 				if ast.IsBindingPattern(nodeName) {
 					visit(nodeName)
 				} else {
-					addSymbolForNode(node, nil /*name*/, getSymbolsForChildren(node.Initializer()))
+					addSymbolForNode(node, ast.Node{} /*name*/, getSymbolsForChildren(node.Initializer()))
 				}
 			}
 		case ast.KindSpreadAssignment:
 			addSymbolForNode(node, node.Expression(), nil /*children*/)
 		case ast.KindMethodSignature, ast.KindPropertySignature, ast.KindCallSignature, ast.KindConstructSignature, ast.KindIndexSignature,
 			ast.KindEnumMember, ast.KindShorthandPropertyAssignment, ast.KindTypeAliasDeclaration, ast.KindImportEqualsDeclaration, ast.KindExportSpecifier:
-			addSymbolForNode(node, nil /*name*/, nil /*children*/)
+			addSymbolForNode(node, ast.Node{} /*name*/, nil /*children*/)
 		case ast.KindImportClause:
 			// Handle default import case e.g.:
 			//    import d from "mod";
-			if node.Name() != nil {
+			if !node.Name().IsNil() {
 				addSymbolForNode(node.Name(), node.Name(), nil /*children*/)
 			}
 			// Handle named bindings in imports e.g.:
 			//    import * as NS from "mod";
 			//    import {a, b as B} from "mod";
-			if namedBindings := node.AsImportClause().NamedBindings(); namedBindings != nil {
+			if namedBindings := node.AsImportClause().NamedBindings(); !namedBindings.IsNil() {
 				if namedBindings.Kind() == ast.KindNamespaceImport {
-					addSymbolForNode(namedBindings, nil /*name*/, nil /*children*/)
+					addSymbolForNode(namedBindings, ast.Node{} /*name*/, nil /*children*/)
 				} else {
 					for _, element := range namedBindings.Elements() {
-						addSymbolForNode(element, nil /*name*/, nil /*children*/)
+						addSymbolForNode(element, ast.Node{} /*name*/, nil /*children*/)
 					}
 				}
 			}
@@ -228,10 +228,10 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 				ast.JSDeclarationKindObjectDefinePropertyExports:
 				node.ForEachChild(visit)
 			case ast.JSDeclarationKindProperty, ast.JSDeclarationKindObjectDefinePropertyValue:
-				var target *ast.Expression
-				var targetFunction *ast.Expression
-				var definition *ast.Node
-				var propertyName *ast.Node
+				var target ast.Expression
+				var targetFunction ast.Expression
+				var definition ast.Node
+				var propertyName ast.Node
 				// `A.b = ... ` or `A.prototype.b = ...`
 				if ast.IsBinaryExpression(node) {
 					binaryExpr := node.AsBinaryExpression()
@@ -269,7 +269,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 			}
 		case ast.KindExportAssignment:
 			if node.AsExportAssignment().IsExportEquals() {
-				addSymbolForNode(node, nil /*name*/, getSymbolsForNode(node.Expression()))
+				addSymbolForNode(node, ast.Node{} /*name*/, getSymbolsForNode(node.Expression()))
 			} else {
 				node.ForEachChild(visit)
 			}
@@ -283,21 +283,21 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 }
 
 // Target is `f.prototype`.
-func isPrototypeExpando(target *ast.Node) bool {
+func isPrototypeExpando(target ast.Node) bool {
 	if ast.IsAccessExpression(target) {
 		accessName := ast.GetElementOrPropertyAccessName(target)
-		return accessName != nil && accessName.Text() == "prototype"
+		return !accessName.IsNil() && accessName.Text() == "prototype"
 	}
 	return false
 }
 
 const maxLength = 150
 
-func (l *LanguageService) newDocumentSymbol(node *ast.Node, name *ast.Node, children []*lsproto.DocumentSymbol) *lsproto.DocumentSymbol {
+func (l *LanguageService) newDocumentSymbol(node ast.Node, name ast.Node, children []*lsproto.DocumentSymbol) *lsproto.DocumentSymbol {
 	result := new(lsproto.DocumentSymbol)
 	file := ast.GetSourceFileOfNode(node)
 	nodeStartPos := scanner.SkipTrivia(file.Text(), node.Pos())
-	if name == nil {
+	if name.IsNil() {
 		name = ast.GetNameOfDeclaration(node)
 	}
 	var text string
@@ -315,7 +315,7 @@ func (l *LanguageService) newDocumentSymbol(node *ast.Node, name *ast.Node, chil
 			nameStartPos = nodeStartPos
 			nameEndPos = node.End()
 		}
-	} else if name != nil {
+	} else if !name.IsNil() {
 		text = getTextOfName(name)
 		nameStartPos = max(scanner.SkipTrivia(file.Text(), name.Pos()), nodeStartPos)
 		nameEndPos = max(name.End(), nodeStartPos)
@@ -430,7 +430,7 @@ func isAnonymousName(name string) bool {
 		name == "constructor" || name == "()" || name == "new()" || name == "[]" || strings.HasSuffix(name, ") callback")
 }
 
-func getTextOfName(node *ast.Node) string {
+func getTextOfName(node ast.Node) string {
 	switch node.Kind() {
 	case ast.KindIdentifier, ast.KindPrivateIdentifier, ast.KindNumericLiteral:
 		return node.Text()
@@ -446,8 +446,8 @@ func getTextOfName(node *ast.Node) string {
 	return scanner.GetTextOfNode(node)
 }
 
-func getUnnamedNodeLabel(node *ast.Node) string {
-	if parent := ast.WalkUpParenthesizedExpressions(node.Parent()); parent != nil && ast.IsExportAssignment(parent) {
+func getUnnamedNodeLabel(node ast.Node) string {
+	if parent := ast.WalkUpParenthesizedExpressions(node.Parent()); !parent.IsNil() && ast.IsExportAssignment(parent) {
 		if parent.AsExportAssignment().IsExportEquals() {
 			return "export="
 		}
@@ -487,7 +487,7 @@ func getUnnamedNodeLabel(node *ast.Node) string {
 	return ""
 }
 
-func getCallExpressionName(node *ast.Node) string {
+func getCallExpressionName(node ast.Node) string {
 	switch node.Kind() {
 	case ast.KindIdentifier, ast.KindPrivateIdentifier:
 		return node.Text()
@@ -502,7 +502,7 @@ func getCallExpressionName(node *ast.Node) string {
 	return ""
 }
 
-func getCallExpressionLiteralArgs(callExpr *ast.Node) string {
+func getCallExpressionLiteralArgs(callExpr ast.Node) string {
 	var parts []string
 	for _, arg := range callExpr.Arguments() {
 		if ast.IsStringLiteralLike(arg) || ast.IsTemplateExpression(arg) {
@@ -525,16 +525,16 @@ func cleanCallbackText(text string) string {
 	}, text)
 }
 
-func getInteriorModule(node *ast.Node) *ast.Node {
-	for node.Body() != nil && ast.IsModuleDeclaration(node.Body()) {
+func getInteriorModule(node ast.Node) ast.Node {
+	for !node.Body().IsNil() && ast.IsModuleDeclaration(node.Body()) {
 		node = node.Body()
 	}
 	return node
 }
 
-func getModuleName(node *ast.Node) string {
+func getModuleName(node ast.Node) string {
 	result := node.Name().Text()
-	for node.Body() != nil && ast.IsModuleDeclaration(node.Body()) {
+	for !node.Body().IsNil() && ast.IsModuleDeclaration(node.Body()) {
 		node = node.Body()
 		result = result + "." + node.Name().Text()
 	}
@@ -543,7 +543,7 @@ func getModuleName(node *ast.Node) string {
 
 type DeclarationInfo struct {
 	name        string
-	declaration *ast.Node
+	declaration ast.Node
 	matchScore  int
 }
 
@@ -590,7 +590,7 @@ func ProvideWorkspaceSymbols(
 		sourceFile := ast.GetSourceFileOfNode(node)
 		container := getContainerNode(info.declaration)
 		var containerName *string
-		if container != nil {
+		if !container.IsNil() {
 			containerName = strPtrTo(ast.GetDeclarationName(container))
 		}
 		// Use the name node's span so that VS selects just the symbol name (matching
@@ -670,7 +670,7 @@ func compareDeclarationInfos(d1, d2 DeclarationInfo) int {
 
 // getSymbolKindFromNode converts an AST node to an LSP SymbolKind.
 // Combines getNodeKind with VS Code's fromProtocolScriptElementKind.
-func getSymbolKindFromNode(node *ast.Node) lsproto.SymbolKind {
+func getSymbolKindFromNode(node ast.Node) lsproto.SymbolKind {
 	switch node.Kind() {
 	case ast.KindSourceFile:
 		if ast.IsExternalModule(node.AsSourceFile()) {

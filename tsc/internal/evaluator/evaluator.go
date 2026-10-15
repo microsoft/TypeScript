@@ -19,11 +19,11 @@ func NewResult(value any, isSyntacticallyString bool, resolvedOtherFiles bool, h
 	return Result{value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences}
 }
 
-type Evaluator func(expr *ast.Node, location *ast.Node) Result
+type Evaluator func(expr ast.Node, location ast.Node) Result
 
 func NewEvaluator(evaluateEntity Evaluator, outerExpressionsToSkip ast.OuterExpressionKinds) Evaluator {
 	var evaluate Evaluator
-	evaluate = func(expr *ast.Node, location *ast.Node) Result {
+	evaluate = func(expr ast.Node, location ast.Node) Result {
 		isSyntacticallyString := false
 		resolvedOtherFiles := false
 		hasExternalReferences := false
@@ -121,7 +121,7 @@ func NewEvaluator(evaluateEntity Evaluator, outerExpressionsToSkip ast.OuterExpr
 	return evaluate
 }
 
-func evaluateTemplateExpression(expr *ast.Node, location *ast.Node, evaluate Evaluator) Result {
+func evaluateTemplateExpression(expr ast.Node, location ast.Node, evaluate Evaluator) Result {
 	var sb strings.Builder
 	sb.WriteString(expr.AsTemplateExpression().Head().Text())
 	resolvedOtherFiles := false

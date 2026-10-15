@@ -53,7 +53,7 @@ foo.bar;`
 	interfaceId := file.Statements.Nodes()[0].Name()
 	varId := file.Statements.Nodes()[1].AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes()[0].Name()
 	propAccess := file.Statements.Nodes()[2].Expression()
-	nodes := []*ast.Node{interfaceId, varId, propAccess}
+	nodes := []ast.Node{interfaceId, varId, propAccess}
 	for _, node := range nodes {
 		symbol := c.GetSymbolAtLocation(node)
 		if symbol == nil {
@@ -98,7 +98,7 @@ export type E = D;`,
 	c, done := p.GetTypeChecker(t.Context())
 	defer done()
 	file := p.GetSourceFile("/main.ts")
-	importClauseAt := func(index int) *ast.Node {
+	importClauseAt := func(index int) ast.Node {
 		return file.Statements.Nodes()[index].AsImportDeclaration().ImportClause()
 	}
 	// An import clause without a default binding has no symbol of its own. A type-only one

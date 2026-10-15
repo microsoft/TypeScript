@@ -88,7 +88,7 @@ func (l *LanguageService) OrganizeImports(
 		}
 
 		ambientModule := stmt.AsModuleDeclaration()
-		if ambientModule.Body() == nil {
+		if ambientModule.Body().IsNil() {
 			continue
 		}
 
@@ -102,7 +102,7 @@ func (l *LanguageService) OrganizeImports(
 		}
 
 		if kind != lsproto.CodeActionKindSourceRemoveUnusedImportsTs {
-			var ambientModuleExportDecls []*ast.Statement
+			var ambientModuleExportDecls []ast.Statement
 			for _, s := range moduleBody.Statements().Nodes() {
 				if s.Kind() == ast.KindExportDeclaration {
 					ambientModuleExportDecls = append(ambientModuleExportDecls, s)
@@ -125,7 +125,7 @@ type organizeImportsComparerSettings struct {
 }
 
 func organizeImportsWorker(
-	oldImportDecls []*ast.Statement,
+	oldImportDecls []ast.Statement,
 	comparer organizeImportsComparerSettings,
 	shouldSort bool,
 	shouldCombine bool,
@@ -148,11 +148,11 @@ func organizeImportsWorker(
 		processedImports = removeUnusedImports(processedImports, sourceFile, typeChecker, program, changeTracker)
 	}
 
-	var newImportDecls []*ast.Statement
+	var newImportDecls []ast.Statement
 	if shouldCombine {
 		grouped := groupByModuleSpecifier(processedImports)
 		if shouldSort {
-			slices.SortFunc(grouped, func(a, b []*ast.Statement) int {
+			slices.SortFunc(grouped, func(a, b []ast.Statement) int {
 				if len(a) == 0 || len(b) == 0 {
 					return 0
 				}
@@ -172,7 +172,7 @@ func organizeImportsWorker(
 		for _, importGroup := range grouped {
 			coalesced := coalesceImportsWorker(importGroup, comparer.moduleSpecifierComparer, specifierComparer, sourceFile, changeTracker)
 			if shouldSort {
-				slices.SortStableFunc(coalesced, func(a, b *ast.Statement) int {
+				slices.SortStableFunc(coalesced, func(a, b ast.Statement) int {
 					return lsutil.CompareImportsOrRequireStatements(a, b, comparer.moduleSpecifierComparer)
 				})
 			}
@@ -183,7 +183,7 @@ func organizeImportsWorker(
 	}
 
 	if shouldSort && !shouldCombine {
-		slices.SortFunc(newImportDecls, func(a, b *ast.Statement) int {
+		slices.SortFunc(newImportDecls, func(a, b ast.Statement) int {
 			return lsutil.CompareImportsOrRequireStatements(a, b, comparer.moduleSpecifierComparer)
 		})
 	}
@@ -207,7 +207,7 @@ func organizeImportsWorker(
 			Suffix:               "\n",
 		}
 
-		newNodes := core.Map(newImportDecls, func(s *ast.Statement) *ast.Node { return s.AsNode() })
+		newNodes := core.Map(newImportDecls, func(s ast.Statement) ast.Node { return s.AsNode() })
 		changeTracker.ReplaceNodeWithNodes(sourceFile, oldImportDecls[0].AsNode(), newNodes, &options)
 
 		if len(oldImportDecls) > 1 {
@@ -218,8 +218,8 @@ func organizeImportsWorker(
 	}
 }
 
-func groupByModuleSpecifier(imports []*ast.Statement) [][]*ast.Statement {
-	groups := make(map[string][]*ast.Statement)
+func groupByModuleSpecifier(imports []ast.Statement) [][]ast.Statement {
+	groups := make(map[string][]ast.Statement)
 	var order []string
 
 	for _, imp := range imports {
@@ -230,24 +230,24 @@ func groupByModuleSpecifier(imports []*ast.Statement) [][]*ast.Statement {
 		groups[specifier] = append(groups[specifier], imp)
 	}
 
-	result := make([][]*ast.Statement, 0, len(order))
+	result := make([][]ast.Statement, 0, len(order))
 	for _, key := range order {
 		result = append(result, groups[key])
 	}
 	return result
 }
 
-func removeUnusedImports(oldImports []*ast.Statement, sourceFile *ast.SourceFile, typeChecker *checker.Checker, program *compiler.Program, changeTracker *change.Tracker) []*ast.Statement {
+func removeUnusedImports(oldImports []ast.Statement, sourceFile *ast.SourceFile, typeChecker *checker.Checker, program *compiler.Program, changeTracker *change.Tracker) []ast.Statement {
 	compilerOptions := program.Options()
 	jsxElementsPresent := (sourceFile.AsNode().SubtreeFacts() & ast.SubtreeContainsJsx) != 0
 	jsxModeNeedsExplicitImport := compilerOptions.Jsx == core.JsxEmitReact || compilerOptions.Jsx == core.JsxEmitReactNative
 
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
-	usedImports := make([]*ast.Statement, 0, len(oldImports))
+	usedImports := make([]ast.Statement, 0, len(oldImports))
 
 	for _, importDecl := range oldImports {
 		importClause := importDecl.AsImportDeclaration().ImportClause()
-		if importClause == nil {
+		if importClause.IsNil() {
 			usedImports = append(usedImports, importDecl)
 			continue
 		}
@@ -256,35 +256,35 @@ func removeUnusedImports(oldImports []*ast.Statement, sourceFile *ast.SourceFile
 		name := clause.Name()
 		namedBindings := clause.NamedBindings()
 
-		if name != nil && !typeChecker.IsDeclarationUsed(sourceFile, name.AsIdentifier(), jsxElementsPresent, jsxModeNeedsExplicitImport) {
-			name = nil
+		if !name.IsNil() && !typeChecker.IsDeclarationUsed(sourceFile, name.AsIdentifier(), jsxElementsPresent, jsxModeNeedsExplicitImport) {
+			name = ast.Node{}
 		}
 
-		if namedBindings != nil {
+		if !namedBindings.IsNil() {
 			switch namedBindings.Kind() {
 			case ast.KindNamespaceImport:
 				nsImport := namedBindings.AsNamespaceImport()
 				if !typeChecker.IsDeclarationUsed(sourceFile, nsImport.Name().AsIdentifier(), jsxElementsPresent, jsxModeNeedsExplicitImport) {
-					namedBindings = nil
+					namedBindings = ast.Node{}
 				}
 			case ast.KindNamedImports:
 				namedImports := namedBindings.AsNamedImports()
 				originalBindings := namedBindings
 				newElements := filterUsedImportSpecifiers(namedImports.Elements().Nodes(), typeChecker, sourceFile, jsxElementsPresent, jsxModeNeedsExplicitImport)
 				if len(newElements) == 0 {
-					namedBindings = nil
+					namedBindings = ast.Node{}
 				} else if len(newElements) < len(namedImports.Elements().Nodes()) {
 					newList := factory.NewNodeList(newElements)
 					updatedNamedImports := factory.UpdateNamedImports(namedImports, newList)
 					namedBindings = updatedNamedImports.AsNode()
 				}
-				if namedBindings != nil && !ast.NodeIsSynthesized(originalBindings.AsNode()) && !printer.RangeIsOnSingleLine(originalBindings.Loc(), sourceFile) {
+				if !namedBindings.IsNil() && !ast.NodeIsSynthesized(originalBindings.AsNode()) && !printer.RangeIsOnSingleLine(originalBindings.Loc(), sourceFile) {
 					changeTracker.SetEmitFlags(namedBindings, printer.EFMultiLine)
 				}
 			}
 		}
 
-		if name != nil || namedBindings != nil {
+		if !name.IsNil() || !namedBindings.IsNil() {
 			importDeclNode := importDecl.AsImportDeclaration()
 			newClause := factory.UpdateImportClause(clause, clause.PhaseModifier(), name, namedBindings)
 			newImportDecl := factory.UpdateImportDeclaration(
@@ -303,7 +303,7 @@ func removeUnusedImports(oldImports []*ast.Statement, sourceFile *ast.SourceFile
 					newImportDecl := factory.UpdateImportDeclaration(
 						importDeclNode,
 						importDeclNode.Modifiers(),
-						nil, // no import clause
+						ast.Node{}, // no import clause
 						importDeclNode.ModuleSpecifier(),
 						importDeclNode.Attributes(),
 					)
@@ -319,13 +319,13 @@ func removeUnusedImports(oldImports []*ast.Statement, sourceFile *ast.SourceFile
 }
 
 func filterUsedImportSpecifiers(
-	elements []*ast.Statement,
+	elements []ast.Statement,
 	typeChecker *checker.Checker,
 	sourceFile *ast.SourceFile,
 	jsxElementsPresent bool,
 	jsxModeNeedsExplicitImport bool,
-) []*ast.Statement {
-	var result []*ast.Statement
+) []ast.Statement {
+	var result []ast.Statement
 	for _, elem := range elements {
 		spec := elem.AsImportSpecifier()
 		if typeChecker.IsDeclarationUsed(sourceFile, spec.Name().AsIdentifier(), jsxElementsPresent, jsxModeNeedsExplicitImport) {
@@ -335,8 +335,8 @@ func filterUsedImportSpecifiers(
 	return result
 }
 
-func hasModuleDeclarationMatchingSpecifier(sourceFile *ast.SourceFile, moduleSpecifier *ast.Expression) bool {
-	if moduleSpecifier == nil || !ast.IsStringLiteral(moduleSpecifier.AsNode()) {
+func hasModuleDeclarationMatchingSpecifier(sourceFile *ast.SourceFile, moduleSpecifier ast.Expression) bool {
+	if moduleSpecifier.IsNil() || !ast.IsStringLiteral(moduleSpecifier.AsNode()) {
 		return false
 	}
 	moduleSpecifierText := moduleSpecifier.Text()
@@ -351,8 +351,8 @@ func hasModuleDeclarationMatchingSpecifier(sourceFile *ast.SourceFile, moduleSpe
 }
 
 // getImportAttributesKey returns a key for grouping imports by their attributes.
-func getImportAttributesKey(attributes *ast.ImportAttributesNode) string {
-	if attributes == nil {
+func getImportAttributesKey(attributes ast.ImportAttributesNode) string {
+	if attributes.IsNil() {
 		return ""
 	}
 
@@ -361,9 +361,9 @@ func getImportAttributesKey(attributes *ast.ImportAttributesNode) string {
 	key.WriteString(importAttrs.Token().String())
 	key.WriteString(" ")
 
-	attrNodes := make([]*ast.Node, len(importAttrs.Attributes().Nodes()))
+	attrNodes := make([]ast.Node, len(importAttrs.Attributes().Nodes()))
 	copy(attrNodes, importAttrs.Attributes().Nodes())
-	slices.SortFunc(attrNodes, func(a, b *ast.Node) int {
+	slices.SortFunc(attrNodes, func(a, b ast.Node) int {
 		aName := a.AsImportAttribute().Name().Text()
 		bName := b.AsImportAttribute().Name().Text()
 		return stringutil.CompareStringsCaseSensitive(aName, bName)
@@ -387,11 +387,11 @@ func getImportAttributesKey(attributes *ast.ImportAttributesNode) string {
 }
 
 // groupByNewlineContiguous groups declarations by blank lines between them.
-func groupByNewlineContiguous(sourceFile *ast.SourceFile, decls []*ast.Statement) [][]*ast.Statement {
+func groupByNewlineContiguous(sourceFile *ast.SourceFile, decls []ast.Statement) [][]ast.Statement {
 	s := scanner.NewScanner()
 	s.SetSkipTrivia(false) // Must not skip trivia to detect newlines
-	var groups [][]*ast.Statement
-	var currentGroup []*ast.Statement
+	var groups [][]ast.Statement
+	var currentGroup []ast.Statement
 
 	for _, decl := range decls {
 		if len(currentGroup) > 0 && isNewGroup(sourceFile, decl, s) {
@@ -408,7 +408,7 @@ func groupByNewlineContiguous(sourceFile *ast.SourceFile, decls []*ast.Statement
 	return groups
 }
 
-func isNewGroup(sourceFile *ast.SourceFile, decl *ast.Statement, s *scanner.Scanner) bool {
+func isNewGroup(sourceFile *ast.SourceFile, decl ast.Statement, s *scanner.Scanner) bool {
 	fullStart := decl.Pos()
 	if fullStart < 0 {
 		return false
@@ -444,17 +444,17 @@ func isNewGroup(sourceFile *ast.SourceFile, decl *ast.Statement, s *scanner.Scan
 }
 
 func coalesceImportsWorker(
-	importDecls []*ast.Statement,
+	importDecls []ast.Statement,
 	comparer func(a, b string) int,
-	specifierComparer func(s1, s2 *ast.Node) int,
+	specifierComparer func(s1, s2 ast.Node) int,
 	sourceFile *ast.SourceFile,
 	changeTracker *change.Tracker,
-) []*ast.Statement {
+) []ast.Statement {
 	if len(importDecls) == 0 {
 		return importDecls
 	}
 
-	importGroupsByAttributes := make(map[string][]*ast.Statement)
+	importGroupsByAttributes := make(map[string][]ast.Statement)
 	var attributeKeys []string
 
 	for _, importDecl := range importDecls {
@@ -465,25 +465,25 @@ func coalesceImportsWorker(
 		importGroupsByAttributes[key] = append(importGroupsByAttributes[key], importDecl)
 	}
 
-	coalescedImports := make([]*ast.Statement, 0)
+	coalescedImports := make([]ast.Statement, 0)
 
 	for _, attributeKey := range attributeKeys {
 		importGroupSameAttrs := importGroupsByAttributes[attributeKey]
 		categorized := getCategorizedImports(importGroupSameAttrs)
 
-		if categorized.importWithoutClause != nil {
+		if !categorized.importWithoutClause.IsNil() {
 			coalescedImports = append(coalescedImports, categorized.importWithoutClause)
 		}
-		slices.SortStableFunc(categorized.sourcePhaseImports, func(a, b *ast.Statement) int {
+		slices.SortStableFunc(categorized.sourcePhaseImports, func(a, b ast.Statement) int {
 			a = a.AsImportDeclaration().ImportClause()
 			b = b.AsImportDeclaration().ImportClause()
-			if a.Name() == nil && b.Name() == nil {
+			if a.Name().IsNil() && b.Name().IsNil() {
 				return 0
 			}
-			if a.Name() == nil {
+			if a.Name().IsNil() {
 				return 1
 			}
-			if b.Name() == nil {
+			if b.Name().IsNil() {
 				return -1
 			}
 			return specifierComparer(a, b)
@@ -519,7 +519,7 @@ func coalesceImportsWorker(
 				continue
 			}
 
-			slices.SortFunc(group.namespaceImports, func(a, b *ast.Statement) int {
+			slices.SortFunc(group.namespaceImports, func(a, b ast.Statement) int {
 				n1 := a.AsImportDeclaration().ImportClause().AsImportClause().NamedBindings().AsNamespaceImport().Name()
 				n2 := b.AsImportDeclaration().ImportClause().AsImportClause().NamedBindings().AsNamespaceImport().Name()
 				return comparer(n1.Text(), n2.Text())
@@ -528,7 +528,7 @@ func coalesceImportsWorker(
 			for _, nsImport := range group.namespaceImports {
 				nsImportDecl := nsImport.AsImportDeclaration()
 				clause := nsImportDecl.ImportClause().AsImportClause()
-				newClause := factory.UpdateImportClause(clause, clause.PhaseModifier(), nil, clause.NamedBindings())
+				newClause := factory.UpdateImportClause(clause, clause.PhaseModifier(), ast.Node{}, clause.NamedBindings())
 				newImportDecl := factory.UpdateImportDeclaration(
 					nsImportDecl,
 					nsImportDecl.Modifiers(),
@@ -539,8 +539,8 @@ func coalesceImportsWorker(
 				coalescedImports = append(coalescedImports, newImportDecl)
 			}
 
-			var firstDefaultImport *ast.Statement
-			var firstNamedImport *ast.Statement
+			var firstDefaultImport ast.Statement
+			var firstNamedImport ast.Statement
 
 			if len(group.defaultImports) > 0 {
 				firstDefaultImport = group.defaultImports[0]
@@ -550,15 +550,15 @@ func coalesceImportsWorker(
 			}
 
 			importDecl := firstDefaultImport
-			if importDecl == nil {
+			if importDecl.IsNil() {
 				importDecl = firstNamedImport
 			}
-			if importDecl == nil {
+			if importDecl.IsNil() {
 				continue
 			}
 
-			var newDefaultImport *ast.IdentifierNode
-			var newImportSpecifiers []*ast.Node
+			var newDefaultImport ast.IdentifierNode
+			var newImportSpecifiers []ast.Node
 
 			if len(group.defaultImports) == 1 {
 				newDefaultImport = group.defaultImports[0].AsImportDeclaration().ImportClause().AsImportClause().Name()
@@ -575,16 +575,16 @@ func coalesceImportsWorker(
 			newImportSpecifiers = append(newImportSpecifiers, getNewImportSpecifiers(group.namedImports, factory)...)
 			slices.SortStableFunc(newImportSpecifiers, specifierComparer)
 
-			var newNamedImports *ast.NamedImportBindings
+			var newNamedImports ast.NamedImportBindings
 			if len(newImportSpecifiers) == 0 {
-				if newDefaultImport != nil {
-					newNamedImports = nil
+				if !newDefaultImport.IsNil() {
+					newNamedImports = ast.Node{}
 				} else {
 					newNamedImports = factory.NewNamedImports(factory.NewNodeList(nil))
 				}
 			} else {
 				sortedList := factory.NewNodeList(newImportSpecifiers)
-				if firstNamedImport != nil {
+				if !firstNamedImport.IsNil() {
 					firstNamedBindings := firstNamedImport.AsImportDeclaration().ImportClause().AsImportClause().NamedBindings().AsNamedImports()
 					originalElements := firstNamedBindings.Elements()
 					if originalElements.HasTrailingComma() {
@@ -596,17 +596,17 @@ func coalesceImportsWorker(
 				}
 			}
 
-			if sourceFile != nil && newNamedImports != nil && firstNamedImport != nil {
+			if sourceFile != nil && !newNamedImports.IsNil() && !firstNamedImport.IsNil() {
 				firstNamedBindings := firstNamedImport.AsImportDeclaration().ImportClause().AsImportClause().NamedBindings()
 				if !ast.NodeIsSynthesized(firstNamedBindings.AsNode()) && !printer.RangeIsOnSingleLine(firstNamedBindings.Loc(), sourceFile) {
 					changeTracker.SetEmitFlags(newNamedImports.AsNode(), printer.EFMultiLine)
 				}
 			}
 
-			if isTypeOnly && newDefaultImport != nil && newNamedImports != nil {
+			if isTypeOnly && !newDefaultImport.IsNil() && !newNamedImports.IsNil() {
 				importDeclNode := importDecl.AsImportDeclaration()
 
-				defaultClause := factory.NewImportClause(importDeclNode.ImportClause().AsImportClause().PhaseModifier(), newDefaultImport, nil)
+				defaultClause := factory.NewImportClause(importDeclNode.ImportClause().AsImportClause().PhaseModifier(), newDefaultImport, ast.Node{})
 				defaultImportDecl := factory.UpdateImportDeclaration(
 					importDeclNode,
 					importDeclNode.Modifiers(),
@@ -617,11 +617,11 @@ func coalesceImportsWorker(
 				coalescedImports = append(coalescedImports, defaultImportDecl)
 
 				namedDeclNode := firstNamedImport
-				if namedDeclNode == nil {
+				if namedDeclNode.IsNil() {
 					namedDeclNode = importDecl
 				}
 				namedImportDeclNode := namedDeclNode.AsImportDeclaration()
-				namedClause := factory.NewImportClause(namedImportDeclNode.ImportClause().AsImportClause().PhaseModifier(), nil, newNamedImports)
+				namedClause := factory.NewImportClause(namedImportDeclNode.ImportClause().AsImportClause().PhaseModifier(), ast.Node{}, newNamedImports)
 				namedImportDecl := factory.UpdateImportDeclaration(
 					namedImportDeclNode,
 					namedImportDeclNode.Modifiers(),
@@ -649,30 +649,30 @@ func coalesceImportsWorker(
 }
 
 type categorizedImports struct {
-	importWithoutClause *ast.Statement
-	sourcePhaseImports  []*ast.Statement
+	importWithoutClause ast.Statement
+	sourcePhaseImports  []ast.Statement
 	typeOnlyImports     importGroup
 	regularImports      importGroup
 }
 
 type importGroup struct {
-	defaultImports   []*ast.Statement
-	namespaceImports []*ast.Statement
-	namedImports     []*ast.Statement
+	defaultImports   []ast.Statement
+	namespaceImports []ast.Statement
+	namedImports     []ast.Statement
 }
 
 func (g importGroup) isEmpty() bool {
 	return len(g.defaultImports) == 0 && len(g.namespaceImports) == 0 && len(g.namedImports) == 0
 }
 
-func getCategorizedImports(importDecls []*ast.Statement) categorizedImports {
-	var importWithoutClause *ast.Statement
-	var sourcePhaseImports []*ast.Statement
+func getCategorizedImports(importDecls []ast.Statement) categorizedImports {
+	var importWithoutClause ast.Statement
+	var sourcePhaseImports []ast.Statement
 	var typeOnlyImports, regularImports importGroup
 
 	for _, importDecl := range importDecls {
-		if importDecl.AsImportDeclaration().ImportClause() == nil {
-			if importWithoutClause == nil {
+		if importDecl.AsImportDeclaration().ImportClause().IsNil() {
+			if importWithoutClause.IsNil() {
 				importWithoutClause = importDecl
 			}
 			continue
@@ -691,11 +691,11 @@ func getCategorizedImports(importDecls []*ast.Statement) categorizedImports {
 		name := clause.Name()
 		namedBindings := clause.NamedBindings()
 
-		if name != nil {
+		if !name.IsNil() {
 			group.defaultImports = append(group.defaultImports, importDecl)
 		}
 
-		if namedBindings != nil {
+		if !namedBindings.IsNil() {
 			switch namedBindings.Kind() {
 			case ast.KindNamespaceImport:
 				group.namespaceImports = append(group.namespaceImports, importDecl)
@@ -713,8 +713,8 @@ func getCategorizedImports(importDecls []*ast.Statement) categorizedImports {
 	}
 }
 
-func getNewImportSpecifiers(namedImports []*ast.Statement, factory *ast.NodeFactory) []*ast.Node {
-	var result []*ast.Node
+func getNewImportSpecifiers(namedImports []ast.Statement, factory *ast.NodeFactory) []ast.Node {
+	var result []ast.Node
 
 	for _, namedImport := range namedImports {
 		elements := tryGetNamedBindingElements(namedImport)
@@ -725,12 +725,12 @@ func getNewImportSpecifiers(namedImports []*ast.Statement, factory *ast.NodeFact
 		for _, elem := range elements {
 			spec := elem.AsImportSpecifier()
 
-			if spec.PropertyName() != nil && spec.Name() != nil {
+			if !spec.PropertyName().IsNil() && !spec.Name().IsNil() {
 				propertyText := spec.PropertyName().Text()
 				nameText := spec.Name().Text()
 
 				if propertyText == nameText {
-					normalized := factory.UpdateImportSpecifier(spec, spec.IsTypeOnly(), nil, spec.Name())
+					normalized := factory.UpdateImportSpecifier(spec, spec.IsTypeOnly(), ast.Node{}, spec.Name())
 					result = append(result, normalized)
 					continue
 				}
@@ -743,20 +743,20 @@ func getNewImportSpecifiers(namedImports []*ast.Statement, factory *ast.NodeFact
 	return result
 }
 
-func tryGetNamedBindingElements(namedImport *ast.Statement) []*ast.Statement {
+func tryGetNamedBindingElements(namedImport ast.Statement) []ast.Statement {
 	if namedImport.Kind() != ast.KindImportDeclaration {
 		return nil
 	}
 
 	importDecl := namedImport.AsImportDeclaration()
-	if importDecl.ImportClause() == nil {
+	if importDecl.ImportClause().IsNil() {
 		return nil
 	}
 
 	clause := importDecl.ImportClause().AsImportClause()
 	namedBindings := clause.NamedBindings()
 
-	if namedBindings != nil && namedBindings.Kind() == ast.KindNamedImports {
+	if !namedBindings.IsNil() && namedBindings.Kind() == ast.KindNamedImports {
 		namedImportsNode := namedBindings.AsNamedImports()
 		return namedImportsNode.Elements().Nodes()
 	}
@@ -764,8 +764,8 @@ func tryGetNamedBindingElements(namedImport *ast.Statement) []*ast.Statement {
 	return nil
 }
 
-func getTopLevelExportGroups(sourceFile *ast.SourceFile) [][]*ast.Statement {
-	var topLevelExportGroups [][]*ast.Statement
+func getTopLevelExportGroups(sourceFile *ast.SourceFile) [][]ast.Statement {
+	var topLevelExportGroups [][]ast.Statement
 	statements := sourceFile.Statements.Nodes()
 	statementsLen := len(statements)
 
@@ -774,10 +774,10 @@ func getTopLevelExportGroups(sourceFile *ast.SourceFile) [][]*ast.Statement {
 	for i < statementsLen {
 		if statements[i].Kind() == ast.KindExportDeclaration {
 			if groupIndex >= len(topLevelExportGroups) {
-				topLevelExportGroups = append(topLevelExportGroups, []*ast.Statement{})
+				topLevelExportGroups = append(topLevelExportGroups, []ast.Statement{})
 			}
 			exportDecl := statements[i].AsExportDeclaration()
-			if exportDecl.ModuleSpecifier() != nil {
+			if !exportDecl.ModuleSpecifier().IsNil() {
 				topLevelExportGroups[groupIndex] = append(topLevelExportGroups[groupIndex], statements[i])
 				i++
 			} else {
@@ -795,7 +795,7 @@ func getTopLevelExportGroups(sourceFile *ast.SourceFile) [][]*ast.Statement {
 		}
 	}
 
-	var result [][]*ast.Statement
+	var result [][]ast.Statement
 	for _, exportGroup := range topLevelExportGroups {
 		subGroups := groupByNewlineContiguous(sourceFile, exportGroup)
 		result = append(result, subGroups...)
@@ -805,7 +805,7 @@ func getTopLevelExportGroups(sourceFile *ast.SourceFile) [][]*ast.Statement {
 }
 
 func organizeExportsWorker(
-	oldExportDecls []*ast.Statement,
+	oldExportDecls []ast.Statement,
 	comparer organizeImportsComparerSettings,
 	sourceFile *ast.SourceFile,
 	changeTracker *change.Tracker,
@@ -841,7 +841,7 @@ func organizeExportsWorker(
 				Suffix:               "\n",
 			}
 
-			newNodes := core.Map(newExportDecls, func(s *ast.Statement) *ast.Node { return s.AsNode() })
+			newNodes := core.Map(newExportDecls, func(s ast.Statement) ast.Node { return s.AsNode() })
 			changeTracker.ReplaceNodeWithNodes(sourceFile, oldExportDecls[0].AsNode(), newNodes, &options)
 
 			if len(oldExportDecls) > 1 {
@@ -854,23 +854,23 @@ func organizeExportsWorker(
 }
 
 func coalesceExportsWorker(
-	exportGroup []*ast.Statement,
-	specifierComparer func(s1, s2 *ast.Node) int,
+	exportGroup []ast.Statement,
+	specifierComparer func(s1, s2 ast.Node) int,
 	moduleSpecifierComparer func(a, b string) int,
 	sourceFile *ast.SourceFile,
 	changeTracker *change.Tracker,
-) []*ast.Statement {
+) []ast.Statement {
 	if len(exportGroup) == 0 {
 		return exportGroup
 	}
 
-	exportsByModuleSpecifier := make(map[string][]*ast.Statement)
+	exportsByModuleSpecifier := make(map[string][]ast.Statement)
 	var moduleSpecifierOrder []string
 
 	for _, exportDecl := range exportGroup {
 		export := exportDecl.AsExportDeclaration()
 		var moduleSpecifier string
-		if export.ModuleSpecifier() != nil {
+		if !export.ModuleSpecifier().IsNil() {
 			moduleSpecifier = export.ModuleSpecifier().Text()
 		}
 		if _, exists := exportsByModuleSpecifier[moduleSpecifier]; !exists {
@@ -889,7 +889,7 @@ func coalesceExportsWorker(
 		return moduleSpecifierComparer(a, b)
 	})
 
-	var coalescedExports []*ast.Statement
+	var coalescedExports []ast.Statement
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 
 	for _, moduleSpecifier := range moduleSpecifierOrder {
@@ -897,19 +897,19 @@ func coalesceExportsWorker(
 
 		categorized := getCategorizedExports(group)
 
-		if categorized.exportWithoutClause != nil {
+		if !categorized.exportWithoutClause.IsNil() {
 			coalescedExports = append(coalescedExports, categorized.exportWithoutClause)
 		}
 
-		for _, subGroup := range [][]*ast.Statement{categorized.namedExports, categorized.typeOnlyExports} {
+		for _, subGroup := range [][]ast.Statement{categorized.namedExports, categorized.typeOnlyExports} {
 			if len(subGroup) == 0 {
 				continue
 			}
 
-			var newExportSpecifiers []*ast.Node
+			var newExportSpecifiers []ast.Node
 			for _, exportDecl := range subGroup {
 				exportClause := exportDecl.AsExportDeclaration().ExportClause()
-				if exportClause != nil && exportClause.Kind() == ast.KindNamedExports {
+				if !exportClause.IsNil() && exportClause.Kind() == ast.KindNamedExports {
 					namedExports := exportClause.AsNamedExports()
 					newExportSpecifiers = append(newExportSpecifiers, namedExports.Elements().Nodes()...)
 				}
@@ -919,8 +919,8 @@ func coalesceExportsWorker(
 
 			exportDecl := subGroup[0].AsExportDeclaration()
 
-			var updatedExportClause *ast.NamedExportBindings
-			if exportDecl.ExportClause() != nil {
+			var updatedExportClause ast.NamedExportBindings
+			if !exportDecl.ExportClause().IsNil() {
 				if exportDecl.ExportClause().Kind() == ast.KindNamedExports {
 					namedExports := exportDecl.ExportClause().AsNamedExports()
 					sortedList := factory.NewNodeList(newExportSpecifiers)
@@ -950,19 +950,19 @@ func coalesceExportsWorker(
 }
 
 type categorizedExports struct {
-	exportWithoutClause *ast.Statement
-	namedExports        []*ast.Statement
-	typeOnlyExports     []*ast.Statement
+	exportWithoutClause ast.Statement
+	namedExports        []ast.Statement
+	typeOnlyExports     []ast.Statement
 }
 
-func getCategorizedExports(exportGroup []*ast.Statement) categorizedExports {
-	var exportWithoutClause *ast.Statement
-	var namedExports, typeOnlyExports []*ast.Statement
+func getCategorizedExports(exportGroup []ast.Statement) categorizedExports {
+	var exportWithoutClause ast.Statement
+	var namedExports, typeOnlyExports []ast.Statement
 
 	for _, exportDecl := range exportGroup {
 		export := exportDecl.AsExportDeclaration()
-		if export.ExportClause() == nil {
-			if exportWithoutClause == nil {
+		if export.ExportClause().IsNil() {
+			if exportWithoutClause.IsNil() {
 				exportWithoutClause = exportDecl
 			}
 		} else if export.IsTypeOnly() {

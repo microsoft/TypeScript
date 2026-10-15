@@ -25,7 +25,7 @@ func (l *LanguageService) ProvideLinkedEditingRange(ctx context.Context, params 
 	position := positions[0].Position
 	token := astnav.FindPrecedingToken(sourceFile, int(position))
 
-	if token == nil || token.Parent().Kind() == ast.KindSourceFile {
+	if token.IsNil() || token.Parent().Kind() == ast.KindSourceFile {
 		return lsproto.LinkedEditingRangeResponse{}, nil
 	}
 
@@ -61,13 +61,13 @@ func (l *LanguageService) ProvideLinkedEditingRange(ctx context.Context, params 
 		}, nil
 	} else {
 		// determines if the cursor is in an element tag
-		tag := ast.FindAncestor(token.Parent(), func(n *ast.Node) bool {
+		tag := ast.FindAncestor(token.Parent(), func(n ast.Node) bool {
 			if ast.IsJsxOpeningElement(n) || ast.IsJsxClosingElement(n) {
 				return true
 			}
 			return false
 		})
-		if tag == nil {
+		if tag.IsNil() {
 			return lsproto.LinkedEditingRangeResponse{}, nil
 		}
 		debug.Assert(ast.IsJsxOpeningElement(tag) || ast.IsJsxClosingElement(tag), "tag should be opening or closing element")
