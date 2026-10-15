@@ -22550,23 +22550,29 @@ func (c *Checker) getNamedMembers(members ast.SymbolTable, container *ast.Symbol
 	// For classes and interfaces, we store explicitly declared members ahead of inherited members. This ensures we process
 	// explicitly declared members first in type relations, which is beneficial because explicitly declared members are more
 	// likely to contain discriminating differences. See for example https://github.com/microsoft/TypeScript/tsc/issues/1968.
-	result := make([]*ast.Symbol, 0, len(members))
-	var containedCount int
-	if container != nil && container.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0 {
-		for id, symbol := range members {
-			if c.isNamedMember(symbol, id) && c.isDeclarationContainedBy(symbol, container) {
-				result = append(result, symbol)
-			}
-		}
-		containedCount = len(result)
-	}
+	symbols := make([]*ast.Symbol, 0, len(members))
 	for id, symbol := range members {
-		if c.isNamedMember(symbol, id) && (container == nil || container.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) == 0 || !c.isDeclarationContainedBy(symbol, container)) {
+		if !isReservedMemberName(id) {
+			symbols = append(symbols, symbol)
+		}
+	}
+	// Sort before checking which members are values: that can resolve aliases (creating types), and the symbol
+	// table is randomly iterated.
+	c.sortSymbols(symbols)
+	if container == nil || container.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) == 0 {
+		return slices.DeleteFunc(symbols, func(symbol *ast.Symbol) bool { return !c.symbolIsValue(symbol) })
+	}
+	result := make([]*ast.Symbol, 0, len(symbols))
+	for _, symbol := range symbols {
+		if c.symbolIsValue(symbol) && c.isDeclarationContainedBy(symbol, container) {
 			result = append(result, symbol)
 		}
 	}
-	c.sortSymbols(result[:containedCount])
-	c.sortSymbols(result[containedCount:])
+	for _, symbol := range symbols {
+		if c.symbolIsValue(symbol) && !c.isDeclarationContainedBy(symbol, container) {
+			result = append(result, symbol)
+		}
+	}
 	return result
 }
 
@@ -24363,11 +24369,18 @@ func (c *Checker) getOuterTypeParameters(node *ast.Node, includeThisTypes bool) 
 }
 
 func (c *Checker) getInferTypeParameters(node *ast.Node) []*Type {
-	var result []*Type
+	var symbols []*ast.Symbol
 	for _, symbol := range node.Locals() {
 		if symbol.Flags()&ast.SymbolFlagsTypeParameter != 0 {
-			result = append(result, c.getDeclaredTypeOfSymbol(symbol))
+			symbols = append(symbols, symbol)
 		}
+	}
+	// Getting the declared types creates them, so do it in a stable order rather than in the random iteration order
+	// of the symbol table.
+	c.sortSymbols(symbols)
+	var result []*Type
+	for _, symbol := range symbols {
+		result = append(result, c.getDeclaredTypeOfSymbol(symbol))
 	}
 	slices.SortFunc(result, CompareTypes)
 	return result

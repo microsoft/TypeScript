@@ -5078,11 +5078,72 @@ func TestGenerateTrace(t *testing.T) {
 			},
 			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
 		},
+		{
+			// Type ids are creation order. Each part of this project makes the checker create types while it
+			// iterates a symbol table with more than eight entries (whose iteration order varies from run to run):
+			// the infer type parameters of a conditional type in a declaration file, a namespace import whose
+			// members are aliases of namespace imports, and declaration emit of a type no import of main.ts
+			// exports, which resolves the `export =` re-exports of every module.
+			subScenario:     "generateTrace creates types in a stable order",
+			files:           generateTraceStableOrderFiles(),
+			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
+		},
 	}
 
 	for _, c := range cases {
 		c.run(t, "generateTrace")
 	}
+}
+
+func generateTraceStableOrderFiles() FileMap {
+	files := FileMap{
+		"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+		{
+			"compilerOptions": {
+				"strict": true,
+				"skipLibCheck": true,
+				"declaration": true,
+				"emitDeclarationOnly": true,
+				"outDir": "out"
+			},
+			"files": ["main.ts", "locales/index.d.ts"]
+		}`),
+		"/home/src/workspaces/project/fields.d.ts": stringtestutil.Dedent(`
+		export type Fields<T> = T extends { a: infer A; b: infer B; c: infer C; d: infer D; e: infer E; f: infer F; g: infer G; h: infer H; i: infer I; j: infer J; k: infer K; l: infer L } ? [A, B, C, D, E, F, G, H, I, J, K, L] : never;
+		`),
+		"/home/src/workspaces/project/gadget.d.ts": stringtestutil.Dedent(`
+		export interface Gadget {
+			id: number;
+		}
+		`),
+		"/home/src/workspaces/project/widget.d.ts": stringtestutil.Dedent(`
+		import { Gadget } from "./gadget";
+		export declare function makeWidget(): Gadget;
+		`),
+		"/home/src/workspaces/project/main.ts": stringtestutil.Dedent(`
+		import * as parts from "./parts/index";
+		import { Fields } from "./fields";
+		import { makeWidget } from "./widget";
+
+		export const fields: Fields<{ a: 1; b: 2; c: 3; d: 4; e: 5; f: 6; g: 7; h: 8; i: 9; j: 10; k: 11; l: 12 }> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+		export const allParts = parts;
+		export const widget = makeWidget();
+		`),
+	}
+	var localesIndex, partsIndex strings.Builder
+	parts := []string{"alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta", "iota", "kappa", "lambda", "mu"}
+	for _, locale := range []string{"ar", "de", "en", "es", "fr", "he", "it", "ja", "ko", "nl", "pl", "pt"} {
+		files["/home/src/workspaces/project/locales/"+locale+".d.ts"] = fmt.Sprintf("declare const _default: () => { locale: %q };\nexport = _default;\n", locale)
+		fmt.Fprintf(&localesIndex, "export { default as %s } from \"./%s\";\n", locale, locale)
+	}
+	for _, part := range parts {
+		files["/home/src/workspaces/project/parts/"+part+".d.ts"] = fmt.Sprintf("export declare const %s: { name: %q };\n", part, part)
+		fmt.Fprintf(&partsIndex, "import * as %s from \"./%s\";\n", part, part)
+	}
+	fmt.Fprintf(&partsIndex, "export { %s };\n", strings.Join(parts, ", "))
+	files["/home/src/workspaces/project/locales/index.d.ts"] = localesIndex.String()
+	files["/home/src/workspaces/project/parts/index.d.ts"] = partsIndex.String()
+	return files
 }
 
 func TestTscContentMapperEmit(t *testing.T) {

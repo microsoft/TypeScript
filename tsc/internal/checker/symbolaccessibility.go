@@ -262,14 +262,33 @@ func (c *Checker) buildExternalModuleContainerIndex() {
 		}
 		container := c.getSymbolOfDeclaration(file.AsNode())
 		index.moduleOrder[container] = len(index.moduleOrder)
-		for _, exported := range c.getExportsOfSymbol(container) {
+		c.forEachSymbolInResolutionOrder(c.getExportsOfSymbol(container), func(exported *ast.Symbol) {
 			index.add(c.getResolvedTarget(exported), container)
-		}
+		})
 		if exportEquals := container.Exports()[ast.InternalSymbolNameExportEquals]; exportEquals != nil {
 			index.add(c.getResolvedTarget(exportEquals), container)
 		}
 	}
 	index.complete = true
+}
+
+// forEachSymbolInResolutionOrder calls f for each symbol of a symbol table, in an order that does not depend on the
+// table's random iteration order wherever resolving the symbols can have side effects. Symbols that are not aliases
+// resolve to themselves and come first, in table order. Resolving an alias can create types, so aliases come last,
+// sorted.
+func (c *Checker) forEachSymbolInResolutionOrder(symbols ast.SymbolTable, f func(symbol *ast.Symbol)) {
+	var aliases []*ast.Symbol
+	for _, symbol := range symbols {
+		if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
+			aliases = append(aliases, symbol)
+		} else {
+			f(symbol)
+		}
+	}
+	c.sortSymbols(aliases)
+	for _, symbol := range aliases {
+		f(symbol)
+	}
 }
 
 func (c *Checker) scanExternalModuleContainers(symbol *ast.Symbol) []*ast.Symbol {
@@ -420,11 +439,11 @@ func (c *Checker) getAliasForSymbolInContainer(container *ast.Symbol, symbol *as
 		return quick
 	}
 	var candidates []*ast.Symbol
-	for _, exported := range exports {
+	c.forEachSymbolInResolutionOrder(exports, func(exported *ast.Symbol) {
 		if c.getSymbolIfSameReference(exported, symbol) != nil {
 			candidates = append(candidates, exported)
 		}
-	}
+	})
 	if len(candidates) > 0 {
 		c.sortSymbols(candidates) // _must_ sort exports for stable results - symbol table is randomly iterated
 		return candidates[0]
