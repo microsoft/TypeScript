@@ -79,3 +79,24 @@ func TestNodeSideTableZeroValues(t *testing.T) {
 	assert.Assert(t, node.AsBlock().Locals() == nil)
 	assert.Equal(t, factory.store.symbolTables.tail.n, uint32(1))
 }
+
+func TestNodeTextRefs(t *testing.T) {
+	t.Parallel()
+	factory := NewNodeFactory(NodeFactoryHooks{})
+	source := "let alpha = beta;"
+	factory.SetSourceText(source)
+	inSource := factory.NewIdentifier(source[4:9])
+	assert.Equal(t, factory.store.texts.next, uint32(0))
+	synthesized := factory.NewIdentifier("gamma")
+	empty := factory.NewIdentifier("")
+	var long []Node
+	for i := range 2000 {
+		long = append(long, factory.NewIdentifier(strconv.Itoa(i)+string(make([]byte, i))))
+	}
+	assert.Equal(t, inSource.Text(), "alpha")
+	assert.Equal(t, synthesized.Text(), "gamma")
+	assert.Equal(t, empty.Text(), "")
+	for i, node := range long {
+		assert.Equal(t, node.Text(), strconv.Itoa(i)+string(make([]byte, i)))
+	}
+}

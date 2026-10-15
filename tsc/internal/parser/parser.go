@@ -303,6 +303,7 @@ func (p *Parser) initializeState(opts ast.SourceFileParseOptions, sourceText str
 	}
 	p.opts = opts
 	p.sourceText = sourceText
+	p.factory.SetSourceText(sourceText)
 	p.scriptKind = scriptKind
 	p.languageVariant = getLanguageVariant(p.scriptKind)
 	switch p.scriptKind {

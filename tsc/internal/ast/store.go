@@ -29,7 +29,7 @@ type nodeStore struct {
 	symbolTables  sideTable[SymbolTable]
 	nodeLists     sideTable[*NodeList]
 	modifierLists sideTable[*ModifierList]
-	strings       sideTable[string]
+	texts         textStore
 	stringLists   sideTable[[]string]
 	nodeSlices    sideTable[[]Node]
 	values        sideTable[any]
@@ -199,7 +199,6 @@ func (s *nodeStore) compactSide() {
 	s.symbolTables.compact()
 	s.nodeLists.compact()
 	s.modifierLists.compact()
-	s.strings.compact()
 	s.stringLists.compact()
 	s.nodeSlices.compact()
 	s.values.compact()
@@ -315,4 +314,78 @@ type recordTable struct {
 func (t *recordTable) at(i uint32) unsafe.Pointer {
 	k, off := segLocate(i)
 	return unsafe.Add(t.segs[k], uintptr(off)*t.size)
+}
+
+// A textRef is a string field: a range of the store's source text, or,
+// with textRefArena set, of its text arena.
+type textRef struct {
+	off uint32
+	len uint32
+}
+
+const textRefArena = 1 << 31
+
+// textStore holds the text of a store's string fields. Text found within
+// the source is referenced in place; other text is copied into an arena of
+// chunks that are never moved or modified, so strings may alias them.
+type textStore struct {
+	source string
+	chunks [segCount]*byte
+	next   uint32
+}
+
+func (t *textStore) get(r textRef) string {
+	if r.off&textRefArena == 0 {
+		return unsafe.String((*byte)(unsafe.Add(unsafe.Pointer(unsafe.StringData(t.source)), r.off)), r.len)
+	}
+	k, off := textLocate(r.off &^ textRefArena)
+	return unsafe.String((*byte)(unsafe.Add(unsafe.Pointer(t.chunks[k]), off)), r.len)
+}
+
+func (t *textStore) set(r *textRef, v string, _ bool) {
+	if len(v) == 0 {
+		*r = textRef{}
+		return
+	}
+	if len(t.source) != 0 {
+		start := uintptr(unsafe.Pointer(unsafe.StringData(t.source)))
+		p := uintptr(unsafe.Pointer(unsafe.StringData(v)))
+		if p >= start && p+uintptr(len(v)) <= start+uintptr(len(t.source)) {
+			*r = textRef{off: uint32(p - start), len: uint32(len(v))}
+			return
+		}
+	}
+	*r = textRef{off: t.alloc(v) | textRefArena, len: uint32(len(v))}
+}
+
+// Arena chunk k holds 1<<(k+textBaseShift) bytes; offsets run contiguously
+// through the chunks, and a string never spans two.
+const textBaseShift = 12
+
+func textLocate(i uint32) (k, off uint32) {
+	j := i + 1<<textBaseShift
+	k = uint32(bits.Len32(j)) - (textBaseShift + 1)
+	return k, j - 1<<(k+textBaseShift)
+}
+
+func (t *textStore) alloc(v string) uint32 {
+	n := uint32(len(v))
+	for {
+		k, off := textLocate(t.next)
+		size := uint32(1) << (k + textBaseShift)
+		if off+n <= size {
+			if t.chunks[k] == nil {
+				t.chunks[k] = unsafe.SliceData(make([]byte, size))
+			}
+			copy(unsafe.Slice((*byte)(unsafe.Add(unsafe.Pointer(t.chunks[k]), off)), n), v)
+			i := t.next
+			t.next += n
+			if t.next&textRefArena != 0 {
+				panic("node text arena overflow")
+			}
+			return i
+		}
+		// Skip the rest of this chunk.
+		t.next += size - off
+	}
 }

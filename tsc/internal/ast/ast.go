@@ -89,6 +89,12 @@ func (f *NodeFactory) nodeStore() *nodeStore {
 	return f.store
 }
 
+// SetSourceText sets the text that nodes created by f are parsed from;
+// string fields that are substrings of it are stored as offsets.
+func (f *NodeFactory) SetSourceText(text string) {
+	f.nodeStore().texts.source = text
+}
+
 // CompactStore packs the nodes created so far into contiguous storage.
 // Existing Nodes remain valid. It must be called before the nodes are
 // shared with other goroutines.

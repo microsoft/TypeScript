@@ -271,7 +271,7 @@ const sideTables: Record<string, string> = {
     "SymbolTable": "symbolTables",
     "*NodeList": "nodeLists",
     "*ModifierList": "modifierLists",
-    "string": "strings",
+    "string": "texts",
     "[]string": "stringLists",
     "[]Node": "nodeSlices",
     "any": "values",
@@ -291,6 +291,7 @@ function zeroCheck(goType: string, value: string): string {
 // The Go type a field has within a record.
 function recordGoType(isNode: boolean, goType: string): string {
     if (isNode) return "nodeRef";
+    if (goType === "string") return "textRef";
     return sideTableOf(goType) ? "sideRef" : goType;
 }
 

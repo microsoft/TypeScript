@@ -2701,7 +2701,7 @@ func (node ClassLikeBase) SetMembers(value *ClassElementList) {
 }
 
 type literalLikeNodeBaseData struct {
-	text       sideRef // string
+	text       textRef // string
 	tokenFlags TokenFlags
 }
 
@@ -2744,11 +2744,11 @@ func (n Node) literalLikeNodeBaseData() *literalLikeNodeBaseData {
 }
 
 func (node LiteralLikeNodeBase) Text() string {
-	return node.s.strings.get(node.literalLikeNodeBaseData().text)
+	return node.s.texts.get(node.literalLikeNodeBaseData().text)
 }
 
 func (node LiteralLikeNodeBase) SetText(value string) {
-	node.s.strings.set(&node.literalLikeNodeBaseData().text, value, value == "")
+	node.s.texts.set(&node.literalLikeNodeBaseData().text, value, value == "")
 }
 
 func (node LiteralLikeNodeBase) TokenFlags() TokenFlags {
@@ -2788,11 +2788,11 @@ func (n Node) literalExpressionBaseData() *literalExpressionBaseData {
 }
 
 func (node LiteralExpressionBase) Text() string {
-	return node.s.strings.get(node.literalExpressionBaseData().text)
+	return node.s.texts.get(node.literalExpressionBaseData().text)
 }
 
 func (node LiteralExpressionBase) SetText(value string) {
-	node.s.strings.set(&node.literalExpressionBaseData().text, value, value == "")
+	node.s.texts.set(&node.literalExpressionBaseData().text, value, value == "")
 }
 
 func (node LiteralExpressionBase) TokenFlags() TokenFlags {
@@ -2805,7 +2805,7 @@ func (node LiteralExpressionBase) SetTokenFlags(value TokenFlags) {
 
 type templateLiteralLikeNodeBaseData struct {
 	literalLikeNodeBaseData
-	rawText       sideRef // string
+	rawText       textRef // string
 	templateFlags TokenFlags
 }
 
@@ -2833,11 +2833,11 @@ func (n Node) templateLiteralLikeNodeBaseData() *templateLiteralLikeNodeBaseData
 }
 
 func (node TemplateLiteralLikeNodeBase) Text() string {
-	return node.s.strings.get(node.templateLiteralLikeNodeBaseData().text)
+	return node.s.texts.get(node.templateLiteralLikeNodeBaseData().text)
 }
 
 func (node TemplateLiteralLikeNodeBase) SetText(value string) {
-	node.s.strings.set(&node.templateLiteralLikeNodeBaseData().text, value, value == "")
+	node.s.texts.set(&node.templateLiteralLikeNodeBaseData().text, value, value == "")
 }
 
 func (node TemplateLiteralLikeNodeBase) TokenFlags() TokenFlags {
@@ -2849,11 +2849,11 @@ func (node TemplateLiteralLikeNodeBase) SetTokenFlags(value TokenFlags) {
 }
 
 func (node TemplateLiteralLikeNodeBase) RawText() string {
-	return node.s.strings.get(node.templateLiteralLikeNodeBaseData().rawText)
+	return node.s.texts.get(node.templateLiteralLikeNodeBaseData().rawText)
 }
 
 func (node TemplateLiteralLikeNodeBase) SetRawText(value string) {
-	node.s.strings.set(&node.templateLiteralLikeNodeBaseData().rawText, value, value == "")
+	node.s.texts.set(&node.templateLiteralLikeNodeBaseData().rawText, value, value == "")
 }
 
 func (node TemplateLiteralLikeNodeBase) TemplateFlags() TokenFlags {
@@ -3760,7 +3760,7 @@ func IsToken(node Node) bool {
 type identifierData struct {
 	primaryExpressionBaseData
 	flowNodeBaseData
-	text sideRef // string
+	text textRef // string
 }
 
 type Identifier struct{ Node }
@@ -3771,15 +3771,13 @@ func (node Identifier) FlowNode() *FlowNode { return node.s.flowNodes.get(node.d
 func (node Identifier) SetFlowNode(value *FlowNode) {
 	node.s.flowNodes.set(&node.data().flowNode, value, value == nil)
 }
-func (node Identifier) Text() string { return node.s.strings.get(node.data().text) }
-func (node Identifier) SetText(value string) {
-	node.s.strings.set(&node.data().text, value, value == "")
-}
+func (node Identifier) Text() string         { return node.s.texts.get(node.data().text) }
+func (node Identifier) SetText(value string) { node.s.texts.set(&node.data().text, value, value == "") }
 
 func (f *NodeFactory) NewIdentifier(text string) Node {
 	s := f.nodeStore()
 	data, i := newRecord[identifierData](s, layoutIdentifier)
-	s.strings.set(&data.text, text, text == "")
+	s.texts.set(&data.text, text, text == "")
 	f.textCount++
 	return f.newNode(KindIdentifier, layoutIdentifier, i)
 }
@@ -3798,7 +3796,7 @@ func IsIdentifier(node Node) bool {
 
 type privateIdentifierData struct {
 	primaryExpressionBaseData
-	text sideRef // string
+	text textRef // string
 }
 
 type PrivateIdentifier struct{ Node }
@@ -3807,15 +3805,15 @@ func (node PrivateIdentifier) data() *privateIdentifierData {
 	return (*privateIdentifierData)(node.rec())
 }
 
-func (node PrivateIdentifier) Text() string { return node.s.strings.get(node.data().text) }
+func (node PrivateIdentifier) Text() string { return node.s.texts.get(node.data().text) }
 func (node PrivateIdentifier) SetText(value string) {
-	node.s.strings.set(&node.data().text, value, value == "")
+	node.s.texts.set(&node.data().text, value, value == "")
 }
 
 func (f *NodeFactory) NewPrivateIdentifier(text string) Node {
 	s := f.nodeStore()
 	data, i := newRecord[privateIdentifierData](s, layoutPrivateIdentifier)
-	s.strings.set(&data.text, text, text == "")
+	s.texts.set(&data.text, text, text == "")
 	f.textCount++
 	return f.newNode(KindPrivateIdentifier, layoutPrivateIdentifier, i)
 }
@@ -8927,9 +8925,9 @@ type StringLiteral struct{ Node }
 
 func (node StringLiteral) data() *stringLiteralData { return (*stringLiteralData)(node.rec()) }
 
-func (node StringLiteral) Text() string { return node.s.strings.get(node.data().text) }
+func (node StringLiteral) Text() string { return node.s.texts.get(node.data().text) }
 func (node StringLiteral) SetText(value string) {
-	node.s.strings.set(&node.data().text, value, value == "")
+	node.s.texts.set(&node.data().text, value, value == "")
 }
 func (node StringLiteral) TokenFlags() TokenFlags         { return node.data().tokenFlags }
 func (node StringLiteral) SetTokenFlags(value TokenFlags) { node.data().tokenFlags = value }
@@ -8937,7 +8935,7 @@ func (node StringLiteral) SetTokenFlags(value TokenFlags) { node.data().tokenFla
 func (f *NodeFactory) NewStringLiteral(text string, tokenFlags TokenFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[stringLiteralData](s, layoutStringLiteral)
-	s.strings.set(&data.text, text, text == "")
+	s.texts.set(&data.text, text, text == "")
 	data.tokenFlags = tokenFlags & TokenFlagsStringLiteralFlags
 	f.textCount++
 	return f.newNode(KindStringLiteral, layoutStringLiteral, i)
@@ -8963,9 +8961,9 @@ type NumericLiteral struct{ Node }
 
 func (node NumericLiteral) data() *numericLiteralData { return (*numericLiteralData)(node.rec()) }
 
-func (node NumericLiteral) Text() string { return node.s.strings.get(node.data().text) }
+func (node NumericLiteral) Text() string { return node.s.texts.get(node.data().text) }
 func (node NumericLiteral) SetText(value string) {
-	node.s.strings.set(&node.data().text, value, value == "")
+	node.s.texts.set(&node.data().text, value, value == "")
 }
 func (node NumericLiteral) TokenFlags() TokenFlags         { return node.data().tokenFlags }
 func (node NumericLiteral) SetTokenFlags(value TokenFlags) { node.data().tokenFlags = value }
@@ -8973,7 +8971,7 @@ func (node NumericLiteral) SetTokenFlags(value TokenFlags) { node.data().tokenFl
 func (f *NodeFactory) NewNumericLiteral(text string, tokenFlags TokenFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[numericLiteralData](s, layoutNumericLiteral)
-	s.strings.set(&data.text, text, text == "")
+	s.texts.set(&data.text, text, text == "")
 	data.tokenFlags = tokenFlags & TokenFlagsNumericLiteralFlags
 	f.textCount++
 	return f.newNode(KindNumericLiteral, layoutNumericLiteral, i)
@@ -8999,9 +8997,9 @@ type BigIntLiteral struct{ Node }
 
 func (node BigIntLiteral) data() *bigIntLiteralData { return (*bigIntLiteralData)(node.rec()) }
 
-func (node BigIntLiteral) Text() string { return node.s.strings.get(node.data().text) }
+func (node BigIntLiteral) Text() string { return node.s.texts.get(node.data().text) }
 func (node BigIntLiteral) SetText(value string) {
-	node.s.strings.set(&node.data().text, value, value == "")
+	node.s.texts.set(&node.data().text, value, value == "")
 }
 func (node BigIntLiteral) TokenFlags() TokenFlags         { return node.data().tokenFlags }
 func (node BigIntLiteral) SetTokenFlags(value TokenFlags) { node.data().tokenFlags = value }
@@ -9009,7 +9007,7 @@ func (node BigIntLiteral) SetTokenFlags(value TokenFlags) { node.data().tokenFla
 func (f *NodeFactory) NewBigIntLiteral(text string, tokenFlags TokenFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[bigIntLiteralData](s, layoutBigIntLiteral)
-	s.strings.set(&data.text, text, text == "")
+	s.texts.set(&data.text, text, text == "")
 	data.tokenFlags = tokenFlags & TokenFlagsNumericLiteralFlags
 	f.textCount++
 	return f.newNode(KindBigIntLiteral, layoutBigIntLiteral, i)
@@ -9037,9 +9035,9 @@ func (node RegularExpressionLiteral) data() *regularExpressionLiteralData {
 	return (*regularExpressionLiteralData)(node.rec())
 }
 
-func (node RegularExpressionLiteral) Text() string { return node.s.strings.get(node.data().text) }
+func (node RegularExpressionLiteral) Text() string { return node.s.texts.get(node.data().text) }
 func (node RegularExpressionLiteral) SetText(value string) {
-	node.s.strings.set(&node.data().text, value, value == "")
+	node.s.texts.set(&node.data().text, value, value == "")
 }
 
 func (node RegularExpressionLiteral) TokenFlags() TokenFlags { return node.data().tokenFlags }
@@ -9049,7 +9047,7 @@ func (node RegularExpressionLiteral) SetTokenFlags(value TokenFlags) { node.data
 func (f *NodeFactory) NewRegularExpressionLiteral(text string, tokenFlags TokenFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[regularExpressionLiteralData](s, layoutRegularExpressionLiteral)
-	s.strings.set(&data.text, text, text == "")
+	s.texts.set(&data.text, text, text == "")
 	data.tokenFlags = tokenFlags & TokenFlagsRegularExpressionLiteralFlags
 	f.textCount++
 	return f.newNode(KindRegularExpressionLiteral, layoutRegularExpressionLiteral, i)
@@ -9079,10 +9077,10 @@ func (node NoSubstitutionTemplateLiteral) data() *noSubstitutionTemplateLiteralD
 	return (*noSubstitutionTemplateLiteralData)(node.rec())
 }
 
-func (node NoSubstitutionTemplateLiteral) Text() string { return node.s.strings.get(node.data().text) }
+func (node NoSubstitutionTemplateLiteral) Text() string { return node.s.texts.get(node.data().text) }
 
 func (node NoSubstitutionTemplateLiteral) SetText(value string) {
-	node.s.strings.set(&node.data().text, value, value == "")
+	node.s.texts.set(&node.data().text, value, value == "")
 }
 func (node NoSubstitutionTemplateLiteral) TokenFlags() TokenFlags { return node.data().tokenFlags }
 func (node NoSubstitutionTemplateLiteral) SetTokenFlags(value TokenFlags) {
@@ -9090,11 +9088,11 @@ func (node NoSubstitutionTemplateLiteral) SetTokenFlags(value TokenFlags) {
 }
 
 func (node NoSubstitutionTemplateLiteral) RawText() string {
-	return node.s.strings.get(node.data().rawText)
+	return node.s.texts.get(node.data().rawText)
 }
 
 func (node NoSubstitutionTemplateLiteral) SetRawText(value string) {
-	node.s.strings.set(&node.data().rawText, value, value == "")
+	node.s.texts.set(&node.data().rawText, value, value == "")
 }
 
 func (node NoSubstitutionTemplateLiteral) TemplateFlags() TokenFlags {
@@ -9116,7 +9114,7 @@ func (node NoSubstitutionTemplateLiteral) SetSymbol(value *Symbol) {
 func (f *NodeFactory) NewNoSubstitutionTemplateLiteral(text string, templateFlags TokenFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[noSubstitutionTemplateLiteralData](s, layoutNoSubstitutionTemplateLiteral)
-	s.strings.set(&data.text, text, text == "")
+	s.texts.set(&data.text, text, text == "")
 	data.templateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
 	return f.newNode(KindNoSubstitutionTemplateLiteral, layoutNoSubstitutionTemplateLiteral, i)
@@ -12785,16 +12783,16 @@ type TemplateHead struct{ Node }
 
 func (node TemplateHead) data() *templateHeadData { return (*templateHeadData)(node.rec()) }
 
-func (node TemplateHead) Text() string { return node.s.strings.get(node.data().text) }
+func (node TemplateHead) Text() string { return node.s.texts.get(node.data().text) }
 func (node TemplateHead) SetText(value string) {
-	node.s.strings.set(&node.data().text, value, value == "")
+	node.s.texts.set(&node.data().text, value, value == "")
 }
 func (node TemplateHead) TokenFlags() TokenFlags         { return node.data().tokenFlags }
 func (node TemplateHead) SetTokenFlags(value TokenFlags) { node.data().tokenFlags = value }
-func (node TemplateHead) RawText() string                { return node.s.strings.get(node.data().rawText) }
+func (node TemplateHead) RawText() string                { return node.s.texts.get(node.data().rawText) }
 
 func (node TemplateHead) SetRawText(value string) {
-	node.s.strings.set(&node.data().rawText, value, value == "")
+	node.s.texts.set(&node.data().rawText, value, value == "")
 }
 func (node TemplateHead) TemplateFlags() TokenFlags         { return node.data().templateFlags }
 func (node TemplateHead) SetTemplateFlags(value TokenFlags) { node.data().templateFlags = value }
@@ -12802,8 +12800,8 @@ func (node TemplateHead) SetTemplateFlags(value TokenFlags) { node.data().templa
 func (f *NodeFactory) NewTemplateHead(text string, rawText string, templateFlags TokenFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateHeadData](s, layoutTemplateHead)
-	s.strings.set(&data.text, text, text == "")
-	s.strings.set(&data.rawText, rawText, rawText == "")
+	s.texts.set(&data.text, text, text == "")
+	s.texts.set(&data.rawText, rawText, rawText == "")
 	data.templateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
 	return f.newNode(KindTemplateHead, layoutTemplateHead, i)
@@ -12830,16 +12828,16 @@ type TemplateMiddle struct{ Node }
 
 func (node TemplateMiddle) data() *templateMiddleData { return (*templateMiddleData)(node.rec()) }
 
-func (node TemplateMiddle) Text() string { return node.s.strings.get(node.data().text) }
+func (node TemplateMiddle) Text() string { return node.s.texts.get(node.data().text) }
 func (node TemplateMiddle) SetText(value string) {
-	node.s.strings.set(&node.data().text, value, value == "")
+	node.s.texts.set(&node.data().text, value, value == "")
 }
 func (node TemplateMiddle) TokenFlags() TokenFlags         { return node.data().tokenFlags }
 func (node TemplateMiddle) SetTokenFlags(value TokenFlags) { node.data().tokenFlags = value }
-func (node TemplateMiddle) RawText() string                { return node.s.strings.get(node.data().rawText) }
+func (node TemplateMiddle) RawText() string                { return node.s.texts.get(node.data().rawText) }
 
 func (node TemplateMiddle) SetRawText(value string) {
-	node.s.strings.set(&node.data().rawText, value, value == "")
+	node.s.texts.set(&node.data().rawText, value, value == "")
 }
 func (node TemplateMiddle) TemplateFlags() TokenFlags         { return node.data().templateFlags }
 func (node TemplateMiddle) SetTemplateFlags(value TokenFlags) { node.data().templateFlags = value }
@@ -12847,8 +12845,8 @@ func (node TemplateMiddle) SetTemplateFlags(value TokenFlags) { node.data().temp
 func (f *NodeFactory) NewTemplateMiddle(text string, rawText string, templateFlags TokenFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateMiddleData](s, layoutTemplateMiddle)
-	s.strings.set(&data.text, text, text == "")
-	s.strings.set(&data.rawText, rawText, rawText == "")
+	s.texts.set(&data.text, text, text == "")
+	s.texts.set(&data.rawText, rawText, rawText == "")
 	data.templateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
 	return f.newNode(KindTemplateMiddle, layoutTemplateMiddle, i)
@@ -12875,16 +12873,16 @@ type TemplateTail struct{ Node }
 
 func (node TemplateTail) data() *templateTailData { return (*templateTailData)(node.rec()) }
 
-func (node TemplateTail) Text() string { return node.s.strings.get(node.data().text) }
+func (node TemplateTail) Text() string { return node.s.texts.get(node.data().text) }
 func (node TemplateTail) SetText(value string) {
-	node.s.strings.set(&node.data().text, value, value == "")
+	node.s.texts.set(&node.data().text, value, value == "")
 }
 func (node TemplateTail) TokenFlags() TokenFlags         { return node.data().tokenFlags }
 func (node TemplateTail) SetTokenFlags(value TokenFlags) { node.data().tokenFlags = value }
-func (node TemplateTail) RawText() string                { return node.s.strings.get(node.data().rawText) }
+func (node TemplateTail) RawText() string                { return node.s.texts.get(node.data().rawText) }
 
 func (node TemplateTail) SetRawText(value string) {
-	node.s.strings.set(&node.data().rawText, value, value == "")
+	node.s.texts.set(&node.data().rawText, value, value == "")
 }
 func (node TemplateTail) TemplateFlags() TokenFlags         { return node.data().templateFlags }
 func (node TemplateTail) SetTemplateFlags(value TokenFlags) { node.data().templateFlags = value }
@@ -12892,8 +12890,8 @@ func (node TemplateTail) SetTemplateFlags(value TokenFlags) { node.data().templa
 func (f *NodeFactory) NewTemplateTail(text string, rawText string, templateFlags TokenFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateTailData](s, layoutTemplateTail)
-	s.strings.set(&data.text, text, text == "")
-	s.strings.set(&data.rawText, rawText, rawText == "")
+	s.texts.set(&data.text, text, text == "")
+	s.texts.set(&data.rawText, rawText, rawText == "")
 	data.templateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
 	f.textCount++
 	return f.newNode(KindTemplateTail, layoutTemplateTail, i)
@@ -13848,8 +13846,8 @@ type JsxText struct{ Node }
 
 func (node JsxText) data() *jsxTextData { return (*jsxTextData)(node.rec()) }
 
-func (node JsxText) Text() string                   { return node.s.strings.get(node.data().text) }
-func (node JsxText) SetText(value string)           { node.s.strings.set(&node.data().text, value, value == "") }
+func (node JsxText) Text() string                   { return node.s.texts.get(node.data().text) }
+func (node JsxText) SetText(value string)           { node.s.texts.set(&node.data().text, value, value == "") }
 func (node JsxText) TokenFlags() TokenFlags         { return node.data().tokenFlags }
 func (node JsxText) SetTokenFlags(value TokenFlags) { node.data().tokenFlags = value }
 func (node JsxText) ContainsOnlyTriviaWhiteSpaces() bool {
@@ -13863,7 +13861,7 @@ func (node JsxText) SetContainsOnlyTriviaWhiteSpaces(value bool) {
 func (f *NodeFactory) NewJsxText(text string, containsOnlyTriviaWhiteSpaces bool) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxTextData](s, layoutJsxText)
-	s.strings.set(&data.text, text, text == "")
+	s.texts.set(&data.text, text, text == "")
 	data.containsOnlyTriviaWhiteSpaces = containsOnlyTriviaWhiteSpaces
 	f.textCount++
 	return f.newNode(KindJsxText, layoutJsxText, i)
