@@ -1,0 +1,39 @@
+/main.ts(1,22): error TS5116: Network path '//server/share/types.d.ts' is not supported.
+/main.ts(2,22): error TS5116: Network path '//server/share/types.d.ts' is not supported.
+/main.ts(3,22): error TS5116: Network path '//?/UNC/server/share/types.d.ts' is not supported.
+/main.ts(4,22): error TS5116: Network path '/??/UNC/server/share/types.d.ts' is not supported.
+/tsconfig.json(4,24): error TS5116: Network path '//server/share/remote.d.ts' is not supported.
+
+
+==== /tsconfig.json (1 errors) ====
+    {
+        "compilerOptions": {
+            "paths": {
+                "remote": ["//server/share/remote.d.ts", "./share/types.d.ts"],
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5116: Network path '//server/share/remote.d.ts' is not supported.
+                "local": ["/??/../share/types.d.ts"]
+            }
+        }
+    }
+    
+==== /share/types.d.ts (0 errors) ====
+    export declare const x: number;
+    
+==== /main.ts (4 errors) ====
+    /// <reference path="//server/share/types.d.ts" />
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5116: Network path '//server/share/types.d.ts' is not supported.
+    /// <reference path="\\server\share\types.d.ts" />
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5116: Network path '//server/share/types.d.ts' is not supported.
+    /// <reference path="\\?\UNC\server\share\types.d.ts" />
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5116: Network path '//?/UNC/server/share/types.d.ts' is not supported.
+    /// <reference path="\??\UNC\server\share\types.d.ts" />
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5116: Network path '/??/UNC/server/share/types.d.ts' is not supported.
+    /// <reference path="./share/types.d.ts" />
+    import { x } from "./share/types";
+    x;
+    

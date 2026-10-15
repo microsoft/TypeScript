@@ -21,6 +21,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
@@ -1181,6 +1182,8 @@ func (p *Program) verifyCompilerOptions() {
 			}
 			if !tspath.PathIsRelative(subst) && !tspath.PathIsAbsolute(subst) {
 				createDiagnosticForOptionPathKeyValue(key, i, diagnostics.Non_relative_paths_are_not_allowed_Did_you_forget_a_leading_Slash)
+			} else if nativepath.IsNetworkPath(tspath.GetNormalizedAbsolutePath(subst, options.GetPathsBasePath(p.GetCurrentDirectory()))) {
+				createDiagnosticForOptionPathKeyValue(key, i, diagnostics.Network_path_0_is_not_supported, subst)
 			}
 		}
 	}
