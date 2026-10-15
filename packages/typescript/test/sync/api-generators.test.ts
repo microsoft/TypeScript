@@ -579,7 +579,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         assert.equal(started, false);
     });
 
-    test("retains deferred branding after completion", () => {
+    test("rejects deferred generator reuse after completion", () => {
         let completed = false;
         function* child(): Generator<APIRequest, string, string> {
             const result = yield { method: "request", params: null } as unknown as APIRequest;
@@ -591,8 +591,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         assert.deepEqual(results, []);
         assert.equal(completed, true);
         const noRequests = () => assert.fail("Unexpected request round");
-        assert.deepEqual(executeRequestGenerators([deferred], noRequests), []);
-        assert.throws(() => executeRequestGenerators([deferred, deferred], noRequests), /same generator instance more than once/);
+        assert.throws(() => executeRequestGenerators([deferred], noRequests), /same generator instance more than once/);
     });
 
     test("joins nested, empty, and synchronously completed groups in result order", () => {
@@ -897,23 +896,15 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         }
     });
 
-    test("tracks all identity independently across executors", () => {
+    test("rejects generator reuse across executors", () => {
         const joined = all();
         const noRequests = () => assert.fail("Unexpected request round");
         function* parent() {
             assert.deepEqual(yield* all(joined), [[]]);
-            assert.deepEqual(executeRequestGenerators([joined], noRequests), [undefined]);
-            try {
-                yield* all(joined);
-                assert.fail("Expected duplicate generator rejection");
-            }
-            catch (error) {
-                assert.match((error as Error).message, /same generator instance more than once/);
-            }
+            assert.throws(() => executeRequestGenerators([joined], noRequests), /same generator instance more than once/);
         }
         executeRequestGenerators([parent()], noRequests);
-        assert.deepEqual(executeRequestGenerators([joined], noRequests), [undefined]);
-        assert.throws(() => executeRequestGenerators([joined, joined], noRequests), /same generator instance more than once/);
+        assert.throws(() => executeRequestGenerators([joined], noRequests), /same generator instance more than once/);
     });
 
     test("deduplicates initialization across nested joins", () => {
