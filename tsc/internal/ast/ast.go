@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -72,19 +73,18 @@ func NewNodeFactory(hooks NodeFactoryHooks) *NodeFactory {
 	return &NodeFactory{hooks: hooks}
 }
 
-func newNode(kind Kind, n *Node, data any, hooks NodeFactoryHooks) *Node {
+func newNode(kind Kind, n *Node, hooks NodeFactoryHooks) *Node {
 	n.Loc = core.UndefinedTextRange()
 	n.Kind = kind
-	n.data = data
 	if hooks.OnCreate != nil {
 		hooks.OnCreate(n)
 	}
 	return n
 }
 
-func (f *NodeFactory) newNode(kind Kind, n *Node, data any) *Node {
+func (f *NodeFactory) newNode(kind Kind, n *Node) *Node {
 	f.nodeCount++
-	return newNode(kind, n, data, f.hooks)
+	return newNode(kind, n, f.hooks)
 }
 
 func (f *NodeFactory) NodeCount() int {
@@ -172,9 +172,8 @@ func (list *ModifierList) Clone(f *NodeFactory) *ModifierList {
 	return res
 }
 
-// AST Node
-// Interface values stored in AST nodes are never typed nil values. Construction code must ensure that
-// interface valued properties either store a true nil or a reference to a non-nil struct.
+// Every concrete AST node embeds Node at offset zero. Kind identifies the
+// enclosing allocation, which generated accessors recover without a data pointer.
 
 type Node struct {
 	Kind   Kind
@@ -182,10 +181,9 @@ type Node struct {
 	Loc    core.TextRange
 	id     atomic.Uint64
 	Parent *Node
-	data   any
 }
 
-// Shared node accessors dispatch on Kind to the concrete payload stored in data.
+// Shared node accessors dispatch on Kind to the enclosing concrete node.
 
 func (n *Node) AsNode() *Node { return n }
 func (n *Node) Pos() int      { return n.Loc.Pos() }
@@ -281,7 +279,7 @@ func (n *Node) Text() string {
 	case KindJSDocLinkPlain:
 		return strings.Join(n.AsJSDocLinkPlain().text, "")
 	}
-	panic(fmt.Sprintf("Unhandled case in Node.Text: %T", n.data))
+	panic(fmt.Sprintf("Unhandled case in Node.Text: %s", n.Kind))
 }
 
 func (n *Node) Expression() *Node {
@@ -1148,11 +1146,17 @@ func (n *Node) Contains(descendant *Node) bool {
 // Node casts
 
 func (n *Node) AsFlowSwitchClauseData() *FlowSwitchClauseData {
-	return n.data.(*FlowSwitchClauseData)
+	if n.Kind != kindFlowSwitchClauseData {
+		panic("Invalid node cast to FlowSwitchClauseData")
+	}
+	return (*FlowSwitchClauseData)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
-	return n.data.(*FlowReduceLabelData)
+	if n.Kind != kindFlowReduceLabelData {
+		panic("Invalid node cast to FlowReduceLabelData")
+	}
+	return (*FlowReduceLabelData)(unsafe.Pointer(n))
 }
 
 // NodeDefault keeps Node methods one promotion level below fields such as Text,
@@ -2451,7 +2455,7 @@ func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, st
 	data.text = text
 	data.Statements = statements
 	data.EndOfFileToken = endOfFileToken
-	return f.newNode(KindSourceFile, data.AsNode(), data)
+	return f.newNode(KindSourceFile, data.AsNode())
 }
 
 func (node *SourceFile) ParseOptions() SourceFileParseOptions {

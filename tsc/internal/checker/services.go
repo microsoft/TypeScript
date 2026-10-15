@@ -413,7 +413,7 @@ func (c *Checker) GetRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 
 func (c *Checker) GetMappedTypeSymbolOfProperty(symbol *ast.Symbol) *ast.Symbol {
 	if valueLinks := c.valueSymbolLinks.TryGet(symbol); valueLinks != nil {
-		return valueLinks.containingType.symbol
+		return valueLinks.getContainingType().symbol
 	}
 	return nil
 }
@@ -421,7 +421,7 @@ func (c *Checker) GetMappedTypeSymbolOfProperty(symbol *ast.Symbol) *ast.Symbol 
 func (c *Checker) getImmediateRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 	if symbol.CheckFlags()&ast.CheckFlagsSynthetic != 0 {
 		return core.MapNonNil(
-			c.valueSymbolLinks.Get(symbol).containingType.Types(),
+			c.valueSymbolLinks.Get(symbol).getContainingType().Types(),
 			func(t *Type) *ast.Symbol {
 				return c.getPropertyOfType(t, symbol.Name())
 			},
@@ -726,10 +726,10 @@ func (c *Checker) getUninstantiatedSignatures(node *ast.Node) []*Signature {
 func (c *Checker) getTypeParameterConstraintForPositionAcrossSignatures(signatures []*Signature, position int) *Type {
 	var relevantConstraints []*Type
 	for _, signature := range signatures {
-		if position >= len(signature.typeParameters) {
+		if position >= len(signature.TypeParameters()) {
 			continue
 		}
-		relevantTypeParameter := signature.typeParameters[position]
+		relevantTypeParameter := signature.TypeParameters()[position]
 		relevantConstraint := c.getConstraintOfTypeParameter(relevantTypeParameter)
 		if relevantConstraint != nil {
 			relevantConstraints = append(relevantConstraints, relevantConstraint)
