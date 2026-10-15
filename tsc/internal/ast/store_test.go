@@ -26,6 +26,24 @@ func TestNodeRecordsArePointerFree(t *testing.T) {
 	}
 }
 
+// Records are ordered so that their only padding rounds out their size.
+func TestNodeRecordsAreUnpadded(t *testing.T) {
+	t.Parallel()
+	for layout := nodeLayout(1); layout < layoutCount; layout++ {
+		if standaloneLayout(layout) {
+			continue
+		}
+		typ := reflect.TypeOf(layoutRecord(layout))
+		var used uintptr
+		for field := range typ.Fields() {
+			used += field.Type.Size()
+		}
+		if typ.Size()-used >= uintptr(typ.Align()) {
+			t.Errorf("record %s has %d bytes of padding", typ.Name(), typ.Size()-used)
+		}
+	}
+}
+
 func findPointer(typ reflect.Type, path string) string {
 	switch typ.Kind() {
 	case reflect.Struct:

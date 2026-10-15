@@ -302,9 +302,72 @@ function baseGoFields(key: string): GoField[] {
     for (const ext of baseGoEmbeds(base)) fields.push(...baseGoFields(ext));
     for (const field of base.fields) {
         if (field.noGo) continue;
-        fields.push({ name: field.name, goType: field.goOnly ? field.rawType as string : field.type.formatGoReference(), isNode: isNodeField(field) });
+        fields.push({ name: field.name, goType: field.goOnly ? field.rawType as string : field.type.formatGoReference(), isNode: isNodeField(field), owner: key });
     }
     return fields;
+}
+
+// A field as laid out in a record.
+interface RecordField {
+    storage: string;
+    goType: string;
+    comment: string;
+}
+
+function baseRecordFields(key: string): RecordField[] {
+    const base = api.getBase(key);
+    if (!base || HAND_WRITTEN_BASES.has(key)) return [];
+    const fields: RecordField[] = [];
+    for (const ext of baseGoEmbeds(base)) fields.push(...baseRecordFields(ext));
+    for (const field of base.fields) {
+        if (field.noGo) continue;
+        const valueType = field.goOnly ? field.rawType as string : field.type.formatGoReference();
+        const goType = recordGoType(isNodeField(field), valueType);
+        const parts = [];
+        if (goType !== valueType) parts.push(valueType);
+        if (field.optional) parts.push("Optional");
+        fields.push({ storage: goStorageName(field.name), goType, comment: parts.length > 0 ? `// ${parts.join(". ")}` : "" });
+    }
+    return fields;
+}
+
+// Alignments of the Go types that record fields may have.
+const recordFieldAlignments: Record<string, number> = {
+    "nodeRef": 8,
+    "textRef": 4,
+    "sideRef": 4,
+    "atomic.Uint32": 4,
+    "TokenFlags": 4,
+    "Kind": 2,
+    "ImportPhaseModifierSyntaxKind": 2,
+    "bool": 1,
+};
+
+function recordFieldAlignment(goType: string): number {
+    if (!Object.hasOwn(recordFieldAlignments, goType)) {
+        throw new Error(`unknown alignment for record field type ${goType}`);
+    }
+    return recordFieldAlignments[goType];
+}
+
+// A node's record holds its own and its bases' fields after the header,
+// ordered by decreasing alignment so that no padding falls between them.
+function nodeRecordFields(node: NodeType): RecordField[] {
+    const fields: RecordField[] = [];
+    for (const ext of goEmbeds(node.extendsKeys)) fields.push(...baseRecordFields(ext));
+    for (const m of nodeOwnFields(node)) {
+        const goType = recordGoType(isNodeField(m), memberGoType(m));
+        fields.push({ storage: goStorageName(m.name), goType, comment: buildFieldComment(m, goType !== memberGoType(m) ? memberGoType(m) : undefined) });
+    }
+    const seen = new Set<string>();
+    for (const field of fields) {
+        if (seen.has(field.storage)) throw new Error(`${node.name} has more than one field named ${field.storage}`);
+        seen.add(field.storage);
+    }
+    return fields
+        .map((field, index) => ({ field, index }))
+        .sort((a, b) => recordFieldAlignment(b.field.goType) - recordFieldAlignment(a.field.goType) || a.index - b.index)
+        .map(({ field }) => field);
 }
 
 function nodeGoFields(node: NodeType): GoField[] {
@@ -318,25 +381,10 @@ function generateStructDef(w: CodeWriter, node: NodeType) {
     const structName = node.name;
     w.write(`type ${dataName(node)} struct {`);
     w.push();
-
-    // Embeddings from extends (each maps to a Go struct via convention)
-    for (const ext of goEmbeds(node.extendsKeys)) {
-        w.write(baseDataName(ext));
+    w.write("nodeBaseData");
+    for (const { storage, goType, comment } of nodeRecordFields(node)) {
+        w.write(comment ? `${storage} ${goType} ${comment}` : `${storage} ${goType}`);
     }
-
-    // Fields from members (skip inherited, Kind params, and noGo)
-    for (const m of nodeOwnFields(node)) {
-        const fieldName = goStorageName(m.name);
-        const goType = recordGoType(isNodeField(m), memberGoType(m));
-        const comment = buildFieldComment(m, goType !== memberGoType(m) ? memberGoType(m) : undefined);
-        if (comment) {
-            w.write(`${fieldName} ${goType} ${comment}`);
-        }
-        else {
-            w.write(`${fieldName} ${goType}`);
-        }
-    }
-
     w.pop();
     w.write("}");
     w.write("");
@@ -344,7 +392,7 @@ function generateStructDef(w: CodeWriter, node: NodeType) {
     w.write("");
     w.write(`func (node ${structName}) data() *${dataName(node)} { return ${dataOf(node, "node")} }`);
     w.write("");
-    generateFieldAccessors(w, structName, nodeGoFields(node), "node.data()");
+    generateFieldAccessors(w, structName, nodeGoFields(node), f => `&node.data().${goStorageName(f.name)}`, f => `node.data().${goStorageName(f.name)}`);
 }
 
 function buildFieldComment(m: MemberInfo, refType?: string): string {
@@ -401,7 +449,7 @@ const HAND_WRITTEN_BASES = new Set(["NodeBase"]);
 
 function generateBaseStructDefs(w: CodeWriter) {
     w.write("// ──────────────────────────────────────────────────────────────────────");
-    w.write("// Base struct definitions");
+    w.write("// Base views");
     w.write("// ──────────────────────────────────────────────────────────────────────");
     w.write("");
 
@@ -409,71 +457,48 @@ function generateBaseStructDefs(w: CodeWriter) {
         if (HAND_WRITTEN_BASES.has(base.key)) continue;
 
         const structName = base.key;
-
-        const goExts = baseGoEmbeds(base);
-
-        w.write(`type ${baseDataName(structName)} struct {`);
-        w.push();
-
-        // Embeddings from extends
-        for (const ext of goExts) {
-            w.write(baseDataName(ext));
-        }
-
-        // Schema fields
         for (const field of base.fields) {
-            if (field.noGo) continue;
-            const valueType = field.goOnly ? field.rawType as string : field.type.formatGoReference();
-            const goType = recordGoType(isNodeField(field), valueType);
-            const parts = [];
-            if (goType !== valueType) parts.push(valueType);
-            if (field.optional) parts.push("Optional");
-            const comment = parts.length > 0 ? ` // ${parts.join(". ")}` : "";
-            w.write(`${goStorageName(field.name)} ${goType}${comment}`);
+            if (!field.noGo) generateBaseFieldOffsets(w, base, field.name, field.goOnly ? field.rawType as string : field.type.formatGoReference(), isNodeField(field));
         }
-
-        w.pop();
-        w.write("}");
-        w.write("");
 
         // Base views see the fields of whichever concrete node they wrap.
         w.write(`type ${structName} struct{ Node }`);
         w.write("");
         const fields = baseGoFields(structName);
         if (fields.length > 0) {
-            generateBaseDataDispatch(w, base);
-            generateFieldAccessors(w, structName, fields, `node.${baseDataName(structName)}()`);
+            generateFieldAccessors(w, structName, fields, f => `node.${baseFieldName(f.owner!, f.name)}()`, f => `*node.${baseFieldName(f.owner!, f.name)}()`);
         }
     }
 }
 
-function generateBaseDataDispatch(w: CodeWriter, base: NodeType) {
-    const cases: { node: NodeType; kinds: string[]; }[] = [];
-    for (const node of api.nodes()) {
-        if (!transitiveBaseKeys(node).has(base.key)) continue;
-        const kinds = node.allKinds().map(kind => kind.formatGoConstant());
-        if (kinds.length !== 0) cases.push({ node, kinds });
-    }
-    const table = `${baseDataName(base.key)}Dispatch`;
+// The method locating a base's field in a record.
+function baseFieldName(key: string, name: string): string {
+    return `${goStorageName(key)}${api.capitalize(goStorageName(name))}`;
+}
+
+// A base's fields lie at different offsets in each kind's record, so each
+// has a table of its offsets by kind, zero for kinds without the base.
+function generateBaseFieldOffsets(w: CodeWriter, base: NodeType, name: string, valueType: string, isNode: boolean) {
+    const method = baseFieldName(base.key, name);
+    const table = `${method}Offsets`;
+    const goType = recordGoType(isNode, valueType);
     w.write(`var ${table} = [kindFlowReduceLabelData + 1]uint8{`);
     w.push();
-    for (const [index, { kinds }] of cases.entries()) {
-        for (const kind of kinds) {
-            w.write(`${kind}: ${index + 1},`);
+    for (const node of api.nodes()) {
+        if (!transitiveBaseKeys(node).has(base.key)) continue;
+        for (const kind of node.allKinds()) {
+            w.write(`${kind.formatGoConstant()}: uint8(unsafe.Offsetof(${dataName(node)}{}.${goStorageName(name)})),`);
         }
     }
     w.pop();
     w.write("}");
     w.write("");
-    w.write(`func (n Node) ${baseDataName(base.key)}() *${baseDataName(base.key)} {`);
+    w.write(`func (n Node) ${method}() *${goType} {`);
     w.push();
-    w.write(`switch ${table}[n.Kind()] {`);
-    for (const [index, { node }] of cases.entries()) {
-        w.write(`case ${index + 1}:`);
-        w.push();
-        w.write(`return &${dataOf(node, "n")}.${baseDataName(base.key)}`);
-        w.pop();
-    }
+    w.write(`if off := ${table}[n.Kind()]; off != 0 {`);
+    w.push();
+    w.write(`return (*${goType})(unsafe.Add(n.p, off))`);
+    w.pop();
     w.write("}");
     w.write("return nil");
     w.pop();
@@ -626,14 +651,12 @@ interface GoField {
     name: string;
     goType: string;
     isNode: boolean;
+    // The base declaring the field, or undefined for a node's own field.
+    owner?: string;
 }
 
 function dataName(node: NodeType): string {
     return node.handWritten ? node.name : `${goStorageName(node.name)}Data`;
-}
-
-function baseDataName(key: string): string {
-    return key === "NodeBase" ? "nodeBaseData" : `${goStorageName(key)}Data`;
 }
 
 // Private fields get exported getters only where they agree with the shared
@@ -660,23 +683,24 @@ function viewOf(node: NodeType, recv: string): string {
     return node.handWritten ? dataOf(node, recv) : `${node.name}{${recv}}`;
 }
 
-function generateFieldAccessors(w: CodeWriter, structName: string, fields: GoField[], data: string) {
+// addr and value give a field's address and value within a record.
+function generateFieldAccessors(w: CodeWriter, structName: string, fields: GoField[], addr: (field: GoField) => string, value: (field: GoField) => string) {
     let wrote = false;
-    for (const { name, goType, isNode } of fields) {
+    for (const field of fields) {
+        const { name, goType, isNode } = field;
         if (goType.startsWith("atomic.")) continue;
-        const storage = goStorageName(name);
         const side = sideTableOf(goType);
         if (isNode) {
-            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.deref(&${data}.${storage}) }`);
-            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { node.setRef(&${data}.${storage}, value) }`);
+            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.deref(${addr(field)}) }`);
+            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { node.setRef(${addr(field)}, value) }`);
         }
         else if (side) {
-            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.store().${side}.get(${data}.${storage}) }`);
-            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { node.store().${side}.set(&${data}.${storage}, value, ${zeroCheck(goType, "value")}) }`);
+            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.store().${side}.get(${value(field)}) }`);
+            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { node.store().${side}.set(${addr(field)}, value, ${zeroCheck(goType, "value")}) }`);
         }
         else {
-            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return ${data}.${storage} }`);
-            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { ${data}.${storage} = value }`);
+            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return ${value(field)} }`);
+            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { ${value(field)} = value }`);
         }
         wrote = true;
     }
@@ -1106,7 +1130,7 @@ function generateSubtreeFactsDispatch(w: CodeWriter) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
         if (transitiveBaseKeys(node).has("CompositeBase")) {
-            w.write(`return ${dataOf(node, "n")}.subtreeFactsWorker(n)`);
+            w.write(`return subtreeFactsWorker(&${dataOf(node, "n")}.facts, n)`);
         }
         else {
             w.write("return n.computeSubtreeFacts()");

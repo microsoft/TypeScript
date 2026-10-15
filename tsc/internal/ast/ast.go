@@ -1520,12 +1520,12 @@ func (node Node) EagerJSDoc(file *SourceFile) []Node {
 
 // CompositeBase
 
-func (node *compositeBaseData) subtreeFactsWorker(self Node) SubtreeFacts {
+func subtreeFactsWorker(cache *atomic.Uint32, self Node) SubtreeFacts {
 	// computeSubtreeFacts() is expected to be idempotent, so races will only impact time, not correctness.
-	facts := SubtreeFacts(node.facts.Load())
+	facts := SubtreeFacts(cache.Load())
 	if facts&SubtreeFactsComputed == 0 {
 		facts |= self.computeSubtreeFacts() | SubtreeFactsComputed
-		node.facts.Store(uint32(facts))
+		cache.Store(uint32(facts))
 	}
 	return facts &^ SubtreeFactsComputed
 }
@@ -2349,9 +2349,10 @@ type TokenCacheKey struct {
 // itself, giving *SourceFile the shared node methods.
 type SourceFile struct {
 	nodeBaseData
-	declarationBaseData
-	localsContainerBaseData
-	compositeBaseData
+	nextContainer nodeRef
+	symbol        sideRef
+	locals        sideRef
+	facts         atomic.Uint32
 	Node
 
 	// Fields set by NewSourceFile

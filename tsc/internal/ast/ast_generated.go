@@ -1185,2153 +1185,1407 @@ func layoutRecord(layout nodeLayout) any {
 }
 
 // ──────────────────────────────────────────────────────────────────────
-// Base struct definitions
+// Base views
 // ──────────────────────────────────────────────────────────────────────
-
-type statementBaseData struct {
-	nodeBaseData
-	flowNodeBaseData
-}
 
 type StatementBase struct{ Node }
 
-var statementBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindEmptyStatement:             1,
-	KindIfStatement:                2,
-	KindDoStatement:                3,
-	KindWhileStatement:             4,
-	KindForStatement:               5,
-	KindForInStatement:             6,
-	KindForOfStatement:             6,
-	KindBreakStatement:             7,
-	KindContinueStatement:          8,
-	KindReturnStatement:            9,
-	KindWithStatement:              10,
-	KindSwitchStatement:            11,
-	KindThrowStatement:             12,
-	KindTryStatement:               13,
-	KindDebuggerStatement:          14,
-	KindLabeledStatement:           15,
-	KindExpressionStatement:        16,
-	KindBlock:                      17,
-	KindVariableStatement:          18,
-	KindMissingDeclaration:         19,
-	KindFunctionDeclaration:        20,
-	KindClassDeclaration:           21,
-	KindInterfaceDeclaration:       22,
-	KindTypeAliasDeclaration:       23,
-	KindJSTypeAliasDeclaration:     23,
-	KindEnumDeclaration:            24,
-	KindModuleBlock:                25,
-	KindNotEmittedStatement:        26,
-	KindImportDeclaration:          27,
-	KindJSImportDeclaration:        27,
-	KindExportAssignment:           28,
-	KindNamespaceExportDeclaration: 29,
-	KindModuleDeclaration:          30,
-	KindImportEqualsDeclaration:    31,
-	KindExportDeclaration:          32,
-}
-
-func (n Node) statementBaseData() *statementBaseData {
-	switch statementBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*emptyStatementData)(n.rec()).statementBaseData
-	case 2:
-		return &(*ifStatementData)(n.rec()).statementBaseData
-	case 3:
-		return &(*doStatementData)(n.rec()).statementBaseData
-	case 4:
-		return &(*whileStatementData)(n.rec()).statementBaseData
-	case 5:
-		return &(*forStatementData)(n.rec()).statementBaseData
-	case 6:
-		return &(*forInOrOfStatementData)(n.rec()).statementBaseData
-	case 7:
-		return &(*breakStatementData)(n.rec()).statementBaseData
-	case 8:
-		return &(*continueStatementData)(n.rec()).statementBaseData
-	case 9:
-		return &(*returnStatementData)(n.rec()).statementBaseData
-	case 10:
-		return &(*withStatementData)(n.rec()).statementBaseData
-	case 11:
-		return &(*switchStatementData)(n.rec()).statementBaseData
-	case 12:
-		return &(*throwStatementData)(n.rec()).statementBaseData
-	case 13:
-		return &(*tryStatementData)(n.rec()).statementBaseData
-	case 14:
-		return &(*debuggerStatementData)(n.rec()).statementBaseData
-	case 15:
-		return &(*labeledStatementData)(n.rec()).statementBaseData
-	case 16:
-		return &(*expressionStatementData)(n.rec()).statementBaseData
-	case 17:
-		return &(*blockData)(n.rec()).statementBaseData
-	case 18:
-		return &(*variableStatementData)(n.rec()).statementBaseData
-	case 19:
-		return &(*missingDeclarationData)(n.rec()).statementBaseData
-	case 20:
-		return &(*functionDeclarationData)(n.rec()).statementBaseData
-	case 21:
-		return &(*classDeclarationData)(n.rec()).statementBaseData
-	case 22:
-		return &(*interfaceDeclarationData)(n.rec()).statementBaseData
-	case 23:
-		return &(*typeAliasDeclarationData)(n.rec()).statementBaseData
-	case 24:
-		return &(*enumDeclarationData)(n.rec()).statementBaseData
-	case 25:
-		return &(*moduleBlockData)(n.rec()).statementBaseData
-	case 26:
-		return &(*notEmittedStatementData)(n.rec()).statementBaseData
-	case 27:
-		return &(*importDeclarationData)(n.rec()).statementBaseData
-	case 28:
-		return &(*exportAssignmentData)(n.rec()).statementBaseData
-	case 29:
-		return &(*namespaceExportDeclarationData)(n.rec()).statementBaseData
-	case 30:
-		return &(*moduleDeclarationData)(n.rec()).statementBaseData
-	case 31:
-		return &(*importEqualsDeclarationData)(n.rec()).statementBaseData
-	case 32:
-		return &(*exportDeclarationData)(n.rec()).statementBaseData
-	}
-	return nil
-}
-
 func (node StatementBase) FlowNode() *FlowNode {
-	return node.store().flowNodes.get(node.statementBaseData().flowNode)
+	return node.store().flowNodes.get(*node.flowNodeBaseFlowNode())
 }
 
 func (node StatementBase) SetFlowNode(value *FlowNode) {
-	node.store().flowNodes.set(&node.statementBaseData().flowNode, value, value == nil)
+	node.store().flowNodes.set(node.flowNodeBaseFlowNode(), value, value == nil)
 }
 
-type iterationStatementBaseData struct {
-	statementBaseData
-	statement nodeRef // Statement
+var iterationStatementBaseStatementOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindDoStatement:    uint8(unsafe.Offsetof(doStatementData{}.statement)),
+	KindWhileStatement: uint8(unsafe.Offsetof(whileStatementData{}.statement)),
+	KindForStatement:   uint8(unsafe.Offsetof(forStatementData{}.statement)),
+}
+
+func (n Node) iterationStatementBaseStatement() *nodeRef {
+	if off := iterationStatementBaseStatementOffsets[n.Kind()]; off != 0 {
+		return (*nodeRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type IterationStatementBase struct{ Node }
 
-var iterationStatementBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindDoStatement:    1,
-	KindWhileStatement: 2,
-	KindForStatement:   3,
-}
-
-func (n Node) iterationStatementBaseData() *iterationStatementBaseData {
-	switch iterationStatementBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*doStatementData)(n.rec()).iterationStatementBaseData
-	case 2:
-		return &(*whileStatementData)(n.rec()).iterationStatementBaseData
-	case 3:
-		return &(*forStatementData)(n.rec()).iterationStatementBaseData
-	}
-	return nil
-}
-
 func (node IterationStatementBase) FlowNode() *FlowNode {
-	return node.store().flowNodes.get(node.iterationStatementBaseData().flowNode)
+	return node.store().flowNodes.get(*node.flowNodeBaseFlowNode())
 }
 
 func (node IterationStatementBase) SetFlowNode(value *FlowNode) {
-	node.store().flowNodes.set(&node.iterationStatementBaseData().flowNode, value, value == nil)
+	node.store().flowNodes.set(node.flowNodeBaseFlowNode(), value, value == nil)
 }
 
 func (node IterationStatementBase) Statement() Statement {
-	return node.deref(&node.iterationStatementBaseData().statement)
+	return node.deref(node.iterationStatementBaseStatement())
 }
 
 func (node IterationStatementBase) SetStatement(value Statement) {
-	node.setRef(&node.iterationStatementBaseData().statement, value)
-}
-
-type expressionBaseData struct {
-	nodeBaseData
+	node.setRef(node.iterationStatementBaseStatement(), value)
 }
 
 type ExpressionBase struct{ Node }
 
-type unaryExpressionBaseData struct {
-	expressionBaseData
-}
-
 type UnaryExpressionBase struct{ Node }
-
-type updateExpressionBaseData struct {
-	unaryExpressionBaseData
-}
 
 type UpdateExpressionBase struct{ Node }
 
-type leftHandSideExpressionBaseData struct {
-	updateExpressionBaseData
-}
-
 type LeftHandSideExpressionBase struct{ Node }
-
-type memberExpressionBaseData struct {
-	leftHandSideExpressionBaseData
-}
 
 type MemberExpressionBase struct{ Node }
 
-type primaryExpressionBaseData struct {
-	memberExpressionBaseData
-}
-
 type PrimaryExpressionBase struct{ Node }
-
-type typeNodeBaseData struct {
-	typeSyntaxBaseData
-	nodeBaseData
-}
 
 type TypeNodeBase struct{ Node }
 
-type nodeWithTypeArgumentsBaseData struct {
-	typeNodeBaseData
-	typeArguments sideRef // *TypeList. Optional
+var nodeWithTypeArgumentsBaseTypeArgumentsOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindTypeReference: uint8(unsafe.Offsetof(typeReferenceNodeData{}.typeArguments)),
+	KindTypeQuery:     uint8(unsafe.Offsetof(typeQueryNodeData{}.typeArguments)),
+	KindImportType:    uint8(unsafe.Offsetof(importTypeNodeData{}.typeArguments)),
+}
+
+func (n Node) nodeWithTypeArgumentsBaseTypeArguments() *sideRef {
+	if off := nodeWithTypeArgumentsBaseTypeArgumentsOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type NodeWithTypeArgumentsBase struct{ Node }
 
-var nodeWithTypeArgumentsBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindTypeReference: 1,
-	KindTypeQuery:     2,
-	KindImportType:    3,
-}
-
-func (n Node) nodeWithTypeArgumentsBaseData() *nodeWithTypeArgumentsBaseData {
-	switch nodeWithTypeArgumentsBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*typeReferenceNodeData)(n.rec()).nodeWithTypeArgumentsBaseData
-	case 2:
-		return &(*typeQueryNodeData)(n.rec()).nodeWithTypeArgumentsBaseData
-	case 3:
-		return &(*importTypeNodeData)(n.rec()).nodeWithTypeArgumentsBaseData
-	}
-	return nil
-}
-
 func (node NodeWithTypeArgumentsBase) TypeArguments() *TypeList {
-	return node.store().nodeLists.get(node.nodeWithTypeArgumentsBaseData().typeArguments)
+	return node.store().nodeLists.get(*node.nodeWithTypeArgumentsBaseTypeArguments())
 }
 
 func (node NodeWithTypeArgumentsBase) SetTypeArguments(value *TypeList) {
-	node.store().nodeLists.set(&node.nodeWithTypeArgumentsBaseData().typeArguments, value, value == nil)
-}
-
-type jsDocTypeBaseData struct {
-	typeNodeBaseData
+	node.store().nodeLists.set(node.nodeWithTypeArgumentsBaseTypeArguments(), value, value == nil)
 }
 
 type JSDocTypeBase struct{ Node }
 
-type declarationBaseData struct {
-	symbol sideRef // *Symbol
+var declarationBaseSymbolOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindVariableDeclaration:           uint8(unsafe.Offsetof(variableDeclarationData{}.symbol)),
+	KindParameter:                     uint8(unsafe.Offsetof(parameterDeclarationData{}.symbol)),
+	KindBindingElement:                uint8(unsafe.Offsetof(bindingElementData{}.symbol)),
+	KindMissingDeclaration:            uint8(unsafe.Offsetof(missingDeclarationData{}.symbol)),
+	KindFunctionDeclaration:           uint8(unsafe.Offsetof(functionDeclarationData{}.symbol)),
+	KindClassDeclaration:              uint8(unsafe.Offsetof(classDeclarationData{}.symbol)),
+	KindClassExpression:               uint8(unsafe.Offsetof(classExpressionData{}.symbol)),
+	KindInterfaceDeclaration:          uint8(unsafe.Offsetof(interfaceDeclarationData{}.symbol)),
+	KindTypeAliasDeclaration:          uint8(unsafe.Offsetof(typeAliasDeclarationData{}.symbol)),
+	KindJSTypeAliasDeclaration:        uint8(unsafe.Offsetof(typeAliasDeclarationData{}.symbol)),
+	KindEnumMember:                    uint8(unsafe.Offsetof(enumMemberData{}.symbol)),
+	KindEnumDeclaration:               uint8(unsafe.Offsetof(enumDeclarationData{}.symbol)),
+	KindNotEmittedTypeElement:         uint8(unsafe.Offsetof(notEmittedTypeElementData{}.symbol)),
+	KindImportDeclaration:             uint8(unsafe.Offsetof(importDeclarationData{}.symbol)),
+	KindJSImportDeclaration:           uint8(unsafe.Offsetof(importDeclarationData{}.symbol)),
+	KindNamespaceImport:               uint8(unsafe.Offsetof(namespaceImportData{}.symbol)),
+	KindExportAssignment:              uint8(unsafe.Offsetof(exportAssignmentData{}.symbol)),
+	KindNamespaceExportDeclaration:    uint8(unsafe.Offsetof(namespaceExportDeclarationData{}.symbol)),
+	KindNamespaceExport:               uint8(unsafe.Offsetof(namespaceExportData{}.symbol)),
+	KindExportSpecifier:               uint8(unsafe.Offsetof(exportSpecifierData{}.symbol)),
+	KindCallSignature:                 uint8(unsafe.Offsetof(callSignatureDeclarationData{}.symbol)),
+	KindConstructSignature:            uint8(unsafe.Offsetof(constructSignatureDeclarationData{}.symbol)),
+	KindConstructor:                   uint8(unsafe.Offsetof(constructorDeclarationData{}.symbol)),
+	KindGetAccessor:                   uint8(unsafe.Offsetof(getAccessorDeclarationData{}.symbol)),
+	KindSetAccessor:                   uint8(unsafe.Offsetof(setAccessorDeclarationData{}.symbol)),
+	KindIndexSignature:                uint8(unsafe.Offsetof(indexSignatureDeclarationData{}.symbol)),
+	KindMethodSignature:               uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.symbol)),
+	KindMethodDeclaration:             uint8(unsafe.Offsetof(methodDeclarationData{}.symbol)),
+	KindPropertySignature:             uint8(unsafe.Offsetof(propertySignatureDeclarationData{}.symbol)),
+	KindPropertyDeclaration:           uint8(unsafe.Offsetof(propertyDeclarationData{}.symbol)),
+	KindSemicolonClassElement:         uint8(unsafe.Offsetof(semicolonClassElementData{}.symbol)),
+	KindClassStaticBlockDeclaration:   uint8(unsafe.Offsetof(classStaticBlockDeclarationData{}.symbol)),
+	KindNoSubstitutionTemplateLiteral: uint8(unsafe.Offsetof(noSubstitutionTemplateLiteralData{}.symbol)),
+	KindBinaryExpression:              uint8(unsafe.Offsetof(binaryExpressionData{}.symbol)),
+	KindArrowFunction:                 uint8(unsafe.Offsetof(arrowFunctionData{}.symbol)),
+	KindFunctionExpression:            uint8(unsafe.Offsetof(functionExpressionData{}.symbol)),
+	KindCallExpression:                uint8(unsafe.Offsetof(callExpressionData{}.symbol)),
+	KindObjectLiteralExpression:       uint8(unsafe.Offsetof(objectLiteralExpressionData{}.symbol)),
+	KindSpreadAssignment:              uint8(unsafe.Offsetof(spreadAssignmentData{}.symbol)),
+	KindPropertyAssignment:            uint8(unsafe.Offsetof(propertyAssignmentData{}.symbol)),
+	KindShorthandPropertyAssignment:   uint8(unsafe.Offsetof(shorthandPropertyAssignmentData{}.symbol)),
+	KindMappedType:                    uint8(unsafe.Offsetof(mappedTypeNodeData{}.symbol)),
+	KindTypeLiteral:                   uint8(unsafe.Offsetof(typeLiteralNodeData{}.symbol)),
+	KindNamedTupleMember:              uint8(unsafe.Offsetof(namedTupleMemberData{}.symbol)),
+	KindFunctionType:                  uint8(unsafe.Offsetof(functionTypeNodeData{}.symbol)),
+	KindConstructorType:               uint8(unsafe.Offsetof(constructorTypeNodeData{}.symbol)),
+	KindJsxAttributes:                 uint8(unsafe.Offsetof(jsxAttributesData{}.symbol)),
+	KindJsxAttribute:                  uint8(unsafe.Offsetof(jsxAttributeData{}.symbol)),
+	KindJsxSpreadAttribute:            uint8(unsafe.Offsetof(jsxSpreadAttributeData{}.symbol)),
+	KindJSDocSignature:                uint8(unsafe.Offsetof(jsDocSignatureData{}.symbol)),
+	KindSourceFile:                    uint8(unsafe.Offsetof(SourceFile{}.symbol)),
+	KindModuleDeclaration:             uint8(unsafe.Offsetof(moduleDeclarationData{}.symbol)),
+	KindImportEqualsDeclaration:       uint8(unsafe.Offsetof(importEqualsDeclarationData{}.symbol)),
+	KindExportDeclaration:             uint8(unsafe.Offsetof(exportDeclarationData{}.symbol)),
+	KindImportClause:                  uint8(unsafe.Offsetof(importClauseData{}.symbol)),
+	KindImportSpecifier:               uint8(unsafe.Offsetof(importSpecifierData{}.symbol)),
+	KindTypeParameter:                 uint8(unsafe.Offsetof(typeParameterDeclarationData{}.symbol)),
+	KindJSDocTypeLiteral:              uint8(unsafe.Offsetof(jsDocTypeLiteralData{}.symbol)),
+}
+
+func (n Node) declarationBaseSymbol() *sideRef {
+	if off := declarationBaseSymbolOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type DeclarationBase struct{ Node }
 
-var declarationBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindVariableDeclaration:           1,
-	KindParameter:                     2,
-	KindBindingElement:                3,
-	KindMissingDeclaration:            4,
-	KindFunctionDeclaration:           5,
-	KindClassDeclaration:              6,
-	KindClassExpression:               7,
-	KindInterfaceDeclaration:          8,
-	KindTypeAliasDeclaration:          9,
-	KindJSTypeAliasDeclaration:        9,
-	KindEnumMember:                    10,
-	KindEnumDeclaration:               11,
-	KindNotEmittedTypeElement:         12,
-	KindImportDeclaration:             13,
-	KindJSImportDeclaration:           13,
-	KindNamespaceImport:               14,
-	KindExportAssignment:              15,
-	KindNamespaceExportDeclaration:    16,
-	KindNamespaceExport:               17,
-	KindExportSpecifier:               18,
-	KindCallSignature:                 19,
-	KindConstructSignature:            20,
-	KindConstructor:                   21,
-	KindGetAccessor:                   22,
-	KindSetAccessor:                   23,
-	KindIndexSignature:                24,
-	KindMethodSignature:               25,
-	KindMethodDeclaration:             26,
-	KindPropertySignature:             27,
-	KindPropertyDeclaration:           28,
-	KindSemicolonClassElement:         29,
-	KindClassStaticBlockDeclaration:   30,
-	KindNoSubstitutionTemplateLiteral: 31,
-	KindBinaryExpression:              32,
-	KindArrowFunction:                 33,
-	KindFunctionExpression:            34,
-	KindCallExpression:                35,
-	KindObjectLiteralExpression:       36,
-	KindSpreadAssignment:              37,
-	KindPropertyAssignment:            38,
-	KindShorthandPropertyAssignment:   39,
-	KindMappedType:                    40,
-	KindTypeLiteral:                   41,
-	KindNamedTupleMember:              42,
-	KindFunctionType:                  43,
-	KindConstructorType:               44,
-	KindJsxAttributes:                 45,
-	KindJsxAttribute:                  46,
-	KindJsxSpreadAttribute:            47,
-	KindJSDocSignature:                48,
-	KindSourceFile:                    49,
-	KindModuleDeclaration:             50,
-	KindImportEqualsDeclaration:       51,
-	KindExportDeclaration:             52,
-	KindImportClause:                  53,
-	KindImportSpecifier:               54,
-	KindTypeParameter:                 55,
-	KindJSDocTypeLiteral:              56,
-}
-
-func (n Node) declarationBaseData() *declarationBaseData {
-	switch declarationBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*variableDeclarationData)(n.rec()).declarationBaseData
-	case 2:
-		return &(*parameterDeclarationData)(n.rec()).declarationBaseData
-	case 3:
-		return &(*bindingElementData)(n.rec()).declarationBaseData
-	case 4:
-		return &(*missingDeclarationData)(n.rec()).declarationBaseData
-	case 5:
-		return &(*functionDeclarationData)(n.rec()).declarationBaseData
-	case 6:
-		return &(*classDeclarationData)(n.rec()).declarationBaseData
-	case 7:
-		return &(*classExpressionData)(n.rec()).declarationBaseData
-	case 8:
-		return &(*interfaceDeclarationData)(n.rec()).declarationBaseData
-	case 9:
-		return &(*typeAliasDeclarationData)(n.rec()).declarationBaseData
-	case 10:
-		return &(*enumMemberData)(n.rec()).declarationBaseData
-	case 11:
-		return &(*enumDeclarationData)(n.rec()).declarationBaseData
-	case 12:
-		return &(*notEmittedTypeElementData)(n.rec()).declarationBaseData
-	case 13:
-		return &(*importDeclarationData)(n.rec()).declarationBaseData
-	case 14:
-		return &(*namespaceImportData)(n.rec()).declarationBaseData
-	case 15:
-		return &(*exportAssignmentData)(n.rec()).declarationBaseData
-	case 16:
-		return &(*namespaceExportDeclarationData)(n.rec()).declarationBaseData
-	case 17:
-		return &(*namespaceExportData)(n.rec()).declarationBaseData
-	case 18:
-		return &(*exportSpecifierData)(n.rec()).declarationBaseData
-	case 19:
-		return &(*callSignatureDeclarationData)(n.rec()).declarationBaseData
-	case 20:
-		return &(*constructSignatureDeclarationData)(n.rec()).declarationBaseData
-	case 21:
-		return &(*constructorDeclarationData)(n.rec()).declarationBaseData
-	case 22:
-		return &(*getAccessorDeclarationData)(n.rec()).declarationBaseData
-	case 23:
-		return &(*setAccessorDeclarationData)(n.rec()).declarationBaseData
-	case 24:
-		return &(*indexSignatureDeclarationData)(n.rec()).declarationBaseData
-	case 25:
-		return &(*methodSignatureDeclarationData)(n.rec()).declarationBaseData
-	case 26:
-		return &(*methodDeclarationData)(n.rec()).declarationBaseData
-	case 27:
-		return &(*propertySignatureDeclarationData)(n.rec()).declarationBaseData
-	case 28:
-		return &(*propertyDeclarationData)(n.rec()).declarationBaseData
-	case 29:
-		return &(*semicolonClassElementData)(n.rec()).declarationBaseData
-	case 30:
-		return &(*classStaticBlockDeclarationData)(n.rec()).declarationBaseData
-	case 31:
-		return &(*noSubstitutionTemplateLiteralData)(n.rec()).declarationBaseData
-	case 32:
-		return &(*binaryExpressionData)(n.rec()).declarationBaseData
-	case 33:
-		return &(*arrowFunctionData)(n.rec()).declarationBaseData
-	case 34:
-		return &(*functionExpressionData)(n.rec()).declarationBaseData
-	case 35:
-		return &(*callExpressionData)(n.rec()).declarationBaseData
-	case 36:
-		return &(*objectLiteralExpressionData)(n.rec()).declarationBaseData
-	case 37:
-		return &(*spreadAssignmentData)(n.rec()).declarationBaseData
-	case 38:
-		return &(*propertyAssignmentData)(n.rec()).declarationBaseData
-	case 39:
-		return &(*shorthandPropertyAssignmentData)(n.rec()).declarationBaseData
-	case 40:
-		return &(*mappedTypeNodeData)(n.rec()).declarationBaseData
-	case 41:
-		return &(*typeLiteralNodeData)(n.rec()).declarationBaseData
-	case 42:
-		return &(*namedTupleMemberData)(n.rec()).declarationBaseData
-	case 43:
-		return &(*functionTypeNodeData)(n.rec()).declarationBaseData
-	case 44:
-		return &(*constructorTypeNodeData)(n.rec()).declarationBaseData
-	case 45:
-		return &(*jsxAttributesData)(n.rec()).declarationBaseData
-	case 46:
-		return &(*jsxAttributeData)(n.rec()).declarationBaseData
-	case 47:
-		return &(*jsxSpreadAttributeData)(n.rec()).declarationBaseData
-	case 48:
-		return &(*jsDocSignatureData)(n.rec()).declarationBaseData
-	case 49:
-		return &(*SourceFile)(n.rec()).declarationBaseData
-	case 50:
-		return &(*moduleDeclarationData)(n.rec()).declarationBaseData
-	case 51:
-		return &(*importEqualsDeclarationData)(n.rec()).declarationBaseData
-	case 52:
-		return &(*exportDeclarationData)(n.rec()).declarationBaseData
-	case 53:
-		return &(*importClauseData)(n.rec()).declarationBaseData
-	case 54:
-		return &(*importSpecifierData)(n.rec()).declarationBaseData
-	case 55:
-		return &(*typeParameterDeclarationData)(n.rec()).declarationBaseData
-	case 56:
-		return &(*jsDocTypeLiteralData)(n.rec()).declarationBaseData
-	}
-	return nil
-}
-
 func (node DeclarationBase) Symbol() *Symbol {
-	return node.store().symbols.get(node.declarationBaseData().symbol)
+	return node.store().symbols.get(*node.declarationBaseSymbol())
 }
 
 func (node DeclarationBase) SetSymbol(value *Symbol) {
-	node.store().symbols.set(&node.declarationBaseData().symbol, value, value == nil)
+	node.store().symbols.set(node.declarationBaseSymbol(), value, value == nil)
 }
 
-type exportableBaseData struct {
-	localSymbol sideRef // *Symbol
+var exportableBaseLocalSymbolOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindVariableDeclaration:     uint8(unsafe.Offsetof(variableDeclarationData{}.localSymbol)),
+	KindBindingElement:          uint8(unsafe.Offsetof(bindingElementData{}.localSymbol)),
+	KindFunctionDeclaration:     uint8(unsafe.Offsetof(functionDeclarationData{}.localSymbol)),
+	KindClassDeclaration:        uint8(unsafe.Offsetof(classDeclarationData{}.localSymbol)),
+	KindClassExpression:         uint8(unsafe.Offsetof(classExpressionData{}.localSymbol)),
+	KindInterfaceDeclaration:    uint8(unsafe.Offsetof(interfaceDeclarationData{}.localSymbol)),
+	KindTypeAliasDeclaration:    uint8(unsafe.Offsetof(typeAliasDeclarationData{}.localSymbol)),
+	KindJSTypeAliasDeclaration:  uint8(unsafe.Offsetof(typeAliasDeclarationData{}.localSymbol)),
+	KindEnumDeclaration:         uint8(unsafe.Offsetof(enumDeclarationData{}.localSymbol)),
+	KindNamespaceImport:         uint8(unsafe.Offsetof(namespaceImportData{}.localSymbol)),
+	KindExportSpecifier:         uint8(unsafe.Offsetof(exportSpecifierData{}.localSymbol)),
+	KindModuleDeclaration:       uint8(unsafe.Offsetof(moduleDeclarationData{}.localSymbol)),
+	KindImportEqualsDeclaration: uint8(unsafe.Offsetof(importEqualsDeclarationData{}.localSymbol)),
+	KindImportClause:            uint8(unsafe.Offsetof(importClauseData{}.localSymbol)),
+	KindImportSpecifier:         uint8(unsafe.Offsetof(importSpecifierData{}.localSymbol)),
+}
+
+func (n Node) exportableBaseLocalSymbol() *sideRef {
+	if off := exportableBaseLocalSymbolOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type ExportableBase struct{ Node }
 
-var exportableBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindVariableDeclaration:     1,
-	KindBindingElement:          2,
-	KindFunctionDeclaration:     3,
-	KindClassDeclaration:        4,
-	KindClassExpression:         5,
-	KindInterfaceDeclaration:    6,
-	KindTypeAliasDeclaration:    7,
-	KindJSTypeAliasDeclaration:  7,
-	KindEnumDeclaration:         8,
-	KindNamespaceImport:         9,
-	KindExportSpecifier:         10,
-	KindModuleDeclaration:       11,
-	KindImportEqualsDeclaration: 12,
-	KindImportClause:            13,
-	KindImportSpecifier:         14,
-}
-
-func (n Node) exportableBaseData() *exportableBaseData {
-	switch exportableBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*variableDeclarationData)(n.rec()).exportableBaseData
-	case 2:
-		return &(*bindingElementData)(n.rec()).exportableBaseData
-	case 3:
-		return &(*functionDeclarationData)(n.rec()).exportableBaseData
-	case 4:
-		return &(*classDeclarationData)(n.rec()).exportableBaseData
-	case 5:
-		return &(*classExpressionData)(n.rec()).exportableBaseData
-	case 6:
-		return &(*interfaceDeclarationData)(n.rec()).exportableBaseData
-	case 7:
-		return &(*typeAliasDeclarationData)(n.rec()).exportableBaseData
-	case 8:
-		return &(*enumDeclarationData)(n.rec()).exportableBaseData
-	case 9:
-		return &(*namespaceImportData)(n.rec()).exportableBaseData
-	case 10:
-		return &(*exportSpecifierData)(n.rec()).exportableBaseData
-	case 11:
-		return &(*moduleDeclarationData)(n.rec()).exportableBaseData
-	case 12:
-		return &(*importEqualsDeclarationData)(n.rec()).exportableBaseData
-	case 13:
-		return &(*importClauseData)(n.rec()).exportableBaseData
-	case 14:
-		return &(*importSpecifierData)(n.rec()).exportableBaseData
-	}
-	return nil
-}
-
 func (node ExportableBase) LocalSymbol() *Symbol {
-	return node.store().symbols.get(node.exportableBaseData().localSymbol)
+	return node.store().symbols.get(*node.exportableBaseLocalSymbol())
 }
 
 func (node ExportableBase) SetLocalSymbol(value *Symbol) {
-	node.store().symbols.set(&node.exportableBaseData().localSymbol, value, value == nil)
+	node.store().symbols.set(node.exportableBaseLocalSymbol(), value, value == nil)
 }
 
-type modifiersBaseData struct {
-	modifiers sideRef // *ModifierList. Optional
+var modifiersBaseModifiersOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindVariableStatement:           uint8(unsafe.Offsetof(variableStatementData{}.modifiers)),
+	KindParameter:                   uint8(unsafe.Offsetof(parameterDeclarationData{}.modifiers)),
+	KindMissingDeclaration:          uint8(unsafe.Offsetof(missingDeclarationData{}.modifiers)),
+	KindFunctionDeclaration:         uint8(unsafe.Offsetof(functionDeclarationData{}.modifiers)),
+	KindClassDeclaration:            uint8(unsafe.Offsetof(classDeclarationData{}.modifiers)),
+	KindClassExpression:             uint8(unsafe.Offsetof(classExpressionData{}.modifiers)),
+	KindInterfaceDeclaration:        uint8(unsafe.Offsetof(interfaceDeclarationData{}.modifiers)),
+	KindTypeAliasDeclaration:        uint8(unsafe.Offsetof(typeAliasDeclarationData{}.modifiers)),
+	KindJSTypeAliasDeclaration:      uint8(unsafe.Offsetof(typeAliasDeclarationData{}.modifiers)),
+	KindEnumMember:                  uint8(unsafe.Offsetof(enumMemberData{}.modifiers)),
+	KindEnumDeclaration:             uint8(unsafe.Offsetof(enumDeclarationData{}.modifiers)),
+	KindImportDeclaration:           uint8(unsafe.Offsetof(importDeclarationData{}.modifiers)),
+	KindJSImportDeclaration:         uint8(unsafe.Offsetof(importDeclarationData{}.modifiers)),
+	KindExportAssignment:            uint8(unsafe.Offsetof(exportAssignmentData{}.modifiers)),
+	KindNamespaceExportDeclaration:  uint8(unsafe.Offsetof(namespaceExportDeclarationData{}.modifiers)),
+	KindConstructor:                 uint8(unsafe.Offsetof(constructorDeclarationData{}.modifiers)),
+	KindGetAccessor:                 uint8(unsafe.Offsetof(getAccessorDeclarationData{}.modifiers)),
+	KindSetAccessor:                 uint8(unsafe.Offsetof(setAccessorDeclarationData{}.modifiers)),
+	KindIndexSignature:              uint8(unsafe.Offsetof(indexSignatureDeclarationData{}.modifiers)),
+	KindMethodSignature:             uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.modifiers)),
+	KindMethodDeclaration:           uint8(unsafe.Offsetof(methodDeclarationData{}.modifiers)),
+	KindPropertySignature:           uint8(unsafe.Offsetof(propertySignatureDeclarationData{}.modifiers)),
+	KindPropertyDeclaration:         uint8(unsafe.Offsetof(propertyDeclarationData{}.modifiers)),
+	KindClassStaticBlockDeclaration: uint8(unsafe.Offsetof(classStaticBlockDeclarationData{}.modifiers)),
+	KindBinaryExpression:            uint8(unsafe.Offsetof(binaryExpressionData{}.modifiers)),
+	KindArrowFunction:               uint8(unsafe.Offsetof(arrowFunctionData{}.modifiers)),
+	KindFunctionExpression:          uint8(unsafe.Offsetof(functionExpressionData{}.modifiers)),
+	KindPropertyAssignment:          uint8(unsafe.Offsetof(propertyAssignmentData{}.modifiers)),
+	KindShorthandPropertyAssignment: uint8(unsafe.Offsetof(shorthandPropertyAssignmentData{}.modifiers)),
+	KindFunctionType:                uint8(unsafe.Offsetof(functionTypeNodeData{}.modifiers)),
+	KindConstructorType:             uint8(unsafe.Offsetof(constructorTypeNodeData{}.modifiers)),
+	KindModuleDeclaration:           uint8(unsafe.Offsetof(moduleDeclarationData{}.modifiers)),
+	KindImportEqualsDeclaration:     uint8(unsafe.Offsetof(importEqualsDeclarationData{}.modifiers)),
+	KindExportDeclaration:           uint8(unsafe.Offsetof(exportDeclarationData{}.modifiers)),
+	KindTypeParameter:               uint8(unsafe.Offsetof(typeParameterDeclarationData{}.modifiers)),
+}
+
+func (n Node) modifiersBaseModifiers() *sideRef {
+	if off := modifiersBaseModifiersOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type ModifiersBase struct{ Node }
 
-var modifiersBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindVariableStatement:           1,
-	KindParameter:                   2,
-	KindMissingDeclaration:          3,
-	KindFunctionDeclaration:         4,
-	KindClassDeclaration:            5,
-	KindClassExpression:             6,
-	KindInterfaceDeclaration:        7,
-	KindTypeAliasDeclaration:        8,
-	KindJSTypeAliasDeclaration:      8,
-	KindEnumMember:                  9,
-	KindEnumDeclaration:             10,
-	KindImportDeclaration:           11,
-	KindJSImportDeclaration:         11,
-	KindExportAssignment:            12,
-	KindNamespaceExportDeclaration:  13,
-	KindConstructor:                 14,
-	KindGetAccessor:                 15,
-	KindSetAccessor:                 16,
-	KindIndexSignature:              17,
-	KindMethodSignature:             18,
-	KindMethodDeclaration:           19,
-	KindPropertySignature:           20,
-	KindPropertyDeclaration:         21,
-	KindClassStaticBlockDeclaration: 22,
-	KindBinaryExpression:            23,
-	KindArrowFunction:               24,
-	KindFunctionExpression:          25,
-	KindPropertyAssignment:          26,
-	KindShorthandPropertyAssignment: 27,
-	KindFunctionType:                28,
-	KindConstructorType:             29,
-	KindModuleDeclaration:           30,
-	KindImportEqualsDeclaration:     31,
-	KindExportDeclaration:           32,
-	KindTypeParameter:               33,
+func (node ModifiersBase) Modifiers() *ModifierList {
+	return node.store().modifierLists.get(*node.modifiersBaseModifiers())
 }
 
-func (n Node) modifiersBaseData() *modifiersBaseData {
-	switch modifiersBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*variableStatementData)(n.rec()).modifiersBaseData
-	case 2:
-		return &(*parameterDeclarationData)(n.rec()).modifiersBaseData
-	case 3:
-		return &(*missingDeclarationData)(n.rec()).modifiersBaseData
-	case 4:
-		return &(*functionDeclarationData)(n.rec()).modifiersBaseData
-	case 5:
-		return &(*classDeclarationData)(n.rec()).modifiersBaseData
-	case 6:
-		return &(*classExpressionData)(n.rec()).modifiersBaseData
-	case 7:
-		return &(*interfaceDeclarationData)(n.rec()).modifiersBaseData
-	case 8:
-		return &(*typeAliasDeclarationData)(n.rec()).modifiersBaseData
-	case 9:
-		return &(*enumMemberData)(n.rec()).modifiersBaseData
-	case 10:
-		return &(*enumDeclarationData)(n.rec()).modifiersBaseData
-	case 11:
-		return &(*importDeclarationData)(n.rec()).modifiersBaseData
-	case 12:
-		return &(*exportAssignmentData)(n.rec()).modifiersBaseData
-	case 13:
-		return &(*namespaceExportDeclarationData)(n.rec()).modifiersBaseData
-	case 14:
-		return &(*constructorDeclarationData)(n.rec()).modifiersBaseData
-	case 15:
-		return &(*getAccessorDeclarationData)(n.rec()).modifiersBaseData
-	case 16:
-		return &(*setAccessorDeclarationData)(n.rec()).modifiersBaseData
-	case 17:
-		return &(*indexSignatureDeclarationData)(n.rec()).modifiersBaseData
-	case 18:
-		return &(*methodSignatureDeclarationData)(n.rec()).modifiersBaseData
-	case 19:
-		return &(*methodDeclarationData)(n.rec()).modifiersBaseData
-	case 20:
-		return &(*propertySignatureDeclarationData)(n.rec()).modifiersBaseData
-	case 21:
-		return &(*propertyDeclarationData)(n.rec()).modifiersBaseData
-	case 22:
-		return &(*classStaticBlockDeclarationData)(n.rec()).modifiersBaseData
-	case 23:
-		return &(*binaryExpressionData)(n.rec()).modifiersBaseData
-	case 24:
-		return &(*arrowFunctionData)(n.rec()).modifiersBaseData
-	case 25:
-		return &(*functionExpressionData)(n.rec()).modifiersBaseData
-	case 26:
-		return &(*propertyAssignmentData)(n.rec()).modifiersBaseData
-	case 27:
-		return &(*shorthandPropertyAssignmentData)(n.rec()).modifiersBaseData
-	case 28:
-		return &(*functionTypeNodeData)(n.rec()).modifiersBaseData
-	case 29:
-		return &(*constructorTypeNodeData)(n.rec()).modifiersBaseData
-	case 30:
-		return &(*moduleDeclarationData)(n.rec()).modifiersBaseData
-	case 31:
-		return &(*importEqualsDeclarationData)(n.rec()).modifiersBaseData
-	case 32:
-		return &(*exportDeclarationData)(n.rec()).modifiersBaseData
-	case 33:
-		return &(*typeParameterDeclarationData)(n.rec()).modifiersBaseData
+func (node ModifiersBase) setModifiers(value *ModifierList) {
+	node.store().modifierLists.set(node.modifiersBaseModifiers(), value, value == nil)
+}
+
+var localsContainerBaseLocalsOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindForStatement:                uint8(unsafe.Offsetof(forStatementData{}.locals)),
+	KindForInStatement:              uint8(unsafe.Offsetof(forInOrOfStatementData{}.locals)),
+	KindForOfStatement:              uint8(unsafe.Offsetof(forInOrOfStatementData{}.locals)),
+	KindCaseBlock:                   uint8(unsafe.Offsetof(caseBlockData{}.locals)),
+	KindCatchClause:                 uint8(unsafe.Offsetof(catchClauseData{}.locals)),
+	KindBlock:                       uint8(unsafe.Offsetof(blockData{}.locals)),
+	KindFunctionDeclaration:         uint8(unsafe.Offsetof(functionDeclarationData{}.locals)),
+	KindClassDeclaration:            uint8(unsafe.Offsetof(classDeclarationData{}.locals)),
+	KindClassExpression:             uint8(unsafe.Offsetof(classExpressionData{}.locals)),
+	KindTypeAliasDeclaration:        uint8(unsafe.Offsetof(typeAliasDeclarationData{}.locals)),
+	KindJSTypeAliasDeclaration:      uint8(unsafe.Offsetof(typeAliasDeclarationData{}.locals)),
+	KindCallSignature:               uint8(unsafe.Offsetof(callSignatureDeclarationData{}.locals)),
+	KindConstructSignature:          uint8(unsafe.Offsetof(constructSignatureDeclarationData{}.locals)),
+	KindConstructor:                 uint8(unsafe.Offsetof(constructorDeclarationData{}.locals)),
+	KindGetAccessor:                 uint8(unsafe.Offsetof(getAccessorDeclarationData{}.locals)),
+	KindSetAccessor:                 uint8(unsafe.Offsetof(setAccessorDeclarationData{}.locals)),
+	KindIndexSignature:              uint8(unsafe.Offsetof(indexSignatureDeclarationData{}.locals)),
+	KindMethodSignature:             uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.locals)),
+	KindMethodDeclaration:           uint8(unsafe.Offsetof(methodDeclarationData{}.locals)),
+	KindClassStaticBlockDeclaration: uint8(unsafe.Offsetof(classStaticBlockDeclarationData{}.locals)),
+	KindArrowFunction:               uint8(unsafe.Offsetof(arrowFunctionData{}.locals)),
+	KindFunctionExpression:          uint8(unsafe.Offsetof(functionExpressionData{}.locals)),
+	KindConditionalType:             uint8(unsafe.Offsetof(conditionalTypeNodeData{}.locals)),
+	KindMappedType:                  uint8(unsafe.Offsetof(mappedTypeNodeData{}.locals)),
+	KindFunctionType:                uint8(unsafe.Offsetof(functionTypeNodeData{}.locals)),
+	KindConstructorType:             uint8(unsafe.Offsetof(constructorTypeNodeData{}.locals)),
+	KindJSDocSignature:              uint8(unsafe.Offsetof(jsDocSignatureData{}.locals)),
+	KindSourceFile:                  uint8(unsafe.Offsetof(SourceFile{}.locals)),
+	KindModuleDeclaration:           uint8(unsafe.Offsetof(moduleDeclarationData{}.locals)),
+}
+
+func (n Node) localsContainerBaseLocals() *sideRef {
+	if off := localsContainerBaseLocalsOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
 	}
 	return nil
 }
 
-func (node ModifiersBase) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.modifiersBaseData().modifiers)
+var localsContainerBaseNextContainerOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindForStatement:                uint8(unsafe.Offsetof(forStatementData{}.nextContainer)),
+	KindForInStatement:              uint8(unsafe.Offsetof(forInOrOfStatementData{}.nextContainer)),
+	KindForOfStatement:              uint8(unsafe.Offsetof(forInOrOfStatementData{}.nextContainer)),
+	KindCaseBlock:                   uint8(unsafe.Offsetof(caseBlockData{}.nextContainer)),
+	KindCatchClause:                 uint8(unsafe.Offsetof(catchClauseData{}.nextContainer)),
+	KindBlock:                       uint8(unsafe.Offsetof(blockData{}.nextContainer)),
+	KindFunctionDeclaration:         uint8(unsafe.Offsetof(functionDeclarationData{}.nextContainer)),
+	KindClassDeclaration:            uint8(unsafe.Offsetof(classDeclarationData{}.nextContainer)),
+	KindClassExpression:             uint8(unsafe.Offsetof(classExpressionData{}.nextContainer)),
+	KindTypeAliasDeclaration:        uint8(unsafe.Offsetof(typeAliasDeclarationData{}.nextContainer)),
+	KindJSTypeAliasDeclaration:      uint8(unsafe.Offsetof(typeAliasDeclarationData{}.nextContainer)),
+	KindCallSignature:               uint8(unsafe.Offsetof(callSignatureDeclarationData{}.nextContainer)),
+	KindConstructSignature:          uint8(unsafe.Offsetof(constructSignatureDeclarationData{}.nextContainer)),
+	KindConstructor:                 uint8(unsafe.Offsetof(constructorDeclarationData{}.nextContainer)),
+	KindGetAccessor:                 uint8(unsafe.Offsetof(getAccessorDeclarationData{}.nextContainer)),
+	KindSetAccessor:                 uint8(unsafe.Offsetof(setAccessorDeclarationData{}.nextContainer)),
+	KindIndexSignature:              uint8(unsafe.Offsetof(indexSignatureDeclarationData{}.nextContainer)),
+	KindMethodSignature:             uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.nextContainer)),
+	KindMethodDeclaration:           uint8(unsafe.Offsetof(methodDeclarationData{}.nextContainer)),
+	KindClassStaticBlockDeclaration: uint8(unsafe.Offsetof(classStaticBlockDeclarationData{}.nextContainer)),
+	KindArrowFunction:               uint8(unsafe.Offsetof(arrowFunctionData{}.nextContainer)),
+	KindFunctionExpression:          uint8(unsafe.Offsetof(functionExpressionData{}.nextContainer)),
+	KindConditionalType:             uint8(unsafe.Offsetof(conditionalTypeNodeData{}.nextContainer)),
+	KindMappedType:                  uint8(unsafe.Offsetof(mappedTypeNodeData{}.nextContainer)),
+	KindFunctionType:                uint8(unsafe.Offsetof(functionTypeNodeData{}.nextContainer)),
+	KindConstructorType:             uint8(unsafe.Offsetof(constructorTypeNodeData{}.nextContainer)),
+	KindJSDocSignature:              uint8(unsafe.Offsetof(jsDocSignatureData{}.nextContainer)),
+	KindSourceFile:                  uint8(unsafe.Offsetof(SourceFile{}.nextContainer)),
+	KindModuleDeclaration:           uint8(unsafe.Offsetof(moduleDeclarationData{}.nextContainer)),
 }
 
-func (node ModifiersBase) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.modifiersBaseData().modifiers, value, value == nil)
-}
-
-type localsContainerBaseData struct {
-	locals        sideRef // SymbolTable
-	nextContainer nodeRef // Node
+func (n Node) localsContainerBaseNextContainer() *nodeRef {
+	if off := localsContainerBaseNextContainerOffsets[n.Kind()]; off != 0 {
+		return (*nodeRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type LocalsContainerBase struct{ Node }
 
-var localsContainerBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindForStatement:                1,
-	KindForInStatement:              2,
-	KindForOfStatement:              2,
-	KindCaseBlock:                   3,
-	KindCatchClause:                 4,
-	KindBlock:                       5,
-	KindFunctionDeclaration:         6,
-	KindClassDeclaration:            7,
-	KindClassExpression:             8,
-	KindTypeAliasDeclaration:        9,
-	KindJSTypeAliasDeclaration:      9,
-	KindCallSignature:               10,
-	KindConstructSignature:          11,
-	KindConstructor:                 12,
-	KindGetAccessor:                 13,
-	KindSetAccessor:                 14,
-	KindIndexSignature:              15,
-	KindMethodSignature:             16,
-	KindMethodDeclaration:           17,
-	KindClassStaticBlockDeclaration: 18,
-	KindArrowFunction:               19,
-	KindFunctionExpression:          20,
-	KindConditionalType:             21,
-	KindMappedType:                  22,
-	KindFunctionType:                23,
-	KindConstructorType:             24,
-	KindJSDocSignature:              25,
-	KindSourceFile:                  26,
-	KindModuleDeclaration:           27,
-}
-
-func (n Node) localsContainerBaseData() *localsContainerBaseData {
-	switch localsContainerBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*forStatementData)(n.rec()).localsContainerBaseData
-	case 2:
-		return &(*forInOrOfStatementData)(n.rec()).localsContainerBaseData
-	case 3:
-		return &(*caseBlockData)(n.rec()).localsContainerBaseData
-	case 4:
-		return &(*catchClauseData)(n.rec()).localsContainerBaseData
-	case 5:
-		return &(*blockData)(n.rec()).localsContainerBaseData
-	case 6:
-		return &(*functionDeclarationData)(n.rec()).localsContainerBaseData
-	case 7:
-		return &(*classDeclarationData)(n.rec()).localsContainerBaseData
-	case 8:
-		return &(*classExpressionData)(n.rec()).localsContainerBaseData
-	case 9:
-		return &(*typeAliasDeclarationData)(n.rec()).localsContainerBaseData
-	case 10:
-		return &(*callSignatureDeclarationData)(n.rec()).localsContainerBaseData
-	case 11:
-		return &(*constructSignatureDeclarationData)(n.rec()).localsContainerBaseData
-	case 12:
-		return &(*constructorDeclarationData)(n.rec()).localsContainerBaseData
-	case 13:
-		return &(*getAccessorDeclarationData)(n.rec()).localsContainerBaseData
-	case 14:
-		return &(*setAccessorDeclarationData)(n.rec()).localsContainerBaseData
-	case 15:
-		return &(*indexSignatureDeclarationData)(n.rec()).localsContainerBaseData
-	case 16:
-		return &(*methodSignatureDeclarationData)(n.rec()).localsContainerBaseData
-	case 17:
-		return &(*methodDeclarationData)(n.rec()).localsContainerBaseData
-	case 18:
-		return &(*classStaticBlockDeclarationData)(n.rec()).localsContainerBaseData
-	case 19:
-		return &(*arrowFunctionData)(n.rec()).localsContainerBaseData
-	case 20:
-		return &(*functionExpressionData)(n.rec()).localsContainerBaseData
-	case 21:
-		return &(*conditionalTypeNodeData)(n.rec()).localsContainerBaseData
-	case 22:
-		return &(*mappedTypeNodeData)(n.rec()).localsContainerBaseData
-	case 23:
-		return &(*functionTypeNodeData)(n.rec()).localsContainerBaseData
-	case 24:
-		return &(*constructorTypeNodeData)(n.rec()).localsContainerBaseData
-	case 25:
-		return &(*jsDocSignatureData)(n.rec()).localsContainerBaseData
-	case 26:
-		return &(*SourceFile)(n.rec()).localsContainerBaseData
-	case 27:
-		return &(*moduleDeclarationData)(n.rec()).localsContainerBaseData
-	}
-	return nil
-}
-
 func (node LocalsContainerBase) Locals() SymbolTable {
-	return node.store().symbolTables.get(node.localsContainerBaseData().locals)
+	return node.store().symbolTables.get(*node.localsContainerBaseLocals())
 }
 
 func (node LocalsContainerBase) SetLocals(value SymbolTable) {
-	node.store().symbolTables.set(&node.localsContainerBaseData().locals, value, value == nil)
+	node.store().symbolTables.set(node.localsContainerBaseLocals(), value, value == nil)
 }
 
 func (node LocalsContainerBase) NextContainer() Node {
-	return node.deref(&node.localsContainerBaseData().nextContainer)
+	return node.deref(node.localsContainerBaseNextContainer())
 }
 
 func (node LocalsContainerBase) SetNextContainer(value Node) {
-	node.setRef(&node.localsContainerBaseData().nextContainer, value)
+	node.setRef(node.localsContainerBaseNextContainer(), value)
 }
 
-type flowNodeBaseData struct {
-	flowNode sideRef // *FlowNode
+var flowNodeBaseFlowNodeOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindIdentifier:                 uint8(unsafe.Offsetof(identifierData{}.flowNode)),
+	KindQualifiedName:              uint8(unsafe.Offsetof(qualifiedNameData{}.flowNode)),
+	KindEmptyStatement:             uint8(unsafe.Offsetof(emptyStatementData{}.flowNode)),
+	KindIfStatement:                uint8(unsafe.Offsetof(ifStatementData{}.flowNode)),
+	KindDoStatement:                uint8(unsafe.Offsetof(doStatementData{}.flowNode)),
+	KindWhileStatement:             uint8(unsafe.Offsetof(whileStatementData{}.flowNode)),
+	KindForStatement:               uint8(unsafe.Offsetof(forStatementData{}.flowNode)),
+	KindForInStatement:             uint8(unsafe.Offsetof(forInOrOfStatementData{}.flowNode)),
+	KindForOfStatement:             uint8(unsafe.Offsetof(forInOrOfStatementData{}.flowNode)),
+	KindBreakStatement:             uint8(unsafe.Offsetof(breakStatementData{}.flowNode)),
+	KindContinueStatement:          uint8(unsafe.Offsetof(continueStatementData{}.flowNode)),
+	KindReturnStatement:            uint8(unsafe.Offsetof(returnStatementData{}.flowNode)),
+	KindWithStatement:              uint8(unsafe.Offsetof(withStatementData{}.flowNode)),
+	KindSwitchStatement:            uint8(unsafe.Offsetof(switchStatementData{}.flowNode)),
+	KindThrowStatement:             uint8(unsafe.Offsetof(throwStatementData{}.flowNode)),
+	KindTryStatement:               uint8(unsafe.Offsetof(tryStatementData{}.flowNode)),
+	KindDebuggerStatement:          uint8(unsafe.Offsetof(debuggerStatementData{}.flowNode)),
+	KindLabeledStatement:           uint8(unsafe.Offsetof(labeledStatementData{}.flowNode)),
+	KindExpressionStatement:        uint8(unsafe.Offsetof(expressionStatementData{}.flowNode)),
+	KindBlock:                      uint8(unsafe.Offsetof(blockData{}.flowNode)),
+	KindVariableStatement:          uint8(unsafe.Offsetof(variableStatementData{}.flowNode)),
+	KindBindingElement:             uint8(unsafe.Offsetof(bindingElementData{}.flowNode)),
+	KindMissingDeclaration:         uint8(unsafe.Offsetof(missingDeclarationData{}.flowNode)),
+	KindFunctionDeclaration:        uint8(unsafe.Offsetof(functionDeclarationData{}.flowNode)),
+	KindClassDeclaration:           uint8(unsafe.Offsetof(classDeclarationData{}.flowNode)),
+	KindInterfaceDeclaration:       uint8(unsafe.Offsetof(interfaceDeclarationData{}.flowNode)),
+	KindTypeAliasDeclaration:       uint8(unsafe.Offsetof(typeAliasDeclarationData{}.flowNode)),
+	KindJSTypeAliasDeclaration:     uint8(unsafe.Offsetof(typeAliasDeclarationData{}.flowNode)),
+	KindEnumDeclaration:            uint8(unsafe.Offsetof(enumDeclarationData{}.flowNode)),
+	KindModuleBlock:                uint8(unsafe.Offsetof(moduleBlockData{}.flowNode)),
+	KindNotEmittedStatement:        uint8(unsafe.Offsetof(notEmittedStatementData{}.flowNode)),
+	KindImportDeclaration:          uint8(unsafe.Offsetof(importDeclarationData{}.flowNode)),
+	KindJSImportDeclaration:        uint8(unsafe.Offsetof(importDeclarationData{}.flowNode)),
+	KindExportAssignment:           uint8(unsafe.Offsetof(exportAssignmentData{}.flowNode)),
+	KindNamespaceExportDeclaration: uint8(unsafe.Offsetof(namespaceExportDeclarationData{}.flowNode)),
+	KindGetAccessor:                uint8(unsafe.Offsetof(getAccessorDeclarationData{}.flowNode)),
+	KindSetAccessor:                uint8(unsafe.Offsetof(setAccessorDeclarationData{}.flowNode)),
+	KindMethodDeclaration:          uint8(unsafe.Offsetof(methodDeclarationData{}.flowNode)),
+	KindNullKeyword:                uint8(unsafe.Offsetof(keywordExpressionData{}.flowNode)),
+	KindTrueKeyword:                uint8(unsafe.Offsetof(keywordExpressionData{}.flowNode)),
+	KindFalseKeyword:               uint8(unsafe.Offsetof(keywordExpressionData{}.flowNode)),
+	KindThisKeyword:                uint8(unsafe.Offsetof(keywordExpressionData{}.flowNode)),
+	KindSuperKeyword:               uint8(unsafe.Offsetof(keywordExpressionData{}.flowNode)),
+	KindImportKeyword:              uint8(unsafe.Offsetof(keywordExpressionData{}.flowNode)),
+	KindArrowFunction:              uint8(unsafe.Offsetof(arrowFunctionData{}.flowNode)),
+	KindFunctionExpression:         uint8(unsafe.Offsetof(functionExpressionData{}.flowNode)),
+	KindPropertyAccessExpression:   uint8(unsafe.Offsetof(propertyAccessExpressionData{}.flowNode)),
+	KindElementAccessExpression:    uint8(unsafe.Offsetof(elementAccessExpressionData{}.flowNode)),
+	KindMetaProperty:               uint8(unsafe.Offsetof(metaPropertyData{}.flowNode)),
+	KindModuleDeclaration:          uint8(unsafe.Offsetof(moduleDeclarationData{}.flowNode)),
+	KindImportEqualsDeclaration:    uint8(unsafe.Offsetof(importEqualsDeclarationData{}.flowNode)),
+	KindExportDeclaration:          uint8(unsafe.Offsetof(exportDeclarationData{}.flowNode)),
+}
+
+func (n Node) flowNodeBaseFlowNode() *sideRef {
+	if off := flowNodeBaseFlowNodeOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type FlowNodeBase struct{ Node }
 
-var flowNodeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindIdentifier:                 1,
-	KindQualifiedName:              2,
-	KindEmptyStatement:             3,
-	KindIfStatement:                4,
-	KindDoStatement:                5,
-	KindWhileStatement:             6,
-	KindForStatement:               7,
-	KindForInStatement:             8,
-	KindForOfStatement:             8,
-	KindBreakStatement:             9,
-	KindContinueStatement:          10,
-	KindReturnStatement:            11,
-	KindWithStatement:              12,
-	KindSwitchStatement:            13,
-	KindThrowStatement:             14,
-	KindTryStatement:               15,
-	KindDebuggerStatement:          16,
-	KindLabeledStatement:           17,
-	KindExpressionStatement:        18,
-	KindBlock:                      19,
-	KindVariableStatement:          20,
-	KindBindingElement:             21,
-	KindMissingDeclaration:         22,
-	KindFunctionDeclaration:        23,
-	KindClassDeclaration:           24,
-	KindInterfaceDeclaration:       25,
-	KindTypeAliasDeclaration:       26,
-	KindJSTypeAliasDeclaration:     26,
-	KindEnumDeclaration:            27,
-	KindModuleBlock:                28,
-	KindNotEmittedStatement:        29,
-	KindImportDeclaration:          30,
-	KindJSImportDeclaration:        30,
-	KindExportAssignment:           31,
-	KindNamespaceExportDeclaration: 32,
-	KindGetAccessor:                33,
-	KindSetAccessor:                34,
-	KindMethodDeclaration:          35,
-	KindNullKeyword:                36,
-	KindTrueKeyword:                36,
-	KindFalseKeyword:               36,
-	KindThisKeyword:                36,
-	KindSuperKeyword:               36,
-	KindImportKeyword:              36,
-	KindArrowFunction:              37,
-	KindFunctionExpression:         38,
-	KindPropertyAccessExpression:   39,
-	KindElementAccessExpression:    40,
-	KindMetaProperty:               41,
-	KindModuleDeclaration:          42,
-	KindImportEqualsDeclaration:    43,
-	KindExportDeclaration:          44,
-}
-
-func (n Node) flowNodeBaseData() *flowNodeBaseData {
-	switch flowNodeBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*identifierData)(n.rec()).flowNodeBaseData
-	case 2:
-		return &(*qualifiedNameData)(n.rec()).flowNodeBaseData
-	case 3:
-		return &(*emptyStatementData)(n.rec()).flowNodeBaseData
-	case 4:
-		return &(*ifStatementData)(n.rec()).flowNodeBaseData
-	case 5:
-		return &(*doStatementData)(n.rec()).flowNodeBaseData
-	case 6:
-		return &(*whileStatementData)(n.rec()).flowNodeBaseData
-	case 7:
-		return &(*forStatementData)(n.rec()).flowNodeBaseData
-	case 8:
-		return &(*forInOrOfStatementData)(n.rec()).flowNodeBaseData
-	case 9:
-		return &(*breakStatementData)(n.rec()).flowNodeBaseData
-	case 10:
-		return &(*continueStatementData)(n.rec()).flowNodeBaseData
-	case 11:
-		return &(*returnStatementData)(n.rec()).flowNodeBaseData
-	case 12:
-		return &(*withStatementData)(n.rec()).flowNodeBaseData
-	case 13:
-		return &(*switchStatementData)(n.rec()).flowNodeBaseData
-	case 14:
-		return &(*throwStatementData)(n.rec()).flowNodeBaseData
-	case 15:
-		return &(*tryStatementData)(n.rec()).flowNodeBaseData
-	case 16:
-		return &(*debuggerStatementData)(n.rec()).flowNodeBaseData
-	case 17:
-		return &(*labeledStatementData)(n.rec()).flowNodeBaseData
-	case 18:
-		return &(*expressionStatementData)(n.rec()).flowNodeBaseData
-	case 19:
-		return &(*blockData)(n.rec()).flowNodeBaseData
-	case 20:
-		return &(*variableStatementData)(n.rec()).flowNodeBaseData
-	case 21:
-		return &(*bindingElementData)(n.rec()).flowNodeBaseData
-	case 22:
-		return &(*missingDeclarationData)(n.rec()).flowNodeBaseData
-	case 23:
-		return &(*functionDeclarationData)(n.rec()).flowNodeBaseData
-	case 24:
-		return &(*classDeclarationData)(n.rec()).flowNodeBaseData
-	case 25:
-		return &(*interfaceDeclarationData)(n.rec()).flowNodeBaseData
-	case 26:
-		return &(*typeAliasDeclarationData)(n.rec()).flowNodeBaseData
-	case 27:
-		return &(*enumDeclarationData)(n.rec()).flowNodeBaseData
-	case 28:
-		return &(*moduleBlockData)(n.rec()).flowNodeBaseData
-	case 29:
-		return &(*notEmittedStatementData)(n.rec()).flowNodeBaseData
-	case 30:
-		return &(*importDeclarationData)(n.rec()).flowNodeBaseData
-	case 31:
-		return &(*exportAssignmentData)(n.rec()).flowNodeBaseData
-	case 32:
-		return &(*namespaceExportDeclarationData)(n.rec()).flowNodeBaseData
-	case 33:
-		return &(*getAccessorDeclarationData)(n.rec()).flowNodeBaseData
-	case 34:
-		return &(*setAccessorDeclarationData)(n.rec()).flowNodeBaseData
-	case 35:
-		return &(*methodDeclarationData)(n.rec()).flowNodeBaseData
-	case 36:
-		return &(*keywordExpressionData)(n.rec()).flowNodeBaseData
-	case 37:
-		return &(*arrowFunctionData)(n.rec()).flowNodeBaseData
-	case 38:
-		return &(*functionExpressionData)(n.rec()).flowNodeBaseData
-	case 39:
-		return &(*propertyAccessExpressionData)(n.rec()).flowNodeBaseData
-	case 40:
-		return &(*elementAccessExpressionData)(n.rec()).flowNodeBaseData
-	case 41:
-		return &(*metaPropertyData)(n.rec()).flowNodeBaseData
-	case 42:
-		return &(*moduleDeclarationData)(n.rec()).flowNodeBaseData
-	case 43:
-		return &(*importEqualsDeclarationData)(n.rec()).flowNodeBaseData
-	case 44:
-		return &(*exportDeclarationData)(n.rec()).flowNodeBaseData
-	}
-	return nil
-}
-
 func (node FlowNodeBase) FlowNode() *FlowNode {
-	return node.store().flowNodes.get(node.flowNodeBaseData().flowNode)
+	return node.store().flowNodes.get(*node.flowNodeBaseFlowNode())
 }
 
 func (node FlowNodeBase) SetFlowNode(value *FlowNode) {
-	node.store().flowNodes.set(&node.flowNodeBaseData().flowNode, value, value == nil)
+	node.store().flowNodes.set(node.flowNodeBaseFlowNode(), value, value == nil)
 }
 
-type compositeBaseData struct {
-	facts atomic.Uint32
+var compositeBaseFactsOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindQualifiedName:               uint8(unsafe.Offsetof(qualifiedNameData{}.facts)),
+	KindComputedPropertyName:        uint8(unsafe.Offsetof(computedPropertyNameData{}.facts)),
+	KindDecorator:                   uint8(unsafe.Offsetof(decoratorData{}.facts)),
+	KindIfStatement:                 uint8(unsafe.Offsetof(ifStatementData{}.facts)),
+	KindDoStatement:                 uint8(unsafe.Offsetof(doStatementData{}.facts)),
+	KindWhileStatement:              uint8(unsafe.Offsetof(whileStatementData{}.facts)),
+	KindForStatement:                uint8(unsafe.Offsetof(forStatementData{}.facts)),
+	KindForInStatement:              uint8(unsafe.Offsetof(forInOrOfStatementData{}.facts)),
+	KindForOfStatement:              uint8(unsafe.Offsetof(forInOrOfStatementData{}.facts)),
+	KindReturnStatement:             uint8(unsafe.Offsetof(returnStatementData{}.facts)),
+	KindWithStatement:               uint8(unsafe.Offsetof(withStatementData{}.facts)),
+	KindSwitchStatement:             uint8(unsafe.Offsetof(switchStatementData{}.facts)),
+	KindCaseBlock:                   uint8(unsafe.Offsetof(caseBlockData{}.facts)),
+	KindCaseClause:                  uint8(unsafe.Offsetof(caseOrDefaultClauseData{}.facts)),
+	KindDefaultClause:               uint8(unsafe.Offsetof(caseOrDefaultClauseData{}.facts)),
+	KindThrowStatement:              uint8(unsafe.Offsetof(throwStatementData{}.facts)),
+	KindTryStatement:                uint8(unsafe.Offsetof(tryStatementData{}.facts)),
+	KindCatchClause:                 uint8(unsafe.Offsetof(catchClauseData{}.facts)),
+	KindBlock:                       uint8(unsafe.Offsetof(blockData{}.facts)),
+	KindVariableStatement:           uint8(unsafe.Offsetof(variableStatementData{}.facts)),
+	KindVariableDeclaration:         uint8(unsafe.Offsetof(variableDeclarationData{}.facts)),
+	KindVariableDeclarationList:     uint8(unsafe.Offsetof(variableDeclarationListData{}.facts)),
+	KindObjectBindingPattern:        uint8(unsafe.Offsetof(bindingPatternData{}.facts)),
+	KindArrayBindingPattern:         uint8(unsafe.Offsetof(bindingPatternData{}.facts)),
+	KindParameter:                   uint8(unsafe.Offsetof(parameterDeclarationData{}.facts)),
+	KindBindingElement:              uint8(unsafe.Offsetof(bindingElementData{}.facts)),
+	KindFunctionDeclaration:         uint8(unsafe.Offsetof(functionDeclarationData{}.facts)),
+	KindClassDeclaration:            uint8(unsafe.Offsetof(classDeclarationData{}.facts)),
+	KindClassExpression:             uint8(unsafe.Offsetof(classExpressionData{}.facts)),
+	KindHeritageClause:              uint8(unsafe.Offsetof(heritageClauseData{}.facts)),
+	KindEnumMember:                  uint8(unsafe.Offsetof(enumMemberData{}.facts)),
+	KindEnumDeclaration:             uint8(unsafe.Offsetof(enumDeclarationData{}.facts)),
+	KindModuleBlock:                 uint8(unsafe.Offsetof(moduleBlockData{}.facts)),
+	KindImportDeclaration:           uint8(unsafe.Offsetof(importDeclarationData{}.facts)),
+	KindJSImportDeclaration:         uint8(unsafe.Offsetof(importDeclarationData{}.facts)),
+	KindNamedImports:                uint8(unsafe.Offsetof(namedImportsData{}.facts)),
+	KindExportAssignment:            uint8(unsafe.Offsetof(exportAssignmentData{}.facts)),
+	KindNamedExports:                uint8(unsafe.Offsetof(namedExportsData{}.facts)),
+	KindExportSpecifier:             uint8(unsafe.Offsetof(exportSpecifierData{}.facts)),
+	KindConstructor:                 uint8(unsafe.Offsetof(constructorDeclarationData{}.facts)),
+	KindGetAccessor:                 uint8(unsafe.Offsetof(getAccessorDeclarationData{}.facts)),
+	KindSetAccessor:                 uint8(unsafe.Offsetof(setAccessorDeclarationData{}.facts)),
+	KindMethodDeclaration:           uint8(unsafe.Offsetof(methodDeclarationData{}.facts)),
+	KindPropertyDeclaration:         uint8(unsafe.Offsetof(propertyDeclarationData{}.facts)),
+	KindClassStaticBlockDeclaration: uint8(unsafe.Offsetof(classStaticBlockDeclarationData{}.facts)),
+	KindBinaryExpression:            uint8(unsafe.Offsetof(binaryExpressionData{}.facts)),
+	KindArrowFunction:               uint8(unsafe.Offsetof(arrowFunctionData{}.facts)),
+	KindFunctionExpression:          uint8(unsafe.Offsetof(functionExpressionData{}.facts)),
+	KindConditionalExpression:       uint8(unsafe.Offsetof(conditionalExpressionData{}.facts)),
+	KindPropertyAccessExpression:    uint8(unsafe.Offsetof(propertyAccessExpressionData{}.facts)),
+	KindElementAccessExpression:     uint8(unsafe.Offsetof(elementAccessExpressionData{}.facts)),
+	KindCallExpression:              uint8(unsafe.Offsetof(callExpressionData{}.facts)),
+	KindNewExpression:               uint8(unsafe.Offsetof(newExpressionData{}.facts)),
+	KindMetaProperty:                uint8(unsafe.Offsetof(metaPropertyData{}.facts)),
+	KindTemplateExpression:          uint8(unsafe.Offsetof(templateExpressionData{}.facts)),
+	KindTaggedTemplateExpression:    uint8(unsafe.Offsetof(taggedTemplateExpressionData{}.facts)),
+	KindArrayLiteralExpression:      uint8(unsafe.Offsetof(arrayLiteralExpressionData{}.facts)),
+	KindObjectLiteralExpression:     uint8(unsafe.Offsetof(objectLiteralExpressionData{}.facts)),
+	KindPropertyAssignment:          uint8(unsafe.Offsetof(propertyAssignmentData{}.facts)),
+	KindShorthandPropertyAssignment: uint8(unsafe.Offsetof(shorthandPropertyAssignmentData{}.facts)),
+	KindExpressionWithTypeArguments: uint8(unsafe.Offsetof(expressionWithTypeArgumentsData{}.facts)),
+	KindImportAttribute:             uint8(unsafe.Offsetof(importAttributeData{}.facts)),
+	KindImportAttributes:            uint8(unsafe.Offsetof(importAttributesData{}.facts)),
+	KindJsxElement:                  uint8(unsafe.Offsetof(jsxElementData{}.facts)),
+	KindJsxAttributes:               uint8(unsafe.Offsetof(jsxAttributesData{}.facts)),
+	KindJsxNamespacedName:           uint8(unsafe.Offsetof(jsxNamespacedNameData{}.facts)),
+	KindJsxOpeningElement:           uint8(unsafe.Offsetof(jsxOpeningElementData{}.facts)),
+	KindJsxSelfClosingElement:       uint8(unsafe.Offsetof(jsxSelfClosingElementData{}.facts)),
+	KindJsxFragment:                 uint8(unsafe.Offsetof(jsxFragmentData{}.facts)),
+	KindJsxAttribute:                uint8(unsafe.Offsetof(jsxAttributeData{}.facts)),
+	KindSourceFile:                  uint8(unsafe.Offsetof(SourceFile{}.facts)),
+	KindModuleDeclaration:           uint8(unsafe.Offsetof(moduleDeclarationData{}.facts)),
+	KindImportEqualsDeclaration:     uint8(unsafe.Offsetof(importEqualsDeclarationData{}.facts)),
+	KindExportDeclaration:           uint8(unsafe.Offsetof(exportDeclarationData{}.facts)),
+	KindImportClause:                uint8(unsafe.Offsetof(importClauseData{}.facts)),
+	KindImportSpecifier:             uint8(unsafe.Offsetof(importSpecifierData{}.facts)),
+}
+
+func (n Node) compositeBaseFacts() *atomic.Uint32 {
+	if off := compositeBaseFactsOffsets[n.Kind()]; off != 0 {
+		return (*atomic.Uint32)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type CompositeBase struct{ Node }
 
-var compositeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindQualifiedName:               1,
-	KindComputedPropertyName:        2,
-	KindDecorator:                   3,
-	KindIfStatement:                 4,
-	KindDoStatement:                 5,
-	KindWhileStatement:              6,
-	KindForStatement:                7,
-	KindForInStatement:              8,
-	KindForOfStatement:              8,
-	KindReturnStatement:             9,
-	KindWithStatement:               10,
-	KindSwitchStatement:             11,
-	KindCaseBlock:                   12,
-	KindCaseClause:                  13,
-	KindDefaultClause:               13,
-	KindThrowStatement:              14,
-	KindTryStatement:                15,
-	KindCatchClause:                 16,
-	KindBlock:                       17,
-	KindVariableStatement:           18,
-	KindVariableDeclaration:         19,
-	KindVariableDeclarationList:     20,
-	KindObjectBindingPattern:        21,
-	KindArrayBindingPattern:         21,
-	KindParameter:                   22,
-	KindBindingElement:              23,
-	KindFunctionDeclaration:         24,
-	KindClassDeclaration:            25,
-	KindClassExpression:             26,
-	KindHeritageClause:              27,
-	KindEnumMember:                  28,
-	KindEnumDeclaration:             29,
-	KindModuleBlock:                 30,
-	KindImportDeclaration:           31,
-	KindJSImportDeclaration:         31,
-	KindNamedImports:                32,
-	KindExportAssignment:            33,
-	KindNamedExports:                34,
-	KindExportSpecifier:             35,
-	KindConstructor:                 36,
-	KindGetAccessor:                 37,
-	KindSetAccessor:                 38,
-	KindMethodDeclaration:           39,
-	KindPropertyDeclaration:         40,
-	KindClassStaticBlockDeclaration: 41,
-	KindBinaryExpression:            42,
-	KindArrowFunction:               43,
-	KindFunctionExpression:          44,
-	KindConditionalExpression:       45,
-	KindPropertyAccessExpression:    46,
-	KindElementAccessExpression:     47,
-	KindCallExpression:              48,
-	KindNewExpression:               49,
-	KindMetaProperty:                50,
-	KindTemplateExpression:          51,
-	KindTaggedTemplateExpression:    52,
-	KindArrayLiteralExpression:      53,
-	KindObjectLiteralExpression:     54,
-	KindPropertyAssignment:          55,
-	KindShorthandPropertyAssignment: 56,
-	KindExpressionWithTypeArguments: 57,
-	KindImportAttribute:             58,
-	KindImportAttributes:            59,
-	KindJsxElement:                  60,
-	KindJsxAttributes:               61,
-	KindJsxNamespacedName:           62,
-	KindJsxOpeningElement:           63,
-	KindJsxSelfClosingElement:       64,
-	KindJsxFragment:                 65,
-	KindJsxAttribute:                66,
-	KindSourceFile:                  67,
-	KindModuleDeclaration:           68,
-	KindImportEqualsDeclaration:     69,
-	KindExportDeclaration:           70,
-	KindImportClause:                71,
-	KindImportSpecifier:             72,
+type TypeSyntaxBase struct{ Node }
+
+var functionLikeBaseTypeParametersOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindFunctionDeclaration: uint8(unsafe.Offsetof(functionDeclarationData{}.typeParameters)),
+	KindCallSignature:       uint8(unsafe.Offsetof(callSignatureDeclarationData{}.typeParameters)),
+	KindConstructSignature:  uint8(unsafe.Offsetof(constructSignatureDeclarationData{}.typeParameters)),
+	KindConstructor:         uint8(unsafe.Offsetof(constructorDeclarationData{}.typeParameters)),
+	KindGetAccessor:         uint8(unsafe.Offsetof(getAccessorDeclarationData{}.typeParameters)),
+	KindSetAccessor:         uint8(unsafe.Offsetof(setAccessorDeclarationData{}.typeParameters)),
+	KindIndexSignature:      uint8(unsafe.Offsetof(indexSignatureDeclarationData{}.typeParameters)),
+	KindMethodSignature:     uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.typeParameters)),
+	KindMethodDeclaration:   uint8(unsafe.Offsetof(methodDeclarationData{}.typeParameters)),
+	KindArrowFunction:       uint8(unsafe.Offsetof(arrowFunctionData{}.typeParameters)),
+	KindFunctionExpression:  uint8(unsafe.Offsetof(functionExpressionData{}.typeParameters)),
+	KindFunctionType:        uint8(unsafe.Offsetof(functionTypeNodeData{}.typeParameters)),
+	KindConstructorType:     uint8(unsafe.Offsetof(constructorTypeNodeData{}.typeParameters)),
+	KindJSDocSignature:      uint8(unsafe.Offsetof(jsDocSignatureData{}.typeParameters)),
 }
 
-func (n Node) compositeBaseData() *compositeBaseData {
-	switch compositeBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*qualifiedNameData)(n.rec()).compositeBaseData
-	case 2:
-		return &(*computedPropertyNameData)(n.rec()).compositeBaseData
-	case 3:
-		return &(*decoratorData)(n.rec()).compositeBaseData
-	case 4:
-		return &(*ifStatementData)(n.rec()).compositeBaseData
-	case 5:
-		return &(*doStatementData)(n.rec()).compositeBaseData
-	case 6:
-		return &(*whileStatementData)(n.rec()).compositeBaseData
-	case 7:
-		return &(*forStatementData)(n.rec()).compositeBaseData
-	case 8:
-		return &(*forInOrOfStatementData)(n.rec()).compositeBaseData
-	case 9:
-		return &(*returnStatementData)(n.rec()).compositeBaseData
-	case 10:
-		return &(*withStatementData)(n.rec()).compositeBaseData
-	case 11:
-		return &(*switchStatementData)(n.rec()).compositeBaseData
-	case 12:
-		return &(*caseBlockData)(n.rec()).compositeBaseData
-	case 13:
-		return &(*caseOrDefaultClauseData)(n.rec()).compositeBaseData
-	case 14:
-		return &(*throwStatementData)(n.rec()).compositeBaseData
-	case 15:
-		return &(*tryStatementData)(n.rec()).compositeBaseData
-	case 16:
-		return &(*catchClauseData)(n.rec()).compositeBaseData
-	case 17:
-		return &(*blockData)(n.rec()).compositeBaseData
-	case 18:
-		return &(*variableStatementData)(n.rec()).compositeBaseData
-	case 19:
-		return &(*variableDeclarationData)(n.rec()).compositeBaseData
-	case 20:
-		return &(*variableDeclarationListData)(n.rec()).compositeBaseData
-	case 21:
-		return &(*bindingPatternData)(n.rec()).compositeBaseData
-	case 22:
-		return &(*parameterDeclarationData)(n.rec()).compositeBaseData
-	case 23:
-		return &(*bindingElementData)(n.rec()).compositeBaseData
-	case 24:
-		return &(*functionDeclarationData)(n.rec()).compositeBaseData
-	case 25:
-		return &(*classDeclarationData)(n.rec()).compositeBaseData
-	case 26:
-		return &(*classExpressionData)(n.rec()).compositeBaseData
-	case 27:
-		return &(*heritageClauseData)(n.rec()).compositeBaseData
-	case 28:
-		return &(*enumMemberData)(n.rec()).compositeBaseData
-	case 29:
-		return &(*enumDeclarationData)(n.rec()).compositeBaseData
-	case 30:
-		return &(*moduleBlockData)(n.rec()).compositeBaseData
-	case 31:
-		return &(*importDeclarationData)(n.rec()).compositeBaseData
-	case 32:
-		return &(*namedImportsData)(n.rec()).compositeBaseData
-	case 33:
-		return &(*exportAssignmentData)(n.rec()).compositeBaseData
-	case 34:
-		return &(*namedExportsData)(n.rec()).compositeBaseData
-	case 35:
-		return &(*exportSpecifierData)(n.rec()).compositeBaseData
-	case 36:
-		return &(*constructorDeclarationData)(n.rec()).compositeBaseData
-	case 37:
-		return &(*getAccessorDeclarationData)(n.rec()).compositeBaseData
-	case 38:
-		return &(*setAccessorDeclarationData)(n.rec()).compositeBaseData
-	case 39:
-		return &(*methodDeclarationData)(n.rec()).compositeBaseData
-	case 40:
-		return &(*propertyDeclarationData)(n.rec()).compositeBaseData
-	case 41:
-		return &(*classStaticBlockDeclarationData)(n.rec()).compositeBaseData
-	case 42:
-		return &(*binaryExpressionData)(n.rec()).compositeBaseData
-	case 43:
-		return &(*arrowFunctionData)(n.rec()).compositeBaseData
-	case 44:
-		return &(*functionExpressionData)(n.rec()).compositeBaseData
-	case 45:
-		return &(*conditionalExpressionData)(n.rec()).compositeBaseData
-	case 46:
-		return &(*propertyAccessExpressionData)(n.rec()).compositeBaseData
-	case 47:
-		return &(*elementAccessExpressionData)(n.rec()).compositeBaseData
-	case 48:
-		return &(*callExpressionData)(n.rec()).compositeBaseData
-	case 49:
-		return &(*newExpressionData)(n.rec()).compositeBaseData
-	case 50:
-		return &(*metaPropertyData)(n.rec()).compositeBaseData
-	case 51:
-		return &(*templateExpressionData)(n.rec()).compositeBaseData
-	case 52:
-		return &(*taggedTemplateExpressionData)(n.rec()).compositeBaseData
-	case 53:
-		return &(*arrayLiteralExpressionData)(n.rec()).compositeBaseData
-	case 54:
-		return &(*objectLiteralExpressionData)(n.rec()).compositeBaseData
-	case 55:
-		return &(*propertyAssignmentData)(n.rec()).compositeBaseData
-	case 56:
-		return &(*shorthandPropertyAssignmentData)(n.rec()).compositeBaseData
-	case 57:
-		return &(*expressionWithTypeArgumentsData)(n.rec()).compositeBaseData
-	case 58:
-		return &(*importAttributeData)(n.rec()).compositeBaseData
-	case 59:
-		return &(*importAttributesData)(n.rec()).compositeBaseData
-	case 60:
-		return &(*jsxElementData)(n.rec()).compositeBaseData
-	case 61:
-		return &(*jsxAttributesData)(n.rec()).compositeBaseData
-	case 62:
-		return &(*jsxNamespacedNameData)(n.rec()).compositeBaseData
-	case 63:
-		return &(*jsxOpeningElementData)(n.rec()).compositeBaseData
-	case 64:
-		return &(*jsxSelfClosingElementData)(n.rec()).compositeBaseData
-	case 65:
-		return &(*jsxFragmentData)(n.rec()).compositeBaseData
-	case 66:
-		return &(*jsxAttributeData)(n.rec()).compositeBaseData
-	case 67:
-		return &(*SourceFile)(n.rec()).compositeBaseData
-	case 68:
-		return &(*moduleDeclarationData)(n.rec()).compositeBaseData
-	case 69:
-		return &(*importEqualsDeclarationData)(n.rec()).compositeBaseData
-	case 70:
-		return &(*exportDeclarationData)(n.rec()).compositeBaseData
-	case 71:
-		return &(*importClauseData)(n.rec()).compositeBaseData
-	case 72:
-		return &(*importSpecifierData)(n.rec()).compositeBaseData
+func (n Node) functionLikeBaseTypeParameters() *sideRef {
+	if off := functionLikeBaseTypeParametersOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
 	}
 	return nil
 }
 
-type typeSyntaxBaseData struct{}
+var functionLikeBaseParametersOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindFunctionDeclaration: uint8(unsafe.Offsetof(functionDeclarationData{}.parameters)),
+	KindCallSignature:       uint8(unsafe.Offsetof(callSignatureDeclarationData{}.parameters)),
+	KindConstructSignature:  uint8(unsafe.Offsetof(constructSignatureDeclarationData{}.parameters)),
+	KindConstructor:         uint8(unsafe.Offsetof(constructorDeclarationData{}.parameters)),
+	KindGetAccessor:         uint8(unsafe.Offsetof(getAccessorDeclarationData{}.parameters)),
+	KindSetAccessor:         uint8(unsafe.Offsetof(setAccessorDeclarationData{}.parameters)),
+	KindIndexSignature:      uint8(unsafe.Offsetof(indexSignatureDeclarationData{}.parameters)),
+	KindMethodSignature:     uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.parameters)),
+	KindMethodDeclaration:   uint8(unsafe.Offsetof(methodDeclarationData{}.parameters)),
+	KindArrowFunction:       uint8(unsafe.Offsetof(arrowFunctionData{}.parameters)),
+	KindFunctionExpression:  uint8(unsafe.Offsetof(functionExpressionData{}.parameters)),
+	KindFunctionType:        uint8(unsafe.Offsetof(functionTypeNodeData{}.parameters)),
+	KindConstructorType:     uint8(unsafe.Offsetof(constructorTypeNodeData{}.parameters)),
+	KindJSDocSignature:      uint8(unsafe.Offsetof(jsDocSignatureData{}.parameters)),
+}
 
-type TypeSyntaxBase struct{ Node }
+func (n Node) functionLikeBaseParameters() *sideRef {
+	if off := functionLikeBaseParametersOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
+}
 
-type functionLikeBaseData struct {
-	localsContainerBaseData
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
-	typeField      nodeRef // TypeNode. Optional
-	fullSignature  nodeRef // TypeNode. Optional
+var functionLikeBaseTypeFieldOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindFunctionDeclaration: uint8(unsafe.Offsetof(functionDeclarationData{}.typeField)),
+	KindCallSignature:       uint8(unsafe.Offsetof(callSignatureDeclarationData{}.typeField)),
+	KindConstructSignature:  uint8(unsafe.Offsetof(constructSignatureDeclarationData{}.typeField)),
+	KindConstructor:         uint8(unsafe.Offsetof(constructorDeclarationData{}.typeField)),
+	KindGetAccessor:         uint8(unsafe.Offsetof(getAccessorDeclarationData{}.typeField)),
+	KindSetAccessor:         uint8(unsafe.Offsetof(setAccessorDeclarationData{}.typeField)),
+	KindIndexSignature:      uint8(unsafe.Offsetof(indexSignatureDeclarationData{}.typeField)),
+	KindMethodSignature:     uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.typeField)),
+	KindMethodDeclaration:   uint8(unsafe.Offsetof(methodDeclarationData{}.typeField)),
+	KindArrowFunction:       uint8(unsafe.Offsetof(arrowFunctionData{}.typeField)),
+	KindFunctionExpression:  uint8(unsafe.Offsetof(functionExpressionData{}.typeField)),
+	KindFunctionType:        uint8(unsafe.Offsetof(functionTypeNodeData{}.typeField)),
+	KindConstructorType:     uint8(unsafe.Offsetof(constructorTypeNodeData{}.typeField)),
+	KindJSDocSignature:      uint8(unsafe.Offsetof(jsDocSignatureData{}.typeField)),
+}
+
+func (n Node) functionLikeBaseTypeField() *nodeRef {
+	if off := functionLikeBaseTypeFieldOffsets[n.Kind()]; off != 0 {
+		return (*nodeRef)(unsafe.Add(n.p, off))
+	}
+	return nil
+}
+
+var functionLikeBaseFullSignatureOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindFunctionDeclaration: uint8(unsafe.Offsetof(functionDeclarationData{}.fullSignature)),
+	KindCallSignature:       uint8(unsafe.Offsetof(callSignatureDeclarationData{}.fullSignature)),
+	KindConstructSignature:  uint8(unsafe.Offsetof(constructSignatureDeclarationData{}.fullSignature)),
+	KindConstructor:         uint8(unsafe.Offsetof(constructorDeclarationData{}.fullSignature)),
+	KindGetAccessor:         uint8(unsafe.Offsetof(getAccessorDeclarationData{}.fullSignature)),
+	KindSetAccessor:         uint8(unsafe.Offsetof(setAccessorDeclarationData{}.fullSignature)),
+	KindIndexSignature:      uint8(unsafe.Offsetof(indexSignatureDeclarationData{}.fullSignature)),
+	KindMethodSignature:     uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.fullSignature)),
+	KindMethodDeclaration:   uint8(unsafe.Offsetof(methodDeclarationData{}.fullSignature)),
+	KindArrowFunction:       uint8(unsafe.Offsetof(arrowFunctionData{}.fullSignature)),
+	KindFunctionExpression:  uint8(unsafe.Offsetof(functionExpressionData{}.fullSignature)),
+	KindFunctionType:        uint8(unsafe.Offsetof(functionTypeNodeData{}.fullSignature)),
+	KindConstructorType:     uint8(unsafe.Offsetof(constructorTypeNodeData{}.fullSignature)),
+	KindJSDocSignature:      uint8(unsafe.Offsetof(jsDocSignatureData{}.fullSignature)),
+}
+
+func (n Node) functionLikeBaseFullSignature() *nodeRef {
+	if off := functionLikeBaseFullSignatureOffsets[n.Kind()]; off != 0 {
+		return (*nodeRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type FunctionLikeBase struct{ Node }
 
-var functionLikeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindFunctionDeclaration: 1,
-	KindCallSignature:       2,
-	KindConstructSignature:  3,
-	KindConstructor:         4,
-	KindGetAccessor:         5,
-	KindSetAccessor:         6,
-	KindIndexSignature:      7,
-	KindMethodSignature:     8,
-	KindMethodDeclaration:   9,
-	KindArrowFunction:       10,
-	KindFunctionExpression:  11,
-	KindFunctionType:        12,
-	KindConstructorType:     13,
-	KindJSDocSignature:      14,
+func (node FunctionLikeBase) Locals() SymbolTable {
+	return node.store().symbolTables.get(*node.localsContainerBaseLocals())
 }
 
-func (n Node) functionLikeBaseData() *functionLikeBaseData {
-	switch functionLikeBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*functionDeclarationData)(n.rec()).functionLikeBaseData
-	case 2:
-		return &(*callSignatureDeclarationData)(n.rec()).functionLikeBaseData
-	case 3:
-		return &(*constructSignatureDeclarationData)(n.rec()).functionLikeBaseData
-	case 4:
-		return &(*constructorDeclarationData)(n.rec()).functionLikeBaseData
-	case 5:
-		return &(*getAccessorDeclarationData)(n.rec()).functionLikeBaseData
-	case 6:
-		return &(*setAccessorDeclarationData)(n.rec()).functionLikeBaseData
-	case 7:
-		return &(*indexSignatureDeclarationData)(n.rec()).functionLikeBaseData
-	case 8:
-		return &(*methodSignatureDeclarationData)(n.rec()).functionLikeBaseData
-	case 9:
-		return &(*methodDeclarationData)(n.rec()).functionLikeBaseData
-	case 10:
-		return &(*arrowFunctionData)(n.rec()).functionLikeBaseData
-	case 11:
-		return &(*functionExpressionData)(n.rec()).functionLikeBaseData
-	case 12:
-		return &(*functionTypeNodeData)(n.rec()).functionLikeBaseData
-	case 13:
-		return &(*constructorTypeNodeData)(n.rec()).functionLikeBaseData
-	case 14:
-		return &(*jsDocSignatureData)(n.rec()).functionLikeBaseData
+func (node FunctionLikeBase) SetLocals(value SymbolTable) {
+	node.store().symbolTables.set(node.localsContainerBaseLocals(), value, value == nil)
+}
+
+func (node FunctionLikeBase) NextContainer() Node {
+	return node.deref(node.localsContainerBaseNextContainer())
+}
+
+func (node FunctionLikeBase) SetNextContainer(value Node) {
+	node.setRef(node.localsContainerBaseNextContainer(), value)
+}
+
+func (node FunctionLikeBase) TypeParameters() *TypeParameterList {
+	return node.store().nodeLists.get(*node.functionLikeBaseTypeParameters())
+}
+
+func (node FunctionLikeBase) SetTypeParameters(value *TypeParameterList) {
+	node.store().nodeLists.set(node.functionLikeBaseTypeParameters(), value, value == nil)
+}
+
+func (node FunctionLikeBase) Parameters() *ParameterList {
+	return node.store().nodeLists.get(*node.functionLikeBaseParameters())
+}
+
+func (node FunctionLikeBase) SetParameters(value *ParameterList) {
+	node.store().nodeLists.set(node.functionLikeBaseParameters(), value, value == nil)
+}
+func (node FunctionLikeBase) Type() TypeNode { return node.deref(node.functionLikeBaseTypeField()) }
+func (node FunctionLikeBase) SetType(value TypeNode) {
+	node.setRef(node.functionLikeBaseTypeField(), value)
+}
+
+func (node FunctionLikeBase) FullSignature() TypeNode {
+	return node.deref(node.functionLikeBaseFullSignature())
+}
+
+func (node FunctionLikeBase) SetFullSignature(value TypeNode) {
+	node.setRef(node.functionLikeBaseFullSignature(), value)
+}
+
+var bodyBaseAsteriskTokenOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindFunctionDeclaration: uint8(unsafe.Offsetof(functionDeclarationData{}.asteriskToken)),
+	KindConstructor:         uint8(unsafe.Offsetof(constructorDeclarationData{}.asteriskToken)),
+	KindGetAccessor:         uint8(unsafe.Offsetof(getAccessorDeclarationData{}.asteriskToken)),
+	KindSetAccessor:         uint8(unsafe.Offsetof(setAccessorDeclarationData{}.asteriskToken)),
+	KindMethodDeclaration:   uint8(unsafe.Offsetof(methodDeclarationData{}.asteriskToken)),
+	KindArrowFunction:       uint8(unsafe.Offsetof(arrowFunctionData{}.asteriskToken)),
+	KindFunctionExpression:  uint8(unsafe.Offsetof(functionExpressionData{}.asteriskToken)),
+	KindModuleDeclaration:   uint8(unsafe.Offsetof(moduleDeclarationData{}.asteriskToken)),
+}
+
+func (n Node) bodyBaseAsteriskToken() *nodeRef {
+	if off := bodyBaseAsteriskTokenOffsets[n.Kind()]; off != 0 {
+		return (*nodeRef)(unsafe.Add(n.p, off))
 	}
 	return nil
 }
 
-func (node FunctionLikeBase) Locals() SymbolTable {
-	return node.store().symbolTables.get(node.functionLikeBaseData().locals)
+var bodyBaseBodyOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindFunctionDeclaration: uint8(unsafe.Offsetof(functionDeclarationData{}.body)),
+	KindConstructor:         uint8(unsafe.Offsetof(constructorDeclarationData{}.body)),
+	KindGetAccessor:         uint8(unsafe.Offsetof(getAccessorDeclarationData{}.body)),
+	KindSetAccessor:         uint8(unsafe.Offsetof(setAccessorDeclarationData{}.body)),
+	KindMethodDeclaration:   uint8(unsafe.Offsetof(methodDeclarationData{}.body)),
+	KindArrowFunction:       uint8(unsafe.Offsetof(arrowFunctionData{}.body)),
+	KindFunctionExpression:  uint8(unsafe.Offsetof(functionExpressionData{}.body)),
+	KindModuleDeclaration:   uint8(unsafe.Offsetof(moduleDeclarationData{}.body)),
 }
 
-func (node FunctionLikeBase) SetLocals(value SymbolTable) {
-	node.store().symbolTables.set(&node.functionLikeBaseData().locals, value, value == nil)
+func (n Node) bodyBaseBody() *nodeRef {
+	if off := bodyBaseBodyOffsets[n.Kind()]; off != 0 {
+		return (*nodeRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
-func (node FunctionLikeBase) NextContainer() Node {
-	return node.deref(&node.functionLikeBaseData().nextContainer)
+var bodyBaseEndFlowNodeOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindFunctionDeclaration: uint8(unsafe.Offsetof(functionDeclarationData{}.endFlowNode)),
+	KindConstructor:         uint8(unsafe.Offsetof(constructorDeclarationData{}.endFlowNode)),
+	KindGetAccessor:         uint8(unsafe.Offsetof(getAccessorDeclarationData{}.endFlowNode)),
+	KindSetAccessor:         uint8(unsafe.Offsetof(setAccessorDeclarationData{}.endFlowNode)),
+	KindMethodDeclaration:   uint8(unsafe.Offsetof(methodDeclarationData{}.endFlowNode)),
+	KindArrowFunction:       uint8(unsafe.Offsetof(arrowFunctionData{}.endFlowNode)),
+	KindFunctionExpression:  uint8(unsafe.Offsetof(functionExpressionData{}.endFlowNode)),
+	KindModuleDeclaration:   uint8(unsafe.Offsetof(moduleDeclarationData{}.endFlowNode)),
 }
 
-func (node FunctionLikeBase) SetNextContainer(value Node) {
-	node.setRef(&node.functionLikeBaseData().nextContainer, value)
-}
-
-func (node FunctionLikeBase) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.functionLikeBaseData().typeParameters)
-}
-
-func (node FunctionLikeBase) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.functionLikeBaseData().typeParameters, value, value == nil)
-}
-
-func (node FunctionLikeBase) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.functionLikeBaseData().parameters)
-}
-
-func (node FunctionLikeBase) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.functionLikeBaseData().parameters, value, value == nil)
-}
-
-func (node FunctionLikeBase) Type() TypeNode {
-	return node.deref(&node.functionLikeBaseData().typeField)
-}
-
-func (node FunctionLikeBase) SetType(value TypeNode) {
-	node.setRef(&node.functionLikeBaseData().typeField, value)
-}
-
-func (node FunctionLikeBase) FullSignature() TypeNode {
-	return node.deref(&node.functionLikeBaseData().fullSignature)
-}
-
-func (node FunctionLikeBase) SetFullSignature(value TypeNode) {
-	node.setRef(&node.functionLikeBaseData().fullSignature, value)
-}
-
-type bodyBaseData struct {
-	asteriskToken nodeRef // AsteriskToken. Optional
-	body          nodeRef // NodeBody. Optional
-	endFlowNode   sideRef // *FlowNode
+func (n Node) bodyBaseEndFlowNode() *sideRef {
+	if off := bodyBaseEndFlowNodeOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type BodyBase struct{ Node }
 
-var bodyBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindFunctionDeclaration: 1,
-	KindConstructor:         2,
-	KindGetAccessor:         3,
-	KindSetAccessor:         4,
-	KindMethodDeclaration:   5,
-	KindArrowFunction:       6,
-	KindFunctionExpression:  7,
-	KindModuleDeclaration:   8,
-}
-
-func (n Node) bodyBaseData() *bodyBaseData {
-	switch bodyBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*functionDeclarationData)(n.rec()).bodyBaseData
-	case 2:
-		return &(*constructorDeclarationData)(n.rec()).bodyBaseData
-	case 3:
-		return &(*getAccessorDeclarationData)(n.rec()).bodyBaseData
-	case 4:
-		return &(*setAccessorDeclarationData)(n.rec()).bodyBaseData
-	case 5:
-		return &(*methodDeclarationData)(n.rec()).bodyBaseData
-	case 6:
-		return &(*arrowFunctionData)(n.rec()).bodyBaseData
-	case 7:
-		return &(*functionExpressionData)(n.rec()).bodyBaseData
-	case 8:
-		return &(*moduleDeclarationData)(n.rec()).bodyBaseData
-	}
-	return nil
-}
-
-func (node BodyBase) AsteriskToken() AsteriskToken {
-	return node.deref(&node.bodyBaseData().asteriskToken)
-}
+func (node BodyBase) AsteriskToken() AsteriskToken { return node.deref(node.bodyBaseAsteriskToken()) }
 
 func (node BodyBase) SetAsteriskToken(value AsteriskToken) {
-	node.setRef(&node.bodyBaseData().asteriskToken, value)
+	node.setRef(node.bodyBaseAsteriskToken(), value)
 }
-func (node BodyBase) Body() NodeBody         { return node.deref(&node.bodyBaseData().body) }
-func (node BodyBase) SetBody(value NodeBody) { node.setRef(&node.bodyBaseData().body, value) }
+func (node BodyBase) Body() NodeBody         { return node.deref(node.bodyBaseBody()) }
+func (node BodyBase) SetBody(value NodeBody) { node.setRef(node.bodyBaseBody(), value) }
 func (node BodyBase) EndFlowNode() *FlowNode {
-	return node.store().flowNodes.get(node.bodyBaseData().endFlowNode)
+	return node.store().flowNodes.get(*node.bodyBaseEndFlowNode())
 }
 
 func (node BodyBase) SetEndFlowNode(value *FlowNode) {
-	node.store().flowNodes.set(&node.bodyBaseData().endFlowNode, value, value == nil)
-}
-
-type functionLikeWithBodyBaseData struct {
-	functionLikeBaseData
-	bodyBaseData
+	node.store().flowNodes.set(node.bodyBaseEndFlowNode(), value, value == nil)
 }
 
 type FunctionLikeWithBodyBase struct{ Node }
 
-var functionLikeWithBodyBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindFunctionDeclaration: 1,
-	KindConstructor:         2,
-	KindGetAccessor:         3,
-	KindSetAccessor:         4,
-	KindMethodDeclaration:   5,
-	KindArrowFunction:       6,
-	KindFunctionExpression:  7,
+func (node FunctionLikeWithBodyBase) Locals() SymbolTable {
+	return node.store().symbolTables.get(*node.localsContainerBaseLocals())
 }
 
-func (n Node) functionLikeWithBodyBaseData() *functionLikeWithBodyBaseData {
-	switch functionLikeWithBodyBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*functionDeclarationData)(n.rec()).functionLikeWithBodyBaseData
-	case 2:
-		return &(*constructorDeclarationData)(n.rec()).functionLikeWithBodyBaseData
-	case 3:
-		return &(*getAccessorDeclarationData)(n.rec()).functionLikeWithBodyBaseData
-	case 4:
-		return &(*setAccessorDeclarationData)(n.rec()).functionLikeWithBodyBaseData
-	case 5:
-		return &(*methodDeclarationData)(n.rec()).functionLikeWithBodyBaseData
-	case 6:
-		return &(*arrowFunctionData)(n.rec()).functionLikeWithBodyBaseData
-	case 7:
-		return &(*functionExpressionData)(n.rec()).functionLikeWithBodyBaseData
+func (node FunctionLikeWithBodyBase) SetLocals(value SymbolTable) {
+	node.store().symbolTables.set(node.localsContainerBaseLocals(), value, value == nil)
+}
+
+func (node FunctionLikeWithBodyBase) NextContainer() Node {
+	return node.deref(node.localsContainerBaseNextContainer())
+}
+
+func (node FunctionLikeWithBodyBase) SetNextContainer(value Node) {
+	node.setRef(node.localsContainerBaseNextContainer(), value)
+}
+
+func (node FunctionLikeWithBodyBase) TypeParameters() *TypeParameterList {
+	return node.store().nodeLists.get(*node.functionLikeBaseTypeParameters())
+}
+
+func (node FunctionLikeWithBodyBase) SetTypeParameters(value *TypeParameterList) {
+	node.store().nodeLists.set(node.functionLikeBaseTypeParameters(), value, value == nil)
+}
+
+func (node FunctionLikeWithBodyBase) Parameters() *ParameterList {
+	return node.store().nodeLists.get(*node.functionLikeBaseParameters())
+}
+
+func (node FunctionLikeWithBodyBase) SetParameters(value *ParameterList) {
+	node.store().nodeLists.set(node.functionLikeBaseParameters(), value, value == nil)
+}
+
+func (node FunctionLikeWithBodyBase) Type() TypeNode {
+	return node.deref(node.functionLikeBaseTypeField())
+}
+
+func (node FunctionLikeWithBodyBase) SetType(value TypeNode) {
+	node.setRef(node.functionLikeBaseTypeField(), value)
+}
+
+func (node FunctionLikeWithBodyBase) FullSignature() TypeNode {
+	return node.deref(node.functionLikeBaseFullSignature())
+}
+
+func (node FunctionLikeWithBodyBase) SetFullSignature(value TypeNode) {
+	node.setRef(node.functionLikeBaseFullSignature(), value)
+}
+
+func (node FunctionLikeWithBodyBase) AsteriskToken() AsteriskToken {
+	return node.deref(node.bodyBaseAsteriskToken())
+}
+
+func (node FunctionLikeWithBodyBase) SetAsteriskToken(value AsteriskToken) {
+	node.setRef(node.bodyBaseAsteriskToken(), value)
+}
+
+func (node FunctionLikeWithBodyBase) Body() NodeBody { return node.deref(node.bodyBaseBody()) }
+
+func (node FunctionLikeWithBodyBase) SetBody(value NodeBody) { node.setRef(node.bodyBaseBody(), value) }
+
+func (node FunctionLikeWithBodyBase) EndFlowNode() *FlowNode {
+	return node.store().flowNodes.get(*node.bodyBaseEndFlowNode())
+}
+
+func (node FunctionLikeWithBodyBase) SetEndFlowNode(value *FlowNode) {
+	node.store().flowNodes.set(node.bodyBaseEndFlowNode(), value, value == nil)
+}
+
+var classLikeBaseNameOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindClassDeclaration: uint8(unsafe.Offsetof(classDeclarationData{}.name)),
+	KindClassExpression:  uint8(unsafe.Offsetof(classExpressionData{}.name)),
+}
+
+func (n Node) classLikeBaseName() *nodeRef {
+	if off := classLikeBaseNameOffsets[n.Kind()]; off != 0 {
+		return (*nodeRef)(unsafe.Add(n.p, off))
 	}
 	return nil
 }
 
-func (node FunctionLikeWithBodyBase) Locals() SymbolTable {
-	return node.store().symbolTables.get(node.functionLikeWithBodyBaseData().locals)
+var classLikeBaseTypeParametersOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindClassDeclaration: uint8(unsafe.Offsetof(classDeclarationData{}.typeParameters)),
+	KindClassExpression:  uint8(unsafe.Offsetof(classExpressionData{}.typeParameters)),
 }
 
-func (node FunctionLikeWithBodyBase) SetLocals(value SymbolTable) {
-	node.store().symbolTables.set(&node.functionLikeWithBodyBaseData().locals, value, value == nil)
+func (n Node) classLikeBaseTypeParameters() *sideRef {
+	if off := classLikeBaseTypeParametersOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
-func (node FunctionLikeWithBodyBase) NextContainer() Node {
-	return node.deref(&node.functionLikeWithBodyBaseData().nextContainer)
+var classLikeBaseHeritageClausesOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindClassDeclaration: uint8(unsafe.Offsetof(classDeclarationData{}.heritageClauses)),
+	KindClassExpression:  uint8(unsafe.Offsetof(classExpressionData{}.heritageClauses)),
 }
 
-func (node FunctionLikeWithBodyBase) SetNextContainer(value Node) {
-	node.setRef(&node.functionLikeWithBodyBaseData().nextContainer, value)
+func (n Node) classLikeBaseHeritageClauses() *sideRef {
+	if off := classLikeBaseHeritageClausesOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
-func (node FunctionLikeWithBodyBase) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.functionLikeWithBodyBaseData().typeParameters)
+var classLikeBaseMembersOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindClassDeclaration: uint8(unsafe.Offsetof(classDeclarationData{}.members)),
+	KindClassExpression:  uint8(unsafe.Offsetof(classExpressionData{}.members)),
 }
 
-func (node FunctionLikeWithBodyBase) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.functionLikeWithBodyBaseData().typeParameters, value, value == nil)
-}
-
-func (node FunctionLikeWithBodyBase) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.functionLikeWithBodyBaseData().parameters)
-}
-
-func (node FunctionLikeWithBodyBase) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.functionLikeWithBodyBaseData().parameters, value, value == nil)
-}
-
-func (node FunctionLikeWithBodyBase) Type() TypeNode {
-	return node.deref(&node.functionLikeWithBodyBaseData().typeField)
-}
-
-func (node FunctionLikeWithBodyBase) SetType(value TypeNode) {
-	node.setRef(&node.functionLikeWithBodyBaseData().typeField, value)
-}
-
-func (node FunctionLikeWithBodyBase) FullSignature() TypeNode {
-	return node.deref(&node.functionLikeWithBodyBaseData().fullSignature)
-}
-
-func (node FunctionLikeWithBodyBase) SetFullSignature(value TypeNode) {
-	node.setRef(&node.functionLikeWithBodyBaseData().fullSignature, value)
-}
-
-func (node FunctionLikeWithBodyBase) AsteriskToken() AsteriskToken {
-	return node.deref(&node.functionLikeWithBodyBaseData().asteriskToken)
-}
-
-func (node FunctionLikeWithBodyBase) SetAsteriskToken(value AsteriskToken) {
-	node.setRef(&node.functionLikeWithBodyBaseData().asteriskToken, value)
-}
-
-func (node FunctionLikeWithBodyBase) Body() NodeBody {
-	return node.deref(&node.functionLikeWithBodyBaseData().body)
-}
-
-func (node FunctionLikeWithBodyBase) SetBody(value NodeBody) {
-	node.setRef(&node.functionLikeWithBodyBaseData().body, value)
-}
-
-func (node FunctionLikeWithBodyBase) EndFlowNode() *FlowNode {
-	return node.store().flowNodes.get(node.functionLikeWithBodyBaseData().endFlowNode)
-}
-
-func (node FunctionLikeWithBodyBase) SetEndFlowNode(value *FlowNode) {
-	node.store().flowNodes.set(&node.functionLikeWithBodyBaseData().endFlowNode, value, value == nil)
-}
-
-type classLikeBaseData struct {
-	exportableBaseData
-	modifiersBaseData
-	localsContainerBaseData
-	compositeBaseData
-	name            nodeRef // IdentifierNode. Optional
-	typeParameters  sideRef // *TypeParameterList. Optional
-	heritageClauses sideRef // *HeritageClauseList. Optional
-	members         sideRef // *ClassElementList
+func (n Node) classLikeBaseMembers() *sideRef {
+	if off := classLikeBaseMembersOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type ClassLikeBase struct{ Node }
 
-var classLikeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindClassDeclaration: 1,
-	KindClassExpression:  2,
+func (node ClassLikeBase) LocalSymbol() *Symbol {
+	return node.store().symbols.get(*node.exportableBaseLocalSymbol())
 }
 
-func (n Node) classLikeBaseData() *classLikeBaseData {
-	switch classLikeBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*classDeclarationData)(n.rec()).classLikeBaseData
-	case 2:
-		return &(*classExpressionData)(n.rec()).classLikeBaseData
+func (node ClassLikeBase) SetLocalSymbol(value *Symbol) {
+	node.store().symbols.set(node.exportableBaseLocalSymbol(), value, value == nil)
+}
+
+func (node ClassLikeBase) Modifiers() *ModifierList {
+	return node.store().modifierLists.get(*node.modifiersBaseModifiers())
+}
+
+func (node ClassLikeBase) setModifiers(value *ModifierList) {
+	node.store().modifierLists.set(node.modifiersBaseModifiers(), value, value == nil)
+}
+
+func (node ClassLikeBase) Locals() SymbolTable {
+	return node.store().symbolTables.get(*node.localsContainerBaseLocals())
+}
+
+func (node ClassLikeBase) SetLocals(value SymbolTable) {
+	node.store().symbolTables.set(node.localsContainerBaseLocals(), value, value == nil)
+}
+
+func (node ClassLikeBase) NextContainer() Node {
+	return node.deref(node.localsContainerBaseNextContainer())
+}
+
+func (node ClassLikeBase) SetNextContainer(value Node) {
+	node.setRef(node.localsContainerBaseNextContainer(), value)
+}
+
+func (node ClassLikeBase) Name() IdentifierNode { return node.deref(node.classLikeBaseName()) }
+
+func (node ClassLikeBase) setName(value IdentifierNode) { node.setRef(node.classLikeBaseName(), value) }
+
+func (node ClassLikeBase) TypeParameters() *TypeParameterList {
+	return node.store().nodeLists.get(*node.classLikeBaseTypeParameters())
+}
+
+func (node ClassLikeBase) SetTypeParameters(value *TypeParameterList) {
+	node.store().nodeLists.set(node.classLikeBaseTypeParameters(), value, value == nil)
+}
+
+func (node ClassLikeBase) HeritageClauses() *HeritageClauseList {
+	return node.store().nodeLists.get(*node.classLikeBaseHeritageClauses())
+}
+
+func (node ClassLikeBase) SetHeritageClauses(value *HeritageClauseList) {
+	node.store().nodeLists.set(node.classLikeBaseHeritageClauses(), value, value == nil)
+}
+
+func (node ClassLikeBase) Members() *ClassElementList {
+	return node.store().nodeLists.get(*node.classLikeBaseMembers())
+}
+
+func (node ClassLikeBase) SetMembers(value *ClassElementList) {
+	node.store().nodeLists.set(node.classLikeBaseMembers(), value, value == nil)
+}
+
+var literalLikeNodeBaseTextOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindStringLiteral:                 uint8(unsafe.Offsetof(stringLiteralData{}.text)),
+	KindNumericLiteral:                uint8(unsafe.Offsetof(numericLiteralData{}.text)),
+	KindBigIntLiteral:                 uint8(unsafe.Offsetof(bigIntLiteralData{}.text)),
+	KindRegularExpressionLiteral:      uint8(unsafe.Offsetof(regularExpressionLiteralData{}.text)),
+	KindNoSubstitutionTemplateLiteral: uint8(unsafe.Offsetof(noSubstitutionTemplateLiteralData{}.text)),
+	KindTemplateHead:                  uint8(unsafe.Offsetof(templateHeadData{}.text)),
+	KindTemplateMiddle:                uint8(unsafe.Offsetof(templateMiddleData{}.text)),
+	KindTemplateTail:                  uint8(unsafe.Offsetof(templateTailData{}.text)),
+	KindJsxText:                       uint8(unsafe.Offsetof(jsxTextData{}.text)),
+}
+
+func (n Node) literalLikeNodeBaseText() *textRef {
+	if off := literalLikeNodeBaseTextOffsets[n.Kind()]; off != 0 {
+		return (*textRef)(unsafe.Add(n.p, off))
 	}
 	return nil
 }
 
-func (node ClassLikeBase) LocalSymbol() *Symbol {
-	return node.store().symbols.get(node.classLikeBaseData().localSymbol)
+var literalLikeNodeBaseTokenFlagsOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindStringLiteral:                 uint8(unsafe.Offsetof(stringLiteralData{}.tokenFlags)),
+	KindNumericLiteral:                uint8(unsafe.Offsetof(numericLiteralData{}.tokenFlags)),
+	KindBigIntLiteral:                 uint8(unsafe.Offsetof(bigIntLiteralData{}.tokenFlags)),
+	KindRegularExpressionLiteral:      uint8(unsafe.Offsetof(regularExpressionLiteralData{}.tokenFlags)),
+	KindNoSubstitutionTemplateLiteral: uint8(unsafe.Offsetof(noSubstitutionTemplateLiteralData{}.tokenFlags)),
+	KindTemplateHead:                  uint8(unsafe.Offsetof(templateHeadData{}.tokenFlags)),
+	KindTemplateMiddle:                uint8(unsafe.Offsetof(templateMiddleData{}.tokenFlags)),
+	KindTemplateTail:                  uint8(unsafe.Offsetof(templateTailData{}.tokenFlags)),
+	KindJsxText:                       uint8(unsafe.Offsetof(jsxTextData{}.tokenFlags)),
 }
 
-func (node ClassLikeBase) SetLocalSymbol(value *Symbol) {
-	node.store().symbols.set(&node.classLikeBaseData().localSymbol, value, value == nil)
-}
-
-func (node ClassLikeBase) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.classLikeBaseData().modifiers)
-}
-
-func (node ClassLikeBase) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.classLikeBaseData().modifiers, value, value == nil)
-}
-
-func (node ClassLikeBase) Locals() SymbolTable {
-	return node.store().symbolTables.get(node.classLikeBaseData().locals)
-}
-
-func (node ClassLikeBase) SetLocals(value SymbolTable) {
-	node.store().symbolTables.set(&node.classLikeBaseData().locals, value, value == nil)
-}
-
-func (node ClassLikeBase) NextContainer() Node {
-	return node.deref(&node.classLikeBaseData().nextContainer)
-}
-
-func (node ClassLikeBase) SetNextContainer(value Node) {
-	node.setRef(&node.classLikeBaseData().nextContainer, value)
-}
-
-func (node ClassLikeBase) Name() IdentifierNode { return node.deref(&node.classLikeBaseData().name) }
-
-func (node ClassLikeBase) setName(value IdentifierNode) {
-	node.setRef(&node.classLikeBaseData().name, value)
-}
-
-func (node ClassLikeBase) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.classLikeBaseData().typeParameters)
-}
-
-func (node ClassLikeBase) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.classLikeBaseData().typeParameters, value, value == nil)
-}
-
-func (node ClassLikeBase) HeritageClauses() *HeritageClauseList {
-	return node.store().nodeLists.get(node.classLikeBaseData().heritageClauses)
-}
-
-func (node ClassLikeBase) SetHeritageClauses(value *HeritageClauseList) {
-	node.store().nodeLists.set(&node.classLikeBaseData().heritageClauses, value, value == nil)
-}
-
-func (node ClassLikeBase) Members() *ClassElementList {
-	return node.store().nodeLists.get(node.classLikeBaseData().members)
-}
-
-func (node ClassLikeBase) SetMembers(value *ClassElementList) {
-	node.store().nodeLists.set(&node.classLikeBaseData().members, value, value == nil)
-}
-
-type literalLikeNodeBaseData struct {
-	text       textRef // string
-	tokenFlags TokenFlags
+func (n Node) literalLikeNodeBaseTokenFlags() *TokenFlags {
+	if off := literalLikeNodeBaseTokenFlagsOffsets[n.Kind()]; off != 0 {
+		return (*TokenFlags)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type LiteralLikeNodeBase struct{ Node }
 
-var literalLikeNodeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindStringLiteral:                 1,
-	KindNumericLiteral:                2,
-	KindBigIntLiteral:                 3,
-	KindRegularExpressionLiteral:      4,
-	KindNoSubstitutionTemplateLiteral: 5,
-	KindTemplateHead:                  6,
-	KindTemplateMiddle:                7,
-	KindTemplateTail:                  8,
-	KindJsxText:                       9,
-}
-
-func (n Node) literalLikeNodeBaseData() *literalLikeNodeBaseData {
-	switch literalLikeNodeBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*stringLiteralData)(n.rec()).literalLikeNodeBaseData
-	case 2:
-		return &(*numericLiteralData)(n.rec()).literalLikeNodeBaseData
-	case 3:
-		return &(*bigIntLiteralData)(n.rec()).literalLikeNodeBaseData
-	case 4:
-		return &(*regularExpressionLiteralData)(n.rec()).literalLikeNodeBaseData
-	case 5:
-		return &(*noSubstitutionTemplateLiteralData)(n.rec()).literalLikeNodeBaseData
-	case 6:
-		return &(*templateHeadData)(n.rec()).literalLikeNodeBaseData
-	case 7:
-		return &(*templateMiddleData)(n.rec()).literalLikeNodeBaseData
-	case 8:
-		return &(*templateTailData)(n.rec()).literalLikeNodeBaseData
-	case 9:
-		return &(*jsxTextData)(n.rec()).literalLikeNodeBaseData
-	}
-	return nil
-}
-
 func (node LiteralLikeNodeBase) Text() string {
-	return node.store().texts.get(node.literalLikeNodeBaseData().text)
+	return node.store().texts.get(*node.literalLikeNodeBaseText())
 }
 
 func (node LiteralLikeNodeBase) SetText(value string) {
-	node.store().texts.set(&node.literalLikeNodeBaseData().text, value, value == "")
+	node.store().texts.set(node.literalLikeNodeBaseText(), value, value == "")
 }
 
-func (node LiteralLikeNodeBase) TokenFlags() TokenFlags {
-	return node.literalLikeNodeBaseData().tokenFlags
-}
+func (node LiteralLikeNodeBase) TokenFlags() TokenFlags { return *node.literalLikeNodeBaseTokenFlags() }
 
 func (node LiteralLikeNodeBase) SetTokenFlags(value TokenFlags) {
-	node.literalLikeNodeBaseData().tokenFlags = value
-}
-
-type literalExpressionBaseData struct {
-	primaryExpressionBaseData
-	literalLikeNodeBaseData
+	*node.literalLikeNodeBaseTokenFlags() = value
 }
 
 type LiteralExpressionBase struct{ Node }
 
-var literalExpressionBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindStringLiteral:            1,
-	KindNumericLiteral:           2,
-	KindBigIntLiteral:            3,
-	KindRegularExpressionLiteral: 4,
+func (node LiteralExpressionBase) Text() string {
+	return node.store().texts.get(*node.literalLikeNodeBaseText())
 }
 
-func (n Node) literalExpressionBaseData() *literalExpressionBaseData {
-	switch literalExpressionBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*stringLiteralData)(n.rec()).literalExpressionBaseData
-	case 2:
-		return &(*numericLiteralData)(n.rec()).literalExpressionBaseData
-	case 3:
-		return &(*bigIntLiteralData)(n.rec()).literalExpressionBaseData
-	case 4:
-		return &(*regularExpressionLiteralData)(n.rec()).literalExpressionBaseData
+func (node LiteralExpressionBase) SetText(value string) {
+	node.store().texts.set(node.literalLikeNodeBaseText(), value, value == "")
+}
+
+func (node LiteralExpressionBase) TokenFlags() TokenFlags {
+	return *node.literalLikeNodeBaseTokenFlags()
+}
+
+func (node LiteralExpressionBase) SetTokenFlags(value TokenFlags) {
+	*node.literalLikeNodeBaseTokenFlags() = value
+}
+
+var templateLiteralLikeNodeBaseRawTextOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindNoSubstitutionTemplateLiteral: uint8(unsafe.Offsetof(noSubstitutionTemplateLiteralData{}.rawText)),
+	KindTemplateHead:                  uint8(unsafe.Offsetof(templateHeadData{}.rawText)),
+	KindTemplateMiddle:                uint8(unsafe.Offsetof(templateMiddleData{}.rawText)),
+	KindTemplateTail:                  uint8(unsafe.Offsetof(templateTailData{}.rawText)),
+}
+
+func (n Node) templateLiteralLikeNodeBaseRawText() *textRef {
+	if off := templateLiteralLikeNodeBaseRawTextOffsets[n.Kind()]; off != 0 {
+		return (*textRef)(unsafe.Add(n.p, off))
 	}
 	return nil
 }
 
-func (node LiteralExpressionBase) Text() string {
-	return node.store().texts.get(node.literalExpressionBaseData().text)
+var templateLiteralLikeNodeBaseTemplateFlagsOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindNoSubstitutionTemplateLiteral: uint8(unsafe.Offsetof(noSubstitutionTemplateLiteralData{}.templateFlags)),
+	KindTemplateHead:                  uint8(unsafe.Offsetof(templateHeadData{}.templateFlags)),
+	KindTemplateMiddle:                uint8(unsafe.Offsetof(templateMiddleData{}.templateFlags)),
+	KindTemplateTail:                  uint8(unsafe.Offsetof(templateTailData{}.templateFlags)),
 }
 
-func (node LiteralExpressionBase) SetText(value string) {
-	node.store().texts.set(&node.literalExpressionBaseData().text, value, value == "")
-}
-
-func (node LiteralExpressionBase) TokenFlags() TokenFlags {
-	return node.literalExpressionBaseData().tokenFlags
-}
-
-func (node LiteralExpressionBase) SetTokenFlags(value TokenFlags) {
-	node.literalExpressionBaseData().tokenFlags = value
-}
-
-type templateLiteralLikeNodeBaseData struct {
-	literalLikeNodeBaseData
-	rawText       textRef // string
-	templateFlags TokenFlags
+func (n Node) templateLiteralLikeNodeBaseTemplateFlags() *TokenFlags {
+	if off := templateLiteralLikeNodeBaseTemplateFlagsOffsets[n.Kind()]; off != 0 {
+		return (*TokenFlags)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type TemplateLiteralLikeNodeBase struct{ Node }
 
-var templateLiteralLikeNodeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindNoSubstitutionTemplateLiteral: 1,
-	KindTemplateHead:                  2,
-	KindTemplateMiddle:                3,
-	KindTemplateTail:                  4,
+func (node TemplateLiteralLikeNodeBase) Text() string {
+	return node.store().texts.get(*node.literalLikeNodeBaseText())
 }
 
-func (n Node) templateLiteralLikeNodeBaseData() *templateLiteralLikeNodeBaseData {
-	switch templateLiteralLikeNodeBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*noSubstitutionTemplateLiteralData)(n.rec()).templateLiteralLikeNodeBaseData
-	case 2:
-		return &(*templateHeadData)(n.rec()).templateLiteralLikeNodeBaseData
-	case 3:
-		return &(*templateMiddleData)(n.rec()).templateLiteralLikeNodeBaseData
-	case 4:
-		return &(*templateTailData)(n.rec()).templateLiteralLikeNodeBaseData
+func (node TemplateLiteralLikeNodeBase) SetText(value string) {
+	node.store().texts.set(node.literalLikeNodeBaseText(), value, value == "")
+}
+
+func (node TemplateLiteralLikeNodeBase) TokenFlags() TokenFlags {
+	return *node.literalLikeNodeBaseTokenFlags()
+}
+
+func (node TemplateLiteralLikeNodeBase) SetTokenFlags(value TokenFlags) {
+	*node.literalLikeNodeBaseTokenFlags() = value
+}
+
+func (node TemplateLiteralLikeNodeBase) RawText() string {
+	return node.store().texts.get(*node.templateLiteralLikeNodeBaseRawText())
+}
+
+func (node TemplateLiteralLikeNodeBase) SetRawText(value string) {
+	node.store().texts.set(node.templateLiteralLikeNodeBaseRawText(), value, value == "")
+}
+
+func (node TemplateLiteralLikeNodeBase) TemplateFlags() TokenFlags {
+	return *node.templateLiteralLikeNodeBaseTemplateFlags()
+}
+
+func (node TemplateLiteralLikeNodeBase) SetTemplateFlags(value TokenFlags) {
+	*node.templateLiteralLikeNodeBaseTemplateFlags() = value
+}
+
+type TypeElementBase struct{ Node }
+
+type ClassElementBase struct{ Node }
+
+var namedMemberBaseNameOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindEnumMember:                  uint8(unsafe.Offsetof(enumMemberData{}.name)),
+	KindGetAccessor:                 uint8(unsafe.Offsetof(getAccessorDeclarationData{}.name)),
+	KindSetAccessor:                 uint8(unsafe.Offsetof(setAccessorDeclarationData{}.name)),
+	KindMethodSignature:             uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.name)),
+	KindMethodDeclaration:           uint8(unsafe.Offsetof(methodDeclarationData{}.name)),
+	KindPropertySignature:           uint8(unsafe.Offsetof(propertySignatureDeclarationData{}.name)),
+	KindPropertyDeclaration:         uint8(unsafe.Offsetof(propertyDeclarationData{}.name)),
+	KindPropertyAssignment:          uint8(unsafe.Offsetof(propertyAssignmentData{}.name)),
+	KindShorthandPropertyAssignment: uint8(unsafe.Offsetof(shorthandPropertyAssignmentData{}.name)),
+}
+
+func (n Node) namedMemberBaseName() *nodeRef {
+	if off := namedMemberBaseNameOffsets[n.Kind()]; off != 0 {
+		return (*nodeRef)(unsafe.Add(n.p, off))
 	}
 	return nil
 }
 
-func (node TemplateLiteralLikeNodeBase) Text() string {
-	return node.store().texts.get(node.templateLiteralLikeNodeBaseData().text)
+var namedMemberBasePostfixTokenOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindEnumMember:                  uint8(unsafe.Offsetof(enumMemberData{}.postfixToken)),
+	KindGetAccessor:                 uint8(unsafe.Offsetof(getAccessorDeclarationData{}.postfixToken)),
+	KindSetAccessor:                 uint8(unsafe.Offsetof(setAccessorDeclarationData{}.postfixToken)),
+	KindMethodSignature:             uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.postfixToken)),
+	KindMethodDeclaration:           uint8(unsafe.Offsetof(methodDeclarationData{}.postfixToken)),
+	KindPropertySignature:           uint8(unsafe.Offsetof(propertySignatureDeclarationData{}.postfixToken)),
+	KindPropertyDeclaration:         uint8(unsafe.Offsetof(propertyDeclarationData{}.postfixToken)),
+	KindPropertyAssignment:          uint8(unsafe.Offsetof(propertyAssignmentData{}.postfixToken)),
+	KindShorthandPropertyAssignment: uint8(unsafe.Offsetof(shorthandPropertyAssignmentData{}.postfixToken)),
 }
 
-func (node TemplateLiteralLikeNodeBase) SetText(value string) {
-	node.store().texts.set(&node.templateLiteralLikeNodeBaseData().text, value, value == "")
-}
-
-func (node TemplateLiteralLikeNodeBase) TokenFlags() TokenFlags {
-	return node.templateLiteralLikeNodeBaseData().tokenFlags
-}
-
-func (node TemplateLiteralLikeNodeBase) SetTokenFlags(value TokenFlags) {
-	node.templateLiteralLikeNodeBaseData().tokenFlags = value
-}
-
-func (node TemplateLiteralLikeNodeBase) RawText() string {
-	return node.store().texts.get(node.templateLiteralLikeNodeBaseData().rawText)
-}
-
-func (node TemplateLiteralLikeNodeBase) SetRawText(value string) {
-	node.store().texts.set(&node.templateLiteralLikeNodeBaseData().rawText, value, value == "")
-}
-
-func (node TemplateLiteralLikeNodeBase) TemplateFlags() TokenFlags {
-	return node.templateLiteralLikeNodeBaseData().templateFlags
-}
-
-func (node TemplateLiteralLikeNodeBase) SetTemplateFlags(value TokenFlags) {
-	node.templateLiteralLikeNodeBaseData().templateFlags = value
-}
-
-type typeElementBaseData struct{}
-
-type TypeElementBase struct{ Node }
-
-type classElementBaseData struct{}
-
-type ClassElementBase struct{ Node }
-
-type namedMemberBaseData struct {
-	modifiersBaseData
-	name         nodeRef // PropertyName
-	postfixToken nodeRef // TokenNode. Optional
+func (n Node) namedMemberBasePostfixToken() *nodeRef {
+	if off := namedMemberBasePostfixTokenOffsets[n.Kind()]; off != 0 {
+		return (*nodeRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type NamedMemberBase struct{ Node }
 
-var namedMemberBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindEnumMember:                  1,
-	KindGetAccessor:                 2,
-	KindSetAccessor:                 3,
-	KindMethodSignature:             4,
-	KindMethodDeclaration:           5,
-	KindPropertySignature:           6,
-	KindPropertyDeclaration:         7,
-	KindPropertyAssignment:          8,
-	KindShorthandPropertyAssignment: 9,
-}
-
-func (n Node) namedMemberBaseData() *namedMemberBaseData {
-	switch namedMemberBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*enumMemberData)(n.rec()).namedMemberBaseData
-	case 2:
-		return &(*getAccessorDeclarationData)(n.rec()).namedMemberBaseData
-	case 3:
-		return &(*setAccessorDeclarationData)(n.rec()).namedMemberBaseData
-	case 4:
-		return &(*methodSignatureDeclarationData)(n.rec()).namedMemberBaseData
-	case 5:
-		return &(*methodDeclarationData)(n.rec()).namedMemberBaseData
-	case 6:
-		return &(*propertySignatureDeclarationData)(n.rec()).namedMemberBaseData
-	case 7:
-		return &(*propertyDeclarationData)(n.rec()).namedMemberBaseData
-	case 8:
-		return &(*propertyAssignmentData)(n.rec()).namedMemberBaseData
-	case 9:
-		return &(*shorthandPropertyAssignmentData)(n.rec()).namedMemberBaseData
-	}
-	return nil
-}
-
 func (node NamedMemberBase) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.namedMemberBaseData().modifiers)
+	return node.store().modifierLists.get(*node.modifiersBaseModifiers())
 }
 
 func (node NamedMemberBase) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.namedMemberBaseData().modifiers, value, value == nil)
+	node.store().modifierLists.set(node.modifiersBaseModifiers(), value, value == nil)
 }
-
-func (node NamedMemberBase) Name() PropertyName { return node.deref(&node.namedMemberBaseData().name) }
-
+func (node NamedMemberBase) Name() PropertyName { return node.deref(node.namedMemberBaseName()) }
 func (node NamedMemberBase) setName(value PropertyName) {
-	node.setRef(&node.namedMemberBaseData().name, value)
+	node.setRef(node.namedMemberBaseName(), value)
 }
 
 func (node NamedMemberBase) PostfixToken() TokenNode {
-	return node.deref(&node.namedMemberBaseData().postfixToken)
+	return node.deref(node.namedMemberBasePostfixToken())
 }
 
 func (node NamedMemberBase) SetPostfixToken(value TokenNode) {
-	node.setRef(&node.namedMemberBaseData().postfixToken, value)
+	node.setRef(node.namedMemberBasePostfixToken(), value)
 }
-
-type objectLiteralElementBaseData struct{}
 
 type ObjectLiteralElementBase struct{ Node }
 
-type accessorDeclarationBaseData struct {
-	typeElementBaseData
-	classElementBaseData
-	objectLiteralElementBaseData
-	nodeBaseData
-	declarationBaseData
-	namedMemberBaseData
-	functionLikeWithBodyBaseData
-	flowNodeBaseData
-	compositeBaseData
-}
-
 type AccessorDeclarationBase struct{ Node }
 
-var accessorDeclarationBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindGetAccessor: 1,
-	KindSetAccessor: 2,
-}
-
-func (n Node) accessorDeclarationBaseData() *accessorDeclarationBaseData {
-	switch accessorDeclarationBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*getAccessorDeclarationData)(n.rec()).accessorDeclarationBaseData
-	case 2:
-		return &(*setAccessorDeclarationData)(n.rec()).accessorDeclarationBaseData
-	}
-	return nil
-}
-
 func (node AccessorDeclarationBase) Symbol() *Symbol {
-	return node.store().symbols.get(node.accessorDeclarationBaseData().symbol)
+	return node.store().symbols.get(*node.declarationBaseSymbol())
 }
 
 func (node AccessorDeclarationBase) SetSymbol(value *Symbol) {
-	node.store().symbols.set(&node.accessorDeclarationBaseData().symbol, value, value == nil)
+	node.store().symbols.set(node.declarationBaseSymbol(), value, value == nil)
 }
 
 func (node AccessorDeclarationBase) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.accessorDeclarationBaseData().modifiers)
+	return node.store().modifierLists.get(*node.modifiersBaseModifiers())
 }
 
 func (node AccessorDeclarationBase) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.accessorDeclarationBaseData().modifiers, value, value == nil)
+	node.store().modifierLists.set(node.modifiersBaseModifiers(), value, value == nil)
 }
 
 func (node AccessorDeclarationBase) Name() PropertyName {
-	return node.deref(&node.accessorDeclarationBaseData().name)
+	return node.deref(node.namedMemberBaseName())
 }
 
 func (node AccessorDeclarationBase) setName(value PropertyName) {
-	node.setRef(&node.accessorDeclarationBaseData().name, value)
+	node.setRef(node.namedMemberBaseName(), value)
 }
 
 func (node AccessorDeclarationBase) PostfixToken() TokenNode {
-	return node.deref(&node.accessorDeclarationBaseData().postfixToken)
+	return node.deref(node.namedMemberBasePostfixToken())
 }
 
 func (node AccessorDeclarationBase) SetPostfixToken(value TokenNode) {
-	node.setRef(&node.accessorDeclarationBaseData().postfixToken, value)
+	node.setRef(node.namedMemberBasePostfixToken(), value)
 }
 
 func (node AccessorDeclarationBase) Locals() SymbolTable {
-	return node.store().symbolTables.get(node.accessorDeclarationBaseData().locals)
+	return node.store().symbolTables.get(*node.localsContainerBaseLocals())
 }
 
 func (node AccessorDeclarationBase) SetLocals(value SymbolTable) {
-	node.store().symbolTables.set(&node.accessorDeclarationBaseData().locals, value, value == nil)
+	node.store().symbolTables.set(node.localsContainerBaseLocals(), value, value == nil)
 }
 
 func (node AccessorDeclarationBase) NextContainer() Node {
-	return node.deref(&node.accessorDeclarationBaseData().nextContainer)
+	return node.deref(node.localsContainerBaseNextContainer())
 }
 
 func (node AccessorDeclarationBase) SetNextContainer(value Node) {
-	node.setRef(&node.accessorDeclarationBaseData().nextContainer, value)
+	node.setRef(node.localsContainerBaseNextContainer(), value)
 }
 
 func (node AccessorDeclarationBase) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.accessorDeclarationBaseData().typeParameters)
+	return node.store().nodeLists.get(*node.functionLikeBaseTypeParameters())
 }
 
 func (node AccessorDeclarationBase) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.accessorDeclarationBaseData().typeParameters, value, value == nil)
+	node.store().nodeLists.set(node.functionLikeBaseTypeParameters(), value, value == nil)
 }
 
 func (node AccessorDeclarationBase) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.accessorDeclarationBaseData().parameters)
+	return node.store().nodeLists.get(*node.functionLikeBaseParameters())
 }
 
 func (node AccessorDeclarationBase) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.accessorDeclarationBaseData().parameters, value, value == nil)
+	node.store().nodeLists.set(node.functionLikeBaseParameters(), value, value == nil)
 }
 
 func (node AccessorDeclarationBase) Type() TypeNode {
-	return node.deref(&node.accessorDeclarationBaseData().typeField)
+	return node.deref(node.functionLikeBaseTypeField())
 }
 
 func (node AccessorDeclarationBase) SetType(value TypeNode) {
-	node.setRef(&node.accessorDeclarationBaseData().typeField, value)
+	node.setRef(node.functionLikeBaseTypeField(), value)
 }
 
 func (node AccessorDeclarationBase) FullSignature() TypeNode {
-	return node.deref(&node.accessorDeclarationBaseData().fullSignature)
+	return node.deref(node.functionLikeBaseFullSignature())
 }
 
 func (node AccessorDeclarationBase) SetFullSignature(value TypeNode) {
-	node.setRef(&node.accessorDeclarationBaseData().fullSignature, value)
+	node.setRef(node.functionLikeBaseFullSignature(), value)
 }
 
 func (node AccessorDeclarationBase) AsteriskToken() AsteriskToken {
-	return node.deref(&node.accessorDeclarationBaseData().asteriskToken)
+	return node.deref(node.bodyBaseAsteriskToken())
 }
 
 func (node AccessorDeclarationBase) SetAsteriskToken(value AsteriskToken) {
-	node.setRef(&node.accessorDeclarationBaseData().asteriskToken, value)
+	node.setRef(node.bodyBaseAsteriskToken(), value)
 }
 
-func (node AccessorDeclarationBase) Body() NodeBody {
-	return node.deref(&node.accessorDeclarationBaseData().body)
-}
+func (node AccessorDeclarationBase) Body() NodeBody { return node.deref(node.bodyBaseBody()) }
 
-func (node AccessorDeclarationBase) SetBody(value NodeBody) {
-	node.setRef(&node.accessorDeclarationBaseData().body, value)
-}
+func (node AccessorDeclarationBase) SetBody(value NodeBody) { node.setRef(node.bodyBaseBody(), value) }
 
 func (node AccessorDeclarationBase) EndFlowNode() *FlowNode {
-	return node.store().flowNodes.get(node.accessorDeclarationBaseData().endFlowNode)
+	return node.store().flowNodes.get(*node.bodyBaseEndFlowNode())
 }
 
 func (node AccessorDeclarationBase) SetEndFlowNode(value *FlowNode) {
-	node.store().flowNodes.set(&node.accessorDeclarationBaseData().endFlowNode, value, value == nil)
+	node.store().flowNodes.set(node.bodyBaseEndFlowNode(), value, value == nil)
 }
 
 func (node AccessorDeclarationBase) FlowNode() *FlowNode {
-	return node.store().flowNodes.get(node.accessorDeclarationBaseData().flowNode)
+	return node.store().flowNodes.get(*node.flowNodeBaseFlowNode())
 }
 
 func (node AccessorDeclarationBase) SetFlowNode(value *FlowNode) {
-	node.store().flowNodes.set(&node.accessorDeclarationBaseData().flowNode, value, value == nil)
-}
-
-type functionOrConstructorTypeNodeBaseData struct {
-	typeNodeBaseData
-	declarationBaseData
-	modifiersBaseData
-	functionLikeBaseData
+	node.store().flowNodes.set(node.flowNodeBaseFlowNode(), value, value == nil)
 }
 
 type FunctionOrConstructorTypeNodeBase struct{ Node }
 
-var functionOrConstructorTypeNodeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindFunctionType:    1,
-	KindConstructorType: 2,
-}
-
-func (n Node) functionOrConstructorTypeNodeBaseData() *functionOrConstructorTypeNodeBaseData {
-	switch functionOrConstructorTypeNodeBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*functionTypeNodeData)(n.rec()).functionOrConstructorTypeNodeBaseData
-	case 2:
-		return &(*constructorTypeNodeData)(n.rec()).functionOrConstructorTypeNodeBaseData
-	}
-	return nil
-}
-
 func (node FunctionOrConstructorTypeNodeBase) Symbol() *Symbol {
-	return node.store().symbols.get(node.functionOrConstructorTypeNodeBaseData().symbol)
+	return node.store().symbols.get(*node.declarationBaseSymbol())
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetSymbol(value *Symbol) {
-	node.store().symbols.set(&node.functionOrConstructorTypeNodeBaseData().symbol, value, value == nil)
+	node.store().symbols.set(node.declarationBaseSymbol(), value, value == nil)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.functionOrConstructorTypeNodeBaseData().modifiers)
+	return node.store().modifierLists.get(*node.modifiersBaseModifiers())
 }
 
 func (node FunctionOrConstructorTypeNodeBase) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.functionOrConstructorTypeNodeBaseData().modifiers, value, value == nil)
+	node.store().modifierLists.set(node.modifiersBaseModifiers(), value, value == nil)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) Locals() SymbolTable {
-	return node.store().symbolTables.get(node.functionOrConstructorTypeNodeBaseData().locals)
+	return node.store().symbolTables.get(*node.localsContainerBaseLocals())
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetLocals(value SymbolTable) {
-	node.store().symbolTables.set(&node.functionOrConstructorTypeNodeBaseData().locals, value, value == nil)
+	node.store().symbolTables.set(node.localsContainerBaseLocals(), value, value == nil)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) NextContainer() Node {
-	return node.deref(&node.functionOrConstructorTypeNodeBaseData().nextContainer)
+	return node.deref(node.localsContainerBaseNextContainer())
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetNextContainer(value Node) {
-	node.setRef(&node.functionOrConstructorTypeNodeBaseData().nextContainer, value)
+	node.setRef(node.localsContainerBaseNextContainer(), value)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.functionOrConstructorTypeNodeBaseData().typeParameters)
+	return node.store().nodeLists.get(*node.functionLikeBaseTypeParameters())
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.functionOrConstructorTypeNodeBaseData().typeParameters, value, value == nil)
+	node.store().nodeLists.set(node.functionLikeBaseTypeParameters(), value, value == nil)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.functionOrConstructorTypeNodeBaseData().parameters)
+	return node.store().nodeLists.get(*node.functionLikeBaseParameters())
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.functionOrConstructorTypeNodeBaseData().parameters, value, value == nil)
+	node.store().nodeLists.set(node.functionLikeBaseParameters(), value, value == nil)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) Type() TypeNode {
-	return node.deref(&node.functionOrConstructorTypeNodeBaseData().typeField)
+	return node.deref(node.functionLikeBaseTypeField())
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetType(value TypeNode) {
-	node.setRef(&node.functionOrConstructorTypeNodeBaseData().typeField, value)
+	node.setRef(node.functionLikeBaseTypeField(), value)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) FullSignature() TypeNode {
-	return node.deref(&node.functionOrConstructorTypeNodeBaseData().fullSignature)
+	return node.deref(node.functionLikeBaseFullSignature())
 }
 
 func (node FunctionOrConstructorTypeNodeBase) SetFullSignature(value TypeNode) {
-	node.setRef(&node.functionOrConstructorTypeNodeBaseData().fullSignature, value)
+	node.setRef(node.functionLikeBaseFullSignature(), value)
 }
 
-type unionOrIntersectionTypeNodeBaseData struct {
-	typeNodeBaseData
-	types sideRef // *TypeList
+var unionOrIntersectionTypeNodeBaseTypesOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindUnionType:        uint8(unsafe.Offsetof(unionTypeNodeData{}.types)),
+	KindIntersectionType: uint8(unsafe.Offsetof(intersectionTypeNodeData{}.types)),
+}
+
+func (n Node) unionOrIntersectionTypeNodeBaseTypes() *sideRef {
+	if off := unionOrIntersectionTypeNodeBaseTypesOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type UnionOrIntersectionTypeNodeBase struct{ Node }
 
-var unionOrIntersectionTypeNodeBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindUnionType:        1,
-	KindIntersectionType: 2,
+func (node UnionOrIntersectionTypeNodeBase) Types() *TypeList {
+	return node.store().nodeLists.get(*node.unionOrIntersectionTypeNodeBaseTypes())
 }
 
-func (n Node) unionOrIntersectionTypeNodeBaseData() *unionOrIntersectionTypeNodeBaseData {
-	switch unionOrIntersectionTypeNodeBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*unionTypeNodeData)(n.rec()).unionOrIntersectionTypeNodeBaseData
-	case 2:
-		return &(*intersectionTypeNodeData)(n.rec()).unionOrIntersectionTypeNodeBaseData
+func (node UnionOrIntersectionTypeNodeBase) SetTypes(value *TypeList) {
+	node.store().nodeLists.set(node.unionOrIntersectionTypeNodeBaseTypes(), value, value == nil)
+}
+
+var jsDocTagBaseTagNameOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindJSDocTypeTag:       uint8(unsafe.Offsetof(jsDocTypeTagData{}.tagName)),
+	KindJSDocUnknownTag:    uint8(unsafe.Offsetof(jsDocUnknownTagData{}.tagName)),
+	KindJSDocTemplateTag:   uint8(unsafe.Offsetof(jsDocTemplateTagData{}.tagName)),
+	KindJSDocReturnTag:     uint8(unsafe.Offsetof(jsDocReturnTagData{}.tagName)),
+	KindJSDocPublicTag:     uint8(unsafe.Offsetof(jsDocPublicTagData{}.tagName)),
+	KindJSDocPrivateTag:    uint8(unsafe.Offsetof(jsDocPrivateTagData{}.tagName)),
+	KindJSDocProtectedTag:  uint8(unsafe.Offsetof(jsDocProtectedTagData{}.tagName)),
+	KindJSDocReadonlyTag:   uint8(unsafe.Offsetof(jsDocReadonlyTagData{}.tagName)),
+	KindJSDocOverrideTag:   uint8(unsafe.Offsetof(jsDocOverrideTagData{}.tagName)),
+	KindJSDocDeprecatedTag: uint8(unsafe.Offsetof(jsDocDeprecatedTagData{}.tagName)),
+	KindJSDocSeeTag:        uint8(unsafe.Offsetof(jsDocSeeTagData{}.tagName)),
+	KindJSDocImplementsTag: uint8(unsafe.Offsetof(jsDocImplementsTagData{}.tagName)),
+	KindJSDocAugmentsTag:   uint8(unsafe.Offsetof(jsDocAugmentsTagData{}.tagName)),
+	KindJSDocSatisfiesTag:  uint8(unsafe.Offsetof(jsDocSatisfiesTagData{}.tagName)),
+	KindJSDocThrowsTag:     uint8(unsafe.Offsetof(jsDocThrowsTagData{}.tagName)),
+	KindJSDocThisTag:       uint8(unsafe.Offsetof(jsDocThisTagData{}.tagName)),
+	KindJSDocImportTag:     uint8(unsafe.Offsetof(jsDocImportTagData{}.tagName)),
+	KindJSDocCallbackTag:   uint8(unsafe.Offsetof(jsDocCallbackTagData{}.tagName)),
+	KindJSDocOverloadTag:   uint8(unsafe.Offsetof(jsDocOverloadTagData{}.tagName)),
+	KindJSDocTypedefTag:    uint8(unsafe.Offsetof(jsDocTypedefTagData{}.tagName)),
+	KindJSDocParameterTag:  uint8(unsafe.Offsetof(jsDocParameterOrPropertyTagData{}.tagName)),
+	KindJSDocPropertyTag:   uint8(unsafe.Offsetof(jsDocParameterOrPropertyTagData{}.tagName)),
+}
+
+func (n Node) jsDocTagBaseTagName() *nodeRef {
+	if off := jsDocTagBaseTagNameOffsets[n.Kind()]; off != 0 {
+		return (*nodeRef)(unsafe.Add(n.p, off))
 	}
 	return nil
 }
 
-func (node UnionOrIntersectionTypeNodeBase) Types() *TypeList {
-	return node.store().nodeLists.get(node.unionOrIntersectionTypeNodeBaseData().types)
+var jsDocTagBaseCommentOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindJSDocTypeTag:       uint8(unsafe.Offsetof(jsDocTypeTagData{}.comment)),
+	KindJSDocUnknownTag:    uint8(unsafe.Offsetof(jsDocUnknownTagData{}.comment)),
+	KindJSDocTemplateTag:   uint8(unsafe.Offsetof(jsDocTemplateTagData{}.comment)),
+	KindJSDocReturnTag:     uint8(unsafe.Offsetof(jsDocReturnTagData{}.comment)),
+	KindJSDocPublicTag:     uint8(unsafe.Offsetof(jsDocPublicTagData{}.comment)),
+	KindJSDocPrivateTag:    uint8(unsafe.Offsetof(jsDocPrivateTagData{}.comment)),
+	KindJSDocProtectedTag:  uint8(unsafe.Offsetof(jsDocProtectedTagData{}.comment)),
+	KindJSDocReadonlyTag:   uint8(unsafe.Offsetof(jsDocReadonlyTagData{}.comment)),
+	KindJSDocOverrideTag:   uint8(unsafe.Offsetof(jsDocOverrideTagData{}.comment)),
+	KindJSDocDeprecatedTag: uint8(unsafe.Offsetof(jsDocDeprecatedTagData{}.comment)),
+	KindJSDocSeeTag:        uint8(unsafe.Offsetof(jsDocSeeTagData{}.comment)),
+	KindJSDocImplementsTag: uint8(unsafe.Offsetof(jsDocImplementsTagData{}.comment)),
+	KindJSDocAugmentsTag:   uint8(unsafe.Offsetof(jsDocAugmentsTagData{}.comment)),
+	KindJSDocSatisfiesTag:  uint8(unsafe.Offsetof(jsDocSatisfiesTagData{}.comment)),
+	KindJSDocThrowsTag:     uint8(unsafe.Offsetof(jsDocThrowsTagData{}.comment)),
+	KindJSDocThisTag:       uint8(unsafe.Offsetof(jsDocThisTagData{}.comment)),
+	KindJSDocImportTag:     uint8(unsafe.Offsetof(jsDocImportTagData{}.comment)),
+	KindJSDocCallbackTag:   uint8(unsafe.Offsetof(jsDocCallbackTagData{}.comment)),
+	KindJSDocOverloadTag:   uint8(unsafe.Offsetof(jsDocOverloadTagData{}.comment)),
+	KindJSDocTypedefTag:    uint8(unsafe.Offsetof(jsDocTypedefTagData{}.comment)),
+	KindJSDocParameterTag:  uint8(unsafe.Offsetof(jsDocParameterOrPropertyTagData{}.comment)),
+	KindJSDocPropertyTag:   uint8(unsafe.Offsetof(jsDocParameterOrPropertyTagData{}.comment)),
 }
 
-func (node UnionOrIntersectionTypeNodeBase) SetTypes(value *TypeList) {
-	node.store().nodeLists.set(&node.unionOrIntersectionTypeNodeBaseData().types, value, value == nil)
-}
-
-type jsDocTagBaseData struct {
-	nodeBaseData
-	tagName nodeRef // IdentifierNode
-	comment sideRef // *NodeList. Optional
+func (n Node) jsDocTagBaseComment() *sideRef {
+	if off := jsDocTagBaseCommentOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type JSDocTagBase struct{ Node }
 
-var jsDocTagBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindJSDocTypeTag:       1,
-	KindJSDocUnknownTag:    2,
-	KindJSDocTemplateTag:   3,
-	KindJSDocReturnTag:     4,
-	KindJSDocPublicTag:     5,
-	KindJSDocPrivateTag:    6,
-	KindJSDocProtectedTag:  7,
-	KindJSDocReadonlyTag:   8,
-	KindJSDocOverrideTag:   9,
-	KindJSDocDeprecatedTag: 10,
-	KindJSDocSeeTag:        11,
-	KindJSDocImplementsTag: 12,
-	KindJSDocAugmentsTag:   13,
-	KindJSDocSatisfiesTag:  14,
-	KindJSDocThrowsTag:     15,
-	KindJSDocThisTag:       16,
-	KindJSDocImportTag:     17,
-	KindJSDocCallbackTag:   18,
-	KindJSDocOverloadTag:   19,
-	KindJSDocTypedefTag:    20,
-	KindJSDocParameterTag:  21,
-	KindJSDocPropertyTag:   21,
-}
-
-func (n Node) jsDocTagBaseData() *jsDocTagBaseData {
-	switch jsDocTagBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*jsDocTypeTagData)(n.rec()).jsDocTagBaseData
-	case 2:
-		return &(*jsDocUnknownTagData)(n.rec()).jsDocTagBaseData
-	case 3:
-		return &(*jsDocTemplateTagData)(n.rec()).jsDocTagBaseData
-	case 4:
-		return &(*jsDocReturnTagData)(n.rec()).jsDocTagBaseData
-	case 5:
-		return &(*jsDocPublicTagData)(n.rec()).jsDocTagBaseData
-	case 6:
-		return &(*jsDocPrivateTagData)(n.rec()).jsDocTagBaseData
-	case 7:
-		return &(*jsDocProtectedTagData)(n.rec()).jsDocTagBaseData
-	case 8:
-		return &(*jsDocReadonlyTagData)(n.rec()).jsDocTagBaseData
-	case 9:
-		return &(*jsDocOverrideTagData)(n.rec()).jsDocTagBaseData
-	case 10:
-		return &(*jsDocDeprecatedTagData)(n.rec()).jsDocTagBaseData
-	case 11:
-		return &(*jsDocSeeTagData)(n.rec()).jsDocTagBaseData
-	case 12:
-		return &(*jsDocImplementsTagData)(n.rec()).jsDocTagBaseData
-	case 13:
-		return &(*jsDocAugmentsTagData)(n.rec()).jsDocTagBaseData
-	case 14:
-		return &(*jsDocSatisfiesTagData)(n.rec()).jsDocTagBaseData
-	case 15:
-		return &(*jsDocThrowsTagData)(n.rec()).jsDocTagBaseData
-	case 16:
-		return &(*jsDocThisTagData)(n.rec()).jsDocTagBaseData
-	case 17:
-		return &(*jsDocImportTagData)(n.rec()).jsDocTagBaseData
-	case 18:
-		return &(*jsDocCallbackTagData)(n.rec()).jsDocTagBaseData
-	case 19:
-		return &(*jsDocOverloadTagData)(n.rec()).jsDocTagBaseData
-	case 20:
-		return &(*jsDocTypedefTagData)(n.rec()).jsDocTagBaseData
-	case 21:
-		return &(*jsDocParameterOrPropertyTagData)(n.rec()).jsDocTagBaseData
-	}
-	return nil
-}
-
-func (node JSDocTagBase) TagName() IdentifierNode {
-	return node.deref(&node.jsDocTagBaseData().tagName)
-}
-
+func (node JSDocTagBase) TagName() IdentifierNode { return node.deref(node.jsDocTagBaseTagName()) }
 func (node JSDocTagBase) SetTagName(value IdentifierNode) {
-	node.setRef(&node.jsDocTagBaseData().tagName, value)
+	node.setRef(node.jsDocTagBaseTagName(), value)
 }
 
 func (node JSDocTagBase) Comment() *NodeList {
-	return node.store().nodeLists.get(node.jsDocTagBaseData().comment)
+	return node.store().nodeLists.get(*node.jsDocTagBaseComment())
 }
 
 func (node JSDocTagBase) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.jsDocTagBaseData().comment, value, value == nil)
+	node.store().nodeLists.set(node.jsDocTagBaseComment(), value, value == nil)
 }
 
-type jsDocCommentBaseData struct {
-	nodeBaseData
-	text sideRef // []string
+var jsDocCommentBaseTextOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindJSDocText:      uint8(unsafe.Offsetof(jsDocTextData{}.text)),
+	KindJSDocLink:      uint8(unsafe.Offsetof(jsDocLinkData{}.text)),
+	KindJSDocLinkPlain: uint8(unsafe.Offsetof(jsDocLinkPlainData{}.text)),
+	KindJSDocLinkCode:  uint8(unsafe.Offsetof(jsDocLinkCodeData{}.text)),
+}
+
+func (n Node) jsDocCommentBaseText() *sideRef {
+	if off := jsDocCommentBaseTextOffsets[n.Kind()]; off != 0 {
+		return (*sideRef)(unsafe.Add(n.p, off))
+	}
+	return nil
 }
 
 type JSDocCommentBase struct{ Node }
 
-var jsDocCommentBaseDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindJSDocText:      1,
-	KindJSDocLink:      2,
-	KindJSDocLinkPlain: 3,
-	KindJSDocLinkCode:  4,
-}
-
-func (n Node) jsDocCommentBaseData() *jsDocCommentBaseData {
-	switch jsDocCommentBaseDataDispatch[n.Kind()] {
-	case 1:
-		return &(*jsDocTextData)(n.rec()).jsDocCommentBaseData
-	case 2:
-		return &(*jsDocLinkData)(n.rec()).jsDocCommentBaseData
-	case 3:
-		return &(*jsDocLinkPlainData)(n.rec()).jsDocCommentBaseData
-	case 4:
-		return &(*jsDocLinkCodeData)(n.rec()).jsDocCommentBaseData
-	}
-	return nil
-}
-
 func (node JSDocCommentBase) text() []string {
-	return node.store().stringLists.get(node.jsDocCommentBaseData().text)
+	return node.store().stringLists.get(*node.jsDocCommentBaseText())
 }
 
 func (node JSDocCommentBase) setText(value []string) {
-	node.store().stringLists.set(&node.jsDocCommentBaseData().text, value, value == nil)
+	node.store().stringLists.set(node.jsDocCommentBaseText(), value, value == nil)
 }
 
 // ──────────────────────────────────────────────────────────────────────
@@ -3758,9 +3012,9 @@ func IsToken(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type identifierData struct {
-	primaryExpressionBaseData
-	flowNodeBaseData
-	text textRef // string
+	nodeBaseData
+	flowNode sideRef // *FlowNode
+	text     textRef // string
 }
 
 type Identifier struct{ Node }
@@ -3798,7 +3052,7 @@ func IsIdentifier(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type privateIdentifierData struct {
-	primaryExpressionBaseData
+	nodeBaseData
 	text textRef // string
 }
 
@@ -3835,10 +3089,10 @@ func IsPrivateIdentifier(node Node) bool {
 
 type qualifiedNameData struct {
 	nodeBaseData
-	flowNodeBaseData
-	compositeBaseData
-	left  nodeRef // EntityName
-	right nodeRef // MemberName
+	left     nodeRef // EntityName
+	right    nodeRef // MemberName
+	flowNode sideRef // *FlowNode
+	facts    atomic.Uint32
 }
 
 type QualifiedName struct{ Node }
@@ -3899,8 +3153,8 @@ func IsQualifiedName(node Node) bool {
 
 type computedPropertyNameData struct {
 	nodeBaseData
-	compositeBaseData
 	expression nodeRef // Expression
+	facts      atomic.Uint32
 }
 
 type ComputedPropertyName struct{ Node }
@@ -3955,8 +3209,8 @@ func IsComputedPropertyName(node Node) bool {
 
 type decoratorData struct {
 	nodeBaseData
-	compositeBaseData
 	expression nodeRef // LeftHandSideExpression
+	facts      atomic.Uint32
 }
 
 type Decorator struct{ Node }
@@ -4004,7 +3258,8 @@ func IsDecorator(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type emptyStatementData struct {
-	statementBaseData
+	nodeBaseData
+	flowNode sideRef // *FlowNode
 }
 
 type EmptyStatement struct{ Node }
@@ -4037,11 +3292,12 @@ func IsEmptyStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type ifStatementData struct {
-	statementBaseData
-	compositeBaseData
+	nodeBaseData
 	expression    nodeRef // Expression
 	thenStatement nodeRef // Statement
 	elseStatement nodeRef // Statement. Optional
+	flowNode      sideRef // *FlowNode
+	facts         atomic.Uint32
 }
 
 type IfStatement struct{ Node }
@@ -4111,9 +3367,11 @@ func IsIfStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type doStatementData struct {
-	iterationStatementBaseData
-	compositeBaseData
+	nodeBaseData
+	statement  nodeRef // Statement
 	expression nodeRef // Expression
+	flowNode   sideRef // *FlowNode
+	facts      atomic.Uint32
 }
 
 type DoStatement struct{ Node }
@@ -4175,9 +3433,11 @@ func IsDoStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type whileStatementData struct {
-	iterationStatementBaseData
-	compositeBaseData
+	nodeBaseData
+	statement  nodeRef // Statement
 	expression nodeRef // Expression
+	flowNode   sideRef // *FlowNode
+	facts      atomic.Uint32
 }
 
 type WhileStatement struct{ Node }
@@ -4243,12 +3503,15 @@ func IsWhileStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type forStatementData struct {
-	iterationStatementBaseData
-	localsContainerBaseData
-	compositeBaseData
-	initializer nodeRef // ForInitializer. Optional
-	condition   nodeRef // Expression. Optional
-	incrementor nodeRef // Expression. Optional
+	nodeBaseData
+	statement     nodeRef // Statement
+	nextContainer nodeRef // Node
+	initializer   nodeRef // ForInitializer. Optional
+	condition     nodeRef // Expression. Optional
+	incrementor   nodeRef // Expression. Optional
+	flowNode      sideRef // *FlowNode
+	locals        sideRef // SymbolTable
+	facts         atomic.Uint32
 }
 
 type ForStatement struct{ Node }
@@ -4341,13 +3604,15 @@ func IsForStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type forInOrOfStatementData struct {
-	statementBaseData
-	localsContainerBaseData
-	compositeBaseData
+	nodeBaseData
+	nextContainer nodeRef // Node
 	awaitModifier nodeRef // AwaitKeyword. Optional
 	initializer   nodeRef // ForInitializer
 	expression    nodeRef // Expression
 	statement     nodeRef // Statement
+	flowNode      sideRef // *FlowNode
+	locals        sideRef // SymbolTable
+	facts         atomic.Uint32
 }
 
 type ForInOrOfStatement struct{ Node }
@@ -4454,8 +3719,9 @@ func IsForOfStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type breakStatementData struct {
-	statementBaseData
-	label nodeRef // IdentifierNode. Optional
+	nodeBaseData
+	label    nodeRef // IdentifierNode. Optional
+	flowNode sideRef // *FlowNode
 }
 
 type BreakStatement struct{ Node }
@@ -4507,8 +3773,9 @@ func IsBreakStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type continueStatementData struct {
-	statementBaseData
-	label nodeRef // IdentifierNode. Optional
+	nodeBaseData
+	label    nodeRef // IdentifierNode. Optional
+	flowNode sideRef // *FlowNode
 }
 
 type ContinueStatement struct{ Node }
@@ -4564,9 +3831,10 @@ func IsContinueStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type returnStatementData struct {
-	statementBaseData
-	compositeBaseData
+	nodeBaseData
 	expression nodeRef // Expression. Optional
+	flowNode   sideRef // *FlowNode
+	facts      atomic.Uint32
 }
 
 type ReturnStatement struct{ Node }
@@ -4620,10 +3888,11 @@ func IsReturnStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type withStatementData struct {
-	statementBaseData
-	compositeBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 	statement  nodeRef // Statement
+	flowNode   sideRef // *FlowNode
+	facts      atomic.Uint32
 }
 
 type WithStatement struct{ Node }
@@ -4687,10 +3956,11 @@ func IsWithStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type switchStatementData struct {
-	statementBaseData
-	compositeBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 	caseBlock  nodeRef // CaseBlockNode
+	flowNode   sideRef // *FlowNode
+	facts      atomic.Uint32
 }
 
 type SwitchStatement struct{ Node }
@@ -4755,9 +4025,10 @@ func IsSwitchStatement(node Node) bool {
 
 type caseBlockData struct {
 	nodeBaseData
-	localsContainerBaseData
-	compositeBaseData
-	clauses sideRef // *CaseClausesList
+	nextContainer nodeRef // Node
+	locals        sideRef // SymbolTable
+	facts         atomic.Uint32
+	clauses       sideRef // *CaseClausesList
 }
 
 type CaseBlock struct{ Node }
@@ -4820,8 +4091,8 @@ func IsCaseBlock(node Node) bool {
 
 type caseOrDefaultClauseData struct {
 	nodeBaseData
-	compositeBaseData
 	expression          nodeRef // Expression
+	facts               atomic.Uint32
 	statements          sideRef // *StatementList
 	fallthroughFlowNode sideRef // *FlowNode
 }
@@ -4904,9 +4175,10 @@ func IsDefaultClause(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type throwStatementData struct {
-	statementBaseData
-	compositeBaseData
+	nodeBaseData
 	expression nodeRef // Expression
+	flowNode   sideRef // *FlowNode
+	facts      atomic.Uint32
 }
 
 type ThrowStatement struct{ Node }
@@ -4964,11 +4236,12 @@ func IsThrowStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type tryStatementData struct {
-	statementBaseData
-	compositeBaseData
+	nodeBaseData
 	tryBlock     nodeRef // BlockNode
 	catchClause  nodeRef // CatchClauseNode. Optional
 	finallyBlock nodeRef // BlockNode. Optional
+	flowNode     sideRef // *FlowNode
+	facts        atomic.Uint32
 }
 
 type TryStatement struct{ Node }
@@ -5038,10 +4311,11 @@ func IsTryStatement(node Node) bool {
 
 type catchClauseData struct {
 	nodeBaseData
-	localsContainerBaseData
-	compositeBaseData
+	nextContainer       nodeRef // Node
 	variableDeclaration nodeRef // VariableDeclarationNode. Optional
 	block               nodeRef // BlockNode
+	locals              sideRef // SymbolTable
+	facts               atomic.Uint32
 }
 
 type CatchClause struct{ Node }
@@ -5106,7 +4380,8 @@ func IsCatchClause(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type debuggerStatementData struct {
-	statementBaseData
+	nodeBaseData
+	flowNode sideRef // *FlowNode
 }
 
 type DebuggerStatement struct{ Node }
@@ -5141,9 +4416,10 @@ func IsDebuggerStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type labeledStatementData struct {
-	statementBaseData
+	nodeBaseData
 	label     nodeRef // IdentifierNode
 	statement nodeRef // Statement
+	flowNode  sideRef // *FlowNode
 }
 
 type LabeledStatement struct{ Node }
@@ -5209,8 +4485,9 @@ func IsLabeledStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type expressionStatementData struct {
-	statementBaseData
+	nodeBaseData
 	expression nodeRef // Expression
+	flowNode   sideRef // *FlowNode
 }
 
 type ExpressionStatement struct{ Node }
@@ -5272,11 +4549,13 @@ func IsExpressionStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type blockData struct {
-	statementBaseData
-	localsContainerBaseData
-	compositeBaseData
-	statements sideRef // *StatementList
-	multiLine  bool
+	nodeBaseData
+	nextContainer nodeRef // Node
+	flowNode      sideRef // *FlowNode
+	locals        sideRef // SymbolTable
+	facts         atomic.Uint32
+	statements    sideRef // *StatementList
+	multiLine     bool
 }
 
 type Block struct{ Node }
@@ -5343,10 +4622,11 @@ func IsBlock(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type variableStatementData struct {
-	statementBaseData
-	modifiersBaseData
-	compositeBaseData
+	nodeBaseData
 	declarationList nodeRef // VariableDeclarationListNode
+	flowNode        sideRef // *FlowNode
+	modifiers       sideRef // *ModifierList. Optional
+	facts           atomic.Uint32
 }
 
 type VariableStatement struct{ Node }
@@ -5416,13 +4696,13 @@ func IsVariableStatement(node Node) bool {
 
 type variableDeclarationData struct {
 	nodeBaseData
-	declarationBaseData
-	exportableBaseData
-	compositeBaseData
 	name             nodeRef // BindingName
 	exclamationToken nodeRef // ExclamationToken. Optional
 	typeField        nodeRef // TypeNode. Optional
 	initializer      nodeRef // Expression. Optional
+	symbol           sideRef // *Symbol
+	localSymbol      sideRef // *Symbol
+	facts            atomic.Uint32
 }
 
 type VariableDeclaration struct{ Node }
@@ -5506,7 +4786,7 @@ func IsVariableDeclaration(node Node) bool {
 
 type variableDeclarationListData struct {
 	nodeBaseData
-	compositeBaseData
+	facts        atomic.Uint32
 	declarations sideRef // *VariableDeclarationNodeList
 }
 
@@ -5562,7 +4842,7 @@ func IsVariableDeclarationList(node Node) bool {
 
 type bindingPatternData struct {
 	nodeBaseData
-	compositeBaseData
+	facts    atomic.Uint32
 	elements sideRef // *BindingElementList
 }
 
@@ -5623,14 +4903,14 @@ func IsArrayBindingPattern(node Node) bool {
 
 type parameterDeclarationData struct {
 	nodeBaseData
-	declarationBaseData
-	modifiersBaseData
-	compositeBaseData
 	dotDotDotToken nodeRef // DotDotDotToken. Optional
 	name           nodeRef // BindingName
 	questionToken  nodeRef // QuestionToken. Optional
 	typeField      nodeRef // TypeNode. Optional
 	initializer    nodeRef // Expression. Optional
+	symbol         sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	facts          atomic.Uint32
 }
 
 type ParameterDeclaration struct{ Node }
@@ -5731,14 +5011,14 @@ func IsParameterDeclaration(node Node) bool {
 
 type bindingElementData struct {
 	nodeBaseData
-	declarationBaseData
-	exportableBaseData
-	flowNodeBaseData
-	compositeBaseData
 	dotDotDotToken nodeRef // DotDotDotToken. Optional
 	propertyName   nodeRef // PropertyName. Optional
 	name           nodeRef // BindingName. Optional
 	initializer    nodeRef // Expression. Optional
+	symbol         sideRef // *Symbol
+	localSymbol    sideRef // *Symbol
+	flowNode       sideRef // *FlowNode
+	facts          atomic.Uint32
 }
 
 type BindingElement struct{ Node }
@@ -5828,9 +5108,10 @@ func IsBindingElement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type missingDeclarationData struct {
-	statementBaseData
-	declarationBaseData
-	modifiersBaseData
+	nodeBaseData
+	flowNode  sideRef // *FlowNode
+	symbol    sideRef // *Symbol
+	modifiers sideRef // *ModifierList. Optional
 }
 
 type MissingDeclaration struct{ Node }
@@ -5896,13 +5177,22 @@ func IsMissingDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type functionDeclarationData struct {
-	statementBaseData
-	declarationBaseData
-	exportableBaseData
-	modifiersBaseData
-	functionLikeWithBodyBaseData
-	compositeBaseData
+	nodeBaseData
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	asteriskToken  nodeRef // AsteriskToken. Optional
+	body           nodeRef // NodeBody. Optional
 	name           nodeRef // IdentifierNode. Optional
+	flowNode       sideRef // *FlowNode
+	symbol         sideRef // *Symbol
+	localSymbol    sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
+	endFlowNode    sideRef // *FlowNode
+	facts          atomic.Uint32
 	returnFlowNode sideRef // *FlowNode
 }
 
@@ -6062,9 +5352,18 @@ func IsFunctionDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type classDeclarationData struct {
-	statementBaseData
-	declarationBaseData
-	classLikeBaseData
+	nodeBaseData
+	nextContainer   nodeRef // Node
+	name            nodeRef // IdentifierNode. Optional
+	flowNode        sideRef // *FlowNode
+	symbol          sideRef // *Symbol
+	localSymbol     sideRef // *Symbol
+	modifiers       sideRef // *ModifierList. Optional
+	locals          sideRef // SymbolTable
+	facts           atomic.Uint32
+	typeParameters  sideRef // *TypeParameterList. Optional
+	heritageClauses sideRef // *HeritageClauseList. Optional
+	members         sideRef // *ClassElementList
 }
 
 type ClassDeclaration struct{ Node }
@@ -6181,9 +5480,17 @@ func IsClassDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type classExpressionData struct {
-	primaryExpressionBaseData
-	declarationBaseData
-	classLikeBaseData
+	nodeBaseData
+	nextContainer   nodeRef // Node
+	name            nodeRef // IdentifierNode. Optional
+	symbol          sideRef // *Symbol
+	localSymbol     sideRef // *Symbol
+	modifiers       sideRef // *ModifierList. Optional
+	locals          sideRef // SymbolTable
+	facts           atomic.Uint32
+	typeParameters  sideRef // *TypeParameterList. Optional
+	heritageClauses sideRef // *HeritageClauseList. Optional
+	members         sideRef // *ClassElementList
 }
 
 type ClassExpression struct{ Node }
@@ -6292,9 +5599,9 @@ func IsClassExpression(node Node) bool {
 
 type heritageClauseData struct {
 	nodeBaseData
-	compositeBaseData
-	token Kind
+	facts atomic.Uint32
 	types sideRef // *HeritageClauseElementList
+	token Kind
 }
 
 type HeritageClause struct{ Node }
@@ -6347,12 +5654,12 @@ func IsHeritageClause(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type interfaceDeclarationData struct {
-	typeSyntaxBaseData
-	statementBaseData
-	declarationBaseData
-	exportableBaseData
-	modifiersBaseData
+	nodeBaseData
 	name            nodeRef // IdentifierNode
+	flowNode        sideRef // *FlowNode
+	symbol          sideRef // *Symbol
+	localSymbol     sideRef // *Symbol
+	modifiers       sideRef // *ModifierList. Optional
 	typeParameters  sideRef // *TypeParameterList. Optional
 	heritageClauses sideRef // *HeritageClauseList. Optional
 	members         sideRef // *TypeElementList
@@ -6467,15 +5774,16 @@ func IsInterfaceDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type typeAliasDeclarationData struct {
-	typeSyntaxBaseData
-	statementBaseData
-	declarationBaseData
-	exportableBaseData
-	modifiersBaseData
-	localsContainerBaseData
+	nodeBaseData
+	nextContainer  nodeRef // Node
 	name           nodeRef // IdentifierNode
-	typeParameters sideRef // *TypeParameterList. Optional
 	typeField      nodeRef // TypeNode
+	flowNode       sideRef // *FlowNode
+	symbol         sideRef // *Symbol
+	localSymbol    sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
 }
 
 type TypeAliasDeclaration struct{ Node }
@@ -6621,10 +5929,12 @@ func IsJSTypeAliasDeclaration(node Node) bool {
 
 type enumMemberData struct {
 	nodeBaseData
-	declarationBaseData
-	namedMemberBaseData
-	compositeBaseData
-	initializer nodeRef // Expression. Optional
+	name         nodeRef // PropertyName
+	postfixToken nodeRef // TokenNode. Optional
+	initializer  nodeRef // Expression. Optional
+	symbol       sideRef // *Symbol
+	modifiers    sideRef // *ModifierList. Optional
+	facts        atomic.Uint32
 }
 
 type EnumMember struct{ Node }
@@ -6690,13 +6000,14 @@ func IsEnumMember(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type enumDeclarationData struct {
-	statementBaseData
-	declarationBaseData
-	exportableBaseData
-	modifiersBaseData
-	compositeBaseData
-	name    nodeRef // IdentifierNode
-	members sideRef // *EnumMemberList
+	nodeBaseData
+	name        nodeRef // IdentifierNode
+	flowNode    sideRef // *FlowNode
+	symbol      sideRef // *Symbol
+	localSymbol sideRef // *Symbol
+	modifiers   sideRef // *ModifierList. Optional
+	facts       atomic.Uint32
+	members     sideRef // *EnumMemberList
 }
 
 type EnumDeclaration struct{ Node }
@@ -6777,8 +6088,9 @@ func IsEnumDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type moduleBlockData struct {
-	statementBaseData
-	compositeBaseData
+	nodeBaseData
+	flowNode   sideRef // *FlowNode
+	facts      atomic.Uint32
 	statements sideRef // *StatementList
 }
 
@@ -6839,7 +6151,8 @@ func IsModuleBlock(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type notEmittedStatementData struct {
-	statementBaseData
+	nodeBaseData
+	flowNode sideRef // *FlowNode
 }
 
 type NotEmittedStatement struct{ Node }
@@ -6874,9 +6187,8 @@ func IsNotEmittedStatement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type notEmittedTypeElementData struct {
-	typeElementBaseData
 	nodeBaseData
-	declarationBaseData
+	symbol sideRef // *Symbol
 }
 
 type NotEmittedTypeElement struct{ Node }
@@ -6911,13 +6223,14 @@ func IsNotEmittedTypeElement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type importDeclarationData struct {
-	statementBaseData
-	modifiersBaseData
-	compositeBaseData
-	declarationBaseData
+	nodeBaseData
 	importClause    nodeRef // ImportClauseNode. Optional
 	moduleSpecifier nodeRef // Expression
 	attributes      nodeRef // ImportAttributesNode. Optional
+	flowNode        sideRef // *FlowNode
+	modifiers       sideRef // *ModifierList. Optional
+	facts           atomic.Uint32
+	symbol          sideRef // *Symbol
 }
 
 type ImportDeclaration struct{ Node }
@@ -7109,9 +6422,9 @@ func IsExternalModuleReference(node Node) bool {
 
 type namespaceImportData struct {
 	nodeBaseData
-	declarationBaseData
-	exportableBaseData
-	name nodeRef // IdentifierNode
+	name        nodeRef // IdentifierNode
+	symbol      sideRef // *Symbol
+	localSymbol sideRef // *Symbol
 }
 
 type NamespaceImport struct{ Node }
@@ -7173,7 +6486,7 @@ func IsNamespaceImport(node Node) bool {
 
 type namedImportsData struct {
 	nodeBaseData
-	compositeBaseData
+	facts    atomic.Uint32
 	elements sideRef // *ImportSpecifierList
 }
 
@@ -7228,13 +6541,14 @@ func IsNamedImports(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type exportAssignmentData struct {
-	statementBaseData
-	declarationBaseData
-	modifiersBaseData
-	compositeBaseData
-	isExportEquals bool
+	nodeBaseData
 	typeField      nodeRef // TypeNode
 	expression     nodeRef // Expression
+	flowNode       sideRef // *FlowNode
+	symbol         sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	facts          atomic.Uint32
+	isExportEquals bool
 }
 
 type ExportAssignment struct{ Node }
@@ -7312,11 +6626,11 @@ func IsExportAssignment(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type namespaceExportDeclarationData struct {
-	typeSyntaxBaseData
-	statementBaseData
-	declarationBaseData
-	modifiersBaseData
-	name nodeRef // IdentifierNode
+	nodeBaseData
+	name      nodeRef // IdentifierNode
+	flowNode  sideRef // *FlowNode
+	symbol    sideRef // *Symbol
+	modifiers sideRef // *ModifierList. Optional
 }
 
 type NamespaceExportDeclaration struct{ Node }
@@ -7392,8 +6706,8 @@ func IsNamespaceExportDeclaration(node Node) bool {
 
 type namespaceExportData struct {
 	nodeBaseData
-	declarationBaseData
-	name nodeRef // ModuleExportName
+	name   nodeRef // ModuleExportName
+	symbol sideRef // *Symbol
 }
 
 type NamespaceExport struct{ Node }
@@ -7447,7 +6761,7 @@ func IsNamespaceExport(node Node) bool {
 
 type namedExportsData struct {
 	nodeBaseData
-	compositeBaseData
+	facts    atomic.Uint32
 	elements sideRef // *ExportSpecifierList
 }
 
@@ -7503,12 +6817,12 @@ func IsNamedExports(node Node) bool {
 
 type exportSpecifierData struct {
 	nodeBaseData
-	declarationBaseData
-	exportableBaseData
-	compositeBaseData
-	isTypeOnly   bool
 	propertyName nodeRef // ModuleExportName. Optional
 	name         nodeRef // ModuleExportName
+	symbol       sideRef // *Symbol
+	localSymbol  sideRef // *Symbol
+	facts        atomic.Uint32
+	isTypeOnly   bool
 }
 
 type ExportSpecifier struct{ Node }
@@ -7576,11 +6890,14 @@ func IsExportSpecifier(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type callSignatureDeclarationData struct {
-	typeElementBaseData
-	typeSyntaxBaseData
 	nodeBaseData
-	declarationBaseData
-	functionLikeBaseData
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	symbol         sideRef // *Symbol
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
 }
 
 type CallSignatureDeclaration struct{ Node }
@@ -7678,11 +6995,14 @@ func IsCallSignatureDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type constructSignatureDeclarationData struct {
-	typeElementBaseData
-	typeSyntaxBaseData
 	nodeBaseData
-	declarationBaseData
-	functionLikeBaseData
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	symbol         sideRef // *Symbol
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
 }
 
 type ConstructSignatureDeclaration struct{ Node }
@@ -7782,12 +7102,19 @@ func IsConstructSignatureDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type constructorDeclarationData struct {
-	classElementBaseData
 	nodeBaseData
-	declarationBaseData
-	modifiersBaseData
-	functionLikeWithBodyBaseData
-	compositeBaseData
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	asteriskToken  nodeRef // AsteriskToken. Optional
+	body           nodeRef // NodeBody. Optional
+	symbol         sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
+	endFlowNode    sideRef // *FlowNode
+	facts          atomic.Uint32
 	returnFlowNode sideRef // *FlowNode
 }
 
@@ -7927,7 +7254,22 @@ func IsConstructorDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type getAccessorDeclarationData struct {
-	accessorDeclarationBaseData
+	nodeBaseData
+	name           nodeRef // PropertyName
+	postfixToken   nodeRef // TokenNode. Optional
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	asteriskToken  nodeRef // AsteriskToken. Optional
+	body           nodeRef // NodeBody. Optional
+	symbol         sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
+	endFlowNode    sideRef // *FlowNode
+	flowNode       sideRef // *FlowNode
+	facts          atomic.Uint32
 }
 
 type GetAccessorDeclaration struct{ Node }
@@ -8080,7 +7422,22 @@ func IsGetAccessorDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type setAccessorDeclarationData struct {
-	accessorDeclarationBaseData
+	nodeBaseData
+	name           nodeRef // PropertyName
+	postfixToken   nodeRef // TokenNode. Optional
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	asteriskToken  nodeRef // AsteriskToken. Optional
+	body           nodeRef // NodeBody. Optional
+	symbol         sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
+	endFlowNode    sideRef // *FlowNode
+	flowNode       sideRef // *FlowNode
+	facts          atomic.Uint32
 }
 
 type SetAccessorDeclaration struct{ Node }
@@ -8233,13 +7590,15 @@ func IsSetAccessorDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type indexSignatureDeclarationData struct {
-	typeElementBaseData
-	classElementBaseData
-	typeSyntaxBaseData
 	nodeBaseData
-	declarationBaseData
-	modifiersBaseData
-	functionLikeBaseData
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	symbol         sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
 }
 
 type IndexSignatureDeclaration struct{ Node }
@@ -8345,12 +7704,17 @@ func IsIndexSignatureDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type methodSignatureDeclarationData struct {
-	typeElementBaseData
-	typeSyntaxBaseData
 	nodeBaseData
-	declarationBaseData
-	namedMemberBaseData
-	functionLikeBaseData
+	name           nodeRef // PropertyName
+	postfixToken   nodeRef // TokenNode. Optional
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	symbol         sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
 }
 
 type MethodSignatureDeclaration struct{ Node }
@@ -8476,14 +7840,22 @@ func IsMethodSignatureDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type methodDeclarationData struct {
-	classElementBaseData
-	objectLiteralElementBaseData
 	nodeBaseData
-	declarationBaseData
-	namedMemberBaseData
-	functionLikeWithBodyBaseData
-	flowNodeBaseData
-	compositeBaseData
+	name           nodeRef // PropertyName
+	postfixToken   nodeRef // TokenNode. Optional
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	asteriskToken  nodeRef // AsteriskToken. Optional
+	body           nodeRef // NodeBody. Optional
+	symbol         sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
+	endFlowNode    sideRef // *FlowNode
+	flowNode       sideRef // *FlowNode
+	facts          atomic.Uint32
 }
 
 type MethodDeclaration struct{ Node }
@@ -8625,13 +7997,13 @@ func IsMethodDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type propertySignatureDeclarationData struct {
-	typeElementBaseData
-	typeSyntaxBaseData
 	nodeBaseData
-	declarationBaseData
-	namedMemberBaseData
-	typeField   nodeRef // TypeNode
-	initializer nodeRef // Expression
+	name         nodeRef // PropertyName
+	postfixToken nodeRef // TokenNode. Optional
+	typeField    nodeRef // TypeNode
+	initializer  nodeRef // Expression
+	symbol       sideRef // *Symbol
+	modifiers    sideRef // *ModifierList. Optional
 }
 
 type PropertySignatureDeclaration struct{ Node }
@@ -8727,13 +8099,14 @@ func IsPropertySignatureDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type propertyDeclarationData struct {
-	classElementBaseData
 	nodeBaseData
-	declarationBaseData
-	namedMemberBaseData
-	compositeBaseData
-	typeField   nodeRef // TypeNode. Optional
-	initializer nodeRef // Expression. Optional
+	name         nodeRef // PropertyName
+	postfixToken nodeRef // TokenNode. Optional
+	typeField    nodeRef // TypeNode. Optional
+	initializer  nodeRef // Expression. Optional
+	symbol       sideRef // *Symbol
+	modifiers    sideRef // *ModifierList. Optional
+	facts        atomic.Uint32
 }
 
 type PropertyDeclaration struct{ Node }
@@ -8819,9 +8192,8 @@ func IsPropertyDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type semicolonClassElementData struct {
-	classElementBaseData
 	nodeBaseData
-	declarationBaseData
+	symbol sideRef // *Symbol
 }
 
 type SemicolonClassElement struct{ Node }
@@ -8856,13 +8228,13 @@ func IsSemicolonClassElement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type classStaticBlockDeclarationData struct {
-	classElementBaseData
 	nodeBaseData
-	declarationBaseData
-	modifiersBaseData
-	localsContainerBaseData
-	compositeBaseData
+	nextContainer  nodeRef // Node
 	body           nodeRef // BlockNode
+	symbol         sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	locals         sideRef // SymbolTable
+	facts          atomic.Uint32
 	returnFlowNode sideRef // *FlowNode
 }
 
@@ -8952,7 +8324,7 @@ func IsClassStaticBlockDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type omittedExpressionData struct {
-	expressionBaseData
+	nodeBaseData
 }
 
 type OmittedExpression struct{ Node }
@@ -8979,8 +8351,8 @@ func IsOmittedExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type keywordExpressionData struct {
-	expressionBaseData
-	flowNodeBaseData
+	nodeBaseData
+	flowNode sideRef // *FlowNode
 }
 
 type KeywordExpression struct{ Node }
@@ -9024,7 +8396,9 @@ func IsKeywordExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type stringLiteralData struct {
-	literalExpressionBaseData
+	nodeBaseData
+	text       textRef // string
+	tokenFlags TokenFlags
 }
 
 type StringLiteral struct{ Node }
@@ -9060,7 +8434,9 @@ func IsStringLiteral(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type numericLiteralData struct {
-	literalExpressionBaseData
+	nodeBaseData
+	text       textRef // string
+	tokenFlags TokenFlags
 }
 
 type NumericLiteral struct{ Node }
@@ -9096,7 +8472,9 @@ func IsNumericLiteral(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type bigIntLiteralData struct {
-	literalExpressionBaseData
+	nodeBaseData
+	text       textRef // string
+	tokenFlags TokenFlags
 }
 
 type BigIntLiteral struct{ Node }
@@ -9132,7 +8510,9 @@ func IsBigIntLiteral(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type regularExpressionLiteralData struct {
-	literalExpressionBaseData
+	nodeBaseData
+	text       textRef // string
+	tokenFlags TokenFlags
 }
 
 type RegularExpressionLiteral struct{ Node }
@@ -9173,9 +8553,12 @@ func IsRegularExpressionLiteral(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type noSubstitutionTemplateLiteralData struct {
-	expressionBaseData
-	templateLiteralLikeNodeBaseData
-	declarationBaseData
+	nodeBaseData
+	text          textRef // string
+	tokenFlags    TokenFlags
+	rawText       textRef // string
+	templateFlags TokenFlags
+	symbol        sideRef // *Symbol
 }
 
 type NoSubstitutionTemplateLiteral struct{ Node }
@@ -9242,14 +8625,14 @@ func IsNoSubstitutionTemplateLiteral(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type binaryExpressionData struct {
-	expressionBaseData
-	declarationBaseData
-	modifiersBaseData
-	compositeBaseData
+	nodeBaseData
 	left          nodeRef // Expression
 	typeField     nodeRef // TypeNode. Optional
 	operatorToken nodeRef // BinaryOperatorToken
 	right         nodeRef // Expression
+	symbol        sideRef // *Symbol
+	modifiers     sideRef // *ModifierList. Optional
+	facts         atomic.Uint32
 }
 
 type BinaryExpression struct{ Node }
@@ -9327,9 +8710,9 @@ func IsBinaryExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type prefixUnaryExpressionData struct {
-	updateExpressionBaseData
-	operator Kind
+	nodeBaseData
 	operand  nodeRef // Expression
+	operator Kind
 }
 
 type PrefixUnaryExpression struct{ Node }
@@ -9386,7 +8769,7 @@ func IsPrefixUnaryExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type postfixUnaryExpressionData struct {
-	updateExpressionBaseData
+	nodeBaseData
 	operand  nodeRef // Expression
 	operator Kind
 }
@@ -9444,7 +8827,7 @@ func IsPostfixUnaryExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type yieldExpressionData struct {
-	expressionBaseData
+	nodeBaseData
 	asteriskToken nodeRef // AsteriskToken. Optional
 	expression    nodeRef // Expression. Optional
 }
@@ -9501,13 +8884,21 @@ func IsYieldExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type arrowFunctionData struct {
-	expressionBaseData
-	declarationBaseData
-	modifiersBaseData
-	functionLikeWithBodyBaseData
-	flowNodeBaseData
-	compositeBaseData
+	nodeBaseData
+	nextContainer          nodeRef // Node
+	typeField              nodeRef // TypeNode. Optional
+	fullSignature          nodeRef // TypeNode. Optional
+	asteriskToken          nodeRef // AsteriskToken. Optional
+	body                   nodeRef // NodeBody. Optional
 	equalsGreaterThanToken nodeRef // EqualsGreaterThanToken
+	symbol                 sideRef // *Symbol
+	modifiers              sideRef // *ModifierList. Optional
+	locals                 sideRef // SymbolTable
+	typeParameters         sideRef // *TypeParameterList. Optional
+	parameters             sideRef // *ParameterList
+	endFlowNode            sideRef // *FlowNode
+	flowNode               sideRef // *FlowNode
+	facts                  atomic.Uint32
 }
 
 type ArrowFunction struct{ Node }
@@ -9641,13 +9032,21 @@ func IsArrowFunction(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type functionExpressionData struct {
-	primaryExpressionBaseData
-	declarationBaseData
-	modifiersBaseData
-	functionLikeWithBodyBaseData
-	flowNodeBaseData
-	compositeBaseData
+	nodeBaseData
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	asteriskToken  nodeRef // AsteriskToken. Optional
+	body           nodeRef // NodeBody. Optional
 	name           nodeRef // IdentifierNode. Optional
+	symbol         sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
+	endFlowNode    sideRef // *FlowNode
+	flowNode       sideRef // *FlowNode
+	facts          atomic.Uint32
 	returnFlowNode sideRef // *FlowNode
 }
 
@@ -9797,7 +9196,7 @@ func IsFunctionExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type asExpressionData struct {
-	expressionBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 	typeField  nodeRef // TypeNode
 }
@@ -9850,7 +9249,7 @@ func IsAsExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type satisfiesExpressionData struct {
-	expressionBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 	typeField  nodeRef // TypeNode
 }
@@ -9907,13 +9306,13 @@ func IsSatisfiesExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type conditionalExpressionData struct {
-	expressionBaseData
-	compositeBaseData
+	nodeBaseData
 	condition     nodeRef // Expression
 	questionToken nodeRef // QuestionToken
 	whenTrue      nodeRef // Expression
 	colonToken    nodeRef // ColonToken
 	whenFalse     nodeRef // Expression
+	facts         atomic.Uint32
 }
 
 type ConditionalExpression struct{ Node }
@@ -10003,12 +9402,12 @@ func IsConditionalExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type propertyAccessExpressionData struct {
-	memberExpressionBaseData
-	flowNodeBaseData
-	compositeBaseData
+	nodeBaseData
 	expression       nodeRef // Expression
 	questionDotToken nodeRef // QuestionDotToken. Optional
 	name             nodeRef // MemberName
+	flowNode         sideRef // *FlowNode
+	facts            atomic.Uint32
 }
 
 type PropertyAccessExpression struct{ Node }
@@ -10084,12 +9483,12 @@ func IsPropertyAccessExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type elementAccessExpressionData struct {
-	memberExpressionBaseData
-	flowNodeBaseData
-	compositeBaseData
+	nodeBaseData
 	expression         nodeRef // Expression
 	questionDotToken   nodeRef // QuestionDotToken. Optional
 	argumentExpression nodeRef // Expression
+	flowNode           sideRef // *FlowNode
+	facts              atomic.Uint32
 }
 
 type ElementAccessExpression struct{ Node }
@@ -10175,11 +9574,11 @@ func IsElementAccessExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type callExpressionData struct {
-	leftHandSideExpressionBaseData
-	declarationBaseData
-	compositeBaseData
+	nodeBaseData
 	expression       nodeRef // Expression
 	questionDotToken nodeRef // QuestionDotToken. Optional
+	symbol           sideRef // *Symbol
+	facts            atomic.Uint32
 	typeArguments    sideRef // *TypeList. Optional
 	arguments        sideRef // *ElementList
 }
@@ -10264,9 +9663,9 @@ func IsCallExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type newExpressionData struct {
-	primaryExpressionBaseData
-	compositeBaseData
+	nodeBaseData
 	expression    nodeRef // Expression
+	facts         atomic.Uint32
 	typeArguments sideRef // *TypeList. Optional
 	arguments     sideRef // *ElementList. Optional
 }
@@ -10333,11 +9732,11 @@ func IsNewExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type metaPropertyData struct {
-	primaryExpressionBaseData
-	flowNodeBaseData
-	compositeBaseData
-	keywordToken Kind
+	nodeBaseData
 	name         nodeRef // IdentifierNode
+	flowNode     sideRef // *FlowNode
+	facts        atomic.Uint32
+	keywordToken Kind
 }
 
 type MetaProperty struct{ Node }
@@ -10392,7 +9791,7 @@ func IsMetaProperty(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type nonNullExpressionData struct {
-	leftHandSideExpressionBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 }
 
@@ -10444,7 +9843,7 @@ func IsNonNullExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type spreadElementData struct {
-	expressionBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 }
 
@@ -10492,9 +9891,9 @@ func IsSpreadElement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type templateExpressionData struct {
-	primaryExpressionBaseData
-	compositeBaseData
+	nodeBaseData
 	head          nodeRef // TemplateHeadNode
+	facts         atomic.Uint32
 	templateSpans sideRef // *TemplateSpanList
 }
 
@@ -10615,12 +10014,12 @@ func IsTemplateSpan(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type taggedTemplateExpressionData struct {
-	memberExpressionBaseData
-	compositeBaseData
+	nodeBaseData
 	tag              nodeRef // Expression
 	questionDotToken nodeRef // QuestionDotToken
-	typeArguments    sideRef // *TypeList. Optional
 	template         nodeRef // TemplateLiteral
+	facts            atomic.Uint32
+	typeArguments    sideRef // *TypeList. Optional
 }
 
 type TaggedTemplateExpression struct{ Node }
@@ -10700,7 +10099,7 @@ func IsTaggedTemplateExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type parenthesizedExpressionData struct {
-	primaryExpressionBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 }
 
@@ -10757,8 +10156,8 @@ func IsParenthesizedExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type arrayLiteralExpressionData struct {
-	primaryExpressionBaseData
-	compositeBaseData
+	nodeBaseData
+	facts     atomic.Uint32
 	elements  sideRef // *ElementList
 	multiLine bool
 }
@@ -10819,9 +10218,9 @@ func IsArrayLiteralExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type objectLiteralExpressionData struct {
-	primaryExpressionBaseData
-	declarationBaseData
-	compositeBaseData
+	nodeBaseData
+	symbol     sideRef // *Symbol
+	facts      atomic.Uint32
 	properties sideRef // *NodeList
 	multiLine  bool
 }
@@ -10890,10 +10289,9 @@ func IsObjectLiteralExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type spreadAssignmentData struct {
-	objectLiteralElementBaseData
 	nodeBaseData
-	declarationBaseData
 	expression nodeRef // Expression
+	symbol     sideRef // *Symbol
 }
 
 type SpreadAssignment struct{ Node }
@@ -10945,13 +10343,14 @@ func IsSpreadAssignment(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type propertyAssignmentData struct {
-	objectLiteralElementBaseData
 	nodeBaseData
-	declarationBaseData
-	namedMemberBaseData
-	compositeBaseData
-	typeField   nodeRef // TypeNode
-	initializer nodeRef // Expression
+	name         nodeRef // PropertyName
+	postfixToken nodeRef // TokenNode. Optional
+	typeField    nodeRef // TypeNode
+	initializer  nodeRef // Expression
+	symbol       sideRef // *Symbol
+	modifiers    sideRef // *ModifierList. Optional
+	facts        atomic.Uint32
 }
 
 type PropertyAssignment struct{ Node }
@@ -11032,14 +10431,15 @@ func IsPropertyAssignment(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type shorthandPropertyAssignmentData struct {
-	objectLiteralElementBaseData
 	nodeBaseData
-	declarationBaseData
-	namedMemberBaseData
-	compositeBaseData
+	name                        nodeRef // PropertyName
+	postfixToken                nodeRef // TokenNode. Optional
 	typeField                   nodeRef // TypeNode
 	equalsToken                 nodeRef // EqualsToken. Optional
 	objectAssignmentInitializer nodeRef // Expression. Optional
+	symbol                      sideRef // *Symbol
+	modifiers                   sideRef // *ModifierList. Optional
+	facts                       atomic.Uint32
 }
 
 type ShorthandPropertyAssignment struct{ Node }
@@ -11143,7 +10543,7 @@ func IsShorthandPropertyAssignment(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type deleteExpressionData struct {
-	unaryExpressionBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 }
 
@@ -11195,7 +10595,7 @@ func IsDeleteExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type typeOfExpressionData struct {
-	unaryExpressionBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 }
 
@@ -11247,7 +10647,7 @@ func IsTypeOfExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type voidExpressionData struct {
-	unaryExpressionBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 }
 
@@ -11299,7 +10699,7 @@ func IsVoidExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type awaitExpressionData struct {
-	unaryExpressionBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 }
 
@@ -11347,7 +10747,7 @@ func IsAwaitExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type typeAssertionData struct {
-	unaryExpressionBaseData
+	nodeBaseData
 	typeField  nodeRef // TypeNode
 	expression nodeRef // Expression
 }
@@ -11399,7 +10799,7 @@ func IsTypeAssertion(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type keywordTypeNodeData struct {
-	typeNodeBaseData
+	nodeBaseData
 }
 
 type KeywordTypeNode struct{ Node }
@@ -11433,7 +10833,8 @@ func IsKeywordTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type unionTypeNodeData struct {
-	unionOrIntersectionTypeNodeBaseData
+	nodeBaseData
+	types sideRef // *TypeList
 }
 
 type UnionTypeNode struct{ Node }
@@ -11480,7 +10881,8 @@ func IsUnionTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type intersectionTypeNodeData struct {
-	unionOrIntersectionTypeNodeBaseData
+	nodeBaseData
+	types sideRef // *TypeList
 }
 
 type IntersectionTypeNode struct{ Node }
@@ -11532,12 +10934,13 @@ func IsIntersectionTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type conditionalTypeNodeData struct {
-	typeNodeBaseData
-	localsContainerBaseData
-	checkType   nodeRef // TypeNode
-	extendsType nodeRef // TypeNode
-	trueType    nodeRef // TypeNode
-	falseType   nodeRef // TypeNode
+	nodeBaseData
+	nextContainer nodeRef // Node
+	checkType     nodeRef // TypeNode
+	extendsType   nodeRef // TypeNode
+	trueType      nodeRef // TypeNode
+	falseType     nodeRef // TypeNode
+	locals        sideRef // SymbolTable
 }
 
 type ConditionalTypeNode struct{ Node }
@@ -11619,9 +11022,9 @@ func IsConditionalTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type typeOperatorNodeData struct {
-	typeNodeBaseData
-	operator  Kind
+	nodeBaseData
 	typeField nodeRef // TypeNode
+	operator  Kind
 }
 
 type TypeOperatorNode struct{ Node }
@@ -11669,7 +11072,7 @@ func IsTypeOperatorNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type inferTypeNodeData struct {
-	typeNodeBaseData
+	nodeBaseData
 	typeParameter nodeRef // TypeParameterDeclarationNode
 }
 
@@ -11720,7 +11123,7 @@ func IsInferTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type arrayTypeNodeData struct {
-	typeNodeBaseData
+	nodeBaseData
 	elementType nodeRef // TypeNode
 }
 
@@ -11768,7 +11171,7 @@ func IsArrayTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type indexedAccessTypeNodeData struct {
-	typeNodeBaseData
+	nodeBaseData
 	objectType nodeRef // TypeNode
 	indexType  nodeRef // TypeNode
 }
@@ -11825,8 +11228,9 @@ func IsIndexedAccessTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type typeReferenceNodeData struct {
-	nodeWithTypeArgumentsBaseData
-	typeName nodeRef // EntityName
+	nodeBaseData
+	typeName      nodeRef // EntityName
+	typeArguments sideRef // *TypeList. Optional
 }
 
 type TypeReferenceNode struct{ Node }
@@ -11883,9 +11287,9 @@ func IsTypeReferenceNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type expressionWithTypeArgumentsData struct {
-	memberExpressionBaseData
-	compositeBaseData
+	nodeBaseData
 	expression    nodeRef // Expression
+	facts         atomic.Uint32
 	typeArguments sideRef // *TypeList. Optional
 }
 
@@ -11947,7 +11351,7 @@ func IsExpressionWithTypeArguments(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type literalTypeNodeData struct {
-	typeNodeBaseData
+	nodeBaseData
 	literal nodeRef // Node
 }
 
@@ -11993,7 +11397,7 @@ func IsLiteralTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type thisTypeNodeData struct {
-	typeNodeBaseData
+	nodeBaseData
 }
 
 type ThisTypeNode struct{ Node }
@@ -12018,7 +11422,7 @@ func IsThisTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type typePredicateNodeData struct {
-	typeNodeBaseData
+	nodeBaseData
 	assertsModifier nodeRef // AssertsKeyword. Optional
 	parameterName   nodeRef // TypePredicateParameterName
 	typeField       nodeRef // TypeNode. Optional
@@ -12086,9 +11490,9 @@ func IsTypePredicateNode(node Node) bool {
 
 type importAttributeData struct {
 	nodeBaseData
-	compositeBaseData
 	name  nodeRef // ImportAttributeName
 	value nodeRef // Expression
+	facts atomic.Uint32
 }
 
 type ImportAttribute struct{ Node }
@@ -12145,9 +11549,9 @@ func IsImportAttribute(node Node) bool {
 
 type importAttributesData struct {
 	nodeBaseData
-	compositeBaseData
-	token      Kind
+	facts      atomic.Uint32
 	attributes sideRef // *ImportAttributeList
+	token      Kind
 	multiLine  bool
 }
 
@@ -12208,8 +11612,9 @@ func IsImportAttributes(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type typeQueryNodeData struct {
-	nodeWithTypeArgumentsBaseData
-	exprName nodeRef // EntityName
+	nodeBaseData
+	exprName      nodeRef // EntityName
+	typeArguments sideRef // *TypeList. Optional
 }
 
 type TypeQueryNode struct{ Node }
@@ -12262,14 +11667,15 @@ func IsTypeQueryNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type mappedTypeNodeData struct {
-	typeNodeBaseData
-	declarationBaseData
-	localsContainerBaseData
+	nodeBaseData
+	nextContainer nodeRef // Node
 	readonlyToken nodeRef // TokenNode. Optional
 	typeParameter nodeRef // TypeParameterDeclarationNode
 	nameType      nodeRef // TypeNode. Optional
 	questionToken nodeRef // TokenNode. Optional
 	typeField     nodeRef // TypeNode. Optional
+	symbol        sideRef // *Symbol
+	locals        sideRef // SymbolTable
 	members       sideRef // *TypeElementList. Optional
 }
 
@@ -12369,8 +11775,8 @@ func IsMappedTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type typeLiteralNodeData struct {
-	typeNodeBaseData
-	declarationBaseData
+	nodeBaseData
+	symbol  sideRef // *Symbol
 	members sideRef // *TypeElementList
 }
 
@@ -12426,7 +11832,7 @@ func IsTypeLiteralNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type tupleTypeNodeData struct {
-	typeNodeBaseData
+	nodeBaseData
 	elements sideRef // *TypeList
 }
 
@@ -12477,12 +11883,12 @@ func IsTupleTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type namedTupleMemberData struct {
-	typeNodeBaseData
-	declarationBaseData
+	nodeBaseData
 	dotDotDotToken nodeRef // DotDotDotToken. Optional
 	name           nodeRef // IdentifierNode
 	questionToken  nodeRef // QuestionToken. Optional
 	typeField      nodeRef // TypeNode
+	symbol         sideRef // *Symbol
 }
 
 type NamedTupleMember struct{ Node }
@@ -12555,7 +11961,7 @@ func IsNamedTupleMember(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type optionalTypeNodeData struct {
-	typeNodeBaseData
+	nodeBaseData
 	typeField nodeRef // TypeNode
 }
 
@@ -12601,7 +12007,7 @@ func IsOptionalTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type restTypeNodeData struct {
-	typeNodeBaseData
+	nodeBaseData
 	typeField nodeRef // TypeNode
 }
 
@@ -12647,7 +12053,7 @@ func IsRestTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type parenthesizedTypeNodeData struct {
-	typeNodeBaseData
+	nodeBaseData
 	typeField nodeRef // TypeNode
 }
 
@@ -12696,7 +12102,15 @@ func IsParenthesizedTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type functionTypeNodeData struct {
-	functionOrConstructorTypeNodeBaseData
+	nodeBaseData
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	symbol         sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
 }
 
 type FunctionTypeNode struct{ Node }
@@ -12789,7 +12203,15 @@ func IsFunctionTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type constructorTypeNodeData struct {
-	functionOrConstructorTypeNodeBaseData
+	nodeBaseData
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	symbol         sideRef // *Symbol
+	modifiers      sideRef // *ModifierList. Optional
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
 }
 
 type ConstructorTypeNode struct{ Node }
@@ -12896,7 +12318,10 @@ func IsConstructorTypeNode(node Node) bool {
 
 type templateHeadData struct {
 	nodeBaseData
-	templateLiteralLikeNodeBaseData
+	text          textRef // string
+	tokenFlags    TokenFlags
+	rawText       textRef // string
+	templateFlags TokenFlags
 }
 
 type TemplateHead struct{ Node }
@@ -12941,7 +12366,10 @@ func IsTemplateHead(node Node) bool {
 
 type templateMiddleData struct {
 	nodeBaseData
-	templateLiteralLikeNodeBaseData
+	text          textRef // string
+	tokenFlags    TokenFlags
+	rawText       textRef // string
+	templateFlags TokenFlags
 }
 
 type TemplateMiddle struct{ Node }
@@ -12986,7 +12414,10 @@ func IsTemplateMiddle(node Node) bool {
 
 type templateTailData struct {
 	nodeBaseData
-	templateLiteralLikeNodeBaseData
+	text          textRef // string
+	tokenFlags    TokenFlags
+	rawText       textRef // string
+	templateFlags TokenFlags
 }
 
 type TemplateTail struct{ Node }
@@ -13030,7 +12461,7 @@ func IsTemplateTail(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type templateLiteralTypeNodeData struct {
-	typeNodeBaseData
+	nodeBaseData
 	head          nodeRef // TemplateHeadNode
 	templateSpans sideRef // *TemplateLiteralTypeSpanList
 }
@@ -13090,7 +12521,7 @@ func IsTemplateLiteralTypeNode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type templateLiteralTypeSpanData struct {
-	typeNodeBaseData
+	nodeBaseData
 	typeField nodeRef // TypeNode
 	literal   nodeRef // TemplateMiddleOrTail
 }
@@ -13150,10 +12581,10 @@ func IsTemplateLiteralTypeSpan(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type syntheticExpressionData struct {
-	expressionBaseData
+	nodeBaseData
+	tupleNameSource nodeRef // Node. Optional
 	typeField       sideRef // any
 	isSpread        bool
-	tupleNameSource nodeRef // Node. Optional
 }
 
 type SyntheticExpression struct{ Node }
@@ -13213,7 +12644,7 @@ func IsSyntheticExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type partiallyEmittedExpressionData struct {
-	leftHandSideExpressionBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 }
 
@@ -13270,11 +12701,11 @@ func IsPartiallyEmittedExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsxElementData struct {
-	primaryExpressionBaseData
-	compositeBaseData
+	nodeBaseData
 	openingElement nodeRef // JsxOpeningElementNode
-	children       sideRef // *JsxChildList
 	closingElement nodeRef // JsxClosingElementNode
+	facts          atomic.Uint32
+	children       sideRef // *JsxChildList
 }
 
 type JsxElement struct{ Node }
@@ -13342,9 +12773,9 @@ func IsJsxElement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsxAttributesData struct {
-	primaryExpressionBaseData
-	declarationBaseData
-	compositeBaseData
+	nodeBaseData
+	symbol     sideRef // *Symbol
+	facts      atomic.Uint32
 	properties sideRef // *JsxAttributeList
 }
 
@@ -13400,10 +12831,10 @@ func IsJsxAttributes(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsxNamespacedNameData struct {
-	expressionBaseData
-	compositeBaseData
+	nodeBaseData
 	namespace nodeRef // IdentifierNode
 	name      nodeRef // IdentifierNode
+	facts     atomic.Uint32
 }
 
 type JsxNamespacedName struct{ Node }
@@ -13456,11 +12887,11 @@ func IsJsxNamespacedName(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsxOpeningElementData struct {
-	expressionBaseData
-	compositeBaseData
+	nodeBaseData
 	tagName       nodeRef // JsxTagNameExpression
-	typeArguments sideRef // *TypeList. Optional
 	attributes    nodeRef // JsxAttributesNode
+	facts         atomic.Uint32
+	typeArguments sideRef // *TypeList. Optional
 }
 
 type JsxOpeningElement struct{ Node }
@@ -13528,11 +12959,11 @@ func IsJsxOpeningElement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsxSelfClosingElementData struct {
-	primaryExpressionBaseData
-	compositeBaseData
+	nodeBaseData
 	tagName       nodeRef // JsxTagNameExpression
-	typeArguments sideRef // *TypeList. Optional
 	attributes    nodeRef // JsxAttributesNode
+	facts         atomic.Uint32
+	typeArguments sideRef // *TypeList. Optional
 }
 
 type JsxSelfClosingElement struct{ Node }
@@ -13602,11 +13033,11 @@ func IsJsxSelfClosingElement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsxFragmentData struct {
-	primaryExpressionBaseData
-	compositeBaseData
+	nodeBaseData
 	openingFragment nodeRef // JsxOpeningFragmentNode
-	children        sideRef // *JsxChildList
 	closingFragment nodeRef // JsxClosingFragmentNode
+	facts           atomic.Uint32
+	children        sideRef // *JsxChildList
 }
 
 type JsxFragment struct{ Node }
@@ -13674,7 +13105,7 @@ func IsJsxFragment(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsxOpeningFragmentData struct {
-	expressionBaseData
+	nodeBaseData
 }
 
 type JsxOpeningFragment struct{ Node }
@@ -13701,7 +13132,7 @@ func IsJsxOpeningFragment(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsxClosingFragmentData struct {
-	expressionBaseData
+	nodeBaseData
 }
 
 type JsxClosingFragment struct{ Node }
@@ -13729,10 +13160,10 @@ func IsJsxClosingFragment(node Node) bool {
 
 type jsxAttributeData struct {
 	nodeBaseData
-	declarationBaseData
-	compositeBaseData
 	name        nodeRef // JsxAttributeName
 	initializer nodeRef // JsxAttributeValue. Optional
+	symbol      sideRef // *Symbol
+	facts       atomic.Uint32
 }
 
 type JsxAttribute struct{ Node }
@@ -13787,10 +13218,9 @@ func IsJsxAttribute(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsxSpreadAttributeData struct {
-	objectLiteralElementBaseData
 	nodeBaseData
-	declarationBaseData
 	expression nodeRef // Expression
+	symbol     sideRef // *Symbol
 }
 
 type JsxSpreadAttribute struct{ Node }
@@ -13897,7 +13327,7 @@ func IsJsxClosingElement(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsxExpressionData struct {
-	expressionBaseData
+	nodeBaseData
 	dotDotDotToken nodeRef // DotDotDotToken. Optional
 	expression     nodeRef // Expression. Optional
 }
@@ -13954,8 +13384,9 @@ func IsJsxExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsxTextData struct {
-	expressionBaseData
-	literalLikeNodeBaseData
+	nodeBaseData
+	text                          textRef // string
+	tokenFlags                    TokenFlags
 	containsOnlyTriviaWhiteSpaces bool
 }
 
@@ -14103,7 +13534,7 @@ func IsJSDoc(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocTypeExpressionData struct {
-	typeNodeBaseData
+	nodeBaseData
 	typeField nodeRef // TypeNode
 }
 
@@ -14152,7 +13583,7 @@ func IsJSDocTypeExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocNonNullableTypeData struct {
-	jsDocTypeBaseData
+	nodeBaseData
 	typeField nodeRef // TypeNode
 }
 
@@ -14201,7 +13632,7 @@ func IsJSDocNonNullableType(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocNullableTypeData struct {
-	jsDocTypeBaseData
+	nodeBaseData
 	typeField nodeRef // TypeNode
 }
 
@@ -14249,7 +13680,7 @@ func IsJSDocNullableType(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocAllTypeData struct {
-	jsDocTypeBaseData
+	nodeBaseData
 }
 
 type JSDocAllType struct{ Node }
@@ -14274,7 +13705,7 @@ func IsJSDocAllType(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocVariadicTypeData struct {
-	jsDocTypeBaseData
+	nodeBaseData
 	typeField nodeRef // TypeNode
 }
 
@@ -14322,7 +13753,7 @@ func IsJSDocVariadicType(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocOptionalTypeData struct {
-	jsDocTypeBaseData
+	nodeBaseData
 	typeField nodeRef // TypeNode
 }
 
@@ -14370,8 +13801,10 @@ func IsJSDocOptionalType(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocTypeTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName        nodeRef // IdentifierNode
 	typeExpression nodeRef // Node
+	comment        sideRef // *NodeList. Optional
 }
 
 type JSDocTypeTag struct{ Node }
@@ -14429,7 +13862,9 @@ func IsJSDocTypeTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocUnknownTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName nodeRef // IdentifierNode
+	comment sideRef // *NodeList. Optional
 }
 
 type JSDocUnknownTag struct{ Node }
@@ -14485,8 +13920,10 @@ func IsJSDocUnknownTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocTemplateTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName        nodeRef // IdentifierNode
 	constraint     nodeRef // Node
+	comment        sideRef // *NodeList. Optional
 	typeParameters sideRef // *TypeParameterList
 }
 
@@ -14560,8 +13997,10 @@ func IsJSDocTemplateTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocReturnTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName        nodeRef // IdentifierNode
 	typeExpression nodeRef // TypeNode. Optional
+	comment        sideRef // *NodeList. Optional
 }
 
 type JSDocReturnTag struct{ Node }
@@ -14623,7 +14062,9 @@ func IsJSDocReturnTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocPublicTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName nodeRef // IdentifierNode
+	comment sideRef // *NodeList. Optional
 }
 
 type JSDocPublicTag struct{ Node }
@@ -14678,7 +14119,9 @@ func IsJSDocPublicTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocPrivateTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName nodeRef // IdentifierNode
+	comment sideRef // *NodeList. Optional
 }
 
 type JSDocPrivateTag struct{ Node }
@@ -14734,7 +14177,9 @@ func IsJSDocPrivateTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocProtectedTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName nodeRef // IdentifierNode
+	comment sideRef // *NodeList. Optional
 }
 
 type JSDocProtectedTag struct{ Node }
@@ -14792,7 +14237,9 @@ func IsJSDocProtectedTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocReadonlyTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName nodeRef // IdentifierNode
+	comment sideRef // *NodeList. Optional
 }
 
 type JSDocReadonlyTag struct{ Node }
@@ -14848,7 +14295,9 @@ func IsJSDocReadonlyTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocOverrideTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName nodeRef // IdentifierNode
+	comment sideRef // *NodeList. Optional
 }
 
 type JSDocOverrideTag struct{ Node }
@@ -14904,7 +14353,9 @@ func IsJSDocOverrideTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocDeprecatedTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName nodeRef // IdentifierNode
+	comment sideRef // *NodeList. Optional
 }
 
 type JSDocDeprecatedTag struct{ Node }
@@ -14962,8 +14413,10 @@ func IsJSDocDeprecatedTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocSeeTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName        nodeRef // IdentifierNode
 	nameExpression nodeRef // TypeNode
+	comment        sideRef // *NodeList. Optional
 }
 
 type JSDocSeeTag struct{ Node }
@@ -15020,8 +14473,10 @@ func IsJSDocSeeTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocImplementsTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName   nodeRef // IdentifierNode
 	className nodeRef // ExpressionWithTypeArgumentsNode
+	comment   sideRef // *NodeList. Optional
 }
 
 type JSDocImplementsTag struct{ Node }
@@ -15088,8 +14543,10 @@ func IsJSDocImplementsTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocAugmentsTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName   nodeRef // IdentifierNode
 	className nodeRef // ExpressionWithTypeArgumentsNode
+	comment   sideRef // *NodeList. Optional
 }
 
 type JSDocAugmentsTag struct{ Node }
@@ -15154,8 +14611,10 @@ func IsJSDocAugmentsTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocSatisfiesTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName        nodeRef // IdentifierNode
 	typeExpression nodeRef // TypeNode
+	comment        sideRef // *NodeList. Optional
 }
 
 type JSDocSatisfiesTag struct{ Node }
@@ -15222,8 +14681,10 @@ func IsJSDocSatisfiesTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocThrowsTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName        nodeRef // IdentifierNode
 	typeExpression nodeRef // TypeNode. Optional
+	comment        sideRef // *NodeList. Optional
 }
 
 type JSDocThrowsTag struct{ Node }
@@ -15285,8 +14746,10 @@ func IsJSDocThrowsTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocThisTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName        nodeRef // IdentifierNode
 	typeExpression nodeRef // TypeNode
+	comment        sideRef // *NodeList. Optional
 }
 
 type JSDocThisTag struct{ Node }
@@ -15346,10 +14809,12 @@ func IsJSDocThisTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocImportTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName         nodeRef // IdentifierNode
 	importClause    nodeRef // ImportClauseNode. Optional
 	moduleSpecifier nodeRef // Expression
 	attributes      nodeRef // ImportAttributesNode. Optional
+	comment         sideRef // *NodeList. Optional
 }
 
 type JSDocImportTag struct{ Node }
@@ -15435,9 +14900,11 @@ func IsJSDocImportTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocCallbackTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName        nodeRef // IdentifierNode
 	typeExpression nodeRef // TypeNode
 	name           nodeRef // JSDocFullName. Optional
+	comment        sideRef // *NodeList. Optional
 }
 
 type JSDocCallbackTag struct{ Node }
@@ -15508,8 +14975,10 @@ func IsJSDocCallbackTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocOverloadTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName        nodeRef // IdentifierNode
 	typeExpression nodeRef // TypeNode
+	comment        sideRef // *NodeList. Optional
 }
 
 type JSDocOverloadTag struct{ Node }
@@ -15574,9 +15043,11 @@ func IsJSDocOverloadTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocTypedefTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName        nodeRef // IdentifierNode
 	typeExpression nodeRef // Node. Optional
 	name           nodeRef // JSDocFullName. Optional
+	comment        sideRef // *NodeList. Optional
 }
 
 type JSDocTypedefTag struct{ Node }
@@ -15643,9 +15114,14 @@ func IsJSDocTypedefTag(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocSignatureData struct {
-	jsDocTypeBaseData
-	declarationBaseData
-	functionLikeBaseData
+	nodeBaseData
+	nextContainer  nodeRef // Node
+	typeField      nodeRef // TypeNode. Optional
+	fullSignature  nodeRef // TypeNode. Optional
+	symbol         sideRef // *Symbol
+	locals         sideRef // SymbolTable
+	typeParameters sideRef // *TypeParameterList. Optional
+	parameters     sideRef // *ParameterList
 }
 
 type JSDocSignature struct{ Node }
@@ -15729,7 +15205,7 @@ func IsJSDocSignature(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocNameReferenceData struct {
-	typeNodeBaseData
+	nodeBaseData
 	name nodeRef // EntityName
 }
 
@@ -15786,16 +15262,20 @@ func IsSourceFile(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type moduleDeclarationData struct {
-	statementBaseData
-	declarationBaseData
-	exportableBaseData
-	modifiersBaseData
-	localsContainerBaseData
-	bodyBaseData
-	compositeBaseData
-	keyword    Kind
-	name       nodeRef // ModuleName
-	attributes nodeRef // TypeLiteralNodeNode. Optional
+	nodeBaseData
+	nextContainer nodeRef // Node
+	asteriskToken nodeRef // AsteriskToken. Optional
+	body          nodeRef // NodeBody. Optional
+	name          nodeRef // ModuleName
+	attributes    nodeRef // TypeLiteralNodeNode. Optional
+	flowNode      sideRef // *FlowNode
+	symbol        sideRef // *Symbol
+	localSymbol   sideRef // *Symbol
+	modifiers     sideRef // *ModifierList. Optional
+	locals        sideRef // SymbolTable
+	endFlowNode   sideRef // *FlowNode
+	facts         atomic.Uint32
+	keyword       Kind
 }
 
 type ModuleDeclaration struct{ Node }
@@ -15916,14 +15396,15 @@ func IsModuleDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type importEqualsDeclarationData struct {
-	statementBaseData
-	declarationBaseData
-	exportableBaseData
-	modifiersBaseData
-	compositeBaseData
-	isTypeOnly      bool
+	nodeBaseData
 	name            nodeRef // IdentifierNode
 	moduleReference nodeRef // ModuleReference
+	flowNode        sideRef // *FlowNode
+	symbol          sideRef // *Symbol
+	localSymbol     sideRef // *Symbol
+	modifiers       sideRef // *ModifierList. Optional
+	facts           atomic.Uint32
+	isTypeOnly      bool
 }
 
 type ImportEqualsDeclaration struct{ Node }
@@ -16017,14 +15498,15 @@ func IsImportEqualsDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type exportDeclarationData struct {
-	statementBaseData
-	declarationBaseData
-	modifiersBaseData
-	compositeBaseData
-	isTypeOnly      bool
+	nodeBaseData
 	exportClause    nodeRef // NamedExportBindings. Optional
 	moduleSpecifier nodeRef // Expression. Optional
 	attributes      nodeRef // ImportAttributesNode. Optional
+	flowNode        sideRef // *FlowNode
+	symbol          sideRef // *Symbol
+	modifiers       sideRef // *ModifierList. Optional
+	facts           atomic.Uint32
+	isTypeOnly      bool
 }
 
 type ExportDeclaration struct{ Node }
@@ -16122,11 +15604,12 @@ func IsExportDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type importTypeNodeData struct {
-	nodeWithTypeArgumentsBaseData
-	isTypeOf   bool
-	argument   nodeRef // TypeNode
-	attributes nodeRef // ImportAttributesNode. Optional
-	qualifier  nodeRef // EntityName. Optional
+	nodeBaseData
+	argument      nodeRef // TypeNode
+	attributes    nodeRef // ImportAttributesNode. Optional
+	qualifier     nodeRef // EntityName. Optional
+	typeArguments sideRef // *TypeList. Optional
+	isTypeOf      bool
 }
 
 type ImportTypeNode struct{ Node }
@@ -16199,12 +15682,12 @@ func IsImportTypeNode(node Node) bool {
 
 type importClauseData struct {
 	nodeBaseData
-	declarationBaseData
-	exportableBaseData
-	compositeBaseData
+	name          nodeRef // IdentifierNode. Optional
+	namedBindings nodeRef // NamedImportBindings. Optional
+	symbol        sideRef // *Symbol
+	localSymbol   sideRef // *Symbol
+	facts         atomic.Uint32
 	phaseModifier ImportPhaseModifierSyntaxKind // Optional
-	name          nodeRef                       // IdentifierNode. Optional
-	namedBindings nodeRef                       // NamedImportBindings. Optional
 }
 
 type ImportClause struct{ Node }
@@ -16279,12 +15762,12 @@ func IsImportClause(node Node) bool {
 
 type importSpecifierData struct {
 	nodeBaseData
-	declarationBaseData
-	exportableBaseData
-	compositeBaseData
-	isTypeOnly   bool
 	propertyName nodeRef // ModuleExportName. Optional
 	name         nodeRef // IdentifierNode
+	symbol       sideRef // *Symbol
+	localSymbol  sideRef // *Symbol
+	facts        atomic.Uint32
+	isTypeOnly   bool
 }
 
 type ImportSpecifier struct{ Node }
@@ -16352,7 +15835,8 @@ func IsImportSpecifier(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocTextData struct {
-	jsDocCommentBaseData
+	nodeBaseData
+	text sideRef // []string
 }
 
 type JSDocText struct{ Node }
@@ -16385,8 +15869,9 @@ func IsJSDocText(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocLinkData struct {
-	jsDocCommentBaseData
+	nodeBaseData
 	name nodeRef // EntityName. Optional
+	text sideRef // []string
 }
 
 type JSDocLink struct{ Node }
@@ -16437,8 +15922,9 @@ func IsJSDocLink(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocLinkPlainData struct {
-	jsDocCommentBaseData
+	nodeBaseData
 	name nodeRef // EntityName. Optional
+	text sideRef // []string
 }
 
 type JSDocLinkPlain struct{ Node }
@@ -16489,8 +15975,9 @@ func IsJSDocLinkPlain(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocLinkCodeData struct {
-	jsDocCommentBaseData
+	nodeBaseData
 	name nodeRef // EntityName. Optional
+	text sideRef // []string
 }
 
 type JSDocLinkCode struct{ Node }
@@ -16541,14 +16028,13 @@ func IsJSDocLinkCode(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type typeParameterDeclarationData struct {
-	typeSyntaxBaseData
 	nodeBaseData
-	declarationBaseData
-	modifiersBaseData
 	name        nodeRef // IdentifierNode
 	constraint  nodeRef // TypeNode. Optional
 	expression  nodeRef // Expression. Optional
 	defaultType nodeRef // TypeNode. Optional
+	symbol      sideRef // *Symbol
+	modifiers   sideRef // *ModifierList. Optional
 }
 
 type TypeParameterDeclaration struct{ Node }
@@ -16644,7 +16130,7 @@ func IsTypeParameterDeclaration(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type syntheticReferenceExpressionData struct {
-	expressionBaseData
+	nodeBaseData
 	expression nodeRef // Expression
 	thisArg    nodeRef // Expression
 }
@@ -16712,8 +16198,8 @@ func IsSyntheticReferenceExpression(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocTypeLiteralData struct {
-	jsDocTypeBaseData
-	declarationBaseData
+	nodeBaseData
+	symbol            sideRef // *Symbol
 	jsDocPropertyTags sideRef // []Node. Optional
 	isArrayType       bool
 }
@@ -16775,10 +16261,12 @@ func IsJSDocTypeLiteral(node Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type jsDocParameterOrPropertyTagData struct {
-	jsDocTagBaseData
+	nodeBaseData
+	tagName        nodeRef // IdentifierNode
 	name           nodeRef // EntityName
-	isBracketed    bool
 	typeExpression nodeRef // TypeNode. Optional
+	comment        sideRef // *NodeList. Optional
+	isBracketed    bool
 	isNameFirst    bool
 }
 
@@ -17992,43 +17480,43 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
 		return n.computeSubtreeFacts()
 	case KindQualifiedName:
-		return (*qualifiedNameData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*qualifiedNameData)(n.rec()).facts, n)
 	case KindComputedPropertyName:
-		return (*computedPropertyNameData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*computedPropertyNameData)(n.rec()).facts, n)
 	case KindDecorator:
-		return (*decoratorData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*decoratorData)(n.rec()).facts, n)
 	case KindEmptyStatement:
 		return n.computeSubtreeFacts()
 	case KindIfStatement:
-		return (*ifStatementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*ifStatementData)(n.rec()).facts, n)
 	case KindDoStatement:
-		return (*doStatementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*doStatementData)(n.rec()).facts, n)
 	case KindWhileStatement:
-		return (*whileStatementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*whileStatementData)(n.rec()).facts, n)
 	case KindForStatement:
-		return (*forStatementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*forStatementData)(n.rec()).facts, n)
 	case KindForInStatement, KindForOfStatement:
-		return (*forInOrOfStatementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*forInOrOfStatementData)(n.rec()).facts, n)
 	case KindBreakStatement:
 		return n.computeSubtreeFacts()
 	case KindContinueStatement:
 		return n.computeSubtreeFacts()
 	case KindReturnStatement:
-		return (*returnStatementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*returnStatementData)(n.rec()).facts, n)
 	case KindWithStatement:
-		return (*withStatementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*withStatementData)(n.rec()).facts, n)
 	case KindSwitchStatement:
-		return (*switchStatementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*switchStatementData)(n.rec()).facts, n)
 	case KindCaseBlock:
-		return (*caseBlockData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*caseBlockData)(n.rec()).facts, n)
 	case KindCaseClause, KindDefaultClause:
-		return (*caseOrDefaultClauseData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*caseOrDefaultClauseData)(n.rec()).facts, n)
 	case KindThrowStatement:
-		return (*throwStatementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*throwStatementData)(n.rec()).facts, n)
 	case KindTryStatement:
-		return (*tryStatementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*tryStatementData)(n.rec()).facts, n)
 	case KindCatchClause:
-		return (*catchClauseData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*catchClauseData)(n.rec()).facts, n)
 	case KindDebuggerStatement:
 		return n.computeSubtreeFacts()
 	case KindLabeledStatement:
@@ -18036,89 +17524,89 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindExpressionStatement:
 		return n.computeSubtreeFacts()
 	case KindBlock:
-		return (*blockData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*blockData)(n.rec()).facts, n)
 	case KindVariableStatement:
-		return (*variableStatementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*variableStatementData)(n.rec()).facts, n)
 	case KindVariableDeclaration:
-		return (*variableDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*variableDeclarationData)(n.rec()).facts, n)
 	case KindVariableDeclarationList:
-		return (*variableDeclarationListData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*variableDeclarationListData)(n.rec()).facts, n)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
-		return (*bindingPatternData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*bindingPatternData)(n.rec()).facts, n)
 	case KindParameter:
-		return (*parameterDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*parameterDeclarationData)(n.rec()).facts, n)
 	case KindBindingElement:
-		return (*bindingElementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*bindingElementData)(n.rec()).facts, n)
 	case KindMissingDeclaration:
 		return n.computeSubtreeFacts()
 	case KindFunctionDeclaration:
-		return (*functionDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*functionDeclarationData)(n.rec()).facts, n)
 	case KindClassDeclaration:
-		return (*classDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*classDeclarationData)(n.rec()).facts, n)
 	case KindClassExpression:
-		return (*classExpressionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*classExpressionData)(n.rec()).facts, n)
 	case KindHeritageClause:
-		return (*heritageClauseData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*heritageClauseData)(n.rec()).facts, n)
 	case KindInterfaceDeclaration:
 		return n.computeSubtreeFacts()
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
 		return n.computeSubtreeFacts()
 	case KindEnumMember:
-		return (*enumMemberData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*enumMemberData)(n.rec()).facts, n)
 	case KindEnumDeclaration:
-		return (*enumDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*enumDeclarationData)(n.rec()).facts, n)
 	case KindModuleBlock:
-		return (*moduleBlockData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*moduleBlockData)(n.rec()).facts, n)
 	case KindNotEmittedStatement:
 		return n.computeSubtreeFacts()
 	case KindNotEmittedTypeElement:
 		return n.computeSubtreeFacts()
 	case KindImportDeclaration, KindJSImportDeclaration:
-		return (*importDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*importDeclarationData)(n.rec()).facts, n)
 	case KindExternalModuleReference:
 		return n.computeSubtreeFacts()
 	case KindNamespaceImport:
 		return n.computeSubtreeFacts()
 	case KindNamedImports:
-		return (*namedImportsData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*namedImportsData)(n.rec()).facts, n)
 	case KindExportAssignment:
-		return (*exportAssignmentData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*exportAssignmentData)(n.rec()).facts, n)
 	case KindNamespaceExportDeclaration:
 		return n.computeSubtreeFacts()
 	case KindNamespaceExport:
 		return n.computeSubtreeFacts()
 	case KindNamedExports:
-		return (*namedExportsData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*namedExportsData)(n.rec()).facts, n)
 	case KindExportSpecifier:
-		return (*exportSpecifierData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*exportSpecifierData)(n.rec()).facts, n)
 	case KindCallSignature:
 		return n.computeSubtreeFacts()
 	case KindConstructSignature:
 		return n.computeSubtreeFacts()
 	case KindConstructor:
-		return (*constructorDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*constructorDeclarationData)(n.rec()).facts, n)
 	case KindGetAccessor:
-		return (*getAccessorDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*getAccessorDeclarationData)(n.rec()).facts, n)
 	case KindSetAccessor:
-		return (*setAccessorDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*setAccessorDeclarationData)(n.rec()).facts, n)
 	case KindIndexSignature:
 		return n.computeSubtreeFacts()
 	case KindMethodSignature:
 		return n.computeSubtreeFacts()
 	case KindMethodDeclaration:
-		return (*methodDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*methodDeclarationData)(n.rec()).facts, n)
 	case KindPropertySignature:
 		return n.computeSubtreeFacts()
 	case KindPropertyDeclaration:
-		return (*propertyDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*propertyDeclarationData)(n.rec()).facts, n)
 	case KindSemicolonClassElement:
 		return n.computeSubtreeFacts()
 	case KindClassStaticBlockDeclaration:
-		return (*classStaticBlockDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*classStaticBlockDeclarationData)(n.rec()).facts, n)
 	case KindOmittedExpression:
 		return n.computeSubtreeFacts()
 	case KindBinaryExpression:
-		return (*binaryExpressionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*binaryExpressionData)(n.rec()).facts, n)
 	case KindPrefixUnaryExpression:
 		return n.computeSubtreeFacts()
 	case KindPostfixUnaryExpression:
@@ -18126,47 +17614,47 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindYieldExpression:
 		return n.computeSubtreeFacts()
 	case KindArrowFunction:
-		return (*arrowFunctionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*arrowFunctionData)(n.rec()).facts, n)
 	case KindFunctionExpression:
-		return (*functionExpressionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*functionExpressionData)(n.rec()).facts, n)
 	case KindAsExpression:
 		return n.computeSubtreeFacts()
 	case KindSatisfiesExpression:
 		return n.computeSubtreeFacts()
 	case KindConditionalExpression:
-		return (*conditionalExpressionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*conditionalExpressionData)(n.rec()).facts, n)
 	case KindPropertyAccessExpression:
-		return (*propertyAccessExpressionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*propertyAccessExpressionData)(n.rec()).facts, n)
 	case KindElementAccessExpression:
-		return (*elementAccessExpressionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*elementAccessExpressionData)(n.rec()).facts, n)
 	case KindCallExpression:
-		return (*callExpressionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*callExpressionData)(n.rec()).facts, n)
 	case KindNewExpression:
-		return (*newExpressionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*newExpressionData)(n.rec()).facts, n)
 	case KindMetaProperty:
-		return (*metaPropertyData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*metaPropertyData)(n.rec()).facts, n)
 	case KindNonNullExpression:
 		return n.computeSubtreeFacts()
 	case KindSpreadElement:
 		return n.computeSubtreeFacts()
 	case KindTemplateExpression:
-		return (*templateExpressionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*templateExpressionData)(n.rec()).facts, n)
 	case KindTemplateSpan:
 		return n.computeSubtreeFacts()
 	case KindTaggedTemplateExpression:
-		return (*taggedTemplateExpressionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*taggedTemplateExpressionData)(n.rec()).facts, n)
 	case KindParenthesizedExpression:
 		return n.computeSubtreeFacts()
 	case KindArrayLiteralExpression:
-		return (*arrayLiteralExpressionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*arrayLiteralExpressionData)(n.rec()).facts, n)
 	case KindObjectLiteralExpression:
-		return (*objectLiteralExpressionData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*objectLiteralExpressionData)(n.rec()).facts, n)
 	case KindSpreadAssignment:
 		return n.computeSubtreeFacts()
 	case KindPropertyAssignment:
-		return (*propertyAssignmentData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*propertyAssignmentData)(n.rec()).facts, n)
 	case KindShorthandPropertyAssignment:
-		return (*shorthandPropertyAssignmentData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*shorthandPropertyAssignmentData)(n.rec()).facts, n)
 	case KindDeleteExpression:
 		return n.computeSubtreeFacts()
 	case KindTypeOfExpression:
@@ -18194,7 +17682,7 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindTypeReference:
 		return n.computeSubtreeFacts()
 	case KindExpressionWithTypeArguments:
-		return (*expressionWithTypeArgumentsData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*expressionWithTypeArgumentsData)(n.rec()).facts, n)
 	case KindLiteralType:
 		return n.computeSubtreeFacts()
 	case KindThisType:
@@ -18202,9 +17690,9 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindTypePredicate:
 		return n.computeSubtreeFacts()
 	case KindImportAttribute:
-		return (*importAttributeData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*importAttributeData)(n.rec()).facts, n)
 	case KindImportAttributes:
-		return (*importAttributesData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*importAttributesData)(n.rec()).facts, n)
 	case KindTypeQuery:
 		return n.computeSubtreeFacts()
 	case KindMappedType:
@@ -18234,23 +17722,23 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindPartiallyEmittedExpression:
 		return n.computeSubtreeFacts()
 	case KindJsxElement:
-		return (*jsxElementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*jsxElementData)(n.rec()).facts, n)
 	case KindJsxAttributes:
-		return (*jsxAttributesData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*jsxAttributesData)(n.rec()).facts, n)
 	case KindJsxNamespacedName:
-		return (*jsxNamespacedNameData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*jsxNamespacedNameData)(n.rec()).facts, n)
 	case KindJsxOpeningElement:
-		return (*jsxOpeningElementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*jsxOpeningElementData)(n.rec()).facts, n)
 	case KindJsxSelfClosingElement:
-		return (*jsxSelfClosingElementData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*jsxSelfClosingElementData)(n.rec()).facts, n)
 	case KindJsxFragment:
-		return (*jsxFragmentData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*jsxFragmentData)(n.rec()).facts, n)
 	case KindJsxOpeningFragment:
 		return n.computeSubtreeFacts()
 	case KindJsxClosingFragment:
 		return n.computeSubtreeFacts()
 	case KindJsxAttribute:
-		return (*jsxAttributeData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*jsxAttributeData)(n.rec()).facts, n)
 	case KindJsxSpreadAttribute:
 		return n.computeSubtreeFacts()
 	case KindJsxClosingElement:
@@ -18318,19 +17806,19 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindJSDocNameReference:
 		return n.computeSubtreeFacts()
 	case KindSourceFile:
-		return (*SourceFile)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*SourceFile)(n.rec()).facts, n)
 	case KindModuleDeclaration:
-		return (*moduleDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*moduleDeclarationData)(n.rec()).facts, n)
 	case KindImportEqualsDeclaration:
-		return (*importEqualsDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*importEqualsDeclarationData)(n.rec()).facts, n)
 	case KindExportDeclaration:
-		return (*exportDeclarationData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*exportDeclarationData)(n.rec()).facts, n)
 	case KindImportType:
 		return n.computeSubtreeFacts()
 	case KindImportClause:
-		return (*importClauseData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*importClauseData)(n.rec()).facts, n)
 	case KindImportSpecifier:
-		return (*importSpecifierData)(n.rec()).subtreeFactsWorker(n)
+		return subtreeFactsWorker(&(*importSpecifierData)(n.rec()).facts, n)
 	case KindJSDocText:
 		return n.computeSubtreeFacts()
 	case KindJSDocLink:
