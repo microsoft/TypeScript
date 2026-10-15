@@ -25,19 +25,20 @@ func TestSymbolAccessors(t *testing.T) {
 	assert.Equal(t, symbol.CheckFlags(), ast.CheckFlags(0))
 	assert.Equal(t, symbol.Name(), "")
 	assert.Assert(t, symbol.Declarations() == nil)
-	assert.Assert(t, symbol.ValueDeclaration() == nil)
+	assert.Assert(t, symbol.ValueDeclaration().IsNil())
 	assert.Assert(t, symbol.Members() == nil)
 	assert.Assert(t, symbol.Exports() == nil)
 	assert.Assert(t, symbol.Parent() == nil)
 	assert.Assert(t, symbol.ExportSymbol() == nil)
 
-	declaration := &ast.Node{}
-	otherDeclaration := &ast.Node{}
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	declaration := factory.NewIdentifier("a")
+	otherDeclaration := factory.NewIdentifier("b")
 	member := ast.NewSymbol()
 	export := ast.NewSymbol()
 	parent := ast.NewSymbol()
 	exportSymbol := ast.NewSymbol()
-	declarations := []*ast.Node{declaration}
+	declarations := []ast.Node{declaration}
 	members := ast.SymbolTable{"member": member}
 	exports := ast.SymbolTable{"export": export}
 
@@ -74,7 +75,7 @@ func TestSymbolAccessors(t *testing.T) {
 	symbol.SetCheckFlags(0)
 	symbol.SetName("")
 	symbol.SetDeclarations(nil)
-	symbol.SetValueDeclaration(nil)
+	symbol.SetValueDeclaration(ast.Node{})
 	symbol.SetMembers(nil, &arena)
 	symbol.SetExports(nil, &arena)
 	symbol.SetParent(nil)
@@ -84,7 +85,7 @@ func TestSymbolAccessors(t *testing.T) {
 	assert.Equal(t, symbol.CheckFlags(), ast.CheckFlags(0))
 	assert.Equal(t, symbol.Name(), "")
 	assert.Assert(t, symbol.Declarations() == nil)
-	assert.Assert(t, symbol.ValueDeclaration() == nil)
+	assert.Assert(t, symbol.ValueDeclaration().IsNil())
 	assert.Assert(t, symbol.Members() == nil)
 	assert.Assert(t, symbol.Exports() == nil)
 	assert.Assert(t, symbol.Parent() == nil)
@@ -118,7 +119,7 @@ func TestSymbolTableInitialization(t *testing.T) {
 
 func TestSymbolHotRecordLayout(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, unsafe.Sizeof(ast.SymbolWithData{}), unsafe.Sizeof(ast.Symbol{})+8*unsafe.Sizeof((*ast.Node)(nil)))
+	assert.Equal(t, unsafe.Sizeof(ast.SymbolWithData{}), unsafe.Sizeof(ast.Symbol{})+7*unsafe.Sizeof(uintptr(0))+unsafe.Sizeof(ast.Node{}))
 }
 
 func TestSymbolNilExtraFieldsDoNotAllocate(t *testing.T) { //nolint:paralleltest

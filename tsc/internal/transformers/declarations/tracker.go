@@ -13,14 +13,14 @@ type SymbolTrackerImpl struct {
 	resolver      printer.EmitResolver
 	state         *SymbolTrackerSharedState
 	host          DeclarationEmitHost
-	fallbackStack []*ast.Node
+	fallbackStack []ast.Node
 
 	// For detecting class expression self-references during member serialization.
 	// When set, TrackSymbol will record usage without reporting accessibility errors.
 	watchedClassSymbol *ast.Symbol
 	classSymbolTracked bool
 
-	getIsolatedDeclarationError func(node *ast.Node) *ast.Diagnostic
+	getIsolatedDeclarationError func(node ast.Node) *ast.Diagnostic
 }
 
 // PopErrorFallbackNode implements checker.SymbolTracker.
@@ -29,14 +29,14 @@ func (s *SymbolTrackerImpl) PopErrorFallbackNode() {
 }
 
 // PushErrorFallbackNode implements checker.SymbolTracker.
-func (s *SymbolTrackerImpl) PushErrorFallbackNode(node *ast.Node) {
+func (s *SymbolTrackerImpl) PushErrorFallbackNode(node ast.Node) {
 	s.fallbackStack = append(s.fallbackStack, node)
 }
 
 // ReportCyclicStructureError implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) ReportCyclicStructureError() {
 	location := s.errorLocation()
-	if location != nil {
+	if !location.IsNil() {
 		s.state.addDiagnostic(createDiagnosticForNode(location, diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary, s.errorDeclarationNameWithFallback()))
 	}
 }
@@ -44,7 +44,7 @@ func (s *SymbolTrackerImpl) ReportCyclicStructureError() {
 // ReportInaccessibleThisError implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) ReportInaccessibleThisError() {
 	location := s.errorLocation()
-	if location != nil {
+	if !location.IsNil() {
 		s.state.addDiagnostic(createDiagnosticForNode(location, diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary, s.errorDeclarationNameWithFallback(), "this"))
 	}
 }
@@ -52,39 +52,39 @@ func (s *SymbolTrackerImpl) ReportInaccessibleThisError() {
 // ReportInaccessibleUniqueSymbolError implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) ReportInaccessibleUniqueSymbolError() {
 	location := s.errorLocation()
-	if location != nil {
+	if !location.IsNil() {
 		s.state.addDiagnostic(createDiagnosticForNode(location, diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary, s.errorDeclarationNameWithFallback(), "unique symbol"))
 	}
 }
 
-func (s *SymbolTrackerImpl) isBoundExpando(node *ast.Node) bool {
-	if !(ast.IsExpandoPropertyDeclaration(node) && ast.IsPropertyAccessExpression(node.AsBinaryExpression().Left)) {
+func (s *SymbolTrackerImpl) isBoundExpando(node ast.Node) bool {
+	if !(ast.IsExpandoPropertyDeclaration(node) && ast.IsPropertyAccessExpression(node.AsBinaryExpression().Left())) {
 		return false
 	}
 	// Match transformExpandoAssignment: only an assignment rooted at an identifier (`f.x = ...`) can bind an expando
 	// property; `this.x = ...`, `super.x = ...`, `f().x = ...` and the like have no referenced declaration.
-	ns := ast.GetLeftmostAccessExpression(node.AsBinaryExpression().Left)
+	ns := ast.GetLeftmostAccessExpression(node.AsBinaryExpression().Left())
 	if !ast.IsIdentifier(ns) {
 		return false
 	}
 	ref := s.resolver.GetReferencedValueDeclarationUnsafe(ns)
-	if ref == nil {
+	if ref.IsNil() {
 		return false
 	}
 	return s.resolver.IsExpandoFunctionDeclarationUnsafe(ref)
 }
 
-func (s *SymbolTrackerImpl) isChildOfBoundExpando(node *ast.Node) bool {
-	return ast.FindAncestorOrQuit(node, func(n *ast.Node) ast.FindAncestorResult {
+func (s *SymbolTrackerImpl) isChildOfBoundExpando(node ast.Node) bool {
+	return !ast.FindAncestorOrQuit(node, func(n ast.Node) ast.FindAncestorResult {
 		if ast.IsSourceFile(n) || ast.IsBlock(n) {
 			return ast.FindAncestorQuit
 		}
 		return ast.ToFindAncestorResult(s.isBoundExpando(n))
-	}) != nil
+	}).IsNil()
 }
 
 // ReportInferenceFallback implements checker.SymbolTracker.
-func (s *SymbolTrackerImpl) ReportInferenceFallback(node *ast.Node) {
+func (s *SymbolTrackerImpl) ReportInferenceFallback(node ast.Node) {
 	if !s.state.isolatedDeclarations {
 		return
 	}
@@ -102,7 +102,7 @@ func (s *SymbolTrackerImpl) ReportInferenceFallback(node *ast.Node) {
 // ReportLikelyUnsafeImportRequiredError implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) ReportLikelyUnsafeImportRequiredError(specifier string, symbolName string) {
 	location := s.errorLocation()
-	if location != nil {
+	if !location.IsNil() {
 		if symbolName != "" {
 			s.state.addDiagnostic(createDiagnosticForNode(location, diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_2_from_1_This_is_likely_not_portable_A_type_annotation_is_necessary, s.errorDeclarationNameWithFallback(), specifier, symbolName))
 		} else {
@@ -114,16 +114,16 @@ func (s *SymbolTrackerImpl) ReportLikelyUnsafeImportRequiredError(specifier stri
 // ReportNonSerializableProperty implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) ReportNonSerializableProperty(propertyName string) {
 	location := s.errorLocation()
-	if location != nil {
+	if !location.IsNil() {
 		s.state.addDiagnostic(createDiagnosticForNode(location, diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName))
 	}
 }
 
 // ReportNonlocalAugmentation implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) ReportNonlocalAugmentation(containingFile *ast.SourceFile, parentSymbol *ast.Symbol, augmentingSymbol *ast.Symbol) {
-	primaryDeclaration := core.Find(parentSymbol.Declarations(), func(d *ast.Node) bool { return ast.GetSourceFileOfNode(d) == containingFile })
-	augmentingDeclarations := core.Filter(augmentingSymbol.Declarations(), func(d *ast.Node) bool { return ast.GetSourceFileOfNode(d) != containingFile })
-	if primaryDeclaration != nil && len(augmentingDeclarations) > 0 {
+	primaryDeclaration := core.Find(parentSymbol.Declarations(), func(d ast.Node) bool { return ast.GetSourceFileOfNode(d) == containingFile })
+	augmentingDeclarations := core.Filter(augmentingSymbol.Declarations(), func(d ast.Node) bool { return ast.GetSourceFileOfNode(d) != containingFile })
+	if !primaryDeclaration.IsNil() && len(augmentingDeclarations) > 0 {
 		for _, augmentations := range augmentingDeclarations {
 			diag := createDiagnosticForNode(augmentations, diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized)
 			related := createDiagnosticForNode(primaryDeclaration, diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file)
@@ -136,9 +136,9 @@ func (s *SymbolTrackerImpl) ReportNonlocalAugmentation(containingFile *ast.Sourc
 // ReportPrivateInBaseOfClassExpression implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) ReportPrivateInBaseOfClassExpression(propertyName string) {
 	location := s.errorLocation()
-	if location != nil {
+	if !location.IsNil() {
 		diag := createDiagnosticForNode(location, diagnostics.Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected, propertyName)
-		if ast.IsVariableDeclaration(location.Parent) {
+		if ast.IsVariableDeclaration(location.Parent()) {
 			related := createDiagnosticForNode(location, diagnostics.Add_a_type_annotation_to_the_variable_0, s.errorDeclarationNameWithFallback())
 			diag.AddRelatedInfo(related)
 		}
@@ -149,35 +149,35 @@ func (s *SymbolTrackerImpl) ReportPrivateInBaseOfClassExpression(propertyName st
 // ReportTruncationError implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) ReportTruncationError() {
 	location := s.errorLocation()
-	if location != nil {
+	if !location.IsNil() {
 		s.state.addDiagnostic(createDiagnosticForNode(location, diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed))
 	}
 }
 
-func (s *SymbolTrackerImpl) errorFallbackNode() *ast.Node {
+func (s *SymbolTrackerImpl) errorFallbackNode() ast.Node {
 	if len(s.fallbackStack) >= 1 {
 		return s.fallbackStack[len(s.fallbackStack)-1]
 	}
-	return nil
+	return ast.Node{}
 }
 
-func (s *SymbolTrackerImpl) errorLocation() *ast.Node {
+func (s *SymbolTrackerImpl) errorLocation() ast.Node {
 	location := s.state.errorNameNode
-	if location == nil {
+	if location.IsNil() {
 		location = s.errorFallbackNode()
 	}
 	return location
 }
 
 func (s *SymbolTrackerImpl) errorDeclarationNameWithFallback() string {
-	if s.state.errorNameNode != nil {
+	if !s.state.errorNameNode.IsNil() {
 		return scanner.DeclarationNameToString(s.state.errorNameNode)
 	}
-	if s.errorFallbackNode() != nil && ast.GetNameOfDeclaration(s.errorFallbackNode()) != nil {
+	if !s.errorFallbackNode().IsNil() && !ast.GetNameOfDeclaration(s.errorFallbackNode()).IsNil() {
 		return scanner.DeclarationNameToString(ast.GetNameOfDeclaration(s.errorFallbackNode()))
 	}
-	if s.errorFallbackNode() != nil && ast.IsExportAssignment(s.errorFallbackNode()) {
-		if s.errorFallbackNode().AsExportAssignment().IsExportEquals {
+	if !s.errorFallbackNode().IsNil() && ast.IsExportAssignment(s.errorFallbackNode()) {
+		if s.errorFallbackNode().AsExportAssignment().IsExportEquals() {
 			return "export="
 		}
 		return "default"
@@ -186,7 +186,7 @@ func (s *SymbolTrackerImpl) errorDeclarationNameWithFallback() string {
 }
 
 // TrackSymbol implements checker.SymbolTracker.
-func (s *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags) bool {
+func (s *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclaration ast.Node, meaning ast.SymbolFlags) bool {
 	if symbol.Flags()&ast.SymbolFlagsTypeParameter != 0 {
 		return false
 	}
@@ -218,10 +218,10 @@ func (s *SymbolTrackerImpl) handleSymbolAccessibilityError(symbolAccessibilityRe
 		if errorInfo != nil {
 			info := *errorInfo
 			diagNode := symbolAccessibilityResult.ErrorNode
-			if diagNode == nil {
+			if diagNode.IsNil() {
 				diagNode = errorInfo.errorNode
 			}
-			if info.typeName != nil {
+			if !info.typeName.IsNil() {
 				s.state.addDiagnostic(createDiagnosticForNode(diagNode, info.diagnosticMessage, scanner.GetTextOfNode(info.typeName), symbolAccessibilityResult.ErrorSymbolName, symbolAccessibilityResult.ErrorModuleName))
 			} else {
 				s.state.addDiagnostic(createDiagnosticForNode(diagNode, info.diagnosticMessage, symbolAccessibilityResult.ErrorSymbolName, symbolAccessibilityResult.ErrorModuleName))
@@ -232,20 +232,20 @@ func (s *SymbolTrackerImpl) handleSymbolAccessibilityError(symbolAccessibilityRe
 	return false
 }
 
-func createDiagnosticForNode(node *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
+func createDiagnosticForNode(node ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 	return checker.NewDiagnosticForNode(node, message, args...)
 }
 
 type SymbolTrackerSharedState struct {
-	lateMarkedStatements             []*ast.Node
+	lateMarkedStatements             []ast.Node
 	diagnostics                      []*ast.Diagnostic
 	getSymbolAccessibilityDiagnostic GetSymbolAccessibilityDiagnostic
-	errorNameNode                    *ast.Node
+	errorNameNode                    ast.Node
 	isolatedDeclarations             bool
 	stripInternal                    bool
 	currentSourceFile                *ast.SourceFile
 	resolver                         printer.EmitResolver
-	reportExpandoFunctionErrors      func(node *ast.Node)
+	reportExpandoFunctionErrors      func(node ast.Node)
 }
 
 func (s *SymbolTrackerSharedState) addDiagnostic(diag *ast.Diagnostic) {

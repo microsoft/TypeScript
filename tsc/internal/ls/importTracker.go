@@ -43,13 +43,13 @@ type ExportInfo struct {
 }
 
 type LocationAndSymbol struct {
-	importLocation *ast.Node
+	importLocation ast.Node
 	importSymbol   *ast.Symbol
 }
 
 type ImportsResult struct {
 	importSearches   []LocationAndSymbol
-	singleReferences []*ast.Node
+	singleReferences []ast.Node
 	indirectUsers    []*ast.SourceFile
 }
 
@@ -66,7 +66,7 @@ const (
 // ModuleReference represents a reference to a module, either via import, <reference>, or implicit reference
 type ModuleReference struct {
 	kind            ModuleReferenceKind
-	literal         *ast.Node // for import and implicit kinds (StringLiteralLike)
+	literal         ast.Node // for import and implicit kinds (StringLiteralLike)
 	referencingFile *ast.SourceFile
 	ref             *ast.FileReference // for reference kind
 }
@@ -82,13 +82,13 @@ func createImportTracker(ctx context.Context, program *compiler.Program, sourceF
 }
 
 // Returns a map from a module symbol to all import statements that directly reference the module
-func getDirectImportsMap(ctx context.Context, program *compiler.Program, sourceFiles []*ast.SourceFile, checker *checker.Checker) map[*ast.Symbol][]*ast.Node {
-	result := make(map[*ast.Symbol][]*ast.Node)
+func getDirectImportsMap(ctx context.Context, program *compiler.Program, sourceFiles []*ast.SourceFile, checker *checker.Checker) map[*ast.Symbol][]ast.Node {
+	result := make(map[*ast.Symbol][]ast.Node)
 	for _, sourceFile := range sourceFiles {
 		if ctx.Err() != nil {
 			return result
 		}
-		forEachImport(program, sourceFile, func(importDecl *ast.Node, moduleSpecifier *ast.Node) {
+		forEachImport(program, sourceFile, func(importDecl ast.Node, moduleSpecifier ast.Node) {
 			if moduleSymbol := checker.GetSymbolAtLocation(moduleSpecifier); moduleSymbol != nil {
 				result[moduleSymbol] = append(result[moduleSymbol], importDecl)
 			}
@@ -98,17 +98,17 @@ func getDirectImportsMap(ctx context.Context, program *compiler.Program, sourceF
 }
 
 // Calls `action` for each import, re-export, or require() in a file
-func forEachImport(program *compiler.Program, sourceFile *ast.SourceFile, action func(importStatement *ast.Node, imported *ast.Node)) {
-	var implicitImports []*ast.LiteralLikeNode
+func forEachImport(program *compiler.Program, sourceFile *ast.SourceFile, action func(importStatement ast.Node, imported ast.Node)) {
+	var implicitImports []ast.LiteralLikeNode
 	_, jsxSpecifier := program.GetJSXRuntimeImportSpecifier(sourceFile.PathKey())
-	if jsxSpecifier != nil {
+	if !jsxSpecifier.IsNil() {
 		implicitImports = append(implicitImports, jsxSpecifier)
 	}
 	importHelpersSpecifier := program.GetImportHelpersImportSpecifier(sourceFile.PathKey())
-	if importHelpersSpecifier != nil {
+	if !importHelpersSpecifier.IsNil() {
 		implicitImports = append(implicitImports, importHelpersSpecifier)
 	}
-	if sourceFile.ExternalModuleIndicator != nil || len(sourceFile.Imports())+len(implicitImports) != 0 {
+	if !sourceFile.ExternalModuleIndicator.IsNil() || len(sourceFile.Imports())+len(implicitImports) != 0 {
 		for _, i := range sourceFile.Imports() {
 			action(ast.ImportFromModuleSpecifier(i), i)
 		}
@@ -116,15 +116,15 @@ func forEachImport(program *compiler.Program, sourceFile *ast.SourceFile, action
 			action(ast.ImportFromModuleSpecifier(i), i)
 		}
 	} else {
-		forEachPossibleImportOrExportStatement(sourceFile.AsNode(), func(node *ast.Node) bool {
-			switch node.Kind {
+		forEachPossibleImportOrExportStatement(sourceFile.AsNode(), func(node ast.Node) bool {
+			switch node.Kind() {
 			case ast.KindExportDeclaration, ast.KindImportDeclaration, ast.KindJSImportDeclaration:
-				if specifier := node.ModuleSpecifier(); specifier != nil && ast.IsStringLiteral(specifier) {
+				if specifier := node.ModuleSpecifier(); !specifier.IsNil() && ast.IsStringLiteral(specifier) {
 					action(node, specifier)
 				}
 			case ast.KindImportEqualsDeclaration:
 				if isExternalModuleImportEquals(node) {
-					action(node, node.AsImportEqualsDeclaration().ModuleReference.Expression())
+					action(node, node.AsImportEqualsDeclaration().ModuleReference().Expression())
 				}
 			}
 			return false
@@ -132,7 +132,7 @@ func forEachImport(program *compiler.Program, sourceFile *ast.SourceFile, action
 	}
 }
 
-func forEachPossibleImportOrExportStatement(sourceFileLike *ast.Node, action func(statement *ast.Node) bool) bool {
+func forEachPossibleImportOrExportStatement(sourceFileLike ast.Node, action func(statement ast.Node) bool) bool {
 	for _, statement := range getStatementsOfSourceFileLike(sourceFileLike) {
 		if action(statement) || isAmbientModuleDeclaration(statement) && forEachPossibleImportOrExportStatement(statement, action) {
 			return true
@@ -141,27 +141,27 @@ func forEachPossibleImportOrExportStatement(sourceFileLike *ast.Node, action fun
 	return false
 }
 
-func getSourceFileLikeForImportDeclaration(node *ast.Node) *ast.Node {
+func getSourceFileLikeForImportDeclaration(node ast.Node) ast.Node {
 	if ast.IsCallExpression(node) || ast.IsJSDocImportTag(node) {
 		return ast.GetSourceFileOfNode(node).AsNode()
 	}
-	parent := node.Parent
+	parent := node.Parent()
 	if ast.IsSourceFile(parent) {
 		return parent
 	}
-	debug.Assert(ast.IsModuleBlock(parent) && isAmbientModuleDeclaration(parent.Parent))
-	return parent.Parent
+	debug.Assert(ast.IsModuleBlock(parent) && isAmbientModuleDeclaration(parent.Parent()))
+	return parent.Parent()
 }
 
-func isAmbientModuleDeclaration(node *ast.Node) bool {
+func isAmbientModuleDeclaration(node ast.Node) bool {
 	return ast.IsModuleDeclaration(node) && ast.IsStringLiteral(node.Name())
 }
 
-func getStatementsOfSourceFileLike(node *ast.Node) []*ast.Node {
+func getStatementsOfSourceFileLike(node ast.Node) []ast.Node {
 	if ast.IsSourceFile(node) {
 		return node.Statements()
 	}
-	if body := node.Body(); body != nil {
+	if body := node.Body(); !body.IsNil() {
 		return body.Statements()
 	}
 	return nil
@@ -170,23 +170,23 @@ func getStatementsOfSourceFileLike(node *ast.Node) []*ast.Node {
 func getImportersForExport(
 	sourceFiles []*ast.SourceFile,
 	sourceFilesSet *collections.Set[tspath.RootedFilePath],
-	allDirectImports map[*ast.Symbol][]*ast.Node,
+	allDirectImports map[*ast.Symbol][]ast.Node,
 	exportInfo *ExportInfo,
 	checker *checker.Checker,
-) ([]*ast.Node, []*ast.SourceFile) {
-	var directImports []*ast.Node
-	var indirectUserDeclarations []*ast.Node
+) ([]ast.Node, []*ast.SourceFile) {
+	var directImports []ast.Node
+	var indirectUserDeclarations []ast.Node
 	markSeenDirectImport := nodeSeenTracker()
 	markSeenIndirectUser := nodeSeenTracker()
 	isAvailableThroughGlobal := isSourceFileWithGlobalExports(exportInfo.exportingModuleSymbol.ValueDeclaration())
 
-	getDirectImports := func(moduleSymbol *ast.Symbol) []*ast.Node {
+	getDirectImports := func(moduleSymbol *ast.Symbol) []ast.Node {
 		return allDirectImports[moduleSymbol]
 	}
 
 	// Adds a module and all of its transitive dependencies as possible indirect users
-	var addIndirectUser func(*ast.Node, bool)
-	addIndirectUser = func(sourceFileLike *ast.Node, addTransitiveDependencies bool) {
+	var addIndirectUser func(ast.Node, bool)
+	addIndirectUser = func(sourceFileLike ast.Node, addTransitiveDependencies bool) {
 		// When isAvailableThroughGlobal, getIndirectUsers already returns all source files,
 		// so indirectUserDeclarations is never consulted. Nothing to do here.
 		if isAvailableThroughGlobal {
@@ -211,25 +211,25 @@ func getImportersForExport(
 		}
 	}
 
-	isExported := func(node *ast.Node, stopAtAmbientModule bool) bool {
-		for node != nil && !(stopAtAmbientModule && isAmbientModuleDeclaration(node)) {
+	isExported := func(node ast.Node, stopAtAmbientModule bool) bool {
+		for !node.IsNil() && !(stopAtAmbientModule && isAmbientModuleDeclaration(node)) {
 			if ast.HasSyntacticModifier(node, ast.ModifierFlagsExport) {
 				return true
 			}
-			node = node.Parent
+			node = node.Parent()
 		}
 		return false
 	}
 
-	handleImportCall := func(importCall *ast.Node) {
+	handleImportCall := func(importCall ast.Node) {
 		top := ast.FindAncestor(importCall, isAmbientModuleDeclaration)
-		if top == nil {
+		if top.IsNil() {
 			top = ast.GetSourceFileOfNode(importCall).AsNode()
 		}
 		addIndirectUser(top, isExported(importCall, true /*stopAtAmbientModule*/))
 	}
 
-	handleNamespaceImport := func(importDeclaration *ast.Node, name *ast.Node, isReExport bool, alreadyAddedDirect bool) {
+	handleNamespaceImport := func(importDeclaration ast.Node, name ast.Node, isReExport bool, alreadyAddedDirect bool) {
 		if exportInfo.exportKind == ExportKindExportEquals {
 			// This is a direct import, not import-as-namespace.
 			if !alreadyAddedDirect {
@@ -250,12 +250,12 @@ func getImportersForExport(
 				continue
 			}
 			// !!! cancellation
-			switch direct.Kind {
+			switch direct.Kind() {
 			case ast.KindCallExpression:
 				if ast.IsImportCall(direct) {
 					handleImportCall(direct)
 				} else if !isAvailableThroughGlobal {
-					parent := direct.Parent
+					parent := direct.Parent()
 					if exportInfo.exportKind == ExportKindExportEquals && ast.IsVariableDeclaration(parent) {
 						name := parent.Name()
 						if ast.IsIdentifier(name) {
@@ -269,8 +269,8 @@ func getImportersForExport(
 				handleNamespaceImport(direct, direct.Name(), ast.HasSyntacticModifier(direct, ast.ModifierFlagsExport), false /*alreadyAddedDirect*/)
 			case ast.KindImportDeclaration, ast.KindJSImportDeclaration, ast.KindJSDocImportTag:
 				directImports = append(directImports, direct)
-				if importClause := direct.ImportClause(); importClause != nil {
-					if namedBindings := importClause.AsImportClause().NamedBindings; namedBindings != nil && ast.IsNamespaceImport(namedBindings) {
+				if importClause := direct.ImportClause(); !importClause.IsNil() {
+					if namedBindings := importClause.AsImportClause().NamedBindings(); !namedBindings.IsNil() && ast.IsNamespaceImport(namedBindings) {
 						handleNamespaceImport(direct, namedBindings.Name(), false /*isReExport*/, true /*alreadyAddedDirect*/)
 						break
 					}
@@ -280,8 +280,8 @@ func getImportersForExport(
 					// Add a check for indirect uses to handle synthetic default imports
 				}
 			case ast.KindExportDeclaration:
-				exportClause := direct.AsExportDeclaration().ExportClause
-				if exportClause == nil {
+				exportClause := direct.AsExportDeclaration().ExportClause()
+				if exportClause.IsNil() {
 					// This is `export * from "foo"`, so imports of this module may import the export too.
 					handleDirectImports(getContainingModuleSymbol(direct, checker))
 				} else if ast.IsNamespaceExport(exportClause) {
@@ -293,7 +293,7 @@ func getImportersForExport(
 				}
 			case ast.KindImportType:
 				// Only check for typeof import('xyz')
-				if !isAvailableThroughGlobal && direct.AsImportTypeNode().IsTypeOf && direct.AsImportTypeNode().Qualifier == nil && isExported(direct, false) {
+				if !isAvailableThroughGlobal && direct.AsImportTypeNode().IsTypeOf() && direct.AsImportTypeNode().Qualifier().IsNil() && isExported(direct, false) {
 					addIndirectUser(ast.GetSourceFileOfNode(direct).AsNode(), true /*addTransitiveDependencies*/)
 				}
 				directImports = append(directImports, direct)
@@ -322,36 +322,36 @@ func getImportersForExport(
 	return directImports, getIndirectUsers()
 }
 
-func getContainingModuleSymbol(importer *ast.Node, checker *checker.Checker) *ast.Symbol {
+func getContainingModuleSymbol(importer ast.Node, checker *checker.Checker) *ast.Symbol {
 	return checker.GetMergedSymbol(getSourceFileLikeForImportDeclaration(importer).Symbol())
 }
 
 // Returns 'true' is the namespace 'name' is re-exported from this module, and 'false' if it is only used locally
-func findNamespaceReExports(sourceFileLike *ast.Node, name *ast.Node, checker *checker.Checker) bool {
+func findNamespaceReExports(sourceFileLike ast.Node, name ast.Node, checker *checker.Checker) bool {
 	namespaceImportSymbol := checker.GetSymbolAtLocation(name)
-	return forEachPossibleImportOrExportStatement(sourceFileLike, func(statement *ast.Node) bool {
+	return forEachPossibleImportOrExportStatement(sourceFileLike, func(statement ast.Node) bool {
 		if !ast.IsExportDeclaration(statement) {
 			return false
 		}
-		exportClause := statement.AsExportDeclaration().ExportClause
+		exportClause := statement.AsExportDeclaration().ExportClause()
 		moduleSpecifier := statement.ModuleSpecifier()
-		return moduleSpecifier == nil && exportClause != nil && ast.IsNamedExports(exportClause) && core.Some(exportClause.Elements(), func(element *ast.Node) bool {
+		return moduleSpecifier.IsNil() && !exportClause.IsNil() && ast.IsNamedExports(exportClause) && core.Some(exportClause.Elements(), func(element ast.Node) bool {
 			return checker.GetExportSpecifierLocalTargetSymbol(element) == namespaceImportSymbol
 		})
 	})
 }
 
 func getSearchesFromDirectImports(
-	directImports []*ast.Node,
+	directImports []ast.Node,
 	exportSymbol *ast.Symbol,
 	exportKind ExportKind,
 	checker *checker.Checker,
 	isForRename bool,
-) ([]LocationAndSymbol, []*ast.Node) {
+) ([]LocationAndSymbol, []ast.Node) {
 	var importSearches []LocationAndSymbol
-	var singleReferences []*ast.Node
+	var singleReferences []ast.Node
 
-	addSearch := func(location *ast.Node, symbol *ast.Symbol) {
+	addSearch := func(location ast.Node, symbol *ast.Symbol) {
 		importSearches = append(importSearches, LocationAndSymbol{location, symbol})
 	}
 
@@ -363,15 +363,15 @@ func getSearchesFromDirectImports(
 	// `import x = require("./x")` or `import * as x from "./x"`.
 	// An `export =` may be imported by this syntax, so it may be a direct import.
 	// If it's not a direct import, it will be in `indirectUsers`, so we don't have to do anything here.
-	handleNamespaceImportLike := func(importName *ast.Node) {
+	handleNamespaceImportLike := func(importName ast.Node) {
 		// Don't rename an import that already has a different name than the export.
 		if exportKind == ExportKindExportEquals && (!isForRename || isNameMatch(importName.Text())) {
 			addSearch(importName, checker.GetSymbolAtLocation(importName))
 		}
 	}
 
-	searchForNamedImport := func(namedBindings *ast.Node) {
-		if namedBindings == nil {
+	searchForNamedImport := func(namedBindings ast.Node) {
+		if namedBindings.IsNil() {
 			return
 		}
 		for _, element := range namedBindings.Elements() {
@@ -380,7 +380,7 @@ func getSearchesFromDirectImports(
 			if !isNameMatch(core.OrElse(propertyName, name).Text()) {
 				continue
 			}
-			if propertyName != nil {
+			if !propertyName.IsNil() {
 				// This is `import { foo as bar } from "./a"` or `export { foo as bar } from "./a"`. `foo` isn't a local in the file, so just add it as a single reference.
 				singleReferences = append(singleReferences, propertyName)
 				// If renaming `{ foo as bar }`, don't touch `bar`, just `foo`.
@@ -391,7 +391,7 @@ func getSearchesFromDirectImports(
 				}
 			} else {
 				var localSymbol *ast.Symbol
-				if ast.IsExportSpecifier(element) && element.PropertyName() != nil {
+				if ast.IsExportSpecifier(element) && !element.PropertyName().IsNil() {
 					localSymbol = checker.GetExportSpecifierLocalTargetSymbol(element)
 				} else {
 					localSymbol = checker.GetSymbolAtLocation(name)
@@ -401,7 +401,7 @@ func getSearchesFromDirectImports(
 		}
 	}
 
-	handleImport := func(decl *ast.Node) {
+	handleImport := func(decl ast.Node) {
 		if ast.IsImportEqualsDeclaration(decl) {
 			if isExternalModuleImportEquals(decl) {
 				handleNamespaceImportLike(decl.Name())
@@ -413,13 +413,13 @@ func getSearchesFromDirectImports(
 			return
 		}
 		if ast.IsImportTypeNode(decl) {
-			if qualifier := decl.AsImportTypeNode().Qualifier; qualifier != nil {
+			if qualifier := decl.AsImportTypeNode().Qualifier(); !qualifier.IsNil() {
 				firstIdentifier := ast.GetFirstIdentifier(qualifier)
 				if firstIdentifier.Text() == ast.SymbolName(exportSymbol) {
 					singleReferences = append(singleReferences, firstIdentifier)
 				}
 			} else if exportKind == ExportKindExportEquals {
-				singleReferences = append(singleReferences, decl.AsImportTypeNode().Argument.AsLiteralTypeNode().Literal)
+				singleReferences = append(singleReferences, decl.AsImportTypeNode().Argument().AsLiteralTypeNode().Literal())
 			}
 			return
 		}
@@ -428,14 +428,14 @@ func getSearchesFromDirectImports(
 			return
 		}
 		if ast.IsExportDeclaration(decl) {
-			if exportClause := decl.AsExportDeclaration().ExportClause; exportClause != nil && ast.IsNamedExports(exportClause) {
+			if exportClause := decl.AsExportDeclaration().ExportClause(); !exportClause.IsNil() && ast.IsNamedExports(exportClause) {
 				searchForNamedImport(exportClause)
 			}
 			return
 		}
-		if importClause := decl.ImportClause(); importClause != nil {
-			if namedBindings := importClause.AsImportClause().NamedBindings; namedBindings != nil {
-				switch namedBindings.Kind {
+		if importClause := decl.ImportClause(); !importClause.IsNil() {
+			if namedBindings := importClause.AsImportClause().NamedBindings(); !namedBindings.IsNil() {
+				switch namedBindings.Kind() {
 				case ast.KindNamespaceImport:
 					handleNamespaceImportLike(namedBindings.Name())
 				case ast.KindNamedImports:
@@ -448,7 +448,7 @@ func getSearchesFromDirectImports(
 			// `export =` might be imported by a default import if `--allowSyntheticDefaultImports` is on, so this handles both ExportKind.Default and ExportKind.ExportEquals.
 			// If a default import has the same name as the default export, allow to rename it.
 			// Given `import f` and `export default function f`, we will rename both, but for `import g` we will rename just that.
-			if name := importClause.Name(); name != nil && (exportKind == ExportKindDefault || exportKind == ExportKindExportEquals) && (!isForRename || name.Text() == symbolNameNoDefault(exportSymbol)) {
+			if name := importClause.Name(); !name.IsNil() && (exportKind == ExportKindDefault || exportKind == ExportKindExportEquals) && (!isForRename || name.Text() == symbolNameNoDefault(exportSymbol)) {
 				defaultImportAlias := checker.GetSymbolAtLocation(name)
 				addSearch(name, defaultImportAlias)
 			}
@@ -460,7 +460,7 @@ func getSearchesFromDirectImports(
 	return importSearches, singleReferences
 }
 
-func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checker.Checker, comingFromExport bool) *ImportExportSymbol {
+func getImportOrExportSymbol(node ast.Node, symbol *ast.Symbol, checker *checker.Checker, comingFromExport bool) *ImportExportSymbol {
 	exportInfo := func(symbol *ast.Symbol, kind ExportKind) *ImportExportSymbol {
 		if exportInfo := getExportInfo(symbol, kind, checker); exportInfo != nil {
 			return &ImportExportSymbol{
@@ -473,12 +473,12 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 	}
 
 	getExport := func() *ImportExportSymbol {
-		getExportAssignmentExport := func(ex *ast.Node) *ImportExportSymbol {
+		getExportAssignmentExport := func(ex ast.Node) *ImportExportSymbol {
 			// Get the symbol for the `export =` node; its parent is the module it's the export of.
 			if ex.Symbol().Parent() == nil {
 				return nil
 			}
-			exportKind := core.IfElse(ex.AsExportAssignment().IsExportEquals, ExportKindExportEquals, ExportKindDefault)
+			exportKind := core.IfElse(ex.AsExportAssignment().IsExportEquals(), ExportKindExportEquals, ExportKindDefault)
 			return &ImportExportSymbol{
 				kind:   ImpExpKindExport,
 				symbol: symbol,
@@ -490,14 +490,14 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 		}
 
 		// Not meant for use with export specifiers or export assignment.
-		getExportKindForDeclaration := func(node *ast.Node) ExportKind {
+		getExportKindForDeclaration := func(node ast.Node) ExportKind {
 			if ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault) {
 				return ExportKindDefault
 			}
 			return ExportKindNamed
 		}
 
-		getSpecialPropertyExport := func(node *ast.Node, useLhsSymbol bool) *ImportExportSymbol {
+		getSpecialPropertyExport := func(node ast.Node, useLhsSymbol bool) *ImportExportSymbol {
 			var kind ExportKind
 			switch ast.GetAssignmentDeclarationKind(node) {
 			case ast.JSDeclarationKindExportsProperty:
@@ -517,8 +517,8 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 			return exportInfo(sym, kind)
 		}
 
-		parent := node.Parent
-		grandparent := parent.Parent
+		parent := node.Parent()
+		grandparent := parent.Parent()
 		if symbol.ExportSymbol() != nil {
 			if ast.IsPropertyAccessExpression(parent) {
 				// When accessing an export of a JS module, there's no alias. The symbol will still be flagged as an export even though we're at the use.
@@ -532,8 +532,8 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 		} else {
 			exportNode := getExportNode(parent, node)
 			switch {
-			case exportNode != nil && (ast.HasSyntacticModifier(exportNode, ast.ModifierFlagsExport) || ast.IsImplicitlyExportedJSDocDeclaration(exportNode)):
-				if ast.IsImportEqualsDeclaration(exportNode) && exportNode.AsImportEqualsDeclaration().ModuleReference == node {
+			case !exportNode.IsNil() && (ast.HasSyntacticModifier(exportNode, ast.ModifierFlagsExport) || ast.IsImplicitlyExportedJSDocDeclaration(exportNode)):
+				if ast.IsImportEqualsDeclaration(exportNode) && exportNode.AsImportEqualsDeclaration().ModuleReference() == node {
 					// We're at `Y` in `export import X = Y`. This is not the exported symbol, the left-hand-side is. So treat this as an import statement.
 					if comingFromExport {
 						return nil
@@ -626,43 +626,43 @@ func getExportInfo(exportSymbol *ast.Symbol, exportKind ExportKind, c *checker.C
 
 // If a reference is a class expression, the exported node would be its parent.
 // If a reference is a variable declaration, the exported node would be the variable statement.
-func getExportNode(parent *ast.Node, node *ast.Node) *ast.Node {
-	var declaration *ast.Node
+func getExportNode(parent ast.Node, node ast.Node) ast.Node {
+	var declaration ast.Node
 	switch {
 	case ast.IsVariableDeclaration(parent):
 		declaration = parent
 	case ast.IsBindingElement(parent):
 		declaration = ast.WalkUpBindingElementsAndPatterns(parent)
 	}
-	if declaration != nil {
-		if parent.Name() == node && !ast.IsCatchClause(declaration.Parent) && ast.IsVariableStatement(declaration.Parent.Parent) {
-			return declaration.Parent.Parent
+	if !declaration.IsNil() {
+		if parent.Name() == node && !ast.IsCatchClause(declaration.Parent()) && ast.IsVariableStatement(declaration.Parent().Parent()) {
+			return declaration.Parent().Parent()
 		}
-		return nil
+		return ast.Node{}
 	}
 	return parent
 }
 
-func isNodeImport(node *ast.Node) bool {
-	parent := node.Parent
-	switch parent.Kind {
+func isNodeImport(node ast.Node) bool {
+	parent := node.Parent()
+	switch parent.Kind() {
 	case ast.KindImportEqualsDeclaration:
 		return parent.Name() == node && isExternalModuleImportEquals(parent)
 	case ast.KindImportSpecifier:
 		// For a rename import `{ foo as bar }`, don't search for the imported symbol. Just find local uses of `bar`.
-		return parent.PropertyName() == nil
+		return parent.PropertyName().IsNil()
 	case ast.KindImportClause, ast.KindNamespaceImport:
 		debug.Assert(parent.Name() == node)
 		return true
 	case ast.KindBindingElement:
-		return ast.IsInJSFile(node) && ast.IsVariableDeclarationInitializedToBareOrAccessedRequire(parent.Parent.Parent)
+		return ast.IsInJSFile(node) && ast.IsVariableDeclarationInitializedToBareOrAccessedRequire(parent.Parent().Parent())
 	}
 	return false
 }
 
-func isExternalModuleImportEquals(node *ast.Node) bool {
-	moduleReference := node.AsImportEqualsDeclaration().ModuleReference
-	return ast.IsExternalModuleReference(moduleReference) && moduleReference.Expression().Kind == ast.KindStringLiteral
+func isExternalModuleImportEquals(node ast.Node) bool {
+	moduleReference := node.AsImportEqualsDeclaration().ModuleReference()
+	return ast.IsExternalModuleReference(moduleReference) && moduleReference.Expression().Kind() == ast.KindStringLiteral
 }
 
 // If at an export specifier, go to the symbol it refers to. */
@@ -670,12 +670,12 @@ func skipExportSpecifierSymbol(symbol *ast.Symbol, checker *checker.Checker) *as
 	// For `export { foo } from './bar", there's nothing to skip, because it does not create a new alias. But `export { foo } does.
 	for _, declaration := range symbol.Declarations() {
 		switch {
-		case ast.IsExportSpecifier(declaration) && declaration.PropertyName() == nil && declaration.Parent.Parent.ModuleSpecifier() == nil:
+		case ast.IsExportSpecifier(declaration) && declaration.PropertyName().IsNil() && declaration.Parent().Parent().ModuleSpecifier().IsNil():
 			return core.OrElse(checker.GetExportSpecifierLocalTargetSymbol(declaration), symbol)
 		case ast.IsPropertyAccessExpression(declaration) && ast.IsModuleExportsAccessExpression(declaration.Expression()) && !ast.IsPrivateIdentifier(declaration.Name()):
 			// Export of form 'module.exports.propName = expr';
 			return checker.GetSymbolAtLocation(declaration)
-		case ast.IsShorthandPropertyAssignment(declaration) && ast.IsBinaryExpression(declaration.Parent.Parent) && ast.GetAssignmentDeclarationKind(declaration.Parent.Parent) == ast.JSDeclarationKindModuleExports:
+		case ast.IsShorthandPropertyAssignment(declaration) && ast.IsBinaryExpression(declaration.Parent().Parent()) && ast.GetAssignmentDeclarationKind(declaration.Parent().Parent()) == ast.JSDeclarationKindModuleExports:
 			return checker.GetExportSpecifierLocalTargetSymbol(declaration.Name())
 		}
 	}
@@ -687,12 +687,12 @@ func getExportEqualsLocalSymbol(importedSymbol *ast.Symbol, checker *checker.Che
 		return checker.GetImmediateAliasedSymbol(importedSymbol)
 	}
 	decl := importedSymbol.ValueDeclaration()
-	debug.Assert(decl != nil)
+	debug.Assert(!decl.IsNil())
 	switch {
 	case ast.IsExportAssignment(decl):
 		return decl.Expression().Symbol()
 	case ast.IsBinaryExpression(decl):
-		return decl.AsBinaryExpression().Right.Symbol()
+		return decl.AsBinaryExpression().Right().Symbol()
 	case ast.IsSourceFile(decl):
 		return decl.Symbol()
 	}
@@ -705,7 +705,7 @@ func symbolNameNoDefault(symbol *ast.Symbol) string {
 	}
 	for _, decl := range symbol.Declarations() {
 		name := ast.GetNameOfDeclaration(decl)
-		if name != nil && ast.IsIdentifier(name) {
+		if !name.IsNil() && ast.IsIdentifier(name) {
 			return name.Text()
 		}
 	}
@@ -719,7 +719,7 @@ func findModuleReferences(program *compiler.Program, sourceFiles []*ast.SourceFi
 
 	for _, referencingFile := range sourceFiles {
 		searchSourceFile := searchModuleSymbol.ValueDeclaration()
-		if searchSourceFile != nil && searchSourceFile.Kind == ast.KindSourceFile {
+		if !searchSourceFile.IsNil() && searchSourceFile.Kind() == ast.KindSourceFile {
 			// Check <reference path> directives
 			for _, ref := range referencingFile.ReferencedFiles {
 				if program.GetSourceFileFromReference(referencingFile, ref) == searchSourceFile.AsSourceFile() {
@@ -745,7 +745,7 @@ func findModuleReferences(program *compiler.Program, sourceFiles []*ast.SourceFi
 		}
 
 		// Check all imports (including require() calls)
-		forEachImport(program, referencingFile, func(importDecl *ast.Node, moduleSpecifier *ast.Node) {
+		forEachImport(program, referencingFile, func(importDecl ast.Node, moduleSpecifier ast.Node) {
 			moduleSymbol := checker.GetSymbolAtLocation(moduleSpecifier)
 			if moduleSymbol == searchModuleSymbol {
 				if ast.NodeIsSynthesized(importDecl) {

@@ -38,7 +38,7 @@ func TestCreateSourceFile(t *testing.T) {
 		assert.Equal(t, sourceFile.PathKey().AsString(), "/src/input.tsx")
 		assert.Equal(t, sourceFile.Text(), `export const element = <div />;`)
 		assert.Equal(t, sourceFile.ScriptKind, core.ScriptKindTSX)
-		assert.Equal(t, len(sourceFile.Statements.Nodes), 1)
+		assert.Equal(t, len(sourceFile.Statements.Nodes()), 1)
 		assert.Assert(t, sourceFile.IsBound())
 	})
 
@@ -184,7 +184,7 @@ func TestCreateSourceFile(t *testing.T) {
 
 		present, err := session.handleGetSymbolOfDeclaration(&GetSymbolOfDeclarationParams{
 			File:  descriptor,
-			Index: table.GetIndex(sourceFile.Statements.Nodes[0]),
+			Index: table.GetIndex(sourceFile.Statements.Nodes()[0]),
 		})
 		assert.NilError(t, err)
 		assert.Assert(t, present != nil)

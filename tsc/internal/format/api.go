@@ -78,7 +78,7 @@ func FormatSpan(ctx context.Context, span core.TextRange, file *ast.SourceFile, 
 	)
 }
 
-func FormatNodeGivenIndentation(ctx context.Context, node *ast.Node, file *ast.SourceFile, languageVariant core.LanguageVariant, initialIndentation int, delta int) []core.TextChange {
+func FormatNodeGivenIndentation(ctx context.Context, node ast.Node, file *ast.SourceFile, languageVariant core.LanguageVariant, initialIndentation int, delta int) []core.TextChange {
 	textRange := core.NewTextRange(node.Pos(), node.End())
 	return newFormattingScanner(
 		file.Text(),
@@ -98,8 +98,8 @@ func FormatNodeGivenIndentation(ctx context.Context, node *ast.Node, file *ast.S
 	)
 }
 
-func formatNodeLines(ctx context.Context, sourceFile *ast.SourceFile, node *ast.Node, requestKind FormatRequestKind) []core.TextChange {
-	if node == nil {
+func formatNodeLines(ctx context.Context, sourceFile *ast.SourceFile, node ast.Node, requestKind FormatRequestKind) []core.TextChange {
+	if node.IsNil() {
 		return nil
 	}
 	tokenStart := scanner.GetTokenPosOfNode(node, sourceFile, false)
@@ -118,10 +118,10 @@ func FormatSelection(ctx context.Context, sourceFile *ast.SourceFile, start int,
 
 func FormatOnOpeningCurly(ctx context.Context, sourceFile *ast.SourceFile, position int) []core.TextChange {
 	openingCurly := findImmediatelyPrecedingTokenOfKind(position, ast.KindOpenBraceToken, sourceFile)
-	if openingCurly == nil {
+	if openingCurly.IsNil() {
 		return nil
 	}
-	curlyBraceRange := openingCurly.Parent
+	curlyBraceRange := openingCurly.Parent()
 	outermostNode := findOutermostNodeWithinListLevel(curlyBraceRange)
 	/**
 	 * We limit the span to end at the opening curly to handle the case where

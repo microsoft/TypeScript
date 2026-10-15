@@ -160,7 +160,7 @@ export class NodeType extends TypeBase {
     }
 
     formatGoReference(): string {
-        return this.api.hasNode(this.name) ? `*${this.name}Node` : `*${this.name}`;
+        return this.api.hasNode(this.name) ? `${this.name}Node` : this.name;
     }
 
     formatTypeScript(): string {
@@ -399,7 +399,7 @@ export class AliasType extends TypeBase {
     }
 
     formatGoReference(): string {
-        return this.baseKind() === "node" || (this.baseKind() === "list" && (this.resolved as ListType).listKind !== "raw") ? `*${this.name}` : this.name;
+        return this.baseKind() === "list" && (this.resolved as ListType).listKind !== "raw" ? `*${this.name}` : this.name;
     }
 
     formatTypeScript(): string {
@@ -476,11 +476,11 @@ export class UnionType extends TypeBase {
             concreteNodes.add(nodeName);
         }
         if (allConcreteNodes && concreteNodes.size === 1) {
-            return `*${[...concreteNodes][0]}Node`;
+            return `${[...concreteNodes][0]}Node`;
         }
 
         if (this.types.some(type => type.baseKind() === "node" || type.baseKind() === "list")) {
-            return "*Node";
+            return "Node";
         }
 
         if (this.types.every(type => type.baseKind() === "kind")) {
@@ -537,7 +537,7 @@ export class ListType extends TypeBase {
 
     formatGoReference(): string {
         if (this.listKind === "raw") {
-            return this.elementType.baseKind() === "node" ? "[]*Node" : `[]${this.elementType.formatGoReference()}`;
+            return this.elementType.baseKind() === "node" ? "[]Node" : `[]${this.elementType.formatGoReference()}`;
         }
         if (this.listKind === "ModifierList") {
             return "*ModifierList";

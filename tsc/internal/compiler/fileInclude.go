@@ -38,21 +38,21 @@ type FileIncludeReason struct {
 type referencedFileData struct {
 	file      tspath.PathKey
 	index     int
-	synthetic *ast.Node
+	synthetic ast.Node
 }
 
 type referenceFileLocation struct {
 	file        *ast.SourceFile
-	node        *ast.Node
+	node        ast.Node
 	ref         *ast.FileReference
 	packageId   module.PackageId
 	isSynthetic bool
 }
 
 func (r *referenceFileLocation) text() string {
-	if r.node != nil {
+	if !r.node.IsNil() {
 		if !ast.NodeIsSynthesized(r.node) {
-			return r.file.Text()[scanner.SkipTrivia(r.file.Text(), r.node.Loc.Pos()):r.node.End()]
+			return r.file.Text()[scanner.SkipTrivia(r.file.Text(), r.node.Loc().Pos()):r.node.End()]
 		} else {
 			return fmt.Sprintf(`"%s"`, r.node.Text())
 		}
@@ -62,7 +62,7 @@ func (r *referenceFileLocation) text() string {
 }
 
 func (r *referenceFileLocation) diagnosticAt(message *diagnostics.Message, args ...any) *ast.Diagnostic {
-	if r.node != nil {
+	if !r.node.IsNil() {
 		return tsoptions.CreateDiagnosticForNodeInSourceFile(r.file, r.node, message, args...)
 	} else {
 		return ast.NewDiagnostic(r.file, r.ref.TextRange, message, args...)
@@ -99,9 +99,9 @@ func (r *FileIncludeReason) getReferencedLocation(program *Program) *referenceFi
 	file := program.GetSourceFileByPath(ref.file)
 	switch r.kind {
 	case fileIncludeKindImport:
-		var specifier *ast.Node
+		var specifier ast.Node
 		var isSynthetic bool
-		if ref.synthetic != nil {
+		if !ref.synthetic.IsNil() {
 			specifier = ref.synthetic
 			isSynthetic = true
 		} else if ref.index < len(file.Imports()) {
@@ -109,7 +109,7 @@ func (r *FileIncludeReason) getReferencedLocation(program *Program) *referenceFi
 		} else {
 			augIndex := len(file.Imports())
 			for _, imp := range file.ModuleAugmentations {
-				if imp.Kind == ast.KindStringLiteral {
+				if imp.Kind() == ast.KindStringLiteral {
 					if augIndex == ref.index {
 						specifier = imp
 						break
@@ -267,28 +267,28 @@ func (r *FileIncludeReason) toRelatedInfo(program *Program) *ast.Diagnostic {
 	case fileIncludeKindRootFile:
 		fileName := config.FileNames()[r.asIndex()]
 		if matchedFileSpec := config.GetMatchedFileSpec(fileName); matchedFileSpec != "" {
-			if filesNode := tsoptions.GetTsConfigPropArrayElementValue(config.ConfigFile.SourceFile, "files", matchedFileSpec); filesNode != nil {
+			if filesNode := tsoptions.GetTsConfigPropArrayElementValue(config.ConfigFile.SourceFile, "files", matchedFileSpec); !filesNode.IsNil() {
 				return tsoptions.CreateDiagnosticForNodeInSourceFile(config.ConfigFile.SourceFile, filesNode.AsNode(), diagnostics.File_is_matched_by_files_list_specified_here)
 			}
 		} else if matchedIncludeSpec, isDefaultIncludeSpec := config.GetMatchedIncludeSpec(fileName); matchedIncludeSpec != "" && !isDefaultIncludeSpec {
-			if includeNode := tsoptions.GetTsConfigPropArrayElementValue(config.ConfigFile.SourceFile, "include", matchedIncludeSpec); includeNode != nil {
+			if includeNode := tsoptions.GetTsConfigPropArrayElementValue(config.ConfigFile.SourceFile, "include", matchedIncludeSpec); !includeNode.IsNil() {
 				return tsoptions.CreateDiagnosticForNodeInSourceFile(config.ConfigFile.SourceFile, includeNode.AsNode(), diagnostics.File_is_matched_by_include_pattern_specified_here)
 			}
 		}
 	case fileIncludeKindAutomaticTypeDirectiveFile:
 		if !program.Options().UsesWildcardTypes() {
 			data := r.asAutomaticTypeDirectiveFileData()
-			if typesSyntax := tsoptions.GetOptionsSyntaxByArrayElementValue(program.includeProcessor.getCompilerOptionsObjectLiteralSyntax(program), "types", data.typeReference); typesSyntax != nil {
+			if typesSyntax := tsoptions.GetOptionsSyntaxByArrayElementValue(program.includeProcessor.getCompilerOptionsObjectLiteralSyntax(program), "types", data.typeReference); !typesSyntax.IsNil() {
 				return tsoptions.CreateDiagnosticForNodeInSourceFile(config.ConfigFile.SourceFile, typesSyntax.AsNode(), diagnostics.File_is_entry_point_of_type_library_specified_here)
 			}
 		}
 	case fileIncludeKindLibFile:
 		if index, ok := r.asLibFileIndex(); ok {
-			if libSyntax := tsoptions.GetOptionsSyntaxByArrayElementValue(program.includeProcessor.getCompilerOptionsObjectLiteralSyntax(program), "lib", program.Options().Lib[index]); libSyntax != nil {
+			if libSyntax := tsoptions.GetOptionsSyntaxByArrayElementValue(program.includeProcessor.getCompilerOptionsObjectLiteralSyntax(program), "lib", program.Options().Lib[index]); !libSyntax.IsNil() {
 				return tsoptions.CreateDiagnosticForNodeInSourceFile(config.ConfigFile.SourceFile, libSyntax.AsNode(), diagnostics.File_is_library_specified_here)
 			}
 		} else if target := program.Options().GetEmitScriptTarget().String(); target != "" {
-			if targetValueSyntax := tsoptions.ForEachPropertyAssignment(program.includeProcessor.getCompilerOptionsObjectLiteralSyntax(program), "target", tsoptions.GetCallbackForFindingPropertyAssignmentByValue(target)); targetValueSyntax != nil {
+			if targetValueSyntax := tsoptions.ForEachPropertyAssignment(program.includeProcessor.getCompilerOptionsObjectLiteralSyntax(program), "target", tsoptions.GetCallbackForFindingPropertyAssignmentByValue(target)); !targetValueSyntax.IsNil() {
 				return tsoptions.CreateDiagnosticForNodeInSourceFile(config.ConfigFile.SourceFile, targetValueSyntax.AsNode(), diagnostics.File_is_default_library_for_target_specified_here)
 			}
 		}

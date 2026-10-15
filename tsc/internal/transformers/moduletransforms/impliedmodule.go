@@ -21,15 +21,15 @@ func NewImpliedModuleTransformer(opts *transformers.TransformOptions) *transform
 	return tx.NewTransformer(tx.visit, opts.Context)
 }
 
-func (tx *ImpliedModuleTransformer) visit(node *ast.Node) *ast.Node {
-	switch node.Kind {
+func (tx *ImpliedModuleTransformer) visit(node ast.Node) ast.Node {
+	switch node.Kind() {
 	case ast.KindSourceFile:
 		node = tx.visitSourceFile(node.AsSourceFile())
 	}
 	return node
 }
 
-func (tx *ImpliedModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
+func (tx *ImpliedModuleTransformer) visitSourceFile(node *ast.SourceFile) ast.Node {
 	if node.IsDeclarationFile {
 		return node.AsNode()
 	}

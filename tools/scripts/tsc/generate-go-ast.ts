@@ -5,7 +5,7 @@
  *
  * Generates:
  *   - Struct definitions for each node kind
- *   - As*() cast methods on *Node
+ *   - As*() cast methods on Node
  *   - New*()/Update*() factory methods on *NodeFactory
  *   - ForEachChild() implementations
  *   - VisitEachChild() implementations
@@ -15,6 +15,7 @@
  *   - Is*() type guard functions
  */
 
+import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import { GeneratedFile } from "../gen/generatedFile.mts";
@@ -93,13 +94,6 @@ class CodeWriter {
 
 function generateNodeFactoryStruct(w: CodeWriter) {
     const arenaFields: { fieldName: string; typeName: string; }[] = [];
-    for (const node of api.nodes()) {
-        if (!node.arena) continue;
-        arenaFields.push({
-            fieldName: `${api.uncapitalize(node.name)}Arena`,
-            typeName: node.name,
-        });
-    }
     arenaFields.push({ fieldName: "modifierListArena", typeName: "ModifierList" });
     arenaFields.push({ fieldName: "nodeListArena", typeName: "NodeList" });
     arenaFields.sort((a, b) => a.fieldName.localeCompare(b.fieldName));
@@ -111,6 +105,7 @@ function generateNodeFactoryStruct(w: CodeWriter) {
     w.write("type NodeFactory struct {");
     w.push();
     w.write("hooks NodeFactoryHooks");
+    w.write("store *nodeStore");
     for (const { fieldName, typeName } of arenaFields) {
         w.write(`${fieldName} core.Arena[${typeName}]`);
     }
@@ -253,46 +248,163 @@ function goEmbeds(extendsKeys: string[]): string[] {
     return [...zeroSized, ...nonZeroSized];
 }
 
+function nodeOwnFields(node: NodeType): MemberInfo[] {
+    return node.members.filter(m => !m.inherited && !m.isKindParam() && !m.noGo);
+}
+
+function memberGoType(m: MemberInfo): string {
+    return m.goOnly ? m.rawType as string : m.type.formatGoReference();
+}
+
+// Whether a field holds a single node handle, which records store as a nodeRef.
+function isNodeField(f: { goOnly?: boolean; rawType: string | string[]; type: Type; }): boolean {
+    if (f.goOnly) return f.rawType === "Node";
+    const goType = f.type.formatGoReference();
+    return f.type.baseKind() === "node" && !goType.startsWith("*") && !goType.startsWith("[]");
+}
+
+// Fields holding Go pointers are kept out of records, in the store's side
+// table for their type, so that records contain no pointers.
+const sideTables: Record<string, string> = {
+    "*Symbol": "symbols",
+    "*FlowNode": "flowNodes",
+    "SymbolTable": "symbolTables",
+    "*NodeList": "nodeLists",
+    "*ModifierList": "modifierLists",
+    "string": "texts",
+    "[]string": "stringLists",
+    "[]Node": "nodeSlices",
+    "any": "values",
+};
+
+function sideTableOf(goType: string): string | undefined {
+    if (Object.hasOwn(sideTables, goType)) return sideTables[goType];
+    // Aliases of NodeList, such as *StatementList.
+    if (/^\*\w+List$/.test(goType) && goType !== "*FlowList") return "nodeLists";
+    return undefined;
+}
+
+function zeroCheck(goType: string, value: string): string {
+    return goType === "string" ? `${value} == ""` : `${value} == nil`;
+}
+
+// The Go type a field has within a record.
+function recordGoType(isNode: boolean, goType: string): string {
+    if (isNode) return "nodeRef";
+    if (goType === "string") return "textRef";
+    return sideTableOf(goType) ? "sideRef" : goType;
+}
+
+function baseGoFields(key: string): GoField[] {
+    const base = api.getBase(key);
+    if (!base || HAND_WRITTEN_BASES.has(key)) return [];
+    const fields: GoField[] = [];
+    for (const ext of baseGoEmbeds(base)) fields.push(...baseGoFields(ext));
+    for (const field of base.fields) {
+        if (field.noGo) continue;
+        fields.push({ name: field.name, goType: field.goOnly ? field.rawType as string : field.type.formatGoReference(), isNode: isNodeField(field), owner: key });
+    }
+    return fields;
+}
+
+// A field as laid out in a record.
+interface RecordField {
+    storage: string;
+    goType: string;
+    comment: string;
+}
+
+function baseRecordFields(key: string): RecordField[] {
+    const base = api.getBase(key);
+    if (!base || HAND_WRITTEN_BASES.has(key)) return [];
+    const fields: RecordField[] = [];
+    for (const ext of baseGoEmbeds(base)) fields.push(...baseRecordFields(ext));
+    for (const field of base.fields) {
+        if (field.noGo) continue;
+        const valueType = field.goOnly ? field.rawType as string : field.type.formatGoReference();
+        const goType = recordGoType(isNodeField(field), valueType);
+        const parts = [];
+        if (goType !== valueType) parts.push(valueType);
+        if (field.optional) parts.push("Optional");
+        fields.push({ storage: goStorageName(field.name), goType, comment: parts.length > 0 ? `// ${parts.join(". ")}` : "" });
+    }
+    return fields;
+}
+
+// Alignments of the Go types that record fields may have.
+const recordFieldAlignments: Record<string, number> = {
+    "nodeRef": 8,
+    "textRef": 4,
+    "sideRef": 4,
+    "atomic.Uint32": 4,
+    "TokenFlags": 4,
+    "Kind": 2,
+    "ImportPhaseModifierSyntaxKind": 2,
+    "bool": 1,
+};
+
+function recordFieldAlignment(goType: string): number {
+    if (!Object.hasOwn(recordFieldAlignments, goType)) {
+        throw new Error(`unknown alignment for record field type ${goType}`);
+    }
+    return recordFieldAlignments[goType];
+}
+
+// A node's record holds its own and its bases' fields after the header,
+// ordered by decreasing alignment so that no padding falls between them.
+function nodeRecordFields(node: NodeType): RecordField[] {
+    const fields: RecordField[] = [];
+    for (const ext of goEmbeds(node.extendsKeys)) fields.push(...baseRecordFields(ext));
+    for (const m of nodeOwnFields(node)) {
+        const goType = recordGoType(isNodeField(m), memberGoType(m));
+        fields.push({ storage: goStorageName(m.name), goType, comment: buildFieldComment(m, goType !== memberGoType(m) ? memberGoType(m) : undefined) });
+    }
+    const seen = new Set<string>();
+    for (const field of fields) {
+        if (seen.has(field.storage)) throw new Error(`${node.name} has more than one field named ${field.storage}`);
+        seen.add(field.storage);
+    }
+    return fields
+        .map((field, index) => ({ field, index }))
+        .sort((a, b) => recordFieldAlignment(b.field.goType) - recordFieldAlignment(a.field.goType) || a.index - b.index)
+        .map(({ field }) => field);
+}
+
+function nodeGoFields(node: NodeType): GoField[] {
+    const fields: GoField[] = [];
+    for (const ext of goEmbeds(node.extendsKeys)) fields.push(...baseGoFields(ext));
+    for (const m of nodeOwnFields(node)) fields.push({ name: m.name, goType: memberGoType(m), isNode: isNodeField(m) });
+    return fields;
+}
+
 function generateStructDef(w: CodeWriter, node: NodeType) {
     const structName = node.name;
-    w.write(`type ${structName} struct {`);
+    w.write(`type ${dataName(node)} struct {`);
     w.push();
-
-    // Embeddings from extends (each maps to a Go struct via convention)
-    for (const ext of goEmbeds(node.extendsKeys)) {
-        w.write(ext);
+    w.write("nodeBaseData");
+    for (const { storage, goType, comment } of nodeRecordFields(node)) {
+        w.write(comment ? `${storage} ${goType} ${comment}` : `${storage} ${goType}`);
     }
-
-    // Fields from members (skip inherited, Kind params, and noGo)
-    if (node.members.length > 0) {
-        for (const m of node.members) {
-            if (m.inherited || m.isKindParam() || m.noGo) continue;
-            const fieldName = m.name;
-            const goType = m.goOnly ? m.rawType as string : m.type.formatGoReference();
-            const comment = buildFieldComment(m);
-            if (comment) {
-                w.write(`${fieldName} ${goType} ${comment}`);
-            }
-            else {
-                w.write(`${fieldName} ${goType}`);
-            }
-        }
-    }
-
     w.pop();
     w.write("}");
     w.write("");
+    w.write(`type ${structName} struct{ Node }`);
+    w.write("");
+    w.write(`func (node ${structName}) data() *${dataName(node)} { return ${dataOf(node, "node")} }`);
+    w.write("");
+    generateFieldAccessors(w, structName, nodeGoFields(node), f => `&node.data().${goStorageName(f.name)}`, f => `node.data().${goStorageName(f.name)}`);
 }
 
-function buildFieldComment(m: MemberInfo): string {
+function buildFieldComment(m: MemberInfo, refType?: string): string {
     const parts: string[] = [];
+    if (refType) parts.push(refType);
     if (m.optional) parts.push("Optional");
     if (parts.length > 0) return `// ${parts.join(". ")}`;
     return "";
 }
 
 function goSubtreeFactsTerm(m: MemberInfo): string {
-    const access = `node.${m.name}`;
+    const access = fieldAccess(m);
     if (m.listKind === "ModifierList") {
         return `propagateModifierListSubtreeFacts(${access})`;
     }
@@ -307,7 +419,7 @@ function generateSubtreeFacts(w: CodeWriter, node: NodeType) {
 
     const childMembers = schemaMembers(node).filter(m => m.isChild());
     const structName = node.name;
-    w.write(`func (node *${structName}) computeSubtreeFacts() SubtreeFacts {`);
+    w.write(`func (node ${structName}) computeSubtreeFacts() SubtreeFacts {`);
     w.push();
     if (childMembers.length === 0) {
         w.write("return SubtreeFactsNone");
@@ -337,7 +449,7 @@ const HAND_WRITTEN_BASES = new Set(["NodeBase"]);
 
 function generateBaseStructDefs(w: CodeWriter) {
     w.write("// ──────────────────────────────────────────────────────────────────────");
-    w.write("// Base struct definitions");
+    w.write("// Base views");
     w.write("// ──────────────────────────────────────────────────────────────────────");
     w.write("");
 
@@ -345,31 +457,115 @@ function generateBaseStructDefs(w: CodeWriter) {
         if (HAND_WRITTEN_BASES.has(base.key)) continue;
 
         const structName = base.key;
-
-        const goExts = baseGoEmbeds(base);
-
-        w.write(`type ${structName} struct {`);
-        w.push();
-
-        // Embeddings from extends
-        for (const ext of goExts) {
-            w.write(ext);
+        for (const field of base.fields) {
+            if (!field.noGo) generateBaseFieldOffsets(w, base, field.name, field.goOnly ? field.rawType as string : field.type.formatGoReference(), isNodeField(field));
         }
 
-        // Schema fields
-        if (base.fields.length > 0) {
-            for (const field of base.fields) {
-                if (field.noGo) continue;
-                const goType = field.goOnly ? field.rawType as string : field.type.formatGoReference();
-                const comment = field.optional ? " // Optional" : "";
-                w.write(`${field.name} ${goType}${comment}`);
-            }
-        }
-
-        w.pop();
-        w.write("}");
+        // Base views see the fields of whichever concrete node they wrap.
+        w.write(`type ${structName} struct{ Node }`);
         w.write("");
+        const fields = baseGoFields(structName);
+        if (fields.length > 0) {
+            generateFieldAccessors(w, structName, fields, f => `node.${baseFieldName(f.owner!, f.name)}()`, f => `*node.${baseFieldName(f.owner!, f.name)}()`);
+        }
     }
+}
+
+// The method locating a base's field in a record.
+function baseFieldName(key: string, name: string): string {
+    return `${goStorageName(key)}${api.capitalize(goStorageName(name))}`;
+}
+
+// A base's fields lie at different offsets in each kind's record, so each
+// has a table of its offsets by kind, zero for kinds without the base.
+function generateBaseFieldOffsets(w: CodeWriter, base: NodeType, name: string, valueType: string, isNode: boolean) {
+    const method = baseFieldName(base.key, name);
+    const table = `${method}Offsets`;
+    const goType = recordGoType(isNode, valueType);
+    w.write(`var ${table} = [kindFlowReduceLabelData + 1]uint8{`);
+    w.push();
+    for (const node of api.nodes()) {
+        if (!transitiveBaseKeys(node).has(base.key)) continue;
+        for (const kind of node.allKinds()) {
+            w.write(`${kind.formatGoConstant()}: uint8(unsafe.Offsetof(${dataName(node)}{}.${goStorageName(name)})),`);
+        }
+    }
+    w.pop();
+    w.write("}");
+    w.write("");
+    w.write(`func (n Node) ${method}() *${goType} {`);
+    w.push();
+    w.write(`if off := ${table}[n.Kind()]; off != 0 {`);
+    w.push();
+    w.write(`return (*${goType})(unsafe.Add(n.p, off))`);
+    w.pop();
+    w.write("}");
+    w.write("return nil");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+// ── Generate record layouts ────────────────────────────────────────────────
+
+// Synthetic nodes declared by hand in flow.go, each with its own pseudo-kind.
+const EXTRA_LAYOUTS = ["FlowSwitchClauseData", "FlowReduceLabelData"];
+
+function layoutName(node: NodeType): string {
+    return `layout${node.name}`;
+}
+
+function generateLayouts(w: CodeWriter) {
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("// Record layouts");
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("");
+    w.write("// nodeLayout identifies the record table holding a node's fields.");
+    w.write("type nodeLayout uint8");
+    w.write("");
+    w.write("const (");
+    w.push();
+    w.write("layoutNone nodeLayout = iota");
+    for (const node of api.nodes()) w.write(layoutName(node));
+    for (const name of EXTRA_LAYOUTS) w.write(`layout${name}`);
+    w.write("layoutCount");
+    w.pop();
+    w.write(")");
+    w.write("");
+    w.write("var kindLayout = [kindFlowReduceLabelData + 1]nodeLayout{");
+    w.push();
+    for (const [node, kinds] of canonicalNodesByKind()) {
+        for (const kind of kinds) w.write(`${kind}: ${layoutName(node)},`);
+    }
+    for (const name of EXTRA_LAYOUTS) w.write(`kind${name}: layout${name},`);
+    w.pop();
+    w.write("}");
+    w.write("");
+    w.write("// Every record must begin with its nodeBaseData header.");
+    w.write("const (");
+    w.push();
+    for (const node of api.nodes()) w.write(`_ = -unsafe.Offsetof(${dataName(node)}{}.nodeBaseData)`);
+    for (const name of EXTRA_LAYOUTS) w.write(`_ = -unsafe.Offsetof(${name[0].toLowerCase()}${name.slice(1)}{}.nodeBaseData)`);
+    w.pop();
+    w.write(")");
+    w.write("");
+    w.write("// layoutRecord returns a zero record of layout.");
+    w.write("func layoutRecord(layout nodeLayout) any {");
+    w.push();
+    w.write("switch layout {");
+    for (const node of api.nodes()) {
+        w.write(`case ${layoutName(node)}:`);
+        w.write(`return ${dataName(node)}{}`);
+    }
+    for (const name of EXTRA_LAYOUTS) {
+        w.write(`case layout${name}:`);
+        w.write(`return ${name[0].toLowerCase()}${name.slice(1)}{}`);
+    }
+    w.write("}");
+    w.write("return nil");
+    w.pop();
+    w.write("}");
+    w.write("");
 }
 
 // ── Generate As*() cast methods ────────────────────────────────────────────
@@ -396,16 +592,126 @@ function generateKindCheck(w: CodeWriter, node: NodeType, expression: string, me
 
 function generateAsCast(w: CodeWriter, node: NodeType) {
     const structName = node.name;
-    w.write(`func (n *Node) As${structName}() *${structName} {`);
+    const ret = node.handWritten ? `*${structName}` : structName;
+    w.write(`func (n Node) As${structName}() ${ret} {`);
     w.push();
-    generateKindCheck(w, node, "n.Kind", `Invalid node cast to ${structName}`);
-    w.write(`return (*${structName})(unsafe.Pointer(n))`);
+    generateKindCheck(w, node, "n.Kind()", `Invalid node cast to ${structName}`);
+    w.write(`return ${viewOf(node, "n")}`);
     w.pop();
     w.write("}");
     w.write("");
 }
 
 // ── Generate New*() factory methods ────────────────────────────────────────
+
+const GO_KEYWORDS = new Set([
+    "break",
+    "case",
+    "chan",
+    "const",
+    "continue",
+    "default",
+    "defer",
+    "else",
+    "fallthrough",
+    "for",
+    "func",
+    "go",
+    "goto",
+    "if",
+    "import",
+    "interface",
+    "map",
+    "package",
+    "range",
+    "return",
+    "select",
+    "struct",
+    "switch",
+    "type",
+    "var",
+]);
+
+// Exported schema fields are stored in unexported Go fields and exposed through
+// generated accessors, so storage can change without touching consumers.
+function goStorageName(name: string): string {
+    if (name[0] === name[0].toLowerCase()) return name;
+    let i = 0;
+    while (i < name.length && name[i] !== name[i].toLowerCase()) i++;
+    const upperRun = i === name.length || i === 1 ? i : i - 1;
+    const lower = name.slice(0, upperRun).toLowerCase() + name.slice(upperRun);
+    return GO_KEYWORDS.has(lower) ? lower + "Field" : lower;
+}
+
+function isExportedField(name: string): boolean {
+    return name[0] !== name[0].toLowerCase();
+}
+
+interface GoField {
+    name: string;
+    goType: string;
+    isNode: boolean;
+    // The base declaring the field, or undefined for a node's own field.
+    owner?: string;
+}
+
+function dataName(node: NodeType): string {
+    return node.handWritten ? node.name : `${goStorageName(node.name)}Data`;
+}
+
+// Private fields get exported getters only where they agree with the shared
+// Node method of the same name; others would shadow it with a different type.
+function hasPublicGetter(name: string, goType: string): boolean {
+    return isExportedField(name) || name === "name" || name === "modifiers" || (name === "text" && goType === "string");
+}
+
+function getterName(name: string, goType: string): string {
+    return hasPublicGetter(name, goType) ? api.capitalize(name) : name;
+}
+
+function setterName(name: string): string {
+    return isExportedField(name) ? `Set${name}` : `set${api.capitalize(name)}`;
+}
+
+// The storage struct of a node, reached from a handle.
+function dataOf(node: NodeType, recv: string): string {
+    return `(*${dataName(node)})(${recv}.rec())`;
+}
+
+// The typed view of a node, reached from a handle.
+function viewOf(node: NodeType, recv: string): string {
+    return node.handWritten ? dataOf(node, recv) : `${node.name}{${recv}}`;
+}
+
+// addr and value give a field's address and value within a record.
+function generateFieldAccessors(w: CodeWriter, structName: string, fields: GoField[], addr: (field: GoField) => string, value: (field: GoField) => string) {
+    let wrote = false;
+    for (const field of fields) {
+        const { name, goType, isNode } = field;
+        if (goType.startsWith("atomic.")) continue;
+        const side = sideTableOf(goType);
+        if (isNode) {
+            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.deref(${addr(field)}) }`);
+            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { node.setRef(${addr(field)}, value) }`);
+        }
+        else if (side) {
+            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.store().${side}.get(${value(field)}) }`);
+            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { node.store().${side}.set(${addr(field)}, value, ${zeroCheck(goType, "value")}) }`);
+        }
+        else {
+            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return ${value(field)} }`);
+            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { ${value(field)} = value }`);
+        }
+        wrote = true;
+    }
+    if (wrote) {
+        w.write("");
+    }
+}
+
+function fieldAccess(m: MemberInfo, recv = "node"): string {
+    return isNodeFlagsMember(m) ? `${recv}.Flags()` : `${recv}.${getterName(m.name, memberGoType(m))}()`;
+}
 
 function isNodeFlagsMember(m: MemberInfo): boolean {
     const type = m.type;
@@ -445,25 +751,34 @@ function emitNewFactory(
 ) {
     const params = members.map(m => `${m.goParamName()} ${m.type.formatGoReference()}`).join(", ");
 
-    w.write(`func (f *NodeFactory) ${funcName}(${params}) *Node {`);
+    w.write(`func (f *NodeFactory) ${funcName}(${params}) Node {`);
     w.push();
 
     if (kindMember) {
         generateKindCheck(w, node, kindMember.goParamName(), `Invalid node kind for ${structName}`);
     }
 
-    if (node.arena) {
-        w.write(`data := f.${api.uncapitalize(structName)}Arena.New()`);
+    const stored = members.filter(m => !m.isKindParam() && !isNodeFlagsMember(m));
+    if (stored.length === 0) {
+        w.write(`_, i := newRecord[${dataName(node)}](f.nodeStore(), ${layoutName(node)})`);
+    }
+    else if (stored.some(m => isNodeField(m) || sideTableOf(m.type.formatGoReference()))) {
+        w.write("s := f.nodeStore()");
+        w.write(`data, i := newRecord[${dataName(node)}](s, ${layoutName(node)})`);
     }
     else {
-        w.write(`data := &${structName}{}`);
+        w.write(`data, i := newRecord[${dataName(node)}](f.nodeStore(), ${layoutName(node)})`);
     }
 
-    for (const m of members) {
-        if (m.isKindParam()) continue;
-        if (isNodeFlagsMember(m)) continue;
-        const value = m.bitmask ? `${m.goParamName()} & ${m.bitmask}` : m.goParamName();
-        w.write(`data.${m.name} = ${value}`);
+    for (const m of stored) {
+        let value = m.bitmask ? `${m.goParamName()} & ${m.bitmask}` : m.goParamName();
+        const side = sideTableOf(m.type.formatGoReference());
+        if (side) {
+            w.write(`s.${side}.set(&data.${goStorageName(m.name)}, ${value}, ${zeroCheck(m.type.formatGoReference(), value)})`);
+            continue;
+        }
+        if (isNodeField(m)) value = `s.refAt(i, &data.${goStorageName(m.name)}, ${value})`;
+        w.write(`data.${goStorageName(m.name)} = ${value}`);
     }
 
     if (hasTextContent(node)) {
@@ -473,20 +788,20 @@ function emitNewFactory(
     const kindArg = kindMember ? kindMember.goParamName() : `Kind${kindName}`;
 
     if (nodeFlagsMembers.length > 0) {
-        w.write(`node := f.newNode(${kindArg}, data.AsNode())`);
+        w.write(`node := f.newNode(${kindArg}, ${layoutName(node)}, i)`);
         for (const m of nodeFlagsMembers) {
             const param = m.goParamName();
             if (m.bitmask) {
-                w.write(`node.Flags |= ${param} & ${m.bitmask}`);
+                w.write(`node.SetFlags(node.Flags() | (${param} & ${m.bitmask}))`);
             }
             else {
-                w.write(`node.Flags = ${param}`);
+                w.write(`node.SetFlags(${param})`);
             }
         }
         w.write("return node");
     }
     else {
-        w.write(`return f.newNode(${kindArg}, data.AsNode())`);
+        w.write(`return f.newNode(${kindArg}, ${layoutName(node)}, i)`);
     }
 
     w.pop();
@@ -501,7 +816,7 @@ function generateNewFactory(w: CodeWriter, node: NodeType) {
     const nodeFlagsMembers = members.filter(m => isNodeFlagsMember(m));
     if (node.name === "Token") {
         const tokenKinds = new Set(node.allKinds().map(kind => kind.formatGoConstant()));
-        w.write("func (f *NodeFactory) NewToken(kind TokenSyntaxKind) *Node {");
+        w.write("func (f *NodeFactory) NewToken(kind TokenSyntaxKind) Node {");
         w.push();
         w.write('if !IsTokenKind(kind) { panic("Invalid token kind") }');
         w.write("switch kind {");
@@ -511,19 +826,14 @@ function generateNewFactory(w: CodeWriter, node: NodeType) {
             if (overlappingKinds.length === 0) continue;
             w.write(`case ${overlappingKinds.join(", ")}:`);
             w.push();
-            if (canonicalNode.arena) {
-                w.write(`data := f.${api.uncapitalize(canonicalNode.name)}Arena.New()`);
-            }
-            else {
-                w.write(`data := &${canonicalNode.name}{}`);
-            }
-            w.write("return f.newNode(kind, data.AsNode())");
+            w.write(`_, i := newRecord[${dataName(canonicalNode)}](f.nodeStore(), ${layoutName(canonicalNode)})`);
+            w.write(`return f.newNode(kind, ${layoutName(canonicalNode)}, i)`);
             w.pop();
         }
         w.write("default:");
         w.push();
-        w.write("data := f.tokenArena.New()");
-        w.write("return f.newNode(kind, data.AsNode())");
+        w.write(`_, i := newRecord[${dataName(node)}](f.nodeStore(), ${layoutName(node)})`);
+        w.write(`return f.newNode(kind, ${layoutName(node)}, i)`);
         w.pop();
         w.write("}");
         w.pop();
@@ -553,11 +863,11 @@ function generateUpdateFactory(w: CodeWriter, node: NodeType) {
 
     // Build parameter list
     const params = [
-        `node *${structName}`,
+        `node ${structName}`,
         ...updateMembers.map(m => `${m.goParamName()} ${m.type.formatGoReference()}`),
     ].join(", ");
 
-    w.write(`func (f *NodeFactory) Update${node.name}(${params}) *Node {`);
+    w.write(`func (f *NodeFactory) Update${node.name}(${params}) Node {`);
     w.push();
 
     // Build comparison (all update members)
@@ -565,9 +875,9 @@ function generateUpdateFactory(w: CodeWriter, node: NodeType) {
         const type = m.type;
         // Slices can't be compared with != in Go
         if (type.kind === "list" && type.listKind === "raw") {
-            return `!core.Same(${m.goParamName()}, node.${m.name})`;
+            return `!core.Same(${m.goParamName()}, ${fieldAccess(m)})`;
         }
-        return `${m.goParamName()} != node.${m.name}`;
+        return `${m.goParamName()} != ${fieldAccess(m)}`;
     });
 
     w.write(`if ${comparisons.join(" || ")} {`);
@@ -576,13 +886,13 @@ function generateUpdateFactory(w: CodeWriter, node: NodeType) {
     // Call New with all members (Kind from original, everything else from params)
     const newArgs = members.map(m => {
         if (m.isKindParam()) {
-            return "node.Kind";
+            return "node.Kind()";
         }
         return m.goParamName();
     }).join(", ");
 
     if (node.kindAliases.length > 0) {
-        w.write("switch node.Kind {");
+        w.write("switch node.Kind() {");
         w.push();
         w.write(`case ${api.kindType(`SyntaxKind.${node.syntaxKindName}`).formatGoConstant()}:`);
         w.push();
@@ -596,7 +906,7 @@ function generateUpdateFactory(w: CodeWriter, node: NodeType) {
         }
         w.write("default:");
         w.push();
-        w.write(`panic("unexpected kind in Update${node.name}: " + node.Kind.String())`);
+        w.write(`panic("unexpected kind in Update${node.name}: " + node.Kind().String())`);
         w.pop();
         w.pop();
         w.write("}");
@@ -625,7 +935,7 @@ function generateForEachChild(w: CodeWriter, node: NodeType) {
     }
 
     const structName = node.name;
-    w.write(`func (node *${structName}) ForEachChild(v Visitor) bool {`);
+    w.write(`func (node ${structName}) ForEachChild(v Visitor) bool {`);
     w.push();
 
     // Nodes with runtime-dependent child ordering delegate to a hand-written function.
@@ -639,7 +949,7 @@ function generateForEachChild(w: CodeWriter, node: NodeType) {
 
     // Build visit chain: visit(v, node.Field) || visitNodeList(v, node.Field) || ...
     const parts = childMembers.map(m => {
-        const access = `node.${m.name}`;
+        const access = fieldAccess(m);
         const type = m.type;
         const listKind = m.listKind;
         if (listKind === "raw") {
@@ -682,7 +992,7 @@ function hasForEachChild(node: NodeType): boolean {
     return schemaMembers(node).some(m => m.isChild());
 }
 
-// Generates a (*Node).ForEachChild method that dispatches on node.Kind to the
+// Generates a Node.ForEachChild method that dispatches on node.Kind to the
 // concrete node type's ForEachChild method.
 //
 // An indirect call is opaque to escape analysis, which must then assume the
@@ -695,16 +1005,16 @@ function hasForEachChild(node: NodeType): boolean {
 // Kinds whose node has no children fall through to `default` and return false,
 // matching NodeDefault.ForEachChild.
 function generateForEachChildDispatch(w: CodeWriter) {
-    w.write("func (n *Node) ForEachChild(v Visitor) bool {");
+    w.write("func (n Node) ForEachChild(v Visitor) bool {");
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.Kind() {");
     for (const node of api.nodes()) {
         if (!hasForEachChild(node)) continue;
         const kinds = node.allKinds().map(k => k.formatGoConstant());
         if (kinds.length === 0) continue;
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
-        w.write(`return (*${node.name})(unsafe.Pointer(n)).ForEachChild(v)`);
+        w.write(`return ${viewOf(node, "n")}.ForEachChild(v)`);
         w.pop();
     }
     w.write("default:");
@@ -718,16 +1028,16 @@ function generateForEachChildDispatch(w: CodeWriter) {
 }
 
 function generateVisitEachChildDispatch(w: CodeWriter) {
-    w.write("func (n *Node) VisitEachChild(v *NodeVisitor) *Node {");
+    w.write("func (n Node) VisitEachChild(v *NodeVisitor) Node {");
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.Kind() {");
     for (const node of api.nodes()) {
         if (!hasForEachChild(node)) continue;
         const kinds = node.allKinds().map(kind => kind.formatGoConstant());
         if (kinds.length === 0) continue;
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
-        w.write(`return (*${node.name})(unsafe.Pointer(n)).VisitEachChild(v)`);
+        w.write(`return ${viewOf(node, "n")}.VisitEachChild(v)`);
         w.pop();
     }
     w.write("default:");
@@ -741,22 +1051,22 @@ function generateVisitEachChildDispatch(w: CodeWriter) {
 }
 
 function generateCloneDispatch(w: CodeWriter) {
-    w.write("func (n *Node) Clone(f NodeFactoryCoercible) *Node {");
+    w.write("func (n Node) Clone(f NodeFactoryCoercible) Node {");
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.Kind() {");
     w.write("case kindFlowSwitchClauseData, kindFlowReduceLabelData:");
     w.push();
-    w.write("return nil");
+    w.write("return Node{}");
     w.pop();
     for (const [node, kinds] of canonicalNodesByKind()) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
-        w.write(`return (*${node.name})(unsafe.Pointer(n)).Clone(f)`);
+        w.write(`return ${viewOf(node, "n")}.Clone(f)`);
         w.pop();
     }
     w.write("default:");
     w.push();
-    w.write("return nil");
+    w.write("return Node{}");
     w.pop();
     w.write("}");
     w.pop();
@@ -764,10 +1074,54 @@ function generateCloneDispatch(w: CodeWriter) {
     w.write("");
 }
 
+// Methods declared on hand-written view types in the ast package, by receiver type.
+const handWrittenMethods: Map<string, Set<string>> = (() => {
+    const dir = path.join(ROOT, "tsc", "internal", "ast");
+    const result = new Map<string, Set<string>>();
+    for (const file of fs.readdirSync(dir)) {
+        if (!file.endsWith(".go") || file.endsWith("_test.go") || file.endsWith("_generated.go")) continue;
+        const text = fs.readFileSync(path.join(dir, file), "utf8");
+        for (const match of text.matchAll(/^func \(\w+ \*?(\w+)\) (\w+)\(/gm)) {
+            let methods = result.get(match[1]);
+            if (!methods) result.set(match[1], methods = new Set());
+            methods.add(match[2]);
+        }
+    }
+    return result;
+})();
+
+function hasViewMethod(typeName: string, method: string): boolean {
+    if (method === "computeSubtreeFacts" && api.nodes().some(node => node.name === typeName && node.generateSubtreeFacts)) {
+        return true;
+    }
+    return handWrittenMethods.get(typeName)?.has(method) ?? false;
+}
+
+// Resolves a method the way Go promotion did when nodes embedded their bases:
+// the node's own method wins, then the shallowest base that declares it.
+function resolveViewMethod(node: NodeType, method: string): string | undefined {
+    if (hasViewMethod(node.name, method)) return node.name;
+    let level = goEmbeds(node.extendsKeys);
+    while (level.length > 0) {
+        const found = level.filter(key => hasViewMethod(key, method));
+        if (found.length > 1) throw new Error(`${node.name}.${method} is ambiguous between ${found.join(", ")}`);
+        if (found.length === 1) return found[0];
+        level = level.flatMap(key => baseGoEmbeds(api.getBase(key)));
+    }
+    return undefined;
+}
+
+function viewMethodCall(node: NodeType, method: string, recv: string): string | undefined {
+    const owner = resolveViewMethod(node, method);
+    if (!owner) return undefined;
+    if (owner === node.name) return `${viewOf(node, recv)}.${method}()`;
+    return `${owner}{${recv}}.${method}()`;
+}
+
 function generateSubtreeFactsDispatch(w: CodeWriter) {
-    w.write("func (n *Node) SubtreeFacts() SubtreeFacts {");
+    w.write("func (n Node) SubtreeFacts() SubtreeFacts {");
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.Kind() {");
     w.write("case kindFlowSwitchClauseData, kindFlowReduceLabelData:");
     w.push();
     w.write("return SubtreeFactsNone");
@@ -776,7 +1130,7 @@ function generateSubtreeFactsDispatch(w: CodeWriter) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
         if (transitiveBaseKeys(node).has("CompositeBase")) {
-            w.write(`return (*${node.name})(unsafe.Pointer(n)).subtreeFactsWorker(n)`);
+            w.write(`return subtreeFactsWorker(&${dataOf(node, "n")}.facts, n)`);
         }
         else {
             w.write("return n.computeSubtreeFacts()");
@@ -793,56 +1147,46 @@ function generateSubtreeFactsDispatch(w: CodeWriter) {
     w.write("");
 }
 
-function generateComputeSubtreeFactsDispatch(w: CodeWriter) {
-    w.write("func (n *Node) computeSubtreeFacts() SubtreeFacts {");
+function generateSubtreeFactsMethodDispatch(w: CodeWriter, method: string, fallback: string) {
+    w.write(`func (n Node) ${method}() SubtreeFacts {`);
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.Kind() {");
     for (const [node, kinds] of canonicalNodesByKind()) {
+        const call = viewMethodCall(node, method, "n");
+        if (!call) continue;
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
-        w.write(`return (*${node.name})(unsafe.Pointer(n)).computeSubtreeFacts()`);
+        w.write(`return ${call}`);
         w.pop();
     }
     w.write("default:");
     w.push();
-    w.write("return SubtreeFactsNone");
+    w.write(`return ${fallback}`);
     w.pop();
     w.write("}");
     w.pop();
     w.write("}");
     w.write("");
+}
+
+function generateComputeSubtreeFactsDispatch(w: CodeWriter) {
+    generateSubtreeFactsMethodDispatch(w, "computeSubtreeFacts", "SubtreeFactsNone");
 }
 
 function generatePropagateSubtreeFactsDispatch(w: CodeWriter) {
-    w.write("func (n *Node) propagateSubtreeFacts() SubtreeFacts {");
-    w.push();
-    w.write("switch n.Kind {");
-    for (const [node, kinds] of canonicalNodesByKind()) {
-        w.write(`case ${kinds.join(", ")}:`);
-        w.push();
-        w.write(`return (*${node.name})(unsafe.Pointer(n)).propagateSubtreeFacts()`);
-        w.pop();
-    }
-    w.write("default:");
-    w.push();
-    w.write("return SubtreeFactsNone");
-    w.pop();
-    w.write("}");
-    w.pop();
-    w.write("}");
-    w.write("");
+    generateSubtreeFactsMethodDispatch(w, "propagateSubtreeFacts", "n.SubtreeFacts() &^ SubtreeExclusionsNode");
 }
 
 const NODE_ACCESSORS: { method: string; ret: string; base: string; }[] = [
-    { method: "FlowNodeData", ret: "*FlowNodeBase", base: "FlowNodeBase" },
-    { method: "DeclarationData", ret: "*DeclarationBase", base: "DeclarationBase" },
-    { method: "ExportableData", ret: "*ExportableBase", base: "ExportableBase" },
-    { method: "LocalsContainerData", ret: "*LocalsContainerBase", base: "LocalsContainerBase" },
-    { method: "FunctionLikeData", ret: "*FunctionLikeBase", base: "FunctionLikeBase" },
-    { method: "ClassLikeData", ret: "*ClassLikeBase", base: "ClassLikeBase" },
-    { method: "BodyData", ret: "*BodyBase", base: "BodyBase" },
-    { method: "LiteralLikeData", ret: "*LiteralLikeNodeBase", base: "LiteralLikeNodeBase" },
-    { method: "TemplateLiteralLikeData", ret: "*TemplateLiteralLikeNodeBase", base: "TemplateLiteralLikeNodeBase" },
+    { method: "FlowNodeData", ret: "FlowNodeBase", base: "FlowNodeBase" },
+    { method: "DeclarationData", ret: "DeclarationBase", base: "DeclarationBase" },
+    { method: "ExportableData", ret: "ExportableBase", base: "ExportableBase" },
+    { method: "LocalsContainerData", ret: "LocalsContainerBase", base: "LocalsContainerBase" },
+    { method: "FunctionLikeData", ret: "FunctionLikeBase", base: "FunctionLikeBase" },
+    { method: "ClassLikeData", ret: "ClassLikeBase", base: "ClassLikeBase" },
+    { method: "BodyData", ret: "BodyBase", base: "BodyBase" },
+    { method: "LiteralLikeData", ret: "LiteralLikeNodeBase", base: "LiteralLikeNodeBase" },
+    { method: "TemplateLiteralLikeData", ret: "TemplateLiteralLikeNodeBase", base: "TemplateLiteralLikeNodeBase" },
 ];
 
 function transitiveBaseKeys(node: NodeType): Set<string> {
@@ -859,7 +1203,14 @@ function transitiveBaseKeys(node: NodeType): Set<string> {
     return seen;
 }
 
-function generateNodeAccessorDispatch(w: CodeWriter, method: string, ret: string, hasAccessor: (node: NodeType) => boolean) {
+function generateNodeAccessorDispatch(
+    w: CodeWriter,
+    method: string,
+    ret: string,
+    hasAccessor: (node: NodeType) => boolean,
+    body: (node: NodeType) => string,
+    zero: string,
+) {
     const cases: { node: NodeType; kinds: string[]; }[] = [];
     for (const node of api.nodes()) {
         if (!hasAccessor(node)) continue;
@@ -887,23 +1238,23 @@ function generateNodeAccessorDispatch(w: CodeWriter, method: string, ret: string
         w.write("");
     }
 
-    w.write(`func (n *Node) ${method}() ${ret} {`);
+    w.write(`func (n Node) ${method}() ${ret} {`);
     w.push();
     if (useDispatchTable) {
-        w.write(`switch ${table}[n.Kind] {`);
+        w.write(`switch ${table}[n.Kind()] {`);
     }
     else {
-        w.write("switch n.Kind {");
+        w.write("switch n.Kind() {");
     }
     for (const [index, { node, kinds }] of cases.entries()) {
         w.write(`case ${useDispatchTable ? index + 1 : kinds.join(", ")}:`);
         w.push();
-        w.write(`return (*${node.name})(unsafe.Pointer(n)).${method}()`);
+        w.write(`return ${body(node)}`);
         w.pop();
     }
     w.write("default:");
     w.push();
-    w.write("return nil");
+    w.write(`return ${zero}`);
     w.pop();
     w.write("}");
     w.pop();
@@ -913,7 +1264,7 @@ function generateNodeAccessorDispatch(w: CodeWriter, method: string, ret: string
 
 function generateNodeAccessors(w: CodeWriter) {
     for (const { method, ret, base } of NODE_ACCESSORS) {
-        generateNodeAccessorDispatch(w, method, ret, node => transitiveBaseKeys(node).has(base));
+        generateNodeAccessorDispatch(w, method, ret, node => transitiveBaseKeys(node).has(base), () => `${ret}{n}`, `${ret}{}`);
     }
 }
 
@@ -922,24 +1273,24 @@ function hasMember(node: NodeType, name: string): boolean {
 }
 
 function generateNameDispatch(w: CodeWriter) {
-    generateNodeAccessorDispatch(w, "Name", "*DeclarationName", node => hasMember(node, "name"));
+    generateNodeAccessorDispatch(w, "Name", "DeclarationName", node => hasMember(node, "name"), node => `${viewOf(node, "n")}.Name()`, "Node{}");
 }
 
 function generateModifiersDispatch(w: CodeWriter) {
-    generateNodeAccessorDispatch(w, "Modifiers", "*ModifierList", node => hasMember(node, "modifiers"));
+    generateNodeAccessorDispatch(w, "Modifiers", "*ModifierList", node => hasMember(node, "modifiers"), node => `${viewOf(node, "n")}.Modifiers()`, "nil");
 }
 
 function generateSetModifiersDispatch(w: CodeWriter) {
-    w.write("func (n *MutableNode) SetModifiers(modifiers *ModifierList) {");
+    w.write("func (n MutableNode) SetModifiers(modifiers *ModifierList) {");
     w.push();
-    w.write("switch n.Kind {");
+    w.write("switch n.Kind() {");
     for (const node of api.nodes()) {
         if (!hasMember(node, "modifiers")) continue;
         const kinds = node.allKinds().map(kind => kind.formatGoConstant());
         if (kinds.length === 0) continue;
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
-        w.write(`(*${node.name})(unsafe.Pointer(n)).setModifiers(modifiers)`);
+        w.write(`${viewOf(node, "n.Node")}.setModifiers(modifiers)`);
         w.pop();
     }
     w.write("}");
@@ -957,7 +1308,7 @@ function generateVisitEachChild(w: CodeWriter, node: NodeType) {
     if (childMembers.length === 0) return;
 
     const structName = node.name;
-    w.write(`func (node *${structName}) VisitEachChild(v *NodeVisitor) *Node {`);
+    w.write(`func (node ${structName}) VisitEachChild(v *NodeVisitor) Node {`);
     w.push();
 
     // Nodes with runtime-dependent child ordering delegate to a hand-written function.
@@ -977,13 +1328,13 @@ function generateVisitEachChild(w: CodeWriter, node: NodeType) {
         if (m.isChild() && type.kind === "list" && type.listKind === "raw") {
             const localName = m.goParamName();
             rawListLocals.set(m.name, localName);
-            w.write(`${localName} := core.SameMap(node.${m.name}, func(n *Node) *Node { return v.visitNode(n) })`);
+            w.write(`${localName} := core.SameMap(${fieldAccess(m)}, func(n Node) Node { return v.visitNode(n) })`);
         }
     }
 
     const args = updateMembers.map(m => {
         if (!m.isChild()) {
-            return `node.${m.name}`;
+            return fieldAccess(m);
         }
 
         // Raw list: use the local variable
@@ -991,7 +1342,7 @@ function generateVisitEachChild(w: CodeWriter, node: NodeType) {
             return rawListLocals.get(m.name)!;
         }
 
-        const access = `node.${m.name}`;
+        const access = fieldAccess(m);
         const type = m.type;
         const listKind = m.listKind;
 
@@ -1021,14 +1372,22 @@ function generateClone(w: CodeWriter, node: NodeType) {
     const structName = node.name;
     const members = schemaMembers(node);
 
-    w.write(`func (node *${structName}) Clone(f NodeFactoryCoercible) *Node {`);
+    if (node.kindAliases.length > 0) {
+        w.write(`func (node ${structName}) Clone(f NodeFactoryCoercible) Node { return node.CloneAs(f, node.Kind()) }`);
+        w.write("");
+        w.write("// CloneAs clones node as kind, which may be any of its kind aliases.");
+        w.write(`func (node ${structName}) CloneAs(f NodeFactoryCoercible, kind Kind) Node {`);
+    }
+    else {
+        w.write(`func (node ${structName}) Clone(f NodeFactoryCoercible) Node {`);
+    }
     w.push();
 
     // Build args for New* call
     // Clone is a struct method, so it can access private fields directly
     const args = members.map(m => {
         if (m.isKindParam()) {
-            return "node.Kind";
+            return "node.Kind()";
         }
         const type = m.declaredType;
 
@@ -1036,11 +1395,11 @@ function generateClone(w: CodeWriter, node: NodeType) {
             return "node.Modifiers()";
         }
         // Use direct field access (Clone is a struct method, can access private fields)
-        return `node.${m.name}`;
+        return fieldAccess(m);
     }).join(", ");
 
     if (node.kindAliases.length > 0) {
-        w.write("switch node.Kind {");
+        w.write("switch kind {");
         w.push();
         w.write(`case ${api.kindType(`SyntaxKind.${node.syntaxKindName}`).formatGoConstant()}:`);
         w.push();
@@ -1054,7 +1413,7 @@ function generateClone(w: CodeWriter, node: NodeType) {
         }
         w.write("default:");
         w.push();
-        w.write(`panic("unexpected kind in ${structName}.Clone: " + node.Kind.String())`);
+        w.write(`panic("unexpected kind in ${structName}.CloneAs: " + kind.String())`);
         w.pop();
         w.pop();
         w.write("}");
@@ -1073,9 +1432,9 @@ function generateClone(w: CodeWriter, node: NodeType) {
 function generateIsFunction(w: CodeWriter, node: NodeType) {
     const kindTypes = node.kindTypes();
     if (node.kindType.kind === "typeParameter") {
-        w.write(`func Is${node.name}(node *Node) bool {`);
+        w.write(`func Is${node.name}(node Node) bool {`);
         w.push();
-        w.write("switch node.Kind {");
+        w.write("switch node.Kind() {");
         w.write(`case ${kindTypes.map(kind => kind.formatGoConstant()).join(", ")}:`);
         w.push();
         w.write("return true");
@@ -1091,9 +1450,9 @@ function generateIsFunction(w: CodeWriter, node: NodeType) {
     if (node.isMultiKind()) {
         for (const kind of kindTypes) {
             const kindName = kind.name;
-            w.write(`func Is${kindName}(node *Node) bool {`);
+            w.write(`func Is${kindName}(node Node) bool {`);
             w.push();
-            w.write(`return node.Kind == ${kind.formatGoConstant()}`);
+            w.write(`return node.Kind() == ${kind.formatGoConstant()}`);
             w.pop();
             w.write("}");
             w.write("");
@@ -1101,16 +1460,16 @@ function generateIsFunction(w: CodeWriter, node: NodeType) {
         return;
     }
 
-    w.write(`func Is${node.name}(node *Node) bool {`);
+    w.write(`func Is${node.name}(node Node) bool {`);
     w.push();
-    w.write(`return node.Kind == ${api.kindType(`SyntaxKind.${node.syntaxKindName}`).formatGoConstant()}`);
+    w.write(`return node.Kind() == ${api.kindType(`SyntaxKind.${node.syntaxKindName}`).formatGoConstant()}`);
     w.pop();
     w.write("}");
     w.write("");
     for (const alias of node.kindAliases) {
-        w.write(`func Is${alias}(node *Node) bool {`);
+        w.write(`func Is${alias}(node Node) bool {`);
         w.push();
-        w.write(`return node.Kind == Kind${alias}`);
+        w.write(`return node.Kind() == Kind${alias}`);
         w.pop();
         w.write("}");
         w.write("");
@@ -1164,28 +1523,6 @@ function generateKindAliasGuards(w: CodeWriter) {
     }
 }
 
-// ── Generate Name() accessor ───────────────────────────────────────────────
-
-function generateNameAccessor(w: CodeWriter, node: NodeType) {
-    const members = schemaMembers(node);
-    const nameMember = members.find(m => m.name === "name");
-    if (!nameMember) return;
-
-    // Check if private (either directly or via trait)
-    const isPrivate = nameMember.inherited
-        ? (nameMember.inheritedField?.private || false)
-        : (nameMember.private || false);
-    if (!isPrivate) return;
-
-    const structName = node.name;
-    w.write(`func (node *${structName}) Name() *DeclarationName {`);
-    w.push();
-    w.write("return node.name");
-    w.pop();
-    w.write("}");
-    w.write("");
-}
-
 // ────────────────────────────────────────────────────────────────────────────
 // Main generation
 // ────────────────────────────────────────────────────────────────────────────
@@ -1195,6 +1532,7 @@ function generate(): string {
 
     generateHeader(w);
     generateNodeFactoryStruct(w);
+    generateLayouts(w);
 
     // Generate base struct definitions
     generateBaseStructDefs(w);
@@ -1280,7 +1618,6 @@ function generate(): string {
             generateVisitEachChild(w, node);
             generateClone(w, node);
             generateSubtreeFacts(w, node);
-            generateNameAccessor(w, node);
         }
         generateIsFunction(w, node);
         if (node.handWritten) {
@@ -1339,15 +1676,6 @@ function generate(): string {
     w.write("// ──────────────────────────────────────────────────────────────────────");
     w.write("// As*() cast methods");
     w.write("// ──────────────────────────────────────────────────────────────────────");
-    w.write("");
-    w.write("// Every concrete node embeds its header at offset zero.");
-    w.write("var (");
-    w.push();
-    for (const node of api.nodes()) {
-        w.write(`_ [0 - unsafe.Offsetof(${node.name}{}.Node)]byte`);
-    }
-    w.pop();
-    w.write(")");
     w.write("");
     for (const node of api.nodes()) {
         generateAsCast(w, node);

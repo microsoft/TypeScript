@@ -12,10 +12,10 @@ import (
 )
 
 var (
-	accessorName        *ast.Node
+	accessorName        ast.Node
 	accessorModifiers   *ast.ModifierList
-	accessorDeclaration *ast.DeclarationBase
-	accessorLocals      *ast.LocalsContainerBase
+	accessorDeclaration ast.DeclarationBase
+	accessorLocals      ast.LocalsContainerBase
 )
 
 func BenchmarkNodeAccessors(b *testing.B) {
@@ -33,18 +33,18 @@ func BenchmarkNodeAccessors(b *testing.B) {
 	}
 }
 
-func benchmarkNodeAccessors(b *testing.B, root *ast.Node) {
-	var nodes, named, declarations, containers []*ast.Node
+func benchmarkNodeAccessors(b *testing.B, root ast.Node) {
+	var nodes, named, declarations, containers []ast.Node
 	var visit ast.Visitor
-	visit = func(node *ast.Node) bool {
+	visit = func(node ast.Node) bool {
 		nodes = append(nodes, node)
-		if node.Name() != nil {
+		if !node.Name().IsNil() {
 			named = append(named, node)
 		}
-		if node.DeclarationData() != nil {
+		if !node.DeclarationData().IsNil() {
 			declarations = append(declarations, node)
 		}
-		if node.LocalsContainerData() != nil {
+		if !node.LocalsContainerData().IsNil() {
 			containers = append(containers, node)
 		}
 		node.ForEachChild(visit)

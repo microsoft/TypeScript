@@ -26,7 +26,7 @@ import (
 // conditionally, e.g.
 //
 //	var exprType *Type
-//	if node.Expression() != nil {
+//	if !node.Expression().IsNil() {
 //		exprType = c.checkExpressionCached(node.Expression())
 //	}
 //	if c.grammarError(node) {
@@ -238,9 +238,18 @@ func guardedNil(ret inspector.Cursor, childExpr ast.Expr) bool {
 }
 
 // condImpliesNil reports whether `cond` evaluating to `condIsTrue` implies that
-// `childExpr` is nil, i.e. `childExpr == nil` (when true) or `childExpr != nil`
-// (when false).
+// `childExpr` is nil, i.e. `childExpr == nil` or `childExpr.IsNil()` (when
+// true) or `childExpr != nil` or `!childExpr.IsNil()` (when false).
 func condImpliesNil(cond ast.Expr, childExpr ast.Expr, condIsTrue bool) bool {
+	if un, ok := cond.(*ast.UnaryExpr); ok && un.Op == token.NOT {
+		return condImpliesNil(un.X, childExpr, !condIsTrue)
+	}
+	if call, ok := cond.(*ast.CallExpr); ok && condIsTrue && len(call.Args) == 0 {
+		if sel, ok := call.Fun.(*ast.SelectorExpr); ok && sel.Sel.Name == "IsNil" {
+			return equalExpr(sel.X, childExpr)
+		}
+		return false
+	}
 	bin, ok := cond.(*ast.BinaryExpr)
 	if !ok {
 		return false

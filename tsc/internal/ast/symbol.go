@@ -22,8 +22,8 @@ type Symbol struct {
 // Every symbol references a symbolData structure that may be shared with other symbols.
 type symbolData struct {
 	name             string
-	declarations     []*Node
-	valueDeclaration *Node
+	declarations     []Node
+	valueDeclaration Node
 	parent           *Symbol
 	extra            *symbolExtra
 }
@@ -40,12 +40,12 @@ type SymbolExtraArena struct {
 	arena core.Arena[symbolExtra]
 }
 
-func (s *Symbol) Flags() SymbolFlags      { return s.flags }
-func (s *Symbol) CheckFlags() CheckFlags  { return s.checkFlags }
-func (s *Symbol) Name() string            { return s.data.name }
-func (s *Symbol) Declarations() []*Node   { return s.data.declarations }
-func (s *Symbol) ValueDeclaration() *Node { return s.data.valueDeclaration }
-func (s *Symbol) Parent() *Symbol         { return s.data.parent }
+func (s *Symbol) Flags() SymbolFlags     { return s.flags }
+func (s *Symbol) CheckFlags() CheckFlags { return s.checkFlags }
+func (s *Symbol) Name() string           { return s.data.name }
+func (s *Symbol) Declarations() []Node   { return s.data.declarations }
+func (s *Symbol) ValueDeclaration() Node { return s.data.valueDeclaration }
+func (s *Symbol) Parent() *Symbol        { return s.data.parent }
 
 func (s *Symbol) Members() SymbolTable {
 	if s.data.extra == nil {
@@ -68,12 +68,12 @@ func (s *Symbol) ExportSymbol() *Symbol {
 	return s.data.extra.exportSymbol
 }
 
-func (s *Symbol) SetFlags(value SymbolFlags)      { s.flags = value }
-func (s *Symbol) SetCheckFlags(value CheckFlags)  { s.checkFlags = value }
-func (s *Symbol) SetName(value string)            { s.data.name = value }
-func (s *Symbol) SetDeclarations(value []*Node)   { s.data.declarations = value }
-func (s *Symbol) SetValueDeclaration(value *Node) { s.data.valueDeclaration = value }
-func (s *Symbol) SetParent(value *Symbol)         { s.data.parent = value }
+func (s *Symbol) SetFlags(value SymbolFlags)     { s.flags = value }
+func (s *Symbol) SetCheckFlags(value CheckFlags) { s.checkFlags = value }
+func (s *Symbol) SetName(value string)           { s.data.name = value }
+func (s *Symbol) SetDeclarations(value []Node)   { s.data.declarations = value }
+func (s *Symbol) SetValueDeclaration(value Node) { s.data.valueDeclaration = value }
+func (s *Symbol) SetParent(value *Symbol)        { s.data.parent = value }
 
 func (s *Symbol) ensureExtra(arena *SymbolExtraArena) *symbolExtra {
 	if s.data.extra == nil {
@@ -148,7 +148,7 @@ func (s *Symbol) IsExternalModule() bool {
 }
 
 func (s *Symbol) IsStatic() bool {
-	if s.ValueDeclaration() == nil {
+	if s.ValueDeclaration().IsNil() {
 		return false
 	}
 	modifierFlags := s.ValueDeclaration().ModifierFlags()
@@ -193,7 +193,7 @@ const (
 )
 
 func SymbolName(symbol *Symbol) string {
-	if symbol.ValueDeclaration() != nil && IsPrivateIdentifierClassElementDeclaration(symbol.ValueDeclaration()) {
+	if !symbol.ValueDeclaration().IsNil() && IsPrivateIdentifierClassElementDeclaration(symbol.ValueDeclaration()) {
 		return symbol.ValueDeclaration().Name().Text()
 	}
 	return symbol.Name()

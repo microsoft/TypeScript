@@ -50,10 +50,10 @@ foo.bar;`
 	c, done := p.GetTypeChecker(t.Context())
 	defer done()
 	file := p.GetSourceFile("/foo.ts")
-	interfaceId := file.Statements.Nodes[0].Name()
-	varId := file.Statements.Nodes[1].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].Name()
-	propAccess := file.Statements.Nodes[2].Expression()
-	nodes := []*ast.Node{interfaceId, varId, propAccess}
+	interfaceId := file.Statements.Nodes()[0].Name()
+	varId := file.Statements.Nodes()[1].AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes()[0].Name()
+	propAccess := file.Statements.Nodes()[2].Expression()
+	nodes := []ast.Node{interfaceId, varId, propAccess}
 	for _, node := range nodes {
 		symbol := c.GetSymbolAtLocation(node)
 		if symbol == nil {
@@ -98,8 +98,8 @@ export type E = D;`,
 	c, done := p.GetTypeChecker(t.Context())
 	defer done()
 	file := p.GetSourceFile("/main.ts")
-	importClauseAt := func(index int) *ast.Node {
-		return file.Statements.Nodes[index].AsImportDeclaration().ImportClause
+	importClauseAt := func(index int) ast.Node {
+		return file.Statements.Nodes()[index].AsImportDeclaration().ImportClause()
 	}
 	// An import clause without a default binding has no symbol of its own. A type-only one
 	// should get the same type as the equivalent regular import instead of crashing.
@@ -113,7 +113,7 @@ export type E = D;`,
 	}
 
 	defaultClause := c.GetTypeAtLocation(importClauseAt(3))
-	defaultReference := c.GetTypeAtLocation(file.Statements.Nodes[7].AsTypeAliasDeclaration().Type)
+	defaultReference := c.GetTypeAtLocation(file.Statements.Nodes()[7].AsTypeAliasDeclaration().Type())
 	assert.Equal(t, defaultClause, defaultReference)
 }
 
@@ -198,13 +198,13 @@ export type Initial = Box<"first">;
 	c, done := program.GetTypeChecker(t.Context())
 	defer done()
 	file := program.GetSourceFile("/foo.ts")
-	initial := c.GetTypeAtLocation(file.Statements.Nodes[1].AsTypeAliasDeclaration().Type)
+	initial := c.GetTypeAtLocation(file.Statements.Nodes()[1].AsTypeAliasDeclaration().Type())
 	for i := range 1024 {
-		node := file.Statements.Nodes[i+2].AsTypeAliasDeclaration().Type
+		node := file.Statements.Nodes()[i+2].AsTypeAliasDeclaration().Type()
 		typ := c.GetTypeAtLocation(node)
 		assert.Equal(t, c.TypeToString(typ), fmt.Sprintf("T%d", i))
 	}
-	assert.Equal(t, c.GetTypeAtLocation(file.Statements.Nodes[1].AsTypeAliasDeclaration().Type), initial)
+	assert.Equal(t, c.GetTypeAtLocation(file.Statements.Nodes()[1].AsTypeAliasDeclaration().Type()), initial)
 	assert.Equal(t, c.TypeToString(initial), "Initial")
 	assert.Equal(t, len(c.GetDiagnostics(t.Context(), file)), 0)
 }

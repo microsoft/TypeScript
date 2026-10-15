@@ -20,14 +20,14 @@ type useStrictTransformer struct {
 	getEmitModuleFormatOfFile func(file ast.HasFileName) core.ModuleKind
 }
 
-func (tx *useStrictTransformer) visit(node *ast.Node) *ast.Node {
-	if node.Kind != ast.KindSourceFile {
+func (tx *useStrictTransformer) visit(node ast.Node) ast.Node {
+	if node.Kind() != ast.KindSourceFile {
 		return node
 	}
 	return tx.visitSourceFile(node.AsSourceFile())
 }
 
-func (tx *useStrictTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
+func (tx *useStrictTransformer) visitSourceFile(node *ast.SourceFile) ast.Node {
 	if node.ScriptKind == core.ScriptKindJSON {
 		return node.AsNode()
 	}
@@ -43,8 +43,8 @@ func (tx *useStrictTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node 
 		return node.AsNode()
 	}
 
-	statements := tx.Factory().EnsureUseStrict(node.Statements.Nodes)
+	statements := tx.Factory().EnsureUseStrict(node.Statements.Nodes())
 	statementList := tx.Factory().NewNodeList(statements)
-	statementList.Loc = node.Statements.Loc
+	statementList.SetLoc(node.Statements.Loc())
 	return tx.Factory().UpdateSourceFile(node, statementList, node.EndOfFileToken).AsSourceFile().AsNode()
 }

@@ -38,7 +38,7 @@ func TestFileSymbolResponseSerializesDescriptorOnce(t *testing.T) {
 	t.Parallel()
 	sourceFile := parseAndBind(t, "/file.ts", `class C { property = 1 }`)
 
-	response := newFileSymbolResponse(sourceFile.Statements.Nodes[0].Symbol())
+	response := newFileSymbolResponse(sourceFile.Statements.Nodes()[0].Symbol())
 	encoded, err := json.Marshal(response)
 	assert.NilError(t, err)
 	assert.Equal(t, strings.Count(string(encoded), `"contentHash"`), 1)
@@ -49,7 +49,7 @@ func TestFileOwnedSymbolsAreNotRegisteredInSnapshot(t *testing.T) {
 	sourceFile := parseAndBind(t, "/file.ts", `export class C { property = 1 }`)
 	sd := newTestSnapshotData()
 
-	response := sd.newSymbolResponse(sourceFile.Statements.Nodes[0].Symbol(), "/tsconfig.json")
+	response := sd.newSymbolResponse(sourceFile.Statements.Nodes()[0].Symbol(), "/tsconfig.json")
 	assert.Equal(t, response.Reference.Kind, SymbolOwnerKindFile)
 	assert.Equal(t, len(sd.symbolRegistry), 0)
 	assert.Equal(t, len(sd.symbolCanonicalProjects), 0)
@@ -58,11 +58,11 @@ func TestFileOwnedSymbolsAreNotRegisteredInSnapshot(t *testing.T) {
 func TestTransientSymbolWithFileDeclarationIsSnapshotOwned(t *testing.T) {
 	t.Parallel()
 	sourceFile := parseAndBind(t, "/file.ts", `export class C { property = 1 }`)
-	class := sourceFile.Statements.Nodes[0]
+	class := sourceFile.Statements.Nodes()[0]
 	symbol := ast.NewSymbol()
 	symbol.SetFlags(ast.SymbolFlagsClass | ast.SymbolFlagsTransient)
 	symbol.SetName("C")
-	symbol.SetDeclarations([]*ast.Node{class})
+	symbol.SetDeclarations([]ast.Node{class})
 	sd := newTestSnapshotData()
 
 	response := sd.newSymbolResponse(symbol, "/tsconfig.json")
@@ -75,7 +75,7 @@ func TestTransientSymbolWithFileDeclarationIsSnapshotOwned(t *testing.T) {
 func TestSymbolReferencesIdentifyOwnerWithoutDescriptor(t *testing.T) {
 	t.Parallel()
 	sourceFile := parseAndBind(t, "/file.ts", `export class C { property = 1 }`)
-	class := sourceFile.Statements.Nodes[0].Symbol()
+	class := sourceFile.Statements.Nodes()[0].Symbol()
 
 	reference := newSymbolReference(class)
 	assert.Equal(t, reference.Id, SymbolHandle(class))
@@ -98,7 +98,7 @@ func TestContentMappedSymbolsAreSnapshotOwned(t *testing.T) {
 	}, `export class C { property = 1 }`, core.ScriptKindTS)
 	sourceFile.SetContentMapperInfo(ast.ContentMapperSourceFileInfo{ContentMapper: "mapper"})
 	binder.BindSourceFile(sourceFile)
-	class := sourceFile.Statements.Nodes[0].Symbol()
+	class := sourceFile.Statements.Nodes()[0].Symbol()
 	sd := newTestSnapshotData()
 
 	response := sd.newSymbolResponse(class, "/tsconfig.json")

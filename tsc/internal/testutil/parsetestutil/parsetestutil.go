@@ -48,32 +48,32 @@ func CheckDiagnosticsMessage(t *testing.T, file *ast.SourceFile, message string)
 func newSyntheticRecursiveVisitor() *ast.NodeVisitor {
 	var v *ast.NodeVisitor
 	v = ast.NewNodeVisitor(
-		func(node *ast.Node) *ast.Node {
+		func(node ast.Node) ast.Node {
 			return v.VisitEachChild(node)
 		},
 		&ast.NodeFactory{},
 		ast.NodeVisitorHooks{
-			VisitNode: func(node *ast.Node, v *ast.NodeVisitor) *ast.Node {
-				if node != nil {
-					node.Loc = core.UndefinedTextRange()
+			VisitNode: func(node ast.Node, v *ast.NodeVisitor) ast.Node {
+				if !node.IsNil() {
+					node.SetLoc(core.UndefinedTextRange())
 				}
 				return v.VisitNode(node)
 			},
-			VisitToken: func(node *ast.Node, v *ast.NodeVisitor) *ast.Node {
-				if node != nil {
-					node.Loc = core.UndefinedTextRange()
+			VisitToken: func(node ast.Node, v *ast.NodeVisitor) ast.Node {
+				if !node.IsNil() {
+					node.SetLoc(core.UndefinedTextRange())
 				}
 				return v.VisitNode(node)
 			},
 			VisitNodes: func(nodes *ast.NodeList, v *ast.NodeVisitor) *ast.NodeList {
 				if nodes != nil {
-					nodes.Loc = core.UndefinedTextRange()
+					nodes.SetLoc(core.UndefinedTextRange())
 				}
 				return v.VisitNodes(nodes)
 			},
 			VisitModifiers: func(nodes *ast.ModifierList, v *ast.NodeVisitor) *ast.ModifierList {
 				if nodes != nil {
-					nodes.Loc = core.UndefinedTextRange()
+					nodes.SetLoc(core.UndefinedTextRange())
 				}
 				return v.VisitModifiers(nodes)
 			},
@@ -83,6 +83,6 @@ func newSyntheticRecursiveVisitor() *ast.NodeVisitor {
 }
 
 // Sets the Loc of the given node and every Node in its subtree to an undefined TextRange (-1,-1).
-func MarkSyntheticRecursive(node *ast.Node) {
+func MarkSyntheticRecursive(node ast.Node) {
 	newSyntheticRecursiveVisitor().VisitNode(node)
 }

@@ -4,6 +4,8 @@ type Node struct{}
 
 func (n *Node) Expression() *Node { return nil }
 
+func (n *Node) IsNil() bool { return n == nil }
+
 type Type struct{}
 
 type CheckMode int
@@ -40,6 +42,8 @@ func (c *Checker) checkExpressionWorker(node *Node, checkMode CheckMode) *Type {
 		return c.checkCallLike(node)
 	case node != nil:
 		return c.checkNilGuardedReturn(node)
+	case node.IsNil():
+		return c.checkIsNilGuardedReturn(node)
 	default:
 		return c.checkReturnsInReturn(node)
 	}
@@ -107,6 +111,16 @@ func (c *Checker) checkReturnsInReturn(node *Node) *Type {
 func (c *Checker) checkNilGuardedReturn(node *Node) *Type {
 	c.grammarError(node)
 	if node.Expression() == nil {
+		return c.errorType
+	}
+	return c.checkExpression(node.Expression(), 0)
+}
+
+// checkIsNilGuardedReturn is like checkNilGuardedReturn, but guards with an
+// IsNil method call.
+func (c *Checker) checkIsNilGuardedReturn(node *Node) *Type {
+	c.grammarError(node)
+	if node.Expression().IsNil() {
 		return c.errorType
 	}
 	return c.checkExpression(node.Expression(), 0)

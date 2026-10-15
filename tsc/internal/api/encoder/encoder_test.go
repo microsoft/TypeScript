@@ -133,13 +133,13 @@ func TestBuildNodeIndexTableMatchesEncode(t *testing.T) {
 
 	// GetIndex on both tables should agree for every non-nil node
 	for i, node := range encodeTable.Nodes {
-		if node == nil {
+		if node.IsNil() {
 			continue
 		}
 		encIdx := encodeTable.GetIndex(node)
 		buildIdx := buildTable.GetIndex(node)
-		assert.Equal(t, encIdx, uint32(i), "encodeTable.GetIndex mismatch at index %d, node kind=%s", i, node.Kind.String())
-		assert.Equal(t, buildIdx, encIdx, "buildTable.GetIndex mismatch for node kind=%s", node.Kind.String())
+		assert.Equal(t, encIdx, uint32(i), "encodeTable.GetIndex mismatch at index %d, node kind=%s", i, node.Kind().String())
+		assert.Equal(t, buildIdx, encIdx, "buildTable.GetIndex mismatch for node kind=%s", node.Kind().String())
 	}
 }
 

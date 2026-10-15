@@ -1,7 +1,5 @@
 package ast
 
-import "unsafe"
-
 // FlowFlags
 
 type FlowFlags uint32
@@ -28,7 +26,7 @@ const (
 
 type FlowNode struct {
 	Flags       FlowFlags
-	Node        *Node     // Associated AST node
+	Node        Node      // Associated AST node
 	Antecedent  *FlowNode // Antecedent for all but FlowLabel
 	Antecedents *FlowList // Linked list of antecedents for FlowLabel
 }
@@ -47,40 +45,71 @@ const (
 
 // FlowSwitchClauseData (synthetic AST node for FlowFlagsSwitchClause)
 
-type FlowSwitchClauseData struct {
-	NodeBase
-	SwitchStatement *Node
-	ClauseStart     int32 // Start index of case/default clause range
-	ClauseEnd       int32 // End index of case/default clause range
+type FlowSwitchClauseData struct{ Node }
+
+type flowSwitchClauseData struct {
+	nodeBaseData
+	switchStatement nodeRef
+	clauseStart     int32 // Start index of case/default clause range
+	clauseEnd       int32 // End index of case/default clause range
 }
 
-var _ [0 - unsafe.Offsetof(FlowSwitchClauseData{}.Node)]byte
-
-func NewFlowSwitchClauseData(switchStatement *Node, clauseStart int, clauseEnd int) *Node {
-	node := &FlowSwitchClauseData{}
-	node.SwitchStatement = switchStatement
-	node.ClauseStart = int32(clauseStart)
-	node.ClauseEnd = int32(clauseEnd)
-	return newNode(kindFlowSwitchClauseData, node.AsNode(), NodeFactoryHooks{})
+func (node FlowSwitchClauseData) data() *flowSwitchClauseData {
+	return (*flowSwitchClauseData)(node.rec())
 }
 
-func (node *FlowSwitchClauseData) IsEmpty() bool {
-	return node.ClauseStart == node.ClauseEnd
+func (node FlowSwitchClauseData) SwitchStatement() Node {
+	return node.deref(&node.data().switchStatement)
+}
+
+func (node FlowSwitchClauseData) SetSwitchStatement(value Node) {
+	node.setRef(&node.data().switchStatement, value)
+}
+func (node FlowSwitchClauseData) ClauseStart() int32         { return node.data().clauseStart }
+func (node FlowSwitchClauseData) SetClauseStart(value int32) { node.data().clauseStart = value }
+func (node FlowSwitchClauseData) ClauseEnd() int32           { return node.data().clauseEnd }
+func (node FlowSwitchClauseData) SetClauseEnd(value int32)   { node.data().clauseEnd = value }
+
+// NewFlowSwitchClauseData allocates in the store of switchStatement, whose
+// file must not be shared with other writers while it is bound.
+func NewFlowSwitchClauseData(switchStatement Node, clauseStart int, clauseEnd int) Node {
+	s := switchStatement.store()
+	data, i := newRecord[flowSwitchClauseData](s, layoutFlowSwitchClauseData)
+	data.switchStatement = s.refAt(i, &data.switchStatement, switchStatement)
+	data.clauseStart = int32(clauseStart)
+	data.clauseEnd = int32(clauseEnd)
+	return newNode(s, kindFlowSwitchClauseData, layoutFlowSwitchClauseData, i, NodeFactoryHooks{})
+}
+
+func (node FlowSwitchClauseData) IsEmpty() bool {
+	return node.ClauseStart() == node.ClauseEnd()
 }
 
 // FlowReduceLabelData (synthetic AST node for FlowFlagsReduceLabel)
 
-type FlowReduceLabelData struct {
-	NodeBase
-	Target      *FlowLabel // Target label
-	Antecedents *FlowList  // Temporary antecedent list
+type FlowReduceLabelData struct{ Node }
+
+type flowReduceLabelData struct {
+	nodeBaseData
+	target      *FlowLabel // Target label
+	antecedents *FlowList  // Temporary antecedent list
 }
 
-var _ [0 - unsafe.Offsetof(FlowReduceLabelData{}.Node)]byte
+func (node FlowReduceLabelData) data() *flowReduceLabelData {
+	return (*flowReduceLabelData)(node.rec())
+}
 
-func NewFlowReduceLabelData(target *FlowLabel, antecedents *FlowList) *Node {
-	node := &FlowReduceLabelData{}
-	node.Target = target
-	node.Antecedents = antecedents
-	return newNode(kindFlowReduceLabelData, node.AsNode(), NodeFactoryHooks{})
+func (node FlowReduceLabelData) Target() *FlowLabel             { return node.data().target }
+func (node FlowReduceLabelData) SetTarget(value *FlowLabel)     { node.data().target = value }
+func (node FlowReduceLabelData) Antecedents() *FlowList         { return node.data().antecedents }
+func (node FlowReduceLabelData) SetAntecedents(value *FlowList) { node.data().antecedents = value }
+
+// NewFlowReduceLabelData allocates in the store of file, which must not be
+// shared with other writers while it is bound.
+func NewFlowReduceLabelData(file *SourceFile, target *FlowLabel, antecedents *FlowList) Node {
+	s := file.store()
+	data, i := newRecord[flowReduceLabelData](s, layoutFlowReduceLabelData)
+	data.target = target
+	data.antecedents = antecedents
+	return newNode(s, kindFlowReduceLabelData, layoutFlowReduceLabelData, i, NodeFactoryHooks{})
 }

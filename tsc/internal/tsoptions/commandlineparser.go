@@ -145,7 +145,7 @@ func (p *commandLineParser) parseStrings(args []string) {
 			if opt != nil {
 				i = p.parseOptionValue(args, i, opt, p.workerDiagnostics.OptionTypeMismatchDiagnostic)
 			} else {
-				p.errors = append(p.errors, p.createUnknownOptionError(inputOptionName, s, nil, nil))
+				p.errors = append(p.errors, p.createUnknownOptionError(inputOptionName, s, ast.Node{}, nil))
 			}
 		default:
 			p.fileNames = append(p.fileNames, s)
@@ -267,7 +267,7 @@ func (p *commandLineParser) parseOptionValue(
 				if opt.Kind == "list" {
 					p.options.Set(opt.Name, []string{})
 				} else if opt.Kind == "enum" {
-					p.errors = append(p.errors, createDiagnosticForInvalidEnumType(opt, nil, nil))
+					p.errors = append(p.errors, createDiagnosticForInvalidEnumType(opt, nil, ast.Node{}))
 				}
 			} else {
 				p.options.Set(opt.Name, true)
@@ -304,7 +304,7 @@ func (p *commandLineParser) parseOptionValue(
 					i++
 				}
 			case "string":
-				val, err := validateJsonOptionValue(opt, args[i], nil, nil)
+				val, err := validateJsonOptionValue(opt, args[i], ast.Node{}, nil)
 				if err == nil {
 					p.options.Set(opt.Name, val)
 				} else {
@@ -322,7 +322,7 @@ func (p *commandLineParser) parseOptionValue(
 				// If not a primitive, the possible types are specified in what is effectively a map of options.
 				panic("listOrElement not supported here")
 			default:
-				val, err := convertJsonOptionOfEnumType(opt, strings.TrimFunc(args[i], stringutil.IsWhiteSpaceLike), nil, nil)
+				val, err := convertJsonOptionOfEnumType(opt, strings.TrimFunc(args[i], stringutil.IsWhiteSpaceLike), ast.Node{}, nil)
 				p.options.Set(opt.Name, val)
 				p.errors = append(p.errors, err...)
 				i++
@@ -346,7 +346,7 @@ func ParseListTypeOption(opt *CommandLineOption, value string) ([]any, []*ast.Di
 		return []any{}, errors
 	}
 	if opt.Kind == "listOrElement" && !strings.ContainsRune(value, ',') {
-		val, err := validateJsonOptionValue(opt, value, nil, nil)
+		val, err := validateJsonOptionValue(opt, value, ast.Node{}, nil)
 		if err != nil {
 			return []any{}, err
 		}
@@ -359,7 +359,7 @@ func ParseListTypeOption(opt *CommandLineOption, value string) ([]any, []*ast.Di
 	switch opt.Elements().Kind {
 	case "string":
 		elements := core.MapFiltered(values, func(v string) (any, bool) {
-			val, err := validateJsonOptionValue(opt.Elements(), v, nil, nil)
+			val, err := validateJsonOptionValue(opt.Elements(), v, ast.Node{}, nil)
 			if s, ok := val.(string); ok && len(err) == 0 && s != "" {
 				return s, true
 			}
@@ -373,7 +373,7 @@ func ParseListTypeOption(opt *CommandLineOption, value string) ([]any, []*ast.Di
 		panic("List of " + opt.Elements().Kind + " is not yet supported.")
 	default:
 		result := core.MapFiltered(values, func(v string) (any, bool) {
-			val, err := convertJsonOptionOfEnumType(opt.Elements(), strings.TrimFunc(v, stringutil.IsWhiteSpaceLike), nil, nil)
+			val, err := convertJsonOptionOfEnumType(opt.Elements(), strings.TrimFunc(v, stringutil.IsWhiteSpaceLike), ast.Node{}, nil)
 			if s, ok := val.(string); ok && len(err) == 0 && s != "" {
 				return s, true
 			}
@@ -387,7 +387,7 @@ func ParseListTypeOption(opt *CommandLineOption, value string) ([]any, []*ast.Di
 func convertJsonOptionOfEnumType(
 	opt *CommandLineOption,
 	value string,
-	valueExpression *ast.Expression,
+	valueExpression ast.Expression,
 	sourceFile *ast.SourceFile,
 ) (any, []*ast.Diagnostic) {
 	if value == "" {

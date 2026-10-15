@@ -20,7 +20,7 @@ func TestCheckerNodeLinkStores(t *testing.T) {
 	f := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 	first := &Checker{}
 	second := &Checker{}
-	nodes := make([]*ast.Node, 4096)
+	nodes := make([]ast.Node, 4096)
 	for i := range nodes {
 		node := f.NewIdentifier(strconv.Itoa(i))
 		if i%2 == 0 {
@@ -591,7 +591,7 @@ func TestCompactTypeNodeLinksLayout(t *testing.T) {
 
 func TestCompactSignatureLayout(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, unsafe.Sizeof(Signature{}), 16+8*unsafe.Sizeof(uintptr(0)))
+	assert.Equal(t, unsafe.Sizeof(Signature{}), 16+7*unsafe.Sizeof(uintptr(0))+unsafe.Sizeof(ast.Node{}))
 	assert.Equal(t, unsafe.Sizeof(signatureExtra{}), 7*unsafe.Sizeof(uintptr(0)))
 }
 
@@ -599,7 +599,7 @@ func TestSignatureExtra(t *testing.T) {
 	t.Parallel()
 	c, types := newCompositeTestChecker()
 	c.noTypePredicate = &TypePredicate{}
-	sig := c.newSignature(SignatureFlagsHasRestParameter, nil, nil, nil, nil, types[0], nil, 1)
+	sig := c.newSignature(SignatureFlagsHasRestParameter, ast.Node{}, nil, nil, nil, types[0], nil, 1)
 	assert.Assert(t, sig.extra == nil)
 	assert.Assert(t, sig.TypeParameters() == nil)
 	assert.Assert(t, sig.ThisParameter() == nil)
@@ -648,7 +648,7 @@ func TestSignatureExtra(t *testing.T) {
 	assert.Assert(t, entry.resolvedTypePredicate == nil)
 	sig.setResolvedTypePredicate(c, predicate)
 	for range 1024 {
-		other := c.newSignature(SignatureFlagsNone, nil, types, parameter, nil, nil, predicate, 0)
+		other := c.newSignature(SignatureFlagsNone, ast.Node{}, types, parameter, nil, nil, predicate, 0)
 		other.setComposite(c, composite)
 	}
 	runtime.GC()

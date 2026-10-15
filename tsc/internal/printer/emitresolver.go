@@ -18,10 +18,10 @@ const (
 
 type SymbolAccessibilityResult struct {
 	Accessibility        SymbolAccessibility
-	AliasesToMakeVisible []*ast.Node // aliases that need to have this symbol visible
-	ErrorSymbolName      string      // Optional - symbol name that results in error
-	ErrorNode            *ast.Node   // Optional - node that results in error
-	ErrorModuleName      string      // Optional - If the symbol is not visible from module, module's name
+	AliasesToMakeVisible []ast.Node // aliases that need to have this symbol visible
+	ErrorSymbolName      string     // Optional - symbol name that results in error
+	ErrorNode            ast.Node   // Optional - node that results in error
+	ErrorModuleName      string     // Optional - If the symbol is not visible from module, module's name
 }
 
 /**
@@ -76,53 +76,53 @@ const (
 type EmitResolver interface {
 	binder.ReferenceResolver
 	EmitContext() *EmitContext
-	IsReferencedAliasDeclaration(node *ast.Node) bool
-	IsValueAliasDeclaration(node *ast.Node) bool
-	IsTopLevelValueImportEqualsWithEntityName(node *ast.Node) bool
+	IsReferencedAliasDeclaration(node ast.Node) bool
+	IsValueAliasDeclaration(node ast.Node) bool
+	IsTopLevelValueImportEqualsWithEntityName(node ast.Node) bool
 	MarkLinkedReferencesRecursively(file *ast.SourceFile)
-	GetExternalModuleFileFromDeclaration(node *ast.Node) *ast.SourceFile
-	GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags
+	GetExternalModuleFileFromDeclaration(node ast.Node) *ast.SourceFile
+	GetEffectiveDeclarationFlags(node ast.Node, flags ast.ModifierFlags) ast.ModifierFlags
 
 	// decorator metadata
-	GetTypeReferenceSerializationKind(name *ast.EntityName, serialScope *ast.Node) TypeReferenceSerializationKind
+	GetTypeReferenceSerializationKind(name ast.EntityName, serialScope ast.Node) TypeReferenceSerializationKind
 
 	// const enum inlining
-	GetConstantValue(node *ast.Node) any
+	GetConstantValue(node ast.Node) any
 
 	// JSX Emit
-	GetJsxFactoryEntity(location *ast.Node) *ast.Node
-	GetJsxFragmentFactoryEntity(location *ast.Node) *ast.Node
-	SetReferencedImportDeclaration(node *ast.IdentifierNode, ref *ast.Declaration) // for overriding the reference resolver behavior for generated identifiers
+	GetJsxFactoryEntity(location ast.Node) ast.Node
+	GetJsxFragmentFactoryEntity(location ast.Node) ast.Node
+	SetReferencedImportDeclaration(node ast.IdentifierNode, ref ast.Declaration) // for overriding the reference resolver behavior for generated identifiers
 
 	// declaration emit checker functionality projections
 	PrecalculateDeclarationEmitVisibility(file *ast.SourceFile)
-	IsSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasToMarkVisible bool) SymbolAccessibilityResult
-	IsEntityNameVisible(entityName *ast.Node, enclosingDeclaration *ast.Node) SymbolAccessibilityResult // previously SymbolVisibilityResult in strada - ErrorModuleName never set
-	IsExpandoFunctionDeclaration(node *ast.Node) bool
-	IsExpandoFunctionDeclarationUnsafe(node *ast.Node) bool
-	IsLiteralConstDeclaration(node *ast.Node) bool
-	RequiresAddingImplicitUndefined(node *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool
-	IsDeclarationVisible(node *ast.Node) bool
-	IsNameResolvable(location *ast.Node, name string) bool
-	IsImportRequiredByAugmentation(decl *ast.ImportDeclaration) bool
-	IsDefinitelyReferenceToGlobalSymbolObject(node *ast.Node) bool
-	IsImplementationOfOverload(node *ast.SignatureDeclaration) bool
-	GetEnumMemberValue(node *ast.Node) evaluator.Result
-	IsLateBound(node *ast.Node) bool
-	IsOptionalParameter(node *ast.Node) bool
-	IsThisPropertyAssignmentDeclarationRedundant(node *ast.Node) bool
+	IsSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration ast.Node, meaning ast.SymbolFlags, shouldComputeAliasToMarkVisible bool) SymbolAccessibilityResult
+	IsEntityNameVisible(entityName ast.Node, enclosingDeclaration ast.Node) SymbolAccessibilityResult // previously SymbolVisibilityResult in strada - ErrorModuleName never set
+	IsExpandoFunctionDeclaration(node ast.Node) bool
+	IsExpandoFunctionDeclarationUnsafe(node ast.Node) bool
+	IsLiteralConstDeclaration(node ast.Node) bool
+	RequiresAddingImplicitUndefined(node ast.Node, symbol *ast.Symbol, enclosingDeclaration ast.Node) bool
+	IsDeclarationVisible(node ast.Node) bool
+	IsNameResolvable(location ast.Node, name string) bool
+	IsImportRequiredByAugmentation(decl ast.ImportDeclaration) bool
+	IsDefinitelyReferenceToGlobalSymbolObject(node ast.Node) bool
+	IsImplementationOfOverload(node ast.SignatureDeclaration) bool
+	GetEnumMemberValue(node ast.Node) evaluator.Result
+	IsLateBound(node ast.Node) bool
+	IsOptionalParameter(node ast.Node) bool
+	IsThisPropertyAssignmentDeclarationRedundant(node ast.Node) bool
 
 	// isolatedDeclarations-specific declaration emit
-	GetPropertiesOfContainerFunction(node *ast.Node) []*ast.Symbol
-	RequiresAddingImplicitUndefinedUnsafe(node *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool
-	GetReferencedValueDeclarationUnsafe(node *ast.IdentifierNode) *ast.Declaration
+	GetPropertiesOfContainerFunction(node ast.Node) []*ast.Symbol
+	RequiresAddingImplicitUndefinedUnsafe(node ast.Node, symbol *ast.Symbol, enclosingDeclaration ast.Node) bool
+	GetReferencedValueDeclarationUnsafe(node ast.IdentifierNode) ast.Declaration
 
 	// Node construction for declaration emit
-	CreateTypeOfDeclaration(declaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node
-	CreateReturnTypeOfSignatureDeclaration(signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node
-	CreateTypeParametersOfSignatureDeclaration(signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node
-	CreateLiteralConstValue(node *ast.Node, tracker nodebuilder.SymbolTracker) *ast.Node
-	CreateTypeOfExpression(expression *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node
-	CreateLateBoundIndexSignatures(container *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node
-	TryJSTypeNodeToTypeNode(typeNode *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node
+	CreateTypeOfDeclaration(declaration ast.Node, enclosingDeclaration ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) ast.Node
+	CreateReturnTypeOfSignatureDeclaration(signatureDeclaration ast.Node, enclosingDeclaration ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) ast.Node
+	CreateTypeParametersOfSignatureDeclaration(signatureDeclaration ast.Node, enclosingDeclaration ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []ast.Node
+	CreateLiteralConstValue(node ast.Node, tracker nodebuilder.SymbolTracker) ast.Node
+	CreateTypeOfExpression(expression ast.Node, enclosingDeclaration ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) ast.Node
+	CreateLateBoundIndexSignatures(container ast.Node, enclosingDeclaration ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []ast.Node
+	TryJSTypeNodeToTypeNode(typeNode ast.Node, enclosingDeclaration ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) ast.Node
 }

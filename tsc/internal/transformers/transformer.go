@@ -11,7 +11,7 @@ type Transformer struct {
 	visitor     *ast.NodeVisitor
 }
 
-func (tx *Transformer) NewTransformer(visit func(node *ast.Node) *ast.Node, emitContext *printer.EmitContext) *Transformer {
+func (tx *Transformer) NewTransformer(visit func(node ast.Node) ast.Node, emitContext *printer.EmitContext) *Transformer {
 	if tx.emitContext != nil {
 		panic("Transformer already initialized")
 	}
