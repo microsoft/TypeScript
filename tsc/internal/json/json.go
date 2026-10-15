@@ -82,7 +82,6 @@ func NewDecoder(r io.Reader) *jsontext.Decoder {
 }
 
 type (
-	Options         = json.Options
 	Value           = jsontext.Value
 	Kind            = jsontext.Kind
 	UnmarshalerFrom = json.UnmarshalerFrom

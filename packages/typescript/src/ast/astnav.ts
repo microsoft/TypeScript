@@ -600,44 +600,49 @@ function isJSDocSingleCommentNodeList(nodes: NodeArray<Node>): boolean {
 // Idle scanners available for reuse, keyed by the source file whose text they scan.
 // A scanner is removed from its pool while in use, so nested or reentrant traversals
 // always receive distinct scanners. Pooled scanners retain only the source file's text.
-const scannerPools = new WeakMap<SourceFile, Scanner[]>();
-
-function acquireScanner(sourceFile: SourceFile): Scanner {
-    const scanner = scannerPools.get(sourceFile)?.pop();
-    if (scanner === undefined) {
-        return createScanner(/*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text);
-    }
-    // setText resets the token state (position, token, value, flags) to the start of the text.
-    scanner.setText(sourceFile.text);
-    scanner.setLanguageVariant(sourceFile.languageVariant);
-    return scanner;
+interface ScannerLease extends Disposable {
+    readonly scanner: Scanner;
 }
 
-function releaseScanner(sourceFile: SourceFile, scanner: Scanner): void {
-    // Drop per-use state so an idle scanner holds no token values or comment directives.
-    // The JSDoc leading-asterisk depth is never changed by this module, so it stays zero.
-    scanner.clearCommentDirectives();
-    scanner.resetTokenState(0);
+const scannerPools = new WeakMap<SourceFile, ScannerLease[]>();
+
+function acquireScanner(sourceFile: SourceFile): ScannerLease {
     let pool = scannerPools.get(sourceFile);
     if (pool === undefined) {
         pool = [];
         scannerPools.set(sourceFile, pool);
     }
-    pool.push(scanner);
+    const lease = pool.pop();
+    if (lease === undefined) {
+        return createPooledScanner(sourceFile, pool);
+    }
+    // setText resets the token state (position, token, value, flags) to the start of the text.
+    lease.scanner.setText(sourceFile.text);
+    lease.scanner.setLanguageVariant(sourceFile.languageVariant);
+    return lease;
+}
+
+function createPooledScanner(sourceFile: SourceFile, pool: ScannerLease[]): ScannerLease {
+    return {
+        scanner: createScanner(/*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text),
+        [Symbol.dispose]() {
+            // Drop per-use state so an idle scanner holds no token values or comment directives.
+            // The JSDoc leading-asterisk depth is never changed by this module, so it stays zero.
+            this.scanner.clearCommentDirectives();
+            this.scanner.resetTokenState(0);
+            pool.push(this);
+        },
+    };
 }
 
 function withScanner<T>(sourceFile: SourceFile, pos: number | undefined, callback: (scanner: Scanner) => T): T {
-    const scanner = acquireScanner(sourceFile);
-    try {
-        if (pos !== undefined) {
-            scanner.resetTokenState(pos);
-            scanner.scan();
-        }
-        return callback(scanner);
+    using lease = acquireScanner(sourceFile);
+    const { scanner } = lease;
+    if (pos !== undefined) {
+        scanner.resetTokenState(pos);
+        scanner.scan();
     }
-    finally {
-        releaseScanner(sourceFile, scanner);
-    }
+    return callback(scanner);
 }
 
 /**
@@ -645,7 +650,7 @@ function withScanner<T>(sourceFile: SourceFile, pos: number | undefined, callbac
  * @internal
  */
 export function getPooledScannersForTesting(sourceFile: SourceFile): readonly Scanner[] {
-    return scannerPools.get(sourceFile) ?? emptyScannerArray;
+    return scannerPools.get(sourceFile)?.map(lease => lease.scanner) ?? emptyScannerArray;
 }
 
 const emptyScannerArray: readonly Scanner[] = [];
@@ -720,42 +725,38 @@ function createChildren(node: Node, sourceFile: SourceFile): readonly Node[] {
     }
 
     // One scanner serves every run of synthetic tokens materialized for this node.
-    const scanner = acquireScanner(sourceFile);
-    try {
-        let pos = node.pos;
-        const processNode = (child: Node): undefined => {
-            // Reparsed subtrees (JSDoc types materialized into the AST) have positions inside
-            // the comment, not in this node's token range.
-            if (child.flags & NodeFlags.Reparsed) {
-                return;
-            }
-            addSyntheticNodes(children, pos, child.pos, node, sourceFile, scanner);
-            children.push(child);
-            pos = child.end;
-        };
-        const processNodes = (nodes: NodeArray<Node>): undefined => {
-            if (nodes.length > 0 && !nodes.some(child => !(child.flags & NodeFlags.Reparsed))) {
-                return;
-            }
-            addSyntheticNodes(children, pos, nodes.pos, node, sourceFile, scanner);
-            children.push(createSyntaxListNode(nodes, node, sourceFile, scanner));
-            pos = nodes.end;
-        };
-
-        // JSDoc attached to the node is leading content, processed first.
-        if (node.jsDoc) {
-            for (const jsDoc of node.jsDoc) {
-                processNode(jsDoc);
-            }
+    using lease = acquireScanner(sourceFile);
+    const { scanner } = lease;
+    let pos = node.pos;
+    const processNode = (child: Node): undefined => {
+        // Reparsed subtrees (JSDoc types materialized into the AST) have positions inside
+        // the comment, not in this node's token range.
+        if (child.flags & NodeFlags.Reparsed) {
+            return;
         }
-        pos = node.pos;
-        node.forEachChild(processNode, processNodes);
-        addSyntheticNodes(children, pos, node.end, node, sourceFile, scanner);
-        return children;
+        addSyntheticNodes(children, pos, child.pos, node, sourceFile, scanner);
+        children.push(child);
+        pos = child.end;
+    };
+    const processNodes = (nodes: NodeArray<Node>): undefined => {
+        if (nodes.length > 0 && !nodes.some(child => !(child.flags & NodeFlags.Reparsed))) {
+            return;
+        }
+        addSyntheticNodes(children, pos, nodes.pos, node, sourceFile, scanner);
+        children.push(createSyntaxListNode(nodes, node, sourceFile, scanner));
+        pos = nodes.end;
+    };
+
+    // JSDoc attached to the node is leading content, processed first.
+    if (node.jsDoc) {
+        for (const jsDoc of node.jsDoc) {
+            processNode(jsDoc);
+        }
     }
-    finally {
-        releaseScanner(sourceFile, scanner);
-    }
+    pos = node.pos;
+    node.forEachChild(processNode, processNodes);
+    addSyntheticNodes(children, pos, node.end, node, sourceFile, scanner);
+    return children;
 }
 
 function addSyntheticNodes(children: Node[], pos: number, end: number, parent: Node, sourceFile: SourceFile, scanner: Scanner): void {
