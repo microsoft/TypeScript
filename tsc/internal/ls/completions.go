@@ -2141,7 +2141,10 @@ func completionNameForLiteral(
 }
 
 func getInsertTextAndReplacementSpanForImportCompletion(fix *autoimport.Fix, importKind lsproto.ImportKind, importStatementCompletion *importStatementCompletionInfo, useSemicolons bool, file *ast.SourceFile, preferences lsutil.UserPreferences, isSnippet bool) (insertText string, replacementSpan *lsproto.Range) {
-	quotedModuleSpecifier := escapeSnippetText(quote(file, preferences, fix.ModuleSpecifier))
+	quotedModuleSpecifier := quote(file, preferences, fix.ModuleSpecifier)
+	if isSnippet {
+		quotedModuleSpecifier = escapeSnippetText(strings.ReplaceAll(quotedModuleSpecifier, `\`, `\\`))
+	}
 	tabStop := core.IfElse(isSnippet, "$1", "")
 	suffix := core.IfElse(useSemicolons, ";", "")
 	topLevelTypeOnlyText := core.IfElse(importStatementCompletion.isTopLevelTypeOnly, " "+scanner.TokenToString(ast.KindTypeKeyword)+" ", " ")
