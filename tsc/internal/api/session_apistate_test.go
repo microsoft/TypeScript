@@ -535,3 +535,42 @@ func TestOpenProjectsWithCircularExtendsReportCircularity(t *testing.T) {
 	}
 	assert.DeepEqual(t, codes, []int32{18000})
 }
+
+func TestOpenProjectsExtendingIntoCircularExtendsReportCircularity(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const cycle = "/home/projects/cycle/tsconfig.json"
+	const outer = "/home/projects/outer/tsconfig.json"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		cycle:                          `{ "extends": "./a.json" }`,
+		"/home/projects/cycle/a.json":  `{ "extends": "./tsconfig.json" }`,
+		outer:                          `{ "extends": "../cycle/a.json" }`,
+		"/home/projects/cycle/main.ts": `export const a = 1;`,
+		"/home/projects/outer/main.ts": `export const b = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	_, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: cycle}},
+	})
+	assert.NilError(t, err)
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: outer}},
+	})
+	assert.NilError(t, err)
+	diagnostics, err := session.handleGetConfigFileParsingDiagnostics(context.Background(), &GetProjectDiagnosticsParams{
+		Snapshot: response.Snapshot,
+		Project:  configuredProjectID(outer),
+	})
+	assert.NilError(t, err)
+	codes := make([]int32, 0, len(diagnostics))
+	for _, diagnostic := range diagnostics {
+		codes = append(codes, diagnostic.Code)
+	}
+	assert.DeepEqual(t, codes, []int32{18000})
+}
