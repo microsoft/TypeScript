@@ -8201,6 +8201,29 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.strictEqual(text, "{\n    a: 1\n}");
     });
 
+    test("EmitFlags includes None and the composed flags", async () => {
+        await using api = spawnAPI(emitterFiles);
+
+        assert.strictEqual(EmitFlags.None, 0);
+        assert.strictEqual(EmitFlags.NoComments, EmitFlags.NoLeadingComments | EmitFlags.NoTrailingComments);
+        assert.strictEqual(EmitFlags.NoSourceMap, EmitFlags.NoLeadingSourceMap | EmitFlags.NoTrailingSourceMap);
+        assert.strictEqual(EmitFlags.NoTokenSourceMaps, EmitFlags.NoTokenLeadingSourceMaps | EmitFlags.NoTokenTrailingSourceMaps);
+
+        const typeLiteral = createTypeLiteralNode([
+            createPropertySignatureDeclaration(undefined, createIdentifier("a"), undefined, createKeywordTypeNode(SyntaxKind.StringKeyword), undefined!),
+            createPropertySignatureDeclaration(undefined, createIdentifier("b"), undefined, createKeywordTypeNode(SyntaxKind.NumberKeyword), undefined!),
+        ]);
+        const emitContext = api.printer.createEmitContext();
+        assert.strictEqual(emitContext.getEmitFlags(typeLiteral), EmitFlags.None);
+
+        emitContext.setEmitFlags(typeLiteral, EmitFlags.SingleLine);
+        assert.strictEqual(await api.printer.printNode(typeLiteral, { emitContext }), "{ a: string; b: number; }");
+
+        emitContext.setEmitFlags(typeLiteral, EmitFlags.None);
+        assert.strictEqual(emitContext.getEmitFlags(typeLiteral), EmitFlags.None);
+        assert.strictEqual(await api.printer.printNode(typeLiteral, { emitContext }), "{\n    a: string;\n    b: number;\n}");
+    });
+
     test("printNode with emitContext only affects the node it was attached to", async () => {
         await using api = spawnAPI(emitterFiles);
 
