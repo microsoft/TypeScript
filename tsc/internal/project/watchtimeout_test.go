@@ -2,6 +2,7 @@ package project_test
 
 import (
 	"context"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -12,8 +13,78 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+func TestATADiscoveryWaitsForSharedWatchRegistration(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+	synctest.Test(t, func(t *testing.T) {
+		files := map[string]any{
+			"/user/username/projects/p1/app.js":           "",
+			"/user/username/projects/p1/tsconfig.json":    `{"compilerOptions":{"allowJs":true},"typeAcquisition":{"enable":true}}`,
+			"/user/username/projects/p1/package.json":     `{"dependencies":{"foo":"1.0.0"}}`,
+			"/user/username/projects/p1/node_modules/foo": vfstest.Symlink("/vendor/foo"),
+			"/user/username/projects/p2/app.js":           "",
+			"/user/username/projects/p2/tsconfig.json":    `{"compilerOptions":{"allowJs":true},"typeAcquisition":{"enable":true}}`,
+			"/user/username/projects/p2/package.json":     `{"dependencies":{"foo":"1.0.0"}}`,
+			"/user/username/projects/p2/node_modules/foo": vfstest.Symlink("/vendor/foo"),
+			"/vendor/foo/package.json":                    `{"name":"foo"}`,
+		}
+		init, utils := projecttestutil.GetSessionInitOptions(files, nil, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{"foo": "declare const foo: number;"},
+		})
+		init.Options.CurrentDirectory = "/user/username/projects"
+		registered := make(chan struct{})
+		var pending atomic.Bool
+		var once sync.Once
+		release := func() { once.Do(func() { close(registered) }) }
+		utils.Client().WatchFilesFunc = func(ctx context.Context, id project.WatcherID, watchers []*lsproto.FileSystemWatcher) error {
+			for _, watcher := range watchers {
+				external := watcher.GlobPattern.Pattern != nil && strings.HasPrefix(*watcher.GlobPattern.Pattern, "/vendor/")
+				if pattern := watcher.GlobPattern.RelativePattern; pattern != nil && pattern.BaseUri.URI != nil {
+					external = strings.HasPrefix(string(*pattern.BaseUri.URI), "file:///vendor")
+				}
+				if external && pending.CompareAndSwap(false, true) {
+					select {
+					case <-registered:
+						// Complete the simulated registration.
+					case <-ctx.Done():
+						return ctx.Err()
+					}
+				}
+			}
+			return nil
+		}
+		var installs atomic.Int32
+		install := utils.NpmExecutor().NpmInstallFunc
+		utils.NpmExecutor().NpmInstallFunc = func(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
+			for _, arg := range args {
+				if arg == "@types/foo@latest" {
+					installs.Add(1)
+				}
+			}
+			return install(ctx, cwd, args)
+		}
+		session := project.NewSession(init)
+		defer session.Close()
+		defer release()
+		ctx := context.Background()
+		session.DidOpenFile(ctx, "file:///user/username/projects/p1/app.js", 1, "", lsproto.LanguageKindJavaScript)
+		synctest.Wait()
+		assert.Assert(t, pending.Load(), "the first external watch registration must be pending")
+		session.DidOpenFile(ctx, "file:///user/username/projects/p2/app.js", 1, "", lsproto.LanguageKindJavaScript)
+		synctest.Wait()
+		assert.Equal(t, installs.Load(), int32(0), "sharing an in-flight registration must not release another discovery publisher")
+		release()
+		session.WaitForBackgroundTasks()
+		assert.Assert(t, installs.Load() > 0)
+	})
+}
 
 func TestUpdateWatchTimeoutAndRollback(t *testing.T) {
 	t.Parallel()

@@ -27,6 +27,7 @@ type SnapshotHost struct {
 	extendedConfigCache     *ExtendedConfigCache
 	programCounter          *programCounter
 	contentMapperHost       contentmapper.Host
+	hasTypingsInstaller     bool
 
 	snapshotID atomic.Uint64
 }
@@ -93,6 +94,7 @@ func NewSnapshotHost(init *SessionInit) *SnapshotHost {
 		extendedConfigCache:     NewExtendedConfigCache(),
 		programCounter:          &programCounter{},
 		contentMapperHost:       newContentMapperHost(init),
+		hasTypingsInstaller:     init.Options.TypingsLocation != "" && init.NpmExecutor != nil,
 	}
 }
 

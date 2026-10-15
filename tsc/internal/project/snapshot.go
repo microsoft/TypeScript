@@ -409,21 +409,29 @@ type SnapshotChange struct {
 	contentMapperContributions         *ContentMapperContributions
 	newConfig                          *lsutil.UserPreferences
 	// ataChanges contains ATA-related changes to apply to projects in the new snapshot.
-	ataChanges map[ID]*ATAStateChange
-	apiRequest *APISnapshotRequest
+	ataChanges          map[ID]*ATAStateChange
+	ataDiscoveryChanges map[ID]*ATAStateChange
+	watchUpdatesDone    chan<- error
+	apiRequest          *APISnapshotRequest
 	// cleanFileCache triggers cleaning of cached files not referenced by any open project.
 	cleanFileCache bool
 }
 
 // ATAStateChange represents a change to a project's ATA state.
 type ATAStateChange struct {
+	// SnapshotID is the snapshot whose project state triggered the ATA request.
+	SnapshotID uint64
 	// TypingsInfo is the new typings info for the project.
 	TypingsInfo *ata.TypingsInfo
+	// FileNames are the JavaScript files used for typings discovery.
+	FileNames []tspath.RootedFilePath
 	// TypingsFiles is the new list of typing files for the project.
 	TypingsFiles []tspath.RootedFilePath
 	// TypingsFilesToWatch is the new list of typing files to watch for changes.
-	TypingsFilesToWatch []tspath.RootedPath
-	Logs                *logging.LogTree
+	TypingsFilesToWatch    []tspath.RootedPath
+	TypingCacheEntryPoints []ata.CachedTypingEntryPoint
+	MissingTypingFiles     []tspath.RootedFilePath
+	Logs                   *logging.LogTree
 }
 
 func (s *Snapshot) Clone(
@@ -490,10 +498,17 @@ func (s *Snapshot) Clone(
 			logger.Logf("Reason: DidChangeConfigFile - %v", getDetails())
 		case UpdateReasonDidChangeContentMapperContributions:
 			logger.Logf("Reason: DidChangeContentMapperContributions - %v", getDetails())
+		case UpdateReasonATADiscovery:
+			logger.Log("Reason: ATADiscovery")
 		}
 	}
 
 	start := time.Now()
+	hadExcessiveWatchEvents := change.fileChanges.HasExcessiveWatchEvents()
+	var unfilteredFileChanges FileChangeSummary
+	if hadExcessiveWatchEvents || change.fileChanges.Deleted.Len() > 0 {
+		unfilteredFileChanges = change.fileChanges.Clone()
+	}
 	inferredContentMappers := s.inferredProjectContentMappers
 	inferredContentMapperExtensions := s.inferredProjectContentMapperExtensions
 	if change.contentMapperContributions != nil {
@@ -514,6 +529,23 @@ func (s *Snapshot) Clone(
 	overlays = layeredFS.Overlays()
 	fs := newSnapshotFSBuilderFromSource(layeredFS, s.fs.cacheFiles, s.fs.cacheDirectories, s.fs.nodeModulesRealpathAliases)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions, s.overlays(), overlays)
+	typingsWatchChanges := change.fileChanges
+	if hadExcessiveWatchEvents {
+		typingsWatchChanges = unfilteredFileChanges
+		typingsWatchChanges.InvalidateAll = typingsWatchChanges.InvalidateAll || change.fileChanges.InvalidateAll
+	} else if unfilteredFileChanges.Deleted.Len() > 0 {
+		typingsWatchChanges = typingsWatchChanges.Clone()
+		for uri := range unfilteredFileChanges.Deleted.Keys() {
+			typingsWatchChanges.Deleted.Add(uri)
+		}
+	}
+	typingCacheChanges := typingsWatchChanges
+	if typingsLocation := store.options.TypingsLocation; typingsLocation != "" {
+		typingsWatchChanges = typingsWatchChanges.withoutChangesWithin(typingsLocation.AsPath(), fs.fs.CaseSensitivity())
+		if realTypingsLocation := fs.fs.Realpath(typingsLocation.AsPath()); realTypingsLocation != typingsLocation.AsPath() {
+			typingsWatchChanges = typingsWatchChanges.withoutChangesWithin(realTypingsLocation, fs.fs.CaseSensitivity())
+		}
+	}
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
 	if change.compilerOptionsForInferredProjects != nil {
@@ -539,6 +571,7 @@ func (s *Snapshot) Clone(
 		inferredContentMappers,
 		inferredContentMapperExtensions,
 		store.options,
+		store.hasTypingsInstaller,
 		customConfigFileName,
 		store.parseCache,
 		store.contentMappedParseCache,
@@ -547,22 +580,26 @@ func (s *Snapshot) Clone(
 		client,
 	)
 
-	if len(change.ataChanges) != 0 {
-		projectCollectionBuilder.DidUpdateATAState(change.ataChanges, logger.Fork("DidUpdateATAState"))
+	if typingsWatchChanges.HasExcessiveWatchEvents() {
+		projectCollectionBuilder.DidInvalidateTypingsWatchState(logger.Fork("DidInvalidateTypingsWatchState"))
 	}
 
 	projectCollectionBuilder.DidChangeCustomConfigFileName(logger.Fork("DidChangeCustomConfigFileName"))
-	if change.compilerOptionsForInferredProjects != nil && projectCollectionBuilder.inferredProject.Value() != nil {
-		projectCollectionBuilder.updateInferredProject(
-			projectCollectionBuilder.inferredProject.Value().CommandLine.FileNames(),
-			change.compilerOptionsForInferredProjects,
-			projectCollectionBuilder.inferredProject.Value().CommandLine.ProjectReferences(),
-			projectCollectionBuilder.inferredProject.Value().CommandLine.Errors,
-			projectCollectionBuilder.inferredProject.Value().CommandLine.ContentMappers(),
-			logger.Fork("DidChangeCompilerOptionsForInferredProjects"),
-		)
+	if change.compilerOptionsForInferredProjects != nil {
+		projectCollectionBuilder.invalidateInferredProjectATAState("inferred compiler options changes", logger.Fork("InvalidateInferredProjectATAState"))
+		if projectCollectionBuilder.inferredProject.Value() != nil {
+			projectCollectionBuilder.updateInferredProject(
+				projectCollectionBuilder.inferredProject.Value().CommandLine.FileNames(),
+				change.compilerOptionsForInferredProjects,
+				projectCollectionBuilder.inferredProject.Value().CommandLine.ProjectReferences(),
+				projectCollectionBuilder.inferredProject.Value().CommandLine.Errors,
+				projectCollectionBuilder.inferredProject.Value().CommandLine.ContentMappers(),
+				logger.Fork("DidChangeCompilerOptionsForInferredProjects"),
+			)
+		}
 	}
 	if change.contentMapperContributions != nil {
+		projectCollectionBuilder.invalidateInferredProjectATAState("content mapper changes", logger.Fork("InvalidateInferredProjectATAState"))
 		projectCollectionBuilder.DidChangeContentMapperContributions(logger.Fork("DidChangeContentMapperContributions"))
 	}
 	if change.newConfig != nil {
@@ -571,6 +608,18 @@ func (s *Snapshot) Clone(
 
 	if !change.fileChanges.IsEmpty() {
 		projectCollectionBuilder.DidChangeFiles(change.fileChanges, logger.Fork("DidChangeFiles"))
+	}
+	if len(change.ataDiscoveryChanges) != 0 {
+		projectCollectionBuilder.DidUpdateATAState(change.ataDiscoveryChanges, typingsWatchChanges, true, logger.Fork("DidDiscoverATAWatchInputs"))
+	}
+	if !typingsWatchChanges.IsEmpty() {
+		projectCollectionBuilder.DidChangeTypingsWatchInputs(typingsWatchChanges, logger.Fork("DidChangeTypingsWatchInputs"))
+	}
+	if !typingCacheChanges.IsEmpty() {
+		projectCollectionBuilder.DidChangeCachedTypingEntryPoints(typingCacheChanges, logger.Fork("DidChangeCachedTypingEntryPoints"))
+	}
+	if len(change.ataChanges) != 0 {
+		projectCollectionBuilder.DidUpdateATAState(change.ataChanges, typingsWatchChanges, false, logger.Fork("DidUpdateATAState"))
 	}
 
 	var apiError error

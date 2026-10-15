@@ -8,7 +8,9 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/semver"
@@ -35,13 +37,34 @@ func DiscoverTypings(
 	packageNameToTypingLocation *collections.SyncMap[string, *CachedTyping],
 	typesRegistry map[string]map[string]string,
 ) (cachedTypingPaths []tspath.RootedFilePath, newTypingNames []string, filesToWatch []tspath.RootedPath) {
+	inferredTypings, filesToWatch, _, err := discoverTypingNames(fs, logger, typingsInfo, fileNames, projectRootPath, nil)
+	debug.Assert(err == nil, "discovery without a watch publisher cannot fail")
+	cachedTypingPaths, newTypingNames = getCachedTypingPaths(inferredTypings, packageNameToTypingLocation, typesRegistry, logger)
+	return cachedTypingPaths, newTypingNames, filesToWatch
+}
+
+func discoverTypingNames(
+	fs vfs.FS,
+	logger logging.Logger,
+	typingsInfo *TypingsInfo,
+	fileNames []tspath.RootedFilePath,
+	projectRootPath tspath.RootedDirectoryPath,
+	onDiscovery func([]tspath.RootedPath) error,
+) (inferredTypings map[string]tspath.RootedFilePath, filesToWatch []tspath.RootedPath, missingTypingFiles []tspath.RootedFilePath, err error) {
 	// A typing name to typing file path mapping
-	inferredTypings := map[string]tspath.RootedFilePath{}
+	inferredTypings = map[string]tspath.RootedFilePath{}
 
 	// Only infer typings for .js and .jsx files
 	fileNames = core.Filter(fileNames, func(fileName tspath.RootedFilePath) bool {
 		return fileName.HasJSFileExtension()
 	})
+	if onDiscovery != nil {
+		inputs := discoveryManifestWatchInputs(typingsInfo, fileNames, projectRootPath)
+		inputs = appendRealTypingWatchInputs(fs, inputs)
+		if err = onDiscovery(inputs); err != nil {
+			return nil, nil, nil, err
+		}
+	}
 
 	if typingsInfo.TypeAcquisition.Include != nil {
 		addInferredTypings(fs, logger, inferredTypings, typingsInfo.TypeAcquisition.Include, "Explicitly included types")
@@ -50,14 +73,13 @@ func DiscoverTypings(
 
 	// Directories to search for package.json, bower.json and other typing information
 	if typingsInfo.CompilerOptions.Types == nil {
-		possibleSearchDirs := map[tspath.RootedDirectoryPath]bool{}
-		for _, fileName := range fileNames {
-			possibleSearchDirs[fileName.Directory()] = true
-		}
-		possibleSearchDirs[projectRootPath] = true
-		for searchDir := range possibleSearchDirs {
-			filesToWatch = addTypingNamesAndGetFilesToWatch(fs, logger, inferredTypings, filesToWatch, searchDir, "bower.json", "bower_components")
-			filesToWatch = addTypingNamesAndGetFilesToWatch(fs, logger, inferredTypings, filesToWatch, searchDir, "package.json", "node_modules")
+		for _, searchDir := range discoveryDirectories(typingsInfo, fileNames, projectRootPath) {
+			for _, pair := range [][2]string{{"bower.json", "bower_components"}, {"package.json", "node_modules"}} {
+				filesToWatch, err = addTypingNamesAndGetFilesToWatch(fs, logger, inferredTypings, filesToWatch, &missingTypingFiles, searchDir, pair[0], pair[1], onDiscovery)
+				if err != nil {
+					return nil, nil, nil, err
+				}
+			}
 		}
 	}
 
@@ -82,15 +104,33 @@ func DiscoverTypings(
 		delete(inferredTypings, excludeTypingName)
 		logger.Log(fmt.Sprintf("ATA:: Typing for %s is in exclude list, will be ignored.", excludeTypingName))
 	}
+	filesToWatch = appendRealTypingWatchInputs(fs, filesToWatch)
+	return inferredTypings, filesToWatch, missingTypingFiles, nil
+}
 
+func appendRealTypingWatchInputs(fs vfs.FS, filesToWatch []tspath.RootedPath) []tspath.RootedPath {
+	for _, path := range filesToWatch {
+		if realPath := fs.Realpath(path); fs.CaseSensitivity().ComparePaths(path, realPath) != 0 {
+			filesToWatch = append(filesToWatch, realPath)
+		}
+	}
+	return filesToWatch
+}
+
+func getCachedTypingPaths(
+	inferredTypings map[string]tspath.RootedFilePath,
+	packageNameToTypingLocation *collections.SyncMap[string, *CachedTyping],
+	typesRegistry map[string]map[string]string,
+	logger logging.Logger,
+) (cachedTypingPaths []tspath.RootedFilePath, newTypingNames []string) {
 	// Add the cached typing locations for inferred typings that are already installed
-	packageNameToTypingLocation.Range(func(name string, typing *CachedTyping) bool {
-		registryEntry := typesRegistry[name]
-		if inferredTypings[name] == "" && registryEntry != nil && isTypingUpToDate(typing, registryEntry) {
+	for name, inferred := range inferredTypings {
+		typingKey := module.MangleScopedPackageName(name)
+		registryEntry := typesRegistry[typingKey]
+		if typing, ok := packageNameToTypingLocation.Load(typingKey); ok && inferred == "" && registryEntry != nil && isTypingUpToDate(typing, registryEntry) {
 			inferredTypings[name] = typing.TypingsLocation
 		}
-		return true
-	})
+	}
 
 	for typing, inferred := range inferredTypings {
 		if inferred != "" {
@@ -99,8 +139,54 @@ func DiscoverTypings(
 			newTypingNames = append(newTypingNames, typing)
 		}
 	}
-	logger.Log(fmt.Sprintf("ATA:: Finished typings discovery: cachedTypingsPaths: %v newTypingNames: %v, filesToWatch %v", cachedTypingPaths, newTypingNames, filesToWatch))
-	return cachedTypingPaths, newTypingNames, filesToWatch
+	logger.Log(fmt.Sprintf("ATA:: Finished typings discovery: cachedTypingsPaths: %v newTypingNames: %v", cachedTypingPaths, newTypingNames))
+	return cachedTypingPaths, newTypingNames
+}
+
+func discoveryManifestWatchInputs(info *TypingsInfo, files []tspath.RootedFilePath, projectDirectory tspath.RootedDirectoryPath) []tspath.RootedPath {
+	var paths []tspath.RootedPath
+	for _, directory := range discoveryDirectories(info, files, projectDirectory) {
+		paths = append(paths, directory.ResolveFile("package.json").AsPath(), directory.ResolveFile("bower.json").AsPath(),
+			directory.ResolveDirectory("node_modules").AsPath(), directory.ResolveDirectory("bower_components").AsPath())
+	}
+	return paths
+}
+
+func DiscoveryWatchInputs(info *TypingsInfo, files []tspath.RootedFilePath, projectDirectory tspath.RootedDirectoryPath) []tspath.RootedPath {
+	paths := discoveryManifestWatchInputs(info, files, projectDirectory)
+	for _, file := range files {
+		paths = append(paths, file.AsPath())
+	}
+	slices.Sort(paths)
+	return slices.Compact(paths)
+}
+
+func discoveryDirectories(info *TypingsInfo, files []tspath.RootedFilePath, projectDirectory tspath.RootedDirectoryPath) []tspath.RootedDirectoryPath {
+	if info.CompilerOptions.Types != nil {
+		return nil
+	}
+	directories := collections.NewSetFromItems(projectDirectory)
+	for _, file := range files {
+		if file.HasJSFileExtension() {
+			directories.Add(file.Directory())
+		}
+	}
+	result := slices.Collect(maps.Keys(directories.Keys()))
+	slices.Sort(result)
+	return result
+}
+
+func DiscoveryInputsEqual(info *TypingsInfo, files, otherFiles []tspath.RootedFilePath, projectDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) bool {
+	directoryKeys := func(files []tspath.RootedFilePath) []tspath.PathKey {
+		keys := core.Map(discoveryDirectories(info, files, projectDirectory), func(dir tspath.RootedDirectoryPath) tspath.PathKey {
+			return caseSensitivity.PathKey(dir.AsPath())
+		})
+		slices.Sort(keys)
+		return slices.Compact(keys)
+	}
+	return slices.Equal(directoryKeys(files), directoryKeys(otherFiles)) &&
+		(info.TypeAcquisition.DisableFilenameBasedTypeAcquisition.IsTrue() ||
+			slices.Equal(typingNamesFromSourceFileNames(files), typingNamesFromSourceFileNames(otherFiles)))
 }
 
 func addInferredTyping(inferredTypings map[string]tspath.RootedFilePath, typingName string) {
@@ -133,23 +219,26 @@ func getTypingNamesFromSourceFileNames(
 	inferredTypings map[string]tspath.RootedFilePath,
 	fileNames []tspath.RootedFilePath,
 ) {
-	hasJsxFile := false
+	addInferredTypings(fs, logger, inferredTypings, typingNamesFromSourceFileNames(fileNames), "Inferred typings from file names")
+}
+
+func typingNamesFromSourceFileNames(fileNames []tspath.RootedFilePath) []string {
 	var fromFileNames []string
 	for _, fileName := range fileNames {
-		hasJsxFile = hasJsxFile || fileName.ExtensionIs(tspath.ExtensionJsx)
+		if !fileName.HasJSFileExtension() {
+			continue
+		}
+		if fileName.ExtensionIs(tspath.ExtensionJsx) {
+			fromFileNames = append(fromFileNames, "react")
+		}
 		inferredTypingName := tspath.RemoveFileExtension(tspath.ToFileNameLowerCase(fileName.BaseName()))
 		cleanedTypingName := removeMinAndVersionNumbers(inferredTypingName)
 		if typeName, ok := safeFileNameToTypeName[cleanedTypingName]; ok {
 			fromFileNames = append(fromFileNames, typeName)
 		}
 	}
-	if len(fromFileNames) > 0 {
-		addInferredTypings(fs, logger, inferredTypings, fromFileNames, "Inferred typings from file names")
-	}
-	if hasJsxFile {
-		logger.Log("ATA:: Inferred 'react' typings due to presence of '.jsx' extension")
-		addInferredTyping(inferredTypings, "react")
-	}
+	slices.Sort(fromFileNames)
+	return slices.Compact(fromFileNames)
 }
 
 /**
@@ -165,10 +254,12 @@ func addTypingNamesAndGetFilesToWatch(
 	logger logging.Logger,
 	inferredTypings map[string]tspath.RootedFilePath,
 	filesToWatch []tspath.RootedPath,
+	missingTypingFiles *[]tspath.RootedFilePath,
 	projectRootPath tspath.RootedDirectoryPath,
 	manifestName string,
 	modulesDirName string,
-) []tspath.RootedPath {
+	onDiscovery func([]tspath.RootedPath) error,
+) ([]tspath.RootedPath, error) {
 	// First, we check the manifests themselves. They're not
 	// _required_, but they allow us to do some filtering when dealing
 	// with big flat dep directories.
@@ -196,7 +287,7 @@ func addTypingNamesAndGetFilesToWatch(
 	packagesFolderPath := projectRootPath.ResolveDirectory(modulesDirName)
 	filesToWatch = append(filesToWatch, packagesFolderPath.AsPath())
 	if !fs.DirectoryExists(packagesFolderPath) {
-		return filesToWatch
+		return filesToWatch, nil
 	}
 
 	// There's two cases we have to take into account here:
@@ -252,6 +343,20 @@ func addTypingNamesAndGetFilesToWatch(
 	// Once we have the names of things to look up, we iterate over
 	// and either collect their included typings, or add them to the
 	// list of typings we need to look up separately.
+	watchCount := len(filesToWatch)
+	for _, manifestPath := range dependencyManifestNames {
+		// These reads bypass the compiler host's realpath alias cache.
+		for _, path := range []tspath.RootedPath{manifestPath.AsPath(), manifestPath.Directory().AsPath()} {
+			if realPath := fs.Realpath(path); fs.CaseSensitivity().ComparePaths(path, realPath) != 0 {
+				filesToWatch = append(filesToWatch, path, realPath)
+			}
+		}
+	}
+	if onDiscovery != nil && len(filesToWatch) != watchCount {
+		if err := onDiscovery(filesToWatch); err != nil {
+			return nil, err
+		}
+	}
 	for _, manifestPath := range dependencyManifestNames {
 		manifestContents, ok := fs.ReadFile(manifestPath)
 		if !ok {
@@ -269,10 +374,12 @@ func addTypingNamesAndGetFilesToWatch(
 		}
 		if len(ownTypes) != 0 {
 			absolutePath := manifestPath.Directory().ResolveFile(ownTypes)
+			filesToWatch = append(filesToWatch, absolutePath.AsPath())
 			if fs.FileExists(absolutePath) {
 				logger.Log(fmt.Sprintf("ATA::     Package '%s' provides its own types.", manifest.Name.Value))
 				inferredTypings[manifest.Name.Value] = absolutePath
 			} else {
+				*missingTypingFiles = append(*missingTypingFiles, absolutePath)
 				logger.Log(fmt.Sprintf("ATA::     Package '%s' provides its own types but they are missing.", manifest.Name.Value))
 			}
 		} else {
@@ -280,7 +387,7 @@ func addTypingNamesAndGetFilesToWatch(
 		}
 	}
 	addInferredTypings(fs, logger, inferredTypings, packageNames, "    Found package names")
-	return filesToWatch
+	return filesToWatch, nil
 }
 
 /**
