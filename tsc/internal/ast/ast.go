@@ -98,6 +98,12 @@ func (f *NodeFactory) CompactStore() {
 	}
 }
 
+// CompactBinderData packs the binder's additions to the file's nodes. It
+// must be called before the file is shared with other goroutines.
+func (node *SourceFile) CompactBinderData() {
+	node.s.compactSide()
+}
+
 func (f *NodeFactory) newNode(kind Kind, layout nodeLayout, row uint32) Node {
 	f.nodeCount++
 	return newNode(f.store, kind, layout, row, f.hooks)

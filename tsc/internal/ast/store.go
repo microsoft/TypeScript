@@ -21,6 +21,19 @@ type nodeStore struct {
 	flat    [layoutCount]flatTable
 	records [layoutCount]*recordTable
 
+	// Fields that hold Go pointers live in side tables rather than in the
+	// records, so that the records themselves contain no pointers and the
+	// garbage collector never scans them.
+	symbols       sideTable[*Symbol]
+	flowNodes     sideTable[*FlowNode]
+	symbolTables  sideTable[SymbolTable]
+	nodeLists     sideTable[*NodeList]
+	modifierLists sideTable[*ModifierList]
+	strings       sideTable[string]
+	stringLists   sideTable[[]string]
+	nodeSlices    sideTable[[]Node]
+	values        sideTable[any]
+
 	// Children stored in another store, or whose rows do not fit in a
 	// nodeRef, are recorded as foreign refs.
 	foreignMu    sync.Mutex
@@ -152,6 +165,7 @@ func pinnedLayout(layout nodeLayout) bool {
 // record pointers obtained earlier do not; it must only be called before
 // the store is shared, with no record pointers outstanding.
 func (s *nodeStore) compact() {
+	s.compactSide()
 	for l, t := range s.records {
 		if t == nil || t.n == 0 {
 			continue
@@ -174,6 +188,75 @@ func (s *nodeStore) compact() {
 		t.segs = [segCount]unsafe.Pointer{}
 		t.n = 0
 	}
+}
+
+// compactSide packs the side tables that have grown since the last
+// compaction. Side values are never addressed, so this is safe whenever the
+// store is not being read concurrently.
+func (s *nodeStore) compactSide() {
+	s.symbols.compact()
+	s.flowNodes.compact()
+	s.symbolTables.compact()
+	s.nodeLists.compact()
+	s.modifierLists.compact()
+	s.strings.compact()
+	s.stringLists.compact()
+	s.nodeSlices.compact()
+	s.values.compact()
+}
+
+// A sideRef is a record field's slot in a side table, biased by one so that
+// zero means the zero value without a slot.
+type sideRef uint32
+
+type sideTable[T any] struct {
+	flat []T
+	tail segTable[T]
+}
+
+func (t *sideTable[T]) get(r sideRef) T {
+	if r == 0 {
+		var zero T
+		return zero
+	}
+	i := uint32(r) - 1
+	if i < uint32(len(t.flat)) {
+		return t.flat[i]
+	}
+	return *t.tail.at(i - uint32(len(t.flat)))
+}
+
+// set stores v in r's slot, allocating one unless v is the zero value.
+func (t *sideTable[T]) set(r *sideRef, v T, isZero bool) {
+	if *r == 0 {
+		if isZero {
+			return
+		}
+		i, slot := t.tail.alloc()
+		*slot = v
+		*r = sideRef(uint32(len(t.flat)) + i + 1)
+		return
+	}
+	i := uint32(*r) - 1
+	if i < uint32(len(t.flat)) {
+		t.flat[i] = v
+	} else {
+		*t.tail.at(i - uint32(len(t.flat))) = v
+	}
+}
+
+func (t *sideTable[T]) compact() {
+	n := t.tail.n
+	if n == 0 {
+		return
+	}
+	flat := make([]T, len(t.flat)+int(n))
+	copied := copy(flat, t.flat)
+	for k := uint32(0); copied < len(flat); k++ {
+		copied += copy(flat[copied:], unsafe.Slice(t.tail.segs[k], segLen(k)))
+	}
+	t.flat = flat
+	t.tail = segTable[T]{}
 }
 
 func compactRecords[T any](t *recordTable) unsafe.Pointer {

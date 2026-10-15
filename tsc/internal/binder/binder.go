@@ -125,6 +125,7 @@ func bindSourceFile(file *ast.SourceFile) {
 		b.unreachableFlow = b.newFlowNode(ast.FlowFlagsUnreachable)
 		b.bind(file.AsNode())
 		b.bindDeferredExpandoAssignments()
+		file.CompactBinderData()
 		file.SymbolCount = b.symbolCount
 	})
 }
