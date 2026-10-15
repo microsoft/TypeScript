@@ -150,10 +150,11 @@ func standaloneLayout(layout nodeLayout) bool {
 	return false
 }
 
-// Each chunk adds a quarter to the store's size, at least minChunkSize.
+// Each chunk adds an eighth to the store's size, at least minChunkSize.
 // Records do not move, so the unused end of the last chunk is never
-// reclaimed; slower growth wastes less of it.
-const minChunkSize = 4 << 10
+// reclaimed; slower growth wastes less of it, at the cost of more chunks.
+// Many stores, such as those for lazily parsed JSDoc, are tiny.
+const minChunkSize = 512
 
 // alloc allocates size zeroed bytes for a record and sets its self.
 func (s *nodeStore) alloc(size uintptr) unsafe.Pointer {
@@ -168,7 +169,7 @@ func (s *nodeStore) alloc(size uintptr) unsafe.Pointer {
 }
 
 func (s *nodeStore) grow(size uintptr) {
-	next := min(max(minChunkSize, s.total/4, size+wordSize), maxChunkSize)
+	next := min(max(minChunkSize, s.total/8, size+wordSize), maxChunkSize)
 	typ := chunkType(next)
 	chunk := reflect.New(typ).UnsafePointer()
 	*(**nodeStore)(chunk) = s
@@ -185,8 +186,13 @@ var chunkTypes sync.Map // map[uintptr]reflect.Type
 // least size-wordSize bytes of records. Sizes are rounded so that few
 // distinct types are created.
 func chunkType(size uintptr) reflect.Type {
-	step := uintptr(minChunkSize)
-	if size > 64*minChunkSize {
+	var step uintptr
+	switch {
+	case size <= 32<<10:
+		step = minChunkSize
+	case size <= 256<<10:
+		step = 4 << 10
+	default:
 		step = uintptr(1) << (bits.Len(uint(size)) - 4)
 	}
 	size = (size + step - 1) &^ (step - 1)
