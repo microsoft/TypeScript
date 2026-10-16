@@ -13,19 +13,23 @@ import (
 
 // A nodeStore holds the nodes created by one NodeFactory (for parsed files,
 // one store per file). Nodes are records allocated from a sequence of
-// chunks, every record beginning with the shared node header
+// blocks, every record beginning with the shared node header
 // (nodeBaseData). A Node is a pointer to its record. Records never move,
-// so a Node never goes stale.
+// so a Node never goes stale, and holding one keeps its block alive.
 //
-// A chunk is a single Go object whose first word points to the store and
+// A block is a single Go object whose first word points to the store and
 // whose remainder holds records. Records contain no Go pointers, so the
-// garbage collector scans only that first word of each chunk; fields that
-// hold Go pointers are kept in the store's side tables instead.
+// garbage collector scans only that first word of each block. A record
+// refers to another record of its store by a 32-bit ref giving the
+// target's block and offset; references to other stores go through the
+// store's far table, and fields holding other Go values through its side
+// tables.
 type nodeStore struct {
-	chunk    unsafe.Pointer // the chunk being filled
-	used     uintptr        // bytes used in the current chunk
-	capacity uintptr        // size of the current chunk
-	total    uintptr        // size of all chunks
+	block    unsafe.Pointer // the block being filled
+	current  ref            // the index of the block being filled, as a ref
+	used     uintptr        // bytes used in the current block
+	capacity uintptr        // size of the current block
+	total    uintptr        // size of all blocks
 
 	symbols       sideTable[*Symbol]
 	symbolTables  sideTable[SymbolTable]
@@ -36,12 +40,12 @@ type nodeStore struct {
 	nodeSlices    sideTable[[]Node]
 	values        sideTable[any]
 
-	// chunks keeps every chunk alive, since refs between records are
-	// invisible to the garbage collector. keep does the same for records
-	// outside the chunks that the store's records refer to.
-	chunks []unsafe.Pointer
-	keepMu sync.Mutex
-	keep   map[unsafe.Pointer]struct{}
+	far farTable
+
+	// blocks holds every block, by index, keeping them alive, since a
+	// block's records may only be referred to by other records.
+	blocks  [maxBlocks]unsafe.Pointer
+	nblocks uint32
 }
 
 func newNodeStore() *nodeStore {
@@ -54,66 +58,112 @@ type nodeBaseData struct {
 	loc    core.TextRange
 	parent nodeRef
 	flags  NodeFlags
-	self   uint16 // the record's offset in its chunk, in words
+	self   ref // the record's own location in its store
 	kind   Kind
 }
 
 // Every node has a header, so it must stay small.
 var _ [32 - unsafe.Sizeof(nodeBaseData{})]struct{}
 
-// A nodeRef is the address of the record of the node a field refers to, or
-// zero for no node. It is not a Go pointer, so the garbage collector does
-// not trace it; the referring store keeps the record alive instead.
-type nodeRef uintptr
+// A ref is a record field referring to another record. Zero is no record.
+// Without farRef, it locates the target in the referring record's store:
+// the index of the target's block in the high bits, and the target's
+// offset in that block, in words, in the low bits. Every record keeps its
+// own location as its self, so a ref to a record is its self. With farRef,
+// it is an index into the referring store's far table.
+type ref uint32
 
 const (
+	farRef     ref = 1 << 31
+	blockShift     = 25
+	offsetMask ref = 1<<blockShift - 1
+	maxBlocks      = int(farRef >> blockShift)
 	// Records with Go pointers are each allocated alone, behind their own
-	// store pointer.
-	standaloneSelf = 1
-
-	wordSize = unsafe.Sizeof(uintptr(0))
-	// Chunks are small enough for any record's offset to fit in self.
-	maxChunkSize = (1 << 16) * wordSize
+	// store pointer, as a block of their own. A store has blocks for a
+	// limited number of them; the rest are only referred to as far.
+	unindexedBlock = maxBlocks - 1
 )
+
+// A nodeRef is a ref to a node record.
+type nodeRef = ref
+
+func (r ref) block() int { return int(r >> blockShift) }
+
+const wordSize = unsafe.Sizeof(uintptr(0))
 
 func (n Node) hdr() *nodeBaseData { return (*nodeBaseData)(n.p) }
 
+// blockOf returns the block holding the record at p, whose self is self.
+func blockOf(p unsafe.Pointer, self ref) unsafe.Pointer {
+	return unsafe.Add(p, -int(self&offsetMask)*int(wordSize))
+}
+
+// storeOf returns the store owning block.
+func storeOf(block unsafe.Pointer) *nodeStore {
+	return *(**nodeStore)(block)
+}
+
 // store returns the store that owns n.
 func (n Node) store() *nodeStore {
-	return storeAt(n.p, n.hdr().self)
+	return storeOf(n.block())
+}
+
+func (n Node) block() unsafe.Pointer { return blockOf(n.p, n.hdr().self) }
+
+// deref returns the record that r, a field of the record at p whose self
+// is self, refers to. Block 0 is never used, so a zero ref is never in the
+// referring record's block.
+func deref(p unsafe.Pointer, self ref, r ref) unsafe.Pointer {
+	if r^self < 1<<blockShift {
+		return unsafe.Add(p, int(int32(r-self))*int(wordSize))
+	}
+	return derefOther(p, self, r)
+}
+
+func derefOther(p unsafe.Pointer, self ref, r ref) unsafe.Pointer {
+	if r == 0 {
+		return nil
+	}
+	s := storeOf(blockOf(p, self))
+	if r&farRef == 0 {
+		return unsafe.Add(s.blocks[r.block()], uintptr(r&offsetMask)*wordSize)
+	}
+	return s.far.get(r &^ farRef)
+}
+
+// refTo returns a ref to the record at target, whose self is targetSelf,
+// for a field of a record of s.
+func (s *nodeStore) refTo(target unsafe.Pointer, targetSelf ref) ref {
+	if target == nil {
+		return 0
+	}
+	if targetSelf.block() != unindexedBlock && storeOf(blockOf(target, targetSelf)) == s {
+		return targetSelf
+	}
+	return s.far.add(target) | farRef
 }
 
 // deref returns the node that the field f of n refers to.
 func (n Node) deref(f *nodeRef) Node {
-	return Node{*(*unsafe.Pointer)(unsafe.Pointer(f))}
+	return Node{deref(n.p, n.hdr().self, *f)}
 }
 
 // setRef makes the field f of n refer to v.
 func (n Node) setRef(f *nodeRef, v Node) {
-	*f = n.store().refAt(n.p, f, v)
+	*f = n.store().refNode(v)
 }
 
-// refAt returns a nodeRef to v for the field f of the record at owner,
+// refAt returns a nodeRef to v for a field of the node record at owner,
 // which must belong to s.
-func (s *nodeStore) refAt(owner unsafe.Pointer, f *nodeRef, v Node) nodeRef {
+func (s *nodeStore) refAt(owner unsafe.Pointer, v Node) nodeRef {
+	return s.refNode(v)
+}
+
+func (s *nodeStore) refNode(v Node) nodeRef {
 	if v.p == nil {
 		return 0
 	}
-	if standaloneLayout(kindLayout[v.Kind()]) {
-		s.keepAlive(v.p)
-	} else if other := v.store(); other != s {
-		s.keepAlive(unsafe.Pointer(other))
-	}
-	return nodeRef(uintptr(v.p))
-}
-
-func (s *nodeStore) keepAlive(p unsafe.Pointer) {
-	s.keepMu.Lock()
-	defer s.keepMu.Unlock()
-	if s.keep == nil {
-		s.keep = make(map[unsafe.Pointer]struct{})
-	}
-	s.keep[p] = struct{}{}
+	return s.refTo(v.p, v.hdr().self)
 }
 
 func (s *nodeStore) newNode(kind Kind, layout nodeLayout, rec unsafe.Pointer) Node {
@@ -131,7 +181,7 @@ func newRecord[T any](s *nodeStore, layout nodeLayout) (*T, unsafe.Pointer) {
 	if standaloneLayout(layout) {
 		c := &standaloneRecord[T]{s: s}
 		p := unsafe.Pointer(&c.rec)
-		(*nodeBaseData)(p).self = standaloneSelf
+		(*nodeBaseData)(p).self = s.addStandalone(unsafe.Pointer(c))
 		return &c.rec, p
 	}
 	p, self := s.alloc(unsafe.Sizeof(*new(T)))
@@ -145,88 +195,141 @@ type standaloneRecord[T any] struct {
 }
 
 // standaloneLayout reports whether a layout's records hold Go pointers, so
-// must be allocated outside the chunks.
+// must be allocated outside the blocks.
 func standaloneLayout(layout nodeLayout) bool {
-	switch layout {
-	case layoutSourceFile, layoutFlowSwitchClauseData, layoutFlowReduceLabelData:
-		return true
-	}
-	return false
+	return layout == layoutSourceFile
 }
 
-// Each chunk adds an eighth to the store's size, at least minChunkSize.
-// Records do not move, so the unused end of the last chunk is never
-// reclaimed; slower growth wastes less of it, at the cost of more chunks.
-// Many stores, such as those for lazily parsed JSDoc, are tiny.
-const minChunkSize = 512
+// addStandalone returns the self of the record of the standalone block c,
+// indexing c as a block of s if the store has used under half its block
+// indexes.
+func (s *nodeStore) addStandalone(c unsafe.Pointer) ref {
+	s.reserveBlockZero()
+	if s.nblocks < uint32(unindexedBlock)/2 {
+		i := s.nblocks
+		s.blocks[i] = c
+		s.nblocks++
+		return ref(i)<<blockShift | 1
+	}
+	return ref(unindexedBlock)<<blockShift | 1
+}
 
-// alloc allocates size zeroed bytes for a record and returns the record's
-// offset in its chunk, in words, which the record must keep as its self.
-func (s *nodeStore) alloc(size uintptr) (unsafe.Pointer, uint16) {
+// reserveBlockZero skips block index 0, so that the zero ref is never a
+// ref within the referring record's block.
+func (s *nodeStore) reserveBlockZero() {
+	if s.nblocks == 0 {
+		s.nblocks = 1
+	}
+}
+
+// Each block adds a quarter to the store's size, at least minBlockSize,
+// until the store has used half its block indexes, after which each block
+// doubles it. Records do not move, so the unused end of the last block is
+// never reclaimed; slower growth wastes less of it. Many stores, such as
+// those for lazily parsed JSDoc, are tiny.
+const minBlockSize = 512
+
+// alloc allocates size zeroed bytes for a record and returns the record
+// and its self.
+func (s *nodeStore) alloc(size uintptr) (unsafe.Pointer, ref) {
 	size = (size + wordSize - 1) &^ (wordSize - 1)
 	if s.used+size > s.capacity {
 		s.grow(size)
 	}
 	off := s.used
 	s.used += size
-	return unsafe.Add(s.chunk, off), uint16(off / wordSize)
-}
-
-// storeAt returns the store owning the chunk record at p, whose self is
-// self.
-func storeAt(p unsafe.Pointer, self uint16) *nodeStore {
-	return *(**nodeStore)(unsafe.Add(p, -int(self)*int(wordSize)))
-}
-
-// refRecord returns a ref to the chunk record at p, owned by other, for a
-// field of one of s's records.
-func (s *nodeStore) refRecord(p unsafe.Pointer, other *nodeStore) uintptr {
-	if p == nil {
-		return 0
-	}
-	if other != s {
-		s.keepAlive(unsafe.Pointer(other))
-	}
-	return uintptr(p)
-}
-
-// derefRecord returns the record that the ref at f refers to.
-func derefRecord(f unsafe.Pointer) unsafe.Pointer {
-	return *(*unsafe.Pointer)(f)
+	return unsafe.Add(s.block, off), s.current | ref(off/wordSize)
 }
 
 func (s *nodeStore) grow(size uintptr) {
-	next := min(max(minChunkSize, s.total/8, size+wordSize), maxChunkSize)
-	typ := chunkType(next)
-	chunk := reflect.New(typ).UnsafePointer()
-	*(**nodeStore)(chunk) = s
-	s.chunk = chunk
-	s.chunks = append(s.chunks, chunk)
+	s.reserveBlockZero()
+	growth := s.total / 4
+	if s.nblocks >= uint32(unindexedBlock)/2 {
+		growth = s.total
+	}
+	next := max(minBlockSize, growth, size+wordSize)
+	if s.nblocks >= uint32(unindexedBlock) || next/wordSize > uintptr(offsetMask) {
+		panic("node store too large")
+	}
+	typ := blockType(next)
+	block := reflect.New(typ).UnsafePointer()
+	*(**nodeStore)(block) = s
+	s.block = block
+	s.current = ref(s.nblocks) << blockShift
+	s.blocks[s.nblocks] = block
+	s.nblocks++
 	s.used = wordSize
-	s.capacity = typ.Size()
+	s.capacity = min(typ.Size(), uintptr(offsetMask)*wordSize)
 	s.total += s.capacity
 }
 
-var chunkTypes sync.Map // map[uintptr]reflect.Type
+// A farTable holds the targets of a store's refs leaving their blocks. It
+// is appended to under its lock, but entries never move, so it is read
+// without one.
+type farTable struct {
+	mu    sync.Mutex
+	index map[unsafe.Pointer]ref
+	pages [32 - farBaseShift]*unsafe.Pointer
+	next  ref
+}
 
-// chunkType returns a struct type holding a store pointer followed by at
+// Far page k holds 1<<(k+farBaseShift) entries.
+const farBaseShift = 4
+
+func farLocate(i ref) (k, off uint32) {
+	j := uint32(i) + 1<<farBaseShift
+	k = uint32(bits.Len32(j)) - (farBaseShift + 1)
+	return k, j - 1<<(k+farBaseShift)
+}
+
+func (t *farTable) get(i ref) unsafe.Pointer {
+	k, off := farLocate(i)
+	return *(*unsafe.Pointer)(unsafe.Add(unsafe.Pointer(t.pages[k]), uintptr(off)*wordSize))
+}
+
+func (t *farTable) add(p unsafe.Pointer) ref {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+	if i, ok := t.index[p]; ok {
+		return i
+	}
+	i := t.next
+	if i&farRef != 0 {
+		panic("node store far table overflow")
+	}
+	k, off := farLocate(i)
+	if t.pages[k] == nil {
+		t.pages[k] = unsafe.SliceData(make([]unsafe.Pointer, 1<<(k+farBaseShift)))
+	}
+	*(*unsafe.Pointer)(unsafe.Add(unsafe.Pointer(t.pages[k]), uintptr(off)*wordSize)) = p
+	t.next++
+	if t.index == nil {
+		t.index = make(map[unsafe.Pointer]ref)
+	}
+	t.index[p] = i
+	return i
+}
+
+var blockTypes sync.Map // map[uintptr]reflect.Type
+
+// blockType returns a struct type holding a store pointer followed by at
 // least size-wordSize bytes of records. Sizes are rounded so that few
 // distinct types are created.
-func chunkType(size uintptr) reflect.Type {
+func blockType(size uintptr) reflect.Type {
 	var step uintptr
 	switch {
 	case size <= 32<<10:
-		step = minChunkSize
+		step = minBlockSize
 	case size <= 256<<10:
 		step = 4 << 10
 	default:
 		step = uintptr(1) << (bits.Len(uint(size)) - 4)
 	}
 	size = (size + step - 1) &^ (step - 1)
-	if t, ok := chunkTypes.Load(size); ok {
+	if t, ok := blockTypes.Load(size); ok {
 		return t.(reflect.Type)
 	}
-	t, _ := chunkTypes.LoadOrStore(size, reflect.StructOf([]reflect.StructField{
+	t, _ := blockTypes.LoadOrStore(size, reflect.StructOf([]reflect.StructField{
 		{Name: "S", Type: reflect.TypeFor[*nodeStore]()},
 		{Name: "D", Type: reflect.ArrayOf(int(size-wordSize), reflect.TypeFor[byte]())},
 	}))

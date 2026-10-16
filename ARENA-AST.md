@@ -17,16 +17,16 @@ type PropertyAccessExpression struct{ Node }    // typed views carry no extra da
 
 `Node` is passed by value everywhere, and the zero `Node` means "no node". Kind-specific views such as `node.AsPropertyAccessExpression()` are free conversions.
 
-### Records live in per-file chunked arenas
+### Records live in per-file block arenas
 
-Each file (more precisely, each `NodeFactory`) has a `nodeStore`, which allocates large chunks. Each chunk is a single Go object built with `reflect.StructOf` so that **only word 0 is a pointer**:
+Each file (more precisely, each `NodeFactory`) has a `nodeStore`, which allocates blocks. Each block is a single Go object built with `reflect.StructOf` so that **only word 0 is a pointer**:
 
 ```
-chunk: [ *nodeStore | record | record | record | ... ]
-         ^ the only word the GC scans in the whole chunk
+block: [ *nodeStore | record | record | record | ... ]
+         ^ the only word the GC scans in the whole block
 ```
 
-Chunks start at 512 bytes and grow by `max(512, total/8, size)`, up to 512KB. This keeps the wasted tail of the last chunk small, which matters because many stores are tiny (for example, lazily parsed JSDoc).
+A store has at most 63 blocks, indexed from 1 (index 0 is reserved so that a zero ref is never "in this block"). Blocks start at 512 bytes and each adds a quarter of the store's size; once half the indexes are used, each doubles it. The store keeps every block in `blocks`, and every block points back at the store, so any handle into any block keeps the whole store alive.
 
 ### Every record starts with a 32-byte header
 
@@ -36,12 +36,12 @@ type nodeBaseData struct {
     loc    core.TextRange
     parent nodeRef
     flags  NodeFlags
-    self   uint16  // offset of this record within its chunk, in words
+    self   ref     // this record's block index and word offset
     kind   Kind
 }
 ```
 
-`self` lets any node find its store in O(1): step back `self` words to word 0 of the chunk and load the `*nodeStore`. Capping chunks at 512KB makes every offset fit in 16 bits. A compile-time assertion keeps the header at 32 bytes.
+`self` lets any node find its store in O(1): step back `self`'s offset to word 0 of the block and load the `*nodeStore`. A compile-time assertion keeps the header at 32 bytes.
 
 ### Records are flat and pointer-free
 
@@ -64,19 +64,20 @@ All fields, including those from "base" shapes (declaration, function-like, flow
 
 | Field type | Stored as | Read path |
 |---|---|---|
-| Another node | `nodeRef` (uintptr, absolute address) | A single load, reinterpreted as a `Node` |
-| Flow node | `flowRef` (uintptr, absolute address of a pointer-free `FlowNode` record in a chunk) | A single load, reinterpreted as `*FlowNode` |
+| Another node | `nodeRef` (`ref`, 32 bits: 6-bit block index, 25-bit word offset, or a far-table index) | Same block: `p + (r − self)·8`. Other block: store → `blocks[i]` + offset. Other store: far table |
+| Flow node | `flowRef` (`ref` to a pointer-free `FlowNode` record in a block) | As for nodes |
 | Other Go pointers (`*Symbol`, `*NodeList`, `[]Node`, `SymbolTable`, `any`, …) | `sideRef uint32`, an index into a typed `sideTable[T]` on the store | `store().table.items[i-1]` |
 | `string` | `textRef{off, len uint32}` into the file's source text, or into an append-only text arena | `unsafe.String` over the backing bytes |
 
-Flow nodes and flow lists are arena records like nodes: `FlowNode{node nodeRef; antecedent flowRef; antecedents flowListRef; Flags; self}` is 32 bytes with no Go pointers. The binder allocates them in the file's store, and the checker allocates its synthetic flow nodes in its own factory's store. The API still hands out a real `*FlowNode`; an interior pointer into a chunk keeps the chunk, and through word 0 the whole store, alive, so checker maps keyed by `*FlowNode` stay safe.
+Flow nodes and flow lists are arena records like nodes: `FlowNode{node nodeRef; antecedent flowRef; antecedents flowListRef; Flags; self}` is 24 bytes with no Go pointers. The binder allocates them in the file's store, and the checker allocates its synthetic flow nodes in its own factory's store. The API still hands out a real `*FlowNode`; an interior pointer into a chunk keeps the chunk, and through word 0 the whole store, alive, so checker maps keyed by `*FlowNode` stay safe.
 
-The GC can't see `nodeRef`s, so liveness is handled explicitly:
-- A store keeps all of its own chunks in `chunks`.
-- When `setRef` stores a ref to a node in **another** store (synthesized nodes, cross-file reuse), it adds that store to the referring store's `keep` set.
-- The few kinds that can't avoid real pointers are allocated as standalone records (`self == 1`), each behind its own store pointer, and are also kept alive through `keep`.
+Refs are plain numbers, never addresses hidden from the GC, so liveness falls out of ordinary Go pointers:
+- Handles are real interior pointers, so they keep their block alive, and word 0 keeps the store alive.
+- A store keeps all of its own blocks in `blocks`.
+- A ref to a record in **another** store (synthesized nodes, cross-file reuse) is an index into the referring store's far table, which holds a real pointer to the target, deduplicated by a map.
+- `SourceFile`, which can't avoid real pointers, is allocated as a standalone record behind its own store pointer and indexed as a block of its own.
 
-As a result, the GC scans one word per chunk plus the side tables, instead of every child, parent, symbol and string pointer of every node.
+As a result, the GC scans one word per block plus the side tables and far table, instead of every child, parent, symbol and string pointer of every node.
 
 ### How we got here (commit sequence)
 
@@ -88,7 +89,23 @@ As a result, the GC scans one word per chunk plus the side tables, instead of ev
 6. **Slower chunk growth** (memory −2.63%).
 7. **32-byte header** (memory −3.28%).
 8. **Flattened records + offset tables** (memory −0.39%, check time unchanged).
-9. **Flow nodes in the arena** (memory −0.67%, check time unchanged). This drops the `*FlowNode` side table and makes flow nodes invisible to the GC. The field itself grows from a 4-byte index to an 8-byte absolute ref; shrinking it to 32 bits needs a contiguous per-file image (see future work).
+9. **Flow nodes in the arena** (memory −0.67%, check time unchanged). This drops the `*FlowNode` side table and makes flow nodes invisible to the GC.
+10. **32-bit block-indexed refs** (check **+10.2%**, memory −1.0%). Absolute refs were Go pointers hidden in `uintptr`s, so this replaces them with real 32-bit refs. It's a deliberate stepping stone and is slower; see [Next: one block per file](#next-one-block-per-file).
+
+## Next: one block per file
+
+Profiling step 10 shows that its check-time cost is ref decoding:
+
+- 750M derefs in a vscode build, of which 21% cross blocks. Containers are allocated after their members, so walking up parent chains keeps crossing blocks, and 42M derefs land on the standalone `SourceFile`.
+- But sizing the first block from the source length, so that most files fit in one block, does **not** recover the time. The same-block path itself (load the field, load `self`, subtract, add) costs about as much as the cross-block lookups.
+
+So the fix is architectural:
+
+1. **Lists become arena records**: a count followed by 32-bit refs. `*NodeList` becomes a view (`Len`, `At`, `All`) instead of a `[]Node` holder, so no side table holds node handles once parsing is done.
+2. **`SourceFile` moves into the arena**, with its Go-pointer fields in a separate struct reached through the store.
+3. **Compact once at the end of parse**: a Cheney-style copy from the `SourceFile` into one exact-size block, leaving forwarding addresses in the old records. This also drops the garbage left by speculative parsing. After that the file's store is immutable.
+4. **Field-relative refs**: a ref is a word offset from the field's own address. Decoding needs neither `self` nor a block table, and since every in-file ref stays inside one Go object, it's ordinary `unsafe.Add` arithmetic. Refs to other stores keep going through the far table.
+5. **Binder output gets its own per-file tables**: flow nodes, and then symbols, live in paged typed tables addressed by 32-bit index. Nothing allocates into the node block after parse.
 
 ## Performance (vscode, n=10, interleaved)
 
@@ -167,7 +184,7 @@ Peak RSS is 4.19GB on main and 4.21GB on the arena. Symbol (7.09M), type (2.43M)
 
    The savings come from `string` (16 bytes) → `textRef` (8 bytes) and from pointer fields → 4-byte `sideRef`s. Together that's roughly 85MB.
 2. **Side tables give it back, and more.** Moving `*Symbol` and `*FlowNode` out of the node replaces one 8-byte pointer with a 4-byte index plus an 8-byte table entry. These fields are populated on most declarations and identifiers, so this is a net loss, and the tables also carry append-growth slack and a clone on compaction. That costs about 125MB.
-3. **Refs are still 8 bytes.** The 32-bit relative refs that would actually shrink nodes cost 6–8% of check time in the self-relative form, so the branch uses absolute addresses.
+3. **Refs were 8 bytes.** These measurements predate step 10. With 32-bit refs, records round up to whole words, so many kinds don't shrink (Identifier: 32 + 4 + 8 → 48 bytes either way).
 4. **The AST is only about 30% of the heap.** About 60% is checker state: instantiated symbol tables, node links, types and relations. This work doesn't touch any of that.
 
 ## Future work and expected impact

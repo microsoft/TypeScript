@@ -5,7 +5,6 @@ import (
 	"slices"
 	"strconv"
 	"testing"
-	"unsafe"
 
 	"gotest.tools/v3/assert"
 )
@@ -60,7 +59,7 @@ func findPointer(typ reflect.Type, path string) string {
 	return ""
 }
 
-func TestNodeStoreChunks(t *testing.T) {
+func TestNodeStoreBlocks(t *testing.T) {
 	t.Parallel()
 	factory := NewNodeFactory(NodeFactoryHooks{})
 	var statements []Node
@@ -68,14 +67,14 @@ func TestNodeStoreChunks(t *testing.T) {
 		statements = append(statements, factory.NewExpressionStatement(factory.NewIdentifier(strconv.Itoa(i))))
 	}
 	store := factory.store
-	assert.Assert(t, len(store.chunks) > 2, "nodes should span several chunks")
-	chunkOf := func(n Node) int {
-		return slices.Index(store.chunks, unsafe.Add(n.p, -int(n.hdr().self)*int(wordSize)))
+	assert.Assert(t, store.nblocks > 2, "nodes should span several blocks")
+	blockOfNode := func(n Node) int {
+		return slices.Index(store.blocks[:store.nblocks], n.block())
 	}
 	crossed := 0
 	for i, statement := range statements {
 		expression := statement.Expression()
-		if chunkOf(expression) != chunkOf(statement) {
+		if blockOfNode(expression) != blockOfNode(statement) {
 			crossed++
 		}
 		assert.Equal(t, expression.Text(), strconv.Itoa(i))
@@ -83,9 +82,26 @@ func TestNodeStoreChunks(t *testing.T) {
 		expression.SetParent(statement)
 		assert.Equal(t, expression.Parent(), statement)
 	}
-	assert.Assert(t, crossed > 0, "some children should be in an earlier chunk than their parents")
+	assert.Assert(t, crossed > 0, "some children should be in an earlier block than their parents")
+	assert.Equal(t, store.far.next, ref(0), "refs between blocks of a store should not be far")
 	factory.CompactStore()
 	assert.Equal(t, statements[0].Expression().Text(), "0")
+}
+
+func TestNodeStoreCrossStoreRefs(t *testing.T) {
+	t.Parallel()
+	a := NewNodeFactory(NodeFactoryHooks{})
+	b := NewNodeFactory(NodeFactoryHooks{})
+	target := a.NewIdentifier("x")
+	first := b.NewExpressionStatement(target)
+	second := b.NewExpressionStatement(target)
+	assert.Equal(t, first.Expression(), target)
+	assert.Equal(t, second.Expression(), target)
+	assert.Equal(t, b.store.far.next, ref(1), "far refs to one target should share an entry")
+	target.SetParent(first)
+	assert.Equal(t, target.Parent(), first)
+	first.AsExpressionStatement().SetExpression(Node{})
+	assert.Assert(t, first.Expression().IsNil())
 }
 
 func TestNodeSideTableZeroValues(t *testing.T) {

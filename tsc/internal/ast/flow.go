@@ -26,7 +26,7 @@ const (
 
 // FlowNode
 
-// A FlowNode is a record in a node store's chunks, like a node's, so it
+// A FlowNode is a record in a node store's blocks, like a node's, so it
 // holds no Go pointers; it is created by NewFlowNode and only referred to
 // by pointer. A pointer to a FlowNode keeps its store alive.
 type FlowNode struct {
@@ -34,54 +34,67 @@ type FlowNode struct {
 	antecedent  flowRef // Antecedent for all but FlowLabel
 	antecedents flowListRef
 	Flags       FlowFlags
-	self        uint16 // the record's offset in its chunk, in words
+	self        ref // the record's own location in its store
 }
 
-// A flowRef is the address of a FlowNode, or zero for none. Like a nodeRef,
-// it is invisible to the garbage collector.
-type flowRef uintptr
+// A flowRef is a ref to a FlowNode.
+type flowRef = ref
 
-// A flowListRef is the address of a FlowList, or zero for none.
-type flowListRef uintptr
+// A flowListRef is a ref to a FlowList.
+type flowListRef = ref
 
-func (r *flowRef) get() *FlowNode     { return (*FlowNode)(derefRecord(unsafe.Pointer(r))) }
-func (r *flowListRef) get() *FlowList { return (*FlowList)(derefRecord(unsafe.Pointer(r))) }
+func (f *FlowNode) store() *nodeStore { return storeOf(blockOf(unsafe.Pointer(f), f.self)) }
+
+func (f *FlowNode) deref(r ref) unsafe.Pointer { return deref(unsafe.Pointer(f), f.self, r) }
+
+// Node returns the AST node associated with the flow node.
+func (f *FlowNode) Node() Node { return Node{f.deref(f.node)} }
+
+func (f *FlowNode) Antecedent() *FlowNode { return (*FlowNode)(f.deref(f.antecedent)) }
+
+// Antecedents returns the linked list of antecedents of a FlowLabel.
+func (f *FlowNode) Antecedents() *FlowList { return (*FlowList)(f.deref(f.antecedents)) }
+
+func (f *FlowNode) SetAntecedent(v *FlowNode) { f.antecedent = f.store().refFlow(v) }
+
+func (f *FlowNode) SetAntecedents(v *FlowList) { f.antecedents = f.store().refFlowList(v) }
+
 func (s *nodeStore) refFlow(v *FlowNode) flowRef {
 	if v == nil {
 		return 0
 	}
-	return flowRef(s.refRecord(unsafe.Pointer(v), v.store()))
+	return s.refTo(unsafe.Pointer(v), v.self)
 }
 
 func (s *nodeStore) refFlowList(v *FlowList) flowListRef {
 	if v == nil {
 		return 0
 	}
-	return flowListRef(s.refRecord(unsafe.Pointer(v), v.store()))
+	return s.refTo(unsafe.Pointer(v), v.self)
 }
 
-func (f *FlowNode) store() *nodeStore { return storeAt(unsafe.Pointer(f), f.self) }
+// derefFlow returns the flow node that the field f of n refers to.
+func (n Node) derefFlow(f *flowRef) *FlowNode {
+	return (*FlowNode)(deref(n.p, n.hdr().self, *f))
+}
 
-// Node returns the AST node associated with the flow node.
-func (f *FlowNode) Node() Node { return Node{derefRecord(unsafe.Pointer(&f.node))} }
+// setFlowRef makes the field f of n refer to v.
+func (n Node) setFlowRef(f *flowRef, v *FlowNode) {
+	*f = n.store().refFlow(v)
+}
 
-func (f *FlowNode) Antecedent() *FlowNode { return f.antecedent.get() }
-
-// Antecedents returns the linked list of antecedents of a FlowLabel.
-func (f *FlowNode) Antecedents() *FlowList { return f.antecedents.get() }
-
-func (f *FlowNode) SetAntecedent(v *FlowNode) { f.antecedent = f.store().refFlow(v) }
-
-func (f *FlowNode) SetAntecedents(v *FlowList) { f.antecedents = f.store().refFlowList(v) }
+// refFlowAt returns a flowRef to v for a field of the node record at
+// owner, which must belong to s.
+func (s *nodeStore) refFlowAt(owner unsafe.Pointer, v *FlowNode) flowRef {
+	return s.refFlow(v)
+}
 
 func newFlowNode(s *nodeStore, flags FlowFlags, node Node, antecedent *FlowNode) *FlowNode {
 	p, self := s.alloc(unsafe.Sizeof(FlowNode{}))
 	f := (*FlowNode)(p)
 	f.self = self
 	f.Flags = flags
-	if node.p != nil {
-		f.node = s.refAt(p, &f.node, node)
-	}
+	f.node = s.refNode(node)
 	f.antecedent = s.refFlow(antecedent)
 	return f
 }
@@ -97,16 +110,17 @@ func (f *NodeFactory) NewFlowNode(flags FlowFlags, node Node, antecedent *FlowNo
 	return newFlowNode(f.nodeStore(), flags, node, antecedent)
 }
 
-// A FlowList is a record in a node store's chunks, like a FlowNode.
+// A FlowList is a record in a node store's blocks, like a FlowNode.
 type FlowList struct {
 	flow flowRef
 	next flowListRef
-	self uint16
+	self ref
 }
 
-func (l *FlowList) store() *nodeStore   { return storeAt(unsafe.Pointer(l), l.self) }
-func (l *FlowList) Flow() *FlowNode     { return l.flow.get() }
-func (l *FlowList) Next() *FlowList     { return l.next.get() }
+func (l *FlowList) store() *nodeStore { return storeOf(blockOf(unsafe.Pointer(l), l.self)) }
+func (l *FlowList) Flow() *FlowNode   { return (*FlowNode)(deref(unsafe.Pointer(l), l.self, l.flow)) }
+
+func (l *FlowList) Next() *FlowList     { return (*FlowList)(deref(unsafe.Pointer(l), l.self, l.next)) }
 func (l *FlowList) SetNext(v *FlowList) { l.next = l.store().refFlowList(v) }
 
 // NewFlowList allocates a flow list in the store of file, which must not be
@@ -160,7 +174,7 @@ func (node FlowSwitchClauseData) SetClauseEnd(value int32)   { node.data().claus
 func NewFlowSwitchClauseData(switchStatement Node, clauseStart int, clauseEnd int) Node {
 	s := switchStatement.store()
 	data, i := newRecord[flowSwitchClauseData](s, layoutFlowSwitchClauseData)
-	data.switchStatement = s.refAt(i, &data.switchStatement, switchStatement)
+	data.switchStatement = s.refAt(i, switchStatement)
 	data.clauseStart = int32(clauseStart)
 	data.clauseEnd = int32(clauseEnd)
 	return newNode(s, kindFlowSwitchClauseData, layoutFlowSwitchClauseData, i, NodeFactoryHooks{})
@@ -184,8 +198,10 @@ func (node FlowReduceLabelData) data() *flowReduceLabelData {
 	return (*flowReduceLabelData)(node.rec())
 }
 
-func (node FlowReduceLabelData) Target() *FlowLabel     { return node.data().target.get() }
-func (node FlowReduceLabelData) Antecedents() *FlowList { return node.data().antecedents.get() }
+func (node FlowReduceLabelData) Target() *FlowLabel { return node.derefFlow(&node.data().target) }
+func (node FlowReduceLabelData) Antecedents() *FlowList {
+	return (*FlowList)(deref(node.p, node.hdr().self, node.data().antecedents))
+}
 
 // NewFlowReduceLabelData allocates in the store of file, which must not be
 // shared with other writers while it is bound.
