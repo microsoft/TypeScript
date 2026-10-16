@@ -136,8 +136,8 @@ func getCallHierarchyDeclarationReferenceNode(node ast.Node) ast.Node {
 		return node.Parent().Name()
 	}
 
-	if modifiers := node.Modifiers(); modifiers != nil {
-		for _, mod := range modifiers.Nodes() {
+	if modifiers := node.Modifiers(); !modifiers.IsNil() {
+		for _, mod := range modifiers.All() {
 			if mod.Kind() == ast.KindDefaultKeyword {
 				return mod
 			}
@@ -167,8 +167,8 @@ func getCallHierarchyItemName(program *compiler.Program, node ast.Node) (text st
 	}
 
 	if (ast.IsFunctionDeclaration(node) || ast.IsClassDeclaration(node)) && node.Name().IsNil() {
-		if modifiers := node.Modifiers(); modifiers != nil {
-			for _, mod := range modifiers.Nodes() {
+		if modifiers := node.Modifiers(); !modifiers.IsNil() {
+			for _, mod := range modifiers.All() {
 				if mod.Kind() == ast.KindDefaultKeyword {
 					sourceFile := ast.GetSourceFileOfNode(node)
 					start := scanner.SkipTrivia(sourceFile.Text(), mod.Pos())
@@ -298,8 +298,8 @@ func getCallHierarchyItemContainerName(program *compiler.Program, node ast.Node)
 }
 
 func moveRangePastModifiers(node ast.Node) core.TextRange {
-	if modifiers := node.Modifiers(); modifiers != nil && len(modifiers.Nodes()) > 0 {
-		lastMod := modifiers.Nodes()[len(modifiers.Nodes())-1]
+	if modifiers := node.Modifiers(); !modifiers.IsNil() && modifiers.Len() > 0 {
+		lastMod := modifiers.At(modifiers.Len() - 1)
 		return core.NewTextRange(lastMod.End(), node.End())
 	}
 	return core.NewTextRange(node.Pos(), node.End())
@@ -781,7 +781,7 @@ func (c *callSiteCollector) collect(node ast.Node) {
 	// do not descend into other call site declarations, other than class member names
 	if isValidCallHierarchyDeclaration(node) {
 		if ast.IsClassLike(node) {
-			for _, member := range node.Members() {
+			for _, member := range node.MemberList().All() {
 				if !member.Name().IsNil() && ast.IsComputedPropertyName(member.Name()) {
 					c.collect(member.Name().Expression())
 				}
@@ -815,7 +815,7 @@ func (c *callSiteCollector) collect(node ast.Node) {
 		// do not descend into the type arguments of a call expression
 		c.recordCallSite(node)
 		c.collect(node.Expression())
-		for _, arg := range node.Arguments() {
+		for _, arg := range node.ArgumentList().All() {
 			c.collect(arg)
 		}
 		return
@@ -823,7 +823,7 @@ func (c *callSiteCollector) collect(node ast.Node) {
 		// do not descend into the type arguments of a new expression
 		c.recordCallSite(node)
 		c.collect(node.Expression())
-		for _, arg := range node.Arguments() {
+		for _, arg := range node.ArgumentList().All() {
 			c.collect(arg)
 		}
 		return
@@ -876,13 +876,13 @@ func collectCallSites(program *compiler.Program, c *checker.Checker, node ast.No
 
 	switch node.Kind() {
 	case ast.KindSourceFile:
-		for _, stmt := range node.Statements() {
+		for _, stmt := range node.StatementList().All() {
 			collector.collect(stmt)
 		}
 
 	case ast.KindModuleDeclaration:
 		if body := node.Body(); !ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient) && !body.IsNil() && ast.IsModuleBlock(body) {
-			for _, stmt := range body.Statements() {
+			for _, stmt := range body.StatementList().All() {
 				collector.collect(stmt)
 			}
 		}
@@ -891,15 +891,15 @@ func collectCallSites(program *compiler.Program, c *checker.Checker, node ast.No
 		ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:
 		impl := findImplementation(c, node)
 		if !impl.IsNil() {
-			for _, param := range impl.Parameters() {
+			for _, param := range impl.ParameterList().All() {
 				collector.collect(param)
 			}
 			collector.collect(impl.Body())
 		}
 
 	case ast.KindClassDeclaration, ast.KindClassExpression:
-		if modifiers := node.Modifiers(); modifiers != nil {
-			for _, mod := range modifiers.Nodes() {
+		if modifiers := node.Modifiers(); !modifiers.IsNil() {
+			for _, mod := range modifiers.All() {
 				collector.collect(mod)
 			}
 		}
@@ -909,9 +909,9 @@ func collectCallSites(program *compiler.Program, c *checker.Checker, node ast.No
 			collector.collect(heritage.Expression())
 		}
 
-		for _, member := range node.Members() {
-			if ast.CanHaveModifiers(member) && member.Modifiers() != nil {
-				for _, mod := range member.Modifiers().Nodes() {
+		for _, member := range node.MemberList().All() {
+			if ast.CanHaveModifiers(member) && !member.Modifiers().IsNil() {
+				for _, mod := range member.Modifiers().All() {
 					collector.collect(mod)
 				}
 			}
@@ -920,7 +920,7 @@ func collectCallSites(program *compiler.Program, c *checker.Checker, node ast.No
 				collector.collect(member.Initializer())
 			} else if ast.IsConstructorDeclaration(member) {
 				if body := member.Body(); !body.IsNil() {
-					for _, param := range member.Parameters() {
+					for _, param := range member.ParameterList().All() {
 						collector.collect(param)
 					}
 					collector.collect(body)

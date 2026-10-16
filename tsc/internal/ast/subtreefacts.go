@@ -86,8 +86,8 @@ const (
 	SubtreeContainsLexicalThisOrSuper = SubtreeContainsLexicalThis | SubtreeContainsLexicalSuper
 )
 
-func propagateEraseableSyntaxListSubtreeFacts(children *TypeArgumentList) SubtreeFacts {
-	return core.IfElse(children != nil, SubtreeContainsTypeScript, SubtreeFactsNone)
+func propagateEraseableSyntaxListSubtreeFacts(children TypeArgumentList) SubtreeFacts {
+	return core.IfElse(!children.IsNil(), SubtreeContainsTypeScript, SubtreeFactsNone)
 }
 
 func propagateEraseableSyntaxSubtreeFacts(child TypeNode) SubtreeFacts {
@@ -114,20 +114,20 @@ func propagateSubtreeFacts(child Node) SubtreeFacts {
 	return child.propagateSubtreeFacts()
 }
 
-func propagateNodeListSubtreeFacts(children *NodeList, propagate func(Node) SubtreeFacts) SubtreeFacts {
-	if children == nil {
+func propagateNodeListSubtreeFacts(children NodeList, propagate func(Node) SubtreeFacts) SubtreeFacts {
+	if children.IsNil() {
 		return SubtreeFactsNone
 	}
 	facts := SubtreeFactsNone
-	for _, child := range children.Nodes() {
+	for _, child := range children.All() {
 		facts |= propagate(child)
 	}
 	return facts
 }
 
-func propagateModifierListSubtreeFacts(children *ModifierList) SubtreeFacts {
-	if children == nil {
+func propagateModifierListSubtreeFacts(children ModifierList) SubtreeFacts {
+	if children.IsNil() {
 		return SubtreeFactsNone
 	}
-	return propagateNodeListSubtreeFacts(&children.NodeList, propagateSubtreeFacts)
+	return propagateNodeListSubtreeFacts(children.NodeList, propagateSubtreeFacts)
 }

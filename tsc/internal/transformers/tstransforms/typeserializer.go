@@ -53,11 +53,11 @@ func (s *metadataSerializer) SerializeReturnTypeOfNode(ctx metadataSerializerCon
 }
 
 func GetSetAccessorValueParameter(node ast.SetAccessorDeclaration) ast.Node {
-	if !node.IsNil() && len(node.Parameters().Nodes()) > 0 {
-		if len(node.Parameters().Nodes()) >= 2 && ast.IsThisParameter(node.Parameters().Nodes()[0]) {
-			return node.Parameters().Nodes()[1]
+	if !node.IsNil() && node.Parameters().Len() > 0 {
+		if node.Parameters().Len() >= 2 && ast.IsThisParameter(node.Parameters().At(0)) {
+			return node.Parameters().At(1)
 		}
-		return node.Parameters().Nodes()[0]
+		return node.Parameters().At(0)
 	}
 	return ast.Node{}
 }
@@ -121,7 +121,7 @@ func (s *metadataSerializer) serializeParameterTypesOfNode(node ast.Node, contai
 
 	var expressions []ast.Node
 	parameters := getParametersOfDecoratedDeclaration(valueDeclaration, container)
-	for i, parameter := range parameters.Nodes() {
+	for i, parameter := range parameters.All() {
 		if i == 0 && ast.IsIdentifier(parameter.Name()) && parameter.Name().Text() == "this" {
 			continue
 		}
@@ -134,7 +134,7 @@ func (s *metadataSerializer) serializeParameterTypesOfNode(node ast.Node, contai
 	return s.f.NewArrayLiteralExpression(s.f.NewNodeList(expressions), false)
 }
 
-func getParametersOfDecoratedDeclaration(node ast.Node, container ast.Node) *ast.NodeList {
+func getParametersOfDecoratedDeclaration(node ast.Node, container ast.Node) ast.NodeList {
 	if !container.IsNil() && node.Kind() == ast.KindGetAccessor {
 		acc := ast.GetAllAccessorDeclarations(container.Members(), node)
 		if !acc.SetAccessor.IsNil() {
@@ -211,9 +211,9 @@ func (s *metadataSerializer) serializeTypeNode(node ast.Node) ast.Node {
 	case ast.KindTypeReference:
 		return s.serializeTypeReferenceNode(node.AsTypeReferenceNode())
 	case ast.KindIntersectionType:
-		return s.serializeUnionOrIntersectionConstituents(node.AsIntersectionTypeNode().Types().Nodes(), true)
+		return s.serializeUnionOrIntersectionConstituents(node.AsIntersectionTypeNode().Types().Slice(), true)
 	case ast.KindUnionType:
-		return s.serializeUnionOrIntersectionConstituents(node.AsUnionTypeNode().Types().Nodes(), false)
+		return s.serializeUnionOrIntersectionConstituents(node.AsUnionTypeNode().Types().Slice(), false)
 	case ast.KindConditionalType:
 		oldState := s.c.serializingConditionalTypeBranch
 		s.c.serializingConditionalTypeBranch = true

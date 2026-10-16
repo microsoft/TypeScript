@@ -279,13 +279,13 @@ func getModuleSpecifierExpression(declaration ast.Statement) ast.Expression {
 	case ast.KindImportDeclaration:
 		return declaration.ModuleSpecifier()
 	case ast.KindVariableStatement:
-		declarations := declaration.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes()
+		declarations := declaration.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Slice()
 		if len(declarations) > 0 {
 			initializer := declarations[0].Initializer()
 			if !initializer.IsNil() && initializer.Kind() == ast.KindCallExpression {
 				callExpr := initializer.AsCallExpression()
-				if len(callExpr.Arguments().Nodes()) > 0 {
-					return callExpr.Arguments().Nodes()[0]
+				if callExpr.Arguments().Len() > 0 {
+					return callExpr.Arguments().At(0)
 				}
 			}
 		}
@@ -480,14 +480,14 @@ func detectNamedImportOrganizationBySort(
 			continue
 		}
 		namedImports := clause.NamedBindings().AsNamedImports()
-		if len(namedImports.Elements().Nodes()) == 0 {
+		if namedImports.Elements().Len() == 0 {
 			continue
 		}
 
 		if !bothNamedImports {
 			hasTypeOnly := false
 			hasRegular := false
-			for _, elem := range namedImports.Elements().Nodes() {
+			for _, elem := range namedImports.Elements().All() {
 				if elem.IsTypeOnly() {
 					hasTypeOnly = true
 				} else {
@@ -510,7 +510,7 @@ func detectNamedImportOrganizationBySort(
 	for _, imp := range importDeclsWithNamed {
 		clause := imp.AsImportDeclaration().ImportClause().AsImportClause()
 		namedImports := clause.NamedBindings().AsNamedImports()
-		namedImportsByDecl = append(namedImportsByDecl, namedImports.Elements().Nodes())
+		namedImportsByDecl = append(namedImportsByDecl, namedImports.Elements().Slice())
 	}
 
 	if !bothNamedImports || len(typesToTest) == 0 {
@@ -679,7 +679,7 @@ func GetNamedImportSpecifierComparerWithDetection(importDecl ast.Node, sourceFil
 				detectFromDecl.namedImportComparer,
 			)
 		} else if sourceFile != nil {
-			allImports := FilterImportDeclarations(sourceFile.Statements.Nodes())
+			allImports := FilterImportDeclarations(sourceFile.Statements.Slice())
 			detectFromFile := detectNamedImportOrganizationBySort(allImports, comparersToTest, typeOrdersToTest)
 			if detectFromFile != nil {
 				isSorted = core.BoolToTristate(detectFromFile.isSorted)

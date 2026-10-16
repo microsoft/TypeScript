@@ -94,8 +94,6 @@ class CodeWriter {
 
 function generateNodeFactoryStruct(w: CodeWriter) {
     const arenaFields: { fieldName: string; typeName: string; }[] = [];
-    arenaFields.push({ fieldName: "modifierListArena", typeName: "ModifierList" });
-    arenaFields.push({ fieldName: "nodeListArena", typeName: "NodeList" });
     arenaFields.sort((a, b) => a.fieldName.localeCompare(b.fieldName));
 
     w.write("// ──────────────────────────────────────────────────────────────────────");
@@ -268,8 +266,6 @@ function isNodeField(f: { goOnly?: boolean; rawType: string | string[]; type: Ty
 const sideTables: Record<string, string> = {
     "*Symbol": "symbols",
     "SymbolTable": "symbolTables",
-    "*NodeList": "nodeLists",
-    "*ModifierList": "modifierLists",
     "string": "texts",
     "[]string": "stringLists",
     "[]Node": "nodeSlices",
@@ -280,16 +276,19 @@ const sideTables: Record<string, string> = {
 // like node fields; the methods named here read, write and create them.
 const recordRefs: Record<string, { ref: string; deref: string; set: string; setAt: string; }> = {
     FlowNode: { ref: "flowRef", deref: "derefFlow", set: "setFlowRef", setAt: "setFlowRef" },
+    NodeList: { ref: "listRef", deref: "derefList", set: "setListRef", setAt: "setListRefAt" },
+    ModifierList: { ref: "listRef", deref: "derefModifiers", set: "setModifiersRef", setAt: "setModifiersRefAt" },
 };
 
 function recordRefOf(goType: string) {
-    return Object.hasOwn(recordRefs, goType) ? recordRefs[goType] : undefined;
+    if (Object.hasOwn(recordRefs, goType)) return recordRefs[goType];
+    // Aliases of NodeList, such as StatementList.
+    if (/^\w+List$/.test(goType) && goType !== "FlowList") return recordRefs.NodeList;
+    return undefined;
 }
 
 function sideTableOf(goType: string): string | undefined {
     if (Object.hasOwn(sideTables, goType)) return sideTables[goType];
-    // Aliases of NodeList, such as *StatementList.
-    if (/^\*\w+List$/.test(goType) && goType !== "*FlowList") return "nodeLists";
     return undefined;
 }
 
@@ -346,6 +345,7 @@ function baseRecordFields(key: string): RecordField[] {
 const recordFieldAlignments: Record<string, number> = {
     "nodeRef": 4,
     "flowRef": 4,
+    "listRef": 4,
     "textRef": 4,
     "sideRef": 4,
     "atomic.Uint32": 4,
@@ -1302,11 +1302,11 @@ function generateNameDispatch(w: CodeWriter) {
 }
 
 function generateModifiersDispatch(w: CodeWriter) {
-    generateNodeAccessorDispatch(w, "Modifiers", "*ModifierList", node => hasMember(node, "modifiers"), node => `${viewOf(node, "n")}.Modifiers()`, "nil");
+    generateNodeAccessorDispatch(w, "Modifiers", "ModifierList", node => hasMember(node, "modifiers"), node => `${viewOf(node, "n")}.Modifiers()`, "ModifierList{}");
 }
 
 function generateSetModifiersDispatch(w: CodeWriter) {
-    w.write("func (n MutableNode) SetModifiers(modifiers *ModifierList) {");
+    w.write("func (n MutableNode) SetModifiers(modifiers ModifierList) {");
     w.push();
     w.write("switch n.Kind() {");
     for (const node of api.nodes()) {

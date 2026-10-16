@@ -544,7 +544,7 @@ func getSwitchCaseDefaultOccurrences(node ast.Node, sourceFile *ast.SourceFile) 
 	}
 
 	clauses := switchStatement.CaseBlock().AsCaseBlock().Clauses()
-	for _, clause := range clauses.Nodes() {
+	for _, clause := range clauses.All() {
 		clauseToken := lsutil.GetFirstToken(clause.AsNode(), sourceFile)
 		if clauseToken.Kind() == ast.KindCaseKeyword || clauseToken.Kind() == ast.KindDefaultKeyword {
 			keywords = append(keywords, clauseToken)
@@ -669,7 +669,7 @@ func getAsyncAndAwaitOccurrences(node ast.Node, sourceFile *ast.SourceFile) []as
 
 	var keywords []ast.Node
 
-	for _, modifier := range fun.ModifierNodes() {
+	for _, modifier := range fun.Modifiers().All() {
 		if modifier.Kind() == ast.KindAsyncKeyword {
 			keywords = append(keywords, modifier)
 		}
@@ -788,7 +788,7 @@ func getNodesToSearchForModifier(declaration ast.Node, modifierFlag ast.Modifier
 }
 
 func findModifier(node ast.Node, kind ast.Kind) ast.Node {
-	for _, modifier := range node.ModifierNodes() {
+	for _, modifier := range node.Modifiers().All() {
 		if modifier.Kind() == kind {
 			return modifier
 		}

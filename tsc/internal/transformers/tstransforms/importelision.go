@@ -71,7 +71,7 @@ func (tx *ImportElisionTransformer) visit(node ast.Node) ast.Node {
 	case ast.KindNamedImports:
 		n := node.AsNamedImports()
 		elements := tx.Visitor().VisitNodes(n.Elements())
-		if len(elements.Nodes()) == 0 {
+		if elements.Len() == 0 {
 			// all import specifiers were elided
 			return ast.Node{}
 		}
@@ -98,11 +98,11 @@ func (tx *ImportElisionTransformer) visit(node ast.Node) ast.Node {
 				return ast.Node{}
 			}
 		}
-		return tx.Factory().UpdateExportDeclaration(n, nil /*modifiers*/, false /*isTypeOnly*/, exportClause, tx.Visitor().VisitNode(n.ModuleSpecifier()), tx.Visitor().VisitNode(n.Attributes()))
+		return tx.Factory().UpdateExportDeclaration(n, ast.ModifierList{} /*modifiers*/, false /*isTypeOnly*/, exportClause, tx.Visitor().VisitNode(n.ModuleSpecifier()), tx.Visitor().VisitNode(n.Attributes()))
 	case ast.KindNamedExports:
 		n := node.AsNamedExports()
 		elements := tx.Visitor().VisitNodes(n.Elements())
-		if len(elements.Nodes()) == 0 {
+		if elements.Len() == 0 {
 			// all export specifiers were elided
 			return ast.Node{}
 		}

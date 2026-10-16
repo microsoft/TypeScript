@@ -301,7 +301,7 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		return d.factory.NewExpressionStatement(d.singleChild(childIndices)), nil
 	case ast.KindBlock:
 		multiLine := commonData&1 != 0
-		var list *ast.NodeList
+		var list ast.NodeList
 		if len(childIndices) > 0 {
 			list = d.nodeListAt(childIndices[0])
 		}
@@ -339,7 +339,7 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		initializer := d.nodeAt(it.nextIf(mask, 3))
 		return d.factory.NewBindingElement(dotDotDotToken, propertyName, name, initializer), nil
 	case ast.KindMissingDeclaration:
-		var mods *ast.ModifierList
+		var mods ast.ModifierList
 		if len(childIndices) > 0 {
 			mods = d.modifierListAt(childIndices[0])
 		}
@@ -674,14 +674,14 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		return d.factory.NewParenthesizedExpression(d.singleChild(childIndices)), nil
 	case ast.KindArrayLiteralExpression:
 		multiLine := commonData&1 != 0
-		var list *ast.NodeList
+		var list ast.NodeList
 		if len(childIndices) > 0 {
 			list = d.nodeListAt(childIndices[0])
 		}
 		return d.factory.NewArrayLiteralExpression(list, multiLine), nil
 	case ast.KindObjectLiteralExpression:
 		multiLine := commonData&1 != 0
-		var list *ast.NodeList
+		var list ast.NodeList
 		if len(childIndices) > 0 {
 			list = d.nodeListAt(childIndices[0])
 		}
@@ -793,7 +793,7 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		if (commonData>>1)&1 != 0 {
 			token = ast.KindAssertKeyword
 		}
-		var list *ast.NodeList
+		var list ast.NodeList
 		if len(childIndices) > 0 {
 			list = d.nodeListAt(childIndices[0])
 		}

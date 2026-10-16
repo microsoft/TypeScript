@@ -49,7 +49,7 @@ func (c *Checker) determineIfDeclarationIsVisible(node ast.Node) bool {
 		ast.KindImportEqualsDeclaration:
 		if ast.IsVariableDeclaration(node) {
 			if ast.IsBindingPattern(node.Name()) &&
-				len(node.Name().Elements()) == 0 {
+				node.Name().ElementList().Len() == 0 {
 				// If the binding pattern is empty, this variable declaration is not visible
 				return false
 			}

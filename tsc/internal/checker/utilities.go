@@ -74,7 +74,7 @@ func isStaticPrivateIdentifierProperty(s *ast.Symbol) bool {
 }
 
 func isEmptyObjectLiteral(expression ast.Node) bool {
-	return ast.IsObjectLiteralExpression(expression) && len(expression.Properties()) == 0
+	return ast.IsObjectLiteralExpression(expression) && expression.PropertyList().Len() == 0
 }
 
 type AssignmentKind int32
@@ -126,7 +126,7 @@ func isCompoundLikeAssignment(assignment ast.Node) bool {
 }
 
 func isConstTypeReference(node ast.Node) bool {
-	return ast.IsTypeReferenceNode(node) && len(node.TypeArguments()) == 0 && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName()) && node.AsTypeReferenceNode().TypeName().Text() == "const"
+	return ast.IsTypeReferenceNode(node) && node.TypeArgumentList().Len() == 0 && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName()) && node.AsTypeReferenceNode().TypeName().Text() == "const"
 }
 
 // isConstTypeReferenceName reports whether node is the `const` type name of a `const`
@@ -156,7 +156,7 @@ func GetSingleVariableOfVariableStatement(node ast.Node) ast.Node {
 	if !ast.IsVariableStatement(node) {
 		return ast.Node{}
 	}
-	return core.FirstOrNil(node.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes())
+	return core.FirstOrNil(node.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Slice())
 }
 
 func isTypeReferenceIdentifier(node ast.Node) bool {
@@ -233,7 +233,7 @@ func isSideEffectImport(node ast.Node) bool {
 
 func getExternalModuleRequireArgument(node ast.Node) ast.Node {
 	if ast.IsVariableDeclarationInitializedToRequire(node) {
-		return node.Initializer().Arguments()[0]
+		return node.Initializer().ArgumentList().At(0)
 	}
 	return ast.Node{}
 }
@@ -328,7 +328,7 @@ func (c *Checker) isOptionalParameter(node ast.Node) bool {
 }
 
 func isEmptyArrayLiteral(expression ast.Node) bool {
-	return ast.IsArrayLiteralExpression(expression) && len(expression.Elements()) == 0
+	return ast.IsArrayLiteralExpression(expression) && expression.ElementList().Len() == 0
 }
 
 func declarationBelongsToPrivateAmbientMember(declaration ast.Node) bool {
@@ -1685,7 +1685,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 	}
 })
 
-func rangeOfTypeParameters(sourceFile *ast.SourceFile, typeParameters *ast.NodeList) core.TextRange {
+func rangeOfTypeParameters(sourceFile *ast.SourceFile, typeParameters ast.NodeList) core.TextRange {
 	return core.NewTextRange(typeParameters.Pos()-1, min(len(sourceFile.Text()), scanner.SkipTrivia(sourceFile.Text(), typeParameters.End())+1))
 }
 

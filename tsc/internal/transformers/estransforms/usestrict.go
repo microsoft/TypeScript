@@ -43,7 +43,7 @@ func (tx *useStrictTransformer) visitSourceFile(node *ast.SourceFile) ast.Node {
 		return node.AsNode()
 	}
 
-	statements := tx.Factory().EnsureUseStrict(node.Statements.Nodes())
+	statements := tx.Factory().EnsureUseStrict(node.Statements.Slice())
 	statementList := tx.Factory().NewNodeList(statements)
 	statementList.SetLoc(node.Statements.Loc())
 	return tx.Factory().UpdateSourceFile(node, statementList, node.EndOfFileToken).AsSourceFile().AsNode()

@@ -263,15 +263,15 @@ func (tx *CommonJSModuleTransformer) createUnderscoreUnderscoreESModule() ast.St
 				tx.Factory().NewIdentifier("defineProperty"),
 				ast.NodeFlagsNone,
 			),
-			ast.Node{}, /*questionDotToken*/
-			nil,        /*typeArguments*/
+			ast.Node{},     /*questionDotToken*/
+			ast.TypeList{}, /*typeArguments*/
 			tx.Factory().NewNodeList([]ast.Node{
 				tx.Factory().NewIdentifier("exports"),
 				tx.Factory().NewStringLiteral("__esModule", ast.TokenFlagsNone),
 				tx.Factory().NewObjectLiteralExpression(
 					tx.Factory().NewNodeList([]ast.Node{
 						tx.Factory().NewPropertyAssignment(
-							nil, /*modifiers*/
+							ast.ModifierList{}, /*modifiers*/
 							tx.Factory().NewIdentifier("value"),
 							ast.Node{}, /*postfixToken*/
 							ast.Node{}, /*typeNode*/
@@ -292,7 +292,7 @@ func (tx *CommonJSModuleTransformer) transformCommonJSModule(node *ast.SourceFil
 	tx.EmitContext().StartVariableEnvironment()
 
 	// emit standard prologue directives (e.g. "use strict")
-	prologue, rest := tx.Factory().SplitStandardPrologue(node.Statements.Nodes())
+	prologue, rest := tx.Factory().SplitStandardPrologue(node.Statements.Slice())
 	statements := slices.Clone(prologue)
 
 	// emit custom prologues from other transformations
@@ -368,7 +368,7 @@ func (tx *CommonJSModuleTransformer) transformCommonJSModule(node *ast.SourceFil
 
 	externalHelpersImportDeclaration := createExternalHelpersImportDeclarationIfNeeded(tx.EmitContext(), result, tx.compilerOptions, tx.getEmitModuleFormatOfFile(node), false /*hasExportStarsToExportValues*/, false /*hasImportStar*/, false /*hasImportDefault*/)
 	if !externalHelpersImportDeclaration.IsNil() {
-		prologue, rest := tx.Factory().SplitStandardPrologue(result.Statements.Nodes())
+		prologue, rest := tx.Factory().SplitStandardPrologue(result.Statements.Slice())
 		custom, rest := tx.Factory().SplitCustomPrologue(rest)
 		statements := slices.Clone(prologue)
 		statements = append(statements, custom...)
@@ -441,7 +441,7 @@ func (tx *CommonJSModuleTransformer) appendExportsOfImportDeclaration(statements
 			statements = tx.appendExportsOfDeclaration(statements, namedBindings, seen, false /*liveBinding*/)
 
 		case ast.KindNamedImports:
-			for _, importBinding := range namedBindings.Elements() {
+			for _, importBinding := range namedBindings.ElementList().All() {
 				statements = tx.appendExportsOfDeclaration(statements, importBinding, seen, true /*liveBinding*/)
 			}
 		}
@@ -467,7 +467,7 @@ func (tx *CommonJSModuleTransformer) appendExportsOfVariableDeclarationList(stat
 		return statements
 	}
 
-	for _, decl := range node.Declarations().Nodes() {
+	for _, decl := range node.Declarations().All() {
 		statements = tx.appendExportsOfBindingElement(statements, decl, isForInOrOfInitializer)
 	}
 
@@ -484,7 +484,7 @@ func (tx *CommonJSModuleTransformer) appendExportsOfBindingElement(statements []
 	}
 
 	if ast.IsBindingPattern(decl.Name()) {
-		for _, element := range decl.Name().Elements() {
+		for _, element := range decl.Name().ElementList().All() {
 			if !ast.IsOmittedExpression(element) {
 				statements = tx.appendExportsOfBindingElement(statements, element, isForInOrOfInitializer)
 			}
@@ -606,30 +606,30 @@ func (tx *CommonJSModuleTransformer) createExportExpression(name ast.ModuleExpor
 				tx.Factory().NewIdentifier("defineProperty"),
 				ast.NodeFlagsNone,
 			),
-			ast.Node{}, /*questionDotToken*/
-			nil,        /*typeArguments*/
+			ast.Node{},     /*questionDotToken*/
+			ast.TypeList{}, /*typeArguments*/
 			tx.Factory().NewNodeList([]ast.Node{
 				tx.Factory().NewIdentifier("exports"),
 				tx.Factory().NewStringLiteralFromNode(name),
 				tx.Factory().NewObjectLiteralExpression(
 					tx.Factory().NewNodeList([]ast.Node{
 						tx.Factory().NewPropertyAssignment(
-							nil, /*modifiers*/
+							ast.ModifierList{}, /*modifiers*/
 							tx.Factory().NewIdentifier("enumerable"),
 							ast.Node{}, /*postfixToken*/
 							ast.Node{}, /*typeNode*/
 							tx.Factory().NewTrueExpression(),
 						),
 						tx.Factory().NewPropertyAssignment(
-							nil, /*modifiers*/
+							ast.ModifierList{}, /*modifiers*/
 							tx.Factory().NewIdentifier("get"),
 							ast.Node{}, /*postfixToken*/
 							ast.Node{}, /*typeNode*/
 							tx.Factory().NewFunctionExpression(
-								nil,        /*modifiers*/
-								ast.Node{}, /*asteriskToken*/
-								ast.Node{}, /*name*/
-								nil,        /*typeParameters*/
+								ast.ModifierList{},      /*modifiers*/
+								ast.Node{},              /*asteriskToken*/
+								ast.Node{},              /*name*/
+								ast.TypeParameterList{}, /*typeParameters*/
 								tx.Factory().NewNodeList([]ast.Node{}),
 								ast.Node{}, /*type*/
 								ast.Node{}, /*fullSignature*/
@@ -686,8 +686,8 @@ func (tx *CommonJSModuleTransformer) createRequireCall(node ast.Node /*ImportDec
 	}
 	return tx.Factory().NewCallExpression(
 		tx.Factory().NewIdentifier("require"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		tx.Factory().NewNodeList(args),
 		ast.NodeFlagsNone,
 	)
@@ -762,7 +762,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelImportDeclaration(node ast.Imp
 	}
 
 	varStatement := tx.Factory().NewVariableStatement(
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		tx.Factory().NewVariableDeclarationList(
 			tx.Factory().NewNodeList(variables),
 			ast.NodeFlagsConst,
@@ -800,7 +800,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelImportEqualsDeclaration(node a
 	} else {
 		// import m = require("mod");
 		statement := tx.Factory().NewVariableStatement(
-			nil, /*modifiers*/
+			ast.ModifierList{}, /*modifiers*/
 			tx.Factory().NewVariableDeclarationList(
 				tx.Factory().NewNodeList([]ast.VariableDeclarationNode{
 					tx.Factory().NewVariableDeclaration(
@@ -834,7 +834,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelExportDeclaration(node ast.Exp
 		// export { x, y } from "mod";
 		var statements []ast.Statement
 		varStatement := tx.Factory().NewVariableStatement(
-			nil, /*modifiers*/
+			ast.ModifierList{}, /*modifiers*/
 			tx.Factory().NewVariableDeclarationList(
 				tx.Factory().NewNodeList([]ast.VariableDeclarationNode{
 					tx.Factory().NewVariableDeclaration(
@@ -851,7 +851,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelExportDeclaration(node ast.Exp
 		tx.EmitContext().AssignCommentAndSourceMapRanges(varStatement, node.AsNode())
 		statements = append(statements, varStatement)
 
-		for _, specifier := range node.ExportClause().Elements() {
+		for _, specifier := range node.ExportClause().ElementList().All() {
 			specifierName := specifier.PropertyNameOrName()
 			exportNeedsImportDefault := ast.ModuleExportNameIsDefault(specifierName)
 
@@ -946,7 +946,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelFunctionDeclaration(node ast.F
 			transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), ^ast.ModifierFlagsExportDefault),
 			node.AsteriskToken(),
 			tx.Factory().GetDeclarationName(node.AsNode()),
-			nil, /*typeParameters*/
+			ast.TypeParameterList{}, /*typeParameters*/
 			tx.Visitor().VisitNodes(node.Parameters()),
 			ast.Node{}, /*type*/
 			ast.Node{}, /*fullSignature*/
@@ -964,7 +964,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelClassDeclaration(node ast.Clas
 			node,
 			tx.Visitor().VisitModifiers(transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), ^ast.ModifierFlagsExportDefault)),
 			tx.Factory().GetDeclarationName(node.AsNode()),
-			nil, /*typeParameters*/
+			ast.TypeParameterList{}, /*typeParameters*/
 			tx.Visitor().VisitNodes(node.HeritageClauses()),
 			tx.Visitor().VisitNodes(node.Members()),
 		))
@@ -981,7 +981,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelVariableStatement(node ast.Var
 		// export var a = b;
 		var variables []ast.VariableDeclarationNode
 		var expressions []ast.Expression
-		var modifiers *ast.ModifierList
+		var modifiers ast.ModifierList
 
 		commitPendingVariables := func() {
 			if len(variables) > 0 {
@@ -1026,7 +1026,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelVariableStatement(node ast.Var
 		}
 
 		// If we're exporting these variables, then these just become assignments to 'exports.x'.
-		for _, variable := range node.DeclarationList().AsVariableDeclarationList().Declarations().Nodes() {
+		for _, variable := range node.DeclarationList().AsVariableDeclarationList().Declarations().All() {
 			v := variable.AsVariableDeclaration()
 
 			if ast.IsIdentifier(v.Name()) && transformers.IsLocalName(tx.EmitContext(), v.Name()) {
@@ -1037,7 +1037,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelVariableStatement(node ast.Var
 				// untransformed (i.e., `new C` rather than `new exports.C`). In these cases,
 				// an `export { x }` declaration will follow.
 
-				if modifiers == nil {
+				if modifiers.IsNil() {
 					modifiers = transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), ^ast.ModifierFlagsExportDefault)
 				}
 
@@ -1161,7 +1161,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelNestedForStatement(node ast.Fo
 
 			var statements []ast.Statement
 			varDeclList := tx.discardedValueVisitor.VisitNode(node.Initializer())
-			varStatement := tx.Factory().NewVariableStatement(nil /*modifiers*/, varDeclList)
+			varStatement := tx.Factory().NewVariableStatement(ast.ModifierList{} /*modifiers*/, varDeclList)
 			statements = append(statements, varStatement)
 			statements = append(statements, exportStatements...)
 
@@ -1209,7 +1209,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelNestedForInOrOfStatement(node 
 			body := tx.EmitContext().VisitIterationBody(node.Statement(), tx.topLevelNestedVisitor)
 			if ast.IsBlock(body) {
 				block := body.AsBlock()
-				bodyStatements := append(exportStatements, block.Statements().Nodes()...)
+				bodyStatements := append(exportStatements, block.Statements().Slice()...)
 				bodyStatementList := tx.Factory().NewNodeList(bodyStatements)
 				bodyStatementList.SetLoc(block.Statements().Loc())
 				body = tx.Factory().UpdateBlock(block, bodyStatementList, block.MultiLine())
@@ -1435,7 +1435,7 @@ func (tx *CommonJSModuleTransformer) visitDestructuringAssignment(node ast.Binar
 // exported identifiers that need to be flattened into individual export assignments.
 func (tx *CommonJSModuleTransformer) destructuringNeedsFlattening(node ast.Node) bool {
 	if ast.IsObjectLiteralExpression(node) {
-		for _, elem := range node.Properties() {
+		for _, elem := range node.PropertyList().All() {
 			switch elem.Kind() {
 			case ast.KindPropertyAssignment:
 				if tx.destructuringNeedsFlattening(elem.Initializer()) {
@@ -1454,7 +1454,7 @@ func (tx *CommonJSModuleTransformer) destructuringNeedsFlattening(node ast.Node)
 			}
 		}
 	} else if ast.IsArrayLiteralExpression(node) {
-		for _, elem := range node.AsArrayLiteralExpression().Elements().Nodes() {
+		for _, elem := range node.AsArrayLiteralExpression().Elements().All() {
 			if ast.IsSpreadElement(elem) {
 				if tx.destructuringNeedsFlattening(elem.Expression()) {
 					return true
@@ -1545,7 +1545,7 @@ func (tx *CommonJSModuleTransformer) isDirectExport(name ast.IdentifierNode) boo
 func (tx *CommonJSModuleTransformer) visitAssignmentProperty(node ast.PropertyAssignment) ast.Node {
 	return tx.Factory().UpdatePropertyAssignment(
 		node,
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		tx.Visitor().VisitNode(node.Name()),
 		ast.Node{}, /*postfixToken*/
 		ast.Node{}, /*typeNode*/
@@ -1558,7 +1558,7 @@ func (tx *CommonJSModuleTransformer) visitShorthandAssignmentProperty(node ast.S
 	if ast.IsIdentifier(target) {
 		return tx.Factory().UpdateShorthandPropertyAssignment(
 			node,
-			nil, /*modifiers*/
+			ast.ModifierList{}, /*modifiers*/
 			target,
 			ast.Node{}, /*postfixToken*/
 			ast.Node{}, /*typeNode*/
@@ -1572,7 +1572,7 @@ func (tx *CommonJSModuleTransformer) visitShorthandAssignmentProperty(node ast.S
 			equalsToken = tx.Factory().NewToken(ast.KindEqualsToken)
 		}
 		target = tx.Factory().NewBinaryExpression(
-			nil, /*modifiers*/
+			ast.ModifierList{}, /*modifiers*/
 			target,
 			ast.Node{}, /*typeNode*/
 			equalsToken,
@@ -1580,7 +1580,7 @@ func (tx *CommonJSModuleTransformer) visitShorthandAssignmentProperty(node ast.S
 		)
 	}
 	updated := tx.Factory().NewPropertyAssignment(
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		node.Name(),
 		ast.Node{}, /*postfixToken*/
 		ast.Node{}, /*typeNode*/
@@ -1611,7 +1611,7 @@ func (tx *CommonJSModuleTransformer) visitAssignmentElement(node ast.Node) ast.N
 		if n.OperatorToken().Kind() == ast.KindEqualsToken {
 			return tx.Factory().UpdateBinaryExpression(
 				n,
-				nil, /*modifiers*/
+				ast.ModifierList{}, /*modifiers*/
 				tx.visitDestructuringAssignmentTarget(n.Left()),
 				ast.Node{}, /*typeNode*/
 				n.OperatorToken(),
@@ -1662,17 +1662,17 @@ func (tx *CommonJSModuleTransformer) visitDestructuringAssignmentTargetNoStack(n
 			statement := tx.Factory().NewExpressionStatement(expression)
 			statementList := tx.Factory().NewNodeList([]ast.Node{statement})
 			param := tx.Factory().NewParameterDeclaration(
-				nil,        /*modifiers*/
-				ast.Node{}, /*dotDotDotToken*/
+				ast.ModifierList{}, /*modifiers*/
+				ast.Node{},         /*dotDotDotToken*/
 				value,
 				ast.Node{}, /*questionToken*/
 				ast.Node{}, /*type*/
 				ast.Node{}, /*initializer*/
 			)
 			valueSetter := tx.Factory().NewSetAccessorDeclaration(
-				nil, /*modifiers*/
+				ast.ModifierList{}, /*modifiers*/
 				tx.Factory().NewIdentifier("value"),
-				nil, /*typeParameters*/
+				ast.TypeParameterList{}, /*typeParameters*/
 				tx.Factory().NewNodeList([]ast.Node{param}),
 				ast.Node{}, /*returnType*/
 				ast.Node{}, /*fullSignature*/
@@ -1692,7 +1692,7 @@ func (tx *CommonJSModuleTransformer) visitDestructuringAssignmentTargetNoStack(n
 func (tx *CommonJSModuleTransformer) visitCommaExpression(node ast.BinaryExpression, resultIsDiscarded bool) ast.Node {
 	left := tx.discardedValueVisitor.VisitNode(node.Left())
 	right := core.IfElse(resultIsDiscarded, tx.discardedValueVisitor, tx.Visitor()).VisitNode(node.Right())
-	return tx.Factory().UpdateBinaryExpression(node, nil /*modifiers*/, left, ast.Node{} /*typeNode*/, node.OperatorToken(), right)
+	return tx.Factory().UpdateBinaryExpression(node, ast.ModifierList{} /*modifiers*/, left, ast.Node{} /*typeNode*/, node.OperatorToken(), right)
 }
 
 // Visits a prefix unary expression that might modify an exported identifier.
@@ -1808,7 +1808,7 @@ func (tx *CommonJSModuleTransformer) visitPostfixUnaryExpression(node ast.Postfi
 func (tx *CommonJSModuleTransformer) visitCallExpression(node ast.CallExpression) ast.Node {
 	needsRewrite := false
 	if tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
-		if ast.IsImportCall(node.AsNode()) && len(node.Arguments().Nodes()) > 0 ||
+		if ast.IsImportCall(node.AsNode()) && node.Arguments().Len() > 0 ||
 			ast.IsInJSFile(node.AsNode()) && ast.IsRequireCall(node.AsNode(), false /*requireStringLiteralLikeArgument*/) {
 			needsRewrite = true
 		}
@@ -1833,7 +1833,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node ast.CallExpression
 			node,
 			expression,
 			node.QuestionDotToken(),
-			nil, /*typeArguments*/
+			ast.TypeList{}, /*typeArguments*/
 			tx.Visitor().VisitNodes(node.Arguments()),
 			node.Flags(),
 		)
@@ -1855,7 +1855,7 @@ func (tx *CommonJSModuleTransformer) visitImportCallExpression(node ast.CallExpr
 	}
 
 	externalModuleName := getExternalModuleNameLiteral(tx.Factory(), node.AsNode(), tx.currentSourceFile, nil /*host*/, nil /*resolver*/, tx.compilerOptions)
-	firstArgument := tx.Visitor().VisitNode(core.FirstOrNil(node.Arguments().Nodes()))
+	firstArgument := tx.Visitor().VisitNode(core.FirstOrNil(node.Arguments().Slice()))
 
 	// Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
 	var argument ast.Expression
@@ -1902,8 +1902,8 @@ func (tx *CommonJSModuleTransformer) createImportCallExpressionCommonJS(arg ast.
 			tx.Factory().NewIdentifier("resolve"),
 			ast.NodeFlagsNone,
 		),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		tx.Factory().NewNodeList(promiseResolveArguments),
 		ast.NodeFlagsNone,
 	)
@@ -1920,8 +1920,8 @@ func (tx *CommonJSModuleTransformer) createImportCallExpressionCommonJS(arg ast.
 	requireCall := tx.Factory().NewImportStarHelper(
 		tx.Factory().NewCallExpression(
 			tx.Factory().NewIdentifier("require"),
-			ast.Node{}, /*questionDotToken*/
-			nil,        /*typeArguments*/
+			ast.Node{},     /*questionDotToken*/
+			ast.TypeList{}, /*typeArguments*/
 			tx.Factory().NewNodeList(requireArguments),
 			ast.NodeFlagsNone,
 		),
@@ -1931,8 +1931,8 @@ func (tx *CommonJSModuleTransformer) createImportCallExpressionCommonJS(arg ast.
 	if needSyncEval {
 		parameters = []ast.ParameterDeclarationNode{
 			tx.Factory().NewParameterDeclaration(
-				nil,        /*modifiers*/
-				ast.Node{}, /*dotDotDotToken*/
+				ast.ModifierList{}, /*modifiers*/
+				ast.Node{},         /*dotDotDotToken*/
 				tx.Factory().NewIdentifier("s"),
 				ast.Node{}, /*questionToken*/
 				ast.Node{}, /*type*/
@@ -1942,8 +1942,8 @@ func (tx *CommonJSModuleTransformer) createImportCallExpressionCommonJS(arg ast.
 	}
 
 	function := tx.Factory().NewArrowFunction(
-		nil, /*modifiers*/
-		nil, /*typeParameters*/
+		ast.ModifierList{},      /*modifiers*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		tx.Factory().NewNodeList(parameters),
 		ast.Node{}, /*type*/
 		ast.Node{}, /*fullSignature*/
@@ -1958,8 +1958,8 @@ func (tx *CommonJSModuleTransformer) createImportCallExpressionCommonJS(arg ast.
 			tx.Factory().NewIdentifier("then"),
 			ast.NodeFlagsNone,
 		),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		tx.Factory().NewNodeList([]ast.Expression{function}),
 		ast.NodeFlagsNone,
 	)
@@ -1969,8 +1969,8 @@ func (tx *CommonJSModuleTransformer) createImportCallExpressionCommonJS(arg ast.
 func (tx *CommonJSModuleTransformer) shimOrRewriteImportOrRequireCall(node ast.CallExpression) ast.Node {
 	expression := tx.Visitor().VisitNode(node.Expression())
 	argumentsList := node.Arguments()
-	if len(node.Arguments().Nodes()) > 0 {
-		firstArgument := tx.Visitor().VisitNode(node.Arguments().Nodes()[0])
+	if node.Arguments().Len() > 0 {
+		firstArgument := tx.Visitor().VisitNode(node.Arguments().At(0))
 		firstArgumentChanged := false
 		if ast.IsStringLiteralLike(firstArgument) {
 			rewritten := rewriteModuleSpecifier(tx.EmitContext(), firstArgument, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
@@ -1981,7 +1981,7 @@ func (tx *CommonJSModuleTransformer) shimOrRewriteImportOrRequireCall(node ast.C
 			firstArgumentChanged = true
 		}
 
-		rest, restChanged := tx.Visitor().VisitSlice(node.Arguments().Nodes()[1:])
+		rest, restChanged := tx.Visitor().VisitSlice(node.Arguments().Slice()[1:])
 		if firstArgumentChanged || restChanged {
 			arguments := append([]ast.Expression{firstArgument}, rest...)
 			argumentsList = tx.Factory().NewNodeList(arguments)
@@ -1993,7 +1993,7 @@ func (tx *CommonJSModuleTransformer) shimOrRewriteImportOrRequireCall(node ast.C
 		node,
 		expression,
 		node.QuestionDotToken(),
-		nil, /*typeArguments*/
+		ast.TypeList{}, /*typeArguments*/
 		argumentsList,
 		node.Flags(),
 	)
@@ -2015,8 +2015,8 @@ func (tx *CommonJSModuleTransformer) visitTaggedTemplateExpression(node ast.Tagg
 		updated := tx.Factory().UpdateTaggedTemplateExpression(
 			node,
 			expression,
-			ast.Node{}, /*questionDotToken*/
-			nil,        /*typeArguments*/
+			ast.Node{},     /*questionDotToken*/
+			ast.TypeList{}, /*typeArguments*/
 			tx.Visitor().VisitNode(node.Template()),
 			node.Flags(),
 		)
@@ -2042,14 +2042,14 @@ func (tx *CommonJSModuleTransformer) visitShorthandPropertyAssignment(node ast.S
 				tx.Visitor().VisitNode(node.ObjectAssignmentInitializer()),
 			)
 		}
-		assignment := tx.Factory().NewPropertyAssignment(nil /*modifiers*/, name, ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, expression)
+		assignment := tx.Factory().NewPropertyAssignment(ast.ModifierList{} /*modifiers*/, name, ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, expression)
 		assignment.SetLoc(node.Loc())
 		tx.EmitContext().AssignCommentAndSourceMapRanges(assignment, node.AsNode())
 		return assignment
 	}
 	return tx.Factory().UpdateShorthandPropertyAssignment(
 		node,
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		exportedOrImportedName,
 		ast.Node{}, /*postfixToken*/
 		ast.Node{}, /*typeNode*/

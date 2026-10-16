@@ -97,8 +97,8 @@ func TestNodeStoreCrossStoreRefs(t *testing.T) {
 func TestNodeSideTableZeroValues(t *testing.T) {
 	t.Parallel()
 	factory := NewNodeFactory(NodeFactoryHooks{})
-	node := factory.NewBlock(nil, false)
-	assert.Equal(t, len(factory.store.nodeLists.items), 0)
+	node := factory.NewBlock(StatementList{}, false)
+	assert.Assert(t, node.AsBlock().Statements().IsNil())
 	assert.Assert(t, node.AsBlock().Locals() == nil)
 
 	locals := SymbolTable{}

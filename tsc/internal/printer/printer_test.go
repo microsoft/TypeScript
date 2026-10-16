@@ -601,7 +601,7 @@ func TestParenthesizeDecorator(t *testing.T) {
 					[]ast.Node{
 						factory.NewDecorator(
 							factory.NewBinaryExpression(
-								nil, /*modifiers*/
+								ast.ModifierList{}, /*modifiers*/
 								factory.NewIdentifier("a"),
 								ast.Node{}, /*typeNode*/
 								factory.NewToken(ast.KindPlusToken),
@@ -611,8 +611,8 @@ func TestParenthesizeDecorator(t *testing.T) {
 					},
 				),
 				factory.NewIdentifier("C"),
-				nil,
-				nil,
+				ast.TypeParameterList{},
+				ast.HeritageClauseList{},
 				factory.NewNodeList([]ast.Node{}),
 			),
 		},
@@ -629,17 +629,17 @@ func TestParenthesizeComputedPropertyName(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewClassDeclaration(
-				nil, /*modifiers*/
+				ast.ModifierList{}, /*modifiers*/
 				factory.NewIdentifier("C"),
-				nil, /*typeParameters*/
-				nil, /*heritageClauses*/
+				ast.TypeParameterList{},  /*typeParameters*/
+				ast.HeritageClauseList{}, /*heritageClauses*/
 				factory.NewNodeList([]ast.Node{
 					factory.NewPropertyDeclaration(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewComputedPropertyName(
 							// will be parenthesized on emit:
 							factory.NewBinaryExpression(
-								nil, /*modifiers*/
+								ast.ModifierList{}, /*modifiers*/
 								factory.NewIdentifier("a"),
 								ast.Node{}, /*typeNode*/
 								factory.NewToken(ast.KindCommaToken),
@@ -671,7 +671,7 @@ func TestParenthesizeArrayLiteral(t *testing.T) {
 						[]ast.Node{
 							// will be parenthesized on emit:
 							factory.NewBinaryExpression(
-								nil, /*modifiers*/
+								ast.ModifierList{}, /*modifiers*/
 								factory.NewIdentifier("a"),
 								ast.Node{}, /*typeNode*/
 								factory.NewToken(ast.KindCommaToken),
@@ -699,7 +699,7 @@ func TestParenthesizePropertyAccess1(t *testing.T) {
 				factory.NewPropertyAccessExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
@@ -755,8 +755,8 @@ func TestParenthesizePropertyAccess3(t *testing.T) {
 					// will be parenthesized on emit:
 					factory.NewNewExpression(
 						factory.NewIdentifier("a"),
-						nil, /*typeArguments*/
-						nil, /*arguments*/
+						ast.TypeList{},    /*typeArguments*/
+						ast.ElementList{}, /*arguments*/
 					),
 					ast.Node{}, /*questionDotToken*/
 					factory.NewIdentifier("b"),
@@ -780,7 +780,7 @@ func TestParenthesizeElementAccess1(t *testing.T) {
 				factory.NewElementAccessExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
@@ -836,8 +836,8 @@ func TestParenthesizeElementAccess3(t *testing.T) {
 					// will be parenthesized on emit:
 					factory.NewNewExpression(
 						factory.NewIdentifier("a"),
-						nil, /*typeArguments*/
-						nil, /*arguments*/
+						ast.TypeList{},    /*typeArguments*/
+						ast.ElementList{}, /*arguments*/
 					),
 					ast.Node{}, /*questionDotToken*/
 					factory.NewIdentifier("b"),
@@ -861,14 +861,14 @@ func TestParenthesizeCall1(t *testing.T) {
 				factory.NewCallExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
-					ast.Node{}, /*questionDotToken*/
-					nil,        /*typeArguments*/
+					ast.Node{},     /*questionDotToken*/
+					ast.TypeList{}, /*typeArguments*/
 					factory.NewNodeList([]ast.Node{}),
 					ast.NodeFlagsNone,
 				),
@@ -895,8 +895,8 @@ func TestParenthesizeCall2(t *testing.T) {
 						factory.NewIdentifier("b"),
 						ast.NodeFlagsOptionalChain,
 					),
-					ast.Node{}, /*questionDotToken*/
-					nil,        /*typeArguments*/
+					ast.Node{},     /*questionDotToken*/
+					ast.TypeList{}, /*typeArguments*/
 					factory.NewNodeList([]ast.Node{}),
 					ast.NodeFlagsNone,
 				),
@@ -919,11 +919,11 @@ func TestParenthesizeCall3(t *testing.T) {
 					// will be parenthesized on emit:
 					factory.NewNewExpression(
 						factory.NewIdentifier("C"),
-						nil, /*typeArguments*/
-						nil, /*arguments*/
+						ast.TypeList{},    /*typeArguments*/
+						ast.ElementList{}, /*arguments*/
 					),
-					ast.Node{}, /*questionDotToken*/
-					nil,        /*typeArguments*/
+					ast.Node{},     /*questionDotToken*/
+					ast.TypeList{}, /*typeArguments*/
 					factory.NewNodeList([]ast.Node{}),
 					ast.NodeFlagsNone,
 				),
@@ -944,11 +944,11 @@ func TestParenthesizeCall4(t *testing.T) {
 			factory.NewExpressionStatement(
 				factory.NewCallExpression(
 					factory.NewIdentifier("a"),
-					ast.Node{}, /*questionDotToken*/
-					nil,        /*typeArguments*/
+					ast.Node{},     /*questionDotToken*/
+					ast.TypeList{}, /*typeArguments*/
 					factory.NewNodeList([]ast.Node{
 						factory.NewBinaryExpression(
-							nil, /*modifiers*/
+							ast.ModifierList{}, /*modifiers*/
 							factory.NewIdentifier("b"),
 							ast.Node{}, /*typeNode*/
 							factory.NewToken(ast.KindCommaToken),
@@ -975,13 +975,13 @@ func TestParenthesizeNew1(t *testing.T) {
 				factory.NewNewExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
-					nil, /*typeArguments*/
+					ast.TypeList{}, /*typeArguments*/
 					factory.NewNodeList([]ast.Node{}),
 				),
 			),
@@ -1003,13 +1003,13 @@ func TestParenthesizeNew2(t *testing.T) {
 					// will be parenthesized on emit:
 					factory.NewCallExpression(
 						factory.NewIdentifier("C"),
-						ast.Node{}, /*questionDotToken*/
-						nil,        /*typeArguments*/
+						ast.Node{},     /*questionDotToken*/
+						ast.TypeList{}, /*typeArguments*/
 						factory.NewNodeList([]ast.Node{}),
 						ast.NodeFlagsNone,
 					),
-					nil, /*typeArguments*/
-					nil, /*arguments*/
+					ast.TypeList{},    /*typeArguments*/
+					ast.ElementList{}, /*arguments*/
 				),
 			),
 		},
@@ -1028,10 +1028,10 @@ func TestParenthesizeNew3(t *testing.T) {
 			factory.NewExpressionStatement(
 				factory.NewNewExpression(
 					factory.NewIdentifier("C"),
-					nil, /*typeArguments*/
+					ast.TypeList{}, /*typeArguments*/
 					factory.NewNodeList([]ast.Node{
 						factory.NewBinaryExpression(
-							nil, /*modifiers*/
+							ast.ModifierList{}, /*modifiers*/
 							factory.NewIdentifier("a"),
 							ast.Node{}, /*typeNode*/
 							factory.NewToken(ast.KindCommaToken),
@@ -1057,14 +1057,14 @@ func TestParenthesizeTaggedTemplate1(t *testing.T) {
 				factory.NewTaggedTemplateExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
-					ast.Node{}, /*questionDotToken*/
-					nil,        /*typeArguments*/
+					ast.Node{},     /*questionDotToken*/
+					ast.TypeList{}, /*typeArguments*/
 					factory.NewNoSubstitutionTemplateLiteral("", ast.TokenFlagsNone),
 					ast.NodeFlagsNone,
 				),
@@ -1091,8 +1091,8 @@ func TestParenthesizeTaggedTemplate2(t *testing.T) {
 						factory.NewIdentifier("b"),
 						ast.NodeFlagsOptionalChain,
 					),
-					ast.Node{}, /*questionDotToken*/
-					nil,        /*typeArguments*/
+					ast.Node{},     /*questionDotToken*/
+					ast.TypeList{}, /*typeArguments*/
 					factory.NewNoSubstitutionTemplateLiteral("", ast.TokenFlagsNone),
 					ast.NodeFlagsNone,
 				),
@@ -1114,11 +1114,11 @@ func TestParenthesizeTypeAssertion1(t *testing.T) {
 				factory.NewTypeAssertion(
 					factory.NewTypeReferenceNode(
 						factory.NewIdentifier("T"),
-						nil, /*typeArguments*/
+						ast.TypeList{}, /*typeArguments*/
 					),
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindPlusToken),
@@ -1141,8 +1141,8 @@ func TestParenthesizeArrowFunction1(t *testing.T) {
 		[]ast.Node{
 			factory.NewExpressionStatement(
 				factory.NewArrowFunction(
-					nil, /*modifiers*/
-					nil, /*typeParameters*/
+					ast.ModifierList{},      /*modifiers*/
+					ast.TypeParameterList{}, /*typeParameters*/
 					factory.NewNodeList([]ast.Node{}),
 					ast.Node{}, /*returnType*/
 					ast.Node{}, /*fullSignature*/
@@ -1169,8 +1169,8 @@ func TestParenthesizeArrowFunction2(t *testing.T) {
 		[]ast.Node{
 			factory.NewExpressionStatement(
 				factory.NewArrowFunction(
-					nil, /*modifiers*/
-					nil, /*typeParameters*/
+					ast.ModifierList{},      /*modifiers*/
+					ast.TypeParameterList{}, /*typeParameters*/
 					factory.NewNodeList([]ast.Node{}),
 					ast.Node{}, /*returnType*/
 					ast.Node{}, /*fullSignature*/
@@ -1204,7 +1204,7 @@ func TestParenthesizeDelete(t *testing.T) {
 				factory.NewDeleteExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindPlusToken),
@@ -1229,7 +1229,7 @@ func TestParenthesizeVoid(t *testing.T) {
 				factory.NewVoidExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindPlusToken),
@@ -1254,7 +1254,7 @@ func TestParenthesizeTypeOf(t *testing.T) {
 				factory.NewTypeOfExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindPlusToken),
@@ -1279,7 +1279,7 @@ func TestParenthesizeAwait(t *testing.T) {
 				factory.NewAwaitExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindPlusToken),
@@ -1349,8 +1349,8 @@ func makeSide(label string, kind ast.Kind, factory *ast.NodeFactory) ast.Node {
 		return factory.NewIdentifier(label)
 	case kind == ast.KindArrowFunction:
 		return factory.NewArrowFunction(
-			nil, /*modifiers*/
-			nil, /*typeParameters*/
+			ast.ModifierList{},      /*modifiers*/
+			ast.TypeParameterList{}, /*typeParameters*/
 			factory.NewNodeList([]ast.Node{}),
 			ast.Node{}, /*returnType*/
 			ast.Node{}, /*fullSignature*/
@@ -1359,7 +1359,7 @@ func makeSide(label string, kind ast.Kind, factory *ast.NodeFactory) ast.Node {
 		)
 	case isBinaryOperator(kind):
 		return factory.NewBinaryExpression(
-			nil, /*modifiers*/
+			ast.ModifierList{}, /*modifiers*/
 			factory.NewIdentifier(label+"l"),
 			ast.Node{}, /*typeNode*/
 			factory.NewToken(kind),
@@ -1404,7 +1404,7 @@ func TestParenthesizeBinary(t *testing.T) {
 				[]ast.Node{
 					factory.NewExpressionStatement(
 						factory.NewBinaryExpression(
-							nil, /*modifiers*/
+							ast.ModifierList{}, /*modifiers*/
 							makeSide("l", rec.left, &factory),
 							ast.Node{}, /*typeNode*/
 							factory.NewToken(rec.operator),
@@ -1430,7 +1430,7 @@ func TestParenthesizeConditional1(t *testing.T) {
 				factory.NewConditionalExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
@@ -1459,7 +1459,7 @@ func TestParenthesizeConditional2(t *testing.T) {
 				factory.NewConditionalExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindEqualsToken),
@@ -1488,8 +1488,8 @@ func TestParenthesizeConditional3(t *testing.T) {
 				factory.NewConditionalExpression(
 					// will be parenthesized on emit:
 					factory.NewArrowFunction(
-						nil, /*modifiers*/
-						nil, /*typeParameters*/
+						ast.ModifierList{},      /*modifiers*/
+						ast.TypeParameterList{}, /*typeParameters*/
 						factory.NewNodeList([]ast.Node{}),
 						ast.Node{}, /*returnType*/
 						ast.Node{}, /*fullSignature*/
@@ -1547,7 +1547,7 @@ func TestParenthesizeConditional5(t *testing.T) {
 					factory.NewToken(ast.KindQuestionToken),
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("b"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
@@ -1578,7 +1578,7 @@ func TestParenthesizeConditional6(t *testing.T) {
 					factory.NewToken(ast.KindColonToken),
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("c"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
@@ -1604,7 +1604,7 @@ func TestParenthesizeYield1(t *testing.T) {
 					ast.Node{}, /*asteriskToken*/
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
@@ -1636,7 +1636,7 @@ func TestParenthesizeSpreadElement1(t *testing.T) {
 							factory.NewSpreadElement(
 								// will be parenthesized on emit:
 								factory.NewBinaryExpression(
-									nil, /*modifiers*/
+									ast.ModifierList{}, /*modifiers*/
 									factory.NewIdentifier("a"),
 									ast.Node{}, /*typeNode*/
 									factory.NewToken(ast.KindCommaToken),
@@ -1664,14 +1664,14 @@ func TestParenthesizeSpreadElement2(t *testing.T) {
 			factory.NewExpressionStatement(
 				factory.NewCallExpression(
 					factory.NewIdentifier("a"),
-					ast.Node{}, /*questionDotToken*/
-					nil,        /*typeArguments*/
+					ast.Node{},     /*questionDotToken*/
+					ast.TypeList{}, /*typeArguments*/
 					factory.NewNodeList(
 						[]ast.Node{
 							factory.NewSpreadElement(
 								// will be parenthesized on emit:
 								factory.NewBinaryExpression(
-									nil, /*modifiers*/
+									ast.ModifierList{}, /*modifiers*/
 									factory.NewIdentifier("b"),
 									ast.Node{}, /*typeNode*/
 									factory.NewToken(ast.KindCommaToken),
@@ -1699,13 +1699,13 @@ func TestParenthesizeSpreadElement3(t *testing.T) {
 			factory.NewExpressionStatement(
 				factory.NewNewExpression(
 					factory.NewIdentifier("a"),
-					nil, /*typeArguments*/
+					ast.TypeList{}, /*typeArguments*/
 					factory.NewNodeList(
 						[]ast.Node{
 							factory.NewSpreadElement(
 								// will be parenthesized on emit:
 								factory.NewBinaryExpression(
-									nil, /*modifiers*/
+									ast.ModifierList{}, /*modifiers*/
 									factory.NewIdentifier("b"),
 									ast.Node{}, /*typeNode*/
 									factory.NewToken(ast.KindCommaToken),
@@ -1733,7 +1733,7 @@ func TestParenthesizeExpressionWithTypeArguments(t *testing.T) {
 				factory.NewExpressionWithTypeArguments(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
@@ -1743,7 +1743,7 @@ func TestParenthesizeExpressionWithTypeArguments(t *testing.T) {
 						[]ast.Node{
 							factory.NewTypeReferenceNode(
 								factory.NewIdentifier("c"),
-								nil,
+								ast.TypeList{},
 							),
 						},
 					),
@@ -1766,7 +1766,7 @@ func TestParenthesizeAsExpression(t *testing.T) {
 				factory.NewAsExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
@@ -1774,7 +1774,7 @@ func TestParenthesizeAsExpression(t *testing.T) {
 					),
 					factory.NewTypeReferenceNode(
 						factory.NewIdentifier("c"),
-						nil,
+						ast.TypeList{},
 					),
 				),
 			),
@@ -1795,7 +1795,7 @@ func TestParenthesizeSatisfiesExpression(t *testing.T) {
 				factory.NewSatisfiesExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
@@ -1803,7 +1803,7 @@ func TestParenthesizeSatisfiesExpression(t *testing.T) {
 					),
 					factory.NewTypeReferenceNode(
 						factory.NewIdentifier("c"),
-						nil,
+						ast.TypeList{},
 					),
 				),
 			),
@@ -1824,7 +1824,7 @@ func TestParenthesizeNonNullExpression(t *testing.T) {
 				factory.NewNonNullExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
-						nil, /*modifiers*/
+						ast.ModifierList{}, /*modifiers*/
 						factory.NewIdentifier("a"),
 						ast.Node{}, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
@@ -1869,10 +1869,10 @@ func TestParenthesizeExpressionStatement2(t *testing.T) {
 		[]ast.Node{
 			factory.NewExpressionStatement(
 				factory.NewFunctionExpression(
-					nil,        /*modifiers*/
-					ast.Node{}, /*asteriskToken*/
-					ast.Node{}, /*name*/
-					nil,        /*typeParameters*/
+					ast.ModifierList{},      /*modifiers*/
+					ast.Node{},              /*asteriskToken*/
+					ast.Node{},              /*name*/
+					ast.TypeParameterList{}, /*typeParameters*/
 					factory.NewNodeList(
 						[]ast.Node{},
 					),
@@ -1899,10 +1899,10 @@ func TestParenthesizeExpressionStatement3(t *testing.T) {
 		[]ast.Node{
 			factory.NewExpressionStatement(
 				factory.NewClassExpression(
-					nil,        /*modifiers*/
-					ast.Node{}, /*name*/
-					nil,        /*typeParameters*/
-					nil,        /*heritageClauses*/
+					ast.ModifierList{},       /*modifiers*/
+					ast.Node{},               /*name*/
+					ast.TypeParameterList{},  /*typeParameters*/
+					ast.HeritageClauseList{}, /*heritageClauses*/
 					factory.NewNodeList(
 						[]ast.Node{},
 					),
@@ -1922,15 +1922,15 @@ func TestParenthesizeExpressionDefault1(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewExportAssignment(
-				nil,        /*modifiers*/
-				false,      /*isExportEquals*/
-				ast.Node{}, /*typeNode*/
+				ast.ModifierList{}, /*modifiers*/
+				false,              /*isExportEquals*/
+				ast.Node{},         /*typeNode*/
 				// will be parenthesized on emit:
 				factory.NewClassExpression(
-					nil,        /*modifiers*/
-					ast.Node{}, /*name*/
-					nil,        /*typeParameters*/
-					nil,        /*heritageClauses*/
+					ast.ModifierList{},       /*modifiers*/
+					ast.Node{},               /*name*/
+					ast.TypeParameterList{},  /*typeParameters*/
+					ast.HeritageClauseList{}, /*heritageClauses*/
 					factory.NewNodeList(
 						[]ast.Node{},
 					),
@@ -1950,15 +1950,15 @@ func TestParenthesizeExpressionDefault2(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewExportAssignment(
-				nil,        /*modifiers*/
-				false,      /*isExportEquals*/
-				ast.Node{}, /*typeNode*/
+				ast.ModifierList{}, /*modifiers*/
+				false,              /*isExportEquals*/
+				ast.Node{},         /*typeNode*/
 				// will be parenthesized on emit:
 				factory.NewFunctionExpression(
-					nil,        /*modifiers*/
-					ast.Node{}, /*asteriskToken*/
-					ast.Node{}, /*name*/
-					nil,        /*typeParameters*/
+					ast.ModifierList{},      /*modifiers*/
+					ast.Node{},              /*asteriskToken*/
+					ast.Node{},              /*name*/
+					ast.TypeParameterList{}, /*typeParameters*/
 					factory.NewNodeList(
 						[]ast.Node{},
 					),
@@ -1986,12 +1986,12 @@ func TestParenthesizeExpressionDefault3(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewExportAssignment(
-				nil,        /*modifiers*/
-				false,      /*isExportEquals*/
-				ast.Node{}, /*typeNode*/
+				ast.ModifierList{}, /*modifiers*/
+				false,              /*isExportEquals*/
+				ast.Node{},         /*typeNode*/
 				// will be parenthesized on emit:
 				factory.NewBinaryExpression(
-					nil, /*modifiers*/
+					ast.ModifierList{}, /*modifiers*/
 					factory.NewIdentifier("a"),
 					ast.Node{}, /*typeNode*/
 					factory.NewToken(ast.KindCommaToken),
@@ -2012,16 +2012,16 @@ func TestParenthesizeArrayType(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
+				ast.ModifierList{},         /*modifiers*/
 				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
+				ast.TypeParameterList{},    /*typeParameters*/
 				factory.NewArrayTypeNode(
 					// will be parenthesized on emit:
 					factory.NewUnionTypeNode(
 						factory.NewNodeList(
 							[]ast.Node{
-								factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
-								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("a"), ast.TypeList{} /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), ast.TypeList{} /*typeArguments*/),
 							},
 						),
 					),
@@ -2041,9 +2041,9 @@ func TestParenthesizeOptionalType(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
+				ast.ModifierList{},         /*modifiers*/
 				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
+				ast.TypeParameterList{},    /*typeParameters*/
 				factory.NewTupleTypeNode(
 					factory.NewNodeList(
 						[]ast.Node{
@@ -2052,8 +2052,8 @@ func TestParenthesizeOptionalType(t *testing.T) {
 								factory.NewUnionTypeNode(
 									factory.NewNodeList(
 										[]ast.Node{
-											factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
-											factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+											factory.NewTypeReferenceNode(factory.NewIdentifier("a"), ast.TypeList{} /*typeArguments*/),
+											factory.NewTypeReferenceNode(factory.NewIdentifier("b"), ast.TypeList{} /*typeArguments*/),
 										},
 									),
 								),
@@ -2076,20 +2076,20 @@ func TestParenthesizeUnionType1(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
+				ast.ModifierList{},         /*modifiers*/
 				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
+				ast.TypeParameterList{},    /*typeParameters*/
 				factory.NewUnionTypeNode(
 					factory.NewNodeList(
 						[]ast.Node{
-							factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+							factory.NewTypeReferenceNode(factory.NewIdentifier("a"), ast.TypeList{} /*typeArguments*/),
 							// will be parenthesized on emit:
 							factory.NewFunctionTypeNode(
-								nil, /*typeParameters*/
+								ast.TypeParameterList{}, /*typeParameters*/
 								factory.NewNodeList(
 									[]ast.Node{},
 								),
-								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), ast.TypeList{} /*typeArguments*/),
 							),
 						},
 					),
@@ -2109,23 +2109,23 @@ func TestParenthesizeUnionType2(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
+				ast.ModifierList{},         /*modifiers*/
 				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
+				ast.TypeParameterList{},    /*typeParameters*/
 				factory.NewUnionTypeNode(
 					factory.NewNodeList(
 						[]ast.Node{
 							// will be parenthesized on emit:
 							factory.NewInferTypeNode(
 								factory.NewTypeParameterDeclaration(
-									nil,
+									ast.ModifierList{},
 									factory.NewIdentifier("a"),
-									factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+									factory.NewTypeReferenceNode(factory.NewIdentifier("b"), ast.TypeList{} /*typeArguments*/),
 									ast.Node{}, /*expression*/
 									ast.Node{}, /*defaultType*/
 								),
 							),
-							factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+							factory.NewTypeReferenceNode(factory.NewIdentifier("c"), ast.TypeList{} /*typeArguments*/),
 						},
 					),
 				),
@@ -2144,19 +2144,19 @@ func TestParenthesizeIntersectionType(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
+				ast.ModifierList{},         /*modifiers*/
 				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
+				ast.TypeParameterList{},    /*typeParameters*/
 				factory.NewIntersectionTypeNode(
 					factory.NewNodeList(
 						[]ast.Node{
-							factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+							factory.NewTypeReferenceNode(factory.NewIdentifier("a"), ast.TypeList{} /*typeArguments*/),
 							// will be parenthesized on emit:
 							factory.NewUnionTypeNode(
 								factory.NewNodeList(
 									[]ast.Node{
-										factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
-										factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+										factory.NewTypeReferenceNode(factory.NewIdentifier("b"), ast.TypeList{} /*typeArguments*/),
+										factory.NewTypeReferenceNode(factory.NewIdentifier("c"), ast.TypeList{} /*typeArguments*/),
 									},
 								),
 							),
@@ -2178,17 +2178,17 @@ func TestParenthesizeReadonlyTypeOperator1(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
+				ast.ModifierList{},         /*modifiers*/
 				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
+				ast.TypeParameterList{},    /*typeParameters*/
 				factory.NewTypeOperatorNode(
 					ast.KindReadonlyKeyword,
 					// will be parenthesized on emit:
 					factory.NewUnionTypeNode(
 						factory.NewNodeList(
 							[]ast.Node{
-								factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
-								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("a"), ast.TypeList{} /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), ast.TypeList{} /*typeArguments*/),
 							},
 						),
 					),
@@ -2208,15 +2208,15 @@ func TestParenthesizeReadonlyTypeOperator2(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
+				ast.ModifierList{},         /*modifiers*/
 				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
+				ast.TypeParameterList{},    /*typeParameters*/
 				factory.NewTypeOperatorNode(
 					ast.KindReadonlyKeyword,
 					// will be parenthesized on emit:
 					factory.NewTypeOperatorNode(
 						ast.KindKeyOfKeyword,
-						factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+						factory.NewTypeReferenceNode(factory.NewIdentifier("a"), ast.TypeList{} /*typeArguments*/),
 					),
 				),
 			),
@@ -2234,17 +2234,17 @@ func TestParenthesizeKeyofTypeOperator(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
+				ast.ModifierList{},         /*modifiers*/
 				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
+				ast.TypeParameterList{},    /*typeParameters*/
 				factory.NewTypeOperatorNode(
 					ast.KindKeyOfKeyword,
 					// will be parenthesized on emit:
 					factory.NewUnionTypeNode(
 						factory.NewNodeList(
 							[]ast.Node{
-								factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
-								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("a"), ast.TypeList{} /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), ast.TypeList{} /*typeArguments*/),
 							},
 						),
 					),
@@ -2264,20 +2264,20 @@ func TestParenthesizeIndexedAccessType(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
+				ast.ModifierList{},         /*modifiers*/
 				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
+				ast.TypeParameterList{},    /*typeParameters*/
 				factory.NewIndexedAccessTypeNode(
 					// will be parenthesized on emit:
 					factory.NewUnionTypeNode(
 						factory.NewNodeList(
 							[]ast.Node{
-								factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
-								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("a"), ast.TypeList{} /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), ast.TypeList{} /*typeArguments*/),
 							},
 						),
 					),
-					factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("c"), ast.TypeList{} /*typeArguments*/),
 				),
 			),
 		},
@@ -2294,21 +2294,21 @@ func TestParenthesizeConditionalType1(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
+				ast.ModifierList{},         /*modifiers*/
 				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
+				ast.TypeParameterList{},    /*typeParameters*/
 				factory.NewConditionalTypeNode(
 					// will be parenthesized on emit:
 					factory.NewFunctionTypeNode(
-						nil, /*typeParameters*/
+						ast.TypeParameterList{}, /*typeParameters*/
 						factory.NewNodeList(
 							[]ast.Node{},
 						),
-						factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+						factory.NewTypeReferenceNode(factory.NewIdentifier("a"), ast.TypeList{} /*typeArguments*/),
 					),
-					factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
-					factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
-					factory.NewTypeReferenceNode(factory.NewIdentifier("d"), nil /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("b"), ast.TypeList{} /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("c"), ast.TypeList{} /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("d"), ast.TypeList{} /*typeArguments*/),
 				),
 			),
 		},
@@ -2325,20 +2325,20 @@ func TestParenthesizeConditionalType2(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
+				ast.ModifierList{},         /*modifiers*/
 				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
+				ast.TypeParameterList{},    /*typeParameters*/
 				factory.NewConditionalTypeNode(
-					factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("a"), ast.TypeList{} /*typeArguments*/),
 					// will be parenthesized on emit:
 					factory.NewConditionalTypeNode(
-						factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
-						factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
-						factory.NewTypeReferenceNode(factory.NewIdentifier("d"), nil /*typeArguments*/),
-						factory.NewTypeReferenceNode(factory.NewIdentifier("e"), nil /*typeArguments*/),
+						factory.NewTypeReferenceNode(factory.NewIdentifier("b"), ast.TypeList{} /*typeArguments*/),
+						factory.NewTypeReferenceNode(factory.NewIdentifier("c"), ast.TypeList{} /*typeArguments*/),
+						factory.NewTypeReferenceNode(factory.NewIdentifier("d"), ast.TypeList{} /*typeArguments*/),
+						factory.NewTypeReferenceNode(factory.NewIdentifier("e"), ast.TypeList{} /*typeArguments*/),
 					),
-					factory.NewTypeReferenceNode(factory.NewIdentifier("f"), nil /*typeArguments*/),
-					factory.NewTypeReferenceNode(factory.NewIdentifier("g"), nil /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("f"), ast.TypeList{} /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("g"), ast.TypeList{} /*typeArguments*/),
 				),
 			),
 		},
@@ -2355,29 +2355,29 @@ func TestParenthesizeConditionalType3(t *testing.T) {
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
 		[]ast.Node{
 			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
+				ast.ModifierList{},         /*modifiers*/
 				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
+				ast.TypeParameterList{},    /*typeParameters*/
 				factory.NewConditionalTypeNode(
-					factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("a"), ast.TypeList{} /*typeArguments*/),
 					factory.NewFunctionTypeNode(
-						nil, /*typeParameters*/
+						ast.TypeParameterList{}, /*typeParameters*/
 						factory.NewNodeList(
 							[]ast.Node{},
 						),
 						// will be parenthesized on emit:
 						factory.NewInferTypeNode(
 							factory.NewTypeParameterDeclaration(
-								nil,
+								ast.ModifierList{},
 								factory.NewIdentifier("b"),
-								factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("c"), ast.TypeList{} /*typeArguments*/),
 								ast.Node{}, /*expression*/
 								ast.Node{}, /*defaultType*/
 							),
 						),
 					),
-					factory.NewTypeReferenceNode(factory.NewIdentifier("d"), nil /*typeArguments*/),
-					factory.NewTypeReferenceNode(factory.NewIdentifier("e"), nil /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("d"), ast.TypeList{} /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("e"), ast.TypeList{} /*typeArguments*/),
 				),
 			),
 		},
@@ -2393,13 +2393,13 @@ func TestParenthesizeConditionalType4(t *testing.T) {
 	var factory ast.NodeFactory
 	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList([]ast.Node{
 		factory.NewTypeAliasDeclaration(
-			nil,                        /*modifiers*/
+			ast.ModifierList{},         /*modifiers*/
 			factory.NewIdentifier("_"), /*name*/
-			nil,                        /*typeParameters*/
+			ast.TypeParameterList{},    /*typeParameters*/
 			factory.NewConditionalTypeNode(
-				factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+				factory.NewTypeReferenceNode(factory.NewIdentifier("a"), ast.TypeList{} /*typeArguments*/),
 				factory.NewFunctionTypeNode(
-					nil, /*typeParameters*/
+					ast.TypeParameterList{}, /*typeParameters*/
 					factory.NewNodeList(
 						[]ast.Node{},
 					),
@@ -2409,20 +2409,20 @@ func TestParenthesizeConditionalType4(t *testing.T) {
 							[]ast.Node{
 								factory.NewInferTypeNode(
 									factory.NewTypeParameterDeclaration(
-										nil,
+										ast.ModifierList{},
 										factory.NewIdentifier("b"),
-										factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+										factory.NewTypeReferenceNode(factory.NewIdentifier("c"), ast.TypeList{} /*typeArguments*/),
 										ast.Node{}, /*expression*/
 										ast.Node{}, /*defaultType*/
 									),
 								),
-								factory.NewTypeReferenceNode(factory.NewIdentifier("d"), nil /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("d"), ast.TypeList{} /*typeArguments*/),
 							},
 						),
 					),
 				),
-				factory.NewTypeReferenceNode(factory.NewIdentifier("e"), nil /*typeArguments*/),
-				factory.NewTypeReferenceNode(factory.NewIdentifier("f"), nil /*typeArguments*/),
+				factory.NewTypeReferenceNode(factory.NewIdentifier("e"), ast.TypeList{} /*typeArguments*/),
+				factory.NewTypeReferenceNode(factory.NewIdentifier("f"), ast.TypeList{} /*typeArguments*/),
 			),
 		),
 	}), factory.NewToken(ast.KindEndOfFile))
@@ -2435,22 +2435,22 @@ func TestNameGeneration(t *testing.T) {
 	t.Parallel()
 	ec := printer.NewEmitContext()
 	file := ec.Factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", ec.Factory.NewNodeList([]ast.Node{
-		ec.Factory.NewVariableStatement(nil, ec.Factory.NewVariableDeclarationList(
+		ec.Factory.NewVariableStatement(ast.ModifierList{}, ec.Factory.NewVariableDeclarationList(
 			ec.Factory.NewNodeList([]ast.Node{
 				ec.Factory.NewVariableDeclaration(ec.Factory.NewTempVariable(), ast.Node{}, ast.Node{}, ast.Node{}),
 			}),
 			ast.NodeFlagsNone,
 		)),
 		ec.Factory.NewFunctionDeclaration(
-			nil,
+			ast.ModifierList{},
 			ast.Node{},
 			ec.Factory.NewIdentifier("f"),
-			nil,
+			ast.TypeParameterList{},
 			ec.Factory.NewNodeList([]ast.Node{}),
 			ast.Node{},
 			ast.Node{},
 			ec.Factory.NewBlock(ec.Factory.NewNodeList([]ast.Node{
-				ec.Factory.NewVariableStatement(nil, ec.Factory.NewVariableDeclarationList(
+				ec.Factory.NewVariableStatement(ast.ModifierList{}, ec.Factory.NewVariableDeclarationList(
 					ec.Factory.NewNodeList([]ast.Node{
 						ec.Factory.NewVariableDeclaration(ec.Factory.NewTempVariable(), ast.Node{}, ast.Node{}, ast.Node{}),
 					}),
@@ -2553,7 +2553,7 @@ func TestParenthesizeBinaryExpressionMixingNullishCoalescing(t *testing.T) {
 			t.Parallel()
 			var factory ast.NodeFactory
 			innerExpr := factory.NewBinaryExpression(
-				nil, /*modifiers*/
+				ast.ModifierList{}, /*modifiers*/
 				factory.NewIdentifier("a"),
 				ast.Node{}, /*typeNode*/
 				factory.NewToken(tt.innerOp),
@@ -2562,15 +2562,15 @@ func TestParenthesizeBinaryExpressionMixingNullishCoalescing(t *testing.T) {
 			var outerExpr ast.Node
 			if tt.side == "left" {
 				outerExpr = factory.NewBinaryExpression(
-					nil,        /*modifiers*/
-					innerExpr,  /*left: (a innerOp b)*/
-					ast.Node{}, /*typeNode*/
+					ast.ModifierList{}, /*modifiers*/
+					innerExpr,          /*left: (a innerOp b)*/
+					ast.Node{},         /*typeNode*/
 					factory.NewToken(tt.outerOp),
 					factory.NewIdentifier("c"),
 				)
 			} else {
 				outerExpr = factory.NewBinaryExpression(
-					nil, /*modifiers*/
+					ast.ModifierList{}, /*modifiers*/
 					factory.NewIdentifier("a"),
 					ast.Node{}, /*typeNode*/
 					factory.NewToken(tt.outerOp),
@@ -2597,10 +2597,10 @@ func TestOmitTrailingSemicolon(t *testing.T) {
 
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 	methodSignature := factory.NewMethodSignatureDeclaration(
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		factory.NewIdentifier("m"),
-		ast.Node{}, /*postfixToken*/
-		nil,        /*typeParameters*/
+		ast.Node{},              /*postfixToken*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		factory.NewNodeList(nil),
 		factory.NewKeywordTypeNode(ast.KindVoidKeyword),
 	)

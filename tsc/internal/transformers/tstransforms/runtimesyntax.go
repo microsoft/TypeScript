@@ -143,12 +143,12 @@ func (tx *RuntimeSyntaxTransformer) recordDeclarationInScope(node ast.Node) {
 		tx.recordDeclarationInScope(node.AsVariableStatement().DeclarationList())
 		return
 	case ast.KindVariableDeclarationList:
-		for _, decl := range node.AsVariableDeclarationList().Declarations().Nodes() {
+		for _, decl := range node.AsVariableDeclarationList().Declarations().All() {
 			tx.recordDeclarationInScope(decl)
 		}
 		return
 	case ast.KindArrayBindingPattern, ast.KindObjectBindingPattern:
-		for _, element := range node.Elements() {
+		for _, element := range node.ElementList().All() {
 			tx.recordDeclarationInScope(element)
 		}
 		return
@@ -331,10 +331,10 @@ func (tx *RuntimeSyntaxTransformer) visitEnumDeclaration(node ast.EnumDeclaratio
 	enumParamName := tx.Factory().NewGeneratedNameForNode(node.AsNode())
 	tx.EmitContext().SetSourceMapRange(enumParamName, node.Name().Loc())
 
-	enumParam := tx.Factory().NewParameterDeclaration(nil, ast.Node{}, enumParamName, ast.Node{}, ast.Node{}, ast.Node{})
+	enumParam := tx.Factory().NewParameterDeclaration(ast.ModifierList{}, ast.Node{}, enumParamName, ast.Node{}, ast.Node{}, ast.Node{})
 	enumBody := tx.transformEnumBody(node)
-	enumFunc := tx.Factory().NewFunctionExpression(nil, ast.Node{}, ast.Node{}, nil, tx.Factory().NewNodeList([]ast.Node{enumParam}), ast.Node{}, ast.Node{}, enumBody)
-	enumCall := tx.Factory().NewCallExpression(tx.Factory().NewParenthesizedExpression(enumFunc), ast.Node{}, nil, tx.Factory().NewNodeList([]ast.Node{enumArg}), ast.NodeFlagsNone)
+	enumFunc := tx.Factory().NewFunctionExpression(ast.ModifierList{}, ast.Node{}, ast.Node{}, ast.TypeParameterList{}, tx.Factory().NewNodeList([]ast.Node{enumParam}), ast.Node{}, ast.Node{}, enumBody)
+	enumCall := tx.Factory().NewCallExpression(tx.Factory().NewParenthesizedExpression(enumFunc), ast.Node{}, ast.TypeList{}, tx.Factory().NewNodeList([]ast.Node{enumArg}), ast.NodeFlagsNone)
 	enumStatement := tx.Factory().NewExpressionStatement(enumCall)
 	tx.EmitContext().SetOriginal(enumStatement, node.AsNode())
 	tx.EmitContext().AssignCommentAndSourceMapRanges(enumStatement, node.AsNode())
@@ -351,7 +351,7 @@ func (tx *RuntimeSyntaxTransformer) transformEnumBody(node ast.EnumDeclaration) 
 	node = tx.Visitor().VisitEachChild(node.AsNode()).AsEnumDeclaration()
 
 	statements := []ast.Statement{}
-	for i := range len(node.Members().Nodes()) {
+	for i := range node.Members().Len() {
 		//  E[E["A"] = 0] = "A";
 		statements = tx.transformEnumMember(
 			statements,
@@ -373,7 +373,7 @@ func (tx *RuntimeSyntaxTransformer) transformEnumMember(
 	enum ast.EnumDeclaration,
 	index int,
 ) []ast.Statement {
-	memberNode := enum.Members().Nodes()[index]
+	memberNode := enum.Members().At(index)
 	member := memberNode.AsEnumMember()
 
 	savedParent := tx.parentNode
@@ -473,10 +473,10 @@ func (tx *RuntimeSyntaxTransformer) visitModuleDeclaration(node ast.ModuleDeclar
 	moduleParamName := tx.Factory().NewGeneratedNameForNode(node.AsNode())
 	tx.EmitContext().SetSourceMapRange(moduleParamName, node.Name().Loc())
 
-	moduleParam := tx.Factory().NewParameterDeclaration(nil, ast.Node{}, moduleParamName, ast.Node{}, ast.Node{}, ast.Node{})
+	moduleParam := tx.Factory().NewParameterDeclaration(ast.ModifierList{}, ast.Node{}, moduleParamName, ast.Node{}, ast.Node{}, ast.Node{})
 	moduleBody := tx.transformModuleBody(node, tx.getNamespaceContainerName(node.AsNode()))
-	moduleFunc := tx.Factory().NewFunctionExpression(nil, ast.Node{}, ast.Node{}, nil, tx.Factory().NewNodeList([]ast.Node{moduleParam}), ast.Node{}, ast.Node{}, moduleBody)
-	moduleCall := tx.Factory().NewCallExpression(tx.Factory().NewParenthesizedExpression(moduleFunc), ast.Node{}, nil, tx.Factory().NewNodeList([]ast.Node{moduleArg}), ast.NodeFlagsNone)
+	moduleFunc := tx.Factory().NewFunctionExpression(ast.ModifierList{}, ast.Node{}, ast.Node{}, ast.TypeParameterList{}, tx.Factory().NewNodeList([]ast.Node{moduleParam}), ast.Node{}, ast.Node{}, moduleBody)
+	moduleCall := tx.Factory().NewCallExpression(tx.Factory().NewParenthesizedExpression(moduleFunc), ast.Node{}, ast.TypeList{}, tx.Factory().NewNodeList([]ast.Node{moduleArg}), ast.NodeFlagsNone)
 	moduleStatement := tx.Factory().NewExpressionStatement(moduleCall)
 	tx.EmitContext().SetOriginal(moduleStatement, node.AsNode())
 	tx.EmitContext().AssignCommentAndSourceMapRanges(moduleStatement, node.AsNode())
@@ -502,7 +502,7 @@ func (tx *RuntimeSyntaxTransformer) transformModuleBody(node ast.ModuleDeclarati
 			// visit the children of `node` in advance to capture any references to namespace members
 			node = tx.Visitor().VisitEachChild(node.AsNode()).AsModuleDeclaration()
 			body := node.Body().AsModuleBlock()
-			statements = body.Statements().Nodes()
+			statements = body.Statements().Slice()
 			statementsLocation = body.Statements().Loc()
 			blockLocation = body.Loc()
 		} else { // node.Body.Kind == ast.KindModuleDeclaration
@@ -580,7 +580,7 @@ func (tx *RuntimeSyntaxTransformer) visitImportEqualsDeclaration(node ast.Import
 func (tx *RuntimeSyntaxTransformer) visitVariableStatement(node ast.VariableStatement) ast.Node {
 	if tx.isExportOfNamespace(node.AsNode()) {
 		expressions := []ast.Expression{}
-		for _, declaration := range node.DeclarationList().AsVariableDeclarationList().Declarations().Nodes() {
+		for _, declaration := range node.DeclarationList().AsVariableDeclarationList().Declarations().All() {
 			v := declaration.AsVariableDeclaration()
 			if v.Initializer().IsNil() {
 				continue
@@ -639,7 +639,7 @@ func (tx *RuntimeSyntaxTransformer) visitFunctionDeclaration(node ast.FunctionDe
 			tx.Visitor().VisitModifiers(transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), ^ast.ModifierFlagsExport)),
 			node.AsteriskToken(),
 			tx.Visitor().VisitNode(node.Name()),
-			nil, /*typeParameters*/
+			ast.TypeParameterList{}, /*typeParameters*/
 			tx.Visitor().VisitNodes(node.Parameters()),
 			ast.Node{}, /*returnType*/
 			ast.Node{}, /*fullSignature*/
@@ -657,7 +657,7 @@ func (tx *RuntimeSyntaxTransformer) visitFunctionDeclaration(node ast.FunctionDe
 func (tx *RuntimeSyntaxTransformer) getParameterProperties(constructor ast.Node) []ast.ParameterDeclaration {
 	var parameterProperties []ast.ParameterDeclaration
 	if !constructor.IsNil() {
-		for _, parameter := range constructor.Parameters() {
+		for _, parameter := range constructor.ParameterList().All() {
 			if ast.IsParameterPropertyDeclaration(parameter, constructor) {
 				parameterProperties = append(parameterProperties, parameter.AsParameterDeclaration())
 			}
@@ -668,7 +668,7 @@ func (tx *RuntimeSyntaxTransformer) getParameterProperties(constructor ast.Node)
 
 func (tx *RuntimeSyntaxTransformer) visitClassDeclaration(node ast.ClassDeclaration) ast.Node {
 	exported := tx.isExportOfNamespace(node.AsNode())
-	var modifiers *ast.ModifierList
+	var modifiers ast.ModifierList
 	if exported {
 		modifiers = tx.Visitor().VisitModifiers(transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), ^ast.ModifierFlagsExportDefault))
 	} else {
@@ -684,14 +684,14 @@ func (tx *RuntimeSyntaxTransformer) visitClassDeclaration(node ast.ClassDeclarat
 	}
 	heritageClauses := tx.Visitor().VisitNodes(node.HeritageClauses())
 	members := tx.Visitor().VisitNodes(node.Members())
-	parameterProperties := tx.getParameterProperties(core.Find(node.Members().Nodes(), ast.IsConstructorDeclaration))
+	parameterProperties := tx.getParameterProperties(core.Find(node.Members().Slice(), ast.IsConstructorDeclaration))
 
 	if len(parameterProperties) > 0 {
 		var newMembers []ast.ClassElement
 		for _, parameter := range parameterProperties {
 			if ast.IsIdentifier(parameter.Name()) {
 				parameterProperty := tx.Factory().NewPropertyDeclaration(
-					nil, /*modifiers*/
+					ast.ModifierList{}, /*modifiers*/
 					parameter.Name().Clone(tx.Factory()),
 					ast.Node{}, /*questionOrExclamationToken*/
 					ast.Node{}, /*type*/
@@ -702,13 +702,13 @@ func (tx *RuntimeSyntaxTransformer) visitClassDeclaration(node ast.ClassDeclarat
 			}
 		}
 		if len(newMembers) > 0 {
-			newMembers = append(newMembers, members.Nodes()...)
+			newMembers = append(newMembers, members.Slice()...)
 			members = tx.Factory().NewNodeList(newMembers)
 			members.SetLoc(node.Members().Loc())
 		}
 	}
 
-	updated := tx.Factory().UpdateClassDeclaration(node, modifiers, name, nil /*typeParameters*/, heritageClauses, members)
+	updated := tx.Factory().UpdateClassDeclaration(node, modifiers, name, ast.TypeParameterList{} /*typeParameters*/, heritageClauses, members)
 	if exported {
 		export := tx.createExportStatementForDeclaration(node.AsNode())
 		if !export.IsNil() {
@@ -723,14 +723,14 @@ func (tx *RuntimeSyntaxTransformer) visitClassExpression(node ast.ClassExpressio
 	name := tx.Visitor().VisitNode(node.Name())
 	heritageClauses := tx.Visitor().VisitNodes(node.HeritageClauses())
 	members := tx.Visitor().VisitNodes(node.Members())
-	parameterProperties := tx.getParameterProperties(core.Find(node.Members().Nodes(), ast.IsConstructorDeclaration))
+	parameterProperties := tx.getParameterProperties(core.Find(node.Members().Slice(), ast.IsConstructorDeclaration))
 
 	if len(parameterProperties) > 0 {
 		var newMembers []ast.ClassElement
 		for _, parameter := range parameterProperties {
 			if ast.IsIdentifier(parameter.Name()) {
 				parameterProperty := tx.Factory().NewPropertyDeclaration(
-					nil, /*modifiers*/
+					ast.ModifierList{}, /*modifiers*/
 					parameter.Name().Clone(tx.Factory()),
 					ast.Node{}, /*questionOrExclamationToken*/
 					ast.Node{}, /*type*/
@@ -741,20 +741,20 @@ func (tx *RuntimeSyntaxTransformer) visitClassExpression(node ast.ClassExpressio
 			}
 		}
 		if len(newMembers) > 0 {
-			newMembers = append(newMembers, members.Nodes()...)
+			newMembers = append(newMembers, members.Slice()...)
 			members = tx.Factory().NewNodeList(newMembers)
 			members.SetLoc(node.Members().Loc())
 		}
 	}
 
-	return tx.Factory().UpdateClassExpression(node, modifiers, name, nil /*typeParameters*/, heritageClauses, members)
+	return tx.Factory().UpdateClassExpression(node, modifiers, name, ast.TypeParameterList{} /*typeParameters*/, heritageClauses, members)
 }
 
 func (tx *RuntimeSyntaxTransformer) visitConstructorDeclaration(node ast.ConstructorDeclaration) ast.Node {
 	modifiers := tx.Visitor().VisitModifiers(node.Modifiers())
 	parameters := tx.EmitContext().VisitParameters(node.ParameterList(), tx.Visitor())
 	body := tx.visitConstructorBody(node.Body().AsBlock(), node.AsNode())
-	return tx.Factory().UpdateConstructorDeclaration(node, modifiers, nil /*typeParameters*/, parameters, ast.Node{} /*returnType*/, ast.Node{} /*fullSignature*/, body)
+	return tx.Factory().UpdateConstructorDeclaration(node, modifiers, ast.TypeParameterList{} /*typeParameters*/, parameters, ast.Node{} /*returnType*/, ast.Node{} /*fullSignature*/, body)
 }
 
 func (tx *RuntimeSyntaxTransformer) visitConstructorBody(body ast.Block, constructor ast.Node) ast.Node {
@@ -767,7 +767,7 @@ func (tx *RuntimeSyntaxTransformer) visitConstructorBody(body ast.Block, constru
 	savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName := tx.pushScope(body.AsNode())
 
 	tx.EmitContext().StartVariableEnvironment()
-	prologue, rest := tx.Factory().SplitStandardPrologue(body.Statements().Nodes())
+	prologue, rest := tx.Factory().SplitStandardPrologue(body.Statements().Slice())
 	statements := slices.Clone(prologue)
 
 	// Transform parameters into property assignments. Transforms this:
@@ -852,7 +852,7 @@ func (tx *RuntimeSyntaxTransformer) transformConstructorBodyWorker(statementsIn 
 
 		// visit the `try` block
 		tryBlockStatements := tx.transformConstructorBodyWorker(
-			tryBlock.Statements().Nodes(),
+			tryBlock.Statements().Slice(),
 			superPath[1:],
 			initializerStatements,
 		)
@@ -896,7 +896,7 @@ func (tx *RuntimeSyntaxTransformer) visitShorthandPropertyAssignment(node ast.Sh
 				equalsToken = tx.Factory().NewToken(ast.KindEqualsToken)
 			}
 			expression = tx.Factory().NewBinaryExpression(
-				nil, /*modifiers*/
+				ast.ModifierList{}, /*modifiers*/
 				expression,
 				ast.Node{}, /*typeNode*/
 				equalsToken,
@@ -904,7 +904,7 @@ func (tx *RuntimeSyntaxTransformer) visitShorthandPropertyAssignment(node ast.Sh
 			)
 		}
 
-		updated := tx.Factory().NewPropertyAssignment(nil /*modifiers*/, node.Name(), ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, expression)
+		updated := tx.Factory().NewPropertyAssignment(ast.ModifierList{} /*modifiers*/, node.Name(), ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, expression)
 		updated.SetLoc(node.Loc())
 		tx.EmitContext().SetOriginal(updated, node.AsNode())
 		tx.EmitContext().AssignCommentAndSourceMapRanges(updated, node.AsNode())
@@ -912,7 +912,7 @@ func (tx *RuntimeSyntaxTransformer) visitShorthandPropertyAssignment(node ast.Sh
 	}
 	return tx.Factory().UpdateShorthandPropertyAssignment(
 		node,
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		exportedOrImportedName,
 		ast.Node{}, /*postfixToken*/
 		ast.Node{}, /*typeNode*/

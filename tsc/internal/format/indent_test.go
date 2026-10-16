@@ -34,8 +34,8 @@ func TestGetContainingList_NamedImports(t *testing.T) {
 	// Test GetContainingList for each import specifier
 	for _, specifier := range importSpecifiers {
 		list := format.GetContainingList(specifier, sourceFile)
-		assert.Assert(t, list != nil, "GetContainingList should return non-nil for import specifier")
-		assert.Assert(t, len(list.Nodes()) == 2, "Expected list with 2 elements, got %d", len(list.Nodes()))
+		assert.Assert(t, !list.IsNil(), "GetContainingList should return non-nil for import specifier")
+		assert.Assert(t, list.Len() == 2, "Expected list with 2 elements, got %d", list.Len())
 	}
 }
 

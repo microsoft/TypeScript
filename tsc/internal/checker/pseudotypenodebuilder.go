@@ -118,7 +118,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) ast.Node
 		var appendTypeNode func(node ast.Node)
 		appendTypeNode = func(node ast.Node) {
 			if ast.IsUnionTypeNode(node) {
-				for _, node := range node.AsUnionTypeNode().Types().Nodes() {
+				for _, node := range node.AsUnionTypeNode().Types().All() {
 					appendTypeNode(node)
 				}
 				return
@@ -180,7 +180,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) ast.Node
 		expandedParams := b.ch.getExpandedParameters(signature, true /*skipUnionExpanding*/)[0]
 		cleanup := b.enterNewScope(d.Signature, expandedParams, signature.TypeParameters(), signature.parameters, signature.mapper)
 		defer cleanup()
-		var typeParams *ast.NodeList
+		var typeParams ast.NodeList
 		if len(d.TypeParameters) > 0 {
 			res := make([]ast.Node, 0, len(d.TypeParameters))
 			for _, tp := range d.TypeParameters {
@@ -225,7 +225,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) ast.Node
 		b.ctx.flags |= nodebuilder.FlagsInObjectTypeLiteral
 
 		for _, e := range elements {
-			var modifiers *ast.ModifierList
+			var modifiers ast.ModifierList
 			if isConst || (e.Kind == pseudochecker.PseudoObjectElementKindPropertyAssignment && e.AsPseudoPropertyAssignment().Readonly) {
 				modifiers = b.f.NewModifierList([]ast.Node{b.f.NewModifier(ast.KindReadonlyKeyword)})
 			}
@@ -239,7 +239,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) ast.Node
 			switch e.Kind {
 			case pseudochecker.PseudoObjectElementKindMethod:
 				d := e.AsPseudoObjectMethod()
-				var typeParams *ast.NodeList
+				var typeParams ast.NodeList
 				if len(d.TypeParameters) > 0 {
 					res := make([]ast.Node, 0, len(d.TypeParameters))
 					for _, tp := range d.TypeParameters {
@@ -281,9 +281,9 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) ast.Node
 			case pseudochecker.PseudoObjectElementKindSetAccessor:
 				d := e.AsPseudoSetAccessor()
 				newProp = b.f.NewSetAccessorDeclaration(
-					nil,
+					ast.ModifierList{},
 					b.reuseName(e.Name, false /*isMethod*/),
-					nil,
+					ast.TypeParameterList{},
 					b.f.NewNodeList([]ast.Node{b.pseudoParameterToNode(d.Parameter)}),
 					ast.Node{},
 					ast.Node{},
@@ -292,10 +292,10 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) ast.Node
 			case pseudochecker.PseudoObjectElementKindGetAccessor:
 				d := e.AsPseudoGetAccessor()
 				newProp = b.f.NewGetAccessorDeclaration(
-					nil,
+					ast.ModifierList{},
 					b.reuseName(e.Name, false /*isMethod*/),
-					nil,
-					nil,
+					ast.TypeParameterList{},
+					ast.ParameterList{},
 					b.pseudoTypeToNode(d.Type),
 					ast.Node{},
 					ast.Node{},
@@ -324,7 +324,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) ast.Node
 	}
 }
 
-func (b *NodeBuilderImpl) pseudoParametersToNodeList(params []*pseudochecker.PseudoParameter) *ast.NodeList {
+func (b *NodeBuilderImpl) pseudoParametersToNodeList(params []*pseudochecker.PseudoParameter) ast.NodeList {
 	res := make([]ast.Node, 0, len(params))
 	for _, p := range params {
 		res = append(res, b.pseudoParameterToNode(p))
@@ -342,7 +342,7 @@ func (b *NodeBuilderImpl) pseudoParameterToNode(p *pseudochecker.PseudoParameter
 		questionMark = b.f.NewToken(ast.KindQuestionToken)
 	}
 	parameter := b.f.NewParameterDeclaration(
-		nil,
+		ast.ModifierList{},
 		dotDotDot,
 		// matches strada behavior of always reserializing param names from scratch
 		b.parameterToParameterDeclarationName(p.Name.Parent().Symbol(), p.Name.Parent()),

@@ -127,12 +127,12 @@ func getTokenAtPosition(
 		return node
 	}
 
-	visitNodeList := func(nodeList *ast.NodeList, _ *ast.NodeVisitor) *ast.NodeList {
-		if nodeList == nil || len(nodeList.Nodes()) == 0 {
+	visitNodeList := func(nodeList ast.NodeList, _ *ast.NodeVisitor) ast.NodeList {
+		if nodeList.IsNil() || nodeList.Len() == 0 {
 			return nodeList
 		}
 		if nodeAfterLeft.IsNil() {
-			for _, node := range nodeList.Nodes() {
+			for _, node := range nodeList.All() {
 				if node.Flags()&ast.NodeFlagsReparsed == 0 {
 					nodeAfterLeft = node
 					break
@@ -143,7 +143,7 @@ func getTokenAtPosition(
 			if nodeList.End() == position && includePrecedingTokenAtEndPosition != nil {
 				left = nodeList.End()
 				nodeAfterLeft = ast.Node{}
-				for _, v := range slices.Backward(nodeList.Nodes()) {
+				for _, v := range slices.Backward(nodeList.Slice()) {
 					if v.Flags()&ast.NodeFlagsReparsed == 0 {
 						prevSubtree = v
 						break
@@ -153,7 +153,7 @@ func getTokenAtPosition(
 				left = nodeList.End()
 				nodeAfterLeft = ast.Node{}
 			} else if nodeList.Pos() <= position {
-				nodes := nodeList.Nodes()
+				nodes := nodeList.Slice()
 				index, match := core.BinarySearchUniqueFunc(nodes, func(middle int, node ast.Node) int {
 					if node.Flags()&ast.NodeFlagsReparsed != 0 {
 						return 0
@@ -289,9 +289,9 @@ func findRightmostNode(node ast.Node) ast.Node {
 		}
 		return node
 	}
-	visitNodes := func(nodeList *ast.NodeList, visitor *ast.NodeVisitor) *ast.NodeList {
-		if nodeList != nil {
-			if rightmost := ast.FindLastVisibleNode(nodeList.Nodes()); !rightmost.IsNil() {
+	visitNodes := func(nodeList ast.NodeList, visitor *ast.NodeVisitor) ast.NodeList {
+		if !nodeList.IsNil() {
+			if rightmost := ast.FindLastVisibleNode(nodeList.Slice()); !rightmost.IsNil() {
 				next = rightmost
 			}
 		}
@@ -313,7 +313,7 @@ func VisitEachChildAndJSDoc(
 	node ast.Node,
 	sourceFile *ast.SourceFile,
 	visitNode func(ast.Node, *ast.NodeVisitor) ast.Node,
-	visitNodes func(*ast.NodeList, *ast.NodeVisitor) *ast.NodeList,
+	visitNodes func(ast.NodeList, *ast.NodeVisitor) ast.NodeList,
 ) {
 	visitor := getNodeVisitor(visitNode, visitNodes)
 	for _, jsdoc := range node.JSDoc(sourceFile) {
@@ -365,12 +365,12 @@ func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode as
 			}
 			return node
 		}
-		visitNodes := func(nodeList *ast.NodeList, _ *ast.NodeVisitor) *ast.NodeList {
+		visitNodes := func(nodeList ast.NodeList, _ *ast.NodeVisitor) ast.NodeList {
 			if !foundChild.IsNil() {
 				return nodeList
 			}
-			if nodeList != nil && len(nodeList.Nodes()) > 0 {
-				nodes := nodeList.Nodes()
+			if !nodeList.IsNil() && nodeList.Len() > 0 {
+				nodes := nodeList.Slice()
 				index, match := core.BinarySearchUniqueFunc(nodes, func(middle int, _ ast.Node) int {
 					// synthetic jsdoc nodes should have jsdocNode.End() <= n.Pos()
 					if nodes[middle].Flags()&ast.NodeFlagsReparsed != 0 {
@@ -513,10 +513,10 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 			}
 			return node
 		}
-		visitNodes := func(nodeList *ast.NodeList, _ *ast.NodeVisitor) *ast.NodeList {
-			if nodeList != nil && len(nodeList.Nodes()) > 0 {
+		visitNodes := func(nodeList ast.NodeList, _ *ast.NodeVisitor) ast.NodeList {
+			if !nodeList.IsNil() && nodeList.Len() > 0 {
 				hasChildren = true
-				index, _ := core.BinarySearchUniqueFunc(nodeList.Nodes(), func(middle int, node ast.Node) int {
+				index, _ := core.BinarySearchUniqueFunc(nodeList.Slice(), func(middle int, node ast.Node) int {
 					if node.End() > endPos {
 						return comparisonGreaterThan
 					}
@@ -524,20 +524,20 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 				})
 				validIndex := -1
 				for i := index - 1; i >= 0; i-- {
-					if !shouldVisitNode(nodeList.Nodes()[i]) {
+					if !shouldVisitNode(nodeList.At(i)) {
 						continue
 					}
-					if isValidPrecedingNode(nodeList.Nodes()[i], sourceFile) {
+					if isValidPrecedingNode(nodeList.At(i), sourceFile) {
 						validIndex = i
-						rightmostValidNode = nodeList.Nodes()[i]
+						rightmostValidNode = nodeList.At(i)
 						break
 					}
 				}
 				for i := validIndex + 1; i < index; i++ {
-					if !shouldVisitNode(nodeList.Nodes()[i]) {
+					if !shouldVisitNode(nodeList.At(i)) {
 						continue
 					}
-					rightmostVisitedNodes = append(rightmostVisitedNodes, nodeList.Nodes()[i])
+					rightmostVisitedNodes = append(rightmostVisitedNodes, nodeList.At(i))
 				}
 			}
 			return nodeList
@@ -635,9 +635,9 @@ func FindNextToken(previousToken ast.Node, parent ast.Node, file *ast.SourceFile
 			}
 			return node
 		}
-		visitNodes := func(nodeList *ast.NodeList, _ *ast.NodeVisitor) *ast.NodeList {
-			if nodeList != nil && len(nodeList.Nodes()) > 0 && foundNode.IsNil() {
-				nodes := nodeList.Nodes()
+		visitNodes := func(nodeList ast.NodeList, _ *ast.NodeVisitor) ast.NodeList {
+			if !nodeList.IsNil() && nodeList.Len() > 0 && foundNode.IsNil() {
+				nodes := nodeList.Slice()
 				index, match := core.BinarySearchUniqueFunc(nodes, func(_ int, node ast.Node) int {
 					if node.Flags()&ast.NodeFlagsReparsed != 0 {
 						return comparisonLessThan
@@ -690,10 +690,10 @@ func FindNextToken(previousToken ast.Node, parent ast.Node, file *ast.SourceFile
 
 func getNodeVisitor(
 	visitNode func(ast.Node, *ast.NodeVisitor) ast.Node,
-	visitNodes func(*ast.NodeList, *ast.NodeVisitor) *ast.NodeList,
+	visitNodes func(ast.NodeList, *ast.NodeVisitor) ast.NodeList,
 ) *ast.NodeVisitor {
 	var wrappedVisitNode func(ast.Node, *ast.NodeVisitor) ast.Node
-	var wrappedVisitNodes func(*ast.NodeList, *ast.NodeVisitor) *ast.NodeList
+	var wrappedVisitNodes func(ast.NodeList, *ast.NodeVisitor) ast.NodeList
 	if visitNode != nil {
 		wrappedVisitNode = func(n ast.Node, v *ast.NodeVisitor) ast.Node {
 			if ast.IsJSDocSingleCommentNodeComment(n) {
@@ -704,7 +704,7 @@ func getNodeVisitor(
 	}
 
 	if visitNodes != nil {
-		wrappedVisitNodes = func(n *ast.NodeList, v *ast.NodeVisitor) *ast.NodeList {
+		wrappedVisitNodes = func(n ast.NodeList, v *ast.NodeVisitor) ast.NodeList {
 			if ast.IsJSDocSingleCommentNodeList(n) {
 				return n
 			}
@@ -716,9 +716,9 @@ func getNodeVisitor(
 		VisitNode:  wrappedVisitNode,
 		VisitToken: wrappedVisitNode,
 		VisitNodes: wrappedVisitNodes,
-		VisitModifiers: func(modifiers *ast.ModifierList, visitor *ast.NodeVisitor) *ast.ModifierList {
-			if modifiers != nil {
-				wrappedVisitNodes(&modifiers.NodeList, visitor)
+		VisitModifiers: func(modifiers ast.ModifierList, visitor *ast.NodeVisitor) ast.ModifierList {
+			if !modifiers.IsNil() {
+				wrappedVisitNodes(modifiers.NodeList, visitor)
 			}
 			return modifiers
 		},

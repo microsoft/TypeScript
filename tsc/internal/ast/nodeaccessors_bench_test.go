@@ -13,7 +13,7 @@ import (
 
 var (
 	accessorName        ast.Node
-	accessorModifiers   *ast.ModifierList
+	accessorModifiers   ast.ModifierList
 	accessorDeclaration ast.DeclarationBase
 	accessorLocals      ast.LocalsContainerBase
 )

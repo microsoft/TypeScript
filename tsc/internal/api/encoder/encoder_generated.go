@@ -76,10 +76,10 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.Expression().IsNil()) << 0) | (boolToByte(!n.CaseBlock().IsNil()) << 1)
 	case ast.KindCaseBlock:
 		n := node.AsCaseBlock()
-		return (boolToByte(n.Clauses() != nil) << 0)
+		return (boolToByte(!n.Clauses().IsNil()) << 0)
 	case ast.KindCaseClause, ast.KindDefaultClause:
 		n := node.AsCaseOrDefaultClause()
-		return (boolToByte(!n.Expression().IsNil()) << 0) | (boolToByte(n.Statements() != nil) << 1)
+		return (boolToByte(!n.Expression().IsNil()) << 0) | (boolToByte(!n.Statements().IsNil()) << 1)
 	case ast.KindThrowStatement:
 		n := node.AsThrowStatement()
 		return (boolToByte(!n.Expression().IsNil()) << 0)
@@ -97,7 +97,7 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.Expression().IsNil()) << 0)
 	case ast.KindBlock:
 		n := node.AsBlock()
-		return (boolToByte(n.Statements() != nil) << 0)
+		return (boolToByte(!n.Statements().IsNil()) << 0)
 	case ast.KindVariableStatement:
 		n := node.AsVariableStatement()
 		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.DeclarationList().IsNil()) << 1)
@@ -106,10 +106,10 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.Name().IsNil()) << 0) | (boolToByte(!n.ExclamationToken().IsNil()) << 1) | (boolToByte(!n.Type().IsNil()) << 2) | (boolToByte(!n.Initializer().IsNil()) << 3)
 	case ast.KindVariableDeclarationList:
 		n := node.AsVariableDeclarationList()
-		return (boolToByte(n.Declarations() != nil) << 0)
+		return (boolToByte(!n.Declarations().IsNil()) << 0)
 	case ast.KindObjectBindingPattern, ast.KindArrayBindingPattern:
 		n := node.AsBindingPattern()
-		return (boolToByte(n.Elements() != nil) << 0)
+		return (boolToByte(!n.Elements().IsNil()) << 0)
 	case ast.KindParameter:
 		n := node.AsParameterDeclaration()
 		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.DotDotDotToken().IsNil()) << 1) | (boolToByte(!n.Name().IsNil()) << 2) | (boolToByte(!n.QuestionToken().IsNil()) << 3) | (boolToByte(!n.Type().IsNil()) << 4) | (boolToByte(!n.Initializer().IsNil()) << 5)
@@ -121,31 +121,31 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(hasModifiers(n.Modifiers())) << 0)
 	case ast.KindFunctionDeclaration:
 		n := node.AsFunctionDeclaration()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.AsteriskToken().IsNil()) << 1) | (boolToByte(!n.Name().IsNil()) << 2) | (boolToByte(n.TypeParameters() != nil) << 3) | (boolToByte(n.Parameters() != nil) << 4) | (boolToByte(!n.Type().IsNil()) << 5) | (boolToByte(!n.Body().IsNil()) << 6)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.AsteriskToken().IsNil()) << 1) | (boolToByte(!n.Name().IsNil()) << 2) | (boolToByte(!n.TypeParameters().IsNil()) << 3) | (boolToByte(!n.Parameters().IsNil()) << 4) | (boolToByte(!n.Type().IsNil()) << 5) | (boolToByte(!n.Body().IsNil()) << 6)
 	case ast.KindClassDeclaration:
 		n := node.AsClassDeclaration()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(n.TypeParameters() != nil) << 2) | (boolToByte(n.HeritageClauses() != nil) << 3) | (boolToByte(n.Members() != nil) << 4)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.TypeParameters().IsNil()) << 2) | (boolToByte(!n.HeritageClauses().IsNil()) << 3) | (boolToByte(!n.Members().IsNil()) << 4)
 	case ast.KindClassExpression:
 		n := node.AsClassExpression()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(n.TypeParameters() != nil) << 2) | (boolToByte(n.HeritageClauses() != nil) << 3) | (boolToByte(n.Members() != nil) << 4)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.TypeParameters().IsNil()) << 2) | (boolToByte(!n.HeritageClauses().IsNil()) << 3) | (boolToByte(!n.Members().IsNil()) << 4)
 	case ast.KindHeritageClause:
 		n := node.AsHeritageClause()
-		return (boolToByte(n.Types() != nil) << 0)
+		return (boolToByte(!n.Types().IsNil()) << 0)
 	case ast.KindInterfaceDeclaration:
 		n := node.AsInterfaceDeclaration()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(n.TypeParameters() != nil) << 2) | (boolToByte(n.HeritageClauses() != nil) << 3) | (boolToByte(n.Members() != nil) << 4)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.TypeParameters().IsNil()) << 2) | (boolToByte(!n.HeritageClauses().IsNil()) << 3) | (boolToByte(!n.Members().IsNil()) << 4)
 	case ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration:
 		n := node.AsTypeAliasDeclaration()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(n.TypeParameters() != nil) << 2) | (boolToByte(!n.Type().IsNil()) << 3)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.TypeParameters().IsNil()) << 2) | (boolToByte(!n.Type().IsNil()) << 3)
 	case ast.KindEnumMember:
 		n := node.AsEnumMember()
 		return (boolToByte(!n.Name().IsNil()) << 0) | (boolToByte(!n.Initializer().IsNil()) << 1)
 	case ast.KindEnumDeclaration:
 		n := node.AsEnumDeclaration()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(n.Members() != nil) << 2)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.Members().IsNil()) << 2)
 	case ast.KindModuleBlock:
 		n := node.AsModuleBlock()
-		return (boolToByte(n.Statements() != nil) << 0)
+		return (boolToByte(!n.Statements().IsNil()) << 0)
 	case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
 		n := node.AsImportDeclaration()
 		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.ImportClause().IsNil()) << 1) | (boolToByte(!n.ModuleSpecifier().IsNil()) << 2) | (boolToByte(!n.Attributes().IsNil()) << 3)
@@ -157,7 +157,7 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.Name().IsNil()) << 0)
 	case ast.KindNamedImports:
 		n := node.AsNamedImports()
-		return (boolToByte(n.Elements() != nil) << 0)
+		return (boolToByte(!n.Elements().IsNil()) << 0)
 	case ast.KindExportAssignment:
 		n := node.AsExportAssignment()
 		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Type().IsNil()) << 1) | (boolToByte(!n.Expression().IsNil()) << 2)
@@ -169,34 +169,34 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.Name().IsNil()) << 0)
 	case ast.KindNamedExports:
 		n := node.AsNamedExports()
-		return (boolToByte(n.Elements() != nil) << 0)
+		return (boolToByte(!n.Elements().IsNil()) << 0)
 	case ast.KindExportSpecifier:
 		n := node.AsExportSpecifier()
 		return (boolToByte(!n.PropertyName().IsNil()) << 0) | (boolToByte(!n.Name().IsNil()) << 1)
 	case ast.KindCallSignature:
 		n := node.AsCallSignatureDeclaration()
-		return (boolToByte(n.TypeParameters() != nil) << 0) | (boolToByte(n.Parameters() != nil) << 1) | (boolToByte(!n.Type().IsNil()) << 2)
+		return (boolToByte(!n.TypeParameters().IsNil()) << 0) | (boolToByte(!n.Parameters().IsNil()) << 1) | (boolToByte(!n.Type().IsNil()) << 2)
 	case ast.KindConstructSignature:
 		n := node.AsConstructSignatureDeclaration()
-		return (boolToByte(n.TypeParameters() != nil) << 0) | (boolToByte(n.Parameters() != nil) << 1) | (boolToByte(!n.Type().IsNil()) << 2)
+		return (boolToByte(!n.TypeParameters().IsNil()) << 0) | (boolToByte(!n.Parameters().IsNil()) << 1) | (boolToByte(!n.Type().IsNil()) << 2)
 	case ast.KindConstructor:
 		n := node.AsConstructorDeclaration()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(n.TypeParameters() != nil) << 1) | (boolToByte(n.Parameters() != nil) << 2) | (boolToByte(!n.Type().IsNil()) << 3) | (boolToByte(!n.Body().IsNil()) << 4)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.TypeParameters().IsNil()) << 1) | (boolToByte(!n.Parameters().IsNil()) << 2) | (boolToByte(!n.Type().IsNil()) << 3) | (boolToByte(!n.Body().IsNil()) << 4)
 	case ast.KindGetAccessor:
 		n := node.AsGetAccessorDeclaration()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(n.TypeParameters() != nil) << 2) | (boolToByte(n.Parameters() != nil) << 3) | (boolToByte(!n.Type().IsNil()) << 4) | (boolToByte(!n.Body().IsNil()) << 5)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.TypeParameters().IsNil()) << 2) | (boolToByte(!n.Parameters().IsNil()) << 3) | (boolToByte(!n.Type().IsNil()) << 4) | (boolToByte(!n.Body().IsNil()) << 5)
 	case ast.KindSetAccessor:
 		n := node.AsSetAccessorDeclaration()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(n.TypeParameters() != nil) << 2) | (boolToByte(n.Parameters() != nil) << 3) | (boolToByte(!n.Type().IsNil()) << 4) | (boolToByte(!n.Body().IsNil()) << 5)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.TypeParameters().IsNil()) << 2) | (boolToByte(!n.Parameters().IsNil()) << 3) | (boolToByte(!n.Type().IsNil()) << 4) | (boolToByte(!n.Body().IsNil()) << 5)
 	case ast.KindIndexSignature:
 		n := node.AsIndexSignatureDeclaration()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(n.Parameters() != nil) << 1) | (boolToByte(!n.Type().IsNil()) << 2)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Parameters().IsNil()) << 1) | (boolToByte(!n.Type().IsNil()) << 2)
 	case ast.KindMethodSignature:
 		n := node.AsMethodSignatureDeclaration()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.PostfixToken().IsNil()) << 2) | (boolToByte(n.TypeParameters() != nil) << 3) | (boolToByte(n.Parameters() != nil) << 4) | (boolToByte(!n.Type().IsNil()) << 5)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.PostfixToken().IsNil()) << 2) | (boolToByte(!n.TypeParameters().IsNil()) << 3) | (boolToByte(!n.Parameters().IsNil()) << 4) | (boolToByte(!n.Type().IsNil()) << 5)
 	case ast.KindMethodDeclaration:
 		n := node.AsMethodDeclaration()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.AsteriskToken().IsNil()) << 1) | (boolToByte(!n.Name().IsNil()) << 2) | (boolToByte(!n.PostfixToken().IsNil()) << 3) | (boolToByte(n.TypeParameters() != nil) << 4) | (boolToByte(n.Parameters() != nil) << 5) | (boolToByte(!n.Type().IsNil()) << 6) | (boolToByte(!n.Body().IsNil()) << 7)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.AsteriskToken().IsNil()) << 1) | (boolToByte(!n.Name().IsNil()) << 2) | (boolToByte(!n.PostfixToken().IsNil()) << 3) | (boolToByte(!n.TypeParameters().IsNil()) << 4) | (boolToByte(!n.Parameters().IsNil()) << 5) | (boolToByte(!n.Type().IsNil()) << 6) | (boolToByte(!n.Body().IsNil()) << 7)
 	case ast.KindPropertySignature:
 		n := node.AsPropertySignatureDeclaration()
 		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.PostfixToken().IsNil()) << 2) | (boolToByte(!n.Type().IsNil()) << 3) | (boolToByte(!n.Initializer().IsNil()) << 4)
@@ -220,10 +220,10 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.AsteriskToken().IsNil()) << 0) | (boolToByte(!n.Expression().IsNil()) << 1)
 	case ast.KindArrowFunction:
 		n := node.AsArrowFunction()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(n.TypeParameters() != nil) << 1) | (boolToByte(n.Parameters() != nil) << 2) | (boolToByte(!n.Type().IsNil()) << 3) | (boolToByte(!n.EqualsGreaterThanToken().IsNil()) << 4) | (boolToByte(!n.Body().IsNil()) << 5)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.TypeParameters().IsNil()) << 1) | (boolToByte(!n.Parameters().IsNil()) << 2) | (boolToByte(!n.Type().IsNil()) << 3) | (boolToByte(!n.EqualsGreaterThanToken().IsNil()) << 4) | (boolToByte(!n.Body().IsNil()) << 5)
 	case ast.KindFunctionExpression:
 		n := node.AsFunctionExpression()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.AsteriskToken().IsNil()) << 1) | (boolToByte(!n.Name().IsNil()) << 2) | (boolToByte(n.TypeParameters() != nil) << 3) | (boolToByte(n.Parameters() != nil) << 4) | (boolToByte(!n.Type().IsNil()) << 5) | (boolToByte(!n.Body().IsNil()) << 6)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.AsteriskToken().IsNil()) << 1) | (boolToByte(!n.Name().IsNil()) << 2) | (boolToByte(!n.TypeParameters().IsNil()) << 3) | (boolToByte(!n.Parameters().IsNil()) << 4) | (boolToByte(!n.Type().IsNil()) << 5) | (boolToByte(!n.Body().IsNil()) << 6)
 	case ast.KindAsExpression:
 		n := node.AsAsExpression()
 		return (boolToByte(!n.Expression().IsNil()) << 0) | (boolToByte(!n.Type().IsNil()) << 1)
@@ -241,10 +241,10 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.Expression().IsNil()) << 0) | (boolToByte(!n.QuestionDotToken().IsNil()) << 1) | (boolToByte(!n.ArgumentExpression().IsNil()) << 2)
 	case ast.KindCallExpression:
 		n := node.AsCallExpression()
-		return (boolToByte(!n.Expression().IsNil()) << 0) | (boolToByte(!n.QuestionDotToken().IsNil()) << 1) | (boolToByte(n.TypeArguments() != nil) << 2) | (boolToByte(n.Arguments() != nil) << 3)
+		return (boolToByte(!n.Expression().IsNil()) << 0) | (boolToByte(!n.QuestionDotToken().IsNil()) << 1) | (boolToByte(!n.TypeArguments().IsNil()) << 2) | (boolToByte(!n.Arguments().IsNil()) << 3)
 	case ast.KindNewExpression:
 		n := node.AsNewExpression()
-		return (boolToByte(!n.Expression().IsNil()) << 0) | (boolToByte(n.TypeArguments() != nil) << 1) | (boolToByte(n.Arguments() != nil) << 2)
+		return (boolToByte(!n.Expression().IsNil()) << 0) | (boolToByte(!n.TypeArguments().IsNil()) << 1) | (boolToByte(!n.Arguments().IsNil()) << 2)
 	case ast.KindMetaProperty:
 		n := node.AsMetaProperty()
 		return (boolToByte(!n.Name().IsNil()) << 0)
@@ -256,22 +256,22 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.Expression().IsNil()) << 0)
 	case ast.KindTemplateExpression:
 		n := node.AsTemplateExpression()
-		return (boolToByte(!n.Head().IsNil()) << 0) | (boolToByte(n.TemplateSpans() != nil) << 1)
+		return (boolToByte(!n.Head().IsNil()) << 0) | (boolToByte(!n.TemplateSpans().IsNil()) << 1)
 	case ast.KindTemplateSpan:
 		n := node.AsTemplateSpan()
 		return (boolToByte(!n.Expression().IsNil()) << 0) | (boolToByte(!n.Literal().IsNil()) << 1)
 	case ast.KindTaggedTemplateExpression:
 		n := node.AsTaggedTemplateExpression()
-		return (boolToByte(!n.Tag().IsNil()) << 0) | (boolToByte(!n.QuestionDotToken().IsNil()) << 1) | (boolToByte(n.TypeArguments() != nil) << 2) | (boolToByte(!n.Template().IsNil()) << 3)
+		return (boolToByte(!n.Tag().IsNil()) << 0) | (boolToByte(!n.QuestionDotToken().IsNil()) << 1) | (boolToByte(!n.TypeArguments().IsNil()) << 2) | (boolToByte(!n.Template().IsNil()) << 3)
 	case ast.KindParenthesizedExpression:
 		n := node.AsParenthesizedExpression()
 		return (boolToByte(!n.Expression().IsNil()) << 0)
 	case ast.KindArrayLiteralExpression:
 		n := node.AsArrayLiteralExpression()
-		return (boolToByte(n.Elements() != nil) << 0)
+		return (boolToByte(!n.Elements().IsNil()) << 0)
 	case ast.KindObjectLiteralExpression:
 		n := node.AsObjectLiteralExpression()
-		return (boolToByte(n.Properties() != nil) << 0)
+		return (boolToByte(!n.Properties().IsNil()) << 0)
 	case ast.KindSpreadAssignment:
 		n := node.AsSpreadAssignment()
 		return (boolToByte(!n.Expression().IsNil()) << 0)
@@ -298,10 +298,10 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.Type().IsNil()) << 0) | (boolToByte(!n.Expression().IsNil()) << 1)
 	case ast.KindUnionType:
 		n := node.AsUnionTypeNode()
-		return (boolToByte(n.Types() != nil) << 0)
+		return (boolToByte(!n.Types().IsNil()) << 0)
 	case ast.KindIntersectionType:
 		n := node.AsIntersectionTypeNode()
-		return (boolToByte(n.Types() != nil) << 0)
+		return (boolToByte(!n.Types().IsNil()) << 0)
 	case ast.KindConditionalType:
 		n := node.AsConditionalTypeNode()
 		return (boolToByte(!n.CheckType().IsNil()) << 0) | (boolToByte(!n.ExtendsType().IsNil()) << 1) | (boolToByte(!n.TrueType().IsNil()) << 2) | (boolToByte(!n.FalseType().IsNil()) << 3)
@@ -319,10 +319,10 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.ObjectType().IsNil()) << 0) | (boolToByte(!n.IndexType().IsNil()) << 1)
 	case ast.KindTypeReference:
 		n := node.AsTypeReferenceNode()
-		return (boolToByte(!n.TypeName().IsNil()) << 0) | (boolToByte(n.TypeArguments() != nil) << 1)
+		return (boolToByte(!n.TypeName().IsNil()) << 0) | (boolToByte(!n.TypeArguments().IsNil()) << 1)
 	case ast.KindExpressionWithTypeArguments:
 		n := node.AsExpressionWithTypeArguments()
-		return (boolToByte(!n.Expression().IsNil()) << 0) | (boolToByte(n.TypeArguments() != nil) << 1)
+		return (boolToByte(!n.Expression().IsNil()) << 0) | (boolToByte(!n.TypeArguments().IsNil()) << 1)
 	case ast.KindLiteralType:
 		n := node.AsLiteralTypeNode()
 		return (boolToByte(!n.Literal().IsNil()) << 0)
@@ -334,19 +334,19 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.Name().IsNil()) << 0) | (boolToByte(!n.Value().IsNil()) << 1)
 	case ast.KindImportAttributes:
 		n := node.AsImportAttributes()
-		return (boolToByte(n.Attributes() != nil) << 0)
+		return (boolToByte(!n.Attributes().IsNil()) << 0)
 	case ast.KindTypeQuery:
 		n := node.AsTypeQueryNode()
-		return (boolToByte(!n.ExprName().IsNil()) << 0) | (boolToByte(n.TypeArguments() != nil) << 1)
+		return (boolToByte(!n.ExprName().IsNil()) << 0) | (boolToByte(!n.TypeArguments().IsNil()) << 1)
 	case ast.KindMappedType:
 		n := node.AsMappedTypeNode()
-		return (boolToByte(!n.ReadonlyToken().IsNil()) << 0) | (boolToByte(!n.TypeParameter().IsNil()) << 1) | (boolToByte(!n.NameType().IsNil()) << 2) | (boolToByte(!n.QuestionToken().IsNil()) << 3) | (boolToByte(!n.Type().IsNil()) << 4) | (boolToByte(n.Members() != nil) << 5)
+		return (boolToByte(!n.ReadonlyToken().IsNil()) << 0) | (boolToByte(!n.TypeParameter().IsNil()) << 1) | (boolToByte(!n.NameType().IsNil()) << 2) | (boolToByte(!n.QuestionToken().IsNil()) << 3) | (boolToByte(!n.Type().IsNil()) << 4) | (boolToByte(!n.Members().IsNil()) << 5)
 	case ast.KindTypeLiteral:
 		n := node.AsTypeLiteralNode()
-		return (boolToByte(n.Members() != nil) << 0)
+		return (boolToByte(!n.Members().IsNil()) << 0)
 	case ast.KindTupleType:
 		n := node.AsTupleTypeNode()
-		return (boolToByte(n.Elements() != nil) << 0)
+		return (boolToByte(!n.Elements().IsNil()) << 0)
 	case ast.KindNamedTupleMember:
 		n := node.AsNamedTupleMember()
 		return (boolToByte(!n.DotDotDotToken().IsNil()) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.QuestionToken().IsNil()) << 2) | (boolToByte(!n.Type().IsNil()) << 3)
@@ -361,13 +361,13 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.Type().IsNil()) << 0)
 	case ast.KindFunctionType:
 		n := node.AsFunctionTypeNode()
-		return (boolToByte(n.TypeParameters() != nil) << 0) | (boolToByte(n.Parameters() != nil) << 1) | (boolToByte(!n.Type().IsNil()) << 2)
+		return (boolToByte(!n.TypeParameters().IsNil()) << 0) | (boolToByte(!n.Parameters().IsNil()) << 1) | (boolToByte(!n.Type().IsNil()) << 2)
 	case ast.KindConstructorType:
 		n := node.AsConstructorTypeNode()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(n.TypeParameters() != nil) << 1) | (boolToByte(n.Parameters() != nil) << 2) | (boolToByte(!n.Type().IsNil()) << 3)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.TypeParameters().IsNil()) << 1) | (boolToByte(!n.Parameters().IsNil()) << 2) | (boolToByte(!n.Type().IsNil()) << 3)
 	case ast.KindTemplateLiteralType:
 		n := node.AsTemplateLiteralTypeNode()
-		return (boolToByte(!n.Head().IsNil()) << 0) | (boolToByte(n.TemplateSpans() != nil) << 1)
+		return (boolToByte(!n.Head().IsNil()) << 0) | (boolToByte(!n.TemplateSpans().IsNil()) << 1)
 	case ast.KindTemplateLiteralTypeSpan:
 		n := node.AsTemplateLiteralTypeSpan()
 		return (boolToByte(!n.Type().IsNil()) << 0) | (boolToByte(!n.Literal().IsNil()) << 1)
@@ -379,22 +379,22 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.Expression().IsNil()) << 0)
 	case ast.KindJsxElement:
 		n := node.AsJsxElement()
-		return (boolToByte(!n.OpeningElement().IsNil()) << 0) | (boolToByte(n.Children() != nil) << 1) | (boolToByte(!n.ClosingElement().IsNil()) << 2)
+		return (boolToByte(!n.OpeningElement().IsNil()) << 0) | (boolToByte(!n.Children().IsNil()) << 1) | (boolToByte(!n.ClosingElement().IsNil()) << 2)
 	case ast.KindJsxAttributes:
 		n := node.AsJsxAttributes()
-		return (boolToByte(n.Properties() != nil) << 0)
+		return (boolToByte(!n.Properties().IsNil()) << 0)
 	case ast.KindJsxNamespacedName:
 		n := node.AsJsxNamespacedName()
 		return (boolToByte(!n.Namespace().IsNil()) << 0) | (boolToByte(!n.Name().IsNil()) << 1)
 	case ast.KindJsxOpeningElement:
 		n := node.AsJsxOpeningElement()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(n.TypeArguments() != nil) << 1) | (boolToByte(!n.Attributes().IsNil()) << 2)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeArguments().IsNil()) << 1) | (boolToByte(!n.Attributes().IsNil()) << 2)
 	case ast.KindJsxSelfClosingElement:
 		n := node.AsJsxSelfClosingElement()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(n.TypeArguments() != nil) << 1) | (boolToByte(!n.Attributes().IsNil()) << 2)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeArguments().IsNil()) << 1) | (boolToByte(!n.Attributes().IsNil()) << 2)
 	case ast.KindJsxFragment:
 		n := node.AsJsxFragment()
-		return (boolToByte(!n.OpeningFragment().IsNil()) << 0) | (boolToByte(n.Children() != nil) << 1) | (boolToByte(!n.ClosingFragment().IsNil()) << 2)
+		return (boolToByte(!n.OpeningFragment().IsNil()) << 0) | (boolToByte(!n.Children().IsNil()) << 1) | (boolToByte(!n.ClosingFragment().IsNil()) << 2)
 	case ast.KindJsxAttribute:
 		n := node.AsJsxAttribute()
 		return (boolToByte(!n.Name().IsNil()) << 0) | (boolToByte(!n.Initializer().IsNil()) << 1)
@@ -412,7 +412,7 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(len(n.Children()) > 0) << 0)
 	case ast.KindJSDoc:
 		n := node.AsJSDoc()
-		return (boolToByte(n.Comment() != nil) << 0) | (boolToByte(n.Tags() != nil) << 1)
+		return (boolToByte(!n.Comment().IsNil()) << 0) | (boolToByte(!n.Tags().IsNil()) << 1)
 	case ast.KindJSDocTypeExpression:
 		n := node.AsJSDocTypeExpression()
 		return (boolToByte(!n.Type().IsNil()) << 0)
@@ -430,67 +430,67 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(!n.Type().IsNil()) << 0)
 	case ast.KindJSDocTypeTag:
 		n := node.AsJSDocTypeTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(n.Comment() != nil) << 2)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(!n.Comment().IsNil()) << 2)
 	case ast.KindJSDocUnknownTag:
 		n := node.AsJSDocUnknownTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(n.Comment() != nil) << 1)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.Comment().IsNil()) << 1)
 	case ast.KindJSDocTemplateTag:
 		n := node.AsJSDocTemplateTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.Constraint().IsNil()) << 1) | (boolToByte(n.TypeParameters() != nil) << 2) | (boolToByte(n.Comment() != nil) << 3)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.Constraint().IsNil()) << 1) | (boolToByte(!n.TypeParameters().IsNil()) << 2) | (boolToByte(!n.Comment().IsNil()) << 3)
 	case ast.KindJSDocReturnTag:
 		n := node.AsJSDocReturnTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(n.Comment() != nil) << 2)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(!n.Comment().IsNil()) << 2)
 	case ast.KindJSDocPublicTag:
 		n := node.AsJSDocPublicTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(n.Comment() != nil) << 1)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.Comment().IsNil()) << 1)
 	case ast.KindJSDocPrivateTag:
 		n := node.AsJSDocPrivateTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(n.Comment() != nil) << 1)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.Comment().IsNil()) << 1)
 	case ast.KindJSDocProtectedTag:
 		n := node.AsJSDocProtectedTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(n.Comment() != nil) << 1)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.Comment().IsNil()) << 1)
 	case ast.KindJSDocReadonlyTag:
 		n := node.AsJSDocReadonlyTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(n.Comment() != nil) << 1)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.Comment().IsNil()) << 1)
 	case ast.KindJSDocOverrideTag:
 		n := node.AsJSDocOverrideTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(n.Comment() != nil) << 1)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.Comment().IsNil()) << 1)
 	case ast.KindJSDocDeprecatedTag:
 		n := node.AsJSDocDeprecatedTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(n.Comment() != nil) << 1)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.Comment().IsNil()) << 1)
 	case ast.KindJSDocSeeTag:
 		n := node.AsJSDocSeeTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.NameExpression().IsNil()) << 1) | (boolToByte(n.Comment() != nil) << 2)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.NameExpression().IsNil()) << 1) | (boolToByte(!n.Comment().IsNil()) << 2)
 	case ast.KindJSDocImplementsTag:
 		n := node.AsJSDocImplementsTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.ClassName().IsNil()) << 1) | (boolToByte(n.Comment() != nil) << 2)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.ClassName().IsNil()) << 1) | (boolToByte(!n.Comment().IsNil()) << 2)
 	case ast.KindJSDocAugmentsTag:
 		n := node.AsJSDocAugmentsTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.ClassName().IsNil()) << 1) | (boolToByte(n.Comment() != nil) << 2)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.ClassName().IsNil()) << 1) | (boolToByte(!n.Comment().IsNil()) << 2)
 	case ast.KindJSDocSatisfiesTag:
 		n := node.AsJSDocSatisfiesTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(n.Comment() != nil) << 2)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(!n.Comment().IsNil()) << 2)
 	case ast.KindJSDocThrowsTag:
 		n := node.AsJSDocThrowsTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(n.Comment() != nil) << 2)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(!n.Comment().IsNil()) << 2)
 	case ast.KindJSDocThisTag:
 		n := node.AsJSDocThisTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(n.Comment() != nil) << 2)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(!n.Comment().IsNil()) << 2)
 	case ast.KindJSDocImportTag:
 		n := node.AsJSDocImportTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.ImportClause().IsNil()) << 1) | (boolToByte(!n.ModuleSpecifier().IsNil()) << 2) | (boolToByte(!n.Attributes().IsNil()) << 3) | (boolToByte(n.Comment() != nil) << 4)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.ImportClause().IsNil()) << 1) | (boolToByte(!n.ModuleSpecifier().IsNil()) << 2) | (boolToByte(!n.Attributes().IsNil()) << 3) | (boolToByte(!n.Comment().IsNil()) << 4)
 	case ast.KindJSDocCallbackTag:
 		n := node.AsJSDocCallbackTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(!n.Name().IsNil()) << 2) | (boolToByte(n.Comment() != nil) << 3)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(!n.Name().IsNil()) << 2) | (boolToByte(!n.Comment().IsNil()) << 3)
 	case ast.KindJSDocOverloadTag:
 		n := node.AsJSDocOverloadTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(n.Comment() != nil) << 2)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(!n.Comment().IsNil()) << 2)
 	case ast.KindJSDocTypedefTag:
 		n := node.AsJSDocTypedefTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(!n.Name().IsNil()) << 2) | (boolToByte(n.Comment() != nil) << 3)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.TypeExpression().IsNil()) << 1) | (boolToByte(!n.Name().IsNil()) << 2) | (boolToByte(!n.Comment().IsNil()) << 3)
 	case ast.KindJSDocSignature:
 		n := node.AsJSDocSignature()
-		return (boolToByte(n.TypeParameters() != nil) << 0) | (boolToByte(n.Parameters() != nil) << 1) | (boolToByte(!n.Type().IsNil()) << 2)
+		return (boolToByte(!n.TypeParameters().IsNil()) << 0) | (boolToByte(!n.Parameters().IsNil()) << 1) | (boolToByte(!n.Type().IsNil()) << 2)
 	case ast.KindJSDocNameReference:
 		n := node.AsJSDocNameReference()
 		return (boolToByte(!n.Name().IsNil()) << 0)
@@ -505,7 +505,7 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(!n.ExportClause().IsNil()) << 1) | (boolToByte(!n.ModuleSpecifier().IsNil()) << 2) | (boolToByte(!n.Attributes().IsNil()) << 3)
 	case ast.KindImportType:
 		n := node.AsImportTypeNode()
-		return (boolToByte(!n.Argument().IsNil()) << 0) | (boolToByte(!n.Attributes().IsNil()) << 1) | (boolToByte(!n.Qualifier().IsNil()) << 2) | (boolToByte(n.TypeArguments() != nil) << 3)
+		return (boolToByte(!n.Argument().IsNil()) << 0) | (boolToByte(!n.Attributes().IsNil()) << 1) | (boolToByte(!n.Qualifier().IsNil()) << 2) | (boolToByte(!n.TypeArguments().IsNil()) << 3)
 	case ast.KindImportClause:
 		n := node.AsImportClause()
 		return (boolToByte(!n.Name().IsNil()) << 0) | (boolToByte(!n.NamedBindings().IsNil()) << 1)
@@ -532,7 +532,7 @@ func getChildrenPropertyMask(node ast.Node) uint8 {
 		return (boolToByte(len(n.JSDocPropertyTags()) > 0) << 0)
 	case ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag:
 		n := node.AsJSDocParameterOrPropertyTag()
-		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.TypeExpression().IsNil()) << 2) | (boolToByte(n.Comment() != nil) << 3)
+		return (boolToByte(!n.TagName().IsNil()) << 0) | (boolToByte(!n.Name().IsNil()) << 1) | (boolToByte(!n.TypeExpression().IsNil()) << 2) | (boolToByte(!n.Comment().IsNil()) << 3)
 	default:
 		return 0
 	}

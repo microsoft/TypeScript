@@ -1278,8 +1278,8 @@ func IsVarUsing(node Node) bool {
 func GetJSDocDeprecatedTag(node Node) Node {
 	for _, jsdoc := range node.JSDoc(nil) {
 		tags := jsdoc.AsJSDoc().Tags()
-		if tags != nil {
-			for _, tag := range tags.Nodes() {
+		if !tags.IsNil() {
+			for _, tag := range tags.All() {
 				if IsJSDocDeprecatedTag(tag) {
 					return tag
 				}
@@ -1531,7 +1531,7 @@ func GetNonAssignedNameOfDeclaration(declaration Node) Node {
 			}
 			return left
 		case JSDeclarationKindObjectDefinePropertyValue, JSDeclarationKindObjectDefinePropertyExports:
-			return declaration.Arguments()[1]
+			return declaration.ArgumentList().At(1)
 		}
 		return Node{}
 	case KindExportAssignment:
@@ -1623,7 +1623,7 @@ func GetAssignmentDeclarationKind(node Node) JSDeclarationKind {
 		}
 	case KindCallExpression:
 		if IsInJSFile(node) && IsBindableObjectDefinePropertyCall(node) {
-			entityName := node.Arguments()[0]
+			entityName := node.ArgumentList().At(0)
 			if IsExportsIdentifier(entityName) || IsModuleExportsAccessExpression(entityName) {
 				return JSDeclarationKindObjectDefinePropertyExports
 			}
@@ -1805,7 +1805,7 @@ func GetImplementsHeritageClauseElements(node Node) []HeritageClauseElement {
 func GetHeritageElements(node Node, kind Kind) []HeritageClauseElement {
 	clause := GetHeritageClause(node, kind)
 	if !clause.IsNil() {
-		return clause.AsHeritageClause().Types().Nodes()
+		return clause.AsHeritageClause().Types().Slice()
 	}
 	return nil
 }
@@ -1829,8 +1829,8 @@ func IsNameOfHeritageClauseTypeReference(node Node) bool {
 
 func GetHeritageClause(node Node, kind Kind) Node {
 	clauses := getHeritageClauses(node)
-	if clauses != nil {
-		for _, clause := range clauses.Nodes() {
+	if !clauses.IsNil() {
+		for _, clause := range clauses.All() {
 			if clause.AsHeritageClause().Token() == kind {
 				return clause
 			}
@@ -1839,7 +1839,7 @@ func GetHeritageClause(node Node, kind Kind) Node {
 	return Node{}
 }
 
-func getHeritageClauses(node Node) *NodeList {
+func getHeritageClauses(node Node) NodeList {
 	switch node.Kind() {
 	case KindClassDeclaration:
 		return node.AsClassDeclaration().HeritageClauses()
@@ -1848,7 +1848,7 @@ func getHeritageClauses(node Node) *NodeList {
 	case KindInterfaceDeclaration:
 		return node.AsInterfaceDeclaration().HeritageClauses()
 	}
-	return nil
+	return NodeList{}
 }
 
 func IsPartOfTypeQuery(node Node) bool {
@@ -2503,7 +2503,7 @@ func getModuleInstanceStateWorker(node Node, ancestors []Node, visited map[NodeI
 			state := ModuleInstanceStateNonInstantiated
 			ancestors = pushAncestor(ancestors, node)
 			ancestors = pushAncestor(ancestors, decl.ExportClause())
-			for _, specifier := range decl.ExportClause().Elements() {
+			for _, specifier := range decl.ExportClause().ElementList().All() {
 				specifierState := getModuleInstanceStateForAliasTarget(specifier, ancestors, visited)
 				if specifierState > state {
 					state = specifierState
@@ -2548,7 +2548,7 @@ func getModuleInstanceStateForAliasTarget(node Node, ancestors []Node, visited m
 		if IsBlock(p) || IsModuleBlock(p) || IsSourceFile(p) {
 			found := ModuleInstanceStateUnknown
 			statementsAncestors := pushAncestor(ancestors, p)
-			for _, statement := range p.Statements() {
+			for _, statement := range p.StatementList().All() {
 				if NodeHasName(statement, name) {
 					state := getModuleInstanceStateCached(statement, statementsAncestors, visited)
 					if found == ModuleInstanceStateUnknown || state > found {
@@ -2587,7 +2587,7 @@ func NodeHasName(statement Node, id Node) bool {
 		return IsIdentifier(name) && name.Text() == id.Text()
 	}
 	if IsVariableStatement(statement) {
-		declarations := statement.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes()
+		declarations := statement.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Slice()
 		return core.Some(declarations, func(d Node) bool { return NodeHasName(d, id) })
 	}
 	return false
@@ -2606,7 +2606,7 @@ func IsConstAssertion(node Node) bool {
 }
 
 func IsConstTypeReference(node Node) bool {
-	return IsTypeReferenceNode(node) && len(node.TypeArguments()) == 0 && IsIdentifier(node.AsTypeReferenceNode().TypeName()) && node.AsTypeReferenceNode().TypeName().Text() == "const"
+	return IsTypeReferenceNode(node) && node.TypeArgumentList().Len() == 0 && IsIdentifier(node.AsTypeReferenceNode().TypeName()) && node.AsTypeReferenceNode().TypeName().Text() == "const"
 }
 
 func IsGlobalSourceFile(node Node) bool {
@@ -2631,7 +2631,7 @@ func GetDeclarationOfKind(symbol *Symbol, kind Kind) Node {
 }
 
 func FindConstructorDeclaration(node ClassLikeDeclaration) Node {
-	for _, member := range node.Members() {
+	for _, member := range node.MemberList().All() {
 		if IsConstructorDeclaration(member) && NodeIsPresent(member.Body()) {
 			return member
 		}
@@ -2858,11 +2858,11 @@ func ForEachDynamicImportOrRequireCall(
 	for lastIndex >= 0 {
 		node := GetNodeAtPosition(file, lastIndex, isJavaScriptFile && includeTypeSpaceImports)
 		if isJavaScriptFile && IsRequireCall(node, requireStringLiteralLikeArgument) {
-			if cb(node, node.Arguments()[0]) {
+			if cb(node, node.ArgumentList().At(0)) {
 				return true
 			}
-		} else if IsImportCall(node) && len(node.Arguments()) > 0 && (!requireStringLiteralLikeArgument || IsStringLiteralLike(node.Arguments()[0])) {
-			if cb(node, node.Arguments()[0]) {
+		} else if IsImportCall(node) && node.ArgumentList().Len() > 0 && (!requireStringLiteralLikeArgument || IsStringLiteralLike(node.ArgumentList().At(0))) {
+			if cb(node, node.ArgumentList().At(0)) {
 				return true
 			}
 		} else if includeTypeSpaceImports && IsLiteralImportTypeNode(node) {
@@ -2888,15 +2888,15 @@ func IsRequireCall(node Node, requireStringLiteralLikeArgument bool) bool {
 	if !IsIdentifier(call.Expression()) || call.Expression().Text() != "require" {
 		return false
 	}
-	if len(call.Arguments().Nodes()) != 1 {
+	if call.Arguments().Len() != 1 {
 		return false
 	}
-	return !requireStringLiteralLikeArgument || IsStringLiteralLike(call.Arguments().Nodes()[0])
+	return !requireStringLiteralLikeArgument || IsStringLiteralLike(call.Arguments().At(0))
 }
 
 func IsRequireVariableStatement(node Node) bool {
 	if IsVariableStatement(node) {
-		if declarations := node.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes(); len(declarations) > 0 {
+		if declarations := node.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Slice(); len(declarations) > 0 {
 			return core.Every(declarations, IsVariableDeclarationInitializedToRequire)
 		}
 	}
@@ -2990,12 +2990,12 @@ func isVariableDeclarationInitializedWithRequireHelper(node Node, allowAccessedR
 
 func GetModuleSpecifierOfBareOrAccessedRequire(node Node) Node {
 	if isVariableDeclarationInitializedWithRequireHelper(node, false /*allowAccessedRequire*/) {
-		return node.Initializer().Arguments()[0]
+		return node.Initializer().ArgumentList().At(0)
 	}
 	if isVariableDeclarationInitializedWithRequireHelper(node, true /*allowAccessedRequire*/) {
 		leftmost := GetLeftmostAccessExpression(node.Initializer())
 		if IsRequireCall(leftmost, true /*requireStringLiteralLikeArgument*/) {
-			return leftmost.Arguments()[0]
+			return leftmost.ArgumentList().At(0)
 		}
 	}
 	return Node{}
@@ -3227,11 +3227,11 @@ func IsTypeKeywordToken(node Node) bool {
 }
 
 // See `IsJSDocSingleCommentNode`.
-func IsJSDocSingleCommentNodeList(nodeList *NodeList) bool {
-	if nodeList == nil || len(nodeList.Nodes()) == 0 {
+func IsJSDocSingleCommentNodeList(nodeList NodeList) bool {
+	if nodeList.IsNil() || nodeList.Len() == 0 {
 		return false
 	}
-	parent := nodeList.Nodes()[0].Parent()
+	parent := nodeList.At(0).Parent()
 	if parent.IsNil() {
 		return false
 	}
@@ -3243,13 +3243,13 @@ func IsJSDocSingleCommentNodeComment(node Node) bool {
 	if node.IsNil() || node.Parent().IsNil() {
 		return false
 	}
-	return IsJSDocSingleCommentNode(node.Parent()) && node == node.Parent().CommentList().Nodes()[0]
+	return IsJSDocSingleCommentNode(node.Parent()) && node == node.Parent().CommentList().At(0)
 }
 
 // In Strada, if a JSDoc node has a single comment, that comment is represented as a string property
 // as a simplification, and therefore that comment is not visited by `forEachChild`.
 func IsJSDocSingleCommentNode(node Node) bool {
-	return hasComment(node.Kind()) && node.CommentList() != nil && len(node.CommentList().Nodes()) == 1
+	return hasComment(node.Kind()) && !node.CommentList().IsNil() && node.CommentList().Len() == 1
 }
 
 func IsValidTypeOnlyAliasUseSite(useSite Node) bool {
@@ -3426,8 +3426,8 @@ func CreateModifiersFromModifierFlags(flags ModifierFlags, createModifier func(k
 
 func GetThisParameter(signature Node) Node {
 	// callback tags do not currently support this parameters
-	if len(signature.Parameters()) != 0 {
-		thisParameter := signature.Parameters()[0]
+	if signature.ParameterList().Len() != 0 {
+		thisParameter := signature.ParameterList().At(0)
 		if IsThisParameter(thisParameter) {
 			return thisParameter
 		}
@@ -3435,7 +3435,7 @@ func GetThisParameter(signature Node) Node {
 	return Node{}
 }
 
-func ReplaceModifiers(factory *NodeFactory, node Node, modifierArray *ModifierList) Node {
+func ReplaceModifiers(factory *NodeFactory, node Node, modifierArray ModifierList) Node {
 	switch node.Kind() {
 	case KindTypeParameter:
 		return factory.UpdateTypeParameterDeclaration(
@@ -4122,11 +4122,11 @@ func ContainsObjectRestOrSpread(node Node) bool {
 }
 
 func IsEmptyObjectLiteral(expression Node) bool {
-	return IsObjectLiteralExpression(expression) && len(expression.Properties()) == 0
+	return IsObjectLiteralExpression(expression) && expression.PropertyList().Len() == 0
 }
 
 func IsEmptyArrayLiteral(expression Node) bool {
-	return IsArrayLiteralExpression(expression) && len(expression.Elements()) == 0
+	return IsArrayLiteralExpression(expression) && expression.ElementList().Len() == 0
 }
 
 func GetRestIndicatorOfBindingOrAssignmentElement(bindingElement Node) Node {
@@ -4190,7 +4190,7 @@ func GetNextJSDocCommentLocation(node Node) Node {
 			KindSatisfiesExpression, KindReturnStatement, KindVariableStatement, KindExpressionStatement:
 			return parent
 		case KindVariableDeclarationList:
-			if parent.AsVariableDeclarationList().Declarations().Nodes()[0] == node {
+			if parent.AsVariableDeclarationList().Declarations().At(0) == node {
 				return parent
 			}
 		}
@@ -4269,7 +4269,7 @@ func IsExpandoInitializer(declaration Node, initializer Node) bool {
 		return true
 	}
 	if IsInJSFile(initializer) {
-		return IsClassExpression(initializer) || (IsObjectLiteralExpression(initializer) && len(initializer.Properties()) == 0 && declaration.Type().IsNil())
+		return IsClassExpression(initializer) || (IsObjectLiteralExpression(initializer) && initializer.PropertyList().Len() == 0 && declaration.Type().IsNil())
 	}
 	return false
 }
@@ -4345,7 +4345,7 @@ func IsInfinityOrNaNString(name string) bool {
 }
 
 func GetFirstConstructorWithBody(node Node) Node {
-	for _, member := range node.Members() {
+	for _, member := range node.MemberList().All() {
 		if IsConstructorDeclaration(member) && NodeIsPresent(member.Body()) {
 			return member
 		}
@@ -4361,7 +4361,7 @@ func IsPotentiallyExecutableNode(node Node) bool {
 			if GetCombinedNodeFlags(declarationList)&NodeFlagsBlockScoped != 0 {
 				return true
 			}
-			declarations := declarationList.AsVariableDeclarationList().Declarations().Nodes()
+			declarations := declarationList.AsVariableDeclarationList().Declarations().Slice()
 			return core.Some(declarations, func(d Node) bool {
 				return !d.Initializer().IsNil()
 			})
@@ -4422,7 +4422,7 @@ func ClassOrConstructorParameterIsDecorated(useLegacyDecorators bool, node Node)
 }
 
 func ClassElementOrClassElementParameterIsDecorated(useLegacyDecorators bool, node Node, parent Node) bool {
-	var parameters *NodeList
+	var parameters NodeList
 	if IsAccessor(node) {
 		decls := GetAllAccessorDeclarations(parent.Members(), node)
 		var firstAccessorWithDecorators Node
@@ -4443,8 +4443,8 @@ func ClassElementOrClassElementParameterIsDecorated(useLegacyDecorators bool, no
 	if NodeIsDecorated(useLegacyDecorators, node, parent, Node{}) {
 		return true
 	}
-	if parameters != nil && len(parameters.Nodes()) > 0 {
-		for _, parameter := range parameters.Nodes() {
+	if !parameters.IsNil() && parameters.Len() > 0 {
+		for _, parameter := range parameters.All() {
 			if IsThisParameter(parameter) {
 				continue
 			}
@@ -4583,8 +4583,8 @@ func GetRestParameterElementType(node ParameterDeclarationNode) Node {
 	if node.Kind() == KindArrayType {
 		return node.AsArrayTypeNode().ElementType()
 	}
-	if node.Kind() == KindTypeReference && node.AsTypeReferenceNode().TypeArguments() != nil {
-		return core.FirstOrNil(node.AsTypeReferenceNode().TypeArguments().Nodes())
+	if node.Kind() == KindTypeReference && !node.AsTypeReferenceNode().TypeArguments().IsNil() {
+		return core.FirstOrNil(node.AsTypeReferenceNode().TypeArguments().Slice())
 	}
 	return Node{}
 }

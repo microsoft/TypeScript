@@ -289,7 +289,7 @@ func getContextNode(node ast.Node) ast.Node {
 	}
 	switch node.Kind() {
 	case ast.KindVariableDeclaration:
-		if !ast.IsVariableDeclarationList(node.Parent()) || len(node.Parent().AsVariableDeclarationList().Declarations().Nodes()) != 1 {
+		if !ast.IsVariableDeclarationList(node.Parent()) || node.Parent().AsVariableDeclarationList().Declarations().Len() != 1 {
 			return node
 		} else if ast.IsVariableStatement(node.Parent().Parent()) {
 			return node.Parent().Parent()
@@ -365,7 +365,7 @@ func isValidReferencePosition(node ast.Node, searchSymbolName string) bool {
 		return len(node.Text()) == len(searchSymbolName) && (isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
 			isNameOfModuleDeclaration(node) ||
 			isExpressionOfExternalModuleImportEqualsDeclaration(node) ||
-			ast.IsCallExpression(node.Parent()) && ast.IsBindableObjectDefinePropertyCall(node.Parent()) && node.Parent().Arguments()[1] == node ||
+			ast.IsCallExpression(node.Parent()) && ast.IsBindableObjectDefinePropertyCall(node.Parent()) && node.Parent().ArgumentList().At(1) == node ||
 			ast.IsImportOrExportSpecifier(node.Parent()))
 	case ast.KindNumericLiteral:
 		return isLiteralNameOfPropertyDeclarationOrIndexAccess(node) && len(node.Text()) == len(searchSymbolName)
@@ -1762,8 +1762,8 @@ func (l *LanguageService) getReferencedSymbolsForModule(checker *checker.Checker
 			}
 
 			if rangeNode.IsNil() {
-				if reference.referencingFile.Statements != nil && len(reference.referencingFile.Statements.Nodes()) > 0 {
-					rangeNode = reference.referencingFile.Statements.Nodes()[0]
+				if !reference.referencingFile.Statements.IsNil() && reference.referencingFile.Statements.Len() > 0 {
+					rangeNode = reference.referencingFile.Statements.At(0)
 				} else {
 					rangeNode = reference.referencingFile.AsNode()
 				}

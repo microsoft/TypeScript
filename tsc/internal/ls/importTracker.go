@@ -374,7 +374,7 @@ func getSearchesFromDirectImports(
 		if namedBindings.IsNil() {
 			return
 		}
-		for _, element := range namedBindings.Elements() {
+		for _, element := range namedBindings.ElementList().All() {
 			name := element.Name()
 			propertyName := element.PropertyName()
 			if !isNameMatch(core.OrElse(propertyName, name).Text()) {

@@ -18,9 +18,9 @@ func (v *modifierVisitor) visit(node ast.Node) ast.Node {
 	return node
 }
 
-func ExtractModifiers(emitContext *printer.EmitContext, modifiers *ast.ModifierList, allowed ast.ModifierFlags) *ast.ModifierList {
-	if modifiers == nil {
-		return nil
+func ExtractModifiers(emitContext *printer.EmitContext, modifiers ast.ModifierList, allowed ast.ModifierFlags) ast.ModifierList {
+	if modifiers.IsNil() {
+		return ast.ModifierList{}
 	}
 	tx := modifierVisitor{AllowedModifiers: allowed}
 	tx.NewTransformer(tx.visit, emitContext)

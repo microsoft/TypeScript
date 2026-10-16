@@ -78,7 +78,8 @@ All fields, including those from "base" shapes (declaration, function-like, flow
 | Another node in the same store | `nodeRef`: the target's word index | `Node{n.s, r}` |
 | A node in another store (reused node) | `nodeRef` with the top bit set: an index into `reused` | `n.s.reused[r &^ refReused]` |
 | Flow node, flow list | `flowRef`/`flowListRef`: an index into the store's `flows`/`flowLists` arrays; a `flowRef` with the top bit set indexes `reusedFlows` | `FlowNode{n.s, r}` |
-| Other Go pointers (`*Symbol`, `*NodeList`, `[]Node`, `SymbolTable`, `any`, …) | `sideRef uint32`, an index into a typed `sideTable[T]` | `n.s.table.items[r-1]` |
+| Node list, modifier list | `listRef uint32`: the word index of a list record in the same store; with the top bit set, an index into `reusedLists` | `NodeList{n.s, r}` |
+| Other Go pointers (`*Symbol`, `[]Node`, `SymbolTable`, `any`, …) | `sideRef uint32`, an index into a typed `sideTable[T]` | `n.s.table.items[r-1]` |
 | `string` | `textRef{off, len uint32}` into the file's source text, or into an append-only text arena | `unsafe.String` over the backing bytes |
 
 Reused nodes come from JSDoc (parsed with its own factory), and from checker and transformer factories that point at nodes of the file they work on. Parsed files have almost none.
@@ -86,6 +87,8 @@ Reused nodes come from JSDoc (parsed with its own factory), and from checker and
 `SourceFile` is a `sourceFileData` record like any other node, plus a Go struct for its pointer-heavy fields, reached through the store's `sourceFiles` table.
 
 Flow nodes work the same way as nodes: `FlowNode` is `{store, index}` into a per-store `[]flowNodeData` (16 bytes each: node ref, antecedent ref, antecedent list ref, flags), and `FlowList` is `{store, index}` into `[]flowListData`. They contain no Go pointers. Checker-created flow nodes live in the checker's store and point at file flow nodes through `reusedFlows`, just as reused nodes do.
+
+Lists are records in `words` too: one word for the range, one for the count and an extra 32 bits (the "missing list" flag, or a `ModifierList`'s flags), then the element refs packed two per word. `NodeList` and `ModifierList` are `{store, index}` views with `Len`, `At` and `All`; `Slice` copies into a fresh `[]Node` for callers that really need one. A list can't change length in place, so code that used to append to a list builds a new one and sets it on the parent. The parser collects the elements of the lists it is parsing on a single scratch stack and copies each one into the store when it finishes, so parsing no longer allocates a `[]Node` per list.
 
 No Go pointers are hidden in integers: every ref is an index, and liveness comes from the `s` pointer in each `Node` and the store's own slices. The GC scans `reused` and the side tables, not every child, parent, symbol and string of every node.
 
@@ -113,6 +116,7 @@ Typed per-layout slices instead of one word array would remove the record cast t
 12. **Index-based store** (check +5.5%, total +6.6%, memory −0.2% vs step 9). One word array per store, `Node = {store, index}`, refs are indices. Removes blocks, `reflect.StructOf`, the far table and all pointer arithmetic on refs, and is slightly faster than step 11. Flow nodes go back to Go objects for now.
 13. **Bind at parse, then freeze** (check and total unchanged). Parsing builds in pooled scratch memory, binds, and copies the records once into a frozen exact-size array. Before, the array was clipped after parse, then had to grow again for the binder's flow data records, and was copied again after bind.
 14. **Flow nodes as indexed values** (memory −2.9%, check +1.2%, total unchanged vs step 13). `FlowNode` and `FlowList` become `{store, index}` handles into pointer-free per-store arrays, replacing the Go-object slab and the `*FlowNode` side tables.
+15. **Lists as records** (memory −3.2%, check and total unchanged vs step 14). `NodeList` and `ModifierList` become `{store, index}` views over records in the store, replacing the heap-allocated list structs, their `[]Node` backing arrays and the parser's node-slice arena.
 
 Step 12 vs step 9 (vscode, n=8, interleaved, shared machine):
 
@@ -133,7 +137,6 @@ VSCode   3.375Gi ± 0%   3.367Gi ± 0%  -0.23% (p=0.000 n=8)
 ## Next
 
 - Replace offset tables with generated kind switches.
-- Lists as records in the store (a count followed by refs), with `NodeList` as a view.
 - Symbols as per-store typed arrays addressed by index.
 - Profile the remaining check-time gap (likely the bounds check and slice load on `words` per access, and the 16-byte `Node`).
 
@@ -223,7 +226,7 @@ Peak RSS is 4.19GB on main and 4.21GB on the arena. Symbol (7.09M), type (2.43M)
 |---|---|---|---|
 | **Inline symbol/flow IDs instead of side tables** | Give symbols and flow nodes dense uint32 IDs into global (or per-program) arrays and store the ID inline in the record, dropping the per-store side tables for densely populated fields. | About −125MB, recovering the side-table overhead. Lookup cost is similar (one indexed load). | Medium: needs stable ID allocation for binder- and checker-created symbols. |
 | **24-byte header (drop `id`)** | Derive the node ordinal from the store plus the record position instead of storing an 8-byte atomic id. Node links index by ordinal. | About −80–100MB (8 bytes × ~10M+ nodes). Check time roughly neutral. | Medium: everything that uses `GetNodeId` must be able to compute it, and ordinals must be stable and dense. |
-| **Lists in the arena** | Store `NodeList`, `ModifierList` and `[]Node` as inline ref arrays in chunks instead of side-table slices. | About −50–100MB, fewer GC-visible slices, and better locality in `ForEachChild`. | Medium: the list API currently hands out `*NodeList` / `[]Node`, so it needs a view type. |
+| **Lists in the arena** (done, step 15) | Store `NodeList`, `ModifierList` and `[]Node` as inline ref arrays in chunks instead of side-table slices. | About −50–100MB, fewer GC-visible slices, and better locality in `ForEachChild`. | Medium: the list API currently hands out `*NodeList` / `[]Node`, so it needs a view type. |
 | **Compacted per-file image** | After parse and bind, copy a file's chunks into one exact-size block (with refs rewritten), dropping growth tails and side-table slack. | About −20–50MB. More importantly, a file becomes **one contiguous, pointer-free blob**: zero-copy hand-off to the JS API or IPC, mmap-able caches, and cheap incremental reuse. | Medium-high: cross-store refs and `keep` sets need fixing up, and this must happen before the file is shared. |
 | **Relative refs again, done right** | 32-bit refs relative to the chunk or image base (not the field), with the image making "far" refs rare. | Shrinks every ref field by 4 bytes (about −100MB+). The previous attempt cost 6–8% of check time; with a contiguous image it should be one add instead of a branch plus a table lookup. | Medium, and depends on the image. |
 | **Cheaper instantiated symbol tables** | `instantiateSymbolTable`, `addInheritedMembers` and `getNamedMembers` build about 650MB of maps and symbols. Use sorted slices or shared/lazy tables for small or derived members. | The largest single memory target, bigger than the whole AST saving potential. Likely a check-time win too (fewer map writes). | Medium-high; separate project. |

@@ -119,19 +119,19 @@ func (l *LanguageService) addNodeOutliningSpans(ctx context.Context, sourceFile 
 	current := 0
 
 	statements := sourceFile.Statements
-	n := len(statements.Nodes())
+	n := statements.Len()
 	foldingRange := make([]*lsproto.FoldingRange, 0, 40)
 	for current < n {
-		for current < n && !ast.IsAnyImportSyntax(statements.Nodes()[current]) {
-			foldingRange = append(foldingRange, visitNode(ctx, statements.Nodes()[current], depthRemaining, sourceFile, l)...)
+		for current < n && !ast.IsAnyImportSyntax(statements.At(current)) {
+			foldingRange = append(foldingRange, visitNode(ctx, statements.At(current), depthRemaining, sourceFile, l)...)
 			current++
 		}
 		if current == n {
 			break
 		}
 		firstImport := current
-		for current < n && ast.IsAnyImportSyntax(statements.Nodes()[current]) {
-			foldingRange = append(foldingRange, visitNode(ctx, statements.Nodes()[current], depthRemaining, sourceFile, l)...)
+		for current < n && ast.IsAnyImportSyntax(statements.At(current)) {
+			foldingRange = append(foldingRange, visitNode(ctx, statements.At(current), depthRemaining, sourceFile, l)...)
 			current++
 		}
 		lastImport := current - 1
@@ -139,9 +139,9 @@ func (l *LanguageService) addNodeOutliningSpans(ctx context.Context, sourceFile 
 			foldingRangeKind := lsproto.FoldingRangeKindImports
 			imports := createFoldingRangeFromBounds(
 				ctx,
-				astnav.GetStartOfNode(astnav.FindChildOfKind(statements.Nodes()[firstImport],
+				astnav.GetStartOfNode(astnav.FindChildOfKind(statements.At(firstImport),
 					ast.KindImportKeyword, sourceFile), sourceFile, false /*includeJSDoc*/),
-				statements.Nodes()[lastImport].End(),
+				statements.At(lastImport).End(),
 				foldingRangeKind,
 				sourceFile,
 				l,
@@ -213,18 +213,18 @@ func visitNode(ctx context.Context, n ast.Node, depthRemaining int, sourceFile *
 	}
 	if ast.IsBlock(n) {
 		statements := n.AsBlock().Statements()
-		if statements != nil {
+		if !statements.IsNil() {
 			foldingRange = append(foldingRange, addOutliningForLeadingCommentsForPos(ctx, statements.End(), sourceFile, l)...)
 		}
 	}
 	if ast.IsModuleBlock(n) {
 		statements := n.AsModuleBlock().Statements()
-		if statements != nil {
+		if !statements.IsNil() {
 			foldingRange = append(foldingRange, addOutliningForLeadingCommentsForPos(ctx, statements.End(), sourceFile, l)...)
 		}
 	}
 	if ast.IsClassLike(n) || ast.IsInterfaceDeclaration(n) {
-		var members *ast.NodeList
+		var members ast.NodeList
 		if ast.IsClassDeclaration(n) {
 			members = n.AsClassDeclaration().Members()
 		} else if ast.IsClassExpression(n) {
@@ -232,7 +232,7 @@ func visitNode(ctx context.Context, n ast.Node, depthRemaining int, sourceFile *
 		} else {
 			members = n.AsInterfaceDeclaration().Members()
 		}
-		if members != nil {
+		if !members.IsNil() {
 			foldingRange = append(foldingRange, addOutliningForLeadingCommentsForPos(ctx, members.End(), sourceFile, l)...)
 		}
 	}
@@ -250,7 +250,7 @@ func visitNode(ctx context.Context, n ast.Node, depthRemaining int, sourceFile *
 			foldingRange = append(foldingRange, expressionNodes...)
 		}
 		depthRemaining--
-		for _, arg := range n.Arguments() {
+		for _, arg := range n.ArgumentList().All() {
 			if !arg.IsNil() {
 				foldingRange = append(foldingRange, visitNode(ctx, arg, depthRemaining, sourceFile, l)...)
 			}
@@ -462,7 +462,7 @@ func getOutliningSpanForNode(ctx context.Context, n ast.Node, sourceFile *ast.So
 }
 
 func spanForImportExportElements(ctx context.Context, node ast.Node, sourceFile *ast.SourceFile, l *LanguageService) *lsproto.FoldingRange {
-	var elements *ast.NodeList
+	var elements ast.NodeList
 	switch node.Kind() {
 	case ast.KindNamedImports:
 		elements = node.AsNamedImports().Elements()
@@ -471,7 +471,7 @@ func spanForImportExportElements(ctx context.Context, node ast.Node, sourceFile 
 	case ast.KindImportAttributes:
 		elements = node.AsImportAttributes().Attributes()
 	}
-	if elements == nil || len(elements.Nodes()) == 0 {
+	if elements.IsNil() || elements.Len() == 0 {
 		return nil
 	}
 	openToken := astnav.FindChildOfKind(node, ast.KindOpenBraceToken, sourceFile)
@@ -495,7 +495,7 @@ func spanForParenthesizedExpression(ctx context.Context, node ast.Node, sourceFi
 }
 
 func spanForCallExpression(ctx context.Context, node ast.Node, sourceFile *ast.SourceFile, l *LanguageService) *lsproto.FoldingRange {
-	if node.AsCallExpression().Arguments() == nil || len(node.AsCallExpression().Arguments().Nodes()) == 0 {
+	if node.AsCallExpression().Arguments().IsNil() || node.AsCallExpression().Arguments().Len() == 0 {
 		return nil
 	}
 	openToken := astnav.FindChildOfKind(node, ast.KindOpenParenToken, sourceFile)
@@ -553,14 +553,14 @@ func spanForJSXAttributes(ctx context.Context, node ast.Node, sourceFile *ast.So
 	} else {
 		attributes = node.AsJsxOpeningElement().Attributes()
 	}
-	if len(attributes.Properties()) == 0 {
+	if attributes.PropertyList().Len() == 0 {
 		return nil
 	}
 	return createFoldingRangeFromBounds(ctx, astnav.GetStartOfNode(node, sourceFile, false /*includeJSDoc*/), node.End(), "", sourceFile, l)
 }
 
-func spanForNodeArray(ctx context.Context, statements *ast.NodeList, sourceFile *ast.SourceFile, l *LanguageService) *lsproto.FoldingRange {
-	if statements != nil && len(statements.Nodes()) != 0 {
+func spanForNodeArray(ctx context.Context, statements ast.NodeList, sourceFile *ast.SourceFile, l *LanguageService) *lsproto.FoldingRange {
+	if !statements.IsNil() && statements.Len() != 0 {
 		textRange, fidelity := l.createFoldingRangeFromBounds(statements.Pos(), statements.End(), sourceFile)
 		if fidelity.IsNone() {
 			return nil

@@ -373,18 +373,18 @@ func BuildNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
 
 	visitor := &ast.NodeVisitor{
 		Hooks: ast.NodeVisitorHooks{
-			VisitNodes: func(nodeList *ast.NodeList, visitor *ast.NodeVisitor) *ast.NodeList {
-				if nodeList == nil {
+			VisitNodes: func(nodeList ast.NodeList, visitor *ast.NodeVisitor) ast.NodeList {
+				if nodeList.IsNil() {
 					return nodeList
 				}
 				nodeCount++
 				nodeTable = append(nodeTable, ast.Node{}) // NodeLists are not *ast.Node
-				visitor.VisitSlice(nodeList.Nodes())
+				visitor.VisitSlice(nodeList.Slice())
 				return nodeList
 			},
-			VisitModifiers: func(modifiers *ast.ModifierList, visitor *ast.NodeVisitor) *ast.ModifierList {
-				if modifiers != nil && len(modifiers.Nodes()) > 0 {
-					visitor.Hooks.VisitNodes(&modifiers.NodeList, visitor)
+			VisitModifiers: func(modifiers ast.ModifierList, visitor *ast.NodeVisitor) ast.ModifierList {
+				if !modifiers.IsNil() && modifiers.Len() > 0 {
+					visitor.Hooks.VisitNodes(modifiers.NodeList, visitor)
 				}
 				return modifiers
 			},
@@ -505,8 +505,8 @@ func encodeTree(rootNode ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeInd
 
 	visitor := &ast.NodeVisitor{
 		Hooks: ast.NodeVisitorHooks{
-			VisitNodes: func(nodeList *ast.NodeList, visitor *ast.NodeVisitor) *ast.NodeList {
-				if nodeList == nil {
+			VisitNodes: func(nodeList ast.NodeList, visitor *ast.NodeVisitor) ast.NodeList {
+				if nodeList.IsNil() {
 					return nodeList
 				}
 
@@ -521,22 +521,22 @@ func encodeTree(rootNode ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeInd
 					nodes[prevIndex*NodeSize+NodeOffsetNext+3] = b3
 				}
 
-				nodes = appendUint32s(nodes, SyntaxKindNodeList, utf16(nodeList.Pos()), utf16(nodeList.End()), 0, parentIndex, uint32(len(nodeList.Nodes())), uint32(boolToByte(nodeList.HasTrailingComma())))
+				nodes = appendUint32s(nodes, SyntaxKindNodeList, utf16(nodeList.Pos()), utf16(nodeList.End()), 0, parentIndex, uint32(nodeList.Len()), uint32(boolToByte(nodeList.HasTrailingComma())))
 
 				saveParentIndex := parentIndex
 
 				currentIndex := nodeCount
 				prevIndex = 0
 				parentIndex = currentIndex
-				visitor.VisitSlice(nodeList.Nodes())
+				visitor.VisitSlice(nodeList.Slice())
 				prevIndex = currentIndex
 				parentIndex = saveParentIndex
 
 				return nodeList
 			},
-			VisitModifiers: func(modifiers *ast.ModifierList, visitor *ast.NodeVisitor) *ast.ModifierList {
-				if modifiers != nil && len(modifiers.Nodes()) > 0 {
-					visitor.Hooks.VisitNodes(&modifiers.NodeList, visitor)
+			VisitModifiers: func(modifiers ast.ModifierList, visitor *ast.NodeVisitor) ast.ModifierList {
+				if !modifiers.IsNil() && modifiers.Len() > 0 {
+					visitor.Hooks.VisitNodes(modifiers.NodeList, visitor)
 				}
 				return modifiers
 			},
@@ -745,8 +745,8 @@ func boolToByte(b bool) byte {
 }
 
 // hasModifiers returns true if the modifier list is non-nil and has at least one modifier.
-func hasModifiers(modifiers *ast.ModifierList) bool {
-	return modifiers != nil && len(modifiers.Nodes()) > 0
+func hasModifiers(modifiers ast.ModifierList) bool {
+	return !modifiers.IsNil() && modifiers.Len() > 0
 }
 
 // encodeFileReferences encodes a slice of FileReferences as a msgpack array of tuples

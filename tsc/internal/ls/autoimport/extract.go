@@ -109,13 +109,13 @@ func (e *exportExtractor) extractFromFile(file *ast.SourceFile) []*Export {
 	}
 	if len(file.AmbientModuleNames) > 0 {
 		var exportCount int
-		for _, statement := range file.Statements.Nodes() {
+		for _, statement := range file.Statements.All() {
 			if ast.IsModuleWithStringLiteralName(statement) && isNonPatternAmbientModuleDeclaration(file, statement.AsModuleDeclaration()) {
 				exportCount += len(statement.AsModuleDeclaration().Symbol().Exports())
 			}
 		}
 		exports := make([]*Export, 0, exportCount)
-		for _, statement := range file.Statements.Nodes() {
+		for _, statement := range file.Statements.All() {
 			if ast.IsModuleWithStringLiteralName(statement) && isNonPatternAmbientModuleDeclaration(file, statement.AsModuleDeclaration()) {
 				e.extractFromModuleDeclaration(statement.AsModuleDeclaration(), file, ambientModuleID(statement.Name().Text()), "", &exports)
 			}
@@ -248,8 +248,8 @@ func (e *symbolExtractor) extractFromSymbol(name string, symbol *ast.Symbol, mod
 			// what is actually desirable here? I think it would be reasonable to only treat these as exports
 			// if *every* property is a shorthand property or identifier: identifier
 			// At least, it would be sketchy if there were any methods, computed properties...
-			*exports = slices.Grow(*exports, len(expression.AsObjectLiteralExpression().Properties().Nodes()))
-			for _, prop := range expression.AsObjectLiteralExpression().Properties().Nodes() {
+			*exports = slices.Grow(*exports, expression.AsObjectLiteralExpression().Properties().Len())
+			for _, prop := range expression.AsObjectLiteralExpression().Properties().All() {
 				if ast.IsShorthandPropertyAssignment(prop) || ast.IsPropertyAssignment(prop) && prop.AsPropertyAssignment().Name().Kind() == ast.KindIdentifier {
 					export, _ := e.createExport(expression.Symbol().Members()[prop.Name().Text()], moduleID, moduleFileName, syntax, file, checkerLease)
 					if export != nil {

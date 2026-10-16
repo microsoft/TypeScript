@@ -46,7 +46,7 @@ func collectExternalModuleInfo(sourceFile *ast.SourceFile, compilerOptions *core
 func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 	hasImportStar := false
 	hasImportDefault := false
-	for _, node := range c.sourceFile.Statements.Nodes() {
+	for _, node := range c.sourceFile.Statements.All() {
 		// Look through NotEmittedStatement to find elided export= declarations
 		// (e.g., `declare export = x` is elided by the type eraser but must still be collected)
 		if ast.IsNotEmittedStatement(node) {
@@ -123,7 +123,7 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 		case ast.KindVariableStatement:
 			n := node.AsVariableStatement()
 			if ast.HasSyntacticModifier(node, ast.ModifierFlagsExport) {
-				for _, decl := range n.DeclarationList().AsVariableDeclarationList().Declarations().Nodes() {
+				for _, decl := range n.DeclarationList().AsVariableDeclarationList().Declarations().All() {
 					c.collectExportedVariableInfo(decl)
 				}
 			}
@@ -185,7 +185,7 @@ func (c *externalModuleInfoCollector) addExportedName(name ast.ModuleExportName)
 }
 
 func (c *externalModuleInfoCollector) addExportedNamesForExportDeclaration(node ast.ExportDeclaration) {
-	for _, specifier := range node.ExportClause().Elements() {
+	for _, specifier := range node.ExportClause().ElementList().All() {
 		specifierNameText := specifier.Name().Text()
 		if c.addUniqueExport(specifierNameText) {
 			name := specifier.PropertyNameOrName()
@@ -240,7 +240,7 @@ func (c *externalModuleInfoCollector) addExportedFunctionDeclaration(node ast.Fu
 
 func (c *externalModuleInfoCollector) collectExportedVariableInfo(decl ast.Node /*VariableDeclaration | BindingElement*/) {
 	if ast.IsBindingPattern(decl.Name()) {
-		for _, element := range decl.Name().Elements() {
+		for _, element := range decl.Name().ElementList().All() {
 			e := element.AsBindingElement()
 			if !e.Name().IsNil() {
 				c.collectExportedVariableInfo(element)
@@ -268,8 +268,8 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 			externalHelpersModuleName := getOrCreateExternalHelpersModuleNameIfNeeded(emitContext, sourceFile, compilerOptions, helpers, hasExportStarsToExportValues, hasImportStar || hasImportDefault, fileModuleKind)
 			if !externalHelpersModuleName.IsNil() {
 				externalHelpersImportDeclaration := emitContext.Factory.NewImportEqualsDeclaration(
-					nil,   /*modifiers*/
-					false, /*isTypeOnly*/
+					ast.ModifierList{}, /*modifiers*/
+					false,              /*isTypeOnly*/
 					externalHelpersModuleName,
 					emitContext.Factory.NewExternalModuleReference(emitContext.Factory.NewStringLiteral(externalHelpersModuleNameText, ast.TokenFlagsNone)),
 				)
@@ -303,7 +303,7 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 				emitContext.AddEmitFlags(parseNode, printer.EFExternalHelpers)
 
 				externalHelpersImportDeclaration := emitContext.Factory.NewImportDeclaration(
-					nil, /*modifiers*/
+					ast.ModifierList{}, /*modifiers*/
 					emitContext.Factory.NewImportClause(ast.KindUnknown /*phaseModifier*/, ast.Node{} /*name*/, namedBindings),
 					emitContext.Factory.NewStringLiteral(externalHelpersModuleNameText, ast.TokenFlagsNone),
 					ast.Node{}, /*attributes*/
@@ -373,13 +373,13 @@ func getImportNeedsImportStarHelper(node ast.ImportDeclaration) bool {
 	}
 	namedImports := bindings.AsNamedImports()
 	defaultRefCount := 0
-	for _, binding := range namedImports.Elements().Nodes() {
+	for _, binding := range namedImports.Elements().All() {
 		if isNamedDefaultReference(binding) {
 			defaultRefCount++
 		}
 	}
 	// Import star is required if there's default named refs mixed with non-default refs, or if theres non-default refs and it has a default import
-	return (defaultRefCount > 0 && defaultRefCount != len(namedImports.Elements().Nodes())) || ((len(namedImports.Elements().Nodes())-defaultRefCount) != 0 && ast.IsDefaultImport(node.AsNode()))
+	return (defaultRefCount > 0 && defaultRefCount != namedImports.Elements().Len()) || ((namedImports.Elements().Len()-defaultRefCount) != 0 && ast.IsDefaultImport(node.AsNode()))
 }
 
 func getImportNeedsImportDefaultHelper(node ast.ImportDeclaration) bool {

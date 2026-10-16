@@ -65,14 +65,14 @@ func newSyntheticRecursiveVisitor() *ast.NodeVisitor {
 				}
 				return v.VisitNode(node)
 			},
-			VisitNodes: func(nodes *ast.NodeList, v *ast.NodeVisitor) *ast.NodeList {
-				if nodes != nil {
+			VisitNodes: func(nodes ast.NodeList, v *ast.NodeVisitor) ast.NodeList {
+				if !nodes.IsNil() {
 					nodes.SetLoc(core.UndefinedTextRange())
 				}
 				return v.VisitNodes(nodes)
 			},
-			VisitModifiers: func(nodes *ast.ModifierList, v *ast.NodeVisitor) *ast.ModifierList {
-				if nodes != nil {
+			VisitModifiers: func(nodes ast.ModifierList, v *ast.NodeVisitor) ast.ModifierList {
+				if !nodes.IsNil() {
 					nodes.SetLoc(core.UndefinedTextRange())
 				}
 				return v.VisitModifiers(nodes)

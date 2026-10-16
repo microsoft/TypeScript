@@ -14,17 +14,17 @@ import (
  * @internal
  */
 func isClassNamedEvaluationHelperBlock(emitContext *printer.EmitContext, node ast.Node) bool {
-	if !ast.IsClassStaticBlockDeclaration(node) || len(node.AsClassStaticBlockDeclaration().Body().Statements()) != 1 {
+	if !ast.IsClassStaticBlockDeclaration(node) || node.AsClassStaticBlockDeclaration().Body().StatementList().Len() != 1 {
 		return false
 	}
 
-	statement := node.AsClassStaticBlockDeclaration().Body().Statements()[0]
+	statement := node.AsClassStaticBlockDeclaration().Body().StatementList().At(0)
 	if ast.IsExpressionStatement(statement) {
 		expression := statement.Expression()
 		if emitContext.IsCallToHelper(expression, "__setFunctionName") {
 			arguments := expression.AsCallExpression().Arguments()
-			return len(arguments.Nodes()) >= 2 &&
-				arguments.Nodes()[1] == emitContext.AssignedName(node.AsNode())
+			return arguments.Len() >= 2 &&
+				arguments.At(1) == emitContext.AssignedName(node.AsNode())
 		}
 	}
 	return false
@@ -37,7 +37,7 @@ func isClassNamedEvaluationHelperBlock(emitContext *printer.EmitContext, node as
  */
 func classHasExplicitlyAssignedName(emitContext *printer.EmitContext, node ast.ClassLikeDeclaration) bool {
 	if assignedName := emitContext.AssignedName(node); !assignedName.IsNil() {
-		for _, member := range node.Members() {
+		for _, member := range node.MemberList().All() {
 			if isClassNamedEvaluationHelperBlock(emitContext, member) {
 				return true
 			}
@@ -164,7 +164,7 @@ func createClassNamedEvaluationHelperBlock(emitContext *printer.EmitContext, ass
 	expression := factory.NewSetFunctionNameHelper(thisExpression, assignedName, "" /*prefix*/)
 	statement := factory.NewExpressionStatement(expression)
 	body := factory.NewBlock(factory.NewNodeList([]ast.Statement{statement}), false /*multiLine*/)
-	block := factory.NewClassStaticBlockDeclaration(nil /*modifiers*/, body)
+	block := factory.NewClassStaticBlockDeclaration(ast.ModifierList{} /*modifiers*/, body)
 
 	// We use `emitNode.assignedName` to indicate this is a NamedEvaluation helper block
 	// and to stash the expression used to resolve the assigned name.
@@ -199,7 +199,7 @@ func injectClassNamedEvaluationHelperBlockIfMissing(
 	factory := emitContext.Factory
 	namedEvaluationBlock := createClassNamedEvaluationHelperBlock(emitContext, assignedName, thisExpression)
 	if !node.Name().IsNil() {
-		emitContext.SetSourceMapRange(namedEvaluationBlock.Body().Statements()[0], node.Name().Loc())
+		emitContext.SetSourceMapRange(namedEvaluationBlock.Body().StatementList().At(0), node.Name().Loc())
 	}
 
 	insertionIndex := slices.IndexFunc(node.Members(), func(n ast.Node) bool {
@@ -281,7 +281,7 @@ func transformNamedEvaluationOfPropertyAssignment(context *printer.EmitContext, 
 	factory := context.Factory
 	assignedName, name := getAssignedNameOfPropertyName(context, node.Name(), assignedNameText)
 	initializer := finishTransformNamedEvaluation(context, node.Initializer(), assignedName, ignoreEmptyStringLiteral)
-	return factory.UpdatePropertyAssignment(node, nil /*modifiers*/, name, ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, initializer)
+	return factory.UpdatePropertyAssignment(node, ast.ModifierList{} /*modifiers*/, name, ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, initializer)
 }
 
 func transformNamedEvaluationOfShorthandAssignmentProperty(emitContext *printer.EmitContext, node ast.ShorthandPropertyAssignment /*NamedEvaluation & ShorthandPropertyAssignment*/, ignoreEmptyStringLiteral bool, assignedNameText string) ast.Expression {
@@ -303,7 +303,7 @@ func transformNamedEvaluationOfShorthandAssignmentProperty(emitContext *printer.
 	objectAssignmentInitializer := finishTransformNamedEvaluation(emitContext, node.ObjectAssignmentInitializer(), assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdateShorthandPropertyAssignment(
 		node,
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		node.Name(),
 		ast.Node{}, /*postfixToken*/
 		ast.Node{}, /*typeNode*/
@@ -371,7 +371,7 @@ func transformNamedEvaluationOfParameterDeclaration(emitContext *printer.EmitCon
 	initializer := finishTransformNamedEvaluation(emitContext, node.Initializer(), assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdateParameterDeclaration(
 		node,
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		node.DotDotDotToken(),
 		node.Name(),
 		ast.Node{}, /*questionToken*/
@@ -472,7 +472,7 @@ func transformNamedEvaluationOfAssignmentExpression(emitContext *printer.EmitCon
 	right := finishTransformNamedEvaluation(emitContext, node.Right(), assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdateBinaryExpression(
 		node,
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		node.Left(),
 		ast.Node{}, /*typeNode*/
 		node.OperatorToken(),
@@ -502,7 +502,7 @@ func transformNamedEvaluationOfExportAssignment(emitContext *printer.EmitContext
 	expression := finishTransformNamedEvaluation(emitContext, node.Expression(), assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdateExportAssignment(
 		node,
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		node.IsExportEquals(),
 		ast.Node{}, /*typeNode*/
 		expression,

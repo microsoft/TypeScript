@@ -1105,7 +1105,7 @@ func (c *Checker) getTypeOfAssignmentPattern(expr ast.Node) *Type {
 		node := expr.Parent().Parent()
 		typeOfParentObjectLiteral := core.OrElse(c.getTypeOfAssignmentPattern(node), c.errorType)
 		propertyIndex := slices.Index(node.Properties(), expr.Parent())
-		return c.checkObjectLiteralDestructuringPropertyAssignment(node, typeOfParentObjectLiteral, propertyIndex, nil, false)
+		return c.checkObjectLiteralDestructuringPropertyAssignment(node, typeOfParentObjectLiteral, propertyIndex, ast.NodeList{}, false)
 	}
 	// Array literal assignment - array destructuring pattern
 	node := expr.Parent()

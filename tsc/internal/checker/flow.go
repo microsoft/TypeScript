@@ -296,8 +296,8 @@ func (c *Checker) getTypeAtFlowCall(f *FlowState, flow ast.FlowNode) FlowType {
 			switch {
 			case predicate.t != nil:
 				narrowedType = c.narrowTypeByTypePredicate(f, t, predicate, flow.Node(), true /*assumeTrue*/)
-			case predicate.kind == TypePredicateKindAssertsIdentifier && predicate.parameterIndex >= 0 && int(predicate.parameterIndex) < len(flow.Node().Arguments()):
-				narrowedType = c.narrowTypeByAssertion(f, t, flow.Node().Arguments()[predicate.parameterIndex])
+			case predicate.kind == TypePredicateKindAssertsIdentifier && predicate.parameterIndex >= 0 && int(predicate.parameterIndex) < flow.Node().ArgumentList().Len():
+				narrowedType = c.narrowTypeByAssertion(f, t, flow.Node().ArgumentList().At(int(predicate.parameterIndex)))
 			default:
 				narrowedType = t
 			}
@@ -456,8 +456,8 @@ func (c *Checker) narrowTypeByCallExpression(f *FlowState, t *Type, callExpressi
 	}
 	if c.containsMissingType(t) && ast.IsAccessExpression(f.reference) && ast.IsPropertyAccessExpression(callExpression.Expression()) {
 		callAccess := callExpression.Expression()
-		if c.isMatchingReference(f.reference.Expression(), c.getReferenceCandidate(callAccess.Expression())) && ast.IsIdentifier(callAccess.Name()) && callAccess.Name().Text() == "hasOwnProperty" && len(callExpression.Arguments()) == 1 {
-			argument := callExpression.Arguments()[0]
+		if c.isMatchingReference(f.reference.Expression(), c.getReferenceCandidate(callAccess.Expression())) && ast.IsIdentifier(callAccess.Name()) && callAccess.Name().Text() == "hasOwnProperty" && callExpression.ArgumentList().Len() == 1 {
+			argument := callExpression.ArgumentList().At(0)
 			if accessedName, ok := c.getAccessedPropertyName(f.reference); ok && ast.IsStringLiteralLike(argument) && accessedName == argument.Text() {
 				return c.getTypeWithFacts(t, core.IfElse(assumeTrue, TypeFactsNEUndefined, TypeFactsEQUndefined))
 			}
@@ -1159,7 +1159,7 @@ func (c *Checker) narrowTypeBySwitchOnTypeOf(t *Type, data ast.FlowSwitchClauseD
 	if witnesses == nil {
 		return t
 	}
-	clauses := data.SwitchStatement().AsSwitchStatement().CaseBlock().AsCaseBlock().Clauses().Nodes()
+	clauses := data.SwitchStatement().AsSwitchStatement().CaseBlock().AsCaseBlock().Clauses().Slice()
 	// Equal start and end denotes implicit fallthrough; undefined marks explicit default clause.
 	defaultIndex := core.FindIndex(clauses, func(clause ast.Node) bool {
 		return clause.Kind() == ast.KindDefaultClause
@@ -1185,7 +1185,7 @@ func (c *Checker) narrowTypeBySwitchOnTypeOf(t *Type, data ast.FlowSwitchClauseD
 }
 
 func (c *Checker) narrowTypeBySwitchOnTrue(f *FlowState, t *Type, data ast.FlowSwitchClauseData) *Type {
-	clauses := data.SwitchStatement().AsSwitchStatement().CaseBlock().AsCaseBlock().Clauses().Nodes()
+	clauses := data.SwitchStatement().AsSwitchStatement().CaseBlock().AsCaseBlock().Clauses().Slice()
 	defaultIndex := core.FindIndex(clauses, func(clause ast.Node) bool {
 		return clause.Kind() == ast.KindDefaultClause
 	})
@@ -1415,7 +1415,7 @@ func (c *Checker) getTypeAtFlowArrayMutation(f *FlowState, flow ast.FlowNode) Fl
 			if flowType.t.objectFlags&ObjectFlagsEvolvingArray != 0 {
 				evolvedType := flowType.t
 				if ast.IsCallExpression(node) {
-					for _, arg := range node.Arguments() {
+					for _, arg := range node.ArgumentList().All() {
 						evolvedType = c.addEvolvingArrayElementType(evolvedType, arg)
 					}
 				} else {
@@ -1884,7 +1884,7 @@ func (c *Checker) getReferenceRoot(node ast.Node) ast.Node {
 }
 
 func (c *Checker) hasMatchingArgument(expression ast.Node, reference ast.Node) bool {
-	for _, argument := range expression.Arguments() {
+	for _, argument := range expression.ArgumentList().All() {
 		if c.isOrContainsMatchingReference(reference, argument) || c.optionalChainContainsReference(argument, reference) {
 			return true
 		}
@@ -1989,7 +1989,7 @@ func (c *Checker) eachTypeContainedIn(source *Type, types []*Type) bool {
 func (c *Checker) getSwitchClauseTypeOfWitnesses(node ast.Node) []string {
 	links := c.switchStatementLinks.Get(node)
 	if !links.witnessesComputed {
-		clauses := node.AsSwitchStatement().CaseBlock().AsCaseBlock().Clauses().Nodes()
+		clauses := node.AsSwitchStatement().CaseBlock().AsCaseBlock().Clauses().Slice()
 		witnesses := make([]string, len(clauses))
 		for i, clause := range clauses {
 			if clause.Kind() == ast.KindCaseClause {
@@ -2026,7 +2026,7 @@ func (c *Checker) getNotEqualFactsFromTypeofSwitch(start int, end int, witnesses
 func (c *Checker) getSwitchClauseTypes(node ast.Node) []*Type {
 	links := c.switchStatementLinks.Get(node)
 	if !links.switchTypesComputed {
-		clauses := node.AsSwitchStatement().CaseBlock().AsCaseBlock().Clauses().Nodes()
+		clauses := node.AsSwitchStatement().CaseBlock().AsCaseBlock().Clauses().Slice()
 		types := make([]*Type, len(clauses))
 		for i, clause := range clauses {
 			types[i] = c.getTypeOfSwitchClause(clause)

@@ -98,7 +98,7 @@ func (f *missingMemberFixer) createMemberFromSymbol(symbol *ast.Symbol, enclosin
 					nodes,
 					f.changeTracker.NodeFactory.NewGetAccessorDeclaration(
 						modifiers, createPropertyName(f.changeTracker.NodeFactory, declarationName, quotePreference),
-						nil /*typeParameters*/, nil /*parameters*/, f.createTypeNode(t, enclosingDeclaration, flags, nodeBuilder, idToSymbol), ast.Node{} /*fullSignature*/, f.createBody(body, quotePreference, signatureOnly),
+						ast.TypeParameterList{} /*typeParameters*/, ast.ParameterList{} /*parameters*/, f.createTypeNode(t, enclosingDeclaration, flags, nodeBuilder, idToSymbol), ast.Node{} /*fullSignature*/, f.createBody(body, quotePreference, signatureOnly),
 					),
 				)
 			}
@@ -111,7 +111,7 @@ func (f *missingMemberFixer) createMemberFromSymbol(symbol *ast.Symbol, enclosin
 
 				nodes = append(nodes, f.changeTracker.NodeFactory.NewSetAccessorDeclaration(
 					modifiers, createPropertyName(f.changeTracker.NodeFactory, declarationName, quotePreference),
-					nil /*typeParameters*/, createDummyParameters(f.changeTracker.NodeFactory, 1, []string{parameter.Name().Text()}, []ast.TypeNode{f.createTypeNode(t, enclosingDeclaration, flags, nodeBuilder, idToSymbol)}, 1, ast.IsInJSFile(enclosingDeclaration)),
+					ast.TypeParameterList{} /*typeParameters*/, createDummyParameters(f.changeTracker.NodeFactory, 1, []string{parameter.Name().Text()}, []ast.TypeNode{f.createTypeNode(t, enclosingDeclaration, flags, nodeBuilder, idToSymbol)}, 1, ast.IsInJSFile(enclosingDeclaration)),
 					ast.Node{} /*type*/, ast.Node{} /*fullSignature*/, f.createBody(body, quotePreference, signatureOnly),
 				),
 				)
@@ -178,7 +178,7 @@ func (f *missingMemberFixer) createTypeNode(t *checker.Type, enclosingDeclaratio
 	return f.importTypeNode(nodeBuilder.TypeToTypeNode(t, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil /*tracker*/), idToSymbol)
 }
 
-func (f *missingMemberFixer) createModifiers(symbol *ast.Symbol, declaration ast.Node) *ast.ModifierList {
+func (f *missingMemberFixer) createModifiers(symbol *ast.Symbol, declaration ast.Node) ast.ModifierList {
 	modifierFlags := ast.ModifierFlagsNone
 	if !declaration.IsNil() {
 		effective := checker.GetDeclarationModifierFlagsFromSymbol(symbol)
@@ -196,7 +196,7 @@ func (f *missingMemberFixer) createModifiers(symbol *ast.Symbol, declaration ast
 		modifierFlags |= ast.ModifierFlagsOverride
 	}
 	if modifierFlags == ast.ModifierFlagsNone {
-		return nil
+		return ast.ModifierList{}
 	}
 	return f.changeTracker.NodeFactory.NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, f.changeTracker.NodeFactory.NewModifier))
 }
@@ -205,7 +205,7 @@ func (f *missingMemberFixer) shouldAddOverrideKeyword(declaration ast.Node) bool
 	return !declaration.IsNil() && f.program.Options().NoImplicitOverride.IsTrue() && ast.HasAbstractModifier(declaration)
 }
 
-func (f *missingMemberFixer) createSignatureDeclarationFromSignature(signature *checker.Signature, kind ast.Kind, sourceFile *ast.SourceFile, enclosingDeclaration ast.Node, body ast.FunctionBody, modifiers *ast.ModifierList, name ast.PropertyName, optional bool) ast.Node {
+func (f *missingMemberFixer) createSignatureDeclarationFromSignature(signature *checker.Signature, kind ast.Kind, sourceFile *ast.SourceFile, enclosingDeclaration ast.Node, body ast.FunctionBody, modifiers ast.ModifierList, name ast.PropertyName, optional bool) ast.Node {
 	quotePreference := lsutil.GetQuotePreference(sourceFile, f.preferences)
 	flags := nodebuilder.FlagsNoTruncation | nodebuilder.FlagsSuppressAnyReturnType | nodebuilder.FlagsAllowEmptyTuple
 	if quotePreference == lsutil.QuotePreferenceSingle {
@@ -220,12 +220,12 @@ func (f *missingMemberFixer) createSignatureDeclarationFromSignature(signature *
 
 	isJS := ast.IsInJSFile(enclosingDeclaration)
 	parameters := signatureDeclaration.ParameterList()
-	typeParameters := core.IfElse(isJS, nil, signatureDeclaration.TypeParameterList())
+	typeParameters := core.IfElse(isJS, ast.NodeList{}, signatureDeclaration.TypeParameterList())
 	typeNode := core.IfElse(isJS, ast.Node{}, signatureDeclaration.Type())
 
-	if typeParameters != nil && len(typeParameters.Nodes()) > 0 {
-		nodes := make([]ast.Node, 0, len(typeParameters.Nodes()))
-		for _, tp := range typeParameters.Nodes() {
+	if !typeParameters.IsNil() && typeParameters.Len() > 0 {
+		nodes := make([]ast.Node, 0, typeParameters.Len())
+		for _, tp := range typeParameters.All() {
 			if tp.IsNil() {
 				continue
 			}
@@ -252,9 +252,9 @@ func (f *missingMemberFixer) createSignatureDeclarationFromSignature(signature *
 		typeParameters = f.changeTracker.NodeFactory.NewNodeList(nodes)
 	}
 
-	if parameters != nil {
-		nodes := make([]ast.Node, 0, len(parameters.Nodes()))
-		for _, p := range parameters.Nodes() {
+	if !parameters.IsNil() {
+		nodes := make([]ast.Node, 0, parameters.Len())
+		for _, p := range parameters.All() {
 			if p.IsNil() {
 				continue
 			}
@@ -302,7 +302,7 @@ func (f *missingMemberFixer) createSignatureDeclarationFromSignature(signature *
 	return ast.Node{}
 }
 
-func (f *missingMemberFixer) createSignatureDeclarationFromSignatures(signatures []*checker.Signature, name ast.PropertyName, optional bool, modifiers *ast.ModifierList, quotePreference lsutil.QuotePreference, body ast.FunctionBody, enclosingDeclaration ast.Node) ast.Node {
+func (f *missingMemberFixer) createSignatureDeclarationFromSignatures(signatures []*checker.Signature, name ast.PropertyName, optional bool, modifiers ast.ModifierList, quotePreference lsutil.QuotePreference, body ast.FunctionBody, enclosingDeclaration ast.Node) ast.Node {
 	if len(signatures) == 0 {
 		return ast.Node{}
 	}
@@ -340,18 +340,20 @@ func (f *missingMemberFixer) createSignatureDeclarationFromSignatures(signatures
 			questionToken = f.changeTracker.NodeFactory.NewToken(ast.KindQuestionToken)
 		}
 
-		parameters.SetNodes(append(parameters.Nodes(), f.changeTracker.NodeFactory.NewParameterDeclaration(
-			nil /*modifiers*/, f.changeTracker.NodeFactory.NewToken(ast.KindDotDotDotToken),
+		withRest := f.changeTracker.NodeFactory.NewNodeList(append(parameters.Slice(), f.changeTracker.NodeFactory.NewParameterDeclaration(
+			ast.ModifierList{} /*modifiers*/, f.changeTracker.NodeFactory.NewToken(ast.KindDotDotDotToken),
 			f.changeTracker.NodeFactory.NewIdentifier(restParameterName), questionToken,
 			f.changeTracker.NodeFactory.NewArrayTypeNode(f.changeTracker.NodeFactory.NewKeywordTypeNode(ast.KindUnknownKeyword)), ast.Node{}, /*initializer*/
 		)))
+		withRest.SetLoc(parameters.Loc())
+		parameters = withRest
 	}
 
 	methodName := core.IfElse(name.IsNil(), f.changeTracker.NodeFactory.NewIdentifier(""), createPropertyName(f.changeTracker.NodeFactory, name, quotePreference))
 
 	return f.changeTracker.NodeFactory.NewMethodDeclaration(
 		modifiers, ast.Node{} /*asteriskToken*/, methodName, core.IfElse(optional, f.changeTracker.NodeFactory.NewToken(ast.KindQuestionToken), ast.Node{}),
-		nil /*typeParameters*/, parameters, f.getReturnTypeFromSignatures(signatures, enclosingDeclaration, nodeBuilder, idToSymbol),
+		ast.TypeParameterList{} /*typeParameters*/, parameters, f.getReturnTypeFromSignatures(signatures, enclosingDeclaration, nodeBuilder, idToSymbol),
 		ast.Node{} /*fullSignature*/, f.createBody(body, quotePreference, false /*signatureOnly*/),
 	)
 }
@@ -440,7 +442,7 @@ func (f *missingMemberFixer) createStubbedMethodBody(quotePreference lsutil.Quot
 	return f.changeTracker.NodeFactory.NewBlock(f.changeTracker.NodeFactory.NewNodeList([]ast.Node{
 		f.changeTracker.NodeFactory.NewThrowStatement(
 			f.changeTracker.NodeFactory.NewNewExpression(
-				f.changeTracker.NodeFactory.NewIdentifier("Error"), nil /*typeArguments*/, f.changeTracker.NodeFactory.NewNodeList([]ast.Node{
+				f.changeTracker.NodeFactory.NewIdentifier("Error"), ast.TypeList{} /*typeArguments*/, f.changeTracker.NodeFactory.NewNodeList([]ast.Node{
 					f.changeTracker.NodeFactory.NewStringLiteral(diagnostics.Method_not_implemented.Localize(f.locale), tokenFlags),
 				}),
 			),
@@ -448,7 +450,7 @@ func (f *missingMemberFixer) createStubbedMethodBody(quotePreference lsutil.Quot
 	}), true /*multiLine*/)
 }
 
-func createDummyParameters(factory *ast.NodeFactory, argCount int, names []string, types []ast.TypeNode, minArgumentCount int, inJS bool) *ast.ParameterList {
+func createDummyParameters(factory *ast.NodeFactory, argCount int, names []string, types []ast.TypeNode, minArgumentCount int, inJS bool) ast.ParameterList {
 	parameters := make([]ast.Node, 0, argCount)
 	parameterNameCounts := make(map[string]int)
 
@@ -481,7 +483,7 @@ func createDummyParameters(factory *ast.NodeFactory, argCount int, names []strin
 			typeNode = factory.NewKeywordTypeNode(ast.KindUnknownKeyword)
 		}
 		parameters = append(parameters,
-			factory.NewParameterDeclaration(nil /*modifiers*/, ast.Node{} /*dotDotDotToken*/, factory.NewIdentifier(parameterName), questionToken, typeNode, ast.Node{} /*initializer*/))
+			factory.NewParameterDeclaration(ast.ModifierList{} /*modifiers*/, ast.Node{} /*dotDotDotToken*/, factory.NewIdentifier(parameterName), questionToken, typeNode, ast.Node{} /*initializer*/))
 	}
 	return factory.NewNodeList(parameters)
 }

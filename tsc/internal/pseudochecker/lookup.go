@@ -183,10 +183,10 @@ func (ch *PseudoChecker) getTypeAnnotationFromAccessor(node ast.Node) ast.Node {
 		return node.AsGetAccessorDeclaration().Type()
 	}
 	set := node.AsSetAccessorDeclaration()
-	if set.Parameters() == nil || len(set.Parameters().Nodes()) < 1 {
+	if set.Parameters().IsNil() || set.Parameters().Len() < 1 {
 		return ast.Node{}
 	}
-	p := set.Parameters().Nodes()[0]
+	p := set.Parameters().At(0)
 	if !ast.IsParameterDeclaration(p) {
 		return ast.Node{}
 	}
@@ -317,11 +317,11 @@ func (ch *PseudoChecker) typeFromObjectLiteral(node ast.ObjectLiteralExpression)
 		return NewPseudoTypeInferredWithErrors(node.AsNode(), false, errorNodes)
 	}
 	// we are in a const context producing an object literal type, there are no shorthand or spread assignments
-	if node.Properties() == nil || len(node.Properties().Nodes()) == 0 {
+	if node.Properties().IsNil() || node.Properties().Len() == 0 {
 		return NewPseudoTypeObjectLiteral(nil)
 	}
-	results := make([]*PseudoObjectElement, 0, len(node.Properties().Nodes()))
-	for _, e := range node.Properties().Nodes() {
+	results := make([]*PseudoObjectElement, 0, node.Properties().Len())
+	for _, e := range node.Properties().All() {
 		switch e.Kind() {
 		case ast.KindMethodDeclaration:
 			optional := !e.AsMethodDeclaration().PostfixToken().IsNil() && e.AsMethodDeclaration().PostfixToken().Kind() == ast.KindQuestionToken
@@ -365,7 +365,7 @@ func (ch *PseudoChecker) getAccessorMember(accessor ast.Node, name ast.Node) *Ps
 
 	// TODO: handle pseudo-annotations from get accessor return positions?
 	if !allAccessors.GetAccessor.IsNil() && !allAccessors.GetAccessor.Type().IsNil() &&
-		!allAccessors.SetAccessor.IsNil() && len(allAccessors.SetAccessor.Parameters().Nodes()) > 0 && !allAccessors.SetAccessor.Parameters().Nodes()[0].AsParameterDeclaration().Type().IsNil() {
+		!allAccessors.SetAccessor.IsNil() && allAccessors.SetAccessor.Parameters().Len() > 0 && !allAccessors.SetAccessor.Parameters().At(0).AsParameterDeclaration().Type().IsNil() {
 		// We have possible types for both accessors, we can't know if they are the same type so we keep both accessors
 
 		if ast.IsGetAccessorDeclaration(accessor) {
@@ -404,11 +404,11 @@ func (ch *PseudoChecker) getAccessorMember(accessor ast.Node, name ast.Node) *Ps
 // Returns nil if the object can be typed, or a slice of error nodes (shorthand/spread properties,
 // non-literal computed names) that prevent typing.
 func (ch *PseudoChecker) canGetTypeFromObjectLiteral(node ast.ObjectLiteralExpression) []ast.Node {
-	if node.Properties() == nil || len(node.Properties().Nodes()) == 0 {
+	if node.Properties().IsNil() || node.Properties().Len() == 0 {
 		return nil // empty object, ok
 	}
 	var errorNodes []ast.Node
-	for _, e := range node.Properties().Nodes() {
+	for _, e := range node.Properties().All() {
 		if e.Flags()&ast.NodeFlagsThisNodeHasError != 0 {
 			errorNodes = append(errorNodes, e)
 			continue
@@ -443,8 +443,8 @@ func (ch *PseudoChecker) typeFromArrayLiteral(node ast.ArrayLiteralExpression) *
 		return NewPseudoTypeInferred(node.AsNode(), false) // expr in an as const cast with a contextual type has variable readonly state, bail
 	}
 	// we are in a const context producing a tuple type, there are no spread elements
-	results := make([]*PseudoType, 0, len(node.Elements().Nodes()))
-	for _, e := range node.Elements().Nodes() {
+	results := make([]*PseudoType, 0, node.Elements().Len())
+	for _, e := range node.Elements().All() {
 		results = append(results, ch.typeFromExpression(e))
 	}
 	return NewPseudoTypeTuple(results)
@@ -458,7 +458,7 @@ func (ch *PseudoChecker) canGetTypeFromArrayLiteral(node ast.ArrayLiteralExpress
 	if !IsInConstContext(node.AsNode()) {
 		return []ast.Node{node.AsNode()}
 	}
-	for _, e := range node.Elements().Nodes() {
+	for _, e := range node.Elements().All() {
 		if e.Kind() == ast.KindSpreadElement {
 			return []ast.Node{e}
 		}
@@ -529,15 +529,15 @@ func (ch *PseudoChecker) typeFromFunctionLikeExpression(node ast.Node) *PseudoTy
 	)
 }
 
-func (ch *PseudoChecker) cloneTypeParameters(nodes *ast.NodeList) []ast.TypeParameterDeclaration {
-	if nodes == nil {
+func (ch *PseudoChecker) cloneTypeParameters(nodes ast.NodeList) []ast.TypeParameterDeclaration {
+	if nodes.IsNil() {
 		return nil
 	}
-	if len(nodes.Nodes()) == 0 {
+	if nodes.Len() == 0 {
 		return nil
 	}
-	result := make([]ast.TypeParameterDeclaration, 0, len(nodes.Nodes()))
-	for _, e := range nodes.Nodes() {
+	result := make([]ast.TypeParameterDeclaration, 0, nodes.Len())
+	for _, e := range nodes.All() {
 		result = append(result, e.AsTypeParameterDeclaration())
 	}
 	return result
@@ -558,9 +558,9 @@ func typeNodeCouldReferToUndefined(node ast.Node) bool {
 	case ast.KindIntersectionType:
 		// TODO: why is this not `core.Every`? strada treated unions and intersections the same, but logically every intersection member needs to contain a possible `undefined`
 		// for the result type to contain `undefined`. Likely a bug persisting from strada.
-		return core.Some(node.AsIntersectionTypeNode().Types().Nodes(), typeNodeCouldReferToUndefined)
+		return core.Some(node.AsIntersectionTypeNode().Types().Slice(), typeNodeCouldReferToUndefined)
 	case ast.KindUnionType:
-		return core.Some(node.AsUnionTypeNode().Types().Nodes(), typeNodeCouldReferToUndefined)
+		return core.Some(node.AsUnionTypeNode().Types().Slice(), typeNodeCouldReferToUndefined)
 	case ast.KindConditionalType: // suspect - should be treated as a union of both branches instead, likely a bug persisted from strada
 		return true
 	case ast.KindTypeOperator: // suspect - always refers to a subset of `string | number | symbol` for `keyof` or `symbol` for `unique`
@@ -684,16 +684,16 @@ func (ch *PseudoChecker) typeFromParameterWorker(node ast.ParameterDeclaration, 
 	return NewPseudoTypeNoResult(node.AsNode())
 }
 
-func (ch *PseudoChecker) cloneParameters(nodes *ast.NodeList) []*PseudoParameter {
-	if nodes == nil {
+func (ch *PseudoChecker) cloneParameters(nodes ast.NodeList) []*PseudoParameter {
+	if nodes.IsNil() {
 		return nil
 	}
-	if len(nodes.Nodes()) == 0 {
+	if nodes.Len() == 0 {
 		return nil
 	}
-	lastRequired := lastRequiredParamIndex(nodes.Nodes())
-	result := make([]*PseudoParameter, 0, len(nodes.Nodes()))
-	for i, e := range nodes.Nodes() {
+	lastRequired := lastRequiredParamIndex(nodes.Slice())
+	result := make([]*PseudoParameter, 0, nodes.Len())
+	for i, e := range nodes.All() {
 		p := e.AsParameterDeclaration()
 		optional := !p.QuestionToken().IsNil()
 		if !optional && !p.Initializer().IsNil() {

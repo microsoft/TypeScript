@@ -338,8 +338,8 @@ func isDefaultImportName(node ast.Node) bool {
 }
 
 func getSourceDefinitionEntryNode(sourceFile *ast.SourceFile) ast.Node {
-	if len(sourceFile.Statements.Nodes()) != 0 {
-		return sourceFile.Statements.Nodes()[0].AsNode()
+	if sourceFile.Statements.Len() != 0 {
+		return sourceFile.Statements.At(0).AsNode()
 	}
 	return sourceFile.AsNode()
 }

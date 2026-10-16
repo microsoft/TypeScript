@@ -82,7 +82,7 @@ func (b *NodeBuilderImpl) expandEnumDecl(symbol *ast.Symbol) ast.Node {
 	if isConstEnumSymbol(symbol) {
 		constModifier = ast.ModifierFlagsConst
 	}
-	var mods *ast.ModifierList
+	var mods ast.ModifierList
 	if constModifier != 0 {
 		mods = b.f.NewModifierList(ast.CreateModifiersFromModifierFlags(constModifier, b.f.NewModifier))
 	}
@@ -179,7 +179,7 @@ func (b *NodeBuilderImpl) expandClassDecl(symbol *ast.Symbol) ast.Node {
 	allMembers = append(allMembers, instanceMembers...)
 	allMembers = append(allMembers, privateMembers...)
 
-	return b.f.NewClassDeclaration(nil, b.f.NewIdentifier(name), b.f.NewNodeList(typeParamDecls), b.f.NewNodeList(heritageClauses), b.f.NewNodeList(allMembers))
+	return b.f.NewClassDeclaration(ast.ModifierList{}, b.f.NewIdentifier(name), b.f.NewNodeList(typeParamDecls), b.f.NewNodeList(heritageClauses), b.f.NewNodeList(allMembers))
 }
 
 // addClassModifiers post-processes class member nodes to add class-specific modifiers
@@ -269,7 +269,7 @@ func (b *NodeBuilderImpl) expandInterfaceDecl(symbol *ast.Symbol) ast.Node {
 	// Heritage clauses
 	heritageClauses := b.hoverHeritageClauses(interfaceDeclarations)
 
-	return b.f.NewInterfaceDeclaration(nil, b.f.NewIdentifier(name), b.f.NewNodeList(typeParamDecls), b.f.NewNodeList(heritageClauses), b.f.NewNodeList(members))
+	return b.f.NewInterfaceDeclaration(ast.ModifierList{}, b.f.NewIdentifier(name), b.f.NewNodeList(typeParamDecls), b.f.NewNodeList(heritageClauses), b.f.NewNodeList(members))
 }
 
 func (b *NodeBuilderImpl) hoverHeritageClauses(declarations []ast.Node) []ast.Node {
@@ -304,7 +304,7 @@ func (b *NodeBuilderImpl) serializePropertiesWithTruncation(properties []*ast.Sy
 		if b.checkTruncationLengthIfExpanding() && (i+3 < len(properties)-1) {
 			b.ctx.expansionTruncated = true
 			text := fmt.Sprintf("... %d more ...", len(properties)-i-1)
-			elements = append(elements, b.f.NewPropertySignatureDeclaration(nil, b.f.NewIdentifier(text), ast.Node{}, ast.Node{}, ast.Node{}))
+			elements = append(elements, b.f.NewPropertySignatureDeclaration(ast.ModifierList{}, b.f.NewIdentifier(text), ast.Node{}, ast.Node{}, ast.Node{}))
 			elements = b.addPropertyToElementList(properties[len(properties)-1], elements)
 			break
 		}
@@ -322,7 +322,7 @@ func (b *NodeBuilderImpl) serializeConstructors(staticType *Type, staticBaseType
 	if isNonConstructable {
 		b.ctx.approximateLength += 21
 		modifiers := ast.CreateModifiersFromModifierFlags(ast.ModifierFlagsPrivate, b.f.NewModifier)
-		return []ast.Node{b.f.NewConstructorDeclaration(b.f.NewModifierList(modifiers), nil, b.f.NewNodeList(nil), ast.Node{}, ast.Node{}, ast.Node{})}
+		return []ast.Node{b.f.NewConstructorDeclaration(b.f.NewModifierList(modifiers), ast.TypeParameterList{}, b.f.NewNodeList(nil), ast.Node{}, ast.Node{}, ast.Node{})}
 	}
 	signatures := b.ch.getSignaturesOfType(staticType, SignatureKindConstruct)
 	if staticBaseType != nil {
@@ -351,7 +351,7 @@ func (b *NodeBuilderImpl) serializeConstructors(staticType *Type, staticBaseType
 		if privateProtected != 0 {
 			return []ast.Node{b.f.NewConstructorDeclaration(
 				b.f.NewModifierList(ast.CreateModifiersFromModifierFlags(privateProtected, b.f.NewModifier)),
-				nil, b.f.NewNodeList(nil), ast.Node{}, ast.Node{}, ast.Node{},
+				ast.TypeParameterList{}, b.f.NewNodeList(nil), ast.Node{}, ast.Node{}, ast.Node{},
 			)}
 		}
 	} else if core.Every(signatures, func(sig *Signature) bool { return len(sig.parameters) == 0 }) {
@@ -398,7 +398,7 @@ func (b *NodeBuilderImpl) serializeNamespaceMember(resolved *ast.Symbol, name st
 		t := b.ch.getWidenedType(b.ch.getTypeOfSymbol(resolved))
 		b.ctx.approximateLength += len(name) + 5
 		return b.f.NewVariableStatement(
-			nil,
+			ast.ModifierList{},
 			b.f.NewVariableDeclarationList(
 				b.f.NewNodeList([]ast.Node{
 					b.f.NewVariableDeclaration(b.f.NewIdentifier(name), ast.Node{}, b.serializeTypeForDeclaration(ast.Node{}, t, resolved, true), ast.Node{}),
@@ -458,7 +458,7 @@ func (b *NodeBuilderImpl) expandModuleDecl(symbol *ast.Symbol) ast.Node {
 					if emittedLocals.AddIfAbsent(target) {
 						localType := b.ch.getWidenedType(b.ch.getTypeOfSymbol(target))
 						b.ctx.approximateLength += len(target.Name()) + 5
-						localStmt := b.f.NewVariableStatement(nil,
+						localStmt := b.f.NewVariableStatement(ast.ModifierList{},
 							b.f.NewVariableDeclarationList(b.f.NewNodeList([]ast.Node{
 								b.f.NewVariableDeclaration(b.f.NewIdentifier(target.Name()), ast.Node{}, b.serializeTypeForDeclaration(ast.Node{}, localType, target, true), ast.Node{}),
 							}), ast.NodeFlagsLet))
@@ -472,7 +472,7 @@ func (b *NodeBuilderImpl) expandModuleDecl(symbol *ast.Symbol) ast.Node {
 					propertyName = b.f.NewIdentifier(targetName)
 				}
 				stmt := b.f.NewExportDeclaration(
-					nil, false,
+					ast.ModifierList{}, false,
 					b.f.NewNamedExports(b.f.NewNodeList([]ast.Node{
 						b.f.NewExportSpecifier(false, propertyName, b.f.NewIdentifier(m.Name())),
 					})),
@@ -500,7 +500,7 @@ func (b *NodeBuilderImpl) expandModuleDecl(symbol *ast.Symbol) ast.Node {
 			merged := b.ch.getMergedSymbol(resolved)
 			hasModuleExports := merged.Flags()&(ast.SymbolFlagsValueModule|ast.SymbolFlagsNamespaceModule) != 0 && merged.Exports() != nil && len(merged.Exports()) != 0
 			if !hasModuleExports {
-				bodyStmts = append(bodyStmts, hoverStatement{node: b.f.NewModuleDeclaration(nil, ast.KindNamespaceKeyword, b.f.NewIdentifier(m.Name()), ast.Node{} /*attributes*/, b.f.NewModuleBlock(b.f.NewNodeList(nil)))})
+				bodyStmts = append(bodyStmts, hoverStatement{node: b.f.NewModuleDeclaration(ast.ModifierList{}, ast.KindNamespaceKeyword, b.f.NewIdentifier(m.Name()), ast.Node{} /*attributes*/, b.f.NewModuleBlock(b.f.NewNodeList(nil)))})
 			}
 			continue
 		}
@@ -551,7 +551,7 @@ func (b *NodeBuilderImpl) expandModuleDecl(symbol *ast.Symbol) ast.Node {
 		attributes = b.f.DeepCloneNode(declaration.AsModuleDeclaration().Attributes())
 		b.e.SetEmitFlags(attributes, printer.EFSingleLine)
 	}
-	return b.f.NewModuleDeclaration(nil, keyword, localName, attributes, b.f.NewModuleBlock(b.f.NewNodeList(bodyStatements)))
+	return b.f.NewModuleDeclaration(ast.ModifierList{}, keyword, localName, attributes, b.f.NewModuleBlock(b.f.NewNodeList(bodyStatements)))
 }
 
 // serializeTypeAliasForNamespace produces a TypeAliasDeclaration for a type alias inside a namespace body.
@@ -564,7 +564,7 @@ func (b *NodeBuilderImpl) serializeTypeAliasForNamespace(symbol *ast.Symbol, nam
 	typeNode := b.typeToTypeNode(aliasType)
 	restoreFlags()
 	b.ctx.approximateLength += 8 + len(name)
-	return b.f.NewTypeAliasDeclaration(nil, b.f.NewIdentifier(name), b.f.NewNodeList(typeParamDecls), typeNode)
+	return b.f.NewTypeAliasDeclaration(ast.ModifierList{}, b.f.NewIdentifier(name), b.f.NewNodeList(typeParamDecls), typeNode)
 }
 
 // filterInheritedProperties removes properties already present in base types.

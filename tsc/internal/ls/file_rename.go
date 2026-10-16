@@ -160,7 +160,7 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 					if !ast.IsArrayLiteralExpression(pathsProperty.Initializer()) {
 						return
 					}
-					for _, element := range pathsProperty.Initializer().Elements() {
+					for _, element := range pathsProperty.Initializer().ElementList().All() {
 						tryUpdateConfigString(configFile, configDir, element, changeTracker, oldToNew, l.converters, l.CaseSensitivity())
 					}
 				})
@@ -359,8 +359,8 @@ func createStringTextRange(sourceFile *ast.SourceFile, node ast.LiteralLikeNode)
 }
 
 func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) ast.ObjectLiteralExpression {
-	if tsConfigSourceFile != nil && tsConfigSourceFile.Statements != nil && len(tsConfigSourceFile.Statements.Nodes()) > 0 {
-		expression := tsConfigSourceFile.Statements.Nodes()[0].Expression()
+	if tsConfigSourceFile != nil && !tsConfigSourceFile.Statements.IsNil() && tsConfigSourceFile.Statements.Len() > 0 {
+		expression := tsConfigSourceFile.Statements.At(0).Expression()
 		if ast.IsObjectLiteralExpression(expression) {
 			return expression.AsObjectLiteralExpression()
 		}
@@ -372,7 +372,7 @@ func forEachObjectProperty(objectLiteral ast.ObjectLiteralExpression, cb func(pr
 	if objectLiteral.IsNil() {
 		return
 	}
-	for _, property := range objectLiteral.Properties().Nodes() {
+	for _, property := range objectLiteral.Properties().All() {
 		if !ast.IsPropertyAssignment(property) {
 			continue
 		}

@@ -470,7 +470,7 @@ func (tx *esDecoratorTransformer) createHelperVariable(node ast.Node, suffix str
 
 func (tx *esDecoratorTransformer) createLet(name ast.IdentifierNode, initializer ast.Expression) ast.Statement {
 	return tx.Factory().NewVariableStatement(
-		nil,
+		ast.ModifierList{},
 		tx.Factory().NewVariableDeclarationList(
 			tx.Factory().NewNodeList([]ast.Node{
 				tx.Factory().NewVariableDeclaration(name, ast.Node{}, ast.Node{}, initializer),
@@ -506,7 +506,7 @@ func (tx *esDecoratorTransformer) createClassInfo(node ast.Node) *classInfo {
 		ci.classThis = f.NewUniqueNameEx("_classThis", printer.AutoGenerateOptions{Flags: flags})
 	}
 
-	for _, member := range node.Members() {
+	for _, member := range node.MemberList().All() {
 		if ast.IsMethodOrAccessor(member) && ast.NodeOrChildIsDecorated(false, member, node, ast.Node{}) {
 			if ast.HasStaticModifier(member) {
 				if ci.staticMethodExtraInitializersName.IsNil() {
@@ -592,7 +592,7 @@ func (tx *esDecoratorTransformer) transformClassLike(node ast.Node) ast.Expressi
 	var leadingBlockStatements []ast.Statement
 	var trailingBlockStatements []ast.Statement
 	var syntheticConstructor ast.Node
-	var heritageClauses *ast.NodeList
+	var heritageClauses ast.NodeList
 	shouldTransformPrivateStaticElementsInClass := false
 
 	// 1. Class decorators are evaluated outside the private name scope of the class.
@@ -640,8 +640,8 @@ func (tx *esDecoratorTransformer) transformClassLike(node ast.Node) ast.Expressi
 	var extendsElement ast.Node
 	if !extendsClause.IsNil() {
 		hc := extendsClause.AsHeritageClause()
-		if hc.Types() != nil && len(hc.Types().Nodes()) > 0 {
-			extendsElement = hc.Types().Nodes()[0]
+		if !hc.Types().IsNil() && hc.Types().Len() > 0 {
+			extendsElement = hc.Types().At(0)
 		}
 	}
 	var extendsExpression ast.Expression
@@ -669,7 +669,7 @@ func (tx *esDecoratorTransformer) transformClassLike(node ast.Node) ast.Expressi
 		}
 		classDefinitionStatements = append(classDefinitionStatements, tx.createLet(ci.classSuper, safeExtendsExpression))
 
-		updatedExtendsElement := f.UpdateExpressionWithTypeArguments(extendsElement.AsExpressionWithTypeArguments(), ci.classSuper, nil)
+		updatedExtendsElement := f.UpdateExpressionWithTypeArguments(extendsElement.AsExpressionWithTypeArguments(), ci.classSuper, ast.TypeList{})
 		hc := extendsClause.AsHeritageClause()
 		updatedExtendsClause := f.UpdateHeritageClause(hc, hc.Token(), f.NewNodeList([]ast.Node{updatedExtendsElement}))
 		heritageClauses = f.NewNodeList([]ast.Node{updatedExtendsClause})
@@ -738,12 +738,12 @@ func (tx *esDecoratorTransformer) transformClassLike(node ast.Node) ast.Expressi
 			constructorStatements := []ast.Statement{}
 			if isDerivedClass {
 				spreadArguments := f.NewSpreadElement(f.NewIdentifier("arguments"))
-				superCall := f.NewCallExpression(f.NewKeywordExpression(ast.KindSuperKeyword), ast.Node{}, nil, f.NewNodeList([]ast.Expression{spreadArguments}), ast.NodeFlagsNone)
+				superCall := f.NewCallExpression(f.NewKeywordExpression(ast.KindSuperKeyword), ast.Node{}, ast.TypeList{}, f.NewNodeList([]ast.Expression{spreadArguments}), ast.NodeFlagsNone)
 				constructorStatements = append(constructorStatements, f.NewExpressionStatement(superCall))
 			}
 			constructorStatements = append(constructorStatements, initializerStatements...)
 			constructorBody := f.NewBlock(f.NewNodeList(constructorStatements), true)
-			syntheticConstructor = f.NewConstructorDeclaration(nil, nil, f.NewNodeList(nil), ast.Node{}, ast.Node{}, constructorBody)
+			syntheticConstructor = f.NewConstructorDeclaration(ast.ModifierList{}, ast.TypeParameterList{}, f.NewNodeList(nil), ast.Node{}, ast.Node{}, constructorBody)
 		}
 	}
 
@@ -788,7 +788,7 @@ func (tx *esDecoratorTransformer) transformClassLike(node ast.Node) ast.Expressi
 	// produces:
 	//   __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata }, null, _classExtraInitializers);
 	if !ci.classDescriptorName.IsNil() && !ci.classDecoratorsName.IsNil() && !ci.classExtraInitializersName.IsNil() && !ci.classThis.IsNil() {
-		valueProperty := f.NewPropertyAssignment(nil, f.NewIdentifier("value"), ast.Node{}, ast.Node{}, renamedClassThis)
+		valueProperty := f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("value"), ast.Node{}, ast.Node{}, renamedClassThis)
 		classDescriptor := f.NewObjectLiteralExpression(f.NewNodeList([]ast.Node{valueProperty}), false)
 		classDescriptorAssignment := f.NewAssignmentExpression(ci.classDescriptorName, classDescriptor)
 		classNameReference := f.NewPropertyAccessExpression(renamedClassThis, ast.Node{}, f.NewIdentifier("name"), ast.NodeFlagsNone)
@@ -858,7 +858,7 @@ func (tx *esDecoratorTransformer) transformClassLike(node ast.Node) ast.Expressi
 	var leadingStaticBlock ast.Node
 	if len(leadingBlockStatements) > 0 {
 		leadingStaticBlock = f.NewClassStaticBlockDeclaration(
-			nil,
+			ast.ModifierList{},
 			f.NewBlock(f.NewNodeList(leadingBlockStatements), true),
 		)
 	}
@@ -880,18 +880,18 @@ func (tx *esDecoratorTransformer) transformClassLike(node ast.Node) ast.Expressi
 	var trailingStaticBlock ast.Node
 	if len(trailingBlockStatements) > 0 {
 		trailingStaticBlock = f.NewClassStaticBlockDeclaration(
-			nil,
+			ast.ModifierList{},
 			f.NewBlock(f.NewNodeList(trailingBlockStatements), true),
 		)
 	}
 
 	// Assemble new members list
 	if !leadingStaticBlock.IsNil() || !syntheticConstructor.IsNil() || !trailingStaticBlock.IsNil() {
-		newMembers := make([]ast.Node, 0, len(members.Nodes())+3)
+		newMembers := make([]ast.Node, 0, members.Len()+3)
 
 		// Find the existing NamedEvaluation helper block index
 		existingNamedEvaluationHelperBlockIndex := -1
-		for i, m := range members.Nodes() {
+		for i, m := range members.All() {
 			if isClassNamedEvaluationHelperBlock(ec, m) {
 				existingNamedEvaluationHelperBlockIndex = i
 				break
@@ -901,11 +901,11 @@ func (tx *esDecoratorTransformer) transformClassLike(node ast.Node) ast.Expressi
 		// add the leading `static {}` block
 		if !leadingStaticBlock.IsNil() {
 			// add the `static {}` block after any existing NamedEvaluation helper block, if one exists.
-			newMembers = append(newMembers, members.Nodes()[:existingNamedEvaluationHelperBlockIndex+1]...)
+			newMembers = append(newMembers, members.Slice()[:existingNamedEvaluationHelperBlockIndex+1]...)
 			newMembers = append(newMembers, leadingStaticBlock)
-			newMembers = append(newMembers, members.Nodes()[existingNamedEvaluationHelperBlockIndex+1:]...)
+			newMembers = append(newMembers, members.Slice()[existingNamedEvaluationHelperBlockIndex+1:]...)
 		} else {
-			newMembers = append(newMembers, members.Nodes()...)
+			newMembers = append(newMembers, members.Slice()...)
 		}
 
 		// append the synthetic constructor, if necessary
@@ -927,7 +927,7 @@ func (tx *esDecoratorTransformer) transformClassLike(node ast.Node) ast.Expressi
 
 	var classExpression ast.Node
 	if len(classDecorators) > 0 {
-		classExpression = f.NewClassExpression(nil, ast.Node{}, nil, heritageClauses, members)
+		classExpression = f.NewClassExpression(ast.ModifierList{}, ast.Node{}, ast.TypeParameterList{}, heritageClauses, members)
 		ec.SetOriginal(classExpression, node)
 		if !ci.classThis.IsNil() {
 			classExpression = injectClassThisAssignmentIfMissing(ec, f, classExpression, ci.classThis)
@@ -965,20 +965,20 @@ func (tx *esDecoratorTransformer) transformClassLike(node ast.Node) ast.Expressi
 		}
 		classDefinitionStatements = append(
 			classDefinitionStatements,
-			f.NewVariableStatement(nil, classReferenceVarDeclList),
+			f.NewVariableStatement(ast.ModifierList{}, classReferenceVarDeclList),
 			f.NewReturnStatement(returnExpr),
 		)
 	} else {
 		// produces:
 		//   return <classExpression>;
-		classExpression = f.NewClassExpression(nil, node.Name(), nil, heritageClauses, members)
+		classExpression = f.NewClassExpression(ast.ModifierList{}, node.Name(), ast.TypeParameterList{}, heritageClauses, members)
 		ec.SetOriginal(classExpression, node)
 		classDefinitionStatements = append(classDefinitionStatements, f.NewReturnStatement(classExpression))
 	}
 
 	if shouldTransformPrivateStaticElementsInClass {
 		ec.AddEmitFlags(classExpression, printer.EFTransformPrivateStaticElements)
-		for _, member := range classExpression.Members() {
+		for _, member := range classExpression.MemberList().All() {
 			if (ast.IsPrivateIdentifierClassElementDeclaration(member) || ast.IsAutoAccessorPropertyDeclaration(member)) && ast.HasStaticModifier(member) {
 				ec.AddEmitFlags(member, printer.EFTransformPrivateStaticElements)
 			}
@@ -1050,7 +1050,7 @@ func (tx *esDecoratorTransformer) visitClassDeclaration(node ast.ClassDeclaratio
 				varDecl := f.NewVariableDeclaration(f.GetLocalName(classNode), ast.Node{}, ast.Node{}, iife)
 				ec.SetOriginal(varDecl, classNode)
 				varDecls := f.NewVariableDeclarationList(f.NewNodeList([]ast.Node{varDecl}), ast.NodeFlagsLet)
-				varStatement := f.NewVariableStatement(nil, varDecls)
+				varStatement := f.NewVariableStatement(ast.ModifierList{}, varDecls)
 				statements = append(statements, varStatement)
 
 				exportStatement := f.NewExportDefault(f.GetDeclarationName(classNode))
@@ -1101,7 +1101,7 @@ func (tx *esDecoratorTransformer) visitClassDeclaration(node ast.ClassDeclaratio
 	tx.enterClass(nil)
 	members := tx.classElementVisitor.VisitNodes(node.Members())
 	tx.exitClass()
-	return tx.Factory().UpdateClassDeclaration(node, modifiers, node.Name(), nil, heritageClauses, members)
+	return tx.Factory().UpdateClassDeclaration(node, modifiers, node.Name(), ast.TypeParameterList{}, heritageClauses, members)
 }
 
 func (tx *esDecoratorTransformer) visitClassExpression(node ast.ClassExpression) ast.Node {
@@ -1116,7 +1116,7 @@ func (tx *esDecoratorTransformer) visitClassExpression(node ast.ClassExpression)
 	tx.enterClass(nil)
 	members := tx.classElementVisitor.VisitNodes(node.Members())
 	tx.exitClass()
-	return tx.Factory().UpdateClassExpression(node, modifiers, node.Name(), nil, heritageClauses, members)
+	return tx.Factory().UpdateClassExpression(node, modifiers, node.Name(), ast.TypeParameterList{}, heritageClauses, members)
 }
 
 func (tx *esDecoratorTransformer) prepareConstructor(ci *classInfo) []ast.Statement {
@@ -1149,7 +1149,7 @@ func (tx *esDecoratorTransformer) transformConstructorBodyWorker(statementsOut [
 		// Recurse into try block
 		tryBlockNode := superStatement.AsTryStatement().TryBlock()
 		tryBlock := tryBlockNode.AsBlock()
-		tryBlockStatements := tx.transformConstructorBodyWorker(nil, tryBlock.Statements().Nodes(), 0, superPath, superPathDepth+1, initializerStatements)
+		tryBlockStatements := tx.transformConstructorBodyWorker(nil, tryBlock.Statements().Slice(), 0, superPath, superPathDepth+1, initializerStatements)
 
 		newTryBlock := tx.Factory().NewBlock(tx.Factory().NewNodeList(tryBlockStatements), true)
 		// Use the original try block's range even though the statements may differ due to
@@ -1194,7 +1194,7 @@ func (tx *esDecoratorTransformer) visitConstructorDeclaration(node ast.Node) ast
 		initializerStatements := tx.prepareConstructor(tx.classInfoStack)
 		if len(initializerStatements) > 0 {
 			stmts := []ast.Statement{}
-			prologue, rest := tx.Factory().SplitStandardPrologue(ctor.Body().AsBlock().Statements().Nodes())
+			prologue, rest := tx.Factory().SplitStandardPrologue(ctor.Body().AsBlock().Statements().Slice())
 			stmts = append(stmts, prologue...)
 
 			superStatementIndices := transformers.FindSuperStatementIndexPath(rest, 0)
@@ -1216,7 +1216,7 @@ func (tx *esDecoratorTransformer) visitConstructorDeclaration(node ast.Node) ast
 		body = tx.Visitor().VisitNode(ctor.Body().AsNode())
 	}
 	tx.exitClassElement()
-	return tx.Factory().UpdateConstructorDeclaration(ctor, modifiers, nil, parameters, ast.Node{}, ast.Node{}, body)
+	return tx.Factory().UpdateConstructorDeclaration(ctor, modifiers, ast.TypeParameterList{}, parameters, ast.Node{}, ast.Node{}, body)
 }
 
 func (tx *esDecoratorTransformer) finishClassElement(updated ast.Node, original ast.Node) ast.Node {
@@ -1230,7 +1230,7 @@ func (tx *esDecoratorTransformer) finishClassElement(updated ast.Node, original 
 }
 
 type partialResult struct {
-	modifiers             *ast.ModifierList
+	modifiers             ast.ModifierList
 	referencedName        ast.Expression
 	name                  ast.Node
 	initializersName      ast.IdentifierNode
@@ -1239,7 +1239,7 @@ type partialResult struct {
 	thisArg               ast.IdentifierNode
 }
 
-type createDescriptorFunc func(member ast.Node, modifiers *ast.ModifierList) ast.Expression
+type createDescriptorFunc func(member ast.Node, modifiers ast.ModifierList) ast.Expression
 
 func (tx *esDecoratorTransformer) partialTransformClassElement(member ast.Node, ci *classInfo, createDescriptor createDescriptorFunc) partialResult {
 	f := tx.Factory()
@@ -1402,7 +1402,7 @@ func (tx *esDecoratorTransformer) partialTransformClassElement(member ast.Node, 
 
 			var descriptorArg ast.Expression
 			if ast.IsPrivateIdentifierClassElementDeclaration(member) && ast.HasAccessorModifier(member) && createDescriptor != nil {
-				descriptor := createDescriptor(member, nil)
+				descriptor := createDescriptor(member, ast.ModifierList{})
 				mi.memberDescriptorName = tx.createHelperVariable(member, "descriptor")
 				result.descriptorName = mi.memberDescriptorName
 				descriptorArg = f.NewAssignmentExpression(mi.memberDescriptorName, descriptor)
@@ -1433,7 +1433,7 @@ func (tx *esDecoratorTransformer) partialTransformClassElement(member ast.Node, 
 		tx.exitName()
 	}
 
-	if (modifiers == nil || len(modifiers.Nodes()) == 0) && (ast.IsMethodDeclaration(member) || ast.IsPropertyDeclaration(member)) {
+	if (modifiers.IsNil() || modifiers.Len() == 0) && (ast.IsMethodDeclaration(member) || ast.IsPropertyDeclaration(member)) {
 		// Don't emit leading comments on the name for methods and properties without modifiers, otherwise we
 		// will end up printing duplicate comments.
 		ec.SetEmitFlags(result.name, printer.EFNoLeadingComments)
@@ -1474,7 +1474,7 @@ func (tx *esDecoratorTransformer) visitMethodDeclaration(node ast.Node) ast.Node
 	tx.exitClassElement()
 	method := node.AsMethodDeclaration()
 	return tx.finishClassElement(
-		tx.Factory().UpdateMethodDeclaration(method, result.modifiers, method.AsteriskToken(), result.name, ast.Node{}, nil, parameters, ast.Node{}, ast.Node{}, body),
+		tx.Factory().UpdateMethodDeclaration(method, result.modifiers, method.AsteriskToken(), result.name, ast.Node{}, ast.TypeParameterList{}, parameters, ast.Node{}, ast.Node{}, body),
 		node,
 	)
 }
@@ -1491,7 +1491,7 @@ func (tx *esDecoratorTransformer) visitGetAccessorDeclaration(node ast.Node) ast
 	tx.exitClassElement()
 	accessor := node.AsGetAccessorDeclaration()
 	return tx.finishClassElement(
-		tx.Factory().UpdateGetAccessorDeclaration(accessor, result.modifiers, result.name, nil, parameters, ast.Node{}, ast.Node{}, body),
+		tx.Factory().UpdateGetAccessorDeclaration(accessor, result.modifiers, result.name, ast.TypeParameterList{}, parameters, ast.Node{}, ast.Node{}, body),
 		node,
 	)
 }
@@ -1508,7 +1508,7 @@ func (tx *esDecoratorTransformer) visitSetAccessorDeclaration(node ast.Node) ast
 	tx.exitClassElement()
 	accessor := node.AsSetAccessorDeclaration()
 	return tx.finishClassElement(
-		tx.Factory().UpdateSetAccessorDeclaration(accessor, result.modifiers, result.name, nil, parameters, ast.Node{}, ast.Node{}, body),
+		tx.Factory().UpdateSetAccessorDeclaration(accessor, result.modifiers, result.name, ast.TypeParameterList{}, parameters, ast.Node{}, ast.Node{}, body),
 		node,
 	)
 }
@@ -1540,10 +1540,10 @@ func (tx *esDecoratorTransformer) visitClassStaticBlockDeclaration(node ast.Node
 		if len(varStatements) > 0 {
 			// Inject var declarations at the start of the static block's body
 			blockBody := result.AsClassStaticBlockDeclaration().Body().AsBlock()
-			newStmts := make([]ast.Statement, 0, len(varStatements)+len(blockBody.Statements().Nodes()))
+			newStmts := make([]ast.Statement, 0, len(varStatements)+blockBody.Statements().Len())
 			newStmts = append(newStmts, varStatements...)
-			newStmts = append(newStmts, blockBody.Statements().Nodes()...)
-			result = f.NewClassStaticBlockDeclaration(nil, f.NewBlock(f.NewNodeList(newStmts), blockBody.MultiLine()))
+			newStmts = append(newStmts, blockBody.Statements().Slice()...)
+			result = f.NewClassStaticBlockDeclaration(ast.ModifierList{}, f.NewBlock(f.NewNodeList(newStmts), blockBody.MultiLine()))
 		}
 		if tx.classInfoStack != nil {
 			tx.classInfoStack.hasStaticInitializers = true
@@ -1558,7 +1558,7 @@ func (tx *esDecoratorTransformer) visitClassStaticBlockDeclaration(node ast.Node
 					stmts = append(stmts, initStmt)
 				}
 				body := f.NewBlock(f.NewNodeList(stmts), true)
-				staticBlock := f.NewClassStaticBlockDeclaration(nil, body)
+				staticBlock := f.NewClassStaticBlockDeclaration(ast.ModifierList{}, body)
 				tx.classInfoStack.pendingStaticInitializers = nil
 				// Return both the new static block and the original
 				tx.exitClassElement()
@@ -1733,7 +1733,7 @@ func (tx *esDecoratorTransformer) visitCallExpression(node ast.Node) ast.Node {
 	if ast.IsSuperProperty(call.Expression()) && !tx.classThis.IsNil() {
 		expression := tx.Visitor().VisitNode(call.Expression())
 		argumentsList := tx.Visitor().VisitNodes(call.Arguments())
-		invocation := tx.Factory().NewFunctionCallCall(expression, tx.classThis, argumentsList.Nodes())
+		invocation := tx.Factory().NewFunctionCallCall(expression, tx.classThis, argumentsList.Slice())
 		tx.EmitContext().SetOriginal(invocation, node)
 		invocation.SetLoc(node.Loc())
 		return invocation
@@ -1749,7 +1749,7 @@ func (tx *esDecoratorTransformer) visitTaggedTemplateExpression(node ast.Node) a
 		tx.EmitContext().SetOriginal(boundTag, node)
 		boundTag.SetLoc(node.Loc())
 		template := tx.Visitor().VisitNode(tte.Template())
-		return tx.Factory().UpdateTaggedTemplateExpression(tte, boundTag, ast.Node{}, nil, template, tte.Flags())
+		return tx.Factory().UpdateTaggedTemplateExpression(tte, boundTag, ast.Node{}, ast.TypeList{}, template, tte.Flags())
 	}
 	return tx.Visitor().VisitEachChild(node)
 }
@@ -1804,7 +1804,7 @@ func (tx *esDecoratorTransformer) visitParameterDeclaration(node ast.ParameterDe
 
 	updated := tx.Factory().UpdateParameterDeclaration(
 		node,
-		nil, // modifiers - strip all modifiers (including decorators)
+		ast.ModifierList{}, // modifiers - strip all modifiers (including decorators)
 		node.DotDotDotToken(),
 		tx.Visitor().VisitNode(node.Name()),
 		ast.Node{}, // questionToken
@@ -1914,7 +1914,7 @@ func (tx *esDecoratorTransformer) visitBinaryExpression(node ast.Node, discarded
 	if ast.IsDestructuringAssignment(node) {
 		left := tx.visitAssignmentPattern(bin.Left())
 		right := tx.Visitor().VisitNode(bin.Right())
-		return f.UpdateBinaryExpression(bin, nil, left, ast.Node{}, bin.OperatorToken(), right)
+		return f.UpdateBinaryExpression(bin, ast.ModifierList{}, left, ast.Node{}, bin.OperatorToken(), right)
 	}
 
 	if ast.IsAssignmentExpression(node, false) {
@@ -1973,7 +1973,7 @@ func (tx *esDecoratorTransformer) visitBinaryExpression(node ast.Node, discarded
 					ec.SetOriginal(superPropertyGet, bin.Left())
 					superPropertyGet.SetLoc(bin.Left().Loc())
 					expression = f.AsNodeFactory().NewBinaryExpression(
-						nil,
+						ast.ModifierList{},
 						superPropertyGet,
 						ast.Node{},
 						f.NewToken(transformers.GetNonAssignmentOperatorForCompoundAssignment(bin.OperatorToken().Kind())),
@@ -2010,7 +2010,7 @@ func (tx *esDecoratorTransformer) visitBinaryExpression(node ast.Node, discarded
 		} else {
 			right = tx.Visitor().VisitNode(bin.Right())
 		}
-		return f.UpdateBinaryExpression(bin, nil, left, ast.Node{}, bin.OperatorToken(), right)
+		return f.UpdateBinaryExpression(bin, ast.ModifierList{}, left, ast.Node{}, bin.OperatorToken(), right)
 	}
 
 	return tx.Visitor().VisitEachChild(node)
@@ -2182,7 +2182,7 @@ func (tx *esDecoratorTransformer) visitAssignmentElement(node ast.Node) ast.Node
 		}
 		assignmentTarget := tx.visitDestructuringAssignmentTarget(bin.Left())
 		initializer := tx.Visitor().VisitNode(bin.Right())
-		return f.UpdateBinaryExpression(bin, nil, assignmentTarget, ast.Node{}, bin.OperatorToken(), initializer)
+		return f.UpdateBinaryExpression(bin, ast.ModifierList{}, assignmentTarget, ast.Node{}, bin.OperatorToken(), initializer)
 	}
 	return tx.visitDestructuringAssignmentTarget(node)
 }
@@ -2225,11 +2225,11 @@ func (tx *esDecoratorTransformer) visitAssignmentPropertyNode(node ast.Node) ast
 	name := tx.Visitor().VisitNode(pa.Name())
 	if ast.IsAssignmentExpression(pa.Initializer(), true /*excludeCompoundAssignment*/) {
 		assignmentElement := tx.visitAssignmentElement(pa.Initializer())
-		return f.UpdatePropertyAssignment(pa, nil, name, ast.Node{}, ast.Node{}, assignmentElement)
+		return f.UpdatePropertyAssignment(pa, ast.ModifierList{}, name, ast.Node{}, ast.Node{}, assignmentElement)
 	}
 	if ast.IsLeftHandSideExpression(pa.Initializer()) {
 		assignmentElement := tx.visitDestructuringAssignmentTarget(pa.Initializer())
-		return f.UpdatePropertyAssignment(pa, nil, name, ast.Node{}, ast.Node{}, assignmentElement)
+		return f.UpdatePropertyAssignment(pa, ast.ModifierList{}, name, ast.Node{}, ast.Node{}, assignmentElement)
 	}
 	return tx.Visitor().VisitEachChild(node)
 }
@@ -2462,10 +2462,10 @@ func (tx *esDecoratorTransformer) shouldBeCapturedInTempVariable(node ast.Expres
 func (tx *esDecoratorTransformer) createDescriptorMethod(
 	original ast.Node,
 	name ast.Node, // PrivateIdentifier
-	modifiers *ast.ModifierList,
+	modifiers ast.ModifierList,
 	asteriskToken ast.TokenNode,
 	kind string,
-	parameters *ast.NodeList,
+	parameters ast.NodeList,
 	body ast.Node,
 ) ast.Node {
 	f := tx.Factory()
@@ -2478,8 +2478,8 @@ func (tx *esDecoratorTransformer) createDescriptorMethod(
 	funcExpr := f.NewFunctionExpression(
 		modifiers,
 		asteriskToken,
-		ast.Node{}, // name
-		nil,        // typeParameters
+		ast.Node{},              // name
+		ast.TypeParameterList{}, // typeParameters
 		parameters,
 		ast.Node{}, // type
 		ast.Node{}, // fullSignature
@@ -2496,7 +2496,7 @@ func (tx *esDecoratorTransformer) createDescriptorMethod(
 	functionName := f.NewStringLiteralFromNode(name)
 	namedFunction := f.NewSetFunctionNameHelper(funcExpr, functionName, prefix)
 
-	method := f.NewPropertyAssignment(nil, f.NewIdentifier(kind), ast.Node{}, ast.Node{}, namedFunction)
+	method := f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier(kind), ast.Node{}, ast.Node{}, namedFunction)
 	ec.SetOriginal(method, original)
 	ec.SetSourceMapRange(method, transformers.MoveRangePastDecorators(original))
 	ec.SetEmitFlags(method, printer.EFNoComments)
@@ -2504,7 +2504,7 @@ func (tx *esDecoratorTransformer) createDescriptorMethod(
 }
 
 // Creates a pseudo-PropertyDescriptor object used when decorating a private MethodDeclaration.
-func (tx *esDecoratorTransformer) createMethodDescriptorObject(member ast.Node, modifiers *ast.ModifierList) ast.Expression {
+func (tx *esDecoratorTransformer) createMethodDescriptorObject(member ast.Node, modifiers ast.ModifierList) ast.Expression {
 	f := tx.Factory()
 	parameters := tx.Visitor().VisitNodes(member.ParameterList())
 	body := tx.Visitor().VisitNode(member.Body())
@@ -2518,7 +2518,7 @@ func (tx *esDecoratorTransformer) createMethodDescriptorObject(member ast.Node, 
 }
 
 // Creates a pseudo-PropertyDescriptor object used when decorating a private GetAccessor.
-func (tx *esDecoratorTransformer) createGetAccessorDescriptorObject(member ast.Node, modifiers *ast.ModifierList) ast.Expression {
+func (tx *esDecoratorTransformer) createGetAccessorDescriptorObject(member ast.Node, modifiers ast.ModifierList) ast.Expression {
 	f := tx.Factory()
 	body := tx.Visitor().VisitNode(member.Body())
 	return f.NewObjectLiteralExpression(
@@ -2530,7 +2530,7 @@ func (tx *esDecoratorTransformer) createGetAccessorDescriptorObject(member ast.N
 }
 
 // Creates a pseudo-PropertyDescriptor object used when decorating a private SetAccessor.
-func (tx *esDecoratorTransformer) createSetAccessorDescriptorObject(member ast.Node, modifiers *ast.ModifierList) ast.Expression {
+func (tx *esDecoratorTransformer) createSetAccessorDescriptorObject(member ast.Node, modifiers ast.ModifierList) ast.Expression {
 	f := tx.Factory()
 	parameters := tx.Visitor().VisitNodes(member.ParameterList())
 	body := tx.Visitor().VisitNode(member.Body())
@@ -2544,7 +2544,7 @@ func (tx *esDecoratorTransformer) createSetAccessorDescriptorObject(member ast.N
 
 // Creates a pseudo-PropertyDescriptor object used when decorating a private auto-accessor PropertyDeclaration.
 // The descriptor contains get/set methods that access the generated backing field.
-func (tx *esDecoratorTransformer) createAccessorPropertyDescriptorObject(member ast.Node, _ *ast.ModifierList) ast.Expression {
+func (tx *esDecoratorTransformer) createAccessorPropertyDescriptorObject(member ast.Node, _ ast.ModifierList) ast.Expression {
 	//  {
 	//      get() { return this.${privateName}; },
 	//      set(value) { this.${privateName} = value; },
@@ -2554,7 +2554,7 @@ func (tx *esDecoratorTransformer) createAccessorPropertyDescriptorObject(member 
 	return f.NewObjectLiteralExpression(
 		f.NewNodeList([]ast.Node{
 			tx.createDescriptorMethod(
-				member, member.Name(), nil, ast.Node{}, "get",
+				member, member.Name(), ast.ModifierList{}, ast.Node{}, "get",
 				f.NewNodeList([]ast.Node{}),
 				f.NewBlock(f.NewNodeList([]ast.Node{
 					f.NewReturnStatement(
@@ -2563,9 +2563,9 @@ func (tx *esDecoratorTransformer) createAccessorPropertyDescriptorObject(member 
 				}), false),
 			),
 			tx.createDescriptorMethod(
-				member, member.Name(), nil, ast.Node{}, "set",
+				member, member.Name(), ast.ModifierList{}, ast.Node{}, "set",
 				f.NewNodeList([]ast.Node{
-					f.NewParameterDeclaration(nil, ast.Node{}, f.NewIdentifier("value"), ast.Node{}, ast.Node{}, ast.Node{}),
+					f.NewParameterDeclaration(ast.ModifierList{}, ast.Node{}, f.NewIdentifier("value"), ast.Node{}, ast.Node{}, ast.Node{}),
 				}),
 				f.NewBlock(f.NewNodeList([]ast.Node{
 					f.NewExpressionStatement(
@@ -2582,13 +2582,13 @@ func (tx *esDecoratorTransformer) createAccessorPropertyDescriptorObject(member 
 }
 
 // Creates a MethodDeclaration that forwards its invocation to a PropertyDescriptor object.
-func (tx *esDecoratorTransformer) createMethodDescriptorForwarder(modifiers *ast.ModifierList, name ast.Node, descriptorName ast.IdentifierNode) ast.Node {
+func (tx *esDecoratorTransformer) createMethodDescriptorForwarder(modifiers ast.ModifierList, name ast.Node, descriptorName ast.IdentifierNode) ast.Node {
 	f := tx.Factory()
 	staticOnly := tx.staticOnlyModifierVisitor.VisitModifiers(modifiers)
 	return f.NewGetAccessorDeclaration(
 		staticOnly,
 		name,
-		nil, // typeParameters
+		ast.TypeParameterList{}, // typeParameters
 		f.NewNodeList([]ast.Node{}),
 		ast.Node{}, // type
 		ast.Node{}, // fullSignature
@@ -2601,13 +2601,13 @@ func (tx *esDecoratorTransformer) createMethodDescriptorForwarder(modifiers *ast
 }
 
 // Creates a GetAccessor that forwards its invocation to a PropertyDescriptor object.
-func (tx *esDecoratorTransformer) createGetAccessorDescriptorForwarder(modifiers *ast.ModifierList, name ast.Node, descriptorName ast.IdentifierNode) ast.Node {
+func (tx *esDecoratorTransformer) createGetAccessorDescriptorForwarder(modifiers ast.ModifierList, name ast.Node, descriptorName ast.IdentifierNode) ast.Node {
 	f := tx.Factory()
 	staticOnly := tx.staticOnlyModifierVisitor.VisitModifiers(modifiers)
 	return f.NewGetAccessorDeclaration(
 		staticOnly,
 		name,
-		nil, // typeParameters
+		ast.TypeParameterList{}, // typeParameters
 		f.NewNodeList([]ast.Node{}),
 		ast.Node{}, // type
 		ast.Node{}, // fullSignature
@@ -2624,15 +2624,15 @@ func (tx *esDecoratorTransformer) createGetAccessorDescriptorForwarder(modifiers
 }
 
 // Creates a SetAccessor that forwards its invocation to a PropertyDescriptor object.
-func (tx *esDecoratorTransformer) createSetAccessorDescriptorForwarder(modifiers *ast.ModifierList, name ast.Node, descriptorName ast.IdentifierNode) ast.Node {
+func (tx *esDecoratorTransformer) createSetAccessorDescriptorForwarder(modifiers ast.ModifierList, name ast.Node, descriptorName ast.IdentifierNode) ast.Node {
 	f := tx.Factory()
 	staticOnly := tx.staticOnlyModifierVisitor.VisitModifiers(modifiers)
 	return f.NewSetAccessorDeclaration(
 		staticOnly,
 		name,
-		nil, // typeParameters
+		ast.TypeParameterList{}, // typeParameters
 		f.NewNodeList([]ast.Node{
-			f.NewParameterDeclaration(nil, ast.Node{}, f.NewIdentifier("value"), ast.Node{}, ast.Node{}, ast.Node{}),
+			f.NewParameterDeclaration(ast.ModifierList{}, ast.Node{}, f.NewIdentifier("value"), ast.Node{}, ast.Node{}, ast.Node{}),
 		}),
 		ast.Node{}, // type
 		ast.Node{}, // fullSignature
@@ -2660,7 +2660,7 @@ func (tx *esDecoratorTransformer) createMetadata(name ast.IdentifierNode, classS
 
 	objectCreate := f.NewCallExpression(
 		f.NewPropertyAccessExpression(f.NewIdentifier("Object"), ast.Node{}, f.NewIdentifier("create"), ast.NodeFlagsNone),
-		ast.Node{}, nil,
+		ast.Node{}, ast.TypeList{},
 		f.NewNodeList([]ast.Expression{superMetadata}),
 		ast.NodeFlagsNone,
 	)
@@ -2680,7 +2680,7 @@ func (tx *esDecoratorTransformer) createMetadata(name ast.IdentifierNode, classS
 
 	varDecl := f.NewVariableDeclaration(name, ast.Node{}, ast.Node{}, conditional)
 	varDeclList := f.NewVariableDeclarationList(f.NewNodeList([]ast.Node{varDecl}), ast.NodeFlagsConst)
-	return f.NewVariableStatement(nil, varDeclList)
+	return f.NewVariableStatement(ast.ModifierList{}, varDeclList)
 }
 
 func (tx *esDecoratorTransformer) createSymbolMetadata(target ast.Expression, value ast.IdentifierNode) ast.Statement {
@@ -2690,16 +2690,16 @@ func (tx *esDecoratorTransformer) createSymbolMetadata(target ast.Expression, va
 	symbolMetadata := f.NewPropertyAccessExpression(f.NewIdentifier("Symbol"), ast.Node{}, f.NewIdentifier("metadata"), ast.NodeFlagsNone)
 
 	descriptorProps := []ast.Node{
-		f.NewPropertyAssignment(nil, f.NewIdentifier("enumerable"), ast.Node{}, ast.Node{}, f.NewTrueExpression()),
-		f.NewPropertyAssignment(nil, f.NewIdentifier("configurable"), ast.Node{}, ast.Node{}, f.NewTrueExpression()),
-		f.NewPropertyAssignment(nil, f.NewIdentifier("writable"), ast.Node{}, ast.Node{}, f.NewTrueExpression()),
-		f.NewPropertyAssignment(nil, f.NewIdentifier("value"), ast.Node{}, ast.Node{}, value),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("enumerable"), ast.Node{}, ast.Node{}, f.NewTrueExpression()),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("configurable"), ast.Node{}, ast.Node{}, f.NewTrueExpression()),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("writable"), ast.Node{}, ast.Node{}, f.NewTrueExpression()),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("value"), ast.Node{}, ast.Node{}, value),
 	}
 	descriptor := f.NewObjectLiteralExpression(f.NewNodeList(descriptorProps), false)
 
 	defineProperty := f.NewCallExpression(
 		f.NewPropertyAccessExpression(f.NewIdentifier("Object"), ast.Node{}, f.NewIdentifier("defineProperty"), ast.NodeFlagsNone),
-		ast.Node{}, nil,
+		ast.Node{}, ast.TypeList{},
 		f.NewNodeList([]ast.Expression{target, symbolMetadata, descriptor}),
 		ast.NodeFlagsNone,
 	)
@@ -2713,7 +2713,7 @@ func (tx *esDecoratorTransformer) createSymbolMetadataReference(classSuper ast.I
 	f := tx.Factory()
 	symbolMetadata := f.NewPropertyAccessExpression(f.NewIdentifier("Symbol"), ast.Node{}, f.NewIdentifier("metadata"), ast.NodeFlagsNone)
 	elementAccess := f.NewElementAccessExpression(classSuper, ast.Node{}, symbolMetadata, ast.NodeFlagsNone)
-	return f.NewBinaryExpression(nil, elementAccess, ast.Node{}, f.NewToken(ast.KindQuestionQuestionToken), f.NewToken(ast.KindNullKeyword))
+	return f.NewBinaryExpression(ast.ModifierList{}, elementAccess, ast.Node{}, f.NewToken(ast.KindQuestionQuestionToken), f.NewToken(ast.KindNullKeyword))
 }
 
 func injectClassThisAssignmentIfMissing(ec *printer.EmitContext, f *printer.NodeFactory, node ast.Node, classThis ast.IdentifierNode) ast.Node {
@@ -2725,14 +2725,14 @@ func injectClassThisAssignmentIfMissing(ec *printer.EmitContext, f *printer.Node
 	expression := f.NewAssignmentExpression(classThis, f.NewThisExpression())
 	statement := f.NewExpressionStatement(expression)
 	body := f.NewBlock(f.NewNodeList([]ast.Node{statement}), false)
-	staticBlock := f.NewClassStaticBlockDeclaration(nil, body)
+	staticBlock := f.NewClassStaticBlockDeclaration(ast.ModifierList{}, body)
 	ec.SetClassThis(staticBlock, classThis)
 
 	if !node.Name().IsNil() {
 		ec.SetSourceMapRange(statement, node.Name().Loc())
 	}
 
-	newMembers := make([]ast.Node, 0, 1+len(node.Members()))
+	newMembers := make([]ast.Node, 0, 1+node.MemberList().Len())
 	newMembers = append(newMembers, staticBlock)
 	newMembers = append(newMembers, node.Members()...)
 	membersList := f.NewNodeList(newMembers)
@@ -2741,10 +2741,10 @@ func injectClassThisAssignmentIfMissing(ec *printer.EmitContext, f *printer.Node
 	var updatedNode ast.Node
 	if ast.IsClassDeclaration(node) {
 		cd := node.AsClassDeclaration()
-		updatedNode = f.UpdateClassDeclaration(cd, cd.Modifiers(), cd.Name(), nil, cd.HeritageClauses(), membersList)
+		updatedNode = f.UpdateClassDeclaration(cd, cd.Modifiers(), cd.Name(), ast.TypeParameterList{}, cd.HeritageClauses(), membersList)
 	} else {
 		ce := node.AsClassExpression()
-		updatedNode = f.UpdateClassExpression(ce, ce.Modifiers(), ce.Name(), nil, ce.HeritageClauses(), membersList)
+		updatedNode = f.UpdateClassExpression(ce, ce.Modifiers(), ce.Name(), ast.TypeParameterList{}, ce.HeritageClauses(), membersList)
 	}
 	ec.SetClassThis(updatedNode, classThis)
 	return updatedNode

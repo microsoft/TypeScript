@@ -19,10 +19,8 @@ var (
 // ──────────────────────────────────────────────────────────────────────
 
 type NodeFactory struct {
-	hooks             NodeFactoryHooks
-	store             *nodeStore
-	modifierListArena core.Arena[ModifierList]
-	nodeListArena     core.Arena[NodeList]
+	hooks NodeFactoryHooks
+	store *nodeStore
 
 	nodeCount int
 	textCount int
@@ -1246,21 +1244,21 @@ var nodeWithTypeArgumentsBaseTypeArgumentsOffsets = [kindFlowReduceLabelData + 1
 	KindImportType:    uint8(unsafe.Offsetof(importTypeNodeData{}.typeArguments)),
 }
 
-func (n Node) nodeWithTypeArgumentsBaseTypeArguments() *sideRef {
+func (n Node) nodeWithTypeArgumentsBaseTypeArguments() *listRef {
 	if off := nodeWithTypeArgumentsBaseTypeArgumentsOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.rec(), off))
+		return (*listRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
 
 type NodeWithTypeArgumentsBase struct{ Node }
 
-func (node NodeWithTypeArgumentsBase) TypeArguments() *TypeList {
-	return node.store().nodeLists.get(*node.nodeWithTypeArgumentsBaseTypeArguments())
+func (node NodeWithTypeArgumentsBase) TypeArguments() TypeList {
+	return node.derefList(node.nodeWithTypeArgumentsBaseTypeArguments())
 }
 
-func (node NodeWithTypeArgumentsBase) SetTypeArguments(value *TypeList) {
-	node.store().nodeLists.set(node.nodeWithTypeArgumentsBaseTypeArguments(), value, value == nil)
+func (node NodeWithTypeArgumentsBase) SetTypeArguments(value TypeList) {
+	node.setListRef(node.nodeWithTypeArgumentsBaseTypeArguments(), value)
 }
 
 type JSDocTypeBase struct{ Node }
@@ -1416,21 +1414,21 @@ var modifiersBaseModifiersOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindTypeParameter:               uint8(unsafe.Offsetof(typeParameterDeclarationData{}.modifiers)),
 }
 
-func (n Node) modifiersBaseModifiers() *sideRef {
+func (n Node) modifiersBaseModifiers() *listRef {
 	if off := modifiersBaseModifiersOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.rec(), off))
+		return (*listRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
 
 type ModifiersBase struct{ Node }
 
-func (node ModifiersBase) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(*node.modifiersBaseModifiers())
+func (node ModifiersBase) Modifiers() ModifierList {
+	return node.derefModifiers(node.modifiersBaseModifiers())
 }
 
-func (node ModifiersBase) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(node.modifiersBaseModifiers(), value, value == nil)
+func (node ModifiersBase) setModifiers(value ModifierList) {
+	node.setModifiersRef(node.modifiersBaseModifiers(), value)
 }
 
 var localsContainerBaseLocalsOffsets = [kindFlowReduceLabelData + 1]uint8{
@@ -1705,9 +1703,9 @@ var functionLikeBaseTypeParametersOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindJSDocSignature:      uint8(unsafe.Offsetof(jsDocSignatureData{}.typeParameters)),
 }
 
-func (n Node) functionLikeBaseTypeParameters() *sideRef {
+func (n Node) functionLikeBaseTypeParameters() *listRef {
 	if off := functionLikeBaseTypeParametersOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.rec(), off))
+		return (*listRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1729,9 +1727,9 @@ var functionLikeBaseParametersOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindJSDocSignature:      uint8(unsafe.Offsetof(jsDocSignatureData{}.parameters)),
 }
 
-func (n Node) functionLikeBaseParameters() *sideRef {
+func (n Node) functionLikeBaseParameters() *listRef {
 	if off := functionLikeBaseParametersOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.rec(), off))
+		return (*listRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1802,20 +1800,20 @@ func (node FunctionLikeBase) SetNextContainer(value Node) {
 	node.setRef(node.localsContainerBaseNextContainer(), value)
 }
 
-func (node FunctionLikeBase) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(*node.functionLikeBaseTypeParameters())
+func (node FunctionLikeBase) TypeParameters() TypeParameterList {
+	return node.derefList(node.functionLikeBaseTypeParameters())
 }
 
-func (node FunctionLikeBase) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(node.functionLikeBaseTypeParameters(), value, value == nil)
+func (node FunctionLikeBase) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(node.functionLikeBaseTypeParameters(), value)
 }
 
-func (node FunctionLikeBase) Parameters() *ParameterList {
-	return node.store().nodeLists.get(*node.functionLikeBaseParameters())
+func (node FunctionLikeBase) Parameters() ParameterList {
+	return node.derefList(node.functionLikeBaseParameters())
 }
 
-func (node FunctionLikeBase) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(node.functionLikeBaseParameters(), value, value == nil)
+func (node FunctionLikeBase) SetParameters(value ParameterList) {
+	node.setListRef(node.functionLikeBaseParameters(), value)
 }
 func (node FunctionLikeBase) Type() TypeNode { return node.deref(node.functionLikeBaseTypeField()) }
 func (node FunctionLikeBase) SetType(value TypeNode) {
@@ -1916,20 +1914,20 @@ func (node FunctionLikeWithBodyBase) SetNextContainer(value Node) {
 	node.setRef(node.localsContainerBaseNextContainer(), value)
 }
 
-func (node FunctionLikeWithBodyBase) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(*node.functionLikeBaseTypeParameters())
+func (node FunctionLikeWithBodyBase) TypeParameters() TypeParameterList {
+	return node.derefList(node.functionLikeBaseTypeParameters())
 }
 
-func (node FunctionLikeWithBodyBase) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(node.functionLikeBaseTypeParameters(), value, value == nil)
+func (node FunctionLikeWithBodyBase) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(node.functionLikeBaseTypeParameters(), value)
 }
 
-func (node FunctionLikeWithBodyBase) Parameters() *ParameterList {
-	return node.store().nodeLists.get(*node.functionLikeBaseParameters())
+func (node FunctionLikeWithBodyBase) Parameters() ParameterList {
+	return node.derefList(node.functionLikeBaseParameters())
 }
 
-func (node FunctionLikeWithBodyBase) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(node.functionLikeBaseParameters(), value, value == nil)
+func (node FunctionLikeWithBodyBase) SetParameters(value ParameterList) {
+	node.setListRef(node.functionLikeBaseParameters(), value)
 }
 
 func (node FunctionLikeWithBodyBase) Type() TypeNode {
@@ -1985,9 +1983,9 @@ var classLikeBaseTypeParametersOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindClassExpression:  uint8(unsafe.Offsetof(classExpressionData{}.typeParameters)),
 }
 
-func (n Node) classLikeBaseTypeParameters() *sideRef {
+func (n Node) classLikeBaseTypeParameters() *listRef {
 	if off := classLikeBaseTypeParametersOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.rec(), off))
+		return (*listRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1997,9 +1995,9 @@ var classLikeBaseHeritageClausesOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindClassExpression:  uint8(unsafe.Offsetof(classExpressionData{}.heritageClauses)),
 }
 
-func (n Node) classLikeBaseHeritageClauses() *sideRef {
+func (n Node) classLikeBaseHeritageClauses() *listRef {
 	if off := classLikeBaseHeritageClausesOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.rec(), off))
+		return (*listRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2009,9 +2007,9 @@ var classLikeBaseMembersOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindClassExpression:  uint8(unsafe.Offsetof(classExpressionData{}.members)),
 }
 
-func (n Node) classLikeBaseMembers() *sideRef {
+func (n Node) classLikeBaseMembers() *listRef {
 	if off := classLikeBaseMembersOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.rec(), off))
+		return (*listRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2026,12 +2024,12 @@ func (node ClassLikeBase) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(node.exportableBaseLocalSymbol(), value, value == nil)
 }
 
-func (node ClassLikeBase) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(*node.modifiersBaseModifiers())
+func (node ClassLikeBase) Modifiers() ModifierList {
+	return node.derefModifiers(node.modifiersBaseModifiers())
 }
 
-func (node ClassLikeBase) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(node.modifiersBaseModifiers(), value, value == nil)
+func (node ClassLikeBase) setModifiers(value ModifierList) {
+	node.setModifiersRef(node.modifiersBaseModifiers(), value)
 }
 
 func (node ClassLikeBase) Locals() SymbolTable {
@@ -2054,28 +2052,28 @@ func (node ClassLikeBase) Name() IdentifierNode { return node.deref(node.classLi
 
 func (node ClassLikeBase) setName(value IdentifierNode) { node.setRef(node.classLikeBaseName(), value) }
 
-func (node ClassLikeBase) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(*node.classLikeBaseTypeParameters())
+func (node ClassLikeBase) TypeParameters() TypeParameterList {
+	return node.derefList(node.classLikeBaseTypeParameters())
 }
 
-func (node ClassLikeBase) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(node.classLikeBaseTypeParameters(), value, value == nil)
+func (node ClassLikeBase) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(node.classLikeBaseTypeParameters(), value)
 }
 
-func (node ClassLikeBase) HeritageClauses() *HeritageClauseList {
-	return node.store().nodeLists.get(*node.classLikeBaseHeritageClauses())
+func (node ClassLikeBase) HeritageClauses() HeritageClauseList {
+	return node.derefList(node.classLikeBaseHeritageClauses())
 }
 
-func (node ClassLikeBase) SetHeritageClauses(value *HeritageClauseList) {
-	node.store().nodeLists.set(node.classLikeBaseHeritageClauses(), value, value == nil)
+func (node ClassLikeBase) SetHeritageClauses(value HeritageClauseList) {
+	node.setListRef(node.classLikeBaseHeritageClauses(), value)
 }
 
-func (node ClassLikeBase) Members() *ClassElementList {
-	return node.store().nodeLists.get(*node.classLikeBaseMembers())
+func (node ClassLikeBase) Members() ClassElementList {
+	return node.derefList(node.classLikeBaseMembers())
 }
 
-func (node ClassLikeBase) SetMembers(value *ClassElementList) {
-	node.store().nodeLists.set(node.classLikeBaseMembers(), value, value == nil)
+func (node ClassLikeBase) SetMembers(value ClassElementList) {
+	node.setListRef(node.classLikeBaseMembers(), value)
 }
 
 var literalLikeNodeBaseTextOffsets = [kindFlowReduceLabelData + 1]uint8{
@@ -2256,12 +2254,12 @@ func (n Node) namedMemberBasePostfixToken() *nodeRef {
 
 type NamedMemberBase struct{ Node }
 
-func (node NamedMemberBase) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(*node.modifiersBaseModifiers())
+func (node NamedMemberBase) Modifiers() ModifierList {
+	return node.derefModifiers(node.modifiersBaseModifiers())
 }
 
-func (node NamedMemberBase) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(node.modifiersBaseModifiers(), value, value == nil)
+func (node NamedMemberBase) setModifiers(value ModifierList) {
+	node.setModifiersRef(node.modifiersBaseModifiers(), value)
 }
 func (node NamedMemberBase) Name() PropertyName { return node.deref(node.namedMemberBaseName()) }
 func (node NamedMemberBase) setName(value PropertyName) {
@@ -2288,12 +2286,12 @@ func (node AccessorDeclarationBase) SetSymbol(value *Symbol) {
 	node.store().symbols.set(node.declarationBaseSymbol(), value, value == nil)
 }
 
-func (node AccessorDeclarationBase) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(*node.modifiersBaseModifiers())
+func (node AccessorDeclarationBase) Modifiers() ModifierList {
+	return node.derefModifiers(node.modifiersBaseModifiers())
 }
 
-func (node AccessorDeclarationBase) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(node.modifiersBaseModifiers(), value, value == nil)
+func (node AccessorDeclarationBase) setModifiers(value ModifierList) {
+	node.setModifiersRef(node.modifiersBaseModifiers(), value)
 }
 
 func (node AccessorDeclarationBase) Name() PropertyName {
@@ -2328,20 +2326,20 @@ func (node AccessorDeclarationBase) SetNextContainer(value Node) {
 	node.setRef(node.localsContainerBaseNextContainer(), value)
 }
 
-func (node AccessorDeclarationBase) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(*node.functionLikeBaseTypeParameters())
+func (node AccessorDeclarationBase) TypeParameters() TypeParameterList {
+	return node.derefList(node.functionLikeBaseTypeParameters())
 }
 
-func (node AccessorDeclarationBase) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(node.functionLikeBaseTypeParameters(), value, value == nil)
+func (node AccessorDeclarationBase) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(node.functionLikeBaseTypeParameters(), value)
 }
 
-func (node AccessorDeclarationBase) Parameters() *ParameterList {
-	return node.store().nodeLists.get(*node.functionLikeBaseParameters())
+func (node AccessorDeclarationBase) Parameters() ParameterList {
+	return node.derefList(node.functionLikeBaseParameters())
 }
 
-func (node AccessorDeclarationBase) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(node.functionLikeBaseParameters(), value, value == nil)
+func (node AccessorDeclarationBase) SetParameters(value ParameterList) {
+	node.setListRef(node.functionLikeBaseParameters(), value)
 }
 
 func (node AccessorDeclarationBase) Type() TypeNode {
@@ -2398,12 +2396,12 @@ func (node FunctionOrConstructorTypeNodeBase) SetSymbol(value *Symbol) {
 	node.store().symbols.set(node.declarationBaseSymbol(), value, value == nil)
 }
 
-func (node FunctionOrConstructorTypeNodeBase) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(*node.modifiersBaseModifiers())
+func (node FunctionOrConstructorTypeNodeBase) Modifiers() ModifierList {
+	return node.derefModifiers(node.modifiersBaseModifiers())
 }
 
-func (node FunctionOrConstructorTypeNodeBase) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(node.modifiersBaseModifiers(), value, value == nil)
+func (node FunctionOrConstructorTypeNodeBase) setModifiers(value ModifierList) {
+	node.setModifiersRef(node.modifiersBaseModifiers(), value)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) Locals() SymbolTable {
@@ -2422,20 +2420,20 @@ func (node FunctionOrConstructorTypeNodeBase) SetNextContainer(value Node) {
 	node.setRef(node.localsContainerBaseNextContainer(), value)
 }
 
-func (node FunctionOrConstructorTypeNodeBase) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(*node.functionLikeBaseTypeParameters())
+func (node FunctionOrConstructorTypeNodeBase) TypeParameters() TypeParameterList {
+	return node.derefList(node.functionLikeBaseTypeParameters())
 }
 
-func (node FunctionOrConstructorTypeNodeBase) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(node.functionLikeBaseTypeParameters(), value, value == nil)
+func (node FunctionOrConstructorTypeNodeBase) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(node.functionLikeBaseTypeParameters(), value)
 }
 
-func (node FunctionOrConstructorTypeNodeBase) Parameters() *ParameterList {
-	return node.store().nodeLists.get(*node.functionLikeBaseParameters())
+func (node FunctionOrConstructorTypeNodeBase) Parameters() ParameterList {
+	return node.derefList(node.functionLikeBaseParameters())
 }
 
-func (node FunctionOrConstructorTypeNodeBase) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(node.functionLikeBaseParameters(), value, value == nil)
+func (node FunctionOrConstructorTypeNodeBase) SetParameters(value ParameterList) {
+	node.setListRef(node.functionLikeBaseParameters(), value)
 }
 
 func (node FunctionOrConstructorTypeNodeBase) Type() TypeNode {
@@ -2459,21 +2457,21 @@ var unionOrIntersectionTypeNodeBaseTypesOffsets = [kindFlowReduceLabelData + 1]u
 	KindIntersectionType: uint8(unsafe.Offsetof(intersectionTypeNodeData{}.types)),
 }
 
-func (n Node) unionOrIntersectionTypeNodeBaseTypes() *sideRef {
+func (n Node) unionOrIntersectionTypeNodeBaseTypes() *listRef {
 	if off := unionOrIntersectionTypeNodeBaseTypesOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.rec(), off))
+		return (*listRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
 
 type UnionOrIntersectionTypeNodeBase struct{ Node }
 
-func (node UnionOrIntersectionTypeNodeBase) Types() *TypeList {
-	return node.store().nodeLists.get(*node.unionOrIntersectionTypeNodeBaseTypes())
+func (node UnionOrIntersectionTypeNodeBase) Types() TypeList {
+	return node.derefList(node.unionOrIntersectionTypeNodeBaseTypes())
 }
 
-func (node UnionOrIntersectionTypeNodeBase) SetTypes(value *TypeList) {
-	node.store().nodeLists.set(node.unionOrIntersectionTypeNodeBaseTypes(), value, value == nil)
+func (node UnionOrIntersectionTypeNodeBase) SetTypes(value TypeList) {
+	node.setListRef(node.unionOrIntersectionTypeNodeBaseTypes(), value)
 }
 
 var jsDocTagBaseTagNameOffsets = [kindFlowReduceLabelData + 1]uint8{
@@ -2533,9 +2531,9 @@ var jsDocTagBaseCommentOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindJSDocPropertyTag:   uint8(unsafe.Offsetof(jsDocParameterOrPropertyTagData{}.comment)),
 }
 
-func (n Node) jsDocTagBaseComment() *sideRef {
+func (n Node) jsDocTagBaseComment() *listRef {
 	if off := jsDocTagBaseCommentOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.rec(), off))
+		return (*listRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2546,13 +2544,9 @@ func (node JSDocTagBase) TagName() IdentifierNode { return node.deref(node.jsDoc
 func (node JSDocTagBase) SetTagName(value IdentifierNode) {
 	node.setRef(node.jsDocTagBaseTagName(), value)
 }
-
-func (node JSDocTagBase) Comment() *NodeList {
-	return node.store().nodeLists.get(*node.jsDocTagBaseComment())
-}
-
-func (node JSDocTagBase) SetComment(value *NodeList) {
-	node.store().nodeLists.set(node.jsDocTagBaseComment(), value, value == nil)
+func (node JSDocTagBase) Comment() NodeList { return node.derefList(node.jsDocTagBaseComment()) }
+func (node JSDocTagBase) SetComment(value NodeList) {
+	node.setListRef(node.jsDocTagBaseComment(), value)
 }
 
 var jsDocCommentBaseTextOffsets = [kindFlowReduceLabelData + 1]uint8{
@@ -3977,7 +3971,7 @@ type caseBlockData struct {
 	locals        sideRef // SymbolTable
 	nextContainer nodeRef // Node
 	facts         atomic.Uint32
-	clauses       sideRef // *CaseClausesList
+	clauses       listRef // CaseClausesList
 }
 
 type CaseBlock struct{ Node }
@@ -3989,25 +3983,23 @@ func (node CaseBlock) Locals() SymbolTable { return node.store().symbolTables.ge
 func (node CaseBlock) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-func (node CaseBlock) NextContainer() Node         { return node.deref(&node.data().nextContainer) }
+
+func (node CaseBlock) NextContainer() Node { return node.deref(&node.data().nextContainer) }
+
 func (node CaseBlock) SetNextContainer(value Node) { node.setRef(&node.data().nextContainer, value) }
 
-func (node CaseBlock) Clauses() *CaseClausesList {
-	return node.store().nodeLists.get(node.data().clauses)
-}
+func (node CaseBlock) Clauses() CaseClausesList { return node.derefList(&node.data().clauses) }
 
-func (node CaseBlock) SetClauses(value *CaseClausesList) {
-	node.store().nodeLists.set(&node.data().clauses, value, value == nil)
-}
+func (node CaseBlock) SetClauses(value CaseClausesList) { node.setListRef(&node.data().clauses, value) }
 
-func (f *NodeFactory) NewCaseBlock(clauses *CaseClausesList) Node {
+func (f *NodeFactory) NewCaseBlock(clauses CaseClausesList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[caseBlockData](s, layoutCaseBlock)
-	s.nodeLists.set(&data.clauses, clauses, clauses == nil)
+	setListRefAt(&data.clauses, i, clauses)
 	return f.newNode(KindCaseBlock, layoutCaseBlock, i)
 }
 
-func (f *NodeFactory) UpdateCaseBlock(node CaseBlock, clauses *CaseClausesList) Node {
+func (f *NodeFactory) UpdateCaseBlock(node CaseBlock, clauses CaseClausesList) Node {
 	if clauses != node.Clauses() {
 		return updateNode(f.NewCaseBlock(clauses), node.AsNode(), f.hooks)
 	}
@@ -4042,7 +4034,7 @@ type caseOrDefaultClauseData struct {
 	nodeBaseData
 	facts               atomic.Uint32
 	expression          nodeRef // Expression
-	statements          sideRef // *StatementList
+	statements          listRef // StatementList
 	fallthroughFlowNode flowRef // FlowNode
 }
 
@@ -4058,12 +4050,12 @@ func (node CaseOrDefaultClause) SetExpression(value Expression) {
 	node.setRef(&node.data().expression, value)
 }
 
-func (node CaseOrDefaultClause) Statements() *StatementList {
-	return node.store().nodeLists.get(node.data().statements)
+func (node CaseOrDefaultClause) Statements() StatementList {
+	return node.derefList(&node.data().statements)
 }
 
-func (node CaseOrDefaultClause) SetStatements(value *StatementList) {
-	node.store().nodeLists.set(&node.data().statements, value, value == nil)
+func (node CaseOrDefaultClause) SetStatements(value StatementList) {
+	node.setListRef(&node.data().statements, value)
 }
 
 func (node CaseOrDefaultClause) FallthroughFlowNode() FlowNode {
@@ -4074,7 +4066,7 @@ func (node CaseOrDefaultClause) SetFallthroughFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().fallthroughFlowNode, value)
 }
 
-func (f *NodeFactory) NewCaseOrDefaultClause(kind Kind, expression Expression, statements *StatementList) Node {
+func (f *NodeFactory) NewCaseOrDefaultClause(kind Kind, expression Expression, statements StatementList) Node {
 	switch kind {
 	case KindCaseClause, KindDefaultClause:
 	default:
@@ -4083,11 +4075,11 @@ func (f *NodeFactory) NewCaseOrDefaultClause(kind Kind, expression Expression, s
 	s := f.nodeStore()
 	data, i := newRecord[caseOrDefaultClauseData](s, layoutCaseOrDefaultClause)
 	setNodeRef(&data.expression, i, expression)
-	s.nodeLists.set(&data.statements, statements, statements == nil)
+	setListRefAt(&data.statements, i, statements)
 	return f.newNode(kind, layoutCaseOrDefaultClause, i)
 }
 
-func (f *NodeFactory) UpdateCaseOrDefaultClause(node CaseOrDefaultClause, expression Expression, statements *StatementList) Node {
+func (f *NodeFactory) UpdateCaseOrDefaultClause(node CaseOrDefaultClause, expression Expression, statements StatementList) Node {
 	if expression != node.Expression() || statements != node.Statements() {
 		return updateNode(f.NewCaseOrDefaultClause(node.Kind(), expression, statements), node.AsNode(), f.hooks)
 	}
@@ -4488,7 +4480,7 @@ type blockData struct {
 	locals        sideRef // SymbolTable
 	nextContainer nodeRef // Node
 	facts         atomic.Uint32
-	statements    sideRef // *StatementList
+	statements    listRef // StatementList
 	multiLine     bool
 }
 
@@ -4503,27 +4495,26 @@ func (node Block) Locals() SymbolTable        { return node.store().symbolTables
 func (node Block) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
 }
-func (node Block) NextContainer() Node         { return node.deref(&node.data().nextContainer) }
+
+func (node Block) NextContainer() Node { return node.deref(&node.data().nextContainer) }
+
 func (node Block) SetNextContainer(value Node) { node.setRef(&node.data().nextContainer, value) }
-func (node Block) Statements() *StatementList {
-	return node.store().nodeLists.get(node.data().statements)
-}
 
-func (node Block) SetStatements(value *StatementList) {
-	node.store().nodeLists.set(&node.data().statements, value, value == nil)
-}
-func (node Block) MultiLine() bool         { return node.data().multiLine }
-func (node Block) SetMultiLine(value bool) { node.data().multiLine = value }
+func (node Block) Statements() StatementList { return node.derefList(&node.data().statements) }
 
-func (f *NodeFactory) NewBlock(statements *StatementList, multiLine bool) Node {
+func (node Block) SetStatements(value StatementList) { node.setListRef(&node.data().statements, value) }
+func (node Block) MultiLine() bool                   { return node.data().multiLine }
+func (node Block) SetMultiLine(value bool)           { node.data().multiLine = value }
+
+func (f *NodeFactory) NewBlock(statements StatementList, multiLine bool) Node {
 	s := f.nodeStore()
 	data, i := newRecord[blockData](s, layoutBlock)
-	s.nodeLists.set(&data.statements, statements, statements == nil)
+	setListRefAt(&data.statements, i, statements)
 	data.multiLine = multiLine
 	return f.newNode(KindBlock, layoutBlock, i)
 }
 
-func (f *NodeFactory) UpdateBlock(node Block, statements *StatementList, multiLine bool) Node {
+func (f *NodeFactory) UpdateBlock(node Block, statements StatementList, multiLine bool) Node {
 	if statements != node.Statements() || multiLine != node.MultiLine() {
 		return updateNode(f.NewBlock(statements, multiLine), node.AsNode(), f.hooks)
 	}
@@ -4557,7 +4548,7 @@ func IsBlock(node Node) bool {
 type variableStatementData struct {
 	nodeBaseData
 	flowNode        flowRef // FlowNode
-	modifiers       sideRef // *ModifierList. Optional
+	modifiers       listRef // ModifierList. Optional
 	facts           atomic.Uint32
 	declarationList nodeRef // VariableDeclarationListNode
 }
@@ -4573,12 +4564,12 @@ func (node VariableStatement) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
-func (node VariableStatement) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node VariableStatement) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node VariableStatement) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node VariableStatement) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node VariableStatement) DeclarationList() VariableDeclarationListNode {
@@ -4589,15 +4580,15 @@ func (node VariableStatement) SetDeclarationList(value VariableDeclarationListNo
 	node.setRef(&node.data().declarationList, value)
 }
 
-func (f *NodeFactory) NewVariableStatement(modifiers *ModifierList, declarationList VariableDeclarationListNode) Node {
+func (f *NodeFactory) NewVariableStatement(modifiers ModifierList, declarationList VariableDeclarationListNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[variableStatementData](s, layoutVariableStatement)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.declarationList, i, declarationList)
 	return f.newNode(KindVariableStatement, layoutVariableStatement, i)
 }
 
-func (f *NodeFactory) UpdateVariableStatement(node VariableStatement, modifiers *ModifierList, declarationList VariableDeclarationListNode) Node {
+func (f *NodeFactory) UpdateVariableStatement(node VariableStatement, modifiers ModifierList, declarationList VariableDeclarationListNode) Node {
 	if modifiers != node.Modifiers() || declarationList != node.DeclarationList() {
 		return updateNode(f.NewVariableStatement(modifiers, declarationList), node.AsNode(), f.hooks)
 	}
@@ -4717,7 +4708,7 @@ func IsVariableDeclaration(node Node) bool {
 type variableDeclarationListData struct {
 	nodeBaseData
 	facts        atomic.Uint32
-	declarations sideRef // *VariableDeclarationNodeList
+	declarations listRef // VariableDeclarationNodeList
 }
 
 type VariableDeclarationList struct{ Node }
@@ -4726,24 +4717,24 @@ func (node VariableDeclarationList) data() *variableDeclarationListData {
 	return (*variableDeclarationListData)(node.rec())
 }
 
-func (node VariableDeclarationList) Declarations() *VariableDeclarationNodeList {
-	return node.store().nodeLists.get(node.data().declarations)
+func (node VariableDeclarationList) Declarations() VariableDeclarationNodeList {
+	return node.derefList(&node.data().declarations)
 }
 
-func (node VariableDeclarationList) SetDeclarations(value *VariableDeclarationNodeList) {
-	node.store().nodeLists.set(&node.data().declarations, value, value == nil)
+func (node VariableDeclarationList) SetDeclarations(value VariableDeclarationNodeList) {
+	node.setListRef(&node.data().declarations, value)
 }
 
-func (f *NodeFactory) NewVariableDeclarationList(declarations *VariableDeclarationNodeList, flags NodeFlags) Node {
+func (f *NodeFactory) NewVariableDeclarationList(declarations VariableDeclarationNodeList, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[variableDeclarationListData](s, layoutVariableDeclarationList)
-	s.nodeLists.set(&data.declarations, declarations, declarations == nil)
+	setListRefAt(&data.declarations, i, declarations)
 	node := f.newNode(KindVariableDeclarationList, layoutVariableDeclarationList, i)
 	node.SetFlags(flags)
 	return node
 }
 
-func (f *NodeFactory) UpdateVariableDeclarationList(node VariableDeclarationList, declarations *VariableDeclarationNodeList, flags NodeFlags) Node {
+func (f *NodeFactory) UpdateVariableDeclarationList(node VariableDeclarationList, declarations VariableDeclarationNodeList, flags NodeFlags) Node {
 	if declarations != node.Declarations() || flags != node.Flags() {
 		return updateNode(f.NewVariableDeclarationList(declarations, flags), node.AsNode(), f.hooks)
 	}
@@ -4773,22 +4764,22 @@ func IsVariableDeclarationList(node Node) bool {
 type bindingPatternData struct {
 	nodeBaseData
 	facts    atomic.Uint32
-	elements sideRef // *BindingElementList
+	elements listRef // BindingElementList
 }
 
 type BindingPattern struct{ Node }
 
 func (node BindingPattern) data() *bindingPatternData { return (*bindingPatternData)(node.rec()) }
 
-func (node BindingPattern) Elements() *BindingElementList {
-	return node.store().nodeLists.get(node.data().elements)
+func (node BindingPattern) Elements() BindingElementList {
+	return node.derefList(&node.data().elements)
 }
 
-func (node BindingPattern) SetElements(value *BindingElementList) {
-	node.store().nodeLists.set(&node.data().elements, value, value == nil)
+func (node BindingPattern) SetElements(value BindingElementList) {
+	node.setListRef(&node.data().elements, value)
 }
 
-func (f *NodeFactory) NewBindingPattern(kind Kind, elements *BindingElementList) Node {
+func (f *NodeFactory) NewBindingPattern(kind Kind, elements BindingElementList) Node {
 	switch kind {
 	case KindObjectBindingPattern, KindArrayBindingPattern:
 	default:
@@ -4796,11 +4787,11 @@ func (f *NodeFactory) NewBindingPattern(kind Kind, elements *BindingElementList)
 	}
 	s := f.nodeStore()
 	data, i := newRecord[bindingPatternData](s, layoutBindingPattern)
-	s.nodeLists.set(&data.elements, elements, elements == nil)
+	setListRefAt(&data.elements, i, elements)
 	return f.newNode(kind, layoutBindingPattern, i)
 }
 
-func (f *NodeFactory) UpdateBindingPattern(node BindingPattern, elements *BindingElementList) Node {
+func (f *NodeFactory) UpdateBindingPattern(node BindingPattern, elements BindingElementList) Node {
 	if elements != node.Elements() {
 		return updateNode(f.NewBindingPattern(node.Kind(), elements), node.AsNode(), f.hooks)
 	}
@@ -4834,7 +4825,7 @@ func IsArrayBindingPattern(node Node) bool {
 type parameterDeclarationData struct {
 	nodeBaseData
 	symbol         sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	facts          atomic.Uint32
 	dotDotDotToken nodeRef // DotDotDotToken. Optional
 	name           nodeRef // BindingName
@@ -4857,12 +4848,12 @@ func (node ParameterDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node ParameterDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ParameterDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ParameterDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ParameterDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node ParameterDeclaration) DotDotDotToken() DotDotDotToken {
@@ -4895,10 +4886,10 @@ func (node ParameterDeclaration) SetInitializer(value Expression) {
 	node.setRef(&node.data().initializer, value)
 }
 
-func (f *NodeFactory) NewParameterDeclaration(modifiers *ModifierList, dotDotDotToken DotDotDotToken, name BindingName, questionToken QuestionToken, typeNode TypeNode, initializer Expression) Node {
+func (f *NodeFactory) NewParameterDeclaration(modifiers ModifierList, dotDotDotToken DotDotDotToken, name BindingName, questionToken QuestionToken, typeNode TypeNode, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[parameterDeclarationData](s, layoutParameterDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.dotDotDotToken, i, dotDotDotToken)
 	setNodeRef(&data.name, i, name)
 	setNodeRef(&data.questionToken, i, questionToken)
@@ -4907,7 +4898,7 @@ func (f *NodeFactory) NewParameterDeclaration(modifiers *ModifierList, dotDotDot
 	return f.newNode(KindParameter, layoutParameterDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateParameterDeclaration(node ParameterDeclaration, modifiers *ModifierList, dotDotDotToken DotDotDotToken, name BindingName, questionToken QuestionToken, typeNode TypeNode, initializer Expression) Node {
+func (f *NodeFactory) UpdateParameterDeclaration(node ParameterDeclaration, modifiers ModifierList, dotDotDotToken DotDotDotToken, name BindingName, questionToken QuestionToken, typeNode TypeNode, initializer Expression) Node {
 	if modifiers != node.Modifiers() || dotDotDotToken != node.DotDotDotToken() || name != node.Name() || questionToken != node.QuestionToken() || typeNode != node.Type() || initializer != node.Initializer() {
 		return updateNode(f.NewParameterDeclaration(modifiers, dotDotDotToken, name, questionToken, typeNode, initializer), node.AsNode(), f.hooks)
 	}
@@ -5037,7 +5028,7 @@ type missingDeclarationData struct {
 	nodeBaseData
 	flowNode  flowRef // FlowNode
 	symbol    sideRef // *Symbol
-	modifiers sideRef // *ModifierList. Optional
+	modifiers listRef // ModifierList. Optional
 }
 
 type MissingDeclaration struct{ Node }
@@ -5057,22 +5048,22 @@ func (node MissingDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node MissingDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node MissingDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node MissingDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node MissingDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
-func (f *NodeFactory) NewMissingDeclaration(modifiers *ModifierList) Node {
+func (f *NodeFactory) NewMissingDeclaration(modifiers ModifierList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[missingDeclarationData](s, layoutMissingDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	return f.newNode(KindMissingDeclaration, layoutMissingDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateMissingDeclaration(node MissingDeclaration, modifiers *ModifierList) Node {
+func (f *NodeFactory) UpdateMissingDeclaration(node MissingDeclaration, modifiers ModifierList) Node {
 	if modifiers != node.Modifiers() {
 		return updateNode(f.NewMissingDeclaration(modifiers), node.AsNode(), f.hooks)
 	}
@@ -5104,11 +5095,11 @@ type functionDeclarationData struct {
 	flowNode       flowRef // FlowNode
 	symbol         sideRef // *Symbol
 	localSymbol    sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 	asteriskToken  nodeRef // AsteriskToken. Optional
@@ -5144,12 +5135,12 @@ func (node FunctionDeclaration) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().localSymbol, value, value == nil)
 }
 
-func (node FunctionDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node FunctionDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node FunctionDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node FunctionDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node FunctionDeclaration) Locals() SymbolTable {
@@ -5166,20 +5157,20 @@ func (node FunctionDeclaration) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node FunctionDeclaration) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node FunctionDeclaration) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node FunctionDeclaration) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node FunctionDeclaration) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node FunctionDeclaration) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
+func (node FunctionDeclaration) Parameters() ParameterList {
+	return node.derefList(&node.data().parameters)
 }
 
-func (node FunctionDeclaration) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node FunctionDeclaration) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 
 func (node FunctionDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
@@ -5223,21 +5214,21 @@ func (node FunctionDeclaration) SetReturnFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().returnFlowNode, value)
 }
 
-func (f *NodeFactory) NewFunctionDeclaration(modifiers *ModifierList, asteriskToken AsteriskToken, name IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
+func (f *NodeFactory) NewFunctionDeclaration(modifiers ModifierList, asteriskToken AsteriskToken, name IdentifierNode, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
 	s := f.nodeStore()
 	data, i := newRecord[functionDeclarationData](s, layoutFunctionDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.asteriskToken, i, asteriskToken)
 	setNodeRef(&data.name, i, name)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	setNodeRef(&data.fullSignature, i, fullSignature)
 	setNodeRef(&data.body, i, body)
 	return f.newNode(KindFunctionDeclaration, layoutFunctionDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateFunctionDeclaration(node FunctionDeclaration, modifiers *ModifierList, asteriskToken AsteriskToken, name IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
+func (f *NodeFactory) UpdateFunctionDeclaration(node FunctionDeclaration, modifiers ModifierList, asteriskToken AsteriskToken, name IdentifierNode, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
 	if modifiers != node.Modifiers() || asteriskToken != node.AsteriskToken() || name != node.Name() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || body != node.Body() {
 		return updateNode(f.NewFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, typeNode, fullSignature, body), node.AsNode(), f.hooks)
 	}
@@ -5276,14 +5267,14 @@ type classDeclarationData struct {
 	flowNode        flowRef // FlowNode
 	symbol          sideRef // *Symbol
 	localSymbol     sideRef // *Symbol
-	modifiers       sideRef // *ModifierList. Optional
+	modifiers       listRef // ModifierList. Optional
 	locals          sideRef // SymbolTable
 	nextContainer   nodeRef // Node
 	facts           atomic.Uint32
 	name            nodeRef // IdentifierNode. Optional
-	typeParameters  sideRef // *TypeParameterList. Optional
-	heritageClauses sideRef // *HeritageClauseList. Optional
-	members         sideRef // *ClassElementList
+	typeParameters  listRef // TypeParameterList. Optional
+	heritageClauses listRef // HeritageClauseList. Optional
+	members         listRef // ClassElementList
 }
 
 type ClassDeclaration struct{ Node }
@@ -5309,12 +5300,12 @@ func (node ClassDeclaration) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().localSymbol, value, value == nil)
 }
 
-func (node ClassDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ClassDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ClassDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ClassDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node ClassDeclaration) Locals() SymbolTable {
@@ -5330,42 +5321,40 @@ func (node ClassDeclaration) SetNextContainer(value Node) {
 }
 func (node ClassDeclaration) Name() IdentifierNode         { return node.deref(&node.data().name) }
 func (node ClassDeclaration) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
-func (node ClassDeclaration) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node ClassDeclaration) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node ClassDeclaration) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node ClassDeclaration) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node ClassDeclaration) HeritageClauses() *HeritageClauseList {
-	return node.store().nodeLists.get(node.data().heritageClauses)
+func (node ClassDeclaration) HeritageClauses() HeritageClauseList {
+	return node.derefList(&node.data().heritageClauses)
 }
 
-func (node ClassDeclaration) SetHeritageClauses(value *HeritageClauseList) {
-	node.store().nodeLists.set(&node.data().heritageClauses, value, value == nil)
+func (node ClassDeclaration) SetHeritageClauses(value HeritageClauseList) {
+	node.setListRef(&node.data().heritageClauses, value)
 }
 
-func (node ClassDeclaration) Members() *ClassElementList {
-	return node.store().nodeLists.get(node.data().members)
+func (node ClassDeclaration) Members() ClassElementList { return node.derefList(&node.data().members) }
+
+func (node ClassDeclaration) SetMembers(value ClassElementList) {
+	node.setListRef(&node.data().members, value)
 }
 
-func (node ClassDeclaration) SetMembers(value *ClassElementList) {
-	node.store().nodeLists.set(&node.data().members, value, value == nil)
-}
-
-func (f *NodeFactory) NewClassDeclaration(modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) Node {
+func (f *NodeFactory) NewClassDeclaration(modifiers ModifierList, name IdentifierNode, typeParameters TypeParameterList, heritageClauses HeritageClauseList, members ClassElementList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[classDeclarationData](s, layoutClassDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.heritageClauses, heritageClauses, heritageClauses == nil)
-	s.nodeLists.set(&data.members, members, members == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.heritageClauses, i, heritageClauses)
+	setListRefAt(&data.members, i, members)
 	return f.newNode(KindClassDeclaration, layoutClassDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateClassDeclaration(node ClassDeclaration, modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) Node {
+func (f *NodeFactory) UpdateClassDeclaration(node ClassDeclaration, modifiers ModifierList, name IdentifierNode, typeParameters TypeParameterList, heritageClauses HeritageClauseList, members ClassElementList) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || typeParameters != node.TypeParameters() || heritageClauses != node.HeritageClauses() || members != node.Members() {
 		return updateNode(f.NewClassDeclaration(modifiers, name, typeParameters, heritageClauses, members), node.AsNode(), f.hooks)
 	}
@@ -5400,14 +5389,14 @@ type classExpressionData struct {
 	nodeBaseData
 	symbol          sideRef // *Symbol
 	localSymbol     sideRef // *Symbol
-	modifiers       sideRef // *ModifierList. Optional
+	modifiers       listRef // ModifierList. Optional
 	locals          sideRef // SymbolTable
 	nextContainer   nodeRef // Node
 	facts           atomic.Uint32
 	name            nodeRef // IdentifierNode. Optional
-	typeParameters  sideRef // *TypeParameterList. Optional
-	heritageClauses sideRef // *HeritageClauseList. Optional
-	members         sideRef // *ClassElementList
+	typeParameters  listRef // TypeParameterList. Optional
+	heritageClauses listRef // HeritageClauseList. Optional
+	members         listRef // ClassElementList
 }
 
 type ClassExpression struct{ Node }
@@ -5427,12 +5416,12 @@ func (node ClassExpression) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().localSymbol, value, value == nil)
 }
 
-func (node ClassExpression) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ClassExpression) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ClassExpression) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ClassExpression) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node ClassExpression) Locals() SymbolTable {
@@ -5448,42 +5437,40 @@ func (node ClassExpression) SetNextContainer(value Node) {
 }
 func (node ClassExpression) Name() IdentifierNode         { return node.deref(&node.data().name) }
 func (node ClassExpression) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
-func (node ClassExpression) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node ClassExpression) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node ClassExpression) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node ClassExpression) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node ClassExpression) HeritageClauses() *HeritageClauseList {
-	return node.store().nodeLists.get(node.data().heritageClauses)
+func (node ClassExpression) HeritageClauses() HeritageClauseList {
+	return node.derefList(&node.data().heritageClauses)
 }
 
-func (node ClassExpression) SetHeritageClauses(value *HeritageClauseList) {
-	node.store().nodeLists.set(&node.data().heritageClauses, value, value == nil)
+func (node ClassExpression) SetHeritageClauses(value HeritageClauseList) {
+	node.setListRef(&node.data().heritageClauses, value)
 }
 
-func (node ClassExpression) Members() *ClassElementList {
-	return node.store().nodeLists.get(node.data().members)
+func (node ClassExpression) Members() ClassElementList { return node.derefList(&node.data().members) }
+
+func (node ClassExpression) SetMembers(value ClassElementList) {
+	node.setListRef(&node.data().members, value)
 }
 
-func (node ClassExpression) SetMembers(value *ClassElementList) {
-	node.store().nodeLists.set(&node.data().members, value, value == nil)
-}
-
-func (f *NodeFactory) NewClassExpression(modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) Node {
+func (f *NodeFactory) NewClassExpression(modifiers ModifierList, name IdentifierNode, typeParameters TypeParameterList, heritageClauses HeritageClauseList, members ClassElementList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[classExpressionData](s, layoutClassExpression)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.heritageClauses, heritageClauses, heritageClauses == nil)
-	s.nodeLists.set(&data.members, members, members == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.heritageClauses, i, heritageClauses)
+	setListRefAt(&data.members, i, members)
 	return f.newNode(KindClassExpression, layoutClassExpression, i)
 }
 
-func (f *NodeFactory) UpdateClassExpression(node ClassExpression, modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *ClassElementList) Node {
+func (f *NodeFactory) UpdateClassExpression(node ClassExpression, modifiers ModifierList, name IdentifierNode, typeParameters TypeParameterList, heritageClauses HeritageClauseList, members ClassElementList) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || typeParameters != node.TypeParameters() || heritageClauses != node.HeritageClauses() || members != node.Members() {
 		return updateNode(f.NewClassExpression(modifiers, name, typeParameters, heritageClauses, members), node.AsNode(), f.hooks)
 	}
@@ -5517,7 +5504,7 @@ func IsClassExpression(node Node) bool {
 type heritageClauseData struct {
 	nodeBaseData
 	facts atomic.Uint32
-	types sideRef // *HeritageClauseElementList
+	types listRef // HeritageClauseElementList
 	token Kind
 }
 
@@ -5527,23 +5514,23 @@ func (node HeritageClause) data() *heritageClauseData { return (*heritageClauseD
 
 func (node HeritageClause) Token() Kind         { return node.data().token }
 func (node HeritageClause) SetToken(value Kind) { node.data().token = value }
-func (node HeritageClause) Types() *HeritageClauseElementList {
-	return node.store().nodeLists.get(node.data().types)
+func (node HeritageClause) Types() HeritageClauseElementList {
+	return node.derefList(&node.data().types)
 }
 
-func (node HeritageClause) SetTypes(value *HeritageClauseElementList) {
-	node.store().nodeLists.set(&node.data().types, value, value == nil)
+func (node HeritageClause) SetTypes(value HeritageClauseElementList) {
+	node.setListRef(&node.data().types, value)
 }
 
-func (f *NodeFactory) NewHeritageClause(token Kind, types *HeritageClauseElementList) Node {
+func (f *NodeFactory) NewHeritageClause(token Kind, types HeritageClauseElementList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[heritageClauseData](s, layoutHeritageClause)
 	data.token = token
-	s.nodeLists.set(&data.types, types, types == nil)
+	setListRefAt(&data.types, i, types)
 	return f.newNode(KindHeritageClause, layoutHeritageClause, i)
 }
 
-func (f *NodeFactory) UpdateHeritageClause(node HeritageClause, token Kind, types *HeritageClauseElementList) Node {
+func (f *NodeFactory) UpdateHeritageClause(node HeritageClause, token Kind, types HeritageClauseElementList) Node {
 	if token != node.Token() || types != node.Types() {
 		return updateNode(f.NewHeritageClause(token, types), node.AsNode(), f.hooks)
 	}
@@ -5575,11 +5562,11 @@ type interfaceDeclarationData struct {
 	flowNode        flowRef // FlowNode
 	symbol          sideRef // *Symbol
 	localSymbol     sideRef // *Symbol
-	modifiers       sideRef // *ModifierList. Optional
+	modifiers       listRef // ModifierList. Optional
 	name            nodeRef // IdentifierNode
-	typeParameters  sideRef // *TypeParameterList. Optional
-	heritageClauses sideRef // *HeritageClauseList. Optional
-	members         sideRef // *TypeElementList
+	typeParameters  listRef // TypeParameterList. Optional
+	heritageClauses listRef // HeritageClauseList. Optional
+	members         listRef // TypeElementList
 }
 
 type InterfaceDeclaration struct{ Node }
@@ -5610,54 +5597,54 @@ func (node InterfaceDeclaration) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().localSymbol, value, value == nil)
 }
 
-func (node InterfaceDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node InterfaceDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node InterfaceDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node InterfaceDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node InterfaceDeclaration) Name() IdentifierNode { return node.deref(&node.data().name) }
 
 func (node InterfaceDeclaration) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 
-func (node InterfaceDeclaration) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node InterfaceDeclaration) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node InterfaceDeclaration) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node InterfaceDeclaration) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node InterfaceDeclaration) HeritageClauses() *HeritageClauseList {
-	return node.store().nodeLists.get(node.data().heritageClauses)
+func (node InterfaceDeclaration) HeritageClauses() HeritageClauseList {
+	return node.derefList(&node.data().heritageClauses)
 }
 
-func (node InterfaceDeclaration) SetHeritageClauses(value *HeritageClauseList) {
-	node.store().nodeLists.set(&node.data().heritageClauses, value, value == nil)
+func (node InterfaceDeclaration) SetHeritageClauses(value HeritageClauseList) {
+	node.setListRef(&node.data().heritageClauses, value)
 }
 
-func (node InterfaceDeclaration) Members() *TypeElementList {
-	return node.store().nodeLists.get(node.data().members)
+func (node InterfaceDeclaration) Members() TypeElementList {
+	return node.derefList(&node.data().members)
 }
 
-func (node InterfaceDeclaration) SetMembers(value *TypeElementList) {
-	node.store().nodeLists.set(&node.data().members, value, value == nil)
+func (node InterfaceDeclaration) SetMembers(value TypeElementList) {
+	node.setListRef(&node.data().members, value)
 }
 
-func (f *NodeFactory) NewInterfaceDeclaration(modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *TypeElementList) Node {
+func (f *NodeFactory) NewInterfaceDeclaration(modifiers ModifierList, name IdentifierNode, typeParameters TypeParameterList, heritageClauses HeritageClauseList, members TypeElementList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[interfaceDeclarationData](s, layoutInterfaceDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.heritageClauses, heritageClauses, heritageClauses == nil)
-	s.nodeLists.set(&data.members, members, members == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.heritageClauses, i, heritageClauses)
+	setListRefAt(&data.members, i, members)
 	return f.newNode(KindInterfaceDeclaration, layoutInterfaceDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateInterfaceDeclaration(node InterfaceDeclaration, modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, heritageClauses *HeritageClauseList, members *TypeElementList) Node {
+func (f *NodeFactory) UpdateInterfaceDeclaration(node InterfaceDeclaration, modifiers ModifierList, name IdentifierNode, typeParameters TypeParameterList, heritageClauses HeritageClauseList, members TypeElementList) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || typeParameters != node.TypeParameters() || heritageClauses != node.HeritageClauses() || members != node.Members() {
 		return updateNode(f.NewInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members), node.AsNode(), f.hooks)
 	}
@@ -5693,11 +5680,11 @@ type typeAliasDeclarationData struct {
 	flowNode       flowRef // FlowNode
 	symbol         sideRef // *Symbol
 	localSymbol    sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
 	name           nodeRef // IdentifierNode
-	typeParameters sideRef // *TypeParameterList. Optional
+	typeParameters listRef // TypeParameterList. Optional
 	typeField      nodeRef // TypeNode
 }
 
@@ -5729,12 +5716,12 @@ func (node TypeAliasDeclaration) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().localSymbol, value, value == nil)
 }
 
-func (node TypeAliasDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node TypeAliasDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node TypeAliasDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node TypeAliasDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node TypeAliasDeclaration) Locals() SymbolTable {
@@ -5755,39 +5742,39 @@ func (node TypeAliasDeclaration) Name() IdentifierNode { return node.deref(&node
 
 func (node TypeAliasDeclaration) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 
-func (node TypeAliasDeclaration) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node TypeAliasDeclaration) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node TypeAliasDeclaration) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node TypeAliasDeclaration) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
 func (node TypeAliasDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
 
 func (node TypeAliasDeclaration) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
 
-func (f *NodeFactory) NewTypeAliasDeclaration(modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) NewTypeAliasDeclaration(modifiers ModifierList, name IdentifierNode, typeParameters TypeParameterList, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeAliasDeclarationData](s, layoutTypeAliasDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindTypeAliasDeclaration, layoutTypeAliasDeclaration, i)
 }
 
-func (f *NodeFactory) NewJSTypeAliasDeclaration(modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) NewJSTypeAliasDeclaration(modifiers ModifierList, name IdentifierNode, typeParameters TypeParameterList, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeAliasDeclarationData](s, layoutTypeAliasDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindJSTypeAliasDeclaration, layoutTypeAliasDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateTypeAliasDeclaration(node TypeAliasDeclaration, modifiers *ModifierList, name IdentifierNode, typeParameters *TypeParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) UpdateTypeAliasDeclaration(node TypeAliasDeclaration, modifiers ModifierList, name IdentifierNode, typeParameters TypeParameterList, typeNode TypeNode) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || typeParameters != node.TypeParameters() || typeNode != node.Type() {
 		switch node.Kind() {
 		case KindTypeAliasDeclaration:
@@ -5843,7 +5830,7 @@ func IsJSTypeAliasDeclaration(node Node) bool {
 type enumMemberData struct {
 	nodeBaseData
 	symbol       sideRef // *Symbol
-	modifiers    sideRef // *ModifierList. Optional
+	modifiers    listRef // ModifierList. Optional
 	name         nodeRef // PropertyName
 	postfixToken nodeRef // TokenNode. Optional
 	facts        atomic.Uint32
@@ -5859,12 +5846,10 @@ func (node EnumMember) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node EnumMember) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
-}
+func (node EnumMember) Modifiers() ModifierList { return node.derefModifiers(&node.data().modifiers) }
 
-func (node EnumMember) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node EnumMember) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 func (node EnumMember) Name() PropertyName         { return node.deref(&node.data().name) }
 func (node EnumMember) setName(value PropertyName) { node.setRef(&node.data().name, value) }
@@ -5917,10 +5902,10 @@ type enumDeclarationData struct {
 	flowNode    flowRef // FlowNode
 	symbol      sideRef // *Symbol
 	localSymbol sideRef // *Symbol
-	modifiers   sideRef // *ModifierList. Optional
+	modifiers   listRef // ModifierList. Optional
 	facts       atomic.Uint32
 	name        nodeRef // IdentifierNode
-	members     sideRef // *EnumMemberList
+	members     listRef // EnumMemberList
 }
 
 type EnumDeclaration struct{ Node }
@@ -5944,33 +5929,31 @@ func (node EnumDeclaration) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().localSymbol, value, value == nil)
 }
 
-func (node EnumDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node EnumDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node EnumDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node EnumDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 func (node EnumDeclaration) Name() IdentifierNode         { return node.deref(&node.data().name) }
 func (node EnumDeclaration) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
-func (node EnumDeclaration) Members() *EnumMemberList {
-	return node.store().nodeLists.get(node.data().members)
+func (node EnumDeclaration) Members() EnumMemberList      { return node.derefList(&node.data().members) }
+
+func (node EnumDeclaration) SetMembers(value EnumMemberList) {
+	node.setListRef(&node.data().members, value)
 }
 
-func (node EnumDeclaration) SetMembers(value *EnumMemberList) {
-	node.store().nodeLists.set(&node.data().members, value, value == nil)
-}
-
-func (f *NodeFactory) NewEnumDeclaration(modifiers *ModifierList, name IdentifierNode, members *EnumMemberList) Node {
+func (f *NodeFactory) NewEnumDeclaration(modifiers ModifierList, name IdentifierNode, members EnumMemberList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[enumDeclarationData](s, layoutEnumDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
-	s.nodeLists.set(&data.members, members, members == nil)
+	setListRefAt(&data.members, i, members)
 	return f.newNode(KindEnumDeclaration, layoutEnumDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateEnumDeclaration(node EnumDeclaration, modifiers *ModifierList, name IdentifierNode, members *EnumMemberList) Node {
+func (f *NodeFactory) UpdateEnumDeclaration(node EnumDeclaration, modifiers ModifierList, name IdentifierNode, members EnumMemberList) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || members != node.Members() {
 		return updateNode(f.NewEnumDeclaration(modifiers, name, members), node.AsNode(), f.hooks)
 	}
@@ -6001,7 +5984,7 @@ type moduleBlockData struct {
 	nodeBaseData
 	flowNode   flowRef // FlowNode
 	facts      atomic.Uint32
-	statements sideRef // *StatementList
+	statements listRef // StatementList
 }
 
 type ModuleBlock struct{ Node }
@@ -6011,22 +5994,20 @@ func (node ModuleBlock) data() *moduleBlockData { return (*moduleBlockData)(node
 func (node ModuleBlock) FlowNode() FlowNode         { return node.derefFlow(&node.data().flowNode) }
 func (node ModuleBlock) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
 
-func (node ModuleBlock) Statements() *StatementList {
-	return node.store().nodeLists.get(node.data().statements)
+func (node ModuleBlock) Statements() StatementList { return node.derefList(&node.data().statements) }
+
+func (node ModuleBlock) SetStatements(value StatementList) {
+	node.setListRef(&node.data().statements, value)
 }
 
-func (node ModuleBlock) SetStatements(value *StatementList) {
-	node.store().nodeLists.set(&node.data().statements, value, value == nil)
-}
-
-func (f *NodeFactory) NewModuleBlock(statements *StatementList) Node {
+func (f *NodeFactory) NewModuleBlock(statements StatementList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[moduleBlockData](s, layoutModuleBlock)
-	s.nodeLists.set(&data.statements, statements, statements == nil)
+	setListRefAt(&data.statements, i, statements)
 	return f.newNode(KindModuleBlock, layoutModuleBlock, i)
 }
 
-func (f *NodeFactory) UpdateModuleBlock(node ModuleBlock, statements *StatementList) Node {
+func (f *NodeFactory) UpdateModuleBlock(node ModuleBlock, statements StatementList) Node {
 	if statements != node.Statements() {
 		return updateNode(f.NewModuleBlock(statements), node.AsNode(), f.hooks)
 	}
@@ -6129,7 +6110,7 @@ func IsNotEmittedTypeElement(node Node) bool {
 type importDeclarationData struct {
 	nodeBaseData
 	flowNode        flowRef // FlowNode
-	modifiers       sideRef // *ModifierList. Optional
+	modifiers       listRef // ModifierList. Optional
 	facts           atomic.Uint32
 	symbol          sideRef // *Symbol
 	importClause    nodeRef // ImportClauseNode. Optional
@@ -6148,12 +6129,12 @@ func (node ImportDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
-func (node ImportDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ImportDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ImportDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ImportDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node ImportDeclaration) Symbol() *Symbol { return node.store().symbols.get(node.data().symbol) }
@@ -6186,27 +6167,27 @@ func (node ImportDeclaration) SetAttributes(value ImportAttributesNode) {
 	node.setRef(&node.data().attributes, value)
 }
 
-func (f *NodeFactory) NewImportDeclaration(modifiers *ModifierList, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
+func (f *NodeFactory) NewImportDeclaration(modifiers ModifierList, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[importDeclarationData](s, layoutImportDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.importClause, i, importClause)
 	setNodeRef(&data.moduleSpecifier, i, moduleSpecifier)
 	setNodeRef(&data.attributes, i, attributes)
 	return f.newNode(KindImportDeclaration, layoutImportDeclaration, i)
 }
 
-func (f *NodeFactory) NewJSImportDeclaration(modifiers *ModifierList, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
+func (f *NodeFactory) NewJSImportDeclaration(modifiers ModifierList, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[importDeclarationData](s, layoutImportDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.importClause, i, importClause)
 	setNodeRef(&data.moduleSpecifier, i, moduleSpecifier)
 	setNodeRef(&data.attributes, i, attributes)
 	return f.newNode(KindJSImportDeclaration, layoutImportDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateImportDeclaration(node ImportDeclaration, modifiers *ModifierList, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
+func (f *NodeFactory) UpdateImportDeclaration(node ImportDeclaration, modifiers ModifierList, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
 	if modifiers != node.Modifiers() || importClause != node.ImportClause() || moduleSpecifier != node.ModuleSpecifier() || attributes != node.Attributes() {
 		switch node.Kind() {
 		case KindImportDeclaration:
@@ -6388,29 +6369,27 @@ func IsNamespaceImport(node Node) bool {
 type namedImportsData struct {
 	nodeBaseData
 	facts    atomic.Uint32
-	elements sideRef // *ImportSpecifierList
+	elements listRef // ImportSpecifierList
 }
 
 type NamedImports struct{ Node }
 
 func (node NamedImports) data() *namedImportsData { return (*namedImportsData)(node.rec()) }
 
-func (node NamedImports) Elements() *ImportSpecifierList {
-	return node.store().nodeLists.get(node.data().elements)
+func (node NamedImports) Elements() ImportSpecifierList { return node.derefList(&node.data().elements) }
+
+func (node NamedImports) SetElements(value ImportSpecifierList) {
+	node.setListRef(&node.data().elements, value)
 }
 
-func (node NamedImports) SetElements(value *ImportSpecifierList) {
-	node.store().nodeLists.set(&node.data().elements, value, value == nil)
-}
-
-func (f *NodeFactory) NewNamedImports(elements *ImportSpecifierList) Node {
+func (f *NodeFactory) NewNamedImports(elements ImportSpecifierList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[namedImportsData](s, layoutNamedImports)
-	s.nodeLists.set(&data.elements, elements, elements == nil)
+	setListRefAt(&data.elements, i, elements)
 	return f.newNode(KindNamedImports, layoutNamedImports, i)
 }
 
-func (f *NodeFactory) UpdateNamedImports(node NamedImports, elements *ImportSpecifierList) Node {
+func (f *NodeFactory) UpdateNamedImports(node NamedImports, elements ImportSpecifierList) Node {
 	if elements != node.Elements() {
 		return updateNode(f.NewNamedImports(elements), node.AsNode(), f.hooks)
 	}
@@ -6445,7 +6424,7 @@ type exportAssignmentData struct {
 	nodeBaseData
 	flowNode       flowRef // FlowNode
 	symbol         sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	facts          atomic.Uint32
 	typeField      nodeRef // TypeNode
 	expression     nodeRef // Expression
@@ -6467,12 +6446,12 @@ func (node ExportAssignment) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node ExportAssignment) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ExportAssignment) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ExportAssignment) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ExportAssignment) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 func (node ExportAssignment) IsExportEquals() bool         { return node.data().isExportEquals }
 func (node ExportAssignment) SetIsExportEquals(value bool) { node.data().isExportEquals = value }
@@ -6486,17 +6465,17 @@ func (node ExportAssignment) SetExpression(value Expression) {
 	node.setRef(&node.data().expression, value)
 }
 
-func (f *NodeFactory) NewExportAssignment(modifiers *ModifierList, isExportEquals bool, typeNode TypeNode, expression Expression) Node {
+func (f *NodeFactory) NewExportAssignment(modifiers ModifierList, isExportEquals bool, typeNode TypeNode, expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[exportAssignmentData](s, layoutExportAssignment)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	data.isExportEquals = isExportEquals
 	setNodeRef(&data.typeField, i, typeNode)
 	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindExportAssignment, layoutExportAssignment, i)
 }
 
-func (f *NodeFactory) UpdateExportAssignment(node ExportAssignment, modifiers *ModifierList, isExportEquals bool, typeNode TypeNode, expression Expression) Node {
+func (f *NodeFactory) UpdateExportAssignment(node ExportAssignment, modifiers ModifierList, isExportEquals bool, typeNode TypeNode, expression Expression) Node {
 	if modifiers != node.Modifiers() || isExportEquals != node.IsExportEquals() || typeNode != node.Type() || expression != node.Expression() {
 		return updateNode(f.NewExportAssignment(modifiers, isExportEquals, typeNode, expression), node.AsNode(), f.hooks)
 	}
@@ -6527,7 +6506,7 @@ type namespaceExportDeclarationData struct {
 	nodeBaseData
 	flowNode  flowRef // FlowNode
 	symbol    sideRef // *Symbol
-	modifiers sideRef // *ModifierList. Optional
+	modifiers listRef // ModifierList. Optional
 	name      nodeRef // IdentifierNode
 }
 
@@ -6553,12 +6532,12 @@ func (node NamespaceExportDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node NamespaceExportDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node NamespaceExportDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node NamespaceExportDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node NamespaceExportDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node NamespaceExportDeclaration) Name() IdentifierNode { return node.deref(&node.data().name) }
@@ -6567,15 +6546,15 @@ func (node NamespaceExportDeclaration) setName(value IdentifierNode) {
 	node.setRef(&node.data().name, value)
 }
 
-func (f *NodeFactory) NewNamespaceExportDeclaration(modifiers *ModifierList, name IdentifierNode) Node {
+func (f *NodeFactory) NewNamespaceExportDeclaration(modifiers ModifierList, name IdentifierNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[namespaceExportDeclarationData](s, layoutNamespaceExportDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
 	return f.newNode(KindNamespaceExportDeclaration, layoutNamespaceExportDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateNamespaceExportDeclaration(node NamespaceExportDeclaration, modifiers *ModifierList, name IdentifierNode) Node {
+func (f *NodeFactory) UpdateNamespaceExportDeclaration(node NamespaceExportDeclaration, modifiers ModifierList, name IdentifierNode) Node {
 	if modifiers != node.Modifiers() || name != node.Name() {
 		return updateNode(f.NewNamespaceExportDeclaration(modifiers, name), node.AsNode(), f.hooks)
 	}
@@ -6660,29 +6639,27 @@ func IsNamespaceExport(node Node) bool {
 type namedExportsData struct {
 	nodeBaseData
 	facts    atomic.Uint32
-	elements sideRef // *ExportSpecifierList
+	elements listRef // ExportSpecifierList
 }
 
 type NamedExports struct{ Node }
 
 func (node NamedExports) data() *namedExportsData { return (*namedExportsData)(node.rec()) }
 
-func (node NamedExports) Elements() *ExportSpecifierList {
-	return node.store().nodeLists.get(node.data().elements)
+func (node NamedExports) Elements() ExportSpecifierList { return node.derefList(&node.data().elements) }
+
+func (node NamedExports) SetElements(value ExportSpecifierList) {
+	node.setListRef(&node.data().elements, value)
 }
 
-func (node NamedExports) SetElements(value *ExportSpecifierList) {
-	node.store().nodeLists.set(&node.data().elements, value, value == nil)
-}
-
-func (f *NodeFactory) NewNamedExports(elements *ExportSpecifierList) Node {
+func (f *NodeFactory) NewNamedExports(elements ExportSpecifierList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[namedExportsData](s, layoutNamedExports)
-	s.nodeLists.set(&data.elements, elements, elements == nil)
+	setListRefAt(&data.elements, i, elements)
 	return f.newNode(KindNamedExports, layoutNamedExports, i)
 }
 
-func (f *NodeFactory) UpdateNamedExports(node NamedExports, elements *ExportSpecifierList) Node {
+func (f *NodeFactory) UpdateNamedExports(node NamedExports, elements ExportSpecifierList) Node {
 	if elements != node.Elements() {
 		return updateNode(f.NewNamedExports(elements), node.AsNode(), f.hooks)
 	}
@@ -6792,8 +6769,8 @@ type callSignatureDeclarationData struct {
 	symbol         sideRef // *Symbol
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 }
@@ -6828,20 +6805,20 @@ func (node CallSignatureDeclaration) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node CallSignatureDeclaration) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node CallSignatureDeclaration) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node CallSignatureDeclaration) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node CallSignatureDeclaration) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node CallSignatureDeclaration) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
+func (node CallSignatureDeclaration) Parameters() ParameterList {
+	return node.derefList(&node.data().parameters)
 }
 
-func (node CallSignatureDeclaration) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node CallSignatureDeclaration) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 func (node CallSignatureDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
 func (node CallSignatureDeclaration) SetType(value TypeNode) {
@@ -6856,16 +6833,16 @@ func (node CallSignatureDeclaration) SetFullSignature(value TypeNode) {
 	node.setRef(&node.data().fullSignature, value)
 }
 
-func (f *NodeFactory) NewCallSignatureDeclaration(typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) NewCallSignatureDeclaration(typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[callSignatureDeclarationData](s, layoutCallSignatureDeclaration)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindCallSignature, layoutCallSignatureDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateCallSignatureDeclaration(node CallSignatureDeclaration, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) UpdateCallSignatureDeclaration(node CallSignatureDeclaration, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode) Node {
 	if typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewCallSignatureDeclaration(typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
@@ -6897,8 +6874,8 @@ type constructSignatureDeclarationData struct {
 	symbol         sideRef // *Symbol
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 }
@@ -6933,20 +6910,20 @@ func (node ConstructSignatureDeclaration) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node ConstructSignatureDeclaration) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node ConstructSignatureDeclaration) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node ConstructSignatureDeclaration) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node ConstructSignatureDeclaration) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node ConstructSignatureDeclaration) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
+func (node ConstructSignatureDeclaration) Parameters() ParameterList {
+	return node.derefList(&node.data().parameters)
 }
 
-func (node ConstructSignatureDeclaration) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node ConstructSignatureDeclaration) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 
 func (node ConstructSignatureDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
@@ -6963,16 +6940,16 @@ func (node ConstructSignatureDeclaration) SetFullSignature(value TypeNode) {
 	node.setRef(&node.data().fullSignature, value)
 }
 
-func (f *NodeFactory) NewConstructSignatureDeclaration(typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) NewConstructSignatureDeclaration(typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[constructSignatureDeclarationData](s, layoutConstructSignatureDeclaration)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindConstructSignature, layoutConstructSignatureDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateConstructSignatureDeclaration(node ConstructSignatureDeclaration, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) UpdateConstructSignatureDeclaration(node ConstructSignatureDeclaration, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode) Node {
 	if typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewConstructSignatureDeclaration(typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
@@ -7002,11 +6979,11 @@ func IsConstructSignatureDeclaration(node Node) bool {
 type constructorDeclarationData struct {
 	nodeBaseData
 	symbol         sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 	asteriskToken  nodeRef // AsteriskToken. Optional
@@ -7030,12 +7007,12 @@ func (node ConstructorDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node ConstructorDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ConstructorDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ConstructorDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ConstructorDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node ConstructorDeclaration) Locals() SymbolTable {
@@ -7054,20 +7031,20 @@ func (node ConstructorDeclaration) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node ConstructorDeclaration) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node ConstructorDeclaration) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node ConstructorDeclaration) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node ConstructorDeclaration) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node ConstructorDeclaration) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
+func (node ConstructorDeclaration) Parameters() ParameterList {
+	return node.derefList(&node.data().parameters)
 }
 
-func (node ConstructorDeclaration) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node ConstructorDeclaration) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 func (node ConstructorDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
 func (node ConstructorDeclaration) SetType(value TypeNode) {
@@ -7107,19 +7084,19 @@ func (node ConstructorDeclaration) SetReturnFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().returnFlowNode, value)
 }
 
-func (f *NodeFactory) NewConstructorDeclaration(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
+func (f *NodeFactory) NewConstructorDeclaration(modifiers ModifierList, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
 	s := f.nodeStore()
 	data, i := newRecord[constructorDeclarationData](s, layoutConstructorDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	setNodeRef(&data.fullSignature, i, fullSignature)
 	setNodeRef(&data.body, i, body)
 	return f.newNode(KindConstructor, layoutConstructorDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateConstructorDeclaration(node ConstructorDeclaration, modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
+func (f *NodeFactory) UpdateConstructorDeclaration(node ConstructorDeclaration, modifiers ModifierList, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
 	if modifiers != node.Modifiers() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || body != node.Body() {
 		return updateNode(f.NewConstructorDeclaration(modifiers, typeParameters, parameters, typeNode, fullSignature, body), node.AsNode(), f.hooks)
 	}
@@ -7154,13 +7131,13 @@ func IsConstructorDeclaration(node Node) bool {
 type getAccessorDeclarationData struct {
 	nodeBaseData
 	symbol         sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	name           nodeRef // PropertyName
 	postfixToken   nodeRef // TokenNode. Optional
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 	asteriskToken  nodeRef // AsteriskToken. Optional
@@ -7184,12 +7161,12 @@ func (node GetAccessorDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node GetAccessorDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node GetAccessorDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node GetAccessorDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node GetAccessorDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node GetAccessorDeclaration) Name() PropertyName { return node.deref(&node.data().name) }
@@ -7220,20 +7197,20 @@ func (node GetAccessorDeclaration) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node GetAccessorDeclaration) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node GetAccessorDeclaration) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node GetAccessorDeclaration) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node GetAccessorDeclaration) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node GetAccessorDeclaration) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
+func (node GetAccessorDeclaration) Parameters() ParameterList {
+	return node.derefList(&node.data().parameters)
 }
 
-func (node GetAccessorDeclaration) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node GetAccessorDeclaration) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 func (node GetAccessorDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
 func (node GetAccessorDeclaration) SetType(value TypeNode) {
@@ -7271,20 +7248,20 @@ func (node GetAccessorDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
-func (f *NodeFactory) NewGetAccessorDeclaration(modifiers *ModifierList, name PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
+func (f *NodeFactory) NewGetAccessorDeclaration(modifiers ModifierList, name PropertyName, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
 	s := f.nodeStore()
 	data, i := newRecord[getAccessorDeclarationData](s, layoutGetAccessorDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	setNodeRef(&data.fullSignature, i, fullSignature)
 	setNodeRef(&data.body, i, body)
 	return f.newNode(KindGetAccessor, layoutGetAccessorDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateGetAccessorDeclaration(node GetAccessorDeclaration, modifiers *ModifierList, name PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
+func (f *NodeFactory) UpdateGetAccessorDeclaration(node GetAccessorDeclaration, modifiers ModifierList, name PropertyName, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || body != node.Body() {
 		return updateNode(f.NewGetAccessorDeclaration(modifiers, name, typeParameters, parameters, typeNode, fullSignature, body), node.AsNode(), f.hooks)
 	}
@@ -7320,13 +7297,13 @@ func IsGetAccessorDeclaration(node Node) bool {
 type setAccessorDeclarationData struct {
 	nodeBaseData
 	symbol         sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	name           nodeRef // PropertyName
 	postfixToken   nodeRef // TokenNode. Optional
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 	asteriskToken  nodeRef // AsteriskToken. Optional
@@ -7350,12 +7327,12 @@ func (node SetAccessorDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node SetAccessorDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node SetAccessorDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node SetAccessorDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node SetAccessorDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node SetAccessorDeclaration) Name() PropertyName { return node.deref(&node.data().name) }
@@ -7386,20 +7363,20 @@ func (node SetAccessorDeclaration) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node SetAccessorDeclaration) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node SetAccessorDeclaration) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node SetAccessorDeclaration) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node SetAccessorDeclaration) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node SetAccessorDeclaration) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
+func (node SetAccessorDeclaration) Parameters() ParameterList {
+	return node.derefList(&node.data().parameters)
 }
 
-func (node SetAccessorDeclaration) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node SetAccessorDeclaration) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 func (node SetAccessorDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
 func (node SetAccessorDeclaration) SetType(value TypeNode) {
@@ -7437,20 +7414,20 @@ func (node SetAccessorDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
-func (f *NodeFactory) NewSetAccessorDeclaration(modifiers *ModifierList, name PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
+func (f *NodeFactory) NewSetAccessorDeclaration(modifiers ModifierList, name PropertyName, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
 	s := f.nodeStore()
 	data, i := newRecord[setAccessorDeclarationData](s, layoutSetAccessorDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	setNodeRef(&data.fullSignature, i, fullSignature)
 	setNodeRef(&data.body, i, body)
 	return f.newNode(KindSetAccessor, layoutSetAccessorDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateSetAccessorDeclaration(node SetAccessorDeclaration, modifiers *ModifierList, name PropertyName, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
+func (f *NodeFactory) UpdateSetAccessorDeclaration(node SetAccessorDeclaration, modifiers ModifierList, name PropertyName, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || body != node.Body() {
 		return updateNode(f.NewSetAccessorDeclaration(modifiers, name, typeParameters, parameters, typeNode, fullSignature, body), node.AsNode(), f.hooks)
 	}
@@ -7486,11 +7463,11 @@ func IsSetAccessorDeclaration(node Node) bool {
 type indexSignatureDeclarationData struct {
 	nodeBaseData
 	symbol         sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 }
@@ -7509,12 +7486,12 @@ func (node IndexSignatureDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node IndexSignatureDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node IndexSignatureDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node IndexSignatureDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node IndexSignatureDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node IndexSignatureDeclaration) Locals() SymbolTable {
@@ -7533,20 +7510,20 @@ func (node IndexSignatureDeclaration) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node IndexSignatureDeclaration) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node IndexSignatureDeclaration) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node IndexSignatureDeclaration) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node IndexSignatureDeclaration) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node IndexSignatureDeclaration) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
+func (node IndexSignatureDeclaration) Parameters() ParameterList {
+	return node.derefList(&node.data().parameters)
 }
 
-func (node IndexSignatureDeclaration) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node IndexSignatureDeclaration) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 func (node IndexSignatureDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
 func (node IndexSignatureDeclaration) SetType(value TypeNode) {
@@ -7561,16 +7538,16 @@ func (node IndexSignatureDeclaration) SetFullSignature(value TypeNode) {
 	node.setRef(&node.data().fullSignature, value)
 }
 
-func (f *NodeFactory) NewIndexSignatureDeclaration(modifiers *ModifierList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) NewIndexSignatureDeclaration(modifiers ModifierList, parameters ParameterList, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[indexSignatureDeclarationData](s, layoutIndexSignatureDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindIndexSignature, layoutIndexSignatureDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateIndexSignatureDeclaration(node IndexSignatureDeclaration, modifiers *ModifierList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) UpdateIndexSignatureDeclaration(node IndexSignatureDeclaration, modifiers ModifierList, parameters ParameterList, typeNode TypeNode) Node {
 	if modifiers != node.Modifiers() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewIndexSignatureDeclaration(modifiers, parameters, typeNode), node.AsNode(), f.hooks)
 	}
@@ -7600,13 +7577,13 @@ func IsIndexSignatureDeclaration(node Node) bool {
 type methodSignatureDeclarationData struct {
 	nodeBaseData
 	symbol         sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	name           nodeRef // PropertyName
 	postfixToken   nodeRef // TokenNode. Optional
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 }
@@ -7625,12 +7602,12 @@ func (node MethodSignatureDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node MethodSignatureDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node MethodSignatureDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node MethodSignatureDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node MethodSignatureDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 func (node MethodSignatureDeclaration) Name() PropertyName { return node.deref(&node.data().name) }
 func (node MethodSignatureDeclaration) setName(value PropertyName) {
@@ -7661,20 +7638,20 @@ func (node MethodSignatureDeclaration) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node MethodSignatureDeclaration) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node MethodSignatureDeclaration) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node MethodSignatureDeclaration) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node MethodSignatureDeclaration) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node MethodSignatureDeclaration) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
+func (node MethodSignatureDeclaration) Parameters() ParameterList {
+	return node.derefList(&node.data().parameters)
 }
 
-func (node MethodSignatureDeclaration) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node MethodSignatureDeclaration) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 func (node MethodSignatureDeclaration) Type() TypeNode { return node.deref(&node.data().typeField) }
 func (node MethodSignatureDeclaration) SetType(value TypeNode) {
@@ -7689,19 +7666,19 @@ func (node MethodSignatureDeclaration) SetFullSignature(value TypeNode) {
 	node.setRef(&node.data().fullSignature, value)
 }
 
-func (f *NodeFactory) NewMethodSignatureDeclaration(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) NewMethodSignatureDeclaration(modifiers ModifierList, name PropertyName, postfixToken TokenNode, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[methodSignatureDeclarationData](s, layoutMethodSignatureDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
 	setNodeRef(&data.postfixToken, i, postfixToken)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindMethodSignature, layoutMethodSignatureDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateMethodSignatureDeclaration(node MethodSignatureDeclaration, modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) UpdateMethodSignatureDeclaration(node MethodSignatureDeclaration, modifiers ModifierList, name PropertyName, postfixToken TokenNode, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || postfixToken != node.PostfixToken() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewMethodSignatureDeclaration(modifiers, name, postfixToken, typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
@@ -7736,13 +7713,13 @@ func IsMethodSignatureDeclaration(node Node) bool {
 type methodDeclarationData struct {
 	nodeBaseData
 	symbol         sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	name           nodeRef // PropertyName
 	postfixToken   nodeRef // TokenNode. Optional
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 	asteriskToken  nodeRef // AsteriskToken. Optional
@@ -7764,12 +7741,12 @@ func (node MethodDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node MethodDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node MethodDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node MethodDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node MethodDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 func (node MethodDeclaration) Name() PropertyName         { return node.deref(&node.data().name) }
 func (node MethodDeclaration) setName(value PropertyName) { node.setRef(&node.data().name, value) }
@@ -7791,20 +7768,20 @@ func (node MethodDeclaration) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node MethodDeclaration) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node MethodDeclaration) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node MethodDeclaration) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node MethodDeclaration) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node MethodDeclaration) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
+func (node MethodDeclaration) Parameters() ParameterList {
+	return node.derefList(&node.data().parameters)
 }
 
-func (node MethodDeclaration) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node MethodDeclaration) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 func (node MethodDeclaration) Type() TypeNode         { return node.deref(&node.data().typeField) }
 func (node MethodDeclaration) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
@@ -7834,22 +7811,22 @@ func (node MethodDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
-func (f *NodeFactory) NewMethodDeclaration(modifiers *ModifierList, asteriskToken AsteriskToken, name PropertyName, postfixToken TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
+func (f *NodeFactory) NewMethodDeclaration(modifiers ModifierList, asteriskToken AsteriskToken, name PropertyName, postfixToken TokenNode, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
 	s := f.nodeStore()
 	data, i := newRecord[methodDeclarationData](s, layoutMethodDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.asteriskToken, i, asteriskToken)
 	setNodeRef(&data.name, i, name)
 	setNodeRef(&data.postfixToken, i, postfixToken)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	setNodeRef(&data.fullSignature, i, fullSignature)
 	setNodeRef(&data.body, i, body)
 	return f.newNode(KindMethodDeclaration, layoutMethodDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateMethodDeclaration(node MethodDeclaration, modifiers *ModifierList, asteriskToken AsteriskToken, name PropertyName, postfixToken TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
+func (f *NodeFactory) UpdateMethodDeclaration(node MethodDeclaration, modifiers ModifierList, asteriskToken AsteriskToken, name PropertyName, postfixToken TokenNode, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
 	if modifiers != node.Modifiers() || asteriskToken != node.AsteriskToken() || name != node.Name() || postfixToken != node.PostfixToken() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || body != node.Body() {
 		return updateNode(f.NewMethodDeclaration(modifiers, asteriskToken, name, postfixToken, typeParameters, parameters, typeNode, fullSignature, body), node.AsNode(), f.hooks)
 	}
@@ -7887,7 +7864,7 @@ func IsMethodDeclaration(node Node) bool {
 type propertySignatureDeclarationData struct {
 	nodeBaseData
 	symbol       sideRef // *Symbol
-	modifiers    sideRef // *ModifierList. Optional
+	modifiers    listRef // ModifierList. Optional
 	name         nodeRef // PropertyName
 	postfixToken nodeRef // TokenNode. Optional
 	typeField    nodeRef // TypeNode
@@ -7908,12 +7885,12 @@ func (node PropertySignatureDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node PropertySignatureDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node PropertySignatureDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node PropertySignatureDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node PropertySignatureDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node PropertySignatureDeclaration) Name() PropertyName { return node.deref(&node.data().name) }
@@ -7944,10 +7921,10 @@ func (node PropertySignatureDeclaration) SetInitializer(value Expression) {
 	node.setRef(&node.data().initializer, value)
 }
 
-func (f *NodeFactory) NewPropertySignatureDeclaration(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
+func (f *NodeFactory) NewPropertySignatureDeclaration(modifiers ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[propertySignatureDeclarationData](s, layoutPropertySignatureDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
 	setNodeRef(&data.postfixToken, i, postfixToken)
 	setNodeRef(&data.typeField, i, typeNode)
@@ -7955,7 +7932,7 @@ func (f *NodeFactory) NewPropertySignatureDeclaration(modifiers *ModifierList, n
 	return f.newNode(KindPropertySignature, layoutPropertySignatureDeclaration, i)
 }
 
-func (f *NodeFactory) UpdatePropertySignatureDeclaration(node PropertySignatureDeclaration, modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
+func (f *NodeFactory) UpdatePropertySignatureDeclaration(node PropertySignatureDeclaration, modifiers ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || postfixToken != node.PostfixToken() || typeNode != node.Type() || initializer != node.Initializer() {
 		return updateNode(f.NewPropertySignatureDeclaration(modifiers, name, postfixToken, typeNode, initializer), node.AsNode(), f.hooks)
 	}
@@ -7989,7 +7966,7 @@ func IsPropertySignatureDeclaration(node Node) bool {
 type propertyDeclarationData struct {
 	nodeBaseData
 	symbol       sideRef // *Symbol
-	modifiers    sideRef // *ModifierList. Optional
+	modifiers    listRef // ModifierList. Optional
 	name         nodeRef // PropertyName
 	postfixToken nodeRef // TokenNode. Optional
 	facts        atomic.Uint32
@@ -8009,12 +7986,12 @@ func (node PropertyDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node PropertyDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node PropertyDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node PropertyDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node PropertyDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 func (node PropertyDeclaration) Name() PropertyName         { return node.deref(&node.data().name) }
 func (node PropertyDeclaration) setName(value PropertyName) { node.setRef(&node.data().name, value) }
@@ -8037,10 +8014,10 @@ func (node PropertyDeclaration) SetInitializer(value Expression) {
 	node.setRef(&node.data().initializer, value)
 }
 
-func (f *NodeFactory) NewPropertyDeclaration(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
+func (f *NodeFactory) NewPropertyDeclaration(modifiers ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[propertyDeclarationData](s, layoutPropertyDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
 	setNodeRef(&data.postfixToken, i, postfixToken)
 	setNodeRef(&data.typeField, i, typeNode)
@@ -8048,7 +8025,7 @@ func (f *NodeFactory) NewPropertyDeclaration(modifiers *ModifierList, name Prope
 	return f.newNode(KindPropertyDeclaration, layoutPropertyDeclaration, i)
 }
 
-func (f *NodeFactory) UpdatePropertyDeclaration(node PropertyDeclaration, modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
+func (f *NodeFactory) UpdatePropertyDeclaration(node PropertyDeclaration, modifiers ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || postfixToken != node.PostfixToken() || typeNode != node.Type() || initializer != node.Initializer() {
 		return updateNode(f.NewPropertyDeclaration(modifiers, name, postfixToken, typeNode, initializer), node.AsNode(), f.hooks)
 	}
@@ -8118,7 +8095,7 @@ func IsSemicolonClassElement(node Node) bool {
 type classStaticBlockDeclarationData struct {
 	nodeBaseData
 	symbol         sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
 	facts          atomic.Uint32
@@ -8140,12 +8117,12 @@ func (node ClassStaticBlockDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node ClassStaticBlockDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ClassStaticBlockDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ClassStaticBlockDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ClassStaticBlockDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node ClassStaticBlockDeclaration) Locals() SymbolTable {
@@ -8176,15 +8153,15 @@ func (node ClassStaticBlockDeclaration) SetReturnFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().returnFlowNode, value)
 }
 
-func (f *NodeFactory) NewClassStaticBlockDeclaration(modifiers *ModifierList, body BlockNode) Node {
+func (f *NodeFactory) NewClassStaticBlockDeclaration(modifiers ModifierList, body BlockNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[classStaticBlockDeclarationData](s, layoutClassStaticBlockDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.body, i, body)
 	return f.newNode(KindClassStaticBlockDeclaration, layoutClassStaticBlockDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateClassStaticBlockDeclaration(node ClassStaticBlockDeclaration, modifiers *ModifierList, body BlockNode) Node {
+func (f *NodeFactory) UpdateClassStaticBlockDeclaration(node ClassStaticBlockDeclaration, modifiers ModifierList, body BlockNode) Node {
 	if modifiers != node.Modifiers() || body != node.Body() {
 		return updateNode(f.NewClassStaticBlockDeclaration(modifiers, body), node.AsNode(), f.hooks)
 	}
@@ -8512,7 +8489,7 @@ func IsNoSubstitutionTemplateLiteral(node Node) bool {
 type binaryExpressionData struct {
 	nodeBaseData
 	symbol        sideRef // *Symbol
-	modifiers     sideRef // *ModifierList. Optional
+	modifiers     listRef // ModifierList. Optional
 	facts         atomic.Uint32
 	left          nodeRef // Expression
 	typeField     nodeRef // TypeNode. Optional
@@ -8530,12 +8507,12 @@ func (node BinaryExpression) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node BinaryExpression) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node BinaryExpression) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node BinaryExpression) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node BinaryExpression) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 func (node BinaryExpression) Left() Expression         { return node.deref(&node.data().left) }
 func (node BinaryExpression) SetLeft(value Expression) { node.setRef(&node.data().left, value) }
@@ -8552,10 +8529,10 @@ func (node BinaryExpression) SetOperatorToken(value BinaryOperatorToken) {
 func (node BinaryExpression) Right() Expression         { return node.deref(&node.data().right) }
 func (node BinaryExpression) SetRight(value Expression) { node.setRef(&node.data().right, value) }
 
-func (f *NodeFactory) NewBinaryExpression(modifiers *ModifierList, left Expression, typeNode TypeNode, operatorToken BinaryOperatorToken, right Expression) Node {
+func (f *NodeFactory) NewBinaryExpression(modifiers ModifierList, left Expression, typeNode TypeNode, operatorToken BinaryOperatorToken, right Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[binaryExpressionData](s, layoutBinaryExpression)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.left, i, left)
 	setNodeRef(&data.typeField, i, typeNode)
 	setNodeRef(&data.operatorToken, i, operatorToken)
@@ -8563,7 +8540,7 @@ func (f *NodeFactory) NewBinaryExpression(modifiers *ModifierList, left Expressi
 	return f.newNode(KindBinaryExpression, layoutBinaryExpression, i)
 }
 
-func (f *NodeFactory) UpdateBinaryExpression(node BinaryExpression, modifiers *ModifierList, left Expression, typeNode TypeNode, operatorToken BinaryOperatorToken, right Expression) Node {
+func (f *NodeFactory) UpdateBinaryExpression(node BinaryExpression, modifiers ModifierList, left Expression, typeNode TypeNode, operatorToken BinaryOperatorToken, right Expression) Node {
 	if modifiers != node.Modifiers() || left != node.Left() || typeNode != node.Type() || operatorToken != node.OperatorToken() || right != node.Right() {
 		return updateNode(f.NewBinaryExpression(modifiers, left, typeNode, operatorToken, right), node.AsNode(), f.hooks)
 	}
@@ -8771,11 +8748,11 @@ func IsYieldExpression(node Node) bool {
 type arrowFunctionData struct {
 	nodeBaseData
 	symbol                 sideRef // *Symbol
-	modifiers              sideRef // *ModifierList. Optional
+	modifiers              listRef // ModifierList. Optional
 	locals                 sideRef // SymbolTable
 	nextContainer          nodeRef // Node
-	typeParameters         sideRef // *TypeParameterList. Optional
-	parameters             sideRef // *ParameterList
+	typeParameters         listRef // TypeParameterList. Optional
+	parameters             listRef // ParameterList
 	typeField              nodeRef // TypeNode. Optional
 	fullSignature          nodeRef // TypeNode. Optional
 	asteriskToken          nodeRef // AsteriskToken. Optional
@@ -8795,12 +8772,12 @@ func (node ArrowFunction) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node ArrowFunction) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ArrowFunction) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ArrowFunction) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ArrowFunction) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node ArrowFunction) Locals() SymbolTable {
@@ -8815,20 +8792,18 @@ func (node ArrowFunction) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node ArrowFunction) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node ArrowFunction) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node ArrowFunction) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node ArrowFunction) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node ArrowFunction) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
-}
+func (node ArrowFunction) Parameters() ParameterList { return node.derefList(&node.data().parameters) }
 
-func (node ArrowFunction) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node ArrowFunction) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 func (node ArrowFunction) Type() TypeNode          { return node.deref(&node.data().typeField) }
 func (node ArrowFunction) SetType(value TypeNode)  { node.setRef(&node.data().typeField, value) }
@@ -8864,12 +8839,12 @@ func (node ArrowFunction) SetEqualsGreaterThanToken(value EqualsGreaterThanToken
 	node.setRef(&node.data().equalsGreaterThanToken, value)
 }
 
-func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, equalsGreaterThanToken EqualsGreaterThanToken, body ConciseBody) Node {
+func (f *NodeFactory) NewArrowFunction(modifiers ModifierList, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, equalsGreaterThanToken EqualsGreaterThanToken, body ConciseBody) Node {
 	s := f.nodeStore()
 	data, i := newRecord[arrowFunctionData](s, layoutArrowFunction)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	setNodeRef(&data.fullSignature, i, fullSignature)
 	setNodeRef(&data.equalsGreaterThanToken, i, equalsGreaterThanToken)
@@ -8877,7 +8852,7 @@ func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *
 	return f.newNode(KindArrowFunction, layoutArrowFunction, i)
 }
 
-func (f *NodeFactory) UpdateArrowFunction(node ArrowFunction, modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, equalsGreaterThanToken EqualsGreaterThanToken, body ConciseBody) Node {
+func (f *NodeFactory) UpdateArrowFunction(node ArrowFunction, modifiers ModifierList, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, equalsGreaterThanToken EqualsGreaterThanToken, body ConciseBody) Node {
 	if modifiers != node.Modifiers() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || equalsGreaterThanToken != node.EqualsGreaterThanToken() || body != node.Body() {
 		return updateNode(f.NewArrowFunction(modifiers, typeParameters, parameters, typeNode, fullSignature, equalsGreaterThanToken, body), node.AsNode(), f.hooks)
 	}
@@ -8913,11 +8888,11 @@ func IsArrowFunction(node Node) bool {
 type functionExpressionData struct {
 	nodeBaseData
 	symbol         sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 	asteriskToken  nodeRef // AsteriskToken. Optional
@@ -8941,12 +8916,12 @@ func (node FunctionExpression) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node FunctionExpression) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node FunctionExpression) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node FunctionExpression) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node FunctionExpression) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node FunctionExpression) Locals() SymbolTable {
@@ -8963,20 +8938,20 @@ func (node FunctionExpression) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node FunctionExpression) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node FunctionExpression) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node FunctionExpression) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node FunctionExpression) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node FunctionExpression) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
+func (node FunctionExpression) Parameters() ParameterList {
+	return node.derefList(&node.data().parameters)
 }
 
-func (node FunctionExpression) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node FunctionExpression) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 func (node FunctionExpression) Type() TypeNode         { return node.deref(&node.data().typeField) }
 func (node FunctionExpression) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
@@ -9022,21 +8997,21 @@ func (node FunctionExpression) SetReturnFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().returnFlowNode, value)
 }
 
-func (f *NodeFactory) NewFunctionExpression(modifiers *ModifierList, asteriskToken AsteriskToken, name IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
+func (f *NodeFactory) NewFunctionExpression(modifiers ModifierList, asteriskToken AsteriskToken, name IdentifierNode, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
 	s := f.nodeStore()
 	data, i := newRecord[functionExpressionData](s, layoutFunctionExpression)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.asteriskToken, i, asteriskToken)
 	setNodeRef(&data.name, i, name)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	setNodeRef(&data.fullSignature, i, fullSignature)
 	setNodeRef(&data.body, i, body)
 	return f.newNode(KindFunctionExpression, layoutFunctionExpression, i)
 }
 
-func (f *NodeFactory) UpdateFunctionExpression(node FunctionExpression, modifiers *ModifierList, asteriskToken AsteriskToken, name IdentifierNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
+func (f *NodeFactory) UpdateFunctionExpression(node FunctionExpression, modifiers ModifierList, asteriskToken AsteriskToken, name IdentifierNode, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, body FunctionBody) Node {
 	if modifiers != node.Modifiers() || asteriskToken != node.AsteriskToken() || name != node.Name() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() || fullSignature != node.FullSignature() || body != node.Body() {
 		return updateNode(f.NewFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, typeNode, fullSignature, body), node.AsNode(), f.hooks)
 	}
@@ -9452,8 +9427,8 @@ type callExpressionData struct {
 	facts            atomic.Uint32
 	expression       nodeRef // Expression
 	questionDotToken nodeRef // QuestionDotToken. Optional
-	typeArguments    sideRef // *TypeList. Optional
-	arguments        sideRef // *ElementList
+	typeArguments    listRef // TypeList. Optional
+	arguments        listRef // ElementList
 }
 
 type CallExpression struct{ Node }
@@ -9477,35 +9452,31 @@ func (node CallExpression) SetQuestionDotToken(value QuestionDotToken) {
 	node.setRef(&node.data().questionDotToken, value)
 }
 
-func (node CallExpression) TypeArguments() *TypeList {
-	return node.store().nodeLists.get(node.data().typeArguments)
+func (node CallExpression) TypeArguments() TypeList {
+	return node.derefList(&node.data().typeArguments)
 }
 
-func (node CallExpression) SetTypeArguments(value *TypeList) {
-	node.store().nodeLists.set(&node.data().typeArguments, value, value == nil)
+func (node CallExpression) SetTypeArguments(value TypeList) {
+	node.setListRef(&node.data().typeArguments, value)
+}
+func (node CallExpression) Arguments() ElementList { return node.derefList(&node.data().arguments) }
+func (node CallExpression) SetArguments(value ElementList) {
+	node.setListRef(&node.data().arguments, value)
 }
 
-func (node CallExpression) Arguments() *ElementList {
-	return node.store().nodeLists.get(node.data().arguments)
-}
-
-func (node CallExpression) SetArguments(value *ElementList) {
-	node.store().nodeLists.set(&node.data().arguments, value, value == nil)
-}
-
-func (f *NodeFactory) NewCallExpression(expression Expression, questionDotToken QuestionDotToken, typeArguments *TypeList, arguments *ElementList, flags NodeFlags) Node {
+func (f *NodeFactory) NewCallExpression(expression Expression, questionDotToken QuestionDotToken, typeArguments TypeList, arguments ElementList, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[callExpressionData](s, layoutCallExpression)
 	setNodeRef(&data.expression, i, expression)
 	setNodeRef(&data.questionDotToken, i, questionDotToken)
-	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
-	s.nodeLists.set(&data.arguments, arguments, arguments == nil)
+	setListRefAt(&data.typeArguments, i, typeArguments)
+	setListRefAt(&data.arguments, i, arguments)
 	node := f.newNode(KindCallExpression, layoutCallExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
 }
 
-func (f *NodeFactory) UpdateCallExpression(node CallExpression, expression Expression, questionDotToken QuestionDotToken, typeArguments *TypeList, arguments *ElementList, flags NodeFlags) Node {
+func (f *NodeFactory) UpdateCallExpression(node CallExpression, expression Expression, questionDotToken QuestionDotToken, typeArguments TypeList, arguments ElementList, flags NodeFlags) Node {
 	if expression != node.Expression() || questionDotToken != node.QuestionDotToken() || typeArguments != node.TypeArguments() || arguments != node.Arguments() || flags != node.Flags() {
 		return updateNode(f.NewCallExpression(expression, questionDotToken, typeArguments, arguments, flags), node.AsNode(), f.hooks)
 	}
@@ -9539,8 +9510,8 @@ type newExpressionData struct {
 	nodeBaseData
 	facts         atomic.Uint32
 	expression    nodeRef // Expression
-	typeArguments sideRef // *TypeList. Optional
-	arguments     sideRef // *ElementList. Optional
+	typeArguments listRef // TypeList. Optional
+	arguments     listRef // ElementList. Optional
 }
 
 type NewExpression struct{ Node }
@@ -9552,32 +9523,26 @@ func (node NewExpression) SetExpression(value Expression) {
 	node.setRef(&node.data().expression, value)
 }
 
-func (node NewExpression) TypeArguments() *TypeList {
-	return node.store().nodeLists.get(node.data().typeArguments)
+func (node NewExpression) TypeArguments() TypeList { return node.derefList(&node.data().typeArguments) }
+
+func (node NewExpression) SetTypeArguments(value TypeList) {
+	node.setListRef(&node.data().typeArguments, value)
+}
+func (node NewExpression) Arguments() ElementList { return node.derefList(&node.data().arguments) }
+func (node NewExpression) SetArguments(value ElementList) {
+	node.setListRef(&node.data().arguments, value)
 }
 
-func (node NewExpression) SetTypeArguments(value *TypeList) {
-	node.store().nodeLists.set(&node.data().typeArguments, value, value == nil)
-}
-
-func (node NewExpression) Arguments() *ElementList {
-	return node.store().nodeLists.get(node.data().arguments)
-}
-
-func (node NewExpression) SetArguments(value *ElementList) {
-	node.store().nodeLists.set(&node.data().arguments, value, value == nil)
-}
-
-func (f *NodeFactory) NewNewExpression(expression Expression, typeArguments *TypeList, arguments *ElementList) Node {
+func (f *NodeFactory) NewNewExpression(expression Expression, typeArguments TypeList, arguments ElementList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[newExpressionData](s, layoutNewExpression)
 	setNodeRef(&data.expression, i, expression)
-	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
-	s.nodeLists.set(&data.arguments, arguments, arguments == nil)
+	setListRefAt(&data.typeArguments, i, typeArguments)
+	setListRefAt(&data.arguments, i, arguments)
 	return f.newNode(KindNewExpression, layoutNewExpression, i)
 }
 
-func (f *NodeFactory) UpdateNewExpression(node NewExpression, expression Expression, typeArguments *TypeList, arguments *ElementList) Node {
+func (f *NodeFactory) UpdateNewExpression(node NewExpression, expression Expression, typeArguments TypeList, arguments ElementList) Node {
 	if expression != node.Expression() || typeArguments != node.TypeArguments() || arguments != node.Arguments() {
 		return updateNode(f.NewNewExpression(expression, typeArguments, arguments), node.AsNode(), f.hooks)
 	}
@@ -9763,7 +9728,7 @@ type templateExpressionData struct {
 	nodeBaseData
 	facts         atomic.Uint32
 	head          nodeRef // TemplateHeadNode
-	templateSpans sideRef // *TemplateSpanList
+	templateSpans listRef // TemplateSpanList
 }
 
 type TemplateExpression struct{ Node }
@@ -9776,23 +9741,23 @@ func (node TemplateExpression) Head() TemplateHeadNode { return node.deref(&node
 
 func (node TemplateExpression) SetHead(value TemplateHeadNode) { node.setRef(&node.data().head, value) }
 
-func (node TemplateExpression) TemplateSpans() *TemplateSpanList {
-	return node.store().nodeLists.get(node.data().templateSpans)
+func (node TemplateExpression) TemplateSpans() TemplateSpanList {
+	return node.derefList(&node.data().templateSpans)
 }
 
-func (node TemplateExpression) SetTemplateSpans(value *TemplateSpanList) {
-	node.store().nodeLists.set(&node.data().templateSpans, value, value == nil)
+func (node TemplateExpression) SetTemplateSpans(value TemplateSpanList) {
+	node.setListRef(&node.data().templateSpans, value)
 }
 
-func (f *NodeFactory) NewTemplateExpression(head TemplateHeadNode, templateSpans *TemplateSpanList) Node {
+func (f *NodeFactory) NewTemplateExpression(head TemplateHeadNode, templateSpans TemplateSpanList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateExpressionData](s, layoutTemplateExpression)
 	setNodeRef(&data.head, i, head)
-	s.nodeLists.set(&data.templateSpans, templateSpans, templateSpans == nil)
+	setListRefAt(&data.templateSpans, i, templateSpans)
 	return f.newNode(KindTemplateExpression, layoutTemplateExpression, i)
 }
 
-func (f *NodeFactory) UpdateTemplateExpression(node TemplateExpression, head TemplateHeadNode, templateSpans *TemplateSpanList) Node {
+func (f *NodeFactory) UpdateTemplateExpression(node TemplateExpression, head TemplateHeadNode, templateSpans TemplateSpanList) Node {
 	if head != node.Head() || templateSpans != node.TemplateSpans() {
 		return updateNode(f.NewTemplateExpression(head, templateSpans), node.AsNode(), f.hooks)
 	}
@@ -9887,7 +9852,7 @@ type taggedTemplateExpressionData struct {
 	facts            atomic.Uint32
 	tag              nodeRef // Expression
 	questionDotToken nodeRef // QuestionDotToken
-	typeArguments    sideRef // *TypeList. Optional
+	typeArguments    listRef // TypeList. Optional
 	template         nodeRef // TemplateLiteral
 }
 
@@ -9909,12 +9874,12 @@ func (node TaggedTemplateExpression) SetQuestionDotToken(value QuestionDotToken)
 	node.setRef(&node.data().questionDotToken, value)
 }
 
-func (node TaggedTemplateExpression) TypeArguments() *TypeList {
-	return node.store().nodeLists.get(node.data().typeArguments)
+func (node TaggedTemplateExpression) TypeArguments() TypeList {
+	return node.derefList(&node.data().typeArguments)
 }
 
-func (node TaggedTemplateExpression) SetTypeArguments(value *TypeList) {
-	node.store().nodeLists.set(&node.data().typeArguments, value, value == nil)
+func (node TaggedTemplateExpression) SetTypeArguments(value TypeList) {
+	node.setListRef(&node.data().typeArguments, value)
 }
 
 func (node TaggedTemplateExpression) Template() TemplateLiteral {
@@ -9925,19 +9890,19 @@ func (node TaggedTemplateExpression) SetTemplate(value TemplateLiteral) {
 	node.setRef(&node.data().template, value)
 }
 
-func (f *NodeFactory) NewTaggedTemplateExpression(tag Expression, questionDotToken QuestionDotToken, typeArguments *TypeList, template TemplateLiteral, flags NodeFlags) Node {
+func (f *NodeFactory) NewTaggedTemplateExpression(tag Expression, questionDotToken QuestionDotToken, typeArguments TypeList, template TemplateLiteral, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[taggedTemplateExpressionData](s, layoutTaggedTemplateExpression)
 	setNodeRef(&data.tag, i, tag)
 	setNodeRef(&data.questionDotToken, i, questionDotToken)
-	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
+	setListRefAt(&data.typeArguments, i, typeArguments)
 	setNodeRef(&data.template, i, template)
 	node := f.newNode(KindTaggedTemplateExpression, layoutTaggedTemplateExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
 }
 
-func (f *NodeFactory) UpdateTaggedTemplateExpression(node TaggedTemplateExpression, tag Expression, questionDotToken QuestionDotToken, typeArguments *TypeList, template TemplateLiteral, flags NodeFlags) Node {
+func (f *NodeFactory) UpdateTaggedTemplateExpression(node TaggedTemplateExpression, tag Expression, questionDotToken QuestionDotToken, typeArguments TypeList, template TemplateLiteral, flags NodeFlags) Node {
 	if tag != node.Tag() || questionDotToken != node.QuestionDotToken() || typeArguments != node.TypeArguments() || template != node.Template() || flags != node.Flags() {
 		return updateNode(f.NewTaggedTemplateExpression(tag, questionDotToken, typeArguments, template, flags), node.AsNode(), f.hooks)
 	}
@@ -10027,7 +9992,7 @@ func IsParenthesizedExpression(node Node) bool {
 type arrayLiteralExpressionData struct {
 	nodeBaseData
 	facts     atomic.Uint32
-	elements  sideRef // *ElementList
+	elements  listRef // ElementList
 	multiLine bool
 }
 
@@ -10037,25 +10002,25 @@ func (node ArrayLiteralExpression) data() *arrayLiteralExpressionData {
 	return (*arrayLiteralExpressionData)(node.rec())
 }
 
-func (node ArrayLiteralExpression) Elements() *ElementList {
-	return node.store().nodeLists.get(node.data().elements)
+func (node ArrayLiteralExpression) Elements() ElementList {
+	return node.derefList(&node.data().elements)
 }
 
-func (node ArrayLiteralExpression) SetElements(value *ElementList) {
-	node.store().nodeLists.set(&node.data().elements, value, value == nil)
+func (node ArrayLiteralExpression) SetElements(value ElementList) {
+	node.setListRef(&node.data().elements, value)
 }
 func (node ArrayLiteralExpression) MultiLine() bool         { return node.data().multiLine }
 func (node ArrayLiteralExpression) SetMultiLine(value bool) { node.data().multiLine = value }
 
-func (f *NodeFactory) NewArrayLiteralExpression(elements *ElementList, multiLine bool) Node {
+func (f *NodeFactory) NewArrayLiteralExpression(elements ElementList, multiLine bool) Node {
 	s := f.nodeStore()
 	data, i := newRecord[arrayLiteralExpressionData](s, layoutArrayLiteralExpression)
-	s.nodeLists.set(&data.elements, elements, elements == nil)
+	setListRefAt(&data.elements, i, elements)
 	data.multiLine = multiLine
 	return f.newNode(KindArrayLiteralExpression, layoutArrayLiteralExpression, i)
 }
 
-func (f *NodeFactory) UpdateArrayLiteralExpression(node ArrayLiteralExpression, elements *ElementList, multiLine bool) Node {
+func (f *NodeFactory) UpdateArrayLiteralExpression(node ArrayLiteralExpression, elements ElementList, multiLine bool) Node {
 	if elements != node.Elements() || multiLine != node.MultiLine() {
 		return updateNode(f.NewArrayLiteralExpression(elements, multiLine), node.AsNode(), f.hooks)
 	}
@@ -10090,7 +10055,7 @@ type objectLiteralExpressionData struct {
 	nodeBaseData
 	symbol     sideRef // *Symbol
 	facts      atomic.Uint32
-	properties sideRef // *NodeList
+	properties listRef // NodeList
 	multiLine  bool
 }
 
@@ -10108,25 +10073,25 @@ func (node ObjectLiteralExpression) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node ObjectLiteralExpression) Properties() *NodeList {
-	return node.store().nodeLists.get(node.data().properties)
+func (node ObjectLiteralExpression) Properties() NodeList {
+	return node.derefList(&node.data().properties)
 }
 
-func (node ObjectLiteralExpression) SetProperties(value *NodeList) {
-	node.store().nodeLists.set(&node.data().properties, value, value == nil)
+func (node ObjectLiteralExpression) SetProperties(value NodeList) {
+	node.setListRef(&node.data().properties, value)
 }
 func (node ObjectLiteralExpression) MultiLine() bool         { return node.data().multiLine }
 func (node ObjectLiteralExpression) SetMultiLine(value bool) { node.data().multiLine = value }
 
-func (f *NodeFactory) NewObjectLiteralExpression(properties *NodeList, multiLine bool) Node {
+func (f *NodeFactory) NewObjectLiteralExpression(properties NodeList, multiLine bool) Node {
 	s := f.nodeStore()
 	data, i := newRecord[objectLiteralExpressionData](s, layoutObjectLiteralExpression)
-	s.nodeLists.set(&data.properties, properties, properties == nil)
+	setListRefAt(&data.properties, i, properties)
 	data.multiLine = multiLine
 	return f.newNode(KindObjectLiteralExpression, layoutObjectLiteralExpression, i)
 }
 
-func (f *NodeFactory) UpdateObjectLiteralExpression(node ObjectLiteralExpression, properties *NodeList, multiLine bool) Node {
+func (f *NodeFactory) UpdateObjectLiteralExpression(node ObjectLiteralExpression, properties NodeList, multiLine bool) Node {
 	if properties != node.Properties() || multiLine != node.MultiLine() {
 		return updateNode(f.NewObjectLiteralExpression(properties, multiLine), node.AsNode(), f.hooks)
 	}
@@ -10214,7 +10179,7 @@ func IsSpreadAssignment(node Node) bool {
 type propertyAssignmentData struct {
 	nodeBaseData
 	symbol       sideRef // *Symbol
-	modifiers    sideRef // *ModifierList. Optional
+	modifiers    listRef // ModifierList. Optional
 	name         nodeRef // PropertyName
 	postfixToken nodeRef // TokenNode. Optional
 	facts        atomic.Uint32
@@ -10234,12 +10199,12 @@ func (node PropertyAssignment) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node PropertyAssignment) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node PropertyAssignment) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node PropertyAssignment) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node PropertyAssignment) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 func (node PropertyAssignment) Name() PropertyName         { return node.deref(&node.data().name) }
 func (node PropertyAssignment) setName(value PropertyName) { node.setRef(&node.data().name, value) }
@@ -10257,10 +10222,10 @@ func (node PropertyAssignment) SetInitializer(value Expression) {
 	node.setRef(&node.data().initializer, value)
 }
 
-func (f *NodeFactory) NewPropertyAssignment(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
+func (f *NodeFactory) NewPropertyAssignment(modifiers ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[propertyAssignmentData](s, layoutPropertyAssignment)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
 	setNodeRef(&data.postfixToken, i, postfixToken)
 	setNodeRef(&data.typeField, i, typeNode)
@@ -10268,7 +10233,7 @@ func (f *NodeFactory) NewPropertyAssignment(modifiers *ModifierList, name Proper
 	return f.newNode(KindPropertyAssignment, layoutPropertyAssignment, i)
 }
 
-func (f *NodeFactory) UpdatePropertyAssignment(node PropertyAssignment, modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
+func (f *NodeFactory) UpdatePropertyAssignment(node PropertyAssignment, modifiers ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, initializer Expression) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || postfixToken != node.PostfixToken() || typeNode != node.Type() || initializer != node.Initializer() {
 		return updateNode(f.NewPropertyAssignment(modifiers, name, postfixToken, typeNode, initializer), node.AsNode(), f.hooks)
 	}
@@ -10302,7 +10267,7 @@ func IsPropertyAssignment(node Node) bool {
 type shorthandPropertyAssignmentData struct {
 	nodeBaseData
 	symbol                      sideRef // *Symbol
-	modifiers                   sideRef // *ModifierList. Optional
+	modifiers                   listRef // ModifierList. Optional
 	name                        nodeRef // PropertyName
 	postfixToken                nodeRef // TokenNode. Optional
 	facts                       atomic.Uint32
@@ -10325,12 +10290,12 @@ func (node ShorthandPropertyAssignment) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node ShorthandPropertyAssignment) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ShorthandPropertyAssignment) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ShorthandPropertyAssignment) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ShorthandPropertyAssignment) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 func (node ShorthandPropertyAssignment) Name() PropertyName { return node.deref(&node.data().name) }
 func (node ShorthandPropertyAssignment) setName(value PropertyName) {
@@ -10367,10 +10332,10 @@ func (node ShorthandPropertyAssignment) SetObjectAssignmentInitializer(value Exp
 	node.setRef(&node.data().objectAssignmentInitializer, value)
 }
 
-func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, equalsToken EqualsToken, objectAssignmentInitializer Expression) Node {
+func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, equalsToken EqualsToken, objectAssignmentInitializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[shorthandPropertyAssignmentData](s, layoutShorthandPropertyAssignment)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
 	setNodeRef(&data.postfixToken, i, postfixToken)
 	setNodeRef(&data.typeField, i, typeNode)
@@ -10379,7 +10344,7 @@ func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers *ModifierList, na
 	return f.newNode(KindShorthandPropertyAssignment, layoutShorthandPropertyAssignment, i)
 }
 
-func (f *NodeFactory) UpdateShorthandPropertyAssignment(node ShorthandPropertyAssignment, modifiers *ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, equalsToken EqualsToken, objectAssignmentInitializer Expression) Node {
+func (f *NodeFactory) UpdateShorthandPropertyAssignment(node ShorthandPropertyAssignment, modifiers ModifierList, name PropertyName, postfixToken TokenNode, typeNode TypeNode, equalsToken EqualsToken, objectAssignmentInitializer Expression) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || postfixToken != node.PostfixToken() || typeNode != node.Type() || equalsToken != node.EqualsToken() || objectAssignmentInitializer != node.ObjectAssignmentInitializer() {
 		return updateNode(f.NewShorthandPropertyAssignment(modifiers, name, postfixToken, typeNode, equalsToken, objectAssignmentInitializer), node.AsNode(), f.hooks)
 	}
@@ -10703,26 +10668,24 @@ func IsKeywordTypeNode(node Node) bool {
 
 type unionTypeNodeData struct {
 	nodeBaseData
-	types sideRef // *TypeList
+	types listRef // TypeList
 }
 
 type UnionTypeNode struct{ Node }
 
 func (node UnionTypeNode) data() *unionTypeNodeData { return (*unionTypeNodeData)(node.rec()) }
 
-func (node UnionTypeNode) Types() *TypeList { return node.store().nodeLists.get(node.data().types) }
-func (node UnionTypeNode) SetTypes(value *TypeList) {
-	node.store().nodeLists.set(&node.data().types, value, value == nil)
-}
+func (node UnionTypeNode) Types() TypeList         { return node.derefList(&node.data().types) }
+func (node UnionTypeNode) SetTypes(value TypeList) { node.setListRef(&node.data().types, value) }
 
-func (f *NodeFactory) NewUnionTypeNode(types *TypeList) Node {
+func (f *NodeFactory) NewUnionTypeNode(types TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[unionTypeNodeData](s, layoutUnionTypeNode)
-	s.nodeLists.set(&data.types, types, types == nil)
+	setListRefAt(&data.types, i, types)
 	return f.newNode(KindUnionType, layoutUnionTypeNode, i)
 }
 
-func (f *NodeFactory) UpdateUnionTypeNode(node UnionTypeNode, types *TypeList) Node {
+func (f *NodeFactory) UpdateUnionTypeNode(node UnionTypeNode, types TypeList) Node {
 	if types != node.Types() {
 		return updateNode(f.NewUnionTypeNode(types), node.AsNode(), f.hooks)
 	}
@@ -10751,7 +10714,7 @@ func IsUnionTypeNode(node Node) bool {
 
 type intersectionTypeNodeData struct {
 	nodeBaseData
-	types sideRef // *TypeList
+	types listRef // TypeList
 }
 
 type IntersectionTypeNode struct{ Node }
@@ -10760,22 +10723,18 @@ func (node IntersectionTypeNode) data() *intersectionTypeNodeData {
 	return (*intersectionTypeNodeData)(node.rec())
 }
 
-func (node IntersectionTypeNode) Types() *TypeList {
-	return node.store().nodeLists.get(node.data().types)
-}
+func (node IntersectionTypeNode) Types() TypeList { return node.derefList(&node.data().types) }
 
-func (node IntersectionTypeNode) SetTypes(value *TypeList) {
-	node.store().nodeLists.set(&node.data().types, value, value == nil)
-}
+func (node IntersectionTypeNode) SetTypes(value TypeList) { node.setListRef(&node.data().types, value) }
 
-func (f *NodeFactory) NewIntersectionTypeNode(types *TypeList) Node {
+func (f *NodeFactory) NewIntersectionTypeNode(types TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[intersectionTypeNodeData](s, layoutIntersectionTypeNode)
-	s.nodeLists.set(&data.types, types, types == nil)
+	setListRefAt(&data.types, i, types)
 	return f.newNode(KindIntersectionType, layoutIntersectionTypeNode, i)
 }
 
-func (f *NodeFactory) UpdateIntersectionTypeNode(node IntersectionTypeNode, types *TypeList) Node {
+func (f *NodeFactory) UpdateIntersectionTypeNode(node IntersectionTypeNode, types TypeList) Node {
 	if types != node.Types() {
 		return updateNode(f.NewIntersectionTypeNode(types), node.AsNode(), f.hooks)
 	}
@@ -11098,7 +11057,7 @@ func IsIndexedAccessTypeNode(node Node) bool {
 
 type typeReferenceNodeData struct {
 	nodeBaseData
-	typeArguments sideRef // *TypeList. Optional
+	typeArguments listRef // TypeList. Optional
 	typeName      nodeRef // EntityName
 }
 
@@ -11108,27 +11067,27 @@ func (node TypeReferenceNode) data() *typeReferenceNodeData {
 	return (*typeReferenceNodeData)(node.rec())
 }
 
-func (node TypeReferenceNode) TypeArguments() *TypeList {
-	return node.store().nodeLists.get(node.data().typeArguments)
+func (node TypeReferenceNode) TypeArguments() TypeList {
+	return node.derefList(&node.data().typeArguments)
 }
 
-func (node TypeReferenceNode) SetTypeArguments(value *TypeList) {
-	node.store().nodeLists.set(&node.data().typeArguments, value, value == nil)
+func (node TypeReferenceNode) SetTypeArguments(value TypeList) {
+	node.setListRef(&node.data().typeArguments, value)
 }
 func (node TypeReferenceNode) TypeName() EntityName { return node.deref(&node.data().typeName) }
 func (node TypeReferenceNode) SetTypeName(value EntityName) {
 	node.setRef(&node.data().typeName, value)
 }
 
-func (f *NodeFactory) NewTypeReferenceNode(typeName EntityName, typeArguments *TypeList) Node {
+func (f *NodeFactory) NewTypeReferenceNode(typeName EntityName, typeArguments TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeReferenceNodeData](s, layoutTypeReferenceNode)
 	setNodeRef(&data.typeName, i, typeName)
-	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
+	setListRefAt(&data.typeArguments, i, typeArguments)
 	return f.newNode(KindTypeReference, layoutTypeReferenceNode, i)
 }
 
-func (f *NodeFactory) UpdateTypeReferenceNode(node TypeReferenceNode, typeName EntityName, typeArguments *TypeList) Node {
+func (f *NodeFactory) UpdateTypeReferenceNode(node TypeReferenceNode, typeName EntityName, typeArguments TypeList) Node {
 	if typeName != node.TypeName() || typeArguments != node.TypeArguments() {
 		return updateNode(f.NewTypeReferenceNode(typeName, typeArguments), node.AsNode(), f.hooks)
 	}
@@ -11159,7 +11118,7 @@ type expressionWithTypeArgumentsData struct {
 	nodeBaseData
 	facts         atomic.Uint32
 	expression    nodeRef // Expression
-	typeArguments sideRef // *TypeList. Optional
+	typeArguments listRef // TypeList. Optional
 }
 
 type ExpressionWithTypeArguments struct{ Node }
@@ -11176,23 +11135,23 @@ func (node ExpressionWithTypeArguments) SetExpression(value Expression) {
 	node.setRef(&node.data().expression, value)
 }
 
-func (node ExpressionWithTypeArguments) TypeArguments() *TypeList {
-	return node.store().nodeLists.get(node.data().typeArguments)
+func (node ExpressionWithTypeArguments) TypeArguments() TypeList {
+	return node.derefList(&node.data().typeArguments)
 }
 
-func (node ExpressionWithTypeArguments) SetTypeArguments(value *TypeList) {
-	node.store().nodeLists.set(&node.data().typeArguments, value, value == nil)
+func (node ExpressionWithTypeArguments) SetTypeArguments(value TypeList) {
+	node.setListRef(&node.data().typeArguments, value)
 }
 
-func (f *NodeFactory) NewExpressionWithTypeArguments(expression Expression, typeArguments *TypeList) Node {
+func (f *NodeFactory) NewExpressionWithTypeArguments(expression Expression, typeArguments TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[expressionWithTypeArgumentsData](s, layoutExpressionWithTypeArguments)
 	setNodeRef(&data.expression, i, expression)
-	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
+	setListRefAt(&data.typeArguments, i, typeArguments)
 	return f.newNode(KindExpressionWithTypeArguments, layoutExpressionWithTypeArguments, i)
 }
 
-func (f *NodeFactory) UpdateExpressionWithTypeArguments(node ExpressionWithTypeArguments, expression Expression, typeArguments *TypeList) Node {
+func (f *NodeFactory) UpdateExpressionWithTypeArguments(node ExpressionWithTypeArguments, expression Expression, typeArguments TypeList) Node {
 	if expression != node.Expression() || typeArguments != node.TypeArguments() {
 		return updateNode(f.NewExpressionWithTypeArguments(expression, typeArguments), node.AsNode(), f.hooks)
 	}
@@ -11419,7 +11378,7 @@ func IsImportAttribute(node Node) bool {
 type importAttributesData struct {
 	nodeBaseData
 	facts      atomic.Uint32
-	attributes sideRef // *ImportAttributeList
+	attributes listRef // ImportAttributeList
 	token      Kind
 	multiLine  bool
 }
@@ -11430,26 +11389,26 @@ func (node ImportAttributes) data() *importAttributesData { return (*importAttri
 
 func (node ImportAttributes) Token() Kind         { return node.data().token }
 func (node ImportAttributes) SetToken(value Kind) { node.data().token = value }
-func (node ImportAttributes) Attributes() *ImportAttributeList {
-	return node.store().nodeLists.get(node.data().attributes)
+func (node ImportAttributes) Attributes() ImportAttributeList {
+	return node.derefList(&node.data().attributes)
 }
 
-func (node ImportAttributes) SetAttributes(value *ImportAttributeList) {
-	node.store().nodeLists.set(&node.data().attributes, value, value == nil)
+func (node ImportAttributes) SetAttributes(value ImportAttributeList) {
+	node.setListRef(&node.data().attributes, value)
 }
 func (node ImportAttributes) MultiLine() bool         { return node.data().multiLine }
 func (node ImportAttributes) SetMultiLine(value bool) { node.data().multiLine = value }
 
-func (f *NodeFactory) NewImportAttributes(token Kind, attributes *ImportAttributeList, multiLine bool) Node {
+func (f *NodeFactory) NewImportAttributes(token Kind, attributes ImportAttributeList, multiLine bool) Node {
 	s := f.nodeStore()
 	data, i := newRecord[importAttributesData](s, layoutImportAttributes)
 	data.token = token
-	s.nodeLists.set(&data.attributes, attributes, attributes == nil)
+	setListRefAt(&data.attributes, i, attributes)
 	data.multiLine = multiLine
 	return f.newNode(KindImportAttributes, layoutImportAttributes, i)
 }
 
-func (f *NodeFactory) UpdateImportAttributes(node ImportAttributes, token Kind, attributes *ImportAttributeList, multiLine bool) Node {
+func (f *NodeFactory) UpdateImportAttributes(node ImportAttributes, token Kind, attributes ImportAttributeList, multiLine bool) Node {
 	if token != node.Token() || attributes != node.Attributes() || multiLine != node.MultiLine() {
 		return updateNode(f.NewImportAttributes(token, attributes, multiLine), node.AsNode(), f.hooks)
 	}
@@ -11482,7 +11441,7 @@ func IsImportAttributes(node Node) bool {
 
 type typeQueryNodeData struct {
 	nodeBaseData
-	typeArguments sideRef // *TypeList. Optional
+	typeArguments listRef // TypeList. Optional
 	exprName      nodeRef // EntityName
 }
 
@@ -11490,25 +11449,23 @@ type TypeQueryNode struct{ Node }
 
 func (node TypeQueryNode) data() *typeQueryNodeData { return (*typeQueryNodeData)(node.rec()) }
 
-func (node TypeQueryNode) TypeArguments() *TypeList {
-	return node.store().nodeLists.get(node.data().typeArguments)
-}
+func (node TypeQueryNode) TypeArguments() TypeList { return node.derefList(&node.data().typeArguments) }
 
-func (node TypeQueryNode) SetTypeArguments(value *TypeList) {
-	node.store().nodeLists.set(&node.data().typeArguments, value, value == nil)
+func (node TypeQueryNode) SetTypeArguments(value TypeList) {
+	node.setListRef(&node.data().typeArguments, value)
 }
 func (node TypeQueryNode) ExprName() EntityName         { return node.deref(&node.data().exprName) }
 func (node TypeQueryNode) SetExprName(value EntityName) { node.setRef(&node.data().exprName, value) }
 
-func (f *NodeFactory) NewTypeQueryNode(exprName EntityName, typeArguments *TypeList) Node {
+func (f *NodeFactory) NewTypeQueryNode(exprName EntityName, typeArguments TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeQueryNodeData](s, layoutTypeQueryNode)
 	setNodeRef(&data.exprName, i, exprName)
-	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
+	setListRefAt(&data.typeArguments, i, typeArguments)
 	return f.newNode(KindTypeQuery, layoutTypeQueryNode, i)
 }
 
-func (f *NodeFactory) UpdateTypeQueryNode(node TypeQueryNode, exprName EntityName, typeArguments *TypeList) Node {
+func (f *NodeFactory) UpdateTypeQueryNode(node TypeQueryNode, exprName EntityName, typeArguments TypeList) Node {
 	if exprName != node.ExprName() || typeArguments != node.TypeArguments() {
 		return updateNode(f.NewTypeQueryNode(exprName, typeArguments), node.AsNode(), f.hooks)
 	}
@@ -11545,7 +11502,7 @@ type mappedTypeNodeData struct {
 	nameType      nodeRef // TypeNode. Optional
 	questionToken nodeRef // TokenNode. Optional
 	typeField     nodeRef // TypeNode. Optional
-	members       sideRef // *TypeElementList. Optional
+	members       listRef // TypeElementList. Optional
 }
 
 type MappedTypeNode struct{ Node }
@@ -11589,17 +11546,14 @@ func (node MappedTypeNode) QuestionToken() TokenNode   { return node.deref(&node
 func (node MappedTypeNode) SetQuestionToken(value TokenNode) {
 	node.setRef(&node.data().questionToken, value)
 }
-func (node MappedTypeNode) Type() TypeNode         { return node.deref(&node.data().typeField) }
-func (node MappedTypeNode) SetType(value TypeNode) { node.setRef(&node.data().typeField, value) }
-func (node MappedTypeNode) Members() *TypeElementList {
-	return node.store().nodeLists.get(node.data().members)
+func (node MappedTypeNode) Type() TypeNode           { return node.deref(&node.data().typeField) }
+func (node MappedTypeNode) SetType(value TypeNode)   { node.setRef(&node.data().typeField, value) }
+func (node MappedTypeNode) Members() TypeElementList { return node.derefList(&node.data().members) }
+func (node MappedTypeNode) SetMembers(value TypeElementList) {
+	node.setListRef(&node.data().members, value)
 }
 
-func (node MappedTypeNode) SetMembers(value *TypeElementList) {
-	node.store().nodeLists.set(&node.data().members, value, value == nil)
-}
-
-func (f *NodeFactory) NewMappedTypeNode(readonlyToken TokenNode, typeParameter TypeParameterDeclarationNode, nameType TypeNode, questionToken TokenNode, typeNode TypeNode, members *TypeElementList) Node {
+func (f *NodeFactory) NewMappedTypeNode(readonlyToken TokenNode, typeParameter TypeParameterDeclarationNode, nameType TypeNode, questionToken TokenNode, typeNode TypeNode, members TypeElementList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[mappedTypeNodeData](s, layoutMappedTypeNode)
 	setNodeRef(&data.readonlyToken, i, readonlyToken)
@@ -11607,11 +11561,11 @@ func (f *NodeFactory) NewMappedTypeNode(readonlyToken TokenNode, typeParameter T
 	setNodeRef(&data.nameType, i, nameType)
 	setNodeRef(&data.questionToken, i, questionToken)
 	setNodeRef(&data.typeField, i, typeNode)
-	s.nodeLists.set(&data.members, members, members == nil)
+	setListRefAt(&data.members, i, members)
 	return f.newNode(KindMappedType, layoutMappedTypeNode, i)
 }
 
-func (f *NodeFactory) UpdateMappedTypeNode(node MappedTypeNode, readonlyToken TokenNode, typeParameter TypeParameterDeclarationNode, nameType TypeNode, questionToken TokenNode, typeNode TypeNode, members *TypeElementList) Node {
+func (f *NodeFactory) UpdateMappedTypeNode(node MappedTypeNode, readonlyToken TokenNode, typeParameter TypeParameterDeclarationNode, nameType TypeNode, questionToken TokenNode, typeNode TypeNode, members TypeElementList) Node {
 	if readonlyToken != node.ReadonlyToken() || typeParameter != node.TypeParameter() || nameType != node.NameType() || questionToken != node.QuestionToken() || typeNode != node.Type() || members != node.Members() {
 		return updateNode(f.NewMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, typeNode, members), node.AsNode(), f.hooks)
 	}
@@ -11646,7 +11600,7 @@ func IsMappedTypeNode(node Node) bool {
 type typeLiteralNodeData struct {
 	nodeBaseData
 	symbol  sideRef // *Symbol
-	members sideRef // *TypeElementList
+	members listRef // TypeElementList
 }
 
 type TypeLiteralNode struct{ Node }
@@ -11658,22 +11612,20 @@ func (node TypeLiteralNode) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node TypeLiteralNode) Members() *TypeElementList {
-	return node.store().nodeLists.get(node.data().members)
+func (node TypeLiteralNode) Members() TypeElementList { return node.derefList(&node.data().members) }
+
+func (node TypeLiteralNode) SetMembers(value TypeElementList) {
+	node.setListRef(&node.data().members, value)
 }
 
-func (node TypeLiteralNode) SetMembers(value *TypeElementList) {
-	node.store().nodeLists.set(&node.data().members, value, value == nil)
-}
-
-func (f *NodeFactory) NewTypeLiteralNode(members *TypeElementList) Node {
+func (f *NodeFactory) NewTypeLiteralNode(members TypeElementList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeLiteralNodeData](s, layoutTypeLiteralNode)
-	s.nodeLists.set(&data.members, members, members == nil)
+	setListRefAt(&data.members, i, members)
 	return f.newNode(KindTypeLiteral, layoutTypeLiteralNode, i)
 }
 
-func (f *NodeFactory) UpdateTypeLiteralNode(node TypeLiteralNode, members *TypeElementList) Node {
+func (f *NodeFactory) UpdateTypeLiteralNode(node TypeLiteralNode, members TypeElementList) Node {
 	if members != node.Members() {
 		return updateNode(f.NewTypeLiteralNode(members), node.AsNode(), f.hooks)
 	}
@@ -11702,29 +11654,25 @@ func IsTypeLiteralNode(node Node) bool {
 
 type tupleTypeNodeData struct {
 	nodeBaseData
-	elements sideRef // *TypeList
+	elements listRef // TypeList
 }
 
 type TupleTypeNode struct{ Node }
 
 func (node TupleTypeNode) data() *tupleTypeNodeData { return (*tupleTypeNodeData)(node.rec()) }
 
-func (node TupleTypeNode) Elements() *TypeList {
-	return node.store().nodeLists.get(node.data().elements)
-}
+func (node TupleTypeNode) Elements() TypeList { return node.derefList(&node.data().elements) }
 
-func (node TupleTypeNode) SetElements(value *TypeList) {
-	node.store().nodeLists.set(&node.data().elements, value, value == nil)
-}
+func (node TupleTypeNode) SetElements(value TypeList) { node.setListRef(&node.data().elements, value) }
 
-func (f *NodeFactory) NewTupleTypeNode(elements *TypeList) Node {
+func (f *NodeFactory) NewTupleTypeNode(elements TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[tupleTypeNodeData](s, layoutTupleTypeNode)
-	s.nodeLists.set(&data.elements, elements, elements == nil)
+	setListRefAt(&data.elements, i, elements)
 	return f.newNode(KindTupleType, layoutTupleTypeNode, i)
 }
 
-func (f *NodeFactory) UpdateTupleTypeNode(node TupleTypeNode, elements *TypeList) Node {
+func (f *NodeFactory) UpdateTupleTypeNode(node TupleTypeNode, elements TypeList) Node {
 	if elements != node.Elements() {
 		return updateNode(f.NewTupleTypeNode(elements), node.AsNode(), f.hooks)
 	}
@@ -11973,11 +11921,11 @@ func IsParenthesizedTypeNode(node Node) bool {
 type functionTypeNodeData struct {
 	nodeBaseData
 	symbol         sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 }
@@ -11992,12 +11940,12 @@ func (node FunctionTypeNode) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node FunctionTypeNode) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node FunctionTypeNode) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node FunctionTypeNode) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node FunctionTypeNode) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node FunctionTypeNode) Locals() SymbolTable {
@@ -12012,20 +11960,20 @@ func (node FunctionTypeNode) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node FunctionTypeNode) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node FunctionTypeNode) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node FunctionTypeNode) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node FunctionTypeNode) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node FunctionTypeNode) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
+func (node FunctionTypeNode) Parameters() ParameterList {
+	return node.derefList(&node.data().parameters)
 }
 
-func (node FunctionTypeNode) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node FunctionTypeNode) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 func (node FunctionTypeNode) Type() TypeNode          { return node.deref(&node.data().typeField) }
 func (node FunctionTypeNode) SetType(value TypeNode)  { node.setRef(&node.data().typeField, value) }
@@ -12035,16 +11983,16 @@ func (node FunctionTypeNode) SetFullSignature(value TypeNode) {
 	node.setRef(&node.data().fullSignature, value)
 }
 
-func (f *NodeFactory) NewFunctionTypeNode(typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) NewFunctionTypeNode(typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[functionTypeNodeData](s, layoutFunctionTypeNode)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindFunctionType, layoutFunctionTypeNode, i)
 }
 
-func (f *NodeFactory) UpdateFunctionTypeNode(node FunctionTypeNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) UpdateFunctionTypeNode(node FunctionTypeNode, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode) Node {
 	if typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewFunctionTypeNode(typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
@@ -12074,11 +12022,11 @@ func IsFunctionTypeNode(node Node) bool {
 type constructorTypeNodeData struct {
 	nodeBaseData
 	symbol         sideRef // *Symbol
-	modifiers      sideRef // *ModifierList. Optional
+	modifiers      listRef // ModifierList. Optional
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 }
@@ -12095,12 +12043,12 @@ func (node ConstructorTypeNode) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node ConstructorTypeNode) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ConstructorTypeNode) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ConstructorTypeNode) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ConstructorTypeNode) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node ConstructorTypeNode) Locals() SymbolTable {
@@ -12117,20 +12065,20 @@ func (node ConstructorTypeNode) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node ConstructorTypeNode) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node ConstructorTypeNode) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node ConstructorTypeNode) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node ConstructorTypeNode) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node ConstructorTypeNode) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
+func (node ConstructorTypeNode) Parameters() ParameterList {
+	return node.derefList(&node.data().parameters)
 }
 
-func (node ConstructorTypeNode) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node ConstructorTypeNode) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 
 func (node ConstructorTypeNode) Type() TypeNode { return node.deref(&node.data().typeField) }
@@ -12145,17 +12093,17 @@ func (node ConstructorTypeNode) SetFullSignature(value TypeNode) {
 	node.setRef(&node.data().fullSignature, value)
 }
 
-func (f *NodeFactory) NewConstructorTypeNode(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) NewConstructorTypeNode(modifiers ModifierList, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[constructorTypeNodeData](s, layoutConstructorTypeNode)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindConstructorType, layoutConstructorTypeNode, i)
 }
 
-func (f *NodeFactory) UpdateConstructorTypeNode(node ConstructorTypeNode, modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) UpdateConstructorTypeNode(node ConstructorTypeNode, modifiers ModifierList, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode) Node {
 	if modifiers != node.Modifiers() || typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewConstructorTypeNode(modifiers, typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
@@ -12332,7 +12280,7 @@ func IsTemplateTail(node Node) bool {
 type templateLiteralTypeNodeData struct {
 	nodeBaseData
 	head          nodeRef // TemplateHeadNode
-	templateSpans sideRef // *TemplateLiteralTypeSpanList
+	templateSpans listRef // TemplateLiteralTypeSpanList
 }
 
 type TemplateLiteralTypeNode struct{ Node }
@@ -12346,23 +12294,23 @@ func (node TemplateLiteralTypeNode) SetHead(value TemplateHeadNode) {
 	node.setRef(&node.data().head, value)
 }
 
-func (node TemplateLiteralTypeNode) TemplateSpans() *TemplateLiteralTypeSpanList {
-	return node.store().nodeLists.get(node.data().templateSpans)
+func (node TemplateLiteralTypeNode) TemplateSpans() TemplateLiteralTypeSpanList {
+	return node.derefList(&node.data().templateSpans)
 }
 
-func (node TemplateLiteralTypeNode) SetTemplateSpans(value *TemplateLiteralTypeSpanList) {
-	node.store().nodeLists.set(&node.data().templateSpans, value, value == nil)
+func (node TemplateLiteralTypeNode) SetTemplateSpans(value TemplateLiteralTypeSpanList) {
+	node.setListRef(&node.data().templateSpans, value)
 }
 
-func (f *NodeFactory) NewTemplateLiteralTypeNode(head TemplateHeadNode, templateSpans *TemplateLiteralTypeSpanList) Node {
+func (f *NodeFactory) NewTemplateLiteralTypeNode(head TemplateHeadNode, templateSpans TemplateLiteralTypeSpanList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateLiteralTypeNodeData](s, layoutTemplateLiteralTypeNode)
 	setNodeRef(&data.head, i, head)
-	s.nodeLists.set(&data.templateSpans, templateSpans, templateSpans == nil)
+	setListRefAt(&data.templateSpans, i, templateSpans)
 	return f.newNode(KindTemplateLiteralType, layoutTemplateLiteralTypeNode, i)
 }
 
-func (f *NodeFactory) UpdateTemplateLiteralTypeNode(node TemplateLiteralTypeNode, head TemplateHeadNode, templateSpans *TemplateLiteralTypeSpanList) Node {
+func (f *NodeFactory) UpdateTemplateLiteralTypeNode(node TemplateLiteralTypeNode, head TemplateHeadNode, templateSpans TemplateLiteralTypeSpanList) Node {
 	if head != node.Head() || templateSpans != node.TemplateSpans() {
 		return updateNode(f.NewTemplateLiteralTypeNode(head, templateSpans), node.AsNode(), f.hooks)
 	}
@@ -12573,7 +12521,7 @@ type jsxElementData struct {
 	nodeBaseData
 	facts          atomic.Uint32
 	openingElement nodeRef // JsxOpeningElementNode
-	children       sideRef // *JsxChildList
+	children       listRef // JsxChildList
 	closingElement nodeRef // JsxClosingElementNode
 }
 
@@ -12589,13 +12537,9 @@ func (node JsxElement) SetOpeningElement(value JsxOpeningElementNode) {
 	node.setRef(&node.data().openingElement, value)
 }
 
-func (node JsxElement) Children() *JsxChildList {
-	return node.store().nodeLists.get(node.data().children)
-}
+func (node JsxElement) Children() JsxChildList { return node.derefList(&node.data().children) }
 
-func (node JsxElement) SetChildren(value *JsxChildList) {
-	node.store().nodeLists.set(&node.data().children, value, value == nil)
-}
+func (node JsxElement) SetChildren(value JsxChildList) { node.setListRef(&node.data().children, value) }
 
 func (node JsxElement) ClosingElement() JsxClosingElementNode {
 	return node.deref(&node.data().closingElement)
@@ -12605,16 +12549,16 @@ func (node JsxElement) SetClosingElement(value JsxClosingElementNode) {
 	node.setRef(&node.data().closingElement, value)
 }
 
-func (f *NodeFactory) NewJsxElement(openingElement JsxOpeningElementNode, children *JsxChildList, closingElement JsxClosingElementNode) Node {
+func (f *NodeFactory) NewJsxElement(openingElement JsxOpeningElementNode, children JsxChildList, closingElement JsxClosingElementNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxElementData](s, layoutJsxElement)
 	setNodeRef(&data.openingElement, i, openingElement)
-	s.nodeLists.set(&data.children, children, children == nil)
+	setListRefAt(&data.children, i, children)
 	setNodeRef(&data.closingElement, i, closingElement)
 	return f.newNode(KindJsxElement, layoutJsxElement, i)
 }
 
-func (f *NodeFactory) UpdateJsxElement(node JsxElement, openingElement JsxOpeningElementNode, children *JsxChildList, closingElement JsxClosingElementNode) Node {
+func (f *NodeFactory) UpdateJsxElement(node JsxElement, openingElement JsxOpeningElementNode, children JsxChildList, closingElement JsxClosingElementNode) Node {
 	if openingElement != node.OpeningElement() || children != node.Children() || closingElement != node.ClosingElement() {
 		return updateNode(f.NewJsxElement(openingElement, children, closingElement), node.AsNode(), f.hooks)
 	}
@@ -12645,7 +12589,7 @@ type jsxAttributesData struct {
 	nodeBaseData
 	symbol     sideRef // *Symbol
 	facts      atomic.Uint32
-	properties sideRef // *JsxAttributeList
+	properties listRef // JsxAttributeList
 }
 
 type JsxAttributes struct{ Node }
@@ -12657,22 +12601,22 @@ func (node JsxAttributes) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node JsxAttributes) Properties() *JsxAttributeList {
-	return node.store().nodeLists.get(node.data().properties)
+func (node JsxAttributes) Properties() JsxAttributeList {
+	return node.derefList(&node.data().properties)
 }
 
-func (node JsxAttributes) SetProperties(value *JsxAttributeList) {
-	node.store().nodeLists.set(&node.data().properties, value, value == nil)
+func (node JsxAttributes) SetProperties(value JsxAttributeList) {
+	node.setListRef(&node.data().properties, value)
 }
 
-func (f *NodeFactory) NewJsxAttributes(properties *JsxAttributeList) Node {
+func (f *NodeFactory) NewJsxAttributes(properties JsxAttributeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxAttributesData](s, layoutJsxAttributes)
-	s.nodeLists.set(&data.properties, properties, properties == nil)
+	setListRefAt(&data.properties, i, properties)
 	return f.newNode(KindJsxAttributes, layoutJsxAttributes, i)
 }
 
-func (f *NodeFactory) UpdateJsxAttributes(node JsxAttributes, properties *JsxAttributeList) Node {
+func (f *NodeFactory) UpdateJsxAttributes(node JsxAttributes, properties JsxAttributeList) Node {
 	if properties != node.Properties() {
 		return updateNode(f.NewJsxAttributes(properties), node.AsNode(), f.hooks)
 	}
@@ -12759,7 +12703,7 @@ type jsxOpeningElementData struct {
 	nodeBaseData
 	facts         atomic.Uint32
 	tagName       nodeRef // JsxTagNameExpression
-	typeArguments sideRef // *TypeList. Optional
+	typeArguments listRef // TypeList. Optional
 	attributes    nodeRef // JsxAttributesNode
 }
 
@@ -12775,12 +12719,12 @@ func (node JsxOpeningElement) SetTagName(value JsxTagNameExpression) {
 	node.setRef(&node.data().tagName, value)
 }
 
-func (node JsxOpeningElement) TypeArguments() *TypeList {
-	return node.store().nodeLists.get(node.data().typeArguments)
+func (node JsxOpeningElement) TypeArguments() TypeList {
+	return node.derefList(&node.data().typeArguments)
 }
 
-func (node JsxOpeningElement) SetTypeArguments(value *TypeList) {
-	node.store().nodeLists.set(&node.data().typeArguments, value, value == nil)
+func (node JsxOpeningElement) SetTypeArguments(value TypeList) {
+	node.setListRef(&node.data().typeArguments, value)
 }
 
 func (node JsxOpeningElement) Attributes() JsxAttributesNode {
@@ -12791,16 +12735,16 @@ func (node JsxOpeningElement) SetAttributes(value JsxAttributesNode) {
 	node.setRef(&node.data().attributes, value)
 }
 
-func (f *NodeFactory) NewJsxOpeningElement(tagName JsxTagNameExpression, typeArguments *TypeList, attributes JsxAttributesNode) Node {
+func (f *NodeFactory) NewJsxOpeningElement(tagName JsxTagNameExpression, typeArguments TypeList, attributes JsxAttributesNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxOpeningElementData](s, layoutJsxOpeningElement)
 	setNodeRef(&data.tagName, i, tagName)
-	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
+	setListRefAt(&data.typeArguments, i, typeArguments)
 	setNodeRef(&data.attributes, i, attributes)
 	return f.newNode(KindJsxOpeningElement, layoutJsxOpeningElement, i)
 }
 
-func (f *NodeFactory) UpdateJsxOpeningElement(node JsxOpeningElement, tagName JsxTagNameExpression, typeArguments *TypeList, attributes JsxAttributesNode) Node {
+func (f *NodeFactory) UpdateJsxOpeningElement(node JsxOpeningElement, tagName JsxTagNameExpression, typeArguments TypeList, attributes JsxAttributesNode) Node {
 	if tagName != node.TagName() || typeArguments != node.TypeArguments() || attributes != node.Attributes() {
 		return updateNode(f.NewJsxOpeningElement(tagName, typeArguments, attributes), node.AsNode(), f.hooks)
 	}
@@ -12831,7 +12775,7 @@ type jsxSelfClosingElementData struct {
 	nodeBaseData
 	facts         atomic.Uint32
 	tagName       nodeRef // JsxTagNameExpression
-	typeArguments sideRef // *TypeList. Optional
+	typeArguments listRef // TypeList. Optional
 	attributes    nodeRef // JsxAttributesNode
 }
 
@@ -12849,12 +12793,12 @@ func (node JsxSelfClosingElement) SetTagName(value JsxTagNameExpression) {
 	node.setRef(&node.data().tagName, value)
 }
 
-func (node JsxSelfClosingElement) TypeArguments() *TypeList {
-	return node.store().nodeLists.get(node.data().typeArguments)
+func (node JsxSelfClosingElement) TypeArguments() TypeList {
+	return node.derefList(&node.data().typeArguments)
 }
 
-func (node JsxSelfClosingElement) SetTypeArguments(value *TypeList) {
-	node.store().nodeLists.set(&node.data().typeArguments, value, value == nil)
+func (node JsxSelfClosingElement) SetTypeArguments(value TypeList) {
+	node.setListRef(&node.data().typeArguments, value)
 }
 
 func (node JsxSelfClosingElement) Attributes() JsxAttributesNode {
@@ -12865,16 +12809,16 @@ func (node JsxSelfClosingElement) SetAttributes(value JsxAttributesNode) {
 	node.setRef(&node.data().attributes, value)
 }
 
-func (f *NodeFactory) NewJsxSelfClosingElement(tagName JsxTagNameExpression, typeArguments *TypeList, attributes JsxAttributesNode) Node {
+func (f *NodeFactory) NewJsxSelfClosingElement(tagName JsxTagNameExpression, typeArguments TypeList, attributes JsxAttributesNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxSelfClosingElementData](s, layoutJsxSelfClosingElement)
 	setNodeRef(&data.tagName, i, tagName)
-	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
+	setListRefAt(&data.typeArguments, i, typeArguments)
 	setNodeRef(&data.attributes, i, attributes)
 	return f.newNode(KindJsxSelfClosingElement, layoutJsxSelfClosingElement, i)
 }
 
-func (f *NodeFactory) UpdateJsxSelfClosingElement(node JsxSelfClosingElement, tagName JsxTagNameExpression, typeArguments *TypeList, attributes JsxAttributesNode) Node {
+func (f *NodeFactory) UpdateJsxSelfClosingElement(node JsxSelfClosingElement, tagName JsxTagNameExpression, typeArguments TypeList, attributes JsxAttributesNode) Node {
 	if tagName != node.TagName() || typeArguments != node.TypeArguments() || attributes != node.Attributes() {
 		return updateNode(f.NewJsxSelfClosingElement(tagName, typeArguments, attributes), node.AsNode(), f.hooks)
 	}
@@ -12905,7 +12849,7 @@ type jsxFragmentData struct {
 	nodeBaseData
 	facts           atomic.Uint32
 	openingFragment nodeRef // JsxOpeningFragmentNode
-	children        sideRef // *JsxChildList
+	children        listRef // JsxChildList
 	closingFragment nodeRef // JsxClosingFragmentNode
 }
 
@@ -12920,13 +12864,9 @@ func (node JsxFragment) OpeningFragment() JsxOpeningFragmentNode {
 func (node JsxFragment) SetOpeningFragment(value JsxOpeningFragmentNode) {
 	node.setRef(&node.data().openingFragment, value)
 }
-
-func (node JsxFragment) Children() *JsxChildList {
-	return node.store().nodeLists.get(node.data().children)
-}
-
-func (node JsxFragment) SetChildren(value *JsxChildList) {
-	node.store().nodeLists.set(&node.data().children, value, value == nil)
+func (node JsxFragment) Children() JsxChildList { return node.derefList(&node.data().children) }
+func (node JsxFragment) SetChildren(value JsxChildList) {
+	node.setListRef(&node.data().children, value)
 }
 
 func (node JsxFragment) ClosingFragment() JsxClosingFragmentNode {
@@ -12937,16 +12877,16 @@ func (node JsxFragment) SetClosingFragment(value JsxClosingFragmentNode) {
 	node.setRef(&node.data().closingFragment, value)
 }
 
-func (f *NodeFactory) NewJsxFragment(openingFragment JsxOpeningFragmentNode, children *JsxChildList, closingFragment JsxClosingFragmentNode) Node {
+func (f *NodeFactory) NewJsxFragment(openingFragment JsxOpeningFragmentNode, children JsxChildList, closingFragment JsxClosingFragmentNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxFragmentData](s, layoutJsxFragment)
 	setNodeRef(&data.openingFragment, i, openingFragment)
-	s.nodeLists.set(&data.children, children, children == nil)
+	setListRefAt(&data.children, i, children)
 	setNodeRef(&data.closingFragment, i, closingFragment)
 	return f.newNode(KindJsxFragment, layoutJsxFragment, i)
 }
 
-func (f *NodeFactory) UpdateJsxFragment(node JsxFragment, openingFragment JsxOpeningFragmentNode, children *JsxChildList, closingFragment JsxClosingFragmentNode) Node {
+func (f *NodeFactory) UpdateJsxFragment(node JsxFragment, openingFragment JsxOpeningFragmentNode, children JsxChildList, closingFragment JsxClosingFragmentNode) Node {
 	if openingFragment != node.OpeningFragment() || children != node.Children() || closingFragment != node.ClosingFragment() {
 		return updateNode(f.NewJsxFragment(openingFragment, children, closingFragment), node.AsNode(), f.hooks)
 	}
@@ -13350,32 +13290,28 @@ func IsSyntaxList(node Node) bool {
 
 type jsDocData struct {
 	nodeBaseData
-	comment sideRef // *NodeList
-	tags    sideRef // *NodeList. Optional
+	comment listRef // NodeList
+	tags    listRef // NodeList. Optional
 }
 
 type JSDoc struct{ Node }
 
 func (node JSDoc) data() *jsDocData { return (*jsDocData)(node.rec()) }
 
-func (node JSDoc) Comment() *NodeList { return node.store().nodeLists.get(node.data().comment) }
-func (node JSDoc) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
-func (node JSDoc) Tags() *NodeList { return node.store().nodeLists.get(node.data().tags) }
-func (node JSDoc) SetTags(value *NodeList) {
-	node.store().nodeLists.set(&node.data().tags, value, value == nil)
-}
+func (node JSDoc) Comment() NodeList         { return node.derefList(&node.data().comment) }
+func (node JSDoc) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
+func (node JSDoc) Tags() NodeList            { return node.derefList(&node.data().tags) }
+func (node JSDoc) SetTags(value NodeList)    { node.setListRef(&node.data().tags, value) }
 
-func (f *NodeFactory) NewJSDoc(comment *NodeList, tags *NodeList) Node {
+func (f *NodeFactory) NewJSDoc(comment NodeList, tags NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocData](s, layoutJSDoc)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
-	s.nodeLists.set(&data.tags, tags, tags == nil)
+	setListRefAt(&data.comment, i, comment)
+	setListRefAt(&data.tags, i, tags)
 	return f.newNode(KindJSDoc, layoutJSDoc, i)
 }
 
-func (f *NodeFactory) UpdateJSDoc(node JSDoc, comment *NodeList, tags *NodeList) Node {
+func (f *NodeFactory) UpdateJSDoc(node JSDoc, comment NodeList, tags NodeList) Node {
 	if comment != node.Comment() || tags != node.Tags() {
 		return updateNode(f.NewJSDoc(comment, tags), node.AsNode(), f.hooks)
 	}
@@ -13672,7 +13608,7 @@ func IsJSDocOptionalType(node Node) bool {
 type jsDocTypeTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
-	comment        sideRef // *NodeList. Optional
+	comment        listRef // NodeList. Optional
 	typeExpression nodeRef // Node
 }
 
@@ -13684,26 +13620,26 @@ func (node JSDocTypeTag) TagName() IdentifierNode { return node.deref(&node.data
 
 func (node JSDocTypeTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
 
-func (node JSDocTypeTag) Comment() *NodeList { return node.store().nodeLists.get(node.data().comment) }
+func (node JSDocTypeTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocTypeTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocTypeTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
+
 func (node JSDocTypeTag) TypeExpression() Node { return node.deref(&node.data().typeExpression) }
+
 func (node JSDocTypeTag) SetTypeExpression(value Node) {
 	node.setRef(&node.data().typeExpression, value)
 }
 
-func (f *NodeFactory) NewJSDocTypeTag(tagName IdentifierNode, typeExpression Node, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocTypeTag(tagName IdentifierNode, typeExpression Node, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocTypeTagData](s, layoutJSDocTypeTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.typeExpression, i, typeExpression)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocTypeTag, layoutJSDocTypeTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocTypeTag(node JSDocTypeTag, tagName IdentifierNode, typeExpression Node, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocTypeTag(node JSDocTypeTag, tagName IdentifierNode, typeExpression Node, comment NodeList) Node {
 	if tagName != node.TagName() || typeExpression != node.TypeExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocTypeTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
 	}
@@ -13733,7 +13669,7 @@ func IsJSDocTypeTag(node Node) bool {
 type jsDocUnknownTagData struct {
 	nodeBaseData
 	tagName nodeRef // IdentifierNode
-	comment sideRef // *NodeList. Optional
+	comment listRef // NodeList. Optional
 }
 
 type JSDocUnknownTag struct{ Node }
@@ -13745,23 +13681,19 @@ func (node JSDocUnknownTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
 
-func (node JSDocUnknownTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocUnknownTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocUnknownTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocUnknownTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
-func (f *NodeFactory) NewJSDocUnknownTag(tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocUnknownTag(tagName IdentifierNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocUnknownTagData](s, layoutJSDocUnknownTag)
 	setNodeRef(&data.tagName, i, tagName)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocUnknownTag, layoutJSDocUnknownTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocUnknownTag(node JSDocUnknownTag, tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocUnknownTag(node JSDocUnknownTag, tagName IdentifierNode, comment NodeList) Node {
 	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocUnknownTag(tagName, comment), node.AsNode(), f.hooks)
 	}
@@ -13791,9 +13723,9 @@ func IsJSDocUnknownTag(node Node) bool {
 type jsDocTemplateTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
-	comment        sideRef // *NodeList. Optional
+	comment        listRef // NodeList. Optional
 	constraint     nodeRef // Node
-	typeParameters sideRef // *TypeParameterList
+	typeParameters listRef // TypeParameterList
 }
 
 type JSDocTemplateTag struct{ Node }
@@ -13805,37 +13737,33 @@ func (node JSDocTemplateTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
 
-func (node JSDocTemplateTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocTemplateTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocTemplateTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocTemplateTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
 func (node JSDocTemplateTag) Constraint() Node { return node.deref(&node.data().constraint) }
 
 func (node JSDocTemplateTag) SetConstraint(value Node) { node.setRef(&node.data().constraint, value) }
 
-func (node JSDocTemplateTag) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node JSDocTemplateTag) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node JSDocTemplateTag) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node JSDocTemplateTag) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (f *NodeFactory) NewJSDocTemplateTag(tagName IdentifierNode, constraint Node, typeParameters *TypeParameterList, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocTemplateTag(tagName IdentifierNode, constraint Node, typeParameters TypeParameterList, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocTemplateTagData](s, layoutJSDocTemplateTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.constraint, i, constraint)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocTemplateTag, layoutJSDocTemplateTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocTemplateTag(node JSDocTemplateTag, tagName IdentifierNode, constraint Node, typeParameters *TypeParameterList, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocTemplateTag(node JSDocTemplateTag, tagName IdentifierNode, constraint Node, typeParameters TypeParameterList, comment NodeList) Node {
 	if tagName != node.TagName() || constraint != node.Constraint() || typeParameters != node.TypeParameters() || comment != node.Comment() {
 		return updateNode(f.NewJSDocTemplateTag(tagName, constraint, typeParameters, comment), node.AsNode(), f.hooks)
 	}
@@ -13868,7 +13796,7 @@ func IsJSDocTemplateTag(node Node) bool {
 type jsDocReturnTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
-	comment        sideRef // *NodeList. Optional
+	comment        listRef // NodeList. Optional
 	typeExpression nodeRef // TypeNode. Optional
 }
 
@@ -13880,13 +13808,9 @@ func (node JSDocReturnTag) TagName() IdentifierNode { return node.deref(&node.da
 
 func (node JSDocReturnTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
 
-func (node JSDocReturnTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocReturnTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocReturnTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocReturnTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
 func (node JSDocReturnTag) TypeExpression() TypeNode { return node.deref(&node.data().typeExpression) }
 
@@ -13894,16 +13818,16 @@ func (node JSDocReturnTag) SetTypeExpression(value TypeNode) {
 	node.setRef(&node.data().typeExpression, value)
 }
 
-func (f *NodeFactory) NewJSDocReturnTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocReturnTag(tagName IdentifierNode, typeExpression TypeNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocReturnTagData](s, layoutJSDocReturnTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.typeExpression, i, typeExpression)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocReturnTag, layoutJSDocReturnTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocReturnTag(node JSDocReturnTag, tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocReturnTag(node JSDocReturnTag, tagName IdentifierNode, typeExpression TypeNode, comment NodeList) Node {
 	if tagName != node.TagName() || typeExpression != node.TypeExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocReturnTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
 	}
@@ -13933,7 +13857,7 @@ func IsJSDocReturnTag(node Node) bool {
 type jsDocPublicTagData struct {
 	nodeBaseData
 	tagName nodeRef // IdentifierNode
-	comment sideRef // *NodeList. Optional
+	comment listRef // NodeList. Optional
 }
 
 type JSDocPublicTag struct{ Node }
@@ -13944,23 +13868,19 @@ func (node JSDocPublicTag) TagName() IdentifierNode { return node.deref(&node.da
 
 func (node JSDocPublicTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
 
-func (node JSDocPublicTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocPublicTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocPublicTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocPublicTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
-func (f *NodeFactory) NewJSDocPublicTag(tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocPublicTag(tagName IdentifierNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocPublicTagData](s, layoutJSDocPublicTag)
 	setNodeRef(&data.tagName, i, tagName)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocPublicTag, layoutJSDocPublicTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocPublicTag(node JSDocPublicTag, tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocPublicTag(node JSDocPublicTag, tagName IdentifierNode, comment NodeList) Node {
 	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocPublicTag(tagName, comment), node.AsNode(), f.hooks)
 	}
@@ -13990,7 +13910,7 @@ func IsJSDocPublicTag(node Node) bool {
 type jsDocPrivateTagData struct {
 	nodeBaseData
 	tagName nodeRef // IdentifierNode
-	comment sideRef // *NodeList. Optional
+	comment listRef // NodeList. Optional
 }
 
 type JSDocPrivateTag struct{ Node }
@@ -14002,23 +13922,19 @@ func (node JSDocPrivateTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
 
-func (node JSDocPrivateTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocPrivateTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocPrivateTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocPrivateTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
-func (f *NodeFactory) NewJSDocPrivateTag(tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocPrivateTag(tagName IdentifierNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocPrivateTagData](s, layoutJSDocPrivateTag)
 	setNodeRef(&data.tagName, i, tagName)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocPrivateTag, layoutJSDocPrivateTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocPrivateTag(node JSDocPrivateTag, tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocPrivateTag(node JSDocPrivateTag, tagName IdentifierNode, comment NodeList) Node {
 	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocPrivateTag(tagName, comment), node.AsNode(), f.hooks)
 	}
@@ -14048,7 +13964,7 @@ func IsJSDocPrivateTag(node Node) bool {
 type jsDocProtectedTagData struct {
 	nodeBaseData
 	tagName nodeRef // IdentifierNode
-	comment sideRef // *NodeList. Optional
+	comment listRef // NodeList. Optional
 }
 
 type JSDocProtectedTag struct{ Node }
@@ -14061,24 +13977,20 @@ func (node JSDocProtectedTag) TagName() IdentifierNode { return node.deref(&node
 func (node JSDocProtectedTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
-
-func (node JSDocProtectedTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
+func (node JSDocProtectedTag) Comment() NodeList { return node.derefList(&node.data().comment) }
+func (node JSDocProtectedTag) SetComment(value NodeList) {
+	node.setListRef(&node.data().comment, value)
 }
 
-func (node JSDocProtectedTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
-
-func (f *NodeFactory) NewJSDocProtectedTag(tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocProtectedTag(tagName IdentifierNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocProtectedTagData](s, layoutJSDocProtectedTag)
 	setNodeRef(&data.tagName, i, tagName)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocProtectedTag, layoutJSDocProtectedTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocProtectedTag(node JSDocProtectedTag, tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocProtectedTag(node JSDocProtectedTag, tagName IdentifierNode, comment NodeList) Node {
 	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocProtectedTag(tagName, comment), node.AsNode(), f.hooks)
 	}
@@ -14108,7 +14020,7 @@ func IsJSDocProtectedTag(node Node) bool {
 type jsDocReadonlyTagData struct {
 	nodeBaseData
 	tagName nodeRef // IdentifierNode
-	comment sideRef // *NodeList. Optional
+	comment listRef // NodeList. Optional
 }
 
 type JSDocReadonlyTag struct{ Node }
@@ -14120,23 +14032,19 @@ func (node JSDocReadonlyTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
 
-func (node JSDocReadonlyTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocReadonlyTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocReadonlyTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocReadonlyTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
-func (f *NodeFactory) NewJSDocReadonlyTag(tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocReadonlyTag(tagName IdentifierNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocReadonlyTagData](s, layoutJSDocReadonlyTag)
 	setNodeRef(&data.tagName, i, tagName)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocReadonlyTag, layoutJSDocReadonlyTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocReadonlyTag(node JSDocReadonlyTag, tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocReadonlyTag(node JSDocReadonlyTag, tagName IdentifierNode, comment NodeList) Node {
 	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocReadonlyTag(tagName, comment), node.AsNode(), f.hooks)
 	}
@@ -14166,7 +14074,7 @@ func IsJSDocReadonlyTag(node Node) bool {
 type jsDocOverrideTagData struct {
 	nodeBaseData
 	tagName nodeRef // IdentifierNode
-	comment sideRef // *NodeList. Optional
+	comment listRef // NodeList. Optional
 }
 
 type JSDocOverrideTag struct{ Node }
@@ -14178,23 +14086,19 @@ func (node JSDocOverrideTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
 
-func (node JSDocOverrideTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocOverrideTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocOverrideTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocOverrideTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
-func (f *NodeFactory) NewJSDocOverrideTag(tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocOverrideTag(tagName IdentifierNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocOverrideTagData](s, layoutJSDocOverrideTag)
 	setNodeRef(&data.tagName, i, tagName)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocOverrideTag, layoutJSDocOverrideTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocOverrideTag(node JSDocOverrideTag, tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocOverrideTag(node JSDocOverrideTag, tagName IdentifierNode, comment NodeList) Node {
 	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocOverrideTag(tagName, comment), node.AsNode(), f.hooks)
 	}
@@ -14224,7 +14128,7 @@ func IsJSDocOverrideTag(node Node) bool {
 type jsDocDeprecatedTagData struct {
 	nodeBaseData
 	tagName nodeRef // IdentifierNode
-	comment sideRef // *NodeList. Optional
+	comment listRef // NodeList. Optional
 }
 
 type JSDocDeprecatedTag struct{ Node }
@@ -14237,24 +14141,20 @@ func (node JSDocDeprecatedTag) TagName() IdentifierNode { return node.deref(&nod
 func (node JSDocDeprecatedTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
-
-func (node JSDocDeprecatedTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
+func (node JSDocDeprecatedTag) Comment() NodeList { return node.derefList(&node.data().comment) }
+func (node JSDocDeprecatedTag) SetComment(value NodeList) {
+	node.setListRef(&node.data().comment, value)
 }
 
-func (node JSDocDeprecatedTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
-
-func (f *NodeFactory) NewJSDocDeprecatedTag(tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocDeprecatedTag(tagName IdentifierNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocDeprecatedTagData](s, layoutJSDocDeprecatedTag)
 	setNodeRef(&data.tagName, i, tagName)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocDeprecatedTag, layoutJSDocDeprecatedTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocDeprecatedTag(node JSDocDeprecatedTag, tagName IdentifierNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocDeprecatedTag(node JSDocDeprecatedTag, tagName IdentifierNode, comment NodeList) Node {
 	if tagName != node.TagName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocDeprecatedTag(tagName, comment), node.AsNode(), f.hooks)
 	}
@@ -14284,7 +14184,7 @@ func IsJSDocDeprecatedTag(node Node) bool {
 type jsDocSeeTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
-	comment        sideRef // *NodeList. Optional
+	comment        listRef // NodeList. Optional
 	nameExpression nodeRef // TypeNode
 }
 
@@ -14295,26 +14195,26 @@ func (node JSDocSeeTag) data() *jsDocSeeTagData { return (*jsDocSeeTagData)(node
 func (node JSDocSeeTag) TagName() IdentifierNode         { return node.deref(&node.data().tagName) }
 func (node JSDocSeeTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
 
-func (node JSDocSeeTag) Comment() *NodeList { return node.store().nodeLists.get(node.data().comment) }
+func (node JSDocSeeTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocSeeTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocSeeTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
+
 func (node JSDocSeeTag) NameExpression() TypeNode { return node.deref(&node.data().nameExpression) }
+
 func (node JSDocSeeTag) SetNameExpression(value TypeNode) {
 	node.setRef(&node.data().nameExpression, value)
 }
 
-func (f *NodeFactory) NewJSDocSeeTag(tagName IdentifierNode, nameExpression TypeNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocSeeTag(tagName IdentifierNode, nameExpression TypeNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocSeeTagData](s, layoutJSDocSeeTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.nameExpression, i, nameExpression)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocSeeTag, layoutJSDocSeeTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocSeeTag(node JSDocSeeTag, tagName IdentifierNode, nameExpression TypeNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocSeeTag(node JSDocSeeTag, tagName IdentifierNode, nameExpression TypeNode, comment NodeList) Node {
 	if tagName != node.TagName() || nameExpression != node.NameExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocSeeTag(tagName, nameExpression, comment), node.AsNode(), f.hooks)
 	}
@@ -14344,7 +14244,7 @@ func IsJSDocSeeTag(node Node) bool {
 type jsDocImplementsTagData struct {
 	nodeBaseData
 	tagName   nodeRef // IdentifierNode
-	comment   sideRef // *NodeList. Optional
+	comment   listRef // NodeList. Optional
 	className nodeRef // ExpressionWithTypeArgumentsNode
 }
 
@@ -14358,13 +14258,9 @@ func (node JSDocImplementsTag) TagName() IdentifierNode { return node.deref(&nod
 func (node JSDocImplementsTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
-
-func (node JSDocImplementsTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
-
-func (node JSDocImplementsTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
+func (node JSDocImplementsTag) Comment() NodeList { return node.derefList(&node.data().comment) }
+func (node JSDocImplementsTag) SetComment(value NodeList) {
+	node.setListRef(&node.data().comment, value)
 }
 
 func (node JSDocImplementsTag) ClassName() ExpressionWithTypeArgumentsNode {
@@ -14375,16 +14271,16 @@ func (node JSDocImplementsTag) SetClassName(value ExpressionWithTypeArgumentsNod
 	node.setRef(&node.data().className, value)
 }
 
-func (f *NodeFactory) NewJSDocImplementsTag(tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocImplementsTag(tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocImplementsTagData](s, layoutJSDocImplementsTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.className, i, className)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocImplementsTag, layoutJSDocImplementsTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocImplementsTag(node JSDocImplementsTag, tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocImplementsTag(node JSDocImplementsTag, tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment NodeList) Node {
 	if tagName != node.TagName() || className != node.ClassName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocImplementsTag(tagName, className, comment), node.AsNode(), f.hooks)
 	}
@@ -14414,7 +14310,7 @@ func IsJSDocImplementsTag(node Node) bool {
 type jsDocAugmentsTagData struct {
 	nodeBaseData
 	tagName   nodeRef // IdentifierNode
-	comment   sideRef // *NodeList. Optional
+	comment   listRef // NodeList. Optional
 	className nodeRef // ExpressionWithTypeArgumentsNode
 }
 
@@ -14427,13 +14323,9 @@ func (node JSDocAugmentsTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
 
-func (node JSDocAugmentsTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocAugmentsTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocAugmentsTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocAugmentsTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
 func (node JSDocAugmentsTag) ClassName() ExpressionWithTypeArgumentsNode {
 	return node.deref(&node.data().className)
@@ -14443,16 +14335,16 @@ func (node JSDocAugmentsTag) SetClassName(value ExpressionWithTypeArgumentsNode)
 	node.setRef(&node.data().className, value)
 }
 
-func (f *NodeFactory) NewJSDocAugmentsTag(tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocAugmentsTag(tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocAugmentsTagData](s, layoutJSDocAugmentsTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.className, i, className)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocAugmentsTag, layoutJSDocAugmentsTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocAugmentsTag(node JSDocAugmentsTag, tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocAugmentsTag(node JSDocAugmentsTag, tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment NodeList) Node {
 	if tagName != node.TagName() || className != node.ClassName() || comment != node.Comment() {
 		return updateNode(f.NewJSDocAugmentsTag(tagName, className, comment), node.AsNode(), f.hooks)
 	}
@@ -14482,7 +14374,7 @@ func IsJSDocAugmentsTag(node Node) bool {
 type jsDocSatisfiesTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
-	comment        sideRef // *NodeList. Optional
+	comment        listRef // NodeList. Optional
 	typeExpression nodeRef // TypeNode
 }
 
@@ -14496,13 +14388,9 @@ func (node JSDocSatisfiesTag) TagName() IdentifierNode { return node.deref(&node
 func (node JSDocSatisfiesTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
-
-func (node JSDocSatisfiesTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
-
-func (node JSDocSatisfiesTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
+func (node JSDocSatisfiesTag) Comment() NodeList { return node.derefList(&node.data().comment) }
+func (node JSDocSatisfiesTag) SetComment(value NodeList) {
+	node.setListRef(&node.data().comment, value)
 }
 
 func (node JSDocSatisfiesTag) TypeExpression() TypeNode {
@@ -14513,16 +14401,16 @@ func (node JSDocSatisfiesTag) SetTypeExpression(value TypeNode) {
 	node.setRef(&node.data().typeExpression, value)
 }
 
-func (f *NodeFactory) NewJSDocSatisfiesTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocSatisfiesTag(tagName IdentifierNode, typeExpression TypeNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocSatisfiesTagData](s, layoutJSDocSatisfiesTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.typeExpression, i, typeExpression)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocSatisfiesTag, layoutJSDocSatisfiesTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocSatisfiesTag(node JSDocSatisfiesTag, tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocSatisfiesTag(node JSDocSatisfiesTag, tagName IdentifierNode, typeExpression TypeNode, comment NodeList) Node {
 	if tagName != node.TagName() || typeExpression != node.TypeExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocSatisfiesTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
 	}
@@ -14552,7 +14440,7 @@ func IsJSDocSatisfiesTag(node Node) bool {
 type jsDocThrowsTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
-	comment        sideRef // *NodeList. Optional
+	comment        listRef // NodeList. Optional
 	typeExpression nodeRef // TypeNode. Optional
 }
 
@@ -14564,13 +14452,9 @@ func (node JSDocThrowsTag) TagName() IdentifierNode { return node.deref(&node.da
 
 func (node JSDocThrowsTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
 
-func (node JSDocThrowsTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocThrowsTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocThrowsTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocThrowsTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
 func (node JSDocThrowsTag) TypeExpression() TypeNode { return node.deref(&node.data().typeExpression) }
 
@@ -14578,16 +14462,16 @@ func (node JSDocThrowsTag) SetTypeExpression(value TypeNode) {
 	node.setRef(&node.data().typeExpression, value)
 }
 
-func (f *NodeFactory) NewJSDocThrowsTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocThrowsTag(tagName IdentifierNode, typeExpression TypeNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocThrowsTagData](s, layoutJSDocThrowsTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.typeExpression, i, typeExpression)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocThrowsTag, layoutJSDocThrowsTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocThrowsTag(node JSDocThrowsTag, tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocThrowsTag(node JSDocThrowsTag, tagName IdentifierNode, typeExpression TypeNode, comment NodeList) Node {
 	if tagName != node.TagName() || typeExpression != node.TypeExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocThrowsTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
 	}
@@ -14617,7 +14501,7 @@ func IsJSDocThrowsTag(node Node) bool {
 type jsDocThisTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
-	comment        sideRef // *NodeList. Optional
+	comment        listRef // NodeList. Optional
 	typeExpression nodeRef // TypeNode
 }
 
@@ -14629,11 +14513,9 @@ func (node JSDocThisTag) TagName() IdentifierNode { return node.deref(&node.data
 
 func (node JSDocThisTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
 
-func (node JSDocThisTag) Comment() *NodeList { return node.store().nodeLists.get(node.data().comment) }
+func (node JSDocThisTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocThisTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocThisTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
 func (node JSDocThisTag) TypeExpression() TypeNode { return node.deref(&node.data().typeExpression) }
 
@@ -14641,16 +14523,16 @@ func (node JSDocThisTag) SetTypeExpression(value TypeNode) {
 	node.setRef(&node.data().typeExpression, value)
 }
 
-func (f *NodeFactory) NewJSDocThisTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocThisTag(tagName IdentifierNode, typeExpression TypeNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocThisTagData](s, layoutJSDocThisTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.typeExpression, i, typeExpression)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocThisTag, layoutJSDocThisTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocThisTag(node JSDocThisTag, tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocThisTag(node JSDocThisTag, tagName IdentifierNode, typeExpression TypeNode, comment NodeList) Node {
 	if tagName != node.TagName() || typeExpression != node.TypeExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocThisTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
 	}
@@ -14680,7 +14562,7 @@ func IsJSDocThisTag(node Node) bool {
 type jsDocImportTagData struct {
 	nodeBaseData
 	tagName         nodeRef // IdentifierNode
-	comment         sideRef // *NodeList. Optional
+	comment         listRef // NodeList. Optional
 	importClause    nodeRef // ImportClauseNode. Optional
 	moduleSpecifier nodeRef // Expression
 	attributes      nodeRef // ImportAttributesNode. Optional
@@ -14694,13 +14576,9 @@ func (node JSDocImportTag) TagName() IdentifierNode { return node.deref(&node.da
 
 func (node JSDocImportTag) SetTagName(value IdentifierNode) { node.setRef(&node.data().tagName, value) }
 
-func (node JSDocImportTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocImportTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocImportTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocImportTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
 func (node JSDocImportTag) ImportClause() ImportClauseNode {
 	return node.deref(&node.data().importClause)
@@ -14726,18 +14604,18 @@ func (node JSDocImportTag) SetAttributes(value ImportAttributesNode) {
 	node.setRef(&node.data().attributes, value)
 }
 
-func (f *NodeFactory) NewJSDocImportTag(tagName IdentifierNode, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocImportTag(tagName IdentifierNode, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocImportTagData](s, layoutJSDocImportTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.importClause, i, importClause)
 	setNodeRef(&data.moduleSpecifier, i, moduleSpecifier)
 	setNodeRef(&data.attributes, i, attributes)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocImportTag, layoutJSDocImportTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocImportTag(node JSDocImportTag, tagName IdentifierNode, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocImportTag(node JSDocImportTag, tagName IdentifierNode, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode, comment NodeList) Node {
 	if tagName != node.TagName() || importClause != node.ImportClause() || moduleSpecifier != node.ModuleSpecifier() || attributes != node.Attributes() || comment != node.Comment() {
 		return updateNode(f.NewJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comment), node.AsNode(), f.hooks)
 	}
@@ -14771,7 +14649,7 @@ func IsJSDocImportTag(node Node) bool {
 type jsDocCallbackTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
-	comment        sideRef // *NodeList. Optional
+	comment        listRef // NodeList. Optional
 	typeExpression nodeRef // TypeNode
 	name           nodeRef // JSDocFullName. Optional
 }
@@ -14785,13 +14663,9 @@ func (node JSDocCallbackTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
 
-func (node JSDocCallbackTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocCallbackTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocCallbackTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocCallbackTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
 func (node JSDocCallbackTag) TypeExpression() TypeNode {
 	return node.deref(&node.data().typeExpression)
@@ -14803,17 +14677,17 @@ func (node JSDocCallbackTag) SetTypeExpression(value TypeNode) {
 func (node JSDocCallbackTag) Name() JSDocFullName         { return node.deref(&node.data().name) }
 func (node JSDocCallbackTag) setName(value JSDocFullName) { node.setRef(&node.data().name, value) }
 
-func (f *NodeFactory) NewJSDocCallbackTag(tagName IdentifierNode, typeExpression TypeNode, name JSDocFullName, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocCallbackTag(tagName IdentifierNode, typeExpression TypeNode, name JSDocFullName, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocCallbackTagData](s, layoutJSDocCallbackTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.typeExpression, i, typeExpression)
 	setNodeRef(&data.name, i, name)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocCallbackTag, layoutJSDocCallbackTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocCallbackTag(node JSDocCallbackTag, tagName IdentifierNode, typeExpression TypeNode, name JSDocFullName, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocCallbackTag(node JSDocCallbackTag, tagName IdentifierNode, typeExpression TypeNode, name JSDocFullName, comment NodeList) Node {
 	if tagName != node.TagName() || typeExpression != node.TypeExpression() || name != node.Name() || comment != node.Comment() {
 		return updateNode(f.NewJSDocCallbackTag(tagName, typeExpression, name, comment), node.AsNode(), f.hooks)
 	}
@@ -14846,7 +14720,7 @@ func IsJSDocCallbackTag(node Node) bool {
 type jsDocOverloadTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
-	comment        sideRef // *NodeList. Optional
+	comment        listRef // NodeList. Optional
 	typeExpression nodeRef // TypeNode
 }
 
@@ -14859,13 +14733,9 @@ func (node JSDocOverloadTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
 
-func (node JSDocOverloadTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocOverloadTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocOverloadTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocOverloadTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
 
 func (node JSDocOverloadTag) TypeExpression() TypeNode {
 	return node.deref(&node.data().typeExpression)
@@ -14875,16 +14745,16 @@ func (node JSDocOverloadTag) SetTypeExpression(value TypeNode) {
 	node.setRef(&node.data().typeExpression, value)
 }
 
-func (f *NodeFactory) NewJSDocOverloadTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocOverloadTag(tagName IdentifierNode, typeExpression TypeNode, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocOverloadTagData](s, layoutJSDocOverloadTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.typeExpression, i, typeExpression)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocOverloadTag, layoutJSDocOverloadTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocOverloadTag(node JSDocOverloadTag, tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocOverloadTag(node JSDocOverloadTag, tagName IdentifierNode, typeExpression TypeNode, comment NodeList) Node {
 	if tagName != node.TagName() || typeExpression != node.TypeExpression() || comment != node.Comment() {
 		return updateNode(f.NewJSDocOverloadTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
 	}
@@ -14914,7 +14784,7 @@ func IsJSDocOverloadTag(node Node) bool {
 type jsDocTypedefTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
-	comment        sideRef // *NodeList. Optional
+	comment        listRef // NodeList. Optional
 	typeExpression nodeRef // Node. Optional
 	name           nodeRef // JSDocFullName. Optional
 }
@@ -14928,31 +14798,29 @@ func (node JSDocTypedefTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
 
-func (node JSDocTypedefTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
-}
+func (node JSDocTypedefTag) Comment() NodeList { return node.derefList(&node.data().comment) }
 
-func (node JSDocTypedefTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
-}
+func (node JSDocTypedefTag) SetComment(value NodeList) { node.setListRef(&node.data().comment, value) }
+
 func (node JSDocTypedefTag) TypeExpression() Node { return node.deref(&node.data().typeExpression) }
+
 func (node JSDocTypedefTag) SetTypeExpression(value Node) {
 	node.setRef(&node.data().typeExpression, value)
 }
 func (node JSDocTypedefTag) Name() JSDocFullName         { return node.deref(&node.data().name) }
 func (node JSDocTypedefTag) setName(value JSDocFullName) { node.setRef(&node.data().name, value) }
 
-func (f *NodeFactory) NewJSDocTypedefTag(tagName IdentifierNode, typeExpression Node, name JSDocFullName, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocTypedefTag(tagName IdentifierNode, typeExpression Node, name JSDocFullName, comment NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocTypedefTagData](s, layoutJSDocTypedefTag)
 	setNodeRef(&data.tagName, i, tagName)
 	setNodeRef(&data.typeExpression, i, typeExpression)
 	setNodeRef(&data.name, i, name)
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(KindJSDocTypedefTag, layoutJSDocTypedefTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocTypedefTag(node JSDocTypedefTag, tagName IdentifierNode, typeExpression Node, name JSDocFullName, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocTypedefTag(node JSDocTypedefTag, tagName IdentifierNode, typeExpression Node, name JSDocFullName, comment NodeList) Node {
 	if tagName != node.TagName() || typeExpression != node.TypeExpression() || name != node.Name() || comment != node.Comment() {
 		return updateNode(f.NewJSDocTypedefTag(tagName, typeExpression, name, comment), node.AsNode(), f.hooks)
 	}
@@ -14987,8 +14855,8 @@ type jsDocSignatureData struct {
 	symbol         sideRef // *Symbol
 	locals         sideRef // SymbolTable
 	nextContainer  nodeRef // Node
-	typeParameters sideRef // *TypeParameterList. Optional
-	parameters     sideRef // *ParameterList
+	typeParameters listRef // TypeParameterList. Optional
+	parameters     listRef // ParameterList
 	typeField      nodeRef // TypeNode. Optional
 	fullSignature  nodeRef // TypeNode. Optional
 }
@@ -15014,20 +14882,18 @@ func (node JSDocSignature) SetNextContainer(value Node) {
 	node.setRef(&node.data().nextContainer, value)
 }
 
-func (node JSDocSignature) TypeParameters() *TypeParameterList {
-	return node.store().nodeLists.get(node.data().typeParameters)
+func (node JSDocSignature) TypeParameters() TypeParameterList {
+	return node.derefList(&node.data().typeParameters)
 }
 
-func (node JSDocSignature) SetTypeParameters(value *TypeParameterList) {
-	node.store().nodeLists.set(&node.data().typeParameters, value, value == nil)
+func (node JSDocSignature) SetTypeParameters(value TypeParameterList) {
+	node.setListRef(&node.data().typeParameters, value)
 }
 
-func (node JSDocSignature) Parameters() *ParameterList {
-	return node.store().nodeLists.get(node.data().parameters)
-}
+func (node JSDocSignature) Parameters() ParameterList { return node.derefList(&node.data().parameters) }
 
-func (node JSDocSignature) SetParameters(value *ParameterList) {
-	node.store().nodeLists.set(&node.data().parameters, value, value == nil)
+func (node JSDocSignature) SetParameters(value ParameterList) {
+	node.setListRef(&node.data().parameters, value)
 }
 func (node JSDocSignature) Type() TypeNode          { return node.deref(&node.data().typeField) }
 func (node JSDocSignature) SetType(value TypeNode)  { node.setRef(&node.data().typeField, value) }
@@ -15037,16 +14903,16 @@ func (node JSDocSignature) SetFullSignature(value TypeNode) {
 	node.setRef(&node.data().fullSignature, value)
 }
 
-func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) NewJSDocSignature(typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocSignatureData](s, layoutJSDocSignature)
-	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
+	setListRefAt(&data.typeParameters, i, typeParameters)
+	setListRefAt(&data.parameters, i, parameters)
 	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindJSDocSignature, layoutJSDocSignature, i)
 }
 
-func (f *NodeFactory) UpdateJSDocSignature(node JSDocSignature, typeParameters *TypeParameterList, parameters *ParameterList, typeNode TypeNode) Node {
+func (f *NodeFactory) UpdateJSDocSignature(node JSDocSignature, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode) Node {
 	if typeParameters != node.TypeParameters() || parameters != node.Parameters() || typeNode != node.Type() {
 		return updateNode(f.NewJSDocSignature(typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
@@ -15135,7 +15001,7 @@ type moduleDeclarationData struct {
 	flowNode      flowRef // FlowNode
 	symbol        sideRef // *Symbol
 	localSymbol   sideRef // *Symbol
-	modifiers     sideRef // *ModifierList. Optional
+	modifiers     listRef // ModifierList. Optional
 	locals        sideRef // SymbolTable
 	nextContainer nodeRef // Node
 	asteriskToken nodeRef // AsteriskToken. Optional
@@ -15172,12 +15038,12 @@ func (node ModuleDeclaration) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().localSymbol, value, value == nil)
 }
 
-func (node ModuleDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ModuleDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ModuleDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ModuleDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 
 func (node ModuleDeclaration) Locals() SymbolTable {
@@ -15218,10 +15084,10 @@ func (node ModuleDeclaration) SetAttributes(value TypeLiteralNodeNode) {
 	node.setRef(&node.data().attributes, value)
 }
 
-func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, keyword Kind, name ModuleName, attributes TypeLiteralNodeNode, body ModuleBody) Node {
+func (f *NodeFactory) NewModuleDeclaration(modifiers ModifierList, keyword Kind, name ModuleName, attributes TypeLiteralNodeNode, body ModuleBody) Node {
 	s := f.nodeStore()
 	data, i := newRecord[moduleDeclarationData](s, layoutModuleDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	data.keyword = keyword
 	setNodeRef(&data.name, i, name)
 	setNodeRef(&data.attributes, i, attributes)
@@ -15229,7 +15095,7 @@ func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, keyword Kind
 	return f.newNode(KindModuleDeclaration, layoutModuleDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateModuleDeclaration(node ModuleDeclaration, modifiers *ModifierList, keyword Kind, name ModuleName, attributes TypeLiteralNodeNode, body ModuleBody) Node {
+func (f *NodeFactory) UpdateModuleDeclaration(node ModuleDeclaration, modifiers ModifierList, keyword Kind, name ModuleName, attributes TypeLiteralNodeNode, body ModuleBody) Node {
 	if modifiers != node.Modifiers() || keyword != node.Keyword() || name != node.Name() || attributes != node.Attributes() || body != node.Body() {
 		return updateNode(f.NewModuleDeclaration(modifiers, keyword, name, attributes, body), node.AsNode(), f.hooks)
 	}
@@ -15264,7 +15130,7 @@ type importEqualsDeclarationData struct {
 	flowNode        flowRef // FlowNode
 	symbol          sideRef // *Symbol
 	localSymbol     sideRef // *Symbol
-	modifiers       sideRef // *ModifierList. Optional
+	modifiers       listRef // ModifierList. Optional
 	facts           atomic.Uint32
 	name            nodeRef // IdentifierNode
 	moduleReference nodeRef // ModuleReference
@@ -15299,12 +15165,12 @@ func (node ImportEqualsDeclaration) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().localSymbol, value, value == nil)
 }
 
-func (node ImportEqualsDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ImportEqualsDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ImportEqualsDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ImportEqualsDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 func (node ImportEqualsDeclaration) IsTypeOnly() bool         { return node.data().isTypeOnly }
 func (node ImportEqualsDeclaration) SetIsTypeOnly(value bool) { node.data().isTypeOnly = value }
@@ -15322,17 +15188,17 @@ func (node ImportEqualsDeclaration) SetModuleReference(value ModuleReference) {
 	node.setRef(&node.data().moduleReference, value)
 }
 
-func (f *NodeFactory) NewImportEqualsDeclaration(modifiers *ModifierList, isTypeOnly bool, name IdentifierNode, moduleReference ModuleReference) Node {
+func (f *NodeFactory) NewImportEqualsDeclaration(modifiers ModifierList, isTypeOnly bool, name IdentifierNode, moduleReference ModuleReference) Node {
 	s := f.nodeStore()
 	data, i := newRecord[importEqualsDeclarationData](s, layoutImportEqualsDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	data.isTypeOnly = isTypeOnly
 	setNodeRef(&data.name, i, name)
 	setNodeRef(&data.moduleReference, i, moduleReference)
 	return f.newNode(KindImportEqualsDeclaration, layoutImportEqualsDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateImportEqualsDeclaration(node ImportEqualsDeclaration, modifiers *ModifierList, isTypeOnly bool, name IdentifierNode, moduleReference ModuleReference) Node {
+func (f *NodeFactory) UpdateImportEqualsDeclaration(node ImportEqualsDeclaration, modifiers ModifierList, isTypeOnly bool, name IdentifierNode, moduleReference ModuleReference) Node {
 	if modifiers != node.Modifiers() || isTypeOnly != node.IsTypeOnly() || name != node.Name() || moduleReference != node.ModuleReference() {
 		return updateNode(f.NewImportEqualsDeclaration(modifiers, isTypeOnly, name, moduleReference), node.AsNode(), f.hooks)
 	}
@@ -15363,7 +15229,7 @@ type exportDeclarationData struct {
 	nodeBaseData
 	flowNode        flowRef // FlowNode
 	symbol          sideRef // *Symbol
-	modifiers       sideRef // *ModifierList. Optional
+	modifiers       listRef // ModifierList. Optional
 	facts           atomic.Uint32
 	exportClause    nodeRef // NamedExportBindings. Optional
 	moduleSpecifier nodeRef // Expression. Optional
@@ -15388,12 +15254,12 @@ func (node ExportDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node ExportDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node ExportDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node ExportDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node ExportDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 func (node ExportDeclaration) IsTypeOnly() bool         { return node.data().isTypeOnly }
 func (node ExportDeclaration) SetIsTypeOnly(value bool) { node.data().isTypeOnly = value }
@@ -15421,10 +15287,10 @@ func (node ExportDeclaration) SetAttributes(value ImportAttributesNode) {
 	node.setRef(&node.data().attributes, value)
 }
 
-func (f *NodeFactory) NewExportDeclaration(modifiers *ModifierList, isTypeOnly bool, exportClause NamedExportBindings, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
+func (f *NodeFactory) NewExportDeclaration(modifiers ModifierList, isTypeOnly bool, exportClause NamedExportBindings, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[exportDeclarationData](s, layoutExportDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	data.isTypeOnly = isTypeOnly
 	setNodeRef(&data.exportClause, i, exportClause)
 	setNodeRef(&data.moduleSpecifier, i, moduleSpecifier)
@@ -15432,7 +15298,7 @@ func (f *NodeFactory) NewExportDeclaration(modifiers *ModifierList, isTypeOnly b
 	return f.newNode(KindExportDeclaration, layoutExportDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateExportDeclaration(node ExportDeclaration, modifiers *ModifierList, isTypeOnly bool, exportClause NamedExportBindings, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
+func (f *NodeFactory) UpdateExportDeclaration(node ExportDeclaration, modifiers ModifierList, isTypeOnly bool, exportClause NamedExportBindings, moduleSpecifier Expression, attributes ImportAttributesNode) Node {
 	if modifiers != node.Modifiers() || isTypeOnly != node.IsTypeOnly() || exportClause != node.ExportClause() || moduleSpecifier != node.ModuleSpecifier() || attributes != node.Attributes() {
 		return updateNode(f.NewExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, attributes), node.AsNode(), f.hooks)
 	}
@@ -15464,7 +15330,7 @@ func IsExportDeclaration(node Node) bool {
 
 type importTypeNodeData struct {
 	nodeBaseData
-	typeArguments sideRef // *TypeList. Optional
+	typeArguments listRef // TypeList. Optional
 	argument      nodeRef // TypeNode
 	attributes    nodeRef // ImportAttributesNode. Optional
 	qualifier     nodeRef // EntityName. Optional
@@ -15475,12 +15341,12 @@ type ImportTypeNode struct{ Node }
 
 func (node ImportTypeNode) data() *importTypeNodeData { return (*importTypeNodeData)(node.rec()) }
 
-func (node ImportTypeNode) TypeArguments() *TypeList {
-	return node.store().nodeLists.get(node.data().typeArguments)
+func (node ImportTypeNode) TypeArguments() TypeList {
+	return node.derefList(&node.data().typeArguments)
 }
 
-func (node ImportTypeNode) SetTypeArguments(value *TypeList) {
-	node.store().nodeLists.set(&node.data().typeArguments, value, value == nil)
+func (node ImportTypeNode) SetTypeArguments(value TypeList) {
+	node.setListRef(&node.data().typeArguments, value)
 }
 func (node ImportTypeNode) IsTypeOf() bool             { return node.data().isTypeOf }
 func (node ImportTypeNode) SetIsTypeOf(value bool)     { node.data().isTypeOf = value }
@@ -15498,18 +15364,18 @@ func (node ImportTypeNode) Qualifier() EntityName { return node.deref(&node.data
 
 func (node ImportTypeNode) SetQualifier(value EntityName) { node.setRef(&node.data().qualifier, value) }
 
-func (f *NodeFactory) NewImportTypeNode(isTypeOf bool, argument TypeNode, attributes ImportAttributesNode, qualifier EntityName, typeArguments *TypeList) Node {
+func (f *NodeFactory) NewImportTypeNode(isTypeOf bool, argument TypeNode, attributes ImportAttributesNode, qualifier EntityName, typeArguments TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[importTypeNodeData](s, layoutImportTypeNode)
 	data.isTypeOf = isTypeOf
 	setNodeRef(&data.argument, i, argument)
 	setNodeRef(&data.attributes, i, attributes)
 	setNodeRef(&data.qualifier, i, qualifier)
-	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
+	setListRefAt(&data.typeArguments, i, typeArguments)
 	return f.newNode(KindImportType, layoutImportTypeNode, i)
 }
 
-func (f *NodeFactory) UpdateImportTypeNode(node ImportTypeNode, isTypeOf bool, argument TypeNode, attributes ImportAttributesNode, qualifier EntityName, typeArguments *TypeList) Node {
+func (f *NodeFactory) UpdateImportTypeNode(node ImportTypeNode, isTypeOf bool, argument TypeNode, attributes ImportAttributesNode, qualifier EntityName, typeArguments TypeList) Node {
 	if isTypeOf != node.IsTypeOf() || argument != node.Argument() || attributes != node.Attributes() || qualifier != node.Qualifier() || typeArguments != node.TypeArguments() {
 		return updateNode(f.NewImportTypeNode(isTypeOf, argument, attributes, qualifier, typeArguments), node.AsNode(), f.hooks)
 	}
@@ -15889,7 +15755,7 @@ func IsJSDocLinkCode(node Node) bool {
 type typeParameterDeclarationData struct {
 	nodeBaseData
 	symbol      sideRef // *Symbol
-	modifiers   sideRef // *ModifierList. Optional
+	modifiers   listRef // ModifierList. Optional
 	name        nodeRef // IdentifierNode
 	constraint  nodeRef // TypeNode. Optional
 	expression  nodeRef // Expression. Optional
@@ -15910,12 +15776,12 @@ func (node TypeParameterDeclaration) SetSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().symbol, value, value == nil)
 }
 
-func (node TypeParameterDeclaration) Modifiers() *ModifierList {
-	return node.store().modifierLists.get(node.data().modifiers)
+func (node TypeParameterDeclaration) Modifiers() ModifierList {
+	return node.derefModifiers(&node.data().modifiers)
 }
 
-func (node TypeParameterDeclaration) setModifiers(value *ModifierList) {
-	node.store().modifierLists.set(&node.data().modifiers, value, value == nil)
+func (node TypeParameterDeclaration) setModifiers(value ModifierList) {
+	node.setModifiersRef(&node.data().modifiers, value)
 }
 func (node TypeParameterDeclaration) Name() IdentifierNode { return node.deref(&node.data().name) }
 func (node TypeParameterDeclaration) setName(value IdentifierNode) {
@@ -15946,10 +15812,10 @@ func (node TypeParameterDeclaration) SetDefaultType(value TypeNode) {
 	node.setRef(&node.data().defaultType, value)
 }
 
-func (f *NodeFactory) NewTypeParameterDeclaration(modifiers *ModifierList, name IdentifierNode, constraint TypeNode, expression Expression, defaultType TypeNode) Node {
+func (f *NodeFactory) NewTypeParameterDeclaration(modifiers ModifierList, name IdentifierNode, constraint TypeNode, expression Expression, defaultType TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeParameterDeclarationData](s, layoutTypeParameterDeclaration)
-	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
+	setModifiersRefAt(&data.modifiers, i, modifiers)
 	setNodeRef(&data.name, i, name)
 	setNodeRef(&data.constraint, i, constraint)
 	setNodeRef(&data.expression, i, expression)
@@ -15957,7 +15823,7 @@ func (f *NodeFactory) NewTypeParameterDeclaration(modifiers *ModifierList, name 
 	return f.newNode(KindTypeParameter, layoutTypeParameterDeclaration, i)
 }
 
-func (f *NodeFactory) UpdateTypeParameterDeclaration(node TypeParameterDeclaration, modifiers *ModifierList, name IdentifierNode, constraint TypeNode, expression Expression, defaultType TypeNode) Node {
+func (f *NodeFactory) UpdateTypeParameterDeclaration(node TypeParameterDeclaration, modifiers ModifierList, name IdentifierNode, constraint TypeNode, expression Expression, defaultType TypeNode) Node {
 	if modifiers != node.Modifiers() || name != node.Name() || constraint != node.Constraint() || expression != node.Expression() || defaultType != node.DefaultType() {
 		return updateNode(f.NewTypeParameterDeclaration(modifiers, name, constraint, expression, defaultType), node.AsNode(), f.hooks)
 	}
@@ -16122,7 +15988,7 @@ func IsJSDocTypeLiteral(node Node) bool {
 type jsDocParameterOrPropertyTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
-	comment        sideRef // *NodeList. Optional
+	comment        listRef // NodeList. Optional
 	name           nodeRef // EntityName
 	typeExpression nodeRef // TypeNode. Optional
 	isBracketed    bool
@@ -16143,12 +16009,12 @@ func (node JSDocParameterOrPropertyTag) SetTagName(value IdentifierNode) {
 	node.setRef(&node.data().tagName, value)
 }
 
-func (node JSDocParameterOrPropertyTag) Comment() *NodeList {
-	return node.store().nodeLists.get(node.data().comment)
+func (node JSDocParameterOrPropertyTag) Comment() NodeList {
+	return node.derefList(&node.data().comment)
 }
 
-func (node JSDocParameterOrPropertyTag) SetComment(value *NodeList) {
-	node.store().nodeLists.set(&node.data().comment, value, value == nil)
+func (node JSDocParameterOrPropertyTag) SetComment(value NodeList) {
+	node.setListRef(&node.data().comment, value)
 }
 func (node JSDocParameterOrPropertyTag) Name() EntityName { return node.deref(&node.data().name) }
 func (node JSDocParameterOrPropertyTag) setName(value EntityName) {
@@ -16171,7 +16037,7 @@ func (node JSDocParameterOrPropertyTag) IsNameFirst() bool { return node.data().
 
 func (node JSDocParameterOrPropertyTag) SetIsNameFirst(value bool) { node.data().isNameFirst = value }
 
-func (f *NodeFactory) NewJSDocParameterOrPropertyTag(kind Kind, tagName IdentifierNode, name EntityName, isBracketed bool, typeExpression TypeNode, isNameFirst bool, comment *NodeList) Node {
+func (f *NodeFactory) NewJSDocParameterOrPropertyTag(kind Kind, tagName IdentifierNode, name EntityName, isBracketed bool, typeExpression TypeNode, isNameFirst bool, comment NodeList) Node {
 	switch kind {
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
 	default:
@@ -16184,11 +16050,11 @@ func (f *NodeFactory) NewJSDocParameterOrPropertyTag(kind Kind, tagName Identifi
 	data.isBracketed = isBracketed
 	setNodeRef(&data.typeExpression, i, typeExpression)
 	data.isNameFirst = isNameFirst
-	s.nodeLists.set(&data.comment, comment, comment == nil)
+	setListRefAt(&data.comment, i, comment)
 	return f.newNode(kind, layoutJSDocParameterOrPropertyTag, i)
 }
 
-func (f *NodeFactory) UpdateJSDocParameterOrPropertyTag(node JSDocParameterOrPropertyTag, tagName IdentifierNode, name EntityName, isBracketed bool, typeExpression TypeNode, isNameFirst bool, comment *NodeList) Node {
+func (f *NodeFactory) UpdateJSDocParameterOrPropertyTag(node JSDocParameterOrPropertyTag, tagName IdentifierNode, name EntityName, isBracketed bool, typeExpression TypeNode, isNameFirst bool, comment NodeList) Node {
 	if tagName != node.TagName() || name != node.Name() || isBracketed != node.IsBracketed() || typeExpression != node.TypeExpression() || isNameFirst != node.IsNameFirst() || comment != node.Comment() {
 		return updateNode(f.NewJSDocParameterOrPropertyTag(node.Kind(), tagName, name, isBracketed, typeExpression, isNameFirst, comment), node.AsNode(), f.hooks)
 	}
@@ -18955,7 +18821,7 @@ var nodeModifiersDispatch = [kindFlowReduceLabelData + 1]uint8{
 	KindTypeParameter:               31,
 }
 
-func (n Node) Modifiers() *ModifierList {
+func (n Node) Modifiers() ModifierList {
 	switch nodeModifiersDispatch[n.Kind()] {
 	case 1:
 		return VariableStatement{n}.Modifiers()
@@ -19020,11 +18886,11 @@ func (n Node) Modifiers() *ModifierList {
 	case 31:
 		return TypeParameterDeclaration{n}.Modifiers()
 	default:
-		return nil
+		return ModifierList{}
 	}
 }
 
-func (n MutableNode) SetModifiers(modifiers *ModifierList) {
+func (n MutableNode) SetModifiers(modifiers ModifierList) {
 	switch n.Kind() {
 	case KindVariableStatement:
 		VariableStatement{n.Node}.setModifiers(modifiers)

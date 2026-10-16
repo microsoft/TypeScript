@@ -39,7 +39,7 @@ func IsCompletedNode(n ast.Node, sourceFile *ast.SourceFile) bool {
 		return IsCompletedNode(n.AsCatchClause().Block(), sourceFile)
 
 	case ast.KindNewExpression:
-		if n.ArgumentList() == nil {
+		if n.ArgumentList().IsNil() {
 			return true
 		}
 		fallthrough
@@ -130,10 +130,10 @@ func IsCompletedNode(n ast.Node, sourceFile *ast.SourceFile) bool {
 		return IsCompletedNode(n.AsTaggedTemplateExpression().Template(), sourceFile)
 
 	case ast.KindTemplateExpression:
-		if n.AsTemplateExpression().TemplateSpans() == nil {
+		if n.AsTemplateExpression().TemplateSpans().IsNil() {
 			return false
 		}
-		lastSpan := core.LastOrNil(n.AsTemplateExpression().TemplateSpans().Nodes())
+		lastSpan := core.LastOrNil(n.AsTemplateExpression().TemplateSpans().Slice())
 		return IsCompletedNode(lastSpan, sourceFile)
 
 	case ast.KindTemplateSpan:

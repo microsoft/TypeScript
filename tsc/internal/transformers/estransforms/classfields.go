@@ -208,7 +208,7 @@ func (tx *classFieldsTransformer) classExpressionNeedsBlockScopedTemp() bool {
 	if !tx.requiresBlockScopedVar() {
 		return false
 	}
-	for _, member := range tx.currentClassContainer.Members() {
+	for _, member := range tx.currentClassContainer.MemberList().All() {
 		if ast.IsPropertyDeclaration(member) && !ast.HasStaticModifier(member) &&
 			!member.Name().IsNil() && ast.IsComputedPropertyName(member.Name()) {
 			return true
@@ -702,7 +702,7 @@ func (tx *classFieldsTransformer) visitMethodOrAccessorDeclaration(node ast.Node
 		params := tx.Visitor().VisitNodes(node.ParameterList())
 		tx.inIterationStatement = saved
 
-		funcExpr := tx.Factory().NewFunctionExpression(modifiers, node.BodyData().AsteriskToken(), functionName, nil, params, ast.Node{}, ast.Node{}, body)
+		funcExpr := tx.Factory().NewFunctionExpression(modifiers, node.BodyData().AsteriskToken(), functionName, ast.TypeParameterList{}, params, ast.Node{}, ast.Node{}, body)
 		assignment := tx.Factory().NewAssignmentExpression(functionName, funcExpr)
 		tx.addPendingExpressions(assignment)
 	}
@@ -711,7 +711,7 @@ func (tx *classFieldsTransformer) visitMethodOrAccessorDeclaration(node ast.Node
 	return ast.Node{}
 }
 
-func (tx *classFieldsTransformer) extractNonStaticNonAccessorModifiers(node ast.Node) *ast.ModifierList {
+func (tx *classFieldsTransformer) extractNonStaticNonAccessorModifiers(node ast.Node) ast.ModifierList {
 	return transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), ^(ast.ModifierFlagsStatic | ast.ModifierFlagsAccessor))
 }
 
@@ -762,7 +762,7 @@ func (tx *classFieldsTransformer) visitFunctionExpressionOrDeclaration(node ast.
 	if !tx.currentClassElement.IsNil() {
 		original := tx.EmitContext().MostOriginal(node)
 		if original != node && !tx.currentClassContainer.IsNil() {
-			for _, member := range tx.currentClassContainer.Members() {
+			for _, member := range tx.currentClassContainer.MemberList().All() {
 				if tx.EmitContext().MostOriginal(member) == original && ast.IsStatic(member) {
 					// The function expression originates from a static class member (e.g., a
 					// descriptor method synthesized by the ES decorator transformer for a
@@ -878,8 +878,8 @@ func (tx *classFieldsTransformer) transformAutoAccessor(node ast.PropertyDeclara
 	tx.EmitContext().SetSourceMapRange(getter, sourceMapRange)
 
 	// create a fresh copy of the modifiers so that we don't duplicate comments
-	var setterModifiers *ast.ModifierList
-	if modifiers != nil {
+	var setterModifiers ast.ModifierList
+	if !modifiers.IsNil() {
 		setterModifiers = tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifiers.ModifierFlags(), tx.Factory().NewModifier))
 	}
 	setter := tx.createAccessorPropertySetRedirector(node, setterModifiers, setterName, receiver)
@@ -910,7 +910,7 @@ func (tx *classFieldsTransformer) transformPrivateFieldInitializer(node ast.Prop
 			statement := tx.transformPropertyOrClassStaticBlock(node.AsNode(), tx.Factory().NewThisExpression())
 			if !statement.IsNil() {
 				return tx.Factory().NewClassStaticBlockDeclaration(
-					nil, /*modifiers*/
+					ast.ModifierList{}, /*modifiers*/
 					tx.Factory().NewBlock(tx.Factory().NewNodeList([]ast.Node{statement}), true /*multiLine*/),
 				)
 			}
@@ -965,7 +965,7 @@ func (tx *classFieldsTransformer) transformPublicFieldInitializer(node ast.Prope
 			initializerStatement := tx.transformPropertyOrClassStaticBlock(node.AsNode(), tx.Factory().NewThisExpression())
 			if !initializerStatement.IsNil() {
 				staticBlock := tx.Factory().NewClassStaticBlockDeclaration(
-					nil, /*modifiers*/
+					ast.ModifierList{}, /*modifiers*/
 					tx.Factory().NewBlock(tx.Factory().NewNodeList([]ast.Node{initializerStatement}), false),
 				)
 
@@ -1290,15 +1290,15 @@ func (tx *classFieldsTransformer) visitCallExpression(node ast.CallExpression) a
 		visitedTarget := tx.Visitor().VisitNode(target)
 		visitedThisArg := tx.Visitor().VisitNode(thisArg)
 		visitedArgs := tx.Visitor().VisitNodes(node.Arguments())
-		allArgs := make([]ast.Node, 0, 1+len(visitedArgs.Nodes()))
+		allArgs := make([]ast.Node, 0, 1+visitedArgs.Len())
 		allArgs = append(allArgs, visitedThisArg)
-		allArgs = append(allArgs, visitedArgs.Nodes()...)
+		allArgs = append(allArgs, visitedArgs.Slice()...)
 		if node.Flags()&ast.NodeFlagsOptionalChain != 0 {
 			return tx.Factory().UpdateCallExpression(
 				node,
 				tx.Factory().NewPropertyAccessExpression(visitedTarget, node.QuestionDotToken(), tx.Factory().NewIdentifier("call"), ast.NodeFlagsOptionalChain),
-				ast.Node{}, /*questionDotToken*/
-				nil,        /*typeArguments*/
+				ast.Node{},     /*questionDotToken*/
+				ast.TypeList{}, /*typeArguments*/
 				tx.Factory().NewNodeList(allArgs),
 				node.Flags(),
 			)
@@ -1306,8 +1306,8 @@ func (tx *classFieldsTransformer) visitCallExpression(node ast.CallExpression) a
 		return tx.Factory().UpdateCallExpression(
 			node,
 			tx.Factory().NewPropertyAccessExpression(visitedTarget, ast.Node{}, tx.Factory().NewIdentifier("call"), ast.NodeFlagsNone),
-			ast.Node{}, /*questionDotToken*/
-			nil,        /*typeArguments*/
+			ast.Node{},     /*questionDotToken*/
+			ast.TypeList{}, /*typeArguments*/
 			tx.Factory().NewNodeList(allArgs),
 			node.Flags(),
 		)
@@ -1325,7 +1325,7 @@ func (tx *classFieldsTransformer) visitCallExpression(node ast.CallExpression) a
 		invocation := tx.Factory().NewFunctionCallCall(
 			tx.Visitor().VisitNode(node.Expression()),
 			tx.lexicalEnvironment.data.classConstructor,
-			tx.Visitor().VisitNodes(node.Arguments()).Nodes(),
+			tx.Visitor().VisitNodes(node.Arguments()).Slice(),
 		)
 		tx.EmitContext().SetOriginal(invocation, node.AsNode())
 		invocation.SetLoc(node.Loc())
@@ -1342,16 +1342,16 @@ func (tx *classFieldsTransformer) visitTaggedTemplateExpression(node ast.TaggedT
 		thisArg, target := tx.createCallBinding(node.Tag())
 		bindExpr := tx.Factory().NewCallExpression(
 			tx.Factory().NewPropertyAccessExpression(tx.Visitor().VisitNode(target), ast.Node{}, tx.Factory().NewIdentifier("bind"), ast.NodeFlagsNone),
-			ast.Node{}, /*questionDotToken*/
-			nil,        /*typeArguments*/
+			ast.Node{},     /*questionDotToken*/
+			ast.TypeList{}, /*typeArguments*/
 			tx.Factory().NewNodeList([]ast.Node{tx.Visitor().VisitNode(thisArg)}),
 			ast.NodeFlagsNone,
 		)
 		return tx.Factory().UpdateTaggedTemplateExpression(
 			node,
 			bindExpr,
-			ast.Node{}, /*questionDotToken*/
-			nil,        /*typeArguments*/
+			ast.Node{},     /*questionDotToken*/
+			ast.TypeList{}, /*typeArguments*/
 			tx.Visitor().VisitNode(node.Template()),
 			node.Flags(),
 		)
@@ -1373,8 +1373,8 @@ func (tx *classFieldsTransformer) visitTaggedTemplateExpression(node ast.TaggedT
 		return tx.Factory().UpdateTaggedTemplateExpression(
 			node,
 			invocation,
-			ast.Node{}, /*questionDotToken*/
-			nil,        /*typeArguments*/
+			ast.Node{},     /*questionDotToken*/
+			ast.TypeList{}, /*typeArguments*/
 			tx.Visitor().VisitNode(node.Template()),
 			node.Flags(),
 		)
@@ -1386,7 +1386,7 @@ func (tx *classFieldsTransformer) visitTaggedTemplateExpression(node ast.TaggedT
 func (tx *classFieldsTransformer) transformClassStaticBlockDeclaration(node ast.Node) ast.Expression {
 	if tx.shouldTransformPrivateElementsOrClassStaticBlocks {
 		if isClassThisAssignmentBlock(tx.EmitContext(), node) {
-			result := tx.Visitor().VisitNode(node.AsClassStaticBlockDeclaration().Body().AsBlock().Statements().Nodes()[0].Expression())
+			result := tx.Visitor().VisitNode(node.AsClassStaticBlockDeclaration().Body().AsBlock().Statements().At(0).Expression())
 			// If the generated `_classThis` assignment is a noop (i.e., `_classThis = _classThis`), we can
 			// eliminate the expression
 			if ast.IsAssignmentExpression(result, true /*excludeCompoundAssignment*/) {
@@ -1399,11 +1399,11 @@ func (tx *classFieldsTransformer) transformClassStaticBlockDeclaration(node ast.
 		}
 
 		if isClassNamedEvaluationHelperBlock(tx.EmitContext(), node) {
-			return tx.Visitor().VisitNode(node.AsClassStaticBlockDeclaration().Body().AsBlock().Statements().Nodes()[0].Expression())
+			return tx.Visitor().VisitNode(node.AsClassStaticBlockDeclaration().Body().AsBlock().Statements().At(0).Expression())
 		}
 
 		tx.EmitContext().StartVariableEnvironment()
-		statements := tx.setCurrentClassElementAndVisitStatements(node, node.AsClassStaticBlockDeclaration().Body().AsBlock().Statements().Nodes())
+		statements := tx.setCurrentClassElementAndVisitStatements(node, node.AsClassStaticBlockDeclaration().Body().AsBlock().Statements().Slice())
 		statements = tx.EmitContext().EndAndMergeVariableEnvironment(statements)
 
 		iife := tx.Factory().NewImmediatelyInvokedArrowFunction(statements)
@@ -1458,7 +1458,7 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node ast.BinaryExpressio
 		tx.pendingExpressions = nil
 		updated := tx.Factory().UpdateBinaryExpression(
 			node,
-			nil,
+			ast.ModifierList{},
 			tx.assignmentTargetVisitor.VisitNode(node.Left()),
 			ast.Node{},
 			node.OperatorToken(),
@@ -1529,7 +1529,7 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node ast.BinaryExpressio
 			if data.facts&classFactsClassWasDecorated != 0 {
 				return tx.Factory().UpdateBinaryExpression(
 					node,
-					nil,
+					ast.ModifierList{},
 					tx.visitInvalidSuperProperty(node.Left()),
 					ast.Node{},
 					node.OperatorToken(),
@@ -1565,7 +1565,7 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node ast.BinaryExpressio
 						tx.EmitContext().SetOriginal(superPropertyGet, node.Left())
 						superPropertyGet.SetLoc(node.Left().Loc())
 						expression = tx.Factory().NewBinaryExpression(
-							nil,
+							ast.ModifierList{},
 							superPropertyGet,
 							ast.Node{},
 							tx.Factory().NewToken(transformers.GetNonAssignmentOperatorForCompoundAssignment(node.OperatorToken().Kind())),
@@ -1636,7 +1636,7 @@ func (tx *classFieldsTransformer) createPrivateIdentifierAssignment(info *privat
 			receiver = readExpression
 		}
 		right = tx.Factory().NewBinaryExpression(
-			nil,
+			ast.ModifierList{},
 			tx.createPrivateIdentifierAccessHelper(info, readExpression),
 			ast.Node{},
 			tx.Factory().NewToken(transformers.GetNonAssignmentOperatorForCompoundAssignment(operator)),
@@ -1736,7 +1736,7 @@ func (tx *classFieldsTransformer) memberContainsConstructorReference(member ast.
 // references to the class's own constructor. Replaces Strada's
 // resolver.hasNodeCheckFlag(node, NodeCheckFlags.ContainsConstructorReference).
 func (tx *classFieldsTransformer) classContainsConstructorReference(node ast.Node) bool {
-	for _, member := range node.Members() {
+	for _, member := range node.MemberList().All() {
 		if tx.memberContainsConstructorReference(member, node) {
 			return true
 		}
@@ -1762,7 +1762,7 @@ func (tx *classFieldsTransformer) getClassFacts(node ast.Node) classFacts {
 	var containsInstancePrivateElements bool
 	var containsInstanceAutoAccessors bool
 
-	for _, member := range node.Members() {
+	for _, member := range node.MemberList().All() {
 		if ast.IsStatic(member) {
 			if !member.Name().IsNil() && (ast.IsPrivateIdentifier(member.Name()) || ast.IsAutoAccessorPropertyDeclaration(member)) &&
 				tx.shouldTransformPrivateElementsOrClassStaticBlocks {
@@ -1826,7 +1826,7 @@ func (tx *classFieldsTransformer) visitExpressionWithTypeArgumentsInHeritageClau
 		return tx.Factory().UpdateExpressionWithTypeArguments(
 			node,
 			tx.Factory().NewAssignmentExpression(temp, tx.Visitor().VisitNode(node.Expression())),
-			nil, /*typeArguments*/
+			ast.TypeList{}, /*typeArguments*/
 		)
 	}
 	return tx.heritageClauseVisitor.VisitEachChild(node.AsNode())
@@ -1978,7 +1978,7 @@ func (tx *classFieldsTransformer) visitClassDeclarationInNewClassLexicalEnvironm
 
 	if len(statements) > 0 && isExport && isDefault {
 		modifiers = transformers.ExtractModifiers(tx.EmitContext(), modifiers, ^ast.ModifierFlagsExportDefault)
-		exportAssignment := tx.Factory().NewExportAssignment(nil, false /*isExportEquals*/, ast.Node{} /*typeNode*/, tx.Factory().GetLocalName(node))
+		exportAssignment := tx.Factory().NewExportAssignment(ast.ModifierList{}, false /*isExportEquals*/, ast.Node{} /*typeNode*/, tx.Factory().GetLocalName(node))
 		statements = append(statements, exportAssignment)
 	}
 
@@ -1986,7 +1986,7 @@ func (tx *classFieldsTransformer) visitClassDeclarationInNewClassLexicalEnvironm
 		classDecl,
 		modifiers,
 		name,
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		heritageClauses,
 		members,
 	)
@@ -2101,7 +2101,7 @@ func (tx *classFieldsTransformer) visitClassExpressionInNewClassLexicalEnvironme
 		classExpr,
 		modifiers,
 		classExpr.Name(),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		heritageClauses,
 		members,
 	)
@@ -2221,12 +2221,12 @@ func (tx *classFieldsTransformer) visitThisExpression(node ast.Node) ast.Node {
 	return node
 }
 
-func (tx *classFieldsTransformer) transformClassMembers(node ast.Node) (members *ast.NodeList, prologue ast.Expression) {
+func (tx *classFieldsTransformer) transformClassMembers(node ast.Node) (members ast.NodeList, prologue ast.Expression) {
 	shouldTransformPrivateStaticElementsInClass := tx.EmitContext().EmitFlags(node)&printer.EFTransformPrivateStaticElements != 0
 
 	// Declare private names
 	if tx.shouldTransformPrivateElementsOrClassStaticBlocks || tx.shouldTransformPrivateStaticElementsInFile {
-		for _, member := range node.Members() {
+		for _, member := range node.MemberList().All() {
 			if ast.IsPrivateIdentifierClassElementDeclaration(member) {
 				if tx.shouldTransformClassElementToWeakMap(member) {
 					tx.addPrivateIdentifierToEnvironment(member)
@@ -2246,7 +2246,7 @@ func (tx *classFieldsTransformer) transformClassMembers(node ast.Node) (members 
 		}
 
 		if tx.shouldTransformAutoAccessorsInCurrentClass() {
-			for _, member := range node.Members() {
+			for _, member := range node.MemberList().All() {
 				if ast.IsAutoAccessorPropertyDeclaration(member) {
 					storageName := tx.Factory().NewGeneratedPrivateNameForNodeEx(member.Name(), printer.AutoGenerateOptions{Suffix: "_accessor_storage"})
 					if tx.shouldTransformPrivateElementsOrClassStaticBlocks ||
@@ -2272,7 +2272,7 @@ func (tx *classFieldsTransformer) transformClassMembers(node ast.Node) (members 
 
 	// Create a synthetic constructor if necessary
 	var syntheticConstructor ast.Node
-	if !core.Some(members.Nodes(), ast.IsConstructorDeclaration) {
+	if !core.Some(members.Slice(), ast.IsConstructorDeclaration) {
 		syntheticConstructor = tx.transformConstructor(ast.ConstructorDeclaration{}, node)
 	}
 
@@ -2290,8 +2290,8 @@ func (tx *classFieldsTransformer) transformClassMembers(node ast.Node) (members 
 			temp := tx.Factory().NewTempVariable()
 			tx.EmitContext().AddVariableDeclaration(temp)
 			arrow := tx.Factory().NewArrowFunction(
-				nil,                           /*modifiers*/
-				nil,                           /*typeParameters*/
+				ast.ModifierList{},            /*modifiers*/
+				ast.TypeParameterList{},       /*typeParameters*/
 				tx.Factory().NewNodeList(nil), /*parameters*/
 				ast.Node{},                    /*returnType*/
 				ast.Node{},                    /*fullSignature*/
@@ -2300,32 +2300,32 @@ func (tx *classFieldsTransformer) transformClassMembers(node ast.Node) (members 
 			)
 			prologue = tx.Factory().NewAssignmentExpression(temp, arrow)
 			statement = tx.Factory().NewExpressionStatement(
-				tx.Factory().NewCallExpression(temp, ast.Node{} /*questionDotToken*/, nil /*typeArguments*/, tx.Factory().NewNodeList(nil), ast.NodeFlagsNone),
+				tx.Factory().NewCallExpression(temp, ast.Node{} /*questionDotToken*/, ast.TypeList{} /*typeArguments*/, tx.Factory().NewNodeList(nil), ast.NodeFlagsNone),
 			)
 		}
 
 		block := tx.Factory().NewBlock(tx.Factory().NewNodeList([]ast.Node{statement}), false /*multiline*/)
-		syntheticStaticBlock = tx.Factory().NewClassStaticBlockDeclaration(nil /*modifiers*/, block)
+		syntheticStaticBlock = tx.Factory().NewClassStaticBlockDeclaration(ast.ModifierList{} /*modifiers*/, block)
 		tx.pendingExpressions = nil
 	}
 
 	// If we created a synthetic constructor or class static block, add them to the visited members
 	if !syntheticConstructor.IsNil() || !syntheticStaticBlock.IsNil() {
-		membersArray := make([]ast.Node, 0, len(members.Nodes())+2)
+		membersArray := make([]ast.Node, 0, members.Len()+2)
 
 		// Find and preserve classThis assignment block and named evaluation helper block at the top
-		classThisIdx := slices.IndexFunc(members.Nodes(), func(n ast.Node) bool {
+		classThisIdx := slices.IndexFunc(members.Slice(), func(n ast.Node) bool {
 			return isClassThisAssignmentBlock(tx.EmitContext(), n)
 		})
-		namedEvalIdx := slices.IndexFunc(members.Nodes(), func(n ast.Node) bool {
+		namedEvalIdx := slices.IndexFunc(members.Slice(), func(n ast.Node) bool {
 			return isClassNamedEvaluationHelperBlock(tx.EmitContext(), n)
 		})
 
 		if classThisIdx >= 0 {
-			membersArray = append(membersArray, members.Nodes()[classThisIdx])
+			membersArray = append(membersArray, members.At(classThisIdx))
 		}
 		if namedEvalIdx >= 0 {
-			membersArray = append(membersArray, members.Nodes()[namedEvalIdx])
+			membersArray = append(membersArray, members.At(namedEvalIdx))
 		}
 		if !syntheticConstructor.IsNil() {
 			membersArray = append(membersArray, syntheticConstructor)
@@ -2334,7 +2334,7 @@ func (tx *classFieldsTransformer) transformClassMembers(node ast.Node) (members 
 			membersArray = append(membersArray, syntheticStaticBlock)
 		}
 
-		for i, member := range members.Nodes() {
+		for i, member := range members.All() {
 			if i != classThisIdx && i != namedEvalIdx {
 				membersArray = append(membersArray, member)
 			}
@@ -2356,7 +2356,7 @@ func (tx *classFieldsTransformer) createBrandCheckWeakSetForPrivateMethods() {
 			weakSetName,
 			tx.Factory().NewNewExpression(
 				tx.Factory().NewIdentifier("WeakSet"),
-				nil, /*typeArguments*/
+				ast.TypeList{}, /*typeArguments*/
 				tx.Factory().NewNodeList(nil),
 			),
 		),
@@ -2380,7 +2380,7 @@ func (tx *classFieldsTransformer) transformConstructor(constructor ast.Construct
 	extendsClauseElement := ast.GetClassExtendsHeritageElement(container)
 	isDerivedClass := !extendsClauseElement.IsNil() && ast.SkipOuterExpressions(extendsClauseElement.Expression(), ast.OEKAll).Kind() != ast.KindNullKeyword
 
-	var parameters *ast.NodeList
+	var parameters ast.NodeList
 	if !constructor.IsNil() {
 		parameters = tx.Visitor().VisitNodes(constructor.Parameters())
 	}
@@ -2394,11 +2394,11 @@ func (tx *classFieldsTransformer) transformConstructor(constructor ast.Construct
 	}
 
 	if !constructor.IsNil() {
-		debug.Assert(parameters != nil)
+		debug.Assert(!parameters.IsNil())
 		return tx.Factory().UpdateConstructorDeclaration(
 			constructor,
-			nil, /*modifiers*/
-			nil, /*typeParameters*/
+			ast.ModifierList{},      /*modifiers*/
+			ast.TypeParameterList{}, /*typeParameters*/
 			parameters,
 			ast.Node{}, /*returnType*/
 			ast.Node{}, /*fullSignature*/
@@ -2406,13 +2406,13 @@ func (tx *classFieldsTransformer) transformConstructor(constructor ast.Construct
 		)
 	}
 
-	if parameters == nil {
+	if parameters.IsNil() {
 		parameters = tx.Factory().NewNodeList(nil)
 	}
 
 	result := tx.Factory().NewConstructorDeclaration(
-		nil, /*modifiers*/
-		nil, /*typeParameters*/
+		ast.ModifierList{},      /*modifiers*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		parameters,
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -2443,7 +2443,7 @@ func (tx *classFieldsTransformer) transformConstructorBodyWorker(
 		tryBlock := superStatement.AsTryStatement().TryBlock().AsBlock()
 		tryBlockStatements := tx.transformConstructorBodyWorker(
 			nil,
-			tryBlock.Statements().Nodes(),
+			tryBlock.Statements().Slice(),
 			0, /*statementOffset*/
 			superPath,
 			superPathDepth+1,
@@ -2556,7 +2556,7 @@ func (tx *classFieldsTransformer) transformConstructorBody(container ast.Node, c
 		body := constructor.Body().AsBlock()
 
 		// Copy prologue
-		for _, stmt := range body.Statements().Nodes() {
+		for _, stmt := range body.Statements().All() {
 			if ast.IsPrologueDirective(stmt) {
 				statements = append(statements, stmt)
 			} else {
@@ -2565,14 +2565,14 @@ func (tx *classFieldsTransformer) transformConstructorBody(container ast.Node, c
 		}
 		statementOffset := len(statements)
 
-		superPath := transformers.FindSuperStatementIndexPath(body.Statements().Nodes(), statementOffset)
+		superPath := transformers.FindSuperStatementIndexPath(body.Statements().Slice(), statementOffset)
 		if len(superPath) > 0 {
-			statements = tx.transformConstructorBodyWorker(statements, body.Statements().Nodes(), statementOffset, superPath, 0, initializerStatements, constructor)
+			statements = tx.transformConstructorBodyWorker(statements, body.Statements().Slice(), statementOffset, superPath, 0, initializerStatements, constructor)
 		} else {
 			// parameter-property assignments should occur immediately after the prologue and `super()`,
 			// so only count the statements that immediately follow.
-			for statementOffset < len(body.Statements().Nodes()) {
-				stmt := body.Statements().Nodes()[statementOffset]
+			for statementOffset < body.Statements().Len() {
+				stmt := body.Statements().At(statementOffset)
 				orig := tx.EmitContext().MostOriginal(stmt)
 				if ast.IsParameterPropertyDeclaration(orig, constructor.AsNode()) {
 					statementOffset++
@@ -2581,7 +2581,7 @@ func (tx *classFieldsTransformer) transformConstructorBody(container ast.Node, c
 				}
 			}
 			statements = append(statements, initializerStatements...)
-			visited, _ := tx.Visitor().VisitSlice(body.Statements().Nodes()[statementOffset:])
+			visited, _ := tx.Visitor().VisitSlice(body.Statements().Slice()[statementOffset:])
 			statements = append(statements, visited...)
 		}
 	} else {
@@ -2593,8 +2593,8 @@ func (tx *classFieldsTransformer) transformConstructorBody(container ast.Node, c
 			superCall := tx.Factory().NewExpressionStatement(
 				tx.Factory().NewCallExpression(
 					tx.Factory().NewKeywordExpression(ast.KindSuperKeyword),
-					ast.Node{}, /*typeArguments*/
-					nil,        /*questionDotToken*/
+					ast.Node{},     /*typeArguments*/
+					ast.TypeList{}, /*questionDotToken*/
 					tx.Factory().NewNodeList([]ast.Node{
 						tx.Factory().NewSpreadElement(tx.Factory().NewIdentifier("arguments")),
 					}),
@@ -2614,7 +2614,7 @@ func (tx *classFieldsTransformer) transformConstructorBody(container ast.Node, c
 
 	var multiLine bool
 	if !constructor.IsNil() && !constructor.Body().IsNil() &&
-		len(constructor.Body().AsBlock().Statements().Nodes()) >= len(statements) {
+		constructor.Body().AsBlock().Statements().Len() >= len(statements) {
 		multiLine = constructor.Body().AsBlock().MultiLine()
 	} else {
 		multiLine = len(statements) > 0
@@ -2825,10 +2825,10 @@ func (tx *classFieldsTransformer) transformPropertyWorker(property ast.PropertyD
 		name = propertyName
 	}
 	descriptor := tx.Factory().NewObjectLiteralExpression(tx.Factory().NewNodeList([]ast.Node{
-		tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("enumerable"), ast.Node{}, ast.Node{}, tx.Factory().NewTrueExpression()),
-		tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("configurable"), ast.Node{}, ast.Node{}, tx.Factory().NewTrueExpression()),
-		tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("writable"), ast.Node{}, ast.Node{}, tx.Factory().NewTrueExpression()),
-		tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("value"), ast.Node{}, ast.Node{}, initializer),
+		tx.Factory().NewPropertyAssignment(ast.ModifierList{}, tx.Factory().NewIdentifier("enumerable"), ast.Node{}, ast.Node{}, tx.Factory().NewTrueExpression()),
+		tx.Factory().NewPropertyAssignment(ast.ModifierList{}, tx.Factory().NewIdentifier("configurable"), ast.Node{}, ast.Node{}, tx.Factory().NewTrueExpression()),
+		tx.Factory().NewPropertyAssignment(ast.ModifierList{}, tx.Factory().NewIdentifier("writable"), ast.Node{}, ast.Node{}, tx.Factory().NewTrueExpression()),
+		tx.Factory().NewPropertyAssignment(ast.ModifierList{}, tx.Factory().NewIdentifier("value"), ast.Node{}, ast.Node{}, initializer),
 	}), true)
 	return tx.Factory().NewObjectDefinePropertyCall(receiver, name, descriptor)
 }
@@ -2971,7 +2971,7 @@ func (tx *classFieldsTransformer) addPrivateIdentifierPropertyDeclarationToEnvir
 				weakMapName,
 				tx.Factory().NewNewExpression(
 					tx.Factory().NewIdentifier("WeakMap"),
-					nil, /*typeArguments*/
+					ast.TypeList{}, /*typeArguments*/
 					tx.Factory().NewNodeList(nil),
 				),
 			),
@@ -3235,7 +3235,7 @@ func (tx *classFieldsTransformer) visitAssignmentElement(node ast.Node) ast.Node
 		right := tx.Visitor().VisitNode(node.AsBinaryExpression().Right())
 		return tx.Factory().UpdateBinaryExpression(
 			node.AsBinaryExpression(),
-			nil,
+			ast.ModifierList{},
 			left,
 			ast.Node{},
 			node.AsBinaryExpression().OperatorToken(),
@@ -3283,11 +3283,11 @@ func (tx *classFieldsTransformer) visitAssignmentProperty(node ast.Node) ast.Nod
 	init := prop.Initializer()
 	if ast.IsAssignmentExpression(init, true /*excludeCompoundAssignment*/) {
 		assignElem := tx.visitAssignmentElement(init)
-		return tx.Factory().UpdatePropertyAssignment(prop, nil, name, ast.Node{}, ast.Node{}, assignElem)
+		return tx.Factory().UpdatePropertyAssignment(prop, ast.ModifierList{}, name, ast.Node{}, ast.Node{}, assignElem)
 	}
 	if ast.IsLeftHandSideExpression(init) {
 		target := tx.visitDestructuringAssignmentTarget(init)
-		return tx.Factory().UpdatePropertyAssignment(prop, nil, name, ast.Node{}, ast.Node{}, target)
+		return tx.Factory().UpdatePropertyAssignment(prop, ast.ModifierList{}, name, ast.Node{}, ast.Node{}, target)
 	}
 	return tx.Visitor().VisitEachChild(node)
 }
@@ -3371,7 +3371,7 @@ func createPrivateStaticFieldInitializer(factory *printer.NodeFactory, variableN
 		variableName,
 		factory.NewObjectLiteralExpression(
 			factory.NewNodeList([]ast.Node{
-				factory.NewPropertyAssignment(nil, factory.NewIdentifier("value"), ast.Node{}, ast.Node{}, initializer),
+				factory.NewPropertyAssignment(ast.ModifierList{}, factory.NewIdentifier("value"), ast.Node{}, ast.Node{}, initializer),
 			}),
 			false,
 		),
@@ -3400,7 +3400,7 @@ func isStaticPropertyDeclarationOrClassStaticBlock(node ast.Node) bool {
 
 func (tx *classFieldsTransformer) getProperties(node ast.Node, requireInitializer bool, isStatic bool) []ast.Node {
 	var result []ast.Node
-	for _, member := range node.Members() {
+	for _, member := range node.MemberList().All() {
 		if ast.IsPropertyDeclaration(member) &&
 			(!requireInitializer || !member.Initializer().IsNil()) &&
 			ast.HasStaticModifier(member) == isStatic {
@@ -3412,7 +3412,7 @@ func (tx *classFieldsTransformer) getProperties(node ast.Node, requireInitialize
 
 func (tx *classFieldsTransformer) getStaticPropertiesAndClassStaticBlock(node ast.Node) []ast.Node {
 	var result []ast.Node
-	for _, member := range node.Members() {
+	for _, member := range node.MemberList().All() {
 		if ast.IsClassStaticBlockDeclaration(member) || (ast.IsPropertyDeclaration(member) && ast.HasStaticModifier(member)) {
 			result = append(result, member)
 		}
@@ -3422,7 +3422,7 @@ func (tx *classFieldsTransformer) getStaticPropertiesAndClassStaticBlock(node as
 
 // classHasClassThisAssignment checks if a class has a static block that is a class-this assignment.
 func classHasClassThisAssignment(emitContext *printer.EmitContext, node ast.Node) bool {
-	for _, member := range node.Members() {
+	for _, member := range node.MemberList().All() {
 		if isClassThisAssignmentBlock(emitContext, member) {
 			return true
 		}
@@ -3491,7 +3491,7 @@ func shouldBeCapturedInTempVariable(node ast.Node) bool {
 	}
 }
 
-func (tx *classFieldsTransformer) createAccessorPropertyGetRedirector(node ast.PropertyDeclaration, modifiers *ast.ModifierList, name ast.PropertyName, receiver ast.Expression) ast.Node {
+func (tx *classFieldsTransformer) createAccessorPropertyGetRedirector(node ast.PropertyDeclaration, modifiers ast.ModifierList, name ast.PropertyName, receiver ast.Expression) ast.Node {
 	backingFieldName := tx.Factory().NewGeneratedPrivateNameForNodeEx(node.Name(), printer.AutoGenerateOptions{Suffix: "_accessor_storage"})
 	returnExpr := tx.Factory().NewPropertyAccessExpression(
 		receiver,
@@ -3504,7 +3504,7 @@ func (tx *classFieldsTransformer) createAccessorPropertyGetRedirector(node ast.P
 	return tx.Factory().NewGetAccessorDeclaration(
 		modifiers,
 		name,
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		tx.Factory().NewNodeList([]ast.Node{}),
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -3512,11 +3512,11 @@ func (tx *classFieldsTransformer) createAccessorPropertyGetRedirector(node ast.P
 	)
 }
 
-func (tx *classFieldsTransformer) createAccessorPropertySetRedirector(node ast.PropertyDeclaration, modifiers *ast.ModifierList, name ast.PropertyName, receiver ast.Expression) ast.Node {
+func (tx *classFieldsTransformer) createAccessorPropertySetRedirector(node ast.PropertyDeclaration, modifiers ast.ModifierList, name ast.PropertyName, receiver ast.Expression) ast.Node {
 	backingFieldName := tx.Factory().NewGeneratedPrivateNameForNodeEx(node.Name(), printer.AutoGenerateOptions{Suffix: "_accessor_storage"})
 	valueParam := tx.Factory().NewParameterDeclaration(
-		nil,        /*modifiers*/
-		ast.Node{}, /*dotDotDotToken*/
+		ast.ModifierList{}, /*modifiers*/
+		ast.Node{},         /*dotDotDotToken*/
 		tx.Factory().NewIdentifier("value"),
 		ast.Node{}, /*questionToken*/
 		ast.Node{}, /*typeNode*/
@@ -3536,7 +3536,7 @@ func (tx *classFieldsTransformer) createAccessorPropertySetRedirector(node ast.P
 	return tx.Factory().NewSetAccessorDeclaration(
 		modifiers,
 		name,
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		tx.Factory().NewNodeList([]ast.Node{valueParam}),
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/

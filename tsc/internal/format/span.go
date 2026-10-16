@@ -236,8 +236,8 @@ func (w *formatSpanWorker) execute(s *formattingScanner) []core.TextChange {
 		w.processChildNode(w.visitingNode, w.visitingIndenter, w.visitingNodeStartLine, w.visitingUndecoratedNodeStartLine, child, -1, w.visitingNode, w.visitingIndenter, w.visitingNodeStartLine, w.visitingUndecoratedNodeStartLine, false, false)
 		return child
 	}, &ast.NodeFactory{}, ast.NodeVisitorHooks{
-		VisitNodes: func(nodes *ast.NodeList, v *ast.NodeVisitor) *ast.NodeList {
-			if nodes == nil {
+		VisitNodes: func(nodes ast.NodeList, v *ast.NodeVisitor) ast.NodeList {
+			if nodes.IsNil() {
 				return nodes
 			}
 			w.processChildNodes(w.visitingNode, w.visitingIndenter, w.visitingNodeStartLine, w.visitingUndecoratedNodeStartLine, nodes, w.visitingNode, w.visitingNodeStartLine, w.visitingIndenter)
@@ -441,12 +441,12 @@ func (w *formatSpanWorker) processChildNodes(
 	indenter *dynamicIndenter,
 	nodeStartLine int,
 	undecoratedNodeStartLine int,
-	nodes *ast.NodeList,
+	nodes ast.NodeList,
 	parent ast.Node,
 	parentStartLine int,
 	parentDynamicIndentation *dynamicIndenter,
 ) {
-	debug.Assert(nodes != nil)
+	debug.Assert(!nodes.IsNil())
 	debug.Assert(!ast.PositionIsSynthesized(nodes.Pos()))
 	debug.Assert(!ast.PositionIsSynthesized(nodes.End()))
 
@@ -457,7 +457,7 @@ func (w *formatSpanWorker) processChildNodes(
 
 	// node range is outside the target range - do not dive inside
 	if !w.originalRange.Overlaps(nodes.Loc()) {
-		if nodes.End() < w.originalRange.Pos() && (len(nodes.Nodes()) == 0 || nodes.Nodes()[0].Flags()&ast.NodeFlagsReparsed == 0) {
+		if nodes.End() < w.originalRange.Pos() && (nodes.Len() == 0 || nodes.At(0).Flags()&ast.NodeFlagsReparsed == 0) {
 			w.formattingScanner.skipToEndOf(new(nodes.Loc()))
 		}
 		return
@@ -496,8 +496,8 @@ func (w *formatSpanWorker) processChildNodes(
 	}
 
 	inheritedIndentation := -1
-	for i := range len(nodes.Nodes()) {
-		child := nodes.Nodes()[i]
+	for i := range nodes.Len() {
+		child := nodes.At(i)
 		inheritedIndentation = w.processChildNode(node, indenter, nodeStartLine, undecoratedNodeStartLine, child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, true, i == 0)
 	}
 

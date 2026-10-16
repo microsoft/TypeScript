@@ -11,8 +11,8 @@ func isClassThisAssignmentBlock(emitContext *printer.EmitContext, node ast.Node)
 	if ast.IsClassStaticBlockDeclaration(node) {
 		n := node.AsClassStaticBlockDeclaration()
 		body := n.Body().AsBlock()
-		if len(body.Statements().Nodes()) == 1 {
-			statement := body.Statements().Nodes()[0]
+		if body.Statements().Len() == 1 {
+			statement := body.Statements().At(0)
 			if ast.IsExpressionStatement(statement) {
 				expression := statement.Expression()
 				if ast.IsAssignmentExpression(expression, true /*excludeCompoundAssignment*/) {

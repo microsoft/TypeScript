@@ -55,12 +55,12 @@ func TestIsJSDocTypeExpressionOrChild(t *testing.T) {
 		node.SetParent(parent)
 		return node
 	}
-	jsDocType := withFlags(f.NewTypeReferenceNode(f.NewIdentifier("T"), nil), ast.NodeFlagsJSDoc, ast.Node{})
+	jsDocType := withFlags(f.NewTypeReferenceNode(f.NewIdentifier("T"), ast.TypeList{}), ast.NodeFlagsJSDoc, ast.Node{})
 	jsDocTypeChild := withFlags(f.NewIdentifier("T"), ast.NodeFlagsJSDoc, jsDocType)
 	reparsedType := withFlags(f.NewTypeLiteralNode(f.NewNodeList(nil)), ast.NodeFlagsReparsed, ast.Node{})
 	reparsedTypeChild := withFlags(f.NewIdentifier("T"), ast.NodeFlagsReparsed, reparsedType)
-	ordinaryType := f.NewTypeReferenceNode(f.NewIdentifier("T"), nil)
-	jsDocTag := withFlags(f.NewJSDocTypeTag(f.NewIdentifier("type"), ast.Node{}, nil), ast.NodeFlagsJSDoc, ast.Node{})
+	ordinaryType := f.NewTypeReferenceNode(f.NewIdentifier("T"), ast.TypeList{})
+	jsDocTag := withFlags(f.NewJSDocTypeTag(f.NewIdentifier("type"), ast.Node{}, ast.NodeList{}), ast.NodeFlagsJSDoc, ast.Node{})
 	jsDocTagChild := withFlags(f.NewIdentifier("T"), ast.NodeFlagsJSDoc, jsDocTag)
 
 	tests := []struct {

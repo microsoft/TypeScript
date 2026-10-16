@@ -196,16 +196,16 @@ func (tx *MetadataTransformer) visitGetAccessor(node ast.GetAccessorDeclaration)
 	)
 }
 
-func (tx *MetadataTransformer) injectClassTypeMetadata(list *ast.ModifierList, node ast.Node) *ast.ModifierList {
+func (tx *MetadataTransformer) injectClassTypeMetadata(list ast.ModifierList, node ast.Node) ast.ModifierList {
 	metadata := tx.getTypeMetadata(node, node)
 	if len(metadata) > 0 {
 		var originalNodes []ast.Node
-		if list != nil {
-			originalNodes = list.Nodes()
+		if !list.IsNil() {
+			originalNodes = list.Slice()
 		}
 		if len(originalNodes) == 0 {
 			res := tx.Factory().NewModifierList(metadata)
-			if list != nil {
+			if !list.IsNil() {
 				res.SetLoc(list.Loc())
 			}
 			return res
@@ -230,7 +230,7 @@ func (tx *MetadataTransformer) injectClassTypeMetadata(list *ast.ModifierList, n
 	return list
 }
 
-func (tx *MetadataTransformer) injectClassElementTypeMetadata(list *ast.ModifierList, node ast.Node, container ast.Node) *ast.ModifierList {
+func (tx *MetadataTransformer) injectClassElementTypeMetadata(list ast.ModifierList, node ast.Node, container ast.Node) ast.ModifierList {
 	if !ast.IsClassLike(container) {
 		return list
 	}
@@ -240,12 +240,12 @@ func (tx *MetadataTransformer) injectClassElementTypeMetadata(list *ast.Modifier
 	metadata := tx.getTypeMetadata(node, container)
 	if len(metadata) > 0 {
 		var originalNodes []ast.Node
-		if list != nil {
-			originalNodes = list.Nodes()
+		if !list.IsNil() {
+			originalNodes = list.Slice()
 		}
 		if len(originalNodes) == 0 {
 			res := tx.Factory().NewModifierList(metadata)
-			if list != nil {
+			if !list.IsNil() {
 				res.SetLoc(list.Loc())
 			}
 			return res
@@ -300,13 +300,13 @@ func (tx *MetadataTransformer) getNewTypeMetadata(node ast.Node, container ast.N
 	var properties []ast.Node
 	if tx.shouldAddTypeMetadata(node) {
 		properties = append(properties, tx.Factory().NewPropertyAssignment(
-			nil,
+			ast.ModifierList{},
 			tx.Factory().NewIdentifier("type"),
 			ast.Node{},
 			ast.Node{},
 			tx.Factory().NewArrowFunction(
-				nil,
-				nil,
+				ast.ModifierList{},
+				ast.TypeParameterList{},
 				tx.Factory().NewNodeList([]ast.Node{}),
 				ast.Node{},
 				ast.Node{},
@@ -317,13 +317,13 @@ func (tx *MetadataTransformer) getNewTypeMetadata(node ast.Node, container ast.N
 	}
 	if tx.shouldAddParamTypesMetadata(node) {
 		properties = append(properties, tx.Factory().NewPropertyAssignment(
-			nil,
+			ast.ModifierList{},
 			tx.Factory().NewIdentifier("paramTypes"),
 			ast.Node{},
 			ast.Node{},
 			tx.Factory().NewArrowFunction(
-				nil,
-				nil,
+				ast.ModifierList{},
+				ast.TypeParameterList{},
 				tx.Factory().NewNodeList([]ast.Node{}),
 				ast.Node{},
 				ast.Node{},
@@ -334,13 +334,13 @@ func (tx *MetadataTransformer) getNewTypeMetadata(node ast.Node, container ast.N
 	}
 	if tx.shouldAddReturnTypeMetadata(node) {
 		properties = append(properties, tx.Factory().NewPropertyAssignment(
-			nil,
+			ast.ModifierList{},
 			tx.Factory().NewIdentifier("returnType"),
 			ast.Node{},
 			ast.Node{},
 			tx.Factory().NewArrowFunction(
-				nil,
-				nil,
+				ast.ModifierList{},
+				ast.TypeParameterList{},
 				tx.Factory().NewNodeList([]ast.Node{}),
 				ast.Node{},
 				ast.Node{},

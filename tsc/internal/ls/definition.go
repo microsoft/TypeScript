@@ -195,7 +195,7 @@ func combineDefinitionResponses(results []lsproto.DefinitionResponse, links bool
 func getDeclarationNameForKeyword(node ast.Node) ast.Node {
 	if node.Kind() >= ast.KindFirstKeyword && node.Kind() <= ast.KindLastKeyword {
 		if ast.IsVariableDeclarationList(node.Parent()) {
-			if decl := core.FirstOrNil(node.Parent().AsVariableDeclarationList().Declarations().Nodes()); !decl.IsNil() && !decl.Name().IsNil() {
+			if decl := core.FirstOrNil(node.Parent().AsVariableDeclarationList().Declarations().Slice()); !decl.IsNil() && !decl.Name().IsNil() {
 				return decl.Name()
 			}
 		} else if !node.Parent().DeclarationData().IsNil() && !node.Parent().Name().IsNil() && node.Pos() < node.Parent().Name().Pos() {

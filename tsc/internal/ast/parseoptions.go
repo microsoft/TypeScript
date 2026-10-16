@@ -84,7 +84,7 @@ func getExternalModuleIndicator(file *SourceFile, opts ExternalModuleIndicatorOp
 }
 
 func isFileProbablyExternalModule(sourceFile *SourceFile) Node {
-	for _, statement := range sourceFile.Statements.Nodes() {
+	for _, statement := range sourceFile.Statements.All() {
 		if isAnExternalModuleIndicatorNode(statement) {
 			return statement
 		}

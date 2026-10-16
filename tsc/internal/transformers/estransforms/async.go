@@ -307,7 +307,7 @@ func (tx *asyncTransformer) visitConstructorDeclaration(node ast.Node) ast.Node 
 	updated := tx.Factory().UpdateConstructorDeclaration(
 		decl,
 		tx.Visitor().VisitModifiers(decl.Modifiers()),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor()),
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -327,7 +327,7 @@ func (tx *asyncTransformer) visitMethodDeclaration(node ast.Node) ast.Node {
 	savedLexicalArguments := tx.lexicalArguments
 	tx.lexicalArguments = lexicalArgumentsInfo{}
 
-	var parameters *ast.NodeList
+	var parameters ast.NodeList
 	var body ast.Node
 	if functionFlags&ast.FunctionFlagsAsync != 0 {
 		parameters = tx.transformAsyncFunctionParameterList(node)
@@ -342,8 +342,8 @@ func (tx *asyncTransformer) visitMethodDeclaration(node ast.Node) ast.Node {
 		tx.Visitor().VisitModifiers(decl.Modifiers()),
 		decl.AsteriskToken(),
 		decl.Name(),
-		ast.Node{}, /*postfixToken*/
-		nil,        /*typeParameters*/
+		ast.Node{},              /*postfixToken*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		parameters,
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -361,7 +361,7 @@ func (tx *asyncTransformer) visitGetAccessorDeclaration(node ast.Node) ast.Node 
 		decl,
 		tx.Visitor().VisitModifiers(decl.Modifiers()),
 		decl.Name(),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor()),
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -379,7 +379,7 @@ func (tx *asyncTransformer) visitSetAccessorDeclaration(node ast.Node) ast.Node 
 		decl,
 		tx.Visitor().VisitModifiers(decl.Modifiers()),
 		decl.Name(),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor()),
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -399,7 +399,7 @@ func (tx *asyncTransformer) visitFunctionDeclaration(node ast.Node) ast.Node {
 	savedLexicalArguments := tx.lexicalArguments
 	tx.lexicalArguments = lexicalArgumentsInfo{}
 
-	var parameters *ast.NodeList
+	var parameters ast.NodeList
 	var body ast.Node
 	if functionFlags&ast.FunctionFlagsAsync != 0 {
 		parameters = tx.transformAsyncFunctionParameterList(node)
@@ -414,7 +414,7 @@ func (tx *asyncTransformer) visitFunctionDeclaration(node ast.Node) ast.Node {
 		tx.Visitor().VisitModifiers(decl.Modifiers()),
 		decl.AsteriskToken(),
 		tx.Visitor().VisitNode(decl.Name()),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		parameters,
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -434,7 +434,7 @@ func (tx *asyncTransformer) visitFunctionExpression(node ast.Node) ast.Node {
 	savedLexicalArguments := tx.lexicalArguments
 	tx.lexicalArguments = lexicalArgumentsInfo{}
 
-	var parameters *ast.NodeList
+	var parameters ast.NodeList
 	var body ast.Node
 	if functionFlags&ast.FunctionFlagsAsync != 0 {
 		parameters = tx.transformAsyncFunctionParameterList(node)
@@ -449,7 +449,7 @@ func (tx *asyncTransformer) visitFunctionExpression(node ast.Node) ast.Node {
 		tx.Visitor().VisitModifiers(decl.Modifiers()),
 		decl.AsteriskToken(),
 		tx.Visitor().VisitNode(decl.Name()),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		parameters,
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -477,7 +477,7 @@ func (tx *asyncTransformer) visitArrowFunction(node ast.Node) ast.Node {
 	decl := node.AsArrowFunction()
 	functionFlags := ast.GetFunctionFlags(node)
 
-	var parameters *ast.NodeList
+	var parameters ast.NodeList
 	var body ast.Node
 	if functionFlags&ast.FunctionFlagsAsync != 0 {
 		parameters = tx.transformAsyncFunctionParameterList(node)
@@ -490,7 +490,7 @@ func (tx *asyncTransformer) visitArrowFunction(node ast.Node) ast.Node {
 	return tx.Factory().UpdateArrowFunction(
 		decl,
 		tx.Visitor().VisitModifiers(decl.Modifiers()),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		parameters,
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -507,7 +507,7 @@ func (tx *asyncTransformer) recordDeclarationName(node ast.Node, names *collecti
 	if ast.IsIdentifier(name) {
 		names.Add(name.Text())
 	} else if ast.IsBindingPattern(name) {
-		for _, element := range name.AsBindingPattern().Elements().Nodes() {
+		for _, element := range name.AsBindingPattern().Elements().All() {
 			if !ast.IsOmittedExpression(element) {
 				tx.recordDeclarationName(element, names)
 			}
@@ -519,14 +519,14 @@ func (tx *asyncTransformer) isVariableDeclarationListWithCollidingName(node ast.
 	return !node.IsNil() &&
 		ast.IsVariableDeclarationList(node) &&
 		node.Flags()&ast.NodeFlagsBlockScoped == 0 &&
-		slices.ContainsFunc(node.AsVariableDeclarationList().Declarations().Nodes(), tx.collidesWithParameterName)
+		slices.ContainsFunc(node.AsVariableDeclarationList().Declarations().Slice(), tx.collidesWithParameterName)
 }
 
 func (tx *asyncTransformer) visitVariableDeclarationListWithCollidingNames(node ast.VariableDeclarationList, hasReceiver bool) ast.Node {
 	tx.hoistVariableDeclarationList(node)
 
 	var variables []ast.Node
-	for _, decl := range node.Declarations().Nodes() {
+	for _, decl := range node.Declarations().All() {
 		if !decl.AsVariableDeclaration().Initializer().IsNil() {
 			variables = append(variables, decl)
 		}
@@ -534,7 +534,7 @@ func (tx *asyncTransformer) visitVariableDeclarationListWithCollidingNames(node 
 
 	if len(variables) == 0 {
 		if hasReceiver {
-			name := node.Declarations().Nodes()[0].Name()
+			name := node.Declarations().At(0).Name()
 			var target ast.Node
 			if ast.IsBindingPattern(name) {
 				target = transformers.ConvertBindingPatternToAssignmentPattern(tx.EmitContext(), name.AsBindingPattern())
@@ -554,7 +554,7 @@ func (tx *asyncTransformer) visitVariableDeclarationListWithCollidingNames(node 
 }
 
 func (tx *asyncTransformer) hoistVariableDeclarationList(node ast.VariableDeclarationList) {
-	for _, decl := range node.Declarations().Nodes() {
+	for _, decl := range node.Declarations().All() {
 		tx.hoistVariable(decl)
 	}
 }
@@ -567,7 +567,7 @@ func (tx *asyncTransformer) hoistVariable(node ast.Node) {
 	if ast.IsIdentifier(name) {
 		tx.EmitContext().AddVariableDeclaration(name)
 	} else if ast.IsBindingPattern(name) {
-		for _, element := range name.AsBindingPattern().Elements().Nodes() {
+		for _, element := range name.AsBindingPattern().Elements().All() {
 			if !ast.IsOmittedExpression(element) {
 				tx.hoistVariable(element)
 			}
@@ -596,7 +596,7 @@ func (tx *asyncTransformer) collidesWithParameterName(node ast.Node) bool {
 		return tx.enclosingFunctionParameterNames != nil && tx.enclosingFunctionParameterNames.Has(name.Text())
 	}
 	if ast.IsBindingPattern(name) {
-		for _, element := range name.AsBindingPattern().Elements().Nodes() {
+		for _, element := range name.AsBindingPattern().Elements().All() {
 			if !ast.IsOmittedExpression(element) && tx.collidesWithParameterName(element) {
 				return true
 			}
@@ -663,25 +663,25 @@ func (tx *asyncTransformer) createCaptureArgumentsStatement() ast.Node {
 		tx.Factory().NewIdentifier("arguments"),
 	)
 	declList := tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]ast.Node{variable}), ast.NodeFlagsNone)
-	statement := tx.Factory().NewVariableStatement(nil, declList)
+	statement := tx.Factory().NewVariableStatement(ast.ModifierList{}, declList)
 	tx.EmitContext().AddEmitFlags(statement, printer.EFStartOnNewLine|printer.EFCustomPrologue)
 	return statement
 }
 
-func (tx *asyncTransformer) transformAsyncFunctionParameterList(node ast.Node) *ast.NodeList {
+func (tx *asyncTransformer) transformAsyncFunctionParameterList(node ast.Node) ast.NodeList {
 	if isSimpleParameterList(node.Parameters()) {
 		return tx.EmitContext().VisitParameters(node.ParameterList(), tx.Visitor())
 	}
 
 	var newParameters []ast.Node
-	for _, parameter := range node.Parameters() {
+	for _, parameter := range node.ParameterList().All() {
 		param := parameter.AsParameterDeclaration()
 		if !param.Initializer().IsNil() || !param.DotDotDotToken().IsNil() {
 			// for an arrow function, capture the remaining arguments in a rest parameter.
 			// for any other function/method this isn't necessary as we can just use `arguments`.
 			if node.Kind() == ast.KindArrowFunction {
 				restParameter := tx.Factory().NewParameterDeclaration(
-					nil,
+					ast.ModifierList{},
 					tx.Factory().NewToken(ast.KindDotDotDotToken),
 					tx.Factory().NewUniqueNameEx("args", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsReservedInNestedScopes}),
 					ast.Node{},
@@ -695,7 +695,7 @@ func (tx *asyncTransformer) transformAsyncFunctionParameterList(node ast.Node) *
 		// for arrow functions we capture fixed parameters to forward to `__awaiter`. For all other functions
 		// we add fixed parameters to preserve the function's `length` property.
 		newParameter := tx.Factory().NewParameterDeclaration(
-			nil,
+			ast.ModifierList{},
 			ast.Node{},
 			tx.Factory().NewGeneratedNameForNodeEx(param.Name(), printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsReservedInNestedScopes}),
 			ast.Node{},
@@ -709,7 +709,7 @@ func (tx *asyncTransformer) transformAsyncFunctionParameterList(node ast.Node) *
 	return newParametersArray
 }
 
-func (tx *asyncTransformer) transformAsyncFunctionBody(node ast.Node, outerParameters *ast.NodeList) ast.Node {
+func (tx *asyncTransformer) transformAsyncFunctionBody(node ast.Node, outerParameters ast.NodeList) ast.Node {
 	isArrow := node.Kind() == ast.KindArrowFunction
 	savedCapturedSuperProperties := tx.capturedSuperProperties
 	savedHasSuperElementAccess := tx.hasSuperElementAccess
@@ -724,7 +724,7 @@ func (tx *asyncTransformer) transformAsyncFunctionBody(node ast.Node, outerParam
 		tx.superIndexBinding = tx.Factory().NewUniqueNameEx("_superIndex", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic | printer.GeneratedIdentifierFlagsFileLevel})
 	}
 
-	innerParameters := (*ast.NodeList)(nil)
+	innerParameters := ast.NodeList{}
 	if !isSimpleParameterList(node.Parameters()) {
 		innerParameters = tx.EmitContext().VisitParameters(node.ParameterList(), tx.Visitor())
 	}
@@ -738,18 +738,18 @@ func (tx *asyncTransformer) transformAsyncFunctionBody(node ast.Node, outerParam
 	}
 
 	var argumentsExpression ast.Expression
-	if innerParameters != nil {
+	if !innerParameters.IsNil() {
 		if isArrow {
 			// `node` does not have a simple parameter list, so `outerParameters` refers to placeholders that are
 			// forwarded to `innerParameters`, matching how they are introduced in `transformAsyncFunctionParameterList`.
 			var parameterBindings []ast.Node
-			outerLen := len(outerParameters.Nodes())
-			for i, param := range node.Parameters() {
+			outerLen := outerParameters.Len()
+			for i, param := range node.ParameterList().All() {
 				if i >= outerLen {
 					break
 				}
 				originalParameter := param.AsParameterDeclaration()
-				outerParameter := outerParameters.Nodes()[i].AsParameterDeclaration()
+				outerParameter := outerParameters.At(i).AsParameterDeclaration()
 				if !originalParameter.Initializer().IsNil() || !originalParameter.DotDotDotToken().IsNil() {
 					parameterBindings = append(parameterBindings, tx.Factory().NewSpreadElement(outerParameter.Name()))
 					break
@@ -770,7 +770,7 @@ func (tx *asyncTransformer) transformAsyncFunctionBody(node ast.Node, outerParam
 
 	savedEnclosingFunctionParameterNames := tx.enclosingFunctionParameterNames
 	tx.enclosingFunctionParameterNames = &collections.Set[string]{}
-	for _, parameter := range node.Parameters() {
+	for _, parameter := range node.ParameterList().All() {
 		tx.recordDeclarationName(parameter, tx.enclosingFunctionParameterNames)
 	}
 
@@ -843,7 +843,7 @@ func (tx *asyncTransformer) transformAsyncFunctionBody(node ast.Node, outerParam
 		if captureLexicalArguments && tx.lexicalArguments.used {
 			block := tx.EmitContext().ConvertToFunctionBlock(result, true /*multiLine*/)
 			if !ast.IsBlock(result) {
-				tx.EmitContext().SetOriginal(block.StatementList().Nodes()[0], result)
+				tx.EmitContext().SetOriginal(block.StatementList().At(0), result)
 			}
 			result = tx.Factory().UpdateBlock(
 				block.AsBlock(),
@@ -903,9 +903,9 @@ func assignmentTargetContainsSuperProperty(node ast.Node) bool {
 	case ast.KindParenthesizedExpression:
 		return assignmentTargetContainsSuperProperty(node.AsParenthesizedExpression().Expression())
 	case ast.KindArrayLiteralExpression:
-		return slices.ContainsFunc(node.AsArrayLiteralExpression().Elements().Nodes(), assignmentTargetContainsSuperProperty)
+		return slices.ContainsFunc(node.AsArrayLiteralExpression().Elements().Slice(), assignmentTargetContainsSuperProperty)
 	case ast.KindObjectLiteralExpression:
-		for _, prop := range node.AsObjectLiteralExpression().Properties().Nodes() {
+		for _, prop := range node.AsObjectLiteralExpression().Properties().All() {
 			switch prop.Kind() {
 			case ast.KindPropertyAssignment:
 				if assignmentTargetContainsSuperProperty(prop.AsPropertyAssignment().Initializer()) {

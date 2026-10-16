@@ -44,18 +44,17 @@ func visitNodes(v Visitor, nodes []Node) bool {
 	return false
 }
 
-func visitNodeList(v Visitor, nodeList *NodeList) bool {
-	if nodeList != nil {
-		return visitNodes(v, nodeList.Nodes())
+func visitNodeList(v Visitor, nodeList NodeList) bool {
+	for i, n := 0, nodeList.Len(); i < n; i++ {
+		if node := nodeList.at(i); !node.IsNil() && v(node) {
+			return true
+		}
 	}
 	return false
 }
 
-func visitModifiers(v Visitor, modifiers *ModifierList) bool {
-	if modifiers != nil {
-		return visitNodes(v, modifiers.Nodes())
-	}
-	return false
+func visitModifiers(v Visitor, modifiers ModifierList) bool {
+	return visitNodeList(v, modifiers.NodeList)
 }
 
 type NodeFactoryHooks struct {
@@ -158,68 +157,6 @@ func cloneNode(updated Node, original Node, hooks NodeFactoryHooks) Node {
 	return updated
 }
 
-// NodeList
-
-type NodeList struct {
-	loc   core.TextRange
-	nodes []Node
-}
-
-func (list *NodeList) Loc() core.TextRange       { return list.loc }
-func (list *NodeList) SetLoc(loc core.TextRange) { list.loc = loc }
-func (list *NodeList) Nodes() []Node             { return list.nodes }
-func (list *NodeList) SetNodes(nodes []Node)     { list.nodes = nodes }
-
-func (f *NodeFactory) NewNodeList(nodes []Node) *NodeList {
-	list := f.nodeListArena.New()
-	list.SetLoc(core.UndefinedTextRange())
-	list.SetNodes(nodes)
-	return list
-}
-
-func (list *NodeList) Pos() int { return list.Loc().Pos() }
-func (list *NodeList) End() int { return list.Loc().End() }
-
-func (list *NodeList) HasTrailingComma() bool {
-	if len(list.Nodes()) == 0 {
-		return false
-	}
-	last := list.Nodes()[len(list.Nodes())-1]
-	return last.End() < list.End()
-}
-
-func (list *NodeList) Clone(f NodeFactoryCoercible) *NodeList {
-	result := f.AsNodeFactory().NewNodeList(list.Nodes())
-	result.SetLoc(list.Loc())
-	return result
-}
-
-// ModifierList
-
-type ModifierList struct {
-	NodeList
-	modifierFlags ModifierFlags
-}
-
-func (list *ModifierList) ModifierFlags() ModifierFlags         { return list.modifierFlags }
-func (list *ModifierList) SetModifierFlags(flags ModifierFlags) { list.modifierFlags = flags }
-
-func (f *NodeFactory) NewModifierList(nodes []Node) *ModifierList {
-	list := f.modifierListArena.New()
-	list.SetLoc(core.UndefinedTextRange())
-	list.SetNodes(nodes)
-	list.SetModifierFlags(ModifiersToFlags(nodes))
-	return list
-}
-
-func (list *ModifierList) Clone(f *NodeFactory) *ModifierList {
-	res := f.modifierListArena.New()
-	res.SetLoc(list.Loc())
-	res.SetNodes(list.Nodes())
-	res.SetModifierFlags(list.ModifierFlags())
-	return res
-}
-
 // Node is a handle to an AST node: the nodeStore that owns it and the
 // index of its record there. The zero Node is the absent node.
 type Node struct {
@@ -251,15 +188,15 @@ func (n Node) IterChildren() iter.Seq[Node] {
 		})
 	}
 }
-func (n Node) ParameterList() *ParameterList          { return n.FunctionLikeData().Parameters() }
-func (n Node) Parameters() []ParameterDeclarationNode { return n.ParameterList().Nodes() }
+func (n Node) ParameterList() ParameterList           { return n.FunctionLikeData().Parameters() }
+func (n Node) Parameters() []ParameterDeclarationNode { return n.ParameterList().Slice() }
 func (n Node) KindString() string                     { return n.Kind().String() }
 func (n Node) KindValue() int16                       { return int16(n.Kind()) }
 func (n Node) Decorators() []Node {
-	if n.Modifiers() == nil {
+	if n.Modifiers().IsNil() {
 		return nil
 	}
-	return core.Filter(n.Modifiers().Nodes(), IsDecorator)
+	return core.Filter(n.Modifiers().Slice(), IsDecorator)
 }
 
 type MutableNode struct{ Node }
@@ -502,7 +439,7 @@ func (m MutableNode) SetExpression(expr Node) {
 	}
 }
 
-func (n Node) ArgumentList() *NodeList {
+func (n Node) ArgumentList() NodeList {
 	switch n.Kind() {
 	case KindCallExpression:
 		return n.AsCallExpression().Arguments()
@@ -514,13 +451,13 @@ func (n Node) ArgumentList() *NodeList {
 
 func (n Node) Arguments() []Node {
 	list := n.ArgumentList()
-	if list != nil {
-		return list.Nodes()
+	if !list.IsNil() {
+		return list.Slice()
 	}
 	return nil
 }
 
-func (n Node) TypeArgumentList() *NodeList {
+func (n Node) TypeArgumentList() NodeList {
 	switch n.Kind() {
 	case KindCallExpression:
 		return n.AsCallExpression().TypeArguments()
@@ -546,13 +483,13 @@ func (n Node) TypeArgumentList() *NodeList {
 
 func (n Node) TypeArguments() []Node {
 	list := n.TypeArgumentList()
-	if list != nil {
-		return list.Nodes()
+	if !list.IsNil() {
+		return list.Slice()
 	}
 	return nil
 }
 
-func (n Node) TypeParameterList() *NodeList {
+func (n Node) TypeParameterList() NodeList {
 	switch n.Kind() {
 	case KindClassDeclaration:
 		return n.AsClassDeclaration().TypeParameters()
@@ -575,13 +512,13 @@ func (n Node) TypeParameterList() *NodeList {
 
 func (n Node) TypeParameters() []Node {
 	list := n.TypeParameterList()
-	if list != nil {
-		return list.Nodes()
+	if !list.IsNil() {
+		return list.Slice()
 	}
 	return nil
 }
 
-func (n Node) MemberList() *NodeList {
+func (n Node) MemberList() NodeList {
 	switch n.Kind() {
 	case KindClassDeclaration:
 		return n.AsClassDeclaration().Members()
@@ -601,13 +538,13 @@ func (n Node) MemberList() *NodeList {
 
 func (n Node) Members() []Node {
 	list := n.MemberList()
-	if list != nil {
-		return list.Nodes()
+	if !list.IsNil() {
+		return list.Slice()
 	}
 	return nil
 }
 
-func (n Node) StatementList() *NodeList {
+func (n Node) StatementList() NodeList {
 	switch n.Kind() {
 	case KindSourceFile:
 		return n.AsSourceFile().Statements
@@ -623,8 +560,8 @@ func (n Node) StatementList() *NodeList {
 
 func (n Node) Statements() []Node {
 	list := n.StatementList()
-	if list != nil {
-		return list.Nodes()
+	if !list.IsNil() {
+		return list.Slice()
 	}
 	return nil
 }
@@ -640,7 +577,7 @@ func (n Node) CanHaveStatements() bool {
 
 func (n Node) ModifierFlags() ModifierFlags {
 	modifiers := n.Modifiers()
-	if modifiers != nil {
+	if !modifiers.IsNil() {
 		return modifiers.ModifierFlags()
 	}
 	return ModifierFlagsNone
@@ -648,8 +585,8 @@ func (n Node) ModifierFlags() ModifierFlags {
 
 func (n Node) ModifierNodes() []Node {
 	modifiers := n.Modifiers()
-	if modifiers != nil {
-		return modifiers.Nodes()
+	if !modifiers.IsNil() {
+		return modifiers.Slice()
 	}
 	return nil
 }
@@ -921,7 +858,7 @@ func (n Node) IsTypeOnly() bool {
 }
 
 // If updating this function, also update `hasComment`.
-func (n Node) CommentList() *NodeList {
+func (n Node) CommentList() NodeList {
 	switch n.Kind() {
 	case KindJSDoc:
 		return n.AsJSDoc().Comment()
@@ -973,8 +910,8 @@ func (n Node) CommentList() *NodeList {
 
 func (n Node) Comments() []Node {
 	list := n.CommentList()
-	if list != nil {
-		return list.Nodes()
+	if !list.IsNil() {
+		return list.Slice()
 	}
 	return nil
 }
@@ -1003,7 +940,7 @@ func (n Node) Attributes() Node {
 	panic("Unhandled case in Node.Attributes: " + n.Kind().String())
 }
 
-func (n Node) Children() *NodeList {
+func (n Node) Children() NodeList {
 	switch n.Kind() {
 	case KindJsxElement:
 		return n.AsJsxElement().Children()
@@ -1053,7 +990,7 @@ func (n Node) Statement() Statement {
 	panic("Unhandled case in Node.Statement: " + n.Kind().String())
 }
 
-func (n Node) PropertyList() *NodeList {
+func (n Node) PropertyList() NodeList {
 	switch n.Kind() {
 	case KindObjectLiteralExpression:
 		return n.AsObjectLiteralExpression().Properties()
@@ -1065,13 +1002,13 @@ func (n Node) PropertyList() *NodeList {
 
 func (n Node) Properties() []Node {
 	list := n.PropertyList()
-	if list != nil {
-		return list.Nodes()
+	if !list.IsNil() {
+		return list.Slice()
 	}
 	return nil
 }
 
-func (n Node) ElementList() *NodeList {
+func (n Node) ElementList() NodeList {
 	switch n.Kind() {
 	case KindNamedImports:
 		return n.AsNamedImports().Elements()
@@ -1089,8 +1026,8 @@ func (n Node) ElementList() *NodeList {
 
 func (n Node) Elements() []Node {
 	list := n.ElementList()
-	if list != nil {
-		return list.Nodes()
+	if !list.IsNil() {
+		return list.Slice()
 	}
 	return nil
 }
@@ -1640,7 +1577,7 @@ func (node CatchClause) propagateSubtreeFacts() SubtreeFacts {
 }
 
 func (node VariableStatement) computeSubtreeFacts() SubtreeFacts {
-	if node.Modifiers() != nil && node.Modifiers().ModifierFlags()&ModifierFlagsAmbient != 0 {
+	if !node.Modifiers().IsNil() && node.Modifiers().ModifierFlags()&ModifierFlagsAmbient != 0 {
 		return SubtreeContainsTypeScript
 	} else {
 		return propagateModifierListSubtreeFacts(node.Modifiers()) |
@@ -1728,7 +1665,7 @@ func (node FunctionDeclaration) propagateSubtreeFacts() SubtreeFacts {
 // ClassLikeBase
 
 func (node ClassLikeBase) computeSubtreeFacts() SubtreeFacts {
-	if node.Modifiers() != nil && node.Modifiers().ModifierFlags()&ModifierFlagsAmbient != 0 {
+	if !node.Modifiers().IsNil() && node.Modifiers().ModifierFlags()&ModifierFlagsAmbient != 0 {
 		return SubtreeContainsTypeScript
 	} else {
 		return propagateModifierListSubtreeFacts(node.Modifiers()) |
@@ -1769,7 +1706,7 @@ func (node EnumMember) computeSubtreeFacts() SubtreeFacts {
 }
 
 func (node EnumDeclaration) computeSubtreeFacts() SubtreeFacts {
-	if node.Modifiers() != nil && node.Modifiers().ModifierFlags()&ModifierFlagsAmbient != 0 {
+	if !node.Modifiers().IsNil() && node.Modifiers().ModifierFlags()&ModifierFlagsAmbient != 0 {
 		return SubtreeContainsTypeScript
 	} else {
 		return propagateModifierListSubtreeFacts(node.Modifiers()) |
@@ -1895,7 +1832,7 @@ func (node MethodDeclaration) computeSubtreeFacts() SubtreeFacts {
 	if node.Body().IsNil() {
 		return SubtreeContainsTypeScript
 	} else {
-		isAsync := node.Modifiers() != nil && node.Modifiers().ModifierFlags()&ModifierFlagsAsync != 0
+		isAsync := !node.Modifiers().IsNil() && node.Modifiers().ModifierFlags()&ModifierFlagsAsync != 0
 		isGenerator := !node.AsteriskToken().IsNil()
 		return propagateModifierListSubtreeFacts(node.Modifiers()) |
 			propagateSubtreeFacts(node.AsteriskToken()) |
@@ -1997,7 +1934,7 @@ func (node ArrowFunction) propagateSubtreeFacts() SubtreeFacts {
 }
 
 func (node FunctionExpression) computeSubtreeFacts() SubtreeFacts {
-	isAsync := node.Modifiers() != nil && node.Modifiers().ModifierFlags()&ModifierFlagsAsync != 0
+	isAsync := !node.Modifiers().IsNil() && node.Modifiers().ModifierFlags()&ModifierFlagsAsync != 0
 	isGenerator := !node.AsteriskToken().IsNil()
 	return propagateModifierListSubtreeFacts(node.Modifiers()) |
 		propagateSubtreeFacts(node.AsteriskToken()) |
@@ -2142,7 +2079,7 @@ func (node ImportAttributesNode) GetResolutionModeOverride(grammarErrorOnNode fu
 
 	attributes := node.AsImportAttributes().Attributes()
 
-	attribute := core.Find(attributes.Nodes(), func(attribute Node) bool {
+	attribute := core.Find(attributes.Slice(), func(attribute Node) bool {
 		return attribute.Name().Text() == "resolution-mode"
 	})
 	if attribute.IsNil() {
@@ -2378,7 +2315,7 @@ type SourceFile struct {
 	parseOptions      SourceFileParseOptions
 	text              string
 	contentMapperInfo *ContentMapperSourceFileInfo
-	Statements        *NodeList // NodeList[*Statement]
+	Statements        NodeList  // NodeList[*Statement]
 	EndOfFileToken    TokenNode // TokenNode[*EndOfFileToken]
 
 	// Fields for lazily-computed data owned by packages outside ast.
@@ -2447,7 +2384,7 @@ type SourceFile struct {
 	positionMap     *PositionMap
 }
 
-func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, statements *NodeList, endOfFileToken TokenNode) Node {
+func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, statements NodeList, endOfFileToken TokenNode) Node {
 	store := f.nodeStore()
 	rec, i := newRecord[sourceFileData](store, layoutSourceFile)
 	file := &SourceFile{
@@ -2757,7 +2694,7 @@ func (node *SourceFile) computeSubtreeFacts() SubtreeFacts {
 	return propagateNodeListSubtreeFacts(node.Statements, propagateSubtreeFacts)
 }
 
-func (f *NodeFactory) UpdateSourceFile(node *SourceFile, statements *StatementList, endOfFileToken TokenNode) Node {
+func (f *NodeFactory) UpdateSourceFile(node *SourceFile, statements StatementList, endOfFileToken TokenNode) Node {
 	if statements != node.Statements || endOfFileToken != node.EndOfFileToken {
 		updated := f.NewSourceFile(node.parseOptions, node.text, statements, endOfFileToken).AsSourceFile()
 		updated.copyFrom(node)
@@ -2975,7 +2912,7 @@ func (node *SourceFile) computeDeclarationMap() map[string][]Node {
 			exportClause := node.AsExportDeclaration().ExportClause()
 			if !exportClause.IsNil() {
 				if IsNamedExports(exportClause) {
-					for _, element := range exportClause.Elements() {
+					for _, element := range exportClause.ElementList().All() {
 						visit(element)
 					}
 				} else {
@@ -2998,7 +2935,7 @@ func (node *SourceFile) computeDeclarationMap() map[string][]Node {
 					if namedBindings.Kind() == KindNamespaceImport {
 						addDeclaration(namedBindings)
 					} else {
-						for _, element := range namedBindings.Elements() {
+						for _, element := range namedBindings.ElementList().All() {
 							visit(element)
 						}
 					}

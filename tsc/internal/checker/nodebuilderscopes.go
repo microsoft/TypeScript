@@ -182,7 +182,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration ast.Node, expandedParams []*
 						var bindPattern func(e ast.BindingPattern)
 
 						bindPatternWorker := func(p ast.BindingPattern) {
-							for _, e := range p.Elements().Nodes() {
+							for _, e := range p.Elements().All() {
 								switch e.Kind() {
 								case ast.KindOmittedExpression:
 									return

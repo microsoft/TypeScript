@@ -27,7 +27,7 @@ func (c *Checker) checkUnmatchedJSDocParameters(node ast.Node) {
 	parameters := collections.Set[string]{}
 	excludedParameters := collections.Set[int]{}
 
-	for i, param := range node.Parameters() {
+	for i, param := range node.ParameterList().All() {
 		name := param.AsParameterDeclaration().Name()
 		if ast.IsIdentifier(name) {
 			parameters.Add(name.Text())
@@ -92,8 +92,8 @@ func getAllJSDocTags(node ast.Node) []ast.Node {
 				continue
 			}
 			lastJSDoc := jsdocs[len(jsdocs)-1].AsJSDoc()
-			if lastJSDoc.Tags() != nil {
-				return lastJSDoc.Tags().Nodes()
+			if !lastJSDoc.Tags().IsNil() {
+				return lastJSDoc.Tags().Slice()
 			}
 		}
 	}
@@ -106,10 +106,10 @@ func (c *Checker) checkJSDocAugmentsTagMatchesExtends(node ast.Node, baseTypeNod
 	}
 	file := ast.GetSourceFileOfNode(node)
 	for _, j := range node.EagerJSDoc(file) {
-		if j.AsJSDoc().Tags() == nil {
+		if j.AsJSDoc().Tags().IsNil() {
 			continue
 		}
-		for _, tag := range j.AsJSDoc().Tags().Nodes() {
+		for _, tag := range j.AsJSDoc().Tags().All() {
 			if tag.Kind() != ast.KindJSDocAugmentsTag {
 				continue
 			}

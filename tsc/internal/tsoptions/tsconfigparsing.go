@@ -238,8 +238,8 @@ func convertConfigFileToObject(
 	jsonConversionNotifier *jsonConversionNotifier,
 ) (any, []*ast.Diagnostic) {
 	var rootExpression ast.Expression
-	if len(sourceFile.Statements.Nodes()) > 0 {
-		rootExpression = sourceFile.Statements.Nodes()[0].Expression()
+	if sourceFile.Statements.Len() > 0 {
+		rootExpression = sourceFile.Statements.At(0).Expression()
 	}
 	if !rootExpression.IsNil() && rootExpression.Kind() != ast.KindObjectLiteralExpression {
 		baseFileName := "tsconfig.json"
@@ -335,7 +335,7 @@ func convertJsonOptionOfListType(
 	if values, ok := values.([]any); ok {
 		mappedValues := core.MapIndex(values, func(v any, index int) any {
 			if !valueExpression.IsNil() {
-				expression = valueExpression.Elements()[index]
+				expression = valueExpression.ElementList().At(index)
 			}
 			result, err := convertJsonOption(option.Elements(), v, basePath, propertyAssignment, expression, sourceFile)
 			errors = append(errors, err...)
@@ -449,7 +449,7 @@ func getExtendsConfigPathOrArray(
 		for index, fileName := range value.([]any) {
 			var expression ast.Expression = ast.Node{}
 			if !valueExpression.IsNil() {
-				expression = valueExpression.Elements()[index]
+				expression = valueExpression.ElementList().At(index)
 			}
 			if reflect.TypeOf(fileName).Kind() == reflect.String {
 				val, err := getExtendsConfigPath(fileName.(string), fs, newBase, expression, sourceFile)
@@ -649,7 +649,7 @@ func convertObjectLiteralExpressionToJson(
 		result = &collections.OrderedMap[string, any]{}
 	}
 	var errors []*ast.Diagnostic
-	for _, element := range node.Properties().Nodes() {
+	for _, element := range node.Properties().All() {
 		if element.Kind() != ast.KindPropertyAssignment {
 			errors = append(errors, ast.NewDiagnostic(sourceFile, element.Loc(), diagnostics.Property_assignment_expected))
 			continue
@@ -816,8 +816,8 @@ func normalizeJsonValue(value any) any {
 // convertToObject converts the json syntax tree into the json value
 func convertToObject(sourceFile *ast.SourceFile) (any, []*ast.Diagnostic) {
 	var rootExpression ast.Expression
-	if len(sourceFile.Statements.Nodes()) != 0 {
-		rootExpression = sourceFile.Statements.Nodes()[0].Expression()
+	if sourceFile.Statements.Len() != 0 {
+		rootExpression = sourceFile.Statements.At(0).Expression()
 	}
 	return convertToJson(sourceFile, rootExpression, true /*returnValue*/, nil /*jsonConversionNotifier*/)
 }
@@ -1714,7 +1714,7 @@ func setContentMapperDiagnosticLocation(diagnostic *ast.Diagnostic, sourceFile *
 
 func ForEachPropertyAssignment[T any](objectLiteral ast.ObjectLiteralExpression, key string, callback func(property ast.PropertyAssignment) T, key2 ...string) T {
 	if !objectLiteral.IsNil() {
-		for _, property := range objectLiteral.Properties().Nodes() {
+		for _, property := range objectLiteral.Properties().All() {
 			if !ast.IsPropertyAssignment(property) {
 				continue
 			}
@@ -1730,8 +1730,8 @@ func ForEachPropertyAssignment[T any](objectLiteral ast.ObjectLiteralExpression,
 }
 
 func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) ast.ObjectLiteralExpression {
-	if tsConfigSourceFile != nil && tsConfigSourceFile.Statements != nil && len(tsConfigSourceFile.Statements.Nodes()) > 0 {
-		expression := tsConfigSourceFile.Statements.Nodes()[0].Expression()
+	if tsConfigSourceFile != nil && !tsConfigSourceFile.Statements.IsNil() && tsConfigSourceFile.Statements.Len() > 0 {
+		expression := tsConfigSourceFile.Statements.At(0).Expression()
 		if ast.IsObjectLiteralExpression(expression) {
 			return expression.AsObjectLiteralExpression()
 		}

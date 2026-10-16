@@ -87,7 +87,7 @@ func (tx *forawaitTransformer) exitSubtree(ancestorFacts forAwaitHierarchyFacts)
 	tx.forAwaitHierarchyFacts = ancestorFacts
 }
 
-func (tx *forawaitTransformer) visitModifiersNoAsync(modifiers *ast.ModifierList) *ast.ModifierList {
+func (tx *forawaitTransformer) visitModifiersNoAsync(modifiers ast.ModifierList) ast.ModifierList {
 	return tx.noAsyncModifierVisitor.VisitModifiers(modifiers)
 }
 
@@ -411,7 +411,7 @@ func (tx *forawaitTransformer) transformForAwaitOfStatement(node ast.ForInOrOfSt
 	callValues.SetLoc(node.Expression().Loc())
 	callNext := f.NewCallExpression(
 		f.NewPropertyAccessExpression(iterator, ast.Node{}, f.NewIdentifier("next"), ast.NodeFlagsNone),
-		ast.Node{}, nil,
+		ast.Node{}, ast.TypeList{},
 		f.NewNodeList([]ast.Node{}),
 		ast.NodeFlagsNone,
 	)
@@ -472,7 +472,7 @@ func (tx *forawaitTransformer) transformForAwaitOfStatement(node ast.ForInOrOfSt
 			f.NewAssignmentExpression(
 				errorRecord,
 				f.NewObjectLiteralExpression(f.NewNodeList([]ast.Node{
-					f.NewPropertyAssignment(nil, f.NewIdentifier("error"), ast.Node{}, ast.Node{}, catchVariable),
+					f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("error"), ast.Node{}, ast.Node{}, catchVariable),
 				}), false),
 			),
 		),
@@ -486,9 +486,9 @@ func (tx *forawaitTransformer) transformForAwaitOfStatement(node ast.ForInOrOfSt
 	// finally block
 	// inner try: if (!nonUserCode && !done && (returnMethod = iterator.return)) await returnMethod.call(iterator);
 	innerIfCondition := f.NewBinaryExpression(
-		nil,
+		ast.ModifierList{},
 		f.NewBinaryExpression(
-			nil,
+			ast.ModifierList{},
 			f.NewPrefixUnaryExpression(ast.KindExclamationToken, nonUserCode),
 			ast.Node{},
 			f.NewToken(ast.KindAmpersandAmpersandToken),
@@ -535,7 +535,7 @@ func (tx *forawaitTransformer) visitConstructorDeclaration(node ast.Node) ast.No
 	updated := tx.Factory().UpdateConstructorDeclaration(
 		decl,
 		decl.Modifiers(),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor()),
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -553,7 +553,7 @@ func (tx *forawaitTransformer) visitGetAccessorDeclaration(node ast.Node) ast.No
 		decl,
 		decl.Modifiers(),
 		tx.Visitor().VisitNode(decl.Name()),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor()),
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -571,7 +571,7 @@ func (tx *forawaitTransformer) visitSetAccessorDeclaration(node ast.Node) ast.No
 		decl,
 		decl.Modifiers(),
 		tx.Visitor().VisitNode(decl.Name()),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor()),
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -586,7 +586,7 @@ func (tx *forawaitTransformer) visitMethodDeclaration(node ast.Node) ast.Node {
 	savedEnclosingFunctionFlags := tx.enclosingFunctionFlags
 	tx.enclosingFunctionFlags = ast.GetFunctionFlags(node)
 
-	var modifiers *ast.ModifierList
+	var modifiers ast.ModifierList
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsGenerator != 0 {
 		modifiers = tx.visitModifiersNoAsync(decl.Modifiers())
 	} else {
@@ -600,7 +600,7 @@ func (tx *forawaitTransformer) visitMethodDeclaration(node ast.Node) ast.Node {
 		asteriskToken = decl.AsteriskToken()
 	}
 
-	var parameters *ast.NodeList
+	var parameters ast.NodeList
 	var body ast.Node
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsAsync != 0 && tx.enclosingFunctionFlags&ast.FunctionFlagsGenerator != 0 {
 		parameters = tx.transformAsyncGeneratorFunctionParameterList(node)
@@ -615,8 +615,8 @@ func (tx *forawaitTransformer) visitMethodDeclaration(node ast.Node) ast.Node {
 		modifiers,
 		asteriskToken,
 		tx.Visitor().VisitNode(decl.Name()),
-		ast.Node{}, /*postfixToken*/
-		nil,        /*typeParameters*/
+		ast.Node{},              /*postfixToken*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		parameters,
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -631,7 +631,7 @@ func (tx *forawaitTransformer) visitFunctionDeclaration(node ast.Node) ast.Node 
 	savedEnclosingFunctionFlags := tx.enclosingFunctionFlags
 	tx.enclosingFunctionFlags = ast.GetFunctionFlags(node)
 
-	var modifiers *ast.ModifierList
+	var modifiers ast.ModifierList
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsGenerator != 0 {
 		modifiers = tx.visitModifiersNoAsync(decl.Modifiers())
 	} else {
@@ -645,7 +645,7 @@ func (tx *forawaitTransformer) visitFunctionDeclaration(node ast.Node) ast.Node 
 		asteriskToken = decl.AsteriskToken()
 	}
 
-	var parameters *ast.NodeList
+	var parameters ast.NodeList
 	var body ast.Node
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsAsync != 0 && tx.enclosingFunctionFlags&ast.FunctionFlagsGenerator != 0 {
 		parameters = tx.transformAsyncGeneratorFunctionParameterList(node)
@@ -660,7 +660,7 @@ func (tx *forawaitTransformer) visitFunctionDeclaration(node ast.Node) ast.Node 
 		modifiers,
 		asteriskToken,
 		decl.Name(),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		parameters,
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -677,7 +677,7 @@ func (tx *forawaitTransformer) visitArrowFunction(node ast.Node) ast.Node {
 	updated := tx.Factory().UpdateArrowFunction(
 		decl,
 		decl.Modifiers(),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		tx.EmitContext().VisitParameters(decl.Parameters(), tx.Visitor()),
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -693,7 +693,7 @@ func (tx *forawaitTransformer) visitFunctionExpression(node ast.Node) ast.Node {
 	savedEnclosingFunctionFlags := tx.enclosingFunctionFlags
 	tx.enclosingFunctionFlags = ast.GetFunctionFlags(node)
 
-	var modifiers *ast.ModifierList
+	var modifiers ast.ModifierList
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsGenerator != 0 {
 		modifiers = tx.visitModifiersNoAsync(decl.Modifiers())
 	} else {
@@ -707,7 +707,7 @@ func (tx *forawaitTransformer) visitFunctionExpression(node ast.Node) ast.Node {
 		asteriskToken = decl.AsteriskToken()
 	}
 
-	var parameters *ast.NodeList
+	var parameters ast.NodeList
 	var body ast.Node
 	if tx.enclosingFunctionFlags&ast.FunctionFlagsAsync != 0 && tx.enclosingFunctionFlags&ast.FunctionFlagsGenerator != 0 {
 		parameters = tx.transformAsyncGeneratorFunctionParameterList(node)
@@ -722,7 +722,7 @@ func (tx *forawaitTransformer) visitFunctionExpression(node ast.Node) ast.Node {
 		modifiers,
 		asteriskToken,
 		decl.Name(),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		parameters,
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -732,19 +732,19 @@ func (tx *forawaitTransformer) visitFunctionExpression(node ast.Node) ast.Node {
 	return updated
 }
 
-func (tx *forawaitTransformer) transformAsyncGeneratorFunctionParameterList(node ast.Node) *ast.NodeList {
+func (tx *forawaitTransformer) transformAsyncGeneratorFunctionParameterList(node ast.Node) ast.NodeList {
 	if isSimpleParameterList(node.Parameters()) {
 		return tx.EmitContext().VisitParameters(node.ParameterList(), tx.Visitor())
 	}
 	// Add fixed parameters to preserve the function's `length` property.
 	var newParameters []ast.Node
-	for _, parameter := range node.Parameters() {
+	for _, parameter := range node.ParameterList().All() {
 		param := parameter.AsParameterDeclaration()
 		if !param.Initializer().IsNil() || !param.DotDotDotToken().IsNil() {
 			break
 		}
 		newParameter := tx.Factory().NewParameterDeclaration(
-			nil,
+			ast.ModifierList{},
 			ast.Node{},
 			tx.Factory().NewGeneratedNameForNodeEx(param.Name(), printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsReservedInNestedScopes}),
 			ast.Node{},
@@ -760,7 +760,7 @@ func (tx *forawaitTransformer) transformAsyncGeneratorFunctionParameterList(node
 
 func (tx *forawaitTransformer) transformAsyncGeneratorFunctionBody(node ast.Node) ast.Node {
 	f := tx.Factory()
-	var innerParameters *ast.NodeList
+	var innerParameters ast.NodeList
 	if !isSimpleParameterList(node.Parameters()) {
 		innerParameters = tx.EmitContext().VisitParameters(node.ParameterList(), tx.Visitor())
 	}
@@ -793,8 +793,8 @@ func (tx *forawaitTransformer) transformAsyncGeneratorFunctionBody(node ast.Node
 		asyncBody = tx.substituteSuperAccessesInBody(asyncBody)
 	}
 
-	var innerParams *ast.NodeList
-	if innerParameters != nil {
+	var innerParams ast.NodeList
+	if !innerParameters.IsNil() {
 		innerParams = innerParameters
 	} else {
 		innerParams = f.NewNodeList([]ast.Node{})
@@ -806,10 +806,10 @@ func (tx *forawaitTransformer) transformAsyncGeneratorFunctionBody(node ast.Node
 	}
 
 	generatorFunc := f.NewFunctionExpression(
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		f.NewToken(ast.KindAsteriskToken),
 		name,
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		innerParams,
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/

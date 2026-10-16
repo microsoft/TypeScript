@@ -13,7 +13,7 @@ func rangeIsOnOneLine(node core.TextRange, file *ast.SourceFile) bool {
 	return startLine == endLine
 }
 
-func getOpenTokenForList(node ast.Node, list *ast.NodeList) ast.Kind {
+func getOpenTokenForList(node ast.Node, list ast.NodeList) ast.Kind {
 	switch node.Kind() {
 	case ast.KindConstructor,
 		ast.KindFunctionDeclaration,

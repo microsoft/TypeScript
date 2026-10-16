@@ -51,7 +51,7 @@ func isModuleSpecifierLike(node ast.Node) bool {
 	}
 
 	if ast.IsRequireCall(node.Parent(), false /*requireStringLiteralLikeArgument*/) || ast.IsImportCall(node.Parent()) {
-		return node.Parent().Arguments()[0] == node
+		return node.Parent().ArgumentList().At(0) == node
 	}
 
 	return node.Parent().Kind() == ast.KindExternalModuleReference ||
@@ -504,8 +504,8 @@ func getAdjustedLocation(node ast.Node, forRename bool, sourceFile *ast.SourceFi
 
 	// /**/<var|let|const> [|name|] ...
 	if (node.Kind() == ast.KindVarKeyword || node.Kind() == ast.KindConstKeyword || node.Kind() == ast.KindLetKeyword) &&
-		ast.IsVariableDeclarationList(parent) && len(parent.AsVariableDeclarationList().Declarations().Nodes()) == 1 {
-		declaration := parent.AsVariableDeclarationList().Declarations().Nodes()[0].AsVariableDeclaration()
+		ast.IsVariableDeclarationList(parent) && parent.AsVariableDeclarationList().Declarations().Len() == 1 {
+		declaration := parent.AsVariableDeclarationList().Declarations().At(0).AsVariableDeclaration()
 		if ast.IsIdentifier(declaration.Name()) {
 			return declaration.Name()
 		}
@@ -598,8 +598,8 @@ func getAdjustedLocation(node ast.Node, forRename bool, sourceFile *ast.SourceFi
 		getAdjustedLocationForHeritageClause := func(node ast.HeritageClause) ast.Node {
 			// /**/extends [|name|]
 			// /**/implements [|name|]
-			if len(node.Types().Nodes()) == 1 {
-				return ast.GetHeritageClauseElementName(node.Types().Nodes()[0])
+			if node.Types().Len() == 1 {
+				return ast.GetHeritageClauseElementName(node.Types().At(0))
 			}
 
 			// fall through `getAdjustedLocation`
@@ -1192,15 +1192,15 @@ func findPrecedingMatchingToken(token ast.Node, matchingTokenKind ast.Kind, sour
 	}
 }
 
-func findContainingList(node ast.Node, file *ast.SourceFile) *ast.NodeList {
+func findContainingList(node ast.Node, file *ast.SourceFile) ast.NodeList {
 	// The node might be a list element (nonsynthetic) or a comma (synthetic). Either way, it will
 	// be parented by the container of the SyntaxList, not the SyntaxList itself.
-	var list *ast.NodeList
+	var list ast.NodeList
 	visitNode := func(n ast.Node, visitor *ast.NodeVisitor) ast.Node {
 		return n
 	}
-	visitNodes := func(nodes *ast.NodeList, visitor *ast.NodeVisitor) *ast.NodeList {
-		if nodes != nil && RangeContainsRange(nodes.Loc(), node.Loc()) {
+	visitNodes := func(nodes ast.NodeList, visitor *ast.NodeVisitor) ast.NodeList {
+		if !nodes.IsNil() && RangeContainsRange(nodes.Loc(), node.Loc()) {
 			list = nodes
 		}
 		return nodes

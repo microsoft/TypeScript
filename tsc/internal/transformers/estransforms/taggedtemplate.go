@@ -46,9 +46,9 @@ func (tx *taggedTemplateTransformer) visitSourceFile(node *ast.SourceFile) ast.N
 	if len(tx.taggedTemplateStringDeclarations) > 0 {
 		visitedSourceFile := visited.AsSourceFile()
 		statements := append(
-			slices.Clip(visitedSourceFile.Statements.Nodes()),
+			slices.Clip(visitedSourceFile.Statements.Slice()),
 			tx.Factory().NewVariableStatement(
-				nil, /*modifiers*/
+				ast.ModifierList{}, /*modifiers*/
 				tx.Factory().NewVariableDeclarationList(
 					tx.Factory().NewNodeList(tx.taggedTemplateStringDeclarations),
 					ast.NodeFlagsNone,
@@ -90,7 +90,7 @@ func (tx *taggedTemplateTransformer) processTaggedTemplateExpression(node ast.Ta
 		te := template.AsTemplateExpression()
 		cookedStrings = append(cookedStrings, createTemplateCooked(f, te.Head().TemplateLiteralLikeData()))
 		rawStrings = append(rawStrings, getRawLiteral(f, te.Head()))
-		for _, span := range te.TemplateSpans().Nodes() {
+		for _, span := range te.TemplateSpans().All() {
 			ts := span.AsTemplateSpan()
 			cookedStrings = append(cookedStrings, createTemplateCooked(f, ts.Literal().TemplateLiteralLikeData()))
 			rawStrings = append(rawStrings, getRawLiteral(f, ts.Literal()))
@@ -120,7 +120,7 @@ func (tx *taggedTemplateTransformer) processTaggedTemplateExpression(node ast.Ta
 		templateArguments[0] = helperCall
 	}
 
-	call := f.NewCallExpression(tag, ast.Node{} /*questionDotToken*/, nil /*typeArguments*/, f.NewNodeList(templateArguments), ast.NodeFlagsNone)
+	call := f.NewCallExpression(tag, ast.Node{} /*questionDotToken*/, ast.TypeList{} /*typeArguments*/, f.NewNodeList(templateArguments), ast.NodeFlagsNone)
 	call.SetLoc(node.Loc())
 	return call
 }
@@ -166,7 +166,7 @@ func hasInvalidEscape(template ast.Node) bool {
 	if te.Head().TemplateLiteralLikeData().TemplateFlags()&ast.TokenFlagsContainsInvalidEscape != 0 {
 		return true
 	}
-	for _, span := range te.TemplateSpans().Nodes() {
+	for _, span := range te.TemplateSpans().All() {
 		if span.AsTemplateSpan().Literal().TemplateLiteralLikeData().TemplateFlags()&ast.TokenFlagsContainsInvalidEscape != 0 {
 			return true
 		}

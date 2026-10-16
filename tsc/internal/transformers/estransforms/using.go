@@ -57,7 +57,7 @@ func (tx *usingDeclarationTransformer) visitSourceFile(node *ast.SourceFile) ast
 	}
 
 	var visited ast.SourceFileNode
-	usingKind := getUsingKindOfStatements(node.Statements.Nodes())
+	usingKind := getUsingKindOfStatements(node.Statements.Slice())
 	if usingKind != usingKindNone {
 		// Imports and exports must stay at the top level. This means we must hoist all imports, exports, and
 		// top-level function declarations and bindings out of the `try` statements we generate. For example:
@@ -102,7 +102,7 @@ func (tx *usingDeclarationTransformer) visitSourceFile(node *ast.SourceFile) ast
 		tx.exportBindings = make(map[string]ast.ExportSpecifierNode)
 		tx.exportVars = nil
 
-		prologue, rest := tx.Factory().SplitStandardPrologue(node.Statements.Nodes())
+		prologue, rest := tx.Factory().SplitStandardPrologue(node.Statements.Slice())
 		var topLevelStatements []ast.Statement
 		topLevelStatements = append(topLevelStatements, core.FirstResult(tx.Visitor().VisitSlice(prologue))...)
 
@@ -140,8 +140,8 @@ func (tx *usingDeclarationTransformer) visitSourceFile(node *ast.SourceFile) ast
 			topLevelStatements = append(
 				topLevelStatements,
 				tx.Factory().NewExportDeclaration(
-					nil,   /*modifiers*/
-					false, /*isTypeOnly*/
+					ast.ModifierList{}, /*modifiers*/
+					false,              /*isTypeOnly*/
 					tx.Factory().NewNamedExports(
 						tx.Factory().NewNodeList(
 							exportSpecifiers,
@@ -169,9 +169,9 @@ func (tx *usingDeclarationTransformer) visitSourceFile(node *ast.SourceFile) ast
 
 		if !tx.exportEqualsBinding.IsNil() {
 			topLevelStatements = append(topLevelStatements, tx.Factory().NewExportAssignment(
-				nil,        /*modifiers*/
-				true,       /*isExportEquals*/
-				ast.Node{}, /*typeNode*/
+				ast.ModifierList{}, /*modifiers*/
+				true,               /*isExportEquals*/
+				ast.Node{},         /*typeNode*/
 				tx.exportEqualsBinding,
 			))
 		}
@@ -190,9 +190,9 @@ func (tx *usingDeclarationTransformer) visitSourceFile(node *ast.SourceFile) ast
 }
 
 func (tx *usingDeclarationTransformer) visitBlock(node ast.Block) ast.Node {
-	usingKind := getUsingKindOfStatements(node.Statements().Nodes())
+	usingKind := getUsingKindOfStatements(node.Statements().Slice())
 	if usingKind != usingKindNone {
-		prologue, rest := tx.Factory().SplitStandardPrologue(node.Statements().Nodes())
+		prologue, rest := tx.Factory().SplitStandardPrologue(node.Statements().Slice())
 		envBinding := tx.createEnvBinding()
 		statements := make([]ast.Statement, 0, len(prologue)+2)
 		statements = append(statements, core.FirstResult(tx.Visitor().VisitSlice(prologue))...)
@@ -224,7 +224,7 @@ func (tx *usingDeclarationTransformer) visitForStatement(node ast.ForStatement) 
 		// before handing the shallow transformation back to the visitor for an in-depth transformation.
 		return tx.Visitor().VisitNode(
 			tx.Factory().NewBlock(tx.Factory().NewNodeList([]ast.Statement{
-				tx.Factory().NewVariableStatement(nil /*modifiers*/, node.Initializer()),
+				tx.Factory().NewVariableStatement(ast.ModifierList{} /*modifiers*/, node.Initializer()),
 				tx.Factory().UpdateForStatement(
 					node,
 					ast.Node{}, /*initializer*/
@@ -253,7 +253,7 @@ func (tx *usingDeclarationTransformer) visitForOfStatement(node ast.ForInOrOfSta
 		//
 		// before handing the shallow transformation back to the visitor for an in-depth transformation.
 		forInitializer := node.Initializer().AsVariableDeclarationList()
-		forDecl := core.FirstOrNil(forInitializer.Declarations().Nodes())
+		forDecl := core.FirstOrNil(forInitializer.Declarations().Slice())
 		if forDecl.IsNil() {
 			forDecl = tx.Factory().NewVariableDeclaration(tx.Factory().NewTempVariable(), ast.Node{}, ast.Node{}, ast.Node{})
 		}
@@ -265,10 +265,10 @@ func (tx *usingDeclarationTransformer) visitForOfStatement(node ast.ForInOrOfSta
 			tx.Factory().NewNodeList([]ast.Node{usingVar}),
 			core.IfElse(isAwaitUsing, ast.NodeFlagsAwaitUsing, ast.NodeFlagsUsing),
 		)
-		usingVarStatement := tx.Factory().NewVariableStatement(nil /*modifiers*/, usingVarList)
+		usingVarStatement := tx.Factory().NewVariableStatement(ast.ModifierList{} /*modifiers*/, usingVarList)
 		var statement ast.Statement
 		if ast.IsBlock(node.Statement()) {
-			statements := make([]ast.Statement, 0, len(node.Statement().Statements())+1)
+			statements := make([]ast.Statement, 0, node.Statement().StatementList().Len()+1)
 			statements = append(statements, usingVarStatement)
 			statements = append(statements, node.Statement().Statements()...)
 			statement = tx.Factory().UpdateBlock(
@@ -342,7 +342,7 @@ func (tx *usingDeclarationTransformer) transformUsingDeclarations(statementsIn [
 			varStatement := statement.AsVariableStatement()
 			declarationList := varStatement.DeclarationList()
 			var declarations []ast.VariableDeclarationNode
-			for _, declaration := range declarationList.AsVariableDeclarationList().Declarations().Nodes() {
+			for _, declaration := range declarationList.AsVariableDeclarationList().Declarations().All() {
 				if !ast.IsIdentifier(declaration.Name()) {
 					// Since binding patterns are a grammar error, we reset `declarations` so we don't process this as a `using`.
 					declarations = nil
@@ -376,7 +376,7 @@ func (tx *usingDeclarationTransformer) transformUsingDeclarations(statementsIn [
 				varList := tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList(declarations), ast.NodeFlagsConst)
 				tx.EmitContext().SetOriginal(varList, declarationList)
 				varList.SetLoc(declarationList.Loc())
-				hoistOrAppendNode(tx.Factory().UpdateVariableStatement(varStatement, nil /*modifiers*/, varList))
+				hoistOrAppendNode(tx.Factory().UpdateVariableStatement(varStatement, ast.ModifierList{} /*modifiers*/, varList))
 				continue
 			}
 		}
@@ -563,7 +563,7 @@ func (tx *usingDeclarationTransformer) hoistVariableStatement(node ast.VariableS
 	// NOTE: `node` has already been visited
 	var expressions []ast.Expression
 	isExported := ast.HasSyntacticModifier(node.AsNode(), ast.ModifierFlagsExport)
-	for _, variable := range node.DeclarationList().AsVariableDeclarationList().Declarations().Nodes() {
+	for _, variable := range node.DeclarationList().AsVariableDeclarationList().Declarations().All() {
 		tx.hoistBindingElement(variable, isExported, variable)
 		if !variable.Initializer().IsNil() {
 			expressions = append(expressions, tx.hoistInitializedVariable(variable.AsVariableDeclaration()))
@@ -602,7 +602,7 @@ func (tx *usingDeclarationTransformer) hoistInitializedVariable(node ast.Variabl
 func (tx *usingDeclarationTransformer) hoistBindingElement(node ast.Node /*VariableDeclaration|BindingElement*/, isExportedDeclaration bool, original ast.Node) {
 	// NOTE: `node` has already been visited
 	if ast.IsBindingPattern(node.Name()) {
-		for _, element := range node.Name().Elements() {
+		for _, element := range node.Name().ElementList().All() {
 			if !element.Name().IsNil() {
 				tx.hoistBindingElement(element, isExportedDeclaration, original)
 			}
@@ -663,13 +663,13 @@ func (tx *usingDeclarationTransformer) createDownlevelUsingStatements(bodyStatem
 	//  const env_1 = { stack: [], error: void 0, hasError: false };
 	//
 	envObject := tx.Factory().NewObjectLiteralExpression(tx.Factory().NewNodeList([]ast.Expression{
-		tx.Factory().NewPropertyAssignment(nil /*modifiers*/, tx.Factory().NewIdentifier("stack"), ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, tx.Factory().NewArrayLiteralExpression(nil, false /*multiLine*/)),
-		tx.Factory().NewPropertyAssignment(nil /*modifiers*/, tx.Factory().NewIdentifier("error"), ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, tx.Factory().NewVoidZeroExpression()),
-		tx.Factory().NewPropertyAssignment(nil /*modifiers*/, tx.Factory().NewIdentifier("hasError"), ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, tx.Factory().NewFalseExpression()),
+		tx.Factory().NewPropertyAssignment(ast.ModifierList{} /*modifiers*/, tx.Factory().NewIdentifier("stack"), ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, tx.Factory().NewArrayLiteralExpression(ast.ElementList{}, false /*multiLine*/)),
+		tx.Factory().NewPropertyAssignment(ast.ModifierList{} /*modifiers*/, tx.Factory().NewIdentifier("error"), ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, tx.Factory().NewVoidZeroExpression()),
+		tx.Factory().NewPropertyAssignment(ast.ModifierList{} /*modifiers*/, tx.Factory().NewIdentifier("hasError"), ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, tx.Factory().NewFalseExpression()),
 	}), false /*multiLine*/)
 	envVar := tx.Factory().NewVariableDeclaration(envBinding, ast.Node{} /*exclamationToken*/, ast.Node{} /*typeNode*/, envObject)
 	envVarList := tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]ast.VariableDeclarationNode{envVar}), ast.NodeFlagsConst)
-	envVarStatement := tx.Factory().NewVariableStatement(nil /*modifiers*/, envVarList)
+	envVarStatement := tx.Factory().NewVariableStatement(ast.ModifierList{} /*modifiers*/, envVarList)
 	statements = append(statements, envVarStatement)
 
 	// when `async` is `false`, produces:
@@ -733,7 +733,7 @@ func (tx *usingDeclarationTransformer) createDownlevelUsingStatements(bodyStatem
 		result := tx.Factory().NewUniqueName("result")
 		finallyBlock = tx.Factory().NewBlock(tx.Factory().NewNodeList([]ast.Statement{
 			tx.Factory().NewVariableStatement(
-				nil, /*modifiers*/
+				ast.ModifierList{}, /*modifiers*/
 				tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]ast.VariableDeclarationNode{
 					tx.Factory().NewVariableDeclaration(
 						result,

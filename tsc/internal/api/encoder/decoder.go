@@ -26,7 +26,7 @@ type astDecoder struct {
 	nodeArena []ast.Node
 	// Results
 	nodes     []ast.Node
-	nodeLists []*ast.NodeList
+	nodeLists []ast.NodeList
 }
 
 // DecodeSourceFile decodes binary-encoded data into an *ast.SourceFile.
@@ -141,7 +141,7 @@ func (d *astDecoder) decode() (ast.Node, error) {
 	}
 
 	d.nodes = make([]ast.Node, d.nodeCount)
-	d.nodeLists = make([]*ast.NodeList, d.nodeCount)
+	d.nodeLists = make([]ast.NodeList, d.nodeCount)
 	// Pre-allocate arena for NodeList child slices. Each node can appear as a
 	// child at most once, so nodeCount is an upper bound on total child pointers.
 	d.nodeArena = make([]ast.Node, 0, d.nodeCount)
@@ -182,13 +182,13 @@ func (d *astDecoder) decode() (ast.Node, error) {
 	return d.nodes[1], nil
 }
 
-// getModifierList creates a *ast.ModifierList from a child index that is a NodeList.
-func (d *astDecoder) getModifierList(ci int) *ast.ModifierList {
+// getModifierList creates a ast.ModifierList from a child index that is a NodeList.
+func (d *astDecoder) getModifierList(ci int) ast.ModifierList {
 	nl := d.nodeLists[ci]
-	if nl == nil {
-		return nil
+	if nl.IsNil() {
+		return ast.ModifierList{}
 	}
-	ml := d.factory.NewModifierList(nl.Nodes())
+	ml := d.factory.NewModifierList(nl.Slice())
 	ml.SetLoc(nl.Loc())
 	return ml
 }
@@ -228,16 +228,16 @@ func (d *astDecoder) nodeAt(ci int) ast.Node {
 	return d.nodes[ci]
 }
 
-func (d *astDecoder) nodeListAt(ci int) *ast.NodeList {
+func (d *astDecoder) nodeListAt(ci int) ast.NodeList {
 	if ci == 0 {
-		return nil
+		return ast.NodeList{}
 	}
 	return d.nodeLists[ci]
 }
 
-func (d *astDecoder) modifierListAt(ci int) *ast.ModifierList {
+func (d *astDecoder) modifierListAt(ci int) ast.ModifierList {
 	if ci == 0 {
-		return nil
+		return ast.ModifierList{}
 	}
 	return d.getModifierList(ci)
 }
@@ -288,7 +288,7 @@ func (d *astDecoder) decodeExtendedData_SourceFile(data uint32, childIndices []i
 	}
 
 	// Collect children: first is statements NodeList, second is EndOfFile.
-	var stmts *ast.NodeList
+	var stmts ast.NodeList
 	var endOfFile ast.Node
 	for _, ci := range childIndices {
 		if d.nodeField(ci, NodeOffsetKind) == SyntaxKindNodeList {
@@ -338,9 +338,9 @@ func (d *astDecoder) singleChild(childIndices []int) ast.Node {
 	return d.nodes[childIndices[0]]
 }
 
-func (d *astDecoder) singleNodeListChild(childIndices []int) *ast.NodeList {
+func (d *astDecoder) singleNodeListChild(childIndices []int) ast.NodeList {
 	if len(childIndices) == 0 {
-		return nil
+		return ast.NodeList{}
 	}
 	return d.nodeLists[childIndices[0]]
 }

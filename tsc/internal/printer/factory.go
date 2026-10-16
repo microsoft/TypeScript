@@ -208,19 +208,19 @@ func (f *NodeFactory) NewFalseExpression() ast.Expression {
 //
 
 func (f *NodeFactory) NewCommaExpression(left ast.Expression, right ast.Expression) ast.Expression {
-	return f.NewBinaryExpression(nil /*modifiers*/, left, ast.Node{} /*typeNode*/, f.NewToken(ast.KindCommaToken), right)
+	return f.NewBinaryExpression(ast.ModifierList{} /*modifiers*/, left, ast.Node{} /*typeNode*/, f.NewToken(ast.KindCommaToken), right)
 }
 
 func (f *NodeFactory) NewAssignmentExpression(left ast.Expression, right ast.Expression) ast.Expression {
-	return f.NewBinaryExpression(nil /*modifiers*/, left, ast.Node{} /*typeNode*/, f.NewToken(ast.KindEqualsToken), right)
+	return f.NewBinaryExpression(ast.ModifierList{} /*modifiers*/, left, ast.Node{} /*typeNode*/, f.NewToken(ast.KindEqualsToken), right)
 }
 
 func (f *NodeFactory) NewLogicalORExpression(left ast.Expression, right ast.Expression) ast.Expression {
-	return f.NewBinaryExpression(nil /*modifiers*/, left, ast.Node{} /*typeNode*/, f.NewToken(ast.KindBarBarToken), right)
+	return f.NewBinaryExpression(ast.ModifierList{} /*modifiers*/, left, ast.Node{} /*typeNode*/, f.NewToken(ast.KindBarBarToken), right)
 }
 
 func (f *NodeFactory) NewLogicalANDExpression(left ast.Expression, right ast.Expression) ast.Expression {
-	return f.NewBinaryExpression(nil /*modifiers*/, left, ast.Node{} /*typeNode*/, f.NewToken(ast.KindAmpersandAmpersandToken), right)
+	return f.NewBinaryExpression(ast.ModifierList{} /*modifiers*/, left, ast.Node{} /*typeNode*/, f.NewToken(ast.KindAmpersandAmpersandToken), right)
 }
 
 // func (f *NodeFactory) NewLogicalANDExpression(left *ast.Expression, right *ast.Expression) *ast.Expression
@@ -228,11 +228,11 @@ func (f *NodeFactory) NewLogicalANDExpression(left ast.Expression, right ast.Exp
 // func (f *NodeFactory) NewBitwiseXORExpression(left *ast.Expression, right *ast.Expression) *ast.Expression
 // func (f *NodeFactory) NewBitwiseANDExpression(left *ast.Expression, right *ast.Expression) *ast.Expression
 func (f *NodeFactory) NewStrictEqualityExpression(left ast.Expression, right ast.Expression) ast.Expression {
-	return f.NewBinaryExpression(nil /*modifiers*/, left, ast.Node{} /*typeNode*/, f.NewToken(ast.KindEqualsEqualsEqualsToken), right)
+	return f.NewBinaryExpression(ast.ModifierList{} /*modifiers*/, left, ast.Node{} /*typeNode*/, f.NewToken(ast.KindEqualsEqualsEqualsToken), right)
 }
 
 func (f *NodeFactory) NewStrictInequalityExpression(left ast.Expression, right ast.Expression) ast.Expression {
-	return f.NewBinaryExpression(nil /*modifiers*/, left, ast.Node{} /*typeNode*/, f.NewToken(ast.KindExclamationEqualsEqualsToken), right)
+	return f.NewBinaryExpression(ast.ModifierList{} /*modifiers*/, left, ast.Node{} /*typeNode*/, f.NewToken(ast.KindExclamationEqualsEqualsToken), right)
 }
 
 //
@@ -317,7 +317,7 @@ func (f *NodeFactory) RestoreEnclosingLabel(node ast.Node, outermostLabeledState
 // CreateForOfBindingStatement creates a statement to bind the iteration value.
 func (f *NodeFactory) CreateForOfBindingStatement(node ast.Node, boundValue ast.Node) ast.Node {
 	if ast.IsVariableDeclarationList(node) {
-		firstDeclaration := node.AsVariableDeclarationList().Declarations().Nodes()[0]
+		firstDeclaration := node.AsVariableDeclarationList().Declarations().At(0)
 		updatedDeclaration := f.UpdateVariableDeclaration(
 			firstDeclaration.AsVariableDeclaration(),
 			firstDeclaration.Name(),
@@ -326,7 +326,7 @@ func (f *NodeFactory) CreateForOfBindingStatement(node ast.Node, boundValue ast.
 			boundValue,
 		)
 		statement := f.NewVariableStatement(
-			nil,
+			ast.ModifierList{},
 			f.UpdateVariableDeclarationList(
 				node.AsVariableDeclarationList(),
 				f.NewNodeList([]ast.Node{updatedDeclaration}),
@@ -359,7 +359,7 @@ func (f *NodeFactory) NewMethodCall(object ast.Node, methodName ast.Node, argume
 		return f.NewCallExpression(
 			f.NewPropertyAccessExpression(object, ast.Node{}, methodName, ast.NodeFlagsNone),
 			ast.Node{},
-			nil,
+			ast.TypeList{},
 			f.NewNodeList(argumentsList),
 			ast.NodeFlagsOptionalChain,
 		)
@@ -367,7 +367,7 @@ func (f *NodeFactory) NewMethodCall(object ast.Node, methodName ast.Node, argume
 	return f.NewCallExpression(
 		f.NewPropertyAccessExpression(object, ast.Node{}, methodName, ast.NodeFlagsNone),
 		ast.Node{},
-		nil,
+		ast.TypeList{},
 		f.NewNodeList(argumentsList),
 		ast.NodeFlagsNone,
 	)
@@ -614,8 +614,8 @@ func (f *NodeFactory) NewDecorateHelper(decoratorExpressions []ast.Node, target 
 
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__decorate"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList(argumentsArray),
 		ast.NodeFlagsNone,
 	)
@@ -626,8 +626,8 @@ func (f *NodeFactory) NewMetadataHelper(metadataKey string, metadataValue ast.No
 
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__metadata"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Node{
 			f.NewStringLiteral(metadataKey, ast.TokenFlagsNone),
 			metadataValue,
@@ -640,8 +640,8 @@ func (f *NodeFactory) NewParamHelper(expression ast.Node, parameterOffset int, l
 	f.emitContext.RequestEmitHelper(paramHelper)
 	helper := f.NewCallExpression(
 		f.NewUnscopedHelperName("__param"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{f.NewNumericLiteral(strconv.Itoa(parameterOffset), ast.TokenFlagsNone), expression}),
 		ast.NodeFlagsNone,
 	)
@@ -655,8 +655,8 @@ func (f *NodeFactory) NewAddDisposableResourceHelper(envBinding ast.Expression, 
 	f.emitContext.RequestEmitHelper(addDisposableResourceHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__addDisposableResource"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{envBinding, value, f.NewKeywordExpression(core.IfElse(async, ast.KindTrueKeyword, ast.KindFalseKeyword))}),
 		ast.NodeFlagsNone,
 	)
@@ -666,8 +666,8 @@ func (f *NodeFactory) NewDisposeResourcesHelper(envBinding ast.Expression) ast.E
 	f.emitContext.RequestEmitHelper(disposeResourcesHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__disposeResources"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{envBinding}),
 		ast.NodeFlagsNone,
 	)
@@ -694,8 +694,8 @@ func (f *NodeFactory) NewClassPrivateFieldGetHelper(receiver ast.Expression, sta
 	}
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__classPrivateFieldGet"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList(args),
 		ast.NodeFlagsNone,
 	)
@@ -711,8 +711,8 @@ func (f *NodeFactory) NewClassPrivateFieldSetHelper(receiver ast.Expression, sta
 	}
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__classPrivateFieldSet"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList(args),
 		ast.NodeFlagsNone,
 	)
@@ -722,8 +722,8 @@ func (f *NodeFactory) NewClassPrivateFieldInHelper(state ast.IdentifierNode, rec
 	f.emitContext.RequestEmitHelper(classPrivateFieldInHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__classPrivateFieldIn"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{state, receiver}),
 		ast.NodeFlagsNone,
 	)
@@ -738,8 +738,8 @@ func (f *NodeFactory) NewObjectDefinePropertyCall(target ast.Expression, name as
 			f.NewIdentifier("defineProperty"),
 			ast.NodeFlagsNone,
 		),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{target, name, descriptor}),
 		ast.NodeFlagsNone,
 	)
@@ -754,8 +754,8 @@ func (f *NodeFactory) NewReflectGetCall(target ast.Expression, propertyKey ast.E
 			f.NewIdentifier("get"),
 			ast.NodeFlagsNone,
 		),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{target, propertyKey, receiver}),
 		ast.NodeFlagsNone,
 	)
@@ -770,8 +770,8 @@ func (f *NodeFactory) NewReflectSetCall(target ast.Expression, propertyKey ast.E
 			f.NewIdentifier("set"),
 			ast.NodeFlagsNone,
 		),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{target, propertyKey, value, receiver}),
 		ast.NodeFlagsNone,
 	)
@@ -788,8 +788,8 @@ func (f *NodeFactory) NewFunctionBindCall(target ast.Expression, thisArg ast.Exp
 // Creates `(() => { ...statements })()` — an immediately invoked arrow function.
 func (f *NodeFactory) NewImmediatelyInvokedArrowFunction(statements []ast.Statement) ast.Expression {
 	arrow := f.NewArrowFunction(
-		nil,                         /*modifiers*/
-		nil,                         /*typeParameters*/
+		ast.ModifierList{},          /*modifiers*/
+		ast.TypeParameterList{},     /*typeParameters*/
 		f.NewNodeList([]ast.Node{}), /*parameters*/
 		ast.Node{},                  /*returnType*/
 		ast.Node{},                  /*fullSignature*/
@@ -798,8 +798,8 @@ func (f *NodeFactory) NewImmediatelyInvokedArrowFunction(statements []ast.Statem
 	)
 	return f.NewCallExpression(
 		f.NewParenthesizedExpression(arrow),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Node{}),
 		ast.NodeFlagsNone,
 	)
@@ -807,20 +807,20 @@ func (f *NodeFactory) NewImmediatelyInvokedArrowFunction(statements []ast.Statem
 
 // Creates `export default <expression>;`.
 func (f *NodeFactory) NewExportDefault(expression ast.Expression) ast.Statement {
-	return f.NewExportAssignment(nil, false, ast.Node{}, expression)
+	return f.NewExportAssignment(ast.ModifierList{}, false, ast.Node{}, expression)
 }
 
 // Creates `export { <name> };`.
 func (f *NodeFactory) NewExternalModuleExport(name ast.IdentifierNode) ast.Statement {
 	specifier := f.NewExportSpecifier(false, ast.Node{}, name)
 	namedExports := f.NewNamedExports(f.NewNodeList([]ast.Node{specifier}))
-	return f.NewExportDeclaration(nil, false, namedExports, ast.Node{}, ast.Node{})
+	return f.NewExportDeclaration(ast.ModifierList{}, false, namedExports, ast.Node{}, ast.Node{})
 }
 
 // ES2018 Helpers
 // Chains a sequence of expressions using the __assign helper or Object.assign if available in the target
 func (f *NodeFactory) NewAssignHelper(attributesSegments []ast.Expression, scriptTarget core.ScriptTarget) ast.Expression {
-	return f.NewCallExpression(f.NewPropertyAccessExpression(f.NewIdentifier("Object"), ast.Node{}, f.NewIdentifier("assign"), ast.NodeFlagsNone), ast.Node{}, nil, f.NewNodeList(attributesSegments), ast.NodeFlagsNone)
+	return f.NewCallExpression(f.NewPropertyAccessExpression(f.NewIdentifier("Object"), ast.Node{}, f.NewIdentifier("assign"), ast.NodeFlagsNone), ast.Node{}, ast.TypeList{}, f.NewNodeList(attributesSegments), ast.NodeFlagsNone)
 }
 
 // ES2018 Destructuring Helpers
@@ -845,7 +845,7 @@ func (f *NodeFactory) NewRestHelper(value ast.Expression, elements []ast.Node, c
 					f.NewToken(ast.KindQuestionToken),
 					temp,
 					f.NewToken(ast.KindColonToken),
-					f.NewBinaryExpression(nil, temp, ast.Node{}, f.NewToken(ast.KindPlusToken), f.NewStringLiteral("", ast.TokenFlagsNone)),
+					f.NewBinaryExpression(ast.ModifierList{}, temp, ast.Node{}, f.NewToken(ast.KindPlusToken), f.NewStringLiteral("", ast.TokenFlagsNone)),
 				))
 			} else {
 				propertyNames = append(propertyNames, f.NewStringLiteralFromNode(propertyName))
@@ -857,7 +857,7 @@ func (f *NodeFactory) NewRestHelper(value ast.Expression, elements []ast.Node, c
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__rest"),
 		ast.Node{},
-		nil,
+		ast.TypeList{},
 		f.NewNodeList([]ast.Node{
 			value,
 			propNames,
@@ -873,8 +873,8 @@ func (f *NodeFactory) NewAwaitHelper(expression ast.Expression) ast.Expression {
 	f.emitContext.RequestEmitHelper(awaitHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__await"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{expression}),
 		ast.NodeFlagsNone,
 	)
@@ -900,8 +900,8 @@ func (f *NodeFactory) NewAsyncGeneratorHelper(
 
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__asyncGenerator"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{
 			thisArg,
 			f.NewIdentifier("arguments"),
@@ -917,8 +917,8 @@ func (f *NodeFactory) NewAsyncDelegatorHelper(expression ast.Expression) ast.Exp
 	f.emitContext.RequestEmitHelper(asyncDelegatorHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__asyncDelegator"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{expression}),
 		ast.NodeFlagsNone,
 	)
@@ -929,8 +929,8 @@ func (f *NodeFactory) NewAsyncValuesHelper(expression ast.Expression) ast.Expres
 	f.emitContext.RequestEmitHelper(asyncValuesHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__asyncValues"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{expression}),
 		ast.NodeFlagsNone,
 	)
@@ -942,23 +942,23 @@ func (f *NodeFactory) NewAsyncValuesHelper(expression ast.Expression) ast.Expres
 func (f *NodeFactory) NewAwaiterHelper(
 	hasLexicalThis bool,
 	argumentsExpression ast.Expression,
-	parameters *ast.NodeList,
+	parameters ast.NodeList,
 	body ast.BlockNode,
 ) ast.Expression {
 	f.emitContext.RequestEmitHelper(awaiterHelper)
 
-	var params *ast.NodeList
-	if parameters != nil {
+	var params ast.NodeList
+	if !parameters.IsNil() {
 		params = parameters
 	} else {
 		params = f.NewNodeList([]ast.Node{})
 	}
 
 	generatorFunc := f.NewFunctionExpression(
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		f.NewToken(ast.KindAsteriskToken),
-		ast.Node{}, /*name*/
-		nil,        /*typeParameters*/
+		ast.Node{},              /*name*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		params,
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -984,8 +984,8 @@ func (f *NodeFactory) NewAwaiterHelper(
 
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__awaiter"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{
 			thisArg,
 			argsArg,
@@ -1000,9 +1000,9 @@ func (f *NodeFactory) NewAwaiterHelper(
 
 func (f *NodeFactory) NewESDecorateClassContextObject(nameExpr ast.Expression, metadata ast.IdentifierNode) ast.Expression {
 	props := []ast.Node{
-		f.NewPropertyAssignment(nil, f.NewIdentifier("kind"), ast.Node{}, ast.Node{}, f.NewStringLiteral("class", 0)),
-		f.NewPropertyAssignment(nil, f.NewIdentifier("name"), ast.Node{}, ast.Node{}, nameExpr),
-		f.NewPropertyAssignment(nil, f.NewIdentifier("metadata"), ast.Node{}, ast.Node{}, metadata),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("kind"), ast.Node{}, ast.Node{}, f.NewStringLiteral("class", 0)),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("name"), ast.Node{}, ast.Node{}, nameExpr),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("metadata"), ast.Node{}, ast.Node{}, metadata),
 	}
 	return f.NewObjectLiteralExpression(f.NewNodeList(props), false)
 }
@@ -1018,17 +1018,17 @@ func (f *NodeFactory) NewESDecorateClassElementAccessGetMethod(
 		accessor = f.NewPropertyAccessExpression(f.NewIdentifier("obj"), ast.Node{}, nameExpr, ast.NodeFlagsNone)
 	}
 
-	objParam := f.NewParameterDeclaration(nil, ast.Node{}, f.NewIdentifier("obj"), ast.Node{}, ast.Node{}, ast.Node{})
+	objParam := f.NewParameterDeclaration(ast.ModifierList{}, ast.Node{}, f.NewIdentifier("obj"), ast.Node{}, ast.Node{}, ast.Node{})
 
 	arrow := f.NewArrowFunction(
-		nil, nil,
+		ast.ModifierList{}, ast.TypeParameterList{},
 		f.NewNodeList([]ast.Node{objParam}),
 		ast.Node{}, ast.Node{},
 		f.NewToken(ast.KindEqualsGreaterThanToken),
 		accessor,
 	)
 
-	return f.NewPropertyAssignment(nil, f.NewIdentifier("get"), ast.Node{}, ast.Node{}, arrow)
+	return f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("get"), ast.Node{}, ast.Node{}, arrow)
 }
 
 func (f *NodeFactory) NewESDecorateClassElementAccessSetMethod(
@@ -1046,18 +1046,18 @@ func (f *NodeFactory) NewESDecorateClassElementAccessSetMethod(
 	stmt := f.NewExpressionStatement(assignment)
 	body := f.NewBlock(f.NewNodeList([]ast.Node{stmt}), false)
 
-	objParam := f.NewParameterDeclaration(nil, ast.Node{}, f.NewIdentifier("obj"), ast.Node{}, ast.Node{}, ast.Node{})
-	valueParam := f.NewParameterDeclaration(nil, ast.Node{}, f.NewIdentifier("value"), ast.Node{}, ast.Node{}, ast.Node{})
+	objParam := f.NewParameterDeclaration(ast.ModifierList{}, ast.Node{}, f.NewIdentifier("obj"), ast.Node{}, ast.Node{}, ast.Node{})
+	valueParam := f.NewParameterDeclaration(ast.ModifierList{}, ast.Node{}, f.NewIdentifier("value"), ast.Node{}, ast.Node{}, ast.Node{})
 
 	arrow := f.NewArrowFunction(
-		nil, nil,
+		ast.ModifierList{}, ast.TypeParameterList{},
 		f.NewNodeList([]ast.Node{objParam, valueParam}),
 		ast.Node{}, ast.Node{},
 		f.NewToken(ast.KindEqualsGreaterThanToken),
 		body,
 	)
 
-	return f.NewPropertyAssignment(nil, f.NewIdentifier("set"), ast.Node{}, ast.Node{}, arrow)
+	return f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("set"), ast.Node{}, ast.Node{}, arrow)
 }
 
 func (f *NodeFactory) NewESDecorateClassElementAccessHasMethod(
@@ -1072,18 +1072,18 @@ func (f *NodeFactory) NewESDecorateClassElementAccessHasMethod(
 		propertyName = nameExpr
 	}
 
-	objParam := f.NewParameterDeclaration(nil, ast.Node{}, f.NewIdentifier("obj"), ast.Node{}, ast.Node{}, ast.Node{})
-	inExpr := f.NewBinaryExpression(nil, propertyName, ast.Node{}, f.NewToken(ast.KindInKeyword), f.NewIdentifier("obj"))
+	objParam := f.NewParameterDeclaration(ast.ModifierList{}, ast.Node{}, f.NewIdentifier("obj"), ast.Node{}, ast.Node{}, ast.Node{})
+	inExpr := f.NewBinaryExpression(ast.ModifierList{}, propertyName, ast.Node{}, f.NewToken(ast.KindInKeyword), f.NewIdentifier("obj"))
 
 	arrow := f.NewArrowFunction(
-		nil, nil,
+		ast.ModifierList{}, ast.TypeParameterList{},
 		f.NewNodeList([]ast.Node{objParam}),
 		ast.Node{}, ast.Node{},
 		f.NewToken(ast.KindEqualsGreaterThanToken),
 		inExpr,
 	)
 
-	return f.NewPropertyAssignment(nil, f.NewIdentifier("has"), ast.Node{}, ast.Node{}, arrow)
+	return f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("has"), ast.Node{}, ast.Node{}, arrow)
 }
 
 // Creates the "access" object for a class element decorator context.
@@ -1156,12 +1156,12 @@ func (f *NodeFactory) NewESDecorateClassElementContextObject(
 	}
 
 	props := []ast.Node{
-		f.NewPropertyAssignment(nil, f.NewIdentifier("kind"), ast.Node{}, ast.Node{}, f.NewStringLiteral(kind, 0)),
-		f.NewPropertyAssignment(nil, f.NewIdentifier("name"), ast.Node{}, ast.Node{}, nameValue),
-		f.NewPropertyAssignment(nil, f.NewIdentifier("static"), ast.Node{}, ast.Node{}, staticExpr),
-		f.NewPropertyAssignment(nil, f.NewIdentifier("private"), ast.Node{}, ast.Node{}, privateExpr),
-		f.NewPropertyAssignment(nil, f.NewIdentifier("access"), ast.Node{}, ast.Node{}, accessObj),
-		f.NewPropertyAssignment(nil, f.NewIdentifier("metadata"), ast.Node{}, ast.Node{}, metadata),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("kind"), ast.Node{}, ast.Node{}, f.NewStringLiteral(kind, 0)),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("name"), ast.Node{}, ast.Node{}, nameValue),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("static"), ast.Node{}, ast.Node{}, staticExpr),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("private"), ast.Node{}, ast.Node{}, privateExpr),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("access"), ast.Node{}, ast.Node{}, accessObj),
+		f.NewPropertyAssignment(ast.ModifierList{}, f.NewIdentifier("metadata"), ast.Node{}, ast.Node{}, metadata),
 	}
 	return f.NewObjectLiteralExpression(f.NewNodeList(props), false)
 }
@@ -1170,8 +1170,8 @@ func (f *NodeFactory) NewESDecorateHelper(ctor ast.Expression, descriptorIn ast.
 	f.emitContext.RequestEmitHelper(esDecorateHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__esDecorate"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers}),
 		ast.NodeFlagsNone,
 	)
@@ -1187,8 +1187,8 @@ func (f *NodeFactory) NewRunInitializersHelper(thisArg ast.Expression, initializ
 	}
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__runInitializers"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList(arguments),
 		ast.NodeFlagsNone,
 	)
@@ -1200,8 +1200,8 @@ func (f *NodeFactory) NewTemplateObjectHelper(cookedArray ast.Expression, rawArr
 	f.emitContext.RequestEmitHelper(makeTemplateObjectHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__makeTemplateObject"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{cookedArray, rawArray}),
 		ast.NodeFlagsNone,
 	)
@@ -1211,8 +1211,8 @@ func (f *NodeFactory) NewPropKeyHelper(expr ast.Expression) ast.Expression {
 	f.emitContext.RequestEmitHelper(propKeyHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__propKey"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{expr}),
 		ast.NodeFlagsNone,
 	)
@@ -1228,8 +1228,8 @@ func (f *NodeFactory) NewSetFunctionNameHelper(fn ast.Expression, name ast.Expre
 	}
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__setFunctionName"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList(arguments),
 		ast.NodeFlagsNone,
 	)
@@ -1242,8 +1242,8 @@ func (f *NodeFactory) NewImportDefaultHelper(expression ast.Expression) ast.Expr
 	f.emitContext.RequestEmitHelper(importDefaultHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__importDefault"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{expression}),
 		ast.NodeFlagsNone,
 	)
@@ -1254,8 +1254,8 @@ func (f *NodeFactory) NewImportStarHelper(expression ast.Expression) ast.Express
 	f.emitContext.RequestEmitHelper(importStarHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__importStar"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{expression}),
 		ast.NodeFlagsNone,
 	)
@@ -1266,8 +1266,8 @@ func (f *NodeFactory) NewExportStarHelper(moduleExpression ast.Expression, expor
 	f.emitContext.RequestEmitHelper(exportStarHelper)
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__exportStar"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList([]ast.Expression{moduleExpression, exportsExpression}),
 		ast.NodeFlagsNone,
 	)
@@ -1275,11 +1275,11 @@ func (f *NodeFactory) NewExportStarHelper(moduleExpression ast.Expression, expor
 
 func (f *NodeFactory) NewAssignmentTargetWrapper(paramName ast.IdentifierNode, expression ast.Expression) ast.Node {
 	setAccessor := f.NewSetAccessorDeclaration(
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		f.NewIdentifier("value"),
-		nil, /*typeParameters*/
+		ast.TypeParameterList{}, /*typeParameters*/
 		f.NewNodeList([]ast.Node{
-			f.NewParameterDeclaration(nil, ast.Node{}, paramName, ast.Node{}, ast.Node{}, ast.Node{}),
+			f.NewParameterDeclaration(ast.ModifierList{}, ast.Node{}, paramName, ast.Node{}, ast.Node{}, ast.Node{}),
 		}),
 		ast.Node{}, /*returnType*/
 		ast.Node{}, /*fullSignature*/
@@ -1310,7 +1310,7 @@ func (f *NodeFactory) NewRewriteRelativeImportExtensionsHelper(firstArgument ast
 		return f.NewCallExpression(
 			f.NewUnscopedHelperName("__rewriteRelativeImportExtension"),
 			ast.Node{},
-			nil,
+			ast.TypeList{},
 			f.NewNodeList(arguments),
 			ast.NodeFlagsNone,
 		)
@@ -1321,7 +1321,7 @@ func (f *NodeFactory) NewRewriteRelativeImportExtensionsHelper(firstArgument ast
 	properties := make([]ast.Node, 0, len(extraExtensions))
 	for _, extension := range extraExtensions {
 		properties = append(properties, f.NewPropertyAssignment(
-			nil,
+			ast.ModifierList{},
 			f.NewStringLiteral(extension.Source, ast.TokenFlagsNone),
 			ast.Node{},
 			ast.Node{},
@@ -1334,8 +1334,8 @@ func (f *NodeFactory) NewRewriteRelativeImportExtensionsHelper(firstArgument ast
 	}
 	return f.NewCallExpression(
 		f.NewUnscopedHelperName("__rewriteRelativeImportExtension"),
-		ast.Node{}, /*questionDotToken*/
-		nil,        /*typeArguments*/
+		ast.Node{},     /*questionDotToken*/
+		ast.TypeList{}, /*typeArguments*/
 		f.NewNodeList(arguments),
 		ast.NodeFlagsNone,
 	)

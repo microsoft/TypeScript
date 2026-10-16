@@ -232,7 +232,7 @@ func getCommentOwnerInfoWorker(commentOwner ast.Node, generateReturnInDocTemplat
 		}
 		return &commentOwnerInfo{commentOwner: commentOwner}, false
 	case ast.KindVariableStatement:
-		declarations := commentOwner.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes()
+		declarations := commentOwner.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Slice()
 		if len(declarations) == 1 {
 			if initializer := declarations[0].AsVariableDeclaration().Initializer(); !initializer.IsNil() {
 				if host := getRightHandSideOfAssignment(initializer); !host.IsNil() {
@@ -351,7 +351,7 @@ func isNonEmptyJSDoc(jsdoc ast.Node) bool {
 		return false
 	}
 	data := jsdoc.AsJSDoc()
-	return data.Comment() != nil && len(data.Comment().Nodes()) > 0 || data.Tags() != nil && len(data.Tags().Nodes()) > 0
+	return !data.Comment().IsNil() && data.Comment().Len() > 0 || !data.Tags().IsNil() && data.Tags().Len() > 0
 }
 
 func hasJSDocTags(node ast.Node, file *ast.SourceFile) bool {
@@ -360,7 +360,7 @@ func hasJSDocTags(node ast.Node, file *ast.SourceFile) bool {
 		return false
 	}
 	tags := jsdocs[len(jsdocs)-1].AsJSDoc().Tags()
-	return tags != nil && len(tags.Nodes()) > 0
+	return !tags.IsNil() && tags.Len() > 0
 }
 
 func templateToSnippet(template string, newLine string) string {

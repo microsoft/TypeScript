@@ -312,8 +312,8 @@ func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapp
 	if jsdoc := getJSDocOrTag(c, declaration, &collections.Set[*ast.Symbol]{}); !jsdoc.IsNil() && !(declaration.Flags()&ast.NodeFlagsReparsed == 0 && containsTypedefTag(jsdoc)) {
 		writeComments(getMappedLocation, &b, c, jsdoc.Comments(), isMarkdown)
 		if jsdoc.Kind() == ast.KindJSDoc && !commentOnly {
-			if tags := jsdoc.AsJSDoc().Tags(); tags != nil {
-				for _, tag := range tags.Nodes() {
+			if tags := jsdoc.AsJSDoc().Tags(); !tags.IsNil() {
+				for _, tag := range tags.All() {
 					if tag.Kind() == ast.KindJSDocTypeTag || tag.Kind() == ast.KindJSDocTypedefTag || tag.Kind() == ast.KindJSDocCallbackTag {
 						continue
 					}
@@ -332,7 +332,7 @@ func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapp
 					case ast.KindJSDocAugmentsTag:
 						writeOptionalEntityName(&b, tag.ClassName())
 					case ast.KindJSDocTemplateTag:
-						for i, tp := range tag.TypeParameters() {
+						for i, tp := range tag.TypeParameterList().All() {
 							if i != 0 {
 								b.WriteString(",")
 							}
@@ -1017,8 +1017,8 @@ func getCallOrNewExpression(node ast.Node) ast.Node {
 
 func containsTypedefTag(jsdoc ast.Node) bool {
 	if jsdoc.Kind() == ast.KindJSDoc {
-		if tags := jsdoc.AsJSDoc().Tags(); tags != nil {
-			for _, tag := range tags.Nodes() {
+		if tags := jsdoc.AsJSDoc().Tags(); !tags.IsNil() {
+			for _, tag := range tags.All() {
 				if tag.Kind() == ast.KindJSDocTypedefTag || tag.Kind() == ast.KindJSDocCallbackTag {
 					return true
 				}

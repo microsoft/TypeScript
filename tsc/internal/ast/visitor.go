@@ -16,13 +16,13 @@ type NodeVisitor struct {
 type NodeVisitorHooks struct {
 	VisitNode               func(node Node, v *NodeVisitor) Node                           // Overrides visiting a Node. Only invoked by the VisitEachChild method on a given Node subtype.
 	VisitToken              func(node TokenNode, v *NodeVisitor) Node                      // Overrides visiting a TokenNode. Only invoked by the VisitEachChild method on a given Node subtype.
-	VisitNodes              func(nodes *NodeList, v *NodeVisitor) *NodeList                // Overrides visiting a NodeList. Only invoked by the VisitEachChild method on a given Node subtype.
-	VisitModifiers          func(nodes *ModifierList, v *NodeVisitor) *ModifierList        // Overrides visiting a ModifierList. Only invoked by the VisitEachChild method on a given Node subtype.
+	VisitNodes              func(nodes NodeList, v *NodeVisitor) NodeList                  // Overrides visiting a NodeList. Only invoked by the VisitEachChild method on a given Node subtype.
+	VisitModifiers          func(nodes ModifierList, v *NodeVisitor) ModifierList          // Overrides visiting a ModifierList. Only invoked by the VisitEachChild method on a given Node subtype.
 	VisitEmbeddedStatement  func(node Statement, v *NodeVisitor) Statement                 // Overrides visiting a Node when it is the embedded statement body of an iteration statement, `if` statement, or `with` statement. Only invoked by the VisitEachChild method on a given Node subtype.
 	VisitIterationBody      func(node Statement, v *NodeVisitor) Statement                 // Overrides visiting a Node when it is the embedded statement body of an iteration statement. Only invoked by the VisitEachChild method on a given Node subtype.
-	VisitParameters         func(nodes *ParameterList, v *NodeVisitor) *ParameterList      // Overrides visiting a ParameterList. Only invoked by the VisitEachChild method on a given Node subtype.
+	VisitParameters         func(nodes ParameterList, v *NodeVisitor) ParameterList        // Overrides visiting a ParameterList. Only invoked by the VisitEachChild method on a given Node subtype.
 	VisitFunctionBody       func(node BlockOrExpression, v *NodeVisitor) BlockOrExpression // Overrides visiting a function body. Only invoked by the VisitEachChild method on a given Node subtype.
-	VisitTopLevelStatements func(nodes *StatementList, v *NodeVisitor) *StatementList      // Overrides visiting a variable environment. Only invoked by the VisitEachChild method on a given Node subtype.
+	VisitTopLevelStatements func(nodes StatementList, v *NodeVisitor) StatementList        // Overrides visiting a variable environment. Only invoked by the VisitEachChild method on a given Node subtype.
 }
 
 func NewNodeVisitor(visit func(node Node) Node, factory *NodeFactory, hooks NodeVisitorHooks) *NodeVisitor {
@@ -91,12 +91,12 @@ func (v *NodeVisitor) VisitEmbeddedStatement(node Statement) Statement {
 //   - If v.Visit returns a different Node than the input, a new NodeList will be generated and returned.
 //   - If v.Visit returns a SyntaxList Node, then the children of that node will be merged into the output and a new NodeList will be returned.
 //   - If this method returns a new NodeList for any reason, it will have the same Loc as the input NodeList.
-func (v *NodeVisitor) VisitNodes(nodes *NodeList) *NodeList {
-	if nodes == nil || v.Visit == nil {
+func (v *NodeVisitor) VisitNodes(nodes NodeList) NodeList {
+	if nodes.IsNil() || v.Visit == nil {
 		return nodes
 	}
 
-	if result, changed := v.VisitSlice(nodes.Nodes()); changed {
+	if result, changed := v.VisitSlice(nodes.Slice()); changed {
 		list := v.Factory.NewNodeList(result)
 		list.SetLoc(nodes.Loc())
 		return list
@@ -113,12 +113,12 @@ func (v *NodeVisitor) VisitNodes(nodes *NodeList) *NodeList {
 //   - If v.Visit returns a different Node than the input, a new ModifierList will be generated and returned.
 //   - If v.Visit returns a SyntaxList Node, then the children of that node will be merged into the output and a new NodeList will be returned.
 //   - If this method returns a new NodeList for any reason, it will have the same Loc as the input NodeList.
-func (v *NodeVisitor) VisitModifiers(nodes *ModifierList) *ModifierList {
-	if nodes == nil || v.Visit == nil {
+func (v *NodeVisitor) VisitModifiers(nodes ModifierList) ModifierList {
+	if nodes.IsNil() || v.Visit == nil {
 		return nodes
 	}
 
-	if result, changed := v.VisitSlice(nodes.Nodes()); changed {
+	if result, changed := v.VisitSlice(nodes.Slice()); changed {
 		list := v.Factory.NewModifierList(result)
 		list.SetLoc(nodes.Loc())
 		return list
@@ -229,28 +229,28 @@ func (v *NodeVisitor) visitToken(node Node) Node {
 	return v.VisitNode(node)
 }
 
-func (v *NodeVisitor) visitNodes(nodes *NodeList) *NodeList {
+func (v *NodeVisitor) visitNodes(nodes NodeList) NodeList {
 	if v.Hooks.VisitNodes != nil {
 		return v.Hooks.VisitNodes(nodes, v)
 	}
 	return v.VisitNodes(nodes)
 }
 
-func (v *NodeVisitor) visitModifiers(nodes *ModifierList) *ModifierList {
+func (v *NodeVisitor) visitModifiers(nodes ModifierList) ModifierList {
 	if v.Hooks.VisitModifiers != nil {
 		return v.Hooks.VisitModifiers(nodes, v)
 	}
 	return v.VisitModifiers(nodes)
 }
 
-func (v *NodeVisitor) visitParameters(nodes *ParameterList) *ParameterList {
+func (v *NodeVisitor) visitParameters(nodes ParameterList) ParameterList {
 	if v.Hooks.VisitParameters != nil {
 		return v.Hooks.VisitParameters(nodes, v)
 	}
 	return v.visitNodes(nodes)
 }
 
-func (v *NodeVisitor) visitTopLevelStatements(nodes *StatementList) *StatementList {
+func (v *NodeVisitor) visitTopLevelStatements(nodes StatementList) StatementList {
 	if v.Hooks.VisitTopLevelStatements != nil {
 		return v.Hooks.VisitTopLevelStatements(nodes, v)
 	}

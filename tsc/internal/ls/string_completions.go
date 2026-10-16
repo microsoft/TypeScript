@@ -361,7 +361,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		//      export * from "/*completion position*/";
 		return l.getStringLiteralCompletionsFromModuleNames(file, node, l.GetProgram(), typeChecker)
 	case ast.KindCaseClause:
-		tracker := newCaseClauseTracker(typeChecker, parent.Parent().AsCaseBlock().Clauses().Nodes())
+		tracker := newCaseClauseTracker(typeChecker, parent.Parent().AsCaseBlock().Clauses().Slice())
 		contextualTypes := fromContextualType(checker.ContextFlagsIgnoreNodeInferences, node, typeChecker)
 		if contextualTypes == nil {
 			return nil
@@ -1944,11 +1944,11 @@ func getStringLiteralTypes(t *checker.Type, uniques *collections.Set[string], ty
 
 func getAlreadyUsedTypesInStringLiteralUnion(union ast.UnionTypeNodeNode, current ast.LiteralTypeNodeNode) []string {
 	typesList := union.AsUnionTypeNode().Types()
-	if typesList == nil {
+	if typesList.IsNil() {
 		return nil
 	}
 	var values []string
-	for _, typeNode := range typesList.Nodes() {
+	for _, typeNode := range typesList.All() {
 		if typeNode != current && ast.IsLiteralTypeNode(typeNode) &&
 			ast.IsStringLiteral(typeNode.AsLiteralTypeNode().Literal()) {
 			values = append(values, typeNode.AsLiteralTypeNode().Literal().Text())
@@ -1966,7 +1966,7 @@ func hasIndexSignature(t *checker.Type, typeChecker *checker.Checker) bool {
 //	require(""
 //	require("")
 func isRequireCallArgument(node ast.Node) bool {
-	return ast.IsCallExpression(node.Parent()) && len(node.Parent().Arguments()) > 0 && node.Parent().Arguments()[0] == node &&
+	return ast.IsCallExpression(node.Parent()) && node.Parent().ArgumentList().Len() > 0 && node.Parent().ArgumentList().At(0) == node &&
 		ast.IsIdentifier(node.Parent().Expression()) && node.Parent().Expression().Text() == "require"
 }
 

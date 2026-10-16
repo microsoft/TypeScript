@@ -375,21 +375,21 @@ func (t *Tracker) finishDeleteDeclarations() {
 	for node := range deletedNodesInLists {
 		sourceFile := ast.GetSourceFileOfNode(node)
 		list := format.GetContainingList(node, sourceFile)
-		if list == nil || node != list.Nodes()[len(list.Nodes())-1] {
+		if list.IsNil() || node != list.At(list.Len()-1) {
 			continue
 		}
 
 		lastNonDeletedIndex := -1
-		for i := len(list.Nodes()) - 2; i >= 0; i-- {
-			if !deletedNodesInLists[list.Nodes()[i]] {
+		for i := list.Len() - 2; i >= 0; i-- {
+			if !deletedNodesInLists[list.At(i)] {
 				lastNonDeletedIndex = i
 				break
 			}
 		}
 
 		if lastNonDeletedIndex != -1 {
-			start := list.Nodes()[lastNonDeletedIndex].End()
-			end := t.startPositionToDeleteNodeInList(sourceFile, list.Nodes()[lastNonDeletedIndex+1])
+			start := list.At(lastNonDeletedIndex).End()
+			end := t.startPositionToDeleteNodeInList(sourceFile, list.At(lastNonDeletedIndex+1))
 			t.ReplaceTextRangeWithText(sourceFile, core.NewTextRange(start, end), "")
 		}
 	}
@@ -418,20 +418,20 @@ func (t *Tracker) endPosForInsertNodeAfter(sourceFile *ast.SourceFile, after ast
 * i.e. arguments in arguments lists, parameters in parameter lists etc.
 * Note that separators are part of the node in statements and class elements.
  */
-func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after ast.Node, newNode ast.Node, containingList *ast.NodeList) {
-	if containingList == nil {
+func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after ast.Node, newNode ast.Node, containingList ast.NodeList) {
+	if containingList.IsNil() {
 		containingList = format.GetContainingList(after, sourceFile)
 	}
-	if containingList == nil {
+	if containingList.IsNil() {
 		// Debug.fail("node is not a list element")
 		return
 	}
-	index := slices.Index(containingList.Nodes(), after)
+	index := slices.Index(containingList.Slice(), after)
 	if index < 0 {
 		return
 	}
 	end := after.End()
-	if index != len(containingList.Nodes())-1 {
+	if index != containingList.Len()-1 {
 		// any element except the last one
 		// use next sibling as an anchor
 		if nextToken := astnav.GetTokenAtPosition(sourceFile, after.End()); !nextToken.IsNil() && isSeparator(after, nextToken) {
@@ -451,7 +451,7 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after ast.No
 			//   insertedtext<separator>#
 			// ###b,
 			//   c,
-			nextNode := containingList.Nodes()[index+1]
+			nextNode := containingList.At(index + 1)
 			startPos := scanner.SkipTriviaEx(sourceFile.Text(), nextNode.Pos(), &scanner.SkipTriviaOptions{StopAfterLineBreak: false, StopAtComments: true})
 
 			// write separator and leading trivia of the next element as suffix
@@ -474,12 +474,12 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after ast.No
 	// i.e. var x = 1 // this is x
 	//     | new element will be inserted at this position
 	separator := ast.KindCommaToken // SyntaxKind.CommaToken | SyntaxKind.SemicolonToken
-	if len(containingList.Nodes()) != 1 {
+	if containingList.Len() != 1 {
 		// otherwise, if list has more than one element, pick separator from the list
 		tokenBeforeInsertPosition := astnav.FindPrecedingToken(sourceFile, after.Pos())
 		separator = core.IfElse(isSeparator(after, tokenBeforeInsertPosition), tokenBeforeInsertPosition.Kind(), ast.KindCommaToken)
 		// determine if list is multiline by checking lines of after element and element that precedes it.
-		afterMinusOneStartLinePosition := format.GetLineStartPositionForPosition(astnav.GetStartOfNode(containingList.Nodes()[index-1], sourceFile, false), sourceFile)
+		afterMinusOneStartLinePosition := format.GetLineStartPositionForPosition(astnav.GetStartOfNode(containingList.At(index-1), sourceFile, false), sourceFile)
 		multilineList = afterMinusOneStartLinePosition != afterStartLinePosition
 	}
 	if hasCommentsBeforeLineBreak(sourceFile.Text(), after.End()) || !positionsAreOnSameLine(containingList.Pos(), containingList.End(), sourceFile) {
@@ -522,14 +522,14 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after ast.No
 // InsertImportSpecifierAtIndex inserts a new import specifier at the specified index in a NamedImports list
 func (t *Tracker) InsertImportSpecifierAtIndex(sourceFile *ast.SourceFile, newSpecifier ast.Node, namedImports ast.Node, index int) {
 	namedImportsNode := namedImports.AsNamedImports()
-	elements := namedImportsNode.Elements().Nodes()
+	elements := namedImportsNode.Elements().Slice()
 
 	var prevSpecifier ast.Node
 	if index > 0 && index-1 < len(elements) {
 		prevSpecifier = elements[index-1]
 	}
 	if !prevSpecifier.IsNil() {
-		t.InsertNodeInListAfter(sourceFile, prevSpecifier, newSpecifier, nil)
+		t.InsertNodeInListAfter(sourceFile, prevSpecifier, newSpecifier, ast.NodeList{})
 	} else {
 		t.InsertNodeBefore(
 			sourceFile,
@@ -591,7 +591,7 @@ func (t *Tracker) insertNodeAtStartWorker(sourceFile *ast.SourceFile, node ast.N
 	}
 
 	members := getMembersOrProperties(node)
-	if members == nil {
+	if members.IsNil() {
 		return
 	}
 
@@ -616,7 +616,7 @@ func (t *Tracker) tryComputeIndentationForNewMember(sourceFile *ast.SourceFile, 
 
 func (t *Tracker) tryComputeIndentationFromExistingMembers(sourceFile *ast.SourceFile, node ast.Node) int {
 	members := getMembersOrProperties(node)
-	if members == nil {
+	if members.IsNil() {
 		return -1
 	}
 
@@ -629,7 +629,7 @@ func (t *Tracker) tryComputeIndentationFromExistingMembers(sourceFile *ast.Sourc
 		tabSize = 4
 	}
 
-	for _, member := range members.Nodes() {
+	for _, member := range members.All() {
 		if member.IsNil() {
 			continue
 		}
@@ -736,7 +736,7 @@ func (t *Tracker) getInsertNodeAtStartInsertOptions(sourceFile *ast.SourceFile, 
 	isObjectLiteral := ast.IsObjectLiteralExpression(node)
 	isJSON := ast.IsJsonSourceFile(sourceFile)
 
-	hasMembers := members != nil && len(members.Nodes()) > 0
+	hasMembers := !members.IsNil() && members.Len() > 0
 
 	insertTrailingComma := isObjectLiteral && (hasMembers || !isJSON)
 	insertLeadingComma := isObjectLiteral && isJSON && !hasMembers && hasPreviousInsertion
@@ -773,7 +773,7 @@ func (t *Tracker) finishNodesWithInsertionsAtStart() {
 		}
 
 		members := getMembersOrProperties(state.node)
-		isEmpty := members == nil || len(members.Nodes()) == 0
+		isEmpty := members.IsNil() || members.Len() == 0
 		isSingleLine := positionsAreOnSameLine(openBrace.End(), closeBrace.End(), state.sourceFile)
 
 		if isEmpty && isSingleLine && openBrace.End() != closeBrace.End()-1 {
@@ -786,7 +786,7 @@ func (t *Tracker) finishNodesWithInsertionsAtStart() {
 	}
 }
 
-func getMembersOrProperties(node ast.Node) *ast.NodeList {
+func getMembersOrProperties(node ast.Node) ast.NodeList {
 	if ast.IsObjectLiteralExpression(node) {
 		return node.PropertyList()
 	}

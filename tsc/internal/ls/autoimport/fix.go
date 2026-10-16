@@ -287,7 +287,7 @@ func addToExistingImport(
 				}
 			} else if len(existingSpecifiers) > 0 {
 				for _, spec := range newSpecifiers {
-					ct.InsertNodeInListAfter(file, existingSpecifiers[len(existingSpecifiers)-1], spec.AsNode(), nil)
+					ct.InsertNodeInListAfter(file, existingSpecifiers[len(existingSpecifiers)-1], spec.AsNode(), ast.NodeList{})
 				}
 			} else {
 				if len(newSpecifiers) > 0 {
@@ -343,8 +343,8 @@ func addElementToBindingPattern(
 	propertyName string,
 ) {
 	element := ct.NodeFactory.NewBindingElement(ast.Node{}, ast.Node{}, ct.NodeFactory.NewIdentifier(name), core.IfElse(propertyName == "", ast.Node{}, ct.NodeFactory.NewIdentifier(propertyName)))
-	if len(bindingPattern.Elements().Nodes()) > 0 {
-		ct.InsertNodeInListAfter(file, bindingPattern.Elements().Nodes()[len(bindingPattern.Elements().Nodes())-1], element, bindingPattern.Elements())
+	if bindingPattern.Elements().Len() > 0 {
+		ct.InsertNodeInListAfter(file, bindingPattern.Elements().At(bindingPattern.Elements().Len()-1), element, bindingPattern.Elements())
 	} else {
 		ct.ReplaceNode(file, bindingPattern.AsNode(), ct.NodeFactory.NewBindingPattern(ast.KindObjectBindingPattern, ct.AsNodeFactory().NewNodeList([]ast.Node{element})), nil)
 	}
@@ -394,14 +394,14 @@ func getNewImports(
 		var declaration ast.Statement
 		if namespaceLikeImport.kind == lsproto.ImportKindCommonJS {
 			declaration = ct.NodeFactory.NewImportEqualsDeclaration(
-				/*modifiers*/ nil,
+				/*modifiers*/ ast.ModifierList{},
 				shouldUseTypeOnly(namespaceLikeImport.addAsTypeOnly, preferences),
 				ct.NodeFactory.NewIdentifier(namespaceLikeImport.name),
 				ct.NodeFactory.NewExternalModuleReference(moduleSpecifierStringLiteral),
 			)
 		} else {
 			declaration = ct.NodeFactory.NewImportDeclaration(
-				/*modifiers*/ nil,
+				/*modifiers*/ ast.ModifierList{},
 				ct.NodeFactory.NewImportClause(
 					/*phaseModifier*/ core.IfElse(shouldUseTypeOnly(namespaceLikeImport.addAsTypeOnly, preferences), ast.KindTypeKeyword, ast.KindUnknown),
 					/*name*/ ast.Node{},
@@ -486,7 +486,7 @@ func getNewRequires(
 
 func createConstEqualsRequireDeclaration(changeTracker *change.Tracker, name ast.Node, quotedModuleSpecifier ast.Node) ast.Statement {
 	return changeTracker.NodeFactory.NewVariableStatement(
-		/*modifiers*/ nil,
+		/*modifiers*/ ast.ModifierList{},
 		changeTracker.NodeFactory.NewVariableDeclarationList(
 			changeTracker.NodeFactory.NewNodeList([]ast.Node{
 				changeTracker.NodeFactory.NewVariableDeclaration(
@@ -496,7 +496,7 @@ func createConstEqualsRequireDeclaration(changeTracker *change.Tracker, name ast
 					changeTracker.NodeFactory.NewCallExpression(
 						changeTracker.NodeFactory.NewIdentifier("require"),
 						/*questionDotToken*/ ast.Node{},
-						/*typeArguments*/ nil,
+						/*typeArguments*/ ast.TypeList{},
 						changeTracker.NodeFactory.NewNodeList([]ast.Node{quotedModuleSpecifier}),
 						ast.NodeFlagsNone,
 					),
@@ -511,9 +511,9 @@ func insertImports(ct *change.Tracker, sourceFile *ast.SourceFile, imports []ast
 	var existingImportStatements []ast.Statement
 
 	if imports[0].Kind() == ast.KindVariableStatement {
-		existingImportStatements = core.Filter(sourceFile.Statements.Nodes(), ast.IsRequireVariableStatement)
+		existingImportStatements = core.Filter(sourceFile.Statements.Slice(), ast.IsRequireVariableStatement)
 	} else {
-		existingImportStatements = core.Filter(sourceFile.Statements.Nodes(), ast.IsAnyImportSyntax)
+		existingImportStatements = core.Filter(sourceFile.Statements.Slice(), ast.IsAnyImportSyntax)
 	}
 	comparer, isSorted := lsutil.GetOrganizeImportsStringComparerWithDetection(existingImportStatements, preferences)
 	sortedNewImports := slices.Clone(imports)
@@ -530,7 +530,7 @@ func insertImports(ct *change.Tracker, sourceFile *ast.SourceFile, imports []ast
 			if insertionIndex == 0 {
 				// If the first import is top-of-file, insert after the leading comment which is likely the header.
 				leadingTriviaOption := change.LeadingTriviaOptionNone
-				if existingImportStatements[0] == sourceFile.Statements.Nodes()[0] {
+				if existingImportStatements[0] == sourceFile.Statements.At(0) {
 					leadingTriviaOption = change.LeadingTriviaOptionExclude
 				}
 				ct.InsertNodeBefore(sourceFile, existingImportStatements[0].AsNode(), newImport.AsNode(), false /*blankLineBetween*/, leadingTriviaOption)
@@ -555,7 +555,7 @@ func makeImport(ct *change.Tracker, defaultImport ast.IdentifierNode, namedImpor
 	if !defaultImport.IsNil() || !newNamedImports.IsNil() {
 		importClause = ct.NodeFactory.NewImportClause(core.IfElse(isTypeOnly, ast.KindTypeKeyword, ast.KindUnknown), defaultImport, newNamedImports)
 	}
-	return ct.NodeFactory.NewImportDeclaration( /*modifiers*/ nil, importClause, moduleSpecifier, ast.Node{} /*attributes*/)
+	return ct.NodeFactory.NewImportDeclaration( /*modifiers*/ ast.ModifierList{}, importClause, moduleSpecifier, ast.Node{} /*attributes*/)
 }
 
 func (v *View) GetFixes(export *Export, forJSX bool, isValidTypeOnlyUseSite bool, usagePosition *lsproto.Position) []*Fix {
@@ -827,7 +827,7 @@ func getImportKind(importingFile *ast.SourceFile, export *Export, program *compi
 			return lsproto.ImportKindNamed
 		}
 		// !!! cache this?
-		for _, statement := range importingFile.Statements.Nodes() {
+		for _, statement := range importingFile.Statements.All() {
 			// `import foo` parses as an ImportEqualsDeclaration even though it could be an ImportDeclaration
 			if ast.IsImportEqualsDeclaration(statement) && !ast.NodeIsMissing(statement.AsImportEqualsDeclaration().ModuleReference()) {
 				return lsproto.ImportKindCommonJS
@@ -1132,7 +1132,7 @@ func promoteFromTypeOnly(
 		if spec.IsTypeOnly() {
 			if !spec.Parent().IsNil() && spec.Parent().Kind() == ast.KindNamedImports {
 				namedImportsNode := spec.Parent().AsNamedImports()
-				elements := namedImportsNode.Elements().Nodes()
+				elements := namedImportsNode.Elements().Slice()
 				if len(elements) > 1 {
 					// Create a synthetic specifier with isTypeOnly=false to compute sorted position
 					var propertyName ast.Node
@@ -1239,7 +1239,7 @@ func promoteImportClause(
 		namedImports := importClause.NamedBindings()
 		if !namedImports.IsNil() && namedImports.Kind() == ast.KindNamedImports {
 			namedImportsData := namedImports.AsNamedImports()
-			if len(namedImportsData.Elements().Nodes()) > 1 {
+			if namedImportsData.Elements().Len() > 1 {
 				// Check if the list is sorted and if we need to reorder
 				_, isSorted := lsutil.GetNamedImportSpecifierComparerWithDetection(
 					importClause.Parent(),
@@ -1254,7 +1254,7 @@ func promoteImportClause(
 					aliasDeclaration.Kind() == ast.KindImportSpecifier {
 					// Find the index of the alias declaration
 					aliasIndex := -1
-					for i, element := range namedImportsData.Elements().Nodes() {
+					for i, element := range namedImportsData.Elements().All() {
 						if element == aliasDeclaration {
 							aliasIndex = i
 							break
@@ -1270,7 +1270,7 @@ func promoteImportClause(
 				}
 
 				// Add 'type' keyword to all other import specifiers that aren't already type-only
-				for _, element := range namedImportsData.Elements().Nodes() {
+				for _, element := range namedImportsData.Elements().All() {
 					spec := element.AsImportSpecifier()
 					// Skip the specifier being promoted (if aliasDeclaration is an ImportSpecifier)
 					if !aliasDeclaration.IsNil() && aliasDeclaration.Kind() == ast.KindImportSpecifier {

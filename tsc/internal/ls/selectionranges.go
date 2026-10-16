@@ -271,7 +271,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 		// Skip lone variable declarations
 		if !parent.IsNil() && ast.IsVariableDeclaration(node) && ast.IsVariableDeclarationList(parent) {
 			decl := parent.AsVariableDeclarationList()
-			if !decl.IsNil() && len(decl.Declarations().Nodes()) == 1 {
+			if !decl.IsNil() && decl.Declarations().Len() == 1 {
 				return true
 			}
 		}
@@ -367,13 +367,13 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 			return node
 		}
 
-		visitNodes := func(nodes *ast.NodeList, v *ast.NodeVisitor) *ast.NodeList {
-			if nodes != nil && len(nodes.Nodes()) > 0 {
+		visitNodes := func(nodes ast.NodeList, v *ast.NodeVisitor) ast.NodeList {
+			if !nodes.IsNil() && nodes.Len() > 0 {
 				shouldSkipList := !parent.IsNil() && (ast.IsVariableDeclarationList(parent) || ast.IsTemplateExpression(parent))
 
 				if !shouldSkipList {
-					start := astnav.GetStartOfNode(nodes.Nodes()[0], sourceFile, false)
-					end := nodes.Nodes()[len(nodes.Nodes())-1].End()
+					start := astnav.GetStartOfNode(nodes.At(0), sourceFile, false)
+					end := nodes.At(nodes.Len() - 1).End()
 
 					if start <= pos && pos < end {
 						pushSelectionRange(start, end)

@@ -90,8 +90,8 @@ func declarationJSDocTags(node ast.Node) []ast.Node {
 				continue
 			}
 			lastJSDoc := jsdocs[len(jsdocs)-1].AsJSDoc()
-			if lastJSDoc.Tags() != nil {
-				return lastJSDoc.Tags().Nodes()
+			if !lastJSDoc.Tags().IsNil() {
+				return lastJSDoc.Tags().Slice()
 			}
 		}
 	}
@@ -124,8 +124,8 @@ func getJSDocTagText(tag ast.Node) string {
 		if !templateTag.Constraint().IsNil() {
 			b.WriteString(scanner.GetTextOfNode(templateTag.Constraint()))
 		}
-		if templateTag.TypeParameters() != nil {
-			for i, tp := range templateTag.TypeParameters().Nodes() {
+		if !templateTag.TypeParameters().IsNil() {
+			for i, tp := range templateTag.TypeParameters().All() {
 				if i == 0 && b.Len() != 0 {
 					b.WriteString(" ")
 				}
@@ -182,7 +182,7 @@ func getJSDocOrTag(c *checker.Checker, node ast.Node, seenSymbols *collections.S
 		return getMatchingJSDocTag(c, node.Parent(), name.Text(), isMatchingParameterTag, seenSymbols)
 	case ast.IsTypeParameterDeclaration(node):
 		return getMatchingJSDocTag(c, node.Parent(), node.Name().Text(), isMatchingTemplateTag, seenSymbols)
-	case ast.IsVariableDeclaration(node) && ast.IsVariableDeclarationList(node.Parent()) && core.FirstOrNil(node.Parent().AsVariableDeclarationList().Declarations().Nodes()) == node:
+	case ast.IsVariableDeclaration(node) && ast.IsVariableDeclarationList(node.Parent()) && core.FirstOrNil(node.Parent().AsVariableDeclarationList().Declarations().Slice()) == node:
 		return getJSDocOrTag(c, node.Parent().Parent(), seenSymbols)
 	case (ast.IsFunctionExpressionOrArrowFunction(node) || ast.IsClassExpression(node)) &&
 		(ast.IsVariableDeclaration(node.Parent()) || ast.IsPropertyDeclaration(node.Parent()) || ast.IsPropertyAssignment(node.Parent())) && node.Parent().Initializer() == node:
@@ -238,8 +238,8 @@ func getJSDocOrTag(c *checker.Checker, node ast.Node, seenSymbols *collections.S
 
 func getMatchingJSDocTag(c *checker.Checker, node ast.Node, name string, match func(ast.Node, string) bool, seenSymbols *collections.Set[*ast.Symbol]) ast.Node {
 	if jsdoc := getJSDocOrTag(c, node, seenSymbols); !jsdoc.IsNil() && jsdoc.Kind() == ast.KindJSDoc {
-		if tags := jsdoc.AsJSDoc().Tags(); tags != nil {
-			for _, tag := range tags.Nodes() {
+		if tags := jsdoc.AsJSDoc().Tags(); !tags.IsNil() {
+			for _, tag := range tags.All() {
 				if match(tag, name) {
 					return tag
 				}
@@ -278,12 +278,12 @@ func getJSDocParameterTagByPosition(c *checker.Checker, param ast.Node) ast.Node
 
 	// Collect all @param tags in order
 	tags := jsdoc.AsJSDoc().Tags()
-	if tags == nil {
+	if tags.IsNil() {
 		return ast.Node{}
 	}
 
 	paramTagIndex := 0
-	for _, tag := range tags.Nodes() {
+	for _, tag := range tags.All() {
 		if tag.Kind() == ast.KindJSDocParameterTag {
 			if paramTagIndex == paramIndex {
 				return tag

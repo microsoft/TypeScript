@@ -433,7 +433,7 @@ function generateGoGetChildrenPropertyMask(w: CodeWriter) {
                 check = `hasModifiers(n.Modifiers())`;
             }
             else if (ct === "nodeList") {
-                check = `${goFieldAccess(m)} != nil`;
+                check = `!${goFieldAccess(m)}.IsNil()`;
             }
             else if (ct === "rawNodeList") {
                 check = `len(${goFieldAccess(m)}) > 0`;
@@ -892,7 +892,7 @@ function emitSingleChildDecoder(w: CodeWriter, node: NodeType, info: EncoderNode
             }
             else if (ct === "nodeList") {
                 if (hasCommonData) {
-                    w.write("var list *ast.NodeList");
+                    w.write("var list ast.NodeList");
                     w.write("if len(childIndices) > 0 {");
                     w.push();
                     w.write("list = d.nodeListAt(childIndices[0])");
@@ -905,7 +905,7 @@ function emitSingleChildDecoder(w: CodeWriter, node: NodeType, info: EncoderNode
                 }
             }
             else if (ct === "modifierList") {
-                w.write("var mods *ast.ModifierList");
+                w.write("var mods ast.ModifierList");
                 w.write("if len(childIndices) > 0 {");
                 w.push();
                 w.write("mods = d.modifierListAt(childIndices[0])");
@@ -957,12 +957,7 @@ function emitMultiChildDecoder(w: CodeWriter, node: NodeType, info: EncoderNodeI
         else if (ct === "rawNodeList") {
             const nlVar = `${varName}NL`;
             w.write(`${nlVar} := d.nodeListAt(it.nextIf(mask, ${i}))`);
-            w.write(`var ${varName} []ast.Node`);
-            w.write(`if ${nlVar} != nil {`);
-            w.push();
-            w.write(`${varName} = ${nlVar}.Nodes()`);
-            w.pop();
-            w.write("}");
+            w.write(`${varName} := ${nlVar}.Slice()`);
             childVars.set(m, varName);
             continue;
         }

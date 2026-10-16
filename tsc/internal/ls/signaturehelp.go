@@ -954,7 +954,7 @@ func getImmediatelyContainingArgumentInfo(node ast.Node, position int, sourceFil
 		argumentsSpan := info.argumentsSpan
 		isTypeParameterList := false
 		parentTypeArgumentList := parent.TypeArgumentList()
-		if parentTypeArgumentList != nil {
+		if !parentTypeArgumentList.IsNil() {
 			if parentTypeArgumentList.Pos() == list.Pos() {
 				isTypeParameterList = true
 			}
@@ -991,7 +991,7 @@ func getImmediatelyContainingArgumentInfo(node ast.Node, position int, sourceFil
 			return nil
 		}
 
-		spanIndex := ast.IndexOfNode(templateSpan.Parent().AsTemplateExpression().TemplateSpans().Nodes(), templateSpan)
+		spanIndex := ast.IndexOfNode(templateSpan.Parent().AsTemplateExpression().TemplateSpans().Slice(), templateSpan)
 		argumentIndex := getArgumentIndexForTemplatePiece(spanIndex, node, position, sourceFile)
 
 		return getArgumentListInfoForTemplate(tagExpression.AsTaggedTemplateExpression(), argumentIndex, sourceFile)
@@ -1102,11 +1102,11 @@ func getSpreadElementCount(node ast.SpreadElement, c *checker.Checker) int {
 	return 0
 }
 
-func getArgumentIndex(node ast.Node, arguments *ast.NodeList, sourceFile *ast.SourceFile, c *checker.Checker) int {
+func getArgumentIndex(node ast.Node, arguments ast.NodeList, sourceFile *ast.SourceFile, c *checker.Checker) int {
 	return getArgumentIndexOrCount(getTokenFromNodeList(arguments, node.Parent(), sourceFile), node, c)
 }
 
-func getArgumentCount(node ast.Node, arguments *ast.NodeList, sourceFile *ast.SourceFile, c *checker.Checker) int {
+func getArgumentCount(node ast.Node, arguments ast.NodeList, sourceFile *ast.SourceFile, c *checker.Checker) int {
 	return getArgumentIndexOrCount(getTokenFromNodeList(arguments, node.Parent(), sourceFile), ast.Node{}, c)
 }
 
@@ -1153,7 +1153,7 @@ func getArgumentIndexOrCount(arguments []ast.Node, node ast.Node, c *checker.Che
 }
 
 type argumentOrParameterListInfo struct {
-	list          *ast.NodeList
+	list          ast.NodeList
 	argumentIndex int
 	argumentCount int
 	argumentsSpan core.TextRange
@@ -1176,7 +1176,7 @@ func getArgumentOrParameterListInfo(node ast.Node, sourceFile *ast.SourceFile, c
 	}
 }
 
-func getApplicableSpanForArguments(argumentList *ast.NodeList, node ast.Node, sourceFile *ast.SourceFile) core.TextRange {
+func getApplicableSpanForArguments(argumentList ast.NodeList, node ast.Node, sourceFile *ast.SourceFile) core.TextRange {
 	// We use full start and skip trivia on the end because we want to include trivia on
 	// both sides. For example,
 	//
@@ -1185,7 +1185,7 @@ func getApplicableSpanForArguments(argumentList *ast.NodeList, node ast.Node, so
 	//
 	// The applicable span is from the first bar to the second bar (inclusive,
 	// but not including parentheses).
-	if argumentList == nil && !node.IsNil() {
+	if argumentList.IsNil() && !node.IsNil() {
 		// If the user has just opened a list, and there are no arguments.
 		// For example, foo(    )
 		//                  |  |
@@ -1216,7 +1216,7 @@ func ensureMinimumSpanSize(start, end int) int {
 }
 
 type argumentOrParameterListAndIndex struct {
-	list          *ast.NodeList
+	list          ast.NodeList
 	argumentIndex int
 }
 
@@ -1237,7 +1237,7 @@ func getArgumentOrParameterListAndIndex(node ast.Node, sourceFile *ast.SourceFil
 		//   - On the target of the call (parent.func)
 		//   - On the 'new' keyword in a 'new' expression
 		list := findContainingList(node, sourceFile)
-		if list == nil {
+		if list.IsNil() {
 			return nil
 		}
 		return &argumentOrParameterListAndIndex{
@@ -1248,7 +1248,7 @@ func getArgumentOrParameterListAndIndex(node ast.Node, sourceFile *ast.SourceFil
 	}
 }
 
-func getChildListThatStartsWithOpenerToken(parent ast.Node, openerToken ast.Node) *ast.NodeList {
+func getChildListThatStartsWithOpenerToken(parent ast.Node, openerToken ast.Node) ast.NodeList {
 	if ast.IsCallExpression(parent) {
 		parentCallExpression := parent.AsCallExpression()
 		if openerToken.Kind() == ast.KindLessThanToken {
@@ -1262,7 +1262,7 @@ func getChildListThatStartsWithOpenerToken(parent ast.Node, openerToken ast.Node
 		}
 		return parentNewExpression.Arguments()
 	}
-	return nil
+	return ast.NodeList{}
 }
 
 func tryGetParameterInfo(startingToken ast.Node, sourceFile *ast.SourceFile, c *checker.Checker) *argumentListInfo {
@@ -1379,17 +1379,17 @@ func countBinaryExpressionParameters(b ast.BinaryExpression) int {
 	return 2
 }
 
-func getTokenFromNodeList(nodeList *ast.NodeList, nodeListParent ast.Node, sourceFile *ast.SourceFile) []ast.Node {
-	if nodeList == nil || nodeListParent.IsNil() {
+func getTokenFromNodeList(nodeList ast.NodeList, nodeListParent ast.Node, sourceFile *ast.SourceFile) []ast.Node {
+	if nodeList.IsNil() || nodeListParent.IsNil() {
 		return nil
 	}
 	left := nodeList.Pos()
 	nodeListIndex := 0
 	var tokens []ast.Node
 	for left < nodeList.End() {
-		if len(nodeList.Nodes()) > nodeListIndex && left == nodeList.Nodes()[nodeListIndex].Pos() {
-			tokens = append(tokens, nodeList.Nodes()[nodeListIndex])
-			left = nodeList.Nodes()[nodeListIndex].End()
+		if nodeList.Len() > nodeListIndex && left == nodeList.At(nodeListIndex).Pos() {
+			tokens = append(tokens, nodeList.At(nodeListIndex))
+			left = nodeList.At(nodeListIndex).End()
 			nodeListIndex++
 		} else {
 			scanner := scanner.GetScannerForSourceFile(sourceFile, left)
@@ -1407,7 +1407,7 @@ func getArgumentListInfoForTemplate(tagExpression ast.TaggedTemplateExpression, 
 	// argumentCount is either 1 or (numSpans + 1) to account for the template strings array argument.
 	argumentCount := 1
 	if !isNoSubstitutionTemplateLiteral(tagExpression.Template()) {
-		argumentCount = len(tagExpression.Template().AsTemplateExpression().TemplateSpans().Nodes()) + 1
+		argumentCount = tagExpression.Template().AsTemplateExpression().TemplateSpans().Len() + 1
 	}
 	if argumentIndex != 0 {
 		debug.Assert(argumentIndex < argumentCount)
@@ -1436,7 +1436,7 @@ func getApplicableRangeForTaggedTemplate(taggedTemplate ast.TaggedTemplateExpres
 	// leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
 	if template.Kind() == ast.KindTemplateExpression {
 		templateSpans := template.AsTemplateExpression().TemplateSpans()
-		lastSpan := templateSpans.Nodes()[len(templateSpans.Nodes())-1]
+		lastSpan := templateSpans.At(templateSpans.Len() - 1)
 		if lastSpan.AsTemplateSpan().Literal().End()-lastSpan.AsTemplateSpan().Literal().Pos() == 0 {
 			applicableSpanEnd = scanner.SkipTrivia(sourceFile.Text(), applicableSpanEnd)
 		}

@@ -530,7 +530,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				}
 				ty := visitor.VisitNode(t.TypeExpression()) // !!! TODO: alternate lookup locations for the type? serialize on demand if it doesn't serialze? strada does something funky here.
 
-				members = append(members, factory.NewPropertySignatureDeclaration(nil, name, question, ty, ast.Node{}))
+				members = append(members, factory.NewPropertySignatureDeclaration(ast.ModifierList{}, name, question, ty, ast.Node{}))
 			}
 			return factory.NewTypeLiteralNode(factory.NewNodeList(members))
 		}
@@ -690,7 +690,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			case ast.KindParameter:
 				return factory.UpdateParameterDeclaration(
 					node.AsParameterDeclaration(),
-					nil,
+					ast.ModifierList{},
 					node.AsParameterDeclaration().DotDotDotToken(),
 					node.Name(),
 					node.AsParameterDeclaration().QuestionToken(),
@@ -880,9 +880,9 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 
 		return result
 	}, b.f, ast.NodeVisitorHooks{
-		VisitNodes: func(nodes *ast.NodeList, v *ast.NodeVisitor) *ast.NodeList {
+		VisitNodes: func(nodes ast.NodeList, v *ast.NodeVisitor) ast.NodeList {
 			res := v.VisitNodes(nodes)
-			if nonLocalNode && res != nil {
+			if nonLocalNode && !res.IsNil() {
 				// Remove position data from node lists originating in other files
 				if res == nodes {
 					res = nodes.Clone(b.f)

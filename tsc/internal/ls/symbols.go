@@ -151,8 +151,8 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 		if node.Flags()&ast.NodeFlagsReparsed == 0 {
 			if jsdocs := node.JSDoc(file); len(jsdocs) > 0 {
 				for _, jsdoc := range jsdocs {
-					if tagList := jsdoc.AsJSDoc().Tags(); tagList != nil {
-						for _, tag := range tagList.Nodes() {
+					if tagList := jsdoc.AsJSDoc().Tags(); !tagList.IsNil() {
+						for _, tag := range tagList.All() {
 							if ast.IsJSDocTypedefTag(tag) || ast.IsJSDocCallbackTag(tag) {
 								addSymbolForNode(tag, ast.Node{} /*name*/, nil /*children*/)
 							}
@@ -174,7 +174,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 			addSymbolForNode(node, ast.Node{} /*name*/, getSymbolsForChildren(getInteriorModule(node)))
 		case ast.KindConstructor:
 			addSymbolForNode(node, ast.Node{} /*name*/, getSymbolsForChildren(node.Body()))
-			for _, param := range node.Parameters() {
+			for _, param := range node.ParameterList().All() {
 				if ast.IsParameterPropertyDeclaration(param, node) {
 					addSymbolForNode(param, ast.Node{} /*name*/, nil /*children*/)
 				}
@@ -213,7 +213,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 				if namedBindings.Kind() == ast.KindNamespaceImport {
 					addSymbolForNode(namedBindings, ast.Node{} /*name*/, nil /*children*/)
 				} else {
-					for _, element := range namedBindings.Elements() {
+					for _, element := range namedBindings.ElementList().All() {
 						addSymbolForNode(element, ast.Node{} /*name*/, nil /*children*/)
 					}
 				}
@@ -504,7 +504,7 @@ func getCallExpressionName(node ast.Node) string {
 
 func getCallExpressionLiteralArgs(callExpr ast.Node) string {
 	var parts []string
-	for _, arg := range callExpr.Arguments() {
+	for _, arg := range callExpr.ArgumentList().All() {
 		if ast.IsStringLiteralLike(arg) || ast.IsTemplateExpression(arg) {
 			parts = append(parts, scanner.GetTextOfNode(arg))
 		}

@@ -103,12 +103,12 @@ func GetTextOfNode(node ast.Node) string {
 	return GetSourceTextOfNodeFromSourceFile(ast.GetSourceFileOfNode(node), node, false /*includeTrivia*/)
 }
 
-func GetTextOfJSDocComment(comment *ast.NodeList) string {
-	if comment == nil {
+func GetTextOfJSDocComment(comment ast.NodeList) string {
+	if comment.IsNil() {
 		return ""
 	}
 	var b strings.Builder
-	for _, n := range comment.Nodes() {
+	for _, n := range comment.All() {
 		switch n.Kind() {
 		case ast.KindJSDocText:
 			b.WriteString(n.Text())

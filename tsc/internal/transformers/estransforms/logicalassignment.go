@@ -94,7 +94,7 @@ func (ch *logicalAssignmentTransformer) visitBinaryExpression(node ast.BinaryExp
 	}
 
 	return ch.Factory().NewBinaryExpression(
-		nil,
+		ast.ModifierList{},
 		left,
 		ast.Node{},
 		ch.Factory().NewToken(nonAssignmentOperator),

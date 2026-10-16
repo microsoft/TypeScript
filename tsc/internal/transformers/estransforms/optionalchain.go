@@ -43,12 +43,12 @@ func (ch *optionalChainTransformer) visitCallExpression(node ast.CallExpression,
 			expression := ch.visitParenthesizedExpression(node.Expression().AsParenthesizedExpression(), true, false)
 			args := ch.Visitor().VisitNodes(node.Arguments())
 			if ast.IsSyntheticReferenceExpression(expression) {
-				res := ch.Factory().NewFunctionCallCall(expression.AsSyntheticReferenceExpression().Expression(), expression.AsSyntheticReferenceExpression().ThisArg(), args.Nodes())
+				res := ch.Factory().NewFunctionCallCall(expression.AsSyntheticReferenceExpression().Expression(), expression.AsSyntheticReferenceExpression().ThisArg(), args.Slice())
 				res.SetLoc(node.Loc())
 				ch.EmitContext().SetOriginal(res, node.AsNode())
 				return res
 			}
-			return ch.Factory().UpdateCallExpression(node, expression, ast.Node{} /*questionDotToken*/, nil /*typeArguments*/, args, node.Flags())
+			return ch.Factory().UpdateCallExpression(node, expression, ast.Node{} /*questionDotToken*/, ast.TypeList{} /*typeArguments*/, args, node.Flags())
 		}
 	}
 	return ch.Visitor().VisitEachChild(node.AsNode())
@@ -194,12 +194,12 @@ func (ch *optionalChainTransformer) visitOptionalExpression(node ast.Node, captu
 				if leftThisArg.Kind() == ast.KindSuperKeyword {
 					callThisArg = ch.Factory().NewThisExpression()
 				}
-				rightExpression = ch.Factory().NewFunctionCallCall(rightExpression, callThisArg, ch.Visitor().VisitNodes(segment.ArgumentList()).Nodes())
+				rightExpression = ch.Factory().NewFunctionCallCall(rightExpression, callThisArg, ch.Visitor().VisitNodes(segment.ArgumentList()).Slice())
 			} else {
 				rightExpression = ch.Factory().NewCallExpression(
 					rightExpression,
 					ast.Node{},
-					nil,
+					ast.TypeList{},
 					ch.Visitor().VisitNodes(segment.ArgumentList()),
 					ast.NodeFlagsNone,
 				)

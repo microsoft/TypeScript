@@ -9,7 +9,7 @@ import (
 )
 
 func collectExternalModuleReferences(file *ast.SourceFile) {
-	for _, node := range file.Statements.Nodes() {
+	for _, node := range file.Statements.All() {
 		collectModuleReferences(file, node, false /*inAmbientModule*/)
 	}
 
@@ -62,7 +62,7 @@ func collectModuleReferences(file *ast.SourceFile, node ast.Statement, inAmbient
 			// Relative external module names are not permitted
 			// NOTE: body of ambient module is always a module block, if it exists
 			if !node.Body().IsNil() {
-				for _, statement := range node.Body().Statements() {
+				for _, statement := range node.Body().StatementList().All() {
 					collectModuleReferences(file, statement, true /*inAmbientModule*/)
 				}
 			}

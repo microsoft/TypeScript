@@ -25,12 +25,12 @@ func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 		},
 		f,
 		NodeVisitorHooks{
-			VisitNodes: func(nodes *NodeList, v *NodeVisitor) *NodeList {
-				if nodes == nil {
-					return nil
+			VisitNodes: func(nodes NodeList, v *NodeVisitor) NodeList {
+				if nodes.IsNil() {
+					return NodeList{}
 				}
 				visited := v.VisitNodes(nodes)
-				var newList *NodeList
+				var newList NodeList
 				if visited != nodes {
 					newList = visited
 				} else {
@@ -39,17 +39,17 @@ func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 				if syntheticLocation {
 					newList.SetLoc(core.NewTextRange(-1, -1))
 					if nodes.HasTrailingComma() {
-						newList.Nodes()[len(newList.Nodes())-1].SetLoc(core.NewTextRange(-2, -2))
+						newList.At(newList.Len() - 1).SetLoc(core.NewTextRange(-2, -2))
 					}
 				}
 				return newList
 			},
-			VisitModifiers: func(nodes *ModifierList, v *NodeVisitor) *ModifierList {
-				if nodes == nil {
-					return nil
+			VisitModifiers: func(nodes ModifierList, v *NodeVisitor) ModifierList {
+				if nodes.IsNil() {
+					return ModifierList{}
 				}
 				visited := v.VisitModifiers(nodes)
-				var newList *ModifierList
+				var newList ModifierList
 				if visited != nodes {
 					newList = visited
 				} else {
@@ -58,7 +58,7 @@ func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 				if syntheticLocation {
 					newList.SetLoc(core.NewTextRange(-1, -1))
 					if nodes.HasTrailingComma() {
-						newList.Nodes()[len(newList.Nodes())-1].SetLoc(core.NewTextRange(-2, -2))
+						newList.At(newList.Len() - 1).SetLoc(core.NewTextRange(-2, -2))
 					}
 				}
 				return newList
@@ -81,6 +81,6 @@ func (f *NodeFactory) DeepCloneReparse(node Node) Node {
 	return node
 }
 
-func (f *NodeFactory) DeepCloneReparseModifiers(modifiers *ModifierList) *ModifierList {
+func (f *NodeFactory) DeepCloneReparseModifiers(modifiers ModifierList) ModifierList {
 	return getDeepCloneVisitor(f, false /*syntheticLocation*/).VisitModifiers(modifiers)
 }

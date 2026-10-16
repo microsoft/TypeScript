@@ -432,18 +432,18 @@ func siblingNodePositionsAreComparable(emitContext *EmitContext, previousNode as
 	}
 
 	parentNodeArray := getContainingNodeArray(previousNode)
-	if parentNodeArray != nil {
-		prevNodeIndex := slices.Index(parentNodeArray.Nodes(), previousNode)
-		return prevNodeIndex >= 0 && slices.Index(parentNodeArray.Nodes(), nextNode) == prevNodeIndex+1
+	if !parentNodeArray.IsNil() {
+		prevNodeIndex := slices.Index(parentNodeArray.Slice(), previousNode)
+		return prevNodeIndex >= 0 && slices.Index(parentNodeArray.Slice(), nextNode) == prevNodeIndex+1
 	}
 
 	return false
 }
 
-func getContainingNodeArray(node ast.Node) *ast.NodeList {
+func getContainingNodeArray(node ast.Node) ast.NodeList {
 	parent := node.Parent()
 	if parent.IsNil() {
-		return nil
+		return ast.NodeList{}
 	}
 
 	switch node.Kind() {
@@ -465,11 +465,11 @@ func getContainingNodeArray(node ast.Node) *ast.NodeList {
 		return node.Parent().AsTemplateExpression().TemplateSpans()
 	case ast.KindDecorator:
 		if canHaveDecorators(node.Parent()) {
-			if modifiers := node.Parent().Modifiers(); modifiers != nil {
-				return &modifiers.NodeList
+			if modifiers := node.Parent().Modifiers(); !modifiers.IsNil() {
+				return modifiers.NodeList
 			}
 		}
-		return nil
+		return ast.NodeList{}
 	case ast.KindHeritageClause:
 		if ast.IsClassLike(node.Parent()) {
 			return node.Parent().ClassLikeData().HeritageClauses()
@@ -542,12 +542,12 @@ func getContainingNodeArray(node ast.Node) *ast.NodeList {
 	}
 
 	if ast.IsModifier(node) {
-		if modifiers := parent.Modifiers(); modifiers != nil {
-			return &modifiers.NodeList
+		if modifiers := parent.Modifiers(); !modifiers.IsNil() {
+			return modifiers.NodeList
 		}
 	}
 
-	return nil
+	return ast.NodeList{}
 }
 
 func canHaveDecorators(node ast.Node) bool {
@@ -582,12 +582,12 @@ func tryGetEnd(node interface{ End() int }) (int, bool) {
 		if !v.IsNil() {
 			return v.End(), true
 		}
-	case (*ast.NodeList):
-		if v != nil {
+	case ast.NodeList:
+		if !v.IsNil() {
 			return v.End(), true
 		}
-	case (*ast.ModifierList):
-		if v != nil {
+	case ast.ModifierList:
+		if !v.IsNil() {
 			return v.End(), true
 		}
 	case (*core.TextRange):
@@ -619,7 +619,7 @@ func skipSynthesizedParentheses(node ast.Node) ast.Node {
 }
 
 func isNewExpressionWithoutArguments(node ast.Node) bool {
-	return node.Kind() == ast.KindNewExpression && node.ArgumentList() == nil
+	return node.Kind() == ast.KindNewExpression && node.ArgumentList().IsNil()
 }
 
 func isBinaryOperation(node ast.Node, token ast.Kind) bool {

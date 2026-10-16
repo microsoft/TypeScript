@@ -16,7 +16,7 @@ type ChangeTrackerWriter struct {
 	end                   map[triviaPositionKey]int
 }
 
-type triviaPositionKey interface { // *astNode | *ast.NodeList
+type triviaPositionKey interface { // *astNode | ast.NodeList
 	Pos() int
 	End() int
 }
@@ -48,13 +48,13 @@ func (ct *ChangeTrackerWriter) GetPrintHandlers() PrintHandlers {
 				ct.setEnd(nodeOpt)
 			}
 		},
-		OnBeforeEmitNodeList: func(nodesOpt *ast.NodeList) {
-			if nodesOpt != nil {
+		OnBeforeEmitNodeList: func(nodesOpt ast.NodeList) {
+			if !nodesOpt.IsNil() {
 				ct.setPos(nodesOpt)
 			}
 		},
-		OnAfterEmitNodeList: func(nodesOpt *ast.NodeList) {
-			if nodesOpt != nil {
+		OnAfterEmitNodeList: func(nodesOpt ast.NodeList) {
+			if !nodesOpt.IsNil() {
 				ct.setEnd(nodesOpt)
 			}
 		},
@@ -113,12 +113,12 @@ func (ct *ChangeTrackerWriter) AssignPositionsToNode(node ast.Node, factory *ast
 			VisitNode:  ct.assignPositionsToNodeWorker,
 			VisitNodes: ct.assignPositionsToNodeArray,
 			VisitToken: ct.assignPositionsToNodeWorker,
-			VisitModifiers: func(modifiers *ast.ModifierList, v *ast.NodeVisitor) *ast.ModifierList {
-				if modifiers != nil {
-					newNodeList := ct.assignPositionsToNodeArray(&modifiers.NodeList, v)
+			VisitModifiers: func(modifiers ast.ModifierList, v *ast.NodeVisitor) ast.ModifierList {
+				if !modifiers.IsNil() {
+					newNodeList := ct.assignPositionsToNodeArray(modifiers.NodeList, v)
 					// Return a new ModifierList so that VisitEachChild/Update detects the
 					// change and creates a new node with reassigned child positions.
-					return factory.NewModifierList(newNodeList.Nodes())
+					return factory.NewModifierList(newNodeList.Slice())
 				}
 				return modifiers
 			},
@@ -152,14 +152,14 @@ func (ct *ChangeTrackerWriter) assignPositionsToNodeWorker(
 }
 
 func (ct *ChangeTrackerWriter) assignPositionsToNodeArray(
-	nodes *ast.NodeList,
+	nodes ast.NodeList,
 	v *ast.NodeVisitor,
-) *ast.NodeList {
+) ast.NodeList {
 	visited := v.VisitNodes(nodes)
-	if visited == nil {
+	if visited.IsNil() {
 		return visited
 	}
-	if nodes == nil {
+	if nodes.IsNil() {
 		// Debug.assert(nodes);
 		panic("if nodes is nil, visited should not be nil")
 	}

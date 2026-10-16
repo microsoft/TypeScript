@@ -25,19 +25,19 @@ type nodeStore struct {
 	// index zero.
 	words []uint64
 
-	symbols       sideTable[*Symbol]
-	symbolTables  sideTable[SymbolTable]
-	nodeLists     sideTable[*NodeList]
-	modifierLists sideTable[*ModifierList]
-	texts         textStore
-	stringLists   sideTable[[]string]
-	nodeSlices    sideTable[[]Node]
-	values        sideTable[any]
-	sourceFiles   sideTable[*SourceFile]
+	symbols      sideTable[*Symbol]
+	symbolTables sideTable[SymbolTable]
+	texts        textStore
+	stringLists  sideTable[[]string]
+	nodeSlices   sideTable[[]Node]
+	values       sideTable[any]
+	sourceFiles  sideTable[*SourceFile]
 
 	// reused holds the nodes of other stores that records refer to, such
 	// as original nodes reused by a transformed tree.
 	reused []Node
+	// reusedLists holds the lists of other stores that records refer to.
+	reusedLists []NodeList
 
 	flows       []flowNodeData
 	flowLists   []flowListData
@@ -229,12 +229,11 @@ func (s *nodeStore) finish(freeze bool) {
 func (s *nodeStore) compactSide() {
 	s.symbols.compact()
 	s.symbolTables.compact()
-	s.nodeLists.compact()
-	s.modifierLists.compact()
 	s.stringLists.compact()
 	s.nodeSlices.compact()
 	s.values.compact()
 	s.reused = slices.Clip(s.reused)
+	s.reusedLists = slices.Clip(s.reusedLists)
 }
 
 // A sideRef is a record field's slot in a side table, biased by one so that

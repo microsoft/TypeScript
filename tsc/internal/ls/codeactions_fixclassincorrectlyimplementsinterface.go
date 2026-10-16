@@ -164,10 +164,10 @@ func getClass(sourceFile *ast.SourceFile, span core.TextRange) ast.Node {
 }
 
 func getConstructor(classDeclaration ast.Node) ast.Node {
-	if classDeclaration.IsNil() || classDeclaration.MemberList() == nil {
+	if classDeclaration.IsNil() || classDeclaration.MemberList().IsNil() {
 		return ast.Node{}
 	}
-	for _, member := range classDeclaration.MemberList().Nodes() {
+	for _, member := range classDeclaration.MemberList().All() {
 		if !member.IsNil() && ast.IsConstructorDeclaration(member) {
 			return member
 		}

@@ -108,8 +108,8 @@ type PrintHandlers struct {
 
 	OnBeforeEmitNode     func(nodeOpt ast.Node)
 	OnAfterEmitNode      func(nodeOpt ast.Node)
-	OnBeforeEmitNodeList func(nodesOpt *ast.NodeList)
-	OnAfterEmitNodeList  func(nodesOpt *ast.NodeList)
+	OnBeforeEmitNodeList func(nodesOpt ast.NodeList)
+	OnAfterEmitNodeList  func(nodesOpt ast.NodeList)
 	OnBeforeEmitToken    func(nodeOpt ast.TokenNode)
 	OnAfterEmitToken     func(nodeOpt ast.TokenNode)
 }
@@ -788,13 +788,13 @@ func (p *Printer) shouldEmitBlockFunctionBodyOnSingleLine(body ast.Block) bool {
 		return false
 	}
 
-	if p.getLeadingLineTerminatorCount(body.AsNode(), core.FirstOrNil(body.Statements().Nodes()), LFPreserveLines) > 0 ||
-		p.getClosingLineTerminatorCount(body.AsNode(), core.LastOrNil(body.Statements().Nodes()), LFPreserveLines, body.Statements().Loc()) > 0 {
+	if p.getLeadingLineTerminatorCount(body.AsNode(), core.FirstOrNil(body.Statements().Slice()), LFPreserveLines) > 0 ||
+		p.getClosingLineTerminatorCount(body.AsNode(), core.LastOrNil(body.Statements().Slice()), LFPreserveLines, body.Statements().Loc()) > 0 {
 		return false
 	}
 
 	var previousStatement ast.Statement
-	for _, statement := range body.Statements().Nodes() {
+	for _, statement := range body.Statements().All() {
 		if p.getSeparatingLineTerminatorCount(previousStatement, statement, LFPreserveLines) > 0 {
 			return false
 		}
@@ -850,9 +850,9 @@ func (p *Printer) shouldEmitDetachedComments(node ast.Node) bool {
 
 	// Emit detached comment if there are no prologue directives or if the first node is synthesized.
 	// The synthesized node will have no leading comment so some comments may be missed.
-	return len(file.Statements.Nodes()) == 0 ||
-		!ast.IsPrologueDirective(file.Statements.Nodes()[0]) ||
-		ast.NodeIsSynthesized(file.Statements.Nodes()[0])
+	return file.Statements.Len() == 0 ||
+		!ast.IsPrologueDirective(file.Statements.At(0)) ||
+		ast.NodeIsSynthesized(file.Statements.At(0))
 }
 
 func (p *Printer) hasCommentsAtPosition(pos int) bool {
@@ -873,7 +873,7 @@ func (p *Printer) shouldEmitIndirectCall(node ast.Node) bool {
 	return p.emitContext.EmitFlags(node)&EFIndirectCall != 0
 }
 
-func (p *Printer) shouldAllowTrailingComma(node ast.Node, list *ast.NodeList) bool {
+func (p *Printer) shouldAllowTrailingComma(node ast.Node, list ast.NodeList) bool {
 	if p.currentSourceFile == nil || p.currentSourceFile.ScriptKind == core.ScriptKindJSON {
 		return false
 	}
@@ -1360,24 +1360,24 @@ func (p *Printer) emitNestedModuleName(node ast.ModuleName) {
 // Signature elements
 //
 
-func (p *Printer) emitModifierList(parentNode ast.Node, modifiers *ast.ModifierList, allowDecorators bool) int {
-	if modifiers == nil || len(modifiers.Nodes()) == 0 {
+func (p *Printer) emitModifierList(parentNode ast.Node, modifiers ast.ModifierList, allowDecorators bool) int {
+	if modifiers.IsNil() || modifiers.Len() == 0 {
 		return parentNode.Pos()
 	}
 
-	if core.Every(modifiers.Nodes(), ast.IsModifier) {
+	if core.Every(modifiers.Slice(), ast.IsModifier) {
 		// if all modifier-likes are `Modifier`, simply emit the list as modifiers.
-		p.emitList((*Printer).emitKeywordNode, parentNode, &modifiers.NodeList, LFModifiers)
-	} else if core.Every(modifiers.Nodes(), ast.IsDecorator) {
+		p.emitList((*Printer).emitKeywordNode, parentNode, modifiers.NodeList, LFModifiers)
+	} else if core.Every(modifiers.Slice(), ast.IsDecorator) {
 		if !allowDecorators {
 			return parentNode.Pos()
 		}
 
 		// if all modifier-likes are `Decorator`, simply emit the list as decorators.
-		p.emitList((*Printer).emitModifierLike, parentNode, &modifiers.NodeList, LFDecorators)
+		p.emitList((*Printer).emitModifierLike, parentNode, modifiers.NodeList, LFDecorators)
 	} else {
 		if p.OnBeforeEmitNodeList != nil {
-			p.OnBeforeEmitNodeList(&modifiers.NodeList)
+			p.OnBeforeEmitNodeList(modifiers.NodeList)
 		}
 
 		// partition modifiers into contiguous chunks of `Modifier` or `Decorator` so as to
@@ -1395,9 +1395,9 @@ func (p *Printer) emitModifierList(parentNode ast.Node, modifiers *ast.ModifierL
 		pos := 0
 
 		var lastModifier ast.ModifierLike
-		for start < len(modifiers.Nodes()) {
-			for pos < len(modifiers.Nodes()) {
-				lastModifier = modifiers.Nodes()[pos]
+		for start < modifiers.Len() {
+			for pos < modifiers.Len() {
+				lastModifier = modifiers.At(pos)
 				if ast.IsDecorator(lastModifier) {
 					mode = ModeDecorators
 				} else {
@@ -1415,14 +1415,14 @@ func (p *Printer) emitModifierList(parentNode ast.Node, modifiers *ast.ModifierL
 			if start == 0 {
 				textRange = core.NewTextRange(modifiers.Pos(), textRange.End())
 			}
-			if pos == len(modifiers.Nodes())-1 {
+			if pos == modifiers.Len()-1 {
 				textRange = core.NewTextRange(textRange.Pos(), modifiers.End())
 			}
 			if allowDecorators || lastMode == ModeModifiers {
 				p.emitListItems(
 					(*Printer).emitModifierLike,
 					parentNode,
-					modifiers.Nodes()[start:pos],
+					modifiers.Slice()[start:pos],
 					core.IfElse(lastMode == ModeModifiers, LFModifiers, LFDecorators),
 					false, /*hasTrailingComma*/
 					textRange,
@@ -1434,11 +1434,11 @@ func (p *Printer) emitModifierList(parentNode ast.Node, modifiers *ast.ModifierL
 		}
 
 		if p.OnAfterEmitNodeList != nil {
-			p.OnAfterEmitNodeList(&modifiers.NodeList)
+			p.OnAfterEmitNodeList(modifiers.NodeList)
 		}
 	}
 
-	return greatestEnd(parentNode.Pos(), core.LastOrNil(modifiers.Nodes()))
+	return greatestEnd(parentNode.Pos(), core.LastOrNil(modifiers.Slice()))
 }
 
 func (p *Printer) emitTypeParameter(node ast.TypeParameterDeclaration) {
@@ -1514,8 +1514,8 @@ func (p *Printer) emitModifierLike(node ast.ModifierLike) {
 	}
 }
 
-func (p *Printer) emitTypeParameters(parentNode ast.Node, nodes *ast.TypeParameterList) {
-	if nodes == nil {
+func (p *Printer) emitTypeParameters(parentNode ast.Node, nodes ast.TypeParameterList) {
+	if nodes.IsNil() {
 		return
 	}
 	p.emitList((*Printer).emitTypeParameterDeclarationNode, parentNode, nodes, LFTypeParameters|core.IfElse(ast.IsArrowFunction(parentNode) /*p.shouldAllowTrailingComma(parentNode, nodes)*/, LFAllowTrailingComma, LFNone)) // TODO: preserve trailing comma after Strada migration
@@ -1542,26 +1542,26 @@ func (p *Printer) emitInitializer(node ast.Expression, equalTokenPos int, contex
 	p.emitExpression(node, ast.OperatorPrecedenceDisallowComma)
 }
 
-func (p *Printer) emitParameters(parentNode ast.Node, parameters *ast.ParameterList) {
+func (p *Printer) emitParameters(parentNode ast.Node, parameters ast.ParameterList) {
 	p.generateAllNames(parameters)
 	p.emitList((*Printer).emitParameterDeclarationNode, parentNode, parameters, LFParameters /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, parameters), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
 }
 
-func canEmitSimpleArrowHead(parentNode ast.Node, parameters *ast.ParameterList) bool {
+func canEmitSimpleArrowHead(parentNode ast.Node, parameters ast.ParameterList) bool {
 	// only arrow functions with a single parameter may have simple arrow head
-	if !ast.IsArrowFunction(parentNode) || len(parameters.Nodes()) != 1 {
+	if !ast.IsArrowFunction(parentNode) || parameters.Len() != 1 {
 		return false
 	}
 
 	parent := parentNode.AsArrowFunction()
-	parameter := parameters.Nodes()[0].AsParameterDeclaration()
+	parameter := parameters.At(0).AsParameterDeclaration()
 
 	return parameter.Pos() == parent.Pos() && // may not have parsed tokens between start of parent and parameter
-		parent.TypeParameters() == nil && // parent may not have type parameters
+		parent.TypeParameters().IsNil() && // parent may not have type parameters
 		parent.Type().IsNil() && // parent may not have return type annotation
-		(parent.Modifiers() == nil || len(parent.Modifiers().Nodes()) == 0) && // parent may not have modifiers
+		(parent.Modifiers().IsNil() || parent.Modifiers().Len() == 0) && // parent may not have modifiers
 		!parameters.HasTrailingComma() && // parameters may not have a trailing comma
-		parameter.Modifiers() == nil && // parameter may not have decorators or modifiers
+		parameter.Modifiers().IsNil() && // parameter may not have decorators or modifiers
 		parameter.DotDotDotToken().IsNil() && // parameter may not be rest
 		parameter.QuestionToken().IsNil() && // parameter may not be optional
 		parameter.Type().IsNil() && // parameter may not have a type annotation
@@ -1569,7 +1569,7 @@ func canEmitSimpleArrowHead(parentNode ast.Node, parameters *ast.ParameterList) 
 		ast.IsIdentifier(parameter.Name()) // parameter name must be identifier
 }
 
-func (p *Printer) emitParametersForArrow(parentNode ast.Node /*FunctionType | ConstructorType | ArrowFunction*/, parameters *ast.ParameterList) {
+func (p *Printer) emitParametersForArrow(parentNode ast.Node /*FunctionType | ConstructorType | ArrowFunction*/, parameters ast.ParameterList) {
 	if canEmitSimpleArrowHead(parentNode, parameters) {
 		p.generateAllNames(parameters)
 		p.emitList((*Printer).emitParameterDeclarationNode, parentNode, parameters, LFSingleArrowParameter)
@@ -1578,7 +1578,7 @@ func (p *Printer) emitParametersForArrow(parentNode ast.Node /*FunctionType | Co
 	}
 }
 
-func (p *Printer) emitParametersForIndexSignature(parentNode ast.Node, parameters *ast.ParameterList) {
+func (p *Printer) emitParametersForIndexSignature(parentNode ast.Node, parameters ast.ParameterList) {
 	p.generateAllNames(parameters)
 	p.emitList((*Printer).emitParameterDeclarationNode, parentNode, parameters, LFIndexSignatureParameters)
 }
@@ -1901,8 +1901,8 @@ func (p *Printer) emitTypeArgument(node ast.TypeNode) {
 	p.emitTypeNodeOutsideExtends(node)
 }
 
-func (p *Printer) emitTypeArguments(parentNode ast.Node, nodes *ast.TypeArgumentList) {
-	if nodes == nil {
+func (p *Printer) emitTypeArguments(parentNode ast.Node, nodes ast.TypeArgumentList) {
+	if nodes.IsNil() {
 		return
 	}
 	p.emitList((*Printer).emitTypeParameterDeclarationNode, parentNode, nodes, LFTypeArguments /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
@@ -2187,8 +2187,8 @@ func (p *Printer) emitMappedType(node ast.MappedTypeNode) {
 		p.emitTypeNodeOutsideExtends(node.Type())
 	}
 	p.writeTrailingSemicolon()
-	if node.Members() != nil {
-		if len(node.Members().Nodes()) > 0 {
+	if !node.Members().IsNil() {
+		if node.Members().Len() > 0 {
 			if singleLine {
 				p.writeSpace()
 			} else {
@@ -3368,8 +3368,8 @@ func (p *Printer) emitSemicolonClassElement(node ast.SemicolonClassElement) {
 // Statements
 //
 
-func (p *Printer) isEmptyBlock(block ast.Node, statements *ast.StatementList) bool {
-	return len(statements.Nodes()) == 0 &&
+func (p *Printer) isEmptyBlock(block ast.Node, statements ast.StatementList) bool {
+	return statements.Len() == 0 &&
 		(p.currentSourceFile == nil || rangeEndIsOnSameLineAsRangeStart(block.Loc(), block.Loc(), p.currentSourceFile))
 }
 
@@ -4288,7 +4288,7 @@ func (p *Printer) emitJsxOpeningElement(node ast.JsxOpeningElement) {
 	indented := p.writeLineSeparatorsAndIndentBefore(node.TagName(), node.AsNode())
 	p.emitJsxTagName(node.TagName())
 	p.emitTypeArguments(node.AsNode(), node.TypeArguments())
-	if len(node.Attributes().Properties()) > 0 {
+	if node.Attributes().PropertyList().Len() > 0 {
 		p.writeSpace()
 	}
 	p.emitJsxAttributes(node.Attributes().AsJsxAttributes())
@@ -4451,12 +4451,12 @@ func (p *Printer) emitJsxAttributeValue(node ast.JsxAttributeValue) {
 //
 
 func (p *Printer) emitCaseOrDefaultClauseStatements(node ast.CaseOrDefaultClause, colonPos int) {
-	emitAsSingleStatement := len(node.Statements().Nodes()) == 1 &&
+	emitAsSingleStatement := node.Statements().Len() == 1 &&
 		// treat synthesized nodes as located on the same line for emit purposes
 		(p.currentSourceFile == nil ||
 			ast.NodeIsSynthesized(node.AsNode()) ||
-			ast.NodeIsSynthesized(node.Statements().Nodes()[0]) ||
-			RangeStartPositionsAreOnSameLine(node.Loc(), node.Statements().Nodes()[0].Loc(), p.currentSourceFile))
+			ast.NodeIsSynthesized(node.Statements().At(0)) ||
+			RangeStartPositionsAreOnSameLine(node.Loc(), node.Statements().At(0).Loc(), p.currentSourceFile))
 
 	format := LFCaseOrDefaultClauseStatements
 	if emitAsSingleStatement {
@@ -4624,8 +4624,8 @@ func (p *Printer) emitShebangIfNeeded(node *ast.SourceFile) {
 	}
 }
 
-func (p *Printer) emitPrologueDirectives(statements *ast.StatementList) int {
-	for i, statement := range statements.Nodes() {
+func (p *Printer) emitPrologueDirectives(statements ast.StatementList) int {
+	for i, statement := range statements.All() {
 		if ast.IsPrologueDirective(statement) {
 			p.writeLine()
 			p.emitStatement(statement)
@@ -4633,7 +4633,7 @@ func (p *Printer) emitPrologueDirectives(statements *ast.StatementList) int {
 			return i
 		}
 	}
-	return len(statements.Nodes())
+	return statements.Len()
 }
 
 func (p *Printer) emitHelpers(node ast.Node) bool {
@@ -4727,7 +4727,7 @@ func (p *Printer) emitDirective(kind string, refs []*ast.FileReference) {
 // Lists
 //
 
-func (p *Printer) emitList(emit func(p *Printer, node ast.Node), parentNode ast.Node, children *ast.NodeList, format ListFormat) {
+func (p *Printer) emitList(emit func(p *Printer, node ast.Node), parentNode ast.Node, children ast.NodeList, format ListFormat) {
 	if p.shouldEmitOnMultipleLines(parentNode) {
 		format |= LFPreferNewLine | LFIndented
 	}
@@ -4735,12 +4735,12 @@ func (p *Printer) emitList(emit func(p *Printer, node ast.Node), parentNode ast.
 	p.emitListRange(emit, parentNode, children, format, -1 /*start*/, -1 /*count*/)
 }
 
-func (p *Printer) emitListRange(emit func(p *Printer, node ast.Node), parentNode ast.Node, children *ast.NodeList, format ListFormat, start int, count int) {
-	isNil := children == nil
+func (p *Printer) emitListRange(emit func(p *Printer, node ast.Node), parentNode ast.Node, children ast.NodeList, format ListFormat, start int, count int) {
+	isNil := children.IsNil()
 
 	length := 0
 	if !isNil {
-		length = len(children.Nodes())
+		length = children.Len()
 	}
 
 	if start < 0 {
@@ -4787,7 +4787,7 @@ func (p *Printer) emitListRange(emit func(p *Printer, node ast.Node), parentNode
 	} else {
 		end := min(start+count, length)
 
-		p.emitListItems(emit, parentNode, children.Nodes()[start:end], format, p.hasTrailingComma(parentNode, children), children.Loc())
+		p.emitListItems(emit, parentNode, children.Slice()[start:end], format, p.hasTrailingComma(parentNode, children), children.Loc())
 	}
 
 	if p.OnAfterEmitNodeList != nil {
@@ -4802,7 +4802,7 @@ func (p *Printer) emitListRange(emit func(p *Printer, node ast.Node), parentNode
 	}
 }
 
-func (p *Printer) hasTrailingComma(parentNode ast.Node, children *ast.NodeList) bool {
+func (p *Printer) hasTrailingComma(parentNode ast.Node, children ast.NodeList) bool {
 	// NodeList.HasTrailingComma() is unreliable on transformed nodes as some nodes may have been removed. In the event
 	// we believe we may need to emit a trailing comma, we must first look to the respective node list on the original
 	// node first.
@@ -4869,7 +4869,7 @@ func (p *Printer) hasTrailingComma(parentNode ast.Node, children *ast.NodeList) 
 	}
 
 	// if we have the original list, we can use it's result.
-	if originalList != nil {
+	if !originalList.IsNil() {
 		return originalList.HasTrailingComma()
 	}
 
@@ -6033,11 +6033,11 @@ func (p *Printer) popNameGenerationScope(node ast.Node) {
 	p.nameGenerator.PopScope(p.shouldReuseTempVariableScope(node))
 }
 
-func (p *Printer) generateAllNames(nodes *ast.NodeList) {
-	if nodes == nil {
+func (p *Printer) generateAllNames(nodes ast.NodeList) {
+	if nodes.IsNil() {
 		return
 	}
-	for _, node := range nodes.Nodes() {
+	for _, node := range nodes.All() {
 		p.generateNames(node)
 	}
 }
@@ -6102,11 +6102,11 @@ func (p *Printer) generateNames(node ast.Node) {
 	}
 }
 
-func (p *Printer) generateAllMemberNames(nodes *ast.NodeList) {
-	if nodes == nil {
+func (p *Printer) generateAllMemberNames(nodes ast.NodeList) {
+	if nodes.IsNil() {
 		return
 	}
-	for _, node := range nodes.Nodes() {
+	for _, node := range nodes.All() {
 		p.generateMemberNames(node)
 	}
 }

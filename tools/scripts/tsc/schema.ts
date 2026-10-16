@@ -399,7 +399,7 @@ export class AliasType extends TypeBase {
     }
 
     formatGoReference(): string {
-        return this.baseKind() === "list" && (this.resolved as ListType).listKind !== "raw" ? `*${this.name}` : this.name;
+        return this.name;
     }
 
     formatTypeScript(): string {
@@ -540,9 +540,9 @@ export class ListType extends TypeBase {
             return this.elementType.baseKind() === "node" ? "[]Node" : `[]${this.elementType.formatGoReference()}`;
         }
         if (this.listKind === "ModifierList") {
-            return "*ModifierList";
+            return "ModifierList";
         }
-        return `*${this.api.listAliasName(this.elementType) || "NodeList"}`;
+        return this.api.listAliasName(this.elementType) || "NodeList";
     }
 
     formatTypeScript(): string {

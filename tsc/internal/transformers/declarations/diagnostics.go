@@ -207,8 +207,8 @@ func createGetSymbolAccessibilityDiagnosticForNode(node ast.Node) GetSymbolAcces
 				diagnostics.Exported_variable_0_has_or_is_using_name_1_from_private_module_2,
 				diagnostics.Exported_variable_0_has_or_is_using_private_name_1,
 			)
-			errorNode := node.Arguments()[1]
-			typeName := node.Arguments()[1]
+			errorNode := node.ArgumentList().At(1)
+			typeName := node.ArgumentList().At(1)
 			return &SymbolAccessibilityDiagnostic{
 				errorNode:         errorNode,
 				diagnosticMessage: diagnosticMessage,
@@ -588,8 +588,8 @@ func createAccessorTypeError(node ast.Node) *ast.Diagnostic {
 	getAccessor := allDeclarations.GetAccessor
 	setAccessor := allDeclarations.SetAccessor
 	targetNode := node
-	if ast.IsSetAccessorDeclaration(node) && len(node.Parameters()) > 0 {
-		targetNode = node.Parameters()[0]
+	if ast.IsSetAccessorDeclaration(node) && node.ParameterList().Len() > 0 {
+		targetNode = node.ParameterList().At(0)
 	}
 	diag := createDiagnosticForNode(targetNode, getErrorByDeclarationKind(node.Kind()))
 	if !setAccessor.IsNil() {

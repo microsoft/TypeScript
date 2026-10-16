@@ -118,8 +118,8 @@ func (c *Checker) checkGrammarPrivateIdentifierExpression(privId ast.PrivateIden
 }
 
 func (c *Checker) checkGrammarMappedType(node ast.MappedTypeNode) bool {
-	if len(node.Members().Nodes()) > 0 {
-		return c.grammarErrorOnNode(node.Members().Nodes()[0], diagnostics.A_mapped_type_may_not_declare_properties_or_methods)
+	if node.Members().Len() > 0 {
+		return c.grammarErrorOnNode(node.Members().At(0), diagnostics.A_mapped_type_may_not_declare_properties_or_methods)
 	}
 	return false
 }
@@ -212,7 +212,7 @@ func (c *Checker) checkGrammarModuleElementContext(node ast.Statement, errorMess
 }
 
 func (c *Checker) checkGrammarModifiers(node ast.Node /*Union[HasModifiers, HasDecorators, HasIllegalModifiers, HasIllegalDecorators]*/) bool {
-	if node.Modifiers() == nil {
+	if node.Modifiers().IsNil() {
 		return false
 	}
 	if c.reportObviousDecoratorErrors(node) || c.reportObviousModifierErrors(node) {
@@ -668,15 +668,15 @@ func (c *Checker) checkGrammarAsyncModifier(node ast.Node, asyncModifier ast.Nod
 	return c.grammarErrorOnNode(asyncModifier, diagnostics.X_0_modifier_cannot_be_used_here, "async")
 }
 
-func (c *Checker) checkGrammarForDisallowedTrailingComma(list *ast.NodeList, diag *diagnostics.Message) bool {
-	if list != nil && list.HasTrailingComma() {
-		return c.grammarErrorAtPos(list.Nodes()[0], list.End()-len(","), len(","), diag)
+func (c *Checker) checkGrammarForDisallowedTrailingComma(list ast.NodeList, diag *diagnostics.Message) bool {
+	if !list.IsNil() && list.HasTrailingComma() {
+		return c.grammarErrorAtPos(list.At(0), list.End()-len(","), len(","), diag)
 	}
 	return false
 }
 
-func (c *Checker) checkGrammarTypeParameterList(typeParameters *ast.NodeList, file *ast.SourceFile) bool {
-	if typeParameters != nil && len(typeParameters.Nodes()) == 0 {
+func (c *Checker) checkGrammarTypeParameterList(typeParameters ast.NodeList, file *ast.SourceFile) bool {
+	if !typeParameters.IsNil() && typeParameters.Len() == 0 {
 		start := typeParameters.Pos() - len("<")
 		end := scanner.SkipTrivia(file.Text(), typeParameters.End()) + len(">")
 		return c.grammarErrorAtPos(file.AsNode(), start, end-start, diagnostics.Type_parameter_list_cannot_be_empty)
@@ -684,12 +684,12 @@ func (c *Checker) checkGrammarTypeParameterList(typeParameters *ast.NodeList, fi
 	return false
 }
 
-func (c *Checker) checkGrammarParameterList(parameters *ast.NodeList) bool {
+func (c *Checker) checkGrammarParameterList(parameters ast.NodeList) bool {
 	seenOptionalParameter := false
-	parameterCount := len(parameters.Nodes())
+	parameterCount := parameters.Len()
 
 	for i := range parameterCount {
-		parameter := parameters.Nodes()[i].AsParameterDeclaration()
+		parameter := parameters.At(i).AsParameterDeclaration()
 		if !parameter.DotDotDotToken().IsNil() {
 			if i != parameterCount-1 {
 				return c.grammarErrorOnNode(parameter.DotDotDotToken(), diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list)
@@ -776,13 +776,13 @@ func (c *Checker) checkGrammarArrowFunction(node ast.Node, file *ast.SourceFile)
 
 	arrowFunc := node.AsArrowFunction()
 	typeParameters := arrowFunc.TypeParameters()
-	if typeParameters != nil {
-		typeParamNodes := typeParameters.Nodes()
+	if !typeParameters.IsNil() {
+		typeParamNodes := typeParameters.Slice()
 		hasConstraint := len(typeParamNodes) > 0 && !typeParamNodes[0].AsTypeParameterDeclaration().Constraint().IsNil()
 		if !(len(typeParamNodes) > 1 || typeParameters.HasTrailingComma() || hasConstraint) {
 			if file.FileName().ExtensionIsOneOf([]string{tspath.ExtensionMts, tspath.ExtensionCts}) {
 				// TODO(danielr): should we return early here?
-				c.grammarErrorOnNode(typeParameters.Nodes()[0], diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_constraint)
+				c.grammarErrorOnNode(typeParameters.At(0), diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_constraint)
 			}
 		}
 	}
@@ -794,7 +794,7 @@ func (c *Checker) checkGrammarArrowFunction(node ast.Node, file *ast.SourceFile)
 }
 
 func (c *Checker) checkGrammarIndexSignatureParameters(node ast.IndexSignatureDeclaration) bool {
-	paramNodes := node.Parameters().Nodes()
+	paramNodes := node.Parameters().Slice()
 
 	if len(paramNodes) == 0 {
 		return c.grammarErrorOnNode(node.AsNode(), diagnostics.An_index_signature_must_have_exactly_one_parameter)
@@ -809,7 +809,7 @@ func (c *Checker) checkGrammarIndexSignatureParameters(node ast.IndexSignatureDe
 	if !parameter.DotDotDotToken().IsNil() {
 		return c.grammarErrorOnNode(parameter.DotDotDotToken(), diagnostics.An_index_signature_cannot_have_a_rest_parameter)
 	}
-	if parameter.Modifiers() != nil {
+	if !parameter.Modifiers().IsNil() {
 		return c.grammarErrorOnNode(parameter.Name(), diagnostics.An_index_signature_parameter_cannot_have_an_accessibility_modifier)
 	}
 	if !parameter.QuestionToken().IsNil() {
@@ -842,8 +842,8 @@ func (c *Checker) checkGrammarIndexSignature(node ast.IndexSignatureDeclaration)
 	return c.checkGrammarModifiers(node.AsNode()) || c.checkGrammarIndexSignatureParameters(node)
 }
 
-func (c *Checker) checkGrammarForAtLeastOneTypeArgument(node ast.Node, typeArguments *ast.NodeList) bool {
-	if typeArguments != nil && len(typeArguments.Nodes()) == 0 {
+func (c *Checker) checkGrammarForAtLeastOneTypeArgument(node ast.Node, typeArguments ast.NodeList) bool {
+	if !typeArguments.IsNil() && typeArguments.Len() == 0 {
 		sourceFile := ast.GetSourceFileOfNode(node)
 		start := typeArguments.Pos() - len("<")
 		end := scanner.SkipTrivia(sourceFile.Text(), typeArguments.End()) + len(">")
@@ -852,7 +852,7 @@ func (c *Checker) checkGrammarForAtLeastOneTypeArgument(node ast.Node, typeArgum
 	return false
 }
 
-func (c *Checker) checkGrammarTypeArguments(node ast.Node, typeArguments *ast.NodeList) bool {
+func (c *Checker) checkGrammarTypeArguments(node ast.Node, typeArguments ast.NodeList) bool {
 	return c.checkGrammarForDisallowedTrailingComma(typeArguments, diagnostics.Trailing_comma_not_allowed) || c.checkGrammarForAtLeastOneTypeArgument(node, typeArguments)
 }
 
@@ -868,13 +868,13 @@ func (c *Checker) checkGrammarHeritageClause(node ast.HeritageClause) bool {
 	if c.checkGrammarForDisallowedTrailingComma(types, diagnostics.Trailing_comma_not_allowed) {
 		return true
 	}
-	if types != nil && len(types.Nodes()) == 0 {
+	if !types.IsNil() && types.Len() == 0 {
 		listType := scanner.TokenToString(node.Token())
 		// TODO(danielr): why not error on the token?
 		return c.grammarErrorAtPos(node.AsNode(), types.Pos(), 0, diagnostics.X_0_list_cannot_be_empty, listType)
 	}
 
-	for _, node := range types.Nodes() { //nolint:modernize
+	for _, node := range types.All() {
 		if c.checkGrammarExpressionWithTypeArguments(node) {
 			return true
 		}
@@ -883,7 +883,7 @@ func (c *Checker) checkGrammarHeritageClause(node ast.HeritageClause) bool {
 }
 
 func (c *Checker) checkGrammarExpressionWithTypeArguments(node ast.Node /*Union[ExpressionWithTypeArguments, TypeQuery]*/) bool {
-	if ast.IsExpressionWithTypeArguments(node) && node.Expression().Kind() == ast.KindImportKeyword && node.TypeArgumentList() != nil {
+	if ast.IsExpressionWithTypeArguments(node) && node.Expression().Kind() == ast.KindImportKeyword && !node.TypeArgumentList().IsNil() {
 		return c.grammarErrorOnNode(node, diagnostics.This_use_of_import_is_invalid_import_calls_can_be_written_but_they_must_have_parentheses_and_cannot_have_type_arguments)
 	}
 	return c.checkGrammarTypeArguments(node, node.TypeArgumentList())
@@ -895,8 +895,8 @@ func (c *Checker) checkGrammarClassDeclarationHeritageClauses(node ast.ClassLike
 
 	classLikeData := node.ClassLikeData()
 
-	if !c.checkGrammarModifiers(node) && classLikeData.HeritageClauses() != nil {
-		for _, heritageClauseNode := range classLikeData.HeritageClauses().Nodes() {
+	if !c.checkGrammarModifiers(node) && !classLikeData.HeritageClauses().IsNil() {
+		for _, heritageClauseNode := range classLikeData.HeritageClauses().All() {
 			heritageClause := heritageClauseNode.AsHeritageClause()
 			if heritageClause.Token() == ast.KindExtendsKeyword {
 				if seenExtendsClause {
@@ -907,7 +907,7 @@ func (c *Checker) checkGrammarClassDeclarationHeritageClauses(node ast.ClassLike
 					return c.grammarErrorOnFirstToken(heritageClauseNode, diagnostics.X_extends_clause_must_precede_implements_clause)
 				}
 
-				typeNodes := heritageClause.Types().Nodes()
+				typeNodes := heritageClause.Types().Slice()
 				if len(typeNodes) > 1 {
 					return c.grammarErrorOnFirstToken(typeNodes[1], diagnostics.Classes_can_only_extend_a_single_class)
 				}
@@ -933,9 +933,9 @@ func (c *Checker) checkGrammarClassDeclarationHeritageClauses(node ast.ClassLike
 }
 
 func (c *Checker) checkGrammarInterfaceDeclaration(node ast.InterfaceDeclaration) bool {
-	if node.HeritageClauses() != nil {
+	if !node.HeritageClauses().IsNil() {
 		seenExtendsClause := false
-		for _, heritageClauseNode := range node.HeritageClauses().Nodes() {
+		for _, heritageClauseNode := range node.HeritageClauses().All() {
 			heritageClause := heritageClauseNode.AsHeritageClause()
 
 			switch heritageClause.Token() {
@@ -999,8 +999,8 @@ func (c *Checker) checkGrammarObjectLiteralExpression(node ast.ObjectLiteralExpr
 	seen := make(map[string]DeclarationMeaning)
 
 	var properties []ast.Node
-	if node.Properties() != nil {
-		properties = node.Properties().Nodes()
+	if !node.Properties().IsNil() {
+		properties = node.Properties().Slice()
 	}
 	for _, prop := range properties {
 		if prop.Kind() == ast.KindSpreadAssignment {
@@ -1133,7 +1133,7 @@ func (c *Checker) checkGrammarJsxElement(node ast.Node) bool {
 	c.checkGrammarJsxName(node.TagName())
 	c.checkGrammarTypeArguments(node, node.TypeArgumentList())
 	var seen collections.Set[string]
-	for _, attrNode := range node.Attributes().Properties() {
+	for _, attrNode := range node.Attributes().PropertyList().All() {
 		if attrNode.Kind() == ast.KindJsxSpreadAttribute {
 			continue
 		}
@@ -1241,21 +1241,21 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement ast.ForIn
 			//      for (let of [1,2,3]) {} // this is invalid ES6 syntax
 			//      for (let in [1,2,3]) {} // this is invalid ES6 syntax
 			// We will then want to skip on grammar checking on variableList declaration
-			if len(declarations.Nodes()) == 0 {
+			if declarations.Len() == 0 {
 				return false
 			}
 
-			if len(declarations.Nodes()) > 1 {
+			if declarations.Len() > 1 {
 				var diagnostic *diagnostics.Message
 				if forInOrOfStatement.Kind() == ast.KindForInStatement {
 					diagnostic = diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement
 				} else {
 					diagnostic = diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement
 				}
-				return c.grammarErrorOnFirstToken(declarations.Nodes()[1], diagnostic)
+				return c.grammarErrorOnFirstToken(declarations.At(1), diagnostic)
 			}
 
-			firstVariableDeclaration := declarations.Nodes()[0].AsVariableDeclaration()
+			firstVariableDeclaration := declarations.At(0).AsVariableDeclaration()
 			if !firstVariableDeclaration.Initializer().IsNil() {
 				var diagnostic *diagnostics.Message
 				if forInOrOfStatement.Kind() == ast.KindForInStatement {
@@ -1297,12 +1297,12 @@ func (c *Checker) checkGrammarAccessor(accessor ast.AccessorDeclaration) bool {
 	}
 
 	funcData := accessor.FunctionLikeData()
-	var typeParameters *ast.NodeList
+	var typeParameters ast.NodeList
 	if !funcData.IsNil() {
 		typeParameters = funcData.TypeParameters()
 	}
 
-	if typeParameters != nil {
+	if !typeParameters.IsNil() {
 		return c.grammarErrorOnNode(accessor.Name(), diagnostics.An_accessor_cannot_have_type_parameters)
 	}
 	if !c.doesAccessorHaveCorrectParameterCount(accessor) {
@@ -1339,7 +1339,7 @@ func (c *Checker) checkGrammarAccessor(accessor ast.AccessorDeclaration) bool {
 func (c *Checker) doesAccessorHaveCorrectParameterCount(accessor ast.AccessorDeclaration) bool {
 	// `getAccessorThisParameter` returns `nil` if the accessor's arity is incorrect,
 	// even if there is a `this` parameter declared.
-	return !c.getAccessorThisParameter(accessor).IsNil() || len(accessor.Parameters()) == core.IfElse(accessor.Kind() == ast.KindGetAccessor, 0, 1)
+	return !c.getAccessorThisParameter(accessor).IsNil() || accessor.ParameterList().Len() == core.IfElse(accessor.Kind() == ast.KindGetAccessor, 0, 1)
 }
 
 func (c *Checker) checkGrammarTypeOperatorNode(node ast.TypeOperatorNode) bool {
@@ -1413,7 +1413,7 @@ func (c *Checker) checkGrammarMethod(node ast.Node /*Union[MethodDeclaration, Me
 	if node.Kind() == ast.KindMethodDeclaration {
 		if node.Parent().Kind() == ast.KindObjectLiteralExpression {
 			// We only disallow modifier on a method declaration if it is a property of object-literal-expression
-			if modifiers := node.Modifiers(); modifiers != nil && !(len(modifiers.Nodes()) == 1 && modifiers.Nodes()[0].Kind() == ast.KindAsyncKeyword) {
+			if modifiers := node.Modifiers(); !modifiers.IsNil() && !(modifiers.Len() == 1 && modifiers.At(0).Kind() == ast.KindAsyncKeyword) {
 				return c.grammarErrorOnFirstToken(node, diagnostics.Modifiers_cannot_appear_here)
 			}
 
@@ -1512,7 +1512,7 @@ func (c *Checker) checkGrammarBreakOrContinueStatement(node ast.Node) bool {
 func (c *Checker) checkGrammarBindingElement(node ast.BindingElement) bool {
 	if !node.DotDotDotToken().IsNil() {
 		elements := node.Parent().ElementList()
-		if node.AsNode() != core.LastOrNil(elements.Nodes()) {
+		if node.AsNode() != core.LastOrNil(elements.Slice()) {
 			return c.grammarErrorOnNode(node.Node, diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern)
 		}
 		c.checkGrammarForDisallowedTrailingComma(elements, diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma)
@@ -1593,7 +1593,7 @@ func (c *Checker) checkGrammarForEsModuleMarkerInBindingName(name ast.Node) bool
 			return c.grammarErrorOnNodeSkippedOnNoEmit(name, diagnostics.Identifier_expected_esModule_is_reserved_as_an_exported_marker_when_transforming_ECMAScript_modules)
 		}
 	} else {
-		for _, element := range name.Elements() {
+		for _, element := range name.ElementList().All() {
 			if !element.Name().IsNil() {
 				return c.checkGrammarForEsModuleMarkerInBindingName(element.Name())
 			}
@@ -1625,7 +1625,7 @@ func (c *Checker) checkGrammarVariableDeclarationList(declarationList ast.Variab
 		return true
 	}
 
-	if len(declarations.Nodes()) == 0 {
+	if declarations.Len() == 0 {
 		return c.grammarErrorAtPos(declarationList.AsNode(), declarations.Pos(), declarations.End()-declarations.Pos(), diagnostics.Variable_declaration_list_cannot_be_empty)
 	}
 
@@ -1834,7 +1834,7 @@ func (c *Checker) checkGrammarMetaProperty(node ast.MetaProperty) bool {
 
 func (c *Checker) checkGrammarConstructorTypeParameters(node ast.ConstructorDeclaration) bool {
 	range_ := node.TypeParameters()
-	if range_ != nil {
+	if !range_.IsNil() {
 		var pos int
 		if range_.Pos() == range_.End() {
 			pos = range_.Pos()
@@ -1858,7 +1858,7 @@ func (c *Checker) checkGrammarConstructorTypeAnnotation(node ast.ConstructorDecl
 func (c *Checker) checkGrammarProperty(node ast.Node /*Union[PropertyDeclaration, PropertySignature]*/) bool {
 	propertyName := node.Name()
 	if ast.IsComputedPropertyName(propertyName) && ast.IsBinaryExpression(propertyName.Expression()) && propertyName.Expression().AsBinaryExpression().OperatorToken().Kind() == ast.KindInKeyword {
-		return c.grammarErrorOnNode(node.Parent().Members()[0], diagnostics.A_mapped_type_may_not_declare_properties_or_methods)
+		return c.grammarErrorOnNode(node.Parent().MemberList().At(0), diagnostics.A_mapped_type_may_not_declare_properties_or_methods)
 	}
 	if ast.IsClassLike(node.Parent()) {
 		if ast.IsStringLiteral(propertyName) && propertyName.Text() == "constructor" {
@@ -2006,7 +2006,7 @@ func (c *Checker) checkGrammarTopLevelElementForRequiredDeclareModifier(node ast
 }
 
 func (c *Checker) checkGrammarTopLevelElementsForRequiredDeclareModifier(file *ast.SourceFile) bool {
-	for _, decl := range file.Statements.Nodes() {
+	for _, decl := range file.Statements.All() {
 		if ast.IsDeclarationNode(decl) || decl.Kind() == ast.KindVariableStatement {
 			if c.checkGrammarTopLevelElementForRequiredDeclareModifier(decl) {
 				return true
@@ -2135,7 +2135,7 @@ func (c *Checker) checkGrammarImportClause(node ast.ImportClause) bool {
 
 func (c *Checker) checkGrammarImportAttributeValues(node ast.ImportAttributes) bool {
 	hasError := false
-	for _, attribute := range node.Attributes().Nodes() {
+	for _, attribute := range node.Attributes().All() {
 		value := attribute.AsImportAttribute().Value()
 		if ast.IsStringLiteral(value) {
 			continue
@@ -2148,7 +2148,7 @@ func (c *Checker) checkGrammarImportAttributeValues(node ast.ImportAttributes) b
 
 func (c *Checker) checkGrammarTypeOnlyNamedImportsOrExports(namedBindings ast.Node) bool {
 	nodeList := namedBindings.ElementList()
-	for _, specifier := range nodeList.Nodes() {
+	for _, specifier := range nodeList.All() {
 		var specifierIsTypeOnly bool
 		var message *diagnostics.Message
 		if specifier.Kind() == ast.KindImportSpecifier {
@@ -2191,12 +2191,12 @@ func (c *Checker) checkGrammarImportCallExpression(node ast.Node) bool {
 	if ast.IsSourcePhaseImportCall(node) && !nodeAsCall.QuestionDotToken().IsNil() {
 		return c.grammarErrorOnNode(nodeAsCall.QuestionDotToken(), diagnostics.Optional_chaining_cannot_be_used_with_import_source)
 	}
-	if nodeAsCall.TypeArguments() != nil {
+	if !nodeAsCall.TypeArguments().IsNil() {
 		return c.grammarErrorOnNode(node, diagnostics.This_use_of_import_is_invalid_import_calls_can_be_written_but_they_must_have_parentheses_and_cannot_have_type_arguments)
 	}
 
 	nodeArguments := nodeAsCall.Arguments()
-	argumentNodes := nodeArguments.Nodes()
+	argumentNodes := nodeArguments.Slice()
 	if !(core.ModuleKindNode16 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext) && c.moduleKind != core.ModuleKindESNext && c.moduleKind != core.ModuleKindPreserve {
 		// We are allowed trailing comma after proposal-import-assertions.
 		c.checkGrammarForDisallowedTrailingComma(nodeArguments, diagnostics.Trailing_comma_not_allowed)
@@ -2222,16 +2222,16 @@ func (c *Checker) checkGrammarImportCallExpression(node ast.Node) bool {
 
 func (c *Checker) checkGrammarImportAttributesType(attributes ast.TypeLiteralNode) bool {
 	members := attributes.Members()
-	if members == nil {
+	if members.IsNil() {
 		return false
 	}
-	for _, member := range members.Nodes() {
+	for _, member := range members.All() {
 		if member.Kind() != ast.KindPropertySignature {
 			return c.grammarErrorOnNode(member, diagnostics.An_import_attributes_type_may_only_contain_property_signatures)
 		}
 		propertySignature := member.AsPropertySignatureDeclaration()
-		if modifiers := propertySignature.Modifiers(); modifiers != nil {
-			for _, modifier := range modifiers.Nodes() {
+		if modifiers := propertySignature.Modifiers(); !modifiers.IsNil() {
+			for _, modifier := range modifiers.All() {
 				if modifier.Kind() == ast.KindReadonlyKeyword {
 					return c.grammarErrorOnNode(modifier, diagnostics.An_import_attributes_property_cannot_have_a_readonly_modifier)
 				}

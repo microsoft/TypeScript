@@ -268,7 +268,7 @@ func (s *inlayHintState) visitFunctionLikeForParameterType(node ast.FunctionLike
 	}
 
 	pos := 0
-	for _, param := range node.Parameters() {
+	for _, param := range node.ParameterList().All() {
 		if isHintableDeclaration(param) {
 			var symbol *ast.Symbol
 			if ast.IsThisParameter(param) {
@@ -490,13 +490,13 @@ func (s *inlayHintState) getInlayHintLabelParts(node ast.Node, idToSymbol map[as
 			}
 		case ast.KindTypeReference:
 			visitForDisplayParts(node.AsTypeReferenceNode().TypeName())
-			if len(node.TypeArguments()) > 0 {
+			if node.TypeArgumentList().Len() > 0 {
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: "<"})
 				visitDisplayPartList(node.TypeArguments(), ",")
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: ">"})
 			}
 		case ast.KindTypeParameter:
-			if len(node.ModifierNodes()) > 0 {
+			if node.Modifiers().Len() > 0 {
 				visitDisplayPartList(node.ModifierNodes(), "")
 			}
 			visitForDisplayParts(node.Name())
@@ -509,7 +509,7 @@ func (s *inlayHintState) getInlayHintLabelParts(node ast.Node, idToSymbol map[as
 				visitForDisplayParts(node.AsTypeParameterDeclaration().DefaultType())
 			}
 		case ast.KindParameter:
-			if len(node.ModifierNodes()) > 0 {
+			if node.Modifiers().Len() > 0 {
 				visitDisplayPartList(node.ModifierNodes(), " ")
 			}
 			if !node.AsParameterDeclaration().DotDotDotToken().IsNil() {
@@ -531,14 +531,14 @@ func (s *inlayHintState) getInlayHintLabelParts(node ast.Node, idToSymbol map[as
 		case ast.KindTypeQuery:
 			parts = append(parts, &lsproto.InlayHintLabelPart{Value: "typeof "})
 			visitForDisplayParts(node.AsTypeQueryNode().ExprName())
-			if len(node.TypeArguments()) > 0 {
+			if node.TypeArgumentList().Len() > 0 {
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: "<"})
 				visitDisplayPartList(node.TypeArguments(), ", ")
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: ">"})
 			}
 		case ast.KindTypeLiteral:
 			parts = append(parts, &lsproto.InlayHintLabelPart{Value: "{"})
-			if len(node.Members()) > 0 {
+			if node.MemberList().Len() > 0 {
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: " "})
 				visitDisplayPartList(node.Members(), "; ")
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: " "})
@@ -568,12 +568,12 @@ func (s *inlayHintState) getInlayHintLabelParts(node ast.Node, idToSymbol map[as
 			parts = append(parts, &lsproto.InlayHintLabelPart{Value: "..."})
 			visitForDisplayParts(node.Type())
 		case ast.KindUnionType:
-			if node.AsUnionTypeNode().Types() != nil {
-				visitDisplayPartList(node.AsUnionTypeNode().Types().Nodes(), " | ")
+			if !node.AsUnionTypeNode().Types().IsNil() {
+				visitDisplayPartList(node.AsUnionTypeNode().Types().Slice(), " | ")
 			}
 		case ast.KindIntersectionType:
-			if node.AsIntersectionTypeNode().Types() != nil {
-				visitDisplayPartList(node.AsIntersectionTypeNode().Types().Nodes(), " & ")
+			if !node.AsIntersectionTypeNode().Types().IsNil() {
+				visitDisplayPartList(node.AsIntersectionTypeNode().Types().Slice(), " & ")
 			}
 		case ast.KindConditionalType:
 			visitForDisplayParts(node.AsConditionalTypeNode().CheckType())
@@ -645,13 +645,13 @@ func (s *inlayHintState) getInlayHintLabelParts(node ast.Node, idToSymbol map[as
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: "."})
 				visitForDisplayParts(node.AsImportTypeNode().Qualifier())
 			}
-			if len(node.TypeArguments()) > 0 {
+			if node.TypeArgumentList().Len() > 0 {
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: "<"})
 				visitDisplayPartList(node.TypeArguments(), ", ")
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: ">"})
 			}
 		case ast.KindPropertySignature:
-			if len(node.ModifierNodes()) > 0 {
+			if node.Modifiers().Len() > 0 {
 				visitDisplayPartList(node.ModifierNodes(), " ")
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: " "})
 			}
@@ -677,7 +677,7 @@ func (s *inlayHintState) getInlayHintLabelParts(node ast.Node, idToSymbol map[as
 				visitForDisplayParts(node.Type())
 			}
 		case ast.KindMethodSignature:
-			if len(node.ModifierNodes()) > 0 {
+			if node.Modifiers().Len() > 0 {
 				visitDisplayPartList(node.ModifierNodes(), " ")
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: " "})
 			}
@@ -714,7 +714,7 @@ func (s *inlayHintState) getInlayHintLabelParts(node ast.Node, idToSymbol map[as
 			parts = append(parts, &lsproto.InlayHintLabelPart{Value: "]"})
 		case ast.KindObjectBindingPattern:
 			parts = append(parts, &lsproto.InlayHintLabelPart{Value: "{"})
-			if len(node.Elements()) > 0 {
+			if node.ElementList().Len() > 0 {
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: " "})
 				visitDisplayPartList(node.Elements(), ", ")
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: " "})
@@ -732,7 +732,7 @@ func (s *inlayHintState) getInlayHintLabelParts(node ast.Node, idToSymbol map[as
 			visitForDisplayParts(node.AsPrefixUnaryExpression().Operand())
 		case ast.KindTemplateLiteralType:
 			visitForDisplayParts(node.AsTemplateLiteralTypeNode().Head())
-			for _, span := range node.AsTemplateLiteralTypeNode().TemplateSpans().Nodes() {
+			for _, span := range node.AsTemplateLiteralTypeNode().TemplateSpans().All() {
 				visitForDisplayParts(span)
 			}
 		case ast.KindTemplateHead:
@@ -772,7 +772,7 @@ func (s *inlayHintState) getInlayHintLabelParts(node ast.Node, idToSymbol map[as
 	}
 
 	visitParametersAndTypeParameters = func(node ast.SignatureDeclaration) {
-		if len(node.TypeParameters()) > 0 {
+		if node.TypeParameterList().Len() > 0 {
 			parts = append(parts, &lsproto.InlayHintLabelPart{Value: "<"})
 			visitDisplayPartList(node.TypeParameters(), ", ")
 			parts = append(parts, &lsproto.InlayHintLabelPart{Value: ">"})

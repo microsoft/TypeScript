@@ -32,7 +32,7 @@ func (l *LanguageService) OrganizeImports(
 	shouldSort := kind == lsproto.CodeActionKindSourceSortImportsTs || kind == lsproto.CodeActionKindSourceOrganizeImportsTs
 	shouldCombine := shouldSort
 	shouldRemove := kind == lsproto.CodeActionKindSourceRemoveUnusedImportsTs || kind == lsproto.CodeActionKindSourceOrganizeImportsTs
-	topLevelImportDecls := lsutil.FilterImportDeclarations(sourceFile.Statements.Nodes())
+	topLevelImportDecls := lsutil.FilterImportDeclarations(sourceFile.Statements.Slice())
 	topLevelImportGroupDecls := groupByNewlineContiguous(sourceFile, topLevelImportDecls)
 
 	preferences := l.UserPreferences()
@@ -82,7 +82,7 @@ func (l *LanguageService) OrganizeImports(
 		}
 	}
 
-	for _, stmt := range sourceFile.Statements.Nodes() {
+	for _, stmt := range sourceFile.Statements.All() {
 		if !ast.IsAmbientModule(stmt.AsNode()) {
 			continue
 		}
@@ -94,7 +94,7 @@ func (l *LanguageService) OrganizeImports(
 
 		moduleBody := ambientModule.Body().AsModuleBlock()
 
-		ambientModuleImportDecls := lsutil.FilterImportDeclarations(moduleBody.Statements().Nodes())
+		ambientModuleImportDecls := lsutil.FilterImportDeclarations(moduleBody.Statements().Slice())
 		ambientModuleImportGroupDecls := groupByNewlineContiguous(sourceFile, ambientModuleImportDecls)
 
 		for _, importGroupDecl := range ambientModuleImportGroupDecls {
@@ -103,7 +103,7 @@ func (l *LanguageService) OrganizeImports(
 
 		if kind != lsproto.CodeActionKindSourceRemoveUnusedImportsTs {
 			var ambientModuleExportDecls []ast.Statement
-			for _, s := range moduleBody.Statements().Nodes() {
+			for _, s := range moduleBody.Statements().All() {
 				if s.Kind() == ast.KindExportDeclaration {
 					ambientModuleExportDecls = append(ambientModuleExportDecls, s)
 				}
@@ -270,10 +270,10 @@ func removeUnusedImports(oldImports []ast.Statement, sourceFile *ast.SourceFile,
 			case ast.KindNamedImports:
 				namedImports := namedBindings.AsNamedImports()
 				originalBindings := namedBindings
-				newElements := filterUsedImportSpecifiers(namedImports.Elements().Nodes(), typeChecker, sourceFile, jsxElementsPresent, jsxModeNeedsExplicitImport)
+				newElements := filterUsedImportSpecifiers(namedImports.Elements().Slice(), typeChecker, sourceFile, jsxElementsPresent, jsxModeNeedsExplicitImport)
 				if len(newElements) == 0 {
 					namedBindings = ast.Node{}
-				} else if len(newElements) < len(namedImports.Elements().Nodes()) {
+				} else if len(newElements) < namedImports.Elements().Len() {
 					newList := factory.NewNodeList(newElements)
 					updatedNamedImports := factory.UpdateNamedImports(namedImports, newList)
 					namedBindings = updatedNamedImports.AsNode()
@@ -361,8 +361,8 @@ func getImportAttributesKey(attributes ast.ImportAttributesNode) string {
 	key.WriteString(importAttrs.Token().String())
 	key.WriteString(" ")
 
-	attrNodes := make([]ast.Node, len(importAttrs.Attributes().Nodes()))
-	copy(attrNodes, importAttrs.Attributes().Nodes())
+	attrNodes := make([]ast.Node, importAttrs.Attributes().Len())
+	copy(attrNodes, importAttrs.Attributes().Slice())
 	slices.SortFunc(attrNodes, func(a, b ast.Node) int {
 		aName := a.AsImportAttribute().Name().Text()
 		bName := b.AsImportAttribute().Name().Text()
@@ -758,7 +758,7 @@ func tryGetNamedBindingElements(namedImport ast.Statement) []ast.Statement {
 
 	if !namedBindings.IsNil() && namedBindings.Kind() == ast.KindNamedImports {
 		namedImportsNode := namedBindings.AsNamedImports()
-		return namedImportsNode.Elements().Nodes()
+		return namedImportsNode.Elements().Slice()
 	}
 
 	return nil
@@ -766,7 +766,7 @@ func tryGetNamedBindingElements(namedImport ast.Statement) []ast.Statement {
 
 func getTopLevelExportGroups(sourceFile *ast.SourceFile) [][]ast.Statement {
 	var topLevelExportGroups [][]ast.Statement
-	statements := sourceFile.Statements.Nodes()
+	statements := sourceFile.Statements.Slice()
 	statementsLen := len(statements)
 
 	i := 0
@@ -911,7 +911,7 @@ func coalesceExportsWorker(
 				exportClause := exportDecl.AsExportDeclaration().ExportClause()
 				if !exportClause.IsNil() && exportClause.Kind() == ast.KindNamedExports {
 					namedExports := exportClause.AsNamedExports()
-					newExportSpecifiers = append(newExportSpecifiers, namedExports.Elements().Nodes()...)
+					newExportSpecifiers = append(newExportSpecifiers, namedExports.Elements().Slice()...)
 				}
 			}
 

@@ -126,7 +126,7 @@ func evaluateTemplateExpression(expr ast.Node, location ast.Node, evaluate Evalu
 	sb.WriteString(expr.AsTemplateExpression().Head().Text())
 	resolvedOtherFiles := false
 	hasExternalReferences := false
-	for _, span := range expr.AsTemplateExpression().TemplateSpans().Nodes() {
+	for _, span := range expr.AsTemplateExpression().TemplateSpans().All() {
 		spanResult := evaluate(span.Expression(), location)
 		if spanResult.Value == nil {
 			return Result{nil, true /*isSyntacticallyString*/, false, false}

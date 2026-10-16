@@ -802,7 +802,7 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(container ast.Node, enclos
 						}
 
 						decl := r.emitContext.Factory.NewPropertyDeclaration(
-							core.IfElse(mods != nil, r.emitContext.Factory.NewModifierList(mods), nil),
+							core.IfElse(mods != nil, r.emitContext.Factory.NewModifierList(mods), ast.ModifierList{}),
 							c.Name(),
 							c.QuestionToken(),
 							requestNodeBuilder.TypeToTypeNode(r.checker.getTypeOfSymbol(c.Symbol()), enclosingDeclaration, flags, internalFlags, tracker),

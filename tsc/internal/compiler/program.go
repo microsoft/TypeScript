@@ -1147,8 +1147,8 @@ func (p *Program) verifyCompilerOptions() {
 					initializer := keyProps.Initializer()
 					if ast.IsArrayLiteralExpression(initializer) {
 						elements := initializer.ElementList()
-						if elements != nil && len(elements.Nodes()) > valueIndex {
-							diag := tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile(), elements.Nodes()[valueIndex], message, args...)
+						if !elements.IsNil() && elements.Len() > valueIndex {
+							diag := tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile(), elements.At(valueIndex), message, args...)
 							p.programDiagnostics = append(p.programDiagnostics, diag)
 							return diag
 						}

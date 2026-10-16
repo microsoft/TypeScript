@@ -823,7 +823,7 @@ func (b *Binder) declareModuleSymbol(node ast.Node) ast.ModuleInstanceState {
 }
 
 func (b *Binder) bindNamespaceExportDeclaration(node ast.Node) {
-	if node.Modifiers() != nil {
+	if !node.Modifiers().IsNil() {
 		b.errorOnNode(node, diagnostics.Modifiers_cannot_appear_here)
 	}
 	switch {
@@ -1077,7 +1077,7 @@ func getParentOfPropertyAssignment(node ast.Node) ast.Node {
 	case ast.KindBinaryExpression:
 		return node.AsBinaryExpression().Left().Expression()
 	case ast.KindCallExpression:
-		return node.Arguments()[0]
+		return node.ArgumentList().At(0)
 	}
 	panic("Unhandled case in getParentOfPropertyAssignment")
 }
@@ -1604,7 +1604,7 @@ func (b *Binder) bindContainer(node ast.Node, containerFlags ContainerFlags) {
 	if ast.IsSourceFile(node) && ast.IsInJSFile(node) {
 		// Binding of top-level JSTypeAliasDeclaration nodes is deferred to ensure CommonJS module
 		// indicators, if any, are processed first.
-		for _, statement := range node.Statements() {
+		for _, statement := range node.StatementList().All() {
 			if ast.IsJSTypeAliasDeclaration(statement) {
 				b.bindBlockScopedDeclaration(statement, ast.SymbolFlagsTypeAlias, ast.SymbolFlagsTypeAliasExcludes)
 			}
@@ -1749,25 +1749,25 @@ func (b *Binder) bindEach(nodes []ast.Node) {
 	}
 }
 
-func (b *Binder) bindNodeList(nodeList *ast.NodeList) {
-	if nodeList != nil {
-		b.bindEach(nodeList.Nodes())
+func (b *Binder) bindNodeList(nodeList ast.NodeList) {
+	if !nodeList.IsNil() {
+		b.bindEach(nodeList.Slice())
 	}
 }
 
-func (b *Binder) bindModifiers(modifiers *ast.ModifierList) {
-	if modifiers != nil {
-		b.bindEach(modifiers.Nodes())
+func (b *Binder) bindModifiers(modifiers ast.ModifierList) {
+	if !modifiers.IsNil() {
+		b.bindEach(modifiers.Slice())
 	}
 }
 
-func (b *Binder) bindEachStatementFunctionsFirst(statements *ast.NodeList) {
-	for _, node := range statements.Nodes() {
+func (b *Binder) bindEachStatementFunctionsFirst(statements ast.NodeList) {
+	for _, node := range statements.All() {
 		if node.Kind() == ast.KindFunctionDeclaration {
 			b.bind(node)
 		}
 	}
-	for _, node := range statements.Nodes() {
+	for _, node := range statements.All() {
 		if node.Kind() != ast.KindFunctionDeclaration {
 			b.bind(node)
 		}
@@ -1819,7 +1819,7 @@ func isLogicalAssignmentExpression(node ast.Node) bool {
 func (b *Binder) bindAssignmentTargetFlow(node ast.Node) {
 	switch node.Kind() {
 	case ast.KindArrayLiteralExpression:
-		for _, e := range node.Elements() {
+		for _, e := range node.ElementList().All() {
 			if e.Kind() == ast.KindSpreadElement {
 				b.bindAssignmentTargetFlow(e.Expression())
 			} else {
@@ -1827,7 +1827,7 @@ func (b *Binder) bindAssignmentTargetFlow(node ast.Node) {
 			}
 		}
 	case ast.KindObjectLiteralExpression:
-		for _, p := range node.Properties() {
+		for _, p := range node.PropertyList().All() {
 			switch p.Kind() {
 			case ast.KindPropertyAssignment:
 				b.bindDestructuringTargetFlow(p.Initializer())
@@ -2100,7 +2100,7 @@ func (b *Binder) bindSwitchStatement(node ast.Node) {
 	b.preSwitchCaseFlow = b.currentFlow
 	b.bind(stmt.CaseBlock())
 	b.addAntecedent(postSwitchLabel, b.currentFlow)
-	hasDefault := core.Some(stmt.CaseBlock().AsCaseBlock().Clauses().Nodes(), func(c ast.Node) bool {
+	hasDefault := core.Some(stmt.CaseBlock().AsCaseBlock().Clauses().Slice(), func(c ast.Node) bool {
 		return c.Kind() == ast.KindDefaultClause
 	})
 	if !hasDefault {
@@ -2113,12 +2113,12 @@ func (b *Binder) bindSwitchStatement(node ast.Node) {
 
 func (b *Binder) bindCaseBlock(node ast.Node) {
 	switchStatement := node.Parent()
-	clauses := node.AsCaseBlock().Clauses().Nodes()
+	clauses := node.AsCaseBlock().Clauses().Slice()
 	isNarrowingSwitch := switchStatement.Expression().Kind() == ast.KindTrueKeyword || isNarrowingExpression(switchStatement.Expression())
 	var fallthroughFlow ast.FlowNode = b.unreachableFlow
 	for i := 0; i < len(clauses); i++ {
 		clauseStart := i
-		for len(clauses[i].Statements()) == 0 && i+1 < len(clauses) {
+		for clauses[i].StatementList().Len() == 0 && i+1 < len(clauses) {
 			if fallthroughFlow == b.unreachableFlow {
 				b.currentFlow = b.preSwitchCaseFlow
 			}
@@ -2150,7 +2150,7 @@ func (b *Binder) bindCaseOrDefaultClause(node ast.Node) {
 		b.bind(clause.Expression())
 		b.currentFlow = saveCurrentFlow
 	}
-	b.bindEach(clause.Statements().Nodes())
+	b.bindEach(clause.Statements().Slice())
 }
 
 func (b *Binder) bindExpressionStatement(node ast.Node) {
@@ -2346,7 +2346,7 @@ func (b *Binder) bindInitializedVariableFlow(node ast.Node) {
 		name = node.AsBindingElement().Name()
 	}
 	if !name.IsNil() && ast.IsBindingPattern(name) {
-		for _, child := range name.Elements() {
+		for _, child := range name.ElementList().All() {
 			b.bindInitializedVariableFlow(child)
 		}
 	} else {
@@ -2441,7 +2441,7 @@ func (b *Binder) bindCallExpressionFlow(node ast.Node) {
 		expr := ast.SkipParentheses(call.Expression())
 		if expr.Kind() == ast.KindFunctionExpression || expr.Kind() == ast.KindArrowFunction {
 			b.bindNodeList(call.TypeArguments())
-			b.bindEach(call.Arguments().Nodes())
+			b.bindEach(call.Arguments().Slice())
 			b.bind(call.Expression())
 		} else {
 			b.bindEachChild(node)
@@ -2669,7 +2669,7 @@ func isNarrowableReference(node ast.Node) bool {
 
 func hasNarrowableArgument(expr ast.Node) bool {
 	call := expr.AsCallExpression()
-	for _, argument := range call.Arguments().Nodes() { //nolint:modernize
+	for _, argument := range call.Arguments().All() {
 		if containsNarrowableReference(argument) {
 			return true
 		}

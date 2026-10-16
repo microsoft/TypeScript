@@ -144,7 +144,7 @@ func convertBindingElementToObjectAssignmentElement(emitContext *printer.EmitCon
 		if !element.Initializer().IsNil() {
 			expression = emitContext.Factory.NewAssignmentExpression(expression, element.Initializer())
 		}
-		assignment := emitContext.Factory.NewPropertyAssignment(nil /*modifiers*/, element.PropertyName(), ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, expression)
+		assignment := emitContext.Factory.NewPropertyAssignment(ast.ModifierList{} /*modifiers*/, element.PropertyName(), ast.Node{} /*postfixToken*/, ast.Node{} /*typeNode*/, expression)
 		emitContext.SetOriginal(assignment, element.AsNode())
 		emitContext.AssignCommentAndSourceMapRanges(assignment, element.AsNode())
 		return assignment
@@ -154,7 +154,7 @@ func convertBindingElementToObjectAssignmentElement(emitContext *printer.EmitCon
 		equalsToken = emitContext.Factory.NewToken(ast.KindEqualsToken)
 	}
 	assignment := emitContext.Factory.NewShorthandPropertyAssignment(
-		nil, /*modifiers*/
+		ast.ModifierList{}, /*modifiers*/
 		element.Name(),
 		ast.Node{}, /*postfixToken*/
 		ast.Node{}, /*typeNode*/
@@ -179,7 +179,7 @@ func ConvertBindingPatternToAssignmentPattern(emitContext *printer.EmitContext, 
 
 func convertBindingElementToObjectAssignmentPattern(emitContext *printer.EmitContext, element ast.BindingPattern) ast.Expression {
 	var properties []ast.ObjectLiteralElement
-	for _, element := range element.Elements().Nodes() {
+	for _, element := range element.Elements().All() {
 		properties = append(properties, convertBindingElementToObjectAssignmentElement(emitContext, element.AsBindingElement()))
 	}
 	propertyList := emitContext.Factory.NewNodeList(properties)
@@ -192,7 +192,7 @@ func convertBindingElementToObjectAssignmentPattern(emitContext *printer.EmitCon
 
 func convertBindingElementToArrayAssignmentPattern(emitContext *printer.EmitContext, element ast.BindingPattern) ast.Expression {
 	var elements []ast.Expression
-	for _, element := range element.Elements().Nodes() {
+	for _, element := range element.Elements().All() {
 		elements = append(elements, convertBindingElementToArrayAssignmentElement(emitContext, element.AsBindingElement()))
 	}
 	elementList := emitContext.Factory.NewNodeList(elements)

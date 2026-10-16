@@ -92,7 +92,7 @@ func GetIndentation(position int, sourceFile *ast.SourceFile, options lsutil.For
 
 	containerList := getListByPosition(position, precedingToken.Parent(), sourceFile)
 	// use list position if the preceding token is before any list items
-	if containerList != nil && !precedingToken.Loc().ContainedBy(containerList.Loc()) {
+	if !containerList.IsNil() && !precedingToken.Loc().ContainedBy(containerList.Loc()) {
 		useTheSameBaseIndentation := !currentToken.Parent().IsNil() && (currentToken.Parent().Kind() == ast.KindFunctionExpression || currentToken.Parent().Kind() == ast.KindArrowFunction)
 		indentSize := 0
 		if !useTheSameBaseIndentation {
@@ -196,10 +196,10 @@ func getActualIndentationForListItemBeforeComma(commaToken ast.Node, sourceFile 
 		return -1
 	}
 	containingList := GetContainingList(commaToken, sourceFile)
-	if containingList == nil {
+	if containingList.IsNil() {
 		return -1
 	}
-	commaIndex := core.FindIndex(containingList.Nodes(), func(n ast.Node) bool { return n == commaToken })
+	commaIndex := core.FindIndex(containingList.Slice(), func(n ast.Node) bool { return n == commaToken })
 	if commaIndex > 0 {
 		return deriveActualIndentationFromList(containingList, commaIndex-1, sourceFile, options)
 	}
@@ -306,8 +306,8 @@ func getIndentationForNodeWorker(
 			// check if current node is a list item - if yes, take indentation from it
 			var firstListChild ast.Node
 			containerList := GetContainingList(current, sourceFile)
-			if containerList != nil {
-				firstListChild = core.FirstOrNil(containerList.Nodes())
+			if !containerList.IsNil() {
+				firstListChild = core.FirstOrNil(containerList.Slice())
 			}
 			// A list indents its children if the children begin on a later line than the list itself:
 			//
@@ -403,8 +403,8 @@ func getActualIndentationForListItem(node ast.Node, sourceFile *ast.SourceFile, 
 		return -1
 	}
 	containingList := GetContainingList(node, sourceFile)
-	if containingList != nil {
-		index := core.FindIndex(containingList.Nodes(), func(e ast.Node) bool { return e == node })
+	if !containingList.IsNil() {
+		index := core.FindIndex(containingList.Slice(), func(e ast.Node) bool { return e == node })
 		if index != -1 {
 			result := deriveActualIndentationFromList(containingList, index, sourceFile, options)
 			if result != -1 {
@@ -424,18 +424,18 @@ func getActualIndentationForListItem(node ast.Node, sourceFile *ast.SourceFile, 
 	return -1
 }
 
-func getActualIndentationForListStartLine(list *ast.NodeList, sourceFile *ast.SourceFile, options lsutil.FormatCodeSettings) int {
-	if list == nil {
+func getActualIndentationForListStartLine(list ast.NodeList, sourceFile *ast.SourceFile, options lsutil.FormatCodeSettings) int {
+	if list.IsNil() {
 		return -1
 	}
 	line, char := scanner.GetECMALineAndByteOffsetOfPosition(sourceFile, list.Loc().Pos())
 	return findColumnForFirstNonWhitespaceCharacterInLine(line, char, sourceFile, options)
 }
 
-func deriveActualIndentationFromList(list *ast.NodeList, index int, sourceFile *ast.SourceFile, options lsutil.FormatCodeSettings) int {
-	debug.Assert(list != nil && index >= 0 && index < len(list.Nodes()))
+func deriveActualIndentationFromList(list ast.NodeList, index int, sourceFile *ast.SourceFile, options lsutil.FormatCodeSettings) int {
+	debug.Assert(!list.IsNil() && index >= 0 && index < list.Len())
 
-	node := list.Nodes()[index]
+	node := list.At(index)
 
 	// walk toward the start of the list starting from current node and check if the line is the same for all items.
 	// if end line for item [i - 1] differs from the start line for item [i] - find column of the first non-whitespace character on the line of item [i]
@@ -443,16 +443,16 @@ func deriveActualIndentationFromList(list *ast.NodeList, index int, sourceFile *
 	line, char := getStartLineAndCharacterForNode(node, sourceFile)
 
 	for i := index; i >= 0; i-- {
-		if list.Nodes()[i].Kind() == ast.KindCommaToken {
+		if list.At(i).Kind() == ast.KindCommaToken {
 			continue
 		}
 		// skip list items that ends on the same line with the current list element
-		prevEndLine := scanner.GetECMALineOfPosition(sourceFile, list.Nodes()[i].End())
+		prevEndLine := scanner.GetECMALineOfPosition(sourceFile, list.At(i).End())
 		if prevEndLine != line {
 			return findColumnForFirstNonWhitespaceCharacterInLine(line, char, sourceFile, options)
 		}
 
-		line, char = getStartLineAndCharacterForNode(list.Nodes()[i], sourceFile)
+		line, char = getStartLineAndCharacterForNode(list.At(i), sourceFile)
 	}
 	return -1
 }
@@ -515,21 +515,21 @@ func getStartLineForNode(n ast.Node, sourceFile *ast.SourceFile) int {
 	return scanner.GetECMALineOfPosition(sourceFile, scanner.GetTokenPosOfNode(n, sourceFile, false))
 }
 
-func GetContainingList(node ast.Node, sourceFile *ast.SourceFile) *ast.NodeList {
+func GetContainingList(node ast.Node, sourceFile *ast.SourceFile) ast.NodeList {
 	if node.Parent().IsNil() {
-		return nil
+		return ast.NodeList{}
 	}
 	return getListByRange(scanner.GetTokenPosOfNode(node, sourceFile, false), node.End(), node.Parent(), sourceFile)
 }
 
-func getListByPosition(pos int, node ast.Node, sourceFile *ast.SourceFile) *ast.NodeList {
+func getListByPosition(pos int, node ast.Node, sourceFile *ast.SourceFile) ast.NodeList {
 	if node.IsNil() {
-		return nil
+		return ast.NodeList{}
 	}
 	return getListByRange(pos, pos, node, sourceFile)
 }
 
-func getListByRange(start int, end int, node ast.Node, sourceFile *ast.SourceFile) *ast.NodeList {
+func getListByRange(start int, end int, node ast.Node, sourceFile *ast.SourceFile) ast.NodeList {
 	r := core.NewTextRange(start, end)
 	switch node.Kind() {
 	case ast.KindTypeReference:
@@ -550,7 +550,7 @@ func getListByRange(start int, end int, node ast.Node, sourceFile *ast.SourceFil
 		ast.KindConstructorType,
 		ast.KindConstructSignature:
 		tpl := getList(node.TypeParameterList(), r, node, sourceFile)
-		if tpl != nil {
+		if !tpl.IsNil() {
 			return tpl
 		}
 		return getList(node.ParameterList(), r, node, sourceFile)
@@ -564,7 +564,7 @@ func getListByRange(start int, end int, node ast.Node, sourceFile *ast.SourceFil
 		return getList(node.TypeParameterList(), r, node, sourceFile)
 	case ast.KindNewExpression, ast.KindCallExpression:
 		l := getList(node.TypeArgumentList(), r, node, sourceFile)
-		if l != nil {
+		if !l.IsNil() {
 			return l
 		}
 		return getList(node.ArgumentList(), r, node, sourceFile)
@@ -573,17 +573,17 @@ func getListByRange(start int, end int, node ast.Node, sourceFile *ast.SourceFil
 	case ast.KindObjectBindingPattern, ast.KindArrayBindingPattern, ast.KindNamedImports, ast.KindNamedExports:
 		return getList(node.ElementList(), r, node, sourceFile)
 	}
-	return nil // TODO: should this be a panic? It isn't in strada.
+	return ast.NodeList{} // TODO: should this be a panic? It isn't in strada.
 }
 
-func getList(list *ast.NodeList, r core.TextRange, node ast.Node, sourceFile *ast.SourceFile) *ast.NodeList {
-	if list == nil {
-		return nil
+func getList(list ast.NodeList, r core.TextRange, node ast.Node, sourceFile *ast.SourceFile) ast.NodeList {
+	if list.IsNil() {
+		return ast.NodeList{}
 	}
 	if r.ContainedBy(getVisualListRange(node, list.Loc(), sourceFile)) {
 		return list
 	}
-	return nil
+	return ast.NodeList{}
 }
 
 func getVisualListRange(node ast.Node, list core.TextRange, sourceFile *ast.SourceFile) core.TextRange {
@@ -613,7 +613,7 @@ func getVisualListRange(node ast.Node, list core.TextRange, sourceFile *ast.Sour
 func getContainingListOrParentStart(parent ast.Node, child ast.Node, sourceFile *ast.SourceFile) (line int, character int) {
 	containingList := GetContainingList(child, sourceFile)
 	var startPos int
-	if containingList != nil {
+	if !containingList.IsNil() {
 		startPos = containingList.Loc().Pos()
 	} else {
 		startPos = scanner.GetTokenPosOfNode(parent, sourceFile, false)
@@ -799,7 +799,7 @@ func childIsUnindentedBranchOfConditionalExpression(parent ast.Node, child ast.N
 
 func argumentStartsOnSameLineAsPreviousArgument(parent ast.Node, child ast.Node, childStartLine int, sourceFile *ast.SourceFile) bool {
 	if ast.IsCallExpression(parent) || ast.IsNewExpression(parent) {
-		if len(parent.Arguments()) == 0 {
+		if parent.ArgumentList().Len() == 0 {
 			return false
 		}
 		currentIndex := core.FindIndex(parent.Arguments(), func(n ast.Node) bool { return n == child })
@@ -811,7 +811,7 @@ func argumentStartsOnSameLineAsPreviousArgument(parent ast.Node, child ast.Node,
 			return false // Can't look at previous node if first
 		}
 
-		previousNode := parent.Arguments()[currentIndex-1]
+		previousNode := parent.ArgumentList().At(currentIndex - 1)
 		lineOfPreviousNode := scanner.GetECMALineOfPosition(sourceFile, previousNode.End())
 		if childStartLine == lineOfPreviousNode {
 			return true

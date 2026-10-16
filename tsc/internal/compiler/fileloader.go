@@ -956,7 +956,7 @@ func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) as
 	p.factoryMu.Lock()
 	defer p.factoryMu.Unlock()
 	externalHelpersModuleReference := p.factory.NewStringLiteral(text, ast.TokenFlagsNone)
-	importDecl := p.factory.NewImportDeclaration(nil, ast.Node{}, externalHelpersModuleReference, ast.Node{})
+	importDecl := p.factory.NewImportDeclaration(ast.ModifierList{}, ast.Node{}, externalHelpersModuleReference, ast.Node{})
 	externalHelpersModuleReference.SetParent(importDecl)
 	importDecl.SetParent(file.AsNode())
 	return externalHelpersModuleReference

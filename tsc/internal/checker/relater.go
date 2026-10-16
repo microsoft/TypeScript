@@ -498,7 +498,7 @@ func (c *Checker) elaborateObjectLiteral(node ast.Node, source *Type, target *Ty
 		return false
 	}
 	reportedError := false
-	for _, prop := range node.Properties() {
+	for _, prop := range node.PropertyList().All() {
 		if ast.IsSpreadAssignment(prop) {
 			continue
 		}
@@ -530,7 +530,7 @@ func (c *Checker) elaborateArrayLiteral(node ast.Node, source *Type, target *Typ
 		}
 	}
 	reportedError := false
-	for i, element := range node.Elements() {
+	for i, element := range node.ElementList().All() {
 		if ast.IsOmittedExpression(element) || c.isTupleLikeType(target) && c.getPropertyOfType(target, jsnum.Number(i).String()) == nil {
 			continue
 		}

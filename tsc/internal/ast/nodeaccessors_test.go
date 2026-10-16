@@ -61,7 +61,7 @@ func TestNodeAccessors(t *testing.T) {
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 	name := factory.NewIdentifier("f")
 	modifiers := factory.NewModifierList([]ast.Node{factory.NewToken(ast.KindExportKeyword)})
-	node := factory.NewFunctionDeclaration(modifiers, ast.Node{}, name, nil, nil, ast.Node{}, ast.Node{}, ast.Node{})
+	node := factory.NewFunctionDeclaration(modifiers, ast.Node{}, name, ast.TypeParameterList{}, ast.ParameterList{}, ast.Node{}, ast.Node{}, ast.Node{})
 
 	assert.Equal(t, node.Name(), name)
 	assert.Equal(t, node.Modifiers(), modifiers)
@@ -89,8 +89,8 @@ func TestNodeAccessorsSharedKinds(t *testing.T) {
 	name := factory.NewIdentifier("T")
 	modifiers := factory.NewModifierList([]ast.Node{factory.NewToken(ast.KindExportKeyword)})
 	for _, node := range []ast.Node{
-		factory.NewTypeAliasDeclaration(modifiers, name, nil, ast.Node{}),
-		factory.NewJSTypeAliasDeclaration(modifiers, name, nil, ast.Node{}),
+		factory.NewTypeAliasDeclaration(modifiers, name, ast.TypeParameterList{}, ast.Node{}),
+		factory.NewJSTypeAliasDeclaration(modifiers, name, ast.TypeParameterList{}, ast.Node{}),
 	} {
 		assert.Equal(t, node.Name(), name)
 		assert.Equal(t, node.Modifiers(), modifiers)
@@ -116,7 +116,7 @@ func TestNodeAccessorsMissing(t *testing.T) {
 		t.Run(node.Kind().String(), func(t *testing.T) {
 			t.Parallel()
 			assert.Assert(t, node.Name().IsNil())
-			assert.Equal(t, node.Modifiers(), (*ast.ModifierList)(nil))
+			assert.Assert(t, node.Modifiers().IsNil())
 			assert.Assert(t, node.DeclarationData().IsNil())
 			assert.Assert(t, node.ExportableData().IsNil())
 			assert.Assert(t, node.FlowNodeData().IsNil())
@@ -171,7 +171,7 @@ func TestNodeCloneAsKindAlias(t *testing.T) {
 	t.Parallel()
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 	name := factory.NewIdentifier("T")
-	node := factory.NewJSTypeAliasDeclaration(nil, name, nil, ast.Node{})
+	node := factory.NewJSTypeAliasDeclaration(ast.ModifierList{}, name, ast.TypeParameterList{}, ast.Node{})
 	clone := node.AsTypeAliasDeclaration().CloneAs(factory, ast.KindTypeAliasDeclaration)
 	assert.Equal(t, clone.Kind(), ast.KindTypeAliasDeclaration)
 	assert.Equal(t, clone.Name(), name)

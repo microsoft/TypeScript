@@ -101,7 +101,7 @@ func (c *EmitContext) EndVariableEnvironment() []ast.Statement {
 	}
 	if len(scope.variables) > 0 {
 		varDeclList := c.Factory.NewVariableDeclarationList(c.Factory.NewNodeList(scope.variables), ast.NodeFlagsNone)
-		varStatement := c.Factory.NewVariableStatement(nil /*modifiers*/, varDeclList)
+		varStatement := c.Factory.NewVariableStatement(ast.ModifierList{} /*modifiers*/, varDeclList)
 		c.SetEmitFlags(varStatement, EFCustomPrologue)
 		statements = append(statements, varStatement)
 	}
@@ -112,10 +112,10 @@ func (c *EmitContext) EndVariableEnvironment() []ast.Statement {
 }
 
 // Invokes c.EndVariableEnvironment() and merges the results into `statements`
-func (c *EmitContext) EndAndMergeVariableEnvironmentList(statements *ast.StatementList) *ast.StatementList {
+func (c *EmitContext) EndAndMergeVariableEnvironmentList(statements ast.StatementList) ast.StatementList {
 	var nodes []ast.Statement
-	if statements != nil {
-		nodes = statements.Nodes()
+	if !statements.IsNil() {
+		nodes = statements.Slice()
 	}
 
 	if result, changed := c.endAndMergeVariableEnvironment(nodes); changed {
@@ -178,7 +178,7 @@ func (c *EmitContext) EndLexicalEnvironment() []ast.Statement {
 	var statements []ast.Statement
 	if len(scope.variables) > 0 {
 		varDeclList := c.Factory.NewVariableDeclarationList(c.Factory.NewNodeList(scope.variables), ast.NodeFlagsLet)
-		varStatement := c.Factory.NewVariableStatement(nil /*modifiers*/, varDeclList)
+		varStatement := c.Factory.NewVariableStatement(ast.ModifierList{} /*modifiers*/, varDeclList)
 		c.SetEmitFlags(varStatement, EFCustomPrologue)
 		statements = append(statements, varStatement)
 	}
@@ -186,10 +186,10 @@ func (c *EmitContext) EndLexicalEnvironment() []ast.Statement {
 }
 
 // Invokes c.EndLexicalEnvironment() and merges the results into `statements`
-func (c *EmitContext) EndAndMergeLexicalEnvironmentList(statements *ast.StatementList) *ast.StatementList {
+func (c *EmitContext) EndAndMergeLexicalEnvironmentList(statements ast.StatementList) ast.StatementList {
 	var nodes []ast.Statement
-	if statements != nil {
-		nodes = statements.Nodes()
+	if !statements.IsNil() {
+		nodes = statements.Slice()
 	}
 
 	if result, changed := c.endAndMergeLexicalEnvironment(nodes); changed {
@@ -221,8 +221,8 @@ func (c *EmitContext) AddLexicalDeclaration(name ast.IdentifierNode) {
 }
 
 // Merges declarations produced by c.EndVariableEnvironment() or c.EndLexicalEnvironment() into a statement list
-func (c *EmitContext) MergeEnvironmentList(statements *ast.StatementList, declarations []ast.Statement) *ast.StatementList {
-	if result, changed := c.mergeEnvironment(statements.Nodes(), declarations); changed {
+func (c *EmitContext) MergeEnvironmentList(statements ast.StatementList, declarations []ast.Statement) ast.StatementList {
+	if result, changed := c.mergeEnvironment(statements.Slice(), declarations); changed {
 		list := c.Factory.NewNodeList(result)
 		list.SetLoc(statements.Loc())
 		return list
@@ -345,7 +345,7 @@ func isHoistedVariable(node ast.VariableDeclarationNode) bool {
 func (c *EmitContext) isHoistedVariableStatement(node ast.Statement) bool {
 	return c.isCustomPrologue(node) &&
 		ast.IsVariableStatement(node) &&
-		core.Every(node.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Nodes(), isHoistedVariable)
+		core.Every(node.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Slice(), isHoistedVariable)
 }
 
 //
@@ -770,12 +770,12 @@ func (c *EmitContext) IsCallToHelper(firstSegment ast.Expression, helperName str
 // Visitor Hooks
 //
 
-func (c *EmitContext) VisitVariableEnvironment(nodes *ast.StatementList, visitor *ast.NodeVisitor) *ast.StatementList {
+func (c *EmitContext) VisitVariableEnvironment(nodes ast.StatementList, visitor *ast.NodeVisitor) ast.StatementList {
 	c.StartVariableEnvironment()
 	return c.EndAndMergeVariableEnvironmentList(visitor.VisitNodes(nodes))
 }
 
-func (c *EmitContext) VisitParameters(nodes *ast.ParameterList, visitor *ast.NodeVisitor) *ast.ParameterList {
+func (c *EmitContext) VisitParameters(nodes ast.ParameterList, visitor *ast.NodeVisitor) ast.ParameterList {
 	c.StartVariableEnvironment()
 	scope := c.varScopeStack.Peek()
 	oldFlags := scope.flags
@@ -796,12 +796,12 @@ func (c *EmitContext) VisitParameters(nodes *ast.ParameterList, visitor *ast.Nod
 	return nodes
 }
 
-func (c *EmitContext) addDefaultValueAssignmentsIfNeeded(nodeList *ast.ParameterList) *ast.ParameterList {
-	if nodeList == nil {
+func (c *EmitContext) addDefaultValueAssignmentsIfNeeded(nodeList ast.ParameterList) ast.ParameterList {
+	if nodeList.IsNil() {
 		return nodeList
 	}
 	var result []ast.Node
-	nodes := nodeList.Nodes()
+	nodes := nodeList.Slice()
 	for i, parameter := range nodes {
 		updated := c.addDefaultValueAssignmentIfNeeded(parameter.AsParameterDeclaration())
 		if updated != parameter {
@@ -849,7 +849,7 @@ func (c *EmitContext) addDefaultValueAssignmentForBindingPattern(parameter ast.P
 		initNode = c.Factory.NewGeneratedNameForNode(parameter.AsNode())
 	}
 	c.AddInitializationStatement(c.Factory.NewVariableStatement(
-		nil,
+		ast.ModifierList{},
 		c.Factory.NewVariableDeclarationList(c.Factory.NewNodeList([]ast.Node{c.Factory.NewVariableDeclaration(
 			parameter.Name(),
 			ast.Node{},
