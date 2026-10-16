@@ -108,6 +108,7 @@ export class SyncRpcChannel {
     private writeFd: number;
     private pipeFd: number | undefined;
     private callbacks = new Map<string, (name: string, payload: string) => string>();
+    private callbackError: Error | undefined;
 
     private methodBufCache = new Map<string, Buffer>();
 
@@ -275,6 +276,10 @@ export class SyncRpcChannel {
         if (this.readFd < 0) {
             throw new Error("SyncRpcChannel is closed");
         }
+        // A failed callback aborts the request loop with its response still unread.
+        if (this.callbackError) {
+            throw this.callbackError;
+        }
     }
 
     private getMethodBuf(method: string): Buffer {
@@ -349,7 +354,7 @@ export class SyncRpcChannel {
                 Buffer.from(name, "utf-8"),
                 Buffer.from(errMsg, "utf-8"),
             );
-            throw new Error(`no callback named \`${name}\` found`);
+            throw this.callbackError = new Error(`no callback named \`${name}\` found`);
         }
 
         try {
@@ -367,7 +372,7 @@ export class SyncRpcChannel {
                 Buffer.from(name, "utf-8"),
                 Buffer.from(errMsg, "utf-8"),
             );
-            throw new Error(`Error calling callback \`${name}\`: ${errMsg}`);
+            throw this.callbackError = new Error(`Error calling callback \`${name}\`: ${errMsg}`);
         }
     }
 
