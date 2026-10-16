@@ -3,26 +3,22 @@ package incremental
 import (
 	"testing"
 
-	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
 func TestGlobalFileDeletionAfterNonGlobalFile(t *testing.T) {
 	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/index.ts", PathKey: "/index.ts"}, "export {};", core.ScriptKindTS)
 	for _, globalFirst := range []bool{false, true} {
 		t.Run(core.IfElse(globalFirst, "global first", "non-global first"), func(t *testing.T) {
 			t.Parallel()
-			current := &snapshot{
-				allFilesExcludingDefaultLibraryFile: []*ast.SourceFile{file},
-			}
-
-			current.allFilesExcludingDefaultLibraryFileOnce.Do(func() {})
-			current.fileInfos.Store(file.PathKey(), &FileInfo{})
-			to := &toProgramSnapshot{snapshot: current}
+			program := newDeletionTestProgram(map[string]string{
+				"/lib/lib.d.ts":        deletionTestLib,
+				"/project/consumer.ts": "export {};",
+			}, []string{"consumer.ts"}, &core.CompilerOptions{Incremental: core.TSTrue, NoEmit: core.TSTrue}, nil)
+			current := program.snapshot
+			to := &toProgramSnapshot{program: program.program, snapshot: current}
 			deletions := []struct {
 				path tspath.PathKey
 				info *FileInfo
@@ -34,13 +30,16 @@ func TestGlobalFileDeletionAfterNonGlobalFile(t *testing.T) {
 				deletions[0], deletions[1] = deletions[1], deletions[0]
 			}
 			// Enumerate both possible orders without relying on SyncMap iteration order.
-			for _, deletion := range deletions {
-				if !to.handleDeletedFile(deletion.path, deletion.info) {
-					break
+			forEachDeletedFile(func(callback func(tspath.PathKey, *FileInfo) bool) {
+				for _, deletion := range deletions {
+					if !callback(deletion.path, deletion.info) {
+						return
+					}
 				}
-			}
+			}, &current.fileInfos, to.handleDeletedFile)
 			assert.Assert(t, to.globalFileRemoved)
-			assert.Assert(t, current.changedFilesSet.Has(file.PathKey()))
+			to.invalidateGlobalScope()
+			assert.Assert(t, current.changedFilesSet.Has("/project/consumer.ts"))
 			assert.Assert(t, current.buildInfoEmitPending.Load())
 		})
 	}

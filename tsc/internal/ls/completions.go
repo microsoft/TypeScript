@@ -92,6 +92,7 @@ func (l *LanguageService) filterContentMappedAutoImports(ctx context.Context, pr
 			l.FormatOptions(),
 			l.converters,
 			l.UserPreferences(),
+			false, /*includeSymbolNameInDescription*/
 		)
 		if !ok {
 			continue
@@ -2140,7 +2141,10 @@ func completionNameForLiteral(
 }
 
 func getInsertTextAndReplacementSpanForImportCompletion(fix *autoimport.Fix, importKind lsproto.ImportKind, importStatementCompletion *importStatementCompletionInfo, useSemicolons bool, file *ast.SourceFile, preferences lsutil.UserPreferences, isSnippet bool) (insertText string, replacementSpan *lsproto.Range) {
-	quotedModuleSpecifier := escapeSnippetText(quote(file, preferences, fix.ModuleSpecifier))
+	quotedModuleSpecifier := quote(file, preferences, fix.ModuleSpecifier)
+	if isSnippet {
+		quotedModuleSpecifier = escapeSnippetText(strings.ReplaceAll(quotedModuleSpecifier, `\`, `\\`))
+	}
 	tabStop := core.IfElse(isSnippet, "$1", "")
 	suffix := core.IfElse(useSemicolons, ";", "")
 	topLevelTypeOnlyText := core.IfElse(importStatementCompletion.isTopLevelTypeOnly, " "+scanner.TokenToString(ast.KindTypeKeyword)+" ", " ")
@@ -5544,7 +5548,7 @@ func (l *LanguageService) getCompletionItemDetails(
 		// Auto-imports in content-mapped files are evaluated eagerly so edits outside
 		// of verbatim spans can cause the completion item to be filtered out entirely.
 		// Only real files take this code path, so the final Edits() is guaranteed ok.
-		edits, description, _ := (&autoimport.Fix{AutoImportFix: data.AutoImport}).Edits(ctx, file, program.Options(), l.FormatOptions(), l.converters, l.UserPreferences())
+		edits, description, _ := (&autoimport.Fix{AutoImportFix: data.AutoImport}).Edits(ctx, file, program.Options(), l.FormatOptions(), l.converters, l.UserPreferences(), false /*includeSymbolNameInDescription*/)
 		item.AdditionalTextEdits = &edits
 		item.Detail = strPtrTo(description)
 		return item
