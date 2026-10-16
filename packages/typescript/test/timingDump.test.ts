@@ -85,6 +85,8 @@ test("timing dumps", async t => {
         try {
             api.parseCommandLine([]);
             assert.throws(() => api.readConfigFile("/tsconfig.json"), /read failed/);
+            assert.throws(() => api.parseCommandLine([]), /read failed/);
+            assert.throws(() => api.getTimingInfo(), /read failed/);
         }
         finally {
             api.close();
