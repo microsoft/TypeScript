@@ -262,6 +262,7 @@ func (p *fileLoader) addRootFileTask(fileName tspath.RootedFilePath, referenceTe
 		rootTask.normalizedFilePath = fileName
 		rootTask.path = p.caseSensitivity.PathKey(tspath.RootedPath(fileName))
 		rootTask.failedLookup = true
+		rootTask.parseTaskResult = &parseTaskResult{}
 		rootTask.processingDiagnostics = []*processingDiagnostic{{
 			kind: processingDiagnosticKindExplainingFileInclude,
 			explanation: &includeExplainingDiagnostic{

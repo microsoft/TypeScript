@@ -30,22 +30,25 @@ type parseTask struct {
 	failedLookup                bool
 	includeReason               *FileIncludeReason
 	packageId                   module.PackageId
+	increaseDepth               bool
+	elideOnDepth                bool
+	loadedTask                  *parseTask
 
+	// Most tasks are duplicate references to an already-loaded file, so
+	// state produced by loading lives in a separately allocated record that
+	// is only created when the task is loaded.
+	*parseTaskResult
+}
+
+type parseTaskResult struct {
 	metadata                     ast.SourceFileMetaData
 	resolutionsInFile            module.ModeAwareCache[*module.ResolvedModule]
 	resolutionsTrace             []module.DiagAndArgs
 	typeResolutionsInFile        module.ModeAwareCache[*module.ResolvedTypeReferenceDirective]
 	typeResolutionsTrace         []module.DiagAndArgs
-	resolutionDiagnostics        []*ast.Diagnostic
 	processingDiagnostics        []*processingDiagnostic
 	importHelpersImportSpecifier *ast.StringLiteralNode
 	jsxRuntimeImportSpecifier    *jsxRuntimeImportSpecifier
-
-	increaseDepth bool
-	elideOnDepth  bool
-
-	loadedTask        *parseTask
-	allIncludeReasons []*FileIncludeReason
 }
 
 func (t *parseTask) FileName() tspath.RootedFilePath {
@@ -58,6 +61,9 @@ func (t *parseTask) PathKey() tspath.PathKey {
 
 func (t *parseTask) load(loader *fileLoader) {
 	t.loaded = true
+	if t.parseTaskResult == nil {
+		t.parseTaskResult = &parseTaskResult{}
+	}
 	if t.isForAutomaticTypeDirective {
 		t.loadAutomaticTypeDirectives(loader)
 		return
