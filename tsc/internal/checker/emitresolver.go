@@ -754,6 +754,7 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(container *ast.Node, enclo
 	var instanceInfos []*IndexInfo
 	if instanceIndexSymbol != nil {
 		siblingSymbols := slices.Collect(maps.Values(r.checker.getMembersOfSymbol(sym)))
+		r.checker.sortSymbols(siblingSymbols)
 		instanceInfos = r.checker.getIndexInfosOfIndexSymbol(instanceIndexSymbol, siblingSymbols)
 	}
 

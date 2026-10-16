@@ -5088,6 +5088,43 @@ func TestGenerateTrace(t *testing.T) {
 			files:           generateTraceStableOrderFiles(),
 			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
 		},
+		{
+			subScenario: "generateTrace creates index signature sibling types in a stable order",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"strict": true,
+						"skipLibCheck": true,
+						"declaration": true,
+						"emitDeclarationOnly": true,
+						"outDir": "out"
+					},
+					"files": ["main.ts", "ambient.d.ts"]
+				}`),
+				"/home/src/workspaces/project/ambient.d.ts": stringtestutil.Dedent(`
+				declare const k1: string;
+				declare class C {
+					[k1]: { a: 1 };
+					m1: { p1: 1 };
+					m2: { p2: 2 };
+					m3: { p3: 3 };
+					m4: { p4: 4 };
+					m5: { p5: 5 };
+					m6: { p6: 6 };
+					m7: { p7: 7 };
+					m8: { p8: 8 };
+					m9: { p9: 9 };
+					m10: { p10: 10 };
+				}
+				`),
+				"/home/src/workspaces/project/main.ts": stringtestutil.Dedent(`
+				declare function expand<X>(): { [K in keyof X]: X[K] };
+				export const w = expand<C>();
+				`),
+			},
+			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
+		},
 	}
 
 	for _, c := range cases {

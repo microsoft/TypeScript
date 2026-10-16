@@ -20089,7 +20089,11 @@ func (c *Checker) resolveDeclaredMembers(t *Type) *InterfaceType {
 func (c *Checker) getIndexInfosOfSymbol(symbol *ast.Symbol) []*IndexInfo {
 	indexSymbol := c.getIndexSymbol(symbol)
 	if indexSymbol != nil {
-		return c.getIndexInfosOfIndexSymbol(indexSymbol, slices.Collect(maps.Values(c.getMembersOfSymbol(symbol))))
+		// The types of the siblings are created in this order, so sort them rather than using the random iteration
+		// order of the symbol table.
+		siblingSymbols := slices.Collect(maps.Values(c.getMembersOfSymbol(symbol)))
+		c.sortSymbols(siblingSymbols)
+		return c.getIndexInfosOfIndexSymbol(indexSymbol, siblingSymbols)
 	}
 	return nil
 }
