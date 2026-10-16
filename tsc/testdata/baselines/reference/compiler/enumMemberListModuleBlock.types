@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/enumMemberListModuleBlock.ts] ////
+
+=== enumMemberListModuleBlock.ts ===
+namespace E { export class C {} }
+>E : typeof E
+>C : C
+
+enum E { D = E["C"] }
+>E : E
+>D : E.D
+>E["C"] : typeof E.C
+>E : typeof E
+>"C" : "C"
+
