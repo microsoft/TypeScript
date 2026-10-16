@@ -108,7 +108,7 @@ func TestCreateSnapshotPreservesWindowsRootDriveLetterCase(t *testing.T) {
 
 	snapshot, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
-	program, err := snapshot.getProgram(response.Projects[0].Id)
+	program, err := snapshot.getProgram(response.Projects[0].Handle)
 	assert.NilError(t, err)
 	assert.Equal(t, program.GetSourceFile(fileName).FileName(), tspath.RootedFilePathFromNormalized(fileName))
 }
@@ -304,7 +304,7 @@ func TestCreateProgramReportsNonCompositeProjectReference(t *testing.T) {
 		}},
 	})
 	assert.NilError(t, err)
-	projectID := (*response.Operation.CreatedPrograms)[0].AsID()
+	projectID := session.snapshots[response.Snapshot].snapshot.ProjectCollection.GetProject((*response.Operation.CreatedPrograms)[0].AsID()).Handle()
 	diagnostics, err := session.handleGetProgramDiagnostics(context.Background(), &GetProjectDiagnosticsParams{
 		Snapshot: response.Snapshot,
 		Project:  projectID,
