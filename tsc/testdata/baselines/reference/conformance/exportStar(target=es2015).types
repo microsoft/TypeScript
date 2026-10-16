@@ -40,20 +40,20 @@ export * from "./t3";
 
 === main.ts ===
 import hello, { x, y, z, foo } from "./t4";
->hello : any
->x : number
->y : number
+>hello : "hello"
+>x : any
+>y : any
 >z : string
 >foo : () => void
 
 hello;
->hello : any
+>hello : "hello"
 
 x;
->x : number
+>x : any
 
 y;
->y : number
+>y : any
 
 z;
 >z : string

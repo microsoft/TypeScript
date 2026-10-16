@@ -11555,6 +11555,10 @@ func (c *Checker) checkPropertyAccessExpressionOrQualifiedName(node *ast.Node, l
 		}
 		prop = c.getPropertyOfTypeEx(apparentType, right.Text(), isConstEnumObjectType(apparentType) /*skipObjectFunctionPropertyAugment*/, node.Kind == ast.KindQualifiedName /*includeTypeOnlyMembers*/)
 	}
+	if c.checkExportConflict(prop, right) {
+		c.symbolNodeLinks.Get(node).resolvedSymbol = prop
+		return c.errorType
+	}
 	c.markLinkedReferences(node, ReferenceHintProperty, prop, leftType)
 	var propType *Type
 	if prop == nil {
@@ -14886,23 +14890,7 @@ func (c *Checker) reportNonDefaultExport(moduleSymbol *ast.Symbol, node *ast.Nod
 	if moduleSymbol.Exports() != nil && moduleSymbol.Exports()[node.Symbol().Name()] != nil {
 		c.error(node, diagnostics.Module_0_has_no_default_export_Did_you_mean_to_use_import_1_from_0_instead, c.symbolToString(moduleSymbol), c.symbolToString(node.Symbol()))
 	} else {
-		diagnostic := c.error(node.Name(), diagnostics.Module_0_has_no_default_export, c.symbolToString(moduleSymbol))
-		var exportStar *ast.Symbol
-		if moduleSymbol.Exports() != nil {
-			exportStar = moduleSymbol.Exports()[ast.InternalSymbolNameExportStar]
-		}
-		if exportStar != nil {
-			defaultExport := core.Find(exportStar.Declarations(), func(decl *ast.Declaration) bool {
-				if !(ast.IsExportDeclaration(decl) && decl.ModuleSpecifier() != nil) {
-					return false
-				}
-				resolvedExternalModuleName := c.resolveExternalModuleName(decl, decl.ModuleSpecifier(), false /*ignoreErrors*/, c.getTypeFromImportAttributes(ast.GetImportAttributes(decl)))
-				return resolvedExternalModuleName != nil && resolvedExternalModuleName.Exports()[ast.InternalSymbolNameDefault] != nil
-			})
-			if defaultExport != nil {
-				diagnostic.AddRelatedInfo(createDiagnosticForNode(defaultExport, diagnostics.X_export_Asterisk_does_not_re_export_a_default))
-			}
-		}
+		c.error(node.Name(), diagnostics.Module_0_has_no_default_export, c.symbolToString(moduleSymbol))
 	}
 }
 
@@ -14912,10 +14900,18 @@ func (c *Checker) resolveExportByName(moduleSymbol *ast.Symbol, name string, sou
 	if exportValue != nil {
 		exportSymbol = c.getPropertyOfTypeEx(c.getTypeOfSymbol(exportValue), name, true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/)
 	} else {
-		exportSymbol = moduleSymbol.Exports()[name]
+		exportSymbol = c.getExportsOfModule(moduleSymbol)[name]
 	}
 	resolved := c.resolveSymbolEx(exportSymbol, dontResolveAlias)
-	c.markSymbolOfAliasDeclarationIfTypeOnly(sourceNode, nil)
+	var errorNode *ast.Node
+	if sourceNode != nil {
+		errorNode = sourceNode.Name()
+		if ast.IsImportOrExportSpecifier(sourceNode) {
+			errorNode = sourceNode.PropertyNameOrName()
+		}
+	}
+	c.checkExportConflict(c.resolveSymbol(exportSymbol), errorNode)
+	c.markSymbolOfAliasDeclarationIfTypeOnly(sourceNode, c.moduleSymbolLinks.Get(moduleSymbol).typeOnlyExportStarMap[name])
 	return resolved
 }
 
@@ -15089,11 +15085,27 @@ func (c *Checker) getExportOfModule(symbol *ast.Symbol, nameText string, specifi
 	if symbol.Flags()&ast.SymbolFlagsModule != 0 {
 		exportSymbol := c.getExportsOfSymbol(symbol)[nameText]
 		resolved := c.resolveSymbolEx(exportSymbol, dontResolveAlias)
+		errorNode := specifier
+		if ast.IsImportOrExportSpecifier(specifier) || ast.IsBindingElement(specifier) {
+			errorNode = specifier.PropertyNameOrName()
+		}
+		c.checkExportConflict(c.resolveSymbol(exportSymbol), errorNode)
 		exportStarDeclaration := c.moduleSymbolLinks.Get(symbol).typeOnlyExportStarMap[nameText]
 		c.markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportStarDeclaration)
 		return resolved
 	}
 	return nil
+}
+
+func (c *Checker) checkExportConflict(symbol *ast.Symbol, node *ast.Node) bool {
+	symbol = c.resolveSymbol(symbol)
+	if symbol == nil || symbol.CheckFlags()&ast.CheckFlagsExportConflict == 0 {
+		return false
+	}
+	if node != nil {
+		c.error(node, diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity, c.symbolToString(symbol.Parent()), symbol.Name())
+	}
+	return true
 }
 
 func (c *Checker) isOnlyImportableAsDefault(usage *ast.Node, resolvedModule *ast.Symbol, importAttributesType *Type) bool {
@@ -15149,7 +15161,7 @@ func (c *Checker) canHaveSyntheticDefault(file *ast.Node, moduleSymbol *ast.Symb
 	if file == nil || file.AsSourceFile().IsDeclarationFile {
 		// Definitely cannot have a synthetic default if they have a syntactic default member specified
 		defaultExportSymbol := c.resolveExportByName(moduleSymbol, ast.InternalSymbolNameDefault /*sourceNode*/, nil /*dontResolveAlias*/, true) // Dont resolve alias because we want the immediately exported symbol's declaration
-		if defaultExportSymbol != nil && core.Some(defaultExportSymbol.Declarations(), isSyntacticDefault) {
+		if defaultExportSymbol != nil && (c.resolveSymbol(defaultExportSymbol).CheckFlags()&ast.CheckFlagsExportConflict != 0 || core.Some(defaultExportSymbol.Declarations(), isSyntacticDefault)) {
 			return false
 		}
 		// It _might_ still be incorrect to assume there is no __esModule marker on the import at runtime, even if there is no `default` member
@@ -16238,8 +16250,8 @@ func (c *Checker) resolveQualifiedName(name *ast.Node, left *ast.Node, right *as
 	if namespace == nil || ast.NodeIsMissing(right) {
 		return nil
 	}
-	if namespace == c.unknownSymbol {
-		return namespace
+	if namespace == c.unknownSymbol || namespace.CheckFlags()&ast.CheckFlagsExportConflict != 0 {
+		return c.unknownSymbol
 	}
 	if namespace.ValueDeclaration() != nil &&
 		ast.IsInJSFile(namespace.ValueDeclaration()) &&
@@ -16261,6 +16273,9 @@ func (c *Checker) resolveQualifiedName(name *ast.Node, left *ast.Node, right *as
 	if symbol == nil && namespace.Flags()&ast.SymbolFlagsAlias != 0 {
 		// `namespace` can be resolved further if there was a symbol merge with a re-export
 		symbol = c.getMergedSymbol(c.getSymbol(c.getExportsOfSymbol(c.resolveAlias(namespace)), text, meaning))
+	}
+	if !ignoreErrors {
+		c.checkExportConflict(c.resolveSymbol(symbol), right)
 	}
 	if symbol == nil {
 		if !ignoreErrors {
@@ -16546,13 +16561,6 @@ func (c *Checker) getExportsOfModule(moduleSymbol *ast.Symbol) ast.SymbolTable {
 	return links.resolvedExports
 }
 
-type ExportCollision struct {
-	specifierText        string
-	exportsWithDuplicate []*ast.Node
-}
-
-type ExportCollisionTable = map[string]*ExportCollision
-
 func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports ast.SymbolTable, typeOnlyExportStarMap map[string]*ast.Node) {
 	var visitedSymbols []*ast.Symbol
 	nonTypeOnlyNames := collections.NewSetWithSizeHint[string](len(moduleSymbol.Exports()))
@@ -16577,22 +16585,12 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 		exportStars := symbol.Exports()[ast.InternalSymbolNameExportStar]
 		if exportStars != nil {
 			nestedSymbols := make(ast.SymbolTable)
-			lookupTable := make(ExportCollisionTable)
 			for _, node := range exportStars.Declarations() {
 				resolvedModule := c.resolveExternalModuleName(node, node.ModuleSpecifier(), false /*ignoreErrors*/, c.getTypeFromImportAttributes(ast.GetImportAttributes(node)))
 				exportedSymbols := visit(resolvedModule, node, isTypeOnly || node.IsTypeOnly())
-				c.extendExportSymbols(nestedSymbols, exportedSymbols, lookupTable, node)
+				c.extendExportSymbols(nestedSymbols, exportedSymbols, symbol)
 			}
-			for id, s := range lookupTable {
-				// It's not an error if the file with multiple `export *`s with duplicate names exports a member with that name itself
-				if id == ast.InternalSymbolNameExportEquals || len(s.exportsWithDuplicate) == 0 || symbols[id] != nil {
-					continue
-				}
-				for _, node := range s.exportsWithDuplicate {
-					c.addDiagnostic(createDiagnosticForNode(node, diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity, s.specifierText, id))
-				}
-			}
-			c.extendExportSymbols(symbols, nestedSymbols, nil, nil)
+			c.extendExportSymbols(symbols, nestedSymbols, nil)
 		}
 		if exportStar != nil && exportStar.IsTypeOnly() {
 			if typeOnlyExportStarMap == nil {
@@ -16636,26 +16634,20 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 	return exports, typeOnlyExportStarMap
 }
 
-/**
- * Extends one symbol table with another while collecting information on name collisions for error message generation into the `lookupTable` argument
- * Not passing `lookupTable` and `exportNode` disables this collection, and just extends the tables
- */
-func (c *Checker) extendExportSymbols(target ast.SymbolTable, source ast.SymbolTable, lookupTable ExportCollisionTable, exportNode *ast.Node) {
+// A non-nil moduleSymbol collects conflicting star exports. Explicit exports are
+// merged afterward without conflicts, so they take precedence over star exports.
+func (c *Checker) extendExportSymbols(target ast.SymbolTable, source ast.SymbolTable, moduleSymbol *ast.Symbol) {
 	for id, sourceSymbol := range source {
-		if id == ast.InternalSymbolNameDefault {
+		if id == ast.InternalSymbolNameExportStar || id == ast.InternalSymbolNameExportEquals {
 			continue
 		}
 		targetSymbol := target[id]
 		if targetSymbol == nil {
 			target[id] = sourceSymbol
-			if lookupTable != nil && exportNode != nil {
-				lookupTable[id] = &ExportCollision{
-					specifierText: scanner.GetTextOfNode(exportNode.ModuleSpecifier()),
-				}
-			}
-		} else if lookupTable != nil && exportNode != nil && c.resolveSymbol(targetSymbol) != c.resolveSymbol(sourceSymbol) {
-			s := lookupTable[id]
-			s.exportsWithDuplicate = append(s.exportsWithDuplicate, exportNode)
+		} else if moduleSymbol != nil && targetSymbol.CheckFlags()&ast.CheckFlagsExportConflict == 0 && c.resolveSymbol(targetSymbol) != c.resolveSymbol(sourceSymbol) {
+			conflict := c.newSymbolEx(ast.SymbolFlagsProperty|ast.SymbolFlagsTypeAlias|ast.SymbolFlagsNamespaceModule, id, ast.CheckFlagsExportConflict)
+			conflict.SetParent(moduleSymbol)
+			target[id] = conflict
 		}
 	}
 }
@@ -16899,6 +16891,9 @@ func (c *Checker) GetTypeOfSymbolAtLocation(symbol *ast.Symbol, location *ast.No
 }
 
 func (c *Checker) getTypeOfSymbol(symbol *ast.Symbol) *Type {
+	if symbol.CheckFlags()&ast.CheckFlagsExportConflict != 0 {
+		return c.errorType
+	}
 	if symbol.CheckFlags()&ast.CheckFlagsDeferredType != 0 {
 		return c.getTypeOfSymbolWithDeferredType(symbol)
 	}
@@ -24239,6 +24234,8 @@ func (c *Checker) getDeclaredTypeOfSymbol(symbol *ast.Symbol) *Type {
 
 func (c *Checker) tryGetDeclaredTypeOfSymbol(symbol *ast.Symbol) *Type {
 	switch {
+	case symbol.CheckFlags()&ast.CheckFlagsExportConflict != 0:
+		return c.errorType
 	case symbol.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0:
 		return c.getDeclaredTypeOfClassOrInterface(symbol)
 	case symbol.Flags()&ast.SymbolFlagsTypeParameter != 0:
@@ -27624,6 +27621,16 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 		}
 		prop := c.getPropertyOfType(objectType, propName)
 		if prop != nil {
+			var errorNode *ast.Node
+			if accessNode != nil {
+				errorNode = getIndexNodeForAccessExpression(accessNode)
+			}
+			if c.checkExportConflict(prop, errorNode) {
+				if accessExpression != nil && accessFlags&AccessFlagsCacheSymbol != 0 {
+					c.symbolNodeLinks.Get(accessNode).resolvedSymbol = prop
+				}
+				return c.errorType
+			}
 			if accessFlags&AccessFlagsReportDeprecated != 0 && accessNode != nil && len(prop.Declarations()) != 0 && c.isDeprecatedSymbol(prop) && c.isUncalledFunctionReference(accessNode, prop) {
 				var deprecatedNode *ast.Node
 				if accessExpression != nil {

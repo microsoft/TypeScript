@@ -46,6 +46,7 @@ func collectExternalModuleInfo(sourceFile *ast.SourceFile, compilerOptions *core
 func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 	hasImportStar := false
 	hasImportDefault := false
+	hasDefaultToInitialize := false
 	for _, node := range c.sourceFile.Statements.Nodes {
 		// Look through NotEmittedStatement to find elided export= declarations
 		// (e.g., `declare export = x` is elided by the type eraser but must still be collected)
@@ -118,6 +119,8 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 			if n.IsExportEquals && c.output.exportEquals == nil {
 				// export = x
 				c.output.exportEquals = n
+			} else if !n.IsExportEquals {
+				hasDefaultToInitialize = true
 			}
 
 		case ast.KindVariableStatement:
@@ -138,6 +141,7 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 			n := node.AsClassDeclaration()
 			if ast.HasSyntacticModifier(node, ast.ModifierFlagsExport) {
 				if ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault) {
+					hasDefaultToInitialize = true
 					// export default class { }
 					if !c.hasExportDefault {
 						name := n.Name()
@@ -159,6 +163,9 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 				}
 			}
 		}
+	}
+	if hasDefaultToInitialize && c.output.hasExportStarsToExportValues && c.addUniqueExport("default") {
+		c.addExportedName(c.emitContext.Factory.NewIdentifier("default"))
 	}
 
 	return c.output

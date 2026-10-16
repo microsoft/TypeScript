@@ -1,5 +1,4 @@
-/f.ts(2,1): error TS2308: Module "./e" has already exported a member named 'A'. Consider explicitly re-exporting to resolve the ambiguity.
-/g.ts(3,10): error TS2749: 'A' refers to a value, but is being used as a type here. Did you mean 'typeof A'?
+/g.ts(1,10): error TS2308: Module "/f" has already exported a member named 'A'. Consider explicitly re-exporting to resolve the ambiguity.
 
 
 ==== /a.ts (0 errors) ====
@@ -21,16 +20,14 @@
 ==== /e.ts (0 errors) ====
     export const A = 1;
     
-==== /f.ts (1 errors) ====
+==== /f.ts (0 errors) ====
     export * from "./e";
     export type * from "./a"; // Collision error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2308: Module "./e" has already exported a member named 'A'. Consider explicitly re-exporting to resolve the ambiguity.
     
 ==== /g.ts (1 errors) ====
     import { A } from "./f";
+             ~
+!!! error TS2308: Module "/f" has already exported a member named 'A'. Consider explicitly re-exporting to resolve the ambiguity.
     A;
     type _ = A; // Follow-on from collision error
-             ~
-!!! error TS2749: 'A' refers to a value, but is being used as a type here. Did you mean 'typeof A'?
     

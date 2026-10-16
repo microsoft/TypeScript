@@ -1,0 +1,263 @@
+//// [tests/cases/compiler/exportStarDefault.ts] ////
+
+=== first.ts ===
+export default class First { first = 1; }
+>First : Symbol(First, Decl(first.ts, 0, 0))
+>first : Symbol(First.first, Decl(first.ts, 0, 28))
+
+export const shared = 1;
+>shared : Symbol(shared, Decl(first.ts, 1, 12))
+
+export const unique = "first";
+>unique : Symbol(unique, Decl(first.ts, 2, 12))
+
+=== second.ts ===
+export default class Second { second = 2; }
+>Second : Symbol(Second, Decl(second.ts, 0, 0))
+>second : Symbol(Second.second, Decl(second.ts, 0, 29))
+
+export const shared = 2;
+>shared : Symbol(shared, Decl(second.ts, 1, 12))
+
+=== single.ts ===
+
+export * from "./first";
+
+=== diamond.ts ===
+
+export * from "./first";
+export * from "./single";
+
+=== ambiguous.ts ===
+
+export * from "./first";
+export * from "./second";
+
+=== forwarded.ts ===
+
+export * from "./ambiguous";
+
+=== resolved.ts ===
+export * from "./ambiguous";
+export { default, shared } from "./first";
+>default : Symbol(default, Decl(resolved.ts, 1, 8))
+>shared : Symbol(shared, Decl(resolved.ts, 1, 17))
+
+=== local.ts ===
+export * from "./first";
+export * from "./second";
+export default "local";
+export const shared = true;
+>shared : Symbol(shared, Decl(local.ts, 3, 12))
+
+=== localClass.ts ===
+export * from "./first";
+export default class LocalClass { local = true; }
+>LocalClass : Symbol(LocalClass, Decl(localClass.ts, 0, 24))
+>local : Symbol(LocalClass.local, Decl(localClass.ts, 1, 33))
+
+=== localFunction.ts ===
+export * from "./first";
+export default function localFunction() { return true; }
+>localFunction : Symbol(localFunction, Decl(localFunction.ts, 0, 24))
+
+=== cycleA.ts ===
+
+export * from "./cycleB";
+
+=== cycleB.ts ===
+
+export * from "./cycleA";
+export * from "./first";
+
+=== namedConflict.ts ===
+export { shared } from "./ambiguous";
+>shared : Symbol(shared, Decl(namedConflict.ts, 0, 8))
+
+=== firstDeclaration.d.ts ===
+export default class FirstDeclaration { first: number; }
+>FirstDeclaration : Symbol(FirstDeclaration, Decl(firstDeclaration.d.ts, 0, 0))
+>first : Symbol(FirstDeclaration.first, Decl(firstDeclaration.d.ts, 0, 39))
+
+=== secondDeclaration.d.ts ===
+export default class SecondDeclaration { second: number; }
+>SecondDeclaration : Symbol(SecondDeclaration, Decl(secondDeclaration.d.ts, 0, 0))
+>second : Symbol(SecondDeclaration.second, Decl(secondDeclaration.d.ts, 0, 40))
+
+=== ambiguousDeclaration.d.ts ===
+
+export * from "./firstDeclaration";
+export * from "./secondDeclaration";
+
+=== consumer.ts ===
+import First from "./single";
+>First : Symbol(First, Decl(consumer.ts, 0, 6))
+
+import { default as Diamond, shared as diamondShared } from "./diamond";
+>default : Symbol(First, Decl(first.ts, 0, 0))
+>Diamond : Symbol(Diamond, Decl(consumer.ts, 1, 8))
+>shared : Symbol(diamondShared, Decl(first.ts, 1, 12))
+>diamondShared : Symbol(diamondShared, Decl(consumer.ts, 1, 28))
+
+import Resolved, { shared as resolvedShared } from "./resolved";
+>Resolved : Symbol(Resolved, Decl(consumer.ts, 2, 6))
+>shared : Symbol(shared, Decl(resolved.ts, 1, 17))
+>resolvedShared : Symbol(resolvedShared, Decl(consumer.ts, 2, 18))
+
+import Local, { shared as localShared } from "./local";
+>Local : Symbol(Local, Decl(consumer.ts, 3, 6))
+>shared : Symbol(localShared, Decl(local.ts, 3, 12))
+>localShared : Symbol(localShared, Decl(consumer.ts, 3, 15))
+
+import LocalClass from "./localClass";
+>LocalClass : Symbol(LocalClass, Decl(consumer.ts, 4, 6))
+
+import localFunction from "./localFunction";
+>localFunction : Symbol(localFunction, Decl(consumer.ts, 5, 6))
+
+import Cycle from "./cycleA";
+>Cycle : Symbol(Cycle, Decl(consumer.ts, 6, 6))
+
+import * as single from "./single";
+>single : Symbol(single, Decl(consumer.ts, 7, 6))
+
+import * as ambiguous from "./ambiguous";
+>ambiguous : Symbol(ambiguous, Decl(consumer.ts, 8, 6))
+
+import * as forwarded from "./forwarded";
+>forwarded : Symbol(forwarded, Decl(consumer.ts, 9, 6))
+
+import * as namedConflict from "./namedConflict";
+>namedConflict : Symbol(namedConflict, Decl(consumer.ts, 10, 6))
+
+import Conflict, { default as NamedConflict, shared, unique } from "./ambiguous";
+>Conflict : Symbol(Conflict, Decl(consumer.ts, 11, 6))
+>default : Symbol(Conflict)
+>NamedConflict : Symbol(NamedConflict, Decl(consumer.ts, 11, 18))
+>shared : Symbol(shared, Decl(consumer.ts, 11, 44))
+>unique : Symbol(unique, Decl(consumer.ts, 11, 52))
+
+import DeclarationConflict from "./ambiguousDeclaration";
+>DeclarationConflict : Symbol(DeclarationConflict, Decl(consumer.ts, 12, 6))
+
+export { default, shared as conflict } from "./forwarded";
+>default : Symbol(default, Decl(consumer.ts, 13, 8))
+>shared : Symbol(shared)
+>conflict : Symbol(conflict, Decl(consumer.ts, 13, 17))
+
+new First().first;
+>new First().first : Symbol(First.first, Decl(first.ts, 0, 28))
+>First : Symbol(First, Decl(consumer.ts, 0, 6))
+>first : Symbol(First.first, Decl(first.ts, 0, 28))
+
+new Diamond().first;
+>new Diamond().first : Symbol(First.first, Decl(first.ts, 0, 28))
+>Diamond : Symbol(Diamond, Decl(consumer.ts, 1, 8))
+>first : Symbol(First.first, Decl(first.ts, 0, 28))
+
+new Resolved().first;
+>new Resolved().first : Symbol(First.first, Decl(first.ts, 0, 28))
+>Resolved : Symbol(Resolved, Decl(consumer.ts, 2, 6))
+>first : Symbol(First.first, Decl(first.ts, 0, 28))
+
+new single.default().first;
+>new single.default().first : Symbol(First.first, Decl(first.ts, 0, 28))
+>single.default : Symbol(First, Decl(first.ts, 0, 0))
+>single : Symbol(single, Decl(consumer.ts, 7, 6))
+>default : Symbol(First, Decl(first.ts, 0, 0))
+>first : Symbol(First.first, Decl(first.ts, 0, 28))
+
+new single["default"]().first;
+>new single["default"]().first : Symbol(First.first, Decl(first.ts, 0, 28))
+>single : Symbol(single, Decl(consumer.ts, 7, 6))
+>"default" : Symbol(First, Decl(first.ts, 0, 0))
+>first : Symbol(First.first, Decl(first.ts, 0, 28))
+
+new LocalClass().local;
+>new LocalClass().local : Symbol(LocalClass.local, Decl(localClass.ts, 1, 33))
+>LocalClass : Symbol(LocalClass, Decl(consumer.ts, 4, 6))
+>local : Symbol(LocalClass.local, Decl(localClass.ts, 1, 33))
+
+const localResult: boolean = localFunction();
+>localResult : Symbol(localResult, Decl(consumer.ts, 21, 5))
+>localFunction : Symbol(localFunction, Decl(consumer.ts, 5, 6))
+
+new Cycle().first;
+>new Cycle().first : Symbol(First.first, Decl(first.ts, 0, 28))
+>Cycle : Symbol(Cycle, Decl(consumer.ts, 6, 6))
+>first : Symbol(First.first, Decl(first.ts, 0, 28))
+
+const one: 1 = diamondShared;
+>one : Symbol(one, Decl(consumer.ts, 23, 5))
+>diamondShared : Symbol(diamondShared, Decl(consumer.ts, 1, 28))
+
+const anotherOne: 1 = resolvedShared;
+>anotherOne : Symbol(anotherOne, Decl(consumer.ts, 24, 5))
+>resolvedShared : Symbol(resolvedShared, Decl(consumer.ts, 2, 18))
+
+const text: string = Local;
+>text : Symbol(text, Decl(consumer.ts, 25, 5))
+>Local : Symbol(Local, Decl(consumer.ts, 3, 6))
+
+const flag: boolean = localShared;
+>flag : Symbol(flag, Decl(consumer.ts, 26, 5))
+>localShared : Symbol(localShared, Decl(consumer.ts, 3, 15))
+
+const nonconflicting: string = unique;
+>nonconflicting : Symbol(nonconflicting, Decl(consumer.ts, 27, 5))
+>unique : Symbol(unique, Decl(consumer.ts, 11, 52))
+
+ambiguous.default;
+>ambiguous.default : Symbol(Conflict)
+>ambiguous : Symbol(ambiguous, Decl(consumer.ts, 8, 6))
+>default : Symbol(Conflict)
+
+ambiguous["default"];
+>ambiguous : Symbol(ambiguous, Decl(consumer.ts, 8, 6))
+>"default" : Symbol(Conflict)
+
+ambiguous.shared;
+>ambiguous.shared : Symbol(shared)
+>ambiguous : Symbol(ambiguous, Decl(consumer.ts, 8, 6))
+>shared : Symbol(shared)
+
+ambiguous["shared"];
+>ambiguous : Symbol(ambiguous, Decl(consumer.ts, 8, 6))
+>"shared" : Symbol(shared)
+
+forwarded.default;
+>forwarded.default : Symbol(default)
+>forwarded : Symbol(forwarded, Decl(consumer.ts, 9, 6))
+>default : Symbol(default)
+
+forwarded["shared"];
+>forwarded : Symbol(forwarded, Decl(consumer.ts, 9, 6))
+>"shared" : Symbol(shared)
+
+namedConflict.shared;
+>namedConflict.shared : Symbol(namedConflict.shared, Decl(namedConflict.ts, 0, 8))
+>namedConflict : Symbol(namedConflict, Decl(consumer.ts, 10, 6))
+>shared : Symbol(namedConflict.shared, Decl(namedConflict.ts, 0, 8))
+
+// Conflicting accesses have the error type, without cascading errors.
+ambiguous.default.nonexistent();
+>ambiguous.default : Symbol(Conflict)
+>ambiguous : Symbol(ambiguous, Decl(consumer.ts, 8, 6))
+>default : Symbol(Conflict)
+
+ambiguous["shared"].nonexistent();
+>ambiguous : Symbol(ambiguous, Decl(consumer.ts, 8, 6))
+>"shared" : Symbol(shared)
+
+Conflict.nonexistent();
+>Conflict : Symbol(Conflict, Decl(consumer.ts, 11, 6))
+
+NamedConflict.nonexistent();
+>NamedConflict : Symbol(NamedConflict, Decl(consumer.ts, 11, 18))
+
+shared.nonexistent();
+>shared : Symbol(shared, Decl(consumer.ts, 11, 44))
+
+DeclarationConflict.nonexistent();
+>DeclarationConflict : Symbol(DeclarationConflict, Decl(consumer.ts, 12, 6))
+
