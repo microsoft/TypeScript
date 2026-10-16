@@ -1,0 +1,56 @@
+/ambiguous.ts(2,1): error TS2308: Module "./default" has already exported a member named 'default'. Consider explicitly re-exporting to resolve the ambiguity.
+
+
+==== /default.ts (0 errors) ====
+    export default class Default {}
+    export const named = 1;
+    
+==== /other.ts (0 errors) ====
+    export default class Other {}
+    
+==== /reexport.ts (0 errors) ====
+    export * from "./default";
+    
+==== /ambiguous.ts (1 errors) ====
+    export * from "./default";
+    export * from "./other";
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./default" has already exported a member named 'default'. Consider explicitly re-exporting to resolve the ambiguity.
+    
+==== /resolved.ts (0 errors) ====
+    export * from "./default";
+    export * from "./other";
+    export { default } from "./default";
+    
+==== /localDefault.ts (0 errors) ====
+    export * from "./default";
+    export * from "./other";
+    export default class Local {}
+    
+==== /localDefaultExpression.ts (0 errors) ====
+    export * from "./default";
+    export * from "./other";
+    export default 1;
+    
+==== /defaultType.ts (0 errors) ====
+    export default interface DefaultType {
+        value: string;
+    }
+    
+==== /reexportType.ts (0 errors) ====
+    export type * from "./defaultType";
+    
+==== /main.ts (0 errors) ====
+    import Default, { named } from "./reexport";
+    import Resolved from "./resolved";
+    import Local from "./localDefault";
+    import valueDefault from "./localDefaultExpression";
+    import type DefaultType from "./reexportType";
+    
+    new Default();
+    new Resolved();
+    new Local();
+    valueDefault.toFixed();
+    const value: DefaultType = { value: "" };
+    named;
+    
