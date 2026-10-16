@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/recursiveArrayTupleTypePrinting.ts] ////
+
+=== recursiveArrayTupleTypePrinting.ts ===
+type G<T> = T extends unknown ? (T | G<[T]>)[] : never;
+>G : G<T>
+
+declare const g: G<"x">;
+>g : ("x" | (((((((((((((((((((any | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[])[]
+
+export const n: number = g;
+>n : number
+>g : ("x" | (((((((((((((((((((any | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[])[]
+
+export const later: number = "oops";
+>later : number
+>"oops" : "oops"
+
