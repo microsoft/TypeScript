@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
@@ -74,6 +75,10 @@ func (host *emitHost) GetNearestAncestorDirectoryWithPackageJson(dirname tspath.
 
 func (host *emitHost) GetPackageJsonInfo(pkgJsonPath tspath.RootedFilePath) *packagejson.InfoCacheEntry {
 	return host.program.GetPackageJsonInfo(pkgJsonPath)
+}
+
+func (host *emitHost) ModuleSpecifierGenerationCache() *modulespecifiers.GenerationCache {
+	return host.program.ModuleSpecifierGenerationCache()
 }
 
 func (host *emitHost) GetSourceOfProjectReferenceIfOutputIncluded(file ast.HasFileName) tspath.RootedFilePath {

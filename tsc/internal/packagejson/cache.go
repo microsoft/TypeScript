@@ -68,6 +68,9 @@ func (p *PackageJson) GetVersionPaths(trace func(m *diagnostics.Message, args ..
 					Version:   key,
 					pathsJSON: value.AsObject(),
 				}
+				// Build the table now, so that every copy returned below shares it instead of
+				// rebuilding it on each GetPaths call.
+				p.versionPaths.GetPaths()
 				return
 			}
 		}
