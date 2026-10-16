@@ -1,0 +1,590 @@
+//// [tests/cases/compiler/unionOverloadSignaturePriority.ts] ////
+
+=== unionOverloadSignaturePriority.ts ===
+namespace TupleRest {
+>TupleRest : Symbol(TupleRest, Decl(unionOverloadSignaturePriority.ts, 0, 0))
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 0, 21))
+
+        foo(...args: [n: "str", opt?: boolean]): string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignaturePriority.ts, 1, 21))
+>args : Symbol(args, Decl(unionOverloadSignaturePriority.ts, 2, 12))
+    }
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 3, 5))
+
+        foo(...args: [n: "str", opt?: true]): string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 4, 20), Decl(unionOverloadSignaturePriority.ts, 5, 53))
+>args : Symbol(args, Decl(unionOverloadSignaturePriority.ts, 5, 12))
+
+        foo(n: string): number | string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 4, 20), Decl(unionOverloadSignaturePriority.ts, 5, 53))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 6, 12))
+    }
+    declare let value: Alpha | Beta;
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 8, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 0, 21))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 3, 5))
+
+    declare let reversed: Beta | Alpha;
+>reversed : Symbol(reversed, Decl(unionOverloadSignaturePriority.ts, 9, 15))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 3, 5))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 0, 21))
+
+    const result: string = value.foo("str");
+>result : Symbol(result, Decl(unionOverloadSignaturePriority.ts, 10, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 1, 21), Decl(unionOverloadSignaturePriority.ts, 4, 20), Decl(unionOverloadSignaturePriority.ts, 5, 53))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 8, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 1, 21), Decl(unionOverloadSignaturePriority.ts, 4, 20), Decl(unionOverloadSignaturePriority.ts, 5, 53))
+
+    const reversedResult: string = reversed.foo("str");
+>reversedResult : Symbol(reversedResult, Decl(unionOverloadSignaturePriority.ts, 11, 9))
+>reversed.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 1, 21), Decl(unionOverloadSignaturePriority.ts, 4, 20), Decl(unionOverloadSignaturePriority.ts, 5, 53))
+>reversed : Symbol(reversed, Decl(unionOverloadSignaturePriority.ts, 9, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 1, 21), Decl(unionOverloadSignaturePriority.ts, 4, 20), Decl(unionOverloadSignaturePriority.ts, 5, 53))
+
+    const withOption: string = value.foo("str", true);
+>withOption : Symbol(withOption, Decl(unionOverloadSignaturePriority.ts, 12, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 1, 21), Decl(unionOverloadSignaturePriority.ts, 4, 20), Decl(unionOverloadSignaturePriority.ts, 5, 53))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 8, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 1, 21), Decl(unionOverloadSignaturePriority.ts, 4, 20), Decl(unionOverloadSignaturePriority.ts, 5, 53))
+
+    // @ts-expect-error
+    value.foo(0);
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 1, 21), Decl(unionOverloadSignaturePriority.ts, 4, 20), Decl(unionOverloadSignaturePriority.ts, 5, 53))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 8, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 1, 21), Decl(unionOverloadSignaturePriority.ts, 4, 20), Decl(unionOverloadSignaturePriority.ts, 5, 53))
+}
+
+namespace RequiredTupleRest {
+>RequiredTupleRest : Symbol(RequiredTupleRest, Decl(unionOverloadSignaturePriority.ts, 15, 1))
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 17, 29))
+
+        foo(...args: [n: "str", count: number, opt?: boolean]): string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignaturePriority.ts, 18, 21))
+>args : Symbol(args, Decl(unionOverloadSignaturePriority.ts, 19, 12))
+    }
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 20, 5))
+
+        foo(...args: [n: "str", count: number, opt?: true]): string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 21, 20), Decl(unionOverloadSignaturePriority.ts, 22, 68))
+>args : Symbol(args, Decl(unionOverloadSignaturePriority.ts, 22, 12))
+
+        foo(n: string, count: number): number | string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 21, 20), Decl(unionOverloadSignaturePriority.ts, 22, 68))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 23, 12))
+>count : Symbol(count, Decl(unionOverloadSignaturePriority.ts, 23, 22))
+    }
+    declare let value: Alpha | Beta;
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 25, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 17, 29))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 20, 5))
+
+    const result: string = value.foo("str", 1);
+>result : Symbol(result, Decl(unionOverloadSignaturePriority.ts, 26, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 18, 21), Decl(unionOverloadSignaturePriority.ts, 21, 20), Decl(unionOverloadSignaturePriority.ts, 22, 68))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 25, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 18, 21), Decl(unionOverloadSignaturePriority.ts, 21, 20), Decl(unionOverloadSignaturePriority.ts, 22, 68))
+
+    // @ts-expect-error
+    value.foo("str");
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 18, 21), Decl(unionOverloadSignaturePriority.ts, 21, 20), Decl(unionOverloadSignaturePriority.ts, 22, 68))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 25, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 18, 21), Decl(unionOverloadSignaturePriority.ts, 21, 20), Decl(unionOverloadSignaturePriority.ts, 22, 68))
+}
+
+namespace OverlappingOverloads {
+>OverlappingOverloads : Symbol(OverlappingOverloads, Decl(unionOverloadSignaturePriority.ts, 29, 1))
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 31, 32))
+
+        foo(n: "num", opt?: unknown): number;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 33, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 33, 21))
+
+        foo(n: "str", opt?: unknown): string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 34, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 34, 21))
+
+        foo(n: string, opt?: unknown): number | string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 35, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 35, 22))
+    }
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 36, 5))
+
+        foo(n: "num", opt?: { a?: string }): number;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52), Decl(unionOverloadSignaturePriority.ts, 39, 52))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 38, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 38, 21))
+>a : Symbol(a, Decl(unionOverloadSignaturePriority.ts, 38, 29))
+
+        foo(n: "str", opt?: { b?: string }): string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52), Decl(unionOverloadSignaturePriority.ts, 39, 52))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 39, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 39, 21))
+>b : Symbol(b, Decl(unionOverloadSignaturePriority.ts, 39, 29))
+
+        foo(n: "num" | "str", opt?: unknown): number | string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52), Decl(unionOverloadSignaturePriority.ts, 39, 52))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 40, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 40, 29))
+    }
+    declare let value: Alpha | Beta;
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 42, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 31, 32))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 36, 5))
+
+    declare let reversed: Beta | Alpha;
+>reversed : Symbol(reversed, Decl(unionOverloadSignaturePriority.ts, 43, 15))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 36, 5))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 31, 32))
+
+    const str: string = value.foo("str");
+>str : Symbol(str, Decl(unionOverloadSignaturePriority.ts, 44, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 42, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+
+    const num: number = value.foo("num");
+>num : Symbol(num, Decl(unionOverloadSignaturePriority.ts, 45, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 42, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+
+    const reversedStr: string = reversed.foo("str");
+>reversedStr : Symbol(reversedStr, Decl(unionOverloadSignaturePriority.ts, 46, 9))
+>reversed.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+>reversed : Symbol(reversed, Decl(unionOverloadSignaturePriority.ts, 43, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+
+    const reversedNum: number = reversed.foo("num");
+>reversedNum : Symbol(reversedNum, Decl(unionOverloadSignaturePriority.ts, 47, 9))
+>reversed.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+>reversed : Symbol(reversed, Decl(unionOverloadSignaturePriority.ts, 43, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+
+    const fallback: number | string = value.foo("str", false);
+>fallback : Symbol(fallback, Decl(unionOverloadSignaturePriority.ts, 48, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 42, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+
+    // @ts-expect-error
+    const narrowFallback: string = value.foo("str", false);
+>narrowFallback : Symbol(narrowFallback, Decl(unionOverloadSignaturePriority.ts, 50, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 42, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+
+    // @ts-expect-error
+    value.foo("other");
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 42, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 32, 21), Decl(unionOverloadSignaturePriority.ts, 33, 45), Decl(unionOverloadSignaturePriority.ts, 34, 45), Decl(unionOverloadSignaturePriority.ts, 37, 20), Decl(unionOverloadSignaturePriority.ts, 38, 52) ... and 1 more)
+}
+
+namespace RestArguments {
+>RestArguments : Symbol(RestArguments, Decl(unionOverloadSignaturePriority.ts, 53, 1))
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 55, 25))
+
+        foo(n: "str", ...values: boolean[]): string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignaturePriority.ts, 56, 21))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 57, 12))
+>values : Symbol(values, Decl(unionOverloadSignaturePriority.ts, 57, 21))
+    }
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 58, 5))
+
+        foo(n: "str", ...values: true[]): string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 60, 12))
+>values : Symbol(values, Decl(unionOverloadSignaturePriority.ts, 60, 21))
+
+        foo(n: string, ...values: boolean[]): number | string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 61, 12))
+>values : Symbol(values, Decl(unionOverloadSignaturePriority.ts, 61, 22))
+    }
+    declare let value: Alpha | Beta;
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 63, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 55, 25))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 58, 5))
+
+    declare let reversed: Beta | Alpha;
+>reversed : Symbol(reversed, Decl(unionOverloadSignaturePriority.ts, 64, 15))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 58, 5))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 55, 25))
+
+    const result: string = value.foo("str");
+>result : Symbol(result, Decl(unionOverloadSignaturePriority.ts, 65, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 56, 21), Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 63, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 56, 21), Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+
+    const withValues: string = value.foo("str", true, true);
+>withValues : Symbol(withValues, Decl(unionOverloadSignaturePriority.ts, 66, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 56, 21), Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 63, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 56, 21), Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+
+    const reversedResult: string = reversed.foo("str");
+>reversedResult : Symbol(reversedResult, Decl(unionOverloadSignaturePriority.ts, 67, 9))
+>reversed.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 56, 21), Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+>reversed : Symbol(reversed, Decl(unionOverloadSignaturePriority.ts, 64, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 56, 21), Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+
+    const fallback: number | string = value.foo("str", false);
+>fallback : Symbol(fallback, Decl(unionOverloadSignaturePriority.ts, 68, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 56, 21), Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 63, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 56, 21), Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+
+    // @ts-expect-error
+    const narrowFallback: string = value.foo("str", false);
+>narrowFallback : Symbol(narrowFallback, Decl(unionOverloadSignaturePriority.ts, 70, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 56, 21), Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 63, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 56, 21), Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+
+    // @ts-expect-error
+    value.foo("str", 1);
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 56, 21), Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 63, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 56, 21), Decl(unionOverloadSignaturePriority.ts, 59, 20), Decl(unionOverloadSignaturePriority.ts, 60, 49))
+}
+
+namespace IncomparableOverloadPriorities {
+>IncomparableOverloadPriorities : Symbol(IncomparableOverloadPriorities, Decl(unionOverloadSignaturePriority.ts, 73, 1))
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 75, 42))
+
+        foo(n: string, opt?: boolean): string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignaturePriority.ts, 76, 21), Decl(unionOverloadSignaturePriority.ts, 77, 46))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 77, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 77, 22))
+
+        foo(n: string | number): number;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignaturePriority.ts, 76, 21), Decl(unionOverloadSignaturePriority.ts, 77, 46))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 78, 12))
+    }
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 79, 5))
+
+        foo(n: string | number): boolean;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 80, 20), Decl(unionOverloadSignaturePriority.ts, 81, 41))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 81, 12))
+
+        foo(n: string, opt?: true): Date;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 80, 20), Decl(unionOverloadSignaturePriority.ts, 81, 41))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 82, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 82, 22))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+    }
+    declare let value: Alpha | Beta;
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 84, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 75, 42))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 79, 5))
+
+    declare let reversed: Beta | Alpha;
+>reversed : Symbol(reversed, Decl(unionOverloadSignaturePriority.ts, 85, 15))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 79, 5))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 75, 42))
+
+    const result = value.foo("str");
+>result : Symbol(result, Decl(unionOverloadSignaturePriority.ts, 86, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 76, 21), Decl(unionOverloadSignaturePriority.ts, 77, 46), Decl(unionOverloadSignaturePriority.ts, 80, 20), Decl(unionOverloadSignaturePriority.ts, 81, 41))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 84, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 76, 21), Decl(unionOverloadSignaturePriority.ts, 77, 46), Decl(unionOverloadSignaturePriority.ts, 80, 20), Decl(unionOverloadSignaturePriority.ts, 81, 41))
+
+    const reversedResult = reversed.foo("str");
+>reversedResult : Symbol(reversedResult, Decl(unionOverloadSignaturePriority.ts, 87, 9))
+>reversed.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 76, 21), Decl(unionOverloadSignaturePriority.ts, 77, 46), Decl(unionOverloadSignaturePriority.ts, 80, 20), Decl(unionOverloadSignaturePriority.ts, 81, 41))
+>reversed : Symbol(reversed, Decl(unionOverloadSignaturePriority.ts, 85, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 76, 21), Decl(unionOverloadSignaturePriority.ts, 77, 46), Decl(unionOverloadSignaturePriority.ts, 80, 20), Decl(unionOverloadSignaturePriority.ts, 81, 41))
+
+    const consistent: typeof result = reversedResult;
+>consistent : Symbol(consistent, Decl(unionOverloadSignaturePriority.ts, 88, 9))
+>result : Symbol(result, Decl(unionOverloadSignaturePriority.ts, 86, 9))
+>reversedResult : Symbol(reversedResult, Decl(unionOverloadSignaturePriority.ts, 87, 9))
+}
+
+namespace IdenticalGenericSignatures {
+>IdenticalGenericSignatures : Symbol(IdenticalGenericSignatures, Decl(unionOverloadSignaturePriority.ts, 89, 1))
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 91, 38))
+
+        foo<T>(value: T, opt?: boolean): T;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignaturePriority.ts, 92, 21))
+>T : Symbol(T, Decl(unionOverloadSignaturePriority.ts, 93, 12))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 93, 15))
+>T : Symbol(T, Decl(unionOverloadSignaturePriority.ts, 93, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 93, 24))
+>T : Symbol(T, Decl(unionOverloadSignaturePriority.ts, 93, 12))
+    }
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 94, 5))
+
+        foo<T>(value: T, opt?: boolean): T;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 95, 20), Decl(unionOverloadSignaturePriority.ts, 96, 43))
+>T : Symbol(T, Decl(unionOverloadSignaturePriority.ts, 96, 12))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 96, 15))
+>T : Symbol(T, Decl(unionOverloadSignaturePriority.ts, 96, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 96, 24))
+>T : Symbol(T, Decl(unionOverloadSignaturePriority.ts, 96, 12))
+
+        foo(n: string): number;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 95, 20), Decl(unionOverloadSignaturePriority.ts, 96, 43))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 97, 12))
+    }
+    declare let value: Alpha | Beta;
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 99, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 91, 38))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 94, 5))
+
+    const result: "str" = value.foo("str");
+>result : Symbol(result, Decl(unionOverloadSignaturePriority.ts, 100, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 92, 21), Decl(unionOverloadSignaturePriority.ts, 95, 20), Decl(unionOverloadSignaturePriority.ts, 96, 43))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 99, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 92, 21), Decl(unionOverloadSignaturePriority.ts, 95, 20), Decl(unionOverloadSignaturePriority.ts, 96, 43))
+
+    const explicit: number = value.foo<number>(1);
+>explicit : Symbol(explicit, Decl(unionOverloadSignaturePriority.ts, 101, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 92, 21), Decl(unionOverloadSignaturePriority.ts, 95, 20), Decl(unionOverloadSignaturePriority.ts, 96, 43))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 99, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 92, 21), Decl(unionOverloadSignaturePriority.ts, 95, 20), Decl(unionOverloadSignaturePriority.ts, 96, 43))
+
+    // @ts-expect-error
+    value.foo<number>("str");
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 92, 21), Decl(unionOverloadSignaturePriority.ts, 95, 20), Decl(unionOverloadSignaturePriority.ts, 96, 43))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 99, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 92, 21), Decl(unionOverloadSignaturePriority.ts, 95, 20), Decl(unionOverloadSignaturePriority.ts, 96, 43))
+}
+
+namespace ThreeConstituents {
+>ThreeConstituents : Symbol(ThreeConstituents, Decl(unionOverloadSignaturePriority.ts, 104, 1))
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 106, 29))
+
+        foo(n: "str", opt?: boolean): string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignaturePriority.ts, 107, 21))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 108, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 108, 21))
+    }
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 109, 5))
+
+        foo(n: "str", opt?: true): string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 111, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 111, 21))
+
+        foo(n: string): number | string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 112, 12))
+    }
+    interface Gamma {
+>Gamma : Symbol(Gamma, Decl(unionOverloadSignaturePriority.ts, 113, 5))
+
+        foo(n: "str", opt?: true): string;
+>foo : Symbol(Gamma.foo, Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 115, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 115, 21))
+
+        foo(n: string): boolean | string;
+>foo : Symbol(Gamma.foo, Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 116, 12))
+    }
+    declare let abc: Alpha | Beta | Gamma;
+>abc : Symbol(abc, Decl(unionOverloadSignaturePriority.ts, 118, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 106, 29))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 109, 5))
+>Gamma : Symbol(Gamma, Decl(unionOverloadSignaturePriority.ts, 113, 5))
+
+    declare let acb: Alpha | Gamma | Beta;
+>acb : Symbol(acb, Decl(unionOverloadSignaturePriority.ts, 119, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 106, 29))
+>Gamma : Symbol(Gamma, Decl(unionOverloadSignaturePriority.ts, 113, 5))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 109, 5))
+
+    declare let bac: Beta | Alpha | Gamma;
+>bac : Symbol(bac, Decl(unionOverloadSignaturePriority.ts, 120, 15))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 109, 5))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 106, 29))
+>Gamma : Symbol(Gamma, Decl(unionOverloadSignaturePriority.ts, 113, 5))
+
+    declare let bca: Beta | Gamma | Alpha;
+>bca : Symbol(bca, Decl(unionOverloadSignaturePriority.ts, 121, 15))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 109, 5))
+>Gamma : Symbol(Gamma, Decl(unionOverloadSignaturePriority.ts, 113, 5))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 106, 29))
+
+    declare let cab: Gamma | Alpha | Beta;
+>cab : Symbol(cab, Decl(unionOverloadSignaturePriority.ts, 122, 15))
+>Gamma : Symbol(Gamma, Decl(unionOverloadSignaturePriority.ts, 113, 5))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 106, 29))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 109, 5))
+
+    declare let cba: Gamma | Beta | Alpha;
+>cba : Symbol(cba, Decl(unionOverloadSignaturePriority.ts, 123, 15))
+>Gamma : Symbol(Gamma, Decl(unionOverloadSignaturePriority.ts, 113, 5))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 109, 5))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 106, 29))
+
+    const abcResult: string = abc.foo("str");
+>abcResult : Symbol(abcResult, Decl(unionOverloadSignaturePriority.ts, 124, 9))
+>abc.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 107, 21), Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42), Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+>abc : Symbol(abc, Decl(unionOverloadSignaturePriority.ts, 118, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 107, 21), Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42), Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+
+    const acbResult: string = acb.foo("str");
+>acbResult : Symbol(acbResult, Decl(unionOverloadSignaturePriority.ts, 125, 9))
+>acb.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 107, 21), Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42), Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+>acb : Symbol(acb, Decl(unionOverloadSignaturePriority.ts, 119, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 107, 21), Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42), Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+
+    const bacResult: string = bac.foo("str");
+>bacResult : Symbol(bacResult, Decl(unionOverloadSignaturePriority.ts, 126, 9))
+>bac.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 107, 21), Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42), Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+>bac : Symbol(bac, Decl(unionOverloadSignaturePriority.ts, 120, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 107, 21), Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42), Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+
+    const bcaResult: string = bca.foo("str");
+>bcaResult : Symbol(bcaResult, Decl(unionOverloadSignaturePriority.ts, 127, 9))
+>bca.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 107, 21), Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42), Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+>bca : Symbol(bca, Decl(unionOverloadSignaturePriority.ts, 121, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 107, 21), Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42), Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+
+    const cabResult: string = cab.foo("str");
+>cabResult : Symbol(cabResult, Decl(unionOverloadSignaturePriority.ts, 128, 9))
+>cab.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 107, 21), Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42), Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+>cab : Symbol(cab, Decl(unionOverloadSignaturePriority.ts, 122, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 107, 21), Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42), Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+
+    const cbaResult: string = cba.foo("str");
+>cbaResult : Symbol(cbaResult, Decl(unionOverloadSignaturePriority.ts, 129, 9))
+>cba.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 107, 21), Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42), Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+>cba : Symbol(cba, Decl(unionOverloadSignaturePriority.ts, 123, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 107, 21), Decl(unionOverloadSignaturePriority.ts, 110, 20), Decl(unionOverloadSignaturePriority.ts, 111, 42), Decl(unionOverloadSignaturePriority.ts, 114, 21), Decl(unionOverloadSignaturePriority.ts, 115, 42))
+}
+
+namespace ConstructSignatures {
+>ConstructSignatures : Symbol(ConstructSignatures, Decl(unionOverloadSignaturePriority.ts, 130, 1))
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 132, 31))
+
+        new(n: "str", opt?: boolean): { value: string };
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 134, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 134, 21))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 134, 39))
+    }
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 135, 5))
+
+        new(n: "str", opt?: true): { value: string };
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 137, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 137, 21))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 137, 36))
+
+        new(n: string): { value: number | string };
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 138, 12))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 138, 25))
+    }
+    declare let value: Alpha | Beta;
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 140, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 132, 31))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 135, 5))
+
+    declare let reversed: Beta | Alpha;
+>reversed : Symbol(reversed, Decl(unionOverloadSignaturePriority.ts, 141, 15))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 135, 5))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 132, 31))
+
+    const result: string = new value("str").value;
+>result : Symbol(result, Decl(unionOverloadSignaturePriority.ts, 142, 9))
+>new value("str").value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 134, 39))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 140, 15))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 134, 39))
+
+    const reversedResult: string = new reversed("str").value;
+>reversedResult : Symbol(reversedResult, Decl(unionOverloadSignaturePriority.ts, 143, 9))
+>new reversed("str").value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 134, 39))
+>reversed : Symbol(reversed, Decl(unionOverloadSignaturePriority.ts, 141, 15))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 134, 39))
+
+    // @ts-expect-error
+    new value(1);
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 140, 15))
+}
+
+namespace MergedDeclarations {
+>MergedDeclarations : Symbol(MergedDeclarations, Decl(unionOverloadSignaturePriority.ts, 146, 1))
+
+    interface Alpha {
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 148, 30))
+
+        foo(n: string, opt?: unknown): string;
+>foo : Symbol(Alpha.foo, Decl(unionOverloadSignaturePriority.ts, 149, 21))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 150, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 150, 22))
+    }
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 151, 5), Decl(unionOverloadSignaturePriority.ts, 154, 5))
+
+        foo(n: string, opt?: { a?: string }): string;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 152, 20), Decl(unionOverloadSignaturePriority.ts, 155, 20))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 153, 12))
+>opt : Symbol(opt, Decl(unionOverloadSignaturePriority.ts, 153, 22))
+>a : Symbol(a, Decl(unionOverloadSignaturePriority.ts, 153, 30))
+    }
+    interface Beta {
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 151, 5), Decl(unionOverloadSignaturePriority.ts, 154, 5))
+
+        foo(n: string): number;
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 152, 20), Decl(unionOverloadSignaturePriority.ts, 155, 20))
+>n : Symbol(n, Decl(unionOverloadSignaturePriority.ts, 156, 12))
+    }
+    declare let beta: Beta;
+>beta : Symbol(beta, Decl(unionOverloadSignaturePriority.ts, 158, 15))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 151, 5), Decl(unionOverloadSignaturePriority.ts, 154, 5))
+
+    declare let value: Alpha | Beta;
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 159, 15))
+>Alpha : Symbol(Alpha, Decl(unionOverloadSignaturePriority.ts, 148, 30))
+>Beta : Symbol(Beta, Decl(unionOverloadSignaturePriority.ts, 151, 5), Decl(unionOverloadSignaturePriority.ts, 154, 5))
+
+    const direct: number = beta.foo("str");
+>direct : Symbol(direct, Decl(unionOverloadSignaturePriority.ts, 160, 9))
+>beta.foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 152, 20), Decl(unionOverloadSignaturePriority.ts, 155, 20))
+>beta : Symbol(beta, Decl(unionOverloadSignaturePriority.ts, 158, 15))
+>foo : Symbol(Beta.foo, Decl(unionOverloadSignaturePriority.ts, 152, 20), Decl(unionOverloadSignaturePriority.ts, 155, 20))
+
+    const result: string | number = value.foo("str");
+>result : Symbol(result, Decl(unionOverloadSignaturePriority.ts, 161, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 149, 21), Decl(unionOverloadSignaturePriority.ts, 152, 20), Decl(unionOverloadSignaturePriority.ts, 155, 20))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 159, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 149, 21), Decl(unionOverloadSignaturePriority.ts, 152, 20), Decl(unionOverloadSignaturePriority.ts, 155, 20))
+
+    // @ts-expect-error
+    const unsafeNarrow: string = value.foo("str");
+>unsafeNarrow : Symbol(unsafeNarrow, Decl(unionOverloadSignaturePriority.ts, 163, 9))
+>value.foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 149, 21), Decl(unionOverloadSignaturePriority.ts, 152, 20), Decl(unionOverloadSignaturePriority.ts, 155, 20))
+>value : Symbol(value, Decl(unionOverloadSignaturePriority.ts, 159, 15))
+>foo : Symbol(foo, Decl(unionOverloadSignaturePriority.ts, 149, 21), Decl(unionOverloadSignaturePriority.ts, 152, 20), Decl(unionOverloadSignaturePriority.ts, 155, 20))
+}
+
+

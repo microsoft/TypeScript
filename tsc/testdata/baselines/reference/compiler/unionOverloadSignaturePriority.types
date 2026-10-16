@@ -1,0 +1,586 @@
+//// [tests/cases/compiler/unionOverloadSignaturePriority.ts] ////
+
+=== unionOverloadSignaturePriority.ts ===
+namespace TupleRest {
+>TupleRest : typeof TupleRest
+
+    interface Alpha {
+        foo(...args: [n: "str", opt?: boolean]): string;
+>foo : (n: "str", opt?: boolean | undefined) => string
+>args : [n: "str", opt?: boolean | undefined]
+    }
+    interface Beta {
+        foo(...args: [n: "str", opt?: true]): string;
+>foo : { (n: "str", opt?: true | undefined): string; (n: string): number | string; }
+>args : [n: "str", opt?: true | undefined]
+>true : true
+
+        foo(n: string): number | string;
+>foo : { (n: "str", opt?: true | undefined): string; (n: string): number | string; }
+>n : string
+    }
+    declare let value: Alpha | Beta;
+>value : Alpha | Beta
+
+    declare let reversed: Beta | Alpha;
+>reversed : Alpha | Beta
+
+    const result: string = value.foo("str");
+>result : string
+>value.foo("str") : string
+>value.foo : ((n: "str", opt?: boolean | undefined) => string) | { (n: "str", opt?: true | undefined): string; (n: string): number | string; }
+>value : Alpha | Beta
+>foo : ((n: "str", opt?: boolean | undefined) => string) | { (n: "str", opt?: true | undefined): string; (n: string): number | string; }
+>"str" : "str"
+
+    const reversedResult: string = reversed.foo("str");
+>reversedResult : string
+>reversed.foo("str") : string
+>reversed.foo : ((n: "str", opt?: boolean | undefined) => string) | { (n: "str", opt?: true | undefined): string; (n: string): number | string; }
+>reversed : Alpha | Beta
+>foo : ((n: "str", opt?: boolean | undefined) => string) | { (n: "str", opt?: true | undefined): string; (n: string): number | string; }
+>"str" : "str"
+
+    const withOption: string = value.foo("str", true);
+>withOption : string
+>value.foo("str", true) : string
+>value.foo : ((n: "str", opt?: boolean | undefined) => string) | { (n: "str", opt?: true | undefined): string; (n: string): number | string; }
+>value : Alpha | Beta
+>foo : ((n: "str", opt?: boolean | undefined) => string) | { (n: "str", opt?: true | undefined): string; (n: string): number | string; }
+>"str" : "str"
+>true : true
+
+    // @ts-expect-error
+    value.foo(0);
+>value.foo(0) : string
+>value.foo : ((n: "str", opt?: boolean | undefined) => string) | { (n: "str", opt?: true | undefined): string; (n: string): number | string; }
+>value : Alpha | Beta
+>foo : ((n: "str", opt?: boolean | undefined) => string) | { (n: "str", opt?: true | undefined): string; (n: string): number | string; }
+>0 : 0
+}
+
+namespace RequiredTupleRest {
+>RequiredTupleRest : typeof RequiredTupleRest
+
+    interface Alpha {
+        foo(...args: [n: "str", count: number, opt?: boolean]): string;
+>foo : (n: "str", count: number, opt?: boolean | undefined) => string
+>args : [n: "str", count: number, opt?: boolean | undefined]
+    }
+    interface Beta {
+        foo(...args: [n: "str", count: number, opt?: true]): string;
+>foo : { (n: "str", count: number, opt?: true | undefined): string; (n: string, count: number): number | string; }
+>args : [n: "str", count: number, opt?: true | undefined]
+>true : true
+
+        foo(n: string, count: number): number | string;
+>foo : { (n: "str", count: number, opt?: true | undefined): string; (n: string, count: number): number | string; }
+>n : string
+>count : number
+    }
+    declare let value: Alpha | Beta;
+>value : Alpha | Beta
+
+    const result: string = value.foo("str", 1);
+>result : string
+>value.foo("str", 1) : string
+>value.foo : ((n: "str", count: number, opt?: boolean | undefined) => string) | { (n: "str", count: number, opt?: true | undefined): string; (n: string, count: number): number | string; }
+>value : Alpha | Beta
+>foo : ((n: "str", count: number, opt?: boolean | undefined) => string) | { (n: "str", count: number, opt?: true | undefined): string; (n: string, count: number): number | string; }
+>"str" : "str"
+>1 : 1
+
+    // @ts-expect-error
+    value.foo("str");
+>value.foo("str") : string
+>value.foo : ((n: "str", count: number, opt?: boolean | undefined) => string) | { (n: "str", count: number, opt?: true | undefined): string; (n: string, count: number): number | string; }
+>value : Alpha | Beta
+>foo : ((n: "str", count: number, opt?: boolean | undefined) => string) | { (n: "str", count: number, opt?: true | undefined): string; (n: string, count: number): number | string; }
+>"str" : "str"
+}
+
+namespace OverlappingOverloads {
+>OverlappingOverloads : typeof OverlappingOverloads
+
+    interface Alpha {
+        foo(n: "num", opt?: unknown): number;
+>foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; }
+>n : "num"
+>opt : unknown
+
+        foo(n: "str", opt?: unknown): string;
+>foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; }
+>n : "str"
+>opt : unknown
+
+        foo(n: string, opt?: unknown): number | string;
+>foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; }
+>n : string
+>opt : unknown
+    }
+    interface Beta {
+        foo(n: "num", opt?: { a?: string }): number;
+>foo : { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>n : "num"
+>opt : { a?: string; } | undefined
+>a : string | undefined
+
+        foo(n: "str", opt?: { b?: string }): string;
+>foo : { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>n : "str"
+>opt : { b?: string; } | undefined
+>b : string | undefined
+
+        foo(n: "num" | "str", opt?: unknown): number | string;
+>foo : { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>n : "num" | "str"
+>opt : unknown
+    }
+    declare let value: Alpha | Beta;
+>value : Alpha | Beta
+
+    declare let reversed: Beta | Alpha;
+>reversed : Alpha | Beta
+
+    const str: string = value.foo("str");
+>str : string
+>value.foo("str") : string
+>value.foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>value : Alpha | Beta
+>foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>"str" : "str"
+
+    const num: number = value.foo("num");
+>num : number
+>value.foo("num") : number
+>value.foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>value : Alpha | Beta
+>foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>"num" : "num"
+
+    const reversedStr: string = reversed.foo("str");
+>reversedStr : string
+>reversed.foo("str") : string
+>reversed.foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>reversed : Alpha | Beta
+>foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>"str" : "str"
+
+    const reversedNum: number = reversed.foo("num");
+>reversedNum : number
+>reversed.foo("num") : number
+>reversed.foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>reversed : Alpha | Beta
+>foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>"num" : "num"
+
+    const fallback: number | string = value.foo("str", false);
+>fallback : string | number
+>value.foo("str", false) : string | number
+>value.foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>value : Alpha | Beta
+>foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>"str" : "str"
+>false : false
+
+    // @ts-expect-error
+    const narrowFallback: string = value.foo("str", false);
+>narrowFallback : string
+>value.foo("str", false) : string | number
+>value.foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>value : Alpha | Beta
+>foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>"str" : "str"
+>false : false
+
+    // @ts-expect-error
+    value.foo("other");
+>value.foo("other") : never
+>value.foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>value : Alpha | Beta
+>foo : { (n: "num", opt?: unknown): number; (n: "str", opt?: unknown): string; (n: string, opt?: unknown): number | string; } | { (n: "num", opt?: { a?: string; }): number; (n: "str", opt?: { b?: string; }): string; (n: "num" | "str", opt?: unknown): number | string; }
+>"other" : "other"
+}
+
+namespace RestArguments {
+>RestArguments : typeof RestArguments
+
+    interface Alpha {
+        foo(n: "str", ...values: boolean[]): string;
+>foo : (n: "str", ...values: boolean[]) => string
+>n : "str"
+>values : boolean[]
+    }
+    interface Beta {
+        foo(n: "str", ...values: true[]): string;
+>foo : { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>n : "str"
+>values : true[]
+>true : true
+
+        foo(n: string, ...values: boolean[]): number | string;
+>foo : { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>n : string
+>values : boolean[]
+    }
+    declare let value: Alpha | Beta;
+>value : Alpha | Beta
+
+    declare let reversed: Beta | Alpha;
+>reversed : Alpha | Beta
+
+    const result: string = value.foo("str");
+>result : string
+>value.foo("str") : string
+>value.foo : ((n: "str", ...values: boolean[]) => string) | { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>value : Alpha | Beta
+>foo : ((n: "str", ...values: boolean[]) => string) | { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>"str" : "str"
+
+    const withValues: string = value.foo("str", true, true);
+>withValues : string
+>value.foo("str", true, true) : string
+>value.foo : ((n: "str", ...values: boolean[]) => string) | { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>value : Alpha | Beta
+>foo : ((n: "str", ...values: boolean[]) => string) | { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>"str" : "str"
+>true : true
+>true : true
+
+    const reversedResult: string = reversed.foo("str");
+>reversedResult : string
+>reversed.foo("str") : string
+>reversed.foo : ((n: "str", ...values: boolean[]) => string) | { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>reversed : Alpha | Beta
+>foo : ((n: "str", ...values: boolean[]) => string) | { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>"str" : "str"
+
+    const fallback: number | string = value.foo("str", false);
+>fallback : string | number
+>value.foo("str", false) : string | number
+>value.foo : ((n: "str", ...values: boolean[]) => string) | { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>value : Alpha | Beta
+>foo : ((n: "str", ...values: boolean[]) => string) | { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>"str" : "str"
+>false : false
+
+    // @ts-expect-error
+    const narrowFallback: string = value.foo("str", false);
+>narrowFallback : string
+>value.foo("str", false) : string | number
+>value.foo : ((n: "str", ...values: boolean[]) => string) | { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>value : Alpha | Beta
+>foo : ((n: "str", ...values: boolean[]) => string) | { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>"str" : "str"
+>false : false
+
+    // @ts-expect-error
+    value.foo("str", 1);
+>value.foo("str", 1) : string
+>value.foo : ((n: "str", ...values: boolean[]) => string) | { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>value : Alpha | Beta
+>foo : ((n: "str", ...values: boolean[]) => string) | { (n: "str", ...values: true[]): string; (n: string, ...values: boolean[]): number | string; }
+>"str" : "str"
+>1 : 1
+}
+
+namespace IncomparableOverloadPriorities {
+>IncomparableOverloadPriorities : typeof IncomparableOverloadPriorities
+
+    interface Alpha {
+        foo(n: string, opt?: boolean): string;
+>foo : { (n: string, opt?: boolean): string; (n: string | number): number; }
+>n : string
+>opt : boolean | undefined
+
+        foo(n: string | number): number;
+>foo : { (n: string, opt?: boolean): string; (n: string | number): number; }
+>n : string | number
+    }
+    interface Beta {
+        foo(n: string | number): boolean;
+>foo : { (n: string | number): boolean; (n: string, opt?: true): Date; }
+>n : string | number
+
+        foo(n: string, opt?: true): Date;
+>foo : { (n: string | number): boolean; (n: string, opt?: true): Date; }
+>n : string
+>opt : true | undefined
+>true : true
+    }
+    declare let value: Alpha | Beta;
+>value : Alpha | Beta
+
+    declare let reversed: Beta | Alpha;
+>reversed : Alpha | Beta
+
+    const result = value.foo("str");
+>result : string | Date
+>value.foo("str") : string | Date
+>value.foo : { (n: string, opt?: boolean): string; (n: string | number): number; } | { (n: string | number): boolean; (n: string, opt?: true): Date; }
+>value : Alpha | Beta
+>foo : { (n: string, opt?: boolean): string; (n: string | number): number; } | { (n: string | number): boolean; (n: string, opt?: true): Date; }
+>"str" : "str"
+
+    const reversedResult = reversed.foo("str");
+>reversedResult : string | Date
+>reversed.foo("str") : string | Date
+>reversed.foo : { (n: string, opt?: boolean): string; (n: string | number): number; } | { (n: string | number): boolean; (n: string, opt?: true): Date; }
+>reversed : Alpha | Beta
+>foo : { (n: string, opt?: boolean): string; (n: string | number): number; } | { (n: string | number): boolean; (n: string, opt?: true): Date; }
+>"str" : "str"
+
+    const consistent: typeof result = reversedResult;
+>consistent : string | Date
+>result : string | Date
+>reversedResult : string | Date
+}
+
+namespace IdenticalGenericSignatures {
+>IdenticalGenericSignatures : typeof IdenticalGenericSignatures
+
+    interface Alpha {
+        foo<T>(value: T, opt?: boolean): T;
+>foo : <T>(value: T, opt?: boolean) => T
+>value : T
+>opt : boolean | undefined
+    }
+    interface Beta {
+        foo<T>(value: T, opt?: boolean): T;
+>foo : { <T>(value: T, opt?: boolean): T; (n: string): number; }
+>value : T
+>opt : boolean | undefined
+
+        foo(n: string): number;
+>foo : { <T>(value: T, opt?: boolean): T; (n: string): number; }
+>n : string
+    }
+    declare let value: Alpha | Beta;
+>value : Alpha | Beta
+
+    const result: "str" = value.foo("str");
+>result : "str"
+>value.foo("str") : "str"
+>value.foo : (<T>(value: T, opt?: boolean) => T) | { <T>(value: T, opt?: boolean): T; (n: string): number; }
+>value : Alpha | Beta
+>foo : (<T>(value: T, opt?: boolean) => T) | { <T>(value: T, opt?: boolean): T; (n: string): number; }
+>"str" : "str"
+
+    const explicit: number = value.foo<number>(1);
+>explicit : number
+>value.foo<number>(1) : number
+>value.foo : (<T>(value: T, opt?: boolean) => T) | { <T>(value: T, opt?: boolean): T; (n: string): number; }
+>value : Alpha | Beta
+>foo : (<T>(value: T, opt?: boolean) => T) | { <T>(value: T, opt?: boolean): T; (n: string): number; }
+>1 : 1
+
+    // @ts-expect-error
+    value.foo<number>("str");
+>value.foo<number>("str") : number
+>value.foo : (<T>(value: T, opt?: boolean) => T) | { <T>(value: T, opt?: boolean): T; (n: string): number; }
+>value : Alpha | Beta
+>foo : (<T>(value: T, opt?: boolean) => T) | { <T>(value: T, opt?: boolean): T; (n: string): number; }
+>"str" : "str"
+}
+
+namespace ThreeConstituents {
+>ThreeConstituents : typeof ThreeConstituents
+
+    interface Alpha {
+        foo(n: "str", opt?: boolean): string;
+>foo : (n: "str", opt?: boolean) => string
+>n : "str"
+>opt : boolean | undefined
+    }
+    interface Beta {
+        foo(n: "str", opt?: true): string;
+>foo : { (n: "str", opt?: true): string; (n: string): number | string; }
+>n : "str"
+>opt : true | undefined
+>true : true
+
+        foo(n: string): number | string;
+>foo : { (n: "str", opt?: true): string; (n: string): number | string; }
+>n : string
+    }
+    interface Gamma {
+        foo(n: "str", opt?: true): string;
+>foo : { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>n : "str"
+>opt : true | undefined
+>true : true
+
+        foo(n: string): boolean | string;
+>foo : { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>n : string
+    }
+    declare let abc: Alpha | Beta | Gamma;
+>abc : Alpha | Beta | Gamma
+
+    declare let acb: Alpha | Gamma | Beta;
+>acb : Alpha | Beta | Gamma
+
+    declare let bac: Beta | Alpha | Gamma;
+>bac : Alpha | Beta | Gamma
+
+    declare let bca: Beta | Gamma | Alpha;
+>bca : Alpha | Beta | Gamma
+
+    declare let cab: Gamma | Alpha | Beta;
+>cab : Alpha | Beta | Gamma
+
+    declare let cba: Gamma | Beta | Alpha;
+>cba : Alpha | Beta | Gamma
+
+    const abcResult: string = abc.foo("str");
+>abcResult : string
+>abc.foo("str") : string
+>abc.foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; } | { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>abc : Alpha | Beta | Gamma
+>foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; } | { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>"str" : "str"
+
+    const acbResult: string = acb.foo("str");
+>acbResult : string
+>acb.foo("str") : string
+>acb.foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; } | { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>acb : Alpha | Beta | Gamma
+>foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; } | { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>"str" : "str"
+
+    const bacResult: string = bac.foo("str");
+>bacResult : string
+>bac.foo("str") : string
+>bac.foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; } | { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>bac : Alpha | Beta | Gamma
+>foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; } | { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>"str" : "str"
+
+    const bcaResult: string = bca.foo("str");
+>bcaResult : string
+>bca.foo("str") : string
+>bca.foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; } | { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>bca : Alpha | Beta | Gamma
+>foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; } | { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>"str" : "str"
+
+    const cabResult: string = cab.foo("str");
+>cabResult : string
+>cab.foo("str") : string
+>cab.foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; } | { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>cab : Alpha | Beta | Gamma
+>foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; } | { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>"str" : "str"
+
+    const cbaResult: string = cba.foo("str");
+>cbaResult : string
+>cba.foo("str") : string
+>cba.foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; } | { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>cba : Alpha | Beta | Gamma
+>foo : ((n: "str", opt?: boolean) => string) | { (n: "str", opt?: true): string; (n: string): number | string; } | { (n: "str", opt?: true): string; (n: string): boolean | string; }
+>"str" : "str"
+}
+
+namespace ConstructSignatures {
+>ConstructSignatures : typeof ConstructSignatures
+
+    interface Alpha {
+        new(n: "str", opt?: boolean): { value: string };
+>n : "str"
+>opt : boolean | undefined
+>value : string
+    }
+    interface Beta {
+        new(n: "str", opt?: true): { value: string };
+>n : "str"
+>opt : true | undefined
+>true : true
+>value : string
+
+        new(n: string): { value: number | string };
+>n : string
+>value : string | number
+    }
+    declare let value: Alpha | Beta;
+>value : Alpha | Beta
+
+    declare let reversed: Beta | Alpha;
+>reversed : Alpha | Beta
+
+    const result: string = new value("str").value;
+>result : string
+>new value("str").value : string
+>new value("str") : { value: string; }
+>value : Alpha | Beta
+>"str" : "str"
+>value : string
+
+    const reversedResult: string = new reversed("str").value;
+>reversedResult : string
+>new reversed("str").value : string
+>new reversed("str") : { value: string; }
+>reversed : Alpha | Beta
+>"str" : "str"
+>value : string
+
+    // @ts-expect-error
+    new value(1);
+>new value(1) : { value: string; } & { value: number | string; }
+>value : Alpha | Beta
+>1 : 1
+}
+
+namespace MergedDeclarations {
+>MergedDeclarations : typeof MergedDeclarations
+
+    interface Alpha {
+        foo(n: string, opt?: unknown): string;
+>foo : (n: string, opt?: unknown) => string
+>n : string
+>opt : unknown
+    }
+    interface Beta {
+        foo(n: string, opt?: { a?: string }): string;
+>foo : { (n: string, opt?: { a?: string; }): string; (n: string): number; }
+>n : string
+>opt : { a?: string; } | undefined
+>a : string | undefined
+    }
+    interface Beta {
+        foo(n: string): number;
+>foo : { (n: string, opt?: { a?: string; }): string; (n: string): number; }
+>n : string
+    }
+    declare let beta: Beta;
+>beta : Beta
+
+    declare let value: Alpha | Beta;
+>value : Alpha | Beta
+
+    const direct: number = beta.foo("str");
+>direct : number
+>beta.foo("str") : number
+>beta.foo : { (n: string, opt?: { a?: string; }): string; (n: string): number; }
+>beta : Beta
+>foo : { (n: string, opt?: { a?: string; }): string; (n: string): number; }
+>"str" : "str"
+
+    const result: string | number = value.foo("str");
+>result : string | number
+>value.foo("str") : string | number
+>value.foo : ((n: string, opt?: unknown) => string) | { (n: string, opt?: { a?: string; }): string; (n: string): number; }
+>value : Alpha | Beta
+>foo : ((n: string, opt?: unknown) => string) | { (n: string, opt?: { a?: string; }): string; (n: string): number; }
+>"str" : "str"
+
+    // @ts-expect-error
+    const unsafeNarrow: string = value.foo("str");
+>unsafeNarrow : string
+>value.foo("str") : string | number
+>value.foo : ((n: string, opt?: unknown) => string) | { (n: string, opt?: { a?: string; }): string; (n: string): number; }
+>value : Alpha | Beta
+>foo : ((n: string, opt?: unknown) => string) | { (n: string, opt?: { a?: string; }): string; (n: string): number; }
+>"str" : "str"
+}
+
+
