@@ -3301,6 +3301,7 @@ func (p *Parser) parseTypeParameters() *ast.NodeList {
 
 func (p *Parser) parseTypeParameter() *ast.Node {
 	pos := p.nodePos()
+	jsdoc := p.jsdocScannerInfo()
 	modifiers := p.parseModifiersEx(false /*allowDecorators*/, true /*permitConstAsModifier*/, false /*stopOnStartOfClassStaticBlock*/)
 	name := p.parseIdentifier()
 	var constraint *ast.TypeNode
@@ -3328,7 +3329,8 @@ func (p *Parser) parseTypeParameter() *ast.Node {
 		defaultType = p.parseType()
 	}
 	result := p.factory.NewTypeParameterDeclaration(modifiers, name, constraint, expression, defaultType)
-	return p.finishNode(result, pos)
+	p.withJSDoc(p.finishNode(result, pos), jsdoc)
+	return result
 }
 
 func (p *Parser) parseParameters(flags ParseFlags) *ast.NodeList {
