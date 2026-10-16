@@ -613,6 +613,9 @@ func (c *Checker) getSymbolTableAliases(symbols ast.SymbolTable, tableId symbolT
 			aliases = append(aliases, sym)
 		}
 	}
+	// The aliases are resolved in this order, which creates types, so sort them rather than using the random
+	// iteration order of the symbol table.
+	c.sortSymbols(aliases)
 	if kind == stKindGlobals || kind == stKindExports || kind == stKindResolvedExports {
 		if c.symbolTableAliasCache == nil {
 			c.symbolTableAliasCache = make(map[symbolTableID][]*ast.Symbol)
