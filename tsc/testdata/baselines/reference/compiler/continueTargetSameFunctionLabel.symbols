@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/continueTargetSameFunctionLabel.ts] ////
+
+=== continueTargetSameFunctionLabel.ts ===
+// Repro for https://github.com/microsoft/TypeScript/issues/30408
+// The label is declared in the same function but does not enclose the
+// continue statement, so the error should say so instead of claiming the
+// jump target crosses a function boundary.
+function foo() {
+>foo : Symbol(foo, Decl(continueTargetSameFunctionLabel.ts, 0, 0))
+
+    for (let i = 0; i < 10; i++) {
+>i : Symbol(i, Decl(continueTargetSameFunctionLabel.ts, 5, 12))
+>i : Symbol(i, Decl(continueTargetSameFunctionLabel.ts, 5, 12))
+>i : Symbol(i, Decl(continueTargetSameFunctionLabel.ts, 5, 12))
+
+        console.log(`${i}`);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>i : Symbol(i, Decl(continueTargetSameFunctionLabel.ts, 5, 12))
+
+        continue loopend;
+    }
+
+    loopend:
+    console.log('end of loop');
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+
