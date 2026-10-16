@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic2.ts] ////
+
+=== mappedTypeNotMistakenlyHomomorphic2.ts ===
+// https://github.com/microsoft/TypeScript/issues/63132
+
+type KeyMap<T> = keyof T extends PropertyKey ? { [K in keyof T]: K } : never;
+>KeyMap : Symbol(KeyMap, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 2, 12))
+>T : Symbol(T, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 2, 12))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 2, 50))
+>T : Symbol(T, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 2, 12))
+>K : Symbol(K, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 2, 50))
+
+type X = KeyMap<number>;
+>X : Symbol(X, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 2, 77))
+>KeyMap : Symbol(KeyMap, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 0, 0))
+
+type U = { a?: number; b: string } | { b: string; readonly c: boolean };
+>U : Symbol(U, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 3, 24))
+>a : Symbol(a, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 5, 10))
+>b : Symbol(b, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 5, 22))
+>b : Symbol(b, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 5, 38))
+>c : Symbol(c, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 5, 49))
+
+type MapStringOnly<T> = keyof T extends string ? { [K in keyof T]: [T[K]] } : never;
+>MapStringOnly : Symbol(MapStringOnly, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 5, 72))
+>T : Symbol(T, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 6, 19))
+>T : Symbol(T, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 6, 19))
+>K : Symbol(K, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 6, 52))
+>T : Symbol(T, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 6, 19))
+>T : Symbol(T, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 6, 19))
+>K : Symbol(K, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 6, 52))
+
+type Y = MapStringOnly<U>;
+>Y : Symbol(Y, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 6, 84))
+>MapStringOnly : Symbol(MapStringOnly, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 5, 72))
+>U : Symbol(U, Decl(mappedTypeNotMistakenlyHomomorphic2.ts, 3, 24))
+
