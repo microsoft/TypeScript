@@ -967,8 +967,8 @@ type CreateBuildOrchestratorParams struct {
 	RootNames []string                   `json:"rootNames"`
 	Cwd       tspath.RootedDirectoryPath `json:"cwd,omitempty"`
 	// Only a subset of these options are exposed  the API
-	*core.BuildOptions    `json:"buildOptions,omitempty"`
-	*core.CompilerOptions `json:"compilerOptions,omitempty"`
+	*core.BuildOptions
+	*core.CompilerOptions
 }
 
 type CreateBuildOrchestratorResponse struct {

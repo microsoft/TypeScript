@@ -2158,6 +2158,7 @@ export interface OverrideCompilerOptions {
     sourceMap?: boolean;
     inlineSourceMap?: boolean;
     traceResolution?: boolean;
+    noEmit?: boolean;
 }
 
 export class BuildOrchestrator {
