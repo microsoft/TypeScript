@@ -24,86 +24,173 @@ const (
 
 // FlowNode
 
-// A FlowNode is a node of the control flow graph. Flow nodes are created by
-// the binder and checker, and nodes refer to them through their store's
-// side tables.
+// A FlowNode is a node of the control flow graph: an index into the flow
+// nodes of a store. The binder adds a file's flow nodes while it is
+// private, and checkers add synthetic ones to their own stores. The zero
+// FlowNode is no flow node.
 type FlowNode struct {
-	node        Node      // Associated AST node
-	antecedent  *FlowNode // Antecedent for all but FlowLabel
-	antecedents *FlowList // Linked list of antecedents for FlowLabel
-	Flags       FlowFlags
+	s *nodeStore
+	i uint32
 }
 
-// A flowRef is a record field holding a *FlowNode, in its store's side
-// table.
-type flowRef = sideRef
+type flowNodeData struct {
+	node        nodeRef     // Associated AST node
+	antecedent  flowRef     // Antecedent for all but FlowLabel
+	antecedents flowListRef // Linked list of antecedents for FlowLabel
+	flags       FlowFlags
+}
 
-// A flowListRef is a record field holding a *FlowList.
-type flowListRef = sideRef
+// A flowRef is a field referring to a flow node. Zero is none. With
+// refReused clear, it is an index into the referring store's flow nodes;
+// otherwise, the rest is an index into its reused flow nodes.
+type flowRef uint32
+
+// A flowListRef is a field referring to a flow list in the same store, by
+// index. Zero is none.
+type flowListRef uint32
+
+func (f FlowNode) IsNil() bool { return f.s == nil }
+
+func (f FlowNode) data() *flowNodeData { return &f.s.flows[f.i] }
 
 // Node returns the AST node associated with the flow node.
-func (f *FlowNode) Node() Node { return f.node }
+func (f FlowNode) Node() Node { return Node{s: f.s}.deref(&f.data().node) }
 
-func (f *FlowNode) Antecedent() *FlowNode { return f.antecedent }
+func (f FlowNode) Flags() FlowFlags { return f.data().flags }
+
+func (f FlowNode) SetFlags(v FlowFlags) { f.data().flags = v }
+
+func (f FlowNode) Antecedent() FlowNode { return f.s.derefFlow(f.data().antecedent) }
 
 // Antecedents returns the linked list of antecedents of a FlowLabel.
-func (f *FlowNode) Antecedents() *FlowList { return f.antecedents }
+func (f FlowNode) Antecedents() FlowList { return f.s.flowList(f.data().antecedents) }
 
-func (f *FlowNode) SetAntecedent(v *FlowNode) { f.antecedent = v }
+func (f FlowNode) SetAntecedent(v FlowNode) { f.s.setFlowRef(&f.data().antecedent, v) }
 
-func (f *FlowNode) SetAntecedents(v *FlowList) { f.antecedents = v }
+func (f FlowNode) SetAntecedents(v FlowList) { f.data().antecedents = f.s.flowListRef(v) }
+
+func (s *nodeStore) derefFlow(r flowRef) FlowNode {
+	if r&refReused == 0 {
+		if r == 0 {
+			return FlowNode{}
+		}
+		return FlowNode{s, uint32(r)}
+	}
+	return s.reusedFlows[r&^refReused]
+}
+
+// setFlowRef makes the field f of a record or flow node of s refer to v.
+func (s *nodeStore) setFlowRef(f *flowRef, v FlowNode) {
+	switch {
+	case v.s == s:
+		*f = flowRef(v.i)
+	case v.s == nil:
+		*f = 0
+	case *f&refReused != 0:
+		s.reusedFlows[*f&^refReused] = v
+	default:
+		if len(s.reusedFlows) >= refReused {
+			panic("node store reused flow node overflow")
+		}
+		*f = flowRef(len(s.reusedFlows)) | refReused
+		s.reusedFlows = append(s.reusedFlows, v)
+	}
+}
 
 // derefFlow returns the flow node that the field f of n refers to.
-func (n Node) derefFlow(f *flowRef) *FlowNode {
-	return n.s.flowNodes.get(*f)
+func (n Node) derefFlow(f *flowRef) FlowNode {
+	return n.s.derefFlow(*f)
 }
 
 // setFlowRef makes the field f of n refer to v.
-func (n Node) setFlowRef(f *flowRef, v *FlowNode) {
-	setFlowRef(f, n, v)
+func (n Node) setFlowRef(f *flowRef, v FlowNode) {
+	n.s.setFlowRef(f, v)
 }
 
 // setFlowRef makes the field f of the record of owner refer to v.
-func setFlowRef(f *flowRef, owner Node, v *FlowNode) {
-	owner.s.flowNodes.set(f, v, v == nil)
+func setFlowRef(f *flowRef, owner Node, v FlowNode) {
+	owner.s.setFlowRef(f, v)
 }
 
-func newFlowNode(s *nodeStore, flags FlowFlags, node Node, antecedent *FlowNode) *FlowNode {
-	if len(s.flowSlab) == cap(s.flowSlab) {
-		s.flowSlab = make([]FlowNode, 0, 64)
+func newFlowNode(s *nodeStore, flags FlowFlags, node Node, antecedent FlowNode) FlowNode {
+	if s.frozen {
+		panic("node store is frozen")
 	}
-	s.flowSlab = s.flowSlab[:len(s.flowSlab)+1]
-	f := &s.flowSlab[len(s.flowSlab)-1]
-	f.Flags = flags
-	f.node = node
-	f.antecedent = antecedent
+	if len(s.flows) == 0 {
+		s.flows = make([]flowNodeData, 1, minStoreWords)
+	}
+	f := FlowNode{s, uint32(len(s.flows))}
+	s.flows = append(s.flows, flowNodeData{flags: flags})
+	if f.i >= refReused {
+		panic("node store flow node overflow")
+	}
+	s.setRef(&f.data().node, node)
+	f.SetAntecedent(antecedent)
 	return f
 }
 
 // NewFlowNode allocates a flow node for file, which must not be shared
 // with other writers while it is bound.
-func NewFlowNode(file *SourceFile, flags FlowFlags, node Node, antecedent *FlowNode) *FlowNode {
+func NewFlowNode(file *SourceFile, flags FlowFlags, node Node, antecedent FlowNode) FlowNode {
 	return newFlowNode(file.store(), flags, node, antecedent)
 }
 
 // NewFlowNode allocates a flow node for f's nodes.
-func (f *NodeFactory) NewFlowNode(flags FlowFlags, node Node, antecedent *FlowNode) *FlowNode {
+func (f *NodeFactory) NewFlowNode(flags FlowFlags, node Node, antecedent FlowNode) FlowNode {
 	return newFlowNode(f.nodeStore(), flags, node, antecedent)
 }
 
-// A FlowList is a linked list of flow nodes.
+// A FlowList is a linked list of flow nodes of one store. The zero
+// FlowList is the empty list.
 type FlowList struct {
-	flow *FlowNode
-	next *FlowList
+	s *nodeStore
+	i uint32
 }
 
-func (l *FlowList) Flow() *FlowNode     { return l.flow }
-func (l *FlowList) Next() *FlowList     { return l.next }
-func (l *FlowList) SetNext(v *FlowList) { l.next = v }
+type flowListData struct {
+	flow flowRef
+	next flowListRef
+}
 
-// NewFlowList allocates a flow list.
-func NewFlowList(file *SourceFile, flow *FlowNode, next *FlowList) *FlowList {
-	return &FlowList{flow: flow, next: next}
+func (l FlowList) IsNil() bool { return l.s == nil }
+
+func (l FlowList) data() *flowListData { return &l.s.flowLists[l.i] }
+
+func (l FlowList) Flow() FlowNode     { return l.s.derefFlow(l.data().flow) }
+func (l FlowList) Next() FlowList     { return l.s.flowList(l.data().next) }
+func (l FlowList) SetNext(v FlowList) { l.data().next = l.s.flowListRef(v) }
+
+func (s *nodeStore) flowList(r flowListRef) FlowList {
+	if r == 0 {
+		return FlowList{}
+	}
+	return FlowList{s, uint32(r)}
+}
+
+func (s *nodeStore) flowListRef(l FlowList) flowListRef {
+	if l.s == nil {
+		return 0
+	}
+	if l.s != s {
+		panic("flow list belongs to another store")
+	}
+	return flowListRef(l.i)
+}
+
+// NewFlowList allocates a flow list for file, which must not be shared
+// with other writers while it is bound.
+func NewFlowList(file *SourceFile, flow FlowNode, next FlowList) FlowList {
+	s := file.store()
+	if s.frozen {
+		panic("node store is frozen")
+	}
+	if len(s.flowLists) == 0 {
+		s.flowLists = make([]flowListData, 1, minStoreWords)
+	}
+	l := FlowList{s, uint32(len(s.flowLists))}
+	s.flowLists = append(s.flowLists, flowListData{next: s.flowListRef(next)})
+	s.setFlowRef(&l.data().flow, flow)
+	return l
 }
 
 type FlowLabel = FlowNode
@@ -169,17 +256,17 @@ func (node FlowReduceLabelData) data() *flowReduceLabelData {
 	return (*flowReduceLabelData)(node.rec())
 }
 
-func (node FlowReduceLabelData) Target() *FlowLabel { return node.derefFlow(&node.data().target) }
-func (node FlowReduceLabelData) Antecedents() *FlowList {
-	return node.s.flowLists.get(node.data().antecedents)
+func (node FlowReduceLabelData) Target() FlowLabel { return node.derefFlow(&node.data().target) }
+func (node FlowReduceLabelData) Antecedents() FlowList {
+	return node.s.flowList(node.data().antecedents)
 }
 
 // NewFlowReduceLabelData allocates in the store of file, which must not be
 // shared with other writers while it is bound.
-func NewFlowReduceLabelData(file *SourceFile, target *FlowLabel, antecedents *FlowList) Node {
+func NewFlowReduceLabelData(file *SourceFile, target FlowLabel, antecedents FlowList) Node {
 	s := file.store()
 	data, i := newRecord[flowReduceLabelData](s, layoutFlowReduceLabelData)
 	setFlowRef(&data.target, i, target)
-	s.flowLists.set(&data.antecedents, antecedents, antecedents == nil)
+	data.antecedents = s.flowListRef(antecedents)
 	return newNode(s, kindFlowReduceLabelData, layoutFlowReduceLabelData, i, NodeFactoryHooks{})
 }

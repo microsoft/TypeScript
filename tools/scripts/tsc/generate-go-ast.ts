@@ -279,7 +279,7 @@ const sideTables: Record<string, string> = {
 // Fields referring to records that live in the store's blocks hold a ref,
 // like node fields; the methods named here read, write and create them.
 const recordRefs: Record<string, { ref: string; deref: string; set: string; setAt: string; }> = {
-    "*FlowNode": { ref: "flowRef", deref: "derefFlow", set: "setFlowRef", setAt: "setFlowRef" },
+    FlowNode: { ref: "flowRef", deref: "derefFlow", set: "setFlowRef", setAt: "setFlowRef" },
 };
 
 function recordRefOf(goType: string) {

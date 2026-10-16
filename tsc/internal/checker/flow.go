@@ -33,7 +33,7 @@ func (c *Checker) newFlowType(t *Type, incomplete bool) FlowType {
 }
 
 type SharedFlow struct {
-	flow     *ast.FlowNode
+	flow     ast.FlowNode
 	flowType FlowType
 }
 
@@ -66,25 +66,25 @@ func (c *Checker) putFlowState(f *FlowState) {
 	c.freeFlowState = f
 }
 
-func getFlowNodeOfNode(node ast.Node) *ast.FlowNode {
+func getFlowNodeOfNode(node ast.Node) ast.FlowNode {
 	flowNodeData := node.FlowNodeData()
 	if !flowNodeData.IsNil() {
 		return flowNodeData.FlowNode()
 	}
-	return nil
+	return ast.FlowNode{}
 }
 
 func (c *Checker) getFlowTypeOfReference(reference ast.Node, declaredType *Type) *Type {
-	return c.getFlowTypeOfReferenceEx(reference, declaredType, declaredType, ast.Node{}, nil)
+	return c.getFlowTypeOfReferenceEx(reference, declaredType, declaredType, ast.Node{}, ast.FlowNode{})
 }
 
-func (c *Checker) getFlowTypeOfReferenceEx(reference ast.Node, declaredType *Type, initialType *Type, flowContainer ast.Node, flowNode *ast.FlowNode) *Type {
+func (c *Checker) getFlowTypeOfReferenceEx(reference ast.Node, declaredType *Type, initialType *Type, flowContainer ast.Node, flowNode ast.FlowNode) *Type {
 	if c.flowAnalysisDisabled {
 		return c.errorType
 	}
-	if flowNode == nil {
+	if flowNode.IsNil() {
 		flowNode = getFlowNodeOfNode(reference)
-		if flowNode == nil {
+		if flowNode.IsNil() {
 			return declaredType
 		}
 	}
@@ -114,7 +114,7 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference ast.Node, declaredType *Typ
 	return resultType
 }
 
-func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
+func (c *Checker) getTypeAtFlowNode(f *FlowState, flow ast.FlowNode) FlowType {
 	if f.depth == 2000 {
 		// We have made 2000 recursive invocations. To avoid overflowing the call stack we report an error
 		// and disable further control flow analysis in the containing function or module body.
@@ -126,9 +126,9 @@ func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 		return FlowType{t: c.errorType}
 	}
 	f.depth++
-	var sharedFlow *ast.FlowNode
+	var sharedFlow ast.FlowNode
 	for {
-		flags := flow.Flags
+		flags := flow.Flags()
 		if flags&ast.FlowFlagsShared != 0 {
 			// We cache results of flow type resolution for shared nodes that were previously visited in
 			// the same getFlowTypeOfReference invocation. A node is considered shared when it is the
@@ -161,13 +161,13 @@ func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 			t = c.getTypeAtSwitchClause(f, flow)
 		case flags&ast.FlowFlagsBranchLabel != 0:
 			antecedents := getBranchLabelAntecedents(flow, f.reduceLabels)
-			if antecedents.Next() == nil {
+			if antecedents.Next().IsNil() {
 				flow = antecedents.Flow()
 				continue
 			}
 			t = c.getTypeAtFlowBranchLabel(f, flow, antecedents)
 		case flags&ast.FlowFlagsLoopLabel != 0:
-			if flow.Antecedents().Next() == nil {
+			if flow.Antecedents().Next().IsNil() {
 				flow = flow.Antecedents().Flow()
 				continue
 			}
@@ -196,7 +196,7 @@ func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 			// simply return the non-auto declared type to reduce follow-on errors.
 			t = FlowType{t: c.convertAutoToAny(f.declaredType)}
 		}
-		if sharedFlow != nil {
+		if !sharedFlow.IsNil() {
 			// Record visited node and the associated type in the cache.
 			c.sharedFlows = append(c.sharedFlows, SharedFlow{flow: sharedFlow, flowType: t})
 		}
@@ -205,7 +205,7 @@ func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 	}
 }
 
-func getBranchLabelAntecedents(flow *ast.FlowNode, reduceLabels []ast.FlowReduceLabelData) *ast.FlowList {
+func getBranchLabelAntecedents(flow ast.FlowNode, reduceLabels []ast.FlowReduceLabelData) ast.FlowList {
 	i := len(reduceLabels)
 	for i != 0 {
 		i--
@@ -217,7 +217,7 @@ func getBranchLabelAntecedents(flow *ast.FlowNode, reduceLabels []ast.FlowReduce
 	return flow.Antecedents()
 }
 
-func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) FlowType {
+func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow ast.FlowNode) FlowType {
 	node := flow.Node()
 	// Assignments only narrow the computed type if the declared type is a union type. Thus, we
 	// only need to evaluate the assigned type if the declared type is a union type.
@@ -273,7 +273,7 @@ func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) Flow
 	return FlowType{}
 }
 
-func (c *Checker) getInitialOrAssignedType(f *FlowState, flow *ast.FlowNode) *Type {
+func (c *Checker) getInitialOrAssignedType(f *FlowState, flow ast.FlowNode) *Type {
 	if ast.IsVariableDeclaration(flow.Node()) || ast.IsBindingElement(flow.Node()) {
 		return c.getNarrowableTypeForReference(c.getInitialType(flow.Node()), f.reference, CheckModeNormal)
 	}
@@ -285,7 +285,7 @@ func (c *Checker) isEmptyArrayAssignment(node ast.Node) bool {
 		!ast.IsBindingElement(node) && ast.IsBinaryExpression(node.Parent()) && isEmptyArrayLiteral(node.Parent().AsBinaryExpression().Right())
 }
 
-func (c *Checker) getTypeAtFlowCall(f *FlowState, flow *ast.FlowNode) FlowType {
+func (c *Checker) getTypeAtFlowCall(f *FlowState, flow ast.FlowNode) FlowType {
 	signature := c.getEffectsSignature(flow.Node())
 	if signature != nil {
 		predicate := c.getTypePredicateOfSignature(signature)
@@ -351,7 +351,7 @@ func (c *Checker) narrowTypeByAssertion(f *FlowState, t *Type, expr ast.Node) *T
 	return c.narrowType(f, t, node, true /*assumeTrue*/)
 }
 
-func (c *Checker) getTypeAtFlowCondition(f *FlowState, flow *ast.FlowNode) FlowType {
+func (c *Checker) getTypeAtFlowCondition(f *FlowState, flow ast.FlowNode) FlowType {
 	flowType := c.getTypeAtFlowNode(f, flow.Antecedent())
 	if flowType.t.flags&TypeFlagsNever != 0 {
 		return flowType
@@ -363,7 +363,7 @@ func (c *Checker) getTypeAtFlowCondition(f *FlowState, flow *ast.FlowNode) FlowT
 	// have the complete type. We proceed by switching to the silent never type which
 	// doesn't report errors when operators are applied to it. Note that this is the
 	// *only* place a silent never type is ever generated.
-	assumeTrue := flow.Flags&ast.FlowFlagsTrueCondition != 0
+	assumeTrue := flow.Flags()&ast.FlowFlagsTrueCondition != 0
 	nonEvolvingType := c.finalizeEvolvingArrayType(flowType.t)
 	narrowedType := c.narrowType(f, nonEvolvingType, flow.Node(), assumeTrue)
 	if narrowedType == nonEvolvingType {
@@ -1056,7 +1056,7 @@ func (c *Checker) narrowTypeByOptionalChainContainment(f *FlowState, t *Type, op
 	return t
 }
 
-func (c *Checker) getTypeAtSwitchClause(f *FlowState, flow *ast.FlowNode) FlowType {
+func (c *Checker) getTypeAtSwitchClause(f *FlowState, flow ast.FlowNode) FlowType {
 	data := flow.Node().AsFlowSwitchClauseData()
 	expr := ast.SkipParentheses(data.SwitchStatement().Expression())
 	flowType := c.getTypeAtFlowNode(f, flow.Antecedent())
@@ -1250,14 +1250,14 @@ func (c *Checker) narrowTypeBySwitchOnDiscriminantProperty(t *Type, access ast.N
 	})
 }
 
-func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode, antecedents *ast.FlowList) FlowType {
+func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow ast.FlowNode, antecedents ast.FlowList) FlowType {
 	antecedentStart := len(c.antecedentTypes)
 	subtypeReduction := false
 	seenIncomplete := false
-	var bypassFlow *ast.FlowNode
-	for list := antecedents; list != nil; list = list.Next() {
+	var bypassFlow ast.FlowNode
+	for list := antecedents; !list.IsNil(); list = list.Next() {
 		antecedent := list.Flow()
-		if bypassFlow == nil && antecedent.Flags&ast.FlowFlagsSwitchClause != 0 && antecedent.Node().AsFlowSwitchClauseData().IsEmpty() {
+		if bypassFlow.IsNil() && antecedent.Flags()&ast.FlowFlagsSwitchClause != 0 && antecedent.Node().AsFlowSwitchClauseData().IsEmpty() {
 			// The antecedent is the bypass branch of a potentially exhaustive switch statement.
 			bypassFlow = antecedent
 			continue
@@ -1284,7 +1284,7 @@ func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode, ant
 			seenIncomplete = true
 		}
 	}
-	if bypassFlow != nil {
+	if !bypassFlow.IsNil() {
 		flowType := c.getTypeAtFlowNode(f, bypassFlow)
 		// If the bypass flow contributes a type we haven't seen yet and the switch statement
 		// isn't exhaustive, process the bypass flow type. Since exhaustiveness checks increase
@@ -1322,7 +1322,7 @@ func (c *Checker) getUnionOrEvolvingArrayType(f *FlowState, types []*Type, subty
 	return result
 }
 
-func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowType {
+func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow ast.FlowNode) FlowType {
 	if f.refKey.IsZero() {
 		f.refKey = c.getFlowReferenceKey(f)
 	}
@@ -1354,7 +1354,7 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 	antecedentTypes := make([]*Type, 0, 4)
 	subtypeReduction := false
 	var firstAntecedentType FlowType
-	for list := flow.Antecedents(); list != nil; list = list.Next() {
+	for list := flow.Antecedents(); !list.IsNil(); list = list.Next() {
 		var flowType FlowType
 		if firstAntecedentType.isNil() {
 			// The first antecedent of a loop junction is always the non-looping control
@@ -1401,7 +1401,7 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 	return FlowType{t: result}
 }
 
-func (c *Checker) getTypeAtFlowArrayMutation(f *FlowState, flow *ast.FlowNode) FlowType {
+func (c *Checker) getTypeAtFlowArrayMutation(f *FlowState, flow ast.FlowNode) FlowType {
 	if f.declaredType == c.autoType || f.declaredType == c.autoArrayType {
 		node := flow.Node()
 		var expr ast.Node
@@ -2510,7 +2510,7 @@ func (c *Checker) getFlowTypeInStaticBlocks(symbol *ast.Symbol, staticBlocks []a
 	return nil
 }
 
-func (c *Checker) isReachableFlowNode(flow *ast.FlowNode) bool {
+func (c *Checker) isReachableFlowNode(flow ast.FlowNode) bool {
 	f := c.getFlowState()
 	result := c.isReachableFlowNodeWorker(f, flow, false /*noCacheCheck*/)
 	c.putFlowState(f)
@@ -2519,12 +2519,12 @@ func (c *Checker) isReachableFlowNode(flow *ast.FlowNode) bool {
 	return result
 }
 
-func (c *Checker) isReachableFlowNodeWorker(f *FlowState, flow *ast.FlowNode, noCacheCheck bool) bool {
+func (c *Checker) isReachableFlowNodeWorker(f *FlowState, flow ast.FlowNode, noCacheCheck bool) bool {
 	for {
 		if flow == c.lastFlowNode {
 			return c.lastFlowNodeReachable
 		}
-		flags := flow.Flags
+		flags := flow.Flags()
 		if flags&ast.FlowFlagsShared != 0 {
 			if !noCacheCheck && len(f.reduceLabels) == 0 {
 				if reachable, ok := c.flowNodeReachable[flow]; ok {
@@ -2553,14 +2553,14 @@ func (c *Checker) isReachableFlowNodeWorker(f *FlowState, flow *ast.FlowNode, no
 			flow = flow.Antecedent()
 		case flags&ast.FlowFlagsBranchLabel != 0:
 			// A branching point is reachable if any branch is reachable.
-			for list := getBranchLabelAntecedents(flow, f.reduceLabels); list != nil; list = list.Next() {
+			for list := getBranchLabelAntecedents(flow, f.reduceLabels); !list.IsNil(); list = list.Next() {
 				if c.isReachableFlowNodeWorker(f, list.Flow(), false /*noCacheCheck*/) {
 					return true
 				}
 			}
 			return false
 		case flags&ast.FlowFlagsLoopLabel != 0:
-			if flow.Antecedents() == nil {
+			if flow.Antecedents().IsNil() {
 				return false
 			}
 			// A loop is reachable if the control flow path that leads to the top is reachable.
@@ -2575,7 +2575,7 @@ func (c *Checker) isReachableFlowNodeWorker(f *FlowState, flow *ast.FlowNode, no
 			flow = flow.Antecedent()
 		case flags&ast.FlowFlagsReduceLabel != 0:
 			// Cache is unreliable once we start adjusting labels
-			c.lastFlowNode = nil
+			c.lastFlowNode = ast.FlowNode{}
 			f.reduceLabels = append(f.reduceLabels, flow.Node().AsFlowReduceLabelData())
 			result := c.isReachableFlowNodeWorker(f, flow.Antecedent(), false /*noCacheCheck*/)
 			f.reduceLabels = f.reduceLabels[:len(f.reduceLabels)-1]
@@ -2601,16 +2601,16 @@ func (c *Checker) isFalseExpression(expr ast.Node) bool {
 
 // Return true if the given flow node is preceded by a 'super(...)' call in every possible code path
 // leading to the node.
-func (c *Checker) isPostSuperFlowNode(flow *ast.FlowNode, noCacheCheck bool) bool {
+func (c *Checker) isPostSuperFlowNode(flow ast.FlowNode, noCacheCheck bool) bool {
 	f := c.getFlowState()
 	result := c.isPostSuperFlowNodeWorker(f, flow, noCacheCheck)
 	c.putFlowState(f)
 	return result
 }
 
-func (c *Checker) isPostSuperFlowNodeWorker(f *FlowState, flow *ast.FlowNode, noCacheCheck bool) bool {
+func (c *Checker) isPostSuperFlowNodeWorker(f *FlowState, flow ast.FlowNode, noCacheCheck bool) bool {
 	for {
-		flags := flow.Flags
+		flags := flow.Flags()
 		if flags&ast.FlowFlagsShared != 0 {
 			if !noCacheCheck {
 				if postSuper, ok := c.flowNodePostSuper[flow]; ok {
@@ -2630,7 +2630,7 @@ func (c *Checker) isPostSuperFlowNodeWorker(f *FlowState, flow *ast.FlowNode, no
 			}
 			flow = flow.Antecedent()
 		case flags&ast.FlowFlagsBranchLabel != 0:
-			for list := getBranchLabelAntecedents(flow, f.reduceLabels); list != nil; list = list.Next() {
+			for list := getBranchLabelAntecedents(flow, f.reduceLabels); !list.IsNil(); list = list.Next() {
 				if !c.isPostSuperFlowNodeWorker(f, list.Flow(), false /*noCacheCheck*/) {
 					return false
 				}

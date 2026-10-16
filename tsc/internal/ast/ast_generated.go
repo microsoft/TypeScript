@@ -1190,9 +1190,8 @@ func layoutRecord(layout nodeLayout) any {
 
 type StatementBase struct{ Node }
 
-func (node StatementBase) FlowNode() *FlowNode { return node.derefFlow(node.flowNodeBaseFlowNode()) }
-
-func (node StatementBase) SetFlowNode(value *FlowNode) {
+func (node StatementBase) FlowNode() FlowNode { return node.derefFlow(node.flowNodeBaseFlowNode()) }
+func (node StatementBase) SetFlowNode(value FlowNode) {
 	node.setFlowRef(node.flowNodeBaseFlowNode(), value)
 }
 
@@ -1211,11 +1210,11 @@ func (n Node) iterationStatementBaseStatement() *nodeRef {
 
 type IterationStatementBase struct{ Node }
 
-func (node IterationStatementBase) FlowNode() *FlowNode {
+func (node IterationStatementBase) FlowNode() FlowNode {
 	return node.derefFlow(node.flowNodeBaseFlowNode())
 }
 
-func (node IterationStatementBase) SetFlowNode(value *FlowNode) {
+func (node IterationStatementBase) SetFlowNode(value FlowNode) {
 	node.setFlowRef(node.flowNodeBaseFlowNode(), value)
 }
 
@@ -1594,8 +1593,8 @@ func (n Node) flowNodeBaseFlowNode() *flowRef {
 
 type FlowNodeBase struct{ Node }
 
-func (node FlowNodeBase) FlowNode() *FlowNode { return node.derefFlow(node.flowNodeBaseFlowNode()) }
-func (node FlowNodeBase) SetFlowNode(value *FlowNode) {
+func (node FlowNodeBase) FlowNode() FlowNode { return node.derefFlow(node.flowNodeBaseFlowNode()) }
+func (node FlowNodeBase) SetFlowNode(value FlowNode) {
 	node.setFlowRef(node.flowNodeBaseFlowNode(), value)
 }
 
@@ -1894,8 +1893,8 @@ func (node BodyBase) SetAsteriskToken(value AsteriskToken) {
 }
 func (node BodyBase) Body() NodeBody         { return node.deref(node.bodyBaseBody()) }
 func (node BodyBase) SetBody(value NodeBody) { node.setRef(node.bodyBaseBody(), value) }
-func (node BodyBase) EndFlowNode() *FlowNode { return node.derefFlow(node.bodyBaseEndFlowNode()) }
-func (node BodyBase) SetEndFlowNode(value *FlowNode) {
+func (node BodyBase) EndFlowNode() FlowNode  { return node.derefFlow(node.bodyBaseEndFlowNode()) }
+func (node BodyBase) SetEndFlowNode(value FlowNode) {
 	node.setFlowRef(node.bodyBaseEndFlowNode(), value)
 }
 
@@ -1961,11 +1960,11 @@ func (node FunctionLikeWithBodyBase) Body() NodeBody { return node.deref(node.bo
 
 func (node FunctionLikeWithBodyBase) SetBody(value NodeBody) { node.setRef(node.bodyBaseBody(), value) }
 
-func (node FunctionLikeWithBodyBase) EndFlowNode() *FlowNode {
+func (node FunctionLikeWithBodyBase) EndFlowNode() FlowNode {
 	return node.derefFlow(node.bodyBaseEndFlowNode())
 }
 
-func (node FunctionLikeWithBodyBase) SetEndFlowNode(value *FlowNode) {
+func (node FunctionLikeWithBodyBase) SetEndFlowNode(value FlowNode) {
 	node.setFlowRef(node.bodyBaseEndFlowNode(), value)
 }
 
@@ -2373,19 +2372,19 @@ func (node AccessorDeclarationBase) Body() NodeBody { return node.deref(node.bod
 
 func (node AccessorDeclarationBase) SetBody(value NodeBody) { node.setRef(node.bodyBaseBody(), value) }
 
-func (node AccessorDeclarationBase) EndFlowNode() *FlowNode {
+func (node AccessorDeclarationBase) EndFlowNode() FlowNode {
 	return node.derefFlow(node.bodyBaseEndFlowNode())
 }
 
-func (node AccessorDeclarationBase) SetEndFlowNode(value *FlowNode) {
+func (node AccessorDeclarationBase) SetEndFlowNode(value FlowNode) {
 	node.setFlowRef(node.bodyBaseEndFlowNode(), value)
 }
 
-func (node AccessorDeclarationBase) FlowNode() *FlowNode {
+func (node AccessorDeclarationBase) FlowNode() FlowNode {
 	return node.derefFlow(node.flowNodeBaseFlowNode())
 }
 
-func (node AccessorDeclarationBase) SetFlowNode(value *FlowNode) {
+func (node AccessorDeclarationBase) SetFlowNode(value FlowNode) {
 	node.setFlowRef(node.flowNodeBaseFlowNode(), value)
 }
 
@@ -3005,7 +3004,7 @@ func IsToken(node Node) bool {
 
 type identifierData struct {
 	nodeBaseData
-	flowNode flowRef // *FlowNode
+	flowNode flowRef // FlowNode
 	text     textRef // string
 }
 
@@ -3013,10 +3012,9 @@ type Identifier struct{ Node }
 
 func (node Identifier) data() *identifierData { return (*identifierData)(node.rec()) }
 
-func (node Identifier) FlowNode() *FlowNode         { return node.derefFlow(&node.data().flowNode) }
-func (node Identifier) SetFlowNode(value *FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
-
-func (node Identifier) Text() string { return node.store().texts.get(node.data().text) }
+func (node Identifier) FlowNode() FlowNode         { return node.derefFlow(&node.data().flowNode) }
+func (node Identifier) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
+func (node Identifier) Text() string               { return node.store().texts.get(node.data().text) }
 
 func (node Identifier) SetText(value string) {
 	node.store().texts.set(&node.data().text, value, value == "")
@@ -3080,7 +3078,7 @@ func IsPrivateIdentifier(node Node) bool {
 
 type qualifiedNameData struct {
 	nodeBaseData
-	flowNode flowRef // *FlowNode
+	flowNode flowRef // FlowNode
 	facts    atomic.Uint32
 	left     nodeRef // EntityName
 	right    nodeRef // MemberName
@@ -3090,13 +3088,13 @@ type QualifiedName struct{ Node }
 
 func (node QualifiedName) data() *qualifiedNameData { return (*qualifiedNameData)(node.rec()) }
 
-func (node QualifiedName) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node QualifiedName) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node QualifiedName) SetFlowNode(value *FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
-func (node QualifiedName) Left() EntityName            { return node.deref(&node.data().left) }
-func (node QualifiedName) SetLeft(value EntityName)    { node.setRef(&node.data().left, value) }
-func (node QualifiedName) Right() MemberName           { return node.deref(&node.data().right) }
-func (node QualifiedName) SetRight(value MemberName)   { node.setRef(&node.data().right, value) }
+func (node QualifiedName) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
+func (node QualifiedName) Left() EntityName           { return node.deref(&node.data().left) }
+func (node QualifiedName) SetLeft(value EntityName)   { node.setRef(&node.data().left, value) }
+func (node QualifiedName) Right() MemberName          { return node.deref(&node.data().right) }
+func (node QualifiedName) SetRight(value MemberName)  { node.setRef(&node.data().right, value) }
 
 func (f *NodeFactory) NewQualifiedName(left EntityName, right MemberName) Node {
 	s := f.nodeStore()
@@ -3246,17 +3244,16 @@ func IsDecorator(node Node) bool {
 
 type emptyStatementData struct {
 	nodeBaseData
-	flowNode flowRef // *FlowNode
+	flowNode flowRef // FlowNode
 }
 
 type EmptyStatement struct{ Node }
 
 func (node EmptyStatement) data() *emptyStatementData { return (*emptyStatementData)(node.rec()) }
 
-func (node EmptyStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node EmptyStatement) SetFlowNode(value *FlowNode) {
-	node.setFlowRef(&node.data().flowNode, value)
-}
+func (node EmptyStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+
+func (node EmptyStatement) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
 
 func (f *NodeFactory) NewEmptyStatement() Node {
 	_, i := newRecord[emptyStatementData](f.nodeStore(), layoutEmptyStatement)
@@ -3277,7 +3274,7 @@ func IsEmptyStatement(node Node) bool {
 
 type ifStatementData struct {
 	nodeBaseData
-	flowNode      flowRef // *FlowNode
+	flowNode      flowRef // FlowNode
 	facts         atomic.Uint32
 	expression    nodeRef // Expression
 	thenStatement nodeRef // Statement
@@ -3288,9 +3285,9 @@ type IfStatement struct{ Node }
 
 func (node IfStatement) data() *ifStatementData { return (*ifStatementData)(node.rec()) }
 
-func (node IfStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node IfStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node IfStatement) SetFlowNode(value *FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
+func (node IfStatement) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
 
 func (node IfStatement) Expression() Expression { return node.deref(&node.data().expression) }
 
@@ -3350,7 +3347,7 @@ func IsIfStatement(node Node) bool {
 
 type doStatementData struct {
 	nodeBaseData
-	flowNode   flowRef // *FlowNode
+	flowNode   flowRef // FlowNode
 	statement  nodeRef // Statement
 	facts      atomic.Uint32
 	expression nodeRef // Expression
@@ -3360,9 +3357,9 @@ type DoStatement struct{ Node }
 
 func (node DoStatement) data() *doStatementData { return (*doStatementData)(node.rec()) }
 
-func (node DoStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node DoStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node DoStatement) SetFlowNode(value *FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
+func (node DoStatement) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
 
 func (node DoStatement) Statement() Statement { return node.deref(&node.data().statement) }
 
@@ -3414,7 +3411,7 @@ func IsDoStatement(node Node) bool {
 
 type whileStatementData struct {
 	nodeBaseData
-	flowNode   flowRef // *FlowNode
+	flowNode   flowRef // FlowNode
 	statement  nodeRef // Statement
 	facts      atomic.Uint32
 	expression nodeRef // Expression
@@ -3424,10 +3421,9 @@ type WhileStatement struct{ Node }
 
 func (node WhileStatement) data() *whileStatementData { return (*whileStatementData)(node.rec()) }
 
-func (node WhileStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node WhileStatement) SetFlowNode(value *FlowNode) {
-	node.setFlowRef(&node.data().flowNode, value)
-}
+func (node WhileStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+
+func (node WhileStatement) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
 
 func (node WhileStatement) Statement() Statement { return node.deref(&node.data().statement) }
 
@@ -3481,7 +3477,7 @@ func IsWhileStatement(node Node) bool {
 
 type forStatementData struct {
 	nodeBaseData
-	flowNode      flowRef // *FlowNode
+	flowNode      flowRef // FlowNode
 	statement     nodeRef // Statement
 	locals        sideRef // SymbolTable
 	nextContainer nodeRef // Node
@@ -3495,9 +3491,9 @@ type ForStatement struct{ Node }
 
 func (node ForStatement) data() *forStatementData { return (*forStatementData)(node.rec()) }
 
-func (node ForStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node ForStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node ForStatement) SetFlowNode(value *FlowNode)  { node.setFlowRef(&node.data().flowNode, value) }
+func (node ForStatement) SetFlowNode(value FlowNode)   { node.setFlowRef(&node.data().flowNode, value) }
 func (node ForStatement) Statement() Statement         { return node.deref(&node.data().statement) }
 func (node ForStatement) SetStatement(value Statement) { node.setRef(&node.data().statement, value) }
 
@@ -3578,7 +3574,7 @@ func IsForStatement(node Node) bool {
 
 type forInOrOfStatementData struct {
 	nodeBaseData
-	flowNode      flowRef // *FlowNode
+	flowNode      flowRef // FlowNode
 	locals        sideRef // SymbolTable
 	nextContainer nodeRef // Node
 	facts         atomic.Uint32
@@ -3594,8 +3590,8 @@ func (node ForInOrOfStatement) data() *forInOrOfStatementData {
 	return (*forInOrOfStatementData)(node.rec())
 }
 
-func (node ForInOrOfStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node ForInOrOfStatement) SetFlowNode(value *FlowNode) {
+func (node ForInOrOfStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node ForInOrOfStatement) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -3690,7 +3686,7 @@ func IsForOfStatement(node Node) bool {
 
 type breakStatementData struct {
 	nodeBaseData
-	flowNode flowRef // *FlowNode
+	flowNode flowRef // FlowNode
 	label    nodeRef // IdentifierNode. Optional
 }
 
@@ -3698,10 +3694,9 @@ type BreakStatement struct{ Node }
 
 func (node BreakStatement) data() *breakStatementData { return (*breakStatementData)(node.rec()) }
 
-func (node BreakStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node BreakStatement) SetFlowNode(value *FlowNode) {
-	node.setFlowRef(&node.data().flowNode, value)
-}
+func (node BreakStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+
+func (node BreakStatement) SetFlowNode(value FlowNode)    { node.setFlowRef(&node.data().flowNode, value) }
 func (node BreakStatement) Label() IdentifierNode         { return node.deref(&node.data().label) }
 func (node BreakStatement) SetLabel(value IdentifierNode) { node.setRef(&node.data().label, value) }
 
@@ -3741,7 +3736,7 @@ func IsBreakStatement(node Node) bool {
 
 type continueStatementData struct {
 	nodeBaseData
-	flowNode flowRef // *FlowNode
+	flowNode flowRef // FlowNode
 	label    nodeRef // IdentifierNode. Optional
 }
 
@@ -3751,8 +3746,8 @@ func (node ContinueStatement) data() *continueStatementData {
 	return (*continueStatementData)(node.rec())
 }
 
-func (node ContinueStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node ContinueStatement) SetFlowNode(value *FlowNode) {
+func (node ContinueStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node ContinueStatement) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -3796,7 +3791,7 @@ func IsContinueStatement(node Node) bool {
 
 type returnStatementData struct {
 	nodeBaseData
-	flowNode   flowRef // *FlowNode
+	flowNode   flowRef // FlowNode
 	facts      atomic.Uint32
 	expression nodeRef // Expression. Optional
 }
@@ -3805,8 +3800,8 @@ type ReturnStatement struct{ Node }
 
 func (node ReturnStatement) data() *returnStatementData { return (*returnStatementData)(node.rec()) }
 
-func (node ReturnStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node ReturnStatement) SetFlowNode(value *FlowNode) {
+func (node ReturnStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node ReturnStatement) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 func (node ReturnStatement) Expression() Expression { return node.deref(&node.data().expression) }
@@ -3850,7 +3845,7 @@ func IsReturnStatement(node Node) bool {
 
 type withStatementData struct {
 	nodeBaseData
-	flowNode   flowRef // *FlowNode
+	flowNode   flowRef // FlowNode
 	facts      atomic.Uint32
 	expression nodeRef // Expression
 	statement  nodeRef // Statement
@@ -3860,12 +3855,10 @@ type WithStatement struct{ Node }
 
 func (node WithStatement) data() *withStatementData { return (*withStatementData)(node.rec()) }
 
-func (node WithStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node WithStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node WithStatement) SetFlowNode(value *FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
-
-func (node WithStatement) Expression() Expression { return node.deref(&node.data().expression) }
-
+func (node WithStatement) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
+func (node WithStatement) Expression() Expression     { return node.deref(&node.data().expression) }
 func (node WithStatement) SetExpression(value Expression) {
 	node.setRef(&node.data().expression, value)
 }
@@ -3916,7 +3909,7 @@ func IsWithStatement(node Node) bool {
 
 type switchStatementData struct {
 	nodeBaseData
-	flowNode   flowRef // *FlowNode
+	flowNode   flowRef // FlowNode
 	facts      atomic.Uint32
 	expression nodeRef // Expression
 	caseBlock  nodeRef // CaseBlockNode
@@ -3926,8 +3919,8 @@ type SwitchStatement struct{ Node }
 
 func (node SwitchStatement) data() *switchStatementData { return (*switchStatementData)(node.rec()) }
 
-func (node SwitchStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node SwitchStatement) SetFlowNode(value *FlowNode) {
+func (node SwitchStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node SwitchStatement) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 func (node SwitchStatement) Expression() Expression { return node.deref(&node.data().expression) }
@@ -4050,7 +4043,7 @@ type caseOrDefaultClauseData struct {
 	facts               atomic.Uint32
 	expression          nodeRef // Expression
 	statements          sideRef // *StatementList
-	fallthroughFlowNode flowRef // *FlowNode
+	fallthroughFlowNode flowRef // FlowNode
 }
 
 type CaseOrDefaultClause struct{ Node }
@@ -4073,11 +4066,11 @@ func (node CaseOrDefaultClause) SetStatements(value *StatementList) {
 	node.store().nodeLists.set(&node.data().statements, value, value == nil)
 }
 
-func (node CaseOrDefaultClause) FallthroughFlowNode() *FlowNode {
+func (node CaseOrDefaultClause) FallthroughFlowNode() FlowNode {
 	return node.derefFlow(&node.data().fallthroughFlowNode)
 }
 
-func (node CaseOrDefaultClause) SetFallthroughFlowNode(value *FlowNode) {
+func (node CaseOrDefaultClause) SetFallthroughFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().fallthroughFlowNode, value)
 }
 
@@ -4132,7 +4125,7 @@ func IsDefaultClause(node Node) bool {
 
 type throwStatementData struct {
 	nodeBaseData
-	flowNode   flowRef // *FlowNode
+	flowNode   flowRef // FlowNode
 	facts      atomic.Uint32
 	expression nodeRef // Expression
 }
@@ -4141,11 +4134,12 @@ type ThrowStatement struct{ Node }
 
 func (node ThrowStatement) data() *throwStatementData { return (*throwStatementData)(node.rec()) }
 
-func (node ThrowStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node ThrowStatement) SetFlowNode(value *FlowNode) {
-	node.setFlowRef(&node.data().flowNode, value)
-}
+func (node ThrowStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+
+func (node ThrowStatement) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
+
 func (node ThrowStatement) Expression() Expression { return node.deref(&node.data().expression) }
+
 func (node ThrowStatement) SetExpression(value Expression) {
 	node.setRef(&node.data().expression, value)
 }
@@ -4190,7 +4184,7 @@ func IsThrowStatement(node Node) bool {
 
 type tryStatementData struct {
 	nodeBaseData
-	flowNode     flowRef // *FlowNode
+	flowNode     flowRef // FlowNode
 	facts        atomic.Uint32
 	tryBlock     nodeRef // BlockNode
 	catchClause  nodeRef // CatchClauseNode. Optional
@@ -4201,9 +4195,9 @@ type TryStatement struct{ Node }
 
 func (node TryStatement) data() *tryStatementData { return (*tryStatementData)(node.rec()) }
 
-func (node TryStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node TryStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node TryStatement) SetFlowNode(value *FlowNode)  { node.setFlowRef(&node.data().flowNode, value) }
+func (node TryStatement) SetFlowNode(value FlowNode)   { node.setFlowRef(&node.data().flowNode, value) }
 func (node TryStatement) TryBlock() BlockNode          { return node.deref(&node.data().tryBlock) }
 func (node TryStatement) SetTryBlock(value BlockNode)  { node.setRef(&node.data().tryBlock, value) }
 func (node TryStatement) CatchClause() CatchClauseNode { return node.deref(&node.data().catchClause) }
@@ -4330,7 +4324,7 @@ func IsCatchClause(node Node) bool {
 
 type debuggerStatementData struct {
 	nodeBaseData
-	flowNode flowRef // *FlowNode
+	flowNode flowRef // FlowNode
 }
 
 type DebuggerStatement struct{ Node }
@@ -4339,8 +4333,8 @@ func (node DebuggerStatement) data() *debuggerStatementData {
 	return (*debuggerStatementData)(node.rec())
 }
 
-func (node DebuggerStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node DebuggerStatement) SetFlowNode(value *FlowNode) {
+func (node DebuggerStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node DebuggerStatement) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -4363,7 +4357,7 @@ func IsDebuggerStatement(node Node) bool {
 
 type labeledStatementData struct {
 	nodeBaseData
-	flowNode  flowRef // *FlowNode
+	flowNode  flowRef // FlowNode
 	label     nodeRef // IdentifierNode
 	statement nodeRef // Statement
 }
@@ -4372,8 +4366,8 @@ type LabeledStatement struct{ Node }
 
 func (node LabeledStatement) data() *labeledStatementData { return (*labeledStatementData)(node.rec()) }
 
-func (node LabeledStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node LabeledStatement) SetFlowNode(value *FlowNode) {
+func (node LabeledStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node LabeledStatement) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -4429,7 +4423,7 @@ func IsLabeledStatement(node Node) bool {
 
 type expressionStatementData struct {
 	nodeBaseData
-	flowNode   flowRef // *FlowNode
+	flowNode   flowRef // FlowNode
 	expression nodeRef // Expression
 }
 
@@ -4439,9 +4433,8 @@ func (node ExpressionStatement) data() *expressionStatementData {
 	return (*expressionStatementData)(node.rec())
 }
 
-func (node ExpressionStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-
-func (node ExpressionStatement) SetFlowNode(value *FlowNode) {
+func (node ExpressionStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node ExpressionStatement) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -4491,7 +4484,7 @@ func IsExpressionStatement(node Node) bool {
 
 type blockData struct {
 	nodeBaseData
-	flowNode      flowRef // *FlowNode
+	flowNode      flowRef // FlowNode
 	locals        sideRef // SymbolTable
 	nextContainer nodeRef // Node
 	facts         atomic.Uint32
@@ -4503,9 +4496,9 @@ type Block struct{ Node }
 
 func (node Block) data() *blockData { return (*blockData)(node.rec()) }
 
-func (node Block) FlowNode() *FlowNode         { return node.derefFlow(&node.data().flowNode) }
-func (node Block) SetFlowNode(value *FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
-func (node Block) Locals() SymbolTable         { return node.store().symbolTables.get(node.data().locals) }
+func (node Block) FlowNode() FlowNode         { return node.derefFlow(&node.data().flowNode) }
+func (node Block) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
+func (node Block) Locals() SymbolTable        { return node.store().symbolTables.get(node.data().locals) }
 
 func (node Block) SetLocals(value SymbolTable) {
 	node.store().symbolTables.set(&node.data().locals, value, value == nil)
@@ -4563,7 +4556,7 @@ func IsBlock(node Node) bool {
 
 type variableStatementData struct {
 	nodeBaseData
-	flowNode        flowRef // *FlowNode
+	flowNode        flowRef // FlowNode
 	modifiers       sideRef // *ModifierList. Optional
 	facts           atomic.Uint32
 	declarationList nodeRef // VariableDeclarationListNode
@@ -4575,8 +4568,8 @@ func (node VariableStatement) data() *variableStatementData {
 	return (*variableStatementData)(node.rec())
 }
 
-func (node VariableStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node VariableStatement) SetFlowNode(value *FlowNode) {
+func (node VariableStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node VariableStatement) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -4950,7 +4943,7 @@ type bindingElementData struct {
 	nodeBaseData
 	symbol         sideRef // *Symbol
 	localSymbol    sideRef // *Symbol
-	flowNode       flowRef // *FlowNode
+	flowNode       flowRef // FlowNode
 	facts          atomic.Uint32
 	dotDotDotToken nodeRef // DotDotDotToken. Optional
 	propertyName   nodeRef // PropertyName. Optional
@@ -4974,10 +4967,10 @@ func (node BindingElement) LocalSymbol() *Symbol {
 func (node BindingElement) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(&node.data().localSymbol, value, value == nil)
 }
-func (node BindingElement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node BindingElement) SetFlowNode(value *FlowNode) {
-	node.setFlowRef(&node.data().flowNode, value)
-}
+
+func (node BindingElement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+
+func (node BindingElement) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
 
 func (node BindingElement) DotDotDotToken() DotDotDotToken {
 	return node.deref(&node.data().dotDotDotToken)
@@ -5042,7 +5035,7 @@ func IsBindingElement(node Node) bool {
 
 type missingDeclarationData struct {
 	nodeBaseData
-	flowNode  flowRef // *FlowNode
+	flowNode  flowRef // FlowNode
 	symbol    sideRef // *Symbol
 	modifiers sideRef // *ModifierList. Optional
 }
@@ -5053,8 +5046,8 @@ func (node MissingDeclaration) data() *missingDeclarationData {
 	return (*missingDeclarationData)(node.rec())
 }
 
-func (node MissingDeclaration) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node MissingDeclaration) SetFlowNode(value *FlowNode) {
+func (node MissingDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node MissingDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -5108,7 +5101,7 @@ func IsMissingDeclaration(node Node) bool {
 
 type functionDeclarationData struct {
 	nodeBaseData
-	flowNode       flowRef // *FlowNode
+	flowNode       flowRef // FlowNode
 	symbol         sideRef // *Symbol
 	localSymbol    sideRef // *Symbol
 	modifiers      sideRef // *ModifierList. Optional
@@ -5120,10 +5113,10 @@ type functionDeclarationData struct {
 	fullSignature  nodeRef // TypeNode. Optional
 	asteriskToken  nodeRef // AsteriskToken. Optional
 	body           nodeRef // NodeBody. Optional
-	endFlowNode    flowRef // *FlowNode
+	endFlowNode    flowRef // FlowNode
 	facts          atomic.Uint32
 	name           nodeRef // IdentifierNode. Optional
-	returnFlowNode flowRef // *FlowNode
+	returnFlowNode flowRef // FlowNode
 }
 
 type FunctionDeclaration struct{ Node }
@@ -5132,9 +5125,8 @@ func (node FunctionDeclaration) data() *functionDeclarationData {
 	return (*functionDeclarationData)(node.rec())
 }
 
-func (node FunctionDeclaration) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-
-func (node FunctionDeclaration) SetFlowNode(value *FlowNode) {
+func (node FunctionDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node FunctionDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -5211,11 +5203,11 @@ func (node FunctionDeclaration) SetAsteriskToken(value AsteriskToken) {
 }
 func (node FunctionDeclaration) Body() NodeBody         { return node.deref(&node.data().body) }
 func (node FunctionDeclaration) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
-func (node FunctionDeclaration) EndFlowNode() *FlowNode {
+func (node FunctionDeclaration) EndFlowNode() FlowNode {
 	return node.derefFlow(&node.data().endFlowNode)
 }
 
-func (node FunctionDeclaration) SetEndFlowNode(value *FlowNode) {
+func (node FunctionDeclaration) SetEndFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().endFlowNode, value)
 }
 
@@ -5223,11 +5215,11 @@ func (node FunctionDeclaration) Name() IdentifierNode { return node.deref(&node.
 
 func (node FunctionDeclaration) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 
-func (node FunctionDeclaration) ReturnFlowNode() *FlowNode {
+func (node FunctionDeclaration) ReturnFlowNode() FlowNode {
 	return node.derefFlow(&node.data().returnFlowNode)
 }
 
-func (node FunctionDeclaration) SetReturnFlowNode(value *FlowNode) {
+func (node FunctionDeclaration) SetReturnFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().returnFlowNode, value)
 }
 
@@ -5281,7 +5273,7 @@ func IsFunctionDeclaration(node Node) bool {
 
 type classDeclarationData struct {
 	nodeBaseData
-	flowNode        flowRef // *FlowNode
+	flowNode        flowRef // FlowNode
 	symbol          sideRef // *Symbol
 	localSymbol     sideRef // *Symbol
 	modifiers       sideRef // *ModifierList. Optional
@@ -5298,8 +5290,8 @@ type ClassDeclaration struct{ Node }
 
 func (node ClassDeclaration) data() *classDeclarationData { return (*classDeclarationData)(node.rec()) }
 
-func (node ClassDeclaration) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node ClassDeclaration) SetFlowNode(value *FlowNode) {
+func (node ClassDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node ClassDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -5580,7 +5572,7 @@ func IsHeritageClause(node Node) bool {
 
 type interfaceDeclarationData struct {
 	nodeBaseData
-	flowNode        flowRef // *FlowNode
+	flowNode        flowRef // FlowNode
 	symbol          sideRef // *Symbol
 	localSymbol     sideRef // *Symbol
 	modifiers       sideRef // *ModifierList. Optional
@@ -5596,9 +5588,9 @@ func (node InterfaceDeclaration) data() *interfaceDeclarationData {
 	return (*interfaceDeclarationData)(node.rec())
 }
 
-func (node InterfaceDeclaration) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node InterfaceDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node InterfaceDeclaration) SetFlowNode(value *FlowNode) {
+func (node InterfaceDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -5698,7 +5690,7 @@ func IsInterfaceDeclaration(node Node) bool {
 
 type typeAliasDeclarationData struct {
 	nodeBaseData
-	flowNode       flowRef // *FlowNode
+	flowNode       flowRef // FlowNode
 	symbol         sideRef // *Symbol
 	localSymbol    sideRef // *Symbol
 	modifiers      sideRef // *ModifierList. Optional
@@ -5715,9 +5707,9 @@ func (node TypeAliasDeclaration) data() *typeAliasDeclarationData {
 	return (*typeAliasDeclarationData)(node.rec())
 }
 
-func (node TypeAliasDeclaration) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node TypeAliasDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node TypeAliasDeclaration) SetFlowNode(value *FlowNode) {
+func (node TypeAliasDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -5922,7 +5914,7 @@ func IsEnumMember(node Node) bool {
 
 type enumDeclarationData struct {
 	nodeBaseData
-	flowNode    flowRef // *FlowNode
+	flowNode    flowRef // FlowNode
 	symbol      sideRef // *Symbol
 	localSymbol sideRef // *Symbol
 	modifiers   sideRef // *ModifierList. Optional
@@ -5935,8 +5927,8 @@ type EnumDeclaration struct{ Node }
 
 func (node EnumDeclaration) data() *enumDeclarationData { return (*enumDeclarationData)(node.rec()) }
 
-func (node EnumDeclaration) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node EnumDeclaration) SetFlowNode(value *FlowNode) {
+func (node EnumDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node EnumDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 func (node EnumDeclaration) Symbol() *Symbol { return node.store().symbols.get(node.data().symbol) }
@@ -6007,7 +5999,7 @@ func IsEnumDeclaration(node Node) bool {
 
 type moduleBlockData struct {
 	nodeBaseData
-	flowNode   flowRef // *FlowNode
+	flowNode   flowRef // FlowNode
 	facts      atomic.Uint32
 	statements sideRef // *StatementList
 }
@@ -6016,9 +6008,8 @@ type ModuleBlock struct{ Node }
 
 func (node ModuleBlock) data() *moduleBlockData { return (*moduleBlockData)(node.rec()) }
 
-func (node ModuleBlock) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-
-func (node ModuleBlock) SetFlowNode(value *FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
+func (node ModuleBlock) FlowNode() FlowNode         { return node.derefFlow(&node.data().flowNode) }
+func (node ModuleBlock) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
 
 func (node ModuleBlock) Statements() *StatementList {
 	return node.store().nodeLists.get(node.data().statements)
@@ -6068,7 +6059,7 @@ func IsModuleBlock(node Node) bool {
 
 type notEmittedStatementData struct {
 	nodeBaseData
-	flowNode flowRef // *FlowNode
+	flowNode flowRef // FlowNode
 }
 
 type NotEmittedStatement struct{ Node }
@@ -6077,9 +6068,8 @@ func (node NotEmittedStatement) data() *notEmittedStatementData {
 	return (*notEmittedStatementData)(node.rec())
 }
 
-func (node NotEmittedStatement) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-
-func (node NotEmittedStatement) SetFlowNode(value *FlowNode) {
+func (node NotEmittedStatement) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node NotEmittedStatement) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -6138,7 +6128,7 @@ func IsNotEmittedTypeElement(node Node) bool {
 
 type importDeclarationData struct {
 	nodeBaseData
-	flowNode        flowRef // *FlowNode
+	flowNode        flowRef // FlowNode
 	modifiers       sideRef // *ModifierList. Optional
 	facts           atomic.Uint32
 	symbol          sideRef // *Symbol
@@ -6153,8 +6143,8 @@ func (node ImportDeclaration) data() *importDeclarationData {
 	return (*importDeclarationData)(node.rec())
 }
 
-func (node ImportDeclaration) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node ImportDeclaration) SetFlowNode(value *FlowNode) {
+func (node ImportDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node ImportDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -6453,7 +6443,7 @@ func IsNamedImports(node Node) bool {
 
 type exportAssignmentData struct {
 	nodeBaseData
-	flowNode       flowRef // *FlowNode
+	flowNode       flowRef // FlowNode
 	symbol         sideRef // *Symbol
 	modifiers      sideRef // *ModifierList. Optional
 	facts          atomic.Uint32
@@ -6466,8 +6456,8 @@ type ExportAssignment struct{ Node }
 
 func (node ExportAssignment) data() *exportAssignmentData { return (*exportAssignmentData)(node.rec()) }
 
-func (node ExportAssignment) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node ExportAssignment) SetFlowNode(value *FlowNode) {
+func (node ExportAssignment) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node ExportAssignment) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -6535,7 +6525,7 @@ func IsExportAssignment(node Node) bool {
 
 type namespaceExportDeclarationData struct {
 	nodeBaseData
-	flowNode  flowRef // *FlowNode
+	flowNode  flowRef // FlowNode
 	symbol    sideRef // *Symbol
 	modifiers sideRef // *ModifierList. Optional
 	name      nodeRef // IdentifierNode
@@ -6547,11 +6537,11 @@ func (node NamespaceExportDeclaration) data() *namespaceExportDeclarationData {
 	return (*namespaceExportDeclarationData)(node.rec())
 }
 
-func (node NamespaceExportDeclaration) FlowNode() *FlowNode {
+func (node NamespaceExportDeclaration) FlowNode() FlowNode {
 	return node.derefFlow(&node.data().flowNode)
 }
 
-func (node NamespaceExportDeclaration) SetFlowNode(value *FlowNode) {
+func (node NamespaceExportDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -7021,9 +7011,9 @@ type constructorDeclarationData struct {
 	fullSignature  nodeRef // TypeNode. Optional
 	asteriskToken  nodeRef // AsteriskToken. Optional
 	body           nodeRef // NodeBody. Optional
-	endFlowNode    flowRef // *FlowNode
+	endFlowNode    flowRef // FlowNode
 	facts          atomic.Uint32
-	returnFlowNode flowRef // *FlowNode
+	returnFlowNode flowRef // FlowNode
 }
 
 type ConstructorDeclaration struct{ Node }
@@ -7101,19 +7091,19 @@ func (node ConstructorDeclaration) SetAsteriskToken(value AsteriskToken) {
 }
 func (node ConstructorDeclaration) Body() NodeBody         { return node.deref(&node.data().body) }
 func (node ConstructorDeclaration) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
-func (node ConstructorDeclaration) EndFlowNode() *FlowNode {
+func (node ConstructorDeclaration) EndFlowNode() FlowNode {
 	return node.derefFlow(&node.data().endFlowNode)
 }
 
-func (node ConstructorDeclaration) SetEndFlowNode(value *FlowNode) {
+func (node ConstructorDeclaration) SetEndFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().endFlowNode, value)
 }
 
-func (node ConstructorDeclaration) ReturnFlowNode() *FlowNode {
+func (node ConstructorDeclaration) ReturnFlowNode() FlowNode {
 	return node.derefFlow(&node.data().returnFlowNode)
 }
 
-func (node ConstructorDeclaration) SetReturnFlowNode(value *FlowNode) {
+func (node ConstructorDeclaration) SetReturnFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().returnFlowNode, value)
 }
 
@@ -7175,8 +7165,8 @@ type getAccessorDeclarationData struct {
 	fullSignature  nodeRef // TypeNode. Optional
 	asteriskToken  nodeRef // AsteriskToken. Optional
 	body           nodeRef // NodeBody. Optional
-	endFlowNode    flowRef // *FlowNode
-	flowNode       flowRef // *FlowNode
+	endFlowNode    flowRef // FlowNode
+	flowNode       flowRef // FlowNode
 	facts          atomic.Uint32
 }
 
@@ -7267,17 +7257,17 @@ func (node GetAccessorDeclaration) SetAsteriskToken(value AsteriskToken) {
 }
 func (node GetAccessorDeclaration) Body() NodeBody         { return node.deref(&node.data().body) }
 func (node GetAccessorDeclaration) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
-func (node GetAccessorDeclaration) EndFlowNode() *FlowNode {
+func (node GetAccessorDeclaration) EndFlowNode() FlowNode {
 	return node.derefFlow(&node.data().endFlowNode)
 }
 
-func (node GetAccessorDeclaration) SetEndFlowNode(value *FlowNode) {
+func (node GetAccessorDeclaration) SetEndFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().endFlowNode, value)
 }
 
-func (node GetAccessorDeclaration) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node GetAccessorDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node GetAccessorDeclaration) SetFlowNode(value *FlowNode) {
+func (node GetAccessorDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -7341,8 +7331,8 @@ type setAccessorDeclarationData struct {
 	fullSignature  nodeRef // TypeNode. Optional
 	asteriskToken  nodeRef // AsteriskToken. Optional
 	body           nodeRef // NodeBody. Optional
-	endFlowNode    flowRef // *FlowNode
-	flowNode       flowRef // *FlowNode
+	endFlowNode    flowRef // FlowNode
+	flowNode       flowRef // FlowNode
 	facts          atomic.Uint32
 }
 
@@ -7433,17 +7423,17 @@ func (node SetAccessorDeclaration) SetAsteriskToken(value AsteriskToken) {
 }
 func (node SetAccessorDeclaration) Body() NodeBody         { return node.deref(&node.data().body) }
 func (node SetAccessorDeclaration) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
-func (node SetAccessorDeclaration) EndFlowNode() *FlowNode {
+func (node SetAccessorDeclaration) EndFlowNode() FlowNode {
 	return node.derefFlow(&node.data().endFlowNode)
 }
 
-func (node SetAccessorDeclaration) SetEndFlowNode(value *FlowNode) {
+func (node SetAccessorDeclaration) SetEndFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().endFlowNode, value)
 }
 
-func (node SetAccessorDeclaration) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node SetAccessorDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node SetAccessorDeclaration) SetFlowNode(value *FlowNode) {
+func (node SetAccessorDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -7757,8 +7747,8 @@ type methodDeclarationData struct {
 	fullSignature  nodeRef // TypeNode. Optional
 	asteriskToken  nodeRef // AsteriskToken. Optional
 	body           nodeRef // NodeBody. Optional
-	endFlowNode    flowRef // *FlowNode
-	flowNode       flowRef // *FlowNode
+	endFlowNode    flowRef // FlowNode
+	flowNode       flowRef // FlowNode
 	facts          atomic.Uint32
 }
 
@@ -7834,15 +7824,13 @@ func (node MethodDeclaration) SetAsteriskToken(value AsteriskToken) {
 }
 func (node MethodDeclaration) Body() NodeBody         { return node.deref(&node.data().body) }
 func (node MethodDeclaration) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
-func (node MethodDeclaration) EndFlowNode() *FlowNode {
-	return node.derefFlow(&node.data().endFlowNode)
-}
+func (node MethodDeclaration) EndFlowNode() FlowNode  { return node.derefFlow(&node.data().endFlowNode) }
 
-func (node MethodDeclaration) SetEndFlowNode(value *FlowNode) {
+func (node MethodDeclaration) SetEndFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().endFlowNode, value)
 }
-func (node MethodDeclaration) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node MethodDeclaration) SetFlowNode(value *FlowNode) {
+func (node MethodDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node MethodDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -8135,7 +8123,7 @@ type classStaticBlockDeclarationData struct {
 	nextContainer  nodeRef // Node
 	facts          atomic.Uint32
 	body           nodeRef // BlockNode
-	returnFlowNode flowRef // *FlowNode
+	returnFlowNode flowRef // FlowNode
 }
 
 type ClassStaticBlockDeclaration struct{ Node }
@@ -8180,11 +8168,11 @@ func (node ClassStaticBlockDeclaration) SetBody(value BlockNode) {
 	node.setRef(&node.data().body, value)
 }
 
-func (node ClassStaticBlockDeclaration) ReturnFlowNode() *FlowNode {
+func (node ClassStaticBlockDeclaration) ReturnFlowNode() FlowNode {
 	return node.derefFlow(&node.data().returnFlowNode)
 }
 
-func (node ClassStaticBlockDeclaration) SetReturnFlowNode(value *FlowNode) {
+func (node ClassStaticBlockDeclaration) SetReturnFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().returnFlowNode, value)
 }
 
@@ -8252,7 +8240,7 @@ func IsOmittedExpression(node Node) bool {
 
 type keywordExpressionData struct {
 	nodeBaseData
-	flowNode flowRef // *FlowNode
+	flowNode flowRef // FlowNode
 }
 
 type KeywordExpression struct{ Node }
@@ -8261,8 +8249,8 @@ func (node KeywordExpression) data() *keywordExpressionData {
 	return (*keywordExpressionData)(node.rec())
 }
 
-func (node KeywordExpression) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node KeywordExpression) SetFlowNode(value *FlowNode) {
+func (node KeywordExpression) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node KeywordExpression) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -8792,8 +8780,8 @@ type arrowFunctionData struct {
 	fullSignature          nodeRef // TypeNode. Optional
 	asteriskToken          nodeRef // AsteriskToken. Optional
 	body                   nodeRef // NodeBody. Optional
-	endFlowNode            flowRef // *FlowNode
-	flowNode               flowRef // *FlowNode
+	endFlowNode            flowRef // FlowNode
+	flowNode               flowRef // FlowNode
 	facts                  atomic.Uint32
 	equalsGreaterThanToken nodeRef // EqualsGreaterThanToken
 }
@@ -8858,15 +8846,15 @@ func (node ArrowFunction) SetAsteriskToken(value AsteriskToken) {
 }
 func (node ArrowFunction) Body() NodeBody         { return node.deref(&node.data().body) }
 func (node ArrowFunction) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
-func (node ArrowFunction) EndFlowNode() *FlowNode { return node.derefFlow(&node.data().endFlowNode) }
+func (node ArrowFunction) EndFlowNode() FlowNode  { return node.derefFlow(&node.data().endFlowNode) }
 
-func (node ArrowFunction) SetEndFlowNode(value *FlowNode) {
+func (node ArrowFunction) SetEndFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().endFlowNode, value)
 }
 
-func (node ArrowFunction) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node ArrowFunction) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node ArrowFunction) SetFlowNode(value *FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
+func (node ArrowFunction) SetFlowNode(value FlowNode) { node.setFlowRef(&node.data().flowNode, value) }
 
 func (node ArrowFunction) EqualsGreaterThanToken() EqualsGreaterThanToken {
 	return node.deref(&node.data().equalsGreaterThanToken)
@@ -8934,11 +8922,11 @@ type functionExpressionData struct {
 	fullSignature  nodeRef // TypeNode. Optional
 	asteriskToken  nodeRef // AsteriskToken. Optional
 	body           nodeRef // NodeBody. Optional
-	endFlowNode    flowRef // *FlowNode
-	flowNode       flowRef // *FlowNode
+	endFlowNode    flowRef // FlowNode
+	flowNode       flowRef // FlowNode
 	facts          atomic.Uint32
 	name           nodeRef // IdentifierNode. Optional
-	returnFlowNode flowRef // *FlowNode
+	returnFlowNode flowRef // FlowNode
 }
 
 type FunctionExpression struct{ Node }
@@ -9010,15 +8998,15 @@ func (node FunctionExpression) SetAsteriskToken(value AsteriskToken) {
 }
 func (node FunctionExpression) Body() NodeBody         { return node.deref(&node.data().body) }
 func (node FunctionExpression) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
-func (node FunctionExpression) EndFlowNode() *FlowNode {
+func (node FunctionExpression) EndFlowNode() FlowNode {
 	return node.derefFlow(&node.data().endFlowNode)
 }
 
-func (node FunctionExpression) SetEndFlowNode(value *FlowNode) {
+func (node FunctionExpression) SetEndFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().endFlowNode, value)
 }
-func (node FunctionExpression) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node FunctionExpression) SetFlowNode(value *FlowNode) {
+func (node FunctionExpression) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node FunctionExpression) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -9026,11 +9014,11 @@ func (node FunctionExpression) Name() IdentifierNode { return node.deref(&node.d
 
 func (node FunctionExpression) setName(value IdentifierNode) { node.setRef(&node.data().name, value) }
 
-func (node FunctionExpression) ReturnFlowNode() *FlowNode {
+func (node FunctionExpression) ReturnFlowNode() FlowNode {
 	return node.derefFlow(&node.data().returnFlowNode)
 }
 
-func (node FunctionExpression) SetReturnFlowNode(value *FlowNode) {
+func (node FunctionExpression) SetReturnFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().returnFlowNode, value)
 }
 
@@ -9290,7 +9278,7 @@ func IsConditionalExpression(node Node) bool {
 
 type propertyAccessExpressionData struct {
 	nodeBaseData
-	flowNode         flowRef // *FlowNode
+	flowNode         flowRef // FlowNode
 	facts            atomic.Uint32
 	expression       nodeRef // Expression
 	questionDotToken nodeRef // QuestionDotToken. Optional
@@ -9303,11 +9291,11 @@ func (node PropertyAccessExpression) data() *propertyAccessExpressionData {
 	return (*propertyAccessExpressionData)(node.rec())
 }
 
-func (node PropertyAccessExpression) FlowNode() *FlowNode {
+func (node PropertyAccessExpression) FlowNode() FlowNode {
 	return node.derefFlow(&node.data().flowNode)
 }
 
-func (node PropertyAccessExpression) SetFlowNode(value *FlowNode) {
+func (node PropertyAccessExpression) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -9371,7 +9359,7 @@ func IsPropertyAccessExpression(node Node) bool {
 
 type elementAccessExpressionData struct {
 	nodeBaseData
-	flowNode           flowRef // *FlowNode
+	flowNode           flowRef // FlowNode
 	facts              atomic.Uint32
 	expression         nodeRef // Expression
 	questionDotToken   nodeRef // QuestionDotToken. Optional
@@ -9384,11 +9372,9 @@ func (node ElementAccessExpression) data() *elementAccessExpressionData {
 	return (*elementAccessExpressionData)(node.rec())
 }
 
-func (node ElementAccessExpression) FlowNode() *FlowNode {
-	return node.derefFlow(&node.data().flowNode)
-}
+func (node ElementAccessExpression) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node ElementAccessExpression) SetFlowNode(value *FlowNode) {
+func (node ElementAccessExpression) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -9620,7 +9606,7 @@ func IsNewExpression(node Node) bool {
 
 type metaPropertyData struct {
 	nodeBaseData
-	flowNode     flowRef // *FlowNode
+	flowNode     flowRef // FlowNode
 	facts        atomic.Uint32
 	name         nodeRef // IdentifierNode
 	keywordToken Kind
@@ -9630,9 +9616,9 @@ type MetaProperty struct{ Node }
 
 func (node MetaProperty) data() *metaPropertyData { return (*metaPropertyData)(node.rec()) }
 
-func (node MetaProperty) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node MetaProperty) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node MetaProperty) SetFlowNode(value *FlowNode)  { node.setFlowRef(&node.data().flowNode, value) }
+func (node MetaProperty) SetFlowNode(value FlowNode)   { node.setFlowRef(&node.data().flowNode, value) }
 func (node MetaProperty) KeywordToken() Kind           { return node.data().keywordToken }
 func (node MetaProperty) SetKeywordToken(value Kind)   { node.data().keywordToken = value }
 func (node MetaProperty) Name() IdentifierNode         { return node.deref(&node.data().name) }
@@ -15146,7 +15132,7 @@ func IsSourceFile(node Node) bool {
 
 type moduleDeclarationData struct {
 	nodeBaseData
-	flowNode      flowRef // *FlowNode
+	flowNode      flowRef // FlowNode
 	symbol        sideRef // *Symbol
 	localSymbol   sideRef // *Symbol
 	modifiers     sideRef // *ModifierList. Optional
@@ -15154,7 +15140,7 @@ type moduleDeclarationData struct {
 	nextContainer nodeRef // Node
 	asteriskToken nodeRef // AsteriskToken. Optional
 	body          nodeRef // NodeBody. Optional
-	endFlowNode   flowRef // *FlowNode
+	endFlowNode   flowRef // FlowNode
 	facts         atomic.Uint32
 	name          nodeRef // ModuleName
 	attributes    nodeRef // TypeLiteralNodeNode. Optional
@@ -15167,8 +15153,8 @@ func (node ModuleDeclaration) data() *moduleDeclarationData {
 	return (*moduleDeclarationData)(node.rec())
 }
 
-func (node ModuleDeclaration) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node ModuleDeclaration) SetFlowNode(value *FlowNode) {
+func (node ModuleDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node ModuleDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -15215,11 +15201,9 @@ func (node ModuleDeclaration) SetAsteriskToken(value AsteriskToken) {
 }
 func (node ModuleDeclaration) Body() NodeBody         { return node.deref(&node.data().body) }
 func (node ModuleDeclaration) SetBody(value NodeBody) { node.setRef(&node.data().body, value) }
-func (node ModuleDeclaration) EndFlowNode() *FlowNode {
-	return node.derefFlow(&node.data().endFlowNode)
-}
+func (node ModuleDeclaration) EndFlowNode() FlowNode  { return node.derefFlow(&node.data().endFlowNode) }
 
-func (node ModuleDeclaration) SetEndFlowNode(value *FlowNode) {
+func (node ModuleDeclaration) SetEndFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().endFlowNode, value)
 }
 func (node ModuleDeclaration) Keyword() Kind            { return node.data().keyword }
@@ -15277,7 +15261,7 @@ func IsModuleDeclaration(node Node) bool {
 
 type importEqualsDeclarationData struct {
 	nodeBaseData
-	flowNode        flowRef // *FlowNode
+	flowNode        flowRef // FlowNode
 	symbol          sideRef // *Symbol
 	localSymbol     sideRef // *Symbol
 	modifiers       sideRef // *ModifierList. Optional
@@ -15293,11 +15277,9 @@ func (node ImportEqualsDeclaration) data() *importEqualsDeclarationData {
 	return (*importEqualsDeclarationData)(node.rec())
 }
 
-func (node ImportEqualsDeclaration) FlowNode() *FlowNode {
-	return node.derefFlow(&node.data().flowNode)
-}
+func (node ImportEqualsDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
 
-func (node ImportEqualsDeclaration) SetFlowNode(value *FlowNode) {
+func (node ImportEqualsDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 
@@ -15379,7 +15361,7 @@ func IsImportEqualsDeclaration(node Node) bool {
 
 type exportDeclarationData struct {
 	nodeBaseData
-	flowNode        flowRef // *FlowNode
+	flowNode        flowRef // FlowNode
 	symbol          sideRef // *Symbol
 	modifiers       sideRef // *ModifierList. Optional
 	facts           atomic.Uint32
@@ -15395,8 +15377,8 @@ func (node ExportDeclaration) data() *exportDeclarationData {
 	return (*exportDeclarationData)(node.rec())
 }
 
-func (node ExportDeclaration) FlowNode() *FlowNode { return node.derefFlow(&node.data().flowNode) }
-func (node ExportDeclaration) SetFlowNode(value *FlowNode) {
+func (node ExportDeclaration) FlowNode() FlowNode { return node.derefFlow(&node.data().flowNode) }
+func (node ExportDeclaration) SetFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().flowNode, value)
 }
 

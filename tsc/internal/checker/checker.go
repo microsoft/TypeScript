@@ -253,7 +253,7 @@ type NonExistentPropertyKey struct {
 // FlowLoopKey
 
 type FlowLoopKey struct {
-	flowNode *ast.FlowNode
+	flowNode ast.FlowNode
 	refKey   CacheHashKey
 }
 
@@ -835,10 +835,10 @@ type Checker struct {
 	flowAnalysisDisabled                        bool
 	flowInvocationCount                         int
 	flowTypeCache                               map[ast.Node]*Type
-	lastFlowNode                                *ast.FlowNode
+	lastFlowNode                                ast.FlowNode
 	lastFlowNodeReachable                       bool
-	flowNodeReachable                           map[*ast.FlowNode]bool
-	flowNodePostSuper                           map[*ast.FlowNode]bool
+	flowNodeReachable                           map[ast.FlowNode]bool
+	flowNodePostSuper                           map[ast.FlowNode]bool
 	renamedBindingElementsInTypes               []ast.Node
 	contextualInfos                             []ContextualInfo
 	inferenceContextInfos                       []InferenceContextInfo
@@ -1085,8 +1085,8 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.zeroBigIntType = c.getBigIntLiteralType(jsnum.PseudoBigInt{})
 	c.typeofType = c.getUnionType(core.Map(slices.Sorted(maps.Keys(typeofNEFacts)), c.getStringLiteralType))
 	c.flowLoopCache = make(map[FlowLoopKey]*Type)
-	c.flowNodeReachable = make(map[*ast.FlowNode]bool)
-	c.flowNodePostSuper = make(map[*ast.FlowNode]bool)
+	c.flowNodeReachable = make(map[ast.FlowNode]bool)
+	c.flowNodePostSuper = make(map[ast.FlowNode]bool)
 	c.subtypeRelation = &Relation{}
 	c.strictSubtypeRelation = &Relation{}
 	c.assignableRelation = &Relation{}
@@ -2530,7 +2530,7 @@ func (c *Checker) isSourceElementUnreachable(node ast.Node) bool {
 		default:
 			return true
 		}
-	} else if flowNode := node.FlowNodeData().FlowNode(); flowNode != nil {
+	} else if flowNode := node.FlowNodeData().FlowNode(); !flowNode.IsNil() {
 		// For code the binder doesn't know is unreachable, use control flow / types.
 		return !c.isReachableFlowNode(flowNode)
 	}
@@ -4247,7 +4247,7 @@ func (c *Checker) checkSwitchStatement(node ast.Node) {
 		}
 		c.checkSourceElements(clause.Statements())
 		if c.compilerOptions.NoFallthroughCasesInSwitch.IsTrue() {
-			if flowNode := clause.AsCaseOrDefaultClause().FallthroughFlowNode(); flowNode != nil && c.isReachableFlowNode(flowNode) {
+			if flowNode := clause.AsCaseOrDefaultClause().FallthroughFlowNode(); !flowNode.IsNil() && c.isReachableFlowNode(flowNode) {
 				c.error(clause, diagnostics.Fallthrough_case_in_switch)
 			}
 		}
@@ -5068,7 +5068,7 @@ func (c *Checker) isPropertyInitializedInStaticBlocks(propName ast.Node, propTyp
 			reference.Expression().SetParent(reference)
 			reference.SetParent(staticBlock)
 			reference.FlowNodeData().SetFlowNode(staticBlock.AsClassStaticBlockDeclaration().ReturnFlowNode())
-			flowType := c.getFlowTypeOfReferenceEx(reference, propType, c.getOptionalType(propType, false), ast.Node{}, nil)
+			flowType := c.getFlowTypeOfReferenceEx(reference, propType, c.getOptionalType(propType, false), ast.Node{}, ast.FlowNode{})
 			if !c.containsUndefinedType(flowType) {
 				return true
 			}
@@ -5087,7 +5087,7 @@ func (c *Checker) isPropertyInitializedInConstructor(propName ast.Node, propType
 	reference.Expression().SetParent(reference)
 	reference.SetParent(constructor)
 	reference.FlowNodeData().SetFlowNode(constructor.AsConstructorDeclaration().ReturnFlowNode())
-	flowType := c.getFlowTypeOfReferenceEx(reference, propType, c.getOptionalType(propType, false), ast.Node{}, nil)
+	flowType := c.getFlowTypeOfReferenceEx(reference, propType, c.getOptionalType(propType, false), ast.Node{}, ast.FlowNode{})
 	return !c.containsUndefinedType(flowType)
 }
 
@@ -11405,9 +11405,9 @@ func (c *Checker) checkIdentifier(node ast.Node, checkMode CheckMode) *Type {
 	}
 	var flowType *Type
 	if isAutomaticTypeInNonNull {
-		flowType = c.GetNonNullableType(c.getFlowTypeOfReferenceEx(node, t, initialType, flowContainer, nil))
+		flowType = c.GetNonNullableType(c.getFlowTypeOfReferenceEx(node, t, initialType, flowContainer, ast.FlowNode{}))
 	} else {
-		flowType = c.getFlowTypeOfReferenceEx(node, t, initialType, flowContainer, nil)
+		flowType = c.getFlowTypeOfReferenceEx(node, t, initialType, flowContainer, ast.FlowNode{})
 	}
 	// A variable is considered uninitialized when it is possible to analyze the entire control flow graph
 	// from declaration to use, and when the variable's declared type doesn't include undefined but the
@@ -11657,7 +11657,7 @@ func (c *Checker) getFlowTypeOfAccessExpression(node ast.Node, prop *ast.Symbol,
 			}
 		}
 	}
-	flowType := c.getFlowTypeOfReferenceEx(node, propType, c.addOptionalityEx(propType, false /*isProperty*/, assumeUninitialized), ast.Node{}, nil)
+	flowType := c.getFlowTypeOfReferenceEx(node, propType, c.addOptionalityEx(propType, false /*isProperty*/, assumeUninitialized), ast.Node{}, ast.FlowNode{})
 	if assumeUninitialized && !c.containsUndefinedType(propType) && c.containsUndefinedType(flowType) {
 		c.error(errorNode, diagnostics.Property_0_is_used_before_being_assigned, c.symbolToString(prop))
 		// Return the declared type to reduce follow-on errors
@@ -11682,7 +11682,7 @@ func (c *Checker) getFlowTypeOfProperty(reference ast.Node, prop *ast.Symbol) *T
 			initialType = baseType
 		}
 	}
-	return c.getFlowTypeOfReferenceEx(reference, c.autoType, initialType, ast.Node{}, nil)
+	return c.getFlowTypeOfReferenceEx(reference, c.autoType, initialType, ast.Node{}, ast.FlowNode{})
 }
 
 // Return the inherited type of the given property or undefined if property doesn't exist in a base class.
@@ -18288,7 +18288,7 @@ func (c *Checker) getFlowTypeOfDestructuring(node ast.Node, declaredType *Type) 
 
 func (c *Checker) getSyntheticElementAccess(node ast.Node) ast.Node {
 	parentAccess := c.getParentElementAccess(node)
-	if !parentAccess.IsNil() && getFlowNodeOfNode(parentAccess) != nil {
+	if !parentAccess.IsNil() && !getFlowNodeOfNode(parentAccess).IsNil() {
 		if propName, ok := c.getDestructuringPropertyName(node); ok {
 			literal := c.factory.NewStringLiteral(propName, ast.TokenFlagsNone)
 			literal.SetLoc(node.Loc())
@@ -20742,7 +20742,7 @@ func (c *Checker) checkAndAggregateReturnExpressionTypes(fn ast.Node, checkMode 
 
 func (c *Checker) functionHasImplicitReturn(fn ast.Node) bool {
 	endFlowNode := fn.BodyData().EndFlowNode()
-	return endFlowNode != nil && c.isReachableFlowNode(endFlowNode)
+	return !endFlowNode.IsNil() && c.isReachableFlowNode(endFlowNode)
 }
 
 func mayReturnNever(fn ast.Node) bool {
@@ -21020,11 +21020,11 @@ func (c *Checker) checkIfExpressionRefinesAnyParameter(fn ast.Node, expr ast.Nod
 
 func (c *Checker) checkIfExpressionRefinesParameter(fn ast.Node, expr ast.Node, param ast.Node, initType *Type) *Type {
 	antecedent := getFlowNodeOfNode(expr)
-	if antecedent == nil && ast.IsReturnStatement(expr.Parent()) {
+	if antecedent.IsNil() && ast.IsReturnStatement(expr.Parent()) {
 		antecedent = getFlowNodeOfNode(expr.Parent())
 	}
-	if antecedent == nil {
-		antecedent = c.factory.NewFlowNode(ast.FlowFlagsStart, ast.Node{}, nil)
+	if antecedent.IsNil() {
+		antecedent = c.factory.NewFlowNode(ast.FlowFlagsStart, ast.Node{}, ast.FlowNode{})
 	}
 	trueCondition := c.factory.NewFlowNode(ast.FlowFlagsTrueCondition, expr, antecedent)
 	trueType := c.getFlowTypeOfReferenceEx(param.Name(), initType, initType, fn, trueCondition)

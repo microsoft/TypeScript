@@ -33,15 +33,15 @@ type nodeStore struct {
 	stringLists   sideTable[[]string]
 	nodeSlices    sideTable[[]Node]
 	values        sideTable[any]
-	flowNodes     sideTable[*FlowNode]
-	flowLists     sideTable[*FlowList]
 	sourceFiles   sideTable[*SourceFile]
 
 	// reused holds the nodes of other stores that records refer to, such
 	// as original nodes reused by a transformed tree.
 	reused []Node
 
-	flowSlab []FlowNode
+	flows       []flowNodeData
+	flowLists   []flowListData
+	reusedFlows []FlowNode
 
 	// scratch is set while words is reusable scratch memory.
 	scratch bool
@@ -234,8 +234,6 @@ func (s *nodeStore) compactSide() {
 	s.stringLists.compact()
 	s.nodeSlices.compact()
 	s.values.compact()
-	s.flowNodes.compact()
-	s.flowLists.compact()
 	s.reused = slices.Clip(s.reused)
 }
 

@@ -77,7 +77,7 @@ All fields, including those from "base" shapes (declaration, function-like, flow
 |---|---|---|
 | Another node in the same store | `nodeRef`: the target's word index | `Node{n.s, r}` |
 | A node in another store (reused node) | `nodeRef` with the top bit set: an index into `reused` | `n.s.reused[r &^ refReused]` |
-| Flow node, flow list | `flowRef`/`flowListRef`, an index into a side table of `*FlowNode`/`*FlowList` | `n.s.flowNodes.items[r-1]` |
+| Flow node, flow list | `flowRef`/`flowListRef`: an index into the store's `flows`/`flowLists` arrays; a `flowRef` with the top bit set indexes `reusedFlows` | `FlowNode{n.s, r}` |
 | Other Go pointers (`*Symbol`, `*NodeList`, `[]Node`, `SymbolTable`, `any`, …) | `sideRef uint32`, an index into a typed `sideTable[T]` | `n.s.table.items[r-1]` |
 | `string` | `textRef{off, len uint32}` into the file's source text, or into an append-only text arena | `unsafe.String` over the backing bytes |
 
@@ -85,7 +85,7 @@ Reused nodes come from JSDoc (parsed with its own factory), and from checker and
 
 `SourceFile` is a `sourceFileData` record like any other node, plus a Go struct for its pointer-heavy fields, reached through the store's `sourceFiles` table.
 
-Flow nodes are back to plain Go structs, allocated 64 at a time from a per-store slab. Moving them, and then symbols, into per-store typed arrays addressed by index ("links") is future work.
+Flow nodes work the same way as nodes: `FlowNode` is `{store, index}` into a per-store `[]flowNodeData` (16 bytes each: node ref, antecedent ref, antecedent list ref, flags), and `FlowList` is `{store, index}` into `[]flowListData`. They contain no Go pointers. Checker-created flow nodes live in the checker's store and point at file flow nodes through `reusedFlows`, just as reused nodes do.
 
 No Go pointers are hidden in integers: every ref is an index, and liveness comes from the `s` pointer in each `Node` and the store's own slices. The GC scans `reused` and the side tables, not every child, parent, symbol and string of every node.
 
@@ -112,6 +112,7 @@ Typed per-layout slices instead of one word array would remove the record cast t
 11. **Field-relative refs** (check +6.3% vs step 9). A near ref is an offset from the field holding it. Still needed `unsafe` address arithmetic, a far table, and blocks built with `reflect.StructOf`.
 12. **Index-based store** (check +5.5%, total +6.6%, memory −0.2% vs step 9). One word array per store, `Node = {store, index}`, refs are indices. Removes blocks, `reflect.StructOf`, the far table and all pointer arithmetic on refs, and is slightly faster than step 11. Flow nodes go back to Go objects for now.
 13. **Bind at parse, then freeze** (check and total unchanged). Parsing builds in pooled scratch memory, binds, and copies the records once into a frozen exact-size array. Before, the array was clipped after parse, then had to grow again for the binder's flow data records, and was copied again after bind.
+14. **Flow nodes as indexed values** (memory −2.9%, check +1.2%, total unchanged vs step 13). `FlowNode` and `FlowList` become `{store, index}` handles into pointer-free per-store arrays, replacing the Go-object slab and the `*FlowNode` side tables.
 
 Step 12 vs step 9 (vscode, n=8, interleaved, shared machine):
 
@@ -133,7 +134,7 @@ VSCode   3.375Gi ± 0%   3.367Gi ± 0%  -0.23% (p=0.000 n=8)
 
 - Replace offset tables with generated kind switches.
 - Lists as records in the store (a count followed by refs), with `NodeList` as a view.
-- Flow nodes and symbols as per-store typed arrays addressed by index.
+- Symbols as per-store typed arrays addressed by index.
 - Profile the remaining check-time gap (likely the bounds check and slice load on `words` per access, and the 16-byte `Node`).
 
 ## Earlier measurements (step 9 vs main, vscode, n=10, interleaved)

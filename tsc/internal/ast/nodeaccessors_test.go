@@ -109,7 +109,7 @@ func TestNodeAccessorsMissing(t *testing.T) {
 		factory.NewToken(ast.KindEndOfFile),
 		factory.NewToken(ast.KindPlusToken),
 		ast.NewFlowSwitchClauseData(factory.NewToken(ast.KindSwitchKeyword), 0, 0),
-		ast.NewFlowReduceLabelData(file, nil, nil),
+		ast.NewFlowReduceLabelData(file, ast.FlowLabel{}, ast.FlowList{}),
 	}
 
 	for _, node := range nodes {
