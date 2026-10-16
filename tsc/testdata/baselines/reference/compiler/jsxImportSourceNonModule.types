@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/jsxImportSourceNonModule.tsx] ////
+
+=== jsxImportSourceNonModule.tsx ===
+const x = <><div>hi</div></>;
+>x : any
+><><div>hi</div></> : any
+><div>hi</div> : any
+>div : any
+>div : any
+
