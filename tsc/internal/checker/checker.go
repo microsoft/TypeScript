@@ -15235,8 +15235,13 @@ func (c *Checker) reportNonExportedMember(name *ast.Node, declarationName string
 				c.error(name, diagnostics.Module_0_has_no_exported_member_1, moduleName, declarationName)
 			}
 		} else {
-			exportedSymbol := findInMap(exports, func(symbol *ast.Symbol) bool {
-				return c.getSymbolIfSameReference(symbol, localSymbol) != nil
+			// Looking for the export resolves aliases, which creates types, so do it in a stable order rather than
+			// in the random iteration order of the symbol table.
+			var exportedSymbol *ast.Symbol
+			c.forEachSymbolInResolutionOrder(exports, func(symbol *ast.Symbol) {
+				if exportedSymbol == nil && c.getSymbolIfSameReference(symbol, localSymbol) != nil {
+					exportedSymbol = symbol
+				}
 			})
 			var diagnostic *ast.Diagnostic
 			if exportedSymbol != nil {
