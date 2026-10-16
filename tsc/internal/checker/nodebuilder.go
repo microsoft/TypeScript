@@ -51,8 +51,8 @@ func (b *NodeBuilder) enterContext(enclosingDeclaration *ast.Node, flags nodebui
 		symbolDepth:              make(map[CompositeSymbolIdentity]int),
 		trackedSymbols:           make([]*TrackedSymbolArgs, 0),
 		reverseMappedStack:       make([]*ast.Symbol, 0),
-		enclosingSymbolTypes:     make(map[ast.SymbolId]*Type),
-		remappedSymbolReferences: make(map[ast.SymbolId]*ast.Symbol),
+		enclosingSymbolTypes:     make(map[*ast.Symbol]*Type),
+		remappedSymbolReferences: make(map[*ast.Symbol]*ast.Symbol),
 	}
 	tracker = NewSymbolTrackerImpl(b.impl.ctx, tracker)
 	b.impl.ctx.tracker = tracker

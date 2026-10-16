@@ -567,8 +567,8 @@ func convertEntryToCallSite(entry *ReferenceEntry) *callSite {
 	}
 }
 
-func getCallSiteGroupKey(site *callSite) ast.NodeId {
-	return ast.GetNodeId(site.declaration)
+func getCallSiteGroupKey(site *callSite) *ast.Node {
+	return site.declaration
 }
 
 func (l *LanguageService) convertCallSiteGroupToIncomingCall(program *compiler.Program, entries []*callSite) *lsproto.CallHierarchyIncomingCall {
@@ -695,7 +695,7 @@ func (l *LanguageService) symbolAndEntriesToIncomingCalls(ctx context.Context, p
 		return lsproto.CallHierarchyIncomingCallsOrNull{}, nil
 	}
 
-	grouped := make(map[ast.NodeId][]*callSite)
+	grouped := make(map[*ast.Node][]*callSite)
 	for _, site := range callSites {
 		key := getCallSiteGroupKey(site)
 		grouped[key] = append(grouped[key], site)
@@ -977,7 +977,7 @@ func (l *LanguageService) getOutgoingCalls(program *compiler.Program, declaratio
 		return nil
 	}
 
-	grouped := make(map[ast.NodeId][]*callSite)
+	grouped := make(map[*ast.Node][]*callSite)
 	for _, site := range callSites {
 		key := getCallSiteGroupKey(site)
 		grouped[key] = append(grouped[key], site)
