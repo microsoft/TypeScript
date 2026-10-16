@@ -43,6 +43,7 @@ import {
     TimingCollector,
     type TimingInfo,
 } from "../timing.ts";
+import { TimingDump } from "../timingDump.ts";
 
 export type { ClientOptions, ClientSocketOptions, ClientSpawnOptions };
 
@@ -59,16 +60,22 @@ export class Client {
     private closed = false;
     private connecting: Promise<void> | undefined;
     private timing: TimingCollector | undefined;
+    private timingDump: TimingDump | undefined;
+    private closing: Promise<void> | undefined;
     private batchedRequests: { method: APIRequest["method"]; params: APIRequest["params"]; resolve: (value: unknown) => void; reject: (reason?: any) => void; }[] = [];
     private nextBatch: NodeJS.Immediate | "manual" | undefined;
 
     constructor(options: ClientOptions) {
+        this.timingDump = TimingDump.fromEnvironment("async", isSpawnOptions(options) ? "spawn" : "socket");
+        if (this.timingDump || isSpawnOptions(options) && options.collectTiming) {
+            this.timing = new TimingCollector();
+        }
+        if (this.timingDump && isSpawnOptions(options)) {
+            options = { ...options, collectTiming: true };
+        }
         this.options = options;
         if (isSpawnOptions(options)) {
             configureFileSystemCallbacks(options.fs);
-            if (options.collectTiming) {
-                this.timing = new TimingCollector();
-            }
         }
     }
 
@@ -401,26 +408,37 @@ export class Client {
         return this.connection.sendRequest(requestType, undefined);
     }
 
-    async close(): Promise<void> {
+    close(): Promise<void> {
+        return this.closing ??= this.closeWorker();
+    }
+
+    private async closeWorker(): Promise<void> {
         await this.connecting?.catch(() => {}); // if connection is still in-progress, wait for it to finish before closing the connection
         this.closed = true;
-        if (this.connection) {
-            this.connection.dispose();
-            this.connection = undefined;
+        try {
+            if (this.timingDump && this.timing) {
+                this.timingDump.write(this.timing.getInfo(), this.connected ? await this.fetchServerTiming() : undefined);
+            }
         }
-        if (this.socket) {
-            this.socket.destroy();
-            this.socket = undefined;
+        finally {
+            if (this.connection) {
+                this.connection.dispose();
+                this.connection = undefined;
+            }
+            if (this.socket) {
+                this.socket.destroy();
+                this.socket = undefined;
+            }
+            if (this.process) {
+                // Close stdin to unblock the server's read loop, allowing it to exit cleanly.
+                // The server is blocked on stdin.Read(), so just sending SIGTERM would deadlock:
+                // - Node won't exit while child is alive
+                // - Child can't process SIGTERM while blocked on read
+                // - Read won't error until stdin is closed
+                this.process.stdin?.end();
+                this.process = undefined;
+            }
+            this.connected = false;
         }
-        if (this.process) {
-            // Close stdin to unblock the server's read loop, allowing it to exit cleanly.
-            // The server is blocked on stdin.Read(), so just sending SIGTERM would deadlock:
-            // - Node won't exit while child is alive
-            // - Child can't process SIGTERM while blocked on read
-            // - Read won't error until stdin is closed
-            this.process.stdin?.end();
-            this.process = undefined;
-        }
-        this.connected = false;
     }
 }
