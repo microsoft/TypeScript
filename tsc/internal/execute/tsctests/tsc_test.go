@@ -7,10 +7,53 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/stringtestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+	"gotest.tools/v3/assert"
 )
+
+func TestOutputSanitizerVersionPadding(t *testing.T) {
+	t.Parallel()
+	for name, language := range map[string]locale.Locale{"en": locale.Default, "cs": czech} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			version := diagnostics.Version_0.Localize(language, core.Version())
+			fakeVersion := diagnostics.Version_0.Localize(language, harnessutil.FakeTSVersion)
+			header := diagnostics.X_tsc_Colon_The_TypeScript_Compiler.Localize(language) + " - "
+			for _, test := range []struct {
+				name  string
+				input string
+				want  string
+			}{
+				{name: "version", input: version, want: fakeVersion},
+				{name: "version in prose", input: version + " is installed", want: fakeVersion + " is installed"},
+				{name: "repeated versions", input: version + ", " + version, want: fakeVersion + ", " + fakeVersion},
+				{name: "header without logo", input: header + version, want: header + fakeVersion},
+				{
+					name:  "header with logo",
+					input: fmt.Sprintf("%-115s\x1b[44m     \x1b[39;49m", header+version),
+					want:  fmt.Sprintf("%-115s\x1b[44m     \x1b[39;49m", header+fakeVersion),
+				},
+				{
+					name:  "narrow header with logo",
+					input: fmt.Sprintf("%-75s\x1b[44m     \x1b[39;49m", header+version),
+					want:  fmt.Sprintf("%-75s\x1b[44m     \x1b[39;49m", header+fakeVersion),
+				},
+			} {
+				t.Run(test.name, func(t *testing.T) {
+					t.Parallel()
+					sanitizer := &outputSanitizer{}
+					sanitizer.addOutputLine(test.input)
+					assert.Equal(t, strings.Join(sanitizer.outputLines, "\n"), test.want)
+				})
+			}
+		})
+	}
+}
 
 func TestTscCommandline(t *testing.T) {
 	t.Parallel()
