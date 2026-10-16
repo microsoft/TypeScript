@@ -8,7 +8,10 @@ import type {
     NamedTupleMember,
     ParameterDeclaration,
 } from "../../ast/ast.ts";
-import type { RootedFilePath } from "../../ast/index.ts";
+import type {
+    __String,
+    RootedFilePath,
+} from "../../ast/index.ts";
 import type {
     Diagnostic,
     RequestFileSystem,
@@ -98,6 +101,8 @@ export interface Type {
     isObjectType(): this is ObjectType;
     /** Whether this type is an intrinsic primitive type */
     isIntrinsicType(): this is IntrinsicType;
+    /** Whether this type is a unique symbol type (`unique symbol`) */
+    isUniqueESSymbolType(): this is UniqueESSymbolType;
     /**
      * Whether this is the error type — the placeholder produced when a type
      * cannot be determined (e.g. an unresolved reference).
@@ -245,6 +250,8 @@ export interface UnionOrIntersectionType extends Type {
 
 /** Union types (TypeFlags.Union) */
 export interface UnionType extends UnionOrIntersectionType {
+    /** Get the denormalized union, intersection, or index type this union originates from, if any */
+    getOrigin(): Promise<Type | undefined>;
 }
 
 /** Intersection types (TypeFlags.Intersection) */
@@ -288,6 +295,8 @@ export interface ConditionalType extends Type {
     getTrueType(): Promise<Type>;
     /** Get the false type Y in `T extends U ? X : Y` */
     getFalseType(): Promise<Type>;
+    /** Get the type parameters introduced by `infer` declarations in the extends clause */
+    getInferTypeParameters(): Promise<readonly TypeParameter[]>;
 }
 
 /** Substitution types (TypeFlags.Substitution) */
@@ -314,6 +323,12 @@ export interface StringMappingType extends Type {
 export interface IntrinsicType extends Type {
     /** The intrinsic type name (e.g. "any", "string", "never") */
     readonly intrinsicName: string;
+}
+
+/** Unique symbol types — `unique symbol` (TypeFlags.UniqueESSymbol) */
+export interface UniqueESSymbolType extends Type {
+    /** The escaped name of the unique symbol, e.g. `"__@startWork@7"` */
+    readonly escapedName: __String;
 }
 
 /** Base for all type predicates */

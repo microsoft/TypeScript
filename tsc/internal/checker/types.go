@@ -1101,6 +1101,8 @@ type UniqueESSymbolType struct {
 	name string
 }
 
+func (t *UniqueESSymbolType) Name() string { return t.name }
+
 // ConstrainedType (type with computed base constraint)
 
 type ConstrainedType struct {
@@ -1384,6 +1386,8 @@ type UnionType struct {
 	constituentMap      map[*Type]*Type // Constituents keyed by unit type discriminants
 }
 
+func (t *UnionType) Origin() *Type { return t.origin }
+
 // IntersectionType
 
 type IntersectionType struct {
@@ -1490,8 +1494,9 @@ type ConditionalType struct {
 	combinedMapper                   *TypeMapper
 }
 
-func (t *ConditionalType) CheckType() *Type   { return t.checkType }
-func (t *ConditionalType) ExtendsType() *Type { return t.extendsType }
+func (t *ConditionalType) CheckType() *Type             { return t.checkType }
+func (t *ConditionalType) ExtendsType() *Type           { return t.extendsType }
+func (t *ConditionalType) InferTypeParameters() []*Type { return t.root.inferTypeParameters }
 
 // SignatureFlags
 

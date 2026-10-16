@@ -62,6 +62,7 @@ import {
     type TypePredicate,
     type TypeReference,
     type UnionOrIntersectionType,
+    type UnionType,
 } from "@typescript/typescript/sync";
 import assert from "node:assert";
 import {
@@ -111,6 +112,8 @@ export type Union = Derived | string;
 export enum Choice { First = 1, Second = "second" }
 export class Unimported { value = "extra"; }
 export type Mapped<T> = { [K in keyof T as \`get\${Capitalize<string & K>}\`]: T[K] };
+export type AB = "a" | "b";
+export declare const combinedUnion: AB | "c";
 `,
     "/src/index.ts": `
 /// <reference types="parity" />
@@ -1491,6 +1494,8 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             const indexedType = checker.getTypeFromTypeNode(indexedAlias.type) as IndexedAccessType;
             checker.getTypeFromTypeNode(indexAlias.type);
             const unionType = checker.getTypeFromTypeNode(unionAlias.type);
+            const combinedUnionSymbol = checker.getMemberInModuleExports(moduleSymbol, "combinedUnion")!;
+            const combinedUnionType = checker.getTypeOfSymbol(combinedUnionSymbol) as UnionType;
             const typeParameter = checker.getTypeAtLocation(combineDeclaration.typeParameters![0].name) as TypeParameter;
             const literalType = checker.getTypeAtLocation(enumDeclaration.members[0].name) as LiteralType;
             const substitutionType = conditionalType.getTrueType() as SubstitutionType;
@@ -1689,6 +1694,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "typeToTypeNode", checker.typeToTypeNode, assertOptionalNodesEquivalent, interfaceType, interfaceDeclaration),
                 parityCase("Checker", "signatureToSignatureDeclaration", checker.signatureToSignatureDeclaration, assertOptionalNodesEquivalent, signature, SyntaxKind.FunctionDeclaration, combineDeclaration),
                 parityCase("Checker", "typeToString", checker.typeToString, assertDeepEquivalent, interfaceType, interfaceDeclaration),
+                parityCase("Checker", "symbolToString", checker.symbolToString, assertDeepEquivalent, interfaceSymbol, interfaceDeclaration),
                 parityCase("Checker", "isContextSensitive", checker.isContextSensitive, assertDeepEquivalent, boxDeclaration.initializer!),
                 parityCase("Checker", "isArrayType", checker.isArrayType, assertDeepEquivalent, arrayType),
                 parityCase("Checker", "isTupleType", checker.isTupleType, assertDeepEquivalent, tupleType),
@@ -1757,6 +1763,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Type", "getFreshType", literalType.getFreshType, assertOptionalTypesEquivalent),
                 parityCase("Type", "getRegularType", literalType.getRegularType, assertOptionalTypesEquivalent),
                 parityCase("Type", "getTypes", (unionType as UnionOrIntersectionType).getTypes, assertOptionalTypeArrayEquivalent),
+                parityCase("Type", "getOrigin", combinedUnionType.getOrigin, assertOptionalTypesEquivalent),
                 parityCase("Type", "getTypeParameters", interfaceType.getTypeParameters, assertTypeArraysEquivalent),
                 parityCase("Type", "getOuterTypeParameters", interfaceType.getOuterTypeParameters, assertTypeArraysEquivalent),
                 parityCase("Type", "getLocalTypeParameters", interfaceType.getLocalTypeParameters, assertTypeArraysEquivalent),
@@ -1770,6 +1777,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Type", "getIndexType", indexedType.getIndexType, assertTypesEquivalent),
                 parityCase("Type", "getCheckType", conditionalType.getCheckType, assertTypesEquivalent),
                 parityCase("Type", "getExtendsType", conditionalType.getExtendsType, assertTypesEquivalent),
+                parityCase("Type", "getInferTypeParameters", conditionalType.getInferTypeParameters, assertTypeArraysEquivalent),
                 parityCase("Type", "getBaseType", substitutionType.getBaseType, assertTypesEquivalent),
                 parityCase("Type", "getConstraint", typeParameter.getConstraint, assertOptionalTypesEquivalent),
                 parityCase("Type", "getDefault", typeParameter.getDefault, assertOptionalTypesEquivalent),

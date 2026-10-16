@@ -31,6 +31,7 @@ import { ScriptKind } from "#enums/scriptKind";
 import { SignatureFlags } from "#enums/signatureFlags";
 import { SignatureKind } from "#enums/signatureKind";
 import { SymbolFlags } from "#enums/symbolFlags";
+import { SymbolFormatFlags } from "#enums/symbolFormatFlags";
 import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
 import { TypeFlags } from "#enums/typeFlags";
 import { TypeFormatFlags } from "#enums/typeFormatFlags";
@@ -202,11 +203,12 @@ import type {
     TypeReference,
     UnionOrIntersectionType,
     UnionType,
+    UniqueESSymbolType,
 } from "./types.ts";
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolFormatFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -284,6 +286,7 @@ export type {
     TypeReference,
     UnionOrIntersectionType,
     UnionType,
+    UniqueESSymbolType,
     UserPreferences,
 };
 
@@ -5450,6 +5453,41 @@ export class Checker {
         );
     }
 
+    get symbolToString(): {
+        (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string;
+        gen(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToString",
+            function (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string {
+                const result = owner.client.apiRequest("symbolToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    meaning,
+                    flags,
+                });
+                if (typeof result !== "string") throw new TypeError("symbolToString returned a non-string result");
+                return result;
+            },
+            function* (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                const result = yield* apiRequest("symbolToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    meaning,
+                    flags,
+                });
+                if (typeof result !== "string") throw new TypeError("symbolToString returned a non-string result");
+                return result;
+            },
+        );
+    }
+
     get isContextSensitive(): {
         (node: Node): boolean;
         gen(node: Node): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
@@ -6921,9 +6959,11 @@ class TypeObject implements Type {
     readonly symbol!: CompactSymbolReference;
     readonly value!: string | number | boolean | bigint;
     readonly intrinsicName!: string;
+    readonly escapedName!: __String;
     readonly isThisType!: boolean;
     readonly freshType!: number;
     readonly regularType!: number;
+    readonly origin!: number;
     readonly target!: number;
     private readonly tupleType: boolean;
     readonly typeParameters!: readonly number[];
@@ -6941,6 +6981,7 @@ class TypeObject implements Type {
     readonly indexType!: number;
     readonly checkType!: number;
     readonly extendsType!: number;
+    readonly inferTypeParameters!: readonly number[];
     readonly baseType!: number;
     readonly substConstraint!: number;
     readonly typeParameter!: number;
@@ -7001,9 +7042,11 @@ class TypeObject implements Type {
             }
         }
         if (data.intrinsicName !== undefined) this.intrinsicName = data.intrinsicName;
+        if (data.escapedName !== undefined) this.escapedName = data.escapedName as __String;
         if (data.isThisType !== undefined) this.isThisType = data.isThisType;
         if (data.freshType !== undefined) this.freshType = data.freshType;
         if (data.regularType !== undefined) this.regularType = data.regularType;
+        if (data.origin !== undefined) this.origin = data.origin;
         if (data.target !== undefined) this.target = data.target;
         this.tupleType = data.isTupleType ?? false;
         this.typeParameters = data.typeParameters ?? [];
@@ -7025,6 +7068,7 @@ class TypeObject implements Type {
         if (data.indexType !== undefined) this.indexType = data.indexType;
         if (data.checkType !== undefined) this.checkType = data.checkType;
         if (data.extendsType !== undefined) this.extendsType = data.extendsType;
+        this.inferTypeParameters = data.inferTypeParameters ?? [];
         if (data.baseType !== undefined) this.baseType = data.baseType;
         if (data.substConstraint !== undefined) this.substConstraint = data.substConstraint;
         if (data.typeParameter !== undefined) this.typeParameter = data.typeParameter;
@@ -7414,6 +7458,29 @@ class TypeObject implements Type {
         );
     }
 
+    get getOrigin(): {
+        (): Type | undefined;
+        gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getOrigin",
+            function (): Type | undefined {
+                if (!(owner.flags & TypeFlags.Union)) {
+                    return undefined;
+                }
+                return owner.objectRegistry.fetchOptionalType(owner, "getOriginOfType", owner.origin);
+            },
+            function* (): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                if (!(owner.flags & TypeFlags.Union)) {
+                    return undefined;
+                }
+                return yield* owner.objectRegistry.fetchOptionalType.gen(owner, "getOriginOfType", owner.origin);
+            },
+        );
+    }
+
     get getTypes(): {
         (): readonly Type[] | undefined;
         gen(): Generator<ProtocolRequest, readonly Type[] | undefined, ProtocolResponse["result"]>;
@@ -7670,6 +7737,23 @@ class TypeObject implements Type {
         );
     }
 
+    get getInferTypeParameters(): {
+        (): readonly TypeParameter[];
+        gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getInferTypeParameters",
+            function (): readonly TypeParameter[] {
+                return owner.objectRegistry.fetchTypes(owner, "getInferTypeParametersOfType", owner.inferTypeParameters) as readonly TypeParameter[];
+            },
+            function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
+                return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getInferTypeParametersOfType", owner.inferTypeParameters)) as readonly TypeParameter[];
+            },
+        );
+    }
+
     get getBaseType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
@@ -7834,6 +7918,10 @@ class TypeObject implements Type {
         return isIntrinsicType(this);
     }
 
+    isUniqueESSymbolType(): this is UniqueESSymbolType {
+        return isUniqueESSymbolType(this);
+    }
+
     isErrorType(): boolean {
         return isErrorType(this);
     }
@@ -7921,6 +8009,10 @@ export function isClassOrInterfaceType(type: Type): type is InterfaceType {
 
 export function isIntrinsicType(type: Type): type is IntrinsicType {
     return (type.flags & TypeFlags.Intrinsic) !== 0;
+}
+
+export function isUniqueESSymbolType(type: Type): type is UniqueESSymbolType {
+    return (type.flags & TypeFlags.UniqueESSymbol) !== 0;
 }
 
 /**
