@@ -3101,8 +3101,8 @@ func (node QualifiedName) SetRight(value MemberName)   { node.setRef(&node.data(
 func (f *NodeFactory) NewQualifiedName(left EntityName, right MemberName) Node {
 	s := f.nodeStore()
 	data, i := newRecord[qualifiedNameData](s, layoutQualifiedName)
-	data.left = s.refAt(i, left)
-	data.right = s.refAt(i, right)
+	setNodeRef(&data.left, i, left)
+	setNodeRef(&data.right, i, right)
 	return f.newNode(KindQualifiedName, layoutQualifiedName, i)
 }
 
@@ -3159,7 +3159,7 @@ func (node ComputedPropertyName) SetExpression(value Expression) {
 func (f *NodeFactory) NewComputedPropertyName(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[computedPropertyNameData](s, layoutComputedPropertyName)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindComputedPropertyName, layoutComputedPropertyName, i)
 }
 
@@ -3213,7 +3213,7 @@ func (node Decorator) SetExpression(value LeftHandSideExpression) {
 func (f *NodeFactory) NewDecorator(expression LeftHandSideExpression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[decoratorData](s, layoutDecorator)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindDecorator, layoutDecorator, i)
 }
 
@@ -3309,9 +3309,9 @@ func (node IfStatement) SetElseStatement(value Statement) {
 func (f *NodeFactory) NewIfStatement(expression Expression, thenStatement Statement, elseStatement Statement) Node {
 	s := f.nodeStore()
 	data, i := newRecord[ifStatementData](s, layoutIfStatement)
-	data.expression = s.refAt(i, expression)
-	data.thenStatement = s.refAt(i, thenStatement)
-	data.elseStatement = s.refAt(i, elseStatement)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.thenStatement, i, thenStatement)
+	setNodeRef(&data.elseStatement, i, elseStatement)
 	return f.newNode(KindIfStatement, layoutIfStatement, i)
 }
 
@@ -3375,8 +3375,8 @@ func (node DoStatement) SetExpression(value Expression) { node.setRef(&node.data
 func (f *NodeFactory) NewDoStatement(statement Statement, expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[doStatementData](s, layoutDoStatement)
-	data.statement = s.refAt(i, statement)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.statement, i, statement)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindDoStatement, layoutDoStatement, i)
 }
 
@@ -3442,8 +3442,8 @@ func (node WhileStatement) SetExpression(value Expression) {
 func (f *NodeFactory) NewWhileStatement(expression Expression, statement Statement) Node {
 	s := f.nodeStore()
 	data, i := newRecord[whileStatementData](s, layoutWhileStatement)
-	data.expression = s.refAt(i, expression)
-	data.statement = s.refAt(i, statement)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.statement, i, statement)
 	return f.newNode(KindWhileStatement, layoutWhileStatement, i)
 }
 
@@ -3532,10 +3532,10 @@ func (node ForStatement) SetIncrementor(value Expression) {
 func (f *NodeFactory) NewForStatement(initializer ForInitializer, condition Expression, incrementor Expression, statement Statement) Node {
 	s := f.nodeStore()
 	data, i := newRecord[forStatementData](s, layoutForStatement)
-	data.initializer = s.refAt(i, initializer)
-	data.condition = s.refAt(i, condition)
-	data.incrementor = s.refAt(i, incrementor)
-	data.statement = s.refAt(i, statement)
+	setNodeRef(&data.initializer, i, initializer)
+	setNodeRef(&data.condition, i, condition)
+	setNodeRef(&data.incrementor, i, incrementor)
+	setNodeRef(&data.statement, i, statement)
 	return f.newNode(KindForStatement, layoutForStatement, i)
 }
 
@@ -3647,10 +3647,10 @@ func (f *NodeFactory) NewForInOrOfStatement(kind Kind, awaitModifier AwaitKeywor
 	}
 	s := f.nodeStore()
 	data, i := newRecord[forInOrOfStatementData](s, layoutForInOrOfStatement)
-	data.awaitModifier = s.refAt(i, awaitModifier)
-	data.initializer = s.refAt(i, initializer)
-	data.expression = s.refAt(i, expression)
-	data.statement = s.refAt(i, statement)
+	setNodeRef(&data.awaitModifier, i, awaitModifier)
+	setNodeRef(&data.initializer, i, initializer)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.statement, i, statement)
 	return f.newNode(kind, layoutForInOrOfStatement, i)
 }
 
@@ -3708,7 +3708,7 @@ func (node BreakStatement) SetLabel(value IdentifierNode) { node.setRef(&node.da
 func (f *NodeFactory) NewBreakStatement(label IdentifierNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[breakStatementData](s, layoutBreakStatement)
-	data.label = s.refAt(i, label)
+	setNodeRef(&data.label, i, label)
 	return f.newNode(KindBreakStatement, layoutBreakStatement, i)
 }
 
@@ -3763,7 +3763,7 @@ func (node ContinueStatement) SetLabel(value IdentifierNode) { node.setRef(&node
 func (f *NodeFactory) NewContinueStatement(label IdentifierNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[continueStatementData](s, layoutContinueStatement)
-	data.label = s.refAt(i, label)
+	setNodeRef(&data.label, i, label)
 	return f.newNode(KindContinueStatement, layoutContinueStatement, i)
 }
 
@@ -3817,7 +3817,7 @@ func (node ReturnStatement) SetExpression(value Expression) {
 func (f *NodeFactory) NewReturnStatement(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[returnStatementData](s, layoutReturnStatement)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindReturnStatement, layoutReturnStatement, i)
 }
 
@@ -3877,8 +3877,8 @@ func (node WithStatement) SetStatement(value Statement) { node.setRef(&node.data
 func (f *NodeFactory) NewWithStatement(expression Expression, statement Statement) Node {
 	s := f.nodeStore()
 	data, i := newRecord[withStatementData](s, layoutWithStatement)
-	data.expression = s.refAt(i, expression)
-	data.statement = s.refAt(i, statement)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.statement, i, statement)
 	return f.newNode(KindWithStatement, layoutWithStatement, i)
 }
 
@@ -3942,8 +3942,8 @@ func (node SwitchStatement) SetCaseBlock(value CaseBlockNode) {
 func (f *NodeFactory) NewSwitchStatement(expression Expression, caseBlock CaseBlockNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[switchStatementData](s, layoutSwitchStatement)
-	data.expression = s.refAt(i, expression)
-	data.caseBlock = s.refAt(i, caseBlock)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.caseBlock, i, caseBlock)
 	return f.newNode(KindSwitchStatement, layoutSwitchStatement, i)
 }
 
@@ -4089,7 +4089,7 @@ func (f *NodeFactory) NewCaseOrDefaultClause(kind Kind, expression Expression, s
 	}
 	s := f.nodeStore()
 	data, i := newRecord[caseOrDefaultClauseData](s, layoutCaseOrDefaultClause)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	s.nodeLists.set(&data.statements, statements, statements == nil)
 	return f.newNode(kind, layoutCaseOrDefaultClause, i)
 }
@@ -4153,7 +4153,7 @@ func (node ThrowStatement) SetExpression(value Expression) {
 func (f *NodeFactory) NewThrowStatement(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[throwStatementData](s, layoutThrowStatement)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindThrowStatement, layoutThrowStatement, i)
 }
 
@@ -4219,9 +4219,9 @@ func (node TryStatement) SetFinallyBlock(value BlockNode) {
 func (f *NodeFactory) NewTryStatement(tryBlock BlockNode, catchClause CatchClauseNode, finallyBlock BlockNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[tryStatementData](s, layoutTryStatement)
-	data.tryBlock = s.refAt(i, tryBlock)
-	data.catchClause = s.refAt(i, catchClause)
-	data.finallyBlock = s.refAt(i, finallyBlock)
+	setNodeRef(&data.tryBlock, i, tryBlock)
+	setNodeRef(&data.catchClause, i, catchClause)
+	setNodeRef(&data.finallyBlock, i, finallyBlock)
 	return f.newNode(KindTryStatement, layoutTryStatement, i)
 }
 
@@ -4296,8 +4296,8 @@ func (node CatchClause) SetBlock(value BlockNode) { node.setRef(&node.data().blo
 func (f *NodeFactory) NewCatchClause(variableDeclaration VariableDeclarationNode, block BlockNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[catchClauseData](s, layoutCatchClause)
-	data.variableDeclaration = s.refAt(i, variableDeclaration)
-	data.block = s.refAt(i, block)
+	setNodeRef(&data.variableDeclaration, i, variableDeclaration)
+	setNodeRef(&data.block, i, block)
 	return f.newNode(KindCatchClause, layoutCatchClause, i)
 }
 
@@ -4390,8 +4390,8 @@ func (node LabeledStatement) SetStatement(value Statement) {
 func (f *NodeFactory) NewLabeledStatement(label IdentifierNode, statement Statement) Node {
 	s := f.nodeStore()
 	data, i := newRecord[labeledStatementData](s, layoutLabeledStatement)
-	data.label = s.refAt(i, label)
-	data.statement = s.refAt(i, statement)
+	setNodeRef(&data.label, i, label)
+	setNodeRef(&data.statement, i, statement)
 	return f.newNode(KindLabeledStatement, layoutLabeledStatement, i)
 }
 
@@ -4454,7 +4454,7 @@ func (node ExpressionStatement) SetExpression(value Expression) {
 func (f *NodeFactory) NewExpressionStatement(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[expressionStatementData](s, layoutExpressionStatement)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindExpressionStatement, layoutExpressionStatement, i)
 }
 
@@ -4600,7 +4600,7 @@ func (f *NodeFactory) NewVariableStatement(modifiers *ModifierList, declarationL
 	s := f.nodeStore()
 	data, i := newRecord[variableStatementData](s, layoutVariableStatement)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.declarationList = s.refAt(i, declarationList)
+	setNodeRef(&data.declarationList, i, declarationList)
 	return f.newNode(KindVariableStatement, layoutVariableStatement, i)
 }
 
@@ -4684,10 +4684,10 @@ func (node VariableDeclaration) SetInitializer(value Expression) {
 func (f *NodeFactory) NewVariableDeclaration(name BindingName, exclamationToken ExclamationToken, typeNode TypeNode, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[variableDeclarationData](s, layoutVariableDeclaration)
-	data.name = s.refAt(i, name)
-	data.exclamationToken = s.refAt(i, exclamationToken)
-	data.typeField = s.refAt(i, typeNode)
-	data.initializer = s.refAt(i, initializer)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.exclamationToken, i, exclamationToken)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.initializer, i, initializer)
 	return f.newNode(KindVariableDeclaration, layoutVariableDeclaration, i)
 }
 
@@ -4906,11 +4906,11 @@ func (f *NodeFactory) NewParameterDeclaration(modifiers *ModifierList, dotDotDot
 	s := f.nodeStore()
 	data, i := newRecord[parameterDeclarationData](s, layoutParameterDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.dotDotDotToken = s.refAt(i, dotDotDotToken)
-	data.name = s.refAt(i, name)
-	data.questionToken = s.refAt(i, questionToken)
-	data.typeField = s.refAt(i, typeNode)
-	data.initializer = s.refAt(i, initializer)
+	setNodeRef(&data.dotDotDotToken, i, dotDotDotToken)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.questionToken, i, questionToken)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.initializer, i, initializer)
 	return f.newNode(KindParameter, layoutParameterDeclaration, i)
 }
 
@@ -5003,10 +5003,10 @@ func (node BindingElement) SetInitializer(value Expression) {
 func (f *NodeFactory) NewBindingElement(dotDotDotToken DotDotDotToken, propertyName PropertyName, name BindingName, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[bindingElementData](s, layoutBindingElement)
-	data.dotDotDotToken = s.refAt(i, dotDotDotToken)
-	data.propertyName = s.refAt(i, propertyName)
-	data.name = s.refAt(i, name)
-	data.initializer = s.refAt(i, initializer)
+	setNodeRef(&data.dotDotDotToken, i, dotDotDotToken)
+	setNodeRef(&data.propertyName, i, propertyName)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.initializer, i, initializer)
 	return f.newNode(KindBindingElement, layoutBindingElement, i)
 }
 
@@ -5235,13 +5235,13 @@ func (f *NodeFactory) NewFunctionDeclaration(modifiers *ModifierList, asteriskTo
 	s := f.nodeStore()
 	data, i := newRecord[functionDeclarationData](s, layoutFunctionDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.asteriskToken = s.refAt(i, asteriskToken)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.asteriskToken, i, asteriskToken)
+	setNodeRef(&data.name, i, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.body = s.refAt(i, body)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.fullSignature, i, fullSignature)
+	setNodeRef(&data.body, i, body)
 	return f.newNode(KindFunctionDeclaration, layoutFunctionDeclaration, i)
 }
 
@@ -5366,7 +5366,7 @@ func (f *NodeFactory) NewClassDeclaration(modifiers *ModifierList, name Identifi
 	s := f.nodeStore()
 	data, i := newRecord[classDeclarationData](s, layoutClassDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.heritageClauses, heritageClauses, heritageClauses == nil)
 	s.nodeLists.set(&data.members, members, members == nil)
@@ -5484,7 +5484,7 @@ func (f *NodeFactory) NewClassExpression(modifiers *ModifierList, name Identifie
 	s := f.nodeStore()
 	data, i := newRecord[classExpressionData](s, layoutClassExpression)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.heritageClauses, heritageClauses, heritageClauses == nil)
 	s.nodeLists.set(&data.members, members, members == nil)
@@ -5658,7 +5658,7 @@ func (f *NodeFactory) NewInterfaceDeclaration(modifiers *ModifierList, name Iden
 	s := f.nodeStore()
 	data, i := newRecord[interfaceDeclarationData](s, layoutInterfaceDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.heritageClauses, heritageClauses, heritageClauses == nil)
 	s.nodeLists.set(&data.members, members, members == nil)
@@ -5779,9 +5779,9 @@ func (f *NodeFactory) NewTypeAliasDeclaration(modifiers *ModifierList, name Iden
 	s := f.nodeStore()
 	data, i := newRecord[typeAliasDeclarationData](s, layoutTypeAliasDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindTypeAliasDeclaration, layoutTypeAliasDeclaration, i)
 }
 
@@ -5789,9 +5789,9 @@ func (f *NodeFactory) NewJSTypeAliasDeclaration(modifiers *ModifierList, name Id
 	s := f.nodeStore()
 	data, i := newRecord[typeAliasDeclarationData](s, layoutTypeAliasDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindJSTypeAliasDeclaration, layoutTypeAliasDeclaration, i)
 }
 
@@ -5888,8 +5888,8 @@ func (node EnumMember) SetInitializer(value Expression) { node.setRef(&node.data
 func (f *NodeFactory) NewEnumMember(name PropertyName, initializer Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[enumMemberData](s, layoutEnumMember)
-	data.name = s.refAt(i, name)
-	data.initializer = s.refAt(i, initializer)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.initializer, i, initializer)
 	return f.newNode(KindEnumMember, layoutEnumMember, i)
 }
 
@@ -5973,7 +5973,7 @@ func (f *NodeFactory) NewEnumDeclaration(modifiers *ModifierList, name Identifie
 	s := f.nodeStore()
 	data, i := newRecord[enumDeclarationData](s, layoutEnumDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	s.nodeLists.set(&data.members, members, members == nil)
 	return f.newNode(KindEnumDeclaration, layoutEnumDeclaration, i)
 }
@@ -6200,9 +6200,9 @@ func (f *NodeFactory) NewImportDeclaration(modifiers *ModifierList, importClause
 	s := f.nodeStore()
 	data, i := newRecord[importDeclarationData](s, layoutImportDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.importClause = s.refAt(i, importClause)
-	data.moduleSpecifier = s.refAt(i, moduleSpecifier)
-	data.attributes = s.refAt(i, attributes)
+	setNodeRef(&data.importClause, i, importClause)
+	setNodeRef(&data.moduleSpecifier, i, moduleSpecifier)
+	setNodeRef(&data.attributes, i, attributes)
 	return f.newNode(KindImportDeclaration, layoutImportDeclaration, i)
 }
 
@@ -6210,9 +6210,9 @@ func (f *NodeFactory) NewJSImportDeclaration(modifiers *ModifierList, importClau
 	s := f.nodeStore()
 	data, i := newRecord[importDeclarationData](s, layoutImportDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.importClause = s.refAt(i, importClause)
-	data.moduleSpecifier = s.refAt(i, moduleSpecifier)
-	data.attributes = s.refAt(i, attributes)
+	setNodeRef(&data.importClause, i, importClause)
+	setNodeRef(&data.moduleSpecifier, i, moduleSpecifier)
+	setNodeRef(&data.attributes, i, attributes)
 	return f.newNode(KindJSImportDeclaration, layoutImportDeclaration, i)
 }
 
@@ -6296,7 +6296,7 @@ func (node ExternalModuleReference) SetExpression(value Expression) {
 func (f *NodeFactory) NewExternalModuleReference(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[externalModuleReferenceData](s, layoutExternalModuleReference)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindExternalModuleReference, layoutExternalModuleReference, i)
 }
 
@@ -6360,7 +6360,7 @@ func (node NamespaceImport) setName(value IdentifierNode) { node.setRef(&node.da
 func (f *NodeFactory) NewNamespaceImport(name IdentifierNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[namespaceImportData](s, layoutNamespaceImport)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	return f.newNode(KindNamespaceImport, layoutNamespaceImport, i)
 }
 
@@ -6501,8 +6501,8 @@ func (f *NodeFactory) NewExportAssignment(modifiers *ModifierList, isExportEqual
 	data, i := newRecord[exportAssignmentData](s, layoutExportAssignment)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	data.isExportEquals = isExportEquals
-	data.typeField = s.refAt(i, typeNode)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindExportAssignment, layoutExportAssignment, i)
 }
 
@@ -6581,7 +6581,7 @@ func (f *NodeFactory) NewNamespaceExportDeclaration(modifiers *ModifierList, nam
 	s := f.nodeStore()
 	data, i := newRecord[namespaceExportDeclarationData](s, layoutNamespaceExportDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	return f.newNode(KindNamespaceExportDeclaration, layoutNamespaceExportDeclaration, i)
 }
 
@@ -6632,7 +6632,7 @@ func (node NamespaceExport) setName(value ModuleExportName) { node.setRef(&node.
 func (f *NodeFactory) NewNamespaceExport(name ModuleExportName) Node {
 	s := f.nodeStore()
 	data, i := newRecord[namespaceExportData](s, layoutNamespaceExport)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	return f.newNode(KindNamespaceExport, layoutNamespaceExport, i)
 }
 
@@ -6765,8 +6765,8 @@ func (f *NodeFactory) NewExportSpecifier(isTypeOnly bool, propertyName ModuleExp
 	s := f.nodeStore()
 	data, i := newRecord[exportSpecifierData](s, layoutExportSpecifier)
 	data.isTypeOnly = isTypeOnly
-	data.propertyName = s.refAt(i, propertyName)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.propertyName, i, propertyName)
+	setNodeRef(&data.name, i, name)
 	return f.newNode(KindExportSpecifier, layoutExportSpecifier, i)
 }
 
@@ -6871,7 +6871,7 @@ func (f *NodeFactory) NewCallSignatureDeclaration(typeParameters *TypeParameterL
 	data, i := newRecord[callSignatureDeclarationData](s, layoutCallSignatureDeclaration)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindCallSignature, layoutCallSignatureDeclaration, i)
 }
 
@@ -6978,7 +6978,7 @@ func (f *NodeFactory) NewConstructSignatureDeclaration(typeParameters *TypeParam
 	data, i := newRecord[constructSignatureDeclarationData](s, layoutConstructSignatureDeclaration)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindConstructSignature, layoutConstructSignatureDeclaration, i)
 }
 
@@ -7123,9 +7123,9 @@ func (f *NodeFactory) NewConstructorDeclaration(modifiers *ModifierList, typePar
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.body = s.refAt(i, body)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.fullSignature, i, fullSignature)
+	setNodeRef(&data.body, i, body)
 	return f.newNode(KindConstructor, layoutConstructorDeclaration, i)
 }
 
@@ -7285,12 +7285,12 @@ func (f *NodeFactory) NewGetAccessorDeclaration(modifiers *ModifierList, name Pr
 	s := f.nodeStore()
 	data, i := newRecord[getAccessorDeclarationData](s, layoutGetAccessorDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.body = s.refAt(i, body)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.fullSignature, i, fullSignature)
+	setNodeRef(&data.body, i, body)
 	return f.newNode(KindGetAccessor, layoutGetAccessorDeclaration, i)
 }
 
@@ -7451,12 +7451,12 @@ func (f *NodeFactory) NewSetAccessorDeclaration(modifiers *ModifierList, name Pr
 	s := f.nodeStore()
 	data, i := newRecord[setAccessorDeclarationData](s, layoutSetAccessorDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.body = s.refAt(i, body)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.fullSignature, i, fullSignature)
+	setNodeRef(&data.body, i, body)
 	return f.newNode(KindSetAccessor, layoutSetAccessorDeclaration, i)
 }
 
@@ -7576,7 +7576,7 @@ func (f *NodeFactory) NewIndexSignatureDeclaration(modifiers *ModifierList, para
 	data, i := newRecord[indexSignatureDeclarationData](s, layoutIndexSignatureDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindIndexSignature, layoutIndexSignatureDeclaration, i)
 }
 
@@ -7703,11 +7703,11 @@ func (f *NodeFactory) NewMethodSignatureDeclaration(modifiers *ModifierList, nam
 	s := f.nodeStore()
 	data, i := newRecord[methodSignatureDeclarationData](s, layoutMethodSignatureDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
-	data.postfixToken = s.refAt(i, postfixToken)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.postfixToken, i, postfixToken)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindMethodSignature, layoutMethodSignatureDeclaration, i)
 }
 
@@ -7850,14 +7850,14 @@ func (f *NodeFactory) NewMethodDeclaration(modifiers *ModifierList, asteriskToke
 	s := f.nodeStore()
 	data, i := newRecord[methodDeclarationData](s, layoutMethodDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.asteriskToken = s.refAt(i, asteriskToken)
-	data.name = s.refAt(i, name)
-	data.postfixToken = s.refAt(i, postfixToken)
+	setNodeRef(&data.asteriskToken, i, asteriskToken)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.postfixToken, i, postfixToken)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.body = s.refAt(i, body)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.fullSignature, i, fullSignature)
+	setNodeRef(&data.body, i, body)
 	return f.newNode(KindMethodDeclaration, layoutMethodDeclaration, i)
 }
 
@@ -7960,10 +7960,10 @@ func (f *NodeFactory) NewPropertySignatureDeclaration(modifiers *ModifierList, n
 	s := f.nodeStore()
 	data, i := newRecord[propertySignatureDeclarationData](s, layoutPropertySignatureDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
-	data.postfixToken = s.refAt(i, postfixToken)
-	data.typeField = s.refAt(i, typeNode)
-	data.initializer = s.refAt(i, initializer)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.postfixToken, i, postfixToken)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.initializer, i, initializer)
 	return f.newNode(KindPropertySignature, layoutPropertySignatureDeclaration, i)
 }
 
@@ -8053,10 +8053,10 @@ func (f *NodeFactory) NewPropertyDeclaration(modifiers *ModifierList, name Prope
 	s := f.nodeStore()
 	data, i := newRecord[propertyDeclarationData](s, layoutPropertyDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
-	data.postfixToken = s.refAt(i, postfixToken)
-	data.typeField = s.refAt(i, typeNode)
-	data.initializer = s.refAt(i, initializer)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.postfixToken, i, postfixToken)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.initializer, i, initializer)
 	return f.newNode(KindPropertyDeclaration, layoutPropertyDeclaration, i)
 }
 
@@ -8192,7 +8192,7 @@ func (f *NodeFactory) NewClassStaticBlockDeclaration(modifiers *ModifierList, bo
 	s := f.nodeStore()
 	data, i := newRecord[classStaticBlockDeclarationData](s, layoutClassStaticBlockDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.body = s.refAt(i, body)
+	setNodeRef(&data.body, i, body)
 	return f.newNode(KindClassStaticBlockDeclaration, layoutClassStaticBlockDeclaration, i)
 }
 
@@ -8568,10 +8568,10 @@ func (f *NodeFactory) NewBinaryExpression(modifiers *ModifierList, left Expressi
 	s := f.nodeStore()
 	data, i := newRecord[binaryExpressionData](s, layoutBinaryExpression)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.left = s.refAt(i, left)
-	data.typeField = s.refAt(i, typeNode)
-	data.operatorToken = s.refAt(i, operatorToken)
-	data.right = s.refAt(i, right)
+	setNodeRef(&data.left, i, left)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.operatorToken, i, operatorToken)
+	setNodeRef(&data.right, i, right)
 	return f.newNode(KindBinaryExpression, layoutBinaryExpression, i)
 }
 
@@ -8630,7 +8630,7 @@ func (f *NodeFactory) NewPrefixUnaryExpression(operator Kind, operand Expression
 	s := f.nodeStore()
 	data, i := newRecord[prefixUnaryExpressionData](s, layoutPrefixUnaryExpression)
 	data.operator = operator
-	data.operand = s.refAt(i, operand)
+	setNodeRef(&data.operand, i, operand)
 	return f.newNode(KindPrefixUnaryExpression, layoutPrefixUnaryExpression, i)
 }
 
@@ -8687,7 +8687,7 @@ func (node PostfixUnaryExpression) SetOperator(value Kind) { node.data().operato
 func (f *NodeFactory) NewPostfixUnaryExpression(operand Expression, operator Kind) Node {
 	s := f.nodeStore()
 	data, i := newRecord[postfixUnaryExpressionData](s, layoutPostfixUnaryExpression)
-	data.operand = s.refAt(i, operand)
+	setNodeRef(&data.operand, i, operand)
 	data.operator = operator
 	return f.newNode(KindPostfixUnaryExpression, layoutPostfixUnaryExpression, i)
 }
@@ -8748,8 +8748,8 @@ func (node YieldExpression) SetExpression(value Expression) {
 func (f *NodeFactory) NewYieldExpression(asteriskToken AsteriskToken, expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[yieldExpressionData](s, layoutYieldExpression)
-	data.asteriskToken = s.refAt(i, asteriskToken)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.asteriskToken, i, asteriskToken)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindYieldExpression, layoutYieldExpression, i)
 }
 
@@ -8882,10 +8882,10 @@ func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.equalsGreaterThanToken = s.refAt(i, equalsGreaterThanToken)
-	data.body = s.refAt(i, body)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.fullSignature, i, fullSignature)
+	setNodeRef(&data.equalsGreaterThanToken, i, equalsGreaterThanToken)
+	setNodeRef(&data.body, i, body)
 	return f.newNode(KindArrowFunction, layoutArrowFunction, i)
 }
 
@@ -9038,13 +9038,13 @@ func (f *NodeFactory) NewFunctionExpression(modifiers *ModifierList, asteriskTok
 	s := f.nodeStore()
 	data, i := newRecord[functionExpressionData](s, layoutFunctionExpression)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.asteriskToken = s.refAt(i, asteriskToken)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.asteriskToken, i, asteriskToken)
+	setNodeRef(&data.name, i, name)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
-	data.fullSignature = s.refAt(i, fullSignature)
-	data.body = s.refAt(i, body)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.fullSignature, i, fullSignature)
+	setNodeRef(&data.body, i, body)
 	return f.newNode(KindFunctionExpression, layoutFunctionExpression, i)
 }
 
@@ -9103,8 +9103,8 @@ func (node AsExpression) SetType(value TypeNode) { node.setRef(&node.data().type
 func (f *NodeFactory) NewAsExpression(expression Expression, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[asExpressionData](s, layoutAsExpression)
-	data.expression = s.refAt(i, expression)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindAsExpression, layoutAsExpression, i)
 }
 
@@ -9160,8 +9160,8 @@ func (node SatisfiesExpression) SetType(value TypeNode) { node.setRef(&node.data
 func (f *NodeFactory) NewSatisfiesExpression(expression Expression, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[satisfiesExpressionData](s, layoutSatisfiesExpression)
-	data.expression = s.refAt(i, expression)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindSatisfiesExpression, layoutSatisfiesExpression, i)
 }
 
@@ -9241,11 +9241,11 @@ func (node ConditionalExpression) SetWhenFalse(value Expression) {
 func (f *NodeFactory) NewConditionalExpression(condition Expression, questionToken QuestionToken, whenTrue Expression, colonToken ColonToken, whenFalse Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[conditionalExpressionData](s, layoutConditionalExpression)
-	data.condition = s.refAt(i, condition)
-	data.questionToken = s.refAt(i, questionToken)
-	data.whenTrue = s.refAt(i, whenTrue)
-	data.colonToken = s.refAt(i, colonToken)
-	data.whenFalse = s.refAt(i, whenFalse)
+	setNodeRef(&data.condition, i, condition)
+	setNodeRef(&data.questionToken, i, questionToken)
+	setNodeRef(&data.whenTrue, i, whenTrue)
+	setNodeRef(&data.colonToken, i, colonToken)
+	setNodeRef(&data.whenFalse, i, whenFalse)
 	return f.newNode(KindConditionalExpression, layoutConditionalExpression, i)
 }
 
@@ -9334,9 +9334,9 @@ func (node PropertyAccessExpression) setName(value MemberName) { node.setRef(&no
 func (f *NodeFactory) NewPropertyAccessExpression(expression Expression, questionDotToken QuestionDotToken, name MemberName, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[propertyAccessExpressionData](s, layoutPropertyAccessExpression)
-	data.expression = s.refAt(i, expression)
-	data.questionDotToken = s.refAt(i, questionDotToken)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.questionDotToken, i, questionDotToken)
+	setNodeRef(&data.name, i, name)
 	node := f.newNode(KindPropertyAccessExpression, layoutPropertyAccessExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
@@ -9419,9 +9419,9 @@ func (node ElementAccessExpression) SetArgumentExpression(value Expression) {
 func (f *NodeFactory) NewElementAccessExpression(expression Expression, questionDotToken QuestionDotToken, argumentExpression Expression, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[elementAccessExpressionData](s, layoutElementAccessExpression)
-	data.expression = s.refAt(i, expression)
-	data.questionDotToken = s.refAt(i, questionDotToken)
-	data.argumentExpression = s.refAt(i, argumentExpression)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.questionDotToken, i, questionDotToken)
+	setNodeRef(&data.argumentExpression, i, argumentExpression)
 	node := f.newNode(KindElementAccessExpression, layoutElementAccessExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
@@ -9510,8 +9510,8 @@ func (node CallExpression) SetArguments(value *ElementList) {
 func (f *NodeFactory) NewCallExpression(expression Expression, questionDotToken QuestionDotToken, typeArguments *TypeList, arguments *ElementList, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[callExpressionData](s, layoutCallExpression)
-	data.expression = s.refAt(i, expression)
-	data.questionDotToken = s.refAt(i, questionDotToken)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.questionDotToken, i, questionDotToken)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
 	s.nodeLists.set(&data.arguments, arguments, arguments == nil)
 	node := f.newNode(KindCallExpression, layoutCallExpression, i)
@@ -9585,7 +9585,7 @@ func (node NewExpression) SetArguments(value *ElementList) {
 func (f *NodeFactory) NewNewExpression(expression Expression, typeArguments *TypeList, arguments *ElementList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[newExpressionData](s, layoutNewExpression)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
 	s.nodeLists.set(&data.arguments, arguments, arguments == nil)
 	return f.newNode(KindNewExpression, layoutNewExpression, i)
@@ -9642,7 +9642,7 @@ func (f *NodeFactory) NewMetaProperty(keywordToken Kind, name IdentifierNode) No
 	s := f.nodeStore()
 	data, i := newRecord[metaPropertyData](s, layoutMetaProperty)
 	data.keywordToken = keywordToken
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	return f.newNode(KindMetaProperty, layoutMetaProperty, i)
 }
 
@@ -9692,7 +9692,7 @@ func (node NonNullExpression) SetExpression(value Expression) {
 func (f *NodeFactory) NewNonNullExpression(expression Expression, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[nonNullExpressionData](s, layoutNonNullExpression)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	node := f.newNode(KindNonNullExpression, layoutNonNullExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
@@ -9742,7 +9742,7 @@ func (node SpreadElement) SetExpression(value Expression) {
 func (f *NodeFactory) NewSpreadElement(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[spreadElementData](s, layoutSpreadElement)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindSpreadElement, layoutSpreadElement, i)
 }
 
@@ -9801,7 +9801,7 @@ func (node TemplateExpression) SetTemplateSpans(value *TemplateSpanList) {
 func (f *NodeFactory) NewTemplateExpression(head TemplateHeadNode, templateSpans *TemplateSpanList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateExpressionData](s, layoutTemplateExpression)
-	data.head = s.refAt(i, head)
+	setNodeRef(&data.head, i, head)
 	s.nodeLists.set(&data.templateSpans, templateSpans, templateSpans == nil)
 	return f.newNode(KindTemplateExpression, layoutTemplateExpression, i)
 }
@@ -9859,8 +9859,8 @@ func (node TemplateSpan) SetLiteral(value TemplateMiddleOrTail) {
 func (f *NodeFactory) NewTemplateSpan(expression Expression, literal TemplateMiddleOrTail) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateSpanData](s, layoutTemplateSpan)
-	data.expression = s.refAt(i, expression)
-	data.literal = s.refAt(i, literal)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.literal, i, literal)
 	return f.newNode(KindTemplateSpan, layoutTemplateSpan, i)
 }
 
@@ -9942,10 +9942,10 @@ func (node TaggedTemplateExpression) SetTemplate(value TemplateLiteral) {
 func (f *NodeFactory) NewTaggedTemplateExpression(tag Expression, questionDotToken QuestionDotToken, typeArguments *TypeList, template TemplateLiteral, flags NodeFlags) Node {
 	s := f.nodeStore()
 	data, i := newRecord[taggedTemplateExpressionData](s, layoutTaggedTemplateExpression)
-	data.tag = s.refAt(i, tag)
-	data.questionDotToken = s.refAt(i, questionDotToken)
+	setNodeRef(&data.tag, i, tag)
+	setNodeRef(&data.questionDotToken, i, questionDotToken)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
-	data.template = s.refAt(i, template)
+	setNodeRef(&data.template, i, template)
 	node := f.newNode(KindTaggedTemplateExpression, layoutTaggedTemplateExpression, i)
 	node.SetFlags(node.Flags() | (flags & NodeFlagsOptionalChain))
 	return node
@@ -10003,7 +10003,7 @@ func (node ParenthesizedExpression) SetExpression(value Expression) {
 func (f *NodeFactory) NewParenthesizedExpression(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[parenthesizedExpressionData](s, layoutParenthesizedExpression)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindParenthesizedExpression, layoutParenthesizedExpression, i)
 }
 
@@ -10194,7 +10194,7 @@ func (node SpreadAssignment) SetExpression(value Expression) {
 func (f *NodeFactory) NewSpreadAssignment(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[spreadAssignmentData](s, layoutSpreadAssignment)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindSpreadAssignment, layoutSpreadAssignment, i)
 }
 
@@ -10275,10 +10275,10 @@ func (f *NodeFactory) NewPropertyAssignment(modifiers *ModifierList, name Proper
 	s := f.nodeStore()
 	data, i := newRecord[propertyAssignmentData](s, layoutPropertyAssignment)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
-	data.postfixToken = s.refAt(i, postfixToken)
-	data.typeField = s.refAt(i, typeNode)
-	data.initializer = s.refAt(i, initializer)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.postfixToken, i, postfixToken)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.initializer, i, initializer)
 	return f.newNode(KindPropertyAssignment, layoutPropertyAssignment, i)
 }
 
@@ -10385,11 +10385,11 @@ func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers *ModifierList, na
 	s := f.nodeStore()
 	data, i := newRecord[shorthandPropertyAssignmentData](s, layoutShorthandPropertyAssignment)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
-	data.postfixToken = s.refAt(i, postfixToken)
-	data.typeField = s.refAt(i, typeNode)
-	data.equalsToken = s.refAt(i, equalsToken)
-	data.objectAssignmentInitializer = s.refAt(i, objectAssignmentInitializer)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.postfixToken, i, postfixToken)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.equalsToken, i, equalsToken)
+	setNodeRef(&data.objectAssignmentInitializer, i, objectAssignmentInitializer)
 	return f.newNode(KindShorthandPropertyAssignment, layoutShorthandPropertyAssignment, i)
 }
 
@@ -10442,7 +10442,7 @@ func (node DeleteExpression) SetExpression(value Expression) {
 func (f *NodeFactory) NewDeleteExpression(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[deleteExpressionData](s, layoutDeleteExpression)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindDeleteExpression, layoutDeleteExpression, i)
 }
 
@@ -10494,7 +10494,7 @@ func (node TypeOfExpression) SetExpression(value Expression) {
 func (f *NodeFactory) NewTypeOfExpression(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeOfExpressionData](s, layoutTypeOfExpression)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindTypeOfExpression, layoutTypeOfExpression, i)
 }
 
@@ -10546,7 +10546,7 @@ func (node VoidExpression) SetExpression(value Expression) {
 func (f *NodeFactory) NewVoidExpression(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[voidExpressionData](s, layoutVoidExpression)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindVoidExpression, layoutVoidExpression, i)
 }
 
@@ -10598,7 +10598,7 @@ func (node AwaitExpression) SetExpression(value Expression) {
 func (f *NodeFactory) NewAwaitExpression(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[awaitExpressionData](s, layoutAwaitExpression)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindAwaitExpression, layoutAwaitExpression, i)
 }
 
@@ -10649,8 +10649,8 @@ func (node TypeAssertion) SetExpression(value Expression) {
 func (f *NodeFactory) NewTypeAssertion(typeNode TypeNode, expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeAssertionData](s, layoutTypeAssertion)
-	data.typeField = s.refAt(i, typeNode)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindTypeAssertionExpression, layoutTypeAssertion, i)
 }
 
@@ -10867,10 +10867,10 @@ func (node ConditionalTypeNode) SetFalseType(value TypeNode) {
 func (f *NodeFactory) NewConditionalTypeNode(checkType TypeNode, extendsType TypeNode, trueType TypeNode, falseType TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[conditionalTypeNodeData](s, layoutConditionalTypeNode)
-	data.checkType = s.refAt(i, checkType)
-	data.extendsType = s.refAt(i, extendsType)
-	data.trueType = s.refAt(i, trueType)
-	data.falseType = s.refAt(i, falseType)
+	setNodeRef(&data.checkType, i, checkType)
+	setNodeRef(&data.extendsType, i, extendsType)
+	setNodeRef(&data.trueType, i, trueType)
+	setNodeRef(&data.falseType, i, falseType)
 	return f.newNode(KindConditionalType, layoutConditionalTypeNode, i)
 }
 
@@ -10923,7 +10923,7 @@ func (f *NodeFactory) NewTypeOperatorNode(operator Kind, typeNode TypeNode) Node
 	s := f.nodeStore()
 	data, i := newRecord[typeOperatorNodeData](s, layoutTypeOperatorNode)
 	data.operator = operator
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindTypeOperator, layoutTypeOperatorNode, i)
 }
 
@@ -10974,7 +10974,7 @@ func (node InferTypeNode) SetTypeParameter(value TypeParameterDeclarationNode) {
 func (f *NodeFactory) NewInferTypeNode(typeParameter TypeParameterDeclarationNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[inferTypeNodeData](s, layoutInferTypeNode)
-	data.typeParameter = s.refAt(i, typeParameter)
+	setNodeRef(&data.typeParameter, i, typeParameter)
 	return f.newNode(KindInferType, layoutInferTypeNode, i)
 }
 
@@ -11022,7 +11022,7 @@ func (node ArrayTypeNode) SetElementType(value TypeNode) {
 func (f *NodeFactory) NewArrayTypeNode(elementType TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[arrayTypeNodeData](s, layoutArrayTypeNode)
-	data.elementType = s.refAt(i, elementType)
+	setNodeRef(&data.elementType, i, elementType)
 	return f.newNode(KindArrayType, layoutArrayTypeNode, i)
 }
 
@@ -11078,8 +11078,8 @@ func (node IndexedAccessTypeNode) SetIndexType(value TypeNode) {
 func (f *NodeFactory) NewIndexedAccessTypeNode(objectType TypeNode, indexType TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[indexedAccessTypeNodeData](s, layoutIndexedAccessTypeNode)
-	data.objectType = s.refAt(i, objectType)
-	data.indexType = s.refAt(i, indexType)
+	setNodeRef(&data.objectType, i, objectType)
+	setNodeRef(&data.indexType, i, indexType)
 	return f.newNode(KindIndexedAccessType, layoutIndexedAccessTypeNode, i)
 }
 
@@ -11137,7 +11137,7 @@ func (node TypeReferenceNode) SetTypeName(value EntityName) {
 func (f *NodeFactory) NewTypeReferenceNode(typeName EntityName, typeArguments *TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeReferenceNodeData](s, layoutTypeReferenceNode)
-	data.typeName = s.refAt(i, typeName)
+	setNodeRef(&data.typeName, i, typeName)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
 	return f.newNode(KindTypeReference, layoutTypeReferenceNode, i)
 }
@@ -11201,7 +11201,7 @@ func (node ExpressionWithTypeArguments) SetTypeArguments(value *TypeList) {
 func (f *NodeFactory) NewExpressionWithTypeArguments(expression Expression, typeArguments *TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[expressionWithTypeArgumentsData](s, layoutExpressionWithTypeArguments)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
 	return f.newNode(KindExpressionWithTypeArguments, layoutExpressionWithTypeArguments, i)
 }
@@ -11248,7 +11248,7 @@ func (node LiteralTypeNode) SetLiteral(value Node) { node.setRef(&node.data().li
 func (f *NodeFactory) NewLiteralTypeNode(literal Node) Node {
 	s := f.nodeStore()
 	data, i := newRecord[literalTypeNodeData](s, layoutLiteralTypeNode)
-	data.literal = s.refAt(i, literal)
+	setNodeRef(&data.literal, i, literal)
 	return f.newNode(KindLiteralType, layoutLiteralTypeNode, i)
 }
 
@@ -11338,9 +11338,9 @@ func (node TypePredicateNode) SetType(value TypeNode) { node.setRef(&node.data()
 func (f *NodeFactory) NewTypePredicateNode(assertsModifier AssertsKeyword, parameterName TypePredicateParameterName, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typePredicateNodeData](s, layoutTypePredicateNode)
-	data.assertsModifier = s.refAt(i, assertsModifier)
-	data.parameterName = s.refAt(i, parameterName)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.assertsModifier, i, assertsModifier)
+	setNodeRef(&data.parameterName, i, parameterName)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindTypePredicate, layoutTypePredicateNode, i)
 }
 
@@ -11393,8 +11393,8 @@ func (node ImportAttribute) SetValue(value Expression) { node.setRef(&node.data(
 func (f *NodeFactory) NewImportAttribute(name ImportAttributeName, value Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[importAttributeData](s, layoutImportAttribute)
-	data.name = s.refAt(i, name)
-	data.value = s.refAt(i, value)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.value, i, value)
 	return f.newNode(KindImportAttribute, layoutImportAttribute, i)
 }
 
@@ -11517,7 +11517,7 @@ func (node TypeQueryNode) SetExprName(value EntityName) { node.setRef(&node.data
 func (f *NodeFactory) NewTypeQueryNode(exprName EntityName, typeArguments *TypeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[typeQueryNodeData](s, layoutTypeQueryNode)
-	data.exprName = s.refAt(i, exprName)
+	setNodeRef(&data.exprName, i, exprName)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
 	return f.newNode(KindTypeQuery, layoutTypeQueryNode, i)
 }
@@ -11616,11 +11616,11 @@ func (node MappedTypeNode) SetMembers(value *TypeElementList) {
 func (f *NodeFactory) NewMappedTypeNode(readonlyToken TokenNode, typeParameter TypeParameterDeclarationNode, nameType TypeNode, questionToken TokenNode, typeNode TypeNode, members *TypeElementList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[mappedTypeNodeData](s, layoutMappedTypeNode)
-	data.readonlyToken = s.refAt(i, readonlyToken)
-	data.typeParameter = s.refAt(i, typeParameter)
-	data.nameType = s.refAt(i, nameType)
-	data.questionToken = s.refAt(i, questionToken)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.readonlyToken, i, readonlyToken)
+	setNodeRef(&data.typeParameter, i, typeParameter)
+	setNodeRef(&data.nameType, i, nameType)
+	setNodeRef(&data.questionToken, i, questionToken)
+	setNodeRef(&data.typeField, i, typeNode)
 	s.nodeLists.set(&data.members, members, members == nil)
 	return f.newNode(KindMappedType, layoutMappedTypeNode, i)
 }
@@ -11806,10 +11806,10 @@ func (node NamedTupleMember) SetType(value TypeNode) { node.setRef(&node.data().
 func (f *NodeFactory) NewNamedTupleMember(dotDotDotToken DotDotDotToken, name IdentifierNode, questionToken QuestionToken, typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[namedTupleMemberData](s, layoutNamedTupleMember)
-	data.dotDotDotToken = s.refAt(i, dotDotDotToken)
-	data.name = s.refAt(i, name)
-	data.questionToken = s.refAt(i, questionToken)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.dotDotDotToken, i, dotDotDotToken)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.questionToken, i, questionToken)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindNamedTupleMember, layoutNamedTupleMember, i)
 }
 
@@ -11858,7 +11858,7 @@ func (node OptionalTypeNode) SetType(value TypeNode) { node.setRef(&node.data().
 func (f *NodeFactory) NewOptionalTypeNode(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[optionalTypeNodeData](s, layoutOptionalTypeNode)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindOptionalType, layoutOptionalTypeNode, i)
 }
 
@@ -11904,7 +11904,7 @@ func (node RestTypeNode) SetType(value TypeNode) { node.setRef(&node.data().type
 func (f *NodeFactory) NewRestTypeNode(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[restTypeNodeData](s, layoutRestTypeNode)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindRestType, layoutRestTypeNode, i)
 }
 
@@ -11953,7 +11953,7 @@ func (node ParenthesizedTypeNode) SetType(value TypeNode) { node.setRef(&node.da
 func (f *NodeFactory) NewParenthesizedTypeNode(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[parenthesizedTypeNodeData](s, layoutParenthesizedTypeNode)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindParenthesizedType, layoutParenthesizedTypeNode, i)
 }
 
@@ -12054,7 +12054,7 @@ func (f *NodeFactory) NewFunctionTypeNode(typeParameters *TypeParameterList, par
 	data, i := newRecord[functionTypeNodeData](s, layoutFunctionTypeNode)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindFunctionType, layoutFunctionTypeNode, i)
 }
 
@@ -12165,7 +12165,7 @@ func (f *NodeFactory) NewConstructorTypeNode(modifiers *ModifierList, typeParame
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindConstructorType, layoutConstructorTypeNode, i)
 }
 
@@ -12371,7 +12371,7 @@ func (node TemplateLiteralTypeNode) SetTemplateSpans(value *TemplateLiteralTypeS
 func (f *NodeFactory) NewTemplateLiteralTypeNode(head TemplateHeadNode, templateSpans *TemplateLiteralTypeSpanList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateLiteralTypeNodeData](s, layoutTemplateLiteralTypeNode)
-	data.head = s.refAt(i, head)
+	setNodeRef(&data.head, i, head)
 	s.nodeLists.set(&data.templateSpans, templateSpans, templateSpans == nil)
 	return f.newNode(KindTemplateLiteralType, layoutTemplateLiteralTypeNode, i)
 }
@@ -12431,8 +12431,8 @@ func (node TemplateLiteralTypeSpan) SetLiteral(value TemplateMiddleOrTail) {
 func (f *NodeFactory) NewTemplateLiteralTypeSpan(typeNode TypeNode, literal TemplateMiddleOrTail) Node {
 	s := f.nodeStore()
 	data, i := newRecord[templateLiteralTypeSpanData](s, layoutTemplateLiteralTypeSpan)
-	data.typeField = s.refAt(i, typeNode)
-	data.literal = s.refAt(i, literal)
+	setNodeRef(&data.typeField, i, typeNode)
+	setNodeRef(&data.literal, i, literal)
 	return f.newNode(KindTemplateLiteralTypeSpan, layoutTemplateLiteralTypeSpan, i)
 }
 
@@ -12495,7 +12495,7 @@ func (f *NodeFactory) NewSyntheticExpression(typeNode any, isSpread bool, tupleN
 	data, i := newRecord[syntheticExpressionData](s, layoutSyntheticExpression)
 	s.values.set(&data.typeField, typeNode, typeNode == nil)
 	data.isSpread = isSpread
-	data.tupleNameSource = s.refAt(i, tupleNameSource)
+	setNodeRef(&data.tupleNameSource, i, tupleNameSource)
 	return f.newNode(KindSyntheticExpression, layoutSyntheticExpression, i)
 }
 
@@ -12548,7 +12548,7 @@ func (node PartiallyEmittedExpression) SetExpression(value Expression) {
 func (f *NodeFactory) NewPartiallyEmittedExpression(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[partiallyEmittedExpressionData](s, layoutPartiallyEmittedExpression)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindPartiallyEmittedExpression, layoutPartiallyEmittedExpression, i)
 }
 
@@ -12622,9 +12622,9 @@ func (node JsxElement) SetClosingElement(value JsxClosingElementNode) {
 func (f *NodeFactory) NewJsxElement(openingElement JsxOpeningElementNode, children *JsxChildList, closingElement JsxClosingElementNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxElementData](s, layoutJsxElement)
-	data.openingElement = s.refAt(i, openingElement)
+	setNodeRef(&data.openingElement, i, openingElement)
 	s.nodeLists.set(&data.children, children, children == nil)
-	data.closingElement = s.refAt(i, closingElement)
+	setNodeRef(&data.closingElement, i, closingElement)
 	return f.newNode(KindJsxElement, layoutJsxElement, i)
 }
 
@@ -12737,8 +12737,8 @@ func (node JsxNamespacedName) setName(value IdentifierNode) { node.setRef(&node.
 func (f *NodeFactory) NewJsxNamespacedName(namespace IdentifierNode, name IdentifierNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxNamespacedNameData](s, layoutJsxNamespacedName)
-	data.namespace = s.refAt(i, namespace)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.namespace, i, namespace)
+	setNodeRef(&data.name, i, name)
 	return f.newNode(KindJsxNamespacedName, layoutJsxNamespacedName, i)
 }
 
@@ -12808,9 +12808,9 @@ func (node JsxOpeningElement) SetAttributes(value JsxAttributesNode) {
 func (f *NodeFactory) NewJsxOpeningElement(tagName JsxTagNameExpression, typeArguments *TypeList, attributes JsxAttributesNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxOpeningElementData](s, layoutJsxOpeningElement)
-	data.tagName = s.refAt(i, tagName)
+	setNodeRef(&data.tagName, i, tagName)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
-	data.attributes = s.refAt(i, attributes)
+	setNodeRef(&data.attributes, i, attributes)
 	return f.newNode(KindJsxOpeningElement, layoutJsxOpeningElement, i)
 }
 
@@ -12882,9 +12882,9 @@ func (node JsxSelfClosingElement) SetAttributes(value JsxAttributesNode) {
 func (f *NodeFactory) NewJsxSelfClosingElement(tagName JsxTagNameExpression, typeArguments *TypeList, attributes JsxAttributesNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxSelfClosingElementData](s, layoutJsxSelfClosingElement)
-	data.tagName = s.refAt(i, tagName)
+	setNodeRef(&data.tagName, i, tagName)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
-	data.attributes = s.refAt(i, attributes)
+	setNodeRef(&data.attributes, i, attributes)
 	return f.newNode(KindJsxSelfClosingElement, layoutJsxSelfClosingElement, i)
 }
 
@@ -12954,9 +12954,9 @@ func (node JsxFragment) SetClosingFragment(value JsxClosingFragmentNode) {
 func (f *NodeFactory) NewJsxFragment(openingFragment JsxOpeningFragmentNode, children *JsxChildList, closingFragment JsxClosingFragmentNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxFragmentData](s, layoutJsxFragment)
-	data.openingFragment = s.refAt(i, openingFragment)
+	setNodeRef(&data.openingFragment, i, openingFragment)
 	s.nodeLists.set(&data.children, children, children == nil)
-	data.closingFragment = s.refAt(i, closingFragment)
+	setNodeRef(&data.closingFragment, i, closingFragment)
 	return f.newNode(KindJsxFragment, layoutJsxFragment, i)
 }
 
@@ -13068,8 +13068,8 @@ func (node JsxAttribute) SetInitializer(value JsxAttributeValue) {
 func (f *NodeFactory) NewJsxAttribute(name JsxAttributeName, initializer JsxAttributeValue) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxAttributeData](s, layoutJsxAttribute)
-	data.name = s.refAt(i, name)
-	data.initializer = s.refAt(i, initializer)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.initializer, i, initializer)
 	return f.newNode(KindJsxAttribute, layoutJsxAttribute, i)
 }
 
@@ -13127,7 +13127,7 @@ func (node JsxSpreadAttribute) SetExpression(value Expression) {
 func (f *NodeFactory) NewJsxSpreadAttribute(expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxSpreadAttributeData](s, layoutJsxSpreadAttribute)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindJsxSpreadAttribute, layoutJsxSpreadAttribute, i)
 }
 
@@ -13178,7 +13178,7 @@ func (node JsxClosingElement) SetTagName(value JsxTagNameExpression) {
 func (f *NodeFactory) NewJsxClosingElement(tagName JsxTagNameExpression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxClosingElementData](s, layoutJsxClosingElement)
-	data.tagName = s.refAt(i, tagName)
+	setNodeRef(&data.tagName, i, tagName)
 	return f.newNode(KindJsxClosingElement, layoutJsxClosingElement, i)
 }
 
@@ -13234,8 +13234,8 @@ func (node JsxExpression) SetExpression(value Expression) {
 func (f *NodeFactory) NewJsxExpression(dotDotDotToken DotDotDotToken, expression Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsxExpressionData](s, layoutJsxExpression)
-	data.dotDotDotToken = s.refAt(i, dotDotDotToken)
-	data.expression = s.refAt(i, expression)
+	setNodeRef(&data.dotDotDotToken, i, dotDotDotToken)
+	setNodeRef(&data.expression, i, expression)
 	return f.newNode(KindJsxExpression, layoutJsxExpression, i)
 }
 
@@ -13434,7 +13434,7 @@ func (node JSDocTypeExpression) SetType(value TypeNode) { node.setRef(&node.data
 func (f *NodeFactory) NewJSDocTypeExpression(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocTypeExpressionData](s, layoutJSDocTypeExpression)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindJSDocTypeExpression, layoutJSDocTypeExpression, i)
 }
 
@@ -13483,7 +13483,7 @@ func (node JSDocNonNullableType) SetType(value TypeNode) { node.setRef(&node.dat
 func (f *NodeFactory) NewJSDocNonNullableType(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocNonNullableTypeData](s, layoutJSDocNonNullableType)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindJSDocNonNullableType, layoutJSDocNonNullableType, i)
 }
 
@@ -13531,7 +13531,7 @@ func (node JSDocNullableType) SetType(value TypeNode) { node.setRef(&node.data()
 func (f *NodeFactory) NewJSDocNullableType(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocNullableTypeData](s, layoutJSDocNullableType)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindJSDocNullableType, layoutJSDocNullableType, i)
 }
 
@@ -13604,7 +13604,7 @@ func (node JSDocVariadicType) SetType(value TypeNode) { node.setRef(&node.data()
 func (f *NodeFactory) NewJSDocVariadicType(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocVariadicTypeData](s, layoutJSDocVariadicType)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindJSDocVariadicType, layoutJSDocVariadicType, i)
 }
 
@@ -13652,7 +13652,7 @@ func (node JSDocOptionalType) SetType(value TypeNode) { node.setRef(&node.data()
 func (f *NodeFactory) NewJSDocOptionalType(typeNode TypeNode) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocOptionalTypeData](s, layoutJSDocOptionalType)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindJSDocOptionalType, layoutJSDocOptionalType, i)
 }
 
@@ -13711,8 +13711,8 @@ func (node JSDocTypeTag) SetTypeExpression(value Node) {
 func (f *NodeFactory) NewJSDocTypeTag(tagName IdentifierNode, typeExpression Node, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocTypeTagData](s, layoutJSDocTypeTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.typeExpression, i, typeExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocTypeTag, layoutJSDocTypeTag, i)
 }
@@ -13770,7 +13770,7 @@ func (node JSDocUnknownTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocUnknownTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocUnknownTagData](s, layoutJSDocUnknownTag)
-	data.tagName = s.refAt(i, tagName)
+	setNodeRef(&data.tagName, i, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocUnknownTag, layoutJSDocUnknownTag, i)
 }
@@ -13842,8 +13842,8 @@ func (node JSDocTemplateTag) SetTypeParameters(value *TypeParameterList) {
 func (f *NodeFactory) NewJSDocTemplateTag(tagName IdentifierNode, constraint Node, typeParameters *TypeParameterList, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocTemplateTagData](s, layoutJSDocTemplateTag)
-	data.tagName = s.refAt(i, tagName)
-	data.constraint = s.refAt(i, constraint)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.constraint, i, constraint)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocTemplateTag, layoutJSDocTemplateTag, i)
@@ -13911,8 +13911,8 @@ func (node JSDocReturnTag) SetTypeExpression(value TypeNode) {
 func (f *NodeFactory) NewJSDocReturnTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocReturnTagData](s, layoutJSDocReturnTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.typeExpression, i, typeExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocReturnTag, layoutJSDocReturnTag, i)
 }
@@ -13969,7 +13969,7 @@ func (node JSDocPublicTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocPublicTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocPublicTagData](s, layoutJSDocPublicTag)
-	data.tagName = s.refAt(i, tagName)
+	setNodeRef(&data.tagName, i, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocPublicTag, layoutJSDocPublicTag, i)
 }
@@ -14027,7 +14027,7 @@ func (node JSDocPrivateTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocPrivateTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocPrivateTagData](s, layoutJSDocPrivateTag)
-	data.tagName = s.refAt(i, tagName)
+	setNodeRef(&data.tagName, i, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocPrivateTag, layoutJSDocPrivateTag, i)
 }
@@ -14087,7 +14087,7 @@ func (node JSDocProtectedTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocProtectedTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocProtectedTagData](s, layoutJSDocProtectedTag)
-	data.tagName = s.refAt(i, tagName)
+	setNodeRef(&data.tagName, i, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocProtectedTag, layoutJSDocProtectedTag, i)
 }
@@ -14145,7 +14145,7 @@ func (node JSDocReadonlyTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocReadonlyTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocReadonlyTagData](s, layoutJSDocReadonlyTag)
-	data.tagName = s.refAt(i, tagName)
+	setNodeRef(&data.tagName, i, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocReadonlyTag, layoutJSDocReadonlyTag, i)
 }
@@ -14203,7 +14203,7 @@ func (node JSDocOverrideTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocOverrideTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocOverrideTagData](s, layoutJSDocOverrideTag)
-	data.tagName = s.refAt(i, tagName)
+	setNodeRef(&data.tagName, i, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocOverrideTag, layoutJSDocOverrideTag, i)
 }
@@ -14263,7 +14263,7 @@ func (node JSDocDeprecatedTag) SetComment(value *NodeList) {
 func (f *NodeFactory) NewJSDocDeprecatedTag(tagName IdentifierNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocDeprecatedTagData](s, layoutJSDocDeprecatedTag)
-	data.tagName = s.refAt(i, tagName)
+	setNodeRef(&data.tagName, i, tagName)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocDeprecatedTag, layoutJSDocDeprecatedTag, i)
 }
@@ -14322,8 +14322,8 @@ func (node JSDocSeeTag) SetNameExpression(value TypeNode) {
 func (f *NodeFactory) NewJSDocSeeTag(tagName IdentifierNode, nameExpression TypeNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocSeeTagData](s, layoutJSDocSeeTag)
-	data.tagName = s.refAt(i, tagName)
-	data.nameExpression = s.refAt(i, nameExpression)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.nameExpression, i, nameExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocSeeTag, layoutJSDocSeeTag, i)
 }
@@ -14392,8 +14392,8 @@ func (node JSDocImplementsTag) SetClassName(value ExpressionWithTypeArgumentsNod
 func (f *NodeFactory) NewJSDocImplementsTag(tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocImplementsTagData](s, layoutJSDocImplementsTag)
-	data.tagName = s.refAt(i, tagName)
-	data.className = s.refAt(i, className)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.className, i, className)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocImplementsTag, layoutJSDocImplementsTag, i)
 }
@@ -14460,8 +14460,8 @@ func (node JSDocAugmentsTag) SetClassName(value ExpressionWithTypeArgumentsNode)
 func (f *NodeFactory) NewJSDocAugmentsTag(tagName IdentifierNode, className ExpressionWithTypeArgumentsNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocAugmentsTagData](s, layoutJSDocAugmentsTag)
-	data.tagName = s.refAt(i, tagName)
-	data.className = s.refAt(i, className)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.className, i, className)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocAugmentsTag, layoutJSDocAugmentsTag, i)
 }
@@ -14530,8 +14530,8 @@ func (node JSDocSatisfiesTag) SetTypeExpression(value TypeNode) {
 func (f *NodeFactory) NewJSDocSatisfiesTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocSatisfiesTagData](s, layoutJSDocSatisfiesTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.typeExpression, i, typeExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocSatisfiesTag, layoutJSDocSatisfiesTag, i)
 }
@@ -14595,8 +14595,8 @@ func (node JSDocThrowsTag) SetTypeExpression(value TypeNode) {
 func (f *NodeFactory) NewJSDocThrowsTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocThrowsTagData](s, layoutJSDocThrowsTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.typeExpression, i, typeExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocThrowsTag, layoutJSDocThrowsTag, i)
 }
@@ -14658,8 +14658,8 @@ func (node JSDocThisTag) SetTypeExpression(value TypeNode) {
 func (f *NodeFactory) NewJSDocThisTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocThisTagData](s, layoutJSDocThisTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.typeExpression, i, typeExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocThisTag, layoutJSDocThisTag, i)
 }
@@ -14743,10 +14743,10 @@ func (node JSDocImportTag) SetAttributes(value ImportAttributesNode) {
 func (f *NodeFactory) NewJSDocImportTag(tagName IdentifierNode, importClause ImportClauseNode, moduleSpecifier Expression, attributes ImportAttributesNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocImportTagData](s, layoutJSDocImportTag)
-	data.tagName = s.refAt(i, tagName)
-	data.importClause = s.refAt(i, importClause)
-	data.moduleSpecifier = s.refAt(i, moduleSpecifier)
-	data.attributes = s.refAt(i, attributes)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.importClause, i, importClause)
+	setNodeRef(&data.moduleSpecifier, i, moduleSpecifier)
+	setNodeRef(&data.attributes, i, attributes)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocImportTag, layoutJSDocImportTag, i)
 }
@@ -14820,9 +14820,9 @@ func (node JSDocCallbackTag) setName(value JSDocFullName) { node.setRef(&node.da
 func (f *NodeFactory) NewJSDocCallbackTag(tagName IdentifierNode, typeExpression TypeNode, name JSDocFullName, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocCallbackTagData](s, layoutJSDocCallbackTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.typeExpression, i, typeExpression)
+	setNodeRef(&data.name, i, name)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocCallbackTag, layoutJSDocCallbackTag, i)
 }
@@ -14892,8 +14892,8 @@ func (node JSDocOverloadTag) SetTypeExpression(value TypeNode) {
 func (f *NodeFactory) NewJSDocOverloadTag(tagName IdentifierNode, typeExpression TypeNode, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocOverloadTagData](s, layoutJSDocOverloadTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.typeExpression, i, typeExpression)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocOverloadTag, layoutJSDocOverloadTag, i)
 }
@@ -14959,9 +14959,9 @@ func (node JSDocTypedefTag) setName(value JSDocFullName) { node.setRef(&node.dat
 func (f *NodeFactory) NewJSDocTypedefTag(tagName IdentifierNode, typeExpression Node, name JSDocFullName, comment *NodeList) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocTypedefTagData](s, layoutJSDocTypedefTag)
-	data.tagName = s.refAt(i, tagName)
-	data.typeExpression = s.refAt(i, typeExpression)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.typeExpression, i, typeExpression)
+	setNodeRef(&data.name, i, name)
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(KindJSDocTypedefTag, layoutJSDocTypedefTag, i)
 }
@@ -15056,7 +15056,7 @@ func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, param
 	data, i := newRecord[jsDocSignatureData](s, layoutJSDocSignature)
 	s.nodeLists.set(&data.typeParameters, typeParameters, typeParameters == nil)
 	s.nodeLists.set(&data.parameters, parameters, parameters == nil)
-	data.typeField = s.refAt(i, typeNode)
+	setNodeRef(&data.typeField, i, typeNode)
 	return f.newNode(KindJSDocSignature, layoutJSDocSignature, i)
 }
 
@@ -15104,7 +15104,7 @@ func (node JSDocNameReference) setName(value EntityName) { node.setRef(&node.dat
 func (f *NodeFactory) NewJSDocNameReference(name EntityName) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocNameReferenceData](s, layoutJSDocNameReference)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	return f.newNode(KindJSDocNameReference, layoutJSDocNameReference, i)
 }
 
@@ -15239,9 +15239,9 @@ func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, keyword Kind
 	data, i := newRecord[moduleDeclarationData](s, layoutModuleDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	data.keyword = keyword
-	data.name = s.refAt(i, name)
-	data.attributes = s.refAt(i, attributes)
-	data.body = s.refAt(i, body)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.attributes, i, attributes)
+	setNodeRef(&data.body, i, body)
 	return f.newNode(KindModuleDeclaration, layoutModuleDeclaration, i)
 }
 
@@ -15345,8 +15345,8 @@ func (f *NodeFactory) NewImportEqualsDeclaration(modifiers *ModifierList, isType
 	data, i := newRecord[importEqualsDeclarationData](s, layoutImportEqualsDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	data.isTypeOnly = isTypeOnly
-	data.name = s.refAt(i, name)
-	data.moduleReference = s.refAt(i, moduleReference)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.moduleReference, i, moduleReference)
 	return f.newNode(KindImportEqualsDeclaration, layoutImportEqualsDeclaration, i)
 }
 
@@ -15444,9 +15444,9 @@ func (f *NodeFactory) NewExportDeclaration(modifiers *ModifierList, isTypeOnly b
 	data, i := newRecord[exportDeclarationData](s, layoutExportDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
 	data.isTypeOnly = isTypeOnly
-	data.exportClause = s.refAt(i, exportClause)
-	data.moduleSpecifier = s.refAt(i, moduleSpecifier)
-	data.attributes = s.refAt(i, attributes)
+	setNodeRef(&data.exportClause, i, exportClause)
+	setNodeRef(&data.moduleSpecifier, i, moduleSpecifier)
+	setNodeRef(&data.attributes, i, attributes)
 	return f.newNode(KindExportDeclaration, layoutExportDeclaration, i)
 }
 
@@ -15520,9 +15520,9 @@ func (f *NodeFactory) NewImportTypeNode(isTypeOf bool, argument TypeNode, attrib
 	s := f.nodeStore()
 	data, i := newRecord[importTypeNodeData](s, layoutImportTypeNode)
 	data.isTypeOf = isTypeOf
-	data.argument = s.refAt(i, argument)
-	data.attributes = s.refAt(i, attributes)
-	data.qualifier = s.refAt(i, qualifier)
+	setNodeRef(&data.argument, i, argument)
+	setNodeRef(&data.attributes, i, attributes)
+	setNodeRef(&data.qualifier, i, qualifier)
 	s.nodeLists.set(&data.typeArguments, typeArguments, typeArguments == nil)
 	return f.newNode(KindImportType, layoutImportTypeNode, i)
 }
@@ -15605,8 +15605,8 @@ func (f *NodeFactory) NewImportClause(phaseModifier ImportPhaseModifierSyntaxKin
 	s := f.nodeStore()
 	data, i := newRecord[importClauseData](s, layoutImportClause)
 	data.phaseModifier = phaseModifier
-	data.name = s.refAt(i, name)
-	data.namedBindings = s.refAt(i, namedBindings)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.namedBindings, i, namedBindings)
 	return f.newNode(KindImportClause, layoutImportClause, i)
 }
 
@@ -15679,8 +15679,8 @@ func (f *NodeFactory) NewImportSpecifier(isTypeOnly bool, propertyName ModuleExp
 	s := f.nodeStore()
 	data, i := newRecord[importSpecifierData](s, layoutImportSpecifier)
 	data.isTypeOnly = isTypeOnly
-	data.propertyName = s.refAt(i, propertyName)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.propertyName, i, propertyName)
+	setNodeRef(&data.name, i, name)
 	return f.newNode(KindImportSpecifier, layoutImportSpecifier, i)
 }
 
@@ -15765,7 +15765,7 @@ func (node JSDocLink) setName(value EntityName) { node.setRef(&node.data().name,
 func (f *NodeFactory) NewJSDocLink(name EntityName, text []string) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocLinkData](s, layoutJSDocLink)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	s.stringLists.set(&data.text, text, text == nil)
 	f.textCount++
 	return f.newNode(KindJSDocLink, layoutJSDocLink, i)
@@ -15818,7 +15818,7 @@ func (node JSDocLinkPlain) setName(value EntityName) { node.setRef(&node.data().
 func (f *NodeFactory) NewJSDocLinkPlain(name EntityName, text []string) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocLinkPlainData](s, layoutJSDocLinkPlain)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	s.stringLists.set(&data.text, text, text == nil)
 	f.textCount++
 	return f.newNode(KindJSDocLinkPlain, layoutJSDocLinkPlain, i)
@@ -15871,7 +15871,7 @@ func (node JSDocLinkCode) setName(value EntityName) { node.setRef(&node.data().n
 func (f *NodeFactory) NewJSDocLinkCode(name EntityName, text []string) Node {
 	s := f.nodeStore()
 	data, i := newRecord[jsDocLinkCodeData](s, layoutJSDocLinkCode)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.name, i, name)
 	s.stringLists.set(&data.text, text, text == nil)
 	f.textCount++
 	return f.newNode(KindJSDocLinkCode, layoutJSDocLinkCode, i)
@@ -15968,10 +15968,10 @@ func (f *NodeFactory) NewTypeParameterDeclaration(modifiers *ModifierList, name 
 	s := f.nodeStore()
 	data, i := newRecord[typeParameterDeclarationData](s, layoutTypeParameterDeclaration)
 	s.modifierLists.set(&data.modifiers, modifiers, modifiers == nil)
-	data.name = s.refAt(i, name)
-	data.constraint = s.refAt(i, constraint)
-	data.expression = s.refAt(i, expression)
-	data.defaultType = s.refAt(i, defaultType)
+	setNodeRef(&data.name, i, name)
+	setNodeRef(&data.constraint, i, constraint)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.defaultType, i, defaultType)
 	return f.newNode(KindTypeParameter, layoutTypeParameterDeclaration, i)
 }
 
@@ -16037,8 +16037,8 @@ func (node SyntheticReferenceExpression) SetThisArg(value Expression) {
 func (f *NodeFactory) NewSyntheticReferenceExpression(expression Expression, thisArg Expression) Node {
 	s := f.nodeStore()
 	data, i := newRecord[syntheticReferenceExpressionData](s, layoutSyntheticReferenceExpression)
-	data.expression = s.refAt(i, expression)
-	data.thisArg = s.refAt(i, thisArg)
+	setNodeRef(&data.expression, i, expression)
+	setNodeRef(&data.thisArg, i, thisArg)
 	return f.newNode(KindSyntheticReferenceExpression, layoutSyntheticReferenceExpression, i)
 }
 
@@ -16197,10 +16197,10 @@ func (f *NodeFactory) NewJSDocParameterOrPropertyTag(kind Kind, tagName Identifi
 	}
 	s := f.nodeStore()
 	data, i := newRecord[jsDocParameterOrPropertyTagData](s, layoutJSDocParameterOrPropertyTag)
-	data.tagName = s.refAt(i, tagName)
-	data.name = s.refAt(i, name)
+	setNodeRef(&data.tagName, i, tagName)
+	setNodeRef(&data.name, i, name)
 	data.isBracketed = isBracketed
-	data.typeExpression = s.refAt(i, typeExpression)
+	setNodeRef(&data.typeExpression, i, typeExpression)
 	data.isNameFirst = isNameFirst
 	s.nodeLists.set(&data.comment, comment, comment == nil)
 	return f.newNode(kind, layoutJSDocParameterOrPropertyTag, i)

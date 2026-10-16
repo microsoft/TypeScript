@@ -26,7 +26,7 @@ block: [ *nodeStore | record | record | record | ... ]
          ^ the only word the GC scans in the whole block
 ```
 
-A store has at most 63 blocks, indexed from 1 (index 0 is reserved so that a zero ref is never "in this block"). Blocks start at 512 bytes and each adds a quarter of the store's size; once half the indexes are used, each doubles it. The store keeps every block in `blocks`, and every block points back at the store, so any handle into any block keeps the whole store alive.
+Blocks start at 512 bytes and each adds a quarter of the store's size, up to 1GB so that any offset within a block fits in an `int32`. The store keeps every block in `blocks`, and every block points back at the store, so any handle into any block keeps the whole store alive.
 
 ### Every record starts with a 32-byte header
 
@@ -36,7 +36,7 @@ type nodeBaseData struct {
     loc    core.TextRange
     parent nodeRef
     flags  NodeFlags
-    self   ref     // this record's block index and word offset
+    self   uint32  // this record's word offset in its block
     kind   Kind
 }
 ```
@@ -64,7 +64,7 @@ All fields, including those from "base" shapes (declaration, function-like, flow
 
 | Field type | Stored as | Read path |
 |---|---|---|
-| Another node | `nodeRef` (`ref`, 32 bits: 6-bit block index, 25-bit word offset, or a far-table index) | Same block: `p + (r − self)·8`. Other block: store → `blocks[i]` + offset. Other store: far table |
+| Another node | `nodeRef` (`ref`, 32 bits). Odd: byte offset from the field itself, plus one. Even: far-table index × 2. Zero: none | Same block: `&field + r − 1`. Otherwise: store's far table, found through `self` |
 | Flow node | `flowRef` (`ref` to a pointer-free `FlowNode` record in a block) | As for nodes |
 | Other Go pointers (`*Symbol`, `*NodeList`, `[]Node`, `SymbolTable`, `any`, …) | `sideRef uint32`, an index into a typed `sideTable[T]` on the store | `store().table.items[i-1]` |
 | `string` | `textRef{off, len uint32}` into the file's source text, or into an append-only text arena | `unsafe.String` over the backing bytes |
@@ -74,7 +74,7 @@ Flow nodes and flow lists are arena records like nodes: `FlowNode{node nodeRef; 
 Refs are plain numbers, never addresses hidden from the GC, so liveness falls out of ordinary Go pointers:
 - Handles are real interior pointers, so they keep their block alive, and word 0 keeps the store alive.
 - A store keeps all of its own blocks in `blocks`.
-- A ref to a record in **another** store (synthesized nodes, cross-file reuse) is an index into the referring store's far table, which holds a real pointer to the target, deduplicated by a map.
+- A ref to a record in **another** store (synthesized nodes, cross-file reuse) is an index into the referring store's far table, which holds a real pointer to the target. Refs to other blocks of the same store also go through it.
 - `SourceFile`, which can't avoid real pointers, is allocated as a standalone record behind its own store pointer and indexed as a block of its own.
 
 As a result, the GC scans one word per block plus the side tables and far table, instead of every child, parent, symbol and string pointer of every node.
@@ -91,6 +91,7 @@ As a result, the GC scans one word per block plus the side tables and far table,
 8. **Flattened records + offset tables** (memory −0.39%, check time unchanged).
 9. **Flow nodes in the arena** (memory −0.67%, check time unchanged). This drops the `*FlowNode` side table and makes flow nodes invisible to the GC.
 10. **32-bit block-indexed refs** (check **+10.2%**, memory −1.0%). Absolute refs were Go pointers hidden in `uintptr`s, so this replaces them with real 32-bit refs. It's a deliberate stepping stone and is slower; see [Next: one block per file](#next-one-block-per-file).
+11. **Field-relative refs** (check +6.3% vs step 9). A near ref is an offset from the field holding it, and decoding makes no calls, so it inlines into every accessor. The remaining cost is refs leaving their block. Sizing the first block to fit the file didn't recover it, so the next step is the index-based redesign below.
 
 ## Next: one block per file
 

@@ -278,8 +278,8 @@ const sideTables: Record<string, string> = {
 
 // Fields referring to records that live in the store's blocks hold a ref,
 // like node fields; the methods named here read, write and create them.
-const recordRefs: Record<string, { ref: string; deref: string; set: string; refAt: string; }> = {
-    "*FlowNode": { ref: "flowRef", deref: "derefFlow", set: "setFlowRef", refAt: "refFlowAt" },
+const recordRefs: Record<string, { ref: string; deref: string; set: string; setAt: string; }> = {
+    "*FlowNode": { ref: "flowRef", deref: "derefFlow", set: "setFlowRef", setAt: "setFlowRef" },
 };
 
 function recordRefOf(goType: string) {
@@ -795,8 +795,14 @@ function emitNewFactory(
             continue;
         }
         const recordRef = recordRefOf(m.type.formatGoReference());
-        if (recordRef) value = `s.${recordRef.refAt}(i, ${value})`;
-        if (isNodeField(m)) value = `s.refAt(i, ${value})`;
+        if (recordRef) {
+            w.write(`${recordRef.setAt}(&data.${goStorageName(m.name)}, i, ${value})`);
+            continue;
+        }
+        if (isNodeField(m)) {
+            w.write(`setNodeRef(&data.${goStorageName(m.name)}, i, ${value})`);
+            continue;
+        }
         w.write(`data.${goStorageName(m.name)} = ${value}`);
     }
 

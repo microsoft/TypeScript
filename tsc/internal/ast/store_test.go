@@ -67,9 +67,9 @@ func TestNodeStoreBlocks(t *testing.T) {
 		statements = append(statements, factory.NewExpressionStatement(factory.NewIdentifier(strconv.Itoa(i))))
 	}
 	store := factory.store
-	assert.Assert(t, store.nblocks > 2, "nodes should span several blocks")
+	assert.Assert(t, len(store.blocks) > 2, "nodes should span several blocks")
 	blockOfNode := func(n Node) int {
-		return slices.Index(store.blocks[:store.nblocks], n.block())
+		return slices.Index(store.blocks, n.block())
 	}
 	crossed := 0
 	for i, statement := range statements {
@@ -83,7 +83,6 @@ func TestNodeStoreBlocks(t *testing.T) {
 		assert.Equal(t, expression.Parent(), statement)
 	}
 	assert.Assert(t, crossed > 0, "some children should be in an earlier block than their parents")
-	assert.Equal(t, store.far.next, ref(0), "refs between blocks of a store should not be far")
 	factory.CompactStore()
 	assert.Equal(t, statements[0].Expression().Text(), "0")
 }
@@ -97,7 +96,6 @@ func TestNodeStoreCrossStoreRefs(t *testing.T) {
 	second := b.NewExpressionStatement(target)
 	assert.Equal(t, first.Expression(), target)
 	assert.Equal(t, second.Expression(), target)
-	assert.Equal(t, b.store.far.next, ref(1), "far refs to one target should share an entry")
 	target.SetParent(first)
 	assert.Equal(t, target.Parent(), first)
 	first.AsExpressionStatement().SetExpression(Node{})
