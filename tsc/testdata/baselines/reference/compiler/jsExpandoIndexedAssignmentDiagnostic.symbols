@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/jsExpandoIndexedAssignmentDiagnostic.ts] ////
+
+=== file.js ===
+/** @param {any} axis @param {any} value */
+function updateElements(axis, value) {
+>updateElements : Symbol(updateElements, Decl(file.js, 0, 0))
+>axis : Symbol(axis, Decl(file.js, 1, 24))
+>value : Symbol(value, Decl(file.js, 1, 29))
+
+    const properties = {};
+>properties : Symbol(properties, Decl(file.js, 2, 9))
+
+    const pixel = properties[axis] = value;
+>pixel : Symbol(pixel, Decl(file.js, 3, 9))
+>properties : Symbol(properties, Decl(file.js, 2, 9))
+>axis : Symbol(axis, Decl(file.js, 1, 24))
+>value : Symbol(value, Decl(file.js, 1, 29))
+
+    const otherPixel = properties[axis] = value;
+>otherPixel : Symbol(otherPixel, Decl(file.js, 4, 9))
+>properties : Symbol(properties, Decl(file.js, 2, 9))
+>axis : Symbol(axis, Decl(file.js, 1, 24))
+>value : Symbol(value, Decl(file.js, 1, 29))
+
+    properties.skip = isNaN(pixel) || isNaN(otherPixel);
+>properties.skip : Symbol(skip, Decl(file.js, 4, 48))
+>properties : Symbol(properties, Decl(file.js, 2, 9))
+>skip : Symbol(skip, Decl(file.js, 4, 48))
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>pixel : Symbol(pixel, Decl(file.js, 3, 9))
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>otherPixel : Symbol(otherPixel, Decl(file.js, 4, 9))
+}

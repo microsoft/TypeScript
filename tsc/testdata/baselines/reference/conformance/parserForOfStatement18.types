@@ -2,6 +2,6 @@
 
 === parserForOfStatement18.ts ===
 for (var of of of) { }
->of : any
->of : any
+>of : error
+>of : error
 

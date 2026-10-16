@@ -1,6 +1,15 @@
 //// [tests/cases/conformance/types/witness/witness.ts] ////
 
 === witness.ts ===
+type IsAny<Type> = 0 extends (1 & Type) ? true : false;
+>IsAny : IsAny<Type>
+>true : true
+>false : false
+
+type Assert<Condition extends true> = Condition;
+>Assert : Condition
+>true : true
+
 // Initializers
 var varInit = varInit; // any
 >varInit : any
@@ -75,7 +84,8 @@ var co1 = (co1, 3);
 >co1 : any
 >3 : 3
 
-var co1: number;
+type CommaInference = Assert<IsAny<typeof co1>>;
+>CommaInference : any
 >co1 : any
 
 var co2 = (3, 4, co2);
@@ -101,7 +111,8 @@ var co3 = (co1, co2, co3, co1);
 >co3 : any
 >co1 : any
 
-var co3: number;
+type NestedCommaInference = Assert<IsAny<typeof co3>>;
+>NestedCommaInference : any
 >co3 : any
 
 // Assignment
@@ -112,7 +123,8 @@ var as1 = (as1 = 2);
 >as1 : any
 >2 : 2
 
-var as1: number;
+type AssignmentInference = Assert<IsAny<typeof as1>>;
+>AssignmentInference : any
 >as1 : any
 
 var as2 = (as2 = as2 = 2);
@@ -124,7 +136,8 @@ var as2 = (as2 = as2 = 2);
 >as2 : any
 >2 : 2
 
-var as2: number;
+type NestedAssignmentInference = Assert<IsAny<typeof as2>>;
+>NestedAssignmentInference : any
 >as2 : any
 
 // Conditional
@@ -135,7 +148,8 @@ var cnd1 = cnd1 ? 0 : 1;
 >0 : 0
 >1 : 1
 
-var cnd1: number;
+type ConditionalInference = Assert<IsAny<typeof cnd1>>;
+>ConditionalInference : any
 >cnd1 : any
 
 var cnd2 = cnd1 ? cnd1 ? '' : "" : '';
@@ -186,7 +200,8 @@ var and1 = and1 && '';
 >and1 : any
 >'' : ""
 
-var and1: string;
+type LogicalAndInference = Assert<IsAny<typeof and1>>;
+>LogicalAndInference : any
 >and1 : any
 
 var and2 = '' && and2;
@@ -346,9 +361,9 @@ var propAcc1 = {
 >m : any
 
 };
-var propAcc1: { m: any; }
+type PropertyAccessInference = Assert<IsAny<typeof propAcc1>>;
+>PropertyAccessInference : any
 >propAcc1 : any
->m : any
 
 // Property access of namespace member
 namespace M2 {

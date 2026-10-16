@@ -1,5 +1,5 @@
 circularIndexedAccessErrors.ts(2,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
-circularIndexedAccessErrors.ts(11,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+circularIndexedAccessErrors.ts(6,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 circularIndexedAccessErrors.ts(18,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 circularIndexedAccessErrors.ts(22,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 circularIndexedAccessErrors.ts(26,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
@@ -18,13 +18,13 @@ circularIndexedAccessErrors.ts(37,30): error TS2536: Type '"hello"' cannot be us
     
     type T2<K extends "x" | "y"> = {
         x: T2<K>[K];  // Error
+        ~
+!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
         y: number;
     }
     
     declare let x2: T2<"x">;
     let x2x = x2.x;
-              ~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     
     interface T3<T extends T3<T>> {
         x: T["x"];
