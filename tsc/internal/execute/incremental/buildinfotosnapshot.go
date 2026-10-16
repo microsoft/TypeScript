@@ -36,6 +36,7 @@ func buildInfoToSnapshot(buildInfo *BuildInfo, config *tsoptions.ParsedCommandLi
 	if buildInfo.LatestChangedDtsFile != "" {
 		to.snapshot.latestChangedDtsFile = to.toAbsoluteFileName(buildInfo.LatestChangedDtsFile)
 	}
+	to.snapshot.linkedPackagesSignature = buildInfo.LinkedPackagesSignature
 	to.snapshot.hasErrors = core.IfElse(buildInfo.Errors, core.TSTrue, core.TSFalse)
 	to.snapshot.hasSemanticErrors = buildInfo.SemanticErrors
 	to.snapshot.checkPending = buildInfo.CheckPending

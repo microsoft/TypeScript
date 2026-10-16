@@ -2564,8 +2564,73 @@ func TestTscIncremental(t *testing.T) {
 		},
 	}
 
+	testCases = append(testCases, linkedPackageDeclarationEmitTestInput(
+		"updates declaration emit when linked dependency is removed and added",
+		nil,
+	))
+
 	for _, test := range testCases {
 		test.run(t, "incremental")
+	}
+}
+
+func linkedPackageDeclarationEmitTestInput(subScenario string, commandLineArgs []string) *tscInput {
+	writeManifestOfA := func(sys *TestSys, dependencies string) {
+		sys.writeFileNoError("/home/src/workspaces/project/a/package.json", fmt.Sprintf(`{"name":"a","version":"1.0.0","type":"module","dependencies":{%s}}`, dependencies))
+	}
+	return &tscInput{
+		subScenario: subScenario,
+		files: FileMap{
+			"/home/src/workspaces/project/a/package.json": `{"name":"a","version":"1.0.0","type":"module","dependencies":{"b":"1.0.0","c":"1.0.0"}}`,
+			"/home/src/workspaces/project/a/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"incremental": true,
+						"declaration": true,
+						"emitDeclarationOnly": true,
+						"strict": true,
+						"module": "nodenext",
+						"types": [],
+						"rootDir": "src",
+						"outDir": "dist"
+					},
+					"include": ["src"]
+				}`),
+			"/home/src/workspaces/project/a/src/index.ts": stringtestutil.Dedent(`
+				import { currentStage } from "b";
+				export const stage = currentStage();
+			`),
+			"/home/src/workspaces/project/a/node_modules/b": vfstest.Symlink("/home/src/workspaces/project/b"),
+			"/home/src/workspaces/project/a/node_modules/c": vfstest.Symlink("/home/src/workspaces/project/c"),
+			"/home/src/workspaces/project/b/package.json":   `{"name":"b","version":"1.0.0","type":"module","types":"./index.d.ts","dependencies":{"c":"1.0.0"}}`,
+			"/home/src/workspaces/project/b/index.d.ts":     `export declare const currentStage: () => import("c").Current;`,
+			"/home/src/workspaces/project/b/node_modules/c": vfstest.Symlink("/home/src/workspaces/project/c"),
+			"/home/src/workspaces/project/c/package.json":   `{"name":"c","version":"1.0.0","type":"module","types":"./index.d.ts"}`,
+			"/home/src/workspaces/project/c/index.d.ts": stringtestutil.Dedent(`
+				export interface Current { readonly stage: string }
+				export declare const current: Current;
+			`),
+		},
+		cwd:             "/home/src/workspaces/project/a",
+		commandLineArgs: commandLineArgs,
+		edits: []*tscEdit{
+			{
+				caption: "remove c from dependencies and unlink it",
+				edit: func(sys *TestSys) {
+					writeManifestOfA(sys, `"b":"1.0.0"`)
+					sys.removeNoError("/home/src/workspaces/project/a/node_modules/c")
+				},
+			},
+			noChange,
+			{
+				caption: "add c to dependencies and link it",
+				edit: func(sys *TestSys) {
+					writeManifestOfA(sys, `"b":"1.0.0","c":"1.0.0"`)
+					sys.addSymlink("/home/src/workspaces/project/a/node_modules/c", "/home/src/workspaces/project/c")
+				},
+			},
+			noChange,
+		},
 	}
 }
 

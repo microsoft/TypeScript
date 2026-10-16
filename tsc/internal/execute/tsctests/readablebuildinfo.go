@@ -35,6 +35,7 @@ type readableBuildInfo struct {
 	AffectedFilesPendingEmit   []*readableBuildInfoFilePendingEmit       `json:"affectedFilesPendingEmit,omitzero"`
 	LatestChangedDtsFile       string                                    `json:"latestChangedDtsFile,omitzero"` // Because this is only output file in the program, we dont need fileId to deduplicate name
 	EmitSignatures             []*readableBuildInfoEmitSignature         `json:"emitSignatures,omitzero"`
+	LinkedPackagesSignature    string                                    `json:"linkedPackagesSignature,omitzero"`
 	ResolvedRoot               []*readableBuildInfoResolvedRoot          `json:"resolvedRoot,omitzero"`
 	Size                       int                                       `json:"size,omitzero"` // Size of the build info file
 
@@ -217,17 +218,18 @@ func (b *readableBuildInfoResolvedRoot) UnmarshalJSON(data []byte) error {
 
 func toReadableBuildInfo(buildInfo *incremental.BuildInfo, buildInfoText string) string {
 	readable := readableBuildInfo{
-		buildInfo:            buildInfo,
-		Version:              buildInfo.Version,
-		Errors:               buildInfo.Errors,
-		CheckPending:         buildInfo.CheckPending,
-		FileNames:            buildInfoPathsAsStrings(buildInfo.FileNames),
-		Options:              buildInfo.Options,
-		LatestChangedDtsFile: buildInfo.LatestChangedDtsFile.AsString(),
-		SemanticErrors:       buildInfo.SemanticErrors,
-		PackageJsons:         buildInfoPathsAsStrings(buildInfo.PackageJsons),
-		MissingPackageJsons:  buildInfoPathsAsStrings(buildInfo.MissingPackageJsons),
-		Size:                 len(buildInfoText),
+		buildInfo:               buildInfo,
+		Version:                 buildInfo.Version,
+		Errors:                  buildInfo.Errors,
+		CheckPending:            buildInfo.CheckPending,
+		FileNames:               buildInfoPathsAsStrings(buildInfo.FileNames),
+		Options:                 buildInfo.Options,
+		LatestChangedDtsFile:    buildInfo.LatestChangedDtsFile.AsString(),
+		LinkedPackagesSignature: buildInfo.LinkedPackagesSignature,
+		SemanticErrors:          buildInfo.SemanticErrors,
+		PackageJsons:            buildInfoPathsAsStrings(buildInfo.PackageJsons),
+		MissingPackageJsons:     buildInfoPathsAsStrings(buildInfo.MissingPackageJsons),
+		Size:                    len(buildInfoText),
 	}
 	readable.setFileInfos()
 	readable.setRoot()
