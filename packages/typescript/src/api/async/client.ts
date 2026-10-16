@@ -420,11 +420,17 @@ export class Client {
                 const local = this.timing.getInfo();
                 let server: ServerTimingInfo | undefined;
                 let serverTimingError: string | undefined;
+                const connection = this.connection;
+                // Closing alone does not reject pending JSON-RPC requests.
+                const onClose = connection?.onClose(() => connection.dispose());
                 try {
                     if (this.connected) server = await this.fetchServerTiming();
                 }
                 catch (error) {
                     serverTimingError = String(error);
+                }
+                finally {
+                    onClose?.dispose();
                 }
                 this.timingDump.write(local, server, serverTimingError);
             }
