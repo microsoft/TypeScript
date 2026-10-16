@@ -29,7 +29,7 @@ type parseTask struct {
 	isContentMapperSupplemental bool
 	failedLookup                bool
 	includeReason               *FileIncludeReason
-	packageId                   module.PackageId
+	packageId                   *module.PackageId
 	increaseDepth               bool
 	elideOnDepth                bool
 	loadedTask                  *parseTask
@@ -220,7 +220,16 @@ type resolvedRef struct {
 	increaseDepth bool
 	elideOnDepth  bool
 	includeReason *FileIncludeReason
-	packageId     module.PackageId
+	packageId     *module.PackageId
+}
+
+// packageIdRef returns id, or nil if id is empty. Pointing into an existing
+// resolution keeps the commonly empty ID out of every parse task.
+func packageIdRef(id *module.PackageId) *module.PackageId {
+	if id.Name == "" {
+		return nil
+	}
+	return id
 }
 
 func (t *parseTask) addSubTask(ref resolvedRef, libFile *LibFile) {
@@ -303,8 +312,8 @@ func (w *filesParser) start(loader *fileLoader, tasks []*parseTask, depth int) {
 			}
 
 			// Propagate packageId to data if we have one and data doesn't yet
-			if data.packageId.Name == "" && task.packageId.Name != "" {
-				data.packageId = task.packageId
+			if data.packageId.Name == "" && task.packageId != nil {
+				data.packageId = *task.packageId
 			}
 
 			currentDepth := core.IfElse(task.increaseDepth, depth+1, depth)
