@@ -729,13 +729,7 @@ func (p *fileLoader) getSourceFileFromReference(
 func (p *fileLoader) resolveTripleslashPathReference(moduleName string, containingFile tspath.RootedFilePath, index int) (*resolvedRef, *processingDiagnostic) {
 	normalizedFileName := containingFile.Directory().ResolveFile(moduleName)
 	containingPath := p.caseSensitivity.PathKey(tspath.RootedPath(containingFile))
-	includeReason := &FileIncludeReason{
-		kind: fileIncludeKindReferenceFile,
-		referencedFile: &referencedFileData{
-			file:  containingPath,
-			index: index,
-		},
-	}
+	includeReason := newReferencedFileIncludeReason(fileIncludeKindReferenceFile, containingPath, index, syntheticImportNone)
 
 	resolvedFileName, resolvedPath, diagnostic := p.getSourceFileFromReference(
 		normalizedFileName,
@@ -789,13 +783,7 @@ func (p *fileLoader) resolveTypeReferenceDirectives(t *parseTask) {
 			traceDone = p.tracing.Push(tracing.PhaseProgram, "processTypeReferenceDirective", map[string]any{"directive": ref.FileName, "hasResolved": resolved.IsResolved(), "refKind": int(fileIncludeKindTypeReferenceDirective), "refPath": string(t.path)}, false)
 		}
 		typeResolutionsInFile[module.ModeAwareCacheKey{Name: ref.FileName, Mode: resolutionMode}] = resolved
-		includeReason := &FileIncludeReason{
-			kind: fileIncludeKindTypeReferenceDirective,
-			referencedFile: &referencedFileData{
-				file:  t.path,
-				index: index,
-			},
-		}
+		includeReason := newReferencedFileIncludeReason(fileIncludeKindTypeReferenceDirective, t.path, index, syntheticImportNone)
 		typeResolutionsTrace = append(typeResolutionsTrace, trace...)
 
 		if resolved.IsResolved() {
@@ -944,15 +932,8 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 					path:          resolvedModule.ResolvedPath,
 					increaseDepth: resolvedModule.IsExternalLibraryImport,
 					elideOnDepth:  isJsFileFromNodeModules,
-					includeReason: &FileIncludeReason{
-						kind: fileIncludeKindImport,
-						referencedFile: &referencedFileData{
-							file:      t.path,
-							index:     importIndex,
-							synthetic: synthetic,
-						},
-					},
-					packageId: packageIdRef(&resolvedModule.PackageId),
+					includeReason: newReferencedFileIncludeReason(fileIncludeKindImport, t.path, importIndex, synthetic),
+					packageId:     packageIdRef(&resolvedModule.PackageId),
 				}, nil)
 			}
 		}
