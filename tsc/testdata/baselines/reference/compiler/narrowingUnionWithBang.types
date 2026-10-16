@@ -83,9 +83,9 @@ if (working.thing!.name !== "Correct") {
 >log : (...data: any[]) => void
 >working.thing!.id : string
 >working.thing! : { name: 'Correct'; id: string; }
->working.thing : { name: 'Correct'; id: string; }
+>working.thing : { name: 'Correct'; id: string; } | undefined
 >working : WorkingType
->thing : { name: 'Correct'; id: string; }
+>thing : { name: 'Correct'; id: string; } | undefined
 >id : string
 }
 
