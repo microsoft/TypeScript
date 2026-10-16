@@ -32,7 +32,7 @@ export class TimingDump {
         this.transport = transport;
     }
 
-    write(client: TimingInfo, server: ServerTimingInfo | undefined): void {
+    write(client: TimingInfo, server: ServerTimingInfo | undefined, serverTimingError?: string): void {
         const snapshot = {
             schemaVersion: 1,
             instanceId: this.instanceId,
@@ -43,6 +43,7 @@ export class TimingDump {
             closedAt: new Date().toISOString(),
             timing: server ? combineTimingInfo(client, server) : client,
             serverTiming: server ?? null,
+            serverTimingError,
         };
         mkdirSync(this.directory, { recursive: true });
         writeFileSync(

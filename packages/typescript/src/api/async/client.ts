@@ -417,7 +417,16 @@ export class Client {
         this.closed = true;
         try {
             if (this.timingDump && this.timing) {
-                this.timingDump.write(this.timing.getInfo(), this.connected ? await this.fetchServerTiming() : undefined);
+                const local = this.timing.getInfo();
+                let server: ServerTimingInfo | undefined;
+                let serverTimingError: string | undefined;
+                try {
+                    if (this.connected) server = await this.fetchServerTiming();
+                }
+                catch (error) {
+                    serverTimingError = String(error);
+                }
+                this.timingDump.write(local, server, serverTimingError);
             }
         }
         finally {

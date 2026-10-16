@@ -196,8 +196,15 @@ export class Client {
         try {
             if (this.timingDump && this.timing) {
                 const local = this.timing.getInfo();
-                const server = JSON.parse(this.channel.requestSync("getServerTiming", "")) as ServerTimingInfo;
-                this.timingDump.write(local, server);
+                let server: ServerTimingInfo | undefined;
+                let serverTimingError: string | undefined;
+                try {
+                    server = JSON.parse(this.channel.requestSync("getServerTiming", "")) as ServerTimingInfo;
+                }
+                catch (error) {
+                    serverTimingError = String(error);
+                }
+                this.timingDump.write(local, server, serverTimingError);
             }
         }
         finally {
