@@ -1848,7 +1848,11 @@ func (c *Checker) getSuggestionForSymbolNameLookup(symbols ast.SymbolTable, name
 	if meaning&ast.SymbolFlagsGlobalLookup != 0 {
 		extras = getPrimitiveTypeAliasSuggestions(symbols)
 	}
-	return c.getSpellingSuggestionForName(name, core.ConcatenateSeq(maps.Values(symbols), extras), meaning)
+	// Checking a candidate alias resolves it, which creates types, so visit aliases last and in a stable order
+	// rather than in the random iteration order of the symbol table.
+	candidates := make([]*ast.Symbol, 0, len(symbols))
+	c.forEachSymbolInResolutionOrder(symbols, func(symbol *ast.Symbol) { candidates = append(candidates, symbol) })
+	return c.getSpellingSuggestionForName(name, core.ConcatenateSeq(slices.Values(candidates), extras), meaning)
 }
 
 // Given a name and a list of symbols whose names are *not* equal to the name, return a spelling suggestion if there is
