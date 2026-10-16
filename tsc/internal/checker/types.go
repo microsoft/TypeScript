@@ -1116,6 +1116,7 @@ type StructuredType struct {
 	ConstrainedType
 	members    ast.SymbolTable
 	properties []*ast.Symbol
+	lazy       *lazyMembers // Members resolved on demand, in which case members and properties are nil until needed
 	extra      *structuredTypeExtra
 }
 
@@ -1165,7 +1166,40 @@ func (t *StructuredType) ensureExtra() *structuredTypeExtra {
 }
 
 func (t *StructuredType) Properties() []*ast.Symbol {
+	if t.properties == nil && t.lazy != nil {
+		t.properties = t.checker.getLazyProperties(t.lazy)
+	}
 	return t.properties
+}
+
+// Like Properties, but without resolving lazy members, so the properties may be the symbols they would be
+// instantiated from. These have the same names and flags as the actual properties, but not the same types.
+func (t *StructuredType) uninstantiatedProperties() []*ast.Symbol {
+	if t.properties == nil && t.lazy != nil {
+		return t.lazy.layout.properties()
+	}
+	return t.properties
+}
+
+func (t *StructuredType) property(i int) *ast.Symbol {
+	if t.properties == nil && t.lazy != nil {
+		return t.checker.getLazyMember(t.lazy, i)
+	}
+	return t.properties[i]
+}
+
+func (t *StructuredType) getMember(name string) *ast.Symbol {
+	if t.lazy != nil {
+		return t.checker.getLazyMemberByName(t.lazy, name)
+	}
+	return t.members[name]
+}
+
+func (t *StructuredType) getMembers() ast.SymbolTable {
+	if t.members == nil && t.lazy != nil {
+		t.members = t.checker.getLazyMemberTable(t.lazy)
+	}
+	return t.members
 }
 
 // Except for tuple type references and reverse mapped types, all object types have an associated symbol.
@@ -1235,6 +1269,7 @@ type InterfaceType struct {
 	declaredCallSignatures      []*Signature    // Declared call signatures
 	declaredConstructSignatures []*Signature    // Declared construct signatures
 	declaredIndexInfos          []*IndexInfo    // Declared index signatures
+	memberLayout                *memberLayout   // Member layout shared by all instantiations, if possible
 }
 
 func (t *InterfaceType) AsInterfaceType() *InterfaceType { return t }

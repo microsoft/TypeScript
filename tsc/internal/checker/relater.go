@@ -679,7 +679,8 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 func (c *Checker) isWeakType(t *Type) bool {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
-		return len(resolved.getSignatures()) == 0 && len(resolved.getIndexInfos()) == 0 && len(resolved.properties) > 0 && core.Every(resolved.properties, func(p *ast.Symbol) bool {
+		properties := resolved.uninstantiatedProperties()
+		return len(resolved.getSignatures()) == 0 && len(resolved.getIndexInfos()) == 0 && len(properties) > 0 && core.Every(properties, func(p *ast.Symbol) bool {
 			return p.Flags()&ast.SymbolFlagsOptional != 0
 		})
 	}
@@ -975,14 +976,19 @@ func (c *Checker) getUnmatchedProperties(source *Type, target *Type, requireOpti
 }
 
 func (c *Checker) getUnmatchedPropertiesWorker(source *Type, target *Type, requireOptionalProperties bool, matchDiscriminantProperties bool, propsOut *[]*ast.Symbol) *ast.Symbol {
-	properties := c.getPropertiesOfType(target)
-	for _, targetProp := range properties {
+	// Names and flags of properties are known without resolving them, so only resolve the ones we report or compare.
+	// Reduce the target once, since getting its apparent type can allocate.
+	target = c.getReducedApparentType(target)
+	for i, targetProp := range c.getUninstantiatedPropertiesOfType(target) {
 		// TODO: remove this when we support static private identifier fields and find other solutions to get privateNamesAndStaticFields test to pass
 		if isStaticPrivateIdentifierProperty(targetProp) {
 			continue
 		}
 		if requireOptionalProperties || targetProp.Flags()&ast.SymbolFlagsOptional == 0 && targetProp.CheckFlags()&ast.CheckFlagsPartial == 0 {
 			sourceProp := c.getPropertyOfType(source, targetProp.Name())
+			if sourceProp == nil || matchDiscriminantProperties {
+				targetProp = c.getPropertyOfTypeAt(target, i)
+			}
 			if sourceProp == nil {
 				if propsOut == nil {
 					return targetProp
