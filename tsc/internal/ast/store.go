@@ -28,7 +28,6 @@ type nodeStore struct {
 	total    uintptr        // size of all chunks
 
 	symbols       sideTable[*Symbol]
-	flowNodes     sideTable[*FlowNode]
 	symbolTables  sideTable[SymbolTable]
 	nodeLists     sideTable[*NodeList]
 	modifierLists sideTable[*ModifierList]
@@ -81,7 +80,7 @@ func (n Node) hdr() *nodeBaseData { return (*nodeBaseData)(n.p) }
 
 // store returns the store that owns n.
 func (n Node) store() *nodeStore {
-	return *(**nodeStore)(unsafe.Add(n.p, -int(n.hdr().self)*int(wordSize)))
+	return storeAt(n.p, n.hdr().self)
 }
 
 // deref returns the node that the field f of n refers to.
@@ -135,7 +134,8 @@ func newRecord[T any](s *nodeStore, layout nodeLayout) (*T, unsafe.Pointer) {
 		(*nodeBaseData)(p).self = standaloneSelf
 		return &c.rec, p
 	}
-	p := s.alloc((unsafe.Sizeof(*new(T)) + wordSize - 1) &^ (wordSize - 1))
+	p, self := s.alloc(unsafe.Sizeof(*new(T)))
+	(*nodeBaseData)(p).self = self
 	return (*T)(p), p
 }
 
@@ -160,16 +160,39 @@ func standaloneLayout(layout nodeLayout) bool {
 // Many stores, such as those for lazily parsed JSDoc, are tiny.
 const minChunkSize = 512
 
-// alloc allocates size zeroed bytes for a record and sets its self.
-func (s *nodeStore) alloc(size uintptr) unsafe.Pointer {
+// alloc allocates size zeroed bytes for a record and returns the record's
+// offset in its chunk, in words, which the record must keep as its self.
+func (s *nodeStore) alloc(size uintptr) (unsafe.Pointer, uint16) {
+	size = (size + wordSize - 1) &^ (wordSize - 1)
 	if s.used+size > s.capacity {
 		s.grow(size)
 	}
 	off := s.used
 	s.used += size
-	p := unsafe.Add(s.chunk, off)
-	(*nodeBaseData)(p).self = uint16(off / wordSize)
-	return p
+	return unsafe.Add(s.chunk, off), uint16(off / wordSize)
+}
+
+// storeAt returns the store owning the chunk record at p, whose self is
+// self.
+func storeAt(p unsafe.Pointer, self uint16) *nodeStore {
+	return *(**nodeStore)(unsafe.Add(p, -int(self)*int(wordSize)))
+}
+
+// refRecord returns a ref to the chunk record at p, owned by other, for a
+// field of one of s's records.
+func (s *nodeStore) refRecord(p unsafe.Pointer, other *nodeStore) uintptr {
+	if p == nil {
+		return 0
+	}
+	if other != s {
+		s.keepAlive(unsafe.Pointer(other))
+	}
+	return uintptr(p)
+}
+
+// derefRecord returns the record that the ref at f refers to.
+func derefRecord(f unsafe.Pointer) unsafe.Pointer {
+	return *(*unsafe.Pointer)(f)
 }
 
 func (s *nodeStore) grow(size uintptr) {
@@ -221,7 +244,6 @@ func (s *nodeStore) compact() {
 // concurrently.
 func (s *nodeStore) compactSide() {
 	s.symbols.compact()
-	s.flowNodes.compact()
 	s.symbolTables.compact()
 	s.nodeLists.compact()
 	s.modifierLists.compact()

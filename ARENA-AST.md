@@ -65,8 +65,11 @@ All fields, including those from "base" shapes (declaration, function-like, flow
 | Field type | Stored as | Read path |
 |---|---|---|
 | Another node | `nodeRef` (uintptr, absolute address) | A single load, reinterpreted as a `Node` |
-| Go pointer (`*Symbol`, `*FlowNode`, `*NodeList`, `[]Node`, `SymbolTable`, `any`, …) | `sideRef uint32`, an index into a typed `sideTable[T]` on the store | `store().table.items[i-1]` |
+| Flow node | `flowRef` (uintptr, absolute address of a pointer-free `FlowNode` record in a chunk) | A single load, reinterpreted as `*FlowNode` |
+| Other Go pointers (`*Symbol`, `*NodeList`, `[]Node`, `SymbolTable`, `any`, …) | `sideRef uint32`, an index into a typed `sideTable[T]` on the store | `store().table.items[i-1]` |
 | `string` | `textRef{off, len uint32}` into the file's source text, or into an append-only text arena | `unsafe.String` over the backing bytes |
+
+Flow nodes and flow lists are arena records like nodes: `FlowNode{node nodeRef; antecedent flowRef; antecedents flowListRef; Flags; self}` is 32 bytes with no Go pointers. The binder allocates them in the file's store, and the checker allocates its synthetic flow nodes in its own factory's store. The API still hands out a real `*FlowNode`; an interior pointer into a chunk keeps the chunk, and through word 0 the whole store, alive, so checker maps keyed by `*FlowNode` stay safe.
 
 The GC can't see `nodeRef`s, so liveness is handled explicitly:
 - A store keeps all of its own chunks in `chunks`.
@@ -85,6 +88,7 @@ As a result, the GC scans one word per chunk plus the side tables, instead of ev
 6. **Slower chunk growth** (memory −2.63%).
 7. **32-byte header** (memory −3.28%).
 8. **Flattened records + offset tables** (memory −0.39%, check time unchanged).
+9. **Flow nodes in the arena** (memory −0.67%, check time unchanged). This drops the `*FlowNode` side table and makes flow nodes invisible to the GC. The field itself grows from a 4-byte index to an 8-byte absolute ref; shrinking it to 32 bits needs a contiguous per-file image (see future work).
 
 ## Performance (vscode, n=10, interleaved)
 

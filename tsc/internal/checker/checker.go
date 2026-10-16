@@ -21024,16 +21024,16 @@ func (c *Checker) checkIfExpressionRefinesParameter(fn ast.Node, expr ast.Node, 
 		antecedent = getFlowNodeOfNode(expr.Parent())
 	}
 	if antecedent == nil {
-		antecedent = &ast.FlowNode{Flags: ast.FlowFlagsStart}
+		antecedent = c.factory.NewFlowNode(ast.FlowFlagsStart, ast.Node{}, nil)
 	}
-	trueCondition := &ast.FlowNode{Flags: ast.FlowFlagsTrueCondition, Node: expr, Antecedent: antecedent}
+	trueCondition := c.factory.NewFlowNode(ast.FlowFlagsTrueCondition, expr, antecedent)
 	trueType := c.getFlowTypeOfReferenceEx(param.Name(), initType, initType, fn, trueCondition)
 	if trueType == initType {
 		return nil
 	}
 	// "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
 	// This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
-	falseCondition := &ast.FlowNode{Flags: ast.FlowFlagsFalseCondition, Node: expr, Antecedent: antecedent}
+	falseCondition := c.factory.NewFlowNode(ast.FlowFlagsFalseCondition, expr, antecedent)
 	falseSubtype := c.getReducedType(c.getFlowTypeOfReferenceEx(param.Name(), initType, trueType, fn, falseCondition))
 	if falseSubtype.flags&TypeFlagsNever != 0 {
 		return trueType

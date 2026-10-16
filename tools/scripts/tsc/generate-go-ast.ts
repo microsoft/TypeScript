@@ -267,7 +267,6 @@ function isNodeField(f: { goOnly?: boolean; rawType: string | string[]; type: Ty
 // table for their type, so that records contain no pointers.
 const sideTables: Record<string, string> = {
     "*Symbol": "symbols",
-    "*FlowNode": "flowNodes",
     "SymbolTable": "symbolTables",
     "*NodeList": "nodeLists",
     "*ModifierList": "modifierLists",
@@ -276,6 +275,17 @@ const sideTables: Record<string, string> = {
     "[]Node": "nodeSlices",
     "any": "values",
 };
+
+// Fields referring to records that live in the store's chunks hold the
+// record's address, like node fields; the record type gives their getter
+// and the store method giving their refs.
+const recordRefs: Record<string, { ref: string; method: string; }> = {
+    "*FlowNode": { ref: "flowRef", method: "refFlow" },
+};
+
+function recordRefOf(goType: string) {
+    return Object.hasOwn(recordRefs, goType) ? recordRefs[goType] : undefined;
+}
 
 function sideTableOf(goType: string): string | undefined {
     if (Object.hasOwn(sideTables, goType)) return sideTables[goType];
@@ -292,6 +302,8 @@ function zeroCheck(goType: string, value: string): string {
 function recordGoType(isNode: boolean, goType: string): string {
     if (isNode) return "nodeRef";
     if (goType === "string") return "textRef";
+    const recordRef = recordRefOf(goType);
+    if (recordRef) return recordRef.ref;
     return sideTableOf(goType) ? "sideRef" : goType;
 }
 
@@ -334,6 +346,7 @@ function baseRecordFields(key: string): RecordField[] {
 // Alignments of the Go types that record fields may have.
 const recordFieldAlignments: Record<string, number> = {
     "nodeRef": 8,
+    "flowRef": 8,
     "textRef": 4,
     "sideRef": 4,
     "atomic.Uint32": 4,
@@ -690,9 +703,14 @@ function generateFieldAccessors(w: CodeWriter, structName: string, fields: GoFie
         const { name, goType, isNode } = field;
         if (goType.startsWith("atomic.")) continue;
         const side = sideTableOf(goType);
+        const recordRef = recordRefOf(goType);
         if (isNode) {
             w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.deref(${addr(field)}) }`);
             w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { node.setRef(${addr(field)}, value) }`);
+        }
+        else if (recordRef) {
+            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return (${addr(field)}).get() }`);
+            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { *(${addr(field)}) = node.store().${recordRef.method}(value) }`);
         }
         else if (side) {
             w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.store().${side}.get(${value(field)}) }`);
@@ -762,7 +780,7 @@ function emitNewFactory(
     if (stored.length === 0) {
         w.write(`_, i := newRecord[${dataName(node)}](f.nodeStore(), ${layoutName(node)})`);
     }
-    else if (stored.some(m => isNodeField(m) || sideTableOf(m.type.formatGoReference()))) {
+    else if (stored.some(m => isNodeField(m) || sideTableOf(m.type.formatGoReference()) || recordRefOf(m.type.formatGoReference()))) {
         w.write("s := f.nodeStore()");
         w.write(`data, i := newRecord[${dataName(node)}](s, ${layoutName(node)})`);
     }
@@ -777,6 +795,8 @@ function emitNewFactory(
             w.write(`s.${side}.set(&data.${goStorageName(m.name)}, ${value}, ${zeroCheck(m.type.formatGoReference(), value)})`);
             continue;
         }
+        const recordRef = recordRefOf(m.type.formatGoReference());
+        if (recordRef) value = `s.${recordRef.method}(${value})`;
         if (isNodeField(m)) value = `s.refAt(i, &data.${goStorageName(m.name)}, ${value})`;
         w.write(`data.${goStorageName(m.name)} = ${value}`);
     }

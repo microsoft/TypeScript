@@ -1,5 +1,7 @@
 package ast
 
+import "unsafe"
+
 // FlowFlags
 
 type FlowFlags uint32
@@ -24,16 +26,99 @@ const (
 
 // FlowNode
 
+// A FlowNode is a record in a node store's chunks, like a node's, so it
+// holds no Go pointers; it is created by NewFlowNode and only referred to
+// by pointer. A pointer to a FlowNode keeps its store alive.
 type FlowNode struct {
+	node        nodeRef
+	antecedent  flowRef // Antecedent for all but FlowLabel
+	antecedents flowListRef
 	Flags       FlowFlags
-	Node        Node      // Associated AST node
-	Antecedent  *FlowNode // Antecedent for all but FlowLabel
-	Antecedents *FlowList // Linked list of antecedents for FlowLabel
+	self        uint16 // the record's offset in its chunk, in words
 }
 
+// A flowRef is the address of a FlowNode, or zero for none. Like a nodeRef,
+// it is invisible to the garbage collector.
+type flowRef uintptr
+
+// A flowListRef is the address of a FlowList, or zero for none.
+type flowListRef uintptr
+
+func (r *flowRef) get() *FlowNode     { return (*FlowNode)(derefRecord(unsafe.Pointer(r))) }
+func (r *flowListRef) get() *FlowList { return (*FlowList)(derefRecord(unsafe.Pointer(r))) }
+func (s *nodeStore) refFlow(v *FlowNode) flowRef {
+	if v == nil {
+		return 0
+	}
+	return flowRef(s.refRecord(unsafe.Pointer(v), v.store()))
+}
+
+func (s *nodeStore) refFlowList(v *FlowList) flowListRef {
+	if v == nil {
+		return 0
+	}
+	return flowListRef(s.refRecord(unsafe.Pointer(v), v.store()))
+}
+
+func (f *FlowNode) store() *nodeStore { return storeAt(unsafe.Pointer(f), f.self) }
+
+// Node returns the AST node associated with the flow node.
+func (f *FlowNode) Node() Node { return Node{derefRecord(unsafe.Pointer(&f.node))} }
+
+func (f *FlowNode) Antecedent() *FlowNode { return f.antecedent.get() }
+
+// Antecedents returns the linked list of antecedents of a FlowLabel.
+func (f *FlowNode) Antecedents() *FlowList { return f.antecedents.get() }
+
+func (f *FlowNode) SetAntecedent(v *FlowNode) { f.antecedent = f.store().refFlow(v) }
+
+func (f *FlowNode) SetAntecedents(v *FlowList) { f.antecedents = f.store().refFlowList(v) }
+
+func newFlowNode(s *nodeStore, flags FlowFlags, node Node, antecedent *FlowNode) *FlowNode {
+	p, self := s.alloc(unsafe.Sizeof(FlowNode{}))
+	f := (*FlowNode)(p)
+	f.self = self
+	f.Flags = flags
+	if node.p != nil {
+		f.node = s.refAt(p, &f.node, node)
+	}
+	f.antecedent = s.refFlow(antecedent)
+	return f
+}
+
+// NewFlowNode allocates a flow node in the store of file, which must not be
+// shared with other writers while it is bound.
+func NewFlowNode(file *SourceFile, flags FlowFlags, node Node, antecedent *FlowNode) *FlowNode {
+	return newFlowNode(file.store(), flags, node, antecedent)
+}
+
+// NewFlowNode allocates a flow node in f's store.
+func (f *NodeFactory) NewFlowNode(flags FlowFlags, node Node, antecedent *FlowNode) *FlowNode {
+	return newFlowNode(f.nodeStore(), flags, node, antecedent)
+}
+
+// A FlowList is a record in a node store's chunks, like a FlowNode.
 type FlowList struct {
-	Flow *FlowNode
-	Next *FlowList
+	flow flowRef
+	next flowListRef
+	self uint16
+}
+
+func (l *FlowList) store() *nodeStore   { return storeAt(unsafe.Pointer(l), l.self) }
+func (l *FlowList) Flow() *FlowNode     { return l.flow.get() }
+func (l *FlowList) Next() *FlowList     { return l.next.get() }
+func (l *FlowList) SetNext(v *FlowList) { l.next = l.store().refFlowList(v) }
+
+// NewFlowList allocates a flow list in the store of file, which must not be
+// shared with other writers while it is bound.
+func NewFlowList(file *SourceFile, flow *FlowNode, next *FlowList) *FlowList {
+	s := file.store()
+	p, self := s.alloc(unsafe.Sizeof(FlowList{}))
+	l := (*FlowList)(p)
+	l.self = self
+	l.flow = s.refFlow(flow)
+	l.next = s.refFlowList(next)
+	return l
 }
 
 type FlowLabel = FlowNode
@@ -91,25 +176,23 @@ type FlowReduceLabelData struct{ Node }
 
 type flowReduceLabelData struct {
 	nodeBaseData
-	target      *FlowLabel // Target label
-	antecedents *FlowList  // Temporary antecedent list
+	target      flowRef     // Target label
+	antecedents flowListRef // Temporary antecedent list
 }
 
 func (node FlowReduceLabelData) data() *flowReduceLabelData {
 	return (*flowReduceLabelData)(node.rec())
 }
 
-func (node FlowReduceLabelData) Target() *FlowLabel             { return node.data().target }
-func (node FlowReduceLabelData) SetTarget(value *FlowLabel)     { node.data().target = value }
-func (node FlowReduceLabelData) Antecedents() *FlowList         { return node.data().antecedents }
-func (node FlowReduceLabelData) SetAntecedents(value *FlowList) { node.data().antecedents = value }
+func (node FlowReduceLabelData) Target() *FlowLabel     { return node.data().target.get() }
+func (node FlowReduceLabelData) Antecedents() *FlowList { return node.data().antecedents.get() }
 
 // NewFlowReduceLabelData allocates in the store of file, which must not be
 // shared with other writers while it is bound.
 func NewFlowReduceLabelData(file *SourceFile, target *FlowLabel, antecedents *FlowList) Node {
 	s := file.store()
 	data, i := newRecord[flowReduceLabelData](s, layoutFlowReduceLabelData)
-	data.target = target
-	data.antecedents = antecedents
+	data.target = s.refFlow(target)
+	data.antecedents = s.refFlowList(antecedents)
 	return newNode(s, kindFlowReduceLabelData, layoutFlowReduceLabelData, i, NodeFactoryHooks{})
 }
