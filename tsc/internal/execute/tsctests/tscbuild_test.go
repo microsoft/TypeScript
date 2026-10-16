@@ -1139,6 +1139,55 @@ func TestBuildDependencyUpdate(t *testing.T) {
 	updateDepAWithBreakingTypeChange := func(sys *TestSys) {
 		sys.writeFileNoError("/home/src/workspaces/project/node_modules/dep-a/index.d.ts", `export type Kind = "a" | "b" | "c";`)
 	}
+	linkedPackageConfig := func(name string, references string) string {
+		return stringtestutil.Dedent(fmt.Sprintf(`
+			{
+				"compilerOptions": {
+					"composite": true,
+					"emitDeclarationOnly": true,
+					"noEmitOnError": true,
+					"strict": true,
+					"module": "nodenext",
+					"types": [],
+					"rootDir": "src",
+					"outDir": "../dist/%s",
+					"tsBuildInfoFile": "../dist/%s.tsbuildinfo"
+				},
+				"include": ["src"],
+				"references": %s
+			}`, name, name, references))
+	}
+	linkedPackageManifest := func(name string, dependencies string) string {
+		return fmt.Sprintf(`{"name":"%s","version":"1.0.0","type":"module","types":"./src/index.ts","dependencies":{%s}}`, name, dependencies)
+	}
+	getLinkedPackageFiles := func(aDependencies string) FileMap {
+		return FileMap{
+			"/home/src/workspaces/solution/tsconfig.json":   `{"files":[],"references":[{"path":"./a"}]}`,
+			"/home/src/workspaces/solution/a/package.json":  linkedPackageManifest("a", aDependencies),
+			"/home/src/workspaces/solution/a/tsconfig.json": linkedPackageConfig("a", `[{"path":"../b"}]`),
+			"/home/src/workspaces/solution/a/src/index.ts": stringtestutil.Dedent(`
+				import { currentStage } from "b";
+				export const stage = currentStage();
+			`),
+			"/home/src/workspaces/solution/a/node_modules/b": vfstest.Symlink("/home/src/workspaces/solution/b"),
+			"/home/src/workspaces/solution/b/package.json":   linkedPackageManifest("b", `"c":"1.0.0"`),
+			"/home/src/workspaces/solution/b/tsconfig.json":  linkedPackageConfig("b", `[{"path":"../c"}]`),
+			"/home/src/workspaces/solution/b/src/index.ts": stringtestutil.Dedent(`
+				import { current } from "c";
+				export const currentStage = () => current;
+			`),
+			"/home/src/workspaces/solution/b/node_modules/c": vfstest.Symlink("/home/src/workspaces/solution/c"),
+			"/home/src/workspaces/solution/c/package.json":   linkedPackageManifest("c", ""),
+			"/home/src/workspaces/solution/c/tsconfig.json":  linkedPackageConfig("c", "[]"),
+			"/home/src/workspaces/solution/c/src/index.ts": stringtestutil.Dedent(`
+				export interface Current { readonly stage: string }
+				export const current: Current = { stage: "test" };
+			`),
+		}
+	}
+	writeLinkedPackageManifestOfA := func(sys *TestSys, dependencies string) {
+		sys.writeFileNoError("/home/src/workspaces/solution/a/package.json", linkedPackageManifest("a", dependencies))
+	}
 	testCases := []*tscInput{
 		{
 			// https://github.com/microsoft/TypeScript/tsc/issues/2666
@@ -1417,6 +1466,95 @@ func TestBuildDependencyUpdate(t *testing.T) {
 						`))
 					},
 				},
+			},
+		},
+		{
+			subScenario:     "updates declaration emit when linked dependency is added and removed",
+			files:           getLinkedPackageFiles(`"b":"1.0.0"`),
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"--b", "--verbose"},
+			edits: []*tscEdit{
+				{
+					caption: "add c to dependencies of a and link it",
+					edit: func(sys *TestSys) {
+						writeLinkedPackageManifestOfA(sys, `"b":"1.0.0","c":"1.0.0"`)
+						sys.addSymlink("/home/src/workspaces/solution/a/node_modules/c", "/home/src/workspaces/solution/c")
+					},
+				},
+				noChange,
+				{
+					caption:         "force build with c linked",
+					commandLineArgs: []string{"--b", "--verbose", "--force"},
+				},
+				{
+					caption: "remove c from dependencies of a and unlink it",
+					edit: func(sys *TestSys) {
+						writeLinkedPackageManifestOfA(sys, `"b":"1.0.0"`)
+						sys.removeNoError("/home/src/workspaces/solution/a/node_modules/c")
+					},
+				},
+				noChange,
+			},
+		},
+		{
+			subScenario: "updates declaration emit when dependency on linked package is added and removed",
+			files: func() FileMap {
+				files := getLinkedPackageFiles(`"b":"1.0.0"`)
+				files["/home/src/workspaces/solution/a/node_modules/c"] = vfstest.Symlink("/home/src/workspaces/solution/c")
+				return files
+			}(),
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"--b", "--verbose"},
+			edits: []*tscEdit{
+				{
+					caption: "add c to dependencies of a",
+					edit: func(sys *TestSys) {
+						writeLinkedPackageManifestOfA(sys, `"b":"1.0.0","c":"1.0.0"`)
+					},
+				},
+				noChange,
+				{
+					caption:         "force build with c as dependency",
+					commandLineArgs: []string{"--b", "--verbose", "--force"},
+				},
+				{
+					caption: "remove c from dependencies of a",
+					edit: func(sys *TestSys) {
+						writeLinkedPackageManifestOfA(sys, `"b":"1.0.0"`)
+					},
+				},
+				noChange,
+			},
+		},
+		{
+			subScenario: "updates declaration emit when types entry of linked package changes",
+			files: func() FileMap {
+				files := getLinkedPackageFiles(`"b":"1.0.0","c":"1.0.0"`)
+				files["/home/src/workspaces/solution/a/node_modules/c"] = vfstest.Symlink("/home/src/workspaces/solution/c")
+				files["/home/src/workspaces/solution/b/src/index.ts"] = stringtestutil.Dedent(`
+					import { current } from "c/src/index.js";
+					export const currentStage = () => current;
+				`)
+				files["/home/src/workspaces/solution/c/src/main.ts"] = `export const version = "1.0.0";`
+				return files
+			}(),
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"--b", "--verbose"},
+			edits: []*tscEdit{
+				{
+					caption: "point types of c to another entry",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText("/home/src/workspaces/solution/c/package.json", "./src/index.ts", "./src/main.ts")
+					},
+				},
+				noChange,
+				{
+					caption: "point types of c back to index",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText("/home/src/workspaces/solution/c/package.json", "./src/main.ts", "./src/index.ts")
+					},
+				},
+				noChange,
 			},
 		},
 	}
