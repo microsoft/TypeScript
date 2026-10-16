@@ -1822,7 +1822,11 @@ func getFileNamesFromConfigSpecs(
 
 	var jsonOnlyIncludeMatchers *vfsmatch.SpecMatcher
 	if len(validatedIncludeSpecs) > 0 {
-		files := vfsmatch.ReadDirectory(host, basePath, core.Flatten(supportedExtensionsWithJsonIfResolveJsonModule), validatedExcludeSpecs, validatedIncludeSpecs, vfsmatch.UnlimitedDepth)
+		readDirectory := vfsmatch.ReadDirectory[tspath.PathPattern]
+		if options.SingleThreaded.IsTrue() {
+			readDirectory = vfsmatch.ReadDirectorySingleThreaded[tspath.PathPattern]
+		}
+		files := readDirectory(host, basePath, core.Flatten(supportedExtensionsWithJsonIfResolveJsonModule), validatedExcludeSpecs, validatedIncludeSpecs, vfsmatch.UnlimitedDepth)
 		for _, file := range files {
 			if file.ExtensionIs(tspath.ExtensionJson) {
 				if jsonOnlyIncludeMatchers == nil {

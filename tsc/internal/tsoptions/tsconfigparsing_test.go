@@ -7,7 +7,9 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -25,6 +27,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/wrapvfs"
 	"gotest.tools/v3/assert"
 )
 
@@ -1885,4 +1888,43 @@ func TestExtendedConfigConfigDirPathsAreNotCached(t *testing.T) {
 	parseConfig("/packages/a/tsconfig.json")
 	paths := parseConfig("/packages/b/tsconfig.json").CompilerOptions().Paths
 	assert.DeepEqual(t, paths.GetOrZero("@pkg/*"), []string{"/packages/b/src/*"})
+}
+
+func TestParseJsonConfigFileContentSingleThreadedReadsDirectoriesSerially(t *testing.T) {
+	t.Parallel()
+
+	files := map[string]string{}
+	for i := range 16 {
+		files[fmt.Sprintf("/project/dir%d/index.ts", i)] = ""
+	}
+	base := tsoptionstest.NewVFS(files, tspath.CaseSensitive)
+	var inFlight, maxInFlight atomic.Int32
+	fs := wrapvfs.Wrap(base, wrapvfs.Replacements{
+		GetAccessibleEntries: func(path tspath.RootedDirectoryPath) vfs.Entries {
+			n := inFlight.Add(1)
+			for {
+				current := maxInFlight.Load()
+				if n <= current || maxInFlight.CompareAndSwap(current, n) {
+					break
+				}
+			}
+			// Give concurrent readers time to overlap.
+			time.Sleep(time.Millisecond)
+			defer inFlight.Add(-1)
+			return base.GetAccessibleEntries(path)
+		},
+	})
+
+	parsed := tsoptions.ParseJsonConfigFileContent(
+		map[string]any{},
+		fs,
+		"/project",
+		&core.CompilerOptions{SingleThreaded: core.TSTrue},
+		"/project/tsconfig.json",
+		nil, /*resolutionStack*/
+		nil, /*extendedConfigCache*/
+	)
+
+	assert.Equal(t, len(parsed.FileNames()), 16)
+	assert.Equal(t, maxInFlight.Load(), int32(1))
 }
