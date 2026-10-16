@@ -1598,9 +1598,9 @@
 >zdt => zdt.toLocaleString("en", { month: "long" }) : (zdt: Temporal.ZonedDateTime) => string
 >zdt : Temporal.ZonedDateTime
 >zdt.toLocaleString("en", { month: "long" }) : string
->zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt : Temporal.ZonedDateTime
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >"en" : "en"
 >{ month: "long" } : { month: "long"; }
 >month : "long"
@@ -2604,15 +2604,15 @@
 
     zdt.toLocaleString(); // example output: 12/1/2019, 12:00:00 PM
 >zdt.toLocaleString() : string
->zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt : Temporal.ZonedDateTime
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 
     zdt.toLocaleString("de-DE"); // => '1.12.2019, 12:00:00 MEZ'
 >zdt.toLocaleString("de-DE") : string
->zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt : Temporal.ZonedDateTime
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >"de-DE" : "de-DE"
 
     const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" } as const;
@@ -2630,17 +2630,17 @@
 
     zdt.toLocaleString("de-DE", options); // => 'Sonntag, 1. Dezember 2019'
 >zdt.toLocaleString("de-DE", options) : string
->zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt : Temporal.ZonedDateTime
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >"de-DE" : "de-DE"
 >options : { readonly weekday: "long"; readonly year: "numeric"; readonly month: "long"; readonly day: "numeric"; }
 
     /* WRONG */ zdt.toLocaleString("de-DE", { timeZone: "Pacific/Auckland" });
 >zdt.toLocaleString("de-DE", { timeZone: "Pacific/Auckland" }) : string
->zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt : Temporal.ZonedDateTime
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >"de-DE" : "de-DE"
 >{ timeZone: "Pacific/Auckland" } : { timeZone: string; }
 >timeZone : string
@@ -2649,20 +2649,20 @@
     // => RangeError: Time zone option Pacific/Auckland does not match actual time zone Europe/Berlin
     zdt.withTimeZone("Pacific/Auckland").toLocaleString("de-DE"); // => '2.12.2019, 0:00:00 GMT+13'
 >zdt.withTimeZone("Pacific/Auckland").toLocaleString("de-DE") : string
->zdt.withTimeZone("Pacific/Auckland").toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.withTimeZone("Pacific/Auckland").toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt.withTimeZone("Pacific/Auckland") : Temporal.ZonedDateTime
 >zdt.withTimeZone : (timeZone: Temporal.TimeZoneLike) => Temporal.ZonedDateTime
 >zdt : Temporal.ZonedDateTime
 >withTimeZone : (timeZone: Temporal.TimeZoneLike) => Temporal.ZonedDateTime
 >"Pacific/Auckland" : "Pacific/Auckland"
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >"de-DE" : "de-DE"
 
     zdt.toLocaleString("en-US-u-nu-fullwide-hc-h12"); // => '１２/１/２０１９, １２:００:００ PM GMT+１'
 >zdt.toLocaleString("en-US-u-nu-fullwide-hc-h12") : string
->zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt : Temporal.ZonedDateTime
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >"en-US-u-nu-fullwide-hc-h12" : "en-US-u-nu-fullwide-hc-h12"
 }
 
@@ -9124,5 +9124,33 @@
 >Temporal : typeof Temporal
 >Now : typeof Temporal.Now
 >plainDateTimeISO : (timeZone?: Temporal.TimeZoneLike) => Temporal.PlainDateTime
+}
+
+{
+    // Refused through a widened variable too, not only in an object literal.
+    const zdt = Temporal.ZonedDateTime.from("2019-12-01T12:00+01:00[Europe/Berlin]");
+>zdt : Temporal.ZonedDateTime
+>Temporal.ZonedDateTime.from("2019-12-01T12:00+01:00[Europe/Berlin]") : Temporal.ZonedDateTime
+>Temporal.ZonedDateTime.from : (item: Temporal.ZonedDateTimeLike, options?: Temporal.ZonedDateTimeFromOptions) => Temporal.ZonedDateTime
+>Temporal.ZonedDateTime : Temporal.ZonedDateTimeConstructor
+>Temporal : typeof Temporal
+>ZonedDateTime : Temporal.ZonedDateTimeConstructor
+>from : (item: Temporal.ZonedDateTimeLike, options?: Temporal.ZonedDateTimeFromOptions) => Temporal.ZonedDateTime
+>"2019-12-01T12:00+01:00[Europe/Berlin]" : "2019-12-01T12:00+01:00[Europe/Berlin]"
+
+    const widened: Intl.DateTimeFormatOptions = { timeZone: "Pacific/Auckland" };
+>widened : Intl.DateTimeFormatOptions
+>Intl : any
+>{ timeZone: "Pacific/Auckland" } : { timeZone: string; }
+>timeZone : string
+>"Pacific/Auckland" : "Pacific/Auckland"
+
+    /* WRONG */ zdt.toLocaleString("de-DE", widened);
+>zdt.toLocaleString("de-DE", widened) : string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>zdt : Temporal.ZonedDateTime
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>"de-DE" : "de-DE"
+>widened : Intl.DateTimeFormatOptions
 }
 
