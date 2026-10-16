@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/declarationEmitMappedTypePropertyJSDoc.ts] ////
+
+=== declarationEmitMappedTypePropertyJSDoc.ts ===
+type Writeable<T> = { -readonly [P in keyof T]: T[P] } & {};
+>Writeable : { -readonly [P in keyof T]: T[P]; }
+
+declare function make<T>(shape: T): { shape: Writeable<T> };
+>make : <T>(shape: T) => { shape: Writeable<T>; }
+>shape : T
+>shape : { -readonly [P in keyof T]: T[P]; }
+
+export const a = make({
+>a : { shape: { x: number; }; }
+>make({  /** doc for x */  x: 1,}) : { shape: { x: number; }; }
+>make : <T>(shape: T) => { shape: Writeable<T>; }
+>{  /** doc for x */  x: 1,} : { x: number; }
+
+  /** doc for x */
+  x: 1,
+>x : number
+>1 : 1
+
+});
+declare function pick<T, K extends keyof T>(t: T, k: K): { [P in K]: T[P] };
+>pick : <T, K extends keyof T>(t: T, k: K) => { [P in K]: T[P]; }
+>t : T
+>k : K
+
+export const b = pick({
+>b : { v: number; }
+>pick({  /** doc for v */  v: 1,  w: 2,}, "v") : { v: number; }
+>pick : <T, K extends keyof T>(t: T, k: K) => { [P in K]: T[P]; }
+>{  /** doc for v */  v: 1,  w: 2,} : { v: number; w: number; }
+
+  /** doc for v */
+  v: 1,
+>v : number
+>1 : 1
+
+  w: 2,
+>w : number
+>2 : 2
+
+}, "v");
+>"v" : "v"
+
