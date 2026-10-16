@@ -938,6 +938,11 @@ var CompletionGlobalTypeDecls = []fourslash.CompletionsExpectedItem{
 		SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 	},
 	&lsproto.CompletionItem{
+		Label:    "inherit",
+		Kind:     new(lsproto.CompletionItemKindClass),
+		SortText: new(string(ls.SortTextGlobalsOrKeywords)),
+	},
+	&lsproto.CompletionItem{
 		Label:    "ArrayLike",
 		Kind:     new(lsproto.CompletionItemKindInterface),
 		SortText: new(string(ls.SortTextGlobalsOrKeywords)),
