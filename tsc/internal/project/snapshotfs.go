@@ -321,6 +321,9 @@ func (s *snapshotFSBuilder) deleteCacheEntry(entry *dirty.SyncMapEntry[tspath.Pa
 }
 
 func (s *snapshotFSBuilder) FileExists(fileName tspath.RootedFilePath, path tspath.PathKey) bool {
+	if file, ok := s.cacheFiles.LoadClean(path); ok && file != nil && file.MatchesDiskText() {
+		return true
+	}
 	if entry, ok := s.cacheFiles.Load(path); ok {
 		val := entry.Value()
 		if val == nil {
@@ -334,6 +337,9 @@ func (s *snapshotFSBuilder) FileExists(fileName tspath.RootedFilePath, path tspa
 }
 
 func (s *snapshotFSBuilder) GetFileByPath(fileName tspath.RootedFilePath, path tspath.PathKey) FileHandle {
+	if file, ok := s.cacheFiles.LoadClean(path); ok && file != nil && file.MatchesDiskText() {
+		return file
+	}
 	if entry, ok := s.cacheFiles.Load(path); ok {
 		return s.reloadEntryIfNeeded(entry)
 	}
@@ -351,6 +357,9 @@ func (s *snapshotFSBuilder) GetAccessibleEntries(path tspath.RootedDirectoryPath
 		return lowerEntries
 	}
 	return mergeCachedDirectoryEntries(lowerEntries, directory.Value(), func(key tspath.PathKey, childName string) bool {
+		if file, clean := s.cacheFiles.LoadClean(key); clean {
+			return file != nil || s.fs.FileExists(path.ResolveFile(childName))
+		}
 		entry, cached := s.cacheFiles.Load(key)
 		return cached && entry.Value() != nil || s.fs.FileExists(path.ResolveFile(childName))
 	}, s.fs.CaseSensitivity())
