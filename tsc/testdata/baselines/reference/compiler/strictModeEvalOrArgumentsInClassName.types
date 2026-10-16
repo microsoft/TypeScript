@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/strictModeEvalOrArgumentsInClassName.ts] ////
+
+=== classDeclarations.ts ===
+class arguments {}
+>arguments : arguments
+
+class eval {}
+>eval : eval
+
+export {};
+
+=== classExpression.ts ===
+const C = class eval {};
+>C : typeof eval
+>class eval {} : typeof eval
+>eval : typeof eval
+
+export {};
+
+=== ambientClassDeclaration.ts ===
+declare class eval {}
+>eval : eval
+
+export {};
+
+=== classNames.js ===
+class arguments {}
+>arguments : arguments
+
+class eval {}
+>eval : eval
+
+const C = class eval {};
+>C : typeof eval
+>class eval {} : typeof eval
+>eval : typeof eval
+
+export {};
+
