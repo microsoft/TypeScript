@@ -144,8 +144,17 @@ func (c *Checker) getWithAlternativeContainers(container *ast.Symbol, symbol *as
 		c.getDeclaredTypeOfSymbol(container).flags&TypeFlagsObject != 0 {
 		c.someSymbolTableInScope(enclosingDeclaration, func(t ast.SymbolTable, _ symbolTableID, _ bool, _ bool, _ *ast.Node) bool {
 			found := false
+			var values []*ast.Symbol
 			for _, s := range t {
-				if s.Flags()&leftMeaning != 0 && c.getTypeOfSymbol(s) == c.getDeclaredTypeOfSymbol(container) {
+				if s.Flags()&leftMeaning != 0 {
+					values = append(values, s)
+				}
+			}
+			// Getting the types of the values can create types and resolve aliases, so do it in a stable order
+			// rather than in the random iteration order of the symbol table.
+			c.sortSymbols(values)
+			for _, s := range values {
+				if c.getTypeOfSymbol(s) == c.getDeclaredTypeOfSymbol(container) {
 					variableMatches = append(variableMatches, s)
 					found = true
 				}
