@@ -216,45 +216,27 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(
 		}
 	}
 
-	// Avoid scanning unrelated links for files or directories in external packages.
-	canMap := false
+	// Map through the nearest linked ancestor. Only the path's own ancestors
+	// are checked, so the cost does not grow with the number of known links.
 	for directory := fileOrDirectory.Directory(); ; {
 		if link, ok := knownDirectoryLinks.Load(fs.pathKey(directory.AsPath())); ok && link != nil {
-			realFile, ok := link.ResolveFilePath(tspath.RootedFilePathFromPath(fileOrDirectory), fs.CaseSensitivity())
-			if ok && existsUsingSource(tspath.RootedPath(realFile)).IsTrue() {
-				canMap = true
-				break
+			realFileOrDirectory, ok := link.ResolveFilePath(tspath.RootedFilePathFromPath(fileOrDirectory), fs.CaseSensitivity())
+			if !ok {
+				panic("canonical symlink path did not match its presentation path")
+			}
+			if existsUsingSource(tspath.RootedPath(realFileOrDirectory)).IsTrue() {
+				if onFileExists != nil {
+					onFileExists(realFileOrDirectory)
+				}
+				return true
 			}
 		}
 		parent := directory.AsPath().Directory()
 		if parent == directory {
-			break
+			return false
 		}
 		directory = parent
 	}
-	if !canMap {
-		return false
-	}
-
-	// If it contains node_modules check if its one of the symlinked path we know of
-	var exists bool
-	knownDirectoryLinks.Range(func(directoryPath tspath.PathKey, knownDirectoryLink *symlinks.KnownDirectoryLink) bool {
-		if directoryPath == fileOrDirectoryPath || !directoryPath.ContainsPath(fileOrDirectoryPath) {
-			return true
-		}
-		realFileOrDirectory, ok := knownDirectoryLink.ResolveFilePath(tspath.RootedFilePathFromPath(fileOrDirectory), fs.CaseSensitivity())
-		if !ok {
-			panic("canonical symlink path did not match its presentation path")
-		}
-		if exists = existsUsingSource(tspath.RootedPath(realFileOrDirectory)).IsTrue(); exists {
-			if onFileExists != nil {
-				onFileExists(realFileOrDirectory)
-			}
-			return false
-		}
-		return true
-	})
-	return exists
 }
 
 func (fs *projectReferenceDtsFakingVfs) fileExistsIfProjectReferenceDts(file tspath.RootedFilePath) core.Tristate {
