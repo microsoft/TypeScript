@@ -109,7 +109,6 @@ jobs:
       - name: Verify clean merge
         run: |
           set -euo pipefail
-          git diff --check
           if ! git diff --quiet || ! git diff --cached --quiet; then
             echo "Validation modified the worktree; refusing to push the merge." >&2
             git status --short

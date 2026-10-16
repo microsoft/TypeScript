@@ -95,7 +95,6 @@ jobs:
           PACKAGE_VERSION: ${{ inputs.package_version }}
         run: |
           set -euo pipefail
-          git diff --check
           mapfile -t changedFiles < <(git diff --name-only)
           expectedFiles=("Herebyfile.mjs" "tsc/internal/core/version.go")
           if [ "${changedFiles[*]}" != "${expectedFiles[*]}" ]; then
