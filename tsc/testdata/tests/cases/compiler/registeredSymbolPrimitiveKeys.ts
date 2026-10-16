@@ -7,7 +7,7 @@ type Equal<A, B> =
     (<T>() => T extends A ? 1 : 2) extends
     (<T>() => T extends B ? 1 : 2) ? true : false;
 
-type AcceptedKeys = Assert<Equal<SymbolForKey, string | number | bigint | boolean | null | undefined>>;
+type AcceptedKeys = Assert<Equal<NonSymbol, string | number | bigint | boolean | null | undefined | object>>;
 
 const numberKey: RegisteredSymbol<1> = Symbol.for(1);
 const bigintKey: RegisteredSymbol<1n> = Symbol.for(1n);
@@ -51,9 +51,14 @@ const aliasedNull: RegisteredSymbol<"null"> = Symbol.for(nullOrString);
 declare const arbitraryNumber: number;
 declare const arbitraryBigint: bigint;
 declare const arbitraryBoolean: boolean;
+declare const arbitraryObject: object;
 const broadNumber: symbol = Symbol.for(arbitraryNumber);
 const broadBigint: symbol = Symbol.for(arbitraryBigint);
 const broadBoolean: symbol = Symbol.for(arbitraryBoolean);
+const broadObject: symbol = Symbol.for(arbitraryObject);
+const objectLiteral: symbol = Symbol.for({ toString: () => "object" });
+const functionObject: symbol = Symbol.for(function objectKey() {});
+const explicitObject: RegisteredSymbol<object> = Symbol.for(arbitraryObject);
 const eitherBoolean: RegisteredSymbol<"true" | "false"> = Symbol.for(arbitraryBoolean);
 declare const wideUnion: string | 1;
 const broadUnion: symbol = Symbol.for(wideUnion);
@@ -61,15 +66,16 @@ const broadUnion: symbol = Symbol.for(wideUnion);
 const unsoundNumber: typeof stringKey = Symbol.for(arbitraryNumber);
 // @ts-expect-error A union containing arbitrary strings cannot have one identity.
 const unsoundUnion: typeof stringKey = Symbol.for(wideUnion);
+// @ts-expect-error An object's string conversion cannot give it a fixed symbol identity.
+const unsoundObject: typeof stringKey = Symbol.for(arbitraryObject);
 
-function fromGeneric<K extends SymbolForKey>(key: K): RegisteredSymbol<K> {
+function fromGeneric<K extends NonSymbol>(key: K): RegisteredSymbol<K> {
     return Symbol.for(key);
 }
 const genericNumber: RegisteredSymbol<"1"> = fromGeneric(1);
+const genericObject: symbol = fromGeneric({});
 
 // @ts-expect-error A symbol primitive cannot be converted by ToString.
 Symbol.for(Symbol());
-// @ts-expect-error Object conversion can throw or depend on mutable methods.
-Symbol.for({});
 // @ts-expect-error A symbol is not a safe registry key.
 type InvalidKey = RegisteredSymbol<symbol>;

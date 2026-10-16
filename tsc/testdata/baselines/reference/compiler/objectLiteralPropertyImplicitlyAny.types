@@ -4,9 +4,9 @@
 const foo = Symbol.for("foo");
 >foo : RegisteredSymbol<"foo">
 >Symbol.for("foo") : RegisteredSymbol<"foo">
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >"foo" : "foo"
 
 const o = { [foo]: undefined };

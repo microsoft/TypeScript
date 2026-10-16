@@ -4,9 +4,9 @@
 var symbol = Symbol.for('myThing');
 >symbol : symbol
 >Symbol.for('myThing') : RegisteredSymbol<"myThing">
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >'myThing' : "myThing"
 
 class Bar {

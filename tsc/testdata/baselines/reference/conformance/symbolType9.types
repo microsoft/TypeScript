@@ -4,9 +4,9 @@
 var s = Symbol.for("equal");
 >s : symbol
 >Symbol.for("equal") : RegisteredSymbol<"equal">
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >"equal" : "equal"
 
 s == s;

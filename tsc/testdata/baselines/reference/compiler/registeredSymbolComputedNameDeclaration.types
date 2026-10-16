@@ -4,9 +4,9 @@
 export const key = Symbol.for("abc");
 >key : RegisteredSymbol<"abc">
 >Symbol.for("abc") : RegisteredSymbol<"abc">
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >"abc" : "abc"
 
 export function getKey(): typeof key { return key; }
@@ -31,9 +31,9 @@ export const value = {
     [Symbol.for("other")]: true,
 >[Symbol.for("other")] : boolean
 >Symbol.for("other") : RegisteredSymbol<"other">
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >"other" : "other"
 >true : true
 

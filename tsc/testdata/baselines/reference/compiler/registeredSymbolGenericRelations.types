@@ -18,9 +18,9 @@ const inferred: "foo" = inferKey(Symbol.for("foo"));
 >inferKey(Symbol.for("foo")) : "foo"
 >inferKey : <K extends string>(value: RegisteredSymbol<K>) => K
 >Symbol.for("foo") : RegisteredSymbol<"foo">
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >"foo" : "foo"
 
 function simplify<K extends string>() {

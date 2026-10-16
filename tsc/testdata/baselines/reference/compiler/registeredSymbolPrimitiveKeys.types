@@ -13,31 +13,31 @@ type Equal<A, B> =
 >true : true
 >false : false
 
-type AcceptedKeys = Assert<Equal<SymbolForKey, string | number | bigint | boolean | null | undefined>>;
+type AcceptedKeys = Assert<Equal<NonSymbol, string | number | bigint | boolean | null | undefined | object>>;
 >AcceptedKeys : true
 
 const numberKey: RegisteredSymbol<1> = Symbol.for(1);
 >numberKey : RegisteredSymbol<1>
 >Symbol.for(1) : RegisteredSymbol<1>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >1 : 1
 
 const bigintKey: RegisteredSymbol<1n> = Symbol.for(1n);
 >bigintKey : RegisteredSymbol<1>
 >Symbol.for(1n) : RegisteredSymbol<1>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >1n : 1n
 
 const stringKey: RegisteredSymbol<"1"> = Symbol.for("1");
 >stringKey : RegisteredSymbol<1>
 >Symbol.for("1") : RegisteredSymbol<1>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >"1" : "1"
 
 const sameNumber: typeof stringKey = numberKey;
@@ -60,9 +60,9 @@ const differentNumber: typeof numberKey = Symbol.for(2);
 >differentNumber : RegisteredSymbol<1>
 >numberKey : RegisteredSymbol<1>
 >Symbol.for(2) : RegisteredSymbol<2>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >2 : 2
 
 // @ts-expect-error ToString does not parse numeric strings.
@@ -70,26 +70,26 @@ const leadingZero: typeof numberKey = Symbol.for("01");
 >leadingZero : RegisteredSymbol<1>
 >numberKey : RegisteredSymbol<1>
 >Symbol.for("01") : RegisteredSymbol<"01">
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >"01" : "01"
 
 const zero: RegisteredSymbol<0> = Symbol.for(0);
 >zero : RegisteredSymbol<0>
 >Symbol.for(0) : RegisteredSymbol<0>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >0 : 0
 
 const negativeZero: typeof zero = Symbol.for(-0);
 >negativeZero : RegisteredSymbol<0>
 >zero : RegisteredSymbol<0>
 >Symbol.for(-0) : RegisteredSymbol<0>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >-0 : 0
 >0 : 0
 
@@ -97,17 +97,17 @@ const bigZero: typeof zero = Symbol.for(0n);
 >bigZero : RegisteredSymbol<0>
 >zero : RegisteredSymbol<0>
 >Symbol.for(0n) : RegisteredSymbol<0>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >0n : 0n
 
 const largeNumber: RegisteredSymbol<1e21> = Symbol.for(1e21);
 >largeNumber : RegisteredSymbol<1e+21>
 >Symbol.for(1e21) : RegisteredSymbol<1e+21>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >1e21 : 1e+21
 
 const largeString: RegisteredSymbol<"1e+21"> = largeNumber;
@@ -119,9 +119,9 @@ const negativeBigint: RegisteredSymbol<-1n> = Symbol.for(-1n);
 >-1n : -1n
 >1n : 1n
 >Symbol.for(-1n) : RegisteredSymbol<-1n>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >-1n : -1n
 >1n : 1n
 
@@ -132,9 +132,9 @@ const negativeString: RegisteredSymbol<"-1"> = negativeBigint;
 const hugeBigint: RegisteredSymbol<9007199254740993n> = Symbol.for(9007199254740993n);
 >hugeBigint : RegisteredSymbol<9007199254740993n>
 >Symbol.for(9007199254740993n) : RegisteredSymbol<9007199254740993n>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >9007199254740993n : 9007199254740993n
 
 const hugeString: RegisteredSymbol<"9007199254740993"> = hugeBigint;
@@ -145,9 +145,9 @@ const trueKey: RegisteredSymbol<true> = Symbol.for(true);
 >trueKey : RegisteredSymbol<true>
 >true : true
 >Symbol.for(true) : RegisteredSymbol<true>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >true : true
 
 const trueString: RegisteredSymbol<"true"> = trueKey;
@@ -158,9 +158,9 @@ const falseKey: RegisteredSymbol<false> = Symbol.for(false);
 >falseKey : RegisteredSymbol<false>
 >false : false
 >Symbol.for(false) : RegisteredSymbol<false>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >false : false
 
 const falseString: RegisteredSymbol<"false"> = falseKey;
@@ -170,9 +170,9 @@ const falseString: RegisteredSymbol<"false"> = falseKey;
 const nullKey: RegisteredSymbol<null> = Symbol.for(null);
 >nullKey : RegisteredSymbol<null>
 >Symbol.for(null) : RegisteredSymbol<null>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 
 const nullString: RegisteredSymbol<"null"> = nullKey;
 >nullString : RegisteredSymbol<null>
@@ -181,9 +181,9 @@ const nullString: RegisteredSymbol<"null"> = nullKey;
 const undefinedKey: RegisteredSymbol<undefined> = Symbol.for(undefined);
 >undefinedKey : RegisteredSymbol<undefined>
 >Symbol.for(undefined) : RegisteredSymbol<undefined>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >undefined : undefined
 
 const undefinedString: RegisteredSymbol<"undefined"> = undefinedKey;
@@ -202,9 +202,9 @@ declare const mixedKey: 1 | "2";
 const mixed: RegisteredSymbol<"1" | 2n> = Symbol.for(mixedKey);
 >mixed : RegisteredSymbol<1> | RegisteredSymbol<2>
 >Symbol.for(mixedKey) : RegisteredSymbol<1> | RegisteredSymbol<2>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >mixedKey : "2" | 1
 
 declare const aliasedKey: 1 | "1";
@@ -213,9 +213,9 @@ declare const aliasedKey: 1 | "1";
 const aliased: RegisteredSymbol<"1"> = Symbol.for(aliasedKey);
 >aliased : RegisteredSymbol<1>
 >Symbol.for(aliasedKey) : RegisteredSymbol<1>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >aliasedKey : "1" | 1
 
 declare const nullOrString: null | "null";
@@ -224,9 +224,9 @@ declare const nullOrString: null | "null";
 const aliasedNull: RegisteredSymbol<"null"> = Symbol.for(nullOrString);
 >aliasedNull : RegisteredSymbol<null>
 >Symbol.for(nullOrString) : RegisteredSymbol<null>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >nullOrString : "null" | null
 
 declare const arbitraryNumber: number;
@@ -238,36 +238,75 @@ declare const arbitraryBigint: bigint;
 declare const arbitraryBoolean: boolean;
 >arbitraryBoolean : boolean
 
+declare const arbitraryObject: object;
+>arbitraryObject : object
+
 const broadNumber: symbol = Symbol.for(arbitraryNumber);
 >broadNumber : symbol
 >Symbol.for(arbitraryNumber) : symbol
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >arbitraryNumber : number
 
 const broadBigint: symbol = Symbol.for(arbitraryBigint);
 >broadBigint : symbol
 >Symbol.for(arbitraryBigint) : symbol
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >arbitraryBigint : bigint
 
 const broadBoolean: symbol = Symbol.for(arbitraryBoolean);
 >broadBoolean : symbol
 >Symbol.for(arbitraryBoolean) : RegisteredSymbol<false> | RegisteredSymbol<true>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >arbitraryBoolean : boolean
+
+const broadObject: symbol = Symbol.for(arbitraryObject);
+>broadObject : symbol
+>Symbol.for(arbitraryObject) : symbol
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
+>arbitraryObject : object
+
+const objectLiteral: symbol = Symbol.for({ toString: () => "object" });
+>objectLiteral : symbol
+>Symbol.for({ toString: () => "object" }) : symbol
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
+>{ toString: () => "object" } : { toString: () => "object"; }
+>toString : () => "object"
+>() => "object" : () => "object"
+>"object" : "object"
+
+const functionObject: symbol = Symbol.for(function objectKey() {});
+>functionObject : symbol
+>Symbol.for(function objectKey() {}) : symbol
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
+>function objectKey() {} : () => void
+>objectKey : () => void
+
+const explicitObject: RegisteredSymbol<object> = Symbol.for(arbitraryObject);
+>explicitObject : symbol
+>Symbol.for(arbitraryObject) : symbol
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
+>arbitraryObject : object
 
 const eitherBoolean: RegisteredSymbol<"true" | "false"> = Symbol.for(arbitraryBoolean);
 >eitherBoolean : RegisteredSymbol<false> | RegisteredSymbol<true>
 >Symbol.for(arbitraryBoolean) : RegisteredSymbol<false> | RegisteredSymbol<true>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >arbitraryBoolean : boolean
 
 declare const wideUnion: string | 1;
@@ -276,9 +315,9 @@ declare const wideUnion: string | 1;
 const broadUnion: symbol = Symbol.for(wideUnion);
 >broadUnion : symbol
 >Symbol.for(wideUnion) : symbol
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >wideUnion : string | 1
 
 // @ts-expect-error A broad number cannot have the identity of one registry key.
@@ -286,9 +325,9 @@ const unsoundNumber: typeof stringKey = Symbol.for(arbitraryNumber);
 >unsoundNumber : RegisteredSymbol<1>
 >stringKey : RegisteredSymbol<1>
 >Symbol.for(arbitraryNumber) : symbol
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >arbitraryNumber : number
 
 // @ts-expect-error A union containing arbitrary strings cannot have one identity.
@@ -296,44 +335,52 @@ const unsoundUnion: typeof stringKey = Symbol.for(wideUnion);
 >unsoundUnion : RegisteredSymbol<1>
 >stringKey : RegisteredSymbol<1>
 >Symbol.for(wideUnion) : symbol
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >wideUnion : string | 1
 
-function fromGeneric<K extends SymbolForKey>(key: K): RegisteredSymbol<K> {
->fromGeneric : <K extends SymbolForKey>(key: K) => RegisteredSymbol<K>
+// @ts-expect-error An object's string conversion cannot give it a fixed symbol identity.
+const unsoundObject: typeof stringKey = Symbol.for(arbitraryObject);
+>unsoundObject : RegisteredSymbol<1>
+>stringKey : RegisteredSymbol<1>
+>Symbol.for(arbitraryObject) : symbol
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
+>Symbol : SymbolConstructor
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
+>arbitraryObject : object
+
+function fromGeneric<K extends NonSymbol>(key: K): RegisteredSymbol<K> {
+>fromGeneric : <K extends NonSymbol>(key: K) => RegisteredSymbol<K>
 >key : K
 
     return Symbol.for(key);
 >Symbol.for(key) : RegisteredSymbol<K>
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >key : K
 }
 const genericNumber: RegisteredSymbol<"1"> = fromGeneric(1);
 >genericNumber : RegisteredSymbol<1>
 >fromGeneric(1) : RegisteredSymbol<1>
->fromGeneric : <K extends SymbolForKey>(key: K) => RegisteredSymbol<K>
+>fromGeneric : <K extends NonSymbol>(key: K) => RegisteredSymbol<K>
 >1 : 1
+
+const genericObject: symbol = fromGeneric({});
+>genericObject : symbol
+>fromGeneric({}) : symbol
+>fromGeneric : <K extends NonSymbol>(key: K) => RegisteredSymbol<K>
+>{} : {}
 
 // @ts-expect-error A symbol primitive cannot be converted by ToString.
 Symbol.for(Symbol());
 >Symbol.for(Symbol()) : symbol
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol() : symbol
 >Symbol : SymbolConstructor
-
-// @ts-expect-error Object conversion can throw or depend on mutable methods.
-Symbol.for({});
->Symbol.for({}) : symbol
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
->Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
->{} : {}
 
 // @ts-expect-error A symbol is not a safe registry key.
 type InvalidKey = RegisteredSymbol<symbol>;

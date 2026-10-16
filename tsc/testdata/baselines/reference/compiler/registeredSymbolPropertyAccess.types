@@ -4,25 +4,25 @@
 export const single = Symbol.for("single");
 >single : RegisteredSymbol<"single">
 >Symbol.for("single") : RegisteredSymbol<"single">
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >"single" : "single"
 
 export const twin1 = Symbol.for("twin");
 >twin1 : RegisteredSymbol<"twin">
 >Symbol.for("twin") : RegisteredSymbol<"twin">
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >"twin" : "twin"
 
 export const twin2 = Symbol.for("twin");
 >twin2 : RegisteredSymbol<"twin">
 >Symbol.for("twin") : RegisteredSymbol<"twin">
->Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends NonSymbol>(key: Key) => RegisteredSymbol<Key>
 >"twin" : "twin"
 
 export const unique1 = Symbol("unique");
