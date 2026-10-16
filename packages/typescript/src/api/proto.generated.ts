@@ -1927,4 +1927,5 @@ export interface RawCompilerOptions {
     singleThreaded?: boolean | undefined;
     quiet?: boolean | undefined;
     checkers?: number | undefined;
+    maxMemory?: number | undefined;
 }
