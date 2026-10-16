@@ -19,6 +19,7 @@ func buildInfoToSnapshot(buildInfo *BuildInfo, config *tsoptions.ParsedCommandLi
 	to.filePaths = core.Map(buildInfo.FileNames, func(fileName BuildInfoPath) tspath.PathKey {
 		return config.CaseSensitivity().PathKey(tspath.RootedPath(ResolveBuildInfoFileName(fileName, to.buildInfoDirectory, host.DefaultLibraryPath())))
 	})
+	to.snapshot.fileOrder = to.filePaths
 	to.filePathSet = core.Map(buildInfo.FileIdsList, func(fileIdList []BuildInfoFileId) *collections.Set[tspath.PathKey] {
 		fileSet := collections.NewSetWithSizeHint[tspath.PathKey](len(fileIdList))
 		for _, fileId := range fileIdList {

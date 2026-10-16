@@ -55,7 +55,7 @@ Errors  Files
      1  global.d.ts[90m:1[0m
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es5.d.ts","./consumer.ts","./global.d.ts","./module.d.ts"],"fileInfos":[{"version":"a5af7e2c45fb7635b05dcb96b08fc584-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Shared<T> {}","affectsGlobalScope":true,"impliedNodeFormat":1},"b8ccc95b7f8a123c2fed61f2394c7e72-export const unchanged = 1;",{"version":"35a5065018e48ace611d23c47b1c790a-interface Shared<T, U> {}","affectsGlobalScope":true,"impliedNodeFormat":1},"6c520878a353927f50be384ce898a985-export interface Unrelated {}"],"semanticDiagnosticsPerFile":[[1,[{"pos":662,"end":668,"code":2428,"category":1,"messageKey":"All_declarations_of_0_must_have_identical_type_parameters_2428","messageArgs":["Shared"]}]],[3,[{"pos":10,"end":16,"code":2428,"category":1,"messageKey":"All_declarations_of_0_must_have_identical_type_parameters_2428","messageArgs":["Shared"]}]]],"affectedFilesPendingEmit":[2]}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es5.d.ts","./consumer.ts","./global.d.ts","./module.d.ts"],"fileInfos":[{"version":"a5af7e2c45fb7635b05dcb96b08fc584-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Shared<T> {}","affectsGlobalScope":true,"impliedNodeFormat":1},"b8ccc95b7f8a123c2fed61f2394c7e72-export const unchanged = 1;",{"version":"35a5065018e48ace611d23c47b1c790a-interface Shared<T, U> {}","affectsGlobalScope":true,"impliedNodeFormat":1},"6c520878a353927f50be384ce898a985-export interface Unrelated {}"],"options":{"types":[]},"semanticDiagnosticsPerFile":[[1,[{"pos":662,"end":668,"code":2428,"category":1,"messageKey":"All_declarations_of_0_must_have_identical_type_parameters_2428","messageArgs":["Shared"]}]],[3,[{"pos":10,"end":16,"code":2428,"category":1,"messageKey":"All_declarations_of_0_must_have_identical_type_parameters_2428","messageArgs":["Shared"]}]]],"affectedFilesPendingEmit":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -116,6 +116,9 @@ Errors  Files
       "impliedNodeFormat": "CommonJS"
     }
   ],
+  "options": {
+    "types": []
+  },
   "semanticDiagnosticsPerFile": [
     [
       "lib.es5.d.ts",
@@ -155,7 +158,7 @@ Errors  Files
       2
     ]
   ],
-  "size": 1548
+  "size": 1571
 }
 
 tsconfig.json::
@@ -175,7 +178,7 @@ tsgo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es5.d.ts","./consumer.ts"],"fileInfos":[{"version":"a5af7e2c45fb7635b05dcb96b08fc584-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Shared<T> {}","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b8ccc95b7f8a123c2fed61f2394c7e72-export const unchanged = 1;","signature":"93ca091d3ab68cd75a241c9cc24ea4cc-export declare const unchanged = 1;\n","impliedNodeFormat":1}],"affectedFilesPendingEmit":[2]}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es5.d.ts","./consumer.ts"],"fileInfos":[{"version":"a5af7e2c45fb7635b05dcb96b08fc584-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Shared<T> {}","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b8ccc95b7f8a123c2fed61f2394c7e72-export const unchanged = 1;","signature":"93ca091d3ab68cd75a241c9cc24ea4cc-export declare const unchanged = 1;\n","impliedNodeFormat":1}],"options":{"types":[]},"affectedFilesPendingEmit":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -216,6 +219,9 @@ Output::
       }
     }
   ],
+  "options": {
+    "types": []
+  },
   "affectedFilesPendingEmit": [
     [
       "./consumer.ts",
@@ -223,7 +229,7 @@ Output::
       2
     ]
   ],
-  "size": 1104
+  "size": 1127
 }
 
 tsconfig.json::
@@ -270,7 +276,7 @@ Errors  Files
      1  global.d.ts[90m:1[0m
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es5.d.ts","./consumer.ts","./global.d.ts"],"fileInfos":[{"version":"a5af7e2c45fb7635b05dcb96b08fc584-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Shared<T> {}","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b8ccc95b7f8a123c2fed61f2394c7e72-export const unchanged = 1;","signature":"93ca091d3ab68cd75a241c9cc24ea4cc-export declare const unchanged = 1;\n","impliedNodeFormat":1},{"version":"35a5065018e48ace611d23c47b1c790a-interface Shared<T, U> {}","affectsGlobalScope":true,"impliedNodeFormat":1}],"semanticDiagnosticsPerFile":[[1,[{"pos":662,"end":668,"code":2428,"category":1,"messageKey":"All_declarations_of_0_must_have_identical_type_parameters_2428","messageArgs":["Shared"]}]],[3,[{"pos":10,"end":16,"code":2428,"category":1,"messageKey":"All_declarations_of_0_must_have_identical_type_parameters_2428","messageArgs":["Shared"]}]]],"affectedFilesPendingEmit":[2]}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es5.d.ts","./consumer.ts","./global.d.ts"],"fileInfos":[{"version":"a5af7e2c45fb7635b05dcb96b08fc584-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface Shared<T> {}","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b8ccc95b7f8a123c2fed61f2394c7e72-export const unchanged = 1;","signature":"93ca091d3ab68cd75a241c9cc24ea4cc-export declare const unchanged = 1;\n","impliedNodeFormat":1},{"version":"35a5065018e48ace611d23c47b1c790a-interface Shared<T, U> {}","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"types":[]},"semanticDiagnosticsPerFile":[[1,[{"pos":662,"end":668,"code":2428,"category":1,"messageKey":"All_declarations_of_0_must_have_identical_type_parameters_2428","messageArgs":["Shared"]}]],[3,[{"pos":10,"end":16,"code":2428,"category":1,"messageKey":"All_declarations_of_0_must_have_identical_type_parameters_2428","messageArgs":["Shared"]}]]],"affectedFilesPendingEmit":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -328,6 +334,9 @@ Errors  Files
       }
     }
   ],
+  "options": {
+    "types": []
+  },
   "semanticDiagnosticsPerFile": [
     [
       "lib.es5.d.ts",
@@ -367,7 +376,7 @@ Errors  Files
       2
     ]
   ],
-  "size": 1586
+  "size": 1609
 }
 
 tsconfig.json::

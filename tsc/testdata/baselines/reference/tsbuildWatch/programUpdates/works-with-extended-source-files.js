@@ -364,6 +364,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
+//// [/user/username/projects/project/other.js] *rewrite with same content*
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2026.full.d.ts","./other.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"7148e8559d706b66aaba2a2423755c63-let z = 0;","signature":"879426698e1db06899fd57775c19b230-declare let z: number;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true,"strict":false},"latestChangedDtsFile":"./other.d.ts"}
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
@@ -443,7 +444,7 @@ Output::
     * project2.tsconfig.json
     * project3.tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project2.tsconfig.json' is out of date because output 'other.js' is older than input 'project2.tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'project2.tsconfig.json'
 
 [[90mHH:MM:SS AM[0m] Building project 'project2.tsconfig.json'...
 
