@@ -152,13 +152,7 @@ func (t *parseTask) load(loader *fileLoader) {
 
 	if compilerOptions.NoLib != core.TSTrue && !loader.opts.SkipModuleResolution {
 		for index, lib := range file.LibReferenceDirectives {
-			includeReason := &FileIncludeReason{
-				kind: fileIncludeKindLibReferenceDirective,
-				referencedFile: &referencedFileData{
-					file:  t.path,
-					index: index,
-				},
-			}
+			includeReason := newReferencedFileIncludeReason(fileIncludeKindLibReferenceDirective, t.path, index, nil)
 			if name, ok := tsoptions.GetLibFileName(lib.FileName); ok {
 				libFile := loader.pathForLibFile(name)
 				t.addSubTask(resolvedRef{
