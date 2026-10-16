@@ -2,7 +2,6 @@ package ast
 
 import (
 	"reflect"
-	"slices"
 	"strconv"
 	"testing"
 
@@ -14,9 +13,6 @@ import (
 func TestNodeRecordsArePointerFree(t *testing.T) {
 	t.Parallel()
 	for layout := nodeLayout(1); layout < layoutCount; layout++ {
-		if standaloneLayout(layout) {
-			continue
-		}
 		typ := reflect.TypeOf(layoutRecord(layout))
 		assert.Assert(t, typ != nil, "layout %d has no record type", layout)
 		if path := findPointer(typ, typ.Name()); path != "" {
@@ -29,9 +25,6 @@ func TestNodeRecordsArePointerFree(t *testing.T) {
 func TestNodeRecordsAreUnpadded(t *testing.T) {
 	t.Parallel()
 	for layout := nodeLayout(1); layout < layoutCount; layout++ {
-		if standaloneLayout(layout) {
-			continue
-		}
 		typ := reflect.TypeOf(layoutRecord(layout))
 		var used uintptr
 		for field := range typ.Fields() {
@@ -59,7 +52,8 @@ func findPointer(typ reflect.Type, path string) string {
 	return ""
 }
 
-func TestNodeStoreBlocks(t *testing.T) {
+// Records move when the store grows, so handles and refs must survive it.
+func TestNodeStoreGrowth(t *testing.T) {
 	t.Parallel()
 	factory := NewNodeFactory(NodeFactoryHooks{})
 	var statements []Node
@@ -67,24 +61,18 @@ func TestNodeStoreBlocks(t *testing.T) {
 		statements = append(statements, factory.NewExpressionStatement(factory.NewIdentifier(strconv.Itoa(i))))
 	}
 	store := factory.store
-	assert.Assert(t, len(store.blocks) > 2, "nodes should span several blocks")
-	blockOfNode := func(n Node) int {
-		return slices.Index(store.blocks, n.block())
-	}
-	crossed := 0
 	for i, statement := range statements {
 		expression := statement.Expression()
-		if blockOfNode(expression) != blockOfNode(statement) {
-			crossed++
-		}
 		assert.Equal(t, expression.Text(), strconv.Itoa(i))
 		assert.Equal(t, expression.store(), store)
 		expression.SetParent(statement)
 		assert.Equal(t, expression.Parent(), statement)
 	}
-	assert.Assert(t, crossed > 0, "some children should be in an earlier block than their parents")
+	assert.Equal(t, len(store.reused), 0, "refs within a store should not be reused nodes")
 	factory.CompactStore()
+	assert.Equal(t, len(store.words), cap(store.words))
 	assert.Equal(t, statements[0].Expression().Text(), "0")
+	assert.Equal(t, statements[19999].Expression().Parent(), statements[19999])
 }
 
 func TestNodeStoreCrossStoreRefs(t *testing.T) {
@@ -98,6 +86,10 @@ func TestNodeStoreCrossStoreRefs(t *testing.T) {
 	assert.Equal(t, second.Expression(), target)
 	target.SetParent(first)
 	assert.Equal(t, target.Parent(), first)
+	assert.Equal(t, len(b.store.reused), 2)
+	target.SetParent(second)
+	target.SetParent(first)
+	assert.Equal(t, len(a.store.reused), 1, "rewriting a reused ref should reuse its slot")
 	first.AsExpressionStatement().SetExpression(Node{})
 	assert.Assert(t, first.Expression().IsNil())
 }

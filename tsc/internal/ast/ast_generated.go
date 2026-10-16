@@ -770,7 +770,7 @@ const (
 	_ = -unsafe.Offsetof(jsDocTypedefTagData{}.nodeBaseData)
 	_ = -unsafe.Offsetof(jsDocSignatureData{}.nodeBaseData)
 	_ = -unsafe.Offsetof(jsDocNameReferenceData{}.nodeBaseData)
-	_ = -unsafe.Offsetof(SourceFile{}.nodeBaseData)
+	_ = -unsafe.Offsetof(sourceFileData{}.nodeBaseData)
 	_ = -unsafe.Offsetof(moduleDeclarationData{}.nodeBaseData)
 	_ = -unsafe.Offsetof(importEqualsDeclarationData{}.nodeBaseData)
 	_ = -unsafe.Offsetof(exportDeclarationData{}.nodeBaseData)
@@ -1147,7 +1147,7 @@ func layoutRecord(layout nodeLayout) any {
 	case layoutJSDocNameReference:
 		return jsDocNameReferenceData{}
 	case layoutSourceFile:
-		return SourceFile{}
+		return sourceFileData{}
 	case layoutModuleDeclaration:
 		return moduleDeclarationData{}
 	case layoutImportEqualsDeclaration:
@@ -1204,7 +1204,7 @@ var iterationStatementBaseStatementOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) iterationStatementBaseStatement() *nodeRef {
 	if off := iterationStatementBaseStatementOffsets[n.Kind()]; off != 0 {
-		return (*nodeRef)(unsafe.Add(n.p, off))
+		return (*nodeRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1249,7 +1249,7 @@ var nodeWithTypeArgumentsBaseTypeArgumentsOffsets = [kindFlowReduceLabelData + 1
 
 func (n Node) nodeWithTypeArgumentsBaseTypeArguments() *sideRef {
 	if off := nodeWithTypeArgumentsBaseTypeArgumentsOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1317,7 +1317,7 @@ var declarationBaseSymbolOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindJsxAttribute:                  uint8(unsafe.Offsetof(jsxAttributeData{}.symbol)),
 	KindJsxSpreadAttribute:            uint8(unsafe.Offsetof(jsxSpreadAttributeData{}.symbol)),
 	KindJSDocSignature:                uint8(unsafe.Offsetof(jsDocSignatureData{}.symbol)),
-	KindSourceFile:                    uint8(unsafe.Offsetof(SourceFile{}.symbol)),
+	KindSourceFile:                    uint8(unsafe.Offsetof(sourceFileData{}.symbol)),
 	KindModuleDeclaration:             uint8(unsafe.Offsetof(moduleDeclarationData{}.symbol)),
 	KindImportEqualsDeclaration:       uint8(unsafe.Offsetof(importEqualsDeclarationData{}.symbol)),
 	KindExportDeclaration:             uint8(unsafe.Offsetof(exportDeclarationData{}.symbol)),
@@ -1329,7 +1329,7 @@ var declarationBaseSymbolOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) declarationBaseSymbol() *sideRef {
 	if off := declarationBaseSymbolOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1364,7 +1364,7 @@ var exportableBaseLocalSymbolOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) exportableBaseLocalSymbol() *sideRef {
 	if off := exportableBaseLocalSymbolOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1419,7 +1419,7 @@ var modifiersBaseModifiersOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) modifiersBaseModifiers() *sideRef {
 	if off := modifiersBaseModifiersOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1462,13 +1462,13 @@ var localsContainerBaseLocalsOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindFunctionType:                uint8(unsafe.Offsetof(functionTypeNodeData{}.locals)),
 	KindConstructorType:             uint8(unsafe.Offsetof(constructorTypeNodeData{}.locals)),
 	KindJSDocSignature:              uint8(unsafe.Offsetof(jsDocSignatureData{}.locals)),
-	KindSourceFile:                  uint8(unsafe.Offsetof(SourceFile{}.locals)),
+	KindSourceFile:                  uint8(unsafe.Offsetof(sourceFileData{}.locals)),
 	KindModuleDeclaration:           uint8(unsafe.Offsetof(moduleDeclarationData{}.locals)),
 }
 
 func (n Node) localsContainerBaseLocals() *sideRef {
 	if off := localsContainerBaseLocalsOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1501,13 +1501,13 @@ var localsContainerBaseNextContainerOffsets = [kindFlowReduceLabelData + 1]uint8
 	KindFunctionType:                uint8(unsafe.Offsetof(functionTypeNodeData{}.nextContainer)),
 	KindConstructorType:             uint8(unsafe.Offsetof(constructorTypeNodeData{}.nextContainer)),
 	KindJSDocSignature:              uint8(unsafe.Offsetof(jsDocSignatureData{}.nextContainer)),
-	KindSourceFile:                  uint8(unsafe.Offsetof(SourceFile{}.nextContainer)),
+	KindSourceFile:                  uint8(unsafe.Offsetof(sourceFileData{}.nextContainer)),
 	KindModuleDeclaration:           uint8(unsafe.Offsetof(moduleDeclarationData{}.nextContainer)),
 }
 
 func (n Node) localsContainerBaseNextContainer() *nodeRef {
 	if off := localsContainerBaseNextContainerOffsets[n.Kind()]; off != 0 {
-		return (*nodeRef)(unsafe.Add(n.p, off))
+		return (*nodeRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1587,7 +1587,7 @@ var flowNodeBaseFlowNodeOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) flowNodeBaseFlowNode() *flowRef {
 	if off := flowNodeBaseFlowNodeOffsets[n.Kind()]; off != 0 {
-		return (*flowRef)(unsafe.Add(n.p, off))
+		return (*flowRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1670,7 +1670,7 @@ var compositeBaseFactsOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindJsxSelfClosingElement:       uint8(unsafe.Offsetof(jsxSelfClosingElementData{}.facts)),
 	KindJsxFragment:                 uint8(unsafe.Offsetof(jsxFragmentData{}.facts)),
 	KindJsxAttribute:                uint8(unsafe.Offsetof(jsxAttributeData{}.facts)),
-	KindSourceFile:                  uint8(unsafe.Offsetof(SourceFile{}.facts)),
+	KindSourceFile:                  uint8(unsafe.Offsetof(sourceFileData{}.facts)),
 	KindModuleDeclaration:           uint8(unsafe.Offsetof(moduleDeclarationData{}.facts)),
 	KindImportEqualsDeclaration:     uint8(unsafe.Offsetof(importEqualsDeclarationData{}.facts)),
 	KindExportDeclaration:           uint8(unsafe.Offsetof(exportDeclarationData{}.facts)),
@@ -1680,7 +1680,7 @@ var compositeBaseFactsOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) compositeBaseFacts() *atomic.Uint32 {
 	if off := compositeBaseFactsOffsets[n.Kind()]; off != 0 {
-		return (*atomic.Uint32)(unsafe.Add(n.p, off))
+		return (*atomic.Uint32)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1708,7 +1708,7 @@ var functionLikeBaseTypeParametersOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) functionLikeBaseTypeParameters() *sideRef {
 	if off := functionLikeBaseTypeParametersOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1732,7 +1732,7 @@ var functionLikeBaseParametersOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) functionLikeBaseParameters() *sideRef {
 	if off := functionLikeBaseParametersOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1756,7 +1756,7 @@ var functionLikeBaseTypeFieldOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) functionLikeBaseTypeField() *nodeRef {
 	if off := functionLikeBaseTypeFieldOffsets[n.Kind()]; off != 0 {
-		return (*nodeRef)(unsafe.Add(n.p, off))
+		return (*nodeRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1780,7 +1780,7 @@ var functionLikeBaseFullSignatureOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) functionLikeBaseFullSignature() *nodeRef {
 	if off := functionLikeBaseFullSignatureOffsets[n.Kind()]; off != 0 {
-		return (*nodeRef)(unsafe.Add(n.p, off))
+		return (*nodeRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1844,7 +1844,7 @@ var bodyBaseAsteriskTokenOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) bodyBaseAsteriskToken() *nodeRef {
 	if off := bodyBaseAsteriskTokenOffsets[n.Kind()]; off != 0 {
-		return (*nodeRef)(unsafe.Add(n.p, off))
+		return (*nodeRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1862,7 +1862,7 @@ var bodyBaseBodyOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) bodyBaseBody() *nodeRef {
 	if off := bodyBaseBodyOffsets[n.Kind()]; off != 0 {
-		return (*nodeRef)(unsafe.Add(n.p, off))
+		return (*nodeRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1880,7 +1880,7 @@ var bodyBaseEndFlowNodeOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) bodyBaseEndFlowNode() *flowRef {
 	if off := bodyBaseEndFlowNodeOffsets[n.Kind()]; off != 0 {
-		return (*flowRef)(unsafe.Add(n.p, off))
+		return (*flowRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1976,7 +1976,7 @@ var classLikeBaseNameOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) classLikeBaseName() *nodeRef {
 	if off := classLikeBaseNameOffsets[n.Kind()]; off != 0 {
-		return (*nodeRef)(unsafe.Add(n.p, off))
+		return (*nodeRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -1988,7 +1988,7 @@ var classLikeBaseTypeParametersOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) classLikeBaseTypeParameters() *sideRef {
 	if off := classLikeBaseTypeParametersOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2000,7 +2000,7 @@ var classLikeBaseHeritageClausesOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) classLikeBaseHeritageClauses() *sideRef {
 	if off := classLikeBaseHeritageClausesOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2012,7 +2012,7 @@ var classLikeBaseMembersOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) classLikeBaseMembers() *sideRef {
 	if off := classLikeBaseMembersOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2093,7 +2093,7 @@ var literalLikeNodeBaseTextOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) literalLikeNodeBaseText() *textRef {
 	if off := literalLikeNodeBaseTextOffsets[n.Kind()]; off != 0 {
-		return (*textRef)(unsafe.Add(n.p, off))
+		return (*textRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2112,7 +2112,7 @@ var literalLikeNodeBaseTokenFlagsOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) literalLikeNodeBaseTokenFlags() *TokenFlags {
 	if off := literalLikeNodeBaseTokenFlagsOffsets[n.Kind()]; off != 0 {
-		return (*TokenFlags)(unsafe.Add(n.p, off))
+		return (*TokenFlags)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2160,7 +2160,7 @@ var templateLiteralLikeNodeBaseRawTextOffsets = [kindFlowReduceLabelData + 1]uin
 
 func (n Node) templateLiteralLikeNodeBaseRawText() *textRef {
 	if off := templateLiteralLikeNodeBaseRawTextOffsets[n.Kind()]; off != 0 {
-		return (*textRef)(unsafe.Add(n.p, off))
+		return (*textRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2174,7 +2174,7 @@ var templateLiteralLikeNodeBaseTemplateFlagsOffsets = [kindFlowReduceLabelData +
 
 func (n Node) templateLiteralLikeNodeBaseTemplateFlags() *TokenFlags {
 	if off := templateLiteralLikeNodeBaseTemplateFlagsOffsets[n.Kind()]; off != 0 {
-		return (*TokenFlags)(unsafe.Add(n.p, off))
+		return (*TokenFlags)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2231,7 +2231,7 @@ var namedMemberBaseNameOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) namedMemberBaseName() *nodeRef {
 	if off := namedMemberBaseNameOffsets[n.Kind()]; off != 0 {
-		return (*nodeRef)(unsafe.Add(n.p, off))
+		return (*nodeRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2250,7 +2250,7 @@ var namedMemberBasePostfixTokenOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) namedMemberBasePostfixToken() *nodeRef {
 	if off := namedMemberBasePostfixTokenOffsets[n.Kind()]; off != 0 {
-		return (*nodeRef)(unsafe.Add(n.p, off))
+		return (*nodeRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2462,7 +2462,7 @@ var unionOrIntersectionTypeNodeBaseTypesOffsets = [kindFlowReduceLabelData + 1]u
 
 func (n Node) unionOrIntersectionTypeNodeBaseTypes() *sideRef {
 	if off := unionOrIntersectionTypeNodeBaseTypesOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2504,7 +2504,7 @@ var jsDocTagBaseTagNameOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) jsDocTagBaseTagName() *nodeRef {
 	if off := jsDocTagBaseTagNameOffsets[n.Kind()]; off != 0 {
-		return (*nodeRef)(unsafe.Add(n.p, off))
+		return (*nodeRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2536,7 +2536,7 @@ var jsDocTagBaseCommentOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) jsDocTagBaseComment() *sideRef {
 	if off := jsDocTagBaseCommentOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -2565,7 +2565,7 @@ var jsDocCommentBaseTextOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) jsDocCommentBaseText() *sideRef {
 	if off := jsDocCommentBaseTextOffsets[n.Kind()]; off != 0 {
-		return (*sideRef)(unsafe.Add(n.p, off))
+		return (*sideRef)(unsafe.Add(n.rec(), off))
 	}
 	return nil
 }
@@ -16546,7 +16546,7 @@ func (n Node) ForEachChild(v Visitor) bool {
 	case KindJSDocNameReference:
 		return JSDocNameReference{n}.ForEachChild(v)
 	case KindSourceFile:
-		return (*SourceFile)(n.rec()).ForEachChild(v)
+		return n.asSourceFile().ForEachChild(v)
 	case KindModuleDeclaration:
 		return ModuleDeclaration{n}.ForEachChild(v)
 	case KindImportEqualsDeclaration:
@@ -16891,7 +16891,7 @@ func (n Node) VisitEachChild(v *NodeVisitor) Node {
 	case KindJSDocNameReference:
 		return JSDocNameReference{n}.VisitEachChild(v)
 	case KindSourceFile:
-		return (*SourceFile)(n.rec()).VisitEachChild(v)
+		return n.asSourceFile().VisitEachChild(v)
 	case KindModuleDeclaration:
 		return ModuleDeclaration{n}.VisitEachChild(v)
 	case KindImportEqualsDeclaration:
@@ -17286,7 +17286,7 @@ func (n Node) Clone(f NodeFactoryCoercible) Node {
 	case KindJSDocNameReference:
 		return JSDocNameReference{n}.Clone(f)
 	case KindSourceFile:
-		return (*SourceFile)(n.rec()).Clone(f)
+		return n.asSourceFile().Clone(f)
 	case KindModuleDeclaration:
 		return ModuleDeclaration{n}.Clone(f)
 	case KindImportEqualsDeclaration:
@@ -17683,7 +17683,7 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindJSDocNameReference:
 		return n.computeSubtreeFacts()
 	case KindSourceFile:
-		return subtreeFactsWorker(&(*SourceFile)(n.rec()).facts, n)
+		return subtreeFactsWorker(&(*sourceFileData)(n.rec()).facts, n)
 	case KindModuleDeclaration:
 		return subtreeFactsWorker(&(*moduleDeclarationData)(n.rec()).facts, n)
 	case KindImportEqualsDeclaration:
@@ -18004,7 +18004,7 @@ func (n Node) computeSubtreeFacts() SubtreeFacts {
 	case KindJSDocNameReference:
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindSourceFile:
-		return (*SourceFile)(n.rec()).computeSubtreeFacts()
+		return n.asSourceFile().computeSubtreeFacts()
 	case KindModuleDeclaration:
 		return ModuleDeclaration{n}.computeSubtreeFacts()
 	case KindImportEqualsDeclaration:
@@ -20372,7 +20372,7 @@ func (n Node) AsSourceFile() *SourceFile {
 	if n.Kind() != KindSourceFile {
 		panic("Invalid node cast to SourceFile")
 	}
-	return (*SourceFile)(n.rec())
+	return n.asSourceFile()
 }
 
 func (n Node) AsModuleDeclaration() ModuleDeclaration {

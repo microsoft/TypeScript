@@ -509,7 +509,7 @@ function generateBaseFieldOffsets(w: CodeWriter, base: NodeType, name: string, v
     w.push();
     w.write(`if off := ${table}[n.Kind()]; off != 0 {`);
     w.push();
-    w.write(`return (*${goType})(unsafe.Add(n.p, off))`);
+    w.write(`return (*${goType})(unsafe.Add(n.rec(), off))`);
     w.pop();
     w.write("}");
     w.write("return nil");
@@ -668,7 +668,7 @@ interface GoField {
 }
 
 function dataName(node: NodeType): string {
-    return node.handWritten ? node.name : `${goStorageName(node.name)}Data`;
+    return `${goStorageName(node.name)}Data`;
 }
 
 // Private fields get exported getters only where they agree with the shared
@@ -692,7 +692,7 @@ function dataOf(node: NodeType, recv: string): string {
 
 // The typed view of a node, reached from a handle.
 function viewOf(node: NodeType, recv: string): string {
-    return node.handWritten ? dataOf(node, recv) : `${node.name}{${recv}}`;
+    return node.handWritten ? `${recv}.as${node.name}()` : `${node.name}{${recv}}`;
 }
 
 // addr and value give a field's address and value within a record.

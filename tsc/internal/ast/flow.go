@@ -1,7 +1,5 @@
 package ast
 
-import "unsafe"
-
 // FlowFlags
 
 type FlowFlags uint32
@@ -26,122 +24,86 @@ const (
 
 // FlowNode
 
-// A FlowNode is a record in a node store's blocks, like a node's, so it
-// holds no Go pointers; it is created by NewFlowNode and only referred to
-// by pointer. A pointer to a FlowNode keeps its store alive.
+// A FlowNode is a node of the control flow graph. Flow nodes are created by
+// the binder and checker, and nodes refer to them through their store's
+// side tables.
 type FlowNode struct {
-	node        nodeRef
-	antecedent  flowRef // Antecedent for all but FlowLabel
-	antecedents flowListRef
+	node        Node      // Associated AST node
+	antecedent  *FlowNode // Antecedent for all but FlowLabel
+	antecedents *FlowList // Linked list of antecedents for FlowLabel
 	Flags       FlowFlags
-	self        uint32 // the record's offset in its block, in words
 }
 
-// A flowRef is a ref to a FlowNode.
-type flowRef = ref
+// A flowRef is a record field holding a *FlowNode, in its store's side
+// table.
+type flowRef = sideRef
 
-// A flowListRef is a ref to a FlowList.
-type flowListRef = ref
-
-func (f *FlowNode) deref(r *ref) unsafe.Pointer { return derefAt(r, unsafe.Pointer(f), f.self) }
-
-func (f *FlowNode) setRef(r *ref, target unsafe.Pointer, targetSelf uint32) {
-	setRefAt(r, unsafe.Pointer(f), f.self, target, targetSelf)
-}
+// A flowListRef is a record field holding a *FlowList.
+type flowListRef = sideRef
 
 // Node returns the AST node associated with the flow node.
-func (f *FlowNode) Node() Node { return Node{f.deref(&f.node)} }
+func (f *FlowNode) Node() Node { return f.node }
 
-func (f *FlowNode) Antecedent() *FlowNode { return (*FlowNode)(f.deref(&f.antecedent)) }
+func (f *FlowNode) Antecedent() *FlowNode { return f.antecedent }
 
 // Antecedents returns the linked list of antecedents of a FlowLabel.
-func (f *FlowNode) Antecedents() *FlowList { return (*FlowList)(f.deref(&f.antecedents)) }
+func (f *FlowNode) Antecedents() *FlowList { return f.antecedents }
 
-func (f *FlowNode) SetAntecedent(v *FlowNode) {
-	f.setRef(&f.antecedent, unsafe.Pointer(v), v.selfOrZero())
-}
+func (f *FlowNode) SetAntecedent(v *FlowNode) { f.antecedent = v }
 
-func (f *FlowNode) SetAntecedents(v *FlowList) {
-	f.setRef(&f.antecedents, unsafe.Pointer(v), v.selfOrZero())
-}
-
-func (f *FlowNode) selfOrZero() uint32 {
-	if f == nil {
-		return 0
-	}
-	return f.self
-}
-
-func (l *FlowList) selfOrZero() uint32 {
-	if l == nil {
-		return 0
-	}
-	return l.self
-}
+func (f *FlowNode) SetAntecedents(v *FlowList) { f.antecedents = v }
 
 // derefFlow returns the flow node that the field f of n refers to.
 func (n Node) derefFlow(f *flowRef) *FlowNode {
-	return (*FlowNode)(derefAt(f, n.p, n.hdr().self))
+	return n.s.flowNodes.get(*f)
 }
 
 // setFlowRef makes the field f of n refer to v.
 func (n Node) setFlowRef(f *flowRef, v *FlowNode) {
-	setFlowRef(f, n.p, v)
+	setFlowRef(f, n, v)
 }
 
-// setFlowRef makes the field f of the node record at rec refer to v.
-func setFlowRef(f *flowRef, rec unsafe.Pointer, v *FlowNode) {
-	setRefAt(f, rec, (*nodeBaseData)(rec).self, unsafe.Pointer(v), v.selfOrZero())
+// setFlowRef makes the field f of the record of owner refer to v.
+func setFlowRef(f *flowRef, owner Node, v *FlowNode) {
+	owner.s.flowNodes.set(f, v, v == nil)
 }
 
 func newFlowNode(s *nodeStore, flags FlowFlags, node Node, antecedent *FlowNode) *FlowNode {
-	p, self := s.alloc(unsafe.Sizeof(FlowNode{}))
-	f := (*FlowNode)(p)
-	f.self = self
-	f.Flags = flags
-	if node.p != nil {
-		f.setRef(&f.node, node.p, node.hdr().self)
+	if len(s.flowSlab) == cap(s.flowSlab) {
+		s.flowSlab = make([]FlowNode, 0, 64)
 	}
-	f.SetAntecedent(antecedent)
+	s.flowSlab = s.flowSlab[:len(s.flowSlab)+1]
+	f := &s.flowSlab[len(s.flowSlab)-1]
+	f.Flags = flags
+	f.node = node
+	f.antecedent = antecedent
 	return f
 }
 
-// NewFlowNode allocates a flow node in the store of file, which must not be
-// shared with other writers while it is bound.
+// NewFlowNode allocates a flow node for file, which must not be shared
+// with other writers while it is bound.
 func NewFlowNode(file *SourceFile, flags FlowFlags, node Node, antecedent *FlowNode) *FlowNode {
 	return newFlowNode(file.store(), flags, node, antecedent)
 }
 
-// NewFlowNode allocates a flow node in f's store.
+// NewFlowNode allocates a flow node for f's nodes.
 func (f *NodeFactory) NewFlowNode(flags FlowFlags, node Node, antecedent *FlowNode) *FlowNode {
 	return newFlowNode(f.nodeStore(), flags, node, antecedent)
 }
 
-// A FlowList is a record in a node store's blocks, like a FlowNode.
+// A FlowList is a linked list of flow nodes.
 type FlowList struct {
-	flow flowRef
-	next flowListRef
-	self uint32
+	flow *FlowNode
+	next *FlowList
 }
 
-func (l *FlowList) deref(r *ref) unsafe.Pointer { return derefAt(r, unsafe.Pointer(l), l.self) }
+func (l *FlowList) Flow() *FlowNode     { return l.flow }
+func (l *FlowList) Next() *FlowList     { return l.next }
+func (l *FlowList) SetNext(v *FlowList) { l.next = v }
 
-func (l *FlowList) Flow() *FlowNode { return (*FlowNode)(l.deref(&l.flow)) }
-func (l *FlowList) Next() *FlowList { return (*FlowList)(l.deref(&l.next)) }
-
-func (l *FlowList) SetNext(v *FlowList) {
-	setRefAt(&l.next, unsafe.Pointer(l), l.self, unsafe.Pointer(v), v.selfOrZero())
-}
-
-// NewFlowList allocates a flow list in the store of file, which must not be
-// shared with other writers while it is bound.
+// NewFlowList allocates a flow list.
 func NewFlowList(file *SourceFile, flow *FlowNode, next *FlowList) *FlowList {
-	p, self := file.store().alloc(unsafe.Sizeof(FlowList{}))
-	l := (*FlowList)(p)
-	l.self = self
-	setRefAt(&l.flow, p, self, unsafe.Pointer(flow), flow.selfOrZero())
-	l.SetNext(next)
-	return l
+	return &FlowList{flow: flow, next: next}
 }
 
 type FlowLabel = FlowNode
@@ -209,7 +171,7 @@ func (node FlowReduceLabelData) data() *flowReduceLabelData {
 
 func (node FlowReduceLabelData) Target() *FlowLabel { return node.derefFlow(&node.data().target) }
 func (node FlowReduceLabelData) Antecedents() *FlowList {
-	return (*FlowList)(derefAt(&node.data().antecedents, node.p, node.hdr().self))
+	return node.s.flowLists.get(node.data().antecedents)
 }
 
 // NewFlowReduceLabelData allocates in the store of file, which must not be
@@ -218,6 +180,6 @@ func NewFlowReduceLabelData(file *SourceFile, target *FlowLabel, antecedents *Fl
 	s := file.store()
 	data, i := newRecord[flowReduceLabelData](s, layoutFlowReduceLabelData)
 	setFlowRef(&data.target, i, target)
-	setRefAt(&data.antecedents, i, data.self, unsafe.Pointer(antecedents), antecedents.selfOrZero())
+	s.flowLists.set(&data.antecedents, antecedents, antecedents == nil)
 	return newNode(s, kindFlowReduceLabelData, layoutFlowReduceLabelData, i, NodeFactoryHooks{})
 }

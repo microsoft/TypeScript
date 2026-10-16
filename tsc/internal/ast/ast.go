@@ -6,7 +6,6 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
-	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -73,7 +72,7 @@ func NewNodeFactory(hooks NodeFactoryHooks) *NodeFactory {
 	return &NodeFactory{hooks: hooks}
 }
 
-func newNode(s *nodeStore, kind Kind, layout nodeLayout, rec unsafe.Pointer, hooks NodeFactoryHooks) Node {
+func newNode(s *nodeStore, kind Kind, layout nodeLayout, rec Node, hooks NodeFactoryHooks) Node {
 	n := s.newNode(kind, layout, rec)
 	n.SetLoc(core.UndefinedTextRange())
 	if hooks.OnCreate != nil {
@@ -106,10 +105,10 @@ func (f *NodeFactory) CompactStore() {
 // CompactBinderData packs the binder's additions to the file's nodes. It
 // must be called before the file is shared with other goroutines.
 func (node *SourceFile) CompactBinderData() {
-	node.store().compactSide()
+	node.store().compact()
 }
 
-func (f *NodeFactory) newNode(kind Kind, layout nodeLayout, rec unsafe.Pointer) Node {
+func (f *NodeFactory) newNode(kind Kind, layout nodeLayout, rec Node) Node {
 	f.nodeCount++
 	return newNode(f.store, kind, layout, rec, f.hooks)
 }
@@ -207,16 +206,14 @@ func (list *ModifierList) Clone(f *NodeFactory) *ModifierList {
 	return res
 }
 
-// Node is a handle to an AST node: a pointer to its record in the
-// nodeStore that owns it. The zero Node is the absent node.
+// Node is a handle to an AST node: the nodeStore that owns it and the
+// index of its record there. The zero Node is the absent node.
 type Node struct {
-	p unsafe.Pointer
+	s *nodeStore
+	i uint32
 }
 
-// rec returns the node's record, which begins with its nodeBaseData.
-func (n Node) rec() unsafe.Pointer { return n.p }
-
-func (n Node) IsNil() bool               { return n.p == nil }
+func (n Node) IsNil() bool               { return n.s == nil }
 func (n Node) Kind() Kind                { return n.hdr().kind }
 func (n Node) Flags() NodeFlags          { return n.hdr().flags }
 func (n Node) Loc() core.TextRange       { return n.hdr().loc }
@@ -224,10 +221,7 @@ func (n Node) SetFlags(flags NodeFlags)  { n.hdr().flags = flags }
 func (n Node) SetLoc(loc core.TextRange) { n.hdr().loc = loc }
 func (n Node) SetParent(parent Node)     { n.setRef(&n.hdr().parent, parent) }
 
-func (n Node) Parent() Node {
-	h := n.hdr()
-	return Node{derefAt(&h.parent, n.p, h.self)}
-}
+func (n Node) Parent() Node { return n.deref(&n.hdr().parent) }
 
 // Shared node accessors dispatch on Kind to the enclosing concrete node.
 
@@ -2348,15 +2342,21 @@ type TokenCacheKey struct {
 	loc    core.TextRange
 }
 
-// SourceFile is accessed by pointer rather than through a view, because its
-// many fields are only meaningful for files. Its embedded Node is a handle to
-// itself, giving *SourceFile the shared node methods.
-type SourceFile struct {
+// sourceFileData is a SourceFile's record. It holds the fields that
+// SourceFile shares with other nodes; the rest are in the SourceFile.
+type sourceFileData struct {
 	nodeBaseData
 	nextContainer nodeRef
 	symbol        sideRef
 	locals        sideRef
+	file          sideRef
 	facts         atomic.Uint32
+}
+
+// SourceFile is accessed by pointer rather than through a view, because its
+// many fields are only meaningful for files. Its embedded Node is a handle to
+// its record, giving *SourceFile the shared node methods.
+type SourceFile struct {
 	Node
 
 	// Fields set by NewSourceFile
@@ -2435,14 +2435,21 @@ type SourceFile struct {
 
 func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, statements *NodeList, endOfFileToken TokenNode) Node {
 	store := f.nodeStore()
-	data, i := newRecord[SourceFile](store, layoutSourceFile)
-	data.fileName = opts.FileName
-	data.parseOptions = opts
-	data.text = text
-	data.Statements = statements
-	data.EndOfFileToken = endOfFileToken
-	data.Node = f.newNode(KindSourceFile, layoutSourceFile, i)
-	return data.Node
+	rec, i := newRecord[sourceFileData](store, layoutSourceFile)
+	file := &SourceFile{
+		fileName:       opts.FileName,
+		parseOptions:   opts,
+		text:           text,
+		Statements:     statements,
+		EndOfFileToken: endOfFileToken,
+	}
+	store.sourceFiles.set(&rec.file, file, false)
+	file.Node = f.newNode(KindSourceFile, layoutSourceFile, i)
+	return file.Node
+}
+
+func (n Node) asSourceFile() *SourceFile {
+	return n.s.sourceFiles.get((*sourceFileData)(n.rec()).file)
 }
 
 func (node *SourceFile) ParseOptions() SourceFileParseOptions {
