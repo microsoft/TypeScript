@@ -109,7 +109,7 @@ const options = /** @type {Options} */ (rawOptions);
 // Native release branches can edit these constants to publish a fixed stable version.
 // Main publishes prerelease builds of the TypeScript package.
 const nativePreviewReleaseProfile = /** @type {"native-preview" | "typescript"} */ ("typescript");
-const nativePreviewReleaseVersion = /** @type {string | undefined} */ (undefined);
+const nativePreviewReleaseVersion = /** @type {string | undefined} */ ("7.1.0-beta");
 const releaseVscodeTypescript = !!options.vscodeTypescriptRelease;
 const produceNativePreviewVsix = releaseVscodeTypescript;
 const produceTypeScriptNightlyVsix = !nativePreviewReleaseVersion && !releaseVscodeTypescript;
