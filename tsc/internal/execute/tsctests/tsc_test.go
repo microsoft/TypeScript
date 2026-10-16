@@ -2526,6 +2526,153 @@ func TestTscIncremental(t *testing.T) {
 	}
 }
 
+func TestTscIncrementalDeletion(t *testing.T) {
+	t.Parallel()
+	for _, mode := range []struct {
+		name string
+		args []string
+	}{
+		{},
+		{" with single threaded", []string{"--singleThreaded"}},
+		{" with one checker", []string{"--checkers", "1"}},
+	} {
+		config := func(options string) string {
+			return `{"compilerOptions":{"incremental":true,"noEmit":true,"types":[]` + options + `},"files":["a.ts"]}`
+		}
+		(&tscInput{
+			subScenario:     "lib and target changes delete mixed library files" + mode.name,
+			commandLineArgs: mode.args,
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": config(`,"target":"esnext"`),
+				"/home/src/workspaces/project/a.ts":          `export const values = [3, 1, 2].toSorted();`,
+				getTestLibPathFor("es5"):                     tscDefaultLibContent,
+				getTestLibPathFor("esnext.array"): stringtestutil.Dedent(`
+					/// <reference no-default-lib="true"/>
+					interface Array<T> {
+						toSorted(): T[];
+					}
+				`),
+				getTestLibPathFor("decorators"): stringtestutil.Dedent(`
+					/// <reference no-default-lib="true"/>
+					export {};
+				`),
+				getTestLibPathFor("esnext.full"): stringtestutil.Dedent(`
+					/// <reference no-default-lib="true"/>
+					/// <reference lib="es5"/>
+					/// <reference lib="esnext.array"/>
+					/// <reference lib="decorators"/>
+				`),
+				getTestLibPathFor("es2020"): stringtestutil.Dedent(`
+					/// <reference no-default-lib="true"/>
+					/// <reference lib="es5"/>
+				`),
+				getTestLibPathFor("es2020.full"): stringtestutil.Dedent(`
+					/// <reference no-default-lib="true"/>
+					/// <reference lib="es5"/>
+				`),
+			},
+			edits: []*tscEdit{
+				{caption: "narrow lib", edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", config(`,"target":"esnext","lib":["es2020"]`))
+				}},
+				noChange,
+				{caption: "restore lib", edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", config(`,"target":"esnext"`))
+				}},
+				{caption: "narrow target", edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", config(`,"target":"es2020"`))
+				}},
+				noChange,
+				{caption: "restore target", edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", config(`,"target":"esnext"`))
+				}},
+				noChange,
+			},
+		}).run(t, "incremental")
+		(&tscInput{
+			subScenario:     "mixed file deletion with add and change" + mode.name,
+			commandLineArgs: mode.args,
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions":{"incremental":true,"noEmit":true,"types":[]}}`,
+				"/home/src/workspaces/project/consumer.ts":   `declare const value: RemovedGlobal; value.property;`,
+				"/home/src/workspaces/project/global.d.ts":   `interface RemovedGlobal { property: string; }`,
+				"/home/src/workspaces/project/module.d.ts":   `export interface ModuleOnly { property: string; }`,
+				"/home/src/workspaces/project/changed.ts":    `export const changed = 1;`,
+			},
+			edits: []*tscEdit{
+				{caption: "delete global and non-global files while adding and changing sources", edit: func(sys *TestSys) {
+					sys.removeNoError("/home/src/workspaces/project/global.d.ts")
+					sys.removeNoError("/home/src/workspaces/project/module.d.ts")
+					sys.replaceFileText("/home/src/workspaces/project/changed.ts", "1", "2")
+					sys.writeFileNoError("/home/src/workspaces/project/added.ts", `export const added = 1;`)
+				}},
+				noChange,
+				{caption: "restore global file", edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/global.d.ts", `interface RemovedGlobal { property: number; }`)
+				}},
+				{caption: "delete ordinary source file", edit: func(sys *TestSys) {
+					sys.removeNoError("/home/src/workspaces/project/added.ts")
+				}},
+				noChange,
+			},
+		}).run(t, "incremental")
+		for _, cleared := range []bool{false, true} {
+			library := tscDefaultLibContent + "\ninterface LibraryConsumer { property: RemovedGlobal; }"
+			global := "interface RemovedGlobal {}"
+			if cleared {
+				library = tscDefaultLibContent + "\ninterface Shared<T> {}"
+				global = "interface Shared<T, U> {}"
+			}
+			(&tscInput{
+				subScenario:     fmt.Sprintf("retained library diagnostics after global deletion cleared %t%s", cleared, mode.name),
+				commandLineArgs: mode.args,
+				files: FileMap{
+					"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions":{"incremental":true,"noEmit":true,"types":[],"lib":["es5"]}}`,
+					"/home/src/workspaces/project/consumer.ts":   "export const unchanged = 1;",
+					"/home/src/workspaces/project/global.d.ts":   global,
+					"/home/src/workspaces/project/module.d.ts":   "export interface Unrelated {}",
+					getTestLibPathFor("es5"):                     library,
+				},
+				edits: []*tscEdit{
+					{caption: "delete global and module declarations", edit: func(sys *TestSys) {
+						sys.removeNoError("/home/src/workspaces/project/global.d.ts")
+						sys.removeNoError("/home/src/workspaces/project/module.d.ts")
+					}},
+					noChange,
+					{caption: "restore global declaration", edit: func(sys *TestSys) {
+						sys.writeFileNoError("/home/src/workspaces/project/global.d.ts", global)
+					}},
+					noChange,
+				},
+			}).run(t, "incremental")
+		}
+	}
+	for _, composite := range []bool{false, true} {
+		(&tscInput{
+			subScenario: fmt.Sprintf("unchecked deleted paths with no emit composite %t", composite),
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": fmt.Sprintf(`{"compilerOptions":{"incremental":true,"noCheck":true,"noEmit":true,"composite":%t,"types":[]}}`, composite),
+				"/home/src/workspaces/project/stable.ts":     "export const stable = 1;",
+			},
+			edits: []*tscEdit{
+				{caption: "add unchecked sources", edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/first.ts", "export const first = 1;")
+					sys.writeFileNoError("/home/src/workspaces/project/second.ts", "export const second = 1;")
+				}},
+				{caption: "delete unchecked sources", edit: func(sys *TestSys) {
+					sys.removeNoError("/home/src/workspaces/project/first.ts")
+					sys.removeNoError("/home/src/workspaces/project/second.ts")
+				}},
+				noChange,
+				{caption: "enable checking and emit", edit: func(sys *TestSys) {
+					sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", `"noCheck":true,"noEmit":true`, `"noCheck":false,"noEmit":false`)
+				}},
+				noChange,
+			},
+		}).run(t, "incremental")
+	}
+}
+
 func TestTscLibraryResolution(t *testing.T) {
 	t.Parallel()
 	getTscLibraryResolutionFileMap := func(libReplacement bool) FileMap {
