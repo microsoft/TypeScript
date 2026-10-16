@@ -3,6 +3,7 @@ package ast
 import (
 	"math/bits"
 	"slices"
+	"sync"
 	"sync/atomic"
 	"unsafe"
 
@@ -41,6 +42,12 @@ type nodeStore struct {
 	reused []Node
 
 	flowSlab []FlowNode
+
+	// scratch is set while words is reusable scratch memory.
+	scratch bool
+	// frozen is set once the records are shared, after which they must not
+	// move.
+	frozen bool
 
 	debugAllocs uint32
 }
@@ -141,6 +148,9 @@ func (s *nodeStore) alloc(size uintptr) uint32 {
 	words := int((size + wordSize - 1) / wordSize)
 	i := max(len(s.words), 1)
 	if i+words > cap(s.words) {
+		if s.frozen {
+			panic("node store is frozen")
+		}
 		s.grow(words)
 	}
 	if debugMoveRecords {
@@ -164,7 +174,7 @@ func (s *nodeStore) alloc(size uintptr) uint32 {
 
 func (s *nodeStore) grow(words int) {
 	n := max(len(s.words), 1)
-	grown := make([]uint64, n, max(minStoreWords, n+words, n+n/2))
+	grown := make([]uint64, n, max(minStoreWords, n+words, n*2))
 	copy(grown, s.words)
 	s.words = grown
 }
@@ -177,12 +187,39 @@ const minStoreWords = 64
 // tests catch record addresses held across one.
 var debugMoveRecords = false
 
-// compact trims the store's records and side tables to size. It must only
-// be called before the store is shared.
-func (s *nodeStore) compact() {
-	if len(s.words) != cap(s.words) {
-		s.words = slices.Clip(slices.Clone(s.words))
+// A store being built, such as by the parser, can keep its records in
+// scratch memory that is reused from file to file, so that growing it is
+// nearly free. Finishing the store copies the records out once.
+var scratchWords sync.Pool
+
+// maxScratchWords bounds the scratch memory kept for reuse.
+const maxScratchWords = 1 << 22
+
+func (s *nodeStore) useScratch() {
+	if len(s.words) > 1 || s.scratch {
+		panic("node store already has records")
 	}
+	if p, ok := scratchWords.Get().(*[]uint64); ok {
+		s.words = (*p)[:1]
+	}
+	s.scratch = true
+}
+
+// finish copies the records into memory of their exact size, freezing them
+// if asked to, and trims the side tables. It must only be called before the store
+// is shared.
+func (s *nodeStore) finish(freeze bool) {
+	if len(s.words) != cap(s.words) {
+		words := slices.Clip(slices.Clone(s.words))
+		if s.scratch && cap(s.words) <= maxScratchWords {
+			clear(s.words)
+			scratch := s.words[:0]
+			scratchWords.Put(&scratch)
+		}
+		s.words = words
+	}
+	s.scratch = false
+	s.frozen = freeze
 	s.compactSide()
 }
 

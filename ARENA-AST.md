@@ -32,7 +32,13 @@ type nodeStore struct {
 }
 ```
 
-`words` is a single noscan Go slice that grows by 1.5× while the file is parsed and bound. Records can move when it grows, so a raw record pointer is only valid until the next allocation; handles and refs are indices and are unaffected. `debugMoveRecords` in store.go forces frequent moves and poisons the old copies to check this. After binding, `CompactBinderData` trims `words` and the side tables to their exact size, and the store is no longer written.
+`words` is a single noscan Go slice. `ParseSourceFile` builds a file in three steps:
+
+1. **Build**: the parser fills `words` in scratch memory taken from a pool and reused from file to file, so growing it is nearly free.
+2. **Bind**: the binder runs right away, while the file is still private, and adds its symbols, flow nodes and flow data records. Binding depends only on the file, never on compiler options, and every file in a program is bound anyway.
+3. **Finish**: the records are copied once into an exact-size array, the scratch memory goes back to the pool, and the store is frozen. Allocating in a frozen store panics.
+
+So a parsed file's records never change or move once it's returned. While building, records can move when `words` grows, so a raw record pointer is only valid until the next allocation; handles and refs are indices and are unaffected. `debugMoveRecords` in store.go forces frequent moves and poisons the old copies to check this.
 
 ### Every record starts with a 32-byte header
 
@@ -105,6 +111,7 @@ Typed per-layout slices instead of one word array would remove the record cast t
 10. **32-bit block-indexed refs** (check +10.2%, memory −1.0%). Absolute refs were Go pointers hidden in `uintptr`s, so this replaced them with real 32-bit refs.
 11. **Field-relative refs** (check +6.3% vs step 9). A near ref is an offset from the field holding it. Still needed `unsafe` address arithmetic, a far table, and blocks built with `reflect.StructOf`.
 12. **Index-based store** (check +5.5%, total +6.6%, memory −0.2% vs step 9). One word array per store, `Node = {store, index}`, refs are indices. Removes blocks, `reflect.StructOf`, the far table and all pointer arithmetic on refs, and is slightly faster than step 11. Flow nodes go back to Go objects for now.
+13. **Bind at parse, then freeze** (check and total unchanged). Parsing builds in pooled scratch memory, binds, and copies the records once into a frozen exact-size array. Before, the array was clipped after parse, then had to grow again for the binder's flow data records, and was copied again after bind.
 
 Step 12 vs step 9 (vscode, n=8, interleaved, shared machine):
 

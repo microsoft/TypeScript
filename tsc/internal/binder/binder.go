@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"sync"
 
+	"github.com/microsoft/TypeScript/tsc/internal/parser"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -96,6 +98,10 @@ func BindSourceFile(file *ast.SourceFile) {
 	if !file.IsBound() {
 		bindSourceFile(file)
 	}
+}
+
+func init() {
+	parser.SetBinder(bindSourceFile)
 }
 
 var binderPool = sync.Pool{

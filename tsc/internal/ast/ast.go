@@ -94,18 +94,32 @@ func (f *NodeFactory) SetSourceText(text string) {
 	f.nodeStore().texts.source = text
 }
 
-// CompactStore trims the memory held for the nodes created so far. It must
-// be called before the nodes are shared with other goroutines.
-func (f *NodeFactory) CompactStore() {
+// BuildInScratch makes f build its nodes in reusable scratch memory, which
+// FinishStore must then release.
+func (f *NodeFactory) BuildInScratch() {
+	f.nodeStore().useScratch()
+}
+
+// FinishStore moves the nodes created so far into memory of their exact
+// size, after which they must never change. It must be called before the
+// nodes are shared with other goroutines.
+func (f *NodeFactory) FinishStore() {
 	if f.store != nil {
-		f.store.compact()
+		f.store.finish(true)
+	}
+}
+
+// FinishStoreUnfrozen is like FinishStore, but nodes may still be added.
+func (f *NodeFactory) FinishStoreUnfrozen() {
+	if f.store != nil {
+		f.store.finish(false)
 	}
 }
 
 // CompactBinderData packs the binder's additions to the file's nodes. It
 // must be called before the file is shared with other goroutines.
 func (node *SourceFile) CompactBinderData() {
-	node.store().compact()
+	node.store().compactSide()
 }
 
 func (f *NodeFactory) newNode(kind Kind, layout nodeLayout, rec Node) Node {

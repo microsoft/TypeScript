@@ -131,10 +131,31 @@ func putParser(p *Parser) {
 	parserPool.Put(p)
 }
 
+// bindSourceFile binds a parsed file; the binder package provides it.
+var bindSourceFile func(file *ast.SourceFile)
+
+// SetBinder sets the function that binds files as they are parsed.
+func SetBinder(bind func(file *ast.SourceFile)) {
+	bindSourceFile = bind
+}
+
+// ParseSourceFile parses and binds a file. Its nodes are immutable once it
+// is returned.
 func ParseSourceFile(opts ast.SourceFileParseOptions, sourceText string, scriptKind core.ScriptKind) *ast.SourceFile {
+	return parseSourceFile(opts, sourceText, scriptKind, true)
+}
+
+// ParseSourceFileUnbound parses a file without binding it, for measuring
+// the binder alone.
+func ParseSourceFileUnbound(opts ast.SourceFileParseOptions, sourceText string, scriptKind core.ScriptKind) *ast.SourceFile {
+	return parseSourceFile(opts, sourceText, scriptKind, false)
+}
+
+func parseSourceFile(opts ast.SourceFileParseOptions, sourceText string, scriptKind core.ScriptKind, bind bool) *ast.SourceFile {
 	p := getParser()
 	defer putParser(p)
 	p.initializeState(opts, sourceText, scriptKind)
+	p.factory.BuildInScratch()
 	p.nextToken()
 	var result *ast.SourceFile
 	if p.scriptKind == core.ScriptKindJSON {
@@ -142,7 +163,17 @@ func ParseSourceFile(opts ast.SourceFileParseOptions, sourceText string, scriptK
 	} else {
 		result = p.parseSourceFileWorker()
 	}
-	p.factory.CompactStore()
+	if !bind {
+		// The binder will still add to the nodes.
+		p.factory.FinishStoreUnfrozen()
+		return result
+	}
+	// Binding before the nodes are finished lets the binder add to them
+	// while they are private, so they never change afterwards.
+	if bindSourceFile != nil {
+		bindSourceFile(result)
+	}
+	p.factory.FinishStore()
 	return result
 }
 

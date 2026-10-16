@@ -69,7 +69,7 @@ func TestNodeStoreGrowth(t *testing.T) {
 		assert.Equal(t, expression.Parent(), statement)
 	}
 	assert.Equal(t, len(store.reused), 0, "refs within a store should not be reused nodes")
-	factory.CompactStore()
+	factory.FinishStore()
 	assert.Equal(t, len(store.words), cap(store.words))
 	assert.Equal(t, statements[0].Expression().Text(), "0")
 	assert.Equal(t, statements[19999].Expression().Parent(), statements[19999])
