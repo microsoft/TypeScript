@@ -1,0 +1,32 @@
+// === Inlay Hints ===
+foo({ a: 1 }, 2)
+              ^
+{
+  "position": {
+    "line": 1,
+    "character": 14
+  },
+  "label": [
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsParameterNames_destructuredParameter.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 35
+          },
+          "end": {
+            "line": 0,
+            "character": 36
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
