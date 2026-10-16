@@ -36,13 +36,22 @@ func NewOwnerCache[K comparable, V any, LoadArgs any](
 }
 
 func (c *OwnerCache[K, V, LoadArgs]) LoadAndAcquire(identity K, owner uint64, loadArgs LoadArgs) V {
-	entry, loaded := c.loadOrStoreLockedEntry(identity)
-	defer entry.mu.Unlock()
-	if !loaded || c.isExpired != nil && c.isExpired(identity, entry.value, loadArgs) {
-		entry.value = c.parse(identity, loadArgs)
+	if entry, ok := c.entries.Load(identity); ok {
+		entry.mu.Lock()
+		if len(entry.owners) > 0 && (c.isExpired == nil || !c.isExpired(identity, entry.value, loadArgs)) {
+			entry.owners[owner] = struct{}{}
+			value := entry.value
+			entry.mu.Unlock()
+			return value
+		}
+		entry.mu.Unlock()
 	}
+	value := c.parse(identity, loadArgs)
+	entry, _ := c.loadOrStoreLockedEntry(identity)
+	defer entry.mu.Unlock()
+	entry.value = value
 	entry.owners[owner] = struct{}{}
-	return entry.value
+	return value
 }
 
 func (c *OwnerCache[K, V, LoadArgs]) Acquire(identity K, owner uint64, value V) {
@@ -68,6 +77,20 @@ func (c *OwnerCache[K, V, LoadArgs]) AddOwner(identity K, owner uint64) {
 		panic("OwnerCache.AddOwner: entry has no owners")
 	}
 	entry.owners[owner] = struct{}{}
+}
+
+func (c *OwnerCache[K, V, LoadArgs]) TryAddOwner(identity K, owner uint64) bool {
+	entry, ok := c.entries.Load(identity)
+	if !ok {
+		return false
+	}
+	entry.mu.Lock()
+	defer entry.mu.Unlock()
+	if len(entry.owners) == 0 {
+		return false
+	}
+	entry.owners[owner] = struct{}{}
+	return true
 }
 
 func (c *OwnerCache[K, V, LoadArgs]) Has(identity K) bool {

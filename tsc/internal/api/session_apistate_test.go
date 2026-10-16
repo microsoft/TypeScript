@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"sync"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
@@ -534,4 +535,129 @@ func TestOpenProjectsWithCircularExtendsReportCircularity(t *testing.T) {
 		codes = append(codes, diagnostic.Code)
 	}
 	assert.DeepEqual(t, codes, []int32{18000})
+}
+
+func openProjectInNewSnapshot(t *testing.T, session *Session, configFileName string) SnapshotID {
+	t.Helper()
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: configFileName}},
+	})
+	assert.NilError(t, err)
+	return response.Snapshot
+}
+
+func openProjectsInConcurrentSnapshots(t *testing.T, session *Session, configFileNames []string) []SnapshotID {
+	t.Helper()
+	responses := make([]*CreateSnapshotResponse, len(configFileNames))
+	errs := make([]error, len(configFileNames))
+	var wg sync.WaitGroup
+	for i, configFileName := range configFileNames {
+		wg.Go(func() {
+			responses[i], errs[i] = session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+				OpenProjects: []DocumentIdentifier{{FileName: configFileName}},
+			})
+		})
+	}
+	wg.Wait()
+	snapshots := make([]SnapshotID, len(configFileNames))
+	for i := range configFileNames {
+		assert.NilError(t, errs[i])
+		snapshots[i] = responses[i].Snapshot
+	}
+	return snapshots
+}
+
+func configFileParsingDiagnosticCodes(t *testing.T, session *Session, snapshot SnapshotID, configFileName string) []int32 {
+	t.Helper()
+	diagnostics, err := session.handleGetConfigFileParsingDiagnostics(context.Background(), &GetProjectDiagnosticsParams{
+		Snapshot: snapshot,
+		Project:  configuredProjectID(configFileName),
+	})
+	assert.NilError(t, err)
+	codes := make([]int32, 0, len(diagnostics))
+	for _, diagnostic := range diagnostics {
+		codes = append(codes, diagnostic.Code)
+	}
+	return codes
+}
+
+func TestOpenProjectsExtendingIntoCircularExtendsReportCircularity(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const cycle = "/home/projects/cycle/tsconfig.json"
+	const outer = "/home/projects/outer/tsconfig.json"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		cycle:                          `{ "extends": "./a.json" }`,
+		"/home/projects/cycle/a.json":  `{ "extends": "./tsconfig.json" }`,
+		outer:                          `{ "extends": "../cycle/a.json" }`,
+		"/home/projects/cycle/main.ts": `export const a = 1;`,
+		"/home/projects/outer/main.ts": `export const b = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	openProjectInNewSnapshot(t, session, cycle)
+	snapshot := openProjectInNewSnapshot(t, session, outer)
+	assert.DeepEqual(t, configFileParsingDiagnosticCodes(t, session, snapshot, outer), []int32{18000})
+}
+
+func TestConcurrentlyOpenProjectsExtendingIntoCircularExtendsReportCircularity(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const cycle = "/home/projects/cycle/tsconfig.json"
+	outers := []string{"/home/projects/p1/tsconfig.json", "/home/projects/p2/tsconfig.json"}
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		cycle:                          `{ "extends": "./a.json" }`,
+		"/home/projects/cycle/a.json":  `{ "extends": "./b.json" }`,
+		"/home/projects/cycle/b.json":  `{ "extends": "./tsconfig.json" }`,
+		outers[0]:                      `{ "extends": "../cycle/a.json" }`,
+		outers[1]:                      `{ "extends": "../cycle/b.json" }`,
+		"/home/projects/cycle/main.ts": `export const a = 1;`,
+		"/home/projects/p1/main.ts":    `export const b = 1;`,
+		"/home/projects/p2/main.ts":    `export const c = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	for i, snapshot := range openProjectsInConcurrentSnapshots(t, session, outers) {
+		assert.DeepEqual(t, configFileParsingDiagnosticCodes(t, session, snapshot, outers[i]), []int32{18000})
+	}
+	openProjectInNewSnapshot(t, session, cycle)
+	for i, snapshot := range openProjectsInConcurrentSnapshots(t, session, outers) {
+		assert.DeepEqual(t, configFileParsingDiagnosticCodes(t, session, snapshot, outers[i]), []int32{18000})
+	}
+}
+
+func TestReopenProjectExtendingIntoCircularExtendsReportsCircularity(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const cycle = "/home/projects/cycle/tsconfig.json"
+	const outer = "/home/projects/outer/tsconfig.json"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		cycle:                          `{ "extends": "./a.json" }`,
+		"/home/projects/cycle/a.json":  `{ "extends": "./tsconfig.json" }`,
+		outer:                          `{ "extends": "../cycle/a.json" }`,
+		"/home/projects/cycle/main.ts": `export const a = 1;`,
+		"/home/projects/outer/main.ts": `export const b = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	openProjectInNewSnapshot(t, session, cycle)
+	_, err := session.handleRelease(context.Background(), &ReleaseParams{Snapshot: openProjectInNewSnapshot(t, session, outer)})
+	assert.NilError(t, err)
+	snapshot := openProjectInNewSnapshot(t, session, outer)
+	assert.DeepEqual(t, configFileParsingDiagnosticCodes(t, session, snapshot, outer), []int32{18000})
 }
