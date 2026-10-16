@@ -144,20 +144,28 @@ func (c *Checker) getWithAlternativeContainers(container *ast.Symbol, symbol *as
 		c.getDeclaredTypeOfSymbol(container).flags&TypeFlagsObject != 0 {
 		c.someSymbolTableInScope(enclosingDeclaration, func(t ast.SymbolTable, _ symbolTableID, _ bool, _ bool, _ *ast.Node) bool {
 			found := false
-			var values []*ast.Symbol
-			for _, s := range t {
-				if s.Flags()&leftMeaning != 0 {
-					values = append(values, s)
-				}
-			}
-			// Getting the types of the values can create types and resolve aliases, so do it in a stable order
-			// rather than in the random iteration order of the symbol table.
-			c.sortSymbols(values)
-			for _, s := range values {
+			check := func(s *ast.Symbol) {
 				if c.getTypeOfSymbol(s) == c.getDeclaredTypeOfSymbol(container) {
 					variableMatches = append(variableMatches, s)
 					found = true
 				}
+			}
+			var unresolved []*ast.Symbol
+			for _, s := range t {
+				if s.Flags()&leftMeaning == 0 {
+					continue
+				}
+				if links := c.valueSymbolLinks.TryGet(s); links != nil && links.resolvedType != nil {
+					check(s)
+				} else {
+					unresolved = append(unresolved, s)
+				}
+			}
+			// Getting the types that are not resolved yet can create types and resolve aliases, so do it in a stable
+			// order rather than in the random iteration order of the symbol table.
+			c.sortSymbols(unresolved)
+			for _, s := range unresolved {
+				check(s)
 			}
 			return found
 		})
