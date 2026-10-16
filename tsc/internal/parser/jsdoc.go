@@ -783,7 +783,8 @@ func (p *Parser) parseUnknownTag(start int, tagName *ast.IdentifierNode, indent 
 
 func (p *Parser) tryParseTypeExpression() *ast.Node {
 	p.skipWhitespaceOrAsterisk()
-	if p.token == ast.KindOpenBraceToken {
+	// An inline link starts the tag's description, not a type annotation.
+	if p.token == ast.KindOpenBraceToken && p.lookAhead(func(p *Parser) bool { _, ok := p.parseJSDocLinkPrefix(); return !ok }) {
 		return p.parseJSDocTypeExpression(false /*mayOmitBraces*/)
 	} else {
 		return nil
@@ -838,7 +839,7 @@ func (p *Parser) parseParameterOrPropertyTag(start int, tagName *ast.IdentifierN
 	name, isBracketed := p.parseBracketNameInPropertyAndParamTag(target)
 	indentText := p.skipWhitespaceOrAsterisk()
 
-	if isNameFirst && p.lookAhead(func(p *Parser) bool { _, ok := p.parseJSDocLinkPrefix(); return !ok }) {
+	if isNameFirst {
 		typeExpression = p.tryParseTypeExpression()
 	}
 
