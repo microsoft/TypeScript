@@ -117,6 +117,19 @@ func (p PathKey) AppendCanonicalSuffix(suffix string) PathKey {
 	return PathKeyFromCanonical(string(p) + suffix)
 }
 
+// ReplaceCanonicalExtension replaces the suffix oldExt, which p must end with,
+// with newExt. newExt must already be canonical under the CaseSensitivity used
+// to construct p.
+func (p PathKey) ReplaceCanonicalExtension(oldExt string, newExt string) PathKey {
+	if !strings.HasSuffix(string(p), oldExt) || len(oldExt) == len(p) {
+		panic("path key must end with the extension being replaced")
+	}
+	if strings.ContainsAny(newExt, `/\`) {
+		panic("extension must not contain a directory separator")
+	}
+	return PathKey(string(p)[:len(p)-len(oldExt)] + newExt)
+}
+
 // SplitAtCanonicalComponent finds component and returns the path before it and
 // the path through it. Both results retain the key's canonical casing.
 func (p PathKey) SplitAtCanonicalComponent(component string) (before PathKey, through PathKey, ok bool) {

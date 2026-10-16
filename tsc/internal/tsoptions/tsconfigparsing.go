@@ -1723,57 +1723,71 @@ func getSubstitutedStringArrayWithConfigDirTemplate[T ~string](list []T, basePat
 	return nil
 }
 
+// extensionSiblings computes keys of files that differ from file only by extension.
+type extensionSiblings struct {
+	file tspath.RootedFilePath
+	key  tspath.PathKey
+	ext  string
+	// keyMapper is set when sibling keys cannot be derived from the file's key.
+	keyMapper func(tspath.RootedFilePath) tspath.PathKey
+}
+
+func newExtensionSiblings(file tspath.RootedFilePath, key tspath.PathKey, keyMapper func(tspath.RootedFilePath) tspath.PathKey) extensionSiblings {
+	ext := file.Extension()
+	if ext == "" || tspath.IsEncodedDynamicFileName(string(file)) || !strings.HasSuffix(key.AsString(), ext) {
+		return extensionSiblings{file: file, keyMapper: keyMapper}
+	}
+	return extensionSiblings{file: file, key: key, ext: ext}
+}
+
+func (s *extensionSiblings) siblingKey(ext string) tspath.PathKey {
+	if s.keyMapper != nil {
+		return s.keyMapper(s.file.ChangeExtension(ext))
+	}
+	return s.key.ReplaceCanonicalExtension(s.ext, ext)
+}
+
 // hasFileWithHigherPriorityExtension determines whether a literal or wildcard file has already been included that has a higher extension priority.
-// file is the path to the file.
-func hasFileWithHigherPriorityExtension(file tspath.RootedFilePath, extensions [][]string, hasFile func(fileName tspath.RootedFilePath) bool) bool {
-	var extensionGroup []string
+func hasFileWithHigherPriorityExtension(siblings *extensionSiblings, extensions [][]string, hasFile func(key tspath.PathKey) bool) bool {
+	file := siblings.file
 	for _, group := range extensions {
-		if file.ExtensionIsOneOf(group) {
-			extensionGroup = append(extensionGroup, group...)
+		if !file.ExtensionIsOneOf(group) {
+			continue
 		}
-	}
-	if len(extensionGroup) == 0 {
-		return false
-	}
-	for _, ext := range extensionGroup {
-		// d.ts files match with .ts extension and with case sensitive sorting the file order for same files with ts tsx and dts extension is
-		// d.ts, .ts, .tsx in that order so we need to handle tsx and dts of same same name case here and in remove files with same extensions
-		// So dont match .d.ts files with .ts extension
-		if file.ExtensionIs(ext) && (ext != tspath.ExtensionTs || !file.ExtensionIs(tspath.ExtensionDts)) {
-			return false
-		}
-		if hasFile(file.ChangeExtension(ext)) {
-			if ext == tspath.ExtensionDts && (file.ExtensionIs(tspath.ExtensionJs) || file.ExtensionIs(tspath.ExtensionJsx)) {
-				// LEGACY BEHAVIOR: An off-by-one bug somewhere in the extension priority system for wildcard module loading allowed declaration
-				// files to be loaded alongside their js(x) counterparts. We regard this as generally undesirable, but retain the behavior to
-				// prevent breakage.
-				continue
+		for _, ext := range group {
+			// d.ts files match with .ts extension and with case sensitive sorting the file order for same files with ts tsx and dts extension is
+			// d.ts, .ts, .tsx in that order so we need to handle tsx and dts of same same name case here and in remove files with same extensions
+			// So dont match .d.ts files with .ts extension
+			if file.ExtensionIs(ext) && (ext != tspath.ExtensionTs || !file.ExtensionIs(tspath.ExtensionDts)) {
+				return false
 			}
-			return true
+			if hasFile(siblings.siblingKey(ext)) {
+				if ext == tspath.ExtensionDts && (file.ExtensionIs(tspath.ExtensionJs) || file.ExtensionIs(tspath.ExtensionJsx)) {
+					// LEGACY BEHAVIOR: An off-by-one bug somewhere in the extension priority system for wildcard module loading allowed declaration
+					// files to be loaded alongside their js(x) counterparts. We regard this as generally undesirable, but retain the behavior to
+					// prevent breakage.
+					continue
+				}
+				return true
+			}
 		}
 	}
 	return false
 }
 
 // Removes files included via wildcard expansion with a lower extension priority that have already been included.
-// file is the path to the file.
-func removeWildcardFilesWithLowerPriorityExtension[V any](file tspath.RootedFilePath, wildcardFiles *collections.OrderedMap[tspath.PathKey, V], extensions [][]string, keyMapper func(value tspath.RootedFilePath) tspath.PathKey) {
-	var extensionGroup []string
-	for _, group := range extensions {
-		if file.ExtensionIsOneOf(group) {
-			extensionGroup = append(extensionGroup, group...)
+func removeWildcardFilesWithLowerPriorityExtension[V any](siblings *extensionSiblings, wildcardFiles *collections.OrderedMap[tspath.PathKey, V], extensions [][]string) {
+	file := siblings.file
+	for _, group := range slices.Backward(extensions) {
+		if !file.ExtensionIsOneOf(group) {
+			continue
 		}
-	}
-	if extensionGroup == nil {
-		return
-	}
-	for _, ext := range slices.Backward(extensionGroup) {
-
-		if file.ExtensionIs(ext) {
-			return
+		for _, ext := range slices.Backward(group) {
+			if file.ExtensionIs(ext) {
+				return
+			}
+			wildcardFiles.Delete(siblings.siblingKey(ext))
 		}
-		lowerPriorityPath := keyMapper(file.ChangeExtension(ext))
-		wildcardFiles.Delete(lowerPriorityPath)
 	}
 }
 
@@ -1820,6 +1834,10 @@ func getFileNamesFromConfigSpecs(
 		literalFileMap.Set(keyMapper(validatedFileNames[i]), validatedFileNames[i])
 	}
 
+	hasFile := func(key tspath.PathKey) bool {
+		return literalFileMap.Has(key) || wildcardFileMap.Has(key)
+	}
+
 	var jsonOnlyIncludeMatchers *vfsmatch.SpecMatcher
 	if len(validatedIncludeSpecs) > 0 {
 		readDirectory := vfsmatch.ReadDirectory[tspath.PathPattern]
@@ -1853,18 +1871,16 @@ func getFileNamesFromConfigSpecs(
 			// This handles cases where we may encounter both <file>.ts and
 			// <file>.d.ts (or <file>.js if "allowJs" is enabled) in the same
 			// directory when they are compilation outputs.
-			if hasFileWithHigherPriorityExtension(file, supportedExtensions, func(fileName tspath.RootedFilePath) bool {
-				canonicalFileName := keyMapper(fileName)
-				return literalFileMap.Has(canonicalFileName) || wildcardFileMap.Has(canonicalFileName)
-			}) {
+			key := keyMapper(file)
+			siblings := newExtensionSiblings(file, key, keyMapper)
+			if hasFileWithHigherPriorityExtension(&siblings, supportedExtensions, hasFile) {
 				continue
 			}
 			// We may have included a wildcard path with a lower priority
 			// extension due to the user-defined order of entries in the
 			// "include" array. If there is a lower priority extension in the
 			// same directory, we should remove it.
-			removeWildcardFilesWithLowerPriorityExtension(file, &wildcardFileMap, supportedExtensions, keyMapper)
-			key := keyMapper(file)
+			removeWildcardFilesWithLowerPriorityExtension(&siblings, &wildcardFileMap, supportedExtensions)
 			if !literalFileMap.Has(key) && !wildcardFileMap.Has(key) {
 				wildcardFileMap.Set(key, file)
 			}
