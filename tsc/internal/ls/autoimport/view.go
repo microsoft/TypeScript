@@ -78,14 +78,18 @@ const (
 )
 
 func (v *View) Search(query string, kind QueryKind) []*Export {
+	var queryName ast.SymbolName
+	if kind != QueryKindWordPrefix {
+		queryName = ast.MakeSymbolName(query)
+	}
 	searchFn := func(bucket *RegistryBucket) []*Export {
 		switch kind {
 		case QueryKindWordPrefix:
 			return bucket.Index.SearchWordPrefix(query)
 		case QueryKindExactMatch:
-			return bucket.Index.Find(query, true)
+			return bucket.Index.Find(queryName, true)
 		case QueryKindCaseInsensitiveMatch:
-			return bucket.Index.Find(query, false)
+			return bucket.Index.Find(queryName, false)
 		default:
 			panic("unreachable")
 		}
@@ -181,17 +185,17 @@ func (v *View) GetCompletions(prefix string, position lsproto.Position, forJSX b
 
 	type exportGroupKey struct {
 		target                     ExportID
-		name                       string
+		name                       ast.SymbolName
 		ambientModuleOrPackageName string
 	}
 	grouped := make(map[exportGroupKey][]*Export, len(results))
 outer:
 	for _, e := range results {
 		name := e.Name()
-		if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
+		if !scanner.IsIdentifierText(name.Value(), core.LanguageVariantStandard) {
 			continue
 		}
-		if forJSX && !(unicode.IsUpper(rune(name[0])) || e.IsRenameable()) {
+		if forJSX && !(unicode.IsUpper(rune(name.Value()[0])) || e.IsRenameable()) {
 			continue
 		}
 		target := e.ExportID

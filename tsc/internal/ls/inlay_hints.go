@@ -891,7 +891,7 @@ func (s *inlayHintState) getParameterIdentifierInfoAtPosition(signature *checker
 	if pos == paramCount {
 		return &parameterInfo{
 			parameter:       restId,
-			name:            restParameter.Name(),
+			name:            restParameter.Name().Value(),
 			isRestParameter: true,
 		}
 	}

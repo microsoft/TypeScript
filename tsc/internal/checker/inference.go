@@ -1244,13 +1244,13 @@ func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
 			continue
 		}
 		name := getStringLiteralValue(t)
-		literalProp := c.newSymbol(ast.SymbolFlagsProperty, name)
+		literalProp := c.newSymbol(ast.SymbolFlagsProperty, ast.MakeSymbolName(name))
 		c.valueSymbolLinks.Get(literalProp).resolvedType = c.anyType
 		if t.symbol != nil {
 			literalProp.SetDeclarations(t.symbol.Declarations())
 			literalProp.SetValueDeclaration(t.symbol.ValueDeclaration())
 		}
-		members[name] = literalProp
+		members[ast.MakeSymbolName(name)] = literalProp
 	}
 	var indexInfos []*IndexInfo
 	if t.flags&TypeFlagsString != 0 {

@@ -154,6 +154,14 @@ test("other TypeScript enums retain their Go sources", () => {
     assert.throws(() => generateEnum({ ...def, goFile: "does-not-exist.go" }), /ENOENT/);
 });
 
+test("interned internal symbol names retain their escaped string enum values", () => {
+    const def = enumDefs.find(def => def.name === "InternalSymbolName")!;
+    const { members, code } = generateEnum(def);
+    assert.equal(members.length, 20);
+    const actual = fs.readFileSync(path.join(repoRoot, def.outDir, "internalSymbolName.enum.ts"), "utf8");
+    assert.equal(actual.replaceAll("\r\n", "\n"), code);
+});
+
 test("SyntaxKind is generated without reading its Go definition", () => {
     const def = enumDefs.find(def => def.name === "SyntaxKind")!;
     const { members, code } = generateEnum({ ...def, goFile: "does-not-exist.go" });

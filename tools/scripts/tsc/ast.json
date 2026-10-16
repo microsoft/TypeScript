@@ -1236,7 +1236,7 @@
                 "members": [
                     {
                         "name": "Text",
-                        "type": "string"
+                        "type": "SymbolName"
                     }
                 ],
                 "arena": true

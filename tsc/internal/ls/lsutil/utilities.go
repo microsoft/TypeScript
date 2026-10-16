@@ -115,9 +115,9 @@ func GetQuotePreference(sourceFile *ast.SourceFile, preferences UserPreferences)
 func ModuleSymbolToValidIdentifier(moduleSymbol *ast.Symbol, forceCapitalize bool) string {
 	moduleName := moduleSymbol.Name()
 	if ambientModuleName, ok := ast.TryGetAmbientModuleNameFromSymbolName(moduleName); ok {
-		moduleName = ambientModuleName
+		moduleName = ast.MakeSymbolName(ambientModuleName)
 	}
-	return ModuleSpecifierToValidIdentifier(moduleName, forceCapitalize)
+	return ModuleSpecifierToValidIdentifier(moduleName.Value(), forceCapitalize)
 }
 
 func ModuleSpecifierToValidIdentifier(moduleSpecifier string, forceCapitalize bool) string {

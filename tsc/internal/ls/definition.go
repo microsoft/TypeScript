@@ -340,7 +340,7 @@ func getDeclarationsFromLocation(c *checker.Checker, node *ast.Node) []*ast.Node
 				}
 				var result []*ast.Node
 				for _, unionType := range types {
-					if prop := c.GetPropertyOfType(unionType, name); prop != nil {
+					if prop := c.GetPropertyOfType(unionType, ast.MakeSymbolName(name)); prop != nil {
 						result = append(result, prop.Declarations()...)
 					}
 				}
@@ -485,9 +485,9 @@ func getSymbolForOverriddenMember(typeChecker *checker.Checker, node *ast.Node) 
 	}
 	name := ast.GetTextOfPropertyName(classElement.Name())
 	if ast.HasStaticModifier(classElement) {
-		return typeChecker.GetPropertyOfType(typeChecker.GetTypeOfSymbol(base), name)
+		return typeChecker.GetPropertyOfType(typeChecker.GetTypeOfSymbol(base), ast.MakeSymbolName(name))
 	}
-	return typeChecker.GetPropertyOfType(typeChecker.GetDeclaredTypeOfSymbol(base), name)
+	return typeChecker.GetPropertyOfType(typeChecker.GetDeclaredTypeOfSymbol(base), ast.MakeSymbolName(name))
 }
 
 func getTypeOfSymbolAtLocation(c *checker.Checker, symbol *ast.Symbol, node *ast.Node) *checker.Type {

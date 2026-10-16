@@ -100,6 +100,7 @@ export class PrimitiveType extends TypeBase {
         const typeMap: Record<string, string> = {
             bool: "boolean",
             int: "number",
+            SymbolName: "string",
         };
         return typeMap[this.name] || this.name;
     }
@@ -804,6 +805,7 @@ export class SchemaAPI {
         "ModifierFlags",
         "NodeFlags",
         "string",
+        "SymbolName",
         "TokenFlags",
     ]);
 

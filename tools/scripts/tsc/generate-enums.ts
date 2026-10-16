@@ -84,7 +84,7 @@ function syntaxKindMembers(): EnumMember[] {
     return [...members, { name: "Count", value: String(members.length) }, ...api.kindMarkers()];
 }
 
-function parseGoConstBlock(block: string, def: EnumDef): EnumMember[] {
+function parseGoDeclarationBlock(block: string, def: EnumDef): EnumMember[] {
     const prefix = def.goPrefix;
     const members: EnumMember[] = [];
     let iotaCounter = 0;
@@ -278,11 +278,12 @@ function translateGoNumericExpression(expression: string, prefix: string): strin
 }
 
 /**
- * Resolve a Go string-constant expression (e.g. `Prefix + "call"` or `"export="`)
+ * Resolve a Go string expression, optionally interned with `MakeSymbolName`,
  * into a quoted, JS-escaped TypeScript string literal. `replacements` maps bare
  * Go identifiers (such as a sentinel-prefix constant) to their literal value.
  */
 function parseGoStringValue(goValue: string, replacements: Record<string, string>): string {
+    goValue = goValue.replace(/^(?:unique\.Make|MakeSymbolName)\((.*)\)$/, "$1");
     let result = "";
     for (const part of goValue.split("+").map(p => p.trim())) {
         if (Object.prototype.hasOwnProperty.call(replacements, part)) {
@@ -306,10 +307,11 @@ interface EnumMember {
 
 function parseGoEnum(def: EnumDef): EnumMember[] {
     const source = fs.readFileSync(path.join(ROOT, def.goFile), "utf-8");
-    const constBlockRegex = /const\s*\(([\s\S]*?)\n\)/g;
+    const declarationBlockRegex = /(const|var)\s*\(([\s\S]*?)\n\)/g;
 
-    for (const match of source.matchAll(constBlockRegex)) {
-        const members = parseGoConstBlock(match[1], def).filter(member => !def.excludeMembers?.includes(member.name));
+    for (const match of source.matchAll(declarationBlockRegex)) {
+        if (match[1] === "var" && !def.stringEnum) continue;
+        const members = parseGoDeclarationBlock(match[2], def).filter(member => !def.excludeMembers?.includes(member.name));
         if (members.length > 0) return topoSortMembers(members);
     }
 
