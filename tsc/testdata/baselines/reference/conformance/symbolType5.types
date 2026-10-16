@@ -4,9 +4,9 @@
 var s = Symbol.for("multiply");
 >s : symbol
 >Symbol.for("multiply") : RegisteredSymbol<"multiply">
->Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >"multiply" : "multiply"
 
 s * s;

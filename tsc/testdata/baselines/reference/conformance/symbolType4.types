@@ -4,9 +4,9 @@
 var s = Symbol.for("postfix");
 >s : symbol
 >Symbol.for("postfix") : RegisteredSymbol<"postfix">
->Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >"postfix" : "postfix"
 
 s++;

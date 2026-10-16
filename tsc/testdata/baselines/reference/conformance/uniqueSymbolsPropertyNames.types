@@ -16,17 +16,17 @@ namespace OpNamespace {
 const uniqueSymbol0 = Symbol.for("");
 >uniqueSymbol0 : RegisteredSymbol<"">
 >Symbol.for("") : RegisteredSymbol<"">
->Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >"" : ""
 
 const uniqueSymbol1 = Symbol.for("");
 >uniqueSymbol1 : RegisteredSymbol<"">
 >Symbol.for("") : RegisteredSymbol<"">
->Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >"" : ""
 
 
@@ -54,9 +54,9 @@ const Op: OpTypes = {
   equal: Symbol.for("equal"),
 >equal : RegisteredSymbol<"equal">
 >Symbol.for("equal") : RegisteredSymbol<"equal">
->Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >"equal" : "equal"
 
 } as OpTypes;

@@ -4,9 +4,9 @@
 var s = Symbol.for("shift");
 >s : symbol
 >Symbol.for("shift") : RegisteredSymbol<"shift">
->Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >"shift" : "shift"
 
 s << s;

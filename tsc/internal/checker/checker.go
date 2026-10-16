@@ -23380,7 +23380,7 @@ func (c *Checker) getRegisteredESSymbolType(keyType *Type, alias *TypeAlias) *Ty
 	if keyType.flags&TypeFlagsUnion != 0 {
 		members := make([]*Type, 0, len(keyType.Types()))
 		for _, member := range keyType.Types() {
-			if member.flags&TypeFlagsStringOrNumberLiteral == 0 {
+			if member.flags&(TypeFlagsLiteral|TypeFlagsNull|TypeFlagsUndefined) == 0 {
 				return c.esSymbolType
 			}
 			memberAlias := &TypeAlias{symbol: alias.symbol, typeArguments: []*Type{member}}
@@ -23388,7 +23388,7 @@ func (c *Checker) getRegisteredESSymbolType(keyType *Type, alias *TypeAlias) *Ty
 		}
 		return c.getUnionType(members)
 	}
-	if keyType.flags&(TypeFlagsStringOrNumberLiteral|TypeFlagsTypeParameter) == 0 {
+	if keyType.flags&(TypeFlagsLiteral|TypeFlagsNull|TypeFlagsUndefined|TypeFlagsTypeParameter) == 0 {
 		return c.esSymbolType
 	}
 	key := c.getRegisteredESSymbolTypeKey(keyType)
@@ -23398,41 +23398,28 @@ func (c *Checker) getRegisteredESSymbolType(keyType *Type, alias *TypeAlias) *Ty
 			data := &RegisteredESSymbolType{target: keyType}
 			t = c.newType(TypeFlagsRegisteredESSymbol, ObjectFlagsNone, data)
 		} else {
-			name := ast.InternalSymbolNamePrefix + "@@" + c.getRegisteredESSymbolNameText(keyType)
+			name := ast.InternalSymbolNamePrefix + "@@" + c.getTemplateStringForType(keyType)
 			symbol := c.newSymbol(ast.SymbolFlagsProperty, name)
 			t = c.newUniqueESSymbolType(symbol, name)
 		}
+		t.alias = alias
 		c.registeredESSymbolTypes[key] = t
 	}
-	t.alias = alias
 	return t
 }
 
 func (c *Checker) getRegisteredESSymbolTypeKey(keyType *Type) CacheHashKey {
 	var b keyBuilder
 	b.writeString("RegisteredSymbol")
-	if keyType.flags&TypeFlagsStringLiteral != 0 {
+	if keyType.flags&TypeFlagsTypeParameter == 0 {
+		// Symbol.for stores ToString(key), so different primitive types can share a key.
 		b.writeByte('s')
-		b.writeString(getStringLiteralValue(keyType))
-	} else if keyType.flags&TypeFlagsNumberLiteral != 0 {
-		b.writeByte('n')
-		b.writeString(getNumberLiteralValue(keyType).String())
+		b.writeString(c.getTemplateStringForType(keyType))
 	} else {
 		b.writeByte('t')
 		b.writeType(keyType)
 	}
 	return b.hash()
-}
-
-func (c *Checker) getRegisteredESSymbolNameText(keyType *Type) string {
-	switch {
-	case keyType.flags&TypeFlagsStringLiteral != 0:
-		return getStringLiteralValue(keyType)
-	case keyType.flags&TypeFlagsNumberLiteral != 0:
-		return getNumberLiteralValue(keyType).String()
-	default:
-		return c.typeToStringEx(keyType, nil, TypeFormatFlagsNoTruncation|TypeFormatFlagsUseAliasDefinedOutsideCurrentScope, nil)
-	}
 }
 
 func (c *Checker) getTypeFromTypeReference(node *ast.Node) *Type {

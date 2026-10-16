@@ -1,0 +1,330 @@
+//// [tests/cases/compiler/registeredSymbolPrimitiveKeys.ts] ////
+
+=== registeredSymbolPrimitiveKeys.ts ===
+type Assert<T extends true> = T;
+>Assert : Symbol(Assert, Decl(registeredSymbolPrimitiveKeys.ts, 0, 0))
+>T : Symbol(T, Decl(registeredSymbolPrimitiveKeys.ts, 0, 12))
+>T : Symbol(T, Decl(registeredSymbolPrimitiveKeys.ts, 0, 12))
+
+type Equal<A, B> =
+>Equal : Symbol(Equal, Decl(registeredSymbolPrimitiveKeys.ts, 0, 32))
+>A : Symbol(A, Decl(registeredSymbolPrimitiveKeys.ts, 1, 11))
+>B : Symbol(B, Decl(registeredSymbolPrimitiveKeys.ts, 1, 13))
+
+    (<T>() => T extends A ? 1 : 2) extends
+>T : Symbol(T, Decl(registeredSymbolPrimitiveKeys.ts, 2, 6))
+>T : Symbol(T, Decl(registeredSymbolPrimitiveKeys.ts, 2, 6))
+>A : Symbol(A, Decl(registeredSymbolPrimitiveKeys.ts, 1, 11))
+
+    (<T>() => T extends B ? 1 : 2) ? true : false;
+>T : Symbol(T, Decl(registeredSymbolPrimitiveKeys.ts, 3, 6))
+>T : Symbol(T, Decl(registeredSymbolPrimitiveKeys.ts, 3, 6))
+>B : Symbol(B, Decl(registeredSymbolPrimitiveKeys.ts, 1, 13))
+
+type AcceptedKeys = Assert<Equal<SymbolForKey, string | number | bigint | boolean | null | undefined>>;
+>AcceptedKeys : Symbol(AcceptedKeys, Decl(registeredSymbolPrimitiveKeys.ts, 3, 50))
+>Assert : Symbol(Assert, Decl(registeredSymbolPrimitiveKeys.ts, 0, 0))
+>Equal : Symbol(Equal, Decl(registeredSymbolPrimitiveKeys.ts, 0, 32))
+>SymbolForKey : Symbol(SymbolForKey, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const numberKey: RegisteredSymbol<1> = Symbol.for(1);
+>numberKey : Symbol(numberKey, Decl(registeredSymbolPrimitiveKeys.ts, 7, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const bigintKey: RegisteredSymbol<1n> = Symbol.for(1n);
+>bigintKey : Symbol(bigintKey, Decl(registeredSymbolPrimitiveKeys.ts, 8, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const stringKey: RegisteredSymbol<"1"> = Symbol.for("1");
+>stringKey : Symbol(stringKey, Decl(registeredSymbolPrimitiveKeys.ts, 9, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const sameNumber: typeof stringKey = numberKey;
+>sameNumber : Symbol(sameNumber, Decl(registeredSymbolPrimitiveKeys.ts, 10, 5))
+>stringKey : Symbol(stringKey, Decl(registeredSymbolPrimitiveKeys.ts, 9, 5))
+>numberKey : Symbol(numberKey, Decl(registeredSymbolPrimitiveKeys.ts, 7, 5))
+
+const sameBigint: typeof numberKey = bigintKey;
+>sameBigint : Symbol(sameBigint, Decl(registeredSymbolPrimitiveKeys.ts, 11, 5))
+>numberKey : Symbol(numberKey, Decl(registeredSymbolPrimitiveKeys.ts, 7, 5))
+>bigintKey : Symbol(bigintKey, Decl(registeredSymbolPrimitiveKeys.ts, 8, 5))
+
+const sameString: typeof bigintKey = stringKey;
+>sameString : Symbol(sameString, Decl(registeredSymbolPrimitiveKeys.ts, 12, 5))
+>bigintKey : Symbol(bigintKey, Decl(registeredSymbolPrimitiveKeys.ts, 8, 5))
+>stringKey : Symbol(stringKey, Decl(registeredSymbolPrimitiveKeys.ts, 9, 5))
+
+// @ts-expect-error A different canonical string has a different symbol.
+const differentNumber: typeof numberKey = Symbol.for(2);
+>differentNumber : Symbol(differentNumber, Decl(registeredSymbolPrimitiveKeys.ts, 14, 5))
+>numberKey : Symbol(numberKey, Decl(registeredSymbolPrimitiveKeys.ts, 7, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+// @ts-expect-error ToString does not parse numeric strings.
+const leadingZero: typeof numberKey = Symbol.for("01");
+>leadingZero : Symbol(leadingZero, Decl(registeredSymbolPrimitiveKeys.ts, 16, 5))
+>numberKey : Symbol(numberKey, Decl(registeredSymbolPrimitiveKeys.ts, 7, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const zero: RegisteredSymbol<0> = Symbol.for(0);
+>zero : Symbol(zero, Decl(registeredSymbolPrimitiveKeys.ts, 18, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const negativeZero: typeof zero = Symbol.for(-0);
+>negativeZero : Symbol(negativeZero, Decl(registeredSymbolPrimitiveKeys.ts, 19, 5))
+>zero : Symbol(zero, Decl(registeredSymbolPrimitiveKeys.ts, 18, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const bigZero: typeof zero = Symbol.for(0n);
+>bigZero : Symbol(bigZero, Decl(registeredSymbolPrimitiveKeys.ts, 20, 5))
+>zero : Symbol(zero, Decl(registeredSymbolPrimitiveKeys.ts, 18, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const largeNumber: RegisteredSymbol<1e21> = Symbol.for(1e21);
+>largeNumber : Symbol(largeNumber, Decl(registeredSymbolPrimitiveKeys.ts, 21, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const largeString: RegisteredSymbol<"1e+21"> = largeNumber;
+>largeString : Symbol(largeString, Decl(registeredSymbolPrimitiveKeys.ts, 22, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>largeNumber : Symbol(largeNumber, Decl(registeredSymbolPrimitiveKeys.ts, 21, 5))
+
+const negativeBigint: RegisteredSymbol<-1n> = Symbol.for(-1n);
+>negativeBigint : Symbol(negativeBigint, Decl(registeredSymbolPrimitiveKeys.ts, 23, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const negativeString: RegisteredSymbol<"-1"> = negativeBigint;
+>negativeString : Symbol(negativeString, Decl(registeredSymbolPrimitiveKeys.ts, 24, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>negativeBigint : Symbol(negativeBigint, Decl(registeredSymbolPrimitiveKeys.ts, 23, 5))
+
+const hugeBigint: RegisteredSymbol<9007199254740993n> = Symbol.for(9007199254740993n);
+>hugeBigint : Symbol(hugeBigint, Decl(registeredSymbolPrimitiveKeys.ts, 25, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const hugeString: RegisteredSymbol<"9007199254740993"> = hugeBigint;
+>hugeString : Symbol(hugeString, Decl(registeredSymbolPrimitiveKeys.ts, 26, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>hugeBigint : Symbol(hugeBigint, Decl(registeredSymbolPrimitiveKeys.ts, 25, 5))
+
+const trueKey: RegisteredSymbol<true> = Symbol.for(true);
+>trueKey : Symbol(trueKey, Decl(registeredSymbolPrimitiveKeys.ts, 28, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const trueString: RegisteredSymbol<"true"> = trueKey;
+>trueString : Symbol(trueString, Decl(registeredSymbolPrimitiveKeys.ts, 29, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>trueKey : Symbol(trueKey, Decl(registeredSymbolPrimitiveKeys.ts, 28, 5))
+
+const falseKey: RegisteredSymbol<false> = Symbol.for(false);
+>falseKey : Symbol(falseKey, Decl(registeredSymbolPrimitiveKeys.ts, 30, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const falseString: RegisteredSymbol<"false"> = falseKey;
+>falseString : Symbol(falseString, Decl(registeredSymbolPrimitiveKeys.ts, 31, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>falseKey : Symbol(falseKey, Decl(registeredSymbolPrimitiveKeys.ts, 30, 5))
+
+const nullKey: RegisteredSymbol<null> = Symbol.for(null);
+>nullKey : Symbol(nullKey, Decl(registeredSymbolPrimitiveKeys.ts, 32, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const nullString: RegisteredSymbol<"null"> = nullKey;
+>nullString : Symbol(nullString, Decl(registeredSymbolPrimitiveKeys.ts, 33, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>nullKey : Symbol(nullKey, Decl(registeredSymbolPrimitiveKeys.ts, 32, 5))
+
+const undefinedKey: RegisteredSymbol<undefined> = Symbol.for(undefined);
+>undefinedKey : Symbol(undefinedKey, Decl(registeredSymbolPrimitiveKeys.ts, 34, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+const undefinedString: RegisteredSymbol<"undefined"> = undefinedKey;
+>undefinedString : Symbol(undefinedString, Decl(registeredSymbolPrimitiveKeys.ts, 35, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>undefinedKey : Symbol(undefinedKey, Decl(registeredSymbolPrimitiveKeys.ts, 34, 5))
+
+// @ts-expect-error null and undefined have different registry keys.
+const differentNullish: typeof nullKey = undefinedKey;
+>differentNullish : Symbol(differentNullish, Decl(registeredSymbolPrimitiveKeys.ts, 37, 5))
+>nullKey : Symbol(nullKey, Decl(registeredSymbolPrimitiveKeys.ts, 32, 5))
+>undefinedKey : Symbol(undefinedKey, Decl(registeredSymbolPrimitiveKeys.ts, 34, 5))
+
+declare const mixedKey: 1 | "2";
+>mixedKey : Symbol(mixedKey, Decl(registeredSymbolPrimitiveKeys.ts, 39, 13))
+
+const mixed: RegisteredSymbol<"1" | 2n> = Symbol.for(mixedKey);
+>mixed : Symbol(mixed, Decl(registeredSymbolPrimitiveKeys.ts, 40, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>mixedKey : Symbol(mixedKey, Decl(registeredSymbolPrimitiveKeys.ts, 39, 13))
+
+declare const aliasedKey: 1 | "1";
+>aliasedKey : Symbol(aliasedKey, Decl(registeredSymbolPrimitiveKeys.ts, 41, 13))
+
+const aliased: RegisteredSymbol<"1"> = Symbol.for(aliasedKey);
+>aliased : Symbol(aliased, Decl(registeredSymbolPrimitiveKeys.ts, 42, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>aliasedKey : Symbol(aliasedKey, Decl(registeredSymbolPrimitiveKeys.ts, 41, 13))
+
+declare const nullOrString: null | "null";
+>nullOrString : Symbol(nullOrString, Decl(registeredSymbolPrimitiveKeys.ts, 43, 13))
+
+const aliasedNull: RegisteredSymbol<"null"> = Symbol.for(nullOrString);
+>aliasedNull : Symbol(aliasedNull, Decl(registeredSymbolPrimitiveKeys.ts, 44, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>nullOrString : Symbol(nullOrString, Decl(registeredSymbolPrimitiveKeys.ts, 43, 13))
+
+declare const arbitraryNumber: number;
+>arbitraryNumber : Symbol(arbitraryNumber, Decl(registeredSymbolPrimitiveKeys.ts, 46, 13))
+
+declare const arbitraryBigint: bigint;
+>arbitraryBigint : Symbol(arbitraryBigint, Decl(registeredSymbolPrimitiveKeys.ts, 47, 13))
+
+declare const arbitraryBoolean: boolean;
+>arbitraryBoolean : Symbol(arbitraryBoolean, Decl(registeredSymbolPrimitiveKeys.ts, 48, 13))
+
+const broadNumber: symbol = Symbol.for(arbitraryNumber);
+>broadNumber : Symbol(broadNumber, Decl(registeredSymbolPrimitiveKeys.ts, 49, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>arbitraryNumber : Symbol(arbitraryNumber, Decl(registeredSymbolPrimitiveKeys.ts, 46, 13))
+
+const broadBigint: symbol = Symbol.for(arbitraryBigint);
+>broadBigint : Symbol(broadBigint, Decl(registeredSymbolPrimitiveKeys.ts, 50, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>arbitraryBigint : Symbol(arbitraryBigint, Decl(registeredSymbolPrimitiveKeys.ts, 47, 13))
+
+const broadBoolean: symbol = Symbol.for(arbitraryBoolean);
+>broadBoolean : Symbol(broadBoolean, Decl(registeredSymbolPrimitiveKeys.ts, 51, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>arbitraryBoolean : Symbol(arbitraryBoolean, Decl(registeredSymbolPrimitiveKeys.ts, 48, 13))
+
+const eitherBoolean: RegisteredSymbol<"true" | "false"> = Symbol.for(arbitraryBoolean);
+>eitherBoolean : Symbol(eitherBoolean, Decl(registeredSymbolPrimitiveKeys.ts, 52, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>arbitraryBoolean : Symbol(arbitraryBoolean, Decl(registeredSymbolPrimitiveKeys.ts, 48, 13))
+
+declare const wideUnion: string | 1;
+>wideUnion : Symbol(wideUnion, Decl(registeredSymbolPrimitiveKeys.ts, 53, 13))
+
+const broadUnion: symbol = Symbol.for(wideUnion);
+>broadUnion : Symbol(broadUnion, Decl(registeredSymbolPrimitiveKeys.ts, 54, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>wideUnion : Symbol(wideUnion, Decl(registeredSymbolPrimitiveKeys.ts, 53, 13))
+
+// @ts-expect-error A broad number cannot have the identity of one registry key.
+const unsoundNumber: typeof stringKey = Symbol.for(arbitraryNumber);
+>unsoundNumber : Symbol(unsoundNumber, Decl(registeredSymbolPrimitiveKeys.ts, 56, 5))
+>stringKey : Symbol(stringKey, Decl(registeredSymbolPrimitiveKeys.ts, 9, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>arbitraryNumber : Symbol(arbitraryNumber, Decl(registeredSymbolPrimitiveKeys.ts, 46, 13))
+
+// @ts-expect-error A union containing arbitrary strings cannot have one identity.
+const unsoundUnion: typeof stringKey = Symbol.for(wideUnion);
+>unsoundUnion : Symbol(unsoundUnion, Decl(registeredSymbolPrimitiveKeys.ts, 58, 5))
+>stringKey : Symbol(stringKey, Decl(registeredSymbolPrimitiveKeys.ts, 9, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>wideUnion : Symbol(wideUnion, Decl(registeredSymbolPrimitiveKeys.ts, 53, 13))
+
+function fromGeneric<K extends SymbolForKey>(key: K): RegisteredSymbol<K> {
+>fromGeneric : Symbol(fromGeneric, Decl(registeredSymbolPrimitiveKeys.ts, 58, 61))
+>K : Symbol(K, Decl(registeredSymbolPrimitiveKeys.ts, 60, 21))
+>SymbolForKey : Symbol(SymbolForKey, Decl(lib.es2015.symbol.d.ts, --, --))
+>key : Symbol(key, Decl(registeredSymbolPrimitiveKeys.ts, 60, 45))
+>K : Symbol(K, Decl(registeredSymbolPrimitiveKeys.ts, 60, 21))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>K : Symbol(K, Decl(registeredSymbolPrimitiveKeys.ts, 60, 21))
+
+    return Symbol.for(key);
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>key : Symbol(key, Decl(registeredSymbolPrimitiveKeys.ts, 60, 45))
+}
+const genericNumber: RegisteredSymbol<"1"> = fromGeneric(1);
+>genericNumber : Symbol(genericNumber, Decl(registeredSymbolPrimitiveKeys.ts, 63, 5))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+>fromGeneric : Symbol(fromGeneric, Decl(registeredSymbolPrimitiveKeys.ts, 58, 61))
+
+// @ts-expect-error A symbol primitive cannot be converted by ToString.
+Symbol.for(Symbol());
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+// @ts-expect-error Object conversion can throw or depend on mutable methods.
+Symbol.for({});
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+// @ts-expect-error A symbol is not a safe registry key.
+type InvalidKey = RegisteredSymbol<symbol>;
+>InvalidKey : Symbol(InvalidKey, Decl(registeredSymbolPrimitiveKeys.ts, 68, 15))
+>RegisteredSymbol : Symbol(RegisteredSymbol, Decl(lib.es2015.symbol.d.ts, --, --))
+

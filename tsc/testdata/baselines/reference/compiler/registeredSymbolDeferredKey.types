@@ -8,9 +8,9 @@ export function make<K extends string>(key: K) {
     const registered = Symbol.for(key);
 >registered : RegisteredSymbol<K>
 >Symbol.for(key) : RegisteredSymbol<K>
->Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >key : K
 
     const widened: symbol = registered;
@@ -27,9 +27,9 @@ export function unreachable(key: never): never {
 
     return Symbol.for(key);
 >Symbol.for(key) : never
->Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >key : never
 }
 
@@ -41,9 +41,9 @@ export function read<K extends string>(first: K, second: K) {
     const firstKey = Symbol.for(first);
 >firstKey : RegisteredSymbol<K>
 >Symbol.for(first) : RegisteredSymbol<K>
->Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >first : K
 
     const record = { [firstKey]: "first" } as const;
@@ -57,9 +57,9 @@ export function read<K extends string>(first: K, second: K) {
     const secondKey = Symbol.for(second);
 >secondKey : RegisteredSymbol<K>
 >Symbol.for(second) : RegisteredSymbol<K>
->Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >second : K
 
     const value: "first" = record[secondKey];

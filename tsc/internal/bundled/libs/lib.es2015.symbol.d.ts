@@ -31,7 +31,7 @@ interface SymbolConstructor {
      * Otherwise, returns a new symbol with this key.
      * @param key key to search for.
      */
-    for<Key extends string>(key: Key): RegisteredSymbol<Key>;
+    for<Key extends SymbolForKey>(key: Key): RegisteredSymbol<Key>;
 
     /**
      * Returns a key from the global symbol registry matching the given Symbol if found.
@@ -43,4 +43,6 @@ interface SymbolConstructor {
 
 declare var Symbol: SymbolConstructor;
 
-type RegisteredSymbol<Key extends string | number> = intrinsic;
+type SymbolForKey = string | number | bigint | boolean | null | undefined;
+
+type RegisteredSymbol<Key extends SymbolForKey> = intrinsic;

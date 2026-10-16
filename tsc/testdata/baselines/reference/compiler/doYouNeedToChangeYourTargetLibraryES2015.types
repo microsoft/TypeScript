@@ -474,9 +474,9 @@ const testPromiseReject = Promise.reject();
 const testSymbolFor = Symbol.for('a');
 >testSymbolFor : RegisteredSymbol<"a">
 >Symbol.for('a') : RegisteredSymbol<"a">
->Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >'a' : "a"
 
 const testSymbolKeyFor = Symbol.keyFor(testSymbolFor);

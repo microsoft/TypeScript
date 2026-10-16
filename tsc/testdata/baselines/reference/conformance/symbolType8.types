@@ -4,9 +4,9 @@
 var s = Symbol.for("compare");
 >s : symbol
 >Symbol.for("compare") : RegisteredSymbol<"compare">
->Symbol.for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>Symbol.for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >Symbol : SymbolConstructor
->for : <Key extends string>(key: Key) => RegisteredSymbol<Key>
+>for : <Key extends SymbolForKey>(key: Key) => RegisteredSymbol<Key>
 >"compare" : "compare"
 
 s < s;
