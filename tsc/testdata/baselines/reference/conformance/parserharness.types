@@ -46,9 +46,9 @@ function switchToForwardSlashes(path: string) {
 
     return path.replace(/\\/g, "/");
 >path.replace(/\\/g, "/") : string
->path.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>path.replace : (searchValue: string | RegExp, replaceValue: string | ((substring: string, ...args: any[]) => string)) => string
 >path : string
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : (searchValue: string | RegExp, replaceValue: string | ((substring: string, ...args: any[]) => string)) => string
 >/\\/g : RegExp
 >"/" : "/"
 }
@@ -8034,9 +8034,9 @@ namespace Harness {
 >reportContent = reportContent.replace(htmlTrailer, '') : string
 >reportContent : string
 >reportContent.replace(htmlTrailer, '') : string
->reportContent.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>reportContent.replace : (searchValue: string | RegExp, replaceValue: string | ((substring: string, ...args: any[]) => string)) => string
 >reportContent : string
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : (searchValue: string | RegExp, replaceValue: string | ((substring: string, ...args: any[]) => string)) => string
 >htmlTrailer : string
 >'' : ""
 
@@ -8203,9 +8203,9 @@ namespace Harness {
 >expected = expected.replace(/\r\n?/g, '\n') : string
 >expected : string
 >expected.replace(/\r\n?/g, '\n') : string
->expected.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>expected.replace : (searchValue: string | RegExp, replaceValue: string | ((substring: string, ...args: any[]) => string)) => string
 >expected : string
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : (searchValue: string | RegExp, replaceValue: string | ((substring: string, ...args: any[]) => string)) => string
 >/\r\n?/g : RegExp
 >'\n' : "\n"
 
@@ -8213,9 +8213,9 @@ namespace Harness {
 >actual = actual.replace(/\r\n?/g, '\n') : string
 >actual : string
 >actual.replace(/\r\n?/g, '\n') : string
->actual.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>actual.replace : (searchValue: string | RegExp, replaceValue: string | ((substring: string, ...args: any[]) => string)) => string
 >actual : string
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : (searchValue: string | RegExp, replaceValue: string | ((substring: string, ...args: any[]) => string)) => string
 >/\r\n?/g : RegExp
 >'\n' : "\n"
             }
