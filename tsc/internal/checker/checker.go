@@ -16657,9 +16657,12 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
  * Not passing `lookupTable` and `exportNode` disables this collection, and just extends the tables
  */
 func (c *Checker) extendExportSymbols(target ast.SymbolTable, source ast.SymbolTable, lookupTable ExportCollisionTable, exportNode *ast.Node) {
-	for id, sourceSymbol := range source {
+	// Checking for collisions resolves aliases, which creates types, so visit aliases last and in a stable order
+	// rather than in the random iteration order of the symbol table.
+	c.forEachSymbolInResolutionOrder(source, func(sourceSymbol *ast.Symbol) {
+		id := sourceSymbol.Name()
 		if id == ast.InternalSymbolNameDefault {
-			continue
+			return
 		}
 		targetSymbol := target[id]
 		if targetSymbol == nil {
@@ -16673,7 +16676,7 @@ func (c *Checker) extendExportSymbols(target ast.SymbolTable, source ast.SymbolT
 			s := lookupTable[id]
 			s.exportsWithDuplicate = append(s.exportsWithDuplicate, exportNode)
 		}
-	}
+	})
 }
 
 func (c *Checker) ResolveAlias(symbol *ast.Symbol) (*ast.Symbol, bool) {
