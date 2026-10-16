@@ -111,6 +111,13 @@ func resolutionCandidateFromDiskLogicalPath(directory tspath.RootedDirectoryPath
 }
 
 func resolutionCandidateFromEncodedPaths(directory tspath.RootedDirectoryPath, filePath string, directoryPath string, directoryOnly bool) resolutionCandidate {
+	if filePath == directoryPath {
+		// File and directory resolution of the same input are identical.
+		return resolutionCandidate{
+			path:          directory.ResolveFile(filePath).AsPath(),
+			directoryOnly: directoryOnly,
+		}
+	}
 	resolvedDirectoryPath := directory.ResolveDirectory(directoryPath)
 	if directoryOnly {
 		return resolutionCandidate{
