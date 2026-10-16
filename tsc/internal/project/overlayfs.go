@@ -319,6 +319,9 @@ func (fs *overlayFS) GetAccessibleEntries(directoryName tspath.RootedDirectoryPa
 		return vfs.Entries{}
 	}
 	hostEntries := fs.host.GetAccessibleEntries(directoryName)
+	if len(directory) == 0 {
+		return hostEntries
+	}
 	entries := vfs.Entries{
 		Files:       slices.Clone(hostEntries.Files),
 		Directories: slices.Clone(hostEntries.Directories),

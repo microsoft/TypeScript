@@ -812,7 +812,16 @@ func (fs *sourceFS) Track(fileName tspath.RootedFilePath) {
 	if !fs.tracking {
 		return
 	}
-	fs.seenFiles.Store(fs.caseSensitivity.PathKey(fileName.AsPath()), fileName)
+	fs.track(fileName, fs.caseSensitivity.PathKey(fileName.AsPath()))
+}
+
+func (fs *sourceFS) track(fileName tspath.RootedFilePath, path tspath.PathKey) {
+	if !fs.tracking {
+		return
+	}
+	if _, ok := fs.seenFiles.Load(path); !ok {
+		fs.seenFiles.Store(path, fileName)
+	}
 }
 
 func (fs *sourceFS) SeenFile(path tspath.PathKey) bool {
@@ -851,7 +860,7 @@ func (fs *sourceFS) GetFile(fileName tspath.RootedFilePath) FileHandle {
 }
 
 func (fs *sourceFS) GetFileByPath(fileName tspath.RootedFilePath, path tspath.PathKey) FileHandle {
-	fs.Track(fileName)
+	fs.track(fileName, path)
 	return fs.source.GetFileByPath(fileName, path)
 }
 
@@ -866,8 +875,9 @@ func (fs *sourceFS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
 
 // FileExists implements vfs.FS.
 func (fs *sourceFS) FileExists(path tspath.RootedFilePath) bool {
-	fs.Track(path)
-	return fs.source.FileExists(path, fs.caseSensitivity.PathKey(path.AsPath()))
+	pathKey := fs.caseSensitivity.PathKey(path.AsPath())
+	fs.track(path, pathKey)
+	return fs.source.FileExists(path, pathKey)
 }
 
 // GetAccessibleEntries implements vfs.FS.
