@@ -1060,7 +1060,8 @@ func (c *Checker) getTypeAtSwitchClause(f *FlowState, flow *ast.FlowNode) FlowTy
 	data := flow.Node.AsFlowSwitchClauseData()
 	expr := ast.SkipParentheses(data.SwitchStatement.Expression())
 	flowType := c.getTypeAtFlowNode(f, flow.Antecedent)
-	t := flowType.t
+	nonEvolvingType := c.finalizeEvolvingArrayType(flowType.t)
+	t := nonEvolvingType
 	switch {
 	case c.isMatchingReference(f.reference, expr):
 		t = c.narrowTypeBySwitchOnDiscriminant(t, data)
@@ -1084,6 +1085,9 @@ func (c *Checker) getTypeAtSwitchClause(f *FlowState, flow *ast.FlowNode) FlowTy
 		if access != nil {
 			t = c.narrowTypeBySwitchOnDiscriminantProperty(t, access, data)
 		}
+	}
+	if t == nonEvolvingType {
+		return flowType
 	}
 	return c.newFlowType(t, flowType.incomplete)
 }
