@@ -315,7 +315,7 @@ func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName tspath.Ro
 						kind:                   fileIncludeKindAutomaticTypeDirectiveFile,
 						automaticTypeDirective: &automaticTypeDirectiveFileData{name, resolved.PackageId},
 					},
-					packageId: resolved.PackageId,
+					packageId: packageIdRef(&resolved.PackageId),
 				})
 			} else {
 				pDiagnostics = append(pDiagnostics, &processingDiagnostic{
@@ -800,7 +800,7 @@ func (p *fileLoader) resolveTypeReferenceDirectives(t *parseTask) {
 				increaseDepth: resolved.IsExternalLibraryImport,
 				elideOnDepth:  false,
 				includeReason: includeReason,
-				packageId:     resolved.PackageId,
+				packageId:     packageIdRef(&resolved.PackageId),
 			}, nil)
 		} else {
 			t.processingDiagnostics = append(t.processingDiagnostics, &processingDiagnostic{
@@ -931,7 +931,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 							synthetic: core.IfElse(importIndex < 0, entry, nil),
 						},
 					},
-					packageId: resolvedModule.PackageId,
+					packageId: packageIdRef(&resolvedModule.PackageId),
 				}, nil)
 			}
 		}
