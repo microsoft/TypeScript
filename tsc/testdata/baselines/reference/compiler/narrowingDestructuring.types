@@ -117,10 +117,10 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 >t : { kind: "a"; a: string; }
 
         const r2 = (({ kind, ...rest }) => rest)(t);
->r2 : { a: string; }
->(({ kind, ...rest }) => rest)(t) : { a: string; }
->(({ kind, ...rest }) => rest) : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
->({ kind, ...rest }) => rest : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
+>r2 : T extends { kind: "a"; a: string; } ? { a: string; } : never
+>(({ kind, ...rest }) => rest)(t) : T extends { kind: "a"; a: string; } ? { a: string; } : never
+>(({ kind, ...rest }) => rest) : ({ kind, ...rest }: { kind: "a"; a: string; }) => T extends { kind: "a"; a: string; } ? { a: string; } : never
+>({ kind, ...rest }) => rest : ({ kind, ...rest }: { kind: "a"; a: string; }) => T extends { kind: "a"; a: string; } ? { a: string; } : never
 >kind : "a"
 >rest : { a: string; }
 >rest : { a: string; }

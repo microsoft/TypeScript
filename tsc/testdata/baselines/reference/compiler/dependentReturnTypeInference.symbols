@@ -1,0 +1,1714 @@
+//// [tests/cases/compiler/dependentReturnTypeInference.ts] ////
+
+=== dependentReturnType1.ts ===
+export {};
+
+class Unnamed {
+>Unnamed : Symbol(Unnamed, Decl(dependentReturnType1.ts, 0, 10))
+
+    root!: { name: string };
+>root : Symbol(Unnamed.root, Decl(dependentReturnType1.ts, 2, 15))
+>name : Symbol(name, Decl(dependentReturnType1.ts, 3, 12))
+
+    // Original return type: T extends string ? this : T extends undefined ? string : never
+    name2<T extends string | undefined>(name?: T) {
+>name2 : Symbol(Unnamed.name2, Decl(dependentReturnType1.ts, 3, 28))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 6, 10))
+>name : Symbol(name, Decl(dependentReturnType1.ts, 6, 40))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 6, 10))
+
+        if (typeof name === "undefined") {
+>name : Symbol(name, Decl(dependentReturnType1.ts, 6, 40))
+
+            return this.root.name;
+>this.root.name : Symbol(name, Decl(dependentReturnType1.ts, 3, 12))
+>this.root : Symbol(Unnamed.root, Decl(dependentReturnType1.ts, 2, 15))
+>this : Symbol(Unnamed, Decl(dependentReturnType1.ts, 0, 10))
+>root : Symbol(Unnamed.root, Decl(dependentReturnType1.ts, 2, 15))
+>name : Symbol(name, Decl(dependentReturnType1.ts, 3, 12))
+        }
+        this.root.name = name;
+>this.root.name : Symbol(name, Decl(dependentReturnType1.ts, 3, 12))
+>this.root : Symbol(Unnamed.root, Decl(dependentReturnType1.ts, 2, 15))
+>this : Symbol(Unnamed, Decl(dependentReturnType1.ts, 0, 10))
+>root : Symbol(Unnamed.root, Decl(dependentReturnType1.ts, 2, 15))
+>name : Symbol(name, Decl(dependentReturnType1.ts, 3, 12))
+>name : Symbol(name, Decl(dependentReturnType1.ts, 6, 40))
+
+        return this;
+>this : Symbol(Unnamed, Decl(dependentReturnType1.ts, 0, 10))
+    }
+}
+
+// Original return type: T extends true ? 1 : T extends false ? 2 : never
+function conditional<T extends boolean>(x: T) {
+>conditional : Symbol(conditional, Decl(dependentReturnType1.ts, 13, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 16, 21))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 16, 40))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 16, 21))
+
+    return x ? 1 : 2;
+>x : Symbol(x, Decl(dependentReturnType1.ts, 16, 40))
+}
+
+// Original return type: T extends "a" ? "a" : T extends "b" ? number : never
+function contextualConditional<T extends "a" | "b">(x: T) {
+>contextualConditional : Symbol(contextualConditional, Decl(dependentReturnType1.ts, 18, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 21, 31))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 21, 52))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 21, 31))
+
+    return x === "a" ? x : parseInt(x);
+>x : Symbol(x, Decl(dependentReturnType1.ts, 21, 52))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 21, 52))
+>parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 21, 52))
+}
+
+declare function isString(s: unknown): s is string;
+>isString : Symbol(isString, Decl(dependentReturnType1.ts, 23, 1))
+>s : Symbol(s, Decl(dependentReturnType1.ts, 25, 26))
+>s : Symbol(s, Decl(dependentReturnType1.ts, 25, 26))
+
+// Original return type: T extends string[] ? string[] : T extends string ? string : never
+function capitalize<T extends string | string[]>(input: T) {
+>capitalize : Symbol(capitalize, Decl(dependentReturnType1.ts, 25, 51))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 28, 20))
+>input : Symbol(input, Decl(dependentReturnType1.ts, 28, 49))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 28, 20))
+
+    if (isString(input)) {
+>isString : Symbol(isString, Decl(dependentReturnType1.ts, 23, 1))
+>input : Symbol(input, Decl(dependentReturnType1.ts, 28, 49))
+
+        return input[0].toUpperCase() + input.slice(1);
+>input[0].toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>input : Symbol(input, Decl(dependentReturnType1.ts, 28, 49))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>input.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>input : Symbol(input, Decl(dependentReturnType1.ts, 28, 49))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+    }
+    return input.map(element => capitalize(element));
+>input.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>input : Symbol(input, Decl(dependentReturnType1.ts, 28, 49))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>element : Symbol(element, Decl(dependentReturnType1.ts, 32, 21))
+>capitalize : Symbol(capitalize, Decl(dependentReturnType1.ts, 25, 51))
+>element : Symbol(element, Decl(dependentReturnType1.ts, 32, 21))
+}
+
+// Original return type: T extends {} ? void : T extends undefined ? number : never
+function voidRet<T extends { a: string } | undefined>(x: T) {
+>voidRet : Symbol(voidRet, Decl(dependentReturnType1.ts, 33, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 36, 17))
+>a : Symbol(a, Decl(dependentReturnType1.ts, 36, 28))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 36, 54))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 36, 17))
+
+    if (x) {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 36, 54))
+
+        return;
+    }
+    return 1;
+}
+
+// Original return type:
+// T extends string
+//     ? U extends string ? 1 : U extends number ? 2 : never
+//     : T extends number ? U extends number ? 3 : U extends string ? 4 : never
+//     : never
+function ttt<T extends string | number, U extends string | number>(x: T, y: U) {
+>ttt : Symbol(ttt, Decl(dependentReturnType1.ts, 41, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 48, 13))
+>U : Symbol(U, Decl(dependentReturnType1.ts, 48, 39))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 48, 67))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 48, 13))
+>y : Symbol(y, Decl(dependentReturnType1.ts, 48, 72))
+>U : Symbol(U, Decl(dependentReturnType1.ts, 48, 39))
+
+    if (typeof x === "number" && typeof y === "string") {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 48, 67))
+>y : Symbol(y, Decl(dependentReturnType1.ts, 48, 72))
+
+        return 4;
+    }
+    return undefined as any;
+>undefined : Symbol(undefined)
+}
+
+// Original return type: T extends 1 ? number : T extends 2 ? string : never
+function noShadowing<T extends 1 | 2>(x: T) {
+>noShadowing : Symbol(noShadowing, Decl(dependentReturnType1.ts, 53, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 56, 21))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 56, 38))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 56, 21))
+
+    if (true) {
+        if (x === 1) {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 56, 38))
+
+            return 1;
+        }
+        return "";
+    }
+}
+
+// Original return type: Promise<T extends true ? 1 : T extends false ? 2 : never>
+async function abool<T extends true | false>(x: T) {
+>abool : Symbol(abool, Decl(dependentReturnType1.ts, 63, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 66, 21))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 66, 45))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 66, 21))
+
+    if (x) {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 66, 45))
+
+        return 1;
+    }
+    return 2;
+}
+
+// Original return type: Generator<number, T extends true ? 1 : T extends false ? 2 : never, unknown>
+function* bbool<T extends true | false>(x: T) {
+>bbool : Symbol(bbool, Decl(dependentReturnType1.ts, 71, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 74, 16))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 74, 40))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 74, 16))
+
+    yield 3;
+    if (x) {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 74, 40))
+
+        return 1;
+    }
+    return 2;
+}
+
+// Original return type: T extends true ? 1 : T extends false ? 2 : never
+function returnStuff1<T extends boolean>(x: T) {
+>returnStuff1 : Symbol(returnStuff1, Decl(dependentReturnType1.ts, 80, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 83, 22))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 83, 41))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 83, 22))
+
+    return (x ? (1) : 2);
+>x : Symbol(x, Decl(dependentReturnType1.ts, 83, 41))
+}
+
+// Original return type: T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never
+function returnStuff2<T extends 1 | 2 | "a">(x: T) {
+>returnStuff2 : Symbol(returnStuff2, Decl(dependentReturnType1.ts, 85, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 88, 22))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 88, 45))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 88, 22))
+
+    return (typeof x === "string" ? 0 : (x === 1 ? ("one") : "two"));
+>x : Symbol(x, Decl(dependentReturnType1.ts, 88, 45))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 88, 45))
+}
+
+=== dependentReturnType2.js ===
+export {};
+
+/**
+ * @template T
+ * @template A
+ * @template R1
+ * @template B
+ * @template R2
+ * @typedef {T extends A ? R1 : T extends B ? R2 : never} HelperCond
+ */
+
+/**
+ * @typedef IMessage
+ * @property {string} [html]
+ * @property {Object[]} [tokens]
+ */
+
+class NewKatex {
+>NewKatex : Symbol(NewKatex, Decl(dependentReturnType2.js, 0, 10))
+
+    /**
+     * @param {string} s
+     * @returns {string}
+     */
+    render(s) {
+>render : Symbol(NewKatex.render, Decl(dependentReturnType2.js, 17, 16))
+>s : Symbol(s, Decl(dependentReturnType2.js, 22, 11))
+
+        return "";
+    }
+
+    /**
+     * @template {string | IMessage} T
+     * @param {T} message
+     * Original return type: `T extends string ? string : T extends IMessage ? IMessage : never`
+     */
+    renderMessage(message) {
+>renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType2.js, 24, 5))
+>message : Symbol(message, Decl(dependentReturnType2.js, 31, 18))
+
+        if (typeof message === "string") {
+>message : Symbol(message, Decl(dependentReturnType2.js, 31, 18))
+
+            return this.render(message);
+>this.render : Symbol(NewKatex.render, Decl(dependentReturnType2.js, 17, 16))
+>this : Symbol(NewKatex, Decl(dependentReturnType2.js, 0, 10))
+>render : Symbol(NewKatex.render, Decl(dependentReturnType2.js, 17, 16))
+>message : Symbol(message, Decl(dependentReturnType2.js, 31, 18))
+        }
+        if (!message.html?.trim()) {
+>message.html?.trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+>message.html : Symbol(html, Decl(dependentReturnType2.js, 13, 3))
+>message : Symbol(message, Decl(dependentReturnType2.js, 31, 18))
+>html : Symbol(html, Decl(dependentReturnType2.js, 13, 3))
+>trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+
+            return message;
+>message : Symbol(message, Decl(dependentReturnType2.js, 31, 18))
+        }
+        if (!message.tokens) {
+>message.tokens : Symbol(tokens, Decl(dependentReturnType2.js, 14, 3))
+>message : Symbol(message, Decl(dependentReturnType2.js, 31, 18))
+>tokens : Symbol(tokens, Decl(dependentReturnType2.js, 14, 3))
+
+            message.tokens = [];
+>message.tokens : Symbol(tokens, Decl(dependentReturnType2.js, 14, 3))
+>message : Symbol(message, Decl(dependentReturnType2.js, 31, 18))
+>tokens : Symbol(tokens, Decl(dependentReturnType2.js, 14, 3))
+        }
+        message.html = this.render(message.html);
+>message.html : Symbol(html, Decl(dependentReturnType2.js, 13, 3))
+>message : Symbol(message, Decl(dependentReturnType2.js, 31, 18))
+>html : Symbol(html, Decl(dependentReturnType2.js, 13, 3))
+>this.render : Symbol(NewKatex.render, Decl(dependentReturnType2.js, 17, 16))
+>this : Symbol(NewKatex, Decl(dependentReturnType2.js, 0, 10))
+>render : Symbol(NewKatex.render, Decl(dependentReturnType2.js, 17, 16))
+>message.html : Symbol(html, Decl(dependentReturnType2.js, 13, 3))
+>message : Symbol(message, Decl(dependentReturnType2.js, 31, 18))
+>html : Symbol(html, Decl(dependentReturnType2.js, 13, 3))
+
+        return message;
+>message : Symbol(message, Decl(dependentReturnType2.js, 31, 18))
+    }
+}
+
+/**
+ * @template {true | false} T
+ * @param {{ dollarSyntax: boolean; parenthesisSyntax: boolean; }} options
+ * @param {T} isMessage
+ * Original return type:
+ * `T extends true ? (message: IMessage) => IMessage : T extends false ? (message: string) => string : never`
+ */
+function createKatexMessageRendering(options, isMessage) {
+>createKatexMessageRendering : Symbol(createKatexMessageRendering, Decl(dependentReturnType2.js, 44, 1))
+>options : Symbol(options, Decl(dependentReturnType2.js, 53, 37))
+>isMessage : Symbol(isMessage, Decl(dependentReturnType2.js, 53, 45))
+
+    const instance = new NewKatex();
+>instance : Symbol(instance, Decl(dependentReturnType2.js, 54, 9))
+>NewKatex : Symbol(NewKatex, Decl(dependentReturnType2.js, 0, 10))
+
+    if (isMessage) {
+>isMessage : Symbol(isMessage, Decl(dependentReturnType2.js, 53, 45))
+
+        return (/** @type {IMessage} */ message) => instance.renderMessage(message);
+>message : Symbol(message, Decl(dependentReturnType2.js, 56, 16))
+>instance.renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType2.js, 24, 5))
+>instance : Symbol(instance, Decl(dependentReturnType2.js, 54, 9))
+>renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType2.js, 24, 5))
+>message : Symbol(message, Decl(dependentReturnType2.js, 56, 16))
+    }
+    return (/** @type {string} */ message) => instance.renderMessage(message);
+>message : Symbol(message, Decl(dependentReturnType2.js, 58, 12))
+>instance.renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType2.js, 24, 5))
+>instance : Symbol(instance, Decl(dependentReturnType2.js, 54, 9))
+>renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType2.js, 24, 5))
+>message : Symbol(message, Decl(dependentReturnType2.js, 58, 12))
+}
+
+/** @typedef {Record<any, any>} MyObj */
+/** @typedef {MyObj} MessageBoxAction */
+
+/**
+ * @template {string | undefined} T
+ * @param {T} group
+ * Original return type: `HelperCond<T, string, MessageBoxAction[], undefined, Record<string, MessageBoxAction[]>>`
+ */
+function getWithoutBug(group) {
+>getWithoutBug : Symbol(getWithoutBug, Decl(dependentReturnType2.js, 59, 1))
+>group : Symbol(group, Decl(dependentReturnType2.js, 69, 23))
+
+    if (group === undefined) {
+>group : Symbol(group, Decl(dependentReturnType2.js, 69, 23))
+>undefined : Symbol(undefined)
+
+        return /** @type {Record<string, MessageBoxAction[]>} */ ({});
+    }
+    return /** @type {MessageBoxAction[]} */ ([]);
+}
+
+/**
+ * @param {string} x
+ * @returns {Date}
+ */
+function mapDateForAPI(x) {
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType2.js, 74, 1))
+>x : Symbol(x, Decl(dependentReturnType2.js, 80, 23))
+
+    return /** @type {any} */ (undefined);
+>undefined : Symbol(undefined)
+}
+
+/**
+ * @template {string | undefined} T
+ * @param {string} start
+ * @param {T} [end]
+ * Original return type: `HelperCond<T, string, { start: Date, end: Date }, undefined, { start: Date, end: undefined }>`
+ */
+function transformDatesForAPI(start, end) {
+>transformDatesForAPI : Symbol(transformDatesForAPI, Decl(dependentReturnType2.js, 82, 1))
+>start : Symbol(start, Decl(dependentReturnType2.js, 90, 30))
+>end : Symbol(end, Decl(dependentReturnType2.js, 90, 36))
+
+    return end !== undefined
+>end : Symbol(end, Decl(dependentReturnType2.js, 90, 36))
+>undefined : Symbol(undefined)
+
+        ? { start: mapDateForAPI(start), end: mapDateForAPI(end) }
+>start : Symbol(start, Decl(dependentReturnType2.js, 92, 11))
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType2.js, 74, 1))
+>start : Symbol(start, Decl(dependentReturnType2.js, 90, 30))
+>end : Symbol(end, Decl(dependentReturnType2.js, 92, 40))
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType2.js, 74, 1))
+>end : Symbol(end, Decl(dependentReturnType2.js, 90, 36))
+
+        : { start: mapDateForAPI(start), end: undefined };
+>start : Symbol(start, Decl(dependentReturnType2.js, 93, 11))
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType2.js, 74, 1))
+>start : Symbol(start, Decl(dependentReturnType2.js, 90, 30))
+>end : Symbol(end, Decl(dependentReturnType2.js, 93, 40))
+>undefined : Symbol(undefined)
+}
+
+/** @typedef {MyObj} RepeatOptions */
+/** @typedef {MyObj} Job */
+/**
+ * @typedef {Object} IJob
+ * @property {MyObj} data
+ */
+class NewAgenda {
+>NewAgenda : Symbol(NewAgenda, Decl(dependentReturnType2.js, 94, 1))
+
+    /**
+     * @param {string | number} interval
+     * @param {string} name
+     * @param {IJob["data"]} data
+     * @param {RepeatOptions} options
+     * @returns {Promise<Job>}
+     */
+    async _createIntervalJob(interval, name, data, options) {
+>_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType2.js, 102, 17))
+>interval : Symbol(interval, Decl(dependentReturnType2.js, 110, 29))
+>name : Symbol(name, Decl(dependentReturnType2.js, 110, 38))
+>data : Symbol(data, Decl(dependentReturnType2.js, 110, 44))
+>options : Symbol(options, Decl(dependentReturnType2.js, 110, 50))
+
+        return /** @type {any} */ (undefined);
+>undefined : Symbol(undefined)
+    }
+
+    /**
+     * @param {string | number} interval
+     * @param {string[]} names
+     * @param {IJob["data"]} data
+     * @param {RepeatOptions} options
+     * @returns {Promise<Job[]> | undefined}
+     */
+    _createIntervalJobs(interval, names, data, options) {
+>_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType2.js, 112, 5))
+>interval : Symbol(interval, Decl(dependentReturnType2.js, 121, 24))
+>names : Symbol(names, Decl(dependentReturnType2.js, 121, 33))
+>data : Symbol(data, Decl(dependentReturnType2.js, 121, 40))
+>options : Symbol(options, Decl(dependentReturnType2.js, 121, 46))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+
+    /**
+     * @template {string | string[]} T
+     * @param {string | number} interval
+     * @param {T} name
+     * @param {IJob["data"]} data
+     * @param {RepeatOptions} options
+     * Original return type: `Promise<HelperCond<T, string, Job, string[], Job[] | undefined>>`
+     */
+    async newEvery(interval, name, data, options) {
+>newEvery : Symbol(NewAgenda.newEvery, Decl(dependentReturnType2.js, 123, 5))
+>interval : Symbol(interval, Decl(dependentReturnType2.js, 133, 19))
+>name : Symbol(name, Decl(dependentReturnType2.js, 133, 28))
+>data : Symbol(data, Decl(dependentReturnType2.js, 133, 34))
+>options : Symbol(options, Decl(dependentReturnType2.js, 133, 40))
+
+        if (typeof name === "string") {
+>name : Symbol(name, Decl(dependentReturnType2.js, 133, 28))
+
+            return this._createIntervalJob(interval, name, data, options);
+>this._createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType2.js, 102, 17))
+>this : Symbol(NewAgenda, Decl(dependentReturnType2.js, 94, 1))
+>_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType2.js, 102, 17))
+>interval : Symbol(interval, Decl(dependentReturnType2.js, 133, 19))
+>name : Symbol(name, Decl(dependentReturnType2.js, 133, 28))
+>data : Symbol(data, Decl(dependentReturnType2.js, 133, 34))
+>options : Symbol(options, Decl(dependentReturnType2.js, 133, 40))
+        }
+        if (Array.isArray(name)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(dependentReturnType2.js, 133, 28))
+
+            return this._createIntervalJobs(interval, name, data, options);
+>this._createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType2.js, 112, 5))
+>this : Symbol(NewAgenda, Decl(dependentReturnType2.js, 94, 1))
+>_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType2.js, 112, 5))
+>interval : Symbol(interval, Decl(dependentReturnType2.js, 133, 19))
+>name : Symbol(name, Decl(dependentReturnType2.js, 133, 28))
+>data : Symbol(data, Decl(dependentReturnType2.js, 133, 34))
+>options : Symbol(options, Decl(dependentReturnType2.js, 133, 40))
+        }
+        throw new Error("Unexpected error: Invalid job name(s)");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+    }
+}
+
+/**
+ * @template {string | null | undefined} T
+ * @param {T} value
+ * Original return type: `HelperCond<T, string, string, null | undefined, null>`
+ */
+function transform1(value) {
+>transform1 : Symbol(transform1, Decl(dependentReturnType2.js, 142, 1))
+>value : Symbol(value, Decl(dependentReturnType2.js, 149, 20))
+
+    if (value == null) return null;
+>value : Symbol(value, Decl(dependentReturnType2.js, 149, 20))
+
+    if (typeof value !== "string") {
+>value : Symbol(value, Decl(dependentReturnType2.js, 149, 20))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+    }
+    return value.toLowerCase();
+>value.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(dependentReturnType2.js, 149, 20))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
+
+=== dependentReturnType3.ts ===
+export {};
+
+type HelperCond<T, A, R1, B, R2> =
+>HelperCond : Symbol(HelperCond, Decl(dependentReturnType3.ts, 0, 10))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 2, 16))
+>A : Symbol(A, Decl(dependentReturnType3.ts, 2, 18))
+>R1 : Symbol(R1, Decl(dependentReturnType3.ts, 2, 21))
+>B : Symbol(B, Decl(dependentReturnType3.ts, 2, 25))
+>R2 : Symbol(R2, Decl(dependentReturnType3.ts, 2, 28))
+
+    T extends A ? R1 : T extends B ? R2 : never;
+>T : Symbol(T, Decl(dependentReturnType3.ts, 2, 16))
+>A : Symbol(A, Decl(dependentReturnType3.ts, 2, 18))
+>R1 : Symbol(R1, Decl(dependentReturnType3.ts, 2, 21))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 2, 16))
+>B : Symbol(B, Decl(dependentReturnType3.ts, 2, 25))
+>R2 : Symbol(R2, Decl(dependentReturnType3.ts, 2, 28))
+
+interface IMessage {
+>IMessage : Symbol(IMessage, Decl(dependentReturnType3.ts, 3, 48))
+
+    html?: string;
+>html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 5, 20))
+
+    tokens?: {}[];
+>tokens : Symbol(IMessage.tokens, Decl(dependentReturnType3.ts, 6, 18))
+}
+
+class NewKatex {
+>NewKatex : Symbol(NewKatex, Decl(dependentReturnType3.ts, 8, 1))
+
+    render(s: string): string {
+>render : Symbol(NewKatex.render, Decl(dependentReturnType3.ts, 10, 16))
+>s : Symbol(s, Decl(dependentReturnType3.ts, 11, 11))
+
+        return "";
+    }
+
+    // Original return type: T extends string ? string : T extends IMessage ? IMessage : never
+    renderMessage<T extends string | IMessage>(message: T) {
+>renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType3.ts, 13, 5))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 16, 18))
+>IMessage : Symbol(IMessage, Decl(dependentReturnType3.ts, 3, 48))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 16, 47))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 16, 18))
+
+        if (typeof message === "string") {
+>message : Symbol(message, Decl(dependentReturnType3.ts, 16, 47))
+
+            return this.render(message);
+>this.render : Symbol(NewKatex.render, Decl(dependentReturnType3.ts, 10, 16))
+>this : Symbol(NewKatex, Decl(dependentReturnType3.ts, 8, 1))
+>render : Symbol(NewKatex.render, Decl(dependentReturnType3.ts, 10, 16))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 16, 47))
+        }
+        if (!message.html?.trim()) {
+>message.html?.trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+>message.html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 5, 20))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 16, 47))
+>html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 5, 20))
+>trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+
+            return message;
+>message : Symbol(message, Decl(dependentReturnType3.ts, 16, 47))
+        }
+        if (!message.tokens) {
+>message.tokens : Symbol(IMessage.tokens, Decl(dependentReturnType3.ts, 6, 18))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 16, 47))
+>tokens : Symbol(IMessage.tokens, Decl(dependentReturnType3.ts, 6, 18))
+
+            message.tokens = [];
+>message.tokens : Symbol(IMessage.tokens, Decl(dependentReturnType3.ts, 6, 18))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 16, 47))
+>tokens : Symbol(IMessage.tokens, Decl(dependentReturnType3.ts, 6, 18))
+        }
+        message.html = this.render(message.html);
+>message.html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 5, 20))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 16, 47))
+>html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 5, 20))
+>this.render : Symbol(NewKatex.render, Decl(dependentReturnType3.ts, 10, 16))
+>this : Symbol(NewKatex, Decl(dependentReturnType3.ts, 8, 1))
+>render : Symbol(NewKatex.render, Decl(dependentReturnType3.ts, 10, 16))
+>message.html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 5, 20))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 16, 47))
+>html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 5, 20))
+
+        return message;
+>message : Symbol(message, Decl(dependentReturnType3.ts, 16, 47))
+    }
+}
+
+// Original return type:
+// T extends true ? (message: IMessage) => IMessage : T extends false ? (message: string) => string : never
+function createKatexMessageRendering<T extends true | false>(
+>createKatexMessageRendering : Symbol(createKatexMessageRendering, Decl(dependentReturnType3.ts, 29, 1))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 33, 37))
+
+    options: { dollarSyntax: boolean; parenthesisSyntax: boolean },
+>options : Symbol(options, Decl(dependentReturnType3.ts, 33, 61))
+>dollarSyntax : Symbol(dollarSyntax, Decl(dependentReturnType3.ts, 34, 14))
+>parenthesisSyntax : Symbol(parenthesisSyntax, Decl(dependentReturnType3.ts, 34, 37))
+
+    isMessage: T,
+>isMessage : Symbol(isMessage, Decl(dependentReturnType3.ts, 34, 67))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 33, 37))
+
+) {
+    const instance = new NewKatex();
+>instance : Symbol(instance, Decl(dependentReturnType3.ts, 37, 9))
+>NewKatex : Symbol(NewKatex, Decl(dependentReturnType3.ts, 8, 1))
+
+    if (isMessage) {
+>isMessage : Symbol(isMessage, Decl(dependentReturnType3.ts, 34, 67))
+
+        return (message: IMessage): IMessage => instance.renderMessage(message);
+>message : Symbol(message, Decl(dependentReturnType3.ts, 39, 16))
+>IMessage : Symbol(IMessage, Decl(dependentReturnType3.ts, 3, 48))
+>IMessage : Symbol(IMessage, Decl(dependentReturnType3.ts, 3, 48))
+>instance.renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType3.ts, 13, 5))
+>instance : Symbol(instance, Decl(dependentReturnType3.ts, 37, 9))
+>renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType3.ts, 13, 5))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 39, 16))
+    }
+    return (message: string): string => instance.renderMessage(message);
+>message : Symbol(message, Decl(dependentReturnType3.ts, 41, 12))
+>instance.renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType3.ts, 13, 5))
+>instance : Symbol(instance, Decl(dependentReturnType3.ts, 37, 9))
+>renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType3.ts, 13, 5))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 41, 12))
+}
+
+type MessageBoxAction = object;
+>MessageBoxAction : Symbol(MessageBoxAction, Decl(dependentReturnType3.ts, 42, 1))
+
+// Original return type: HelperCond<T, string, MessageBoxAction[], undefined, Record<string, MessageBoxAction[]>>
+function getWithoutBug<T extends string | undefined>(group: T) {
+>getWithoutBug : Symbol(getWithoutBug, Decl(dependentReturnType3.ts, 44, 31))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 47, 23))
+>group : Symbol(group, Decl(dependentReturnType3.ts, 47, 53))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 47, 23))
+
+    if (group === undefined) {
+>group : Symbol(group, Decl(dependentReturnType3.ts, 47, 53))
+>undefined : Symbol(undefined)
+
+        return {} as Record<string, MessageBoxAction[]>;
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>MessageBoxAction : Symbol(MessageBoxAction, Decl(dependentReturnType3.ts, 42, 1))
+    }
+    return [] as MessageBoxAction[];
+>MessageBoxAction : Symbol(MessageBoxAction, Decl(dependentReturnType3.ts, 42, 1))
+}
+
+declare function mapDateForAPI(x: string): Date;
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType3.ts, 52, 1))
+>x : Symbol(x, Decl(dependentReturnType3.ts, 54, 31))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+
+// Original return type:
+// HelperCond<T, string, { start: Date; end: Date }, undefined, { start: Date; end: undefined }>
+function transformDatesForAPI<T extends string | undefined>(start: string, end?: T) {
+>transformDatesForAPI : Symbol(transformDatesForAPI, Decl(dependentReturnType3.ts, 54, 48))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 58, 30))
+>start : Symbol(start, Decl(dependentReturnType3.ts, 58, 60))
+>end : Symbol(end, Decl(dependentReturnType3.ts, 58, 74))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 58, 30))
+
+    return end !== undefined
+>end : Symbol(end, Decl(dependentReturnType3.ts, 58, 74))
+>undefined : Symbol(undefined)
+
+        ? { start: mapDateForAPI(start), end: mapDateForAPI(end) }
+>start : Symbol(start, Decl(dependentReturnType3.ts, 60, 11))
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType3.ts, 52, 1))
+>start : Symbol(start, Decl(dependentReturnType3.ts, 58, 60))
+>end : Symbol(end, Decl(dependentReturnType3.ts, 60, 40))
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType3.ts, 52, 1))
+>end : Symbol(end, Decl(dependentReturnType3.ts, 58, 74))
+
+        : { start: mapDateForAPI(start), end: undefined };
+>start : Symbol(start, Decl(dependentReturnType3.ts, 61, 11))
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType3.ts, 52, 1))
+>start : Symbol(start, Decl(dependentReturnType3.ts, 58, 60))
+>end : Symbol(end, Decl(dependentReturnType3.ts, 61, 40))
+>undefined : Symbol(undefined)
+}
+
+type RepeatOptions = object;
+>RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 62, 1))
+
+type Job = object;
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 64, 28))
+
+type IJob = { data: object };
+>IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 65, 18))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 66, 13))
+
+class NewAgenda {
+>NewAgenda : Symbol(NewAgenda, Decl(dependentReturnType3.ts, 66, 29))
+
+    async _createIntervalJob(interval: string | number, name: string, data: IJob["data"], options: RepeatOptions): Promise<Job> {
+>_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType3.ts, 68, 17))
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 69, 29))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 69, 55))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 69, 69))
+>IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 65, 18))
+>options : Symbol(options, Decl(dependentReturnType3.ts, 69, 89))
+>RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 62, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 64, 28))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    private _createIntervalJobs(
+>_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType3.ts, 71, 5))
+
+        interval: string | number,
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 73, 32))
+
+        names: string[],
+>names : Symbol(names, Decl(dependentReturnType3.ts, 74, 34))
+
+        data: IJob["data"],
+>data : Symbol(data, Decl(dependentReturnType3.ts, 75, 24))
+>IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 65, 18))
+
+        options: RepeatOptions,
+>options : Symbol(options, Decl(dependentReturnType3.ts, 76, 27))
+>RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 62, 1))
+
+    ): Promise<Job[]> | undefined {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 64, 28))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    // Original return type: Promise<HelperCond<T, string, Job, string[], Job[] | undefined>>
+    async newEvery<T extends string | string[]>(
+>newEvery : Symbol(NewAgenda.newEvery, Decl(dependentReturnType3.ts, 80, 5))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 83, 19))
+
+        interval: string | number,
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 83, 48))
+
+        name: T,
+>name : Symbol(name, Decl(dependentReturnType3.ts, 84, 34))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 83, 19))
+
+        data: IJob["data"],
+>data : Symbol(data, Decl(dependentReturnType3.ts, 85, 16))
+>IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 65, 18))
+
+        options: RepeatOptions,
+>options : Symbol(options, Decl(dependentReturnType3.ts, 86, 27))
+>RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 62, 1))
+
+    ) {
+        if (typeof name === "string") {
+>name : Symbol(name, Decl(dependentReturnType3.ts, 84, 34))
+
+            return this._createIntervalJob(interval, name, data, options);
+>this._createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType3.ts, 68, 17))
+>this : Symbol(NewAgenda, Decl(dependentReturnType3.ts, 66, 29))
+>_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType3.ts, 68, 17))
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 83, 48))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 84, 34))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 85, 16))
+>options : Symbol(options, Decl(dependentReturnType3.ts, 86, 27))
+        }
+        if (Array.isArray(name)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 84, 34))
+
+            return this._createIntervalJobs(interval, name, data, options);
+>this._createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType3.ts, 71, 5))
+>this : Symbol(NewAgenda, Decl(dependentReturnType3.ts, 66, 29))
+>_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType3.ts, 71, 5))
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 83, 48))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 84, 34))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 85, 16))
+>options : Symbol(options, Decl(dependentReturnType3.ts, 86, 27))
+        }
+        throw new Error("Unexpected error: Invalid job name(s)");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+    }
+}
+
+// Original return type: HelperCond<T, string, string, null | undefined, null>
+function transform1<T extends string | null | undefined>(value: T) {
+>transform1 : Symbol(transform1, Decl(dependentReturnType3.ts, 97, 1))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 100, 20))
+>value : Symbol(value, Decl(dependentReturnType3.ts, 100, 57))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 100, 20))
+
+    if (value == null) return null;
+>value : Symbol(value, Decl(dependentReturnType3.ts, 100, 57))
+
+    if (typeof value !== "string") {
+>value : Symbol(value, Decl(dependentReturnType3.ts, 100, 57))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+    }
+    return value.toLowerCase();
+>value.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(dependentReturnType3.ts, 100, 57))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
+
+=== dependentReturnType4.ts ===
+export {};
+
+declare const rand: { a?: never };
+>rand : Symbol(rand, Decl(dependentReturnType4.ts, 2, 13))
+>a : Symbol(a, Decl(dependentReturnType4.ts, 2, 21))
+
+type Missing = typeof rand.a;
+>Missing : Symbol(Missing, Decl(dependentReturnType4.ts, 2, 34))
+>rand.a : Symbol(a, Decl(dependentReturnType4.ts, 2, 21))
+>rand : Symbol(rand, Decl(dependentReturnType4.ts, 2, 13))
+>a : Symbol(a, Decl(dependentReturnType4.ts, 2, 21))
+
+// Original return type: T extends Missing ? 0 : T extends string ? 1 : never
+function bar1<T extends string | Missing>(x?: T) {
+>bar1 : Symbol(bar1, Decl(dependentReturnType4.ts, 3, 29))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 6, 14))
+>Missing : Symbol(Missing, Decl(dependentReturnType4.ts, 2, 34))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 6, 42))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 6, 14))
+
+    if (x === undefined) {
+>x : Symbol(x, Decl(dependentReturnType4.ts, 6, 42))
+>undefined : Symbol(undefined)
+
+        return 0;
+    }
+    return 1;
+}
+
+// Original return type: T extends undefined ? 0 : T extends string ? 1 : never
+function bar2<T extends string | undefined>(x?: T) {
+>bar2 : Symbol(bar2, Decl(dependentReturnType4.ts, 11, 1))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 14, 14))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 14, 44))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 14, 14))
+
+    if (x === undefined) {
+>x : Symbol(x, Decl(dependentReturnType4.ts, 14, 44))
+>undefined : Symbol(undefined)
+
+        return 0;
+    }
+    return 1;
+}
+
+=== dependentReturnType6.ts ===
+export {};
+
+function outer<T extends boolean>(x: T): number {
+>outer : Symbol(outer, Decl(dependentReturnType6.ts, 0, 10))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 2, 15))
+>x : Symbol(x, Decl(dependentReturnType6.ts, 2, 34))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 2, 15))
+
+    return inner();
+>inner : Symbol(inner, Decl(dependentReturnType6.ts, 3, 19))
+
+    // Original return type: T extends true ? 1 : T extends false ? 2 : never
+    function inner() {
+>inner : Symbol(inner, Decl(dependentReturnType6.ts, 3, 19))
+
+        return x ? 1 : 2;
+>x : Symbol(x, Decl(dependentReturnType6.ts, 2, 34))
+    }
+}
+
+// Original overloads:
+// function fun6<T extends boolean>(x: T, y: string): T extends true ? string : T extends false ? 2 : never;
+// function fun6<T extends boolean>(x: T, y: undefined): T extends true ? 1 : T extends false ? 2 : never;
+// function fun6(x: boolean): 1 | 2 | string;
+// Original return type: T extends true ? 1 | string : T extends false ? 2 : never
+function fun6<T extends boolean>(x: T, y?: string) {
+>fun6 : Symbol(fun6, Decl(dependentReturnType6.ts, 9, 1))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 16, 14))
+>x : Symbol(x, Decl(dependentReturnType6.ts, 16, 33))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 16, 14))
+>y : Symbol(y, Decl(dependentReturnType6.ts, 16, 38))
+
+    return x ? y !== undefined ? y : 1 : 2;
+>x : Symbol(x, Decl(dependentReturnType6.ts, 16, 33))
+>y : Symbol(y, Decl(dependentReturnType6.ts, 16, 38))
+>undefined : Symbol(undefined)
+>y : Symbol(y, Decl(dependentReturnType6.ts, 16, 38))
+}
+
+interface SomeInterfaceGood<T> {
+>SomeInterfaceGood : Symbol(SomeInterfaceGood, Decl(dependentReturnType6.ts, 18, 1))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 20, 28))
+
+    prop1: T extends true ? 2 : T extends false ? 1 : never;
+>prop1 : Symbol(SomeInterfaceGood.prop1, Decl(dependentReturnType6.ts, 20, 32))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 20, 28))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 20, 28))
+
+    prop2: T extends true ? 1 : T extends false ? 2 : never;
+>prop2 : Symbol(SomeInterfaceGood.prop2, Decl(dependentReturnType6.ts, 21, 60))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 20, 28))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 20, 28))
+}
+
+// Original return type: SomeInterfaceGood<T>[U]
+function fun4good<T extends boolean, U extends keyof SomeInterfaceGood<unknown>>(x: T, y: U) {
+>fun4good : Symbol(fun4good, Decl(dependentReturnType6.ts, 23, 1))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 26, 18))
+>U : Symbol(U, Decl(dependentReturnType6.ts, 26, 36))
+>SomeInterfaceGood : Symbol(SomeInterfaceGood, Decl(dependentReturnType6.ts, 18, 1))
+>x : Symbol(x, Decl(dependentReturnType6.ts, 26, 81))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 26, 18))
+>y : Symbol(y, Decl(dependentReturnType6.ts, 26, 86))
+>U : Symbol(U, Decl(dependentReturnType6.ts, 26, 36))
+
+    if (y === "prop1") {
+>y : Symbol(y, Decl(dependentReturnType6.ts, 26, 86))
+
+        return x ? 2 : 1;
+>x : Symbol(x, Decl(dependentReturnType6.ts, 26, 81))
+    }
+    return x ? 1 : 2;
+>x : Symbol(x, Decl(dependentReturnType6.ts, 26, 81))
+}
+
+interface BB {
+>BB : Symbol(BB, Decl(dependentReturnType6.ts, 31, 1))
+
+    a: number;
+>a : Symbol(BB.a, Decl(dependentReturnType6.ts, 33, 14))
+
+    b: string;
+>b : Symbol(BB.b, Decl(dependentReturnType6.ts, 34, 14))
+}
+
+// Original return type: T extends 1 ? BB[U] : T extends 2 ? boolean : never
+function fun5<T extends 1 | 2, U extends keyof BB>(x: T, y: U) {
+>fun5 : Symbol(fun5, Decl(dependentReturnType6.ts, 36, 1))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 39, 14))
+>U : Symbol(U, Decl(dependentReturnType6.ts, 39, 30))
+>BB : Symbol(BB, Decl(dependentReturnType6.ts, 31, 1))
+>x : Symbol(x, Decl(dependentReturnType6.ts, 39, 51))
+>T : Symbol(T, Decl(dependentReturnType6.ts, 39, 14))
+>y : Symbol(y, Decl(dependentReturnType6.ts, 39, 56))
+>U : Symbol(U, Decl(dependentReturnType6.ts, 39, 30))
+
+    if (x === 1) {
+>x : Symbol(x, Decl(dependentReturnType6.ts, 39, 51))
+
+        if (y === "a") {
+>y : Symbol(y, Decl(dependentReturnType6.ts, 39, 56))
+
+            return 0;
+        }
+        return "";
+    }
+    return true;
+}
+
+=== dependentReturnType8.ts ===
+export {};
+
+declare const record: Record<string, string[]>;
+>record : Symbol(record, Decl(dependentReturnType8.ts, 2, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+declare const array: string[];
+>array : Symbol(array, Decl(dependentReturnType8.ts, 3, 13))
+
+// Original return type: T extends string ? string[] : T extends undefined ? Record<string, string[]> : never
+const getObject = <T extends string | undefined>(group: T) =>
+>getObject : Symbol(getObject, Decl(dependentReturnType8.ts, 6, 5))
+>T : Symbol(T, Decl(dependentReturnType8.ts, 6, 19))
+>group : Symbol(group, Decl(dependentReturnType8.ts, 6, 49))
+>T : Symbol(T, Decl(dependentReturnType8.ts, 6, 19))
+
+    group === undefined ? record : array;
+>group : Symbol(group, Decl(dependentReturnType8.ts, 6, 49))
+>undefined : Symbol(undefined)
+>record : Symbol(record, Decl(dependentReturnType8.ts, 2, 13))
+>array : Symbol(array, Decl(dependentReturnType8.ts, 3, 13))
+
+=== dependentReturnType10.ts ===
+export {};
+
+interface Animal {
+>Animal : Symbol(Animal, Decl(dependentReturnType10.ts, 0, 10))
+
+    name: string;
+>name : Symbol(Animal.name, Decl(dependentReturnType10.ts, 2, 18))
+
+    species: string;
+>species : Symbol(Animal.species, Decl(dependentReturnType10.ts, 3, 17))
+}
+
+interface Dog extends Animal {
+>Dog : Symbol(Dog, Decl(dependentReturnType10.ts, 5, 1))
+>Animal : Symbol(Animal, Decl(dependentReturnType10.ts, 0, 10))
+
+    breed: string;
+>breed : Symbol(Dog.breed, Decl(dependentReturnType10.ts, 7, 30))
+}
+
+type GreetRet<T> =
+>GreetRet : Symbol(GreetRet, Decl(dependentReturnType10.ts, 9, 1))
+>T : Symbol(T, Decl(dependentReturnType10.ts, 11, 14))
+
+    T extends string ? string :
+>T : Symbol(T, Decl(dependentReturnType10.ts, 11, 14))
+
+    T extends { name: string } ? { greeting: string; breed: string } :
+>T : Symbol(T, Decl(dependentReturnType10.ts, 11, 14))
+>name : Symbol(name, Decl(dependentReturnType10.ts, 13, 15))
+>greeting : Symbol(greeting, Decl(dependentReturnType10.ts, 13, 34))
+>breed : Symbol(breed, Decl(dependentReturnType10.ts, 13, 52))
+
+    never;
+
+// Original return type: GreetRet<T>
+function greet<T extends string | Dog>(animal: T) {
+>greet : Symbol(greet, Decl(dependentReturnType10.ts, 14, 10))
+>T : Symbol(T, Decl(dependentReturnType10.ts, 17, 15))
+>Dog : Symbol(Dog, Decl(dependentReturnType10.ts, 5, 1))
+>animal : Symbol(animal, Decl(dependentReturnType10.ts, 17, 39))
+>T : Symbol(T, Decl(dependentReturnType10.ts, 17, 15))
+
+    if (typeof animal === "string") {
+>animal : Symbol(animal, Decl(dependentReturnType10.ts, 17, 39))
+
+        return `hello, ${animal}`;
+>animal : Symbol(animal, Decl(dependentReturnType10.ts, 17, 39))
+    }
+    return { greeting: `woof, ${animal.name}`, breed: animal.breed };
+>greeting : Symbol(greeting, Decl(dependentReturnType10.ts, 21, 12))
+>animal.name : Symbol(Animal.name, Decl(dependentReturnType10.ts, 2, 18))
+>animal : Symbol(animal, Decl(dependentReturnType10.ts, 17, 39))
+>name : Symbol(Animal.name, Decl(dependentReturnType10.ts, 2, 18))
+>breed : Symbol(breed, Decl(dependentReturnType10.ts, 21, 46))
+>animal.breed : Symbol(Dog.breed, Decl(dependentReturnType10.ts, 7, 30))
+>animal : Symbol(animal, Decl(dependentReturnType10.ts, 17, 39))
+>breed : Symbol(Dog.breed, Decl(dependentReturnType10.ts, 7, 30))
+}
+
+=== dependentReturnType11.ts ===
+export {};
+
+type Ret<T extends boolean> =
+>Ret : Symbol(Ret, Decl(dependentReturnType11.ts, 0, 10))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 2, 9))
+
+    T extends true ? 1 :
+>T : Symbol(T, Decl(dependentReturnType11.ts, 2, 9))
+
+    T extends false ? 2 :
+>T : Symbol(T, Decl(dependentReturnType11.ts, 2, 9))
+
+    never;
+
+// Original return type: Ret<T>
+function f1<T extends boolean>(param: T) {
+>f1 : Symbol(f1, Decl(dependentReturnType11.ts, 5, 10))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 8, 12))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 8, 31))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 8, 12))
+
+    return param ? 1 : 2;
+>param : Symbol(param, Decl(dependentReturnType11.ts, 8, 31))
+}
+
+// Original return type: Ret<T>
+function f2<T extends boolean>(param: { prop: T }) {
+>f2 : Symbol(f2, Decl(dependentReturnType11.ts, 10, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 13, 12))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 13, 31))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 13, 39))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 13, 12))
+
+    return param.prop ? 1 : 2;
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 13, 39))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 13, 31))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 13, 39))
+}
+
+// Original return type: Ret<T>
+function f3<T extends boolean>({ prop }: { prop: T }) {
+>f3 : Symbol(f3, Decl(dependentReturnType11.ts, 15, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 18, 12))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 18, 32))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 18, 42))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 18, 12))
+
+    return prop ? 1 : 2;
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 18, 32))
+}
+
+// Original return type: Ret<T>
+function f4<T extends boolean>({ prop1 }: { prop1: { prop2: T } }) {
+>f4 : Symbol(f4, Decl(dependentReturnType11.ts, 20, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 23, 12))
+>prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 23, 32))
+>prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 23, 43))
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 23, 52))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 23, 12))
+
+    return prop1.prop2 ? 1 : 2;
+>prop1.prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 23, 52))
+>prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 23, 32))
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 23, 52))
+}
+
+// Original return type: Ret<T>
+function f5<T extends boolean>(param: { prop1: { prop2: T } }) {
+>f5 : Symbol(f5, Decl(dependentReturnType11.ts, 25, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 28, 12))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 28, 31))
+>prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 28, 39))
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 28, 48))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 28, 12))
+
+    return param.prop1.prop2 ? 1 : 2;
+>param.prop1.prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 28, 48))
+>param.prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 28, 39))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 28, 31))
+>prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 28, 39))
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 28, 48))
+}
+
+// Original return type: Ret<T>
+function f6<T extends boolean>({ prop1: { prop2: a } }: { prop1: { prop2: T } }) {
+>f6 : Symbol(f6, Decl(dependentReturnType11.ts, 30, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 33, 12))
+>prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 33, 57))
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 33, 66))
+>a : Symbol(a, Decl(dependentReturnType11.ts, 33, 41))
+>prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 33, 57))
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 33, 66))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 33, 12))
+
+    return a ? 1 : 2;
+>a : Symbol(a, Decl(dependentReturnType11.ts, 33, 41))
+}
+
+// Original return type: Ret<T>
+function f7<T extends boolean>({ prop1: { prop2 } }: { prop1: { prop2: T } }) {
+>f7 : Symbol(f7, Decl(dependentReturnType11.ts, 35, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 38, 12))
+>prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 38, 54))
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 38, 41))
+>prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 38, 54))
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 38, 63))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 38, 12))
+
+    return prop2 ? 1 : 2;
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 38, 41))
+}
+
+// Original return type: Ret<T>
+function f9<T extends boolean>(param: { "some prop": T }) {
+>f9 : Symbol(f9, Decl(dependentReturnType11.ts, 40, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 43, 12))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 43, 31))
+>"some prop" : Symbol("some prop", Decl(dependentReturnType11.ts, 43, 39))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 43, 12))
+
+    return param["some prop"] ? 1 : 2;
+>param : Symbol(param, Decl(dependentReturnType11.ts, 43, 31))
+>"some prop" : Symbol("some prop", Decl(dependentReturnType11.ts, 43, 39))
+}
+
+class Dog {
+>Dog : Symbol(Dog, Decl(dependentReturnType11.ts, 45, 1))
+
+    bark(): void {}
+>bark : Symbol(Dog.bark, Decl(dependentReturnType11.ts, 47, 11))
+}
+
+class Cat {
+>Cat : Symbol(Cat, Decl(dependentReturnType11.ts, 49, 1))
+
+    meow(): void {}
+>meow : Symbol(Cat.meow, Decl(dependentReturnType11.ts, 51, 11))
+}
+
+type Type1<T> = { prop: T; prop2: Cat | Dog };
+>Type1 : Symbol(Type1, Decl(dependentReturnType11.ts, 53, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 55, 11))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 55, 17))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 55, 11))
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 55, 26))
+>Cat : Symbol(Cat, Decl(dependentReturnType11.ts, 49, 1))
+>Dog : Symbol(Dog, Decl(dependentReturnType11.ts, 45, 1))
+
+// Original return type: Ret<T>
+function g1<T extends boolean>(param: T) {
+>g1 : Symbol(g1, Decl(dependentReturnType11.ts, 55, 46))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 58, 12))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 58, 31))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 58, 12))
+
+    return param ? 1 : 2;
+>param : Symbol(param, Decl(dependentReturnType11.ts, 58, 31))
+}
+
+// Original return type: Ret<T>
+function g2<T extends boolean>(param: { prop: T }) {
+>g2 : Symbol(g2, Decl(dependentReturnType11.ts, 60, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 63, 12))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 63, 31))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 63, 39))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 63, 12))
+
+    return param.prop ? 1 : 2;
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 63, 39))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 63, 31))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 63, 39))
+}
+
+// Original return type: Ret<T>
+function g3<T extends boolean>(param: Type1<T>) {
+>g3 : Symbol(g3, Decl(dependentReturnType11.ts, 65, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 68, 12))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 68, 31))
+>Type1 : Symbol(Type1, Decl(dependentReturnType11.ts, 53, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 68, 12))
+
+    return param.prop ? 1 : 2;
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 55, 17))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 68, 31))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 55, 17))
+}
+
+interface Type2<T extends boolean> {
+>Type2 : Symbol(Type2, Decl(dependentReturnType11.ts, 70, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 72, 16))
+
+    prop: T;
+>prop : Symbol(Type2.prop, Decl(dependentReturnType11.ts, 72, 36))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 72, 16))
+
+    [key: string]: boolean | undefined;
+>key : Symbol(key, Decl(dependentReturnType11.ts, 74, 5))
+}
+
+// Original return type: Ret<T>
+function g5<T extends boolean>(param: Type2<T>) {
+>g5 : Symbol(g5, Decl(dependentReturnType11.ts, 75, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 78, 12))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 78, 31))
+>Type2 : Symbol(Type2, Decl(dependentReturnType11.ts, 70, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 78, 12))
+
+    return param.prop ? 1 : 2;
+>param.prop : Symbol(Type2.prop, Decl(dependentReturnType11.ts, 72, 36))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 78, 31))
+>prop : Symbol(Type2.prop, Decl(dependentReturnType11.ts, 72, 36))
+}
+
+type Type4<T, S> = {
+>Type4 : Symbol(Type4, Decl(dependentReturnType11.ts, 80, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 82, 11))
+>S : Symbol(S, Decl(dependentReturnType11.ts, 82, 13))
+
+    prop: T;
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 82, 20))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 82, 11))
+
+    prop2: S[];
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 83, 12))
+>S : Symbol(S, Decl(dependentReturnType11.ts, 82, 13))
+
+};
+
+// Original return type: Ret<T>
+function g7<T extends boolean, S>(param: Type4<T, S>) {
+>g7 : Symbol(g7, Decl(dependentReturnType11.ts, 85, 2))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 88, 12))
+>S : Symbol(S, Decl(dependentReturnType11.ts, 88, 30))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 88, 34))
+>Type4 : Symbol(Type4, Decl(dependentReturnType11.ts, 80, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 88, 12))
+>S : Symbol(S, Decl(dependentReturnType11.ts, 88, 30))
+
+    return param.prop ? 1 : 2;
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 82, 20))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 88, 34))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 82, 20))
+}
+
+// Original return type: Ret<T>
+function g8<T extends boolean>(param: Type1<T> & { prop2: Cat | Dog }) {
+>g8 : Symbol(g8, Decl(dependentReturnType11.ts, 90, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 93, 12))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 93, 31))
+>Type1 : Symbol(Type1, Decl(dependentReturnType11.ts, 53, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 93, 12))
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 93, 50))
+>Cat : Symbol(Cat, Decl(dependentReturnType11.ts, 49, 1))
+>Dog : Symbol(Dog, Decl(dependentReturnType11.ts, 45, 1))
+
+    return param.prop ? 1 : 2;
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 55, 17))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 93, 31))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 55, 17))
+}
+
+type Type5<S> = {
+>Type5 : Symbol(Type5, Decl(dependentReturnType11.ts, 95, 1))
+>S : Symbol(S, Decl(dependentReturnType11.ts, 97, 11))
+
+    prop: S;
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 97, 17))
+>S : Symbol(S, Decl(dependentReturnType11.ts, 97, 11))
+
+    prop2: string[];
+>prop2 : Symbol(prop2, Decl(dependentReturnType11.ts, 98, 12))
+
+};
+
+// Original return type: Ret<T>
+function g12<T extends boolean>(param: Type5<T>) {
+>g12 : Symbol(g12, Decl(dependentReturnType11.ts, 100, 2))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 103, 13))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 103, 32))
+>Type5 : Symbol(Type5, Decl(dependentReturnType11.ts, 95, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 103, 13))
+
+    return param.prop ? 1 : 2;
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 97, 17))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 103, 32))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 97, 17))
+}
+
+class Class1<T> {
+>Class1 : Symbol(Class1, Decl(dependentReturnType11.ts, 105, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 107, 13))
+
+    prop!: T;
+>prop : Symbol(Class1.prop, Decl(dependentReturnType11.ts, 107, 17))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 107, 13))
+}
+
+// Original return type: Ret<T>
+function g15<T extends boolean>(param: Class1<T>) {
+>g15 : Symbol(g15, Decl(dependentReturnType11.ts, 109, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 112, 13))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 112, 32))
+>Class1 : Symbol(Class1, Decl(dependentReturnType11.ts, 105, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 112, 13))
+
+    return param.prop ? 1 : 2;
+>param.prop : Symbol(Class1.prop, Decl(dependentReturnType11.ts, 107, 17))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 112, 32))
+>prop : Symbol(Class1.prop, Decl(dependentReturnType11.ts, 107, 17))
+}
+
+// Original return type: Ret<T>
+function h1<T extends boolean>(param: T) {
+>h1 : Symbol(h1, Decl(dependentReturnType11.ts, 114, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 117, 12))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 117, 31))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 117, 12))
+
+    if (param) {
+>param : Symbol(param, Decl(dependentReturnType11.ts, 117, 31))
+
+        const param = false;
+>param : Symbol(param, Decl(dependentReturnType11.ts, 119, 13))
+
+        return 1;
+    }
+    return 2;
+}
+
+// Original return type: Ret<T>
+function h2<T extends boolean>({ prop }: { prop: T }) {
+>h2 : Symbol(h2, Decl(dependentReturnType11.ts, 123, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 126, 12))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 126, 32))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 126, 42))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 126, 12))
+
+    if (prop) {
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 126, 32))
+
+        const prop = false;
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 128, 13))
+
+        return 1;
+    }
+    return 2;
+}
+
+// Original return type: Ret<T>
+function h3<T extends boolean>(param: { prop: T }) {
+>h3 : Symbol(h3, Decl(dependentReturnType11.ts, 132, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 135, 12))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 135, 31))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 135, 39))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 135, 12))
+
+    if (param.prop) {
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 135, 39))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 135, 31))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 135, 39))
+
+        const param = { prop: false };
+>param : Symbol(param, Decl(dependentReturnType11.ts, 137, 13))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 137, 23))
+
+        return 1;
+    }
+    return 2;
+}
+
+// Original return type: Ret<T>
+function h4<T extends boolean>(param: { "some prop": T }) {
+>h4 : Symbol(h4, Decl(dependentReturnType11.ts, 141, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 144, 12))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 144, 31))
+>"some prop" : Symbol("some prop", Decl(dependentReturnType11.ts, 144, 39))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 144, 12))
+
+    if (param["some prop"]) {
+>param : Symbol(param, Decl(dependentReturnType11.ts, 144, 31))
+>"some prop" : Symbol("some prop", Decl(dependentReturnType11.ts, 144, 39))
+
+        const param = { "some prop": false };
+>param : Symbol(param, Decl(dependentReturnType11.ts, 146, 13))
+>"some prop" : Symbol("some prop", Decl(dependentReturnType11.ts, 146, 23))
+
+        return 1;
+    }
+    return 2;
+}
+
+type RetU<T> =
+>RetU : Symbol(RetU, Decl(dependentReturnType11.ts, 150, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 152, 10))
+
+    T extends true ? 1 :
+>T : Symbol(T, Decl(dependentReturnType11.ts, 152, 10))
+
+    T extends false ? 2 :
+>T : Symbol(T, Decl(dependentReturnType11.ts, 152, 10))
+
+    T extends undefined ? 3 :
+>T : Symbol(T, Decl(dependentReturnType11.ts, 152, 10))
+
+    never;
+
+// Original return type: RetU<T>
+function fn2<T extends boolean | undefined>(param?: T) {
+>fn2 : Symbol(fn2, Decl(dependentReturnType11.ts, 156, 10))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 159, 13))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 159, 44))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 159, 13))
+
+    if (param == undefined) {
+>param : Symbol(param, Decl(dependentReturnType11.ts, 159, 44))
+>undefined : Symbol(undefined)
+
+        return 3;
+    }
+    if (param) {
+>param : Symbol(param, Decl(dependentReturnType11.ts, 159, 44))
+
+        return 1;
+    }
+    return 2;
+}
+
+// Original return type: RetU<T>
+function fn3<T extends boolean | undefined>(param: { prop?: T }) {
+>fn3 : Symbol(fn3, Decl(dependentReturnType11.ts, 167, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 170, 13))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 170, 44))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 170, 52))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 170, 13))
+
+    if (param.prop == undefined) {
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 170, 52))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 170, 44))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 170, 52))
+>undefined : Symbol(undefined)
+
+        return 3;
+    }
+    if (param.prop) {
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 170, 52))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 170, 44))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 170, 52))
+
+        return 1;
+    }
+    return 2;
+}
+
+// Original return type: RetU<T>
+function fn4<T extends boolean | undefined>({ prop }: { prop?: T }) {
+>fn4 : Symbol(fn4, Decl(dependentReturnType11.ts, 178, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 181, 13))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 181, 45))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 181, 55))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 181, 13))
+
+    if (prop == undefined) {
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 181, 45))
+>undefined : Symbol(undefined)
+
+        return 3;
+    }
+    if (prop) {
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 181, 45))
+
+        return 1;
+    }
+    return 2;
+}
+
+=== dependentReturnType12.ts ===
+export {};
+
+type RetU<T> =
+>RetU : Symbol(RetU, Decl(dependentReturnType12.ts, 0, 10))
+>T : Symbol(T, Decl(dependentReturnType12.ts, 2, 10))
+
+    T extends string ? 2 :
+>T : Symbol(T, Decl(dependentReturnType12.ts, 2, 10))
+
+    T extends number ? 1 :
+>T : Symbol(T, Decl(dependentReturnType12.ts, 2, 10))
+
+    never;
+
+// Original return type: RetU<T>
+function fn1<T extends string | number>(param?: T) {
+>fn1 : Symbol(fn1, Decl(dependentReturnType12.ts, 5, 10))
+>T : Symbol(T, Decl(dependentReturnType12.ts, 8, 13))
+>param : Symbol(param, Decl(dependentReturnType12.ts, 8, 40))
+>T : Symbol(T, Decl(dependentReturnType12.ts, 8, 13))
+
+    if (typeof param === "number") {
+>param : Symbol(param, Decl(dependentReturnType12.ts, 8, 40))
+
+        return 1;
+    }
+    return 2;
+}
+
+// Original return type: RetU<T>
+function fn3<T extends string | number>(param: { prop?: T }) {
+>fn3 : Symbol(fn3, Decl(dependentReturnType12.ts, 13, 1))
+>T : Symbol(T, Decl(dependentReturnType12.ts, 16, 13))
+>param : Symbol(param, Decl(dependentReturnType12.ts, 16, 40))
+>prop : Symbol(prop, Decl(dependentReturnType12.ts, 16, 48))
+>T : Symbol(T, Decl(dependentReturnType12.ts, 16, 13))
+
+    if (typeof param.prop === "number") {
+>param.prop : Symbol(prop, Decl(dependentReturnType12.ts, 16, 48))
+>param : Symbol(param, Decl(dependentReturnType12.ts, 16, 40))
+>prop : Symbol(prop, Decl(dependentReturnType12.ts, 16, 48))
+
+        return 1;
+    }
+    return 2;
+}
+
+// Original return type: RetU<T>
+function fn4<T extends string | number>({ prop }: { prop?: T }) {
+>fn4 : Symbol(fn4, Decl(dependentReturnType12.ts, 21, 1))
+>T : Symbol(T, Decl(dependentReturnType12.ts, 24, 13))
+>prop : Symbol(prop, Decl(dependentReturnType12.ts, 24, 41))
+>prop : Symbol(prop, Decl(dependentReturnType12.ts, 24, 51))
+>T : Symbol(T, Decl(dependentReturnType12.ts, 24, 13))
+
+    if (typeof prop === "number") {
+>prop : Symbol(prop, Decl(dependentReturnType12.ts, 24, 41))
+
+        return 1;
+    }
+    return 2;
+}
+
+=== dependentReturnType13.ts ===
+export {};
+
+// Original return type: T extends string ? 1 : T extends string[] ? 2 : never
+function f1<T extends string | string[]>(param: T) {
+>f1 : Symbol(f1, Decl(dependentReturnType13.ts, 0, 10))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 3, 12))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 3, 41))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 3, 12))
+
+    if (Array.isArray(param)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 3, 41))
+
+        return 2;
+    }
+    return 1;
+}
+
+// Original return type: T extends string ? 1 : T extends string[] | number[] ? 2 : never
+function f2<T extends string | string[] | number[]>(param: T) {
+>f2 : Symbol(f2, Decl(dependentReturnType13.ts, 8, 1))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 11, 12))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 11, 52))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 11, 12))
+
+    if (Array.isArray(param)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 11, 52))
+
+        return 2;
+    }
+    return 1;
+}
+
+// Original return type: T extends string ? 1 : T extends number | string[] ? 2 : never
+function f5<T extends string | number | string[]>(param: T) {
+>f5 : Symbol(f5, Decl(dependentReturnType13.ts, 16, 1))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 19, 12))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 19, 50))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 19, 12))
+
+    if (Array.isArray(param) || typeof param === "number") {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 19, 50))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 19, 50))
+
+        const narrowed: string[] | number = param;
+>narrowed : Symbol(narrowed, Decl(dependentReturnType13.ts, 21, 13))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 19, 50))
+
+        return 2;
+    }
+    const narrowed: string = param;
+>narrowed : Symbol(narrowed, Decl(dependentReturnType13.ts, 24, 9))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 19, 50))
+
+    return 1;
+}
+
+// Original return type:
+// U extends number
+//     ? T extends string[] ? 2 : T extends string ? 1 : never
+//     : U extends number[]
+//     ? T extends string[] ? 4 : T extends string ? 3 : never
+//     : never
+function f7<T extends string | string[], U extends number | number[]>(param: T, other: U) {
+>f7 : Symbol(f7, Decl(dependentReturnType13.ts, 26, 1))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 34, 12))
+>U : Symbol(U, Decl(dependentReturnType13.ts, 34, 40))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 34, 70))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 34, 12))
+>other : Symbol(other, Decl(dependentReturnType13.ts, 34, 79))
+>U : Symbol(U, Decl(dependentReturnType13.ts, 34, 40))
+
+    if (Array.isArray(other)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>other : Symbol(other, Decl(dependentReturnType13.ts, 34, 79))
+
+        if (Array.isArray(param)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 34, 70))
+
+            return 4;
+        }
+        return 3;
+    }
+    if (Array.isArray(param)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 34, 70))
+
+        return 2;
+    }
+    return 1;
+}
