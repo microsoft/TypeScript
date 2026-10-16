@@ -4792,6 +4792,10 @@
         "category": "Error",
         "code": 5115
     },
+    "Network path '{0}' is not supported.": {
+        "category": "Error",
+        "code": 5116
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
