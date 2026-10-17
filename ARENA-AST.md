@@ -119,8 +119,9 @@ Typed per-layout slices instead of one word array would remove the record cast t
 15. **Lists as records** (memory −3.2%, check and total unchanged vs step 14). `NodeList` and `ModifierList` become `{store, index}` views over records in the store, replacing the heap-allocated list structs, their `[]Node` backing arrays and the parser's node-slice arena.
 16. **Iterate lists in place** (check −1.0% vs step 15). `NodeList.Some`/`Every`, plus `NodeList` parameters on hot checker and binder paths, so these paths no longer materialize `[]Node` slices.
 17. **Kind cached in the handle** (check −1.7% vs step 16). `Node` is `{store, index, kind}`; the kind fills what was padding, so `Kind()` needs no memory load. It is a full `uint32`, so the handle has no padding and Node-keyed maps keep the fast hash.
+18. **Source file from the store** (check −1.8% vs step 17). A parsed file's store records its `SourceFile`, so `GetSourceFileOfNode` is one load instead of a parent walk.
 
-### Current state vs main (step 17, vscode, n=8)
+### Step 17 vs main (vscode, n=8)
 
 ```
        │    main    │              step 17              │
@@ -137,6 +138,27 @@ VSCode   3.302Gi ± 0%   3.168Gi ± 0%  -4.07% (p=0.000 n=8)
 ```
 
 Profiles (3 merged runs each) show parsing is much cheaper than on main (8.2s vs 13.0s CPU), but `checkSourceFile` costs about 19% more. GC mark time is unchanged. The gap is checker per-access overhead, spread thinly over AST accessors (`rec`, `deref`, `Symbol`, `Name`, …): ast's flat time is 12.5s vs 4.6s on main. On main a field read is one load through a pointer. Here it is store → `words` pointer and length → bounds check → field, and following a ref builds a new handle. Removing bounds checks alone (an experiment with `unsafe`) gained only 1.2%.
+
+### Why check time is slower: instructions, not memory
+
+Hardware counters (single-threaded, GC off, step 17 vs main):
+
+| | main | step 17 |
+|---|---|---|
+| instructions | 103.8B | 133.9B (+29%) |
+| cycles | 107.3B | 123.4B (+15%) |
+| cache misses | 331M | 308M (−7%) |
+| L1d load misses | 1.53B | 1.58B (+3%) |
+| dTLB load misses | 75.5M | 71.0M (−6%) |
+
+The store layout does improve locality slightly, but the checker runs far more instructions. Sampling by function puts essentially all of the extra in AST accessors (ast +14.5B instructions, plus +9.3B of accessors inlined into checker code); runtime, GC and map costs are unchanged. Following one ref takes about 20 instructions vs about 3 on main: two bounds checks, the reused-ref and nil branches, building a three-word handle and loading the child's kind. A 16-byte handle also spills around calls, so a parent walk with a callback, like `FindAncestor`, costs about 30 instructions per step instead of about 6.
+
+Two experiments bound how much of this a different handle can win back:
+
+- **No bounds checks** (`unsafe` base pointer): −3.8B instructions but only −0.4% time, since well-predicted checks are nearly free.
+- **Interior-pointer handle** (`Node{record pointer, store}` over chunks that never move, with each record's index in its header for setting refs): check time unchanged (+0.4%, noise) and memory +11% from sizing each file's first chunk ahead of time. Turning a ref into an address still takes the same steps, and `Kind()` becomes a load again.
+
+So the remaining gap is the cost of following 32-bit refs from Go code at all, not of how the handle is shaped. It can shrink where the store knows something structurally, as with step 18, but not by tuning the handle.
 
 Step 12 vs step 9 (vscode, n=8, interleaved, shared machine):
 
@@ -158,7 +180,7 @@ VSCode   3.375Gi ± 0%   3.367Gi ± 0%  -0.23% (p=0.000 n=8)
 
 - Replace offset tables with generated kind switches.
 - Symbols as per-store typed arrays addressed by index.
-- Bound what an interior-pointer handle (`Node{record pointer, store}`, non-moving chunked storage) would gain on check time, since per-access indirection is the remaining gap vs main.
+- Look for more places where the store can answer structurally what main answers by walking (as `GetSourceFileOfNode` now does), since per-ref cost can't be tuned away.
 
 ## Earlier measurements (step 9 vs main, vscode, n=10, interleaved)
 
