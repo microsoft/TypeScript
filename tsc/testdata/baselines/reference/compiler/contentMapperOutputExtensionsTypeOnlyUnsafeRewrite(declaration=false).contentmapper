@@ -1,0 +1,10 @@
+//// [/actual.astro] (ScriptKind: ScriptKindTS, ContentMapper: [.astro])
+--- Original ---
+export interface ActualProps { title: string }
+--- Transformed ---
+const __VERSION = "1.0.0";
+export interface ActualProps { title: string }
+
+=== Diagnostics ===
+
+<no content>
