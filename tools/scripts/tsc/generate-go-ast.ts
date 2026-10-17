@@ -1316,6 +1316,8 @@ const MEMBER_OFFSET_TABLES: { member: string; refType: string; overrides?: Recor
     { member: "Arguments", refType: "listRef" },
     // Node.Body has never read the body of a class static block.
     { member: "Body", refType: "nodeRef", overrides: { KindClassStaticBlockDeclaration: null } },
+    // Node.Text has never read the text of JsxText.
+    { member: "Text", refType: "textRef", overrides: { KindJsxText: null } },
     { member: "Symbol", refType: "sideRef" },
     { member: "Locals", refType: "sideRef" },
 ];

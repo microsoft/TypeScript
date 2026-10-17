@@ -403,30 +403,59 @@ func (t *sideTable[T]) compact() {
 	}
 }
 
-// A textRef is a string field: a range of the store's source text, or,
-// with textRefArena set, of its text arena.
+// A textRef is a string field: a range of the store's text, located by
+// textStore.get.
 type textRef struct {
 	off uint32
 	len uint32
 }
 
-const textRefArena = 1 << 31
+const (
+	// The text of a store is addressed in pieces of textPieceSize bytes; a
+	// textRef's offset names a piece in its top bits and a position in the
+	// piece in the rest.
+	textPieceShift = 27
+	textPieceSize  = 1 << textPieceShift
+	textPieceMask  = textPieceSize - 1
+	textPieces     = 1 << (32 - textPieceShift)
+	// textArenaMinSize sizes the first piece of a text arena; later pieces
+	// double up to textPieceSize.
+	textArenaMinSize = 1 << 12
+)
 
 // textStore holds the text of a store's string fields. Text found within
 // the source is referenced in place; other text is copied into an arena of
-// chunks that are never moved or modified, so strings may alias them.
+// pieces that are never moved or modified, so strings may alias them.
+//
+// The first pieces are the source's, so that a position in the source is
+// its own offset; the arena's pieces follow. Every string is then found the
+// same way, from the start of its piece.
 type textStore struct {
+	pieces [textPieces]unsafe.Pointer
 	source string
-	chunks [32 - textBaseShift]*byte
-	next   uint32
+	// arena is the piece being filled, if arenaSize is not zero, and next is
+	// where in it the next string goes.
+	arena     uint32
+	arenaSize uint32
+	next      uint32
 }
 
 func (t *textStore) get(r textRef) string {
-	if r.off&textRefArena == 0 {
-		return unsafe.String((*byte)(unsafe.Add(unsafe.Pointer(unsafe.StringData(t.source)), r.off)), r.len)
+	return unsafe.String((*byte)(unsafe.Add(t.pieces[r.off>>textPieceShift], r.off&textPieceMask)), r.len)
+}
+
+func (t *textStore) setSource(text string) {
+	if t.arenaSize != 0 || t.source != "" {
+		panic("node store source set after text was stored")
 	}
-	k, off := textLocate(r.off &^ textRefArena)
-	return unsafe.String((*byte)(unsafe.Add(unsafe.Pointer(t.chunks[k]), off)), r.len)
+	if len(text) > (textPieces-1)*textPieceSize {
+		panic("node store source too large")
+	}
+	t.source = text
+	p := unsafe.Pointer(unsafe.StringData(text))
+	for k := 0; k*textPieceSize < len(text); k++ {
+		t.pieces[k] = unsafe.Add(p, k*textPieceSize)
+	}
 }
 
 func (t *textStore) set(r *textRef, v string, _ bool) {
@@ -442,37 +471,34 @@ func (t *textStore) set(r *textRef, v string, _ bool) {
 			return
 		}
 	}
-	*r = textRef{off: t.alloc(v) | textRefArena, len: uint32(len(v))}
+	*r = textRef{off: t.alloc(v), len: uint32(len(v))}
 }
 
-// Arena chunk k holds 1<<(k+textBaseShift) bytes; offsets run contiguously
-// through the chunks, and a string never spans two.
-const textBaseShift = 12
-
-func textLocate(i uint32) (k, off uint32) {
-	j := i + 1<<textBaseShift
-	k = uint32(bits.Len32(j)) - (textBaseShift + 1)
-	return k, j - 1<<(k+textBaseShift)
-}
-
+// alloc copies v into the arena, returning its offset.
 func (t *textStore) alloc(v string) uint32 {
 	n := uint32(len(v))
-	for {
-		k, off := textLocate(t.next)
-		size := uint32(1) << (k + textBaseShift)
-		if off+n <= size {
-			if t.chunks[k] == nil {
-				t.chunks[k] = unsafe.SliceData(make([]byte, size))
-			}
-			copy(unsafe.Slice((*byte)(unsafe.Add(unsafe.Pointer(t.chunks[k]), off)), n), v)
-			i := t.next
-			t.next += n
-			if t.next&textRefArena != 0 {
-				panic("node text arena overflow")
-			}
-			return i
-		}
-		// Skip the rest of this chunk.
-		t.next += size - off
+	if n > textPieceSize {
+		panic("node text too large")
 	}
+	if t.arenaSize == 0 || t.next+n > t.arenaSize {
+		size := uint32(textArenaMinSize)
+		if t.arenaSize != 0 {
+			size = min(t.arenaSize*2, textPieceSize)
+			t.arena++
+		} else {
+			// The arena starts after the source's pieces.
+			t.arena = uint32((len(t.source) + textPieceMask) >> textPieceShift)
+		}
+		if t.arena >= textPieces {
+			panic("node text arena overflow")
+		}
+		size = max(size, n)
+		t.pieces[t.arena] = unsafe.Pointer(unsafe.SliceData(make([]byte, size)))
+		t.arenaSize = size
+		t.next = 0
+	}
+	off := t.next
+	copy(unsafe.Slice((*byte)(unsafe.Add(t.pieces[t.arena], off)), n), v)
+	t.next += n
+	return t.arena<<textPieceShift | off
 }

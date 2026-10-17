@@ -18558,6 +18558,19 @@ var nodeBodyOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindModuleDeclaration:   uint8(unsafe.Offsetof(moduleDeclarationData{}.body)),
 }
 
+var nodeTextOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindIdentifier:                    uint8(unsafe.Offsetof(identifierData{}.text)),
+	KindPrivateIdentifier:             uint8(unsafe.Offsetof(privateIdentifierData{}.text)),
+	KindStringLiteral:                 uint8(unsafe.Offsetof(stringLiteralData{}.text)),
+	KindNumericLiteral:                uint8(unsafe.Offsetof(numericLiteralData{}.text)),
+	KindBigIntLiteral:                 uint8(unsafe.Offsetof(bigIntLiteralData{}.text)),
+	KindRegularExpressionLiteral:      uint8(unsafe.Offsetof(regularExpressionLiteralData{}.text)),
+	KindNoSubstitutionTemplateLiteral: uint8(unsafe.Offsetof(noSubstitutionTemplateLiteralData{}.text)),
+	KindTemplateHead:                  uint8(unsafe.Offsetof(templateHeadData{}.text)),
+	KindTemplateMiddle:                uint8(unsafe.Offsetof(templateMiddleData{}.text)),
+	KindTemplateTail:                  uint8(unsafe.Offsetof(templateTailData{}.text)),
+}
+
 var nodeSymbolOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindVariableDeclaration:           uint8(unsafe.Offsetof(variableDeclarationData{}.symbol)),
 	KindParameter:                     uint8(unsafe.Offsetof(parameterDeclarationData{}.symbol)),

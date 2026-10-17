@@ -91,7 +91,7 @@ func (f *NodeFactory) nodeStore() *nodeStore {
 // SetSourceText sets the text that nodes created by f are parsed from;
 // string fields that are substrings of it are stored as offsets.
 func (f *NodeFactory) SetSourceText(text string) {
-	f.nodeStore().texts.source = text
+	f.nodeStore().texts.setSource(text)
 }
 
 // BuildInScratch makes f build its nodes in reusable scratch memory, which
@@ -248,32 +248,21 @@ func (n Node) Body() Node {
 	return Node{}
 }
 
+// Text reads the text field of identifiers and literals through a table,
+// and computes the text of the other kinds having it.
 func (n Node) Text() string {
+	if off := nodeTextOffsets[n.Kind()]; off != 0 {
+		return n.store().texts.get(*(*textRef)(unsafe.Add(n.p, off)))
+	}
+	return n.computedText()
+}
+
+func (n Node) computedText() string {
 	switch n.Kind() {
-	case KindIdentifier:
-		return n.AsIdentifier().Text()
-	case KindPrivateIdentifier:
-		return n.AsPrivateIdentifier().Text()
-	case KindStringLiteral:
-		return n.AsStringLiteral().Text()
-	case KindNumericLiteral:
-		return n.AsNumericLiteral().Text()
-	case KindBigIntLiteral:
-		return n.AsBigIntLiteral().Text()
 	case KindMetaProperty:
 		return n.AsMetaProperty().Name().Text()
-	case KindNoSubstitutionTemplateLiteral:
-		return n.AsNoSubstitutionTemplateLiteral().Text()
-	case KindTemplateHead:
-		return n.AsTemplateHead().Text()
-	case KindTemplateMiddle:
-		return n.AsTemplateMiddle().Text()
-	case KindTemplateTail:
-		return n.AsTemplateTail().Text()
 	case KindJsxNamespacedName:
 		return n.AsJsxNamespacedName().Namespace().Text() + ":" + n.AsJsxNamespacedName().Name().Text()
-	case KindRegularExpressionLiteral:
-		return n.AsRegularExpressionLiteral().Text()
 	case KindJSDocText:
 		return strings.Join(n.AsJSDocText().text(), "")
 	case KindJSDocLink:
