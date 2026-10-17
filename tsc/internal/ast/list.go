@@ -16,7 +16,7 @@ type NodeList struct {
 }
 
 type listHeader struct {
-	// chunk is the record's offset in words from the start of its chunk.
+	// chunk is the record's offset in bytes from the start of its chunk.
 	chunk    uint32
 	n        uint32
 	pos, end int32
@@ -105,14 +105,11 @@ func (l NodeList) At(k int) Node {
 
 func (l NodeList) at(k int) Node {
 	f := l.slot(k)
-	r := int32(*f)
-	if r&refFar == 0 {
-		if r == 0 {
-			return Node{}
-		}
-		return Node{unsafe.Add(unsafe.Pointer(f), int(r)*2)}
+	r := *f
+	if r&refNear != 0 {
+		return Node{unsafe.Add(unsafe.Pointer(f), int(int32(r))-refNear)}
 	}
-	return l.store().far[uint32(r)>>1]
+	return l.store().far[r>>1]
 }
 
 // SetAt replaces the node at index k of l.
@@ -221,20 +218,11 @@ func (l ModifierList) Clone(f *NodeFactory) ModifierList {
 
 // derefList returns the list that the field f of n's record refers to.
 func (n Node) derefList(f *listRef) NodeList {
-	r := int32(*f)
-	if r&refFar == 0 {
-		if r == 0 {
-			return NodeList{}
-		}
-		return NodeList{unsafe.Add(unsafe.Pointer(f), int(r)*2)}
+	r := *f
+	if r&refNear != 0 {
+		return NodeList{unsafe.Add(unsafe.Pointer(f), int(int32(r))-refNear)}
 	}
-	return n.store().farLists[uint32(r)>>1]
-}
-
-// listAt returns the list that the field at offset off of n's record
-// refers to.
-func (n Node) listAt(off uint8) NodeList {
-	return n.derefList((*listRef)(unsafe.Add(n.rec(), off)))
+	return n.store().farLists[r>>1]
 }
 
 func (n Node) derefModifiers(f *listRef) ModifierList {
@@ -264,10 +252,16 @@ func setListRef(c *chunkHeader, f *listRef, v NodeList) {
 		return
 	}
 	s := c.store
-	if *f&refFar != 0 {
+	if *f != 0 && *f&refNear == 0 {
 		s.farLists[*f>>1] = v
 		return
 	}
 	*f = listRef(farSlot(len(s.farLists)))
 	s.farLists = append(s.farLists, v)
+}
+
+// listAt returns the list that the field at offset off of n's record
+// refers to.
+func (n Node) listAt(off uint8) NodeList {
+	return n.derefList((*listRef)(unsafe.Add(n.rec(), off)))
 }

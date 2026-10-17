@@ -967,7 +967,8 @@ func SetImportsOfSourceFile(node *SourceFile, imports []LiteralLikeNode) {
 
 // Walks up the parents of a node to find the ancestor that matches the callback
 func FindAncestor(node Node, callback func(Node) bool) Node {
-	for !node.IsNil() {
+	// Compares the handle directly to stay within the inlining budget.
+	for node.p != nil {
 		if callback(node) {
 			return node
 		}

@@ -72,10 +72,15 @@ type chunkHeader struct {
 	_     uint32
 }
 
-const chunkHeaderWords = uint32(unsafe.Sizeof(chunkHeader{}) / wordSize)
+const (
+	chunkHeaderSize  = uint32(unsafe.Sizeof(chunkHeader{}))
+	chunkHeaderWords = chunkHeaderSize / uint32(wordSize)
+)
 
 func newNodeStore() *nodeStore {
-	return &nodeStore{}
+	// The first far slots are the absent node and list, which zero refs
+	// refer to.
+	return &nodeStore{far: make([]Node, 1), farLists: make([]NodeList, 1)}
 }
 
 // nodeBaseData is the header at the start of every node record.
@@ -84,7 +89,7 @@ type nodeBaseData struct {
 	loc    core.TextRange
 	parent nodeRef
 	flags  NodeFlags
-	// chunk is the record's offset in words from the start of its chunk.
+	// chunk is the record's offset in bytes from the start of its chunk.
 	chunk uint32
 	kind  Kind
 }
@@ -92,13 +97,17 @@ type nodeBaseData struct {
 // Every node has a header, so it must stay small.
 var _ [32 - unsafe.Sizeof(nodeBaseData{})]struct{}
 
-// A nodeRef is a record field referring to a node. Zero is no node. With
-// the low bit clear, the referenced record is in the same chunk, at the
-// field's address plus twice the ref, read as a signed number of bytes;
-// otherwise, the rest is an index into the store's far nodes.
+// A nodeRef is a record field referring to a node. With the low bit set,
+// the referenced record is in the same chunk, at the field's address plus
+// the rest of the ref, read as a signed number of bytes; otherwise, the
+// rest is an index into the store's far nodes, whose first is the absent
+// node, so that zero is no node.
+//
+// Records are word aligned and refs are four byte aligned, so the distance
+// from a ref to a record never has the low bit set.
 type nodeRef uint32
 
-const refFar = 1
+const refNear = 1
 
 const wordSize = unsafe.Sizeof(uint64(0))
 
@@ -108,9 +117,9 @@ func (n Node) rec() unsafe.Pointer { return n.p }
 func (n Node) hdr() *nodeBaseData { return (*nodeBaseData)(n.p) }
 
 // chunkOf returns the header of the chunk holding the record at p, which
-// is chunk words from the chunk's start.
+// is chunk bytes from the chunk's start.
 func chunkOf(p unsafe.Pointer, chunk uint32) *chunkHeader {
-	return (*chunkHeader)(unsafe.Add(p, -int(chunk)*int(wordSize)))
+	return (*chunkHeader)(unsafe.Add(p, -int(chunk)))
 }
 
 func (n Node) chunk() *chunkHeader { return chunkOf(n.p, n.hdr().chunk) }
@@ -120,14 +129,11 @@ func (n Node) store() *nodeStore { return n.chunk().store }
 
 // deref returns the node that the field f of n's record refers to.
 func (n Node) deref(f *nodeRef) Node {
-	r := int32(*f)
-	if r&refFar == 0 {
-		if r == 0 {
-			return Node{}
-		}
-		return Node{unsafe.Add(unsafe.Pointer(f), int(r)*2)}
+	r := *f
+	if r&refNear != 0 {
+		return Node{unsafe.Add(unsafe.Pointer(f), int(int32(r))-refNear)}
 	}
-	return n.store().far[uint32(r)>>1]
+	return n.store().far[r>>1]
 }
 
 // refAt returns the node that the field at offset off of n's record refers
@@ -157,7 +163,7 @@ func setRef(c *chunkHeader, f *nodeRef, v Node) {
 		return
 	}
 	s := c.store
-	if *f&refFar != 0 {
+	if *f != 0 && *f&refNear == 0 {
 		// Slots are never shared, so the field's own slot can be reused.
 		s.far[*f>>1] = v
 		return
@@ -169,14 +175,14 @@ func setRef(c *chunkHeader, f *nodeRef, v Node) {
 // near returns the ref from the field at f to the record at p in the same
 // chunk.
 func near[F any](f *F, p unsafe.Pointer) uint32 {
-	return uint32(int32((int64(uintptr(p)) - int64(uintptr(unsafe.Pointer(f)))) / 2))
+	return uint32(int32(uintptr(p)-uintptr(unsafe.Pointer(f)))) | refNear
 }
 
 func farSlot(i int) uint32 {
 	if i >= 1<<31 {
 		panic("node store far ref overflow")
 	}
-	return uint32(i)<<1 | refFar
+	return uint32(i) << 1
 }
 
 // A nodeAnchor refers to a node of a store from outside its records: the
@@ -196,8 +202,8 @@ func (s *nodeStore) anchor(v Node) nodeAnchor {
 	if v.p == nil {
 		return 0
 	}
-	if c := v.chunk(); c.store == s && c.index < maxAnchorChunks && v.hdr().chunk < maxChunkWords {
-		return nodeAnchor((c.index+1)<<anchorChunkShift | v.hdr().chunk)
+	if c, w := v.chunk(), v.hdr().chunk/uint32(wordSize); c.store == s && c.index < maxAnchorChunks && w < maxChunkWords {
+		return nodeAnchor((c.index+1)<<anchorChunkShift | w)
 	}
 	s.far = append(s.far, v)
 	if len(s.far) > anchorFar {
@@ -234,7 +240,7 @@ func newRecord[T any](s *nodeStore, layout nodeLayout) (*T, Node) {
 }
 
 // alloc allocates size zeroed bytes for a record, returning its address and
-// its word offset in its chunk.
+// its byte offset in its chunk.
 func (s *nodeStore) alloc(size uintptr) (unsafe.Pointer, uint32) {
 	if s.frozen {
 		panic("node store is frozen")
@@ -245,7 +251,7 @@ func (s *nodeStore) alloc(size uintptr) (unsafe.Pointer, uint32) {
 	}
 	p := unsafe.Pointer(unsafe.SliceData(s.free))
 	s.free = s.free[words:]
-	return p, uint32((uintptr(p) - uintptr(s.base)) / wordSize)
+	return p, uint32(uintptr(p) - uintptr(s.base))
 }
 
 // grow allocates words in a new chunk. A record never spans two chunks.
@@ -258,12 +264,12 @@ func (s *nodeStore) grow(words int) (unsafe.Pointer, uint32) {
 		// A record too large for a normal chunk gets one of its own, and
 		// the current chunk stays in use.
 		base, _ := s.addChunk(words)
-		return unsafe.Add(base, chunkHeaderWords*uint32(wordSize)), chunkHeaderWords
+		return unsafe.Add(base, chunkHeaderSize), chunkHeaderSize
 	}
 	base, all := s.addChunk(n)
 	s.base = base
 	s.free = all[words:]
-	return unsafe.Pointer(unsafe.SliceData(all)), chunkHeaderWords
+	return unsafe.Pointer(unsafe.SliceData(all)), chunkHeaderSize
 }
 
 // addChunk allocates a chunk with room for at least n words of records,
@@ -274,7 +280,7 @@ func (s *nodeStore) addChunk(n int) (unsafe.Pointer, []uint64) {
 	*(*chunkHeader)(base) = chunkHeader{store: s, index: uint32(len(s.chunks))}
 	s.chunks = append(s.chunks, base)
 	s.words += n
-	return base, unsafe.Slice((*uint64)(unsafe.Add(base, chunkHeaderWords*uint32(wordSize))), n)
+	return base, unsafe.Slice((*uint64)(unsafe.Add(base, chunkHeaderSize)), n)
 }
 
 // chunkClass rounds n up so that a chunk with n words of records is 2^k

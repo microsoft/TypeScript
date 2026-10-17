@@ -86,10 +86,10 @@ func TestNodeStoreCrossStoreRefs(t *testing.T) {
 	assert.Equal(t, second.Expression(), target)
 	target.SetParent(first)
 	assert.Equal(t, target.Parent(), first)
-	assert.Equal(t, len(b.store.far), 2)
+	assert.Equal(t, len(b.store.far), 3)
 	target.SetParent(second)
 	target.SetParent(first)
-	assert.Equal(t, len(a.store.far), 1, "rewriting a far ref should reuse its slot")
+	assert.Equal(t, len(a.store.far), 2, "rewriting a far ref should reuse its slot")
 	first.AsExpressionStatement().SetExpression(Node{})
 	assert.Assert(t, first.Expression().IsNil())
 }

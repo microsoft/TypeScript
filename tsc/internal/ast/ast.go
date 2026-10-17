@@ -177,7 +177,18 @@ func (n Node) SetFlags(flags NodeFlags)  { n.hdr().flags = flags }
 func (n Node) SetLoc(loc core.TextRange) { n.hdr().loc = loc }
 func (n Node) SetParent(parent Node)     { n.setRef(&n.hdr().parent, parent) }
 
-func (n Node) Parent() Node { return n.deref(&n.hdr().parent) }
+// Parent is deref of the parent field, written out so that loops walking up
+// the tree stay small enough to inline.
+func (n Node) Parent() Node {
+	h := (*nodeBaseData)(n.p)
+	r := h.parent
+	if r&refNear != 0 {
+		return Node{unsafe.Add(n.p, int(int32(r))+parentNearBias)}
+	}
+	return (*chunkHeader)(unsafe.Add(n.p, -int(h.chunk))).store.far[r>>1]
+}
+
+const parentNearBias = int(unsafe.Offsetof(nodeBaseData{}.parent)) - refNear
 
 // Shared node accessors dispatch on Kind to the enclosing concrete node.
 
