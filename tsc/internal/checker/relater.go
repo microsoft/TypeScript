@@ -1410,6 +1410,7 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 				c.resolutionStart = saveResolutionStart
 			}
 		} else {
+			c.noteTransientRead()
 			// We've detected a circularity. Since we may compute different variances depending on where
 			// we enter a circularity, we find the generic type with the "smallest" symbol in the circular
 			// region of the variance stack and restart the computation from there if necessary. This
