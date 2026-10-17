@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -96,7 +97,7 @@ func (f *NodeFactory) SetSourceText(text string) {
 // BuildInScratch makes f build its nodes in reusable scratch memory, which
 // FinishStore must then release.
 func (f *NodeFactory) BuildInScratch() {
-	f.nodeStore().useScratch()
+	f.nodeStore().sizeForSource()
 }
 
 // FinishStore moves the nodes created so far into memory of their exact
@@ -162,21 +163,15 @@ func cloneNode(updated Node, original Node, hooks NodeFactoryHooks) Node {
 	return updated
 }
 
-// Node is a handle to an AST node: the nodeStore that owns it and the
-// index of its record there. The zero Node is the absent node.
+// Node is a handle to an AST node: the address of its record, and the
+// nodeStore that owns it. The zero Node is the absent node.
 type Node struct {
+	p unsafe.Pointer
 	s *nodeStore
-	i uint32
-	// k caches the kind from the record's header, which never changes. It
-	// saves loading the record for the most common question asked of a
-	// node, and as a full uint32 it fills what would otherwise be padding,
-	// so that Node is plain memory that hashes and compares quickly as a
-	// map key.
-	k uint32
 }
 
-func (n Node) IsNil() bool               { return n.s == nil }
-func (n Node) Kind() Kind                { return Kind(n.k) }
+func (n Node) IsNil() bool               { return n.p == nil }
+func (n Node) Kind() Kind                { return n.hdr().kind }
 func (n Node) Flags() NodeFlags          { return n.hdr().flags }
 func (n Node) Loc() core.TextRange       { return n.hdr().loc }
 func (n Node) SetFlags(flags NodeFlags)  { n.hdr().flags = flags }

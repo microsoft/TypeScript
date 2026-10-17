@@ -2,19 +2,24 @@ package ast
 
 import (
 	"iter"
+	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
-// A NodeList is a handle to a list of nodes: the nodeStore that owns it
-// and the index of its record there. The zero NodeList is the absent list.
+// A NodeList is a handle to a list of nodes: the address of its record,
+// and the nodeStore that owns it. The zero NodeList is the absent list.
 //
 // A list record is a word holding its range, a word holding its length and
-// a per-kind auxiliary value, and then the elements as nodeRefs, two per
-// word.
+// a per-kind auxiliary value, and then the elements as nodeRefs.
 type NodeList struct {
+	p unsafe.Pointer
 	s *nodeStore
-	i uint32
+}
+
+type listHeader struct {
+	pos, end int32
+	n, aux   uint32
 }
 
 // A ModifierList is a NodeList of modifiers, whose record also holds their
@@ -23,10 +28,8 @@ type ModifierList struct {
 	NodeList
 }
 
-// A listRef is a record field referring to a list. Zero is no list. With
-// refReused clear, it is the index of a list record in the referring
-// record's store; otherwise, the rest is an index into the store's reused
-// lists.
+// A listRef is a record field referring to a list, encoded like a
+// nodeRef, whose far lists are the store's farLists.
 type listRef uint32
 
 const listHeaderWords = 2
@@ -44,46 +47,45 @@ func (f *NodeFactory) NewModifierList(nodes []Node) ModifierList {
 
 func newNodeList(s *nodeStore, nodes []Node, aux uint32) NodeList {
 	n := len(nodes)
-	i := s.alloc(uintptr(listHeaderWords+(n+1)/2) * wordSize)
-	l := NodeList{s, i}
-	l.SetLoc(core.UndefinedTextRange())
-	s.words[i+1] = uint64(uint32(n)) | uint64(aux)<<32
+	l := NodeList{s.alloc(uintptr(listHeaderWords)*wordSize + uintptr(n)*unsafe.Sizeof(nodeRef(0))), s}
+	*l.hdr() = listHeader{pos: -1, end: -1, n: uint32(n), aux: aux}
 	for k, node := range nodes {
-		var r nodeRef
-		s.setRef(&r, node)
-		w := &s.words[i+listHeaderWords+uint32(k)/2]
-		*w |= uint64(r) << (32 * (k & 1))
+		s.setRef(l.slot(k), node)
 	}
 	return l
 }
 
-func (l NodeList) IsNil() bool { return l.s == nil }
+func (l NodeList) IsNil() bool { return l.p == nil }
+
+func (l NodeList) hdr() *listHeader { return (*listHeader)(l.p) }
+
+func (l NodeList) slot(k int) *nodeRef {
+	return (*nodeRef)(unsafe.Add(l.p, uintptr(listHeaderWords)*wordSize+uintptr(k)*unsafe.Sizeof(nodeRef(0))))
+}
 
 func (l NodeList) Loc() core.TextRange {
-	w := l.s.words[l.i]
-	return core.NewTextRange(int(int32(uint32(w))), int(int32(uint32(w>>32))))
+	h := l.hdr()
+	return core.NewTextRange(int(h.pos), int(h.end))
 }
 
 func (l NodeList) SetLoc(loc core.TextRange) {
-	l.s.words[l.i] = uint64(uint32(int32(loc.Pos()))) | uint64(uint32(int32(loc.End())))<<32
+	h := l.hdr()
+	h.pos, h.end = int32(loc.Pos()), int32(loc.End())
 }
 
 func (l NodeList) Pos() int { return l.Loc().Pos() }
 func (l NodeList) End() int { return l.Loc().End() }
 
-func (l NodeList) aux() uint32 { return uint32(l.s.words[l.i+1] >> 32) }
+func (l NodeList) aux() uint32 { return l.hdr().aux }
 
-func (l NodeList) setAux(v uint32) {
-	w := &l.s.words[l.i+1]
-	*w = uint64(uint32(*w)) | uint64(v)<<32
-}
+func (l NodeList) setAux(v uint32) { l.hdr().aux = v }
 
 // Len returns the number of nodes in l, which is zero for the absent list.
 func (l NodeList) Len() int {
-	if l.s == nil {
+	if l.p == nil {
 		return 0
 	}
-	return int(uint32(l.s.words[l.i+1]))
+	return int(l.hdr().n)
 }
 
 // At returns the node at index k of l.
@@ -95,12 +97,7 @@ func (l NodeList) At(k int) Node {
 }
 
 func (l NodeList) at(k int) Node {
-	w := l.s.words[l.i+listHeaderWords+uint32(k)/2]
-	r := nodeRef(w >> (32 * (k & 1)))
-	if r&refReused == 0 {
-		return l.s.node(uint32(r))
-	}
-	return l.s.reused[r&^refReused]
+	return Node{s: l.s}.deref(l.slot(k))
 }
 
 // SetAt replaces the node at index k of l.
@@ -108,11 +105,7 @@ func (l NodeList) SetAt(k int, node Node) {
 	if uint(k) >= uint(l.Len()) {
 		panic("node list index out of range")
 	}
-	w := &l.s.words[l.i+listHeaderWords+uint32(k)/2]
-	shift := 32 * (k & 1)
-	r := nodeRef(*w >> shift)
-	l.s.setRef(&r, node)
-	*w = *w&^(0xFFFFFFFF<<shift) | uint64(r)<<shift
+	l.s.setRef(l.slot(k), node)
 }
 
 // First returns the first node of l, or the absent node if l is empty.
@@ -212,10 +205,10 @@ func (l ModifierList) Clone(f *NodeFactory) ModifierList {
 }
 
 // derefList returns the list that the field f of n's record refers to.
-func (n Node) derefList(f *listRef) NodeList { return n.s.derefList(*f) }
+func (n Node) derefList(f *listRef) NodeList { return n.s.derefList(f) }
 
 func (n Node) derefModifiers(f *listRef) ModifierList {
-	return ModifierList{n.s.derefList(*f)}
+	return ModifierList{n.s.derefList(f)}
 }
 
 // setListRef makes the field f of n's record refer to v.
@@ -230,29 +223,32 @@ func setModifiersRefAt(f *listRef, owner Node, v ModifierList) {
 	owner.s.setListRef(f, v.NodeList)
 }
 
-func (s *nodeStore) derefList(r listRef) NodeList {
-	if r&refReused == 0 {
+func (s *nodeStore) derefList(f *listRef) NodeList {
+	r := int32(*f)
+	if r&refFar == 0 {
 		if r == 0 {
 			return NodeList{}
 		}
-		return NodeList{s, uint32(r)}
+		return NodeList{unsafe.Add(unsafe.Pointer(f), int(r)*2), s}
 	}
-	return s.reusedLists[r&^refReused]
+	return s.farLists[uint32(r)>>1]
 }
 
 func (s *nodeStore) setListRef(f *listRef, v NodeList) {
-	switch {
-	case v.s == s:
-		*f = listRef(v.i)
-	case v.s == nil:
+	if v.s == nil {
 		*f = 0
-	case *f&refReused != 0:
-		s.reusedLists[*f&^refReused] = v
-	default:
-		if len(s.reusedLists) >= refReused {
-			panic("node store reused list overflow")
-		}
-		*f = listRef(len(s.reusedLists)) | refReused
-		s.reusedLists = append(s.reusedLists, v)
+		return
 	}
+	if v.s == s {
+		if d, ok := s.offset(unsafe.Pointer(f), v.p); ok {
+			*f = listRef(d)
+			return
+		}
+	}
+	if *f&refFar != 0 {
+		s.farLists[*f>>1] = v
+		return
+	}
+	*f = listRef(s.farSlot(len(s.farLists)))
+	s.farLists = append(s.farLists, v)
 }

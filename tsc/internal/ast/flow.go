@@ -34,16 +34,18 @@ type FlowNode struct {
 }
 
 type flowNodeData struct {
-	node        nodeRef     // Associated AST node
+	node        nodeAnchor  // Associated AST node
 	antecedent  flowRef     // Antecedent for all but FlowLabel
 	antecedents flowListRef // Linked list of antecedents for FlowLabel
 	flags       FlowFlags
 }
 
 // A flowRef is a field referring to a flow node. Zero is none. With
-// refReused clear, it is an index into the referring store's flow nodes;
+// flowReused clear, it is an index into the referring store's flow nodes;
 // otherwise, the rest is an index into its reused flow nodes.
 type flowRef uint32
+
+const flowReused = 1 << 31
 
 // A flowListRef is a field referring to a flow list in the same store, by
 // index. Zero is none.
@@ -54,7 +56,7 @@ func (f FlowNode) IsNil() bool { return f.s == nil }
 func (f FlowNode) data() *flowNodeData { return &f.s.flows[f.i] }
 
 // Node returns the AST node associated with the flow node.
-func (f FlowNode) Node() Node { return Node{s: f.s}.deref(&f.data().node) }
+func (f FlowNode) Node() Node { return f.s.fromAnchor(f.data().node) }
 
 func (f FlowNode) Flags() FlowFlags { return f.data().flags }
 
@@ -70,13 +72,13 @@ func (f FlowNode) SetAntecedent(v FlowNode) { f.s.setFlowRef(&f.data().anteceden
 func (f FlowNode) SetAntecedents(v FlowList) { f.data().antecedents = f.s.flowListRef(v) }
 
 func (s *nodeStore) derefFlow(r flowRef) FlowNode {
-	if r&refReused == 0 {
+	if r&flowReused == 0 {
 		if r == 0 {
 			return FlowNode{}
 		}
 		return FlowNode{s, uint32(r)}
 	}
-	return s.reusedFlows[r&^refReused]
+	return s.reusedFlows[r&^flowReused]
 }
 
 // setFlowRef makes the field f of a record or flow node of s refer to v.
@@ -86,13 +88,13 @@ func (s *nodeStore) setFlowRef(f *flowRef, v FlowNode) {
 		*f = flowRef(v.i)
 	case v.s == nil:
 		*f = 0
-	case *f&refReused != 0:
-		s.reusedFlows[*f&^refReused] = v
+	case *f&flowReused != 0:
+		s.reusedFlows[*f&^flowReused] = v
 	default:
-		if len(s.reusedFlows) >= refReused {
+		if len(s.reusedFlows) >= flowReused {
 			panic("node store reused flow node overflow")
 		}
-		*f = flowRef(len(s.reusedFlows)) | refReused
+		*f = flowRef(len(s.reusedFlows)) | flowReused
 		s.reusedFlows = append(s.reusedFlows, v)
 	}
 }
@@ -121,10 +123,10 @@ func newFlowNode(s *nodeStore, flags FlowFlags, node Node, antecedent FlowNode) 
 	}
 	f := FlowNode{s, uint32(len(s.flows))}
 	s.flows = append(s.flows, flowNodeData{flags: flags})
-	if f.i >= refReused {
+	if f.i >= flowReused {
 		panic("node store flow node overflow")
 	}
-	s.setRef(&f.data().node, node)
+	f.data().node = s.anchor(node)
 	f.SetAntecedent(antecedent)
 	return f
 }

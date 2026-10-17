@@ -52,7 +52,7 @@ func findPointer(typ reflect.Type, path string) string {
 	return ""
 }
 
-// Records move when the store grows, so handles and refs must survive it.
+// Records never move as the store grows; refs crossing chunks go far.
 func TestNodeStoreGrowth(t *testing.T) {
 	t.Parallel()
 	factory := NewNodeFactory(NodeFactoryHooks{})
@@ -68,9 +68,9 @@ func TestNodeStoreGrowth(t *testing.T) {
 		expression.SetParent(statement)
 		assert.Equal(t, expression.Parent(), statement)
 	}
-	assert.Equal(t, len(store.reused), 0, "refs within a store should not be reused nodes")
+	assert.Assert(t, len(store.far) < len(statements)/100, "most refs should stay within a chunk")
 	factory.FinishStore()
-	assert.Equal(t, len(store.words), cap(store.words))
+	assert.Assert(t, len(store.chunks) > 0)
 	assert.Equal(t, statements[0].Expression().Text(), "0")
 	assert.Equal(t, statements[19999].Expression().Parent(), statements[19999])
 }
@@ -86,10 +86,10 @@ func TestNodeStoreCrossStoreRefs(t *testing.T) {
 	assert.Equal(t, second.Expression(), target)
 	target.SetParent(first)
 	assert.Equal(t, target.Parent(), first)
-	assert.Equal(t, len(b.store.reused), 2)
+	assert.Equal(t, len(b.store.far), 2)
 	target.SetParent(second)
 	target.SetParent(first)
-	assert.Equal(t, len(a.store.reused), 1, "rewriting a reused ref should reuse its slot")
+	assert.Equal(t, len(a.store.far), 1, "rewriting a far ref should reuse its slot")
 	first.AsExpressionStatement().SetExpression(Node{})
 	assert.Assert(t, first.Expression().IsNil())
 }
