@@ -7054,7 +7054,7 @@ func (c *Checker) checkAliasSymbol(node *ast.Node) {
 	}
 	if ast.IsImportSpecifier(node) {
 		targetSymbol := c.resolveAliasWithDeprecationCheck(symbol, node)
-		if c.isDeprecatedSymbol(targetSymbol) && targetSymbol.Declarations() != nil {
+		if targetSymbol != symbol && c.isDeprecatedSymbol(targetSymbol) && targetSymbol.Declarations() != nil {
 			c.addDeprecatedSuggestion(node, targetSymbol.Declarations(), targetSymbol.Name())
 		}
 	}
