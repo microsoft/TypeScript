@@ -6004,6 +6004,9 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 			// variable renaming in function type notation is confusing,
 			// so we forbid it even if noUnusedLocals is not enabled
 			c.renamedBindingElementsInTypes = append(c.renamedBindingElementsInTypes, node)
+			// Still resolve the type like the end of this function does for every other declaration,
+			// so implicit any errors are reported by checking instead of by whatever asks for the type later
+			c.getTypeOfSymbol(c.getSymbolOfDeclaration(node))
 			return
 		}
 		if ast.IsObjectBindingPattern(node.Parent) && hasDotDotDotToken(node) && c.languageVersion < LanguageFeatureMinimumTarget.ObjectSpreadRest {
