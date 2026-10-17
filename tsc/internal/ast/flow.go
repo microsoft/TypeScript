@@ -46,26 +46,40 @@ const (
 	FlowAssignmentTargetNotIdentifier uint32 = 1
 )
 
+// FlowAssignmentTargetAccess marks an AssignmentTarget whose target is a property
+// or element access chain rooted at the hashed identifier.
+const FlowAssignmentTargetAccess uint32 = 1 << 31
+
 var flowIdentifierHashSeed = maphash.MakeSeed()
 
 // FlowIdentifierHash hashes an identifier name for comparison with
-// FlowNode.AssignmentTarget. The result is never one of the reserved values.
+// FlowNode.AssignmentTarget. The result is never a reserved value and never
+// has FlowAssignmentTargetAccess set.
 func FlowIdentifierHash(name string) uint32 {
 	h := uint32(maphash.String(flowIdentifierHashSeed, name))
+	h &^= FlowAssignmentTargetAccess
 	if h <= FlowAssignmentTargetNotIdentifier {
 		h += 2
 	}
 	return h
 }
 
-// FlowAssignmentTargetHash summarizes which identifier references an assignment
-// flow node can affect, so that walks for an identifier can skip assignments to
-// other names without visiting their syntax. It mirrors the checker's matching of
-// identifier references against assignment targets.
+// FlowAssignmentTargetHash summarizes which references an assignment flow node
+// can affect, so that flow walks can skip assignments to unrelated names without
+// visiting their syntax. An identifier or declaration target records the hash of
+// its name. An access chain target records the hash of the identifier it is
+// rooted at, with FlowAssignmentTargetAccess set. This mirrors the checker's
+// matching of references against assignment targets, which only matches
+// references rooted at the same identifier.
 func FlowAssignmentTargetHash(target *Node) uint32 {
+	access := uint32(0)
 	for {
 		switch target.Kind {
 		case KindParenthesizedExpression, KindNonNullExpression:
+			target = target.Expression()
+			continue
+		case KindPropertyAccessExpression, KindElementAccessExpression:
+			access = FlowAssignmentTargetAccess
 			target = target.Expression()
 			continue
 		case KindBinaryExpression:
@@ -80,8 +94,11 @@ func FlowAssignmentTargetHash(target *Node) uint32 {
 			}
 			return FlowAssignmentTargetNotIdentifier
 		case KindIdentifier:
-			return FlowIdentifierHash(target.AsIdentifier().Text)
+			return FlowIdentifierHash(target.AsIdentifier().Text) | access
 		case KindVariableDeclaration, KindBindingElement:
+			if access != 0 {
+				return FlowAssignmentTargetNotIdentifier
+			}
 			// A for-in variable also narrows the iterated expression.
 			if IsVariableDeclaration(target) && target.Parent != nil && target.Parent.Parent != nil && IsForInStatement(target.Parent.Parent) {
 				return FlowAssignmentTargetUnknown
