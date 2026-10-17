@@ -101,17 +101,17 @@ func (s *nodeStore) setFlowRef(f *flowRef, v FlowNode) {
 
 // derefFlow returns the flow node that the field f of n refers to.
 func (n Node) derefFlow(f *flowRef) FlowNode {
-	return n.s.derefFlow(*f)
+	return n.store().derefFlow(*f)
 }
 
 // setFlowRef makes the field f of n refer to v.
 func (n Node) setFlowRef(f *flowRef, v FlowNode) {
-	n.s.setFlowRef(f, v)
+	n.store().setFlowRef(f, v)
 }
 
 // setFlowRef makes the field f of the record of owner refer to v.
 func setFlowRef(f *flowRef, owner Node, v FlowNode) {
-	owner.s.setFlowRef(f, v)
+	owner.store().setFlowRef(f, v)
 }
 
 func newFlowNode(s *nodeStore, flags FlowFlags, node Node, antecedent FlowNode) FlowNode {
@@ -260,7 +260,7 @@ func (node FlowReduceLabelData) data() *flowReduceLabelData {
 
 func (node FlowReduceLabelData) Target() FlowLabel { return node.derefFlow(&node.data().target) }
 func (node FlowReduceLabelData) Antecedents() FlowList {
-	return node.s.flowList(node.data().antecedents)
+	return node.store().flowList(node.data().antecedents)
 }
 
 // NewFlowReduceLabelData allocates in the store of file, which must not be

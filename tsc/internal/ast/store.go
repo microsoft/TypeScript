@@ -2,7 +2,9 @@ package ast
 
 import (
 	"math/bits"
+	"reflect"
 	"slices"
+	"sync"
 	"sync/atomic"
 	"unsafe"
 
@@ -13,17 +15,21 @@ import (
 // file, every node of that file. Nodes are records in chunks of words,
 // each beginning with the shared node header (nodeBaseData).
 //
-// Records hold no Go pointers, so chunks are never scanned by the garbage
-// collector, and they never move. A Node is the address of its record and
-// its store, and a record refers to another record in the same chunk by
-// its offset from the referring field. Fields holding Go values, and refs
-// to records in other chunks or stores, go through the store's side
+// Records hold no Go pointers and never move. A chunk is a Go object whose
+// only pointer is its leading chunkHeader, so the garbage collector never
+// scans its records. A Node is just the address of its record; the record
+// header holds its offset from the start of its chunk, whose header leads
+// back to the store. A record refers to another record in the same chunk
+// by its offset from the referring field. Fields holding Go values, and
+// refs to records in other chunks or stores, go through the store's side
 // tables.
 type nodeStore struct {
-	// free is the unused rest of the chunk being allocated from.
+	// free is the unused rest of the chunk being allocated from, which
+	// starts at base.
 	free []uint64
-	// chunks holds every chunk, in allocation order, keeping them alive.
-	chunks []storeChunk
+	base unsafe.Pointer
+	// chunks holds the start of every chunk, in allocation order.
+	chunks []unsafe.Pointer
 	// words counts the words of all chunks.
 	words int
 	// hint sizes the first chunk.
@@ -59,11 +65,14 @@ type nodeStore struct {
 	frozen bool
 }
 
-type storeChunk struct {
-	words []uint64
-	// lo and hi bound the chunk's addresses.
-	lo, hi uintptr
+// A chunkHeader begins every chunk, before its records.
+type chunkHeader struct {
+	store *nodeStore
+	index uint32
+	_     uint32
 }
+
+const chunkHeaderWords = uint32(unsafe.Sizeof(chunkHeader{}) / wordSize)
 
 func newNodeStore() *nodeStore {
 	return &nodeStore{}
@@ -75,7 +84,9 @@ type nodeBaseData struct {
 	loc    core.TextRange
 	parent nodeRef
 	flags  NodeFlags
-	kind   Kind
+	// chunk is the record's offset in words from the start of its chunk.
+	chunk uint32
+	kind  Kind
 }
 
 // Every node has a header, so it must stay small.
@@ -96,74 +107,66 @@ func (n Node) rec() unsafe.Pointer { return n.p }
 
 func (n Node) hdr() *nodeBaseData { return (*nodeBaseData)(n.p) }
 
-// store returns the store that owns n.
-func (n Node) store() *nodeStore { return n.s }
+// chunkOf returns the header of the chunk holding the record at p, which
+// is chunk words from the chunk's start.
+func chunkOf(p unsafe.Pointer, chunk uint32) *chunkHeader {
+	return (*chunkHeader)(unsafe.Add(p, -int(chunk)*int(wordSize)))
+}
 
-// deref returns the node that the field f of a record of n's store refers
-// to.
+func (n Node) chunk() *chunkHeader { return chunkOf(n.p, n.hdr().chunk) }
+
+// store returns the store that owns n.
+func (n Node) store() *nodeStore { return n.chunk().store }
+
+// deref returns the node that the field f of n's record refers to.
 func (n Node) deref(f *nodeRef) Node {
 	r := int32(*f)
 	if r&refFar == 0 {
 		if r == 0 {
 			return Node{}
 		}
-		return Node{unsafe.Add(unsafe.Pointer(f), int(r)*2), n.s}
+		return Node{unsafe.Add(unsafe.Pointer(f), int(r)*2)}
 	}
-	return n.s.far[uint32(r)>>1]
+	return n.store().far[uint32(r)>>1]
 }
 
-// setRef makes the field f of a record of n's store refer to v.
+// setRef makes the field f of n's record refer to v.
 func (n Node) setRef(f *nodeRef, v Node) {
-	n.s.setRef(f, v)
+	setRef(n.chunk(), f, v)
 }
 
 // setNodeRef makes the field f of the record of owner refer to v.
 func setNodeRef(f *nodeRef, owner Node, v Node) {
-	owner.s.setRef(f, v)
+	setRef(owner.chunk(), f, v)
 }
 
-func (s *nodeStore) setRef(f *nodeRef, v Node) {
-	if v.s == nil {
+// setRef makes the field f of a record in chunk c refer to v.
+func setRef(c *chunkHeader, f *nodeRef, v Node) {
+	if v.p == nil {
 		*f = 0
 		return
 	}
-	if v.s == s {
-		if d, ok := s.offset(unsafe.Pointer(f), v.p); ok {
-			*f = nodeRef(d)
-			return
-		}
+	if v.chunk() == c {
+		*f = nodeRef(near(f, v.p))
+		return
 	}
+	s := c.store
 	if *f&refFar != 0 {
 		// Slots are never shared, so the field's own slot can be reused.
 		s.far[*f>>1] = v
 		return
 	}
-	*f = nodeRef(s.farSlot(len(s.far)))
+	*f = nodeRef(farSlot(len(s.far)))
 	s.far = append(s.far, v)
 }
 
-// offset returns the ref from the field at f to the record at p, if they
-// are in the same chunk of s.
-func (s *nodeStore) offset(f, p unsafe.Pointer) (uint32, bool) {
-	c := s.chunkOf(uintptr(f))
-	if c == nil || uintptr(p) < c.lo || uintptr(p) >= c.hi {
-		return 0, false
-	}
-	return uint32(int32((int64(uintptr(p)) - int64(uintptr(f))) / 2)), true
+// near returns the ref from the field at f to the record at p in the same
+// chunk.
+func near[F any](f *F, p unsafe.Pointer) uint32 {
+	return uint32(int32((int64(uintptr(p)) - int64(uintptr(unsafe.Pointer(f)))) / 2))
 }
 
-// chunkOf returns the chunk holding address a, which is nearly always one
-// of the latest.
-func (s *nodeStore) chunkOf(a uintptr) *storeChunk {
-	for i := len(s.chunks) - 1; i >= 0; i-- {
-		if c := &s.chunks[i]; a >= c.lo && a < c.hi {
-			return c
-		}
-	}
-	return nil
-}
-
-func (s *nodeStore) farSlot(i int) uint32 {
+func farSlot(i int) uint32 {
 	if i >= 1<<31 {
 		panic("node store far ref overflow")
 	}
@@ -171,8 +174,8 @@ func (s *nodeStore) farSlot(i int) uint32 {
 }
 
 // A nodeAnchor refers to a node of a store from outside its records: the
-// chunk, biased by one, and the word offset there. With anchorFar set, the
-// rest is an index into the store's far nodes.
+// chunk, biased by one, and the record's word offset there. With anchorFar
+// set, the rest is an index into the store's far nodes.
 type nodeAnchor uint32
 
 const (
@@ -184,18 +187,11 @@ const (
 )
 
 func (s *nodeStore) anchor(v Node) nodeAnchor {
-	if v.s == nil {
+	if v.p == nil {
 		return 0
 	}
-	if v.s == s {
-		for i := range s.chunks {
-			if c := &s.chunks[i]; uintptr(v.p) >= c.lo && uintptr(v.p) < c.hi {
-				if i < maxAnchorChunks {
-					return nodeAnchor((i+1)<<anchorChunkShift | int((uintptr(v.p)-c.lo)/wordSize))
-				}
-				break
-			}
-		}
+	if c := v.chunk(); c.store == s && c.index < maxAnchorChunks && v.hdr().chunk < maxChunkWords {
+		return nodeAnchor((c.index+1)<<anchorChunkShift | v.hdr().chunk)
 	}
 	s.far = append(s.far, v)
 	if len(s.far) > anchorFar {
@@ -211,8 +207,8 @@ func (s *nodeStore) fromAnchor(r nodeAnchor) Node {
 	case r&anchorFar != 0:
 		return s.far[r&^anchorFar]
 	}
-	c := &s.chunks[r>>anchorChunkShift-1]
-	return Node{unsafe.Pointer(&c.words[r&(maxChunkWords-1)]), s}
+	c := s.chunks[r>>anchorChunkShift-1]
+	return Node{unsafe.Add(c, int(r&(maxChunkWords-1))*int(wordSize))}
 }
 
 func (s *nodeStore) newNode(kind Kind, layout nodeLayout, n Node) Node {
@@ -226,12 +222,14 @@ func (s *nodeStore) newNode(kind Kind, layout nodeLayout, n Node) Node {
 // newRecord allocates a zeroed record of type T, whose first field must be
 // its nodeBaseData.
 func newRecord[T any](s *nodeStore, layout nodeLayout) (*T, Node) {
-	p := s.alloc(unsafe.Sizeof(*new(T)))
-	return (*T)(p), Node{p, s}
+	p, chunk := s.alloc(unsafe.Sizeof(*new(T)))
+	(*nodeBaseData)(p).chunk = chunk
+	return (*T)(p), Node{p}
 }
 
-// alloc allocates size zeroed bytes for a record.
-func (s *nodeStore) alloc(size uintptr) unsafe.Pointer {
+// alloc allocates size zeroed bytes for a record, returning its address and
+// its word offset in its chunk.
+func (s *nodeStore) alloc(size uintptr) (unsafe.Pointer, uint32) {
 	if s.frozen {
 		panic("node store is frozen")
 	}
@@ -241,11 +239,11 @@ func (s *nodeStore) alloc(size uintptr) unsafe.Pointer {
 	}
 	p := unsafe.Pointer(unsafe.SliceData(s.free))
 	s.free = s.free[words:]
-	return p
+	return p, uint32((uintptr(p) - uintptr(s.base)) / wordSize)
 }
 
 // grow allocates words in a new chunk. A record never spans two chunks.
-func (s *nodeStore) grow(words int) unsafe.Pointer {
+func (s *nodeStore) grow(words int) (unsafe.Pointer, uint32) {
 	n := min(max(s.words/storeGrowthDivisor, minStoreWords), maxChunkWords)
 	if len(s.chunks) == 0 {
 		n = min(max(n, s.hint), maxChunkWords)
@@ -253,19 +251,51 @@ func (s *nodeStore) grow(words int) unsafe.Pointer {
 	if words > n || words > maxChunkWords {
 		// A record too large for a normal chunk gets one of its own, and
 		// the current chunk stays in use.
-		return s.addChunk(words)
+		base, _ := s.addChunk(words)
+		return unsafe.Add(base, chunkHeaderWords*uint32(wordSize)), chunkHeaderWords
 	}
-	p := s.addChunk(n)
-	s.free = s.chunks[len(s.chunks)-1].words[words:]
-	return p
+	base, all := s.addChunk(n)
+	s.base = base
+	s.free = all[words:]
+	return unsafe.Pointer(unsafe.SliceData(all)), chunkHeaderWords
 }
 
-func (s *nodeStore) addChunk(n int) unsafe.Pointer {
-	words := make([]uint64, n)
-	p := unsafe.Pointer(unsafe.SliceData(words))
-	s.chunks = append(s.chunks, storeChunk{words, uintptr(p), uintptr(p) + uintptr(n)*wordSize})
+// addChunk allocates a chunk with room for at least n words of records,
+// returning its start and its records' words.
+func (s *nodeStore) addChunk(n int) (unsafe.Pointer, []uint64) {
+	n = chunkClass(n)
+	base := reflect.New(chunkType(n)).UnsafePointer()
+	*(*chunkHeader)(base) = chunkHeader{store: s, index: uint32(len(s.chunks))}
+	s.chunks = append(s.chunks, base)
 	s.words += n
-	return p
+	return base, unsafe.Slice((*uint64)(unsafe.Add(base, chunkHeaderWords*uint32(wordSize))), n)
+}
+
+// chunkClass rounds n up to one of a few sizes per power of two, so that
+// chunks need only a few types.
+func chunkClass(n int) int {
+	if n <= minStoreWords {
+		return minStoreWords
+	}
+	step := 1 << (bits.Len(uint(n-1)) - 3)
+	return (n + step - 1) &^ (step - 1)
+}
+
+var chunkTypes sync.Map // int -> reflect.Type
+
+// chunkType returns the type of a chunk with n words of records: a
+// chunkHeader followed by an array of n words, so the header is its only
+// pointer.
+func chunkType(n int) reflect.Type {
+	if t, ok := chunkTypes.Load(n); ok {
+		return t.(reflect.Type)
+	}
+	t := reflect.StructOf([]reflect.StructField{
+		{Name: "Header", Type: reflect.TypeFor[chunkHeader]()},
+		{Name: "Words", Type: reflect.ArrayOf(n, reflect.TypeFor[uint64]())},
+	})
+	t2, _ := chunkTypes.LoadOrStore(n, t)
+	return t2.(reflect.Type)
 }
 
 // Stores start small, since many, such as those for lazily parsed JSDoc,

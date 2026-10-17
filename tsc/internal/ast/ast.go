@@ -163,11 +163,10 @@ func cloneNode(updated Node, original Node, hooks NodeFactoryHooks) Node {
 	return updated
 }
 
-// Node is a handle to an AST node: the address of its record, and the
-// nodeStore that owns it. The zero Node is the absent node.
+// Node is a handle to an AST node: the address of its record. The zero
+// Node is the absent node.
 type Node struct {
 	p unsafe.Pointer
-	s *nodeStore
 }
 
 func (n Node) IsNil() bool               { return n.p == nil }
@@ -2406,7 +2405,7 @@ func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, st
 }
 
 func (n Node) asSourceFile() *SourceFile {
-	return n.s.sourceFiles.get((*sourceFileData)(n.rec()).file)
+	return n.store().sourceFiles.get((*sourceFileData)(n.rec()).file)
 }
 
 func (node *SourceFile) ParseOptions() SourceFileParseOptions {

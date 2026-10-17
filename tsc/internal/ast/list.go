@@ -7,20 +7,23 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
-// A NodeList is a handle to a list of nodes: the address of its record,
-// and the nodeStore that owns it. The zero NodeList is the absent list.
+// A NodeList is a handle to a list of nodes: the address of its record.
+// The zero NodeList is the absent list.
 //
-// A list record is a word holding its range, a word holding its length and
-// a per-kind auxiliary value, and then the elements as nodeRefs.
+// A list record is a listHeader and then the elements as nodeRefs.
 type NodeList struct {
 	p unsafe.Pointer
-	s *nodeStore
 }
 
 type listHeader struct {
+	// chunk is the record's offset in words from the start of its chunk.
+	chunk    uint32
+	n        uint32
 	pos, end int32
-	n, aux   uint32
+	aux      uint32
 }
+
+const listHeaderSize = unsafe.Sizeof(listHeader{})
 
 // A ModifierList is a NodeList of modifiers, whose record also holds their
 // combined flags.
@@ -31,8 +34,6 @@ type ModifierList struct {
 // A listRef is a record field referring to a list, encoded like a
 // nodeRef, whose far lists are the store's farLists.
 type listRef uint32
-
-const listHeaderWords = 2
 
 // listMissing marks a list that was expected but missing from the source.
 const listMissing = 1
@@ -47,10 +48,12 @@ func (f *NodeFactory) NewModifierList(nodes []Node) ModifierList {
 
 func newNodeList(s *nodeStore, nodes []Node, aux uint32) NodeList {
 	n := len(nodes)
-	l := NodeList{s.alloc(uintptr(listHeaderWords)*wordSize + uintptr(n)*unsafe.Sizeof(nodeRef(0))), s}
-	*l.hdr() = listHeader{pos: -1, end: -1, n: uint32(n), aux: aux}
+	p, chunk := s.alloc(listHeaderSize + uintptr(n)*unsafe.Sizeof(nodeRef(0)))
+	l := NodeList{p}
+	*l.hdr() = listHeader{chunk: chunk, n: uint32(n), pos: -1, end: -1, aux: aux}
+	c := l.chunk()
 	for k, node := range nodes {
-		s.setRef(l.slot(k), node)
+		setRef(c, l.slot(k), node)
 	}
 	return l
 }
@@ -60,8 +63,12 @@ func (l NodeList) IsNil() bool { return l.p == nil }
 func (l NodeList) hdr() *listHeader { return (*listHeader)(l.p) }
 
 func (l NodeList) slot(k int) *nodeRef {
-	return (*nodeRef)(unsafe.Add(l.p, uintptr(listHeaderWords)*wordSize+uintptr(k)*unsafe.Sizeof(nodeRef(0))))
+	return (*nodeRef)(unsafe.Add(l.p, listHeaderSize+uintptr(k)*unsafe.Sizeof(nodeRef(0))))
 }
+
+func (l NodeList) chunk() *chunkHeader { return chunkOf(l.p, l.hdr().chunk) }
+
+func (l NodeList) store() *nodeStore { return l.chunk().store }
 
 func (l NodeList) Loc() core.TextRange {
 	h := l.hdr()
@@ -97,7 +104,15 @@ func (l NodeList) At(k int) Node {
 }
 
 func (l NodeList) at(k int) Node {
-	return Node{s: l.s}.deref(l.slot(k))
+	f := l.slot(k)
+	r := int32(*f)
+	if r&refFar == 0 {
+		if r == 0 {
+			return Node{}
+		}
+		return Node{unsafe.Add(unsafe.Pointer(f), int(r)*2)}
+	}
+	return l.store().far[uint32(r)>>1]
 }
 
 // SetAt replaces the node at index k of l.
@@ -105,7 +120,7 @@ func (l NodeList) SetAt(k int, node Node) {
 	if uint(k) >= uint(l.Len()) {
 		panic("node list index out of range")
 	}
-	l.s.setRef(l.slot(k), node)
+	setRef(l.chunk(), l.slot(k), node)
 }
 
 // First returns the first node of l, or the absent node if l is empty.
@@ -171,7 +186,7 @@ func (l NodeList) Slice() []Node {
 }
 
 // IsMissing reports whether l stands for a list missing from the source.
-func (l NodeList) IsMissing() bool { return l.s != nil && l.aux()&listMissing != 0 }
+func (l NodeList) IsMissing() bool { return l.p != nil && l.aux()&listMissing != 0 }
 
 func (l NodeList) SetMissing() { l.setAux(l.aux() | listMissing) }
 
@@ -190,7 +205,7 @@ func (l NodeList) Clone(f NodeFactoryCoercible) NodeList {
 }
 
 func (l ModifierList) ModifierFlags() ModifierFlags {
-	if l.s == nil {
+	if l.p == nil {
 		return ModifierFlagsNone
 	}
 	return ModifierFlags(l.aux())
@@ -205,50 +220,48 @@ func (l ModifierList) Clone(f *NodeFactory) ModifierList {
 }
 
 // derefList returns the list that the field f of n's record refers to.
-func (n Node) derefList(f *listRef) NodeList { return n.s.derefList(f) }
-
-func (n Node) derefModifiers(f *listRef) ModifierList {
-	return ModifierList{n.s.derefList(f)}
-}
-
-// setListRef makes the field f of n's record refer to v.
-func (n Node) setListRef(f *listRef, v NodeList) { n.s.setListRef(f, v) }
-
-func (n Node) setModifiersRef(f *listRef, v ModifierList) { n.s.setListRef(f, v.NodeList) }
-
-// setListRefAt makes the field f of the record of owner refer to v.
-func setListRefAt(f *listRef, owner Node, v NodeList) { owner.s.setListRef(f, v) }
-
-func setModifiersRefAt(f *listRef, owner Node, v ModifierList) {
-	owner.s.setListRef(f, v.NodeList)
-}
-
-func (s *nodeStore) derefList(f *listRef) NodeList {
+func (n Node) derefList(f *listRef) NodeList {
 	r := int32(*f)
 	if r&refFar == 0 {
 		if r == 0 {
 			return NodeList{}
 		}
-		return NodeList{unsafe.Add(unsafe.Pointer(f), int(r)*2), s}
+		return NodeList{unsafe.Add(unsafe.Pointer(f), int(r)*2)}
 	}
-	return s.farLists[uint32(r)>>1]
+	return n.store().farLists[uint32(r)>>1]
 }
 
-func (s *nodeStore) setListRef(f *listRef, v NodeList) {
-	if v.s == nil {
+func (n Node) derefModifiers(f *listRef) ModifierList {
+	return ModifierList{n.derefList(f)}
+}
+
+// setListRef makes the field f of n's record refer to v.
+func (n Node) setListRef(f *listRef, v NodeList) { setListRef(n.chunk(), f, v) }
+
+func (n Node) setModifiersRef(f *listRef, v ModifierList) { setListRef(n.chunk(), f, v.NodeList) }
+
+// setListRefAt makes the field f of the record of owner refer to v.
+func setListRefAt(f *listRef, owner Node, v NodeList) { setListRef(owner.chunk(), f, v) }
+
+func setModifiersRefAt(f *listRef, owner Node, v ModifierList) {
+	setListRef(owner.chunk(), f, v.NodeList)
+}
+
+// setListRef makes the field f of a record in chunk c refer to v.
+func setListRef(c *chunkHeader, f *listRef, v NodeList) {
+	if v.p == nil {
 		*f = 0
 		return
 	}
-	if v.s == s {
-		if d, ok := s.offset(unsafe.Pointer(f), v.p); ok {
-			*f = listRef(d)
-			return
-		}
+	if v.chunk() == c {
+		*f = listRef(near(f, v.p))
+		return
 	}
+	s := c.store
 	if *f&refFar != 0 {
 		s.farLists[*f>>1] = v
 		return
 	}
-	*f = listRef(s.farSlot(len(s.farLists)))
+	*f = listRef(farSlot(len(s.farLists)))
 	s.farLists = append(s.farLists, v)
 }
