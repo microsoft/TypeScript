@@ -271,14 +271,16 @@ func (s *nodeStore) addChunk(n int) (unsafe.Pointer, []uint64) {
 	return base, unsafe.Slice((*uint64)(unsafe.Add(base, chunkHeaderWords*uint32(wordSize))), n)
 }
 
-// chunkClass rounds n up to one of a few sizes per power of two, so that
-// chunks need only a few types.
+// chunkClass rounds n up so that a chunk with n words of records is 2^k
+// or 3*2^(k-1) bytes, sizes that the Go allocator has a class for, so the
+// space it would otherwise round up to holds records too.
 func chunkClass(n int) int {
-	if n <= minStoreWords {
-		return minStoreWords
+	bytes := max(n+int(chunkHeaderWords), minStoreWords) * int(wordSize)
+	size := 1 << bits.Len(uint(bytes-1))
+	if three := size / 4 * 3; three >= bytes {
+		size = three
 	}
-	step := 1 << (bits.Len(uint(n-1)) - 3)
-	return (n + step - 1) &^ (step - 1)
+	return size/int(wordSize) - int(chunkHeaderWords)
 }
 
 var chunkTypes sync.Map // int -> reflect.Type
@@ -299,7 +301,7 @@ func chunkType(n int) reflect.Type {
 }
 
 // Stores start small, since many, such as those for lazily parsed JSDoc,
-// are tiny.
+// are tiny. This is the words of a chunk, including its header.
 const minStoreWords = 64
 
 // Each new chunk adds a fraction of the store's size, which bounds the
