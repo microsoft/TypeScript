@@ -325,6 +325,43 @@ func TestTscCommandline(t *testing.T) {
 		},
 	}
 
+	for _, value := range []string{"false", "true", "omitted"} {
+		option := ""
+		if value != "omitted" {
+			option = `, "alwaysStrict": ` + value
+		}
+		testCases = append(testCases, &tscInput{
+			subScenario: "alwaysStrict " + value + " in configuration",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": fmt.Sprintf(`{"compilerOptions": {"target": "es2015"%s}}`, option),
+				"/home/src/workspaces/project/index.ts":      "export {};",
+			},
+			commandLineArgs: []string{"--noEmit"},
+		})
+	}
+	for _, setting := range []struct {
+		name   string
+		config string
+		base   string
+	}{
+		{"relative", `{"compilerOptions": {"target": "es2015", "baseUrl": "."}}`, ""},
+		{"empty", `{"compilerOptions": {"target": "es2015", "baseUrl": ""}}`, ""},
+		{"inherited", `{"extends": "./base.json"}`, `{"compilerOptions": {"target": "es2015", "baseUrl": "."}}`},
+		{"omitted", `{"compilerOptions": {"target": "es2015"}}`, ""},
+	} {
+		files := FileMap{
+			"/home/src/workspaces/project/tsconfig.json": setting.config,
+			"/home/src/workspaces/project/index.ts":      "export {};",
+		}
+		if setting.base != "" {
+			files["/home/src/workspaces/project/base.json"] = setting.base
+		}
+		testCases = append(testCases, &tscInput{
+			subScenario:     "baseUrl " + setting.name + " in configuration",
+			files:           files,
+			commandLineArgs: []string{"--noEmit"},
+		})
+	}
 	for _, testCase := range testCases {
 		testCase.run(t, "commandLine")
 	}
