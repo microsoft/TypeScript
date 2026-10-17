@@ -8,37 +8,31 @@ Every `*ast.Node` is a heap object full of Go pointers: children, parent, symbol
 
 ## Design
 
-The current design is index-based, in the spirit of Zig's compiler AST: a node is "a store plus an index", records live in one growable array per file, and fields refer to each other by 32-bit index. Unlike Zig's uniform `lhs`/`rhs` nodes, records are typed per kind and generated from the TS AST schema, parents are kept, and binder output hangs off the store.
+A node is the address of a pointer-free record in a per-file chunk of words. Fields refer to other records by 32-bit refs, mostly as offsets. The garbage collector sees one pointer per chunk, not one per child, parent, symbol and string.
 
-### A node is a store plus an index
-
-```go
-type Node struct {
-    s *nodeStore  // the file's store (one per NodeFactory)
-    i uint32      // word index of the record in s.words
-}
-type PropertyAccessExpression struct{ Node }  // typed views carry no extra data
-```
-
-`Node` is a 16-byte value passed around everywhere outside the store; the zero `Node` means "no node". Kind-specific views such as `node.AsPropertyAccessExpression()` are free conversions. Inside records, references to other nodes are 32-bit `nodeRef`s, which turn back into a `Node` when they're read.
-
-### Records live in one word array per store
+### A node is a record address
 
 ```go
-type nodeStore struct {
-    words  []uint64  // all records, back to back; index 0 is reserved for "none"
-    reused []Node    // nodes from other stores that this store refers to
-    // typed side tables: symbols, symbol tables, lists, texts, flow nodes, ...
-}
+type Node struct{ p unsafe.Pointer }        // address of the node's record
+type PropertyAccessExpression struct{ Node } // typed views carry no extra data
 ```
 
-`words` is a single noscan Go slice. `ParseSourceFile` builds a file in three steps:
+`Node` is one word, so it is passed in a register and is cheap to compare and to use as a map key. The zero `Node` is "no node". Kind-specific views are free conversions. `Kind()` is one load from the record header.
 
-1. **Build**: the parser fills `words` in scratch memory taken from a pool and reused from file to file, so growing it is nearly free.
-2. **Bind**: the binder runs right away, while the file is still private, and adds its symbols, flow nodes and flow data records. Binding depends only on the file, never on compiler options, and every file in a program is bound anyway.
-3. **Finish**: the records are copied once into an exact-size array, the scratch memory goes back to the pool, and the store is frozen. Allocating in a frozen store panics.
+### Records live in chunks that never move
 
-So a parsed file's records never change or move once it's returned. While building, records can move when `words` grows, so a raw record pointer is only valid until the next allocation; handles and refs are indices and are unaffected. `debugMoveRecords` in store.go forces frequent moves and poisons the old copies to check this.
+```go
+type chunkHeader struct {
+    store *nodeStore  // the only pointer in a chunk
+    index uint32
+    _     uint32
+}
+// A chunk is reflect.StructOf{Header chunkHeader; Words [n]uint64}.
+```
+
+Each store (one per `NodeFactory`, so one per parsed file) allocates records from chunks. Each chunk is a single Go object whose only pointer is its header, so the GC never scans the records. Chunks are sized to allocator size classes (2^k or 3·2^(k-1) bytes), so no rounding is wasted. A parsed file's first chunk is sized from its source length, and later chunks add 1/16 of the store's size. Records never move. An interior `Node` pointer keeps its chunk alive, and the chunk header keeps the store alive.
+
+`ParseSourceFile` parses, binds right away while the file is still private, then freezes the store and clips its side tables. Allocating in a frozen store panics.
 
 ### Every record starts with a 32-byte header
 
@@ -46,143 +40,107 @@ So a parsed file's records never change or move once it's returned. While buildi
 type nodeBaseData struct {
     id     atomic.Uint64
     loc    core.TextRange
-    parent nodeRef
+    parent parentRef
     flags  NodeFlags
+    chunk  uint32 // byte offset of the record in its chunk
     kind   Kind
 }
 ```
 
-A compile-time assertion keeps the header at 32 bytes or less.
+`chunk` leads from any record back to its chunk header, and from there to the store and its side tables.
 
-### Records are flat and pointer-free
+### Records are flat and generated
 
-Records are generated from the AST schema (`tools/scripts/tsc/generate-go-ast.ts`):
-
-```go
-type propertyAccessExpressionData struct {
-    nodeBaseData
-    expression       nodeRef        // Expression
-    questionDotToken nodeRef        // QuestionDotToken (optional)
-    name             nodeRef        // MemberName
-    flowNode         flowRef
-    facts            atomic.Uint32
-}
-```
-
-All fields, including those from "base" shapes (declaration, function-like, flow container, and so on), are laid out inline after the header and sorted by alignment, so there's no padding.
+Records are generated from the AST schema (`tools/scripts/tsc/generate-go-ast.ts`). All fields, including those of "base" shapes (declaration, function-like, flow container, …), are laid out inline after the header and sorted by alignment, so there is no padding. Accessors for members that many kinds share (`Name`, `Modifiers`, `Symbol`, `Locals`, `Body`, …) find their field through a generated per-kind offset table (`unsafe.Offsetof`). Kind-specific accessors use fixed offsets.
 
 ### How fields reference things
 
 | Field type | Stored as | Read path |
 |---|---|---|
-| Another node in the same store | `nodeRef`: the target's word index | `Node{n.s, r}` |
-| A node in another store (reused node) | `nodeRef` with the top bit set: an index into `reused` | `n.s.reused[r &^ refReused]` |
-| Flow node, flow list | `flowRef`/`flowListRef`: an index into the store's `flows`/`flowLists` arrays; a `flowRef` with the top bit set indexes `reusedFlows` | `FlowNode{n.s, r}` |
-| Node list, modifier list | `listRef uint32`: the word index of a list record in the same store; with the top bit set, an index into `reusedLists` | `NodeList{n.s, r}` |
-| Other Go pointers (`*Symbol`, `[]Node`, `SymbolTable`, `any`, …) | `sideRef uint32`, an index into a typed `sideTable[T]` | `n.s.table.items[r-1]` |
-| `string` | `textRef{off, len uint32}` into the file's source text, or into an append-only text arena | `unsafe.String` over the backing bytes |
+| Node in the same chunk | `nodeRef` with the low bit set: signed byte offset from the field | `f + (r-1)` |
+| No node | `nodeRef` 0 | tested before anything else |
+| Node in another chunk or store | `nodeRef` even, nonzero: index into the store's `far []Node` | `store.far[r>>1]` |
+| Parent | `parentRef`: even = byte offset from the record, odd = far slot `<<1\|1`, `1` = none | one add on the near path |
+| Node list, modifier list | `listRef`, same encoding as `nodeRef`, over `farLists` | as for nodes |
+| Flow node, flow list | index into the store's `flows`/`flowLists` arrays (pointer-free, 16 bytes each) | `FlowNode{store, i}` |
+| `*Symbol`, `SymbolTable`, `[]string`, `[]Node`, `any` | `sideRef`: index into a typed side table, whose slot 0 is the zero value | `store.T.items[r]` |
+| `string` | `textRef{off, len}`: the top 5 bits pick one of 32 pieces of up to 128MB. The first pieces hold the source text, so source substrings are referenced in place; the rest are an append-only arena. | `unsafe.String(pieces[off>>27]+off&mask, len)` |
 
-Reused nodes come from JSDoc (parsed with its own factory), and from checker and transformer factories that point at nodes of the file they work on. Parsed files have almost none.
+Lists are records too: a range, a count, a flags word (missing list, or a `ModifierList`'s flags), then packed element refs. The parser collects elements on one scratch stack and copies each finished list into the store, so parsing allocates no `[]Node` per list.
 
-`SourceFile` is a `sourceFileData` record like any other node, plus a Go struct for its pointer-heavy fields, reached through the store's `sourceFiles` table.
-
-Flow nodes work the same way as nodes: `FlowNode` is `{store, index}` into a per-store `[]flowNodeData` (16 bytes each: node ref, antecedent ref, antecedent list ref, flags), and `FlowList` is `{store, index}` into `[]flowListData`. They contain no Go pointers. Checker-created flow nodes live in the checker's store and point at file flow nodes through `reusedFlows`, just as reused nodes do.
-
-Lists are records in `words` too: one word for the range, one for the count and an extra 32 bits (the "missing list" flag, or a `ModifierList`'s flags), then the element refs packed two per word. `NodeList` and `ModifierList` are `{store, index}` views with `Len`, `At` and `All`; `Slice` copies into a fresh `[]Node` for callers that really need one. A list can't change length in place, so code that used to append to a list builds a new one and sets it on the parent. The parser collects the elements of the lists it is parsing on a single scratch stack and copies each one into the store when it finishes, so parsing no longer allocates a `[]Node` per list.
-
-No Go pointers are hidden in integers: every ref is an index, and liveness comes from the `s` pointer in each `Node` and the store's own slices. The GC scans `reused` and the side tables, not every child, parent, symbol and string of every node.
+Records are word aligned and refs are 4-byte aligned, so a distance between them is never odd, and the low bit is free to mark near refs. Go's compiler can't emit a three-operand LEA, so every encoding is chosen to make the hot decode one add: near refs keep the bit set and subtract a constant, and parents use even offsets from the record itself.
 
 ### What unsafe is left
 
-- Reading a record: `(*T)(unsafe.Pointer(&words[i]))`, where `T` is a pointer-free record type.
-- Generic accessors such as `node.Symbol()` find their field through generated per-kind offset tables (`unsafe.Offsetof`, read with `unsafe.Add`). These gave no measurable win, so the plan is to replace them with generated `switch kind`.
-- Text refs use `unsafe.String`.
+- `unsafe.Add` from a ref field to a record in the same chunk. This stays within one Go object, so it satisfies the `unsafe.Pointer` rules and `-d=checkptr`.
+- Record casts `(*T)(p)`, where every `T` is pointer-free.
+- Offset tables built with `unsafe.Offsetof`. The generator produces them, so nothing is laid out by hand.
+- `unsafe.String` for text refs.
 
-Typed per-layout slices instead of one word array would remove the record cast too.
+No Go pointer is ever stored in an integer. Every cross-chunk or cross-store reference goes through a real `[]Node` slot that the GC scans.
+
+## Where it stands (vscode, n=8, interleaved, HEAD vs main)
+
+```
+       │    main    │            arena-ast            │
+       │ check-sec  │ check-sec   vs base             │
+VSCode   7.188 ± 3%   7.247 ± 3%  ~ (p=0.234 n=8)
+
+       │    main    │            arena-ast            │
+       │ total-sec  │ total-sec   vs base             │
+VSCode   8.185 ± 3%   8.057 ± 2%  ~ (p=0.488 n=8)
+
+       │     main     │             arena-ast              │
+       │    mem-B     │    mem-B      vs base              │
+VSCode   3.302Gi ± 0%   3.212Gi ± 0%  -2.74% (p=0.000 n=8)
+```
+
+Single-threaded with GC off, this branch executes about 8% more instructions than main, but task time is within noise (+1.3%, p=0.13), since parsing is much cheaper and the extra instructions are well-predicted branches.
+
+### Where the remaining instructions go
+
+- **Following a parent** costs about 6 instructions vs 1 on main: load the ref, test near/far, add, plus the far path's code size, which keeps some callers just over the inlining budget (80). Main inlines many parent-walk helpers (`FindAncestor` closures, `getControlFlowContainer`, `GetRootDeclaration`) that this branch can't. This is inherent to storing no pointers. Cross-chunk deltas would break the unsafe rules.
+- **Far refs are common**: on vscode, 1.9M far node refs, 1.0M of them parents, 113K far list refs, about 6 chunks per store. A one-chunk-per-file experiment (sizing the first chunk at 2× the source) removed nearly all of them but gained only −0.5% instructions and −0.8% time, so relocating into a single chunk isn't worth its memory.
+- **Shared-member accessors** read a per-kind offset table, where main reads a fixed field of the embedded base.
+
+Experiments that didn't pay: a zero check in side-table getters (+0.03% instructions), a cached source file in the chunk header (no inlining change), early-outs in `GetRootDeclaration` (−0.09%).
 
 ### How we got here (commit sequence)
 
 1. Value-handle `Node` codemod (`*Node` → `Node`) across the compiler.
 2. Store-backed records, side tables for pointer fields, and text refs.
 3. Arena chunks with a noscan body.
-4. Self-relative 32-bit refs with a far-ref table. These were compact, but the near/far branching and the locked far table cost 6–8% of check time.
-5. **Absolute address refs** (check −5.59% vs relative refs, memory +4.85%).
+4. Self-relative 32-bit refs with a far-ref table, which cost 6–8% of check time at the time.
+5. **Absolute address refs** (check −5.59%, memory +4.85%). These hid pointers in `uintptr`s and were later removed.
 6. **Slower chunk growth** (memory −2.63%).
 7. **32-byte header** (memory −3.28%).
-8. **Flattened records + offset tables** (memory −0.39%, check time unchanged).
-9. **Flow nodes in the arena** (memory −0.67%, check time unchanged).
-10. **32-bit block-indexed refs** (check +10.2%, memory −1.0%). Absolute refs were Go pointers hidden in `uintptr`s, so this replaced them with real 32-bit refs.
-11. **Field-relative refs** (check +6.3% vs step 9). A near ref is an offset from the field holding it. Still needed `unsafe` address arithmetic, a far table, and blocks built with `reflect.StructOf`.
-12. **Index-based store** (check +5.5%, total +6.6%, memory −0.2% vs step 9). One word array per store, `Node = {store, index}`, refs are indices. Removes blocks, `reflect.StructOf`, the far table and all pointer arithmetic on refs, and is slightly faster than step 11. Flow nodes go back to Go objects for now.
-13. **Bind at parse, then freeze** (check and total unchanged). Parsing builds in pooled scratch memory, binds, and copies the records once into a frozen exact-size array. Before, the array was clipped after parse, then had to grow again for the binder's flow data records, and was copied again after bind.
-14. **Flow nodes as indexed values** (memory −2.9%, check +1.2%, total unchanged vs step 13). `FlowNode` and `FlowList` become `{store, index}` handles into pointer-free per-store arrays, replacing the Go-object slab and the `*FlowNode` side tables.
-15. **Lists as records** (memory −3.2%, check and total unchanged vs step 14). `NodeList` and `ModifierList` become `{store, index}` views over records in the store, replacing the heap-allocated list structs, their `[]Node` backing arrays and the parser's node-slice arena.
-16. **Iterate lists in place** (check −1.0% vs step 15). `NodeList.Some`/`Every`, plus `NodeList` parameters on hot checker and binder paths, so these paths no longer materialize `[]Node` slices.
-17. **Kind cached in the handle** (check −1.7% vs step 16). `Node` is `{store, index, kind}`; the kind fills what was padding, so `Kind()` needs no memory load. It is a full `uint32`, so the handle has no padding and Node-keyed maps keep the fast hash.
-18. **Source file from the store** (check −1.8% vs step 17). A parsed file's store records its `SourceFile`, so `GetSourceFileOfNode` is one load instead of a parent walk.
-
-### Step 17 vs main (vscode, n=8)
-
-```
-       │    main    │              step 17              │
-       │ check-sec  │ check-sec   vs base               │
-VSCode   6.930 ± 1%   7.828 ± 1%  +12.97% (p=0.000 n=8)
-
-       │    main    │             step 17              │
-       │ total-sec  │ total-sec   vs base              │
-VSCode   7.911 ± 1%   8.611 ± 1%  +8.86% (p=0.000 n=8)
-
-       │     main     │              step 17               │
-       │    mem-B     │    mem-B      vs base              │
-VSCode   3.302Gi ± 0%   3.168Gi ± 0%  -4.07% (p=0.000 n=8)
-```
-
-Profiles (3 merged runs each) show parsing is much cheaper than on main (8.2s vs 13.0s CPU), but `checkSourceFile` costs about 19% more. GC mark time is unchanged. The gap is checker per-access overhead, spread thinly over AST accessors (`rec`, `deref`, `Symbol`, `Name`, …): ast's flat time is 12.5s vs 4.6s on main. On main a field read is one load through a pointer. Here it is store → `words` pointer and length → bounds check → field, and following a ref builds a new handle. Removing bounds checks alone (an experiment with `unsafe`) gained only 1.2%.
-
-### Why check time is slower: instructions, not memory
-
-Hardware counters (single-threaded, GC off, step 17 vs main):
-
-| | main | step 17 |
-|---|---|---|
-| instructions | 103.8B | 133.9B (+29%) |
-| cycles | 107.3B | 123.4B (+15%) |
-| cache misses | 331M | 308M (−7%) |
-| L1d load misses | 1.53B | 1.58B (+3%) |
-| dTLB load misses | 75.5M | 71.0M (−6%) |
-
-The store layout does improve locality slightly, but the checker runs far more instructions. Sampling by function puts essentially all of the extra in AST accessors (ast +14.5B instructions, plus +9.3B of accessors inlined into checker code); runtime, GC and map costs are unchanged. Following one ref takes about 20 instructions vs about 3 on main: two bounds checks, the reused-ref and nil branches, building a three-word handle and loading the child's kind. A 16-byte handle also spills around calls, so a parent walk with a callback, like `FindAncestor`, costs about 30 instructions per step instead of about 6.
-
-Two experiments bound how much of this a different handle can win back:
-
-- **No bounds checks** (`unsafe` base pointer): −3.8B instructions but only −0.4% time, since well-predicted checks are nearly free.
-- **Interior-pointer handle** (`Node{record pointer, store}` over chunks that never move, with each record's index in its header for setting refs): check time unchanged (+0.4%, noise) and memory +11% from sizing each file's first chunk ahead of time. Turning a ref into an address still takes the same steps, and `Kind()` becomes a load again.
-
-So the remaining gap is the cost of following 32-bit refs from Go code at all, not of how the handle is shaped. It can shrink where the store knows something structurally, as with step 18, but not by tuning the handle.
-
-Step 12 vs step 9 (vscode, n=8, interleaved, shared machine):
-
-```
-       │    old     │               new                │
-       │ check-sec  │ check-sec   vs base              │
-VSCode   7.630 ± 4%   8.047 ± 5%  +5.47% (p=0.001 n=8)
-
-       │    old     │               new                │
-       │ total-sec  │ total-sec   vs base              │
-VSCode   8.575 ± 2%   9.140 ± 5%  +6.59% (p=0.000 n=8)
-
-       │     old      │                new                 │
-       │    mem-B     │    mem-B      vs base              │
-VSCode   3.375Gi ± 0%   3.367Gi ± 0%  -0.23% (p=0.000 n=8)
-```
+8. **Flattened records + offset tables** (memory −0.39%).
+9. **Flow nodes in the arena** (memory −0.67%).
+10. **32-bit block-indexed refs** (check +10.2%, memory −1.0%), which replaced the hidden pointers with real 32-bit refs.
+11. **Field-relative refs** (check +6.3% vs step 9).
+12. **Index-based store** (`Node = {store, index}`, check +5.5% vs step 9).
+13. **Bind at parse, then freeze.**
+14. **Flow nodes as indexed values** (memory −2.9%).
+15. **Lists as records** (memory −3.2%).
+16. **Iterate lists in place** (check −1.0%).
+17. **Kind cached in the handle** (check −1.7%). At this point check was +13% vs main and memory −4.1%. Hardware counters showed +29% instructions, all in ref-following accessors.
+18. **Source file from the store** (check −1.8%).
+19. **Record-address handles with self-relative refs** (`ba2d083f1da`, `2e5b2083626`). `Node` becomes a single pointer to a record in a never-moving chunk, and near refs are offsets from the field. This drops the 16–24 byte handle, which spilled around every call.
+20. **Size-class chunks** (`4b85ba3d4f5`): no allocator rounding waste.
+21. **Per-kind offset tables for shared members** (`ca2bc7e2fb7`).
+22. **Ref encoding flip** (`a4fca73683b`): near refs carry the low bit, so the near decode is one add and parent walks inline.
+23. **Accessors within the inlining budget** (`b65f487e501`).
+24. **One text path** (`f6245c449b5`): source text and arena text are both pieces of one table, so `Text()` has no branch.
+25. **Parent as a record-relative delta** (`86be7af1fdd`, −0.32% instructions).
+26. **Zero refs tested first** (`1e5f65ab9fc`, −0.21% instructions): absent fields no longer load the far table.
+27. **`GetNodeId` inlinable again** (`67837fcf02d`, −0.28% instructions).
 
 ## Next
 
-- Replace offset tables with generated kind switches.
-- Symbols as per-store typed arrays addressed by index.
-- Look for more places where the store can answer structurally what main answers by walking (as `GetSourceFileOfNode` now does), since per-ref cost can't be tuned away.
+- Find more places where the store can answer structurally what main answers by walking parents (as `GetSourceFileOfNode` does).
+- Symbols as per-store typed arrays addressed by index, which would shrink the remaining GC-scanned side tables.
 
-## Earlier measurements (step 9 vs main, vscode, n=10, interleaved)
+## Historical: earlier measurements (step 9 vs main, vscode, n=10, interleaved)
 
 ### Branch tip vs main
 
