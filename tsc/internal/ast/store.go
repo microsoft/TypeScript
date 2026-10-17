@@ -96,7 +96,7 @@ func newNodeStore() *nodeStore {
 type nodeBaseData struct {
 	id     atomic.Uint64
 	loc    core.TextRange
-	parent nodeRef
+	parent parentRef
 	flags  NodeFlags
 	// chunk is the record's offset in bytes from the start of its chunk.
 	chunk uint32
@@ -117,6 +117,16 @@ var _ [32 - unsafe.Sizeof(nodeBaseData{})]struct{}
 type nodeRef uint32
 
 const refNear = 1
+
+// A parentRef is a record's parent. It is encoded unlike a nodeRef so that
+// walking up the tree, the hottest way of following a ref, costs a single
+// add: an even ref is the signed distance in bytes from the record to its
+// parent in the same chunk, never zero as no record is its own parent; an
+// odd ref is an index into the store's far nodes, shifted left by one, so
+// that parentNone is no parent. Records start with parentNone.
+type parentRef int32
+
+const parentNone parentRef = 1
 
 const wordSize = unsafe.Sizeof(uint64(0))
 
@@ -246,7 +256,9 @@ func (s *nodeStore) newNode(kind Kind, layout nodeLayout, n Node) Node {
 // its nodeBaseData.
 func newRecord[T any](s *nodeStore, layout nodeLayout) (*T, Node) {
 	p, chunk := s.alloc(unsafe.Sizeof(*new(T)))
-	(*nodeBaseData)(p).chunk = chunk
+	h := (*nodeBaseData)(p)
+	h.chunk = chunk
+	h.parent = parentNone
 	return (*T)(p), Node{p}
 }
 

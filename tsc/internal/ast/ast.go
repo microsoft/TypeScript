@@ -175,20 +175,33 @@ func (n Node) Flags() NodeFlags          { return n.hdr().flags }
 func (n Node) Loc() core.TextRange       { return n.hdr().loc }
 func (n Node) SetFlags(flags NodeFlags)  { n.hdr().flags = flags }
 func (n Node) SetLoc(loc core.TextRange) { n.hdr().loc = loc }
-func (n Node) SetParent(parent Node)     { n.setRef(&n.hdr().parent, parent) }
-
-// Parent is deref of the parent field, written out so that loops walking up
-// the tree stay small enough to inline.
-func (n Node) Parent() Node {
-	h := (*nodeBaseData)(n.p)
-	r := h.parent
-	if r&refNear != 0 {
-		return Node{unsafe.Add(n.p, int(int32(r))+parentNearBias)}
+func (n Node) SetParent(parent Node) {
+	h := n.hdr()
+	switch {
+	case parent.p == nil:
+		h.parent = parentNone
+	case parent.chunk() == n.chunk():
+		h.parent = parentRef(int32(uintptr(parent.p) - uintptr(n.p)))
+	case h.parent&1 != 0 && h.parent != parentNone:
+		// Slots are never shared, so the record's own slot can be reused.
+		n.store().far[uint32(h.parent)>>1] = parent
+	default:
+		s := n.store()
+		h.parent = parentRef(farSlot(len(s.far)) | 1)
+		s.far = append(s.far, parent)
 	}
-	return (*chunkHeader)(unsafe.Add(n.p, -int(h.chunk))).store.far[r>>1]
 }
 
-const parentNearBias = int(unsafe.Offsetof(nodeBaseData{}.parent)) - refNear
+// Parent is written out so that loops walking up the tree stay small enough
+// to inline.
+func (n Node) Parent() Node {
+	h := (*nodeBaseData)(n.p)
+	r := int(h.parent)
+	if r&1 == 0 {
+		return Node{unsafe.Add(n.p, r)}
+	}
+	return (*chunkHeader)(unsafe.Add(n.p, -int(h.chunk))).store.far[uint32(r)>>1]
+}
 
 // Shared node accessors dispatch on Kind to the enclosing concrete node.
 
