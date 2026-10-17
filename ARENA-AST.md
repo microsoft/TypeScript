@@ -117,6 +117,26 @@ Typed per-layout slices instead of one word array would remove the record cast t
 13. **Bind at parse, then freeze** (check and total unchanged). Parsing builds in pooled scratch memory, binds, and copies the records once into a frozen exact-size array. Before, the array was clipped after parse, then had to grow again for the binder's flow data records, and was copied again after bind.
 14. **Flow nodes as indexed values** (memory −2.9%, check +1.2%, total unchanged vs step 13). `FlowNode` and `FlowList` become `{store, index}` handles into pointer-free per-store arrays, replacing the Go-object slab and the `*FlowNode` side tables.
 15. **Lists as records** (memory −3.2%, check and total unchanged vs step 14). `NodeList` and `ModifierList` become `{store, index}` views over records in the store, replacing the heap-allocated list structs, their `[]Node` backing arrays and the parser's node-slice arena.
+16. **Iterate lists in place** (check −1.0% vs step 15). `NodeList.Some`/`Every`, plus `NodeList` parameters on hot checker and binder paths, so these paths no longer materialize `[]Node` slices.
+17. **Kind cached in the handle** (check −1.7% vs step 16). `Node` is `{store, index, kind}`; the kind fills what was padding, so `Kind()` needs no memory load. It is a full `uint32`, so the handle has no padding and Node-keyed maps keep the fast hash.
+
+### Current state vs main (step 17, vscode, n=8)
+
+```
+       │    main    │              step 17              │
+       │ check-sec  │ check-sec   vs base               │
+VSCode   6.930 ± 1%   7.828 ± 1%  +12.97% (p=0.000 n=8)
+
+       │    main    │             step 17              │
+       │ total-sec  │ total-sec   vs base              │
+VSCode   7.911 ± 1%   8.611 ± 1%  +8.86% (p=0.000 n=8)
+
+       │     main     │              step 17               │
+       │    mem-B     │    mem-B      vs base              │
+VSCode   3.302Gi ± 0%   3.168Gi ± 0%  -4.07% (p=0.000 n=8)
+```
+
+Profiles (3 merged runs each) show parsing is much cheaper than on main (8.2s vs 13.0s CPU), but `checkSourceFile` costs about 19% more. GC mark time is unchanged. The gap is checker per-access overhead, spread thinly over AST accessors (`rec`, `deref`, `Symbol`, `Name`, …): ast's flat time is 12.5s vs 4.6s on main. On main a field read is one load through a pointer. Here it is store → `words` pointer and length → bounds check → field, and following a ref builds a new handle. Removing bounds checks alone (an experiment with `unsafe`) gained only 1.2%.
 
 Step 12 vs step 9 (vscode, n=8, interleaved, shared machine):
 
@@ -138,7 +158,7 @@ VSCode   3.375Gi ± 0%   3.367Gi ± 0%  -0.23% (p=0.000 n=8)
 
 - Replace offset tables with generated kind switches.
 - Symbols as per-store typed arrays addressed by index.
-- Profile the remaining check-time gap (likely the bounds check and slice load on `words` per access, and the 16-byte `Node`).
+- Bound what an interior-pointer handle (`Node{record pointer, store}`, non-moving chunked storage) would gain on check time, since per-access indirection is the remaining gap vs main.
 
 ## Earlier measurements (step 9 vs main, vscode, n=10, interleaved)
 
