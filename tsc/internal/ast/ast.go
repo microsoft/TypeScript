@@ -108,6 +108,11 @@ func (f *NodeFactory) FinishStore() {
 	}
 }
 
+// SetStoreFile records that the nodes created by f are the tree of file.
+func (f *NodeFactory) SetStoreFile(file *SourceFile) {
+	f.nodeStore().file = file
+}
+
 // FinishStoreUnfrozen is like FinishStore, but nodes may still be added.
 func (f *NodeFactory) FinishStoreUnfrozen() {
 	if f.store != nil {

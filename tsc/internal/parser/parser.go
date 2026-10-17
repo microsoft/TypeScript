@@ -162,6 +162,7 @@ func parseSourceFile(opts ast.SourceFileParseOptions, sourceText string, scriptK
 	} else {
 		result = p.parseSourceFileWorker()
 	}
+	p.factory.SetStoreFile(result)
 	if !bind {
 		// The binder will still add to the nodes.
 		p.factory.FinishStoreUnfrozen()

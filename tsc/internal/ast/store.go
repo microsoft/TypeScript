@@ -33,6 +33,11 @@ type nodeStore struct {
 	values       sideTable[any]
 	sourceFiles  sideTable[*SourceFile]
 
+	// file is the source file whose tree the store holds, if it holds a
+	// parsed file. Every node of the store that is in that tree is in the
+	// file.
+	file *SourceFile
+
 	// reused holds the nodes of other stores that records refer to, such
 	// as original nodes reused by a transformed tree.
 	reused []Node

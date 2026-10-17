@@ -915,6 +915,9 @@ func WalkUpParenthesizedTypes(node TypeNode) Node {
 // Walks up the parents of a node to find the containing SourceFile
 func GetSourceFileOfNode(node Node) *SourceFile {
 	for !node.IsNil() {
+		if file := node.s.file; file != nil {
+			return file
+		}
 		if node.Kind() == KindSourceFile {
 			return node.AsSourceFile()
 		}
