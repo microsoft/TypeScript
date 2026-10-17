@@ -33,6 +33,7 @@ type OutputPaths interface {
 // Used to be passed in the TransformationContext, which is now just an EmitContext
 type DeclarationEmitHost interface {
 	modulespecifiers.ModuleSpecifierGenerationHost
+	ContentMapperExtensionRewrites() []tspath.ExtensionRewrite
 	CaseSensitivity() tspath.CaseSensitivity
 	GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.FileReference) *ast.SourceFile
 
@@ -218,7 +219,7 @@ const declarationEmitNodeBuilderFlags = nodebuilder.FlagsMultilineObjectLiterals
 	nodebuilder.FlagsGenerateNamesForShadowedTypeParams |
 	nodebuilder.FlagsNoTruncation
 
-const declarationEmitInternalNodeBuilderFlags = nodebuilder.InternalFlagsAllowUnresolvedNames
+const declarationEmitInternalNodeBuilderFlags = nodebuilder.InternalFlagsAllowUnresolvedNames | nodebuilder.InternalFlagsRewriteModuleSpecifiers
 
 // functions as both `visitDeclarationStatements` and `transformRoot`, utilitzing SyntaxList nodes
 func (tx *DeclarationTransformer) visit(node *ast.Node) *ast.Node {
@@ -1604,6 +1605,20 @@ func (tx *DeclarationTransformer) rewriteModuleSpecifier(parent *ast.Node, input
 		return nil
 	}
 	tx.resultHasExternalModuleIndicator = tx.resultHasExternalModuleIndicator || (parent.Kind != ast.KindModuleDeclaration && parent.Kind != ast.KindImportType)
+	if ast.IsStringLiteral(input) && tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
+		specifier := tspath.ToModuleSpecifier(input.Text())
+		rewrites := tx.host.ContentMapperExtensionRewrites()
+		caseSensitivity := tx.host.CaseSensitivity()
+		if !specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
+			return input
+		}
+		if rewritten, ok := specifier.RewriteExtension(rewrites, caseSensitivity); ok {
+			result := tx.Factory().NewStringLiteral(rewritten.AsString(), input.AsStringLiteral().TokenFlags)
+			tx.EmitContext().SetOriginal(result, input)
+			tx.EmitContext().AssignCommentAndSourceMapRanges(result, input)
+			return result
+		}
+	}
 	return input
 }
 
@@ -1791,12 +1806,17 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 
 func (tx *DeclarationTransformer) transformTypeAliasDeclaration(input *ast.TypeAliasDeclaration) *ast.Node {
 	tx.needsDeclare = false
+	t := tx.Visitor().Visit(input.Type)
+	if t == nil {
+		// stripInternal can elide an @internal type RHS; fall back like index signatures
+		t = tx.Factory().NewKeywordTypeNode(ast.KindAnyKeyword)
+	}
 	return tx.Factory().UpdateTypeAliasDeclaration(
 		input,
 		tx.ensureModifiers(input.AsNode()),
 		input.Name(),
 		tx.Visitor().VisitNodes(input.TypeParameters),
-		tx.Visitor().Visit(input.Type),
+		t,
 	)
 }
 
@@ -2007,7 +2027,7 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 
 	members := tx.buildClassMembers(input.AsNode(), extraMembers...)
 
-	extendsClause := getEffectiveBaseTypeNode(input.AsNode())
+	extendsClause := ast.GetClassExtendsHeritageElement(input.AsNode())
 
 	if extendsClause != nil && !ast.IsEntityNameExpression(extendsClause.AsExpressionWithTypeArguments().Expression) && extendsClause.AsExpressionWithTypeArguments().Expression.Kind != ast.KindNullKeyword {
 		tx.tracker.ReportInferenceFallback(extendsClause.AsExpressionWithTypeArguments().Expression) // Add an isolated declarations error on this extends clause
@@ -2118,9 +2138,13 @@ caseBlock:
 			}
 		}
 
-		var mods *ast.ModifierList
+		modifierFlags := tx.ensureModifierFlags(node)
 		if isStatic {
-			mods = tx.Factory().NewModifierList([]*ast.Node{tx.Factory().NewModifier(ast.KindStaticKeyword)})
+			modifierFlags |= ast.ModifierFlagsStatic
+		}
+		var mods *ast.ModifierList
+		if modifierFlags != ast.ModifierFlagsNone {
+			mods = tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier))
 		}
 		if ast.HasDynamicName(node) {
 			if !transformers.IsSimpleInlineableExpression(name) {

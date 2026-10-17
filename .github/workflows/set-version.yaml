@@ -68,7 +68,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
       - uses: ./.github/actions/setup-go
@@ -110,7 +110,6 @@ jobs:
           PACKAGE_VERSION: ${{ inputs.package_version }}
         run: |
           set -euo pipefail
-          git diff --check
           mapfile -t changedFiles < <(git diff --name-only)
           expectedFiles=("Herebyfile.mjs" "tsc/internal/core/version.go")
           for changedFile in "${changedFiles[@]}"; do
@@ -125,11 +124,13 @@ jobs:
           git config core.hooksPath /dev/null
           git commit -m "Bump version to $PACKAGE_VERSION"
       - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        if: ${{ !cancelled() }}
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       - name: Create GitHub App token
+        if: ${{ !cancelled() }}
         id: app-token
         uses: microsoft/create-github-app-token-via-key-vault@5ba0d436e9c3cac52feff4d1f2f66f9698ce4a2d # v1
         with:
@@ -138,6 +139,7 @@ jobs:
           owner: microsoft
           repositories: TypeScript
           permission-contents: write
+          permission-issues: write
       - name: Configure git for GitHub App token
         if: steps.configure.outputs.changed == 'true'
         env:

@@ -9057,7 +9057,7 @@ func (s *ProfileResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 
 // Parameters for the initializeAPISession request.
 type InitializeAPISessionParams struct {
-	// Optional path to use for the named pipe or Unix domain socket. If not provided, a unique path will be generated.
+	// Optional named pipe path on Windows. On Unix, the path must not exist and will be created as a private directory containing a socket named 'socket'. If not provided, a unique path will be generated.
 	Pipe *string `json:"pipe,omitzero"`
 }
 
@@ -9129,6 +9129,9 @@ type ContentMapperManifest struct {
 
 	// Whether the mapper uses project-scoped dynamic configuration.
 	DynamicConfig *bool `json:"dynamicConfig,omitzero"`
+
+	// Default source-to-runtime output extension mappings.
+	OutputExtensions *map[string]string `json:"outputExtensions,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*ContentMapperManifest)(nil)

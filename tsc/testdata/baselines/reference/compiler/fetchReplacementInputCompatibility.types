@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/fetchReplacementInputCompatibility.ts] ////
+
+=== fetchReplacementInputCompatibility.ts ===
+declare const fetchReplacement: (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
+>fetchReplacement : (input: string | URL | Request, init?: RequestInit) => Promise<Response>
+>input : string | Request | URL
+>init : RequestInit | undefined
+
+const replacement: typeof fetch = fetchReplacement;
+>replacement : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+>fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+>fetchReplacement : (input: string | URL | Request, init?: RequestInit) => Promise<Response>
+
+declare const input: Parameters<typeof fetch>[0];
+>input : URL | RequestInfo
+>fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+
+fetchReplacement(input);
+>fetchReplacement(input) : Promise<Response>
+>fetchReplacement : (input: string | URL | Request, init?: RequestInit) => Promise<Response>
+>input : URL | RequestInfo
+

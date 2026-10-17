@@ -1,0 +1,18 @@
+/main.mts(1,23): error TS2307: Cannot find module 'engine' or its corresponding type declarations.
+/main.mts(2,35): error TS2307: Cannot find module 'engine' or its corresponding type declarations.
+
+
+==== /main.mts (2 errors) ====
+    import { value } from "engine";
+                          ~~~~~~~~
+!!! error TS2307: Cannot find module 'engine' or its corresponding type declarations.
+    export { default as engine } from "engine";
+                                      ~~~~~~~~
+!!! error TS2307: Cannot find module 'engine' or its corresponding type declarations.
+    
+==== /node_modules/@types/runtime/index.d.ts (0 errors) ====
+    declare module "engine" {
+        export const value: number;
+        export default function read(): void;
+    }
+    

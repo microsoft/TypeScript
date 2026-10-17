@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/objectFromEntriesBrandedTemplateKeys.ts] ////
+
+=== objectFromEntriesBrandedTemplateKeys.ts ===
+type FeatureId = string & { feature: true };
+>FeatureId : FeatureId
+>feature : true
+>true : true
+
+declare const featureIds: FeatureId[];
+>featureIds : FeatureId[]
+
+const options = Object.fromEntries(featureIds.map(id => [`feature:${id}`, true]));
+>options : { [k: string]: boolean; }
+>Object.fromEntries(featureIds.map(id => [`feature:${id}`, true])) : { [k: string]: boolean; }
+>Object.fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
+>Object : ObjectConstructor
+>fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
+>featureIds.map(id => [`feature:${id}`, true]) : [string, boolean][]
+>featureIds.map : <U>(callbackfn: (value: FeatureId, index: number, array: FeatureId[]) => U, thisArg?: any) => U[]
+>featureIds : FeatureId[]
+>map : <U>(callbackfn: (value: FeatureId, index: number, array: FeatureId[]) => U, thisArg?: any) => U[]
+>id => [`feature:${id}`, true] : (id: FeatureId) => [string, boolean]
+>id : FeatureId
+>[`feature:${id}`, true] : [string, true]
+>`feature:${id}` : string
+>id : FeatureId
+>true : true
+
+declare const featureName: string;
+>featureName : string
+
+options[`feature:${featureName}`];
+>options[`feature:${featureName}`] : boolean
+>options : { [k: string]: boolean; }
+>`feature:${featureName}` : `feature:${string}`
+>featureName : string
+
+featureIds.filter(id => options["feature:" + id]);
+>featureIds.filter(id => options["feature:" + id]) : FeatureId[]
+>featureIds.filter : { <S extends FeatureId>(predicate: (value: FeatureId, index: number, array: FeatureId[]) => value is S, thisArg?: any): S[]; (predicate: (value: FeatureId, index: number, array: FeatureId[]) => unknown, thisArg?: any): FeatureId[]; }
+>featureIds : FeatureId[]
+>filter : { <S extends FeatureId>(predicate: (value: FeatureId, index: number, array: FeatureId[]) => value is S, thisArg?: any): S[]; (predicate: (value: FeatureId, index: number, array: FeatureId[]) => unknown, thisArg?: any): FeatureId[]; }
+>id => options["feature:" + id] : (id: FeatureId) => boolean
+>id : FeatureId
+>options["feature:" + id] : boolean
+>options : { [k: string]: boolean; }
+>"feature:" + id : string
+>"feature:" : "feature:"
+>id : FeatureId
+
+for (const [from, to] of Object.entries({ oldFeature: "newFeature" })) {
+>from : string
+>to : string
+>Object.entries({ oldFeature: "newFeature" }) : [string, string][]
+>Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>{ oldFeature: "newFeature" } : { oldFeature: string; }
+>oldFeature : string
+>"newFeature" : "newFeature"
+
+    if (typeof options[`feature:${from}`] === "boolean") {
+>typeof options[`feature:${from}`] === "boolean" : boolean
+>typeof options[`feature:${from}`] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>options[`feature:${from}`] : boolean
+>options : { [k: string]: boolean; }
+>`feature:${from}` : `feature:${string}`
+>from : string
+>"boolean" : "boolean"
+
+        options[`feature:${to}`] = options[`feature:${from}`];
+>options[`feature:${to}`] = options[`feature:${from}`] : boolean
+>options[`feature:${to}`] : boolean
+>options : { [k: string]: boolean; }
+>`feature:${to}` : `feature:${string}`
+>to : string
+>options[`feature:${from}`] : boolean
+>options : { [k: string]: boolean; }
+>`feature:${from}` : `feature:${string}`
+>from : string
+    }
+}
+
