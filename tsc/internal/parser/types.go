@@ -5,10 +5,12 @@ package parser
 type ParseFlags uint32
 
 const (
-	ParseFlagsNone                   ParseFlags = 0
-	ParseFlagsYield                  ParseFlags = 1 << 0
-	ParseFlagsAwait                  ParseFlags = 1 << 1
-	ParseFlagsType                   ParseFlags = 1 << 2
-	ParseFlagsIgnoreMissingOpenBrace ParseFlags = 1 << 4
-	ParseFlagsJSDoc                  ParseFlags = 1 << 5
+	ParseFlagsNone                     ParseFlags = 0
+	ParseFlagsYield                    ParseFlags = 1 << 0
+	ParseFlagsAwait                    ParseFlags = 1 << 1
+	ParseFlagsType                     ParseFlags = 1 << 2
+	ParseFlagsIgnoreMissingOpenBrace   ParseFlags = 1 << 4
+	ParseFlagsJSDoc                    ParseFlags = 1 << 5
+	ParseFlagsDisallowArrowReturnType  ParseFlags = 1 << 6
+	ParseFlagsAllowAmbiguousAsyncArrow ParseFlags = 1 << 7
 )

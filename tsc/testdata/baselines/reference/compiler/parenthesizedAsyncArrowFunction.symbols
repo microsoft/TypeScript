@@ -8,3 +8,242 @@ let foo = (async bar => bar);
 >bar : Symbol(bar, Decl(parenthesizedAsyncArrowFunction.ts, 2, 16))
 >bar : Symbol(bar, Decl(parenthesizedAsyncArrowFunction.ts, 2, 16))
 
+const a = true;
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+
+const b = 1;
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+
+const c = [b];
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 6, 5))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+
+function async(...c: number[]): number {
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 8, 15))
+
+    return b;
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+}
+
+const f1 = a ? async() : 0;
+>f1 : Symbol(f1, Decl(parenthesizedAsyncArrowFunction.ts, 12, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+
+const f2 = a ? async() : x => x;
+>f2 : Symbol(f2, Decl(parenthesizedAsyncArrowFunction.ts, 13, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 13, 24))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 13, 24))
+
+const f3 = a ? a ? async() : 0 : b;
+>f3 : Symbol(f3, Decl(parenthesizedAsyncArrowFunction.ts, 14, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+
+const f4 = a ? x => async() : x => x;
+>f4 : Symbol(f4, Decl(parenthesizedAsyncArrowFunction.ts, 15, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 15, 14))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 15, 29))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 15, 29))
+
+const f5 = a ? async (): Promise<number> => b : () => b;
+>f5 : Symbol(f5, Decl(parenthesizedAsyncArrowFunction.ts, 16, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+
+const f6 = a ? async (): Promise<number> => { return b; } : () => b;
+>f6 : Symbol(f6, Decl(parenthesizedAsyncArrowFunction.ts, 17, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+
+const f7 = a ? async (): Promise<number> => a ? async() : 0 : () => b;
+>f7 : Symbol(f7, Decl(parenthesizedAsyncArrowFunction.ts, 18, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+
+const f8 = a ? (): number => b : () => b;
+>f8 : Symbol(f8, Decl(parenthesizedAsyncArrowFunction.ts, 19, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+
+const f9 = a ? async(...c) : 0;
+>f9 : Symbol(f9, Decl(parenthesizedAsyncArrowFunction.ts, 21, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 6, 5))
+
+const f10 = a ? async(...c) : x => x;
+>f10 : Symbol(f10, Decl(parenthesizedAsyncArrowFunction.ts, 22, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 6, 5))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 22, 29))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 22, 29))
+
+const f11 = a ? async (...c: number[]): Promise<number> => c.length : () => 0;
+>f11 : Symbol(f11, Decl(parenthesizedAsyncArrowFunction.ts, 23, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 23, 23))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>c.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 23, 23))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+const f12 = a ? async() : x => async (...c): Promise<number> => c.length;
+>f12 : Symbol(f12, Decl(parenthesizedAsyncArrowFunction.ts, 24, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 24, 25))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 24, 38))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>c.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 24, 38))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+type T = Promise<number>;
+>T : Symbol(T, Decl(parenthesizedAsyncArrowFunction.ts, 24, 73))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const f13 = a ? async() : x => async (): Promise<number> => b;
+>f13 : Symbol(f13, Decl(parenthesizedAsyncArrowFunction.ts, 27, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 27, 25))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+
+const f14 = a ? async() : x => async (): T => 0;
+>f14 : Symbol(f14, Decl(parenthesizedAsyncArrowFunction.ts, 28, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 28, 25))
+>T : Symbol(T, Decl(parenthesizedAsyncArrowFunction.ts, 24, 73))
+
+const f15 = a ? (b) : x => async (): T => 0;
+>f15 : Symbol(f15, Decl(parenthesizedAsyncArrowFunction.ts, 29, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 29, 21))
+>T : Symbol(T, Decl(parenthesizedAsyncArrowFunction.ts, 24, 73))
+
+const f16 = a ? async(...c) : x => async (): T => 0;
+>f16 : Symbol(f16, Decl(parenthesizedAsyncArrowFunction.ts, 30, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 6, 5))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 30, 29))
+>T : Symbol(T, Decl(parenthesizedAsyncArrowFunction.ts, 24, 73))
+
+const f17 = a ? async() : x => (y): number => y;
+>f17 : Symbol(f17, Decl(parenthesizedAsyncArrowFunction.ts, 31, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 31, 25))
+>y : Symbol(y, Decl(parenthesizedAsyncArrowFunction.ts, 31, 32))
+>y : Symbol(y, Decl(parenthesizedAsyncArrowFunction.ts, 31, 32))
+
+const f18 = a ? async() : x => async <U>(): T => 0;
+>f18 : Symbol(f18, Decl(parenthesizedAsyncArrowFunction.ts, 32, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 32, 25))
+>U : Symbol(U, Decl(parenthesizedAsyncArrowFunction.ts, 32, 38))
+>T : Symbol(T, Decl(parenthesizedAsyncArrowFunction.ts, 24, 73))
+
+const f19 = a ? async(...c) : x => (y): number => y;
+>f19 : Symbol(f19, Decl(parenthesizedAsyncArrowFunction.ts, 33, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 6, 5))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 33, 29))
+>y : Symbol(y, Decl(parenthesizedAsyncArrowFunction.ts, 33, 36))
+>y : Symbol(y, Decl(parenthesizedAsyncArrowFunction.ts, 33, 36))
+
+const f20 = a ? async(...c) : x => async <U>(): T => 0;
+>f20 : Symbol(f20, Decl(parenthesizedAsyncArrowFunction.ts, 34, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 6, 5))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 34, 29))
+>U : Symbol(U, Decl(parenthesizedAsyncArrowFunction.ts, 34, 42))
+>T : Symbol(T, Decl(parenthesizedAsyncArrowFunction.ts, 24, 73))
+
+const f21 = a ? (x): number => (b): T => 0;
+>f21 : Symbol(f21, Decl(parenthesizedAsyncArrowFunction.ts, 35, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 35, 17))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+>T : Symbol(T, Decl(parenthesizedAsyncArrowFunction.ts, 35, 35))
+
+const f22 = a ? async <U>(): Promise<number> => (b): T => 0;
+>f22 : Symbol(f22, Decl(parenthesizedAsyncArrowFunction.ts, 36, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>U : Symbol(U, Decl(parenthesizedAsyncArrowFunction.ts, 36, 23))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>b : Symbol(b, Decl(parenthesizedAsyncArrowFunction.ts, 5, 5))
+>T : Symbol(T, Decl(parenthesizedAsyncArrowFunction.ts, 36, 52))
+
+const f23 = a ? async () => async() : x => x;
+>f23 : Symbol(f23, Decl(parenthesizedAsyncArrowFunction.ts, 37, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 37, 37))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 37, 37))
+
+const f24 = a ? async (...c) => async() : x => x;
+>f24 : Symbol(f24, Decl(parenthesizedAsyncArrowFunction.ts, 38, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 38, 23))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 38, 41))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 38, 41))
+
+const f25 = a ? () => async() : x => x;
+>f25 : Symbol(f25, Decl(parenthesizedAsyncArrowFunction.ts, 39, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 39, 31))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 39, 31))
+
+const f26 = a ? async (c: number): Promise<number> => async() : x => x;
+>f26 : Symbol(f26, Decl(parenthesizedAsyncArrowFunction.ts, 40, 5))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 40, 23))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 40, 63))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 40, 63))
+
+function* g() {
+>g : Symbol(g, Decl(parenthesizedAsyncArrowFunction.ts, 40, 71))
+
+    const f1 = a ? yield async(...c) : 0;
+>f1 : Symbol(f1, Decl(parenthesizedAsyncArrowFunction.ts, 43, 9))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 6, 5))
+
+    const f2 = a ? yield async(...c) : x => x;
+>f2 : Symbol(f2, Decl(parenthesizedAsyncArrowFunction.ts, 44, 9))
+>a : Symbol(a, Decl(parenthesizedAsyncArrowFunction.ts, 4, 5))
+>async : Symbol(async, Decl(parenthesizedAsyncArrowFunction.ts, 6, 14))
+>c : Symbol(c, Decl(parenthesizedAsyncArrowFunction.ts, 6, 5))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 44, 38))
+>x : Symbol(x, Decl(parenthesizedAsyncArrowFunction.ts, 44, 38))
+}
+

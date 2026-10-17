@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/parenthesizedAsyncArrowFunctionJs.ts] ////
+
+=== a.js ===
+const a = true;
+>a : true
+>true : true
+
+const b = 1;
+>b : 1
+>1 : 1
+
+const c = [b];
+>c : number[]
+>[b] : number[]
+>b : 1
+
+function async(...c) {
+>async : (...c: any[]) => number
+>c : any[]
+
+    return b;
+>b : 1
+}
+
+const f1 = a ? async(...c) : 0;
+>f1 : number
+>a ? async(...c) : 0 : number
+>a : true
+>async(...c) : number
+>async : (...c: any[]) => number
+>...c : number
+>c : number[]
+>0 : 0
+
+const f2 = a ? async(...c) : x => x;
+>f2 : number | ((x: any) => any)
+>a ? async(...c) : x => x : number | ((x: any) => any)
+>a : true
+>async(...c) : number
+>async : (...c: any[]) => number
+>...c : number
+>c : number[]
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+const f3 = a ? async () => async() : x => x;
+>f3 : (x: any) => any
+>a ? async () => async() : x => x : (x: any) => any
+>a : true
+>async () => async() : () => Promise<number>
+>async() : number
+>async : (...c: any[]) => number
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+const f4 = a ? async (...c) => async() : x => x;
+>f4 : ((...c: any[]) => Promise<number>) | ((x: any) => any)
+>a ? async (...c) => async() : x => x : ((...c: any[]) => Promise<number>) | ((x: any) => any)
+>a : true
+>async (...c) => async() : (...c: any[]) => Promise<number>
+>c : any[]
+>async() : number
+>async : (...c: any[]) => number
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+const f5 = a ? () => async() : x => x;
+>f5 : (x: any) => any
+>a ? () => async() : x => x : (x: any) => any
+>a : true
+>() => async() : () => number
+>async() : number
+>async : (...c: any[]) => number
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+function* g() {
+>g : () => Generator<number, void, unknown>
+
+    const f1 = a ? yield async(...c) : 0;
+>f1 : any
+>a ? yield async(...c) : 0 : any
+>a : true
+>yield async(...c) : any
+>async(...c) : number
+>async : (...c: any[]) => number
+>...c : number
+>c : number[]
+>0 : 0
+
+    const f2 = a ? yield async(...c) : x => x;
+>f2 : any
+>a ? yield async(...c) : x => x : any
+>a : true
+>yield async(...c) : any
+>async(...c) : number
+>async : (...c: any[]) => number
+>...c : number
+>c : number[]
+>x => x : (x: any) => any
+>x : any
+>x : any
+}
+

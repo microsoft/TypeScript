@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/parenthesizedAsyncArrowFunctionJs.ts] ////
+
+=== a.js ===
+const a = true;
+>a : Symbol(a, Decl(a.js, 0, 5))
+
+const b = 1;
+>b : Symbol(b, Decl(a.js, 1, 5))
+
+const c = [b];
+>c : Symbol(c, Decl(a.js, 2, 5))
+>b : Symbol(b, Decl(a.js, 1, 5))
+
+function async(...c) {
+>async : Symbol(async, Decl(a.js, 2, 14))
+>c : Symbol(c, Decl(a.js, 4, 15))
+
+    return b;
+>b : Symbol(b, Decl(a.js, 1, 5))
+}
+
+const f1 = a ? async(...c) : 0;
+>f1 : Symbol(f1, Decl(a.js, 8, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>c : Symbol(c, Decl(a.js, 2, 5))
+
+const f2 = a ? async(...c) : x => x;
+>f2 : Symbol(f2, Decl(a.js, 9, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>c : Symbol(c, Decl(a.js, 2, 5))
+>x : Symbol(x, Decl(a.js, 9, 28))
+>x : Symbol(x, Decl(a.js, 9, 28))
+
+const f3 = a ? async () => async() : x => x;
+>f3 : Symbol(f3, Decl(a.js, 10, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>x : Symbol(x, Decl(a.js, 10, 36))
+>x : Symbol(x, Decl(a.js, 10, 36))
+
+const f4 = a ? async (...c) => async() : x => x;
+>f4 : Symbol(f4, Decl(a.js, 11, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>c : Symbol(c, Decl(a.js, 11, 22))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>x : Symbol(x, Decl(a.js, 11, 40))
+>x : Symbol(x, Decl(a.js, 11, 40))
+
+const f5 = a ? () => async() : x => x;
+>f5 : Symbol(f5, Decl(a.js, 12, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>x : Symbol(x, Decl(a.js, 12, 30))
+>x : Symbol(x, Decl(a.js, 12, 30))
+
+function* g() {
+>g : Symbol(g, Decl(a.js, 12, 38))
+
+    const f1 = a ? yield async(...c) : 0;
+>f1 : Symbol(f1, Decl(a.js, 15, 9))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>c : Symbol(c, Decl(a.js, 2, 5))
+
+    const f2 = a ? yield async(...c) : x => x;
+>f2 : Symbol(f2, Decl(a.js, 16, 9))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>c : Symbol(c, Decl(a.js, 2, 5))
+>x : Symbol(x, Decl(a.js, 16, 38))
+>x : Symbol(x, Decl(a.js, 16, 38))
+}
+
