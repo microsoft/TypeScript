@@ -22624,16 +22624,15 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 		return c.errorType
 	}
 	index := c.findActiveMapper(m)
+	var key CacheHashKey
 	if index == -1 {
+		// A newly pushed mapper has an empty cache, and the result is not cached below.
 		c.pushActiveMapper(m)
-	}
-	var b keyBuilder
-	b.writeType(t)
-	b.writeAlias(alias)
-	key := b.hash()
-	cache := c.activeTypeMappersCaches[core.IfElse(index != -1, index, len(c.activeTypeMappersCaches)-1)]
-	if cachedType, ok := cache[key]; ok {
-		return cachedType
+	} else {
+		key = getActiveMapperCacheKey(t, alias)
+		if cachedType, ok := c.activeTypeMappersCaches[index][key]; ok {
+			return cachedType
+		}
 	}
 	c.TotalInstantiationCount++
 	c.instantiationCount++
@@ -22642,11 +22641,23 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	if index == -1 {
 		c.popActiveMapper()
 	} else {
-		cache[key] = result
+		c.activeTypeMappersCaches[index][key] = result
 	}
 	c.instantiationStack[len(c.instantiationStack)-1] = nil
 	c.instantiationStack = c.instantiationStack[:len(c.instantiationStack)-1]
 	return result
+}
+
+// Without an alias the key is just the type ID, which avoids hashing. Hashed keys have
+// a nonzero high half with overwhelming probability, so the two kinds do not collide.
+func getActiveMapperCacheKey(t *Type, alias *TypeAlias) CacheHashKey {
+	if alias == nil {
+		return CacheHashKey{Lo: uint64(t.id)}
+	}
+	var b keyBuilder
+	b.writeType(t)
+	b.writeAlias(alias)
+	return b.hash()
 }
 
 func (c *Checker) getCircularTypeNames() []string {
