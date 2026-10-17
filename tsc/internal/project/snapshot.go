@@ -578,6 +578,11 @@ func (s *Snapshot) Clone(
 		apiError = projectCollectionBuilder.HandleAPIRequest(change.apiRequest, logger.Fork("HandleAPIRequest"))
 	}
 
+	if change.reason == UpdateReasonIdleCleanDiskCache {
+		var retain collections.Set[tspath.PathKey]
+		projectCollectionBuilder.cleanupConfiguredProjects(&retain, logger.Fork("cleanupConfiguredProjects"))
+	}
+
 	for _, uri := range change.Documents {
 		projectCollectionBuilder.DidRequestFile(uri, false /*configuredProjectsOnly*/, logger.Fork("DidRequestFile"))
 	}
