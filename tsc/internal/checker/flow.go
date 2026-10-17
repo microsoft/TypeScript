@@ -43,6 +43,7 @@ type FlowState struct {
 	initialType     *Type
 	flowContainer   *ast.Node
 	refKey          CacheHashKey
+	refNameHash     uint32 // FlowIdentifierHash of an identifier reference, else 0
 	depth           int
 	sharedFlowStart int
 	reduceLabels    []*ast.FlowReduceLabelData
@@ -94,6 +95,10 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 	f.initialType = core.Coalesce(initialType, declaredType)
 	f.flowContainer = flowContainer
 	f.sharedFlowStart = len(c.sharedFlows)
+	f.refNameHash = 0
+	if ast.IsIdentifier(reference) && !ast.IsThisInTypeQuery(reference) {
+		f.refNameHash = ast.FlowIdentifierHash(reference.Text())
+	}
 	c.flowInvocationCount++
 	evolvedType := c.getTypeAtFlowNode(f, flowNode).t
 	c.sharedFlows = c.sharedFlows[:f.sharedFlowStart]
@@ -144,6 +149,11 @@ func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 		var t FlowType
 		switch {
 		case flags&ast.FlowFlagsAssignment != 0:
+			if f.refNameHash != 0 && flow.AssignmentTarget != ast.FlowAssignmentTargetUnknown && flow.AssignmentTarget != f.refNameHash {
+				// The assignment targets a different name, so it cannot affect this reference.
+				flow = flow.Antecedent
+				continue
+			}
 			t = c.getTypeAtFlowAssignment(f, flow)
 			if t.isNil() {
 				flow = flow.Antecedent

@@ -1,6 +1,9 @@
 package ast
 
-import "unsafe"
+import (
+	"hash/maphash"
+	"unsafe"
+)
 
 // FlowFlags
 
@@ -27,10 +30,69 @@ const (
 // FlowNode
 
 type FlowNode struct {
-	Flags       FlowFlags
-	Node        *Node     // Associated AST node
-	Antecedent  *FlowNode // Antecedent for all but FlowLabel
-	Antecedents *FlowList // Linked list of antecedents for FlowLabel
+	Flags FlowFlags
+	// For assignment nodes, describes the identifier the assignment may target
+	// (see FlowAssignmentTargetHash). Fits in padding after Flags.
+	AssignmentTarget uint32
+	Node             *Node     // Associated AST node
+	Antecedent       *FlowNode // Antecedent for all but FlowLabel
+	Antecedents      *FlowList // Linked list of antecedents for FlowLabel
+}
+
+const (
+	// The assignment must be checked against every reference.
+	FlowAssignmentTargetUnknown uint32 = 0
+	// The assignment cannot target an identifier reference.
+	FlowAssignmentTargetNotIdentifier uint32 = 1
+)
+
+var flowIdentifierHashSeed = maphash.MakeSeed()
+
+// FlowIdentifierHash hashes an identifier name for comparison with
+// FlowNode.AssignmentTarget. The result is never one of the reserved values.
+func FlowIdentifierHash(name string) uint32 {
+	h := uint32(maphash.String(flowIdentifierHashSeed, name))
+	if h <= FlowAssignmentTargetNotIdentifier {
+		h += 2
+	}
+	return h
+}
+
+// FlowAssignmentTargetHash summarizes which identifier references an assignment
+// flow node can affect, so that walks for an identifier can skip assignments to
+// other names without visiting their syntax. It mirrors the checker's matching of
+// identifier references against assignment targets.
+func FlowAssignmentTargetHash(target *Node) uint32 {
+	for {
+		switch target.Kind {
+		case KindParenthesizedExpression, KindNonNullExpression:
+			target = target.Expression()
+			continue
+		case KindBinaryExpression:
+			bin := target.AsBinaryExpression()
+			switch {
+			case IsAssignmentExpression(target, false):
+				target = bin.Left
+				continue
+			case bin.OperatorToken.Kind == KindCommaToken:
+				target = bin.Right
+				continue
+			}
+			return FlowAssignmentTargetNotIdentifier
+		case KindIdentifier:
+			return FlowIdentifierHash(target.AsIdentifier().Text)
+		case KindVariableDeclaration, KindBindingElement:
+			// A for-in variable also narrows the iterated expression.
+			if IsVariableDeclaration(target) && target.Parent != nil && target.Parent.Parent != nil && IsForInStatement(target.Parent.Parent) {
+				return FlowAssignmentTargetUnknown
+			}
+			if name := target.Name(); name != nil && IsIdentifier(name) {
+				return FlowIdentifierHash(name.AsIdentifier().Text)
+			}
+			return FlowAssignmentTargetNotIdentifier
+		}
+		return FlowAssignmentTargetNotIdentifier
+	}
 }
 
 type FlowList struct {
