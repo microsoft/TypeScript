@@ -692,7 +692,7 @@ type Checker struct {
 	structuredTypeExtraArena                    core.Arena[structuredTypeExtra]
 	freeTypeSets                                *temporaryTypeSet
 	freePropertyCounts                          *temporaryPropertyCounts
-	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
+	mergedSymbols                               symbolLinkStore[*ast.Symbol]
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
 	factory                                     ast.NodeFactory
 	nodeLinks                                   core.LinkStore[*ast.Node, NodeLinks]
@@ -1003,7 +1003,6 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
 	c.intersectionTypes = make(map[CacheHashKey]*Type)
 	c.propertiesTypes = make(map[PropertiesTypesKey]*Type)
-	c.mergedSymbols = make(map[*ast.Symbol]*ast.Symbol)
 	c.patternForType = make(map[*Type]*ast.Node)
 	c.contextFreeTypes = make(map[*ast.Node]*Type)
 	c.anyType = c.newIntrinsicType(TypeFlagsAny, "any")
@@ -14624,9 +14623,8 @@ func (c *Checker) cloneSymbol(symbol *ast.Symbol) *ast.Symbol {
 
 func (c *Checker) getMergedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	if symbol != nil {
-		merged := c.mergedSymbols[symbol]
-		if merged != nil {
-			return merged
+		if merged := c.mergedSymbols.TryGet(symbol); merged != nil && *merged != nil {
+			return *merged
 		}
 	}
 	return symbol
@@ -14640,7 +14638,7 @@ func (c *Checker) getParentOfSymbol(symbol *ast.Symbol) *ast.Symbol {
 }
 
 func (c *Checker) recordMergedSymbol(target *ast.Symbol, source *ast.Symbol) {
-	c.mergedSymbols[source] = target
+	*c.mergedSymbols.Get(source) = target
 }
 
 func (c *Checker) getResolvedTarget(symbol *ast.Symbol) *ast.Symbol {
