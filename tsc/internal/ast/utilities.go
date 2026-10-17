@@ -56,7 +56,8 @@ type NodeIdGenerator struct {
 }
 
 func (a *NodeIdGenerator) GetNodeId(node Node) NodeId {
-	id := node.hdr().id.Load()
+	h := (*nodeBaseData)(node.p)
+	id := h.id.Load()
 	if id == 0 {
 		if a.nextId == a.lastId {
 			a.nextId = nextNodeBlockId.Add(BlockIdSize) - BlockIdSize
@@ -64,8 +65,8 @@ func (a *NodeIdGenerator) GetNodeId(node Node) NodeId {
 		}
 		id = a.nextId + BlockIdOffset
 		a.nextId++
-		if !node.hdr().id.CompareAndSwap(0, id) {
-			id = node.hdr().id.Load()
+		if !h.id.CompareAndSwap(0, id) {
+			id = h.id.Load()
 		}
 	}
 	return NodeId(id)
