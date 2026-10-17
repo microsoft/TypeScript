@@ -279,77 +279,8 @@ func (n Node) Text() string {
 }
 
 func (n Node) Expression() Node {
-	switch n.Kind() {
-	case KindPropertyAccessExpression:
-		return n.AsPropertyAccessExpression().Expression()
-	case KindElementAccessExpression:
-		return n.AsElementAccessExpression().Expression()
-	case KindParenthesizedExpression:
-		return n.AsParenthesizedExpression().Expression()
-	case KindCallExpression:
-		return n.AsCallExpression().Expression()
-	case KindNewExpression:
-		return n.AsNewExpression().Expression()
-	case KindExpressionWithTypeArguments:
-		return n.AsExpressionWithTypeArguments().Expression()
-	case KindComputedPropertyName:
-		return n.AsComputedPropertyName().Expression()
-	case KindNonNullExpression:
-		return n.AsNonNullExpression().Expression()
-	case KindTypeAssertionExpression:
-		return n.AsTypeAssertion().Expression()
-	case KindAsExpression:
-		return n.AsAsExpression().Expression()
-	case KindSatisfiesExpression:
-		return n.AsSatisfiesExpression().Expression()
-	case KindTypeOfExpression:
-		return n.AsTypeOfExpression().Expression()
-	case KindSpreadAssignment:
-		return n.AsSpreadAssignment().Expression()
-	case KindSpreadElement:
-		return n.AsSpreadElement().Expression()
-	case KindTemplateSpan:
-		return n.AsTemplateSpan().Expression()
-	case KindDeleteExpression:
-		return n.AsDeleteExpression().Expression()
-	case KindVoidExpression:
-		return n.AsVoidExpression().Expression()
-	case KindAwaitExpression:
-		return n.AsAwaitExpression().Expression()
-	case KindYieldExpression:
-		return n.AsYieldExpression().Expression()
-	case KindPartiallyEmittedExpression:
-		return n.AsPartiallyEmittedExpression().Expression()
-	case KindIfStatement:
-		return n.AsIfStatement().Expression()
-	case KindDoStatement:
-		return n.AsDoStatement().Expression()
-	case KindWhileStatement:
-		return n.AsWhileStatement().Expression()
-	case KindWithStatement:
-		return n.AsWithStatement().Expression()
-	case KindForInStatement, KindForOfStatement:
-		return n.AsForInOrOfStatement().Expression()
-	case KindSwitchStatement:
-		return n.AsSwitchStatement().Expression()
-	case KindCaseClause:
-		return n.AsCaseOrDefaultClause().Expression()
-	case KindExpressionStatement:
-		return n.AsExpressionStatement().Expression()
-	case KindReturnStatement:
-		return n.AsReturnStatement().Expression()
-	case KindThrowStatement:
-		return n.AsThrowStatement().Expression()
-	case KindExternalModuleReference:
-		return n.AsExternalModuleReference().Expression()
-	case KindExportAssignment:
-		return n.AsExportAssignment().Expression()
-	case KindDecorator:
-		return n.AsDecorator().Expression()
-	case KindJsxExpression:
-		return n.AsJsxExpression().Expression()
-	case KindJsxSpreadAttribute:
-		return n.AsJsxSpreadAttribute().Expression()
+	if off := nodeExpressionOffsets[n.Kind()]; off != 0 {
+		return n.refAt(off)
 	}
 	panic("Unhandled case in Node.Expression: " + n.Kind().String())
 }
@@ -445,11 +376,8 @@ func (m MutableNode) SetExpression(expr Node) {
 }
 
 func (n Node) ArgumentList() NodeList {
-	switch n.Kind() {
-	case KindCallExpression:
-		return n.AsCallExpression().Arguments()
-	case KindNewExpression:
-		return n.AsNewExpression().Arguments()
+	if off := nodeArgumentsOffsets[n.Kind()]; off != 0 {
+		return n.listAt(off)
 	}
 	panic("Unhandled case in Node.Arguments: " + n.Kind().String())
 }
@@ -463,25 +391,8 @@ func (n Node) Arguments() []Node {
 }
 
 func (n Node) TypeArgumentList() NodeList {
-	switch n.Kind() {
-	case KindCallExpression:
-		return n.AsCallExpression().TypeArguments()
-	case KindNewExpression:
-		return n.AsNewExpression().TypeArguments()
-	case KindTaggedTemplateExpression:
-		return n.AsTaggedTemplateExpression().TypeArguments()
-	case KindTypeReference:
-		return n.AsTypeReferenceNode().TypeArguments()
-	case KindExpressionWithTypeArguments:
-		return n.AsExpressionWithTypeArguments().TypeArguments()
-	case KindImportType:
-		return n.AsImportTypeNode().TypeArguments()
-	case KindTypeQuery:
-		return n.AsTypeQueryNode().TypeArguments()
-	case KindJsxOpeningElement:
-		return n.AsJsxOpeningElement().TypeArguments()
-	case KindJsxSelfClosingElement:
-		return n.AsJsxSelfClosingElement().TypeArguments()
+	if off := nodeTypeArgumentsOffsets[n.Kind()]; off != 0 {
+		return n.listAt(off)
 	}
 	panic("Unhandled case in Node.TypeArguments")
 }
@@ -597,60 +508,14 @@ func (n Node) ModifierNodes() []Node {
 }
 
 func (n Node) Type() Node {
-	switch n.Kind() {
-	case KindVariableDeclaration:
-		return n.AsVariableDeclaration().Type()
-	case KindParameter:
-		return n.AsParameterDeclaration().Type()
-	case KindPropertySignature:
-		return n.AsPropertySignatureDeclaration().Type()
-	case KindPropertyDeclaration:
-		return n.AsPropertyDeclaration().Type()
-	case KindPropertyAssignment:
-		return n.AsPropertyAssignment().Type()
-	case KindShorthandPropertyAssignment:
-		return n.AsShorthandPropertyAssignment().Type()
-	case KindTypePredicate:
-		return n.AsTypePredicateNode().Type()
-	case KindParenthesizedType:
-		return n.AsParenthesizedTypeNode().Type()
-	case KindTypeOperator:
-		return n.AsTypeOperatorNode().Type()
-	case KindMappedType:
-		return n.AsMappedTypeNode().Type()
-	case KindTypeAssertionExpression:
-		return n.AsTypeAssertion().Type()
-	case KindAsExpression:
-		return n.AsAsExpression().Type()
-	case KindSatisfiesExpression:
-		return n.AsSatisfiesExpression().Type()
-	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
-		return n.AsTypeAliasDeclaration().Type()
-	case KindNamedTupleMember:
-		return n.AsNamedTupleMember().Type()
-	case KindOptionalType:
-		return n.AsOptionalTypeNode().Type()
-	case KindRestType:
-		return n.AsRestTypeNode().Type()
-	case KindTemplateLiteralTypeSpan:
-		return n.AsTemplateLiteralTypeSpan().Type()
-	case KindJSDocTypeExpression:
-		return n.AsJSDocTypeExpression().Type()
+	switch k := n.Kind(); k {
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
 		return n.AsJSDocParameterOrPropertyTag().TypeExpression()
-	case KindJSDocNullableType:
-		return n.AsJSDocNullableType().Type()
-	case KindJSDocNonNullableType:
-		return n.AsJSDocNonNullableType().Type()
-	case KindJSDocOptionalType:
-		return n.AsJSDocOptionalType().Type()
-	case KindExportAssignment:
-		return n.AsExportAssignment().Type()
-	case KindBinaryExpression:
-		return n.AsBinaryExpression().Type()
+	case KindJSDocVariadicType:
+		return Node{}
 	default:
-		if funcLike := n.FunctionLikeData(); !funcLike.IsNil() {
-			return funcLike.Type()
+		if off := nodeTypeOffsets[k]; off != 0 {
+			return n.refAt(off)
 		}
 	}
 	return Node{}
@@ -719,27 +584,8 @@ func (m MutableNode) SetType(t Node) {
 }
 
 func (n Node) Initializer() Node {
-	switch n.Kind() {
-	case KindVariableDeclaration:
-		return n.AsVariableDeclaration().Initializer()
-	case KindParameter:
-		return n.AsParameterDeclaration().Initializer()
-	case KindBindingElement:
-		return n.AsBindingElement().Initializer()
-	case KindPropertyDeclaration:
-		return n.AsPropertyDeclaration().Initializer()
-	case KindPropertySignature:
-		return n.AsPropertySignatureDeclaration().Initializer()
-	case KindPropertyAssignment:
-		return n.AsPropertyAssignment().Initializer()
-	case KindEnumMember:
-		return n.AsEnumMember().Initializer()
-	case KindForStatement:
-		return n.AsForStatement().Initializer()
-	case KindForInStatement, KindForOfStatement:
-		return n.AsForInOrOfStatement().Initializer()
-	case KindJsxAttribute:
-		return n.AsJsxAttribute().Initializer()
+	if off := nodeInitializerOffsets[n.Kind()]; off != 0 {
+		return n.refAt(off)
 	}
 	panic("Unhandled case in Node.Initializer")
 }
@@ -1038,39 +884,15 @@ func (n Node) Elements() []Node {
 }
 
 func (n Node) PostfixToken() Node {
-	switch n.Kind() {
-	case KindMethodDeclaration:
-		return n.AsMethodDeclaration().PostfixToken()
-	case KindShorthandPropertyAssignment:
-		return n.AsShorthandPropertyAssignment().PostfixToken()
-	case KindMethodSignature:
-		return n.AsMethodSignatureDeclaration().PostfixToken()
-	case KindPropertySignature:
-		return n.AsPropertySignatureDeclaration().PostfixToken()
-	case KindPropertyAssignment:
-		return n.AsPropertyAssignment().PostfixToken()
-	case KindPropertyDeclaration:
-		return n.AsPropertyDeclaration().PostfixToken()
-	case KindEnumMember:
-		return n.AsEnumMember().PostfixToken()
-	case KindGetAccessor:
-		return n.AsGetAccessorDeclaration().PostfixToken()
-	case KindSetAccessor:
-		return n.AsSetAccessorDeclaration().PostfixToken()
+	if off := nodePostfixTokenOffsets[n.Kind()]; off != 0 {
+		return n.refAt(off)
 	}
 	return Node{}
 }
 
 func (n Node) QuestionToken() TokenNode {
-	switch n.Kind() {
-	case KindParameter:
-		return n.AsParameterDeclaration().QuestionToken()
-	case KindConditionalExpression:
-		return n.AsConditionalExpression().QuestionToken()
-	case KindMappedType:
-		return n.AsMappedTypeNode().QuestionToken()
-	case KindNamedTupleMember:
-		return n.AsNamedTupleMember().QuestionToken()
+	if off := nodeQuestionTokenOffsets[n.Kind()]; off != 0 {
+		return n.refAt(off)
 	}
 	postfix := n.PostfixToken()
 	if !postfix.IsNil() && postfix.Kind() == KindQuestionToken {
@@ -1080,15 +902,8 @@ func (n Node) QuestionToken() TokenNode {
 }
 
 func (n Node) QuestionDotToken() Node {
-	switch n.Kind() {
-	case KindElementAccessExpression:
-		return n.AsElementAccessExpression().QuestionDotToken()
-	case KindPropertyAccessExpression:
-		return n.AsPropertyAccessExpression().QuestionDotToken()
-	case KindCallExpression:
-		return n.AsCallExpression().QuestionDotToken()
-	case KindTaggedTemplateExpression:
-		return n.AsTaggedTemplateExpression().QuestionDotToken()
+	if off := nodeQuestionDotTokenOffsets[n.Kind()]; off != 0 {
+		return n.refAt(off)
 	}
 	panic("Unhandled case in Node.QuestionDotToken: " + n.Kind().String())
 }

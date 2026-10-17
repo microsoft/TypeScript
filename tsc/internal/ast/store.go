@@ -130,6 +130,12 @@ func (n Node) deref(f *nodeRef) Node {
 	return n.store().far[uint32(r)>>1]
 }
 
+// refAt returns the node that the field at offset off of n's record refers
+// to.
+func (n Node) refAt(off uint8) Node {
+	return n.deref((*nodeRef)(unsafe.Add(n.rec(), off)))
+}
+
 // setRef makes the field f of n's record refer to v.
 func (n Node) setRef(f *nodeRef, v Node) {
 	setRef(n.chunk(), f, v)

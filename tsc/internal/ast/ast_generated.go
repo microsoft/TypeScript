@@ -18021,873 +18021,529 @@ func (n Node) propagateSubtreeFacts() SubtreeFacts {
 // Node accessor dispatch
 // ──────────────────────────────────────────────────────────────────────
 
-var nodeFlowNodeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindIdentifier:                 1,
-	KindQualifiedName:              2,
-	KindEmptyStatement:             3,
-	KindIfStatement:                4,
-	KindDoStatement:                5,
-	KindWhileStatement:             6,
-	KindForStatement:               7,
-	KindForInStatement:             8,
-	KindForOfStatement:             8,
-	KindBreakStatement:             9,
-	KindContinueStatement:          10,
-	KindReturnStatement:            11,
-	KindWithStatement:              12,
-	KindSwitchStatement:            13,
-	KindThrowStatement:             14,
-	KindTryStatement:               15,
-	KindDebuggerStatement:          16,
-	KindLabeledStatement:           17,
-	KindExpressionStatement:        18,
-	KindBlock:                      19,
-	KindVariableStatement:          20,
-	KindBindingElement:             21,
-	KindMissingDeclaration:         22,
-	KindFunctionDeclaration:        23,
-	KindClassDeclaration:           24,
-	KindInterfaceDeclaration:       25,
-	KindTypeAliasDeclaration:       26,
-	KindJSTypeAliasDeclaration:     26,
-	KindEnumDeclaration:            27,
-	KindModuleBlock:                28,
-	KindNotEmittedStatement:        29,
-	KindImportDeclaration:          30,
-	KindJSImportDeclaration:        30,
-	KindExportAssignment:           31,
-	KindNamespaceExportDeclaration: 32,
-	KindGetAccessor:                33,
-	KindSetAccessor:                34,
-	KindMethodDeclaration:          35,
-	KindNullKeyword:                36,
-	KindTrueKeyword:                36,
-	KindFalseKeyword:               36,
-	KindThisKeyword:                36,
-	KindSuperKeyword:               36,
-	KindImportKeyword:              36,
-	KindArrowFunction:              37,
-	KindFunctionExpression:         38,
-	KindPropertyAccessExpression:   39,
-	KindElementAccessExpression:    40,
-	KindMetaProperty:               41,
-	KindModuleDeclaration:          42,
-	KindImportEqualsDeclaration:    43,
-	KindExportDeclaration:          44,
+var kindHasFlowNodeBase = [kindFlowReduceLabelData + 1]bool{
+	KindIdentifier:                 true,
+	KindQualifiedName:              true,
+	KindEmptyStatement:             true,
+	KindIfStatement:                true,
+	KindDoStatement:                true,
+	KindWhileStatement:             true,
+	KindForStatement:               true,
+	KindForInStatement:             true,
+	KindForOfStatement:             true,
+	KindBreakStatement:             true,
+	KindContinueStatement:          true,
+	KindReturnStatement:            true,
+	KindWithStatement:              true,
+	KindSwitchStatement:            true,
+	KindThrowStatement:             true,
+	KindTryStatement:               true,
+	KindDebuggerStatement:          true,
+	KindLabeledStatement:           true,
+	KindExpressionStatement:        true,
+	KindBlock:                      true,
+	KindVariableStatement:          true,
+	KindBindingElement:             true,
+	KindMissingDeclaration:         true,
+	KindFunctionDeclaration:        true,
+	KindClassDeclaration:           true,
+	KindInterfaceDeclaration:       true,
+	KindTypeAliasDeclaration:       true,
+	KindJSTypeAliasDeclaration:     true,
+	KindEnumDeclaration:            true,
+	KindModuleBlock:                true,
+	KindNotEmittedStatement:        true,
+	KindImportDeclaration:          true,
+	KindJSImportDeclaration:        true,
+	KindExportAssignment:           true,
+	KindNamespaceExportDeclaration: true,
+	KindGetAccessor:                true,
+	KindSetAccessor:                true,
+	KindMethodDeclaration:          true,
+	KindNullKeyword:                true,
+	KindTrueKeyword:                true,
+	KindFalseKeyword:               true,
+	KindThisKeyword:                true,
+	KindSuperKeyword:               true,
+	KindImportKeyword:              true,
+	KindArrowFunction:              true,
+	KindFunctionExpression:         true,
+	KindPropertyAccessExpression:   true,
+	KindElementAccessExpression:    true,
+	KindMetaProperty:               true,
+	KindModuleDeclaration:          true,
+	KindImportEqualsDeclaration:    true,
+	KindExportDeclaration:          true,
 }
 
 func (n Node) FlowNodeData() FlowNodeBase {
-	switch nodeFlowNodeDataDispatch[n.Kind()] {
-	case 1:
+	if kindHasFlowNodeBase[n.Kind()] {
 		return FlowNodeBase{n}
-	case 2:
-		return FlowNodeBase{n}
-	case 3:
-		return FlowNodeBase{n}
-	case 4:
-		return FlowNodeBase{n}
-	case 5:
-		return FlowNodeBase{n}
-	case 6:
-		return FlowNodeBase{n}
-	case 7:
-		return FlowNodeBase{n}
-	case 8:
-		return FlowNodeBase{n}
-	case 9:
-		return FlowNodeBase{n}
-	case 10:
-		return FlowNodeBase{n}
-	case 11:
-		return FlowNodeBase{n}
-	case 12:
-		return FlowNodeBase{n}
-	case 13:
-		return FlowNodeBase{n}
-	case 14:
-		return FlowNodeBase{n}
-	case 15:
-		return FlowNodeBase{n}
-	case 16:
-		return FlowNodeBase{n}
-	case 17:
-		return FlowNodeBase{n}
-	case 18:
-		return FlowNodeBase{n}
-	case 19:
-		return FlowNodeBase{n}
-	case 20:
-		return FlowNodeBase{n}
-	case 21:
-		return FlowNodeBase{n}
-	case 22:
-		return FlowNodeBase{n}
-	case 23:
-		return FlowNodeBase{n}
-	case 24:
-		return FlowNodeBase{n}
-	case 25:
-		return FlowNodeBase{n}
-	case 26:
-		return FlowNodeBase{n}
-	case 27:
-		return FlowNodeBase{n}
-	case 28:
-		return FlowNodeBase{n}
-	case 29:
-		return FlowNodeBase{n}
-	case 30:
-		return FlowNodeBase{n}
-	case 31:
-		return FlowNodeBase{n}
-	case 32:
-		return FlowNodeBase{n}
-	case 33:
-		return FlowNodeBase{n}
-	case 34:
-		return FlowNodeBase{n}
-	case 35:
-		return FlowNodeBase{n}
-	case 36:
-		return FlowNodeBase{n}
-	case 37:
-		return FlowNodeBase{n}
-	case 38:
-		return FlowNodeBase{n}
-	case 39:
-		return FlowNodeBase{n}
-	case 40:
-		return FlowNodeBase{n}
-	case 41:
-		return FlowNodeBase{n}
-	case 42:
-		return FlowNodeBase{n}
-	case 43:
-		return FlowNodeBase{n}
-	case 44:
-		return FlowNodeBase{n}
-	default:
-		return FlowNodeBase{}
 	}
+	return FlowNodeBase{}
 }
 
-var nodeDeclarationDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindVariableDeclaration:           1,
-	KindParameter:                     2,
-	KindBindingElement:                3,
-	KindMissingDeclaration:            4,
-	KindFunctionDeclaration:           5,
-	KindClassDeclaration:              6,
-	KindClassExpression:               7,
-	KindInterfaceDeclaration:          8,
-	KindTypeAliasDeclaration:          9,
-	KindJSTypeAliasDeclaration:        9,
-	KindEnumMember:                    10,
-	KindEnumDeclaration:               11,
-	KindNotEmittedTypeElement:         12,
-	KindImportDeclaration:             13,
-	KindJSImportDeclaration:           13,
-	KindNamespaceImport:               14,
-	KindExportAssignment:              15,
-	KindNamespaceExportDeclaration:    16,
-	KindNamespaceExport:               17,
-	KindExportSpecifier:               18,
-	KindCallSignature:                 19,
-	KindConstructSignature:            20,
-	KindConstructor:                   21,
-	KindGetAccessor:                   22,
-	KindSetAccessor:                   23,
-	KindIndexSignature:                24,
-	KindMethodSignature:               25,
-	KindMethodDeclaration:             26,
-	KindPropertySignature:             27,
-	KindPropertyDeclaration:           28,
-	KindSemicolonClassElement:         29,
-	KindClassStaticBlockDeclaration:   30,
-	KindNoSubstitutionTemplateLiteral: 31,
-	KindBinaryExpression:              32,
-	KindArrowFunction:                 33,
-	KindFunctionExpression:            34,
-	KindCallExpression:                35,
-	KindObjectLiteralExpression:       36,
-	KindSpreadAssignment:              37,
-	KindPropertyAssignment:            38,
-	KindShorthandPropertyAssignment:   39,
-	KindMappedType:                    40,
-	KindTypeLiteral:                   41,
-	KindNamedTupleMember:              42,
-	KindFunctionType:                  43,
-	KindConstructorType:               44,
-	KindJsxAttributes:                 45,
-	KindJsxAttribute:                  46,
-	KindJsxSpreadAttribute:            47,
-	KindJSDocSignature:                48,
-	KindSourceFile:                    49,
-	KindModuleDeclaration:             50,
-	KindImportEqualsDeclaration:       51,
-	KindExportDeclaration:             52,
-	KindImportClause:                  53,
-	KindImportSpecifier:               54,
-	KindTypeParameter:                 55,
-	KindJSDocTypeLiteral:              56,
+var kindHasDeclarationBase = [kindFlowReduceLabelData + 1]bool{
+	KindVariableDeclaration:           true,
+	KindParameter:                     true,
+	KindBindingElement:                true,
+	KindMissingDeclaration:            true,
+	KindFunctionDeclaration:           true,
+	KindClassDeclaration:              true,
+	KindClassExpression:               true,
+	KindInterfaceDeclaration:          true,
+	KindTypeAliasDeclaration:          true,
+	KindJSTypeAliasDeclaration:        true,
+	KindEnumMember:                    true,
+	KindEnumDeclaration:               true,
+	KindNotEmittedTypeElement:         true,
+	KindImportDeclaration:             true,
+	KindJSImportDeclaration:           true,
+	KindNamespaceImport:               true,
+	KindExportAssignment:              true,
+	KindNamespaceExportDeclaration:    true,
+	KindNamespaceExport:               true,
+	KindExportSpecifier:               true,
+	KindCallSignature:                 true,
+	KindConstructSignature:            true,
+	KindConstructor:                   true,
+	KindGetAccessor:                   true,
+	KindSetAccessor:                   true,
+	KindIndexSignature:                true,
+	KindMethodSignature:               true,
+	KindMethodDeclaration:             true,
+	KindPropertySignature:             true,
+	KindPropertyDeclaration:           true,
+	KindSemicolonClassElement:         true,
+	KindClassStaticBlockDeclaration:   true,
+	KindNoSubstitutionTemplateLiteral: true,
+	KindBinaryExpression:              true,
+	KindArrowFunction:                 true,
+	KindFunctionExpression:            true,
+	KindCallExpression:                true,
+	KindObjectLiteralExpression:       true,
+	KindSpreadAssignment:              true,
+	KindPropertyAssignment:            true,
+	KindShorthandPropertyAssignment:   true,
+	KindMappedType:                    true,
+	KindTypeLiteral:                   true,
+	KindNamedTupleMember:              true,
+	KindFunctionType:                  true,
+	KindConstructorType:               true,
+	KindJsxAttributes:                 true,
+	KindJsxAttribute:                  true,
+	KindJsxSpreadAttribute:            true,
+	KindJSDocSignature:                true,
+	KindSourceFile:                    true,
+	KindModuleDeclaration:             true,
+	KindImportEqualsDeclaration:       true,
+	KindExportDeclaration:             true,
+	KindImportClause:                  true,
+	KindImportSpecifier:               true,
+	KindTypeParameter:                 true,
+	KindJSDocTypeLiteral:              true,
 }
 
 func (n Node) DeclarationData() DeclarationBase {
-	switch nodeDeclarationDataDispatch[n.Kind()] {
-	case 1:
+	if kindHasDeclarationBase[n.Kind()] {
 		return DeclarationBase{n}
-	case 2:
-		return DeclarationBase{n}
-	case 3:
-		return DeclarationBase{n}
-	case 4:
-		return DeclarationBase{n}
-	case 5:
-		return DeclarationBase{n}
-	case 6:
-		return DeclarationBase{n}
-	case 7:
-		return DeclarationBase{n}
-	case 8:
-		return DeclarationBase{n}
-	case 9:
-		return DeclarationBase{n}
-	case 10:
-		return DeclarationBase{n}
-	case 11:
-		return DeclarationBase{n}
-	case 12:
-		return DeclarationBase{n}
-	case 13:
-		return DeclarationBase{n}
-	case 14:
-		return DeclarationBase{n}
-	case 15:
-		return DeclarationBase{n}
-	case 16:
-		return DeclarationBase{n}
-	case 17:
-		return DeclarationBase{n}
-	case 18:
-		return DeclarationBase{n}
-	case 19:
-		return DeclarationBase{n}
-	case 20:
-		return DeclarationBase{n}
-	case 21:
-		return DeclarationBase{n}
-	case 22:
-		return DeclarationBase{n}
-	case 23:
-		return DeclarationBase{n}
-	case 24:
-		return DeclarationBase{n}
-	case 25:
-		return DeclarationBase{n}
-	case 26:
-		return DeclarationBase{n}
-	case 27:
-		return DeclarationBase{n}
-	case 28:
-		return DeclarationBase{n}
-	case 29:
-		return DeclarationBase{n}
-	case 30:
-		return DeclarationBase{n}
-	case 31:
-		return DeclarationBase{n}
-	case 32:
-		return DeclarationBase{n}
-	case 33:
-		return DeclarationBase{n}
-	case 34:
-		return DeclarationBase{n}
-	case 35:
-		return DeclarationBase{n}
-	case 36:
-		return DeclarationBase{n}
-	case 37:
-		return DeclarationBase{n}
-	case 38:
-		return DeclarationBase{n}
-	case 39:
-		return DeclarationBase{n}
-	case 40:
-		return DeclarationBase{n}
-	case 41:
-		return DeclarationBase{n}
-	case 42:
-		return DeclarationBase{n}
-	case 43:
-		return DeclarationBase{n}
-	case 44:
-		return DeclarationBase{n}
-	case 45:
-		return DeclarationBase{n}
-	case 46:
-		return DeclarationBase{n}
-	case 47:
-		return DeclarationBase{n}
-	case 48:
-		return DeclarationBase{n}
-	case 49:
-		return DeclarationBase{n}
-	case 50:
-		return DeclarationBase{n}
-	case 51:
-		return DeclarationBase{n}
-	case 52:
-		return DeclarationBase{n}
-	case 53:
-		return DeclarationBase{n}
-	case 54:
-		return DeclarationBase{n}
-	case 55:
-		return DeclarationBase{n}
-	case 56:
-		return DeclarationBase{n}
-	default:
-		return DeclarationBase{}
 	}
+	return DeclarationBase{}
 }
 
-var nodeExportableDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindVariableDeclaration:     1,
-	KindBindingElement:          2,
-	KindFunctionDeclaration:     3,
-	KindClassDeclaration:        4,
-	KindClassExpression:         5,
-	KindInterfaceDeclaration:    6,
-	KindTypeAliasDeclaration:    7,
-	KindJSTypeAliasDeclaration:  7,
-	KindEnumDeclaration:         8,
-	KindNamespaceImport:         9,
-	KindExportSpecifier:         10,
-	KindModuleDeclaration:       11,
-	KindImportEqualsDeclaration: 12,
-	KindImportClause:            13,
-	KindImportSpecifier:         14,
+var kindHasExportableBase = [kindFlowReduceLabelData + 1]bool{
+	KindVariableDeclaration:     true,
+	KindBindingElement:          true,
+	KindFunctionDeclaration:     true,
+	KindClassDeclaration:        true,
+	KindClassExpression:         true,
+	KindInterfaceDeclaration:    true,
+	KindTypeAliasDeclaration:    true,
+	KindJSTypeAliasDeclaration:  true,
+	KindEnumDeclaration:         true,
+	KindNamespaceImport:         true,
+	KindExportSpecifier:         true,
+	KindModuleDeclaration:       true,
+	KindImportEqualsDeclaration: true,
+	KindImportClause:            true,
+	KindImportSpecifier:         true,
 }
 
 func (n Node) ExportableData() ExportableBase {
-	switch nodeExportableDataDispatch[n.Kind()] {
-	case 1:
+	if kindHasExportableBase[n.Kind()] {
 		return ExportableBase{n}
-	case 2:
-		return ExportableBase{n}
-	case 3:
-		return ExportableBase{n}
-	case 4:
-		return ExportableBase{n}
-	case 5:
-		return ExportableBase{n}
-	case 6:
-		return ExportableBase{n}
-	case 7:
-		return ExportableBase{n}
-	case 8:
-		return ExportableBase{n}
-	case 9:
-		return ExportableBase{n}
-	case 10:
-		return ExportableBase{n}
-	case 11:
-		return ExportableBase{n}
-	case 12:
-		return ExportableBase{n}
-	case 13:
-		return ExportableBase{n}
-	case 14:
-		return ExportableBase{n}
-	default:
-		return ExportableBase{}
 	}
+	return ExportableBase{}
 }
 
-var nodeLocalsContainerDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindForStatement:                1,
-	KindForInStatement:              2,
-	KindForOfStatement:              2,
-	KindCaseBlock:                   3,
-	KindCatchClause:                 4,
-	KindBlock:                       5,
-	KindFunctionDeclaration:         6,
-	KindClassDeclaration:            7,
-	KindClassExpression:             8,
-	KindTypeAliasDeclaration:        9,
-	KindJSTypeAliasDeclaration:      9,
-	KindCallSignature:               10,
-	KindConstructSignature:          11,
-	KindConstructor:                 12,
-	KindGetAccessor:                 13,
-	KindSetAccessor:                 14,
-	KindIndexSignature:              15,
-	KindMethodSignature:             16,
-	KindMethodDeclaration:           17,
-	KindClassStaticBlockDeclaration: 18,
-	KindArrowFunction:               19,
-	KindFunctionExpression:          20,
-	KindConditionalType:             21,
-	KindMappedType:                  22,
-	KindFunctionType:                23,
-	KindConstructorType:             24,
-	KindJSDocSignature:              25,
-	KindSourceFile:                  26,
-	KindModuleDeclaration:           27,
+var kindHasLocalsContainerBase = [kindFlowReduceLabelData + 1]bool{
+	KindForStatement:                true,
+	KindForInStatement:              true,
+	KindForOfStatement:              true,
+	KindCaseBlock:                   true,
+	KindCatchClause:                 true,
+	KindBlock:                       true,
+	KindFunctionDeclaration:         true,
+	KindClassDeclaration:            true,
+	KindClassExpression:             true,
+	KindTypeAliasDeclaration:        true,
+	KindJSTypeAliasDeclaration:      true,
+	KindCallSignature:               true,
+	KindConstructSignature:          true,
+	KindConstructor:                 true,
+	KindGetAccessor:                 true,
+	KindSetAccessor:                 true,
+	KindIndexSignature:              true,
+	KindMethodSignature:             true,
+	KindMethodDeclaration:           true,
+	KindClassStaticBlockDeclaration: true,
+	KindArrowFunction:               true,
+	KindFunctionExpression:          true,
+	KindConditionalType:             true,
+	KindMappedType:                  true,
+	KindFunctionType:                true,
+	KindConstructorType:             true,
+	KindJSDocSignature:              true,
+	KindSourceFile:                  true,
+	KindModuleDeclaration:           true,
 }
 
 func (n Node) LocalsContainerData() LocalsContainerBase {
-	switch nodeLocalsContainerDataDispatch[n.Kind()] {
-	case 1:
+	if kindHasLocalsContainerBase[n.Kind()] {
 		return LocalsContainerBase{n}
-	case 2:
-		return LocalsContainerBase{n}
-	case 3:
-		return LocalsContainerBase{n}
-	case 4:
-		return LocalsContainerBase{n}
-	case 5:
-		return LocalsContainerBase{n}
-	case 6:
-		return LocalsContainerBase{n}
-	case 7:
-		return LocalsContainerBase{n}
-	case 8:
-		return LocalsContainerBase{n}
-	case 9:
-		return LocalsContainerBase{n}
-	case 10:
-		return LocalsContainerBase{n}
-	case 11:
-		return LocalsContainerBase{n}
-	case 12:
-		return LocalsContainerBase{n}
-	case 13:
-		return LocalsContainerBase{n}
-	case 14:
-		return LocalsContainerBase{n}
-	case 15:
-		return LocalsContainerBase{n}
-	case 16:
-		return LocalsContainerBase{n}
-	case 17:
-		return LocalsContainerBase{n}
-	case 18:
-		return LocalsContainerBase{n}
-	case 19:
-		return LocalsContainerBase{n}
-	case 20:
-		return LocalsContainerBase{n}
-	case 21:
-		return LocalsContainerBase{n}
-	case 22:
-		return LocalsContainerBase{n}
-	case 23:
-		return LocalsContainerBase{n}
-	case 24:
-		return LocalsContainerBase{n}
-	case 25:
-		return LocalsContainerBase{n}
-	case 26:
-		return LocalsContainerBase{n}
-	case 27:
-		return LocalsContainerBase{n}
-	default:
-		return LocalsContainerBase{}
 	}
+	return LocalsContainerBase{}
 }
 
-var nodeFunctionLikeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindFunctionDeclaration: 1,
-	KindCallSignature:       2,
-	KindConstructSignature:  3,
-	KindConstructor:         4,
-	KindGetAccessor:         5,
-	KindSetAccessor:         6,
-	KindIndexSignature:      7,
-	KindMethodSignature:     8,
-	KindMethodDeclaration:   9,
-	KindArrowFunction:       10,
-	KindFunctionExpression:  11,
-	KindFunctionType:        12,
-	KindConstructorType:     13,
-	KindJSDocSignature:      14,
+var kindHasFunctionLikeBase = [kindFlowReduceLabelData + 1]bool{
+	KindFunctionDeclaration: true,
+	KindCallSignature:       true,
+	KindConstructSignature:  true,
+	KindConstructor:         true,
+	KindGetAccessor:         true,
+	KindSetAccessor:         true,
+	KindIndexSignature:      true,
+	KindMethodSignature:     true,
+	KindMethodDeclaration:   true,
+	KindArrowFunction:       true,
+	KindFunctionExpression:  true,
+	KindFunctionType:        true,
+	KindConstructorType:     true,
+	KindJSDocSignature:      true,
 }
 
 func (n Node) FunctionLikeData() FunctionLikeBase {
-	switch nodeFunctionLikeDataDispatch[n.Kind()] {
-	case 1:
+	if kindHasFunctionLikeBase[n.Kind()] {
 		return FunctionLikeBase{n}
-	case 2:
-		return FunctionLikeBase{n}
-	case 3:
-		return FunctionLikeBase{n}
-	case 4:
-		return FunctionLikeBase{n}
-	case 5:
-		return FunctionLikeBase{n}
-	case 6:
-		return FunctionLikeBase{n}
-	case 7:
-		return FunctionLikeBase{n}
-	case 8:
-		return FunctionLikeBase{n}
-	case 9:
-		return FunctionLikeBase{n}
-	case 10:
-		return FunctionLikeBase{n}
-	case 11:
-		return FunctionLikeBase{n}
-	case 12:
-		return FunctionLikeBase{n}
-	case 13:
-		return FunctionLikeBase{n}
-	case 14:
-		return FunctionLikeBase{n}
-	default:
-		return FunctionLikeBase{}
 	}
+	return FunctionLikeBase{}
+}
+
+var kindHasClassLikeBase = [kindFlowReduceLabelData + 1]bool{
+	KindClassDeclaration: true,
+	KindClassExpression:  true,
 }
 
 func (n Node) ClassLikeData() ClassLikeBase {
-	switch n.Kind() {
-	case KindClassDeclaration:
+	if kindHasClassLikeBase[n.Kind()] {
 		return ClassLikeBase{n}
-	case KindClassExpression:
-		return ClassLikeBase{n}
-	default:
-		return ClassLikeBase{}
 	}
+	return ClassLikeBase{}
 }
 
-var nodeBodyDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindFunctionDeclaration: 1,
-	KindConstructor:         2,
-	KindGetAccessor:         3,
-	KindSetAccessor:         4,
-	KindMethodDeclaration:   5,
-	KindArrowFunction:       6,
-	KindFunctionExpression:  7,
-	KindModuleDeclaration:   8,
+var kindHasBodyBase = [kindFlowReduceLabelData + 1]bool{
+	KindFunctionDeclaration: true,
+	KindConstructor:         true,
+	KindGetAccessor:         true,
+	KindSetAccessor:         true,
+	KindMethodDeclaration:   true,
+	KindArrowFunction:       true,
+	KindFunctionExpression:  true,
+	KindModuleDeclaration:   true,
 }
 
 func (n Node) BodyData() BodyBase {
-	switch nodeBodyDataDispatch[n.Kind()] {
-	case 1:
+	if kindHasBodyBase[n.Kind()] {
 		return BodyBase{n}
-	case 2:
-		return BodyBase{n}
-	case 3:
-		return BodyBase{n}
-	case 4:
-		return BodyBase{n}
-	case 5:
-		return BodyBase{n}
-	case 6:
-		return BodyBase{n}
-	case 7:
-		return BodyBase{n}
-	case 8:
-		return BodyBase{n}
-	default:
-		return BodyBase{}
 	}
+	return BodyBase{}
 }
 
-var nodeLiteralLikeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindStringLiteral:                 1,
-	KindNumericLiteral:                2,
-	KindBigIntLiteral:                 3,
-	KindRegularExpressionLiteral:      4,
-	KindNoSubstitutionTemplateLiteral: 5,
-	KindTemplateHead:                  6,
-	KindTemplateMiddle:                7,
-	KindTemplateTail:                  8,
-	KindJsxText:                       9,
+var kindHasLiteralLikeNodeBase = [kindFlowReduceLabelData + 1]bool{
+	KindStringLiteral:                 true,
+	KindNumericLiteral:                true,
+	KindBigIntLiteral:                 true,
+	KindRegularExpressionLiteral:      true,
+	KindNoSubstitutionTemplateLiteral: true,
+	KindTemplateHead:                  true,
+	KindTemplateMiddle:                true,
+	KindTemplateTail:                  true,
+	KindJsxText:                       true,
 }
 
 func (n Node) LiteralLikeData() LiteralLikeNodeBase {
-	switch nodeLiteralLikeDataDispatch[n.Kind()] {
-	case 1:
+	if kindHasLiteralLikeNodeBase[n.Kind()] {
 		return LiteralLikeNodeBase{n}
-	case 2:
-		return LiteralLikeNodeBase{n}
-	case 3:
-		return LiteralLikeNodeBase{n}
-	case 4:
-		return LiteralLikeNodeBase{n}
-	case 5:
-		return LiteralLikeNodeBase{n}
-	case 6:
-		return LiteralLikeNodeBase{n}
-	case 7:
-		return LiteralLikeNodeBase{n}
-	case 8:
-		return LiteralLikeNodeBase{n}
-	case 9:
-		return LiteralLikeNodeBase{n}
-	default:
-		return LiteralLikeNodeBase{}
 	}
+	return LiteralLikeNodeBase{}
+}
+
+var kindHasTemplateLiteralLikeNodeBase = [kindFlowReduceLabelData + 1]bool{
+	KindNoSubstitutionTemplateLiteral: true,
+	KindTemplateHead:                  true,
+	KindTemplateMiddle:                true,
+	KindTemplateTail:                  true,
 }
 
 func (n Node) TemplateLiteralLikeData() TemplateLiteralLikeNodeBase {
-	switch n.Kind() {
-	case KindNoSubstitutionTemplateLiteral:
+	if kindHasTemplateLiteralLikeNodeBase[n.Kind()] {
 		return TemplateLiteralLikeNodeBase{n}
-	case KindTemplateHead:
-		return TemplateLiteralLikeNodeBase{n}
-	case KindTemplateMiddle:
-		return TemplateLiteralLikeNodeBase{n}
-	case KindTemplateTail:
-		return TemplateLiteralLikeNodeBase{n}
-	default:
-		return TemplateLiteralLikeNodeBase{}
 	}
+	return TemplateLiteralLikeNodeBase{}
 }
 
 // ──────────────────────────────────────────────────────────────────────
 // Common node accessor dispatch
 // ──────────────────────────────────────────────────────────────────────
 
-var nodeNameDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindVariableDeclaration:         1,
-	KindParameter:                   2,
-	KindBindingElement:              3,
-	KindFunctionDeclaration:         4,
-	KindClassDeclaration:            5,
-	KindClassExpression:             6,
-	KindInterfaceDeclaration:        7,
-	KindTypeAliasDeclaration:        8,
-	KindJSTypeAliasDeclaration:      8,
-	KindEnumMember:                  9,
-	KindEnumDeclaration:             10,
-	KindNamespaceImport:             11,
-	KindNamespaceExportDeclaration:  12,
-	KindNamespaceExport:             13,
-	KindExportSpecifier:             14,
-	KindGetAccessor:                 15,
-	KindSetAccessor:                 16,
-	KindMethodSignature:             17,
-	KindMethodDeclaration:           18,
-	KindPropertySignature:           19,
-	KindPropertyDeclaration:         20,
-	KindFunctionExpression:          21,
-	KindPropertyAccessExpression:    22,
-	KindMetaProperty:                23,
-	KindPropertyAssignment:          24,
-	KindShorthandPropertyAssignment: 25,
-	KindImportAttribute:             26,
-	KindNamedTupleMember:            27,
-	KindJsxNamespacedName:           28,
-	KindJsxAttribute:                29,
-	KindJSDocCallbackTag:            30,
-	KindJSDocTypedefTag:             31,
-	KindJSDocNameReference:          32,
-	KindModuleDeclaration:           33,
-	KindImportEqualsDeclaration:     34,
-	KindImportClause:                35,
-	KindImportSpecifier:             36,
-	KindJSDocLink:                   37,
-	KindJSDocLinkPlain:              38,
-	KindJSDocLinkCode:               39,
-	KindTypeParameter:               40,
-	KindJSDocParameterTag:           41,
-	KindJSDocPropertyTag:            41,
+var nodeNameOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindVariableDeclaration:         uint8(unsafe.Offsetof(variableDeclarationData{}.name)),
+	KindParameter:                   uint8(unsafe.Offsetof(parameterDeclarationData{}.name)),
+	KindBindingElement:              uint8(unsafe.Offsetof(bindingElementData{}.name)),
+	KindFunctionDeclaration:         uint8(unsafe.Offsetof(functionDeclarationData{}.name)),
+	KindClassDeclaration:            uint8(unsafe.Offsetof(classDeclarationData{}.name)),
+	KindClassExpression:             uint8(unsafe.Offsetof(classExpressionData{}.name)),
+	KindInterfaceDeclaration:        uint8(unsafe.Offsetof(interfaceDeclarationData{}.name)),
+	KindTypeAliasDeclaration:        uint8(unsafe.Offsetof(typeAliasDeclarationData{}.name)),
+	KindJSTypeAliasDeclaration:      uint8(unsafe.Offsetof(typeAliasDeclarationData{}.name)),
+	KindEnumMember:                  uint8(unsafe.Offsetof(enumMemberData{}.name)),
+	KindEnumDeclaration:             uint8(unsafe.Offsetof(enumDeclarationData{}.name)),
+	KindNamespaceImport:             uint8(unsafe.Offsetof(namespaceImportData{}.name)),
+	KindNamespaceExportDeclaration:  uint8(unsafe.Offsetof(namespaceExportDeclarationData{}.name)),
+	KindNamespaceExport:             uint8(unsafe.Offsetof(namespaceExportData{}.name)),
+	KindExportSpecifier:             uint8(unsafe.Offsetof(exportSpecifierData{}.name)),
+	KindGetAccessor:                 uint8(unsafe.Offsetof(getAccessorDeclarationData{}.name)),
+	KindSetAccessor:                 uint8(unsafe.Offsetof(setAccessorDeclarationData{}.name)),
+	KindMethodSignature:             uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.name)),
+	KindMethodDeclaration:           uint8(unsafe.Offsetof(methodDeclarationData{}.name)),
+	KindPropertySignature:           uint8(unsafe.Offsetof(propertySignatureDeclarationData{}.name)),
+	KindPropertyDeclaration:         uint8(unsafe.Offsetof(propertyDeclarationData{}.name)),
+	KindFunctionExpression:          uint8(unsafe.Offsetof(functionExpressionData{}.name)),
+	KindPropertyAccessExpression:    uint8(unsafe.Offsetof(propertyAccessExpressionData{}.name)),
+	KindMetaProperty:                uint8(unsafe.Offsetof(metaPropertyData{}.name)),
+	KindPropertyAssignment:          uint8(unsafe.Offsetof(propertyAssignmentData{}.name)),
+	KindShorthandPropertyAssignment: uint8(unsafe.Offsetof(shorthandPropertyAssignmentData{}.name)),
+	KindImportAttribute:             uint8(unsafe.Offsetof(importAttributeData{}.name)),
+	KindNamedTupleMember:            uint8(unsafe.Offsetof(namedTupleMemberData{}.name)),
+	KindJsxNamespacedName:           uint8(unsafe.Offsetof(jsxNamespacedNameData{}.name)),
+	KindJsxAttribute:                uint8(unsafe.Offsetof(jsxAttributeData{}.name)),
+	KindJSDocCallbackTag:            uint8(unsafe.Offsetof(jsDocCallbackTagData{}.name)),
+	KindJSDocTypedefTag:             uint8(unsafe.Offsetof(jsDocTypedefTagData{}.name)),
+	KindJSDocNameReference:          uint8(unsafe.Offsetof(jsDocNameReferenceData{}.name)),
+	KindModuleDeclaration:           uint8(unsafe.Offsetof(moduleDeclarationData{}.name)),
+	KindImportEqualsDeclaration:     uint8(unsafe.Offsetof(importEqualsDeclarationData{}.name)),
+	KindImportClause:                uint8(unsafe.Offsetof(importClauseData{}.name)),
+	KindImportSpecifier:             uint8(unsafe.Offsetof(importSpecifierData{}.name)),
+	KindJSDocLink:                   uint8(unsafe.Offsetof(jsDocLinkData{}.name)),
+	KindJSDocLinkPlain:              uint8(unsafe.Offsetof(jsDocLinkPlainData{}.name)),
+	KindJSDocLinkCode:               uint8(unsafe.Offsetof(jsDocLinkCodeData{}.name)),
+	KindTypeParameter:               uint8(unsafe.Offsetof(typeParameterDeclarationData{}.name)),
+	KindJSDocParameterTag:           uint8(unsafe.Offsetof(jsDocParameterOrPropertyTagData{}.name)),
+	KindJSDocPropertyTag:            uint8(unsafe.Offsetof(jsDocParameterOrPropertyTagData{}.name)),
 }
 
 func (n Node) Name() DeclarationName {
-	switch nodeNameDispatch[n.Kind()] {
-	case 1:
-		return VariableDeclaration{n}.Name()
-	case 2:
-		return ParameterDeclaration{n}.Name()
-	case 3:
-		return BindingElement{n}.Name()
-	case 4:
-		return FunctionDeclaration{n}.Name()
-	case 5:
-		return ClassDeclaration{n}.Name()
-	case 6:
-		return ClassExpression{n}.Name()
-	case 7:
-		return InterfaceDeclaration{n}.Name()
-	case 8:
-		return TypeAliasDeclaration{n}.Name()
-	case 9:
-		return EnumMember{n}.Name()
-	case 10:
-		return EnumDeclaration{n}.Name()
-	case 11:
-		return NamespaceImport{n}.Name()
-	case 12:
-		return NamespaceExportDeclaration{n}.Name()
-	case 13:
-		return NamespaceExport{n}.Name()
-	case 14:
-		return ExportSpecifier{n}.Name()
-	case 15:
-		return GetAccessorDeclaration{n}.Name()
-	case 16:
-		return SetAccessorDeclaration{n}.Name()
-	case 17:
-		return MethodSignatureDeclaration{n}.Name()
-	case 18:
-		return MethodDeclaration{n}.Name()
-	case 19:
-		return PropertySignatureDeclaration{n}.Name()
-	case 20:
-		return PropertyDeclaration{n}.Name()
-	case 21:
-		return FunctionExpression{n}.Name()
-	case 22:
-		return PropertyAccessExpression{n}.Name()
-	case 23:
-		return MetaProperty{n}.Name()
-	case 24:
-		return PropertyAssignment{n}.Name()
-	case 25:
-		return ShorthandPropertyAssignment{n}.Name()
-	case 26:
-		return ImportAttribute{n}.Name()
-	case 27:
-		return NamedTupleMember{n}.Name()
-	case 28:
-		return JsxNamespacedName{n}.Name()
-	case 29:
-		return JsxAttribute{n}.Name()
-	case 30:
-		return JSDocCallbackTag{n}.Name()
-	case 31:
-		return JSDocTypedefTag{n}.Name()
-	case 32:
-		return JSDocNameReference{n}.Name()
-	case 33:
-		return ModuleDeclaration{n}.Name()
-	case 34:
-		return ImportEqualsDeclaration{n}.Name()
-	case 35:
-		return ImportClause{n}.Name()
-	case 36:
-		return ImportSpecifier{n}.Name()
-	case 37:
-		return JSDocLink{n}.Name()
-	case 38:
-		return JSDocLinkPlain{n}.Name()
-	case 39:
-		return JSDocLinkCode{n}.Name()
-	case 40:
-		return TypeParameterDeclaration{n}.Name()
-	case 41:
-		return JSDocParameterOrPropertyTag{n}.Name()
-	default:
-		return Node{}
+	if off := nodeNameOffsets[n.Kind()]; off != 0 {
+		return n.deref((*nodeRef)(unsafe.Add(n.rec(), off)))
 	}
+	return Node{}
 }
 
-var nodeModifiersDispatch = [kindFlowReduceLabelData + 1]uint8{
-	KindVariableStatement:           1,
-	KindParameter:                   2,
-	KindMissingDeclaration:          3,
-	KindFunctionDeclaration:         4,
-	KindClassDeclaration:            5,
-	KindClassExpression:             6,
-	KindInterfaceDeclaration:        7,
-	KindTypeAliasDeclaration:        8,
-	KindJSTypeAliasDeclaration:      8,
-	KindEnumDeclaration:             9,
-	KindImportDeclaration:           10,
-	KindJSImportDeclaration:         10,
-	KindExportAssignment:            11,
-	KindNamespaceExportDeclaration:  12,
-	KindConstructor:                 13,
-	KindGetAccessor:                 14,
-	KindSetAccessor:                 15,
-	KindIndexSignature:              16,
-	KindMethodSignature:             17,
-	KindMethodDeclaration:           18,
-	KindPropertySignature:           19,
-	KindPropertyDeclaration:         20,
-	KindClassStaticBlockDeclaration: 21,
-	KindBinaryExpression:            22,
-	KindArrowFunction:               23,
-	KindFunctionExpression:          24,
-	KindPropertyAssignment:          25,
-	KindShorthandPropertyAssignment: 26,
-	KindConstructorType:             27,
-	KindModuleDeclaration:           28,
-	KindImportEqualsDeclaration:     29,
-	KindExportDeclaration:           30,
-	KindTypeParameter:               31,
+var nodeModifiersOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindVariableStatement:           uint8(unsafe.Offsetof(variableStatementData{}.modifiers)),
+	KindParameter:                   uint8(unsafe.Offsetof(parameterDeclarationData{}.modifiers)),
+	KindMissingDeclaration:          uint8(unsafe.Offsetof(missingDeclarationData{}.modifiers)),
+	KindFunctionDeclaration:         uint8(unsafe.Offsetof(functionDeclarationData{}.modifiers)),
+	KindClassDeclaration:            uint8(unsafe.Offsetof(classDeclarationData{}.modifiers)),
+	KindClassExpression:             uint8(unsafe.Offsetof(classExpressionData{}.modifiers)),
+	KindInterfaceDeclaration:        uint8(unsafe.Offsetof(interfaceDeclarationData{}.modifiers)),
+	KindTypeAliasDeclaration:        uint8(unsafe.Offsetof(typeAliasDeclarationData{}.modifiers)),
+	KindJSTypeAliasDeclaration:      uint8(unsafe.Offsetof(typeAliasDeclarationData{}.modifiers)),
+	KindEnumMember:                  uint8(unsafe.Offsetof(enumMemberData{}.modifiers)),
+	KindEnumDeclaration:             uint8(unsafe.Offsetof(enumDeclarationData{}.modifiers)),
+	KindImportDeclaration:           uint8(unsafe.Offsetof(importDeclarationData{}.modifiers)),
+	KindJSImportDeclaration:         uint8(unsafe.Offsetof(importDeclarationData{}.modifiers)),
+	KindExportAssignment:            uint8(unsafe.Offsetof(exportAssignmentData{}.modifiers)),
+	KindNamespaceExportDeclaration:  uint8(unsafe.Offsetof(namespaceExportDeclarationData{}.modifiers)),
+	KindConstructor:                 uint8(unsafe.Offsetof(constructorDeclarationData{}.modifiers)),
+	KindGetAccessor:                 uint8(unsafe.Offsetof(getAccessorDeclarationData{}.modifiers)),
+	KindSetAccessor:                 uint8(unsafe.Offsetof(setAccessorDeclarationData{}.modifiers)),
+	KindIndexSignature:              uint8(unsafe.Offsetof(indexSignatureDeclarationData{}.modifiers)),
+	KindMethodSignature:             uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.modifiers)),
+	KindMethodDeclaration:           uint8(unsafe.Offsetof(methodDeclarationData{}.modifiers)),
+	KindPropertySignature:           uint8(unsafe.Offsetof(propertySignatureDeclarationData{}.modifiers)),
+	KindPropertyDeclaration:         uint8(unsafe.Offsetof(propertyDeclarationData{}.modifiers)),
+	KindClassStaticBlockDeclaration: uint8(unsafe.Offsetof(classStaticBlockDeclarationData{}.modifiers)),
+	KindBinaryExpression:            uint8(unsafe.Offsetof(binaryExpressionData{}.modifiers)),
+	KindArrowFunction:               uint8(unsafe.Offsetof(arrowFunctionData{}.modifiers)),
+	KindFunctionExpression:          uint8(unsafe.Offsetof(functionExpressionData{}.modifiers)),
+	KindPropertyAssignment:          uint8(unsafe.Offsetof(propertyAssignmentData{}.modifiers)),
+	KindShorthandPropertyAssignment: uint8(unsafe.Offsetof(shorthandPropertyAssignmentData{}.modifiers)),
+	KindFunctionType:                uint8(unsafe.Offsetof(functionTypeNodeData{}.modifiers)),
+	KindConstructorType:             uint8(unsafe.Offsetof(constructorTypeNodeData{}.modifiers)),
+	KindModuleDeclaration:           uint8(unsafe.Offsetof(moduleDeclarationData{}.modifiers)),
+	KindImportEqualsDeclaration:     uint8(unsafe.Offsetof(importEqualsDeclarationData{}.modifiers)),
+	KindExportDeclaration:           uint8(unsafe.Offsetof(exportDeclarationData{}.modifiers)),
+	KindTypeParameter:               uint8(unsafe.Offsetof(typeParameterDeclarationData{}.modifiers)),
 }
 
 func (n Node) Modifiers() ModifierList {
-	switch nodeModifiersDispatch[n.Kind()] {
-	case 1:
-		return VariableStatement{n}.Modifiers()
-	case 2:
-		return ParameterDeclaration{n}.Modifiers()
-	case 3:
-		return MissingDeclaration{n}.Modifiers()
-	case 4:
-		return FunctionDeclaration{n}.Modifiers()
-	case 5:
-		return ClassDeclaration{n}.Modifiers()
-	case 6:
-		return ClassExpression{n}.Modifiers()
-	case 7:
-		return InterfaceDeclaration{n}.Modifiers()
-	case 8:
-		return TypeAliasDeclaration{n}.Modifiers()
-	case 9:
-		return EnumDeclaration{n}.Modifiers()
-	case 10:
-		return ImportDeclaration{n}.Modifiers()
-	case 11:
-		return ExportAssignment{n}.Modifiers()
-	case 12:
-		return NamespaceExportDeclaration{n}.Modifiers()
-	case 13:
-		return ConstructorDeclaration{n}.Modifiers()
-	case 14:
-		return GetAccessorDeclaration{n}.Modifiers()
-	case 15:
-		return SetAccessorDeclaration{n}.Modifiers()
-	case 16:
-		return IndexSignatureDeclaration{n}.Modifiers()
-	case 17:
-		return MethodSignatureDeclaration{n}.Modifiers()
-	case 18:
-		return MethodDeclaration{n}.Modifiers()
-	case 19:
-		return PropertySignatureDeclaration{n}.Modifiers()
-	case 20:
-		return PropertyDeclaration{n}.Modifiers()
-	case 21:
-		return ClassStaticBlockDeclaration{n}.Modifiers()
-	case 22:
-		return BinaryExpression{n}.Modifiers()
-	case 23:
-		return ArrowFunction{n}.Modifiers()
-	case 24:
-		return FunctionExpression{n}.Modifiers()
-	case 25:
-		return PropertyAssignment{n}.Modifiers()
-	case 26:
-		return ShorthandPropertyAssignment{n}.Modifiers()
-	case 27:
-		return ConstructorTypeNode{n}.Modifiers()
-	case 28:
-		return ModuleDeclaration{n}.Modifiers()
-	case 29:
-		return ImportEqualsDeclaration{n}.Modifiers()
-	case 30:
-		return ExportDeclaration{n}.Modifiers()
-	case 31:
-		return TypeParameterDeclaration{n}.Modifiers()
-	default:
-		return ModifierList{}
+	if off := nodeModifiersOffsets[n.Kind()]; off != 0 {
+		return n.derefModifiers((*listRef)(unsafe.Add(n.rec(), off)))
 	}
+	return ModifierList{}
+}
+
+var nodeExpressionOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindComputedPropertyName:         uint8(unsafe.Offsetof(computedPropertyNameData{}.expression)),
+	KindDecorator:                    uint8(unsafe.Offsetof(decoratorData{}.expression)),
+	KindIfStatement:                  uint8(unsafe.Offsetof(ifStatementData{}.expression)),
+	KindDoStatement:                  uint8(unsafe.Offsetof(doStatementData{}.expression)),
+	KindWhileStatement:               uint8(unsafe.Offsetof(whileStatementData{}.expression)),
+	KindForInStatement:               uint8(unsafe.Offsetof(forInOrOfStatementData{}.expression)),
+	KindForOfStatement:               uint8(unsafe.Offsetof(forInOrOfStatementData{}.expression)),
+	KindReturnStatement:              uint8(unsafe.Offsetof(returnStatementData{}.expression)),
+	KindWithStatement:                uint8(unsafe.Offsetof(withStatementData{}.expression)),
+	KindSwitchStatement:              uint8(unsafe.Offsetof(switchStatementData{}.expression)),
+	KindCaseClause:                   uint8(unsafe.Offsetof(caseOrDefaultClauseData{}.expression)),
+	KindDefaultClause:                uint8(unsafe.Offsetof(caseOrDefaultClauseData{}.expression)),
+	KindThrowStatement:               uint8(unsafe.Offsetof(throwStatementData{}.expression)),
+	KindExpressionStatement:          uint8(unsafe.Offsetof(expressionStatementData{}.expression)),
+	KindExternalModuleReference:      uint8(unsafe.Offsetof(externalModuleReferenceData{}.expression)),
+	KindExportAssignment:             uint8(unsafe.Offsetof(exportAssignmentData{}.expression)),
+	KindYieldExpression:              uint8(unsafe.Offsetof(yieldExpressionData{}.expression)),
+	KindAsExpression:                 uint8(unsafe.Offsetof(asExpressionData{}.expression)),
+	KindSatisfiesExpression:          uint8(unsafe.Offsetof(satisfiesExpressionData{}.expression)),
+	KindPropertyAccessExpression:     uint8(unsafe.Offsetof(propertyAccessExpressionData{}.expression)),
+	KindElementAccessExpression:      uint8(unsafe.Offsetof(elementAccessExpressionData{}.expression)),
+	KindCallExpression:               uint8(unsafe.Offsetof(callExpressionData{}.expression)),
+	KindNewExpression:                uint8(unsafe.Offsetof(newExpressionData{}.expression)),
+	KindNonNullExpression:            uint8(unsafe.Offsetof(nonNullExpressionData{}.expression)),
+	KindSpreadElement:                uint8(unsafe.Offsetof(spreadElementData{}.expression)),
+	KindTemplateSpan:                 uint8(unsafe.Offsetof(templateSpanData{}.expression)),
+	KindParenthesizedExpression:      uint8(unsafe.Offsetof(parenthesizedExpressionData{}.expression)),
+	KindSpreadAssignment:             uint8(unsafe.Offsetof(spreadAssignmentData{}.expression)),
+	KindDeleteExpression:             uint8(unsafe.Offsetof(deleteExpressionData{}.expression)),
+	KindTypeOfExpression:             uint8(unsafe.Offsetof(typeOfExpressionData{}.expression)),
+	KindVoidExpression:               uint8(unsafe.Offsetof(voidExpressionData{}.expression)),
+	KindAwaitExpression:              uint8(unsafe.Offsetof(awaitExpressionData{}.expression)),
+	KindTypeAssertionExpression:      uint8(unsafe.Offsetof(typeAssertionData{}.expression)),
+	KindExpressionWithTypeArguments:  uint8(unsafe.Offsetof(expressionWithTypeArgumentsData{}.expression)),
+	KindPartiallyEmittedExpression:   uint8(unsafe.Offsetof(partiallyEmittedExpressionData{}.expression)),
+	KindJsxSpreadAttribute:           uint8(unsafe.Offsetof(jsxSpreadAttributeData{}.expression)),
+	KindJsxExpression:                uint8(unsafe.Offsetof(jsxExpressionData{}.expression)),
+	KindTypeParameter:                uint8(unsafe.Offsetof(typeParameterDeclarationData{}.expression)),
+	KindSyntheticReferenceExpression: uint8(unsafe.Offsetof(syntheticReferenceExpressionData{}.expression)),
+}
+
+var nodeInitializerOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindForStatement:        uint8(unsafe.Offsetof(forStatementData{}.initializer)),
+	KindForInStatement:      uint8(unsafe.Offsetof(forInOrOfStatementData{}.initializer)),
+	KindForOfStatement:      uint8(unsafe.Offsetof(forInOrOfStatementData{}.initializer)),
+	KindVariableDeclaration: uint8(unsafe.Offsetof(variableDeclarationData{}.initializer)),
+	KindParameter:           uint8(unsafe.Offsetof(parameterDeclarationData{}.initializer)),
+	KindBindingElement:      uint8(unsafe.Offsetof(bindingElementData{}.initializer)),
+	KindEnumMember:          uint8(unsafe.Offsetof(enumMemberData{}.initializer)),
+	KindPropertySignature:   uint8(unsafe.Offsetof(propertySignatureDeclarationData{}.initializer)),
+	KindPropertyDeclaration: uint8(unsafe.Offsetof(propertyDeclarationData{}.initializer)),
+	KindPropertyAssignment:  uint8(unsafe.Offsetof(propertyAssignmentData{}.initializer)),
+	KindJsxAttribute:        uint8(unsafe.Offsetof(jsxAttributeData{}.initializer)),
+}
+
+var nodeTypeOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindVariableDeclaration:         uint8(unsafe.Offsetof(variableDeclarationData{}.typeField)),
+	KindParameter:                   uint8(unsafe.Offsetof(parameterDeclarationData{}.typeField)),
+	KindFunctionDeclaration:         uint8(unsafe.Offsetof(functionDeclarationData{}.typeField)),
+	KindTypeAliasDeclaration:        uint8(unsafe.Offsetof(typeAliasDeclarationData{}.typeField)),
+	KindJSTypeAliasDeclaration:      uint8(unsafe.Offsetof(typeAliasDeclarationData{}.typeField)),
+	KindExportAssignment:            uint8(unsafe.Offsetof(exportAssignmentData{}.typeField)),
+	KindCallSignature:               uint8(unsafe.Offsetof(callSignatureDeclarationData{}.typeField)),
+	KindConstructSignature:          uint8(unsafe.Offsetof(constructSignatureDeclarationData{}.typeField)),
+	KindConstructor:                 uint8(unsafe.Offsetof(constructorDeclarationData{}.typeField)),
+	KindGetAccessor:                 uint8(unsafe.Offsetof(getAccessorDeclarationData{}.typeField)),
+	KindSetAccessor:                 uint8(unsafe.Offsetof(setAccessorDeclarationData{}.typeField)),
+	KindIndexSignature:              uint8(unsafe.Offsetof(indexSignatureDeclarationData{}.typeField)),
+	KindMethodSignature:             uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.typeField)),
+	KindMethodDeclaration:           uint8(unsafe.Offsetof(methodDeclarationData{}.typeField)),
+	KindPropertySignature:           uint8(unsafe.Offsetof(propertySignatureDeclarationData{}.typeField)),
+	KindPropertyDeclaration:         uint8(unsafe.Offsetof(propertyDeclarationData{}.typeField)),
+	KindBinaryExpression:            uint8(unsafe.Offsetof(binaryExpressionData{}.typeField)),
+	KindArrowFunction:               uint8(unsafe.Offsetof(arrowFunctionData{}.typeField)),
+	KindFunctionExpression:          uint8(unsafe.Offsetof(functionExpressionData{}.typeField)),
+	KindAsExpression:                uint8(unsafe.Offsetof(asExpressionData{}.typeField)),
+	KindSatisfiesExpression:         uint8(unsafe.Offsetof(satisfiesExpressionData{}.typeField)),
+	KindPropertyAssignment:          uint8(unsafe.Offsetof(propertyAssignmentData{}.typeField)),
+	KindShorthandPropertyAssignment: uint8(unsafe.Offsetof(shorthandPropertyAssignmentData{}.typeField)),
+	KindTypeAssertionExpression:     uint8(unsafe.Offsetof(typeAssertionData{}.typeField)),
+	KindTypeOperator:                uint8(unsafe.Offsetof(typeOperatorNodeData{}.typeField)),
+	KindTypePredicate:               uint8(unsafe.Offsetof(typePredicateNodeData{}.typeField)),
+	KindMappedType:                  uint8(unsafe.Offsetof(mappedTypeNodeData{}.typeField)),
+	KindNamedTupleMember:            uint8(unsafe.Offsetof(namedTupleMemberData{}.typeField)),
+	KindOptionalType:                uint8(unsafe.Offsetof(optionalTypeNodeData{}.typeField)),
+	KindRestType:                    uint8(unsafe.Offsetof(restTypeNodeData{}.typeField)),
+	KindParenthesizedType:           uint8(unsafe.Offsetof(parenthesizedTypeNodeData{}.typeField)),
+	KindFunctionType:                uint8(unsafe.Offsetof(functionTypeNodeData{}.typeField)),
+	KindConstructorType:             uint8(unsafe.Offsetof(constructorTypeNodeData{}.typeField)),
+	KindTemplateLiteralTypeSpan:     uint8(unsafe.Offsetof(templateLiteralTypeSpanData{}.typeField)),
+	KindJSDocTypeExpression:         uint8(unsafe.Offsetof(jsDocTypeExpressionData{}.typeField)),
+	KindJSDocNonNullableType:        uint8(unsafe.Offsetof(jsDocNonNullableTypeData{}.typeField)),
+	KindJSDocNullableType:           uint8(unsafe.Offsetof(jsDocNullableTypeData{}.typeField)),
+	KindJSDocVariadicType:           uint8(unsafe.Offsetof(jsDocVariadicTypeData{}.typeField)),
+	KindJSDocOptionalType:           uint8(unsafe.Offsetof(jsDocOptionalTypeData{}.typeField)),
+	KindJSDocSignature:              uint8(unsafe.Offsetof(jsDocSignatureData{}.typeField)),
+}
+
+var nodePostfixTokenOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindEnumMember:                  uint8(unsafe.Offsetof(enumMemberData{}.postfixToken)),
+	KindGetAccessor:                 uint8(unsafe.Offsetof(getAccessorDeclarationData{}.postfixToken)),
+	KindSetAccessor:                 uint8(unsafe.Offsetof(setAccessorDeclarationData{}.postfixToken)),
+	KindMethodSignature:             uint8(unsafe.Offsetof(methodSignatureDeclarationData{}.postfixToken)),
+	KindMethodDeclaration:           uint8(unsafe.Offsetof(methodDeclarationData{}.postfixToken)),
+	KindPropertySignature:           uint8(unsafe.Offsetof(propertySignatureDeclarationData{}.postfixToken)),
+	KindPropertyDeclaration:         uint8(unsafe.Offsetof(propertyDeclarationData{}.postfixToken)),
+	KindPropertyAssignment:          uint8(unsafe.Offsetof(propertyAssignmentData{}.postfixToken)),
+	KindShorthandPropertyAssignment: uint8(unsafe.Offsetof(shorthandPropertyAssignmentData{}.postfixToken)),
+}
+
+var nodeQuestionTokenOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindParameter:             uint8(unsafe.Offsetof(parameterDeclarationData{}.questionToken)),
+	KindConditionalExpression: uint8(unsafe.Offsetof(conditionalExpressionData{}.questionToken)),
+	KindMappedType:            uint8(unsafe.Offsetof(mappedTypeNodeData{}.questionToken)),
+	KindNamedTupleMember:      uint8(unsafe.Offsetof(namedTupleMemberData{}.questionToken)),
+}
+
+var nodeQuestionDotTokenOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindPropertyAccessExpression: uint8(unsafe.Offsetof(propertyAccessExpressionData{}.questionDotToken)),
+	KindElementAccessExpression:  uint8(unsafe.Offsetof(elementAccessExpressionData{}.questionDotToken)),
+	KindCallExpression:           uint8(unsafe.Offsetof(callExpressionData{}.questionDotToken)),
+	KindTaggedTemplateExpression: uint8(unsafe.Offsetof(taggedTemplateExpressionData{}.questionDotToken)),
+}
+
+var nodeTypeArgumentsOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindCallExpression:              uint8(unsafe.Offsetof(callExpressionData{}.typeArguments)),
+	KindNewExpression:               uint8(unsafe.Offsetof(newExpressionData{}.typeArguments)),
+	KindTaggedTemplateExpression:    uint8(unsafe.Offsetof(taggedTemplateExpressionData{}.typeArguments)),
+	KindTypeReference:               uint8(unsafe.Offsetof(typeReferenceNodeData{}.typeArguments)),
+	KindExpressionWithTypeArguments: uint8(unsafe.Offsetof(expressionWithTypeArgumentsData{}.typeArguments)),
+	KindTypeQuery:                   uint8(unsafe.Offsetof(typeQueryNodeData{}.typeArguments)),
+	KindJsxOpeningElement:           uint8(unsafe.Offsetof(jsxOpeningElementData{}.typeArguments)),
+	KindJsxSelfClosingElement:       uint8(unsafe.Offsetof(jsxSelfClosingElementData{}.typeArguments)),
+	KindImportType:                  uint8(unsafe.Offsetof(importTypeNodeData{}.typeArguments)),
+}
+
+var nodeArgumentsOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindCallExpression: uint8(unsafe.Offsetof(callExpressionData{}.arguments)),
+	KindNewExpression:  uint8(unsafe.Offsetof(newExpressionData{}.arguments)),
 }
 
 func (n MutableNode) SetModifiers(modifiers ModifierList) {

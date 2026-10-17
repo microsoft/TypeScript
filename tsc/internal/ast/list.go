@@ -231,6 +231,12 @@ func (n Node) derefList(f *listRef) NodeList {
 	return n.store().farLists[uint32(r)>>1]
 }
 
+// listAt returns the list that the field at offset off of n's record
+// refers to.
+func (n Node) listAt(off uint8) NodeList {
+	return n.derefList((*listRef)(unsafe.Add(n.rec(), off)))
+}
+
 func (n Node) derefModifiers(f *listRef) ModifierList {
 	return ModifierList{n.derefList(f)}
 }

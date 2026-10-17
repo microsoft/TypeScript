@@ -1228,68 +1228,31 @@ function transitiveBaseKeys(node: NodeType): Set<string> {
     return seen;
 }
 
-function generateNodeAccessorDispatch(
-    w: CodeWriter,
-    method: string,
-    ret: string,
-    hasAccessor: (node: NodeType) => boolean,
-    body: (node: NodeType) => string,
-    zero: string,
-) {
-    const cases: { node: NodeType; kinds: string[]; }[] = [];
-    for (const node of api.nodes()) {
-        if (!hasAccessor(node)) continue;
-        const kinds = node.allKinds().map(kind => kind.formatGoConstant());
-        if (kinds.length !== 0) cases.push({ node, kinds });
-    }
-
-    // Large sparse Kind switches become comparison trees. Dense indices let Go
-    // emit jump tables; zero is reserved for kinds without the accessor.
-    const useDispatchTable = cases.length >= 8;
-    const table = `node${method}Dispatch`;
-    if (useDispatchTable) {
-        if (cases.length > 255) {
-            throw new Error(`${method} dispatch exceeds the uint8 index range`);
-        }
-        w.write(`var ${table} = [kindFlowReduceLabelData + 1]uint8{`);
+// Kinds have a base when their records hold its fields, so testing for it is
+// a table lookup.
+function generateNodeAccessors(w: CodeWriter) {
+    for (const { method, ret, base } of NODE_ACCESSORS) {
+        const table = `kindHas${base}`;
+        w.write(`var ${table} = [kindFlowReduceLabelData + 1]bool{`);
         w.push();
-        for (const [index, { kinds }] of cases.entries()) {
-            for (const kind of kinds) {
-                w.write(`${kind}: ${index + 1},`);
-            }
+        for (const node of api.nodes()) {
+            if (!transitiveBaseKeys(node).has(base)) continue;
+            for (const kind of node.allKinds()) w.write(`${kind.formatGoConstant()}: true,`);
         }
         w.pop();
         w.write("}");
         w.write("");
-    }
-
-    w.write(`func (n Node) ${method}() ${ret} {`);
-    w.push();
-    if (useDispatchTable) {
-        w.write(`switch ${table}[n.Kind()] {`);
-    }
-    else {
-        w.write("switch n.Kind() {");
-    }
-    for (const [index, { node, kinds }] of cases.entries()) {
-        w.write(`case ${useDispatchTable ? index + 1 : kinds.join(", ")}:`);
+        w.write(`func (n Node) ${method}() ${ret} {`);
         w.push();
-        w.write(`return ${body(node)}`);
+        w.write(`if ${table}[n.Kind()] {`);
+        w.push();
+        w.write(`return ${ret}{n}`);
         w.pop();
-    }
-    w.write("default:");
-    w.push();
-    w.write(`return ${zero}`);
-    w.pop();
-    w.write("}");
-    w.pop();
-    w.write("}");
-    w.write("");
-}
-
-function generateNodeAccessors(w: CodeWriter) {
-    for (const { method, ret, base } of NODE_ACCESSORS) {
-        generateNodeAccessorDispatch(w, method, ret, node => transitiveBaseKeys(node).has(base), () => `${ret}{n}`, `${ret}{}`);
+        w.write("}");
+        w.write(`return ${ret}{}`);
+        w.pop();
+        w.write("}");
+        w.write("");
     }
 }
 
@@ -1297,12 +1260,66 @@ function hasMember(node: NodeType, name: string): boolean {
     return schemaMembers(node).some(member => member.name === name);
 }
 
+function generateMemberOffsetTable(w: CodeWriter, table: string, member: string, refType: string) {
+    const storage = goStorageName(member);
+    w.write(`var ${table} = [kindFlowReduceLabelData + 1]uint8{`);
+    w.push();
+    for (const node of api.nodes()) {
+        const field = nodeRecordFields(node).find(f => f.storage === storage);
+        // Only refs can be read the same way for every kind.
+        if (field?.goType !== refType) continue;
+        for (const kind of node.allKinds()) {
+            w.write(`${kind.formatGoConstant()}: uint8(unsafe.Offsetof(${dataName(node)}{}.${storage})),`);
+        }
+    }
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+// A member that every node having it stores as the same kind of ref is read
+// through a table of its offsets by kind, zero for kinds without it.
+function generateMemberOffsetAccessor(w: CodeWriter, method: string, ret: string, member: string, refType: string, deref: string, zero: string) {
+    const table = `node${method}Offsets`;
+    generateMemberOffsetTable(w, table, member, refType);
+    w.write(`func (n Node) ${method}() ${ret} {`);
+    w.push();
+    w.write(`if off := ${table}[n.Kind()]; off != 0 {`);
+    w.push();
+    w.write(`return ${deref}((*${refType})(unsafe.Add(n.rec(), off)))`);
+    w.pop();
+    w.write("}");
+    w.write(`return ${zero}`);
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+// Members read through Node by hand-written accessors, which find them by
+// these tables.
+const MEMBER_OFFSET_TABLES: { member: string; refType: string; }[] = [
+    { member: "Expression", refType: "nodeRef" },
+    { member: "Initializer", refType: "nodeRef" },
+    { member: "Type", refType: "nodeRef" },
+    { member: "PostfixToken", refType: "nodeRef" },
+    { member: "QuestionToken", refType: "nodeRef" },
+    { member: "QuestionDotToken", refType: "nodeRef" },
+    { member: "TypeArguments", refType: "listRef" },
+    { member: "Arguments", refType: "listRef" },
+];
+
+function generateMemberOffsetTables(w: CodeWriter) {
+    for (const { member, refType } of MEMBER_OFFSET_TABLES) {
+        generateMemberOffsetTable(w, `node${member}Offsets`, member, refType);
+    }
+}
+
 function generateNameDispatch(w: CodeWriter) {
-    generateNodeAccessorDispatch(w, "Name", "DeclarationName", node => hasMember(node, "name"), node => `${viewOf(node, "n")}.Name()`, "Node{}");
+    generateMemberOffsetAccessor(w, "Name", "DeclarationName", "name", "nodeRef", "n.deref", "Node{}");
 }
 
 function generateModifiersDispatch(w: CodeWriter) {
-    generateNodeAccessorDispatch(w, "Modifiers", "ModifierList", node => hasMember(node, "modifiers"), node => `${viewOf(node, "n")}.Modifiers()`, "ModifierList{}");
+    generateMemberOffsetAccessor(w, "Modifiers", "ModifierList", "modifiers", "listRef", "n.derefModifiers", "ModifierList{}");
 }
 
 function generateSetModifiersDispatch(w: CodeWriter) {
@@ -1695,6 +1712,7 @@ function generate(): string {
     w.write("");
     generateNameDispatch(w);
     generateModifiersDispatch(w);
+    generateMemberOffsetTables(w);
     generateSetModifiersDispatch(w);
 
     // As*() casts
