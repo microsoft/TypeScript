@@ -150,7 +150,12 @@ func (n Node) store() *nodeStore { return n.chunk().store }
 func (n Node) deref(f *nodeRef) Node {
 	r := *f
 	if r&refNear != 0 {
-		return Node{unsafe.Add(unsafe.Pointer(f), int(int32(r))-refNear)}
+		return Node{unsafe.Add(unsafe.Pointer(f), int32(r-refNear))}
+	}
+	if r == 0 {
+		// Absent fields are common, and checking for them is cheaper than
+		// reading the absent far slot, which is far from the record.
+		return Node{}
 	}
 	// The store is found by hand rather than by n.store() to keep callers
 	// within the inlining budget.

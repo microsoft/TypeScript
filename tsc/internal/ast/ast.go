@@ -288,16 +288,29 @@ func (n Node) computedText() string {
 	panic(fmt.Sprintf("Unhandled case in Node.Text: %s", n.Kind()))
 }
 
-// unhandledKindError is the panic value of accessors given a kind without the
-// member. Its message is built only when printed, which keeps the accessors
-// small enough to inline.
-type unhandledKindError struct {
-	method string
-	kind   Kind
+// The panic values of accessors given a kind without the member are named
+// kinds, so that panicking is a conversion and the accessors stay small
+// enough to inline. Their messages are built only when printed.
+type (
+	unhandledExpressionError       Kind
+	unhandledArgumentsError        Kind
+	unhandledQuestionDotTokenError Kind
+)
+
+func (k unhandledExpressionError) Error() string {
+	return unhandledKindMessage("Node.Expression", Kind(k))
 }
 
-func (e unhandledKindError) Error() string {
-	return "Unhandled case in " + e.method + ": " + e.kind.String()
+func (k unhandledArgumentsError) Error() string {
+	return unhandledKindMessage("Node.Arguments", Kind(k))
+}
+
+func (k unhandledQuestionDotTokenError) Error() string {
+	return unhandledKindMessage("Node.QuestionDotToken", Kind(k))
+}
+
+func unhandledKindMessage(method string, kind Kind) string {
+	return "Unhandled case in " + method + ": " + kind.String()
 }
 
 func (n Node) Expression() Node {
@@ -305,7 +318,7 @@ func (n Node) Expression() Node {
 	if off := nodeExpressionOffsets[k]; off != 0 {
 		return n.refAt(off)
 	}
-	panic(unhandledKindError{"Node.Expression", k})
+	panic(unhandledExpressionError(k))
 }
 
 func (n Node) RawText() string {
@@ -403,7 +416,7 @@ func (n Node) ArgumentList() NodeList {
 	if off := nodeArgumentsOffsets[k]; off != 0 {
 		return n.listAt(off)
 	}
-	panic(unhandledKindError{"Node.Arguments", k})
+	panic(unhandledArgumentsError(k))
 }
 
 func (n Node) Arguments() []Node {
@@ -925,7 +938,7 @@ func (n Node) QuestionDotToken() Node {
 	if off := nodeQuestionDotTokenOffsets[k]; off != 0 {
 		return n.refAt(off)
 	}
-	panic(unhandledKindError{"Node.QuestionDotToken", k})
+	panic(unhandledQuestionDotTokenError(k))
 }
 
 func (n Node) TypeExpression() Node {

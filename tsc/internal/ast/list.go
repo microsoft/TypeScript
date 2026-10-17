@@ -220,7 +220,12 @@ func (l ModifierList) Clone(f *NodeFactory) ModifierList {
 func (n Node) derefList(f *listRef) NodeList {
 	r := *f
 	if r&refNear != 0 {
-		return NodeList{unsafe.Add(unsafe.Pointer(f), int(int32(r))-refNear)}
+		return NodeList{unsafe.Add(unsafe.Pointer(f), int32(r-refNear))}
+	}
+	if r == 0 {
+		// Absent fields are common, and checking for them is cheaper than
+		// reading the absent far slot, which is far from the record.
+		return NodeList{}
 	}
 	return (*chunkHeader)(unsafe.Add(n.p, -int((*nodeBaseData)(n.p).chunk))).store.farLists[r>>1]
 }

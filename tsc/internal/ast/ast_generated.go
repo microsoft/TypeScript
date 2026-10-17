@@ -1423,10 +1423,7 @@ func (n Node) modifiersBaseModifiers() *listRef {
 
 type ModifiersBase struct{ Node }
 
-func (node ModifiersBase) Modifiers() ModifierList {
-	return node.derefModifiers(node.modifiersBaseModifiers())
-}
-
+func (node ModifiersBase) Modifiers() ModifierList { return node.Node.Modifiers() }
 func (node ModifiersBase) setModifiers(value ModifierList) {
 	node.setModifiersRef(node.modifiersBaseModifiers(), value)
 }
@@ -2023,11 +2020,7 @@ func (node ClassLikeBase) LocalSymbol() *Symbol {
 func (node ClassLikeBase) SetLocalSymbol(value *Symbol) {
 	node.store().symbols.set(node.exportableBaseLocalSymbol(), value, value == nil)
 }
-
-func (node ClassLikeBase) Modifiers() ModifierList {
-	return node.derefModifiers(node.modifiersBaseModifiers())
-}
-
+func (node ClassLikeBase) Modifiers() ModifierList { return node.Node.Modifiers() }
 func (node ClassLikeBase) setModifiers(value ModifierList) {
 	node.setModifiersRef(node.modifiersBaseModifiers(), value)
 }
@@ -2254,10 +2247,7 @@ func (n Node) namedMemberBasePostfixToken() *nodeRef {
 
 type NamedMemberBase struct{ Node }
 
-func (node NamedMemberBase) Modifiers() ModifierList {
-	return node.derefModifiers(node.modifiersBaseModifiers())
-}
-
+func (node NamedMemberBase) Modifiers() ModifierList { return node.Node.Modifiers() }
 func (node NamedMemberBase) setModifiers(value ModifierList) {
 	node.setModifiersRef(node.modifiersBaseModifiers(), value)
 }
@@ -2285,11 +2275,7 @@ func (node AccessorDeclarationBase) Symbol() *Symbol {
 func (node AccessorDeclarationBase) SetSymbol(value *Symbol) {
 	node.store().symbols.set(node.declarationBaseSymbol(), value, value == nil)
 }
-
-func (node AccessorDeclarationBase) Modifiers() ModifierList {
-	return node.derefModifiers(node.modifiersBaseModifiers())
-}
-
+func (node AccessorDeclarationBase) Modifiers() ModifierList { return node.Node.Modifiers() }
 func (node AccessorDeclarationBase) setModifiers(value ModifierList) {
 	node.setModifiersRef(node.modifiersBaseModifiers(), value)
 }
@@ -2396,9 +2382,7 @@ func (node FunctionOrConstructorTypeNodeBase) SetSymbol(value *Symbol) {
 	node.store().symbols.set(node.declarationBaseSymbol(), value, value == nil)
 }
 
-func (node FunctionOrConstructorTypeNodeBase) Modifiers() ModifierList {
-	return node.derefModifiers(node.modifiersBaseModifiers())
-}
+func (node FunctionOrConstructorTypeNodeBase) Modifiers() ModifierList { return node.Node.Modifiers() }
 
 func (node FunctionOrConstructorTypeNodeBase) setModifiers(value ModifierList) {
 	node.setModifiersRef(node.modifiersBaseModifiers(), value)
@@ -18354,7 +18338,7 @@ var nodeNameOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) Name() DeclarationName {
 	if off := nodeNameOffsets[n.Kind()]; off != 0 {
-		return n.deref((*nodeRef)(unsafe.Add(n.rec(), off)))
+		return n.deref((*nodeRef)(unsafe.Add(n.p, off)))
 	}
 	return Node{}
 }
@@ -18399,7 +18383,7 @@ var nodeModifiersOffsets = [kindFlowReduceLabelData + 1]uint8{
 
 func (n Node) Modifiers() ModifierList {
 	if off := nodeModifiersOffsets[n.Kind()]; off != 0 {
-		return n.derefModifiers((*listRef)(unsafe.Add(n.rec(), off)))
+		return n.derefModifiers((*listRef)(unsafe.Add(n.p, off)))
 	}
 	return ModifierList{}
 }

@@ -478,7 +478,7 @@ function generateBaseStructDefs(w: CodeWriter) {
         w.write("");
         const fields = baseGoFields(structName);
         if (fields.length > 0) {
-            generateFieldAccessors(w, structName, fields, f => `node.${baseFieldName(f.owner!, f.name)}()`, f => `*node.${baseFieldName(f.owner!, f.name)}()`);
+            generateFieldAccessors(w, structName, fields, f => `node.${baseFieldName(f.owner!, f.name)}()`, f => `*node.${baseFieldName(f.owner!, f.name)}()`, /*isBase*/ true);
         }
     }
 }
@@ -696,14 +696,26 @@ function viewOf(node: NodeType, recv: string): string {
 }
 
 // addr and value give a field's address and value within a record.
-function generateFieldAccessors(w: CodeWriter, structName: string, fields: GoField[], addr: (field: GoField) => string, value: (field: GoField) => string) {
+// Node members whose getters dispatch on kind through an offset table. Base
+// views may use them, as they wrap only kinds with the member, and they cost
+// less than a base's own offset table, which can be absent.
+const KIND_DISPATCHED_GETTERS: Record<string, { getter: string; goType: string; }> = {
+    modifiers: { getter: "Modifiers", goType: "ModifierList" },
+};
+
+function generateFieldAccessors(w: CodeWriter, structName: string, fields: GoField[], addr: (field: GoField) => string, value: (field: GoField) => string, isBase = false) {
     let wrote = false;
     for (const field of fields) {
         const { name, goType, isNode } = field;
         if (goType.startsWith("atomic.")) continue;
         const side = sideTableOf(goType);
         const recordRef = recordRefOf(goType);
-        if (isNode) {
+        const dispatched = isBase ? KIND_DISPATCHED_GETTERS[name] : undefined;
+        if (dispatched && dispatched.goType === goType && recordRef) {
+            w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.Node.${dispatched.getter}() }`);
+            w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { node.${recordRef.set}(${addr(field)}, value) }`);
+        }
+        else if (isNode) {
             w.write(`func (node ${structName}) ${getterName(name, goType)}() ${goType} { return node.deref(${addr(field)}) }`);
             w.write(`func (node ${structName}) ${setterName(name)}(value ${goType}) { node.setRef(${addr(field)}, value) }`);
         }
@@ -1290,7 +1302,7 @@ function generateMemberOffsetAccessor(w: CodeWriter, method: string, ret: string
     w.push();
     w.write(`if off := ${table}[n.Kind()]; off != 0 {`);
     w.push();
-    w.write(`return ${deref}((*${refType})(unsafe.Add(n.rec(), off)))`);
+    w.write(`return ${deref}((*${refType})(unsafe.Add(n.p, off)))`);
     w.pop();
     w.write("}");
     w.write(`return ${zero}`);
