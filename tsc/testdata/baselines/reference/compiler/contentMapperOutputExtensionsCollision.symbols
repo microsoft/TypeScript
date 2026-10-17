@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/contentMapperOutputExtensionsCollision.ts] ////
+
+=== /component.astro ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(component.astro, 0, 5))
+
+export const fromAstro = true;
+>fromAstro : Symbol(fromAstro, Decl(component.astro, 1, 12))
+
+=== /component.ts ===
+export const fromTs = true;
+>fromTs : Symbol(fromTs, Decl(component.ts, 0, 12))
+

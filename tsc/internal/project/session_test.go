@@ -7,6 +7,8 @@ import (
 	"slices"
 	"strings"
 	"testing"
+	"testing/synctest"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -1734,5 +1736,38 @@ export const value = content;`,
 		defaultTSProject := snapshot.GetDefaultProject(tsURI)
 		assert.Assert(t, defaultTSProject != nil, "TS file should have a default project")
 		assert.Equal(t, defaultTSProject.ConfigFileName().AsString(), "/home/projects/TS/p1/tsconfig.json", "TS file should belong to tsconfig.json project")
+	})
+}
+
+// TestSessionCloseDoesNotBlockOnIdleCacheCleanTimer guards against a
+// regression where the idle disk cache clean timer was never stored on the
+// session, so Close could never find and cancel it, and would instead block
+// until the timer's full delay elapsed.
+func TestSessionCloseDoesNotBlockOnIdleCacheCleanTimer(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	files := map[string]any{
+		"/home/projects/TS/p1/tsconfig.json": `{
+			"compilerOptions": { "noLib": true }
+		}`,
+		"/home/projects/TS/p1/src/index.ts": `export const x = 1;`,
+	}
+
+	synctest.Test(t, func(t *testing.T) {
+		session, _ := projecttestutil.Setup(files)
+
+		// DidOpenFile schedules the idle cache clean timer.
+		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/src/index.ts", 1, files["/home/projects/TS/p1/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		synctest.Wait()
+
+		start := time.Now()
+		session.Close()
+		// Close must return without needing the fake clock to advance past
+		// the idle cache clean delay; if it does, the timer leaked.
+		elapsed := time.Since(start)
+		assert.Assert(t, elapsed < 5*time.Second, "Close took %v, want well under the idle cache clean delay", elapsed)
 	})
 }

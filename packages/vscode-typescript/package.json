@@ -360,7 +360,8 @@
     "main": "./dist/extension.bundle.js",
     "files": [
         "dist/extension.bundle.js",
-        "lib",
+        "node_modules/typescript",
+        "node_modules/@typescript",
         "LICENSE",
         "NOTICE.txt",
         "logo.png",

@@ -31,7 +31,7 @@ func GetSymbolDocumentationComment(c *checker.Checker, symbol *ast.Symbol) strin
 	}
 	var parts []string
 	var seen collections.Set[*ast.Node]
-	for _, decl := range symbol.Declarations {
+	for _, decl := range symbol.Declarations() {
 		if decl == nil {
 			continue
 		}
@@ -54,7 +54,7 @@ func GetSymbolJSDocTags(symbol *ast.Symbol) []JSDocTagInfo {
 	}
 	var infos []JSDocTagInfo
 	var seen collections.Set[*ast.Node]
-	for _, decl := range symbol.Declarations {
+	for _, decl := range symbol.Declarations() {
 		if decl == nil {
 			continue
 		}
@@ -191,7 +191,7 @@ func getJSDocOrTag(c *checker.Checker, node *ast.Node, seenSymbols *collections.
 		if name := node.PropertyNameOrName(); ast.IsIdentifier(name) {
 			if objectType := c.GetTypeAtLocation(node.Parent); objectType != nil {
 				if prop := c.GetPropertyOfType(objectType, name.Text()); prop != nil {
-					for _, d := range prop.Declarations {
+					for _, d := range prop.Declarations() {
 						if jsdoc := getJSDoc(d); jsdoc != nil {
 							return jsdoc
 						}
@@ -202,7 +202,7 @@ func getJSDocOrTag(c *checker.Checker, node *ast.Node, seenSymbols *collections.
 	}
 	if symbol := node.Symbol(); symbol != nil && node.Parent != nil {
 		if ast.IsFunctionDeclaration(node) || ast.IsMethodDeclaration(node) || ast.IsMethodSignatureDeclaration(node) || ast.IsConstructorDeclaration(node) || ast.IsConstructSignatureDeclaration(node) {
-			firstSignature := core.Find(symbol.Declarations, ast.IsFunctionLike)
+			firstSignature := core.Find(symbol.Declarations(), ast.IsFunctionLike)
 			if firstSignature != nil && node != firstSignature {
 				if jsDoc := getJSDocOrTag(c, firstSignature, seenSymbols); jsDoc != nil {
 					return jsDoc
@@ -217,15 +217,15 @@ func getJSDocOrTag(c *checker.Checker, node *ast.Node, seenSymbols *collections.
 				// This correctly handles intersection constructor types from mixins
 				// (e.g., typeof MixinClass & T) by preserving the full intersection.
 				staticBaseType := c.GetApparentType(c.GetBaseConstructorTypeOfClass(classType))
-				if prop := c.GetPropertyOfType(staticBaseType, symbol.Name); prop != nil && prop.ValueDeclaration != nil && seenSymbols.AddIfAbsent(prop) {
-					if jsDoc := getJSDocOrTag(c, prop.ValueDeclaration, seenSymbols); jsDoc != nil {
+				if prop := c.GetPropertyOfType(staticBaseType, symbol.Name()); prop != nil && prop.ValueDeclaration() != nil && seenSymbols.AddIfAbsent(prop) {
+					if jsDoc := getJSDocOrTag(c, prop.ValueDeclaration(), seenSymbols); jsDoc != nil {
 						return jsDoc
 					}
 				}
 			} else {
 				for _, baseType := range c.GetBaseTypes(classType) {
-					if prop := c.GetPropertyOfType(baseType, symbol.Name); prop != nil && prop.ValueDeclaration != nil && seenSymbols.AddIfAbsent(prop) {
-						if jsDoc := getJSDocOrTag(c, prop.ValueDeclaration, seenSymbols); jsDoc != nil {
+					if prop := c.GetPropertyOfType(baseType, symbol.Name()); prop != nil && prop.ValueDeclaration() != nil && seenSymbols.AddIfAbsent(prop) {
+						if jsDoc := getJSDocOrTag(c, prop.ValueDeclaration(), seenSymbols); jsDoc != nil {
 							return jsDoc
 						}
 					}

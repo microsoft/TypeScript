@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/domBaseElementToSpan.ts] ////
+
+=== domBaseElementToSpan.ts ===
+declare const element: HTMLElement;
+>element : HTMLElement
+
+const span: HTMLSpanElement = element;
+>span : HTMLSpanElement
+>element : HTMLElement
+

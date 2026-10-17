@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/newTargetUndefinedEquality.ts] ////
+
+=== newTargetUndefinedEquality.ts ===
+class ConstructorGuard {
+>ConstructorGuard : ConstructorGuard
+
+    constructor() {
+        if (new.target === undefined) throw TypeError("Constructor requires new");
+>new.target === undefined : boolean
+>new.target : typeof ConstructorGuard
+>target : typeof ConstructorGuard
+>undefined : undefined
+>TypeError("Constructor requires new") : TypeError
+>TypeError : TypeErrorConstructor
+>"Constructor requires new" : "Constructor requires new"
+    }
+}
+

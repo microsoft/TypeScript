@@ -21,6 +21,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
@@ -546,7 +547,11 @@ func (p *Program) GetContentMapper(file *ast.SourceFile) *contentmapper.Mapper {
 	return nil
 }
 
-func (p *Program) ContentMapperExtensions() []string         { return p.opts.Config.ContentMapperExtensions() }
+func (p *Program) ContentMapperExtensions() []string { return p.opts.Config.ContentMapperExtensions() }
+
+func (p *Program) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
+	return p.opts.Config.ContentMapperExtensionRewrites()
+}
 func (p *Program) CommandLine() *tsoptions.ParsedCommandLine { return p.opts.Config }
 func (p *Program) Host() CompilerHost                        { return p.hosts.Host }
 func (p *Program) Tracing() *tracing.Tracing                 { return p.hosts.Tracing }
@@ -1177,6 +1182,8 @@ func (p *Program) verifyCompilerOptions() {
 			}
 			if !tspath.PathIsRelative(subst) && !tspath.PathIsAbsolute(subst) {
 				createDiagnosticForOptionPathKeyValue(key, i, diagnostics.Non_relative_paths_are_not_allowed_Did_you_forget_a_leading_Slash)
+			} else if nativepath.IsNetworkPath(tspath.GetNormalizedAbsolutePath(subst, options.GetPathsBasePath(p.GetCurrentDirectory()))) {
+				createDiagnosticForOptionPathKeyValue(key, i, diagnostics.Network_path_0_is_not_supported, subst)
 			}
 		}
 	}
@@ -1395,13 +1402,19 @@ func (p *Program) verifyCompilerOptions() {
 			}
 		}
 
+		externalOutputSourceFiles := core.Filter(p.SourceFiles(), func(sourceFile *ast.SourceFile) bool {
+			return sourceFile.ContentMapper() != "" &&
+				!p.IsSourceFileFromExternalLibrary(sourceFile) &&
+				p.GetProjectReferenceFromSource(sourceFile.PathKey()) == nil
+		})
 		outputpaths.ForEachEmittedFile(p, options, func(emitFileNames *outputpaths.OutputPaths, sourceFile *ast.SourceFile) bool {
 			verifyEmitFilePath(emitFileNames.JsFilePath())
 			verifyEmitFilePath(emitFileNames.SourceMapFilePath())
 			verifyEmitFilePath(emitFileNames.DeclarationFilePath())
 			verifyEmitFilePath(emitFileNames.DeclarationMapPath())
+			verifyEmitFilePath(emitFileNames.ExternalOutputFilePath())
 			return false
-		}, p.getSourceFilesToEmit(nil, false, false), false)
+		}, p.getSourceFilesToEmit(nil, false, false), externalOutputSourceFiles, false)
 		verifyEmitFilePath(p.opts.Config.GetBuildInfoFileName())
 	}
 }
@@ -2427,6 +2440,7 @@ var plainJSErrors = collections.NewSetFromItems(
 	diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement.Code(),
 	diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement.Code(),
 	diagnostics.A_default_export_must_be_at_the_top_level_of_a_file_or_module_declaration.Code(),
+	diagnostics.A_deferred_import_must_specify_a_namespace_binding.Code(),
 	diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context.Code(),
 	diagnostics.A_destructuring_declaration_must_have_an_initializer.Code(),
 	diagnostics.A_get_accessor_cannot_have_parameters.Code(),

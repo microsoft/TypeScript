@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/enumPropertyExhaustiveNullableReceiver.ts] ////
+
+=== enumPropertyExhaustiveNullableReceiver.ts ===
+enum NotificationKind { Review, Comment }
+>NotificationKind : NotificationKind
+>Review : NotificationKind.Review
+>Comment : NotificationKind.Comment
+
+declare function assertNever(value: never): never;
+>assertNever : (value: never) => never
+>value : never
+
+function notify(notification: { kind: NotificationKind } | null) {
+>notify : (notification: { kind: NotificationKind; } | null) => undefined
+>notification : { kind: NotificationKind; } | null
+>kind : NotificationKind
+
+    if (notification === null) return;
+>notification === null : boolean
+>notification : { kind: NotificationKind; } | null
+
+    switch (notification.kind) {
+>notification.kind : NotificationKind
+>notification : { kind: NotificationKind; }
+>kind : NotificationKind
+
+        case NotificationKind.Review: return;
+>NotificationKind.Review : NotificationKind.Review
+>NotificationKind : typeof NotificationKind
+>Review : NotificationKind.Review
+
+        case NotificationKind.Comment: return;
+>NotificationKind.Comment : NotificationKind.Comment
+>NotificationKind : typeof NotificationKind
+>Comment : NotificationKind.Comment
+
+        default: return assertNever(notification.kind);
+>assertNever(notification.kind) : never
+>assertNever : (value: never) => never
+>notification.kind : never
+>notification : { kind: NotificationKind; }
+>kind : never
+    }
+}
+

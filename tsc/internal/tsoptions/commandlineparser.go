@@ -305,7 +305,9 @@ func (p *commandLineParser) parseOptionValue(
 				}
 			case "string":
 				val, err := validateJsonOptionValue(opt, args[i], nil, nil)
-				if err == nil {
+				if path, ok := val.(string); ok && err == nil && opt.PathKind.IsRooted() && isNetworkPathValue(path, p.currentDirectory) {
+					p.errors = append(p.errors, ast.NewCompilerDiagnostic(diagnostics.Network_path_0_is_not_supported, path))
+				} else if err == nil {
 					p.options.Set(opt.Name, val)
 				} else {
 					p.errors = append(p.errors, err...)
