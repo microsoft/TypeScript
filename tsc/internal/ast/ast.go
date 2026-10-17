@@ -220,9 +220,8 @@ type MutableNode struct{ Node }
 func (n Node) AsMutable() MutableNode { return MutableNode{n} }
 
 func (n Node) Symbol() *Symbol {
-	data := n.DeclarationData()
-	if !data.IsNil() {
-		return data.Symbol()
+	if off := nodeSymbolOffsets[n.Kind()]; off != 0 {
+		return n.store().symbols.items[*(*sideRef)(unsafe.Add(n.p, off))]
 	}
 	return nil
 }
@@ -236,17 +235,15 @@ func (n Node) LocalSymbol() *Symbol {
 }
 
 func (n Node) Locals() SymbolTable {
-	data := n.LocalsContainerData()
-	if !data.IsNil() {
-		return data.Locals()
+	if off := nodeLocalsOffsets[n.Kind()]; off != 0 {
+		return n.store().symbolTables.items[*(*sideRef)(unsafe.Add(n.p, off))]
 	}
 	return nil
 }
 
 func (n Node) Body() Node {
-	data := n.BodyData()
-	if !data.IsNil() {
-		return data.Body()
+	if off := nodeBodyOffsets[n.Kind()]; off != 0 {
+		return n.refAt(off)
 	}
 	return Node{}
 }
@@ -289,11 +286,24 @@ func (n Node) Text() string {
 	panic(fmt.Sprintf("Unhandled case in Node.Text: %s", n.Kind()))
 }
 
+// unhandledKindError is the panic value of accessors given a kind without the
+// member. Its message is built only when printed, which keeps the accessors
+// small enough to inline.
+type unhandledKindError struct {
+	method string
+	kind   Kind
+}
+
+func (e unhandledKindError) Error() string {
+	return "Unhandled case in " + e.method + ": " + e.kind.String()
+}
+
 func (n Node) Expression() Node {
-	if off := nodeExpressionOffsets[n.Kind()]; off != 0 {
+	k := n.Kind()
+	if off := nodeExpressionOffsets[k]; off != 0 {
 		return n.refAt(off)
 	}
-	panic("Unhandled case in Node.Expression: " + n.Kind().String())
+	panic(unhandledKindError{"Node.Expression", k})
 }
 
 func (n Node) RawText() string {
@@ -387,10 +397,11 @@ func (m MutableNode) SetExpression(expr Node) {
 }
 
 func (n Node) ArgumentList() NodeList {
-	if off := nodeArgumentsOffsets[n.Kind()]; off != 0 {
+	k := n.Kind()
+	if off := nodeArgumentsOffsets[k]; off != 0 {
 		return n.listAt(off)
 	}
-	panic("Unhandled case in Node.Arguments: " + n.Kind().String())
+	panic(unhandledKindError{"Node.Arguments", k})
 }
 
 func (n Node) Arguments() []Node {
@@ -518,16 +529,11 @@ func (n Node) ModifierNodes() []Node {
 	return nil
 }
 
+// Type reads the type expression of JSDoc parameter and property tags, and
+// nothing for JSDocVariadicType, whose type is its operand.
 func (n Node) Type() Node {
-	switch k := n.Kind(); k {
-	case KindJSDocParameterTag, KindJSDocPropertyTag:
-		return n.AsJSDocParameterOrPropertyTag().TypeExpression()
-	case KindJSDocVariadicType:
-		return Node{}
-	default:
-		if off := nodeTypeOffsets[k]; off != 0 {
-			return n.refAt(off)
-		}
+	if off := nodeTypeOffsets[n.Kind()]; off != 0 {
+		return n.refAt(off)
 	}
 	return Node{}
 }
@@ -913,10 +919,11 @@ func (n Node) QuestionToken() TokenNode {
 }
 
 func (n Node) QuestionDotToken() Node {
-	if off := nodeQuestionDotTokenOffsets[n.Kind()]; off != 0 {
+	k := n.Kind()
+	if off := nodeQuestionDotTokenOffsets[k]; off != 0 {
 		return n.refAt(off)
 	}
-	panic("Unhandled case in Node.QuestionDotToken: " + n.Kind().String())
+	panic(unhandledKindError{"Node.QuestionDotToken", k})
 }
 
 func (n Node) TypeExpression() Node {

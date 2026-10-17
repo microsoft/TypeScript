@@ -222,7 +222,7 @@ func (n Node) derefList(f *listRef) NodeList {
 	if r&refNear != 0 {
 		return NodeList{unsafe.Add(unsafe.Pointer(f), int(int32(r))-refNear)}
 	}
-	return n.store().farLists[r>>1]
+	return (*chunkHeader)(unsafe.Add(n.p, -int((*nodeBaseData)(n.p).chunk))).store.farLists[r>>1]
 }
 
 func (n Node) derefModifiers(f *listRef) ModifierList {
@@ -263,5 +263,5 @@ func setListRef(c *chunkHeader, f *listRef, v NodeList) {
 // listAt returns the list that the field at offset off of n's record
 // refers to.
 func (n Node) listAt(off uint8) NodeList {
-	return n.derefList((*listRef)(unsafe.Add(n.rec(), off)))
+	return n.derefList((*listRef)(unsafe.Add(n.p, off)))
 }

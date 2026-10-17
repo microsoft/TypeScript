@@ -1260,16 +1260,20 @@ function hasMember(node: NodeType, name: string): boolean {
     return schemaMembers(node).some(member => member.name === name);
 }
 
-function generateMemberOffsetTable(w: CodeWriter, table: string, member: string, refType: string) {
-    const storage = goStorageName(member);
+// Overrides map a kind's Go constant to the storage of the field read for
+// the member instead, or to null if the kind has none.
+function generateMemberOffsetTable(w: CodeWriter, table: string, member: string, refType: string, overrides: Record<string, string | null> = {}) {
     w.write(`var ${table} = [kindFlowReduceLabelData + 1]uint8{`);
     w.push();
     for (const node of api.nodes()) {
-        const field = nodeRecordFields(node).find(f => f.storage === storage);
-        // Only refs can be read the same way for every kind.
-        if (field?.goType !== refType) continue;
         for (const kind of node.allKinds()) {
-            w.write(`${kind.formatGoConstant()}: uint8(unsafe.Offsetof(${dataName(node)}{}.${storage})),`);
+            const constant = kind.formatGoConstant();
+            const storage = constant in overrides ? overrides[constant] : goStorageName(member);
+            if (storage === null) continue;
+            const field = nodeRecordFields(node).find(f => f.storage === storage);
+            // Only refs can be read the same way for every kind.
+            if (field?.goType !== refType) continue;
+            w.write(`${constant}: uint8(unsafe.Offsetof(${dataName(node)}{}.${storage})),`);
         }
     }
     w.pop();
@@ -1297,20 +1301,28 @@ function generateMemberOffsetAccessor(w: CodeWriter, method: string, ret: string
 
 // Members read through Node by hand-written accessors, which find them by
 // these tables.
-const MEMBER_OFFSET_TABLES: { member: string; refType: string; }[] = [
+const MEMBER_OFFSET_TABLES: { member: string; refType: string; overrides?: Record<string, string | null>; }[] = [
     { member: "Expression", refType: "nodeRef" },
     { member: "Initializer", refType: "nodeRef" },
-    { member: "Type", refType: "nodeRef" },
+    {
+        member: "Type",
+        refType: "nodeRef",
+        overrides: { KindJSDocParameterTag: "typeExpression", KindJSDocPropertyTag: "typeExpression", KindJSDocVariadicType: null },
+    },
     { member: "PostfixToken", refType: "nodeRef" },
     { member: "QuestionToken", refType: "nodeRef" },
     { member: "QuestionDotToken", refType: "nodeRef" },
     { member: "TypeArguments", refType: "listRef" },
     { member: "Arguments", refType: "listRef" },
+    // Node.Body has never read the body of a class static block.
+    { member: "Body", refType: "nodeRef", overrides: { KindClassStaticBlockDeclaration: null } },
+    { member: "Symbol", refType: "sideRef" },
+    { member: "Locals", refType: "sideRef" },
 ];
 
 function generateMemberOffsetTables(w: CodeWriter) {
-    for (const { member, refType } of MEMBER_OFFSET_TABLES) {
-        generateMemberOffsetTable(w, `node${member}Offsets`, member, refType);
+    for (const { member, refType, overrides } of MEMBER_OFFSET_TABLES) {
+        generateMemberOffsetTable(w, `node${member}Offsets`, member, refType, overrides);
     }
 }
 

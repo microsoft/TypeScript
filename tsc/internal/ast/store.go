@@ -80,7 +80,16 @@ const (
 func newNodeStore() *nodeStore {
 	// The first far slots are the absent node and list, which zero refs
 	// refer to.
-	return &nodeStore{far: make([]Node, 1), farLists: make([]NodeList, 1)}
+	return &nodeStore{
+		far:          make([]Node, 1),
+		farLists:     make([]NodeList, 1),
+		symbols:      newSideTable[*Symbol](),
+		symbolTables: newSideTable[SymbolTable](),
+		stringLists:  newSideTable[[]string](),
+		nodeSlices:   newSideTable[[]Node](),
+		values:       newSideTable[any](),
+		sourceFiles:  newSideTable[*SourceFile](),
+	}
 }
 
 // nodeBaseData is the header at the start of every node record.
@@ -133,13 +142,15 @@ func (n Node) deref(f *nodeRef) Node {
 	if r&refNear != 0 {
 		return Node{unsafe.Add(unsafe.Pointer(f), int(int32(r))-refNear)}
 	}
-	return n.store().far[r>>1]
+	// The store is found by hand rather than by n.store() to keep callers
+	// within the inlining budget.
+	return (*chunkHeader)(unsafe.Add(n.p, -int((*nodeBaseData)(n.p).chunk))).store.far[r>>1]
 }
 
 // refAt returns the node that the field at offset off of n's record refers
 // to.
 func (n Node) refAt(off uint8) Node {
-	return n.deref((*nodeRef)(unsafe.Add(n.rec(), off)))
+	return n.deref((*nodeRef)(unsafe.Add(n.p, off)))
 }
 
 // setRef makes the field f of n's record refer to v.
@@ -355,8 +366,9 @@ func (s *nodeStore) compactSide() {
 	s.farLists = slices.Clip(slices.Clone(s.farLists))
 }
 
-// A sideRef is a record field's slot in a side table, biased by one so that
-// zero means the zero value without a slot.
+// A sideRef is a record field's slot in a side table. The first slot holds
+// the zero value and is never written, so a zero ref reads as the zero value
+// without a slot of its own.
 type sideRef uint32
 
 // A sideTable is appended to only by its store's owner, before the store
@@ -365,23 +377,23 @@ type sideTable[T any] struct {
 	items []T
 }
 
+func newSideTable[T any]() sideTable[T] {
+	return sideTable[T]{items: make([]T, 1)}
+}
+
 func (t *sideTable[T]) get(r sideRef) T {
-	if r == 0 {
-		var zero T
-		return zero
-	}
-	return t.items[r-1]
+	return t.items[r]
 }
 
 // set stores v in r's slot, allocating one unless v is the zero value.
 func (t *sideTable[T]) set(r *sideRef, v T, isZero bool) {
 	if *r != 0 {
-		t.items[*r-1] = v
+		t.items[*r] = v
 		return
 	}
 	if !isZero {
-		t.items = append(t.items, v)
 		*r = sideRef(len(t.items))
+		t.items = append(t.items, v)
 	}
 }
 

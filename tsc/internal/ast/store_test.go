@@ -106,7 +106,7 @@ func TestNodeSideTableZeroValues(t *testing.T) {
 	assert.Assert(t, node.AsBlock().Locals() != nil)
 	node.AsBlock().SetLocals(nil)
 	assert.Assert(t, node.AsBlock().Locals() == nil)
-	assert.Equal(t, len(factory.store.symbolTables.items), 1)
+	assert.Equal(t, len(factory.store.symbolTables.items), 2)
 }
 
 func TestNodeTextRefs(t *testing.T) {
