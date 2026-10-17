@@ -335,7 +335,7 @@ func findNamespaceReExports(sourceFileLike ast.Node, name ast.Node, checker *che
 		}
 		exportClause := statement.AsExportDeclaration().ExportClause()
 		moduleSpecifier := statement.ModuleSpecifier()
-		return moduleSpecifier.IsNil() && !exportClause.IsNil() && ast.IsNamedExports(exportClause) && core.Some(exportClause.Elements(), func(element ast.Node) bool {
+		return moduleSpecifier.IsNil() && !exportClause.IsNil() && ast.IsNamedExports(exportClause) && exportClause.ElementList().Some(func(element ast.Node) bool {
 			return checker.GetExportSpecifierLocalTargetSymbol(element) == namespaceImportSymbol
 		})
 	})

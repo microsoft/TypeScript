@@ -2062,7 +2062,7 @@ func (tx *classFieldsTransformer) visitClassExpressionInNewClassLexicalEnvironme
 		// during transformClassMembers. Pre-detect this so we know whether the class
 		// will be wrapped with a temp variable.
 		willHavePrivatePendingExpressions := tx.shouldTransformPrivateElementsOrClassStaticBlocks &&
-			core.Some(node.Members(), func(n ast.Node) bool {
+			node.MemberList().Some(func(n ast.Node) bool {
 				return ast.IsPrivateIdentifierClassElementDeclaration(n) && !ast.HasStaticModifier(n) && tx.shouldTransformClassElementToWeakMap(n)
 			})
 		willNeedTempWrapper := hasTransformableStatics || willHavePrivatePendingExpressions
@@ -2272,7 +2272,7 @@ func (tx *classFieldsTransformer) transformClassMembers(node ast.Node) (members 
 
 	// Create a synthetic constructor if necessary
 	var syntheticConstructor ast.Node
-	if !core.Some(members.Slice(), ast.IsConstructorDeclaration) {
+	if !members.Some(ast.IsConstructorDeclaration) {
 		syntheticConstructor = tx.transformConstructor(ast.ConstructorDeclaration{}, node)
 	}
 

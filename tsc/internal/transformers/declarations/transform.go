@@ -1977,7 +1977,7 @@ func (tx *DeclarationTransformer) buildClassMembers(classNode ast.Node, extraMem
 	// When the class has at least one private identifier, create a unique constant identifier to retain the nominal typing behavior
 	// Prevents other classes with the same public members from being used in place of the current class
 	var privateIdentifier ast.Node
-	if core.Some(classNode.ClassLikeData().Members().Slice(), func(member ast.Node) bool {
+	if classNode.ClassLikeData().Members().Some(func(member ast.Node) bool {
 		return !member.Name().IsNil() && ast.IsPrivateIdentifier(member.Name())
 	}) {
 		privateIdentifier = tx.Factory().NewPropertyDeclaration(ast.ModifierList{}, tx.Factory().NewPrivateIdentifier("#private"), ast.Node{}, ast.Node{}, ast.Node{})

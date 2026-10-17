@@ -90,7 +90,7 @@ func (tx *ESModuleTransformer) visitSourceFile(node *ast.SourceFile) ast.Node {
 
 	if ast.IsExternalModule(result) &&
 		tx.compilerOptions.GetEmitModuleKind() != core.ModuleKindPreserve &&
-		!core.Some(result.Statements.Slice(), ast.IsExternalModuleIndicator) {
+		!result.Statements.Some(ast.IsExternalModuleIndicator) {
 		statements := slices.Clone(result.Statements.Slice())
 		statements = append(statements, createEmptyImports(tx.Factory()))
 		statementList := tx.Factory().NewNodeList(statements)

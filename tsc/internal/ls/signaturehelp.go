@@ -991,7 +991,7 @@ func getImmediatelyContainingArgumentInfo(node ast.Node, position int, sourceFil
 			return nil
 		}
 
-		spanIndex := ast.IndexOfNode(templateSpan.Parent().AsTemplateExpression().TemplateSpans().Slice(), templateSpan)
+		spanIndex := ast.IndexOfNode(templateSpan.Parent().AsTemplateExpression().TemplateSpans(), templateSpan)
 		argumentIndex := getArgumentIndexForTemplatePiece(spanIndex, node, position, sourceFile)
 
 		return getArgumentListInfoForTemplate(tagExpression.AsTaggedTemplateExpression(), argumentIndex, sourceFile)

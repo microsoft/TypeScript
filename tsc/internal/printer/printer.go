@@ -1365,10 +1365,10 @@ func (p *Printer) emitModifierList(parentNode ast.Node, modifiers ast.ModifierLi
 		return parentNode.Pos()
 	}
 
-	if core.Every(modifiers.Slice(), ast.IsModifier) {
+	if modifiers.Every(ast.IsModifier) {
 		// if all modifier-likes are `Modifier`, simply emit the list as modifiers.
 		p.emitList((*Printer).emitKeywordNode, parentNode, modifiers.NodeList, LFModifiers)
-	} else if core.Every(modifiers.Slice(), ast.IsDecorator) {
+	} else if modifiers.Every(ast.IsDecorator) {
 		if !allowDecorators {
 			return parentNode.Pos()
 		}

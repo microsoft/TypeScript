@@ -252,7 +252,7 @@ func fileAffectsGlobalScope(file *ast.SourceFile) bool {
 	// in the file is not ambient external module, we treat it as a regular script file.
 	return !file.Statements.IsNil() &&
 		file.Statements.Slice() != nil &&
-		core.Some(file.Statements.Slice(), func(stmt ast.Node) bool {
+		file.Statements.Some(func(stmt ast.Node) bool {
 			return !ast.IsModuleWithStringLiteralName(stmt)
 		})
 }

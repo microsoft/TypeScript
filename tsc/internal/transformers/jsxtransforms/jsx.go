@@ -145,7 +145,7 @@ func hasKeyAfterPropsSpread(node ast.Node) bool {
 		opener = node.AsJsxElement().OpeningElement()
 	} // otherwise self-closing
 	for _, elem := range opener.Attributes().PropertyList().All() {
-		if ast.IsJsxSpreadAttribute(elem) && (!ast.IsObjectLiteralExpression(elem.Expression()) || core.Some(elem.Expression().Properties(), ast.IsSpreadAssignment)) {
+		if ast.IsJsxSpreadAttribute(elem) && (!ast.IsObjectLiteralExpression(elem.Expression()) || elem.Expression().PropertyList().Some(ast.IsSpreadAssignment)) {
 			spread = true
 		} else if spread && ast.IsJsxAttribute(elem) && ast.IsIdentifier(elem.Name()) && elem.Name().Text() == "key" {
 			return true

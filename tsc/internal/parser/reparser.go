@@ -391,7 +391,7 @@ func (p *Parser) reparseHosted(tag ast.Node, parent ast.Node, jsDoc ast.Node) {
 			}
 		}
 		if fun := getFunctionLikeHost(parent); !fun.IsNil() {
-			noTypedParams := core.Every(fun.Parameters(), func(param ast.Node) bool { return param.Type().IsNil() })
+			noTypedParams := fun.ParameterList().Every(func(param ast.Node) bool { return param.Type().IsNil() })
 			if fun.TypeParameterList().IsNil() && fun.Type().IsNil() && noTypedParams && !tag.TypeExpression().IsNil() {
 				fun.FunctionLikeData().SetFullSignature(p.addDeepCloneReparse(tag.TypeExpression().Type()))
 				p.finishMutatedNode(fun)

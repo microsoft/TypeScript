@@ -439,7 +439,7 @@ func (tx *LegacyDecoratorsTransformer) transformClassDeclarationWithClassDecorat
 
 	// If we're emitting to ES2022 or later then we need to reassign the class alias before
 	// static initializers are evaluated.
-	assignClassAliasInStaticBlock := tx.languageVersion >= core.ScriptTargetES2022 && !classAlias.IsNil() && !members.IsNil() && members.Len() > 0 && core.Some(members.Slice(), isClassStaticBlockDeclarationOrStaticProperty)
+	assignClassAliasInStaticBlock := tx.languageVersion >= core.ScriptTargetES2022 && !classAlias.IsNil() && !members.IsNil() && members.Len() > 0 && members.Some(isClassStaticBlockDeclarationOrStaticProperty)
 	if assignClassAliasInStaticBlock {
 		memberList := []ast.Node{}
 		memberList = append(memberList, tx.Factory().NewClassStaticBlockDeclaration(ast.ModifierList{}, tx.Factory().NewBlock(

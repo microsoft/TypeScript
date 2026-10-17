@@ -3866,10 +3866,21 @@ func IsCallOrNewExpression(node Node) bool {
 	return IsCallExpression(node) || IsNewExpression(node)
 }
 
-func IndexOfNode(nodes []Node, node Node) int {
-	index, ok := slices.BinarySearchFunc(nodes, node, CompareNodePositions)
-	if ok {
-		return index
+// IndexOfNode returns the index of node in nodes, which must be in source
+// order, or -1 if it isn't there.
+func IndexOfNode(nodes NodeList, node Node) int {
+	loc := node.Loc()
+	lo, hi := 0, nodes.Len()
+	for lo < hi {
+		mid := int(uint(lo+hi) >> 1)
+		switch c := core.CompareTextRanges(nodes.At(mid).Loc(), loc); {
+		case c < 0:
+			lo = mid + 1
+		case c > 0:
+			hi = mid
+		default:
+			return mid
+		}
 	}
 	return -1
 }
@@ -4325,7 +4336,7 @@ func HasContextSensitiveParameters(node Node) bool {
 	// Functions with type parameters are not context sensitive.
 	if node.TypeParameters() == nil {
 		// Functions with any parameters that lack type annotations are context sensitive.
-		if core.Some(node.Parameters(), func(p Node) bool { return p.Type().IsNil() }) {
+		if node.ParameterList().Some(func(p Node) bool { return p.Type().IsNil() }) {
 			return true
 		}
 		if !IsArrowFunction(node) {
@@ -4467,13 +4478,13 @@ func NodeOrChildIsDecorated(useLegacyDecorators bool, node Node, parent Node, gr
 func ChildIsDecorated(useLegacyDecorators bool, node Node, parent Node) bool {
 	switch node.Kind() {
 	case KindClassDeclaration, KindClassExpression:
-		return core.Some(node.Members(), func(m Node) bool {
+		return node.MemberList().Some(func(m Node) bool {
 			return NodeOrChildIsDecorated(useLegacyDecorators, m, node, parent)
 		})
 	case KindMethodDeclaration,
 		KindSetAccessor,
 		KindConstructor:
-		return core.Some(node.Parameters(), func(p Node) bool {
+		return node.ParameterList().Some(func(p Node) bool {
 			return NodeIsDecorated(useLegacyDecorators, p, node, parent)
 		})
 	default:

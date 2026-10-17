@@ -638,7 +638,7 @@ func (c *Checker) checkExpressionForMutableLocationWithContextualType(next ast.N
 
 func (c *Checker) elaborateArrowFunction(node ast.Node, source *Type, target *Type, relation *Relation, diagnosticOutput *[]*ast.Diagnostic) bool {
 	// Don't elaborate blocks or functions with annotated parameter types
-	if ast.IsBlock(node.Body()) || core.Some(node.Parameters(), hasType) {
+	if ast.IsBlock(node.Body()) || node.ParameterList().Some(hasType) {
 		return false
 	}
 	sourceSig := c.getSingleCallSignature(source)

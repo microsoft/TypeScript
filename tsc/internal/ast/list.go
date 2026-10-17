@@ -144,6 +144,26 @@ func (l NodeList) All() iter.Seq2[int, Node] {
 	}
 }
 
+// Some reports whether f is true for any node of l.
+func (l NodeList) Some(f func(Node) bool) bool {
+	for k, n := 0, l.Len(); k < n; k++ {
+		if f(l.at(k)) {
+			return true
+		}
+	}
+	return false
+}
+
+// Every reports whether f is true for every node of l.
+func (l NodeList) Every(f func(Node) bool) bool {
+	for k, n := 0, l.Len(); k < n; k++ {
+		if !f(l.at(k)) {
+			return false
+		}
+	}
+	return true
+}
+
 // Slice returns the nodes of l in a new slice, or nil if l is empty.
 func (l NodeList) Slice() []Node {
 	n := l.Len()

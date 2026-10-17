@@ -437,7 +437,7 @@ func (r *EmitResolver) isValueAliasDeclarationWorker(node ast.Node) bool {
 	case ast.KindExportDeclaration:
 		exportClause := node.AsExportDeclaration().ExportClause()
 		return !exportClause.IsNil() && (ast.IsNamespaceExport(exportClause) ||
-			core.Some(exportClause.Elements(), r.isValueAliasDeclaration))
+			exportClause.ElementList().Some(r.isValueAliasDeclaration))
 	case ast.KindExportAssignment:
 		if !node.Expression().IsNil() && node.Expression().Kind() == ast.KindIdentifier {
 			return r.isAliasResolvedToValue(c.getSymbolOfDeclaration(node), true /*excludeTypeOnlyValues*/)

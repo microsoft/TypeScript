@@ -552,7 +552,7 @@ func (c *Checker) resolveJsxOpeningLikeElement(node ast.Node, candidatesOutArray
 			c.checkTypeAssignableToAndOptionallyElaborate(c.checkExpressionWithContextualType(node.Attributes(), c.getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), nil /*inferenceContext*/, CheckModeNormal), result, node.TagName(), node.Attributes(), nil, nil)
 			typeArguments := node.TypeArguments()
 			if len(typeArguments) != 0 {
-				c.checkSourceElements(typeArguments)
+				c.checkSourceElementSlice(typeArguments)
 				sourceFile := ast.GetSourceFileOfNode(node)
 				typeArgumentList := node.TypeArgumentList()
 				loc := core.NewTextRange(scanner.SkipTrivia(sourceFile.Text(), typeArgumentList.Loc().Pos()), typeArgumentList.Loc().End())

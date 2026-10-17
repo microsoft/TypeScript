@@ -1354,8 +1354,8 @@ func isUseStrictPrologueDirective(sourceFile *ast.SourceFile, node ast.Node) boo
 	return nodeText == "\"use strict\"" || nodeText == "'use strict'"
 }
 
-func FindUseStrictPrologue(sourceFile *ast.SourceFile, statements []ast.Node) ast.Node {
-	for _, statement := range statements {
+func FindUseStrictPrologue(sourceFile *ast.SourceFile, statements ast.NodeList) ast.Node {
+	for _, statement := range statements.All() {
 		if ast.IsPrologueDirective(statement) {
 			if isUseStrictPrologueDirective(sourceFile, statement) {
 				return statement
@@ -2100,7 +2100,7 @@ func (b *Binder) bindSwitchStatement(node ast.Node) {
 	b.preSwitchCaseFlow = b.currentFlow
 	b.bind(stmt.CaseBlock())
 	b.addAntecedent(postSwitchLabel, b.currentFlow)
-	hasDefault := core.Some(stmt.CaseBlock().AsCaseBlock().Clauses().Slice(), func(c ast.Node) bool {
+	hasDefault := stmt.CaseBlock().AsCaseBlock().Clauses().Some(func(c ast.Node) bool {
 		return c.Kind() == ast.KindDefaultClause
 	})
 	if !hasDefault {

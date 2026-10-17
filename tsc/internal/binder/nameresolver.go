@@ -366,7 +366,7 @@ func (r *NameResolver) useOuterVariableScopeInParameter(result *ast.Symbol, loca
 				declarationRequiresScopeChange = r.GetRequiresScopeChangeCache(functionLocation)
 			}
 			if declarationRequiresScopeChange == core.TSUnknown {
-				declarationRequiresScopeChange = core.IfElse(core.Some(functionLocation.Parameters(), r.requiresScopeChange), core.TSTrue, core.TSFalse)
+				declarationRequiresScopeChange = core.IfElse(functionLocation.ParameterList().Some(r.requiresScopeChange), core.TSTrue, core.TSFalse)
 				if r.SetRequiresScopeChangeCache != nil {
 					r.SetRequiresScopeChangeCache(functionLocation, declarationRequiresScopeChange)
 				}

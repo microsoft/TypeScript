@@ -299,7 +299,7 @@ func isMatchingParameterTag(tag ast.Node, name string) bool {
 }
 
 func isMatchingTemplateTag(tag ast.Node, name string) bool {
-	return tag.Kind() == ast.KindJSDocTemplateTag && core.Some(tag.TypeParameters(), func(tp ast.Node) bool { return isNodeWithName(tp, name) })
+	return tag.Kind() == ast.KindJSDocTemplateTag && tag.TypeParameterList().Some(func(tp ast.Node) bool { return isNodeWithName(tp, name) })
 }
 
 func isNodeWithName(node ast.Node, name string) bool {

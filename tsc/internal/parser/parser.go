@@ -1177,7 +1177,7 @@ func (p *Parser) parseDeclaration() ast.Statement {
 	pos := p.nodePos()
 	jsdoc := p.jsdocScannerInfo()
 	modifiers := p.parseModifiersEx( /*allowDecorators*/ true, false /*permitConstAsModifier*/, false /*stopOnStartOfClassStaticBlock*/)
-	isAmbient := !modifiers.IsNil() && core.Some(modifiers.Slice(), isDeclareModifier)
+	isAmbient := !modifiers.IsNil() && modifiers.Some(isDeclareModifier)
 	if isAmbient {
 		// !!! incremental parsing
 		// node := p.tryReuseAmbientDeclaration(pos)
@@ -1803,7 +1803,7 @@ func (p *Parser) parseClassDeclarationOrExpression(pos int, jsdoc jsdocScannerIn
 	if !modifiers.IsNil() &&
 		p.parsingContexts&(1<<PCSourceElements) != 0 &&
 		p.parsingContexts&((1<<PCBlockStatements)|(1<<PCSwitchClauseStatements)) == 0 &&
-		core.Some(modifiers.Slice(), isExportModifier) {
+		modifiers.Some(isExportModifier) {
 		p.setContextFlags(ast.NodeFlagsAwaitContext, true /*value*/)
 	}
 	heritageClauses := p.parseHeritageClauses(false /*isInterface*/)
@@ -1971,7 +1971,7 @@ func (p *Parser) parseClassElement() ast.Node {
 	// It is very important that we check this *after* checking indexers because
 	// the [ token can start an index signature or a computed property name
 	if tokenIsIdentifierOrKeyword(p.token) || p.token == ast.KindStringLiteral || p.token == ast.KindNumericLiteral || p.token == ast.KindBigIntLiteral || p.token == ast.KindAsteriskToken || p.token == ast.KindOpenBracketToken {
-		isAmbient := !modifiers.IsNil() && core.Some(modifiers.Slice(), isDeclareModifier)
+		isAmbient := !modifiers.IsNil() && modifiers.Some(isDeclareModifier)
 		if isAmbient {
 			for _, m := range modifiers.All() {
 				m.SetFlags(m.Flags() | ast.NodeFlagsAmbient)
@@ -2058,7 +2058,7 @@ func (p *Parser) parseMethodDeclaration(pos int, jsdoc jsdocScannerInfo, modifie
 }
 
 func modifierListHasAsync(modifiers ast.ModifierList) bool {
-	return !modifiers.IsNil() && core.Some(modifiers.Slice(), isAsyncModifier)
+	return !modifiers.IsNil() && modifiers.Some(isAsyncModifier)
 }
 
 func (p *Parser) parsePropertyDeclaration(pos int, jsdoc jsdocScannerInfo, modifiers ast.ModifierList, name ast.Node, questionToken ast.Node) ast.Node {
@@ -6913,7 +6913,7 @@ func (p *Parser) checkJSSyntax(node ast.Node) ast.Node {
 	switch node.Kind() {
 	case ast.KindClassDeclaration, ast.KindClassExpression, ast.KindMethodDeclaration, ast.KindConstructor, ast.KindGetAccessor,
 		ast.KindSetAccessor, ast.KindFunctionExpression, ast.KindFunctionDeclaration, ast.KindArrowFunction:
-		if list := node.TypeParameterList(); !list.IsNil() && core.Some(list.Slice(), func(n ast.Node) bool { return n.Flags()&ast.NodeFlagsReparsed == 0 }) {
+		if list := node.TypeParameterList(); !list.IsNil() && list.Some(func(n ast.Node) bool { return n.Flags()&ast.NodeFlagsReparsed == 0 }) {
 			p.jsErrorAtRange(list.Loc(), diagnostics.Type_parameter_declarations_can_only_be_used_in_TypeScript_files)
 		}
 		fallthrough
@@ -6924,12 +6924,12 @@ func (p *Parser) checkJSSyntax(node ast.Node) ast.Node {
 			}
 		}
 	case ast.KindParameter:
-		if core.Some(node.ModifierNodes(), ast.IsModifier) {
+		if node.Modifiers().Some(ast.IsModifier) {
 			p.jsErrorAtRange(node.Modifiers().Loc(), diagnostics.Parameter_modifiers_can_only_be_used_in_TypeScript_files)
 		}
 	case ast.KindCallExpression, ast.KindNewExpression, ast.KindExpressionWithTypeArguments, ast.KindJsxSelfClosingElement,
 		ast.KindJsxOpeningElement, ast.KindTaggedTemplateExpression:
-		if list := node.TypeArgumentList(); !list.IsNil() && core.Some(list.Slice(), func(n ast.Node) bool { return n.Flags()&ast.NodeFlagsReparsed == 0 }) {
+		if list := node.TypeArgumentList(); !list.IsNil() && list.Some(func(n ast.Node) bool { return n.Flags()&ast.NodeFlagsReparsed == 0 }) {
 			p.jsErrorAtRange(list.Loc(), diagnostics.Type_arguments_can_only_be_used_in_TypeScript_files)
 		}
 	}

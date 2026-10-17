@@ -169,5 +169,5 @@ func hasScopeMarker(statements ast.StatementList) bool {
 	if statements.IsNil() {
 		return false
 	}
-	return core.Some(statements.Slice(), isScopeMarker)
+	return statements.Some(isScopeMarker)
 }

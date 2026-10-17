@@ -345,7 +345,7 @@ func isHoistedVariable(node ast.VariableDeclarationNode) bool {
 func (c *EmitContext) isHoistedVariableStatement(node ast.Statement) bool {
 	return c.isCustomPrologue(node) &&
 		ast.IsVariableStatement(node) &&
-		core.Every(node.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Slice(), isHoistedVariable)
+		node.AsVariableStatement().DeclarationList().AsVariableDeclarationList().Declarations().Every(isHoistedVariable)
 }
 
 //

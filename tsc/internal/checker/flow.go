@@ -2450,9 +2450,9 @@ func (c *Checker) typeMaybeAssignableTo(source *Type, target *Type) bool {
 
 func (c *Checker) getTypePredicateArgument(predicate *TypePredicate, callExpression ast.Node) ast.Node {
 	if predicate.kind == TypePredicateKindIdentifier || predicate.kind == TypePredicateKindAssertsIdentifier {
-		arguments := callExpression.Arguments()
-		if predicate.parameterIndex >= 0 && int(predicate.parameterIndex) < len(arguments) {
-			return arguments[predicate.parameterIndex]
+		arguments := callExpression.ArgumentList()
+		if predicate.parameterIndex >= 0 && int(predicate.parameterIndex) < arguments.Len() {
+			return arguments.At(int(predicate.parameterIndex))
 		}
 	} else {
 		invokedExpression := ast.SkipParentheses(callExpression.Expression())

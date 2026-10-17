@@ -350,7 +350,7 @@ func isNamedDefaultReference(e ast.Node /*ImportSpecifier | ExportSpecifier*/) b
 }
 
 func containsDefaultReference(node ast.Node /*NamedImportBindings | NamedExportBindings*/) bool {
-	return !node.IsNil() && (ast.IsNamedImports(node) || ast.IsNamedExports(node)) && core.Some(node.Elements(), isNamedDefaultReference)
+	return !node.IsNil() && (ast.IsNamedImports(node) || ast.IsNamedExports(node)) && node.ElementList().Some(isNamedDefaultReference)
 }
 
 func getExportNeedsImportStarHelper(node ast.ExportDeclaration) bool {

@@ -494,7 +494,7 @@ func (tx *esDecoratorTransformer) createClassInfo(node ast.Node) *classInfo {
 
 	// If the class itself is decorated, create a _classThis binding
 	if ast.NodeIsDecorated(false, node, ast.Node{}, ast.Node{}) {
-		needsUniqueClassThis := core.Some(node.Members(), func(member ast.Node) bool {
+		needsUniqueClassThis := node.MemberList().Some(func(member ast.Node) bool {
 			return (ast.IsPrivateIdentifierClassElementDeclaration(member) || ast.IsAutoAccessorPropertyDeclaration(member)) && ast.HasStaticModifier(member)
 		})
 		// We do not mark _classThis as FileLevel if it may be reused by class private fields, which requires the
