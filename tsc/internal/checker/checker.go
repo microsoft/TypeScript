@@ -24634,10 +24634,18 @@ func (c *Checker) evaluateEntity(expr *ast.Node, location *ast.Node) evaluator.R
 				name := expr.AsElementAccessExpression().ArgumentExpression.Text()
 				member := rootSymbol.Exports()[name]
 				if member != nil {
-					if location != nil {
-						return c.evaluateEnumMember(expr, member, location)
+					// Follow aliases like resolveEntityName (property-access path), e.g. export import C = F.A.
+					for member.Flags()&ast.SymbolFlagsValue == 0 && member.Flags()&ast.SymbolFlagsAlias != 0 {
+						member = c.resolveAlias(member)
 					}
-					return c.getEnumMemberValue(member.ValueDeclaration())
+					// Merged namespace+enum symbols can export non-enum members (e.g. a class).
+					// Only treat EnumMember exports as constant enum values — mirror the identifier path.
+					if member.Flags()&ast.SymbolFlagsEnumMember != 0 {
+						if location != nil {
+							return c.evaluateEnumMember(expr, member, location)
+						}
+						return c.getEnumMemberValue(member.ValueDeclaration())
+					}
 				}
 			}
 		}
