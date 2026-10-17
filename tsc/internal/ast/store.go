@@ -94,7 +94,7 @@ func (n Node) deref(f *nodeRef) Node {
 		if r == 0 {
 			return Node{}
 		}
-		return Node{n.s, uint32(r)}
+		return n.s.node(uint32(r))
 	}
 	return n.s.reused[r&^refReused]
 }
@@ -132,14 +132,20 @@ func (s *nodeStore) newNode(kind Kind, layout nodeLayout, n Node) Node {
 		panic("node kind does not match its record layout")
 	}
 	n.hdr().kind = kind
+	n.k = uint32(kind)
 	return n
+}
+
+// node returns the node whose record is at index i.
+func (s *nodeStore) node(i uint32) Node {
+	return Node{s, i, uint32((*nodeBaseData)(unsafe.Pointer(&s.words[i])).kind)}
 }
 
 // newRecord allocates a zeroed record of type T, whose first field must be
 // its nodeBaseData. The returned pointer is only valid until the store
 // next allocates.
 func newRecord[T any](s *nodeStore, layout nodeLayout) (*T, Node) {
-	n := Node{s, s.alloc(unsafe.Sizeof(*new(T)))}
+	n := Node{s: s, i: s.alloc(unsafe.Sizeof(*new(T)))}
 	return (*T)(n.rec()), n
 }
 

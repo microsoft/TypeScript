@@ -98,7 +98,7 @@ func (l NodeList) at(k int) Node {
 	w := l.s.words[l.i+listHeaderWords+uint32(k)/2]
 	r := nodeRef(w >> (32 * (k & 1)))
 	if r&refReused == 0 {
-		return Node{l.s, uint32(r)}
+		return l.s.node(uint32(r))
 	}
 	return l.s.reused[r&^refReused]
 }

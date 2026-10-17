@@ -162,10 +162,16 @@ func cloneNode(updated Node, original Node, hooks NodeFactoryHooks) Node {
 type Node struct {
 	s *nodeStore
 	i uint32
+	// k caches the kind from the record's header, which never changes. It
+	// saves loading the record for the most common question asked of a
+	// node, and as a full uint32 it fills what would otherwise be padding,
+	// so that Node is plain memory that hashes and compares quickly as a
+	// map key.
+	k uint32
 }
 
 func (n Node) IsNil() bool               { return n.s == nil }
-func (n Node) Kind() Kind                { return n.hdr().kind }
+func (n Node) Kind() Kind                { return Kind(n.k) }
 func (n Node) Flags() NodeFlags          { return n.hdr().flags }
 func (n Node) Loc() core.TextRange       { return n.hdr().loc }
 func (n Node) SetFlags(flags NodeFlags)  { n.hdr().flags = flags }
