@@ -1687,6 +1687,7 @@ type VerifyCodeFixOptions struct {
 // VerifyCodeFixAllOptions are the options for VerifyCodeFixAll.
 type VerifyCodeFixAllOptions struct {
 	FixID          string
+	Description    string
 	NewFileContent string
 }
 
@@ -1931,7 +1932,8 @@ func (f *FourslashTest) VerifyCodeFixAll(t *testing.T, options VerifyCodeFixAllO
 	// We look for actions that are NOT single-diagnostic fixes (i.e., have no Diagnostics attached).
 	var fixAllCandidates []*lsproto.CodeAction
 	for _, action := range actions {
-		if action.Diagnostics == nil || len(*action.Diagnostics) == 0 {
+		if (action.Diagnostics == nil || len(*action.Diagnostics) == 0) &&
+			(options.Description == "" || action.Title == options.Description) {
 			fixAllCandidates = append(fixAllCandidates, action)
 		}
 	}

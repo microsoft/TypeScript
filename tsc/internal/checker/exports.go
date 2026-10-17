@@ -152,6 +152,18 @@ func (c *Checker) GetPropertiesOfType(t *Type) []*ast.Symbol {
 	return c.getPropertiesOfType(t)
 }
 
+func (c *Checker) GetJsxAttributesType(node *ast.Node) *Type {
+	return c.checkExpressionCached(node)
+}
+
+func (c *Checker) GetUnmatchedProperties(source *Type, target *Type, requireOptionalProperties bool, matchDiscriminantProperties bool) []*ast.Symbol {
+	return c.getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties)
+}
+
+func (c *Checker) IsDeeplyNestedType(t *Type, stack []*Type, maxDepth int) bool {
+	return c.isDeeplyNestedType(t, stack, maxDepth)
+}
+
 func (c *Checker) GetPropertyOfType(t *Type, name string) *ast.Symbol {
 	return c.getPropertyOfType(t, name)
 }
@@ -172,6 +184,10 @@ func (c *Checker) IsPropertyAccessible(node *ast.Node, isSuper bool, isWrite boo
 	return c.isPropertyAccessible(node, isSuper, isWrite, containingType, property)
 }
 
+func (c *Checker) IsConstructorAccessible(node *ast.Node, signatures []*Signature) bool {
+	return c.getConstructorAccessibilityError(node, signatures, ast.ModifierFlagsNonPublicAccessibilityModifier) == nil
+}
+
 func (c *Checker) GetTypeOfPropertyOfContextualType(t *Type, name string) *Type {
 	return c.getTypeOfPropertyOfContextualType(t, name)
 }
@@ -186,6 +202,10 @@ func (c *Checker) WasCanceled() bool {
 
 func (c *Checker) GetSignaturesOfType(t *Type, kind SignatureKind) []*Signature {
 	return c.getSignaturesOfType(t, kind)
+}
+
+func (c *Checker) GetMinArgumentCount(signature *Signature) int {
+	return c.getMinArgumentCount(signature)
 }
 
 func (c *Checker) GetDeclaredTypeOfSymbol(symbol *ast.Symbol) *Type {
