@@ -1851,7 +1851,7 @@ func (c *Checker) getSuggestionForSymbolNameLookup(symbols ast.SymbolTable, name
 	// Checking a candidate alias resolves it, which creates types, so visit aliases last and in a stable order
 	// rather than in the random iteration order of the symbol table.
 	candidates := make([]*ast.Symbol, 0, len(symbols))
-	c.forEachSymbolInResolutionOrder(symbols, func(symbol *ast.Symbol) { candidates = append(candidates, symbol) })
+	c.forEachSymbolInResolutionOrder(symbols, func(_ string, symbol *ast.Symbol) { candidates = append(candidates, symbol) })
 	return c.getSpellingSuggestionForName(name, core.ConcatenateSeq(slices.Values(candidates), extras), meaning)
 }
 
@@ -15242,7 +15242,7 @@ func (c *Checker) reportNonExportedMember(name *ast.Node, declarationName string
 			// Looking for the export resolves aliases, which creates types, so do it in a stable order rather than
 			// in the random iteration order of the symbol table.
 			var exportedSymbol *ast.Symbol
-			c.forEachSymbolInResolutionOrder(exports, func(symbol *ast.Symbol) {
+			c.forEachSymbolInResolutionOrder(exports, func(_ string, symbol *ast.Symbol) {
 				if exportedSymbol == nil && c.getSymbolIfSameReference(symbol, localSymbol) != nil {
 					exportedSymbol = symbol
 				}
@@ -16643,7 +16643,7 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 	}
 	// A CommonJS module defined by an 'export=' might also export typedefs, stored on the original module
 	if originalModule != nil && len(originalModule.Exports()) > 1 {
-		c.forEachSymbolInResolutionOrder(originalModule.Exports(), func(symbol *ast.Symbol) {
+		c.forEachSymbolInResolutionOrder(originalModule.Exports(), func(_ string, symbol *ast.Symbol) {
 			if symbol.Name() == ast.InternalSymbolNameExportEquals || symbol.Name() == ast.InternalSymbolNameExportStar {
 				return
 			}
@@ -16668,8 +16668,7 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 func (c *Checker) extendExportSymbols(target ast.SymbolTable, source ast.SymbolTable, lookupTable ExportCollisionTable, exportNode *ast.Node) {
 	// Checking for collisions resolves aliases, which creates types, so visit aliases last and in a stable order
 	// rather than in the random iteration order of the symbol table.
-	c.forEachSymbolInResolutionOrder(source, func(sourceSymbol *ast.Symbol) {
-		id := sourceSymbol.Name()
+	c.forEachSymbolInResolutionOrder(source, func(id string, sourceSymbol *ast.Symbol) {
 		if id == ast.InternalSymbolNameDefault {
 			return
 		}
