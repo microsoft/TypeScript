@@ -1133,7 +1133,7 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 		inferredProp := c.newSymbolEx(ast.SymbolFlagsProperty|prop.Flags()&optionalMask, prop.Name(), checkFlags)
 		inferredProp.SetDeclarations(prop.Declarations())
 		c.valueSymbolLinks.Get(inferredProp).setNameType(c, c.valueSymbolLinks.Get(prop).getNameType())
-		links := c.ReverseMappedSymbolLinks.Get(inferredProp)
+		links := c.reverseMappedSymbolLinks.Get(inferredProp)
 		links.propertyType = c.getTypeOfSymbol(prop)
 		constraintTarget := r.constraintType.AsIndexType().target
 		if constraintTarget.flags&TypeFlagsIndexedAccess != 0 && constraintTarget.AsIndexedAccessType().objectType.flags&TypeFlagsTypeParameter != 0 && constraintTarget.AsIndexedAccessType().indexType.flags&TypeFlagsTypeParameter != 0 {
@@ -1156,7 +1156,7 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 func (c *Checker) getTypeOfReverseMappedSymbol(symbol *ast.Symbol) *Type {
 	links := c.valueSymbolLinks.Get(symbol)
 	if links.resolvedType == nil {
-		reverseLinks := c.ReverseMappedSymbolLinks.Get(symbol)
+		reverseLinks := c.reverseMappedSymbolLinks.Get(symbol)
 		links.resolvedType = core.OrElse(c.inferReverseMappedType(reverseLinks.propertyType, reverseLinks.mappedType, reverseLinks.constraintType), c.unknownType)
 	}
 	return links.resolvedType
