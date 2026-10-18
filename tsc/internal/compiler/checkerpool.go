@@ -1,10 +1,11 @@
 package compiler
 
 import (
+	"cmp"
 	"context"
 	"math"
 	"slices"
-	"sort"
+	"strings"
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -40,122 +41,68 @@ var _ CheckerPool = (*checkerPool)(nil)
 /*
 Checker association is a balanced graph-partitioning problem:
 
-  - A vertex is a source file.
-  - An undirected edge connects two files for each resolved, in-program import
-    entry between them. Multiple entries may connect the same pair and therefore
-    strengthen their affinity. Self-imports and unresolved or external targets do
-    not create edges.
+  - A vertex is a group of type-checked source files.
+  - An undirected edge connects two groups for each resolved, in-program import
+    entry between files in them. Multiple entries may connect the same pair and
+    therefore strengthen their affinity. Self-imports and unresolved or external
+    targets do not create edges.
   - A partition is a checker with its own symbol, type, and instantiation caches.
 
 Putting related files on the same checker reduces duplicated cache construction,
 but concentrating too many roots on one checker increases the parallel critical
 path. We use weighted FENNEL to trade off those objectives:
 
-  affinity(partition) - alpha * incrementalLoadPenalty(partition)
+	affinity(partition) - alpha * incrementalLoadPenalty(partition)
 
 See Tsourakakis et al., "FENNEL: Streaming Graph Partitioning for Massive Scale
 Graphs", WSDM 2014: https://doi.org/10.1145/2556195.2556213.
+
+Import edges alone are a weak locality signal: most of a checker's caches are
+built for the types that a file's whole neighborhood shares (a framework's
+declarations, a package's own types), and files in one directory tend to share
+far more of those than their direct imports show. So FENNEL places directories
+rather than single files. Walking down from the root, the first directory small
+enough to fit within 1/checkerAssociationGroupFraction of an average checker
+load becomes one unit with everything beneath it; a file whose every enclosing
+directory is too big is a unit by itself. Units are placed from heaviest to
+lightest, so that the big ones are spread while every checker still has room,
+and the small ones fill in the remaining capacity next to their neighbors.
+
+Declaration and JSON files whose checking is skipped (skipLibCheck or
+skipDefaultLibCheck) are left out of the partition entirely, since no checker
+spends time on them up front. Any later on-demand request for one goes to
+checker 0.
 
 FENNEL is sensitive to stream order. This is both established in the partitioning
 literature (for example, Awadelkarim and Ugander, "Prioritized Restreaming
 Algorithms for Balanced Graph Partitioning", KDD 2020:
 https://arxiv.org/abs/2007.03131) and pronounced in checker workloads because
-semantic work is demand-driven. During calibration with four checkers,
-degree-first streams produced nearly equal estimated loads but highly unequal
-per-checker completion times:
+semantic work is demand-driven. Directory groups bound how far a bad order can
+scatter related files.
 
-  - MUI docs: approximately 0.6s, 2.8s, 15.3s, and 19.0s.
-  - XState: approximately 0.04s, 0.35s, 0.67s, and 1.18s.
+The constants below were chosen on bluesky, sentry, t3code (server), MUI docs,
+VS Code, XState, and the TypeScript compiler at 2, 4, and 8 checkers:
 
-Seeded random-order testing also found repeatable slow orders with identical
-diagnostics, including about +37% MUI docs and +59% XState compiler Check time
-relative to normal order, again with four checkers. Therefore stream order is part
-of the policy below, rather than an incidental implementation detail.
-*/
-
-/*
-The constants below are empirical safety factors for a work proxy that cannot
-observe future semantic cache construction. They were swept across representative
-projects including VS Code, TypeScript, MUI docs, XState, and Bluesky, with 2, 4,
-and 8 checkers:
-
-  - 100-byte text weight divisor: among 25, 50, 75, 80, 90, 100, 110, 125, 150,
-    200, and 400, this kept large literals, comments, and generated files from
-    appearing artificially cheap without allowing raw byte length to dominate.
-    Nearby values occasionally improved one project, but 100 was the most robust
-    setting, particularly on VS Code and MUI docs.
-  - 4x source-file weight: among 2x, 3x, 4x, 5x, and 8x, this best balanced
-    declaration-heavy projects without losing the locality benefit.
-  - 16x FENNEL penalty: 1x, 2x, 4x, 8x, 12x, 16x, 20x, 24x, 32x, and 64x were
-    sampled across the experiments; 16x was the most robust balance/locality
-    compromise for declaration-heavy projects.
-  - 12x prioritized-source penalty: 8x, 12x, 16x, 20x, and 24x were compared;
-    source-first ordering already spreads expensive roots, and 12x retained more
-    locality than the stronger settings.
-  - 4-checker cutoff: at 2-3 checkers the tight load cap provides enough balance;
-    extra source weighting and penalty pressure regressed some projects.
-
-These are project-independent operating points, not formulas derived by FENNEL.
-Rebenchmark the vscode, self-compiler, mui-docs, and xstate-main scenarios in the
-TypeScript-benchmarking repository at 2, 4, and 8 checkers before changing them.
+  - 100-byte text weight divisor: keeps large literals, comments, and generated
+    files from appearing artificially cheap without allowing raw byte length to
+    dominate.
+  - 1/4 checker load per group: large enough to keep a package's files
+    together, small enough that groups can still be balanced.
+  - 1x FENNEL penalty: groups already carry the locality, so the balance term
+    only needs to break ties between checkers with similar affinity.
 */
 const (
-	checkerAssociationTextWeightDivisor            = 100
-	checkerAssociationSourceFileWeightMultiplier   = 4
-	checkerAssociationBalancePenaltyMultiplier     = 16
-	checkerAssociationPrioritizedSourcePenalty     = 12
-	checkerAssociationStrongBalanceMinCheckerCount = 4
+	checkerAssociationTextWeightDivisor = 100
+	checkerAssociationGroupFraction     = 4
+	checkerAssociationPenaltyMultiplier = 1
 )
-
-type checkerAssociationPolicy struct {
-	prioritizeSourceFiles      bool
-	sourceFileWeightMultiplier int
-	balancePenaltyMultiplier   int
-}
-
-/*
-getCheckerAssociationPolicy selects one of three calibrated regimes:
-
- 1. Source-dominated, any checker count:
-    source files first by descending weight; unmodified source-file weight;
-    checkerAssociationPrioritizedSourcePenalty.
- 2. Declaration-heavy, at least checkerAssociationStrongBalanceMinCheckerCount:
-    program order; checkerAssociationSourceFileWeightMultiplier;
-    checkerAssociationBalancePenaltyMultiplier.
- 3. Declaration-heavy, fewer checkers:
-    program order; unmodified source-file weight; unscaled adapted FENNEL
-    penalty.
-
-The source-dominated test is evaluated first intentionally: projects with very
-little declaration work benefit from balancing source-file roots directly even
-with a small checker pool.
-*/
-func getCheckerAssociationPolicy(totalWeight int, declarationWeight int, checkerCount int) checkerAssociationPolicy {
-	if shouldPrioritizeSourceFiles(totalWeight, declarationWeight, checkerCount) {
-		return checkerAssociationPolicy{
-			prioritizeSourceFiles:      true,
-			sourceFileWeightMultiplier: 1,
-			balancePenaltyMultiplier:   checkerAssociationPrioritizedSourcePenalty,
-		}
-	}
-	if checkerCount >= checkerAssociationStrongBalanceMinCheckerCount {
-		return checkerAssociationPolicy{
-			sourceFileWeightMultiplier: checkerAssociationSourceFileWeightMultiplier,
-			balancePenaltyMultiplier:   checkerAssociationBalancePenaltyMultiplier,
-		}
-	}
-	return checkerAssociationPolicy{
-		sourceFileWeightMultiplier: 1,
-		balancePenaltyMultiplier:   1,
-	}
-}
 
 // getCheckerAssociationsInOrder partitions the import graph using a weighted adaptation
 // of FENNEL's streaming graph-partitioning objective with gamma = 3/2. Each file
 // is placed where it has the most already-placed neighbors, minus the incremental
 // convex load penalty. The published alpha = m*sqrt(k)/n^(3/2) becomes
-// m*sqrt(k)/W^(3/2), where W is total estimated checker work. penaltyMultiplier
-// applies the empirical safety factor selected by getCheckerAssociationPolicy.
+// m*sqrt(k)/W^(3/2), where W is total estimated checker work, scaled by
+// penaltyMultiplier.
 //
 // A nil order means stable program order. The preferred maximum checker weight is
 // the larger of the largest file and roughly 101% of average. If no checker can
@@ -232,49 +179,8 @@ func getCheckerAssociationsInOrder(fileWeights []int, adjacentFiles [][]int, fil
 	return associations
 }
 
-// getCheckerAssociationOrder places source files before declarations and
-// orders each group by descending estimated work. This exposes expensive semantic
-// roots early, when all checker loads are still available. Returning nil preserves
-// program order without allocating an index array. Program order is itself a
-// locality choice: it preserves deterministic groups produced during program
-// construction and was consistently safer for declaration-heavy projects.
-func getCheckerAssociationOrder(fileWeights []int, isDeclarationFile []bool, prioritizeSourceFiles bool) []int {
-	if !prioritizeSourceFiles {
-		return nil
-	}
-	fileOrder := make([]int, len(fileWeights))
-	for i := range fileOrder {
-		fileOrder[i] = i
-	}
-	sort.Slice(fileOrder, func(i, j int) bool {
-		left := fileOrder[i]
-		right := fileOrder[j]
-		if isDeclarationFile[left] != isDeclarationFile[right] {
-			return !isDeclarationFile[left]
-		}
-		if fileWeights[left] != fileWeights[right] {
-			return fileWeights[left] > fileWeights[right]
-		}
-		return left < right
-	})
-	return fileOrder
-}
-
 func getCheckerAssociationBaseWeight(nodeCount int, textLength int) int {
 	return max(nodeCount+textLength/checkerAssociationTextWeightDivisor, 1)
-}
-
-// shouldPrioritizeSourceFiles reports whether all declaration-file base work is at
-// most half of one average checker load:
-//
-//	declarationWeight <= totalWeight / (2 * checkerCount)
-//
-// This threshold separated source-dominated projects such as VS Code from projects
-// where declaration locality remained important, such as MUI docs, TypeScript, and
-// XState. Delaying at most half a checker-load of declarations was the stable
-// boundary in the cross-project sweeps.
-func shouldPrioritizeSourceFiles(totalWeight int, declarationWeight int, checkerCount int) bool {
-	return declarationWeight*checkerCount*2 <= totalWeight
 }
 
 // getCheckerAssociationWeights combines local syntax work with syntactic import
@@ -380,43 +286,114 @@ func (p *checkerPool) createCheckers() {
 
 		wg.RunAndWait()
 
-		associations := make([]int, len(p.program.files))
+		var associations []int
 		if checkerCount > 1 {
-			baseWeights := make([]int, len(p.program.files))
-			importCounts := make([]int, len(p.program.files))
-			isDeclarationFile := make([]bool, len(p.program.files))
-			totalBaseWeight := 0
-			declarationBaseWeight := 0
-			for i, file := range p.program.files {
-				baseWeight := getCheckerAssociationBaseWeight(file.NodeCount, len(file.Text()))
-				totalBaseWeight += baseWeight
-				if file.IsDeclarationFile {
-					declarationBaseWeight += baseWeight
-				}
-				baseWeights[i] = baseWeight
-				importCounts[i] = len(file.Imports())
-				isDeclarationFile[i] = file.IsDeclarationFile
-			}
-			policy := getCheckerAssociationPolicy(totalBaseWeight, declarationBaseWeight, checkerCount)
-			if policy.sourceFileWeightMultiplier != 1 {
-				// Apply this before import normalization. The policy intentionally
-				// increases both source-file work and the normalized import unit.
-				for i, declaration := range isDeclarationFile {
-					if !declaration {
-						baseWeights[i] *= policy.sourceFileWeightMultiplier
-					}
-				}
-			}
-			fileWeights := getCheckerAssociationWeights(baseWeights, importCounts)
-			adjacentFiles := p.getImportAdjacency()
-			fileOrder := getCheckerAssociationOrder(fileWeights, isDeclarationFile, policy.prioritizeSourceFiles)
-			associations = getCheckerAssociationsInOrder(fileWeights, adjacentFiles, fileOrder, checkerCount, policy.balancePenaltyMultiplier)
+			associations = p.getCheckerAssociations(checkerCount)
+		} else {
+			associations = make([]int, len(p.program.files))
 		}
 		p.fileAssociations = make(map[*ast.SourceFile]*checker.Checker, len(p.program.files))
 		for i, file := range p.program.files {
 			p.fileAssociations[file] = p.checkers[associations[i]]
 		}
 	})
+}
+
+// getCheckerAssociations returns the checker index of each program file.
+func (p *checkerPool) getCheckerAssociations(checkerCount int) []int {
+	files := p.program.files
+	baseWeights := make([]int, len(files))
+	importCounts := make([]int, len(files))
+	var order []int
+	for i, file := range files {
+		if (file.IsDeclarationFile || ast.IsJsonSourceFile(file)) && p.program.SkipTypeChecking(file, false) {
+			continue
+		}
+		baseWeights[i] = getCheckerAssociationBaseWeight(file.NodeCount, len(file.Text()))
+		importCounts[i] = len(file.Imports())
+		order = append(order, i)
+	}
+	associations := make([]int, len(files))
+	if len(order) == 0 {
+		return associations
+	}
+	weights := getCheckerAssociationWeights(baseWeights, importCounts)
+	paths := make([]string, len(files))
+	for _, i := range order {
+		paths[i] = string(files[i].PathKey())
+	}
+	slices.SortFunc(order, func(a, b int) int {
+		return cmp.Or(strings.Compare(paths[a], paths[b]), cmp.Compare(a, b))
+	})
+	groupOf, groupWeights := getDirectoryGroups(paths, weights, order, checkerCount)
+
+	adjacentFiles := p.getImportAdjacency()
+	groupAdjacency := make([][]int, len(groupWeights))
+	for _, i := range order {
+		for _, j := range adjacentFiles[i] {
+			if gi, gj := groupOf[i], groupOf[j]; gj >= 0 && gi != gj {
+				groupAdjacency[gi] = append(groupAdjacency[gi], gj)
+			}
+		}
+	}
+	groupOrder := make([]int, len(groupWeights))
+	for g := range groupOrder {
+		groupOrder[g] = g
+	}
+	slices.SortFunc(groupOrder, func(a, b int) int {
+		return cmp.Or(cmp.Compare(groupWeights[b], groupWeights[a]), cmp.Compare(a, b))
+	})
+	groupAssociations := getCheckerAssociationsInOrder(groupWeights, groupAdjacency, groupOrder, checkerCount, checkerAssociationPenaltyMultiplier)
+	for _, i := range order {
+		associations[i] = groupAssociations[groupOf[i]]
+	}
+	return associations
+}
+
+// getDirectoryGroups assigns each file in order (sorted by path) to the
+// outermost enclosing directory whose files in order weigh no more than
+// 1/checkerAssociationGroupFraction of an average checker load; when no
+// directory is that light, the file is alone. Groups are numbered by first
+// appearance in path order. groupOf is -1 for files not in order.
+func getDirectoryGroups(paths []string, weights []int, order []int, checkerCount int) (groupOf []int, groupWeights []int) {
+	total := 0
+	for _, i := range order {
+		total += weights[i]
+	}
+	threshold := total / (checkerCount * checkerAssociationGroupFraction)
+	subtreeWeights := make(map[string]int)
+	for _, i := range order {
+		path := paths[i]
+		for pos := range len(path) {
+			if path[pos] == '/' {
+				subtreeWeights[path[:pos]] += weights[i]
+			}
+		}
+	}
+	groupIDs := make(map[string]int)
+	groupOf = make([]int, len(paths))
+	for i := range groupOf {
+		groupOf[i] = -1
+	}
+	for _, i := range order {
+		path := paths[i]
+		key := path
+		for pos := range len(path) {
+			if path[pos] == '/' && subtreeWeights[path[:pos]] <= threshold {
+				key = path[:pos]
+				break
+			}
+		}
+		g, ok := groupIDs[key]
+		if !ok {
+			g = len(groupWeights)
+			groupIDs[key] = g
+			groupWeights = append(groupWeights, 0)
+		}
+		groupOf[i] = g
+		groupWeights[g] += weights[i]
+	}
+	return groupOf, groupWeights
 }
 
 // getImportAdjacency returns an undirected import graph represented by file

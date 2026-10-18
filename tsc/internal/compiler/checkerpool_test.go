@@ -35,88 +35,35 @@ func TestGetCheckerAssociationBaseWeight(t *testing.T) {
 	}
 }
 
-func TestShouldPrioritizeSourceFiles(t *testing.T) {
+func TestGetDirectoryGroups(t *testing.T) {
 	t.Parallel()
-	if !shouldPrioritizeSourceFiles(1000, 100, 4) {
-		t.Fatal("shouldPrioritizeSourceFiles() = false, want true")
+	paths := []string{
+		"/p/a/x.ts",
+		"/p/a/y.ts",
+		"/p/b/c/z.ts",
+		"/p/b/w.ts",
+		"/p/lib.d.ts",
+		"/p/big.ts",
 	}
-	if !shouldPrioritizeSourceFiles(1000, 125, 4) {
-		t.Fatal("shouldPrioritizeSourceFiles() = false at boundary, want true")
+	weights := []int{10, 10, 10, 10, 0, 40}
+	// The declaration file is not type checked, so it is not in order.
+	order := []int{0, 1, 2, 3, 5}
+	// Total weight 80 over 2 checkers: groups hold at most 80/(2*4) = 10 units,
+	// so /p/a and /p/b are split, and /p/b/c becomes a group.
+	groupOf, groupWeights := getDirectoryGroups(paths, weights, order, 2)
+	if want := []int{0, 1, 2, 3, -1, 4}; !slices.Equal(groupOf, want) {
+		t.Fatalf("groupOf = %v, want %v", groupOf, want)
 	}
-	if shouldPrioritizeSourceFiles(1000, 126, 4) {
-		t.Fatal("shouldPrioritizeSourceFiles() = true, want false")
+	if want := []int{10, 10, 10, 10, 40}; !slices.Equal(groupWeights, want) {
+		t.Fatalf("groupWeights = %v, want %v", groupWeights, want)
 	}
-}
-
-func TestGetCheckerAssociationPolicy(t *testing.T) {
-	t.Parallel()
-	tests := []struct {
-		name              string
-		totalWeight       int
-		declarationWeight int
-		checkerCount      int
-		want              checkerAssociationPolicy
-	}{
-		{
-			name:              "source dominated at any checker count",
-			totalWeight:       1000,
-			declarationWeight: 100,
-			checkerCount:      2,
-			want: checkerAssociationPolicy{
-				prioritizeSourceFiles:      true,
-				sourceFileWeightMultiplier: 1,
-				balancePenaltyMultiplier:   checkerAssociationPrioritizedSourcePenalty,
-			},
-		},
-		{
-			name:              "declaration heavy with few checkers",
-			totalWeight:       1000,
-			declarationWeight: 400,
-			checkerCount:      2,
-			want: checkerAssociationPolicy{
-				sourceFileWeightMultiplier: 1,
-				balancePenaltyMultiplier:   1,
-			},
-		},
-		{
-			name:              "source dominated with many checkers",
-			totalWeight:       1000,
-			declarationWeight: 50,
-			checkerCount:      8,
-			want: checkerAssociationPolicy{
-				prioritizeSourceFiles:      true,
-				sourceFileWeightMultiplier: 1,
-				balancePenaltyMultiplier:   checkerAssociationPrioritizedSourcePenalty,
-			},
-		},
-		{
-			name:              "declaration heavy with many checkers",
-			totalWeight:       1000,
-			declarationWeight: 400,
-			checkerCount:      4,
-			want: checkerAssociationPolicy{
-				sourceFileWeightMultiplier: checkerAssociationSourceFileWeightMultiplier,
-				balancePenaltyMultiplier:   checkerAssociationBalancePenaltyMultiplier,
-			},
-		},
+	// With one checker the threshold is 20, which /p/a and /p/b fit.
+	groupOf, groupWeights = getDirectoryGroups(paths, weights, order, 1)
+	if want := []int{0, 0, 1, 1, -1, 2}; !slices.Equal(groupOf, want) {
+		t.Fatalf("groupOf = %v, want %v", groupOf, want)
 	}
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			t.Parallel()
-			if got := getCheckerAssociationPolicy(test.totalWeight, test.declarationWeight, test.checkerCount); got != test.want {
-				t.Fatalf("getCheckerAssociationPolicy() = %+v, want %+v", got, test.want)
-			}
-		})
-	}
-}
-
-func TestGetCheckerAssociationOrder(t *testing.T) {
-	t.Parallel()
-	if got := getCheckerAssociationOrder([]int{5, 10, 7, 2}, []bool{true, false, false, true}, true); !slices.Equal(got, []int{1, 2, 0, 3}) {
-		t.Fatalf("getCheckerAssociationOrder() = %v, want [1 2 0 3]", got)
-	}
-	if got := getCheckerAssociationOrder([]int{5}, []bool{false}, false); got != nil {
-		t.Fatalf("getCheckerAssociationOrder() = %v, want nil", got)
+	if want := []int{20, 20, 40}; !slices.Equal(groupWeights, want) {
+		t.Fatalf("groupWeights = %v, want %v", groupWeights, want)
 	}
 }
 
@@ -159,7 +106,7 @@ func TestGetCheckerAssociations(t *testing.T) {
 
 	t.Run("empty", func(t *testing.T) {
 		t.Parallel()
-		if got := getCheckerAssociationsInOrder(nil, nil, nil, 4, checkerAssociationBalancePenaltyMultiplier); got != nil {
+		if got := getCheckerAssociationsInOrder(nil, nil, nil, 4, checkerAssociationPenaltyMultiplier); got != nil {
 			t.Fatalf("getCheckerAssociationsInOrder() = %v, want nil", got)
 		}
 	})
