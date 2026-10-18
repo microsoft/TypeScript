@@ -18,8 +18,8 @@ import (
 func TestCheckerNodeLinkStores(t *testing.T) {
 	t.Parallel()
 	f := ast.NewNodeFactory(ast.NodeFactoryHooks{})
-	first := &Checker{}
-	second := &Checker{}
+	first := newBareTestChecker()
+	second := newBareTestChecker()
 	nodes := make([]*ast.Node, 4096)
 	for i := range nodes {
 		node := f.NewIdentifier(strconv.Itoa(i))
@@ -85,7 +85,7 @@ func TestTypeCasts(t *testing.T) {
 		{typeKindIntersection, &IntersectionType{}, func(t *Type) any { return t.AsIntersectionType() }},
 	}
 	for _, test := range tests {
-		c := &Checker{}
+		c := newBareTestChecker()
 		typ := c.newType(TypeFlagsAny, ObjectFlagsNone, test.data.AsType(), test.kind)
 		runtime.GC()
 		assert.Equal(t, test.cast(typ), any(test.data))
@@ -175,14 +175,20 @@ func BenchmarkTypeListKey(b *testing.B) {
 	}
 }
 
+// newBareTestChecker returns an uninitialized checker with an empty store.
+func newBareTestChecker() *Checker {
+	c := &Checker{memoStore: &memoStore{}}
+	c.root = c
+	return c
+}
+
 func newCompositeTestChecker() (*Checker, []*Type) {
-	c := &Checker{
-		strictNullChecks:      true,
-		unionTypes:            make(map[CacheHashKey]*Type),
-		unionOfUnionTypes:     make(map[UnionOfUnionKey]*Type),
-		intersectionTypes:     make(map[CacheHashKey]*Type),
-		subtypeReductionCache: make(map[CacheHashKey][]*Type),
-	}
+	c := newBareTestChecker()
+	c.strictNullChecks = true
+	c.unionTypes = make(map[CacheHashKey]*Type)
+	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
+	c.intersectionTypes = make(map[CacheHashKey]*Type)
+	c.subtypeReductionCache = make(map[CacheHashKey][]*Type)
 	c.compareSymbols = c.compareSymbolsWorker
 	c.neverType = c.newIntrinsicType(TypeFlagsNever, "never")
 	c.unknownType = c.newIntrinsicType(TypeFlagsUnknown, "unknown")
@@ -306,7 +312,7 @@ func TestIntersectionReductionAllocations(t *testing.T) { //nolint:paralleltest
 
 func TestTemporaryPropertyCounts(t *testing.T) {
 	t.Parallel()
-	c := &Checker{}
+	c := newBareTestChecker()
 	names := func(p *temporaryPropertyCounts) []string {
 		var result []string
 		for _, e := range p.entries {
@@ -348,7 +354,7 @@ func TestTemporaryPropertyCounts(t *testing.T) {
 		assert.Equal(t, counts.Size(), 0)
 	}
 	assert.Assert(t, c.getTemporaryPropertyCounts() != reused)
-	other := &Checker{}
+	other := newBareTestChecker()
 	assert.Assert(t, other.getTemporaryPropertyCounts() != outer)
 }
 
