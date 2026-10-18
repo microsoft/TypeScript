@@ -215,10 +215,16 @@ func TestDeprecatedNamespaceAliasInTypeReference(t *testing.T) {
 	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
 		"/example.d.ts": `export type Bar = string | number;
 /** @deprecated */
-export type Baz = string | number;`,
+export type Baz = string | number;
+export { /** @deprecated */ Bar as Old } from './example';`,
+		"/values.d.ts": `export const val = 1;`,
 		"/foo.ts": `import * as example from './example';
 
-declare namespace JSX {
+export { val } from './values';
+/** @deprecated */
+export type val = number;
+
+export namespace JSX {
 	/** @deprecated */
 	export type Foo = string | number;
 
@@ -226,15 +232,20 @@ declare namespace JSX {
 	export import Bar = example.Bar;
 
 	export import Baz = example.Baz;
+
+	export import Old = example.Old;
 }
 
 let x: JSX.Foo;
 let y: JSX.Bar;
-let z: JSX.Baz;`,
+let z: JSX.Baz;
+let o: JSX.Old;
+let m: val;
+let w: import('./foo').JSX.Bar;`,
 	}, tspath.CaseSensitive))
 	opts := &core.CompilerOptions{NoLib: core.TSTrue}
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: tsoptions.NewParsedCommandLine(opts, []tspath.RootedFilePath{"/example.d.ts", "/foo.ts"}, nil, "/", fs.CaseSensitivity()),
+		Config: tsoptions.NewParsedCommandLine(opts, []tspath.RootedFilePath{"/example.d.ts", "/values.d.ts", "/foo.ts"}, nil, "/", fs.CaseSensitivity()),
 		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 	})
 	program.BindSourceFiles()
@@ -247,8 +258,11 @@ let z: JSX.Baz;`,
 			deprecatedSuggestions = append(deprecatedSuggestions, s)
 		}
 	}
-	assert.Equal(t, len(deprecatedSuggestions), 3)
+	assert.Equal(t, len(deprecatedSuggestions), 6)
 	assert.Equal(t, deprecatedSuggestions[0].MessageArgs()[0], "Foo")
 	assert.Equal(t, deprecatedSuggestions[1].MessageArgs()[0], "Bar")
 	assert.Equal(t, deprecatedSuggestions[2].MessageArgs()[0], "Baz")
+	assert.Equal(t, deprecatedSuggestions[3].MessageArgs()[0], "Old")
+	assert.Equal(t, deprecatedSuggestions[4].MessageArgs()[0], "val")
+	assert.Equal(t, deprecatedSuggestions[5].MessageArgs()[0], "Bar")
 }
