@@ -1851,7 +1851,10 @@ func (c *Checker) getSuggestionForSymbolNameLookup(symbols ast.SymbolTable, name
 	// Checking a candidate alias resolves it, which creates types, so visit aliases last and in a stable order
 	// rather than in the random iteration order of the symbol table.
 	candidates := make([]*ast.Symbol, 0, len(symbols))
-	c.forEachSymbolInResolutionOrder(symbols, func(_ string, symbol *ast.Symbol) { candidates = append(candidates, symbol) })
+	c.forEachSymbolInResolutionOrder(symbols, func(_ string, symbol *ast.Symbol) bool {
+		candidates = append(candidates, symbol)
+		return false
+	})
 	return c.getSpellingSuggestionForName(name, core.ConcatenateSeq(slices.Values(candidates), extras), meaning)
 }
 
@@ -5923,28 +5926,9 @@ func (c *Checker) checkExternalModuleExports(node *ast.Node) {
 }
 
 func (c *Checker) hasExportedMembersOfKind(moduleSymbol *ast.Symbol, kind ast.SymbolFlags) bool {
-	// Resolving an alias can create types, so resolve aliases last and in a stable order rather than in the random
-	// iteration order of the symbol table.
-	var aliases []*ast.Symbol
-	for _, symbol := range moduleSymbol.Exports() {
-		if symbol.Name() == ast.InternalSymbolNameExportEquals {
-			continue
-		}
-		if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
-			aliases = append(aliases, symbol)
-			continue
-		}
-		if c.getSymbolFlags(symbol)&kind != 0 {
-			return true
-		}
-	}
-	c.sortSymbols(aliases)
-	for _, symbol := range aliases {
-		if c.getSymbolFlags(symbol)&kind != 0 {
-			return true
-		}
-	}
-	return false
+	return c.forEachSymbolInResolutionOrder(moduleSymbol.Exports(), func(_ string, symbol *ast.Symbol) bool {
+		return symbol.Name() != ast.InternalSymbolNameExportEquals && c.getSymbolFlags(symbol)&kind != 0
+	})
 }
 
 func (c *Checker) hasShadowedNamespace(symbol *ast.Symbol) bool {
@@ -15241,12 +15225,15 @@ func (c *Checker) reportNonExportedMember(name *ast.Node, declarationName string
 		} else {
 			// Looking for the export resolves aliases, which creates types, so do it in a stable order rather than
 			// in the random iteration order of the symbol table.
-			var exportedSymbol *ast.Symbol
-			c.forEachSymbolInResolutionOrder(exports, func(_ string, symbol *ast.Symbol) {
-				if exportedSymbol == nil && c.getSymbolIfSameReference(symbol, localSymbol) != nil {
-					exportedSymbol = symbol
+			var exportedSymbols []*ast.Symbol
+			c.forEachSymbolInResolutionOrder(exports, func(_ string, symbol *ast.Symbol) bool {
+				if c.getSymbolIfSameReference(symbol, localSymbol) != nil {
+					exportedSymbols = append(exportedSymbols, symbol)
 				}
+				return false
 			})
+			c.sortSymbols(exportedSymbols)
+			exportedSymbol := core.FirstOrNil(exportedSymbols)
 			var diagnostic *ast.Diagnostic
 			if exportedSymbol != nil {
 				diagnostic = c.error(name, diagnostics.Module_0_declares_1_locally_but_it_is_exported_as_2, moduleName, declarationName, c.symbolToString(exportedSymbol))
@@ -16643,9 +16630,9 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 	}
 	// A CommonJS module defined by an 'export=' might also export typedefs, stored on the original module
 	if originalModule != nil && len(originalModule.Exports()) > 1 {
-		c.forEachSymbolInResolutionOrder(originalModule.Exports(), func(_ string, symbol *ast.Symbol) {
+		c.forEachSymbolInResolutionOrder(originalModule.Exports(), func(_ string, symbol *ast.Symbol) bool {
 			if symbol.Name() == ast.InternalSymbolNameExportEquals || symbol.Name() == ast.InternalSymbolNameExportStar {
-				return
+				return false
 			}
 			flags := c.getSymbolFlags(symbol)
 			if flags&(ast.SymbolFlagsType|ast.SymbolFlagsNamespace) != 0 &&
@@ -16653,6 +16640,7 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 				exports[symbol.Name()] == nil {
 				exports[symbol.Name()] = symbol
 			}
+			return false
 		})
 	}
 	for name := range nonTypeOnlyNames.Keys() {
