@@ -19429,7 +19429,7 @@ func (c *Checker) getSignaturesOfType(t *Type, kind SignatureKind) []*Signature 
 }
 
 func (c *Checker) getSignaturesOfStructuredType(t *Type, kind SignatureKind) []*Signature {
-	if t.flags&TypeFlagsStructuredType == 0 {
+	if t.flags&TypeFlagsStructuredType == 0 || isUnresolvedMappedType(t) {
 		return nil
 	}
 	resolved := c.resolveStructuredTypeMembers(t)
@@ -19555,6 +19555,13 @@ func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
 		}
 	}
 	return t.AsStructuredType()
+}
+
+// Reports whether t is a mapped type whose members resolveMappedTypeMembers hasn't yet resolved.
+// Mapped types never have signatures, so those needn't be resolved to be known.
+func isUnresolvedMappedType(t *Type) bool {
+	return t.flags&TypeFlagsObject != 0 &&
+		t.objectFlags&(ObjectFlagsReference|ObjectFlagsClassOrInterface|ObjectFlagsReverseMapped|ObjectFlagsAnonymous|ObjectFlagsMapped|ObjectFlagsMembersResolved) == ObjectFlagsMapped
 }
 
 func (c *Checker) resolveObjectTypeMembers(t *Type) {
