@@ -4155,10 +4155,10 @@ func (p *Parser) parseExpressionAllowIn() *ast.Expression {
 }
 
 func (p *Parser) parseAssignmentExpressionOrHigher() *ast.Expression {
-	return p.parseAssignmentExpressionOrHigherWorker(ParseFlagsNone)
+	return p.parseAssignmentExpressionOrHigherWorker(ExpressionParseFlagsNone)
 }
 
-func (p *Parser) parseAssignmentExpressionOrHigherWorker(flags ParseFlags) *ast.Expression {
+func (p *Parser) parseAssignmentExpressionOrHigherWorker(flags ExpressionParseFlags) *ast.Expression {
 	//  AssignmentExpression[in,yield]:
 	//      1) ConditionalExpression[?in,?yield]
 	//      2) LeftHandSideExpression = AssignmentExpression[?in,?yield]
@@ -4254,7 +4254,7 @@ func (p *Parser) isYieldExpression() bool {
 	return false
 }
 
-func (p *Parser) parseYieldExpression(flags ParseFlags) *ast.Node {
+func (p *Parser) parseYieldExpression(flags ExpressionParseFlags) *ast.Node {
 	pos := p.nodePos()
 	// YieldExpression[In] :
 	//      yield
@@ -4272,7 +4272,7 @@ func (p *Parser) parseYieldExpression(flags ParseFlags) *ast.Node {
 	return p.finishNode(result, pos)
 }
 
-func (p *Parser) isParenthesizedArrowFunctionExpression(flags ParseFlags) core.Tristate {
+func (p *Parser) isParenthesizedArrowFunctionExpression(flags ExpressionParseFlags) core.Tristate {
 	if p.token == ast.KindOpenParenToken || p.token == ast.KindLessThanToken || p.token == ast.KindAsyncKeyword {
 		state := p.mark()
 		result := p.nextIsParenthesizedArrowFunctionExpression(flags)
@@ -4289,7 +4289,7 @@ func (p *Parser) isParenthesizedArrowFunctionExpression(flags ParseFlags) core.T
 	return core.TSFalse
 }
 
-func (p *Parser) nextIsParenthesizedArrowFunctionExpression(flags ParseFlags) core.Tristate {
+func (p *Parser) nextIsParenthesizedArrowFunctionExpression(flags ExpressionParseFlags) core.Tristate {
 	isAsync := p.token == ast.KindAsyncKeyword
 	if isAsync {
 		p.nextToken()
@@ -4309,7 +4309,7 @@ func (p *Parser) nextIsParenthesizedArrowFunctionExpression(flags ParseFlags) co
 			// but this is probably what the user intended.
 			switch p.nextToken() {
 			case ast.KindColonToken:
-				if isAsync && flags&ParseFlagsAllowAmbiguousAsyncArrow == 0 {
+				if isAsync && flags&ExpressionParseFlagsAllowAmbiguousAsyncArrow == 0 {
 					return core.TSUnknown
 				}
 				return core.TSTrue
@@ -4321,7 +4321,7 @@ func (p *Parser) nextIsParenthesizedArrowFunctionExpression(flags ParseFlags) co
 		// Simple case: "(...". After "async", this could also be a spread argument.
 		if second == ast.KindDotDotDotToken {
 			if isAsync {
-				if flags&ParseFlagsAllowAmbiguousAsyncArrow != 0 {
+				if flags&ExpressionParseFlagsAllowAmbiguousAsyncArrow != 0 {
 					return core.TSTrue
 				}
 				second = p.nextToken()
@@ -4407,7 +4407,7 @@ func (p *Parser) nextIsParenthesizedArrowFunctionExpression(flags ParseFlags) co
 	}
 }
 
-func (p *Parser) tryParseParenthesizedArrowFunctionExpression(flags ParseFlags) *ast.Node {
+func (p *Parser) tryParseParenthesizedArrowFunctionExpression(flags ExpressionParseFlags) *ast.Node {
 	tristate := p.isParenthesizedArrowFunctionExpression(flags)
 	if tristate == core.TSFalse {
 		// It's definitely not a parenthesized arrow function expression.
@@ -4428,7 +4428,7 @@ func (p *Parser) tryParseParenthesizedArrowFunctionExpression(flags ParseFlags) 
 	return result
 }
 
-func (p *Parser) parseParenthesizedArrowFunctionExpression(allowAmbiguity bool, flags ParseFlags) *ast.Node {
+func (p *Parser) parseParenthesizedArrowFunctionExpression(allowAmbiguity bool, flags ExpressionParseFlags) *ast.Node {
 	pos := p.nodePos()
 	jsdoc := p.jsdocScannerInfo()
 	modifiers := p.parseModifiersForArrowFunction()
@@ -4451,7 +4451,7 @@ func (p *Parser) parseParenthesizedArrowFunctionExpression(allowAmbiguity bool, 
 		parameters = p.createMissingList()
 	} else {
 		if isAsync && typeParameters == nil && (p.token == ast.KindCloseParenToken || p.token == ast.KindDotDotDotToken) {
-			bodyFlags = flags & ParseFlagsAllowAmbiguousAsyncArrow
+			bodyFlags = flags & ExpressionParseFlagsAllowAmbiguousAsyncArrow
 		}
 		if !allowAmbiguity {
 			maybeParameters := p.parseParametersWorker(signatureFlags, allowAmbiguity)
@@ -4466,7 +4466,7 @@ func (p *Parser) parseParenthesizedArrowFunctionExpression(allowAmbiguity bool, 
 			return nil
 		}
 	}
-	requiresColon := !allowAmbiguity && p.token == ast.KindColonToken && flags&ParseFlagsDisallowArrowReturnType != 0
+	requiresColon := !allowAmbiguity && p.token == ast.KindColonToken && flags&ExpressionParseFlagsDisallowArrowReturnType != 0
 	returnType := p.parseReturnType(ast.KindColonToken /*isType*/, false)
 	if returnType != nil && !allowAmbiguity && typeHasArrowFunctionBlockingParseError(returnType) {
 		return nil
@@ -4496,7 +4496,7 @@ func (p *Parser) parseParenthesizedArrowFunctionExpression(allowAmbiguity bool, 
 	var body *ast.Node
 	if lastToken == ast.KindEqualsGreaterThanToken || lastToken == ast.KindOpenBraceToken {
 		if requiresColon {
-			bodyFlags |= ParseFlagsAllowAmbiguousAsyncArrow
+			bodyFlags |= ExpressionParseFlagsAllowAmbiguousAsyncArrow
 		} else {
 			bodyFlags = flags
 		}
@@ -4558,7 +4558,7 @@ func typeHasArrowFunctionBlockingParseError(node *ast.TypeNode) bool {
 	return false
 }
 
-func (p *Parser) parseArrowFunctionExpressionBody(isAsync bool, flags ParseFlags) *ast.Node {
+func (p *Parser) parseArrowFunctionExpressionBody(isAsync bool, flags ExpressionParseFlags) *ast.Node {
 	if p.token == ast.KindOpenBraceToken {
 		return p.parseFunctionBlock(core.IfElse(isAsync, ParseFlagsAwait, ParseFlagsNone), nil /*diagnosticMessage*/)
 	}
@@ -4592,7 +4592,7 @@ func (p *Parser) isStartOfExpressionStatement() bool {
 	return p.token != ast.KindOpenBraceToken && p.token != ast.KindFunctionKeyword && p.token != ast.KindClassKeyword && p.token != ast.KindAtToken && p.isStartOfExpression()
 }
 
-func (p *Parser) parsePossibleParenthesizedArrowFunctionExpression(flags ParseFlags) *ast.Node {
+func (p *Parser) parsePossibleParenthesizedArrowFunctionExpression(flags ExpressionParseFlags) *ast.Node {
 	tokenPos := p.scanner.TokenStart()
 	if p.notParenthesizedArrow.Has(tokenPos) {
 		return nil
@@ -4604,7 +4604,7 @@ func (p *Parser) parsePossibleParenthesizedArrowFunctionExpression(flags ParseFl
 	return result
 }
 
-func (p *Parser) tryParseAsyncSimpleArrowFunctionExpression(flags ParseFlags) *ast.Node {
+func (p *Parser) tryParseAsyncSimpleArrowFunctionExpression(flags ExpressionParseFlags) *ast.Node {
 	// We do a check here so that we won't be doing unnecessarily call to "lookAhead"
 	if p.token == ast.KindAsyncKeyword && p.lookAhead((*Parser).nextIsUnParenthesizedAsyncArrowFunction) {
 		pos := p.nodePos()
@@ -4637,7 +4637,7 @@ func (p *Parser) nextIsUnParenthesizedAsyncArrowFunction() bool {
 	return false
 }
 
-func (p *Parser) parseSimpleArrowFunctionExpression(pos int, identifier *ast.Node, flags ParseFlags, jsdoc jsdocScannerInfo, asyncModifier *ast.ModifierList) *ast.Node {
+func (p *Parser) parseSimpleArrowFunctionExpression(pos int, identifier *ast.Node, flags ExpressionParseFlags, jsdoc jsdocScannerInfo, asyncModifier *ast.ModifierList) *ast.Node {
 	debug.Assert(p.token == ast.KindEqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>")
 	parameter := p.finishNode(p.factory.NewParameterDeclaration(nil /*modifiers*/, nil /*dotDotDotToken*/, identifier, nil /*questionToken*/, nil /*typeNode*/, nil /*initializer*/), identifier.Pos())
 	parameters := p.newNodeList(parameter.Loc, []*ast.Node{parameter})
@@ -4648,7 +4648,7 @@ func (p *Parser) parseSimpleArrowFunctionExpression(pos int, identifier *ast.Nod
 	return result
 }
 
-func (p *Parser) parseConditionalExpressionRest(leftOperand *ast.Expression, pos int, flags ParseFlags) *ast.Expression {
+func (p *Parser) parseConditionalExpressionRest(leftOperand *ast.Expression, pos int, flags ExpressionParseFlags) *ast.Expression {
 	// Note: we are passed in an expression which was produced from parseBinaryExpressionOrHigher.
 	questionToken := p.parseOptionalToken(ast.KindQuestionToken)
 	if questionToken == nil {
@@ -4658,7 +4658,7 @@ func (p *Parser) parseConditionalExpressionRest(leftOperand *ast.Expression, pos
 	// we do not that for the 'whenFalse' part.
 	saveContextFlags := p.contextFlags
 	p.setContextFlags(ast.NodeFlagsDisallowInContext, false)
-	trueExpression := p.parseAssignmentExpressionOrHigherWorker(ParseFlagsDisallowArrowReturnType)
+	trueExpression := p.parseAssignmentExpressionOrHigherWorker(ExpressionParseFlagsDisallowArrowReturnType)
 	p.contextFlags = saveContextFlags
 	colonToken := p.parseExpectedToken(ast.KindColonToken)
 	var falseExpression *ast.Expression
