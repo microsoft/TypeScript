@@ -90,11 +90,16 @@ VS Code, XState, and the TypeScript compiler at 2, 4, and 8 checkers:
     together, small enough that groups can still be balanced.
   - 1x FENNEL penalty: groups already carry the locality, so the balance term
     only needs to break ties between checkers with similar affinity.
+  - 256 imports per file: a file with more is a barrel or a route table whose
+    references are cheap to check (MUI's icon index re-exports 10,750 modules
+    and takes 20ms, but uncapped it would carry 14% of the estimated work and
+    pull every icon onto its checker with it).
 */
 const (
 	checkerAssociationTextWeightDivisor = 100
 	checkerAssociationGroupFraction     = 4
 	checkerAssociationPenaltyMultiplier = 1
+	checkerAssociationMaxImports        = 256
 )
 
 // getCheckerAssociationsInOrder partitions the import graph using a weighted adaptation
@@ -310,7 +315,7 @@ func (p *checkerPool) getCheckerAssociations(checkerCount int) []int {
 			continue
 		}
 		baseWeights[i] = getCheckerAssociationBaseWeight(file.NodeCount, len(file.Text()))
-		importCounts[i] = len(file.Imports())
+		importCounts[i] = min(len(file.Imports()), checkerAssociationMaxImports)
 		order = append(order, i)
 	}
 	associations := make([]int, len(files))
