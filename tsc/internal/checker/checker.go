@@ -16666,11 +16666,14 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
  * Not passing `lookupTable` and `exportNode` disables this collection, and just extends the tables
  */
 func (c *Checker) extendExportSymbols(target ast.SymbolTable, source ast.SymbolTable, lookupTable ExportCollisionTable, exportNode *ast.Node) {
-	// Checking for collisions resolves aliases, which creates types, so visit aliases last and in a stable order
-	// rather than in the random iteration order of the symbol table.
-	c.forEachSymbolInResolutionOrder(source, func(id string, sourceSymbol *ast.Symbol) {
+	type collision struct {
+		id     string
+		symbol *ast.Symbol
+	}
+	var collisions []collision
+	for id, sourceSymbol := range source {
 		if id == ast.InternalSymbolNameDefault {
-			return
+			continue
 		}
 		targetSymbol := target[id]
 		if targetSymbol == nil {
@@ -16680,11 +16683,24 @@ func (c *Checker) extendExportSymbols(target ast.SymbolTable, source ast.SymbolT
 					specifierText: scanner.GetTextOfNode(exportNode.ModuleSpecifier()),
 				}
 			}
-		} else if lookupTable != nil && exportNode != nil && c.resolveSymbol(targetSymbol) != c.resolveSymbol(sourceSymbol) {
-			s := lookupTable[id]
+		} else if lookupTable != nil && exportNode != nil {
+			collisions = append(collisions, collision{id, sourceSymbol})
+		}
+	}
+	// Checking a collision resolves the aliases on both sides, which creates types, so do it in a stable order rather
+	// than in the random iteration order of the symbol table.
+	slices.SortFunc(collisions, func(a, b collision) int {
+		if r := c.compareSymbols(a.symbol, b.symbol); r != 0 {
+			return r
+		}
+		return strings.Compare(a.id, b.id)
+	})
+	for _, collision := range collisions {
+		if c.resolveSymbol(target[collision.id]) != c.resolveSymbol(collision.symbol) {
+			s := lookupTable[collision.id]
 			s.exportsWithDuplicate = append(s.exportsWithDuplicate, exportNode)
 		}
-	})
+	}
 }
 
 func (c *Checker) ResolveAlias(symbol *ast.Symbol) (*ast.Symbol, bool) {
