@@ -2,6 +2,8 @@ package checker
 
 import (
 	"encoding/binary"
+	"fmt"
+	"math/rand/v2"
 	"runtime"
 	"slices"
 	"strconv"
@@ -10,7 +12,11 @@ import (
 	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/binder"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/race"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/zeebo/xxh3"
 	"gotest.tools/v3/assert"
 )
@@ -343,6 +349,45 @@ func TestTemporaryPropertyCounts(t *testing.T) {
 	assert.Assert(t, c.getTemporaryPropertyCounts() != reused)
 	other := &Checker{}
 	assert.Assert(t, other.getTemporaryPropertyCounts() != outer)
+}
+
+func TestSortSymbolsMatchesCompareSymbols(t *testing.T) {
+	t.Parallel()
+	c := &Checker{fileIndexMap: make(map[*ast.SourceFile]int)}
+	c.compareSymbols = c.compareSymbolsWorker
+	var symbols []*ast.Symbol
+	for i, name := range []string{"/b.ts", "/a.ts"} {
+		var text strings.Builder
+		text.WriteString("interface I {")
+		for j := range 40 {
+			fmt.Fprintf(&text, " p%d: any;", (j*7)%40)
+		}
+		text.WriteString(" }")
+		file := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: tspath.RootedFilePathFromAbsolute(name), PathKey: tspath.PathKeyFromCanonical(name)}, text.String(), core.ScriptKindTS)
+		binder.BindSourceFile(file)
+		c.fileIndexMap[file] = i
+		for _, member := range file.Locals["I"].Members() {
+			symbols = append(symbols, member)
+		}
+	}
+	for i := range 6 {
+		symbols = append(symbols, c.newSymbol(ast.SymbolFlagsProperty, fmt.Sprintf("x%d", i%3)))
+	}
+	expected := slices.Clone(symbols)
+	slices.SortFunc(expected, c.compareSymbols)
+	half := slices.Clone(expected[:len(expected)/2])
+	twoRuns := append(slices.Clone(expected[len(expected)/2:]), half...)
+	inputs := [][]*ast.Symbol{slices.Clone(expected), twoRuns}
+	rng := rand.New(rand.NewPCG(1, 2))
+	for range 20 {
+		shuffled := slices.Clone(expected)
+		rng.Shuffle(len(shuffled), func(i, j int) { shuffled[i], shuffled[j] = shuffled[j], shuffled[i] })
+		inputs = append(inputs, shuffled)
+	}
+	for _, input := range inputs {
+		c.sortSymbols(input)
+		assert.Assert(t, slices.Equal(input, expected))
+	}
 }
 
 func TestIntersectionReductionReentrancy(t *testing.T) {

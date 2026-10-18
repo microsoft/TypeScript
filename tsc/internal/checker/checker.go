@@ -692,6 +692,7 @@ type Checker struct {
 	structuredTypeExtraArena                    core.Arena[structuredTypeExtra]
 	freeTypeSets                                *temporaryTypeSet
 	freePropertyCounts                          *temporaryPropertyCounts
+	symbolSortKeys                              []symbolSortKey
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
 	factory                                     ast.NodeFactory
@@ -13695,11 +13696,16 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 	} else {
 		indexInfos = c.getUnionIndexInfos([]*Type{left, right})
 	}
+	// Both property lists are usually sorted already, so keep the members in
+	// their order (left properties first) to make sorting them cheap.
+	var leftOrder, rightOrder []*ast.Symbol
 	for _, rightProp := range c.getPropertiesOfType(right) {
 		if getDeclarationModifierFlagsFromSymbol(rightProp)&(ast.ModifierFlagsPrivate|ast.ModifierFlagsProtected) != 0 {
 			skippedPrivateMembers.Add(rightProp.Name())
 		} else if c.isSpreadableProperty(rightProp) {
-			members[rightProp.Name()] = c.getSpreadSymbol(rightProp, readonly)
+			spreadProp := c.getSpreadSymbol(rightProp, readonly)
+			members[rightProp.Name()] = spreadProp
+			rightOrder = append(rightOrder, spreadProp)
 		}
 	}
 
@@ -13732,15 +13738,25 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 				result.SetDeclarations(declarations)
 				links.setNameType(c, c.valueSymbolLinks.Get(leftProp).getNameType())
 				members[leftProp.Name()] = result
+				leftOrder = append(leftOrder, result)
 			}
 		} else {
-			members[leftProp.Name()] = c.getSpreadSymbol(leftProp, readonly)
+			spreadProp := c.getSpreadSymbol(leftProp, readonly)
+			members[leftProp.Name()] = spreadProp
+			leftOrder = append(leftOrder, spreadProp)
+		}
+	}
+	order := leftOrder
+	for _, prop := range rightOrder {
+		if members[prop.Name()] == prop {
+			order = append(order, prop)
 		}
 	}
 	spreadIndexInfos := core.SameMap(indexInfos, func(info *IndexInfo) *IndexInfo {
 		return c.getIndexInfoWithReadonly(info, readonly)
 	})
-	spread := c.newAnonymousType(symbol, members, nil, nil, spreadIndexInfos)
+	spread := c.newObjectType(ObjectFlagsAnonymous, symbol)
+	c.setStructuredTypeMembersInOrder(spread, members, order, nil, nil, spreadIndexInfos)
 	spread.objectFlags |= ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral | ObjectFlagsContainsSpread | objectFlags
 	return spread
 }
@@ -22544,8 +22560,28 @@ func (c *Checker) getDefaultOrUnknownFromTypeParameter(t *Type) *Type {
 }
 
 func (c *Checker) getNamedMembers(members ast.SymbolTable, container *ast.Symbol) []*ast.Symbol {
+	return c.getNamedMembersInOrder(members, nil, container)
+}
+
+// getNamedMembersInOrder is getNamedMembers where order, if not nil, holds the
+// symbols of members keyed by their names. The result does not depend on the
+// order, but sorting is much cheaper when order is mostly sorted already.
+func (c *Checker) getNamedMembersInOrder(members ast.SymbolTable, order []*ast.Symbol, container *ast.Symbol) []*ast.Symbol {
 	if len(members) == 0 {
 		return nil
+	}
+	if order != nil {
+		debug.Assert(len(order) == len(members))
+		if container == nil || container.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) == 0 {
+			result := make([]*ast.Symbol, 0, len(order))
+			for _, symbol := range order {
+				if c.isNamedMember(symbol, symbol.Name()) {
+					result = append(result, symbol)
+				}
+			}
+			c.sortSymbols(result)
+			return result
+		}
 	}
 	// For classes and interfaces, we store explicitly declared members ahead of inherited members. This ensures we process
 	// explicitly declared members first in type relations, which is beneficial because explicitly declared members are more
@@ -25723,10 +25759,14 @@ func (c *Checker) cloneTypeReference(source *Type) *Type {
 }
 
 func (c *Checker) setStructuredTypeMembers(t *Type, members ast.SymbolTable, callSignatures []*Signature, constructSignatures []*Signature, indexInfos []*IndexInfo) {
+	c.setStructuredTypeMembersInOrder(t, members, nil, callSignatures, constructSignatures, indexInfos)
+}
+
+func (c *Checker) setStructuredTypeMembersInOrder(t *Type, members ast.SymbolTable, order []*ast.Symbol, callSignatures []*Signature, constructSignatures []*Signature, indexInfos []*IndexInfo) {
 	t.objectFlags |= ObjectFlagsMembersResolved
 	data := t.AsStructuredType()
 	data.members = members
-	data.properties = c.getNamedMembers(members, t.symbol)
+	data.properties = c.getNamedMembersInOrder(members, order, t.symbol)
 	c.setStructuredTypeSignatures(data, callSignatures, constructSignatures, indexInfos)
 }
 

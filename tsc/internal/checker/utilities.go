@@ -359,8 +359,116 @@ func createSymbolTable(symbols []*ast.Symbol) ast.SymbolTable {
 	return result
 }
 
+type symbolSortKey struct {
+	symbol    *ast.Symbol
+	file      *ast.SourceFile
+	fileIndex int
+	pos       int
+}
+
+// sortSymbols sorts symbols in compareSymbols order. Comparing declarations
+// finds each node's source file by walking its parents, so the keys are
+// computed once per symbol rather than once per comparison.
 func (c *Checker) sortSymbols(symbols []*ast.Symbol) {
-	slices.SortFunc(symbols, c.compareSymbols)
+	if len(symbols) < 2 {
+		return
+	}
+	keys := c.symbolSortKeys[:0]
+	for _, s := range symbols {
+		key := symbolSortKey{symbol: s, fileIndex: -1}
+		if s != nil {
+			if decls := s.Declarations(); len(decls) != 0 && decls[0] != nil {
+				key.file = ast.GetSourceFileOfNode(decls[0])
+				key.fileIndex = c.fileIndexMap[key.file]
+				key.pos = decls[0].Pos()
+			}
+		}
+		keys = append(keys, key)
+	}
+	// Symbol lists are often already sorted, or two sorted runs.
+	descents, split := 0, 0
+	for i := 1; i < len(keys) && descents < 2; i++ {
+		if c.compareSymbolSortKeys(keys[i-1], keys[i]) > 0 {
+			descents++
+			split = i
+		}
+	}
+	switch descents {
+	case 0:
+	case 1:
+		// The keys hold the symbols, so the runs merge straight into symbols.
+		left, right := keys[:split], keys[split:]
+		out := symbols[:0]
+		for len(left) != 0 && len(right) != 0 {
+			if c.compareSymbolSortKeys(left[0], right[0]) <= 0 {
+				out = append(out, left[0].symbol)
+				left = left[1:]
+			} else {
+				out = append(out, right[0].symbol)
+				right = right[1:]
+			}
+		}
+		for _, k := range left {
+			out = append(out, k.symbol)
+		}
+		for _, k := range right {
+			out = append(out, k.symbol)
+		}
+	default:
+		slices.SortFunc(keys, c.compareSymbolSortKeys)
+		for i := range keys {
+			symbols[i] = keys[i].symbol
+		}
+	}
+	clear(keys)
+	if cap(keys) <= 4096 {
+		c.symbolSortKeys = keys[:0]
+	}
+}
+
+// compareSymbolSortKeys matches compareSymbolsWorker.
+func (c *Checker) compareSymbolSortKeys(k1, k2 symbolSortKey) int {
+	s1, s2 := k1.symbol, k2.symbol
+	if s1 == s2 {
+		return 0
+	}
+	if s1 == nil {
+		return 1
+	}
+	if s2 == nil {
+		return -1
+	}
+	if len(s1.Declarations()) != 0 && len(s2.Declarations()) != 0 {
+		if r := compareSymbolSortKeyDeclarations(k1, k2); r != 0 {
+			return r
+		}
+	} else if len(s1.Declarations()) != 0 {
+		return -1
+	} else if len(s2.Declarations()) != 0 {
+		return 1
+	}
+	if r := strings.Compare(s1.Name(), s2.Name()); r != 0 {
+		return r
+	}
+	return cmp.Compare(ast.GetSymbolId(s1), ast.GetSymbolId(s2))
+}
+
+// compareSymbolSortKeyDeclarations matches compareNodes on the first declarations.
+func compareSymbolSortKeyDeclarations(k1, k2 symbolSortKey) int {
+	d1, d2 := k1.symbol.Declarations()[0], k2.symbol.Declarations()[0]
+	if d1 == d2 {
+		return 0
+	}
+	if d1 == nil {
+		return 1
+	}
+	if d2 == nil {
+		return -1
+	}
+	if k1.file != k2.file {
+		return k1.fileIndex - k2.fileIndex
+	}
+	return k1.pos - k2.pos
 }
 
 func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
