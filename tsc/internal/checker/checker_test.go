@@ -208,3 +208,47 @@ export type Initial = Box<"first">;
 	assert.Equal(t, c.TypeToString(initial), "Initial")
 	assert.Equal(t, len(c.GetDiagnostics(t.Context(), file)), 0)
 }
+
+func TestDeprecatedNamespaceAliasInTypeReference(t *testing.T) {
+	t.Parallel()
+
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/example.d.ts": `export type Bar = string | number;
+/** @deprecated */
+export type Baz = string | number;`,
+		"/foo.ts": `import * as example from './example';
+
+declare namespace JSX {
+	/** @deprecated */
+	export type Foo = string | number;
+
+	/** @deprecated */
+	export import Bar = example.Bar;
+
+	export import Baz = example.Baz;
+}
+
+let x: JSX.Foo;
+let y: JSX.Bar;
+let z: JSX.Baz;`,
+	}, tspath.CaseSensitive))
+	opts := &core.CompilerOptions{NoLib: core.TSTrue}
+	program := compiler.NewProgram(compiler.ProgramOptions{
+		Config: tsoptions.NewParsedCommandLine(opts, []tspath.RootedFilePath{"/example.d.ts", "/foo.ts"}, nil, "/", fs.CaseSensitivity()),
+		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+	})
+	program.BindSourceFiles()
+	c, done := program.GetTypeChecker(t.Context())
+	defer done()
+	file := program.GetSourceFile("/foo.ts")
+	var deprecatedSuggestions []*ast.Diagnostic
+	for _, s := range c.GetSuggestionDiagnostics(t.Context(), file) {
+		if s.ReportsDeprecated() {
+			deprecatedSuggestions = append(deprecatedSuggestions, s)
+		}
+	}
+	assert.Equal(t, len(deprecatedSuggestions), 3)
+	assert.Equal(t, deprecatedSuggestions[0].MessageArgs()[0], "Foo")
+	assert.Equal(t, deprecatedSuggestions[1].MessageArgs()[0], "Bar")
+	assert.Equal(t, deprecatedSuggestions[2].MessageArgs()[0], "Baz")
+}

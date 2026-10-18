@@ -3078,10 +3078,24 @@ func (c *Checker) checkTypeReferenceOrImport(node *ast.Node) {
 				c.checkTypeArgumentConstraints(node, typeParameters)
 			}
 		}
-		symbol := c.getResolvedSymbolOrNil(node)
-		if symbol != nil {
-			if core.Some(symbol.Declarations(), func(d *ast.Node) bool { return ast.IsTypeDeclaration(d) && c.IsDeprecatedDeclaration(d) }) {
-				c.addDeprecatedSuggestion(c.getDeprecatedSuggestionNode(node), symbol.Declarations(), symbol.Name())
+		name := getTypeReferenceName(node)
+		var aliasSymbol *ast.Symbol
+		if name != nil {
+			aliasSymbol = c.resolveEntityName(name, ast.SymbolFlagsType, true /*ignoreErrors*/, true /*dontResolveAlias*/, nil /*location*/)
+		}
+		if aliasSymbol != nil && aliasSymbol.Flags()&ast.SymbolFlagsAlias != 0 {
+			targetSymbol := c.resolveAliasWithDeprecationCheck(aliasSymbol, c.getDeprecatedSuggestionNode(node))
+			if targetSymbol != nil && core.Some(targetSymbol.Declarations(), func(d *ast.Node) bool {
+				return (ast.IsTypeDeclaration(d) || d.Kind == ast.KindImportEqualsDeclaration || d.Kind == ast.KindImportSpecifier) && c.IsDeprecatedDeclaration(d)
+			}) {
+				c.addDeprecatedSuggestion(c.getDeprecatedSuggestionNode(node), targetSymbol.Declarations(), targetSymbol.Name())
+			}
+		} else {
+			symbol := c.getResolvedSymbolOrNil(node)
+			if symbol != nil {
+				if core.Some(symbol.Declarations(), func(d *ast.Node) bool { return ast.IsTypeDeclaration(d) && c.IsDeprecatedDeclaration(d) }) {
+					c.addDeprecatedSuggestion(c.getDeprecatedSuggestionNode(node), symbol.Declarations(), symbol.Name())
+				}
 			}
 		}
 	}
