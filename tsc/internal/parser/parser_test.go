@@ -487,6 +487,69 @@ function foo(options) {}`
 	assert.Equal(t, scanner.GetTokenPosOfNode(typeNode, file, false /*includeJSDoc*/), strings.Index(sourceText, "{{")+1)
 }
 
+func TestJSDocAugmentsHeritage(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name       string
+		expression string
+		tagName    string
+		augments   bool
+	}{
+		{"identifier", "A", "A", true},
+		{"dotted name", "ns.A", "ns.A", true},
+		{"call", "A.extend()", "A", true},
+		{"mixin", "mixin(A)", "A", true},
+		{"element access", `ns["A"]`, "A", true},
+		{"conditional", "(cond ? A : A)", "A", true},
+		{"parenthesized name", "(A)", "A", true},
+		{"null", "null", "A", false},
+		{"mismatched identifier", "A", "Other", false},
+		{"mismatched dotted name", "ns.A", "ns.Other", false},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			sourceText := "/** @extends {" + test.tagName + "<string>} */\nclass B extends " + test.expression + " {}"
+			opts := ast.SourceFileParseOptions{
+				FileName: "/index.js",
+				PathKey:  "/index.js",
+			}
+			file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
+			parsetestutil.CheckDiagnostics(t, file)
+			assert.Equal(t, len(file.Statements.Nodes), 1)
+			classB := file.Statements.Nodes[0]
+			assert.Assert(t, ast.IsClassDeclaration(classB))
+
+			baseType := ast.GetClassExtendsHeritageElement(classB)
+			assert.Assert(t, baseType != nil)
+			assert.Equal(t, scanner.GetTextOfNode(baseType.Expression()), test.expression)
+
+			jsDocs := classB.JSDoc(file)
+			assert.Equal(t, len(jsDocs), 1)
+			tags := jsDocs[0].AsJSDoc().Tags
+			assert.Assert(t, tags != nil)
+			assert.Equal(t, len(tags.Nodes), 1)
+			tag := tags.Nodes[0]
+			assert.Assert(t, ast.IsJSDocAugmentsTag(tag))
+			sourceTypeArguments := tag.ClassName().TypeArguments()
+			assert.Equal(t, len(sourceTypeArguments), 1)
+
+			typeArguments := baseType.TypeArguments()
+			if test.augments {
+				assert.Equal(t, len(typeArguments), 1)
+				typeArgument := typeArguments[0]
+				assert.Equal(t, typeArgument.Kind, ast.KindStringKeyword)
+				assert.Assert(t, typeArgument.Flags&ast.NodeFlagsReparsed != 0)
+				assert.Equal(t, typeArgument.Parent, baseType)
+				assert.Equal(t, scanner.GetTextOfNode(typeArgument), "string")
+				assert.Equal(t, ast.GetReparsedNodeForNode(sourceTypeArguments[0]), typeArgument)
+			} else {
+				assert.Equal(t, len(typeArguments), 0)
+				assert.Equal(t, ast.GetReparsedNodeForNode(sourceTypeArguments[0]), sourceTypeArguments[0])
+			}
+		})
+	}
+}
+
 func TestSourceFilePositionMapWithNonASCIIStringLiteral(t *testing.T) {
 	t.Parallel()
 	sourceText := `const x = "─";

@@ -1,0 +1,54 @@
+//// [tests/cases/conformance/jsdoc/extendsTag9.ts] ////
+
+=== a.js ===
+/** @template T */
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+    /** @returns {T} */
+    get a() {
+>a : Symbol(A.a, Decl(a.js, 1, 9))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+
+    /** @returns {typeof C} */
+    static extend() {
+>extend : Symbol(A.extend, Decl(a.js, 5, 5))
+
+        return C;
+>C : Symbol(C, Decl(a.js, 11, 1))
+    }
+}
+
+/** @template T */
+class C {
+>C : Symbol(C, Decl(a.js, 11, 1))
+
+    /** @returns {T} */
+    get c() {
+>c : Symbol(C.c, Decl(a.js, 14, 9))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+/** @extends {A<string>} */
+class B extends A.extend() {}
+>B : Symbol(B, Decl(a.js, 19, 1))
+>A.extend : Symbol(A.extend, Decl(a.js, 5, 5))
+>A : Symbol(A, Decl(a.js, 0, 0))
+>extend : Symbol(A.extend, Decl(a.js, 5, 5))
+
+const a = new B().a;
+>a : Symbol(a, Decl(a.js, 24, 5))
+>B : Symbol(B, Decl(a.js, 19, 1))
+
+const c = new B().c;
+>c : Symbol(c, Decl(a.js, 25, 5))
+>new B().c : Symbol(C.c, Decl(a.js, 14, 9))
+>B : Symbol(B, Decl(a.js, 19, 1))
+>c : Symbol(C.c, Decl(a.js, 14, 9))
+
