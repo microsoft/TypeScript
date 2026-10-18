@@ -22447,16 +22447,22 @@ func (c *Checker) somePropertyReducesToNever(t *Type) bool {
 	// Collect declaration counts for each property across all constituent types of the intersection.
 	counts := c.getTemporaryPropertyCounts()
 	defer c.releaseTemporaryPropertyCounts(counts)
-	for _, t := range t.Types() {
+	// Property names are unique within each constituent, so the first
+	// constituent's names can be added without looking them up.
+	types := t.Types()
+	for _, prop := range c.getLayoutPropertiesOfType(types[0]) {
+		counts.AddNew(prop.Name())
+	}
+	for _, t := range types[1:] {
 		for _, prop := range c.getLayoutPropertiesOfType(t) {
-			counts.Set(prop.Name(), counts.GetOrZero(prop.Name())+1)
+			counts.Add(prop.Name())
 		}
 	}
 	// Check if any property appears in more than one constituent type and reduces to 'never'.
 	// Go in the order the properties were found so the combined properties are created in the same order every time.
-	for propName, count := range counts.Entries() {
-		if count > 1 {
-			if prop := c.getPropertyOfUnionOrIntersectionType(t, propName, true /*skipObjectFunctionPropertyAugment*/); prop != nil && c.isNeverReducedProperty(prop) {
+	for i := range counts.entries {
+		if e := counts.entries[i]; e.count > 1 {
+			if prop := c.getPropertyOfUnionOrIntersectionType(t, e.name, true /*skipObjectFunctionPropertyAugment*/); prop != nil && c.isNeverReducedProperty(prop) {
 				return true
 			}
 		}
