@@ -45,16 +45,16 @@ func TestGetDirectoryGroups(t *testing.T) {
 		"/p/lib.d.ts",
 		"/p/big.ts",
 	}
-	weights := []int{10, 10, 10, 10, 0, 40}
+	weights := []int{10, 10, 10, 10, 0, 280}
 	// The declaration file is not type checked, so it is not in order.
 	order := []int{0, 1, 2, 3, 5}
-	// Total weight 80 over 2 checkers: groups hold at most 80/(2*4) = 10 units,
+	// Total weight 320 over 2 checkers: groups hold at most 320/(2*16) = 10 units,
 	// so /p/a and /p/b are split, and /p/b/c becomes a group.
 	groupOf, groupWeights := getDirectoryGroups(paths, weights, order, 2)
 	if want := []int{0, 1, 2, 3, -1, 4}; !slices.Equal(groupOf, want) {
 		t.Fatalf("groupOf = %v, want %v", groupOf, want)
 	}
-	if want := []int{10, 10, 10, 10, 40}; !slices.Equal(groupWeights, want) {
+	if want := []int{10, 10, 10, 10, 280}; !slices.Equal(groupWeights, want) {
 		t.Fatalf("groupWeights = %v, want %v", groupWeights, want)
 	}
 	// With one checker the threshold is 20, which /p/a and /p/b fit.
@@ -62,7 +62,7 @@ func TestGetDirectoryGroups(t *testing.T) {
 	if want := []int{0, 0, 1, 1, -1, 2}; !slices.Equal(groupOf, want) {
 		t.Fatalf("groupOf = %v, want %v", groupOf, want)
 	}
-	if want := []int{20, 20, 40}; !slices.Equal(groupWeights, want) {
+	if want := []int{20, 20, 280}; !slices.Equal(groupWeights, want) {
 		t.Fatalf("groupWeights = %v, want %v", groupWeights, want)
 	}
 }

@@ -86,8 +86,10 @@ VS Code, XState, and the TypeScript compiler at 2, 4, and 8 checkers:
   - 100-byte text weight divisor: keeps large literals, comments, and generated
     files from appearing artificially cheap without allowing raw byte length to
     dominate.
-  - 1/4 checker load per group: large enough to keep a package's files
-    together, small enough that groups can still be balanced.
+  - 1/16 checker load per group: large enough to keep a package's files
+    together. Estimated work can be far off for a whole directory, and the
+    slowest checker sets the overall time, so groups are kept small enough
+    that one misjudged group cannot hold a checker back for long.
   - 1x FENNEL penalty: groups already carry the locality, so the balance term
     only needs to break ties between checkers with similar affinity.
   - 256 imports per file: a file with more is a barrel or a route table whose
@@ -97,7 +99,7 @@ VS Code, XState, and the TypeScript compiler at 2, 4, and 8 checkers:
 */
 const (
 	checkerAssociationTextWeightDivisor = 100
-	checkerAssociationGroupFraction     = 4
+	checkerAssociationGroupFraction     = 16
 	checkerAssociationPenaltyMultiplier = 1
 	checkerAssociationMaxImports        = 256
 )
