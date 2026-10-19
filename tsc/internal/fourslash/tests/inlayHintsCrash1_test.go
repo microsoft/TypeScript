@@ -23,5 +23,5 @@ function doThing(f) {
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{IncludeInlayVariableTypeHints: core.TSTrue, IncludeInlayParameterNameHints: lsutil.IncludeInlayParameterNameHintsAll}})
+	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{IncludeInlayVariableTypeHints: core.TSTrue, IncludeInlayParameterNameHints: lsutil.IncludeInlayParameterNameHintsAll})
 }

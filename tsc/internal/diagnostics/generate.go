@@ -68,7 +68,7 @@ func main() {
 		return cmp.Compare(a.Code, b.Code)
 	})
 
-	// Collect known keys for filtering localizations
+	// Collect known keys for filtering localizations.
 	knownKeys := make(map[string]bool, len(diagnosticMessages))
 	for _, m := range diagnosticMessages {
 		_, key := convertPropertyName(m.key, m.Code)
@@ -268,17 +268,17 @@ func generateLocalizations(knownKeys map[string]bool, locDir string, localeNames
 	for _, tgtCul := range localeNames {
 		localeFile := filepath.Join(locDir, tgtCul+".generated.json")
 		localizedMessages := readLocalizedMessages(localeFile)
-		if len(localizedMessages) == 0 {
-			continue
-		}
 
-		// Filter to only known keys
 		for key := range localizedMessages {
 			if !knownKeys[key] {
 				delete(localizedMessages, key)
 			}
 		}
 
+		var orderedMessages collections.OrderedMap[string, string]
+		for _, key := range slices.Sorted(maps.Keys(localizedMessages)) {
+			orderedMessages.Set(key, localizedMessages[key])
+		}
 		if len(localizedMessages) == 0 {
 			continue
 		}
@@ -295,13 +295,7 @@ func generateLocalizations(knownKeys map[string]bool, locDir string, localeNames
 		// Filename for the JSON.gz file (use the original tgtCul as standard language tag)
 		filename := fmt.Sprintf("%s.json.gz", tgtCul)
 
-		// Write the JSON.gz file
-		// Convert map to OrderedMap with sorted keys for consistent ordering
-		keys := slices.Sorted(maps.Keys(localizedMessages))
-		var orderedMessages collections.OrderedMap[string, string]
-		for _, key := range keys {
-			orderedMessages.Set(key, localizedMessages[key])
-		}
+		// Write the JSON.gz file.
 		jsonData, err := json.Marshal(&orderedMessages)
 		if err != nil {
 			log.Fatalf("failed to marshal locale %s: %v", tgtCul, err)

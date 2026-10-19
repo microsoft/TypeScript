@@ -178,7 +178,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		d := t.AsPseudoTypeSingleCallSignature()
 		signature := b.ch.getSignatureFromDeclaration(d.Signature)
 		expandedParams := b.ch.getExpandedParameters(signature, true /*skipUnionExpanding*/)[0]
-		cleanup := b.enterNewScope(d.Signature, expandedParams, signature.typeParameters, signature.parameters, signature.mapper)
+		cleanup := b.enterNewScope(d.Signature, expandedParams, signature.TypeParameters(), signature.parameters, signature.mapper)
 		defer cleanup()
 		var typeParams *ast.NodeList
 		if len(d.TypeParameters) > 0 {
@@ -233,7 +233,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 			if e.Kind != pseudochecker.PseudoObjectElementKindPropertyAssignment {
 				signature := b.ch.getSignatureFromDeclaration(e.Signature())
 				expandedParams := b.ch.getExpandedParameters(signature, true /*skipUnionExpanding*/)[0]
-				cleanup = b.enterNewScope(e.Signature(), expandedParams, signature.typeParameters, signature.parameters, signature.mapper)
+				cleanup = b.enterNewScope(e.Signature(), expandedParams, signature.TypeParameters(), signature.parameters, signature.mapper)
 			}
 			var newProp *ast.Node
 			switch e.Kind {
@@ -425,7 +425,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 		// which are two elements in pt.Elements but only one symbol in targetProps.
 		targetDeclCount := 0
 		for _, prop := range targetProps {
-			targetDeclCount += len(prop.Declarations)
+			targetDeclCount += len(prop.Declarations())
 		}
 		if len(pt.Elements) != targetDeclCount {
 			return false
@@ -434,13 +434,13 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 			var targetProp *ast.Symbol
 			elemSymbol := e.Name.Parent.Symbol()
 			if elemSymbol != nil {
-				targetProp = b.ch.getPropertyOfType(undefinedStripped, elemSymbol.Name)
+				targetProp = b.ch.getPropertyOfType(undefinedStripped, elemSymbol.Name())
 			}
 			if targetProp == nil {
 				// Name lookup failed or returned no result; search target properties
 				// for one whose declaration name node matches the one we have
 				for _, prop := range targetProps {
-					if prop.ValueDeclaration != nil && prop.ValueDeclaration.Name() == e.Name {
+					if prop.ValueDeclaration() != nil && prop.ValueDeclaration().Name() == e.Name {
 						targetProp = prop
 						break
 					}
@@ -452,7 +452,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 					return false
 				}
 			}
-			targetIsOptional := targetProp.Flags&ast.SymbolFlagsOptional != 0
+			targetIsOptional := targetProp.Flags()&ast.SymbolFlagsOptional != 0
 			if e.Optional != targetIsOptional {
 				if reportErrors {
 					b.ctx.tracker.ReportInferenceFallback(e.Name.Parent)
@@ -549,7 +549,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 			return false
 		}
 		pt := t.AsPseudoTypeSingleCallSignature()
-		if len(targetSig.typeParameters) != len(pt.TypeParameters) {
+		if len(targetSig.TypeParameters()) != len(pt.TypeParameters) {
 			if reportErrors {
 				b.ctx.tracker.ReportInferenceFallback(pt.Signature)
 			}
@@ -583,13 +583,13 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 }
 
 func (b *NodeBuilderImpl) pseudoParametersEquivalentToParameters(params []*pseudochecker.PseudoParameter, targetSig *Signature, reportErrors bool, nonParamErrorLocation *ast.Node) bool {
-	if targetSig.thisParameter != nil && len(params) == 0 {
+	if targetSig.ThisParameter() != nil && len(params) == 0 {
 		if reportErrors {
 			b.ctx.tracker.ReportInferenceFallback(nonParamErrorLocation) // missing `this` param
 		}
 		return false
-	} else if targetSig.thisParameter != nil && ast.IsThisIdentifier(params[0].Name) {
-		targetParam := targetSig.thisParameter
+	} else if targetSig.ThisParameter() != nil && ast.IsThisIdentifier(params[0].Name) {
+		targetParam := targetSig.ThisParameter()
 		paramType := b.ch.getTypeOfParameter(targetParam)
 		if !b.pseudoTypeEquivalentToType(params[0].Type, paramType, params[0].Optional, false) {
 			if reportErrors {
@@ -598,7 +598,7 @@ func (b *NodeBuilderImpl) pseudoParametersEquivalentToParameters(params []*pseud
 			return false
 		}
 		params = params[1:]
-	} else if targetSig.thisParameter != nil {
+	} else if targetSig.ThisParameter() != nil {
 		if reportErrors {
 			b.ctx.tracker.ReportInferenceFallback(nonParamErrorLocation)
 		}
@@ -612,7 +612,7 @@ func (b *NodeBuilderImpl) pseudoParametersEquivalentToParameters(params []*pseud
 	}
 	for i, p := range params {
 		targetParam := targetSig.parameters[i]
-		if p.Optional != b.ch.isOptionalParameter(targetParam.ValueDeclaration) {
+		if p.Optional != b.ch.isOptionalParameter(targetParam.ValueDeclaration()) {
 			if reportErrors {
 				b.ctx.tracker.ReportInferenceFallback(p.Name.Parent)
 			}

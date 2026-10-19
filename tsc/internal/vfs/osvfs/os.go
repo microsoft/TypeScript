@@ -1,6 +1,7 @@
 package osvfs
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -43,15 +44,15 @@ type osFS struct {
 }
 
 // We do this right at startup to minimize the chance that executable gets moved or deleted.
-var isFileSystemCaseSensitive = func() bool {
+var fileSystemCaseSensitivity = func() tspath.CaseSensitivity {
 	// win32/win64 are case insensitive platforms
 	if runtime.GOOS == "windows" {
-		return false
+		return tspath.CaseInsensitive
 	}
 
 	if runtime.GOARCH == "wasm" {
 		// !!! Who knows; this depends on the host implementation.
-		return true
+		return tspath.CaseSensitive
 	}
 
 	// As a proxy for case-insensitivity, we check if the current executable exists under a different case.
@@ -66,11 +67,11 @@ var isFileSystemCaseSensitive = func() bool {
 	swapped := swapCase(exe)
 	if _, err := os.Stat(swapped); err != nil {
 		if os.IsNotExist(err) {
-			return true
+			return tspath.CaseSensitive
 		}
 		panic(fmt.Sprintf("vfs: failed to stat %q: %v", swapped, err))
 	}
-	return false
+	return tspath.CaseInsensitive
 }()
 
 // Convert all lowercase chars to uppercase, and vice-versa
@@ -85,57 +86,85 @@ func swapCase(str string) string {
 	}, str)
 }
 
-func (vfs *osFS) UseCaseSensitiveFileNames() bool {
-	return isFileSystemCaseSensitive
+func (vfs *osFS) CaseSensitivity() tspath.CaseSensitivity {
+	return fileSystemCaseSensitivity
 }
 
-func (vfs *osFS) ReadFile(path string) (contents string, ok bool) {
+// errNetworkPath is returned when writing to a path that refers to a network
+// location. Such paths are never accessed; see [nativepath.IsNetworkPath].
+var errNetworkPath = errors.New("network paths are not supported")
+
+func (vfs *osFS) ReadFile(path tspath.RootedFilePath) (contents string, ok bool) {
+	if nativepath.IsNetworkPath(path.AsString()) {
+		return "", false
+	}
 	defer readSema.Acquire()()
 	return vfs.common.ReadFile(path)
 }
 
-func (vfs *osFS) DirectoryExists(path string) bool {
+func (vfs *osFS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
+	if nativepath.IsNetworkPath(path.AsString()) {
+		return false
+	}
 	defer blockingOpSema.Acquire()()
 	return vfs.common.DirectoryExists(path)
 }
 
-func (vfs *osFS) FileExists(path string) bool {
+func (vfs *osFS) FileExists(path tspath.RootedFilePath) bool {
+	if nativepath.IsNetworkPath(path.AsString()) {
+		return false
+	}
 	defer blockingOpSema.Acquire()()
 	return vfs.common.FileExists(path)
 }
 
-func (vfs *osFS) GetAccessibleEntries(path string) vfs.Entries {
+func (vfs *osFS) GetAccessibleEntries(path tspath.RootedDirectoryPath) (entries vfs.Entries) {
+	if nativepath.IsNetworkPath(path.AsString()) {
+		return entries
+	}
 	defer blockingOpSema.Acquire()()
 	return vfs.common.GetAccessibleEntries(path)
 }
 
-func (vfs *osFS) Stat(path string) vfs.FileInfo {
+func (vfs *osFS) Stat(path tspath.RootedPath) vfs.FileInfo {
+	if nativepath.IsNetworkPath(path.AsString()) {
+		return nil
+	}
 	defer blockingOpSema.Acquire()()
 	return vfs.common.Stat(path)
 }
 
-func (vfs *osFS) Realpath(path string) string {
+func (vfs *osFS) Realpath(path tspath.RootedPath) tspath.RootedPath {
 	defer blockingOpSema.Acquire()()
 	return osFSRealpath(path)
 }
 
-func osFSRealpath(path string) string {
-	_ = internal.RootLength(path) // Assert path is rooted
-
+func osFSRealpath(path tspath.RootedPath) tspath.RootedPath {
 	orig := path
-	path = filepath.FromSlash(path)
-	path, err := nativepath.Realpath(path)
+	if nativepath.IsNetworkPath(orig.AsString()) {
+		return orig
+	}
+	nativePath := filepath.FromSlash(path.AsString())
+	nativePath, err := nativepath.Realpath(nativePath)
 	if err != nil {
 		return orig
 	}
-	path, err = filepath.Abs(path)
+	nativePath, err = filepath.Abs(nativePath)
 	if err != nil {
 		return orig
 	}
-	return tspath.NormalizeSlashes(path)
+	// A local path may resolve to a network location, e.g. through a mapped
+	// network drive. Keep the original path so later accesses stay on it.
+	if nativepath.IsNetworkPath(nativePath) {
+		return orig
+	}
+	return tspath.RootedPathFromAbsolute(nativePath)
 }
 
 func isReparsePoint(path string) bool {
+	if nativepath.IsNetworkPath(path) {
+		return false
+	}
 	return nativepath.IsSymlinkOrReparsePoint(filepath.FromSlash(path))
 }
 
@@ -160,40 +189,53 @@ func (vfs *osFS) ensureDirectoryExists(directoryPath string) error {
 	return os.MkdirAll(directoryPath, 0o777)
 }
 
-func (vfs *osFS) writeFileEnsuringDir(path string, content string, flag int) error {
-	_ = internal.RootLength(path) // Assert path is rooted
-	if err := vfs.writeFileWithFlag(path, content, flag); err == nil {
+func (vfs *osFS) writeFileEnsuringDir(path tspath.RootedFilePath, content string, flag int) error {
+	if nativepath.IsNetworkPath(path.AsString()) {
+		return errNetworkPath
+	}
+	pathString := path.AsString()
+	if err := vfs.writeFileWithFlag(pathString, content, flag); err == nil {
 		return nil
 	}
-	if err := vfs.ensureDirectoryExists(tspath.GetDirectoryPath(tspath.NormalizePath(path))); err != nil {
+	if err := vfs.ensureDirectoryExists(path.Directory().AsString()); err != nil {
 		return err
 	}
-	return vfs.writeFileWithFlag(path, content, flag)
+	return vfs.writeFileWithFlag(pathString, content, flag)
 }
 
-func (vfs *osFS) WriteFile(path string, content string) error {
+func (vfs *osFS) WriteFile(path tspath.RootedFilePath, content string) error {
 	return vfs.writeFileEnsuringDir(path, content, os.O_WRONLY|os.O_CREATE|os.O_TRUNC)
 }
 
-func (vfs *osFS) AppendFile(path string, content string) error {
+func (vfs *osFS) AppendFile(path tspath.RootedFilePath, content string) error {
 	return vfs.writeFileEnsuringDir(path, content, os.O_WRONLY|os.O_CREATE|os.O_APPEND)
 }
 
-func (vfs *osFS) Remove(path string) error {
+func (vfs *osFS) Remove(path tspath.RootedPath) error {
+	if nativepath.IsNetworkPath(path.AsString()) {
+		return errNetworkPath
+	}
 	defer blockingOpSema.Acquire()()
 	// todo: #701 add retry mechanism?
-	return os.RemoveAll(path)
+	return os.RemoveAll(path.AsString())
 }
 
-func (vfs *osFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+func (vfs *osFS) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Time) error {
+	if nativepath.IsNetworkPath(path.AsString()) {
+		return errNetworkPath
+	}
 	defer blockingOpSema.Acquire()()
-	return os.Chtimes(path, aTime, mTime)
+	return os.Chtimes(path.AsString(), aTime, mTime)
 }
 
-func GetGlobalTypingsCacheLocation() string {
+func GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPath {
 	cacheDir, err := os.UserCacheDir()
 	if err != nil {
-		cacheDir = os.TempDir()
+		return ""
+	}
+	cachePath, ok := tspath.TryRootedPathFromAbsolute(cacheDir)
+	if !ok {
+		return ""
 	}
 
 	var subdir string
@@ -202,5 +244,5 @@ func GetGlobalTypingsCacheLocation() string {
 	} else {
 		subdir = "typescript"
 	}
-	return tspath.CombinePaths(cacheDir, subdir, core.VersionMajorMinor())
+	return tspath.RootedDirectoryPathFromPath(cachePath).ResolveDirectory(subdir).ResolveDirectory(core.VersionMajorMinor())
 }

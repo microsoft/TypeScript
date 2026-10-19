@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
@@ -16,53 +17,53 @@ import (
 // represent outputs, not dependencies.
 type FS struct {
 	Inner     vfs.FS
-	SeenFiles collections.SyncSet[string]
+	SeenFiles collections.SyncSet[tspath.RootedPath]
 }
 
 var _ vfs.FS = (*FS)(nil)
 
-func (fs *FS) ReadFile(path string) (string, bool) {
-	fs.SeenFiles.Add(path)
+func (fs *FS) ReadFile(path tspath.RootedFilePath) (string, bool) {
+	fs.SeenFiles.Add(path.AsPath())
 	return fs.Inner.ReadFile(path)
 }
 
-func (fs *FS) FileExists(path string) bool {
-	fs.SeenFiles.Add(path)
+func (fs *FS) FileExists(path tspath.RootedFilePath) bool {
+	fs.SeenFiles.Add(path.AsPath())
 	return fs.Inner.FileExists(path)
 }
 
-func (fs *FS) UseCaseSensitiveFileNames() bool { return fs.Inner.UseCaseSensitiveFileNames() }
+func (fs *FS) CaseSensitivity() tspath.CaseSensitivity { return fs.Inner.CaseSensitivity() }
 
-func (fs *FS) WriteFile(path string, data string) error {
+func (fs *FS) WriteFile(path tspath.RootedFilePath, data string) error {
 	return fs.Inner.WriteFile(path, data)
 }
 
-func (fs *FS) AppendFile(path string, data string) error {
+func (fs *FS) AppendFile(path tspath.RootedFilePath, data string) error {
 	return fs.Inner.AppendFile(path, data)
 }
 
-func (fs *FS) Remove(path string) error { return fs.Inner.Remove(path) }
+func (fs *FS) Remove(path tspath.RootedPath) error { return fs.Inner.Remove(path) }
 
-func (fs *FS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+func (fs *FS) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Time) error {
 	return fs.Inner.Chtimes(path, aTime, mTime)
 }
 
-func (fs *FS) DirectoryExists(path string) bool {
-	fs.SeenFiles.Add(path)
+func (fs *FS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
+	fs.SeenFiles.Add(path.AsPath())
 	return fs.Inner.DirectoryExists(path)
 }
 
-func (fs *FS) GetAccessibleEntries(path string) vfs.Entries {
-	fs.SeenFiles.Add(path)
+func (fs *FS) GetAccessibleEntries(path tspath.RootedDirectoryPath) vfs.Entries {
+	fs.SeenFiles.Add(path.AsPath())
 	return fs.Inner.GetAccessibleEntries(path)
 }
 
-func (fs *FS) Stat(path string) vfs.FileInfo {
+func (fs *FS) Stat(path tspath.RootedPath) vfs.FileInfo {
 	fs.SeenFiles.Add(path)
 	return fs.Inner.Stat(path)
 }
 
-func (fs *FS) Realpath(path string) string {
+func (fs *FS) Realpath(path tspath.RootedPath) tspath.RootedPath {
 	fs.SeenFiles.Add(path)
 	return fs.Inner.Realpath(path)
 }

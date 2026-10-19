@@ -51,16 +51,24 @@ func (t *toProgramSnapshot) reuseFromOldProgram() {
 		if t.snapshot.options.Composite.IsTrue() {
 			t.snapshot.latestChangedDtsFile = t.oldProgram.snapshot.latestChangedDtsFile
 		}
-		// Copy old snapshot's changed files set
-		t.oldProgram.snapshot.changedFilesSet.Range(func(key tspath.Path) bool {
-			t.snapshot.changedFilesSet.Add(key)
-			return true
-		})
-		t.oldProgram.snapshot.affectedFilesPendingEmit.Range(func(key tspath.Path, emitKind FileEmitKind) bool {
-			t.snapshot.affectedFilesPendingEmit.Store(key, emitKind)
-			return true
-		})
 		t.snapshot.buildInfoEmitPending.Store(t.oldProgram.snapshot.buildInfoEmitPending.Load())
+		// Copy old snapshot's changed files set
+		t.oldProgram.snapshot.changedFilesSet.Range(func(key tspath.PathKey) bool {
+			if t.program.GetSourceFileByPath(key) != nil {
+				t.snapshot.changedFilesSet.Add(key)
+			} else {
+				t.snapshot.buildInfoEmitPending.Store(true)
+			}
+			return true
+		})
+		t.oldProgram.snapshot.affectedFilesPendingEmit.Range(func(key tspath.PathKey, emitKind FileEmitKind) bool {
+			if t.program.GetSourceFileByPath(key) != nil {
+				t.snapshot.affectedFilesPendingEmit.Store(key, emitKind)
+			} else {
+				t.snapshot.buildInfoEmitPending.Store(true)
+			}
+			return true
+		})
 		t.snapshot.hasErrorsFromOldState = t.oldProgram.snapshot.hasErrors
 		t.snapshot.hasSemanticErrorsFromOldState = t.oldProgram.snapshot.hasSemanticErrors
 		t.snapshot.packageJsonsFromOldState = t.oldProgram.snapshot.packageJsons
@@ -96,59 +104,59 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 				versionText = file.OriginalText() + "\x00" + file.ContentMapperTransformIdentity()
 			}
 			version := t.snapshot.computeHash(versionText)
-			impliedNodeFormat := t.program.GetSourceFileMetaData(file.Path()).ImpliedNodeFormat
+			impliedNodeFormat := t.program.GetSourceFileMetaData(file.PathKey()).ImpliedNodeFormat
 			affectsGlobalScope := fileAffectsGlobalScope(file)
 			var signature string
 			newReferences := getReferencedFiles(t.program, file)
 			if newReferences != nil {
-				t.snapshot.referencedMap.storeReferences(file.Path(), newReferences)
+				t.snapshot.referencedMap.storeReferences(file.PathKey(), newReferences)
 			}
 			if t.oldProgram != nil {
-				if oldFileInfo, ok := t.oldProgram.snapshot.fileInfos.Load(file.Path()); ok {
+				if oldFileInfo, ok := t.oldProgram.snapshot.fileInfos.Load(file.PathKey()); ok {
 					signature = oldFileInfo.signature
 					if oldFileInfo.version != version || oldFileInfo.affectsGlobalScope != affectsGlobalScope || oldFileInfo.impliedNodeFormat != impliedNodeFormat {
-						t.snapshot.addFileToChangeSet(file.Path())
-					} else if oldReferences, _ := t.oldProgram.snapshot.referencedMap.getReferences(file.Path()); !newReferences.Equals(oldReferences) {
+						t.snapshot.addFileToChangeSet(file.PathKey())
+					} else if oldReferences, _ := t.oldProgram.snapshot.referencedMap.getReferences(file.PathKey()); !newReferences.Equals(oldReferences) {
 						// Referenced files changed
-						t.snapshot.addFileToChangeSet(file.Path())
+						t.snapshot.addFileToChangeSet(file.PathKey())
 					} else if newReferences != nil {
 						for refPath := range newReferences.Keys() {
 							if t.program.GetSourceFileByPath(refPath) == nil {
 								if _, ok := t.oldProgram.snapshot.fileInfos.Load(refPath); ok {
 									// Referenced file was deleted in the new program
-									t.snapshot.addFileToChangeSet(file.Path())
+									t.snapshot.addFileToChangeSet(file.PathKey())
 									break
 								}
 							}
 						}
 					}
 				} else {
-					t.snapshot.addFileToChangeSet(file.Path())
+					t.snapshot.addFileToChangeSet(file.PathKey())
 				}
-				if !t.snapshot.changedFilesSet.Has(file.Path()) {
-					if emitDiagnostics, ok := t.oldProgram.snapshot.emitDiagnosticsPerFile.Load(file.Path()); ok {
-						t.snapshot.emitDiagnosticsPerFile.Store(file.Path(), repopulateDiagnosticsOfFile(emitDiagnostics, t.program, file))
+				if !t.snapshot.changedFilesSet.Has(file.PathKey()) {
+					if emitDiagnostics, ok := t.oldProgram.snapshot.emitDiagnosticsPerFile.Load(file.PathKey()); ok {
+						t.snapshot.emitDiagnosticsPerFile.Store(file.PathKey(), repopulateDiagnosticsOfFile(emitDiagnostics, t.program, file))
 					}
 					if canCopySemanticDiagnostics {
 						if (!file.IsDeclarationFile || copyDeclarationFileDiagnostics) &&
-							(!t.program.IsSourceFileDefaultLibrary(file.Path()) || copyLibFileDiagnostics) {
+							(!t.program.IsSourceFileDefaultLibrary(file.PathKey()) || copyLibFileDiagnostics) {
 							// Unchanged file copy diagnostics
-							if diagnostics, ok := t.oldProgram.snapshot.semanticDiagnosticsPerFile.Load(file.Path()); ok {
-								t.snapshot.semanticDiagnosticsPerFile.Store(file.Path(), repopulateDiagnosticsOfFile(diagnostics, t.program, file))
+							if diagnostics, ok := t.oldProgram.snapshot.semanticDiagnosticsPerFile.Load(file.PathKey()); ok {
+								t.snapshot.semanticDiagnosticsPerFile.Store(file.PathKey(), repopulateDiagnosticsOfFile(diagnostics, t.program, file))
 							}
 						}
 					}
 				}
 				if canCopyEmitSignatures {
-					if oldEmitSignature, ok := t.oldProgram.snapshot.emitSignatures.Load(file.Path()); ok {
-						t.snapshot.emitSignatures.Store(file.Path(), oldEmitSignature.getNewEmitSignature(t.oldProgram.snapshot.options, t.snapshot.options))
+					if oldEmitSignature, ok := t.oldProgram.snapshot.emitSignatures.Load(file.PathKey()); ok {
+						t.snapshot.emitSignatures.Store(file.PathKey(), oldEmitSignature.getNewEmitSignature(t.oldProgram.snapshot.options, t.snapshot.options))
 					}
 				}
 			} else {
-				t.snapshot.addFileToAffectedFilesPendingEmit(file.Path(), GetFileEmitKind(t.snapshot.options))
+				t.snapshot.addFileToAffectedFilesPendingEmit(file.PathKey(), GetFileEmitKind(t.snapshot.options))
 				signature = version
 			}
-			t.snapshot.fileInfos.Store(file.Path(), &FileInfo{
+			t.snapshot.fileInfos.Store(file.PathKey(), &FileInfo{
 				version:            version,
 				signature:          signature,
 				affectsGlobalScope: affectsGlobalScope,
@@ -161,21 +169,41 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 
 func (t *toProgramSnapshot) handleFileDelete() {
 	if t.oldProgram != nil {
-		// If the global file is removed, add all files as changed
-		t.oldProgram.snapshot.fileInfos.Range(func(filePath tspath.Path, oldInfo *FileInfo) bool {
-			if _, ok := t.snapshot.fileInfos.Load(filePath); !ok {
-				if oldInfo.affectsGlobalScope {
-					for _, file := range t.snapshot.getAllFilesExcludingDefaultLibraryFile(t.program, nil) {
-						t.snapshot.addFileToChangeSet(file.Path())
-					}
-					t.globalFileRemoved = true
-				} else {
-					t.snapshot.buildInfoEmitPending.Store(true)
-				}
-				return false
-			}
-			return true
-		})
+		forEachDeletedFile(t.oldProgram.snapshot.fileInfos.Range, &t.snapshot.fileInfos, t.handleDeletedFile)
+		if t.globalFileRemoved {
+			t.invalidateGlobalScope()
+		}
+	}
+}
+
+func forEachDeletedFile(
+	rangeOldFileInfos func(func(tspath.PathKey, *FileInfo) bool),
+	newFileInfos *collections.SyncMap[tspath.PathKey, *FileInfo],
+	onDeletedFile func(tspath.PathKey, *FileInfo),
+) {
+	rangeOldFileInfos(func(filePath tspath.PathKey, oldInfo *FileInfo) bool {
+		if _, retained := newFileInfos.Load(filePath); !retained {
+			onDeletedFile(filePath, oldInfo)
+		}
+		return true
+	})
+}
+
+func (t *toProgramSnapshot) handleDeletedFile(filePath tspath.PathKey, oldInfo *FileInfo) {
+	t.snapshot.buildInfoEmitPending.Store(true)
+	t.snapshot.changedFilesSet.Delete(filePath)
+	t.snapshot.affectedFilesPendingEmit.Delete(filePath)
+	t.globalFileRemoved = t.globalFileRemoved || oldInfo.affectsGlobalScope
+}
+
+func (t *toProgramSnapshot) invalidateGlobalScope() {
+	t.snapshot.buildInfoEmitPending.Store(true)
+	for _, file := range t.program.GetSourceFiles() {
+		if !t.program.IsSourceFileDefaultLibrary(file.PathKey()) {
+			t.snapshot.addFileToChangeSet(file.PathKey())
+		} else if !t.program.SkipTypeChecking(file, true) {
+			t.snapshot.semanticDiagnosticsPerFile.Delete(file.PathKey())
+		}
 	}
 }
 
@@ -184,7 +212,7 @@ func (t *toProgramSnapshot) handleGlobalScopeChange() {
 		return
 	}
 	globalScopeLost := false
-	t.oldProgram.snapshot.fileInfos.Range(func(filePath tspath.Path, oldInfo *FileInfo) bool {
+	t.oldProgram.snapshot.fileInfos.Range(func(filePath tspath.PathKey, oldInfo *FileInfo) bool {
 		if !oldInfo.affectsGlobalScope {
 			return true
 		}
@@ -195,9 +223,7 @@ func (t *toProgramSnapshot) handleGlobalScopeChange() {
 		return true
 	})
 	if globalScopeLost {
-		for _, file := range t.snapshot.getAllFilesExcludingDefaultLibraryFile(t.program, nil) {
-			t.snapshot.addFileToChangeSet(file.Path())
-		}
+		t.invalidateGlobalScope()
 	}
 }
 
@@ -215,8 +241,8 @@ func (t *toProgramSnapshot) handlePendingEmit() {
 			// Add all files to affectedFilesPendingEmit since emit changed
 			for _, file := range t.program.GetSourceFiles() {
 				// Add to affectedFilesPending emit only if not changed since any changed file will do full emit
-				if !t.snapshot.changedFilesSet.Has(file.Path()) {
-					t.snapshot.addFileToAffectedFilesPendingEmit(file.Path(), pendingEmitKind)
+				if !t.snapshot.changedFilesSet.Has(file.PathKey()) {
+					t.snapshot.addFileToAffectedFilesPendingEmit(file.PathKey(), pendingEmitKind)
 				}
 			}
 			t.snapshot.buildInfoEmitPending.Store(true)
@@ -257,39 +283,39 @@ func fileAffectsGlobalScope(file *ast.SourceFile) bool {
 		})
 }
 
-func addReferencedFilesFromSymbol(file *ast.SourceFile, referencedFiles *collections.Set[tspath.Path], symbol *ast.Symbol) {
+func addReferencedFilesFromSymbol(file *ast.SourceFile, referencedFiles *collections.Set[tspath.PathKey], symbol *ast.Symbol) {
 	if symbol == nil {
 		return
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range symbol.Declarations() {
 		fileOfDecl := ast.GetSourceFileOfNode(declaration)
 		if fileOfDecl == nil {
 			continue
 		}
 		if file != fileOfDecl {
-			referencedFiles.Add(fileOfDecl.Path())
+			referencedFiles.Add(fileOfDecl.PathKey())
 		}
 	}
 }
 
 // Get the module source file and all augmenting files from the import name node from file
-func addReferencedFilesFromImportLiteral(file *ast.SourceFile, referencedFiles *collections.Set[tspath.Path], checker *checker.Checker, importName *ast.LiteralLikeNode) {
+func addReferencedFilesFromImportLiteral(file *ast.SourceFile, referencedFiles *collections.Set[tspath.PathKey], checker *checker.Checker, importName *ast.LiteralLikeNode) {
 	symbol := checker.GetSymbolAtLocation(importName)
 	addReferencedFilesFromSymbol(file, referencedFiles, symbol)
 }
 
-// Gets the path to reference file from file name, it could be resolvedPath if present otherwise path
-func addReferencedFileFromFileName(program *compiler.Program, fileName string, referencedFiles *collections.Set[tspath.Path], sourceFileDirectory string) {
+// Gets the path to reference file from file name, it could be resolvedPath if present otherwise path.
+func addReferencedFileFromFileName(program *compiler.Program, fileName tspath.RootedFilePath, referencedFiles *collections.Set[tspath.PathKey]) {
 	if redirect := program.GetParseFileRedirect(fileName); redirect != "" {
-		referencedFiles.Add(tspath.ToPath(redirect, program.GetCurrentDirectory(), program.UseCaseSensitiveFileNames()))
+		referencedFiles.Add(program.PathKeyForFileName(redirect))
 	} else {
-		referencedFiles.Add(tspath.ToPath(fileName, sourceFileDirectory, program.UseCaseSensitiveFileNames()))
+		referencedFiles.Add(program.PathKeyForFileName(fileName))
 	}
 }
 
 // Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
-func getReferencedFiles(program *compiler.Program, file *ast.SourceFile) *collections.Set[tspath.Path] {
-	referencedFiles := collections.Set[tspath.Path]{}
+func getReferencedFiles(program *compiler.Program, file *ast.SourceFile) *collections.Set[tspath.PathKey] {
+	referencedFiles := collections.Set[tspath.PathKey]{}
 
 	// We need to use a set here since the code can contain the same import twice,
 	// but that will only be one dependency.
@@ -300,17 +326,21 @@ func getReferencedFiles(program *compiler.Program, file *ast.SourceFile) *collec
 		addReferencedFilesFromImportLiteral(file, &referencedFiles, checker, importName)
 	}
 
-	sourceFileDirectory := tspath.GetDirectoryPath(file.FileName())
+	sourceFileDirectory := file.FileName().Directory()
 	// Handle triple slash references
 	for _, referencedFile := range file.ReferencedFiles {
-		addReferencedFileFromFileName(program, referencedFile.FileName, &referencedFiles, sourceFileDirectory)
+		addReferencedFileFromFileName(
+			program,
+			tspath.ToRootedFilePath(referencedFile.FileName, sourceFileDirectory),
+			&referencedFiles,
+		)
 	}
 
 	// Handle type reference directives
-	if typeRefsInFile, ok := program.GetResolvedTypeReferenceDirectives()[file.Path()]; ok {
+	if typeRefsInFile, ok := program.GetResolvedTypeReferenceDirectives()[file.PathKey()]; ok {
 		for _, typeRef := range typeRefsInFile {
 			if typeRef.ResolvedFileName != "" {
-				addReferencedFileFromFileName(program, typeRef.ResolvedFileName, &referencedFiles, sourceFileDirectory)
+				addReferencedFileFromFileName(program, typeRef.ResolvedFileName, &referencedFiles)
 			}
 		}
 	}

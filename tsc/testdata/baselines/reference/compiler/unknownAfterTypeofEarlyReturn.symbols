@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/unknownAfterTypeofEarlyReturn.ts] ////
+
+=== unknownAfterTypeofEarlyReturn.ts ===
+declare function fromString(value: string): number;
+>fromString : Symbol(fromString, Decl(unknownAfterTypeofEarlyReturn.ts, 0, 0))
+>value : Symbol(value, Decl(unknownAfterTypeofEarlyReturn.ts, 0, 28))
+
+declare function fromBigint(value: bigint): number;
+>fromBigint : Symbol(fromBigint, Decl(unknownAfterTypeofEarlyReturn.ts, 0, 51))
+>value : Symbol(value, Decl(unknownAfterTypeofEarlyReturn.ts, 1, 28))
+
+declare function fromNumber(value: number): boolean;
+>fromNumber : Symbol(fromNumber, Decl(unknownAfterTypeofEarlyReturn.ts, 1, 51))
+>value : Symbol(value, Decl(unknownAfterTypeofEarlyReturn.ts, 2, 28))
+
+function coerce(value: unknown) {
+>coerce : Symbol(coerce, Decl(unknownAfterTypeofEarlyReturn.ts, 2, 52))
+>value : Symbol(value, Decl(unknownAfterTypeofEarlyReturn.ts, 3, 16))
+
+    if (typeof value === "boolean") return value;
+>value : Symbol(value, Decl(unknownAfterTypeofEarlyReturn.ts, 3, 16))
+>value : Symbol(value, Decl(unknownAfterTypeofEarlyReturn.ts, 3, 16))
+
+    if (typeof value === "string") return fromString(value);
+>value : Symbol(value, Decl(unknownAfterTypeofEarlyReturn.ts, 3, 16))
+>fromString : Symbol(fromString, Decl(unknownAfterTypeofEarlyReturn.ts, 0, 0))
+>value : Symbol(value, Decl(unknownAfterTypeofEarlyReturn.ts, 3, 16))
+
+    if (typeof value === "bigint") return fromBigint(value);
+>value : Symbol(value, Decl(unknownAfterTypeofEarlyReturn.ts, 3, 16))
+>fromBigint : Symbol(fromBigint, Decl(unknownAfterTypeofEarlyReturn.ts, 0, 51))
+>value : Symbol(value, Decl(unknownAfterTypeofEarlyReturn.ts, 3, 16))
+
+    if (typeof value === "number") return fromNumber(value);
+>value : Symbol(value, Decl(unknownAfterTypeofEarlyReturn.ts, 3, 16))
+>fromNumber : Symbol(fromNumber, Decl(unknownAfterTypeofEarlyReturn.ts, 1, 51))
+>value : Symbol(value, Decl(unknownAfterTypeofEarlyReturn.ts, 3, 16))
+}
+

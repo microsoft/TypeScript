@@ -3014,8 +3014,8 @@ func (p *Printer) emitNonNullExpression(node *ast.NonNullExpression) {
 
 func (p *Printer) emitMetaProperty(node *ast.MetaProperty) {
 	state := p.enterNode(node.AsNode())
-	p.emitToken(node.KeywordToken, node.Pos(), WriteKindPunctuation, node.AsNode())
-	p.writePunctuation(".")
+	pos := p.emitToken(node.KeywordToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+	p.emitToken(ast.KindDotToken, pos, WriteKindPunctuation, node.AsNode())
 	p.emitIdentifierName(node.Name().AsIdentifier())
 	p.exitNode(node.AsNode(), state)
 }
@@ -5821,7 +5821,7 @@ func (p *Printer) setSourceMapSource(source sourcemap.Source) {
 		return
 	}
 
-	p.sourceMapSourceIsJson = tspath.FileExtensionIs(source.FileName(), tspath.ExtensionJson)
+	p.sourceMapSourceIsJson = source.FileName().ExtensionIs(tspath.ExtensionJson)
 	if p.sourceMapSourceIsJson {
 		return
 	}

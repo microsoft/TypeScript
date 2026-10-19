@@ -11,7 +11,7 @@ import (
 func (c *Checker) newNegatedType(baseType *Type, flags ObjectFlags) *Type {
 	data := &NegatedType{}
 	data.baseType = baseType
-	return c.newType(TypeFlagsNegated, flags, data)
+	return c.newType(TypeFlagsNegated, flags, data.AsType(), typeKindNegated)
 }
 
 // getNegatedType constructs the type 'not T', applying the negation identities:
@@ -296,14 +296,14 @@ func (c *Checker) objectTypesAreDisjointByProperties(source *Type, target *Type,
 		return false
 	}
 	for _, prop := range c.getPropertiesOfType(source) {
-		sourcePropType := c.getTypeOfPropertyOfType(source, prop.Name)
-		targetProp := c.getPropertyOfType(target, prop.Name)
+		sourcePropType := c.getTypeOfPropertyOfType(source, prop.Name())
+		targetProp := c.getPropertyOfType(target, prop.Name())
 		var targetPropType *Type
 		if targetProp != nil {
 			targetPropType = c.getTypeOfSymbol(targetProp)
 		}
 		if targetPropType == nil {
-			if indexInfo := c.getApplicableIndexInfoForName(target, prop.Name); indexInfo != nil {
+			if indexInfo := c.getApplicableIndexInfoForName(target, prop.Name()); indexInfo != nil {
 				targetPropType = indexInfo.valueType
 			}
 		}
@@ -312,13 +312,13 @@ func (c *Checker) objectTypesAreDisjointByProperties(source *Type, target *Type,
 		}
 		if (isRequiredProperty(prop) || isRequiredProperty(targetProp)) &&
 			(typesAreInDisjointDomains(sourcePropType, targetPropType) ||
-				c.isDiscriminantProperty(union, prop.Name) && c.getIntersectionType([]*Type{sourcePropType, targetPropType}).flags&TypeFlagsNever != 0) {
+				c.isDiscriminantProperty(union, prop.Name()) && c.getIntersectionType([]*Type{sourcePropType, targetPropType}).flags&TypeFlagsNever != 0) {
 			return true
 		}
 	}
 	if sourceIsClosed {
 		for _, targetProp := range c.getUnmatchedProperties(source, target, false /*requireOptionalProperties*/, false /*matchDiscriminantProperties*/) {
-			sourceIndex := c.getApplicableIndexInfoForName(source, targetProp.Name)
+			sourceIndex := c.getApplicableIndexInfoForName(source, targetProp.Name())
 			if sourceIndex == nil || typesAreInDisjointDomains(sourceIndex.valueType, c.getTypeOfSymbol(targetProp)) {
 				return true
 			}
@@ -369,5 +369,5 @@ func (c *Checker) getTypeDomains(t *Type) TypeFlags {
 }
 
 func isRequiredProperty(prop *ast.Symbol) bool {
-	return prop != nil && prop.Flags&ast.SymbolFlagsOptional == 0 && prop.CheckFlags&ast.CheckFlagsPartial == 0
+	return prop != nil && prop.Flags()&ast.SymbolFlagsOptional == 0 && prop.CheckFlags()&ast.CheckFlagsPartial == 0
 }

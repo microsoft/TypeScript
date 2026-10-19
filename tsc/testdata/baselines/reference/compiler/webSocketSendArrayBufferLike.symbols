@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/webSocketSendArrayBufferLike.ts] ////
+
+=== webSocketSendArrayBufferLike.ts ===
+declare const socket: WebSocket;
+>socket : Symbol(socket, Decl(webSocketSendArrayBufferLike.ts, 0, 13))
+>WebSocket : Symbol(WebSocket, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+declare const bytes: Uint8Array;
+>bytes : Symbol(bytes, Decl(webSocketSendArrayBufferLike.ts, 1, 13))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+
+socket.send(bytes);
+>socket.send : Symbol(WebSocket.send, Decl(lib.dom.d.ts, --, --))
+>socket : Symbol(socket, Decl(webSocketSendArrayBufferLike.ts, 0, 13))
+>send : Symbol(WebSocket.send, Decl(lib.dom.d.ts, --, --))
+>bytes : Symbol(bytes, Decl(webSocketSendArrayBufferLike.ts, 1, 13))
+
+socket.send(new Uint8Array(8));
+>socket.send : Symbol(WebSocket.send, Decl(lib.dom.d.ts, --, --))
+>socket : Symbol(socket, Decl(webSocketSendArrayBufferLike.ts, 0, 13))
+>send : Symbol(WebSocket.send, Decl(lib.dom.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+

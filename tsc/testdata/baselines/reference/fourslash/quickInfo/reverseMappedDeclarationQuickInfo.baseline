@@ -1,0 +1,166 @@
+// === QuickInfo ===
+=== /reverseMappedDeclarationQuickInfo.ts ===
+// 
+// declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;
+// declare const input: { [key: string]: { value: string } };
+// const indexed = unwrap(input);
+//       ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const indexed: {
+// |     [x: string]: ...;
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// indexed["name"].charAt(0);
+//                 ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) String.charAt(pos: number): string
+// | ```
+// | Returns the character at the specified index.
+// | 
+// | *@param* `pos` — The zero-based index of the desired character.
+// | ----------------------------------------------------------------------
+// 
+// type Validator<T> = ((input: unknown) => T | undefined) | {
+//     [K in keyof T]: Validator<T[K]>;
+// };
+// declare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;
+// declare const stringValidator: (input: unknown) => string | undefined;
+// const deep = decode({ a: { b: { c: { d: stringValidator } } } });
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const deep: {
+// |     a: {
+// |         b: {
+// |             c: {
+// |                 d: ...;
+// |             };
+// |         };
+// |     };
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// deep.a.b.c.d;
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) d: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 141,
+      "LSPosition": {
+        "line": 3,
+        "character": 6
+      },
+      "Name": "index",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst indexed: {\n    [x: string]: ...;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 6
+        },
+        "end": {
+          "line": 3,
+          "character": 13
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 188,
+      "LSPosition": {
+        "line": 4,
+        "character": 22
+      },
+      "Name": "member",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) String.charAt(pos: number): string\n```\nReturns the character at the specified index.\n\n*@param* `pos` — The zero-based index of the desired character."
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 16
+        },
+        "end": {
+          "line": 4,
+          "character": 22
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 446,
+      "LSPosition": {
+        "line": 11,
+        "character": 6
+      },
+      "Name": "deep",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst deep: {\n    a: {\n        b: {\n            c: {\n                d: ...;\n            };\n        };\n    };\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 6
+        },
+        "end": {
+          "line": 11,
+          "character": 10
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 517,
+      "LSPosition": {
+        "line": 12,
+        "character": 11
+      },
+      "Name": "leaf",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) d: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 11
+        },
+        "end": {
+          "line": 12,
+          "character": 12
+        }
+      }
+    }
+  }
+]

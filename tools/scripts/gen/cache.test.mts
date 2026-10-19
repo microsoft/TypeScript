@@ -21,7 +21,7 @@ test("cache commands use and track an explicit environment without changing the 
     assert.deepEqual(JSON.parse(fs.readFileSync(path.join(directory, "output.json"), "utf8")), {
         file: "source.go",
         pkg: "example",
-        cwd: directory,
+        cwd: fs.realpathSync(directory),
     });
     assert.equal(await cache(options), true);
     assert.equal(await cache({ ...options, env: { ...options.env, GOFILE: "other.go" } }), false);

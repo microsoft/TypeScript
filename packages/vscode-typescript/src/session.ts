@@ -1,3 +1,8 @@
+import type {
+    LspMiddlewareMethod,
+    LspMiddlewareTransformer,
+    TypeScriptSDK,
+} from "@typescript/typescript/vscode";
 import * as path from "path";
 import * as vscode from "vscode";
 import { ActiveJsTsEditorTracker } from "./activeJsTsEditorTracker";
@@ -12,10 +17,18 @@ import {
     serializeContentMapperContributions,
     validateContentMapperRegistration,
 } from "./contentMapperContributions";
+import { LspMiddlewareRegistry } from "./lspMiddleware";
 import { ProjectStatus } from "./projectStatus";
 import { setupStatusBar } from "./statusBar";
 import { TelemetryReporter } from "./telemetryReporting";
 import {
+    acquireTypeScriptSDK,
+    createTypeScriptSDK,
+    hasModifiedAcquiredTypeScriptInstallation,
+    isSameTypeScriptInstallation,
+} from "./tsdkPackage";
+import {
+    type ExeInfo,
     getDefaultExePath,
     getExe,
     getWorkspaceTsdkConfigValue,
@@ -27,6 +40,7 @@ import {
     useWorkspaceTsdkStorageKey,
     workspaceConfigBase,
 } from "./util";
+import { workspaceSymbolSendRequestMiddleware } from "./workspaceSymbolMiddleware";
 
 /**
  * SessionManager's lifetime is equal to that of the extension. It is responsible
@@ -36,21 +50,45 @@ export class SessionManager implements vscode.Disposable {
     currentSession?: Session;
     private disposables: vscode.Disposable[] = [];
     private outputChannel: vscode.LogOutputChannel;
-    private initializedEventEmitter: vscode.EventEmitter<void>;
     private telemetryReporter: TelemetryReporter;
     private readonly contentMapperRegistrations = new Map<string, readonly ContentMapperContribution[]>();
+    private readonly lspMiddleware: LspMiddlewareRegistry;
     private lifecycleOperation = Promise.resolve();
     private contentMapperSyncOperation = Promise.resolve();
+    private readonly languageServerInitialized = new vscode.EventEmitter<TypeScriptSDK>();
+    private sdk: TypeScriptSDK | undefined;
+
+    readonly onLanguageServerInitialized: vscode.Event<TypeScriptSDK> = (listener, thisArgs, disposables) => {
+        const invoke = (sdk: TypeScriptSDK) => {
+            acquireTypeScriptSDK(sdk);
+            listener.call(thisArgs, sdk);
+        };
+        const subscription = this.languageServerInitialized.event(invoke, undefined, disposables);
+        const sdk = this.currentSession?.client.isInitialized ? this.sdk : undefined;
+        if (sdk) {
+            try {
+                invoke(sdk);
+            }
+            catch (error) {
+                subscription.dispose();
+                throw error;
+            }
+        }
+        return subscription;
+    };
 
     constructor(
         context: vscode.ExtensionContext,
         outputChannel: vscode.LogOutputChannel,
-        initializedEventEmitter: vscode.EventEmitter<void>,
         telemetryReporter: TelemetryReporter,
     ) {
         this.outputChannel = outputChannel;
         this.telemetryReporter = telemetryReporter;
-        this.initializedEventEmitter = initializedEventEmitter;
+        this.disposables.push(this.languageServerInitialized);
+        this.lspMiddleware = new LspMiddlewareRegistry((method, error) => {
+            const detail = error instanceof Error ? error.stack ?? error.message : String(error);
+            this.outputChannel.error(`LSP middleware for '${method}' failed; using original server data: ${detail}`);
+        }, [workspaceSymbolSendRequestMiddleware]);
 
         this.disposables.push(vscode.workspace.onDidChangeConfiguration(event => {
             if (this.currentSession && event.affectsConfiguration("js/ts.contentMappers.enabled")) {
@@ -64,9 +102,31 @@ export class SessionManager implements vscode.Disposable {
                 void this.syncContentMapperContributions();
             }
         }));
-        this.disposables.push(initializedEventEmitter.event(() => {
-            void this.syncContentMapperContributions();
+        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.restart", async () => {
+            this.telemetryReporter.sendTelemetryEvent("command.restartLanguageServer");
+            await this.restartServer(context);
         }));
+        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.selectVersion", async () => {
+            const client = this.currentSession?.client;
+            if (!client) {
+                throw new Error(vscode.l10n.t("Language server is not running."));
+            }
+            await promptSelectVersion(context, client, this.outputChannel, () => this.stop());
+        }));
+    }
+
+    private handleLanguageServerInitialized(exe: ExeInfo): void {
+        this.sdk = createTypeScriptSDK(
+            exe.version,
+            exe.apiPackageJsonPath,
+            pipe => this.initializeAPISession(exe, pipe),
+            () => {
+                const client = this.currentSession?.client;
+                return !!client?.isInitialized && isSameTypeScriptInstallation(client.getCurrentExe(), exe);
+            },
+        );
+        this.languageServerInitialized.fire(this.sdk);
+        void this.syncContentMapperContributions();
     }
 
     start(context: vscode.ExtensionContext): Promise<void> {
@@ -77,16 +137,41 @@ export class SessionManager implements vscode.Disposable {
         return this.enqueueLifecycleOperation(() => this.restartNow(context));
     }
 
+    private restartServer(context: vscode.ExtensionContext): Promise<void> {
+        return this.enqueueLifecycleOperation(async () => {
+            if (await hasModifiedAcquiredTypeScriptInstallation(this.currentSession?.client.getCurrentExe()?.apiPackageJsonPath)) {
+                const restart = vscode.l10n.t("Restart Extensions");
+                const selected = await vscode.window.showWarningMessage(
+                    vscode.l10n.t("One or more extensions are using a TypeScript installation that has been modified on disk. Restart the extension host to ensure they continue functioning."),
+                    vscode.l10n.t("Dismiss"),
+                    restart,
+                );
+                if (selected === restart) {
+                    await vscode.commands.executeCommand("workbench.action.restartExtensionHost");
+                }
+                return;
+            }
+            if (this.currentSession && await this.currentSession.client.tryRestart(context)) return;
+            await this.restartNow(context);
+        });
+    }
+
     private async restartNow(context: vscode.ExtensionContext): Promise<void> {
         if (this.currentSession) {
             this.outputChannel.appendLine("Restarting TypeScript language server...");
             await this.currentSession.stop();
         }
-        const session = new Session(context, this.outputChannel, this.initializedEventEmitter, this.telemetryReporter, () => this.stop(), () => this.restart(context));
+        const session = new Session(
+            context,
+            this.outputChannel,
+            exe => this.handleLanguageServerInitialized(exe),
+            this.telemetryReporter,
+            this.lspMiddleware,
+        );
         this.currentSession = session;
         try {
             await session.start(context);
-            await this.syncContentMapperContributions();
+            await this.contentMapperSyncOperation;
         }
         catch (error) {
             if (this.currentSession === session) {
@@ -97,6 +182,20 @@ export class SessionManager implements vscode.Disposable {
         }
     }
 
+    private initializeAPISession(exe: ExeInfo, pipe?: string): Promise<string> {
+        return this.enqueueLifecycleOperation(async () => {
+            const client = this.currentSession?.client;
+            if (!client) {
+                throw new Error(vscode.l10n.t("Language server is not running."));
+            }
+            if (!isSameTypeScriptInstallation(client.getCurrentExe(), exe)) {
+                throw new Error(vscode.l10n.t("The selected TypeScript installation has changed. Use the SDK from the latest language server initialization."));
+            }
+            const result = await client.initializeAPISession(pipe);
+            return result.pipe;
+        });
+    }
+
     stop(): Promise<void> {
         return this.enqueueLifecycleOperation(async () => {
             if (this.currentSession) {
@@ -104,14 +203,6 @@ export class SessionManager implements vscode.Disposable {
                 this.currentSession = undefined;
             }
         });
-    }
-
-    async initializeAPIConnection(pipe?: string): Promise<string> {
-        if (!this.currentSession) {
-            throw new Error(vscode.l10n.t("Language server is not running."));
-        }
-        const result = await this.currentSession.client.initializeAPISession(pipe);
-        return result.pipe;
     }
 
     registerContentMappers(contributorId: string, contributions: readonly ContentMapperContribution[]): vscode.Disposable {
@@ -128,6 +219,10 @@ export class SessionManager implements vscode.Disposable {
             this.contentMapperRegistrations.delete(contributorId);
             void this.syncContentMapperContributions();
         });
+    }
+
+    registerLspMiddleware<M extends LspMiddlewareMethod>(method: M, transformer: LspMiddlewareTransformer<NoInfer<M>>): vscode.Disposable {
+        return this.lspMiddleware.register(method, transformer);
     }
 
     private syncContentMapperContributions(): Promise<void> {
@@ -152,14 +247,15 @@ export class SessionManager implements vscode.Disposable {
         }
     }
 
-    private enqueueLifecycleOperation(operation: () => Promise<void>): Promise<void> {
+    private enqueueLifecycleOperation<T>(operation: () => Promise<T>): Promise<T> {
         const result = this.lifecycleOperation.then(operation);
-        this.lifecycleOperation = result.catch(() => {});
+        this.lifecycleOperation = result.then(() => {}, () => {});
         return result;
     }
 
     dispose(): Promise<void> {
         return this.enqueueLifecycleOperation(async () => {
+            this.lspMiddleware.dispose();
             await this.currentSession?.dispose();
             this.currentSession = undefined;
             await Promise.all(this.disposables.splice(0).map(d => d.dispose()));
@@ -172,8 +268,8 @@ export class SessionManager implements vscode.Disposable {
  * can be restarted within the same Session only if the underlying exe path/version
  * has not changed. Otherwise, a new Session must be created. Since Session only
  * exists while the LSP server is running (or actively starting/restarting/stopping),
- * it also owns the commands and UI elements that should only be active while the
- * server is running.
+ * it owns the editor features and commands that operate on that client.
+ * Lifecycle commands and the public extension API belong to SessionManager.
  */
 class Session implements vscode.Disposable {
     client: Client;
@@ -181,71 +277,50 @@ class Session implements vscode.Disposable {
     private context: vscode.ExtensionContext;
     private outputChannel: vscode.LogOutputChannel;
     private telemetryReporter: TelemetryReporter;
-    private initializedEventEmitter: vscode.EventEmitter<void>;
-    private stopSession: () => Promise<void>;
-    private restartSession: () => Promise<void>;
+    private projectStatus?: ProjectStatus;
 
     constructor(
         context: vscode.ExtensionContext,
         outputChannel: vscode.LogOutputChannel,
-        initializedEventEmitter: vscode.EventEmitter<void>,
+        private readonly onLanguageServerInitialized: (exe: ExeInfo) => void,
         telemetryReporter: TelemetryReporter,
-        stopSession: () => Promise<void>,
-        restartSession: () => Promise<void>,
+        lspMiddleware: LspMiddlewareRegistry,
     ) {
-        this.client = new Client(outputChannel, initializedEventEmitter, telemetryReporter);
+        this.client = new Client(
+            outputChannel,
+            exe => {
+                this.projectStatus?.onLanguageServerInitialized();
+                this.onLanguageServerInitialized(exe);
+            },
+            telemetryReporter,
+            lspMiddleware,
+        );
         this.context = context;
         this.outputChannel = outputChannel;
         this.telemetryReporter = telemetryReporter;
-        this.initializedEventEmitter = initializedEventEmitter;
-        this.stopSession = stopSession;
-        this.restartSession = restartSession;
         this.registerCommands();
     }
 
     async start(context: vscode.ExtensionContext): Promise<void> {
         await vscode.commands.executeCommand("setContext", "typescript.isManagedFile", false);
+        const activeEditorTracker = new ActiveJsTsEditorTracker();
+        this.disposables.push(activeEditorTracker);
+
+        this.projectStatus = new ProjectStatus(this.client, activeEditorTracker);
+        this.disposables.push(this.projectStatus);
+
         const exe = await getExe(context);
         await this.client.start(exe);
         this.disposables.push(setupStatusBar(exe));
 
-        // Set up active editor tracker and UI features
-        const activeEditorTracker = new ActiveJsTsEditorTracker();
-        this.disposables.push(activeEditorTracker);
-
-        const projectStatus = new ProjectStatus(this.client, activeEditorTracker, this.initializedEventEmitter.event);
-        this.disposables.push(projectStatus);
-
-        // If already initialized, fire immediately so projectStatus picks it up
-        if (this.client.isInitialized) {
-            this.initializedEventEmitter.fire();
-        }
-
         await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", true);
-    }
-
-    tryRestartClient(context: vscode.ExtensionContext): Promise<boolean> {
-        return this.client.tryRestart(context);
     }
 
     registerCommands(): void {
         this.disposables.push(registerCodeLensShowLocationsCommand());
 
-        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.restart", async () => {
-            this.telemetryReporter.sendTelemetryEvent("command.restartLanguageServer");
-            if (await this.tryRestartClient(this.context)) {
-                return;
-            }
-
-            await this.restartSession();
-        }));
-
         this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.output.focus", () => {
             this.outputChannel.show();
-        }));
-
-        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.selectVersion", async () => {
-            await promptSelectVersion(this.context, this.client, this.outputChannel, this.stopSession);
         }));
 
         // TODO: Support the standard reload/go-to-project-config commands while

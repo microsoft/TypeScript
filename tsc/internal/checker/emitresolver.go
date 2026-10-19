@@ -31,23 +31,42 @@ type DeclarationFileLinks struct {
 	aliasesMarked bool // if file has had alias visibility marked
 }
 
+type EmitResolverLinks struct {
+	jsxLinks             core.LinkStore[*ast.Node, JSXLinks]
+	declarationLinks     core.LinkStore[*ast.Node, DeclarationLinks]
+	declarationFileLinks core.LinkStore[*ast.Node, DeclarationFileLinks]
+}
+
 type EmitResolver struct {
 	checker                 *Checker
 	checkerMu               *sync.Mutex
+	emitContext             *printer.EmitContext
+	requestNodeBuilder      *NodeBuilder
 	isValueAliasDeclaration func(node *ast.Node) bool
 	aliasMarkingVisitor     func(node *ast.Node) bool
 	referenceResolver       binder.ReferenceResolver
-	jsxLinks                core.LinkStore[*ast.Node, JSXLinks]
-	declarationLinks        core.LinkStore[*ast.Node, DeclarationLinks]
-	declarationFileLinks    core.LinkStore[*ast.Node, DeclarationFileLinks]
 }
 
-func newEmitResolver(checker *Checker) *EmitResolver {
-	e := &EmitResolver{checker: checker}
+func newEmitResolver(checker *Checker, emitContext *printer.EmitContext) *EmitResolver {
+	if emitContext == nil {
+		panic("EmitResolver requires an EmitContext")
+	}
+	e := &EmitResolver{checker: checker, emitContext: emitContext}
 	e.isValueAliasDeclaration = e.isValueAliasDeclarationWorker
 	e.aliasMarkingVisitor = e.aliasMarkingVisitorWorker
 	e.checkerMu = &checker.mu
 	return e
+}
+
+func (r *EmitResolver) EmitContext() *printer.EmitContext {
+	return r.emitContext
+}
+
+func (r *EmitResolver) nodeBuilder() *NodeBuilder {
+	if r.requestNodeBuilder == nil {
+		r.requestNodeBuilder = NewNodeBuilder(r.checker, r.emitContext)
+	}
+	return r.requestNodeBuilder
 }
 
 func (r *EmitResolver) GetJsxFactoryEntity(location *ast.Node) *ast.Node {
@@ -83,7 +102,7 @@ func (r *EmitResolver) IsLateBound(node *ast.Node) bool {
 	if symbol == nil {
 		return false
 	}
-	return symbol.CheckFlags&ast.CheckFlagsLate != 0
+	return symbol.CheckFlags()&ast.CheckFlagsLate != 0
 }
 
 func (r *EmitResolver) GetEnumMemberValue(node *ast.Node) evaluator.Result {
@@ -105,141 +124,16 @@ func (r *EmitResolver) IsDeclarationVisible(node *ast.Node) bool {
 	// Only lock on external API func to prevent deadlocks
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	return r.isDeclarationVisible(node)
-}
-
-func (r *EmitResolver) isDeclarationVisible(node *ast.Node) bool {
-	// node = r.emitContext.ParseNode(node)
-	if !ast.IsParseTreeNode(node) {
-		return false
-	}
-	if node == nil {
-		return false
-	}
-
-	links := r.declarationLinks.Get(node)
-	if links.isVisible == core.TSUnknown {
-		if r.determineIfDeclarationIsVisible(node) {
-			links.isVisible = core.TSTrue
-		} else {
-			links.isVisible = core.TSFalse
-		}
-	}
-	return links.isVisible == core.TSTrue
-}
-
-func (r *EmitResolver) determineIfDeclarationIsVisible(node *ast.Node) bool {
-	switch node.Kind {
-	case ast.KindJSDocCallbackTag,
-		// ast.KindJSDocEnumTag, // !!! TODO: JSDoc @enum support?
-		ast.KindJSDocTypedefTag:
-		// Top-level jsdoc type aliases are considered exported
-		// First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
-		return node.Parent != nil && node.Parent.Parent != nil && node.Parent.Parent.Parent != nil && ast.IsSourceFile(node.Parent.Parent.Parent)
-	case ast.KindBindingElement:
-		return r.isDeclarationVisible(node.Parent.Parent)
-	case ast.KindVariableDeclaration,
-		ast.KindModuleDeclaration,
-		ast.KindClassDeclaration,
-		ast.KindInterfaceDeclaration,
-		ast.KindTypeAliasDeclaration,
-		ast.KindJSTypeAliasDeclaration,
-		ast.KindFunctionDeclaration,
-		ast.KindEnumDeclaration,
-		ast.KindImportEqualsDeclaration:
-		if ast.IsVariableDeclaration(node) {
-			if ast.IsBindingPattern(node.Name()) &&
-				len(node.Name().Elements()) == 0 {
-				// If the binding pattern is empty, this variable declaration is not visible
-				return false
-			}
-			// falls through
-		}
-		// External module augmentation is always visible
-		// A @typedef at top-level in an external module is always visible
-		if ast.IsExternalModuleAugmentation(node) || ast.IsImplicitlyExportedJSDocDeclaration(node) {
-			return true
-		}
-		parent := ast.GetDeclarationContainer(node)
-		// If the node is not exported or it is not ambient module element (except import declaration)
-		if r.checker.getCombinedModifierFlagsCached(node)&ast.ModifierFlagsExport == 0 &&
-			!(node.Kind != ast.KindImportEqualsDeclaration && parent.Kind != ast.KindSourceFile && parent.Flags&ast.NodeFlagsAmbient != 0) {
-			return ast.IsGlobalSourceFile(parent)
-		}
-		// Exported members/ambient module elements (exception import declaration) are visible if parent is visible
-		return r.isDeclarationVisible(parent)
-
-	case ast.KindPropertyDeclaration,
-		ast.KindPropertySignature,
-		ast.KindGetAccessor,
-		ast.KindSetAccessor,
-		ast.KindMethodDeclaration,
-		ast.KindMethodSignature:
-		if r.checker.GetEffectiveDeclarationFlags(node, ast.ModifierFlagsPrivate|ast.ModifierFlagsProtected) != 0 {
-			// Private/protected properties/methods are not visible
-			return false
-		}
-		// Public properties/methods are visible if its parents are visible, so:
-		return r.isDeclarationVisible(node.Parent)
-
-	case ast.KindConstructor,
-		ast.KindConstructSignature,
-		ast.KindCallSignature,
-		ast.KindIndexSignature,
-		ast.KindParameter,
-		ast.KindModuleBlock,
-		ast.KindFunctionType,
-		ast.KindConstructorType,
-		ast.KindTypeLiteral,
-		ast.KindTypeReference,
-		ast.KindArrayType,
-		ast.KindTupleType,
-		ast.KindUnionType,
-		ast.KindIntersectionType,
-		ast.KindParenthesizedType,
-		ast.KindNamedTupleMember:
-		return r.isDeclarationVisible(node.Parent)
-
-	// Default binding, import specifier and namespace import is visible
-	// only on demand so by default it is not visible
-	case ast.KindImportClause,
-		ast.KindNamespaceImport,
-		ast.KindImportSpecifier:
-		return false
-
-	// Type parameters are always visible
-	case ast.KindTypeParameter:
-		return true
-	// Source file and namespace export are always visible
-	case ast.KindSourceFile,
-		ast.KindNamespaceExportDeclaration:
-		return true
-
-	// Export assignments do not create name bindings outside the module
-	case ast.KindExportAssignment:
-		return false
-
-	// An `export {X}` (without a module specifier) is itself a visible re-export of
-	// the named binding; it contributes to the symbol's external visibility.
-	case ast.KindExportSpecifier:
-		exportDecl := node.Parent.Parent
-		if ast.IsExportDeclaration(exportDecl) && exportDecl.AsExportDeclaration().ModuleSpecifier == nil {
-			return r.isDeclarationVisible(exportDecl.Parent)
-		}
-		return false
-
-	default:
-		return false
-	}
+	return r.checker.isDeclarationVisible(node)
 }
 
 func (r *EmitResolver) PrecalculateDeclarationEmitVisibility(file *ast.SourceFile) {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	if r.declarationFileLinks.Get(file.AsNode()).aliasesMarked {
+	if r.checker.emitResolverLinks.declarationFileLinks.Get(file.AsNode()).aliasesMarked {
 		return
 	}
-	r.declarationFileLinks.Get(file.AsNode()).aliasesMarked = true
+	r.checker.emitResolverLinks.declarationFileLinks.Get(file.AsNode()).aliasesMarked = true
 	// TODO: Does this even *have* to be an upfront walk? If it's not possible for a
 	// import a = a.b.c statement to chain into exposing a statement in a sibling scope,
 	// it could at least be pushed into scope entry -  then it wouldn't need to be recursive.
@@ -292,8 +186,8 @@ func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 		visited[ast.GetSymbolId(exportSymbol)] = struct{}{}
 
 		var nextSymbol *ast.Symbol
-		for _, declaration := range exportSymbol.Declarations {
-			r.declarationLinks.Get(declaration).isVisible = core.TSTrue
+		for _, declaration := range exportSymbol.Declarations() {
+			r.checker.emitResolverLinks.declarationLinks.Get(declaration).isVisible = core.TSTrue
 
 			if ast.IsInternalModuleImportEqualsDeclaration(declaration) {
 				// Add the referenced top container visible
@@ -308,160 +202,10 @@ func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 	}
 }
 
-func getMeaningOfEntityNameReference(entityName *ast.Node) ast.SymbolFlags {
-	// get symbol of the first identifier of the entityName
-	if entityName.Parent.Kind == ast.KindTypeQuery ||
-		entityName.Parent.Kind == ast.KindExpressionWithTypeArguments && !ast.IsPartOfTypeNode(entityName.Parent) ||
-		entityName.Parent.Kind == ast.KindComputedPropertyName ||
-		entityName.Parent.Kind == ast.KindTypePredicate && entityName.Parent.AsTypePredicateNode().ParameterName == entityName ||
-		entityName.Parent.Kind == ast.KindBinaryExpression {
-		// Typeof value
-		return ast.SymbolFlagsValue | ast.SymbolFlagsExportValue
-	}
-	if entityName.Kind == ast.KindQualifiedName || entityName.Kind == ast.KindPropertyAccessExpression ||
-		entityName.Parent.Kind == ast.KindImportEqualsDeclaration ||
-		(entityName.Parent.Kind == ast.KindQualifiedName && entityName.Parent.AsQualifiedName().Left == entityName) ||
-		(entityName.Parent.Kind == ast.KindPropertyAccessExpression && entityName.Parent.Expression() == entityName) ||
-		(entityName.Parent.Kind == ast.KindElementAccessExpression && entityName.Parent.Expression() == entityName) {
-		// Left identifier from type reference or TypeAlias
-		// Entity name of the import declaration
-		return ast.SymbolFlagsNamespace
-	}
-	// Type Reference or TypeAlias entity = Identifier
-	return ast.SymbolFlagsType
-}
-
 func (r *EmitResolver) IsEntityNameVisible(entityName *ast.Node, enclosingDeclaration *ast.Node) printer.SymbolAccessibilityResult {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	return r.isEntityNameVisible(entityName, enclosingDeclaration, true)
-}
-
-func (r *EmitResolver) isEntityNameVisible(entityName *ast.Node, enclosingDeclaration *ast.Node, shouldComputeAliasToMakeVisible bool) printer.SymbolAccessibilityResult {
-	// node = r.emitContext.ParseNode(entityName)
-	if !ast.IsParseTreeNode(entityName) {
-		return printer.SymbolAccessibilityResult{Accessibility: printer.SymbolAccessibilityNotAccessible}
-	}
-
-	meaning := getMeaningOfEntityNameReference(entityName)
-	firstIdentifier := ast.GetFirstIdentifier(entityName)
-
-	symbol := r.checker.resolveName(enclosingDeclaration, firstIdentifier.Text(), meaning, nil, false, false)
-
-	if symbol != nil && symbol.Flags&ast.SymbolFlagsTypeParameter != 0 && meaning&ast.SymbolFlagsType != 0 {
-		return printer.SymbolAccessibilityResult{Accessibility: printer.SymbolAccessibilityAccessible}
-	}
-
-	if symbol == nil && ast.IsThisIdentifier(firstIdentifier) {
-		sym := r.checker.getSymbolOfDeclaration(r.checker.getThisContainer(firstIdentifier, false, false))
-		if r.isSymbolAccessible(sym, enclosingDeclaration, meaning, false).Accessibility == printer.SymbolAccessibilityAccessible {
-			return printer.SymbolAccessibilityResult{Accessibility: printer.SymbolAccessibilityAccessible}
-		}
-	}
-
-	if symbol == nil {
-		return printer.SymbolAccessibilityResult{
-			Accessibility:   printer.SymbolAccessibilityNotResolved,
-			ErrorSymbolName: firstIdentifier.Text(),
-			ErrorNode:       firstIdentifier,
-		}
-	}
-
-	visible := r.hasVisibleDeclarations(symbol, shouldComputeAliasToMakeVisible)
-	if visible != nil {
-		return *visible
-	}
-
-	return printer.SymbolAccessibilityResult{
-		Accessibility:   printer.SymbolAccessibilityNotAccessible,
-		ErrorSymbolName: firstIdentifier.Text(),
-		ErrorNode:       firstIdentifier,
-	}
-}
-
-func noopAddVisibleAlias(declaration *ast.Node, aliasingStatement *ast.Node) {}
-
-func (r *EmitResolver) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasToMakeVisible bool) *printer.SymbolAccessibilityResult {
-	var aliasesToMakeVisibleSet map[ast.NodeId]*ast.Node
-
-	var addVisibleAlias func(declaration *ast.Node, aliasingStatement *ast.Node)
-	if shouldComputeAliasToMakeVisible {
-		addVisibleAlias = func(declaration *ast.Node, aliasingStatement *ast.Node) {
-			r.declarationLinks.Get(declaration).isVisible = core.TSTrue
-			if aliasesToMakeVisibleSet == nil {
-				aliasesToMakeVisibleSet = make(map[ast.NodeId]*ast.Node)
-			}
-			aliasesToMakeVisibleSet[ast.GetNodeId(declaration)] = aliasingStatement
-		}
-	} else {
-		addVisibleAlias = noopAddVisibleAlias
-	}
-
-	for _, declaration := range symbol.Declarations {
-		if ast.IsIdentifier(declaration) {
-			continue
-		}
-		if !r.isDeclarationVisible(declaration) {
-			// Mark the unexported alias as visible if its parent is visible
-			// because these kind of aliases can be used to name types in declaration file
-			anyImportSyntax := getAnyImportSyntax(declaration)
-			if anyImportSyntax != nil &&
-				!ast.HasSyntacticModifier(anyImportSyntax, ast.ModifierFlagsExport) && // import clause without export
-				r.isDeclarationVisible(anyImportSyntax.Parent) {
-				addVisibleAlias(declaration, anyImportSyntax)
-				continue
-			}
-			if ast.IsVariableDeclaration(declaration) && ast.IsVariableStatement(declaration.Parent.Parent) &&
-				!ast.HasSyntacticModifier(declaration.Parent.Parent, ast.ModifierFlagsExport) && // unexported variable statement
-				r.isDeclarationVisible(declaration.Parent.Parent.Parent) {
-				addVisibleAlias(declaration, declaration.Parent.Parent)
-				continue
-			}
-			if ast.IsLateVisibilityPaintedStatement(declaration) && // unexported top-level statement
-				!ast.HasSyntacticModifier(declaration, ast.ModifierFlagsExport) &&
-				r.isDeclarationVisible(declaration.Parent) {
-				addVisibleAlias(declaration, declaration)
-				continue
-			}
-			if ast.IsBindingElement(declaration) {
-				if symbol.Flags&ast.SymbolFlagsAlias != 0 && ast.IsInJSFile(declaration) && declaration.Parent != nil && declaration.Parent.Parent != nil && // exported import-like top-level JS require statement
-					ast.IsVariableDeclaration(declaration.Parent.Parent) &&
-					declaration.Parent.Parent.Parent.Parent != nil && ast.IsVariableStatement(declaration.Parent.Parent.Parent.Parent) &&
-					!ast.HasSyntacticModifier(declaration.Parent.Parent.Parent.Parent, ast.ModifierFlagsExport) &&
-					declaration.Parent.Parent.Parent.Parent.Parent != nil && // check if the thing containing the variable statement is visible (ie, the file)
-					r.isDeclarationVisible(declaration.Parent.Parent.Parent.Parent.Parent) {
-					addVisibleAlias(declaration, declaration.Parent.Parent.Parent.Parent)
-					continue
-				}
-				if symbol.Flags&ast.SymbolFlagsBlockScopedVariable != 0 {
-					rootDeclaration := ast.WalkUpBindingElementsAndPatterns(declaration)
-					if ast.IsParameterDeclaration(rootDeclaration) {
-						return nil
-					}
-					variableStatement := rootDeclaration.Parent.Parent
-					if !ast.IsVariableStatement(variableStatement) {
-						return nil
-					}
-					if ast.HasSyntacticModifier(variableStatement, ast.ModifierFlagsExport) {
-						continue // no alias to add, already exported
-					}
-					if !r.isDeclarationVisible(variableStatement.Parent) {
-						return nil // not visible
-					}
-					addVisibleAlias(declaration, variableStatement)
-					continue
-				}
-			}
-
-			// Declaration is not visible
-			return nil
-		}
-	}
-
-	return &printer.SymbolAccessibilityResult{
-		Accessibility:        printer.SymbolAccessibilityAccessible,
-		AliasesToMakeVisible: slices.Collect(maps.Values(aliasesToMakeVisibleSet)),
-	}
+	return r.checker.isEntityNameVisible(entityName, enclosingDeclaration, true)
 }
 
 func (r *EmitResolver) IsImplementationOfOverload(node *ast.SignatureDeclaration) bool {
@@ -528,8 +272,8 @@ func (r *EmitResolver) IsImportRequiredByAugmentation(decl *ast.ImportDeclaratio
 	for s := range maps.Values(exports) {
 		merged := r.checker.getMergedSymbol(s)
 		if merged != s {
-			if len(merged.Declarations) > 0 {
-				for _, d := range merged.Declarations {
+			if len(merged.Declarations()) > 0 {
+				for _, d := range merged.Declarations() {
 					declFile := ast.GetSourceFileOfNode(d)
 					if declFile == importTarget {
 						return true
@@ -571,7 +315,7 @@ func (r *EmitResolver) RequiresAddingImplicitUndefined(declaration *ast.Node, sy
 	}
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	return r.requiresAddingImplicitUndefined(declaration, symbol, enclosingDeclaration)
+	return r.checker.requiresAddingImplicitUndefined(declaration, symbol, enclosingDeclaration)
 }
 
 func (r *EmitResolver) RequiresAddingImplicitUndefinedUnsafe(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
@@ -579,61 +323,7 @@ func (r *EmitResolver) RequiresAddingImplicitUndefinedUnsafe(declaration *ast.No
 		return false
 	}
 	// NO LOCKING - only should be called in contexts that already have a checker lock
-	return r.requiresAddingImplicitUndefined(declaration, symbol, enclosingDeclaration)
-}
-
-func (r *EmitResolver) requiresAddingImplicitUndefined(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
-	// node = r.emitContext.ParseNode(node)
-	if !ast.IsParseTreeNode(declaration) {
-		return false
-	}
-	switch declaration.Kind {
-	case ast.KindPropertyDeclaration, ast.KindPropertySignature, ast.KindJSDocPropertyTag:
-		if symbol == nil {
-			symbol = r.checker.getSymbolOfDeclaration(declaration)
-		}
-		t := r.checker.getTypeOfSymbol(symbol)
-		r.checker.mappedSymbolLinks.Has(symbol)
-		return (symbol.Flags&ast.SymbolFlagsProperty != 0) && (symbol.Flags&ast.SymbolFlagsOptional != 0) && isOptionalDeclaration(declaration) && r.checker.ReverseMappedSymbolLinks.Has(symbol) && r.checker.ReverseMappedSymbolLinks.Get(symbol).mappedType != nil && containsNonMissingUndefinedType(r.checker, t)
-	case ast.KindParameter, ast.KindJSDocParameterTag:
-		return r.requiresAddingImplicitUndefinedWorker(declaration, enclosingDeclaration)
-	default:
-		panic("Node cannot possibly require adding undefined")
-	}
-}
-
-func (r *EmitResolver) requiresAddingImplicitUndefinedWorker(parameter *ast.Node, enclosingDeclaration *ast.Node) bool {
-	return (r.isRequiredInitializedParameter(parameter, enclosingDeclaration) || r.isOptionalUninitializedParameterProperty(parameter)) && !r.declaredParameterTypeContainsUndefined(parameter)
-}
-
-func (r *EmitResolver) declaredParameterTypeContainsUndefined(parameter *ast.Node) bool {
-	// typeNode := getNonlocalEffectiveTypeAnnotationNode(parameter); // !!! JSDoc Support
-	typeNode := parameter.Type()
-	if typeNode == nil {
-		return false
-	}
-	t := r.checker.getTypeFromTypeNode(typeNode)
-	// allow error type here to avoid confusing errors that the annotation has to contain undefined when it does in cases like this:
-	//
-	// export function fn(x?: Unresolved | undefined): void {}
-	return r.checker.isErrorType(t) || r.checker.containsUndefinedType(t)
-}
-
-func (r *EmitResolver) isOptionalUninitializedParameterProperty(parameter *ast.Node) bool {
-	return r.checker.strictNullChecks &&
-		r.isOptionalParameter(parameter) &&
-		( /*isJSDocParameterTag(parameter) ||*/ parameter.Initializer() == nil) && // !!! TODO: JSDoc support
-		ast.HasSyntacticModifier(parameter, ast.ModifierFlagsParameterPropertyModifier)
-}
-
-func (r *EmitResolver) isRequiredInitializedParameter(parameter *ast.Node, enclosingDeclaration *ast.Node) bool {
-	if !r.checker.strictNullChecks || r.isOptionalParameter(parameter) || /*isJSDocParameterTag(parameter) ||*/ parameter.Initializer() == nil { // !!! TODO: JSDoc Support
-		return false
-	}
-	if ast.HasSyntacticModifier(parameter, ast.ModifierFlagsParameterPropertyModifier) {
-		return enclosingDeclaration != nil && ast.IsFunctionLikeDeclaration(enclosingDeclaration)
-	}
-	return true
+	return r.checker.requiresAddingImplicitUndefined(declaration, symbol, enclosingDeclaration)
 }
 
 func (r *EmitResolver) isOptionalParameter(node *ast.Node) bool {
@@ -665,7 +355,7 @@ func (r *EmitResolver) IsExpandoFunctionDeclarationUnsafe(node *ast.Node) bool {
 	// this is substantially different from strada, but so is expando property checking
 	props := r.GetPropertiesOfContainerFunction(node)
 	for _, p := range props {
-		if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration) {
+		if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration()) {
 			return true
 		}
 	}
@@ -691,7 +381,7 @@ func (r *EmitResolver) IsSymbolAccessible(symbol *ast.Symbol, enclosingDeclarati
 }
 
 func isConstEnumOrConstEnumOnlyModule(s *ast.Symbol) bool {
-	return isConstEnumSymbol(s) || s.Flags&ast.SymbolFlagsConstEnumOnlyModule != 0
+	return isConstEnumSymbol(s) || s.Flags()&ast.SymbolFlagsConstEnumOnlyModule != 0
 }
 
 func (r *EmitResolver) IsReferencedAliasDeclaration(node *ast.Node) bool {
@@ -766,8 +456,8 @@ func (r *EmitResolver) isAliasResolvedToValue(symbol *ast.Symbol, excludeTypeOnl
 	if symbol == nil {
 		return false
 	}
-	if symbol.ValueDeclaration != nil {
-		if container := ast.GetSourceFileOfNode(symbol.ValueDeclaration); container != nil {
+	if symbol.ValueDeclaration() != nil {
+		if container := ast.GetSourceFileOfNode(symbol.ValueDeclaration()); container != nil {
 			fileSymbol := c.getSymbolOfDeclaration(container.AsNode())
 			// Ensures cjs export assignment is setup, since this symbol may point at, and merge with, the file itself.
 			// If we don't, the merge may not have yet occurred, and the flags check below will be missing flags that
@@ -869,14 +559,14 @@ func (r *EmitResolver) GetReferencedExportContainer(node *ast.IdentifierNode, pr
 func (r *EmitResolver) SetReferencedImportDeclaration(node *ast.IdentifierNode, ref *ast.Declaration) {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	r.jsxLinks.Get(node).importRef = ref
+	r.checker.emitResolverLinks.jsxLinks.Get(node).importRef = ref
 }
 
 func (r *EmitResolver) GetReferencedImportDeclaration(node *ast.IdentifierNode) *ast.Declaration {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 	if !ast.IsParseTreeNode(node) {
-		return r.jsxLinks.Get(node).importRef
+		return r.checker.emitResolverLinks.jsxLinks.Get(node).importRef
 	}
 
 	symbol := r.checker.getReferencedValueOrAliasSymbol(node)
@@ -947,46 +637,43 @@ func (r *EmitResolver) GetReferencedMemberValueDeclaration(node *ast.Node) *ast.
 // and requires giving it access to a lot of context it's otherwise not required to have, which also further complicates the API
 // and likely reduces performance. There's probably some refactoring that could be done here to simplify this.
 
-func (r *EmitResolver) CreateReturnTypeOfSignatureDeclaration(emitContext *printer.EmitContext, signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
-	original := emitContext.ParseNode(signatureDeclaration)
+func (r *EmitResolver) CreateReturnTypeOfSignatureDeclaration(signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
+	original := r.emitContext.ParseNode(signatureDeclaration)
 	if original == nil {
-		return emitContext.Factory.NewKeywordTypeNode(ast.KindAnyKeyword)
+		return r.emitContext.Factory.NewKeywordTypeNode(ast.KindAnyKeyword)
 	}
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
-	return requestNodeBuilder.SerializeReturnTypeForSignature(original, enclosingDeclaration, flags, internalFlags, tracker)
+	return r.nodeBuilder().SerializeReturnTypeForSignature(original, enclosingDeclaration, flags, internalFlags, tracker)
 }
 
-func (r *EmitResolver) CreateTypeParametersOfSignatureDeclaration(emitContext *printer.EmitContext, signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node {
-	original := emitContext.ParseNode(signatureDeclaration)
+func (r *EmitResolver) CreateTypeParametersOfSignatureDeclaration(signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node {
+	original := r.emitContext.ParseNode(signatureDeclaration)
 	if original == nil {
 		return nil
 	}
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
-	return requestNodeBuilder.SerializeTypeParametersForSignature(original, enclosingDeclaration, flags, internalFlags, tracker)
+	return r.nodeBuilder().SerializeTypeParametersForSignature(original, enclosingDeclaration, flags, internalFlags, tracker)
 }
 
-func (r *EmitResolver) CreateTypeOfDeclaration(emitContext *printer.EmitContext, declaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
-	original := emitContext.ParseNode(declaration)
+func (r *EmitResolver) CreateTypeOfDeclaration(declaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
+	original := r.emitContext.ParseNode(declaration)
 	if original == nil {
-		return emitContext.Factory.NewKeywordTypeNode(ast.KindAnyKeyword)
+		return r.emitContext.Factory.NewKeywordTypeNode(ast.KindAnyKeyword)
 	}
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
 	// // Get type of the symbol if this is the valid symbol otherwise get type at location
 	symbol := r.checker.getSymbolOfDeclaration(declaration)
-	return requestNodeBuilder.SerializeTypeForDeclaration(declaration, symbol, enclosingDeclaration, flags|nodebuilder.FlagsMultilineObjectLiterals, internalFlags, tracker)
+	return r.nodeBuilder().SerializeTypeForDeclaration(declaration, symbol, enclosingDeclaration, flags|nodebuilder.FlagsMultilineObjectLiterals, internalFlags, tracker)
 }
 
-func (r *EmitResolver) CreateLiteralConstValue(emitContext *printer.EmitContext, node *ast.Node, tracker nodebuilder.SymbolTracker) *ast.Node {
-	node = emitContext.ParseNode(node)
+func (r *EmitResolver) CreateLiteralConstValue(node *ast.Node, tracker nodebuilder.SymbolTracker) *ast.Node {
+	node = r.emitContext.ParseNode(node)
 	r.checkerMu.Lock()
 	t := r.checker.getTypeOfSymbol(r.checker.getSymbolOfDeclaration(node))
 	r.checkerMu.Unlock()
@@ -998,14 +685,13 @@ func (r *EmitResolver) CreateLiteralConstValue(emitContext *printer.EmitContext,
 	if t.flags&TypeFlagsEnumLike != 0 {
 		r.checkerMu.Lock()
 		defer r.checkerMu.Unlock()
-		requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
-		enumResult = requestNodeBuilder.SymbolToExpression(t.symbol, ast.SymbolFlagsValue, node, nodebuilder.FlagsNone, nodebuilder.InternalFlagsNone, tracker)
+		enumResult = r.nodeBuilder().SymbolToExpression(t.symbol, ast.SymbolFlagsValue, node, nodebuilder.FlagsNone, nodebuilder.InternalFlagsNone, tracker)
 		// What about regularTrueType/regularFalseType - since those aren't fresh, we never make initializers from them
 		// TODO: handle those if this function is ever used for more than initializers in declaration emit
 	} else if t == r.checker.trueType {
-		enumResult = emitContext.Factory.NewKeywordExpression(ast.KindTrueKeyword)
+		enumResult = r.emitContext.Factory.NewKeywordExpression(ast.KindTrueKeyword)
 	} else if t == r.checker.falseType {
-		enumResult = emitContext.Factory.NewKeywordExpression(ast.KindFalseKeyword)
+		enumResult = r.emitContext.Factory.NewKeywordExpression(ast.KindFalseKeyword)
 	}
 	if enumResult != nil {
 		return enumResult
@@ -1015,51 +701,50 @@ func (r *EmitResolver) CreateLiteralConstValue(emitContext *printer.EmitContext,
 	}
 	switch value := t.AsLiteralType().value.(type) {
 	case string:
-		return emitContext.Factory.NewStringLiteral(value, ast.TokenFlagsNone)
+		return r.emitContext.Factory.NewStringLiteral(value, ast.TokenFlagsNone)
 	case jsnum.Number:
 		if value.IsInf() {
 			if value > 0 {
-				return emitContext.Factory.NewIdentifier("Infinity")
+				return r.emitContext.Factory.NewIdentifier("Infinity")
 			}
-			return emitContext.Factory.NewPrefixUnaryExpression(ast.KindMinusToken, emitContext.Factory.NewIdentifier("Infinity"))
+			return r.emitContext.Factory.NewPrefixUnaryExpression(ast.KindMinusToken, r.emitContext.Factory.NewIdentifier("Infinity"))
 		}
 		if value.IsNaN() {
-			return emitContext.Factory.NewIdentifier("NaN")
+			return r.emitContext.Factory.NewIdentifier("NaN")
 		}
 		if value.Abs() != value {
 			// negative
-			return emitContext.Factory.NewPrefixUnaryExpression(
+			return r.emitContext.Factory.NewPrefixUnaryExpression(
 				ast.KindMinusToken,
-				emitContext.Factory.NewNumericLiteral(value.String()[1:], ast.TokenFlagsNone),
+				r.emitContext.Factory.NewNumericLiteral(value.String()[1:], ast.TokenFlagsNone),
 			)
 		}
-		return emitContext.Factory.NewNumericLiteral(value.String(), ast.TokenFlagsNone)
+		return r.emitContext.Factory.NewNumericLiteral(value.String(), ast.TokenFlagsNone)
 	case jsnum.PseudoBigInt:
-		return emitContext.Factory.NewBigIntLiteral(pseudoBigIntToString(value)+"n", ast.TokenFlagsNone)
+		return r.emitContext.Factory.NewBigIntLiteral(pseudoBigIntToString(value)+"n", ast.TokenFlagsNone)
 	case bool:
 		kind := ast.KindFalseKeyword
 		if value {
 			kind = ast.KindTrueKeyword
 		}
-		return emitContext.Factory.NewKeywordExpression(kind)
+		return r.emitContext.Factory.NewKeywordExpression(kind)
 	}
 	panic("unhandled literal const value kind")
 }
 
-func (r *EmitResolver) CreateTypeOfExpression(emitContext *printer.EmitContext, expression *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
-	expression = emitContext.ParseNode(expression)
+func (r *EmitResolver) CreateTypeOfExpression(expression *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
+	expression = r.emitContext.ParseNode(expression)
 	if expression == nil {
-		return emitContext.Factory.NewKeywordTypeNode(ast.KindAnyKeyword)
+		return r.emitContext.Factory.NewKeywordTypeNode(ast.KindAnyKeyword)
 	}
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
-	return requestNodeBuilder.SerializeTypeForExpression(expression, enclosingDeclaration, flags|nodebuilder.FlagsMultilineObjectLiterals, internalFlags, tracker)
+	return r.nodeBuilder().SerializeTypeForExpression(expression, enclosingDeclaration, flags|nodebuilder.FlagsMultilineObjectLiterals, internalFlags, tracker)
 }
 
-func (r *EmitResolver) CreateLateBoundIndexSignatures(emitContext *printer.EmitContext, container *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node {
-	container = emitContext.ParseNode(container)
+func (r *EmitResolver) CreateLateBoundIndexSignatures(container *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node {
+	container = r.emitContext.ParseNode(container)
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
@@ -1072,7 +757,7 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(emitContext *printer.EmitC
 		instanceInfos = r.checker.getIndexInfosOfIndexSymbol(instanceIndexSymbol, siblingSymbols)
 	}
 
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
+	requestNodeBuilder := r.nodeBuilder()
 
 	var result []*ast.Node
 	for i, infoList := range [][]*IndexInfo{staticInfos, instanceInfos} {
@@ -1096,7 +781,7 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(emitContext *printer.EmitC
 					return c.Name() != nil &&
 						ast.IsComputedPropertyName(c.Name()) &&
 						ast.IsEntityNameExpression(c.Name().Expression()) &&
-						r.isEntityNameVisible(c.Name().Expression(), enclosingDeclaration, false).Accessibility == printer.SymbolAccessibilityAccessible
+						r.checker.isEntityNameVisible(c.Name().Expression(), enclosingDeclaration, false).Accessibility == printer.SymbolAccessibilityAccessible
 				})
 				if allComponentComputedNamesSerializable {
 					for _, c := range info.components {
@@ -1111,13 +796,13 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(emitContext *printer.EmitC
 							tracker.TrackSymbol(name, enclosingDeclaration, ast.SymbolFlagsValue)
 						}
 
-						mods := core.IfElse(isStatic, []*ast.Node{emitContext.Factory.NewModifier(ast.KindStaticKeyword)}, nil)
+						mods := core.IfElse(isStatic, []*ast.Node{r.emitContext.Factory.NewModifier(ast.KindStaticKeyword)}, nil)
 						if info.isReadonly {
-							mods = append(mods, emitContext.Factory.NewModifier(ast.KindReadonlyKeyword))
+							mods = append(mods, r.emitContext.Factory.NewModifier(ast.KindReadonlyKeyword))
 						}
 
-						decl := emitContext.Factory.NewPropertyDeclaration(
-							core.IfElse(mods != nil, emitContext.Factory.NewModifierList(mods), nil),
+						decl := r.emitContext.Factory.NewPropertyDeclaration(
+							core.IfElse(mods != nil, r.emitContext.Factory.NewModifierList(mods), nil),
 							c.Name(),
 							c.QuestionToken(),
 							requestNodeBuilder.TypeToTypeNode(r.checker.getTypeOfSymbol(c.Symbol()), enclosingDeclaration, flags, internalFlags, tracker),
@@ -1130,10 +815,10 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(emitContext *printer.EmitC
 			}
 			node := requestNodeBuilder.IndexInfoToIndexSignatureDeclaration(info, enclosingDeclaration, flags, internalFlags, tracker)
 			if node != nil && isStatic {
-				modNodes := []*ast.Node{emitContext.Factory.NewModifier(ast.KindStaticKeyword)}
+				modNodes := []*ast.Node{r.emitContext.Factory.NewModifier(ast.KindStaticKeyword)}
 				modNodes = append(modNodes, node.ModifierNodes()...)
-				mods := emitContext.Factory.NewModifierList(modNodes)
-				node = emitContext.Factory.UpdateIndexSignatureDeclaration(
+				mods := r.emitContext.Factory.NewModifierList(modNodes)
+				node = r.emitContext.Factory.UpdateIndexSignatureDeclaration(
 					node.AsIndexSignatureDeclaration(),
 					mods,
 					node.ParameterList(),
@@ -1177,13 +862,13 @@ func (r *EmitResolver) GetTypeReferenceSerializationKind(typeName *ast.Node, loc
 	if ast.IsQualifiedName(typeName) {
 		rootValueSymbol := r.checker.resolveEntityName(ast.GetFirstIdentifier(typeName), ast.SymbolFlagsValue, true, true, location)
 
-		if rootValueSymbol != nil && len(rootValueSymbol.Declarations) > 0 {
-			isTypeOnly = core.Every(rootValueSymbol.Declarations, ast.IsTypeOnlyImportOrExportDeclaration)
+		if rootValueSymbol != nil && len(rootValueSymbol.Declarations()) > 0 {
+			isTypeOnly = core.Every(rootValueSymbol.Declarations(), ast.IsTypeOnlyImportOrExportDeclaration)
 		}
 	}
 	valueSymbol := r.checker.resolveEntityName(typeName, ast.SymbolFlagsValue, true, true, location)
 	resolvedValueSymbol := valueSymbol
-	if valueSymbol != nil && valueSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+	if valueSymbol != nil && valueSymbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		resolvedValueSymbol = r.checker.resolveAlias(valueSymbol)
 	}
 
@@ -1192,7 +877,7 @@ func (r *EmitResolver) GetTypeReferenceSerializationKind(typeName *ast.Node, loc
 	// Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
 	typeSymbol := r.checker.resolveEntityName(typeName, ast.SymbolFlagsType, true, true, location)
 	resolvedTypeSymbol := typeSymbol
-	if typeSymbol != nil && typeSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+	if typeSymbol != nil && typeSymbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		resolvedTypeSymbol = r.checker.resolveAlias(typeSymbol)
 	}
 	// In case the value symbol can't be resolved (e.g. because of missing declarations), use type symbol for reachability check.
@@ -1269,13 +954,12 @@ func (r *EmitResolver) GetPropertiesOfContainerFunction(node *ast.Node) []*ast.S
 	return r.checker.getPropertiesOfType(r.checker.getTypeOfSymbol(s))
 }
 
-func (r *EmitResolver) TryJSTypeNodeToTypeNode(emitContext *printer.EmitContext, typeNode *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
-	typeNode = emitContext.ParseNode(typeNode)
+func (r *EmitResolver) TryJSTypeNodeToTypeNode(typeNode *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
+	typeNode = r.emitContext.ParseNode(typeNode)
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
-	return requestNodeBuilder.TryJSTypeNodeToTypeNode(typeNode, enclosingDeclaration, flags, internalFlags, tracker)
+	return r.nodeBuilder().TryJSTypeNodeToTypeNode(typeNode, enclosingDeclaration, flags, internalFlags, tracker)
 }
 
 // IsThisPropertyAssignmentDeclarationRedundant reports whether a JS `this.<name> = ...` expando
@@ -1298,23 +982,23 @@ func (r *EmitResolver) IsThisPropertyAssignmentDeclarationRedundant(node *ast.No
 	defer r.checkerMu.Unlock()
 
 	s := r.checker.getSymbolOfDeclaration(node)
-	if s == nil || s.Parent == nil {
+	if s == nil || s.Parent() == nil {
 		return false
 	}
-	parentType := r.checker.getDeclaredTypeOfSymbol(s.Parent)
+	parentType := r.checker.getDeclaredTypeOfSymbol(s.Parent())
 	if parentType == nil {
 		return false
 	}
 	for _, base := range r.checker.getBaseTypes(parentType) {
-		baseProp := r.checker.getPropertyOfType(base, s.Name)
+		baseProp := r.checker.getPropertyOfType(base, s.Name())
 		if baseProp == nil {
 			continue
 		}
-		if baseProp.Flags&(ast.SymbolFlagsAccessor|ast.SymbolFlagsMethod|ast.SymbolFlagsFunction) != 0 {
+		if baseProp.Flags()&(ast.SymbolFlagsAccessor|ast.SymbolFlagsMethod|ast.SymbolFlagsFunction) != 0 {
 			return true
 		}
 		if r.checker.isReadonlySymbol(baseProp) == r.checker.isReadonlySymbol(s) &&
-			(s.Flags&ast.SymbolFlagsOptional) == (baseProp.Flags&ast.SymbolFlagsOptional) &&
+			(s.Flags()&ast.SymbolFlagsOptional) == (baseProp.Flags()&ast.SymbolFlagsOptional) &&
 			r.checker.isTypeIdenticalTo(r.checker.getTypeOfSymbol(s), r.checker.getTypeOfSymbol(baseProp)) {
 			return true
 		}

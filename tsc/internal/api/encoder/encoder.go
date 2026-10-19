@@ -435,6 +435,11 @@ func SetSourceFileLease(data []byte, lease uint64) {
 	binary.LittleEndian.PutUint64(data[HeaderOffsetSourceFileLease:], lease)
 }
 
+// SetSourceFileID sets the source file node ID used to validate remote references.
+func SetSourceFileID(data []byte, id uint64) {
+	binary.LittleEndian.PutUint64(data[HeaderOffsetSourceFileID:], id)
+}
+
 // EncodeNode encodes an arbitrary AST node and its descendants into the binary format.
 // The sourceFile is needed to provide the source text for efficient string encoding.
 // When encoding a non-SourceFile node, the header hash and parse options fields will be zero.
@@ -682,8 +687,8 @@ func recordExtendedData_SourceFile(node *ast.Node, strs *stringTable, positionMa
 	if sf.OriginalText() != sf.Text() {
 		originalTextIndex = strs.add(sf.OriginalText(), 0, 0, 0)
 	}
-	fileNameIndex := strs.add(sf.FileName(), 0, 0, 0)
-	pathIndex := strs.add(string(sf.Path()), 0, 0, 0)
+	fileNameIndex := strs.add(sf.FileName().AsString(), 0, 0, 0)
+	pathIndex := strs.add(string(sf.PathKey()), 0, 0, 0)
 	referencedFilesOffset := encodeFileReferences(sf.ReferencedFiles, positionMap, structuredData)
 	typeRefDirectivesOffset := encodeFileReferences(sf.TypeReferenceDirectives, positionMap, structuredData)
 	libRefDirectivesOffset := encodeFileReferences(sf.LibReferenceDirectives, positionMap, structuredData)
@@ -691,11 +696,11 @@ func recordExtendedData_SourceFile(node *ast.Node, strs *stringTable, positionMa
 	if spanMap := sf.SpanMap(); spanMap != nil {
 		spanMapOffset = encodeSpanMap(spanMap, positionMap, ast.ComputePositionMap(sf.OriginalText()), structuredData)
 	}
-	supplementalFileNames := core.Map(sf.SupplementalSourceFiles(), func(file *ast.SourceFile) string { return file.FileName() })
+	supplementalFileNames := core.Map(sf.SupplementalSourceFiles(), func(file *ast.SourceFile) string { return file.FileName().AsString() })
 	supplementalFileNamesOffset := encodeStringArray(supplementalFileNames, structuredData)
 	canonicalFileNameIndex := uint32(noStructuredData)
 	if canonical := sf.CanonicalSourceFile(); canonical != nil {
-		canonicalFileNameIndex = strs.add(canonical.FileName(), 0, 0, 0)
+		canonicalFileNameIndex = strs.add(canonical.FileName().AsString(), 0, 0, 0)
 	}
 	contentMapperIndex := uint32(noStructuredData)
 	if contentMapper := sf.ContentMapper(); contentMapper != "" {
@@ -703,7 +708,7 @@ func recordExtendedData_SourceFile(node *ast.Node, strs *stringTable, positionMa
 	}
 	virtualFileNameIndex := uint32(noStructuredData)
 	if virtualFileName := sf.VirtualFileName(); virtualFileName != "" {
-		virtualFileNameIndex = strs.add(virtualFileName, 0, 0, 0)
+		virtualFileNameIndex = strs.add(virtualFileName.AsString(), 0, 0, 0)
 	}
 	diagnosticDirectivesOffset := encodeDiagnosticDirectives(sf.DiagnosticDirectives(), positionMap, ast.ComputePositionMap(sf.OriginalText()), structuredData)
 	// imports, moduleAugmentations, ambientModuleNames offsets are placeholders;

@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/importSource/importSource21.ts] ////
+
+=== index.ts ===
+import source a from "./a.wasm";
+>a : AbstractModuleSource
+
+import source b from "./b.wasm";
+>b : AbstractModuleSource
+
+import source c from "./c.wasm";
+>c : AbstractModuleSource
+
+export type A = typeof a;
+>A : AbstractModuleSource
+>a : AbstractModuleSource
+
+export const d = c;
+>d : AbstractModuleSource
+>c : AbstractModuleSource
+

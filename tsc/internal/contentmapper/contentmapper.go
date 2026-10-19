@@ -13,13 +13,16 @@ package contentmapper
 
 import (
 	"errors"
+	"maps"
 	"reflect"
+	"slices"
 	"strings"
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/zeebo/xxh3"
 )
 
@@ -28,20 +31,23 @@ var ErrProjectUnavailable = errors.New("content mapper project is unavailable")
 // Definition is a content mapper as declared in a tsconfig's "contentMappers": the npm package that
 // implements the mapper and the otherwise unsupported file extensions it registers.
 type Definition struct {
-	Package    string     `json:"package"`
-	Extensions []string   `json:"extensions"`
-	Options    json.Value `json:"options,omitempty"`
+	Package    string   `json:"package"`
+	Extensions []string `json:"extensions"`
+	// OutputExtensions contains the resolved mapping after applying manifest defaults and project overrides.
+	OutputExtensions map[string]string `json:"outputExtensions,omitzero"`
+	Options          json.Value        `json:"options,omitempty"`
 }
 
 // Manifest is the content-mapper information read from a package's package.json: its name and version
 // (which form the mapper's identity), the argv used to run it, and the compiler options it declares it
 // depends on.
 type Manifest struct {
-	Name            string
-	Version         string
-	Exec            []string
-	CompilerOptions []string
-	DynamicConfig   bool
+	Name                    string
+	Version                 string
+	Exec                    []string
+	CompilerOptions         []string
+	DynamicConfig           bool
+	DefaultOutputExtensions map[string]string
 }
 
 // Mapper is a resolved content mapper: its tsconfig Definition combined with the Manifest resolved from
@@ -50,7 +56,7 @@ type Mapper struct {
 	Definition
 	Manifest `json:"-"`
 	// PackageDirectory is the real path directory returned by package resolution for package-based mappers.
-	PackageDirectory string `json:"-"`
+	PackageDirectory tspath.RootedDirectoryPath `json:"-"`
 	// ContributionID is provided by an LSP client extension for inferred project content mappers.
 	ContributionID string `json:"-"`
 }
@@ -61,6 +67,22 @@ var supportedVirtualExtensions = collections.NewSetFromItems(
 
 func IsSupportedVirtualExtension(extension string) bool {
 	return supportedVirtualExtensions.Has(extension)
+}
+
+func IsValidExtension(extension string) bool {
+	return len(extension) > 1 && extension[0] == '.' && !strings.ContainsAny(extension, "/\\")
+}
+
+func HasReservedSourceExtension(extension string) bool {
+	for _, extensions := range tspath.AllSupportedExtensionsWithJson {
+		for _, nativeExtension := range extensions {
+			if len(extension) >= len(nativeExtension) &&
+				strings.EqualFold(extension[len(extension)-len(nativeExtension):], nativeExtension) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // DiagnosticName returns the best available user-facing name, including when manifest resolution failed.
@@ -95,21 +117,54 @@ func (m *Mapper) manifestIdentity() string {
 	}
 }
 
-// TransformIdentity returns a fingerprint of everything besides a file's content that determines the
-// output of transforming it with this mapper under the given options: the mapper's identity and the
-// values of the compiler options it declared it depends on. Folding it into a cache key means a change to
-// the mapper version or a relevant compiler option invalidates cached results. It is a pure function of
-// the mapper and options — the declared options come from the manifest, so it never starts the mapper
-// process.
+// Equals compares the complete mapper configuration, not just its advertised identity.
+func (m *Mapper) Equals(other *Mapper) bool {
+	if m == other {
+		return true
+	}
+	if m == nil || other == nil {
+		return false
+	}
+	return m.Package == other.Package &&
+		(m.Extensions == nil) == (other.Extensions == nil) &&
+		slices.Equal(m.Extensions, other.Extensions) &&
+		(m.Definition.OutputExtensions == nil) == (other.Definition.OutputExtensions == nil) &&
+		maps.Equal(m.Definition.OutputExtensions, other.Definition.OutputExtensions) &&
+		(m.Options == nil) == (other.Options == nil) &&
+		slices.Equal(m.Options, other.Options) &&
+		m.Name == other.Name &&
+		m.Version == other.Version &&
+		(m.Exec == nil) == (other.Exec == nil) &&
+		slices.Equal(m.Exec, other.Exec) &&
+		(m.CompilerOptions == nil) == (other.CompilerOptions == nil) &&
+		slices.Equal(m.CompilerOptions, other.CompilerOptions) &&
+		m.DynamicConfig == other.DynamicConfig &&
+		(m.Manifest.DefaultOutputExtensions == nil) == (other.Manifest.DefaultOutputExtensions == nil) &&
+		maps.Equal(m.Manifest.DefaultOutputExtensions, other.Manifest.DefaultOutputExtensions) &&
+		m.PackageDirectory == other.PackageDirectory &&
+		m.ContributionID == other.ContributionID
+}
+
+// TransformIdentity fingerprints the mapper's identity, declared compiler options, and runtime output
+// contract so both transformed-file caches and incremental emit are invalidated when these change.
+// It is a pure function of the mapper and options and never starts the mapper process.
 func (m *Mapper) TransformIdentity(options *core.CompilerOptions) xxh3.Uint128 {
 	declared, _ := m.MarshalDeclaredOptions(options)
 	optionsJSON, _ := json.Marshal(declared)
-	buf := make([]byte, 0, len(m.Identity())+2+len(m.Options)+len(optionsJSON))
+	var outputExtensionsJSON []byte
+	if len(m.Definition.OutputExtensions) > 0 {
+		outputExtensionsJSON, _ = json.Marshal(m.Definition.OutputExtensions, json.Deterministic(true))
+	}
+	buf := make([]byte, 0, len(m.Identity())+3+len(m.Options)+len(optionsJSON)+len(outputExtensionsJSON))
 	buf = append(buf, m.Identity()...)
 	buf = append(buf, 0)
 	buf = append(buf, m.Options...)
 	buf = append(buf, 0)
 	buf = append(buf, optionsJSON...)
+	if len(outputExtensionsJSON) > 0 {
+		buf = append(buf, 0)
+		buf = append(buf, outputExtensionsJSON...)
+	}
 	return xxh3.Hash128(buf)
 }
 

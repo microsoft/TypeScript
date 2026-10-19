@@ -1,0 +1,61 @@
+index.ts(2,7): error TS2322: Type 'AbstractModuleSource' is not assignable to type 'string'.
+index.ts(3,3): error TS2339: Property 'exports' does not exist on type 'AbstractModuleSource'.
+index.ts(4,3): error TS2339: Property 'value' does not exist on type 'AbstractModuleSource'.
+index.ts(5,8): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'AbstractModuleSource'.
+index.ts(6,15): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'AbstractModuleSource'.
+index.ts(7,15): error TS7036: Dynamic import's specifier must be of type 'string', but here has type '1'.
+index.ts(8,15): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'undefined'.
+index.ts(9,27): error TS2559: Type '1' has no properties in common with type 'ImportCallOptions'.
+index.ts(10,27): error TS2322: Type '{ with: { readonly type: 1; }; }' is not assignable to type 'ImportCallOptions'.
+  Types of property 'with' are incompatible.
+    Type '{ readonly type: 1; }' is not assignable to type 'ImportAttributes'.
+      Property 'type' is incompatible with index signature.
+        Type 'number' is not assignable to type 'string'.
+index.ts(11,29): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+index.ts(12,5): error TS2693: 'AbstractModuleSource' only refers to a type, but is being used as a value here.
+index.ts(13,10): error TS2315: Type 'AbstractModuleSource' is not generic.
+
+
+==== index.ts (12 errors) ====
+    import source a from "./a.wasm";
+    const b: string = a;
+          ~
+!!! error TS2322: Type 'AbstractModuleSource' is not assignable to type 'string'.
+    a.exports;
+      ~~~~~~~
+!!! error TS2339: Property 'exports' does not exist on type 'AbstractModuleSource'.
+    a.value;
+      ~~~~~
+!!! error TS2339: Property 'value' does not exist on type 'AbstractModuleSource'.
+    import(a);
+           ~
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'AbstractModuleSource'.
+    import.source(a);
+                  ~
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'AbstractModuleSource'.
+    import.source(1);
+                  ~
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type '1'.
+    import.source(undefined);
+                  ~~~~~~~~~
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'undefined'.
+    import.source("./a.wasm", 1);
+                              ~
+!!! error TS2559: Type '1' has no properties in common with type 'ImportCallOptions'.
+    import.source("./a.wasm", { with: { type: 1 } });
+                              ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ with: { readonly type: 1; }; }' is not assignable to type 'ImportCallOptions'.
+!!! error TS2322:   Types of property 'with' are incompatible.
+!!! error TS2322:     Type '{ readonly type: 1; }' is not assignable to type 'ImportAttributes'.
+!!! error TS2322:       Property 'type' is incompatible with index signature.
+!!! error TS2322:         Type 'number' is not assignable to type 'string'.
+    import.source("./a.wasm", { assert: { type: "webassembly" } });
+                                ~~~~~~
+!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+    new AbstractModuleSource();
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2693: 'AbstractModuleSource' only refers to a type, but is being used as a value here.
+    type C = AbstractModuleSource<string>;
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'AbstractModuleSource' is not generic.
+    

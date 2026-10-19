@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/moduleResolution/conditionalExportsRequireDefaultFallback.ts] ////
+
+=== /main.ts ===
+import { value } from "provider";
+>value : number
+
+=== /node_modules/provider/index.d.ts ===
+export const value: number;
+>value : number
+
