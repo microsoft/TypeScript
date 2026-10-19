@@ -32,7 +32,7 @@ makeContextualThisParameter<{ assert(v: any): asserts v }>(function () {
     const w: true = v;
 >w : true
 >true : true
->v : boolean
+>v : true
 
 });
 

@@ -1,9 +1,8 @@
 fixingTypeParametersRepeatedly2.ts(11,32): error TS2741: Property 'toBase' is missing in type 'Base' but required in type 'Derived'.
 fixingTypeParametersRepeatedly2.ts(17,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'result' must be of type 'Derived', but here has type 'Base'.
-fixingTypeParametersRepeatedly2.ts(17,34): error TS2339: Property 'toBase' does not exist on type 'Base'.
 
 
-==== fixingTypeParametersRepeatedly2.ts (3 errors) ====
+==== fixingTypeParametersRepeatedly2.ts (2 errors) ====
     interface Base {
         baseProp;
     }
@@ -28,5 +27,3 @@ fixingTypeParametersRepeatedly2.ts(17,34): error TS2339: Property 'toBase' does 
         ~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'result' must be of type 'Derived', but here has type 'Base'.
 !!! related TS6203 fixingTypeParametersRepeatedly2.ts:11:5: 'result' was also declared here.
-                                     ~~~~~~
-!!! error TS2339: Property 'toBase' does not exist on type 'Base'.

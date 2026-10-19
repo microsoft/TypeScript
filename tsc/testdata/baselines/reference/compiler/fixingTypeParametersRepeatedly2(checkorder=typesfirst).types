@@ -53,7 +53,7 @@ var result = bar(derived, d => d.toBase());
 >d => d.toBase() : (d: Derived) => Base
 >d : Derived
 >d.toBase() : Base
->d.toBase : any
+>d.toBase : () => Base
 >d : Derived
->toBase : any
+>toBase : () => Base
 
