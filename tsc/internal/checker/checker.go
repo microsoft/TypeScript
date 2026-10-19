@@ -1851,7 +1851,7 @@ func (c *Checker) getSuggestionForSymbolNameLookup(symbols ast.SymbolTable, name
 	// Checking a candidate alias resolves it, which creates types, so visit aliases last and in a stable order
 	// rather than in the random iteration order of the symbol table.
 	candidates := make([]*ast.Symbol, 0, len(symbols))
-	c.forEachSymbolInResolutionOrder(symbols, func(_ string, symbol *ast.Symbol) bool {
+	c.forEachSymbolTableEntry(symbols, func(_ string, symbol *ast.Symbol) bool {
 		candidates = append(candidates, symbol)
 		return false
 	})
@@ -5926,7 +5926,7 @@ func (c *Checker) checkExternalModuleExports(node *ast.Node) {
 }
 
 func (c *Checker) hasExportedMembersOfKind(moduleSymbol *ast.Symbol, kind ast.SymbolFlags) bool {
-	return c.forEachSymbolInResolutionOrder(moduleSymbol.Exports(), func(_ string, symbol *ast.Symbol) bool {
+	return c.forEachSymbolTableEntry(moduleSymbol.Exports(), func(_ string, symbol *ast.Symbol) bool {
 		return symbol.Name() != ast.InternalSymbolNameExportEquals && c.getSymbolFlags(symbol)&kind != 0
 	})
 }
@@ -15226,7 +15226,7 @@ func (c *Checker) reportNonExportedMember(name *ast.Node, declarationName string
 			// Looking for the export resolves aliases, which creates types, so do it in a stable order rather than
 			// in the random iteration order of the symbol table.
 			var exportedSymbols []*ast.Symbol
-			c.forEachSymbolInResolutionOrder(exports, func(_ string, symbol *ast.Symbol) bool {
+			c.forEachSymbolTableEntry(exports, func(_ string, symbol *ast.Symbol) bool {
 				if c.getSymbolIfSameReference(symbol, localSymbol) != nil {
 					exportedSymbols = append(exportedSymbols, symbol)
 				}
@@ -16630,7 +16630,7 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 	}
 	// A CommonJS module defined by an 'export=' might also export typedefs, stored on the original module
 	if originalModule != nil && len(originalModule.Exports()) > 1 {
-		c.forEachSymbolInResolutionOrder(originalModule.Exports(), func(_ string, symbol *ast.Symbol) bool {
+		c.forEachSymbolTableEntry(originalModule.Exports(), func(_ string, symbol *ast.Symbol) bool {
 			if symbol.Name() == ast.InternalSymbolNameExportEquals || symbol.Name() == ast.InternalSymbolNameExportStar {
 				return false
 			}

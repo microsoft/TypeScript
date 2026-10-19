@@ -778,7 +778,7 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 					symbolName = symbol.Name()
 				} else {
 					results := make(map[*ast.Symbol]string, 1)
-					b.ch.forEachSymbolInResolutionOrder(exports, func(name string, ex *ast.Symbol) bool {
+					b.ch.forEachSymbolTableEntry(exports, func(name string, ex *ast.Symbol) bool {
 						if b.ch.getSymbolIfSameReference(ex, symbol) != nil && !isLateBoundName(name) && name != ast.InternalSymbolNameExportEquals {
 							// A symbol can be in the table under two keys, so pick one in a way that does not depend on the
 							// order the entries are visited in.
