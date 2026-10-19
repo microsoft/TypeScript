@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"hash/maphash"
 	"iter"
 	"maps"
 	"slices"
@@ -183,9 +184,11 @@ const symbolTableLinearMax = 16
 
 type SymbolMap struct {
 	entries []symbolMapEntry
-	index   map[string]int32
+	index   []int32 // open addressing table of entry positions plus one (0 is empty), only past symbolTableLinearMax
 	oddKeys map[int32]string
 }
+
+var symbolTableSeed = maphash.MakeSeed()
 
 type symbolMapEntry struct {
 	symbol *Symbol
@@ -198,7 +201,7 @@ func NewSymbolTable(capacity int) SymbolTable {
 	if capacity > 0 {
 		m.entries = make([]symbolMapEntry, 0, capacity)
 		if capacity > symbolTableLinearMax {
-			m.index = make(map[string]int32, capacity)
+			m.index = make([]int32, indexSizeFor(capacity))
 		}
 	}
 	return m
@@ -223,10 +226,16 @@ func (m *SymbolMap) find(key string) int {
 		return -1
 	}
 	if m.index != nil {
-		if i, ok := m.index[key]; ok {
-			return int(i)
+		mask := uint64(len(m.index) - 1)
+		for slot := maphash.String(symbolTableSeed, key) & mask; ; slot = (slot + 1) & mask {
+			p := m.index[slot]
+			if p == 0 {
+				return -1
+			}
+			if i := int(p - 1); m.entries[i].keyLen == int32(len(key)) && m.keyAt(i, m.oddKeys) == key {
+				return i
+			}
 		}
-		return -1
 	}
 	keyLen := int32(len(key))
 	for i := range m.entries {
@@ -272,8 +281,8 @@ func (m *SymbolMap) Set(key string, symbol *Symbol) {
 	if symbol == nil || symbol.Name() != key {
 		m.setOddKey(i, key)
 	}
-	if m.index != nil {
-		m.index[key] = i
+	if m.index != nil && len(m.entries)*4 <= len(m.index)*3 {
+		m.insertIndex(key, i)
 	} else if len(m.entries) > symbolTableLinearMax {
 		m.buildIndex()
 	}
@@ -287,10 +296,27 @@ func (m *SymbolMap) setOddKey(i int32, key string) {
 	m.oddKeys[i] = key
 }
 
+func indexSizeFor(n int) int {
+	size := 32
+	for size*3 < n*4 {
+		size *= 2
+	}
+	return size
+}
+
+func (m *SymbolMap) insertIndex(key string, i int32) {
+	mask := uint64(len(m.index) - 1)
+	slot := maphash.String(symbolTableSeed, key) & mask
+	for m.index[slot] != 0 {
+		slot = (slot + 1) & mask
+	}
+	m.index[slot] = i + 1
+}
+
 func (m *SymbolMap) buildIndex() {
-	m.index = make(map[string]int32, len(m.entries))
+	m.index = make([]int32, indexSizeFor(len(m.entries)*2))
 	for i := range m.entries {
-		m.index[m.keyAt(i, m.oddKeys)] = int32(i)
+		m.insertIndex(m.keyAt(i, m.oddKeys), int32(i))
 	}
 }
 
@@ -364,7 +390,7 @@ func (m *SymbolMap) Clone() SymbolTable {
 	if m == nil {
 		return nil
 	}
-	clone := &SymbolMap{entries: slices.Clone(m.entries), index: maps.Clone(m.index), oddKeys: maps.Clone(m.oddKeys)}
+	clone := &SymbolMap{entries: slices.Clone(m.entries), index: slices.Clone(m.index), oddKeys: maps.Clone(m.oddKeys)}
 	return clone
 }
 
