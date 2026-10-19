@@ -1334,7 +1334,9 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 	case flags&checker.TypeFlagsIntrinsic != 0:
 		resp.IntrinsicName = t.AsIntrinsicType().IntrinsicName()
 	case flags&checker.TypeFlagsUniqueESSymbol != 0:
-		resp.EscapedName = ast.EscapeInternalSymbolName(t.AsUniqueESSymbolType().Name())
+		// The name of a unique symbol declared by a late-bound member embeds that member's
+		// internal name (e.g. "\xFE@\xFE@key@1@2"), so every marker must be escaped.
+		resp.EscapedName = ast.EscapeAllInternalSymbolNames(t.AsUniqueESSymbolType().Name())
 	}
 
 	return resp

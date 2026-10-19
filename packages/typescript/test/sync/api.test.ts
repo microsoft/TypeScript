@@ -8024,6 +8024,34 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.strictEqual(plainType.flags & TypeFlags.UniqueESSymbol, 0);
     });
 
+    test("UniqueESSymbolType and Symbol escape nested internal symbol names", () => {
+        // The unique symbol declared by `C[key]` embeds the internal name of that late-bound member.
+        const src = `declare const key: unique symbol;
+export declare class C { static readonly [key]: unique symbol; }
+export declare const nested: typeof C[typeof key];
+export interface I { [nested]: number; }`;
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true, lib: ["esnext"] } }),
+            "/src/main.ts": src,
+        });
+
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const nested = checker.getSymbolAtPosition("/src/main.ts", src.indexOf("nested"));
+        const iface = checker.getSymbolAtPosition("/src/main.ts", src.indexOf("I {"));
+        assert.ok(nested && iface);
+
+        const nestedType = checker.getTypeOfSymbol(nested);
+        assert.ok(nestedType.isUniqueESSymbolType());
+        assert.match(nestedType.escapedName, /^__@__@key@\d+@\d+$/);
+
+        // The escaped name of the unique symbol type must match the escaped name of the member it keys.
+        const properties = (checker.getDeclaredTypeOfSymbol(iface)).getProperties();
+        const property = properties.find(symbol => symbol.escapedName === nestedType.escapedName);
+        assert.ok(property);
+        assert.ok(!property.escapedName.includes("�"));
+    });
+
     test("printNode with terminateUnterminatedLiterals option", () => {
         using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
