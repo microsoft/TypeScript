@@ -1,4 +1,4 @@
-narrowedNeverAfterLoopWithAndCondition.ts(9,9): error TS2322: Type 'false' is not assignable to type 'never'.
+narrowedNeverAfterLoopWithAndCondition.ts(9,19): error TS2339: Property 'last_ref' does not exist on type 'never'.
 narrowedNeverAfterLoopWithAndCondition.ts(17,19): error TS2339: Property 'last_ref' does not exist on type 'never'.
 
 
@@ -12,8 +12,8 @@ narrowedNeverAfterLoopWithAndCondition.ts(17,19): error TS2339: Property 'last_r
         if (value_def) {
             while (x && y);
             value_def.last_ref = false;
-            ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'false' is not assignable to type 'never'.
+                      ~~~~~~~~
+!!! error TS2339: Property 'last_ref' does not exist on type 'never'.
         }
     }
     
