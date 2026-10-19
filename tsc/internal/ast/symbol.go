@@ -177,7 +177,12 @@ func (s *Symbol) CombinedLocalAndExportSymbolFlags() SymbolFlags {
 // it has more than symbolTableLinearMax entries, and only then gets a hash index of entry positions. An entry does not
 // store its key: the key is almost always the symbol's own name, so an entry holds the symbol and the key's length,
 // which rejects most non-matching entries without reading the symbol. A key with other text than its symbol's name
-// is kept in oddKeys.
+// is kept in oddKeys. Because of that, a symbol's name must not change after the symbol is added to a table.
+//
+// This is not a collections.OrderedMap[string, *Symbol]: that stores every key in its key slice and again in its
+// map, and gives every table a hash map, while symbol tables are numerous, long-lived and mostly tiny.
+//
+// A table must not be changed with Set or Delete while it is being iterated.
 type SymbolTable = *SymbolMap
 
 const symbolTableLinearMax = 16
