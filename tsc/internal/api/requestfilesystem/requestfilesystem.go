@@ -119,7 +119,10 @@ func HasFullFileSystem(fileSystem vfs.FS) bool {
 	return requestFileSystem != nil && requestFileSystem.kind == KindFull
 }
 
-func Rebase(fileSystem vfs.FS, base vfs.FS, fileChanges *project.FileChangeSummary) vfs.FS {
+// Rebase reapplies fileSystem's request entries over base. baseContents is the
+// target snapshot's cached/editor view, used only to report changes relative to
+// that snapshot; it must not become part of the composed filesystem.
+func Rebase(fileSystem vfs.FS, base vfs.FS, baseContents vfs.FS, fileChanges *project.FileChangeSummary) vfs.FS {
 	source := getRequestFileSystem(fileSystem)
 	if source == nil {
 		return base
@@ -141,9 +144,13 @@ func Rebase(fileSystem vfs.FS, base vfs.FS, fileChanges *project.FileChangeSumma
 		caseSensitivity:  source.caseSensitivity,
 		paths:            paths,
 	}
-	changed := addRebaseFileChanges(fileChanges, source, baseFileSystem, result)
-	if source.kind == KindFull && (!HasFullFileSystem(baseFileSystem) || changed) {
-		fileChanges.InvalidateAll = true
+	if source != getRequestFileSystem(baseFileSystem) {
+		addRebaseFileChanges(fileChanges, source, baseFileSystem, baseContents, result)
+		// Listings need not expose every readable entry, so only a self-rebase can
+		// establish that a full replacement preserves all of the target's paths.
+		if source.kind == KindFull {
+			fileChanges.InvalidateAll = true
+		}
 	}
 	return result
 }

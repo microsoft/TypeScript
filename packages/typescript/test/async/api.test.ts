@@ -5513,6 +5513,55 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         });
     }
 
+    test("Snapshot.rebase compares against the target's cached contents", async () => {
+        const { api: disposableAPI, fs } = spawnAPIWithFS({ "/index.ts": "export const value = 1;" });
+        await using api = disposableAPI;
+        await using target = await api.createSnapshot({
+            createPrograms: [{ rootFiles: ["/index.ts"], compilerOptions: { noLib: true } }],
+        });
+        const programId = target.operation.createdPrograms[0].id;
+        const originalFile = await target.getProgram(programId)!.getSourceFile("/index.ts");
+        assert.equal(originalFile!.text, "export const value = 1;");
+        fs.writeFile!(toRootedFilePath("/index.ts", undefined), "export const value = 2;");
+        await using source = await api.createSnapshot({
+            fileSystem: createFileSystemLayer([["/index.ts", "export const value = 2;"]]),
+        });
+        await using rebased = await source.rebase(target, { ensurePrograms: true });
+        assert.equal((await rebased.getProgram(programId)!.getSourceFile("/index.ts"))!.text, "export const value = 2;");
+        assert.strictEqual(await target.getProgram(programId)!.getSourceFile("/index.ts"), originalFile);
+    });
+
+    for (const fullReplacement of [false, true]) {
+        test(`Snapshot.rebase removes cached files with ${fullReplacement ? "a full replacement" : "matching tombstones"}`, async () => {
+            await using api = spawnAPI({});
+            const files = {
+                "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["index.ts", "removed/keep.ts"] }),
+                "/index.ts": "export {};",
+            };
+            await using target = await api.createSnapshot({
+                openProjects: ["/tsconfig.json"],
+                fileSystem: {
+                    kind: "full",
+                    files: { ...files, "/removed/keep.ts": "export const keep = true;" },
+                    directories: { "/": { files: ["index.ts", "tsconfig.json"], directories: [] } },
+                    removedPaths: ["/removed"],
+                },
+            });
+            const originalFile = await target.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts");
+            assert.ok(originalFile);
+            await using self = await target.rebase(target, { ensurePrograms: true });
+            assert.strictEqual(await self.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts"), originalFile);
+            await using source = await api.createSnapshot({
+                fileSystem: fullReplacement
+                    ? createFileSystem(Object.entries(files))
+                    : createFileSystemLayer([], { removedPaths: ["/removed"] }),
+            });
+            await using rebased = await source.rebase(target, { ensurePrograms: true });
+            assert.equal(await rebased.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts"), undefined);
+            assert.strictEqual(await target.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts"), originalFile);
+        });
+    }
+
     test("Snapshot.rebase preserves explicit full invalidation", async () => {
         const { api: disposableAPI, fs } = spawnAPIWithFS({ "/index.ts": "export const value = 1;" });
         await using api = disposableAPI;

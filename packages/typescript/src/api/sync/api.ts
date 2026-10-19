@@ -1850,6 +1850,8 @@ export class Snapshot {
      * `newSnapshot`, retaining the target's projects and language server state.
      * Source entries take precedence; a full source filesystem remains total.
      * Optional changes are applied after rebasing, including auto-import preparation.
+     * `newSnapshot` is the sole parent for program reuse and reported changes;
+     * files absent from it are new files even if already present in this snapshot.
      * Neither input snapshot is modified, and retained file contents are not resent.
      */
     get rebase(): {

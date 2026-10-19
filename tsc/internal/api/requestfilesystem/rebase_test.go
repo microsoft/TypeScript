@@ -52,7 +52,7 @@ func TestRebaseDoesNotMutateInputs(t *testing.T) {
 					assert.NilError(t, err)
 				}
 				var fileChanges project.FileChangeSummary
-				rebased := Rebase(source, target, &fileChanges)
+				rebased := Rebase(source, target, target, &fileChanges)
 				assert.Assert(t, rebased != source && rebased != target)
 				content, ok := rebased.ReadFile("/alias.ts")
 				assert.Assert(t, ok)
@@ -62,7 +62,7 @@ func TestRebaseDoesNotMutateInputs(t *testing.T) {
 				assert.Assert(t, rebased.FileExists("/dir/source.ts"))
 				assert.Equal(t, rebased.FileExists("/dir/target.ts"), sourceKind == KindLayer && targetKind != "host")
 				_ = rebased.GetAccessibleEntries("/dir")
-				second := Rebase(source, source, &fileChanges)
+				second := Rebase(source, source, source, &fileChanges)
 				assert.Assert(t, second != source)
 				_ = second.GetAccessibleEntries("/dir")
 				assert.Assert(t, reflect.DeepEqual(source, expectedSource), "source filesystem was mutated")

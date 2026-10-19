@@ -1,6 +1,7 @@
 package requestfilesystem
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/project"
@@ -44,7 +45,7 @@ func TestRebaseFileChangesMatchLayerUpdate(t *testing.T) {
 			var expected, actual project.FileChangeSummary
 			_, updateErr := NewForUpdate(params, base, "/", &expected)
 			assert.NilError(t, updateErr)
-			Rebase(source, base, &actual)
+			Rebase(source, base, base, &actual)
 			assert.DeepEqual(t, actual, expected)
 		})
 	}
@@ -59,9 +60,53 @@ func TestRebaseFileChangesPreserveTombstoneCasing(t *testing.T) {
 	}, host, "C:/Repo")
 	assert.NilError(t, err)
 	var summary project.FileChangeSummary
-	Rebase(source, host, &summary)
+	Rebase(source, host, host, &summary)
 	assert.Assert(t, summary.Deleted.Has("file:///c%3A/Repo/Removed"))
 	assert.Equal(t, summary.Deleted.Len(), 1)
+}
+
+func TestRebaseFileChangesUnderMatchingTombstones(t *testing.T) {
+	t.Parallel()
+	for _, preserved := range []int{0, 1, 2} {
+		t.Run(strconv.Itoa(preserved), func(t *testing.T) {
+			t.Parallel()
+			host := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
+			base, err := newRequestFileSystem(&RequestFileSystem{
+				Kind: KindLayer,
+				Files: map[string]string{
+					"/removed/keep.ts":       "keep",
+					"/removed/extra/file.ts": "extra",
+				},
+				RemovedPaths: []string{"/removed"},
+				Symlinks:     map[string]RequestSymlink{"/alias": {Target: "/removed"}},
+			}, host, "/")
+			assert.NilError(t, err)
+			files := map[string]string{}
+			if preserved >= 1 {
+				files["/removed/keep.ts"] = "keep"
+			}
+			if preserved == 2 {
+				files["/removed/extra/file.ts"] = "extra"
+			}
+			source, err := newRequestFileSystem(&RequestFileSystem{
+				Kind: KindLayer, Files: files, RemovedPaths: []string{"/removed"},
+			}, host, "/")
+			assert.NilError(t, err)
+			var summary project.FileChangeSummary
+			Rebase(source, base, base, &summary)
+			var expected project.FileChangeSummary
+			switch preserved {
+			case 0:
+				expected.Deleted.Add("file:///removed")
+				expected.Deleted.Add("file:///alias")
+			case 1:
+				expected.Deleted.Add("file:///removed/extra")
+				expected.Deleted.Add("file:///alias/extra")
+			}
+			expected.IncludesWatchChangeOutsideNodeModules = preserved != 2
+			assert.DeepEqual(t, summary, expected)
+		})
+	}
 }
 
 func TestFileChangesIncludeDirectoryTombstones(t *testing.T) {

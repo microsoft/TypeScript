@@ -30,25 +30,20 @@ func (s *requestFileSystem) ExpandFileChanges(summary project.FileChangeSummary)
 	return summary
 }
 
-func addRebaseFileChanges(summary *project.FileChangeSummary, source *requestFileSystem, baseFS vfs.FS, rebased *requestFileSystem) bool {
+func addRebaseFileChanges(summary *project.FileChangeSummary, source *requestFileSystem, baseFS vfs.FS, baseContents vfs.FS, rebased *requestFileSystem) {
 	baseRequestFS := getRequestFileSystem(baseFS)
-	changed := false
 	addChange := func(path tspath.RootedPath, kind lsproto.FileChangeType) {
 		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromPath(path))
 		if kind == lsproto.FileChangeTypeDeleted {
-			if baseFS.FileExists(tspath.RootedFilePathFromPath(path)) || baseFS.DirectoryExists(tspath.RootedDirectoryPathFromPath(path)) {
+			if baseContents.FileExists(tspath.RootedFilePathFromPath(path)) || baseContents.DirectoryExists(tspath.RootedDirectoryPathFromPath(path)) {
 				summary.Deleted.Add(uri)
-				changed = true
 			}
 		} else if kind == lsproto.FileChangeTypeCreated {
 			summary.Created.Add(uri)
-			changed = true
-		} else if baseFS.FileExists(tspath.RootedFilePathFromPath(path)) {
+		} else if baseContents.FileExists(tspath.RootedFilePathFromPath(path)) {
 			summary.Changed.Add(uri)
-			changed = true
 		} else {
 			summary.Created.Add(uri)
-			changed = true
 		}
 	}
 	addChangeAndAliases := func(path tspath.RootedPath, kind lsproto.FileChangeType) {
@@ -57,6 +52,32 @@ func addRebaseFileChanges(summary *project.FileChangeSummary, source *requestFil
 			for _, alias := range baseRequestFS.aliasesForPath(path) {
 				addChange(alias, kind)
 			}
+		}
+	}
+	var addRemovedEntries func(*requestPathNode)
+	addRemovedEntries = func(node *requestPathNode) {
+		if node == nil {
+			return
+		}
+		switch entry := node.entry.(type) {
+		case *requestFile:
+			if !rebased.FileExists(entry.fileName) {
+				addChangeAndAliases(entry.fileName.AsPath(), lsproto.FileChangeTypeDeleted)
+				return
+			}
+		case *requestDirectory:
+			if !rebased.DirectoryExists(entry.directoryName) {
+				addChangeAndAliases(entry.directoryName.AsPath(), lsproto.FileChangeTypeDeleted)
+				return
+			}
+		case *requestSymlink:
+			if !rebased.FileExists(tspath.RootedFilePathFromPath(entry.linkName)) && !rebased.DirectoryExists(tspath.RootedDirectoryPathFromPath(entry.linkName)) {
+				addChangeAndAliases(entry.linkName, lsproto.FileChangeTypeDeleted)
+				return
+			}
+		}
+		for _, child := range node.children {
+			addRemovedEntries(child)
 		}
 	}
 	var visit func(*requestPathNode)
@@ -70,15 +91,22 @@ func addRebaseFileChanges(summary *project.FileChangeSummary, source *requestFil
 				}
 				if previousFallback != requestFallbackMissing {
 					addChangeAndAliases(child.fallbackPath, lsproto.FileChangeTypeDeleted)
+				} else if baseRequestFS != nil {
+					// A tombstone can still have explicit descendants. Reapplying
+					// it drops target descendants not supplied by the source.
+					previous, _ := baseRequestFS.paths.lookup(path)
+					addRemovedEntries(previous)
 				}
 			}
 			switch entry := child.entry.(type) {
 			case *requestFile:
-				if previous, ok := baseFS.ReadFile(entry.fileName); !ok || previous != entry.content {
+				if previous, ok := baseContents.ReadFile(entry.fileName); !ok || previous != entry.content {
 					addChangeAndAliases(entry.fileName.AsPath(), lsproto.FileChangeTypeChanged)
 				}
 			case *requestDirectory:
 				if entry.listing != nil {
+					// The snapshot view merges cached files into listings, even
+					// when omitted explicitly. Compare the supplied listings.
 					previous := baseFS.GetAccessibleEntries(entry.directoryName)
 					current := rebased.GetAccessibleEntries(entry.directoryName)
 					if !slices.Equal(previous.Files, current.Files) || !slices.Equal(previous.Directories, current.Directories) || !maps.Equal(previous.Symlinks, current.Symlinks) {
@@ -87,7 +115,7 @@ func addRebaseFileChanges(summary *project.FileChangeSummary, source *requestFil
 					}
 				}
 				if source.kind == KindFull {
-					previous := baseFS.GetAccessibleEntries(entry.directoryName)
+					previous := baseContents.GetAccessibleEntries(entry.directoryName)
 					for _, name := range previous.Files {
 						fileName := entry.directoryName.ResolveFile(name)
 						if !rebased.FileExists(fileName) {
@@ -120,7 +148,6 @@ func addRebaseFileChanges(summary *project.FileChangeSummary, source *requestFil
 	if summary.Changed.Len()+summary.Created.Len()+summary.Deleted.Len() > 0 {
 		summary.IncludesWatchChangeOutsideNodeModules = true
 	}
-	return changed
 }
 
 func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSystem, baseFS vfs.FS, fileSystem *requestFileSystem, currentDirectory tspath.RootedDirectoryPath) {

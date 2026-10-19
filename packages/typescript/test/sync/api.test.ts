@@ -5314,6 +5314,55 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         });
     }
 
+    test("Snapshot.rebase compares against the target's cached contents", () => {
+        const { api: disposableAPI, fs } = spawnAPIWithFS({ "/index.ts": "export const value = 1;" });
+        using api = disposableAPI;
+        using target = api.createSnapshot({
+            createPrograms: [{ rootFiles: ["/index.ts"], compilerOptions: { noLib: true } }],
+        });
+        const programId = target.operation.createdPrograms[0].id;
+        const originalFile = target.getProgram(programId)!.getSourceFile("/index.ts");
+        assert.equal(originalFile!.text, "export const value = 1;");
+        fs.writeFile!(toRootedFilePath("/index.ts", undefined), "export const value = 2;");
+        using source = api.createSnapshot({
+            fileSystem: createFileSystemLayer([["/index.ts", "export const value = 2;"]]),
+        });
+        using rebased = source.rebase(target, { ensurePrograms: true });
+        assert.equal((rebased.getProgram(programId)!.getSourceFile("/index.ts"))!.text, "export const value = 2;");
+        assert.strictEqual(target.getProgram(programId)!.getSourceFile("/index.ts"), originalFile);
+    });
+
+    for (const fullReplacement of [false, true]) {
+        test(`Snapshot.rebase removes cached files with ${fullReplacement ? "a full replacement" : "matching tombstones"}`, () => {
+            using api = spawnAPI({});
+            const files = {
+                "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["index.ts", "removed/keep.ts"] }),
+                "/index.ts": "export {};",
+            };
+            using target = api.createSnapshot({
+                openProjects: ["/tsconfig.json"],
+                fileSystem: {
+                    kind: "full",
+                    files: { ...files, "/removed/keep.ts": "export const keep = true;" },
+                    directories: { "/": { files: ["index.ts", "tsconfig.json"], directories: [] } },
+                    removedPaths: ["/removed"],
+                },
+            });
+            const originalFile = target.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts");
+            assert.ok(originalFile);
+            using self = target.rebase(target, { ensurePrograms: true });
+            assert.strictEqual(self.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts"), originalFile);
+            using source = api.createSnapshot({
+                fileSystem: fullReplacement
+                    ? createFileSystem(Object.entries(files))
+                    : createFileSystemLayer([], { removedPaths: ["/removed"] }),
+            });
+            using rebased = source.rebase(target, { ensurePrograms: true });
+            assert.equal(rebased.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts"), undefined);
+            assert.strictEqual(target.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts"), originalFile);
+        });
+    }
+
     test("Snapshot.rebase preserves explicit full invalidation", () => {
         const { api: disposableAPI, fs } = spawnAPIWithFS({ "/index.ts": "export const value = 1;" });
         using api = disposableAPI;

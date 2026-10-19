@@ -1546,7 +1546,7 @@ func (s *Session) handleRebaseSnapshot(ctx context.Context, params *RebaseSnapsh
 		if fileSystem == nil {
 			fileSystem = s.FS()
 		}
-		fileSystem = requestfilesystem.Rebase(source.fileSystem, fileSystem, &fileChanges)
+		fileSystem = requestfilesystem.Rebase(source.fileSystem, fileSystem, target.snapshot.FS(), &fileChanges)
 	}
 	if changes.FileSystem != nil {
 		baseFileSystem := fileSystem
