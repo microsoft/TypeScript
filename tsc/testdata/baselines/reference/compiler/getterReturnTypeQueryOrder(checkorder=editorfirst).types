@@ -8,7 +8,7 @@ class Container {
 >Container : Container
 
     get options() {
->options : any
+>options : Options
 
         return { container: this, ...props } as Options;
 >{ container: this, ...props } as Options : Options
