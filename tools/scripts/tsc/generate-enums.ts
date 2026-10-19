@@ -373,6 +373,14 @@ export function generateEnum(def: EnumDef): { members: EnumMember[]; code: strin
 
 const enumValuesGeneratedGoPath = path.join(ROOT, "tsc/internal/api/enum_values_generated.go");
 
+export const outputs = [
+    enumValuesGeneratedGoPath,
+    ...enumDefs.flatMap(def => {
+        const camelName = def.name.charAt(0).toLowerCase() + def.name.slice(1);
+        return [path.join(ROOT, def.outDir, `${camelName}.enum.ts`), path.join(ROOT, def.outDir, `${camelName}.ts`)];
+    }),
+];
+
 interface GeneratedEnum {
     def: EnumDef;
     code: string;

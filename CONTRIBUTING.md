@@ -102,6 +102,7 @@ The repository uses a Go workspace with modules in `tsc/` and `tools/`.
 npx hereby build         # Build the native compiler into built/local/tsc
 npx hereby test          # Run compiler and language-service Go tests
 npx hereby test:all      # Also run benchmarks, tools, and API tests
+npx hereby test:codegen  # Run codegen tests without regenerating source outputs
 npx hereby lint          # Run custom golangci-lint for both Go modules
 npx hereby generate:go   # Run the generators also exposed through go generate
 npx hereby generate      # Regenerate all sources, assets, localization, and vendored files
@@ -116,6 +117,13 @@ Generation is owned by `Herebyfile.mjs`; Go directives forward to the same
 to bypass incremental caches. `generate` includes every generator and fetches
 the pinned LSP model when its local cache is missing or stale. Use
 `generate:go` for the narrower scope of `go generate ./...` in the `tsc` module.
+
+`npx hereby build` runs `generate` before compiling; a separate generation step
+is not needed. The API and package build tasks share this prerequisite, and
+`build:watch` runs the full incremental generation suite before every rebuild.
+Each watch pass clears cached input fingerprints and runs generation in-process.
+Restart the watcher after editing generator implementations. Generator-owned outputs are
+excluded from watch events to avoid regeneration loops.
 
 Package-specific commands:
 
@@ -142,19 +150,8 @@ go -C ./tsc test -run='TestLocal/<test name>' ./internal/testrunner
 Run:
 
 ```bash
-npx hereby generate
-npx hereby build
-npx hereby test
-npx hereby test:all
-npx hereby lint
-npx hereby format
-npx hereby check:format
-npm run -w @typescript/typescript build
-npm run -w @typescript/typescript test
-npm run -w native-preview build
-go -C ./tsc mod tidy -diff
-go -C ./tools mod tidy -diff
-go work sync
+npx hereby validate --all
+npx hereby tidy
 git diff --exit-code
 ```
 
