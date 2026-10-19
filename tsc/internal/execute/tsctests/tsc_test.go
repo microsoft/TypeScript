@@ -5125,6 +5125,43 @@ func TestGenerateTrace(t *testing.T) {
 			},
 			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
 		},
+		{
+			subScenario: "generateTrace creates static index signature sibling types in a stable order",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"strict": true,
+						"skipLibCheck": true,
+						"declaration": true,
+						"emitDeclarationOnly": true,
+						"outDir": "out"
+					},
+					"files": ["main.ts", "ambient.d.ts"]
+				}`),
+				"/home/src/workspaces/project/ambient.d.ts": stringtestutil.Dedent(`
+				declare const k1: string;
+				declare class C {
+					static [k1]: { a: 1 };
+					static m1: { p1: 1 };
+					static m2: { p2: 2 };
+					static m3: { p3: 3 };
+					static m4: { p4: 4 };
+					static m5: { p5: 5 };
+					static m6: { p6: 6 };
+					static m7: { p7: 7 };
+					static m8: { p8: 8 };
+					static m9: { p9: 9 };
+					static m10: { p10: 10 };
+				}
+				`),
+				"/home/src/workspaces/project/main.ts": stringtestutil.Dedent(`
+				declare function expand<X>(): { [K in keyof X]: X[K] };
+				export const w = expand<typeof C>();
+				`),
+			},
+			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
+		},
 	}
 
 	for _, c := range cases {

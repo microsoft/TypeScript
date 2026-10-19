@@ -21166,7 +21166,11 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	}
 	indexSymbol := members[ast.InternalSymbolNameIndex]
 	if indexSymbol != nil {
-		indexInfos = c.getIndexInfosOfIndexSymbol(indexSymbol, slices.Collect(maps.Values(members)))
+		// The types of the siblings are created in this order, so sort them rather than using the random iteration
+		// order of the symbol table.
+		siblingSymbols := slices.Collect(maps.Values(members))
+		c.sortSymbols(siblingSymbols)
+		indexInfos = c.getIndexInfosOfIndexSymbol(indexSymbol, siblingSymbols)
 	} else {
 		if baseConstructorIndexInfo != nil {
 			indexInfos = append(indexInfos, baseConstructorIndexInfo)
