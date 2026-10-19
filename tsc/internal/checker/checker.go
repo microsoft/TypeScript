@@ -8616,6 +8616,50 @@ func (c *Checker) isSymbolOrSymbolForCall(node *ast.Node) bool {
 	return globalESSymbol == c.resolveName(left, "Symbol", ast.SymbolFlagsValue, nil /*nameNotFoundMessage*/, false /*isUse*/, false)
 }
 
+// isContextuallyTypedByEnclosingCall reports whether the contextual type of
+// an expression may come from an argument of an enclosing call. Other
+// contexts are not resolved ahead of the expression, since computing them
+// may evaluate expressions that checking only evaluates otherwise, such as
+// the target of a destructuring assignment.
+func isContextuallyTypedByEnclosingCall(node *ast.Node) bool {
+	for {
+		parent := node.Parent
+		switch parent.Kind {
+		case ast.KindCallExpression, ast.KindNewExpression:
+			return node != parent.Expression()
+		case ast.KindParenthesizedExpression, ast.KindSpreadElement, ast.KindArrayLiteralExpression,
+			ast.KindObjectLiteralExpression, ast.KindPropertyAssignment, ast.KindAwaitExpression:
+			node = parent
+			continue
+		case ast.KindConditionalExpression:
+			if node == parent.AsConditionalExpression().Condition {
+				return false
+			}
+		case ast.KindBinaryExpression:
+			switch parent.AsBinaryExpression().OperatorToken.Kind {
+			case ast.KindBarBarToken, ast.KindAmpersandAmpersandToken, ast.KindQuestionQuestionToken, ast.KindCommaToken:
+				if node != parent.AsBinaryExpression().Right {
+					return false
+				}
+			default:
+				return false
+			}
+		case ast.KindArrowFunction:
+			if node != parent.Body() {
+				return false
+			}
+		case ast.KindReturnStatement:
+			parent = ast.GetContainingFunction(parent)
+			if parent == nil || !ast.IsFunctionExpressionOrArrowFunction(parent) {
+				return false
+			}
+		default:
+			return false
+		}
+		node = parent
+	}
+}
+
 /**
  * Resolve a signature of a given call-like expression.
  * @param node a call-like expression to try resolve a signature for
@@ -8632,6 +8676,20 @@ func (c *Checker) getResolvedSignature(node *ast.Node, candidatesOutArray *[]*Si
 	cached := links.resolvedSignature
 	if cached != nil && cached != c.resolvingSignature && candidatesOutArray == nil {
 		return cached
+	}
+	if cached == nil {
+		// Resolve an enclosing call providing the contextual type of this one
+		// first, as checking in source order would. The enclosing call may also
+		// type parameters this call references. Resolved from within this call
+		// instead, the enclosing call sees this one marked as resolving, and
+		// the result depends on which call was queried first.
+		if (ast.IsCallExpression(node) || ast.IsNewExpression(node)) && isContextuallyTypedByEnclosingCall(node) {
+			c.getContextualType(node, ContextFlagsNone)
+		}
+		cached = links.resolvedSignature
+		if cached != nil && cached != c.resolvingSignature && candidatesOutArray == nil {
+			return cached
+		}
 	}
 	saveResolutionStart := c.resolutionStart
 	if cached == nil {
