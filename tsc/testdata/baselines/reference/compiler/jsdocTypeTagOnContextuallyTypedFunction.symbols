@@ -16,12 +16,10 @@ context.f =
     (content, ...rest) => content.toUpperCase() + rest.length;
 >content : Symbol(content, Decl(a.js, 5, 5))
 >rest : Symbol(rest, Decl(a.js, 5, 13))
->content.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 >content : Symbol(content, Decl(a.js, 5, 5))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
->rest.length : Symbol(length)
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >rest : Symbol(rest, Decl(a.js, 5, 13))
->length : Symbol(length)
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
 /** @type {(content: string | number) => string} */
 const g =
@@ -30,7 +28,5 @@ const g =
     /** @type {(content: string) => string} */
     (content) => content.toUpperCase();
 >content : Symbol(content, Decl(a.js, 10, 5))
->content.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 >content : Symbol(content, Decl(a.js, 10, 5))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 
