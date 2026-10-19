@@ -271,14 +271,14 @@ func (m *SymbolMap) Lookup(key string) (*Symbol, bool) {
 func (m *SymbolMap) Set(key string, symbol *Symbol) {
 	if i := m.find(key); i >= 0 {
 		m.entries[i].symbol = symbol
-		if !m.entries[i].oddKey && (symbol == nil || symbol.Name() != key) {
+		if !m.entries[i].oddKey && symbol.Name() != key {
 			m.setOddKey(int32(i), key)
 		}
 		return
 	}
 	i := int32(len(m.entries))
 	m.entries = append(m.entries, symbolMapEntry{symbol: symbol, keyLen: int32(len(key))})
-	if symbol == nil || symbol.Name() != key {
+	if symbol.Name() != key {
 		m.setOddKey(i, key)
 	}
 	if m.index != nil && len(m.entries)*4 <= len(m.index)*3 {
