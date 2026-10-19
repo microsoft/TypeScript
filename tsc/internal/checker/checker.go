@@ -22565,17 +22565,15 @@ func (c *Checker) getNamedMembers(members ast.SymbolTable, container *ast.Symbol
 		c.sortSymbols(result)
 		return result
 	}
-	var inherited []*ast.Symbol
+	// Move the members declared in the container to the front. Both parts are sorted below, so the order the split
+	// leaves them in does not matter.
 	containedCount := 0
-	for _, symbol := range result {
+	for i, symbol := range result {
 		if c.isDeclarationContainedBy(symbol, container) {
-			result[containedCount] = symbol
+			result[containedCount], result[i] = result[i], result[containedCount]
 			containedCount++
-		} else {
-			inherited = append(inherited, symbol)
 		}
 	}
-	copy(result[containedCount:], inherited)
 	c.sortSymbols(result[:containedCount])
 	c.sortSymbols(result[containedCount:])
 	return result
