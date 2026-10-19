@@ -2031,7 +2031,7 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 
 	parsedCommandLine := tsoptions.ParseJsonConfigFileContent(
 		jsonValueToAny(params.JSON),
-		s.snapshotHost.FS(),
+		tsoptions.NewDefaultParseConfigHost(s.snapshotHost.FS()),
 		basePath,
 		nil, /*existingOptions*/
 		configFileName,
@@ -2057,7 +2057,7 @@ func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfig
 	)
 	parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 		tsConfigSourceFile,
-		s.snapshotHost.FS(),
+		tsoptions.NewDefaultParseConfigHost(s.snapshotHost.FS()),
 		configDir,
 		nil, /*existingOptions*/
 		nil, /*existingOptionsRaw*/
