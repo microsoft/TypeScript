@@ -266,10 +266,17 @@ test("rooted path constructors enforce the type lattice", () => {
 });
 
 test("parseNodeHandleFromCompiler validates serialized fields", () => {
-    assert.deepStrictEqual(parseNodeHandleFromCompiler("12.80./workspace/src/file.ts"), {
+    assert.deepStrictEqual(parseNodeHandleFromCompiler("12.80.#42./workspace/src/file.ts"), {
         index: 12,
         kind: 80,
+        sourceFileId: "42",
         path: "/workspace/src/file.ts",
+    });
+    assert.deepStrictEqual(parseNodeHandleFromCompiler("12.80.#18446744073709551615./file.ts"), {
+        index: 12,
+        kind: 80,
+        sourceFileId: "18446744073709551615",
+        path: "/file.ts",
     });
 
     for (
@@ -278,6 +285,13 @@ test("parseNodeHandleFromCompiler validates serialized fields", () => {
             "12.x./workspace/src/file.ts",
             "12.80.",
             "12.80./workspace/../src/file.ts",
+            "12.80.#0",
+            "12.80.#01",
+            "12.80.#-1",
+            "12.80.#18446744073709551616",
+            "12.80.#42.",
+            "12.80.#42",
+            "12.80.#42./workspace/../src/file.ts",
         ]
     ) {
         assert.throws(() => parseNodeHandleFromCompiler(handle), /Invalid node handle/);
