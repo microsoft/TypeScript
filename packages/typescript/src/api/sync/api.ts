@@ -15,6 +15,26 @@ import {
     cacheGeneratorMethod,
 } from "./generatorSupport.ts";
 
+import { CheckFlags } from "../../../enums/checkFlags.js";
+import { CompletionItemKind } from "../../../enums/completionItemKind.js";
+import { DiagnosticCategory } from "../../../enums/diagnosticCategory.js";
+import { ElementFlags } from "../../../enums/elementFlags.js";
+import { EmitOnly } from "../../../enums/emitOnly.js";
+import { IndexKind } from "../../../enums/indexKind.js";
+import { JsxEmit } from "../../../enums/jsxEmit.js";
+import { ModuleKind } from "../../../enums/moduleKind.js";
+import { ModuleResolutionKind } from "../../../enums/moduleResolutionKind.js";
+import { NewLineKind } from "../../../enums/newLineKind.js";
+import { NodeBuilderFlags } from "../../../enums/nodeBuilderFlags.js";
+import { ObjectFlags } from "../../../enums/objectFlags.js";
+import { ScriptKind } from "../../../enums/scriptKind.js";
+import { SignatureFlags } from "../../../enums/signatureFlags.js";
+import { SignatureKind } from "../../../enums/signatureKind.js";
+import { SymbolFlags } from "../../../enums/symbolFlags.js";
+import { SymbolOwnerKind } from "../../../enums/symbolOwnerKind.js";
+import { TypeFlags } from "../../../enums/typeFlags.js";
+import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
+import { TypePredicateKind } from "../../../enums/typePredicateKind.js";
 import {
     type __String,
     type CallLikeExpression,
@@ -36,26 +56,6 @@ import {
     type TypeNode,
     unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
-import { CheckFlags } from "../../enums/checkFlags.js";
-import { CompletionItemKind } from "../../enums/completionItemKind.js";
-import { DiagnosticCategory } from "../../enums/diagnosticCategory.js";
-import { ElementFlags } from "../../enums/elementFlags.js";
-import { EmitOnly } from "../../enums/emitOnly.js";
-import { IndexKind } from "../../enums/indexKind.js";
-import { JsxEmit } from "../../enums/jsxEmit.js";
-import { ModuleKind } from "../../enums/moduleKind.js";
-import { ModuleResolutionKind } from "../../enums/moduleResolutionKind.js";
-import { NewLineKind } from "../../enums/newLineKind.js";
-import { NodeBuilderFlags } from "../../enums/nodeBuilderFlags.js";
-import { ObjectFlags } from "../../enums/objectFlags.js";
-import { ScriptKind } from "../../enums/scriptKind.js";
-import { SignatureFlags } from "../../enums/signatureFlags.js";
-import { SignatureKind } from "../../enums/signatureKind.js";
-import { SymbolFlags } from "../../enums/symbolFlags.js";
-import { SymbolOwnerKind } from "../../enums/symbolOwnerKind.js";
-import { TypeFlags } from "../../enums/typeFlags.js";
-import { TypeFormatFlags } from "../../enums/typeFormatFlags.js";
-import { TypePredicateKind } from "../../enums/typePredicateKind.js";
 import { assertNever } from "../../internal/utils.ts";
 import {
     encodeNode,

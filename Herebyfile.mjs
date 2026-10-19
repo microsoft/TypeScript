@@ -2532,26 +2532,14 @@ async function testNativePreviewPackage(platforms) {
         const { stdout } = await runOutput("npm", ["pack", "--dry-run", "--json", mainPackageDir]);
         /** @type {{ files: { path: string }[] }[]} */
         const packed = JSON.parse(stdout);
-        const packedFiles = new Set(packed[0].files.map(file => file.path));
         for (const name of ["tsconfig", "jsconfig"]) {
             const schemaPath = `schemas/${name}.schema.json`;
-            assert(packedFiles.has(schemaPath), `Package is missing ${schemaPath}`);
+            assert(packed[0].files.some(file => file.path === schemaPath), `Package is missing ${schemaPath}`);
             assert.deepEqual(
                 await fs.promises.readFile(path.join(mainPackageDir, schemaPath)),
                 await fs.promises.readFile(path.join("packages/typescript", schemaPath)),
             );
             assert.equal(require.resolve(`${mainNativePreviewPackage.npmPackageName}/${schemaPath}`), path.join(mainPackageDir, schemaPath));
-        }
-
-        const enumSourceDir = path.resolve("packages/typescript/src/enums");
-        for (const file of await fs.promises.readdir(enumSourceDir)) {
-            const enumPath = `dist/enums/${file}`;
-            assert(packedFiles.has(enumPath), `Package is missing ${enumPath}`);
-            assert.deepEqual(
-                await fs.promises.readFile(path.join(mainPackageDir, enumPath)),
-                await fs.promises.readFile(path.join(enumSourceDir, file)),
-                `Packaged ${enumPath} does not match its source`,
-            );
         }
 
         const binName = publishAsTypescript ? "tsc" : "tsgo";

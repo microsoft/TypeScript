@@ -1,11 +1,11 @@
 // is.ts — Hand-written type guard functions
 // Generated guards are in is.generated.ts
 
-import { ModifierFlags } from "../enums/modifierFlags.js";
-import { NodeFlags } from "../enums/nodeFlags.js";
-import { OuterExpressionKinds } from "../enums/outerExpressionKinds.js";
-import { ScriptKind } from "../enums/scriptKind.js";
-import { SyntaxKind } from "../enums/syntaxKind.js";
+import { ModifierFlags } from "../../enums/modifierFlags.js";
+import { NodeFlags } from "../../enums/nodeFlags.js";
+import { OuterExpressionKinds } from "../../enums/outerExpressionKinds.js";
+import { ScriptKind } from "../../enums/scriptKind.js";
+import { SyntaxKind } from "../../enums/syntaxKind.js";
 import type {
     AsExpression,
     BindingPattern,

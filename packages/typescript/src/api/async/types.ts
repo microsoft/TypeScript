@@ -1,14 +1,14 @@
+import type { CompletionItemKind } from "../../../enums/completionItemKind.js";
+import type { ElementFlags } from "../../../enums/elementFlags.js";
+import type { ObjectFlags } from "../../../enums/objectFlags.js";
+import type { TypeFlags } from "../../../enums/typeFlags.js";
+import type { TypePredicateKind } from "../../../enums/typePredicateKind.js";
 import type {
     IndexSignatureDeclaration,
     NamedTupleMember,
     ParameterDeclaration,
 } from "../../ast/ast.ts";
 import type { RootedFilePath } from "../../ast/index.ts";
-import type { CompletionItemKind } from "../../enums/completionItemKind.js";
-import type { ElementFlags } from "../../enums/elementFlags.js";
-import type { ObjectFlags } from "../../enums/objectFlags.js";
-import type { TypeFlags } from "../../enums/typeFlags.js";
-import type { TypePredicateKind } from "../../enums/typePredicateKind.js";
 import type {
     Diagnostic,
     RequestFileSystem,
