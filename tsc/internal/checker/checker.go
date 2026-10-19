@@ -1848,14 +1848,7 @@ func (c *Checker) getSuggestionForSymbolNameLookup(symbols ast.SymbolTable, name
 	if meaning&ast.SymbolFlagsGlobalLookup != 0 {
 		extras = getPrimitiveTypeAliasSuggestions(symbols)
 	}
-	// Checking a candidate alias resolves it, which creates types, so visit aliases last and in a stable order
-	// rather than in the random iteration order of the symbol table.
-	candidates := make([]*ast.Symbol, 0, symbols.Len())
-	c.forEachSymbolTableEntry(symbols, func(_ string, symbol *ast.Symbol) bool {
-		candidates = append(candidates, symbol)
-		return false
-	})
-	return c.getSpellingSuggestionForName(name, core.ConcatenateSeq(slices.Values(candidates), extras), meaning)
+	return c.getSpellingSuggestionForName(name, core.ConcatenateSeq(symbols.Values(), extras), meaning)
 }
 
 // Given a name and a list of symbols whose names are *not* equal to the name, return a spelling suggestion if there is
@@ -5926,9 +5919,12 @@ func (c *Checker) checkExternalModuleExports(node *ast.Node) {
 }
 
 func (c *Checker) hasExportedMembersOfKind(moduleSymbol *ast.Symbol, kind ast.SymbolFlags) bool {
-	return c.forEachSymbolTableEntry(moduleSymbol.Exports(), func(_ string, symbol *ast.Symbol) bool {
-		return symbol.Name() != ast.InternalSymbolNameExportEquals && c.getSymbolFlags(symbol)&kind != 0
-	})
+	for _, symbol := range moduleSymbol.Exports().All() {
+		if symbol.Name() != ast.InternalSymbolNameExportEquals && c.getSymbolFlags(symbol)&kind != 0 {
+			return true
+		}
+	}
+	return false
 }
 
 func (c *Checker) hasShadowedNamespace(symbol *ast.Symbol) bool {
@@ -15224,13 +15220,12 @@ func (c *Checker) reportNonExportedMember(name *ast.Node, declarationName string
 			}
 		} else {
 			var exportedSymbol *ast.Symbol
-			c.forEachSymbolTableEntry(exports, func(_ string, symbol *ast.Symbol) bool {
+			for _, symbol := range exports.All() {
 				if c.getSymbolIfSameReference(symbol, localSymbol) != nil {
 					exportedSymbol = symbol
-					return true
+					break
 				}
-				return false
-			})
+			}
 			var diagnostic *ast.Diagnostic
 			if exportedSymbol != nil {
 				diagnostic = c.error(name, diagnostics.Module_0_declares_1_locally_but_it_is_exported_as_2, moduleName, declarationName, c.symbolToString(exportedSymbol))
@@ -16628,9 +16623,9 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 	}
 	// A CommonJS module defined by an 'export=' might also export typedefs, stored on the original module
 	if originalModule != nil && originalModule.Exports().Len() > 1 {
-		c.forEachSymbolTableEntry(originalModule.Exports(), func(_ string, symbol *ast.Symbol) bool {
+		for _, symbol := range originalModule.Exports().All() {
 			if symbol.Name() == ast.InternalSymbolNameExportEquals || symbol.Name() == ast.InternalSymbolNameExportStar {
-				return false
+				continue
 			}
 			flags := c.getSymbolFlags(symbol)
 			if flags&(ast.SymbolFlagsType|ast.SymbolFlagsNamespace) != 0 &&
@@ -16638,8 +16633,7 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 				exports.Get(symbol.Name()) == nil {
 				exports.Set(symbol.Name(), symbol)
 			}
-			return false
-		})
+		}
 	}
 	for name := range nonTypeOnlyNames.Keys() {
 		delete(typeOnlyExportStarMap, name)
@@ -22562,12 +22556,11 @@ func (c *Checker) getNamedMembers(members ast.SymbolTable, container *ast.Symbol
 	// explicitly declared members first in type relations, which is beneficial because explicitly declared members are more
 	// likely to contain discriminating differences. See for example https://github.com/microsoft/TypeScript/tsc/issues/1968.
 	result := make([]*ast.Symbol, 0, members.Len())
-	c.forEachSymbolTableEntry(members, func(id string, symbol *ast.Symbol) bool {
+	for id, symbol := range members.All() {
 		if c.isNamedMember(symbol, id) {
 			result = append(result, symbol)
 		}
-		return false
-	})
+	}
 	if container == nil || container.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) == 0 {
 		c.sortSymbols(result)
 		return result

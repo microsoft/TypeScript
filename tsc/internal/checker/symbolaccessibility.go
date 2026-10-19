@@ -262,27 +262,14 @@ func (c *Checker) buildExternalModuleContainerIndex() {
 		}
 		container := c.getSymbolOfDeclaration(file.AsNode())
 		index.moduleOrder[container] = len(index.moduleOrder)
-		c.forEachSymbolTableEntry(c.getExportsOfSymbol(container), func(_ string, exported *ast.Symbol) bool {
+		for _, exported := range c.getExportsOfSymbol(container).All() {
 			index.add(c.getResolvedTarget(exported), container)
-			return false
-		})
+		}
 		if exportEquals := container.Exports().Get(ast.InternalSymbolNameExportEquals); exportEquals != nil {
 			index.add(c.getResolvedTarget(exportEquals), container)
 		}
 	}
 	index.complete = true
-}
-
-// forEachSymbolTableEntry calls f for each entry of a symbol table, in the table's insertion order. f returns true to
-// stop, and forEachSymbolTableEntry then returns true. f gets each symbol's key in the table, which is not always the
-// symbol's name (a default export is keyed "default").
-func (c *Checker) forEachSymbolTableEntry(symbols ast.SymbolTable, f func(name string, symbol *ast.Symbol) bool) bool {
-	for name, symbol := range symbols.All() {
-		if f(name, symbol) {
-			return true
-		}
-	}
-	return false
 }
 
 func (c *Checker) scanExternalModuleContainers(symbol *ast.Symbol) []*ast.Symbol {
@@ -433,12 +420,11 @@ func (c *Checker) getAliasForSymbolInContainer(container *ast.Symbol, symbol *as
 		return quick
 	}
 	var candidates []*ast.Symbol
-	c.forEachSymbolTableEntry(exports, func(_ string, exported *ast.Symbol) bool {
+	for _, exported := range exports.All() {
 		if c.getSymbolIfSameReference(exported, symbol) != nil {
 			candidates = append(candidates, exported)
 		}
-		return false
-	})
+	}
 	if len(candidates) > 0 {
 		c.sortSymbols(candidates) // _must_ sort exports for stable results - symbol table is randomly iterated
 		return candidates[0]

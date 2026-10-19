@@ -778,13 +778,12 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 					symbolName = symbol.Name()
 				} else {
 					results := make(map[*ast.Symbol]string, 1)
-					b.ch.forEachSymbolTableEntry(exports, func(name string, ex *ast.Symbol) bool {
+					for name, ex := range exports.All() {
 						if b.ch.getSymbolIfSameReference(ex, symbol) != nil && !isLateBoundName(name) && name != ast.InternalSymbolNameExportEquals {
 							results[ex] = name
 							// break // must collect all results and sort them - exports are randomly iterated
 						}
-						return false
-					})
+					}
 					resultSymbols := slices.Collect(maps.Keys(results))
 					if len(resultSymbols) > 0 {
 						b.ch.sortSymbols(resultSymbols)
