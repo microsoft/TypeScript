@@ -14,7 +14,7 @@ import type {
     PathKey,
     RootedFilePath,
 } from "../src/ast/index.ts";
-import { SymbolOwnerKind } from "../src/enums/symbolOwnerKind.ts";
+import { SymbolOwnerKind } from "../src/enums/symbolOwnerKind.js";
 
 test("symbol ownership protocol validation rejects mixed variants", () => {
     const project = "/tsconfig.json" as ProjectId;

@@ -1,5 +1,5 @@
-import { NodeFlags } from "#enums/nodeFlags";
-import { SyntaxKind } from "#enums/syntaxKind";
+import { NodeFlags } from "../enums/nodeFlags.js";
+import { SyntaxKind } from "../enums/syntaxKind.js";
 import type { TokenSyntaxKind } from "./ast.generated.ts";
 import type {
     Node,

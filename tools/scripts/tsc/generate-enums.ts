@@ -493,8 +493,8 @@ export default async function generateEnums(force = false) {
         return {
             def,
             camelName,
-            typeFile: new GeneratedFile(path.join(ROOT, def.outDir, `${camelName}.enum.ts`), enumInputs),
-            runtimeFile: new GeneratedFile(path.join(ROOT, def.outDir, `${camelName}.ts`), enumInputs),
+            typeFile: new GeneratedFile(path.join(ROOT, def.outDir, `${camelName}.d.ts`), enumInputs),
+            runtimeFile: new GeneratedFile(path.join(ROOT, def.outDir, `${camelName}.js`), enumInputs),
         };
     });
     const generatedGoFile = new GeneratedFile(enumValuesGeneratedGoPath, [...inputs, ...enumDefs.map(def => path.join(ROOT, def.goFile))]);
@@ -513,25 +513,15 @@ export default async function generateEnums(force = false) {
             },
         }).outputText;
     }
-    function convertEnumToTs(enumSource: string, enumName: string): string {
-        return enumSource.replace(
-            `export var ${enumName};`,
-            `export var ${enumName}: any;`,
-        );
-    }
-
     console.log("Generating enums from metadata and Go source...");
     const generatedEnums: GeneratedEnum[] = [];
     for (const { def, camelName, typeFile, runtimeFile } of enumFiles) {
         const { members, code: enumTS } = generateEnum(def);
 
-        // Generate .enum.ts (TypeScript enum — used for types)
-        typeFile.write(enumTS);
+        typeFile.write(enumTS.replace("export enum ", "export declare enum "));
 
-        // Generate .ts (IIFE — used at runtime)
         const enumJsCode = transpile(enumTS);
-        const iifeSource = convertEnumToTs(enumJsCode, def.name);
-        runtimeFile.write(iifeSource);
+        runtimeFile.write(enumJsCode);
         generatedEnums.push({
             code: enumJsCode,
             def,
@@ -539,7 +529,7 @@ export default async function generateEnums(force = false) {
             fileNames: [typeFile.fileName, runtimeFile.fileName],
         });
 
-        console.log(`  ${def.name}: ${members.length} members → ${camelName}.enum.ts, ${camelName}.ts`);
+        console.log(`  ${def.name}: ${members.length} members → ${camelName}.d.ts, ${camelName}.js`);
     }
 
     console.log("Getting values from go");
