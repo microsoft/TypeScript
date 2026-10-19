@@ -101,6 +101,7 @@ import {
     type Snapshot,
     type StringMappingType,
     SymbolFlags,
+    SymbolFormatFlags,
     type SyntheticProjectId,
     type TemplateLiteralType,
     type TextEdit,
@@ -110,6 +111,7 @@ import {
     TypePredicateKind,
     type TypeReference,
     type UnionOrIntersectionType,
+    type UnionType,
     type UserPreferences,
 } from "@typescript/typescript/async"; // @sync: } from "@typescript/typescript/sync";
 import {
@@ -4239,6 +4241,7 @@ export const intersection: { a: number } & { b: string } = { a: 1, b: "hi" };
 export type KeyOf<T> = keyof T;
 export type Lookup<T, K extends keyof T> = T[K];
 export type Cond<T> = T extends string ? "yes" : "no";
+export type InferCond<T> = T extends Array<infer U> ? U : never;
 export type Mapped<T> = { [K in keyof T as \`get\${Capitalize<string & K>}\`]: T[K] };
 export type MappedUnion<T> = Mapped<T> | string;
 export const tpl: \`hello \${string}\` = "hello world";
@@ -4333,6 +4336,52 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         assert.equal((await (uType as UnionOrIntersectionType).getTypes()).length, 2);
     });
 
+    test("UnionType.getOrigin() returns undefined for a plain union", async () => {
+        const { type, api: disposableAPI } = await getTypeAtName(spawnAPI(typeFiles), "union:");
+        await using api = disposableAPI;
+
+        assert.ok(type.flags & TypeFlags.Union);
+        const union = type as UnionType;
+        assert.equal(await union.getOrigin(), undefined);
+    });
+
+    test("UnionType.getOrigin() returns undefined for a non-union type without hitting the server", async () => {
+        const { type, api: disposableAPI } = await getTypeAtName(spawnAPI(typeFiles), "arr:");
+        await using api = disposableAPI;
+
+        assert.ok(!(type.flags & TypeFlags.Union));
+        assert.equal(await (type as unknown as UnionType).getOrigin(), undefined);
+    });
+
+    test("UnionType.getOrigin() recovers the denormalized union when combining named unions", async () => {
+        const src = `
+export type AB = "a" | "b";
+export declare const value: AB | "c";
+`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("value:"));
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Union, `Expected Union, got flags ${type.flags}`);
+        const union = type as UnionType;
+
+        const origin = await union.getOrigin();
+        assert.ok(origin, "Expected getOrigin() to return the denormalized union");
+        assert.ok(origin.flags & TypeFlags.Union, "Origin should itself be a union");
+        const originTypes = await (origin as unknown as UnionOrIntersectionType).getTypes();
+        assert.equal(originTypes.length, 2, 'Origin should preserve the AB named union and "c" as two constituents');
+
+        const flattenedTypes = await union.getTypes();
+        assert.equal(flattenedTypes.length, 3, "The normalized union should be fully flattened to three constituents");
+    });
+
     test("IndexType.getTarget() returns the target type", async () => {
         await using api = spawnAPI(typeFiles);
 
@@ -4383,6 +4432,25 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         assert.ok(checkType);
         const extendsType = await cond.getExtendsType();
         assert.ok(extendsType);
+    });
+
+    test("ConditionalType.getInferTypeParameters()", async () => {
+        await using api = spawnAPI(typeFiles);
+
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const symbol = await project.checker.resolveName("InferCond", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
+        assert.ok(symbol);
+        const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Conditional, `Expected ConditionalType, got flags ${type.flags}`);
+        const cond = type as ConditionalType;
+
+        const inferTypeParameters = await cond.getInferTypeParameters();
+        assert.equal(inferTypeParameters.length, 1);
+        assert.ok(inferTypeParameters[0].flags & TypeFlags.TypeParameter, `Expected TypeParameter, got flags ${inferTypeParameters[0].flags}`);
+        const typeParamSymbol = await inferTypeParameters[0].getSymbol();
+        assert.equal(typeParamSymbol?.name, "U");
     });
 
     test("ConditionalType.getTrueType() and getFalseType()", async () => {
@@ -8057,6 +8125,130 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.ok(type);
         const text = await checker.typeToString(type, undefined, TypeFormatFlags.WriteArrayAsGenericType);
         assert.strictEqual(text, "(name: string) => Array<string>");
+    });
+
+    test("symbolToString", async () => {
+        await using api = spawnAPI(emitterFiles);
+
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const src = emitterFiles["/src/main.ts"];
+
+        const greetPos = src.indexOf("greet(");
+        const symbol = await checker.getSymbolAtPosition("/src/main.ts", greetPos);
+        assert.ok(symbol);
+        const text = await checker.symbolToString(symbol);
+        assert.strictEqual(text, "greet");
+    });
+
+    test("symbolToString with SymbolFormatFlags", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export namespace NS { export function greet(name: string): string { return name; } }`,
+        });
+
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const greetPos = "export namespace NS { export function greet".indexOf("greet");
+        const symbol = await checker.getSymbolAtPosition("/src/main.ts", greetPos);
+        assert.ok(symbol);
+        const text = await checker.symbolToString(symbol, undefined, undefined, SymbolFormatFlags.AllowAnyNodeKind);
+        assert.strictEqual(text, "greet");
+    });
+
+    test("symbolToString preserves an explicit SymbolFormatFlags.None", async () => {
+        const src = `export const obj = { "a-b": 1 };\nexport namespace NS { export const other = 0; }`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const { checker } = project;
+        const property = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf(`"a-b"`));
+        const other = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf("other"));
+        assert.ok(property && other);
+        const enclosingDeclaration = await other.valueDeclaration!.resolve(project);
+        assert.ok(enclosingDeclaration);
+
+        // Omitted flags default to AllowAnyNodeKind, which may produce an element access.
+        assert.strictEqual(await checker.symbolToString(property, enclosingDeclaration, SymbolFlags.All), `obj["a-b"]`);
+        // An explicit None must not be replaced by the default, so an entity name is produced.
+        assert.strictEqual(await checker.symbolToString(property, enclosingDeclaration, SymbolFlags.All, SymbolFormatFlags.None), `obj."a-b"`);
+    });
+
+    test("symbolToString treats an omitted meaning as SymbolFlags.None", async () => {
+        const src = `export namespace NS { export function greet(): void {} export const alias = greet; }`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const { checker } = project;
+        const greet = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf("greet"));
+        const alias = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf("alias"));
+        assert.ok(greet && alias);
+        const enclosingDeclaration = await alias.valueDeclaration!.resolve(project);
+        assert.ok(enclosingDeclaration);
+
+        assert.strictEqual(await checker.symbolToString(greet, enclosingDeclaration), "greet");
+        assert.strictEqual(await checker.symbolToString(greet, enclosingDeclaration, SymbolFlags.None), "greet");
+        assert.strictEqual(await checker.symbolToString(greet, enclosingDeclaration, SymbolFlags.All), "NS.greet");
+    });
+
+    test("UniqueESSymbolType exposes its escaped name", async () => {
+        const src = `export const key: unique symbol = Symbol("key");\nexport let plain = Symbol("plain");`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true, lib: ["esnext"] } }),
+            "/src/main.ts": src,
+        });
+
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const key = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf("key"));
+        const plain = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf("plain"));
+        assert.ok(key && plain);
+
+        const keyType = await checker.getTypeOfSymbol(key);
+        assert.ok(keyType.isUniqueESSymbolType());
+        const escapedName: __String = keyType.escapedName;
+        assert.match(escapedName, /^__@key@\d+$/);
+        assert.strictEqual(await checker.typeToString(keyType), "unique symbol");
+
+        const plainType = await checker.getTypeOfSymbol(plain);
+        assert.ok(!plainType.isUniqueESSymbolType());
+        assert.strictEqual(plainType.flags & TypeFlags.UniqueESSymbol, 0);
+    });
+
+    test("UniqueESSymbolType and Symbol escape nested internal symbol names", async () => {
+        // The unique symbol declared by `C[key]` embeds the internal name of that late-bound member.
+        const src = `declare const key: unique symbol;
+export declare class C { static readonly [key]: unique symbol; }
+export declare const nested: typeof C[typeof key];
+export interface I { [nested]: number; }`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true, lib: ["esnext"] } }),
+            "/src/main.ts": src,
+        });
+
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const nested = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf("nested"));
+        const iface = await checker.getSymbolAtPosition("/src/main.ts", src.indexOf("I {"));
+        assert.ok(nested && iface);
+
+        const nestedType = await checker.getTypeOfSymbol(nested);
+        assert.ok(nestedType.isUniqueESSymbolType());
+        assert.match(nestedType.escapedName, /^__@__@key@\d+@\d+$/);
+
+        // The escaped name of the unique symbol type must match the escaped name of the member it keys.
+        const properties = await (await checker.getDeclaredTypeOfSymbol(iface)).getProperties();
+        const property = properties.find(symbol => symbol.escapedName === nestedType.escapedName);
+        assert.ok(property);
+        assert.ok(!property.escapedName.includes("�"));
     });
 
     test("printNode with terminateUnterminatedLiterals option", async () => {

@@ -166,3 +166,21 @@ func TestSymbolSharedExtraData(t *testing.T) {
 	assert.Equal(t, symbol.Members()["new"], export)
 	assert.Equal(t, alias.Exports()["new"], member)
 }
+
+func TestEscapeSymbolName(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		expected string
+	}{
+		{name: "a", expected: "a"},
+		{name: "__a", expected: "___a"},
+		{name: ast.InternalSymbolNamePrefix + "@key@1", expected: "__@key@1"},
+		// A unique symbol declared by a late-bound member embeds that member's internal name.
+		{name: ast.InternalSymbolNamePrefix + "@" + ast.InternalSymbolNamePrefix + "@key@1@2", expected: "__@__@key@1@2"},
+	}
+	for _, test := range tests {
+		assert.Equal(t, ast.EscapeSymbolName(test.name), test.expected)
+	}
+}

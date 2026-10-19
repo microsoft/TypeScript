@@ -138,6 +138,7 @@ const (
 	MethodGetTargetOfType               Method = "getTargetOfType"
 	MethodGetFreshTypeOfType            Method = "getFreshTypeOfType"
 	MethodGetRegularTypeOfType          Method = "getRegularTypeOfType"
+	MethodGetOriginOfType               Method = "getOriginOfType"
 	MethodGetTypesOfType                Method = "getTypesOfType"
 	MethodGetTypeParametersOfType       Method = "getTypeParametersOfType"
 	MethodGetOuterTypeParametersOfType  Method = "getOuterTypeParametersOfType"
@@ -149,6 +150,7 @@ const (
 	MethodGetIndexTypeOfType            Method = "getIndexTypeOfType"
 	MethodGetCheckTypeOfType            Method = "getCheckTypeOfType"
 	MethodGetExtendsTypeOfType          Method = "getExtendsTypeOfType"
+	MethodGetInferTypeParametersOfType  Method = "getInferTypeParametersOfType"
 	MethodGetBaseTypeOfType             Method = "getBaseTypeOfType"
 	MethodGetConstraintOfType           Method = "getConstraintOfType"
 	MethodGetTypeParameterOfMappedType  Method = "getTypeParameterOfMappedType"
@@ -179,6 +181,7 @@ const (
 	MethodTypeToTypeNode                    Method = "typeToTypeNode"
 	MethodSignatureToSignatureDeclaration   Method = "signatureToSignatureDeclaration"
 	MethodTypeToString                      Method = "typeToString"
+	MethodSymbolToString                    Method = "symbolToString"
 	MethodIsContextSensitive                Method = "isContextSensitive"
 	MethodGetReturnTypeOfSignature          Method = "getReturnTypeOfSignature"
 	MethodGetRestTypeOfSignature            Method = "getRestTypeOfSignature"
@@ -661,6 +664,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTargetOfType:               unmarshallerFor[GetTypePropertyParams],
 	MethodGetFreshTypeOfType:            unmarshallerFor[GetTypePropertyParams],
 	MethodGetRegularTypeOfType:          unmarshallerFor[GetTypePropertyParams],
+	MethodGetOriginOfType:               unmarshallerFor[GetTypePropertyParams],
 	MethodGetTypesOfType:                unmarshallerFor[GetTypePropertyParams],
 	MethodGetTypeParametersOfType:       unmarshallerFor[GetTypePropertyParams],
 	MethodGetOuterTypeParametersOfType:  unmarshallerFor[GetTypePropertyParams],
@@ -672,6 +676,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetIndexTypeOfType:            unmarshallerFor[GetTypePropertyParams],
 	MethodGetCheckTypeOfType:            unmarshallerFor[GetTypePropertyParams],
 	MethodGetExtendsTypeOfType:          unmarshallerFor[GetTypePropertyParams],
+	MethodGetInferTypeParametersOfType:  unmarshallerFor[GetTypePropertyParams],
 	MethodGetBaseTypeOfType:             unmarshallerFor[GetTypePropertyParams],
 	MethodGetConstraintOfType:           unmarshallerFor[GetTypePropertyParams],
 	MethodGetTypeParameterOfMappedType:  unmarshallerFor[GetTypePropertyParams],
@@ -702,6 +707,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodTypeToTypeNode:                    unmarshallerFor[TypeToTypeNodeParams],
 	MethodSignatureToSignatureDeclaration:   unmarshallerFor[SignatureToSignatureDeclarationParams],
 	MethodTypeToString:                      unmarshallerFor[TypeToTypeNodeParams],
+	MethodSymbolToString:                    unmarshallerFor[SymbolToStringParams],
 	MethodIsContextSensitive:                unmarshallerFor[GetContextualTypeParams],
 	MethodGetReturnTypeOfSignature:          unmarshallerFor[GetSignaturePropertyParams],
 	MethodGetRestTypeOfSignature:            unmarshallerFor[CheckerSignatureParams],
@@ -1202,8 +1208,9 @@ type TypeResponse struct {
 	IndexType  TypeID `json:"indexType,omitzero"`
 
 	// ConditionalType data
-	CheckType   TypeID `json:"checkType,omitzero"`
-	ExtendsType TypeID `json:"extendsType,omitzero"`
+	CheckType           TypeID   `json:"checkType,omitzero"`
+	ExtendsType         TypeID   `json:"extendsType,omitzero"`
+	InferTypeParameters []TypeID `json:"inferTypeParameters,omitempty"`
 
 	// SubstitutionType data
 	BaseType        TypeID `json:"baseType,omitzero"`
@@ -1222,6 +1229,9 @@ type TypeResponse struct {
 	FreshType   TypeID `json:"freshType,omitzero"`
 	RegularType TypeID `json:"regularType,omitzero"`
 
+	// UnionType data
+	Origin TypeID `json:"origin,omitzero"`
+
 	// TypeParameter data
 	IsThisType bool `json:"isThisType,omitempty"`
 
@@ -1230,6 +1240,9 @@ type TypeResponse struct {
 
 	// IntrinsicType data
 	IntrinsicName string `json:"intrinsicName,omitempty"`
+
+	// UniqueESSymbolType data
+	EscapedName string `json:"escapedName,omitempty"`
 
 	// TypeAlias data
 	AliasTypeArguments []TypeID                `json:"aliasTypeArguments,omitempty"`
@@ -1290,6 +1303,11 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 		}
 	case flags&checker.TypeFlagsUnionOrIntersection != 0:
 		// types omitted; fetched via separate request
+		if flags&checker.TypeFlagsUnion != 0 {
+			if origin := t.AsUnionType().Origin(); origin != nil {
+				resp.Origin = TypeHandle(origin)
+			}
+		}
 	case flags&checker.TypeFlagsIndex != 0:
 		resp.Target = TypeHandle(t.AsIndexType().Target())
 	case flags&checker.TypeFlagsIndexedAccess != 0:
@@ -1300,6 +1318,7 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 		data := t.AsConditionalType()
 		resp.CheckType = TypeHandle(data.CheckType())
 		resp.ExtendsType = TypeHandle(data.ExtendsType())
+		resp.InferTypeParameters = typeHandles(data.InferTypeParameters())
 	case flags&checker.TypeFlagsSubstitution != 0:
 		data := t.AsSubstitutionType()
 		resp.BaseType = TypeHandle(data.BaseType())
@@ -1314,6 +1333,10 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 		resp.IsThisType = t.AsTypeParameter().IsThisType()
 	case flags&checker.TypeFlagsIntrinsic != 0:
 		resp.IntrinsicName = t.AsIntrinsicType().IntrinsicName()
+	case flags&checker.TypeFlagsUniqueESSymbol != 0:
+		// The name of a unique symbol declared by a late-bound member embeds that member's
+		// internal name (e.g. "\xFE@\xFE@key@1@2"), so every marker must be escaped.
+		resp.EscapedName = ast.EscapeAllInternalSymbolNames(t.AsUniqueESSymbolType().Name())
 	}
 
 	return resp
@@ -1760,6 +1783,16 @@ type TypeToTypeNodeParams struct {
 	Type     TypeID     `json:"type"`
 	Location NodeHandle `json:"location,omitempty"`
 	Flags    int32      `json:"flags,omitempty"`
+}
+
+// SymbolToStringParams are the parameters for the symbolToString method.
+type SymbolToStringParams struct {
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.ID      `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
+	Location NodeHandle      `json:"location,omitempty"`
+	Meaning  uint32          `json:"meaning,omitempty"`
+	Flags    *int32          `json:"flags,omitempty"`
 }
 
 // SignatureToSignatureDeclarationParams are the parameters for the signatureToSignatureDeclaration method.
