@@ -15223,17 +15223,14 @@ func (c *Checker) reportNonExportedMember(name *ast.Node, declarationName string
 				c.error(name, diagnostics.Module_0_has_no_exported_member_1, moduleName, declarationName)
 			}
 		} else {
-			// Looking for the export resolves aliases, which creates types, so do it in a stable order rather than
-			// in the random iteration order of the symbol table.
-			var exportedSymbols []*ast.Symbol
+			var exportedSymbol *ast.Symbol
 			c.forEachSymbolTableEntry(exports, func(_ string, symbol *ast.Symbol) bool {
 				if c.getSymbolIfSameReference(symbol, localSymbol) != nil {
-					exportedSymbols = append(exportedSymbols, symbol)
+					exportedSymbol = symbol
+					return true
 				}
 				return false
 			})
-			c.sortSymbols(exportedSymbols)
-			exportedSymbol := core.FirstOrNil(exportedSymbols)
 			var diagnostic *ast.Diagnostic
 			if exportedSymbol != nil {
 				diagnostic = c.error(name, diagnostics.Module_0_declares_1_locally_but_it_is_exported_as_2, moduleName, declarationName, c.symbolToString(exportedSymbol))
@@ -16655,11 +16652,6 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
  * Not passing `lookupTable` and `exportNode` disables this collection, and just extends the tables
  */
 func (c *Checker) extendExportSymbols(target ast.SymbolTable, source ast.SymbolTable, lookupTable ExportCollisionTable, exportNode *ast.Node) {
-	type collision struct {
-		id     string
-		symbol *ast.Symbol
-	}
-	var collisions []collision
 	for id, sourceSymbol := range source.All() {
 		if id == ast.InternalSymbolNameDefault {
 			continue
@@ -16672,21 +16664,8 @@ func (c *Checker) extendExportSymbols(target ast.SymbolTable, source ast.SymbolT
 					specifierText: scanner.GetTextOfNode(exportNode.ModuleSpecifier()),
 				}
 			}
-		} else if lookupTable != nil && exportNode != nil {
-			collisions = append(collisions, collision{id, sourceSymbol})
-		}
-	}
-	// Checking a collision resolves the aliases on both sides, which creates types, so do it in a stable order rather
-	// than in the random iteration order of the symbol table.
-	slices.SortFunc(collisions, func(a, b collision) int {
-		if r := c.compareSymbols(a.symbol, b.symbol); r != 0 {
-			return r
-		}
-		return strings.Compare(a.id, b.id)
-	})
-	for _, collision := range collisions {
-		if c.resolveSymbol(target.Get(collision.id)) != c.resolveSymbol(collision.symbol) {
-			s := lookupTable[collision.id]
+		} else if lookupTable != nil && exportNode != nil && c.resolveSymbol(targetSymbol) != c.resolveSymbol(sourceSymbol) {
+			s := lookupTable[id]
 			s.exportsWithDuplicate = append(s.exportsWithDuplicate, exportNode)
 		}
 	}
@@ -20093,11 +20072,7 @@ func (c *Checker) resolveDeclaredMembers(t *Type) *InterfaceType {
 func (c *Checker) getIndexInfosOfSymbol(symbol *ast.Symbol) []*IndexInfo {
 	indexSymbol := c.getIndexSymbol(symbol)
 	if indexSymbol != nil {
-		// The types of the siblings are created in this order, so sort them rather than using the random iteration
-		// order of the symbol table.
-		siblingSymbols := slices.Collect(c.getMembersOfSymbol(symbol).Values())
-		c.sortSymbols(siblingSymbols)
-		return c.getIndexInfosOfIndexSymbol(indexSymbol, siblingSymbols)
+		return c.getIndexInfosOfIndexSymbol(indexSymbol, slices.Collect(c.getMembersOfSymbol(symbol).Values()))
 	}
 	return nil
 }
@@ -21167,11 +21142,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	}
 	indexSymbol := members.Get(ast.InternalSymbolNameIndex)
 	if indexSymbol != nil {
-		// The types of the siblings are created in this order, so sort them rather than using the random iteration
-		// order of the symbol table.
-		siblingSymbols := slices.Collect(members.Values())
-		c.sortSymbols(siblingSymbols)
-		indexInfos = c.getIndexInfosOfIndexSymbol(indexSymbol, siblingSymbols)
+		indexInfos = c.getIndexInfosOfIndexSymbol(indexSymbol, slices.Collect(members.Values()))
 	} else {
 		if baseConstructorIndexInfo != nil {
 			indexInfos = append(indexInfos, baseConstructorIndexInfo)
@@ -24410,18 +24381,11 @@ func (c *Checker) getOuterTypeParameters(node *ast.Node, includeThisTypes bool) 
 }
 
 func (c *Checker) getInferTypeParameters(node *ast.Node) []*Type {
-	var symbols []*ast.Symbol
+	var result []*Type
 	for _, symbol := range node.Locals().All() {
 		if symbol.Flags()&ast.SymbolFlagsTypeParameter != 0 {
-			symbols = append(symbols, symbol)
+			result = append(result, c.getDeclaredTypeOfSymbol(symbol))
 		}
-	}
-	// Getting the declared types creates them, so do it in a stable order rather than in the random iteration order
-	// of the symbol table.
-	c.sortSymbols(symbols)
-	var result []*Type
-	for _, symbol := range symbols {
-		result = append(result, c.getDeclaredTypeOfSymbol(symbol))
 	}
 	slices.SortFunc(result, CompareTypes)
 	return result

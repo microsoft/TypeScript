@@ -28,17 +28,17 @@ export const fromB = MB.pb;
 
 export const checkA: 1 = MA.pa.mb;
 >checkA : Symbol(checkA, Decl(main.ts, 6, 12))
->MA.pa.mb : Symbol(mb, Decl(mb.js, 1, 12))
 >MA.pa : Symbol(MA.pa, Decl(ma.js, 0, 8))
 >MA : Symbol(MA, Decl(main.ts, 2, 6))
 >pa : Symbol(MA.pa, Decl(ma.js, 0, 8))
->mb : Symbol(mb, Decl(mb.js, 1, 12))
 
 export const checkB: 1 = MB.pb.ma;
 >checkB : Symbol(checkB, Decl(main.ts, 7, 12))
+>MB.pb.ma : Symbol(ma, Decl(ma.js, 1, 12))
 >MB.pb : Symbol(MB.pb, Decl(mb.js, 0, 8))
 >MB : Symbol(MB, Decl(main.ts, 3, 6))
 >pb : Symbol(MB.pb, Decl(mb.js, 0, 8))
+>ma : Symbol(ma, Decl(ma.js, 1, 12))
 
 === /ma.js ===
 export { v as pa } from "./xa";

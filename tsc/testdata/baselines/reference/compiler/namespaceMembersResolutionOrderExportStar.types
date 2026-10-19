@@ -5,8 +5,8 @@ import * as idx from "./index";
 >idx : typeof idx
 
 const all = { ...idx };
->all : { a: { pa: { pb: {}; mb: 1; }; ma: 1; }; b: { pb: {}; mb: 1; }; f1: 1; f2: 2; f3: 3; f4: 4; f5: 5; f6: 6; f7: 7; f8: 8; f9: 9; f10: 10; }
->{ ...idx } : { a: { pa: { pb: {}; mb: 1; }; ma: 1; }; b: { pb: {}; mb: 1; }; f1: 1; f2: 2; f3: 3; f4: 4; f5: 5; f6: 6; f7: 7; f8: 8; f9: 9; f10: 10; }
+>all : { a: { pa: {}; ma: 1; }; b: { pb: { pa: {}; ma: 1; }; mb: 1; }; f1: 1; f2: 2; f3: 3; f4: 4; f5: 5; f6: 6; f7: 7; f8: 8; f9: 9; f10: 10; }
+>{ ...idx } : { a: { pa: {}; ma: 1; }; b: { pb: { pa: {}; ma: 1; }; mb: 1; }; f1: 1; f2: 2; f3: 3; f4: 4; f5: 5; f6: 6; f7: 7; f8: 8; f9: 9; f10: 10; }
 >idx : typeof idx
 
 import * as MA from "./ma";
@@ -16,37 +16,37 @@ import * as MB from "./mb";
 >MB : typeof MB
 
 export const fromA = MA.pa;
->fromA : { pb: {}; mb: 1; }
->MA.pa : { pb: {}; mb: 1; }
+>fromA : {}
+>MA.pa : {}
 >MA : typeof MA
->pa : { pb: {}; mb: 1; }
+>pa : {}
 
 export const fromB = MB.pb;
->fromB : {}
->MB.pb : {}
+>fromB : { pa: {}; ma: 1; }
+>MB.pb : { pa: {}; ma: 1; }
 >MB : typeof MB
->pb : {}
+>pb : { pa: {}; ma: 1; }
 
 export const checkA: 1 = MA.pa.mb;
 >checkA : 1
->MA.pa.mb : 1
->MA.pa : { pb: {}; mb: 1; }
+>MA.pa.mb : any
+>MA.pa : {}
 >MA : typeof MA
->pa : { pb: {}; mb: 1; }
->mb : 1
+>pa : {}
+>mb : any
 
 export const checkB: 1 = MB.pb.ma;
 >checkB : 1
->MB.pb.ma : any
->MB.pb : {}
+>MB.pb.ma : 1
+>MB.pb : { pa: {}; ma: 1; }
 >MB : typeof MB
->pb : {}
->ma : any
+>pb : { pa: {}; ma: 1; }
+>ma : 1
 
 === /ma.js ===
 export { v as pa } from "./xa";
->v : { pb: {}; mb: 1; }
->pa : { pb: {}; mb: 1; }
+>v : {}
+>pa : {}
 
 export const ma = 1;
 >ma : 1
@@ -54,8 +54,8 @@ export const ma = 1;
 
 === /mb.js ===
 export { v as pb } from "./xb";
->v : {}
->pb : {}
+>v : { pa: {}; ma: 1; }
+>pb : { pa: {}; ma: 1; }
 
 export const mb = 1;
 >mb : 1
@@ -68,31 +68,11 @@ const M = /** @type {any} */ (null);
 >(null) : any
 
 const o = { v: { ...M } };
->o : { v: { pb: {}; mb: 1; }; }
->{ v: { ...M } } : { v: { pb: {}; mb: 1; }; }
->v : { pb: {}; mb: 1; }
->{ ...M } : { pb: {}; mb: 1; }
->M : typeof import("./mb")
-
-module.exports = o;
->module.exports = o : { v: { pb: {}; mb: 1; }; }
->module.exports : { v: { pb: {}; mb: 1; }; }
->module : { exports: { v: { pb: {}; mb: 1; }; }; }
->exports : { v: { pb: {}; mb: 1; }; }
->o : { v: { pb: {}; mb: 1; }; }
-
-=== /xb.js ===
-/** @type {typeof import("./ma")} */
-const M = /** @type {any} */ (null);
->M : typeof import("./ma")
->(null) : any
-
-const o = { v: { ...M } };
 >o : { v: {}; }
->{ v: { ...M } } : { v: { pa: { pb: {}; mb: 1; }; ma: 1; }; }
->v : { pa: { pb: {}; mb: 1; }; ma: 1; }
->{ ...M } : { pa: { pb: {}; mb: 1; }; ma: 1; }
->M : typeof import("./ma")
+>{ v: { ...M } } : { v: { pb: { pa: {}; ma: 1; }; mb: 1; }; }
+>v : { pb: { pa: {}; ma: 1; }; mb: 1; }
+>{ ...M } : { pb: { pa: {}; ma: 1; }; mb: 1; }
+>M : typeof import("./mb")
 
 module.exports = o;
 >module.exports = o : { v: {}; }
@@ -101,6 +81,26 @@ module.exports = o;
 >exports : { v: {}; }
 >o : { v: {}; }
 
+=== /xb.js ===
+/** @type {typeof import("./ma")} */
+const M = /** @type {any} */ (null);
+>M : typeof import("./ma")
+>(null) : any
+
+const o = { v: { ...M } };
+>o : { v: { pa: {}; ma: 1; }; }
+>{ v: { ...M } } : { v: { pa: {}; ma: 1; }; }
+>v : { pa: {}; ma: 1; }
+>{ ...M } : { pa: {}; ma: 1; }
+>M : typeof import("./ma")
+
+module.exports = o;
+>module.exports = o : { v: { pa: {}; ma: 1; }; }
+>module.exports : { v: { pa: {}; ma: 1; }; }
+>module : { exports: { v: { pa: {}; ma: 1; }; }; }
+>exports : { v: { pa: {}; ma: 1; }; }
+>o : { v: { pa: {}; ma: 1; }; }
+
 === /ia.js ===
 /** @type {typeof import("./ma")} */
 const M = /** @type {any} */ (null);
@@ -108,18 +108,18 @@ const M = /** @type {any} */ (null);
 >(null) : any
 
 const o = { v: { ...M } };
->o : { v: { pa: { pb: {}; mb: 1; }; ma: 1; }; }
->{ v: { ...M } } : { v: { pa: { pb: {}; mb: 1; }; ma: 1; }; }
->v : { pa: { pb: {}; mb: 1; }; ma: 1; }
->{ ...M } : { pa: { pb: {}; mb: 1; }; ma: 1; }
+>o : { v: { pa: {}; ma: 1; }; }
+>{ v: { ...M } } : { v: { pa: {}; ma: 1; }; }
+>v : { pa: {}; ma: 1; }
+>{ ...M } : { pa: {}; ma: 1; }
 >M : typeof import("./ma")
 
 module.exports = o;
->module.exports = o : { v: { pa: { pb: {}; mb: 1; }; ma: 1; }; }
->module.exports : { v: { pa: { pb: {}; mb: 1; }; ma: 1; }; }
->module : { exports: { v: { pa: { pb: {}; mb: 1; }; ma: 1; }; }; }
->exports : { v: { pa: { pb: {}; mb: 1; }; ma: 1; }; }
->o : { v: { pa: { pb: {}; mb: 1; }; ma: 1; }; }
+>module.exports = o : { v: { pa: {}; ma: 1; }; }
+>module.exports : { v: { pa: {}; ma: 1; }; }
+>module : { exports: { v: { pa: {}; ma: 1; }; }; }
+>exports : { v: { pa: {}; ma: 1; }; }
+>o : { v: { pa: {}; ma: 1; }; }
 
 === /ib.js ===
 /** @type {typeof import("./mb")} */
@@ -128,28 +128,28 @@ const M = /** @type {any} */ (null);
 >(null) : any
 
 const o = { v: { ...M } };
->o : { v: { pb: {}; mb: 1; }; }
->{ v: { ...M } } : { v: { pb: {}; mb: 1; }; }
->v : { pb: {}; mb: 1; }
->{ ...M } : { pb: {}; mb: 1; }
+>o : { v: { pb: { pa: {}; ma: 1; }; mb: 1; }; }
+>{ v: { ...M } } : { v: { pb: { pa: {}; ma: 1; }; mb: 1; }; }
+>v : { pb: { pa: {}; ma: 1; }; mb: 1; }
+>{ ...M } : { pb: { pa: {}; ma: 1; }; mb: 1; }
 >M : typeof import("./mb")
 
 module.exports = o;
->module.exports = o : { v: { pb: {}; mb: 1; }; }
->module.exports : { v: { pb: {}; mb: 1; }; }
->module : { exports: { v: { pb: {}; mb: 1; }; }; }
->exports : { v: { pb: {}; mb: 1; }; }
->o : { v: { pb: {}; mb: 1; }; }
+>module.exports = o : { v: { pb: { pa: {}; ma: 1; }; mb: 1; }; }
+>module.exports : { v: { pb: { pa: {}; ma: 1; }; mb: 1; }; }
+>module : { exports: { v: { pb: { pa: {}; ma: 1; }; mb: 1; }; }; }
+>exports : { v: { pb: { pa: {}; ma: 1; }; mb: 1; }; }
+>o : { v: { pb: { pa: {}; ma: 1; }; mb: 1; }; }
 
 === /star.js ===
 export { v as a } from "./ia";
->v : { pa: { pb: {}; mb: 1; }; ma: 1; }
->a : { pa: { pb: {}; mb: 1; }; ma: 1; }
+>v : { pa: {}; ma: 1; }
+>a : { pa: {}; ma: 1; }
 
 === /index.js ===
 export { v as b } from "./ib";
->v : { pb: {}; mb: 1; }
->b : { pb: {}; mb: 1; }
+>v : { pb: { pa: {}; ma: 1; }; mb: 1; }
+>b : { pb: { pa: {}; ma: 1; }; mb: 1; }
 
 export * from "./star";
 export const f1 = 1;
