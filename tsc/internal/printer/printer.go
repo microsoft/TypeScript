@@ -3058,36 +3058,42 @@ func (p *Printer) commentWillEmitNewLine(comment ast.CommentRange) bool {
 }
 
 func (p *Printer) syntheticCommentWillEmitNewLine(comment SynthesizedComment) bool {
-	return comment.Kind == ast.KindSingleLineCommentTrivia || comment.HasTrailingNewLine
+	return comment.Kind == ast.KindSingleLineCommentTrivia || comment.HasLeadingNewLine || comment.HasTrailingNewLine
+}
+
+// willEmitLeadingSyntheticNewLine reports whether the synthetic leading comments of node will
+// introduce a line separator. Unlike source comments, these do not depend on a source file.
+func (p *Printer) willEmitLeadingSyntheticNewLine(node *ast.Expression) bool {
+	return p.emitContext.EmitFlags(node)&EFNoLeadingComments == 0 &&
+		slices.ContainsFunc(p.emitContext.GetSyntheticLeadingComments(node), p.syntheticCommentWillEmitNewLine)
 }
 
 func (p *Printer) willEmitLeadingNewLine(node *ast.Expression) bool {
-	if p.currentSourceFile == nil {
-		return false
-	}
-	hasLeadingCommentRanges := false
-	hasNewLineComment := false
-	for comment := range scanner.GetLeadingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), node.Pos()) {
-		hasLeadingCommentRanges = true
-		if p.commentWillEmitNewLine(comment) {
-			hasNewLineComment = true
+	if p.currentSourceFile != nil {
+		hasLeadingCommentRanges := false
+		hasNewLineComment := false
+		for comment := range scanner.GetLeadingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), node.Pos()) {
+			hasLeadingCommentRanges = true
+			if p.commentWillEmitNewLine(comment) {
+				hasNewLineComment = true
+			}
 		}
-	}
-	if hasLeadingCommentRanges {
-		parseNode := p.emitContext.ParseNode(node)
-		if parseNode != nil && ast.IsParenthesizedExpression(parseNode.Parent) {
+		if hasLeadingCommentRanges {
+			parseNode := p.emitContext.ParseNode(node)
+			if parseNode != nil && ast.IsParenthesizedExpression(parseNode.Parent) {
+				return true
+			}
+		}
+		if hasNewLineComment {
 			return true
 		}
 	}
-	if hasNewLineComment {
-		return true
-	}
-	if slices.ContainsFunc(p.emitContext.GetSyntheticLeadingComments(node), p.syntheticCommentWillEmitNewLine) {
+	if p.willEmitLeadingSyntheticNewLine(node) {
 		return true
 	}
 	if ast.IsPartiallyEmittedExpression(node) {
 		pee := node.AsPartiallyEmittedExpression()
-		if node.Pos() != pee.Expression.Pos() {
+		if p.currentSourceFile != nil && node.Pos() != pee.Expression.Pos() {
 			for comment := range scanner.GetTrailingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), pee.Expression.Pos()) {
 				if p.commentWillEmitNewLine(comment) {
 					return true
@@ -3103,6 +3109,9 @@ func (p *Printer) willEmitLeadingNewLine(node *ast.Expression) bool {
 // that would introduce a line separator between the node and its parent.
 func (p *Printer) parenthesizeExpressionForNoAsi(node *ast.Expression) *ast.Expression {
 	if !p.commentsDisabled {
+		if node.Kind != ast.KindPartiallyEmittedExpression && p.willEmitLeadingSyntheticNewLine(node) {
+			return p.emitContext.Factory.NewParenthesizedExpression(node)
+		}
 		switch node.Kind {
 		case ast.KindPartiallyEmittedExpression:
 			if p.willEmitLeadingNewLine(node) {
@@ -5506,7 +5515,8 @@ func (p *Printer) emitTrailingSynthesizedComment(comment SynthesizedComment) {
 		p.writer.WriteSpace(" ")
 	}
 	p.writeSynthesizedComment(comment)
-	if comment.HasTrailingNewLine {
+	// A single-line comment must end the line, or it would comment out the code that follows it.
+	if comment.HasTrailingNewLine || comment.Kind == ast.KindSingleLineCommentTrivia {
 		p.writer.WriteLine()
 	}
 }

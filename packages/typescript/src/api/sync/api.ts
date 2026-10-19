@@ -6519,7 +6519,11 @@ export class Printer {
                 const encoded = encodeNode(node, (node, index) => {
                     const emitNode = options.emitContext?.getEmitNode(node);
                     if (emitNode === undefined) return;
-                    emitNodes[index] = emitNode;
+                    emitNodes[index] = {
+                        emitFlags: emitNode.emitFlags,
+                        leadingComments: emitNode.leadingComments?.map(c => ({ ...c })),
+                        trailingComments: emitNode.trailingComments?.map(c => ({ ...c })),
+                    };
                 });
                 const base64 = uint8ArrayToBase64(encoded);
                 return owner.client.apiRequest("printNode", {
@@ -6535,7 +6539,11 @@ export class Printer {
                 const encoded = encodeNode(node, (node, index) => {
                     const emitNode = options.emitContext?.getEmitNode(node);
                     if (emitNode === undefined) return;
-                    emitNodes[index] = emitNode;
+                    emitNodes[index] = {
+                        emitFlags: emitNode.emitFlags,
+                        leadingComments: emitNode.leadingComments?.map(c => ({ ...c })),
+                        trailingComments: emitNode.trailingComments?.map(c => ({ ...c })),
+                    };
                 });
                 const base64 = uint8ArrayToBase64(encoded);
                 return yield* apiRequest("printNode", {
