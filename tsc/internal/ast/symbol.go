@@ -282,6 +282,10 @@ func (m *SymbolMap) Set(key string, symbol *Symbol) {
 		return
 	}
 	i := int32(len(m.entries))
+	if cap(m.entries) == 0 {
+		// Most tables hold one or two entries, so start with room for two rather than growing from one.
+		m.entries = make([]symbolMapEntry, 0, 2)
+	}
 	m.entries = append(m.entries, symbolMapEntry{symbol: symbol, keyLen: int32(len(key))})
 	if symbol.Name() != key {
 		m.setOddKey(i, key)
