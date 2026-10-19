@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/domDirectoryReaderArrayCallbacks.ts] ////
+
+=== domDirectoryReaderArrayCallbacks.ts ===
+declare const reader: FileSystemDirectoryReader;
+>reader : FileSystemDirectoryReader
+
+reader.readEntries(entries => entries.length);
+>reader.readEntries(entries => entries.length) : void
+>reader.readEntries : (successCallback: FileSystemEntriesCallback, errorCallback?: ErrorCallback) => void
+>reader : FileSystemDirectoryReader
+>readEntries : (successCallback: FileSystemEntriesCallback, errorCallback?: ErrorCallback) => void
+>entries => entries.length : (entries: FileSystemEntry[]) => number
+>entries : FileSystemEntry[]
+>entries.length : number
+>entries : FileSystemEntry[]
+>length : number
+
+reader.readEntries(async (entries: FileSystemEntry[]) => {});
+>reader.readEntries(async (entries: FileSystemEntry[]) => {}) : void
+>reader.readEntries : (successCallback: FileSystemEntriesCallback, errorCallback?: ErrorCallback) => void
+>reader : FileSystemDirectoryReader
+>readEntries : (successCallback: FileSystemEntriesCallback, errorCallback?: ErrorCallback) => void
+>async (entries: FileSystemEntry[]) => {} : (entries: FileSystemEntry[]) => Promise<void>
+>entries : FileSystemEntry[]
+
+new Promise<readonly FileSystemEntry[]>(resolve => reader.readEntries(resolve));
+>new Promise<readonly FileSystemEntry[]>(resolve => reader.readEntries(resolve)) : Promise<readonly FileSystemEntry[]>
+>Promise : PromiseConstructor
+>resolve => reader.readEntries(resolve) : (resolve: (value: PromiseLike<readonly FileSystemEntry[]> | readonly FileSystemEntry[]) => void) => void
+>resolve : (value: PromiseLike<readonly FileSystemEntry[]> | readonly FileSystemEntry[]) => void
+>reader.readEntries(resolve) : void
+>reader.readEntries : (successCallback: FileSystemEntriesCallback, errorCallback?: ErrorCallback) => void
+>reader : FileSystemDirectoryReader
+>readEntries : (successCallback: FileSystemEntriesCallback, errorCallback?: ErrorCallback) => void
+>resolve : (value: PromiseLike<readonly FileSystemEntry[]> | readonly FileSystemEntry[]) => void
+

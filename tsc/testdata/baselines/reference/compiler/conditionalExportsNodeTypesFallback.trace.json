@@ -1,0 +1,22 @@
+======== Resolving module 'provider' from '/index.mts'. ========
+Explicitly specified module resolution kind: 'NodeNext'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+File '/package.json' does not exist.
+Loading module 'provider' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Found 'package.json' at '/node_modules/provider/package.json'.
+Entering conditional exports.
+Matched 'exports' condition 'node'.
+Using 'exports' subpath '.' with target './index.js'.
+File name '/node_modules/provider/index.js' has a '.js' extension - stripping it.
+File '/node_modules/provider/index.ts' does not exist.
+File '/node_modules/provider/index.tsx' does not exist.
+File '/node_modules/provider/index.d.ts' does not exist.
+Failed to resolve under condition 'node'.
+Matched 'exports' condition 'types'.
+Using 'exports' subpath '.' with target './types.d.ts'.
+File '/node_modules/provider/types.d.ts' exists - use it as a name resolution result.
+Resolved under condition 'types'.
+Exiting conditional exports.
+Resolving real path for '/node_modules/provider/types.d.ts', result '/node_modules/provider/types.d.ts'.
+======== Module name 'provider' was successfully resolved to '/node_modules/provider/types.d.ts'. ========
