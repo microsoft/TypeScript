@@ -319,7 +319,7 @@ func (m *SymbolMap) insertIndex(key string, i int32) {
 }
 
 func (m *SymbolMap) buildIndex() {
-	m.index = make([]int32, indexSizeFor(len(m.entries)*2))
+	m.index = make([]int32, indexSizeFor(len(m.entries)))
 	for i := range m.entries {
 		m.insertIndex(m.keyAt(i, m.oddKeys), int32(i))
 	}
