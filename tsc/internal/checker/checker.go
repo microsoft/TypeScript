@@ -1229,7 +1229,7 @@ func (c *Checker) getGlobalTypeAliasSymbol(name string, arity int, reportErrors 
 	}
 	// Resolve the declared type of the symbol. This resolves type parameters for the type alias so that we can check arity.
 	c.getDeclaredTypeOfSymbol(symbol)
-	if len(c.typeAliasLinks.Get(symbol).typeParameters) != arity {
+	if len(c.getTypeParametersOfTypeAlias(symbol)) != arity {
 		if reportErrors {
 			decl := core.Find(symbol.Declarations(), ast.IsTypeAliasDeclaration)
 			c.error(decl, diagnostics.Global_type_0_must_have_1_type_parameter_s, ast.SymbolName(symbol), arity)
@@ -1243,6 +1243,12 @@ func (c *Checker) GetTypeAliasTypeParameters(symbol *ast.Symbol) []*Type {
 	if symbol.Flags()&ast.SymbolFlagsTypeAlias == 0 {
 		panic("Attempted to fetch type alias parameters for non-type-alias symbol")
 	}
+	return c.getTypeParametersOfTypeAlias(symbol)
+}
+
+// getTypeParametersOfTypeAlias returns the type parameters of a type alias,
+// which are resolved along with its declared type.
+func (c *Checker) getTypeParametersOfTypeAlias(symbol *ast.Symbol) []*Type {
 	c.getDeclaredTypeOfSymbol(symbol)
 	return c.typeAliasLinks.Get(symbol).typeParameters
 }
@@ -17625,7 +17631,7 @@ func (c *Checker) getTypeParametersForTypeReferenceOrImport(node *ast.Node) []*T
 func (c *Checker) getTypeParametersForTypeAndSymbol(t *Type, symbol *ast.Symbol) []*Type {
 	if !c.isErrorType(t) {
 		if symbol.Flags()&ast.SymbolFlagsTypeAlias != 0 {
-			if typeParameters := c.typeAliasLinks.Get(symbol).typeParameters; len(typeParameters) != 0 {
+			if typeParameters := c.getTypeParametersOfTypeAlias(symbol); len(typeParameters) != 0 {
 				return typeParameters
 			}
 		}
@@ -24313,7 +24319,7 @@ func (c *Checker) getTypeFromTypeAliasReference(node *ast.Node, symbol *ast.Symb
 		return errorType
 	}
 	t := c.getDeclaredTypeOfSymbol(symbol)
-	typeParameters := c.typeAliasLinks.Get(symbol).typeParameters
+	typeParameters := c.getTypeParametersOfTypeAlias(symbol)
 	if len(typeParameters) != 0 {
 		numTypeArguments := len(typeArguments)
 		minTypeArgumentCount := c.getMinTypeArgumentCount(typeParameters)

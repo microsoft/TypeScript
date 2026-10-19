@@ -1326,7 +1326,7 @@ func (c *Checker) getVariances(t *Type) []VarianceFlags {
 }
 
 func (c *Checker) getAliasVariances(symbol *ast.Symbol) []VarianceFlags {
-	return c.getVariancesWorker(symbol, c.typeAliasLinks.Get(symbol).typeParameters)
+	return c.getVariancesWorker(symbol, c.getTypeParametersOfTypeAlias(symbol))
 }
 
 // Return an array containing the variance of each type parameter. The variance is effectively
@@ -1454,7 +1454,7 @@ func (c *Checker) createMarkerType(symbol *ast.Symbol, source *Type, target *Typ
 	}
 	var result *Type
 	if symbol.Flags()&ast.SymbolFlagsTypeAlias != 0 {
-		result = c.getTypeAliasInstantiation(symbol, c.instantiateTypes(c.typeAliasLinks.Get(symbol).typeParameters, mapper), nil)
+		result = c.getTypeAliasInstantiation(symbol, c.instantiateTypes(c.getTypeParametersOfTypeAlias(symbol), mapper), nil)
 	} else {
 		result = c.createTypeReference(t, c.instantiateTypes(t.AsInterfaceType().TypeParameters(), mapper))
 	}
