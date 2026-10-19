@@ -293,8 +293,8 @@ func (c *Checker) buildExternalModuleContainerIndex() {
 
 // forEachSymbolTableEntry calls f for each entry of a symbol table so that any types f creates are created
 // in an order that does not depend on the table's random iteration order. That holds as long as f has no side
-// effects for a symbol that is not an alias, or for an alias that is already resolved: those come first, in table
-// order. Resolving an alias can create types, so unresolved aliases come last, sorted. f must not depend on the
+// effects for a symbol that is not an alias, or for an alias whose whole chain of aliases is already resolved: those
+// come first, in table order. Resolving an alias can create types, so the other aliases come last, sorted. f must not depend on the
 // order it sees entries in for its result: collect and sort what it finds instead. f returns true to stop, which is
 // only allowed when the answer does not depend on which entry stopped it (such as whether any entry matches), and
 // forEachSymbolTableEntry then returns true. f gets each symbol's key in the table, which is not always the
@@ -306,11 +306,9 @@ func (c *Checker) forEachSymbolTableEntry(symbols ast.SymbolTable, f func(name s
 	}
 	var unresolved []entry
 	for name, symbol := range symbols {
-		if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
-			if links := c.aliasSymbolLinks.TryGet(symbol); links == nil || links.aliasTarget == nil {
-				unresolved = append(unresolved, entry{name, symbol})
-				continue
-			}
+		if !c.isAliasChainResolved(symbol) {
+			unresolved = append(unresolved, entry{name, symbol})
+			continue
 		}
 		if f(name, symbol) {
 			return true
@@ -326,6 +324,29 @@ func (c *Checker) forEachSymbolTableEntry(symbols ast.SymbolTable, f func(name s
 		if f(alias.name, alias.symbol) {
 			return true
 		}
+	}
+	return false
+}
+
+// isAliasChainResolved reports whether symbol is not an alias, or every alias in its chain is resolved. Resolving an
+// alias stops at a target with a meaning of its own even when that target is also an alias, so getSymbolFlags and
+// getTypeOnlyAliasDeclaration can still resolve later aliases of a chain whose first alias is resolved.
+func (c *Checker) isAliasChainResolved(symbol *ast.Symbol) bool {
+	// A circular chain resolves to the unknown symbol, so the bound only guards against a chain that never ends, which
+	// then counts as unresolved.
+	for range 100 {
+		if symbol.Flags()&ast.SymbolFlagsAlias == 0 {
+			return true
+		}
+		links := c.aliasSymbolLinks.TryGet(symbol)
+		if links == nil || links.aliasTarget == nil {
+			return false
+		}
+		target := c.getExportSymbolOfValueSymbolIfExported(links.aliasTarget)
+		if target == symbol || target == c.unknownSymbol {
+			return true
+		}
+		symbol = target
 	}
 	return false
 }
