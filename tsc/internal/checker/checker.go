@@ -3033,17 +3033,16 @@ func (c *Checker) checkAccessorDeclaration(node *ast.Node) {
 		symbol := c.getSymbolOfDeclaration(node)
 		getter := ast.GetDeclarationOfKind(symbol, ast.KindGetAccessor)
 		setter := ast.GetDeclarationOfKind(symbol, ast.KindSetAccessor)
-		if getter != nil && setter != nil && c.nodeLinks.Get(getter).flags&NodeCheckFlagsTypeChecked == 0 {
-			c.nodeLinks.Get(getter).flags |= NodeCheckFlagsTypeChecked
+		// Each accessor of the pair reports the errors on its own name, so that
+		// they do not depend on which of the two is checked first.
+		if getter != nil && setter != nil && (node == getter || node == setter) {
 			getterFlags := getter.ModifierFlags()
 			setterFlags := setter.ModifierFlags()
 			if (getterFlags & ast.ModifierFlagsAbstract) != (setterFlags & ast.ModifierFlagsAbstract) {
-				c.error(getter.Name(), diagnostics.Accessors_must_both_be_abstract_or_non_abstract)
-				c.error(setter.Name(), diagnostics.Accessors_must_both_be_abstract_or_non_abstract)
+				c.error(node.Name(), diagnostics.Accessors_must_both_be_abstract_or_non_abstract)
 			}
 			if ((getterFlags&ast.ModifierFlagsProtected != 0) && setterFlags&(ast.ModifierFlagsProtected|ast.ModifierFlagsPrivate) == 0) || ((getterFlags&ast.ModifierFlagsPrivate != 0) && setterFlags&ast.ModifierFlagsPrivate == 0) {
-				c.error(getter.Name(), diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter)
-				c.error(setter.Name(), diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter)
+				c.error(node.Name(), diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter)
 			}
 		}
 	}
