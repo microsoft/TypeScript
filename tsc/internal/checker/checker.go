@@ -16986,7 +16986,7 @@ func (c *Checker) GetTypeOfSymbolAtLocation(symbol *ast.Symbol, location *ast.No
 				} else {
 					t = c.getTypeOfExpression(location)
 				}
-				if c.getExportSymbolOfValueSymbolIfExported(c.symbolNodeLinks.Get(location).resolvedSymbol) == symbol {
+				if c.getExportSymbolOfValueSymbolIfExported(c.resolvedSymbolAtLocation(location, symbol)) == symbol {
 					return c.removeOptionalTypeMarker(t)
 				}
 			}
@@ -17004,6 +17004,18 @@ func (c *Checker) GetTypeOfSymbolAtLocation(symbol *ast.Symbol, location *ast.No
 		}
 	}
 	return c.getNonMissingTypeOfSymbol(symbol)
+}
+
+// resolvedSymbolAtLocation returns the symbol that the checked expression at
+// location resolved to. Index symbols are not cached in links (see
+// getSymbolOfNameOrPropertyAccessExpression), so an access that resolved to
+// none is matched against the index signature it would use.
+func (c *Checker) resolvedSymbolAtLocation(location *ast.Node, symbol *ast.Symbol) *ast.Symbol {
+	resolved := c.symbolNodeLinks.Get(location).resolvedSymbol
+	if resolved == nil && symbol.CheckFlags()&ast.CheckFlagsIndexSymbol != 0 && ast.IsPropertyAccessExpression(location) && !ast.IsPrivateIdentifier(location.Name()) {
+		resolved = c.getApplicableIndexSymbol(c.checkExpressionCached(location.Expression()), c.getLiteralTypeFromPropertyName(location.Name()))
+	}
+	return resolved
 }
 
 func (c *Checker) getTypeOfSymbol(symbol *ast.Symbol) *Type {
@@ -32776,7 +32788,9 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 			if ast.IsPropertyAccessExpression(name) {
 				c.checkPropertyAccessExpression(name, CheckModeNormal, false /*writeOnly*/)
 				if links.resolvedSymbol == nil && !ast.IsPrivateIdentifier(name.Name()) {
-					links.resolvedSymbol = c.getApplicableIndexSymbol(
+					// Not cached in links, where checking would observe it as the
+					// property the access resolved to.
+					return c.getApplicableIndexSymbol(
 						c.checkExpressionCached(name.Expression()),
 						c.getLiteralTypeFromPropertyName(name.Name()),
 					)
