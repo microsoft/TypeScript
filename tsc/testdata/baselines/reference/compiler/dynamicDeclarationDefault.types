@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/dynamicDeclarationDefault.ts] ////
+
+=== profiler.d.ts ===
+declare module "profiler" {
+>"profiler" : typeof import("profiler")
+
+    export function start(): void;
+>start : () => void
+}
+
+=== main.mts ===
+const { default: profiler } = await import("profiler");
+>default : any
+>profiler : typeof import("profiler")
+>await import("profiler") : { start(): void; default: typeof import("profiler"); }
+>import("profiler") : Promise<{ start(): void; default: typeof import("profiler"); }>
+>"profiler" : "profiler"
+
+profiler.start();
+>profiler.start() : void
+>profiler.start : () => void
+>profiler : typeof import("profiler")
+>start : () => void
+

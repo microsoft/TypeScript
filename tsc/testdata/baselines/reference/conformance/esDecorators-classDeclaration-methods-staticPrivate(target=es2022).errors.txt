@@ -1,0 +1,66 @@
+esDecorators-classDeclaration-methods-staticPrivate.ts(14,12): error TS2804: Duplicate identifier '#a'. Static and instance elements cannot share the same private name.
+esDecorators-classDeclaration-methods-staticPrivate.ts(15,5): error TS2804: Duplicate identifier '#a'. Static and instance elements cannot share the same private name.
+esDecorators-classDeclaration-methods-staticPrivate.ts(16,5): error TS2804: Duplicate identifier '#b'. Static and instance elements cannot share the same private name.
+esDecorators-classDeclaration-methods-staticPrivate.ts(17,12): error TS2804: Duplicate identifier '#b'. Static and instance elements cannot share the same private name.
+esDecorators-classDeclaration-methods-staticPrivate.ts(18,12): error TS2804: Duplicate identifier '#c'. Static and instance elements cannot share the same private name.
+esDecorators-classDeclaration-methods-staticPrivate.ts(19,5): error TS2804: Duplicate identifier '#c'. Static and instance elements cannot share the same private name.
+esDecorators-classDeclaration-methods-staticPrivate.ts(20,5): error TS2804: Duplicate identifier '#d'. Static and instance elements cannot share the same private name.
+esDecorators-classDeclaration-methods-staticPrivate.ts(21,12): error TS2804: Duplicate identifier '#d'. Static and instance elements cannot share the same private name.
+esDecorators-classDeclaration-methods-staticPrivate.ts(22,16): error TS2804: Duplicate identifier '#e'. Static and instance elements cannot share the same private name.
+esDecorators-classDeclaration-methods-staticPrivate.ts(23,9): error TS2804: Duplicate identifier '#e'. Static and instance elements cannot share the same private name.
+esDecorators-classDeclaration-methods-staticPrivate.ts(24,9): error TS2804: Duplicate identifier '#f'. Static and instance elements cannot share the same private name.
+esDecorators-classDeclaration-methods-staticPrivate.ts(25,16): error TS2804: Duplicate identifier '#f'. Static and instance elements cannot share the same private name.
+
+
+==== esDecorators-classDeclaration-methods-staticPrivate.ts (12 errors) ====
+    declare let dec: any;
+    
+    class C {
+        @dec static #method1() {}
+    }
+    
+    @dec
+    class D {
+        static #method1() {}
+    }
+    
+    @dec
+    class E {
+        static #a() {}
+               ~~
+!!! error TS2804: Duplicate identifier '#a'. Static and instance elements cannot share the same private name.
+        #a() {}
+        ~~
+!!! error TS2804: Duplicate identifier '#a'. Static and instance elements cannot share the same private name.
+        #b() {}
+        ~~
+!!! error TS2804: Duplicate identifier '#b'. Static and instance elements cannot share the same private name.
+        static #b() {}
+               ~~
+!!! error TS2804: Duplicate identifier '#b'. Static and instance elements cannot share the same private name.
+        static #c = 0;
+               ~~
+!!! error TS2804: Duplicate identifier '#c'. Static and instance elements cannot share the same private name.
+        #c = 0;
+        ~~
+!!! error TS2804: Duplicate identifier '#c'. Static and instance elements cannot share the same private name.
+        #d = 0;
+        ~~
+!!! error TS2804: Duplicate identifier '#d'. Static and instance elements cannot share the same private name.
+        static #d = 0;
+               ~~
+!!! error TS2804: Duplicate identifier '#d'. Static and instance elements cannot share the same private name.
+        static get #e() { return 0; }
+                   ~~
+!!! error TS2804: Duplicate identifier '#e'. Static and instance elements cannot share the same private name.
+        set #e(value: number) {}
+            ~~
+!!! error TS2804: Duplicate identifier '#e'. Static and instance elements cannot share the same private name.
+        get #f() { return 0; }
+            ~~
+!!! error TS2804: Duplicate identifier '#f'. Static and instance elements cannot share the same private name.
+        static set #f(value: number) {}
+                   ~~
+!!! error TS2804: Duplicate identifier '#f'. Static and instance elements cannot share the same private name.
+    }
+    
