@@ -18171,8 +18171,8 @@ func (c *Checker) getTypeForBindingElementParent(node *ast.Node, checkMode Check
 	if checkMode == CheckModeNormal {
 		// We can use a cached resolved type if no optionality was included in that type.
 		if symbol := c.getSymbolOfDeclaration(node); symbol != nil {
-			if resolvedType := c.valueSymbolLinks.Get(symbol).resolvedType; resolvedType != nil && !(c.strictNullChecks && isOptionalDeclaration(node)) {
-				return resolvedType
+			if !(c.strictNullChecks && isOptionalDeclaration(node)) && node.Kind == ast.KindParameter && c.isContextSensitiveFunctionOrObjectLiteralMethod(node.Parent) {
+				return c.getTypeOfSymbol(symbol)
 			}
 		}
 	}
