@@ -115,7 +115,7 @@ func getPackageNamesInNodeModules(nodeModulesDir tspath.RootedDirectoryPath, fs 
 }
 
 func getDefaultLikeExportNameFromDeclaration(symbol *ast.Symbol) string {
-	for _, d := range symbol.Declarations {
+	for _, d := range symbol.Declarations() {
 		// "export default" in this case. See `ExportAssignment`for more details.
 		if ast.IsExportAssignment(d) {
 			if innerExpression := ast.SkipOuterExpressions(d.Expression(), ast.OEKAll); ast.IsIdentifier(innerExpression) {
@@ -124,7 +124,7 @@ func getDefaultLikeExportNameFromDeclaration(symbol *ast.Symbol) string {
 			continue
 		}
 		// "export { ~ as default }"
-		if ast.IsExportSpecifier(d) && d.Symbol().Flags == ast.SymbolFlagsAlias && d.PropertyName() != nil {
+		if ast.IsExportSpecifier(d) && d.Symbol().Flags() == ast.SymbolFlagsAlias && d.PropertyName() != nil {
 			if d.PropertyName().Kind == ast.KindIdentifier {
 				return d.PropertyName().Text()
 			}
@@ -134,8 +134,8 @@ func getDefaultLikeExportNameFromDeclaration(symbol *ast.Symbol) string {
 		if name := ast.GetNameOfDeclaration(d); name != nil && name.Kind == ast.KindIdentifier {
 			return name.Text()
 		}
-		if symbol.Parent != nil && !checker.IsExternalModuleSymbol(symbol.Parent) {
-			return symbol.Parent.Name
+		if symbol.Parent() != nil && !checker.IsExternalModuleSymbol(symbol.Parent()) {
+			return symbol.Parent().Name()
 		}
 	}
 	return ""

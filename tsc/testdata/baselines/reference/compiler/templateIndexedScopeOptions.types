@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/templateIndexedScopeOptions.ts] ////
+
+=== templateIndexedScopeOptions.ts ===
+type Attributes = { name?: string } & { [path: `$${string}.${string}$`]: unknown };
+>Attributes : Attributes
+>name : string | undefined
+>path : `$${string}.${string}$`
+
+declare function scope(options: Attributes | { method: readonly [string, ...unknown[]] }): void;
+>scope : (options: Attributes | { method: readonly [string, ...unknown[]]; }) => void
+>options : { method: readonly [string, ...unknown[]]; } | Attributes
+>method : readonly [string, ...unknown[]]
+
+const options = { method: ["list", { id: 1 }] };
+>options : { method: (string | { id: number; })[]; }
+>{ method: ["list", { id: 1 }] } : { method: (string | { id: number; })[]; }
+>method : (string | { id: number; })[]
+>["list", { id: 1 }] : (string | { id: number; })[]
+>"list" : "list"
+>{ id: 1 } : { id: number; }
+>id : number
+>1 : 1
+
+scope(options);
+>scope(options) : void
+>scope : (options: Attributes | { method: readonly [string, ...unknown[]]; }) => void
+>options : { method: (string | { id: number; })[]; }
+

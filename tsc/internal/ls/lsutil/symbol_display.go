@@ -208,7 +208,7 @@ func getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker *
 	// If this is a method from a mapped type, leave as a method so long as it still has a call signature, as opposed to e.g.
 	// `{ [K in keyof I]: number }`.
 	if len(roots) == 1 &&
-		roots[0].Flags&ast.SymbolFlagsMethod != 0 &&
+		roots[0].Flags()&ast.SymbolFlagsMethod != 0 &&
 		(typeChecker == nil || len(typeChecker.GetCallSignatures(typeChecker.GetNonNullableType(typeChecker.GetTypeOfSymbolAtLocation(symbol, location)))) > 0) {
 		return ScriptElementKindMemberFunctionElement
 	}
@@ -230,13 +230,13 @@ func getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker *
 	if flags&ast.SymbolFlagsVariable != 0 {
 		if isFirstDeclarationOfSymbolParameter(symbol) {
 			return ScriptElementKindParameterElement
-		} else if symbol.ValueDeclaration != nil && ast.IsVarConst(symbol.ValueDeclaration) {
+		} else if symbol.ValueDeclaration() != nil && ast.IsVarConst(symbol.ValueDeclaration()) {
 			return ScriptElementKindConstElement
-		} else if symbol.ValueDeclaration != nil && ast.IsVarUsing(symbol.ValueDeclaration) {
+		} else if symbol.ValueDeclaration() != nil && ast.IsVarUsing(symbol.ValueDeclaration()) {
 			return ScriptElementKindVariableUsingElement
-		} else if symbol.ValueDeclaration != nil && ast.IsVarAwaitUsing(symbol.ValueDeclaration) {
+		} else if symbol.ValueDeclaration() != nil && ast.IsVarAwaitUsing(symbol.ValueDeclaration()) {
 			return ScriptElementKindVariableAwaitUsingElement
-		} else if core.Some(symbol.Declarations, ast.IsLet) {
+		} else if core.Some(symbol.Declarations(), ast.IsLet) {
 			return ScriptElementKindLetElement
 		}
 		if isLocalVariableOrFunction(symbol) {
@@ -269,11 +269,11 @@ func getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker *
 	}
 
 	if flags&ast.SymbolFlagsProperty != 0 {
-		if typeChecker != nil && flags&ast.SymbolFlagsTransient != 0 && symbol.CheckFlags&ast.CheckFlagsSynthetic != 0 {
+		if typeChecker != nil && flags&ast.SymbolFlagsTransient != 0 && symbol.CheckFlags()&ast.CheckFlagsSynthetic != 0 {
 			// If union property is result of union of non method (property/accessors/variables), it is labeled as property
 			var unionPropertyKind ScriptElementKind
 			for _, rootSymbol := range roots {
-				if rootSymbol.Flags&(ast.SymbolFlagsPropertyOrAccessor|ast.SymbolFlagsVariable) != 0 {
+				if rootSymbol.Flags()&(ast.SymbolFlagsPropertyOrAccessor|ast.SymbolFlagsVariable) != 0 {
 					unionPropertyKind = ScriptElementKindMemberVariableElement
 					break
 				}
@@ -298,8 +298,8 @@ func getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker *
 
 func isFirstDeclarationOfSymbolParameter(symbol *ast.Symbol) bool {
 	var declaration *ast.Node
-	if len(symbol.Declarations) > 0 {
-		declaration = symbol.Declarations[0]
+	if len(symbol.Declarations()) > 0 {
+		declaration = symbol.Declarations()[0]
 	}
 	result := ast.FindAncestorOrQuit(declaration, func(n *ast.Node) ast.FindAncestorResult {
 		if ast.IsParameterDeclaration(n) {
@@ -315,11 +315,11 @@ func isFirstDeclarationOfSymbolParameter(symbol *ast.Symbol) bool {
 }
 
 func isLocalVariableOrFunction(symbol *ast.Symbol) bool {
-	if symbol.Parent != nil {
+	if symbol.Parent() != nil {
 		return false // This is exported symbol
 	}
 
-	for _, decl := range symbol.Declarations {
+	for _, decl := range symbol.Declarations() {
 		// Function expressions are local
 		if decl.Kind == ast.KindFunctionExpression {
 			return true
@@ -352,13 +352,13 @@ func GetSymbolModifiers(typeChecker *checker.Checker, symbol *ast.Symbol) Script
 	}
 
 	modifiers := getNormalizedSymbolModifiers(typeChecker, symbol)
-	if symbol.Flags&ast.SymbolFlagsAlias != 0 && typeChecker != nil {
+	if symbol.Flags()&ast.SymbolFlagsAlias != 0 && typeChecker != nil {
 		resolvedSymbol := typeChecker.GetAliasedSymbol(symbol)
 		if resolvedSymbol != symbol {
 			modifiers |= getNormalizedSymbolModifiers(typeChecker, resolvedSymbol)
 		}
 	}
-	if symbol.Flags&ast.SymbolFlagsOptional != 0 {
+	if symbol.Flags()&ast.SymbolFlagsOptional != 0 {
 		modifiers |= ScriptElementKindModifierOptional
 	}
 
@@ -367,9 +367,9 @@ func GetSymbolModifiers(typeChecker *checker.Checker, symbol *ast.Symbol) Script
 
 func getNormalizedSymbolModifiers(typeChecker *checker.Checker, symbol *ast.Symbol) ScriptElementKindModifier {
 	var modifierSet ScriptElementKindModifier
-	if len(symbol.Declarations) > 0 {
-		declaration := symbol.Declarations[0]
-		declarations := symbol.Declarations[1:]
+	if len(symbol.Declarations()) > 0 {
+		declaration := symbol.Declarations()[0]
+		declarations := symbol.Declarations()[1:]
 		// omit deprecated flag if some declarations are not deprecated
 		var excludeFlags ast.ModifierFlags
 		if len(declarations) > 0 &&

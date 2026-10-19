@@ -83,7 +83,7 @@ func (c *Checker) GetUnionType(types []*Type) *Type {
 
 func (c *Checker) GetNameTypeOfSymbol(symbol *ast.Symbol) *Type {
 	if links := c.valueSymbolLinks.TryGet(symbol); links != nil {
-		return links.nameType
+		return links.getNameType()
 	}
 	return nil
 }
@@ -392,7 +392,7 @@ func (c *Checker) RequiresAddingImplicitUndefined(node *ast.Node) bool {
 	if symbol == nil {
 		return false
 	}
-	return c.GetEmitResolver().RequiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
+	return c.requiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
 }
 
 func (c *Checker) RemoveMissingOrUndefinedType(t *Type) *Type {

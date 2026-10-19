@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/contextualGenericReturnToOptionalClassField.ts] ////
+
+=== contextualGenericReturnToOptionalClassField.ts ===
+declare function lookup<T extends object = object>(): T;
+>lookup : Symbol(lookup, Decl(contextualGenericReturnToOptionalClassField.ts, 0, 0))
+>T : Symbol(T, Decl(contextualGenericReturnToOptionalClassField.ts, 0, 24))
+>T : Symbol(T, Decl(contextualGenericReturnToOptionalClassField.ts, 0, 24))
+
+class Container {
+>Container : Symbol(Container, Decl(contextualGenericReturnToOptionalClassField.ts, 0, 56))
+
+    item?: { label: string };
+>item : Symbol(Container.item, Decl(contextualGenericReturnToOptionalClassField.ts, 1, 17))
+>label : Symbol(label, Decl(contextualGenericReturnToOptionalClassField.ts, 2, 12))
+
+    getLabel() {
+>getLabel : Symbol(Container.getLabel, Decl(contextualGenericReturnToOptionalClassField.ts, 2, 29))
+
+        if (!this.item) this.item = lookup();
+>this.item : Symbol(Container.item, Decl(contextualGenericReturnToOptionalClassField.ts, 1, 17))
+>this : Symbol(Container, Decl(contextualGenericReturnToOptionalClassField.ts, 0, 56))
+>item : Symbol(Container.item, Decl(contextualGenericReturnToOptionalClassField.ts, 1, 17))
+>this.item : Symbol(Container.item, Decl(contextualGenericReturnToOptionalClassField.ts, 1, 17))
+>this : Symbol(Container, Decl(contextualGenericReturnToOptionalClassField.ts, 0, 56))
+>item : Symbol(Container.item, Decl(contextualGenericReturnToOptionalClassField.ts, 1, 17))
+>lookup : Symbol(lookup, Decl(contextualGenericReturnToOptionalClassField.ts, 0, 0))
+
+        return this.item.label;
+>this.item.label : Symbol(label, Decl(contextualGenericReturnToOptionalClassField.ts, 2, 12))
+>this.item : Symbol(Container.item, Decl(contextualGenericReturnToOptionalClassField.ts, 1, 17))
+>this : Symbol(Container, Decl(contextualGenericReturnToOptionalClassField.ts, 0, 56))
+>item : Symbol(Container.item, Decl(contextualGenericReturnToOptionalClassField.ts, 1, 17))
+>label : Symbol(label, Decl(contextualGenericReturnToOptionalClassField.ts, 2, 12))
+    }
+}
+

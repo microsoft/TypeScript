@@ -699,6 +699,7 @@ function generateFactory(): string {
 
     // ── NodeObject class ──
     const sortedGetters = [...getterNames].sort();
+    out.push(`/** @internal */`);
     out.push(`export class NodeObject {`);
     out.push(`    readonly kind: SyntaxKind;`);
     out.push(`    flags: NodeFlags = 0 as NodeFlags;`);

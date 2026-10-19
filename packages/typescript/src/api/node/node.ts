@@ -196,7 +196,6 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         return result;
     }
 
-    /** @internal */
     getOrCreateNodeAtIndex(index: number): Node {
         let node = this.nodes[index];
         if (!node) {

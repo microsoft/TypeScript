@@ -225,6 +225,7 @@ const (
 
 	// Language service methods
 	MethodGetCompletionsAtPosition Method = "getCompletionsAtPosition"
+	MethodFormatNodeForInsertion   Method = "formatNodeForInsertion"
 
 	// Diagnostic methods
 	MethodGetSyntacticDiagnostics         Method = "getSyntacticDiagnostics"
@@ -236,12 +237,11 @@ const (
 	MethodGetGlobalDiagnostics            Method = "getGlobalDiagnostics"
 	MethodGetConfigFileParsingDiagnostics Method = "getConfigFileParsingDiagnostics"
 	// Printer methods
-	MethodPrintNode              Method = "printNode"
-	MethodFormatNodeForInsertion Method = "formatNodeForInsertion"
-	MethodEmit                   Method = "emit"
-	MethodEmitToString           Method = "emitToString"
-	MethodGetJavaScriptEmit      Method = "getJavaScriptEmit"
-	MethodGetDeclarationEmit     Method = "getDeclarationEmit"
+	MethodPrintNode          Method = "printNode"
+	MethodEmit               Method = "emit"
+	MethodEmitToString       Method = "emitToString"
+	MethodGetJavaScriptEmit  Method = "getJavaScriptEmit"
+	MethodGetDeclarationEmit Method = "getDeclarationEmit"
 
 	// Intrinsic type getters
 	MethodGetAnyType          Method = "getAnyType"
@@ -742,8 +742,8 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetReferencedSymbolsForNode:       unmarshallerFor[GetReferencedSymbolsForNodeParams],
 	MethodGetSignatureUsages:                unmarshallerFor[GetSignatureUsagesParams],
 	MethodGetCompletionsAtPosition:          unmarshallerFor[GetCompletionsAtPositionParams],
-	MethodPrintNode:                         unmarshallerFor[PrintNodeParams],
 	MethodFormatNodeForInsertion:            unmarshallerFor[FormatNodeForInsertionParams],
+	MethodPrintNode:                         unmarshallerFor[PrintNodeParams],
 	MethodEmit:                              unmarshallerFor[EmitParams],
 	MethodEmitToString:                      unmarshallerFor[EmitParams],
 	MethodGetJavaScriptEmit:                 unmarshallerFor[SelectedFilesEmitParams],
@@ -1035,10 +1035,6 @@ type ProjectResponse struct {
 	CurrentDirectory  tspath.RootedDirectoryPath `json:"currentDirectory"`
 	Dirty             bool                       `json:"dirty"`
 	ParsedCommandLine *ConfigFileResponse        `json:"parsedCommandLine" nonnil:"true"`
-	// Deprecated: Use parsedCommandLine.fileNames.
-	RootFiles []tspath.RootedFilePath `json:"rootFiles" nonnil:"true"`
-	// Deprecated: Use parsedCommandLine.options.
-	CompilerOptions *core.CompilerOptions `json:"compilerOptions" nonnil:"true"`
 }
 
 func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *ConfigFileResponse {
@@ -1084,8 +1080,6 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 		CurrentDirectory:  p.CurrentDirectory(),
 		Dirty:             p.IsDirty(),
 		ParsedCommandLine: NewConfigFileResponse(p.CommandLine),
-		RootFiles:         p.CommandLine.FileNames(),
-		CompilerOptions:   p.CommandLine.CompilerOptions(),
 	}
 }
 
@@ -1589,6 +1583,15 @@ type GetCompletionsAtPositionParams struct {
 	IncludeSymbol    bool               `json:"includeSymbol,omitempty"`
 }
 
+// FormatNodeForInsertionParams are the parameters for the formatNodeForInsertion method.
+type FormatNodeForInsertionParams struct {
+	Snapshot SnapshotID         `json:"snapshot"`
+	Project  project.ID         `json:"project"`
+	File     DocumentIdentifier `json:"file"`     // target file where the node will be inserted
+	Position uint32             `json:"position"` // UTF-16 code-unit offset of the insertion position in the target file
+	Data     string             `json:"data"`     // base64-encoded binary AST data for the synthesized node
+}
+
 // CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry.
 type CompletionEntryLabelDetailsResponse struct {
 	Detail      *string `json:"detail,omitempty"`
@@ -1808,15 +1811,6 @@ type EmitOutputResponse struct {
 	EmitSkipped bool                  `json:"emitSkipped"`
 	Diagnostics []*DiagnosticResponse `json:"diagnostics" nonnil:"true"`
 	OutputFiles []*EmitOutputFile     `json:"outputFiles" nonnil:"true"`
-}
-
-// FormatNodeForInsertionParams are the parameters for the formatNodeForInsertion method.
-type FormatNodeForInsertionParams struct {
-	Snapshot SnapshotID         `json:"snapshot"`
-	Project  project.ID         `json:"project"`
-	File     DocumentIdentifier `json:"file"`     // target file where the node will be inserted
-	Position uint32             `json:"position"` // UTF-16 code-unit offset of the insertion position in the target file
-	Data     string             `json:"data"`     // base64-encoded binary AST data for the synthesized node
 }
 
 // CheckerTypeParams are parameters for checker methods that operate on a type.
