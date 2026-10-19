@@ -66,6 +66,7 @@ const (
 	TypeSystemPropertyNameWriteType
 	TypeSystemPropertyNameInitializerIsUndefined
 	TypeSystemPropertyNameAliasTarget
+	TypeSystemPropertyNameComputedPropertyName
 )
 
 type TypeResolution struct {
@@ -19772,6 +19773,8 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return c.valueSymbolLinks.Get(r.target.(*ast.Symbol)).getWriteType() != nil
 	case TypeSystemPropertyNameAliasTarget:
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget != nil
+	case TypeSystemPropertyNameComputedPropertyName:
+		return c.typeNodeLinks.Get(r.target.(*ast.Node)).resolvedType != nil
 	}
 	panic("Unhandled case in typeResolutionHasProperty")
 }
@@ -28402,12 +28405,19 @@ func isInvalidComputedPropertyName(node *ast.Node) bool {
 func (c *Checker) checkComputedPropertyName(node *ast.Node) *Type {
 	links := c.typeNodeLinks.Get(node)
 	if links.resolvedType == nil {
-		links.resolvedType = c.circularConstraintType
 		if isInvalidComputedPropertyName(node) {
 			links.resolvedType = c.errorType
 			return links.resolvedType
 		}
-		links.resolvedType = c.getRegularTypeOfLiteralType(c.checkExpression(node.Expression()))
+		if !c.pushTypeResolution(node, TypeSystemPropertyNameComputedPropertyName) {
+			return c.errorType
+		}
+		t := c.getRegularTypeOfLiteralType(c.checkExpression(node.Expression()))
+		c.popTypeResolution()
+		if links.resolvedType != nil {
+			return links.resolvedType
+		}
+		links.resolvedType = t
 		// This will allow types number, string, symbol or any. It will also allow enums, the unknown
 		// type, and any union of these types (like string | number).
 		if links.resolvedType.flags&TypeFlagsNullable != 0 ||
