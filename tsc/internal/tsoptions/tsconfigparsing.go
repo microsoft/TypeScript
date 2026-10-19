@@ -1807,12 +1807,6 @@ func hasFileWithHigherPriorityExtension(file tspath.RootedFilePath, extensions [
 			return false
 		}
 		if hasFile(file.ChangeExtension(ext)) {
-			if ext == tspath.ExtensionDts && (file.ExtensionIs(tspath.ExtensionJs) || file.ExtensionIs(tspath.ExtensionJsx)) {
-				// LEGACY BEHAVIOR: An off-by-one bug somewhere in the extension priority system for wildcard module loading allowed declaration
-				// files to be loaded alongside their js(x) counterparts. We regard this as generally undesirable, but retain the behavior to
-				// prevent breakage.
-				continue
-			}
 			return true
 		}
 	}
