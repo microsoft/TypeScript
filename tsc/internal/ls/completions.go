@@ -1408,9 +1408,9 @@ func (l *LanguageService) getCompletionData(
 		if localSymbol != nil {
 			localExports = localSymbol.Exports()
 		}
-		for name, symbol := range localsContainer.Locals() {
+		for name, symbol := range localsContainer.Locals().All() {
 			symbols = append(symbols, symbol)
-			if _, ok := localExports[name]; ok {
+			if _, ok := localExports.Lookup(name); ok {
 				symbolId := ast.GetSymbolId(symbol)
 				symbolToSortTextMap[symbolId] = SortTextOptionalMember
 			}

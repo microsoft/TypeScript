@@ -119,21 +119,21 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 				locals = existingFakeScope.Locals()
 			}
 			if locals == nil {
-				locals = make(ast.SymbolTable)
+				locals = ast.NewSymbolTable(0)
 			}
 			newLocals := []string{}
 			oldLocals := []localsRecord{}
 			addAll(func(name string, symbol *ast.Symbol) {
 				// Add cleanup information only if we don't own the fake scope
 				if existingFakeScope != nil {
-					oldSymbol, ok := locals[name]
+					oldSymbol, ok := locals.Lookup(name)
 					if !ok || oldSymbol == nil {
 						newLocals = append(newLocals, name)
 					} else {
 						oldLocals = append(oldLocals, localsRecord{name, oldSymbol})
 					}
 				}
-				locals[name] = symbol
+				locals.Set(name, symbol)
 			})
 
 			if existingFakeScope == nil {
@@ -150,10 +150,10 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 				// We did not create the current scope, so we have to clean it up
 				undo := func() {
 					for _, s := range newLocals {
-						delete(locals, s)
+						locals.Delete(s)
 					}
 					for _, s := range oldLocals {
-						locals[s.name] = s.oldSymbol
+						locals.Set(s.name, s.oldSymbol)
 					}
 				}
 				return undo

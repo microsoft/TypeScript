@@ -70,7 +70,7 @@ func getSourceFileSymbolIndex(sourceFile *ast.SourceFile) map[SymbolID]*ast.Symb
 			addSymbol(symbol.Parent())
 			addSymbol(symbol.ExportSymbol())
 			for _, table := range []ast.SymbolTable{symbol.Members(), symbol.Exports()} {
-				for _, child := range table {
+				for _, child := range table.All() {
 					addSymbol(child)
 				}
 			}
@@ -81,11 +81,11 @@ func getSourceFileSymbolIndex(sourceFile *ast.SourceFile) map[SymbolID]*ast.Symb
 			}
 			addSymbol(node.Symbol())
 			addSymbol(node.LocalSymbol())
-			for _, symbol := range node.Locals() {
+			for _, symbol := range node.Locals().All() {
 				addSymbol(symbol)
 			}
 		}
-		for _, symbol := range file.GlobalExports {
+		for _, symbol := range file.GlobalExports.All() {
 			addSymbol(symbol)
 		}
 		for _, module := range file.PatternAmbientModules {
@@ -3446,11 +3446,11 @@ func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params
 	defer release()
 
 	symbolTable := getter(symbol)
-	if len(symbolTable) == 0 {
+	if symbolTable.Len() == 0 {
 		return nil, nil
 	}
-	if len(symbolTable) == 1 {
-		for _, sub := range symbolTable {
+	if symbolTable.Len() == 1 {
+		for _, sub := range symbolTable.All() {
 			if sd == nil {
 				return []*SymbolResponse{newFileSymbolResponse(sub)}, nil
 			}
@@ -3458,8 +3458,8 @@ func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params
 		}
 	}
 
-	symbols := make([]*ast.Symbol, 0, len(symbolTable))
-	for _, sub := range symbolTable {
+	symbols := make([]*ast.Symbol, 0, symbolTable.Len())
+	for _, sub := range symbolTable.All() {
 		symbols = append(symbols, sub)
 	}
 	if sd == nil {
