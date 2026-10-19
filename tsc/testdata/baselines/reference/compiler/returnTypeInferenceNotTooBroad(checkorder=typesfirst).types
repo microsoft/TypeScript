@@ -50,18 +50,18 @@ export const yun = unwrap(y);
 
 // $ExpectType { kind: "a"; a: 3; }
 export const yone = unwrap(sepsis({ low: 1, sign: { kind: 'a', a: 3 }}));
->yone : { kind: string; a: number; }
->unwrap(sepsis({ low: 1, sign: { kind: 'a', a: 3 }})) : { kind: string; a: number; }
+>yone : { kind: "a"; a: 3; }
+>unwrap(sepsis({ low: 1, sign: { kind: 'a', a: 3 }})) : { kind: "a"; a: 3; }
 >unwrap : <T>(w: Wrapper<T>) => T
->sepsis({ low: 1, sign: { kind: 'a', a: 3 }}) : Wrapper<{ kind: string; a: number; }>
+>sepsis({ low: 1, sign: { kind: 'a', a: 3 }}) : Wrapper<{ kind: "a"; a: 3; }>
 >sepsis : <T extends Signs>(opts: Opts<T>) => Wrapper<T>
->{ low: 1, sign: { kind: 'a', a: 3 }} : { low: number; sign: { kind: string; a: number; }; }
+>{ low: 1, sign: { kind: 'a', a: 3 }} : { low: number; sign: { kind: "a"; a: 3; }; }
 >low : number
 >1 : 1
->sign : { kind: string; a: number; }
->{ kind: 'a', a: 3 } : { kind: string; a: number; }
->kind : string
+>sign : { kind: "a"; a: 3; }
+>{ kind: 'a', a: 3 } : { kind: "a"; a: 3; }
+>kind : "a"
 >'a' : "a"
->a : number
+>a : 3
 >3 : 3
 
