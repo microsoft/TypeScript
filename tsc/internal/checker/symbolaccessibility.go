@@ -294,11 +294,11 @@ func (c *Checker) buildExternalModuleContainerIndex() {
 // forEachSymbolTableEntry calls f for each entry of a symbol table so that any types f creates are created
 // in an order that does not depend on the table's random iteration order. That holds as long as f has no side
 // effects for a symbol that is not an alias, or for an alias whose whole chain of aliases is already resolved: those
-// come first, in table order. Resolving an alias can create types, so the other aliases come last, sorted. f must not depend on the
-// order it sees entries in for its result: collect and sort what it finds instead. f returns true to stop, which is
-// only allowed when the answer does not depend on which entry stopped it (such as whether any entry matches), and
-// forEachSymbolTableEntry then returns true. f gets each symbol's key in the table, which is not always the
-// symbol's name (a default export is keyed "default").
+// come first, in table order. Resolving an alias can create types, so the other aliases come last, sorted. f must
+// not depend on the order it sees entries in for its result: collect and sort what it finds instead. f returns true
+// to stop, which is only allowed when the answer does not depend on which entry stopped it (such as whether any
+// entry matches), and forEachSymbolTableEntry then returns true. f gets each symbol's key in the table, which is
+// not always the symbol's name (a default export is keyed "default").
 func (c *Checker) forEachSymbolTableEntry(symbols ast.SymbolTable, f func(name string, symbol *ast.Symbol) bool) bool {
 	type entry struct {
 		name   string
