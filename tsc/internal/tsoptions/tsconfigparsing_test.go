@@ -259,6 +259,48 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 		}},
 	},
 	{
+		title:                  "reports errors for network paths",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+                "extends": ["//server/share/base.json", "\\\\?\\UNC\\server\\share\\base.json"],
+                "compilerOptions": {
+                    "outDir": "\\\\server\\share\\out",
+                    "rootDir": "./src",
+                    "typeRoots": ["./types", "\\??\\UNC\\server\\share\\types"],
+                    "mapRoot": "//server/share/maps",
+                    "declarationDir": "/x/../??/UNC/server/share/decl",
+                    "baseUrl": "/??/../apath"
+                },
+                "files": ["main.ts", "//server/share/a.ts", "../??/UNC/server/share/b.ts"],
+                "include": ["src", "\\\\.\\GLOBALROOT\\Device\\Mup\\server\\share"],
+                "exclude": ["//server/share/excluded", "../??/*.ts"],
+                "references": [{ "path": "//server/share/project" }]
+            }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": "", "/apath/src/index.ts": ""},
+		}},
+	},
+	{
+		title: "reports errors for network path in string extends",
+		input: []testConfig{{
+			jsonText:       `{ "extends": "\\\\server\\share\\base.json" }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": ""},
+		}},
+	},
+	{
+		title: "reports errors for normalized network path in string extends",
+		input: []testConfig{{
+			jsonText:       `{ "extends": "/x/../??/UNC/server/share/base.json" }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": ""},
+		}},
+	},
+	{
 		title:                  "parses tsconfig with compilerOptions, files, include, and exclude",
 		includeCompilerOptions: true,
 		input: []testConfig{{

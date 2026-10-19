@@ -113,6 +113,7 @@ export class SyncRpcChannel {
     private writeFd: number;
     private pipeFd: number | undefined;
     private callbacks = new Map<string, (name: string, payload: string) => string>();
+    private callbackFailure: { error: unknown; } | undefined;
 
     private methodBufCache = new Map<string, Buffer>();
 
@@ -280,6 +281,9 @@ export class SyncRpcChannel {
         if (this.readFd < 0) {
             throw new Error("SyncRpcChannel is closed");
         }
+        if (this.callbackFailure) {
+            throw this.callbackFailure.error;
+        }
     }
 
     private getMethodBuf(method: string): Buffer {
@@ -326,7 +330,14 @@ export class SyncRpcChannel {
                     );
                 }
                 case MSG_CALL: {
-                    this.handleCall(this._msgName.toString("utf-8"), this._msgPayload);
+                    try {
+                        this.handleCall(this._msgName.toString("utf-8"), this._msgPayload);
+                    }
+                    catch (error) {
+                        // The pending response is unread, so further I/O cannot be synchronized.
+                        this.callbackFailure = { error };
+                        throw error;
+                    }
                     break;
                 }
                 default:

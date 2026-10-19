@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/messagePortHandlerEventTypes.ts] ////
+
+=== messagePortHandlerEventTypes.ts ===
+declare const port: MessagePort;
+>port : Symbol(port, Decl(messagePortHandlerEventTypes.ts, 0, 13))
+>MessagePort : Symbol(MessagePort, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+port.onmessage = event => {
+>port.onmessage : Symbol(MessageEventTarget.onmessage, Decl(lib.dom.d.ts, --, --))
+>port : Symbol(port, Decl(messagePortHandlerEventTypes.ts, 0, 13))
+>onmessage : Symbol(MessageEventTarget.onmessage, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(messagePortHandlerEventTypes.ts, 1, 16))
+
+    event.data;
+>event.data : Symbol(MessageEvent.data, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(messagePortHandlerEventTypes.ts, 1, 16))
+>data : Symbol(MessageEvent.data, Decl(lib.dom.d.ts, --, --))
+
+};
+port.onmessageerror = event => {
+>port.onmessageerror : Symbol(MessageEventTarget.onmessageerror, Decl(lib.dom.d.ts, --, --))
+>port : Symbol(port, Decl(messagePortHandlerEventTypes.ts, 0, 13))
+>onmessageerror : Symbol(MessageEventTarget.onmessageerror, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(messagePortHandlerEventTypes.ts, 4, 21))
+
+    event.data;
+>event.data : Symbol(MessageEvent.data, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(messagePortHandlerEventTypes.ts, 4, 21))
+>data : Symbol(MessageEvent.data, Decl(lib.dom.d.ts, --, --))
+
+};
+
