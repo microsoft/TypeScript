@@ -22585,29 +22585,30 @@ func (c *Checker) getNamedMembers(members ast.SymbolTable, container *ast.Symbol
 	// For classes and interfaces, we store explicitly declared members ahead of inherited members. This ensures we process
 	// explicitly declared members first in type relations, which is beneficial because explicitly declared members are more
 	// likely to contain discriminating differences. See for example https://github.com/microsoft/TypeScript/tsc/issues/1968.
-	symbols := make([]*ast.Symbol, 0, len(members))
-	for id, symbol := range members {
-		if !isReservedMemberName(id) {
-			symbols = append(symbols, symbol)
+	result := make([]*ast.Symbol, 0, len(members))
+	c.forEachSymbolTableEntry(members, func(id string, symbol *ast.Symbol) bool {
+		if c.isNamedMember(symbol, id) {
+			result = append(result, symbol)
 		}
-	}
-	// Sort before checking which members are values: that can resolve aliases (creating types), and the symbol
-	// table is randomly iterated.
-	c.sortSymbols(symbols)
+		return false
+	})
 	if container == nil || container.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) == 0 {
-		return slices.DeleteFunc(symbols, func(symbol *ast.Symbol) bool { return !c.symbolIsValue(symbol) })
+		c.sortSymbols(result)
+		return result
 	}
-	result := make([]*ast.Symbol, 0, len(symbols))
-	for _, symbol := range symbols {
-		if c.symbolIsValue(symbol) && c.isDeclarationContainedBy(symbol, container) {
-			result = append(result, symbol)
+	var inherited []*ast.Symbol
+	containedCount := 0
+	for _, symbol := range result {
+		if c.isDeclarationContainedBy(symbol, container) {
+			result[containedCount] = symbol
+			containedCount++
+		} else {
+			inherited = append(inherited, symbol)
 		}
 	}
-	for _, symbol := range symbols {
-		if c.symbolIsValue(symbol) && !c.isDeclarationContainedBy(symbol, container) {
-			result = append(result, symbol)
-		}
-	}
+	copy(result[containedCount:], inherited)
+	c.sortSymbols(result[:containedCount])
+	c.sortSymbols(result[containedCount:])
 	return result
 }
 
