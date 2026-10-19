@@ -23183,6 +23183,22 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	if newAlias == nil {
 		newAlias = c.instantiateTypeAlias(t.alias, m)
 	}
+	instantiate := func(newMapper *TypeMapper) *Type {
+		switch {
+		case target.objectFlags&ObjectFlagsReference != 0:
+			return c.createDeferredTypeReference(t.Target(), t.AsTypeReference().node, newMapper, newAlias)
+		case target.objectFlags&ObjectFlagsMapped != 0:
+			return c.instantiateMappedType(target, newMapper, newAlias)
+		default:
+			return c.instantiateAnonymousType(target, newMapper, newAlias)
+		}
+	}
+	if target.objectFlags&ObjectFlagsSingleSignatureType != 0 && m != nil {
+		// The signature may reference type parameters other than the outer
+		// type parameters of its declaration, so the instantiation is not
+		// determined by the type arguments and cannot be cached by them.
+		return instantiate(c.combineTypeMappers(newTypeMapper(typeParameters, typeArguments), m))
+	}
 	data := target.AsObjectType()
 	key := getTypeInstantiationKey(typeArguments, newAlias, t.objectFlags&ObjectFlagsSingleSignatureType != 0)
 	if data.instantiations == nil {
@@ -23191,18 +23207,7 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	}
 	result := data.instantiations[key]
 	if result == nil {
-		newMapper := newTypeMapper(typeParameters, typeArguments)
-		if target.objectFlags&ObjectFlagsSingleSignatureType != 0 && m != nil {
-			newMapper = c.combineTypeMappers(newMapper, m)
-		}
-		switch {
-		case target.objectFlags&ObjectFlagsReference != 0:
-			result = c.createDeferredTypeReference(t.Target(), t.AsTypeReference().node, newMapper, newAlias)
-		case target.objectFlags&ObjectFlagsMapped != 0:
-			result = c.instantiateMappedType(target, newMapper, newAlias)
-		default:
-			result = c.instantiateAnonymousType(target, newMapper, newAlias)
-		}
+		result = instantiate(newTypeMapper(typeParameters, typeArguments))
 		data.instantiations[key] = result
 		if result.flags&TypeFlagsObjectFlagsType != 0 && result.objectFlags&ObjectFlagsCouldContainTypeVariablesComputed == 0 {
 			// if `result` is one of the object types we tried to make (it may not be, due to how `instantiateMappedType` works), we can carry forward the type variable containment check from the input type arguments
