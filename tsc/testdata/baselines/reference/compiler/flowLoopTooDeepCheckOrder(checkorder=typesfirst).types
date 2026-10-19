@@ -23,19 +23,19 @@ while (cond()) {
 >cond : () => boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (typeof w === "string") { w = 1; } else { w = "a"; }
 >typeof w === "string" : boolean
@@ -50,2986 +50,2986 @@ while (cond()) {
 >"a" : "a"
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
->b : any
+>b : boolean
 
     if (b) {}
 >b : any
@@ -3355,7 +3355,7 @@ if (isString(w)) {
 >w : any
 
     const narrowed = w;
->narrowed : any
+>narrowed : string
 >w : string
 }
 

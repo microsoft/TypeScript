@@ -856,7 +856,6 @@ type Checker struct {
 	flowLoopStack                               []FlowLoopInfo
 	sharedFlows                                 []SharedFlow
 	antecedentTypes                             []*Type
-	flowAnalysisDisabled                        bool
 	flowInvocationCount                         int
 	flowTypeCache                               map[*ast.Node]*Type
 	lastFlowNode                                *ast.FlowNode
@@ -3888,13 +3887,7 @@ func (c *Checker) checkBlock(node *ast.Node) {
 	if node.Kind == ast.KindBlock {
 		c.checkGrammarStatementInAmbientContext(node)
 	}
-	if ast.IsFunctionOrModuleBlock(node) {
-		saveFlowAnalysisDisabled := c.flowAnalysisDisabled
-		c.checkSourceElements(node.Statements())
-		c.flowAnalysisDisabled = saveFlowAnalysisDisabled
-	} else {
-		c.checkSourceElements(node.Statements())
-	}
+	c.checkSourceElements(node.Statements())
 	if node.Locals().Len() != 0 {
 		c.registerForUnusedIdentifiersCheck(node)
 	}
