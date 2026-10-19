@@ -174,9 +174,9 @@ f6({ x: 1, y: 1 });
 function f7({ a: { x = 0, y = 0 } } = { a: {} }) { }
 >f7 : ({ a: { x, y } }?: { a: {}; }) => void
 >a : any
->x : any
+>x : number
 >0 : 0
->y : any
+>y : number
 >0 : 0
 >{ a: {} } : { a: {}; }
 >a : {}
