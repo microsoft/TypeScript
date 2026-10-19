@@ -1,0 +1,302 @@
+//// [tests/cases/compiler/exportStarDefault.ts] ////
+
+=== first.ts ===
+export default class First { first = 1; }
+>First : First
+>first : number
+>1 : 1
+
+export const shared = 1;
+>shared : 1
+>1 : 1
+
+export const unique = "first";
+>unique : "first"
+>"first" : "first"
+
+=== second.ts ===
+export default class Second { second = 2; }
+>Second : Second
+>second : number
+>2 : 2
+
+export const shared = 2;
+>shared : 2
+>2 : 2
+
+=== single.ts ===
+
+export * from "./first";
+
+=== diamond.ts ===
+
+export * from "./first";
+export * from "./single";
+
+=== ambiguous.ts ===
+
+export * from "./first";
+export * from "./second";
+
+=== forwarded.ts ===
+
+export * from "./ambiguous";
+
+=== resolved.ts ===
+export * from "./ambiguous";
+export { default, shared } from "./first";
+>default : typeof import("./first").default
+>shared : 1
+
+=== local.ts ===
+export * from "./first";
+export * from "./second";
+export default "local";
+export const shared = true;
+>shared : true
+>true : true
+
+=== localClass.ts ===
+export * from "./first";
+export default class LocalClass { local = true; }
+>LocalClass : LocalClass
+>local : boolean
+>true : true
+
+=== localFunction.ts ===
+export * from "./first";
+export default function localFunction() { return true; }
+>localFunction : () => boolean
+>true : true
+
+=== cycleA.ts ===
+
+export * from "./cycleB";
+
+=== cycleB.ts ===
+
+export * from "./cycleA";
+export * from "./first";
+
+=== namedConflict.ts ===
+export { shared } from "./ambiguous";
+>shared : any
+
+=== firstDeclaration.d.ts ===
+export default class FirstDeclaration { first: number; }
+>FirstDeclaration : FirstDeclaration
+>first : number
+
+=== secondDeclaration.d.ts ===
+export default class SecondDeclaration { second: number; }
+>SecondDeclaration : SecondDeclaration
+>second : number
+
+=== ambiguousDeclaration.d.ts ===
+
+export * from "./firstDeclaration";
+export * from "./secondDeclaration";
+
+=== consumer.ts ===
+import First from "./single";
+>First : typeof First
+
+import { default as Diamond, shared as diamondShared } from "./diamond";
+>default : typeof First
+>Diamond : typeof First
+>shared : 1
+>diamondShared : 1
+
+import Resolved, { shared as resolvedShared } from "./resolved";
+>Resolved : typeof First
+>shared : 1
+>resolvedShared : 1
+
+import Local, { shared as localShared } from "./local";
+>Local : "local"
+>shared : true
+>localShared : true
+
+import LocalClass from "./localClass";
+>LocalClass : typeof LocalClass
+
+import localFunction from "./localFunction";
+>localFunction : () => boolean
+
+import Cycle from "./cycleA";
+>Cycle : typeof First
+
+import * as single from "./single";
+>single : typeof single
+
+import * as ambiguous from "./ambiguous";
+>ambiguous : typeof ambiguous
+
+import * as forwarded from "./forwarded";
+>forwarded : typeof forwarded
+
+import * as namedConflict from "./namedConflict";
+>namedConflict : typeof namedConflict
+
+import Conflict, { default as NamedConflict, shared, unique } from "./ambiguous";
+>Conflict : any
+>default : any
+>NamedConflict : any
+>shared : any
+>unique : "first"
+
+import DeclarationConflict from "./ambiguousDeclaration";
+>DeclarationConflict : any
+
+export { default, shared as conflict } from "./forwarded";
+>default : any
+>shared : any
+>conflict : any
+
+new First().first;
+>new First().first : number
+>new First() : First
+>First : typeof First
+>first : number
+
+new Diamond().first;
+>new Diamond().first : number
+>new Diamond() : First
+>Diamond : typeof First
+>first : number
+
+new Resolved().first;
+>new Resolved().first : number
+>new Resolved() : First
+>Resolved : typeof First
+>first : number
+
+new single.default().first;
+>new single.default().first : number
+>new single.default() : First
+>single.default : typeof First
+>single : typeof single
+>default : typeof First
+>first : number
+
+new single["default"]().first;
+>new single["default"]().first : number
+>new single["default"]() : First
+>single["default"] : typeof First
+>single : typeof single
+>"default" : "default"
+>first : number
+
+new LocalClass().local;
+>new LocalClass().local : boolean
+>new LocalClass() : LocalClass
+>LocalClass : typeof LocalClass
+>local : boolean
+
+const localResult: boolean = localFunction();
+>localResult : boolean
+>localFunction() : boolean
+>localFunction : () => boolean
+
+new Cycle().first;
+>new Cycle().first : number
+>new Cycle() : First
+>Cycle : typeof First
+>first : number
+
+const one: 1 = diamondShared;
+>one : 1
+>diamondShared : 1
+
+const anotherOne: 1 = resolvedShared;
+>anotherOne : 1
+>resolvedShared : 1
+
+const text: string = Local;
+>text : string
+>Local : "local"
+
+const flag: boolean = localShared;
+>flag : boolean
+>localShared : true
+
+const nonconflicting: string = unique;
+>nonconflicting : string
+>unique : "first"
+
+ambiguous.default;
+>ambiguous.default : any
+>ambiguous : typeof ambiguous
+>default : any
+
+ambiguous["default"];
+>ambiguous["default"] : any
+>ambiguous : typeof ambiguous
+>"default" : "default"
+
+ambiguous.shared;
+>ambiguous.shared : any
+>ambiguous : typeof ambiguous
+>shared : any
+
+ambiguous["shared"];
+>ambiguous["shared"] : any
+>ambiguous : typeof ambiguous
+>"shared" : "shared"
+
+forwarded.default;
+>forwarded.default : any
+>forwarded : typeof forwarded
+>default : any
+
+forwarded["shared"];
+>forwarded["shared"] : any
+>forwarded : typeof forwarded
+>"shared" : "shared"
+
+namedConflict.shared;
+>namedConflict.shared : any
+>namedConflict : typeof namedConflict
+>shared : any
+
+// Conflicting accesses have the error type, without cascading errors.
+ambiguous.default.nonexistent();
+>ambiguous.default.nonexistent() : any
+>ambiguous.default.nonexistent : any
+>ambiguous.default : any
+>ambiguous : typeof ambiguous
+>default : any
+>nonexistent : any
+
+ambiguous["shared"].nonexistent();
+>ambiguous["shared"].nonexistent() : any
+>ambiguous["shared"].nonexistent : any
+>ambiguous["shared"] : any
+>ambiguous : typeof ambiguous
+>"shared" : "shared"
+>nonexistent : any
+
+Conflict.nonexistent();
+>Conflict.nonexistent() : any
+>Conflict.nonexistent : any
+>Conflict : any
+>nonexistent : any
+
+NamedConflict.nonexistent();
+>NamedConflict.nonexistent() : any
+>NamedConflict.nonexistent : any
+>NamedConflict : any
+>nonexistent : any
+
+shared.nonexistent();
+>shared.nonexistent() : any
+>shared.nonexistent : any
+>shared : any
+>nonexistent : any
+
+DeclarationConflict.nonexistent();
+>DeclarationConflict.nonexistent() : any
+>DeclarationConflict.nonexistent : any
+>DeclarationConflict : any
+>nonexistent : any
+

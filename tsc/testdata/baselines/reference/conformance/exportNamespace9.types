@@ -41,11 +41,11 @@ export type * from "./a"; // Collision error
 
 === /g.ts ===
 import { A } from "./f";
->A : 1
+>A : any
 
 A;
->A : 1
+>A : any
 
 type _ = A; // Follow-on from collision error
->_ : A
+>_ : any
 

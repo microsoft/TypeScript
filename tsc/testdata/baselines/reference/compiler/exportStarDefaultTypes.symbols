@@ -1,0 +1,84 @@
+//// [tests/cases/compiler/exportStarDefaultTypes.ts] ////
+
+=== first.ts ===
+export default interface First { first: number; }
+>First : Symbol(First, Decl(first.ts, 0, 0))
+>first : Symbol(First.first, Decl(first.ts, 0, 32))
+
+export interface Shared { first: number; }
+>Shared : Symbol(Shared, Decl(first.ts, 0, 49))
+>first : Symbol(Shared.first, Decl(first.ts, 1, 25))
+
+=== second.ts ===
+export default interface Second { second: number; }
+>Second : Symbol(Second, Decl(second.ts, 0, 0))
+>second : Symbol(Second.second, Decl(second.ts, 0, 33))
+
+export interface Shared { second: number; }
+>Shared : Symbol(Shared, Decl(second.ts, 0, 51))
+>second : Symbol(Shared.second, Decl(second.ts, 1, 25))
+
+=== single.ts ===
+
+export type * from "./first";
+
+=== ambiguous.ts ===
+
+export type * from "./first";
+export type * from "./second";
+
+=== resolved.ts ===
+export type * from "./ambiguous";
+export type { default, Shared } from "./first";
+>default : Symbol(default, Decl(resolved.ts, 1, 13))
+>Shared : Symbol(Shared, Decl(resolved.ts, 1, 22))
+
+=== consumer.ts ===
+import type First from "./single";
+>First : Symbol(First, Decl(consumer.ts, 0, 6))
+
+import type Resolved from "./resolved";
+>Resolved : Symbol(Resolved, Decl(consumer.ts, 1, 6))
+
+import type Conflict from "./ambiguous";
+>Conflict : Symbol(Conflict, Decl(consumer.ts, 2, 6))
+
+import type { Shared } from "./ambiguous";
+>Shared : Symbol(Shared, Decl(consumer.ts, 3, 13))
+
+import type * as ns from "./ambiguous";
+>ns : Symbol(ns, Decl(consumer.ts, 4, 11))
+
+export type { default, Shared } from "./ambiguous";
+>default : Symbol(default, Decl(consumer.ts, 5, 13))
+>Shared : Symbol(Shared, Decl(consumer.ts, 5, 22))
+
+const first: First = { first: 1 };
+>first : Symbol(first, Decl(consumer.ts, 6, 5))
+>First : Symbol(First, Decl(consumer.ts, 0, 6))
+>first : Symbol(first, Decl(consumer.ts, 6, 22))
+
+const resolved: Resolved = first;
+>resolved : Symbol(resolved, Decl(consumer.ts, 7, 5))
+>Resolved : Symbol(Resolved, Decl(consumer.ts, 1, 6))
+>first : Symbol(first, Decl(consumer.ts, 6, 5))
+
+const conflict: Conflict = {};
+>conflict : Symbol(conflict, Decl(consumer.ts, 8, 5))
+>Conflict : Symbol(Conflict, Decl(consumer.ts, 2, 6))
+
+const shared: Shared = {};
+>shared : Symbol(shared, Decl(consumer.ts, 9, 5))
+>Shared : Symbol(Shared, Decl(consumer.ts, 3, 13))
+
+const qualified: ns.Shared = {};
+>qualified : Symbol(qualified, Decl(consumer.ts, 10, 5))
+>ns : Symbol(ns, Decl(consumer.ts, 4, 11))
+>Shared : Symbol(Shared)
+
+const nested: ns.Shared.Nested = {};
+>nested : Symbol(nested, Decl(consumer.ts, 11, 5))
+>ns : Symbol(ns, Decl(consumer.ts, 4, 11))
+>Shared : Symbol(Shared)
+>Nested : Symbol(ns.Shared.Nested)
+

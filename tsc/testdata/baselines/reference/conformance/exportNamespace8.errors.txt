@@ -1,4 +1,4 @@
-/c.ts(2,1): error TS2308: Module "./a" has already exported a member named 'B'. Consider explicitly re-exporting to resolve the ambiguity.
+/d.ts(1,13): error TS2308: Module "/c" has already exported a member named 'B'. Consider explicitly re-exporting to resolve the ambiguity.
 /d.ts(2,16): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
 
 
@@ -10,14 +10,14 @@
     export class B {}
     export class C {}
     
-==== /c.ts (1 errors) ====
+==== /c.ts (0 errors) ====
     export type * from "./a";
     export * from "./b"; // Collision error
-    ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2308: Module "./a" has already exported a member named 'B'. Consider explicitly re-exporting to resolve the ambiguity.
     
-==== /d.ts (1 errors) ====
+==== /d.ts (2 errors) ====
     import { A, B, C } from "./c";
+                ~
+!!! error TS2308: Module "/c" has already exported a member named 'B'. Consider explicitly re-exporting to resolve the ambiguity.
     let _: A = new A();   // Error
                    ~
 !!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.

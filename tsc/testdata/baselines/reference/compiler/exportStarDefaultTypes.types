@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/exportStarDefaultTypes.ts] ////
+
+=== first.ts ===
+export default interface First { first: number; }
+>first : number
+
+export interface Shared { first: number; }
+>first : number
+
+=== second.ts ===
+export default interface Second { second: number; }
+>second : number
+
+export interface Shared { second: number; }
+>second : number
+
+=== single.ts ===
+
+export type * from "./first";
+
+=== ambiguous.ts ===
+
+export type * from "./first";
+export type * from "./second";
+
+=== resolved.ts ===
+export type * from "./ambiguous";
+export type { default, Shared } from "./first";
+>default : import("./first").default
+>Shared : import("./first").Shared
+
+=== consumer.ts ===
+import type First from "./single";
+>First : First
+
+import type Resolved from "./resolved";
+>Resolved : First
+
+import type Conflict from "./ambiguous";
+>Conflict : any
+
+import type { Shared } from "./ambiguous";
+>Shared : any
+
+import type * as ns from "./ambiguous";
+>ns : typeof ns
+
+export type { default, Shared } from "./ambiguous";
+>default : any
+>Shared : any
+
+const first: First = { first: 1 };
+>first : First
+>{ first: 1 } : { first: number; }
+>first : number
+>1 : 1
+
+const resolved: Resolved = first;
+>resolved : First
+>first : First
+
+const conflict: Conflict = {};
+>conflict : any
+>{} : {}
+
+const shared: Shared = {};
+>shared : any
+>{} : {}
+
+const qualified: ns.Shared = {};
+>qualified : any
+>ns : any
+>{} : {}
+
+const nested: ns.Shared.Nested = {};
+>nested : ns.Shared.Nested
+>ns : any
+>Shared : any
+>{} : {}
+
