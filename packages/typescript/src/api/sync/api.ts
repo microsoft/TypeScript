@@ -1344,8 +1344,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
      *
      * Fetching the snapshot issues a lightweight request to the server to
      * retrieve its timing collection. Collection must be enabled via the
-     * `collectTiming` option; when it is not, the returned snapshot has
-     * `enabled: false` and zeroed totals.
+     * `collectTiming` option or `TS_API_TIMING_DIR` environment variable; when
+     * it is not, the returned snapshot has `enabled: false` and zeroed totals.
      */
     get getTimingInfo(): {
         (): TimingInfo;

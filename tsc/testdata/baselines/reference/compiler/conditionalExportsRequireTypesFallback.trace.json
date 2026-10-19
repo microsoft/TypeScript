@@ -1,0 +1,21 @@
+======== Resolving module 'provider' from '/index.cts'. ========
+Explicitly specified module resolution kind: 'NodeNext'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
+File '/package.json' does not exist.
+Loading module 'provider' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Found 'package.json' at '/node_modules/provider/package.json'.
+Entering conditional exports.
+Matched 'exports' condition 'require'.
+Using 'exports' subpath '.' with target './index.cjs'.
+File name '/node_modules/provider/index.cjs' has a '.cjs' extension - stripping it.
+File '/node_modules/provider/index.cts' does not exist.
+File '/node_modules/provider/index.d.cts' does not exist.
+Failed to resolve under condition 'require'.
+Matched 'exports' condition 'types'.
+Using 'exports' subpath '.' with target './index.d.ts'.
+File '/node_modules/provider/index.d.ts' exists - use it as a name resolution result.
+Resolved under condition 'types'.
+Exiting conditional exports.
+Resolving real path for '/node_modules/provider/index.d.ts', result '/node_modules/provider/index.d.ts'.
+======== Module name 'provider' was successfully resolved to '/node_modules/provider/index.d.ts'. ========

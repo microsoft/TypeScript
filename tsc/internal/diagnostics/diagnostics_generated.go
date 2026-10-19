@@ -2392,6 +2392,8 @@ var Instantiations_of_type_0_appear_infinitely_circular = &Message{code: 5114, c
 
 var Instantiations_of_the_following_types_appear_infinitely_circular_Colon_0 = &Message{code: 5115, category: CategoryError, key: "Instantiations_of_the_following_types_appear_infinitely_circular_Colon_0_5115", text: "Instantiations of the following types appear infinitely circular: {0}."}
 
+var Network_path_0_is_not_supported = &Message{code: 5116, category: CategoryError, key: "Network_path_0_is_not_supported_5116", text: "Network path '{0}' is not supported."}
+
 var Generates_a_sourcemap_for_each_corresponding_d_ts_file = &Message{code: 6000, category: CategoryMessage, key: "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000", text: "Generates a sourcemap for each corresponding '.d.ts' file."}
 
 var Concatenate_and_emit_output_to_single_file = &Message{code: 6001, category: CategoryMessage, key: "Concatenate_and_emit_output_to_single_file_6001", text: "Concatenate and emit output to single file."}
@@ -5654,6 +5656,7 @@ var allMessages = [...]**Message{
 	&X_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here,
 	&Instantiations_of_type_0_appear_infinitely_circular,
 	&Instantiations_of_the_following_types_appear_infinitely_circular_Colon_0,
+	&Network_path_0_is_not_supported,
 	&Generates_a_sourcemap_for_each_corresponding_d_ts_file,
 	&Concatenate_and_emit_output_to_single_file,
 	&Generates_corresponding_d_ts_file,
