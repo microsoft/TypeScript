@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/comparableRelationTypeParameterTarget.ts] ////
+
+=== comparableRelationTypeParameterTarget.ts ===
+// Reproduces #27910: a generic constructor type must be comparable with a concrete
+// constructor it could overlap with. Previously, `Constructor<T> === typeof Child`
+// reported TS2367 ("no overlap") even though `func(Child)` accepted `Child` as
+// `Constructor<T>`.
+
+interface Item { }
+>Item : Symbol(Item, Decl(comparableRelationTypeParameterTarget.ts, 0, 0))
+
+abstract class Base<T> {
+>Base : Symbol(Base, Decl(comparableRelationTypeParameterTarget.ts, 5, 18))
+>T : Symbol(T, Decl(comparableRelationTypeParameterTarget.ts, 7, 20))
+
+    get Item(): T { throw 0 }
+>Item : Symbol(Base.Item, Decl(comparableRelationTypeParameterTarget.ts, 7, 24))
+>T : Symbol(T, Decl(comparableRelationTypeParameterTarget.ts, 7, 20))
+}
+
+class Child extends Base<Item> {
+>Child : Symbol(Child, Decl(comparableRelationTypeParameterTarget.ts, 9, 1))
+>Base : Symbol(Base, Decl(comparableRelationTypeParameterTarget.ts, 5, 18))
+>Item : Symbol(Item, Decl(comparableRelationTypeParameterTarget.ts, 0, 0))
+
+    constructor(public data: any) { super() }
+>data : Symbol(Child.data, Decl(comparableRelationTypeParameterTarget.ts, 12, 16))
+>super : Symbol(Base, Decl(comparableRelationTypeParameterTarget.ts, 5, 18))
+}
+
+type Constructor<T> = new (data: any) => Base<T>
+>Constructor : Symbol(Constructor, Decl(comparableRelationTypeParameterTarget.ts, 13, 1))
+>T : Symbol(T, Decl(comparableRelationTypeParameterTarget.ts, 15, 17))
+>data : Symbol(data, Decl(comparableRelationTypeParameterTarget.ts, 15, 27))
+>Base : Symbol(Base, Decl(comparableRelationTypeParameterTarget.ts, 5, 18))
+>T : Symbol(T, Decl(comparableRelationTypeParameterTarget.ts, 15, 17))
+
+function func<T>(constructor: Constructor<T>): void {
+>func : Symbol(func, Decl(comparableRelationTypeParameterTarget.ts, 15, 48))
+>T : Symbol(T, Decl(comparableRelationTypeParameterTarget.ts, 17, 14))
+>constructor : Symbol(constructor, Decl(comparableRelationTypeParameterTarget.ts, 17, 17))
+>Constructor : Symbol(Constructor, Decl(comparableRelationTypeParameterTarget.ts, 13, 1))
+>T : Symbol(T, Decl(comparableRelationTypeParameterTarget.ts, 17, 14))
+
+    if (constructor === Child) {
+>constructor : Symbol(constructor, Decl(comparableRelationTypeParameterTarget.ts, 17, 17))
+>Child : Symbol(Child, Decl(comparableRelationTypeParameterTarget.ts, 9, 1))
+
+        // do something
+    }
+    new constructor(null)
+>constructor : Symbol(constructor, Decl(comparableRelationTypeParameterTarget.ts, 17, 17))
+}
+
+func(Child);
+>func : Symbol(func, Decl(comparableRelationTypeParameterTarget.ts, 15, 48))
+>Child : Symbol(Child, Decl(comparableRelationTypeParameterTarget.ts, 9, 1))
+
+// Two unrelated type parameters still have no overlap.
+function unrelated<T, U>(x: T, y: U): void {
+>unrelated : Symbol(unrelated, Decl(comparableRelationTypeParameterTarget.ts, 24, 12))
+>T : Symbol(T, Decl(comparableRelationTypeParameterTarget.ts, 27, 19))
+>U : Symbol(U, Decl(comparableRelationTypeParameterTarget.ts, 27, 21))
+>x : Symbol(x, Decl(comparableRelationTypeParameterTarget.ts, 27, 25))
+>T : Symbol(T, Decl(comparableRelationTypeParameterTarget.ts, 27, 19))
+>y : Symbol(y, Decl(comparableRelationTypeParameterTarget.ts, 27, 30))
+>U : Symbol(U, Decl(comparableRelationTypeParameterTarget.ts, 27, 21))
+
+    if (x === y) {
+>x : Symbol(x, Decl(comparableRelationTypeParameterTarget.ts, 27, 25))
+>y : Symbol(y, Decl(comparableRelationTypeParameterTarget.ts, 27, 30))
+    }
+}
+

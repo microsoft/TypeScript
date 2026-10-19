@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/comparableRelationTypeParameterTarget.ts] ////
+
+=== comparableRelationTypeParameterTarget.ts ===
+// Reproduces #27910: a generic constructor type must be comparable with a concrete
+// constructor it could overlap with. Previously, `Constructor<T> === typeof Child`
+// reported TS2367 ("no overlap") even though `func(Child)` accepted `Child` as
+// `Constructor<T>`.
+
+interface Item { }
+
+abstract class Base<T> {
+>Base : Base<T>
+
+    get Item(): T { throw 0 }
+>Item : T
+>0 : 0
+}
+
+class Child extends Base<Item> {
+>Child : Child
+>Base : Base<Item>
+
+    constructor(public data: any) { super() }
+>data : any
+>super() : void
+>super : typeof Base
+}
+
+type Constructor<T> = new (data: any) => Base<T>
+>Constructor : Constructor<T>
+>data : any
+
+function func<T>(constructor: Constructor<T>): void {
+>func : <T>(constructor: Constructor<T>) => void
+>constructor : Constructor<T>
+
+    if (constructor === Child) {
+>constructor === Child : boolean
+>constructor : Constructor<T>
+>Child : typeof Child
+
+        // do something
+    }
+    new constructor(null)
+>new constructor(null) : Base<T>
+>constructor : Constructor<T>
+}
+
+func(Child);
+>func(Child) : void
+>func : <T>(constructor: Constructor<T>) => void
+>Child : typeof Child
+
+// Two unrelated type parameters still have no overlap.
+function unrelated<T, U>(x: T, y: U): void {
+>unrelated : <T, U>(x: T, y: U) => void
+>x : T
+>y : U
+
+    if (x === y) {
+>x === y : boolean
+>x : T
+>y : U
+    }
+}
+

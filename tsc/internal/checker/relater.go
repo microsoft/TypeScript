@@ -3473,6 +3473,20 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 			return TernaryFalse
 		}
+		if r.relation == r.c.comparableRelation && source.flags&TypeFlagsTypeParameter == 0 {
+			// An unconstrained type parameter target could be instantiated with anything, so any
+			// source could overlap with it. This mirrors the source-side constraint check below;
+			// without it, types nested inside properties or construct signature return types (see
+			// issue #27910) are treated as non-overlapping on this side alone. Type parameters
+			// with an object constraint stay strict to preserve TS2352/TS2367 checks against
+			// instantiations with a different subtype of the constraint.
+			constraint := r.c.getConstraintOfType(target)
+			if constraint == nil || constraint.flags&TypeFlagsAnyOrUnknown != 0 {
+				if result := r.isRelatedToEx(source, r.c.unknownType, RecursionFlagsTarget, false /*reportErrors*/, nil /*headMessage*/, intersectionState); result != TernaryFalse {
+					return result
+				}
+			}
+		}
 	case target.flags&TypeFlagsIndexedAccess != 0:
 		if source.flags&TypeFlagsIndexedAccess != 0 {
 			// Relate components directly before falling back to constraint relationships
