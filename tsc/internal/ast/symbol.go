@@ -400,12 +400,6 @@ func (m *SymbolMap) Clone() SymbolTable {
 	return clone
 }
 
-func (m *SymbolMap) CopyFrom(source SymbolTable) {
-	for key, symbol := range source.All() {
-		m.Set(key, symbol)
-	}
-}
-
 const InternalSymbolNamePrefix = "\xFE" // Invalid UTF8 sequence, will never occur as IdentifierName
 
 const (
