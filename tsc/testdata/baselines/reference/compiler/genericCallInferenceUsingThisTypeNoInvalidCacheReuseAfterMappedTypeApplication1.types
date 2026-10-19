@@ -92,10 +92,10 @@ export const a = inner.log(100); // Effect<100, never, never>
 >100 : 100
 
 export const b = outer.log(100); // Effect<100, never, XXX>
->b : Effect<100, never, never>
->outer.log(100) : Effect<100, never, never>
->outer.log : <N extends number>(n: N) => Effect<N, never, never>
+>b : Effect<100, never, XXX>
+>outer.log(100) : Effect<100, never, XXX>
+>outer.log : <N extends number>(n: N) => Effect<N, never, XXX>
 >outer : ProxyMap<XXX>
->log : <N extends number>(n: N) => Effect<N, never, never>
+>log : <N extends number>(n: N) => Effect<N, never, XXX>
 >100 : 100
 
