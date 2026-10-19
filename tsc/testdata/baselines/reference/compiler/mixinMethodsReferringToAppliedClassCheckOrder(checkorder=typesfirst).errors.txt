@@ -1,4 +1,7 @@
-mixinMethodsReferringToAppliedClassCheckOrder.ts(31,28): error TS2507: Type 'never' is not a constructor function type.
+mixinMethodsReferringToAppliedClassCheckOrder.ts(31,7): error TS2417: Class static side 'typeof MixinApplied' incorrectly extends base class static side '{ prototype: (Anonymous function).Mixin2; } & { prototype: (Anonymous function).Mixin; }'.
+  Types of property 'prototype' are incompatible.
+    Type 'MixinApplied' is not assignable to type '(Anonymous function).Mixin2 & (Anonymous function).Mixin'.
+      Property 'bar' is missing in type 'MixinApplied' but required in type '(Anonymous function).Mixin2'.
 
 
 ==== mixinMethodsReferringToAppliedClassCheckOrder.ts (1 errors) ====
@@ -33,6 +36,10 @@ mixinMethodsReferringToAppliedClassCheckOrder.ts(31,28): error TS2507: Type 'nev
     })
     
     class MixinApplied extends Mixin2F(MixinF()) {}
-                               ~~~~~~~~~~~~~~~~~
-!!! error TS2507: Type 'never' is not a constructor function type.
+          ~~~~~~~~~~~~
+!!! error TS2417: Class static side 'typeof MixinApplied' incorrectly extends base class static side '{ prototype: (Anonymous function).Mixin2; } & { prototype: (Anonymous function).Mixin; }'.
+!!! error TS2417:   Types of property 'prototype' are incompatible.
+!!! error TS2417:     Type 'MixinApplied' is not assignable to type '(Anonymous function).Mixin2 & (Anonymous function).Mixin'.
+!!! error TS2417:       Property 'bar' is missing in type 'MixinApplied' but required in type '(Anonymous function).Mixin2'.
+!!! related TS2728 mixinMethodsReferringToAppliedClassCheckOrder.ts:26:5: 'bar' is declared here.
     
