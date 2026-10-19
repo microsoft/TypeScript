@@ -261,6 +261,7 @@ type FlowLoopKey struct {
 type FlowLoopInfo struct {
 	key   FlowLoopKey
 	types []*Type
+	id    uint64
 }
 
 // InferenceFlags
@@ -837,6 +838,7 @@ type Checker struct {
 	flowLoopCache                               map[FlowLoopKey]*Type
 	flowLoopStack                               []FlowLoopInfo
 	sharedFlows                                 []SharedFlow
+	flowLoopFrameCount                          uint64
 	antecedentTypes                             []*Type
 	flowInvocationCount                         int
 	flowTypeCache                               map[*ast.Node]*Type
