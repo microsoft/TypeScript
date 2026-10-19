@@ -177,7 +177,7 @@ func (s *Symbol) CombinedLocalAndExportSymbolFlags() SymbolFlags {
 // it has more than symbolTableLinearMax entries, and only then gets a hash index of entry positions. An entry does not
 // store its key: the key is almost always the symbol's own name, so an entry holds the symbol and the key's length,
 // which rejects most non-matching entries without reading the symbol. A key with other text than its symbol's name
-// is kept in oddKeys. Delete builds a new entry slice, so an iteration in progress keeps seeing a snapshot.
+// is kept in oddKeys.
 type SymbolTable = *SymbolMap
 
 const symbolTableLinearMax = 16
@@ -325,22 +325,23 @@ func (m *SymbolMap) Delete(key string) {
 	if d < 0 {
 		return
 	}
-	entries := make([]symbolMapEntry, 0, len(m.entries)-1)
-	var oddKeys map[int32]string
-	for i := range m.entries {
-		if i == d {
-			continue
-		}
-		if m.entries[i].oddKey {
-			if oddKeys == nil {
-				oddKeys = make(map[int32]string)
+	m.entries = slices.Delete(m.entries, d, d+1)
+	if m.oddKeys != nil {
+		var oddKeys map[int32]string
+		for i, oddKey := range m.oddKeys {
+			if i == int32(d) {
+				continue
 			}
-			oddKeys[int32(len(entries))] = m.oddKeys[int32(i)]
+			if i > int32(d) {
+				i--
+			}
+			if oddKeys == nil {
+				oddKeys = make(map[int32]string, len(m.oddKeys))
+			}
+			oddKeys[i] = oddKey
 		}
-		entries = append(entries, m.entries[i])
+		m.oddKeys = oddKeys
 	}
-	m.entries = entries
-	m.oddKeys = oddKeys
 	m.index = nil
 	if len(m.entries) > symbolTableLinearMax {
 		m.buildIndex()
