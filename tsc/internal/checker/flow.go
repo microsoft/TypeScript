@@ -79,9 +79,6 @@ func (c *Checker) getFlowTypeOfReference(reference *ast.Node, declaredType *Type
 }
 
 func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Type, initialType *Type, flowContainer *ast.Node, flowNode *ast.FlowNode) *Type {
-	if c.flowAnalysisDisabled {
-		return c.errorType
-	}
 	if flowNode == nil {
 		flowNode = getFlowNodeOfNode(reference)
 		if flowNode == nil {
@@ -117,11 +114,11 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 	if f.depth == 2000 {
 		// We have made 2000 recursive invocations. To avoid overflowing the call stack we report an error
-		// and disable further control flow analysis in the containing function or module body.
+		// and give up on this reference. Each reference hits the limit on its own, so its type does not depend
+		// on which other references were analyzed first.
 		if tr := c.tracer; tr != nil {
 			tr.Instant(tracing.PhaseCheckTypes, "getTypeAtFlowNode_DepthLimit", map[string]any{"depth": f.depth})
 		}
-		c.flowAnalysisDisabled = true
 		c.reportFlowControlError(f.reference)
 		return FlowType{t: c.errorType}
 	}
