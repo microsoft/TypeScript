@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/numericCompoundAssignmentsInNonzeroBranch.ts] ////
+
+=== numericCompoundAssignmentsInNonzeroBranch.ts ===
+function scale(value: number, factor: number) {
+>scale : (value: number, factor: number) => void
+>value : number
+>factor : number
+
+    if (value !== 0) {
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        value *= -1;
+>value *= -1 : number
+>value : number
+>-1 : -1
+>1 : 1
+
+        value *= factor;
+>value *= factor : number
+>value : number
+>factor : number
+    }
+}
+

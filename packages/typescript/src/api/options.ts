@@ -33,6 +33,9 @@ export interface ClientSpawnOptions {
      * measures its own per-request processing time; both are combined (along
      * with an estimated transport overhead) in the snapshot returned by
      * {@link API.getTimingInfo}.
+     * Setting `TS_API_TIMING_DIR` to a nonempty output directory also enables
+     * collection, even when this option is false, and writes a JSON snapshot
+     * when the API is closed.
      */
     collectTiming?: boolean | undefined;
 }

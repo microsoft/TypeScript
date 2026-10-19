@@ -85,6 +85,8 @@ func (o *RawCompilerOptions) Finalize(basePath tspath.RootedDirectoryPath) (*cor
 			}
 		} else if key == "configFilePath" {
 			pathKind = CommandLineOptionPathKindFile
+		} else if key == "pathsBasePath" {
+			pathKind = CommandLineOptionPathKindDirectory
 		} else if key != "allowNonTsExtensions" && key != "suppressOutputPathCheck" {
 			continue
 		}

@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/objectEntriesSymbolValueArity.ts] ////
+
+=== objectEntriesSymbolValueArity.ts ===
+declare const database: unique symbol;
+>database : Symbol(database, Decl(objectEntriesSymbolValueArity.ts, 0, 13))
+
+declare const models: {
+>models : Symbol(models, Decl(objectEntriesSymbolValueArity.ts, 1, 13))
+
+    user: { create(entity?: object): void };
+>user : Symbol(user, Decl(objectEntriesSymbolValueArity.ts, 1, 23))
+>create : Symbol(create, Decl(objectEntriesSymbolValueArity.ts, 2, 11))
+>entity : Symbol(entity, Decl(objectEntriesSymbolValueArity.ts, 2, 19))
+
+    [database]: { create(name: string, entity: object, id?: string): void };
+>[database] : Symbol([database], Decl(objectEntriesSymbolValueArity.ts, 2, 44))
+>database : Symbol(database, Decl(objectEntriesSymbolValueArity.ts, 0, 13))
+>create : Symbol(create, Decl(objectEntriesSymbolValueArity.ts, 3, 17))
+>name : Symbol(name, Decl(objectEntriesSymbolValueArity.ts, 3, 25))
+>entity : Symbol(entity, Decl(objectEntriesSymbolValueArity.ts, 3, 38))
+>id : Symbol(id, Decl(objectEntriesSymbolValueArity.ts, 3, 54))
+
+};
+
+for (const [, model] of Object.entries(models)) {
+>model : Symbol(model, Decl(objectEntriesSymbolValueArity.ts, 6, 13))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>models : Symbol(models, Decl(objectEntriesSymbolValueArity.ts, 1, 13))
+
+    model.create({});
+>model.create : Symbol(create, Decl(objectEntriesSymbolValueArity.ts, 2, 11))
+>model : Symbol(model, Decl(objectEntriesSymbolValueArity.ts, 6, 13))
+>create : Symbol(create, Decl(objectEntriesSymbolValueArity.ts, 2, 11))
+}
+
