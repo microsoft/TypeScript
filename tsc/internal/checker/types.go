@@ -471,12 +471,6 @@ type EnumMemberLinks struct {
 	value evaluator.Result // Constant value of enum member
 }
 
-// Links for assertion expressions
-
-type AssertionLinks struct {
-	exprType *Type // Assertion expression type
-}
-
 // SourceFile links
 
 type SourceFileLinks struct {
