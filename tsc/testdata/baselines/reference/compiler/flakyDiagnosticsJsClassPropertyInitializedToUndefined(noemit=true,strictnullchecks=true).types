@@ -1,0 +1,421 @@
+//// [tests/cases/compiler/flakyDiagnosticsJsClassPropertyInitializedToUndefined.ts] ////
+
+=== /index.js ===
+export class C {
+>C : C
+
+    constructor() {
+        this.base = undefined;
+>this.base = undefined : undefined
+>this.base : any
+>this : this
+>base : any
+>undefined : undefined
+
+        const nullableRead = this.base;
+>nullableRead : undefined
+>this.base : undefined
+>this : this
+>base : undefined
+
+        /** @type {undefined} */
+        const nullableCheck = nullableRead;
+>nullableCheck : undefined
+>nullableRead : undefined
+    }
+}
+
+export const nullableResult = new C().base;
+>nullableResult : any
+>new C().base : any
+>new C() : C
+>C : typeof C
+>base : any
+
+export const NullClass = class {
+>NullClass : typeof NullClass
+>class {    constructor() {        this.base = null;    }} : typeof NullClass
+
+    constructor() {
+        this.base = null;
+>this.base = null : null
+>this.base : any
+>this : this
+>base : any
+    }
+};
+
+export class LaterWrite {
+>LaterWrite : LaterWrite
+
+    constructor() {
+        this.base = undefined;
+>this.base = undefined : undefined
+>this.base : any
+>this : this
+>base : any
+>undefined : undefined
+
+        this.base = 1;
+>this.base = 1 : 1
+>this.base : any
+>this : this
+>base : any
+>1 : 1
+    }
+}
+
+export class BranchWrite {
+>BranchWrite : BranchWrite
+
+    /** @param {boolean} condition */
+    constructor(condition) {
+>condition : boolean
+
+        this.base = undefined;
+>this.base = undefined : undefined
+>this.base : any
+>this : this
+>base : any
+>undefined : undefined
+
+        if (condition) {
+>condition : boolean
+
+            this.base = 1;
+>this.base = 1 : 1
+>this.base : any
+>this : this
+>base : any
+>1 : 1
+
+        } else {
+            this.base = "value";
+>this.base = "value" : "value"
+>this.base : any
+>this : this
+>base : any
+>"value" : "value"
+        }
+    }
+}
+
+export class Annotated {
+>Annotated : Annotated
+
+    constructor() {
+        /** @type {number | undefined} */
+        this.base = undefined;
+>this.base = undefined : undefined
+>this.base : number | undefined
+>this : this
+>base : number | undefined
+>undefined : undefined
+    }
+}
+
+export class MutualNestedNullable {
+>MutualNestedNullable : MutualNestedNullable
+
+    constructor() {
+        this.first = (this.second = undefined);
+>this.first = (this.second = undefined) : undefined
+>this.first : any
+>this : this
+>first : any
+>(this.second = undefined) : undefined
+>this.second = undefined : undefined
+>this.second : any
+>this : this
+>second : any
+>undefined : undefined
+
+        this.second = (this.first = undefined);
+>this.second = (this.first = undefined) : undefined
+>this.second : any
+>this : this
+>second : any
+>(this.first = undefined) : undefined
+>this.first = undefined : undefined
+>this.first : any
+>this : this
+>first : any
+>undefined : undefined
+    }
+}
+
+export const NestedNullableExpression = class {
+>NestedNullableExpression : typeof NestedNullableExpression
+>class {    constructor() {        this.first = (this.second = null);        this.second = (this.first = null);    }} : typeof NestedNullableExpression
+
+    constructor() {
+        this.first = (this.second = null);
+>this.first = (this.second = null) : null
+>this.first : any
+>this : this
+>first : any
+>(this.second = null) : null
+>this.second = null : null
+>this.second : any
+>this : this
+>second : any
+
+        this.second = (this.first = null);
+>this.second = (this.first = null) : null
+>this.second : any
+>this : this
+>second : any
+>(this.first = null) : null
+>this.first = null : null
+>this.first : any
+>this : this
+>first : any
+    }
+};
+
+export const nestedNullableResult = new MutualNestedNullable().first;
+>nestedNullableResult : any
+>new MutualNestedNullable().first : any
+>new MutualNestedNullable() : MutualNestedNullable
+>MutualNestedNullable : typeof MutualNestedNullable
+>first : any
+
+export const expressionNullableResult = new NestedNullableExpression().second;
+>expressionNullableResult : any
+>new NestedNullableExpression().second : any
+>new NestedNullableExpression() : NestedNullableExpression
+>NestedNullableExpression : typeof NestedNullableExpression
+>second : any
+
+export class MutualNestedNumber {
+>MutualNestedNumber : MutualNestedNumber
+
+    constructor() {
+        this.first = (this.second = undefined);
+>this.first = (this.second = undefined) : undefined
+>this.first : any
+>this : this
+>first : any
+>(this.second = undefined) : undefined
+>this.second = undefined : undefined
+>this.second : any
+>this : this
+>second : any
+>undefined : undefined
+
+        this.second = (this.first = undefined);
+>this.second = (this.first = undefined) : undefined
+>this.second : any
+>this : this
+>second : any
+>(this.first = undefined) : undefined
+>this.first = undefined : undefined
+>this.first : any
+>this : this
+>first : any
+>undefined : undefined
+
+        this.first = 1;
+>this.first = 1 : 1
+>this.first : any
+>this : this
+>first : any
+>1 : 1
+
+        this.second = 2;
+>this.second = 2 : 2
+>this.second : any
+>this : this
+>second : any
+>2 : 2
+    }
+}
+
+/** @type {number} */
+export const nestedFirst = new MutualNestedNumber().first;
+>nestedFirst : number
+>new MutualNestedNumber().first : number
+>new MutualNestedNumber() : MutualNestedNumber
+>MutualNestedNumber : typeof MutualNestedNumber
+>first : number
+
+/** @type {number} */
+export const nestedSecond = new MutualNestedNumber().second;
+>nestedSecond : number
+>new MutualNestedNumber().second : number
+>new MutualNestedNumber() : MutualNestedNumber
+>MutualNestedNumber : typeof MutualNestedNumber
+>second : number
+
+/** @type {string} */
+export const invalidNestedString = new MutualNestedNumber().first;
+>invalidNestedString : string
+>new MutualNestedNumber().first : number
+>new MutualNestedNumber() : MutualNestedNumber
+>MutualNestedNumber : typeof MutualNestedNumber
+>first : number
+
+export class AssignmentValues {
+>AssignmentValues : AssignmentValues
+
+    constructor() {
+        const initialValue = (this.base = undefined);
+>initialValue : undefined
+>(this.base = undefined) : undefined
+>this.base = undefined : undefined
+>this.base : any
+>this : this
+>base : any
+>undefined : undefined
+
+        const initialRead = this.base;
+>initialRead : undefined
+>this.base : undefined
+>this : this
+>base : undefined
+
+        const numberValue = (this.base = 1);
+>numberValue : 1
+>(this.base = 1) : 1
+>this.base = 1 : 1
+>this.base : any
+>this : this
+>base : any
+>1 : 1
+
+        const stringValue = (this.base = "value");
+>stringValue : "value"
+>(this.base = "value") : "value"
+>this.base = "value" : "value"
+>this.base : any
+>this : this
+>base : any
+>"value" : "value"
+
+        const finalRead = this.base;
+>finalRead : string
+>this.base : string
+>this : this
+>base : string
+
+        /** @type {undefined} */
+        const initialCheck = initialValue;
+>initialCheck : undefined
+>initialValue : undefined
+
+        /** @type {undefined} */
+        const initialReadCheck = initialRead;
+>initialReadCheck : undefined
+>initialRead : undefined
+
+        /** @type {number} */
+        const numberCheck = numberValue;
+>numberCheck : number
+>numberValue : 1
+
+        /** @type {string} */
+        const stringCheck = stringValue;
+>stringCheck : string
+>stringValue : "value"
+
+        /** @type {string} */
+        const finalReadCheck = finalRead;
+>finalReadCheck : string
+>finalRead : string
+
+        /** @type {number} */
+        const invalidNumber = this.base;
+>invalidNumber : number
+>this.base : string
+>this : this
+>base : string
+    }
+}
+
+export class Reentrant {
+>Reentrant : Reentrant
+
+    constructor() {
+        this.base = undefined;
+>this.base = undefined : undefined
+>this.base : any
+>this : this
+>base : any
+>undefined : undefined
+
+        this.read = this.getValue();
+>this.read = this.getValue() : number
+>this.read : any
+>this : this
+>read : any
+>this.getValue() : number
+>this.getValue : () => number
+>this : this
+>getValue : () => number
+
+        this.base = 1;
+>this.base = 1 : 1
+>this.base : any
+>this : this
+>base : any
+>1 : 1
+    }
+    getValue() {
+>getValue : () => number
+
+        return this.base;
+>this.base : number
+>this : this
+>base : number
+    }
+}
+
+/** @type {number} */
+export const reentrantResult = new Reentrant().read;
+>reentrantResult : number
+>new Reentrant().read : number
+>new Reentrant() : Reentrant
+>Reentrant : typeof Reentrant
+>read : number
+
+/** @type {string} */
+export const invalidReentrantString = new Reentrant().read;
+>invalidReentrantString : string
+>new Reentrant().read : number
+>new Reentrant() : Reentrant
+>Reentrant : typeof Reentrant
+>read : number
+
+/** @type {string} */
+export const finalValue = new AssignmentValues().base;
+>finalValue : string
+>new AssignmentValues().base : string
+>new AssignmentValues() : AssignmentValues
+>AssignmentValues : typeof AssignmentValues
+>base : string
+
+/** @type {number} */
+export const numberValue = new LaterWrite().base;
+>numberValue : number
+>new LaterWrite().base : number
+>new LaterWrite() : LaterWrite
+>LaterWrite : typeof LaterWrite
+>base : number
+
+/** @type {string} */
+export const invalidString = new LaterWrite().base;
+>invalidString : string
+>new LaterWrite().base : number
+>new LaterWrite() : LaterWrite
+>LaterWrite : typeof LaterWrite
+>base : number
+
+/** @type {number | string} */
+export const branchValue = new BranchWrite(true).base;
+>branchValue : string | number
+>new BranchWrite(true).base : string | number
+>new BranchWrite(true) : BranchWrite
+>BranchWrite : typeof BranchWrite
+>true : true
+>base : string | number
+

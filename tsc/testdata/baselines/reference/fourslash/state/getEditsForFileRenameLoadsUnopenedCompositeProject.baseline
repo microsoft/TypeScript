@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/app/main.ts] *new* 
 import { helper } from "../lib/helper";
 helper;

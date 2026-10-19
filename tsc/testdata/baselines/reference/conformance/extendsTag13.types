@@ -1,0 +1,116 @@
+//// [tests/cases/conformance/jsdoc/extendsTag13.ts] ////
+
+=== a.js ===
+/** @template T */
+class A {
+>A : A<T>
+
+    /** @param {T} value */
+    constructor(value) {
+>value : T
+
+        this.value = value;
+>this.value = value : T
+>this.value : any
+>this : this
+>value : any
+>value : T
+    }
+
+    /** @returns {typeof A} */
+    static extend() {
+>extend : () => typeof A
+
+        return this;
+>this : typeof A
+    }
+}
+
+/** @template T */
+class Other {
+>Other : Other<T>
+
+    /** @param {T} other */
+    constructor(other) {
+>other : T
+
+        this.other = other;
+>this.other = other : T
+>this.other : any
+>this : this
+>other : any
+>other : T
+    }
+}
+
+const ns = { A };
+>ns : { A: typeof A; }
+>{ A } : { A: typeof A; }
+>A : typeof A
+
+/**
+ * @extends {A<string>}
+ * @extends {Other<string>}
+ */
+class Direct extends A {}
+>Direct : Direct
+>A : A<string>
+
+/**
+ * @extends {A<string>}
+ * @extends {Other<string>}
+ * @augments {Other<string>}
+ */
+class Call extends A.extend() {}
+>Call : Call
+>A.extend() : A<string>
+>A.extend : () => typeof A
+>A : typeof A
+>extend : () => typeof A
+
+/** @extends {A<string>} */
+/** @extends {Other<string>} */
+/** @extends {A<string>} */
+class SeparateDirect extends A {}
+>SeparateDirect : SeparateDirect
+>A : A<string>
+
+/** @extends {A<string>} */
+/** @augments {Other<string>} */
+class SeparateElement extends ns["A"] {}
+>SeparateElement : SeparateElement
+>ns["A"] : A<string>
+>ns : { A: typeof A; }
+>"A" : "A"
+
+/**
+ * @extends {Other<string>}
+ * @extends {A<string>}
+ */
+class FirstMismatch extends A.extend() {}
+>FirstMismatch : FirstMismatch
+>A.extend() : A<string>
+>A.extend : () => typeof A
+>A : typeof A
+>extend : () => typeof A
+
+/**
+ * @extends {A<string>}
+ * @augments {A<string>}
+ */
+class CompatibleTags extends A.extend() {}
+>CompatibleTags : CompatibleTags
+>A.extend() : A<string>
+>A.extend : () => typeof A
+>A : typeof A
+>extend : () => typeof A
+
+/** @type {string} */
+const value = new CompatibleTags("ok").value;
+>value : string
+>new CompatibleTags("ok").value : string
+>new CompatibleTags("ok") : CompatibleTags
+>CompatibleTags : typeof CompatibleTags
+>"ok" : "ok"
+>value : string
+

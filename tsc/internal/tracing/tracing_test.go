@@ -6,6 +6,7 @@ import (
 	"testing/fstest"
 
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -15,7 +16,7 @@ func TestConcurrentDurationEventsUseSeparateThreadIDs(t *testing.T) {
 
 	fsys := vfstest.FromMap(fstest.MapFS{
 		"/trace": &fstest.MapFile{Mode: fs.ModeDir},
-	}, true)
+	}, tspath.CaseSensitive)
 
 	tr, err := StartTracing(fsys, "/trace", "", true /*deterministic*/)
 	assert.NilError(t, err)
@@ -70,7 +71,7 @@ func traceThreadIDsForPaths(t *testing.T, paths []string) map[string]int {
 
 	fsys := vfstest.FromMap(fstest.MapFS{
 		"/trace": &fstest.MapFile{Mode: fs.ModeDir},
-	}, true)
+	}, tspath.CaseSensitive)
 
 	tr, err := StartTracing(fsys, "/trace", "", true /*deterministic*/)
 	assert.NilError(t, err)

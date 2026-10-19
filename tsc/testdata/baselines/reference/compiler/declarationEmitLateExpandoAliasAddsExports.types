@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/declarationEmitLateExpandoAliasAddsExports.ts] ////
+
+=== declarationEmitLateExpandoAliasAddsExports.ts ===
+function helper(): number { return 1; }
+>helper : () => number
+>1 : 1
+
+export function Host() {}
+>Host : { (): void; first: number; second: string; alias: () => number; }
+
+Host.first = 1;
+>Host.first = 1 : 1
+>Host.first : number
+>Host : { (): void; first: number; second: string; alias: () => number; }
+>first : number
+>1 : 1
+
+Host.second = 'two';
+>Host.second = 'two' : "two"
+>Host.second : string
+>Host : { (): void; first: number; second: string; alias: () => number; }
+>second : string
+>'two' : "two"
+
+Host.alias = helper;
+>Host.alias = helper : () => number
+>Host.alias : () => number
+>Host : { (): void; first: number; second: string; alias: () => number; }
+>alias : () => number
+>helper : () => number
+

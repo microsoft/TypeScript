@@ -19,13 +19,13 @@ export const value = 1;
 tsgo --runExternalCode --explainFiles
 ExitStatus:: Success
 Output::
-../../tslibs/TS/Lib/lib.es2025.full.d.ts
-   Default library for target 'ES2025'
+../../tslibs/TS/Lib/lib.es2026.full.d.ts
+   Default library for target 'ES2026'
 app.vue.0.ts
    Supplemental virtual file produced by the content mapper for file 'app.vue'.
 app.vue
    Matched by default include pattern '**/*'
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

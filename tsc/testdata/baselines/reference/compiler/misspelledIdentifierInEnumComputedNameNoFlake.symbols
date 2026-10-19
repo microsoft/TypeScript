@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/misspelledIdentifierInEnumComputedNameNoFlake.ts] ////
+
+=== misspelledIdentifierInEnumComputedNameNoFlake.ts ===
+// TS2552: Cannot find name 'existingVale'. Did you mean 'existingValue'?
+declare const existingValue: { value: number };
+>existingValue : Symbol(existingValue, Decl(misspelledIdentifierInEnumComputedNameNoFlake.ts, 1, 13))
+>value : Symbol(value, Decl(misspelledIdentifierInEnumComputedNameNoFlake.ts, 1, 30))
+
+export enum Values {
+>Values : Symbol(Values, Decl(misspelledIdentifierInEnumComputedNameNoFlake.ts, 1, 47))
+
+    [existingVale.value] = 1,
+>[existingVale.value] : Symbol(Values[existingVale.value], Decl(misspelledIdentifierInEnumComputedNameNoFlake.ts, 2, 20))
+}

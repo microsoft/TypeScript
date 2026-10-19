@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/objectFromEntriesBrandedTemplateKeys.ts] ////
+
+=== objectFromEntriesBrandedTemplateKeys.ts ===
+type FeatureId = string & { feature: true };
+>FeatureId : Symbol(FeatureId, Decl(objectFromEntriesBrandedTemplateKeys.ts, 0, 0))
+>feature : Symbol(feature, Decl(objectFromEntriesBrandedTemplateKeys.ts, 0, 27))
+
+declare const featureIds: FeatureId[];
+>featureIds : Symbol(featureIds, Decl(objectFromEntriesBrandedTemplateKeys.ts, 1, 13))
+>FeatureId : Symbol(FeatureId, Decl(objectFromEntriesBrandedTemplateKeys.ts, 0, 0))
+
+const options = Object.fromEntries(featureIds.map(id => [`feature:${id}`, true]));
+>options : Symbol(options, Decl(objectFromEntriesBrandedTemplateKeys.ts, 2, 5))
+>Object.fromEntries : Symbol(ObjectConstructor.fromEntries, Decl(lib.es2019.object.d.ts, --, --), Decl(lib.es2019.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fromEntries : Symbol(ObjectConstructor.fromEntries, Decl(lib.es2019.object.d.ts, --, --), Decl(lib.es2019.object.d.ts, --, --))
+>featureIds.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>featureIds : Symbol(featureIds, Decl(objectFromEntriesBrandedTemplateKeys.ts, 1, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(objectFromEntriesBrandedTemplateKeys.ts, 2, 50))
+>id : Symbol(id, Decl(objectFromEntriesBrandedTemplateKeys.ts, 2, 50))
+
+declare const featureName: string;
+>featureName : Symbol(featureName, Decl(objectFromEntriesBrandedTemplateKeys.ts, 3, 13))
+
+options[`feature:${featureName}`];
+>options : Symbol(options, Decl(objectFromEntriesBrandedTemplateKeys.ts, 2, 5))
+>featureName : Symbol(featureName, Decl(objectFromEntriesBrandedTemplateKeys.ts, 3, 13))
+
+featureIds.filter(id => options["feature:" + id]);
+>featureIds.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>featureIds : Symbol(featureIds, Decl(objectFromEntriesBrandedTemplateKeys.ts, 1, 13))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(objectFromEntriesBrandedTemplateKeys.ts, 6, 18))
+>options : Symbol(options, Decl(objectFromEntriesBrandedTemplateKeys.ts, 2, 5))
+>id : Symbol(id, Decl(objectFromEntriesBrandedTemplateKeys.ts, 6, 18))
+
+for (const [from, to] of Object.entries({ oldFeature: "newFeature" })) {
+>from : Symbol(from, Decl(objectFromEntriesBrandedTemplateKeys.ts, 7, 12))
+>to : Symbol(to, Decl(objectFromEntriesBrandedTemplateKeys.ts, 7, 17))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>oldFeature : Symbol(oldFeature, Decl(objectFromEntriesBrandedTemplateKeys.ts, 7, 41))
+
+    if (typeof options[`feature:${from}`] === "boolean") {
+>options : Symbol(options, Decl(objectFromEntriesBrandedTemplateKeys.ts, 2, 5))
+>from : Symbol(from, Decl(objectFromEntriesBrandedTemplateKeys.ts, 7, 12))
+
+        options[`feature:${to}`] = options[`feature:${from}`];
+>options : Symbol(options, Decl(objectFromEntriesBrandedTemplateKeys.ts, 2, 5))
+>to : Symbol(to, Decl(objectFromEntriesBrandedTemplateKeys.ts, 7, 17))
+>options : Symbol(options, Decl(objectFromEntriesBrandedTemplateKeys.ts, 2, 5))
+>from : Symbol(from, Decl(objectFromEntriesBrandedTemplateKeys.ts, 7, 12))
+    }
+}
+

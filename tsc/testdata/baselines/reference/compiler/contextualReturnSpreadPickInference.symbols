@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/contextualReturnSpreadPickInference.ts] ////
+
+=== contextualReturnSpreadPickInference.ts ===
+type Many<T> = T | readonly T[];
+>Many : Symbol(Many, Decl(contextualReturnSpreadPickInference.ts, 0, 0))
+>T : Symbol(T, Decl(contextualReturnSpreadPickInference.ts, 0, 10))
+>T : Symbol(T, Decl(contextualReturnSpreadPickInference.ts, 0, 10))
+>T : Symbol(T, Decl(contextualReturnSpreadPickInference.ts, 0, 10))
+
+declare function pick<T extends object, Key extends keyof T>(
+>pick : Symbol(pick, Decl(contextualReturnSpreadPickInference.ts, 0, 32))
+>T : Symbol(T, Decl(contextualReturnSpreadPickInference.ts, 1, 22))
+>Key : Symbol(Key, Decl(contextualReturnSpreadPickInference.ts, 1, 39))
+>T : Symbol(T, Decl(contextualReturnSpreadPickInference.ts, 1, 22))
+
+    object: T,
+>object : Symbol(object, Decl(contextualReturnSpreadPickInference.ts, 1, 61))
+>T : Symbol(T, Decl(contextualReturnSpreadPickInference.ts, 1, 22))
+
+    ...props: Many<Key>[]
+>props : Symbol(props, Decl(contextualReturnSpreadPickInference.ts, 2, 14))
+>Many : Symbol(Many, Decl(contextualReturnSpreadPickInference.ts, 0, 0))
+>Key : Symbol(Key, Decl(contextualReturnSpreadPickInference.ts, 1, 39))
+
+): Pick<T, Key>;
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(contextualReturnSpreadPickInference.ts, 1, 22))
+>Key : Symbol(Key, Decl(contextualReturnSpreadPickInference.ts, 1, 39))
+
+async function getPage(page: any): Promise<{ title: string; intro: string }> {
+>getPage : Symbol(getPage, Decl(contextualReturnSpreadPickInference.ts, 4, 16))
+>page : Symbol(page, Decl(contextualReturnSpreadPickInference.ts, 6, 23))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>title : Symbol(title, Decl(contextualReturnSpreadPickInference.ts, 6, 44))
+>intro : Symbol(intro, Decl(contextualReturnSpreadPickInference.ts, 6, 59))
+
+    return {
+        title: "",
+>title : Symbol(title, Decl(contextualReturnSpreadPickInference.ts, 7, 12))
+
+        ...pick(page, ["intro"]),
+>pick : Symbol(pick, Decl(contextualReturnSpreadPickInference.ts, 0, 32))
+>page : Symbol(page, Decl(contextualReturnSpreadPickInference.ts, 6, 23))
+
+    };
+}
+

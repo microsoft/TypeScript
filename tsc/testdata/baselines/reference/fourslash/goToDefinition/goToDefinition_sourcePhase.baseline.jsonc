@@ -1,0 +1,85 @@
+// === goToDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// /*GOTO DEF*/b;
+// export { b };
+// 
+
+
+
+// === goToDefinition ===
+// === /c.ts ===
+// <|import source [|c|] from "./a.wasm";|>
+// /*GOTO DEF*/c;
+// 
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// b;
+// export { b };
+// 
+
+// === /d.ts ===
+// import { /*GOTO DEF*/[|b|] as d } from "./b";
+// d;
+// 
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// b;
+// export { b };
+// 
+
+// === /d.ts ===
+// import { b as d } from "./b";
+// /*GOTO DEF*/[|d|];
+// 
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// b;
+// export { b };
+// 
+
+// === /e.ts ===
+// export { b as /*GOTO DEF*/[|e|] } from "./b";
+// 
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// b;
+// export { b };
+// 
+
+// === /f.ts ===
+// import { e as f } from "./e";
+// /*GOTO DEF*/[|f|];
+// import * as ns from "./e";
+// ns.e;
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// b;
+// export { b };
+// 
+
+// === /f.ts ===
+// import { e as f } from "./e";
+// f;
+// import * as ns from "./e";
+// ns./*GOTO DEF*/[|e|];

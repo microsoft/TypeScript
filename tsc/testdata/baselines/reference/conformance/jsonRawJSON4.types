@@ -1,0 +1,60 @@
+//// [tests/cases/conformance/es2026/jsonRawJSON4.ts] ////
+
+=== raw.js ===
+/** @type {RawJSON} */
+const a = JSON.rawJSON("1");
+>a : RawJSON
+>JSON.rawJSON("1") : RawJSON
+>JSON.rawJSON : (text: string) => RawJSON
+>JSON : JSON
+>rawJSON : (text: string) => RawJSON
+>"1" : "1"
+
+/** @type {string} */
+const b = a.rawJSON;
+>b : string
+>a.rawJSON : string
+>a : RawJSON
+>rawJSON : string
+
+/** @type {RawJSON} */
+const c = { rawJSON: "1" };
+>c : RawJSON
+>{ rawJSON: "1" } : { rawJSON: string; }
+>rawJSON : string
+>"1" : "1"
+
+/** @type {RawJSON} */
+const d = { ...a };
+>d : RawJSON
+>{ ...a } : { rawJSON: string; }
+>a : RawJSON
+
+a.rawJSON = "2";
+>a.rawJSON = "2" : "2"
+>a.rawJSON : any
+>a : RawJSON
+>rawJSON : any
+>"2" : "2"
+
+/** @param {unknown} x */
+function f(x) {
+>f : (x: unknown) => string | undefined
+>x : unknown
+
+    return JSON.isRawJSON(x) ? x.rawJSON : undefined;
+>JSON.isRawJSON(x) ? x.rawJSON : undefined : string | undefined
+>JSON.isRawJSON(x) : boolean
+>JSON.isRawJSON : (value: unknown) => value is RawJSON
+>JSON : JSON
+>isRawJSON : (value: unknown) => value is RawJSON
+>x : unknown
+>x.rawJSON : string
+>x : RawJSON
+>rawJSON : string
+>undefined : undefined
+}
+
+RawJSON;
+>RawJSON : any
+

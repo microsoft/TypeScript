@@ -1,0 +1,70 @@
+//// [tests/cases/conformance/importSource/importSource2.ts] ////
+
+=== b.ts ===
+export {};
+const a = import.source("./a.wasm");
+>a : Promise<AbstractModuleSource>
+>import.source("./a.wasm") : Promise<AbstractModuleSource>
+>source : any
+>"./a.wasm" : "./a.wasm"
+
+const b: Promise<AbstractModuleSource> = a;
+>b : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource>
+
+=== c.ts ===
+export {};
+const a = import.source("./a.wasm", { with: { type: "webassembly" } });
+>a : Promise<AbstractModuleSource>
+>import.source("./a.wasm", { with: { type: "webassembly" } }) : Promise<AbstractModuleSource>
+>source : any
+>"./a.wasm" : "./a.wasm"
+>{ with: { type: "webassembly" } } : { with: { readonly type: "webassembly"; }; }
+>with : { readonly type: "webassembly"; }
+>{ type: "webassembly" } : { readonly type: "webassembly"; }
+>type : "webassembly"
+>"webassembly" : "webassembly"
+
+const b: Promise<AbstractModuleSource> = a;
+>b : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource>
+
+=== d.ts ===
+export {};
+const a = import.source("./a.wasm",);
+>a : Promise<AbstractModuleSource>
+>import.source("./a.wasm",) : Promise<AbstractModuleSource>
+>source : any
+>"./a.wasm" : "./a.wasm"
+
+const b: Promise<AbstractModuleSource> = a;
+>b : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource>
+
+const c = import.source("./a.wasm", { with: { type: "webassembly" } },);
+>c : Promise<AbstractModuleSource>
+>import.source("./a.wasm", { with: { type: "webassembly" } },) : Promise<AbstractModuleSource>
+>source : any
+>"./a.wasm" : "./a.wasm"
+>{ with: { type: "webassembly" } } : { with: { readonly type: "webassembly"; }; }
+>with : { readonly type: "webassembly"; }
+>{ type: "webassembly" } : { readonly type: "webassembly"; }
+>type : "webassembly"
+>"webassembly" : "webassembly"
+
+const d: Promise<AbstractModuleSource> = c;
+>d : Promise<AbstractModuleSource>
+>c : Promise<AbstractModuleSource>
+
+=== e.ts ===
+export {};
+const a = import.source(`./a.wasm`);
+>a : Promise<AbstractModuleSource>
+>import.source(`./a.wasm`) : Promise<AbstractModuleSource>
+>source : any
+>`./a.wasm` : "./a.wasm"
+
+const b: Promise<AbstractModuleSource> = a;
+>b : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource>
+

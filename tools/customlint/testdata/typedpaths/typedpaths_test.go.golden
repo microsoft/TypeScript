@@ -1,0 +1,47 @@
+	package typedpaths
+	
+	import "testdata/internal/tspath"
+	
+	func testImplicitPath(path tspath.PathKey) {}
+	func testRootedFilePath(path tspath.RootedFilePath) {}
+	func testRelativePath(path tspath.RelativePath) {}
+	
+	func testImplicitConversions() tspath.PathKey {
+		testImplicitPath("/implicit/argument")
+		testImplicitPath("")
+		testRootedFilePath("")
+		testRelativePath("")
+		_ = holder{path: "/implicit/field"}
+		_ = map[tspath.PathKey]bool{"/implicit/key": true}
+		raw := string("/dynamic/file.ts")
+		path := tspath.RootedPath("/dynamic/file.ts")
+		file := tspath.RootedFilePath("/dynamic/file.ts")
+		_ = tspath.RootedFilePath(raw)
+		    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typedpaths: conversion from string to RootedFilePath adds path invariants; use a tspath constructor
+		_ = tspath.RootedFilePath(path)
+		    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typedpaths: conversion from RootedPath to RootedFilePath adds path invariants; use a tspath constructor
+		_ = tspath.RootedPath(file)
+		_ = tspath.RootedFilePath("/valid/file.ts")
+		_ = tspath.RootedFilePath("relative/file.ts")
+		    ~
+!!! typedpaths: constant converted to RootedFilePath must be rooted and normalized
+		return "/implicit/return"
+	}
+	
+	func testInvalidImplicitConversions() tspath.PathKey {
+		testImplicitPath("relative/argument")
+		                 ~
+!!! typedpaths: constant assigned to PathKey must be empty or rooted and normalized
+		_ = holder{path: "/implicit//field"}
+		                 ~
+!!! typedpaths: constant assigned to PathKey must be empty or rooted and normalized
+		_ = map[tspath.PathKey]bool{"relative/key": true}
+		                            ~
+!!! typedpaths: constant assigned to PathKey must be empty or rooted and normalized
+		return "/implicit/../return"
+		       ~
+!!! typedpaths: constant assigned to PathKey must be empty or rooted and normalized
+	}
+	

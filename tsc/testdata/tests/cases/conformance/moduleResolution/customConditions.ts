@@ -1,7 +1,7 @@
 // @target: es2015
 // @module: preserve
 // @moduleResolution: bundler
-// @customConditions: webpack, browser
+// @customConditions: webpack,browser
 // @resolvePackageJsonExports: true, false
 // @traceResolution: true
 

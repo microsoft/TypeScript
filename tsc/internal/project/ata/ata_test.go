@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -18,6 +19,36 @@ func TestATA(t *testing.T) {
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
 	}
+
+	t.Run("no typings cache disables acquisition", func(t *testing.T) {
+		t.Parallel()
+
+		files := map[string]any{
+			"/user/username/projects/project/app.js": `const $ = require("jquery");`,
+			"/user/username/projects/project/jsconfig.json": `{
+				"typeAcquisition": { "enable": true }
+			}`,
+		}
+		session, utils := projecttestutil.SetupWithOptionsAndTypingsInstaller(files, &project.SessionOptions{
+			CurrentDirectory:   tspath.RootedDirectoryPathFromNormalized("/"),
+			DefaultLibraryPath: bundled.LibPath(),
+			WatchEnabled:       true,
+		}, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{
+				"jquery": `export const x: number;`,
+			},
+		})
+
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		session.DidOpenFile(context.Background(), uri, 1, files["/user/username/projects/project/app.js"].(string), lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+
+		ls, err := session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+		assert.Assert(t, ls.GetProgram().GetSourceFile("/user/username/projects/project/app.js") != nil)
+		assert.Equal(t, len(utils.NpmExecutor().NpmInstallCalls()), 0)
+		assert.Assert(t, !session.FS().FileExists(projecttestutil.TestTypingsDirectory.ResolveFile("package.json")))
+	})
 
 	t.Run("local module should not be picked up", func(t *testing.T) {
 		t.Parallel()
@@ -82,9 +113,9 @@ func TestATA(t *testing.T) {
 		session.WaitForBackgroundTasks()
 		npmCalls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, len(npmCalls), 2)
-		assert.Equal(t, npmCalls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, npmCalls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Equal(t, npmCalls[0].Args[2], "types-registry@latest")
-		assert.Equal(t, npmCalls[1].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, npmCalls[1].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Assert(t, slices.Contains(npmCalls[1].Args, "@types/jquery@latest"))
 		assert.Equal(t, len(utils.Client().RefreshDiagnosticsCalls()), 1)
 	})
@@ -113,9 +144,9 @@ func TestATA(t *testing.T) {
 		// Check that npm install was called twice
 		calls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, 2, len(calls), "Expected exactly 2 npm install calls")
-		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, calls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
-		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Equal(t, calls[1].Args[2], "@types/jquery@latest")
 
 		// Verify the types file was installed
@@ -148,7 +179,7 @@ func TestATA(t *testing.T) {
 		// Check that npm install was called once (only types-registry)
 		calls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, 1, len(calls), "Expected exactly 1 npm install call")
-		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, calls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
 	})
 
@@ -183,9 +214,9 @@ func TestATA(t *testing.T) {
 		// Check that npm install was called twice
 		calls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, 2, len(calls), "Expected exactly 2 npm install calls")
-		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, calls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
-		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Equal(t, calls[1].Args[2], "@types/jquery@latest")
 	})
 
@@ -302,9 +333,9 @@ func TestATA(t *testing.T) {
 		// Check that npm install was called twice
 		calls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, 2, len(calls), "Expected exactly 2 npm install calls")
-		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, calls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
-		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Equal(t, calls[1].Args[2], "@types/jquery@latest")
 
 		// Verify the types file was installed
@@ -339,9 +370,9 @@ func TestATA(t *testing.T) {
 		// Check that npm install was called twice
 		calls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, 2, len(calls), "Expected exactly 2 npm install calls")
-		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, calls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
-		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Equal(t, calls[1].Args[2], "@types/jquery@latest")
 
 		// Verify the types file was installed
@@ -506,7 +537,7 @@ func TestATA(t *testing.T) {
 		// Only the types-registry should be installed; @types/node should NOT be installed since it exists locally
 		npmCalls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, len(npmCalls), 1)
-		assert.Equal(t, npmCalls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, npmCalls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, npmCalls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
 
 		// And the program should include the local @types/node declaration file
@@ -595,11 +626,11 @@ func TestATA(t *testing.T) {
 		// Check that npm install was called twice
 		calls := utils.NpmExecutor().NpmInstallCalls()
 		assert.Equal(t, 2, len(calls), "Expected exactly 2 npm install calls")
-		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[0].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.DeepEqual(t, calls[0].Args, []string{"install", "--ignore-scripts", "types-registry@latest"})
 
 		// The second call should install all three packages at once
-		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsLocation)
+		assert.Equal(t, calls[1].Cwd, projecttestutil.TestTypingsDirectory)
 		assert.Equal(t, calls[1].Args[0], "install")
 		assert.Equal(t, calls[1].Args[1], "--ignore-scripts")
 		// Check that all three packages are in the install command

@@ -25,7 +25,7 @@ test("Go AST generator validates bases after schema reloads", async context => {
 
     for (
         const { name, extendsKeys, error } of [
-            { name: "duplicate bases", extendsKeys: ["NodeBase", "NodeBase"], error: /declares duplicate embedded bases/ },
+            { name: "duplicate bases", extendsKeys: ["NodeBase", "ExpressionBase"], error: /declares duplicate embedded bases/ },
             { name: "missing NodeBase", extendsKeys: [], error: /does not embed NodeBase at offset zero/ },
         ]
     ) {

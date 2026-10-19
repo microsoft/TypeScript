@@ -22,6 +22,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -39,7 +40,7 @@ type Fix struct {
 
 	ModuleSpecifierKind      modulespecifiers.ResultKind
 	IsReExport               bool
-	ModuleFileName           string
+	ModuleFileName           tspath.RootedFilePath
 	TypeOnlyAliasDeclaration *ast.Declaration
 }
 
@@ -60,6 +61,7 @@ func (f *Fix) Edits(
 	formatOptions lsutil.FormatCodeSettings,
 	converters *lsconv.Converters,
 	preferences lsutil.UserPreferences,
+	includeSymbolNameInDescription bool,
 ) ([]*lsproto.TextEdit, string, bool) {
 	locale := locale.FromContext(ctx)
 	tracker := change.NewTracker(ctx, compilerOptions, formatOptions, converters)
@@ -75,6 +77,9 @@ func (f *Fix) Edits(
 		existingFix := getAddToExistingImportFix(file, f)
 		addToExistingImport(tracker, file, existingFix.importClauseOrBindingPattern, existingFix.defaultImport, core.SingleElementSlice(existingFix.namedImport), preferences)
 		edits, safe := fileEdits(tracker, file)
+		if includeSymbolNameInDescription {
+			return edits, diagnostics.Import_0_from_1.Localize(locale, f.Name, f.ModuleSpecifier), safe
+		}
 		return edits, diagnostics.Update_import_from_0.Localize(locale, f.ModuleSpecifier), safe
 	case lsproto.AutoImportFixKindAddNew:
 		var declarations []*ast.Statement
@@ -107,6 +112,9 @@ func (f *Fix) Edits(
 		// 	addNamespaceQualifier(tracker, file, qualification)
 		// }
 		edits, safe := fileEdits(tracker, file)
+		if includeSymbolNameInDescription {
+			return edits, diagnostics.Import_0_from_1.Localize(locale, f.Name, f.ModuleSpecifier), safe
+		}
 		return edits, diagnostics.Add_import_from_0.Localize(locale, f.ModuleSpecifier), safe
 	case lsproto.AutoImportFixKindPromoteTypeOnly:
 		promotedDeclaration := promoteFromTypeOnly(tracker, f.TypeOnlyAliasDeclaration, compilerOptions, file, preferences)
@@ -140,11 +148,11 @@ func addImportType(f *Fix, file *ast.SourceFile, preferences lsutil.UserPreferen
 		panic("UsagePosition must be set for JSDoc type import fix")
 	}
 	quotePreference := lsutil.GetQuotePreference(file, preferences)
-	quoteChar := "\""
+	quoteChar := printer.QuoteCharDoubleQuote
 	if quotePreference == lsutil.QuotePreferenceSingle {
-		quoteChar = "'"
+		quoteChar = printer.QuoteCharSingleQuote
 	}
-	importTypePrefix := fmt.Sprintf("import(%s%s%s).", quoteChar, f.ModuleSpecifier, quoteChar)
+	importTypePrefix := fmt.Sprintf("import(%c%s%c).", quoteChar, printer.EscapeString(f.ModuleSpecifier, quoteChar), quoteChar)
 	tracker.InsertText(file, *f.UsagePosition, importTypePrefix)
 	return diagnostics.Change_0_to_1.Localize(locale, f.Name, importTypePrefix+f.Name)
 }
@@ -572,7 +580,7 @@ func (v *View) GetFixes(export *Export, forJSX bool, isValidTypeOnlyUseSite bool
 	}
 
 	// Check if we need a JSDoc import type fix (for JS files with type-only imports)
-	isJs := tspath.HasJSFileExtension(v.importingFile.FileName())
+	isJs := v.importingFile.FileName().HasJSFileExtension()
 	importedSymbolHasValueMeaning := export.Flags&ast.SymbolFlagsValue != 0 || export.IsUnresolvedAlias()
 	if !importedSymbolHasValueMeaning && isJs && usagePosition != nil {
 		// For pure types in JS files, use JSDoc import type syntax
@@ -580,7 +588,7 @@ func (v *View) GetFixes(export *Export, forJSX bool, isValidTypeOnlyUseSite bool
 			{
 				AutoImportFix: &lsproto.AutoImportFix{
 					Kind:            lsproto.AutoImportFixKindJsdocTypeImport,
-					ModuleSpecifier: moduleSpecifier,
+					ModuleSpecifier: moduleSpecifier.AsString(),
 					Name:            export.Name(),
 					UsagePosition:   usagePosition,
 				},
@@ -608,7 +616,7 @@ func (v *View) GetFixes(export *Export, forJSX bool, isValidTypeOnlyUseSite bool
 		AutoImportFix: &lsproto.AutoImportFix{
 			Kind:            lsproto.AutoImportFixKindAddNew,
 			ImportKind:      importKind,
-			ModuleSpecifier: moduleSpecifier,
+			ModuleSpecifier: moduleSpecifier.AsString(),
 			Name:            name,
 			UseRequire:      v.shouldUseRequire(),
 			AddAsTypeOnly:   addAsTypeOnly,
@@ -748,6 +756,9 @@ func (v *View) tryAddToExistingImport(
 			continue
 		}
 		importClause := importClauseNode.AsImportClause()
+		if importClause.PhaseModifier == ast.KindSourceKeyword {
+			continue
+		}
 
 		namedBindings := importClause.NamedBindings
 		// A type-only import may not have both a default and named imports, so the only way a name can
@@ -946,7 +957,7 @@ func detectSyntaxIndicators(file *ast.SourceFile, options *core.CompilerOptions)
 
 func (v *View) computeShouldUseRequire() bool {
 	// 1. TypeScript files don't use require variable declarations
-	if !tspath.HasJSFileExtension(v.importingFile.FileName()) {
+	if !v.importingFile.FileName().HasJSFileExtension() {
 		return false
 	}
 
@@ -1034,8 +1045,8 @@ func (v *View) compareModuleSpecifiersForRanking(a, b *Fix) int {
 	}
 	if a.ModuleSpecifierKind == modulespecifiers.ResultKindRelative && b.ModuleSpecifierKind == modulespecifiers.ResultKindRelative {
 		if comparison := core.CompareBooleans(
-			isFixPossiblyReExportingImportingFile(a, v.importingFile.FileName()),
-			isFixPossiblyReExportingImportingFile(b, v.importingFile.FileName()),
+			isFixPossiblyReExportingImportingFile(a, v.importingFile.FileName(), v.program.CaseSensitivity()),
+			isFixPossiblyReExportingImportingFile(b, v.importingFile.FileName(), v.program.CaseSensitivity()),
 		); comparison != 0 {
 			return comparison
 		}
@@ -1090,22 +1101,16 @@ func (v *View) compareNodeCoreModuleSpecifiers(a, b string, importingFile *ast.S
 // E.g., do not `import { Foo } from ".."` when you could `import { Foo } from "../Foo"`.
 // This can produce false positives or negatives if re-exports cross into sibling directories
 // (e.g. `export * from "../whatever"`) or are not named "index". Technically this should do
-// a tspath.Path comparison, but it's not worth it to run a heuristic in such a hot path.
-func isFixPossiblyReExportingImportingFile(fix *Fix, importingFileName string) bool {
+// a tspath.PathKey comparison, but it's not worth it to run a heuristic in such a hot path.
+func isFixPossiblyReExportingImportingFile(fix *Fix, importingFileName tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) bool {
 	if fix.IsReExport && isIndexFileName(fix.ModuleFileName) {
-		reExportDir := tspath.GetDirectoryPath(fix.ModuleFileName)
-		return strings.HasPrefix(importingFileName, tspath.EnsureTrailingDirectorySeparator(reExportDir))
+		return caseSensitivity.StartsWithDirectory(importingFileName, fix.ModuleFileName.Directory())
 	}
 	return false
 }
 
-func isIndexFileName(fileName string) bool {
-	lastSlash := strings.LastIndexByte(fileName, '/')
-	if lastSlash < 0 || len(fileName) <= lastSlash+1 {
-		return false
-	}
-	fileName = fileName[lastSlash+1:]
-	switch fileName {
+func isIndexFileName(fileName tspath.RootedFilePath) bool {
+	switch fileName.BaseName() {
 	case "index.js", "index.jsx", "index.d.ts", "index.ts", "index.tsx":
 		return true
 	}

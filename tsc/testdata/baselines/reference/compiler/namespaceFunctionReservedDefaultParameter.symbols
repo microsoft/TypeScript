@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/namespaceFunctionReservedDefaultParameter.ts] ////
+
+=== namespaceFunctionReservedDefaultParameter.ts ===
+namespace Dependencies {
+>Dependencies : Symbol(Dependencies, Decl(namespaceFunctionReservedDefaultParameter.ts, 0, 0))
+
+    export function scripts(static = false) {
+>scripts : Symbol(scripts, Decl(namespaceFunctionReservedDefaultParameter.ts, 0, 24))
+>static : Symbol(static, Decl(namespaceFunctionReservedDefaultParameter.ts, 1, 28))
+
+        if (static) {
+>static : Symbol(static, Decl(namespaceFunctionReservedDefaultParameter.ts, 1, 28))
+
+            return "static.js";
+        }
+        return "interactive.js";
+    }
+}
+

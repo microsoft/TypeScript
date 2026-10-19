@@ -120,7 +120,7 @@ function abcdef(x) { }
 	f.Insert(t, "/**")
 
 	userPreferences := lsutil.NewDefaultUserPreferences()
-	userPreferences.EnableJSDocCompletions = core.TSFalse
+	userPreferences.CompleteJSDocs = core.TSFalse
 	list := f.GetCompletions(t, &userPreferences)
 	if list != nil {
 		for _, item := range list.Items {
