@@ -1639,6 +1639,17 @@ func (c *Checker) checkAndReportErrorForMissingPrefix(errorLocation *ast.Node, n
 }
 
 func (c *Checker) onFailedToResolveSymbol(errorLocation *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message) {
+	// Explaining the failure looks up other symbols, for example to suggest a
+	// spelling, which can resolve aliases. Doing that in the middle of the
+	// resolution that failed would make the explanation, and any circularity
+	// errors it causes, depend on what else happened to be in progress. Defer
+	// it until no resolution is in progress, so it only observes results.
+	c.addDeferredDiagnostic(func() {
+		c.reportFailedToResolveSymbol(errorLocation, name, meaning, nameNotFoundMessage)
+	})
+}
+
+func (c *Checker) reportFailedToResolveSymbol(errorLocation *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message) {
 	// The `const` in a `const` assertion (`x as const`) is a syntactic marker, not a real
 	// type reference, and must never be resolved or reported as an unresolvable name.
 	if isConstTypeReferenceName(errorLocation) {
