@@ -199,7 +199,7 @@ export function encodeSourceFile(sourceFile: SourceFile): Uint8Array {
  * Encode an arbitrary AST node into the binary format.
  * When encoding a non-SourceFile node, the header hash and parse options fields will be zero.
  */
-export function encodeNode(node: Node): Uint8Array {
+export function encodeNode(node: Node, onNodeEncoded?: (node: Node, index: number) => void): Uint8Array {
     const strs = new StringTable();
     const extendedDataValues: number[] = [];
     const structuredWriter = new MsgpackWriter();
@@ -233,7 +233,7 @@ export function encodeNode(node: Node): Uint8Array {
             data,
             node.flags,
         );
-
+        onNodeEncoded?.(node, currentIndex);
         const saveParentIndex = parentIndex;
         const savePrevIndex = prevIndex;
         parentIndex = currentIndex;
@@ -315,6 +315,7 @@ export function encodeNode(node: Node): Uint8Array {
     const saveParent = parentIndex;
     prevIndex = 0;
     parentIndex = 1; // root is at index 1
+    onNodeEncoded?.(node, 1);
     visitChildren(node);
     parentIndex = saveParent;
 
