@@ -102,6 +102,7 @@ The repository uses a Go workspace with modules in `tsc/` and `tools/`.
 npx hereby build         # Build the native compiler into built/local/tsc
 npx hereby test          # Run compiler and language-service Go tests
 npx hereby test:all      # Also run benchmarks, tools, and API tests
+npx hereby test:codegen  # Run codegen tests without regenerating source outputs
 npx hereby lint          # Run custom golangci-lint for both Go modules
 npx hereby generate:go   # Run the generators also exposed through go generate
 npx hereby generate      # Regenerate all sources, assets, localization, and vendored files

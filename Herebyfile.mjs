@@ -21,6 +21,10 @@ import {
     invalidateFileFingerprints,
     run,
 } from "./tools/scripts/gen/utils.mts";
+import {
+    ensureModel as ensureLSPModel,
+    outputs as lspModelOutputs,
+} from "./tools/scripts/lsp/fetchModel.mts";
 import { outputs as encoderOutputs } from "./tools/scripts/tsc/generate-encoder.ts";
 import { outputs as enumOutputs } from "./tools/scripts/tsc/generate-enums.ts";
 import { outputs as goASTOutputs } from "./tools/scripts/tsc/generate-go-ast.ts";
@@ -587,19 +591,12 @@ export const generateExtensionTest = task({
     run: runGenerateExtensionTest,
 });
 
-const lspModelOutputs = ["metaModel.json", "metaModelSchema.mts"];
 const lspOutputs = ["tsc/internal/lsp/lsproto/lsp_generated.go", "packages/typescript/src/vscode/protocol.generated.ts"];
 
 async function runGenerateLSP() {
     const { GeneratedFile } = await import("./tools/scripts/gen/generatedFile.mts");
     const directory = path.join(__dirname, "tools/scripts/lsp");
-    const modelFiles = lspModelOutputs.map(file => new GeneratedFile(path.join(directory, file), [path.join(directory, "fetchModel.mts"), path.join(__dirname, "package-lock.json")]));
-    if (!modelFiles.every(file => file.isCurrent(!!options.force))) {
-        for (const file of modelFiles) file.invalidate();
-        const { default: fetchModel } = await import("./tools/scripts/lsp/fetchModel.mts");
-        await fetchModel();
-        for (const file of modelFiles) file.markCurrent();
-    }
+    const modelFiles = await ensureLSPModel(!!options.force);
     const output = new GeneratedFile(path.join(__dirname, lspOutputs[0]), [
         __filename,
         path.join(directory, "generate.mts"),
@@ -1097,7 +1094,7 @@ export const testTools = task({
 
 export const testCodegen = task({
     name: "test:codegen",
-    description: "Runs codegen cache unit tests without invoking generators.",
+    description: "Runs codegen tests without regenerating sources.",
     run: async () => {
         await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
     },

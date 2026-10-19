@@ -4,13 +4,17 @@ import fs from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 import ts from "typescript";
-import { getTypeScriptModel } from "../lsp/generate.mts";
-import { getMiddlewareMethods } from "../lsp/generateTypeScript.mts";
+import { ensureModel } from "../lsp/fetchModel.mts";
 import type {
     MetaModel,
     Type,
 } from "../lsp/metaModelSchema.mts";
-import { generateTypeScript } from "../lsp/typeScript.mts";
+
+await ensureModel();
+
+const { getTypeScriptModel } = await import("../lsp/generate.mts");
+const { getMiddlewareMethods } = await import("../lsp/generateTypeScript.mts");
+const { generateTypeScript } = await import("../lsp/typeScript.mts");
 
 function fixture(): MetaModel {
     return {
