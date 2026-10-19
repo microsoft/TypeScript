@@ -10449,8 +10449,32 @@ func (c *Checker) checkFunctionExpressionOrObjectLiteralMethod(node *ast.Node, c
 }
 
 func (c *Checker) contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node *ast.Node, checkMode CheckMode) {
+	c.assignContextualParameterTypesOfFunction(node, checkMode)
 	links := c.nodeLinks.Get(node)
-	// Check if function expression is contextually typed and assign parameter types if so.
+	if links.flags&NodeCheckFlagsContextChecked == 0 || links.flags&NodeCheckFlagsSignatureContextChecked != 0 {
+		return
+	}
+	links.flags |= NodeCheckFlagsSignatureContextChecked
+	signature := c.getSignatureFromDeclarationUncontextual(node)
+	contextualSignature := c.getContextualSignature(node)
+	if contextualSignature != nil && c.getReturnTypeFromAnnotation(node) == nil && signature.resolvedReturnType == nil {
+		// resolvedReturnType is cached indefinitely, so the return type here has to be computed without CheckModeSkipContextSensitive;
+		// otherwise anyFunctionType could leak as part of the computed (and cached) return type.
+		returnType := c.getReturnTypeFromBody(node, checkMode&^CheckModeSkipContextSensitive)
+		if signature.resolvedReturnType == nil {
+			signature.resolvedReturnType = returnType
+		}
+	}
+	c.checkSignatureDeclaration(node)
+}
+
+// assignContextualParameterTypesOfFunction assigns the parameters of a
+// function expression or object literal method their contextual types, and
+// its signature the type parameters of a generic contextual signature. The
+// signature of the function is not complete until then, so
+// getSignatureFromDeclaration requests this before returning it.
+func (c *Checker) assignContextualParameterTypesOfFunction(node *ast.Node, checkMode CheckMode) {
+	links := c.nodeLinks.Get(node)
 	if links.flags&NodeCheckFlagsContextChecked == 0 {
 		contextualSignature := c.getContextualSignature(node)
 		// If a type check is started at a function expression that is an argument of a function call, obtaining the
@@ -10458,14 +10482,7 @@ func (c *Checker) contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node 
 		// already assigned contextual types.
 		if links.flags&NodeCheckFlagsContextChecked == 0 {
 			links.flags |= NodeCheckFlagsContextChecked
-			signature := core.FirstOrNil(c.getSignaturesOfType(c.getTypeOfSymbol(c.getSymbolOfDeclaration(node)), SignatureKindCall))
-			if signature == nil {
-				// The members of the function's type are being resolved, which
-				// can contextually check the function through its enclosing call.
-				// Leave the check to whoever asks once they are resolved.
-				links.flags &^= NodeCheckFlagsContextChecked
-				return
-			}
+			signature := c.getSignatureFromDeclarationUncontextual(node)
 			if c.isContextSensitive(node) {
 				if contextualSignature != nil {
 					inferenceContext := c.getInferenceContext(node)
@@ -10495,15 +10512,6 @@ func (c *Checker) contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node 
 					c.inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext)
 				}
 			}
-			if contextualSignature != nil && c.getReturnTypeFromAnnotation(node) == nil && signature.resolvedReturnType == nil {
-				// resolvedReturnType is cached indefinitely, so the return type here has to be computed without CheckModeSkipContextSensitive;
-				// otherwise anyFunctionType could leak as part of the computed (and cached) return type.
-				returnType := c.getReturnTypeFromBody(node, checkMode&^CheckModeSkipContextSensitive)
-				if signature.resolvedReturnType == nil {
-					signature.resolvedReturnType = returnType
-				}
-			}
-			c.checkSignatureDeclaration(node)
 		}
 	}
 }
@@ -17438,6 +17446,12 @@ func (c *Checker) getTypeOfFuncClassEnumModule(symbol *ast.Symbol) *Type {
 	if links.resolvedType == nil {
 		links.resolvedType = c.getTypeOfFuncClassEnumModuleWorker(symbol)
 	}
+	if declaration := symbol.ValueDeclaration(); declaration != nil && c.isContextSensitiveFunctionOrObjectLiteralMethod(declaration) {
+		// Complete the signature before anything resolves the members of the
+		// type: doing so may check the enclosing call, which needs the
+		// members of the type.
+		c.assignContextualParameterTypesOfFunction(declaration, CheckModeNormal)
+	}
 	return links.resolvedType
 }
 
@@ -20514,6 +20528,17 @@ func (c *Checker) getSignaturesOfSymbol(symbol *ast.Symbol) []*Signature {
 }
 
 func (c *Checker) getSignatureFromDeclaration(declaration *ast.Node) *Signature {
+	signature := c.getSignatureFromDeclarationUncontextual(declaration)
+	if c.isContextSensitiveFunctionOrObjectLiteralMethod(declaration) {
+		c.assignContextualParameterTypesOfFunction(declaration, CheckModeNormal)
+	}
+	return signature
+}
+
+// getSignatureFromDeclarationUncontextual returns the signature of a
+// declaration without the contextual typing that completes the signatures
+// of context-sensitive functions.
+func (c *Checker) getSignatureFromDeclarationUncontextual(declaration *ast.Node) *Signature {
 	links := c.signatureLinks.Get(declaration)
 	if links.resolvedSignature != nil {
 		return links.resolvedSignature
@@ -20584,6 +20609,12 @@ func (c *Checker) getSignatureFromDeclaration(declaration *ast.Node) *Signature 
 	}
 	if ast.IsConstructorTypeNode(declaration) && ast.HasSyntacticModifier(declaration, ast.ModifierFlagsAbstract) || ast.IsConstructorDeclaration(declaration) && ast.HasSyntacticModifier(declaration.Parent, ast.ModifierFlagsAbstract) {
 		flags |= SignatureFlagsAbstract
+	}
+	if links.resolvedSignature != nil {
+		// Computing the signature reached the enclosing call, which
+		// contextually typed the function with a signature of its own, as
+		// when the call is checked first. Keep that one.
+		return links.resolvedSignature
 	}
 	links.resolvedSignature = c.newSignature(flags, declaration, typeParameters, thisParameter, parameters, nil /*resolvedReturnType*/, nil /*resolvedTypePredicate*/, minArgumentCount)
 	return links.resolvedSignature
@@ -24603,9 +24634,8 @@ func (c *Checker) getOuterTypeParameters(node *ast.Node, includeThisTypes bool) 
 			ast.KindConditionalType:
 			outerTypeParameters := c.getOuterTypeParameters(node, includeThisTypes)
 			if (kind == ast.KindFunctionExpression || kind == ast.KindArrowFunction || ast.IsObjectLiteralMethod(node)) && c.isContextSensitive(node) {
-				signature := core.FirstOrNil(c.getSignaturesOfType(c.getTypeOfSymbol(c.getSymbolOfDeclaration(node)), SignatureKindCall))
-				if signature != nil && len(signature.TypeParameters()) != 0 {
-					return append(outerTypeParameters, signature.TypeParameters()...)
+				if typeParameters := c.getSignatureFromDeclaration(node).TypeParameters(); len(typeParameters) != 0 {
+					return append(outerTypeParameters, typeParameters...)
 				}
 			}
 			if kind == ast.KindMappedType {

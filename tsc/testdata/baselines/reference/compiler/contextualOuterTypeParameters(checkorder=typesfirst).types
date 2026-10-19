@@ -37,13 +37,13 @@ const fn1: <T>(x: T) => void = t => {
 >t : T
 
     type isArray = (typeof t)[] extends string[] ? true : false;
->isArray : false
+>isArray : T[] extends string[] ? true : false
 >t : T
 >true : true
 >false : false
 
     type IsObject = { x: typeof t } extends { x: string } ? true : false;
->IsObject : false
+>IsObject : { x: typeof t; } extends { x: string; } ? true : false
 >x : T
 >t : T
 >x : string
@@ -60,13 +60,13 @@ const fn2: <T>(x: T) => void = function test(t) {
 >t : T
 
     type isArray = (typeof t)[] extends string[] ? true : false;
->isArray : false
+>isArray : T[] extends string[] ? true : false
 >t : T
 >true : true
 >false : false
 
     type IsObject = { x: typeof t } extends { x: string } ? true : false;
->IsObject : false
+>IsObject : { x: typeof t; } extends { x: string; } ? true : false
 >x : T
 >t : T
 >x : string
@@ -86,13 +86,13 @@ const obj: { f: <T>(x: T) => void } = {
 >t : T
 
         type isArray = (typeof t)[] extends string[] ? true : false;
->isArray : false
+>isArray : T[] extends string[] ? true : false
 >t : T
 >true : true
 >false : false
 
         type IsObject = { x: typeof t } extends { x: string } ? true : false;
->IsObject : false
+>IsObject : { x: typeof t; } extends { x: string; } ? true : false
 >x : T
 >t : T
 >x : string
@@ -113,7 +113,7 @@ f(function self(t) {
 >self : <T>(t: T) => void
 
     type P = Parameters<typeof s>;
->P : [t: T]
+>P : [t: unknown]
 >s : <T>(t: T) => void
 
 });
