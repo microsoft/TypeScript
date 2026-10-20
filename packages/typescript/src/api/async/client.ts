@@ -1,14 +1,5 @@
 import type { ChildProcess } from "node:child_process";
 import type { Socket } from "node:net";
-import {
-    createMessageConnection,
-    type MessageConnection,
-    RequestType,
-    SocketMessageReader,
-    SocketMessageWriter,
-    StreamMessageReader,
-    StreamMessageWriter,
-} from "../../../vendor/vscode-jsonrpc/lib/node/main.js";
 import type {
     RootedDirectoryPath,
     RootedFilePath,
@@ -20,6 +11,7 @@ import {
     encodeFileSystemCallbackResult,
     type FileSystemCallbackConfiguration,
 } from "../fsCallbacks.ts";
+import { nodeProcess } from "../nodeProcess.ts";
 import {
     type AsyncClientOptions,
     type ClientOptions,
@@ -46,6 +38,11 @@ import {
     type TimingInfo,
 } from "../timing.ts";
 import { TimingDump } from "../timingDump.ts";
+import {
+    createStreamConnection,
+    type MessageConnection,
+    RequestType,
+} from "./jsonrpc.ts";
 import {
     createTransportClient,
     type TransportClient,
@@ -111,7 +108,7 @@ class RpcClient {
     }
 
     private async connectViaSpawn(options: ClientSpawnOptions): Promise<void> {
-        const { spawn } = await import("node:child_process");
+        const { spawn } = nodeProcess().getBuiltinModule("node:child_process");
 
         return new Promise((resolve, reject) => {
             const args = getAPIProcessArgs(options, true);
@@ -134,22 +131,18 @@ class RpcClient {
                 resolve();
             });
 
-            const reader = new StreamMessageReader(this.process.stdout!);
-            const writer = new StreamMessageWriter(this.process.stdin!);
-            this.connection = createMessageConnection(reader, writer);
+            this.connection = createStreamConnection(this.process.stdout!, this.process.stdin!);
             this.registerFSCallbacks(this.connection, options.fs, fsConfiguration);
             this.connection.listen();
         });
     }
 
     private async connectViaSocket(options: ClientSocketOptions): Promise<void> {
-        const { createConnection } = await import("node:net");
+        const { createConnection } = nodeProcess().getBuiltinModule("node:net");
 
         return new Promise((resolve, reject) => {
             this.socket = createConnection(options.pipe, () => {
-                const reader = new SocketMessageReader(this.socket!);
-                const writer = new SocketMessageWriter(this.socket!);
-                this.connection = createMessageConnection(reader, writer);
+                this.connection = createStreamConnection(this.socket!, this.socket!);
                 this.connection.listen();
                 this.connected = true;
                 resolve();
