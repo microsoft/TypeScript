@@ -29,8 +29,11 @@ export interface WasmReactorInstance {
 
 export interface WasmTransportOptions {
     /**
-     * An instantiated reactor whose WASI host has already initialized it.
-     * For example, call `wasi.initialize(instance)` before constructing the transport.
+     * An initialized reactor, normally created by `instantiateWasm` or
+     * `instantiateWasmSync`. Other WASI hosts must call the module's
+     * `typescript_initialize` export instead of `_start`, which runs the
+     * command line compiler, and cannot use the `fs` option or host
+     * callbacks such as custom file systems passed to the API.
      */
     instance: WasmReactorInstance;
     cwd?: string | undefined;
