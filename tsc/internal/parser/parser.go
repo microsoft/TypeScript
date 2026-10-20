@@ -4691,6 +4691,9 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 		if !shouldConsumeBinaryOperator(operator, newPrecedence, precedence) {
 			break
 		}
+		if p.hasPrecedingLineBreak() && (p.scanner.HasUnicodeEscape() || p.scanner.HasExtendedUnicodeEscape()) {
+			break
+		}
 		if operator == ast.KindInKeyword && p.inDisallowInContext() {
 			break
 		}

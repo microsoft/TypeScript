@@ -38,6 +38,132 @@ export {};
 const a = {def\u0061ult: 12}; // OK, `default` not in keyword position
 // chrome and jsc may still error on this, ref https://bugs.chromium.org/p/chromium/issues/detail?id=993000 and https://bugs.webkit.org/show_bug.cgi?id=200638
 
+//// [a.ts]
+export {};
+
+class A {
+    a = 1
+    \u{69}n
+    b = 2
+    \u{69}nstanceof
+}
+
+class B {
+    a = 1
+    \u0069n
+    b = 2
+    \u0069nstanceof
+}
+
+class C {
+    a = () => 1
+    \u{69}nstanceof
+    b = 2
+    \u0069n() {}
+}
+
+class D {
+    a = "a"
+    in
+    { a: 1 }
+    b = {}
+    instanceof
+    Object
+}
+
+class E {
+    a = 1;
+    \u0069n = 2;
+    b = 3;
+    \u{69}nstanceof = 4;
+}
+
+const a = Object.keys(new A());
+const b = Object.keys(new B());
+const c = new C();
+const d = new D();
+const e = 1;
+const f = \u0065
+    + 1;
+
+//// [b.js]
+export {};
+
+class A {
+    a = 1
+    \u{69}n
+    b = 2
+    \u{69}nstanceof
+}
+
+class B {
+    a = 1
+    \u0069n
+    b = 2
+    \u0069nstanceof
+}
+
+class C {
+    a = () => 1
+    \u{69}nstanceof
+    b = 2
+    \u0069n() {}
+}
+
+class D {
+    a = "a"
+    in
+    { a: 1 }
+    b = {}
+    instanceof
+    Object
+}
+
+class E {
+    a = 1;
+    \u0069n = 2;
+    b = 3;
+    \u{69}nstanceof = 4;
+}
+
+const a = Object.keys(new A());
+const b = Object.keys(new B());
+const c = new C();
+const d = new D();
+const e = 1;
+const f = \u0065
+    + 1;
+
+//// [c.ts]
+export {};
+
+const a = "a" \u0069n { a: 1 };
+const b = {} \u{69}nstanceof Object;
+
+//// [d.js]
+export {};
+
+const a = "a" \u0069n { a: 1 };
+const b = {} \u{69}nstanceof Object;
+
+//// [e.ts]
+export {};
+
+class A {
+    #a;
+    b = #a
+    \u0069n
+}
+
+//// [f.js]
+export {};
+
+class A {
+    #a;
+    b = #a
+    \u0069n
+}
+
 
 //// [file1.js]
 var \u0061wait = 12; // ok
@@ -62,3 +188,107 @@ function* gen() {
 const a = { def\u0061ult: 12 }; // OK, `default` not in keyword position
 export {};
 // chrome and jsc may still error on this, ref https://bugs.chromium.org/p/chromium/issues/detail?id=993000 and https://bugs.webkit.org/show_bug.cgi?id=200638
+//// [a.js]
+class A {
+    a = 1;
+    \u{69}n;
+    b = 2;
+    \u{69}nstanceof;
+}
+class B {
+    a = 1;
+    \u0069n;
+    b = 2;
+    \u0069nstanceof;
+}
+class C {
+    a = () => 1;
+    \u{69}nstanceof;
+    b = 2;
+    \u0069n() { }
+}
+class D {
+    a = "a"
+        in
+            { a: 1 };
+    b = {}
+        instanceof
+            Object;
+}
+class E {
+    a = 1;
+    \u0069n = 2;
+    b = 3;
+    \u{69}nstanceof = 4;
+}
+const a = Object.keys(new A());
+const b = Object.keys(new B());
+const c = new C();
+const d = new D();
+const e = 1;
+const f = \u0065
+    + 1;
+export {};
+//// [b.js]
+export {};
+class A {
+    a = 1;
+    \u{69}n;
+    b = 2;
+    \u{69}nstanceof;
+}
+class B {
+    a = 1;
+    \u0069n;
+    b = 2;
+    \u0069nstanceof;
+}
+class C {
+    a = () => 1;
+    \u{69}nstanceof;
+    b = 2;
+    \u0069n() { }
+}
+class D {
+    a = "a"
+        in
+            { a: 1 };
+    b = {}
+        instanceof
+            Object;
+}
+class E {
+    a = 1;
+    \u0069n = 2;
+    b = 3;
+    \u{69}nstanceof = 4;
+}
+const a = Object.keys(new A());
+const b = Object.keys(new B());
+const c = new C();
+const d = new D();
+const e = 1;
+const f = \u0065
+    + 1;
+//// [c.js]
+const a = "a" in { a: 1 };
+const b = {} instanceof Object;
+export {};
+//// [d.js]
+export {};
+const a = "a" in { a: 1 };
+const b = {} instanceof Object;
+//// [e.js]
+class A {
+    #a;
+    b = #a;
+    \u0069n;
+}
+export {};
+//// [f.js]
+export {};
+class A {
+    #a;
+    b = #a;
+    \u0069n;
+}

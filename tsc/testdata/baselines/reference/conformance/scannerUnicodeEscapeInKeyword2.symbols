@@ -62,3 +62,289 @@ const a = {def\u0061ult: 12}; // OK, `default` not in keyword position
 
 // chrome and jsc may still error on this, ref https://bugs.chromium.org/p/chromium/issues/detail?id=993000 and https://bugs.webkit.org/show_bug.cgi?id=200638
 
+=== a.ts ===
+export {};
+
+class A {
+>A : Symbol(A, Decl(a.ts, 0, 10))
+
+    a = 1
+>a : Symbol(A.a, Decl(a.ts, 2, 9))
+
+    \u{69}n
+>\u{69}n : Symbol(A[\u{69}n], Decl(a.ts, 3, 9))
+
+    b = 2
+>b : Symbol(A.b, Decl(a.ts, 4, 11))
+
+    \u{69}nstanceof
+>\u{69}nstanceof : Symbol(A[\u{69}nstanceof], Decl(a.ts, 5, 9))
+}
+
+class B {
+>B : Symbol(B, Decl(a.ts, 7, 1))
+
+    a = 1
+>a : Symbol(B.a, Decl(a.ts, 9, 9))
+
+    \u0069n
+>\u0069n : Symbol(B[\u0069n], Decl(a.ts, 10, 9))
+
+    b = 2
+>b : Symbol(B.b, Decl(a.ts, 11, 11))
+
+    \u0069nstanceof
+>\u0069nstanceof : Symbol(B[\u0069nstanceof], Decl(a.ts, 12, 9))
+}
+
+class C {
+>C : Symbol(C, Decl(a.ts, 14, 1))
+
+    a = () => 1
+>a : Symbol(C.a, Decl(a.ts, 16, 9))
+
+    \u{69}nstanceof
+>\u{69}nstanceof : Symbol(C[\u{69}nstanceof], Decl(a.ts, 17, 15))
+
+    b = 2
+>b : Symbol(C.b, Decl(a.ts, 18, 19))
+
+    \u0069n() {}
+>\u0069n : Symbol(C[\u0069n], Decl(a.ts, 19, 9))
+}
+
+class D {
+>D : Symbol(D, Decl(a.ts, 21, 1))
+
+    a = "a"
+>a : Symbol(D.a, Decl(a.ts, 23, 9))
+
+    in
+    { a: 1 }
+>a : Symbol(a, Decl(a.ts, 26, 5))
+
+    b = {}
+>b : Symbol(D.b, Decl(a.ts, 26, 12))
+
+    instanceof
+    Object
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+class E {
+>E : Symbol(E, Decl(a.ts, 30, 1))
+
+    a = 1;
+>a : Symbol(E.a, Decl(a.ts, 32, 9))
+
+    \u0069n = 2;
+>\u0069n : Symbol(E[\u0069n], Decl(a.ts, 33, 10))
+
+    b = 3;
+>b : Symbol(E.b, Decl(a.ts, 34, 16))
+
+    \u{69}nstanceof = 4;
+>\u{69}nstanceof : Symbol(E[\u{69}nstanceof], Decl(a.ts, 35, 10))
+}
+
+const a = Object.keys(new A());
+>a : Symbol(a, Decl(a.ts, 39, 5))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>A : Symbol(A, Decl(a.ts, 0, 10))
+
+const b = Object.keys(new B());
+>b : Symbol(b, Decl(a.ts, 40, 5))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>B : Symbol(B, Decl(a.ts, 7, 1))
+
+const c = new C();
+>c : Symbol(c, Decl(a.ts, 41, 5))
+>C : Symbol(C, Decl(a.ts, 14, 1))
+
+const d = new D();
+>d : Symbol(d, Decl(a.ts, 42, 5))
+>D : Symbol(D, Decl(a.ts, 21, 1))
+
+const e = 1;
+>e : Symbol(e, Decl(a.ts, 43, 5))
+
+const f = \u0065
+>f : Symbol(f, Decl(a.ts, 44, 5))
+>\u0065 : Symbol(e, Decl(a.ts, 43, 5))
+
+    + 1;
+
+=== b.js ===
+export {};
+
+class A {
+>A : Symbol(A, Decl(b.js, 0, 10))
+
+    a = 1
+>a : Symbol(A.a, Decl(b.js, 2, 9))
+
+    \u{69}n
+>\u{69}n : Symbol(A[\u{69}n], Decl(b.js, 3, 9))
+
+    b = 2
+>b : Symbol(A.b, Decl(b.js, 4, 11))
+
+    \u{69}nstanceof
+>\u{69}nstanceof : Symbol(A[\u{69}nstanceof], Decl(b.js, 5, 9))
+}
+
+class B {
+>B : Symbol(B, Decl(b.js, 7, 1))
+
+    a = 1
+>a : Symbol(B.a, Decl(b.js, 9, 9))
+
+    \u0069n
+>\u0069n : Symbol(B[\u0069n], Decl(b.js, 10, 9))
+
+    b = 2
+>b : Symbol(B.b, Decl(b.js, 11, 11))
+
+    \u0069nstanceof
+>\u0069nstanceof : Symbol(B[\u0069nstanceof], Decl(b.js, 12, 9))
+}
+
+class C {
+>C : Symbol(C, Decl(b.js, 14, 1))
+
+    a = () => 1
+>a : Symbol(C.a, Decl(b.js, 16, 9))
+
+    \u{69}nstanceof
+>\u{69}nstanceof : Symbol(C[\u{69}nstanceof], Decl(b.js, 17, 15))
+
+    b = 2
+>b : Symbol(C.b, Decl(b.js, 18, 19))
+
+    \u0069n() {}
+>\u0069n : Symbol(C[\u0069n], Decl(b.js, 19, 9))
+}
+
+class D {
+>D : Symbol(D, Decl(b.js, 21, 1))
+
+    a = "a"
+>a : Symbol(D.a, Decl(b.js, 23, 9))
+
+    in
+    { a: 1 }
+>a : Symbol(a, Decl(b.js, 26, 5))
+
+    b = {}
+>b : Symbol(D.b, Decl(b.js, 26, 12))
+
+    instanceof
+    Object
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+class E {
+>E : Symbol(E, Decl(b.js, 30, 1))
+
+    a = 1;
+>a : Symbol(E.a, Decl(b.js, 32, 9))
+
+    \u0069n = 2;
+>\u0069n : Symbol(E[\u0069n], Decl(b.js, 33, 10))
+
+    b = 3;
+>b : Symbol(E.b, Decl(b.js, 34, 16))
+
+    \u{69}nstanceof = 4;
+>\u{69}nstanceof : Symbol(E[\u{69}nstanceof], Decl(b.js, 35, 10))
+}
+
+const a = Object.keys(new A());
+>a : Symbol(a, Decl(b.js, 39, 5))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>A : Symbol(A, Decl(b.js, 0, 10))
+
+const b = Object.keys(new B());
+>b : Symbol(b, Decl(b.js, 40, 5))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>B : Symbol(B, Decl(b.js, 7, 1))
+
+const c = new C();
+>c : Symbol(c, Decl(b.js, 41, 5))
+>C : Symbol(C, Decl(b.js, 14, 1))
+
+const d = new D();
+>d : Symbol(d, Decl(b.js, 42, 5))
+>D : Symbol(D, Decl(b.js, 21, 1))
+
+const e = 1;
+>e : Symbol(e, Decl(b.js, 43, 5))
+
+const f = \u0065
+>f : Symbol(f, Decl(b.js, 44, 5))
+>\u0065 : Symbol(e, Decl(b.js, 43, 5))
+
+    + 1;
+
+=== c.ts ===
+export {};
+
+const a = "a" \u0069n { a: 1 };
+>a : Symbol(a, Decl(c.ts, 2, 5))
+>a : Symbol(a, Decl(c.ts, 2, 23))
+
+const b = {} \u{69}nstanceof Object;
+>b : Symbol(b, Decl(c.ts, 3, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+=== d.js ===
+export {};
+
+const a = "a" \u0069n { a: 1 };
+>a : Symbol(a, Decl(d.js, 2, 5))
+>a : Symbol(a, Decl(d.js, 2, 23))
+
+const b = {} \u{69}nstanceof Object;
+>b : Symbol(b, Decl(d.js, 3, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+=== e.ts ===
+export {};
+
+class A {
+>A : Symbol(A, Decl(e.ts, 0, 10))
+
+    #a;
+>#a : Symbol(A.#a, Decl(e.ts, 2, 9))
+
+    b = #a
+>b : Symbol(A.b, Decl(e.ts, 3, 7))
+
+    \u0069n
+>\u0069n : Symbol(A[\u0069n], Decl(e.ts, 4, 10))
+}
+
+=== f.js ===
+export {};
+
+class A {
+>A : Symbol(A, Decl(f.js, 0, 10))
+
+    #a;
+>#a : Symbol(A.#a, Decl(f.js, 2, 9))
+
+    b = #a
+>b : Symbol(A.b, Decl(f.js, 3, 7))
+
+    \u0069n
+>\u0069n : Symbol(A[\u0069n], Decl(f.js, 4, 10))
+}
+
