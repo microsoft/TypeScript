@@ -2,10 +2,6 @@
 // entry point loads Node modules at import time, which would prevent this
 // package from being loaded or bundled for other environments, so the Node
 // runtime layer it would install is provided below instead.
-import type {
-    Readable,
-    Writable,
-} from "node:stream";
 import {
     AbstractMessageBuffer,
     createMessageConnection,
@@ -44,7 +40,18 @@ class MessageBuffer extends AbstractMessageBuffer {
     }
 }
 
-function listen(stream: Readable | Writable, event: string, listener: (...args: any[]) => void): Disposable {
+interface EventSource {
+    on(event: string, listener: (...args: any[]) => void): unknown;
+    off(event: string, listener: (...args: any[]) => void): unknown;
+}
+
+interface WritableStream extends EventSource {
+    write(data: Uint8Array, callback: (error: Error | null | undefined) => void): unknown;
+    write(data: string, encoding: RAL.MessageBufferEncoding, callback: (error: Error | null | undefined) => void): unknown;
+    end(): unknown;
+}
+
+function listen(stream: EventSource, event: string, listener: (...args: any[]) => void): Disposable {
     stream.on(event, listener);
     return Disposable.create(() => stream.off(event, listener));
 }
@@ -90,7 +97,7 @@ function installRuntime(): void {
 }
 
 /** Creates a JSON-RPC connection over Node.js streams. */
-export function createStreamConnection(readable: Readable, writable: Writable): MessageConnection {
+export function createStreamConnection(readable: EventSource, writable: WritableStream): MessageConnection {
     installRuntime();
     const reader = new ReadableStreamMessageReader({
         onClose: listener => listen(readable, "close", listener),
