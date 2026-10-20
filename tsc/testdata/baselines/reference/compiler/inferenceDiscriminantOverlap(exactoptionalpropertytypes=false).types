@@ -1,0 +1,331 @@
+//// [tests/cases/compiler/inferenceDiscriminantOverlap.ts] ////
+
+=== inferenceDiscriminantOverlap.ts ===
+declare const validOptionalSource: { tag: "a"; value: 1 } | { tag?: "a"; value: 2 };
+>validOptionalSource : { tag: "a"; value: 1; } | { tag?: "a"; value: 2; }
+>tag : "a"
+>value : 1
+>tag : "a" | undefined
+>value : 2
+
+declare const mixedOptionalSource: { tag: "a"; value: 1 } | { tag?: "b"; value: 2 };
+>mixedOptionalSource : { tag: "a"; value: 1; } | { tag?: "b"; value: 2; }
+>tag : "a"
+>value : 1
+>tag : "b" | undefined
+>value : 2
+
+declare const matchingOptionalSource: { tag: "a"; value: 1 } | { tag?: "a"; value: 2 } | { tag: "b"; value: 3 };
+>matchingOptionalSource : { tag: "a"; value: 1; } | { tag?: "a"; value: 2; } | { tag: "b"; value: 3; }
+>tag : "a"
+>value : 1
+>tag : "a" | undefined
+>value : 2
+>tag : "b"
+>value : 3
+
+declare const requiredMismatchSource: { tag: "a"; value: 1 } | { tag: "b"; value: 2 };
+>requiredMismatchSource : { tag: "a"; value: 1; } | { tag: "b"; value: 2; }
+>tag : "a"
+>value : 1
+>tag : "b"
+>value : 2
+
+declare const partiallyMatchingSource: { tag: "a" | "b"; value: 1 } | { tag: "b"; value: 2 };
+>partiallyMatchingSource : { tag: "a" | "b"; value: 1; } | { tag: "b"; value: 2; }
+>tag : "a" | "b"
+>value : 1
+>tag : "b"
+>value : 2
+
+declare const undefinedRequiredSource: { tag: "a"; value: 1 } | { tag: undefined; value: 2 };
+>undefinedRequiredSource : { tag: "a"; value: 1; } | { tag: undefined; value: 2; }
+>tag : "a"
+>value : 1
+>tag : undefined
+>value : 2
+
+declare const explicitUndefinedSource: { tag: "a"; value: 1 } | { tag: "b" | undefined; value: 2 };
+>explicitUndefinedSource : { tag: "a"; value: 1; } | { tag: "b" | undefined; value: 2; }
+>tag : "a"
+>value : 1
+>tag : "b" | undefined
+>value : 2
+
+declare const optionalNeverSource: { tag: "a"; value: 1 } | { tag?: never; value: 2 };
+>optionalNeverSource : { tag: "a"; value: 1; } | { tag?: never; value: 2; }
+>tag : "a"
+>value : 1
+>tag : undefined
+>value : 2
+
+declare const indexedSource:
+>indexedSource : { tag: "a"; value: "a"; } | { tag?: "a"; value: "a"; } | { [key: string]: "b"; value: "b"; }
+
+    | { tag: "a"; value: "a" }
+>tag : "a"
+>value : "a"
+
+    | { tag?: "a"; value: "a" }
+>tag : "a" | undefined
+>value : "a"
+
+    | { [key: string]: "b"; value: "b" };
+>key : string
+>value : "b"
+
+declare const requiredPropertySource:
+>requiredPropertySource : { tag: "a"; value: "a"; } | { [key: string]: "b"; tag: "b"; value: "b"; }
+
+    | { tag: "a"; value: "a" }
+>tag : "a"
+>value : "a"
+
+    | { [key: string]: "b"; tag: "b"; value: "b" };
+>key : string
+>tag : "b"
+>value : "b"
+
+declare const optionalPropertySource:
+>optionalPropertySource : { tag: "a"; value: "a"; } | { [key: string]: "a" | "b" | undefined; tag?: "a"; value: "b"; }
+
+    | { tag: "a"; value: "a" }
+>tag : "a"
+>value : "a"
+
+    | { [key: string]: "a" | "b" | undefined; tag?: "a"; value: "b" };
+>key : string
+>tag : "a" | undefined
+>value : "b"
+
+declare function inferOptionalSource<T>(value: { tag?: "a"; value: T }): T;
+>inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
+>value : { tag?: "a"; value: T; }
+>tag : "a" | undefined
+>value : T
+
+const validOptional = inferOptionalSource(validOptionalSource);
+>validOptional : 1
+>inferOptionalSource(validOptionalSource) : 1
+>inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
+>validOptionalSource : { tag: "a"; value: 1; } | { tag?: "a"; value: 2; }
+
+const mixedOptional = inferOptionalSource(mixedOptionalSource);
+>mixedOptional : 1
+>inferOptionalSource(mixedOptionalSource) : 1
+>inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
+>mixedOptionalSource : { tag: "a"; value: 1; } | { tag?: "b"; value: 2; }
+
+const matchingOptional = inferOptionalSource(matchingOptionalSource);
+>matchingOptional : 1
+>inferOptionalSource(matchingOptionalSource) : 1
+>inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
+>matchingOptionalSource : { tag: "a"; value: 1; } | { tag?: "a"; value: 2; } | { tag: "b"; value: 3; }
+
+const requiredMismatch = inferOptionalSource(requiredMismatchSource);
+>requiredMismatch : 1
+>inferOptionalSource(requiredMismatchSource) : 1
+>inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
+>requiredMismatchSource : { tag: "a"; value: 1; } | { tag: "b"; value: 2; }
+
+const requiredUndefined = inferOptionalSource(undefinedRequiredSource);
+>requiredUndefined : 1 | 2
+>inferOptionalSource(undefinedRequiredSource) : 1 | 2
+>inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
+>undefinedRequiredSource : { tag: "a"; value: 1; } | { tag: undefined; value: 2; }
+
+const explicitUndefined = inferOptionalSource(explicitUndefinedSource);
+>explicitUndefined : 1
+>inferOptionalSource(explicitUndefinedSource) : 1
+>inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
+>explicitUndefinedSource : { tag: "a"; value: 1; } | { tag: "b" | undefined; value: 2; }
+
+const optionalNever = inferOptionalSource(optionalNeverSource);
+>optionalNever : 1 | 2
+>inferOptionalSource(optionalNeverSource) : 1 | 2
+>inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
+>optionalNeverSource : { tag: "a"; value: 1; } | { tag?: never; value: 2; }
+
+const indexedOptional = inferOptionalSource(indexedSource); // error
+>indexedOptional : "a"
+>inferOptionalSource(indexedSource) : "a"
+>inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
+>indexedSource : { tag: "a"; value: "a"; } | { tag?: "a"; value: "a"; } | { [key: string]: "b"; value: "b"; }
+
+const declaredOptional = inferOptionalSource(optionalPropertySource); // error
+>declaredOptional : "a"
+>inferOptionalSource(optionalPropertySource) : "a"
+>inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
+>optionalPropertySource : { tag: "a"; value: "a"; } | { [key: string]: "a" | "b" | undefined; tag?: "a"; value: "b"; }
+
+const declaredRequired = inferOptionalSource(requiredPropertySource); // error
+>declaredRequired : "a"
+>inferOptionalSource(requiredPropertySource) : "a"
+>inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
+>requiredPropertySource : { tag: "a"; value: "a"; } | { [key: string]: "b"; tag: "b"; value: "b"; }
+
+declare function inferRequiredSource<T>(value: { tag: "a"; value: T }): T;
+>inferRequiredSource : <T>(value: { tag: "a"; value: T; }) => T
+>value : { tag: "a"; value: T; }
+>tag : "a"
+>value : T
+
+const partiallyMatching = inferRequiredSource(partiallyMatchingSource);
+>partiallyMatching : 1 | 2
+>inferRequiredSource(partiallyMatchingSource) : 1 | 2
+>inferRequiredSource : <T>(value: { tag: "a"; value: T; }) => T
+>partiallyMatchingSource : { tag: "a" | "b"; value: 1; } | { tag: "b"; value: 2; }
+
+const indexedRequired = inferRequiredSource(indexedSource); // error
+>indexedRequired : "a"
+>inferRequiredSource(indexedSource) : "a"
+>inferRequiredSource : <T>(value: { tag: "a"; value: T; }) => T
+>indexedSource : { tag: "a"; value: "a"; } | { tag?: "a"; value: "a"; } | { [key: string]: "b"; value: "b"; }
+
+declare function makeOptional<const T>(): { tag?: "a"; value: T };
+>makeOptional : <const T>() => { tag?: "a"; value: T; }
+>tag : "a" | undefined
+>value : T
+
+export function optionalContext(): { tag: "a"; value: 1 } | { tag?: "b"; value: 2 } {
+>optionalContext : () => { tag: "a"; value: 1; } | { tag?: "b"; value: 2; }
+>tag : "a"
+>value : 1
+>tag : "b" | undefined
+>value : 2
+
+    return makeOptional();
+>makeOptional() : { tag?: "a"; value: 1; }
+>makeOptional : <const T>() => { tag?: "a"; value: T; }
+}
+
+declare function inferOptionalTargets<A, B>(value: { tag: "a"; value: A } | { tag?: "b"; value: B }): [A, B];
+>inferOptionalTargets : <A, B>(value: { tag: "a"; value: A; } | { tag?: "b"; value: B; }) => [A, B]
+>value : { tag: "a"; value: A; } | { tag?: "b"; value: B; }
+>tag : "a"
+>value : A
+>tag : "b" | undefined
+>value : B
+
+declare const optionalInput: { tag?: "a"; value: 42 };
+>optionalInput : { tag?: "a"; value: 42; }
+>tag : "a" | undefined
+>value : 42
+
+declare const optionalNeverInput: { tag?: never; value: 42 };
+>optionalNeverInput : { tag?: never; value: 42; }
+>tag : undefined
+>value : 42
+
+const optionalTargetInference = inferOptionalTargets(optionalInput);
+>optionalTargetInference : [42, 42]
+>inferOptionalTargets(optionalInput) : [42, 42]
+>inferOptionalTargets : <A, B>(value: { tag: "a"; value: A; } | { tag?: "b"; value: B; }) => [A, B]
+>optionalInput : { tag?: "a"; value: 42; }
+
+const optionalNeverTargetInference = inferOptionalTargets(optionalNeverInput);
+>optionalNeverTargetInference : [unknown, 42]
+>inferOptionalTargets(optionalNeverInput) : [unknown, 42]
+>inferOptionalTargets : <A, B>(value: { tag: "a"; value: A; } | { tag?: "b"; value: B; }) => [A, B]
+>optionalNeverInput : { tag?: never; value: 42; }
+
+// Return type inference runs with the contextual type as the source and the declared
+// return type as the target, so assignability has to hold the other way around.
+declare function makeTagged<const T>(value: T): { kind: "a"; value: T };
+>makeTagged : <const T>(value: T) => { kind: "a"; value: T; }
+>value : T
+>kind : "a"
+>value : T
+
+declare function makeOptionalTagged<const T>(value: T): { kind?: "a"; value: T };
+>makeOptionalTagged : <const T>(value: T) => { kind?: "a"; value: T; }
+>value : T
+>kind : "a" | undefined
+>value : T
+
+declare function makeUnionTagged<const T>(value: T): { kind: "a" | undefined; value: T };
+>makeUnionTagged : <const T>(value: T) => { kind: "a" | undefined; value: T; }
+>value : T
+>kind : "a" | undefined
+>value : T
+
+export function broadContext(): { kind: string; value: string[] } | { kind: "a"; value: number } {
+>broadContext : () => { kind: string; value: string[]; } | { kind: "a"; value: number; }
+>kind : string
+>value : string[]
+>kind : "a"
+>value : number
+
+    return makeTagged([]);
+>makeTagged([]) : { kind: "a"; value: readonly []; }
+>makeTagged : <const T>(value: T) => { kind: "a"; value: T; }
+>[] : []
+}
+export function partialTagContext(): { kind: "a" | "b"; value: string[] } | { kind: "a"; value: number } {
+>partialTagContext : () => { kind: "a" | "b"; value: string[]; } | { kind: "a"; value: number; }
+>kind : "a" | "b"
+>value : string[]
+>kind : "a"
+>value : number
+
+    return makeTagged([]);
+>makeTagged([]) : { kind: "a"; value: readonly []; }
+>makeTagged : <const T>(value: T) => { kind: "a"; value: T; }
+>[] : []
+}
+export function unionTagContext(): { kind?: "a"; value: string[] } | { kind: "a"; value: number } {
+>unionTagContext : () => { kind?: "a"; value: string[]; } | { kind: "a"; value: number; }
+>kind : "a" | undefined
+>value : string[]
+>kind : "a"
+>value : number
+
+    return makeUnionTagged([]);
+>makeUnionTagged([]) : { kind: "a" | undefined; value: readonly []; }
+>makeUnionTagged : <const T>(value: T) => { kind: "a" | undefined; value: T; }
+>[] : []
+}
+export function indexedContext():
+>indexedContext : () => { [key: string]: string | string[]; value: string[]; } | { kind: "a"; value: number; } | { kind: "b"; value: boolean; }
+
+    | { [key: string]: string | string[]; value: string[] }
+>key : string
+>value : string[]
+
+    | { kind: "a"; value: number }
+>kind : "a"
+>value : number
+
+    | { kind: "b"; value: boolean } {
+>kind : "b"
+>value : boolean
+
+    return makeOptionalTagged([]);
+>makeOptionalTagged([]) : { kind?: "a"; value: readonly []; }
+>makeOptionalTagged : <const T>(value: T) => { kind?: "a"; value: T; }
+>[] : []
+}
+
+declare function makeEither<const A, const B>(a: A, b: B): { kind: "a"; value: A } | { kind: "b"; value: B };
+>makeEither : <const A, const B>(a: A, b: B) => { kind: "a"; value: A; } | { kind: "b"; value: B; }
+>a : A
+>b : B
+>kind : "a"
+>value : A
+>kind : "b"
+>value : B
+
+export function eitherContext(): { kind: "a"; value: string[] } | { kind: "b"; value: number[] } {
+>eitherContext : () => { kind: "a"; value: string[]; } | { kind: "b"; value: number[]; }
+>kind : "a"
+>value : string[]
+>kind : "b"
+>value : number[]
+
+    return makeEither([], []);
+>makeEither([], []) : { kind: "a"; value: []; } | { kind: "b"; value: []; }
+>makeEither : <const A, const B>(a: A, b: B) => { kind: "a"; value: A; } | { kind: "b"; value: B; }
+>[] : []
+>[] : []
+}
+

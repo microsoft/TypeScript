@@ -1,0 +1,133 @@
+//// [tests/cases/compiler/contextualTypingDiscriminantOverlap.ts] ////
+
+=== contextualTypingDiscriminantOverlap.ts ===
+type Handler<T> = (value: T) => T;
+>Handler : Symbol(Handler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 0))
+>T : Symbol(T, Decl(contextualTypingDiscriminantOverlap.ts, 0, 13))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 0, 19))
+>T : Symbol(T, Decl(contextualTypingDiscriminantOverlap.ts, 0, 13))
+>T : Symbol(T, Decl(contextualTypingDiscriminantOverlap.ts, 0, 13))
+
+type IndexedHandler = {
+>IndexedHandler : Symbol(IndexedHandler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 34))
+
+    [key: string]: "b" | Handler<"b">;
+>key : Symbol(key, Decl(contextualTypingDiscriminantOverlap.ts, 2, 5))
+>Handler : Symbol(Handler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 0))
+
+    value: Handler<"b">;
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 2, 38))
+>Handler : Symbol(Handler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 0))
+
+};
+type DeclaredOptionalHandler = {
+>DeclaredOptionalHandler : Symbol(DeclaredOptionalHandler, Decl(contextualTypingDiscriminantOverlap.ts, 4, 2))
+
+    [key: string]: "a" | "b" | undefined | Handler<"b">;
+>key : Symbol(key, Decl(contextualTypingDiscriminantOverlap.ts, 6, 5))
+>Handler : Symbol(Handler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 0))
+
+    tag?: "a";
+>tag : Symbol(tag, Decl(contextualTypingDiscriminantOverlap.ts, 6, 56))
+
+    value: Handler<"b">;
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 7, 14))
+>Handler : Symbol(Handler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 0))
+
+};
+type DeclaredRequiredHandler = {
+>DeclaredRequiredHandler : Symbol(DeclaredRequiredHandler, Decl(contextualTypingDiscriminantOverlap.ts, 9, 2))
+
+    [key: string]: "b" | Handler<"b">;
+>key : Symbol(key, Decl(contextualTypingDiscriminantOverlap.ts, 11, 5))
+>Handler : Symbol(Handler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 0))
+
+    tag: "b";
+>tag : Symbol(tag, Decl(contextualTypingDiscriminantOverlap.ts, 11, 38))
+
+    value: Handler<"b">;
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 12, 13))
+>Handler : Symbol(Handler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 0))
+
+};
+
+const indexedOptional:
+>indexedOptional : Symbol(indexedOptional, Decl(contextualTypingDiscriminantOverlap.ts, 16, 5))
+
+    | { tag: "a"; value: Handler<"a"> }
+>tag : Symbol(tag, Decl(contextualTypingDiscriminantOverlap.ts, 17, 7))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 17, 17))
+>Handler : Symbol(Handler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 0))
+
+    | { tag?: "a"; value: Handler<"a"> }
+>tag : Symbol(tag, Decl(contextualTypingDiscriminantOverlap.ts, 18, 7))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 18, 18))
+>Handler : Symbol(Handler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 0))
+
+    | IndexedHandler = {
+>IndexedHandler : Symbol(IndexedHandler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 34))
+
+        value: value => value, // error
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 19, 24))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 20, 14))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 20, 14))
+
+    };
+
+const declaredOptional:
+>declaredOptional : Symbol(declaredOptional, Decl(contextualTypingDiscriminantOverlap.ts, 23, 5))
+
+    | { tag: "a"; value: Handler<"a"> }
+>tag : Symbol(tag, Decl(contextualTypingDiscriminantOverlap.ts, 24, 7))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 24, 17))
+>Handler : Symbol(Handler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 0))
+
+    | DeclaredOptionalHandler = {
+>DeclaredOptionalHandler : Symbol(DeclaredOptionalHandler, Decl(contextualTypingDiscriminantOverlap.ts, 4, 2))
+
+        value: value => value,
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 25, 33))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 26, 14))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 26, 14))
+
+    };
+
+const declaredRequired:
+>declaredRequired : Symbol(declaredRequired, Decl(contextualTypingDiscriminantOverlap.ts, 29, 5))
+
+    | { tag: "a"; value: Handler<"a"> }
+>tag : Symbol(tag, Decl(contextualTypingDiscriminantOverlap.ts, 30, 7))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 30, 17))
+>Handler : Symbol(Handler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 0))
+
+    | DeclaredRequiredHandler = {
+>DeclaredRequiredHandler : Symbol(DeclaredRequiredHandler, Decl(contextualTypingDiscriminantOverlap.ts, 9, 2))
+
+        tag: "a",
+>tag : Symbol(tag, Decl(contextualTypingDiscriminantOverlap.ts, 31, 33))
+
+        value: value => value,
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 32, 17))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 33, 14))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 33, 14))
+
+    };
+
+const indexedRequired:
+>indexedRequired : Symbol(indexedRequired, Decl(contextualTypingDiscriminantOverlap.ts, 36, 5))
+
+    | { tag: "a"; value: Handler<"a"> }
+>tag : Symbol(tag, Decl(contextualTypingDiscriminantOverlap.ts, 37, 7))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 37, 17))
+>Handler : Symbol(Handler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 0))
+
+    | IndexedHandler = {
+>IndexedHandler : Symbol(IndexedHandler, Decl(contextualTypingDiscriminantOverlap.ts, 0, 34))
+
+        value: value => value, // error
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 38, 24))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 39, 14))
+>value : Symbol(value, Decl(contextualTypingDiscriminantOverlap.ts, 39, 14))
+
+    };
+

@@ -1,0 +1,254 @@
+//// [tests/cases/compiler/discriminatedUnionInferenceClassHierarchies.ts] ////
+
+=== discriminatedUnionInferenceClassHierarchies.ts ===
+// The discriminant lives on the instance type behind a construct signature.
+declare class GlobalController<P, S> {
+>GlobalController : Symbol(GlobalController, Decl(discriminatedUnionInferenceClassHierarchies.ts, 0, 0))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 1, 31))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 1, 33))
+
+    isLocal: false;
+>isLocal : Symbol(GlobalController.isLocal, Decl(discriminatedUnionInferenceClassHierarchies.ts, 1, 38))
+
+    getProps(state: S, props: P): void;
+>getProps : Symbol(GlobalController.getProps, Decl(discriminatedUnionInferenceClassHierarchies.ts, 2, 19))
+>state : Symbol(state, Decl(discriminatedUnionInferenceClassHierarchies.ts, 3, 13))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 1, 33))
+>props : Symbol(props, Decl(discriminatedUnionInferenceClassHierarchies.ts, 3, 22))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 1, 31))
+}
+declare class LocalController<P, S> {
+>LocalController : Symbol(LocalController, Decl(discriminatedUnionInferenceClassHierarchies.ts, 4, 1))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 5, 30))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 5, 32))
+
+    isLocal: true;
+>isLocal : Symbol(LocalController.isLocal, Decl(discriminatedUnionInferenceClassHierarchies.ts, 5, 37))
+
+    getProps(props: P, state: S): void;
+>getProps : Symbol(LocalController.getProps, Decl(discriminatedUnionInferenceClassHierarchies.ts, 6, 18))
+>props : Symbol(props, Decl(discriminatedUnionInferenceClassHierarchies.ts, 7, 13))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 5, 30))
+>state : Symbol(state, Decl(discriminatedUnionInferenceClassHierarchies.ts, 7, 22))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 5, 32))
+}
+interface GlobalControllerClass<P, S> {
+>GlobalControllerClass : Symbol(GlobalControllerClass, Decl(discriminatedUnionInferenceClassHierarchies.ts, 8, 1))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 9, 32))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 9, 34))
+
+    new (): GlobalController<P, S>;
+>GlobalController : Symbol(GlobalController, Decl(discriminatedUnionInferenceClassHierarchies.ts, 0, 0))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 9, 32))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 9, 34))
+}
+interface LocalControllerClass<P, S> {
+>LocalControllerClass : Symbol(LocalControllerClass, Decl(discriminatedUnionInferenceClassHierarchies.ts, 11, 1))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 12, 31))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 12, 33))
+
+    new (): LocalController<P, S>;
+>LocalController : Symbol(LocalController, Decl(discriminatedUnionInferenceClassHierarchies.ts, 4, 1))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 12, 31))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 12, 33))
+}
+declare function createEnhancer<P, S>(Wrapper: GlobalControllerClass<P, S> | LocalControllerClass<P, S>): [P, S];
+>createEnhancer : Symbol(createEnhancer, Decl(discriminatedUnionInferenceClassHierarchies.ts, 14, 1))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 15, 32))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 15, 34))
+>Wrapper : Symbol(Wrapper, Decl(discriminatedUnionInferenceClassHierarchies.ts, 15, 38))
+>GlobalControllerClass : Symbol(GlobalControllerClass, Decl(discriminatedUnionInferenceClassHierarchies.ts, 8, 1))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 15, 32))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 15, 34))
+>LocalControllerClass : Symbol(LocalControllerClass, Decl(discriminatedUnionInferenceClassHierarchies.ts, 11, 1))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 15, 32))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 15, 34))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 15, 32))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 15, 34))
+
+class Fail extends LocalController<{ baz: any }, { bar: any }> {}
+>Fail : Symbol(Fail, Decl(discriminatedUnionInferenceClassHierarchies.ts, 15, 113))
+>LocalController : Symbol(LocalController, Decl(discriminatedUnionInferenceClassHierarchies.ts, 4, 1))
+>baz : Symbol(baz, Decl(discriminatedUnionInferenceClassHierarchies.ts, 17, 36))
+>bar : Symbol(bar, Decl(discriminatedUnionInferenceClassHierarchies.ts, 17, 50))
+
+const enhanced = createEnhancer(Fail);
+>enhanced : Symbol(enhanced, Decl(discriminatedUnionInferenceClassHierarchies.ts, 18, 5))
+>createEnhancer : Symbol(createEnhancer, Decl(discriminatedUnionInferenceClassHierarchies.ts, 14, 1))
+>Fail : Symbol(Fail, Decl(discriminatedUnionInferenceClassHierarchies.ts, 15, 113))
+
+class WorkaroundUnusedMethod extends LocalController<{ baz: any }, { bar: any }> {
+>WorkaroundUnusedMethod : Symbol(WorkaroundUnusedMethod, Decl(discriminatedUnionInferenceClassHierarchies.ts, 18, 38))
+>LocalController : Symbol(LocalController, Decl(discriminatedUnionInferenceClassHierarchies.ts, 4, 1))
+>baz : Symbol(baz, Decl(discriminatedUnionInferenceClassHierarchies.ts, 20, 54))
+>bar : Symbol(bar, Decl(discriminatedUnionInferenceClassHierarchies.ts, 20, 68))
+
+    _unused() {}
+>_unused : Symbol(WorkaroundUnusedMethod._unused, Decl(discriminatedUnionInferenceClassHierarchies.ts, 20, 82))
+}
+const enhancedUnusedMethod = createEnhancer(WorkaroundUnusedMethod);
+>enhancedUnusedMethod : Symbol(enhancedUnusedMethod, Decl(discriminatedUnionInferenceClassHierarchies.ts, 23, 5))
+>createEnhancer : Symbol(createEnhancer, Decl(discriminatedUnionInferenceClassHierarchies.ts, 14, 1))
+>WorkaroundUnusedMethod : Symbol(WorkaroundUnusedMethod, Decl(discriminatedUnionInferenceClassHierarchies.ts, 18, 38))
+
+class WorkaroundChangeSignature extends LocalController<{ baz: any }, { bar: any }> {
+>WorkaroundChangeSignature : Symbol(WorkaroundChangeSignature, Decl(discriminatedUnionInferenceClassHierarchies.ts, 23, 68))
+>LocalController : Symbol(LocalController, Decl(discriminatedUnionInferenceClassHierarchies.ts, 4, 1))
+>baz : Symbol(baz, Decl(discriminatedUnionInferenceClassHierarchies.ts, 25, 57))
+>bar : Symbol(bar, Decl(discriminatedUnionInferenceClassHierarchies.ts, 25, 71))
+
+    getProps(props: { baz: any }) {}
+>getProps : Symbol(WorkaroundChangeSignature.getProps, Decl(discriminatedUnionInferenceClassHierarchies.ts, 25, 85))
+>props : Symbol(props, Decl(discriminatedUnionInferenceClassHierarchies.ts, 26, 13))
+>baz : Symbol(baz, Decl(discriminatedUnionInferenceClassHierarchies.ts, 26, 21))
+}
+const enhancedChangedSignature = createEnhancer(WorkaroundChangeSignature);
+>enhancedChangedSignature : Symbol(enhancedChangedSignature, Decl(discriminatedUnionInferenceClassHierarchies.ts, 28, 5))
+>createEnhancer : Symbol(createEnhancer, Decl(discriminatedUnionInferenceClassHierarchies.ts, 14, 1))
+>WorkaroundChangeSignature : Symbol(WorkaroundChangeSignature, Decl(discriminatedUnionInferenceClassHierarchies.ts, 23, 68))
+
+// Three type parameters with a default, as in the original report.
+declare abstract class GlobalStoreController<P, S, SS> {
+>GlobalStoreController : Symbol(GlobalStoreController, Decl(discriminatedUnionInferenceClassHierarchies.ts, 28, 75))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 31, 45))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 31, 47))
+>SS : Symbol(SS, Decl(discriminatedUnionInferenceClassHierarchies.ts, 31, 50))
+
+    isLocal: false;
+>isLocal : Symbol(GlobalStoreController.isLocal, Decl(discriminatedUnionInferenceClassHierarchies.ts, 31, 56))
+
+    abstract getProps(storeState: SS, props: P, state: S): void;
+>getProps : Symbol(GlobalStoreController.getProps, Decl(discriminatedUnionInferenceClassHierarchies.ts, 32, 19))
+>storeState : Symbol(storeState, Decl(discriminatedUnionInferenceClassHierarchies.ts, 33, 22))
+>SS : Symbol(SS, Decl(discriminatedUnionInferenceClassHierarchies.ts, 31, 50))
+>props : Symbol(props, Decl(discriminatedUnionInferenceClassHierarchies.ts, 33, 37))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 31, 45))
+>state : Symbol(state, Decl(discriminatedUnionInferenceClassHierarchies.ts, 33, 47))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 31, 47))
+}
+interface GlobalStoreControllerClass<P, S, SS> {
+>GlobalStoreControllerClass : Symbol(GlobalStoreControllerClass, Decl(discriminatedUnionInferenceClassHierarchies.ts, 34, 1))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 35, 37))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 35, 39))
+>SS : Symbol(SS, Decl(discriminatedUnionInferenceClassHierarchies.ts, 35, 42))
+
+    new (): GlobalStoreController<P, S, SS>;
+>GlobalStoreController : Symbol(GlobalStoreController, Decl(discriminatedUnionInferenceClassHierarchies.ts, 28, 75))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 35, 37))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 35, 39))
+>SS : Symbol(SS, Decl(discriminatedUnionInferenceClassHierarchies.ts, 35, 42))
+}
+type ControllerClass<P, S, SS = {}> = GlobalStoreControllerClass<P, S, SS> | LocalControllerClass<P, S>;
+>ControllerClass : Symbol(ControllerClass, Decl(discriminatedUnionInferenceClassHierarchies.ts, 37, 1))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 38, 21))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 38, 23))
+>SS : Symbol(SS, Decl(discriminatedUnionInferenceClassHierarchies.ts, 38, 26))
+>GlobalStoreControllerClass : Symbol(GlobalStoreControllerClass, Decl(discriminatedUnionInferenceClassHierarchies.ts, 34, 1))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 38, 21))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 38, 23))
+>SS : Symbol(SS, Decl(discriminatedUnionInferenceClassHierarchies.ts, 38, 26))
+>LocalControllerClass : Symbol(LocalControllerClass, Decl(discriminatedUnionInferenceClassHierarchies.ts, 11, 1))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 38, 21))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 38, 23))
+
+declare function createStoreEnhancer<P, S, SS = void>(Wrapper: ControllerClass<P, S, SS>): [P, S, SS];
+>createStoreEnhancer : Symbol(createStoreEnhancer, Decl(discriminatedUnionInferenceClassHierarchies.ts, 38, 104))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 39, 37))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 39, 39))
+>SS : Symbol(SS, Decl(discriminatedUnionInferenceClassHierarchies.ts, 39, 42))
+>Wrapper : Symbol(Wrapper, Decl(discriminatedUnionInferenceClassHierarchies.ts, 39, 54))
+>ControllerClass : Symbol(ControllerClass, Decl(discriminatedUnionInferenceClassHierarchies.ts, 37, 1))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 39, 37))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 39, 39))
+>SS : Symbol(SS, Decl(discriminatedUnionInferenceClassHierarchies.ts, 39, 42))
+>P : Symbol(P, Decl(discriminatedUnionInferenceClassHierarchies.ts, 39, 37))
+>S : Symbol(S, Decl(discriminatedUnionInferenceClassHierarchies.ts, 39, 39))
+>SS : Symbol(SS, Decl(discriminatedUnionInferenceClassHierarchies.ts, 39, 42))
+
+const storeEnhanced = createStoreEnhancer(Fail);
+>storeEnhanced : Symbol(storeEnhanced, Decl(discriminatedUnionInferenceClassHierarchies.ts, 40, 5))
+>createStoreEnhancer : Symbol(createStoreEnhancer, Decl(discriminatedUnionInferenceClassHierarchies.ts, 38, 104))
+>Fail : Symbol(Fail, Decl(discriminatedUnionInferenceClassHierarchies.ts, 15, 113))
+
+// Instances declared directly, through an alias, and through an extending interface.
+interface Local<T, U> {
+>Local : Symbol(Local, Decl(discriminatedUnionInferenceClassHierarchies.ts, 40, 48))
+>T : Symbol(T, Decl(discriminatedUnionInferenceClassHierarchies.ts, 43, 16))
+>U : Symbol(U, Decl(discriminatedUnionInferenceClassHierarchies.ts, 43, 18))
+
+    isLocal: true;
+>isLocal : Symbol(Local.isLocal, Decl(discriminatedUnionInferenceClassHierarchies.ts, 43, 23))
+
+    a: T;
+>a : Symbol(Local.a, Decl(discriminatedUnionInferenceClassHierarchies.ts, 44, 18))
+>T : Symbol(T, Decl(discriminatedUnionInferenceClassHierarchies.ts, 43, 16))
+
+    b: U;
+>b : Symbol(Local.b, Decl(discriminatedUnionInferenceClassHierarchies.ts, 45, 9))
+>U : Symbol(U, Decl(discriminatedUnionInferenceClassHierarchies.ts, 43, 18))
+}
+interface NotLocal<T, U> {
+>NotLocal : Symbol(NotLocal, Decl(discriminatedUnionInferenceClassHierarchies.ts, 47, 1))
+>T : Symbol(T, Decl(discriminatedUnionInferenceClassHierarchies.ts, 48, 19))
+>U : Symbol(U, Decl(discriminatedUnionInferenceClassHierarchies.ts, 48, 21))
+
+    isLocal: false;
+>isLocal : Symbol(NotLocal.isLocal, Decl(discriminatedUnionInferenceClassHierarchies.ts, 48, 26))
+
+    a: U;
+>a : Symbol(NotLocal.a, Decl(discriminatedUnionInferenceClassHierarchies.ts, 49, 19))
+>U : Symbol(U, Decl(discriminatedUnionInferenceClassHierarchies.ts, 48, 21))
+
+    b: T;
+>b : Symbol(NotLocal.b, Decl(discriminatedUnionInferenceClassHierarchies.ts, 50, 9))
+>T : Symbol(T, Decl(discriminatedUnionInferenceClassHierarchies.ts, 48, 19))
+}
+declare function callme<T, U>(Wrapper: NotLocal<T, U> | Local<T, U>): [T, U];
+>callme : Symbol(callme, Decl(discriminatedUnionInferenceClassHierarchies.ts, 52, 1))
+>T : Symbol(T, Decl(discriminatedUnionInferenceClassHierarchies.ts, 53, 24))
+>U : Symbol(U, Decl(discriminatedUnionInferenceClassHierarchies.ts, 53, 26))
+>Wrapper : Symbol(Wrapper, Decl(discriminatedUnionInferenceClassHierarchies.ts, 53, 30))
+>NotLocal : Symbol(NotLocal, Decl(discriminatedUnionInferenceClassHierarchies.ts, 47, 1))
+>T : Symbol(T, Decl(discriminatedUnionInferenceClassHierarchies.ts, 53, 24))
+>U : Symbol(U, Decl(discriminatedUnionInferenceClassHierarchies.ts, 53, 26))
+>Local : Symbol(Local, Decl(discriminatedUnionInferenceClassHierarchies.ts, 40, 48))
+>T : Symbol(T, Decl(discriminatedUnionInferenceClassHierarchies.ts, 53, 24))
+>U : Symbol(U, Decl(discriminatedUnionInferenceClassHierarchies.ts, 53, 26))
+>T : Symbol(T, Decl(discriminatedUnionInferenceClassHierarchies.ts, 53, 24))
+>U : Symbol(U, Decl(discriminatedUnionInferenceClassHierarchies.ts, 53, 26))
+
+declare const directDecl: Local<string, number>;
+>directDecl : Symbol(directDecl, Decl(discriminatedUnionInferenceClassHierarchies.ts, 55, 13))
+>Local : Symbol(Local, Decl(discriminatedUnionInferenceClassHierarchies.ts, 40, 48))
+
+const direct = callme(directDecl);
+>direct : Symbol(direct, Decl(discriminatedUnionInferenceClassHierarchies.ts, 56, 5))
+>callme : Symbol(callme, Decl(discriminatedUnionInferenceClassHierarchies.ts, 52, 1))
+>directDecl : Symbol(directDecl, Decl(discriminatedUnionInferenceClassHierarchies.ts, 55, 13))
+
+type LocalStringNumberAlias = Local<string, number>;
+>LocalStringNumberAlias : Symbol(LocalStringNumberAlias, Decl(discriminatedUnionInferenceClassHierarchies.ts, 56, 34))
+>Local : Symbol(Local, Decl(discriminatedUnionInferenceClassHierarchies.ts, 40, 48))
+
+declare const typeAlias: LocalStringNumberAlias;
+>typeAlias : Symbol(typeAlias, Decl(discriminatedUnionInferenceClassHierarchies.ts, 59, 13))
+>LocalStringNumberAlias : Symbol(LocalStringNumberAlias, Decl(discriminatedUnionInferenceClassHierarchies.ts, 56, 34))
+
+const alias = callme(typeAlias);
+>alias : Symbol(alias, Decl(discriminatedUnionInferenceClassHierarchies.ts, 60, 5))
+>callme : Symbol(callme, Decl(discriminatedUnionInferenceClassHierarchies.ts, 52, 1))
+>typeAlias : Symbol(typeAlias, Decl(discriminatedUnionInferenceClassHierarchies.ts, 59, 13))
+
+interface LocalStringNumberInterface extends Local<string, number> {}
+>LocalStringNumberInterface : Symbol(LocalStringNumberInterface, Decl(discriminatedUnionInferenceClassHierarchies.ts, 60, 32))
+>Local : Symbol(Local, Decl(discriminatedUnionInferenceClassHierarchies.ts, 40, 48))
+
+declare const interfaceDecl: LocalStringNumberInterface;
+>interfaceDecl : Symbol(interfaceDecl, Decl(discriminatedUnionInferenceClassHierarchies.ts, 63, 13))
+>LocalStringNumberInterface : Symbol(LocalStringNumberInterface, Decl(discriminatedUnionInferenceClassHierarchies.ts, 60, 32))
+
+const extended = callme(interfaceDecl);
+>extended : Symbol(extended, Decl(discriminatedUnionInferenceClassHierarchies.ts, 64, 5))
+>callme : Symbol(callme, Decl(discriminatedUnionInferenceClassHierarchies.ts, 52, 1))
+>interfaceDecl : Symbol(interfaceDecl, Decl(discriminatedUnionInferenceClassHierarchies.ts, 63, 13))
+
