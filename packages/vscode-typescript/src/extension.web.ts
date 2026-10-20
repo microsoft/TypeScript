@@ -210,6 +210,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         // Blocking stdin reads stall the Go scheduler, so the server cannot answer requests
         // while waiting for input. `@vscode/wasm-wasi` does not declare this option yet.
         const stdin = { kind: "pipeIn" as const, nonBlocking: true };
+        await process?.terminate();
         process = await wasm.createProcess("tsc", module, {
             args: ["--lsp", "--stdio"],
             env: { PWD: "/" },
@@ -255,6 +256,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             void process?.terminate();
         },
     });
+    // WASI mounts are fixed when the process starts, so new folders need a new process.
+    let restarting = Promise.resolve();
+    context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(() => {
+        restarting = restarting.then(async () => {
+            await client.stop();
+            await client.start();
+        }).catch(error => output.error(`Failed to restart TypeScript language server: ${String(error)}`));
+    }));
     await client.start();
 }
 
