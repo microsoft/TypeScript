@@ -4,7 +4,7 @@ import {
     execFileSync,
     spawnSync,
 } from "node:child_process";
-import { readFileSync } from "node:fs";
+import fs, { readFileSync } from "node:fs";
 import {
     cp,
     mkdir,
@@ -13,13 +13,15 @@ import {
     symlink,
     writeFile,
 } from "node:fs/promises";
+import module from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import url from "node:url";
 import getExePath from "../lib/getExePath.js";
 
 test("versionMajorMinor runtime and declaration match the compiler version", () => {
-    const compilerVersion = execFileSync(getExePath(), ["--version"], { encoding: "utf8" })
+    const compilerVersion = execFileSync(getExePath({ fs, module, path, url }), ["--version"], { encoding: "utf8" })
         .trim()
         .replace(/^Version /, "");
     const majorMinor = compilerVersion.split(".", 2).join(".");

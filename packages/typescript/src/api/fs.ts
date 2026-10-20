@@ -1,11 +1,13 @@
-import { dirname } from "node:path";
-import getExePath from "../../lib/getExePath.js";
 import type {
     RootedDirectoryPath,
     RootedFilePath,
     RootedPath,
 } from "../ast/index.ts";
 import { serverFS } from "./fsCallbacks.ts";
+import {
+    getDefaultExePath,
+    nodeProcess,
+} from "./nodeProcess.ts";
 import { normalizePath } from "./path.ts";
 import type {
     RequestDirectoryEntries,
@@ -121,11 +123,11 @@ export function createFileSystemWithLib(
         : [normalizePath("bundled:///libs")];
     if (!options.defaultLibraryPath) {
         try {
-            defaultLibraryPaths.push(normalizePath(dirname(getExePath())));
+            defaultLibraryPaths.push(normalizePath(nodeProcess().getBuiltinModule("node:path").dirname(getDefaultExePath())));
         }
         catch {
-            // A socket-connected embedded server can provide bundled libs without
-            // a locally installed compiler executable.
+            // A socket-connected embedded server or a WebAssembly transport can
+            // provide bundled libs without a locally installed compiler executable.
         }
     }
     const symlinks = { ...options.symlinks };

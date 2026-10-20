@@ -2,11 +2,12 @@
  * Shared utilities for the TypeScript API client.
  */
 
-import { existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import getExePath from "../../lib/getExePath.js";
 import type { AsyncTransport } from "./async/transport.ts";
 import type { FileSystemCallbacks } from "./fs.ts";
+import {
+    getDefaultExePath,
+    nodeProcess,
+} from "./nodeProcess.ts";
 import type { SyncTransport } from "./sync/transport.ts";
 
 export interface ClientSocketOptions {
@@ -92,13 +93,13 @@ export function isAsyncTransportOptions(options: AsyncClientOptions): options is
 }
 
 export function resolveExePath(options: ClientSpawnOptions): string {
-    return options.tsserverPath ?? getExePath();
+    return options.tsserverPath ?? getDefaultExePath();
 }
 
 export function getAPIProcessArgs(options: ClientSpawnOptions, async: boolean): string[] {
     const args = ["--api"];
     if (async) args.push("--async");
-    args.push("--cwd", options.cwd ?? process.cwd());
+    args.push("--cwd", options.cwd ?? nodeProcess().cwd());
     args.push(`--useCaseSensitiveFileNames=${options.useCaseSensitiveFileNames ?? inferUseCaseSensitiveFileNames()}`);
     if (options.runExternalCode) args.push("--runExternalCode");
     if (options.collectTiming) args.push("--timing");
@@ -106,11 +107,12 @@ export function getAPIProcessArgs(options: ClientSpawnOptions, async: boolean): 
 }
 
 function inferUseCaseSensitiveFileNames(): boolean {
+    const process = nodeProcess();
     if (process.platform === "win32") {
         return false;
     }
-    const fileName = fileURLToPath(import.meta.url);
-    return !existsSync(fileName.replace(/\w/g, char => char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()));
+    const fileName = process.getBuiltinModule("node:url").fileURLToPath(import.meta.url);
+    return !process.getBuiltinModule("node:fs").existsSync(fileName.replace(/\w/g, char => char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()));
 }
 
 export interface LSPConnectionOptions extends ClientSocketOptions {

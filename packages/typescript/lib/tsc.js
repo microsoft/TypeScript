@@ -1,18 +1,23 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import fs, { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
+import nodeModule from "node:module";
+import path from "node:path";
+import url from "node:url";
 import getExePath, { getWasmPath } from "./getExePath.js";
+
+const nodeModules = { fs, module: nodeModule, path, url };
 
 let exe;
 try {
-    exe = getExePath();
+    exe = getExePath(nodeModules);
 }
 catch (nativeError) {
     let wasmPath;
     try {
-        wasmPath = getWasmPath();
+        wasmPath = getWasmPath(nodeModules);
     }
     catch (wasmError) {
         if (wasmError?.code === "ERR_TYPESCRIPT_WASM_PACKAGE") {
