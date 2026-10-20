@@ -2535,14 +2535,6 @@ export const buildNativePreviewPlatformMatrix = task({
  */
 async function buildMainNativePreviewPackage(platforms) {
     const inputDir = "./packages/typescript";
-    await Promise.all([
-        fs.promises.rm(path.join(inputDir, "dist", "tsc.wasm"), { force: true }),
-        fs.promises.rm(path.join(inputDir, "dist", "api", "wasm.js"), { force: true }),
-        fs.promises.rm(path.join(inputDir, "dist", "api", "wasm.js.map"), { force: true }),
-        fs.promises.rm(path.join(inputDir, "dist", "api", "wasm.d.ts"), { force: true }),
-        fs.promises.rm(path.join(inputDir, "dist", "api", "wasm.d.ts.map"), { force: true }),
-    ]);
-
     const inputPackageJson = await createNativePreviewInputPackageJson();
 
     const mainPackage = {
@@ -2557,7 +2549,7 @@ async function buildMainNativePreviewPackage(platforms) {
 
     // Copy package contents excluding node_modules and dist (dist is copied separately after build).
     // The package.json "files" field controls what npm pack actually includes.
-    await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.split("/").includes("dist"));
+    await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
     if (publishAsTypescript) {
         await fs.promises.writeFile(path.join(mainPackageDir, "bin", "tsc"), '#!/usr/bin/env node\nimport "../lib/tsc.js";\n');
         await fs.promises.chmod(path.join(mainPackageDir, "bin", "tsc"), 0o755);
@@ -2617,7 +2609,7 @@ async function buildWasip1Package() {
     stripSourceConditions(wasmPackageJson);
 
     await runBuildWasi(extraFlags);
-    await cpRecursive(wasmInputDir, wasip1Package.npmDir, p => !p.endsWith("/node_modules") && !p.split("/").includes("dist"));
+    await cpRecursive(wasmInputDir, wasip1Package.npmDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
     await cpRecursive(path.join(wasmInputDir, "dist"), path.join(wasip1Package.npmDir, "dist"));
     await fs.promises.writeFile(
         path.join(wasip1Package.npmDir, "package.json"),
