@@ -15,6 +15,11 @@ import {
     cacheGeneratorMethod,
 } from "./generatorSupport.ts";
 
+import {
+    Client,
+    type ClientSocketOptions,
+    type ClientSpawnOptions,
+} from "#syncClient";
 import { CheckFlags } from "../../../enums/checkFlags.js";
 import { CompletionItemKind } from "../../../enums/completionItemKind.js";
 import { DiagnosticCategory } from "../../../enums/diagnosticCategory.js";
@@ -35,11 +40,6 @@ import { SymbolOwnerKind } from "../../../enums/symbolOwnerKind.js";
 import { TypeFlags } from "../../../enums/typeFlags.js";
 import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
 import { TypePredicateKind } from "../../../enums/typePredicateKind.js";
-import {
-    Client,
-    type ClientSocketOptions,
-    type ClientSpawnOptions,
-} from "#syncClient";
 import {
     type __String,
     type CallLikeExpression,
