@@ -3,6 +3,7 @@ package osvfs
 import (
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -34,7 +35,7 @@ func FS() vfs.FS {
 
 var osVFS vfs.FS = &osFS{
 	common: internal.Common{
-		RootFor:        os.DirFS,
+		RootFor:        func(root string) fs.FS { return os.DirFS(toOSPath(root)) },
 		IsReparsePoint: isReparsePoint,
 	},
 }
@@ -144,7 +145,7 @@ func osFSRealpath(path tspath.RootedPath) tspath.RootedPath {
 	if nativepath.IsNetworkPath(orig.AsString()) {
 		return orig
 	}
-	nativePath := filepath.FromSlash(path.AsString())
+	nativePath := filepath.FromSlash(toOSPath(path.AsString()))
 	nativePath, err := nativepath.Realpath(nativePath)
 	if err != nil {
 		return orig
@@ -158,20 +159,20 @@ func osFSRealpath(path tspath.RootedPath) tspath.RootedPath {
 	if nativepath.IsNetworkPath(nativePath) {
 		return orig
 	}
-	return tspath.RootedPathFromAbsolute(nativePath)
+	return tspath.RootedPathFromAbsolute(fromOSPath(nativePath))
 }
 
 func isReparsePoint(path string) bool {
 	if nativepath.IsNetworkPath(path) {
 		return false
 	}
-	return nativepath.IsSymlinkOrReparsePoint(filepath.FromSlash(path))
+	return nativepath.IsSymlinkOrReparsePoint(filepath.FromSlash(toOSPath(path)))
 }
 
 func (vfs *osFS) writeFileWithFlag(path string, content string, flag int) error {
 	defer writeSema.Acquire()()
 
-	file, err := os.OpenFile(path, flag, 0o666)
+	file, err := os.OpenFile(toOSPath(path), flag, 0o666)
 	if err != nil {
 		return err
 	}
@@ -186,7 +187,7 @@ func (vfs *osFS) writeFileWithFlag(path string, content string, flag int) error 
 
 func (vfs *osFS) ensureDirectoryExists(directoryPath string) error {
 	defer blockingOpSema.Acquire()()
-	return os.MkdirAll(directoryPath, 0o777)
+	return os.MkdirAll(toOSPath(directoryPath), 0o777)
 }
 
 func (vfs *osFS) writeFileEnsuringDir(path tspath.RootedFilePath, content string, flag int) error {
@@ -217,7 +218,7 @@ func (vfs *osFS) Remove(path tspath.RootedPath) error {
 	}
 	defer blockingOpSema.Acquire()()
 	// todo: #701 add retry mechanism?
-	return os.RemoveAll(path.AsString())
+	return os.RemoveAll(toOSPath(path.AsString()))
 }
 
 func (vfs *osFS) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Time) error {
@@ -225,7 +226,7 @@ func (vfs *osFS) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Tim
 		return errNetworkPath
 	}
 	defer blockingOpSema.Acquire()()
-	return os.Chtimes(path.AsString(), aTime, mTime)
+	return os.Chtimes(toOSPath(path.AsString()), aTime, mTime)
 }
 
 func GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPath {
