@@ -1,7 +1,8 @@
 import {
-    Client,
+    type Client, // @sync:     Client,
     type ClientSocketOptions,
     type ClientSpawnOptions,
+    createClient, // @sync-skip
 } from "#asyncClient"; // @sync: } from "#syncClient";
 import { CheckFlags } from "#enums/checkFlags";
 import { CompletionItemKind } from "#enums/completionItemKind";
@@ -364,7 +365,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     readonly debug: DebugHandlers;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
-        this.client = new Client(options);
+        this.client = createClient(options); // @sync: this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache<Symbol>();
         this.printer = new Printer(this.client);
         this.debug = new DebugHandlers(this.client, () => this.ensureInitialized()); // @sync: this.debug = new DebugHandlers(this.client, this.ensureInitialized);

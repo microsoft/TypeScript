@@ -46,21 +46,29 @@ import {
     type TimingInfo,
 } from "../timing.ts";
 import { TimingDump } from "../timingDump.ts";
-import { TransportClient } from "./transportClient.ts";
+import {
+    createTransportClient,
+    type TransportClient,
+} from "./transportClient.ts";
 
 export type { AsyncClientOptions as ClientOptions, AsyncClientTransportOptions, ClientSocketOptions, ClientSpawnOptions } from "../options.ts";
 export type { AsyncTransport } from "./transport.ts";
+
+export type Client = TransportClient | RpcClient;
+
+export function createClient(options: AsyncClientOptions): Client {
+    return isAsyncTransportOptions(options) ? createTransportClient(options) : new RpcClient(options);
+}
 
 /**
  * Client handles communication with the TypeScript API server
  * over STDIO (spawned process) or a Unix domain socket using JSON-RPC.
  */
-export class Client {
+class RpcClient {
     private socket: Socket | undefined;
     private process: ChildProcess | undefined;
     private connection: MessageConnection | undefined;
     private options: ClientOptions | undefined;
-    private transportClient: TransportClient | undefined;
     private connected = false;
     private closed = false;
     private connecting: Promise<void> | undefined;
@@ -70,18 +78,7 @@ export class Client {
     private batchedRequests: { method: APIRequest["method"]; params: APIRequest["params"]; resolve: (value: unknown) => void; reject: (reason?: any) => void; }[] = [];
     private nextBatch: NodeJS.Immediate | "manual" | undefined;
 
-    constructor(options: AsyncClientOptions) {
-        if (isAsyncTransportOptions(options)) {
-            if (options.fs !== undefined) {
-                options.transport.setFileSystem?.(options.fs);
-            }
-            this.transportClient = new TransportClient(
-                options.transport,
-                options.collectTiming ?? false,
-                options.maxResponseBytesPerPage,
-            );
-            return;
-        }
+    constructor(options: ClientOptions) {
         this.timingDump = TimingDump.fromEnvironment("async", isSpawnOptions(options) ? "spawn" : "socket");
         if (this.timingDump || isSpawnOptions(options) && options.collectTiming) {
             this.timing = new TimingCollector();
@@ -96,7 +93,6 @@ export class Client {
     }
 
     connect(): Promise<void> {
-        if (this.transportClient) return this.transportClient.connect();
         if (this.closed) return Promise.reject(new Error("Client is closed"));
         if (this.connected) return Promise.resolve();
         return this.connecting ??= this.connectWorker().finally(() => {
@@ -270,9 +266,6 @@ export class Client {
     }
 
     registerCallback(name: string, callback: (params: unknown) => unknown | Promise<unknown>): () => void {
-        if (this.transportClient) {
-            return this.transportClient.registerCallback(name, callback);
-        }
         if (!this.connection) {
             throw new Error("Connection not established");
         }
@@ -344,7 +337,6 @@ export class Client {
     }
 
     batchContext(): { [Symbol.dispose](): void; } {
-        if (this.transportClient) return this.transportClient.batchContext();
         if (this.nextBatch === "manual") {
             throw new Error("Already in a manual batch context");
         }
@@ -362,7 +354,6 @@ export class Client {
     }
 
     async apiRequest<K extends APIRequest["method"]>(method: K, params: APIMethodInfo[K]["params"]): Promise<APIMethodInfo[K]["result"]> {
-        if (this.transportClient) return this.transportClient.apiRequest(method, params);
         if (this.closed) throw new Error("Client is closed");
         if (!this.connected) {
             await this.connect();
@@ -380,7 +371,6 @@ export class Client {
     }
 
     async apiRequestBinary<K extends SourceFileResponseMethod>(method: K, params: APIMethodInfo[K]["params"]): Promise<Uint8Array | undefined> {
-        if (this.transportClient) return this.transportClient.apiRequestBinary(method, params);
         const response = await this.apiRequest(method, params);
         if (!response) return undefined;
         const buffer = Buffer.from(response.data, "base64");
@@ -394,7 +384,6 @@ export class Client {
      * materialization totals surface alongside request timings.
      */
     getTimingCollector(): TimingCollector | undefined {
-        if (this.transportClient) return this.transportClient.getTimingCollector();
         return this.timing;
     }
 
@@ -404,7 +393,6 @@ export class Client {
      * (fetched via a getServerTiming request) and estimated transport overhead.
      */
     async getTimingInfo(): Promise<TimingInfo> {
-        if (this.transportClient) return this.transportClient.getTimingInfo();
         if (!this.timing) {
             return disabledTimingInfo();
         }
@@ -417,7 +405,6 @@ export class Client {
     }
 
     async resetTimingInfo(): Promise<void> {
-        if (this.transportClient) return this.transportClient.resetTimingInfo();
         if (!this.timing) return;
         this.timing.reset();
         if (this.connected && this.connection) {
@@ -438,7 +425,6 @@ export class Client {
     }
 
     close(): Promise<void> {
-        if (this.transportClient) return this.transportClient.close();
         return this.closing ??= this.closeWorker();
     }
 

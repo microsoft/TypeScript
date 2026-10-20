@@ -1,3 +1,4 @@
+import type { AsyncClientTransportOptions } from "../options.ts";
 import type {
     APIMethodInfo,
     APIRequest,
@@ -36,6 +37,13 @@ type PendingRequest = PendingTextRequest | PendingBinaryRequest;
 
 function isTextRequest(request: PendingRequest): request is PendingTextRequest {
     return request.kind === "text";
+}
+
+export function createTransportClient(options: AsyncClientTransportOptions): TransportClient {
+    if (options.fs !== undefined) {
+        options.transport.setFileSystem?.(options.fs);
+    }
+    return new TransportClient(options.transport, options.collectTiming ?? false, options.maxResponseBytesPerPage);
 }
 
 /** Protocol client for an injected asynchronous transport. */
