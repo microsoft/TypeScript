@@ -728,7 +728,7 @@ interface J119 { leaf: number }
 >leaf : number
 
 type Mid = I60 extends J60 ? true : false;
->Mid : true
+>Mid : false
 >true : true
 >false : false
 
