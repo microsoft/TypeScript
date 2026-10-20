@@ -3,7 +3,11 @@ import {
     describe,
     test,
 } from "node:test";
-import { uriToWasmMountPoint } from "../src/webMountPoint";
+import {
+    uriSegmentToWasmName,
+    uriToWasmMountPoint,
+    wasmPathToUriText,
+} from "../src/webMountPoint";
 
 describe("web WASI mount points", () => {
     test("maps POSIX file workspaces to their absolute paths", () => {
@@ -34,5 +38,21 @@ describe("web WASI mount points", () => {
         assert.strictEqual(virtual("memfs:/work/a%5Cb"), "/^/~ts-uri~/memfs/ts-nul-authority/~ts-uri-escape~~/work/a%5Cb");
         assert.strictEqual(virtual("memfs:/work/a\\b/"), "/^/~ts-uri~/memfs/ts-nul-authority/~ts-uri-escape~~/work/~ts-uri-escape~615c62~");
         assert.strictEqual(virtual("memfs:///x"), "/^/~ts-uri~/memfs/~ts-uri-escape~~/x");
+    });
+
+    test("maps virtual workspace file names back to their escaped URIs", () => {
+        assert.strictEqual(wasmPathToUriText("/^/~ts-uri~/vscode-vfs/github/o/r/a%20b.ts"), "vscode-vfs://github/o/r/a%20b.ts");
+        assert.strictEqual(wasmPathToUriText("/^/~ts-uri~/vscode-test-web/mount"), "vscode-test-web://mount/");
+        assert.strictEqual(wasmPathToUriText("/^/~ts-uri~/memfs/ts-nul-authority/~ts-uri-escape~~/work/~ts-uri-escape~615c62~.ts"), "memfs:/work/a\\b.ts");
+        assert.strictEqual(wasmPathToUriText("/^/~ts-uri~/memfs/~ts-uri-escape~~/x"), "memfs:///x");
+        assert.strictEqual(wasmPathToUriText("/^/~ts-uri~/memfs/ts-nul-authority/~ts-uri-escape~~/a\\b"), undefined);
+        assert.strictEqual(wasmPathToUriText("/^/~ts-uri~/memfs/ts-nul-authority/~ts-uri-escape~~/~ts-uri-escape~6100713d31~.ts"), undefined);
+        assert.strictEqual(wasmPathToUriText("/work/a.ts"), undefined);
+    });
+
+    test("names directory entries as the server names them in document URIs", () => {
+        assert.strictEqual(uriSegmentToWasmName("a%20b.ts", true), "a%20b.ts");
+        assert.strictEqual(uriSegmentToWasmName("a\\b.d.ts", true), "~ts-uri-escape~615c62~.d.ts");
+        assert.strictEqual(uriSegmentToWasmName("a\\b.d", false), "~ts-uri-escape~615c622e64~");
     });
 });

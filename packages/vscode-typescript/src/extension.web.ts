@@ -14,7 +14,11 @@ import {
     type MessageTransports,
 } from "vscode-languageclient/browser";
 import { nightlyExtensionId } from "./extensionIds";
-import { uriToWasmMountPoint } from "./webMountPoint";
+import {
+    uriSegmentToWasmName,
+    uriToWasmMountPoint,
+    wasmPathToUriText,
+} from "./webMountPoint";
 
 declare global {
     interface DedicatedWorkerGlobalScope {
@@ -23,6 +27,62 @@ declare global {
 }
 
 const wasmPackagePath = ["node_modules", "@typescript", "typescript-wasip1-wasm", "lib"] as const;
+
+const wasmFileSystemScheme = "ts-wasi";
+
+/**
+ * Serves virtual workspace files under the names the server derives from
+ * their document URIs, since WASI joins those names onto the folder URI
+ * literally and would otherwise miss files whose URIs contain escapes.
+ */
+class WasmFileSystemProvider implements vscode.FileSystemProvider {
+    private readonly changeEmitter = new vscode.EventEmitter<vscode.FileChangeEvent[]>();
+    readonly onDidChangeFile = this.changeEmitter.event;
+
+    watch(): vscode.Disposable {
+        return new vscode.Disposable(() => {});
+    }
+
+    stat(uri: vscode.Uri): Thenable<vscode.FileStat> {
+        return vscode.workspace.fs.stat(toWorkspaceUri(uri));
+    }
+
+    async readDirectory(uri: vscode.Uri): Promise<[string, vscode.FileType][]> {
+        const directory = toWorkspaceUri(uri);
+        const entries = await vscode.workspace.fs.readDirectory(directory);
+        return entries.map(([name, type]) => {
+            const text = vscode.Uri.joinPath(directory, name).toString();
+            const segment = text.slice(text.lastIndexOf("/") + 1);
+            return [uriSegmentToWasmName(segment, (type & vscode.FileType.Directory) === 0), type];
+        });
+    }
+
+    createDirectory(uri: vscode.Uri): Thenable<void> {
+        return vscode.workspace.fs.createDirectory(toWorkspaceUri(uri));
+    }
+
+    readFile(uri: vscode.Uri): Thenable<Uint8Array> {
+        return vscode.workspace.fs.readFile(toWorkspaceUri(uri));
+    }
+
+    writeFile(uri: vscode.Uri, content: Uint8Array): Thenable<void> {
+        return vscode.workspace.fs.writeFile(toWorkspaceUri(uri), content);
+    }
+
+    delete(uri: vscode.Uri, options: { readonly recursive: boolean; }): Thenable<void> {
+        return vscode.workspace.fs.delete(toWorkspaceUri(uri), options);
+    }
+
+    rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { readonly overwrite: boolean; }): Thenable<void> {
+        return vscode.workspace.fs.rename(toWorkspaceUri(oldUri), toWorkspaceUri(newUri), options);
+    }
+}
+
+function toWorkspaceUri(uri: vscode.Uri): vscode.Uri {
+    const text = wasmPathToUriText(uri.path);
+    if (text === undefined) throw vscode.FileSystemError.FileNotFound(uri);
+    return vscode.Uri.parse(text, true);
+}
 
 class WasmMessageReader extends AbstractMessageReader {
     private readonly decoder = new TextDecoder();
@@ -127,6 +187,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             return new TextDecoder().decode(contents);
         },
     }));
+    context.subscriptions.push(vscode.workspace.registerFileSystemProvider(wasmFileSystemScheme, new WasmFileSystemProvider(), { isCaseSensitive: true }));
 
     let process: WasmProcess | undefined;
     const stderrDecoder = new TextDecoder();
@@ -138,11 +199,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             );
         }
         const module = wasm.compile(vscode.Uri.joinPath(modulePackageUri, "tsc.wasm"));
-        const mountPoints = (vscode.workspace.workspaceFolders ?? []).map(folder => ({
-            kind: "vscodeFileSystem" as const,
-            uri: folder.uri,
-            mountPoint: uriToWasmMountPoint(folder.uri),
-        }));
+        const mountPoints = (vscode.workspace.workspaceFolders ?? []).map(folder => {
+            const mountPoint = uriToWasmMountPoint(folder.uri);
+            return {
+                kind: "vscodeFileSystem" as const,
+                uri: folder.uri.scheme === "file" ? folder.uri : vscode.Uri.from({ scheme: wasmFileSystemScheme, path: mountPoint }),
+                mountPoint,
+            };
+        });
         // Blocking stdin reads stall the Go scheduler, so the server cannot answer requests
         // while waiting for input. `@vscode/wasm-wasi` does not declare this option yet.
         const stdin = { kind: "pipeIn" as const, nonBlocking: true };
