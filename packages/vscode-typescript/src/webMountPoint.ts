@@ -70,7 +70,7 @@ export function uriSegmentToWasmName(segment: string, isFile: boolean): string {
 }
 
 function isDriveRoot(segment: string): boolean {
-    return /^[A-Za-z]:/.test(segment);
+    return /^[A-Za-z]:$/.test(segment);
 }
 
 function needsEncoding(segment: string): boolean {
