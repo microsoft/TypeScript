@@ -1745,6 +1745,8 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		s.logger.Logf("file watching: disabled (client lacks dynamic watch registration and builtin watcher backend is not fast-recursive)")
 	}
 
+	workspaceRoots := getInitialWorkspaceRoots(s.initializeParams)
+
 	cwd := s.cwd
 	if s.clientCapabilities.Workspace.WorkspaceFolders &&
 		s.initializeParams.WorkspaceFolders != nil &&
@@ -1778,6 +1780,7 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 			DebounceDelay:          500 * time.Millisecond,
 			PushDiagnosticsEnabled: !disablePushDiagnostics,
 			RunExternalCode:        runExternalCode,
+			InitialWorkspaceRoots:  workspaceRoots,
 		},
 		FS:                  s.fs,
 		Logger:              s.logger,
@@ -1836,6 +1839,23 @@ func (s *Server) handleShutdown(ctx context.Context, _ lsproto.NoParams, _ *lspr
 
 func (s *Server) handleExit(ctx context.Context, _ lsproto.NoParams) error {
 	return io.EOF
+}
+
+func getInitialWorkspaceRoots(params *lsproto.InitializeParams) []tspath.RootedDirectoryPath {
+	workspaceRoots := []tspath.RootedDirectoryPath{}
+	if params.WorkspaceFolders != nil && params.WorkspaceFolders.WorkspaceFolders != nil {
+		for _, folder := range *params.WorkspaceFolders.WorkspaceFolders {
+			uri := lsproto.DocumentUri(folder.Uri)
+			if strings.HasPrefix(string(uri), "file://") {
+				workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromPath(uri.Path()))
+			}
+		}
+	} else if params.RootUri.DocumentUri != nil && strings.HasPrefix(string(*params.RootUri.DocumentUri), "file://") {
+		workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromPath(params.RootUri.DocumentUri.Path()))
+	} else if params.RootPath != nil && params.RootPath.String != nil && tspath.PathIsAbsolute(*params.RootPath.String) {
+		workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromAbsolute(*params.RootPath.String))
+	}
+	return workspaceRoots
 }
 
 func (s *Server) handleDidChangeWorkspaceConfiguration(ctx context.Context, params *lsproto.DidChangeConfigurationParams) error {
