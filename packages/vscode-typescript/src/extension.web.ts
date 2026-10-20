@@ -132,13 +132,19 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     const stderrDecoder = new TextDecoder();
     const serverOptions = async (): Promise<MessageTransports> => {
         const wasm = await Wasm.load();
+        if (!supportsNonBlockingStdin(wasm.versions.extension)) {
+            throw new Error(
+                `TypeScript requires WebAssembly Execution Engine ${minWasiCoreVersion.join(".")} or newer; found ${wasm.versions.extension}. Update the extension and reload.`,
+            );
+        }
         const module = wasm.compile(vscode.Uri.joinPath(modulePackageUri, "tsc.wasm"));
         const mountPoints = (vscode.workspace.workspaceFolders ?? []).map(folder => ({
             kind: "vscodeFileSystem" as const,
             uri: folder.uri,
             mountPoint: uriToWasmMountPoint(folder.uri),
         }));
-        // `nonBlocking` is pending in https://github.com/microsoft/vscode-wasm/pull/298.
+        // Blocking stdin reads stall the Go scheduler, so the server cannot answer requests
+        // while waiting for input. `@vscode/wasm-wasi` does not declare this option yet.
         const stdin = { kind: "pipeIn" as const, nonBlocking: true };
         process = await wasm.createProcess("tsc", module, {
             args: ["--lsp", "--stdio"],
@@ -189,6 +195,16 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 }
 
 export function deactivate(): void {}
+
+const minWasiCoreVersion = [1, 0, 4];
+
+function supportsNonBlockingStdin(version: string): boolean {
+    const parts = version.split(/[.-]/, 3).map(Number);
+    for (let i = 0; i < minWasiCoreVersion.length; i++) {
+        if (parts[i] !== minWasiCoreVersion[i]) return parts[i] > minWasiCoreVersion[i];
+    }
+    return true;
+}
 
 async function hasWasmPayload(extensionUri: vscode.Uri): Promise<boolean> {
     try {
