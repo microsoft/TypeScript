@@ -1,4 +1,5 @@
 import type { FileSystemCallbacks } from "../api/fs.ts";
+import { Wtf8Decoder } from "../api/node/wtf8.ts";
 import type { RootedFilePath } from "../ast/index.ts";
 import type { WasmReactorInstance } from "./transport.ts";
 
@@ -45,6 +46,8 @@ const eventTypeClock = 0;
 const subscriptionClockAbstime = 1;
 const hostCallbackFD = 0x7fff_fffd;
 const hostWriteFileFD = 0x7fff_fffe;
+const textDecoder = new TextDecoder();
+const fileContentDecoder = new Wtf8Decoder("utf-8", { ignoreBOM: true });
 
 export interface InstantiateWasmOptions {
     stdout?: ((text: string) => void) | undefined;
@@ -333,12 +336,11 @@ function createWasiHost(options: InstantiateWasmOptions): {
         const dataLength = view.getUint32(bufferPointer + 4, true);
         const errorCapacity = view.getUint32(bufferPointer + 8, true);
         if (12 + pathLength + dataLength + errorCapacity !== bufferLength) return errnoInvalidArgument;
-        const decoder = new TextDecoder();
         const pathPointer = bufferPointer + 12;
         const dataPointer = pathPointer + pathLength;
         const errorPointer = dataPointer + dataLength;
-        const path = decoder.decode(new Uint8Array(memory.buffer, pathPointer, pathLength));
-        const data = decoder.decode(new Uint8Array(memory.buffer, dataPointer, dataLength));
+        const path = textDecoder.decode(new Uint8Array(memory.buffer, pathPointer, pathLength));
+        const data = fileContentDecoder.decode(new Uint8Array(memory.buffer, dataPointer, dataLength));
         try {
             fileSystem.writeFile(path as RootedFilePath, data);
             new DataView(getMemory().buffer).setUint32(writtenPointer, bufferLength, true);

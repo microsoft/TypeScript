@@ -297,7 +297,7 @@ describe("API over WebAssembly", () => {
         assert.strictEqual(transport.readFile("/raw.ts"), rawContent);
         transport.removeFile("/raw.ts");
 
-        transport.setFile("/tsconfig.json", "{}");
+        transport.setFile("/tsconfig.json", `{ "compilerOptions": { "emitBOM": true } }`);
         transport.setFile("/src/index.ts", "export const value = 42 as const;");
         const snapshot = api.createSnapshot({
             openFiles: ["/src/index.ts"],
@@ -322,7 +322,7 @@ describe("API over WebAssembly", () => {
             emittedFiles: ["/src/index.js"],
             fileSystem: undefined,
         });
-        assert.strictEqual(emittedFiles.get("/src/index.js"), "export const value = 42;\n");
+        assert.strictEqual(emittedFiles.get("/src/index.js"), "\uFEFFexport const value = 42;\n");
         assert.strictEqual(transport.requestSync("echo", "after callback"), "after callback");
 
         const largeResolution = { resolvedFileName: "/large.d.ts", padding: "x".repeat(100_000) };
