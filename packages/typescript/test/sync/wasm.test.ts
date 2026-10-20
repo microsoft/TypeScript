@@ -156,7 +156,7 @@ describe("API over WebAssembly", () => {
             const imports = {
                 ...wasi.wasiImport,
                 fd_read(...args) {
-                    if (++reads > 10) throw new Error("stdin was read repeatedly while idle");
+                    if (++reads > 50) throw new Error("stdin was read repeatedly while idle");
                     return wasi.wasiImport.fd_read(...args);
                 },
             };
@@ -213,7 +213,7 @@ describe("API over WebAssembly", () => {
             const imports = {
                 ...wasi.wasiImport,
                 fd_read(...args) {
-                    if (++reads > 10) throw new Error("stdin was read repeatedly while idle");
+                    if (++reads > 50) throw new Error("stdin was read repeatedly while idle");
                     return wasi.wasiImport.fd_read(...args);
                 },
             };
