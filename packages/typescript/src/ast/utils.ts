@@ -117,7 +117,7 @@ export function isExternalModule(file: SourceFile): boolean {
 }
 
 function getRootDeclaration(node: Node): Node {
-    while (node.kind === SyntaxKind.BindingElement) {
+    while (node.kind === SyntaxKind.BindingElement && node.parent?.parent) {
         node = node.parent.parent;
     }
     return node;

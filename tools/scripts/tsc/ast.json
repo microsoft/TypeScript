@@ -1534,7 +1534,8 @@
                     },
                     {
                         "name": "Expression",
-                        "type": "Expression"
+                        "type": "Expression",
+                        "optional": true
                     },
                     {
                         "name": "Statements",
@@ -2202,7 +2203,8 @@
                     },
                     {
                         "name": "Type",
-                        "type": "TypeNode"
+                        "type": "TypeNode",
+                        "optional": true
                     },
                     {
                         "name": "Expression",
@@ -2481,8 +2483,7 @@
                     },
                     {
                         "name": "Type",
-                        "inherited": true,
-                        "optional": false
+                        "inherited": true
                     }
                 ]
             },
@@ -2603,11 +2604,13 @@
                     },
                     {
                         "name": "Type",
-                        "type": "TypeNode"
+                        "type": "TypeNode",
+                        "optional": true
                     },
                     {
                         "name": "Initializer",
-                        "type": "Expression"
+                        "type": "Expression",
+                        "optional": true
                     }
                 ],
                 "arena": true
@@ -3259,7 +3262,8 @@
                     },
                     {
                         "name": "QuestionDotToken",
-                        "type": "QuestionDotToken"
+                        "type": "QuestionDotToken",
+                        "optional": true
                     },
                     {
                         "name": "TypeArguments",
@@ -3364,7 +3368,8 @@
                     },
                     {
                         "name": "Type",
-                        "type": "TypeNode"
+                        "type": "TypeNode",
+                        "optional": true
                     },
                     {
                         "name": "Initializer",
@@ -3396,7 +3401,8 @@
                     },
                     {
                         "name": "Type",
-                        "type": "TypeNode"
+                        "type": "TypeNode",
+                        "optional": true
                     },
                     {
                         "name": "EqualsToken",
@@ -4396,7 +4402,8 @@
                     },
                     {
                         "name": "Constraint",
-                        "type": "Node"
+                        "type": "Node",
+                        "optional": true
                     },
                     {
                         "name": "TypeParameters",
@@ -4531,7 +4538,8 @@
                     },
                     {
                         "name": "NameExpression",
-                        "type": "TypeNode"
+                        "type": "TypeNode",
+                        "optional": true
                     },
                     {
                         "name": "Comment",

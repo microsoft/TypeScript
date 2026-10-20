@@ -24,7 +24,6 @@ import type {
     VariableStatement,
 } from "@typescript/typescript/ast";
 import * as astModule from "@typescript/typescript/ast";
-import * as factory from "@typescript/typescript/ast/factory";
 import {
     formatSyntaxKind,
     getChildren,
@@ -47,6 +46,7 @@ import {
     getSynthesizedDeepClone,
     getSynthesizedDeepClones,
 } from "@typescript/typescript/ast/clone";
+import * as factory from "@typescript/typescript/ast/factory";
 import {
     cloneNode,
     createBinaryExpression,

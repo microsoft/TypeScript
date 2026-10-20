@@ -169,9 +169,10 @@ describe("API", { concurrency }, () => {
                 seen.add(node.kind);
             }
             if (ast.isPropertySignatureDeclaration(node)) {
-                const expected: Pick<typeof node, "type" | "initializer"> = { type: undefined, initializer: undefined };
-                assert.strictEqual(node.type, expected.type);
-                assert.strictEqual(node.initializer, expected.initializer);
+                const expectedType: typeof node.type = undefined;
+                const expectedInitializer: typeof node.initializer = undefined;
+                assert.strictEqual(node.type, expectedType);
+                assert.strictEqual(node.initializer, expectedInitializer);
                 seen.add(node.kind);
             }
             if (ast.isTaggedTemplateExpression(node)) {
@@ -192,36 +193,44 @@ describe("API", { concurrency }, () => {
             node.forEachChild(walk);
             node.jsDoc?.forEach(walk);
         }
-        await using ts = await api.createSourceFile("/repro.ts", `
+        await using ts = await api.createSourceFile(
+            "/repro.ts",
+            `
             switch (x) { default: break; }
             export default 0;
             const object = { x, y: 1 };
             interface I { p; [key: string]; }
             tag\`text\`;
-        `);
+        `,
+        );
         walk(ts.sourceFile);
-        await using js = await api.createSourceFile("/repro.js", `
+        await using js = await api.createSourceFile(
+            "/repro.js",
+            `
             /** @see */ function a() {}
             /** @template T */ function b() {}
-        `);
+        `,
+        );
         walk(js.sourceFile);
-        assert.deepStrictEqual(seen, new Set([
-            SyntaxKind.DefaultClause,
-            SyntaxKind.ExportAssignment,
-            SyntaxKind.ShorthandPropertyAssignment,
-            SyntaxKind.PropertyAssignment,
-            SyntaxKind.PropertySignature,
-            SyntaxKind.IndexSignature,
-            SyntaxKind.TaggedTemplateExpression,
-            SyntaxKind.JSDocSeeTag,
-            SyntaxKind.JSDocTemplateTag,
-        ]));
+        assert.deepStrictEqual(
+            seen,
+            new Set([
+                SyntaxKind.DefaultClause,
+                SyntaxKind.ExportAssignment,
+                SyntaxKind.ShorthandPropertyAssignment,
+                SyntaxKind.PropertyAssignment,
+                SyntaxKind.PropertySignature,
+                SyntaxKind.IndexSignature,
+                SyntaxKind.TaggedTemplateExpression,
+                SyntaxKind.JSDocSeeTag,
+                SyntaxKind.JSDocTemplateTag,
+            ]),
+        );
     });
 
     test("generated arrow functions have an arrow token", async () => {
-        await using api = spawnAPI();
+        await using api = spawnAPI({ "/repro.ts": "declare function f(): number;" });
         await using snapshot = await api.createSnapshot({
-            fileSystem: createVirtualFileSystem({ "/repro.ts": "declare function f(): number;" }),
             createPrograms: [{ rootFiles: ["/repro.ts"], compilerOptions: { noLib: true } }],
         });
         const program = snapshot.operation.createdPrograms[0];
@@ -3884,8 +3893,8 @@ export class Cache {
         assert.ok(methodSymbol.valueDeclaration);
         const methodNode = await methodSymbol.valueDeclaration.resolve(project);
         assert.ok(methodNode);
-        assert.strictEqual(methodNode.parent.kind, SyntaxKind.ClassDeclaration);
-        assert.strictEqual(methodNode.parent.parent.kind, SyntaxKind.SourceFile);
+        assert.strictEqual(methodNode.parent?.kind, SyntaxKind.ClassDeclaration);
+        assert.strictEqual(methodNode.parent?.parent?.kind, SyntaxKind.SourceFile);
         // A symbol's declaration handles default to the symbol's canonical project.
         const methodNodeFromCanonical = await methodSymbol.valueDeclaration.resolve();
         assert.ok(methodNodeFromCanonical);

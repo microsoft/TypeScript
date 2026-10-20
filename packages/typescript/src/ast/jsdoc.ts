@@ -130,7 +130,7 @@ function filterOwnedJSDocTags(hostNode: Node, comments: JSDoc[]): (JSDoc | JSDoc
 function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[] {
     const result: JSDocParameterTag[] = [];
     const name = param.name;
-    const parentTags = getJSDocTags(param.parent);
+    const parentTags = param.parent ? getJSDocTags(param.parent) : [];
     if (name && isIdentifier(name)) {
         for (const tag of parentTags) {
             if (isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.text === name.text) {
@@ -140,7 +140,7 @@ function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[]
     }
     else if (name) {
         // Binding patterns and JSDoc function syntax match parameter tags by position.
-        const parameters = (param.parent as { parameters?: readonly Node[]; }).parameters;
+        const parameters = (param.parent as { parameters?: readonly Node[]; } | undefined)?.parameters;
         const i = parameters ? [...parameters].indexOf(param) : -1;
         if (i > -1) {
             const paramTags = parentTags.filter(isJSDocParameterTag);
@@ -155,7 +155,7 @@ function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[]
 function getJSDocTypeParameterTags(typeParam: TypeParameterDeclaration): JSDocTemplateTag[] {
     const result: JSDocTemplateTag[] = [];
     const name = typeParam.name.text;
-    for (const tag of getJSDocTags(typeParam.parent)) {
+    for (const tag of typeParam.parent ? getJSDocTags(typeParam.parent) : []) {
         if (isJSDocTemplateTag(tag) && [...tag.typeParameters].some(tp => tp.name.text === name)) {
             result.push(tag);
         }

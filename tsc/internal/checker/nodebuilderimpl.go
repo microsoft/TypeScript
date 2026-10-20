@@ -1981,7 +1981,7 @@ func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 		// TODO: assert name is Identifier
 		node = b.f.NewFunctionExpression(modifierList, nil /*asteriskToken*/, name, typeParamList, paramList, returnTypeNode, nil /*fullSignature*/, b.f.NewBlock(b.f.NewNodeList([]*ast.Node{}), false))
 	case kind == ast.KindArrowFunction:
-		node = b.f.NewArrowFunction(modifierList, typeParamList, paramList, returnTypeNode, nil /*fullSignature*/, nil /*equalsGreaterThanToken*/, b.f.NewBlock(b.f.NewNodeList([]*ast.Node{}), false))
+		node = b.f.NewArrowFunction(modifierList, typeParamList, paramList, returnTypeNode, nil /*fullSignature*/, b.f.NewToken(ast.KindEqualsGreaterThanToken), b.f.NewBlock(b.f.NewNodeList([]*ast.Node{}), false))
 	default:
 		panic("Unhandled kind in signatureToSignatureDeclarationHelper")
 	}

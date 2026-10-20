@@ -1369,7 +1369,7 @@ func IsCaseBlock(node *Node) bool {
 type CaseOrDefaultClause struct {
 	NodeBase
 	CompositeBase
-	Expression          *Expression
+	Expression          *Expression // Optional
 	Statements          *StatementList
 	FallthroughFlowNode *FlowNode
 }
@@ -2795,7 +2795,7 @@ type ExportAssignment struct {
 	ModifiersBase
 	CompositeBase
 	IsExportEquals bool
-	Type           *TypeNode
+	Type           *TypeNode // Optional
 	Expression     *Expression
 }
 
@@ -3436,8 +3436,8 @@ type PropertySignatureDeclaration struct {
 	NodeBase
 	DeclarationBase
 	NamedMemberBase
-	Type        *TypeNode
-	Initializer *Expression
+	Type        *TypeNode   // Optional
+	Initializer *Expression // Optional
 }
 
 func (f *NodeFactory) NewPropertySignatureDeclaration(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
@@ -4633,8 +4633,8 @@ type TaggedTemplateExpression struct {
 	MemberExpressionBase
 	CompositeBase
 	Tag              *Expression
-	QuestionDotToken *QuestionDotToken
-	TypeArguments    *TypeList // Optional
+	QuestionDotToken *QuestionDotToken // Optional
+	TypeArguments    *TypeList         // Optional
 	Template         *TemplateLiteral
 }
 
@@ -4858,7 +4858,7 @@ type PropertyAssignment struct {
 	DeclarationBase
 	NamedMemberBase
 	CompositeBase
-	Type        *TypeNode
+	Type        *TypeNode // Optional
 	Initializer *Expression
 }
 
@@ -4913,7 +4913,7 @@ type ShorthandPropertyAssignment struct {
 	DeclarationBase
 	NamedMemberBase
 	CompositeBase
-	Type                        *TypeNode
+	Type                        *TypeNode    // Optional
 	EqualsToken                 *EqualsToken // Optional
 	ObjectAssignmentInitializer *Expression  // Optional
 }
@@ -7275,7 +7275,7 @@ func IsJSDocUnknownTag(node *Node) bool {
 
 type JSDocTemplateTag struct {
 	JSDocTagBase
-	Constraint     *Node
+	Constraint     *Node // Optional
 	TypeParameters *TypeParameterList
 }
 
@@ -7588,7 +7588,7 @@ func IsJSDocDeprecatedTag(node *Node) bool {
 
 type JSDocSeeTag struct {
 	JSDocTagBase
-	NameExpression *TypeNode
+	NameExpression *TypeNode // Optional
 }
 
 func (f *NodeFactory) NewJSDocSeeTag(tagName *IdentifierNode, nameExpression *TypeNode, comment *NodeList) *Node {

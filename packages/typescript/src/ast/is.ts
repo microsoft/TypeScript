@@ -174,11 +174,11 @@ function isInJSDoc(node: Node): boolean {
     return !!(node.flags & NodeFlags.JSDoc);
 }
 
-function isPartOfTypeQuery(node: Node): boolean {
-    while (node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.Identifier) {
+function isPartOfTypeQuery(node: Node | undefined): boolean {
+    while (node && (node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.Identifier)) {
         node = node.parent;
     }
-    return node.kind === SyntaxKind.TypeQuery;
+    return node?.kind === SyntaxKind.TypeQuery;
 }
 
 function isIdentifierInNonEmittingHeritageClause(node: Node): boolean {
@@ -198,30 +198,30 @@ function isIdentifierInNonEmittingHeritageClause(node: Node): boolean {
 
     return heritageClause !== undefined &&
         isHeritageClause(heritageClause) &&
-        (heritageClause.token === SyntaxKind.ImplementsKeyword || heritageClause.parent.kind === SyntaxKind.InterfaceDeclaration);
+        (heritageClause.token === SyntaxKind.ImplementsKeyword || heritageClause.parent?.kind === SyntaxKind.InterfaceDeclaration);
 }
 
-function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node): boolean {
-    while (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
+function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node | undefined): boolean {
+    while (node && (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression)) {
         node = node.parent;
     }
-    if (!isComputedPropertyName(node)) {
+    if (!node || !isComputedPropertyName(node)) {
         return false;
     }
     if (hasModifierFlags(node.parent) && node.parent.modifierFlags & ModifierFlags.Abstract) {
         return true;
     }
-    const containerKind = node.parent.parent.kind;
+    const containerKind = node.parent?.parent?.kind;
     return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
 }
 
 function isShorthandPropertyNameUseSite(useSite: Node): boolean {
-    return isIdentifier(useSite) && isShorthandPropertyAssignment(useSite.parent) && useSite.parent.name === useSite;
+    return isIdentifier(useSite) && !!useSite.parent && isShorthandPropertyAssignment(useSite.parent) && useSite.parent.name === useSite;
 }
 
 type AncestorCallbackResult = boolean | "quit";
 
-function findAncestor(node: Node, callback: (node: Node) => AncestorCallbackResult): Node | undefined {
+function findAncestor(node: Node | undefined, callback: (node: Node) => AncestorCallbackResult): Node | undefined {
     while (node) {
         const result = callback(node);
         if (result === "quit") {
@@ -234,8 +234,8 @@ function findAncestor(node: Node, callback: (node: Node) => AncestorCallbackResu
     }
 }
 
-function hasModifierFlags(node: Node): node is Node & { readonly modifierFlags: ModifierFlags; } {
-    return "modifierFlags" in node;
+function hasModifierFlags(node: Node | undefined): node is Node & { readonly modifierFlags: ModifierFlags; } {
+    return !!node && "modifierFlags" in node;
 }
 
 function isExpressionNode(node: Node): boolean {
@@ -277,18 +277,18 @@ function isExpressionNode(node: Node): boolean {
         case SyntaxKind.AwaitExpression:
             return true;
         case SyntaxKind.MetaProperty:
-            return !isImportCall(node.parent) || node.parent.expression !== node;
+            return !node.parent || !isImportCall(node.parent) || node.parent.expression !== node;
         case SyntaxKind.ExpressionWithTypeArguments:
-            return !isHeritageClause(node.parent);
+            return !node.parent || !isHeritageClause(node.parent);
         case SyntaxKind.QualifiedName:
-            while (node.parent.kind === SyntaxKind.QualifiedName) {
+            while (node.parent?.kind === SyntaxKind.QualifiedName) {
                 node = node.parent;
             }
-            return node.parent.kind === SyntaxKind.TypeQuery || isInJSDocNameReference(node) || isJSXTagName(node);
+            return node.parent?.kind === SyntaxKind.TypeQuery || isInJSDocNameReference(node) || isJSXTagName(node);
         case SyntaxKind.PrivateIdentifier:
-            return isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.InKeyword;
+            return !!node.parent && isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.InKeyword;
         case SyntaxKind.Identifier:
-            if (node.parent.kind === SyntaxKind.TypeQuery || isInJSDocNameReference(node) || isJSXTagName(node)) {
+            if (node.parent?.kind === SyntaxKind.TypeQuery || isInJSDocNameReference(node) || isJSXTagName(node)) {
                 return true;
             }
         // falls through
@@ -316,11 +316,12 @@ function isJSDocLinkLike(node: Node): boolean {
 }
 
 function isInJSDocNameReference(node: Node): boolean {
-    return isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent);
+    return !!node.parent && (isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent));
 }
 
 function isInExpressionContext(node: Node): boolean {
     const parent = node.parent;
+    if (!parent) return false;
     switch (parent.kind) {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.Parameter:
@@ -371,9 +372,9 @@ function isInExpressionContext(node: Node): boolean {
 
 function isPartOfTypeExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
     const parent = node.parent;
-    return isHeritageClause(parent) && (!isClassLikeDeclaration(parent.parent) || parent.token === SyntaxKind.ImplementsKeyword) ||
+    return !!parent && (isHeritageClause(parent) && (!parent.parent || !isClassLikeDeclaration(parent.parent) || parent.token === SyntaxKind.ImplementsKeyword) ||
         isJSDocImplementsTag(parent) ||
-        isJSDocAugmentsTag(parent);
+        isJSDocAugmentsTag(parent));
 }
 
 function isForStatementExpression(node: Node, parent: ForStatement): boolean {
@@ -389,6 +390,7 @@ function isForInOrOfStatementExpression(node: Node, parent: ForInOrOfStatement):
 
 function isJSXTagName(node: Node): boolean {
     const parent = node.parent;
+    if (!parent) return false;
     switch (parent.kind) {
         case SyntaxKind.JsxOpeningElement:
         case SyntaxKind.JsxSelfClosingElement:
