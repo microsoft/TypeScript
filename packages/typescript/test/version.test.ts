@@ -53,7 +53,6 @@ test("the CLI falls back to the WASI package", {
                     version: "0.0.0",
                     type: "module",
                     bin: { tsc: "./lib/tsc.js" },
-                    imports: { "#getExePath": "./lib/getExePath.js" },
                 }),
             ),
         ]);
