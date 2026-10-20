@@ -52,6 +52,7 @@ test("the CLI falls back to the WASI package", {
                     name: "typescript",
                     version: "0.0.0",
                     type: "module",
+                    bin: { tsc: "./lib/tsc.js" },
                     imports: { "#getExePath": "./lib/getExePath.js" },
                 }),
             ),
@@ -64,7 +65,7 @@ test("the CLI falls back to the WASI package", {
         assert.notStrictEqual(missingArtifact.status, 0);
         assert.match(
             missingArtifact.stderr,
-            /Install @typescript\/typescript-wasip1-wasm@0\.0\.0 to enable WASI fallback/,
+            /Unable to resolve @typescript\/typescript-[\w-]+\. Either your platform is unsupported/,
         );
 
         const scopeDirectory = path.join(directory, "node_modules", "@typescript");

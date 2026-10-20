@@ -79,22 +79,7 @@ export function getWasmPath() {
     }
     else {
         const require = module.createRequire(import.meta.url);
-        let packageJson;
-        try {
-            packageJson = require.resolve("@typescript/typescript-wasip1-wasm/package.json");
-        }
-        catch (error) {
-            if (error?.code === "MODULE_NOT_FOUND") {
-                throw Object.assign(
-                    new Error(
-                        `WebAssembly compiler package not found. Install @typescript/typescript-wasip1-wasm@${pkg.version} to enable WASI fallback.`,
-                        { cause: error },
-                    ),
-                    { code: "ERR_TYPESCRIPT_WASM_PACKAGE" },
-                );
-            }
-            throw error;
-        }
+        const packageJson = require.resolve("@typescript/typescript-wasip1-wasm/package.json");
         const wasmPackage = JSON.parse(fs.readFileSync(packageJson, "utf8"));
         if (wasmPackage.version !== pkg.version) {
             throw Object.assign(
