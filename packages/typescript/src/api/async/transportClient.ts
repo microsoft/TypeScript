@@ -57,16 +57,11 @@ export class TransportClient {
     private nextBatch: boolean | "manual" = false;
     private batchGeneration = 0;
     private batchedRequests: PendingRequest[] = [];
-    private readonly closedPromise: Promise<never>;
-    private rejectClosed!: (reason: Error) => void;
+    private readonly pendingOperations = new Set<(reason: Error) => void>();
 
     constructor(transport: AsyncTransport, collectTiming: boolean, maxResponseBytesPerPage?: number) {
         this.transport = transport;
         this.maxResponseBytesPerPage = maxResponseBytesPerPage;
-        this.closedPromise = new Promise((_, reject) => {
-            this.rejectClosed = reject;
-        });
-        void this.closedPromise.catch(() => {});
         if (collectTiming) {
             this.timing = new TimingCollector();
         }
@@ -178,7 +173,10 @@ export class TransportClient {
 
     async close(): Promise<void> {
         this.closed = true;
-        this.rejectClosed(new Error("Client is closed"));
+        for (const reject of this.pendingOperations) {
+            reject(new Error("Client is closed"));
+        }
+        this.pendingOperations.clear();
         this.batchGeneration++;
         this.nextBatch = false;
         const requests = this.batchedRequests;
@@ -295,10 +293,19 @@ export class TransportClient {
 
     private invokeTransport<T>(operation: () => T | PromiseLike<T>): Promise<T> {
         if (this.closed) return Promise.reject(new Error("Client is closed"));
-        return Promise.race([
-            Promise.resolve().then(operation),
-            this.closedPromise,
-        ]);
+        return new Promise<T>((resolve, reject) => {
+            this.pendingOperations.add(reject);
+            Promise.resolve().then(operation).then(
+                value => {
+                    this.pendingOperations.delete(reject);
+                    resolve(value);
+                },
+                error => {
+                    this.pendingOperations.delete(reject);
+                    reject(error);
+                },
+            );
+        });
     }
 
     private recordTiming(method: string, start: number, bytesSent: number, bytesReceived: number): void {
