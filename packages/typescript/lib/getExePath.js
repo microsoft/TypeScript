@@ -70,10 +70,11 @@ export function getWasmPath() {
     const { __dirname, normalizedDirname, pkg } = getPackageInfo();
 
     let wasmDir;
-    if (normalizedDirname.endsWith("/packages/typescript/lib")) {
-        wasmDir = path.resolve(__dirname, "..", "..", "typescript-wasip1-wasm", "lib");
-    }
-    else if (normalizedDirname.endsWith("/built/npm/typescript/lib") || normalizedDirname.endsWith("/built/npm/native-preview/lib")) {
+    if (
+        normalizedDirname.endsWith("/packages/typescript/lib")
+        || normalizedDirname.endsWith("/built/npm/typescript/lib")
+        || normalizedDirname.endsWith("/built/npm/native-preview/lib")
+    ) {
         wasmDir = path.resolve(__dirname, "..", "..", "typescript-wasip1-wasm", "lib");
     }
     else {
