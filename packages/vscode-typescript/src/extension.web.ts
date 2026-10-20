@@ -14,7 +14,6 @@ import {
     type MessageTransports,
 } from "vscode-languageclient/browser";
 import { nightlyExtensionId } from "./extensionIds";
-import { selectWebModuleExtensionUri } from "./webModuleExtension";
 import { uriToWasmMountPoint } from "./webMountPoint";
 
 declare global {
@@ -110,19 +109,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     context.subscriptions.push(output);
 
     const nightlyExtension = vscode.extensions.getExtension(nightlyExtensionId);
-    const moduleExtensionUri = await selectWebModuleExtensionUri(
-        context.extensionUri,
-        nightlyExtension?.extensionUri,
-        async extensionUri => {
-            try {
-                await vscode.workspace.fs.stat(vscode.Uri.joinPath(extensionUri, ...wasmPackagePath, "tsc.wasm"));
-                return true;
-            }
-            catch {
-                return false;
-            }
-        },
-    );
+    const moduleExtensionUri = nightlyExtension && await hasWasmPayload(nightlyExtension.extensionUri)
+        ? nightlyExtension.extensionUri
+        : context.extensionUri;
     const modulePackageUri = vscode.Uri.joinPath(moduleExtensionUri, ...wasmPackagePath);
     context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider("bundled", {
         async provideTextDocumentContent(uri) {
@@ -200,6 +189,16 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 }
 
 export function deactivate(): void {}
+
+async function hasWasmPayload(extensionUri: vscode.Uri): Promise<boolean> {
+    try {
+        await vscode.workspace.fs.stat(vscode.Uri.joinPath(extensionUri, ...wasmPackagePath, "tsc.wasm"));
+        return true;
+    }
+    catch {
+        return false;
+    }
+}
 
 function findHeaderEnd(buffer: Uint8Array): number {
     for (let i = 0; i + 3 < buffer.length; i++) {
