@@ -122,8 +122,8 @@ function f11(x: string | (() => string) | undefined) {
 >x : string | (() => string) | undefined
 
         x();
->x() : string
->x : () => string
+>x() : any
+>x : (() => string) | (string & Function)
     }
 }
 
@@ -132,14 +132,14 @@ function f12(x: string | (() => string) | undefined) {
 >x : string | (() => string) | undefined
 
     const f = getFunction(x);  // () => string
->f : () => string
->getFunction(x) : () => string
+>f : Extract<string | (() => string) | undefined, Function>
+>getFunction(x) : Extract<string | (() => string) | undefined, Function>
 >getFunction : <T>(item: T) => Extract<T, Function>
 >x : string | (() => string) | undefined
 
     f();
->f() : string
->f : () => string
+>f() : any
+>f : Extract<string | (() => string) | undefined, Function>
 }
 
 type Foo = { foo: string };
