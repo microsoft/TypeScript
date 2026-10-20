@@ -272,7 +272,7 @@ export interface SymbolResponse {
     reference: SymbolReference;
     name: string;
     flags: number;
-    checkFlags: number;
+    checkFlags?: number | undefined;
     declarations?: string[] | undefined;
     valueDeclaration?: string | undefined;
     parent?: CompactSymbolReference | undefined;
@@ -468,6 +468,8 @@ export interface GetDefaultProjectForFileParams {
 
 export interface ProjectResponse {
     id: ProjectId;
+    /** Handle identifies this project's lifetime across snapshots; Id is its logical name. */
+    handle: number;
     configFileName?: RootedFilePath | undefined;
     currentDirectory: RootedDirectoryPath;
     dirty: boolean;
@@ -476,45 +478,45 @@ export interface ProjectResponse {
 
 export interface GetSymbolAtPositionParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
     position: number;
 }
 
 export interface GetSymbolsAtPositionsParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
     positions: readonly number[] | null;
 }
 
 export interface GetSymbolAtLocationParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     location: string;
 }
 
 export interface GetSymbolsAtLocationsParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     locations: readonly string[] | null;
 }
 
 export interface GetSymbolOfSourceFileParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
 }
 
 export interface GetSymbolsOfSourceFilesParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     files: readonly DocumentIdentifier[] | null;
 }
 
 export interface GetTypeOfSymbolParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     symbol: SymbolReference;
 }
 
@@ -525,9 +527,9 @@ export interface TypeResponse {
     isTupleType?: boolean | undefined;
     /**
      * Value is literal type data. BigInt literals are encoded as signed decimal
-     * strings because JSON cannot represent bigint; absent values are null.
+     * strings because JSON cannot represent bigint; absent values are omitted.
      */
-    value: unknown;
+    value?: unknown | undefined;
     /** ObjectType / TypeReference / StringMappingType / IndexType target */
     target?: number | undefined;
     /** InterfaceType type parameters */
@@ -573,19 +575,19 @@ export interface TypeResponse {
 
 export interface GetTypesOfSymbolsParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     symbols: readonly SymbolReference[] | null;
 }
 
 export interface GetSourceFileParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
 }
 
 export interface GetSourceFileNamesParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
 }
 
 /** SourceFileMetadata carries program-stored metadata about a single source file. */
@@ -599,21 +601,21 @@ export interface SourceFileMetadata {
 
 export interface GetModeForUsageLocationParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
     usage: string;
 }
 
 export interface GetModeForResolutionAtIndexParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
     index: number;
 }
 
 export interface GetResolvedModuleParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
     moduleName: string;
     mode: ModuleKind;
@@ -632,14 +634,14 @@ export interface ResolvedModule {
 
 export interface GetResolvedModuleFromModuleSpecifierParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     moduleSpecifier: string;
     sourceFile?: DocumentIdentifier | undefined;
 }
 
 export interface GetResolvedTypeReferenceDirectiveParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
     typeDirectiveName: string;
     mode: ModuleKind;
@@ -655,7 +657,7 @@ export interface ResolvedTypeReferenceDirective {
 
 export interface GetResolvedTypeReferenceDirectiveFromReferenceParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     sourceFile: DocumentIdentifier;
     typeDirectiveName: string;
     resolutionMode: ModuleKind;
@@ -664,12 +666,12 @@ export interface GetResolvedTypeReferenceDirectiveFromReferenceParams {
 /** GetProjectDiagnosticsParams are parameters for project-wide diagnostic methods. */
 export interface GetProjectDiagnosticsParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
 }
 
 export interface ResolveNameParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     name: string;
     /** Optional: node handle for location context */
     location?: string | undefined;
@@ -689,7 +691,7 @@ export interface ResolveNameParams {
  */
 export interface GetSymbolsInScopeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     /** Optional: node handle for location context */
     location?: string | undefined;
     /** Optional: file for location context (alternative to Location) */
@@ -702,14 +704,14 @@ export interface GetSymbolsInScopeParams {
 
 export interface GetSignaturesOfTypeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     type: number;
     kind: number;
 }
 
 export interface SignatureResponse {
     id: number;
-    flags: number;
+    flags?: number | undefined;
     declaration?: string | undefined;
     typeParameters?: number[] | undefined;
     parameters?: CompactSymbolReference[] | undefined;
@@ -719,32 +721,32 @@ export interface SignatureResponse {
 
 export interface GetResolvedSignatureParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     location: string;
 }
 
 export interface GetTypeAtLocationParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     location: string;
 }
 
 export interface GetTypeAtLocationsParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     locations: readonly string[] | null;
 }
 
 export interface GetTypeAtPositionParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
     position: number;
 }
 
 export interface GetTypesAtPositionsParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
     positions: readonly number[] | null;
 }
@@ -757,27 +759,27 @@ export interface GetSymbolPropertyParams {
 /** GetTypePropertyParams is used for all type sub-property endpoints. */
 export interface GetTypePropertyParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     objectId: number;
 }
 
 /** GetSignaturePropertyParams is used for all signature sub-property endpoints. */
 export interface GetSignaturePropertyParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     objectId: number;
 }
 
 /** GetContextualTypeParams returns the contextual type for a node. */
 export interface GetContextualTypeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     location: string;
 }
 
 export interface GetContextualTypeForArgumentParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     location: string;
     index: number;
 }
@@ -785,35 +787,35 @@ export interface GetContextualTypeForArgumentParams {
 /** CheckerTypeParams are parameters for checker methods that operate on a type. */
 export interface CheckerTypeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     type: number;
 }
 
 /** GetBaseTypeOfLiteralTypeParams returns the base type of a literal type. */
 export interface GetBaseTypeOfLiteralTypeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     type: number;
 }
 
 /** GetTypeFromTypeNodeParams are the parameters for the getTypeFromTypeNode method. */
 export interface GetTypeFromTypeNodeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     location: string;
 }
 
 /** GetWidenedTypeParams are the parameters for the getWidenedType method. */
 export interface GetWidenedTypeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     type: number;
 }
 
 /** GetParameterTypeParams are the parameters for the getParameterType method. */
 export interface GetParameterTypeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     signature: number;
     index: number;
 }
@@ -821,14 +823,14 @@ export interface GetParameterTypeParams {
 /** IsArrayLikeTypeParams checks whether a type is array-like. */
 export interface IsArrayLikeTypeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     type: number;
 }
 
 /** IsTypeAssignableToParams checks assignability between two types. */
 export interface IsTypeAssignableToParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     source: number;
     target: number;
 }
@@ -836,7 +838,7 @@ export interface IsTypeAssignableToParams {
 /** GetTypeOfSymbolAtLocationParams returns the narrowed type of a symbol at a specific location. */
 export interface GetTypeOfSymbolAtLocationParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     symbol: SymbolReference;
     location: string;
 }
@@ -844,7 +846,7 @@ export interface GetTypeOfSymbolAtLocationParams {
 /** TypeToTypeNodeParams are the parameters for the typeToTypeNode method. */
 export interface TypeToTypeNodeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     type: number;
     location?: string | undefined;
     flags?: number | undefined;
@@ -853,7 +855,7 @@ export interface TypeToTypeNodeParams {
 /** SignatureToSignatureDeclarationParams are the parameters for the signatureToSignatureDeclaration method. */
 export interface SignatureToSignatureDeclarationParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     signature: number;
     kind: number;
     location?: string | undefined;
@@ -863,7 +865,7 @@ export interface SignatureToSignatureDeclarationParams {
 /** CheckerSignatureParams are parameters for checker methods that operate on a signature. */
 export interface CheckerSignatureParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     signature: number;
 }
 
@@ -878,14 +880,14 @@ export interface TypePredicateResponse {
 /** GetPropertyOfTypeParams are parameters for getPropertyOfType (a named property of a type). */
 export interface GetPropertyOfTypeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     type: number;
     name: string;
 }
 
 export interface GetIndexInfoOfTypeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     type: number;
     kind: number;
 }
@@ -900,7 +902,7 @@ export interface IndexInfoResponse {
 
 export interface GetImportAdderEditsParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
     actions: readonly ImportAdderAction[] | null;
 }
@@ -914,7 +916,7 @@ export interface TextEdit {
 /** CheckerNodeParams are parameters for checker methods that operate on a node location. */
 export interface CheckerNodeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     location: string;
 }
 
@@ -926,14 +928,14 @@ export interface ConstantValueResponse {
 /** CheckerSymbolParams are parameters for checker methods that operate on a symbol. */
 export interface CheckerSymbolParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     symbol: SymbolReference;
 }
 
 /** GetMemberInModuleExportsParams are parameters for getMemberInModuleExports. */
 export interface GetMemberInModuleExportsParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     symbol: SymbolReference;
     name: string;
 }
@@ -950,7 +952,7 @@ export interface JSDocTagInfo {
 /** GetReferencesToSymbolInFileParams are the parameters for the getReferencesToSymbolInFile method. */
 export interface GetReferencesToSymbolInFileParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
     symbol: SymbolReference;
 }
@@ -958,7 +960,7 @@ export interface GetReferencesToSymbolInFileParams {
 /** GetReferencedSymbolsForNodeParams are the parameters for the getReferencedSymbolsForNode method. */
 export interface GetReferencedSymbolsForNodeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     node: string;
     position: number;
 }
@@ -973,7 +975,7 @@ export interface ReferencedSymbolEntry {
 /** GetSignatureUsagesParams are the parameters for the getSignatureUsages method. */
 export interface GetSignatureUsagesParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     signatureDecl: string;
 }
 
@@ -986,7 +988,7 @@ export interface SignatureUsageResponse {
 /** GetCompletionsAtPositionParams are the parameters for the getCompletionsAtPosition method. */
 export interface GetCompletionsAtPositionParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     file: DocumentIdentifier;
     position: number;
     triggerCharacter?: string | undefined;
@@ -1002,7 +1004,7 @@ export interface CompletionInfoResponse {
 /** FormatNodeForInsertionParams are the parameters for the formatNodeForInsertion method. */
 export interface FormatNodeForInsertionParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     /** target file where the node will be inserted */
     file: DocumentIdentifier;
     /** UTF-16 code-unit offset of the insertion position in the target file */
@@ -1014,7 +1016,7 @@ export interface FormatNodeForInsertionParams {
 /** GetDiagnosticsParams are parameters for per-file diagnostic methods. */
 export interface GetDiagnosticsParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     files?: readonly DocumentIdentifier[] | undefined;
 }
 
@@ -1061,7 +1063,7 @@ export interface PrintNodeParams {
 
 export interface EmitParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     emitOnly?: number | undefined;
 }
 
@@ -1084,14 +1086,14 @@ export interface EmitOutputResponse {
 
 export interface SelectedFilesEmitParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
     files: readonly DocumentIdentifier[] | null;
 }
 
 /** GetIntrinsicTypeParams is used for intrinsic type getters (anyType, stringType, etc.). */
 export interface GetIntrinsicTypeParams {
     snapshot: number;
-    project: ProjectId;
+    project: number;
 }
 
 /**
@@ -1709,7 +1711,7 @@ export interface SymbolOwner {
     kind: SymbolOwnerKind;
     file?: SourceFileDescriptor | undefined;
     snapshot?: number | undefined;
-    project?: ProjectId | undefined;
+    project?: number | undefined;
 }
 
 export interface CreateSnapshotProgramParams {

@@ -208,7 +208,7 @@ func TestCustomConditionsNullOverride(t *testing.T) {
 		"/project/tsconfig.json",
 		cmdLine.CompilerOptions(),
 		wrappedRaw,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		nil,
 	)
 
