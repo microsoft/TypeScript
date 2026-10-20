@@ -214,8 +214,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
     let process: WasmProcess | undefined;
     let disposed = false;
+    // Bumped whenever the current client is replaced, so starts by older clients give up.
+    let generation = 0;
     const stderrDecoder = new TextDecoder();
-    const serverOptions = async (): Promise<MessageTransports> => {
+    const serverOptions = async (owner: number): Promise<MessageTransports> => {
+        const isStale = () => disposed || owner !== generation;
         const wasm = await Wasm.load();
         if (!supportsNonBlockingStdin(wasm.versions.extension)) {
             throw new Error(
@@ -234,9 +237,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         // Blocking stdin reads stall the Go scheduler, so the server cannot answer requests
         // while waiting for input. `@vscode/wasm-wasi` does not declare this option yet.
         const stdin = { kind: "pipeIn" as const, nonBlocking: true };
+        if (isStale()) throw new Error("TypeScript language server was stopped");
         await process?.terminate();
-        if (disposed) throw new Error("TypeScript language server was disposed");
-        process = await wasm.createProcess("tsc", module, {
+        if (isStale()) throw new Error("TypeScript language server was stopped");
+        const newProcess = await wasm.createProcess("tsc", module, {
             args: ["--lsp", "--stdio"],
             env: { PWD: "/" },
             mountPoints,
@@ -246,11 +250,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
                 err: { kind: "pipeOut" },
             },
         });
-        // Disposal may have run while the process was being created.
-        if (disposed) {
-            await process.terminate();
-            throw new Error("TypeScript language server was disposed");
+        // The server may have been stopped while the process was being created.
+        if (isStale()) {
+            await newProcess.terminate();
+            throw new Error("TypeScript language server was stopped");
         }
+        process = newProcess;
         if (!process.stdin || !process.stdout) {
             throw new Error("WASM WASI did not create language server stdio pipes");
         }
@@ -281,10 +286,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         },
         outputChannel: output,
     };
-    const client = new LanguageClient("js/ts", "TypeScript Language Server", serverOptions, clientOptions);
-    context.subscriptions.push(client, {
+    // A client whose start failed cannot start again, so each start gets a new one.
+    let client: LanguageClient | undefined;
+    context.subscriptions.push({
         dispose() {
             disposed = true;
+            void client?.dispose().catch(() => {});
             void process?.terminate();
         },
     });
@@ -294,11 +301,20 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     let pending = Promise.resolve();
     const enqueue = (action: () => Promise<void>): Promise<void> => pending = pending.then(action).catch(error => output.error(`TypeScript language server failed: ${String(error)}`));
     const start = async () => {
-        await client.start();
+        const owner = ++generation;
+        const newClient = new LanguageClient("js/ts", "TypeScript Language Server", () => serverOptions(owner), clientOptions);
+        client = newClient;
+        try {
+            await newClient.start();
+        }
+        catch (error) {
+            await disposeClient();
+            throw error;
+        }
         running = true;
         serverCommands = vscode.Disposable.from(
             registerServerCommands(output),
-            registerSourceDefinitionFeature(client),
+            registerSourceDefinitionFeature(newClient),
         );
         await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", true);
     };
@@ -308,7 +324,16 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         serverCommands?.dispose();
         serverCommands = undefined;
         await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", false);
-        await client.stop();
+        await disposeClient();
+    };
+    const disposeClient = async () => {
+        const oldClient = client;
+        client = undefined;
+        generation++;
+        // Stopping fails while the client is starting or after its start failed;
+        // disposing still prevents further restarts, and terminating the process
+        // ends any start in progress.
+        await oldClient?.dispose().catch(() => {});
         await process?.terminate();
         process = undefined;
     };
