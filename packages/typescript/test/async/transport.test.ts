@@ -17,7 +17,7 @@ describe("async transport", () => {
     test("constructs an API over an injected transport", async () => {
         const methods: string[] = [];
         let batchParams: BatchRequestsParams | undefined;
-        let closed = false;
+        let closes = 0;
         const api = new API({
             maxResponseBytesPerPage: 1,
             transport: {
@@ -72,7 +72,7 @@ describe("async transport", () => {
                     throw new Error("Unexpected binary request");
                 },
                 close() {
-                    closed = true;
+                    closes++;
                 },
             },
         });
@@ -90,8 +90,9 @@ describe("async transport", () => {
         await Promise.all(batchRequests);
         assert.deepStrictEqual(methods, ["initialize", "parseCommandLine", "batchRequests"]);
         assert.strictEqual(batchParams?.maxResponseBytesPerPage, 1);
+        await Promise.all([api.close(), api.close()]);
         await api.close();
-        assert.strictEqual(closed, true);
+        assert.strictEqual(closes, 1);
     });
 
     test("rejects requests queued when the transport closes", async () => {

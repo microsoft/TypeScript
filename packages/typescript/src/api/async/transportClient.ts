@@ -54,6 +54,7 @@ export class TransportClient {
     private readonly maxResponseBytesPerPage: number | undefined;
     private connected = false;
     private closed = false;
+    private closing: Promise<void> | undefined;
     private nextBatch: boolean | "manual" = false;
     private batchGeneration = 0;
     private batchedRequests: PendingRequest[] = [];
@@ -171,7 +172,11 @@ export class TransportClient {
         }
     }
 
-    async close(): Promise<void> {
+    close(): Promise<void> {
+        return this.closing ??= this.closeWorker();
+    }
+
+    private async closeWorker(): Promise<void> {
         this.closed = true;
         for (const reject of this.pendingOperations) {
             reject(new Error("Client is closed"));
