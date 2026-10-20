@@ -38,11 +38,7 @@ import {
     type TimingInfo,
 } from "../timing.ts";
 import { TimingDump } from "../timingDump.ts";
-import {
-    createStreamConnection,
-    type MessageConnection,
-    RequestType,
-} from "./jsonrpc.ts";
+import type * as JsonRpc from "./jsonrpc.ts";
 import {
     createTransportClient,
     type TransportClient,
@@ -64,7 +60,9 @@ export function createClient(options: AsyncClientOptions): Client {
 class RpcClient {
     private socket: Socket | undefined;
     private process: ChildProcess | undefined;
-    private connection: MessageConnection | undefined;
+    private connection: JsonRpc.MessageConnection | undefined;
+    // Loaded on connection so that injected-transport clients never load it.
+    private jsonrpc: typeof JsonRpc | undefined;
     private options: ClientOptions | undefined;
     private connected = false;
     private closed = false;
@@ -99,6 +97,7 @@ class RpcClient {
 
     private async connectWorker(): Promise<void> {
         if (!this.options) throw new Error("Client options are not available");
+        this.jsonrpc ??= await import("./jsonrpc.ts");
         if (isSpawnOptions(this.options)) {
             await this.connectViaSpawn(this.options);
         }
@@ -131,7 +130,7 @@ class RpcClient {
                 resolve();
             });
 
-            this.connection = createStreamConnection(this.process.stdout!, this.process.stdin!);
+            this.connection = this.jsonrpc!.createStreamConnection(this.process.stdout!, this.process.stdin!);
             this.registerFSCallbacks(this.connection, options.fs, fsConfiguration);
             this.connection.listen();
         });
@@ -142,7 +141,7 @@ class RpcClient {
 
         return new Promise((resolve, reject) => {
             this.socket = createConnection(options.pipe, () => {
-                this.connection = createStreamConnection(this.socket!, this.socket!);
+                this.connection = this.jsonrpc!.createStreamConnection(this.socket!, this.socket!);
                 this.connection.listen();
                 this.connected = true;
                 resolve();
@@ -155,7 +154,7 @@ class RpcClient {
     }
 
     private registerFSCallbacks(
-        connection: MessageConnection,
+        connection: JsonRpc.MessageConnection,
         fs: FileSystemCallbacks | undefined,
         configuration: FileSystemCallbackConfiguration,
     ): void {
@@ -165,7 +164,7 @@ class RpcClient {
                 case "readFile": {
                     const callback = fs.readFile;
                     if (typeof callback !== "function") throw new Error("Invalid readFile callback configuration");
-                    connection.onRequest(new RequestType<RootedFilePath, unknown, void>(name), fileName => {
+                    connection.onRequest(this.requestType<RootedFilePath, unknown>(name), fileName => {
                         return encodeFileSystemCallbackResult(name, callback(fileName));
                     });
                     break;
@@ -173,7 +172,7 @@ class RpcClient {
                 case "fileExists": {
                     const callback = fs.fileExists;
                     if (typeof callback !== "function") throw new Error("Invalid fileExists callback configuration");
-                    connection.onRequest(new RequestType<RootedFilePath, unknown, void>(name), fileName => {
+                    connection.onRequest(this.requestType<RootedFilePath, unknown>(name), fileName => {
                         return encodeFileSystemCallbackResult(name, callback(fileName));
                     });
                     break;
@@ -181,7 +180,7 @@ class RpcClient {
                 case "directoryExists": {
                     const callback = fs.directoryExists;
                     if (typeof callback !== "function") throw new Error("Invalid directoryExists callback configuration");
-                    connection.onRequest(new RequestType<RootedDirectoryPath, unknown, void>(name), directoryName => {
+                    connection.onRequest(this.requestType<RootedDirectoryPath, unknown>(name), directoryName => {
                         return encodeFileSystemCallbackResult(name, callback(directoryName));
                     });
                     break;
@@ -189,7 +188,7 @@ class RpcClient {
                 case "getAccessibleEntries": {
                     const callback = fs.getAccessibleEntries;
                     if (typeof callback !== "function") throw new Error("Invalid getAccessibleEntries callback configuration");
-                    connection.onRequest(new RequestType<RootedDirectoryPath, unknown, void>(name), directoryName => {
+                    connection.onRequest(this.requestType<RootedDirectoryPath, unknown>(name), directoryName => {
                         return encodeFileSystemCallbackResult(name, callback(directoryName));
                     });
                     break;
@@ -197,7 +196,7 @@ class RpcClient {
                 case "realpath": {
                     const callback = fs.realpath;
                     if (typeof callback !== "function") throw new Error("Invalid realpath callback configuration");
-                    connection.onRequest(new RequestType<RootedPath, unknown, void>(name), path => {
+                    connection.onRequest(this.requestType<RootedPath, unknown>(name), path => {
                         return encodeFileSystemCallbackResult(name, callback(path));
                     });
                     break;
@@ -205,7 +204,7 @@ class RpcClient {
                 case "stat": {
                     const callback = fs.stat;
                     if (typeof callback !== "function") throw new Error("Invalid stat callback configuration");
-                    connection.onRequest(new RequestType<RootedPath, unknown, void>(name), path => {
+                    connection.onRequest(this.requestType<RootedPath, unknown>(name), path => {
                         return encodeFileSystemCallbackResult(name, callback(path));
                     });
                     break;
@@ -213,7 +212,7 @@ class RpcClient {
                 case "writeFile": {
                     const callback = fs.writeFile;
                     if (typeof callback !== "function") throw new Error("Invalid writeFile callback configuration");
-                    connection.onRequest(new RequestType<{ path: RootedFilePath; data: string; }, unknown, void>(name), arg => {
+                    connection.onRequest(this.requestType<{ path: RootedFilePath; data: string; }, unknown>(name), arg => {
                         return encodeFileSystemCallbackResult(name, callback(arg.path, arg.data));
                     });
                     break;
@@ -221,7 +220,7 @@ class RpcClient {
                 case "removeFile": {
                     const callback = fs.removeFile;
                     if (typeof callback !== "function") throw new Error("Invalid removeFile callback configuration");
-                    connection.onRequest(new RequestType<RootedPath, unknown, void>(name), path => {
+                    connection.onRequest(this.requestType<RootedPath, unknown>(name), path => {
                         return encodeFileSystemCallbackResult(name, callback(path));
                     });
                     break;
@@ -230,7 +229,12 @@ class RpcClient {
         }
     }
 
-    private async sendRequestWithTiming<TResponse>(requestType: RequestType<unknown, TResponse, void>, params: unknown): Promise<TResponse> {
+    private requestType<P, R>(method: string): JsonRpc.RequestType<P, R, void> {
+        if (!this.jsonrpc) throw new Error("Connection not established");
+        return new this.jsonrpc.RequestType(method);
+    }
+
+    private async sendRequestWithTiming<TResponse>(requestType: JsonRpc.RequestType<unknown, TResponse, void>, params: unknown): Promise<TResponse> {
         if (!this.connection) {
             throw new Error("Connection not established");
         }
@@ -262,7 +266,7 @@ class RpcClient {
         if (!this.connection) {
             throw new Error("Connection not established");
         }
-        const disposable = this.connection.onRequest(new RequestType<unknown, unknown, void>(name), callback);
+        const disposable = this.connection.onRequest(this.requestType<unknown, unknown>(name), callback);
         return () => disposable.dispose();
     }
 
@@ -281,13 +285,13 @@ class RpcClient {
 
             if (requests.length === 1) {
                 // send single queued requests directly instead of as a batched request
-                const requestType = new RequestType<unknown, unknown, void>(requests[0].method);
+                const requestType = this.requestType<unknown, unknown>(requests[0].method);
                 const response = await this.sendRequestWithTiming(requestType, requests[0].params);
                 requests[0].resolve(response);
                 return;
             }
 
-            const requestType = new RequestType<unknown, BatchRequestsResponse, void>("batchRequests");
+            const requestType = this.requestType<unknown, BatchRequestsResponse>("batchRequests");
             const params: BatchRequestsParams = { requests: requests.map(request => ({ method: request.method, params: request.params })) };
             const maxResponseBytesPerPage = this.options?.maxResponseBytesPerPage;
             if (maxResponseBytesPerPage !== undefined) {
@@ -402,7 +406,7 @@ class RpcClient {
         this.timing.reset();
         if (this.connected && this.connection) {
             // Keep the server's collection in sync so combined totals stay meaningful.
-            const requestType = new RequestType<unknown, void, void>("resetServerTiming");
+            const requestType = this.requestType<unknown, void>("resetServerTiming");
             await this.connection.sendRequest(requestType, undefined);
         }
     }
@@ -413,7 +417,7 @@ class RpcClient {
         }
         // Fetch the server's own timing collection via a dedicated request. This
         // bypasses the client-side collector so the query does not pollute it.
-        const requestType = new RequestType<unknown, ServerTimingInfo, void>("getServerTiming");
+        const requestType = this.requestType<unknown, ServerTimingInfo>("getServerTiming");
         return this.connection.sendRequest(requestType, undefined);
     }
 

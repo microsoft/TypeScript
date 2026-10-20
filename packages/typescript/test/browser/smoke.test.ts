@@ -14,6 +14,50 @@ import {
     chromium,
 } from "playwright";
 
+/** Returns a module whose `run` export exercises the API entries at the given specifiers. */
+function testModule(entries: { async: string; sync: string; wasm: string; fs: string; }): string {
+    return `
+import { API as AsyncAPI } from "${entries.async}";
+import { API as SyncAPI } from "${entries.sync}";
+import { instantiateWasm, WasmTransport } from "${entries.wasm}";
+import { createFileSystemWithLib } from "${entries.fs}";
+
+async function check(API, module) {
+    const instance = await instantiateWasm(module);
+    const transport = new WasmTransport({ instance, cwd: "/" });
+    const api = new API({ transport });
+    transport.setFile("/tsconfig.json", "{}");
+    transport.setFile("/src/index.ts", "export const value = 42 as const;");
+    try {
+        const snapshot = await api.createSnapshot({
+            openFiles: ["/src/index.ts"],
+            fileNotifications: {
+                changed: ["/tsconfig.json", "/src/index.ts"],
+                deleted: [],
+            },
+        });
+        const project = await snapshot.getDefaultProjectForFile("/src/index.ts");
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        const name = sourceFile.statements[0].declarationList.declarations[0].name;
+        const type = await project.checker.getTypeAtLocation(name);
+        return project.checker.typeToString(type);
+    }
+    finally {
+        await api.close();
+    }
+}
+
+export async function run() {
+    const module = await WebAssembly.compileStreaming(fetch("/tsc.wasm"));
+    return [
+        await check(AsyncAPI, module),
+        await check(SyncAPI, module),
+        Object.keys(createFileSystemWithLib([]).symlinks).length,
+    ];
+}
+`;
+}
+
 describe("API over WebAssembly in a browser", () => {
     let browser: Browser;
     let origin: string;
@@ -22,46 +66,12 @@ describe("API over WebAssembly in a browser", () => {
     before(async () => {
         const result = await build({
             stdin: {
-                contents: `
-                    import { API as AsyncAPI } from "typescript/async";
-                    import { API as SyncAPI } from "typescript/sync";
-                    import { instantiateWasm, WasmTransport } from "typescript/unstable/wasm";
-                    import { createFileSystemWithLib } from "typescript/fs";
-
-                    async function check(API, module) {
-                        const instance = await instantiateWasm(module);
-                        const transport = new WasmTransport({ instance, cwd: "/" });
-                        const api = new API({ transport });
-                        transport.setFile("/tsconfig.json", "{}");
-                        transport.setFile("/src/index.ts", "export const value = 42 as const;");
-                        try {
-                            const snapshot = await api.createSnapshot({
-                                openFiles: ["/src/index.ts"],
-                                fileNotifications: {
-                                    changed: ["/tsconfig.json", "/src/index.ts"],
-                                    deleted: [],
-                                },
-                            });
-                            const project = await snapshot.getDefaultProjectForFile("/src/index.ts");
-                            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-                            const name = sourceFile.statements[0].declarationList.declarations[0].name;
-                            const type = await project.checker.getTypeAtLocation(name);
-                            return project.checker.typeToString(type);
-                        }
-                        finally {
-                            await api.close();
-                        }
-                    }
-
-                    export async function run() {
-                        const module = await WebAssembly.compileStreaming(fetch("/tsc.wasm"));
-                        return [
-                            await check(AsyncAPI, module),
-                            await check(SyncAPI, module),
-                            Object.keys(createFileSystemWithLib([]).symlinks).length,
-                        ];
-                    }
-                `,
+                contents: testModule({
+                    async: "typescript/async",
+                    sync: "typescript/sync",
+                    wasm: "typescript/unstable/wasm",
+                    fs: "typescript/fs",
+                }),
                 loader: "ts",
                 resolveDir: process.cwd(),
             },
@@ -80,24 +90,40 @@ describe("API over WebAssembly in a browser", () => {
         const bundle = result.outputFiles[0].contents;
         const wasm = await readFile(wasmURL);
 
-        const dist = new URL("../../dist/", import.meta.url);
+        const unbundled = testModule({
+            async: "/dist/api/async/api.js",
+            sync: "/dist/api/sync/api.js",
+            wasm: "/dist/wasm/index.js",
+            fs: "/dist/api/fs.js",
+        });
+
+        // Serve the package root so the built entries' relative imports resolve as published.
+        const root = new URL("../../", import.meta.url);
         server.on("request", async (request, response) => {
             switch (request.url) {
                 case "/":
                     response.setHeader("Content-Type", "text/html");
                     response.end('<script type="module">import { run } from "/bundle.js"; globalThis.result = run();</script>');
                     break;
+                case "/unbundled":
+                    response.setHeader("Content-Type", "text/html");
+                    response.end('<script type="module">import { run } from "/unbundled.js"; globalThis.result = run();</script>');
+                    break;
                 case "/bundle.js":
                     response.setHeader("Content-Type", "text/javascript");
                     response.end(bundle);
+                    break;
+                case "/unbundled.js":
+                    response.setHeader("Content-Type", "text/javascript");
+                    response.end(unbundled);
                     break;
                 case "/tsc.wasm":
                     response.setHeader("Content-Type", "application/wasm");
                     response.end(wasm);
                     break;
                 default: {
-                    const file = new URL(`.${request.url}`, dist);
-                    const contents = file.href.startsWith(dist.href) && file.pathname.endsWith(".js")
+                    const file = new URL(`.${request.url}`, root);
+                    const contents = file.href.startsWith(root.href) && file.pathname.endsWith(".js")
                         ? await readFile(file).catch(() => undefined)
                         : undefined;
                     if (contents === undefined) {
@@ -135,10 +161,17 @@ describe("API over WebAssembly in a browser", () => {
         assert.deepStrictEqual(result, ["42", "42", 1]);
     });
 
+    test("runs the built async and sync API entries without bundling", async () => {
+        const page = await browser.newPage();
+        await page.goto(`${origin}/unbundled`);
+        const result = await page.evaluate(() => Reflect.get(globalThis, "result"));
+        assert.deepStrictEqual(result, ["42", "42", 1]);
+    });
+
     test("loads the transport entry without package resolution", async () => {
         const page = await browser.newPage();
         await page.goto(origin);
-        const exports = await page.evaluate(async origin => Object.keys(await import(`${origin}/wasm/index.js`)), origin);
+        const exports = await page.evaluate(async origin => Object.keys(await import(`${origin}/dist/wasm/index.js`)), origin);
         assert.deepStrictEqual(exports, ["WasmTransport", "instantiateWasm", "instantiateWasmSync"]);
     });
 });
