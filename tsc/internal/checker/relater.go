@@ -72,8 +72,11 @@ const (
 	RelationComparisonResultReportsUnmeasurable RelationComparisonResult = 1 << 3
 	RelationComparisonResultReportsUnreliable   RelationComparisonResult = 1 << 4
 	RelationComparisonResultComplexityOverflow  RelationComparisonResult = 1 << 5
-	RelationComparisonResultReportsMask                                  = RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable
-	RelationComparisonResultOverflow                                     = RelationComparisonResultComplexityOverflow
+	// Set while relating when a return type still being resolved was read as any. Results computed under that
+	// assumption are not cached; this flag is never recorded in a relation.
+	RelationComparisonResultAssumesResolvingReturnType RelationComparisonResult = 1 << 6
+	RelationComparisonResultReportsMask                                         = RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable
+	RelationComparisonResultOverflow                                            = RelationComparisonResultComplexityOverflow
 )
 
 type DiagnosticAndArguments struct {
@@ -372,7 +375,9 @@ func (c *Checker) checkTypeRelatedToEx(
 	r.relation = relation
 	r.errorNode = errorNode
 	r.relationCount = (16_000_000 - relation.size()) / 8
+	saveAssumesResolvingReturnType := c.reliabilityFlags & RelationComparisonResultAssumesResolvingReturnType
 	result := r.isRelatedToEx(source, target, RecursionFlagsBoth, errorNode != nil /*reportErrors*/, headMessage, IntersectionStateNone)
+	c.reliabilityFlags = c.reliabilityFlags&^RelationComparisonResultAssumesResolvingReturnType | saveAssumesResolvingReturnType
 	if r.overflow {
 		// Record this relation as having failed such that we don't attempt the overflowing operation again.
 		id, _ := getRelationKey(source, target, IntersectionStateNone, relation == c.identityRelation, false /*ignoreConstraints*/)
@@ -3346,6 +3351,14 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		r.targetStack = r.targetStack[:len(r.targetStack)-1]
 	}
 	r.expandingFlags = saveExpandingFlags
+	if propagatingVarianceFlags&RelationComparisonResultAssumesResolvingReturnType != 0 {
+		// The result holds only while a return type it read is being resolved, so it is not cached. Comparisons
+		// still in progress below this one have the same dependence.
+		if result == TernaryFalse || result == TernaryTrue || (len(r.sourceStack) == 0 && len(r.targetStack) == 0) {
+			r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false)
+		}
+		return result
+	}
 	if result != TernaryFalse {
 		if result == TernaryTrue || (len(r.sourceStack) == 0 && len(r.targetStack) == 0) {
 			if result == TernaryTrue || result == TernaryMaybe {

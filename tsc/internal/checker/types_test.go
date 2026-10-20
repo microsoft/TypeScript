@@ -177,11 +177,12 @@ func BenchmarkTypeListKey(b *testing.B) {
 
 func newCompositeTestChecker() (*Checker, []*Type) {
 	c := &Checker{
-		strictNullChecks:      true,
-		unionTypes:            make(map[CacheHashKey]*Type),
-		unionOfUnionTypes:     make(map[UnionOfUnionKey]*Type),
-		intersectionTypes:     make(map[CacheHashKey]*Type),
-		subtypeReductionCache: make(map[CacheHashKey][]*Type),
+		strictNullChecks:         true,
+		unionTypes:               make(map[CacheHashKey]*Type),
+		unionOfUnionTypes:        make(map[UnionOfUnionKey]*Type),
+		intersectionTypes:        make(map[CacheHashKey]*Type),
+		intersectionContentTypes: make(map[CacheHashKey]*Type),
+		subtypeReductionCache:    make(map[CacheHashKey][]*Type),
 	}
 	c.compareSymbols = c.compareSymbolsWorker
 	c.neverType = c.newIntrinsicType(TypeFlagsNever, "never")

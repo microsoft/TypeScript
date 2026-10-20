@@ -64,7 +64,7 @@ class K {
 >rebuild : () => this | B
 
         return flag ? this : new B();
->flag ? this : new B() : this | B
+>flag ? this : new B() : B
 >flag : boolean
 >this : this
 >new B() : B
