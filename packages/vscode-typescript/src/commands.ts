@@ -70,8 +70,27 @@ export async function updateWorkspaceUseTsgoSetting(enable: boolean): Promise<vo
 }
 
 export const codeLensShowLocationsCommandName = "typescript.native-preview.codeLens.showLocations";
-export function registerCodeLensShowLocationsCommand(): vscode.Disposable {
-    return vscode.commands.registerCommand(codeLensShowLocationsCommandName, showCodeLensLocations);
+
+/** Registers the commands that only need a running language server. */
+export function registerServerCommands(outputChannel: vscode.OutputChannel): vscode.Disposable {
+    return vscode.Disposable.from(
+        vscode.commands.registerCommand(codeLensShowLocationsCommandName, showCodeLensLocations),
+        vscode.commands.registerCommand("typescript.native-preview.output.focus", () => {
+            outputChannel.show();
+        }),
+        vscode.commands.registerCommand("typescript.native-preview.sortImports", () => {
+            return vscode.commands.executeCommand("editor.action.sourceAction", {
+                kind: "source.sortImports",
+                apply: "first",
+            });
+        }),
+        vscode.commands.registerCommand("typescript.native-preview.removeUnusedImports", () => {
+            return vscode.commands.executeCommand("editor.action.sourceAction", {
+                kind: "source.removeUnusedImports",
+                apply: "first",
+            });
+        }),
+    );
 
     function showCodeLensLocations(...args: unknown[]): void {
         if (args.length !== 3) {

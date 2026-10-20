@@ -8,7 +8,7 @@ import * as vscode from "vscode";
 import { ActiveJsTsEditorTracker } from "./activeJsTsEditorTracker";
 import { Client } from "./client";
 import {
-    registerCodeLensShowLocationsCommand,
+    registerServerCommands,
     updateWorkspaceUseTsgoSetting,
 } from "./commands";
 import {
@@ -317,11 +317,7 @@ class Session implements vscode.Disposable {
     }
 
     registerCommands(): void {
-        this.disposables.push(registerCodeLensShowLocationsCommand());
-
-        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.output.focus", () => {
-            this.outputChannel.show();
-        }));
+        this.disposables.push(registerServerCommands(this.outputChannel));
 
         // TODO: Support the standard reload/go-to-project-config commands while
         // Strada leaves their command palette entries visible in native mode:
@@ -330,20 +326,6 @@ class Session implements vscode.Disposable {
 
         this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.showMenu", () => {
             showCommands(this.client);
-        }));
-
-        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.sortImports", () => {
-            return vscode.commands.executeCommand("editor.action.sourceAction", {
-                kind: "source.sortImports",
-                apply: "first",
-            });
-        }));
-
-        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.removeUnusedImports", () => {
-            return vscode.commands.executeCommand("editor.action.sourceAction", {
-                kind: "source.removeUnusedImports",
-                apply: "first",
-            });
         }));
 
         this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.reportIssue", () => {
