@@ -196,17 +196,23 @@ func getCheckerAssociationBaseWeight(nodeCount int, textLength int) int {
 // deliberately broader than getImportAdjacency's resolved, in-program edges: this
 // term estimates the work of processing module references, while adjacency controls
 // checker affinity. Normalizing the term avoids a project-specific vertex-weight
-// constant.
+// constant. A program with few imports, such as one built from namespaces, would
+// make each import outweigh whole files, so an import unit is capped at twice the
+// average weight of a weighted file.
 func getCheckerAssociationWeights(baseWeights []int, importCounts []int) []int {
 	totalBaseWeight := 0
 	totalImports := 0
+	weightedFiles := 0
 	for i, baseWeight := range baseWeights {
 		totalBaseWeight += baseWeight
 		totalImports += importCounts[i]
+		if baseWeight > 0 {
+			weightedFiles++
+		}
 	}
 	importWeight := 0
 	if totalImports > 0 {
-		importWeight = max(totalBaseWeight/totalImports, 1)
+		importWeight = max(min(totalBaseWeight/totalImports, 2*totalBaseWeight/weightedFiles), 1)
 	}
 	fileWeights := make([]int, len(baseWeights))
 	for i, baseWeight := range baseWeights {

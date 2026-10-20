@@ -83,6 +83,12 @@ func TestGetCheckerAssociationWeights(t *testing.T) {
 			want:         []int{100, 93, 154},
 		},
 		{
+			name:         "caps import work at twice the average file",
+			baseWeights:  []int{100, 100, 0, 100, 100},
+			importCounts: []int{1, 0, 0, 0, 0},
+			want:         []int{300, 100, 0, 100, 100},
+		},
+		{
 			name:         "no imports preserves base weights",
 			baseWeights:  []int{100, 50, 25},
 			importCounts: []int{0, 0, 0},
