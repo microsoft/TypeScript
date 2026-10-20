@@ -297,6 +297,9 @@ describe("API over WebAssembly", () => {
         transport.setFile("/raw.ts", rawContent);
         assert.strictEqual(transport.readFile("/raw.ts"), rawContent);
         transport.removeFile("/raw.ts");
+        assert.throws(() => transport.setFile("", "text"), /panic setting file/);
+        assert.throws(() => transport.removeFile(""), /panic removing file/);
+        assert.throws(() => transport.readFile(""), /panic reading file/);
 
         transport.setFile("/tsconfig.json", `{ "compilerOptions": { "emitBOM": true } }`);
         transport.setFile("/src/index.ts", "export const value = 42 as const;");

@@ -133,7 +133,7 @@ func handleRequest(methodLen uint32, payloadLen uint32) (status uint32) {
 }
 
 //go:wasmexport set_file
-func setFile(pathLen uint32, contentLen uint32) uint32 {
+func setFile(pathLen uint32, contentLen uint32) (status uint32) {
 	if inCall {
 		return fail("re-entrant set_file: a request is already in flight")
 	}
@@ -143,6 +143,11 @@ func setFile(pathLen uint32, contentLen uint32) uint32 {
 	if !withinRequest(pathLen, contentLen) {
 		return fail("invalid set_file lengths: path + content exceeds the request buffer")
 	}
+	defer func() {
+		if recovered := recover(); recovered != nil {
+			status = fail(fmt.Sprintf("panic setting file: %v\n%s", recovered, debug.Stack()))
+		}
+	}()
 	path := string(requestBuffer[:pathLen])
 	content := string(requestBuffer[pathLen : pathLen+contentLen])
 	if err := reactor.SetFile(path, content); err != nil {
@@ -178,7 +183,7 @@ func readFile(pathLen uint32) (status uint32) {
 }
 
 //go:wasmexport remove_file
-func removeFile(pathLen uint32) uint32 {
+func removeFile(pathLen uint32) (status uint32) {
 	if inCall {
 		return fail("re-entrant remove_file: a request is already in flight")
 	}
@@ -188,6 +193,11 @@ func removeFile(pathLen uint32) uint32 {
 	if !withinRequest(pathLen, 0) {
 		return fail("invalid remove_file length: path exceeds the request buffer")
 	}
+	defer func() {
+		if recovered := recover(); recovered != nil {
+			status = fail(fmt.Sprintf("panic removing file: %v\n%s", recovered, debug.Stack()))
+		}
+	}()
 	if err := reactor.RemoveFile(string(requestBuffer[:pathLen])); err != nil {
 		return fail(err.Error())
 	}
