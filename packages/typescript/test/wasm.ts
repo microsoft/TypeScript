@@ -1,20 +1,28 @@
+import { wasmURL } from "@typescript/typescript-wasip1-wasm";
+import type { API as AsyncAPI } from "@typescript/typescript/async";
 import type { FileSystemCallbacks } from "@typescript/typescript/fs";
 import {
     toRootedDirectoryPath,
     toRootedFilePath,
 } from "@typescript/typescript/path";
+import type { API as SyncAPI } from "@typescript/typescript/sync";
 import {
-    instantiateWasm,
+    instantiateWasmSync,
     type WasmReactorInstance,
     WasmTransport,
 } from "@typescript/typescript/unstable/wasm";
+import { readFileSync } from "node:fs";
 import {
     type DocumentIdentifier,
     type FileNotifications,
     resolveFileName,
-} from "../../src/api/proto.ts";
+} from "../src/api/proto.ts";
 
-interface BrowserAPIOptions {
+declare const WebAssembly: {
+    Module: new (bytes: Uint8Array) => WebAssembly.Module;
+};
+
+interface WasmAPIOptions {
     cwd?: string | undefined;
     fs?: FileSystemCallbacks | undefined;
     collectTiming?: boolean | undefined;
@@ -22,30 +30,25 @@ interface BrowserAPIOptions {
     transport?: object | undefined;
 }
 
-interface BrowserSnapshotChanges {
+interface SnapshotChanges {
     fileNotifications?: FileNotifications | undefined;
     openFiles?: readonly DocumentIdentifier[] | undefined;
 }
 
 const availableInstances: WasmReactorInstance[] = [];
 const mirroredFiles = new WeakMap<WasmTransport, Set<string>>();
+let module: WebAssembly.Module | undefined;
 
-export async function initializeBrowserAPIInstances(module: WebAssembly.Module, count: number): Promise<void> {
-    availableInstances.push(
-        ...await Promise.all(
-            Array.from({ length: count }, () => instantiateWasm(module)),
-        ),
-    );
-}
-
-class BrowserWasmTransport extends WasmTransport {
+class TestWasmTransport extends WasmTransport {
     private returned = false;
+    private readonly reactorInstance: WasmReactorInstance;
 
     constructor(
-        private readonly reactorInstance: WasmReactorInstance,
+        reactorInstance: WasmReactorInstance,
         options: ConstructorParameters<typeof WasmTransport>[0],
     ) {
         super(options);
+        this.reactorInstance = reactorInstance;
     }
 
     override close(): void {
@@ -56,21 +59,18 @@ class BrowserWasmTransport extends WasmTransport {
     }
 }
 
-export function createBrowserAPIOptions(options: BrowserAPIOptions): {
-    options: BrowserAPIOptions;
-    transport?: WasmTransport;
+function createWasmAPIOptions(options: WasmAPIOptions): {
+    options: WasmAPIOptions;
+    transport?: WasmTransport | undefined;
 } {
     if (options.transport) return { options };
-    const instance = availableInstances.pop();
-    if (!instance) {
-        throw new Error("No initialized TypeScript WASM reactor is available");
-    }
+    const instance = availableInstances.pop() ?? instantiateWasmSync(module ??= new WebAssembly.Module(readFileSync(wasmURL)));
     const writeFile = typeof options.fs?.writeFile === "function" ? options.fs.writeFile : undefined;
-    const transport = new BrowserWasmTransport(instance, {
+    const transport = new TestWasmTransport(instance, {
         instance,
         cwd: options.cwd ?? "/",
-        ...writeFile === undefined ? {} : { fs: { writeFile: writeFile.bind(options.fs) } },
-        ...options.collectTiming === undefined ? {} : { collectTiming: options.collectTiming },
+        fs: writeFile === undefined ? undefined : { writeFile: writeFile.bind(options.fs) },
+        collectTiming: options.collectTiming,
     });
     if (options.fs) {
         synchronizeFileSystem(options.fs, transport);
@@ -78,23 +78,23 @@ export function createBrowserAPIOptions(options: BrowserAPIOptions): {
     return {
         options: {
             transport,
-            ...options.fs === undefined ? {} : { fs: options.fs },
-            ...options.collectTiming === undefined ? {} : { collectTiming: options.collectTiming },
-            ...options.maxResponseBytesPerPage === undefined ? {} : { maxResponseBytesPerPage: options.maxResponseBytesPerPage },
+            fs: options.fs,
+            collectTiming: options.collectTiming,
+            maxResponseBytesPerPage: options.maxResponseBytesPerPage,
         },
         transport,
     };
 }
 
-export function wrapFileUpdates<T extends object>(api: T, fs: FileSystemCallbacks | undefined, transport: WasmTransport | undefined): void {
+function wrapFileUpdates<T extends object>(api: T, fs: FileSystemCallbacks | undefined, transport: WasmTransport | undefined): void {
     if (!fs || !transport) return;
     wrapMethod("createSnapshot", args => {
-        const params = args[0] as BrowserSnapshotChanges | undefined;
+        const params = args[0] as SnapshotChanges | undefined;
         syncFileChanges(fs, transport, params?.fileNotifications);
         syncOpenFiles(fs, transport, params);
     });
     wrapMethod("updateSnapshot", args => {
-        const params = args[1] as BrowserSnapshotChanges | undefined;
+        const params = args[1] as SnapshotChanges | undefined;
         syncFileChanges(fs, transport, params?.fileNotifications);
         syncOpenFiles(fs, transport, params);
     });
@@ -126,7 +126,7 @@ export function wrapFileUpdates<T extends object>(api: T, fs: FileSystemCallback
 function syncOpenFiles(
     fs: FileSystemCallbacks,
     transport: WasmTransport,
-    changes: BrowserSnapshotChanges | undefined,
+    changes: SnapshotChanges | undefined,
 ): void {
     for (const file of changes?.openFiles ?? []) {
         const fileName = resolveFileName(file);
@@ -201,4 +201,16 @@ function syncFileChanges(
 
 function join(directory: string, name: string): string {
     return directory === "/" ? `/${name}` : `${directory}/${name}`;
+}
+
+export function withWasm<T extends typeof AsyncAPI | typeof SyncAPI>(API: T): T {
+    return new Proxy(API, {
+        construct(target, args) {
+            const options: WasmAPIOptions = args[0] ?? {};
+            const created = createWasmAPIOptions(options);
+            const api = Reflect.construct(target, [created.options]);
+            wrapFileUpdates(api, options.fs, created.transport);
+            return api;
+        },
+    });
 }

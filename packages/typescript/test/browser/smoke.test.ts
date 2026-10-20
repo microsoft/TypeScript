@@ -76,6 +76,10 @@ describe("API over WebAssembly in a browser", () => {
             write: false,
         });
         assert.strictEqual(result.outputFiles.length, 1);
+        const output = result.outputFiles[0].text;
+        assert.doesNotMatch(output, /(?:from|import)\s*\(?["']node:/);
+        assert.match(output, /The browser async API requires an injected transport/);
+        assert.match(output, /The browser sync API requires an injected transport/);
         const bundle = result.outputFiles[0].contents;
         const wasm = await readFile(wasmURL);
 

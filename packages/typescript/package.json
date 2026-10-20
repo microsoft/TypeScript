@@ -143,7 +143,7 @@
         "build": "tsc -b",
         "build:test": "tsc -b test",
         "test:only": "npm run node -- --test './test/*.test.ts' './test/async/**/*.test.ts' './test/sync/**/*.test.ts'",
-        "test:browser:only": "npm run node -- --test './test/browser/**/*.test.ts'",
+        "test:browser-smoke:only": "npm run node -- --test './test/browser/**/*.test.ts'",
         "test": "npm run test:only"
     },
     "devDependencies": {

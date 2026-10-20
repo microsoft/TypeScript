@@ -82,7 +82,6 @@ import {
     toRootedFilePath,
 } from "@typescript/typescript/path";
 import {
-    API,
     type BigIntLiteralType,
     CheckFlags,
     type CompilerOptions,
@@ -154,6 +153,7 @@ import {
     createVirtualFileSystem,
 } from "../testUtils.ts";
 import {
+    API,
     defaultFiles,
     spawnAPI,
 } from "./api.testUtils.ts";
