@@ -1064,6 +1064,12 @@ func (b *Binder) bindDeferredExpandoAssignment(node *ast.Node) {
 	if symbol = getInitializerSymbol(symbol); symbol != nil {
 		if ast.HasDynamicName(node) {
 			b.bindAnonymousDeclaration(node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.InternalSymbolNameComputed)
+			// Point the anonymous computed assignment at the expando host. For top-level
+			// scripts, bindAnonymousDeclaration would otherwise set parent to a nil
+			// SourceFile symbol, which breaks getLateBoundSymbol under --noCheck.
+			if declSym := node.Symbol(); declSym != nil {
+				declSym.SetParent(symbol)
+			}
 			b.addLateBoundAssignmentDeclarationToSymbol(node, symbol)
 		} else {
 			// We declare expandos only when there are no non-expando declarations for that name.
