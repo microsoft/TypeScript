@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/indexMappedTypeWithFilteredKeysWithNegation.ts] ////
+
+=== indexMappedTypeWithFilteredKeysWithNegation.ts ===
+type ExcludeKey<T, TKey> = {
+>ExcludeKey : ExcludeKey<T, TKey>
+
+    [K in keyof T as K extends TKey ? never : K]: T[K]
+};
+
+interface Test {
+    a: string;
+>a : string
+
+    b: number;
+>b : number
+
+    c: boolean;
+>c : boolean
+}
+
+declare const test: ExcludeKey<Test, "b">; 
+>test : ExcludeKey<Test, "b">
+
+declare var possibleKey: string & keyof Test & not "b";
+>possibleKey : "a" | "c"
+
+test[possibleKey];
+>test[possibleKey] : string | boolean
+>test : ExcludeKey<Test, "b">
+>possibleKey : "a" | "c"
+
+function f<T extends Test>(test: ExcludeKey<T, "b">, possibleKey: string & keyof T & not "b") {
+>f : <T extends Test>(test: ExcludeKey<T, "b">, possibleKey: string & keyof T & not "b") => void
+>test : ExcludeKey<T, "b">
+>possibleKey : string & keyof T & not "b"
+
+    test[possibleKey];
+>test[possibleKey] : ExcludeKey<T, "b">[string & keyof T & not "b"]
+>test : ExcludeKey<T, "b">
+>possibleKey : string & keyof T & not "b"
+}
+

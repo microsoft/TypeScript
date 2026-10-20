@@ -3616,7 +3616,8 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				nameType := r.c.getNameTypeFromMappedType(targetType)
 				constraintType := r.c.getConstraintTypeFromMappedType(targetType)
 				var targetKeys *Type
-				if nameType != nil && r.c.isMappedTypeWithKeyofConstraintDeclaration(targetType) {
+				isFiltering := nameType != nil && r.c.isMappedTypeWithKeyofConstraintDeclaration(targetType)
+				if isFiltering {
 					// we need to get the apparent mappings and union them with the generic mappings, since some properties may be
 					// missing from the `constraintType` which will otherwise be mapped in the object
 					mappedKeys := r.c.getApparentMappedTypeKeys(nameType, targetType)
@@ -3626,6 +3627,16 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 					targetKeys = nameType
 				} else {
 					targetKeys = constraintType
+				}
+				if isFiltering && source.flags&TypeFlagsIntersection != 0 && r.someTypeRelatedToType(source, constraintType, false, intersectionState) == TernaryTrue {
+					// run the filter over `source` - some part of `source` is related to the constraint - if source's other elements end up filtering the same way the nameType does, the assignment can pass
+					// This effectively is a workaround for a lack of distributive conditional/distributive homomorphic mapped types relationship rules that uses execution of the distribution (even at higher order)
+					// to approximate a better result.
+					sourceInstantiatedTarget := r.c.instantiateType(nameType, newSimpleTypeMapper(r.c.getTypeParameterFromMappedType(targetType), source))
+					broadTargetKeys := r.c.getUnionType([]*Type{targetKeys, sourceInstantiatedTarget})
+					if r.isRelatedTo(source, broadTargetKeys, RecursionFlagsTarget, false) == TernaryTrue {
+						return TernaryTrue
+					}
 				}
 				if r.isRelatedTo(source, targetKeys, RecursionFlagsTarget, reportErrors) == TernaryTrue {
 					return TernaryTrue
