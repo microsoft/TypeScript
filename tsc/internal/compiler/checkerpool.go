@@ -661,7 +661,7 @@ func getCheckerAssociationAreas(paths []string, weights []int, order []int, grou
 		path := paths[i]
 		weight := weights[i] >> areaShift
 		depth := 0
-		for pos := rootEnd; pos < len(path) && depth < checkerAssociationAreaDepth; pos++ {
+		for pos := max(rootEnd, 0); pos < len(path) && depth < checkerAssociationAreaDepth; pos++ {
 			if path[pos] == '/' {
 				entries = append(entries, entry{groupOf[i], areaID(path[:pos]), weight})
 				depth++

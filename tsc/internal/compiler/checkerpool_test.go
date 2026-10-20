@@ -208,3 +208,19 @@ func TestMergeCheckerAssociationGroups(t *testing.T) {
 		t.Fatalf("mergeCheckerAssociationGroups() = %v, want %v", got, want)
 	}
 }
+
+func TestGetCheckerAssociationAreasWithoutCommonDirectory(t *testing.T) {
+	t.Parallel()
+	paths := []string{"c:/a/x.ts", "d:/b/y.ts"}
+	areas, areaTotals, _ := getCheckerAssociationAreas(paths, []int{10, 20}, []int{0, 1}, []int{0, 1}, 2, 30)
+	if len(areas) != 2 || len(areas[0]) == 0 || len(areas[1]) == 0 {
+		t.Fatalf("areas = %v, want areas for both groups", areas)
+	}
+	total := 0
+	for _, a := range areas[1] {
+		total += a.weight
+	}
+	if total == 0 || len(areaTotals) == 0 {
+		t.Fatalf("areas = %v, areaTotals = %v", areas, areaTotals)
+	}
+}
