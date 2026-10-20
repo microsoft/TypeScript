@@ -3228,6 +3228,22 @@ async function runPackVsixExtensions() {
                     "ms-vscode.wasm-wasi-core",
                 ];
                 packageJson.files.push("dist/extension.web.bundle.js");
+                const webCommands = new Set([
+                    "typescript.native-preview.enable",
+                    "typescript.native-preview.disable",
+                    "typescript.native-preview.restart",
+                    "typescript.native-preview.output.focus",
+                    "typescript.native-preview.goToSourceDefinition",
+                    "typescript.native-preview.sortImports",
+                    "typescript.native-preview.removeUnusedImports",
+                    "typescript.native-preview.codeLens.showLocations",
+                ]);
+                const contributes = packageJson.contributes;
+                contributes.commands = contributes.commands.filter((/** @type {{ command: string }} */ c) => webCommands.has(c.command));
+                assert.equal(contributes.commands.length, webCommands.size, "Web command allowlist names a command the extension does not contribute");
+                for (const [menu, items] of Object.entries(contributes.menus)) {
+                    contributes.menus[menu] = items.filter((/** @type {{ command: string }} */ item) => webCommands.has(item.command));
+                }
             }
         }
         packageJson.dependencies = packageJsonDependencies;

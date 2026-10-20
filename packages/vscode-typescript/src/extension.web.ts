@@ -14,10 +14,13 @@ import {
     type MessageTransports,
 } from "vscode-languageclient/browser";
 import {
+    codeLensShowLocationsCommandName,
     registerEnablementCommands,
+    registerServerCommands,
     updateUseTsgoSetting,
 } from "./commands";
 import { nightlyExtensionId } from "./extensionIds";
+import { registerSourceDefinitionFeature } from "./languageFeatures/sourceDefinition";
 import {
     getUseTsgo,
     needsExtHostRestartOnChange,
@@ -272,6 +275,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             { language: "typescriptreact" },
         ],
         initializationOptions: {
+            codeLensShowLocationsCommandName,
             enableTelemetry: false,
             runExternalCode: false,
         },
@@ -286,16 +290,23 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     });
 
     let running = false;
+    let serverCommands: vscode.Disposable | undefined;
     let pending = Promise.resolve();
     const enqueue = (action: () => Promise<void>): Promise<void> => pending = pending.then(action).catch(error => output.error(`TypeScript language server failed: ${String(error)}`));
     const start = async () => {
         await client.start();
         running = true;
+        serverCommands = vscode.Disposable.from(
+            registerServerCommands(output),
+            registerSourceDefinitionFeature(client),
+        );
         await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", true);
     };
     const stop = async () => {
         if (!running) return;
         running = false;
+        serverCommands?.dispose();
+        serverCommands = undefined;
         await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", false);
         await client.stop();
         await process?.terminate();
@@ -303,6 +314,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     };
 
     registerEnablementCommands(context, undefined, () => enqueue(stop));
+    context.subscriptions.push(
+        vscode.commands.registerCommand("typescript.native-preview.restart", () =>
+            enqueue(async () => {
+                await stop();
+                await start();
+            })),
+        { dispose: () => serverCommands?.dispose() },
+    );
 
     // WASI mounts are fixed when the process starts, so new folders need a new process.
     context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(() => {
