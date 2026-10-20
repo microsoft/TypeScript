@@ -1049,7 +1049,12 @@ func (d *TypeDiscriminator) name(index int) string {
 	return d.props[index].Name()
 }
 
-func (d *TypeDiscriminator) matches(index int, t *Type) bool {
+func (d *TypeDiscriminator) matches(index int, t *Type, isOptional bool) bool {
+	// Two optional discriminants always overlap through absence. Under strictNullChecks this is what the
+	// relation below would conclude anyway, so skip the property type resolution and the comparisons.
+	if isOptional && d.c.strictNullChecks && d.props[index].Flags()&ast.SymbolFlagsOptional != 0 {
+		return true
+	}
 	sourceType, targetType := d.c.getTypeOfSymbol(d.props[index]), t
 	if d.reverse {
 		sourceType, targetType = targetType, sourceType
@@ -1208,9 +1213,9 @@ func (c *Checker) mapTypesByKeyProperty(types []*Type, keyPropertyName string) m
 }
 
 type Discriminator interface {
-	len() int                        // Number of discriminant properties
-	name(index int) string           // Property name of index-th discriminator
-	matches(index int, t *Type) bool // True if index-th discriminator matches the given type
+	len() int                                         // Number of discriminant properties
+	name(index int) string                            // Property name of index-th discriminator
+	matches(index int, t *Type, isOptional bool) bool // True if index-th discriminator matches the given type, which is optional if isOptional is set
 }
 
 func (c *Checker) discriminateTypeByDiscriminableItems(target *Type, discriminator Discriminator) *Type {
@@ -1228,9 +1233,17 @@ func (c *Checker) discriminateTypeByDiscriminableItems(target *Type, discriminat
 		matched := false
 		for i := range types {
 			if include[i] != TernaryFalse {
-				targetType := c.getTypeOfPropertyOrIndexSignatureOfType(types[i], discriminator.name(n))
+				name := discriminator.name(n)
+				var targetType *Type
+				isOptional := false
+				if prop := c.getPropertyOfType(types[i], name); prop != nil {
+					targetType = c.getTypeOfSymbol(prop)
+					isOptional = prop.Flags()&ast.SymbolFlagsOptional != 0
+				} else if indexInfo := c.getApplicableIndexInfoForName(types[i], name); indexInfo != nil {
+					targetType = c.addOptionalityEx(indexInfo.valueType, true /*isProperty*/, true /*isOptional*/)
+				}
 				if targetType != nil {
-					if discriminator.matches(n, targetType) {
+					if discriminator.matches(n, targetType, isOptional) {
 						matched = true
 					} else {
 						include[i] = TernaryMaybe

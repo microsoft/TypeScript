@@ -31281,7 +31281,7 @@ func (d *ObjectLiteralDiscriminator) name(index int) string {
 	return d.members[index-len(d.props)].Name()
 }
 
-func (d *ObjectLiteralDiscriminator) matches(index int, t *Type) bool {
+func (d *ObjectLiteralDiscriminator) matches(index int, t *Type, _ bool) bool {
 	var propType *Type
 	if index < len(d.props) {
 		prop := d.props[index]
