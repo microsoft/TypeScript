@@ -20,9 +20,6 @@ describe("API over WebAssembly in a browser", () => {
     const server = createServer();
 
     before(async () => {
-        const index = await readFile(new URL("../../dist/wasm/index.js", import.meta.url));
-        const transport = await readFile(new URL("../../dist/wasm/transport.js", import.meta.url));
-        const wasi = await readFile(new URL("../../dist/wasm/wasi.js", import.meta.url));
         const result = await build({
             stdin: {
                 contents: `
@@ -83,7 +80,8 @@ describe("API over WebAssembly in a browser", () => {
         const bundle = result.outputFiles[0].contents;
         const wasm = await readFile(wasmURL);
 
-        server.on("request", (request, response) => {
+        const dist = new URL("../../dist/", import.meta.url);
+        server.on("request", async (request, response) => {
             switch (request.url) {
                 case "/":
                     response.setHeader("Content-Type", "text/html");
@@ -97,22 +95,20 @@ describe("API over WebAssembly in a browser", () => {
                     response.setHeader("Content-Type", "application/wasm");
                     response.end(wasm);
                     break;
-                case "/transport.js":
+                default: {
+                    const file = new URL(`.${request.url}`, dist);
+                    const contents = file.href.startsWith(dist.href) && file.pathname.endsWith(".js")
+                        ? await readFile(file).catch(() => undefined)
+                        : undefined;
+                    if (contents === undefined) {
+                        response.statusCode = 404;
+                        response.end();
+                        break;
+                    }
                     response.setHeader("Content-Type", "text/javascript");
-                    response.end(transport);
+                    response.end(contents);
                     break;
-                case "/index.js":
-                    response.setHeader("Content-Type", "text/javascript");
-                    response.end(index);
-                    break;
-                case "/wasi.js":
-                    response.setHeader("Content-Type", "text/javascript");
-                    response.end(wasi);
-                    break;
-                default:
-                    response.statusCode = 404;
-                    response.end();
-                    break;
+                }
             }
         });
         await new Promise<void>((resolve, reject) => {
@@ -142,7 +138,7 @@ describe("API over WebAssembly in a browser", () => {
     test("loads the transport entry without package resolution", async () => {
         const page = await browser.newPage();
         await page.goto(origin);
-        const exports = await page.evaluate(async origin => Object.keys(await import(`${origin}/index.js`)), origin);
+        const exports = await page.evaluate(async origin => Object.keys(await import(`${origin}/wasm/index.js`)), origin);
         assert.deepStrictEqual(exports, ["WasmTransport", "instantiateWasm", "instantiateWasmSync"]);
     });
 });
