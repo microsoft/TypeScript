@@ -210,6 +210,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     context.subscriptions.push(vscode.workspace.registerFileSystemProvider(wasmFileSystemScheme, new WasmFileSystemProvider(), { isCaseSensitive: true }));
 
     let process: WasmProcess | undefined;
+    let disposed = false;
     const stderrDecoder = new TextDecoder();
     const serverOptions = async (): Promise<MessageTransports> => {
         const wasm = await Wasm.load();
@@ -231,6 +232,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         // while waiting for input. `@vscode/wasm-wasi` does not declare this option yet.
         const stdin = { kind: "pipeIn" as const, nonBlocking: true };
         await process?.terminate();
+        if (disposed) throw new Error("TypeScript language server was disposed");
         process = await wasm.createProcess("tsc", module, {
             args: ["--lsp", "--stdio"],
             env: { PWD: "/" },
@@ -241,6 +243,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
                 err: { kind: "pipeOut" },
             },
         });
+        // Disposal may have run while the process was being created.
+        if (disposed) {
+            await process.terminate();
+            throw new Error("TypeScript language server was disposed");
+        }
         if (!process.stdin || !process.stdout) {
             throw new Error("WASM WASI did not create language server stdio pipes");
         }
@@ -273,6 +280,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     const client = new LanguageClient("js/ts", "TypeScript Language Server", serverOptions, clientOptions);
     context.subscriptions.push(client, {
         dispose() {
+            disposed = true;
             void process?.terminate();
         },
     });
