@@ -15,6 +15,11 @@ const f3 = a ? async () => async() : x => x;
 const f4 = a ? async (...c) => async() : x => x;
 const f5 = a ? () => async() : x => x;
 
+const f6 = a ? async() : 0
+{}
+const f7 = a ? async() : {}
+{}
+
 function* g() {
     const f1 = a ? yield async(...c) : 0;
     const f2 = a ? yield async(...c) : x => x;
@@ -43,6 +48,10 @@ const f2 = a ? async(...c) : x => x;
 const f3 = a ? () => __awaiter(void 0, void 0, void 0, function* () { return async(); }) : x => x;
 const f4 = a ? (...c) => __awaiter(void 0, void 0, void 0, function* () { return async(); }) : x => x;
 const f5 = a ? () => async() : x => x;
+const f6 = a ? async() : 0;
+{ }
+const f7 = a ? async() : {};
+{ }
 function* g() {
     const f1 = a ? yield async(...c) : 0;
     const f2 = a ? yield async(...c) : x => x;

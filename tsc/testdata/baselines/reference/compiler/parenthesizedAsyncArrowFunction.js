@@ -42,6 +42,17 @@ const f23 = a ? async () => async() : x => x;
 const f24 = a ? async (...c) => async() : x => x;
 const f25 = a ? () => async() : x => x;
 const f26 = a ? async (c: number): Promise<number> => async() : x => x;
+const f27 = a ? async (): Promise<number> => async() : x => x;
+const f28 = a ? async (): Promise<number> => async(...c) : x => x;
+const f29 = a ? async (...c): Promise<number> => async() : x => x;
+const f30 = a ? async <U>(): Promise<number> => async() : x => x;
+const f31 = a ? async (): (Promise<number>) => async() : x => x;
+const f32 = a ? async (...c: number[]): Promise<number> => async() : x => x;
+
+const f33 = a ? async() : 0
+{}
+const f34 = a ? async() : {}
+{}
 
 function* g() {
     const f1 = a ? yield async(...c) : 0;
@@ -94,6 +105,16 @@ const f23 = a ? () => __awaiter(void 0, void 0, void 0, function* () { return as
 const f24 = a ? (...c) => __awaiter(void 0, void 0, void 0, function* () { return async(); }) : x => x;
 const f25 = a ? () => async() : x => x;
 const f26 = a ? (c) => __awaiter(void 0, void 0, void 0, function* () { return async(); }) : x => x;
+const f27 = a ? () => __awaiter(void 0, void 0, void 0, function* () { return async(); }) : x => x;
+const f28 = a ? () => __awaiter(void 0, void 0, void 0, function* () { return async(...c); }) : x => x;
+const f29 = a ? (...c) => __awaiter(void 0, void 0, void 0, function* () { return async(); }) : x => x;
+const f30 = a ? () => __awaiter(void 0, void 0, void 0, function* () { return async(); }) : x => x;
+const f31 = a ? () => __awaiter(void 0, void 0, void 0, function* () { return async(); }) : x => x;
+const f32 = a ? (...c) => __awaiter(void 0, void 0, void 0, function* () { return async(); }) : x => x;
+const f33 = a ? async() : 0;
+{ }
+const f34 = a ? async() : {};
+{ }
 function* g() {
     const f1 = a ? yield async(...c) : 0;
     const f2 = a ? yield async(...c) : x => x;

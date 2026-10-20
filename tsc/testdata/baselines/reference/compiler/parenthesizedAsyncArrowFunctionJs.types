@@ -78,6 +78,25 @@ const f5 = a ? () => async() : x => x;
 >x : any
 >x : any
 
+const f6 = a ? async() : 0
+>f6 : number
+>a ? async() : 0 : number
+>a : true
+>async() : number
+>async : (...c: any[]) => number
+>0 : 0
+
+{}
+const f7 = a ? async() : {}
+>f7 : {}
+>a ? async() : {} : number | {}
+>a : true
+>async() : number
+>async : (...c: any[]) => number
+>{} : {}
+
+{}
+
 function* g() {
 >g : () => Generator<number, void, unknown>
 

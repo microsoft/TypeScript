@@ -4467,6 +4467,7 @@ func (p *Parser) parseParenthesizedArrowFunctionExpression(allowAmbiguity bool, 
 		}
 	}
 	requiresColon := !allowAmbiguity && p.token == ast.KindColonToken && flags&ExpressionParseFlagsDisallowArrowReturnType != 0
+	returnTypeCanStartArrowFunction := requiresColon && p.lookAhead((*Parser).nextTokenIsStartOfArrowFunction)
 	returnType := p.parseReturnType(ast.KindColonToken /*isType*/, false)
 	if returnType != nil && !allowAmbiguity && typeHasArrowFunctionBlockingParseError(returnType) {
 		return nil
@@ -4488,6 +4489,9 @@ func (p *Parser) parseParenthesizedArrowFunctionExpression(allowAmbiguity bool, 
 	if !allowAmbiguity && p.token != ast.KindEqualsGreaterThanToken && p.token != ast.KindOpenBraceToken {
 		// Returning undefined here will cause our caller to rewind to where we started from.
 		return nil
+	}
+	if p.token == ast.KindEqualsGreaterThanToken {
+		requiresColon = returnTypeCanStartArrowFunction
 	}
 	// If we have an arrow, then try to parse the body. Even if not, try to parse if we
 	// have an opening brace, just in case we're in an error state.
@@ -4533,6 +4537,13 @@ func (p *Parser) parseParenthesizedArrowFunctionExpression(allowAmbiguity bool, 
 	p.withJSDoc(result, jsdoc)
 	p.checkJSSyntax(result)
 	return result
+}
+
+func (p *Parser) nextTokenIsStartOfArrowFunction() bool {
+	p.nextToken()
+	return p.isParenthesizedArrowFunctionExpression(ExpressionParseFlagsNone).IsTrueOrUnknown() ||
+		p.token == ast.KindAsyncKeyword && p.lookAhead((*Parser).nextIsUnParenthesizedAsyncArrowFunction) ||
+		p.isIdentifier() && p.nextToken() == ast.KindEqualsGreaterThanToken
 }
 
 func (p *Parser) parseModifiersForArrowFunction() *ast.ModifierList {

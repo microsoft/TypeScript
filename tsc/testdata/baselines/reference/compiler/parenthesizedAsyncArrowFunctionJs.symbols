@@ -55,21 +55,34 @@ const f5 = a ? () => async() : x => x;
 >x : Symbol(x, Decl(a.js, 12, 30))
 >x : Symbol(x, Decl(a.js, 12, 30))
 
+const f6 = a ? async() : 0
+>f6 : Symbol(f6, Decl(a.js, 14, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+
+{}
+const f7 = a ? async() : {}
+>f7 : Symbol(f7, Decl(a.js, 16, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+
+{}
+
 function* g() {
->g : Symbol(g, Decl(a.js, 12, 38))
+>g : Symbol(g, Decl(a.js, 17, 2))
 
     const f1 = a ? yield async(...c) : 0;
->f1 : Symbol(f1, Decl(a.js, 15, 9))
+>f1 : Symbol(f1, Decl(a.js, 20, 9))
 >a : Symbol(a, Decl(a.js, 0, 5))
 >async : Symbol(async, Decl(a.js, 2, 14))
 >c : Symbol(c, Decl(a.js, 2, 5))
 
     const f2 = a ? yield async(...c) : x => x;
->f2 : Symbol(f2, Decl(a.js, 16, 9))
+>f2 : Symbol(f2, Decl(a.js, 21, 9))
 >a : Symbol(a, Decl(a.js, 0, 5))
 >async : Symbol(async, Decl(a.js, 2, 14))
 >c : Symbol(c, Decl(a.js, 2, 5))
->x : Symbol(x, Decl(a.js, 16, 38))
->x : Symbol(x, Decl(a.js, 16, 38))
+>x : Symbol(x, Decl(a.js, 21, 38))
+>x : Symbol(x, Decl(a.js, 21, 38))
 }
 

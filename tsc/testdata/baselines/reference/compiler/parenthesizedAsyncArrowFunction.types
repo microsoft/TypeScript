@@ -328,6 +328,95 @@ const f26 = a ? async (c: number): Promise<number> => async() : x => x;
 >x : any
 >x : any
 
+const f27 = a ? async (): Promise<number> => async() : x => x;
+>f27 : (x: any) => any
+>a ? async (): Promise<number> => async() : x => x : (x: any) => any
+>a : true
+>async (): Promise<number> => async() : () => Promise<number>
+>async() : number
+>async : (...c: number[]) => number
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+const f28 = a ? async (): Promise<number> => async(...c) : x => x;
+>f28 : (x: any) => any
+>a ? async (): Promise<number> => async(...c) : x => x : (x: any) => any
+>a : true
+>async (): Promise<number> => async(...c) : () => Promise<number>
+>async(...c) : number
+>async : (...c: number[]) => number
+>...c : number
+>c : number[]
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+const f29 = a ? async (...c): Promise<number> => async() : x => x;
+>f29 : ((...c: any[]) => Promise<number>) | ((x: any) => any)
+>a ? async (...c): Promise<number> => async() : x => x : ((...c: any[]) => Promise<number>) | ((x: any) => any)
+>a : true
+>async (...c): Promise<number> => async() : (...c: any[]) => Promise<number>
+>c : any[]
+>async() : number
+>async : (...c: number[]) => number
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+const f30 = a ? async <U>(): Promise<number> => async() : x => x;
+>f30 : (x: any) => any
+>a ? async <U>(): Promise<number> => async() : x => x : (x: any) => any
+>a : true
+>async <U>(): Promise<number> => async() : <U>() => Promise<number>
+>async() : number
+>async : (...c: number[]) => number
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+const f31 = a ? async (): (Promise<number>) => async() : x => x;
+>f31 : (x: any) => any
+>a ? async (): (Promise<number>) => async() : x => x : (x: any) => any
+>a : true
+>async (): (Promise<number>) => async() : () => (Promise<number>)
+>async() : number
+>async : (...c: number[]) => number
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+const f32 = a ? async (...c: number[]): Promise<number> => async() : x => x;
+>f32 : ((...c: number[]) => Promise<number>) | ((x: any) => any)
+>a ? async (...c: number[]): Promise<number> => async() : x => x : ((...c: number[]) => Promise<number>) | ((x: any) => any)
+>a : true
+>async (...c: number[]): Promise<number> => async() : (...c: number[]) => Promise<number>
+>c : number[]
+>async() : number
+>async : (...c: number[]) => number
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+const f33 = a ? async() : 0
+>f33 : number
+>a ? async() : 0 : number
+>a : true
+>async() : number
+>async : (...c: number[]) => number
+>0 : 0
+
+{}
+const f34 = a ? async() : {}
+>f34 : {}
+>a ? async() : {} : number | {}
+>a : true
+>async() : number
+>async : (...c: number[]) => number
+>{} : {}
+
+{}
+
 function* g() {
 >g : () => Generator<number, void, unknown>
 

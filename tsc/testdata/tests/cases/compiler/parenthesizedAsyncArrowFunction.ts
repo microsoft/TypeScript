@@ -41,6 +41,17 @@ const f23 = a ? async () => async() : x => x;
 const f24 = a ? async (...c) => async() : x => x;
 const f25 = a ? () => async() : x => x;
 const f26 = a ? async (c: number): Promise<number> => async() : x => x;
+const f27 = a ? async (): Promise<number> => async() : x => x;
+const f28 = a ? async (): Promise<number> => async(...c) : x => x;
+const f29 = a ? async (...c): Promise<number> => async() : x => x;
+const f30 = a ? async <U>(): Promise<number> => async() : x => x;
+const f31 = a ? async (): (Promise<number>) => async() : x => x;
+const f32 = a ? async (...c: number[]): Promise<number> => async() : x => x;
+
+const f33 = a ? async() : 0
+{}
+const f34 = a ? async() : {}
+{}
 
 function* g() {
     const f1 = a ? yield async(...c) : 0;
