@@ -7876,6 +7876,21 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.strictEqual(text, "(name: string) => string");
     });
 
+    test("typeToTypeNode returns undefined when the type cannot be named", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/main.ts": "export const x = new (class { a = 1; })();\n",
+        });
+
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const { checker } = project;
+        const symbol = checker.getSymbolAtPosition("/main.ts", 13);
+        assert.strictEqual(symbol?.name, "x");
+        const type = checker.getTypeOfSymbol(symbol);
+        assert.strictEqual(checker.typeToTypeNode(type, project.program.getSourceFile("/main.ts")), undefined);
+    });
+
     test("visitEachChild on typeToTypeNode result with keyword types", () => {
         using api = spawnAPI(emitterFiles);
 
