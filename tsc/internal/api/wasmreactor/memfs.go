@@ -111,6 +111,14 @@ func (m *memFS) writeFile(path tspath.RootedFilePath, data string) error {
 		file.modTime = time.Now()
 		return nil
 	}
+	for dir := path.Directory(); ; dir = dir.AsPath().Directory() {
+		if m.dirs[m.key(dir.AsString())] != nil {
+			break
+		}
+		if m.files[m.key(dir.AsString())] != nil {
+			return &fs.PathError{Op: "write", Path: path.AsString(), Err: fs.ErrInvalid}
+		}
+	}
 	name := path.BaseName()
 	m.ensureDir(path.Directory()).files[m.key(name)] = name
 	m.files[key] = &memFile{path: path, content: data, modTime: time.Now()}

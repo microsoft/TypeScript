@@ -78,4 +78,7 @@ func TestMemFS(t *testing.T) {
 	assert.Assert(t, !m.DirectoryExists("/src/lib"))
 	assert.Assert(t, m.GetAccessibleEntries("/src").Directories == nil)
 	assert.Assert(t, m.DirectoryExists("/"))
+
+	assert.Assert(t, m.WriteFile("/src/index.ts/nested/out.js", "d") != nil)
+	assert.Assert(t, !m.DirectoryExists("/src/index.ts"))
 }
