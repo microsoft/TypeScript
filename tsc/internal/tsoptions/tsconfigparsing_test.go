@@ -913,7 +913,7 @@ func TestParseJsonConfigFileContentAcceptsJsonRepresentations(t *testing.T) {
 			t.Parallel()
 			parsed := tsoptions.ParseJsonConfigFileContent(
 				json,
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/project",
 				nil,
 				"/project/tsconfig.json",
@@ -940,7 +940,7 @@ func TestParseJsonConfigFileContentPreservesRaw(t *testing.T) {
 			"customSetting": map[string]any{"enabled": true},
 			"compileOnSave": true,
 		},
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		"/project",
 		nil,
 		"/project/tsconfig.json",
@@ -967,7 +967,7 @@ func TestParseJsonConfigFileContentHandlesNullArrayElements(t *testing.T) {
 			t.Parallel()
 			parsed := tsoptions.ParseJsonConfigFileContent(
 				map[string]any{property: []any{nil}},
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/project",
 				nil,
 				"/project/tsconfig.json",
@@ -988,7 +988,7 @@ func TestParseJsonConfigFileContentDefaultsCompileOnSaveToFalse(t *testing.T) {
 	}, tspath.CaseSensitive /*caseSensitivity*/)
 	parsed := tsoptions.ParseJsonConfigFileContent(
 		map[string]any{"files": []any{"index.ts"}},
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		"/project",
 		nil,
 		"/project/tsconfig.json",
@@ -1005,7 +1005,7 @@ func getParsedWithJsonApi(config testConfig, fs vfs.FS, basePath tspath.RootedDi
 	parsed, _ := tsoptions.ParseConfigFileTextToJson(configFileName, path, config.jsonText)
 	return tsoptions.ParseJsonConfigFileContent(
 		parsed,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		basePath,
 		config.existingOptions,
 		configFileName,
@@ -1044,7 +1044,7 @@ func TestParseJsonSourceFileConfigFileContentReportsInvalidExtendedConfig(t *tes
 
 	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
 		configFile,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		"/project",
 		nil,
 		nil,
@@ -1087,7 +1087,7 @@ func TestParseJsonSourceFileConfigFileContentWithEmptyExtendedConfig(t *testing.
 
 	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
 		configFile,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		"/project",
 		nil,
 		nil,
@@ -1663,7 +1663,7 @@ func getParsedWithJsonSourceFileApi(config testConfig, fs vfs.FS, basePath tspat
 	}
 	return tsoptions.ParseJsonSourceFileConfigFileContent(
 		tsConfigSourceFile,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		basePath,
 		config.existingOptions,
 		nil,
@@ -1857,7 +1857,7 @@ func parseSrcCompiler(tb testing.TB) *tsoptions.ParsedCommandLine {
 	)
 	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
 		configFile,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		compilerDir,
 		nil,
 		nil,
@@ -1900,7 +1900,7 @@ func BenchmarkParseSrcCompiler(b *testing.B) {
 	for b.Loop() {
 		tsoptions.ParseJsonSourceFileConfigFileContent(
 			configFile,
-			fs,
+			tsoptions.NewDefaultParseConfigHost(fs),
 			compilerDir,
 			nil,
 			nil,
@@ -1959,7 +1959,7 @@ func TestExtendedConfigErrorsAppearOnCacheHit(t *testing.T) {
 			}
 			return tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsConfigSourceFile,
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/",
 				nil,
 				nil,
@@ -2002,7 +2002,7 @@ func TestExtendedConfigErrorsAppearOnCacheHit(t *testing.T) {
 			}
 			return tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsConfigSourceFile,
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/",
 				nil,
 				nil,
@@ -2044,7 +2044,7 @@ func TestExtendedConfigConfigDirPathsAreNotCached(t *testing.T) {
 	cache := &memoCache{}
 
 	parseConfig := func(configFileName tspath.RootedFilePath) *tsoptions.ParsedCommandLine {
-		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, nil, nil, fs, cache)
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, nil, nil, tsoptions.NewDefaultParseConfigHost(fs), cache)
 		assert.Assert(t, len(errors) == 0, "unexpected errors parsing %s: %v", configFileName, errors)
 		return parsed
 	}
