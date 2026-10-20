@@ -6,6 +6,8 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"gotest.tools/v3/assert"
 )
 
 func TestReactor(t *testing.T) {
@@ -53,4 +55,27 @@ func TestReactor(t *testing.T) {
 	if _, ok := reactor.files.ReadFile("/src/index.ts"); ok {
 		t.Fatal("removed file still exists")
 	}
+}
+
+func TestMemFS(t *testing.T) {
+	t.Parallel()
+
+	m := newMemFS(tspath.CaseInsensitive)
+	assert.NilError(t, m.WriteFile("/Src/Index.ts", "a"))
+	assert.NilError(t, m.AppendFile("/src/index.ts", "b"))
+	assert.NilError(t, m.WriteFile("/src/lib/util.ts", "c"))
+
+	contents, ok := m.ReadFile("/SRC/INDEX.TS")
+	assert.Assert(t, ok)
+	assert.Equal(t, contents, "ab")
+	assert.Equal(t, m.Realpath("/src/index.ts"), tspath.RootedPath("/Src/Index.ts"))
+	assert.DeepEqual(t, m.GetAccessibleEntries("/src").Files, []string{"Index.ts"})
+	assert.DeepEqual(t, m.GetAccessibleEntries("/src").Directories, []string{"lib"})
+	assert.Assert(t, m.Stat("/src/lib").IsDir())
+
+	assert.NilError(t, m.Remove("/src/lib"))
+	assert.Assert(t, !m.FileExists("/src/lib/util.ts"))
+	assert.Assert(t, !m.DirectoryExists("/src/lib"))
+	assert.Assert(t, m.GetAccessibleEntries("/src").Directories == nil)
+	assert.Assert(t, m.DirectoryExists("/"))
 }

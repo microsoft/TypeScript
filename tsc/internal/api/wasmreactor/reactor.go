@@ -14,7 +14,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
 
 type Options struct {
@@ -48,7 +47,7 @@ func New(ctx context.Context, options Options) *Reactor {
 	if options.UseCaseSensitiveFileNames != nil && !*options.UseCaseSensitiveFileNames {
 		caseSensitivity = tspath.CaseInsensitive
 	}
-	files := vfstest.FromMap(map[string]string{}, caseSensitivity)
+	files := newMemFS(caseSensitivity)
 	var projectFiles vfs.FS = files
 	if options.WrapFS != nil {
 		projectFiles = options.WrapFS(projectFiles)
