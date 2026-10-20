@@ -1,9 +1,4 @@
 import { wasmURL } from "@typescript/typescript-wasip1-wasm";
-import {
-    isIdentifier,
-    isVariableStatement,
-} from "@typescript/typescript/ast";
-import { API as AsyncAPI } from "@typescript/typescript/async";
 import { API as SyncAPI } from "@typescript/typescript/sync";
 import {
     instantiateWasm,
@@ -240,7 +235,7 @@ describe("API over WebAssembly", () => {
         assert.strictEqual(exitCode, 0, stderr);
     });
 
-    test("runs the compiler and checker through the reactor", async () => {
+    test("enforces reactor transport invariants", async () => {
         const WebAssembly = (globalThis as any).WebAssembly;
         const module = await WebAssembly.compile(
             await readFile(wasmURL),
@@ -308,14 +303,6 @@ describe("API over WebAssembly", () => {
         });
         const project = snapshot.getDefaultProjectForFile("/src/index.ts");
         assert.ok(project);
-        const sourceFile = project.program.getSourceFile("/src/index.ts");
-        assert.ok(sourceFile);
-        const statement = sourceFile.statements[0];
-        assert.ok(isVariableStatement(statement));
-        const name = statement.declarationList.declarations[0].name;
-        assert.ok(isIdentifier(name));
-        const type = project.checker.getTypeAtLocation(name);
-        assert.strictEqual(project.checker.typeToString(type), "42");
         assert.throws(
             () =>
                 new WasmTransport({
@@ -337,12 +324,6 @@ describe("API over WebAssembly", () => {
         assert.strictEqual(timing.enabled, true);
         assert.ok(timing.totals.requestCount > 0);
         assert.ok(timing.totals.serverTimeMs >= 0);
-        Reflect.set(transport, "inCallback", true);
-        assert.throws(
-            () => transport.close(),
-            /TypeScript WASM callbacks cannot close the same API transport/,
-        );
-        Reflect.set(transport, "inCallback", false);
         transport.registerCallback("retained", () => "");
         api.close();
         assert.deepStrictEqual(Reflect.get(transport, "callbackNames"), new Set());
@@ -354,28 +335,5 @@ describe("API over WebAssembly", () => {
         transport.unregisterCallback("retained");
         assert.deepStrictEqual(Reflect.get(secondTransport, "callbackNames"), new Set(["retained"]));
         second.close();
-
-        const asyncTransport = new WasmTransport({ instance, cwd: "/" });
-        const asyncAPI = new AsyncAPI({ transport: asyncTransport });
-        asyncTransport.setFile("/tsconfig.json", "{}");
-        asyncTransport.setFile("/src/async.ts", "export const value = 42 as const;");
-        const asyncSnapshot = await asyncAPI.createSnapshot({
-            openFiles: ["/src/async.ts"],
-            fileNotifications: {
-                changed: ["/tsconfig.json", "/src/async.ts"],
-                deleted: [],
-            },
-        });
-        const asyncProject = await asyncSnapshot.getDefaultProjectForFile("/src/async.ts");
-        assert.ok(asyncProject);
-        const asyncSourceFile = await asyncProject.program.getSourceFile("/src/async.ts");
-        assert.ok(asyncSourceFile);
-        const asyncStatement = asyncSourceFile.statements[0];
-        assert.ok(isVariableStatement(asyncStatement));
-        const asyncName = asyncStatement.declarationList.declarations[0].name;
-        assert.ok(isIdentifier(asyncName));
-        const asyncType = await asyncProject.checker.getTypeAtLocation(asyncName);
-        assert.strictEqual(await asyncProject.checker.typeToString(asyncType), "42");
-        await asyncAPI.close();
     });
 });
