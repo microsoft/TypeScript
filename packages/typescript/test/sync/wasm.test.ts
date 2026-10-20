@@ -320,6 +320,17 @@ describe("API over WebAssembly", () => {
         assert.strictEqual(emittedFiles.get("/src/index.js"), "export const value = 42;\n");
         assert.strictEqual(transport.requestSync("echo", "after callback"), "after callback");
 
+        const largeResolution = { resolvedFileName: "/large.d.ts", padding: "x".repeat(100_000) };
+        let resolverCalls = 0;
+        const resolver = api.createModuleResolver({}, {
+            resolveModuleName: () => {
+                resolverCalls++;
+                return largeResolution;
+            },
+        });
+        assert.strictEqual(resolver.resolveModuleName("large", "/src", undefined).resolvedModule?.resolvedFileName, "/large.d.ts");
+        assert.strictEqual(resolverCalls, 1);
+
         const timing = api.getTimingInfo();
         assert.strictEqual(timing.enabled, true);
         assert.ok(timing.totals.requestCount > 0);

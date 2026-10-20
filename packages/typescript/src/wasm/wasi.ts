@@ -38,6 +38,7 @@ const errnoSuccess = 0;
 const errnoBadFileDescriptor = 8;
 const errnoInvalidArgument = 28;
 const errnoIo = 29;
+const errnoNoBuffers = 42;
 const errnoNoSys = 52;
 const fileTypeCharacterDevice = 2;
 const eventTypeClock = 0;
@@ -122,6 +123,7 @@ function createWasiHost(options: InstantiateWasmOptions): {
     const decoders = new Map<number, StreamingTextDecoder>();
     const encoder = new TextEncoder();
     const callbacks = new Map<string, (name: string, payload: string) => string>();
+    let pendingCallbackResult: Uint8Array | undefined;
     const closedDescriptors = new Set<number>();
     let fileSystem: WasmFileSystem | undefined;
 
@@ -263,14 +265,29 @@ function createWasiHost(options: InstantiateWasmOptions): {
         const decoder = new TextDecoder();
         const method = decoder.decode(new Uint8Array(memory.buffer, methodPointer, methodLength));
         const payload = decoder.decode(new Uint8Array(memory.buffer, payloadPointer, payloadLength));
+        const pending = pendingCallbackResult;
+        pendingCallbackResult = undefined;
         try {
-            const callback = callbacks.get(method);
-            if (!callback) {
-                throw new Error(`No callback is registered for ${method}`);
+            let result: Uint8Array;
+            if (methodLength === 0) {
+                // An empty method fetches a result that did not fit the previous call's buffer.
+                if (!pending || pending.length > resultCapacity) return errnoInvalidArgument;
+                result = pending;
             }
-            const result = encoder.encode(callback(method, payload));
-            if (result.length > resultCapacity) {
-                throw new Error(`Callback result exceeds ${resultCapacity} bytes`);
+            else {
+                const callback = callbacks.get(method);
+                if (!callback) {
+                    throw new Error(`No callback is registered for ${method}`);
+                }
+                result = encoder.encode(callback(method, payload));
+                if (result.length > resultCapacity) {
+                    pendingCallbackResult = result;
+                    const resultView = new DataView(getMemory().buffer);
+                    resultView.setUint32(bufferPointer + 8, result.length, true);
+                    resultView.setUint32(bufferPointer + 12, 0, true);
+                    resultView.setUint32(writtenPointer, 0, true);
+                    return errnoNoBuffers;
+                }
             }
             const resultMemory = getMemory();
             const resultView = new DataView(resultMemory.buffer);

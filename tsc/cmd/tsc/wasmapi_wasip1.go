@@ -25,8 +25,9 @@ const (
 	hostWriteFileFD    = 0x7fff_fffe
 	hostCallbackFD     = 0x7fff_fffd
 	hostErrorCapacity  = 16 * 1024
-	hostResultCapacity = 16 * 1024 * 1024
+	hostResultCapacity = 64 * 1024
 	errnoBadFileNumber = 8
+	errnoNoBuffers     = 42
 )
 
 var (
@@ -256,37 +257,51 @@ func (hostCallbackConn) Call(_ context.Context, method string, params any) (json
 	if err != nil {
 		return nil, err
 	}
-	methodBytes := []byte(method)
-	bufferSize := 16 + len(methodBytes) + len(paramsBytes) + hostResultCapacity + hostErrorCapacity
+	bufferSize := 16 + len(method) + len(paramsBytes) + hostResultCapacity + hostErrorCapacity
 	if cap(hostCallbackBuffer) < bufferSize {
 		hostCallbackBuffer = make([]byte, bufferSize)
 	}
-	buffer := hostCallbackBuffer[:bufferSize]
-	binary.LittleEndian.PutUint32(buffer, uint32(len(methodBytes)))
-	binary.LittleEndian.PutUint32(buffer[4:], uint32(len(paramsBytes)))
-	binary.LittleEndian.PutUint32(buffer[8:], hostResultCapacity)
+	result, errno, err := callHost(hostCallbackBuffer[:bufferSize], method, paramsBytes, hostResultCapacity)
+	if errno == errnoNoBuffers {
+		// The host retains a result that did not fit; fetch it into a buffer of
+		// the reported size rather than invoking the callback again.
+		size := int(binary.LittleEndian.Uint32(hostCallbackBuffer[8:]))
+		result, _, err = callHost(make([]byte, 16+size+hostErrorCapacity), "", nil, size)
+	}
+	if err != nil {
+		return nil, err
+	}
+	return json.Value(result), nil
+}
+
+func callHost(buffer []byte, method string, params []byte, resultCapacity int) ([]byte, uint32, error) {
+	binary.LittleEndian.PutUint32(buffer, uint32(len(method)))
+	binary.LittleEndian.PutUint32(buffer[4:], uint32(len(params)))
+	binary.LittleEndian.PutUint32(buffer[8:], uint32(resultCapacity))
 	binary.LittleEndian.PutUint32(buffer[12:], hostErrorCapacity)
-	copy(buffer[16:], methodBytes)
-	copy(buffer[16+len(methodBytes):], paramsBytes)
+	copy(buffer[16:], method)
+	copy(buffer[16+len(method):], params)
 
 	iov := [2]uint32{bytesPointer(buffer), uint32(len(buffer))}
 	var written uint32
 	errno := hostFDWrite(hostCallbackFD, unsafe.Pointer(&iov[0]), 1, &written)
-	if errno == errnoBadFileNumber {
-		return nil, errors.New("host callbacks are not supported by this WebAssembly host")
+	switch errno {
+	case 0:
+		resultStart := 16 + len(method) + len(params)
+		resultLength := min(int(binary.LittleEndian.Uint32(buffer[8:])), resultCapacity)
+		return buffer[resultStart : resultStart+resultLength], 0, nil
+	case errnoNoBuffers:
+		return nil, errno, nil
+	case errnoBadFileNumber:
+		return nil, errno, errors.New("host callbacks are not supported by this WebAssembly host")
 	}
-	resultLength := min(binary.LittleEndian.Uint32(buffer[8:]), uint32(hostResultCapacity))
-	errorLength := min(binary.LittleEndian.Uint32(buffer[12:]), uint32(hostErrorCapacity))
-	resultStart := 16 + len(methodBytes) + len(paramsBytes)
-	if errno != 0 {
-		errorStart := resultStart + hostResultCapacity
-		message := string(buffer[errorStart : errorStart+int(errorLength)])
-		if message == "" {
-			message = "host callback failed"
-		}
-		return nil, errors.New(message)
+	errorStart := 16 + len(method) + len(params) + resultCapacity
+	errorLength := min(int(binary.LittleEndian.Uint32(buffer[12:])), hostErrorCapacity)
+	message := string(buffer[errorStart : errorStart+errorLength])
+	if message == "" {
+		message = "host callback failed"
 	}
-	return json.Value(buffer[resultStart : resultStart+int(resultLength)]), nil
+	return nil, errno, errors.New(message)
 }
 
 func (hostCallbackConn) Notify(context.Context, string, any) error {
