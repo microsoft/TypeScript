@@ -102,9 +102,13 @@ test("the CLI falls back to the WASI package", {
         });
         assert.match(output, /^Version \d+\.\d+\.\d+/);
 
-        await writeFile(responseFile, `--noEmit\n"${sourceFile}"\n`);
+        const temporaryDirectory = path.join(directory, "tmp dir");
+        await mkdir(temporaryDirectory);
+        await writeFile(responseFile, "@inner.rsp\n");
+        await writeFile(path.join(directory, "inner.rsp"), `--noEmit\n"${sourceFile}"\n`);
         execFileSync(process.execPath, [path.join(libraryDirectory, "tsc.js"), `@${responseFile}`], {
             cwd: directory,
+            env: { ...process.env, TMPDIR: temporaryDirectory, TEMP: temporaryDirectory, TMP: temporaryDirectory },
             stdio: "inherit",
         });
     }

@@ -137,10 +137,11 @@ async function getWasiPaths(wasmPath) {
         if (tokens) {
             const replacements = [];
             for (const token of tokens) {
-                replacements.push({
-                    ...token,
-                    value: await translateArgument(token.value),
-                });
+                let value = await translateArgument(token.value);
+                if (!token.quoted && /\s/.test(value)) {
+                    value = `"${value}"`;
+                }
+                replacements.push({ ...token, value });
             }
             for (let i = replacements.length - 1; i >= 0; i--) {
                 const replacement = replacements[i];
@@ -192,7 +193,7 @@ function parseResponseFile(contents) {
             if (position >= contents.length) {
                 return undefined;
             }
-            tokens.push({ start, end: position, value: contents.slice(start, position) });
+            tokens.push({ start, end: position, value: contents.slice(start, position), quoted: true });
             position++;
         }
         else {
@@ -200,7 +201,7 @@ function parseResponseFile(contents) {
             while (position < contents.length && contents.charCodeAt(position) > 32) {
                 position++;
             }
-            tokens.push({ start, end: position, value: contents.slice(start, position) });
+            tokens.push({ start, end: position, value: contents.slice(start, position), quoted: false });
         }
     }
     return tokens;
