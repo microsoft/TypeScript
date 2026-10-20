@@ -27,10 +27,12 @@ describe("web WASI mount points", () => {
         );
     });
 
-    test("maps virtual workspaces to the path used by DocumentUri.FileName", () => {
-        assert.strictEqual(
-            uriToWasmMountPoint({ scheme: "vscode-test-web", authority: "mount", path: "/" }),
-            "/^/vscode-test-web/mount/",
-        );
+    test("maps virtual workspaces to the paths the server derives from document URIs", () => {
+        const virtual = (text: string) => uriToWasmMountPoint({ scheme: text.slice(0, text.indexOf(":")), authority: "", path: "", toString: () => text });
+        assert.strictEqual(virtual("vscode-test-web://mount/"), "/^/~ts-uri~/vscode-test-web/mount");
+        assert.strictEqual(virtual("vscode-vfs://github/microsoft/TypeScript"), "/^/~ts-uri~/vscode-vfs/github/microsoft/TypeScript");
+        assert.strictEqual(virtual("memfs:/work/a%5Cb"), "/^/~ts-uri~/memfs/ts-nul-authority/~ts-uri-escape~~/work/a%5Cb");
+        assert.strictEqual(virtual("memfs:/work/a\\b/"), "/^/~ts-uri~/memfs/ts-nul-authority/~ts-uri-escape~~/work/~ts-uri-escape~615c62~");
+        assert.strictEqual(virtual("memfs:///x"), "/^/~ts-uri~/memfs/~ts-uri-escape~~/x");
     });
 });
