@@ -15,7 +15,7 @@ function shift(bitmap: number) {
 >index++ : number
 >index : number
 >bitmap >>>= 1 : number
->bitmap : number
+>bitmap : number & not 0
 >1 : 1
 }
 

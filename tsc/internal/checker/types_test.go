@@ -72,6 +72,7 @@ func TestTypeCasts(t *testing.T) {
 		{typeKindTemplateLiteral, &TemplateLiteralType{}, func(t *Type) any { return t.AsTemplateLiteralType() }},
 		{typeKindStringMapping, &StringMappingType{}, func(t *Type) any { return t.AsStringMappingType() }},
 		{typeKindSubstitution, &SubstitutionType{}, func(t *Type) any { return t.AsSubstitutionType() }},
+		{typeKindNegated, &NegatedType{}, func(t *Type) any { return t.AsNegatedType() }},
 		{typeKindConditional, &ConditionalType{}, func(t *Type) any { return t.AsConditionalType() }},
 		{typeKindObject, &ObjectType{}, func(t *Type) any { return t.AsObjectType() }},
 		{typeKindTypeReference, &TypeReference{}, func(t *Type) any { return t.AsTypeReference() }},
@@ -99,6 +100,7 @@ func TestTypeCasts(t *testing.T) {
 		typ.objectFlags = ObjectFlagsReference
 		assert.Equal(t, test.cast(typ), any(test.data))
 		assert.Assert(t, didPanic(func() { typ.AsLiteralType() }) == (test.kind != typeKindLiteral))
+		assert.Assert(t, didPanic(func() { typ.AsNegatedType() }) == (test.kind != typeKindNegated))
 	}
 }
 
@@ -110,7 +112,7 @@ func didPanic(f func()) (panicked bool) {
 
 func TestTypeHeaderSize(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, unsafe.Sizeof(Type{}), 16+3*unsafe.Sizeof((*Checker)(nil)))
+	assert.Equal(t, unsafe.Sizeof(Type{}), 16+4*unsafe.Sizeof((*Checker)(nil)))
 }
 
 func TestKeyBuilder(t *testing.T) {

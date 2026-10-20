@@ -1,0 +1,112 @@
+//// [tests/cases/compiler/negatedPartialTypeGuards.ts] ////
+
+=== negatedPartialTypeGuards.ts ===
+interface Reference {
+    target: object;
+>target : object
+}
+
+interface TupleReference extends Reference {
+    target: { elements: number[] };
+>target : { elements: number[]; }
+>elements : number[]
+}
+
+declare function isArrayReference(value: object): value is Reference;
+>isArrayReference : (value: object) => value is Reference
+>value : object
+
+declare function isTupleReference(value: object): value is TupleReference;
+>isTupleReference : (value: object) => value is TupleReference
+>value : object
+
+declare function acceptsNotReference(value: not Reference): void;
+>acceptsNotReference : (value: not Reference) => void
+>value : not Reference
+
+function checkReference(value: object) {
+>checkReference : (value: object) => void
+>value : object
+
+    if (isArrayReference(value)) {
+>isArrayReference(value) : boolean
+>isArrayReference : (value: object) => value is Reference
+>value : object
+
+        return;
+    }
+    acceptsNotReference(value);
+>acceptsNotReference(value) : void
+>acceptsNotReference : (value: not Reference) => void
+>value : object
+
+    if (isTupleReference(value)) {
+>isTupleReference(value) : boolean
+>isTupleReference : (value: object) => value is TupleReference
+>value : object
+
+        value.target.elements;
+>value.target.elements : number[]
+>value.target : { elements: number[]; }
+>value : TupleReference
+>target : { elements: number[]; }
+>elements : number[]
+    }
+}
+
+function checkProperty(container: { value: object }) {
+>checkProperty : (container: { value: object; }) => void
+>container : { value: object; }
+>value : object
+
+    if (!isArrayReference(container.value) && isTupleReference(container.value)) {
+>!isArrayReference(container.value) && isTupleReference(container.value) : boolean
+>!isArrayReference(container.value) : boolean
+>isArrayReference(container.value) : boolean
+>isArrayReference : (value: object) => value is Reference
+>container.value : object
+>container : { value: object; }
+>value : object
+>isTupleReference(container.value) : boolean
+>isTupleReference : (value: object) => value is TupleReference
+>container.value : object
+>container : { value: object; }
+>value : object
+
+        container.value.target.elements;
+>container.value.target.elements : number[]
+>container.value.target : { elements: number[]; }
+>container.value : TupleReference
+>container : { value: object; }
+>value : TupleReference
+>target : { elements: number[]; }
+>elements : number[]
+    }
+}
+
+declare function isSmallNumber(value: unknown): value is number;
+>isSmallNumber : (value: unknown) => value is number
+>value : unknown
+
+function checkUnknown(value: unknown) {
+>checkUnknown : (value: unknown) => void
+>value : unknown
+
+    if (!isSmallNumber(value) && typeof value === "number") {
+>!isSmallNumber(value) && typeof value === "number" : boolean
+>!isSmallNumber(value) : boolean
+>isSmallNumber(value) : boolean
+>isSmallNumber : (value: unknown) => value is number
+>value : unknown
+>typeof value === "number" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"number" : "number"
+
+        value.toFixed();
+>value.toFixed() : string
+>value.toFixed : (fractionDigits?: number) => string
+>value : number
+>toFixed : (fractionDigits?: number) => string
+    }
+}

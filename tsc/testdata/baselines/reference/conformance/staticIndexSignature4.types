@@ -60,7 +60,7 @@ if (v === 0) {
 
 } else if (v === 1) {
 >v === 1 : boolean
->v : number
+>v : number & not 0
 >1 : 1
 
     D.a = B.a
@@ -83,7 +83,7 @@ if (v === 0) {
 
 } else if (v === 2) {
 >v === 2 : boolean
->v : number
+>v : number & not 0 & not 1
 >2 : 2
 
     B.a = i.a
@@ -124,7 +124,7 @@ if (v === 0) {
 
 } else if (v === 3) {
 >v === 3 : boolean
->v : number
+>v : number & not 0 & not 1 & not 2
 >3 : 3
 
     i.a = B.a
@@ -147,7 +147,7 @@ if (v === 0) {
 
 } else if (v === 4) {
 >v === 4 : boolean
->v : number
+>v : number & not 0 & not 1 & not 2 & not 3
 >4 : 4
 
     i.a = D.a

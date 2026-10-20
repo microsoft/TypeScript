@@ -1,0 +1,63 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInPatternLiteralsAndIndexSignatures.ts] ////
+
+=== negatedTypesInPatternLiteralsAndIndexSignatures.ts ===
+// Combination: negated types with BOTH pattern literal types and index signatures.
+
+// Index signature whose key is a template literal containing a negated placeholder.
+type TemplateKey = {
+>TemplateKey : Symbol(TemplateKey, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 0, 0))
+
+    [idx: `foo${string & not "bar"}`]: number;
+>idx : Symbol(idx, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 4, 5))
+
+};
+
+declare let templateKey: TemplateKey;
+>templateKey : Symbol(templateKey, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 7, 11))
+>TemplateKey : Symbol(TemplateKey, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 0, 0))
+
+templateKey["foobaz"] = 1; // matches pattern
+>templateKey : Symbol(templateKey, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 7, 11))
+
+templateKey["foobar"] = 1; // excluded by negation
+>templateKey : Symbol(templateKey, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 7, 11))
+
+templateKey["baz"] = 1;    // does not match pattern
+>templateKey : Symbol(templateKey, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 7, 11))
+
+// Index signature whose key is a bare negated template literal.
+type NotTemplateKey = {
+>NotTemplateKey : Symbol(NotTemplateKey, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 10, 23))
+
+    [idx: not `foo${string}`]: number;
+>idx : Symbol(idx, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 14, 5))
+
+};
+
+// Mapped type over a template literal key type that uses a negated placeholder.
+type MappedTemplate = {
+>MappedTemplate : Symbol(MappedTemplate, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 15, 2))
+
+    [k in `foo${string & not "bar"}`]: number;
+>k : Symbol(k, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 19, 5))
+
+};
+
+// Generic index signature combination.
+type WrapKey<T extends string> = {
+>WrapKey : Symbol(WrapKey, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 20, 2))
+>T : Symbol(T, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 23, 13))
+
+    [idx: `foo${T & not "bar"}`]: number;
+>idx : Symbol(idx, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 24, 5))
+>T : Symbol(T, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 23, 13))
+
+};
+type WrapKeyString = WrapKey<string>;
+>WrapKeyString : Symbol(WrapKeyString, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 25, 2))
+>WrapKey : Symbol(WrapKey, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 20, 2))
+
+type WrapKeyLiteral = WrapKey<"baz">;
+>WrapKeyLiteral : Symbol(WrapKeyLiteral, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 26, 37))
+>WrapKey : Symbol(WrapKey, Decl(negatedTypesInPatternLiteralsAndIndexSignatures.ts, 20, 2))
+

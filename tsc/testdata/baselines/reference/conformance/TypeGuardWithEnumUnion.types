@@ -87,11 +87,11 @@ function f2(x: Color | string | string[]) {
     }
     else {
         var b = x;
->b : string[] | Color
->x : string[] | Color
+>b : Color | string[]
+>x : Color | string[]
 
         var b: Color | string[];
->b : string[] | Color
+>b : Color | string[]
     }
 }
 

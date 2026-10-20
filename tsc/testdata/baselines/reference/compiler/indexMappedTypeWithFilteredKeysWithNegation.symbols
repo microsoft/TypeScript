@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/indexMappedTypeWithFilteredKeysWithNegation.ts] ////
+
+=== indexMappedTypeWithFilteredKeysWithNegation.ts ===
+type ExcludeKey<T, TKey> = {
+>ExcludeKey : Symbol(ExcludeKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 0, 0))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 0, 16))
+>TKey : Symbol(TKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 0, 18))
+
+    [K in keyof T as K extends TKey ? never : K]: T[K]
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 1, 5))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 0, 16))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 1, 5))
+>TKey : Symbol(TKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 0, 18))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 1, 5))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 0, 16))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 1, 5))
+
+};
+
+interface Test {
+>Test : Symbol(Test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 2, 2))
+
+    a: string;
+>a : Symbol(Test.a, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 4, 16))
+
+    b: number;
+>b : Symbol(Test.b, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 5, 14))
+
+    c: boolean;
+>c : Symbol(Test.c, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 6, 14))
+}
+
+declare const test: ExcludeKey<Test, "b">; 
+>test : Symbol(test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 10, 13))
+>ExcludeKey : Symbol(ExcludeKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 0, 0))
+>Test : Symbol(Test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 2, 2))
+
+declare var possibleKey: string & keyof Test & not "b";
+>possibleKey : Symbol(possibleKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 11, 11))
+>Test : Symbol(Test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 2, 2))
+
+test[possibleKey];
+>test : Symbol(test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 10, 13))
+>possibleKey : Symbol(possibleKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 11, 11))
+
+function f<T extends Test>(test: ExcludeKey<T, "b">, possibleKey: string & keyof T & not "b") {
+>f : Symbol(f, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 13, 18))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 15, 11))
+>Test : Symbol(Test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 2, 2))
+>test : Symbol(test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 15, 27))
+>ExcludeKey : Symbol(ExcludeKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 0, 0))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 15, 11))
+>possibleKey : Symbol(possibleKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 15, 52))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 15, 11))
+
+    test[possibleKey];
+>test : Symbol(test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 15, 27))
+>possibleKey : Symbol(possibleKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 15, 52))
+}
+

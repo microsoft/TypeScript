@@ -1,0 +1,77 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingInOperator.ts] ////
+
+=== negatedNarrowingInOperator.ts ===
+// The `in` operator narrows by presence/absence of a property. It uses type facts and constituent
+// filtering (not fresh `not` negations), so the else branch keeps the property-absent constituents.
+
+declare function wantsNotHasA(x: not { a: unknown }): void;
+>wantsNotHasA : (x: not { a: unknown; }) => void
+>x : not { a: unknown; }
+>a : unknown
+
+interface WithA {
+    a: number;
+>a : number
+}
+interface WithB {
+    b: string;
+>b : string
+}
+
+declare const a: WithA | WithB;
+>a : WithA | WithB
+
+if ("a" in a) {
+>"a" in a : boolean
+>"a" : "a"
+>a : WithA | WithB
+
+    a; // WithA
+>a : WithA
+
+} else {
+    a; // WithB
+>a : WithB
+}
+
+// `in` on a `{}` base does not synthesize a negation; the true branch records the tested member.
+declare const b: {};
+>b : {}
+
+if ("a" in b) {
+>"a" in b : boolean
+>"a" : "a"
+>b : {}
+
+    b; // Record<"a", unknown>
+>b : Record<"a", unknown>
+
+} else {
+    b; // {}
+>b : {}
+}
+
+// Optional property discrimination.
+interface Maybe {
+    kind: "maybe";
+>kind : "maybe"
+
+    payload?: string;
+>payload : string | undefined
+}
+declare const c: Maybe;
+>c : Maybe
+
+if ("payload" in c) {
+>"payload" in c : boolean
+>"payload" : "payload"
+>c : Maybe
+
+    c; // Maybe
+>c : Maybe
+
+} else {
+    c; // Maybe
+>c : Maybe
+}
+

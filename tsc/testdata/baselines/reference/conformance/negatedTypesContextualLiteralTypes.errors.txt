@@ -1,0 +1,74 @@
+negatedTypesContextualLiteralTypes.ts(4,52): error TS2322: Type 'number' is not assignable to type 'not 0'.
+negatedTypesContextualLiteralTypes.ts(7,61): error TS2322: Type 'string' is not assignable to type 'not "reserved"'.
+negatedTypesContextualLiteralTypes.ts(10,53): error TS2322: Type 'bigint' is not assignable to type 'not 0n'.
+negatedTypesContextualLiteralTypes.ts(13,57): error TS2322: Type 'boolean' is not assignable to type 'not false'.
+negatedTypesContextualLiteralTypes.ts(16,72): error TS2322: Type 'typeof excludedSymbol' is not assignable to type 'not unique symbol'.
+negatedTypesContextualLiteralTypes.ts(19,57): error TS2322: Type 'number' is not assignable to type 'not 0 & not 1'.
+  Type 'number' is not assignable to type 'not 0'.
+negatedTypesContextualLiteralTypes.ts(22,66): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+negatedTypesContextualLiteralTypes.ts(26,14): error TS2322: Type 'string' is not assignable to type 'not "reserved"'.
+negatedTypesContextualLiteralTypes.ts(26,26): error TS2322: Type 'number' is not assignable to type 'not 0'.
+negatedTypesContextualLiteralTypes.ts(29,35): error TS2322: Type 'number' is not assignable to type 'not 0'.
+
+
+==== negatedTypesContextualLiteralTypes.ts (10 errors) ====
+    declare const excludedSymbol: unique symbol;
+    declare const allowedSymbol: unique symbol;
+    
+    const excludedNumberProperty: { value: not 0 } = { value: 0 };
+                                                       ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'not 0'.
+!!! related TS6500 negatedTypesContextualLiteralTypes.ts:4:33: The expected type comes from property 'value' which is declared here on type '{ value: not 0; }'
+    const allowedNumberProperty: { value: not 0 } = { value: 1 };
+    
+    const excludedStringProperty: { value: not "reserved" } = { value: "reserved" };
+                                                                ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'not "reserved"'.
+!!! related TS6500 negatedTypesContextualLiteralTypes.ts:7:33: The expected type comes from property 'value' which is declared here on type '{ value: not "reserved"; }'
+    const allowedStringProperty: { value: not "reserved" } = { value: "allowed" };
+    
+    const excludedBigIntProperty: { value: not 0n } = { value: 0n };
+                                                        ~~~~~
+!!! error TS2322: Type 'bigint' is not assignable to type 'not 0n'.
+!!! related TS6500 negatedTypesContextualLiteralTypes.ts:10:33: The expected type comes from property 'value' which is declared here on type '{ value: not 0n; }'
+    const allowedBigIntProperty: { value: not 0n } = { value: 1n };
+    
+    const excludedBooleanProperty: { value: not false } = { value: false };
+                                                            ~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'not false'.
+!!! related TS6500 negatedTypesContextualLiteralTypes.ts:13:34: The expected type comes from property 'value' which is declared here on type '{ value: not false; }'
+    const allowedBooleanProperty: { value: not false } = { value: true };
+    
+    const excludedSymbolProperty: { value: not typeof excludedSymbol } = { value: excludedSymbol };
+                                                                           ~~~~~
+!!! error TS2322: Type 'typeof excludedSymbol' is not assignable to type 'not unique symbol'.
+!!! related TS6500 negatedTypesContextualLiteralTypes.ts:16:33: The expected type comes from property 'value' which is declared here on type '{ value: not unique symbol; }'
+    const allowedSymbolProperty: { value: not typeof excludedSymbol } = { value: allowedSymbol };
+    
+    const excludedUnionProperty: { value: not (0 | 1) } = { value: 0 };
+                                                            ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'not 0 & not 1'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+!!! related TS6500 negatedTypesContextualLiteralTypes.ts:19:32: The expected type comes from property 'value' which is declared here on type '{ value: not 0 & not 1; }'
+    const allowedUnionProperty: { value: not (0 | 1) } = { value: 2 };
+    
+    const excludedIntersectedProperty: { value: number & not 0 } = { value: 0 };
+                                                                     ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+!!! related TS6500 negatedTypesContextualLiteralTypes.ts:22:38: The expected type comes from property 'value' which is declared here on type '{ value: number & not 0; }'
+    const allowedIntersectedProperty: { value: number & not 0 } = { value: 1 };
+    
+    declare function acceptTuple(value: [not "reserved", not 0]): void;
+    acceptTuple(["reserved", 0]);
+                 ~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'not "reserved"'.
+                             ~
+!!! error TS2322: Type 'number' is not assignable to type 'not 0'.
+    acceptTuple(["allowed", 1]);
+    
+    const excludedArray: (not 0)[] = [0];
+                                      ~
+!!! error TS2322: Type 'number' is not assignable to type 'not 0'.
+    const allowedArray: (not 0)[] = [1];

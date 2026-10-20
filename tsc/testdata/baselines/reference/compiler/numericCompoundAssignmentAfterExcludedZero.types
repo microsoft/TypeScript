@@ -13,7 +13,7 @@ function divide(value: number, divisor: number) {
 
     value /= divisor;
 >value /= divisor : number
->value : number
+>value : number & not 0
 >divisor : number
 }
 

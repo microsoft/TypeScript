@@ -28,7 +28,7 @@ class Decoder {
 >this.remaining : number
 >this : this
 >remaining : number
->size : number
+>size : number & not 0
     }
 }
 

@@ -603,6 +603,8 @@ func getNodeCommonData(node *ast.Node) uint32 {
 			operatorIdx = 1
 		case ast.KindUniqueKeyword:
 			operatorIdx = 2
+		case ast.KindNotKeyword:
+			operatorIdx = 3
 		}
 		return operatorIdx << 24
 	case ast.KindImportAttributes:

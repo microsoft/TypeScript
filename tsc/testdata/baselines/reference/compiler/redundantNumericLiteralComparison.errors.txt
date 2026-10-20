@@ -1,0 +1,10 @@
+redundantNumericLiteralComparison.ts(2,34): error TS2367: This comparison appears to be unintentional because the types 'number & not -1' and '-1' have no overlap.
+
+
+==== redundantNumericLiteralComparison.ts (1 errors) ====
+    function shouldRetry(retryCount: number, currentCount: number) {
+        return retryCount === -1 || (retryCount !== -1 && currentCount <= retryCount);
+                                     ~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number & not -1' and '-1' have no overlap.
+    }
+    

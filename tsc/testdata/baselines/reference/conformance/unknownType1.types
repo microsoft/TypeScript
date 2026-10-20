@@ -202,7 +202,7 @@ function f20(x: unknown) {
 >"string" : "string"
 >typeof x === "number" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : unknown
+>x : not string
 >"number" : "number"
 
         x;  // string | number
