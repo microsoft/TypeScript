@@ -320,8 +320,10 @@ describe("async transport", () => {
     });
 
     test("rejects timing requests when closed", async () => {
+        const methods: string[] = [];
         const client = new TransportClient({
-            request() {
+            request(method) {
+                methods.push(method);
                 return new Promise(() => {});
             },
             requestBinary() {
@@ -336,6 +338,7 @@ describe("async transport", () => {
         await client.close();
         await assert.rejects(timing, /Client is closed/);
         await assert.rejects(reset, /Client is closed/);
+        assert.deepStrictEqual(methods, []);
     });
 
     test("does not queue requests after closing during connect", async () => {

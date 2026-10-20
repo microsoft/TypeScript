@@ -295,7 +295,10 @@ export class TransportClient {
         if (this.closed) return Promise.reject(new Error("Client is closed"));
         return new Promise<T>((resolve, reject) => {
             this.pendingOperations.add(reject);
-            Promise.resolve().then(operation).then(
+            Promise.resolve().then(() => {
+                if (this.closed) throw new Error("Client is closed");
+                return operation();
+            }).then(
                 value => {
                     this.pendingOperations.delete(reject);
                     resolve(value);
