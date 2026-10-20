@@ -86,7 +86,8 @@ function toWorkspaceUri(uri: vscode.Uri): vscode.Uri {
 
 class WasmMessageReader extends AbstractMessageReader {
     private readonly decoder = new TextDecoder();
-    private buffer = new Uint8Array();
+    private buffer = new Uint8Array(4096);
+    private length = 0;
     private callback: DataCallback | undefined;
     private closed = false;
     private readonly dataSubscription: vscode.Disposable;
@@ -114,31 +115,40 @@ class WasmMessageReader extends AbstractMessageReader {
     }
 
     private accept(chunk: Uint8Array): void {
-        const next = new Uint8Array(this.buffer.length + chunk.length);
-        next.set(this.buffer);
-        next.set(chunk, this.buffer.length);
-        this.buffer = next;
+        if (this.length + chunk.length > this.buffer.length) {
+            const next = new Uint8Array(Math.max(this.buffer.length * 2, this.length + chunk.length));
+            next.set(this.buffer.subarray(0, this.length));
+            this.buffer = next;
+        }
+        this.buffer.set(chunk, this.length);
+        this.length += chunk.length;
 
+        let offset = 0;
         while (true) {
-            const headerEnd = findHeaderEnd(this.buffer);
-            if (headerEnd < 0) return;
-            const header = this.decoder.decode(this.buffer.subarray(0, headerEnd));
+            const pending = this.buffer.subarray(offset, this.length);
+            const headerEnd = findHeaderEnd(pending);
+            if (headerEnd < 0) break;
+            const header = this.decoder.decode(pending.subarray(0, headerEnd));
             const match = /(?:^|\r\n)Content-Length: (\d+)(?:\r\n|$)/i.exec(header);
             if (!match) {
                 this.fireError(new Error(`Language server response is missing Content-Length: ${header}`));
-                return;
+                break;
             }
             const contentLength = Number(match[1]);
             const bodyStart = headerEnd + 4;
-            if (this.buffer.length < bodyStart + contentLength) return;
-            const body = this.decoder.decode(this.buffer.subarray(bodyStart, bodyStart + contentLength));
-            this.buffer = this.buffer.slice(bodyStart + contentLength);
+            if (pending.length < bodyStart + contentLength) break;
+            const body = this.decoder.decode(pending.subarray(bodyStart, bodyStart + contentLength));
+            offset += bodyStart + contentLength;
             try {
                 this.callback?.(JSON.parse(body));
             }
             catch (error) {
                 this.fireError(error);
             }
+        }
+        if (offset > 0) {
+            this.buffer.copyWithin(0, offset, this.length);
+            this.length -= offset;
         }
     }
 }
