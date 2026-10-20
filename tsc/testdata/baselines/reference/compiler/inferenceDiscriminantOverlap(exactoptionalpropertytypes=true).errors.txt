@@ -35,10 +35,6 @@ inferenceDiscriminantOverlap.ts(39,5): error TS2375: Type '{ tag?: "a"; value: 1
   Type '{ tag?: "a"; value: 1 | 2; }' is not assignable to type '{ tag?: "b"; value: 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
     Types of property 'tag' are incompatible.
       Type '"a"' is not assignable to type '"b"'.
-inferenceDiscriminantOverlap.ts(55,5): error TS2322: Type '{ kind: "a"; value: readonly []; }' is not assignable to type '{ kind: string; value: string[]; } | { kind: "a"; value: number; }'.
-  Type '{ kind: "a"; value: readonly []; }' is not assignable to type '{ kind: "a"; value: number; }'.
-    Types of property 'value' are incompatible.
-      Type 'readonly []' is not assignable to type 'number'.
 inferenceDiscriminantOverlap.ts(61,5): error TS2375: Type '{ kind: "a" | undefined; value: []; }' is not assignable to type '{ kind?: "a"; value: string[]; } | { kind: "a"; value: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
   Type '{ kind: "a" | undefined; value: []; }' is not assignable to type '{ kind: "a"; value: number; }'.
     Types of property 'kind' are incompatible.
@@ -46,7 +42,7 @@ inferenceDiscriminantOverlap.ts(61,5): error TS2375: Type '{ kind: "a" | undefin
         Type 'undefined' is not assignable to type '"a"'.
 
 
-==== inferenceDiscriminantOverlap.ts (11 errors) ====
+==== inferenceDiscriminantOverlap.ts (10 errors) ====
     declare const validOptionalSource: { tag: "a"; value: 1 } | { tag?: "a"; value: 2 };
     declare const mixedOptionalSource: { tag: "a"; value: 1 } | { tag?: "b"; value: 2 };
     declare const matchingOptionalSource: { tag: "a"; value: 1 } | { tag?: "a"; value: 2 } | { tag: "b"; value: 3 };
@@ -148,11 +144,6 @@ inferenceDiscriminantOverlap.ts(61,5): error TS2375: Type '{ kind: "a" | undefin
     
     export function broadContext(): { kind: string; value: string[] } | { kind: "a"; value: number } {
         return makeTagged([]);
-        ~~~~~~
-!!! error TS2322: Type '{ kind: "a"; value: readonly []; }' is not assignable to type '{ kind: string; value: string[]; } | { kind: "a"; value: number; }'.
-!!! error TS2322:   Type '{ kind: "a"; value: readonly []; }' is not assignable to type '{ kind: "a"; value: number; }'.
-!!! error TS2322:     Types of property 'value' are incompatible.
-!!! error TS2322:       Type 'readonly []' is not assignable to type 'number'.
     }
     export function partialTagContext(): { kind: "a" | "b"; value: string[] } | { kind: "a"; value: number } {
         return makeTagged([]);

@@ -132,6 +132,13 @@ func (c *Checker) compareTypesAssignableSimple(source *Type, target *Type) Terna
 	return TernaryFalse
 }
 
+func (c *Checker) compareTypesComparableSimple(source *Type, target *Type) Ternary {
+	if c.isTypeRelatedTo(source, target, c.comparableRelation) {
+		return TernaryTrue
+	}
+	return TernaryFalse
+}
+
 func (c *Checker) compareTypesAssignableWorker(source *Type, target *Type, reportErrors bool) Ternary {
 	if c.isTypeRelatedTo(source, target, c.assignableRelation) {
 		return TernaryTrue

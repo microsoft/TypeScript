@@ -252,8 +252,8 @@ const r3 = pick(u1);
 >u1 : { kind: "b"; value: number; } | { kind: "a"; value: string; }
 
 const r4 = pick(u2);
->r4 : string
->pick(u2) : string
+>r4 : number
+>pick(u2) : number
 >pick : <T>(x: { kind: "a"; value: T; }) => T
 >u2 : { kind: string; value: number; } | { kind: "a"; value: string; }
 

@@ -257,7 +257,7 @@ export function broadContext(): { kind: string; value: string[] } | { kind: "a";
 >value : number
 
     return makeTagged([]);
->makeTagged([]) : { kind: "a"; value: readonly []; }
+>makeTagged([]) : { kind: "a"; value: []; }
 >makeTagged : <const T>(value: T) => { kind: "a"; value: T; }
 >[] : []
 }
