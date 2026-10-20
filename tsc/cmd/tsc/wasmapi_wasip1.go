@@ -44,9 +44,12 @@ var (
 )
 
 //go:wasmexport create_session
-func createSession(optionsPtr uint32, optionsLen uint32) (status uint32) {
+func createSession(optionsLen uint32) (status uint32) {
 	if reactor != nil {
 		return fail("session already created")
+	}
+	if !withinRequest(optionsLen, 0) {
+		return fail("invalid session options length: exceeds the request buffer")
 	}
 	defer func() {
 		if recovered := recover(); recovered != nil {
@@ -56,7 +59,7 @@ func createSession(optionsPtr uint32, optionsLen uint32) (status uint32) {
 	}()
 
 	var options wasmreactor.Options
-	if err := json.Unmarshal(readMemory(optionsPtr, optionsLen), &options); err != nil {
+	if err := json.Unmarshal(requestBuffer[:optionsLen], &options); err != nil {
 		return fail(fmt.Sprintf("invalid session options: %v", err))
 	}
 	options.Conn = hostCallbackConn{}
@@ -220,13 +223,6 @@ func setResponse(data []byte) {
 
 func withinRequest(first uint32, second uint32) bool {
 	return first+second >= first && first+second <= uint32(len(requestBuffer))
-}
-
-func readMemory(pointer uint32, length uint32) []byte {
-	if length == 0 {
-		return nil
-	}
-	return unsafe.Slice((*byte)(unsafe.Pointer(uintptr(pointer))), length)
 }
 
 func bytesPointer(bytes []byte) uint32 {

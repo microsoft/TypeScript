@@ -8,7 +8,7 @@ import {
 
 export interface WasmReactorExports {
     memory: { readonly buffer: ArrayBufferLike; };
-    create_session(optionsPointer: number, optionsLength: number): number;
+    create_session(optionsLength: number): number;
     close_session(): void;
     get_request_buffer(size: number): number;
     handle_request(methodLength: number, payloadLength: number): number;
@@ -50,7 +50,6 @@ export class WasmTransport {
 
     private readonly instance: WasmReactorInstance;
     private readonly exports: WasmReactorExports;
-    private requestPointer = 0;
     private closed = false;
     private inCallback = false;
     private readonly callbackNames = new Set<string>();
@@ -64,7 +63,7 @@ export class WasmTransport {
             collectTiming: options.collectTiming,
         }));
         this.writeRequest(sessionOptions);
-        if (this.exports.create_session(this.requestPointer, sessionOptions.length) !== 0) {
+        if (this.exports.create_session(sessionOptions.length) !== 0) {
             throw new Error(`Failed to create TypeScript WASM session: ${this.readResponseText()}`);
         }
         try {
@@ -190,11 +189,11 @@ export class WasmTransport {
 
     private writeRequest(first: Uint8Array, second?: Uint8Array): void {
         const total = first.length + (second?.length ?? 0);
-        this.requestPointer = this.exports.get_request_buffer(total) >>> 0;
+        const requestPointer = this.exports.get_request_buffer(total) >>> 0;
         const memory = new Uint8Array(this.exports.memory.buffer);
-        memory.set(first, this.requestPointer);
+        memory.set(first, requestPointer);
         if (second) {
-            memory.set(second, this.requestPointer + first.length);
+            memory.set(second, requestPointer + first.length);
         }
     }
 
