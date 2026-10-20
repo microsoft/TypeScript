@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
@@ -776,23 +777,108 @@ func (c *Checker) isDeeplyNestedType(t *Type, stack []*Type, maxDepth int) bool 
 		} else {
 			identity := getRecursionIdentityFromTarget(target)
 			count := 0
-			lastTypeId := TypeId(0)
+			lastGeneration := 0
 			for _, t := range stack {
 				if hasMatchingRecursionIdentity(t, identity) {
-					// We only count occurrences with a higher type id than the previous occurrence, since higher
-					// type ids are an indicator of newer instantiations caused by recursion.
-					if t.id >= lastTypeId {
+					// We only count occurrences of a generation at least that of the previous occurrence, since
+					// newer instantiations caused by recursion are built from the previous ones, whereas nested
+					// type arguments are older than the types they are arguments of.
+					generation := c.typeGeneration(t)
+					if generation >= lastGeneration {
 						count++
 						if count >= maxDepth {
 							return true
 						}
 					}
-					lastTypeId = t.id
+					lastGeneration = generation
 				}
 			}
 		}
 	}
 	return false
+}
+
+const (
+	maxTypeGeneration        = 1<<16 - 3
+	typeGenerationInProgress = 1<<16 - 1
+)
+
+// typeGeneration returns one more than the highest generation of the types t
+// was instantiated from, or zero if it was not instantiated from any. A type is
+// created after the types it is instantiated from, so this orders types by
+// creation where the order follows from their structure, and unlike type ids
+// does not depend on the order in which unrelated types were created.
+func (c *Checker) typeGeneration(t *Type) int {
+	debug.Assert(t.generation != typeGenerationInProgress, "types are only built from existing types")
+	if t.generation != 0 {
+		return int(t.generation) - 1
+	}
+	t.generation = typeGenerationInProgress
+	generation := 0
+	switch {
+	case t.flags&TypeFlagsObject != 0:
+		if t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node == nil {
+			generation = c.typesGeneration(t.AsTypeReference().resolvedTypeArguments)
+		} else if m := t.AsObjectType().mapper; m != nil {
+			generation = c.mapperGeneration(m)
+		} else if t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsObjectLiteral != 0 {
+			// Object literals are built from the types of their properties,
+			// except for those resolved lazily, such as accessors.
+			for prop := range t.AsStructuredType().members.Values() {
+				if prop.Flags()&ast.SymbolFlagsTransient == 0 || prop.CheckFlags()&(ast.CheckFlagsInstantiated|ast.CheckFlagsMapped|ast.CheckFlagsReverseMapped|ast.CheckFlagsDeferredType) != 0 {
+					continue
+				}
+				if propType := c.valueSymbolLinks.Get(prop).resolvedType; propType != nil {
+					generation = max(generation, c.typeGeneration(propType)+1)
+				}
+			}
+		}
+	case t.flags&TypeFlagsConditional != 0:
+		if m := t.AsConditionalType().mapper; m != nil {
+			generation = c.mapperGeneration(m)
+		}
+	case t.flags&TypeFlagsIndexedAccess != 0:
+		d := t.AsIndexedAccessType()
+		generation = max(c.typeGeneration(d.objectType), c.typeGeneration(d.indexType)) + 1
+	case t.flags&TypeFlagsUnionOrIntersection != 0, t.flags&TypeFlagsTemplateLiteral != 0:
+		generation = c.typesGeneration(t.Types())
+	case t.flags&TypeFlagsIndex != 0, t.flags&TypeFlagsStringMapping != 0:
+		generation = c.typeGeneration(t.Target()) + 1
+	case t.flags&TypeFlagsSubstitution != 0:
+		d := t.AsSubstitutionType()
+		generation = max(c.typeGeneration(d.baseType), c.typeGeneration(d.constraint)) + 1
+	}
+	generation = min(generation, maxTypeGeneration)
+	t.generation = uint16(generation + 1)
+	return generation
+}
+
+func (c *Checker) typesGeneration(types []*Type) int {
+	generation := -1
+	for _, t := range types {
+		generation = max(generation, c.typeGeneration(t))
+	}
+	return generation + 1
+}
+
+// mapperGeneration returns one more than the highest generation of the types
+// that m maps to, as far as they are known without computing them.
+func (c *Checker) mapperGeneration(m *TypeMapper) int {
+	switch m.kind {
+	case TypeMapperKindSimple:
+		return c.typeGeneration(castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple).target) + 1
+	case TypeMapperKindArray:
+		return c.typesGeneration(castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray).targets)
+	case TypeMapperKindArrayToSingle:
+		return c.typeGeneration(castTypeMapper[ArrayToSingleTypeMapper](m, TypeMapperKindArrayToSingle).target) + 1
+	case TypeMapperKindMerged:
+		d := castTypeMapper[MergedTypeMapper](m, TypeMapperKindMerged)
+		return max(c.mapperGeneration(d.m1), c.mapperGeneration(d.m2))
+	case TypeMapperKindComposite:
+		d := castTypeMapper[CompositeTypeMapper](m, TypeMapperKindComposite)
+		return max(c.mapperGeneration(d.m1), c.mapperGeneration(d.m2))
+	}
+	return 0
 }
 
 func hasMatchingRecursionIdentity(t *Type, identity RecursionId) bool {

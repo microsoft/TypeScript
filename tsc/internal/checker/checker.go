@@ -676,8 +676,16 @@ type Checker struct {
 	resolveNameForSymbolSuggestion              func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
 	tupleTypes                                  map[CacheHashKey]*Type
 	unionTypes                                  map[CacheHashKey]*Type
+	objectLiteralTypes                          map[CacheHashKey]*Type
+	spreadTypes                                 map[CacheHashKey]*Type
+	objectContentTypes                          map[CacheHashKey]*Type
+	spreadSymbols                               map[spreadSymbolKey]*ast.Symbol
+	symbolsWithType                             map[symbolWithTypeKey]*ast.Symbol
+	paddedProperties                            map[symbolWithTypeKey]*ast.Symbol
+	bindingPatternTypes                         map[CacheHashKey]*Type
 	unionOfUnionTypes                           map[UnionOfUnionKey]*Type
 	intersectionTypes                           map[CacheHashKey]*Type
+	intersectionContentTypes                    map[CacheHashKey]*Type
 	propertiesTypes                             map[PropertiesTypesKey]*Type
 	diagnostics                                 ast.DiagnosticsCollection
 	suggestionDiagnostics                       ast.DiagnosticsCollection
@@ -1014,8 +1022,16 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.resolveNameForSymbolSuggestion = c.createNameResolverForSuggestion().Resolve
 	c.tupleTypes = make(map[CacheHashKey]*Type)
 	c.unionTypes = make(map[CacheHashKey]*Type)
+	c.objectLiteralTypes = make(map[CacheHashKey]*Type)
+	c.spreadTypes = make(map[CacheHashKey]*Type)
+	c.objectContentTypes = make(map[CacheHashKey]*Type)
+	c.spreadSymbols = make(map[spreadSymbolKey]*ast.Symbol)
+	c.symbolsWithType = make(map[symbolWithTypeKey]*ast.Symbol)
+	c.paddedProperties = make(map[symbolWithTypeKey]*ast.Symbol)
+	c.bindingPatternTypes = make(map[CacheHashKey]*Type)
 	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
 	c.intersectionTypes = make(map[CacheHashKey]*Type)
+	c.intersectionContentTypes = make(map[CacheHashKey]*Type)
 	c.propertiesTypes = make(map[PropertiesTypesKey]*Type)
 	c.patternForType = make(map[*Type]*ast.Node)
 	c.contextFreeTypes = make(map[*ast.Node]*Type)
@@ -13595,17 +13611,23 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		if hasComputedSymbolProperty {
 			indexInfos = append(indexInfos, c.getObjectLiteralIndexInfo(isReadonly, propertiesArray[offset:], c.esSymbolType))
 		}
-		result := c.newAnonymousType(node.Symbol(), propertiesTable, nil, nil, indexInfos)
-		result.objectFlags |= objectFlags | ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral
+		flags := objectFlags | ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral
 		if contextualType == nil && ast.IsInJSFile(node) && !ast.IsInJsonFile(node) {
-			result.objectFlags |= ObjectFlagsJSLiteral
+			flags |= ObjectFlagsJSLiteral
 		}
 		if patternWithComputedProperties {
-			result.objectFlags |= ObjectFlagsObjectLiteralPatternWithComputedProperties
+			flags |= ObjectFlagsObjectLiteralPatternWithComputedProperties
 		}
+		key := c.getObjectLiteralTypeKey(node, flags, propertiesTable, indexInfos)
+		if existing := c.objectLiteralTypes[key]; existing != nil {
+			return existing
+		}
+		result := c.newAnonymousType(node.Symbol(), propertiesTable, nil, nil, indexInfos)
+		result.objectFlags |= flags
 		if inDestructuringPattern {
 			c.patternForType[result] = node
 		}
+		c.objectLiteralTypes[key] = result
 		return result
 	}
 	for _, memberDecl := range node.Properties() {
@@ -13839,6 +13861,25 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 		}
 		return c.getIntersectionType([]*Type{left, right})
 	}
+	var b keyBuilder
+	b.writeType(left)
+	b.writeType(right)
+	if symbol != nil {
+		b.writeByte(1)
+		b.writeSymbol(symbol)
+	} else {
+		b.writeByte(0)
+	}
+	b.writeUint32(uint32(objectFlags))
+	if readonly {
+		b.writeByte(1)
+	} else {
+		b.writeByte(0)
+	}
+	key := b.hash()
+	if existing := c.spreadTypes[key]; existing != nil {
+		return existing
+	}
 	members := ast.NewSymbolTable()
 	var skippedPrivateMembers collections.Set[string]
 	var indexInfos []*IndexInfo
@@ -13863,6 +13904,11 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 			rightProp := members.Get(leftProp.Name())
 			rightType := c.getTypeOfSymbol(rightProp)
 			if rightProp.Flags()&ast.SymbolFlagsOptional != 0 {
+				key := spreadSymbolKey{left: leftProp, right: rightProp}
+				if existing := c.spreadSymbols[key]; existing != nil {
+					members.Set(leftProp.Name(), existing)
+					continue
+				}
 				declarations := core.Concatenate(leftProp.Declarations(), rightProp.Declarations())
 				flags := ast.SymbolFlagsProperty | (leftProp.Flags() & ast.SymbolFlagsOptional)
 				result := c.newSymbol(flags, leftProp.Name())
@@ -13883,6 +13929,7 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 				c.spreadLinks.Get(result).rightSpread = rightProp
 				result.SetDeclarations(declarations)
 				links.setNameType(c, c.valueSymbolLinks.Get(leftProp).getNameType())
+				c.spreadSymbols[key] = result
 				members.Set(leftProp.Name(), result)
 			}
 		} else {
@@ -13892,8 +13939,18 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 	spreadIndexInfos := core.SameMap(indexInfos, func(info *IndexInfo) *IndexInfo {
 		return c.getIndexInfoWithReadonly(info, readonly)
 	})
+	flags := ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral | ObjectFlagsContainsSpread | objectFlags
+	// Different inputs can produce the same members, e.g. when the right side
+	// overrides every property of the left side.
+	contentKey := c.getObjectTypeContentKey(symbol, flags, members, spreadIndexInfos)
+	if existing := c.objectContentTypes[contentKey]; existing != nil {
+		c.spreadTypes[key] = existing
+		return existing
+	}
 	spread := c.newAnonymousType(symbol, members, nil, nil, spreadIndexInfos)
-	spread.objectFlags |= ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral | ObjectFlagsContainsSpread | objectFlags
+	spread.objectFlags |= flags
+	c.objectContentTypes[contentKey] = spread
+	c.spreadTypes[key] = spread
 	return spread
 }
 
@@ -13990,6 +14047,10 @@ func (c *Checker) getSpreadSymbol(prop *ast.Symbol, readonly bool) *ast.Symbol {
 	if !isSetonlyAccessor && readonly == c.isReadonlySymbol(prop) {
 		return prop
 	}
+	key := spreadSymbolKey{right: prop, readonly: readonly}
+	if existing := c.spreadSymbols[key]; existing != nil {
+		return existing
+	}
 	flags := ast.SymbolFlagsProperty | (prop.Flags() & ast.SymbolFlagsOptional)
 	result := c.newSymbolEx(flags, prop.Name(), prop.CheckFlags()&ast.CheckFlagsLate|core.IfElse(readonly, ast.CheckFlagsReadonly, 0))
 	links := c.valueSymbolLinks.Get(result)
@@ -14001,7 +14062,57 @@ func (c *Checker) getSpreadSymbol(prop *ast.Symbol, readonly bool) *ast.Symbol {
 	result.SetDeclarations(prop.Declarations())
 	links.setNameType(c, c.valueSymbolLinks.Get(prop).getNameType())
 	c.mappedSymbolLinks.Get(result).syntheticOrigin = prop
+	c.spreadSymbols[key] = result
 	return result
+}
+
+// spreadSymbolKey identifies a property symbol synthesized by a spread: either
+// a copy of right with the given readonly-ness, or the merge of an optional
+// right property into left.
+type spreadSymbolKey struct {
+	left     *ast.Symbol
+	right    *ast.Symbol
+	readonly bool
+}
+
+// getObjectTypeContentKey identifies the content of an object type derived
+// from other object types, such as a spread, widened, or regular type. Members
+// are either input properties or synthesized symbols that are themselves
+// memoized, so symbol identity determines member content.
+func (c *Checker) getObjectTypeContentKey(symbol *ast.Symbol, flags ObjectFlags, members ast.SymbolTable, indexInfos []*IndexInfo) CacheHashKey {
+	var b keyBuilder
+	if symbol != nil {
+		b.writeByte(1)
+		b.writeSymbol(symbol)
+	} else {
+		b.writeByte(0)
+	}
+	b.writeUint32(uint32(flags))
+	b.writeInt(members.Len())
+	for member := range members.Values() {
+		b.writeSymbol(member)
+	}
+	b.writeInt(len(indexInfos))
+	for _, info := range indexInfos {
+		b.writeType(info.keyType)
+		b.writeType(info.valueType)
+		if info.isReadonly {
+			b.writeByte(1)
+		} else {
+			b.writeByte(0)
+		}
+		if info.declaration != nil {
+			b.writeByte(1)
+			b.writeNode(info.declaration)
+		} else {
+			b.writeByte(0)
+		}
+		b.writeInt(len(info.components))
+		for _, n := range info.components {
+			b.writeNode(n)
+		}
+	}
+	return b.hash()
 }
 
 func (c *Checker) isEmptyObjectTypeOrSpreadsIntoEmptyObject(t *Type) bool {
@@ -17423,13 +17534,23 @@ func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 		members.Set(prop.Name(), prop)
 	}
 	for _, e := range missingElements {
-		symbol := c.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsOptional, c.getPropertyNameFromBindingElement(e))
-		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, true /*reportErrors*/)
+		name := c.getPropertyNameFromBindingElement(e)
+		propType := c.getTypeFromBindingElement(e, false /*includePatternInType*/, true /*reportErrors*/)
+		key := symbolWithTypeKey{name: name, t: propType}
+		symbol := c.paddedProperties[key]
+		if symbol == nil {
+			symbol = c.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsOptional, name)
+			c.valueSymbolLinks.Get(symbol).resolvedType = propType
+			c.paddedProperties[key] = symbol
+		}
 		members.Set(symbol.Name(), symbol)
 	}
-	result := c.newAnonymousType(t.symbol, members, nil, nil, c.getIndexInfosOfType(t))
-	result.objectFlags = t.objectFlags
-	return result
+	indexInfos := c.getIndexInfosOfType(t)
+	return c.internObjectType(t.symbol, t.objectFlags, members, indexInfos, func() *Type {
+		result := c.newAnonymousType(t.symbol, members, nil, nil, indexInfos)
+		result.objectFlags = t.objectFlags
+		return result
+	})
 }
 
 func (c *Checker) getPropertyNameFromBindingElement(e *ast.Node) string {
@@ -18107,6 +18228,54 @@ func (b *keyBuilder) writeNode(node *ast.Node) {
 	}
 }
 
+// getObjectLiteralTypeKey identifies the content of an object literal type, so
+// that checking the same object literal again with the same results yields the
+// same type.
+func (c *Checker) getObjectLiteralTypeKey(node *ast.Node, flags ObjectFlags, properties ast.SymbolTable, indexInfos []*IndexInfo) CacheHashKey {
+	var b keyBuilder
+	b.writeNode(node)
+	b.writeUint32(uint32(flags))
+	names := slices.Sorted(properties.Keys())
+	b.writeInt(len(names))
+	for _, name := range names {
+		prop := properties.Get(name)
+		b.writeString(name)
+		b.writeByte(0)
+		b.writeUint32(uint32(prop.Flags()))
+		b.writeUint32(uint32(prop.CheckFlags()))
+		// Members created by this object literal have their types set at
+		// creation; other members (accessors) are the declared symbols.
+		links := c.valueSymbolLinks.TryGet(prop)
+		if links == nil || links.target == nil {
+			b.writeByte(2)
+			b.writeSymbol(prop)
+			continue
+		}
+		if nameType := links.getNameType(); nameType != nil {
+			b.writeByte(1)
+			b.writeType(nameType)
+		} else {
+			b.writeByte(0)
+		}
+		b.writeType(links.resolvedType)
+	}
+	b.writeInt(len(indexInfos))
+	for _, info := range indexInfos {
+		b.writeType(info.keyType)
+		b.writeType(info.valueType)
+		if info.isReadonly {
+			b.writeByte(1)
+		} else {
+			b.writeByte(0)
+		}
+		b.writeInt(len(info.components))
+		for _, n := range info.components {
+			b.writeNode(n)
+		}
+	}
+	return b.hash()
+}
+
 func getTypeListKey(types []*Type) CacheHashKey {
 	var b keyBuilder
 	b.writeTypes(types)
@@ -18444,9 +18613,12 @@ func (c *Checker) getRestType(source *Type, properties []*ast.Node, symbol *ast.
 	for _, prop := range spreadableProperties {
 		members.Set(prop.Name(), c.getSpreadSymbol(prop, false /*readonly*/))
 	}
-	result := c.newAnonymousType(symbol, members, nil, nil, c.getIndexInfosOfType(source))
-	result.objectFlags |= ObjectFlagsObjectRestType
-	return result
+	indexInfos := c.getIndexInfosOfType(source)
+	return c.internObjectType(symbol, ObjectFlagsAnonymous|ObjectFlagsObjectRestType, members, indexInfos, func() *Type {
+		result := c.newAnonymousType(symbol, members, nil, nil, indexInfos)
+		result.objectFlags |= ObjectFlagsObjectRestType
+		return result
+	})
 }
 
 // Determine the control flow type associated with a destructuring declaration or assignment. The following
@@ -18558,12 +18730,35 @@ func (c *Checker) getTypeFromObjectBindingPattern(pattern *ast.Node, includePatt
 	if stringIndexInfo != nil {
 		indexInfos = []*IndexInfo{stringIndexInfo}
 	}
+	// The members are declared by the pattern's elements, so patterns
+	// implying the same members still need distinct types.
+	var b keyBuilder
+	b.writeNode(pattern)
+	if includePatternInType {
+		b.writeByte(1)
+	} else {
+		b.writeByte(0)
+	}
+	b.writeUint32(uint32(objectFlags))
+	b.writeInt(len(indexInfos))
+	names := slices.Sorted(members.Keys())
+	for _, name := range names {
+		b.writeString(name)
+		b.writeByte(0)
+		b.writeUint32(uint32(members.Get(name).Flags()))
+		b.writeType(c.valueSymbolLinks.Get(members.Get(name)).resolvedType)
+	}
+	key := b.hash()
+	if existing := c.bindingPatternTypes[key]; existing != nil {
+		return existing
+	}
 	result := c.newAnonymousType(nil, members, nil, nil, indexInfos)
 	result.objectFlags |= objectFlags
 	if includePatternInType {
 		c.patternForType[result] = pattern
 		result.objectFlags |= ObjectFlagsContainsObjectOrArrayLiteral
 	}
+	c.bindingPatternTypes[key] = result
 	return result
 }
 
@@ -18607,9 +18802,17 @@ func (c *Checker) getTypeFromArrayBindingPattern(pattern *ast.Node, includePatte
 	}
 	result := c.createTupleTypeEx(elementTypes, elementInfos, false)
 	if includePatternInType {
+		var b keyBuilder
+		b.writeNode(pattern)
+		b.writeType(result)
+		key := b.hash()
+		if existing := c.bindingPatternTypes[key]; existing != nil {
+			return existing
+		}
 		result = c.cloneTypeReference(result)
 		c.patternForType[result] = pattern
 		result.objectFlags |= ObjectFlagsContainsObjectOrArrayLiteral
+		c.bindingPatternTypes[key] = result
 	}
 	return result
 }
@@ -19032,11 +19235,16 @@ func (c *Checker) getWidenedTypeOfObjectLiteral(t *Type, context *WideningContex
 			}
 		}
 	}
-	result := c.newAnonymousType(t.symbol, members, nil, nil, core.SameMap(c.getIndexInfosOfType(t), func(info *IndexInfo) *IndexInfo {
+	indexInfos := core.SameMap(c.getIndexInfosOfType(t), func(info *IndexInfo) *IndexInfo {
 		return c.newIndexInfo(info.keyType, c.getWidenedType(info.valueType), info.isReadonly, info.declaration, info.components)
-	}))
+	})
 	// Retain js literal flag through widening
-	result.objectFlags |= t.objectFlags & (ObjectFlagsJSLiteral | ObjectFlagsNonInferrableType)
+	flags := t.objectFlags & (ObjectFlagsJSLiteral | ObjectFlagsNonInferrableType)
+	result := c.internObjectType(t.symbol, ObjectFlagsAnonymous|flags, members, indexInfos, func() *Type {
+		result := c.newAnonymousType(t.symbol, members, nil, nil, indexInfos)
+		result.objectFlags |= flags
+		return result
+	})
 	// Only cache in child contexts since the root context never widens a particular object literal type more than once
 	if context != nil && context.parent != nil {
 		if context.widenedTypes == nil {
@@ -19062,7 +19270,7 @@ func (c *Checker) getWidenedProperty(prop *ast.Symbol, context *WideningContext)
 	if widened == original {
 		return prop
 	}
-	return c.createSymbolWithType(prop, widened)
+	return c.getSymbolWithType(prop, widened)
 }
 
 func (w *WideningContext) getChildContext(propertyName string) *WideningContext {
@@ -22513,6 +22721,36 @@ func (c *Checker) hasCommonDeclaration(symbols *collections.OrderedSet[*ast.Symb
 	return commonDeclarations.Len() != 0
 }
 
+type symbolWithTypeKey struct {
+	source *ast.Symbol
+	name   string
+	t      *Type
+}
+
+// getSymbolWithType is createSymbolWithType for copies of object type members,
+// returning the same copy for the same property and type.
+func (c *Checker) getSymbolWithType(source *ast.Symbol, t *Type) *ast.Symbol {
+	key := symbolWithTypeKey{source: source, t: t}
+	if existing := c.symbolsWithType[key]; existing != nil {
+		return existing
+	}
+	result := c.createSymbolWithType(source, t)
+	c.symbolsWithType[key] = result
+	return result
+}
+
+// internObjectType returns an existing object type with the given content, or
+// creates one with the given creation.
+func (c *Checker) internObjectType(symbol *ast.Symbol, flags ObjectFlags, members ast.SymbolTable, indexInfos []*IndexInfo, create func() *Type) *Type {
+	key := c.getObjectTypeContentKey(symbol, flags&^(ObjectFlagsCouldContainTypeVariablesComputed|ObjectFlagsCouldContainTypeVariables|ObjectFlagsMembersResolved), members, indexInfos)
+	if existing := c.objectContentTypes[key]; existing != nil {
+		return existing
+	}
+	result := create()
+	c.objectContentTypes[key] = result
+	return result
+}
+
 func (c *Checker) createSymbolWithType(source *ast.Symbol, t *Type) *ast.Symbol {
 	symbol := c.newSymbolEx(source.Flags(), source.Name(), source.CheckFlags()&ast.CheckFlagsReadonly)
 	symbol.SetDeclarations(source.Declarations())
@@ -25435,6 +25673,7 @@ func (c *Checker) getRestrictiveTypeParameter(t *Type) *Type {
 	}
 	result := c.newTypeParameter(t.symbol)
 	result.AsTypeParameter().constraint = c.noConstraintType
+	result.AsTypeParameter().origin = t
 	c.cachedTypes[key] = result
 	return result
 }
@@ -25729,6 +25968,9 @@ func (c *Checker) createTupleTargetType(elementInfos []TupleElementInfo, readonl
 	d.thisType = c.newTypeParameter(nil)
 	d.thisType.AsTypeParameter().isThisType = true
 	d.thisType.AsTypeParameter().constraint = t
+	for _, tp := range typeParameters {
+		tp.AsTypeParameter().origin = t
+	}
 	d.allTypeParameters = append(typeParameters, d.thisType)
 	d.instantiations = make(map[CacheHashKey]*Type)
 	d.instantiations[getTypeListKey(d.TypeParameters())] = t
@@ -27155,16 +27397,33 @@ func (c *Checker) getIntersectionTypeEx(types []*Type, flags IntersectionFlags, 
 				// the denormalized origin has fewer constituents than the union itself.
 				var origin *Type
 				if core.Some(constituents, isIntersectionType) && getConstituentCountOfTypes(constituents) > getConstituentCountOfTypes(typeSet) {
-					origin = c.newIntersectionType(ObjectFlagsNone, typeSet)
+					origin = c.getIntersectionTypeWithContent(ObjectFlagsNone, typeSet, nil)
 				}
 				result = c.getUnionTypeEx(constituents, UnionReductionLiteral, alias, origin)
 			}
 		} else {
-			result = c.newIntersectionType(objectFlags|c.getPropagatingFlagsOfTypes(types /*excludeKinds*/, TypeFlagsNullable), typeSet)
-			result.alias = alias
+			result = c.getIntersectionTypeWithContent(objectFlags|c.getPropagatingFlagsOfTypes(types /*excludeKinds*/, TypeFlagsNullable), typeSet, alias)
 		}
 		c.intersectionTypes[key] = result
 	}
+	return result
+}
+
+// getIntersectionTypeWithContent returns the intersection type with the given
+// constituents, flags, and alias. Different intersection cache keys can reduce
+// to the same content, which should yield the same type.
+func (c *Checker) getIntersectionTypeWithContent(objectFlags ObjectFlags, typeSet []*Type, alias *TypeAlias) *Type {
+	var b keyBuilder
+	b.writeTypes(typeSet)
+	b.writeUint32(uint32(objectFlags))
+	b.writeAlias(alias)
+	key := b.hash()
+	if existing := c.intersectionContentTypes[key]; existing != nil {
+		return existing
+	}
+	result := c.newIntersectionType(objectFlags, typeSet)
+	result.alias = alias
+	c.intersectionContentTypes[key] = result
 	return result
 }
 
@@ -27916,7 +28175,7 @@ func (c *Checker) getIndexedAccessTypeOrUndefined(objectType *Type, indexType *T
 		}
 		// Defer the operation by creating an indexed access type.
 		persistentAccessFlags := accessFlags & AccessFlagsPersistent
-		key := getIndexedAccessKey(objectType, indexType, accessFlags, alias)
+		key := getIndexedAccessKey(objectType, indexType, persistentAccessFlags, alias)
 		t := c.indexedAccessTypes[key]
 		if t == nil {
 			t = c.newIndexedAccessType(objectType, indexType, persistentAccessFlags)
@@ -29143,9 +29402,18 @@ func (c *Checker) getRegularTypeOfObjectLiteral(t *Type) *Type {
 	}
 	resolved := c.resolveStructuredTypeMembers(t)
 	members := c.transformTypeOfMembers(t, c.getRegularTypeOfObjectLiteral)
-	regular := c.newAnonymousType(t.symbol, members, resolved.CallSignatures(), resolved.ConstructSignatures(), resolved.getIndexInfos())
-	regular.flags = resolved.flags
-	regular.objectFlags |= resolved.objectFlags & ^ObjectFlagsFreshLiteral
+	create := func() *Type {
+		regular := c.newAnonymousType(t.symbol, members, resolved.CallSignatures(), resolved.ConstructSignatures(), resolved.getIndexInfos())
+		regular.flags = resolved.flags
+		regular.objectFlags |= resolved.objectFlags & ^ObjectFlagsFreshLiteral
+		return regular
+	}
+	var regular *Type
+	if len(resolved.CallSignatures()) == 0 && len(resolved.ConstructSignatures()) == 0 && resolved.flags == TypeFlagsObject {
+		regular = c.internObjectType(t.symbol, ObjectFlagsAnonymous|resolved.objectFlags&^ObjectFlagsFreshLiteral, members, resolved.getIndexInfos(), create)
+	} else {
+		regular = create()
+	}
 	c.cachedTypes[key] = regular
 	return regular
 }
@@ -29156,7 +29424,7 @@ func (c *Checker) transformTypeOfMembers(t *Type, f func(propertyType *Type) *Ty
 		original := c.getTypeOfSymbol(property)
 		updated := f(original)
 		if updated != original {
-			property = c.createSymbolWithType(property, updated)
+			property = c.getSymbolWithType(property, updated)
 		}
 		members.Set(property.Name(), property)
 	}

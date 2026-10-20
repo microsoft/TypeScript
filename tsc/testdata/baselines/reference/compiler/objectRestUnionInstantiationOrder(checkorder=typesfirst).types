@@ -27,8 +27,8 @@ function f<T>(v: { k: "a"; a: T } | { k: "b"; b: number }) {
 >undefined : undefined
 }
 const o = f({ k: "a", a: "s" });
->o : { all: { b: number; } | { a: string; }; onlyB: { b: number; } | undefined; }
->f({ k: "a", a: "s" }) : { all: { b: number; } | { a: string; }; onlyB: { b: number; } | undefined; }
+>o : { all: { a: string; } | { b: number; }; onlyB: { b: number; } | undefined; }
+>f({ k: "a", a: "s" }) : { all: { a: string; } | { b: number; }; onlyB: { b: number; } | undefined; }
 >f : <T>(v: { k: "a"; a: T; } | { k: "b"; b: number; }) => { all: { a: T; } | { b: number; }; onlyB: { b: number; } | undefined; }
 >{ k: "a", a: "s" } : { k: "a"; a: string; }
 >k : "a"
@@ -37,14 +37,14 @@ const o = f({ k: "a", a: "s" });
 >"s" : "s"
 
 const all = o.all;
->all : { b: number; } | { a: string; }
->o.all : { b: number; } | { a: string; }
->o : { all: { b: number; } | { a: string; }; onlyB: { b: number; } | undefined; }
->all : { b: number; } | { a: string; }
+>all : { a: string; } | { b: number; }
+>o.all : { a: string; } | { b: number; }
+>o : { all: { a: string; } | { b: number; }; onlyB: { b: number; } | undefined; }
+>all : { a: string; } | { b: number; }
 
 const onlyB = o.onlyB;
 >onlyB : { b: number; } | undefined
 >o.onlyB : { b: number; } | undefined
->o : { all: { b: number; } | { a: string; }; onlyB: { b: number; } | undefined; }
+>o : { all: { a: string; } | { b: number; }; onlyB: { b: number; } | undefined; }
 >onlyB : { b: number; } | undefined
 

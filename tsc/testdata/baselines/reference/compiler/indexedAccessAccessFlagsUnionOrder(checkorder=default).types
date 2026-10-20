@@ -19,7 +19,7 @@ function f<T extends Record<string, string>, K extends keyof T>(obj: T, k: K, b:
 
     const s1: string = x;
 >s1 : string
->x : string | undefined
+>x : T[K]
 
     const y = b ? g<T, K>() : obj[k];
 >y : T[K]
@@ -33,7 +33,7 @@ function f<T extends Record<string, string>, K extends keyof T>(obj: T, k: K, b:
 
     const s2: string = y;
 >s2 : string
->y : string | undefined
+>y : T[K]
 }
 
 declare function g<T, K extends keyof T>(): T[K];

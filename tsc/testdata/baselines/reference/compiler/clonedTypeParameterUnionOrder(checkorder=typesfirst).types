@@ -34,8 +34,8 @@ declare const c: boolean;
 >c : boolean
 
 const r = c ? call(bs.m) : call(bn.m);
->r : (<T>(x: T) => Pair<T, number>) | (<T>(x: T) => Pair<T, string>)
->c ? call(bs.m) : call(bn.m) : (<T>(x: T) => Pair<T, number>) | (<T>(x: T) => Pair<T, string>)
+>r : (<T>(x: T) => Pair<T, string>) | (<T>(x: T) => Pair<T, number>)
+>c ? call(bs.m) : call(bn.m) : (<T>(x: T) => Pair<T, string>) | (<T>(x: T) => Pair<T, number>)
 >c : boolean
 >call(bs.m) : <T>(x: T) => Pair<T, string>
 >call : <A, R>(f: (x: A) => R) => (x: A) => R
