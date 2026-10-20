@@ -112,6 +112,9 @@ type Program struct {
 
 	processedFiles
 
+	sourceFilesByNodeIDOnce sync.Once
+	sourceFilesByNodeID     map[ast.NodeId]*ast.SourceFile
+
 	usesUriStyleNodeCoreModules core.Tristate
 
 	commonSourceDirectory     tspath.RootedDirectoryPath
@@ -2129,6 +2132,16 @@ func (p *Program) FilesByPath() map[tspath.PathKey]*ast.SourceFile {
 
 func (p *Program) GetSourceFileByPath(path tspath.PathKey) *ast.SourceFile {
 	return p.filesByPath[path]
+}
+
+func (p *Program) GetSourceFileByNodeID(id ast.NodeId) *ast.SourceFile {
+	p.sourceFilesByNodeIDOnce.Do(func() {
+		p.sourceFilesByNodeID = make(map[ast.NodeId]*ast.SourceFile, len(p.GetSourceFiles()))
+		for _, file := range p.GetSourceFiles() {
+			p.sourceFilesByNodeID[ast.GetNodeId(file.AsNode())] = file
+		}
+	})
+	return p.sourceFilesByNodeID[id]
 }
 
 func (p *Program) HasSameFileNames(other *Program) bool {
