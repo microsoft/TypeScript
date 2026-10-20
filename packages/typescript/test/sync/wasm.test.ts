@@ -293,7 +293,7 @@ describe("API over WebAssembly", () => {
             new Uint8Array([1, 2, 3]),
         );
 
-        const rawContent = "\uFEFFconst lone = \"\uD800\";";
+        const rawContent = '\uFEFFconst lone = "\uD800";';
         transport.setFile("/raw.ts", rawContent);
         assert.strictEqual(transport.readFile("/raw.ts"), rawContent);
         transport.removeFile("/raw.ts");
