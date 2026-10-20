@@ -1,3 +1,5 @@
+import type { ChildProcess } from "node:child_process";
+import type { Socket } from "node:net";
 import {
     createMessageConnection,
     type MessageConnection,
@@ -6,9 +8,7 @@ import {
     SocketMessageWriter,
     StreamMessageReader,
     StreamMessageWriter,
-} from "#vscode-jsonrpc/node";
-import type { ChildProcess } from "node:child_process";
-import type { Socket } from "node:net";
+} from "../../../vendor/vscode-jsonrpc/lib/node/main.js";
 import type {
     RootedDirectoryPath,
     RootedFilePath,

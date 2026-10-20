@@ -31,6 +31,7 @@
         "lib",
         "schemas",
         "dist",
+        "enums",
         "vendor"
     ],
     "bin": {
@@ -107,7 +108,6 @@
         }
     },
     "imports": {
-        "#getExePath": "./lib/getExePath.js",
         "#asyncClient": {
             "@typescript/source": {
                 "browser": "./src/api/async/browserClient.ts",
@@ -123,16 +123,7 @@
             },
             "browser": "./dist/api/sync/browserClient.js",
             "default": "./dist/api/sync/client.js"
-        },
-        "#enums/*": {
-            "@typescript/source": {
-                "types": "./src/enums/*.enum.ts",
-                "default": "./src/enums/*.ts"
-            },
-            "types": "./dist/enums/*.enum.d.ts",
-            "default": "./dist/enums/*.js"
-        },
-        "#vscode-jsonrpc/node": "./vendor/vscode-jsonrpc/lib/node/main.js"
+        }
     },
     "scripts": {
         "node": "node --conditions @typescript/source",

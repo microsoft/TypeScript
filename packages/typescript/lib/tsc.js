@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import getExePath, { getWasmPath } from "#getExePath";
 import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
+import getExePath, { getWasmPath } from "./getExePath.js";
 
 let exe;
 try {

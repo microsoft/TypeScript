@@ -15,26 +15,26 @@ import {
     cacheGeneratorMethod,
 } from "./generatorSupport.ts";
 
-import { CheckFlags } from "#enums/checkFlags";
-import { CompletionItemKind } from "#enums/completionItemKind";
-import { DiagnosticCategory } from "#enums/diagnosticCategory";
-import { ElementFlags } from "#enums/elementFlags";
-import { EmitOnly } from "#enums/emitOnly";
-import { IndexKind } from "#enums/indexKind";
-import { JsxEmit } from "#enums/jsxEmit";
-import { ModuleKind } from "#enums/moduleKind";
-import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
-import { NewLineKind } from "#enums/newLineKind";
-import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
-import { ObjectFlags } from "#enums/objectFlags";
-import { ScriptKind } from "#enums/scriptKind";
-import { SignatureFlags } from "#enums/signatureFlags";
-import { SignatureKind } from "#enums/signatureKind";
-import { SymbolFlags } from "#enums/symbolFlags";
-import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
-import { TypeFlags } from "#enums/typeFlags";
-import { TypeFormatFlags } from "#enums/typeFormatFlags";
-import { TypePredicateKind } from "#enums/typePredicateKind";
+import { CheckFlags } from "../../../enums/checkFlags.js";
+import { CompletionItemKind } from "../../../enums/completionItemKind.js";
+import { DiagnosticCategory } from "../../../enums/diagnosticCategory.js";
+import { ElementFlags } from "../../../enums/elementFlags.js";
+import { EmitOnly } from "../../../enums/emitOnly.js";
+import { IndexKind } from "../../../enums/indexKind.js";
+import { JsxEmit } from "../../../enums/jsxEmit.js";
+import { ModuleKind } from "../../../enums/moduleKind.js";
+import { ModuleResolutionKind } from "../../../enums/moduleResolutionKind.js";
+import { NewLineKind } from "../../../enums/newLineKind.js";
+import { NodeBuilderFlags } from "../../../enums/nodeBuilderFlags.js";
+import { ObjectFlags } from "../../../enums/objectFlags.js";
+import { ScriptKind } from "../../../enums/scriptKind.js";
+import { SignatureFlags } from "../../../enums/signatureFlags.js";
+import { SignatureKind } from "../../../enums/signatureKind.js";
+import { SymbolFlags } from "../../../enums/symbolFlags.js";
+import { SymbolOwnerKind } from "../../../enums/symbolOwnerKind.js";
+import { TypeFlags } from "../../../enums/typeFlags.js";
+import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
+import { TypePredicateKind } from "../../../enums/typePredicateKind.js";
 import {
     Client,
     type ClientSocketOptions,
