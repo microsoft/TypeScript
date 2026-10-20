@@ -105,20 +105,20 @@ declare function inferOptionalSource<T>(value: { tag?: "a"; value: T }): T;
 >value : T
 
 const validOptional = inferOptionalSource(validOptionalSource);
->validOptional : 1
->inferOptionalSource(validOptionalSource) : 1
+>validOptional : 1 | 2
+>inferOptionalSource(validOptionalSource) : 1 | 2
 >inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
 >validOptionalSource : { tag: "a"; value: 1; } | { tag?: "a"; value: 2; }
 
 const mixedOptional = inferOptionalSource(mixedOptionalSource);
->mixedOptional : 1
->inferOptionalSource(mixedOptionalSource) : 1
+>mixedOptional : 1 | 2
+>inferOptionalSource(mixedOptionalSource) : 1 | 2
 >inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
 >mixedOptionalSource : { tag: "a"; value: 1; } | { tag?: "b"; value: 2; }
 
 const matchingOptional = inferOptionalSource(matchingOptionalSource);
->matchingOptional : 1
->inferOptionalSource(matchingOptionalSource) : 1
+>matchingOptional : 1 | 2
+>inferOptionalSource(matchingOptionalSource) : 1 | 2
 >inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
 >matchingOptionalSource : { tag: "a"; value: 1; } | { tag?: "a"; value: 2; } | { tag: "b"; value: 3; }
 
@@ -135,8 +135,8 @@ const requiredUndefined = inferOptionalSource(undefinedRequiredSource);
 >undefinedRequiredSource : { tag: "a"; value: 1; } | { tag: undefined; value: 2; }
 
 const explicitUndefined = inferOptionalSource(explicitUndefinedSource);
->explicitUndefined : 1
->inferOptionalSource(explicitUndefinedSource) : 1
+>explicitUndefined : 1 | 2
+>inferOptionalSource(explicitUndefinedSource) : 1 | 2
 >inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
 >explicitUndefinedSource : { tag: "a"; value: 1; } | { tag: "b" | undefined; value: 2; }
 
@@ -147,14 +147,14 @@ const optionalNever = inferOptionalSource(optionalNeverSource);
 >optionalNeverSource : { tag: "a"; value: 1; } | { tag?: never; value: 2; }
 
 const indexedOptional = inferOptionalSource(indexedSource); // error
->indexedOptional : "a"
->inferOptionalSource(indexedSource) : "a"
+>indexedOptional : "a" | "b"
+>inferOptionalSource(indexedSource) : "a" | "b"
 >inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
 >indexedSource : { tag: "a"; value: "a"; } | { tag?: "a"; value: "a"; } | { [key: string]: "b"; value: "b"; }
 
 const declaredOptional = inferOptionalSource(optionalPropertySource); // error
->declaredOptional : "a"
->inferOptionalSource(optionalPropertySource) : "a"
+>declaredOptional : "a" | "b"
+>inferOptionalSource(optionalPropertySource) : "a" | "b"
 >inferOptionalSource : <T>(value: { tag?: "a"; value: T; }) => T
 >optionalPropertySource : { tag: "a"; value: "a"; } | { [key: string]: "a" | "b" | undefined; tag?: "a"; value: "b"; }
 
@@ -171,8 +171,8 @@ declare function inferRequiredSource<T>(value: { tag: "a"; value: T }): T;
 >value : T
 
 const partiallyMatching = inferRequiredSource(partiallyMatchingSource);
->partiallyMatching : 1 | 2
->inferRequiredSource(partiallyMatchingSource) : 1 | 2
+>partiallyMatching : 1
+>inferRequiredSource(partiallyMatchingSource) : 1
 >inferRequiredSource : <T>(value: { tag: "a"; value: T; }) => T
 >partiallyMatchingSource : { tag: "a" | "b"; value: 1; } | { tag: "b"; value: 2; }
 
@@ -195,7 +195,7 @@ export function optionalContext(): { tag: "a"; value: 1 } | { tag?: "b"; value: 
 >value : 2
 
     return makeOptional();
->makeOptional() : { tag?: "a"; value: 1; }
+>makeOptional() : { tag?: "a"; value: 1 | 2; }
 >makeOptional : <const T>() => { tag?: "a"; value: T; }
 }
 
@@ -269,7 +269,7 @@ export function partialTagContext(): { kind: "a" | "b"; value: string[] } | { ki
 >value : number
 
     return makeTagged([]);
->makeTagged([]) : { kind: "a"; value: readonly []; }
+>makeTagged([]) : { kind: "a"; value: []; }
 >makeTagged : <const T>(value: T) => { kind: "a"; value: T; }
 >[] : []
 }
@@ -281,7 +281,7 @@ export function unionTagContext(): { kind?: "a"; value: string[] } | { kind: "a"
 >value : number
 
     return makeUnionTagged([]);
->makeUnionTagged([]) : { kind: "a" | undefined; value: readonly []; }
+>makeUnionTagged([]) : { kind: "a" | undefined; value: []; }
 >makeUnionTagged : <const T>(value: T) => { kind: "a" | undefined; value: T; }
 >[] : []
 }
@@ -301,7 +301,7 @@ export function indexedContext():
 >value : boolean
 
     return makeOptionalTagged([]);
->makeOptionalTagged([]) : { kind?: "a"; value: readonly []; }
+>makeOptionalTagged([]) : { kind?: "a"; value: []; }
 >makeOptionalTagged : <const T>(value: T) => { kind?: "a"; value: T; }
 >[] : []
 }

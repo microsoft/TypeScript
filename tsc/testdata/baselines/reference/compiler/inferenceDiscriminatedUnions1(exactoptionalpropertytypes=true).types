@@ -379,7 +379,7 @@ export function optionalTarget(): OptionalOk<string[]> | Err<string> {
 >optionalTarget : () => OptionalOk<string[]> | Err<string>
 
     return optionalOk([]);
->optionalOk([]) : OptionalOk<readonly []>
+>optionalOk([]) : OptionalOk<[]>
 >optionalOk : <const T>(value: T) => OptionalOk<T>
 >[] : []
 }
@@ -420,7 +420,7 @@ export function explicitUndefined(): ExplicitOptionalOk<string[]> | Err<string> 
 >explicitUndefined : () => ExplicitOptionalOk<string[]> | Err<string>
 
     return explicitOptionalOk([]);
->explicitOptionalOk([]) : ExplicitOptionalOk<readonly []>
+>explicitOptionalOk([]) : ExplicitOptionalOk<[]>
 >explicitOptionalOk : <const T>(value: T) => ExplicitOptionalOk<T>
 >[] : []
 }
@@ -442,7 +442,7 @@ export function requiredUnionTag(): UnionOk<string[]> | Err<string> {
 >requiredUnionTag : () => UnionOk<string[]> | Err<string>
 
     return unionOk([]);
->unionOk([]) : UnionOk<readonly []>
+>unionOk([]) : UnionOk<[]>
 >unionOk : <const T>(value: T) => UnionOk<T>
 >[] : []
 }
@@ -455,7 +455,7 @@ export function undefinedTarget(): UndefinedOk<string[]> | MaybeErr<string> {
 >undefinedTarget : () => UndefinedOk<string[]> | MaybeErr<string>
 
     return undefinedOk([]);
->undefinedOk([]) : UndefinedOk<[]>
+>undefinedOk([]) : UndefinedOk<readonly []>
 >undefinedOk : <const T>(value: T) => UndefinedOk<T>
 >[] : []
 }

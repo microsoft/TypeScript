@@ -1031,6 +1031,7 @@ type TypeDiscriminator struct {
 	c           *Checker
 	props       []*ast.Symbol
 	isRelatedTo func(*Type, *Type) Ternary
+	reverse     bool
 }
 
 func (d *TypeDiscriminator) len() int {
@@ -1042,9 +1043,12 @@ func (d *TypeDiscriminator) name(index int) string {
 }
 
 func (d *TypeDiscriminator) matches(index int, t *Type) bool {
-	propType := d.c.getTypeOfSymbol(d.props[index])
-	for _, s := range propType.Distributed() {
-		if d.isRelatedTo(s, t) != TernaryFalse {
+	sourceType, targetType := d.c.getTypeOfSymbol(d.props[index]), t
+	if d.reverse {
+		sourceType, targetType = targetType, sourceType
+	}
+	for _, sourceType := range sourceType.Distributed() {
+		if d.isRelatedTo(sourceType, targetType) != TernaryFalse {
 			return true
 		}
 	}

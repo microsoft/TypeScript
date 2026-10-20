@@ -1,15 +1,11 @@
-inferenceDiscriminantOverlap.ts(22,43): error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag?: "a"; value: 2; }' is not assignable to parameter of type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-  Type '{ tag?: "a"; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-    Types of property 'value' are incompatible.
-      Type '2' is not assignable to type '1'.
-inferenceDiscriminantOverlap.ts(23,43): error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag?: "b"; value: 2; }' is not assignable to parameter of type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-  Type '{ tag?: "b"; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+inferenceDiscriminantOverlap.ts(23,43): error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag?: "b"; value: 2; }' is not assignable to parameter of type '{ tag?: "a"; value: 1 | 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Type '{ tag?: "b"; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1 | 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
     Types of property 'tag' are incompatible.
       Type '"b"' is not assignable to type '"a"'.
-inferenceDiscriminantOverlap.ts(24,46): error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag?: "a"; value: 2; } | { tag: "b"; value: 3; }' is not assignable to parameter of type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-  Type '{ tag?: "a"; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-    Types of property 'value' are incompatible.
-      Type '2' is not assignable to type '1'.
+inferenceDiscriminantOverlap.ts(24,46): error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag?: "a"; value: 2; } | { tag: "b"; value: 3; }' is not assignable to parameter of type '{ tag?: "a"; value: 1 | 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Type '{ tag: "b"; value: 3; }' is not assignable to type '{ tag?: "a"; value: 1 | 2; }'.
+    Types of property 'tag' are incompatible.
+      Type '"b"' is not assignable to type '"a"'.
 inferenceDiscriminantOverlap.ts(25,46): error TS2345: Argument of type '{ tag: "a"; value: 1; } | { tag: "b"; value: 2; }' is not assignable to parameter of type '{ tag?: "a"; value: 1; }'.
   Type '{ tag: "b"; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1; }'.
     Types of property 'tag' are incompatible.
@@ -18,51 +14,39 @@ inferenceDiscriminantOverlap.ts(26,47): error TS2379: Argument of type '{ tag: "
   Type '{ tag: undefined; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1 | 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
     Types of property 'tag' are incompatible.
       Type 'undefined' is not assignable to type '"a"'.
-inferenceDiscriminantOverlap.ts(27,47): error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag: "b" | undefined; value: 2; }' is not assignable to parameter of type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-  Type '{ tag: "b" | undefined; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+inferenceDiscriminantOverlap.ts(27,47): error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag: "b" | undefined; value: 2; }' is not assignable to parameter of type '{ tag?: "a"; value: 1 | 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Type '{ tag: "b" | undefined; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1 | 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
     Types of property 'tag' are incompatible.
       Type '"b" | undefined' is not assignable to type '"a"'.
         Type 'undefined' is not assignable to type '"a"'.
-inferenceDiscriminantOverlap.ts(29,45): error TS2379: Argument of type '{ tag: "a"; value: "a"; } | { tag?: "a"; value: "a"; } | { [key: string]: "b"; value: "b"; }' is not assignable to parameter of type '{ tag?: "a"; value: "a"; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-  Type '{ [key: string]: "b"; value: "b"; }' is not assignable to type '{ tag?: "a"; value: "a"; }'.
-    Types of property 'value' are incompatible.
-      Type '"b"' is not assignable to type '"a"'.
-inferenceDiscriminantOverlap.ts(30,46): error TS2379: Argument of type '{ tag: "a"; value: "a"; } | { [key: string]: "a" | "b" | undefined; tag?: "a"; value: "b"; }' is not assignable to parameter of type '{ tag?: "a"; value: "a"; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-  Type '{ [key: string]: "a" | "b" | undefined; tag?: "a"; value: "b"; }' is not assignable to type '{ tag?: "a"; value: "a"; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-    Types of property 'value' are incompatible.
-      Type '"b"' is not assignable to type '"a"'.
 inferenceDiscriminantOverlap.ts(31,46): error TS2345: Argument of type '{ tag: "a"; value: "a"; } | { [key: string]: "b"; tag: "b"; value: "b"; }' is not assignable to parameter of type '{ tag?: "a"; value: "a"; }'.
   Type '{ [key: string]: "b"; tag: "b"; value: "b"; }' is not assignable to type '{ tag?: "a"; value: "a"; }'.
     Types of property 'tag' are incompatible.
       Type '"b"' is not assignable to type '"a"'.
-inferenceDiscriminantOverlap.ts(34,47): error TS2345: Argument of type '{ tag: "a" | "b"; value: 1; } | { tag: "b"; value: 2; }' is not assignable to parameter of type '{ tag: "a"; value: 1 | 2; }'.
-  Type '{ tag: "a" | "b"; value: 1; }' is not assignable to type '{ tag: "a"; value: 1 | 2; }'.
+inferenceDiscriminantOverlap.ts(34,47): error TS2345: Argument of type '{ tag: "a" | "b"; value: 1; } | { tag: "b"; value: 2; }' is not assignable to parameter of type '{ tag: "a"; value: 1; }'.
+  Type '{ tag: "a" | "b"; value: 1; }' is not assignable to type '{ tag: "a"; value: 1; }'.
     Types of property 'tag' are incompatible.
       Type '"a" | "b"' is not assignable to type '"a"'.
         Type '"b"' is not assignable to type '"a"'.
 inferenceDiscriminantOverlap.ts(35,45): error TS2345: Argument of type '{ tag: "a"; value: "a"; } | { tag?: "a"; value: "a"; } | { [key: string]: "b"; value: "b"; }' is not assignable to parameter of type '{ tag: "a"; value: "a"; }'.
   Type '{ tag?: "a"; value: "a"; }' is not assignable to type '{ tag: "a"; value: "a"; }'.
     Property 'tag' is optional in type '{ tag?: "a"; value: "a"; }' but required in type '{ tag: "a"; value: "a"; }'.
+inferenceDiscriminantOverlap.ts(39,5): error TS2375: Type '{ tag?: "a"; value: 1 | 2; }' is not assignable to type '{ tag: "a"; value: 1; } | { tag?: "b"; value: 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Type '{ tag?: "a"; value: 1 | 2; }' is not assignable to type '{ tag?: "b"; value: 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+    Types of property 'tag' are incompatible.
+      Type '"a"' is not assignable to type '"b"'.
 inferenceDiscriminantOverlap.ts(55,5): error TS2322: Type '{ kind: "a"; value: readonly []; }' is not assignable to type '{ kind: string; value: string[]; } | { kind: "a"; value: number; }'.
   Type '{ kind: "a"; value: readonly []; }' is not assignable to type '{ kind: "a"; value: number; }'.
     Types of property 'value' are incompatible.
       Type 'readonly []' is not assignable to type 'number'.
-inferenceDiscriminantOverlap.ts(58,5): error TS2322: Type '{ kind: "a"; value: readonly []; }' is not assignable to type '{ kind: "a" | "b"; value: string[]; } | { kind: "a"; value: number; }'.
-  Type '{ kind: "a"; value: readonly []; }' is not assignable to type '{ kind: "a"; value: number; }'.
-    Types of property 'value' are incompatible.
-      Type 'readonly []' is not assignable to type 'number'.
-inferenceDiscriminantOverlap.ts(61,5): error TS2375: Type '{ kind: "a" | undefined; value: readonly []; }' is not assignable to type '{ kind?: "a"; value: string[]; } | { kind: "a"; value: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-  Type '{ kind: "a" | undefined; value: readonly []; }' is not assignable to type '{ kind: "a"; value: number; }'.
+inferenceDiscriminantOverlap.ts(61,5): error TS2375: Type '{ kind: "a" | undefined; value: []; }' is not assignable to type '{ kind?: "a"; value: string[]; } | { kind: "a"; value: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Type '{ kind: "a" | undefined; value: []; }' is not assignable to type '{ kind: "a"; value: number; }'.
     Types of property 'kind' are incompatible.
       Type '"a" | undefined' is not assignable to type '"a"'.
         Type 'undefined' is not assignable to type '"a"'.
-inferenceDiscriminantOverlap.ts(67,5): error TS2322: Type '{ kind?: "a"; value: readonly []; }' is not assignable to type '{ [key: string]: string | string[]; value: string[]; } | { kind: "a"; value: number; } | { kind: "b"; value: boolean; }'.
-  Type '{ kind?: "a"; value: readonly []; }' is not assignable to type '{ [key: string]: string | string[]; value: string[]; } | { kind: "a"; value: number; }'.
-    Type '{ kind?: "a"; value: readonly []; }' is not assignable to type '{ kind: "a"; value: number; }'.
-      Property 'kind' is optional in type '{ kind?: "a"; value: readonly []; }' but required in type '{ kind: "a"; value: number; }'.
 
 
-==== inferenceDiscriminantOverlap.ts (15 errors) ====
+==== inferenceDiscriminantOverlap.ts (11 errors) ====
     declare const validOptionalSource: { tag: "a"; value: 1 } | { tag?: "a"; value: 2 };
     declare const mixedOptionalSource: { tag: "a"; value: 1 } | { tag?: "b"; value: 2 };
     declare const matchingOptionalSource: { tag: "a"; value: 1 } | { tag?: "a"; value: 2 } | { tag: "b"; value: 3 };
@@ -85,23 +69,18 @@ inferenceDiscriminantOverlap.ts(67,5): error TS2322: Type '{ kind?: "a"; value: 
     
     declare function inferOptionalSource<T>(value: { tag?: "a"; value: T }): T;
     const validOptional = inferOptionalSource(validOptionalSource);
-                                              ~~~~~~~~~~~~~~~~~~~
-!!! error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag?: "a"; value: 2; }' is not assignable to parameter of type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-!!! error TS2379:   Type '{ tag?: "a"; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-!!! error TS2379:     Types of property 'value' are incompatible.
-!!! error TS2379:       Type '2' is not assignable to type '1'.
     const mixedOptional = inferOptionalSource(mixedOptionalSource);
                                               ~~~~~~~~~~~~~~~~~~~
-!!! error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag?: "b"; value: 2; }' is not assignable to parameter of type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-!!! error TS2379:   Type '{ tag?: "b"; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag?: "b"; value: 2; }' is not assignable to parameter of type '{ tag?: "a"; value: 1 | 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2379:   Type '{ tag?: "b"; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1 | 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
 !!! error TS2379:     Types of property 'tag' are incompatible.
 !!! error TS2379:       Type '"b"' is not assignable to type '"a"'.
     const matchingOptional = inferOptionalSource(matchingOptionalSource);
                                                  ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag?: "a"; value: 2; } | { tag: "b"; value: 3; }' is not assignable to parameter of type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-!!! error TS2379:   Type '{ tag?: "a"; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-!!! error TS2379:     Types of property 'value' are incompatible.
-!!! error TS2379:       Type '2' is not assignable to type '1'.
+!!! error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag?: "a"; value: 2; } | { tag: "b"; value: 3; }' is not assignable to parameter of type '{ tag?: "a"; value: 1 | 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2379:   Type '{ tag: "b"; value: 3; }' is not assignable to type '{ tag?: "a"; value: 1 | 2; }'.
+!!! error TS2379:     Types of property 'tag' are incompatible.
+!!! error TS2379:       Type '"b"' is not assignable to type '"a"'.
     const requiredMismatch = inferOptionalSource(requiredMismatchSource);
                                                  ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ tag: "a"; value: 1; } | { tag: "b"; value: 2; }' is not assignable to parameter of type '{ tag?: "a"; value: 1; }'.
@@ -116,24 +95,14 @@ inferenceDiscriminantOverlap.ts(67,5): error TS2322: Type '{ kind?: "a"; value: 
 !!! error TS2379:       Type 'undefined' is not assignable to type '"a"'.
     const explicitUndefined = inferOptionalSource(explicitUndefinedSource);
                                                   ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag: "b" | undefined; value: 2; }' is not assignable to parameter of type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-!!! error TS2379:   Type '{ tag: "b" | undefined; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2379: Argument of type '{ tag: "a"; value: 1; } | { tag: "b" | undefined; value: 2; }' is not assignable to parameter of type '{ tag?: "a"; value: 1 | 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2379:   Type '{ tag: "b" | undefined; value: 2; }' is not assignable to type '{ tag?: "a"; value: 1 | 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
 !!! error TS2379:     Types of property 'tag' are incompatible.
 !!! error TS2379:       Type '"b" | undefined' is not assignable to type '"a"'.
 !!! error TS2379:         Type 'undefined' is not assignable to type '"a"'.
     const optionalNever = inferOptionalSource(optionalNeverSource);
     const indexedOptional = inferOptionalSource(indexedSource); // error
-                                                ~~~~~~~~~~~~~
-!!! error TS2379: Argument of type '{ tag: "a"; value: "a"; } | { tag?: "a"; value: "a"; } | { [key: string]: "b"; value: "b"; }' is not assignable to parameter of type '{ tag?: "a"; value: "a"; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-!!! error TS2379:   Type '{ [key: string]: "b"; value: "b"; }' is not assignable to type '{ tag?: "a"; value: "a"; }'.
-!!! error TS2379:     Types of property 'value' are incompatible.
-!!! error TS2379:       Type '"b"' is not assignable to type '"a"'.
     const declaredOptional = inferOptionalSource(optionalPropertySource); // error
-                                                 ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2379: Argument of type '{ tag: "a"; value: "a"; } | { [key: string]: "a" | "b" | undefined; tag?: "a"; value: "b"; }' is not assignable to parameter of type '{ tag?: "a"; value: "a"; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-!!! error TS2379:   Type '{ [key: string]: "a" | "b" | undefined; tag?: "a"; value: "b"; }' is not assignable to type '{ tag?: "a"; value: "a"; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-!!! error TS2379:     Types of property 'value' are incompatible.
-!!! error TS2379:       Type '"b"' is not assignable to type '"a"'.
     const declaredRequired = inferOptionalSource(requiredPropertySource); // error
                                                  ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ tag: "a"; value: "a"; } | { [key: string]: "b"; tag: "b"; value: "b"; }' is not assignable to parameter of type '{ tag?: "a"; value: "a"; }'.
@@ -144,8 +113,8 @@ inferenceDiscriminantOverlap.ts(67,5): error TS2322: Type '{ kind?: "a"; value: 
     declare function inferRequiredSource<T>(value: { tag: "a"; value: T }): T;
     const partiallyMatching = inferRequiredSource(partiallyMatchingSource);
                                                   ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ tag: "a" | "b"; value: 1; } | { tag: "b"; value: 2; }' is not assignable to parameter of type '{ tag: "a"; value: 1 | 2; }'.
-!!! error TS2345:   Type '{ tag: "a" | "b"; value: 1; }' is not assignable to type '{ tag: "a"; value: 1 | 2; }'.
+!!! error TS2345: Argument of type '{ tag: "a" | "b"; value: 1; } | { tag: "b"; value: 2; }' is not assignable to parameter of type '{ tag: "a"; value: 1; }'.
+!!! error TS2345:   Type '{ tag: "a" | "b"; value: 1; }' is not assignable to type '{ tag: "a"; value: 1; }'.
 !!! error TS2345:     Types of property 'tag' are incompatible.
 !!! error TS2345:       Type '"a" | "b"' is not assignable to type '"a"'.
 !!! error TS2345:         Type '"b"' is not assignable to type '"a"'.
@@ -158,6 +127,11 @@ inferenceDiscriminantOverlap.ts(67,5): error TS2322: Type '{ kind?: "a"; value: 
     declare function makeOptional<const T>(): { tag?: "a"; value: T };
     export function optionalContext(): { tag: "a"; value: 1 } | { tag?: "b"; value: 2 } {
         return makeOptional();
+        ~~~~~~
+!!! error TS2375: Type '{ tag?: "a"; value: 1 | 2; }' is not assignable to type '{ tag: "a"; value: 1; } | { tag?: "b"; value: 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Type '{ tag?: "a"; value: 1 | 2; }' is not assignable to type '{ tag?: "b"; value: 2; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:     Types of property 'tag' are incompatible.
+!!! error TS2375:       Type '"a"' is not assignable to type '"b"'.
     }
     
     declare function inferOptionalTargets<A, B>(value: { tag: "a"; value: A } | { tag?: "b"; value: B }): [A, B];
@@ -182,17 +156,12 @@ inferenceDiscriminantOverlap.ts(67,5): error TS2322: Type '{ kind?: "a"; value: 
     }
     export function partialTagContext(): { kind: "a" | "b"; value: string[] } | { kind: "a"; value: number } {
         return makeTagged([]);
-        ~~~~~~
-!!! error TS2322: Type '{ kind: "a"; value: readonly []; }' is not assignable to type '{ kind: "a" | "b"; value: string[]; } | { kind: "a"; value: number; }'.
-!!! error TS2322:   Type '{ kind: "a"; value: readonly []; }' is not assignable to type '{ kind: "a"; value: number; }'.
-!!! error TS2322:     Types of property 'value' are incompatible.
-!!! error TS2322:       Type 'readonly []' is not assignable to type 'number'.
     }
     export function unionTagContext(): { kind?: "a"; value: string[] } | { kind: "a"; value: number } {
         return makeUnionTagged([]);
         ~~~~~~
-!!! error TS2375: Type '{ kind: "a" | undefined; value: readonly []; }' is not assignable to type '{ kind?: "a"; value: string[]; } | { kind: "a"; value: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-!!! error TS2375:   Type '{ kind: "a" | undefined; value: readonly []; }' is not assignable to type '{ kind: "a"; value: number; }'.
+!!! error TS2375: Type '{ kind: "a" | undefined; value: []; }' is not assignable to type '{ kind?: "a"; value: string[]; } | { kind: "a"; value: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Type '{ kind: "a" | undefined; value: []; }' is not assignable to type '{ kind: "a"; value: number; }'.
 !!! error TS2375:     Types of property 'kind' are incompatible.
 !!! error TS2375:       Type '"a" | undefined' is not assignable to type '"a"'.
 !!! error TS2375:         Type 'undefined' is not assignable to type '"a"'.
@@ -202,11 +171,6 @@ inferenceDiscriminantOverlap.ts(67,5): error TS2322: Type '{ kind?: "a"; value: 
         | { kind: "a"; value: number }
         | { kind: "b"; value: boolean } {
         return makeOptionalTagged([]);
-        ~~~~~~
-!!! error TS2322: Type '{ kind?: "a"; value: readonly []; }' is not assignable to type '{ [key: string]: string | string[]; value: string[]; } | { kind: "a"; value: number; } | { kind: "b"; value: boolean; }'.
-!!! error TS2322:   Type '{ kind?: "a"; value: readonly []; }' is not assignable to type '{ [key: string]: string | string[]; value: string[]; } | { kind: "a"; value: number; }'.
-!!! error TS2322:     Type '{ kind?: "a"; value: readonly []; }' is not assignable to type '{ kind: "a"; value: number; }'.
-!!! error TS2322:       Property 'kind' is optional in type '{ kind?: "a"; value: readonly []; }' but required in type '{ kind: "a"; value: number; }'.
     }
     
     declare function makeEither<const A, const B>(a: A, b: B): { kind: "a"; value: A } | { kind: "b"; value: B };

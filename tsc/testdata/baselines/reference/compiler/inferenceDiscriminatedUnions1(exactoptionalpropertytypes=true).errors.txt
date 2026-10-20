@@ -32,23 +32,17 @@ inferenceDiscriminatedUnions1.ts(84,5): error TS2322: Type '{ kind: "other"; val
   Type '{ kind: "other"; value: string[] | number[]; }' is not assignable to type 'Success<string[]>'.
     Types of property 'kind' are incompatible.
       Type '"other"' is not assignable to type '"success"'.
-inferenceDiscriminatedUnions1.ts(89,5): error TS2375: Type 'OptionalOk<readonly []>' is not assignable to type 'Err<string> | OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-  Type 'OptionalOk<readonly []>' is not assignable to type 'OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-    The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
 inferenceDiscriminatedUnions1.ts(93,5): error TS2375: Type 'OptionalOk<readonly []>' is not assignable to type 'MaybeErr<string> | OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
   Type 'OptionalOk<readonly []>' is not assignable to type 'OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
 inferenceDiscriminatedUnions1.ts(101,5): error TS2322: Type 'OptionalOk<readonly []>' is not assignable to type 'AlwaysUndefinedErr<string> | OptionalOk<string[]>'.
   Type 'OptionalOk<readonly []>' is not assignable to type 'OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
-inferenceDiscriminatedUnions1.ts(106,5): error TS2322: Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'Err<string> | ExplicitOptionalOk<string[]>'.
-  Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'ExplicitOptionalOk<string[]>'.
-    The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
 inferenceDiscriminatedUnions1.ts(110,5): error TS2322: Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'AlwaysUndefinedErr<string> | ExplicitOptionalOk<string[]>'.
   Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'ExplicitOptionalOk<string[]>'.
     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
-inferenceDiscriminatedUnions1.ts(115,5): error TS2322: Type 'UnionOk<readonly []>' is not assignable to type 'Err<string> | UnionOk<string[]>'.
-  Type 'UnionOk<readonly []>' is not assignable to type 'UnionOk<string[]>'.
+inferenceDiscriminatedUnions1.ts(120,5): error TS2322: Type 'UndefinedOk<readonly []>' is not assignable to type 'MaybeErr<string> | UndefinedOk<string[]>'.
+  Type 'UndefinedOk<readonly []>' is not assignable to type 'UndefinedOk<string[]>'.
     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
 inferenceDiscriminatedUnions1.ts(131,43): error TS2345: Argument of type '{ type: string; value: number; }' is not assignable to parameter of type '{ type: "a"; value: number; } | { type: "b"; value: number; }'.
   Type '{ type: string; value: number; }' is not assignable to type '{ type: "b"; value: number; }'.
@@ -67,7 +61,7 @@ inferenceDiscriminatedUnions1.ts(150,68): error TS2345: Argument of type '{ type
     Type '2' is not assignable to type '1'.
 
 
-==== inferenceDiscriminatedUnions1.ts (20 errors) ====
+==== inferenceDiscriminatedUnions1.ts (18 errors) ====
     type Ok<T> = { ok: true; value: T };
     type Err<E> = { ok: false; value: E };
     type ErrShape = { ok: false; value: string };
@@ -201,10 +195,6 @@ inferenceDiscriminatedUnions1.ts(150,68): error TS2345: Argument of type '{ type
     declare function optionalOk<const T>(value: T): OptionalOk<T>;
     export function optionalTarget(): OptionalOk<string[]> | Err<string> {
         return optionalOk([]);
-        ~~~~~~
-!!! error TS2375: Type 'OptionalOk<readonly []>' is not assignable to type 'Err<string> | OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-!!! error TS2375:   Type 'OptionalOk<readonly []>' is not assignable to type 'OptionalOk<string[]>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-!!! error TS2375:     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
     }
     
     export function bothOptional(): OptionalOk<string[]> | MaybeErr<string> {
@@ -230,10 +220,6 @@ inferenceDiscriminatedUnions1.ts(150,68): error TS2345: Argument of type '{ type
     declare function explicitOptionalOk<const T>(value: T): ExplicitOptionalOk<T>;
     export function explicitUndefined(): ExplicitOptionalOk<string[]> | Err<string> {
         return explicitOptionalOk([]);
-        ~~~~~~
-!!! error TS2322: Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'Err<string> | ExplicitOptionalOk<string[]>'.
-!!! error TS2322:   Type 'ExplicitOptionalOk<readonly []>' is not assignable to type 'ExplicitOptionalOk<string[]>'.
-!!! error TS2322:     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
     }
     
     export function explicitUndefinedOverlap(): ExplicitOptionalOk<string[]> | AlwaysUndefinedErr<string> {
@@ -247,15 +233,15 @@ inferenceDiscriminatedUnions1.ts(150,68): error TS2345: Argument of type '{ type
     declare function unionOk<const T>(value: T): UnionOk<T>;
     export function requiredUnionTag(): UnionOk<string[]> | Err<string> {
         return unionOk([]);
-        ~~~~~~
-!!! error TS2322: Type 'UnionOk<readonly []>' is not assignable to type 'Err<string> | UnionOk<string[]>'.
-!!! error TS2322:   Type 'UnionOk<readonly []>' is not assignable to type 'UnionOk<string[]>'.
-!!! error TS2322:     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
     }
     
     declare function undefinedOk<const T>(value: T): UndefinedOk<T>;
     export function undefinedTarget(): UndefinedOk<string[]> | MaybeErr<string> {
         return undefinedOk([]);
+        ~~~~~~
+!!! error TS2322: Type 'UndefinedOk<readonly []>' is not assignable to type 'MaybeErr<string> | UndefinedOk<string[]>'.
+!!! error TS2322:   Type 'UndefinedOk<readonly []>' is not assignable to type 'UndefinedOk<string[]>'.
+!!! error TS2322:     The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
     }
     
     declare function inferTwoArguments<A, B>(first: Tagged<A, B>, second: Tagged<A, B>): [A, B];
