@@ -7,9 +7,18 @@ typeReferenceRecursionIdentityCheckOrder.ts(11,7): error TS2322: Type 'never[]' 
             Type '(U | A<U>)[]' is not assignable to type 'U[]'.
               Type 'U | A<U>' is not assignable to type 'U'.
                 'U' could be instantiated with an arbitrary type which could be unrelated to 'U | A<U>'.
+typeReferenceRecursionIdentityCheckOrder.ts(12,7): error TS2322: Type 'never[]' is not assignable to type 'B<0>'.
+  The types returned by 'slice(...).every' are incompatible between these types.
+    Type '{ <S extends never>(predicate: (value: never, index: number, array: never[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any): boolean; }' is not assignable to type '<S extends 0>(predicate: (value: 0) => value is S) => this is A<S>'.
+      Type predicate 'this is any[]' is not assignable to 'this is A<any>'.
+        Type 'any[]' is not assignable to type 'A<any>'.
+          The types returned by 'flatMap(...)' are incompatible between these types.
+            Type '(U | A<U>)[]' is not assignable to type 'U[]'.
+              Type 'U | A<U>' is not assignable to type 'U'.
+                'U' could be instantiated with an arbitrary type which could be unrelated to 'U | A<U>'.
 
 
-==== typeReferenceRecursionIdentityCheckOrder.ts (1 errors) ====
+==== typeReferenceRecursionIdentityCheckOrder.ts (2 errors) ====
     // Comparing never[] to B<0> nests comparisons of the members of A and B.
     // Whether they are cut short as deeply nested must not depend on whether the
     // annotation of b is resolved before checking a instantiates slice.
@@ -32,4 +41,14 @@ typeReferenceRecursionIdentityCheckOrder.ts(11,7): error TS2322: Type 'never[]' 
 !!! error TS2322:               Type 'U | A<U>' is not assignable to type 'U'.
 !!! error TS2322:                 'U' could be instantiated with an arbitrary type which could be unrelated to 'U | A<U>'.
     const b: B<0> = [];
+          ~
+!!! error TS2322: Type 'never[]' is not assignable to type 'B<0>'.
+!!! error TS2322:   The types returned by 'slice(...).every' are incompatible between these types.
+!!! error TS2322:     Type '{ <S extends never>(predicate: (value: never, index: number, array: never[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any): boolean; }' is not assignable to type '<S extends 0>(predicate: (value: 0) => value is S) => this is A<S>'.
+!!! error TS2322:       Type predicate 'this is any[]' is not assignable to 'this is A<any>'.
+!!! error TS2322:         Type 'any[]' is not assignable to type 'A<any>'.
+!!! error TS2322:           The types returned by 'flatMap(...)' are incompatible between these types.
+!!! error TS2322:             Type '(U | A<U>)[]' is not assignable to type 'U[]'.
+!!! error TS2322:               Type 'U | A<U>' is not assignable to type 'U'.
+!!! error TS2322:                 'U' could be instantiated with an arbitrary type which could be unrelated to 'U | A<U>'.
     

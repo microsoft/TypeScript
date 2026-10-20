@@ -27,19 +27,19 @@ function getAllValuesSorted(m: ReadonlyArray<ReadonlyArray<string>>): ReadonlyAr
 
 	// Type 'unknown[]' is not assignable to type 'readonly string[]'.
 	return Array.from(flatten(m.values())).sort()
->Array.from(flatten(m.values())).sort() : unknown[]
->Array.from(flatten(m.values())).sort : (compareFn?: ((a: unknown, b: unknown) => number) | undefined) => unknown[]
->Array.from(flatten(m.values())) : unknown[]
+>Array.from(flatten(m.values())).sort() : string[]
+>Array.from(flatten(m.values())).sort : (compareFn?: ((a: string, b: string) => number) | undefined) => string[]
+>Array.from(flatten(m.values())) : string[]
 >Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >Array : ArrayConstructor
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->flatten(m.values()) : Iterable<unknown>
+>flatten(m.values()) : Iterable<string>
 >flatten : <T>(a: Iterable<Iterable<T>>) => Iterable<T>
 >m.values() : ArrayIterator<readonly string[]>
 >m.values : () => ArrayIterator<readonly string[]>
 >m : readonly (readonly string[])[]
 >values : () => ArrayIterator<readonly string[]>
->sort : (compareFn?: ((a: unknown, b: unknown) => number) | undefined) => unknown[]
+>sort : (compareFn?: ((a: string, b: string) => number) | undefined) => string[]
 }
 
 function* flatten<T>(a: Iterable<Iterable<T>>): Iterable<T> {
