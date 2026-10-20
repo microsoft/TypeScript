@@ -107,24 +107,6 @@
             "default": "./dist/ast/clone.js"
         }
     },
-    "imports": {
-        "#asyncClient": {
-            "@typescript/source": {
-                "browser": "./src/api/async/browserClient.ts",
-                "default": "./src/api/async/client.ts"
-            },
-            "browser": "./dist/api/async/browserClient.js",
-            "default": "./dist/api/async/client.js"
-        },
-        "#syncClient": {
-            "@typescript/source": {
-                "browser": "./src/api/sync/browserClient.ts",
-                "default": "./src/api/sync/client.ts"
-            },
-            "browser": "./dist/api/sync/browserClient.js",
-            "default": "./dist/api/sync/client.js"
-        }
-    },
     "scripts": {
         "node": "node --conditions @typescript/source",
         "generate": "npm run node -- scripts/generate.ts",

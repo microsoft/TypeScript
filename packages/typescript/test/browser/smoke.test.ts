@@ -26,6 +26,7 @@ describe("API over WebAssembly in a browser", () => {
                     import { API as AsyncAPI } from "typescript/async";
                     import { API as SyncAPI } from "typescript/sync";
                     import { instantiateWasm, WasmTransport } from "typescript/unstable/wasm";
+                    import { createFileSystemWithLib } from "typescript/fs";
 
                     async function check(API, module) {
                         const instance = await instantiateWasm(module);
@@ -57,6 +58,7 @@ describe("API over WebAssembly in a browser", () => {
                         return [
                             await check(AsyncAPI, module),
                             await check(SyncAPI, module),
+                            Object.keys(createFileSystemWithLib([]).symlinks).length,
                         ];
                     }
                 `,
@@ -67,7 +69,7 @@ describe("API over WebAssembly in a browser", () => {
                 typescript: "@typescript/typescript",
             },
             bundle: true,
-            conditions: ["@typescript/source", "browser"],
+            conditions: ["@typescript/source"],
             format: "esm",
             platform: "browser",
             write: false,
@@ -75,8 +77,6 @@ describe("API over WebAssembly in a browser", () => {
         assert.strictEqual(result.outputFiles.length, 1);
         const output = result.outputFiles[0].text;
         assert.doesNotMatch(output, /(?:from|import)\s*\(?["']node:/);
-        assert.match(output, /The browser async API requires an injected transport/);
-        assert.match(output, /The browser sync API requires an injected transport/);
         const bundle = result.outputFiles[0].contents;
         const wasm = await readFile(wasmURL);
 
@@ -132,7 +132,7 @@ describe("API over WebAssembly in a browser", () => {
         const page = await browser.newPage();
         await page.goto(origin);
         const result = await page.evaluate(() => Reflect.get(globalThis, "result"));
-        assert.deepStrictEqual(result, ["42", "42"]);
+        assert.deepStrictEqual(result, ["42", "42", 1]);
     });
 
     test("loads the transport entry without package resolution", async () => {

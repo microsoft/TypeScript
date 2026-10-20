@@ -1,9 +1,3 @@
-import {
-    type Client, // @sync:     Client,
-    type ClientSocketOptions,
-    type ClientSpawnOptions,
-    createClient, // @sync-skip
-} from "#asyncClient"; // @sync: } from "#syncClient";
 import { CheckFlags } from "../../../enums/checkFlags.js";
 import { CompletionItemKind } from "../../../enums/completionItemKind.js";
 import { DiagnosticCategory } from "../../../enums/diagnosticCategory.js";
@@ -143,6 +137,12 @@ import type {
     TimingCollector,
     TimingInfo,
 } from "../timing.ts";
+import {
+    type Client, // @sync:     Client,
+    type ClientSocketOptions,
+    type ClientSpawnOptions,
+    createClient, // @sync-skip
+} from "./client.ts";
 import type {
     AssertsIdentifierTypePredicate,
     AssertsThisTypePredicate,

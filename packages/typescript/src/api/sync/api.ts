@@ -15,11 +15,6 @@ import {
     cacheGeneratorMethod,
 } from "./generatorSupport.ts";
 
-import {
-    Client,
-    type ClientSocketOptions,
-    type ClientSpawnOptions,
-} from "#syncClient";
 import { CheckFlags } from "../../../enums/checkFlags.js";
 import { CompletionItemKind } from "../../../enums/completionItemKind.js";
 import { DiagnosticCategory } from "../../../enums/diagnosticCategory.js";
@@ -159,6 +154,11 @@ import type {
     TimingCollector,
     TimingInfo,
 } from "../timing.ts";
+import {
+    Client,
+    type ClientSocketOptions,
+    type ClientSpawnOptions,
+} from "./client.ts";
 import type {
     AssertsIdentifierTypePredicate,
     AssertsThisTypePredicate,
