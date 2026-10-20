@@ -11,7 +11,6 @@ import { TransportClient } from "../../src/api/async/transportClient.ts";
 import type {
     BatchRequestsParams,
     BatchRequestsResponse,
-    InferredProjectId,
 } from "../../src/api/proto.ts";
 
 describe("async transport", () => {
@@ -254,7 +253,7 @@ describe("async transport", () => {
         const text = client.apiRequest("parseCommandLine", { commandLine: [] });
         const binary = client.apiRequestBinary("getSourceFile", {
             snapshot: 1,
-            project: "project" as InferredProjectId,
+            project: 1,
             file: "/index.ts",
         });
         await Promise.resolve();
@@ -356,7 +355,7 @@ describe("async transport", () => {
         const text = client.apiRequest("parseCommandLine", { commandLine: [] });
         const binary = client.apiRequestBinary("getSourceFile", {
             snapshot: 1,
-            project: "project" as InferredProjectId,
+            project: 1,
             file: "/index.ts",
         });
         await client.close();

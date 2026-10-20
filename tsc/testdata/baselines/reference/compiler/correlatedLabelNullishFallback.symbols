@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/correlatedLabelNullishFallback.ts] ////
+
+=== correlatedLabelNullishFallback.ts ===
+function label(options: { label: string; alias: string } | { label: object; alias?: string }) {
+>label : Symbol(label, Decl(correlatedLabelNullishFallback.ts, 0, 0))
+>options : Symbol(options, Decl(correlatedLabelNullishFallback.ts, 0, 15))
+>label : Symbol(label, Decl(correlatedLabelNullishFallback.ts, 0, 25))
+>alias : Symbol(alias, Decl(correlatedLabelNullishFallback.ts, 0, 40))
+>label : Symbol(label, Decl(correlatedLabelNullishFallback.ts, 0, 60))
+>alias : Symbol(alias, Decl(correlatedLabelNullishFallback.ts, 0, 75))
+
+    if (typeof options.label === "string") return options.alias ?? options.label;
+>options.label : Symbol(label, Decl(correlatedLabelNullishFallback.ts, 0, 25), Decl(correlatedLabelNullishFallback.ts, 0, 60))
+>options : Symbol(options, Decl(correlatedLabelNullishFallback.ts, 0, 15))
+>label : Symbol(label, Decl(correlatedLabelNullishFallback.ts, 0, 25), Decl(correlatedLabelNullishFallback.ts, 0, 60))
+>options.alias : Symbol(alias, Decl(correlatedLabelNullishFallback.ts, 0, 40), Decl(correlatedLabelNullishFallback.ts, 0, 75))
+>options : Symbol(options, Decl(correlatedLabelNullishFallback.ts, 0, 15))
+>alias : Symbol(alias, Decl(correlatedLabelNullishFallback.ts, 0, 40), Decl(correlatedLabelNullishFallback.ts, 0, 75))
+>options.label : Symbol(label, Decl(correlatedLabelNullishFallback.ts, 0, 25), Decl(correlatedLabelNullishFallback.ts, 0, 60))
+>options : Symbol(options, Decl(correlatedLabelNullishFallback.ts, 0, 15))
+>label : Symbol(label, Decl(correlatedLabelNullishFallback.ts, 0, 25), Decl(correlatedLabelNullishFallback.ts, 0, 60))
+}
+

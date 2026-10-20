@@ -10,5 +10,5 @@ func GetParsedCommandLine(t assert.TestingT, jsonText string, files map[string]s
 	fs := NewVFS(files, caseSensitivity)
 	configFileName := currentDirectory.ResolveFile("tsconfig.json")
 	tsconfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(configFileName, caseSensitivity.PathKey(tspath.RootedPath(configFileName)), jsonText)
-	return tsoptions.ParseJsonSourceFileConfigFileContent(tsconfigSourceFile, fs, currentDirectory, nil, nil, nil, nil)
+	return tsoptions.ParseJsonSourceFileConfigFileContent(tsconfigSourceFile, tsoptions.NewDefaultParseConfigHost(fs), currentDirectory, nil, nil, nil, nil)
 }

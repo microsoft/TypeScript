@@ -45,6 +45,7 @@ import {
     TimingCollector,
     type TimingInfo,
 } from "../timing.ts";
+import { TimingDump } from "../timingDump.ts";
 import { TransportClient } from "./transportClient.ts";
 
 export type { AsyncClientOptions as ClientOptions, AsyncClientTransportOptions, ClientSocketOptions, ClientSpawnOptions } from "../options.ts";
@@ -64,6 +65,8 @@ export class Client {
     private closed = false;
     private connecting: Promise<void> | undefined;
     private timing: TimingCollector | undefined;
+    private timingDump: TimingDump | undefined;
+    private closing: Promise<void> | undefined;
     private batchedRequests: { method: APIRequest["method"]; params: APIRequest["params"]; resolve: (value: unknown) => void; reject: (reason?: any) => void; }[] = [];
     private nextBatch: NodeJS.Immediate | "manual" | undefined;
 
@@ -79,12 +82,16 @@ export class Client {
             );
             return;
         }
+        this.timingDump = TimingDump.fromEnvironment("async", isSpawnOptions(options) ? "spawn" : "socket");
+        if (this.timingDump || isSpawnOptions(options) && options.collectTiming) {
+            this.timing = new TimingCollector();
+        }
+        if (this.timingDump && isSpawnOptions(options)) {
+            options = { ...options, collectTiming: true };
+        }
         this.options = options;
         if (isSpawnOptions(options)) {
             configureFileSystemCallbacks(options.fs);
-            if (options.collectTiming) {
-                this.timing = new TimingCollector();
-            }
         }
     }
 
@@ -430,9 +437,12 @@ export class Client {
         return this.connection.sendRequest(requestType, undefined);
     }
 
-    async close(): Promise<void> {
+    close(): Promise<void> {
         if (this.transportClient) return this.transportClient.close();
-        if (this.closed) return;
+        return this.closing ??= this.closeWorker();
+    }
+
+    private async closeWorker(): Promise<void> {
         this.closed = true;
         if (this.nextBatch && this.nextBatch !== "manual") {
             clearImmediate(this.nextBatch);
@@ -444,23 +454,45 @@ export class Client {
             reject(new Error("Client is closed"));
         }
         await this.connecting?.catch(() => {}); // if connection is still in-progress, wait for it to finish before closing the connection
-        if (this.connection) {
-            this.connection.dispose();
-            this.connection = undefined;
+        try {
+            if (this.timingDump && this.timing) {
+                const local = this.timing.getInfo();
+                let server: ServerTimingInfo | undefined;
+                let serverTimingError: string | undefined;
+                const connection = this.connection;
+                // Closing alone does not reject pending JSON-RPC requests.
+                const onClose = connection?.onClose(() => connection.dispose());
+                try {
+                    if (this.connected) server = await this.fetchServerTiming();
+                }
+                catch (error) {
+                    serverTimingError = String(error);
+                }
+                finally {
+                    onClose?.dispose();
+                }
+                this.timingDump.write(local, server, serverTimingError);
+            }
         }
-        if (this.socket) {
-            this.socket.destroy();
-            this.socket = undefined;
+        finally {
+            if (this.connection) {
+                this.connection.dispose();
+                this.connection = undefined;
+            }
+            if (this.socket) {
+                this.socket.destroy();
+                this.socket = undefined;
+            }
+            if (this.process) {
+                // Close stdin to unblock the server's read loop, allowing it to exit cleanly.
+                // The server is blocked on stdin.Read(), so just sending SIGTERM would deadlock:
+                // - Node won't exit while child is alive
+                // - Child can't process SIGTERM while blocked on read
+                // - Read won't error until stdin is closed
+                this.process.stdin?.end();
+                this.process = undefined;
+            }
+            this.connected = false;
         }
-        if (this.process) {
-            // Close stdin to unblock the server's read loop, allowing it to exit cleanly.
-            // The server is blocked on stdin.Read(), so just sending SIGTERM would deadlock:
-            // - Node won't exit while child is alive
-            // - Child can't process SIGTERM while blocked on read
-            // - Read won't error until stdin is closed
-            this.process.stdin?.end();
-            this.process = undefined;
-        }
-        this.connected = false;
     }
 }

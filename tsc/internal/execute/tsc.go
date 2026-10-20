@@ -216,7 +216,7 @@ func tscCompilation(ctx context.Context, sys tsc.System, commandLine *tsoptions.
 			commandLineRaw = wrapped
 		}
 		path := sys.FS().CaseSensitivity().PathKey(tspath.RootedPath(configFileName))
-		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFilePath(configFileName, path, compilerOptionsFromCommandLine, commandLineRaw, sys.FS(), extendedConfigCache)
+		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFilePath(configFileName, path, compilerOptionsFromCommandLine, commandLineRaw, tsoptions.NewDefaultParseConfigHost(sys.FS()), extendedConfigCache)
 		compileTimes.ConfigTime = sys.Now().Sub(configStart)
 		if len(errors) != 0 {
 			// these are unrecoverable errors--exit to report them as diagnostics

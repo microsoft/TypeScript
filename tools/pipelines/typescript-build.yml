@@ -37,7 +37,7 @@ extends:
         fetchDepth: 1
         fetchTags: false
         retryCount: 3
-      sourceAnalysisPool: VSEngSS-MicroBuild2022-1ES
+      sourceAnalysisPool: VSEng-MicroBuildVSStable
     featureFlags:
       golang:
         internalModuleProxy:

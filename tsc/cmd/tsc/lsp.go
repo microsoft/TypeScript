@@ -55,7 +55,7 @@ func runLSP(args []string) int {
 		Cwd:                cwd,
 		FS:                 fs,
 		DefaultLibraryPath: defaultLibraryPath,
-		TypingsLocation:    tspath.ToRootedDirectoryPath(typingsLocation, cwd),
+		TypingsLocation:    typingsLocation,
 		NpmInstall:         getNpmInstall(),
 		Spawn:              getLSPSpawn(),
 		ProgressDelay:      250 * time.Millisecond,
