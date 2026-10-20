@@ -255,11 +255,16 @@ export class TransportClient {
             }
 
             for (const request of requests) {
-                if (request.kind === "text") {
-                    request.resolve(await this.sendRequest(request.method, request.params));
+                try {
+                    if (request.kind === "text") {
+                        request.resolve(await this.sendRequest(request.method, request.params));
+                    }
+                    else {
+                        request.resolve(await this.sendBinaryRequest(request.method, request.payload));
+                    }
                 }
-                else {
-                    request.resolve(await this.sendBinaryRequest(request.method, request.payload));
+                catch (error) {
+                    request.reject(error);
                 }
             }
         }

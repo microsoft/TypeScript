@@ -220,7 +220,7 @@ describe("async transport", () => {
         await client.close();
     });
 
-    test("keeps binary requests ordered inside a manual batch", async () => {
+    test("keeps binary requests ordered and isolated inside a manual batch", async () => {
         const methods: string[] = [];
         const client = new TransportClient({
             request(method) {
@@ -237,30 +237,27 @@ describe("async transport", () => {
                     bytesReceived: 0,
                 };
             },
-            requestBinary(method, payload) {
+            requestBinary(method) {
                 methods.push(method);
-                return {
-                    value: payload,
-                    bytesSent: payload.length,
-                    bytesReceived: payload.length,
-                };
+                throw new Error("could not read file");
             },
             close() {},
         }, false);
 
         await client.connect();
         const batch = client.batchContext();
-        const text = client.apiRequest("parseCommandLine", { commandLine: [] });
         const binary = client.apiRequestBinary("getSourceFile", {
             snapshot: 1,
             project: 1,
             file: "/index.ts",
         });
+        const text = client.apiRequest("parseCommandLine", { commandLine: [] });
         await Promise.resolve();
         assert.deepStrictEqual(methods, []);
         batch[Symbol.dispose]();
-        await Promise.all([text, binary]);
-        assert.deepStrictEqual(methods, ["parseCommandLine", "getSourceFile"]);
+        await assert.rejects(binary, /could not read file/);
+        assert.deepStrictEqual(await text, { options: {}, fileNames: [], errors: [] });
+        assert.deepStrictEqual(methods, ["getSourceFile", "parseCommandLine"]);
         await client.close();
     });
 
