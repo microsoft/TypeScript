@@ -3384,6 +3384,11 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		default:
 			r.resetMaybeStack(maybeStart, propagatingVarianceFlags, true)
 		}
+		// The result no longer depends on any comparison in progress, so it
+		// is reported as related, the same as when it is read from the cache.
+		if result == TernaryMaybe {
+			result = TernaryTrue
+		}
 	default:
 		// The result holds while the comparisons it depends on are in progress,
 		// so it is kept until the outermost of them completes. Until then, the
