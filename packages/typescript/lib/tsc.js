@@ -112,6 +112,13 @@ async function getWasiPaths(wasmPath) {
     const translatePath = arg => {
         return path.isAbsolute(arg) ? toGuestPath(arg) : arg;
     };
+    const decodeResponseFile = bytes => {
+        // Match the compiler, which accepts UTF-16 files marked with a BOM.
+        const encoding = bytes[0] === 0xFF && bytes[1] === 0xFE ? "utf-16le"
+            : bytes[0] === 0xFE && bytes[1] === 0xFF ? "utf-16be"
+            : "utf-8";
+        return new TextDecoder(encoding).decode(bytes);
+    };
     const responseFiles = new Map();
     let responseDirectory;
     const translateResponseFile = async hostPath => {
@@ -126,7 +133,7 @@ async function getWasiPaths(wasmPath) {
         responseFiles.set(key, guestPath);
         let contents;
         try {
-            contents = await readFile(hostPath, "utf8");
+            contents = decodeResponseFile(await readFile(hostPath));
         }
         catch {
             const fallbackPath = toGuestPath(hostPath);
