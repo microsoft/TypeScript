@@ -386,6 +386,9 @@ func (f *FourslashTest) initialize(t *testing.T, options *FourslashOptions) {
 			InitializationOptions: initializationOptions,
 		},
 	}
+	if options.RunExternalCode {
+		params.RootUri = lsproto.DocumentUriOrNull{DocumentUri: new(lsproto.DocumentUri("file:///"))}
+	}
 	params.Capabilities = getCapabilitiesWithDefaults(options.Capabilities)
 	f.capabilities = params.Capabilities
 	resp, _, ok := f.client.SendRequest(t, lsproto.InitializeInfo, params)

@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/workerGlobalMessageHandlerThis.ts] ////
+
+=== workerGlobalMessageHandlerThis.ts ===
+declare function createMessageReader(port: MessagePort | Worker | DedicatedWorkerGlobalScope): void;
+>createMessageReader : Symbol(createMessageReader, Decl(workerGlobalMessageHandlerThis.ts, 0, 0))
+>port : Symbol(port, Decl(workerGlobalMessageHandlerThis.ts, 0, 37))
+>MessagePort : Symbol(MessagePort, Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.d.ts, --, --))
+>Worker : Symbol(Worker, Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.d.ts, --, --))
+>DedicatedWorkerGlobalScope : Symbol(DedicatedWorkerGlobalScope, Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.d.ts, --, --))
+
+createMessageReader(self);
+>createMessageReader : Symbol(createMessageReader, Decl(workerGlobalMessageHandlerThis.ts, 0, 0))
+>self : Symbol(self, Decl(lib.webworker.d.ts, --, --))
+
+declare const event: MessageEvent;
+>event : Symbol(event, Decl(workerGlobalMessageHandlerThis.ts, 3, 13))
+>MessageEvent : Symbol(MessageEvent, Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.d.ts, --, --))
+
+self.onmessage?.(event);
+>self.onmessage : Symbol(onmessage, Decl(lib.webworker.d.ts, --, --))
+>self : Symbol(self, Decl(lib.webworker.d.ts, --, --))
+>onmessage : Symbol(onmessage, Decl(lib.webworker.d.ts, --, --))
+>event : Symbol(event, Decl(workerGlobalMessageHandlerThis.ts, 3, 13))
+
