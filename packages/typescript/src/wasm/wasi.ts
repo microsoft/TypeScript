@@ -373,7 +373,9 @@ function createWasiHost(options: InstantiateWasmOptions): {
 
         const deadline = performance.now() + Math.max(0, shortestDelay);
         while (performance.now() < deadline) {
-            // WASI imports are synchronous, so a clock subscription must wait here.
+            // WASI imports are synchronous, so a clock subscription must spin here.
+            // The Go scheduler only polls when every goroutine is idle with a
+            // pending timer, which the reactor does not hit during API requests.
         }
 
         new Uint8Array(memory.buffer, eventsPointer, 32).fill(0);
