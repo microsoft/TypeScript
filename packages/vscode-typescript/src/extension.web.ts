@@ -19,6 +19,10 @@ import {
     registerServerCommands,
     updateUseTsgoSetting,
 } from "./commands";
+import {
+    configurationMiddleware,
+    sendNotificationMiddleware,
+} from "./configurationMiddleware";
 import { nightlyExtensionId } from "./extensionIds";
 import { registerSourceDefinitionFeature } from "./languageFeatures/sourceDefinition";
 import {
@@ -285,6 +289,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             runExternalCode: false,
         },
         outputChannel: output,
+        middleware: {
+            workspace: configurationMiddleware,
+            sendNotification: sendNotificationMiddleware,
+        },
     };
     // A client whose start failed cannot start again, so each start gets a new one.
     let client: LanguageClient | undefined;
