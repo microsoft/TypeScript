@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"os"
 	"runtime/debug"
+	"slices"
+	"sync"
 	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/wasmreactor"
@@ -39,6 +41,9 @@ var (
 	responsePtr    uint32
 	responseLen    uint32
 
+	// hostCallbackMu serializes host callback exchanges, which share
+	// hostCallbackBuffer and the host's single pending-result slot.
+	hostCallbackMu     sync.Mutex
 	hostCallbackBuffer []byte
 	inCall             bool
 )
@@ -263,6 +268,8 @@ func (hostCallbackConn) Call(_ context.Context, method string, params any) (json
 	if err != nil {
 		return nil, err
 	}
+	hostCallbackMu.Lock()
+	defer hostCallbackMu.Unlock()
 	bufferSize := 16 + len(method) + len(paramsBytes) + hostResultCapacity + hostErrorCapacity
 	if cap(hostCallbackBuffer) < bufferSize {
 		hostCallbackBuffer = make([]byte, bufferSize)
@@ -277,7 +284,7 @@ func (hostCallbackConn) Call(_ context.Context, method string, params any) (json
 	if err != nil {
 		return nil, err
 	}
-	return json.Value(result), nil
+	return json.Value(slices.Clone(result)), nil
 }
 
 func callHost(buffer []byte, method string, params []byte, resultCapacity int) ([]byte, uint32, error) {
