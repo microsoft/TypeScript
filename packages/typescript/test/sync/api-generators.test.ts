@@ -982,18 +982,20 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         }
     });
 
-    test("lazily caches generator-enabled methods", () => {
+    test("lazily caches generator-enabled methods without adding own properties", () => {
         const api = spawnAPI();
         const prototype = Object.getPrototypeOf(api);
         try {
+            const ownKeys = Reflect.ownKeys(api);
             assert.equal(Object.hasOwn(api, "parseCommandLine"), false);
             assert.equal(typeof Object.getOwnPropertyDescriptor(prototype, "parseCommandLine")?.get, "function");
 
             const method = api.parseCommandLine;
             assert.strictEqual(api.parseCommandLine, method);
-            assert.equal(Object.hasOwn(api, "parseCommandLine"), true);
-            assert.equal(Object.keys(api).includes("parseCommandLine"), false);
+            assert.strictEqual(api.parseCommandLine.gen, method.gen);
             assert.equal(typeof method.gen, "function");
+            assert.deepEqual(Reflect.ownKeys(api), ownKeys);
+            assert.equal(Object.hasOwn(method, "gen"), true);
         }
         finally {
             api.close();
@@ -1413,8 +1415,14 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             );
             assert.equal(parent, undefined);
             assert.ok(properties.some(property => property.name === "toString"));
-            assert.equal(Object.hasOwn(syncType, "getProperties"), true);
-            assert.equal(Object.keys(syncType).includes("getProperties"), false);
+            assert.equal(Object.hasOwn(syncType, "getProperties"), false);
+
+            const { getSymbolAtLocation } = project.checker;
+            const { getProperties } = syncType;
+            assert.strictEqual(getSymbolAtLocation(node), syncSymbol);
+            assert.strictEqual(api.batch(getSymbolAtLocation.gen(node))[0], syncSymbol);
+            assert.deepEqual(getProperties(), syncType.getProperties());
+            assert.deepEqual(api.batch(getProperties.gen())[0], properties);
         }
         finally {
             api.batch(api.close.gen());
