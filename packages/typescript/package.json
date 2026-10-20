@@ -50,7 +50,7 @@
             "@typescript/source": "./src/api/sync/api.ts",
             "default": "./dist/api/sync/api.js"
         },
-        "./unstable/sync/transport": {
+        "./sync/transport": {
             "@typescript/source": "./src/api/sync/transport.ts",
             "default": "./dist/api/sync/transport.js"
         },
@@ -58,7 +58,7 @@
             "@typescript/source": "./src/api/async/api.ts",
             "default": "./dist/api/async/api.js"
         },
-        "./unstable/async/transport": {
+        "./async/transport": {
             "@typescript/source": "./src/api/async/transport.ts",
             "default": "./dist/api/async/transport.js"
         },
@@ -74,7 +74,7 @@
             "@typescript/source": "./src/api/proto.ts",
             "default": "./dist/api/proto.js"
         },
-        "./unstable/wasm": {
+        "./wasm": {
             "@typescript/source": "./src/wasm/index.ts",
             "default": "./dist/wasm/index.js"
         },

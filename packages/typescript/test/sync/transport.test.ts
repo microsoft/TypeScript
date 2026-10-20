@@ -5,7 +5,7 @@ import {
 import {
     type WasmReactorExports,
     WasmTransport,
-} from "@typescript/typescript/unstable/wasm";
+} from "@typescript/typescript/wasm";
 import assert from "node:assert";
 import {
     describe,

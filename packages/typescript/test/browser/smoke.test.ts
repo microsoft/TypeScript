@@ -69,7 +69,7 @@ describe("API over WebAssembly in a browser", () => {
                 contents: testModule({
                     async: "typescript/async",
                     sync: "typescript/sync",
-                    wasm: "typescript/unstable/wasm",
+                    wasm: "typescript/wasm",
                     fs: "typescript/fs",
                 }),
                 loader: "ts",

@@ -10,7 +10,7 @@ import {
     instantiateWasmSync,
     type WasmReactorInstance,
     WasmTransport,
-} from "@typescript/typescript/unstable/wasm";
+} from "@typescript/typescript/wasm";
 import { readFileSync } from "node:fs";
 import {
     type DocumentIdentifier,

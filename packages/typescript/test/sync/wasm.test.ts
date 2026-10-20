@@ -4,7 +4,7 @@ import {
     instantiateWasm,
     instantiateWasmSync,
     WasmTransport,
-} from "@typescript/typescript/unstable/wasm";
+} from "@typescript/typescript/wasm";
 import binaryen from "binaryen";
 import assert from "node:assert";
 import { spawn } from "node:child_process";
