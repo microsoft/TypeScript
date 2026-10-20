@@ -24,6 +24,7 @@ import type {
     VariableStatement,
 } from "@typescript/typescript/ast";
 import * as astModule from "@typescript/typescript/ast";
+import * as factory from "@typescript/typescript/ast/factory";
 import {
     formatSyntaxKind,
     getChildren,
@@ -103,6 +104,44 @@ describe("NodeObject + childrenIter", { concurrency }, () => {
     test("skips absent optional child lists", () => {
         const node = createMissingDeclaration();
         assert.deepStrictEqual([...node.childrenIter()], []);
+    });
+});
+
+describe("factory property defaults", { concurrency }, () => {
+    test("required booleans default to false", () => {
+        const factories = [
+            (value?: boolean) => factory.createBlock([], value).multiLine,
+            (value?: boolean) => factory.createArrayLiteralExpression([], value).multiLine,
+            (value?: boolean) => factory.createObjectLiteralExpression([], value).multiLine,
+            (value?: boolean) => factory.createImportAttributes(SyntaxKind.WithKeyword, [], value).multiLine,
+            (value?: boolean) => factory.createExportDeclaration(undefined, value).isTypeOnly,
+            (value?: boolean) => factory.createSyntheticExpression(undefined, value).isSpread,
+            (value?: boolean) => factory.createJsxText("text", value).containsOnlyTriviaWhiteSpaces,
+            (value?: boolean) => factory.createJSDocTypeLiteral(undefined, value).isArrayType,
+        ];
+        for (const create of factories) {
+            assert.strictEqual(create(), false);
+            assert.strictEqual(create(undefined), false);
+            assert.strictEqual(create(false), false);
+            assert.strictEqual(create(true), true);
+        }
+    });
+
+    test("modifier flags reflect modifiers", () => {
+        assert.strictEqual(factory.createExportDeclaration().modifierFlags, ModifierFlags.None);
+        const declaration = factory.createExportDeclaration([
+            createToken(SyntaxKind.ExportKeyword),
+            createToken(SyntaxKind.DefaultKeyword),
+        ]);
+        assert.strictEqual(declaration.modifierFlags, ModifierFlags.Export | ModifierFlags.Default);
+        assert.strictEqual(cloneNode(declaration).modifierFlags, declaration.modifierFlags);
+    });
+
+    test("node arrays have transform flags and synthetic nodes have no parent", () => {
+        const id = createIdentifier("x");
+        const parent: typeof id.parent = undefined;
+        assert.strictEqual(id.parent, parent);
+        assert.strictEqual(createNodeArray([id]).transformFlags, 0);
     });
 });
 

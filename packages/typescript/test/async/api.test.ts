@@ -42,6 +42,7 @@ import {
     tryGetAmbientModuleNameFromSymbolName,
     unescapeLeadingUnderscores,
 } from "@typescript/typescript/ast";
+import * as ast from "@typescript/typescript/ast";
 import {
     cloneNode,
     createArrayTypeNode,
@@ -153,6 +154,87 @@ import {
 const concurrency = areTestsFiltered();
 
 describe("API", { concurrency }, () => {
+    test("parsed optional AST properties", async () => {
+        await using api = spawnAPI();
+        const seen = new Set<SyntaxKind>();
+        function walk(node: Node): void {
+            if (ast.isDefaultClause(node)) {
+                const expected: typeof node.expression = undefined;
+                assert.strictEqual(node.expression, expected);
+                seen.add(node.kind);
+            }
+            if (ast.isExportAssignment(node) || ast.isPropertyAssignment(node) || ast.isShorthandPropertyAssignment(node) || ast.isIndexSignatureDeclaration(node)) {
+                const expected: typeof node.type = undefined;
+                assert.strictEqual(node.type, expected);
+                seen.add(node.kind);
+            }
+            if (ast.isPropertySignatureDeclaration(node)) {
+                const expected: Pick<typeof node, "type" | "initializer"> = { type: undefined, initializer: undefined };
+                assert.strictEqual(node.type, expected.type);
+                assert.strictEqual(node.initializer, expected.initializer);
+                seen.add(node.kind);
+            }
+            if (ast.isTaggedTemplateExpression(node)) {
+                const expected: typeof node.questionDotToken = undefined;
+                assert.strictEqual(node.questionDotToken, expected);
+                seen.add(node.kind);
+            }
+            if (ast.isJSDocSeeTag(node)) {
+                const expected: typeof node.nameExpression = undefined;
+                assert.strictEqual(node.nameExpression, expected);
+                seen.add(node.kind);
+            }
+            if (ast.isJSDocTemplateTag(node)) {
+                const expected: typeof node.constraint = undefined;
+                assert.strictEqual(node.constraint, expected);
+                seen.add(node.kind);
+            }
+            node.forEachChild(walk);
+            node.jsDoc?.forEach(walk);
+        }
+        await using ts = await api.createSourceFile("/repro.ts", `
+            switch (x) { default: break; }
+            export default 0;
+            const object = { x, y: 1 };
+            interface I { p; [key: string]; }
+            tag\`text\`;
+        `);
+        walk(ts.sourceFile);
+        await using js = await api.createSourceFile("/repro.js", `
+            /** @see */ function a() {}
+            /** @template T */ function b() {}
+        `);
+        walk(js.sourceFile);
+        assert.deepStrictEqual(seen, new Set([
+            SyntaxKind.DefaultClause,
+            SyntaxKind.ExportAssignment,
+            SyntaxKind.ShorthandPropertyAssignment,
+            SyntaxKind.PropertyAssignment,
+            SyntaxKind.PropertySignature,
+            SyntaxKind.IndexSignature,
+            SyntaxKind.TaggedTemplateExpression,
+            SyntaxKind.JSDocSeeTag,
+            SyntaxKind.JSDocTemplateTag,
+        ]));
+    });
+
+    test("generated arrow functions have an arrow token", async () => {
+        await using api = spawnAPI();
+        await using snapshot = await api.createSnapshot({
+            fileSystem: createVirtualFileSystem({ "/repro.ts": "declare function f(): number;" }),
+            createPrograms: [{ rootFiles: ["/repro.ts"], compilerOptions: { noLib: true } }],
+        });
+        const program = snapshot.operation.createdPrograms[0];
+        const source = await program.getSourceFile("/repro.ts");
+        assert.ok(source);
+        const project = await program.getProject();
+        const type = await project.checker.getTypeAtLocation(source.statements[0]);
+        const signatures = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        const arrow = await project.checker.signatureToSignatureDeclaration(signatures[0], SyntaxKind.ArrowFunction);
+        assert.ok(arrow && ast.isArrowFunction(arrow));
+        assert.strictEqual(arrow.equalsGreaterThanToken.kind, SyntaxKind.EqualsGreaterThanToken);
+    });
+
     test("getCurrentLanguageServerSnapshot is LSP-only", async () => {
         if (!!false) {
             await using standalone = new API();
