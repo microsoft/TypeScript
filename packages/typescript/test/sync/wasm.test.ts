@@ -21,6 +21,7 @@ import {
     test,
 } from "node:test";
 import { WASI } from "node:wasi";
+import { serverFS } from "../../src/api/fs.ts";
 
 describe("API over WebAssembly", () => {
     test("publishes its library file list", async () => {
@@ -324,6 +325,15 @@ describe("API over WebAssembly", () => {
         });
         assert.strictEqual(emittedFiles.get("/src/index.js"), "\uFEFFexport const value = 42;\n");
         assert.strictEqual(transport.requestSync("echo", "after callback"), "after callback");
+
+        transport.setFileSystem({ writeFile: () => serverFS.useOS });
+        project.program.emit();
+        assert.strictEqual(transport.readFile("/src/index.js"), "\uFEFFexport const value = 42;\n");
+        transport.setFileSystem({ writeFile: serverFS.error });
+        assert.match(
+            project.program.emit().diagnostics[0]?.text ?? "",
+            /Could not write file '\/src\/index\.js': filesystem callback returned serverFS\.error/,
+        );
 
         const largeResolution = { resolvedFileName: "/large.d.ts", padding: "x".repeat(100_000) };
         let resolverCalls = 0;

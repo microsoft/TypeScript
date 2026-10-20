@@ -1,4 +1,8 @@
 import type { FileSystemCallbacks } from "../api/fs.ts";
+import {
+    encodeFileSystemCallbackResult,
+    serverFS,
+} from "../api/fsCallbacks.ts";
 import { Wtf8Decoder } from "../api/node/wtf8.ts";
 import type { RootedFilePath } from "../ast/index.ts";
 import type { WasmReactorInstance } from "./transport.ts";
@@ -325,7 +329,8 @@ function createWasiHost(options: InstantiateWasmOptions): {
     function hostWriteFile(iovsPointer: number, iovsLength: number, writtenPointer: number): number {
         iovsPointer >>>= 0;
         writtenPointer >>>= 0;
-        if (typeof fileSystem?.writeFile !== "function") return errnoBadFileDescriptor;
+        const writeFile = fileSystem?.writeFile;
+        if (writeFile === undefined || writeFile === serverFS.useOS) return errnoBadFileDescriptor;
         if (iovsLength !== 1) return errnoInvalidArgument;
         const memory = getMemory();
         const view = new DataView(memory.buffer);
@@ -342,7 +347,10 @@ function createWasiHost(options: InstantiateWasmOptions): {
         const path = textDecoder.decode(new Uint8Array(memory.buffer, pathPointer, pathLength));
         const data = fileContentDecoder.decode(new Uint8Array(memory.buffer, dataPointer, dataLength));
         try {
-            fileSystem.writeFile(path as RootedFilePath, data);
+            const result = typeof writeFile === "function" ? writeFile(path as RootedFilePath, data) : writeFile;
+            const response = encodeFileSystemCallbackResult("writeFile", result);
+            if (response.kind === "useOS") return errnoBadFileDescriptor;
+            if (response.kind === "error") throw new Error("filesystem callback returned serverFS.error: writeFile");
             new DataView(getMemory().buffer).setUint32(writtenPointer, bufferLength, true);
             return errnoSuccess;
         }

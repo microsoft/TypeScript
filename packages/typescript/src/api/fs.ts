@@ -5,6 +5,7 @@ import type {
     RootedFilePath,
     RootedPath,
 } from "../ast/index.ts";
+import { serverFS } from "./fsCallbacks.ts";
 import { normalizePath } from "./path.ts";
 import type {
     RequestDirectoryEntries,
@@ -32,30 +33,7 @@ export interface FileSystemStat {
     mtime: Date;
 }
 
-const useOS: unique symbol = Symbol("useOS");
-const identity: unique symbol = Symbol("identity");
-const fakeStat: unique symbol = Symbol("fakeStat");
-const noop: unique symbol = Symbol("noop");
-const error: unique symbol = Symbol("error");
-
-export const serverFS: {
-    /** Delegate the configured operation, or the current callback invocation, to the server's operating-system filesystem. */
-    readonly useOS: typeof useOS;
-    /** Use the input path as its own real path without consulting a filesystem. Valid only for `realpath`. */
-    readonly identity: typeof identity;
-    /** Synthesize stat information from `directoryExists` and `fileExists`. Valid only for `stat`. */
-    readonly fakeStat: typeof fakeStat;
-    /** Ignore writes without invoking a callback or writing to the server's operating-system filesystem. Valid only for `writeFile`. */
-    readonly noop: typeof noop;
-    /** Panic if the configured operation, or current callback invocation, reaches the server filesystem. */
-    readonly error: typeof error;
-} = {
-    useOS: useOS,
-    identity: identity,
-    fakeStat: fakeStat,
-    noop: noop,
-    error: error,
-};
+export { serverFS };
 
 export interface FileSystemCallbacks {
     directoryExists:
