@@ -3238,6 +3238,12 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		if r.maybeKeysSet.Has(broadestEquivalentId) {
 			return TernaryMaybe
 		}
+		// What relates with unconstrained type parameters also relates with
+		// constrained ones.
+		if entry := r.relation.get(broadestEquivalentId); entry&RelationComparisonResultSucceeded != 0 {
+			r.c.reliabilityFlags |= entry & (RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable)
+			return TernaryTrue
+		}
 	}
 	if len(r.sourceStack) == 100 || len(r.targetStack) == 100 {
 		// We stop relating if we reach 100 levels of nesting. This is a backstop to catch infinite recursion
