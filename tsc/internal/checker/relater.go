@@ -3616,7 +3616,8 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				nameType := r.c.getNameTypeFromMappedType(targetType)
 				constraintType := r.c.getConstraintTypeFromMappedType(targetType)
 				var targetKeys *Type
-				if nameType != nil && r.c.isMappedTypeWithKeyofConstraintDeclaration(targetType) {
+				isFiltering := nameType != nil && r.c.isMappedTypeWithKeyofConstraintDeclaration(targetType)
+				if isFiltering {
 					// we need to get the apparent mappings and union them with the generic mappings, since some properties may be
 					// missing from the `constraintType` which will otherwise be mapped in the object
 					mappedKeys := r.c.getApparentMappedTypeKeys(nameType, targetType)
@@ -3626,6 +3627,17 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 					targetKeys = nameType
 				} else {
 					targetKeys = constraintType
+				}
+				if isFiltering && source.flags&TypeFlagsIntersection != 0 && r.someTypeRelatedToType(source, constraintType, false, intersectionState) == TernaryTrue {
+					// run the filter over `source` - some part of `source` is related to the constraint - if source's other elements end up filtering the same way the nameType does, the assignment can pass
+					// This effectively is a workaround for a lack of distributive conditional/distributive homomorphic mapped types relationship rules that uses execution of the distribution (even at higher order)
+					// to approximate a better result.
+					// See the homomorphic case in tsc\testdata\tests\cases\compiler\indexMappedTypeWithFilteredKeysWithNegation.ts
+					sourceInstantiatedTarget := r.c.instantiateType(nameType, newSimpleTypeMapper(r.c.getTypeParameterFromMappedType(targetType), source))
+					broadTargetKeys := r.c.getUnionType([]*Type{targetKeys, sourceInstantiatedTarget})
+					if r.isRelatedTo(source, broadTargetKeys, RecursionFlagsTarget, false) == TernaryTrue {
+						return TernaryTrue
+					}
 				}
 				if r.isRelatedTo(source, targetKeys, RecursionFlagsTarget, reportErrors) == TernaryTrue {
 					return TernaryTrue
@@ -3662,6 +3674,11 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				if result != TernaryFalse {
 					return result
 				}
+			}
+		} else if simplifiedTarget := r.getOptionalSimplificationOfConditional(target); simplifiedTarget != nil {
+			result = r.isRelatedToEx(source, simplifiedTarget, RecursionFlagsTarget, false /*reportErrors*/, nil /*headMessage*/, intersectionState)
+			if result != TernaryFalse {
+				return result
 			}
 		}
 	case target.flags&TypeFlagsTemplateLiteral != 0:
@@ -4005,6 +4022,34 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		}
 	}
 	return TernaryFalse
+}
+
+func (r *Relater) getOptionalSimplificationOfConditional(target *Type) *Type {
+	if target.flags&TypeFlagsConditional == 0 {
+		return nil
+	}
+	// TODO: This is a kludge for not having proper rules for relating distributive conditional types.
+	// We rewrite `A extends B ? never : Q<A>` into `Q<A & not B>` - provided that substitution
+	// actually changes it. This is not *particularly* accurate, but enables the common case of relating a filtering mapped type to the equivalent filtering negated type.
+	// See the non-homomorphic case in tsc\testdata\tests\cases\compiler\indexMappedTypeWithFilteredKeysWithNegation.ts for an example.
+	root := target.AsConditionalType().root
+	if root.isDistributive && r.c.getTrueTypeFromConditionalType(target).flags&TypeFlagsNever != 0 {
+		f := r.c.getFalseTypeFromConditionalType(target)
+		remappedFalseType := r.c.instantiateType(
+			r.c.getTypeFromTypeNode(root.node.FalseType),
+			r.c.combineTypeMappers(
+				newSimpleTypeMapper(
+					getNonDistributedTypeParameter(root.checkType),
+					r.c.getIntersectionType([]*Type{root.checkType, r.c.getNegatedType(root.extendsType)}),
+				),
+				target.AsConditionalType().mapper,
+			),
+		)
+		if remappedFalseType != f {
+			return remappedFalseType
+		}
+	}
+	return nil
 }
 
 func (r *Relater) typeArgumentsRelatedTo(sources []*Type, targets []*Type, variances []VarianceFlags, reportErrors bool, intersectionState IntersectionState) Ternary {

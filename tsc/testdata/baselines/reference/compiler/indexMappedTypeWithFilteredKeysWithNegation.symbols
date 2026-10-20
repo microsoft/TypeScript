@@ -1,0 +1,139 @@
+//// [tests/cases/compiler/indexMappedTypeWithFilteredKeysWithNegation.ts] ////
+
+=== indexMappedTypeWithFilteredKeysWithNegation.ts ===
+// homomorphic - mapped type causes `keyof ExcludeKey` to not simplify, relater operates with full mapped type awareness
+type ExcludeKey<T, TKey> = {
+>ExcludeKey : Symbol(ExcludeKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 0, 0))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 1, 16))
+>TKey : Symbol(TKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 1, 18))
+
+    [K in keyof T as K extends TKey ? never : K]: T[K]
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 2, 5))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 1, 16))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 2, 5))
+>TKey : Symbol(TKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 1, 18))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 2, 5))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 1, 16))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 2, 5))
+
+};
+
+interface Test {
+>Test : Symbol(Test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 3, 2))
+
+    a: string;
+>a : Symbol(Test.a, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 5, 16))
+
+    b: number;
+>b : Symbol(Test.b, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 6, 14))
+
+    c: boolean;
+>c : Symbol(Test.c, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 7, 14))
+}
+
+declare const test: ExcludeKey<Test, "b">; 
+>test : Symbol(test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 11, 13))
+>ExcludeKey : Symbol(ExcludeKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 0, 0))
+>Test : Symbol(Test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 3, 2))
+
+declare var possibleKey: string & keyof Test & not "b";
+>possibleKey : Symbol(possibleKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 12, 11))
+>Test : Symbol(Test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 3, 2))
+
+test[possibleKey];
+>test : Symbol(test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 11, 13))
+>possibleKey : Symbol(possibleKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 12, 11))
+
+function f<T extends Test>(test: ExcludeKey<T, "b">, possibleKey: string & keyof T & not "b") {
+>f : Symbol(f, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 14, 18))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 16, 11))
+>Test : Symbol(Test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 3, 2))
+>test : Symbol(test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 16, 27))
+>ExcludeKey : Symbol(ExcludeKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 0, 0))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 16, 11))
+>possibleKey : Symbol(possibleKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 16, 52))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 16, 11))
+
+    test[possibleKey];
+>test : Symbol(test, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 16, 27))
+>possibleKey : Symbol(possibleKey, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 16, 52))
+}
+
+// non-homomorphic - mapped type declared with `keyof T & string` causes `keyof PathTuples` to simplify to `(keyof T & string) extends '_key' ? never : (keyof T & string)`
+// relater must operate without mapped type awareness
+// ultimate comparison is `keyof T & string & not '_key'` to `(keyof T & string) extends '_key' ? never : (keyof T & string)`
+type LocalExclude<T, U> = T & not U;
+>LocalExclude : Symbol(LocalExclude, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 18, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 23, 18))
+>U : Symbol(U, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 23, 20))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 23, 18))
+>U : Symbol(U, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 23, 20))
+
+type ChildPaths<T> = [PathTuples<T>] extends [never] ? [] : PathTuples<T>;
+>ChildPaths : Symbol(ChildPaths, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 23, 36))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 24, 16))
+>PathTuples : Symbol(PathTuples, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 24, 74))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 24, 16))
+>PathTuples : Symbol(PathTuples, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 24, 74))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 24, 16))
+
+type PathTuples<T> = T extends object
+>PathTuples : Symbol(PathTuples, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 24, 74))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 25, 16))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 25, 16))
+
+  ? {
+      [K in keyof T & string as K extends '_key' ? never : K]: [PathTuples<T[K]>] extends [never]
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 27, 7))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 25, 16))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 27, 7))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 27, 7))
+>PathTuples : Symbol(PathTuples, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 24, 74))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 25, 16))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 27, 7))
+
+        ? never
+        : readonly [K, ...ChildPaths<T[K]>];
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 27, 7))
+>ChildPaths : Symbol(ChildPaths, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 23, 36))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 25, 16))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 27, 7))
+
+    }[LocalExclude<keyof T & string, '_key'>]
+>LocalExclude : Symbol(LocalExclude, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 18, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 25, 16))
+
+  : [];
+
+type T1 = PathTuples<{ a: string; _key: string; b: { c: number } }>;
+>T1 : Symbol(T1, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 31, 7))
+>PathTuples : Symbol(PathTuples, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 24, 74))
+>a : Symbol(a, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 33, 22))
+>_key : Symbol(_key, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 33, 33))
+>b : Symbol(b, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 33, 47))
+>c : Symbol(c, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 33, 52))
+
+const t1: T1 = ['b', 'c'];
+>t1 : Symbol(t1, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 34, 5))
+>T1 : Symbol(T1, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 31, 7))
+
+type S1<T> = { [K in keyof T & string as K extends '_key' ? never : K]: 1 }[LocalExclude<keyof T & string, '_key'>];
+>S1 : Symbol(S1, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 34, 26))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 36, 8))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 36, 16))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 36, 8))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 36, 16))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 36, 16))
+>LocalExclude : Symbol(LocalExclude, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 18, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 36, 8))
+
+type S2<T> = { [K in string & keyof T as K extends '_key' ? never : K]: 1 }[LocalExclude<string & keyof T, '_key'>];
+>S2 : Symbol(S2, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 36, 116))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 37, 8))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 37, 16))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 37, 8))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 37, 16))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 37, 16))
+>LocalExclude : Symbol(LocalExclude, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 18, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegation.ts, 37, 8))
+
