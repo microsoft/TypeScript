@@ -31,7 +31,7 @@ export function uriToWasmMountPoint(uri: WebFileSystemUri): string {
     if (path.startsWith("//")) {
         const slash = path.indexOf("/", 2);
         const rawAuthority = slash === -1 ? path.slice(2) : path.slice(2, slash);
-        authority = rawAuthority === nulAuthority || isDriveRoot(rawAuthority) ? forceEncodeSegment(rawAuthority) : encodeSegment(rawAuthority);
+        authority = rawAuthority === nulAuthority || isDriveRoot(rawAuthority) ? forceEncodeSegment(rawAuthority) : needsEncoding(rawAuthority) ? forceEncodeSegment(rawAuthority, /* preserveExtension */ true) : rawAuthority;
         path = slash === -1 ? "" : path.slice(slash + 1);
     }
     const segments = path === "" ? [] : (path.endsWith("/") ? path : `${path}/`).split("/").slice(0, -1).map(encodeSegment);
