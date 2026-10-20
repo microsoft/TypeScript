@@ -13,7 +13,16 @@ import {
     type Message,
     type MessageTransports,
 } from "vscode-languageclient/browser";
+import {
+    registerEnablementCommands,
+    updateUseTsgoSetting,
+} from "./commands";
 import { nightlyExtensionId } from "./extensionIds";
+import {
+    getUseTsgo,
+    needsExtHostRestartOnChange,
+    shouldStartTsgo,
+} from "./settings";
 import {
     uriSegmentToWasmName,
     uriToWasmMountPoint,
@@ -175,6 +184,7 @@ class WasmMessageWriter extends AbstractMessageWriter {
 }
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
+    await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", false);
     const output = vscode.window.createOutputChannel("TypeScript 7", { log: true });
     context.subscriptions.push(output);
 
@@ -266,15 +276,77 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             void process?.terminate();
         },
     });
+
+    let running = false;
+    let pending = Promise.resolve();
+    const enqueue = (action: () => Promise<void>): Promise<void> => pending = pending.then(action).catch(error => output.error(`TypeScript language server failed: ${String(error)}`));
+    const start = async () => {
+        await client.start();
+        running = true;
+        await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", true);
+    };
+    const stop = async () => {
+        if (!running) return;
+        running = false;
+        await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", false);
+        await client.stop();
+        await process?.terminate();
+        process = undefined;
+    };
+
+    registerEnablementCommands(context, undefined, () => enqueue(stop));
+
     // WASI mounts are fixed when the process starts, so new folders need a new process.
-    let restarting = Promise.resolve();
     context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(() => {
-        restarting = restarting.then(async () => {
-            await client.stop();
-            await client.start();
-        }).catch(error => output.error(`Failed to restart TypeScript language server: ${String(error)}`));
+        void enqueue(async () => {
+            if (!running) return;
+            await stop();
+            await start();
+        });
     }));
-    await client.start();
+
+    let configChangeTimeout: ReturnType<typeof setTimeout> | undefined;
+    context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(event => {
+        if (
+            event.affectsConfiguration("typescript.experimental.useTsgo")
+            || event.affectsConfiguration("js/ts.experimental.useTsgo")
+        ) {
+            // Debounce to coalesce rapid events when both settings are updated together.
+            clearTimeout(configChangeTimeout);
+            configChangeTimeout = setTimeout(async () => {
+                if (needsExtHostRestartOnChange()) {
+                    const selected = await vscode.window.showInformationMessage(vscode.l10n.t("TypeScript 7 setting has changed. Restart extensions to apply changes."), vscode.l10n.t("Restart Extensions"));
+                    if (selected) {
+                        vscode.commands.executeCommand("workbench.action.restartExtensionHost");
+                    }
+                    return;
+                }
+                void enqueue(async () => {
+                    await stop();
+                    if (shouldStartTsgo(context)) {
+                        await start();
+                    }
+                });
+            }, 100);
+        }
+    }));
+    context.subscriptions.push({ dispose: () => clearTimeout(configChangeTimeout) });
+
+    const hasOnboardedTsgoStateKey = "hasOnboardedTsgo";
+    const shouldOnboardTsgo = !context.globalState.get<boolean>(hasOnboardedTsgoStateKey);
+    if (shouldOnboardTsgo) {
+        await context.globalState.update(hasOnboardedTsgoStateKey, true);
+    }
+    if (getUseTsgo() === undefined && shouldOnboardTsgo) {
+        void updateUseTsgoSetting(true);
+        return;
+    }
+
+    if (!shouldStartTsgo(context)) {
+        output.appendLine(vscode.l10n.t("TypeScript 7 is disabled. Select 'TypeScript: Enable TypeScript 7' in the command palette to enable it."));
+        return;
+    }
+    await enqueue(start);
 }
 
 export function deactivate(): void {}
