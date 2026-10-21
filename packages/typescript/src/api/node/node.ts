@@ -34,6 +34,7 @@ import {
 import {
     HEADER_OFFSET_EXTENDED_DATA,
     HEADER_OFFSET_NODES,
+    HEADER_OFFSET_SOURCE_FILE_ID,
     HEADER_OFFSET_STRING_TABLE,
     HEADER_OFFSET_STRING_TABLE_OFFSETS,
     HEADER_OFFSET_STRUCTURED_DATA,
@@ -106,6 +107,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     private _cachedSupplementalSourceFileNames: readonly RootedFilePath[] | undefined;
     private _cachedDiagnosticDirectives: readonly MappedDiagnosticDirective[] | undefined;
     private _diagnosticDirectivesRead = false;
+    private _handleFileKey: string | undefined;
 
     constructor(
         data: Uint8Array,
@@ -145,6 +147,22 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     /** @internal */
     get nodeId(): string {
         return readSourceFileNodeId(this.view);
+    }
+
+    /**
+     * The file component of node handles sent to the server: `#` followed by the
+     * server's identity for this exact source file.
+     * @internal
+     */
+    get handleFileKey(): string {
+        if (this._handleFileKey === undefined) {
+            const nodeId = this.view.getBigUint64(HEADER_OFFSET_SOURCE_FILE_ID, true);
+            if (nodeId === 0n) {
+                throw new Error("Node has no server source-file identity");
+            }
+            this._handleFileKey = `#${nodeId}`;
+        }
+        return this._handleFileKey;
     }
 
     readFileReferences(structuredDataOffset: number): readonly FileReference[] {
@@ -477,12 +495,13 @@ export function findDescendant(root: Node, pos: number, end: number, kind: Synta
 export interface ParsedNodeHandle {
     index: number;
     kind: SyntaxKind;
+    sourceFileId: string;
     path: PathKey;
 }
 
 /**
  * Parse a compiler-produced node handle into its components.
- * Handle format: "index.kind.path" where path may contain dots.
+ * Handle format: "index.kind.#sourceFileId.path" where path may contain dots.
  */
 export function parseNodeHandleFromCompiler(handle: string): ParsedNodeHandle {
     const firstDot = handle.indexOf(".");
@@ -496,7 +515,13 @@ export function parseNodeHandleFromCompiler(handle: string): ParsedNodeHandle {
 
     const indexText = handle.slice(0, firstDot);
     const kindText = handle.slice(firstDot + 1, secondDot);
-    const path = handle.slice(secondDot + 1);
+    const thirdDot = handle.indexOf(".", secondDot + 1);
+    if (thirdDot === -1) {
+        throw new Error(`Invalid node handle: ${handle}`);
+    }
+    const fileKey = handle.slice(secondDot + 1, thirdDot);
+    const sourceFileId = fileKey.slice(1);
+    const path = handle.slice(thirdDot + 1);
     const index = Number(indexText);
     const kind = Number(kindText);
     const key = tryPathKeyFromCanonical(path);
@@ -507,6 +532,8 @@ export function parseNodeHandleFromCompiler(handle: string): ParsedNodeHandle {
         !Number.isSafeInteger(kind) ||
         kind < 0 ||
         String(kind) !== kindText ||
+        !/^#[1-9][0-9]*$/.test(fileKey) ||
+        BigInt(sourceFileId) > 0xFFFFFFFFFFFFFFFFn ||
         key === undefined
     ) {
         throw new Error(`Invalid node handle: ${handle}`);
@@ -514,6 +541,7 @@ export function parseNodeHandleFromCompiler(handle: string): ParsedNodeHandle {
     return {
         index,
         kind: kind as SyntaxKind,
+        sourceFileId,
         path: key,
     };
 }
@@ -536,5 +564,24 @@ export function getNodeId(node: Node): string {
     if (!(node instanceof RemoteNode)) {
         throw new Error("getNodeId requires a RemoteNode");
     }
-    return node.id;
+    const sourceFile = node["_sourceFile"];
+    if (sourceFile instanceof RemoteSourceFile) {
+        return `${node["index"]}.${node.kind}.${sourceFile.handleFileKey}.${sourceFile.path}`;
+    }
+    throw new Error("Node has no server source-file identity");
+}
+
+/**
+ * Get the compact handle identifying a node in its exact server source-file AST.
+ * @internal
+ */
+export function getNodeRequestHandle(node: Node): string {
+    if (!(node instanceof RemoteNode)) {
+        throw new Error("getNodeRequestHandle requires a RemoteNode");
+    }
+    const sourceFile = node["_sourceFile"];
+    if (sourceFile instanceof RemoteSourceFile) {
+        return `${node["index"]}.${sourceFile.handleFileKey}`;
+    }
+    throw new Error("Node has no server source-file identity");
 }

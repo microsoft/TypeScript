@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/componentEnhancerReturn.ts] ////
+
+=== componentEnhancerReturn.ts ===
+type Component = ((props: number) => number) | (new (props: number) => object);
+>Component : Component
+>props : number
+>props : number
+
+type App = Component & { getInitialProps?: () => object };
+>App : App
+>getInitialProps : (() => object) | undefined
+
+declare function render(enhance: (app: App) => App): void;
+>render : (enhance: (app: App) => App) => void
+>enhance : (app: App) => App
+>app : App
+
+render(app => props => props);
+>render(app => props => props) : void
+>render : (enhance: (app: App) => App) => void
+>app => props => props : (app: App) => (props: number) => number
+>app : App
+>props => props : (props: number) => number
+>props : number
+>props : number
+
+interface RenderPlugin { enhance(app: Component): (props: number) => number }
+>enhance : (app: Component) => (props: number) => number
+>app : Component
+>props : number
+
+declare const plugins: RenderPlugin[];
+>plugins : RenderPlugin[]
+
+render(app => plugins.reduce((result, plugin) => plugin.enhance(result), app));
+>render(app => plugins.reduce((result, plugin) => plugin.enhance(result), app)) : void
+>render : (enhance: (app: App) => App) => void
+>app => plugins.reduce((result, plugin) => plugin.enhance(result), app) : (app: App) => App
+>app : App
+>plugins.reduce((result, plugin) => plugin.enhance(result), app) : App
+>plugins.reduce : { (callbackfn: (previousValue: RenderPlugin, currentValue: RenderPlugin, currentIndex: number, array: RenderPlugin[]) => RenderPlugin): RenderPlugin; (callbackfn: (previousValue: RenderPlugin, currentValue: RenderPlugin, currentIndex: number, array: RenderPlugin[]) => RenderPlugin, initialValue: RenderPlugin): RenderPlugin; <U>(callbackfn: (previousValue: U, currentValue: RenderPlugin, currentIndex: number, array: RenderPlugin[]) => U, initialValue: U): U; }
+>plugins : RenderPlugin[]
+>reduce : { (callbackfn: (previousValue: RenderPlugin, currentValue: RenderPlugin, currentIndex: number, array: RenderPlugin[]) => RenderPlugin): RenderPlugin; (callbackfn: (previousValue: RenderPlugin, currentValue: RenderPlugin, currentIndex: number, array: RenderPlugin[]) => RenderPlugin, initialValue: RenderPlugin): RenderPlugin; <U>(callbackfn: (previousValue: U, currentValue: RenderPlugin, currentIndex: number, array: RenderPlugin[]) => U, initialValue: U): U; }
+>(result, plugin) => plugin.enhance(result) : (result: App, plugin: RenderPlugin) => (props: number) => number
+>result : App
+>plugin : RenderPlugin
+>plugin.enhance(result) : (props: number) => number
+>plugin.enhance : (app: Component) => (props: number) => number
+>plugin : RenderPlugin
+>enhance : (app: Component) => (props: number) => number
+>result : App
+>app : App
+
