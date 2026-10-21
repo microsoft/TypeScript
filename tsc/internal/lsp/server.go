@@ -939,6 +939,13 @@ func (s *Server) readLoop(ctx context.Context) error {
 				}
 				continue
 			}
+			if errors.Is(err, io.EOF) {
+				// Queue EOF after pending requests so transport closure cannot preempt dispatch.
+				if err := s.requestQueue.Put(ctx, nil); err != nil {
+					return err
+				}
+				return nil
+			}
 			return err
 		}
 
@@ -1015,6 +1022,9 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
 				return cause
 			}
 			return err
+		}
+		if req == nil {
+			return io.EOF
 		}
 
 		s.lastRequestTimeMs.Store(time.Now().UnixMilli())

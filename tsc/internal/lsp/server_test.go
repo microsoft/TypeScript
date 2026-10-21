@@ -23,17 +23,13 @@ type shutdownTestWriter struct{}
 
 func (shutdownTestWriter) Write(*lsproto.Message) error { return nil }
 
-type blockingExitTestReader struct {
-	release chan struct{}
-	read    bool
-}
+type exitThenEOFTestReader struct{ read bool }
 
-func (r *blockingExitTestReader) Read() (*lsproto.Message, error) {
+func (r *exitThenEOFTestReader) Read() (*lsproto.Message, error) {
 	if !r.read {
 		r.read = true
 		return (&lsproto.RequestMessage{Method: lsproto.MethodExit}).Message(), nil
 	}
-	<-r.release
 	return nil, io.EOF
 }
 
@@ -127,7 +123,7 @@ func TestDispatchLoopReturnsErrorWhenExitBeforeShutdown(t *testing.T) {
 func TestRunExitsSuccessfullyAfterShutdown(t *testing.T) {
 	t.Parallel()
 
-	reader := &blockingExitTestReader{release: make(chan struct{})}
+	reader := &exitThenEOFTestReader{}
 	server := NewServer(&ServerOptions{
 		In:  reader,
 		Out: shutdownTestWriter{},
@@ -138,9 +134,23 @@ func TestRunExitsSuccessfullyAfterShutdown(t *testing.T) {
 	server.shutdownRequested.Store(true)
 
 	err := server.Run(t.Context())
-	close(reader.release)
 	if err != nil {
 		t.Fatalf("Run() error = %v, want nil", err)
+	}
+}
+
+func TestRunReturnsErrorWhenExitPrecedesShutdown(t *testing.T) {
+	t.Parallel()
+
+	server := NewServer(&ServerOptions{
+		In:  &exitThenEOFTestReader{},
+		Out: shutdownTestWriter{},
+		Err: io.Discard,
+		Cwd: "/test",
+	})
+
+	if err := server.Run(t.Context()); !errors.Is(err, errExitBeforeShutdown) {
+		t.Fatalf("Run() error = %v, want %v", err, errExitBeforeShutdown)
 	}
 }
 
