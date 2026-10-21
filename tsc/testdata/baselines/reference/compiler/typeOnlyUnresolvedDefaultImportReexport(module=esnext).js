@@ -10,5 +10,5 @@ const x = Foo;
 
 
 //// [main.js]
-import { Foo } from "./a";
 const x = Foo;
+export {};
