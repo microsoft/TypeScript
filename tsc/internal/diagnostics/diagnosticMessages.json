@@ -4792,6 +4792,10 @@
         "category": "Error",
         "code": 5115
     },
+    "Network path '{0}' is not supported.": {
+        "category": "Error",
+        "code": 5116
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -8727,6 +8731,10 @@
     "Content mappers require the '--runExternalCode' command line flag to be enabled.": {
         "category": "Error",
         "code": 18068
+    },
+    "The content mapper package '{0}' is outside the open workspace and will not be loaded.": {
+        "category": "Error",
+        "code": 18124
     },
     "The content mapper '{0}' failed to transform this file.": {
         "category": "Error",

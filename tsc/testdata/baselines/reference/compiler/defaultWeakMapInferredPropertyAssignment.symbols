@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/defaultWeakMapInferredPropertyAssignment.ts] ////
+
+=== defaultWeakMapInferredPropertyAssignment.ts ===
+const frameInfo = { frames: new WeakMap() };
+>frameInfo : Symbol(frameInfo, Decl(defaultWeakMapInferredPropertyAssignment.ts, 0, 5))
+>frames : Symbol(frames, Decl(defaultWeakMapInferredPropertyAssignment.ts, 0, 19))
+>WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const target: { frames: WeakMap<{ id: string }, number> } = frameInfo;
+>target : Symbol(target, Decl(defaultWeakMapInferredPropertyAssignment.ts, 1, 5))
+>frames : Symbol(frames, Decl(defaultWeakMapInferredPropertyAssignment.ts, 1, 15))
+>WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>id : Symbol(id, Decl(defaultWeakMapInferredPropertyAssignment.ts, 1, 33))
+>frameInfo : Symbol(frameInfo, Decl(defaultWeakMapInferredPropertyAssignment.ts, 0, 5))
+

@@ -146,6 +146,8 @@ import {
     parseNodeHandleFromCompiler,
     RemoteSourceFile,
 } from "../../src/api/node/node.ts";
+// @ts-ignore -- Internal request format is exercised by source tests.
+import { getNodeRequestHandle } from "../../src/api/node/node.ts";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
 import {
     areTestsFiltered,
@@ -651,7 +653,7 @@ describe("API", { concurrency }, () => {
         assert.equal((getSymbol(recreatedDeclaration))?.name, "present");
     });
 
-    test("createSourceFile can be used with a compatible program", () => {
+    test("createSourceFile cannot substitute a distinct program AST with the same text", () => {
         const sourceText = "export const element = <div />;";
         using api = spawnAPI({
             "/component.tsx": sourceText,
@@ -661,7 +663,8 @@ describe("API", { concurrency }, () => {
         const snapshot = api.createSnapshot({ openFiles: ["/component.tsx"] });
         const project = snapshot.getProjects()[0];
         assert.equal((api.printer.printNode(sourceFile)).trimEnd(), sourceText);
-        assert.ok(project.checker.getTypeAtLocation(sourceFile.statements[0]));
+        assert.notStrictEqual(project.program.getSourceFile("/component.tsx"), sourceFile);
+        assert.throws(() => project.checker.getTypeAtLocation(sourceFile.statements[0]), /could not be resolved/);
         assert.equal(project.program.isSourceFileDefaultLibrary(sourceFile), false);
         snapshot.dispose();
     });
@@ -676,6 +679,42 @@ describe("API", { concurrency }, () => {
         const project = snapshot.getProjects()[0];
         assert.strictEqual(project.program.getSourceFile("/component.d.ts"), retained.sourceFile);
         snapshot.dispose();
+    });
+
+    test("node handles reject a different source-file version but accept an unchanged AST", () => {
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/index.ts": "export function f() { return 1; }",
+            "/other.ts": "export const other = 1;",
+        });
+        using api = disposableAPI;
+        const first = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const firstProject = first.getConfiguredProject("/tsconfig.json")!;
+        const file = firstProject.program.getSourceFile("/index.ts");
+        assert.ok(file instanceof RemoteSourceFile);
+        const declaration = file.statements[0];
+        const symbol = firstProject.checker.getSymbolAtPosition("/index.ts", 16);
+        assert.ok(symbol);
+        const type = firstProject.checker.getTypeOfSymbol(symbol);
+        const signatures = firstProject.checker.getSignaturesOfType(type, SignatureKind.Call);
+        const handle = signatures[0].declaration;
+        assert.ok(handle);
+        assert.equal(handle.path, file.path);
+        assert.equal(handle.sourceFileId, parseNodeHandleFromCompiler(getNodeId(file)).sourceFileId);
+        const parsed = parseNodeHandleFromCompiler(getNodeId(declaration));
+        assert.equal(getNodeRequestHandle(declaration), `${parsed.index}.#${parsed.sourceFileId}`);
+
+        fs.writeFile!(toRootedFilePath("/other.ts", undefined), "export const other = 2;");
+        const unchanged = api.createSnapshot({ openProjects: ["/tsconfig.json"], fileNotifications: { changed: ["/other.ts"] } });
+        const unchangedProject = unchanged.getConfiguredProject("/tsconfig.json")!;
+        assert.ok(unchangedProject.checker.getTypeAtLocation(declaration));
+        assert.strictEqual(handle.resolve(unchangedProject), declaration);
+
+        fs.writeFile!(toRootedFilePath("/index.ts", undefined), "export function f() { return 'changed'; }");
+        const changed = api.createSnapshot({ openProjects: ["/tsconfig.json"], fileNotifications: { changed: ["/index.ts"] } });
+        const changedProject = changed.getConfiguredProject("/tsconfig.json")!;
+        assert.throws(() => changedProject.checker.getTypeAtLocation(declaration), /could not be resolved/);
+        assert.throws(() => handle.resolve(changedProject), /source file is not part of the requested program/);
     });
 
     test("retainSourceFile keeps a borrowed program file available", () => {
@@ -3940,6 +3979,64 @@ export const value = 1;
         api.resetTimingInfo();
         assert.strictEqual(value.getParent(), box);
         assert.equal((api.getTimingInfo()).totals.requestCount, 0);
+    });
+
+    test("node handles are lazily interned within a snapshot", () => {
+        const source = `interface Box<T> { value: T; method(value: T): T; extra: T; }
+declare const first: Box<string>;
+declare const second: Box<number>;
+first;
+second;`;
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ files: ["/index.ts"] }),
+            "/other/tsconfig.json": JSON.stringify({ files: ["/index.ts"] }),
+            "/index.ts": source,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json", "/other/tsconfig.json"] });
+        const registry = (snapshot as unknown as {
+            snapshotRegistry: { nodeHandles: Map<string, unknown>; };
+        }).snapshotRegistry;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const otherProject = snapshot.getConfiguredProject("/other/tsconfig.json")!;
+        const firstType = project.checker.getTypeAtPosition("/index.ts", source.lastIndexOf("first"));
+        const secondType = otherProject.checker.getTypeAtPosition("/index.ts", source.lastIndexOf("second"));
+        assert.ok(firstType && secondType);
+        const [firstValue, firstMethod, firstExtra] = firstType.getProperties();
+        const [secondValue, secondMethod] = secondType.getProperties();
+        assert.ok(firstValue.checkFlags & CheckFlags.Instantiated);
+        assert.ok(secondValue.checkFlags & CheckFlags.Instantiated);
+        assert.equal(registry.nodeHandles.size, 0);
+
+        const handle = firstValue.declarations[0];
+        assert.ok(handle);
+        assert.strictEqual(handle, firstValue.valueDeclaration);
+        assert.strictEqual(handle, secondValue.declarations[0]);
+        assert.strictEqual(handle, secondValue.valueDeclaration);
+        assert.strictEqual(handle.resolve(), handle.resolve(otherProject));
+
+        const firstMethodType = project.checker.getTypeOfSymbol(firstMethod);
+        const secondMethodType = otherProject.checker.getTypeOfSymbol(secondMethod);
+        const [firstSignature] = firstMethodType.getCallSignatures();
+        const [secondSignature] = secondMethodType.getCallSignatures();
+        assert.ok(firstSignature.declaration);
+        assert.strictEqual(firstSignature.declaration, secondSignature.declaration);
+        assert.strictEqual(firstSignature.declaration, firstMethod.declarations[0]);
+        assert.strictEqual(firstSignature.declaration, secondMethod.declarations[0]);
+
+        const updated = snapshot.update({});
+        const updatedProject = updated.getConfiguredProject("/tsconfig.json")!;
+        const updatedType = updatedProject.checker.getTypeAtPosition("/index.ts", source.lastIndexOf("first"));
+        assert.ok(updatedType);
+        const [updatedValue] = updatedType.getProperties();
+        const updatedHandle = updatedValue.declarations[0];
+        assert.notStrictEqual(updatedHandle, handle);
+        assert.equal(updatedHandle.sourceFileId, handle.sourceFileId);
+        snapshot.dispose();
+        assert.equal(registry.nodeHandles.size, 0);
+        assert.ok(firstExtra.valueDeclaration);
+        assert.equal(registry.nodeHandles.size, 0);
+        assert.ok(updatedHandle.resolve());
+        updated.dispose();
     });
 
     test("compact symbol references retain reused file-owned symbols", () => {
