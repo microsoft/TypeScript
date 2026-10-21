@@ -48,38 +48,38 @@ async function test() {
 
     const withUndefined = await import("./actual", { with: undefined });
 >withUndefined : Symbol(withUndefined, Decl(index.ts, 8, 9))
->"./actual" : Symbol("*", Decl(types.d.ts, 0, 0))
+>"./actual" : Symbol("./actual", Decl(actual.ts, 0, 0))
 >with : Symbol(with, Decl(index.ts, 8, 52))
 >undefined : Symbol(undefined)
 
     const withUndefinedKind: "actual" = withUndefined.kind;
 >withUndefinedKind : Symbol(withUndefinedKind, Decl(index.ts, 9, 9))
->withUndefined.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>withUndefined.kind : Symbol(kind, Decl(actual.ts, 0, 12))
 >withUndefined : Symbol(withUndefined, Decl(index.ts, 8, 9))
->kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>kind : Symbol(kind, Decl(actual.ts, 0, 12))
 
     const withOptions = await import("./actual", options);
 >withOptions : Symbol(withOptions, Decl(index.ts, 11, 9))
->"./actual" : Symbol("*", Decl(types.d.ts, 0, 0))
+>"./actual" : Symbol("./actual", Decl(actual.ts, 0, 0))
 >options : Symbol(options, Decl(index.ts, 0, 13))
 
     const withOptionsKind: "actual" = withOptions.kind;
 >withOptionsKind : Symbol(withOptionsKind, Decl(index.ts, 12, 9))
->withOptions.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>withOptions.kind : Symbol(kind, Decl(actual.ts, 0, 12))
 >withOptions : Symbol(withOptions, Decl(index.ts, 11, 9))
->kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>kind : Symbol(kind, Decl(actual.ts, 0, 12))
 
     const withOptionalAttributes = await import("./actual", { with: optionalAttributes });
 >withOptionalAttributes : Symbol(withOptionalAttributes, Decl(index.ts, 14, 9))
->"./actual" : Symbol("*", Decl(types.d.ts, 0, 0))
+>"./actual" : Symbol("./actual", Decl(actual.ts, 0, 0))
 >with : Symbol(with, Decl(index.ts, 14, 61))
 >optionalAttributes : Symbol(optionalAttributes, Decl(index.ts, 1, 13))
 
     const withOptionalAttributesKind: "actual" = withOptionalAttributes.kind;
 >withOptionalAttributesKind : Symbol(withOptionalAttributesKind, Decl(index.ts, 15, 9))
->withOptionalAttributes.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>withOptionalAttributes.kind : Symbol(kind, Decl(actual.ts, 0, 12))
 >withOptionalAttributes : Symbol(withOptionalAttributes, Decl(index.ts, 14, 9))
->kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>kind : Symbol(kind, Decl(actual.ts, 0, 12))
 
     const withEmptyAttributes = await import("./actual", { with: {} });
 >withEmptyAttributes : Symbol(withEmptyAttributes, Decl(index.ts, 17, 9))
@@ -126,14 +126,14 @@ async function generic<T extends { type: "css" } | undefined>(attributes: T) {
 
     const withGenericAttributes = await import("./actual", { with: attributes });
 >withGenericAttributes : Symbol(withGenericAttributes, Decl(index.ts, 28, 9))
->"./actual" : Symbol("*", Decl(types.d.ts, 0, 0))
+>"./actual" : Symbol("./actual", Decl(actual.ts, 0, 0))
 >with : Symbol(with, Decl(index.ts, 28, 60))
 >attributes : Symbol(attributes, Decl(index.ts, 27, 62))
 
     const withGenericAttributesKind: "actual" = withGenericAttributes.kind;
 >withGenericAttributesKind : Symbol(withGenericAttributesKind, Decl(index.ts, 29, 9))
->withGenericAttributes.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>withGenericAttributes.kind : Symbol(kind, Decl(actual.ts, 0, 12))
 >withGenericAttributes : Symbol(withGenericAttributes, Decl(index.ts, 28, 9))
->kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>kind : Symbol(kind, Decl(actual.ts, 0, 12))
 }
 

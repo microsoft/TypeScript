@@ -49,9 +49,9 @@ async function test() {
 >kind : "actual"
 
     const withUndefined = await import("./actual", { with: undefined });
->withUndefined : { kind: "wildcard"; default: typeof import("*"); }
->await import("./actual", { with: undefined }) : { kind: "wildcard"; default: typeof import("*"); }
->import("./actual", { with: undefined }) : Promise<{ kind: "wildcard"; default: typeof import("*"); }>
+>withUndefined : typeof import("./actual")
+>await import("./actual", { with: undefined }) : typeof import("./actual")
+>import("./actual", { with: undefined }) : Promise<typeof import("./actual")>
 >"./actual" : "./actual"
 >{ with: undefined } : { with: undefined; }
 >with : undefined
@@ -59,27 +59,27 @@ async function test() {
 
     const withUndefinedKind: "actual" = withUndefined.kind;
 >withUndefinedKind : "actual"
->withUndefined.kind : "wildcard"
->withUndefined : { kind: "wildcard"; default: typeof import("*"); }
->kind : "wildcard"
+>withUndefined.kind : "actual"
+>withUndefined : typeof import("./actual")
+>kind : "actual"
 
     const withOptions = await import("./actual", options);
->withOptions : { kind: "wildcard"; default: typeof import("*"); }
->await import("./actual", options) : { kind: "wildcard"; default: typeof import("*"); }
->import("./actual", options) : Promise<{ kind: "wildcard"; default: typeof import("*"); }>
+>withOptions : typeof import("./actual")
+>await import("./actual", options) : typeof import("./actual")
+>import("./actual", options) : Promise<typeof import("./actual")>
 >"./actual" : "./actual"
 >options : ImportCallOptions
 
     const withOptionsKind: "actual" = withOptions.kind;
 >withOptionsKind : "actual"
->withOptions.kind : "wildcard"
->withOptions : { kind: "wildcard"; default: typeof import("*"); }
->kind : "wildcard"
+>withOptions.kind : "actual"
+>withOptions : typeof import("./actual")
+>kind : "actual"
 
     const withOptionalAttributes = await import("./actual", { with: optionalAttributes });
->withOptionalAttributes : { kind: "wildcard"; default: typeof import("*"); }
->await import("./actual", { with: optionalAttributes }) : { kind: "wildcard"; default: typeof import("*"); }
->import("./actual", { with: optionalAttributes }) : Promise<{ kind: "wildcard"; default: typeof import("*"); }>
+>withOptionalAttributes : typeof import("./actual")
+>await import("./actual", { with: optionalAttributes }) : typeof import("./actual")
+>import("./actual", { with: optionalAttributes }) : Promise<typeof import("./actual")>
 >"./actual" : "./actual"
 >{ with: optionalAttributes } : { with: { type: "css"; } | undefined; }
 >with : { type: "css"; } | undefined
@@ -87,9 +87,9 @@ async function test() {
 
     const withOptionalAttributesKind: "actual" = withOptionalAttributes.kind;
 >withOptionalAttributesKind : "actual"
->withOptionalAttributes.kind : "wildcard"
->withOptionalAttributes : { kind: "wildcard"; default: typeof import("*"); }
->kind : "wildcard"
+>withOptionalAttributes.kind : "actual"
+>withOptionalAttributes : typeof import("./actual")
+>kind : "actual"
 
     const withEmptyAttributes = await import("./actual", { with: {} });
 >withEmptyAttributes : typeof import("./actual")
@@ -143,9 +143,9 @@ async function generic<T extends { type: "css" } | undefined>(attributes: T) {
 >attributes : T
 
     const withGenericAttributes = await import("./actual", { with: attributes });
->withGenericAttributes : { kind: "wildcard"; default: typeof import("*"); }
->await import("./actual", { with: attributes }) : { kind: "wildcard"; default: typeof import("*"); }
->import("./actual", { with: attributes }) : Promise<{ kind: "wildcard"; default: typeof import("*"); }>
+>withGenericAttributes : typeof import("./actual")
+>await import("./actual", { with: attributes }) : typeof import("./actual")
+>import("./actual", { with: attributes }) : Promise<typeof import("./actual")>
 >"./actual" : "./actual"
 >{ with: attributes } : { with: { type: "css"; } | undefined; }
 >with : { type: "css"; } | undefined
@@ -153,8 +153,8 @@ async function generic<T extends { type: "css" } | undefined>(attributes: T) {
 
     const withGenericAttributesKind: "actual" = withGenericAttributes.kind;
 >withGenericAttributesKind : "actual"
->withGenericAttributes.kind : "wildcard"
->withGenericAttributes : { kind: "wildcard"; default: typeof import("*"); }
->kind : "wildcard"
+>withGenericAttributes.kind : "actual"
+>withGenericAttributes : typeof import("./actual")
+>kind : "actual"
 }
 

@@ -15796,10 +15796,10 @@ func (c *Checker) resolveExternalModule(
 }
 
 // Resolves the module reference to a pattern ambient module, if one exists.
-// If a resolved symbol from regular module resolution exists and we have an empty import attributes type,
-// we prefer the resolved symbol.
+// If regular module resolution found a symbol and the attributes are absent or empty,
+// prefer the resolved symbol.
 func (c *Checker) tryResolvePatternAmbientModule(resolvedSymbol *ast.Symbol, moduleReference string, importAttributesType *Type) *ast.Symbol {
-	if c.isEmptyObjectType(importAttributesType) && resolvedSymbol != nil {
+	if resolvedSymbol != nil && (c.isEmptyObjectType(importAttributesType) || c.maybeTypeOfKindConsideringBaseConstraint(importAttributesType, TypeFlagsUndefined)) {
 		return resolvedSymbol
 	}
 	if len(c.patternAmbientModules) != 0 {
