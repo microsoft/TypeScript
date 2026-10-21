@@ -1,0 +1,24 @@
+// @strict: true
+// @noEmit: true
+
+// Relating to 'keyof M<T>' rejects keys that relate only by assuming a
+// comparison still in progress. Relating 'A' to 'B' assumes only itself
+// along 'next', so it completes on its own and must be accepted whether
+// or not the call to 'h' related 'A' to 'B' first.
+
+interface A { next: A; v: "a" }
+interface B { next: B; v: string }
+type M<T> = { [K in keyof T as B]: 1 };
+
+declare const a: A;
+declare function h(x: B): 1;
+declare function h(x: unknown): 2;
+
+function f<T>() {
+    function g(x: keyof M<T>): 1;
+    function g(x: unknown): 2;
+    function g(x: unknown) { return 1 as any; }
+    const r: 1 = g(a);
+}
+
+const w: 1 = h(a);
