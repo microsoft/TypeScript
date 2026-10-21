@@ -92,7 +92,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 
 		for index, do := range test.edits {
 			sys.clearOutput()
-			wg := core.NewWorkGroup(false)
+			wg := core.NewWorkGroup(0)
 			var nonIncrementalSys *TestSys
 			commandLineArgs := core.IfElse(do.commandLineArgs == nil, test.commandLineArgs, do.commandLineArgs)
 			wg.Queue(func() {

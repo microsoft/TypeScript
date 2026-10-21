@@ -514,7 +514,7 @@ func (s *snapshotFSBuilder) invalidateNodeModulesCache() {
 func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeSummary {
 	if change.Changed.Len() > 0 {
 		var filteredChanged collections.SyncSet[lsproto.DocumentUri]
-		wg := core.NewWorkGroup(false)
+		wg := core.NewWorkGroup(0)
 		for uri := range change.Changed.Keys() {
 			path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
 			if file := s.fs.GetFileByPath(uri.FileName(), path); file != nil && file.IsOverlay() {

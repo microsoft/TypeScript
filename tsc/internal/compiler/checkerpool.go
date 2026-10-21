@@ -367,7 +367,7 @@ func (p *checkerPool) getCheckerNonExclusive() (*checker.Checker, func()) {
 func (p *checkerPool) createCheckers() {
 	p.createCheckersOnce.Do(func() {
 		checkerCount := len(p.checkers)
-		wg := core.NewWorkGroup(p.program.SingleThreaded())
+		wg := core.NewWorkGroup(core.WorkGroupConcurrency(p.program.SingleThreaded()))
 		for i := range checkerCount {
 			wg.Queue(func() {
 				var tracer *checker.Tracer
@@ -450,7 +450,7 @@ func (p *checkerPool) getImportAdjacency() [][]int {
 // making it safe to call `forEachCheckerParallel` from many threads simultaneously.
 func (p *checkerPool) forEachCheckerParallel(cb func(idx int, c *checker.Checker)) {
 	p.createCheckers()
-	wg := core.NewWorkGroup(p.program.SingleThreaded())
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(p.program.SingleThreaded()))
 	for idx, checker := range p.checkers {
 		wg.Queue(func() {
 			p.locks[idx].Lock()
@@ -477,7 +477,7 @@ func (p *checkerPool) forEachCheckerGroupDo(ctx context.Context, files []*ast.So
 	p.createCheckers()
 
 	checkerCount := len(p.checkers)
-	wg := core.NewWorkGroup(singleThreaded)
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(singleThreaded))
 	for checkerIdx := range checkerCount {
 		wg.Queue(func() {
 			p.locks[checkerIdx].Lock()
