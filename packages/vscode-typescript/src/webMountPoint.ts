@@ -27,6 +27,10 @@ export function uriToWasmMountPoint(uri: WebFileSystemUri): string {
     const colon = text.indexOf(":");
     const scheme = text.slice(0, colon);
     let path = text.slice(colon + 1);
+    // Only the final segment of a document name carries a query or fragment,
+    // so directories below the folder are named as if it had none.
+    const suffixStart = path.search(/[?#]/);
+    if (suffixStart !== -1) path = path.slice(0, suffixStart);
     let authority = nulAuthority;
     if (path.startsWith("//")) {
         const slash = path.indexOf("/", 2);

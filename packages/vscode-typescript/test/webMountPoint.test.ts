@@ -41,6 +41,10 @@ describe("web WASI mount points", () => {
         assert.strictEqual(virtual("memfs://c:/work"), "/^/~ts-uri~/memfs/~ts-uri-escape~633a~/work");
         assert.strictEqual(virtual("memfs://x:8080/work"), "/^/~ts-uri~/memfs/x:8080/work");
         assert.strictEqual(virtual("memfs://~ts-uri-escape~fs.example/work"), "/^/~ts-uri~/memfs/~ts-uri-escape~7e74732d7572692d6573636170657e6673~.example/work");
+        assert.strictEqual(virtual("memfs://mount/work?ref=main"), "/^/~ts-uri~/memfs/mount/work");
+        assert.strictEqual(virtual("memfs://mount/work/#x"), "/^/~ts-uri~/memfs/mount/work");
+        assert.strictEqual(virtual("memfs://mount?ref=a/b"), "/^/~ts-uri~/memfs/mount");
+        assert.strictEqual(virtual("memfs:/work#a/b"), "/^/~ts-uri~/memfs/ts-nul-authority/~ts-uri-escape~~/work");
     });
 
     test("maps virtual workspace file names back to their escaped URIs", () => {

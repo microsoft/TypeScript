@@ -234,7 +234,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             const mountPoint = uriToWasmMountPoint(folder.uri);
             return {
                 kind: "vscodeFileSystem" as const,
-                uri: folder.uri.scheme === "file" ? folder.uri : vscode.Uri.from({ scheme: wasmFileSystemScheme, path: mountPoint }),
+                uri: folder.uri.scheme === "file" ? folder.uri.with({ query: "", fragment: "" }) : vscode.Uri.from({ scheme: wasmFileSystemScheme, path: mountPoint }),
                 mountPoint,
             };
         });
