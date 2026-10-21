@@ -1020,7 +1020,7 @@ async function runTestAPIWasm() {
         "module resolver callbacks (?:can delegate to another resolver|can resolve against the in-progress snapshot filesystem|preserve retained and live filesystem context)",
         // These tests require spawned processes or callback filesystem layering.
         "readFile callback semantics (?:callback configurations require every operation at runtime|invalid callback results do not fall through to the server OS|callback configuration and implementations are read together when connecting)",
-        "updateSnapshot file systems (?:full file system is total and does not invoke host callbacks|full file system accepts paths decoded from VS Code document URIs|file system layer bypasses callbacks on hits and falls back on misses)",
+        "updateSnapshot file systems (?:full file system is total and does not invoke host callbacks|file system layer bypasses callbacks on hits and falls back on misses)",
         // The reactor mirrors input files but does not mirror build output changes.
         "BuildOrchestrator (?:returns build response information after clean|returns deleted files from a clean response|rebuilds projects after multiple file system changes|clean removes build outputs|builds and cleans selected projects after file system changes|cleans only references of a selected project|handles invalidated projects and cleans the last built configuration)",
         "parseJsonConfigFileContent accepts non-object JSON|parseConfigFile$|project exposes parsedCommandLine",
