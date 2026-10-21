@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/defaultRootDirInheritedInclude.ts] ////
+
+=== /project/src/index.ts ===
+export const value = 0;
+>value : Symbol(value, Decl(index.ts, 0, 12))
+

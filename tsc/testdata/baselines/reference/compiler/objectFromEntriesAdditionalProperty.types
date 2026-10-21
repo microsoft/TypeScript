@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/objectFromEntriesAdditionalProperty.ts] ////
+
+=== objectFromEntriesAdditionalProperty.ts ===
+declare const keys: ("language" | "theme")[];
+>keys : ("language" | "theme")[]
+
+const settings = Object.fromEntries(keys.map(key => [key, ""]));
+>settings : { [k: string]: string; }
+>Object.fromEntries(keys.map(key => [key, ""])) : { [k: string]: string; }
+>Object.fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
+>Object : ObjectConstructor
+>fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
+>keys.map(key => [key, ""]) : ["language" | "theme", string][]
+>keys.map : <U>(callbackfn: (value: "language" | "theme", index: number, array: ("language" | "theme")[]) => U, thisArg?: any) => U[]
+>keys : ("language" | "theme")[]
+>map : <U>(callbackfn: (value: "language" | "theme", index: number, array: ("language" | "theme")[]) => U, thisArg?: any) => U[]
+>key => [key, ""] : (key: "language" | "theme") => ["language" | "theme", string]
+>key : "language" | "theme"
+>[key, ""] : ["language" | "theme", string]
+>key : "language" | "theme"
+>"" : ""
+
+settings.timestamp = "";
+>settings.timestamp = "" : ""
+>settings.timestamp : string
+>settings : { [k: string]: string; }
+>timestamp : string
+>"" : ""
+

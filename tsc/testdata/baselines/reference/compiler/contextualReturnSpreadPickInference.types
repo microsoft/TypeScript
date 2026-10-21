@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/contextualReturnSpreadPickInference.ts] ////
+
+=== contextualReturnSpreadPickInference.ts ===
+type Many<T> = T | readonly T[];
+>Many : Many<T>
+
+declare function pick<T extends object, Key extends keyof T>(
+>pick : <T extends object, Key extends keyof T>(object: T, ...props: Many<Key>[]) => Pick<T, Key>
+
+    object: T,
+>object : T
+
+    ...props: Many<Key>[]
+>props : Many<Key>[]
+
+): Pick<T, Key>;
+
+async function getPage(page: any): Promise<{ title: string; intro: string }> {
+>getPage : (page: any) => Promise<{ title: string; intro: string; }>
+>page : any
+>title : string
+>intro : string
+
+    return {
+>{        title: "",        ...pick(page, ["intro"]),    } : { title: string; intro: any; }
+
+        title: "",
+>title : string
+>"" : ""
+
+        ...pick(page, ["intro"]),
+>pick(page, ["intro"]) : Pick<any, "intro">
+>pick : <T extends object, Key extends keyof T>(object: T, ...props: Many<Key>[]) => Pick<T, Key>
+>page : any
+>["intro"] : "intro"[]
+>"intro" : "intro"
+
+    };
+}
+

@@ -473,7 +473,7 @@ const (
 	stKindResolvedExports // resolved/derived exports from getExportsOfSymbol, distinct from raw sym.Exports
 
 	// stKindMask extracts the kind bits from a symbolTableID.
-	stKindMask symbolTableID = (iota - 1) << stKindShift
+	stKindMask symbolTableID = ^symbolTableID(1<<stKindShift - 1)
 )
 
 func symbolTableIDFromLocals(node *ast.Node) symbolTableID {

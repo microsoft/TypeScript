@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/chainedFilterPredicateInference.ts] ////
+
+=== chainedFilterPredicateInference.ts ===
+declare const items: { id: number }[];
+>items : Symbol(items, Decl(chainedFilterPredicateInference.ts, 0, 13))
+>id : Symbol(id, Decl(chainedFilterPredicateInference.ts, 0, 22))
+
+declare const registry: { [id: number]: { [frame: number]: unknown } };
+>registry : Symbol(registry, Decl(chainedFilterPredicateInference.ts, 1, 13))
+>id : Symbol(id, Decl(chainedFilterPredicateInference.ts, 1, 27))
+>frame : Symbol(frame, Decl(chainedFilterPredicateInference.ts, 1, 43))
+
+items
+>items    .filter(item => true)    .filter(item => !registry[item.id])    .forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>items    .filter(item => true)    .filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>items    .filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(chainedFilterPredicateInference.ts, 0, 13))
+
+    .filter(item => true)
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(chainedFilterPredicateInference.ts, 4, 12))
+
+    .filter(item => !registry[item.id])
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(chainedFilterPredicateInference.ts, 5, 12))
+>registry : Symbol(registry, Decl(chainedFilterPredicateInference.ts, 1, 13))
+>item.id : Symbol(id, Decl(chainedFilterPredicateInference.ts, 0, 22))
+>item : Symbol(item, Decl(chainedFilterPredicateInference.ts, 5, 12))
+>id : Symbol(id, Decl(chainedFilterPredicateInference.ts, 0, 22))
+
+    .forEach(item => item.id);
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(chainedFilterPredicateInference.ts, 6, 13))
+>item.id : Symbol(id, Decl(chainedFilterPredicateInference.ts, 0, 22))
+>item : Symbol(item, Decl(chainedFilterPredicateInference.ts, 6, 13))
+>id : Symbol(id, Decl(chainedFilterPredicateInference.ts, 0, 22))
+

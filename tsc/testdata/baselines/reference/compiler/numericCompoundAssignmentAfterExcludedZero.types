@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/numericCompoundAssignmentAfterExcludedZero.ts] ////
+
+=== numericCompoundAssignmentAfterExcludedZero.ts ===
+function divide(value: number, divisor: number) {
+>divide : (value: number, divisor: number) => void
+>value : number
+>divisor : number
+
+    if (value === 0) return;
+>value === 0 : boolean
+>value : number
+>0 : 0
+
+    value /= divisor;
+>value /= divisor : number
+>value : number
+>divisor : number
+}
+

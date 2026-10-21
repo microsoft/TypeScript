@@ -1527,6 +1527,35 @@ func TestWatchDirectoriesBatch(t *testing.T) {
 	})
 }
 
+func TestWatchRejectsNetworkPaths(t *testing.T) {
+	t.Parallel()
+	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+		dir := newTmpDir(t)
+		r := newRecorder(t)
+		r.watcher = watcherImpl
+
+		networkPaths := []string{`\\server\share`, `\??\UNC\server\share`}
+		if runtime.GOOS != "windows" {
+			// On POSIX systems, //dir resolves to /dir, so this is an existing
+			// directory that must still be refused.
+			networkPaths = append(networkPaths, "/"+dir)
+		}
+		for _, networkPath := range networkPaths {
+			_, err := watcherImpl.WatchDirectories([]WatchDirectoryRequest{
+				{Dir: dir, Callback: r.callback},
+				{Dir: networkPath, Callback: r.callback},
+			})
+			if !errors.Is(err, errNetworkPath) {
+				t.Fatalf("WatchDirectories(%q) error = %v, want %v", networkPath, err, errNetworkPath)
+			}
+			_, err = watcherImpl.WatchFile(networkPath+"/file.ts", r.callback)
+			if !errors.Is(err, errNetworkPath) {
+				t.Fatalf("WatchFile(%q) error = %v, want %v", networkPath, err, errNetworkPath)
+			}
+		}
+	})
+}
+
 type countingWatcherImpl struct {
 	watcherBase
 	subscribed []*dirWatch

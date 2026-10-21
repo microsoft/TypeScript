@@ -23,6 +23,26 @@ export function* apiRequest(method: PropertyKey, params: unknown): Generator<{ m
     return yield { method, params };
 }
 const deferredGeneratorMarker: unique symbol = Symbol();
+// Marks executed generators on the generator itself: a WeakSet holding every generator of a long-running batch is
+// costly to grow and to process during GC
+const executedMarker: unique symbol = Symbol();
+interface ExecutedGenerator {
+    [executedMarker]?: true;
+}
+const executedNonExtensibleGenerators = new WeakSet<AnyAPIRequestGenerator>();
+
+/** Marks the generator as executed, returning false if it already was. */
+function markExecuted(generator: AnyAPIRequestGenerator): boolean {
+    if (!Object.isExtensible(generator)) {
+        if (executedNonExtensibleGenerators.has(generator)) return false;
+        executedNonExtensibleGenerators.add(generator);
+        return true;
+    }
+    const target = generator as ExecutedGenerator;
+    if (target[executedMarker]) return false;
+    target[executedMarker] = true;
+    return true;
+}
 const allGeneratorMarker: unique symbol = Symbol();
 interface DeferredAPIRequest {
     readonly method: "__defer";
@@ -125,7 +145,6 @@ export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerat
     requestGenerators: T,
     executeRequests: (requests: APIRequest[]) => readonly GeneratorResponse[],
 ): ExecutedGeneratorsResults<T> {
-    const registeredGenerators = new WeakSet<AnyAPIRequestGenerator>();
     let firstGenerator: GeneratorState | undefined;
     let lastGenerator: GeneratorState | undefined;
     const root = startGroup(requestGenerators);
@@ -220,13 +239,12 @@ export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerat
     }
 
     function addGenerator(generator: AnyAPIRequestGenerator, parent?: GeneratorGroup): void {
-        if (registeredGenerators.has(generator)) {
+        if (!markExecuted(generator)) {
             const error = new Error("Cannot execute the same generator instance more than once");
             if (!parent) throw error;
             failGroup(parent, error);
             return;
         }
-        registeredGenerators.add(generator);
         const next = parent?.parent;
         const previous = next ? next.previous : lastGenerator;
         const state: GeneratorState = {
@@ -265,12 +283,11 @@ export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerat
             const wrapper = generator as AllRequestGenerator<unknown>;
             const pending = wrapper.generators;
             if (!pending) break;
-            if (registeredGenerators.has(wrapper)) {
+            if (!markExecuted(wrapper)) {
                 failGroup(group, new Error("Cannot execute the same generator instance more than once"));
                 group.initializing = false;
                 return group;
             }
-            registeredGenerators.add(wrapper);
             wrapper.next();
             (group.wrappers ??= []).push(wrapper);
             generators = pending;

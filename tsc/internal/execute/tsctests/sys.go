@@ -485,10 +485,20 @@ var (
 
 func (o *outputSanitizer) addOutputLine(s string) {
 	s = strings.ReplaceAll(s, fmt.Sprintf("'%s'", core.Version()), fmt.Sprintf("'%s'", harnessutil.FakeTSVersion))
-	s = strings.ReplaceAll(s, englishVersion, fakeEnglishVersion)
-	s = strings.ReplaceAll(s, czechVersion, fakeCzechVersion)
+	s = sanitizeVersion(s, englishVersion, fakeEnglishVersion)
+	s = sanitizeVersion(s, czechVersion, fakeCzechVersion)
 	s = fsbaselineutil.SanitizeInternalSymbolName(s)
 	o.outputLines = append(o.outputLines, s)
+}
+
+func sanitizeVersion(s string, version string, replacement string) string {
+	if before, after, ok := strings.Cut(s, version); ok && strings.HasPrefix(after, "  ") {
+		// Preserve the padded field width when replacing the version in the help header.
+		suffix := strings.TrimLeft(after, " ")
+		width := len(version) + len(after) - len(suffix)
+		s = before + fmt.Sprintf("%-*s", width, replacement) + suffix
+	}
+	return strings.ReplaceAll(s, version, replacement)
 }
 
 func (o *outputSanitizer) sanitizeBuildStatusTimeStamp() string {
