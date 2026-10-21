@@ -144,6 +144,8 @@ func (s *Snapshot) processFileChanges(
 	}
 	previousOpenFiles := overlayFileHandles(previousOverlays)
 	openFiles := overlayFileHandles(overlays)
+	fileChanges = s.fs.expandRealpathAliases(fileChanges, fs.fs)
+	fileChanges = fs.expandCreatedCacheEntries(fileChanges)
 	if fileChanges.HasExcessiveWatchEvents() {
 		invalidateStart := time.Now()
 		if fileChanges.InvalidateAll {
@@ -178,7 +180,6 @@ func (s *Snapshot) processFileChanges(
 		}
 		_, contentMapperWatchedFiles := s.contentMapperWatchState()
 		fileChanges = fs.expandAndFilterWatchEvents(fileChanges, contentMapperExtensions, contentMapperWatchedFiles, previousOpenFiles, openFiles)
-		fileChanges = s.fs.expandRealpathAliases(fileChanges)
 		fileChanges = fs.markDirtyFiles(fileChanges)
 		fileChanges = fs.convertOpenAndCloseToChanges(fileChanges, previousOpenFiles, openFiles)
 	}
