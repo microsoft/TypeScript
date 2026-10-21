@@ -63,7 +63,7 @@ class RpcClient {
     private connection: JsonRpc.MessageConnection | undefined;
     // Loaded on connection so that injected-transport clients never load it.
     private jsonrpc: typeof JsonRpc | undefined;
-    private options: ClientOptions | undefined;
+    private options: ClientOptions;
     private connected = false;
     private closed = false;
     private connecting: Promise<void> | undefined;
@@ -96,7 +96,6 @@ class RpcClient {
     }
 
     private async connectWorker(): Promise<void> {
-        if (!this.options) throw new Error("Client options are not available");
         this.jsonrpc ??= await import("./jsonrpc.ts");
         if (isSpawnOptions(this.options)) {
             await this.connectViaSpawn(this.options);
@@ -293,9 +292,8 @@ class RpcClient {
 
             const requestType = this.requestType<unknown, BatchRequestsResponse>("batchRequests");
             const params: BatchRequestsParams = { requests: requests.map(request => ({ method: request.method, params: request.params })) };
-            const maxResponseBytesPerPage = this.options?.maxResponseBytesPerPage;
-            if (maxResponseBytesPerPage !== undefined) {
-                params.maxResponseBytesPerPage = maxResponseBytesPerPage;
+            if (this.options.maxResponseBytesPerPage !== undefined) {
+                params.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
             }
             const response = await this.sendRequestWithTiming(requestType, params);
             let responses = response.responses;
@@ -305,8 +303,8 @@ class RpcClient {
                     requests: [],
                     continuationToken,
                 };
-                if (maxResponseBytesPerPage !== undefined) {
-                    pageParams.maxResponseBytesPerPage = maxResponseBytesPerPage;
+                if (this.options.maxResponseBytesPerPage !== undefined) {
+                    pageParams.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
                 }
                 const page = await this.sendRequestWithTiming(requestType, pageParams);
                 responses = responses.concat(page.responses);
