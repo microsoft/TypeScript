@@ -4792,7 +4792,17 @@ describe("Checker - getContextualType", { concurrency }, () => {
         const signatures = project.checker.getSignaturesOfType(type, SignatureKind.Call);
         assert.equal(signatures.length, 1);
         assert.deepEqual((signatures[0].getParameters()).map(parameter => parameter.name), ["target", "context"]);
-        assert.equal(signatures[0].declaration, undefined);
+        const declarationHandle = signatures[0].declaration;
+        assert.ok(declarationHandle);
+        assert.equal(declarationHandle.kind, SyntaxKind.FunctionType);
+        const declaration = declarationHandle.resolve();
+        assert.ok(declaration);
+        assert.ok(isSignatureDeclaration(declaration));
+        assert.equal(declaration.kind, SyntaxKind.FunctionType);
+        const declarationSignature = project.checker.getSignatureFromDeclaration(declaration);
+        assert.ok(declarationSignature);
+        assert.strictEqual(declarationSignature.declaration, declarationHandle);
+        assert.deepEqual(project.program.getSourceFileNames(), ["/src/main.ts"]);
     });
 
     test("contextual type from function parameter", () => {
