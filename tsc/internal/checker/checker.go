@@ -670,6 +670,7 @@ type Checker struct {
 	resolveNameForSymbolSuggestion              func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
 	tupleTypes                                  map[CacheHashKey]*Type
 	unionTypes                                  map[CacheHashKey]*Type
+	objectLiteralTypes                          map[CacheHashKey]*Type
 	unionOfUnionTypes                           map[UnionOfUnionKey]*Type
 	intersectionTypes                           map[CacheHashKey]*Type
 	propertiesTypes                             map[PropertiesTypesKey]*Type
@@ -1007,6 +1008,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.resolveNameForSymbolSuggestion = c.createNameResolverForSuggestion().Resolve
 	c.tupleTypes = make(map[CacheHashKey]*Type)
 	c.unionTypes = make(map[CacheHashKey]*Type)
+	c.objectLiteralTypes = make(map[CacheHashKey]*Type)
 	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
 	c.intersectionTypes = make(map[CacheHashKey]*Type)
 	c.propertiesTypes = make(map[PropertiesTypesKey]*Type)
@@ -13568,17 +13570,23 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		if hasComputedSymbolProperty {
 			indexInfos = append(indexInfos, c.getObjectLiteralIndexInfo(isReadonly, propertiesArray[offset:], c.esSymbolType))
 		}
-		result := c.newAnonymousType(node.Symbol(), propertiesTable, nil, nil, indexInfos)
-		result.objectFlags |= objectFlags | ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral
+		flags := objectFlags | ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral
 		if contextualType == nil && ast.IsInJSFile(node) && !ast.IsInJsonFile(node) {
-			result.objectFlags |= ObjectFlagsJSLiteral
+			flags |= ObjectFlagsJSLiteral
 		}
 		if patternWithComputedProperties {
-			result.objectFlags |= ObjectFlagsObjectLiteralPatternWithComputedProperties
+			flags |= ObjectFlagsObjectLiteralPatternWithComputedProperties
 		}
+		key := c.getObjectLiteralTypeKey(node, flags, propertiesTable, indexInfos)
+		if existing := c.objectLiteralTypes[key]; existing != nil {
+			return existing
+		}
+		result := c.newAnonymousType(node.Symbol(), propertiesTable, nil, nil, indexInfos)
+		result.objectFlags |= flags
 		if inDestructuringPattern {
 			c.patternForType[result] = node
 		}
+		c.objectLiteralTypes[key] = result
 		return result
 	}
 	for _, memberDecl := range node.Properties() {
@@ -18078,6 +18086,54 @@ func (b *keyBuilder) writeNode(node *ast.Node) {
 	if node != nil {
 		b.writeNodeId(ast.GetNodeId(node))
 	}
+}
+
+// getObjectLiteralTypeKey identifies the content of an object literal type, so
+// that checking the same object literal again with the same results yields the
+// same type.
+func (c *Checker) getObjectLiteralTypeKey(node *ast.Node, flags ObjectFlags, properties ast.SymbolTable, indexInfos []*IndexInfo) CacheHashKey {
+	var b keyBuilder
+	b.writeNode(node)
+	b.writeUint32(uint32(flags))
+	names := slices.Sorted(properties.Keys())
+	b.writeInt(len(names))
+	for _, name := range names {
+		prop := properties.Get(name)
+		b.writeString(name)
+		b.writeByte(0)
+		b.writeUint32(uint32(prop.Flags()))
+		b.writeUint32(uint32(prop.CheckFlags()))
+		// Members created by this object literal have their types set at
+		// creation; other members (accessors) are the declared symbols.
+		links := c.valueSymbolLinks.TryGet(prop)
+		if links == nil || links.target == nil {
+			b.writeByte(2)
+			b.writeSymbol(prop)
+			continue
+		}
+		if nameType := links.getNameType(); nameType != nil {
+			b.writeByte(1)
+			b.writeType(nameType)
+		} else {
+			b.writeByte(0)
+		}
+		b.writeType(links.resolvedType)
+	}
+	b.writeInt(len(indexInfos))
+	for _, info := range indexInfos {
+		b.writeType(info.keyType)
+		b.writeType(info.valueType)
+		if info.isReadonly {
+			b.writeByte(1)
+		} else {
+			b.writeByte(0)
+		}
+		b.writeInt(len(info.components))
+		for _, n := range info.components {
+			b.writeNode(n)
+		}
+	}
+	return b.hash()
 }
 
 func getTypeListKey(types []*Type) CacheHashKey {
