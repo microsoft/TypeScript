@@ -4022,6 +4022,10 @@
         "category": "Error",
         "code": 2875
     },
+    "This JSX tag cannot be used in a script file. Consider adding an empty 'export {}' statement to make this file a module.": {
+        "category": "Error",
+        "code": 2884
+    },
     "This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to \"{0}\".": {
         "category": "Error",
         "code": 2876
