@@ -30,12 +30,8 @@ function hasSurrogateLeadByte(bytes: Uint8Array): boolean {
 }
 
 function hasReplacementCharacter(bytes: Uint8Array): boolean {
-    for (let i = 0; i <= bytes.length - replacementCharacterUtf8.length; i++) {
-        if (
-            bytes[i] === replacementCharacterUtf8[0]
-            && bytes[i + 1] === replacementCharacterUtf8[1]
-            && bytes[i + 2] === replacementCharacterUtf8[2]
-        ) {
+    for (let i = bytes.indexOf(replacementCharacterUtf8[0]); i !== -1 && i + 2 < bytes.length; i = bytes.indexOf(replacementCharacterUtf8[0], i + 1)) {
+        if (bytes[i + 1] === replacementCharacterUtf8[1] && bytes[i + 2] === replacementCharacterUtf8[2]) {
             return true;
         }
     }
