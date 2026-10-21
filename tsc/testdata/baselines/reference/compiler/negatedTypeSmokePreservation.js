@@ -200,7 +200,7 @@ export declare function repeatedCase(value: number): void;
 export declare function numericToken(value: number): number;
 export declare function bigintToken(value: bigint): bigint;
 export declare function declaredLiteral(value: "first" | "second" | "third"): "second" | "third" | undefined;
-export declare function explicitBounds(value: not string): (not string & {}) | null | undefined;
+export declare function explicitBounds(value: not string): (not string & not null & not undefined) | null | undefined;
 export declare function symbolValue(value: unknown): symbol | undefined;
 export declare function permission(input: {
     mode: unknown;

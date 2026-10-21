@@ -1,7 +1,9 @@
 logicalOrOperatorWithTypeParameters.ts(5,9): error TS2322: Type 'U | NonNullable<T>' is not assignable to type '{}'.
   Type 'U' is not assignable to type '{}'.
+    Type 'U' is not assignable to type 'not null'.
 logicalOrOperatorWithTypeParameters.ts(14,9): error TS2322: Type 'V | NonNullable<U>' is not assignable to type '{}'.
   Type 'V' is not assignable to type '{}'.
+    Type 'V' is not assignable to type 'not null'.
 
 
 ==== logicalOrOperatorWithTypeParameters.ts (2 errors) ====
@@ -13,6 +15,8 @@ logicalOrOperatorWithTypeParameters.ts(14,9): error TS2322: Type 'V | NonNullabl
             ~~
 !!! error TS2322: Type 'U | NonNullable<T>' is not assignable to type '{}'.
 !!! error TS2322:   Type 'U' is not assignable to type '{}'.
+!!! error TS2322:     Type 'U' is not assignable to type 'not null'.
+!!! related TS2208 logicalOrOperatorWithTypeParameters.ts:1:17: This type parameter might need an `extends not null` constraint.
 !!! related TS2208 logicalOrOperatorWithTypeParameters.ts:1:17: This type parameter might need an `extends {}` constraint.
     }
     
@@ -26,6 +30,8 @@ logicalOrOperatorWithTypeParameters.ts(14,9): error TS2322: Type 'V | NonNullabl
             ~~
 !!! error TS2322: Type 'V | NonNullable<U>' is not assignable to type '{}'.
 !!! error TS2322:   Type 'V' is not assignable to type '{}'.
+!!! error TS2322:     Type 'V' is not assignable to type 'not null'.
+!!! related TS2208 logicalOrOperatorWithTypeParameters.ts:8:34: This type parameter might need an `extends not null` constraint.
 !!! related TS2208 logicalOrOperatorWithTypeParameters.ts:8:34: This type parameter might need an `extends {}` constraint.
         //var r7: T = u || v;
     }

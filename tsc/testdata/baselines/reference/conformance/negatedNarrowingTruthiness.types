@@ -5,17 +5,17 @@
 // facts. It does not introduce fresh `not` negations.
 
 declare const a: {} | undefined | null;
->a : {} | null | undefined
+>a : unknown
 
 if (a) {
->a : {} | null | undefined
+>a : unknown
 
     a; // {}
->a : {}
+>a : NonNullable<unknown>
 
 } else {
     a; // undefined | null
->a : {} | null | undefined
+>a : unknown
 }
 
 declare const b: string | 0 | undefined;

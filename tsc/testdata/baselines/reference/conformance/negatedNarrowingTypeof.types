@@ -27,12 +27,12 @@ if (typeof a === "string") {
 
 } else {
     a; // {} & not string
->a : {} & not string
+>a : not null & not undefined & not string
 
     wantsNotStr(a);
 >wantsNotStr(a) : void
 >wantsNotStr : (x: not string) => void
->a : {} & not string
+>a : not null & not undefined & not string
 }
 
 // `!==` flips the branches.
@@ -46,12 +46,12 @@ if (typeof b !== "number") {
 >"number" : "number"
 
     b; // {} & not number
->b : {} & not number
+>b : not null & not undefined & not number
 
     wantsNotNum(b);
 >wantsNotNum(b) : void
 >wantsNotNum : (x: not number) => void
->b : {} & not number
+>b : not null & not undefined & not number
 
 } else {
     b; // number
@@ -129,6 +129,6 @@ if (typeof d == "bigint") {
 
 } else {
     d; // {} & not bigint
->d : {} & not bigint
+>d : not null & not undefined & not bigint
 }
 

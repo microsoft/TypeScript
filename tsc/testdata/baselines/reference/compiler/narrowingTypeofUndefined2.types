@@ -26,13 +26,13 @@ function fn<T extends Array<unknown> | undefined>(arg: T) {
 
         for (const p of arg) {  }
 >p : unknown
->arg : T & {}
+>arg : T & not undefined
 
         const m = [...arg];
->m : (T & {})[number][]
->[...arg] : (T & {})[number][]
+>m : (T & not undefined)[number][]
+>[...arg] : (T & not undefined)[number][]
 >...arg : unknown
->arg : T & {}
+>arg : T & not undefined
     }
 }
 

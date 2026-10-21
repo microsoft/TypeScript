@@ -1,3 +1,5 @@
+/c.d.ts(1,31): error TS2322: Type '{}' is not assignable to type 'ImportAttributes'.
+  Index signature for type 'string' is missing in type '{}'.
 /index.ts(11,7): error TS2339: Property 'augmented' does not exist on type 'typeof import("*.asset")'.
 
 
@@ -11,8 +13,11 @@
         export const fromB: "b";
     }
     
-==== /c.d.ts (0 errors) ====
+==== /c.d.ts (1 errors) ====
     declare module "*.asset" with {} {
+                                  ~~
+!!! error TS2322: Type '{}' is not assignable to type 'ImportAttributes'.
+!!! error TS2322:   Index signature for type 'string' is missing in type '{}'.
         export const fromAttributed: "attributed";
     }
     
