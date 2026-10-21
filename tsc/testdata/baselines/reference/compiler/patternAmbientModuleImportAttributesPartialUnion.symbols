@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/patternAmbientModuleImportAttributesPartialUnion.ts] ////
+
+=== /types.d.ts ===
+declare module "*.resource" {
+>"*.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
+
+    export const kind: "plain";
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+}
+
+declare module "*.resource" with { type: "css" } {
+>"*.resource" : Symbol("*.resource", Decl(types.d.ts, 2, 1))
+>type : Symbol(type, Decl(types.d.ts, 4, 34))
+
+    export const kind: "css";
+>kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+}
+
+=== /index.ts ===
+declare const partial: { type: "css" } | { [key: string]: "css" };
+>partial : Symbol(partial, Decl(index.ts, 0, 13))
+>type : Symbol(type, Decl(index.ts, 0, 24))
+>key : Symbol(key, Decl(index.ts, 0, 44))
+
+declare const readonlyPartial: { type: "css" } | { readonly [key: string]: "css" };
+>readonlyPartial : Symbol(readonlyPartial, Decl(index.ts, 1, 13))
+>type : Symbol(type, Decl(index.ts, 1, 32))
+>key : Symbol(key, Decl(index.ts, 1, 61))
+
+declare const required: { type: "css"; first: "a" } | { type: "css"; second: "b" };
+>required : Symbol(required, Decl(index.ts, 2, 13))
+>type : Symbol(type, Decl(index.ts, 2, 25))
+>first : Symbol(first, Decl(index.ts, 2, 38))
+>type : Symbol(type, Decl(index.ts, 2, 55))
+>second : Symbol(second, Decl(index.ts, 2, 68))
+
+declare const indexOnly: { [key: string]: "css" };
+>indexOnly : Symbol(indexOnly, Decl(index.ts, 3, 13))
+>key : Symbol(key, Decl(index.ts, 3, 28))
+
+declare const optional: { type?: "css" };
+>optional : Symbol(optional, Decl(index.ts, 4, 13))
+>type : Symbol(type, Decl(index.ts, 4, 25))
+
+async function test() {
+>test : Symbol(test, Decl(index.ts, 4, 41))
+
+    const fromPartial = await import("partial.resource", { with: partial });
+>fromPartial : Symbol(fromPartial, Decl(index.ts, 7, 9))
+>"partial.resource" : Symbol("*.resource", Decl(types.d.ts, 2, 1))
+>with : Symbol(with, Decl(index.ts, 7, 58))
+>partial : Symbol(partial, Decl(index.ts, 0, 13))
+
+    const partialKind: "plain" = fromPartial.kind;
+>partialKind : Symbol(partialKind, Decl(index.ts, 8, 9))
+>fromPartial.kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+>fromPartial : Symbol(fromPartial, Decl(index.ts, 7, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+
+    const fromReadonlyPartial = await import("readonlyPartial.resource", { with: readonlyPartial });
+>fromReadonlyPartial : Symbol(fromReadonlyPartial, Decl(index.ts, 10, 9))
+>"readonlyPartial.resource" : Symbol("*.resource", Decl(types.d.ts, 2, 1))
+>with : Symbol(with, Decl(index.ts, 10, 74))
+>readonlyPartial : Symbol(readonlyPartial, Decl(index.ts, 1, 13))
+
+    const readonlyPartialKind: "plain" = fromReadonlyPartial.kind;
+>readonlyPartialKind : Symbol(readonlyPartialKind, Decl(index.ts, 11, 9))
+>fromReadonlyPartial.kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+>fromReadonlyPartial : Symbol(fromReadonlyPartial, Decl(index.ts, 10, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+
+    const fromRequired = await import("required.resource", { with: required });
+>fromRequired : Symbol(fromRequired, Decl(index.ts, 13, 9))
+>"required.resource" : Symbol("*.resource", Decl(types.d.ts, 2, 1))
+>with : Symbol(with, Decl(index.ts, 13, 60))
+>required : Symbol(required, Decl(index.ts, 2, 13))
+
+    const requiredKind: "css" = fromRequired.kind;
+>requiredKind : Symbol(requiredKind, Decl(index.ts, 14, 9))
+>fromRequired.kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+>fromRequired : Symbol(fromRequired, Decl(index.ts, 13, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+
+    const fromIndexOnly = await import("indexOnly.resource", { with: indexOnly });
+>fromIndexOnly : Symbol(fromIndexOnly, Decl(index.ts, 16, 9))
+>"indexOnly.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
+>with : Symbol(with, Decl(index.ts, 16, 62))
+>indexOnly : Symbol(indexOnly, Decl(index.ts, 3, 13))
+
+    const indexOnlyKind: "plain" = fromIndexOnly.kind;
+>indexOnlyKind : Symbol(indexOnlyKind, Decl(index.ts, 17, 9))
+>fromIndexOnly.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>fromIndexOnly : Symbol(fromIndexOnly, Decl(index.ts, 16, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+
+    const fromOptional = await import("optional.resource", { with: optional });
+>fromOptional : Symbol(fromOptional, Decl(index.ts, 19, 9))
+>"optional.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
+>with : Symbol(with, Decl(index.ts, 19, 60))
+>optional : Symbol(optional, Decl(index.ts, 4, 13))
+
+    const optionalKind: "plain" = fromOptional.kind;
+>optionalKind : Symbol(optionalKind, Decl(index.ts, 20, 9))
+>fromOptional.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>fromOptional : Symbol(fromOptional, Decl(index.ts, 19, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+}
+
