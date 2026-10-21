@@ -525,6 +525,11 @@ func CompareTypes(t1, t2 *Type) int {
 			if c := compareTypeMappers(m1, m2); c != 0 {
 				return c
 			}
+			if hasObjectLiteralMembers(t1) && hasObjectLiteralMembers(t2) {
+				if c := compareObjectLiteralMembers(t1, t2); c != 0 {
+					return c
+				}
+			}
 		}
 	case t1.flags&TypeFlagsUnion != 0:
 		// Unions are ordered by origin and then constituent type lists.
@@ -711,6 +716,44 @@ func compareElementLabels(n1, n2 *ast.Node) int {
 		return 1
 	}
 	return strings.Compare(n1.Name().Text(), n2.Name().Text())
+}
+
+// Object literal types, and types derived from them, are given their members
+// at creation rather than resolving them from their symbol.
+func hasObjectLiteralMembers(t *Type) bool {
+	d := t.AsObjectType()
+	return d.target == nil && d.mapper == nil && t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsObjectLiteral != 0
+}
+
+func compareObjectLiteralMembers(t1, t2 *Type) int {
+	c := t1.checker
+	p1 := t1.AsStructuredType().properties
+	p2 := t2.AsStructuredType().properties
+	if n := len(p1) - len(p2); n != 0 {
+		return n
+	}
+	for i, s1 := range p1 {
+		s2 := p2[i]
+		if r := c.compareSymbols(s1, s2); r != 0 {
+			return r
+		}
+		if r := int(s1.Flags()&ast.SymbolFlagsOptional) - int(s2.Flags()&ast.SymbolFlagsOptional); r != 0 {
+			return r
+		}
+		if r := CompareTypes(c.peekTypeOfObjectLiteralMember(s1), c.peekTypeOfObjectLiteralMember(s2)); r != 0 {
+			return r
+		}
+	}
+	return 0
+}
+
+// The type of a member of an object literal type is set when the member is
+// created.
+func (c *Checker) peekTypeOfObjectLiteralMember(s *ast.Symbol) *Type {
+	if links := c.valueSymbolLinks.TryGet(s); links != nil {
+		return links.resolvedType
+	}
+	return nil
 }
 
 type typeParameterOrigin int
