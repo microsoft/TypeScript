@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/patternAmbientModuleResolvedNonModule.ts] ////
+
+=== /ambient.d.ts ===
+declare module "*.svelte" {
+>"*.svelte" : typeof import("*.svelte")
+
+    const c: number;
+>c : number
+
+    export default c;
+>c : number
+}
+
+=== /src/main.ts ===
+import script from "script.svelte";
+>script : number
+
+const scriptValue: string = script;
+>scriptValue : string
+>script : number
+
+import relative from "./relative.svelte";
+>relative : number
+
+const relativeValue: string = relative;
+>relativeValue : string
+>relative : number
+
+import resolved from "module.svelte";
+>resolved : string
+
+const resolvedValue: string = resolved;
+>resolvedValue : string
+>resolved : string
+
+import missing from "missing.svelte";
+>missing : number
+
+const missingValue: number = missing;
+>missingValue : number
+>missing : number
+
+=== /stub.d.ts ===
+
+// A script, not a module.
+
+=== /generated/relative.svelte.d.ts ===
+
+// A script, not a module.
+
+=== /module.d.ts ===
+declare const c: string;
+>c : string
+
+export default c;
+>c : string
+

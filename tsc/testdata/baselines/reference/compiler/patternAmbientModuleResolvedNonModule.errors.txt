@@ -1,0 +1,54 @@
+/src/main.ts(2,7): error TS2322: Type 'number' is not assignable to type 'string'.
+/src/main.ts(5,7): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "strict": true,
+            "noEmit": true,
+            "module": "esnext",
+            "moduleResolution": "bundler",
+            "types": [],
+            "paths": {
+                "script.svelte": ["./stub.d.ts"],
+                "module.svelte": ["./module.d.ts"]
+            },
+            "rootDirs": ["./src", "./generated"]
+        },
+        "files": ["ambient.d.ts", "src/main.ts"]
+    }
+    
+==== /ambient.d.ts (0 errors) ====
+    declare module "*.svelte" {
+        const c: number;
+        export default c;
+    }
+    
+==== /src/main.ts (2 errors) ====
+    import script from "script.svelte";
+    const scriptValue: string = script;
+          ~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    
+    import relative from "./relative.svelte";
+    const relativeValue: string = relative;
+          ~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    
+    import resolved from "module.svelte";
+    const resolvedValue: string = resolved;
+    
+    import missing from "missing.svelte";
+    const missingValue: number = missing;
+    
+==== /stub.d.ts (0 errors) ====
+    // A script, not a module.
+    
+==== /generated/relative.svelte.d.ts (0 errors) ====
+    // A script, not a module.
+    
+==== /module.d.ts (0 errors) ====
+    declare const c: string;
+    export default c;
+    
