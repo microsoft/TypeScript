@@ -621,6 +621,9 @@ func CompareTypes(t1, t2 *Type) int {
 		if c := CompareTypes(t1.AsIndexedAccessType().indexType, t2.AsIndexedAccessType().indexType); c != 0 {
 			return c
 		}
+		if c := int(t1.AsIndexedAccessType().accessFlags) - int(t2.AsIndexedAccessType().accessFlags); c != 0 {
+			return c
+		}
 	case t1.flags&TypeFlagsConditional != 0:
 		if c := t1.checker.compareNodes(t1.AsConditionalType().root.node.AsNode(), t2.AsConditionalType().root.node.AsNode()); c != 0 {
 			return c
