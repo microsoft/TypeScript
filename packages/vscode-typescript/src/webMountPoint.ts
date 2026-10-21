@@ -11,12 +11,14 @@ const nulAuthority = "ts-nul-authority";
 
 export function uriToWasmMountPoint(uri: WebFileSystemUri): string {
     if (uri.scheme === "file") {
+        // Document URIs are serialized with a lowercase authority and drive
+        // letter, and the server names files from that serialized form.
         let fileName: string;
         if (uri.authority) {
-            fileName = `//${uri.authority}${uri.path}`;
+            fileName = `//${uri.authority.toLowerCase()}${uri.path}`;
         }
         else {
-            fileName = /^\/[A-Za-z]:/.test(uri.path) ? uri.path.slice(1) : uri.path;
+            fileName = /^\/[A-Za-z]:/.test(uri.path) ? uri.path[1].toLowerCase() + uri.path.slice(2) : uri.path;
         }
         return fileName.startsWith("/") ? fileName : `/${fileName}`;
     }

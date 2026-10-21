@@ -23,12 +23,20 @@ describe("web WASI mount points", () => {
             uriToWasmMountPoint({ scheme: "file", authority: "", path: "/c:/work/project" }),
             "/c:/work/project",
         );
+        assert.strictEqual(
+            uriToWasmMountPoint({ scheme: "file", authority: "", path: "/C:/Work/Project" }),
+            "/c:/Work/Project",
+        );
     });
 
     test("maps UNC workspaces to UNC paths", () => {
         assert.strictEqual(
             uriToWasmMountPoint({ scheme: "file", authority: "server", path: "/share/project" }),
             "//server/share/project",
+        );
+        assert.strictEqual(
+            uriToWasmMountPoint({ scheme: "file", authority: "Server.Name", path: "/Share/Project" }),
+            "//server.name/Share/Project",
         );
     });
 
