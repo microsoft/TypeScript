@@ -1503,6 +1503,7 @@ type TypeParameter struct {
 	isDistributed       bool
 	resolvedDefaultType *Type
 	distributedType     *Type
+	origin              *Type // The type parameter a restrictive type parameter was made from, or the tuple target of a tuple element type parameter
 }
 
 func (t *TypeParameter) IsThisType() bool { return t.isThisType }

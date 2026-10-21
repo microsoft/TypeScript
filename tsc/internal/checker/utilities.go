@@ -580,6 +580,9 @@ func CompareTypes(t1, t2 *Type) int {
 		if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
 			return c
 		}
+		if c := compareTypeParameterOrigins(t1, t2); c != 0 {
+			return c
+		}
 	case t1.flags&TypeFlagsIndex != 0:
 		if c := CompareTypes(t1.AsIndexType().target, t2.AsIndexType().target); c != 0 {
 			return c
@@ -618,6 +621,12 @@ func CompareTypes(t1, t2 *Type) int {
 	case t1.flags&TypeFlagsStringMapping != 0:
 		if c := CompareTypes(t1.AsStringMappingType().target, t2.AsStringMappingType().target); c != 0 {
 			return c
+		}
+	}
+	// Fresh literal types follow their regular counterparts.
+	if t1.flags&TypeFlagsFreshable != 0 {
+		if f1, f2 := isFreshLiteralType(t1), isFreshLiteralType(t2); f1 != f2 {
+			return core.IfElse(f1, 1, -1)
 		}
 	}
 	// Fall back to type IDs. This results in type creation order for built-in types.
@@ -702,6 +711,98 @@ func compareElementLabels(n1, n2 *ast.Node) int {
 		return 1
 	}
 	return strings.Compare(n1.Name().Text(), n2.Name().Text())
+}
+
+type typeParameterOrigin int
+
+const (
+	typeParameterOriginDeclared typeParameterOrigin = iota
+	typeParameterOriginThis
+	typeParameterOriginDistributed
+	typeParameterOriginRestrictive
+	typeParameterOriginTupleElement
+	typeParameterOriginClone
+)
+
+func getTypeParameterOrigin(tp *TypeParameter) typeParameterOrigin {
+	switch {
+	case tp.isThisType:
+		return typeParameterOriginThis
+	case tp.isDistributed:
+		return typeParameterOriginDistributed
+	case tp.origin != nil && tp.origin.flags&TypeFlagsTypeParameter != 0:
+		return typeParameterOriginRestrictive
+	case tp.origin != nil:
+		return typeParameterOriginTupleElement
+	case tp.target != nil:
+		return typeParameterOriginClone
+	}
+	return typeParameterOriginDeclared
+}
+
+// Type parameters that share a symbol are copies derived from a common original.
+// Order them by how they were derived rather than by creation order.
+func compareTypeParameterOrigins(t1, t2 *Type) int {
+	p1 := t1.AsTypeParameter()
+	p2 := t2.AsTypeParameter()
+	o1 := getTypeParameterOrigin(p1)
+	o2 := getTypeParameterOrigin(p2)
+	if o1 != o2 {
+		return int(o1) - int(o2)
+	}
+	switch o1 {
+	case typeParameterOriginThis:
+		// Tuple this types have no symbol; their constraint is the tuple target,
+		// initialized at creation.
+		if t1.symbol == nil {
+			return CompareTypes(p1.constraint, p2.constraint)
+		}
+	case typeParameterOriginDistributed:
+		return CompareTypes(p1.distributedType, p2.distributedType)
+	case typeParameterOriginRestrictive:
+		return CompareTypes(p1.origin, p2.origin)
+	case typeParameterOriginTupleElement:
+		if c := CompareTypes(p1.origin, p2.origin); c != 0 {
+			return c
+		}
+		return slices.Index(p1.origin.AsTupleType().allTypeParameters, t1) - slices.Index(p2.origin.AsTupleType().allTypeParameters, t2)
+	case typeParameterOriginClone:
+		if c := CompareTypes(p1.target, p2.target); c != 0 {
+			return c
+		}
+		return compareTypeMappers(getCloneOuterMapper(t1), getCloneOuterMapper(t2))
+	}
+	return 0
+}
+
+// A cloned type parameter's mapper maps its target to the clone itself,
+// optionally followed by the instantiation the clone was made for. Return only
+// the latter so comparisons don't recurse into the clone.
+func getCloneOuterMapper(t *Type) *TypeMapper {
+	m := t.AsTypeParameter().mapper
+	if m == nil {
+		return nil
+	}
+	if m.Kind() == TypeMapperKindComposite {
+		cm := castTypeMapper[CompositeTypeMapper](m, TypeMapperKindComposite)
+		if mapperTargetsType(cm.m1, t) {
+			return cm.m2
+		}
+	}
+	if mapperTargetsType(m, t) {
+		return nil
+	}
+	return m
+}
+
+func mapperTargetsType(m *TypeMapper, t *Type) bool {
+	switch m.Kind() {
+	case TypeMapperKindSimple:
+		return castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple).target == t
+	case TypeMapperKindArray:
+		return slices.Contains(castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray).targets, t)
+	}
+	return false
 }
 
 func compareTypeLists(s1, s2 []*Type) int {
