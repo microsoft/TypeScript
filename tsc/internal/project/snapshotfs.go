@@ -654,6 +654,9 @@ func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary, currentFS L
 				createdDirectories.Add(s.caseSensitivity.PathKey(uri.FileName().AsPath()))
 			}
 		}
+		if createdDirectories.Len() == 0 {
+			return change
+		}
 		for realpath, aliases := range s.nodeModulesRealpathAliases {
 			path := realpath
 			for {

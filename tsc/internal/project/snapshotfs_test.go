@@ -1219,6 +1219,55 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		assert.Assert(t, expanded.Deleted.Has("file:///project/node_modules/mylib/package.json"), "symlink deletion should be added")
 	})
 
+	t.Run("directory delete invalidates cached realpath and alias", func(t *testing.T) {
+		t.Parallel()
+		realpath := tspath.PathKey("/packages/mylib/package.json")
+		aliasPath := tspath.PathKey("/project/node_modules/mylib/package.json")
+		aliases := map[tspath.PathKey]*realpathAliasSet{
+			realpath: {
+				paths: aliasPaths{
+					aliasPath: tspath.RootedFilePath("/project/node_modules/mylib/package.json"),
+				},
+			},
+		}
+		snapshotFS := &SnapshotFS{
+			caseSensitivity: tspath.CaseInsensitive,
+			cacheFiles: map[tspath.PathKey]*cachedFile{
+				realpath:  newCachedFile(tspath.RootedFilePath("/packages/mylib/package.json"), `{"name":"mylib"}`),
+				aliasPath: newCachedFile(tspath.RootedFilePath("/project/node_modules/mylib/package.json"), `{"name":"mylib"}`),
+			},
+			cacheDirectories: map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]{
+				tspath.PathKey("/packages/mylib"): {realpath: "package.json"},
+			},
+			nodeModulesRealpathAliases: aliases,
+		}
+		builder := newSnapshotFSBuilder(
+			vfstest.FromMap(map[string]string{}, tspath.CaseInsensitive),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			snapshotFS.cacheFiles,
+			snapshotFS.cacheDirectories,
+			aliases,
+			lsproto.PositionEncodingKindUTF16,
+		)
+		snapshot := &Snapshot{
+			fs:                 snapshotFS,
+			ProjectCollection:  &ProjectCollection{},
+			ConfigFileRegistry: &ConfigFileRegistry{},
+		}
+		change := FileChangeSummary{}
+		change.Deleted.Add("file:///packages/mylib")
+
+		change = snapshot.processFileChanges(builder, change, nil, nil, nil, nil)
+
+		assert.Assert(t, change.Deleted.Has("file:///packages/mylib/package.json"))
+		assert.Assert(t, change.Deleted.Has("file:///project/node_modules/mylib/package.json"))
+		_, realpathCached := builder.cacheFiles.Load(realpath)
+		_, aliasCached := builder.cacheFiles.Load(aliasPath)
+		assert.Assert(t, !realpathCached)
+		assert.Assert(t, !aliasCached)
+	})
+
 	t.Run("expandRealpathAliases is a no-op with no aliases", func(t *testing.T) {
 		t.Parallel()
 		snapshot := &SnapshotFS{

@@ -180,6 +180,7 @@ func (s *Snapshot) processFileChanges(
 		}
 		_, contentMapperWatchedFiles := s.contentMapperWatchState()
 		fileChanges = fs.expandAndFilterWatchEvents(fileChanges, contentMapperExtensions, contentMapperWatchedFiles, previousOpenFiles, openFiles)
+		fileChanges = s.fs.expandRealpathAliases(fileChanges, fs.fs)
 		fileChanges = fs.markDirtyFiles(fileChanges)
 		fileChanges = fs.convertOpenAndCloseToChanges(fileChanges, previousOpenFiles, openFiles)
 	}
