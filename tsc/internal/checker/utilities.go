@@ -537,6 +537,11 @@ func CompareTypes(t1, t2 *Type) int {
 				if c := compareObjectLiteralMembers(t1, t2); c != 0 {
 					return c
 				}
+				// Fresh, regular, and widened copies of the same literal differ only in
+				// the flags set when they were created.
+				if c := int(t1.objectFlags&objectLiteralCreationFlags) - int(t2.objectFlags&objectLiteralCreationFlags); c != 0 {
+					return c
+				}
 			}
 		}
 	case t1.flags&TypeFlagsUnion != 0:
@@ -736,6 +741,10 @@ func compareElementLabels(n1, n2 *ast.Node) int {
 
 // Object literal types, and types derived from them, are given their members
 // at creation rather than resolving them from their symbol.
+const objectLiteralCreationFlags = ObjectFlagsObjectLiteral | ObjectFlagsFreshLiteral | ObjectFlagsJSLiteral | ObjectFlagsArrayLiteral |
+	ObjectFlagsContainsSpread | ObjectFlagsObjectLiteralPatternWithComputedProperties | ObjectFlagsNonInferrableType |
+	ObjectFlagsContainsWideningType | ObjectFlagsContainsObjectOrArrayLiteral
+
 func hasObjectLiteralMembers(t *Type) bool {
 	d := t.AsObjectType()
 	if d.target != nil || d.mapper != nil {
