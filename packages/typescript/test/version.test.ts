@@ -1,9 +1,9 @@
-import getExePath from "#getExePath";
 import { versionMajorMinor } from "@typescript/typescript";
 import assert from "node:assert";
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
+import getExePath from "../lib/getExePath.js";
 
 test("versionMajorMinor runtime and declaration match the compiler version", () => {
     const compilerVersion = execFileSync(getExePath(), ["--version"], { encoding: "utf8" })

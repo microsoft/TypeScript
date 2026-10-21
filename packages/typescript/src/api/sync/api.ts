@@ -15,26 +15,26 @@ import {
     cacheGeneratorMethod,
 } from "./generatorSupport.ts";
 
-import { CheckFlags } from "#enums/checkFlags";
-import { CompletionItemKind } from "#enums/completionItemKind";
-import { DiagnosticCategory } from "#enums/diagnosticCategory";
-import { ElementFlags } from "#enums/elementFlags";
-import { EmitOnly } from "#enums/emitOnly";
-import { IndexKind } from "#enums/indexKind";
-import { JsxEmit } from "#enums/jsxEmit";
-import { ModuleKind } from "#enums/moduleKind";
-import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
-import { NewLineKind } from "#enums/newLineKind";
-import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
-import { ObjectFlags } from "#enums/objectFlags";
-import { ScriptKind } from "#enums/scriptKind";
-import { SignatureFlags } from "#enums/signatureFlags";
-import { SignatureKind } from "#enums/signatureKind";
-import { SymbolFlags } from "#enums/symbolFlags";
-import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
-import { TypeFlags } from "#enums/typeFlags";
-import { TypeFormatFlags } from "#enums/typeFormatFlags";
-import { TypePredicateKind } from "#enums/typePredicateKind";
+import { CheckFlags } from "../../../enums/checkFlags.js";
+import { CompletionItemKind } from "../../../enums/completionItemKind.js";
+import { DiagnosticCategory } from "../../../enums/diagnosticCategory.js";
+import { ElementFlags } from "../../../enums/elementFlags.js";
+import { EmitOnly } from "../../../enums/emitOnly.js";
+import { IndexKind } from "../../../enums/indexKind.js";
+import { JsxEmit } from "../../../enums/jsxEmit.js";
+import { ModuleKind } from "../../../enums/moduleKind.js";
+import { ModuleResolutionKind } from "../../../enums/moduleResolutionKind.js";
+import { NewLineKind } from "../../../enums/newLineKind.js";
+import { NodeBuilderFlags } from "../../../enums/nodeBuilderFlags.js";
+import { ObjectFlags } from "../../../enums/objectFlags.js";
+import { ScriptKind } from "../../../enums/scriptKind.js";
+import { SignatureFlags } from "../../../enums/signatureFlags.js";
+import { SignatureKind } from "../../../enums/signatureKind.js";
+import { SymbolFlags } from "../../../enums/symbolFlags.js";
+import { SymbolOwnerKind } from "../../../enums/symbolOwnerKind.js";
+import { TypeFlags } from "../../../enums/typeFlags.js";
+import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
+import { TypePredicateKind } from "../../../enums/typePredicateKind.js";
 import {
     type __String,
     type CallLikeExpression,
@@ -64,6 +64,7 @@ import {
 import {
     decodeNode,
     getNodeId,
+    getNodeRequestHandle,
     parseNodeHandleFromCompiler,
     readParseOptionsKey,
     readSourceFileHash,
@@ -141,7 +142,6 @@ import type {
 } from "../proto.ts";
 import {
     resolveFileName,
-    toCreateSnapshotRequest,
     validateSymbolResponse,
 } from "../proto.ts";
 import {
@@ -380,13 +380,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private activeBuildOrchestrators: Set<BuildOrchestrator> = new Set();
     private activeSourceFileLeases: Map<number, RetainedSourceFile> = new Map();
     readonly printer: Printer;
-    readonly internal: InternalAPI;
+    readonly debug: DebugHandlers;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
         this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache<Symbol>();
         this.printer = new Printer(this.client);
-        this.internal = new InternalAPI(this.client, this.ensureInitialized);
+        this.debug = new DebugHandlers(this.client, this.ensureInitialized);
     }
 
     /**
@@ -581,6 +581,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return "\n";
     }
 
+    /** @internal */
     get createBuildOrchestrator(): {
         (rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): BuildOrchestrator;
         gen(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Generator<ProtocolRequest, BuildOrchestrator, ProtocolResponse["result"]>;
@@ -936,7 +937,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         function createSnapshot(params?: CreateSnapshotParams): Snapshot {
             owner.ensureInitialized();
 
-            const requestParams = toCreateSnapshotRequest(owner.prepareCreateSnapshotParams(params));
+            const requestParams = owner.prepareCreateSnapshotParams(params);
             const data = owner.client.apiRequest("createSnapshot", requestParams);
 
             const snapshot = new Snapshot(
@@ -959,7 +960,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         function* gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
             yield* owner.ensureInitialized.gen();
 
-            const requestParams = toCreateSnapshotRequest(owner.prepareCreateSnapshotParams(params));
+            const requestParams = owner.prepareCreateSnapshotParams(params);
             const data = yield* apiRequest("createSnapshot", requestParams);
 
             const snapshot = new Snapshot(
@@ -996,7 +997,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
                 const data = owner.client.apiRequest("updateSnapshot", {
                     snapshot: baseSnapshot.id,
-                    changes: toCreateSnapshotRequest(owner.prepareCreateSnapshotParams(params)),
+                    changes: owner.prepareCreateSnapshotParams(params),
                 });
                 if (data.snapshot === baseSnapshot.id) {
                     owner.client.apiRequest("release", { snapshot: data.snapshot });
@@ -1025,7 +1026,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
                 const data = yield* apiRequest("updateSnapshot", {
                     snapshot: baseSnapshot.id,
-                    changes: toCreateSnapshotRequest(owner.prepareCreateSnapshotParams(params)),
+                    changes: owner.prepareCreateSnapshotParams(params),
                 });
                 if (data.snapshot === baseSnapshot.id) {
                     yield* apiRequest("release", { snapshot: data.snapshot });
@@ -1049,8 +1050,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams | undefined {
-        if (!params) return undefined;
+    private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams {
+        params ??= {};
         const prepareOptions = (options: CreateProgramOptions | undefined): ProtocolCreateProgramOptions | undefined => {
             if (!options) return undefined;
             const { moduleResolver, projectReferences, ...rest } = options;
@@ -1343,8 +1344,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
      *
      * Fetching the snapshot issues a lightweight request to the server to
      * retrieve its timing collection. Collection must be enabled via the
-     * `collectTiming` option; when it is not, the returned snapshot has
-     * `enabled: false` and zeroed totals.
+     * `collectTiming` option or `TS_API_TIMING_DIR` environment variable; when
+     * it is not, the returned snapshot has `enabled: false` and zeroed totals.
      */
     get getTimingInfo(): {
         (): TimingInfo;
@@ -1435,8 +1436,13 @@ function sourceFileDescriptor(sourceFile: RemoteSourceFile): SourceFileDescripto
     };
 }
 
+/** Returns whether a node is backed by a remote compiler response. */
+export function isRemoteNode(node: Node): boolean {
+    return node instanceof RemoteNode;
+}
+
 function getRemoteSourceFile(node: Node): RemoteSourceFile | undefined {
-    if (!(node instanceof RemoteNode)) return undefined;
+    if (!isRemoteNode(node)) return undefined;
     const file = node.getSourceFile();
     return file instanceof RemoteSourceFile && file.api ? file : undefined;
 }
@@ -1535,11 +1541,10 @@ export class RetainedSourceFile {
     }
 }
 
-export class InternalAPI {
+export class DebugHandlers {
     private client: Client;
     private ensureInitialized: EnsureInitialized;
 
-    /** @internal */
     constructor(client: Client, ensureInitialized: EnsureInitialized) {
         this.client = client;
         this.ensureInitialized = ensureInitialized;
@@ -1679,7 +1684,6 @@ export class Snapshot {
     private snapshotRegistry: SnapshotObjectRegistry;
     private projectDataMap: Map<ProjectId, ProjectResponse>;
     private updateSnapshot: SnapshotUpdater;
-    readonly internal: SnapshotInternalAPI;
 
     private get client(): Client {
         return this.api.client;
@@ -1711,8 +1715,6 @@ export class Snapshot {
             createdPrograms: data.operation.createdPrograms?.map(projectId => this.requireProject(projectId).program),
             openedFiles: data.operation.openedFiles?.map(result => ({ project: this.requireProject(result.project) })),
         };
-
-        this.internal = new SnapshotInternalAPI(this.id, api.client);
     }
 
     getProjects(): readonly Project[] {
@@ -1958,15 +1960,17 @@ export class ModuleResolver {
 
 class SnapshotObjectRegistry {
     private readonly symbols: Map<number, Symbol> = new Map();
-    private readonly projectRegistries: Map<ProjectId, ProjectObjectRegistry> = new Map();
+    private readonly nodeHandles: Map<string, NodeHandle> = new Map();
+    private readonly projectRegistries: Map<number, ProjectObjectRegistry> = new Map();
     private readonly snapshotId: number;
+    private disposed = false;
 
     constructor(snapshotId: number) {
         this.snapshotId = snapshotId;
     }
 
     addProjectRegistry(registry: ProjectObjectRegistry): void {
-        this.projectRegistries.set(registry.project.id, registry);
+        this.projectRegistries.set(registry.project.handle, registry);
     }
 
     getOrCreateSymbol(data: SymbolResponse): Symbol {
@@ -1989,8 +1993,19 @@ class SnapshotObjectRegistry {
         return this.symbols.get(id);
     }
 
+    getOrCreateNodeHandle<T extends Node>(handle: string, project: Project): NodeHandle<T> {
+        let node = this.nodeHandles.get(handle);
+        if (!node) {
+            node = new NodeHandle<T>(handle, project);
+            if (!this.disposed) this.nodeHandles.set(handle, node);
+        }
+        return node as NodeHandle<T>;
+    }
+
     clear(): void {
+        this.disposed = true;
         this.symbols.clear();
+        this.nodeHandles.clear();
     }
 }
 
@@ -2060,7 +2075,7 @@ class ProjectObjectRegistry {
     }
 
     createNodeHandle<T extends Node>(handle: string): NodeHandle<T> {
-        return new NodeHandle<T>(handle, this.project);
+        return this.snapshotRegistry.getOrCreateNodeHandle<T>(handle, this.project);
     }
 
     getOrCreateSignature(data: SignatureResponse): Signature {
@@ -2103,7 +2118,7 @@ class ProjectObjectRegistry {
 
                 const data = owner.client.apiRequest(method, {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     objectId: source.id,
                 });
                 if (!data) return undefined;
@@ -2118,7 +2133,7 @@ class ProjectObjectRegistry {
 
                 const data = yield* apiRequest(method, {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     objectId: source.id,
                 });
                 if (!data) return undefined;
@@ -2164,7 +2179,7 @@ class ProjectObjectRegistry {
                     ? owner.client.apiRequest(method, { symbol: source.reference })
                     : owner.client.apiRequest(method, {
                         snapshot: owner.snapshotId,
-                        project: owner.project.id,
+                        project: owner.project.handle,
                         objectId: source.id,
                     });
                 if (!data) throw new Error(`${method} returned null symbol for ${source.constructor.name} ${source.id}`);
@@ -2178,7 +2193,7 @@ class ProjectObjectRegistry {
                     ? yield* apiRequest(method, { symbol: source.reference })
                     : yield* apiRequest(method, {
                         snapshot: owner.snapshotId,
-                        project: owner.project.id,
+                        project: owner.project.handle,
                         objectId: source.id,
                     });
                 if (!data) throw new Error(`${method} returned null symbol for ${source.constructor.name} ${source.id}`);
@@ -2202,7 +2217,7 @@ class ProjectObjectRegistry {
 
                 const data = owner.client.apiRequest(method, {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     objectId: source.id,
                 });
                 if (!data) throw new Error(`${method} returned null signature for ${source.constructor.name} ${source.id}`);
@@ -2215,7 +2230,7 @@ class ProjectObjectRegistry {
 
                 const data = yield* apiRequest(method, {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     objectId: source.id,
                 });
                 if (!data) throw new Error(`${method} returned null signature for ${source.constructor.name} ${source.id}`);
@@ -2248,7 +2263,7 @@ class ProjectObjectRegistry {
                 }
                 const typesData = owner.client.apiRequest(method, {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     objectId: source.id,
                 });
                 if (typesData == null) return [];
@@ -2270,7 +2285,7 @@ class ProjectObjectRegistry {
                 }
                 const typesData = yield* apiRequest(method, {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     objectId: source.id,
                 });
                 if (typesData == null) return [];
@@ -2331,7 +2346,7 @@ class ProjectObjectRegistry {
                     ? owner.client.apiRequest(method, { symbol: source.reference })
                     : owner.client.apiRequest(method, {
                         snapshot: owner.snapshotId,
-                        project: owner.project.id,
+                        project: owner.project.handle,
                         objectId: source.id,
                     });
                 return data?.map(symbol => owner.getOrCreateSymbol(symbol)) ?? [];
@@ -2341,7 +2356,7 @@ class ProjectObjectRegistry {
                     ? yield* apiRequest(method, { symbol: source.reference })
                     : yield* apiRequest(method, {
                         snapshot: owner.snapshotId,
-                        project: owner.project.id,
+                        project: owner.project.handle,
                         objectId: source.id,
                     });
                 return data?.map(symbol => owner.getOrCreateSymbol(symbol)) ?? [];
@@ -2362,7 +2377,7 @@ class ProjectObjectRegistry {
             function (source: Type): readonly Type[] {
                 const typesData = owner.client.apiRequest("getBaseTypes", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: source.id,
                 });
                 if (typesData == null) return [];
@@ -2371,7 +2386,7 @@ class ProjectObjectRegistry {
             function* (source: Type): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
                 const typesData = yield* apiRequest("getBaseTypes", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: source.id,
                 });
                 if (typesData == null) return [];
@@ -2391,7 +2406,7 @@ class ProjectObjectRegistry {
             function (source: Type): readonly Symbol[] {
                 const data = owner.client.apiRequest("getPropertiesOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: source.id,
                 });
                 return data ? data.map(symbol => owner.getOrCreateSymbol(symbol)) : [];
@@ -2399,7 +2414,7 @@ class ProjectObjectRegistry {
             function* (source: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getPropertiesOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: source.id,
                 });
                 return data ? data.map(symbol => owner.getOrCreateSymbol(symbol)) : [];
@@ -2418,7 +2433,7 @@ class ProjectObjectRegistry {
             function (source: Type): readonly Symbol[] {
                 const data = owner.client.apiRequest("getApparentPropertiesOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     objectId: source.id,
                 });
                 return data ? data.map(symbol => owner.getOrCreateSymbol(symbol)) : [];
@@ -2426,7 +2441,7 @@ class ProjectObjectRegistry {
             function* (source: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getApparentPropertiesOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     objectId: source.id,
                 });
                 return data ? data.map(symbol => owner.getOrCreateSymbol(symbol)) : [];
@@ -2445,7 +2460,7 @@ class ProjectObjectRegistry {
             function (source: Type, name: string): Symbol | undefined {
                 const data = owner.client.apiRequest("getPropertyOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: source.id,
                     name,
                 });
@@ -2454,7 +2469,7 @@ class ProjectObjectRegistry {
             function* (source: Type, name: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getPropertyOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: source.id,
                     name,
                 });
@@ -2474,7 +2489,7 @@ class ProjectObjectRegistry {
             function (source: Type, kind: SignatureKind): readonly Signature[] {
                 const data = owner.client.apiRequest("getSignaturesOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: source.id,
                     kind,
                 });
@@ -2483,7 +2498,7 @@ class ProjectObjectRegistry {
             function* (source: Type, kind: SignatureKind): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSignaturesOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: source.id,
                     kind,
                 });
@@ -2503,7 +2518,7 @@ class ProjectObjectRegistry {
             function (source: Type): readonly IndexInfo[] {
                 const data = owner.client.apiRequest("getIndexInfosOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: source.id,
                 });
                 if (!data) return [];
@@ -2511,13 +2526,13 @@ class ProjectObjectRegistry {
                     keyType: owner.getOrCreateType(info.keyType),
                     valueType: owner.getOrCreateType(info.valueType),
                     isReadonly: info.isReadonly ?? false,
-                    declaration: info.declaration ? new NodeHandle<IndexSignatureDeclaration>(info.declaration, owner.project) : undefined,
+                    declaration: info.declaration ? owner.createNodeHandle<IndexSignatureDeclaration>(info.declaration) : undefined,
                 }));
             },
             function* (source: Type): Generator<ProtocolRequest, readonly IndexInfo[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getIndexInfosOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: source.id,
                 });
                 if (!data) return [];
@@ -2525,7 +2540,7 @@ class ProjectObjectRegistry {
                     keyType: owner.getOrCreateType(info.keyType),
                     valueType: owner.getOrCreateType(info.valueType),
                     isReadonly: info.isReadonly ?? false,
-                    declaration: info.declaration ? new NodeHandle<IndexSignatureDeclaration>(info.declaration, owner.project) : undefined,
+                    declaration: info.declaration ? owner.createNodeHandle<IndexSignatureDeclaration>(info.declaration) : undefined,
                 }));
             },
         );
@@ -2542,7 +2557,7 @@ class ProjectObjectRegistry {
             function (source: Signature, pos: number): Type {
                 const data = owner.client.apiRequest("getTypeParameterAtPosition", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     signature: source.id,
                     index: pos,
                 });
@@ -2551,7 +2566,7 @@ class ProjectObjectRegistry {
             function* (source: Signature, pos: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getTypeParameterAtPosition", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     signature: source.id,
                     index: pos,
                 });
@@ -2565,22 +2580,23 @@ export class Project<Id extends ProjectId = ProjectId> {
     /** @internal */
     readonly api: API<boolean>;
     readonly id: Id;
+    /**
+     * Server identity for this project's lifetime across snapshots.
+     * @internal
+     */
+    readonly handle: number;
     readonly configFileName: RootedFilePath | undefined;
     readonly currentDirectory: RootedDirectoryPath;
     readonly dirty: boolean;
     readonly parsedCommandLine: ParsedCommandLine;
-    /** @deprecated Use `parsedCommandLine.options`. */
-    readonly compilerOptions: CompilerOptions;
-    /** @deprecated Use `parsedCommandLine.fileNames`. */
-    readonly rootFiles: readonly RootedFilePath[];
 
     readonly program: Program<Id>;
     readonly checker: Checker;
     readonly languageService: LanguageService;
-    private snapshotId: number;
 
     constructor(data: ProjectResponse, snapshotId: number, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, snapshotRegistry: SnapshotObjectRegistry) {
         this.id = data.id as Id;
+        this.handle = data.handle;
         this.api = api;
         this.configFileName = data.configFileName;
         this.currentDirectory = data.currentDirectory;
@@ -2589,49 +2605,10 @@ export class Project<Id extends ProjectId = ProjectId> {
             throw new Error(`Project '${data.configFileName}' has no parsed command line`);
         }
         this.parsedCommandLine = data.parsedCommandLine;
-        this.compilerOptions = this.parsedCommandLine.options;
-        this.rootFiles = this.parsedCommandLine.fileNames;
-        this.snapshotId = snapshotId;
         this.program = new Program(snapshotId, this, toPath);
         const objectRegistry = new ProjectObjectRegistry(snapshotId, this, snapshotRegistry);
         this.checker = new Checker(snapshotId, this, objectRegistry);
         this.languageService = new LanguageService(snapshotId, this, objectRegistry);
-    }
-
-    /** @deprecated Use `languageService.getImportAdderEdits`. */
-    get getImportAdderEdits(): {
-        (file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): readonly TextEdit[];
-        gen(file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getImportAdderEdits",
-            function (file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): readonly TextEdit[] {
-                return owner.languageService.getImportAdderEdits(file, actions);
-            },
-            function* (file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]> {
-                return yield* owner.languageService.getImportAdderEdits.gen(file, actions);
-            },
-        );
-    }
-
-    /** @deprecated Use `languageService.getImportEditsForSymbols`. */
-    get getImportEditsForSymbols(): {
-        (file: DocumentIdentifier, symbols: readonly Symbol[], options?: GetImportEditsForSymbolsOptions): readonly TextEdit[];
-        gen(file: DocumentIdentifier, symbols: readonly Symbol[], options?: GetImportEditsForSymbolsOptions): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getImportEditsForSymbols",
-            function (file: DocumentIdentifier, symbols: readonly Symbol[], options: GetImportEditsForSymbolsOptions = {}): readonly TextEdit[] {
-                return owner.languageService.getImportEditsForSymbols(file, symbols, options);
-            },
-            function* (file: DocumentIdentifier, symbols: readonly Symbol[], options: GetImportEditsForSymbolsOptions = {}): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]> {
-                return yield* owner.languageService.getImportEditsForSymbols.gen(file, symbols, options);
-            },
-        );
     }
 
     dispose(): void {
@@ -2681,7 +2658,7 @@ export class LanguageService {
 
                 const data = owner.client.apiRequest("getImportAdderEdits", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     actions: requestActions,
                 });
@@ -2706,7 +2683,7 @@ export class LanguageService {
 
                 const data = yield* apiRequest("getImportAdderEdits", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     actions: requestActions,
                 });
@@ -2773,27 +2750,27 @@ export class LanguageService {
             function (node: Node, position: number): ReferencedSymbolEntry[] {
                 const data = owner.client.apiRequest("getReferencedSymbolsForNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    node: getNodeId(node),
+                    project: owner.project.handle,
+                    node: getNodeRequestHandle(node),
                     position,
                 });
                 return (data ?? []).map(entry => ({
-                    definition: new NodeHandle(entry.definition, owner.project),
+                    definition: owner.objectRegistry.createNodeHandle(entry.definition),
                     symbol: entry.symbol ? owner.objectRegistry.getOrCreateSymbol(entry.symbol) : undefined,
-                    references: (entry.references ?? []).map(h => new NodeHandle(h, owner.project)),
+                    references: (entry.references ?? []).map(h => owner.objectRegistry.createNodeHandle(h)),
                 }));
             },
             function* (node: Node, position: number): Generator<ProtocolRequest, ReferencedSymbolEntry[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getReferencedSymbolsForNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    node: getNodeId(node),
+                    project: owner.project.handle,
+                    node: getNodeRequestHandle(node),
                     position,
                 });
                 return (data ?? []).map(entry => ({
-                    definition: new NodeHandle(entry.definition, owner.project),
+                    definition: owner.objectRegistry.createNodeHandle(entry.definition),
                     symbol: entry.symbol ? owner.objectRegistry.getOrCreateSymbol(entry.symbol) : undefined,
-                    references: (entry.references ?? []).map(h => new NodeHandle(h, owner.project)),
+                    references: (entry.references ?? []).map(h => owner.objectRegistry.createNodeHandle(h)),
                 }));
             },
         );
@@ -2810,23 +2787,23 @@ export class LanguageService {
             function (signatureDecl: Node): SignatureUsage[] {
                 const data = owner.client.apiRequest("getSignatureUsages", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    signatureDecl: getNodeId(signatureDecl),
+                    project: owner.project.handle,
+                    signatureDecl: getNodeRequestHandle(signatureDecl),
                 });
                 return (data ?? []).map(entry => ({
-                    name: new NodeHandle(entry.name, owner.project),
-                    call: entry.call ? new NodeHandle(entry.call, owner.project) : undefined,
+                    name: owner.objectRegistry.createNodeHandle(entry.name),
+                    call: entry.call ? owner.objectRegistry.createNodeHandle(entry.call) : undefined,
                 }));
             },
             function* (signatureDecl: Node): Generator<ProtocolRequest, SignatureUsage[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSignatureUsages", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    signatureDecl: getNodeId(signatureDecl),
+                    project: owner.project.handle,
+                    signatureDecl: getNodeRequestHandle(signatureDecl),
                 });
                 return (data ?? []).map(entry => ({
-                    name: new NodeHandle(entry.name, owner.project),
-                    call: entry.call ? new NodeHandle(entry.call, owner.project) : undefined,
+                    name: owner.objectRegistry.createNodeHandle(entry.name),
+                    call: entry.call ? owner.objectRegistry.createNodeHandle(entry.call) : undefined,
                 }));
             },
         );
@@ -2843,7 +2820,7 @@ export class LanguageService {
             function (document: string, position: number, options?: CompletionOptions): CompletionInfo | undefined {
                 const data = owner.client.apiRequest("getCompletionsAtPosition", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file: document,
                     position,
                     triggerCharacter: options?.triggerCharacter,
@@ -2861,7 +2838,7 @@ export class LanguageService {
             function* (document: string, position: number, options?: CompletionOptions): Generator<ProtocolRequest, CompletionInfo | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getCompletionsAtPosition", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file: document,
                     position,
                     triggerCharacter: options?.triggerCharacter,
@@ -2875,6 +2852,48 @@ export class LanguageService {
                         symbol: e.symbol ? owner.objectRegistry.getOrCreateSymbol(e.symbol) : undefined,
                     })),
                 };
+            },
+        );
+    }
+
+    /**
+     * Format a synthesized node with the correct indentation for insertion at a
+     * specific position in an existing source file.
+     *
+     * @param node The synthesized AST node to format.
+     * @param file The target file where the node will be inserted.
+     * @param position The UTF-16 code-unit offset in the target file for insertion.
+     * @returns The formatted text of the node, indented for the insertion position.
+     */
+    get formatNodeForInsertion(): {
+        (node: Node, file: DocumentIdentifier, position: number): string;
+        gen(node: Node, file: DocumentIdentifier, position: number): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "formatNodeForInsertion",
+            function (node: Node, file: DocumentIdentifier, position: number): string {
+                const encoded = encodeNode(node);
+                const base64 = uint8ArrayToBase64(encoded);
+                return owner.client.apiRequest("formatNodeForInsertion", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    file,
+                    position,
+                    data: base64,
+                });
+            },
+            function* (node: Node, file: DocumentIdentifier, position: number): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                const encoded = encodeNode(node);
+                const base64 = uint8ArrayToBase64(encoded);
+                return yield* apiRequest("formatNodeForInsertion", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    file,
+                    position,
+                    data: base64,
+                });
             },
         );
     }
@@ -2915,7 +2934,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 
     getNewLine(): string {
-        return this.project.compilerOptions.newLine === NewLineKind.CRLF ? "\r\n" : "\n";
+        return this.project.parsedCommandLine.options.newLine === NewLineKind.CRLF ? "\r\n" : "\n";
     }
 
     /** @internal */
@@ -2966,7 +2985,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 
     getCompilerOptions(): CompilerOptions {
-        return this.project.compilerOptions;
+        return this.project.parsedCommandLine.options;
     }
 
     get getSourceFile(): {
@@ -2992,8 +3011,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     /**
      * Returns the source file for an already-canonical path.
-     *
-     * @internal
      */
     get getSourceFileByPath(): {
         (path: PathKey): SourceFile | undefined;
@@ -3034,7 +3051,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 // Fetch from server
                 const binaryData = owner.client.apiRequestBinary("getSourceFile", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                 });
                 if (!binaryData) {
@@ -3056,7 +3073,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const binaryData = sourceFileResponseToUint8Array(
                     yield* apiRequest("getSourceFile", {
                         snapshot: owner.snapshotId,
-                        project: owner.project.id,
+                        project: owner.project.handle,
                         file,
                     }),
                 );
@@ -3082,7 +3099,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): ResolvedModule | undefined {
                 const result = owner.client.apiRequest("getResolvedModule", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     moduleName,
                     mode,
@@ -3092,7 +3109,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function* (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
                 const result = yield* apiRequest("getResolvedModule", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     moduleName,
                     mode,
@@ -3113,17 +3130,17 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (file: DocumentIdentifier, usage: StringLiteralLikeNode): ModuleKind {
                 return owner.client.apiRequest("getModeForUsageLocation", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
-                    usage: getNodeId(usage),
+                    usage: getNodeRequestHandle(usage),
                 });
             },
             function* (file: DocumentIdentifier, usage: StringLiteralLikeNode): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]> {
                 return yield* apiRequest("getModeForUsageLocation", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
-                    usage: getNodeId(usage),
+                    usage: getNodeRequestHandle(usage),
                 });
             },
         );
@@ -3140,7 +3157,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (file: DocumentIdentifier, index: number): ModuleKind {
                 return owner.client.apiRequest("getModeForResolutionAtIndex", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     index,
                 });
@@ -3148,7 +3165,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function* (file: DocumentIdentifier, index: number): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]> {
                 return yield* apiRequest("getModeForResolutionAtIndex", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     index,
                 });
@@ -3167,8 +3184,8 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModule | undefined {
                 const result = owner.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    moduleSpecifier: getNodeId(moduleSpecifier),
+                    project: owner.project.handle,
+                    moduleSpecifier: getNodeRequestHandle(moduleSpecifier),
                     sourceFile,
                 });
                 return result ?? undefined;
@@ -3176,8 +3193,8 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function* (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
                 const result = yield* apiRequest("getResolvedModuleFromModuleSpecifier", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    moduleSpecifier: getNodeId(moduleSpecifier),
+                    project: owner.project.handle,
+                    moduleSpecifier: getNodeRequestHandle(moduleSpecifier),
                     sourceFile,
                 });
                 return result ?? undefined;
@@ -3196,7 +3213,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): ResolvedTypeReferenceDirective | undefined {
                 const result = owner.client.apiRequest("getResolvedTypeReferenceDirective", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     typeDirectiveName,
                     mode,
@@ -3206,7 +3223,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function* (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]> {
                 const result = yield* apiRequest("getResolvedTypeReferenceDirective", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     typeDirectiveName,
                     mode,
@@ -3227,7 +3244,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): ResolvedTypeReferenceDirective | undefined {
                 const result = owner.client.apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     sourceFile,
                     typeDirectiveName: typeReferenceDirective.fileName,
                     resolutionMode: typeReferenceDirective.resolutionMode,
@@ -3237,7 +3254,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function* (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]> {
                 const result = yield* apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     sourceFile,
                     typeDirectiveName: typeReferenceDirective.fileName,
                     resolutionMode: typeReferenceDirective.resolutionMode,
@@ -3258,14 +3275,14 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (): readonly RootedFilePath[] {
                 const data = owner.client.apiRequest("getSourceFileNames", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
                 return data ?? [];
             },
             function* (): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSourceFileNames", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
                 return data ?? [];
             },
@@ -3340,7 +3357,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 // client-provided path text as untrusted input.
                 const data = owner.client.apiRequest("getSourceFileMetadata", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file: path,
                 });
                 return data ?? undefined;
@@ -3350,7 +3367,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 // client-provided path text as untrusted input.
                 const data = yield* apiRequest("getSourceFileMetadata", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file: path,
                 });
                 return data ?? undefined;
@@ -3425,14 +3442,14 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (): readonly RootedFilePath[] {
                 const data = owner.client.apiRequest("getConfigFileNames", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
                 return data ?? [];
             },
             function* (): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getConfigFileNames", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
                 return data ?? [];
             },
@@ -3454,7 +3471,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (file: DocumentIdentifier): SourceFile | undefined {
                 const binaryData = owner.client.apiRequestBinary("getConfigSourceFile", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                 });
                 if (!binaryData) {
@@ -3467,7 +3484,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const binaryData = sourceFileResponseToUint8Array(
                     yield* apiRequest("getConfigSourceFile", {
                         snapshot: owner.snapshotId,
-                        project: owner.project.id,
+                        project: owner.project.handle,
                         file,
                     }),
                 );
@@ -3498,7 +3515,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     : [file];
                 const data = owner.client.apiRequest("getSyntacticDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return data ?? [];
@@ -3509,7 +3526,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     : [file];
                 const data = yield* apiRequest("getSyntacticDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return data ?? [];
@@ -3535,7 +3552,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     : [file];
                 const data = owner.client.apiRequest("getBindDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return data ?? [];
@@ -3546,7 +3563,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     : [file];
                 const data = yield* apiRequest("getBindDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return data ?? [];
@@ -3572,7 +3589,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     : [file];
                 const data = owner.client.apiRequest("getSemanticDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return data ?? [];
@@ -3583,7 +3600,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     : [file];
                 const data = yield* apiRequest("getSemanticDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return data ?? [];
@@ -3609,7 +3626,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     : [file];
                 const data = owner.client.apiRequest("getSuggestionDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return data ?? [];
@@ -3620,7 +3637,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     : [file];
                 const data = yield* apiRequest("getSuggestionDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return data ?? [];
@@ -3646,7 +3663,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     : [file];
                 const data = owner.client.apiRequest("getDeclarationDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return data ?? [];
@@ -3657,7 +3674,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     : [file];
                 const data = yield* apiRequest("getDeclarationDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return data ?? [];
@@ -3679,14 +3696,14 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (): readonly Diagnostic[] {
                 const data = owner.client.apiRequest("getProgramDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
                 return data ?? [];
             },
             function* (): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getProgramDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
                 return data ?? [];
             },
@@ -3707,14 +3724,14 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (): readonly Diagnostic[] {
                 const data = owner.client.apiRequest("getGlobalDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
                 return data ?? [];
             },
             function* (): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getGlobalDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
                 return data ?? [];
             },
@@ -3735,14 +3752,14 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (): readonly Diagnostic[] {
                 const data = owner.client.apiRequest("getConfigFileParsingDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
                 return data ?? [];
             },
             function* (): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getConfigFileParsingDiagnostics", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
                 return data ?? [];
             },
@@ -3765,7 +3782,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (emitOnly?: EmitOnly): EmitResult {
                 const response = owner.client.apiRequest("emit", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     emitOnly,
                 });
                 const fileSystem = response.emittedFilesContents.length
@@ -3784,7 +3801,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function* (emitOnly?: EmitOnly): Generator<ProtocolRequest, EmitResult, ProtocolResponse["result"]> {
                 const response = yield* apiRequest("emit", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     emitOnly,
                 });
                 const fileSystem = response.emittedFilesContents.length
@@ -3817,7 +3834,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (emitOnly?: EmitOnly): EmitOutput {
                 const response = owner.client.apiRequest("emitToString", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     emitOnly,
                 });
                 return toEmitOutput(response);
@@ -3825,7 +3842,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function* (emitOnly?: EmitOnly): Generator<ProtocolRequest, EmitOutput, ProtocolResponse["result"]> {
                 const response = yield* apiRequest("emitToString", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     emitOnly,
                 });
                 return toEmitOutput(response);
@@ -3847,7 +3864,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (files: readonly DocumentIdentifier[]): EmitOutput {
                 const response = owner.client.apiRequest("getJavaScriptEmit", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return toEmitOutput(response);
@@ -3855,7 +3872,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function* (files: readonly DocumentIdentifier[]): Generator<ProtocolRequest, EmitOutput, ProtocolResponse["result"]> {
                 const response = yield* apiRequest("getJavaScriptEmit", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return toEmitOutput(response);
@@ -3877,7 +3894,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function (files: readonly DocumentIdentifier[]): EmitOutput {
                 const response = owner.client.apiRequest("getDeclarationEmit", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return toEmitOutput(response);
@@ -3885,7 +3902,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             function* (files: readonly DocumentIdentifier[]): Generator<ProtocolRequest, EmitOutput, ProtocolResponse["result"]> {
                 const response = yield* apiRequest("getDeclarationEmit", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files,
                 });
                 return toEmitOutput(response);
@@ -4151,7 +4168,7 @@ export class Checker {
             function (symbol: Symbol): Symbol {
                 const data = owner.client.apiRequest("getMergedSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateSymbol(data);
@@ -4159,7 +4176,7 @@ export class Checker {
             function* (symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getMergedSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateSymbol(data);
@@ -4182,16 +4199,16 @@ export class Checker {
             function (node: Node): Symbol | undefined {
                 const data = owner.client.apiRequest("getSymbolOfNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
             function* (node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSymbolOfNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -4210,8 +4227,8 @@ export class Checker {
             function (node: Declaration): Symbol {
                 const data = owner.client.apiRequest("getSymbolOfDeclarationForChecker", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 // Declarations normally have symbols, but preserve unexpected null results at runtime.
                 return (data && owner.objectRegistry.getOrCreateSymbol(data))!;
@@ -4219,8 +4236,8 @@ export class Checker {
             function* (node: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSymbolOfDeclarationForChecker", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 // Declarations normally have symbols, but preserve unexpected null results at runtime.
                 return (data && owner.objectRegistry.getOrCreateSymbol(data))!;
@@ -4240,7 +4257,7 @@ export class Checker {
             function (symbol: Symbol): Symbol | undefined {
                 const data = owner.client.apiRequest("getParentOfSymbolForChecker", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
@@ -4248,7 +4265,7 @@ export class Checker {
             function* (symbol: Symbol): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getParentOfSymbolForChecker", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
@@ -4269,15 +4286,15 @@ export class Checker {
             if (Array.isArray(nodeOrNodes)) {
                 const data = owner.client.apiRequest("getSymbolsAtLocations", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    locations: nodeOrNodes.map(node => getNodeId(node)),
+                    project: owner.project.handle,
+                    locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
                 });
                 return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
             }
             const data = owner.client.apiRequest("getSymbolAtLocation", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
-                location: getNodeId(nodeOrNodes as Node),
+                project: owner.project.handle,
+                location: getNodeRequestHandle(nodeOrNodes as Node),
             });
             return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
         }
@@ -4287,15 +4304,15 @@ export class Checker {
             if (Array.isArray(nodeOrNodes)) {
                 const data = yield* apiRequest("getSymbolsAtLocations", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    locations: nodeOrNodes.map(node => getNodeId(node)),
+                    project: owner.project.handle,
+                    locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
                 });
                 return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
             }
             const data = yield* apiRequest("getSymbolAtLocation", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
-                location: getNodeId(nodeOrNodes as Node),
+                project: owner.project.handle,
+                location: getNodeRequestHandle(nodeOrNodes as Node),
             });
             return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
         }
@@ -4315,7 +4332,7 @@ export class Checker {
             if (typeof positionOrPositions === "number") {
                 const data = owner.client.apiRequest("getSymbolAtPosition", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     position: positionOrPositions,
                 });
@@ -4323,7 +4340,7 @@ export class Checker {
             }
             const data = owner.client.apiRequest("getSymbolsAtPositions", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
+                project: owner.project.handle,
                 file,
                 positions: positionOrPositions,
             });
@@ -4335,7 +4352,7 @@ export class Checker {
             if (typeof positionOrPositions === "number") {
                 const data = yield* apiRequest("getSymbolAtPosition", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     position: positionOrPositions,
                 });
@@ -4343,7 +4360,7 @@ export class Checker {
             }
             const data = yield* apiRequest("getSymbolsAtPositions", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
+                project: owner.project.handle,
                 file,
                 positions: positionOrPositions,
             });
@@ -4365,14 +4382,14 @@ export class Checker {
             if (Array.isArray(fileOrFiles)) {
                 const data = owner.client.apiRequest("getSymbolsOfSourceFiles", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files: fileOrFiles,
                 });
                 return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
             }
             const data = owner.client.apiRequest("getSymbolOfSourceFile", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
+                project: owner.project.handle,
                 file: fileOrFiles as DocumentIdentifier,
             });
             return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
@@ -4383,14 +4400,14 @@ export class Checker {
             if (Array.isArray(fileOrFiles)) {
                 const data = yield* apiRequest("getSymbolsOfSourceFiles", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     files: fileOrFiles,
                 });
                 return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
             }
             const data = yield* apiRequest("getSymbolOfSourceFile", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
+                project: owner.project.handle,
                 file: fileOrFiles as DocumentIdentifier,
             });
             return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
@@ -4416,14 +4433,14 @@ export class Checker {
             if (Array.isArray(symbolOrSymbols)) {
                 const data = owner.client.apiRequest("getTypesOfSymbols", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbols: symbolOrSymbols.map(symbol => symbol.reference),
                 });
                 return data.map(d => owner.objectRegistry.getOrCreateType(d));
             }
             const data = owner.client.apiRequest("getTypeOfSymbol", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
+                project: owner.project.handle,
                 symbol: (symbolOrSymbols as Symbol).reference,
             });
             return owner.objectRegistry.getOrCreateType(data);
@@ -4434,14 +4451,14 @@ export class Checker {
             if (Array.isArray(symbolOrSymbols)) {
                 const data = yield* apiRequest("getTypesOfSymbols", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbols: symbolOrSymbols.map(symbol => symbol.reference),
                 });
                 return data.map(d => owner.objectRegistry.getOrCreateType(d));
             }
             const data = yield* apiRequest("getTypeOfSymbol", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
+                project: owner.project.handle,
                 symbol: (symbolOrSymbols as Symbol).reference,
             });
             return owner.objectRegistry.getOrCreateType(data);
@@ -4465,7 +4482,7 @@ export class Checker {
             function (symbol: Symbol): Type {
                 const data = owner.client.apiRequest("getDeclaredTypeOfSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
@@ -4473,7 +4490,7 @@ export class Checker {
             function* (symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getDeclaredTypeOfSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
@@ -4498,7 +4515,7 @@ export class Checker {
             function (symbol: Symbol): Type {
                 const data = owner.client.apiRequest("getNonMissingTypeOfSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
@@ -4506,7 +4523,7 @@ export class Checker {
             function* (symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getNonMissingTypeOfSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
@@ -4525,74 +4542,20 @@ export class Checker {
             function (file: DocumentIdentifier, symbol: Symbol): NodeHandle[] {
                 const data = owner.client.apiRequest("getReferencesToSymbolInFile", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     symbol: symbol.reference,
                 });
-                return (data ?? []).map(h => new NodeHandle(h, owner.project));
+                return (data ?? []).map(h => owner.objectRegistry.createNodeHandle(h));
             },
             function* (file: DocumentIdentifier, symbol: Symbol): Generator<ProtocolRequest, NodeHandle[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getReferencesToSymbolInFile", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     symbol: symbol.reference,
                 });
-                return (data ?? []).map(h => new NodeHandle(h, owner.project));
-            },
-        );
-    }
-
-    /** @deprecated Use `project.languageService.getReferencedSymbolsForNode`. */
-    get getReferencedSymbolsForNode(): {
-        (node: Node, position: number): ReferencedSymbolEntry[];
-        gen(node: Node, position: number): Generator<ProtocolRequest, ReferencedSymbolEntry[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getReferencedSymbolsForNode",
-            function (node: Node, position: number): ReferencedSymbolEntry[] {
-                return owner.project.languageService.getReferencedSymbolsForNode(node, position);
-            },
-            function* (node: Node, position: number): Generator<ProtocolRequest, ReferencedSymbolEntry[], ProtocolResponse["result"]> {
-                return yield* owner.project.languageService.getReferencedSymbolsForNode.gen(node, position);
-            },
-        );
-    }
-
-    /** @deprecated Use `project.languageService.getSignatureUsage`. */
-    get getSignatureUsage(): {
-        (signatureDecl: Node): SignatureUsage[];
-        gen(signatureDecl: Node): Generator<ProtocolRequest, SignatureUsage[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSignatureUsage",
-            function (signatureDecl: Node): SignatureUsage[] {
-                return owner.project.languageService.getSignatureUsage(signatureDecl);
-            },
-            function* (signatureDecl: Node): Generator<ProtocolRequest, SignatureUsage[], ProtocolResponse["result"]> {
-                return yield* owner.project.languageService.getSignatureUsage.gen(signatureDecl);
-            },
-        );
-    }
-
-    /** @deprecated Use `project.languageService.getCompletionsAtPosition`. */
-    get getCompletionsAtPosition(): {
-        (document: string, position: number, options?: CompletionOptions): CompletionInfo | undefined;
-        gen(document: string, position: number, options?: CompletionOptions): Generator<ProtocolRequest, CompletionInfo | undefined, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getCompletionsAtPosition",
-            function (document: string, position: number, options?: CompletionOptions): CompletionInfo | undefined {
-                return owner.project.languageService.getCompletionsAtPosition(document, position, options);
-            },
-            function* (document: string, position: number, options?: CompletionOptions): Generator<ProtocolRequest, CompletionInfo | undefined, ProtocolResponse["result"]> {
-                return yield* owner.project.languageService.getCompletionsAtPosition.gen(document, position, options);
+                return (data ?? []).map(h => owner.objectRegistry.createNodeHandle(h));
             },
         );
     }
@@ -4615,15 +4578,15 @@ export class Checker {
             if (Array.isArray(nodeOrNodes)) {
                 const data = owner.client.apiRequest("getTypeAtLocations", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    locations: nodeOrNodes.map(node => getNodeId(node)),
+                    project: owner.project.handle,
+                    locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
                 });
                 return data.map(d => owner.objectRegistry.getOrCreateType(d));
             }
             const data = owner.client.apiRequest("getTypeAtLocation", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
-                location: getNodeId(nodeOrNodes as Node),
+                project: owner.project.handle,
+                location: getNodeRequestHandle(nodeOrNodes as Node),
             });
             return owner.objectRegistry.getOrCreateType(data);
         }
@@ -4633,15 +4596,15 @@ export class Checker {
             if (Array.isArray(nodeOrNodes)) {
                 const data = yield* apiRequest("getTypeAtLocations", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    locations: nodeOrNodes.map(node => getNodeId(node)),
+                    project: owner.project.handle,
+                    locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
                 });
                 return data.map(d => owner.objectRegistry.getOrCreateType(d));
             }
             const data = yield* apiRequest("getTypeAtLocation", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
-                location: getNodeId(nodeOrNodes as Node),
+                project: owner.project.handle,
+                location: getNodeRequestHandle(nodeOrNodes as Node),
             });
             return owner.objectRegistry.getOrCreateType(data);
         }
@@ -4681,16 +4644,16 @@ export class Checker {
             function (node: Node): Signature {
                 const data = owner.client.apiRequest("getResolvedSignature", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return owner.objectRegistry.getOrCreateSignature(data);
             },
             function* (node: Node): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getResolvedSignature", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return owner.objectRegistry.getOrCreateSignature(data);
             },
@@ -4710,7 +4673,7 @@ export class Checker {
             if (typeof positionOrPositions === "number") {
                 const data = owner.client.apiRequest("getTypeAtPosition", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     position: positionOrPositions,
                 });
@@ -4718,7 +4681,7 @@ export class Checker {
             }
             const data = owner.client.apiRequest("getTypesAtPositions", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
+                project: owner.project.handle,
                 file,
                 positions: positionOrPositions,
             });
@@ -4730,7 +4693,7 @@ export class Checker {
             if (typeof positionOrPositions === "number") {
                 const data = yield* apiRequest("getTypeAtPosition", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     file,
                     position: positionOrPositions,
                 });
@@ -4738,7 +4701,7 @@ export class Checker {
             }
             const data = yield* apiRequest("getTypesAtPositions", {
                 snapshot: owner.snapshotId,
-                project: owner.project.id,
+                project: owner.project.handle,
                 file,
                 positions: positionOrPositions,
             });
@@ -4760,10 +4723,10 @@ export class Checker {
                 const isNode = location && "kind" in location;
                 const data = owner.client.apiRequest("resolveName", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     name,
                     meaning,
-                    location: isNode ? getNodeId(location as Node) : undefined,
+                    location: isNode ? getNodeRequestHandle(location as Node) : undefined,
                     file: !isNode && location ? (location as DocumentPosition).document : undefined,
                     position: !isNode && location ? (location as DocumentPosition).position : undefined,
                     excludeGlobals,
@@ -4775,10 +4738,10 @@ export class Checker {
                 const isNode = location && "kind" in location;
                 const data = yield* apiRequest("resolveName", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     name,
                     meaning,
-                    location: isNode ? getNodeId(location as Node) : undefined,
+                    location: isNode ? getNodeRequestHandle(location as Node) : undefined,
                     file: !isNode && location ? (location as DocumentPosition).document : undefined,
                     position: !isNode && location ? (location as DocumentPosition).position : undefined,
                     excludeGlobals,
@@ -4804,9 +4767,9 @@ export class Checker {
                 const isNode = "kind" in location;
                 const data = owner.client.apiRequest("getSymbolsInScope", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     meaning,
-                    location: isNode ? getNodeId(location as Node) : undefined,
+                    location: isNode ? getNodeRequestHandle(location as Node) : undefined,
                     file: isNode ? undefined : (location as DocumentPosition).document,
                     position: isNode ? undefined : (location as DocumentPosition).position,
                 });
@@ -4817,9 +4780,9 @@ export class Checker {
                 const isNode = "kind" in location;
                 const data = yield* apiRequest("getSymbolsInScope", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     meaning,
-                    location: isNode ? getNodeId(location as Node) : undefined,
+                    location: isNode ? getNodeRequestHandle(location as Node) : undefined,
                     file: isNode ? undefined : (location as DocumentPosition).document,
                     position: isNode ? undefined : (location as DocumentPosition).position,
                 });
@@ -4860,16 +4823,16 @@ export class Checker {
             function (node: Expression): Type | undefined {
                 const data = owner.client.apiRequest("getContextualType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
             },
             function* (node: Expression): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getContextualType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
             },
@@ -4887,8 +4850,8 @@ export class Checker {
             function (node: CallLikeExpression, argIndex: number): Type | undefined {
                 const data = owner.client.apiRequest("getContextualTypeForArgument", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                     index: argIndex,
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
@@ -4896,8 +4859,8 @@ export class Checker {
             function* (node: CallLikeExpression, argIndex: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getContextualTypeForArgument", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                     index: argIndex,
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
@@ -4916,7 +4879,7 @@ export class Checker {
             function (type: Type): Type | undefined {
                 const data = owner.client.apiRequest("getAwaitedType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
@@ -4924,7 +4887,7 @@ export class Checker {
             function* (type: Type): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getAwaitedType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
@@ -4944,7 +4907,7 @@ export class Checker {
             function (type: Type): Type {
                 const data = owner.client.apiRequest("getBaseTypeOfLiteralType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
@@ -4952,7 +4915,7 @@ export class Checker {
             function* (type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getBaseTypeOfLiteralType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
@@ -4994,16 +4957,16 @@ export class Checker {
             function (node: TypeNode): Type {
                 const data = owner.client.apiRequest("getTypeFromTypeNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
             function* (node: TypeNode): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getTypeFromTypeNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
@@ -5022,7 +4985,7 @@ export class Checker {
             function (type: Type): Type {
                 const data = owner.client.apiRequest("getWidenedType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
@@ -5030,7 +4993,7 @@ export class Checker {
             function* (type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getWidenedType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
@@ -5053,7 +5016,7 @@ export class Checker {
             function (signature: Signature, index: number): Type {
                 const data = owner.client.apiRequest("getParameterType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     signature: signature.id,
                     index,
                 });
@@ -5062,7 +5025,7 @@ export class Checker {
             function* (signature: Signature, index: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getParameterType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     signature: signature.id,
                     index,
                 });
@@ -5082,14 +5045,14 @@ export class Checker {
             function (type: Type): boolean {
                 return owner.client.apiRequest("isArrayLikeType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
             },
             function* (type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
                 return yield* apiRequest("isArrayLikeType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
             },
@@ -5107,7 +5070,7 @@ export class Checker {
             function (source: Type, target: Type): boolean {
                 return owner.client.apiRequest("isTypeAssignableTo", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     source: source.id,
                     target: target.id,
                 });
@@ -5115,7 +5078,7 @@ export class Checker {
             function* (source: Type, target: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
                 return yield* apiRequest("isTypeAssignableTo", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     source: source.id,
                     target: target.id,
                 });
@@ -5134,16 +5097,16 @@ export class Checker {
             function (node: Node): Symbol | undefined {
                 const data = owner.client.apiRequest("getShorthandAssignmentValueSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
             function* (node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getShorthandAssignmentValueSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -5166,18 +5129,18 @@ export class Checker {
             function (symbol: Symbol, location: Node): Type {
                 const data = owner.client.apiRequest("getTypeOfSymbolAtLocation", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
-                    location: getNodeId(location),
+                    location: getNodeRequestHandle(location),
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
             function* (symbol: Symbol, location: Node): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getTypeOfSymbolAtLocation", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
-                    location: getNodeId(location),
+                    location: getNodeRequestHandle(location),
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
@@ -5195,14 +5158,14 @@ export class Checker {
             function (method: IntrinsicTypeMethod): Type {
                 const data = owner.client.apiRequest(method, {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
             function* (method: IntrinsicTypeMethod): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 const data = yield* apiRequest(method, {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
             },
@@ -5413,9 +5376,9 @@ export class Checker {
             function (type: Type, enclosingDeclaration?: Node, flags?: number): TypeNode | undefined {
                 const binaryData = owner.client.apiRequestBinary("typeToTypeNode", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
-                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
                     flags,
                 });
                 if (!binaryData) return undefined;
@@ -5425,9 +5388,9 @@ export class Checker {
                 const binaryData = sourceFileResponseToUint8Array(
                     yield* apiRequest("typeToTypeNode", {
                         snapshot: owner.snapshotId,
-                        project: owner.project.id,
+                        project: owner.project.handle,
                         type: type.id,
-                        location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
                         flags,
                     }),
                 );
@@ -5448,10 +5411,10 @@ export class Checker {
             function (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Node | undefined {
                 const binaryData = owner.client.apiRequestBinary("signatureToSignatureDeclaration", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     signature: signature.id,
                     kind,
-                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
                     flags,
                 });
                 if (!binaryData) return undefined;
@@ -5461,10 +5424,10 @@ export class Checker {
                 const binaryData = sourceFileResponseToUint8Array(
                     yield* apiRequest("signatureToSignatureDeclaration", {
                         snapshot: owner.snapshotId,
-                        project: owner.project.id,
+                        project: owner.project.handle,
                         signature: signature.id,
                         kind,
-                        location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
                         flags,
                     }),
                 );
@@ -5485,9 +5448,9 @@ export class Checker {
             function (type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
                 const result = owner.client.apiRequest("typeToString", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
-                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
                     flags,
                 });
                 if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
@@ -5496,9 +5459,9 @@ export class Checker {
             function* (type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
                 const result = yield* apiRequest("typeToString", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
-                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
                     flags,
                 });
                 if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
@@ -5518,15 +5481,15 @@ export class Checker {
             function (node: Node): boolean {
                 return owner.client.apiRequest("isContextSensitive", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
             },
             function* (node: Node): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
                 return yield* apiRequest("isContextSensitive", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
             },
         );
@@ -5543,14 +5506,14 @@ export class Checker {
             function (type: Type): boolean {
                 return owner.client.apiRequest("isArrayType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
             },
             function* (type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
                 return yield* apiRequest("isArrayType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
             },
@@ -5611,14 +5574,14 @@ export class Checker {
             function (symbol: Symbol): boolean {
                 return owner.client.apiRequest("isReadonlySymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
             },
             function* (symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
                 return yield* apiRequest("isReadonlySymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
             },
@@ -5658,7 +5621,7 @@ export class Checker {
             function (signature: Signature): Type {
                 const data = owner.client.apiRequest("getRestTypeOfSignature", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     signature: signature.id,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
@@ -5666,7 +5629,7 @@ export class Checker {
             function* (signature: Signature): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getRestTypeOfSignature", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     signature: signature.id,
                 });
                 return owner.objectRegistry.getOrCreateType(data);
@@ -5685,7 +5648,7 @@ export class Checker {
             function (signature: Signature): TypePredicate | undefined {
                 const data = owner.client.apiRequest("getTypePredicateOfSignature", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     signature: signature.id,
                 });
                 if (!data) return undefined;
@@ -5699,7 +5662,7 @@ export class Checker {
             function* (signature: Signature): Generator<ProtocolRequest, TypePredicate | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getTypePredicateOfSignature", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     signature: signature.id,
                 });
                 if (!data) return undefined;
@@ -5815,7 +5778,7 @@ export class Checker {
             function (type: Type, kind: IndexKind): IndexInfo | undefined {
                 const data = owner.client.apiRequest("getIndexInfoOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                     kind,
                 });
@@ -5823,13 +5786,13 @@ export class Checker {
                     keyType: owner.objectRegistry.getOrCreateType(data.keyType),
                     valueType: owner.objectRegistry.getOrCreateType(data.valueType),
                     isReadonly: data.isReadonly ?? false,
-                    declaration: data.declaration ? new NodeHandle<IndexSignatureDeclaration>(data.declaration, owner.project) : undefined,
+                    declaration: data.declaration ? owner.objectRegistry.createNodeHandle<IndexSignatureDeclaration>(data.declaration) : undefined,
                 } : undefined;
             },
             function* (type: Type, kind: IndexKind): Generator<ProtocolRequest, IndexInfo | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getIndexInfoOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                     kind,
                 });
@@ -5837,7 +5800,7 @@ export class Checker {
                     keyType: owner.objectRegistry.getOrCreateType(data.keyType),
                     valueType: owner.objectRegistry.getOrCreateType(data.valueType),
                     isReadonly: data.isReadonly ?? false,
-                    declaration: data.declaration ? new NodeHandle<IndexSignatureDeclaration>(data.declaration, owner.project) : undefined,
+                    declaration: data.declaration ? owner.objectRegistry.createNodeHandle<IndexSignatureDeclaration>(data.declaration) : undefined,
                 } : undefined;
             },
         );
@@ -5871,7 +5834,7 @@ export class Checker {
             function (type: Type, propertyName: string): Type | undefined {
                 const data = owner.client.apiRequest("getTypeOfPropertyOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                     name: propertyName,
                 });
@@ -5880,7 +5843,7 @@ export class Checker {
             function* (type: Type, propertyName: string): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getTypeOfPropertyOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                     name: propertyName,
                 });
@@ -5938,7 +5901,7 @@ export class Checker {
             function (type: Type): Type | undefined {
                 const data = owner.client.apiRequest("getBaseConstraintOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
@@ -5946,7 +5909,7 @@ export class Checker {
             function* (type: Type): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getBaseConstraintOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
@@ -5965,7 +5928,7 @@ export class Checker {
             function (type: Type, name: string): Symbol | undefined {
                 const data = owner.client.apiRequest("getPropertyOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                     name,
                 });
@@ -5974,7 +5937,7 @@ export class Checker {
             function* (type: Type, name: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getPropertyOfType", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                     name,
                 });
@@ -5994,8 +5957,8 @@ export class Checker {
             function (node: Node): string | number | undefined {
                 const data = owner.client.apiRequest("getConstantValue", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 if (!data || (typeof data.value !== "string" && typeof data.value !== "number")) {
                     return undefined;
@@ -6014,8 +5977,8 @@ export class Checker {
             function* (node: Node): Generator<ProtocolRequest, string | number | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getConstantValue", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 if (!data || (typeof data.value !== "string" && typeof data.value !== "number")) {
                     return undefined;
@@ -6046,16 +6009,16 @@ export class Checker {
             function (node: Node): Signature {
                 const data = owner.client.apiRequest("getSignatureFromDeclaration", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return owner.objectRegistry.getOrCreateSignature(data);
             },
             function* (node: Node): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSignatureFromDeclaration", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return owner.objectRegistry.getOrCreateSignature(data);
             },
@@ -6073,16 +6036,16 @@ export class Checker {
             function (node: Node): Symbol | undefined {
                 const data = owner.client.apiRequest("getExportSpecifierLocalTargetSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
             function* (node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getExportSpecifierLocalTargetSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    location: getNodeId(node),
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -6105,7 +6068,7 @@ export class Checker {
             function (symbol: Symbol): Symbol {
                 const data = owner.client.apiRequest("getAliasedSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateSymbol(data);
@@ -6113,7 +6076,7 @@ export class Checker {
             function* (symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getAliasedSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateSymbol(data);
@@ -6136,14 +6099,14 @@ export class Checker {
             function (symbol: Symbol): string {
                 return owner.client.apiRequest("getFullyQualifiedName", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
             },
             function* (symbol: Symbol): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
                 return yield* apiRequest("getFullyQualifiedName", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
             },
@@ -6161,7 +6124,7 @@ export class Checker {
             function (symbol: Symbol): Symbol | undefined {
                 const data = owner.client.apiRequest("getImmediateAliasedSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
@@ -6169,7 +6132,7 @@ export class Checker {
             function* (symbol: Symbol): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getImmediateAliasedSymbol", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
@@ -6192,7 +6155,7 @@ export class Checker {
                 if (symbol.checkFlags & CheckFlags.Instantiated) {
                     const data = owner.client.apiRequest("getTargetSymbol", {
                         snapshot: owner.snapshotId,
-                        project: owner.project.id,
+                        project: owner.project.handle,
                         symbol: symbol.reference,
                     });
                     return owner.objectRegistry.getOrCreateSymbol(data);
@@ -6203,7 +6166,7 @@ export class Checker {
                 if (symbol.checkFlags & CheckFlags.Instantiated) {
                     const data = yield* apiRequest("getTargetSymbol", {
                         snapshot: owner.snapshotId,
-                        project: owner.project.id,
+                        project: owner.project.handle,
                         symbol: symbol.reference,
                     });
                     return owner.objectRegistry.getOrCreateSymbol(data);
@@ -6224,7 +6187,7 @@ export class Checker {
             function (symbol: Symbol): Symbol {
                 const data = owner.client.apiRequest("getExportSymbolOfSymbolForChecker", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateSymbol(data);
@@ -6232,7 +6195,7 @@ export class Checker {
             function* (symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getExportSymbolOfSymbolForChecker", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return owner.objectRegistry.getOrCreateSymbol(data);
@@ -6257,13 +6220,13 @@ export class Checker {
             function (): { unknown: number; undefined: number; arguments: number; } {
                 return owner.wellKnownSymbols ??= owner.client.apiRequest("getWellKnownSymbols", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
             },
             function* (): Generator<ProtocolRequest, { unknown: number; undefined: number; arguments: number; }, ProtocolResponse["result"]> {
                 return owner.wellKnownSymbols ??= yield* apiRequest("getWellKnownSymbols", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
             },
         );
@@ -6346,13 +6309,13 @@ export class Checker {
             function (): { unknown: number; } {
                 return owner.wellKnownSignatures ??= owner.client.apiRequest("getWellKnownSignatures", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
             },
             function* (): Generator<ProtocolRequest, { unknown: number; }, ProtocolResponse["result"]> {
                 return owner.wellKnownSignatures ??= yield* apiRequest("getWellKnownSignatures", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                 });
             },
         );
@@ -6391,7 +6354,7 @@ export class Checker {
             function (symbol: Symbol): readonly Symbol[] {
                 const data = owner.client.apiRequest("getExportsOfModule", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
@@ -6399,7 +6362,7 @@ export class Checker {
             function* (symbol: Symbol): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getExportsOfModule", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
@@ -6418,7 +6381,7 @@ export class Checker {
             function (symbol: Symbol, name: string): Symbol | undefined {
                 const data = owner.client.apiRequest("getMemberInModuleExports", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                     name,
                 });
@@ -6427,7 +6390,7 @@ export class Checker {
             function* (symbol: Symbol, name: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getMemberInModuleExports", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                     name,
                 });
@@ -6447,7 +6410,7 @@ export class Checker {
             function (symbol: Symbol): readonly JSDocTagInfo[] {
                 const data = owner.client.apiRequest("getJsDocTags", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return data ?? [];
@@ -6455,7 +6418,7 @@ export class Checker {
             function* (symbol: Symbol): Generator<ProtocolRequest, readonly JSDocTagInfo[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getJsDocTags", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
                 return data ?? [];
@@ -6474,14 +6437,14 @@ export class Checker {
             function (symbol: Symbol): string {
                 return owner.client.apiRequest("getDocumentationComment", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
             },
             function* (symbol: Symbol): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
                 return yield* apiRequest("getDocumentationComment", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     symbol: symbol.reference,
                 });
             },
@@ -6502,7 +6465,7 @@ export class Checker {
             function (type: TypeReference): readonly Type[] {
                 const data = owner.client.apiRequest("getTypeArguments", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
                 return data ? data.map(d => owner.objectRegistry.getOrCreateType(d)) : [];
@@ -6510,7 +6473,7 @@ export class Checker {
             function* (type: TypeReference): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getTypeArguments", {
                     snapshot: owner.snapshotId,
-                    project: owner.project.id,
+                    project: owner.project.handle,
                     type: type.id,
                 });
                 return data ? data.map(d => owner.objectRegistry.getOrCreateType(d)) : [];
@@ -6595,77 +6558,9 @@ export class Printer {
     }
 }
 
-export class SnapshotInternalAPI {
-    private snapshotId: number;
-    private client: Client;
-
-    constructor(snapshotId: number, client: Client) {
-        this.snapshotId = snapshotId;
-        this.client = client;
-    }
-
-    /**
-     * Format a synthesized node with the correct indentation for insertion at a
-     * specific position in an existing source file.
-     *
-     * @param node The synthesized AST node to format.
-     * @param file The target file where the node will be inserted.
-     * @param position The UTF-16 code-unit offset in the target file for insertion.
-     * @returns The formatted text of the node, indented for the insertion position.
-     */
-    get formatNodeForInsertion(): {
-        (node: Node, file: DocumentIdentifier, position: number): string;
-        gen(node: Node, file: DocumentIdentifier, position: number): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "formatNodeForInsertion",
-            function (node: Node, file: DocumentIdentifier, position: number): string {
-                const data = owner.client.apiRequest("getDefaultProjectForFile", {
-                    snapshot: owner.snapshotId,
-                    file,
-                });
-                if (!data) {
-                    throw new Error(`No project found for file: ${typeof file === "string" ? file : file.uri}`);
-                }
-
-                const encoded = encodeNode(node);
-                const base64 = uint8ArrayToBase64(encoded);
-                return owner.client.apiRequest("formatNodeForInsertion", {
-                    snapshot: owner.snapshotId,
-                    project: data.id,
-                    file,
-                    position,
-                    data: base64,
-                });
-            },
-            function* (node: Node, file: DocumentIdentifier, position: number): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getDefaultProjectForFile", {
-                    snapshot: owner.snapshotId,
-                    file,
-                });
-                if (!data) {
-                    throw new Error(`No project found for file: ${typeof file === "string" ? file : file.uri}`);
-                }
-
-                const encoded = encodeNode(node);
-                const base64 = uint8ArrayToBase64(encoded);
-                return yield* apiRequest("formatNodeForInsertion", {
-                    snapshot: owner.snapshotId,
-                    project: data.id,
-                    file,
-                    position,
-                    data: base64,
-                });
-            },
-        );
-    }
-}
-
 export class NodeHandle<out T extends Node = Node> {
     /**
-     * The project this handle was produced in, used as the default for {@link resolve}.
+     * The project where this handle was first materialized, used as the default for {@link resolve}.
      * Node handles are only meaningful within a project's program, so the producing project
      * is remembered so callers don't have to pass it explicitly.
      */
@@ -6674,12 +6569,16 @@ export class NodeHandle<out T extends Node = Node> {
     private readonly fileOwner: SourceFileOwner | undefined;
     readonly index: number;
     readonly kind: SyntaxKind;
+    /** Identity of the exact parsed source file, shared across programs that reuse that AST. */
+    readonly sourceFileId: string;
+    /** Retrieval metadata; never used to substitute a different source-file AST. */
     readonly path: PathKey;
 
     constructor(handle: string, canonicalProject: Project | undefined, fileOwner?: SourceFileOwner) {
         const parsed = parseNodeHandleFromCompiler(handle);
         this.index = parsed.index;
         this.kind = parsed.kind;
+        this.sourceFileId = parsed.sourceFileId;
         this.path = parsed.path;
         this.canonicalProject = canonicalProject;
         this.fileOwner = fileOwner;
@@ -6689,7 +6588,8 @@ export class NodeHandle<out T extends Node = Node> {
      * Resolve this handle to the actual AST node by fetching the source file from a project
      * and looking up the node by index. If no project is passed, the project that produced
      * the handle is used. Declarations of file-owned symbols identify an exact source file and
-     * resolve through it, independently of any project.
+     * resolve through it, independently of any project. A different AST at the
+     * same path is never substituted.
      */
     get resolve(): {
         (project?: Project | undefined): T | undefined;
@@ -6702,28 +6602,39 @@ export class NodeHandle<out T extends Node = Node> {
             function (project: Project | undefined = owner.canonicalProject): T | undefined {
                 if (owner.fileOwner) {
                     const sourceFile = owner.fileOwner.record.file ?? owner.fetchOwnerFile(owner.fileOwner);
-                    return sourceFile.getOrCreateNodeAtIndex(owner.index) as T | undefined;
+                    return owner.resolveInFile(sourceFile);
                 }
-                if (!project) throw new Error(`Node handle for '${owner.path}' has no project context`);
+                if (!project) throw new Error(`Node handle for source file '${owner.sourceFileId}' has no project context`);
                 const sourceFile = project.program.getSourceFileByPath(owner.path);
                 if (!sourceFile) {
-                    return undefined;
+                    throw new Error("Node handle source file is not part of the requested program");
                 }
-                return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(owner.index) as T | undefined;
+                return owner.resolveInFile(sourceFile as unknown as RemoteSourceFile);
             },
             function* (project: Project | undefined = owner.canonicalProject): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]> {
                 if (owner.fileOwner) {
                     const sourceFile = owner.fileOwner.record.file ?? (yield* owner.fetchOwnerFile.gen(owner.fileOwner));
-                    return sourceFile.getOrCreateNodeAtIndex(owner.index) as T | undefined;
+                    return owner.resolveInFile(sourceFile);
                 }
-                if (!project) throw new Error(`Node handle for '${owner.path}' has no project context`);
+                if (!project) throw new Error(`Node handle for source file '${owner.sourceFileId}' has no project context`);
                 const sourceFile = yield* project.program.getSourceFileByPath.gen(owner.path);
                 if (!sourceFile) {
-                    return undefined;
+                    throw new Error("Node handle source file is not part of the requested program");
                 }
-                return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(owner.index) as T | undefined;
+                return owner.resolveInFile(sourceFile as unknown as RemoteSourceFile);
             },
         );
+    }
+
+    private resolveInFile(sourceFile: RemoteSourceFile): T | undefined {
+        if (sourceFile.nodeId !== this.sourceFileId) {
+            throw new Error(`Node handle source file is not part of the requested program`);
+        }
+        const node = sourceFile.getOrCreateNodeAtIndex(this.index);
+        if (!node || node.kind !== this.kind) {
+            throw new Error("Node handle does not identify a node of the expected kind");
+        }
+        return node as T;
     }
 
     private get fetchOwnerFile(): {
@@ -6796,8 +6707,11 @@ export class Symbol {
     readonly checkFlags: CheckFlags;
     /** @internal */
     readonly reference: SymbolReference;
-    readonly declarations: readonly NodeHandle<Declaration>[];
-    readonly valueDeclaration: NodeHandle<Declaration> | undefined;
+    // Declaration handles are kept in their wire form until first accessed.
+    private readonly declarationHandles: readonly string[] | undefined;
+    private readonly valueDeclarationHandle: string | undefined;
+    private declarationsCache: readonly NodeHandle<Declaration>[] | undefined;
+    private valueDeclarationCache: NodeHandle<Declaration> | undefined;
     private readonly parent!: CompactSymbolReference;
     private readonly exportSymbol!: CompactSymbolReference;
     private membersCache: ReadonlyMap<__String, Symbol> | undefined;
@@ -6811,17 +6725,32 @@ export class Symbol {
         this.escapedName = data.name as __String;
         this.name = unescapeLeadingUnderscores(data.name as __String);
         this.flags = data.flags;
-        this.checkFlags = data.checkFlags;
-        // A file-owned symbol has no canonical project; its declarations resolve through its file.
-        const project = storage.kind === SymbolOwnerKind.Snapshot ? storage.registry.project : undefined;
-        const fileOwner = storage.kind === SymbolOwnerKind.File ? storage.owner : undefined;
-        this.declarations = (data.declarations ?? []).map(handle => new NodeHandle<Declaration>(handle, project, fileOwner));
-        this.valueDeclaration = data.valueDeclaration
-            ? new NodeHandle<Declaration>(data.valueDeclaration, project, fileOwner)
-            : undefined;
+        this.checkFlags = data.checkFlags ?? 0;
+        this.declarationHandles = data.declarations;
+        this.valueDeclarationHandle = data.valueDeclaration;
+        this.declarationsCache = undefined;
+        this.valueDeclarationCache = undefined;
 
         if (data.parent !== undefined) this.parent = data.parent;
         if (data.exportSymbol !== undefined) this.exportSymbol = data.exportSymbol;
+    }
+
+    get declarations(): readonly NodeHandle<Declaration>[] {
+        return this.declarationsCache ??= this.declarationHandles?.map(handle => this.createDeclarationHandle(handle)) ?? [];
+    }
+
+    get valueDeclaration(): NodeHandle<Declaration> | undefined {
+        if (this.valueDeclarationCache === undefined && this.valueDeclarationHandle) {
+            this.valueDeclarationCache = this.createDeclarationHandle(this.valueDeclarationHandle);
+        }
+        return this.valueDeclarationCache;
+    }
+
+    private createDeclarationHandle(handle: string): NodeHandle<Declaration> {
+        // A file-owned symbol has no canonical project; its declarations resolve through its file.
+        return this.storage.kind === SymbolOwnerKind.Snapshot
+            ? this.storage.registry.createNodeHandle<Declaration>(handle)
+            : new NodeHandle<Declaration>(handle, undefined, this.storage.owner);
     }
 
     get getParent(): {
@@ -7100,7 +7029,7 @@ class TypeObject implements Type {
 
         this.id = data.id;
         this.flags = data.flags;
-        if (data.objectFlags !== undefined) this.objectFlags = data.objectFlags;
+        this.objectFlags = data.objectFlags ?? 0;
         if (data.symbol !== undefined) this.symbol = data.symbol;
         if (data.value != null) {
             // BigInt literal values are serialized as decimal strings (e.g. "-123") because
@@ -7126,7 +7055,7 @@ class TypeObject implements Type {
             }
         }
         if (data.intrinsicName !== undefined) this.intrinsicName = data.intrinsicName;
-        if (data.isThisType !== undefined) this.isThisType = data.isThisType;
+        this.isThisType = data.isThisType ?? false;
         if (data.freshType !== undefined) this.freshType = data.freshType;
         if (data.regularType !== undefined) this.regularType = data.regularType;
         if (data.target !== undefined) this.target = data.target;
@@ -8123,7 +8052,9 @@ export class Signature {
     private objectRegistry: ProjectObjectRegistry;
 
     readonly id: number;
-    readonly declaration?: NodeHandle<Declaration> | undefined;
+    private readonly project: Project;
+    private readonly declarationHandle: string | undefined;
+    private declarationCache: NodeHandle<Declaration> | undefined;
     readonly typeParameters?: readonly number[] | undefined;
     readonly parameters: readonly CompactSymbolReference[];
     readonly thisParameter?: CompactSymbolReference | undefined;
@@ -8132,14 +8063,23 @@ export class Signature {
 
     constructor(data: SignatureResponse, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.id = data.id;
-        this.flags = data.flags;
+        this.flags = data.flags ?? 0;
         this.objectRegistry = objectRegistry;
-        this.declaration = data.declaration ? new NodeHandle<Declaration>(data.declaration, project) : undefined;
+        this.project = project;
+        this.declarationHandle = data.declaration;
+        this.declarationCache = undefined;
         this.typeParameters = data.typeParameters ?? [];
         this.parameters = data.parameters ?? [];
         this.thisParameter = data.thisParameter;
         this.target = data.target;
         this.returnType = false;
+    }
+
+    get declaration(): NodeHandle<Declaration> | undefined {
+        if (this.declarationCache === undefined && this.declarationHandle) {
+            this.declarationCache = this.objectRegistry.createNodeHandle<Declaration>(this.declarationHandle);
+        }
+        return this.declarationCache;
     }
 
     get getTypeParameters(): {

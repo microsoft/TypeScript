@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/workerImplementationHandlerThis.ts] ////
+
+=== workerImplementationHandlerThis.ts ===
+declare class WorkerReplacement extends EventTarget implements Worker {
+>WorkerReplacement : Symbol(WorkerReplacement, Decl(workerImplementationHandlerThis.ts, 0, 0))
+>EventTarget : Symbol(EventTarget, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>Worker : Symbol(Worker, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onmessage: ((this: Worker, event: MessageEvent) => any) | null;
+>onmessage : Symbol(WorkerReplacement.onmessage, Decl(workerImplementationHandlerThis.ts, 0, 71))
+>this : Symbol(this, Decl(workerImplementationHandlerThis.ts, 1, 17))
+>Worker : Symbol(Worker, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(workerImplementationHandlerThis.ts, 1, 30))
+>MessageEvent : Symbol(MessageEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onmessageerror: ((this: Worker, event: MessageEvent) => any) | null;
+>onmessageerror : Symbol(WorkerReplacement.onmessageerror, Decl(workerImplementationHandlerThis.ts, 1, 67))
+>this : Symbol(this, Decl(workerImplementationHandlerThis.ts, 2, 22))
+>Worker : Symbol(Worker, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(workerImplementationHandlerThis.ts, 2, 35))
+>MessageEvent : Symbol(MessageEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onerror: Worker["onerror"];
+>onerror : Symbol(WorkerReplacement.onerror, Decl(workerImplementationHandlerThis.ts, 2, 72))
+>Worker : Symbol(Worker, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    postMessage: Worker["postMessage"];
+>postMessage : Symbol(WorkerReplacement.postMessage, Decl(workerImplementationHandlerThis.ts, 3, 31))
+>Worker : Symbol(Worker, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    terminate: Worker["terminate"];
+>terminate : Symbol(WorkerReplacement.terminate, Decl(workerImplementationHandlerThis.ts, 4, 39))
+>Worker : Symbol(Worker, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+

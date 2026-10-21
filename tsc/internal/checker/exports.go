@@ -86,7 +86,7 @@ func (c *Checker) GetUnionType(types []*Type) *Type {
 
 func (c *Checker) GetNameTypeOfSymbol(symbol *ast.Symbol) *Type {
 	if links := c.valueSymbolLinks.TryGet(symbol); links != nil {
-		return links.nameType
+		return links.getNameType()
 	}
 	return nil
 }
@@ -364,8 +364,8 @@ func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
 
 func (c *Checker) GetIndexInfosOfIndexSymbol(symbol *ast.Symbol) []*IndexInfo {
 	var siblingSymbols []*ast.Symbol
-	if symbol.Parent != nil {
-		siblingSymbols = slices.Collect(maps.Values(c.getMembersOfSymbol(symbol.Parent)))
+	if symbol.Parent() != nil {
+		siblingSymbols = slices.Collect(maps.Values(c.getMembersOfSymbol(symbol.Parent())))
 		c.sortSymbols(siblingSymbols)
 	}
 	return c.getIndexInfosOfIndexSymbol(symbol, siblingSymbols)

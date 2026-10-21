@@ -3,7 +3,7 @@ import {
     SpanMapFeature,
     SpanMapFidelity,
     SpanMapKind,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import assert from "node:assert";
 import {
     describe,

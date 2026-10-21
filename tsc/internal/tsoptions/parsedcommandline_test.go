@@ -181,7 +181,7 @@ func TestParsedCommandLine(t *testing.T) {
 			tsconfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(tspath.RootedFilePathFromNormalized(configFileName), "/dev/tsconfig.json", jsonText)
 			parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsconfigSourceFile,
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/dev",
 				&core.CompilerOptions{RunExternalCode: core.TSTrue},
 				nil,
@@ -201,7 +201,7 @@ func TestParsedCommandLine(t *testing.T) {
 			}, tspath.CaseInsensitive)
 			insensitiveCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsconfigSourceFile,
-				insensitiveFS,
+				tsoptions.NewDefaultParseConfigHost(insensitiveFS),
 				"/dev",
 				&core.CompilerOptions{RunExternalCode: core.TSTrue},
 				nil,
@@ -222,7 +222,7 @@ func TestParsedCommandLine(t *testing.T) {
 			)
 			sensitiveCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsconfigSourceFile,
-				tsoptionstest.NewVFS(nil, tspath.CaseSensitive),
+				tsoptions.NewDefaultParseConfigHost(tsoptionstest.NewVFS(nil, tspath.CaseSensitive)),
 				"/dev",
 				nil,
 				nil,
@@ -231,7 +231,7 @@ func TestParsedCommandLine(t *testing.T) {
 			)
 			_ = tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsconfigSourceFile,
-				tsoptionstest.NewVFS(nil, tspath.CaseInsensitive),
+				tsoptions.NewDefaultParseConfigHost(tsoptionstest.NewVFS(nil, tspath.CaseInsensitive)),
 				"/dev",
 				nil,
 				nil,
@@ -252,7 +252,7 @@ func TestParsedCommandLine(t *testing.T) {
 					tspath.CaseSensitive.PathKey(tspath.RootedPath("/dev/tsconfig.json")),
 					`{ "files": ["src/a.ts"], "include": ["src/*.ts"] }`,
 				),
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/dev",
 				nil,
 				nil,
@@ -270,7 +270,7 @@ func TestParsedCommandLine(t *testing.T) {
 			tsconfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(tspath.RootedFilePathFromNormalized(configFileName), tspath.PathKeyFromCanonical(configFileName), `{}`)
 			parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsconfigSourceFile,
-				tsoptionstest.NewVFS(map[string]string{}, tspath.CaseSensitive),
+				tsoptions.NewDefaultParseConfigHost(tsoptionstest.NewVFS(map[string]string{}, tspath.CaseSensitive)),
 				"/dev",
 				nil,
 				nil,

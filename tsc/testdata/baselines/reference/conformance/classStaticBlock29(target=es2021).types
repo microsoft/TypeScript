@@ -1,0 +1,107 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock29.ts] ////
+
+=== classStaticBlock29.ts ===
+// https://github.com/microsoft/TypeScript/issues/64733
+
+// Inside a downleveled `static {}` block, `this` refers to the class and is rewritten
+// to the class alias, but `this` inside a regular function nested in the block refers
+// to the function's own receiver and must be kept.
+class Foo {
+>Foo : Foo
+
+    declare static count: number;
+>count : number
+
+    declare toObject: () => number;
+>toObject : () => number
+
+    declare getBar: () => () => number;
+>getBar : () => () => number
+
+    declare getIndexed: () => number;
+>getIndexed : () => number
+
+    bar() {
+>bar : () => number
+
+        return 1;
+>1 : 1
+    }
+
+    static {
+        // Referencing the class by name makes the downleveled block use a class alias.
+        Foo.count = 0;
+>Foo.count = 0 : 0
+>Foo.count : number
+>Foo : typeof Foo
+>count : number
+>0 : 0
+
+        this.count++;
+>this.count++ : number
+>this.count : number
+>this : typeof Foo
+>count : number
+
+        Foo.prototype.toObject = function (this: Foo) {
+>Foo.prototype.toObject = function (this: Foo) {            return this.bar();        } : (this: Foo) => number
+>Foo.prototype.toObject : () => number
+>Foo.prototype : Foo
+>Foo : typeof Foo
+>prototype : Foo
+>toObject : () => number
+>function (this: Foo) {            return this.bar();        } : (this: Foo) => number
+>this : Foo
+
+            return this.bar();
+>this.bar() : number
+>this.bar : () => number
+>this : Foo
+>bar : () => number
+
+        };
+        Foo.prototype.getBar = function (this: Foo) {
+>Foo.prototype.getBar = function (this: Foo) {            return () => this.bar();        } : (this: Foo) => () => number
+>Foo.prototype.getBar : () => () => number
+>Foo.prototype : Foo
+>Foo : typeof Foo
+>prototype : Foo
+>getBar : () => () => number
+>function (this: Foo) {            return () => this.bar();        } : (this: Foo) => () => number
+>this : Foo
+
+            return () => this.bar();
+>() => this.bar() : () => number
+>this.bar() : number
+>this.bar : () => number
+>this : Foo
+>bar : () => number
+
+        };
+        this.prototype.getIndexed = function (this: Foo) {
+>this.prototype.getIndexed = function (this: Foo) {            return this["bar"]();        } : (this: Foo) => number
+>this.prototype.getIndexed : () => number
+>this.prototype : Foo
+>this : typeof Foo
+>prototype : Foo
+>getIndexed : () => number
+>function (this: Foo) {            return this["bar"]();        } : (this: Foo) => number
+>this : Foo
+
+            return this["bar"]();
+>this["bar"]() : number
+>this["bar"] : () => number
+>this : Foo
+>"bar" : "bar"
+
+        };
+    }
+}
+
+new Foo().toObject();
+>new Foo().toObject() : number
+>new Foo().toObject : () => number
+>new Foo() : Foo
+>Foo : typeof Foo
+>toObject : () => number
+
