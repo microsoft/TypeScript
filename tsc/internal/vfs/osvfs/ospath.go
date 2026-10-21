@@ -6,6 +6,6 @@ func toOSPath(path string) string {
 	return path
 }
 
-func fromOSPath(path string) string {
+func fromOSPath(path string, original string) string {
 	return path
 }

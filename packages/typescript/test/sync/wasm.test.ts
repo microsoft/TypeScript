@@ -9,10 +9,12 @@ import binaryen from "binaryen";
 import assert from "node:assert";
 import { spawn } from "node:child_process";
 import {
+    mkdir,
     mkdtemp,
     open,
     readFile,
     rm,
+    writeFile,
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -103,6 +105,54 @@ describe("API over WebAssembly", () => {
                 await stdout.close();
             }
             assert.match(await readFile(stdoutPath, "utf8"), /^Version \d+\.\d+\.\d+/);
+        }
+        finally {
+            await rm(directory, { recursive: true });
+        }
+    });
+
+    test("keeps paths resolved below the working directory in the compiler namespace", async () => {
+        const WebAssembly = (globalThis as any).WebAssembly;
+        const directory = await mkdtemp(path.join(tmpdir(), "typescript-wasip1-"));
+        try {
+            const root = path.join(directory, "root");
+            // Windows cannot create a directory named like a drive.
+            const projects = ["^/~ts-uri~/memfs/host/project", ...process.platform === "win32" ? [] : ["c:/project"]];
+            for (const project of projects) {
+                const projectDir = path.join(root, project);
+                await mkdir(path.join(projectDir, "node_modules", "pkg"), { recursive: true });
+                await writeFile(path.join(projectDir, "tsconfig.json"), `{ "compilerOptions": { "noEmit": true, "noLib": true, "types": [] } }`);
+                await writeFile(path.join(projectDir, "index.ts"), `import { x } from "pkg";`);
+                await writeFile(path.join(projectDir, "node_modules", "pkg", "package.json"), `{ "name": "pkg", "types": "index.d.ts" }`);
+                await writeFile(path.join(projectDir, "node_modules", "pkg", "index.d.ts"), `export declare const x: number;`);
+            }
+            const module = await WebAssembly.compile(await readFile(wasmURL));
+            // The same directories named by absolute paths stay POSIX paths.
+            for (const project of [...projects, ...projects.map(project => `/${project}`)]) {
+                const stdoutPath = path.join(directory, "stdout");
+                const stdout = await open(stdoutPath, "w+");
+                try {
+                    const wasi = new WASI({
+                        version: "preview1",
+                        args: ["tsc.wasm", "-p", project, "--listFilesOnly"],
+                        env: { PWD: "/" },
+                        preopens: { "/": root },
+                        stdout: stdout.fd,
+                        returnOnExit: true,
+                    });
+                    const instance = await WebAssembly.instantiate(module, {
+                        wasi_snapshot_preview1: wasi.wasiImport,
+                    });
+                    assert.strictEqual(wasi.start(instance), 0);
+                }
+                finally {
+                    await stdout.close();
+                }
+                assert.deepStrictEqual(
+                    (await readFile(stdoutPath, "utf8")).trim().split("\n").sort(),
+                    [`${project}/index.ts`, `${project}/node_modules/pkg/index.d.ts`],
+                );
+            }
         }
         finally {
             await rm(directory, { recursive: true });

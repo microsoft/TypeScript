@@ -159,7 +159,7 @@ func osFSRealpath(path tspath.RootedPath) tspath.RootedPath {
 	if nativepath.IsNetworkPath(nativePath) {
 		return orig
 	}
-	return tspath.RootedPathFromAbsolute(fromOSPath(nativePath))
+	return tspath.RootedPathFromAbsolute(fromOSPath(nativePath, orig.AsString()))
 }
 
 func isReparsePoint(path string) bool {
