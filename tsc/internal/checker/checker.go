@@ -8675,6 +8675,17 @@ func isContextuallyTypedByEnclosingCall(node *ast.Node) bool {
  * @return a signature of the call-like expression or undefined if one can't be found
  */
 func (c *Checker) getResolvedSignature(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
+	// Resolution is located at the call however it was requested, such as
+	// from contextually typing an argument, so that errors it reports at the
+	// current node do not depend on which was checked first.
+	saveCurrentNode := c.currentNode
+	c.currentNode = node
+	result := c.resolveSignatureOfCall(node, candidatesOutArray, checkMode)
+	c.currentNode = saveCurrentNode
+	return result
+}
+
+func (c *Checker) resolveSignatureOfCall(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
 	links := c.signatureLinks.Get(node)
 	// If getResolvedSignature has already been called, we will have cached the resolvedSignature.
 	// However, it is possible that either candidatesOutArray was not passed in the first time,
