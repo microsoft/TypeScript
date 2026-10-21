@@ -409,7 +409,8 @@ export function sourceFileResponseToUint8Array(response: { readonly data: string
         };
     }).Buffer;
     if (bufferConstructor) {
-        return new Uint8Array(bufferConstructor.from(response.data, "base64"));
+        const buffer = bufferConstructor.from(response.data, "base64");
+        return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     }
     const decoded = atob(response.data);
     return Uint8Array.from(decoded, character => character.charCodeAt(0));
