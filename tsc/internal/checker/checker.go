@@ -672,8 +672,10 @@ type Checker struct {
 	unionTypes                                  map[CacheHashKey]*Type
 	objectLiteralTypes                          map[CacheHashKey]*Type
 	spreadTypes                                 map[CacheHashKey]*Type
-	spreadContentTypes                          map[CacheHashKey]*Type
+	objectContentTypes                          map[CacheHashKey]*Type
 	spreadSymbols                               map[spreadSymbolKey]*ast.Symbol
+	symbolsWithType                             map[symbolWithTypeKey]*ast.Symbol
+	paddedProperties                            map[symbolWithTypeKey]*ast.Symbol
 	bindingPatternTypes                         map[CacheHashKey]*Type
 	unionOfUnionTypes                           map[UnionOfUnionKey]*Type
 	intersectionTypes                           map[CacheHashKey]*Type
@@ -1014,8 +1016,10 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.unionTypes = make(map[CacheHashKey]*Type)
 	c.objectLiteralTypes = make(map[CacheHashKey]*Type)
 	c.spreadTypes = make(map[CacheHashKey]*Type)
-	c.spreadContentTypes = make(map[CacheHashKey]*Type)
+	c.objectContentTypes = make(map[CacheHashKey]*Type)
 	c.spreadSymbols = make(map[spreadSymbolKey]*ast.Symbol)
+	c.symbolsWithType = make(map[symbolWithTypeKey]*ast.Symbol)
+	c.paddedProperties = make(map[symbolWithTypeKey]*ast.Symbol)
 	c.bindingPatternTypes = make(map[CacheHashKey]*Type)
 	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
 	c.intersectionTypes = make(map[CacheHashKey]*Type)
@@ -13909,14 +13913,14 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 	flags := ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral | ObjectFlagsContainsSpread | objectFlags
 	// Different inputs can produce the same members, e.g. when the right side
 	// overrides every property of the left side.
-	contentKey := c.getSpreadTypeContentKey(symbol, flags, members, spreadIndexInfos)
-	if existing := c.spreadContentTypes[contentKey]; existing != nil {
+	contentKey := c.getObjectTypeContentKey(symbol, flags, members, spreadIndexInfos)
+	if existing := c.objectContentTypes[contentKey]; existing != nil {
 		c.spreadTypes[key] = existing
 		return existing
 	}
 	spread := c.newAnonymousType(symbol, members, nil, nil, spreadIndexInfos)
 	spread.objectFlags |= flags
-	c.spreadContentTypes[contentKey] = spread
+	c.objectContentTypes[contentKey] = spread
 	c.spreadTypes[key] = spread
 	return spread
 }
@@ -14042,10 +14046,11 @@ type spreadSymbolKey struct {
 	readonly bool
 }
 
-// getSpreadTypeContentKey identifies the content of a spread type. Members are
-// either input properties or synthesized symbols that are themselves memoized,
-// so symbol identity determines member content.
-func (c *Checker) getSpreadTypeContentKey(symbol *ast.Symbol, flags ObjectFlags, members ast.SymbolTable, indexInfos []*IndexInfo) CacheHashKey {
+// getObjectTypeContentKey identifies the content of an object type derived
+// from other object types, such as a spread, widened, or regular type. Members
+// are either input properties or synthesized symbols that are themselves
+// memoized, so symbol identity determines member content.
+func (c *Checker) getObjectTypeContentKey(symbol *ast.Symbol, flags ObjectFlags, members ast.SymbolTable, indexInfos []*IndexInfo) CacheHashKey {
 	var b keyBuilder
 	if symbol != nil {
 		b.writeByte(1)
@@ -17501,13 +17506,23 @@ func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 		members.Set(prop.Name(), prop)
 	}
 	for _, e := range missingElements {
-		symbol := c.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsOptional, c.getPropertyNameFromBindingElement(e))
-		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, true /*reportErrors*/)
+		name := c.getPropertyNameFromBindingElement(e)
+		propType := c.getTypeFromBindingElement(e, false /*includePatternInType*/, true /*reportErrors*/)
+		key := symbolWithTypeKey{name: name, t: propType}
+		symbol := c.paddedProperties[key]
+		if symbol == nil {
+			symbol = c.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsOptional, name)
+			c.valueSymbolLinks.Get(symbol).resolvedType = propType
+			c.paddedProperties[key] = symbol
+		}
 		members.Set(symbol.Name(), symbol)
 	}
-	result := c.newAnonymousType(t.symbol, members, nil, nil, c.getIndexInfosOfType(t))
-	result.objectFlags = t.objectFlags
-	return result
+	indexInfos := c.getIndexInfosOfType(t)
+	return c.internObjectType(t.symbol, t.objectFlags, members, indexInfos, func() *Type {
+		result := c.newAnonymousType(t.symbol, members, nil, nil, indexInfos)
+		result.objectFlags = t.objectFlags
+		return result
+	})
 }
 
 func (c *Checker) getPropertyNameFromBindingElement(e *ast.Node) string {
@@ -19189,11 +19204,16 @@ func (c *Checker) getWidenedTypeOfObjectLiteral(t *Type, context *WideningContex
 			}
 		}
 	}
-	result := c.newAnonymousType(t.symbol, members, nil, nil, core.SameMap(c.getIndexInfosOfType(t), func(info *IndexInfo) *IndexInfo {
+	indexInfos := core.SameMap(c.getIndexInfosOfType(t), func(info *IndexInfo) *IndexInfo {
 		return c.newIndexInfo(info.keyType, c.getWidenedType(info.valueType), info.isReadonly, info.declaration, info.components)
-	}))
+	})
 	// Retain js literal flag through widening
-	result.objectFlags |= t.objectFlags & (ObjectFlagsJSLiteral | ObjectFlagsNonInferrableType)
+	flags := t.objectFlags & (ObjectFlagsJSLiteral | ObjectFlagsNonInferrableType)
+	result := c.internObjectType(t.symbol, ObjectFlagsAnonymous|flags, members, indexInfos, func() *Type {
+		result := c.newAnonymousType(t.symbol, members, nil, nil, indexInfos)
+		result.objectFlags |= flags
+		return result
+	})
 	// Only cache in child contexts since the root context never widens a particular object literal type more than once
 	if context != nil && context.parent != nil {
 		if context.widenedTypes == nil {
@@ -19219,7 +19239,7 @@ func (c *Checker) getWidenedProperty(prop *ast.Symbol, context *WideningContext)
 	if widened == original {
 		return prop
 	}
-	return c.createSymbolWithType(prop, widened)
+	return c.getSymbolWithType(prop, widened)
 }
 
 func (w *WideningContext) getChildContext(propertyName string) *WideningContext {
@@ -22642,6 +22662,36 @@ func (c *Checker) hasCommonDeclaration(symbols *collections.OrderedSet[*ast.Symb
 		}
 	}
 	return commonDeclarations.Len() != 0
+}
+
+type symbolWithTypeKey struct {
+	source *ast.Symbol
+	name   string
+	t      *Type
+}
+
+// getSymbolWithType is createSymbolWithType for copies of object type members,
+// returning the same copy for the same property and type.
+func (c *Checker) getSymbolWithType(source *ast.Symbol, t *Type) *ast.Symbol {
+	key := symbolWithTypeKey{source: source, t: t}
+	if existing := c.symbolsWithType[key]; existing != nil {
+		return existing
+	}
+	result := c.createSymbolWithType(source, t)
+	c.symbolsWithType[key] = result
+	return result
+}
+
+// internObjectType returns an existing object type with the given content, or
+// creates one with the given creation.
+func (c *Checker) internObjectType(symbol *ast.Symbol, flags ObjectFlags, members ast.SymbolTable, indexInfos []*IndexInfo, create func() *Type) *Type {
+	key := c.getObjectTypeContentKey(symbol, flags&^(ObjectFlagsCouldContainTypeVariablesComputed|ObjectFlagsCouldContainTypeVariables|ObjectFlagsMembersResolved), members, indexInfos)
+	if existing := c.objectContentTypes[key]; existing != nil {
+		return existing
+	}
+	result := create()
+	c.objectContentTypes[key] = result
+	return result
 }
 
 func (c *Checker) createSymbolWithType(source *ast.Symbol, t *Type) *ast.Symbol {
@@ -29306,9 +29356,18 @@ func (c *Checker) getRegularTypeOfObjectLiteral(t *Type) *Type {
 	}
 	resolved := c.resolveStructuredTypeMembers(t)
 	members := c.transformTypeOfMembers(t, c.getRegularTypeOfObjectLiteral)
-	regular := c.newAnonymousType(t.symbol, members, resolved.CallSignatures(), resolved.ConstructSignatures(), resolved.getIndexInfos())
-	regular.flags = resolved.flags
-	regular.objectFlags |= resolved.objectFlags & ^ObjectFlagsFreshLiteral
+	create := func() *Type {
+		regular := c.newAnonymousType(t.symbol, members, resolved.CallSignatures(), resolved.ConstructSignatures(), resolved.getIndexInfos())
+		regular.flags = resolved.flags
+		regular.objectFlags |= resolved.objectFlags & ^ObjectFlagsFreshLiteral
+		return regular
+	}
+	var regular *Type
+	if len(resolved.CallSignatures()) == 0 && len(resolved.ConstructSignatures()) == 0 && resolved.flags == TypeFlagsObject {
+		regular = c.internObjectType(t.symbol, ObjectFlagsAnonymous|resolved.objectFlags&^ObjectFlagsFreshLiteral, members, resolved.getIndexInfos(), create)
+	} else {
+		regular = create()
+	}
 	c.cachedTypes[key] = regular
 	return regular
 }
@@ -29319,7 +29378,7 @@ func (c *Checker) transformTypeOfMembers(t *Type, f func(propertyType *Type) *Ty
 		original := c.getTypeOfSymbol(property)
 		updated := f(original)
 		if updated != original {
-			property = c.createSymbolWithType(property, updated)
+			property = c.getSymbolWithType(property, updated)
 		}
 		members.Set(property.Name(), property)
 	}
