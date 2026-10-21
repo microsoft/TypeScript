@@ -131,6 +131,7 @@ describe("API over WebAssembly", () => {
             for (const project of [...projects, ...projects.map(project => `/${project}`)]) {
                 const stdoutPath = path.join(directory, "stdout");
                 const stdout = await open(stdoutPath, "w+");
+                let exitCode: number | undefined;
                 try {
                     const wasi = new WASI({
                         version: "preview1",
@@ -143,13 +144,15 @@ describe("API over WebAssembly", () => {
                     const instance = await WebAssembly.instantiate(module, {
                         wasi_snapshot_preview1: wasi.wasiImport,
                     });
-                    assert.strictEqual(wasi.start(instance), 0);
+                    exitCode = wasi.start(instance);
                 }
                 finally {
                     await stdout.close();
                 }
+                const output = await readFile(stdoutPath, "utf8");
+                assert.strictEqual(exitCode, 0, `tsc -p ${project} failed:\n${output}`);
                 assert.deepStrictEqual(
-                    (await readFile(stdoutPath, "utf8")).trim().split("\n").sort(),
+                    output.trim().split("\n").sort(),
                     [`${project}/index.ts`, `${project}/node_modules/pkg/index.d.ts`],
                 );
             }
