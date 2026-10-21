@@ -3,7 +3,6 @@ package wasmreactor
 
 import (
 	"context"
-	"sync"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api"
@@ -24,18 +23,13 @@ type Options struct {
 	Conn                      ipc.Conn            `json:"-"`
 }
 
-type Response struct {
-	Data []byte
-}
-
 type Reactor struct {
-	ctx       context.Context
-	cancel    context.CancelFunc
-	session   *api.Session
-	files     vfs.FS
-	cwd       tspath.RootedDirectoryPath
-	timing    *ipc.ServerTimingCollector
-	closeOnce sync.Once
+	ctx     context.Context
+	cancel  context.CancelFunc
+	session *api.Session
+	files   vfs.FS
+	cwd     tspath.RootedDirectoryPath
+	timing  *ipc.ServerTimingCollector
 }
 
 func New(ctx context.Context, options Options) *Reactor {
@@ -80,7 +74,7 @@ func New(ctx context.Context, options Options) *Reactor {
 	return reactor
 }
 
-func (r *Reactor) HandleRequest(method string, payload []byte) (Response, error) {
+func (r *Reactor) HandleRequest(method string, payload []byte) ([]byte, error) {
 	switch method {
 	case ipc.MethodGetServerTiming:
 		return marshalResponse(ipc.ServerTimingSnapshot(r.timing))
@@ -97,20 +91,20 @@ func (r *Reactor) HandleRequest(method string, payload []byte) (Response, error)
 		r.timing.Record(method, time.Since(start))
 	}
 	if err != nil {
-		return Response{}, err
+		return nil, err
 	}
 	if raw, ok := result.(api.RawBinary); ok {
-		return Response{Data: []byte(raw)}, nil
+		return []byte(raw), nil
 	}
 	return marshalResponse(result)
 }
 
-func marshalResponse(result any) (Response, error) {
+func marshalResponse(result any) ([]byte, error) {
 	encoded, err := json.Marshal(result)
 	if err != nil {
-		return Response{}, err
+		return nil, err
 	}
-	return Response{Data: encoded}, nil
+	return encoded, nil
 }
 
 func (r *Reactor) SetFile(path string, content string) error {
@@ -126,8 +120,6 @@ func (r *Reactor) RemoveFile(path string) error {
 }
 
 func (r *Reactor) Close() {
-	r.closeOnce.Do(func() {
-		r.cancel()
-		r.session.Close()
-	})
+	r.cancel()
+	r.session.Close()
 }

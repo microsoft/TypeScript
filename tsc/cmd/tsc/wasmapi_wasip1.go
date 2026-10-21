@@ -115,7 +115,7 @@ func handleRequest(methodLen uint32, payloadLen uint32) uint32 {
 		if err != nil {
 			return fail(err.Error())
 		}
-		setResponse(response.Data)
+		setResponse(response)
 		return 0
 	})
 }

@@ -33,7 +33,7 @@ func TestReactor(t *testing.T) {
 	var initializeResponse struct {
 		CurrentDirectory string `json:"currentDirectory"`
 	}
-	if unmarshalErr := json.Unmarshal(initialize.Data, &initializeResponse); unmarshalErr != nil {
+	if unmarshalErr := json.Unmarshal(initialize, &initializeResponse); unmarshalErr != nil {
 		t.Fatal(unmarshalErr)
 	}
 	if initializeResponse.CurrentDirectory != "/" {
@@ -45,8 +45,8 @@ func TestReactor(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !bytes.Equal(echo.Data, payload) {
-		t.Fatalf("echo = %q", echo.Data)
+	if !bytes.Equal(echo, payload) {
+		t.Fatalf("echo = %q", echo)
 	}
 
 	if err := reactor.RemoveFile("/src/index.ts"); err != nil {
