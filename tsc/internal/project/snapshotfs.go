@@ -494,23 +494,9 @@ func (s *snapshotFSBuilder) expandCreatedCacheEntries(change FileChangeSummary) 
 	if createdDirectories.Len() == 0 {
 		return change
 	}
-	s.cacheFiles.Range(func(entry *dirty.SyncMapEntry[tspath.PathKey, *cachedFile]) bool {
-		path := entry.Key()
-		for {
-			if createdDirectories.Has(path) {
-				if file := entry.Value(); file != nil {
-					change.Created.Add(lsconv.FileNameToDocumentURI(file.FileName()))
-				}
-				break
-			}
-			parent := path.Parent()
-			if parent == path {
-				break
-			}
-			path = parent
-		}
-		return true
-	})
+	for path := range createdDirectories.Keys() {
+		s.collectFilesRecursive(path, &change.Created, nil, nil)
+	}
 	return change
 }
 
