@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+	"gotest.tools/v3/assert"
 )
 
 type shutdownTestReader struct{}
@@ -37,6 +38,38 @@ func (w *cancelingTestWriter) Write(msg *lsproto.Message) error {
 		w.cancel()
 	}
 	return nil
+}
+
+func TestGetContentMapperWorkspaceRoots(t *testing.T) {
+	t.Parallel()
+
+	t.Run("no workspace", func(t *testing.T) {
+		t.Parallel()
+		roots := getInitialWorkspaceRoots(&lsproto.InitializeParams{})
+		assert.DeepEqual(t, roots, []tspath.RootedDirectoryPath{})
+	})
+
+	t.Run("all file workspace folders", func(t *testing.T) {
+		t.Parallel()
+		folders := []*lsproto.WorkspaceFolder{
+			{Uri: "file:///home/first", Name: "first"},
+			{Uri: "untitled:ignored", Name: "ignored"},
+			{Uri: "file:///home/second", Name: "second"},
+		}
+		roots := getInitialWorkspaceRoots(&lsproto.InitializeParams{
+			RootUri:          lsproto.DocumentUriOrNull{DocumentUri: new(lsproto.DocumentUri("file:///fallback"))},
+			WorkspaceFolders: &lsproto.WorkspaceFoldersOrNull{WorkspaceFolders: &folders},
+		})
+		assert.DeepEqual(t, roots, []tspath.RootedDirectoryPath{"/home/first", "/home/second"})
+	})
+
+	t.Run("root URI fallback", func(t *testing.T) {
+		t.Parallel()
+		roots := getInitialWorkspaceRoots(&lsproto.InitializeParams{
+			RootUri: lsproto.DocumentUriOrNull{DocumentUri: new(lsproto.DocumentUri("file:///home/root"))},
+		})
+		assert.DeepEqual(t, roots, []tspath.RootedDirectoryPath{"/home/root"})
+	})
 }
 
 // TestServerShutdownNoDeadlock verifies that operations after shutdown

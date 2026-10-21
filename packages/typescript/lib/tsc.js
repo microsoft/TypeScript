@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import getExePath from "#getExePath";
 import { execFileSync } from "node:child_process";
+import getExePath from "./getExePath.js";
 
 const exe = getExePath();
 
