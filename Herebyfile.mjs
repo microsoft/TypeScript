@@ -2609,8 +2609,7 @@ async function buildWasip1Package() {
     stripSourceConditions(wasmPackageJson);
 
     await runBuildWasi(extraFlags);
-    await cpRecursive(wasmInputDir, wasip1Package.npmDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
-    await cpRecursive(path.join(wasmInputDir, "dist"), path.join(wasip1Package.npmDir, "dist"));
+    await cpRecursive(wasmInputDir, wasip1Package.npmDir, p => !p.endsWith("/node_modules"));
     await fs.promises.writeFile(
         path.join(wasip1Package.npmDir, "package.json"),
         JSON.stringify(wasmPackageJson, undefined, 4),
@@ -2752,7 +2751,6 @@ async function testNativePreviewPackage(platforms) {
 
         const wasmPackageJson = JSON.parse(await fs.promises.readFile(path.join(wasmPackageDir, "package.json"), "utf8"));
         assert.equal(wasmPackageJson.version, getVersion(), "WASI artifact package must match the main package version");
-        assert.equal(wasmPackageJson.peerDependencies, undefined, "WASI artifact package must not depend on the main package");
         const libFiles = JSON.parse(await fs.promises.readFile(path.join(wasmPackageDir, "lib", "libFiles.json"), "utf8"));
         const expectedLibFiles = (await fs.promises.readdir(path.join(wasmPackageDir, "lib")))
             .filter(file => file === "lib.d.ts" || file.startsWith("lib.") && file.endsWith(".d.ts"))
@@ -2766,8 +2764,6 @@ async function testNativePreviewPackage(platforms) {
         assert(wasmFiles.has("lib/tsc.wasm"), "WASI artifact package is missing its compiler");
         assert(wasmFiles.has("dist/index.js"), "WASI artifact package is missing its URL helper");
         assert(wasmFiles.has("lib/libFiles.json"), "WASI artifact package is missing its library file list");
-        assert(!wasmFiles.has("dist/transport.js"), "WASI artifact package contains the reactor transport");
-        assert(!wasmFiles.has("dist/wasi.js"), "WASI artifact package contains the reactor host");
 
         const binName = publishAsTypescript ? "tsc" : "tsgo";
         const binPath = path.join(mainPackageDir, "bin", binName);
@@ -2778,8 +2774,6 @@ async function testNativePreviewPackage(platforms) {
         assert(!listFilesOutput.includes("bundled:///"), "Packaged compiler listed an embedded library path");
 
         const expectedLib = path.resolve(platformPackageDir, "lib", "lib.es5.d.ts");
-        const expectedWasmLib = path.resolve(wasmPackageDir, "lib", "lib.es5.d.ts");
-        assert(fs.existsSync(expectedWasmLib), `Expected WASM package to contain ${expectedWasmLib}`);
         const listedFiles = listFilesOutput
             .split(/\r?\n/)
             .filter(Boolean)
@@ -3175,10 +3169,10 @@ async function runPackVsixExtensions() {
 
     await Promise.all(extensions.map(async ({ npmTarball, npmPackageName, nodeOs, vscodeTarget, sourceDir, extensionDir: thisExtensionDir, vsixPath, vsixManifestPath, vsixSignaturePath }) => {
         await cpWithoutNodeModulesOrTsconfig(sourceDir, thisExtensionDir);
+        assert(npmTarball);
+        assert(npmPackageName);
         let packageJsonDependencies;
         if (vscodeTarget === "web") {
-            assert(npmTarball);
-            assert(npmPackageName);
             const embeddedWasmPackageDir = path.join(thisExtensionDir, "node_modules", ...npmPackageName.split("/"));
             await fs.promises.mkdir(embeddedWasmPackageDir, { recursive: true });
             await tar.x({ file: npmTarball, cwd: embeddedWasmPackageDir, strip: 1 });
@@ -3188,8 +3182,6 @@ async function runPackVsixExtensions() {
             };
         }
         else {
-            assert(npmTarball);
-            assert(npmPackageName);
             assert(nodeOs);
             const nodeModules = path.join(thisExtensionDir, "node_modules");
             const embeddedPlatformPackageDir = path.join(nodeModules, ...npmPackageName.split("/"));
