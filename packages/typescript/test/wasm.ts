@@ -25,6 +25,7 @@ declare const WebAssembly: {
 interface WasmAPIOptions {
     cwd?: string | undefined;
     fs?: FileSystemCallbacks | undefined;
+    useCaseSensitiveFileNames?: boolean | undefined;
     collectTiming?: boolean | undefined;
     maxResponseBytesPerPage?: number | undefined;
     transport?: object | undefined;
@@ -70,6 +71,7 @@ function createWasmAPIOptions(options: WasmAPIOptions): {
         instance,
         cwd: options.cwd ?? "/",
         fs: writeFile === undefined ? undefined : { writeFile: writeFile.bind(options.fs) },
+        useCaseSensitiveFileNames: options.useCaseSensitiveFileNames,
         collectTiming: options.collectTiming,
     });
     if (options.fs) {
