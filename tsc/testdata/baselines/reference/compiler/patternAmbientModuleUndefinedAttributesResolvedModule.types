@@ -1,0 +1,160 @@
+//// [tests/cases/compiler/patternAmbientModuleUndefinedAttributesResolvedModule.ts] ////
+
+=== /types.d.ts ===
+declare module "*" {
+>"*" : typeof import("*")
+
+    export const kind: "wildcard";
+>kind : "wildcard"
+}
+
+declare module "*" with { type: "css" } {
+>"*" : typeof import("*", { with: { type: "css" } })
+>type : "css"
+
+    export const kind: "css";
+>kind : "css"
+}
+
+=== /actual.ts ===
+export const kind = "actual";
+>kind : "actual"
+>"actual" : "actual"
+
+=== /index.ts ===
+declare const options: ImportCallOptions;
+>options : ImportCallOptions
+
+declare const optionalAttributes: { type: "css" } | undefined;
+>optionalAttributes : { type: "css"; } | undefined
+>type : "css"
+
+declare const cssAttributes: { type: "css" };
+>cssAttributes : { type: "css"; }
+>type : "css"
+
+async function test() {
+>test : () => Promise<void>
+
+    const withoutOptions = await import("./actual");
+>withoutOptions : typeof import("./actual")
+>await import("./actual") : typeof import("./actual")
+>import("./actual") : Promise<typeof import("./actual")>
+>"./actual" : "./actual"
+
+    const withoutOptionsKind: "actual" = withoutOptions.kind;
+>withoutOptionsKind : "actual"
+>withoutOptions.kind : "actual"
+>withoutOptions : typeof import("./actual")
+>kind : "actual"
+
+    const withUndefined = await import("./actual", { with: undefined });
+>withUndefined : { kind: "wildcard"; default: typeof import("*"); }
+>await import("./actual", { with: undefined }) : { kind: "wildcard"; default: typeof import("*"); }
+>import("./actual", { with: undefined }) : Promise<{ kind: "wildcard"; default: typeof import("*"); }>
+>"./actual" : "./actual"
+>{ with: undefined } : { with: undefined; }
+>with : undefined
+>undefined : undefined
+
+    const withUndefinedKind: "actual" = withUndefined.kind;
+>withUndefinedKind : "actual"
+>withUndefined.kind : "wildcard"
+>withUndefined : { kind: "wildcard"; default: typeof import("*"); }
+>kind : "wildcard"
+
+    const withOptions = await import("./actual", options);
+>withOptions : { kind: "wildcard"; default: typeof import("*"); }
+>await import("./actual", options) : { kind: "wildcard"; default: typeof import("*"); }
+>import("./actual", options) : Promise<{ kind: "wildcard"; default: typeof import("*"); }>
+>"./actual" : "./actual"
+>options : ImportCallOptions
+
+    const withOptionsKind: "actual" = withOptions.kind;
+>withOptionsKind : "actual"
+>withOptions.kind : "wildcard"
+>withOptions : { kind: "wildcard"; default: typeof import("*"); }
+>kind : "wildcard"
+
+    const withOptionalAttributes = await import("./actual", { with: optionalAttributes });
+>withOptionalAttributes : { kind: "wildcard"; default: typeof import("*"); }
+>await import("./actual", { with: optionalAttributes }) : { kind: "wildcard"; default: typeof import("*"); }
+>import("./actual", { with: optionalAttributes }) : Promise<{ kind: "wildcard"; default: typeof import("*"); }>
+>"./actual" : "./actual"
+>{ with: optionalAttributes } : { with: { type: "css"; } | undefined; }
+>with : { type: "css"; } | undefined
+>optionalAttributes : { type: "css"; } | undefined
+
+    const withOptionalAttributesKind: "actual" = withOptionalAttributes.kind;
+>withOptionalAttributesKind : "actual"
+>withOptionalAttributes.kind : "wildcard"
+>withOptionalAttributes : { kind: "wildcard"; default: typeof import("*"); }
+>kind : "wildcard"
+
+    const withEmptyAttributes = await import("./actual", { with: {} });
+>withEmptyAttributes : typeof import("./actual")
+>await import("./actual", { with: {} }) : typeof import("./actual")
+>import("./actual", { with: {} }) : Promise<typeof import("./actual")>
+>"./actual" : "./actual"
+>{ with: {} } : { with: {}; }
+>with : {}
+>{} : {}
+
+    const withEmptyAttributesKind: "actual" = withEmptyAttributes.kind;
+>withEmptyAttributesKind : "actual"
+>withEmptyAttributes.kind : "actual"
+>withEmptyAttributes : typeof import("./actual")
+>kind : "actual"
+
+    const withCssAttributes = await import("./actual", { with: cssAttributes });
+>withCssAttributes : { kind: "css"; default: typeof import("*", { with: { type: "css" } }); }
+>await import("./actual", { with: cssAttributes }) : { kind: "css"; default: typeof import("*", { with: { type: "css" } }); }
+>import("./actual", { with: cssAttributes }) : Promise<{ kind: "css"; default: typeof import("*", { with: { type: "css" } }); }>
+>"./actual" : "./actual"
+>{ with: cssAttributes } : { with: { type: "css"; }; }
+>with : { type: "css"; }
+>cssAttributes : { type: "css"; }
+
+    const withCssAttributesKind: "css" = withCssAttributes.kind;
+>withCssAttributesKind : "css"
+>withCssAttributes.kind : "css"
+>withCssAttributes : { kind: "css"; default: typeof import("*", { with: { type: "css" } }); }
+>kind : "css"
+
+    const unresolved = await import("./missing", { with: undefined });
+>unresolved : { kind: "wildcard"; default: typeof import("*"); }
+>await import("./missing", { with: undefined }) : { kind: "wildcard"; default: typeof import("*"); }
+>import("./missing", { with: undefined }) : Promise<{ kind: "wildcard"; default: typeof import("*"); }>
+>"./missing" : "./missing"
+>{ with: undefined } : { with: undefined; }
+>with : undefined
+>undefined : undefined
+
+    const unresolvedKind: "wildcard" = unresolved.kind;
+>unresolvedKind : "wildcard"
+>unresolved.kind : "wildcard"
+>unresolved : { kind: "wildcard"; default: typeof import("*"); }
+>kind : "wildcard"
+}
+
+async function generic<T extends { type: "css" } | undefined>(attributes: T) {
+>generic : <T extends { type: "css"; } | undefined>(attributes: T) => Promise<void>
+>type : "css"
+>attributes : T
+
+    const withGenericAttributes = await import("./actual", { with: attributes });
+>withGenericAttributes : { kind: "wildcard"; default: typeof import("*"); }
+>await import("./actual", { with: attributes }) : { kind: "wildcard"; default: typeof import("*"); }
+>import("./actual", { with: attributes }) : Promise<{ kind: "wildcard"; default: typeof import("*"); }>
+>"./actual" : "./actual"
+>{ with: attributes } : { with: { type: "css"; } | undefined; }
+>with : { type: "css"; } | undefined
+>attributes : { type: "css"; } | undefined
+
+    const withGenericAttributesKind: "actual" = withGenericAttributes.kind;
+>withGenericAttributesKind : "actual"
+>withGenericAttributes.kind : "wildcard"
+>withGenericAttributes : { kind: "wildcard"; default: typeof import("*"); }
+>kind : "wildcard"
+}
+
