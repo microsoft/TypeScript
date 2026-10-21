@@ -78,15 +78,7 @@ export class WasmTransport {
             this.configureFileSystem(options.fs);
         }
         catch (error) {
-            try {
-                this.exports.close_session();
-            }
-            catch (closeError) {
-                throw new AggregateError(
-                    [error, closeError],
-                    "Failed to configure the TypeScript WASM filesystem and close its session",
-                );
-            }
+            this.exports.close_session();
             throw error;
         }
     }
