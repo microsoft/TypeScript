@@ -2,10 +2,6 @@
 
 package osvfs
 
-func toOSPath(path string) string {
-	return path
-}
-
 func fromOSPath(path string, original string) string {
 	return path
 }
