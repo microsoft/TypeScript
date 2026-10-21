@@ -1535,11 +1535,11 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(`    private _cursorNodeIndex: number = 0;`);
     w.write(``);
     w.write(`    get pos(): number {`);
-    w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_POS, true);`);
+    w.write(`        return this.view.getInt32(this._byteIndex + NODE_OFFSET_POS, true);`);
     w.write(`    }`);
     w.write(``);
     w.write(`    get end(): number {`);
-    w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_END, true);`);
+    w.write(`        return this.view.getInt32(this._byteIndex + NODE_OFFSET_END, true);`);
     w.write(`    }`);
     w.write(``);
     w.write(`    get next(): number {`);
