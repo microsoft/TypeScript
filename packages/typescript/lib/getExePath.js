@@ -5,7 +5,10 @@
 // NOTE: Keep VS Code extension's resolveTsdkPathToExe in sync with this function.
 /** @param {NodeModules} modules */
 export default function getExePath({ fs, module, path, url }) {
-    const { __dirname, normalizedDirname, pkg } = getPackageInfo({ fs, path, url });
+    const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+    const normalizedDirname = __dirname.replace(/\\/g, "/");
+
+    const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
     const pkgName = pkg.name;
     const baseName = pkgName.startsWith("@") ? pkgName.split("/")[1] : pkgName;
     const expectedBinName = baseName === "typescript" ? "tsc" : "tsgo";
@@ -64,46 +67,4 @@ export default function getExePath({ fs, module, path, url }) {
     }
 
     return exe;
-}
-
-/** @param {NodeModules} modules */
-export function getWasmPath({ fs, module, path, url }) {
-    const { __dirname, normalizedDirname, pkg } = getPackageInfo({ fs, path, url });
-
-    let wasmDir;
-    if (
-        normalizedDirname.endsWith("/packages/typescript/lib")
-        || normalizedDirname.endsWith("/built/npm/typescript/lib")
-        || normalizedDirname.endsWith("/built/npm/native-preview/lib")
-    ) {
-        wasmDir = path.resolve(__dirname, "..", "..", "typescript-wasip1-wasm", "lib");
-    }
-    else {
-        const require = module.createRequire(import.meta.url);
-        const packageJson = require.resolve("@typescript/typescript-wasip1-wasm/package.json");
-        const wasmPackage = JSON.parse(fs.readFileSync(packageJson, "utf8"));
-        if (wasmPackage.version !== pkg.version) {
-            throw Object.assign(
-                new Error(
-                    `WebAssembly compiler package version ${wasmPackage.version} is incompatible with ${pkg.name}@${pkg.version}. Install @typescript/typescript-wasip1-wasm@${pkg.version}.`,
-                ),
-                { code: "ERR_TYPESCRIPT_WASM_PACKAGE" },
-            );
-        }
-        wasmDir = path.join(path.dirname(packageJson), "lib");
-    }
-
-    const wasmPath = path.join(wasmDir, "tsc.wasm");
-    if (!fs.existsSync(wasmPath)) {
-        throw new Error("WebAssembly compiler not found: " + wasmPath);
-    }
-    return wasmPath;
-}
-
-/** @param {Pick<NodeModules, "fs" | "path" | "url">} modules */
-function getPackageInfo({ fs, path, url }) {
-    const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
-    const normalizedDirname = __dirname.replace(/\\/g, "/");
-    const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
-    return { __dirname, normalizedDirname, pkg };
 }

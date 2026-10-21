@@ -6,4 +6,3 @@ export interface NodeModules {
 }
 declare function getExePath(modules: NodeModules): string;
 export default getExePath;
-export declare function getWasmPath(modules: NodeModules): string;

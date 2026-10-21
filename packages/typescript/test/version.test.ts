@@ -1,20 +1,8 @@
 import { versionMajorMinor } from "@typescript/typescript";
 import assert from "node:assert";
-import {
-    execFileSync,
-    spawnSync,
-} from "node:child_process";
+import { execFileSync } from "node:child_process";
 import fs, { readFileSync } from "node:fs";
-import {
-    cp,
-    mkdir,
-    mkdtemp,
-    rm,
-    symlink,
-    writeFile,
-} from "node:fs/promises";
 import module from "node:module";
-import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 import url from "node:url";
@@ -31,92 +19,4 @@ test("versionMajorMinor runtime and declaration match the compiler version", () 
     assert.strictEqual(versionMajorMinor, majorMinor);
     assert.ok(declarationMatch, "versionMajorMinor declaration not found");
     assert.strictEqual(declarationMatch[1], majorMinor);
-});
-
-test("the CLI falls back to the WASI package", {
-    skip: Number(process.versions.node.split(".")[0]) < 23 ? "Node.js 23 or newer is required" : undefined,
-}, async () => {
-    const directory = await mkdtemp(path.join(tmpdir(), "typescript-wasi-fallback-"));
-    try {
-        const packageDirectory = path.join(directory, "node_modules", "typescript");
-        const libraryDirectory = path.join(packageDirectory, "lib");
-        await mkdir(libraryDirectory, { recursive: true });
-        const responseFile = path.join(directory, "args.rsp");
-        const sourceFile = path.join(directory, "input.ts");
-        await Promise.all([
-            cp(new URL("../lib/tsc.js", import.meta.url), path.join(libraryDirectory, "tsc.js")),
-            cp(new URL("../lib/getExePath.js", import.meta.url), path.join(libraryDirectory, "getExePath.js")),
-            writeFile(responseFile, "--version"),
-            writeFile(sourceFile, "export const value: string = 'value';\n"),
-            writeFile(
-                path.join(packageDirectory, "package.json"),
-                JSON.stringify({
-                    name: "typescript",
-                    version: "0.0.0",
-                    type: "module",
-                    bin: { tsc: "./lib/tsc.js" },
-                }),
-            ),
-        ]);
-
-        const missingArtifact = spawnSync(process.execPath, [path.join(libraryDirectory, "tsc.js"), `@${responseFile}`], {
-            cwd: directory,
-            encoding: "utf8",
-        });
-        assert.notStrictEqual(missingArtifact.status, 0);
-        assert.match(
-            missingArtifact.stderr,
-            /Unable to resolve @typescript\/typescript-[\w-]+\. Either your platform is unsupported/,
-        );
-
-        const scopeDirectory = path.join(directory, "node_modules", "@typescript");
-        await mkdir(scopeDirectory, { recursive: true });
-        const artifactDirectory = path.join(scopeDirectory, "typescript-wasip1-wasm");
-        await mkdir(artifactDirectory);
-        await symlink(
-            new URL("../../typescript-wasip1-wasm/lib", import.meta.url),
-            path.join(artifactDirectory, "lib"),
-            process.platform === "win32" ? "junction" : "dir",
-        );
-        const artifactPackageJson = {
-            name: "@typescript/typescript-wasip1-wasm",
-            version: "1.0.0",
-            exports: { "./package.json": "./package.json" },
-        };
-        await writeFile(path.join(artifactDirectory, "package.json"), JSON.stringify(artifactPackageJson));
-
-        const mismatchedArtifact = spawnSync(process.execPath, [path.join(libraryDirectory, "tsc.js"), `@${responseFile}`], {
-            cwd: directory,
-            encoding: "utf8",
-        });
-        assert.notStrictEqual(mismatchedArtifact.status, 0);
-        assert.match(
-            mismatchedArtifact.stderr,
-            /WebAssembly compiler package version 1\.0\.0 is incompatible with typescript@0\.0\.0/,
-        );
-        artifactPackageJson.version = "0.0.0";
-        await writeFile(path.join(artifactDirectory, "package.json"), JSON.stringify(artifactPackageJson));
-
-        const output = execFileSync(process.execPath, [path.join(libraryDirectory, "tsc.js"), `@${responseFile}`], {
-            cwd: directory,
-            encoding: "utf8",
-        });
-        assert.match(output, /^Version \d+\.\d+\.\d+/);
-
-        await writeFile(responseFile, "\uFEFF@inner.rsp\n");
-        await writeFile(path.join(directory, "inner.rsp"), Buffer.from(`\uFEFF"${sourceFile}"\n--noEmit\n`, "utf16le"));
-        execFileSync(process.execPath, [path.join(libraryDirectory, "tsc.js"), `@${responseFile}`], {
-            cwd: directory,
-            stdio: "inherit",
-        });
-
-        await writeFile(path.join(directory, "tsconfig.json"), JSON.stringify({ files: [sourceFile], compilerOptions: { noEmit: true } }));
-        execFileSync(process.execPath, [path.join(libraryDirectory, "tsc.js"), "-p", "."], {
-            cwd: directory,
-            stdio: "inherit",
-        });
-    }
-    finally {
-        await rm(directory, { recursive: true });
-    }
 });
