@@ -271,13 +271,17 @@ func callHost(buffer []byte, method string, params []byte, resultCapacity int) (
 	case errnoBadFileNumber:
 		return nil, errno, errors.New("host callbacks are not supported by this WebAssembly host")
 	}
-	errorStart := 16 + len(method) + len(params) + resultCapacity
-	errorLength := min(int(binary.LittleEndian.Uint32(buffer[12:])), hostErrorCapacity)
-	message := string(buffer[errorStart : errorStart+errorLength])
+	return nil, errno, hostError(buffer[16+len(method)+len(params)+resultCapacity:], binary.LittleEndian.Uint32(buffer[12:]), "host callback failed")
+}
+
+// hostError reads the error message a host wrote into the error region of an
+// exchange buffer.
+func hostError(region []byte, length uint32, fallback string) error {
+	message := string(region[:min(int(length), hostErrorCapacity)])
 	if message == "" {
-		message = "host callback failed"
+		message = fallback
 	}
-	return nil, errno, errors.New(message)
+	return errors.New(message)
 }
 
 func (hostCallbackConn) Notify(context.Context, string, any) error {
@@ -304,16 +308,7 @@ func writeFileToHost(path string, data string) (bool, error) {
 		return true, nil
 	}
 
-	errorLength := binary.LittleEndian.Uint32(buffer[8:])
-	if errorLength > hostErrorCapacity {
-		errorLength = hostErrorCapacity
-	}
-	errorStart := 12 + len(pathBytes) + len(dataBytes)
-	message := string(buffer[errorStart : errorStart+int(errorLength)])
-	if message == "" {
-		message = "host filesystem callback failed"
-	}
-	return true, errors.New(message)
+	return true, hostError(buffer[12+len(pathBytes)+len(dataBytes):], binary.LittleEndian.Uint32(buffer[8:]), "host filesystem callback failed")
 }
 
 //go:wasmimport wasi_snapshot_preview1 fd_write
