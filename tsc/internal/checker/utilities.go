@@ -372,6 +372,15 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	if s2 == nil {
 		return -1
 	}
+	if r := c.compareSymbolDeclarationsAndNames(s1, s2); r != 0 {
+		return r
+	}
+	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
+	// no declaration and duplicate names.
+	return cmp.Compare(ast.GetSymbolId(s1), ast.GetSymbolId(s2))
+}
+
+func (c *Checker) compareSymbolDeclarationsAndNames(s1, s2 *ast.Symbol) int {
 	if len(s1.Declarations()) != 0 && len(s2.Declarations()) != 0 {
 		if r := c.compareNodes(s1.Declarations()[0], s2.Declarations()[0]); r != 0 {
 			return r
@@ -381,12 +390,7 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	} else if len(s2.Declarations()) != 0 {
 		return 1
 	}
-	if r := strings.Compare(s1.Name(), s2.Name()); r != 0 {
-		return r
-	}
-	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
-	// no declaration and duplicate names.
-	return cmp.Compare(ast.GetSymbolId(s1), ast.GetSymbolId(s2))
+	return strings.Compare(s1.Name(), s2.Name())
 }
 
 func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
@@ -738,7 +742,9 @@ func compareObjectLiteralMembers(t1, t2 *Type) int {
 	}
 	for i, s1 := range p1 {
 		s2 := p2[i]
-		if r := c.compareSymbols(s1, s2); r != 0 {
+		// Members are created per object literal type, so they are ordered by
+		// what they declare rather than by identity.
+		if r := c.compareSymbolDeclarationsAndNames(s1, s2); r != 0 {
 			return r
 		}
 		if r := int(s1.Flags()&ast.SymbolFlagsOptional) - int(s2.Flags()&ast.SymbolFlagsOptional); r != 0 {
