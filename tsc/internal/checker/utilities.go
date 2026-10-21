@@ -492,6 +492,11 @@ func CompareTypes(t1, t2 *Type) int {
 					return c
 				}
 			}
+			if r1.target != r2.target && r1.target.objectFlags&r2.target.objectFlags&ObjectFlagsTuple != 0 {
+				if c := t1.checker.compareTupleLabelDeclarations(r1.target.AsTupleType(), r2.target.AsTupleType()); c != 0 {
+					return c
+				}
+			}
 			// Array literal types follow the references they were cloned from.
 			if l1, l2 := t1.objectFlags&ObjectFlagsArrayLiteral != 0, t2.objectFlags&ObjectFlagsArrayLiteral != 0; l1 != l2 {
 				return core.IfElse(l1, 1, -1)
@@ -730,6 +735,17 @@ func compareTupleTypes(t1, t2 *TupleType) int {
 	for i := range t1.elementInfos {
 		if c := compareElementLabels(t1.elementInfos[i].labeledDeclaration, t2.elementInfos[i].labeledDeclaration); c != 0 {
 			return c
+		}
+	}
+	return 0
+}
+
+// compareTupleLabelDeclarations orders tuple targets that differ only in where
+// their identically named labels are declared.
+func (c *Checker) compareTupleLabelDeclarations(t1, t2 *TupleType) int {
+	for i := range t1.elementInfos {
+		if r := c.compareNodes(t1.elementInfos[i].labeledDeclaration, t2.elementInfos[i].labeledDeclaration); r != 0 {
+			return r
 		}
 	}
 	return 0
