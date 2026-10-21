@@ -49,13 +49,7 @@ export function isSpawnOptions(options: ClientOptions): options is ClientSpawnOp
     return !("pipe" in options);
 }
 
-export interface ClientTransportOptions {
-    /**
-     * An existing synchronous transport connected to an API session.
-     * Custom module resolution callbacks must obey the transport's reentrancy
-     * constraints.
-     */
-    transport: SyncTransport;
+interface TransportOptionsBase {
     /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
     maxResponseBytesPerPage?: number | undefined;
     /** Virtual filesystem callbacks used by transports that support them. */
@@ -64,13 +58,22 @@ export interface ClientTransportOptions {
     collectTiming?: boolean | undefined;
 }
 
+export interface ClientTransportOptions extends TransportOptionsBase {
+    /**
+     * An existing synchronous transport connected to an API session.
+     * Custom module resolution callbacks must obey the transport's reentrancy
+     * constraints.
+     */
+    transport: SyncTransport;
+}
+
 export type SyncClientOptions = ClientSocketOptions | ClientSpawnOptions | ClientTransportOptions;
 
-export function isTransportOptions(options: SyncClientOptions): options is ClientTransportOptions {
+export function isTransportOptions<T extends SyncClientOptions | AsyncClientOptions>(options: T): options is Extract<T, { transport: unknown; }> {
     return "transport" in options;
 }
 
-export interface AsyncClientTransportOptions {
+export interface AsyncClientTransportOptions extends TransportOptionsBase {
     /**
      * An existing asynchronous transport connected to an API session.
      * Host callbacks are synchronous even when requests are asynchronous, so
@@ -78,19 +81,9 @@ export interface AsyncClientTransportOptions {
      * the transport's reentrancy constraints.
      */
     transport: AsyncTransport;
-    /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
-    maxResponseBytesPerPage?: number | undefined;
-    /** Virtual filesystem callbacks used by transports that support them. */
-    fs?: FileSystemCallbacks | undefined;
-    /** Collect timing information for requests made through the transport. */
-    collectTiming?: boolean | undefined;
 }
 
 export type AsyncClientOptions = ClientOptions | AsyncClientTransportOptions;
-
-export function isAsyncTransportOptions(options: AsyncClientOptions): options is AsyncClientTransportOptions {
-    return "transport" in options;
-}
 
 export function resolveExePath(options: ClientSpawnOptions): string {
     return options.tsserverPath ?? getDefaultExePath();

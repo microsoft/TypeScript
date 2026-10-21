@@ -18,8 +18,8 @@ import {
     type ClientSocketOptions,
     type ClientSpawnOptions,
     getAPIProcessArgs,
-    isAsyncTransportOptions,
     isSpawnOptions,
+    isTransportOptions,
     resolveExePath,
 } from "../options.ts";
 import type {
@@ -50,7 +50,7 @@ export type { AsyncTransport } from "./transport.ts";
 export type Client = TransportClient | RpcClient;
 
 export function createClient(options: AsyncClientOptions): Client {
-    return isAsyncTransportOptions(options) ? createTransportClient(options) : new RpcClient(options);
+    return isTransportOptions(options) ? createTransportClient(options) : new RpcClient(options);
 }
 
 /**
