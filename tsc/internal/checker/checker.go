@@ -679,6 +679,7 @@ type Checker struct {
 	bindingPatternTypes                         map[CacheHashKey]*Type
 	unionOfUnionTypes                           map[UnionOfUnionKey]*Type
 	intersectionTypes                           map[CacheHashKey]*Type
+	intersectionContentTypes                    map[CacheHashKey]*Type
 	propertiesTypes                             map[PropertiesTypesKey]*Type
 	diagnostics                                 ast.DiagnosticsCollection
 	suggestionDiagnostics                       ast.DiagnosticsCollection
@@ -1023,6 +1024,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.bindingPatternTypes = make(map[CacheHashKey]*Type)
 	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
 	c.intersectionTypes = make(map[CacheHashKey]*Type)
+	c.intersectionContentTypes = make(map[CacheHashKey]*Type)
 	c.propertiesTypes = make(map[PropertiesTypesKey]*Type)
 	c.patternForType = make(map[*Type]*ast.Node)
 	c.contextFreeTypes = make(map[*ast.Node]*Type)
@@ -27371,16 +27373,33 @@ func (c *Checker) getIntersectionTypeEx(types []*Type, flags IntersectionFlags, 
 				// the denormalized origin has fewer constituents than the union itself.
 				var origin *Type
 				if core.Some(constituents, isIntersectionType) && getConstituentCountOfTypes(constituents) > getConstituentCountOfTypes(typeSet) {
-					origin = c.newIntersectionType(ObjectFlagsNone, typeSet)
+					origin = c.getIntersectionTypeWithContent(ObjectFlagsNone, typeSet, nil)
 				}
 				result = c.getUnionTypeEx(constituents, UnionReductionLiteral, alias, origin)
 			}
 		} else {
-			result = c.newIntersectionType(objectFlags|c.getPropagatingFlagsOfTypes(types /*excludeKinds*/, TypeFlagsNullable), typeSet)
-			result.alias = alias
+			result = c.getIntersectionTypeWithContent(objectFlags|c.getPropagatingFlagsOfTypes(types /*excludeKinds*/, TypeFlagsNullable), typeSet, alias)
 		}
 		c.intersectionTypes[key] = result
 	}
+	return result
+}
+
+// getIntersectionTypeWithContent returns the intersection type with the given
+// constituents, flags, and alias. Different intersection cache keys can reduce
+// to the same content, which should yield the same type.
+func (c *Checker) getIntersectionTypeWithContent(objectFlags ObjectFlags, typeSet []*Type, alias *TypeAlias) *Type {
+	var b keyBuilder
+	b.writeTypes(typeSet)
+	b.writeUint32(uint32(objectFlags))
+	b.writeAlias(alias)
+	key := b.hash()
+	if existing := c.intersectionContentTypes[key]; existing != nil {
+		return existing
+	}
+	result := c.newIntersectionType(objectFlags, typeSet)
+	result.alias = alias
+	c.intersectionContentTypes[key] = result
 	return result
 }
 
