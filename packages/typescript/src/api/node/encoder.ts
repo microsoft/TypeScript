@@ -388,18 +388,11 @@ export function uint8ArrayToBase64(data: Uint8Array): string {
         return bufferConstructor.from(data.buffer, data.byteOffset, data.byteLength).toString("base64");
     }
 
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    let result = "";
-    for (let i = 0; i < data.length; i += 3) {
-        const first = data[i];
-        const second = data[i + 1];
-        const third = data[i + 2];
-        result += alphabet[first >> 2];
-        result += alphabet[((first & 0x03) << 4) | ((second ?? 0) >> 4)];
-        result += second === undefined ? "=" : alphabet[((second & 0x0F) << 2) | ((third ?? 0) >> 6)];
-        result += third === undefined ? "=" : alphabet[third & 0x3F];
+    let binary = "";
+    for (let i = 0; i < data.length; i += 0x8000) {
+        binary += String.fromCharCode(...data.subarray(i, i + 0x8000));
     }
-    return result;
+    return btoa(binary);
 }
 
 export function sourceFileResponseToUint8Array(response: { readonly data: string; } | null | undefined): Uint8Array | undefined {
