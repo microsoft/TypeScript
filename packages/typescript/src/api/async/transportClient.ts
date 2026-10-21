@@ -35,10 +35,6 @@ interface PendingBinaryRequest extends PendingRequestBase {
 
 type PendingRequest = PendingTextRequest | PendingBinaryRequest;
 
-function isTextRequest(request: PendingRequest): request is PendingTextRequest {
-    return request.kind === "text";
-}
-
 export function createTransportClient(options: AsyncClientTransportOptions): TransportClient {
     if (options.fs !== undefined) {
         options.transport.setFileSystem?.(options.fs);
@@ -52,7 +48,6 @@ export class TransportClient {
     private readonly timing: TimingCollector | undefined;
     private readonly transport: AsyncTransport;
     private readonly maxResponseBytesPerPage: number | undefined;
-    private connected = false;
     private closed = false;
     private closing: Promise<void> | undefined;
     private nextBatch: boolean | "manual" = false;
@@ -66,12 +61,6 @@ export class TransportClient {
         if (collectTiming) {
             this.timing = new TimingCollector();
         }
-    }
-
-    connect(): Promise<void> {
-        if (this.closed) return Promise.reject(new Error("Client is closed"));
-        this.connected = true;
-        return Promise.resolve();
     }
 
     batchContext(): { [Symbol.dispose](): void; } {
@@ -97,10 +86,6 @@ export class TransportClient {
         params: APIMethodInfo[K]["params"],
     ): Promise<APIMethodInfo[K]["result"]> {
         if (this.closed) throw new Error("Client is closed");
-        if (!this.connected) {
-            await this.connect();
-        }
-        if (this.closed) throw new Error("Client is closed");
         if (method === "initialize") {
             return this.sendRequest(method, params);
         }
@@ -115,10 +100,6 @@ export class TransportClient {
         method: K,
         params: APIMethodInfo[K]["params"],
     ): Promise<Uint8Array | undefined> {
-        if (this.closed) throw new Error("Client is closed");
-        if (!this.connected) {
-            await this.connect();
-        }
         if (this.closed) throw new Error("Client is closed");
         return new Promise<Uint8Array | undefined>((resolve, reject) => {
             this.batchedRequests.push({
@@ -157,7 +138,7 @@ export class TransportClient {
             return disabledTimingInfo();
         }
         const local = this.timing.getInfo();
-        if (!this.connected) {
+        if (this.closed) {
             return local;
         }
         const response = await this.invokeTransport(() => this.transport.request("getServerTiming", ""));
@@ -167,7 +148,7 @@ export class TransportClient {
     async resetTimingInfo(): Promise<void> {
         if (!this.timing) return;
         this.timing.reset();
-        if (this.connected) {
+        if (!this.closed) {
             await this.invokeTransport(() => this.transport.request("resetServerTiming", ""));
         }
     }
@@ -190,7 +171,6 @@ export class TransportClient {
             reject(new Error("Client is closed"));
         }
         await this.transport.close();
-        this.connected = false;
     }
 
     private scheduleBatch(): void {
@@ -221,7 +201,7 @@ export class TransportClient {
                 return;
             }
 
-            if (requests.every(isTextRequest)) {
+            if (requests.every((request): request is PendingTextRequest => request.kind === "text")) {
                 const params: BatchRequestsParams = {
                     requests: requests.map(request => ({ method: request.method, params: request.params })),
                 };

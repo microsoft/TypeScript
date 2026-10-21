@@ -210,7 +210,6 @@ describe("async transport", () => {
             close() {},
         }, false);
 
-        await client.connect();
         const first = client.apiRequest("parseCommandLine", { commandLine: [] });
         const batch = client.batchContext();
         const second = client.apiRequest("parseCommandLine", { commandLine: [] });
@@ -245,7 +244,6 @@ describe("async transport", () => {
             close() {},
         }, false);
 
-        await client.connect();
         const batch = client.batchContext();
         const binary = client.apiRequestBinary("getSourceFile", {
             snapshot: 1,
@@ -282,7 +280,6 @@ describe("async transport", () => {
             close() {},
         }, false);
 
-        await client.connect();
         const request = client.apiRequest("parseCommandLine", { commandLine: [] });
         await Promise.resolve();
         await client.close();
@@ -333,7 +330,6 @@ describe("async transport", () => {
             close() {},
         }, true);
 
-        await client.connect();
         const timing = client.getTimingInfo();
         const reset = client.resetTimingInfo();
         await client.close();
@@ -342,7 +338,7 @@ describe("async transport", () => {
         assert.deepStrictEqual(methods, []);
     });
 
-    test("does not queue requests after closing during connect", async () => {
+    test("rejects queued requests when closed before they are sent", async () => {
         const client = new TransportClient({
             request() {
                 throw new Error("Unexpected request");
