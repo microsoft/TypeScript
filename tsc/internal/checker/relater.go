@@ -3616,8 +3616,8 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				nameType := r.c.getNameTypeFromMappedType(targetType)
 				constraintType := r.c.getConstraintTypeFromMappedType(targetType)
 				var targetKeys *Type
-				isFiltering := nameType != nil && r.c.isMappedTypeWithKeyofConstraintDeclaration(targetType)
-				if isFiltering {
+				isRemappedKeyof := nameType != nil && r.c.isMappedTypeWithKeyofConstraintDeclaration(targetType)
+				if isRemappedKeyof {
 					// we need to get the apparent mappings and union them with the generic mappings, since some properties may be
 					// missing from the `constraintType` which will otherwise be mapped in the object
 					mappedKeys := r.c.getApparentMappedTypeKeys(nameType, targetType)
@@ -3628,15 +3628,14 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				} else {
 					targetKeys = constraintType
 				}
-				if isFiltering && source.flags&TypeFlagsIntersection != 0 && r.someTypeRelatedToType(source, constraintType, false, intersectionState) == TernaryTrue {
-					// run the filter over `source` - some part of `source` is related to the constraint - if source's other elements end up filtering the same way the nameType does, the assignment can pass
-					// This effectively is a workaround for a lack of distributive conditional/distributive homomorphic mapped types relationship rules that uses execution of the distribution (even at higher order)
-					// to approximate a better result.
-					// See the homomorphic case in tsc\testdata\tests\cases\compiler\indexMappedTypeWithFilteredKeysWithNegation.ts
-					sourceInstantiatedTarget := r.c.instantiateType(nameType, newSimpleTypeMapper(r.c.getTypeParameterFromMappedType(targetType), source))
-					broadTargetKeys := r.c.getUnionType([]*Type{targetKeys, sourceInstantiatedTarget})
-					if r.isRelatedTo(source, broadTargetKeys, RecursionFlagsTarget, false) == TernaryTrue {
-						return TernaryTrue
+				if isRemappedKeyof && source.flags&TypeFlagsIntersection != 0 {
+					if filteredNameType := r.getOptionalSimplificationOfConditional(nameType); filteredNameType != nil && r.someTypeRelatedToType(source, constraintType, false, intersectionState) == TernaryTrue {
+						// Apply the filter only to a source already constrained to the mapped keys.
+						sourceInstantiatedTarget := r.c.instantiateType(filteredNameType, newSimpleTypeMapper(r.c.getTypeParameterFromMappedType(targetType), source))
+						broadTargetKeys := r.c.getUnionType([]*Type{targetKeys, sourceInstantiatedTarget})
+						if r.isRelatedTo(source, broadTargetKeys, RecursionFlagsTarget, false) == TernaryTrue {
+							return TernaryTrue
+						}
 					}
 				}
 				if r.isRelatedTo(source, targetKeys, RecursionFlagsTarget, reportErrors) == TernaryTrue {
@@ -4024,32 +4023,72 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 	return TernaryFalse
 }
 
+// TODO: Replace this heuristic with proper distributive conditional type relationship rules.
+// For a distributive A extends B ? never : Q<A> without infer parameters, rewrite to Q<A & not B>.
+// A definitely false check uses Q<A> unchanged; a definitely true check cannot use the rewrite.
+// Otherwise B must be independent of A, and Q<never> must be never. The conditional already distributes,
+// but we also probe whether Q<X | Y> agrees with Q<X> | Q<Y> before moving the union inside Q.
+// See Repeated in indexMappedTypeWithFilteredKeysWithNegationErrors.ts, where moving the union
+// inside `${A}-${A}` would lose the correlation between occurrences of A.
 func (r *Relater) getOptionalSimplificationOfConditional(target *Type) *Type {
 	if target.flags&TypeFlagsConditional == 0 {
 		return nil
 	}
-	// TODO: This is a kludge for not having proper rules for relating distributive conditional types.
-	// We rewrite `A extends B ? never : Q<A>` into `Q<A & not B>` - provided that substitution
-	// actually changes it. This is not *particularly* accurate, but enables the common case of relating a filtering mapped type to the equivalent filtering negated type.
-	// See the non-homomorphic case in tsc\testdata\tests\cases\compiler\indexMappedTypeWithFilteredKeysWithNegation.ts for an example.
-	root := target.AsConditionalType().root
-	if root.isDistributive && r.c.getTrueTypeFromConditionalType(target).flags&TypeFlagsNever != 0 {
-		f := r.c.getFalseTypeFromConditionalType(target)
-		remappedFalseType := r.c.instantiateType(
-			r.c.getTypeFromTypeNode(root.node.FalseType),
-			r.c.combineTypeMappers(
-				newSimpleTypeMapper(
-					getNonDistributedTypeParameter(root.checkType),
-					r.c.getIntersectionType([]*Type{root.checkType, r.c.getNegatedType(root.extendsType)}),
-				),
-				target.AsConditionalType().mapper,
-			),
-		)
-		if remappedFalseType != f {
-			return remappedFalseType
-		}
+	conditional := target.AsConditionalType()
+	root := conditional.root
+	if !root.isDistributive || len(root.inferTypeParameters) != 0 || r.c.getTrueTypeFromConditionalType(target).flags&TypeFlagsNever == 0 {
+		return nil
 	}
-	return nil
+	permissiveExtendsType := r.c.getPermissiveInstantiation(conditional.extendsType)
+	skipTrue := !someType(r.c.getPermissiveInstantiation(conditional.checkType), func(t *Type) bool {
+		return r.c.isTypeAssignableTo(t, permissiveExtendsType)
+	})
+	if skipTrue {
+		return r.c.getFalseTypeFromConditionalType(target)
+	}
+	if r.c.isTypeAssignableTo(r.c.getRestrictiveInstantiation(conditional.checkType), r.c.getRestrictiveInstantiation(conditional.extendsType)) {
+		return nil
+	}
+	checkType := getNonDistributedTypeParameter(root.checkType)
+	if r.c.isTypeParameterPossiblyReferenced(checkType, root.node.ExtendsType) {
+		return nil
+	}
+	falseType := r.c.getTypeFromTypeNode(root.node.FalseType)
+	if !r.canDistributeTypeInstantiation(falseType, checkType) {
+		return nil
+	}
+	return r.c.instantiateType(
+		falseType,
+		r.c.combineTypeMappers(
+			newSimpleTypeMapper(checkType, r.c.getIntersectionType([]*Type{root.checkType, r.c.getNegatedType(root.extendsType)})),
+			conditional.mapper,
+		),
+	)
+}
+
+func (r *Relater) canDistributeTypeInstantiation(t *Type, typeParameter *Type) bool {
+	key := DistributiveInstantiationKey{typeId: t.id, typeParameterId: typeParameter.id}
+	if result, ok := r.c.distributiveInstantiationCache[key]; ok {
+		return result
+	}
+	// A recursive probe is unproven until the outer comparison completes.
+	r.c.distributiveInstantiationCache[key] = false
+	// Filtering can remove the entire check type, so the false branch must also preserve never.
+	if r.c.instantiateType(t, newSimpleTypeMapper(typeParameter, r.c.neverType)).flags&TypeFlagsNever == 0 {
+		return false
+	}
+	left := r.c.markerSuperType
+	right := r.c.markerOtherType
+	instantiate := func(argument *Type) *Type {
+		return r.c.getSimplifiedType(r.c.instantiateType(t, newSimpleTypeMapper(typeParameter, argument)), false /*writing*/)
+	}
+	// Require execution over unrelated union members to agree with distributing first.
+	// Use the existing identity comparison rather than introducing conditional relationship rules.
+	instantiatedUnion := instantiate(r.c.getUnionType([]*Type{left, right}))
+	unionOfInstantiations := r.c.getUnionType([]*Type{instantiate(left), instantiate(right)})
+	result := r.c.isTypeIdenticalTo(instantiatedUnion, unionOfInstantiations)
+	r.c.distributiveInstantiationCache[key] = result
+	return result
 }
 
 func (r *Relater) typeArgumentsRelatedTo(sources []*Type, targets []*Type, variances []VarianceFlags, reportErrors bool, intersectionState IntersectionState) Ternary {

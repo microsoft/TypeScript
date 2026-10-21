@@ -1,0 +1,148 @@
+indexMappedTypeWithFilteredKeysWithNegationErrors.ts(5,5): error TS2322: Type '() => never' is not assignable to type 'FilteredFunction<T>'.
+indexMappedTypeWithFilteredKeysWithNegationErrors.ts(14,5): error TS2322: Type '[T & not false & not true, T & not false & not true]' is not assignable to type 'FilteredPair<T>'.
+indexMappedTypeWithFilteredKeysWithNegationErrors.ts(24,5): error TS2322: Type 'T & not Omitted<T>' is not assignable to type 'DependentFilter<T>'.
+indexMappedTypeWithFilteredKeysWithNegationErrors.ts(33,5): error TS2322: Type 'T' is not assignable to type 'Filter<T, U>'.
+indexMappedTypeWithFilteredKeysWithNegationErrors.ts(42,5): error TS2322: Type 'keyof T & not "c"' is not assignable to type 'keyof FilteredKeys<T>'.
+  Type 'keyof T & not "c"' is not assignable to type 'K extends "b" ? never : K'.
+indexMappedTypeWithFilteredKeysWithNegationErrors.ts(47,5): error TS2322: Type 'string & not "b"' is not assignable to type 'keyof FilteredKeys<T>'.
+  Type 'string & not "b"' is not assignable to type 'K extends "b" ? never : K'.
+indexMappedTypeWithFilteredKeysWithNegationErrors.ts(58,5): error TS2322: Type 'keyof T & not "c"' is not assignable to type 'keyof RemappedKeys<T>'.
+  Type 'keyof T & not "c"' is not assignable to type '"a" | "b" extends K ? K : never'.
+indexMappedTypeWithFilteredKeysWithNegationErrors.ts(67,5): error TS2322: Type 'keyof T & not Omitted<keyof T>' is not assignable to type 'keyof DependentKeys<T>'.
+  Type 'keyof T & not Omitted<keyof T>' is not assignable to type 'K extends Omitted<K> ? never : K'.
+indexMappedTypeWithFilteredKeysWithNegationErrors.ts(74,5): error TS2322: Type '`${T & not "skip"}-${T & not "skip"}`' is not assignable to type 'Repeated<T>'.
+  Type '`${string}-${string}`' is not assignable to type 'Repeated<T>'.
+indexMappedTypeWithFilteredKeysWithNegationErrors.ts(83,5): error TS2322: Type 'T & not string & { value: T & not string; }' is not assignable to type 'Correlated<T>'.
+indexMappedTypeWithFilteredKeysWithNegationErrors.ts(88,5): error TS2322: Type '() => string & { value: T; }' is not assignable to type 'never'.
+indexMappedTypeWithFilteredKeysWithNegationErrors.ts(93,5): error TS2322: Type '() => string | [T]' is not assignable to type '() => [T]'.
+  Type 'string | [T]' is not assignable to type '[T]'.
+    Type 'string' is not assignable to type '[T]'.
+
+
+==== indexMappedTypeWithFilteredKeysWithNegationErrors.ts (12 errors) ====
+    type FilteredFunction<T> = T extends string ? never : () => T;
+    
+    function makeFunction<T>(): FilteredFunction<T> {
+        // When T is string, FilteredFunction<T> is never, but this still returns a function.
+        return () => { throw new Error(); };
+        ~~~~~~
+!!! error TS2322: Type '() => never' is not assignable to type 'FilteredFunction<T>'.
+    }
+    
+    const impossibleFunction: never = makeFunction<string>();
+    
+    type FilteredPair<T> = T extends boolean ? never : [T, T];
+    
+    function makePair<T>(value: [T & not boolean, T & not boolean]): FilteredPair<T> {
+        // The tuple elements can come from different union members, unlike the distributed FilteredPair<T>.
+        return value;
+        ~~~~~~
+!!! error TS2322: Type '[T & not false & not true, T & not false & not true]' is not assignable to type 'FilteredPair<T>'.
+    }
+    
+    const homogeneousPair: [string, string] | [number, number] = makePair<string | number>(["a", 1]);
+    
+    type Omitted<T> = "a" extends T ? never : "b";
+    type DependentFilter<T> = T extends Omitted<T> ? never : T;
+    
+    function dependentFilter<T>(value: T & not Omitted<T>): DependentFilter<T> {
+        // For T = "a" | "b", Omitted<T> is never, so value can be "b", but DependentFilter<T> is "a".
+        return value;
+        ~~~~~~
+!!! error TS2322: Type 'T & not Omitted<T>' is not assignable to type 'DependentFilter<T>'.
+    }
+    
+    const onlyA: "a" = dependentFilter<"a" | "b">("b");
+    
+    type Filter<T, U> = T extends U ? never : T;
+    
+    function unfiltered<T, U>(value: T): Filter<T, U> {
+        // value can still belong to U, whose members are excluded from Filter<T, U>.
+        return value;
+        ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'Filter<T, U>'.
+    }
+    
+    type FilteredKeys<T> = {
+        [K in keyof T as K extends "b" ? never : K]: T[K]
+    };
+    
+    function excludedKey<T>(value: keyof T & not "c"): keyof FilteredKeys<T> {
+        // Excluding "c" does not prevent value from being the filtered-out key "b".
+        return value;
+        ~~~~~~
+!!! error TS2322: Type 'keyof T & not "c"' is not assignable to type 'keyof FilteredKeys<T>'.
+!!! error TS2322:   Type 'keyof T & not "c"' is not assignable to type 'K extends "b" ? never : K'.
+    }
+    
+    function unrelatedKey<T>(value: string & not "b"): keyof FilteredKeys<T> {
+        // value is not constrained to keyof T and may name a property T does not have.
+        return value;
+        ~~~~~~
+!!! error TS2322: Type 'string & not "b"' is not assignable to type 'keyof FilteredKeys<T>'.
+!!! error TS2322:   Type 'string & not "b"' is not assignable to type 'K extends "b" ? never : K'.
+    }
+    
+    type RemappedKeys<T> = {
+        [K in keyof T as ("a" | "b") extends K ? K : never]: T[K]
+    };
+    
+    function remappedKey<T extends { a: unknown; b: unknown }>(
+        value: keyof T & not "c"
+    ): keyof RemappedKeys<T> {
+        // For T with just "a" and "b", neither key accepts their union, so no keys survive.
+        return value;
+        ~~~~~~
+!!! error TS2322: Type 'keyof T & not "c"' is not assignable to type 'keyof RemappedKeys<T>'.
+!!! error TS2322:   Type 'keyof T & not "c"' is not assignable to type '"a" | "b" extends K ? K : never'.
+    }
+    
+    type DependentKeys<T> = {
+        [K in keyof T as K extends Omitted<K> ? never : K]: T[K]
+    };
+    
+    function dependentKey<T>(value: keyof T & not Omitted<keyof T>): keyof DependentKeys<T> {
+        // For T = { a: number; b: number }, value can be "b", but only "a" survives the per-key filter.
+        return value;
+        ~~~~~~
+!!! error TS2322: Type 'keyof T & not Omitted<keyof T>' is not assignable to type 'keyof DependentKeys<T>'.
+!!! error TS2322:   Type 'keyof T & not Omitted<keyof T>' is not assignable to type 'K extends Omitted<K> ? never : K'.
+    }
+    
+    type Repeated<T extends string> = T extends "skip" ? never : `${T}-${T}`;
+    
+    function repeated<T extends string>(value: `${T & not "skip"}-${T & not "skip"}`): Repeated<T> {
+        // value can mix different union members in its two T positions, unlike Repeated<T>.
+        return value;
+        ~~~~~~
+!!! error TS2322: Type '`${T & not "skip"}-${T & not "skip"}`' is not assignable to type 'Repeated<T>'.
+!!! error TS2322:   Type '`${string}-${string}`' is not assignable to type 'Repeated<T>'.
+    }
+    
+    const same: "a-a" | "b-b" = repeated<"a" | "b">("a-b");
+    
+    type Correlated<T> = T extends string ? never : T & { value: T };
+    
+    function correlated<T>(value: T & not string & { value: T & not string }): Correlated<T> {
+        // The outer T and the value property's T can come from different union members, unlike Correlated<T>.
+        return value;
+        ~~~~~~
+!!! error TS2322: Type 'T & not string & { value: T & not string; }' is not assignable to type 'Correlated<T>'.
+    }
+    
+    function trueFunction<T>(value: () => (string & { value: T })): FilteredFunction<string & { value: T }> {
+        // The check type always extends string, so the result is never, not a function.
+        return value;
+        ~~~~~~
+!!! error TS2322: Type '() => string & { value: T; }' is not assignable to type 'never'.
+    }
+    
+    function unionFunction<T>(value: () => ([T] | string)): FilteredFunction<[T] | string> {
+        // The string union member is filtered out, so the returned function must return [T], not string.
+        return value;
+        ~~~~~~
+!!! error TS2322: Type '() => string | [T]' is not assignable to type '() => [T]'.
+!!! error TS2322:   Type 'string | [T]' is not assignable to type '[T]'.
+!!! error TS2322:     Type 'string' is not assignable to type '[T]'.
+    }
+    

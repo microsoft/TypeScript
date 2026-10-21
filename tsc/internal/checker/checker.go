@@ -152,6 +152,11 @@ type CachedTypeKey struct {
 	typeId TypeId
 }
 
+type DistributiveInstantiationKey struct {
+	typeId          TypeId
+	typeParameterId TypeId
+}
+
 // NarrowedTypeKey
 
 type NarrowedTypeKey struct {
@@ -651,6 +656,7 @@ type Checker struct {
 	thisExpandoLocations                        map[*ast.Symbol]*ast.Node
 	subtypeReductionCache                       map[CacheHashKey][]*Type
 	cachedTypes                                 map[CachedTypeKey]*Type
+	distributiveInstantiationCache              map[DistributiveInstantiationKey]bool
 	cachedSignatures                            map[CachedSignatureKey]*Signature
 	undefinedProperties                         map[*ast.Symbol]*ast.Symbol
 	narrowedTypes                               map[NarrowedTypeKey]*Type
@@ -990,6 +996,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.thisExpandoLocations = make(map[*ast.Symbol]*ast.Node)
 	c.subtypeReductionCache = make(map[CacheHashKey][]*Type)
 	c.cachedTypes = make(map[CachedTypeKey]*Type)
+	c.distributiveInstantiationCache = make(map[DistributiveInstantiationKey]bool)
 	c.cachedSignatures = make(map[CachedSignatureKey]*Signature)
 	c.undefinedProperties = make(map[*ast.Symbol]*ast.Symbol)
 	c.narrowedTypes = make(map[NarrowedTypeKey]*Type)
