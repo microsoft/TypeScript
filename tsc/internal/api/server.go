@@ -120,5 +120,12 @@ func (s *StdioServer) Run(ctx context.Context) error {
 		callbackFS.SetConnection(ctx, conn)
 	}
 
-	return conn.Run(ctx)
+	return serverRunError(ctx, conn.Run(ctx))
+}
+
+func serverRunError(ctx context.Context, err error) error {
+	if ctx.Err() != nil {
+		return nil
+	}
+	return err
 }
