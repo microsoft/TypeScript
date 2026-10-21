@@ -79,7 +79,8 @@ export function wasmPathToUriText(path: string): string | undefined {
         if (segment === undefined) return undefined;
         uriPath += i === 0 ? segment : `/${segment}`;
     }
-    if (authority === nulAuthority) return `${scheme}:${uriPath}`;
+    // The root path "/" is a single empty segment.
+    if (authority === nulAuthority) return `${scheme}:${uriPath || (segments.length ? "/" : "")}`;
     const decodedAuthority = decodeSegment(authority);
     return decodedAuthority === undefined ? undefined : `${scheme}://${decodedAuthority}/${uriPath}`;
 }
