@@ -745,7 +745,7 @@ export const generateAPI = task({
 const vendorJsonrpcDir = "packages/typescript/vendor/vscode-jsonrpc";
 const vendorJsonrpcSrc = "node_modules/vscode-jsonrpc";
 // Files copied verbatim from the installed vscode-jsonrpc package into the
-// vendored copy. Only the runtime files needed by the `#vscode-jsonrpc/node`
+// vendored copy. Only the runtime files needed by the API's vscode-jsonrpc
 // import (lib + typings + package.json) plus license/readme are vendored.
 const vendorJsonrpcFiles = ["package.json", "README.md", "License.txt", "lib", "typings"];
 

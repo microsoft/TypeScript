@@ -171,8 +171,8 @@ test("metadata enum artifacts are current and use the shared alias ordering", ()
     for (const def of enumDefs.filter(def => def.metadata)) {
         const { code } = generateEnum(def);
         const name = def.name[0].toLowerCase() + def.name.slice(1);
-        const actual = fs.readFileSync(path.join(repoRoot, def.outDir, `${name}.enum.ts`), "utf8");
-        assert.equal(actual.replaceAll("\r\n", "\n"), code, def.name);
+        const actual = fs.readFileSync(path.join(repoRoot, def.outDir, `${name}.d.ts`), "utf8");
+        assert.equal(actual.replaceAll("\r\n", "\n"), code.replace("export enum ", "export declare enum "), def.name);
     }
     const def = enumDefs.find(def => def.name === "SyntaxKind")!;
     const { members } = generateEnum({
