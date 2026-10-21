@@ -164,6 +164,36 @@ class A {
     \u0069n
 }
 
+//// [g.ts]
+declare var x: any, y: any;
+x
+\u0069n
+
+//// [h.ts]
+declare var x: any, y: any;
+x
+\u{69}nstanceof y
+
+//// [i.ts]
+declare var x: any, y: any;
+if (x
+    \u0069n y) {}
+
+//// [j.js]
+var x, y;
+x
+\u0069n
+
+//// [k.js]
+var x, y;
+x
+\u{69}nstanceof y
+
+//// [l.js]
+var x, y;
+if (x
+    \u0069n y) {}
+
 
 //// [file1.js]
 var \u0061wait = 12; // ok
@@ -292,3 +322,34 @@ class A {
     b = #a;
     \u0069n;
 }
+//// [g.js]
+"use strict";
+x;
+    in
+;
+//// [h.js]
+"use strict";
+x;
+    instanceof y;
+//// [i.js]
+"use strict";
+if (x)
+        in y;
+{ }
+//// [j.js]
+"use strict";
+var x, y;
+x;
+    in
+;
+//// [k.js]
+"use strict";
+var x, y;
+x;
+    instanceof y;
+//// [l.js]
+"use strict";
+var x, y;
+if (x)
+        in y;
+{ }

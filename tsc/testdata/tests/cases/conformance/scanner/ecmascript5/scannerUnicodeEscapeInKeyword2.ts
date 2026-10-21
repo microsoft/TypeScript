@@ -166,3 +166,33 @@ class A {
     b = #a
     \u0069n
 }
+
+// @filename: g.ts
+declare var x: any, y: any;
+x
+\u0069n
+
+// @filename: h.ts
+declare var x: any, y: any;
+x
+\u{69}nstanceof y
+
+// @filename: i.ts
+declare var x: any, y: any;
+if (x
+    \u0069n y) {}
+
+// @filename: j.js
+var x, y;
+x
+\u0069n
+
+// @filename: k.js
+var x, y;
+x
+\u{69}nstanceof y
+
+// @filename: l.js
+var x, y;
+if (x
+    \u0069n y) {}

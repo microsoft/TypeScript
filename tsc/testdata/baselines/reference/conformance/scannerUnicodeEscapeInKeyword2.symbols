@@ -348,3 +348,67 @@ class A {
 >\u0069n : Symbol(A[\u0069n], Decl(f.js, 4, 10))
 }
 
+=== g.ts ===
+declare var x: any, y: any;
+>x : Symbol(x, Decl(g.ts, 0, 11), Decl(h.ts, 0, 11), Decl(i.ts, 0, 11), Decl(j.js, 0, 3), Decl(k.js, 0, 3) ... and 1 more)
+>y : Symbol(y, Decl(g.ts, 0, 19), Decl(h.ts, 0, 19), Decl(i.ts, 0, 19), Decl(j.js, 0, 6), Decl(k.js, 0, 6) ... and 1 more)
+
+x
+>x : Symbol(x, Decl(g.ts, 0, 11), Decl(h.ts, 0, 11), Decl(i.ts, 0, 11), Decl(j.js, 0, 3), Decl(k.js, 0, 3) ... and 1 more)
+
+\u0069n
+
+=== h.ts ===
+declare var x: any, y: any;
+>x : Symbol(x, Decl(g.ts, 0, 11), Decl(h.ts, 0, 11), Decl(i.ts, 0, 11), Decl(j.js, 0, 3), Decl(k.js, 0, 3) ... and 1 more)
+>y : Symbol(y, Decl(g.ts, 0, 19), Decl(h.ts, 0, 19), Decl(i.ts, 0, 19), Decl(j.js, 0, 6), Decl(k.js, 0, 6) ... and 1 more)
+
+x
+>x : Symbol(x, Decl(g.ts, 0, 11), Decl(h.ts, 0, 11), Decl(i.ts, 0, 11), Decl(j.js, 0, 3), Decl(k.js, 0, 3) ... and 1 more)
+
+\u{69}nstanceof y
+>y : Symbol(y, Decl(g.ts, 0, 19), Decl(h.ts, 0, 19), Decl(i.ts, 0, 19), Decl(j.js, 0, 6), Decl(k.js, 0, 6) ... and 1 more)
+
+=== i.ts ===
+declare var x: any, y: any;
+>x : Symbol(x, Decl(g.ts, 0, 11), Decl(h.ts, 0, 11), Decl(i.ts, 0, 11), Decl(j.js, 0, 3), Decl(k.js, 0, 3) ... and 1 more)
+>y : Symbol(y, Decl(g.ts, 0, 19), Decl(h.ts, 0, 19), Decl(i.ts, 0, 19), Decl(j.js, 0, 6), Decl(k.js, 0, 6) ... and 1 more)
+
+if (x
+>x : Symbol(x, Decl(g.ts, 0, 11), Decl(h.ts, 0, 11), Decl(i.ts, 0, 11), Decl(j.js, 0, 3), Decl(k.js, 0, 3) ... and 1 more)
+
+    \u0069n y) {}
+>y : Symbol(y, Decl(g.ts, 0, 19), Decl(h.ts, 0, 19), Decl(i.ts, 0, 19), Decl(j.js, 0, 6), Decl(k.js, 0, 6) ... and 1 more)
+
+=== j.js ===
+var x, y;
+>x : Symbol(x, Decl(g.ts, 0, 11), Decl(h.ts, 0, 11), Decl(i.ts, 0, 11), Decl(j.js, 0, 3), Decl(k.js, 0, 3) ... and 1 more)
+>y : Symbol(y, Decl(g.ts, 0, 19), Decl(h.ts, 0, 19), Decl(i.ts, 0, 19), Decl(j.js, 0, 6), Decl(k.js, 0, 6) ... and 1 more)
+
+x
+>x : Symbol(x, Decl(g.ts, 0, 11), Decl(h.ts, 0, 11), Decl(i.ts, 0, 11), Decl(j.js, 0, 3), Decl(k.js, 0, 3) ... and 1 more)
+
+\u0069n
+
+=== k.js ===
+var x, y;
+>x : Symbol(x, Decl(g.ts, 0, 11), Decl(h.ts, 0, 11), Decl(i.ts, 0, 11), Decl(j.js, 0, 3), Decl(k.js, 0, 3) ... and 1 more)
+>y : Symbol(y, Decl(g.ts, 0, 19), Decl(h.ts, 0, 19), Decl(i.ts, 0, 19), Decl(j.js, 0, 6), Decl(k.js, 0, 6) ... and 1 more)
+
+x
+>x : Symbol(x, Decl(g.ts, 0, 11), Decl(h.ts, 0, 11), Decl(i.ts, 0, 11), Decl(j.js, 0, 3), Decl(k.js, 0, 3) ... and 1 more)
+
+\u{69}nstanceof y
+>y : Symbol(y, Decl(g.ts, 0, 19), Decl(h.ts, 0, 19), Decl(i.ts, 0, 19), Decl(j.js, 0, 6), Decl(k.js, 0, 6) ... and 1 more)
+
+=== l.js ===
+var x, y;
+>x : Symbol(x, Decl(g.ts, 0, 11), Decl(h.ts, 0, 11), Decl(i.ts, 0, 11), Decl(j.js, 0, 3), Decl(k.js, 0, 3) ... and 1 more)
+>y : Symbol(y, Decl(g.ts, 0, 19), Decl(h.ts, 0, 19), Decl(i.ts, 0, 19), Decl(j.js, 0, 6), Decl(k.js, 0, 6) ... and 1 more)
+
+if (x
+>x : Symbol(x, Decl(g.ts, 0, 11), Decl(h.ts, 0, 11), Decl(i.ts, 0, 11), Decl(j.js, 0, 3), Decl(k.js, 0, 3) ... and 1 more)
+
+    \u0069n y) {}
+>y : Symbol(y, Decl(g.ts, 0, 19), Decl(h.ts, 0, 19), Decl(i.ts, 0, 19), Decl(j.js, 0, 6), Decl(k.js, 0, 6) ... and 1 more)
+

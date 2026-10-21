@@ -427,3 +427,83 @@ class A {
 >\u0069n : any
 }
 
+=== g.ts ===
+declare var x: any, y: any;
+>x : any
+>y : any
+
+x
+>x : any
+
+\u0069n
+>\u0069n : boolean
+> : any
+
+> : any
+
+=== h.ts ===
+declare var x: any, y: any;
+>x : any
+>y : any
+
+x
+>x : any
+
+\u{69}nstanceof y
+>\u{69}nstanceof y : boolean
+> : any
+>y : any
+
+=== i.ts ===
+declare var x: any, y: any;
+>x : any
+>y : any
+
+if (x
+>x : any
+
+    \u0069n y) {}
+>\u0069n y : boolean
+> : any
+>y : any
+
+=== j.js ===
+var x, y;
+>x : any
+>y : any
+
+x
+>x : any
+
+\u0069n
+>\u0069n : boolean
+> : any
+
+> : any
+
+=== k.js ===
+var x, y;
+>x : any
+>y : any
+
+x
+>x : any
+
+\u{69}nstanceof y
+>\u{69}nstanceof y : boolean
+> : any
+>y : any
+
+=== l.js ===
+var x, y;
+>x : any
+>y : any
+
+if (x
+>x : any
+
+    \u0069n y) {}
+>\u0069n y : boolean
+> : any
+>y : any
+

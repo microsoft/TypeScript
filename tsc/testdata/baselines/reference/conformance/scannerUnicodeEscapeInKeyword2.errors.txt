@@ -11,6 +11,16 @@ file2.ts(1,1): error TS1260: Keywords cannot contain escape characters.
 file2.ts(5,5): error TS1260: Keywords cannot contain escape characters.
 file2.ts(10,5): error TS1260: Keywords cannot contain escape characters.
 file2.ts(15,1): error TS1260: Keywords cannot contain escape characters.
+g.ts(3,1): error TS1109: Expression expected.
+g.ts(3,8): error TS1109: Expression expected.
+h.ts(3,1): error TS1109: Expression expected.
+i.ts(3,5): error TS1005: ')' expected.
+i.ts(3,14): error TS1005: ';' expected.
+j.js(3,1): error TS1109: Expression expected.
+j.js(3,8): error TS1109: Expression expected.
+k.js(3,1): error TS1109: Expression expected.
+l.js(3,5): error TS1005: ')' expected.
+l.js(3,14): error TS1005: ';' expected.
 
 
 ==== file1.ts (3 errors) ====
@@ -202,4 +212,56 @@ file2.ts(15,1): error TS1260: Keywords cannot contain escape characters.
 !!! error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
         \u0069n
     }
+    
+==== g.ts (2 errors) ====
+    declare var x: any, y: any;
+    x
+    \u0069n
+    ~~~~~~~
+!!! error TS1109: Expression expected.
+           
+!!! error TS1109: Expression expected.
+    
+==== h.ts (1 errors) ====
+    declare var x: any, y: any;
+    x
+    \u{69}nstanceof y
+    ~~~~~~~~~~~~~~~
+!!! error TS1109: Expression expected.
+    
+==== i.ts (2 errors) ====
+    declare var x: any, y: any;
+    if (x
+        \u0069n y) {}
+        ~~~~~~~
+!!! error TS1005: ')' expected.
+!!! related TS1007 i.ts:2:4: The parser expected to find a ')' to match the '(' token here.
+                 ~
+!!! error TS1005: ';' expected.
+    
+==== j.js (2 errors) ====
+    var x, y;
+    x
+    \u0069n
+    ~~~~~~~
+!!! error TS1109: Expression expected.
+           
+!!! error TS1109: Expression expected.
+    
+==== k.js (1 errors) ====
+    var x, y;
+    x
+    \u{69}nstanceof y
+    ~~~~~~~~~~~~~~~
+!!! error TS1109: Expression expected.
+    
+==== l.js (2 errors) ====
+    var x, y;
+    if (x
+        \u0069n y) {}
+        ~~~~~~~
+!!! error TS1005: ')' expected.
+!!! related TS1007 l.js:2:4: The parser expected to find a ')' to match the '(' token here.
+                 ~
+!!! error TS1005: ';' expected.
     
