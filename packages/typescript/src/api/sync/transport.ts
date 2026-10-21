@@ -1,3 +1,5 @@
+import type { FileSystemCallbacks } from "../fs.ts";
+
 /**
  * A synchronous request transport connected to a TypeScript API session.
  *
@@ -18,4 +20,3 @@ export interface SyncTransport {
     setFileSystem?(fs: FileSystemCallbacks | undefined): void;
     close(): void;
 }
-import type { FileSystemCallbacks } from "../fs.ts";

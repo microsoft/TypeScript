@@ -1,3 +1,5 @@
+import type { FileSystemCallbacks } from "../fs.ts";
+
 /**
  * An asynchronous request transport connected to a TypeScript API session.
  */
@@ -23,4 +25,3 @@ export interface AsyncTransport {
     setFileSystem?(fs: FileSystemCallbacks | undefined): void;
     close(): void | PromiseLike<void>;
 }
-import type { FileSystemCallbacks } from "../fs.ts";
