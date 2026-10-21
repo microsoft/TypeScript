@@ -18,6 +18,7 @@ import {
     InternalSymbolName,
     isCallExpression,
     isClassDeclaration,
+    isDecorator,
     isExpressionStatement,
     isFunctionDeclaration,
     isIdentifier,
@@ -4766,6 +4767,34 @@ describe("Checker - getBaseTypeOfLiteralType", { concurrency }, () => {
 });
 
 describe("Checker - getContextualType", { concurrency }, () => {
+    test("signatures of a decorator contextual type", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true } }),
+            "/src/main.ts": "class C { @((target, context) => target) get value(): number { return 1; } }",
+        });
+
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+
+        let expression: Expression | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isDecorator(node)) {
+                expression = node.expression;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(expression);
+
+        const type = project.checker.getContextualType(expression);
+        assert.ok(type);
+        const signatures = project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.equal(signatures.length, 1);
+        assert.deepEqual((signatures[0].getParameters()).map(parameter => parameter.name), ["target", "context"]);
+        assert.equal(signatures[0].declaration, undefined);
+    });
+
     test("contextual type from function parameter", () => {
         using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
