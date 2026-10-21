@@ -1002,6 +1002,7 @@ export const testBenchmarks = task({
 
 async function runTestTools() {
     await gotestsumTool.run([...gotestsumArgs("tools"), "./..."], { env: goTestEnv, cwd: path.join(__dirname, "tools") });
+    await run("node", ["--test", "./tools/scripts/*.test.mjs"]);
 }
 
 async function runTestAPI() {
