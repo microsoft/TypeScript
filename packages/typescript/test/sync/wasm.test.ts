@@ -121,7 +121,8 @@ describe("API over WebAssembly", () => {
             for (const project of projects) {
                 const projectDir = path.join(root, project);
                 await mkdir(path.join(projectDir, "node_modules", "pkg"), { recursive: true });
-                await writeFile(path.join(projectDir, "tsconfig.json"), `{ "compilerOptions": { "noEmit": true, "noLib": true, "types": [] } }`);
+                // Node's WASI cannot list directories on Windows.
+                await writeFile(path.join(projectDir, "tsconfig.json"), `{ "compilerOptions": { "noEmit": true, "noLib": true, "types": [] }, "files": ["index.ts"] }`);
                 await writeFile(path.join(projectDir, "index.ts"), `import { x } from "pkg";`);
                 await writeFile(path.join(projectDir, "node_modules", "pkg", "package.json"), `{ "name": "pkg", "types": "index.d.ts" }`);
                 await writeFile(path.join(projectDir, "node_modules", "pkg", "index.d.ts"), `export declare const x: number;`);
