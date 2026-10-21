@@ -1378,6 +1378,7 @@ export const validate = task({
             await runValidation("test:api:wasm", runTestAPIWasm);
         }
         if (options.all) {
+            await runValidation("check:herebyfile", runCheckHerebyfile);
             await runValidation("test:tools", runTestTools);
             await runValidation("test:options", async () => {
                 await run("node", ["--test", "./tools/scripts/tsc/options.test.ts"]);
@@ -1419,29 +1420,32 @@ export const checkFormat = task({
 export const checkHerebyfile = task({
     name: "check:herebyfile",
     description: "Type-checks Herebyfile.mjs.",
-    run: () =>
-        run("node", [
-            "./node_modules/typescript/bin/tsc",
-            "--noEmit",
-            "--allowJs",
-            "--allowImportingTsExtensions",
-            "--checkJs",
-            "--target",
-            "es2022",
-            "--lib",
-            "es2024,esnext.array,esnext.collection,esnext.iterator",
-            "--module",
-            "nodenext",
-            "--moduleResolution",
-            "nodenext",
-            "--types",
-            "node",
-            "--strict",
-            "--esModuleInterop",
-            "--skipLibCheck",
-            "Herebyfile.mjs",
-        ]),
+    run: runCheckHerebyfile,
 });
+
+async function runCheckHerebyfile() {
+    await run("node", [
+        "./node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--allowJs",
+        "--allowImportingTsExtensions",
+        "--checkJs",
+        "--target",
+        "es2022",
+        "--lib",
+        "es2024,esnext.array,esnext.collection,esnext.iterator",
+        "--module",
+        "nodenext",
+        "--moduleResolution",
+        "nodenext",
+        "--types",
+        "node",
+        "--strict",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "Herebyfile.mjs",
+    ]);
+}
 
 export const checkVsceVersion = task({
     name: "check:vsce-version",
