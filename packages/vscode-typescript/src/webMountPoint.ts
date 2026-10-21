@@ -46,6 +46,23 @@ export function uriToWasmMountPoint(uri: WebFileSystemUri): string {
 }
 
 /**
+ * Drops mounts that are the same as, or nested below, another mount on the
+ * same backing file system, since the WASI host cannot mount a folder over an
+ * existing mount.
+ */
+export function outermostMountPoints<T extends { readonly mountPoint: string; readonly uri: { readonly scheme: string; }; }>(mounts: readonly T[]): T[] {
+    const withSlash = (path: string) => path.endsWith("/") ? path : `${path}/`;
+    const sorted = [...mounts].sort((a, b) => a.mountPoint.length - b.mountPoint.length);
+    const kept: T[] = [];
+    for (const mount of sorted) {
+        if (!kept.some(outer => outer.uri.scheme === mount.uri.scheme && withSlash(mount.mountPoint).startsWith(withSlash(outer.mountPoint)))) {
+            kept.push(mount);
+        }
+    }
+    return kept;
+}
+
+/**
  * Maps a file name below a virtual workspace mount back to the URI the server
  * derived it from, or returns undefined for names no document URI produces.
  */

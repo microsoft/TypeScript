@@ -4,6 +4,7 @@ import {
     test,
 } from "node:test";
 import {
+    outermostMountPoints,
     uriSegmentToWasmName,
     uriToWasmMountPoint,
     wasmPathToUriText,
@@ -55,6 +56,16 @@ describe("web WASI mount points", () => {
         assert.strictEqual(wasmPathToUriText("/^/~ts-uri~/memfs/ts-nul-authority/~ts-uri-escape~~/a\\b"), undefined);
         assert.strictEqual(wasmPathToUriText("/^/~ts-uri~/memfs/ts-nul-authority/~ts-uri-escape~~/~ts-uri-escape~6100713d31~.ts"), undefined);
         assert.strictEqual(wasmPathToUriText("/work/a.ts"), undefined);
+    });
+
+    test("drops mounts nested below or equal to another mount", () => {
+        const mounts = (...paths: string[]) => outermostMountPoints(paths.map(mountPoint => ({ mountPoint, uri: { scheme: "ts-wasi" } }))).map(mount => mount.mountPoint);
+        assert.deepStrictEqual(mounts("/^/~ts-uri~/memfs/host/project/src", "/^/~ts-uri~/memfs/host/project"), ["/^/~ts-uri~/memfs/host/project"]);
+        assert.deepStrictEqual(mounts("/^/~ts-uri~/memfs/host/project", "/^/~ts-uri~/memfs/host/project"), ["/^/~ts-uri~/memfs/host/project"]);
+        assert.deepStrictEqual(mounts("/work/a", "/work/ab"), ["/work/a", "/work/ab"]);
+        assert.deepStrictEqual(mounts("/work", "/"), ["/"]);
+        const mixed = outermostMountPoints([{ mountPoint: "/", uri: { scheme: "file" } }, { mountPoint: "/^/~ts-uri~/memfs/host", uri: { scheme: "ts-wasi" } }]);
+        assert.strictEqual(mixed.length, 2);
     });
 
     test("names directory entries as the server names them in document URIs", () => {

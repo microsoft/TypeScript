@@ -31,6 +31,7 @@ import {
     shouldStartTsgo,
 } from "./settings";
 import {
+    outermostMountPoints,
     uriSegmentToWasmName,
     uriToWasmMountPoint,
     wasmPathToUriText,
@@ -230,14 +231,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             );
         }
         const module = wasm.compile(vscode.Uri.joinPath(modulePackageUri, "tsc.wasm"));
-        const mountPoints = (vscode.workspace.workspaceFolders ?? []).map(folder => {
+        const mountPoints = outermostMountPoints((vscode.workspace.workspaceFolders ?? []).map(folder => {
             const mountPoint = uriToWasmMountPoint(folder.uri);
             return {
                 kind: "vscodeFileSystem" as const,
                 uri: folder.uri.scheme === "file" ? folder.uri.with({ query: "", fragment: "" }) : vscode.Uri.from({ scheme: wasmFileSystemScheme, path: mountPoint }),
                 mountPoint,
             };
-        });
+        }));
         // Blocking stdin reads stall the Go scheduler, so the server cannot answer requests
         // while waiting for input. `@vscode/wasm-wasi` does not declare this option yet.
         const stdin = { kind: "pipeIn" as const, nonBlocking: true };
