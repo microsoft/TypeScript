@@ -107,107 +107,77 @@ func getRequestBuffer(size uint32) uint32 {
 }
 
 //go:wasmexport handle_request
-func handleRequest(methodLen uint32, payloadLen uint32) (status uint32) {
+func handleRequest(methodLen uint32, payloadLen uint32) uint32 {
+	return guarded("handling request", methodLen, payloadLen, func() uint32 {
+		method := string(requestBuffer[:methodLen])
+		payload := append([]byte(nil), requestBuffer[methodLen:methodLen+payloadLen]...)
+		response, err := reactor.HandleRequest(method, payload)
+		if err != nil {
+			return fail(err.Error())
+		}
+		setResponse(response.Data)
+		return 0
+	})
+}
+
+//go:wasmexport set_file
+func setFile(pathLen uint32, contentLen uint32) uint32 {
+	return guarded("setting file", pathLen, contentLen, func() uint32 {
+		path := string(requestBuffer[:pathLen])
+		content := string(requestBuffer[pathLen : pathLen+contentLen])
+		if err := reactor.SetFile(path, content); err != nil {
+			return fail(err.Error())
+		}
+		setResponse(nil)
+		return 0
+	})
+}
+
+//go:wasmexport read_file
+func readFile(pathLen uint32) uint32 {
+	return guarded("reading file", pathLen, 0, func() uint32 {
+		content, ok := reactor.ReadFile(string(requestBuffer[:pathLen]))
+		if !ok {
+			setResponse(nil)
+			return 2
+		}
+		setResponse([]byte(content))
+		return 0
+	})
+}
+
+//go:wasmexport remove_file
+func removeFile(pathLen uint32) uint32 {
+	return guarded("removing file", pathLen, 0, func() uint32 {
+		if err := reactor.RemoveFile(string(requestBuffer[:pathLen])); err != nil {
+			return fail(err.Error())
+		}
+		setResponse(nil)
+		return 0
+	})
+}
+
+// guarded runs an export that operates on the session and the first+second
+// bytes of the request buffer, rejecting re-entrant calls and reporting panics
+// as failures.
+func guarded(operation string, first uint32, second uint32, run func() uint32) (status uint32) {
 	if inCall {
-		return fail("re-entrant handle_request: a request is already in flight")
+		return fail(operation + ": re-entrant call while a request is in flight")
 	}
 	if reactor == nil {
 		return fail("no session: create_session must be called first")
 	}
-	if !withinRequest(methodLen, payloadLen) {
-		return fail("invalid request lengths: method + payload exceeds the request buffer")
+	if !withinRequest(first, second) {
+		return fail(operation + ": lengths exceed the request buffer")
 	}
 	inCall = true
 	defer func() {
 		inCall = false
-	}()
-	defer func() {
 		if recovered := recover(); recovered != nil {
-			status = fail(fmt.Sprintf("panic: %v\n%s", recovered, debug.Stack()))
+			status = fail(fmt.Sprintf("panic %s: %v\n%s", operation, recovered, debug.Stack()))
 		}
 	}()
-
-	method := string(requestBuffer[:methodLen])
-	payload := append([]byte(nil), requestBuffer[methodLen:methodLen+payloadLen]...)
-	response, err := reactor.HandleRequest(method, payload)
-	if err != nil {
-		return fail(err.Error())
-	}
-	setResponse(response.Data)
-	return 0
-}
-
-//go:wasmexport set_file
-func setFile(pathLen uint32, contentLen uint32) (status uint32) {
-	if inCall {
-		return fail("re-entrant set_file: a request is already in flight")
-	}
-	if reactor == nil {
-		return fail("no session: create_session must be called first")
-	}
-	if !withinRequest(pathLen, contentLen) {
-		return fail("invalid set_file lengths: path + content exceeds the request buffer")
-	}
-	defer func() {
-		if recovered := recover(); recovered != nil {
-			status = fail(fmt.Sprintf("panic setting file: %v\n%s", recovered, debug.Stack()))
-		}
-	}()
-	path := string(requestBuffer[:pathLen])
-	content := string(requestBuffer[pathLen : pathLen+contentLen])
-	if err := reactor.SetFile(path, content); err != nil {
-		return fail(err.Error())
-	}
-	setResponse(nil)
-	return 0
-}
-
-//go:wasmexport read_file
-func readFile(pathLen uint32) (status uint32) {
-	if inCall {
-		return fail("re-entrant read_file: a request is already in flight")
-	}
-	if reactor == nil {
-		return fail("no session: create_session must be called first")
-	}
-	if !withinRequest(pathLen, 0) {
-		return fail("invalid read_file length: path exceeds the request buffer")
-	}
-	defer func() {
-		if recovered := recover(); recovered != nil {
-			status = fail(fmt.Sprintf("panic reading file: %v\n%s", recovered, debug.Stack()))
-		}
-	}()
-	content, ok := reactor.ReadFile(string(requestBuffer[:pathLen]))
-	if !ok {
-		setResponse(nil)
-		return 2
-	}
-	setResponse([]byte(content))
-	return 0
-}
-
-//go:wasmexport remove_file
-func removeFile(pathLen uint32) (status uint32) {
-	if inCall {
-		return fail("re-entrant remove_file: a request is already in flight")
-	}
-	if reactor == nil {
-		return fail("no session: create_session must be called first")
-	}
-	if !withinRequest(pathLen, 0) {
-		return fail("invalid remove_file length: path exceeds the request buffer")
-	}
-	defer func() {
-		if recovered := recover(); recovered != nil {
-			status = fail(fmt.Sprintf("panic removing file: %v\n%s", recovered, debug.Stack()))
-		}
-	}()
-	if err := reactor.RemoveFile(string(requestBuffer[:pathLen])); err != nil {
-		return fail(err.Error())
-	}
-	setResponse(nil)
-	return 0
+	return run()
 }
 
 //go:wasmexport response_ptr
@@ -245,13 +215,6 @@ func bytesPointer(bytes []byte) uint32 {
 		return 0
 	}
 	return uint32(uintptr(unsafe.Pointer(&bytes[0])))
-}
-
-func bytePointer(bytes []byte) *byte {
-	if len(bytes) == 0 {
-		return nil
-	}
-	return &bytes[0]
 }
 
 type hostCallbackConn struct{}
