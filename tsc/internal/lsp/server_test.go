@@ -23,6 +23,20 @@ type shutdownTestWriter struct{}
 
 func (shutdownTestWriter) Write(*lsproto.Message) error { return nil }
 
+type blockingExitTestReader struct {
+	release chan struct{}
+	read    bool
+}
+
+func (r *blockingExitTestReader) Read() (*lsproto.Message, error) {
+	if !r.read {
+		r.read = true
+		return (&lsproto.RequestMessage{Method: lsproto.MethodExit}).Message(), nil
+	}
+	<-r.release
+	return nil, io.EOF
+}
+
 type cancelingTestWriter struct {
 	writer   Writer
 	cancel   context.CancelFunc
@@ -70,6 +84,64 @@ func TestGetContentMapperWorkspaceRoots(t *testing.T) {
 		})
 		assert.DeepEqual(t, roots, []tspath.RootedDirectoryPath{"/home/root"})
 	})
+}
+
+func TestDispatchLoopReturnsEOFOnExit(t *testing.T) {
+	t.Parallel()
+
+	server := NewServer(&ServerOptions{
+		In:  shutdownTestReader{},
+		Out: shutdownTestWriter{},
+		Err: io.Discard,
+		Cwd: "/test",
+	})
+	server.session = &project.Session{}
+	server.shutdownRequested.Store(true)
+	if err := server.requestQueue.Put(t.Context(), &lsproto.RequestMessage{Method: lsproto.MethodExit}); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := server.dispatchLoop(t.Context()); !errors.Is(err, io.EOF) {
+		t.Fatalf("dispatchLoop() error = %v, want %v", err, io.EOF)
+	}
+}
+
+func TestDispatchLoopReturnsErrorWhenExitBeforeShutdown(t *testing.T) {
+	t.Parallel()
+
+	server := NewServer(&ServerOptions{
+		In:  shutdownTestReader{},
+		Out: shutdownTestWriter{},
+		Err: io.Discard,
+		Cwd: "/test",
+	})
+	if err := server.requestQueue.Put(t.Context(), &lsproto.RequestMessage{Method: lsproto.MethodExit}); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := server.dispatchLoop(t.Context()); !errors.Is(err, errExitBeforeShutdown) {
+		t.Fatalf("dispatchLoop() error = %v, want %v", err, errExitBeforeShutdown)
+	}
+}
+
+func TestRunExitsSuccessfullyAfterShutdown(t *testing.T) {
+	t.Parallel()
+
+	reader := &blockingExitTestReader{release: make(chan struct{})}
+	server := NewServer(&ServerOptions{
+		In:  reader,
+		Out: shutdownTestWriter{},
+		Err: io.Discard,
+		Cwd: "/test",
+	})
+	server.session = &project.Session{}
+	server.shutdownRequested.Store(true)
+
+	err := server.Run(t.Context())
+	close(reader.release)
+	if err != nil {
+		t.Fatalf("Run() error = %v, want nil", err)
+	}
 }
 
 // TestServerShutdownNoDeadlock verifies that operations after shutdown
