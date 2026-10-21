@@ -47,27 +47,27 @@ async function test() {
 
     const fromPartial = await import("partial.resource", { with: partial });
 >fromPartial : Symbol(fromPartial, Decl(index.ts, 7, 9))
->"partial.resource" : Symbol("*.resource", Decl(types.d.ts, 2, 1))
+>"partial.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
 >with : Symbol(with, Decl(index.ts, 7, 58))
 >partial : Symbol(partial, Decl(index.ts, 0, 13))
 
     const partialKind: "plain" = fromPartial.kind;
 >partialKind : Symbol(partialKind, Decl(index.ts, 8, 9))
->fromPartial.kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+>fromPartial.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
 >fromPartial : Symbol(fromPartial, Decl(index.ts, 7, 9))
->kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
 
     const fromReadonlyPartial = await import("readonlyPartial.resource", { with: readonlyPartial });
 >fromReadonlyPartial : Symbol(fromReadonlyPartial, Decl(index.ts, 10, 9))
->"readonlyPartial.resource" : Symbol("*.resource", Decl(types.d.ts, 2, 1))
+>"readonlyPartial.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
 >with : Symbol(with, Decl(index.ts, 10, 74))
 >readonlyPartial : Symbol(readonlyPartial, Decl(index.ts, 1, 13))
 
     const readonlyPartialKind: "plain" = fromReadonlyPartial.kind;
 >readonlyPartialKind : Symbol(readonlyPartialKind, Decl(index.ts, 11, 9))
->fromReadonlyPartial.kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+>fromReadonlyPartial.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
 >fromReadonlyPartial : Symbol(fromReadonlyPartial, Decl(index.ts, 10, 9))
->kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
 
     const fromRequired = await import("required.resource", { with: required });
 >fromRequired : Symbol(fromRequired, Decl(index.ts, 13, 9))

@@ -5376,7 +5376,7 @@ func (c *Checker) isImportAttributesTypeAssignableTo(source *Type, target *Type)
 	}
 	for _, targetProp := range c.getPropertiesOfType(target) {
 		sourceProp := c.getPropertyOfTypeEx(source, targetProp.Name(), true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/)
-		if sourceProp == nil || sourceProp.Flags()&ast.SymbolFlagsOptional != 0 || !c.isTypeAssignableTo(c.getTypeOfSymbol(sourceProp), c.getTypeOfSymbol(targetProp)) {
+		if sourceProp == nil || sourceProp.Flags()&ast.SymbolFlagsOptional != 0 || sourceProp.CheckFlags()&ast.CheckFlagsPartial != 0 || !c.isTypeAssignableTo(c.getTypeOfSymbol(sourceProp), c.getTypeOfSymbol(targetProp)) {
 			return false
 		}
 	}

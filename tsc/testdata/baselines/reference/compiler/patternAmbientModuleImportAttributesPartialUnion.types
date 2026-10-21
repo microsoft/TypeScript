@@ -46,9 +46,9 @@ async function test() {
 >test : () => Promise<void>
 
     const fromPartial = await import("partial.resource", { with: partial });
->fromPartial : { kind: "css"; default: typeof import("*.resource", { with: { type: "css" } }); }
->await import("partial.resource", { with: partial }) : { kind: "css"; default: typeof import("*.resource", { with: { type: "css" } }); }
->import("partial.resource", { with: partial }) : Promise<{ kind: "css"; default: typeof import("*.resource", { with: { type: "css" } }); }>
+>fromPartial : { kind: "plain"; default: typeof import("*.resource"); }
+>await import("partial.resource", { with: partial }) : { kind: "plain"; default: typeof import("*.resource"); }
+>import("partial.resource", { with: partial }) : Promise<{ kind: "plain"; default: typeof import("*.resource"); }>
 >"partial.resource" : "partial.resource"
 >{ with: partial } : { with: { type: "css"; } | { [key: string]: "css"; }; }
 >with : { type: "css"; } | { [key: string]: "css"; }
@@ -56,14 +56,14 @@ async function test() {
 
     const partialKind: "plain" = fromPartial.kind;
 >partialKind : "plain"
->fromPartial.kind : "css"
->fromPartial : { kind: "css"; default: typeof import("*.resource", { with: { type: "css" } }); }
->kind : "css"
+>fromPartial.kind : "plain"
+>fromPartial : { kind: "plain"; default: typeof import("*.resource"); }
+>kind : "plain"
 
     const fromReadonlyPartial = await import("readonlyPartial.resource", { with: readonlyPartial });
->fromReadonlyPartial : { kind: "css"; default: typeof import("*.resource", { with: { type: "css" } }); }
->await import("readonlyPartial.resource", { with: readonlyPartial }) : { kind: "css"; default: typeof import("*.resource", { with: { type: "css" } }); }
->import("readonlyPartial.resource", { with: readonlyPartial }) : Promise<{ kind: "css"; default: typeof import("*.resource", { with: { type: "css" } }); }>
+>fromReadonlyPartial : { kind: "plain"; default: typeof import("*.resource"); }
+>await import("readonlyPartial.resource", { with: readonlyPartial }) : { kind: "plain"; default: typeof import("*.resource"); }
+>import("readonlyPartial.resource", { with: readonlyPartial }) : Promise<{ kind: "plain"; default: typeof import("*.resource"); }>
 >"readonlyPartial.resource" : "readonlyPartial.resource"
 >{ with: readonlyPartial } : { with: { type: "css"; } | { readonly [key: string]: "css"; }; }
 >with : { type: "css"; } | { readonly [key: string]: "css"; }
@@ -71,9 +71,9 @@ async function test() {
 
     const readonlyPartialKind: "plain" = fromReadonlyPartial.kind;
 >readonlyPartialKind : "plain"
->fromReadonlyPartial.kind : "css"
->fromReadonlyPartial : { kind: "css"; default: typeof import("*.resource", { with: { type: "css" } }); }
->kind : "css"
+>fromReadonlyPartial.kind : "plain"
+>fromReadonlyPartial : { kind: "plain"; default: typeof import("*.resource"); }
+>kind : "plain"
 
     const fromRequired = await import("required.resource", { with: required });
 >fromRequired : { kind: "css"; default: typeof import("*.resource", { with: { type: "css" } }); }
