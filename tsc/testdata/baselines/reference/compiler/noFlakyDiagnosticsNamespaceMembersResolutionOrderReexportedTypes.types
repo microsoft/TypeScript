@@ -89,9 +89,9 @@ const M = /** @type {any} */ (null);
 
 const o = { v: { ...M } };
 >o : { v: {}; }
->{ v: { ...M } } : { v: { pa: { pb: {}; mb: 1; }; ma: 1; }; }
->v : { pa: { pb: {}; mb: 1; }; ma: 1; }
->{ ...M } : { pa: { pb: {}; mb: 1; }; ma: 1; }
+>{ v: { ...M } } : { v: {}; }
+>v : {}
+>{ ...M } : {}
 >M : typeof import("./ma")
 
 module.exports = o;

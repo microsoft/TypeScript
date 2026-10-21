@@ -671,6 +671,9 @@ type Checker struct {
 	tupleTypes                                  map[CacheHashKey]*Type
 	unionTypes                                  map[CacheHashKey]*Type
 	objectLiteralTypes                          map[CacheHashKey]*Type
+	spreadTypes                                 map[CacheHashKey]*Type
+	spreadContentTypes                          map[CacheHashKey]*Type
+	spreadSymbols                               map[spreadSymbolKey]*ast.Symbol
 	unionOfUnionTypes                           map[UnionOfUnionKey]*Type
 	intersectionTypes                           map[CacheHashKey]*Type
 	propertiesTypes                             map[PropertiesTypesKey]*Type
@@ -1009,6 +1012,9 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.tupleTypes = make(map[CacheHashKey]*Type)
 	c.unionTypes = make(map[CacheHashKey]*Type)
 	c.objectLiteralTypes = make(map[CacheHashKey]*Type)
+	c.spreadTypes = make(map[CacheHashKey]*Type)
+	c.spreadContentTypes = make(map[CacheHashKey]*Type)
+	c.spreadSymbols = make(map[spreadSymbolKey]*ast.Symbol)
 	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
 	c.intersectionTypes = make(map[CacheHashKey]*Type)
 	c.propertiesTypes = make(map[PropertiesTypesKey]*Type)
@@ -13820,6 +13826,25 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 		}
 		return c.getIntersectionType([]*Type{left, right})
 	}
+	var b keyBuilder
+	b.writeType(left)
+	b.writeType(right)
+	if symbol != nil {
+		b.writeByte(1)
+		b.writeSymbol(symbol)
+	} else {
+		b.writeByte(0)
+	}
+	b.writeUint32(uint32(objectFlags))
+	if readonly {
+		b.writeByte(1)
+	} else {
+		b.writeByte(0)
+	}
+	key := b.hash()
+	if existing := c.spreadTypes[key]; existing != nil {
+		return existing
+	}
 	members := ast.NewSymbolTable()
 	var skippedPrivateMembers collections.Set[string]
 	var indexInfos []*IndexInfo
@@ -13844,6 +13869,11 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 			rightProp := members.Get(leftProp.Name())
 			rightType := c.getTypeOfSymbol(rightProp)
 			if rightProp.Flags()&ast.SymbolFlagsOptional != 0 {
+				key := spreadSymbolKey{left: leftProp, right: rightProp}
+				if existing := c.spreadSymbols[key]; existing != nil {
+					members.Set(leftProp.Name(), existing)
+					continue
+				}
 				declarations := core.Concatenate(leftProp.Declarations(), rightProp.Declarations())
 				flags := ast.SymbolFlagsProperty | (leftProp.Flags() & ast.SymbolFlagsOptional)
 				result := c.newSymbol(flags, leftProp.Name())
@@ -13864,6 +13894,7 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 				c.spreadLinks.Get(result).rightSpread = rightProp
 				result.SetDeclarations(declarations)
 				links.setNameType(c, c.valueSymbolLinks.Get(leftProp).getNameType())
+				c.spreadSymbols[key] = result
 				members.Set(leftProp.Name(), result)
 			}
 		} else {
@@ -13873,8 +13904,18 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 	spreadIndexInfos := core.SameMap(indexInfos, func(info *IndexInfo) *IndexInfo {
 		return c.getIndexInfoWithReadonly(info, readonly)
 	})
+	flags := ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral | ObjectFlagsContainsSpread | objectFlags
+	// Different inputs can produce the same members, e.g. when the right side
+	// overrides every property of the left side.
+	contentKey := c.getSpreadTypeContentKey(symbol, flags, members, spreadIndexInfos)
+	if existing := c.spreadContentTypes[contentKey]; existing != nil {
+		c.spreadTypes[key] = existing
+		return existing
+	}
 	spread := c.newAnonymousType(symbol, members, nil, nil, spreadIndexInfos)
-	spread.objectFlags |= ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral | ObjectFlagsContainsSpread | objectFlags
+	spread.objectFlags |= flags
+	c.spreadContentTypes[contentKey] = spread
+	c.spreadTypes[key] = spread
 	return spread
 }
 
@@ -13971,6 +14012,10 @@ func (c *Checker) getSpreadSymbol(prop *ast.Symbol, readonly bool) *ast.Symbol {
 	if !isSetonlyAccessor && readonly == c.isReadonlySymbol(prop) {
 		return prop
 	}
+	key := spreadSymbolKey{right: prop, readonly: readonly}
+	if existing := c.spreadSymbols[key]; existing != nil {
+		return existing
+	}
 	flags := ast.SymbolFlagsProperty | (prop.Flags() & ast.SymbolFlagsOptional)
 	result := c.newSymbolEx(flags, prop.Name(), prop.CheckFlags()&ast.CheckFlagsLate|core.IfElse(readonly, ast.CheckFlagsReadonly, 0))
 	links := c.valueSymbolLinks.Get(result)
@@ -13982,7 +14027,57 @@ func (c *Checker) getSpreadSymbol(prop *ast.Symbol, readonly bool) *ast.Symbol {
 	result.SetDeclarations(prop.Declarations())
 	links.setNameType(c, c.valueSymbolLinks.Get(prop).getNameType())
 	c.mappedSymbolLinks.Get(result).syntheticOrigin = prop
+	c.spreadSymbols[key] = result
 	return result
+}
+
+// spreadSymbolKey identifies a property symbol synthesized by a spread: either
+// a copy of right with the given readonly-ness, or the merge of an optional
+// right property into left.
+type spreadSymbolKey struct {
+	left     *ast.Symbol
+	right    *ast.Symbol
+	readonly bool
+}
+
+// getSpreadTypeContentKey identifies the content of a spread type. Members are
+// either input properties or synthesized symbols that are themselves memoized,
+// so symbol identity determines member content.
+func (c *Checker) getSpreadTypeContentKey(symbol *ast.Symbol, flags ObjectFlags, members ast.SymbolTable, indexInfos []*IndexInfo) CacheHashKey {
+	var b keyBuilder
+	if symbol != nil {
+		b.writeByte(1)
+		b.writeSymbol(symbol)
+	} else {
+		b.writeByte(0)
+	}
+	b.writeUint32(uint32(flags))
+	names := slices.Sorted(members.Keys())
+	b.writeInt(len(names))
+	for _, name := range names {
+		b.writeSymbol(members.Get(name))
+	}
+	b.writeInt(len(indexInfos))
+	for _, info := range indexInfos {
+		b.writeType(info.keyType)
+		b.writeType(info.valueType)
+		if info.isReadonly {
+			b.writeByte(1)
+		} else {
+			b.writeByte(0)
+		}
+		if info.declaration != nil {
+			b.writeByte(1)
+			b.writeNode(info.declaration)
+		} else {
+			b.writeByte(0)
+		}
+		b.writeInt(len(info.components))
+		for _, n := range info.components {
+			b.writeNode(n)
+		}
+	}
+	return b.hash()
 }
 
 func (c *Checker) isEmptyObjectTypeOrSpreadsIntoEmptyObject(t *Type) bool {

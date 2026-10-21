@@ -38,7 +38,7 @@ var o5: { a: number } | { b: string } | { a: number, b: string };
 
 var o5 =  { ...union, ...union };
 >o5 : { a: number; } | { b: string; } | { a: number; b: string; }
->{ ...union, ...union } : { a: number; } | { b: string; } | { a: number; b: string; } | { a: number; b: string; }
+>{ ...union, ...union } : { a: number; } | { b: string; } | { a: number; b: string; }
 >union : { a: number; } | { b: string; }
 >union : { a: number; } | { b: string; }
 
