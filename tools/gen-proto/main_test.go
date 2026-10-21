@@ -62,7 +62,7 @@ func TestGenerate(t *testing.T) {
 		`export interface SourceFileDescriptor {
     fileName: RootedFilePath;
     path: PathKey;`,
-		`import { SymbolOwnerKind } from "#enums/symbolOwnerKind";`,
+		`import { SymbolOwnerKind } from "../../enums/symbolOwnerKind.js";`,
 		`kind: SymbolOwnerKind;`,
 		`/** InitializeResponse is returned by the initialize method. */
 export interface InitializeResponse`,

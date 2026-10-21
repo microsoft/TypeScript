@@ -1,5 +1,5 @@
-import getExePath from "#getExePath";
 import { dirname } from "node:path";
+import getExePath from "../../lib/getExePath.js";
 import type {
     RootedDirectoryPath,
     RootedFilePath,
