@@ -2200,6 +2200,8 @@ func isPropertyImmediatelyReferencedWithinDeclaration(declaration *ast.Node, usa
 func (c *Checker) getTypeOnlyAliasDeclaration(symbol *ast.Symbol) *ast.Node {
 	if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		c.resolveAlias(symbol)
+		// Alias resolution may fail before recording the declaration's type-only marker.
+		c.markSymbolOfAliasDeclarationIfTypeOnly(core.FirstOrNil(symbol.Declarations()), nil)
 		return c.aliasSymbolLinks.Get(symbol).typeOnlyDeclaration
 	}
 	return nil
@@ -2209,12 +2211,10 @@ func (c *Checker) getTypeOnlyAliasDeclaration(symbol *ast.Symbol) *ast.Node {
 // the symbol for the given meaning
 func (c *Checker) getTypeOnlyAliasDeclarationEx(symbol *ast.Symbol, meaning ast.SymbolFlags) *ast.Node {
 	for symbol.Flags()&ast.SymbolFlagsAlias != 0 && symbol.Flags()&meaning == 0 {
-		resolved := c.resolveAlias(symbol)
-		links := c.aliasSymbolLinks.Get(symbol)
-		if links.typeOnlyDeclaration != nil {
-			return links.typeOnlyDeclaration
+		if declaration := c.getTypeOnlyAliasDeclaration(symbol); declaration != nil {
+			return declaration
 		}
-		symbol = resolved
+		symbol = c.resolveAlias(symbol)
 	}
 	return nil
 }
