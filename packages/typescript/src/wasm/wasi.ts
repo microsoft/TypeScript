@@ -207,26 +207,17 @@ function createWasiHost(options: InstantiateWasmOptions): {
         if ((fd !== 1 && fd !== 2) || closedDescriptors.has(fd)) return errnoBadFileDescriptor;
         const memory = getMemory();
         const view = new DataView(memory.buffer);
-        const chunks: Uint8Array[] = [];
+        let decoder = decoders.get(fd);
+        if (!decoder) decoders.set(fd, decoder = new TextDecoder());
+        let text = "";
         let length = 0;
         for (let i = 0; i < iovsLength; i++) {
             const iovPointer = iovsPointer + i * 8;
-            const chunkPointer = view.getUint32(iovPointer, true);
             const chunkLength = view.getUint32(iovPointer + 4, true);
-            chunks.push(new Uint8Array(memory.buffer, chunkPointer, chunkLength));
+            text += decoder.decode(new Uint8Array(memory.buffer, view.getUint32(iovPointer, true), chunkLength), { stream: true });
             length += chunkLength;
         }
-        const bytes = new Uint8Array(length);
-        let offset = 0;
-        for (const chunk of chunks) {
-            bytes.set(chunk, offset);
-            offset += chunk.length;
-        }
         view.setUint32(writtenPointer, length, true);
-        if (length === 0) return errnoSuccess;
-        const decoder = decoders.get(fd) ?? new TextDecoder();
-        decoders.set(fd, decoder);
-        const text = decoder.decode(bytes, { stream: true });
         if (text) {
             (fd === 1 ? stdout : stderr)(text);
         }
@@ -305,16 +296,20 @@ function createWasiHost(options: InstantiateWasmOptions): {
             return errnoSuccess;
         }
         catch (error) {
-            const errorBytes = encoder.encode(error instanceof Error ? error.message : String(error));
-            const errorLength = Math.min(errorBytes.length, errorCapacity);
-            const errorMemory = getMemory();
-            const errorView = new DataView(errorMemory.buffer);
-            new Uint8Array(errorMemory.buffer, errorPointer, errorLength).set(errorBytes.subarray(0, errorLength));
+            const errorView = new DataView(getMemory().buffer);
             errorView.setUint32(bufferPointer + 8, 0, true);
-            errorView.setUint32(bufferPointer + 12, errorLength, true);
+            errorView.setUint32(bufferPointer + 12, writeHostError(error, errorPointer, errorCapacity), true);
             errorView.setUint32(writtenPointer, 0, true);
             return errnoIo;
         }
+    }
+
+    /** Writes as much of the error message as fits and returns its length. */
+    function writeHostError(error: unknown, pointer: number, capacity: number): number {
+        const bytes = encoder.encode(error instanceof Error ? error.message : String(error));
+        const length = Math.min(bytes.length, capacity);
+        new Uint8Array(getMemory().buffer, pointer, length).set(bytes.subarray(0, length));
+        return length;
     }
 
     function randomGet(bufferPointer: number, bufferLength: number): number {
@@ -355,12 +350,8 @@ function createWasiHost(options: InstantiateWasmOptions): {
             return errnoSuccess;
         }
         catch (error) {
-            const errorBytes = encoder.encode(error instanceof Error ? error.message : String(error));
-            const errorLength = Math.min(errorBytes.length, errorCapacity);
-            const errorMemory = getMemory();
-            const errorView = new DataView(errorMemory.buffer);
-            new Uint8Array(errorMemory.buffer, errorPointer, errorLength).set(errorBytes.subarray(0, errorLength));
-            errorView.setUint32(bufferPointer + 8, errorLength, true);
+            const errorView = new DataView(getMemory().buffer);
+            errorView.setUint32(bufferPointer + 8, writeHostError(error, errorPointer, errorCapacity), true);
             errorView.setUint32(writtenPointer, 0, true);
             return errnoIo;
         }
