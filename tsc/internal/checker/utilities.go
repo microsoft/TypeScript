@@ -488,6 +488,10 @@ func CompareTypes(t1, t2 *Type) int {
 					return c
 				}
 			}
+			// Array literal types follow the references they were cloned from.
+			if l1, l2 := t1.objectFlags&ObjectFlagsArrayLiteral != 0, t2.objectFlags&ObjectFlagsArrayLiteral != 0; l1 != l2 {
+				return core.IfElse(l1, 1, -1)
+			}
 		} else if t1.objectFlags&ObjectFlagsReference != 0 {
 			return -1
 		} else if t2.objectFlags&ObjectFlagsReference != 0 {
