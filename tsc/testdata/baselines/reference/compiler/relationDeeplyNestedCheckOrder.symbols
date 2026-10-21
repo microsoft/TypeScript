@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/relationDeeplyNestedCheckOrder.ts] ////
+
+=== relationDeeplyNestedCheckOrder.ts ===
+// Relating 'B<{ a: string }>' to 'B<{ a: "lit" }>' eventually relates 'string'
+// to '"lit"' through 'm0.m1.a.m0.m1'. Relating the 'A' instantiations first
+// reaches the same comparison only after giving up on deeply nested types,
+// which must not make relating the 'B' instantiations succeed afterwards.
+
+type A<T> = { m0: (x: B<T>) => void; m1: { [K in keyof T]: B<T[K]> } };
+>A : Symbol(A, Decl(relationDeeplyNestedCheckOrder.ts, 0, 0))
+>T : Symbol(T, Decl(relationDeeplyNestedCheckOrder.ts, 5, 7))
+>m0 : Symbol(m0, Decl(relationDeeplyNestedCheckOrder.ts, 5, 13))
+>x : Symbol(x, Decl(relationDeeplyNestedCheckOrder.ts, 5, 19))
+>B : Symbol(B, Decl(relationDeeplyNestedCheckOrder.ts, 5, 71))
+>T : Symbol(T, Decl(relationDeeplyNestedCheckOrder.ts, 5, 7))
+>m1 : Symbol(m1, Decl(relationDeeplyNestedCheckOrder.ts, 5, 36))
+>K : Symbol(K, Decl(relationDeeplyNestedCheckOrder.ts, 5, 44))
+>T : Symbol(T, Decl(relationDeeplyNestedCheckOrder.ts, 5, 7))
+>B : Symbol(B, Decl(relationDeeplyNestedCheckOrder.ts, 5, 71))
+>T : Symbol(T, Decl(relationDeeplyNestedCheckOrder.ts, 5, 7))
+>K : Symbol(K, Decl(relationDeeplyNestedCheckOrder.ts, 5, 44))
+
+type B<T> = { m0: A<T> };
+>B : Symbol(B, Decl(relationDeeplyNestedCheckOrder.ts, 5, 71))
+>T : Symbol(T, Decl(relationDeeplyNestedCheckOrder.ts, 6, 7))
+>m0 : Symbol(m0, Decl(relationDeeplyNestedCheckOrder.ts, 6, 13))
+>A : Symbol(A, Decl(relationDeeplyNestedCheckOrder.ts, 0, 0))
+>T : Symbol(T, Decl(relationDeeplyNestedCheckOrder.ts, 6, 7))
+
+declare let a1: A<{ a: string }>, a2: A<{ a: "lit" }>;
+>a1 : Symbol(a1, Decl(relationDeeplyNestedCheckOrder.ts, 8, 11))
+>A : Symbol(A, Decl(relationDeeplyNestedCheckOrder.ts, 0, 0))
+>a : Symbol(a, Decl(relationDeeplyNestedCheckOrder.ts, 8, 19))
+>a2 : Symbol(a2, Decl(relationDeeplyNestedCheckOrder.ts, 8, 33))
+>A : Symbol(A, Decl(relationDeeplyNestedCheckOrder.ts, 0, 0))
+>a : Symbol(a, Decl(relationDeeplyNestedCheckOrder.ts, 8, 41))
+
+declare let b1: B<{ a: string }>, b2: B<{ a: "lit" }>;
+>b1 : Symbol(b1, Decl(relationDeeplyNestedCheckOrder.ts, 9, 11))
+>B : Symbol(B, Decl(relationDeeplyNestedCheckOrder.ts, 5, 71))
+>a : Symbol(a, Decl(relationDeeplyNestedCheckOrder.ts, 9, 19))
+>b2 : Symbol(b2, Decl(relationDeeplyNestedCheckOrder.ts, 9, 33))
+>B : Symbol(B, Decl(relationDeeplyNestedCheckOrder.ts, 5, 71))
+>a : Symbol(a, Decl(relationDeeplyNestedCheckOrder.ts, 9, 41))
+
+a2 = a1;
+>a2 : Symbol(a2, Decl(relationDeeplyNestedCheckOrder.ts, 8, 33))
+>a1 : Symbol(a1, Decl(relationDeeplyNestedCheckOrder.ts, 8, 11))
+
+b2 = b1; // Error
+>b2 : Symbol(b2, Decl(relationDeeplyNestedCheckOrder.ts, 9, 33))
+>b1 : Symbol(b1, Decl(relationDeeplyNestedCheckOrder.ts, 9, 11))
+
