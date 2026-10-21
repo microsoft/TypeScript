@@ -2409,7 +2409,7 @@ func (p *Parser) tryParseImportClause(identifier *ast.Node, pos int, phaseModifi
 		p.parseExpected(ast.KindFromKeyword)
 		return importClause
 	}
-	if phaseModifier == ast.KindSourceKeyword {
+	if phaseModifier == ast.KindDeferKeyword || phaseModifier == ast.KindSourceKeyword {
 		return p.finishNode(p.factory.NewImportClause(phaseModifier, nil /*name*/, nil /*namedBindings*/), pos)
 	}
 	return nil

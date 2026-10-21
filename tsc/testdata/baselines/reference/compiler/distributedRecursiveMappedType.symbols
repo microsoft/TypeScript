@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/distributedRecursiveMappedType.ts] ////
+
+=== distributedRecursiveMappedType.ts ===
+type Exact<Shape, Input extends Shape> = Shape extends Shape
+>Exact : Symbol(Exact, Decl(distributedRecursiveMappedType.ts, 0, 0))
+>Shape : Symbol(Shape, Decl(distributedRecursiveMappedType.ts, 0, 11))
+>Input : Symbol(Input, Decl(distributedRecursiveMappedType.ts, 0, 17))
+>Shape : Symbol(Shape, Decl(distributedRecursiveMappedType.ts, 0, 11))
+>Shape : Symbol(Shape, Decl(distributedRecursiveMappedType.ts, 0, 11))
+>Shape : Symbol(Shape, Decl(distributedRecursiveMappedType.ts, 0, 11))
+
+    ? { [Key in keyof Shape]: Exact<Shape[Key], Input[Key]> }
+>Key : Symbol(Key, Decl(distributedRecursiveMappedType.ts, 1, 9))
+>Shape : Symbol(Shape, Decl(distributedRecursiveMappedType.ts, 0, 11))
+>Exact : Symbol(Exact, Decl(distributedRecursiveMappedType.ts, 0, 0))
+>Shape : Symbol(Shape, Decl(distributedRecursiveMappedType.ts, 0, 11))
+>Key : Symbol(Key, Decl(distributedRecursiveMappedType.ts, 1, 9))
+>Input : Symbol(Input, Decl(distributedRecursiveMappedType.ts, 0, 17))
+>Key : Symbol(Key, Decl(distributedRecursiveMappedType.ts, 1, 9))
+
+    : never;
+

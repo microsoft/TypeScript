@@ -57,6 +57,7 @@ test("validate generates before building and selects the generation scope", asyn
             },
             runTests: action("test:tsc"),
             runTestExtension: action("test:extension"),
+            runCheckAPIDeclarations: action("check:api-declarations"),
             runTestAPI: action("test:api"),
             runTestBenchmarks: action("test:benchmarks"),
             runTestTools: action("test:tools"),
@@ -74,6 +75,7 @@ test("validate generates before building and selects the generation scope", asyn
         assert.equal(calls[0], "all" in options ? "generate" : "generate:go");
         assert.ok(calls.indexOf("build") > 0);
         assert.ok(calls.indexOf("build") < calls.indexOf("test:tsc"));
+        assert.ok(calls.indexOf("check:api-declarations") > calls.indexOf("test:extension"));
         assert.equal(calls.includes("test:api"), "api" in options || "all" in options);
         assert.equal(calls.includes("test:tools"), "all" in options);
         assert.equal(calls.includes("test:options"), "all" in options);
@@ -355,7 +357,7 @@ test("generate:go runs Go generators directly and shares caches with Go fallback
     const generate = () => x("npx", ["hereby", "generate:go"], { throwOnError: true, nodeOptions: { cwd: root } });
     const first = await generate();
     assert.doesNotMatch(first.stdout, /\$ go generate|npm run --silent cache|\$ node .*generate-unicode-data/);
-    const files = fs.globSync(["tsc/internal/**/*generated.go", "packages/typescript/src/api/*.generated.ts", "packages/typescript/src/enums/*.ts", "packages/typescript/schemas/*.schema.json"], { cwd: root });
+    const files = fs.globSync(["tsc/internal/**/*generated.go", "packages/typescript/src/api/*.generated.ts", "packages/typescript/enums/*.{js,ts}", "packages/typescript/schemas/*.schema.json"], { cwd: root });
     const timestamps = files.map(file => fs.statSync(path.join(root, file)).mtimeMs);
     const current = await generate();
     assert.doesNotMatch(current.stdout, /Generated codegen outputs|Generated Unicode tables/);
@@ -810,7 +812,7 @@ test("enum generation skips unchanged outputs and Go verification", async () => 
     const generate = (force = false) => x("npx", ["hereby", "generate:enums", ...(force ? ["--force"] : [])], { throwOnError: true, nodeOptions: { cwd: root } });
     await generate();
     const files = [
-        ...fs.globSync("packages/typescript/src/enums/*.ts", { cwd: root }),
+        ...fs.globSync("packages/typescript/enums/*.{js,ts}", { cwd: root }),
         "tsc/internal/api/enum_values_generated.go",
     ].map(file => path.join(root, file));
     const timestamps = files.map(file => fs.statSync(file).mtimeMs);

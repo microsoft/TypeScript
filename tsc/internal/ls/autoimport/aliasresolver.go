@@ -166,6 +166,10 @@ func (r *aliasResolver) ContentMapperExtensions() []string {
 	return nil
 }
 
+func (r *aliasResolver) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
+	return nil
+}
+
 // FileExists implements checker.Program.
 func (r *aliasResolver) FileExists(fileName tspath.RootedFilePath) bool {
 	panic("unimplemented")

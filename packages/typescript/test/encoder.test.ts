@@ -1,11 +1,11 @@
 import type {
     SourceFile,
     Statement,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     SyntaxKind,
     TokenFlags,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     createArrayLiteralExpression,
     createBlock,
@@ -25,12 +25,12 @@ import {
     createVariableDeclaration,
     createVariableDeclarationList,
     createVariableStatement,
-} from "@typescript/typescript/unstable/ast/factory";
+} from "@typescript/typescript/ast/factory";
 import {
     CaseSensitivity,
     pathKey,
     toRootedFilePath,
-} from "@typescript/typescript/unstable/path";
+} from "@typescript/typescript/path";
 import assert from "node:assert";
 import {
     describe,

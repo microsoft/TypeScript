@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts] ////
+
+=== mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts ===
+type ChildPaths<T> = [PathTuples<T>] extends [never] ? [] : PathTuples<T>;
+>ChildPaths : ChildPaths<T>
+
+type PathTuples<T> = T extends object
+>PathTuples : PathTuples<T>
+
+  ? {
+      [K in keyof T & string as K extends '_key' ? never : K]: [PathTuples<T[K]>] extends [never]
+        ? never
+        : readonly [K, ...ChildPaths<T[K]>];
+    }[Exclude<keyof T & string, '_key'>]
+  : [];
+
+type T1 = PathTuples<{ a: string; _key: string; b: { c: number } }>;
+>T1 : readonly ["a"] | readonly ["b", "c"]
+>a : string
+>_key : string
+>b : { c: number; }
+>c : number
+
+const t1: T1 = ['b', 'c'];
+>t1 : readonly ["a"] | readonly ["b", "c"]
+>['b', 'c'] : ["b", "c"]
+>'b' : "b"
+>'c' : "c"
+
+type S1<T> = { [K in keyof T & string as K extends '_key' ? never : K]: 1 }[Exclude<keyof T & string, '_key'>];
+>S1 : S1<T>
+
+type S2<T> = { [K in string & keyof T as K extends '_key' ? never : K]: 1 }[Exclude<string & keyof T, '_key'>];
+>S2 : S2<T>
+

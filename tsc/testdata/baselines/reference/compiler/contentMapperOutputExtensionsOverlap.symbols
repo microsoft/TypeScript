@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/contentMapperOutputExtensionsOverlap.ts] ////
+
+=== /Widget.z ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(Widget.z, 0, 5))
+
+export const short = 1;
+>short : Symbol(short, Decl(Widget.z, 1, 12))
+
+=== /Widget.y.z ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(Widget.y.z, 0, 5))
+
+export const long = 1;
+>long : Symbol(long, Decl(Widget.y.z, 1, 12))
+
+=== /Widget.identity.y.z ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(Widget.identity.y.z, 0, 5))
+
+export const identity = 1;
+>identity : Symbol(identity, Decl(Widget.identity.y.z, 1, 12))
+
+=== /Widget.unmapped.y.z ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(Widget.unmapped.y.z, 0, 5))
+
+export const unmapped = 1;
+>unmapped : Symbol(unmapped, Decl(Widget.unmapped.y.z, 1, 12))
+
+=== /main.ts ===
+export { short } from "./Widget.z";
+>short : Symbol(short, Decl(main.ts, 0, 8))
+
+export { long } from "./Widget.y.z";
+>long : Symbol(long, Decl(main.ts, 1, 8))
+
+export { identity } from "./Widget.identity.y.z";
+>identity : Symbol(identity, Decl(main.ts, 2, 8))
+
+export { unmapped } from "./Widget.unmapped.y.z";
+>unmapped : Symbol(unmapped, Decl(main.ts, 3, 8))
+
+export function literal() { return import("./Widget.y.z"); }
+>literal : Symbol(literal, Decl(main.ts, 3, 49))
+>"./Widget.y.z" : Symbol("./Widget.y.z", Decl(Widget.y.z, 0, 0))
+
+export function dynamic(path: string) { return import(path); }
+>dynamic : Symbol(dynamic, Decl(main.ts, 4, 60))
+>path : Symbol(path, Decl(main.ts, 5, 24))
+>path : Symbol(path, Decl(main.ts, 5, 24))
+
+export const inferred = import("./Widget.y.z");
+>inferred : Symbol(inferred, Decl(main.ts, 6, 12))
+>"./Widget.y.z" : Symbol("./Widget.y.z", Decl(Widget.y.z, 0, 0))
+

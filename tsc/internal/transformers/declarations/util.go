@@ -156,22 +156,9 @@ func shouldEmitFunctionProperties(input *ast.FunctionDeclaration) bool {
 	if input.Body != nil {
 		return true
 	}
-	return !core.Every(input.Symbol.Declarations, func(decl *ast.Node) bool {
+	return !core.Every(input.Symbol.Declarations(), func(decl *ast.Node) bool {
 		return !ast.IsFunctionDeclaration(decl) || decl.AsFunctionDeclaration().Body == nil
 	})
-}
-
-func getEffectiveBaseTypeNode(node *ast.Node) *ast.Node {
-	baseType := ast.GetClassExtendsHeritageElement(node)
-	// !!! TODO: JSDoc support
-	// if (baseType && isInJSFile(node)) {
-	//     // Prefer an @augments tag because it may have type parameters.
-	//     const tag = getJSDocAugmentsTag(node);
-	//     if (tag) {
-	//         return tag.class;
-	//     }
-	// }
-	return baseType
 }
 
 func isScopeMarker(node *ast.Node) bool {

@@ -1,0 +1,16 @@
+/project/tsconfig.json(1,29): error TS5011: The common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+
+==== /project/tsconfig.json (1 errors) ====
+    { "extends": "./base.json", "compilerOptions": {}, "files": ["src/index.ts"] }
+                                ~~~~~~~~~~~~~~~~~
+!!! error TS5011: The common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+!!! error TS5011:   Visit https://aka.ms/ts6 for migration information.
+    
+==== /project/src/index.ts (0 errors) ====
+    export const value = 0;
+    
+==== /project/base.json (0 errors) ====
+    { "compilerOptions": { "outDir": "dist" } }
+    

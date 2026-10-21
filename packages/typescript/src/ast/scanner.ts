@@ -1,10 +1,10 @@
-import { CharacterCodes } from "#enums/characterCodes";
-import { CommentDirectiveType } from "#enums/commentDirectiveType";
-import { LanguageVariant } from "#enums/languageVariant";
-import { RegularExpressionFlags } from "#enums/regularExpressionFlags";
-import { ScriptTarget } from "#enums/scriptTarget";
-import { SyntaxKind } from "#enums/syntaxKind";
-import { TokenFlags } from "#enums/tokenFlags";
+import { CharacterCodes } from "../../enums/characterCodes.js";
+import { CommentDirectiveType } from "../../enums/commentDirectiveType.js";
+import { LanguageVariant } from "../../enums/languageVariant.js";
+import { RegularExpressionFlags } from "../../enums/regularExpressionFlags.js";
+import { ScriptTarget } from "../../enums/scriptTarget.js";
+import { SyntaxKind } from "../../enums/syntaxKind.js";
+import { TokenFlags } from "../../enums/tokenFlags.js";
 import type {
     JsxTokenSyntaxKind,
     KeywordSyntaxKind,
