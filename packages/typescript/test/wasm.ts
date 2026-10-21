@@ -90,18 +90,15 @@ function createWasmAPIOptions(options: WasmAPIOptions): {
 
 function wrapFileUpdates<T extends object>(api: T, fs: FileSystemCallbacks | undefined, transport: WasmTransport | undefined): void {
     if (!fs || !transport) return;
-    wrapMethod("createSnapshot", args => {
-        const params = args[0] as SnapshotChanges | undefined;
-        syncFileChanges(fs, transport, params?.fileNotifications);
-        syncOpenFiles(fs, transport, params);
-    });
-    wrapMethod("updateSnapshot", args => {
-        const params = args[1] as SnapshotChanges | undefined;
-        syncFileChanges(fs, transport, params?.fileNotifications);
-        syncOpenFiles(fs, transport, params);
-    });
+    wrapMethod("createSnapshot", 0);
+    wrapMethod("updateSnapshot", 1);
 
-    function wrapMethod(name: string, before: (args: unknown[]) => void): void {
+    function wrapMethod(name: string, changesIndex: number): void {
+        const before = (args: unknown[]) => {
+            const changes = args[changesIndex] as SnapshotChanges | undefined;
+            syncFileChanges(fs!, transport!, changes?.fileNotifications);
+            syncOpenFiles(fs!, transport!, changes);
+        };
         const target = api as Record<string, unknown>;
         const original = target[name] as ((...args: unknown[]) => unknown) & {
             gen?: (...args: unknown[]) => Generator<unknown, unknown, unknown>;
@@ -131,16 +128,19 @@ function syncOpenFiles(
     changes: SnapshotChanges | undefined,
 ): void {
     for (const file of changes?.openFiles ?? []) {
-        const fileName = resolveFileName(file);
-        const content = typeof fs.readFile === "function" ? fs.readFile(toRootedFilePath(fileName, undefined)) : undefined;
-        if (typeof content === "string") {
-            transport.setFile(fileName, content);
-            mirroredFiles.get(transport)?.add(fileName);
-        }
-        else {
-            transport.removeFile(fileName);
-            mirroredFiles.get(transport)?.delete(fileName);
-        }
+        mirrorFile(fs, transport, resolveFileName(file));
+    }
+}
+
+function mirrorFile(fs: FileSystemCallbacks, transport: WasmTransport, fileName: string): void {
+    const content = typeof fs.readFile === "function" ? fs.readFile(toRootedFilePath(fileName, undefined)) : undefined;
+    if (typeof content === "string") {
+        transport.setFile(fileName, content);
+        mirroredFiles.get(transport)?.add(fileName);
+    }
+    else {
+        transport.removeFile(fileName);
+        mirroredFiles.get(transport)?.delete(fileName);
     }
 }
 
@@ -183,16 +183,7 @@ function syncFileChanges(
         synchronizeFileSystem(fs, transport);
     }
     for (const file of [...changes?.changed ?? [], ...changes?.created ?? []]) {
-        const fileName = resolveFileName(file);
-        const content = typeof fs.readFile === "function" ? fs.readFile(toRootedFilePath(fileName, undefined)) : undefined;
-        if (typeof content === "string") {
-            transport.setFile(fileName, content);
-            mirroredFiles.get(transport)?.add(fileName);
-        }
-        else {
-            transport.removeFile(fileName);
-            mirroredFiles.get(transport)?.delete(fileName);
-        }
+        mirrorFile(fs, transport, resolveFileName(file));
     }
     for (const file of changes?.deleted ?? []) {
         const fileName = resolveFileName(file);
