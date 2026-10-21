@@ -13,18 +13,18 @@ declare module "*.svelte" {
 
 === /src/main.ts ===
 import script from "script.svelte";
->script : number
+>script : any
 
 const scriptValue: string = script;
 >scriptValue : string
->script : number
+>script : any
 
 import relative from "./relative.svelte";
->relative : number
+>relative : any
 
 const relativeValue: string = relative;
 >relativeValue : string
->relative : number
+>relative : any
 
 import resolved from "module.svelte";
 >resolved : string
