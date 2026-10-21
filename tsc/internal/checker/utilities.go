@@ -636,6 +636,14 @@ func CompareTypes(t1, t2 *Type) int {
 			return c
 		}
 	}
+	// Types implied by binding patterns are ordered by their patterns.
+	if t1.flags&TypeFlagsObject != 0 {
+		p1 := t1.checker.patternForType[t1]
+		p2 := t2.checker.patternForType[t2]
+		if c := t1.checker.compareNodes(p1, p2); c != 0 {
+			return c
+		}
+	}
 	// Fresh literal types follow their regular counterparts.
 	if t1.flags&TypeFlagsFreshable != 0 {
 		if f1, f2 := isFreshLiteralType(t1), isFreshLiteralType(t2); f1 != f2 {
@@ -730,7 +738,14 @@ func compareElementLabels(n1, n2 *ast.Node) int {
 // at creation rather than resolving them from their symbol.
 func hasObjectLiteralMembers(t *Type) bool {
 	d := t.AsObjectType()
-	return d.target == nil && d.mapper == nil && t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsObjectLiteral != 0
+	if d.target != nil || d.mapper != nil {
+		return false
+	}
+	if t.symbol == nil {
+		// Types implied by binding patterns have no symbol.
+		return t.objectFlags&ObjectFlagsObjectLiteral != 0
+	}
+	return t.symbol.Flags()&ast.SymbolFlagsObjectLiteral != 0
 }
 
 func compareObjectLiteralMembers(t1, t2 *Type) int {

@@ -674,6 +674,7 @@ type Checker struct {
 	spreadTypes                                 map[CacheHashKey]*Type
 	spreadContentTypes                          map[CacheHashKey]*Type
 	spreadSymbols                               map[spreadSymbolKey]*ast.Symbol
+	bindingPatternTypes                         map[CacheHashKey]*Type
 	unionOfUnionTypes                           map[UnionOfUnionKey]*Type
 	intersectionTypes                           map[CacheHashKey]*Type
 	propertiesTypes                             map[PropertiesTypesKey]*Type
@@ -1015,6 +1016,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.spreadTypes = make(map[CacheHashKey]*Type)
 	c.spreadContentTypes = make(map[CacheHashKey]*Type)
 	c.spreadSymbols = make(map[spreadSymbolKey]*ast.Symbol)
+	c.bindingPatternTypes = make(map[CacheHashKey]*Type)
 	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
 	c.intersectionTypes = make(map[CacheHashKey]*Type)
 	c.propertiesTypes = make(map[PropertiesTypesKey]*Type)
@@ -18682,12 +18684,35 @@ func (c *Checker) getTypeFromObjectBindingPattern(pattern *ast.Node, includePatt
 	if stringIndexInfo != nil {
 		indexInfos = []*IndexInfo{stringIndexInfo}
 	}
+	// The members are declared by the pattern's elements, so patterns
+	// implying the same members still need distinct types.
+	var b keyBuilder
+	b.writeNode(pattern)
+	if includePatternInType {
+		b.writeByte(1)
+	} else {
+		b.writeByte(0)
+	}
+	b.writeUint32(uint32(objectFlags))
+	b.writeInt(len(indexInfos))
+	names := slices.Sorted(members.Keys())
+	for _, name := range names {
+		b.writeString(name)
+		b.writeByte(0)
+		b.writeUint32(uint32(members.Get(name).Flags()))
+		b.writeType(c.valueSymbolLinks.Get(members.Get(name)).resolvedType)
+	}
+	key := b.hash()
+	if existing := c.bindingPatternTypes[key]; existing != nil {
+		return existing
+	}
 	result := c.newAnonymousType(nil, members, nil, nil, indexInfos)
 	result.objectFlags |= objectFlags
 	if includePatternInType {
 		c.patternForType[result] = pattern
 		result.objectFlags |= ObjectFlagsContainsObjectOrArrayLiteral
 	}
+	c.bindingPatternTypes[key] = result
 	return result
 }
 
@@ -18731,9 +18756,17 @@ func (c *Checker) getTypeFromArrayBindingPattern(pattern *ast.Node, includePatte
 	}
 	result := c.createTupleTypeEx(elementTypes, elementInfos, false)
 	if includePatternInType {
+		var b keyBuilder
+		b.writeNode(pattern)
+		b.writeType(result)
+		key := b.hash()
+		if existing := c.bindingPatternTypes[key]; existing != nil {
+			return existing
+		}
 		result = c.cloneTypeReference(result)
 		c.patternForType[result] = pattern
 		result.objectFlags |= ObjectFlagsContainsObjectOrArrayLiteral
+		c.bindingPatternTypes[key] = result
 	}
 	return result
 }
