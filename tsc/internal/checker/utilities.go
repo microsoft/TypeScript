@@ -542,6 +542,12 @@ func CompareTypes(t1, t2 *Type) int {
 				if c := int(t1.objectFlags&objectLiteralCreationFlags) - int(t2.objectFlags&objectLiteralCreationFlags); c != 0 {
 					return c
 				}
+			} else if t1.objectFlags&t2.objectFlags&ObjectFlagsObjectRestType != 0 {
+				// Rest types share the symbol of their declaration, so a rest from a union
+				// yields one type per constituent, distinguished by the members they keep.
+				if c := compareObjectMemberDeclarations(t1, t2); c != 0 {
+					return c
+				}
 			}
 		}
 	case t1.flags&TypeFlagsUnion != 0:
@@ -755,6 +761,27 @@ func hasObjectLiteralMembers(t *Type) bool {
 		return t.objectFlags&ObjectFlagsObjectLiteral != 0
 	}
 	return t.symbol.Flags()&ast.SymbolFlagsObjectLiteral != 0
+}
+
+// compareObjectMemberDeclarations orders resolved object types by what their
+// members declare, without consulting member types, which may not be resolved.
+func compareObjectMemberDeclarations(t1, t2 *Type) int {
+	c := t1.checker
+	p1 := t1.AsStructuredType().properties
+	p2 := t2.AsStructuredType().properties
+	if n := len(p1) - len(p2); n != 0 {
+		return n
+	}
+	for i, s1 := range p1 {
+		s2 := p2[i]
+		if r := c.compareSymbolDeclarationsAndNames(s1, s2); r != 0 {
+			return r
+		}
+		if r := int(s1.Flags()&ast.SymbolFlagsOptional) - int(s2.Flags()&ast.SymbolFlagsOptional); r != 0 {
+			return r
+		}
+	}
+	return 0
 }
 
 func compareObjectLiteralMembers(t1, t2 *Type) int {

@@ -18585,9 +18585,12 @@ func (c *Checker) getRestType(source *Type, properties []*ast.Node, symbol *ast.
 	for _, prop := range spreadableProperties {
 		members.Set(prop.Name(), c.getSpreadSymbol(prop, false /*readonly*/))
 	}
-	result := c.newAnonymousType(symbol, members, nil, nil, c.getIndexInfosOfType(source))
-	result.objectFlags |= ObjectFlagsObjectRestType
-	return result
+	indexInfos := c.getIndexInfosOfType(source)
+	return c.internObjectType(symbol, ObjectFlagsAnonymous|ObjectFlagsObjectRestType, members, indexInfos, func() *Type {
+		result := c.newAnonymousType(symbol, members, nil, nil, indexInfos)
+		result.objectFlags |= ObjectFlagsObjectRestType
+		return result
+	})
 }
 
 // Determine the control flow type associated with a destructuring declaration or assignment. The following
