@@ -6,6 +6,7 @@
 // @declaration: true
 // @outDir: /out
 // @noImplicitReferences: true
+// @singleThreaded: true
 
 // @Filename: /ma.js
 export { v as pa } from "./xa";
