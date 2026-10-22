@@ -20096,6 +20096,24 @@ func (c *Checker) exitCurrentNode(save savedCurrentNode) {
 	c.currentNodeResolution = save.resolution
 }
 
+// enterQuery starts a query made outside of checking, unless one is already
+// in progress. Results that depend on errors located at the current node are
+// discarded when the query finishes (see reportAtCurrentNode), so a query
+// that reads results back from caches after computing them must do so before
+// then.
+func (c *Checker) enterQuery() (savedCurrentNode, bool) {
+	if c.memoTop != 0 || c.currentNodeResolution != 0 {
+		return savedCurrentNode{}, false
+	}
+	return c.enterCurrentNode(c.currentNode), true
+}
+
+func (c *Checker) exitQuery(save savedCurrentNode, ok bool) {
+	if ok {
+		c.exitCurrentNode(save)
+	}
+}
+
 type savedCurrentNode struct {
 	node       *ast.Node
 	resolution int
@@ -34095,6 +34113,10 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 			if links.resolvedSymbol.get(c) != nil {
 				return links.resolvedSymbol.get(c)
 			}
+			// The symbol is read back from links after checking, before a query
+			// finishing would discard it.
+			query, ok := c.enterQuery()
+			defer c.exitQuery(query, ok)
 			if ast.IsPropertyAccessExpression(name) {
 				c.checkPropertyAccessExpression(name, CheckModeNormal, false /*writeOnly*/)
 				if links.resolvedSymbol.get(c) == nil && !ast.IsPrivateIdentifier(name.Name()) {
