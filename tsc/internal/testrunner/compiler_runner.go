@@ -13,6 +13,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
@@ -186,6 +187,14 @@ func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName stri
 	compilerTest.verifyParentPointers(t)
 }
 
+// compilerTestVaryBy adds harness options that may vary to the compiler options
+// that may vary.
+var compilerTestVaryBy = func() *collections.Set[string] {
+	s := compilerVaryBy.Clone()
+	s.Add("checkorder")
+	return s
+}()
+
 type compilerFileBasedTest struct {
 	filename       string
 	content        string
@@ -198,7 +207,7 @@ func getCompilerFileBasedTest(t *testing.T, filename string) *compilerFileBasedT
 		panic("Could not read test file: " + filename)
 	}
 	settings := extractCompilerSettings(content)
-	configurations := harnessutil.GetFileBasedTestConfigurations(t, settings, compilerVaryBy)
+	configurations := harnessutil.GetFileBasedTestConfigurations(t, settings, compilerTestVaryBy)
 	return &compilerFileBasedTest{
 		filename:       filename,
 		content:        content,
