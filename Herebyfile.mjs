@@ -1015,15 +1015,11 @@ async function runTestAPI() {
 }
 
 async function runTestAPIWasm() {
-    // These need the API to read and write the real disk.
-    const skip = "Benchmarks|Parse-clone-emit roundtrip";
     for (const mode of ["async", "sync"]) {
         await run("node", [
             "--conditions",
             "@typescript/source",
             "--test",
-            "--test-skip-pattern",
-            skip,
             `./test/${mode}/api.test.ts`,
             ...mode === "sync" ? ["./test/sync/ast.test.ts", "./test/sync/api-generators.test.ts"] : [],
         ], { cwd: "./packages/typescript", env: { TS_API_TEST_WASM: "1" } });
