@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/workerGlobalMessageHandlerThis.ts] ////
+
+=== workerGlobalMessageHandlerThis.ts ===
+declare function createMessageReader(port: MessagePort | Worker | DedicatedWorkerGlobalScope): void;
+>createMessageReader : (port: MessagePort | Worker | DedicatedWorkerGlobalScope) => void
+>port : DedicatedWorkerGlobalScope | MessagePort | Worker
+
+createMessageReader(self);
+>createMessageReader(self) : void
+>createMessageReader : (port: MessagePort | Worker | DedicatedWorkerGlobalScope) => void
+>self : WorkerGlobalScope & typeof globalThis
+
+declare const event: MessageEvent;
+>event : MessageEvent<any>
+
+self.onmessage?.(event);
+>self.onmessage?.(event) : any
+>self.onmessage : ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null
+>self : WorkerGlobalScope & typeof globalThis
+>onmessage : ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null
+>event : MessageEvent<any>
+

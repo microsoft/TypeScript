@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/domIterableSymbolMappedValue.ts] ////
+
+=== domIterableSymbolMappedValue.ts ===
+declare const styles: Partial<Pick<CSSStyleDeclaration, keyof CSSStyleDeclaration & symbol>>;
+>styles : Symbol(styles, Decl(domIterableSymbolMappedValue.ts, 0, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+declare function element(styles: Partial<Record<keyof CSSStyleDeclaration, string>>): void;
+>element : Symbol(element, Decl(domIterableSymbolMappedValue.ts, 0, 93))
+>styles : Symbol(styles, Decl(domIterableSymbolMappedValue.ts, 1, 25))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+element(styles);
+>element : Symbol(element, Decl(domIterableSymbolMappedValue.ts, 0, 93))
+>styles : Symbol(styles, Decl(domIterableSymbolMappedValue.ts, 0, 13))
+

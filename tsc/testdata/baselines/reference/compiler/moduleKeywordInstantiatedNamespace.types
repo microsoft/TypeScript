@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/moduleKeywordInstantiatedNamespace.ts] ////
+
+=== moduleKeywordInstantiatedNamespace.ts ===
+module Runtime {
+>Runtime : typeof Runtime
+
+    export const value = 0;
+>value : 0
+>0 : 0
+}
+Runtime.value;
+>Runtime.value : 0
+>Runtime : typeof Runtime
+>value : 0
+

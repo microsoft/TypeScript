@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/numericPropertyCompoundAssignmentAfterDisjunction.ts] ////
+
+=== numericPropertyCompoundAssignmentAfterDisjunction.ts ===
+class Decoder {
+>Decoder : Decoder
+
+    remaining = 0;
+>remaining : number
+>0 : 0
+
+    consume(size: number) {
+>consume : (size: number) => void
+>size : number
+
+        if (this.remaining === 0 || size === 0) return;
+>this.remaining === 0 || size === 0 : boolean
+>this.remaining === 0 : boolean
+>this.remaining : number
+>this : this
+>remaining : number
+>0 : 0
+>size === 0 : boolean
+>size : number
+>0 : 0
+
+        this.remaining -= size;
+>this.remaining -= size : number
+>this.remaining : number
+>this : this
+>remaining : number
+>size : number
+    }
+}
+

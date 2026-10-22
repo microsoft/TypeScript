@@ -1,6 +1,9 @@
 package checker
 
 import (
+	"maps"
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
@@ -83,7 +86,7 @@ func (c *Checker) GetUnionType(types []*Type) *Type {
 
 func (c *Checker) GetNameTypeOfSymbol(symbol *ast.Symbol) *Type {
 	if links := c.valueSymbolLinks.TryGet(symbol); links != nil {
-		return links.nameType
+		return links.getNameType()
 	}
 	return nil
 }
@@ -357,6 +360,15 @@ func (c *Checker) GetIndexTypeOfType(t *Type, keyType *Type) *Type {
 
 func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
 	return c.getIndexInfosOfType(t)
+}
+
+func (c *Checker) GetIndexInfosOfIndexSymbol(symbol *ast.Symbol) []*IndexInfo {
+	var siblingSymbols []*ast.Symbol
+	if symbol.Parent() != nil {
+		siblingSymbols = slices.Collect(maps.Values(c.getMembersOfSymbol(symbol.Parent())))
+		c.sortSymbols(siblingSymbols)
+	}
+	return c.getIndexInfosOfIndexSymbol(symbol, siblingSymbols)
 }
 
 func (c *Checker) IsContextSensitive(node *ast.Node) bool {

@@ -4792,6 +4792,10 @@
         "category": "Error",
         "code": 5115
     },
+    "Network path '{0}' is not supported.": {
+        "category": "Error",
+        "code": 5116
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -8728,6 +8732,10 @@
         "category": "Error",
         "code": 18068
     },
+    "The content mapper package '{0}' is outside the open workspace and will not be loaded.": {
+        "category": "Error",
+        "code": 18124
+    },
     "The content mapper '{0}' failed to transform this file.": {
         "category": "Error",
         "code": 18069
@@ -8924,8 +8932,32 @@
         "category": "Error",
         "code": 18117
     },
-    "Cannot find module '{0}' or its corresponding type declarations. Did you mean to use the global namespace '{0}'? If you meant to declare an ambient module, the name must be quoted: `declare module '{0}';`.": {
+    "Content mapper output extension '{0}' must be non-empty and begin with a '.'.": {
         "category": "Error",
         "code": 18118
+    },
+    "Content mapper output extension mapping source '{0}' is not registered by this content mapper.": {
+        "category": "Error",
+        "code": 18119
+    },
+    "Content mapper output extension mapping from '{0}' to '{1}' requires 'rewriteRelativeImportExtensions' to be enabled.": {
+        "category": "Error",
+        "code": 18120
+    },
+    "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' contains an invalid mapping from '{1}' to '{2}'. Extensions must be non-empty and begin with a '.'.": {
+        "category": "Error",
+        "code": 18121
+    },
+    "The 'typescript.contentMapper.outputExtensions' of the content mapper package '{0}' must be an object with string values.": {
+        "category": "Error",
+        "code": 18122
+    },
+    "Content mapper extension '{0}' must not contain path separators.": {
+        "category": "Error",
+        "code": 18123
+    },
+    "Cannot find module '{0}' or its corresponding type declarations. Did you mean to use the global namespace '{0}'? If you meant to declare an ambient module, the name must be quoted: `declare module '{0}';`.": {
+        "category": "Error",
+        "code": 18125
     }
 }

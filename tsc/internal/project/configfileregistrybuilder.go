@@ -15,7 +15,10 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-var _ tsoptions.ExtendedConfigCache = (*configFileRegistryBuilder)(nil)
+var (
+	_ tsoptions.ParseConfigHost     = (*configFileRegistryBuilder)(nil)
+	_ tsoptions.ExtendedConfigCache = (*configFileRegistryBuilder)(nil)
+)
 
 // configFileRegistryBuilder tracks changes made on top of a previous
 // configFileRegistry, producing a new clone with `finalize()` after
@@ -155,7 +158,7 @@ func (c *configFileRegistryBuilder) reloadIfNeeded(entry *configFileEntry, fileN
 		if c.sessionOptions.RunExternalCode {
 			existingOptions = &core.CompilerOptions{RunExternalCode: core.TSTrue}
 		}
-		entry.commandLine, _ = tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, existingOptions, nil /*optionsRaw*/, c.fs, c)
+		entry.commandLine, _ = tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, existingOptions, nil /*optionsRaw*/, c, c)
 		c.updateExtendingConfigs(path, entry.commandLine, oldCommandLine)
 		c.updateRootFilesWatch(fileName, entry)
 		logger.Log("Finished loading config file")
@@ -786,6 +789,23 @@ func (c *configFileRegistryBuilder) getAncestorConfigFileName(fileName tspath.Ro
 		})
 	}
 	return result
+}
+
+func (c *configFileRegistryBuilder) FS() vfs.FS {
+	return c.fs
+}
+
+func (c *configFileRegistryBuilder) IsContentMapperPackageAllowed(packageDirectory tspath.RootedDirectoryPath) bool {
+	if c.sessionOptions.InitialWorkspaceRoots == nil {
+		return true
+	}
+	_, nodeModulesPath, ok := tspath.RootedFilePathFromPath(packageDirectory.AsPath()).SplitAtLastComponent("node_modules")
+	if !ok {
+		return false
+	}
+	return slices.ContainsFunc(c.sessionOptions.InitialWorkspaceRoots, func(root tspath.RootedDirectoryPath) bool {
+		return c.fs.CaseSensitivity().ContainsPath(root, nodeModulesPath.AsPath())
+	})
 }
 
 // GetExtendedConfig implements tsoptions.ExtendedConfigCache.

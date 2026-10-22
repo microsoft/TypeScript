@@ -1,7 +1,7 @@
 globals.d.ts(1,16): error TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
 globals.d.ts(4,16): error TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
-main.ts(2,27): error TS18118: Cannot find module 'messageformat' or its corresponding type declarations. Did you mean to use the global namespace 'messageformat'? If you meant to declare an ambient module, the name must be quoted: `declare module 'messageformat';`.
-main.ts(3,19): error TS18118: Cannot find module 'otherlib' or its corresponding type declarations. Did you mean to use the global namespace 'otherlib'? If you meant to declare an ambient module, the name must be quoted: `declare module 'otherlib';`.
+main.ts(2,27): error TS18125: Cannot find module 'messageformat' or its corresponding type declarations. Did you mean to use the global namespace 'messageformat'? If you meant to declare an ambient module, the name must be quoted: `declare module 'messageformat';`.
+main.ts(3,19): error TS18125: Cannot find module 'otherlib' or its corresponding type declarations. Did you mean to use the global namespace 'otherlib'? If you meant to declare an ambient module, the name must be quoted: `declare module 'otherlib';`.
 main.ts(4,27): error TS2307: Cannot find module 'not-declared-globally' or its corresponding type declarations.
 
 
@@ -9,10 +9,10 @@ main.ts(4,27): error TS2307: Cannot find module 'not-declared-globally' or its c
     /// <reference path="globals.d.ts" />
     import MessageFormat from "messageformat";
                               ~~~~~~~~~~~~~~~
-!!! error TS18118: Cannot find module 'messageformat' or its corresponding type declarations. Did you mean to use the global namespace 'messageformat'? If you meant to declare an ambient module, the name must be quoted: `declare module 'messageformat';`.
+!!! error TS18125: Cannot find module 'messageformat' or its corresponding type declarations. Did you mean to use the global namespace 'messageformat'? If you meant to declare an ambient module, the name must be quoted: `declare module 'messageformat';`.
     import Other from "otherlib";
                       ~~~~~~~~~~
-!!! error TS18118: Cannot find module 'otherlib' or its corresponding type declarations. Did you mean to use the global namespace 'otherlib'? If you meant to declare an ambient module, the name must be quoted: `declare module 'otherlib';`.
+!!! error TS18125: Cannot find module 'otherlib' or its corresponding type declarations. Did you mean to use the global namespace 'otherlib'? If you meant to declare an ambient module, the name must be quoted: `declare module 'otherlib';`.
     import { something } from "not-declared-globally";
                               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module 'not-declared-globally' or its corresponding type declarations.
