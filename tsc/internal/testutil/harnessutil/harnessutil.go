@@ -373,16 +373,19 @@ var harnessCommandLineOptions = []*tsoptions.CommandLineOption{
 }
 
 // Checker results should not depend on the order in which files and
-// locations are queried. These orders let tests demonstrate that.
+// locations are queried. These orders let tests demonstrate that. Each
+// applies to both checking and emit, which queries the checker too.
 var checkOrders = []string{
-	// Check all files in program order.
+	// Check and emit all files in program order.
 	"default",
-	// Check files one at a time in reverse program order.
+	// Check and emit files one at a time in reverse program order.
 	"reverse",
-	// Check each file with a fresh program that has checked nothing else.
+	// Check and emit each file with a fresh program that has checked
+	// nothing else.
 	"isolated",
-	// Before checking, ask for the type and symbol of every expression and
-	// name in each file, innermost and last first, as an editor might.
+	// Before checking or emitting, ask for the type and symbol of every
+	// expression and name in each file, innermost and last first, as an
+	// editor might.
 	"typesfirst",
 }
 
@@ -682,7 +685,7 @@ func compileFilesWithHost(
 	preErrors = compiler.SortAndDeduplicateDiagnostics(preErrors)
 
 	postProgram := createProgram(host, config)
-	emitResult := postProgram.Emit(ctx, compiler.EmitOptions{})
+	emitResult := emitInOrder(ctx, host, config, postProgram, harnessOptions.CheckOrder)
 	var postErrors []*ast.Diagnostic
 	postErrors = append(postErrors, postProgram.GetConfigFileParsingDiagnostics()...)
 	postErrors = append(postErrors, postProgram.GetProgramDiagnostics()...)
@@ -765,6 +768,53 @@ func getCheckerDiagnostics(ctx context.Context, host compiler.CompilerHost, conf
 		panic("unknown check order " + order)
 	}
 	return compiler.SortAndDeduplicateDiagnostics(result)
+}
+
+// emitInOrder emits program, querying the checker in the given order: each
+// file emitted separately, in reverse or in a program of its own, or after
+// querying the types and symbols of every file in reverse.
+func emitInOrder(ctx context.Context, host compiler.CompilerHost, config *tsoptions.ParsedCommandLine, program compiler.ProgramLike, order string) *compiler.EmitResult {
+	options := program.Options()
+	if order == "" || order == "default" || options.OutFile != "" || options.NoEmitOnError.IsTrue() {
+		// Emitting files separately would change what a bundle or an emit
+		// blocked by errors contains.
+		return program.Emit(ctx, compiler.EmitOptions{})
+	}
+	files := program.GetSourceFiles()
+	if order == "typesfirst" {
+		for _, file := range slices.Backward(files) {
+			if program.Program().SkipTypeChecking(file, false) {
+				continue
+			}
+			c, done := program.Program().GetTypeCheckerForFile(ctx, file)
+			queryTypesAndSymbols(c, file)
+			done()
+		}
+		return program.Emit(ctx, compiler.EmitOptions{})
+	}
+	result := &compiler.EmitResult{}
+	emitFile := func(p compiler.ProgramLike, file *ast.SourceFile) {
+		r := p.Emit(ctx, compiler.EmitOptions{TargetSourceFiles: []*ast.SourceFile{file}})
+		result.EmitSkipped = result.EmitSkipped || r.EmitSkipped
+		result.Diagnostics = append(result.Diagnostics, r.Diagnostics...)
+		result.EmittedFiles = append(result.EmittedFiles, r.EmittedFiles...)
+		result.SourceMaps = append(result.SourceMaps, r.SourceMaps...)
+	}
+	switch order {
+	case "reverse":
+		for _, file := range slices.Backward(files) {
+			emitFile(program, file)
+		}
+	case "isolated":
+		for _, file := range files {
+			isolated := createProgram(host, config)
+			emitFile(isolated, isolated.GetSourceFile(file.FileName()))
+		}
+	default:
+		panic("unknown check order " + order)
+	}
+	result.Diagnostics = compiler.SortAndDeduplicateDiagnostics(result.Diagnostics)
+	return result
 }
 
 func queryTypesAndSymbols(c *checker.Checker, file *ast.SourceFile) {
