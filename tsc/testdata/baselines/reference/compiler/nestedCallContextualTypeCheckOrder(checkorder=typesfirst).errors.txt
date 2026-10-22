@@ -1,0 +1,75 @@
+nestedCallContextualTypeCheckOrder.ts(12,7): error TS2345: Argument of type '(x: never) => never' is not assignable to parameter of type '(x: number) => void'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'number' is not assignable to type 'never'.
+nestedCallContextualTypeCheckOrder.ts(13,10): error TS2345: Argument of type '{ cb: (x: never) => never; v: number; }' is not assignable to parameter of type '{ cb: (x: number) => void; v: number; }'.
+  Types of property 'cb' are incompatible.
+    Type '(x: never) => never' is not assignable to type '(x: number) => void'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'number' is not assignable to type 'never'.
+nestedCallContextualTypeCheckOrder.ts(14,15): error TS7006: Parameter 'x' implicitly has an 'any' type.
+nestedCallContextualTypeCheckOrder.ts(15,7): error TS2345: Argument of type '(x: never) => never' is not assignable to parameter of type '(x: number) => void'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'number' is not assignable to type 'never'.
+nestedCallContextualTypeCheckOrder.ts(16,7): error TS2345: Argument of type '(x: never) => never' is not assignable to parameter of type '(x: number) => void'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'number' is not assignable to type 'never'.
+nestedCallContextualTypeCheckOrder.ts(17,10): error TS2345: Argument of type '() => Generator<(x: never) => never, void, any>' is not assignable to parameter of type '() => Generator<(x: number) => void, any, any>'.
+  Type 'Generator<(x: never) => never, void, any>' is not assignable to type 'Generator<(x: number) => void, any, any>'.
+    The types returned by 'next(...)' are incompatible between these types.
+      Type 'IteratorResult<(x: never) => never, void>' is not assignable to type 'IteratorResult<(x: number) => void, any>'.
+        Type 'IteratorYieldResult<(x: never) => never>' is not assignable to type 'IteratorResult<(x: number) => void, any>'.
+          Type 'IteratorYieldResult<(x: never) => never>' is not assignable to type 'IteratorYieldResult<(x: number) => void>'.
+            Type '(x: never) => never' is not assignable to type '(x: number) => void'.
+              Types of parameters 'x' and 'x' are incompatible.
+                Type 'number' is not assignable to type 'never'.
+
+
+==== nestedCallContextualTypeCheckOrder.ts (6 errors) ====
+    // A generic call whose contextual type comes from an enclosing call is
+    // resolved after it, whichever is queried first, through every expression
+    // that passes the contextual type on.
+    
+    declare function outer<T>(cb: (x: T) => void, v: T): void;
+    declare function outerObj<T>(o: { cb: (x: T) => void; v: T }): void;
+    declare function outerGen<T>(g: () => Generator<(x: T) => void>, v: T): void;
+    declare function wrap<U>(f: U): U;
+    declare function tag<T>(s: TemplateStringsArray, cb: (x: T) => void, v: T): void;
+    declare function tagWrap<U>(s: TemplateStringsArray, f: U): U;
+    
+    outer(wrap((x) => x.toFixed())!, 1);
+          ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: never) => never' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'never'.
+    outerObj({ ...{ cb: wrap((x) => x.toFixed()) }, v: 1 });
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ cb: (x: never) => never; v: number; }' is not assignable to parameter of type '{ cb: (x: number) => void; v: number; }'.
+!!! error TS2345:   Types of property 'cb' are incompatible.
+!!! error TS2345:     Type '(x: never) => never' is not assignable to type '(x: number) => void'.
+!!! error TS2345:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:         Type 'number' is not assignable to type 'never'.
+    outer(([wrap((x) => x.toFixed())] as const)[0], 1);
+                  ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    tag`${wrap((x) => x.toFixed())}${1}`;
+          ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: never) => never' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'never'.
+    outer(tagWrap`${(x) => x.toFixed()}`, 1);
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: never) => never' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'never'.
+    outerGen(function* () { yield wrap((x) => x.toFixed()); }, 1);
+             ~~~~~~~~
+!!! error TS2345: Argument of type '() => Generator<(x: never) => never, void, any>' is not assignable to parameter of type '() => Generator<(x: number) => void, any, any>'.
+!!! error TS2345:   Type 'Generator<(x: never) => never, void, any>' is not assignable to type 'Generator<(x: number) => void, any, any>'.
+!!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
+!!! error TS2345:       Type 'IteratorResult<(x: never) => never, void>' is not assignable to type 'IteratorResult<(x: number) => void, any>'.
+!!! error TS2345:         Type 'IteratorYieldResult<(x: never) => never>' is not assignable to type 'IteratorResult<(x: number) => void, any>'.
+!!! error TS2345:           Type 'IteratorYieldResult<(x: never) => never>' is not assignable to type 'IteratorYieldResult<(x: number) => void>'.
+!!! error TS2345:             Type '(x: never) => never' is not assignable to type '(x: number) => void'.
+!!! error TS2345:               Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:                 Type 'number' is not assignable to type 'never'.
+    

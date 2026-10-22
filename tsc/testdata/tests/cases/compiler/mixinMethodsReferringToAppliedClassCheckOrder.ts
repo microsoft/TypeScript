@@ -1,0 +1,36 @@
+// @strict: true
+// @noEmit: true
+// @target: esnext
+// @checkOrder: default, typesfirst, editorfirst
+
+// The mixin classes have methods referring to the class built from them,
+// so checking the classes and typing their members first reach the same
+// cycle in different places (55640).
+
+type ConstructorType<T> = abstract new (...args: any[]) => T;
+
+function makeMixin<TBase extends ConstructorType<any>, FinalConstructor>(
+    mixinFunction: (Base: TBase) => FinalConstructor
+): (Base?: TBase) => FinalConstructor {
+    return (Base?: TBase) => {
+        // do other things with Base, this example is simplified
+        return mixinFunction(Base ?? (Object as any));
+    };
+}
+
+const MixinF = makeMixin(<TBase extends ConstructorType<any>>(Base: TBase) => {
+  abstract class Mixin extends Base {
+    foo(foo: MixinApplied, extra: boolean): MixinApplied | boolean { return extra }
+  }
+  return Mixin
+})
+
+
+const Mixin2F = makeMixin(<TBase extends ConstructorType<any>>(Base: TBase) => {
+  abstract class Mixin2 extends Base {
+    bar(foo: MixinApplied, extra: boolean): MixinApplied | boolean { return extra }
+  }
+  return Mixin2
+})
+
+class MixinApplied extends Mixin2F(MixinF()) {}

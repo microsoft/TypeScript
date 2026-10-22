@@ -167,8 +167,21 @@ func (r *CompilerBaselineRunner) runTest(t *testing.T, filename string) {
 	}
 }
 
+// When a program checks its files on several checkers, these tests can see different results depending on which
+// checker answers a query first.
+var concurrentSkippedTests = map[string]string{
+	"checkOrderCircularDefaults.ts":          "Circular default results depend on which checker resolves the cycle first.",
+	"checkOrderSpreadCycle.ts":               "Spread cycle results depend on which checker resolves the cycle first.",
+	"checkOrderStableInstantiationErrors.ts": "Instantiation limit errors depend on which checker instantiates first.",
+}
+
 func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName string, test *compilerFileBasedTest, config *harnessutil.NamedTestConfiguration) {
 	t.Parallel()
+	if !testutil.TestProgramIsSingleThreaded() {
+		if msg, ok := concurrentSkippedTests[tspath.GetBaseFileName(test.filename)]; ok {
+			t.Skipf("Skipping in concurrent mode: %s", msg)
+		}
+	}
 	defer testutil.RecoverAndFail(t, "Panic on compiler test "+test.filename)
 
 	payload := makeUnitsFromTest(test.content, test.filename)

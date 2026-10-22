@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/jsElementAccessAssignmentChainCheckOrder.ts] ////
+
+=== bubble.js ===
+// Each element access on the right of a chained assignment reports its
+// implicit any once, whichever of the assignments is typed first (64710,
+// 64849).
+
+export class C {
+>C : Symbol(C, Decl(bubble.js, 0, 0))
+
+  /** @param {any} iScale @param {any} vScale @param {boolean} reset */
+  updateElements(iScale, vScale, reset) {
+>updateElements : Symbol(C.updateElements, Decl(bubble.js, 4, 16))
+>iScale : Symbol(iScale, Decl(bubble.js, 6, 17))
+>vScale : Symbol(vScale, Decl(bubble.js, 6, 24))
+>reset : Symbol(reset, Decl(bubble.js, 6, 32))
+
+    const iAxis = iScale.axis;
+>iAxis : Symbol(iAxis, Decl(bubble.js, 7, 9))
+>iScale : Symbol(iScale, Decl(bubble.js, 6, 17))
+
+    const vAxis = vScale.axis;
+>vAxis : Symbol(vAxis, Decl(bubble.js, 8, 9))
+>vScale : Symbol(vScale, Decl(bubble.js, 6, 24))
+
+    const properties = {};
+>properties : Symbol(properties, Decl(bubble.js, 9, 9))
+
+    const iPixel = properties[iAxis] = reset ? iScale.getPixelForDecimal(0.5) : iScale.getPixelForValue(1);
+>iPixel : Symbol(iPixel, Decl(bubble.js, 10, 9))
+>properties : Symbol(properties, Decl(bubble.js, 9, 9))
+>iAxis : Symbol(iAxis, Decl(bubble.js, 7, 9))
+>reset : Symbol(reset, Decl(bubble.js, 6, 32))
+>iScale : Symbol(iScale, Decl(bubble.js, 6, 17))
+>iScale : Symbol(iScale, Decl(bubble.js, 6, 17))
+
+    const vPixel = properties[vAxis] = reset ? vScale.getBasePixel() : vScale.getPixelForValue(2);
+>vPixel : Symbol(vPixel, Decl(bubble.js, 11, 9))
+>properties : Symbol(properties, Decl(bubble.js, 9, 9))
+>vAxis : Symbol(vAxis, Decl(bubble.js, 8, 9))
+>reset : Symbol(reset, Decl(bubble.js, 6, 32))
+>vScale : Symbol(vScale, Decl(bubble.js, 6, 24))
+>vScale : Symbol(vScale, Decl(bubble.js, 6, 24))
+
+    properties.skip = isNaN(iPixel) || isNaN(vPixel);
+>properties.skip : Symbol(skip, Decl(bubble.js, 11, 98))
+>properties : Symbol(properties, Decl(bubble.js, 9, 9))
+>skip : Symbol(skip, Decl(bubble.js, 11, 98))
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>iPixel : Symbol(iPixel, Decl(bubble.js, 10, 9))
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))
+>vPixel : Symbol(vPixel, Decl(bubble.js, 11, 9))
+  }
+}
+

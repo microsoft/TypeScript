@@ -1,0 +1,341 @@
+//// [tests/cases/compiler/pipeCallbackInferenceCheckOrder.ts] ////
+
+=== pipeCallbackInferenceCheckOrder.ts ===
+// The callback of a pipe is inferred from the error union of the piped
+// effect, also when signature help was requested for the call first
+// (62183).
+
+export interface Pipeable {
+>Pipeable : Symbol(Pipeable, Decl(pipeCallbackInferenceCheckOrder.ts, 0, 0))
+
+  pipe<A, B = never>(this: A, ab: (_: A) => B): B;
+>pipe : Symbol(Pipeable.pipe, Decl(pipeCallbackInferenceCheckOrder.ts, 4, 27))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 5, 7))
+>B : Symbol(B, Decl(pipeCallbackInferenceCheckOrder.ts, 5, 9))
+>this : Symbol(this, Decl(pipeCallbackInferenceCheckOrder.ts, 5, 21))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 5, 7))
+>ab : Symbol(ab, Decl(pipeCallbackInferenceCheckOrder.ts, 5, 29))
+>_ : Symbol(_, Decl(pipeCallbackInferenceCheckOrder.ts, 5, 35))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 5, 7))
+>B : Symbol(B, Decl(pipeCallbackInferenceCheckOrder.ts, 5, 9))
+>B : Symbol(B, Decl(pipeCallbackInferenceCheckOrder.ts, 5, 9))
+}
+
+type Covariant<A> = (_: never) => A;
+>Covariant : Symbol(Covariant, Decl(pipeCallbackInferenceCheckOrder.ts, 6, 1))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 8, 15))
+>_ : Symbol(_, Decl(pipeCallbackInferenceCheckOrder.ts, 8, 21))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 8, 15))
+
+interface VarianceStruct<out A, out E, out R> {
+>VarianceStruct : Symbol(VarianceStruct, Decl(pipeCallbackInferenceCheckOrder.ts, 8, 36))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 10, 25))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 10, 31))
+>R : Symbol(R, Decl(pipeCallbackInferenceCheckOrder.ts, 10, 38))
+
+  readonly _V: string;
+>_V : Symbol(VarianceStruct._V, Decl(pipeCallbackInferenceCheckOrder.ts, 10, 47))
+
+  readonly _A: Covariant<A>;
+>_A : Symbol(VarianceStruct._A, Decl(pipeCallbackInferenceCheckOrder.ts, 11, 22))
+>Covariant : Symbol(Covariant, Decl(pipeCallbackInferenceCheckOrder.ts, 6, 1))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 10, 25))
+
+  readonly _E: Covariant<E>;
+>_E : Symbol(VarianceStruct._E, Decl(pipeCallbackInferenceCheckOrder.ts, 12, 28))
+>Covariant : Symbol(Covariant, Decl(pipeCallbackInferenceCheckOrder.ts, 6, 1))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 10, 31))
+
+  readonly _R: Covariant<R>;
+>_R : Symbol(VarianceStruct._R, Decl(pipeCallbackInferenceCheckOrder.ts, 13, 28))
+>Covariant : Symbol(Covariant, Decl(pipeCallbackInferenceCheckOrder.ts, 6, 1))
+>R : Symbol(R, Decl(pipeCallbackInferenceCheckOrder.ts, 10, 38))
+}
+
+declare const EffectTypeId: unique symbol;
+>EffectTypeId : Symbol(EffectTypeId, Decl(pipeCallbackInferenceCheckOrder.ts, 17, 13))
+
+interface Variance<out A, out E, out R> {
+>Variance : Symbol(Variance, Decl(pipeCallbackInferenceCheckOrder.ts, 17, 42))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 19, 19))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 19, 25))
+>R : Symbol(R, Decl(pipeCallbackInferenceCheckOrder.ts, 19, 32))
+
+  readonly [EffectTypeId]: VarianceStruct<A, E, R>;
+>[EffectTypeId] : Symbol(Variance[EffectTypeId], Decl(pipeCallbackInferenceCheckOrder.ts, 19, 41))
+>EffectTypeId : Symbol(EffectTypeId, Decl(pipeCallbackInferenceCheckOrder.ts, 17, 13))
+>VarianceStruct : Symbol(VarianceStruct, Decl(pipeCallbackInferenceCheckOrder.ts, 8, 36))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 19, 19))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 19, 25))
+>R : Symbol(R, Decl(pipeCallbackInferenceCheckOrder.ts, 19, 32))
+}
+
+interface Effect<out A, out E = never, out R = never>
+>Effect : Symbol(Effect, Decl(pipeCallbackInferenceCheckOrder.ts, 21, 1))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 23, 17))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 23, 23))
+>R : Symbol(R, Decl(pipeCallbackInferenceCheckOrder.ts, 23, 38))
+
+  extends Variance<A, E, R>,
+>Variance : Symbol(Variance, Decl(pipeCallbackInferenceCheckOrder.ts, 17, 42))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 23, 17))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 23, 23))
+>R : Symbol(R, Decl(pipeCallbackInferenceCheckOrder.ts, 23, 38))
+
+    Pipeable {}
+>Pipeable : Symbol(Pipeable, Decl(pipeCallbackInferenceCheckOrder.ts, 0, 0))
+
+interface Class<Fields> extends Pipeable {
+>Class : Symbol(Class, Decl(pipeCallbackInferenceCheckOrder.ts, 25, 15))
+>Fields : Symbol(Fields, Decl(pipeCallbackInferenceCheckOrder.ts, 27, 16))
+>Pipeable : Symbol(Pipeable, Decl(pipeCallbackInferenceCheckOrder.ts, 0, 0))
+
+  new (): Fields;
+>Fields : Symbol(Fields, Decl(pipeCallbackInferenceCheckOrder.ts, 27, 16))
+}
+
+interface TaggedErrorClass<Tag extends string, Fields> extends Class<Fields> {
+>TaggedErrorClass : Symbol(TaggedErrorClass, Decl(pipeCallbackInferenceCheckOrder.ts, 29, 1))
+>Tag : Symbol(Tag, Decl(pipeCallbackInferenceCheckOrder.ts, 31, 27))
+>Fields : Symbol(Fields, Decl(pipeCallbackInferenceCheckOrder.ts, 31, 46))
+>Class : Symbol(Class, Decl(pipeCallbackInferenceCheckOrder.ts, 25, 15))
+>Fields : Symbol(Fields, Decl(pipeCallbackInferenceCheckOrder.ts, 31, 46))
+
+  readonly _tag: Tag;
+>_tag : Symbol(TaggedErrorClass._tag, Decl(pipeCallbackInferenceCheckOrder.ts, 31, 78))
+>Tag : Symbol(Tag, Decl(pipeCallbackInferenceCheckOrder.ts, 31, 27))
+}
+
+declare const TaggedError: (identifier?: string) => <
+>TaggedError : Symbol(TaggedError, Decl(pipeCallbackInferenceCheckOrder.ts, 35, 13))
+>identifier : Symbol(identifier, Decl(pipeCallbackInferenceCheckOrder.ts, 35, 28))
+
+  Tag extends string,
+>Tag : Symbol(Tag, Decl(pipeCallbackInferenceCheckOrder.ts, 35, 53))
+
+  Fields
+>Fields : Symbol(Fields, Decl(pipeCallbackInferenceCheckOrder.ts, 36, 21))
+
+>(
+  tag: Tag,
+>tag : Symbol(tag, Decl(pipeCallbackInferenceCheckOrder.ts, 38, 2))
+>Tag : Symbol(Tag, Decl(pipeCallbackInferenceCheckOrder.ts, 35, 53))
+
+  fieldsOr: Fields
+>fieldsOr : Symbol(fieldsOr, Decl(pipeCallbackInferenceCheckOrder.ts, 39, 11))
+>Fields : Symbol(Fields, Decl(pipeCallbackInferenceCheckOrder.ts, 36, 21))
+
+) => TaggedErrorClass<
+>TaggedErrorClass : Symbol(TaggedErrorClass, Decl(pipeCallbackInferenceCheckOrder.ts, 29, 1))
+
+  Tag,
+>Tag : Symbol(Tag, Decl(pipeCallbackInferenceCheckOrder.ts, 35, 53))
+  {
+    readonly _tag: Tag;
+>_tag : Symbol(_tag, Decl(pipeCallbackInferenceCheckOrder.ts, 43, 3))
+>Tag : Symbol(Tag, Decl(pipeCallbackInferenceCheckOrder.ts, 35, 53))
+  }
+>;
+
+declare const log: (
+>log : Symbol(log, Decl(pipeCallbackInferenceCheckOrder.ts, 48, 13))
+
+  ...message: ReadonlyArray<any>
+>message : Symbol(message, Decl(pipeCallbackInferenceCheckOrder.ts, 48, 20))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+
+) => Effect<void, never, never>;
+>Effect : Symbol(Effect, Decl(pipeCallbackInferenceCheckOrder.ts, 21, 1))
+
+export const categoriesKey = "@effect/error/categories";
+>categoriesKey : Symbol(categoriesKey, Decl(pipeCallbackInferenceCheckOrder.ts, 52, 12))
+
+export declare const withCategory: <Categories extends Array<PropertyKey>>(
+>withCategory : Symbol(withCategory, Decl(pipeCallbackInferenceCheckOrder.ts, 54, 20))
+>Categories : Symbol(Categories, Decl(pipeCallbackInferenceCheckOrder.ts, 54, 36))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+
+  ...categories: Categories
+>categories : Symbol(categories, Decl(pipeCallbackInferenceCheckOrder.ts, 54, 75))
+>Categories : Symbol(Categories, Decl(pipeCallbackInferenceCheckOrder.ts, 54, 36))
+
+) => <Args extends Array<any>, Ret, C extends { new (...args: Args): Ret }>(
+>Args : Symbol(Args, Decl(pipeCallbackInferenceCheckOrder.ts, 56, 6))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Ret : Symbol(Ret, Decl(pipeCallbackInferenceCheckOrder.ts, 56, 30))
+>C : Symbol(C, Decl(pipeCallbackInferenceCheckOrder.ts, 56, 35), Decl(pipeCallbackInferenceCheckOrder.ts, 56, 76))
+>args : Symbol(args, Decl(pipeCallbackInferenceCheckOrder.ts, 56, 53))
+>Args : Symbol(Args, Decl(pipeCallbackInferenceCheckOrder.ts, 56, 6))
+>Ret : Symbol(Ret, Decl(pipeCallbackInferenceCheckOrder.ts, 56, 30))
+
+  C: C
+>C : Symbol(C, Decl(pipeCallbackInferenceCheckOrder.ts, 56, 35), Decl(pipeCallbackInferenceCheckOrder.ts, 56, 76))
+>C : Symbol(C, Decl(pipeCallbackInferenceCheckOrder.ts, 56, 35), Decl(pipeCallbackInferenceCheckOrder.ts, 56, 76))
+
+) => C & {
+>C : Symbol(C, Decl(pipeCallbackInferenceCheckOrder.ts, 56, 35), Decl(pipeCallbackInferenceCheckOrder.ts, 56, 76))
+
+  new (...args: Args): Ret & {
+>args : Symbol(args, Decl(pipeCallbackInferenceCheckOrder.ts, 59, 7))
+>Args : Symbol(Args, Decl(pipeCallbackInferenceCheckOrder.ts, 56, 6))
+>Ret : Symbol(Ret, Decl(pipeCallbackInferenceCheckOrder.ts, 56, 30))
+
+    [categoriesKey]: { [Cat in Categories[number]]: true };
+>[categoriesKey] : Symbol([categoriesKey], Decl(pipeCallbackInferenceCheckOrder.ts, 59, 30))
+>categoriesKey : Symbol(categoriesKey, Decl(pipeCallbackInferenceCheckOrder.ts, 52, 12))
+>Cat : Symbol(Cat, Decl(pipeCallbackInferenceCheckOrder.ts, 60, 24))
+>Categories : Symbol(Categories, Decl(pipeCallbackInferenceCheckOrder.ts, 54, 36))
+
+  };
+};
+
+export type AllKeys<E> = E extends { [categoriesKey]: infer Q }
+>AllKeys : Symbol(AllKeys, Decl(pipeCallbackInferenceCheckOrder.ts, 62, 2))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 64, 20))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 64, 20))
+>[categoriesKey] : Symbol([categoriesKey], Decl(pipeCallbackInferenceCheckOrder.ts, 64, 36))
+>categoriesKey : Symbol(categoriesKey, Decl(pipeCallbackInferenceCheckOrder.ts, 52, 12))
+>Q : Symbol(Q, Decl(pipeCallbackInferenceCheckOrder.ts, 64, 59))
+
+  ? keyof Q
+>Q : Symbol(Q, Decl(pipeCallbackInferenceCheckOrder.ts, 64, 59))
+
+  : never;
+export type ExtractAll<E, Cats extends PropertyKey> = Cats extends any
+>ExtractAll : Symbol(ExtractAll, Decl(pipeCallbackInferenceCheckOrder.ts, 66, 10))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 67, 23))
+>Cats : Symbol(Cats, Decl(pipeCallbackInferenceCheckOrder.ts, 67, 25))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>Cats : Symbol(Cats, Decl(pipeCallbackInferenceCheckOrder.ts, 67, 25))
+
+  ? Extract<E, { [categoriesKey]: { [K in Cats]: any } }>
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 67, 23))
+>[categoriesKey] : Symbol([categoriesKey], Decl(pipeCallbackInferenceCheckOrder.ts, 68, 16))
+>categoriesKey : Symbol(categoriesKey, Decl(pipeCallbackInferenceCheckOrder.ts, 52, 12))
+>K : Symbol(K, Decl(pipeCallbackInferenceCheckOrder.ts, 68, 37))
+>Cats : Symbol(Cats, Decl(pipeCallbackInferenceCheckOrder.ts, 67, 25))
+
+  : never;
+
+export declare const catchCategory: <
+>catchCategory : Symbol(catchCategory, Decl(pipeCallbackInferenceCheckOrder.ts, 71, 20))
+
+  E,
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 71, 37))
+
+  const Categories extends Array<AllKeys<E>>,
+>Categories : Symbol(Categories, Decl(pipeCallbackInferenceCheckOrder.ts, 72, 4))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>AllKeys : Symbol(AllKeys, Decl(pipeCallbackInferenceCheckOrder.ts, 62, 2))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 71, 37))
+
+  A2,
+>A2 : Symbol(A2, Decl(pipeCallbackInferenceCheckOrder.ts, 73, 45))
+
+  E2,
+>E2 : Symbol(E2, Decl(pipeCallbackInferenceCheckOrder.ts, 74, 5))
+
+  R2
+>R2 : Symbol(R2, Decl(pipeCallbackInferenceCheckOrder.ts, 75, 5))
+
+>(
+  ...args: [
+>args : Symbol(args, Decl(pipeCallbackInferenceCheckOrder.ts, 77, 2))
+
+    ...Categories,
+>Categories : Symbol(Categories, Decl(pipeCallbackInferenceCheckOrder.ts, 72, 4))
+
+    f: (err: ExtractAll<E, Categories[number]>) => Effect<A2, E2, R2>
+>err : Symbol(err, Decl(pipeCallbackInferenceCheckOrder.ts, 80, 8))
+>ExtractAll : Symbol(ExtractAll, Decl(pipeCallbackInferenceCheckOrder.ts, 66, 10))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 71, 37))
+>Categories : Symbol(Categories, Decl(pipeCallbackInferenceCheckOrder.ts, 72, 4))
+>Effect : Symbol(Effect, Decl(pipeCallbackInferenceCheckOrder.ts, 21, 1))
+>A2 : Symbol(A2, Decl(pipeCallbackInferenceCheckOrder.ts, 73, 45))
+>E2 : Symbol(E2, Decl(pipeCallbackInferenceCheckOrder.ts, 74, 5))
+>R2 : Symbol(R2, Decl(pipeCallbackInferenceCheckOrder.ts, 75, 5))
+
+  ]
+) => <A, R>(
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 82, 6))
+>R : Symbol(R, Decl(pipeCallbackInferenceCheckOrder.ts, 82, 8))
+
+  effect: Effect<A, E, R>
+>effect : Symbol(effect, Decl(pipeCallbackInferenceCheckOrder.ts, 82, 12))
+>Effect : Symbol(Effect, Decl(pipeCallbackInferenceCheckOrder.ts, 21, 1))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 82, 6))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 71, 37))
+>R : Symbol(R, Decl(pipeCallbackInferenceCheckOrder.ts, 82, 8))
+
+) => Effect<A | A2, E2 | Exclude<E, ExtractAll<E, Categories[number]>>, R | R2>;
+>Effect : Symbol(Effect, Decl(pipeCallbackInferenceCheckOrder.ts, 21, 1))
+>A : Symbol(A, Decl(pipeCallbackInferenceCheckOrder.ts, 82, 6))
+>A2 : Symbol(A2, Decl(pipeCallbackInferenceCheckOrder.ts, 73, 45))
+>E2 : Symbol(E2, Decl(pipeCallbackInferenceCheckOrder.ts, 74, 5))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 71, 37))
+>ExtractAll : Symbol(ExtractAll, Decl(pipeCallbackInferenceCheckOrder.ts, 66, 10))
+>E : Symbol(E, Decl(pipeCallbackInferenceCheckOrder.ts, 71, 37))
+>Categories : Symbol(Categories, Decl(pipeCallbackInferenceCheckOrder.ts, 72, 4))
+>R : Symbol(R, Decl(pipeCallbackInferenceCheckOrder.ts, 82, 8))
+>R2 : Symbol(R2, Decl(pipeCallbackInferenceCheckOrder.ts, 75, 5))
+
+class FooError extends TaggedError()("FooError", {}).pipe(
+>FooError : Symbol(FooError, Decl(pipeCallbackInferenceCheckOrder.ts, 84, 80))
+>TaggedError()("FooError", {}).pipe : Symbol(Pipeable.pipe, Decl(pipeCallbackInferenceCheckOrder.ts, 4, 27))
+>TaggedError : Symbol(TaggedError, Decl(pipeCallbackInferenceCheckOrder.ts, 35, 13))
+>pipe : Symbol(Pipeable.pipe, Decl(pipeCallbackInferenceCheckOrder.ts, 4, 27))
+
+  withCategory("domain")
+>withCategory : Symbol(withCategory, Decl(pipeCallbackInferenceCheckOrder.ts, 54, 20))
+
+) {}
+
+class BarError extends TaggedError()("BarError", {}).pipe(
+>BarError : Symbol(BarError, Decl(pipeCallbackInferenceCheckOrder.ts, 88, 4))
+>TaggedError()("BarError", {}).pipe : Symbol(Pipeable.pipe, Decl(pipeCallbackInferenceCheckOrder.ts, 4, 27))
+>TaggedError : Symbol(TaggedError, Decl(pipeCallbackInferenceCheckOrder.ts, 35, 13))
+>pipe : Symbol(Pipeable.pipe, Decl(pipeCallbackInferenceCheckOrder.ts, 4, 27))
+
+  withCategory("system", "domain")
+>withCategory : Symbol(withCategory, Decl(pipeCallbackInferenceCheckOrder.ts, 54, 20))
+
+) {}
+
+class BazError extends TaggedError()("BazError", {}).pipe(
+>BazError : Symbol(BazError, Decl(pipeCallbackInferenceCheckOrder.ts, 92, 4))
+>TaggedError()("BazError", {}).pipe : Symbol(Pipeable.pipe, Decl(pipeCallbackInferenceCheckOrder.ts, 4, 27))
+>TaggedError : Symbol(TaggedError, Decl(pipeCallbackInferenceCheckOrder.ts, 35, 13))
+>pipe : Symbol(Pipeable.pipe, Decl(pipeCallbackInferenceCheckOrder.ts, 4, 27))
+
+  withCategory("system")
+>withCategory : Symbol(withCategory, Decl(pipeCallbackInferenceCheckOrder.ts, 54, 20))
+
+) {}
+
+declare const baz: (
+>baz : Symbol(baz, Decl(pipeCallbackInferenceCheckOrder.ts, 98, 13))
+
+  x: number
+>x : Symbol(x, Decl(pipeCallbackInferenceCheckOrder.ts, 98, 20))
+
+) => Effect<never, FooError | BarError | BazError, never>;
+>Effect : Symbol(Effect, Decl(pipeCallbackInferenceCheckOrder.ts, 21, 1))
+>FooError : Symbol(FooError, Decl(pipeCallbackInferenceCheckOrder.ts, 84, 80))
+>BarError : Symbol(BarError, Decl(pipeCallbackInferenceCheckOrder.ts, 88, 4))
+>BazError : Symbol(BazError, Decl(pipeCallbackInferenceCheckOrder.ts, 92, 4))
+
+export const program = baz(1).pipe(catchCategory("domain", (_) => log(_._tag)));
+>program : Symbol(program, Decl(pipeCallbackInferenceCheckOrder.ts, 102, 12))
+>baz(1).pipe : Symbol(Pipeable.pipe, Decl(pipeCallbackInferenceCheckOrder.ts, 4, 27))
+>baz : Symbol(baz, Decl(pipeCallbackInferenceCheckOrder.ts, 98, 13))
+>pipe : Symbol(Pipeable.pipe, Decl(pipeCallbackInferenceCheckOrder.ts, 4, 27))
+>catchCategory : Symbol(catchCategory, Decl(pipeCallbackInferenceCheckOrder.ts, 71, 20))
+>_ : Symbol(_, Decl(pipeCallbackInferenceCheckOrder.ts, 102, 60))
+>log : Symbol(log, Decl(pipeCallbackInferenceCheckOrder.ts, 48, 13))
+>_._tag : Symbol(_tag, Decl(pipeCallbackInferenceCheckOrder.ts, 43, 3))
+>_ : Symbol(_, Decl(pipeCallbackInferenceCheckOrder.ts, 102, 60))
+>_tag : Symbol(_tag, Decl(pipeCallbackInferenceCheckOrder.ts, 43, 3))
+
