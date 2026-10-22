@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/circularBaseTypeArgumentsReadDeclaredMembers.ts] ////
+
+=== circularBaseTypeArgumentsReadDeclaredMembers.ts ===
+// https://github.com/microsoft/TypeScript/issues/64605
+
+interface Internals<I = unknown> { input: I }
+>Internals : Symbol(Internals, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 0, 0))
+>I : Symbol(I, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 2, 20))
+>input : Symbol(Internals.input, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 2, 34))
+>I : Symbol(I, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 2, 20))
+
+interface Schema { _zod: Internals }
+>Schema : Symbol(Schema, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 2, 45))
+>_zod : Symbol(Schema._zod, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 3, 18))
+>Internals : Symbol(Internals, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 0, 0))
+
+type RecordInput<V extends Schema> = V extends unknown ? Record<string, V["_zod"]["input"]> : never;
+>RecordInput : Symbol(RecordInput, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 3, 36))
+>V : Symbol(V, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 4, 17))
+>Schema : Symbol(Schema, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 2, 45))
+>V : Symbol(V, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 4, 17))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 4, 17))
+
+interface RecordSchema<V extends Schema> extends Schema { _zod: Internals<RecordInput<V>> }
+>RecordSchema : Symbol(RecordSchema, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 4, 100))
+>V : Symbol(V, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 5, 23))
+>Schema : Symbol(Schema, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 2, 45))
+>Schema : Symbol(Schema, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 2, 45))
+>_zod : Symbol(RecordSchema._zod, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 5, 57))
+>Internals : Symbol(Internals, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 0, 0))
+>RecordInput : Symbol(RecordInput, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 3, 36))
+>V : Symbol(V, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 5, 23))
+
+interface UnionInternals<T extends readonly Schema[]> extends Internals<T[number]["_zod"]["input"]> {}
+>UnionInternals : Symbol(UnionInternals, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 5, 91))
+>T : Symbol(T, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 6, 25))
+>Schema : Symbol(Schema, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 2, 45))
+>Internals : Symbol(Internals, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 0, 0))
+>T : Symbol(T, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 6, 25))
+
+interface UnionSchema<T extends readonly Schema[]> extends Schema { _zod: UnionInternals<T> }
+>UnionSchema : Symbol(UnionSchema, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 6, 102))
+>T : Symbol(T, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 7, 22))
+>Schema : Symbol(Schema, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 2, 45))
+>Schema : Symbol(Schema, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 2, 45))
+>_zod : Symbol(UnionSchema._zod, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 7, 67))
+>UnionInternals : Symbol(UnionInternals, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 5, 91))
+>T : Symbol(T, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 7, 22))
+
+type JsonValue = { [k: string]: JsonValue };
+>JsonValue : Symbol(JsonValue, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 7, 93))
+>k : Symbol(k, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 8, 20))
+>JsonValue : Symbol(JsonValue, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 7, 93))
+
+type _Json = UnionSchema<[RecordSchema<Json>]>;
+>_Json : Symbol(_Json, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 8, 44))
+>UnionSchema : Symbol(UnionSchema, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 6, 102))
+>RecordSchema : Symbol(RecordSchema, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 4, 100))
+>Json : Symbol(Json, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 11, 67))
+
+type _JsonInternals = _Json["_zod"];
+>_JsonInternals : Symbol(_JsonInternals, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 9, 47))
+>_Json : Symbol(_Json, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 8, 44))
+
+interface JsonInternals extends _JsonInternals { input: JsonValue }
+>JsonInternals : Symbol(JsonInternals, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 10, 36))
+>_JsonInternals : Symbol(_JsonInternals, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 9, 47))
+>input : Symbol(JsonInternals.input, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 11, 48))
+>JsonValue : Symbol(JsonValue, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 7, 93))
+
+interface Json extends _Json { _zod: JsonInternals }
+>Json : Symbol(Json, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 11, 67))
+>_Json : Symbol(_Json, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 8, 44))
+>_zod : Symbol(Json._zod, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 12, 30))
+>JsonInternals : Symbol(JsonInternals, Decl(circularBaseTypeArgumentsReadDeclaredMembers.ts, 10, 36))
+
