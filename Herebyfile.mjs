@@ -2954,21 +2954,18 @@ async function runPackNativePreviewPackages() {
         await fs.promises.rename(filename, npmTarball);
     }));
 
-    // Publish platform packages before the main package that references them as
-    // optionalDependencies. The independent WASI artifact package is published last.
+    // npm packages need to be published in dependency order: platform packages
+    // first, then the main package that references them as optionalDependencies.
+    // The WASI package goes with the platform packages so that typescript/wasm
+    // never refers to a version without a matching tsc.wasm.
     const publishManifest = {
         stages: [
-            platforms.map(p => ({
+            [...platforms, wasip1Package].map(p => ({
                 filename: path.basename(p.npmTarball),
             })),
             [
                 {
                     filename: path.basename(mainNativePreviewPackage.npmTarball),
-                },
-            ],
-            [
-                {
-                    filename: path.basename(wasip1Package.npmTarball),
                 },
             ],
         ],
