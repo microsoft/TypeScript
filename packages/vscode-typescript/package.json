@@ -333,7 +333,35 @@
                 },
                 {
                     "command": "typescript.native-preview.selectVersion",
-                    "when": "typescript.native-preview.serverRunning"
+                    "when": "typescript.native-preview.serverRunning && !isWeb"
+                },
+                {
+                    "command": "typescript.native-preview.reportIssue",
+                    "when": "!isWeb"
+                },
+                {
+                    "command": "typescript.native-preview.dev.runGC",
+                    "when": "!isWeb"
+                },
+                {
+                    "command": "typescript.native-preview.dev.saveHeapProfile",
+                    "when": "!isWeb"
+                },
+                {
+                    "command": "typescript.native-preview.dev.saveAllocProfile",
+                    "when": "!isWeb"
+                },
+                {
+                    "command": "typescript.native-preview.dev.startCPUProfile",
+                    "when": "!isWeb"
+                },
+                {
+                    "command": "typescript.native-preview.dev.stopCPUProfile",
+                    "when": "!isWeb"
+                },
+                {
+                    "command": "typescript.native-preview.initializeAPIConnection.ui",
+                    "when": "!isWeb"
                 },
                 {
                     "command": "typescript.native-preview.goToSourceDefinition",
