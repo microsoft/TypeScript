@@ -92,7 +92,7 @@ export class Counted extends WithCount {
 	fs = bundled.WrapFS(fs)
 
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
 	p := compiler.NewProgram(compiler.ProgramOptions{
 		Config: parsed,
