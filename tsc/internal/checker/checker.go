@@ -5282,8 +5282,11 @@ func (c *Checker) checkEnumMember(node *ast.Node) {
 	if ast.IsComputedPropertyName(node.Name()) {
 		c.checkExpression(node.Name().Expression())
 	}
-	if node.Initializer() != nil {
-		c.checkExpression(node.Initializer())
+	if initializer := node.Initializer(); initializer != nil {
+		initializerType := c.checkExpression(initializer)
+		if c.getEnumMemberValue(node).Value == nil && !ast.IsEnumConst(node.Parent) && node.Parent.Flags&ast.NodeFlagsAmbient == 0 {
+			c.checkTypeAssignableTo(initializerType, c.numberType, initializer, diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values)
+		}
 	}
 }
 
@@ -25160,8 +25163,6 @@ func (c *Checker) computeConstantEnumMemberValue(member *ast.Node) evaluator.Res
 		c.error(initializer, diagnostics.X_const_enum_member_initializers_must_be_constant_expressions)
 	case member.Parent.Flags&ast.NodeFlagsAmbient != 0:
 		c.error(initializer, diagnostics.In_ambient_enum_declarations_member_initializer_must_be_constant_expression)
-	default:
-		c.checkTypeAssignableTo(c.checkExpression(initializer), c.numberType, initializer, diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values)
 	}
 	return result
 }
