@@ -15,7 +15,7 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func TestRebaseRemovesExplicitTombstoneDescendants(t *testing.T) {
+func TestSnapshotFileSystemRemovesExplicitTombstoneDescendants(t *testing.T) {
 	t.Parallel()
 	for _, kind := range []requestfilesystem.Kind{requestfilesystem.KindLayer, requestfilesystem.KindFull} {
 		t.Run(string(kind), func(t *testing.T) {
@@ -45,16 +45,22 @@ func TestRebaseRemovesExplicitTombstoneDescendants(t *testing.T) {
 			targetSnapshot := session.snapshots[target.Snapshot].snapshot
 			targetProgram := targetSnapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram()
 			assert.Assert(t, targetProgram.GetSourceFile("/removed/keep.ts") != nil)
-			self, err := session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{
-				Snapshot: target.Snapshot, NewSnapshot: target.Snapshot,
-				Changes: &CreateSnapshotParams{EnsurePrograms: &EnsurePrograms{All: true}},
+			self, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+				Snapshot: target.Snapshot,
+				Changes: &CreateSnapshotParams{
+					FileSystem:     &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(target.Snapshot)},
+					EnsurePrograms: &EnsurePrograms{All: true},
+				},
 			})
 			assert.NilError(t, err)
 			assert.Assert(t, session.snapshots[self.Snapshot].snapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram() == targetProgram)
 
-			rebased, err := session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{
-				Snapshot: source.Snapshot, NewSnapshot: target.Snapshot,
-				Changes: &CreateSnapshotParams{EnsurePrograms: &EnsurePrograms{All: true}},
+			rebased, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+				Snapshot: target.Snapshot,
+				Changes: &CreateSnapshotParams{
+					FileSystem:     &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot)},
+					EnsurePrograms: &EnsurePrograms{All: true},
+				},
 			})
 			assert.NilError(t, err)
 			snapshot := session.snapshots[rebased.Snapshot].snapshot
@@ -69,7 +75,7 @@ func TestRebaseRemovesExplicitTombstoneDescendants(t *testing.T) {
 	}
 }
 
-func TestRebaseFullFileSystemRemovesUnlistedFiles(t *testing.T) {
+func TestSnapshotFullFileSystemRemovesUnlistedFiles(t *testing.T) {
 	t.Parallel()
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
 	defer projectSession.Close()
@@ -99,9 +105,12 @@ func TestRebaseFullFileSystemRemovesUnlistedFiles(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, session.snapshots[target.Snapshot].snapshot.GetFile("/hidden.ts") != nil)
-	rebased, err := session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{
-		Snapshot: source.Snapshot, NewSnapshot: target.Snapshot,
-		Changes: &CreateSnapshotParams{EnsurePrograms: &EnsurePrograms{All: true}},
+	rebased, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+		Snapshot: target.Snapshot,
+		Changes: &CreateSnapshotParams{
+			FileSystem:     &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot)},
+			EnsurePrograms: &EnsurePrograms{All: true},
+		},
 	})
 	assert.NilError(t, err)
 	snapshot := session.snapshots[rebased.Snapshot].snapshot
@@ -110,7 +119,7 @@ func TestRebaseFullFileSystemRemovesUnlistedFiles(t *testing.T) {
 	assert.Assert(t, snapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram().GetSourceFile("/hidden.ts") == nil)
 }
 
-func TestRebaseComparesTargetSnapshotContents(t *testing.T) {
+func TestSnapshotFileSystemComparesTargetSnapshotContents(t *testing.T) {
 	t.Parallel()
 	for _, editor := range []bool{false, true} {
 		for _, layeredTarget := range []bool{false, true} {
@@ -153,9 +162,12 @@ func TestRebaseComparesTargetSnapshotContents(t *testing.T) {
 					FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindLayer, Files: map[string]string{"/index.ts": expected}},
 				})
 				assert.NilError(t, err)
-				rebased, err := session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{
-					Snapshot: source.Snapshot, NewSnapshot: target.Snapshot,
-					Changes: &CreateSnapshotParams{EnsurePrograms: &EnsurePrograms{All: true}},
+				rebased, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+					Snapshot: target.Snapshot,
+					Changes: &CreateSnapshotParams{
+						FileSystem:     &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot)},
+						EnsurePrograms: &EnsurePrograms{All: true},
+					},
 				})
 				assert.NilError(t, err)
 				snapshot := session.snapshots[rebased.Snapshot].snapshot
@@ -170,7 +182,7 @@ func TestRebaseComparesTargetSnapshotContents(t *testing.T) {
 	}
 }
 
-func TestRebaseUnchangedListingPreservesIncrementalState(t *testing.T) {
+func TestSnapshotFileSystemUnchangedListingPreservesIncrementalState(t *testing.T) {
 	t.Parallel()
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
 	defer projectSession.Close()
@@ -201,9 +213,12 @@ func TestRebaseUnchangedListingPreservesIncrementalState(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
-	rebased, err := session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{
-		Snapshot: source.Snapshot, NewSnapshot: target.Snapshot,
-		Changes: &CreateSnapshotParams{EnsurePrograms: &EnsurePrograms{All: true}},
+	rebased, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+		Snapshot: target.Snapshot,
+		Changes: &CreateSnapshotParams{
+			FileSystem:     &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot)},
+			EnsurePrograms: &EnsurePrograms{All: true},
+		},
 	})
 	assert.NilError(t, err)
 	proj := session.snapshots[rebased.Snapshot].snapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json"))
@@ -213,7 +228,7 @@ func TestRebaseUnchangedListingPreservesIncrementalState(t *testing.T) {
 	assert.Assert(t, proj.GetProgram().GetSourceFile("/hidden.ts") == targetProgram.GetSourceFile("/hidden.ts"))
 }
 
-func TestRebaseGeneratedFilesAreRelativeToTarget(t *testing.T) {
+func TestSnapshotFileSystemGeneratedFilesAreRelativeToTarget(t *testing.T) {
 	t.Parallel()
 	for _, targetHasGeneratedFiles := range []bool{false, true} {
 		t.Run(fmt.Sprintf("targetHasGeneratedFiles=%v", targetHasGeneratedFiles), func(t *testing.T) {
@@ -257,11 +272,14 @@ func TestRebaseGeneratedFilesAreRelativeToTarget(t *testing.T) {
 			}
 			targetSnapshot := session.snapshots[target.Snapshot].snapshot
 			unrelated := targetSnapshot.ProjectCollection.GetProject(project.ID("/other/tsconfig.json")).GetProgram()
-			rebased, err := session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{
-				Snapshot: source.Snapshot, NewSnapshot: target.Snapshot,
+			rebased, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+				Snapshot: target.Snapshot,
 				Changes: &CreateSnapshotParams{
 					FileSystem: &requestfilesystem.RequestFileSystem{
-						Kind: requestfilesystem.KindLayer, Files: map[string]string{"/index.ts": "export const value = 3;"},
+						Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot),
+						FileSystem: &requestfilesystem.RequestFileSystem{
+							Kind: requestfilesystem.KindLayer, Files: map[string]string{"/index.ts": "export const value = 3;"},
+						},
 					},
 					EnsurePrograms: &EnsurePrograms{All: true},
 				},
@@ -286,7 +304,7 @@ func TestRebaseGeneratedFilesAreRelativeToTarget(t *testing.T) {
 	}
 }
 
-func TestRebasePreservesFullInvalidation(t *testing.T) {
+func TestSnapshotFileSystemPreservesFullInvalidation(t *testing.T) {
 	t.Parallel()
 	projectSession, _ := projecttestutil.Setup(map[string]any{"/index.ts": "export const value = 1;"})
 	defer projectSession.Close()
@@ -309,7 +327,9 @@ func TestRebasePreservesFullInvalidation(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, updatedProgram.GetSourceFile("/index.ts").Text(), "export const value = 2;")
 	for _, targetID := range []SnapshotID{base.Snapshot, target.Snapshot} {
-		rebased, err := session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{Snapshot: base.Snapshot, NewSnapshot: targetID, Changes: changes})
+		snapshotChanges := *changes
+		snapshotChanges.FileSystem = &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(base.Snapshot)}
+		rebased, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{Snapshot: targetID, Changes: &snapshotChanges})
 		assert.NilError(t, err)
 		program, err := session.snapshots[rebased.Snapshot].getProgram(rebased.Projects[0].Handle)
 		assert.NilError(t, err)
@@ -317,7 +337,7 @@ func TestRebasePreservesFullInvalidation(t *testing.T) {
 	}
 }
 
-func TestRebaseRefreshesDependencyAutoImports(t *testing.T) {
+func TestSnapshotFileSystemRefreshesDependencyAutoImports(t *testing.T) {
 	t.Parallel()
 	const fileName = "/home/project/index.ts"
 	const dependency = "/home/project/node_modules/my-pkg/index.d.ts"
@@ -362,9 +382,12 @@ func TestRebaseRefreshesDependencyAutoImports(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, slices.Contains(completionNames(source.Snapshot), "packageNew"))
-	rebased, err := session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{
-		Snapshot: source.Snapshot, NewSnapshot: target.Snapshot,
-		Changes: &CreateSnapshotParams{PrepareAutoImports: &DocumentIdentifier{FileName: fileName}},
+	rebased, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+		Snapshot: target.Snapshot,
+		Changes: &CreateSnapshotParams{
+			FileSystem:         &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot)},
+			PrepareAutoImports: &DocumentIdentifier{FileName: fileName},
+		},
 	})
 	assert.NilError(t, err)
 	names := completionNames(rebased.Snapshot)
@@ -372,7 +395,7 @@ func TestRebaseRefreshesDependencyAutoImports(t *testing.T) {
 	assert.Assert(t, !slices.Contains(names, "packageOld"))
 }
 
-func TestSelfRebaseMatchesUpdateProgramState(t *testing.T) {
+func TestSelfSnapshotFileSystemMatchesUpdateProgramState(t *testing.T) {
 	t.Parallel()
 	for _, baseKind := range []requestfilesystem.Kind{"host", requestfilesystem.KindLayer, requestfilesystem.KindFull} {
 		t.Run(string(baseKind), func(t *testing.T) {
@@ -435,7 +458,12 @@ func TestSelfRebaseMatchesUpdateProgramState(t *testing.T) {
 				t.Log(name)
 				updated, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{Snapshot: base.Snapshot, Changes: changes})
 				assert.NilError(t, err, name)
-				rebased, err := session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{Snapshot: base.Snapshot, NewSnapshot: base.Snapshot, Changes: changes})
+				snapshotChanges := *changes
+				snapshotChanges.FileSystem = &requestfilesystem.RequestFileSystem{
+					Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(base.Snapshot),
+					FileSystem: changes.FileSystem,
+				}
+				rebased, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{Snapshot: base.Snapshot, Changes: &snapshotChanges})
 				assert.NilError(t, err, name)
 				// Projects created independently have distinct lifetime handles.
 				assert.DeepEqual(t, rebased.Projects, updated.Projects, cmpopts.IgnoreFields(ProjectResponse{}, "Handle"))

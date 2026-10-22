@@ -19,6 +19,8 @@ const (
 	KindFull Kind = "full"
 	// KindLayer checks the supplied filesystem before falling back to the host.
 	KindLayer Kind = "layer"
+	// KindSnapshot overlays a retained snapshot's request entries before applying an optional filesystem.
+	KindSnapshot Kind = "snapshot"
 )
 
 // RequestDirectoryEntries is a cached directory listing. Entry names are
@@ -42,6 +44,10 @@ type RequestSymlink struct {
 // for a request that creates a snapshot.
 type RequestFileSystem struct {
 	Kind Kind `json:"kind"`
+	// Snapshot identifies the retained snapshot supplying request entries for KindSnapshot.
+	Snapshot uint64 `json:"snapshot,omitempty"`
+	// FileSystem is an optional layer or full filesystem applied on top of KindSnapshot.
+	FileSystem *RequestFileSystem `json:"fileSystem,omitempty"`
 	// Files maps file names to their complete contents.
 	Files map[string]string `json:"files" nonnil:"true"`
 	// Directories maps directory names to complete listing results. Directory
@@ -52,6 +58,11 @@ type RequestFileSystem struct {
 	// RemovedPaths lists files or directory trees that must be treated as missing
 	// even when present in an underlying snapshot or host filesystem.
 	RemovedPaths []string `json:"removedPaths,omitempty"`
+}
+
+// ReplacesFileSystem reports whether the request includes an explicit full replacement.
+func (r *RequestFileSystem) ReplacesFileSystem() bool {
+	return r != nil && (r.Kind == KindFull || r.Kind == KindSnapshot && r.FileSystem != nil && r.FileSystem.Kind == KindFull)
 }
 
 // requestFileSystem is either a full filesystem or a layer over the session

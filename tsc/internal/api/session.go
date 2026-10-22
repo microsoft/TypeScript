@@ -905,8 +905,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleCreateSnapshot(ctx, parsed.(*CreateSnapshotParams))
 	case string(MethodUpdateSnapshot):
 		return s.handleUpdateSnapshot(ctx, parsed.(*UpdateSnapshotParams))
-	case string(MethodRebaseSnapshot):
-		return s.handleRebaseSnapshot(ctx, parsed.(*RebaseSnapshotParams))
 	case string(MethodGetCurrentLanguageServerSnapshot):
 		return s.handleGetCurrentLanguageServerSnapshot(ctx, parsed.(*GetCurrentLanguageServerSnapshotParams))
 	case string(MethodCreateModuleResolver):
@@ -1430,13 +1428,13 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 	fileChanges := s.toFileChangeSummary(params.FileNotifications)
 	var snapshotFileSystem vfs.FS
 	if params.FileSystem != nil {
-		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(params.FileSystem, s.FS(), s.GetCurrentDirectory(), &fileChanges)
+		fileSystem, fileSystemErr := s.createRequestFileSystem(params.FileSystem, s.FS(), s.FS(), &fileChanges)
 		if fileSystemErr != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientError, fileSystemErr)
 		}
 		snapshotFileSystem = fileSystem
 		apiRequest.FileSystem = fileSystem
-		apiRequest.ReplaceFileSystem = params.FileSystem.Kind == requestfilesystem.KindFull
+		apiRequest.ReplaceFileSystem = params.FileSystem.ReplacesFileSystem()
 	}
 	root := s.snapshotHost.NewRootSnapshot()
 	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, root, fileChanges, apiRequest)
@@ -1486,7 +1484,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		if baseFileSystem == nil {
 			baseFileSystem = s.FS()
 		}
-		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(changes.FileSystem, baseFileSystem, s.GetCurrentDirectory(), &fileChanges)
+		fileSystem, fileSystemErr := s.createRequestFileSystem(changes.FileSystem, baseFileSystem, baseSD.snapshot.FS(), &fileChanges)
 		if fileSystemErr != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientError, fileSystemErr)
 		}
@@ -1494,7 +1492,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	}
 	if snapshotFileSystem != nil {
 		apiRequest.FileSystem = snapshotFileSystem
-		apiRequest.ReplaceFileSystem = changes.FileSystem != nil && changes.FileSystem.Kind == requestfilesystem.KindFull
+		apiRequest.ReplaceFileSystem = changes.FileSystem.ReplacesFileSystem()
 	}
 	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, baseSD.snapshot, fileChanges, apiRequest)
 	if err != nil {
@@ -1515,67 +1513,30 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	return response, nil
 }
 
-func (s *Session) handleRebaseSnapshot(ctx context.Context, params *RebaseSnapshotParams) (*CreateSnapshotResponse, error) {
-	source, err := s.retainSnapshotData(params.Snapshot)
-	if err != nil {
-		return nil, err
-	}
-	defer func() { _ = s.releaseSnapshot(params.Snapshot) }()
-	target, err := s.retainSnapshotData(params.NewSnapshot)
-	if err != nil {
-		return nil, err
-	}
-	defer func() { _ = s.releaseSnapshot(params.NewSnapshot) }()
-
-	changes := params.Changes
-	if changes == nil {
-		changes = &CreateSnapshotParams{}
-	}
-	apiRequest, err := s.toAPISnapshotRequest(ctx, &changes.SnapshotRequestChangesParams)
-	if err != nil {
-		return nil, err
-	}
-	apiRequest.UserPreferences = changes.UserPreferences
-	if changes.PrepareAutoImports != nil {
-		apiRequest.PrepareAutoImports = changes.PrepareAutoImports.ToURI(s.GetCurrentDirectory())
-	}
-	openState := s.reconcileSnapshotOpens(apiRequest, snapshotOpenState{openProjects: target.openProjects, openFiles: target.openFiles})
-	fileChanges := s.toFileChangeSummary(changes.FileNotifications)
-	fileSystem := target.fileSystem
-	if source.fileSystem != nil {
-		if fileSystem == nil {
-			fileSystem = s.FS()
+func (s *Session) createRequestFileSystem(params *requestfilesystem.RequestFileSystem, base vfs.FS, baseContents vfs.FS, fileChanges *project.FileChangeSummary) (vfs.FS, error) {
+	if params.Kind == requestfilesystem.KindSnapshot {
+		if len(params.Files) != 0 || len(params.Directories) != 0 || len(params.Symlinks) != 0 || len(params.RemovedPaths) != 0 {
+			return nil, fmt.Errorf("%w: snapshot filesystem entries must be supplied in fileSystem", ErrClientError)
 		}
-		fileSystem = requestfilesystem.Rebase(source.fileSystem, fileSystem, target.snapshot.FS(), &fileChanges)
-	}
-	if changes.FileSystem != nil {
-		baseFileSystem := fileSystem
-		if baseFileSystem == nil {
-			baseFileSystem = s.FS()
+		if params.FileSystem != nil && params.FileSystem.Kind != requestfilesystem.KindLayer && params.FileSystem.Kind != requestfilesystem.KindFull {
+			return nil, fmt.Errorf("%w: only a layer or full filesystem can be applied on top of a snapshot filesystem", ErrClientError)
 		}
-		fileSystem, err = requestfilesystem.NewForUpdate(changes.FileSystem, baseFileSystem, s.GetCurrentDirectory(), &fileChanges)
+		snapshotID := SnapshotID(params.Snapshot)
+		source, err := s.retainSnapshotData(snapshotID)
 		if err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrClientError, err)
+			return nil, err
+		}
+		defer func() { _ = s.releaseSnapshot(snapshotID) }()
+		base = requestfilesystem.Rebase(source.fileSystem, base, baseContents, fileChanges)
+		params = params.FileSystem
+		if params == nil {
+			return base, nil
 		}
 	}
-	apiRequest.FileSystem = fileSystem
-	apiRequest.ReplaceFileSystem = changes.FileSystem != nil && changes.FileSystem.Kind == requestfilesystem.KindFull
-	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, target.snapshot, fileChanges, apiRequest)
-	if err != nil {
-		snapshot.Deref()
-		return nil, fmt.Errorf("%w: failed to rebase snapshot: %w", ErrClientError, err)
+	if params.Snapshot != 0 || params.FileSystem != nil {
+		return nil, fmt.Errorf("%w: snapshot and fileSystem are only valid for a snapshot filesystem", ErrClientError)
 	}
-	if err := s.validatePreparedAutoImports(ctx, snapshot, changes.PrepareAutoImports); err != nil {
-		snapshot.Deref()
-		return nil, err
-	}
-	if err := moduleResolutionError(snapshot); err != nil {
-		snapshot.Deref()
-		return nil, err
-	}
-	response := s.createSnapshotResponse(snapshot, target.snapshot, &changes.SnapshotRequestChangesParams)
-	s.registerSnapshot(snapshot, openState, fileSystem)
-	return response, nil
+	return requestfilesystem.NewForUpdate(params, base, s.GetCurrentDirectory(), fileChanges)
 }
 
 func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotRequestChangesParams) (*project.APISnapshotRequest, error) {

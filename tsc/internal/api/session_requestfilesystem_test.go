@@ -586,7 +586,7 @@ func TestSnapshotUpdateCarriesHostFileSystemWithoutOverride(t *testing.T) {
 func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 	t.Parallel()
 
-	for _, operation := range []string{"update", "self-rebase"} {
+	for _, operation := range []string{"update", "snapshot filesystem"} {
 		for _, baseKind := range []requestfilesystem.Kind{"host", requestfilesystem.KindFull, requestfilesystem.KindLayer} {
 			t.Run(operation+"/"+string(baseKind), func(t *testing.T) {
 				t.Parallel()
@@ -608,8 +608,14 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 				defer session.Close()
 				ctx := context.Background()
 				updateSnapshot := func(params *UpdateSnapshotParams) (*CreateSnapshotResponse, error) {
-					if operation == "self-rebase" {
-						return session.handleRebaseSnapshot(ctx, &RebaseSnapshotParams{Snapshot: params.Snapshot, NewSnapshot: params.Snapshot, Changes: params.Changes})
+					if operation == "snapshot filesystem" {
+						changes := *params.Changes
+						changes.FileSystem = &requestfilesystem.RequestFileSystem{
+							Kind:       requestfilesystem.KindSnapshot,
+							Snapshot:   uint64(params.Snapshot),
+							FileSystem: changes.FileSystem,
+						}
+						return session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{Snapshot: params.Snapshot, Changes: &changes})
 					}
 					return session.handleUpdateSnapshot(ctx, params)
 				}

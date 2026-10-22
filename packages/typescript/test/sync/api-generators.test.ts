@@ -22,6 +22,7 @@ import {
     SyntaxKind,
 } from "@typescript/typescript/ast";
 import { cloneNode } from "@typescript/typescript/ast/factory";
+import { createFileSystemFromSnapshot } from "@typescript/typescript/fs";
 import { toRootedFilePath } from "@typescript/typescript/path";
 import type {
     APIRequest,
@@ -165,7 +166,6 @@ const privateGeneratorGetters = new Set([
     "API.ensureInitialized",
     "API.fetchDeclarationSymbol",
     "API.initializeWorker",
-    "API.rebaseSnapshot",
     "API.updateSnapshot",
     "Checker.getIntrinsicType",
     "Checker.getWellKnownSignatures",
@@ -1809,12 +1809,11 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 } as const;
                 const generatorExtras = snapshotGeneratorAPI.batch(generatorUpdated.update.gen(changes))[0];
                 const syncExtras = syncUpdated.update(changes);
-                const rebaseChanges = { prepareAutoImports: "/src/syntax.ts", openFiles: ["/src/syntax.ts"] } as const;
-                const generatorRebased = snapshotGeneratorAPI.batch(generatorExtras.rebase.gen(generatorBase, rebaseChanges))[0];
-                const syncRebased = syncExtras.rebase(syncBase, rebaseChanges);
-                assertSnapshotsEquivalent(generatorRebased, syncRebased, "Snapshot.rebase");
-                assert.equal(generatorRebased.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/syntax.ts")!.text, "export const fixed = true;");
-                exercisedMethods.add("Snapshot.rebase");
+                const snapshotChanges = { prepareAutoImports: "/src/syntax.ts", openFiles: ["/src/syntax.ts"] } as const;
+                const generatorOverlay = snapshotGeneratorAPI.batch(generatorBase.update.gen({ ...snapshotChanges, fileSystem: createFileSystemFromSnapshot(generatorExtras) }))[0];
+                const syncOverlay = syncBase.update({ ...snapshotChanges, fileSystem: createFileSystemFromSnapshot(syncExtras) });
+                assertSnapshotsEquivalent(generatorOverlay, syncOverlay, "Snapshot.update with a snapshot filesystem");
+                assert.equal(generatorOverlay.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/syntax.ts")!.text, "export const fixed = true;");
             }
             finally {
                 snapshotGeneratorAPI.close();

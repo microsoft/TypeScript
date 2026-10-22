@@ -47,7 +47,6 @@ export interface APIMethodInfo {
     initialize: APIMethod<null, InitializeResponse>;
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;
-    rebaseSnapshot: APIMethod<RebaseSnapshotParams, CreateSnapshotResponse>;
     getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
     createBuildOrchestrator: APIMethod<CreateBuildOrchestratorParams, CreateBuildOrchestratorResponse>;
     disposeBuildOrchestrator: APIMethod<DisposeBuildOrchestratorParams, unknown>;
@@ -309,7 +308,9 @@ export interface CreateSnapshotParams extends SnapshotRequestChangesParams {
     /**
      * FileSystem supplies file contents and directory listings for the new snapshot.
      * A full filesystem is canonical and total. A filesystem layer is checked
-     * before falling back to the base snapshot or host filesystem.
+     * before falling back to the base snapshot or host filesystem. A snapshot
+     * filesystem overlays retained request entries from another active snapshot,
+     * then applies an optional layer or full filesystem.
      */
     fileSystem?: RequestFileSystem | undefined;
 }
@@ -331,12 +332,6 @@ export interface CreateSnapshotResponse {
 
 export interface UpdateSnapshotParams {
     snapshot: number;
-    changes?: CreateSnapshotParams | undefined;
-}
-
-export interface RebaseSnapshotParams {
-    snapshot: number;
-    newSnapshot: number;
     changes?: CreateSnapshotParams | undefined;
 }
 
@@ -1317,7 +1312,6 @@ export interface BatchRequest {
         | "parseJsonConfigFileContent"
         | "printNode"
         | "readConfigFile"
-        | "rebaseSnapshot"
         | "release"
         | "releaseModuleResolver"
         | "releaseSourceFile"
@@ -1500,7 +1494,6 @@ export interface BatchResponse {
         | "parseJsonConfigFileContent"
         | "printNode"
         | "readConfigFile"
-        | "rebaseSnapshot"
         | "release"
         | "releaseModuleResolver"
         | "releaseSourceFile"
@@ -1579,7 +1572,11 @@ export interface FileNotifications {
  * for a request that creates a snapshot.
  */
 export interface RequestFileSystem {
-    kind: "full" | "layer";
+    kind: "full" | "layer" | "snapshot";
+    /** Snapshot identifies the retained snapshot supplying request entries for KindSnapshot. */
+    snapshot?: number | undefined;
+    /** FileSystem is an optional layer or full filesystem applied on top of KindSnapshot. */
+    fileSystem?: RequestFileSystem | undefined;
     /** Files maps file names to their complete contents. */
     files: Record<string, string>;
     /**

@@ -70,6 +70,7 @@ import {
 import { visitEachChild } from "@typescript/typescript/ast/visitor";
 import {
     createFileSystem,
+    createFileSystemFromSnapshot,
     createFileSystemLayer,
     createFileSystemWithLib,
     type FileSystemCallbacks,
@@ -5352,9 +5353,55 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         assert.deepEqual(callbackCalls, []);
     });
 
-    for (const selfRebase of [false, true]) {
-        test(`Snapshot.${selfRebase ? "rebase" : "update"} layers filesystem edits and removals`, () => {
-            const update = (base: Snapshot, changes: CreateSnapshotParams) => selfRebase ? base.rebase(base, changes) : base.update(changes);
+    test("createFileSystemFromSnapshot supports creating snapshots with additional layer and full filesystems", () => {
+        using api = spawnAPI({});
+        using source = api.createSnapshot({
+            fileSystem: createFileSystemLayer([
+                ["/source.ts", "source"],
+                ["/removed/nested.ts", "removed"],
+            ]),
+        });
+        const descriptor = createFileSystemFromSnapshot(source);
+        assert.equal(descriptor.kind, "snapshot");
+        assert.equal(descriptor.snapshot, source.id);
+        assert.deepEqual(descriptor.files, {});
+        using cloned = api.createSnapshot({
+            fileSystem: descriptor,
+            createPrograms: [{ rootFiles: ["/source.ts"], compilerOptions: { noLib: true } }],
+        });
+        assert.notEqual(cloned.id, source.id);
+        assert.equal((cloned.operation.createdPrograms[0].getSourceFile("/source.ts"))?.text, "source");
+        assert.throws(() => createFileSystemFromSnapshot(source, descriptor), /layer or full/);
+        for (const full of [false, true]) {
+            const extra = (full ? createFileSystem : createFileSystemLayer)([
+                ["/extra.ts", "extra"],
+            ], {
+                directories: { "/listed": { files: ["entry.ts"], directories: [] } },
+                symlinks: { "/alias.ts": { target: "/extra.ts" } },
+                removedPaths: ["/removed"],
+            });
+            const fileSystem = createFileSystemFromSnapshot(source, extra);
+            assert.strictEqual(fileSystem.fileSystem, extra);
+            using snapshot = api.createSnapshot({
+                fileSystem,
+                createPrograms: [{ rootFiles: ["/extra.ts", "/alias.ts", "/source.ts", "/removed/nested.ts"], compilerOptions: { noLib: true } }],
+            });
+            const program = snapshot.operation.createdPrograms[0];
+            assert.equal((program.getSourceFile("/extra.ts"))?.text, "extra");
+            assert.equal((program.getSourceFile("/alias.ts"))?.text, "extra");
+            assert.equal((program.getSourceFile("/source.ts"))?.text, full ? undefined : "source");
+            assert.equal(program.getSourceFile("/removed/nested.ts"), undefined);
+        }
+    });
+
+    for (const snapshotFileSystem of [false, true]) {
+        test(`Snapshot.update layers filesystem edits and removals with ${snapshotFileSystem ? "a snapshot" : "a layer"} filesystem`, () => {
+            const update = (base: Snapshot, changes: CreateSnapshotParams) =>
+                base.update(
+                    snapshotFileSystem
+                        ? { ...changes, fileSystem: createFileSystemFromSnapshot(base, changes.fileSystem) }
+                        : changes,
+                );
             using api = new API({
                 cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             });
@@ -5411,7 +5458,7 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         });
     }
 
-    test("Snapshot.rebase compares against the target's cached contents", () => {
+    test("Snapshot.update with a snapshot filesystem compares against the target's cached contents", () => {
         const { api: disposableAPI, fs } = spawnAPIWithFS({ "/index.ts": "export const value = 1;" });
         using api = disposableAPI;
         using target = api.createSnapshot({
@@ -5424,13 +5471,13 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         using source = api.createSnapshot({
             fileSystem: createFileSystemLayer([["/index.ts", "export const value = 2;"]]),
         });
-        using rebased = source.rebase(target, { ensurePrograms: true });
+        using rebased = target.update({ fileSystem: createFileSystemFromSnapshot(source), ensurePrograms: true });
         assert.equal((rebased.getProgram(programId)!.getSourceFile("/index.ts"))!.text, "export const value = 2;");
         assert.strictEqual(target.getProgram(programId)!.getSourceFile("/index.ts"), originalFile);
     });
 
     for (const fullReplacement of [false, true]) {
-        test(`Snapshot.rebase removes cached files with ${fullReplacement ? "a full replacement" : "matching tombstones"}`, () => {
+        test(`Snapshot.update with a snapshot filesystem removes cached files with ${fullReplacement ? "a full replacement" : "matching tombstones"}`, () => {
             using api = spawnAPI({});
             const files = {
                 "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["index.ts", "removed/keep.ts"] }),
@@ -5447,20 +5494,20 @@ describe("updateSnapshot file systems", { concurrency }, () => {
             });
             const originalFile = target.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts");
             assert.ok(originalFile);
-            using self = target.rebase(target, { ensurePrograms: true });
+            using self = target.update({ fileSystem: createFileSystemFromSnapshot(target), ensurePrograms: true });
             assert.strictEqual(self.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts"), originalFile);
             using source = api.createSnapshot({
                 fileSystem: fullReplacement
                     ? createFileSystem(Object.entries(files))
                     : createFileSystemLayer([], { removedPaths: ["/removed"] }),
             });
-            using rebased = source.rebase(target, { ensurePrograms: true });
+            using rebased = target.update({ fileSystem: createFileSystemFromSnapshot(source), ensurePrograms: true });
             assert.equal(rebased.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts"), undefined);
             assert.strictEqual(target.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts"), originalFile);
         });
     }
 
-    test("Snapshot.rebase preserves explicit full invalidation", () => {
+    test("Snapshot.update with a snapshot filesystem preserves explicit full invalidation", () => {
         const { api: disposableAPI, fs } = spawnAPIWithFS({ "/index.ts": "export const value = 1;" });
         using api = disposableAPI;
         using original = api.createSnapshot({
@@ -5473,13 +5520,13 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         using updated = original.update(changes);
         assert.equal((updated.getProgram(programId)!.getSourceFile("/index.ts"))!.text, "export const value = 2;");
         for (const base of [original, target]) {
-            using rebased = original.rebase(base, changes);
+            using rebased = base.update({ ...changes, fileSystem: createFileSystemFromSnapshot(original) });
             assert.equal((rebased.getProgram(programId)!.getSourceFile("/index.ts"))!.text, "export const value = 2;");
         }
         assert.equal((original.getProgram(programId)!.getSourceFile("/index.ts"))!.text, "export const value = 1;");
     });
 
-    test("Snapshot.rebase refreshes dependency auto-imports", () => {
+    test("Snapshot.update with a snapshot filesystem refreshes dependency auto-imports", () => {
         const fileName = "/home/project/index.ts";
         const dependency = "/home/project/node_modules/my-pkg/index.d.ts";
         using api = spawnAPI({
@@ -5501,14 +5548,14 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         });
         assert.ok((completionNames(source)).includes("packageNew"));
         for (const base of [target, source]) {
-            using rebased = source.rebase(base, { prepareAutoImports: fileName });
+            using rebased = base.update({ fileSystem: createFileSystemFromSnapshot(source), prepareAutoImports: fileName });
             const names = completionNames(rebased);
             assert.ok(names.includes("packageNew"));
             assert.ok(!names.includes("packageOld"));
         }
     });
 
-    test("Snapshot.rebase applies memory filesystems over the target snapshot", () => {
+    test("Snapshot.update applies snapshot filesystems over the target snapshot", () => {
         const { api: disposableAPI, fs } = spawnAPIWithFS({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, include: ["src/**/*.ts"] }),
             "/src/index.ts": "export const value = 1;",
@@ -5537,11 +5584,11 @@ describe("updateSnapshot file systems", { concurrency }, () => {
                 ["/src/removed/nested.ts", "export const removed = true;"],
             ]),
         });
-        using rebased = moreExtras.rebase(newOriginal, {
+        using rebased = newOriginal.update({
             prepareAutoImports: "/src/index.ts",
             openFiles: ["/src/index.ts"],
             createPrograms: [{ rootFiles: ["/src/extra.ts"], compilerOptions: { noLib: true } }],
-            fileSystem: createFileSystemLayer([["/src/second.ts", "export const second = false;"]]),
+            fileSystem: createFileSystemFromSnapshot(moreExtras, createFileSystemLayer([["/src/second.ts", "export const second = false;"]])),
         });
         assert.notEqual(rebased.id, moreExtras.id);
         assert.notEqual(rebased.id, newOriginal.id);
@@ -5560,10 +5607,11 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         moreExtras.dispose();
         newOriginal.dispose();
         assert.equal((program.getSourceFile("/src/extra.ts"))!.text, "export const extra = true;");
-        using rebasedAgain = rebased.rebase(original, { ensurePrograms: true });
+        using rebasedAgain = original.update({ fileSystem: createFileSystemFromSnapshot(rebased), ensurePrograms: true });
         assert.equal((rebasedAgain.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/target.ts"))!.text, "export const target = true;");
-        assert.throws(() => moreExtras.rebase(original), /disposed/);
-        assert.throws(() => rebased.rebase(newOriginal), /inactive snapshot/);
+        assert.throws(() => createFileSystemFromSnapshot(moreExtras), /disposed/);
+        assert.throws(() => newOriginal.update({ fileSystem: createFileSystemFromSnapshot(rebased) }), /disposed/);
+        assert.throws(() => original.update({ fileSystem: { kind: "snapshot", snapshot: moreExtras.id, files: {} } }), /inactive snapshot/);
     });
 
     test("eager snapshot disposal does not retain filesystem history", () => {

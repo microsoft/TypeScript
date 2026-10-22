@@ -12,7 +12,7 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func TestRebaseSnapshot(t *testing.T) {
+func TestSnapshotFileSystem(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
 	projectSession, _ := projecttestutil.Setup(map[string]any{
@@ -74,9 +74,12 @@ func TestRebaseSnapshot(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
-	rebased, err := session.handleRebaseSnapshot(ctx, &RebaseSnapshotParams{
-		Snapshot: extras.Snapshot, NewSnapshot: target.Snapshot,
-		Changes: &CreateSnapshotParams{EnsurePrograms: &EnsurePrograms{All: true}},
+	rebased, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: target.Snapshot,
+		Changes: &CreateSnapshotParams{
+			FileSystem:     &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(extras.Snapshot)},
+			EnsurePrograms: &EnsurePrograms{All: true},
+		},
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, rebased.Snapshot != extras.Snapshot && rebased.Snapshot != target.Snapshot)
@@ -105,7 +108,7 @@ func TestRebaseSnapshot(t *testing.T) {
 	assert.Equal(t, content, "target extra")
 }
 
-func TestRebaseSnapshotFileSystemKinds(t *testing.T) {
+func TestSnapshotFileSystemKinds(t *testing.T) {
 	t.Parallel()
 	for _, sourceKind := range []requestfilesystem.Kind{"host", requestfilesystem.KindLayer, requestfilesystem.KindFull} {
 		for _, targetKind := range []requestfilesystem.Kind{"host", requestfilesystem.KindLayer, requestfilesystem.KindFull} {
@@ -134,7 +137,10 @@ func TestRebaseSnapshotFileSystemKinds(t *testing.T) {
 				}
 				target, err := session.handleCreateSnapshot(ctx, targetParams)
 				assert.NilError(t, err)
-				rebased, err := session.handleRebaseSnapshot(ctx, &RebaseSnapshotParams{Snapshot: source.Snapshot, NewSnapshot: target.Snapshot})
+				rebased, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+					Snapshot: target.Snapshot,
+					Changes:  &CreateSnapshotParams{FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot)}},
+				})
 				assert.NilError(t, err)
 				assert.Assert(t, rebased.Snapshot != source.Snapshot && rebased.Snapshot != target.Snapshot)
 				assert.NilError(t, session.releaseSnapshot(source.Snapshot))
@@ -164,7 +170,7 @@ func TestRebaseSnapshotFileSystemKinds(t *testing.T) {
 	}
 }
 
-func TestRebaseSnapshotRejectsInactiveSnapshots(t *testing.T) {
+func TestSnapshotFileSystemRejectsInactiveSnapshots(t *testing.T) {
 	t.Parallel()
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
 	defer projectSession.Close()
@@ -173,18 +179,141 @@ func TestRebaseSnapshotRejectsInactiveSnapshots(t *testing.T) {
 	ctx := context.Background()
 	snapshot, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{})
 	assert.NilError(t, err)
-	_, err = session.handleRebaseSnapshot(ctx, &RebaseSnapshotParams{Snapshot: 999, NewSnapshot: snapshot.Snapshot})
+	_, err = session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: snapshot.Snapshot,
+		Changes:  &CreateSnapshotParams{FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: 999}},
+	})
 	assert.ErrorIs(t, err, ErrClientError)
-	_, err = session.handleRebaseSnapshot(ctx, &RebaseSnapshotParams{Snapshot: snapshot.Snapshot, NewSnapshot: 999})
+	_, err = session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: 999,
+		Changes:  &CreateSnapshotParams{FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(snapshot.Snapshot)}},
+	})
 	assert.ErrorIs(t, err, ErrClientError)
 	assert.Equal(t, session.snapshots[snapshot.Snapshot].refCount, 1)
-	rebased, err := session.handleRebaseSnapshot(ctx, &RebaseSnapshotParams{Snapshot: snapshot.Snapshot, NewSnapshot: snapshot.Snapshot})
+	rebased, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: snapshot.Snapshot,
+		Changes:  &CreateSnapshotParams{FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(snapshot.Snapshot)}},
+	})
 	assert.NilError(t, err)
 	assert.Assert(t, rebased.Snapshot != snapshot.Snapshot)
 	assert.Equal(t, session.snapshots[snapshot.Snapshot].refCount, 1)
 	assert.NilError(t, session.releaseSnapshot(snapshot.Snapshot))
-	_, err = session.handleRebaseSnapshot(ctx, &RebaseSnapshotParams{Snapshot: snapshot.Snapshot, NewSnapshot: rebased.Snapshot})
+	_, err = session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: rebased.Snapshot,
+		Changes:  &CreateSnapshotParams{FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(snapshot.Snapshot)}},
+	})
 	assert.ErrorIs(t, err, ErrClientError)
-	_, err = session.handleRebaseSnapshot(ctx, &RebaseSnapshotParams{Snapshot: rebased.Snapshot, NewSnapshot: snapshot.Snapshot})
+	_, err = session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: snapshot.Snapshot,
+		Changes:  &CreateSnapshotParams{FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(rebased.Snapshot)}},
+	})
 	assert.ErrorIs(t, err, ErrClientError)
+}
+
+func TestCreateSnapshotWithSnapshotFileSystem(t *testing.T) {
+	t.Parallel()
+	for _, kind := range []requestfilesystem.Kind{requestfilesystem.KindLayer, requestfilesystem.KindFull} {
+		t.Run(string(kind), func(t *testing.T) {
+			t.Parallel()
+			projectSession, _ := projecttestutil.Setup(map[string]any{"/host.ts": "host"})
+			defer projectSession.Close()
+			session := NewLSPSession(projectSession, nil)
+			defer session.Close()
+			source, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+				FileSystem: &requestfilesystem.RequestFileSystem{
+					Kind:  requestfilesystem.KindLayer,
+					Files: map[string]string{"/source.ts": "source", "/shared.ts": "source", "/removed/nested.ts": "removed"},
+				},
+			})
+			assert.NilError(t, err)
+			cloned, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+				FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot)},
+			})
+			assert.NilError(t, err)
+			assert.Assert(t, cloned.Snapshot != source.Snapshot)
+			content, ok := session.snapshots[cloned.Snapshot].snapshot.ReadFile("/source.ts")
+			assert.Assert(t, ok)
+			assert.Equal(t, content, "source")
+			created, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+				FileSystem: &requestfilesystem.RequestFileSystem{
+					Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot),
+					FileSystem: &requestfilesystem.RequestFileSystem{
+						Kind:  kind,
+						Files: map[string]string{"/extra.ts": "extra", "/shared.ts": "extra"},
+						Directories: map[string]requestfilesystem.RequestDirectoryEntries{
+							"/listed": {Files: []string{"entry.ts"}},
+						},
+						Symlinks: map[string]requestfilesystem.RequestSymlink{
+							"/alias.ts": {Target: "/shared.ts"},
+						},
+						RemovedPaths: []string{"/removed"},
+					},
+				},
+			})
+			assert.NilError(t, err)
+			assert.Assert(t, created.Snapshot != source.Snapshot)
+			assert.NilError(t, session.releaseSnapshot(source.Snapshot))
+			snapshot := session.snapshots[created.Snapshot].snapshot
+			for fileName, expected := range map[tspath.RootedFilePath]string{
+				"/extra.ts": "extra", "/shared.ts": "extra", "/alias.ts": "extra",
+			} {
+				content, ok = snapshot.ReadFile(fileName)
+				assert.Assert(t, ok)
+				assert.Equal(t, content, expected)
+			}
+			_, ok = snapshot.ReadFile("/source.ts")
+			assert.Equal(t, ok, kind == requestfilesystem.KindLayer)
+			_, ok = snapshot.ReadFile("/host.ts")
+			assert.Equal(t, ok, kind == requestfilesystem.KindLayer)
+			_, ok = snapshot.ReadFile("/removed/nested.ts")
+			assert.Assert(t, !ok)
+			assert.Assert(t, snapshot.FileSystem().DirectoryExists("/listed"))
+		})
+	}
+}
+
+func TestSnapshotFileSystemRejectsInvalidDescriptors(t *testing.T) {
+	t.Parallel()
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	source, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{})
+	assert.NilError(t, err)
+	released, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{})
+	assert.NilError(t, err)
+	assert.NilError(t, session.releaseSnapshot(released.Snapshot))
+	for name, fileSystem := range map[string]*requestfilesystem.RequestFileSystem{
+		"invalid kind":      {Kind: "invalid"},
+		"zero snapshot":     {Kind: requestfilesystem.KindSnapshot},
+		"unknown snapshot":  {Kind: requestfilesystem.KindSnapshot, Snapshot: 999},
+		"released snapshot": {Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(released.Snapshot)},
+		"snapshot on layer": {Kind: requestfilesystem.KindLayer, Snapshot: uint64(source.Snapshot)},
+		"nested filesystem on full": {
+			Kind:       requestfilesystem.KindFull,
+			FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindLayer},
+		},
+		"nested snapshot": {
+			Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot),
+			FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot)},
+		},
+		"invalid nested kind": {
+			Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot),
+			FileSystem: &requestfilesystem.RequestFileSystem{Kind: "invalid"},
+		},
+		"unnested entries": {
+			Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(source.Snapshot),
+			Files: map[string]string{"/extra.ts": "extra"},
+		},
+	} {
+		t.Log(name)
+		_, err = session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{FileSystem: fileSystem})
+		assert.ErrorIs(t, err, ErrClientError, name)
+		_, err = session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+			Snapshot: source.Snapshot,
+			Changes:  &CreateSnapshotParams{FileSystem: fileSystem},
+		})
+		assert.ErrorIs(t, err, ErrClientError, name)
+		assert.Equal(t, session.snapshots[source.Snapshot].refCount, 1)
+	}
 }

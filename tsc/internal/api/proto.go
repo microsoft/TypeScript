@@ -78,7 +78,6 @@ const (
 	MethodInitialize                                     Method = "initialize"
 	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
-	MethodRebaseSnapshot                                 Method = "rebaseSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
 	MethodCreateBuildOrchestrator                        Method = "createBuildOrchestrator"
 	MethodDisposeBuildOrchestrator                       Method = "disposeBuildOrchestrator"
@@ -450,7 +449,9 @@ type CreateSnapshotParams struct {
 	FileNotifications *FileNotifications `json:"fileNotifications,omitempty"`
 	// FileSystem supplies file contents and directory listings for the new snapshot.
 	// A full filesystem is canonical and total. A filesystem layer is checked
-	// before falling back to the base snapshot or host filesystem.
+	// before falling back to the base snapshot or host filesystem. A snapshot
+	// filesystem overlays retained request entries from another active snapshot,
+	// then applies an optional layer or full filesystem.
 	FileSystem *requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
 }
 
@@ -472,12 +473,6 @@ type ReconfigureSnapshotProgramParams struct {
 type UpdateSnapshotParams struct {
 	Snapshot SnapshotID            `json:"snapshot"`
 	Changes  *CreateSnapshotParams `json:"changes,omitempty"`
-}
-
-type RebaseSnapshotParams struct {
-	Snapshot    SnapshotID            `json:"snapshot"`
-	NewSnapshot SnapshotID            `json:"newSnapshot"`
-	Changes     *CreateSnapshotParams `json:"changes,omitempty"`
 }
 
 type GetCurrentLanguageServerSnapshotParams struct {
@@ -610,7 +605,6 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodInitialize:                                     noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
-	MethodRebaseSnapshot:                                 unmarshallerFor[RebaseSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
 	MethodCreateBuildOrchestrator:                        unmarshallerFor[CreateBuildOrchestratorParams],
 	MethodDisposeBuildOrchestrator:                       unmarshallerFor[DisposeBuildOrchestratorParams],

@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
@@ -326,7 +327,7 @@ func TestCompletionUsesSnapshotPreferences(t *testing.T) {
 
 func TestSnapshotCreatesProgramsAndPreparesAutoImportsInOneClone(t *testing.T) {
 	t.Parallel()
-	for _, operation := range []string{"create", "update", "rebase"} {
+	for _, operation := range []string{"create", "update", "snapshot filesystem"} {
 		t.Run(operation, func(t *testing.T) {
 			t.Parallel()
 			defer testutil.RecoverAndFail(t, "snapshot creation panicked")
@@ -355,18 +356,13 @@ func TestSnapshotCreatesProgramsAndPreparesAutoImportsInOneClone(t *testing.T) {
 				base, e := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{})
 				assert.NilError(t, e)
 				expectedID = base.Snapshot + 1
-				if operation == "update" {
-					response, err = session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
-						Snapshot: base.Snapshot,
-						Changes:  params,
-					})
-				} else {
-					response, err = session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{
-						Snapshot:    base.Snapshot,
-						NewSnapshot: base.Snapshot,
-						Changes:     params,
-					})
+				if operation == "snapshot filesystem" {
+					params.FileSystem = &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(base.Snapshot)}
 				}
+				response, err = session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+					Snapshot: base.Snapshot,
+					Changes:  params,
+				})
 			} else {
 				response, err = session.handleCreateSnapshot(t.Context(), params)
 			}
@@ -380,7 +376,7 @@ func TestSnapshotCreatesProgramsAndPreparesAutoImportsInOneClone(t *testing.T) {
 	}
 }
 
-func TestRebaseRejectsUnpreparedAutoImports(t *testing.T) {
+func TestSnapshotFileSystemRejectsUnpreparedAutoImports(t *testing.T) {
 	t.Parallel()
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
 	defer projectSession.Close()
@@ -388,11 +384,11 @@ func TestRebaseRejectsUnpreparedAutoImports(t *testing.T) {
 	defer session.Close()
 	base, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{})
 	assert.NilError(t, err)
-	_, err = session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{
-		Snapshot:    base.Snapshot,
-		NewSnapshot: base.Snapshot,
+	_, err = session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
 		Changes: &CreateSnapshotParams{
 			PrepareAutoImports: &DocumentIdentifier{FileName: "/missing.ts"},
+			FileSystem:         &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(base.Snapshot)},
 		},
 	})
 	assert.ErrorIs(t, err, ErrClientError)
