@@ -76,9 +76,8 @@ export function isTransportOptions<T extends SyncClientOptions | AsyncClientOpti
 export interface AsyncClientTransportOptions extends TransportOptionsBase {
     /**
      * An existing asynchronous transport connected to an API session.
-     * Host callbacks are synchronous even when requests are asynchronous, so
-     * custom module resolution callbacks cannot return Promises and must obey
-     * the transport's reentrancy constraints.
+     * Custom module resolution callbacks must obey the transport's support
+     * for Promise results and reentrancy.
      */
     transport: AsyncTransport;
 }

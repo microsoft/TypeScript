@@ -122,7 +122,7 @@ export class TransportClient {
         register.call(this.transport, name, (_, payload) => {
             const result = callback(JSON.parse(payload));
             if (isPromiseLike(result)) {
-                throw new Error("Injected transport callbacks must complete synchronously");
+                return result.then(value => JSON.stringify(value) ?? "");
             }
             return JSON.stringify(result) ?? "";
         });
