@@ -219,9 +219,9 @@ func SymbolTableOf(name string, symbol *Symbol) SymbolTable {
 	return m
 }
 
-func (m *SymbolMap) keyAt(i int, oddKeys map[int32]string) string {
+func (m *SymbolMap) keyAt(i int) string {
 	if m.entries[i].oddKey {
-		return oddKeys[int32(i)]
+		return m.oddKeys[int32(i)]
 	}
 	return m.entries[i].symbol.Name()
 }
@@ -237,14 +237,14 @@ func (m *SymbolMap) find(key string) int {
 			if p == 0 {
 				return -1
 			}
-			if i := int(p - 1); m.entries[i].keyLen == int32(len(key)) && m.keyAt(i, m.oddKeys) == key {
+			if i := int(p - 1); m.entries[i].keyLen == int32(len(key)) && m.keyAt(i) == key {
 				return i
 			}
 		}
 	}
 	keyLen := int32(len(key))
 	for i := range m.entries {
-		if m.entries[i].keyLen == keyLen && m.keyAt(i, m.oddKeys) == key {
+		if m.entries[i].keyLen == keyLen && m.keyAt(i) == key {
 			return i
 		}
 	}
@@ -325,7 +325,7 @@ func (m *SymbolMap) insertIndex(key string, i int32) {
 func (m *SymbolMap) buildIndex() {
 	m.index = make([]int32, indexSizeFor(len(m.entries)))
 	for i := range m.entries {
-		m.insertIndex(m.keyAt(i, m.oddKeys), int32(i))
+		m.insertIndex(m.keyAt(i), int32(i))
 	}
 }
 
