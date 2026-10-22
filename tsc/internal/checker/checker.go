@@ -26377,11 +26377,14 @@ func (c *Checker) getTypeFromMappedTypeNode(node *ast.Node) *Type {
 		t.AsMappedType().declaration = node.AsMappedTypeNode()
 		t.alias = c.getAliasForTypeNode(node)
 		links.resolvedType.set(c, t)
-		// Eagerly resolve the constraint type which forces an error if the constraint type circularly
-		// references itself through one or more type aliases.
-		c.getConstraintTypeFromMappedType(t)
 	}
-	return links.resolvedType.get(c)
+	t := links.resolvedType.get(c)
+	// Eagerly resolve the constraint type which forces an error if the constraint type circularly
+	// references itself through one or more type aliases. This happens on every request rather
+	// than only when the type is created, so its errors do not depend on whether the type was
+	// created while checking another node.
+	c.getConstraintTypeFromMappedType(t)
+	return t
 }
 
 func (c *Checker) getTypeFromConditionalTypeNode(node *ast.Node) *Type {
