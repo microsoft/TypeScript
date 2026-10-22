@@ -19578,31 +19578,30 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 	}
 	baseTypes := c.getBaseTypes(source)
 	instantiatedBaseTypes := baseTypes
-	if len(baseTypes) != 0 {
-		instantiatedBaseTypes = make([]*Type, 0, len(baseTypes))
-		thisArgument := core.LastOrNil(typeArguments)
-		for _, baseType := range baseTypes {
-			instantiatedBaseType := baseType
-			if thisArgument != nil {
-				instantiatedBaseType = c.getTypeWithThisArgument(c.instantiateType(baseType, mapper), thisArgument, false /*needsApparentType*/)
-			}
-			instantiatedBaseTypes = append(instantiatedBaseTypes, instantiatedBaseType)
-			callSignatures = core.Concatenate(callSignatures, c.getSignaturesOfType(instantiatedBaseType, SignatureKindCall))
-			constructSignatures = core.Concatenate(constructSignatures, c.getSignaturesOfType(instantiatedBaseType, SignatureKindConstruct))
-			var inheritedIndexInfos []*IndexInfo
-			if instantiatedBaseType != c.anyType {
-				inheritedIndexInfos = c.getIndexInfosOfType(instantiatedBaseType)
-			} else {
-				inheritedIndexInfos = []*IndexInfo{c.anyBaseTypeIndexInfo}
-			}
-			indexInfos = core.Concatenate(indexInfos, core.Filter(inheritedIndexInfos, func(info *IndexInfo) bool {
-				return findIndexInfo(indexInfos, info.keyType) == nil
-			}))
+	thisArgument := core.LastOrNil(typeArguments)
+	if len(baseTypes) != 0 && thisArgument != nil {
+		instantiatedBaseTypes = make([]*Type, len(baseTypes))
+		for i, baseType := range baseTypes {
+			instantiatedBaseTypes[i] = c.getTypeWithThisArgument(c.instantiateType(baseType, mapper), thisArgument, false /*needsApparentType*/)
 		}
+	}
+	layout := c.getMemberLayout(t, instantiatedBaseTypes)
+	for _, instantiatedBaseType := range instantiatedBaseTypes {
+		callSignatures = core.Concatenate(callSignatures, c.getSignaturesOfType(instantiatedBaseType, SignatureKindCall))
+		constructSignatures = core.Concatenate(constructSignatures, c.getSignaturesOfType(instantiatedBaseType, SignatureKindConstruct))
+		var inheritedIndexInfos []*IndexInfo
+		if instantiatedBaseType != c.anyType {
+			inheritedIndexInfos = c.getIndexInfosOfType(instantiatedBaseType)
+		} else {
+			inheritedIndexInfos = []*IndexInfo{c.anyBaseTypeIndexInfo}
+		}
+		indexInfos = core.Concatenate(indexInfos, core.Filter(inheritedIndexInfos, func(info *IndexInfo) bool {
+			return findIndexInfo(indexInfos, info.keyType) == nil
+		}))
 	}
 	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
 	t.AsTypeReference().lazy = &LazyState{
-		layout:    c.getMemberLayout(t, instantiatedBaseTypes),
+		layout:    layout,
 		mapper:    mapper,
 		baseTypes: instantiatedBaseTypes,
 	}
@@ -19627,8 +19626,10 @@ func (c *Checker) getMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
 
 func (c *Checker) getMemberLayoutKey(t *Type, baseTypes []*Type) CacheHashKey {
 	var b keyBuilder
-	b.reserve(12 + 4*len(baseTypes))
+	b.reserve(20 + 4*len(baseTypes))
 	b.writeType(t)
+	// Late binding may add new declared members, so include the declared member count in the key
+	b.writeInt(len(t.AsInterfaceType().declaredMembers))
 	b.writeInt(len(baseTypes))
 	for _, baseType := range baseTypes {
 		if baseType.objectFlags&ObjectFlagsReference != 0 {
