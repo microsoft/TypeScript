@@ -5,6 +5,7 @@ import (
 	"slices"
 	"testing"
 
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
@@ -298,20 +299,19 @@ func TestRebasePreservesFullInvalidation(t *testing.T) {
 		}},
 	})
 	assert.NilError(t, err)
-	programID := project.ID((*base.Operation.CreatedPrograms)[0])
 	target, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{Snapshot: base.Snapshot})
 	assert.NilError(t, err)
 	assert.NilError(t, session.FS().WriteFile("/index.ts", "export const value = 2;"))
 	changes := &CreateSnapshotParams{FileNotifications: &FileNotifications{InvalidateAll: true}, EnsurePrograms: &EnsurePrograms{All: true}}
 	updated, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{Snapshot: base.Snapshot, Changes: changes})
 	assert.NilError(t, err)
-	updatedProgram, err := session.snapshots[updated.Snapshot].getProgram(programID)
+	updatedProgram, err := session.snapshots[updated.Snapshot].getProgram(updated.Projects[0].Handle)
 	assert.NilError(t, err)
 	assert.Equal(t, updatedProgram.GetSourceFile("/index.ts").Text(), "export const value = 2;")
 	for _, targetID := range []SnapshotID{base.Snapshot, target.Snapshot} {
 		rebased, err := session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{Snapshot: base.Snapshot, NewSnapshot: targetID, Changes: changes})
 		assert.NilError(t, err)
-		program, err := session.snapshots[rebased.Snapshot].getProgram(programID)
+		program, err := session.snapshots[rebased.Snapshot].getProgram(rebased.Projects[0].Handle)
 		assert.NilError(t, err)
 		assert.Equal(t, program.GetSourceFile("/index.ts").Text(), "export const value = 2;")
 	}
@@ -340,7 +340,7 @@ func TestRebaseRefreshesDependencyAutoImports(t *testing.T) {
 		t.Helper()
 		proj := session.snapshots[snapshotID].snapshot.GetDefaultProject("file:///home/project/index.ts")
 		completions, completionErr := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
-			Snapshot: snapshotID, Project: proj.ID(), File: DocumentIdentifier{FileName: fileName}, Position: 7, IncludeSymbol: true,
+			Snapshot: snapshotID, Project: proj.Handle(), File: DocumentIdentifier{FileName: fileName}, Position: 7, IncludeSymbol: true,
 		})
 		assert.NilError(t, completionErr)
 		assert.Assert(t, completions != nil)
@@ -437,7 +437,8 @@ func TestSelfRebaseMatchesUpdateProgramState(t *testing.T) {
 				assert.NilError(t, err, name)
 				rebased, err := session.handleRebaseSnapshot(t.Context(), &RebaseSnapshotParams{Snapshot: base.Snapshot, NewSnapshot: base.Snapshot, Changes: changes})
 				assert.NilError(t, err, name)
-				assert.DeepEqual(t, rebased.Projects, updated.Projects)
+				// Projects created independently have distinct lifetime handles.
+				assert.DeepEqual(t, rebased.Projects, updated.Projects, cmpopts.IgnoreFields(ProjectResponse{}, "Handle"))
 				assert.DeepEqual(t, rebased.Changes, updated.Changes)
 				assert.DeepEqual(t, rebased.Operation, updated.Operation)
 				assert.Equal(t, session.snapshots[base.Snapshot].refCount, 1)
